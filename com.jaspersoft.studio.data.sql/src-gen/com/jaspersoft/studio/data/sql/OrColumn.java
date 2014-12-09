@@ -4,8 +4,6 @@ package com.jaspersoft.studio.data.sql;
 
 import org.eclipse.emf.common.util.EList;
 
-import org.eclipse.emf.ecore.EObject;
-
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Or Column</b></em>'.
@@ -22,7 +20,7 @@ import org.eclipse.emf.ecore.EObject;
  * @model
  * @generated
  */
-public interface OrColumn extends EObject
+public interface OrColumn extends PivotForClause
 {
   /**
    * Returns the value of the '<em><b>Entries</b></em>' containment reference list.

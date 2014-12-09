@@ -66,9 +66,33 @@
     <genClasses ecoreClass="Sql.ecore#//TableOrAlias">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//TableOrAlias/tfull"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//TableOrAlias/sq"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//TableOrAlias/pivot"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//TableOrAlias/unpivot"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//TableOrAlias/alias"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//TableOrAlias/tblAlias"/>
     </genClasses>
+    <genClasses ecoreClass="Sql.ecore#//PivotTable">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//PivotTable/pfor"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//PivotTable/pin"/>
+    </genClasses>
+    <genClasses ecoreClass="Sql.ecore#//PivotInClause">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//PivotInClause/sq"/>
+    </genClasses>
+    <genClasses ecoreClass="Sql.ecore#//UnpivotTable">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//UnpivotTable/pcols"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//UnpivotTable/pfor"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//UnpivotTable/inop"/>
+    </genClasses>
+    <genClasses ecoreClass="Sql.ecore#//UnpivotInClause"/>
+    <genClasses ecoreClass="Sql.ecore#//UnpivotInClauseArgs"/>
+    <genClasses ecoreClass="Sql.ecore#//UnpivotInClauseArg">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//UnpivotInClauseArg/pcols"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//UnpivotInClauseArg/cfuls"/>
+    </genClasses>
+    <genClasses ecoreClass="Sql.ecore#//PivotForClause"/>
+    <genClasses ecoreClass="Sql.ecore#//PivotColumns"/>
+    <genClasses ecoreClass="Sql.ecore#//Pivots"/>
+    <genClasses ecoreClass="Sql.ecore#//PivotCol"/>
     <genClasses ecoreClass="Sql.ecore#//TableFull"/>
     <genClasses ecoreClass="Sql.ecore#//DbObjectNameAll">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//DbObjectNameAll/dbname"/>
@@ -167,6 +191,39 @@
     <genClasses ecoreClass="Sql.ecore#//OpFunction">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//OpFunction/fname"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//OpFunction/args"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//OpFunction/fan"/>
+    </genClasses>
+    <genClasses ecoreClass="Sql.ecore#//FunctionAnalytical">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//FunctionAnalytical/anClause"/>
+    </genClasses>
+    <genClasses ecoreClass="Sql.ecore#//AnalyticClause"/>
+    <genClasses ecoreClass="Sql.ecore#//WindowingClause"/>
+    <genClasses ecoreClass="Sql.ecore#//WindowingClauseBetween">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//WindowingClauseBetween/wcoP"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//WindowingClauseBetween/wcoF"/>
+    </genClasses>
+    <genClasses ecoreClass="Sql.ecore#//WindowingClauseOperandFollowing">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//WindowingClauseOperandFollowing/exp"/>
+    </genClasses>
+    <genClasses ecoreClass="Sql.ecore#//WindowingClauseOperandPreceding">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//WindowingClauseOperandPreceding/expr"/>
+    </genClasses>
+    <genClasses ecoreClass="Sql.ecore#//OrderByClause">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//OrderByClause/args"/>
+    </genClasses>
+    <genClasses ecoreClass="Sql.ecore#//OrderByClauseArgs"/>
+    <genClasses ecoreClass="Sql.ecore#//OrderByClauseArg">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//OrderByClauseArg/col"/>
+    </genClasses>
+    <genClasses ecoreClass="Sql.ecore#//QueryPartitionClause">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//QueryPartitionClause/obc"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//QueryPartitionClause/winc"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//QueryPartitionClause/args"/>
+    </genClasses>
+    <genClasses ecoreClass="Sql.ecore#//AnalyticExprArgs"/>
+    <genClasses ecoreClass="Sql.ecore#//AnalyticExprArg">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//AnalyticExprArg/ce"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//AnalyticExprArg/colAlias"/>
     </genClasses>
     <genClasses ecoreClass="Sql.ecore#//OpFunctionArg"/>
     <genClasses ecoreClass="Sql.ecore#//OpFunctionArgOperand">
@@ -213,6 +270,19 @@
     <genClasses ecoreClass="Sql.ecore#//Col">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Col/entries"/>
     </genClasses>
+    <genClasses ecoreClass="Sql.ecore#//UnipivotInClause">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//UnipivotInClause/op"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//UnipivotInClause/args"/>
+    </genClasses>
+    <genClasses ecoreClass="Sql.ecore#//uicargs">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//uicargs/entries"/>
+    </genClasses>
+    <genClasses ecoreClass="Sql.ecore#//pvcs">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//pvcs/entries"/>
+    </genClasses>
+    <genClasses ecoreClass="Sql.ecore#//pcols">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//pcols/entries"/>
+    </genClasses>
     <genClasses ecoreClass="Sql.ecore#//tbls">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//tbls/entries"/>
     </genClasses>
@@ -224,6 +294,12 @@
     <genClasses ecoreClass="Sql.ecore#//Star"/>
     <genClasses ecoreClass="Sql.ecore#//Div"/>
     <genClasses ecoreClass="Sql.ecore#//Concat"/>
+    <genClasses ecoreClass="Sql.ecore#//OBCArgs">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//OBCArgs/entries"/>
+    </genClasses>
+    <genClasses ecoreClass="Sql.ecore#//AExpArgs">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//AExpArgs/entries"/>
+    </genClasses>
     <genClasses ecoreClass="Sql.ecore#//OpFList">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//OpFList/entries"/>
     </genClasses>

@@ -130,6 +130,56 @@ public class SqlAdapterFactory extends AdapterFactoryImpl
         return createTableOrAliasAdapter();
       }
       @Override
+      public Adapter casePivotTable(PivotTable object)
+      {
+        return createPivotTableAdapter();
+      }
+      @Override
+      public Adapter casePivotInClause(PivotInClause object)
+      {
+        return createPivotInClauseAdapter();
+      }
+      @Override
+      public Adapter caseUnpivotTable(UnpivotTable object)
+      {
+        return createUnpivotTableAdapter();
+      }
+      @Override
+      public Adapter caseUnpivotInClause(UnpivotInClause object)
+      {
+        return createUnpivotInClauseAdapter();
+      }
+      @Override
+      public Adapter caseUnpivotInClauseArgs(UnpivotInClauseArgs object)
+      {
+        return createUnpivotInClauseArgsAdapter();
+      }
+      @Override
+      public Adapter caseUnpivotInClauseArg(UnpivotInClauseArg object)
+      {
+        return createUnpivotInClauseArgAdapter();
+      }
+      @Override
+      public Adapter casePivotForClause(PivotForClause object)
+      {
+        return createPivotForClauseAdapter();
+      }
+      @Override
+      public Adapter casePivotColumns(PivotColumns object)
+      {
+        return createPivotColumnsAdapter();
+      }
+      @Override
+      public Adapter casePivots(Pivots object)
+      {
+        return createPivotsAdapter();
+      }
+      @Override
+      public Adapter casePivotCol(PivotCol object)
+      {
+        return createPivotColAdapter();
+      }
+      @Override
       public Adapter caseTableFull(TableFull object)
       {
         return createTableFullAdapter();
@@ -240,6 +290,66 @@ public class SqlAdapterFactory extends AdapterFactoryImpl
         return createOpFunctionAdapter();
       }
       @Override
+      public Adapter caseFunctionAnalytical(FunctionAnalytical object)
+      {
+        return createFunctionAnalyticalAdapter();
+      }
+      @Override
+      public Adapter caseAnalyticClause(AnalyticClause object)
+      {
+        return createAnalyticClauseAdapter();
+      }
+      @Override
+      public Adapter caseWindowingClause(WindowingClause object)
+      {
+        return createWindowingClauseAdapter();
+      }
+      @Override
+      public Adapter caseWindowingClauseBetween(WindowingClauseBetween object)
+      {
+        return createWindowingClauseBetweenAdapter();
+      }
+      @Override
+      public Adapter caseWindowingClauseOperandFollowing(WindowingClauseOperandFollowing object)
+      {
+        return createWindowingClauseOperandFollowingAdapter();
+      }
+      @Override
+      public Adapter caseWindowingClauseOperandPreceding(WindowingClauseOperandPreceding object)
+      {
+        return createWindowingClauseOperandPrecedingAdapter();
+      }
+      @Override
+      public Adapter caseOrderByClause(OrderByClause object)
+      {
+        return createOrderByClauseAdapter();
+      }
+      @Override
+      public Adapter caseOrderByClauseArgs(OrderByClauseArgs object)
+      {
+        return createOrderByClauseArgsAdapter();
+      }
+      @Override
+      public Adapter caseOrderByClauseArg(OrderByClauseArg object)
+      {
+        return createOrderByClauseArgAdapter();
+      }
+      @Override
+      public Adapter caseQueryPartitionClause(QueryPartitionClause object)
+      {
+        return createQueryPartitionClauseAdapter();
+      }
+      @Override
+      public Adapter caseAnalyticExprArgs(AnalyticExprArgs object)
+      {
+        return createAnalyticExprArgsAdapter();
+      }
+      @Override
+      public Adapter caseAnalyticExprArg(AnalyticExprArg object)
+      {
+        return createAnalyticExprArgAdapter();
+      }
+      @Override
       public Adapter caseOpFunctionArg(OpFunctionArg object)
       {
         return createOpFunctionArgAdapter();
@@ -305,6 +415,26 @@ public class SqlAdapterFactory extends AdapterFactoryImpl
         return createColAdapter();
       }
       @Override
+      public Adapter caseUnipivotInClause(UnipivotInClause object)
+      {
+        return createUnipivotInClauseAdapter();
+      }
+      @Override
+      public Adapter caseuicargs(uicargs object)
+      {
+        return createuicargsAdapter();
+      }
+      @Override
+      public Adapter casepvcs(pvcs object)
+      {
+        return createpvcsAdapter();
+      }
+      @Override
+      public Adapter casepcols(pcols object)
+      {
+        return createpcolsAdapter();
+      }
+      @Override
       public Adapter casetbls(tbls object)
       {
         return createtblsAdapter();
@@ -338,6 +468,16 @@ public class SqlAdapterFactory extends AdapterFactoryImpl
       public Adapter caseConcat(Concat object)
       {
         return createConcatAdapter();
+      }
+      @Override
+      public Adapter caseOBCArgs(OBCArgs object)
+      {
+        return createOBCArgsAdapter();
+      }
+      @Override
+      public Adapter caseAExpArgs(AExpArgs object)
+      {
+        return createAExpArgsAdapter();
       }
       @Override
       public Adapter caseOpFList(OpFList object)
@@ -532,6 +672,156 @@ public class SqlAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createTableOrAliasAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.PivotTable <em>Pivot Table</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.PivotTable
+   * @generated
+   */
+  public Adapter createPivotTableAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.PivotInClause <em>Pivot In Clause</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.PivotInClause
+   * @generated
+   */
+  public Adapter createPivotInClauseAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.UnpivotTable <em>Unpivot Table</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.UnpivotTable
+   * @generated
+   */
+  public Adapter createUnpivotTableAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.UnpivotInClause <em>Unpivot In Clause</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.UnpivotInClause
+   * @generated
+   */
+  public Adapter createUnpivotInClauseAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.UnpivotInClauseArgs <em>Unpivot In Clause Args</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.UnpivotInClauseArgs
+   * @generated
+   */
+  public Adapter createUnpivotInClauseArgsAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.UnpivotInClauseArg <em>Unpivot In Clause Arg</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.UnpivotInClauseArg
+   * @generated
+   */
+  public Adapter createUnpivotInClauseArgAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.PivotForClause <em>Pivot For Clause</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.PivotForClause
+   * @generated
+   */
+  public Adapter createPivotForClauseAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.PivotColumns <em>Pivot Columns</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.PivotColumns
+   * @generated
+   */
+  public Adapter createPivotColumnsAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.Pivots <em>Pivots</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.Pivots
+   * @generated
+   */
+  public Adapter createPivotsAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.PivotCol <em>Pivot Col</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.PivotCol
+   * @generated
+   */
+  public Adapter createPivotColAdapter()
   {
     return null;
   }
@@ -867,6 +1157,186 @@ public class SqlAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.FunctionAnalytical <em>Function Analytical</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.FunctionAnalytical
+   * @generated
+   */
+  public Adapter createFunctionAnalyticalAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.AnalyticClause <em>Analytic Clause</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.AnalyticClause
+   * @generated
+   */
+  public Adapter createAnalyticClauseAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.WindowingClause <em>Windowing Clause</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.WindowingClause
+   * @generated
+   */
+  public Adapter createWindowingClauseAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.WindowingClauseBetween <em>Windowing Clause Between</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.WindowingClauseBetween
+   * @generated
+   */
+  public Adapter createWindowingClauseBetweenAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.WindowingClauseOperandFollowing <em>Windowing Clause Operand Following</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.WindowingClauseOperandFollowing
+   * @generated
+   */
+  public Adapter createWindowingClauseOperandFollowingAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.WindowingClauseOperandPreceding <em>Windowing Clause Operand Preceding</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.WindowingClauseOperandPreceding
+   * @generated
+   */
+  public Adapter createWindowingClauseOperandPrecedingAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.OrderByClause <em>Order By Clause</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.OrderByClause
+   * @generated
+   */
+  public Adapter createOrderByClauseAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.OrderByClauseArgs <em>Order By Clause Args</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.OrderByClauseArgs
+   * @generated
+   */
+  public Adapter createOrderByClauseArgsAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.OrderByClauseArg <em>Order By Clause Arg</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.OrderByClauseArg
+   * @generated
+   */
+  public Adapter createOrderByClauseArgAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.QueryPartitionClause <em>Query Partition Clause</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.QueryPartitionClause
+   * @generated
+   */
+  public Adapter createQueryPartitionClauseAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.AnalyticExprArgs <em>Analytic Expr Args</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.AnalyticExprArgs
+   * @generated
+   */
+  public Adapter createAnalyticExprArgsAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.AnalyticExprArg <em>Analytic Expr Arg</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.AnalyticExprArg
+   * @generated
+   */
+  public Adapter createAnalyticExprArgAdapter()
+  {
+    return null;
+  }
+
+  /**
    * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.OpFunctionArg <em>Op Function Arg</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
@@ -1062,6 +1532,66 @@ public class SqlAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.UnipivotInClause <em>Unipivot In Clause</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.UnipivotInClause
+   * @generated
+   */
+  public Adapter createUnipivotInClauseAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.uicargs <em>uicargs</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.uicargs
+   * @generated
+   */
+  public Adapter createuicargsAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.pvcs <em>pvcs</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.pvcs
+   * @generated
+   */
+  public Adapter createpvcsAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.pcols <em>pcols</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.pcols
+   * @generated
+   */
+  public Adapter createpcolsAdapter()
+  {
+    return null;
+  }
+
+  /**
    * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.tbls <em>tbls</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
@@ -1162,6 +1692,36 @@ public class SqlAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createConcatAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.OBCArgs <em>OBC Args</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.OBCArgs
+   * @generated
+   */
+  public Adapter createOBCArgsAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.AExpArgs <em>AExp Args</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.AExpArgs
+   * @generated
+   */
+  public Adapter createAExpArgsAdapter()
   {
     return null;
   }

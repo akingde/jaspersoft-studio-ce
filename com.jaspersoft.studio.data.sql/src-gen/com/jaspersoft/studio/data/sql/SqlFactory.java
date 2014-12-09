@@ -122,6 +122,96 @@ public interface SqlFactory extends EFactory
   TableOrAlias createTableOrAlias();
 
   /**
+   * Returns a new object of class '<em>Pivot Table</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Pivot Table</em>'.
+   * @generated
+   */
+  PivotTable createPivotTable();
+
+  /**
+   * Returns a new object of class '<em>Pivot In Clause</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Pivot In Clause</em>'.
+   * @generated
+   */
+  PivotInClause createPivotInClause();
+
+  /**
+   * Returns a new object of class '<em>Unpivot Table</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Unpivot Table</em>'.
+   * @generated
+   */
+  UnpivotTable createUnpivotTable();
+
+  /**
+   * Returns a new object of class '<em>Unpivot In Clause</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Unpivot In Clause</em>'.
+   * @generated
+   */
+  UnpivotInClause createUnpivotInClause();
+
+  /**
+   * Returns a new object of class '<em>Unpivot In Clause Args</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Unpivot In Clause Args</em>'.
+   * @generated
+   */
+  UnpivotInClauseArgs createUnpivotInClauseArgs();
+
+  /**
+   * Returns a new object of class '<em>Unpivot In Clause Arg</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Unpivot In Clause Arg</em>'.
+   * @generated
+   */
+  UnpivotInClauseArg createUnpivotInClauseArg();
+
+  /**
+   * Returns a new object of class '<em>Pivot For Clause</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Pivot For Clause</em>'.
+   * @generated
+   */
+  PivotForClause createPivotForClause();
+
+  /**
+   * Returns a new object of class '<em>Pivot Columns</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Pivot Columns</em>'.
+   * @generated
+   */
+  PivotColumns createPivotColumns();
+
+  /**
+   * Returns a new object of class '<em>Pivots</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Pivots</em>'.
+   * @generated
+   */
+  Pivots createPivots();
+
+  /**
+   * Returns a new object of class '<em>Pivot Col</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Pivot Col</em>'.
+   * @generated
+   */
+  PivotCol createPivotCol();
+
+  /**
    * Returns a new object of class '<em>Table Full</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -320,6 +410,114 @@ public interface SqlFactory extends EFactory
   OpFunction createOpFunction();
 
   /**
+   * Returns a new object of class '<em>Function Analytical</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Function Analytical</em>'.
+   * @generated
+   */
+  FunctionAnalytical createFunctionAnalytical();
+
+  /**
+   * Returns a new object of class '<em>Analytic Clause</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Analytic Clause</em>'.
+   * @generated
+   */
+  AnalyticClause createAnalyticClause();
+
+  /**
+   * Returns a new object of class '<em>Windowing Clause</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Windowing Clause</em>'.
+   * @generated
+   */
+  WindowingClause createWindowingClause();
+
+  /**
+   * Returns a new object of class '<em>Windowing Clause Between</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Windowing Clause Between</em>'.
+   * @generated
+   */
+  WindowingClauseBetween createWindowingClauseBetween();
+
+  /**
+   * Returns a new object of class '<em>Windowing Clause Operand Following</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Windowing Clause Operand Following</em>'.
+   * @generated
+   */
+  WindowingClauseOperandFollowing createWindowingClauseOperandFollowing();
+
+  /**
+   * Returns a new object of class '<em>Windowing Clause Operand Preceding</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Windowing Clause Operand Preceding</em>'.
+   * @generated
+   */
+  WindowingClauseOperandPreceding createWindowingClauseOperandPreceding();
+
+  /**
+   * Returns a new object of class '<em>Order By Clause</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Order By Clause</em>'.
+   * @generated
+   */
+  OrderByClause createOrderByClause();
+
+  /**
+   * Returns a new object of class '<em>Order By Clause Args</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Order By Clause Args</em>'.
+   * @generated
+   */
+  OrderByClauseArgs createOrderByClauseArgs();
+
+  /**
+   * Returns a new object of class '<em>Order By Clause Arg</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Order By Clause Arg</em>'.
+   * @generated
+   */
+  OrderByClauseArg createOrderByClauseArg();
+
+  /**
+   * Returns a new object of class '<em>Query Partition Clause</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Query Partition Clause</em>'.
+   * @generated
+   */
+  QueryPartitionClause createQueryPartitionClause();
+
+  /**
+   * Returns a new object of class '<em>Analytic Expr Args</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Analytic Expr Args</em>'.
+   * @generated
+   */
+  AnalyticExprArgs createAnalyticExprArgs();
+
+  /**
+   * Returns a new object of class '<em>Analytic Expr Arg</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Analytic Expr Arg</em>'.
+   * @generated
+   */
+  AnalyticExprArg createAnalyticExprArg();
+
+  /**
    * Returns a new object of class '<em>Op Function Arg</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -437,6 +635,42 @@ public interface SqlFactory extends EFactory
   Col createCol();
 
   /**
+   * Returns a new object of class '<em>Unipivot In Clause</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Unipivot In Clause</em>'.
+   * @generated
+   */
+  UnipivotInClause createUnipivotInClause();
+
+  /**
+   * Returns a new object of class '<em>uicargs</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>uicargs</em>'.
+   * @generated
+   */
+  uicargs createuicargs();
+
+  /**
+   * Returns a new object of class '<em>pvcs</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>pvcs</em>'.
+   * @generated
+   */
+  pvcs createpvcs();
+
+  /**
+   * Returns a new object of class '<em>pcols</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>pcols</em>'.
+   * @generated
+   */
+  pcols createpcols();
+
+  /**
    * Returns a new object of class '<em>tbls</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -498,6 +732,24 @@ public interface SqlFactory extends EFactory
    * @generated
    */
   Concat createConcat();
+
+  /**
+   * Returns a new object of class '<em>OBC Args</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>OBC Args</em>'.
+   * @generated
+   */
+  OBCArgs createOBCArgs();
+
+  /**
+   * Returns a new object of class '<em>AExp Args</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>AExp Args</em>'.
+   * @generated
+   */
+  AExpArgs createAExpArgs();
 
   /**
    * Returns a new object of class '<em>Op FList</em>'.

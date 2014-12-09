@@ -105,6 +105,7 @@ public class SqlSwitch<T> extends Switch<T>
       {
         OrColumn orColumn = (OrColumn)theEObject;
         T result = caseOrColumn(orColumn);
+        if (result == null) result = casePivotForClause(orColumn);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -113,6 +114,7 @@ public class SqlSwitch<T> extends Switch<T>
         ColumnOrAlias columnOrAlias = (ColumnOrAlias)theEObject;
         T result = caseColumnOrAlias(columnOrAlias);
         if (result == null) result = caseOrColumn(columnOrAlias);
+        if (result == null) result = casePivotForClause(columnOrAlias);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -120,6 +122,7 @@ public class SqlSwitch<T> extends Switch<T>
       {
         ColumnFull columnFull = (ColumnFull)theEObject;
         T result = caseColumnFull(columnFull);
+        if (result == null) result = casePivotForClause(columnFull);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -152,6 +155,80 @@ public class SqlSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
+      case SqlPackage.PIVOT_TABLE:
+      {
+        PivotTable pivotTable = (PivotTable)theEObject;
+        T result = casePivotTable(pivotTable);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.PIVOT_IN_CLAUSE:
+      {
+        PivotInClause pivotInClause = (PivotInClause)theEObject;
+        T result = casePivotInClause(pivotInClause);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.UNPIVOT_TABLE:
+      {
+        UnpivotTable unpivotTable = (UnpivotTable)theEObject;
+        T result = caseUnpivotTable(unpivotTable);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.UNPIVOT_IN_CLAUSE:
+      {
+        UnpivotInClause unpivotInClause = (UnpivotInClause)theEObject;
+        T result = caseUnpivotInClause(unpivotInClause);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.UNPIVOT_IN_CLAUSE_ARGS:
+      {
+        UnpivotInClauseArgs unpivotInClauseArgs = (UnpivotInClauseArgs)theEObject;
+        T result = caseUnpivotInClauseArgs(unpivotInClauseArgs);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.UNPIVOT_IN_CLAUSE_ARG:
+      {
+        UnpivotInClauseArg unpivotInClauseArg = (UnpivotInClauseArg)theEObject;
+        T result = caseUnpivotInClauseArg(unpivotInClauseArg);
+        if (result == null) result = caseUnpivotInClauseArgs(unpivotInClauseArg);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.PIVOT_FOR_CLAUSE:
+      {
+        PivotForClause pivotForClause = (PivotForClause)theEObject;
+        T result = casePivotForClause(pivotForClause);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.PIVOT_COLUMNS:
+      {
+        PivotColumns pivotColumns = (PivotColumns)theEObject;
+        T result = casePivotColumns(pivotColumns);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.PIVOTS:
+      {
+        Pivots pivots = (Pivots)theEObject;
+        T result = casePivots(pivots);
+        if (result == null) result = casePivotColumns(pivots);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.PIVOT_COL:
+      {
+        PivotCol pivotCol = (PivotCol)theEObject;
+        T result = casePivotCol(pivotCol);
+        if (result == null) result = casePivots(pivotCol);
+        if (result == null) result = casePivotColumns(pivotCol);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
       case SqlPackage.TABLE_FULL:
       {
         TableFull tableFull = (TableFull)theEObject;
@@ -171,7 +248,11 @@ public class SqlSwitch<T> extends Switch<T>
         DbObjectName dbObjectName = (DbObjectName)theEObject;
         T result = caseDbObjectName(dbObjectName);
         if (result == null) result = caseColumnFull(dbObjectName);
+        if (result == null) result = casePivotCol(dbObjectName);
         if (result == null) result = caseTableFull(dbObjectName);
+        if (result == null) result = casePivotForClause(dbObjectName);
+        if (result == null) result = casePivots(dbObjectName);
+        if (result == null) result = casePivotColumns(dbObjectName);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -313,6 +394,99 @@ public class SqlSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
+      case SqlPackage.FUNCTION_ANALYTICAL:
+      {
+        FunctionAnalytical functionAnalytical = (FunctionAnalytical)theEObject;
+        T result = caseFunctionAnalytical(functionAnalytical);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.ANALYTIC_CLAUSE:
+      {
+        AnalyticClause analyticClause = (AnalyticClause)theEObject;
+        T result = caseAnalyticClause(analyticClause);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.WINDOWING_CLAUSE:
+      {
+        WindowingClause windowingClause = (WindowingClause)theEObject;
+        T result = caseWindowingClause(windowingClause);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.WINDOWING_CLAUSE_BETWEEN:
+      {
+        WindowingClauseBetween windowingClauseBetween = (WindowingClauseBetween)theEObject;
+        T result = caseWindowingClauseBetween(windowingClauseBetween);
+        if (result == null) result = caseWindowingClause(windowingClauseBetween);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.WINDOWING_CLAUSE_OPERAND_FOLLOWING:
+      {
+        WindowingClauseOperandFollowing windowingClauseOperandFollowing = (WindowingClauseOperandFollowing)theEObject;
+        T result = caseWindowingClauseOperandFollowing(windowingClauseOperandFollowing);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.WINDOWING_CLAUSE_OPERAND_PRECEDING:
+      {
+        WindowingClauseOperandPreceding windowingClauseOperandPreceding = (WindowingClauseOperandPreceding)theEObject;
+        T result = caseWindowingClauseOperandPreceding(windowingClauseOperandPreceding);
+        if (result == null) result = caseWindowingClause(windowingClauseOperandPreceding);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.ORDER_BY_CLAUSE:
+      {
+        OrderByClause orderByClause = (OrderByClause)theEObject;
+        T result = caseOrderByClause(orderByClause);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.ORDER_BY_CLAUSE_ARGS:
+      {
+        OrderByClauseArgs orderByClauseArgs = (OrderByClauseArgs)theEObject;
+        T result = caseOrderByClauseArgs(orderByClauseArgs);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.ORDER_BY_CLAUSE_ARG:
+      {
+        OrderByClauseArg orderByClauseArg = (OrderByClauseArg)theEObject;
+        T result = caseOrderByClauseArg(orderByClauseArg);
+        if (result == null) result = caseOrderByClauseArgs(orderByClauseArg);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.QUERY_PARTITION_CLAUSE:
+      {
+        QueryPartitionClause queryPartitionClause = (QueryPartitionClause)theEObject;
+        T result = caseQueryPartitionClause(queryPartitionClause);
+        if (result == null) result = caseAnalyticClause(queryPartitionClause);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.ANALYTIC_EXPR_ARGS:
+      {
+        AnalyticExprArgs analyticExprArgs = (AnalyticExprArgs)theEObject;
+        T result = caseAnalyticExprArgs(analyticExprArgs);
+        if (result == null) result = caseQueryPartitionClause(analyticExprArgs);
+        if (result == null) result = caseAnalyticClause(analyticExprArgs);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.ANALYTIC_EXPR_ARG:
+      {
+        AnalyticExprArg analyticExprArg = (AnalyticExprArg)theEObject;
+        T result = caseAnalyticExprArg(analyticExprArg);
+        if (result == null) result = caseAnalyticExprArgs(analyticExprArg);
+        if (result == null) result = caseQueryPartitionClause(analyticExprArg);
+        if (result == null) result = caseAnalyticClause(analyticExprArg);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
       case SqlPackage.OP_FUNCTION_ARG:
       {
         OpFunctionArg opFunctionArg = (OpFunctionArg)theEObject;
@@ -405,6 +579,42 @@ public class SqlSwitch<T> extends Switch<T>
         Col col = (Col)theEObject;
         T result = caseCol(col);
         if (result == null) result = caseColumnFull(col);
+        if (result == null) result = casePivotForClause(col);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.UNIPIVOT_IN_CLAUSE:
+      {
+        UnipivotInClause unipivotInClause = (UnipivotInClause)theEObject;
+        T result = caseUnipivotInClause(unipivotInClause);
+        if (result == null) result = caseUnpivotInClause(unipivotInClause);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.UICARGS:
+      {
+        uicargs uicargs = (uicargs)theEObject;
+        T result = caseuicargs(uicargs);
+        if (result == null) result = caseUnpivotInClauseArgs(uicargs);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.PVCS:
+      {
+        pvcs pvcs = (pvcs)theEObject;
+        T result = casepvcs(pvcs);
+        if (result == null) result = casePivots(pvcs);
+        if (result == null) result = casePivotColumns(pvcs);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.PCOLS:
+      {
+        pcols pcols = (pcols)theEObject;
+        T result = casepcols(pcols);
+        if (result == null) result = casePivotCol(pcols);
+        if (result == null) result = casePivots(pcols);
+        if (result == null) result = casePivotColumns(pcols);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -466,6 +676,24 @@ public class SqlSwitch<T> extends Switch<T>
         T result = caseConcat(concat);
         if (result == null) result = caseOperands(concat);
         if (result == null) result = caseOpFunctionArgAgregate(concat);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.OBC_ARGS:
+      {
+        OBCArgs obcArgs = (OBCArgs)theEObject;
+        T result = caseOBCArgs(obcArgs);
+        if (result == null) result = caseOrderByClauseArgs(obcArgs);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.AEXP_ARGS:
+      {
+        AExpArgs aExpArgs = (AExpArgs)theEObject;
+        T result = caseAExpArgs(aExpArgs);
+        if (result == null) result = caseAnalyticExprArgs(aExpArgs);
+        if (result == null) result = caseQueryPartitionClause(aExpArgs);
+        if (result == null) result = caseAnalyticClause(aExpArgs);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -661,6 +889,166 @@ public class SqlSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseTableOrAlias(TableOrAlias object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Pivot Table</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Pivot Table</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T casePivotTable(PivotTable object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Pivot In Clause</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Pivot In Clause</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T casePivotInClause(PivotInClause object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Unpivot Table</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Unpivot Table</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseUnpivotTable(UnpivotTable object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Unpivot In Clause</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Unpivot In Clause</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseUnpivotInClause(UnpivotInClause object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Unpivot In Clause Args</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Unpivot In Clause Args</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseUnpivotInClauseArgs(UnpivotInClauseArgs object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Unpivot In Clause Arg</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Unpivot In Clause Arg</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseUnpivotInClauseArg(UnpivotInClauseArg object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Pivot For Clause</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Pivot For Clause</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T casePivotForClause(PivotForClause object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Pivot Columns</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Pivot Columns</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T casePivotColumns(PivotColumns object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Pivots</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Pivots</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T casePivots(Pivots object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Pivot Col</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Pivot Col</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T casePivotCol(PivotCol object)
   {
     return null;
   }
@@ -1018,6 +1406,198 @@ public class SqlSwitch<T> extends Switch<T>
   }
 
   /**
+   * Returns the result of interpreting the object as an instance of '<em>Function Analytical</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Function Analytical</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseFunctionAnalytical(FunctionAnalytical object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Analytic Clause</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Analytic Clause</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseAnalyticClause(AnalyticClause object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Windowing Clause</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Windowing Clause</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseWindowingClause(WindowingClause object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Windowing Clause Between</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Windowing Clause Between</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseWindowingClauseBetween(WindowingClauseBetween object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Windowing Clause Operand Following</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Windowing Clause Operand Following</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseWindowingClauseOperandFollowing(WindowingClauseOperandFollowing object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Windowing Clause Operand Preceding</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Windowing Clause Operand Preceding</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseWindowingClauseOperandPreceding(WindowingClauseOperandPreceding object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Order By Clause</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Order By Clause</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseOrderByClause(OrderByClause object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Order By Clause Args</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Order By Clause Args</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseOrderByClauseArgs(OrderByClauseArgs object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Order By Clause Arg</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Order By Clause Arg</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseOrderByClauseArg(OrderByClauseArg object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Query Partition Clause</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Query Partition Clause</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseQueryPartitionClause(QueryPartitionClause object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Analytic Expr Args</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Analytic Expr Args</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseAnalyticExprArgs(AnalyticExprArgs object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Analytic Expr Arg</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Analytic Expr Arg</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseAnalyticExprArg(AnalyticExprArg object)
+  {
+    return null;
+  }
+
+  /**
    * Returns the result of interpreting the object as an instance of '<em>Op Function Arg</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
@@ -1226,6 +1806,70 @@ public class SqlSwitch<T> extends Switch<T>
   }
 
   /**
+   * Returns the result of interpreting the object as an instance of '<em>Unipivot In Clause</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Unipivot In Clause</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseUnipivotInClause(UnipivotInClause object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>uicargs</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>uicargs</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseuicargs(uicargs object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>pvcs</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>pvcs</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T casepvcs(pvcs object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>pcols</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>pcols</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T casepcols(pcols object)
+  {
+    return null;
+  }
+
+  /**
    * Returns the result of interpreting the object as an instance of '<em>tbls</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
@@ -1333,6 +1977,38 @@ public class SqlSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseConcat(Concat object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>OBC Args</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>OBC Args</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseOBCArgs(OBCArgs object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>AExp Args</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>AExp Args</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseAExpArgs(AExpArgs object)
   {
     return null;
   }

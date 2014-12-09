@@ -14,6 +14,8 @@ import org.eclipse.emf.ecore.EObject;
  * <ul>
  *   <li>{@link com.jaspersoft.studio.data.sql.TableOrAlias#getTfull <em>Tfull</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.TableOrAlias#getSq <em>Sq</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.TableOrAlias#getPivot <em>Pivot</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.TableOrAlias#getUnpivot <em>Unpivot</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.TableOrAlias#getAlias <em>Alias</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.TableOrAlias#getTblAlias <em>Tbl Alias</em>}</li>
  * </ul>
@@ -76,6 +78,58 @@ public interface TableOrAlias extends EObject
    * @generated
    */
   void setSq(SubQueryOperand value);
+
+  /**
+   * Returns the value of the '<em><b>Pivot</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Pivot</em>' containment reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Pivot</em>' containment reference.
+   * @see #setPivot(PivotTable)
+   * @see com.jaspersoft.studio.data.sql.SqlPackage#getTableOrAlias_Pivot()
+   * @model containment="true"
+   * @generated
+   */
+  PivotTable getPivot();
+
+  /**
+   * Sets the value of the '{@link com.jaspersoft.studio.data.sql.TableOrAlias#getPivot <em>Pivot</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Pivot</em>' containment reference.
+   * @see #getPivot()
+   * @generated
+   */
+  void setPivot(PivotTable value);
+
+  /**
+   * Returns the value of the '<em><b>Unpivot</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Unpivot</em>' containment reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Unpivot</em>' containment reference.
+   * @see #setUnpivot(UnpivotTable)
+   * @see com.jaspersoft.studio.data.sql.SqlPackage#getTableOrAlias_Unpivot()
+   * @model containment="true"
+   * @generated
+   */
+  UnpivotTable getUnpivot();
+
+  /**
+   * Sets the value of the '{@link com.jaspersoft.studio.data.sql.TableOrAlias#getUnpivot <em>Unpivot</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Unpivot</em>' containment reference.
+   * @see #getUnpivot()
+   * @generated
+   */
+  void setUnpivot(UnpivotTable value);
 
   /**
    * Returns the value of the '<em><b>Alias</b></em>' attribute.

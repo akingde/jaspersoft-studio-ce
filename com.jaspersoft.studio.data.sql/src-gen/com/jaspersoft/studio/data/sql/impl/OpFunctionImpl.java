@@ -2,6 +2,7 @@
  */
 package com.jaspersoft.studio.data.sql.impl;
 
+import com.jaspersoft.studio.data.sql.FunctionAnalytical;
 import com.jaspersoft.studio.data.sql.OpFunction;
 import com.jaspersoft.studio.data.sql.OpFunctionArg;
 import com.jaspersoft.studio.data.sql.SqlPackage;
@@ -24,6 +25,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * <ul>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.OpFunctionImpl#getFname <em>Fname</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.OpFunctionImpl#getArgs <em>Args</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.impl.OpFunctionImpl#getFan <em>Fan</em>}</li>
  * </ul>
  * </p>
  *
@@ -60,6 +62,16 @@ public class OpFunctionImpl extends MinimalEObjectImpl.Container implements OpFu
    * @ordered
    */
   protected OpFunctionArg args;
+
+  /**
+   * The cached value of the '{@link #getFan() <em>Fan</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getFan()
+   * @generated
+   * @ordered
+   */
+  protected FunctionAnalytical fan;
 
   /**
    * <!-- begin-user-doc -->
@@ -158,6 +170,54 @@ public class OpFunctionImpl extends MinimalEObjectImpl.Container implements OpFu
    * <!-- end-user-doc -->
    * @generated
    */
+  public FunctionAnalytical getFan()
+  {
+    return fan;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public NotificationChain basicSetFan(FunctionAnalytical newFan, NotificationChain msgs)
+  {
+    FunctionAnalytical oldFan = fan;
+    fan = newFan;
+    if (eNotificationRequired())
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SqlPackage.OP_FUNCTION__FAN, oldFan, newFan);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setFan(FunctionAnalytical newFan)
+  {
+    if (newFan != fan)
+    {
+      NotificationChain msgs = null;
+      if (fan != null)
+        msgs = ((InternalEObject)fan).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SqlPackage.OP_FUNCTION__FAN, null, msgs);
+      if (newFan != null)
+        msgs = ((InternalEObject)newFan).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SqlPackage.OP_FUNCTION__FAN, null, msgs);
+      msgs = basicSetFan(newFan, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.OP_FUNCTION__FAN, newFan, newFan));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   @Override
   public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
   {
@@ -165,6 +225,8 @@ public class OpFunctionImpl extends MinimalEObjectImpl.Container implements OpFu
     {
       case SqlPackage.OP_FUNCTION__ARGS:
         return basicSetArgs(null, msgs);
+      case SqlPackage.OP_FUNCTION__FAN:
+        return basicSetFan(null, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -183,6 +245,8 @@ public class OpFunctionImpl extends MinimalEObjectImpl.Container implements OpFu
         return getFname();
       case SqlPackage.OP_FUNCTION__ARGS:
         return getArgs();
+      case SqlPackage.OP_FUNCTION__FAN:
+        return getFan();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -202,6 +266,9 @@ public class OpFunctionImpl extends MinimalEObjectImpl.Container implements OpFu
         return;
       case SqlPackage.OP_FUNCTION__ARGS:
         setArgs((OpFunctionArg)newValue);
+        return;
+      case SqlPackage.OP_FUNCTION__FAN:
+        setFan((FunctionAnalytical)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -223,6 +290,9 @@ public class OpFunctionImpl extends MinimalEObjectImpl.Container implements OpFu
       case SqlPackage.OP_FUNCTION__ARGS:
         setArgs((OpFunctionArg)null);
         return;
+      case SqlPackage.OP_FUNCTION__FAN:
+        setFan((FunctionAnalytical)null);
+        return;
     }
     super.eUnset(featureID);
   }
@@ -241,6 +311,8 @@ public class OpFunctionImpl extends MinimalEObjectImpl.Container implements OpFu
         return FNAME_EDEFAULT == null ? fname != null : !FNAME_EDEFAULT.equals(fname);
       case SqlPackage.OP_FUNCTION__ARGS:
         return args != null;
+      case SqlPackage.OP_FUNCTION__FAN:
+        return fan != null;
     }
     return super.eIsSet(featureID);
   }

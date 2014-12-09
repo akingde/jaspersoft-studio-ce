@@ -76,6 +76,16 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
       case SqlPackage.FROM_TABLE: return createFromTable();
       case SqlPackage.FROM_TABLE_JOIN: return createFromTableJoin();
       case SqlPackage.TABLE_OR_ALIAS: return createTableOrAlias();
+      case SqlPackage.PIVOT_TABLE: return createPivotTable();
+      case SqlPackage.PIVOT_IN_CLAUSE: return createPivotInClause();
+      case SqlPackage.UNPIVOT_TABLE: return createUnpivotTable();
+      case SqlPackage.UNPIVOT_IN_CLAUSE: return createUnpivotInClause();
+      case SqlPackage.UNPIVOT_IN_CLAUSE_ARGS: return createUnpivotInClauseArgs();
+      case SqlPackage.UNPIVOT_IN_CLAUSE_ARG: return createUnpivotInClauseArg();
+      case SqlPackage.PIVOT_FOR_CLAUSE: return createPivotForClause();
+      case SqlPackage.PIVOT_COLUMNS: return createPivotColumns();
+      case SqlPackage.PIVOTS: return createPivots();
+      case SqlPackage.PIVOT_COL: return createPivotCol();
       case SqlPackage.TABLE_FULL: return createTableFull();
       case SqlPackage.DB_OBJECT_NAME_ALL: return createDbObjectNameAll();
       case SqlPackage.DB_OBJECT_NAME: return createDbObjectName();
@@ -98,6 +108,18 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
       case SqlPackage.OPERANDS: return createOperands();
       case SqlPackage.OPERAND: return createOperand();
       case SqlPackage.OP_FUNCTION: return createOpFunction();
+      case SqlPackage.FUNCTION_ANALYTICAL: return createFunctionAnalytical();
+      case SqlPackage.ANALYTIC_CLAUSE: return createAnalyticClause();
+      case SqlPackage.WINDOWING_CLAUSE: return createWindowingClause();
+      case SqlPackage.WINDOWING_CLAUSE_BETWEEN: return createWindowingClauseBetween();
+      case SqlPackage.WINDOWING_CLAUSE_OPERAND_FOLLOWING: return createWindowingClauseOperandFollowing();
+      case SqlPackage.WINDOWING_CLAUSE_OPERAND_PRECEDING: return createWindowingClauseOperandPreceding();
+      case SqlPackage.ORDER_BY_CLAUSE: return createOrderByClause();
+      case SqlPackage.ORDER_BY_CLAUSE_ARGS: return createOrderByClauseArgs();
+      case SqlPackage.ORDER_BY_CLAUSE_ARG: return createOrderByClauseArg();
+      case SqlPackage.QUERY_PARTITION_CLAUSE: return createQueryPartitionClause();
+      case SqlPackage.ANALYTIC_EXPR_ARGS: return createAnalyticExprArgs();
+      case SqlPackage.ANALYTIC_EXPR_ARG: return createAnalyticExprArg();
       case SqlPackage.OP_FUNCTION_ARG: return createOpFunctionArg();
       case SqlPackage.OP_FUNCTION_ARG_OPERAND: return createOpFunctionArgOperand();
       case SqlPackage.OP_FUNCTION_CAST: return createOpFunctionCast();
@@ -111,6 +133,10 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
       case SqlPackage.SQL_CASE_WHENS: return createSQLCaseWhens();
       case SqlPackage.SQL_CASE_WHEN: return createSqlCaseWhen();
       case SqlPackage.COL: return createCol();
+      case SqlPackage.UNIPIVOT_IN_CLAUSE: return createUnipivotInClause();
+      case SqlPackage.UICARGS: return createuicargs();
+      case SqlPackage.PVCS: return createpvcs();
+      case SqlPackage.PCOLS: return createpcols();
       case SqlPackage.TBLS: return createtbls();
       case SqlPackage.OP_LIST: return createOpList();
       case SqlPackage.PLUS: return createPlus();
@@ -118,6 +144,8 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
       case SqlPackage.STAR: return createStar();
       case SqlPackage.DIV: return createDiv();
       case SqlPackage.CONCAT: return createConcat();
+      case SqlPackage.OBC_ARGS: return createOBCArgs();
+      case SqlPackage.AEXP_ARGS: return createAExpArgs();
       case SqlPackage.OP_FLIST: return createOpFList();
       case SqlPackage.WHEN_LIST: return createWhenList();
       default:
@@ -278,6 +306,116 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
   {
     TableOrAliasImpl tableOrAlias = new TableOrAliasImpl();
     return tableOrAlias;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public PivotTable createPivotTable()
+  {
+    PivotTableImpl pivotTable = new PivotTableImpl();
+    return pivotTable;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public PivotInClause createPivotInClause()
+  {
+    PivotInClauseImpl pivotInClause = new PivotInClauseImpl();
+    return pivotInClause;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public UnpivotTable createUnpivotTable()
+  {
+    UnpivotTableImpl unpivotTable = new UnpivotTableImpl();
+    return unpivotTable;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public UnpivotInClause createUnpivotInClause()
+  {
+    UnpivotInClauseImpl unpivotInClause = new UnpivotInClauseImpl();
+    return unpivotInClause;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public UnpivotInClauseArgs createUnpivotInClauseArgs()
+  {
+    UnpivotInClauseArgsImpl unpivotInClauseArgs = new UnpivotInClauseArgsImpl();
+    return unpivotInClauseArgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public UnpivotInClauseArg createUnpivotInClauseArg()
+  {
+    UnpivotInClauseArgImpl unpivotInClauseArg = new UnpivotInClauseArgImpl();
+    return unpivotInClauseArg;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public PivotForClause createPivotForClause()
+  {
+    PivotForClauseImpl pivotForClause = new PivotForClauseImpl();
+    return pivotForClause;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public PivotColumns createPivotColumns()
+  {
+    PivotColumnsImpl pivotColumns = new PivotColumnsImpl();
+    return pivotColumns;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public Pivots createPivots()
+  {
+    PivotsImpl pivots = new PivotsImpl();
+    return pivots;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public PivotCol createPivotCol()
+  {
+    PivotColImpl pivotCol = new PivotColImpl();
+    return pivotCol;
   }
 
   /**
@@ -527,6 +665,138 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  public FunctionAnalytical createFunctionAnalytical()
+  {
+    FunctionAnalyticalImpl functionAnalytical = new FunctionAnalyticalImpl();
+    return functionAnalytical;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public AnalyticClause createAnalyticClause()
+  {
+    AnalyticClauseImpl analyticClause = new AnalyticClauseImpl();
+    return analyticClause;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public WindowingClause createWindowingClause()
+  {
+    WindowingClauseImpl windowingClause = new WindowingClauseImpl();
+    return windowingClause;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public WindowingClauseBetween createWindowingClauseBetween()
+  {
+    WindowingClauseBetweenImpl windowingClauseBetween = new WindowingClauseBetweenImpl();
+    return windowingClauseBetween;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public WindowingClauseOperandFollowing createWindowingClauseOperandFollowing()
+  {
+    WindowingClauseOperandFollowingImpl windowingClauseOperandFollowing = new WindowingClauseOperandFollowingImpl();
+    return windowingClauseOperandFollowing;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public WindowingClauseOperandPreceding createWindowingClauseOperandPreceding()
+  {
+    WindowingClauseOperandPrecedingImpl windowingClauseOperandPreceding = new WindowingClauseOperandPrecedingImpl();
+    return windowingClauseOperandPreceding;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public OrderByClause createOrderByClause()
+  {
+    OrderByClauseImpl orderByClause = new OrderByClauseImpl();
+    return orderByClause;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public OrderByClauseArgs createOrderByClauseArgs()
+  {
+    OrderByClauseArgsImpl orderByClauseArgs = new OrderByClauseArgsImpl();
+    return orderByClauseArgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public OrderByClauseArg createOrderByClauseArg()
+  {
+    OrderByClauseArgImpl orderByClauseArg = new OrderByClauseArgImpl();
+    return orderByClauseArg;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public QueryPartitionClause createQueryPartitionClause()
+  {
+    QueryPartitionClauseImpl queryPartitionClause = new QueryPartitionClauseImpl();
+    return queryPartitionClause;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public AnalyticExprArgs createAnalyticExprArgs()
+  {
+    AnalyticExprArgsImpl analyticExprArgs = new AnalyticExprArgsImpl();
+    return analyticExprArgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public AnalyticExprArg createAnalyticExprArg()
+  {
+    AnalyticExprArgImpl analyticExprArg = new AnalyticExprArgImpl();
+    return analyticExprArg;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public OpFunctionArg createOpFunctionArg()
   {
     OpFunctionArgImpl opFunctionArg = new OpFunctionArgImpl();
@@ -670,6 +940,50 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  public UnipivotInClause createUnipivotInClause()
+  {
+    UnipivotInClauseImpl unipivotInClause = new UnipivotInClauseImpl();
+    return unipivotInClause;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public uicargs createuicargs()
+  {
+    uicargsImpl uicargs = new uicargsImpl();
+    return uicargs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public pvcs createpvcs()
+  {
+    pvcsImpl pvcs = new pvcsImpl();
+    return pvcs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public pcols createpcols()
+  {
+    pcolsImpl pcols = new pcolsImpl();
+    return pcols;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public tbls createtbls()
   {
     tblsImpl tbls = new tblsImpl();
@@ -740,6 +1054,28 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
   {
     ConcatImpl concat = new ConcatImpl();
     return concat;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public OBCArgs createOBCArgs()
+  {
+    OBCArgsImpl obcArgs = new OBCArgsImpl();
+    return obcArgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public AExpArgs createAExpArgs()
+  {
+    AExpArgsImpl aExpArgs = new AExpArgsImpl();
+    return aExpArgs;
   }
 
   /**

@@ -41,7 +41,38 @@ FromTableJoin:
 	join=JoinType onTable=TableOrAlias 'ON' joinExpr=FullExpression;
 
 TableOrAlias:
-	(tfull=TableFull | sq=SubQueryOperand) alias=('AS')? (tblAlias=DbObjectName)?;
+	(tfull=TableFull | sq=SubQueryOperand) (pivot=PivotTable | unpivot=UnpivotTable)? alias=('AS')?
+	(tblAlias=DbObjectName)?;
+
+PivotTable:
+	'PIVOT' 'XML'? '(' pfor=PivotForClause pin=PivotInClause ')';
+
+PivotInClause:
+	'IN' '(' (sq=SubQueryOperand) ')';
+
+UnpivotTable:
+	'UNPIVOT' (('INCLUDE' | 'EXCLUDE') 'NULLS')? '(' pcols=PivotColumns pfor=PivotForClause inop=UnpivotInClause ')';
+
+UnpivotInClause:
+	{UnipivotInClause} op='IN' '(' args=UnpivotInClauseArgs ')';
+
+UnpivotInClauseArgs:
+	UnpivotInClauseArg ({uicargs.entries+=current} ("," entries+=UnpivotInClauseArg)+)?;
+
+UnpivotInClauseArg:
+	pcols=PivotColumns ('AS' cfuls=PivotColumns)?;
+
+PivotForClause:
+	'FOR' (ColumnFull | ('(' Columns ')'));
+
+PivotColumns:
+	(PivotCol | ('(' PivotCols ')'));
+
+PivotCols returns Pivots:
+	PivotCol ({pvcs.entries+=current} ("," entries+=PivotCol)+)?;
+
+PivotCol returns PivotCol:
+	DbObjectName ({pcols.entries+=current} ("." entries+=DbObjectName)+)?;
 
 TableFull:
 	DbObjectName ({tbls.entries+=current} ("." entries+=DbObjectName)+)?;
@@ -120,7 +151,46 @@ OperandFragment returns Operand:
 	//OperandGroup returns OpGroup:
 //	{OpGroup} '(' op=Operand ')';
 OperandFunction returns OpFunction:
-	{OpFunction} fname=FNAME (STAR | args=OpFunctionArg) ')';
+	{OpFunction} fname=FNAME (STAR | args=OpFunctionArg)? ')' (fan=FunctionAnalytical)?;
+
+FunctionAnalytical:
+	'OVER' '(' anClause=AnalyticClause ')';
+
+AnalyticClause:
+	QueryPartitionClause (obc=OrderByClause winc=WindowingClause?)?;
+
+WindowingClause:
+	('ROWS' | 'RANGE') (WindowingClauseBetween | WindowingClauseOperandPreceding);
+
+WindowingClauseBetween:
+	'BETWEEN' wcoP=WindowingClauseOperandPreceding
+	'AND' wcoF=WindowingClauseOperandFollowing;
+
+WindowingClauseOperandFollowing:
+	{WindowingClauseOperandFollowing} ('UNBOUNDED FOLLOWING' | 'CURRENT ROW' | (exp=AnalyticExprArg ('PRECEDING' |
+	'FOLLOWING')));
+
+WindowingClauseOperandPreceding:
+	{WindowingClauseOperandPreceding} ('UNBOUNDED PRECEDING' | 'CURRENT ROW' | (expr=AnalyticExprArg ('PRECEDING' |
+	'FOLLOWING')));
+
+OrderByClause:
+	('ORDER BY' | 'ORDER SIBLINGS BY') args=OrderByClauseArgs;
+
+OrderByClauseArgs:
+	OrderByClauseArg ({OBCArgs.entries+=current} ("," entries+=OrderByClauseArg)+)?;
+
+OrderByClauseArg:
+	col=AnalyticExprArg ('ASC' | 'DESC')? ('NULLS' ('FIRST' | 'LAST'))?;
+
+QueryPartitionClause:
+	'PARTITION BY' (args=AnalyticExprArgs | '(' AnalyticExprArgs ')');
+
+AnalyticExprArgs returns AnalyticExprArgs:
+	AnalyticExprArg ({AExpArgs.entries+=current} ("," entries+=AnalyticExprArg)+)?;
+
+AnalyticExprArg:
+	(ce=Operand (colAlias=DbObjectName)?);
 
 OpFunctionArg:
 	OpFunctionArgOperand ({OpFList.entries+=current} ("," entries+=OpFunctionArgOperand)+)?;

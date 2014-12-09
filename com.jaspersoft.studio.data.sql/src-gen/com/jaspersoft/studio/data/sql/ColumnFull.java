@@ -2,7 +2,6 @@
  */
 package com.jaspersoft.studio.data.sql;
 
-import org.eclipse.emf.ecore.EObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -14,6 +13,6 @@ import org.eclipse.emf.ecore.EObject;
  * @model
  * @generated
  */
-public interface ColumnFull extends EObject
+public interface ColumnFull extends PivotForClause
 {
 } // ColumnFull
