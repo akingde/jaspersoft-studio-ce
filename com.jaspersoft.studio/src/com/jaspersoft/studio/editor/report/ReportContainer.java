@@ -44,7 +44,6 @@ import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorActionBarContributor;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IPropertyListener;
@@ -218,11 +217,7 @@ public class ReportContainer extends MultiPageToolbarEditorPart implements ITabb
 					removeEditorPage(evt, obj);
 			}
 			getPropertyChangeSupport().firePropertyChange(evt);
-			Display.getDefault().asyncExec(new Runnable() {
-				public void run() {
-					firePropertyChange(ISaveablePart.PROP_DIRTY);
-				}
-			});
+			firePropertyChange(ISaveablePart.PROP_DIRTY);
 		}
 
 	};

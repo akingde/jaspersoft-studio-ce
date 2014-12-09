@@ -123,7 +123,7 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 
 	protected boolean toXML = false;
 
-	protected boolean isRefresh = false;
+	protected boolean isRefreshing = false;
 
 	protected boolean closing = false;
 
@@ -142,6 +142,56 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 
 	/** Preview editor used in page 2. */
 	protected PreviewEditor previewEditor;
+	
+	/**
+	 * Listener called when the source editor is modified
+	 */
+	protected IDocumentListener sourceEditorModified = new IDocumentListener() {
+
+		public void documentChanged(DocumentEvent event) {
+				if (!isRefreshing){
+					xmlFresh = false;
+					firePropertyChange(ISaveablePart.PROP_DIRTY);
+				}
+		}
+
+		public void documentAboutToBeChanged(DocumentEvent event) {
+
+		}
+	};
+	
+	protected class StateListener implements IElementStateListener {
+
+		@Override
+		public void elementDirtyStateChanged(Object element, boolean isDirty) {
+		}
+
+		@Override
+		public void elementContentAboutToBeReplaced(Object element) {
+		}
+
+		@Override
+		public void elementContentReplaced(Object element) {
+		}
+
+		@Override
+		public void elementDeleted(Object element) {
+			IFile resource = getCurrentFile();
+			String path = resource.getRawLocation().toOSString();
+			DefaultManager.INSTANCE.removeDefaultFile(path);
+
+			Display.getDefault().asyncExec(new Runnable() {
+				public void run() {
+					getSite().getPage().closeEditor(AbstractJRXMLEditor.this, false);
+				}
+			});
+		}
+
+		@Override
+		public void elementMoved(Object originalElement, Object movedElement) {
+
+		}
+	}
 
 	public AbstractJRXMLEditor() {
 		super();
@@ -182,7 +232,7 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 				throw new PartInitException("Invalid Input: Must be IFileEditorInput or FileStoreEditorInput"); //$NON-NLS-1$
 
 			getJrContext(file);
-			if (!isRefresh) {
+			if (!isRefreshing) {
 				final InputStream inp = in;
 				final IFile ifile = file;
 				doInitModel(monitor, getEditorInput(), inp, ifile);
@@ -261,7 +311,7 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 	 */
 	@Override
 	public void resourceChanged(final IResourceChangeEvent event) {
-		if (isRefresh)
+		if (isRefreshing)
 			return;
 		switch (event.getType()) {
 		case IResourceChangeEvent.PRE_CLOSE:
@@ -360,7 +410,7 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 		if (!mute)
 			UIUtils.showError(exception);
 		try {
-			isRefresh = true;
+			isRefreshing = true;
 			if (editorInput instanceof IFileEditorInput) {
 				IResource resource = ((IFileEditorInput) editorInput).getFile();
 				if (!resource.exists())
@@ -378,7 +428,7 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 						toXML = true;
 						setActivePage(PAGE_SOURCEEDITOR); // FIXME -> This could be removed???
 																							// we already force source editor in gotoMarker()
-						isRefresh = false;
+						isRefreshing = false;
 					}
 				});
 			}
@@ -394,13 +444,6 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 	}
 
 	/**
-	 * Creates the Design Editor page.
-	 * 
-	 * @see #PAGE_DESIGNER
-	 */
-	protected abstract void createDesignEditorPage() throws PartInitException;
-
-	/**
 	 * Creates the Source Editor page.
 	 * 
 	 * @throws PartInitException
@@ -413,18 +456,7 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 		int index = addPage(xmlEditor, getEditorInput());
 		setPageText(index, Messages.common_source);
 		IDocument doc = xmlEditor.getDocumentProvider().getDocument(xmlEditor.getEditorInput());
-		doc.addDocumentListener(new IDocumentListener() {
-
-			public void documentChanged(DocumentEvent event) {
-				xmlFresh = false;
-				if (previewEditor != null)
-					previewEditor.setDirty(true);
-			}
-
-			public void documentAboutToBeChanged(DocumentEvent event) {
-
-			}
-		});
+		doc.addDocumentListener(sourceEditorModified);
 	}
 
 	/**
@@ -468,7 +500,7 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 	@Override
 	public void doSave(final IProgressMonitor monitor) {
 		try {
-			isRefresh = true;
+			isRefreshing = true;
 
 			final IFile resource = getCurrentFile();
 			if (resource == null)
@@ -522,8 +554,7 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 						String xml = model2xml(version);
 						doSaveEditors(monitor);
 						// on eclipse 4.2.1 on first first save, for some reasons save is not working .., so we'll do it manually
-						resource.setContents(new ByteArrayInputStream(xml.getBytes("UTF-8")), IFile.KEEP_HISTORY | IFile.FORCE,
-								monitor);
+						resource.setContents(new ByteArrayInputStream(xml.getBytes("UTF-8")), IFile.KEEP_HISTORY | IFile.FORCE,	monitor);
 						finishSave(resource);
 					} catch (Throwable e) {
 						UIUtils.showError(e);
@@ -554,7 +585,7 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 		}
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
-				isRefresh = false;
+				isRefreshing = false;
 				firePropertyChange(ISaveablePart.PROP_DIRTY);
 			}
 		});
@@ -594,9 +625,9 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 
 	@Override
 	protected void handlePropertyChange(int propertyId) {
-		if (!isRefresh) {
-			if (propertyId == ISaveablePart.PROP_DIRTY && previewEditor != null)
-				previewEditor.setDirty(true);
+		if (!isRefreshing) {
+			if (propertyId == ISaveablePart.PROP_DIRTY && previewEditor != null && !isRefreshing)
+				setPreviewDirty(true);
 			super.handlePropertyChange(propertyId);
 		}
 	}
@@ -610,15 +641,6 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 	public boolean isSaveAsAllowed() {
 		return true;
 	}
-
-	/**
-	 * @return <code>true</code> if the main report designer is dirty, <code>false</code> otherwise
-	 */
-	protected abstract boolean isDesignerDirty();
-
-	protected abstract ISelection getDesignerPageSelection();
-
-	protected abstract void setDesignerPageSelection(ISelection newSelection);
 
 	@Override
 	protected void pageChange(final int newPageIndex) {
@@ -660,11 +682,14 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 				});
 				break;
 			case PAGE_SOURCEEDITOR:
-				// if (reportContainer.isDirty())
 				if (toXML)
 					toXML = false;
 				else {
+					//This flag avoid to have the xml editor dirty when switching
+					//because of the timestamp
+					isRefreshing = true;
 					model2xml(ver);
+					isRefreshing = false;
 				}
 				break;
 			case PAGE_PREVIEW:
@@ -675,9 +700,9 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 						handleJRException(getEditorInput(), e, false);
 					}
 				else if (isDesignerDirty()) {
-					isRefresh = true;
+					isRefreshing = true;
 					model2xml(ver);
-					isRefresh = false;
+					isRefreshing = false;
 				}
 				Job job = new Job("Switching to Preview") {
 					@Override
@@ -803,14 +828,29 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 			xml = JRXmlWriterHelper.writeReport(jrContext, report, JRXMLUtils.UTF8_ENCODING, version);
 			IDocumentProvider dp = xmlEditor.getDocumentProvider();
 			IDocument doc = dp.getDocument(xmlEditor.getEditorInput());
+			xmlFresh = true;
 			if (xml != null && !Arrays.equals(doc.get().getBytes(), xml.getBytes())) {
 				doc.set(xml);
 			}
-			xmlFresh = true;
 		} catch (Throwable e) {
 			UIUtils.showError(e);
 		}
 		return xml;
+	}
+	
+	/**
+	 * Check if the current editor is dirty
+	 * 
+	 * @return true if the design or the preview editor are dirty, or if 
+	 * the xml inside the xml editor is not fresh. False otherwise
+	 */
+	@Override
+	public boolean isDirty() {
+		boolean designDirty = getDesignEditor() != null && getDesignEditor().isDirty();
+		if (designDirty) return true;
+		boolean previewDirty = previewEditor != null && previewEditor.isDirty();
+		if (previewDirty) return true;
+		return !xmlFresh;
 	}
 
 	protected void model2xml() {
@@ -948,8 +988,6 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 		return JaspersoftStudioPlugin.getExtensionManager().getTitleToolTip(jrContext, super.getTitleToolTip());
 	}
 
-	protected abstract EditorPart getDesignEditor();
-
 	// Accessory classes
 
 	protected final class PreviewEditor extends PreviewContainer {
@@ -978,43 +1016,31 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 		 * Set the dirty flag of the preview area, but only if it isn't refreshing
 		 */
 		public void setDirty(boolean dirty) {
-			if (!isRefresh) {
+			if (!isRefreshing) {
 				super.setDirty(dirty);
 			}
 		}
 	}
+	
+	//ABSTRACT METHODS
+	
+	/**
+	 * @return <code>true</code> if the main report designer is dirty, <code>false</code> otherwise
+	 */
+	protected abstract boolean isDesignerDirty();
 
-	protected class StateListener implements IElementStateListener {
+	protected abstract ISelection getDesignerPageSelection();
 
-		@Override
-		public void elementDirtyStateChanged(Object element, boolean isDirty) {
-		}
+	protected abstract void setDesignerPageSelection(ISelection newSelection);
+	
+	/**
+	 * Creates the Design Editor page.
+	 * 
+	 * @see #PAGE_DESIGNER
+	 */
+	protected abstract void createDesignEditorPage() throws PartInitException;
 
-		@Override
-		public void elementContentAboutToBeReplaced(Object element) {
-		}
+	protected abstract EditorPart getDesignEditor();
 
-		@Override
-		public void elementContentReplaced(Object element) {
-		}
-
-		@Override
-		public void elementDeleted(Object element) {
-			IFile resource = getCurrentFile();
-			String path = resource.getRawLocation().toOSString();
-			DefaultManager.INSTANCE.removeDefaultFile(path);
-
-			Display.getDefault().asyncExec(new Runnable() {
-				public void run() {
-					getSite().getPage().closeEditor(AbstractJRXMLEditor.this, false);
-				}
-			});
-		}
-
-		@Override
-		public void elementMoved(Object originalElement, Object movedElement) {
-
-		}
-	}
 
 }
