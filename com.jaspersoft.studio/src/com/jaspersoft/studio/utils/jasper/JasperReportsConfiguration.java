@@ -131,13 +131,6 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 				refreshFonts = true;
 				refreshBundles = true;
 				fontList = null;
-				if (props != null) {
-					for (Object obj : props.keySet()) {
-						if (obj instanceof String)
-							removeProperty((String) obj);
-					}
-				}
-				props = null;
 				isPropsCached = false;
 				getProperties();
 				qExecutors = null;
@@ -207,6 +200,8 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 			// lookupOrders = new String[] { InstanceScope.SCOPE };
 			// contexts = new IScopeContext[] { INSTANCE_SCOPE };
 		}
+		// file changed, reset properties
+		isPropsCached = false;
 		// service.setDefaultLookupOrder(qualifier, null, lookupOrders);
 		if (preferenceListener == null) {
 			preferenceListener = new PreferenceListener();
@@ -350,31 +345,27 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 		return def;
 	}
 
-	private Map<String, String> propmap;
-
 	@Override
 	public Map<String, String> getProperties() {
+		if (isPropsCached)
+			return getPropertiesMap();
+		setPropertiesMap(null);
 		Map<String, String> smap = super.getProperties();
-		if (smap != null && isPropsCached)
-			return propmap;
-		propmap = super.getProperties();
-		if (propmap != null)
-			propmap = new HashMap<String, String>(smap);
-		if (propmap == null) {
-			propmap = new HashMap<String, String>();
-		}
+		Map<String, String> propmap = new HashMap<String, String>();
+		if (smap != null && !smap.isEmpty())
+			propmap.putAll(smap);
 		setPropertiesMap(propmap);
-		getJRProperties();
-		if (!isPropsCached) {
-			for (Object key : props.keySet()) {
-				if (!(key instanceof String))
-					continue;
-				String val = props.getProperty((String) key);
-				if (val != null)
-					propmap.put((String) key, val);
-			}
-			isPropsCached = true;
+		// get properties from eclipse stored jr properties (eclipse, project, file level)
+		Properties props = getJRProperties();
+		for (Object key : props.keySet()) {
+			if (!(key instanceof String))
+				continue;
+			String val = props.getProperty((String) key);
+			if (val != null)
+				propmap.put((String) key, val);
 		}
+		isPropsCached = true;
+		// let's look also into the preferences maybe there are some properties
 		pstore.setWithDefault(false);
 		for (String key : propmap.keySet()) {
 			String val = Misc.nullIfEmpty(pstore.getString(key));
@@ -387,20 +378,17 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 
 	private boolean isPropsCached = false;
 	public static final String PROPERTY_JRPROPERTY_PREFIX = "ireport.jrproperty.";
-	private Properties props;
 
 	private Properties getJRProperties() {
-		if (props == null) {
-			isPropsCached = false;
-			try {
-				pstore.setWithDefault(false);
-				props = FileUtils.load(pstore.getString(FilePrefUtil.NET_SF_JASPERREPORTS_JRPROPERTIES));
-			} catch (IOException e) {
-				e.printStackTrace();
-				props = new Properties();
-			} finally {
-				pstore.setWithDefault(true);
-			}
+		Properties props = null;
+		try {
+			pstore.setWithDefault(false);
+			props = FileUtils.load(pstore.getString(FilePrefUtil.NET_SF_JASPERREPORTS_JRPROPERTIES));
+		} catch (IOException e) {
+			e.printStackTrace();
+			props = new Properties();
+		} finally {
+			pstore.setWithDefault(true);
 		}
 		return props;
 	}
