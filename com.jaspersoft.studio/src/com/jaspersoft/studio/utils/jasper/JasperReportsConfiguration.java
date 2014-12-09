@@ -158,13 +158,13 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 			functionsBundles = null;
 			messageProviderFactory = null;
 			fontList = null;
-//			try {
-//				DefaultExtensionsRegistry extensionsRegistry = new DefaultExtensionsRegistry();
-//				ExtensionsEnvironment.setSystemExtensionsRegistry(extensionsRegistry);
-//			} catch (Throwable e) {
-//				JaspersoftStudioPlugin.getInstance().logError(
-//						"Cannot complete operations successfully after a classpath change occurred.", e);
-//			}
+			try {
+				DefaultExtensionsRegistry extensionsRegistry = new DefaultExtensionsRegistry();
+				ExtensionsEnvironment.setSystemExtensionsRegistry(extensionsRegistry);
+			} catch (Throwable e) {
+				JaspersoftStudioPlugin.getInstance().logError(
+						"Cannot complete operations successfully after a classpath change occurred.", e);
+			}
 		}
 	}
 
@@ -362,8 +362,8 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 			propmap = new HashMap<String, String>(smap);
 		if (propmap == null) {
 			propmap = new HashMap<String, String>();
-			setPropertiesMap(propmap);
 		}
+		setPropertiesMap(propmap);
 		getJRProperties();
 		if (!isPropsCached) {
 			for (Object key : props.keySet()) {
