@@ -64,7 +64,7 @@ public class HBaseDataAdapterFactory implements DataAdapterFactory {
 
 	public DataAdapterService createDataAdapterService(DataAdapter dataAdapter) {
 		if (dataAdapter instanceof HBaseDataAdapter)
-			return new HBaseDataAdapterService(JasperReportsConfiguration.getDefaultJRConfig(), (HBaseDataAdapter) dataAdapter);
+			return new HBaseDataAdapterService(JasperReportsConfiguration.getDefaultInstance(), (HBaseDataAdapter) dataAdapter);
 		return null;
 	}
 
