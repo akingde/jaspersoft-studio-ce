@@ -61,6 +61,33 @@ public class Messages extends NLS {
 	public static String SPCVItemPropertiesList_ColValue;
 	public static String SPCVItemPropertiesList_Edit;
 	public static String SPCVItemPropertiesList_Remove;
+	public static String CompileDialog_dialogTitle;
+	public static String CompileDialog_endCompilation;
+	public static String CompileDialog_startCompilation;
+	public static String BuildComponentHandler_errorMessage;
+	public static String BuildComponentHandler_errorTitle;
+	public static String CustomVisualizationComponentLicensePage_downloadLabel;
+	public static String CustomVisualizationComponentLicensePage_pageDescription;
+	public static String CustomVisualizationComponentLicensePage_pageTitle;
+	public static String CustomVisualizationComponentSummaryPage_description;
+	public static String CustomVisualizationComponentSummaryPage_footerLabel;
+	public static String CustomVisualizationComponentSummaryPage_headerLabel;
+	public static String CustomVisualizationComponentSummaryPage_title;
+	public static String CustomVisualizationComponentTablePage_licenseGroup;
+	public static String CustomVisualizationComponentTablePage_nameCol;
+	public static String CustomVisualizationComponentTablePage_noLibraryError;
+	public static String CustomVisualizationComponentTablePage_noSpacesError;
+	public static String CustomVisualizationComponentTablePage_pageDescription;
+	public static String CustomVisualizationComponentTablePage_pageTitle;
+	public static String CustomVisualizationComponentTablePage_projectName;
+	public static String CustomVisualizationComponentTablePage_versionCol;
+	public static String CustomVisualizationComponentWizard_errorDescription;
+	public static String CustomVisualizationComponentWizard_errorTitle;
+	public static String CustomVisualizationComponentWizard_projectDescription;
+	public static String CustomVisualizationComponentWizard_title;
+	public static String CustomVisualizationComponentTablePage_errorEmpty;
+	public static String CustomVisualizationComponentTablePage_errorInvalidGeneric;
+	public static String CustomVisualizationComponentTablePage_errorProjectExist;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
