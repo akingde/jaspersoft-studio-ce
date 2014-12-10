@@ -16,11 +16,15 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import org.eclipse.core.expressions.PropertyTester;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 
+
+
 /**
- * Class to evaluate the nature of a project and check if it is a Custom Visualization Project
+ * Class to evaluate the nature of a project and check if it is a Custom Visualization Project or 
+ * if the selected file is a build.js file
  * 
  * @author Orlandin Marco
  *
@@ -28,7 +32,7 @@ import org.eclipse.core.runtime.CoreException;
 public class NatureComponentTester extends PropertyTester {
 
 	/**
-	 * Check if a project is a Custom Visualization project
+	 * Check if a project is a Custom Visualization project or a build.js file
 	 * 
 	 * @param receiver an IProject, if the parameter has a different type
 	 * the method return false
@@ -45,8 +49,11 @@ public class NatureComponentTester extends PropertyTester {
 			} catch (CoreException e) {
 				e.printStackTrace();
 			}
+		} else if (receiver instanceof IFile){
+			IFile file = (IFile)receiver;
+			return file.getName().equals("build.js");
 		}
-	    return false;
+	  return false;
 	}
 	
 

@@ -25,6 +25,7 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IHandler;
 import org.eclipse.core.commands.IHandlerListener;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -33,7 +34,6 @@ import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.util.Util;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IWorkbenchWindow;
@@ -55,7 +55,7 @@ public class BuildComponentHandler implements IHandler {
 	 * Return the selected project
 	 * 
 	 * @return the selected project if it is a project with the nature of a custom visualization 
-	 * component, null otherwise
+	 * component or a file that belong to a nature custom visualization component, null otherwise
 	 */
 	private IProject getSelectedProject(){
 		IWorkbenchWindow activeWorkbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
@@ -65,7 +65,9 @@ public class BuildComponentHandler implements IHandler {
 				for (Iterator<?> it = ((IStructuredSelection) selection).iterator(); it.hasNext();) {
 					Object element = it.next();
 					IProject project = null;
-					if (element instanceof IProject) {
+					if (element instanceof IFile){
+						project = ((IFile)element).getProject();
+					} else if (element instanceof IProject) {
 						project = (IProject) element;
 					} else if (element instanceof IAdaptable) {
 						project = (IProject) ((IAdaptable) element).getAdapter(IProject.class);
@@ -113,8 +115,6 @@ public class BuildComponentHandler implements IHandler {
 			return null;
 		}
 	}
-	
-
 	
 	/**
 	 * 
@@ -180,9 +180,6 @@ public class BuildComponentHandler implements IHandler {
 					"-o",
 					"build.js"
 			};
-			
-			
-			//System.out.println(command);
 			try {
 				//Run the compilation process and print the output inside a dialog
 				Process proc = Runtime.getRuntime().exec(args, null, projectFolder);
