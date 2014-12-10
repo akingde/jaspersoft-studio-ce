@@ -65,7 +65,7 @@ public class ExtendedTemplateProvider implements TemplateProvider {
 			while (en.hasMoreElements()) {
 				URL templateURL = (URL) en.nextElement();
 				try {
-					TemplateBundle bundle = new TableTemplateBunlde(templateURL, JasperReportsConfiguration.getDefaultJRConfig());
+					TemplateBundle bundle = new TableTemplateBunlde(templateURL, JasperReportsConfiguration.getDefaultInstance());
 					if (bundle != null)
 					{
 						cache.add(bundle);
@@ -107,7 +107,7 @@ public class ExtendedTemplateProvider implements TemplateProvider {
 			if (files != null) {
 				for (File f : files) {
 					try {
-						TemplateBundle bundle = new TableTemplateBunlde(f.toURI().toURL(), true, JasperReportsConfiguration.getDefaultJRConfig());
+						TemplateBundle bundle = new TableTemplateBunlde(f.toURI().toURL(), true, JasperReportsConfiguration.getDefaultInstance());
 						if (bundle != null && tableTemplateKey.equals(bundle.getProperty(BuiltInCategories.ENGINE_KEY))) {
 							templates.add(bundle);
 						}
