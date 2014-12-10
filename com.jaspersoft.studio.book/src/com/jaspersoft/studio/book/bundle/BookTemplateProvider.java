@@ -65,7 +65,7 @@ public class BookTemplateProvider implements TemplateProvider {
 			while (en != null && en.hasMoreElements()) {
 				URL templateURL = (URL) en.nextElement();
 				try {
-					TemplateBundle bundle = new BookTemplateBundle(templateURL, false, JasperReportsConfiguration.getDefaultJRConfig());
+					TemplateBundle bundle = new BookTemplateBundle(templateURL, false, JasperReportsConfiguration.getDefaultInstance());
 					if (bundle != null)
 					{
 						cache.add(bundle);
@@ -107,7 +107,7 @@ public class BookTemplateProvider implements TemplateProvider {
 			if (files != null) {
 				for (File f : files) {
 					try {
-						TemplateBundle bundle = new BookTemplateBundle(f.toURI().toURL(), true, JasperReportsConfiguration.getDefaultJRConfig());
+						TemplateBundle bundle = new BookTemplateBundle(f.toURI().toURL(), true, JasperReportsConfiguration.getDefaultInstance());
 						if (bundle != null && bookTemplateKey.equals(bundle.getProperty(BuiltInCategories.ENGINE_KEY))) {
 							templates.add(bundle);
 						}
