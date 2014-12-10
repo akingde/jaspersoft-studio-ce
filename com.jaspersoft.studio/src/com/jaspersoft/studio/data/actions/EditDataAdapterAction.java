@@ -12,11 +12,12 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.actions;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
-import org.eclipse.swt.widgets.Display;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
@@ -60,7 +61,7 @@ public class EditDataAdapterAction extends Action {
 			DataAdapterDescriptor dataAdapter = mDataAdapter.getValue();
 			String oldName = dataAdapter.getName();
 			DataAdapterWizard wizard = new DataAdapterWizard(dataAdapter, storage);
-			DataAdapterWizardDialog dialog = new DataAdapterWizardDialog(Display.getCurrent().getActiveShell(), wizard);
+			DataAdapterWizardDialog dialog = new DataAdapterWizardDialog(UIUtils.getShell(), wizard);
 			wizard.setWizardDialog(dialog);
 			dialog.create();
 			if (dialog.open() == Dialog.OK) {
