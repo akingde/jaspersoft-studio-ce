@@ -62,7 +62,7 @@ public class SelectableComposite extends ScrolledComposite {
 	/**
 	 * List of the clickable composites associated with each ElementDescriptor
 	 */
-	private List<Composite> compositeList;
+	private List<Composite> compositeList = new ArrayList<Composite>();;
 
 	/**
 	 * color used as background for the unselected elements
@@ -261,7 +261,7 @@ public class SelectableComposite extends ScrolledComposite {
 		mainComposite.setLayout(mainCompLayout);
 		setContent(mainComposite);
 		mainComposite.setRedraw(false);
-		compositeList = new ArrayList<Composite>();
+		compositeList.clear();
 		for (ElementDescription item : items) {
 			Composite comp = new Composite(mainComposite, SWT.BORDER);
 			comp.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
@@ -316,6 +316,36 @@ public class SelectableComposite extends ScrolledComposite {
 
 		});
 	}
+	
+	/**
+	 * Show only the elements with a specific string in the name. An empty string
+	 * show all the elements
+	 * 
+	 * @param name name to search
+	 */
+	public void showOnlyElement(String name){
+		for(Composite comp : compositeList){
+			ElementDescription desc = (ElementDescription)comp.getData();
+			if (desc.getName().contains(name) || name.isEmpty()){
+				if (!comp.isVisible()){
+					comp.setVisible(true);
+					GridData layoutData = (GridData)comp.getLayoutData();
+					layoutData.exclude = false;
+				}
+			} else {
+				if (comp.isVisible()){
+					comp.setVisible(false);
+					GridData layoutData = (GridData)comp.getLayoutData();
+					layoutData.exclude = true;
+				}
+			}
+		}
+		if (getContent() != null){
+			int width = getContent().getSize().x;
+			getContent().setSize(width, getContent().computeSize(width, SWT.DEFAULT).y);
+			layout(true, true);
+		}
+	}
 
 	@Override
 	public void dispose() {
@@ -323,6 +353,7 @@ public class SelectableComposite extends ScrolledComposite {
 		PlatformUI.getWorkbench().getDisplay().removeFilter(org.eclipse.swt.SWT.KeyDown, arrowListener);
 		selectedColor.dispose();
 		unselectedColor.dispose();
+		compositeList.clear();
 	}
 
 }

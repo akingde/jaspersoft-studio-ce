@@ -89,6 +89,8 @@ public class JRPropertyDialog extends Dialog {
 	 * Layout used by the stack composite
 	 */
 	protected StackLayout stackLayout;
+	
+	protected SelectableComposite propertiesSuggestions;
 
 	public JRPropertyDialog(Shell parentShell) {
 		super(parentShell);
@@ -121,6 +123,7 @@ public class JRPropertyDialog extends Dialog {
 			public void modifyText(ModifyEvent e) {
 				String newtext = cprop.getText();
 				value.setProperty(newtext);
+				if (propertiesSuggestions != null) propertiesSuggestions.showOnlyElement(newtext);
 				PropertyDTO dto = PropertiesList.getDTO(value.getProperty());
 				if (dto != null) {
 					value.setValue(dto.getDefValue());
@@ -205,11 +208,11 @@ public class JRPropertyDialog extends Dialog {
 		expandableSection.setFont(SWTResourceManager.getBoldFont(expandableSection.getFont()));
 		expandableSection.setSeparatorControl(new Label(expandableSection, SWT.SEPARATOR | SWT.HORIZONTAL));
 		
-		final SelectableComposite comp = new SelectableComposite(expandableSection);
+		propertiesSuggestions = new SelectableComposite(expandableSection);
 		GridData compData = new GridData(GridData.FILL_BOTH);
 		compData.heightHint = 200;
-		comp.setLayoutData(compData);
-		comp.SetDoubleClickListener(new SelectionAdapter() {
+		propertiesSuggestions.setLayoutData(compData);
+		propertiesSuggestions.SetDoubleClickListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				String selectedProp = ((ElementDescription)e.data).getName();
@@ -217,7 +220,7 @@ public class JRPropertyDialog extends Dialog {
 			}
 		});
 		
-		expandableSection.setClient(comp);
+		expandableSection.setClient(propertiesSuggestions);
 		expandableSection.addExpansionListener(new ExpansionAdapter(){
 			
 			private Point oldSize = null;
@@ -230,14 +233,14 @@ public class JRPropertyDialog extends Dialog {
 			
 			@Override
 			public void expansionStateChanged(ExpansionEvent e) {
-				if (!comp.isItemSetted() && e.getState()) comp.setItems(getHints());
+				if (!propertiesSuggestions.isItemSetted() && e.getState()) propertiesSuggestions.setItems(getHints());
 				if (e.getState()) {
 					Point actualSize = getShell().getSize();
 					getShell().setSize(actualSize.x, actualSize.y+200);
 				} else getShell().setSize(oldSize);
 			}
 		});
-		return comp;
+		return propertiesSuggestions;
 	}
 
 	/**

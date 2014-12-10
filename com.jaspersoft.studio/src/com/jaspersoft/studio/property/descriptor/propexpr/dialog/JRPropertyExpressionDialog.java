@@ -83,6 +83,7 @@ public class JRPropertyExpressionDialog extends JRPropertyDialog
 			@Override
 			public void modifyText(ModifyEvent e) {
 				String newtext = cprop.getText();
+				if (propertiesSuggestions != null) propertiesSuggestions.showOnlyElement(newtext);
 				value.setProperty(newtext);
 				PropertyDTO dto = PropertiesList.getDTO(value.getProperty());
 				if (dto != null) {
