@@ -130,7 +130,7 @@ public class WSecretText extends Text {
 		}
 		else {
 			// default fallback solution
-			return JasperReportsConfiguration.getDefaultJRConfig();
+			return JasperReportsConfiguration.getDefaultInstance();
 		}
 	}
 	
