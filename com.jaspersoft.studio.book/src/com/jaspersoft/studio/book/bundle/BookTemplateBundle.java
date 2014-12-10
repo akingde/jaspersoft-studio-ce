@@ -287,7 +287,7 @@ public class BookTemplateBundle extends WizardTemplateBundle {
 			ByteArrayInputStream stream = null;
 			// Save the all the files...
 			try {
-				String contents = JRXmlWriterHelper.writeReport(JasperReportsConfiguration.getDefaultJRConfig(), design, resourceFile, false);
+				String contents = JRXmlWriterHelper.writeReport(JasperReportsConfiguration.getDefaultInstance(), design, resourceFile, false);
 				stream = new ByteArrayInputStream(contents.getBytes());
 				if (resourceFile.exists()) {
 					resourceFile.setContents(stream, true, true, monitor);
