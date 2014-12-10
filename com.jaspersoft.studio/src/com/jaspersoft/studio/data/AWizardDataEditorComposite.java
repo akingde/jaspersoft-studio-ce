@@ -17,15 +17,19 @@ import java.util.List;
 import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
 
+import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+import com.jaspersoft.studio.wizards.JSSWizard;
 
 
 
 public abstract class AWizardDataEditorComposite extends Composite {
 
-	
+	private WizardPage page;
 	/**
 	 * This method returns a compisite which implements the editor itself.
 	 * The editor can totally control what's going on in the wizard page and control the
@@ -39,9 +43,30 @@ public abstract class AWizardDataEditorComposite extends Composite {
 	public AWizardDataEditorComposite(Composite parent, WizardPage page)
 	{
 			super( parent, SWT.NONE );
+			this.page=page;
 	}
 	
+	/**
+	 * @return the page
+	 */
+	public WizardPage getPage() {
+		return page;
+	}
+	/**
+	 * @param page
+	 *          the page to set
+	 */
+	public void setPage(WizardPage page) {
+		this.page = page;
+	}
 	
+	public JasperReportsConfiguration getJasperReportsConfiguration() {
+		WizardPage p = getPage();
+		IWizard wizard = p.getWizard();
+		if (p != null && wizard != null && wizard instanceof JSSWizard) 
+			return ((JSSWizard) wizard).getConfig(); 
+		return JasperReportsConfiguration.getDefaultInstance();
+	}
 	/**
 	 * The editor may be used to edit a query, in this case the wizard may be interested
 	 * in getting the query and its language.

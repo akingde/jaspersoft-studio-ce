@@ -64,102 +64,105 @@ public class XmlaDataAdapterComposite extends ADataAdapterComposite {
 	 * Map with all the authentication for each url
 	 */
 	private static Map<String, PasswordAuthentication> authenticationMap = new HashMap<String, PasswordAuthentication>();
-	
+
 	/**
-	 * Inner class used only to store the result of a connection 
-	 * operation
+	 * Inner class used only to store the result of a connection operation
 	 * 
 	 * @author Orlandin Marco
-	 *
+	 * 
 	 */
-	private class ReturnResponse{
-		
+	private class ReturnResponse {
+
 		/**
 		 * Return code of the connection operation
 		 */
 		private int returnCode;
-		
+
 		/**
 		 * Flag to store if the operation was successful or not
 		 */
 		private boolean successful;
-		
+
 		/**
-		 * Exception raised during the operation, null if there wasen't exceptions
+		 * Exception raised during the operation, null if there wasen't
+		 * exceptions
 		 */
 		private Exception ex;
-		
+
 		/**
 		 * Create an instance of the class
 		 * 
-		 * @param successfull Flag to store if the operation was successful or not
-		 * @param returnCode Return code of the connection operation
+		 * @param successfull
+		 *            Flag to store if the operation was successful or not
+		 * @param returnCode
+		 *            Return code of the connection operation
 		 */
-		public ReturnResponse(boolean successfull, int returnCode){
+		public ReturnResponse(boolean successfull, int returnCode) {
 			this.successful = successfull;
 			this.returnCode = returnCode;
 			ex = null;
 		}
-		
+
 		/**
-		 * Create an instance of the class, the return code is always -1 and
-		 * the successful flag is false, since there was an exception
+		 * Create an instance of the class, the return code is always -1 and the
+		 * successful flag is false, since there was an exception
 		 * 
-		 * @param ex Exception raised during the operation
+		 * @param ex
+		 *            Exception raised during the operation
 		 */
-		public ReturnResponse(Exception ex){
+		public ReturnResponse(Exception ex) {
 			this.successful = false;
 			this.returnCode = -1;
 			this.ex = ex;
 		}
-		
+
 		/**
 		 * Return if there was an exception
 		 * 
 		 * @return true if there was an exception, false otherwise
 		 */
-		public boolean isException(){
+		public boolean isException() {
 			return ex != null;
 		}
-		
+
 		/**
 		 * Return the exception raised
 		 * 
 		 * @return return the exception, or null if isException is false
 		 */
-		public Exception getException(){
+		public Exception getException() {
 			return ex;
 		}
-		
+
 		/**
 		 * Check if the connection operation is successful
 		 * 
 		 * @return true if the connection is working good, false otherwise
 		 */
-		public boolean isSuccessfull(){
+		public boolean isSuccessfull() {
 			return this.successful;
 		}
-		
+
 		/**
 		 * Return the return code of the connection operation
 		 * 
-		 * @return an integer representing the return code of the operation. It 
-		 * is -1 in case of exception since the procedure was interrupted before try
-		 * the connection
+		 * @return an integer representing the return code of the operation. It
+		 *         is -1 in case of exception since the procedure was
+		 *         interrupted before try the connection
 		 */
-		public int getReturnCode(){
+		public int getReturnCode() {
 			return returnCode;
 		}
 	}
-	
-	
+
 	/**
 	 * Create the composite.
 	 * 
 	 * @param parent
 	 * @param style
 	 */
-	public XmlaDataAdapterComposite(Composite parent, int style, JasperReportsContext jrContext) {
+	public XmlaDataAdapterComposite(Composite parent, int style,
+			JasperReportsContext jrContext) {
 
 		super(parent, style, jrContext);
 		setLayout(new GridLayout(3, false));
@@ -228,25 +231,36 @@ public class XmlaDataAdapterComposite extends ADataAdapterComposite {
 				boolean loginSuccesfull = response.isSuccessfull();
 				if (loginSuccesfull) {
 					try {
-						PasswordAuthentication auth = authenticationMap.get(url);
-						if (auth == null){
-							//The access to the server dosen't need a username or a password
-							auth = new PasswordAuthentication("", "".toCharArray()); //$NON-NLS-1$ //$NON-NLS-2$
+						PasswordAuthentication auth = authenticationMap
+								.get(url);
+						if (auth == null) {
+							// The access to the server dosen't need a username
+							// or a password
+							auth = new PasswordAuthentication(
+									"", "".toCharArray()); //$NON-NLS-1$ //$NON-NLS-2$
 						}
-						MetadataDiscover discover = new MetadataDiscover(url, auth.getUserName(), new String(auth.getPassword()));
+						MetadataDiscover discover = new MetadataDiscover(url,
+								auth.getUserName(), new String(auth
+										.getPassword()));
 						handleMetaDataChanged(discover);
-						UIUtils.showInformation(Messages.XmlaDataAdapterComposite_successTitle, Messages.XmlaDataAdapterComposite_successText);
+						UIUtils.showInformation(
+								Messages.XmlaDataAdapterComposite_successTitle,
+								Messages.XmlaDataAdapterComposite_successText);
 					} catch (Exception e1) {
 						e1.printStackTrace();
 					}
 				} else {
 					String message;
-					if (response.isException()){
-						message =  Messages.XmlaDataAdapterComposite_failedText + "\n" + MessageFormat.format(Messages.XmlaDataAdapterComposite_errorException, new Object[]{response.getException().getMessage()}); //$NON-NLS-1$
+					if (response.isException()) {
+						message = Messages.XmlaDataAdapterComposite_failedText
+								+ "\n" + MessageFormat.format(Messages.XmlaDataAdapterComposite_errorException, new Object[] { response.getException().getMessage() }); //$NON-NLS-1$
 					} else {
-						message =  Messages.XmlaDataAdapterComposite_failedText + "\n" + MessageFormat.format(Messages.XmlaDataAdapterComposite_errorCode, new Object[]{response.getReturnCode()}); //$NON-NLS-1$
+						message = Messages.XmlaDataAdapterComposite_failedText
+								+ "\n" + MessageFormat.format(Messages.XmlaDataAdapterComposite_errorCode, new Object[] { response.getReturnCode() }); //$NON-NLS-1$
 					}
-					UIUtils.showInformation(Messages.XmlaDataAdapterComposite_failedTitle, message);
+					UIUtils.showInformation(
+							Messages.XmlaDataAdapterComposite_failedTitle,
+							message);
 				}
 			}
 		});
@@ -269,19 +283,29 @@ public class XmlaDataAdapterComposite extends ADataAdapterComposite {
 
 	@Override
 	protected void bindWidgets(DataAdapter dataAdapter) {
-		bindingContext.bindValue(SWTObservables.observeText(xmlaUri, SWT.Modify), PojoObservables.observeValue(dataAdapter, "xmlaUrl")); //$NON-NLS-1$
-		bindingContext.bindValue(SWTObservables.observeSelection(datasource), PojoObservables.observeValue(dataAdapter, "datasource")); //$NON-NLS-1$
-		bindingContext.bindValue(SWTObservables.observeSelection(catalog), PojoObservables.observeValue(dataAdapter, "catalog")); //$NON-NLS-1$
-		bindingContext.bindValue(SWTObservables.observeSelection(cube), PojoObservables.observeValue(dataAdapter, "cube")); //$NON-NLS-1$
-		bindingContext.bindValue(SWTObservables.observeText(textUsername, SWT.Modify), PojoObservables.observeValue(dataAdapter, "username")); //$NON-NLS-1$
-		bindingContext.bindValue(SWTObservables.observeText(textPassword, SWT.Modify), PojoObservables.observeValue(dataAdapter, "password")); //$NON-NLS-1$
+		bindingContext.bindValue(
+				SWTObservables.observeText(xmlaUri, SWT.Modify),
+				PojoObservables.observeValue(dataAdapter, "xmlaUrl")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeSelection(datasource),
+				PojoObservables.observeValue(dataAdapter, "datasource")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeSelection(catalog),
+				PojoObservables.observeValue(dataAdapter, "catalog")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeSelection(cube),
+				PojoObservables.observeValue(dataAdapter, "cube")); //$NON-NLS-1$
+		bindingContext.bindValue(
+				SWTObservables.observeText(textUsername, SWT.Modify),
+				PojoObservables.observeValue(dataAdapter, "username")); //$NON-NLS-1$
+		bindingContext.bindValue(
+				SWTObservables.observeText(textPassword, SWT.Modify),
+				PojoObservables.observeValue(dataAdapter, "password")); //$NON-NLS-1$
 	}
 
 	public DataAdapterDescriptor getDataAdapter() {
 		if (dataAdapterDesc == null)
 			dataAdapterDesc = new XmlaDataAdapterDescriptor();
 
-		XmlaDataAdapter dataAdapter = (XmlaDataAdapter) dataAdapterDesc.getDataAdapter();
+		XmlaDataAdapter dataAdapter = (XmlaDataAdapter) dataAdapterDesc
+				.getDataAdapter();
 
 		dataAdapter.setXmlaUrl(xmlaUri.getText());
 		dataAdapter.setDatasource(datasource.getText());
@@ -291,7 +315,8 @@ public class XmlaDataAdapterComposite extends ADataAdapterComposite {
 		dataAdapter.setUsername(textUsername.getText());
 		// configure widget if not done yet
 		if (!textPassword.isWidgetConfigured()) {
-			textPassword.loadSecret(DataAdaptersSecretsProvider.SECRET_NODE_ID, textPassword.getText());
+			textPassword.loadSecret(DataAdaptersSecretsProvider.SECRET_NODE_ID,
+					textPassword.getText());
 		} else {
 			// rely on back-compatibility and use clear text
 			dataAdapter.setPassword(textPassword.getText());
@@ -303,9 +328,10 @@ public class XmlaDataAdapterComposite extends ADataAdapterComposite {
 	@Override
 	public void setDataAdapter(DataAdapterDescriptor dataAdapterDesc) {
 		removeDirtyListenersToContext();
-		adapter = (XmlaDataAdapter)dataAdapterDesc.getDataAdapter();
+		adapter = (XmlaDataAdapter) dataAdapterDesc.getDataAdapter();
 		if (dstes == null) {
-			datasource.setItems(new String[] { Misc.nvl(adapter.getDatasource()) });
+			datasource
+					.setItems(new String[] { Misc.nvl(adapter.getDatasource()) });
 			datasource.select(0);
 
 			catalog.setItems(new String[] { Misc.nvl(adapter.getCatalog()) });
@@ -316,22 +342,23 @@ public class XmlaDataAdapterComposite extends ADataAdapterComposite {
 		} else {
 			handleDatasourceChanged();
 		}
-		
-		//The super call bind the widgets,it is called a the end to avoid it to used uninitialized
-		//widgets
+
+		// The super call bind the widgets,it is called a the end to avoid it to
+		// used uninitialized
+		// widgets
 		super.setDataAdapter(dataAdapterDesc);
 		addDirtyListenersToContext();
 	}
 
-	private int getIndex(String[] array, String value, int notFoundValue){
+	private int getIndex(String[] array, String value, int notFoundValue) {
 		int i = 0;
-		for(String item : array){
-			if (item.equals(value)) return i;
+		for (String item : array) {
+			if (item.equals(value))
+				return i;
 			i++;
 		}
 		return notFoundValue;
 	}
-	
 
 	protected void handleMetaDataChanged(MetadataDiscover discover) {
 		dstes = discover.getDatasources();
@@ -388,24 +415,27 @@ public class XmlaDataAdapterComposite extends ADataAdapterComposite {
 		cube.setItems(scubes);
 		cube.select(selectionIndex);
 	}
-	
-	
+
 	/**
-	 * Try to extract the password from the secret storage, and the uuid is taken from the password field.
-	 * If the secret storage is not enabled or the uuid is not valid then the uuid value itself is returned as password
+	 * Try to extract the password from the secret storage, and the uuid is
+	 * taken from the password field. If the secret storage is not enabled or
+	 * the uuid is not valid then the uuid value itself is returned as password
 	 * 
 	 * @return the password inside the password control
 	 */
-	private String getPassword(){
-		SecretsUtil sInstance = SecretsUtil.getInstance(JasperReportsConfiguration.getDefaultJRConfig());
-		String secret = sInstance.getSecret(DataAdaptersSecretsProvider.SECRET_NODE_ID, textPassword.getText());
+	private String getPassword() {
+		SecretsUtil sInstance = SecretsUtil.getInstance(getJrContext());
+		String secret = sInstance.getSecret(
+				DataAdaptersSecretsProvider.SECRET_NODE_ID,
+				textPassword.getText());
 		return secret;
 	}
 
 	/**
 	 * Set a custom swt validation dialog for an url
 	 * 
-	 * @param url the url of the server
+	 * @param url
+	 *            the url of the server
 	 * @return true if the operation was aborted, false otherwise
 	 */
 	private ReturnResponse validateUsernamePassword(final String url) {
@@ -413,41 +443,49 @@ public class XmlaDataAdapterComposite extends ADataAdapterComposite {
 			/**
 			 * Create the dialog
 			 */
-			final AuthenticationDialog ad = new AuthenticationDialog(UIUtils.getShell(), url);
-			
-			
+			final AuthenticationDialog ad = new AuthenticationDialog(
+					UIUtils.getShell(), url);
+
 			/**
 			 * Set the dialog as authenticator
 			 */
 			Authenticator.setDefault(new Authenticator() {
-				
+
 				@Override
 				protected PasswordAuthentication getPasswordAuthentication() {
-					//If the user used the cancel key on the dialog then the operation is aborted to the 
-					//authenticator must return null
+					// If the user used the cancel key on the dialog then the
+					// operation is aborted to the
+					// authenticator must return null
 					authenticationMap.remove(url);
-					if (ad.cancelOperation()) return null;
+					if (ad.cancelOperation())
+						return null;
 					PasswordAuthentication auth = null;
-					if (ad.getAuthenticationAttempt() == 0){
-						//Otherwise the fields are reseted to do another try and the dialog opened
+					if (ad.getAuthenticationAttempt() == 0) {
+						// Otherwise the fields are reseted to do another try
+						// and the dialog opened
 						ad.resetFields(textUsername.getText(), getPassword());
 						ad.incrementAuthAttempt();
-						auth = new PasswordAuthentication(ad.getUsername(), ad.getPasswordCA());
+						auth = new PasswordAuthentication(ad.getUsername(), ad
+								.getPasswordCA());
 					} else {
-						//Otherwise the fields are reseted to do another try and the dialog opened
+						// Otherwise the fields are reseted to do another try
+						// and the dialog opened
 						ad.resetFields();
 						ad.openDialog();
 						ad.incrementAuthAttempt();
-						auth = new PasswordAuthentication(ad.getUsername(), ad.getPasswordCA());
+						auth = new PasswordAuthentication(ad.getUsername(), ad
+								.getPasswordCA());
 					}
 					authenticationMap.put(url, auth);
 					return auth;
 				}
 			});
 			URL endpoint = new URL(url);
-			HttpURLConnection urlConnection = (HttpURLConnection) endpoint.openConnection();
+			HttpURLConnection urlConnection = (HttpURLConnection) endpoint
+					.openConnection();
 			int code = urlConnection.getResponseCode();
-			ReturnResponse response = new ReturnResponse(!ad.cancelOperation() && (code == 405 || code == 500), code);
+			ReturnResponse response = new ReturnResponse(!ad.cancelOperation()
+					&& (code == 405 || code == 500), code);
 			return response;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -464,9 +502,11 @@ public class XmlaDataAdapterComposite extends ADataAdapterComposite {
 	public void performAdditionalUpdates() {
 		if (JaspersoftStudioPlugin.shouldUseSecureStorage()) {
 			textPassword.persistSecret();
-			// update the "password" replacing it with the UUID key saved in secure
+			// update the "password" replacing it with the UUID key saved in
+			// secure
 			// preferences
-			XmlaDataAdapter dataAdapter = (XmlaDataAdapter) dataAdapterDesc.getDataAdapter();
+			XmlaDataAdapter dataAdapter = (XmlaDataAdapter) dataAdapterDesc
+					.getDataAdapter();
 			dataAdapter.setPassword(textPassword.getUUIDKey());
 		}
 	}

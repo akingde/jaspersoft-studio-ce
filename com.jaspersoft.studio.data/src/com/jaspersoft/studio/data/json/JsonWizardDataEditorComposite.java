@@ -13,6 +13,7 @@
 package com.jaspersoft.studio.data.json;
 
 import net.sf.jasperreports.data.json.JsonDataAdapter;
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -24,7 +25,6 @@ import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.progress.WorkbenchJob;
 
 import com.jaspersoft.studio.data.ATreeWizardDataEditorComposite;
@@ -95,7 +95,7 @@ public class JsonWizardDataEditorComposite extends ATreeWizardDataEditorComposit
 	protected void refreshTreeViewerContent(final DataAdapterDescriptor da) {
 		if(da!=null && da.getDataAdapter() instanceof JsonDataAdapter){
 			treeViewer.setInput(JsonTreeCustomStatus.LOADING_JSON);
-			Display.getCurrent().asyncExec(new Runnable() {
+			UIUtils.getDisplay().asyncExec(new Runnable() {
 				@Override
 				public void run() {
 					try {

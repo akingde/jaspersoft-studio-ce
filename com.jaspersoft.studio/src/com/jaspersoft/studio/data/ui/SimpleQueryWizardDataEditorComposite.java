@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.data.ui;
 
@@ -47,7 +43,6 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.fonts.utils.FontUtils;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
-import com.jaspersoft.studio.wizards.JSSWizard;
 import com.jaspersoft.studio.wizards.JSSWizardRunnablePage;
 
 /**
@@ -76,11 +71,6 @@ public class SimpleQueryWizardDataEditorComposite extends AWizardDataEditorCompo
 	protected JRDesignDataset dataset = null;
 
 	private String queryString = ""; //$NON-NLS-1$
-
-	/**
-	 * The wizard page
-	 */
-	private WizardPage page;
 
 	/**
 	 * UI component to display the title
@@ -113,7 +103,6 @@ public class SimpleQueryWizardDataEditorComposite extends AWizardDataEditorCompo
 		super(parent, page);
 		setQueryLanguage(lang);
 		this.dataAdapterDescriptor = dataAdapterDescriptor;
-		this.page = page;
 		init();
 		createCompositeContent();
 	}
@@ -234,8 +223,7 @@ public class SimpleQueryWizardDataEditorComposite extends AWizardDataEditorCompo
 						@Override
 						public void run() {
 
-							MessageBox dialog = new MessageBox(UIUtils.getShell(), SWT.ICON_QUESTION | SWT.OK
-									| SWT.CANCEL);
+							MessageBox dialog = new MessageBox(UIUtils.getShell(), SWT.ICON_QUESTION | SWT.OK | SWT.CANCEL);
 							dialog.setText(Messages.SimpleQueryWizardDataEditorComposite_noQueryProvidedTitle);
 							dialog.setMessage(Messages.SimpleQueryWizardDataEditorComposite_noQueryProvidedText);
 							questionReturnCode = dialog.open();
@@ -246,8 +234,7 @@ public class SimpleQueryWizardDataEditorComposite extends AWizardDataEditorCompo
 					if (questionReturnCode != SWT.OK) {
 						throw JSSWizardRunnablePage.USER_CANCEL_EXCEPTION;
 					}
-				}
-				else {
+				} else {
 					fields = ((IFieldsProvider) getDataAdapterDescriptor()).getFields(das, jContext, dataset);
 				}
 			} catch (final JRException ex) {
@@ -259,11 +246,12 @@ public class SimpleQueryWizardDataEditorComposite extends AWizardDataEditorCompo
 						// That's why we rise the real cause, if any instead of rising the high-level exception...
 						String errorMsg = ex.getMessage();
 						if (ex.getCause() != null && ex.getCause() instanceof Exception) {
-							errorMsg=ex.getCause().getMessage();
+							errorMsg = ex.getCause().getMessage();
 						}
-						page.setErrorMessage(errorMsg);
-						boolean answer = 
-								MessageDialog.openQuestion(UIUtils.getShell(), Messages.SimpleQueryWizardDataEditorComposite_QueryErrorTitle, NLS.bind(Messages.SimpleQueryWizardDataEditorComposite_QueryErrorMsg,errorMsg));
+						getPage().setErrorMessage(errorMsg);
+						boolean answer = MessageDialog.openQuestion(UIUtils.getShell(),
+								Messages.SimpleQueryWizardDataEditorComposite_QueryErrorTitle,
+								NLS.bind(Messages.SimpleQueryWizardDataEditorComposite_QueryErrorMsg, errorMsg));
 						questionReturnCode = (answer) ? SWT.OK : SWT.CANCEL;
 					}
 				});
@@ -276,29 +264,6 @@ public class SimpleQueryWizardDataEditorComposite extends AWizardDataEditorCompo
 		}
 		return Misc.nvl(fields, new ArrayList<JRDesignField>());
 
-	}
-
-	public JasperReportsConfiguration getJasperReportsConfiguration() {
-		if (getPage() != null && getPage().getWizard() != null && getPage().getWizard() instanceof JSSWizard) {
-			return ((JSSWizard) getPage().getWizard()).getConfig();
-		}
-
-		return JasperReportsConfiguration.getDefaultJRConfig();
-	}
-
-	/**
-	 * @return the page
-	 */
-	public WizardPage getPage() {
-		return page;
-	}
-
-	/**
-	 * @param page
-	 *          the page to set
-	 */
-	public void setPage(WizardPage page) {
-		this.page = page;
 	}
 
 	/**
@@ -334,7 +299,7 @@ public class SimpleQueryWizardDataEditorComposite extends AWizardDataEditorCompo
 	}
 
 	@Override
-	public List<JRDesignParameter> readParameters() throws Exception { 
+	public List<JRDesignParameter> readParameters() throws Exception {
 		return null;
 	}
 }

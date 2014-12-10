@@ -31,8 +31,6 @@ import com.jaspersoft.studio.data.AWizardDataEditorComposite;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.fields.IFieldsProvider;
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
-import com.jaspersoft.studio.wizards.JSSWizard;
 
 /**
  * Empty editor composite that is supposed to be used by those 
@@ -44,14 +42,12 @@ import com.jaspersoft.studio.wizards.JSSWizard;
  */
 public class EmptyWizardDataEditorComposite extends AWizardDataEditorComposite {
 
-	private DataAdapterDescriptor dataAdapterDescriptor;
-	private WizardPage page;
+	private DataAdapterDescriptor dataAdapterDescriptor; 
 	private JRDesignDataset dataset;
 	
 	public EmptyWizardDataEditorComposite(Composite parent, WizardPage page, DataAdapterDescriptor dataAdapterDescriptor) {
 		super(parent, page);
-		this.dataAdapterDescriptor=dataAdapterDescriptor;
-		this.page=page;
+		this.dataAdapterDescriptor=dataAdapterDescriptor; 
 		this.setLayout(new FillLayout(SWT.HORIZONTAL));
 		Label msg=new Label(this,SWT.NONE);
 		msg.setText(Messages.EmptyWizardDataEditorComposite_TitleMsg);
@@ -90,12 +86,7 @@ public class EmptyWizardDataEditorComposite extends AWizardDataEditorComposite {
 		return new ArrayList<JRDesignField>();
 	}
 
-	public JasperReportsConfiguration getJasperReportsConfiguration() {
-		if (getPage() != null && getPage().getWizard() != null && getPage().getWizard() instanceof JSSWizard) {
-			return ((JSSWizard) getPage().getWizard()).getConfig();
-		}
-		return JasperReportsConfiguration.getDefaultJRConfig();
-	}
+	
 	
 	/**
 	 * Convenient way to crate a dataset object to be passed to the IFieldsProvider.getFields method
@@ -108,13 +99,7 @@ public class EmptyWizardDataEditorComposite extends AWizardDataEditorComposite {
 		}
 		return dataset;
 	}
-	
-	/**
-	 * @return the page
-	 */
-	public WizardPage getPage() {
-		return page;
-	}
+	 
 	
 	/**
 	 * @return the dataAdapterDescriptor
