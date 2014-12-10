@@ -50,13 +50,12 @@ public class GenericTemplateBundle implements IconedTemplateBundle {
 	public static final String DEFAULT_ICON = "blank_a4.png";
 
 	private String label;
-	
+
 	/**
-	 * The design of the template report, that will be copied and modified
-	 * to create the new report
+	 * The design of the template report, that will be copied and modified to create the new report
 	 */
 	private JasperDesign jasperDesign = null;
-	
+
 	/**
 	 * True if the report is not one of the JSS default report, false otherwise
 	 */
@@ -93,7 +92,7 @@ public class GenericTemplateBundle implements IconedTemplateBundle {
 	 * The icon for the report inside JSS
 	 */
 	private Image icon = null;
-	
+
 	/**
 	 * The current context
 	 */
@@ -102,8 +101,10 @@ public class GenericTemplateBundle implements IconedTemplateBundle {
 	/**
 	 * Creates a template bundle from a template file.
 	 * 
-	 * @param file URL of the template file
-	 * @param jrContext the context of the new report. If it is null then the default one is used
+	 * @param file
+	 *          URL of the template file
+	 * @param jrContext
+	 *          the context of the new report. If it is null then the default one is used
 	 * @throws Exception
 	 */
 	public GenericTemplateBundle(URL url, JasperReportsContext jrContext) throws Exception {
@@ -113,14 +114,17 @@ public class GenericTemplateBundle implements IconedTemplateBundle {
 	/**
 	 * Creates a template bundle from a template file.
 	 * 
-	 * @param file URL of the template file
-	 * @param jrContext the context of the new report. If it is null then the default one is used
-	 * @param isExternal True if the report is not one of the JSS default report, false otherwise
+	 * @param file
+	 *          URL of the template file
+	 * @param jrContext
+	 *          the context of the new report. If it is null then the default one is used
+	 * @param isExternal
+	 *          True if the report is not one of the JSS default report, false otherwise
 	 * @throws Exception
 	 */
 	public GenericTemplateBundle(URL url, boolean isExternal, JasperReportsContext jrContext) throws Exception {
 		if (jrContext == null)
-			jrContext = JasperReportsConfiguration.getDefaultJRConfig();
+			jrContext = JasperReportsConfiguration.getDefaultInstance();
 		this.jrContext = jrContext;
 		this.templateURL = url;
 		this.isExternal = isExternal;
@@ -131,9 +135,13 @@ public class GenericTemplateBundle implements IconedTemplateBundle {
 			URL propertiesFile = new URL(propertiesPath);
 			if (!isExternal() || (new File(propertiesFile.getFile())).exists()) {
 				this.propertyFile = new Properties();
-				InputStream ioStream = propertiesFile.openStream();
-				this.propertyFile.load(ioStream);
-				ioStream.close();
+				InputStream ioStream = null;
+				try {
+					ioStream = propertiesFile.openStream();
+					this.propertyFile.load(ioStream);
+				} finally {
+					FileUtils.closeStream(ioStream);
+				}
 			}
 
 			// read information from the jasper design object...
@@ -154,9 +162,10 @@ public class GenericTemplateBundle implements IconedTemplateBundle {
 					e.printStackTrace();
 				}
 			}
-			if (getIcon() == null){
-				//Use a default icon
-				setIcon(ResourceManager.getImage(JaspersoftStudioPlugin.getInstance().getImageDescriptor("templates/blank_a4.png")));
+			if (getIcon() == null) {
+				// Use a default icon
+				setIcon(ResourceManager.getImage(JaspersoftStudioPlugin.getInstance().getImageDescriptor(
+						"templates/blank_a4.png")));
 			}
 		}
 
@@ -323,15 +332,16 @@ public class GenericTemplateBundle implements IconedTemplateBundle {
 	}
 
 	/**
-	 * Check for an icon provided by the template. If it is available it is returned, otherwise
-	 * it return null
+	 * Check for an icon provided by the template. If it is available it is returned, otherwise it return null
 	 * 
-	 * @param iconURL the url of the icon
+	 * @param iconURL
+	 *          the url of the icon
 	 * @return the icon or null if it can't be found
 	 */
 	private Image getIconFromUrl(URL iconURL) {
 		ImageDescriptor descriptor = ImageDescriptor.createFromURL(iconURL);
-		if (descriptor != null && descriptor.getImageData() != null) return ResourceManager.getImage(descriptor);
+		if (descriptor != null && descriptor.getImageData() != null)
+			return ResourceManager.getImage(descriptor);
 		return null;
 	}
 
@@ -388,11 +398,10 @@ public class GenericTemplateBundle implements IconedTemplateBundle {
 			engine = propertyFile.getProperty(BuiltInCategories.ENGINE_KEY);
 		}
 
-		if (engine == null || engine.toLowerCase().equals(DefaultTemplateProvider.defaultEngineKey))
-		{
+		if (engine == null || engine.toLowerCase().equals(DefaultTemplateProvider.defaultEngineKey)) {
 			templateEngine = new DefaultTemplateEngine();
 		}
-		
+
 		if (name == null) {
 			name = getJasperDesign().getName();
 		}
