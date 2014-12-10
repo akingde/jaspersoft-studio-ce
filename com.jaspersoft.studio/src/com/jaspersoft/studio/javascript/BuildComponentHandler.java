@@ -114,19 +114,13 @@ public class BuildComponentHandler implements IHandler {
 		}
 	}
 	
-	/**
-	 * Return the correct classpath separator for the current operative 
-	 * system
-	 * 
-	 * @return the ";" if the current operative system is windows, ":" 
-	 * otherwise
-	 */
-	private String getOsDependendSeprator(){
-		if (Util.isWin32() || Util.isWindows()) return ";"; //$NON-NLS-1$
-		else return ":"; //$NON-NLS-1$
-	}
+
 	
 	/**
+	 * 
+	 * REMOVED, USING array of arguments to exec instead. For some reason this methos was failing
+	 * on OSX.
+	 * 
 	 * Generate the command to create the custom visualization component.
 	 * 
 	 * @param compiler path to the compiler jar
@@ -134,12 +128,28 @@ public class BuildComponentHandler implements IHandler {
 	 * @param rJs path to the r.js script 
 	 * @param buildFile path to the build.js script
 	 * @return a command to executed inside the runtime
-	 */
+
 	private String generateCommand(File compiler, File rhino, File rJs, File buildFile){
-		String command = "java -classpath \""+rhino.getAbsolutePath() + "\"" +  getOsDependendSeprator(); //$NON-NLS-1$
-		command += "\""+compiler.getAbsolutePath() + "\" org.mozilla.javascript.tools.shell.Main \""+ rJs.getAbsolutePath()+"\" -o \""+buildFile.getAbsolutePath()+"\""; //$NON-NLS-1$ //$NON-NLS-2$
-		return command;
+		
+		StringBuilder command = new StringBuilder();
+		
+		command.append("java -classpath "); //$NON-NLS-1$
+		command.append("\"").append(rhino.getAbsolutePath()); //$NON-NLS-1$
+		command.append(File.pathSeparator);
+		command.append(compiler.getAbsolutePath()); //$NON-NLS-1$
+		command.append("\"");
+		command.append(" "); //$NON-NLS-1$
+		command.append("org.mozilla.javascript.tools.shell.Main"); //$NON-NLS-1$
+		command.append(" "); //$NON-NLS-1$
+		command.append("\"").append(rJs.getAbsolutePath()).append("\""); //$NON-NLS-1$
+		command.append(" -o "); //$NON-NLS-1$
+		command.append(" "); //$NON-NLS-1$
+		command.append("\"").append(buildFile.getAbsolutePath()).append("\""); //$NON-NLS-1$
+		
+		return command.toString();
 	}
+	
+	*/
 	
 	/**
 	 * Setup the environment required to executed the command to compile the custom visualization
@@ -158,11 +168,24 @@ public class BuildComponentHandler implements IHandler {
 			File compiler = fetchResource("com/jaspersoft/studio/javascript/resources/compiler.jar", "compiler.jar"); //$NON-NLS-1$ //$NON-NLS-2$
 			File rhino = fetchResource("com/jaspersoft/studio/javascript/resources/js.jar", "js.jar"); //$NON-NLS-1$ //$NON-NLS-2$
 			File rJs = fetchResource("com/jaspersoft/studio/javascript/resources/r.js", "r.js"); //$NON-NLS-1$ //$NON-NLS-2$
-			String command = generateCommand(compiler, rhino, rJs, buildFile);
+			
+			//String command = generateCommand(compiler, rhino, rJs, buildFile);
+			
+			String[] args = new String[] {
+					"java",
+					"-classpath",
+					rhino.toString() + File.pathSeparator + compiler.toString(),
+					"org.mozilla.javascript.tools.shell.Main",
+					rJs.toString(),
+					"-o",
+					"build.js"
+			};
+			
+			
 			//System.out.println(command);
 			try {
 				//Run the compilation process and print the output inside a dialog
-				Process proc = Runtime.getRuntime().exec(command, null, projectFolder);
+				Process proc = Runtime.getRuntime().exec(args, null, projectFolder);
 				CompileDialog dialog = new CompileDialog(UIUtils.getShell(), proc);
 				if (dialog.open() == IDialogConstants.OK_ID){
 					try {
