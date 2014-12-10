@@ -30,7 +30,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  * Define a part of a Report Book
  * 
  * @author Orlandin Marco
- *
+ * 
  */
 public class PartContainer {
 
@@ -38,23 +38,23 @@ public class PartContainer {
 	 * URL of the part file
 	 */
 	private URL partPath = null;
-	
+
 	/**
-	 * Jasper design of the part file. If is saved
-	 * to avoid to reaload it and it is loaded only
-	 * when requested the first time
+	 * Jasper design of the part file. If is saved to avoid to reaload it and it
+	 * is loaded only when requested the first time
 	 */
 	private JasperDesign loadedPart = null;
-	
+
 	/**
-	 * Create the part but dosen't load the design, it 
-	 * store only the path to the resource
+	 * Create the part but dosen't load the design, it store only the path to
+	 * the resource
 	 * 
-	 * @param parthPathTextual textual path of the resource
+	 * @param parthPathTextual
+	 *            textual path of the resource
 	 */
-	public PartContainer(String parthPathTextual){
+	public PartContainer(String parthPathTextual) {
 		File partFile = new File(parthPathTextual);
-		if (partFile.exists()){
+		if (partFile.exists()) {
 			try {
 				partPath = partFile.toURI().toURL();
 			} catch (MalformedURLException e) {
@@ -62,23 +62,24 @@ public class PartContainer {
 			}
 		}
 	}
-	
+
 	/**
-	 * Create the part but dosen't load the design, it 
-	 * store only the path to the resource
+	 * Create the part but dosen't load the design, it store only the path to
+	 * the resource
 	 * 
-	 * @param partPath url of the resource
+	 * @param partPath
+	 *            url of the resource
 	 */
-	public PartContainer(URL partPath){
+	public PartContainer(URL partPath) {
 		this.partPath = partPath;
 	}
 
 	/**
-	 * If the jasperdesign was loaded before then it is return
-	 * from the cache otherwise it is loaded, cached and returned
+	 * If the jasperdesign was loaded before then it is return from the cache
+	 * otherwise it is loaded, cached and returned
 	 * 
-	 * @return a jasperdesign of null if the url of the part is
-	 * not valid or something goes wrong while loading the jrxml
+	 * @return a jasperdesign of null if the url of the part is not valid or
+	 *         something goes wrong while loading the jrxml
 	 */
 	public JasperDesign getJasperDesign() {
 		if (loadedPart != null)
@@ -87,7 +88,8 @@ public class PartContainer {
 			InputStream is = null;
 			try {
 				is = partPath.openStream();
-				loadedPart = JRXmlLoader.load(JasperReportsConfiguration.getDefaultJRConfig(), is);
+				loadedPart = JRXmlLoader.load(
+						JasperReportsConfiguration.getDefaultInstance(), is);
 				return loadedPart;
 			} catch (FileNotFoundException ex) {
 				// the URL is pointing to a non-existing file
@@ -98,11 +100,12 @@ public class PartContainer {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Close an input stream if it is not null
 	 * 
-	 * @param is stream to close
+	 * @param is
+	 *            stream to close
 	 */
 	private void closeInputStream(InputStream is) {
 		try {
@@ -111,23 +114,25 @@ public class PartContainer {
 		} catch (IOException e) {
 		}
 	}
-	
+
 	/**
 	 * Remove the jasperdesign loaded from the cache
 	 */
-	public void clearDesign(){
+	public void clearDesign() {
 		loadedPart = null;
 	}
-	
+
 	/**
 	 * Clone the current PartContainer. The jasperdesign if it was loaded before
 	 * is deep copied
 	 */
-	public PartContainer clone(){
+	public PartContainer clone() {
 		PartContainer newPart = new PartContainer(partPath);
-		if (loadedPart != null){
+		if (loadedPart != null) {
 			try {
-				newPart.loadedPart = ModelUtils.copyJasperDesign(JasperReportsConfiguration.getDefaultJRConfig(), loadedPart);
+				newPart.loadedPart = ModelUtils.copyJasperDesign(
+						JasperReportsConfiguration.getDefaultInstance(),
+						loadedPart);
 			} catch (JRException e) {
 				e.printStackTrace();
 			}
