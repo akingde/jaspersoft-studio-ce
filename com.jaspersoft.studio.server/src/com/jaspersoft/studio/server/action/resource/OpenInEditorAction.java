@@ -100,10 +100,14 @@ public class OpenInEditorAction extends Action {
 			final Object obj = p[i].getLastSegment();
 			if (isFileResource(obj)) {
 				if (preDownload((AFileResource) obj)) {
-					WorkspaceJob job = new WorkspaceJob(Messages.OpenInEditorAction_0) {
-						public IStatus runInWorkspace(IProgressMonitor monitor) throws CoreException {
+					WorkspaceJob job = new WorkspaceJob(
+							Messages.OpenInEditorAction_0) {
+						public IStatus runInWorkspace(IProgressMonitor monitor)
+								throws CoreException {
 							try {
-								monitor.beginTask(Messages.OpenInEditorAction_0, IProgressMonitor.UNKNOWN);
+								monitor.beginTask(
+										Messages.OpenInEditorAction_0,
+										IProgressMonitor.UNKNOWN);
 								dorun(obj, monitor);
 							} catch (Throwable e) {
 								UIUtils.showError(e);
@@ -123,14 +127,17 @@ public class OpenInEditorAction extends Action {
 
 	protected IPath path;
 
-	protected void dorun(final Object obj, IProgressMonitor monitor) throws Exception, FileNotFoundException, IOException {
+	protected void dorun(final Object obj, IProgressMonitor monitor)
+			throws Exception, FileNotFoundException, IOException {
 		if (isFileResource(obj)) {
 			AFileResource res = (AFileResource) obj;
-			ResourceDescriptor rd = WSClientHelper.getResource(new NullProgressMonitor(), res, res.getValue());
+			ResourceDescriptor rd = WSClientHelper.getResource(
+					new NullProgressMonitor(), res, res.getValue());
 			ANode parent = res.getParent();
 			int index = parent.getChildren().indexOf(res);
 			parent.removeChild(res);
-			res = (AFileResource) ResourceFactory.getResource(parent, rd, index);
+			res = (AFileResource) ResourceFactory
+					.getResource(parent, rd, index);
 			WSClientHelper.fireResourceChanged(res);
 
 			String fkeyname = ServerManager.getKey(res);
@@ -139,18 +146,30 @@ public class OpenInEditorAction extends Action {
 			String type = rd.getWsType();
 			IFile f = null;
 			if (type.equals(ResourceDescriptor.TYPE_JRXML)) {
-				IFile file = new JrxmlExporter(path).exportToIFile(res, rd, fkeyname, monitor);
+				IFile file = new JrxmlExporter(path).exportToIFile(res, rd,
+						fkeyname, monitor);
 				if (file != null) {
-					JasperReportsConfiguration.getDefaultJRConfig(file).getPrefStore().setValue(JRSEditorContributor.KEY_PUBLISH2JSS_SILENT, true);
-					openEditor(file);
+					JasperReportsConfiguration jrconf = JasperReportsConfiguration
+							.getDefaultJRConfig(file);
+					try {
+						jrconf.getPrefStore().setValue(
+								JRSEditorContributor.KEY_PUBLISH2JSS_SILENT,
+								true);
+						openEditor(file);
+					} finally {
+						jrconf.dispose();
+					}
 				}
 				if (res.getParent() instanceof MReportUnit) {
 					for (INode n : res.getParent().getChildren()) {
 						if (n instanceof MJar) {
 							MJar mjar = (MJar) n;
 							fkeyname = ServerManager.getKey(mjar);
-							rd = WSClientHelper.getResource(new NullProgressMonitor(), mjar, mjar.getValue());
-							f = new AExporter(path).exportToIFile(mjar, rd, fkeyname, monitor);
+							rd = WSClientHelper.getResource(
+									new NullProgressMonitor(), mjar,
+									mjar.getValue());
+							f = new AExporter(path).exportToIFile(mjar, rd,
+									fkeyname, monitor);
 							if (f != null)
 								PublishUtil.savePath(f, mjar);
 						}
@@ -158,9 +177,11 @@ public class OpenInEditorAction extends Action {
 				}
 				return;
 			} else if (type.equals(ResourceDescriptor.TYPE_IMAGE))
-				f = new ImageExporter(path).exportToIFile(res, rd, fkeyname, monitor);
+				f = new ImageExporter(path).exportToIFile(res, rd, fkeyname,
+						monitor);
 			else
-				f = new AExporter(path).exportToIFile(res, rd, fkeyname, monitor);
+				f = new AExporter(path).exportToIFile(res, rd, fkeyname,
+						monitor);
 
 			if (f != null) {
 				PublishUtil.savePath(f, res);
