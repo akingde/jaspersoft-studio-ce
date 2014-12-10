@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.data.wizard;
 
@@ -58,6 +54,13 @@ public class DataAdapterWizardDialog extends WizardDialog {
 	}
 
 	@Override
+	public void updateButtons() {
+		super.updateButtons();
+		boolean canFinish = getWizard().canFinish();
+		testButton.setEnabled(canFinish);
+	}
+
+	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
 		((GridLayout) parent.getLayout()).numColumns = 1;
 		testButton = new Button(parent, SWT.NONE);
@@ -73,22 +76,22 @@ public class DataAdapterWizardDialog extends WizardDialog {
 		});
 		super.createButtonsForButtonBar(parent);
 	}
-	
+
 	/*
 	 * Checks if the Test button is supposed to be visible.
 	 */
 	private boolean isTestVisible() {
 		boolean isTestVisible = false;
-		if(getWizard() instanceof DataAdapterWizard && getCurrentPage() instanceof DataAdapterEditorPage) {
-			DataAdapterDescriptor dataAdapterDesc = ((DataAdapterEditorPage)getCurrentPage()).getDataAdapter();
-			isTestVisible = (dataAdapterDesc!=null) ? dataAdapterDesc.doSupportTest() : false;
+		if (getWizard() instanceof DataAdapterWizard && getCurrentPage() instanceof DataAdapterEditorPage) {
+			DataAdapterDescriptor dataAdapterDesc = ((DataAdapterEditorPage) getCurrentPage()).getDataAdapter();
+			isTestVisible = (dataAdapterDesc != null) ? dataAdapterDesc.doSupportTest() : false;
 		}
 		return isTestVisible;
 	}
 
 	public void setTestButtonEnabled(boolean b) {
 		boolean testVisible = isTestVisible();
-		testButton.setEnabled(b && testVisible);
+		testButton.setEnabled(b && testVisible && getWizard().canFinish());
 		testButton.setVisible(testVisible);
 	}
 }

@@ -35,7 +35,6 @@ import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.widgets.Display;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
@@ -163,7 +162,7 @@ public abstract class AbstractDataAdapterWizard extends JSSWizard implements Sel
 							getConfig().setClassLoader(cl);
 
 							DataAdapterServiceUtil.getInstance(getConfig()).getService(da).test();
-							Display.getDefault().asyncExec(new Runnable() {
+							UIUtils.getDisplay().asyncExec(new Runnable() {
 
 								@Override
 								public void run() {

@@ -35,7 +35,9 @@ public abstract class ADataAdapterComposite extends Composite {
 		this.jrContext = jrContext;
 		bindingContext = new DataBindingContext();
 	}
-
+public DataBindingContext getBindingContext() {
+	return bindingContext;
+}
 	@Override
 	protected void checkSubclass() {
 		// Disable the check that prevents subclassing of SWT components

@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.data.wizard.pages;
 
@@ -17,6 +13,7 @@ import java.text.MessageFormat;
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.JasperReportsContext;
 
+import org.eclipse.jface.databinding.wizard.WizardPageSupport;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -56,6 +53,7 @@ public class DataAdapterEditorPage extends WizardPage implements WizardEndingSta
 	}
 
 	private JasperReportsContext jrContext;
+	private WizardPageSupport wizardPageSupport;
 
 	public void setJrContext(JasperReportsContext jrContext) {
 		this.jrContext = jrContext;
@@ -68,6 +66,11 @@ public class DataAdapterEditorPage extends WizardPage implements WizardEndingSta
 		super("dataAdaptereditorpage"); //$NON-NLS-1$
 		setTitle(Messages.DataAdapterEditorPage_2);
 		setDescription(Messages.DataAdapterEditorPage_3);
+	}
+
+	@Override
+	public boolean isPageComplete() {
+		return super.isPageComplete() && getErrorMessage() == null;
 	}
 
 	/**
@@ -124,7 +127,7 @@ public class DataAdapterEditorPage extends WizardPage implements WizardEndingSta
 				} else {
 
 					if (name.length() > 0) {
-						setMessage(MessageFormat.format(Messages.DataAdapterEditorPage_5, new Object[]{name}), ERROR);
+						setMessage(MessageFormat.format(Messages.DataAdapterEditorPage_5, new Object[] { name }), ERROR);
 					} else {
 						setMessage(Messages.DataAdapterEditorPage_7, ERROR);
 					}
@@ -162,12 +165,14 @@ public class DataAdapterEditorPage extends WizardPage implements WizardEndingSta
 
 		// 2. add the composite from the DataAdapterEditor to the wizard page
 		if (editorComposite != null) {
+			wizardPageSupport.dispose();
 			editorComposite.dispose();
 		}
 		if (jrContext == null)
 			jrContext = new JasperReportsConfiguration(DefaultJasperReportsContext.getInstance(), null);
 		editorComposite = dataAdapterEditor.getComposite(customContainer, SWT.NULL, this, jrContext);
 		editorComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		wizardPageSupport = WizardPageSupport.create(this, editorComposite.getBindingContext());
 
 		// 4. set the new dataAdapter to the DataAdapterEditor
 		dataAdapterEditor.setDataAdapter(newDataAdapterDescriptor);

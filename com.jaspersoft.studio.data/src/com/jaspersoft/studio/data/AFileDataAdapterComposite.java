@@ -44,7 +44,8 @@ import com.jaspersoft.studio.data.messages.Messages;
 public abstract class AFileDataAdapterComposite extends ADataAdapterComposite {
 	protected Text textFileName;
 
-	public AFileDataAdapterComposite(Composite parent, int style, JasperReportsContext jrContext) {
+	public AFileDataAdapterComposite(Composite parent, int style,
+			JasperReportsContext jrContext) {
 		super(parent, style, jrContext);
 	}
 
@@ -58,7 +59,8 @@ public abstract class AFileDataAdapterComposite extends ADataAdapterComposite {
 		textFileName.setLayoutData(gd);
 
 		Button btnBrowse = new Button(parent, SWT.NONE);
-		GridData gd_btnBrowse = new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1);
+		GridData gd_btnBrowse = new GridData(SWT.CENTER, SWT.CENTER, false,
+				false, 1, 1);
 		gd_btnBrowse.widthHint = 100;
 		btnBrowse.setLayoutData(gd_btnBrowse);
 		btnBrowse.setText(Messages.XLSXDataAdapterComposite_1);
@@ -78,11 +80,18 @@ public abstract class AFileDataAdapterComposite extends ADataAdapterComposite {
 				fd.setFilterExtensions(getFileExtensions()); //$NON-NLS-1$ //$NON-NLS-2$
 				String selection = fd.open();
 				if (selection != null) {
-					IFile contextfile = (IFile) getJrContext().getValue(FileUtils.KEY_FILE);
+					IFile contextfile = (IFile) getJrContext().getValue(
+							FileUtils.KEY_FILE);
 
-					IFile[] resource = root.findFilesForLocationURI(new File(selection).toURI());
-					if (contextfile != null && resource != null && resource.length > 0 && contextfile.getProject().equals(resource[0].getProject()))
-						selection = resource[0].getProjectRelativePath().toOSString();
+					IFile[] resource = root.findFilesForLocationURI(new File(
+							selection).toURI());
+					if (contextfile != null
+							&& resource != null
+							&& resource.length > 0
+							&& contextfile.getProject().equals(
+									resource[0].getProject()))
+						selection = resource[0].getProjectRelativePath()
+								.toOSString();
 					textFileName.setText(selection);
 				}
 			}
@@ -92,8 +101,15 @@ public abstract class AFileDataAdapterComposite extends ADataAdapterComposite {
 	protected abstract String[] getFileExtensions();
 
 	protected void doBindFileNameWidget(DataAdapter dataAdapter) {
-		Binding binding = bindingContext.bindValue(SWTObservables.observeText(textFileName, SWT.Modify), PojoObservables.observeValue(dataAdapter, "fileName"), //$NON-NLS-1$
-				new UpdateValueStrategy().setAfterConvertValidator(new NotEmptyFileValidator(getJrContext())), null);
-		ControlDecorationSupport.create(binding, SWT.TOP | SWT.LEFT, null, new ControlDecorationUpdater());
+		NotEmptyFileValidator nefValidator = new NotEmptyFileValidator(
+				getJrContext());
+		Binding binding = bindingContext.bindValue(SWTObservables.observeText(
+				textFileName, SWT.Modify), PojoObservables.observeValue(
+				dataAdapter, "fileName"), //$NON-NLS-1$
+				new UpdateValueStrategy()
+						.setAfterConvertValidator(nefValidator), null);
+		nefValidator.setBinding(binding);
+		ControlDecorationSupport.create(binding, SWT.TOP | SWT.LEFT, null,
+				new ControlDecorationUpdater());
 	}
 }
