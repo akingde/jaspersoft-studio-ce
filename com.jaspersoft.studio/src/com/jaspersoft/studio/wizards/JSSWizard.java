@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.wizards;
 
@@ -113,14 +109,14 @@ public abstract class JSSWizard extends Wizard implements JSSWizardPageChangeLis
 		if (!childWizards.contains(w))
 			childWizards.add(w);
 	}
-	
+
 	/**
 	 * Return the list of the child wizards
 	 */
-	protected List<IWizard> getChildWizards(){
+	protected List<IWizard> getChildWizards() {
 		return childWizards;
 	}
-	
+
 	@Override
 	/*
 	 * (non-Javadoc) Method declared on IWizard. The default behavior is to return the page that was added to this wizard
@@ -324,6 +320,9 @@ public abstract class JSSWizard extends Wizard implements JSSWizardPageChangeLis
 			}
 		}
 		super.dispose();
+		JasperReportsConfiguration jrConfig = getConfig();
+		if (jrConfig != null && jrConfig != JasperReportsConfiguration.getDefaultInstance())
+			jrConfig.dispose();
 	}
 
 	/*
