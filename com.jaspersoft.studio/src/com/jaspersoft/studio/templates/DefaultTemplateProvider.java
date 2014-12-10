@@ -67,7 +67,7 @@ public class DefaultTemplateProvider implements TemplateProvider {
 					try {
 	
 					JrxmlTemplateBundle bundle = new JrxmlTemplateBundle(templateURL,
-							JasperReportsConfiguration.getDefaultJRConfig());
+							JasperReportsConfiguration.getDefaultInstance());
 						
 						if (bundle != null)
 						{
@@ -115,7 +115,7 @@ public class DefaultTemplateProvider implements TemplateProvider {
 				for (File f : files) {
 					try {
 						JrxmlTemplateBundle bundle = new JrxmlTemplateBundle(f.toURI().toURL(), true,
-								JasperReportsConfiguration.getDefaultJRConfig());
+								JasperReportsConfiguration.getDefaultInstance());
 						Object engine = bundle.getProperty(BuiltInCategories.ENGINE_KEY);
 						if (bundle != null && (engine == null || defaultEngineKey.equals(engine.toString().toLowerCase()))) {
 							templates.add(bundle);
