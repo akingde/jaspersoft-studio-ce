@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.data;
 
@@ -22,7 +18,6 @@ import net.sf.jasperreports.eclipse.builder.Markers;
 import net.sf.jasperreports.eclipse.classpath.JavaProjectClassLoader;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
-import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -31,7 +26,6 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.swt.SWT;
@@ -173,7 +167,7 @@ public class DataAdapterEditorPart extends ABasicEditor {
 					ClassLoader oldCL = Thread.currentThread().getContextClassLoader();
 					try {
 						IProject project = ((IFileEditorInput) getEditorInput()).getFile().getProject();
-						if(project.hasNature(JavaCore.NATURE_ID)) {
+						if (project.hasNature(JavaCore.NATURE_ID)) {
 							ClassLoader cl = JavaProjectClassLoader.instance(JavaCore.create(project));
 							if (cl != null)
 								Thread.currentThread().setContextClassLoader(cl);
@@ -199,7 +193,7 @@ public class DataAdapterEditorPart extends ABasicEditor {
 
 	protected void getJrContext(IFile file) throws CoreException, JavaModelException {
 		if (jrContext == null)
-			jrContext = new JasperReportsConfiguration(DefaultJasperReportsContext.getInstance(), file);
+			jrContext = JasperReportsConfiguration.getDefaultJRConfig(file);
 	}
 
 	@Override
