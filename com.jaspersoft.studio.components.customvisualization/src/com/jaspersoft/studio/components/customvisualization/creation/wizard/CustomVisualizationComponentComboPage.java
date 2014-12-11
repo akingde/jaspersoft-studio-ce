@@ -84,7 +84,7 @@ public class CustomVisualizationComponentComboPage extends JSSWizardPage {
 		comboItems.add("");
 		combo.setData(items);
 		for(ModuleDefinition def : items){
-			comboItems.add(def.getModuleName());
+			comboItems.add(def.getModuleVisualName());
 		}
 		combo.setItems(comboItems.toArray(new String[comboItems.size()]));
 		combo.addSelectionListener(new SelectionAdapter() {

@@ -97,7 +97,7 @@ public class CustomVisualizationComponentLicensePage extends JSSWizardPage {
 	/**
 	 * Combo with a list of all the libraries used by the currently selected module
 	 */
-	private Combo moduleName;
+	private Combo libraryName;
 	
 	/**
 	 * The currently selected module
@@ -136,9 +136,9 @@ public class CustomVisualizationComponentLicensePage extends JSSWizardPage {
 	
 		// CREATE THE PROJECT NAME AREA
 		
-		moduleName = new Combo(container, SWT.READ_ONLY);
-		moduleName.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		moduleName.addSelectionListener(comboSelected);
+		libraryName = new Combo(container, SWT.READ_ONLY);
+		libraryName.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		libraryName.addSelectionListener(comboSelected);
 		
 		//CREATE THE LICENSE AREA
 		
@@ -188,8 +188,8 @@ public class CustomVisualizationComponentLicensePage extends JSSWizardPage {
 				List<String> comboItems = new ArrayList<String>();
 				usedModules.clear();
 				findComboItems(selectedModule, comboItems);
-				moduleName.setItems(comboItems.toArray(new String[comboItems.size()]));
-				moduleName.select(0);
+				libraryName.setItems(comboItems.toArray(new String[comboItems.size()]));
+				libraryName.select(0);
 				comboSelectionChange();
 			}
 		}
@@ -221,8 +221,8 @@ public class CustomVisualizationComponentLicensePage extends JSSWizardPage {
 	 * @param result list where the name of the found libraries are placed
 	 */
 	private void findComboItems(ModuleDefinition module, List<String> result){
-		result.add(module.getModuleName());
-		usedModules.put(module.getModuleName(), module);
+		result.add(module.getLibraryFilename());
+		usedModules.put(module.getLibraryFilename(), module);
 		for(ModuleDefinition dep : module.getRequiredLibraries()){
 			findComboItems(dep, result);
 		}
@@ -242,7 +242,7 @@ public class CustomVisualizationComponentLicensePage extends JSSWizardPage {
 			public void run() {
 				synchronized (usedModules) {
 					if (licenseLabel != null && !licenseLabel.isDisposed()){
-						if (moduleName.getText().equals(module.getModuleName())){
+						if (libraryName.getText().equals(module.getLibraryFilename())){
 							licenseLabel.setText(licenseText);
 						}
 					}
@@ -255,7 +255,7 @@ public class CustomVisualizationComponentLicensePage extends JSSWizardPage {
 	 * Called when the combo selection changes to show the correct string
 	 */
 	private void comboSelectionChange(){
-		ModuleDefinition selectedModule = usedModules.get(moduleName.getText());
+		ModuleDefinition selectedModule = usedModules.get(libraryName.getText());
 		synchronized (usedModules) {
 			if (selectedModule != null && licenseLabel != null && !licenseLabel.isDisposed()){
 				if (downloadingLicenses.contains(selectedModule) || ModuleManager.isLicenseLocal(selectedModule)){

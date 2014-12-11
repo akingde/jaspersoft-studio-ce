@@ -70,10 +70,10 @@ public class CustomVisualizationComponentTablePage extends JSSWizardPage {
 		@Override
 		public String getColumnText(Object element, int columnIndex) {
 			if (columnIndex == 0){
-				return ((ModuleDefinition)element).getModuleName();
+				return ((ModuleDefinition)element).getModuleVisualName();
 			} else if (columnIndex == 1){
 				ModuleDefinition module = (ModuleDefinition)element;
-				return module.getVersionNumber();
+				return module.getLibraryVersionNumber();
 			}	
 			return null;
 		}

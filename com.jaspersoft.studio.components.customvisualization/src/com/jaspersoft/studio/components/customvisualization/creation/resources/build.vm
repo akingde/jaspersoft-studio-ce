@@ -3,8 +3,7 @@
     baseUrl: '',
     paths: {
 	#foreach( $library in $libraries )
-		'$library.getName()': '$library.getFileName()' #if( $foreach.hasNext ), #end	
-		
+		'$library.getName()': '$library.getFileName()' #if( $foreach.hasNext ), #end		
 	#end
     }, 
 	#if ($hasShim)
@@ -19,6 +18,10 @@
 	#end
     },
     #end
+    wrap: {
+        start: "if (typeof define === 'function' && define.amd){}\nelse if (typeof __visualize__ !== 'undefined' &&\ntypeof __visualize__.define === 'function')\n{\n}\n\n(function(root){\n\nvar define = root.define;\n\n",
+        end: "\n\n}(typeof __visualize__ != 'undefined' ? __visualize__ : window));"
+    },
     name: "${modulename}",
-    out: "${modulename}.min.js"
+    out: "${outputname}.min.js"
 })

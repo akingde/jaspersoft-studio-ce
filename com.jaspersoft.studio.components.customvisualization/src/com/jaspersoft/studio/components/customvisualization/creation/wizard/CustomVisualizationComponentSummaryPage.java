@@ -98,7 +98,7 @@ public class CustomVisualizationComponentSummaryPage extends JSSWizardPage {
 	 */
 	private void createLabel(ModuleDefinition module){
 		Label elementLabel = new Label(libraryList, SWT.NONE);
-		elementLabel.setText(module.toString());
+		elementLabel.setText(module.getLibraryFilename() + " " + module.getLibraryVersionNumber());
 		elementLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		for(ModuleDefinition dep : module.getRequiredLibraries()){
 			createLabel(dep);

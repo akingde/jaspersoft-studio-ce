@@ -56,18 +56,9 @@ public class ModuleManager {
 		
 		embeddedModules = new ArrayList<ModuleDefinition>();
 		
-		ModuleDefinition d3Module = new ModuleDefinition();
-		d3Module.setModuleName("D3");
-		d3Module.setVariableName("d3");
-		d3Module.setLibraryURL("https://raw.githubusercontent.com/mbostock/d3/v3.4.13/d3.min.js");
-		d3Module.setLicenseURL("https://raw.githubusercontent.com/mbostock/d3/v3.4.13/LICENSE");
-		d3Module.setCssResource("com/jaspersoft/studio/components/customvisualization/creation/resources/d3css.css");
-		d3Module.setRenderResource("com/jaspersoft/studio/components/customvisualization/creation/resources/d3render.js");
-		d3Module.setVersionNumber("3.4.13");
-		
-		
 		ModuleDefinition d3Circle = new ModuleDefinition();
-		d3Circle.setModuleName("D3 circle");
+		d3Circle.setModuleVisualName("D3 Circle");
+		d3Circle.setModuleName("d3");
 		d3Circle.setVariableName("d3");
 		d3Circle.setLibraryURL("https://raw.githubusercontent.com/mbostock/d3/v3.4.13/d3.min.js");
 		d3Circle.setLicenseURL("https://raw.githubusercontent.com/mbostock/d3/v3.4.13/LICENSE");
@@ -85,7 +76,8 @@ public class ModuleManager {
 		d3Circle.addRequiredLibrary(require);
 		
 		ModuleDefinition raphaelMap = new ModuleDefinition();
-		raphaelMap.setModuleName("Raphael");
+		raphaelMap.setModuleVisualName("Raphael Map");
+		raphaelMap.setModuleName("RaphaelMap");
 		raphaelMap.setVariableName("Raphael");
 		raphaelMap.setLibraryURL("https://raw.githubusercontent.com/DmitryBaranovskiy/raphael/v2.1.2/raphael-min.js");
 		raphaelMap.setLicenseURL("https://raw.githubusercontent.com/DmitryBaranovskiy/raphael/v2.1.2/license.txt");
@@ -93,7 +85,6 @@ public class ModuleManager {
 		raphaelMap.setRenderResource("com/jaspersoft/studio/components/customvisualization/creation/resources/raphael_Map_render.js");
 		raphaelMap.setVersionNumber("2.1.2");
 		
-		embeddedModules.add(d3Module);
 		embeddedModules.add(d3Circle);
 		embeddedModules.add(raphaelMap);
 
@@ -178,7 +169,7 @@ public class ModuleManager {
 	 * to be downloaded
 	 */
 	public static boolean isLocal(ModuleDefinition module){
-		String fileName = getModuleFileName(module);
+		String fileName = getModuleLibraryFileName(module);
 		return ConfigurationManager.getStorageResource(PREF_KEYS_JS_MODULES, fileName) != null;
 	}
 	
@@ -252,9 +243,9 @@ public class ModuleManager {
 	 * @param module the module
 	 * @return a name to save into the filesystem the library of the module
 	 */
-	private static String getModuleFileName(ModuleDefinition module){
-		String fileName = module.getFilename();
-		fileName = fileName.substring(0, fileName.length()-3)+module.getVersionNumber()+".js";
+	private static String getModuleLibraryFileName(ModuleDefinition module){
+		String fileName = module.getLibraryFilename();
+		fileName = fileName.substring(0, fileName.length()-3)+module.getLibraryVersionNumber()+".js";
 		return fileName;
 	}
 	
@@ -266,8 +257,8 @@ public class ModuleManager {
 	 * @return a name to save into the filesystem the license of the module
 	 */
 	private static String getLicenseFileName(ModuleDefinition module){
-		String fileName = module.getFilename();
-		fileName = fileName.substring(0, fileName.length()-3)+module.getVersionNumber()+"License.txt";
+		String fileName = module.getLibraryFilename();
+		fileName = fileName.substring(0, fileName.length()-3)+module.getLibraryVersionNumber()+"License.txt";
 		return fileName;
 	}
 	
@@ -280,7 +271,7 @@ public class ModuleManager {
 	 */
 	public static File getLibraryFile(ModuleDefinition module){
 		File storage = ConfigurationManager.getStorage(PREF_KEYS_JS_MODULES);
-		String fileName = getModuleFileName(module);
+		String fileName = getModuleLibraryFileName(module);
 		File resource = ConfigurationManager.getStorageResource(storage, fileName);
 		if (resource == null){
 			resource = downloadLibrary(module, fileName);

@@ -1,4 +1,4 @@
-define('RaphaelCircle',['Raphael'], function (Raphael) {
+define('RaphaelMap',['Raphael'], function (Raphael) {
 
 	 return function (instanceData) {	
 		

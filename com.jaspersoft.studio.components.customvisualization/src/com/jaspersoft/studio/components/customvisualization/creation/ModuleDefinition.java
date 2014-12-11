@@ -34,6 +34,8 @@ import org.eclipse.core.runtime.Assert;
  */
 public class ModuleDefinition {
 	
+	private String moduleVisualName;
+	
 	/**
 	 * The name of the module
 	 */
@@ -91,12 +93,8 @@ public class ModuleDefinition {
 	private List<ModuleDefinition> requiredLibraries = new ArrayList<ModuleDefinition>();
 	
 	/**
-	 * List of the include to add in the module section of the build.js file
-	 */
-	//private List<String> includes = new ArrayList<String>(); CURRENTLY NOT SUPPORTED
-	
-	/**
-	 * Return the module name
+	 * Return the module name. It is the same used inside the
+	 * render;
 	 * 
 	 * @return a not null string
 	 */
@@ -105,13 +103,32 @@ public class ModuleDefinition {
 	}
 
 	/**
-	 * Set the module name
+	 * Set the module name. Must be the same used inside the
+	 * render;
 	 * 
 	 * @param moduleName a not null string
 	 */
 	public void setModuleName(String moduleName) {
 		Assert.isNotNull(moduleName);
 		this.moduleName = moduleName;
+	}
+	
+	/**
+	 * Module visual name, used to show it during the wizard
+	 * 
+	 * @return return the module name, can be null
+	 */
+	public String getModuleVisualName() {
+		return moduleVisualName;
+	}
+
+	/**
+	 * Set the module visual name, used to show the module during the wizard
+	 * 
+	 * @param moduleVisualName the name of the module
+	 */
+	public void setModuleVisualName(String moduleVisualName) {
+		this.moduleVisualName = moduleVisualName;
 	}
 
 	/**
@@ -285,7 +302,7 @@ public class ModuleDefinition {
 	 * 
 	 * @return a not null version number
 	 */
-	public String getVersionNumber() {
+	public String getLibraryVersionNumber() {
 		return libraryVersionNumber;
 	}
 
@@ -325,7 +342,7 @@ public class ModuleDefinition {
 	 */
 	@Override
 	public String toString() {
-		return getModuleName() + " " + getVersionNumber();
+		return getModuleName() + " " + getLibraryVersionNumber();
 	}
 	
 	/**
@@ -335,30 +352,10 @@ public class ModuleDefinition {
 	 * 
 	 * @return a not null string
 	 */
-	public String getFilename(){
+	public String getLibraryFilename(){
 		String url = getLibraryURL();
 		return url.substring(url.lastIndexOf("/")+1);
 	}
-	
-	/**
-	 * add an include item to the list of the include to add in the 
-	 * module section of the build.js file
-	 * 
-	 * @param item the item to add, must be unique
-	 */
-	/*public void addIncludeItem(String item){
-		Assert.isLegal(!includes.contains(item));
-		includes.add(item);
-	}*/
-	
-	/**
-	 * Return the list of the includes
-	 * 
-	 * @re not null list of strings
-	 */
-	/*public List<String> getIncludedItems(){
-		return includes;
-	}*/
 
 	/**
 	 * Return the license of the library as file. It is download
@@ -427,7 +424,7 @@ public class ModuleDefinition {
 			URL resource = new URL(libraryURL);
 			InputStream is = resource.openStream();   
 			String tempDir = System.getProperty("java.io.tmpdir");
-			File tempFile = new File(tempDir, getFilename());
+			File tempFile = new File(tempDir, getLibraryFilename());
 			if (tempFile.exists()) tempFile.delete();
 			FileOutputStream outputStream = new FileOutputStream(tempFile);
 			int read = 0;

@@ -133,9 +133,10 @@ public class CustomVisualizationComponentWizard extends JSSWizard implements INe
 				}
 		
 				generateCSS(project, monitor, selected);
-				generateRender(project, monitor, selected);
-				libraries.add(new VelocityLibrary(projectName, projectName));
-				generateBuildFile(project, monitor, libraries, shimLibraries, projectName);
+				String renderFileName = generateRender(project, monitor, selected);
+				libraries.add(new VelocityLibrary(selected.getModuleName(), removeJsExtension(renderFileName)));
+				String buildFile = generateBuildFile(libraries, shimLibraries, selected.getModuleName(), projectName);
+				createFile("build.js", project, buildFile, monitor); //$NON-NLS-1$
 				try {
 					project.refreshLocal(IProject.DEPTH_INFINITE, new NullProgressMonitor());
 				} catch (CoreException e) {
@@ -148,6 +149,11 @@ public class CustomVisualizationComponentWizard extends JSSWizard implements INe
 		}
 		return result;
 	}			
+	
+	private String removeJsExtension(String source){
+		if (source.endsWith(".js")) return source.substring(0,source.length()-3);
+		return source;
+	}
 	
 	/**
 	 * Add a module to the project, it's library is added on the project folder and
@@ -162,7 +168,7 @@ public class CustomVisualizationComponentWizard extends JSSWizard implements INe
 	private void addModule(ModuleDefinition module, List<VelocityShimLibrary> shimmedList, List<VelocityLibrary> librariesList, File projectFolder) throws FileNotFoundException{
 		File resourceFile = ModuleManager.getLibraryFile(module);
 		if (resourceFile != null && resourceFile.exists()){
-			String fileName = module.getFilename();
+			String fileName = module.getLibraryFilename();
 			File workspaceCopy = new File(projectFolder, fileName);
 			try {
 				FileUtils.copyFile(resourceFile, workspaceCopy);
@@ -170,7 +176,7 @@ public class CustomVisualizationComponentWizard extends JSSWizard implements INe
 				e.printStackTrace();
 			}
 			//ADD THE LIBRARY TO THE LIBRARIES LIST
-			librariesList.add(new VelocityLibrary(module.getVariableName(), fileName.substring(0,fileName.length()-3)));
+			librariesList.add(new VelocityLibrary(module.getVariableName(), removeJsExtension(fileName)));
 			//CHECK IF THE MODULE MUST BE SHIMMED
 			if (module.isNeedShim()){
 				String dependencies = ""; //$NON-NLS-1$
@@ -210,36 +216,36 @@ public class CustomVisualizationComponentWizard extends JSSWizard implements INe
 	 * @param monitor the monitor to execute the operation 
 	 * @param library the module selected by the user in the wizard page
 	 */
-	private void generateRender(IProject container, IProgressMonitor monitor, ModuleDefinition library){
+	private String generateRender(IProject container, IProgressMonitor monitor, ModuleDefinition library){
 		String renderContent = library.getRenderResource();
 		if (renderContent != null){
-			createFile(container.getName()+".js", container, renderContent, monitor); //$NON-NLS-1$
+			String renderFileName = container.getName()+".js";
+			createFile(renderFileName, container, renderContent, monitor); //$NON-NLS-1$
+			return renderFileName;
 		}
+		return null;
 	}
 	
 	/**
 	 * Generate the build.js file using the template mixed with the 
 	 * data provided during the wizard
 	 * 
-	 * @param container the container where the final build.js will be placed
-	 * @param monitor monitor to execute the operation
 	 * @param libraries the list of javascript libraries to include inside the build file
 	 * @param shimLibraries the list of javascript shimmed libraries to include inside the build file
 	 * @param modulename the name of the folder where the project is contained, that it is used as module name
 	 */
-	private void generateBuildFile(IProject container, IProgressMonitor monitor, List<VelocityLibrary> libraries, List<VelocityShimLibrary> shimLibraries, String modulename) {
+	private String generateBuildFile(List<VelocityLibrary> libraries, List<VelocityShimLibrary> shimLibraries, String moduleName, String outputName) {
 		VelocityContext functionContext = new VelocityContext();
 		functionContext.put("libraries", libraries); //$NON-NLS-1$
 		functionContext.put("hasShim", shimLibraries.size()>0); //$NON-NLS-1$
 		functionContext.put("shimlibraries", shimLibraries); //$NON-NLS-1$
-		functionContext.put("modulename", modulename); //$NON-NLS-1$
-		//functionContext.put("includes", includes); //$NON-NLS-1$
+		functionContext.put("modulename", moduleName); //$NON-NLS-1$
+		functionContext.put("outputname", outputName); //$NON-NLS-1$
 		
 		Template functionTemplate = ve.getTemplate(BUILD_FILE);
 		StringWriter fsw = new StringWriter();
 		functionTemplate.merge(functionContext, fsw);
-
-		createFile("build.js", container, fsw.toString(), monitor); //$NON-NLS-1$
+		return fsw.toString();
 	}
 	
 	/**
