@@ -51,7 +51,9 @@ public class DateWidget extends AScalarWidget {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				Date sdate = date.getSelection();
-				((ScalarOperand<Date>) getValue()).setValue(convertDate(sdate));
+				if (sdate != null)
+					sdate = convertDate(sdate);
+				((ScalarOperand<Date>) getValue()).setValue(sdate);
 			}
 		});
 

@@ -41,6 +41,7 @@ import com.jaspersoft.studio.data.sql.impl.DbObjectNameImpl;
 import com.jaspersoft.studio.data.sql.impl.OperandImpl;
 import com.jaspersoft.studio.data.sql.impl.ScalarOperandImpl;
 import com.jaspersoft.studio.data.sql.impl.SelectImpl;
+import com.jaspersoft.studio.data.sql.messages.Messages;
 import com.jaspersoft.studio.data.sql.model.enums.Operator;
 import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
 import com.jaspersoft.studio.data.sql.model.query.expression.AMExpression;
@@ -272,7 +273,7 @@ public class ConvertExpression {
 		} else if (op.getSubq() != null) {
 
 		}
-		return Misc.nvl(aop, Factory.getDefaultOperand(me));
+		return Misc.nvl(aop, new ScalarOperand<String>(me, "NULL"));
 	}
 
 	protected static AOperand getScalarOperand(AMExpression<?> me,

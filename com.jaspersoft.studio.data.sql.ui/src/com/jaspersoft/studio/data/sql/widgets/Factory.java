@@ -50,18 +50,21 @@ public class Factory {
 	public static final String OPERANDS = "OPERANDS"; //$NON-NLS-1$
 	public static final String OPERANDS_INDEX = "OPERANDS_INDEX"; //$NON-NLS-1$
 
-	public static Control createWidget(Composite parent, List<AOperand> operands, int index, AMExpression<?> mexpr) {
+	public static Control createWidget(Composite parent,
+			List<AOperand> operands, int index, AMExpression<?> mexpr) {
 		return createWidget(parent, operands, index, mexpr, false);
 	}
 
-	public static Control createWidget(Composite parent, List<AOperand> operands, int index, AMExpression<?> mexpr, boolean exludeField) {
+	public static Control createWidget(Composite parent,
+			List<AOperand> operands, int index, AMExpression<?> mexpr,
+			boolean exludeField) {
 		Composite cmp = new Composite(parent, SWT.NONE);
 		cmp.setLayout(new FillLayout());
 
 		AOperand op = null;
 		if (index >= 0 && index < operands.size())
 			op = operands.get(index);
-		else{
+		else {
 			op = new ScalarOperand<String>(mexpr, "Venice"); //$NON-NLS-1$
 			operands.add(op);
 		}
@@ -72,7 +75,9 @@ public class Factory {
 		return cmp;
 	}
 
-	public static Control createWidget(Composite parent, List<AOperand> operands, int index, AMExpression<?> mexpr, Set<Class<? extends AOperand>> menuOperand) {
+	public static Control createWidget(Composite parent,
+			List<AOperand> operands, int index, AMExpression<?> mexpr,
+			Set<Class<? extends AOperand>> menuOperand) {
 		Composite cmp = new Composite(parent, SWT.NONE);
 		cmp.setLayout(new FillLayout());
 
@@ -88,7 +93,8 @@ public class Factory {
 		return cmp;
 	}
 
-	protected static void createWidgetMenu(AOperandWidget<?> w, List<AOperand> operands, int index, AMExpression<?> mexpr) {
+	protected static void createWidgetMenu(AOperandWidget<?> w,
+			List<AOperand> operands, int index, AMExpression<?> mexpr) {
 		for (Control c : w.getChildren()) {
 			Menu popupMenu = new Menu(c);
 			buildMenu(popupMenu, w, operands, index, mexpr);
@@ -97,7 +103,8 @@ public class Factory {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <T extends AOperand> AOperandWidget<?> createWidget(Composite parent, T operand) {
+	public static <T extends AOperand> AOperandWidget<?> createWidget(
+			Composite parent, T operand) {
 		AOperandWidget<T> w = null;
 		if (operand instanceof FieldOperand)
 			return new FieldWidget(parent, (FieldOperand) operand);
@@ -108,22 +115,36 @@ public class Factory {
 		if (operand instanceof UnknownOperand)
 			return new UnknownOperandWidget(parent, (UnknownOperand) operand);
 		if (operand instanceof ScalarOperand) {
-			Object opval = ((ScalarOperand<?>) operand).getValue();
-			if (opval instanceof String)
-				return new StringWidget(parent, (ScalarOperand<String>) operand);
-			if (opval instanceof Number)
+			Class<?> type = ((ScalarOperand<?>) operand).getType();
+			if (Number.class.isAssignableFrom(type))
 				return new NumberWidget(parent, (ScalarOperand<Number>) operand);
-			if (opval instanceof Time)
+			if (Time.class.isAssignableFrom(type))
 				return new TimeWidget(parent, (ScalarOperand<Time>) operand);
-			if (opval instanceof Timestamp)
-				return new TimestampWidget(parent, (ScalarOperand<Timestamp>) operand);
-			if (opval instanceof Date)
+			if (java.sql.Date.class.isAssignableFrom(type))
 				return new DateWidget(parent, (ScalarOperand<Date>) operand);
+			if (Date.class.isAssignableFrom(type))
+				return new TimestampWidget(parent,
+						(ScalarOperand<Timestamp>) operand);
+			return new StringWidget(parent, (ScalarOperand<String>) operand);
+
+			// ? extends T opval = ((ScalarOperand<?>) operand).getValue();
+			// if (opval instanceof String)
+			// return new StringWidget(parent, (ScalarOperand<String>) operand);
+			// if (opval instanceof Number)
+			// return new NumberWidget(parent, (ScalarOperand<Number>) operand);
+			// if (opval instanceof Time)
+			// return new TimeWidget(parent, (ScalarOperand<Time>) operand);
+			// if (opval instanceof Timestamp)
+			// return new TimestampWidget(parent, (ScalarOperand<Timestamp>)
+			// operand);
+			// if (opval instanceof Date)
+			// return new DateWidget(parent, (ScalarOperand<Date>) operand);
 		}
 		return w;
 	}
 
-	public static void buildMenu(Menu pMenu, AOperandWidget<?> w, List<AOperand> operands, int index, AMExpression<?> mexpr) {
+	public static void buildMenu(Menu pMenu, AOperandWidget<?> w,
+			List<AOperand> operands, int index, AMExpression<?> mexpr) {
 		Map<String, AOperand> opMap = buildMap(w, mexpr);
 		Menu newMenu = null;
 		for (String key : opMap.keySet()) {
@@ -153,7 +174,8 @@ public class Factory {
 		}
 	}
 
-	private static void setupMenuItem(MenuItem mi1, AOperandWidget<?> w, List<AOperand> operands, int index) {
+	private static void setupMenuItem(MenuItem mi1, AOperandWidget<?> w,
+			List<AOperand> operands, int index) {
 		mi1.setData(OPERANDWIDGET, w);
 		mi1.setData(OPERANDS, operands);
 		mi1.setData(OPERANDS_INDEX, index);
@@ -184,19 +206,37 @@ public class Factory {
 		}
 	};
 
-	public static Map<String, AOperand> buildMap(AOperandWidget<?> w, AMExpression<?> mexpr) {
+	public static Map<String, AOperand> buildMap(AOperandWidget<?> w,
+			AMExpression<?> mexpr) {
 		Map<String, AOperand> opMap = w.getOperandMap();
 		if (opMap == null) {
 			opMap = new LinkedHashMap<String, AOperand>();
-			opMap.put(Messages.Factory_6, getOperand(w, new ParameterPOperand(mexpr)));
-			opMap.put(Messages.Factory_7, getOperand(w, new ParameterNotPOperand(mexpr)));
-			opMap.put(Messages.Factory_8, getOperand(w, new FieldOperand(null, null, mexpr)));
-			opMap.put(Messages.Factory_9, getOperand(w, getDefaultOperand(mexpr)));
-			opMap.put(Messages.Factory_10, getOperand(w, new ScalarOperand<BigDecimal>(mexpr, BigDecimal.ZERO)));
-			opMap.put(Messages.Factory_11, getOperand(w, new ScalarOperand<java.sql.Date>(mexpr, new java.sql.Date(new Date().getTime()))));
-			opMap.put(Messages.Factory_12, getOperand(w, new ScalarOperand<Time>(mexpr, new Time(new Date().getTime()))));
-			opMap.put(Messages.Factory_13, getOperand(w, new ScalarOperand<Timestamp>(mexpr, new Timestamp(new Date().getTime()))));
-			opMap.put(Messages.Factory_14, getOperand(w, new UnknownOperand(mexpr, ""))); //$NON-NLS-2$
+			opMap.put(Messages.Factory_6,
+					getOperand(w, new ParameterPOperand(mexpr)));
+			opMap.put(Messages.Factory_7,
+					getOperand(w, new ParameterNotPOperand(mexpr)));
+			opMap.put(Messages.Factory_8,
+					getOperand(w, new FieldOperand(null, null, mexpr)));
+			opMap.put(Messages.Factory_9,
+					getOperand(w, getDefaultOperand(mexpr)));
+			opMap.put(
+					Messages.Factory_10,
+					getOperand(w, new ScalarOperand<BigDecimal>(mexpr,
+							BigDecimal.ZERO)));
+			opMap.put(
+					Messages.Factory_11,
+					getOperand(w, new ScalarOperand<java.sql.Date>(mexpr,
+							new java.sql.Date(new Date().getTime()))));
+			opMap.put(
+					Messages.Factory_12,
+					getOperand(w, new ScalarOperand<Time>(mexpr, new Time(
+							new Date().getTime()))));
+			opMap.put(
+					Messages.Factory_13,
+					getOperand(w, new ScalarOperand<Timestamp>(mexpr,
+							new Timestamp(new Date().getTime()))));
+			opMap.put(Messages.Factory_14,
+					getOperand(w, new UnknownOperand(mexpr, ""))); //$NON-NLS-2$
 			w.setOperandMap(opMap);
 		}
 		return opMap;
@@ -207,7 +247,7 @@ public class Factory {
 			if (operand instanceof ScalarOperand<?>) {
 				ScalarOperand<?> op = (ScalarOperand<?>) operand;
 				ScalarOperand<?> wop = (ScalarOperand<?>) w.getValue();
-				if (op.getValue().getClass().isAssignableFrom(wop.getValue().getClass()))
+				if (op.getType().isAssignableFrom(wop.getType()))
 					return w.getValue();
 			} else
 				return w.getValue();
