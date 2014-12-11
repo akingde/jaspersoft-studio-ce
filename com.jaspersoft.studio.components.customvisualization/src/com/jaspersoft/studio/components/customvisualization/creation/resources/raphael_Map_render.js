@@ -11,6 +11,7 @@ define('RaphaelMap',['Raphael'], function (Raphael) {
 		var R = Raphael(instanceData.id, w, h);
 		R.setViewBox(0,0,300,300,true);
 		R.setSize('100%','100%');
+		R.canvas.setAttribute("preserveAspectRatio", "xMidYMid meet");
 		
             var attr = {
                 fill: "#333",
