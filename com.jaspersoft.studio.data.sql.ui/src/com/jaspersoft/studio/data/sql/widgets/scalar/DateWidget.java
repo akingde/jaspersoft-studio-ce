@@ -51,11 +51,17 @@ public class DateWidget extends AScalarWidget {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				Date sdate = date.getSelection();
-				((ScalarOperand<Date>) getValue()).setValue(sdate);
+				((ScalarOperand<Date>) getValue()).setValue(convertDate(sdate));
 			}
 		});
 
 		date.setSelection((Date) getValue().getValue());
+	}
+
+	protected Date convertDate(Date d) {
+		if (getValue().getValue() instanceof java.sql.Date)
+			return new java.sql.Date(d.getTime());
+		return d;
 	}
 
 	protected int getDateStyle() {

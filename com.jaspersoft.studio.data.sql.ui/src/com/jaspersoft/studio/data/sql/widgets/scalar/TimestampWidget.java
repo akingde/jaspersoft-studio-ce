@@ -13,6 +13,7 @@
 package com.jaspersoft.studio.data.sql.widgets.scalar;
 
 import java.sql.Timestamp;
+import java.util.Date;
 
 import org.eclipse.nebula.widgets.cdatetime.CDT;
 import org.eclipse.swt.widgets.Composite;
@@ -23,6 +24,10 @@ public class TimestampWidget extends DateWidget {
 
 	public TimestampWidget(Composite parent, ScalarOperand<Timestamp> operand) {
 		super(parent, operand);
+	}
+
+	protected Date convertDate(Date d) {
+		return new java.sql.Timestamp(d.getTime());
 	}
 
 	@Override
