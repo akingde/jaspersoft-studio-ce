@@ -27,6 +27,7 @@ import org.eclipse.ui.console.ConsolePlugin;
 import org.eclipse.ui.console.IConsole;
 import org.eclipse.ui.console.MessageConsole;
 import org.eclipse.ui.console.MessageConsoleStream;
+import org.eclipse.ui.progress.UIJob;
 import org.osgi.framework.BundleContext;
 
 import com.jaspersoft.studio.data.defaults.DefaultDAManager;
@@ -116,17 +117,12 @@ public class JaspersoftStudioPlugin extends AbstractJRUIPlugin {
 	@Override
 	protected void postStartOperations() {
 		super.postStartOperations();
-
+		
 		// Initialize the extension manager
 		getExtensionManager();
 
-		// JSS console activation (if requested)
-		if (getInstance().getPreferenceStore().getBoolean(GlobalPreferencePage.JSS_ENABLE_INTERNAL_CONSOLE)) {
-			installJSSConsole();
-		}
-		
 		// Pre-cache template images
-		Job precacheImagesJob = new Job("Pre-caching template images"){
+		Job precacheImagesJob = new Job(Messages.JaspersoftStudioPlugin_CachingTemplateImagesJob){
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				ReportTemplatesWizardPage.templateImagesPreCache();
@@ -137,7 +133,7 @@ public class JaspersoftStudioPlugin extends AbstractJRUIPlugin {
 		precacheImagesJob.schedule();
 
 		// Force the initialization of some JR extensions
-		Job extensionsPreloadingJob = new Job("Pre-caching JR extensions"){
+		Job extensionsPreloadingJob = new Job(Messages.JaspersoftStudioPlugin_CachingJRExtensionsJob){
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				ExtensionLoader.initializeJRExtensions(monitor);
@@ -148,7 +144,7 @@ public class JaspersoftStudioPlugin extends AbstractJRUIPlugin {
 		extensionsPreloadingJob.schedule();
 
 		// Force the creation of the digester
-		Job digesterJob = new Job("Shared Digester creation") {
+		Job digesterJob = new Job(Messages.JaspersoftStudioPlugin_DigesterCreationJob) {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				// Force the digester cache
@@ -158,6 +154,24 @@ public class JaspersoftStudioPlugin extends AbstractJRUIPlugin {
 		};
 		digesterJob.setPriority(Job.LONG);
 		digesterJob.schedule();
+		
+		// JSS console activation (if requested)
+		if (getInstance().getPreferenceStore().getBoolean(GlobalPreferencePage.JSS_ENABLE_INTERNAL_CONSOLE)) {
+			UIJob j = new UIJob(Messages.JaspersoftStudioPlugin_InstallingJSSConsoleJob) {
+				@Override
+				public IStatus runInUIThread(IProgressMonitor monitor) {
+					try {
+						installJSSConsole();
+						return Status.OK_STATUS;
+					}
+					catch (Exception e) {
+						// something went wrong while trying to re-assign the standard output and error streams.
+						return new Status(IStatus.ERROR, PLUGIN_ID, Messages.JaspersoftStudioPlugin_ConsoleInstallationError, e);
+					}
+				}
+			};
+			j.schedule();
+		}
 	}
 
 	private static ExtensionManager extensionManager;
@@ -289,19 +303,13 @@ public class JaspersoftStudioPlugin extends AbstractJRUIPlugin {
 	 * Once installed, all the messages printed on the System.out and System.err streams
 	 * will be redirected here.
 	 */
-	public static void installJSSConsole() {
-		try {
-			MessageConsole jssConsole = new MessageConsole(Messages.JaspersoftStudioPlugin_JSSConsoleTitle, null);
-			ConsolePlugin.getDefault().getConsoleManager().addConsoles(new IConsole[]{jssConsole});
-			MessageConsoleStream consoleStream = jssConsole.newMessageStream();
-			PrintStream pstream = new PrintStream(consoleStream);
-			System.setOut(pstream);
-			System.setErr(pstream);
-		} catch (SecurityException e) {
-			// something went wrong while trying to 
-			// re-assign the standard output and error streams.
-			e.printStackTrace();
-		}	
+	private static void installJSSConsole() {
+		MessageConsole jssConsole = new MessageConsole(Messages.JaspersoftStudioPlugin_JSSConsoleTitle, null);
+		ConsolePlugin.getDefault().getConsoleManager().addConsoles(new IConsole[]{jssConsole});
+		MessageConsoleStream consoleStream = jssConsole.newMessageStream();
+		PrintStream pstream = new PrintStream(consoleStream);
+		System.setOut(pstream);
+		System.setErr(pstream);
 	}
 
 }

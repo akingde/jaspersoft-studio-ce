@@ -836,6 +836,11 @@ public class Messages extends NLS {
 	public static String InputParameterDialog_nameLabel;
 	public static String InputReturnValueDialog_dialogTitle;
 	public static String JaspersoftStudioPlugin_BrandingInfoJSSPlugin;
+	public static String JaspersoftStudioPlugin_CachingJRExtensionsJob;
+	public static String JaspersoftStudioPlugin_CachingTemplateImagesJob;
+	public static String JaspersoftStudioPlugin_ConsoleInstallationError;
+	public static String JaspersoftStudioPlugin_DigesterCreationJob;
+	public static String JaspersoftStudioPlugin_InstallingJSSConsoleJob;
 	public static String JaspersoftStudioPlugin_JSSConsoleTitle;
 	public static String JaspersoftStudioPlugin_StartingJSSBundleMsg;
 	public static String JDMarqueeToolEntry_Behavior_Nodes_Contained;
