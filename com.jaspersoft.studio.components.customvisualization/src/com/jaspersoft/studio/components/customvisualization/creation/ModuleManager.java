@@ -20,6 +20,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.Platform;
 
 import com.jaspersoft.studio.ConfigurationManager;
 
@@ -94,6 +97,7 @@ public class ModuleManager {
 		embeddedModules.add(d3Circle);
 		embeddedModules.add(raphaelMap);
 
+		getContributedModules();
 		//createRaphaelDots();
 	}
 	
@@ -134,6 +138,26 @@ public class ModuleManager {
 		raphaelModule.addRequiredLibrary(gDot);
 		
 		embeddedModules.add(raphaelModule);
+	}
+	
+	/**
+	 * Read the provided modules from the extension point, so they can be contributed
+	 * from external plugins
+	 */
+	private static void getContributedModules() {
+		IConfigurationElement[] elements = Platform.getExtensionRegistry().getConfigurationElementsFor("com.jaspersoft.studio.components.customvisualization.ComponentSamples");
+		for (IConfigurationElement element : elements) {
+			Object input;
+			try {
+				input = element.createExecutableExtension("class");
+				if (input instanceof ModuleDefinition) {
+					ModuleDefinition module = (ModuleDefinition) input;
+					embeddedModules.add(module);
+				}
+			} catch (CoreException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	/**
