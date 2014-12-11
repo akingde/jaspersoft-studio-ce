@@ -1,8 +1,5 @@
 ({
-    #if( "$!namespace" != "" )
-    namespace: '${namespace}',
-    #end
-    //optimize: 'none',
+    //optimize: 'none', // DECOMMENT THIS PROPERTY TO DISABLE THE UGLIFY OF THE LIBRARIES
     baseUrl: '',
     paths: {
 	#foreach( $library in $libraries )
@@ -22,18 +19,6 @@
 	#end
     },
     #end
-    modules: [
-        {
-            name: "${modulename}",      
-            include: [
-            #foreach( $include in $includes )
-				"$include",	
-			#end
-			"${modulename}"
-            ],
-            create: true
-        }
-    ],
     name: "${modulename}",
     out: "${modulename}.min.js"
 })

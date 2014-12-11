@@ -79,8 +79,7 @@ public class ModuleManager {
 		require.setLibraryURL("https://raw.githubusercontent.com/jrburke/requirejs/2.1.15/require.js");
 		require.setLicenseURL("https://raw.githubusercontent.com/jrburke/requirejs/2.1.15/LICENSE");
 		require.setVersionNumber("2.1.15");
-		d3Circle.addRequiredLibrary(require);
-		d3Circle.addIncludeItem("requireLib");
+		d3Circle.addRequiredLibrary(require);;
 		
 		embeddedModules.add(d3Module);
 		embeddedModules.add(d3Circle);
