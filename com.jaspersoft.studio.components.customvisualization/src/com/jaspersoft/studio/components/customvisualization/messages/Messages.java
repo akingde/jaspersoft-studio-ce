@@ -66,6 +66,7 @@ public class Messages extends NLS {
 	public static String CompileDialog_startCompilation;
 	public static String BuildComponentHandler_errorMessage;
 	public static String BuildComponentHandler_errorTitle;
+	public static String CustomVisualizationComponentLicensePage_acceptLicensesButton;
 	public static String CustomVisualizationComponentLicensePage_downloadLabel;
 	public static String CustomVisualizationComponentLicensePage_pageDescription;
 	public static String CustomVisualizationComponentLicensePage_pageTitle;

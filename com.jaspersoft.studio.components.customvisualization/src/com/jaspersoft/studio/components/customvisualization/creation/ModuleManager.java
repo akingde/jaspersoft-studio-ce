@@ -61,11 +61,34 @@ public class ModuleManager {
 		d3Module.setCssResource("com/jaspersoft/studio/components/customvisualization/creation/resources/d3css.css");
 		d3Module.setRenderResource("com/jaspersoft/studio/components/customvisualization/creation/resources/d3render.js");
 		d3Module.setVersionNumber("3.4.13");
+		
+		
+		ModuleDefinition d3Circle = new ModuleDefinition();
+		d3Circle.setModuleName("D3 circle");
+		d3Circle.setVariableName("d3");
+		d3Circle.setLibraryURL("https://raw.githubusercontent.com/mbostock/d3/v3.4.13/d3.min.js");
+		d3Circle.setLicenseURL("https://raw.githubusercontent.com/mbostock/d3/v3.4.13/LICENSE");
+		d3Circle.setCssResource("com/jaspersoft/studio/components/customvisualization/creation/resources/D3_Circle_css.css");
+		d3Circle.setRenderResource("com/jaspersoft/studio/components/customvisualization/creation/resources/D3_Circle_render.js");
+		d3Circle.setVersionNumber("3.4.13");
+		
+		//SET THE DEPENDENCES
+		ModuleDefinition require = new ModuleDefinition();
+		require.setVariableName("requireLib");
+		require.setModuleName("Require.js");
+		require.setLibraryURL("https://raw.githubusercontent.com/jrburke/requirejs/2.1.15/require.js");
+		require.setLicenseURL("https://raw.githubusercontent.com/jrburke/requirejs/2.1.15/LICENSE");
+		require.setVersionNumber("2.1.15");
+		d3Circle.addRequiredLibrary(require);
+		d3Circle.addIncludeItem("requireLib");
+		
 		embeddedModules.add(d3Module);
+		embeddedModules.add(d3Circle);
 
-		createRaphaelDots();
+		//createRaphaelDots();
 	}
 	
+	@SuppressWarnings("unused")
 	private static void createRaphaelDots(){
 		ModuleDefinition raphaelModule = new ModuleDefinition();
 		raphaelModule.setModuleName("Raphael Dots");

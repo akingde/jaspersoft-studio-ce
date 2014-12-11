@@ -1,4 +1,8 @@
 ({
+    #if( "$!namespace" != "" )
+    namespace: '${namespace}',
+    #end
+    //optimize: 'none',
     baseUrl: '',
     paths: {
 	#foreach( $library in $libraries )
@@ -18,6 +22,18 @@
 	#end
     },
     #end
-    name: "${foldername}",
-    out: "${foldername}.min.js"
+    modules: [
+        {
+            name: "${modulename}",      
+            include: [
+            #foreach( $include in $includes )
+				"$include",	
+			#end
+			"${modulename}"
+            ],
+            create: true
+        }
+    ],
+    name: "${modulename}",
+    out: "${modulename}.min.js"
 })

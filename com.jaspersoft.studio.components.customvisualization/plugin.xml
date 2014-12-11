@@ -16,7 +16,7 @@
                category="element"
                id="com.jaspersoft.studio.components.customvisualization.tab"
                image="icons/cvcomponent-16.png"
-               label="%propertyTab.label">
+               label="%propertyTab">
          </propertyTab>
       </propertyTabs>
    </extension>

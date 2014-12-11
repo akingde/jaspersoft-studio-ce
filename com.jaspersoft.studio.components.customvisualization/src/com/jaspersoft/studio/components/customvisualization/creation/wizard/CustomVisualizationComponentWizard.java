@@ -135,7 +135,7 @@ public class CustomVisualizationComponentWizard extends JSSWizard implements INe
 				generateCSS(project, monitor, selected);
 				generateRender(project, monitor, selected);
 				libraries.add(new VelocityLibrary(projectName, projectName));
-				generateBuildFile(project, monitor, libraries, shimLibraries, projectName);
+				generateBuildFile(project, monitor, libraries, shimLibraries, projectName, selected.getIncludedItems());
 				try {
 					project.refreshLocal(IProject.DEPTH_INFINITE, new NullProgressMonitor());
 				} catch (CoreException e) {
@@ -225,15 +225,17 @@ public class CustomVisualizationComponentWizard extends JSSWizard implements INe
 	 * @param monitor monitor to execute the operation
 	 * @param libraries the list of javascript libraries to include inside the build file
 	 * @param shimLibraries the list of javascript shimmed libraries to include inside the build file
-	 * @param folderName the name of the folder where the project is contained
+	 * @param modulename the name of the folder where the project is contained, that it is used as module name
+	 * @param includes not null list of the includes to insert in the module section
 	 */
-	private void generateBuildFile(IProject container, IProgressMonitor monitor, List<VelocityLibrary> libraries, List<VelocityShimLibrary> shimLibraries, String folderName) {
+	private void generateBuildFile(IProject container, IProgressMonitor monitor, List<VelocityLibrary> libraries, List<VelocityShimLibrary> shimLibraries, String modulename, List<String> includes) {
 		VelocityContext functionContext = new VelocityContext();
 		functionContext.put("libraries", libraries); //$NON-NLS-1$
 		functionContext.put("hasShim", shimLibraries.size()>0); //$NON-NLS-1$
 		functionContext.put("shimlibraries", shimLibraries); //$NON-NLS-1$
-		functionContext.put("foldername", folderName); //$NON-NLS-1$
-
+		functionContext.put("modulename", modulename); //$NON-NLS-1$
+		functionContext.put("includes", includes); //$NON-NLS-1$
+		
 		Template functionTemplate = ve.getTemplate(BUILD_FILE);
 		StringWriter fsw = new StringWriter();
 		functionTemplate.merge(functionContext, fsw);

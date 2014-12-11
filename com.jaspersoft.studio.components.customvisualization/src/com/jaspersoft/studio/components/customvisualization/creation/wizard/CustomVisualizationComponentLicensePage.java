@@ -25,6 +25,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
@@ -114,6 +115,10 @@ public class CustomVisualizationComponentLicensePage extends JSSWizardPage {
 	 */
 	private HashMap<String, ModuleDefinition> usedModules = new HashMap<String, ModuleDefinition>();
 	
+	/**
+	 * Boolean flag to check if the user has accepted the licenses
+	 */
+	private boolean licensesAccepted = false;
 	
 	/**
 	 * Create the page
@@ -147,6 +152,20 @@ public class CustomVisualizationComponentLicensePage extends JSSWizardPage {
 		GridData licenseData = new GridData(GridData.FILL_BOTH);
 		licenseData.widthHint = 200;
 		licenseLabel.setLayoutData(licenseData);
+		
+		//CREATE THE ACCEPT BUTTON
+		final Button licenseButton = new Button(container, SWT.CHECK);
+		licenseButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		licenseButton.setText(Messages.CustomVisualizationComponentLicensePage_acceptLicensesButton);
+		licenseButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				licensesAccepted = licenseButton.getSelection();
+				getContainer().updateButtons();
+			}
+			
+		});
+		
 		setControl(container);
 	}
 
@@ -251,5 +270,13 @@ public class CustomVisualizationComponentLicensePage extends JSSWizardPage {
 				}
 			}
 		}
+	}
+	
+	/**
+	 * The page is complete only when the licenses are accepted
+	 */
+	@Override
+	public boolean isPageComplete() {
+		return licensesAccepted;
 	}
 }

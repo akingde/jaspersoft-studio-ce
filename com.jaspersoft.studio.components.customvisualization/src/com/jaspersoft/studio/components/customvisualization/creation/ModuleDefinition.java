@@ -89,7 +89,12 @@ public class ModuleDefinition {
 	 * Dependences of this module
 	 */
 	private List<ModuleDefinition> requiredLibraries = new ArrayList<ModuleDefinition>();
-
+	
+	/**
+	 * List of the include to add in the module section of the build.js file
+	 */
+	private List<String> includes = new ArrayList<String>();
+	
 	/**
 	 * Return the module name
 	 * 
@@ -335,6 +340,26 @@ public class ModuleDefinition {
 		return url.substring(url.lastIndexOf("/")+1);
 	}
 	
+	/**
+	 * add an include item to the list of the include to add in the 
+	 * module section of the build.js file
+	 * 
+	 * @param item the item to add, must be unique
+	 */
+	public void addIncludeItem(String item){
+		Assert.isLegal(!includes.contains(item));
+		includes.add(item);
+	}
+	
+	/**
+	 * Return the list of the includes
+	 * 
+	 * @re not null list of strings
+	 */
+	public List<String> getIncludedItems(){
+		return includes;
+	}
+
 	/**
 	 * Return the license of the library as file. It is download
 	 * using the license url
