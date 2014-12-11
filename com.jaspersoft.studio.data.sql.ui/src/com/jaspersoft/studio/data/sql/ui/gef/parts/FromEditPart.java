@@ -90,7 +90,7 @@ public class FromEditPart extends AbstractGraphicalEditPart {
 					cmd.setTarget(((TableEditPart) child).getModel());
 					return cmd;
 				}
-				return super.createChangeConstraintCommand(request, child, constraint);
+				return null;
 			}
 
 			@Override
