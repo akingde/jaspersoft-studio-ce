@@ -79,10 +79,20 @@ public class ModuleManager {
 		require.setLibraryURL("https://raw.githubusercontent.com/jrburke/requirejs/2.1.15/require.js");
 		require.setLicenseURL("https://raw.githubusercontent.com/jrburke/requirejs/2.1.15/LICENSE");
 		require.setVersionNumber("2.1.15");
-		d3Circle.addRequiredLibrary(require);;
+		d3Circle.addRequiredLibrary(require);
+		
+		ModuleDefinition raphaelMap = new ModuleDefinition();
+		raphaelMap.setModuleName("Raphael");
+		raphaelMap.setVariableName("Raphael");
+		raphaelMap.setLibraryURL("https://raw.githubusercontent.com/DmitryBaranovskiy/raphael/v2.1.2/raphael-min.js");
+		raphaelMap.setLicenseURL("https://raw.githubusercontent.com/DmitryBaranovskiy/raphael/v2.1.2/license.txt");
+		raphaelMap.setCssResource("com/jaspersoft/studio/components/customvisualization/creation/resources/raphael_Map_css.css");
+		raphaelMap.setRenderResource("com/jaspersoft/studio/components/customvisualization/creation/resources/raphael_Map_render.js");
+		raphaelMap.setVersionNumber("2.1.2");
 		
 		embeddedModules.add(d3Module);
 		embeddedModules.add(d3Circle);
+		embeddedModules.add(raphaelMap);
 
 		//createRaphaelDots();
 	}
