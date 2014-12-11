@@ -1,17 +1,14 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.editor.preview.input.array;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -80,7 +77,12 @@ public class CollectionInput extends ADataInput {
 					}
 					TableDialog d = new TableDialog(bbuton.getShell(), value, param);
 					if (d.open() == Dialog.OK) {
-						updateModel(d.getValue());
+						Object val = d.getValue();
+						if (param.getValueClass().isArray()) {
+							List<?> list = (List<?>) val;
+							val = list.toArray((Object[]) Array.newInstance(param.getValueClass().getComponentType(), list.size()));
+						}
+						updateModel(val);
 						updateInput();
 					}
 				}
