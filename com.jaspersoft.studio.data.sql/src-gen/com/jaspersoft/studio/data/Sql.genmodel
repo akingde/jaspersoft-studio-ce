@@ -24,6 +24,20 @@
     <genClasses ecoreClass="Sql.ecore#//Model">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Model/query"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Model/orderByEntry"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Model/lim"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Model/offset"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Model/fetchFirst"/>
+    </genClasses>
+    <genClasses ecoreClass="Sql.ecore#//FetchFirst">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//FetchFirst/fetchFirst"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//FetchFirst/row"/>
+    </genClasses>
+    <genClasses ecoreClass="Sql.ecore#//Offset">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//Offset/offset"/>
+    </genClasses>
+    <genClasses ecoreClass="Sql.ecore#//Limit">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//Limit/l1"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Limit/l2"/>
     </genClasses>
     <genClasses ecoreClass="Sql.ecore#//SelectQuery"/>
     <genClasses ecoreClass="Sql.ecore#//SelectSubSet">
@@ -273,6 +287,9 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//SqlCaseWhen/expr"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//SqlCaseWhen/texp"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//SqlCaseWhen/eexp"/>
+    </genClasses>
+    <genClasses ecoreClass="Sql.ecore#//IntegerValue">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//IntegerValue/integer"/>
     </genClasses>
     <genClasses ecoreClass="Sql.ecore#//Col">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Col/entries"/>

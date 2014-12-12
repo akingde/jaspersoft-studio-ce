@@ -30,28 +30,24 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cOrderByEntryOrderByColumnsParserRuleCall_1_1_0 = (RuleCall)cOrderByEntryAssignment_1_1.eContents().get(0);
 		private final Group cGroup_2 = (Group)cGroup.eContents().get(2);
 		private final Keyword cLIMITKeyword_2_0 = (Keyword)cGroup_2.eContents().get(0);
-		private final Alternatives cAlternatives_2_1 = (Alternatives)cGroup_2.eContents().get(1);
-		private final Keyword cALLKeyword_2_1_0 = (Keyword)cAlternatives_2_1.eContents().get(0);
-		private final Group cGroup_2_1_1 = (Group)cAlternatives_2_1.eContents().get(1);
-		private final RuleCall cINTTerminalRuleCall_2_1_1_0 = (RuleCall)cGroup_2_1_1.eContents().get(0);
-		private final Group cGroup_2_1_1_1 = (Group)cGroup_2_1_1.eContents().get(1);
-		private final Keyword cCommaKeyword_2_1_1_1_0 = (Keyword)cGroup_2_1_1_1.eContents().get(0);
-		private final RuleCall cINTTerminalRuleCall_2_1_1_1_1 = (RuleCall)cGroup_2_1_1_1.eContents().get(1);
+		private final Assignment cLimAssignment_2_1 = (Assignment)cGroup_2.eContents().get(1);
+		private final RuleCall cLimLimitParserRuleCall_2_1_0 = (RuleCall)cLimAssignment_2_1.eContents().get(0);
 		private final Group cGroup_3 = (Group)cGroup.eContents().get(3);
 		private final Keyword cOFFSETKeyword_3_0 = (Keyword)cGroup_3.eContents().get(0);
-		private final RuleCall cINTTerminalRuleCall_3_1 = (RuleCall)cGroup_3.eContents().get(1);
+		private final Assignment cOffsetAssignment_3_1 = (Assignment)cGroup_3.eContents().get(1);
+		private final RuleCall cOffsetOffsetParserRuleCall_3_1_0 = (RuleCall)cOffsetAssignment_3_1.eContents().get(0);
 		private final Group cGroup_4 = (Group)cGroup.eContents().get(4);
 		private final Keyword cFETCHFIRSTKeyword_4_0 = (Keyword)cGroup_4.eContents().get(0);
-		private final RuleCall cINTTerminalRuleCall_4_1 = (RuleCall)cGroup_4.eContents().get(1);
-		private final Keyword cROWSONLYKeyword_4_2 = (Keyword)cGroup_4.eContents().get(2);
+		private final Assignment cFetchFirstAssignment_4_1 = (Assignment)cGroup_4.eContents().get(1);
+		private final RuleCall cFetchFirstFetchFirstParserRuleCall_4_1_0 = (RuleCall)cFetchFirstAssignment_4_1.eContents().get(0);
 		
 		//Model:
-		//	query=SelectQuery ("ORDER BY" orderByEntry=OrderByColumns)? ("LIMIT" ("ALL" | INT ("," INT)?))? ("OFFSET" INT)?
-		//	("FETCH FIRST" INT "ROWS ONLY")?;
+		//	query=SelectQuery ("ORDER BY" orderByEntry=OrderByColumns)? ("LIMIT" lim=Limit)? ("OFFSET" offset=Offset)?
+		//	("FETCH FIRST" fetchFirst=FetchFirst)?;
 		public ParserRule getRule() { return rule; }
 
-		//query=SelectQuery ("ORDER BY" orderByEntry=OrderByColumns)? ("LIMIT" ("ALL" | INT ("," INT)?))? ("OFFSET" INT)?
-		//("FETCH FIRST" INT "ROWS ONLY")?
+		//query=SelectQuery ("ORDER BY" orderByEntry=OrderByColumns)? ("LIMIT" lim=Limit)? ("OFFSET" offset=Offset)?
+		//("FETCH FIRST" fetchFirst=FetchFirst)?
 		public Group getGroup() { return cGroup; }
 
 		//query=SelectQuery
@@ -72,53 +68,149 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		//OrderByColumns
 		public RuleCall getOrderByEntryOrderByColumnsParserRuleCall_1_1_0() { return cOrderByEntryOrderByColumnsParserRuleCall_1_1_0; }
 
-		//("LIMIT" ("ALL" | INT ("," INT)?))?
+		//("LIMIT" lim=Limit)?
 		public Group getGroup_2() { return cGroup_2; }
 
 		//"LIMIT"
 		public Keyword getLIMITKeyword_2_0() { return cLIMITKeyword_2_0; }
 
-		//"ALL" | INT ("," INT)?
-		public Alternatives getAlternatives_2_1() { return cAlternatives_2_1; }
+		//lim=Limit
+		public Assignment getLimAssignment_2_1() { return cLimAssignment_2_1; }
 
-		//"ALL"
-		public Keyword getALLKeyword_2_1_0() { return cALLKeyword_2_1_0; }
+		//Limit
+		public RuleCall getLimLimitParserRuleCall_2_1_0() { return cLimLimitParserRuleCall_2_1_0; }
 
-		//INT ("," INT)?
-		public Group getGroup_2_1_1() { return cGroup_2_1_1; }
-
-		//INT
-		public RuleCall getINTTerminalRuleCall_2_1_1_0() { return cINTTerminalRuleCall_2_1_1_0; }
-
-		//("," INT)?
-		public Group getGroup_2_1_1_1() { return cGroup_2_1_1_1; }
-
-		//","
-		public Keyword getCommaKeyword_2_1_1_1_0() { return cCommaKeyword_2_1_1_1_0; }
-
-		//INT
-		public RuleCall getINTTerminalRuleCall_2_1_1_1_1() { return cINTTerminalRuleCall_2_1_1_1_1; }
-
-		//("OFFSET" INT)?
+		//("OFFSET" offset=Offset)?
 		public Group getGroup_3() { return cGroup_3; }
 
 		//"OFFSET"
 		public Keyword getOFFSETKeyword_3_0() { return cOFFSETKeyword_3_0; }
 
-		//INT
-		public RuleCall getINTTerminalRuleCall_3_1() { return cINTTerminalRuleCall_3_1; }
+		//offset=Offset
+		public Assignment getOffsetAssignment_3_1() { return cOffsetAssignment_3_1; }
 
-		//("FETCH FIRST" INT "ROWS ONLY")?
+		//Offset
+		public RuleCall getOffsetOffsetParserRuleCall_3_1_0() { return cOffsetOffsetParserRuleCall_3_1_0; }
+
+		//("FETCH FIRST" fetchFirst=FetchFirst)?
 		public Group getGroup_4() { return cGroup_4; }
 
 		//"FETCH FIRST"
 		public Keyword getFETCHFIRSTKeyword_4_0() { return cFETCHFIRSTKeyword_4_0; }
 
-		//INT
-		public RuleCall getINTTerminalRuleCall_4_1() { return cINTTerminalRuleCall_4_1; }
+		//fetchFirst=FetchFirst
+		public Assignment getFetchFirstAssignment_4_1() { return cFetchFirstAssignment_4_1; }
 
-		//"ROWS ONLY"
-		public Keyword getROWSONLYKeyword_4_2() { return cROWSONLYKeyword_4_2; }
+		//FetchFirst
+		public RuleCall getFetchFirstFetchFirstParserRuleCall_4_1_0() { return cFetchFirstFetchFirstParserRuleCall_4_1_0; }
+	}
+
+	public class FetchFirstElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "FetchFirst");
+		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final Assignment cFetchFirstAssignment_0 = (Assignment)cGroup.eContents().get(0);
+		private final RuleCall cFetchFirstIntegerValueParserRuleCall_0_0 = (RuleCall)cFetchFirstAssignment_0.eContents().get(0);
+		private final Assignment cRowAssignment_1 = (Assignment)cGroup.eContents().get(1);
+		private final Alternatives cRowAlternatives_1_0 = (Alternatives)cRowAssignment_1.eContents().get(0);
+		private final Keyword cRowROWKeyword_1_0_0 = (Keyword)cRowAlternatives_1_0.eContents().get(0);
+		private final Keyword cRowROWSKeyword_1_0_1 = (Keyword)cRowAlternatives_1_0.eContents().get(1);
+		private final Keyword cONLYKeyword_2 = (Keyword)cGroup.eContents().get(2);
+		
+		//FetchFirst:
+		//	fetchFirst=IntegerValue? row=("ROW" | "ROWS") "ONLY";
+		public ParserRule getRule() { return rule; }
+
+		//fetchFirst=IntegerValue? row=("ROW" | "ROWS") "ONLY"
+		public Group getGroup() { return cGroup; }
+
+		//fetchFirst=IntegerValue?
+		public Assignment getFetchFirstAssignment_0() { return cFetchFirstAssignment_0; }
+
+		//IntegerValue
+		public RuleCall getFetchFirstIntegerValueParserRuleCall_0_0() { return cFetchFirstIntegerValueParserRuleCall_0_0; }
+
+		//row=("ROW" | "ROWS")
+		public Assignment getRowAssignment_1() { return cRowAssignment_1; }
+
+		//"ROW" | "ROWS"
+		public Alternatives getRowAlternatives_1_0() { return cRowAlternatives_1_0; }
+
+		//"ROW"
+		public Keyword getRowROWKeyword_1_0_0() { return cRowROWKeyword_1_0_0; }
+
+		//"ROWS"
+		public Keyword getRowROWSKeyword_1_0_1() { return cRowROWSKeyword_1_0_1; }
+
+		//"ONLY"
+		public Keyword getONLYKeyword_2() { return cONLYKeyword_2; }
+	}
+
+	public class OffsetElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "Offset");
+		private final Assignment cOffsetAssignment = (Assignment)rule.eContents().get(1);
+		private final RuleCall cOffsetINTTerminalRuleCall_0 = (RuleCall)cOffsetAssignment.eContents().get(0);
+		
+		//Offset:
+		//	offset=INT;
+		public ParserRule getRule() { return rule; }
+
+		//offset=INT
+		public Assignment getOffsetAssignment() { return cOffsetAssignment; }
+
+		//INT
+		public RuleCall getOffsetINTTerminalRuleCall_0() { return cOffsetINTTerminalRuleCall_0; }
+	}
+
+	public class LimitElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "Limit");
+		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
+		private final Group cGroup_0 = (Group)cAlternatives.eContents().get(0);
+		private final Action cLimitAction_0_0 = (Action)cGroup_0.eContents().get(0);
+		private final Keyword cALLKeyword_0_1 = (Keyword)cGroup_0.eContents().get(1);
+		private final Group cGroup_1 = (Group)cAlternatives.eContents().get(1);
+		private final Assignment cL1Assignment_1_0 = (Assignment)cGroup_1.eContents().get(0);
+		private final RuleCall cL1INTTerminalRuleCall_1_0_0 = (RuleCall)cL1Assignment_1_0.eContents().get(0);
+		private final Group cGroup_1_1 = (Group)cGroup_1.eContents().get(1);
+		private final Keyword cCommaKeyword_1_1_0 = (Keyword)cGroup_1_1.eContents().get(0);
+		private final Assignment cL2Assignment_1_1_1 = (Assignment)cGroup_1_1.eContents().get(1);
+		private final RuleCall cL2IntegerValueParserRuleCall_1_1_1_0 = (RuleCall)cL2Assignment_1_1_1.eContents().get(0);
+		
+		//Limit:
+		//	{Limit} "ALL" | l1=INT ("," l2=IntegerValue)?;
+		public ParserRule getRule() { return rule; }
+
+		//{Limit} "ALL" | l1=INT ("," l2=IntegerValue)?
+		public Alternatives getAlternatives() { return cAlternatives; }
+
+		//{Limit} "ALL"
+		public Group getGroup_0() { return cGroup_0; }
+
+		//{Limit}
+		public Action getLimitAction_0_0() { return cLimitAction_0_0; }
+
+		//"ALL"
+		public Keyword getALLKeyword_0_1() { return cALLKeyword_0_1; }
+
+		//l1=INT ("," l2=IntegerValue)?
+		public Group getGroup_1() { return cGroup_1; }
+
+		//l1=INT
+		public Assignment getL1Assignment_1_0() { return cL1Assignment_1_0; }
+
+		//INT
+		public RuleCall getL1INTTerminalRuleCall_1_0_0() { return cL1INTTerminalRuleCall_1_0_0; }
+
+		//("," l2=IntegerValue)?
+		public Group getGroup_1_1() { return cGroup_1_1; }
+
+		//","
+		public Keyword getCommaKeyword_1_1_0() { return cCommaKeyword_1_1_0; }
+
+		//l2=IntegerValue
+		public Assignment getL2Assignment_1_1_1() { return cL2Assignment_1_1_1; }
+
+		//IntegerValue
+		public RuleCall getL2IntegerValueParserRuleCall_1_1_1_0() { return cL2IntegerValueParserRuleCall_1_1_1_0; }
 	}
 
 	public class SelectQueryElements extends AbstractParserRuleElementFinder {
@@ -3418,6 +3510,22 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		//"("
 		public Keyword getLeftParenthesisKeyword_1() { return cLeftParenthesisKeyword_1; }
 	}
+
+	public class IntegerValueElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "IntegerValue");
+		private final Assignment cIntegerAssignment = (Assignment)rule.eContents().get(1);
+		private final RuleCall cIntegerINTTerminalRuleCall_0 = (RuleCall)cIntegerAssignment.eContents().get(0);
+		
+		//IntegerValue:
+		//	integer=INT;
+		public ParserRule getRule() { return rule; }
+
+		//integer=INT
+		public Assignment getIntegerAssignment() { return cIntegerAssignment; }
+
+		//INT
+		public RuleCall getIntegerINTTerminalRuleCall_0() { return cIntegerINTTerminalRuleCall_0; }
+	}
 	
 	
 	public class XFunctionElements extends AbstractEnumRuleElementFinder {
@@ -3531,6 +3639,9 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 	
 	private ModelElements pModel;
+	private FetchFirstElements pFetchFirst;
+	private OffsetElements pOffset;
+	private LimitElements pLimit;
 	private SelectQueryElements pSelectQuery;
 	private SelectSubSetElements pSelectSubSet;
 	private SelectElements pSelect;
@@ -3609,6 +3720,7 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	private DBIDElements pDBID;
 	private StringOperandElements pStringOperand;
 	private FNAMEElements pFNAME;
+	private IntegerValueElements pIntegerValue;
 	private TerminalRule tJRPARAM;
 	private TerminalRule tJRNPARAM;
 	private TerminalRule tSTAR;
@@ -3662,14 +3774,44 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 
 	
 	//Model:
-	//	query=SelectQuery ("ORDER BY" orderByEntry=OrderByColumns)? ("LIMIT" ("ALL" | INT ("," INT)?))? ("OFFSET" INT)?
-	//	("FETCH FIRST" INT "ROWS ONLY")?;
+	//	query=SelectQuery ("ORDER BY" orderByEntry=OrderByColumns)? ("LIMIT" lim=Limit)? ("OFFSET" offset=Offset)?
+	//	("FETCH FIRST" fetchFirst=FetchFirst)?;
 	public ModelElements getModelAccess() {
 		return (pModel != null) ? pModel : (pModel = new ModelElements());
 	}
 	
 	public ParserRule getModelRule() {
 		return getModelAccess().getRule();
+	}
+
+	//FetchFirst:
+	//	fetchFirst=IntegerValue? row=("ROW" | "ROWS") "ONLY";
+	public FetchFirstElements getFetchFirstAccess() {
+		return (pFetchFirst != null) ? pFetchFirst : (pFetchFirst = new FetchFirstElements());
+	}
+	
+	public ParserRule getFetchFirstRule() {
+		return getFetchFirstAccess().getRule();
+	}
+
+	//Offset:
+	//	offset=INT;
+	public OffsetElements getOffsetAccess() {
+		return (pOffset != null) ? pOffset : (pOffset = new OffsetElements());
+	}
+	
+	public ParserRule getOffsetRule() {
+		return getOffsetAccess().getRule();
+	}
+
+	//Limit:
+	//	{Limit} "ALL" | l1=INT ("," l2=IntegerValue)?;
+	public LimitElements getLimitAccess() {
+		return (pLimit != null) ? pLimit : (pLimit = new LimitElements());
+	}
+	
+	public ParserRule getLimitRule() {
+		return getLimitAccess().getRule();
 	}
 
 	//SelectQuery:
@@ -4459,6 +4601,16 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	
 	public ParserRule getFNAMERule() {
 		return getFNAMEAccess().getRule();
+	}
+
+	//IntegerValue:
+	//	integer=INT;
+	public IntegerValueElements getIntegerValueAccess() {
+		return (pIntegerValue != null) ? pIntegerValue : (pIntegerValue = new IntegerValueElements());
+	}
+	
+	public ParserRule getIntegerValueRule() {
+		return getIntegerValueAccess().getRule();
 	}
 
 	//terminal JRPARAM:

@@ -6,9 +6,18 @@ generate sql "http://www.com.jaspersoft.studio.data.Sql"
 Model:
 	query=SelectQuery
 	('ORDER BY' orderByEntry=OrderByColumns)?
-	('LIMIT' ('ALL' | (INT (',' INT)?)))?
-	('OFFSET' INT)?
-	('FETCH FIRST' INT 'ROWS ONLY')?;
+	('LIMIT' lim=Limit)?
+	('OFFSET' offset=Offset)?
+	('FETCH FIRST' fetchFirst=FetchFirst)?;
+
+FetchFirst:
+	fetchFirst=IntegerValue? row=('ROW' | 'ROWS') 'ONLY';
+
+Offset:
+	offset=INT;
+
+Limit returns Limit:
+	{Limit} 'ALL' | (l1=INT (',' l2=IntegerValue)?);
 
 SelectQuery returns SelectQuery:
 	Select (op+=SelectSubSet)*;
@@ -256,6 +265,9 @@ StringOperand:
 
 FNAME:
 	ID '(';
+
+IntegerValue:
+	integer=INT;
 
 terminal JRPARAM:
 	'$P{'->'}';

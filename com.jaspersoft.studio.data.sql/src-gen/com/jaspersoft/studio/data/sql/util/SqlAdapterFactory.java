@@ -80,6 +80,21 @@ public class SqlAdapterFactory extends AdapterFactoryImpl
         return createModelAdapter();
       }
       @Override
+      public Adapter caseFetchFirst(FetchFirst object)
+      {
+        return createFetchFirstAdapter();
+      }
+      @Override
+      public Adapter caseOffset(Offset object)
+      {
+        return createOffsetAdapter();
+      }
+      @Override
+      public Adapter caseLimit(Limit object)
+      {
+        return createLimitAdapter();
+      }
+      @Override
       public Adapter caseSelectQuery(SelectQuery object)
       {
         return createSelectQueryAdapter();
@@ -420,6 +435,11 @@ public class SqlAdapterFactory extends AdapterFactoryImpl
         return createSqlCaseWhenAdapter();
       }
       @Override
+      public Adapter caseIntegerValue(IntegerValue object)
+      {
+        return createIntegerValueAdapter();
+      }
+      @Override
       public Adapter caseCol(Col object)
       {
         return createColAdapter();
@@ -532,6 +552,51 @@ public class SqlAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createModelAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.FetchFirst <em>Fetch First</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.FetchFirst
+   * @generated
+   */
+  public Adapter createFetchFirstAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.Offset <em>Offset</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.Offset
+   * @generated
+   */
+  public Adapter createOffsetAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.Limit <em>Limit</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.Limit
+   * @generated
+   */
+  public Adapter createLimitAdapter()
   {
     return null;
   }
@@ -1552,6 +1617,21 @@ public class SqlAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createSqlCaseWhenAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.IntegerValue <em>Integer Value</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.IntegerValue
+   * @generated
+   */
+  public Adapter createIntegerValueAdapter()
   {
     return null;
   }

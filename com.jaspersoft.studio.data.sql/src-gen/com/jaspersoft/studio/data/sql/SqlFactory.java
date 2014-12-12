@@ -32,6 +32,33 @@ public interface SqlFactory extends EFactory
   Model createModel();
 
   /**
+   * Returns a new object of class '<em>Fetch First</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Fetch First</em>'.
+   * @generated
+   */
+  FetchFirst createFetchFirst();
+
+  /**
+   * Returns a new object of class '<em>Offset</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Offset</em>'.
+   * @generated
+   */
+  Offset createOffset();
+
+  /**
+   * Returns a new object of class '<em>Limit</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Limit</em>'.
+   * @generated
+   */
+  Limit createLimit();
+
+  /**
    * Returns a new object of class '<em>Select Query</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -642,6 +669,15 @@ public interface SqlFactory extends EFactory
    * @generated
    */
   SqlCaseWhen createSqlCaseWhen();
+
+  /**
+   * Returns a new object of class '<em>Integer Value</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Integer Value</em>'.
+   * @generated
+   */
+  IntegerValue createIntegerValue();
 
   /**
    * Returns a new object of class '<em>Col</em>'.

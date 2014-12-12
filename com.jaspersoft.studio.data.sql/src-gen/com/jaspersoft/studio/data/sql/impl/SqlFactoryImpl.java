@@ -66,6 +66,9 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
     switch (eClass.getClassifierID())
     {
       case SqlPackage.MODEL: return createModel();
+      case SqlPackage.FETCH_FIRST: return createFetchFirst();
+      case SqlPackage.OFFSET: return createOffset();
+      case SqlPackage.LIMIT: return createLimit();
       case SqlPackage.SELECT_QUERY: return createSelectQuery();
       case SqlPackage.SELECT_SUB_SET: return createSelectSubSet();
       case SqlPackage.SELECT: return createSelect();
@@ -134,6 +137,7 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
       case SqlPackage.SQL_CASE_OPERAND: return createSQLCaseOperand();
       case SqlPackage.SQL_CASE_WHENS: return createSQLCaseWhens();
       case SqlPackage.SQL_CASE_WHEN: return createSqlCaseWhen();
+      case SqlPackage.INTEGER_VALUE: return createIntegerValue();
       case SqlPackage.COL: return createCol();
       case SqlPackage.UNIPIVOT_IN_CLAUSE: return createUnipivotInClause();
       case SqlPackage.UICARGS: return createuicargs();
@@ -198,6 +202,39 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
   {
     ModelImpl model = new ModelImpl();
     return model;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public FetchFirst createFetchFirst()
+  {
+    FetchFirstImpl fetchFirst = new FetchFirstImpl();
+    return fetchFirst;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public Offset createOffset()
+  {
+    OffsetImpl offset = new OffsetImpl();
+    return offset;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public Limit createLimit()
+  {
+    LimitImpl limit = new LimitImpl();
+    return limit;
   }
 
   /**
@@ -946,6 +983,17 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
   {
     SqlCaseWhenImpl sqlCaseWhen = new SqlCaseWhenImpl();
     return sqlCaseWhen;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public IntegerValue createIntegerValue()
+  {
+    IntegerValueImpl integerValue = new IntegerValueImpl();
+    return integerValue;
   }
 
   /**

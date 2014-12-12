@@ -6,6 +6,24 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="orderByEntry" eType="#//OrOrderByColumn"
         containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="lim" eType="#//Limit" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="offset" eType="#//Offset"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fetchFirst" eType="#//FetchFirst"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FetchFirst">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fetchFirst" eType="#//IntegerValue"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="row" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Offset">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="offset" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Limit">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="l1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="l2" eType="#//IntegerValue"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SelectQuery"/>
   <eClassifiers xsi:type="ecore:EClass" name="SelectSubSet">
@@ -359,6 +377,9 @@
     <eLiterals name="xbwnc" value="9" literal="[BETWEEN]"/>
     <eLiterals name="xbwnl" value="10" literal="[BETWEEN"/>
     <eLiterals name="xbwnr" value="11" literal="BETWEEN]"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IntegerValue">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="integer" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Col" eSuperTypes="#//ColumnFull">
     <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"

@@ -85,6 +85,9 @@ public class Text2Model {
 								}
 							}
 							ConvertOrderBy.convertOrderBy(designer, ((ModelImpl) obj).getOrderByEntry());
+							ConvertLimit.convertLimit(designer, ((ModelImpl) obj).getLim());
+							ConvertOffset.convertOffset(designer, ((ModelImpl) obj).getOffset());
+							ConvertFetchFirst.convertFetchFirst(designer, ((ModelImpl) obj).getFetchFirst());
 						}
 					}
 					isRunning = false;

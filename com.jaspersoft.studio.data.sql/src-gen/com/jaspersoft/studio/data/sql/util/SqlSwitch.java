@@ -79,6 +79,27 @@ public class SqlSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
+      case SqlPackage.FETCH_FIRST:
+      {
+        FetchFirst fetchFirst = (FetchFirst)theEObject;
+        T result = caseFetchFirst(fetchFirst);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.OFFSET:
+      {
+        Offset offset = (Offset)theEObject;
+        T result = caseOffset(offset);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.LIMIT:
+      {
+        Limit limit = (Limit)theEObject;
+        T result = caseLimit(limit);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
       case SqlPackage.SELECT_QUERY:
       {
         SelectQuery selectQuery = (SelectQuery)theEObject;
@@ -590,6 +611,13 @@ public class SqlSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
+      case SqlPackage.INTEGER_VALUE:
+      {
+        IntegerValue integerValue = (IntegerValue)theEObject;
+        T result = caseIntegerValue(integerValue);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
       case SqlPackage.COL:
       {
         Col col = (Col)theEObject;
@@ -746,6 +774,54 @@ public class SqlSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseModel(Model object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Fetch First</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Fetch First</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseFetchFirst(FetchFirst object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Offset</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Offset</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseOffset(Offset object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Limit</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Limit</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseLimit(Limit object)
   {
     return null;
   }
@@ -1834,6 +1910,22 @@ public class SqlSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseSqlCaseWhen(SqlCaseWhen object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Integer Value</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Integer Value</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseIntegerValue(IntegerValue object)
   {
     return null;
   }

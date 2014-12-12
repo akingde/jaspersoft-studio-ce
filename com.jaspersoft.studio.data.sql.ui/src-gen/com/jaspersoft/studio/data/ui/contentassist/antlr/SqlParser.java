@@ -37,7 +37,8 @@ public class SqlParser extends AbstractContentAssistParser {
 			nameMappings = new HashMap<AbstractElement, String>() {
 				private static final long serialVersionUID = 1L;
 				{
-					put(grammarAccess.getModelAccess().getAlternatives_2_1(), "rule__Model__Alternatives_2_1");
+					put(grammarAccess.getFetchFirstAccess().getRowAlternatives_1_0(), "rule__FetchFirst__RowAlternatives_1_0");
+					put(grammarAccess.getLimitAccess().getAlternatives(), "rule__Limit__Alternatives");
 					put(grammarAccess.getSelectSubSetAccess().getOpAlternatives_0_0(), "rule__SelectSubSet__OpAlternatives_0_0");
 					put(grammarAccess.getSelectAccess().getAlternatives_2_1(), "rule__Select__Alternatives_2_1");
 					put(grammarAccess.getColumnOrAliasAccess().getAlternatives(), "rule__ColumnOrAlias__Alternatives");
@@ -87,10 +88,12 @@ public class SqlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getModelAccess().getGroup(), "rule__Model__Group__0");
 					put(grammarAccess.getModelAccess().getGroup_1(), "rule__Model__Group_1__0");
 					put(grammarAccess.getModelAccess().getGroup_2(), "rule__Model__Group_2__0");
-					put(grammarAccess.getModelAccess().getGroup_2_1_1(), "rule__Model__Group_2_1_1__0");
-					put(grammarAccess.getModelAccess().getGroup_2_1_1_1(), "rule__Model__Group_2_1_1_1__0");
 					put(grammarAccess.getModelAccess().getGroup_3(), "rule__Model__Group_3__0");
 					put(grammarAccess.getModelAccess().getGroup_4(), "rule__Model__Group_4__0");
+					put(grammarAccess.getFetchFirstAccess().getGroup(), "rule__FetchFirst__Group__0");
+					put(grammarAccess.getLimitAccess().getGroup_0(), "rule__Limit__Group_0__0");
+					put(grammarAccess.getLimitAccess().getGroup_1(), "rule__Limit__Group_1__0");
+					put(grammarAccess.getLimitAccess().getGroup_1_1(), "rule__Limit__Group_1_1__0");
 					put(grammarAccess.getSelectQueryAccess().getGroup(), "rule__SelectQuery__Group__0");
 					put(grammarAccess.getSelectSubSetAccess().getGroup(), "rule__SelectSubSet__Group__0");
 					put(grammarAccess.getSelectAccess().getGroup(), "rule__Select__Group__0");
@@ -211,6 +214,14 @@ public class SqlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getFNAMEAccess().getGroup(), "rule__FNAME__Group__0");
 					put(grammarAccess.getModelAccess().getQueryAssignment_0(), "rule__Model__QueryAssignment_0");
 					put(grammarAccess.getModelAccess().getOrderByEntryAssignment_1_1(), "rule__Model__OrderByEntryAssignment_1_1");
+					put(grammarAccess.getModelAccess().getLimAssignment_2_1(), "rule__Model__LimAssignment_2_1");
+					put(grammarAccess.getModelAccess().getOffsetAssignment_3_1(), "rule__Model__OffsetAssignment_3_1");
+					put(grammarAccess.getModelAccess().getFetchFirstAssignment_4_1(), "rule__Model__FetchFirstAssignment_4_1");
+					put(grammarAccess.getFetchFirstAccess().getFetchFirstAssignment_0(), "rule__FetchFirst__FetchFirstAssignment_0");
+					put(grammarAccess.getFetchFirstAccess().getRowAssignment_1(), "rule__FetchFirst__RowAssignment_1");
+					put(grammarAccess.getOffsetAccess().getOffsetAssignment(), "rule__Offset__OffsetAssignment");
+					put(grammarAccess.getLimitAccess().getL1Assignment_1_0(), "rule__Limit__L1Assignment_1_0");
+					put(grammarAccess.getLimitAccess().getL2Assignment_1_1_1(), "rule__Limit__L2Assignment_1_1_1");
 					put(grammarAccess.getSelectQueryAccess().getOpAssignment_1(), "rule__SelectQuery__OpAssignment_1");
 					put(grammarAccess.getSelectSubSetAccess().getOpAssignment_0(), "rule__SelectSubSet__OpAssignment_0");
 					put(grammarAccess.getSelectSubSetAccess().getAllAssignment_1(), "rule__SelectSubSet__AllAssignment_1");
@@ -357,6 +368,7 @@ public class SqlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getSqlCaseWhenAccess().getExprAssignment_1(), "rule__SqlCaseWhen__ExprAssignment_1");
 					put(grammarAccess.getSqlCaseWhenAccess().getTexpAssignment_3(), "rule__SqlCaseWhen__TexpAssignment_3");
 					put(grammarAccess.getSqlCaseWhenAccess().getEexpAssignment_4_1(), "rule__SqlCaseWhen__EexpAssignment_4_1");
+					put(grammarAccess.getIntegerValueAccess().getIntegerAssignment(), "rule__IntegerValue__IntegerAssignment");
 				}
 			};
 		}
