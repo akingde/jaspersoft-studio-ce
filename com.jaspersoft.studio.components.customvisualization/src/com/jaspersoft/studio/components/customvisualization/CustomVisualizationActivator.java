@@ -10,6 +10,7 @@ import java.io.IOException;
 import net.sf.jasperreports.eclipse.AbstractJRUIPlugin;
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 
+import org.apache.batik.util.Platform;
 import org.osgi.framework.BundleContext;
 
 import com.jaspersoft.jasperreports.customvisualization.CVConstants;
@@ -72,15 +73,25 @@ public class CustomVisualizationActivator extends AbstractJRUIPlugin {
 	private void initCustomVisualizationComponentProperties() throws IOException {
 		
 			
-			String pathToRequireJs = "file:"+ getFileLocation("resources/scripts/require-2.1.6.src.js"); //$NON-NLS-1$
-		
-			PreferencesUtils.getJaspersoftStudioPrefStore().setValue(CVConstants.CV_REQUIREJS_PROPERTY, pathToRequireJs);
-			PreferencesUtils.storeJasperReportsProperty(CVConstants.CV_REQUIREJS_PROPERTY, pathToRequireJs);
-			DefaultJasperReportsContext.getInstance().setProperty(CVConstants.CV_REQUIREJS_PROPERTY, pathToRequireJs);
+			String pathToRequireJs = getFileLocation("resources/scripts/require-2.1.6.src.js"); //$NON-NLS-1$
+	
+			// On windows, Phantomjs does not seem to like to the "file:" , so we avoid to add it on this specific platform.
+			if (!org.eclipse.core.runtime.Platform.getOS().equals( org.eclipse.core.runtime.Platform.OS_WIN32))
+			{
+				pathToRequireJs = "file:" + pathToRequireJs;
+			}
 			
+			// We store the property only in the JasperReports property store, so the property can be actually changed by the user.
+			// The plugin will not override existing keys.
 			
-			PreferencesUtils.getJaspersoftStudioPrefStore().setValue("net.sf.jasperreports.web.resource.pattern.customvisualization.scripts", "com/jaspersoft/jasperreports/customvisualization/resources/require");
-			PreferencesUtils.storeJasperReportsProperty(CVConstants.CV_REQUIREJS_PROPERTY, pathToRequireJs);
-			DefaultJasperReportsContext.getInstance().setProperty(CVConstants.CV_REQUIREJS_PROPERTY, pathToRequireJs);
+			if (PreferencesUtils.getJasperReportsProperty(CVConstants.CV_REQUIREJS_PROPERTY) == null)
+			{
+				PreferencesUtils.storeJasperReportsProperty(CVConstants.CV_REQUIREJS_PROPERTY, pathToRequireJs);
+			}
+			
+			if (PreferencesUtils.getJasperReportsProperty("net.sf.jasperreports.web.resource.pattern.customvisualization.scripts") == null)
+			{
+				PreferencesUtils.storeJasperReportsProperty("net.sf.jasperreports.web.resource.pattern.customvisualization.scripts", "com/jaspersoft/jasperreports/customvisualization/resources/require");
+			}
 	}
 }
