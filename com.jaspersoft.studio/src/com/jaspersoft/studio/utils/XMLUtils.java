@@ -8,6 +8,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.utils;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -16,6 +17,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import net.sf.jasperreports.data.xml.XmlDataAdapter;
+import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.w3c.dom.Document;
@@ -26,6 +28,22 @@ public class XMLUtils {
 
 	public static Document parseNoValidation(InputStream io) throws ParserConfigurationException, SAXException,
 			IOException {
+		return getDocumentBuilder().parse(io);
+	}
+
+	public static Document parseNoValidation(String xml) throws ParserConfigurationException, SAXException, IOException {
+		Document doc = null;
+		ByteArrayInputStream is = null;
+		try {
+			is = new ByteArrayInputStream(xml.getBytes("UTF-8"));
+			doc = getDocumentBuilder().parse(is);
+		} finally {
+			FileUtils.closeStream(is);
+		}
+		return doc;
+	}
+
+	private static DocumentBuilder getDocumentBuilder() throws ParserConfigurationException {
 		if (db == null) {
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 			dbf.setValidating(false);
@@ -37,7 +55,7 @@ public class XMLUtils {
 
 			db = dbf.newDocumentBuilder();
 		}
-		return db.parse(io);
+		return db;
 	}
 
 	public static boolean isNamespaceAware(XmlDataAdapter xmlDataAdapter, JasperDesign jdesign) {
