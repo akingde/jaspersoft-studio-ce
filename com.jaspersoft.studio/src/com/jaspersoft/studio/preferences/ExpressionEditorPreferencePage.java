@@ -34,9 +34,11 @@ import com.jaspersoft.studio.preferences.util.PropertiesHelper;
  */
 public class ExpressionEditorPreferencePage extends FieldEditorOverlayPage {
 
+	public static final String PAGE_ID = "com.jaspersoft.studio.preferences.ExpressionEditorPreferencePage.property"; //$NON-NLS-1$
 	public static final String P_USER_DEFINED_EXPRESSIONS = "userDefinedExpressions";//$NON-NLS-1$
 	@Deprecated
 	public static final String P_INCLUDE_FUCTIONS_LIBRARY_IMPORTS = "includeFunctionsLibraryImports";//$NON-NLS-1$
+	public static final String P_CONFIRMATION_ON_CLOSE = "askConfirmationOnEditorClose"; //$NON-NLS-1$ 
 
 	public ExpressionEditorPreferencePage() {
 		super(GRID);
@@ -48,6 +50,7 @@ public class ExpressionEditorPreferencePage extends FieldEditorOverlayPage {
 	protected void createFieldEditors() {
 		addField(new ExpressionListFieldEditor(P_USER_DEFINED_EXPRESSIONS, Messages.ExpressionEditorPreferencePage_userDefinedExpressions,
 				getFieldEditorParent()));
+		addField(new BooleanFieldEditor(P_CONFIRMATION_ON_CLOSE, "Ask for confirmation before closing the Expression Editor", getFieldEditorParent()));
 	}
 
 	/*
@@ -74,12 +77,15 @@ public class ExpressionEditorPreferencePage extends FieldEditorOverlayPage {
 		}
 		return v;
 	}
-
+	
+	/**
+	 * Init default properties if needed.
+	 * 
+	 * @param store the preference store
+	 */
 	public static void getDefaults(IPreferenceStore store) {
-		// Init default properties if needed
+		store.setDefault(P_CONFIRMATION_ON_CLOSE, false);
 	}
-
-	public static final String PAGE_ID = "com.jaspersoft.studio.preferences.ExpressionEditorPreferencePage.property"; //$NON-NLS-1$
 
 	@Override
 	protected String getPageId() {

@@ -22,6 +22,7 @@ import java.util.Set;
 
 import net.sf.jasperreports.crosstabs.JRCrosstab;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRExpressionCollector;
@@ -30,6 +31,7 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.expressions.annotations.JRExprFunctionBean;
 
 import org.eclipse.core.runtime.Assert;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Shell;
@@ -39,6 +41,7 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
 import com.jaspersoft.studio.compatibility.VersionConstants;
 import com.jaspersoft.studio.editor.AbstractJRXMLEditor;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.preferences.ExpressionEditorPreferencePage;
 import com.jaspersoft.studio.utils.ModelUtils;
@@ -346,7 +349,29 @@ public class ExpressionEditorSupportUtil {
 			}
 			else {
 				isExpressionEditorDialogOpen=Boolean.TRUE;
-				return new WizardDialog(parentShell, newWizard);
+				return new WizardDialog(parentShell, newWizard) {
+					/*
+					 * Possibly ask if the wizard dialog should be closed.
+					 */
+					private boolean canCloseDialog() {
+						boolean askOnClose = JaspersoftStudioPlugin.getInstance().getPreferenceStore().getBoolean(ExpressionEditorPreferencePage.P_CONFIRMATION_ON_CLOSE);
+						if(askOnClose) {
+							return MessageDialog.openQuestion(UIUtils.getShell(), Messages.ExpressionEditorSupportUtil_ConfirmOnCloseTitle, Messages.ExpressionEditorSupportUtil_ConfirmOnCloseMessage);
+						}
+						return true;
+					}
+					
+					@Override
+					protected void cancelPressed() {
+						if(canCloseDialog()) {
+							super.cancelPressed();
+						}
+					}
+					@Override
+					protected boolean canHandleShellCloseEvent() {
+						return canCloseDialog();
+					}
+				};
 			}
 		}
 	}

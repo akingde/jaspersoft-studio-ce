@@ -678,6 +678,8 @@ public class Messages extends NLS {
 	public static String ExpressionEditorPreferencePage_includeStatic;
 	public static String ExpressionEditorPreferencePage_subtitle;
 	public static String ExpressionEditorPreferencePage_userDefinedExpressions;
+	public static String ExpressionEditorSupportUtil_ConfirmOnCloseMessage;
+	public static String ExpressionEditorSupportUtil_ConfirmOnCloseTitle;
 	public static String FieldEditorOverlayPage_2;
 	public static String FieldEditorOverlayPage_3;
 	public static String FieldEditorOverlayPage_4;
