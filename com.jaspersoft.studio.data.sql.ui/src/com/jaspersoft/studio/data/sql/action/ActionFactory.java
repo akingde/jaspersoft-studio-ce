@@ -26,6 +26,7 @@ import com.jaspersoft.studio.data.sql.action.expression.CreatePNotExpression;
 import com.jaspersoft.studio.data.sql.action.expression.CreateWhereFromColumn;
 import com.jaspersoft.studio.data.sql.action.expression.CreateXExpression;
 import com.jaspersoft.studio.data.sql.action.expression.EditExpression;
+import com.jaspersoft.studio.data.sql.action.expression.NotExpressionGroup;
 import com.jaspersoft.studio.data.sql.action.groupby.CreateGroupByColumn;
 import com.jaspersoft.studio.data.sql.action.groupby.CreateGroupByFromColumn;
 import com.jaspersoft.studio.data.sql.action.order.CreateOrderByColumn;
@@ -62,6 +63,7 @@ public class ActionFactory {
 	public ActionFactory(SQLQueryDesigner designer, TreeViewer treeViewer) {
 
 		actions.add(new SelectDistinct(treeViewer));
+		actions.add(new NotExpressionGroup(treeViewer));
 		actions.add(new CreateWhereFromColumn(designer, treeViewer));
 		actions.add(new CreateGroupByFromColumn(treeViewer));
 		actions.add(new CreateHavingFromColumn(designer, treeViewer));

@@ -61,12 +61,13 @@ public class MExpressionGroup extends AMKeyword {
 	@Override
 	public StyledString getStyledDisplayText() {
 		StyledString ss = new StyledString();
-		if (isFirst())
-			ss.append("(");
-		else {
-			ss.append(super.getDisplayText(), FontUtils.KEYWORDS_STYLER);
-			ss.append(" (");
-		}
+
+		if (!isFirst())
+			ss.append(super.getDisplayText() + " ", FontUtils.KEYWORDS_STYLER);
+
+		if (isNot)
+			ss.append("NOT ", FontUtils.KEYWORDS_STYLER);
+		ss.append("(");
 		if (getChildren().isEmpty())
 			ss.append(")");
 		return ss;
