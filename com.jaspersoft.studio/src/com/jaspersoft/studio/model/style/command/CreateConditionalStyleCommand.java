@@ -54,7 +54,22 @@ public class CreateConditionalStyleCommand extends Command {
 			this.jrConditionalStyle = (JRDesignConditionalStyle) srcNode.getValue();
 		}
 	}
-
+	
+	/**
+	 * Create the command to build the conditional style. The style is always the 
+	 * last children of the parent node
+	 * 
+	 *  @param destNode parent node
+	 *  @param style the JR object of the conditional style. It should be a new object
+	 *  not used from other element of the model
+	 */
+	public CreateConditionalStyleCommand(MStyle destNode, JRDesignConditionalStyle style) {
+		super();
+		this.index = -1;
+		this.jrStyle = (JRDesignStyle) destNode.getValue();
+		this.jrConditionalStyle = style;
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -66,10 +81,14 @@ public class CreateConditionalStyleCommand extends Command {
 			this.jrConditionalStyle = MConditionalStyle.createJRStyle();
 		}
 		if (jrConditionalStyle != null) {
-			if (index < 0 || index > jrStyle.getConditionalStyleList().size())
+			if (index < 0 || index > jrStyle.getConditionalStyleList().size()){
 				jrStyle.addConditionalStyle(jrConditionalStyle);
-			else
+				//new MConditionalStyle(destNode, jrConditionalStyle, -1);
+			}
+			else {
 				jrStyle.addConditionalStyle(index, jrConditionalStyle);
+				//new MConditionalStyle(destNode, jrConditionalStyle, index);
+			}
 		}
 	}
 

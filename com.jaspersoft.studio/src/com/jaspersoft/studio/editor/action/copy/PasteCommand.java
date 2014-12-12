@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JRCloneable;
+import net.sf.jasperreports.engine.design.JRDesignConditionalStyle;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 
 import org.eclipse.draw2d.geometry.Rectangle;
@@ -36,6 +37,9 @@ import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.command.CloseSubeditorsCommand;
 import com.jaspersoft.studio.model.dataset.MDataset;
 import com.jaspersoft.studio.model.dataset.command.CopyDatasetCommand;
+import com.jaspersoft.studio.model.style.MConditionalStyle;
+import com.jaspersoft.studio.model.style.MStyle;
+import com.jaspersoft.studio.model.style.command.CreateConditionalStyleCommand;
 
 public class PasteCommand extends Command {
 	protected Map<ANode, Command> list;
@@ -114,7 +118,12 @@ public class PasteCommand extends Command {
 						cmd.add(cmdc);
 						createdNodes++;
 						list.put(node, cmd);
-					} else {
+					} if (node instanceof MConditionalStyle) {
+						Command cmdc = new CreateConditionalStyleCommand((MStyle)parent, (JRDesignConditionalStyle)n.getValue());
+						cmd.add(cmdc);
+						createdNodes++;
+						list.put(node, cmd);
+					}	else {
 						// create command
 						Command cmdc = OutlineTreeEditPartFactory.getCreateCommand((ANode) parent, n, rect, -1);
 						if (cmdc != null) {

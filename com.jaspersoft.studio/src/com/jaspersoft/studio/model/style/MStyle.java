@@ -447,7 +447,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 	 * then it is also removed from the element
 	 */
 	public JRStyle getActualStyle(){
-		JRDesignStyle jrElement = (JRDesignStyle) getValue();
+		JRBaseStyle jrElement = (JRBaseStyle) getValue();
 		//Check if the used style is valid otherwise set it to null
 		if (jrElement.getStyle() != null && !getJasperDesign().getStylesMap().containsKey(jrElement.getStyle().getName())){
 			setPropertyValue(JRDesignStyle.PROPERTY_PARENT_STYLE, null);
@@ -466,8 +466,8 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 	public Object getPropertyValue(Object id) {
 		if (getValue() == null)
 			return null;
-		if (getValue() instanceof JRDesignStyle) {
-			JRDesignStyle jrstyle = (JRDesignStyle) getValue();
+		if (getValue() instanceof JRBaseStyle) {
+			JRBaseStyle jrstyle = (JRBaseStyle) getValue();
 			if (id.equals(JRDesignStyle.PROPERTY_NAME))
 				return jrstyle.getName();
 			if (id.equals(JRDesignStyle.PROPERTY_DEFAULT))
@@ -634,7 +634,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 			} else if (id.equals(JRDesignStyle.PROPERTY_DEFAULT)) {
 				jrstyle.setDefault(((Boolean) value).booleanValue());
 			} else if (id.equals(JRDesignStyle.PROPERTY_PARENT_STYLE)) {
-				if (!Misc.isNullOrEmpty((String) value)) { //$NON-NLS-1$
+				if (!Misc.isNullOrEmpty((String) value)) { 
 					JRStyle style = (JRStyle) getJasperDesign().getStylesMap().get(value);
 					if (style != null) {
 						//FIXME: It is important to set a null first the external style, because it is returned first on the getPropertyValue and this raise a lot of events
@@ -715,7 +715,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 	 * 
 	 * @param externalStyleName name of the external style
 	 */
-	private void fixExternalStyleReference(String externalStyleName){
+	protected void fixExternalStyleReference(String externalStyleName){
 		if (externalStyleName != null){
 			JRDesignStyle jrstyle = (JRDesignStyle) getValue();
 			jrstyle.setParentStyle(ExternalStylesManager.getExternalStyle((String) externalStyleName, getJasperConfiguration()));

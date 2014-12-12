@@ -19,6 +19,7 @@ import java.util.Set;
 
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRExpression;
+import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.design.JRDesignConditionalStyle;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
 
@@ -26,6 +27,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource;
 
+import com.jaspersoft.studio.ExternalStylesManager;
 import com.jaspersoft.studio.editor.expression.ExpressionEditorSupportUtil;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
@@ -33,6 +35,7 @@ import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
+import com.jaspersoft.studio.utils.Misc;
 
 /*
  * The Class MConditionalStyle.
@@ -186,8 +189,24 @@ public class MConditionalStyle extends MStyle implements IPropertySource {
 	public void setPropertyValue(Object id, Object value) {
 		if (isEditable()) {
 			JRDesignConditionalStyle jrstyle = (JRDesignConditionalStyle) getValue();
-			if (id.equals(JRDesignConditionalStyle.PROPERTY_CONDITION_EXPRESSION))
+			if (id.equals(JRDesignConditionalStyle.PROPERTY_CONDITION_EXPRESSION)){
 				jrstyle.setConditionExpression(ExprUtil.setValues(jrstyle.getConditionExpression(), value));
+			} else if (id.equals(JRDesignStyle.PROPERTY_PARENT_STYLE)){
+				//Needed special code to set the parent style of a conditional style, since the method are not inerithed
+				//from the same class of the standard style
+				if (!Misc.isNullOrEmpty((String) value)) {
+					JRStyle style = (JRStyle) getJasperDesign().getStylesMap().get(value);
+					if (style != null) {
+						jrstyle.setParentStyle(style);
+					} else {
+						//Set the external style as parent style if existing, to resolve JR resolving problem at design time
+						jrstyle.setParentStyle(ExternalStylesManager.getExternalStyle((String) value, getJasperConfiguration()));
+					}
+				} else {
+					//remove the style
+					jrstyle.setParentStyle(null);
+				}
+			}		
 			else
 				super.setPropertyValue(id, value);
 		}
