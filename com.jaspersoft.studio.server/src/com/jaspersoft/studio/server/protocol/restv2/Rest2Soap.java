@@ -341,11 +341,11 @@ public class Rest2Soap {
 							return -1;
 						if (arg1.isMainReport())
 							return 1;
-						return arg0.getLabel().compareTo(arg1.getLabel());
+						return arg0.getLabel().compareToIgnoreCase(arg1.getLabel());
 					} else if (wsType0.equals(ResourceDescriptor.TYPE_INPUT_CONTROL))
 						// ignore input controls
 						return 0;
-					return arg0.getLabel().compareTo(arg1.getLabel());
+					return arg0.getLabel().compareToIgnoreCase(arg1.getLabel());
 				}
 				if (DatasourcesAllFilter.getTypes().contains(wsType0))
 					return -1;

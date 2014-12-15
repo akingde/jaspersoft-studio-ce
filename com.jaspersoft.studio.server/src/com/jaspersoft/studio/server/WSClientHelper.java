@@ -138,7 +138,7 @@ public class WSClientHelper {
 					String wsType0 = arg0.getWsType();
 					String wsType1 = arg1.getWsType();
 					if (wsType0.equals(wsType1))
-						return arg0.getLabel().compareTo(arg1.getLabel());
+						return arg0.getLabel().compareToIgnoreCase(arg1.getLabel());
 					if (wsType0.equals(ResourceDescriptor.TYPE_FOLDER))
 						return -1;
 					if (wsType1.equals(ResourceDescriptor.TYPE_FOLDER))
