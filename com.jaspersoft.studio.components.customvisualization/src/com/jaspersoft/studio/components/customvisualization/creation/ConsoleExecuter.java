@@ -15,6 +15,7 @@ package com.jaspersoft.studio.components.customvisualization.creation;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -50,6 +51,11 @@ import com.jaspersoft.studio.components.customvisualization.messages.Messages;
  *
  */
 public class ConsoleExecuter {
+	
+	/**
+	 * name of the build file
+	 */
+	private static final String BUILD_FILE_NAME = "build.js";
 	
 	/**
 	 * Name of the output console
@@ -91,6 +97,16 @@ public class ConsoleExecuter {
 					try{
 						monitor.beginTask("Compiling "+fileToCompile.getName(), 10);
 						File projectFolder = fileToCompile.getParent().getLocation().toFile();
+						
+						//Remove the old file, if the name is found inside the build.js and if it is present
+						String filename = getOutputFilename(projectFolder);
+						if (filename != null){
+							File oldFile = new File(projectFolder, filename);
+							if (oldFile.exists() && oldFile.delete()) {
+								fileToCompile.getParent().refreshLocal(IProject.DEPTH_ONE, new NullProgressMonitor());
+							}
+						}
+						
 						Process process = Runtime.getRuntime().exec(command, null, projectFolder);
 						outputSteam.println(Messages.CompileDialog_startCompilation);
 						BufferedReader stdInput = new BufferedReader(new InputStreamReader(process.getInputStream()));
@@ -140,6 +156,42 @@ public class ConsoleExecuter {
 	};
 	
 	/**
+	 * Read the build.js to find the output file name inside the out section
+	 * 
+	 * @param projectFolder the folder where the build.js is contained
+	 * @return the output filename if it can be found inside the build.js, if something
+	 * goes wrong return null
+	 */
+	private String getOutputFilename(File projectFolder){
+		BufferedReader br = null;
+		String result = null;
+		try{
+			String sCurrentLine;
+			br = new BufferedReader(new FileReader(new File(projectFolder, BUILD_FILE_NAME)));
+			while ((sCurrentLine = br.readLine()) != null && result == null) {
+				String trimmed = sCurrentLine.trim();
+				if (trimmed.toLowerCase().startsWith("out:")){
+					String fileName = trimmed.substring(4);
+					int firstQuote = fileName.indexOf("\"");
+					if (firstQuote == -1) break;
+					int secondQuote = fileName.indexOf("\"", firstQuote+1);
+					if (secondQuote == -1) break;
+					result = fileName.substring(firstQuote+1, secondQuote);
+				}
+			}
+		} catch (Exception ex){
+		}
+		if (br != null) {
+			try {
+				br.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return result;
+	}
+	
+	/**
 	 * Create the class and start the compilation process, showing 
 	 * the output into a console view
 	 * 
@@ -158,7 +210,7 @@ public class ConsoleExecuter {
 				"org.mozilla.javascript.tools.shell.Main",
 				rJs.toString(),
 				"-o",
-				"build.js"};
+				BUILD_FILE_NAME};
 				
 		readOutputJob.setPriority(Job.SHORT);
 		readOutputJob.schedule(); // start as soon as possible
