@@ -160,7 +160,8 @@ public class ModuleDefinition {
 	/**
 	 * Return the url of the library
 	 * 
-	 * @return a not null url for the library
+	 * @return an url for the library, can be null
+	 * if no library is used by the module.
 	 */
 	public String getLibraryURL() {
 		return libraryURL;
@@ -169,10 +170,10 @@ public class ModuleDefinition {
 	/**
 	 * Set the library url
 	 * 
-	 * @param libraryURL a not null string and a valid url
+	 * @param libraryURL an url for the library, could 
+	 * be null if no library is provided
 	 */
 	public void setLibraryURL(String libraryURL) {
-		Assert.isNotNull(libraryURL);
 		this.libraryURL = libraryURL;
 	}
 
@@ -389,12 +390,14 @@ public class ModuleDefinition {
 	/**
 	 * Return a file name used to store the library and it's license
 	 * on the disk as local copy. The name is read as the last segment
-	 * of the library url
+	 * of the library url. 
 	 * 
-	 * @return a not null string
+	 * @return The name of the library, or null if no library was defined
+	 * for the module
 	 */
 	public String getLibraryFilename(){
 		String url = getLibraryURL();
+		if (url == null) return null;
 		return url.substring(url.lastIndexOf("/")+1);
 	}
 

@@ -57,37 +57,38 @@ public class ModuleManager {
 		embeddedModules = new ArrayList<ModuleDefinition>();
 		
 		ModuleDefinition d3Circle = new ModuleDefinition();
-		d3Circle.setModuleVisualName("D3 Circle");
-		d3Circle.setModuleName("d3");
+		d3Circle.setModuleVisualName("Circle Sample based on D3.js library");
+		d3Circle.setModuleName("d3Circle");
 		d3Circle.setVariableName("d3");
 		d3Circle.setLibraryURL("https://raw.githubusercontent.com/mbostock/d3/v3.4.13/d3.min.js");
 		d3Circle.setLicenseURL("https://raw.githubusercontent.com/mbostock/d3/v3.4.13/LICENSE");
 		d3Circle.setCssResource("com/jaspersoft/studio/components/customvisualization/creation/resources/D3_Circle_css.css");
 		d3Circle.setRenderResource("com/jaspersoft/studio/components/customvisualization/creation/resources/D3_Circle_render.js");
 		d3Circle.setVersionNumber("3.4.13");
-		
-		//SET THE DEPENDENCES
-		ModuleDefinition require = new ModuleDefinition();
-		require.setVariableName("requireLib");
-		require.setModuleName("Require.js");
-		require.setLibraryURL("https://raw.githubusercontent.com/jrburke/requirejs/2.1.15/require.js");
-		require.setLicenseURL("https://raw.githubusercontent.com/jrburke/requirejs/2.1.15/LICENSE");
-		require.setVersionNumber("2.1.15");
-		d3Circle.addRequiredLibrary(require);
+		d3Circle.addSampleResource("com/jaspersoft/studio/components/customvisualization/creation/resources/d3_Circle_sample.jrxml");
 		
 		ModuleDefinition raphaelMap = new ModuleDefinition();
-		raphaelMap.setModuleVisualName("Raphael Map");
+		raphaelMap.setModuleVisualName("Map Sample based on Raphaël library");
 		raphaelMap.setModuleName("RaphaelMap");
-		raphaelMap.setVariableName("Raphael");
-		raphaelMap.setLibraryURL("https://raw.githubusercontent.com/DmitryBaranovskiy/raphael/v2.1.2/raphael-min.js");
-		raphaelMap.setLicenseURL("https://raw.githubusercontent.com/DmitryBaranovskiy/raphael/v2.1.2/license.txt");
 		raphaelMap.setCssResource("com/jaspersoft/studio/components/customvisualization/creation/resources/raphael_Map_css.css");
 		raphaelMap.setRenderResource("com/jaspersoft/studio/components/customvisualization/creation/resources/raphael_Map_render.js");
+		//Set the library informations
+		raphaelMap.setLibraryURL("https://raw.githubusercontent.com/DmitryBaranovskiy/raphael/v2.1.2/raphael-min.js");
+		raphaelMap.setLicenseURL("https://raw.githubusercontent.com/DmitryBaranovskiy/raphael/v2.1.2/license.txt");
 		raphaelMap.setVersionNumber("2.1.2");
+		raphaelMap.setVariableName("Raphael");
 		raphaelMap.addSampleResource("com/jaspersoft/studio/components/customvisualization/creation/resources/raphael_Map_sample.jrxml");
+		
+		ModuleDefinition plainSample = new ModuleDefinition();
+		plainSample.setModuleVisualName("Circle Sample based on plain javascript");
+		plainSample.setModuleName("Sample");
+		plainSample.setCssResource("com/jaspersoft/studio/components/customvisualization/creation/resources/raphael_Map_css.css");
+		plainSample.setRenderResource("com/jaspersoft/studio/components/customvisualization/creation/resources/raphael_Map_render.js");
+		plainSample.addSampleResource("com/jaspersoft/studio/components/customvisualization/creation/resources/raphael_Map_sample.jrxml");
 		
 		embeddedModules.add(d3Circle);
 		embeddedModules.add(raphaelMap);
+		embeddedModules.add(plainSample);
 
 		getContributedModules();
 		//createRaphaelDots();

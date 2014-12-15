@@ -81,7 +81,7 @@ public class CustomVisualizationComponentWizard extends JSSWizard implements INe
 	/**
 	 * Page to select the javascript module used by the project
 	 */
-	private CustomVisualizationComponentTablePage page0;
+	private CustomVisualizationComponentListPage page0;
 	
 	/**
 	 * Page to get a summary of all the libraries used by the project
@@ -101,7 +101,7 @@ public class CustomVisualizationComponentWizard extends JSSWizard implements INe
 
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
-		page0 = new CustomVisualizationComponentTablePage();
+		page0 = new CustomVisualizationComponentListPage();
 		addPage(page0);
 		page1 = new CustomVisualizationComponentSummaryPage();
 		addPage(page1);
@@ -251,25 +251,28 @@ public class CustomVisualizationComponentWizard extends JSSWizard implements INe
 		File resourceFile = ModuleManager.getLibraryFile(module);
 		if (resourceFile != null && resourceFile.exists()){
 			String fileName = module.getLibraryFilename();
-			File workspaceCopy = new File(projectFolder, fileName);
-			try {
-				FileUtils.copyFile(resourceFile, workspaceCopy);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			//ADD THE LIBRARY TO THE LIBRARIES LIST
-			librariesList.add(new VelocityLibrary(module.getVariableName(), removeJsExtension(fileName)));
-			//CHECK IF THE MODULE MUST BE SHIMMED
-			if (module.isNeedShim()){
-				String dependencies = ""; //$NON-NLS-1$
-				for(int i=0; i< module.getShimDependencies().size(); i++){
-					dependencies+= "'"+ module.getShimDependencies().get(i) +"'"; //$NON-NLS-1$ //$NON-NLS-2$
-					if (i < (module.getShimDependencies().size()-1)){
-						dependencies+=","; //$NON-NLS-1$
-					}
+			//Check if the name is null because a module could not have a library
+			if (fileName != null){
+				File workspaceCopy = new File(projectFolder, fileName);
+				try {
+					FileUtils.copyFile(resourceFile, workspaceCopy);
+				} catch (IOException e) {
+					e.printStackTrace();
 				}
-				VelocityShimLibrary shimLibrary = new VelocityShimLibrary(module.getVariableName(), module.getShimExportName(), dependencies);
-				shimmedList.add(shimLibrary);
+				//ADD THE LIBRARY TO THE LIBRARIES LIST
+				librariesList.add(new VelocityLibrary(module.getVariableName(), removeJsExtension(fileName)));
+				//CHECK IF THE MODULE MUST BE SHIMMED
+				if (module.isNeedShim()){
+					String dependencies = ""; //$NON-NLS-1$
+					for(int i=0; i< module.getShimDependencies().size(); i++){
+						dependencies+= "'"+ module.getShimDependencies().get(i) +"'"; //$NON-NLS-1$ //$NON-NLS-2$
+						if (i < (module.getShimDependencies().size()-1)){
+							dependencies+=","; //$NON-NLS-1$
+						}
+					}
+					VelocityShimLibrary shimLibrary = new VelocityShimLibrary(module.getVariableName(), module.getShimExportName(), dependencies);
+					shimmedList.add(shimLibrary);
+				}
 			}
 		}  else {
 			String errorMessage = MessageFormat.format(Messages.CustomVisualizationComponentWizard_errorDescription, new Object[]{module.getLibraryURL()});
@@ -408,5 +411,15 @@ public class CustomVisualizationComponentWizard extends JSSWizard implements INe
 			e.printStackTrace();
 		} 
 		return false;
+	}
+	
+	/**
+	 * Can finish if all the pages are complete or if only the first page is available
+	 * and it is complete
+	 */
+	@Override
+	public boolean canFinish() {
+		if (!page0.hasLibraryPage()) return page0.isPageComplete();
+		else return super.canFinish();
 	}
 }

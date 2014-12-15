@@ -12,22 +12,22 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.customvisualization.creation.wizard;
 
+
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.jface.viewers.CheckStateChangedEvent;
-import org.eclipse.jface.viewers.CheckboxTableViewer;
 import org.eclipse.jface.viewers.ColumnWeightData;
-import org.eclipse.jface.viewers.ICheckStateListener;
-import org.eclipse.jface.viewers.ITableLabelProvider;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableLayout;
+import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -50,7 +50,7 @@ import com.jaspersoft.studio.wizards.JSSWizardPage;
  * @author Orlandin Marco
  *
  */
-public class CustomVisualizationComponentTablePage extends JSSWizardPage {
+public class CustomVisualizationComponentListPage extends JSSWizardPage {
 
 	/**
 	 * Label provider for the table, the first column has the module name, 
@@ -60,22 +60,10 @@ public class CustomVisualizationComponentTablePage extends JSSWizardPage {
 	 * @author Orlandin Marco
 	 *
 	 */
-	private class ModuleLableProvider extends LabelProvider implements ITableLabelProvider{ 
-
-		@Override
-		public Image getColumnImage(Object element, int columnIndex) {
-			return null;
-		}
-
-		@Override
-		public String getColumnText(Object element, int columnIndex) {
-			if (columnIndex == 0){
-				return ((ModuleDefinition)element).getModuleVisualName();
-			} else if (columnIndex == 1){
-				ModuleDefinition module = (ModuleDefinition)element;
-				return module.getLibraryVersionNumber();
-			}	
-			return null;
+	private class ModuleLabelProvider extends LabelProvider{ 
+		
+		public String getText(Object element) {
+			return ((ModuleDefinition)element).getModuleVisualName();
 		}
 		
 	};
@@ -83,12 +71,12 @@ public class CustomVisualizationComponentTablePage extends JSSWizardPage {
 	/**
 	 * viewer for the table
 	 */
-	private CheckboxTableViewer viewer;
+	private TableViewer viewer;
 	
 	/**
 	 * the table when the user can select a module that will be used as skeleton
 	 */
-	private Table table;
+	private Table list;
 
 	/**
 	 * Text area where the project name can be provided
@@ -98,7 +86,7 @@ public class CustomVisualizationComponentTablePage extends JSSWizardPage {
 	/**
 	 * Provider for the table labels
 	 */
-	private ModuleLableProvider labelProvider = new ModuleLableProvider();
+	private ModuleLabelProvider labelProvider = new ModuleLabelProvider();
 	
 	/**
 	 * Modify listener for the projectName, made to re-validate the 
@@ -115,7 +103,7 @@ public class CustomVisualizationComponentTablePage extends JSSWizardPage {
 	/**
 	 * Create the page
 	 */
-	public CustomVisualizationComponentTablePage() {
+	public CustomVisualizationComponentListPage() {
 		super("moduleSelector"); //$NON-NLS-1$
 		setTitle(Messages.CustomVisualizationComponentTablePage_pageTitle);
 		setDescription(Messages.CustomVisualizationComponentTablePage_pageDescription);
@@ -141,40 +129,28 @@ public class CustomVisualizationComponentTablePage extends JSSWizardPage {
 		
 		//CREATE THE TABLE AREA
 		
-		viewer = CheckboxTableViewer.newCheckList(container, SWT.BORDER); 
+		viewer = new TableViewer(container, SWT.BORDER); 
 		viewer.setLabelProvider(labelProvider);
 		viewer.setContentProvider(new ListContentProvider());
-		table = viewer.getTable();
+		list = viewer.getTable();
 		GridData tableData = new GridData(GridData.FILL_BOTH);
 		tableData.widthHint = 250;
-		table.setLayoutData(tableData);
-		
+		list.setLayoutData(tableData);
 		TableLayout tlayout = new TableLayout();
-		tlayout.addColumnData(new ColumnWeightData(75, 200, true));
-		tlayout.addColumnData(new ColumnWeightData(25, 50, true));
-		//tlayout.addColumnData(new ColumnWeightData(50, 75, true));
-		table.setLayout(tlayout);
-		table.setHeaderVisible(true);
-		TableColumn[] column = new TableColumn[2];
-		column[0] = new TableColumn(table, SWT.NONE);
+		tlayout.addColumnData(new ColumnWeightData(100, 250, false));
+		list.setLayout(tlayout);
+		list.setHeaderVisible(false);
+		TableColumn[] column = new TableColumn[1];
+		column[0] = new TableColumn(list, SWT.NONE);
 		column[0].setText(Messages.CustomVisualizationComponentTablePage_nameCol);
-		
-		column[1] = new TableColumn(table, SWT.NONE);
-		column[1].setText(Messages.CustomVisualizationComponentTablePage_versionCol);
 
 		for (int i = 0, n = column.length; i < n; i++)
 			column[i].pack();
 
-		
 		attachCellEditors();
 		viewer.setInput(ModuleManager.getModules());
 		
 		setControl(container);
-	}
-
-	@Override
-	protected String getContextName() {
-		return null;
 	}
 	
 	/**
@@ -184,26 +160,24 @@ public class CustomVisualizationComponentTablePage extends JSSWizardPage {
 		
 		//Check listener, allow only to have one module selected. It show
 		//also the license of the checked module
-		viewer.addCheckStateListener(new ICheckStateListener() {
+		viewer.addSelectionChangedListener(new ISelectionChangedListener() {
 			
 			@Override
-			public void checkStateChanged(CheckStateChangedEvent event) {
-				viewer.setSelection(new StructuredSelection(event.getElement()));
-				if (event.getChecked()){
-					for(Object element : ModuleManager.getModules()){
-						if (element != event.getElement()){
-							viewer.setChecked(element, false);
-						}
-					}
-				}
+			public void selectionChanged(SelectionChangedEvent event) {
+				ModuleDefinition selectedElement = getSelectedModule();
 				//Store the selected module to share it with the other pages
-				if (viewer.getCheckedElements().length>0) getSettings().put(CustomVisualizationComponentWizard.SELECTED_MODULE_KEY, viewer.getCheckedElements()[0]);
+				if (selectedElement != null) getSettings().put(CustomVisualizationComponentWizard.SELECTED_MODULE_KEY, selectedElement);
 				else getSettings().remove(CustomVisualizationComponentWizard.SELECTED_MODULE_KEY);
 				getContainer().updateButtons();
 			}
 		});
 	}
-	
+
+	@Override
+	protected String getContextName() {
+		return null;
+	}
+
 	/**
 	 * Get the first (and the only one) checked module inside 
 	 * the table
@@ -211,8 +185,10 @@ public class CustomVisualizationComponentTablePage extends JSSWizardPage {
 	 * @return the checked module inside the table or null if no module is checked
 	 */
 	public ModuleDefinition getSelectedModule(){
-		if ( viewer.getCheckedElements().length > 0){
-			return (ModuleDefinition)viewer.getCheckedElements()[0];
+		ISelection selection = viewer.getSelection();
+		if (selection != null && selection instanceof StructuredSelection){
+			StructuredSelection ss = (StructuredSelection)selection;
+			if (!ss.isEmpty()) return (ModuleDefinition)ss.getFirstElement();	
 		}
 		return null;
 	}
@@ -235,7 +211,7 @@ public class CustomVisualizationComponentTablePage extends JSSWizardPage {
 	 */
 	@Override
 	public boolean isPageComplete() {
-		if (viewer.getCheckedElements().length == 0){
+		if (getSelectedModule() == null){
 			setErrorMessage(Messages.CustomVisualizationComponentTablePage_noLibraryError);
 			return false;
 		}
@@ -279,4 +255,36 @@ public class CustomVisualizationComponentTablePage extends JSSWizardPage {
       }
       return resource.exists();
   }
+   
+   /**
+    * Can advance to the license steps only if the selected module
+    * has at least a license to show
+    */
+   @Override
+	public boolean canFlipToNextPage() {
+	   boolean hasLibrary = hasLibraryPage();
+	   if (!hasLibrary) return false;
+	   else return super.canFlipToNextPage();
+	}
+	   
+   /**
+    * Return true if the selected module or one of it's dependencies has
+    * at last a library. Used to know if make sense to show the license
+    * step since a project without libraries has no licenses either
+    * 
+    * @return true if the selected module or a dependency use a library, 
+    * false otherwise
+    */
+   protected boolean hasLibraryPage(){
+	   ModuleDefinition selected = getSelectedModule();
+	   if (selected != null){
+		   boolean hasLibrary = selected.getLibraryFilename() != null;
+		   for(ModuleDefinition dependency : selected.getRequiredLibraries()){
+			   if (hasLibrary) break;
+			   hasLibrary = dependency.getLibraryFilename() != null;
+		   }
+		   return hasLibrary;
+	   }
+	   return true;
+   }
 }
