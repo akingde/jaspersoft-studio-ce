@@ -24,9 +24,8 @@ import org.eclipse.ui.IWorkbench;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.editor.properties.PropertyComparator;
-import com.jaspersoft.studio.preferences.editor.properties.PropertyListFieldEditor;
+import com.jaspersoft.studio.preferences.editor.properties.SearchPropertyListFieldEditor;
 import com.jaspersoft.studio.preferences.util.FieldEditorOverlayPage;
-import com.jaspersoft.studio.utils.Misc;
 
 /*
  * This class represents a preference page that is contributed to the Preferences dialog. By subclassing
@@ -48,8 +47,9 @@ public class PropertiesPreferencePage extends FieldEditorOverlayPage {
 	 * types of preferences. Each field editor knows how to save and restore itself.
 	 */
 	public void createFieldEditors() {
-		addField(new PropertyListFieldEditor(
-				"abcd", Messages.PropertiesPreferencePage_jrPropertiesTitle, getFieldEditorParent())); //$NON-NLS-1$
+
+		addField(new SearchPropertyListFieldEditor(
+				"properties_list", Messages.PropertiesPreferencePage_jrPropertiesTitle, getFieldEditorParent())); //$NON-NLS-1$
 	}
 
 	public static void getDefaults(IPreferenceStore store) {
