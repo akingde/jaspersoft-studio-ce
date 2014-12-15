@@ -108,6 +108,12 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 		List<JRParameter> oldParamList = mdataset.getValue().getParametersList();
 		for (int i = 0; i < oldParamList.size(); i++)
 			mapparam.put(oldParamList.get(i), newParamList.get(i));
+
+	}
+
+	@Override
+	protected boolean canHandleShellCloseEvent() {
+		return UIUtils.showConfirmation(Messages.DatasetDialog_0, Messages.DatasetDialog_1);
 	}
 
 	@Override

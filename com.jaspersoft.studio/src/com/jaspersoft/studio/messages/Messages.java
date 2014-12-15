@@ -430,6 +430,8 @@ public class Messages extends NLS {
 	public static String DatasetAction_ErrorMsg;
 	public static String DatasetAction_Title;
 	public static String DatasetAction_Tooltip;
+	public static String DatasetDialog_0;
+	public static String DatasetDialog_1;
 	public static String DatasetDialog_DataPreviewTab;
 	public static String DatasetDialog_fieldstab;
 	public static String DatasetDialog_filterexpression;
