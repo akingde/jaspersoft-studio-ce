@@ -108,7 +108,7 @@
          </property>
          <property
                name="appName"
-               value="TIBCO Jaspersoft Studio">
+               value="Jaspersoft Studio">
          </property>
       </product>
    </extension>
