@@ -7,15 +7,22 @@
 		<![CDATA[]]>
 	</queryString>
 	<title>
-		<band height="376" splitType="Stretch">
+		<band height="202" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="555" height="30" uuid="acb97bb9-fb90-49ec-a27e-f96235871893"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[A rectangle drawn without using any Javascript library]]></text>
+			</staticText>
 			<componentElement>
-				<reportElement x="0" y="0" width="555" height="376" uuid="fbb36477-0a3a-4763-98ce-94237b08671e"/>
-				<cvc:customvisualization xmlns:cvc="http://www.jaspersoft.com/cvcomponent" xsi:schemaLocation="http://www.jaspersoft.com/cvcomponent http://www.jaspersoft.com/cvcomponent/component.xsd" evaluationTime="Report">
+				<reportElement x="102" y="40" width="350" height="150" uuid="89458bf2-6ab9-4bf0-ab6c-010c66cdac6b"/>
+				<cvc:customvisualization xmlns:cvc="http://www.jaspersoft.com/cvcomponent" xsi:schemaLocation="http://www.jaspersoft.com/cvcomponent http://www.jaspersoft.com/cvcomponent/component.xsd"  evaluationTime="Report">
 					<cvc:itemProperty name="script" value="${scriptname}"/>
-					<cvc:itemProperty name="number" value="2"/>
-					<cvc:itemProperty name="module" value="d3Circle"/>
+					<cvc:itemProperty name="module" value="plain"/>
 				</cvc:customvisualization>
 			</componentElement>
 		</band>
 	</title>
 </jasperReport>
+

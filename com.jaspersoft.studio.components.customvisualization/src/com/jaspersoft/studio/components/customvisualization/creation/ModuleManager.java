@@ -80,11 +80,10 @@ public class ModuleManager {
 		raphaelMap.addSampleResource("com/jaspersoft/studio/components/customvisualization/creation/resources/raphael_Map_sample.jrxml");
 		
 		ModuleDefinition plainSample = new ModuleDefinition();
-		plainSample.setModuleVisualName("Circle Sample based on plain javascript");
-		plainSample.setModuleName("Sample");
-		plainSample.setCssResource("com/jaspersoft/studio/components/customvisualization/creation/resources/raphael_Map_css.css");
-		plainSample.setRenderResource("com/jaspersoft/studio/components/customvisualization/creation/resources/raphael_Map_render.js");
-		plainSample.addSampleResource("com/jaspersoft/studio/components/customvisualization/creation/resources/raphael_Map_sample.jrxml");
+		plainSample.setModuleVisualName("Rectangle Sample based on plain javascript");
+		plainSample.setModuleName("plain");
+		plainSample.setRenderResource("com/jaspersoft/studio/components/customvisualization/creation/resources/plain_render.js");
+		plainSample.addSampleResource("com/jaspersoft/studio/components/customvisualization/creation/resources/plain_sample.jrxml");
 		
 		embeddedModules.add(d3Circle);
 		embeddedModules.add(raphaelMap);

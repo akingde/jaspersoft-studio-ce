@@ -248,11 +248,11 @@ public class CustomVisualizationComponentWizard extends JSSWizard implements INe
 	 * @throws FileNotFoundException throw the exception if the library file can not be found
 	 */
 	private void addModule(ModuleDefinition module, List<VelocityShimLibrary> shimmedList, List<VelocityLibrary> librariesList, File projectFolder) throws FileNotFoundException{
-		File resourceFile = ModuleManager.getLibraryFile(module);
-		if (resourceFile != null && resourceFile.exists()){
-			String fileName = module.getLibraryFilename();
-			//Check if the name is null because a module could not have a library
-			if (fileName != null){
+		//Check if the name is null because a module could not have a library
+		String fileName = module.getLibraryFilename();
+		if (fileName != null){
+			File resourceFile = ModuleManager.getLibraryFile(module);
+			if (resourceFile != null && resourceFile.exists()){
 				File workspaceCopy = new File(projectFolder, fileName);
 				try {
 					FileUtils.copyFile(resourceFile, workspaceCopy);
@@ -273,10 +273,11 @@ public class CustomVisualizationComponentWizard extends JSSWizard implements INe
 					VelocityShimLibrary shimLibrary = new VelocityShimLibrary(module.getVariableName(), module.getShimExportName(), dependencies);
 					shimmedList.add(shimLibrary);
 				}
+
+			}  else {
+				String errorMessage = MessageFormat.format(Messages.CustomVisualizationComponentWizard_errorDescription, new Object[]{module.getLibraryURL()});
+				throw new FileNotFoundException(errorMessage);
 			}
-		}  else {
-			String errorMessage = MessageFormat.format(Messages.CustomVisualizationComponentWizard_errorDescription, new Object[]{module.getLibraryURL()});
-			throw new FileNotFoundException(errorMessage);
 		}
 	}
 	
