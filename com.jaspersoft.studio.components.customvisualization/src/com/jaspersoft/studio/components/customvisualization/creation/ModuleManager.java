@@ -68,7 +68,7 @@ public class ModuleManager {
 		d3Circle.addSampleResource("com/jaspersoft/studio/components/customvisualization/creation/resources/d3_Circle_sample.jrxml");
 		
 		ModuleDefinition raphaelMap = new ModuleDefinition();
-		raphaelMap.setModuleVisualName("Map Sample based on Raphaël library");
+		raphaelMap.setModuleVisualName("Map Sample based on Raphael library");
 		raphaelMap.setModuleName("RaphaelMap");
 		raphaelMap.setCssResource("com/jaspersoft/studio/components/customvisualization/creation/resources/raphael_Map_css.css");
 		raphaelMap.setRenderResource("com/jaspersoft/studio/components/customvisualization/creation/resources/raphael_Map_render.js");

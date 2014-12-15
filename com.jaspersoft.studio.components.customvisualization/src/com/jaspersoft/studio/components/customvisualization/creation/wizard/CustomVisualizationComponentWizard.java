@@ -133,13 +133,13 @@ public class CustomVisualizationComponentWizard extends JSSWizard implements INe
 					addModule(requiredLibrary, shimLibraries, libraries, dest);
 				}
 		
-				generateCSS(project, monitor, selected);
+				String cssFileName = generateCSS(project, monitor, selected);
 				String renderFileName = generateRender(project, monitor, selected);
 				libraries.add(new VelocityLibrary(selected.getModuleName(), removeJsExtension(renderFileName)));
 				String buildFile = generateBuildFile(libraries, shimLibraries, selected.getModuleName(), outputScriptName);
 				createFile("build.js", project, buildFile, monitor); //$NON-NLS-1$
 				//Eventually create a sample for the current project
-				createSample(selected, outputScriptName, project, monitor);
+				createSample(selected, outputScriptName, cssFileName, project, monitor);
 				try {
 					project.refreshLocal(IProject.DEPTH_INFINITE, new NullProgressMonitor());
 				} catch (CoreException e) {
@@ -160,10 +160,11 @@ public class CustomVisualizationComponentWizard extends JSSWizard implements INe
 	 * 
 	 * @param selectedModule the selected module
 	 * @param scriptName the name of the output script that will be generated when the project component is compiled
+	 * @param cssName name of the css file if any, could be null if no css is provided
 	 * @param project the current project
 	 * @param monitor monitor to execute the operation
 	 */
-	private void createSample(ModuleDefinition selectedModule, String scriptName, IProject project, IProgressMonitor monitor){
+	private void createSample(ModuleDefinition selectedModule, String scriptName, String cssName, IProject project, IProgressMonitor monitor){
 		if (!selectedModule.getSampleResources().isEmpty()){
 			try {
 				//It uses the samples, add the jr nature to the project
@@ -179,7 +180,7 @@ public class CustomVisualizationComponentWizard extends JSSWizard implements INe
 					String resourceName = getResourceName(resourcePath);
 					if (resourceName.toLowerCase().endsWith(".jrxml")){
 						//It's a jrxml, call the generate method to provide some project dependent informations
-						String jrxmlContent = generateJRXML(resourcePath, scriptName);
+						String jrxmlContent = generateJRXML(resourcePath, scriptName, cssName);
 						createFile(resourceName, project, jrxmlContent, monitor);
 					} else {
 						//It's another resource file (maybe required from the jrxml), simply create it in the folder
@@ -198,11 +199,13 @@ public class CustomVisualizationComponentWizard extends JSSWizard implements INe
 	 * @param jrxmlPath path to the sample template
 	 * @param scriptName name of the script to use along with the template
 	 * to generate the sample jrxml
+	 * @param cssName name of the css file if any, could be null if no css is provided
 	 * @return the content of the sample jrxml
 	 */
-	private String generateJRXML(String jrxmlPath, String scriptName){
+	private String generateJRXML(String jrxmlPath, String scriptName, String cssName){
 		VelocityContext functionContext = new VelocityContext();
 		functionContext.put("scriptname", scriptName); //$NON-NLS-1$
+		functionContext.put("cssname", cssName); //$NON-NLS-1$
 		
 		Template functionTemplate = ve.getTemplate(jrxmlPath);
 		StringWriter fsw = new StringWriter();
@@ -213,7 +216,7 @@ public class CustomVisualizationComponentWizard extends JSSWizard implements INe
 	/**
 	 * Return a resource name starting from it's path. To
 	 * find the resource name the last / is searched, if not found
-	 * it will return the path itself, otherwise the subrstring after
+	 * it will return the path itself, otherwise the substring after
 	 * the last /
 	 * 
 	 * @param resourcePath a path of a resource
@@ -226,7 +229,7 @@ public class CustomVisualizationComponentWizard extends JSSWizard implements INe
 	}
 	
 	/**
-	 * Get a resource name and if it ends with the js exentesion
+	 * Get a resource name and if it ends with the js extension
 	 * then the extension is removed
 	 * 
 	 * @param source the name of the resource
@@ -287,12 +290,16 @@ public class CustomVisualizationComponentWizard extends JSSWizard implements INe
 	 * @param container the container where the fill will be placed
 	 * @param monitor the monitor to execute the operation 
 	 * @param library the module selected by the user in the wizard page
+	 * @return the name of the css file or null if no css is provided by the module
 	 */ 
-	private void generateCSS(IProject container, IProgressMonitor monitor, ModuleDefinition library){
-		String cssContent = library.getCssResource();
+	private String generateCSS(IProject container, IProgressMonitor monitor, ModuleDefinition module){
+		String cssContent = module.getCssResource();
 		if (cssContent != null){
-			createFile(container.getName()+".css", container, cssContent, monitor); //$NON-NLS-1$
+			String cssName = container.getName()+".css";
+			createFile(cssName, container, cssContent, monitor); //$NON-NLS-1$
+			return cssName;
 		}
+		return null;
 	}
 	
 	/**
