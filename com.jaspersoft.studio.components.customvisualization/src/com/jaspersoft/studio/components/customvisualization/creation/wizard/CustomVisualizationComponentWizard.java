@@ -126,6 +126,7 @@ public class CustomVisualizationComponentWizard extends JSSWizard implements INe
 			List<VelocityShimLibrary> shimLibraries = new ArrayList<VelocityShimLibrary>();
 			
 			try{
+				String outputScriptName = projectName + ".min.js";
 				//Add the main module and all it's dependencies
 				addModule(selected, shimLibraries, libraries, dest);
 				for(ModuleDefinition requiredLibrary : selected.getRequiredLibraries()){
@@ -135,8 +136,10 @@ public class CustomVisualizationComponentWizard extends JSSWizard implements INe
 				generateCSS(project, monitor, selected);
 				String renderFileName = generateRender(project, monitor, selected);
 				libraries.add(new VelocityLibrary(selected.getModuleName(), removeJsExtension(renderFileName)));
-				String buildFile = generateBuildFile(libraries, shimLibraries, selected.getModuleName(), projectName);
+				String buildFile = generateBuildFile(libraries, shimLibraries, selected.getModuleName(), outputScriptName);
 				createFile("build.js", project, buildFile, monitor); //$NON-NLS-1$
+				//Eventually create a sample for the current project
+				createSample(selected, outputScriptName, project, monitor);
 				try {
 					project.refreshLocal(IProject.DEPTH_INFINITE, new NullProgressMonitor());
 				} catch (CoreException e) {
@@ -148,10 +151,89 @@ public class CustomVisualizationComponentWizard extends JSSWizard implements INe
 			}
 		}
 		return result;
-	}			
+	}		
 	
+	/**
+	 * Check if the selected module provide some samples, like a sample jrxml  or its resources.
+	 * In this case it add the jr nature to the project and copy all the specified resources
+	 * inside the project
+	 * 
+	 * @param selectedModule the selected module
+	 * @param scriptName the name of the output script that will be generated when the project component is compiled
+	 * @param project the current project
+	 * @param monitor monitor to execute the operation
+	 */
+	private void createSample(ModuleDefinition selectedModule, String scriptName, IProject project, IProgressMonitor monitor){
+		if (!selectedModule.getSampleResources().isEmpty()){
+			try {
+				//It uses the samples, add the jr nature to the project
+				if (!ProjectUtil.hasJRNature(monitor, project)){
+					ProjectUtil.createJRProject(monitor, project);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			} 
+			for(String resourcePath : selectedModule.getSampleResources()){
+				InputStream resource = selectedModule.getResource(resourcePath);
+				if (resource != null){
+					String resourceName = getResourceName(resourcePath);
+					if (resourceName.toLowerCase().endsWith(".jrxml")){
+						//It's a jrxml, call the generate method to provide some project dependent informations
+						String jrxmlContent = generateJRXML(resourcePath, scriptName);
+						createFile(resourceName, project, jrxmlContent, monitor);
+					} else {
+						//It's another resource file (maybe required from the jrxml), simply create it in the folder
+						createFile(resourceName, project, resource, monitor);
+					}
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Generate a sample jrxml for the project by starting from an
+	 * existing jrxml and doing some substitution. Actually only the
+	 * script name is write inside the final sample jrxml
+	 * 
+	 * @param jrxmlPath path to the sample template
+	 * @param scriptName name of the script to use along with the template
+	 * to generate the sample jrxml
+	 * @return the content of the sample jrxml
+	 */
+	private String generateJRXML(String jrxmlPath, String scriptName){
+		VelocityContext functionContext = new VelocityContext();
+		functionContext.put("scriptname", scriptName); //$NON-NLS-1$
+		
+		Template functionTemplate = ve.getTemplate(jrxmlPath);
+		StringWriter fsw = new StringWriter();
+		functionTemplate.merge(functionContext, fsw);
+		return fsw.toString();
+	}
+	
+	/**
+	 * Return a resource name starting from it's path. To
+	 * find the resource name the last / is searched, if not found
+	 * it will return the path itself, otherwise the subrstring after
+	 * the last /
+	 * 
+	 * @param resourcePath a path of a resource
+	 * @return a not null string
+	 */
+	private String getResourceName(String resourcePath){
+		int slash = resourcePath.lastIndexOf("/");
+		if (slash == -1) return resourcePath;
+		else return resourcePath.substring(slash+1);
+	}
+	
+	/**
+	 * Get a resource name and if it ends with the js exentesion
+	 * then the extension is removed
+	 * 
+	 * @param source the name of the resource
+	 * @return the name without the extension if it was a .js, otherwise the source
+	 */
 	private String removeJsExtension(String source){
-		if (source.endsWith(".js")) return source.substring(0,source.length()-3);
+		if (source.toLowerCase().endsWith(".js")) return source.substring(0,source.length()-3);
 		return source;
 	}
 	
@@ -257,10 +339,28 @@ public class CustomVisualizationComponentWizard extends JSSWizard implements INe
 	 * @param progressMonitor a progress monitor
 	 * @return the added file
 	 */
-	public static IFile createFile(String name, IContainer container, String content, IProgressMonitor progressMonitor) {
+	protected static IFile createFile(String name, IContainer container, String content, IProgressMonitor progressMonitor) {
+		try{
+			final InputStream stream = new ByteArrayInputStream(content.getBytes(container.getDefaultCharset(true)));
+			return createFile(name, container, stream, progressMonitor);
+		} catch (Exception ex){
+			ex.printStackTrace();
+		}
+		return null;
+	}
+	
+	/**
+	 * Add a file to the project
+	 * 
+	 * @param name the name of the file
+	 * @param container the container of the file
+	 * @param stream the binary content of the file
+	 * @param progressMonitor a progress monitor
+	 * @return the added file
+	 */
+	protected static IFile createFile(String name, IContainer container, InputStream stream, IProgressMonitor progressMonitor) {
 		final IFile file = container.getFile(new Path(name));
 		try {
-			final InputStream stream = new ByteArrayInputStream(content.getBytes(file.getCharset()));
 			if (file.exists()) {
 				file.setContents(stream, true, true, progressMonitor);
 			}

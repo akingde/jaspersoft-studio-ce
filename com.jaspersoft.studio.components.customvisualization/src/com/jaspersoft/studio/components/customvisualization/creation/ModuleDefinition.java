@@ -15,6 +15,7 @@ package com.jaspersoft.studio.components.customvisualization.creation;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -91,6 +92,12 @@ public class ModuleDefinition {
 	 * Dependences of this module
 	 */
 	private List<ModuleDefinition> requiredLibraries = new ArrayList<ModuleDefinition>();
+	
+	/**
+	 * List of resources that can be used to provide additional samples when a module is 
+	 * used to generate a custom visualization component project
+	 */
+	private List<String> sampleResources = new ArrayList<String>();
 	
 	/**
 	 * Return the module name. It is the same used inside the
@@ -337,6 +344,40 @@ public class ModuleDefinition {
 		return requiredLibraries;
 	}
 	
+	/**
+	 * Return the list of sample resources path
+	 * 
+	 * @return a not null list of path. The resource can be 
+	 * read by using the getResource method with the path as
+	 * parameter
+	 */
+	public List<String> getSampleResources() {
+		return sampleResources;
+	}
+
+	/**
+	 * Add a sample resource to the module. If a resorce with the
+	 * same path was added before then this method does nothing
+	 * 
+	 * @param sampleResourcePath the path to the resource
+	 */
+	public void addSampleResource(String sampleResourcePath) {
+		String path = sampleResourcePath.trim();
+		if (!sampleResources.contains(path)){
+			sampleResources.add(path);
+		}
+	}
+	
+	public InputStream getResource(String resourceName){
+		URL url = getClass().getClassLoader().getResource(resourceName);
+		try {
+			return url.openStream();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}   
+		return null;
+	}
+
 	/**
 	 * Return the module name followed by it's version
 	 */

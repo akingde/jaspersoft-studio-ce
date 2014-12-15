@@ -23,5 +23,5 @@
         end: "\n\n}(typeof __visualize__ != 'undefined' ? __visualize__ : window));"
     },
     name: "${modulename}",
-    out: "${outputname}.min.js"
+    out: "${outputname}"
 })

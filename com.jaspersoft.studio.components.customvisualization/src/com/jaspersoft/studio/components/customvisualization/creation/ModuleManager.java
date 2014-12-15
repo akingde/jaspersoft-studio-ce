@@ -84,6 +84,7 @@ public class ModuleManager {
 		raphaelMap.setCssResource("com/jaspersoft/studio/components/customvisualization/creation/resources/raphael_Map_css.css");
 		raphaelMap.setRenderResource("com/jaspersoft/studio/components/customvisualization/creation/resources/raphael_Map_render.js");
 		raphaelMap.setVersionNumber("2.1.2");
+		raphaelMap.addSampleResource("com/jaspersoft/studio/components/customvisualization/creation/resources/raphael_Map_sample.jrxml");
 		
 		embeddedModules.add(d3Circle);
 		embeddedModules.add(raphaelMap);
