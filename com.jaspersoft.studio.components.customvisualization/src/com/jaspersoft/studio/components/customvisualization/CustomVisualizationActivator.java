@@ -90,7 +90,7 @@ public class CustomVisualizationActivator extends AbstractJRUIPlugin {
 			
 			if (PreferencesUtils.getJasperReportsProperty("net.sf.jasperreports.web.resource.pattern.customvisualization.scripts") == null)
 			{
-				PreferencesUtils.storeJasperReportsProperty("net.sf.jasperreports.web.resource.pattern.customvisualization.scripts", "com/jaspersoft/jasperreports/customvisualization/resources/require");
+				PreferencesUtils.storeJasperReportsProperty("net.sf.jasperreports.web.resource.pattern.customvisualization.scripts", "com/jaspersoft/jasperreports/customvisualization/resources/require/.*");
 			}
 	}
 }
