@@ -24,6 +24,7 @@ import net.sf.jasperreports.data.DataAdapterParameterContributorFactory;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRPart;
+import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.JRReportTemplate;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignElement;
@@ -205,13 +206,12 @@ public class JrxmlPublishContributor implements IPublishContributor {
 			ds.addAll(datasetsList);
 		boolean syncDA = mrunit.getWsClient().getServerProfile().isSyncDA();
 		for (JRDataset d : ds) {
-			String dapath = d
-					.getPropertiesMap()
-					.getProperty(
-							DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION);
+			JRPropertiesMap pmap = d.getPropertiesMap();
+			String dapath = pmap
+					.getProperty(DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION);
 			if (syncDA && Misc.isNullOrEmpty(dapath)) {
-				String name = d.getPropertiesMap().getProperty(
-						DataQueryAdapters.DEFAULT_DATAADAPTER);
+				String name = pmap
+						.getProperty(DataQueryAdapters.DEFAULT_DATAADAPTER);
 				if (!Misc.isNullOrEmpty(name)) {
 					ADataAdapterStorage storage = DataAdapterManager
 							.getProjectStorage(((IFile) jrConfig

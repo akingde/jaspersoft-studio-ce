@@ -66,14 +66,26 @@ public class ImpDataAdapter extends AImpObject {
 	public File publish(JRDesignDataset jd, String dpath, MReportUnit mrunit,
 			IProgressMonitor monitor, Set<String> fileset, IFile file)
 			throws Exception {
+		dpath = preparePath(fileset, dpath);
+		if (dpath == null)
+			return null;
 		File f = findFile(file, dpath);
 		if (f != null && f.exists()) {
 			fileset.add(f.getAbsolutePath());
 			PublishOptions popt = new PublishOptions();
-			popt.setDataset(jd);
+			// popt.setDataset(jd);
 			AFileResource fr = addResource(monitor, mrunit, fileset, f, popt);
-			jd.setProperty(
-					DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION,
+			popt.setValueSetter(popt.new ValueSetter<JRDesignDataset>(
+					(JRDesignDataset) jd) {
+
+				@Override
+				public void setup() {
+					object.setProperty(
+							DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION,
+							getValue());
+				}
+			});
+			popt.getValueSetter().setValue(
 					"repo:" + fr.getValue().getUriString());
 		}
 		return f;
