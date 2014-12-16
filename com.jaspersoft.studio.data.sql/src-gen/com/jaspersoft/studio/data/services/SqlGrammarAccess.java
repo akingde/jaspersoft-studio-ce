@@ -1569,12 +1569,18 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cXexpXExpression_ParserRuleCall_2_0_1 = (RuleCall)cXexpAlternatives_2_0.eContents().get(1);
 		private final Assignment cNotPrmAssignment_3 = (Assignment)cAlternatives.eContents().get(3);
 		private final RuleCall cNotPrmJRNPARAMTerminalRuleCall_3_0 = (RuleCall)cNotPrmAssignment_3.eContents().get(0);
+		private final Assignment cInAssignment_4 = (Assignment)cAlternatives.eContents().get(4);
+		private final RuleCall cInInOperatorParserRuleCall_4_0 = (RuleCall)cInAssignment_4.eContents().get(0);
+		private final Assignment cExistsAssignment_5 = (Assignment)cAlternatives.eContents().get(5);
+		private final RuleCall cExistsExistsOperatorParserRuleCall_5_0 = (RuleCall)cExistsAssignment_5.eContents().get(0);
 		
 		//ExpressionFragment returns FullExpression:
-		//	expgroup=ExpressionGroup | exp=Expression | xexp=(XExpression | XExpression_) | notPrm=JRNPARAM;
+		//	expgroup=ExpressionGroup | exp=Expression | xexp=(XExpression | XExpression_) | notPrm=JRNPARAM | in=InOperator |
+		//	exists=ExistsOperator;
 		public ParserRule getRule() { return rule; }
 
-		//expgroup=ExpressionGroup | exp=Expression | xexp=(XExpression | XExpression_) | notPrm=JRNPARAM
+		//expgroup=ExpressionGroup | exp=Expression | xexp=(XExpression | XExpression_) | notPrm=JRNPARAM | in=InOperator |
+		//exists=ExistsOperator
 		public Alternatives getAlternatives() { return cAlternatives; }
 
 		//expgroup=ExpressionGroup
@@ -1606,6 +1612,18 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 
 		//JRNPARAM
 		public RuleCall getNotPrmJRNPARAMTerminalRuleCall_3_0() { return cNotPrmJRNPARAMTerminalRuleCall_3_0; }
+
+		//in=InOperator
+		public Assignment getInAssignment_4() { return cInAssignment_4; }
+
+		//InOperator
+		public RuleCall getInInOperatorParserRuleCall_4_0() { return cInInOperatorParserRuleCall_4_0; }
+
+		//exists=ExistsOperator
+		public Assignment getExistsAssignment_5() { return cExistsAssignment_5; }
+
+		//ExistsOperator
+		public RuleCall getExistsExistsOperatorParserRuleCall_5_0() { return cExistsExistsOperatorParserRuleCall_5_0; }
 	}
 
 	public class ExpressionGroupElements extends AbstractParserRuleElementFinder {
@@ -1852,18 +1870,22 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Keyword cIsnullISNOTNULLKeyword_1_0_0_1 = (Keyword)cIsnullAlternatives_1_0_0.eContents().get(1);
 		private final Assignment cInAssignment_1_1 = (Assignment)cAlternatives_1.eContents().get(1);
 		private final RuleCall cInInOperatorParserRuleCall_1_1_0 = (RuleCall)cInAssignment_1_1.eContents().get(0);
-		private final Assignment cBetweenAssignment_1_2 = (Assignment)cAlternatives_1.eContents().get(2);
-		private final RuleCall cBetweenBetweenParserRuleCall_1_2_0 = (RuleCall)cBetweenAssignment_1_2.eContents().get(0);
-		private final Assignment cLikeAssignment_1_3 = (Assignment)cAlternatives_1.eContents().get(3);
-		private final RuleCall cLikeLikeParserRuleCall_1_3_0 = (RuleCall)cLikeAssignment_1_3.eContents().get(0);
-		private final Assignment cCompAssignment_1_4 = (Assignment)cAlternatives_1.eContents().get(4);
-		private final RuleCall cCompComparisonParserRuleCall_1_4_0 = (RuleCall)cCompAssignment_1_4.eContents().get(0);
+		private final Assignment cExistsAssignment_1_2 = (Assignment)cAlternatives_1.eContents().get(2);
+		private final RuleCall cExistsExistsOperatorParserRuleCall_1_2_0 = (RuleCall)cExistsAssignment_1_2.eContents().get(0);
+		private final Assignment cBetweenAssignment_1_3 = (Assignment)cAlternatives_1.eContents().get(3);
+		private final RuleCall cBetweenBetweenParserRuleCall_1_3_0 = (RuleCall)cBetweenAssignment_1_3.eContents().get(0);
+		private final Assignment cLikeAssignment_1_4 = (Assignment)cAlternatives_1.eContents().get(4);
+		private final RuleCall cLikeLikeParserRuleCall_1_4_0 = (RuleCall)cLikeAssignment_1_4.eContents().get(0);
+		private final Assignment cCompAssignment_1_5 = (Assignment)cAlternatives_1.eContents().get(5);
+		private final RuleCall cCompComparisonParserRuleCall_1_5_0 = (RuleCall)cCompAssignment_1_5.eContents().get(0);
 		
 		//Expression returns FullExpression:
-		//	op1=Operand (isnull=("IS NULL" | "IS NOT NULL") | in=InOperator | between=Between | like=Like | comp=Comparison);
+		//	op1=Operand (isnull=("IS NULL" | "IS NOT NULL") | in=InOperator | exists=ExistsOperator | between=Between | like=Like
+		//	| comp=Comparison);
 		public ParserRule getRule() { return rule; }
 
-		//op1=Operand (isnull=("IS NULL" | "IS NOT NULL") | in=InOperator | between=Between | like=Like | comp=Comparison)
+		//op1=Operand (isnull=("IS NULL" | "IS NOT NULL") | in=InOperator | exists=ExistsOperator | between=Between | like=Like |
+		//comp=Comparison)
 		public Group getGroup() { return cGroup; }
 
 		//op1=Operand
@@ -1872,7 +1894,8 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		//Operand
 		public RuleCall getOp1OperandParserRuleCall_0_0() { return cOp1OperandParserRuleCall_0_0; }
 
-		//isnull=("IS NULL" | "IS NOT NULL") | in=InOperator | between=Between | like=Like | comp=Comparison
+		//isnull=("IS NULL" | "IS NOT NULL") | in=InOperator | exists=ExistsOperator | between=Between | like=Like |
+		//comp=Comparison
 		public Alternatives getAlternatives_1() { return cAlternatives_1; }
 
 		//isnull=("IS NULL" | "IS NOT NULL")
@@ -1893,23 +1916,29 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		//InOperator
 		public RuleCall getInInOperatorParserRuleCall_1_1_0() { return cInInOperatorParserRuleCall_1_1_0; }
 
+		//exists=ExistsOperator
+		public Assignment getExistsAssignment_1_2() { return cExistsAssignment_1_2; }
+
+		//ExistsOperator
+		public RuleCall getExistsExistsOperatorParserRuleCall_1_2_0() { return cExistsExistsOperatorParserRuleCall_1_2_0; }
+
 		//between=Between
-		public Assignment getBetweenAssignment_1_2() { return cBetweenAssignment_1_2; }
+		public Assignment getBetweenAssignment_1_3() { return cBetweenAssignment_1_3; }
 
 		//Between
-		public RuleCall getBetweenBetweenParserRuleCall_1_2_0() { return cBetweenBetweenParserRuleCall_1_2_0; }
+		public RuleCall getBetweenBetweenParserRuleCall_1_3_0() { return cBetweenBetweenParserRuleCall_1_3_0; }
 
 		//like=Like
-		public Assignment getLikeAssignment_1_3() { return cLikeAssignment_1_3; }
+		public Assignment getLikeAssignment_1_4() { return cLikeAssignment_1_4; }
 
 		//Like
-		public RuleCall getLikeLikeParserRuleCall_1_3_0() { return cLikeLikeParserRuleCall_1_3_0; }
+		public RuleCall getLikeLikeParserRuleCall_1_4_0() { return cLikeLikeParserRuleCall_1_4_0; }
 
 		//comp=Comparison
-		public Assignment getCompAssignment_1_4() { return cCompAssignment_1_4; }
+		public Assignment getCompAssignment_1_5() { return cCompAssignment_1_5; }
 
 		//Comparison
-		public RuleCall getCompComparisonParserRuleCall_1_4_0() { return cCompComparisonParserRuleCall_1_4_0; }
+		public RuleCall getCompComparisonParserRuleCall_1_5_0() { return cCompComparisonParserRuleCall_1_5_0; }
 	}
 
 	public class ComparisonElements extends AbstractParserRuleElementFinder {
@@ -2128,19 +2157,17 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Alternatives cOpAlternatives_1_0 = (Alternatives)cOpAssignment_1.eContents().get(0);
 		private final Keyword cOpNOTINKeyword_1_0_0 = (Keyword)cOpAlternatives_1_0.eContents().get(0);
 		private final Keyword cOpINKeyword_1_0_1 = (Keyword)cOpAlternatives_1_0.eContents().get(1);
-		private final Keyword cLeftParenthesisKeyword_2 = (Keyword)cGroup.eContents().get(2);
-		private final Alternatives cAlternatives_3 = (Alternatives)cGroup.eContents().get(3);
-		private final Assignment cSubqueryAssignment_3_0 = (Assignment)cAlternatives_3.eContents().get(0);
-		private final RuleCall cSubquerySubQueryOperandParserRuleCall_3_0_0 = (RuleCall)cSubqueryAssignment_3_0.eContents().get(0);
-		private final Assignment cOpListAssignment_3_1 = (Assignment)cAlternatives_3.eContents().get(1);
-		private final RuleCall cOpListOperandListParserRuleCall_3_1_0 = (RuleCall)cOpListAssignment_3_1.eContents().get(0);
-		private final Keyword cRightParenthesisKeyword_4 = (Keyword)cGroup.eContents().get(4);
+		private final Alternatives cAlternatives_2 = (Alternatives)cGroup.eContents().get(2);
+		private final Assignment cSubqueryAssignment_2_0 = (Assignment)cAlternatives_2.eContents().get(0);
+		private final RuleCall cSubquerySubQueryOperandParserRuleCall_2_0_0 = (RuleCall)cSubqueryAssignment_2_0.eContents().get(0);
+		private final Assignment cOpListAssignment_2_1 = (Assignment)cAlternatives_2.eContents().get(1);
+		private final RuleCall cOpListOperandListGroupParserRuleCall_2_1_0 = (RuleCall)cOpListAssignment_2_1.eContents().get(0);
 		
 		//InOperator returns InOper:
-		//	{InOper} op=("NOT IN" | "IN") "(" (subquery=SubQueryOperand | opList=OperandList) ")";
+		//	{InOper} op=("NOT IN" | "IN") (subquery=SubQueryOperand | opList=OperandListGroup);
 		public ParserRule getRule() { return rule; }
 
-		//{InOper} op=("NOT IN" | "IN") "(" (subquery=SubQueryOperand | opList=OperandList) ")"
+		//{InOper} op=("NOT IN" | "IN") (subquery=SubQueryOperand | opList=OperandListGroup)
 		public Group getGroup() { return cGroup; }
 
 		//{InOper}
@@ -2158,26 +2185,100 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		//"IN"
 		public Keyword getOpINKeyword_1_0_1() { return cOpINKeyword_1_0_1; }
 
-		//"("
-		public Keyword getLeftParenthesisKeyword_2() { return cLeftParenthesisKeyword_2; }
-
-		//subquery=SubQueryOperand | opList=OperandList
-		public Alternatives getAlternatives_3() { return cAlternatives_3; }
+		//subquery=SubQueryOperand | opList=OperandListGroup
+		public Alternatives getAlternatives_2() { return cAlternatives_2; }
 
 		//subquery=SubQueryOperand
-		public Assignment getSubqueryAssignment_3_0() { return cSubqueryAssignment_3_0; }
+		public Assignment getSubqueryAssignment_2_0() { return cSubqueryAssignment_2_0; }
 
 		//SubQueryOperand
-		public RuleCall getSubquerySubQueryOperandParserRuleCall_3_0_0() { return cSubquerySubQueryOperandParserRuleCall_3_0_0; }
+		public RuleCall getSubquerySubQueryOperandParserRuleCall_2_0_0() { return cSubquerySubQueryOperandParserRuleCall_2_0_0; }
 
-		//opList=OperandList
-		public Assignment getOpListAssignment_3_1() { return cOpListAssignment_3_1; }
+		//opList=OperandListGroup
+		public Assignment getOpListAssignment_2_1() { return cOpListAssignment_2_1; }
+
+		//OperandListGroup
+		public RuleCall getOpListOperandListGroupParserRuleCall_2_1_0() { return cOpListOperandListGroupParserRuleCall_2_1_0; }
+	}
+
+	public class ExistsOperatorElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "ExistsOperator");
+		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final Action cExistsOperAction_0 = (Action)cGroup.eContents().get(0);
+		private final Assignment cOpAssignment_1 = (Assignment)cGroup.eContents().get(1);
+		private final Alternatives cOpAlternatives_1_0 = (Alternatives)cOpAssignment_1.eContents().get(0);
+		private final Keyword cOpNOTEXISTSKeyword_1_0_0 = (Keyword)cOpAlternatives_1_0.eContents().get(0);
+		private final Keyword cOpEXISTSKeyword_1_0_1 = (Keyword)cOpAlternatives_1_0.eContents().get(1);
+		private final Alternatives cAlternatives_2 = (Alternatives)cGroup.eContents().get(2);
+		private final Assignment cSubqueryAssignment_2_0 = (Assignment)cAlternatives_2.eContents().get(0);
+		private final RuleCall cSubquerySubQueryOperandParserRuleCall_2_0_0 = (RuleCall)cSubqueryAssignment_2_0.eContents().get(0);
+		private final Assignment cOpListAssignment_2_1 = (Assignment)cAlternatives_2.eContents().get(1);
+		private final RuleCall cOpListOperandListGroupParserRuleCall_2_1_0 = (RuleCall)cOpListAssignment_2_1.eContents().get(0);
+		
+		//ExistsOperator returns ExistsOper:
+		//	{ExistsOper} op=("NOT EXISTS" | "EXISTS") (subquery=SubQueryOperand | opList=OperandListGroup);
+		public ParserRule getRule() { return rule; }
+
+		//{ExistsOper} op=("NOT EXISTS" | "EXISTS") (subquery=SubQueryOperand | opList=OperandListGroup)
+		public Group getGroup() { return cGroup; }
+
+		//{ExistsOper}
+		public Action getExistsOperAction_0() { return cExistsOperAction_0; }
+
+		//op=("NOT EXISTS" | "EXISTS")
+		public Assignment getOpAssignment_1() { return cOpAssignment_1; }
+
+		//"NOT EXISTS" | "EXISTS"
+		public Alternatives getOpAlternatives_1_0() { return cOpAlternatives_1_0; }
+
+		//"NOT EXISTS"
+		public Keyword getOpNOTEXISTSKeyword_1_0_0() { return cOpNOTEXISTSKeyword_1_0_0; }
+
+		//"EXISTS"
+		public Keyword getOpEXISTSKeyword_1_0_1() { return cOpEXISTSKeyword_1_0_1; }
+
+		//subquery=SubQueryOperand | opList=OperandListGroup
+		public Alternatives getAlternatives_2() { return cAlternatives_2; }
+
+		//subquery=SubQueryOperand
+		public Assignment getSubqueryAssignment_2_0() { return cSubqueryAssignment_2_0; }
+
+		//SubQueryOperand
+		public RuleCall getSubquerySubQueryOperandParserRuleCall_2_0_0() { return cSubquerySubQueryOperandParserRuleCall_2_0_0; }
+
+		//opList=OperandListGroup
+		public Assignment getOpListAssignment_2_1() { return cOpListAssignment_2_1; }
+
+		//OperandListGroup
+		public RuleCall getOpListOperandListGroupParserRuleCall_2_1_0() { return cOpListOperandListGroupParserRuleCall_2_1_0; }
+	}
+
+	public class OperandListGroupElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "OperandListGroup");
+		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final Keyword cLeftParenthesisKeyword_0 = (Keyword)cGroup.eContents().get(0);
+		private final Assignment cOpGroupAssignment_1 = (Assignment)cGroup.eContents().get(1);
+		private final RuleCall cOpGroupOperandListParserRuleCall_1_0 = (RuleCall)cOpGroupAssignment_1.eContents().get(0);
+		private final Keyword cRightParenthesisKeyword_2 = (Keyword)cGroup.eContents().get(2);
+		
+		//OperandListGroup:
+		//	"(" opGroup=OperandList ")";
+		public ParserRule getRule() { return rule; }
+
+		//"(" opGroup=OperandList ")"
+		public Group getGroup() { return cGroup; }
+
+		//"("
+		public Keyword getLeftParenthesisKeyword_0() { return cLeftParenthesisKeyword_0; }
+
+		//opGroup=OperandList
+		public Assignment getOpGroupAssignment_1() { return cOpGroupAssignment_1; }
 
 		//OperandList
-		public RuleCall getOpListOperandListParserRuleCall_3_1_0() { return cOpListOperandListParserRuleCall_3_1_0; }
+		public RuleCall getOpGroupOperandListParserRuleCall_1_0() { return cOpGroupOperandListParserRuleCall_1_0; }
 
 		//")"
-		public Keyword getRightParenthesisKeyword_4() { return cRightParenthesisKeyword_4; }
+		public Keyword getRightParenthesisKeyword_2() { return cRightParenthesisKeyword_2; }
 	}
 
 	public class OperandListElements extends AbstractParserRuleElementFinder {
@@ -3686,6 +3787,8 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	private LikeOperandElements pLikeOperand;
 	private BetweenElements pBetween;
 	private InOperatorElements pInOperator;
+	private ExistsOperatorElements pExistsOperator;
+	private OperandListGroupElements pOperandListGroup;
 	private OperandListElements pOperandList;
 	private OperandElements pOperand;
 	private OperandFragmentElements pOperandFragment;
@@ -4138,7 +4241,8 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//ExpressionFragment returns FullExpression:
-	//	expgroup=ExpressionGroup | exp=Expression | xexp=(XExpression | XExpression_) | notPrm=JRNPARAM;
+	//	expgroup=ExpressionGroup | exp=Expression | xexp=(XExpression | XExpression_) | notPrm=JRNPARAM | in=InOperator |
+	//	exists=ExistsOperator;
 	public ExpressionFragmentElements getExpressionFragmentAccess() {
 		return (pExpressionFragment != null) ? pExpressionFragment : (pExpressionFragment = new ExpressionFragmentElements());
 	}
@@ -4198,7 +4302,8 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//Expression returns FullExpression:
-	//	op1=Operand (isnull=("IS NULL" | "IS NOT NULL") | in=InOperator | between=Between | like=Like | comp=Comparison);
+	//	op1=Operand (isnull=("IS NULL" | "IS NOT NULL") | in=InOperator | exists=ExistsOperator | between=Between | like=Like
+	//	| comp=Comparison);
 	public ExpressionElements getExpressionAccess() {
 		return (pExpression != null) ? pExpression : (pExpression = new ExpressionElements());
 	}
@@ -4248,13 +4353,33 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//InOperator returns InOper:
-	//	{InOper} op=("NOT IN" | "IN") "(" (subquery=SubQueryOperand | opList=OperandList) ")";
+	//	{InOper} op=("NOT IN" | "IN") (subquery=SubQueryOperand | opList=OperandListGroup);
 	public InOperatorElements getInOperatorAccess() {
 		return (pInOperator != null) ? pInOperator : (pInOperator = new InOperatorElements());
 	}
 	
 	public ParserRule getInOperatorRule() {
 		return getInOperatorAccess().getRule();
+	}
+
+	//ExistsOperator returns ExistsOper:
+	//	{ExistsOper} op=("NOT EXISTS" | "EXISTS") (subquery=SubQueryOperand | opList=OperandListGroup);
+	public ExistsOperatorElements getExistsOperatorAccess() {
+		return (pExistsOperator != null) ? pExistsOperator : (pExistsOperator = new ExistsOperatorElements());
+	}
+	
+	public ParserRule getExistsOperatorRule() {
+		return getExistsOperatorAccess().getRule();
+	}
+
+	//OperandListGroup:
+	//	"(" opGroup=OperandList ")";
+	public OperandListGroupElements getOperandListGroupAccess() {
+		return (pOperandListGroup != null) ? pOperandListGroup : (pOperandListGroup = new OperandListGroupElements());
+	}
+	
+	public ParserRule getOperandListGroupRule() {
+		return getOperandListGroupAccess().getRule();
 	}
 
 	//OperandList:

@@ -63,7 +63,9 @@ public class SqlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getLikeOperandAccess().getAlternatives(), "rule__LikeOperand__Alternatives");
 					put(grammarAccess.getBetweenAccess().getOpBetweenAlternatives_0_0(), "rule__Between__OpBetweenAlternatives_0_0");
 					put(grammarAccess.getInOperatorAccess().getOpAlternatives_1_0(), "rule__InOperator__OpAlternatives_1_0");
-					put(grammarAccess.getInOperatorAccess().getAlternatives_3(), "rule__InOperator__Alternatives_3");
+					put(grammarAccess.getInOperatorAccess().getAlternatives_2(), "rule__InOperator__Alternatives_2");
+					put(grammarAccess.getExistsOperatorAccess().getOpAlternatives_1_0(), "rule__ExistsOperator__OpAlternatives_1_0");
+					put(grammarAccess.getExistsOperatorAccess().getAlternatives_2(), "rule__ExistsOperator__Alternatives_2");
 					put(grammarAccess.getOperandAccess().getAlternatives_1_0(), "rule__Operand__Alternatives_1_0");
 					put(grammarAccess.getOperandFragmentAccess().getAlternatives(), "rule__OperandFragment__Alternatives");
 					put(grammarAccess.getOperandFunctionAccess().getAlternatives_2(), "rule__OperandFunction__Alternatives_2");
@@ -163,6 +165,8 @@ public class SqlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getLikeAccess().getGroup(), "rule__Like__Group__0");
 					put(grammarAccess.getBetweenAccess().getGroup(), "rule__Between__Group__0");
 					put(grammarAccess.getInOperatorAccess().getGroup(), "rule__InOperator__Group__0");
+					put(grammarAccess.getExistsOperatorAccess().getGroup(), "rule__ExistsOperator__Group__0");
+					put(grammarAccess.getOperandListGroupAccess().getGroup(), "rule__OperandListGroup__Group__0");
 					put(grammarAccess.getOperandListAccess().getGroup(), "rule__OperandList__Group__0");
 					put(grammarAccess.getOperandListAccess().getGroup_1(), "rule__OperandList__Group_1__0");
 					put(grammarAccess.getOperandListAccess().getGroup_1_1(), "rule__OperandList__Group_1_1__0");
@@ -285,6 +289,8 @@ public class SqlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getExpressionFragmentAccess().getExpAssignment_1(), "rule__ExpressionFragment__ExpAssignment_1");
 					put(grammarAccess.getExpressionFragmentAccess().getXexpAssignment_2(), "rule__ExpressionFragment__XexpAssignment_2");
 					put(grammarAccess.getExpressionFragmentAccess().getNotPrmAssignment_3(), "rule__ExpressionFragment__NotPrmAssignment_3");
+					put(grammarAccess.getExpressionFragmentAccess().getInAssignment_4(), "rule__ExpressionFragment__InAssignment_4");
+					put(grammarAccess.getExpressionFragmentAccess().getExistsAssignment_5(), "rule__ExpressionFragment__ExistsAssignment_5");
 					put(grammarAccess.getExpressionGroupAccess().getIsnotAssignment_1(), "rule__ExpressionGroup__IsnotAssignment_1");
 					put(grammarAccess.getExpressionGroupAccess().getExprAssignment_3(), "rule__ExpressionGroup__ExprAssignment_3");
 					put(grammarAccess.getXExpressionAccess().getXfAssignment_3(), "rule__XExpression__XfAssignment_3");
@@ -298,9 +304,10 @@ public class SqlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getExpressionAccess().getOp1Assignment_0(), "rule__Expression__Op1Assignment_0");
 					put(grammarAccess.getExpressionAccess().getIsnullAssignment_1_0(), "rule__Expression__IsnullAssignment_1_0");
 					put(grammarAccess.getExpressionAccess().getInAssignment_1_1(), "rule__Expression__InAssignment_1_1");
-					put(grammarAccess.getExpressionAccess().getBetweenAssignment_1_2(), "rule__Expression__BetweenAssignment_1_2");
-					put(grammarAccess.getExpressionAccess().getLikeAssignment_1_3(), "rule__Expression__LikeAssignment_1_3");
-					put(grammarAccess.getExpressionAccess().getCompAssignment_1_4(), "rule__Expression__CompAssignment_1_4");
+					put(grammarAccess.getExpressionAccess().getExistsAssignment_1_2(), "rule__Expression__ExistsAssignment_1_2");
+					put(grammarAccess.getExpressionAccess().getBetweenAssignment_1_3(), "rule__Expression__BetweenAssignment_1_3");
+					put(grammarAccess.getExpressionAccess().getLikeAssignment_1_4(), "rule__Expression__LikeAssignment_1_4");
+					put(grammarAccess.getExpressionAccess().getCompAssignment_1_5(), "rule__Expression__CompAssignment_1_5");
 					put(grammarAccess.getComparisonAccess().getOperatorAssignment_0(), "rule__Comparison__OperatorAssignment_0");
 					put(grammarAccess.getComparisonAccess().getSubOperatorAssignment_1(), "rule__Comparison__SubOperatorAssignment_1");
 					put(grammarAccess.getComparisonAccess().getOp2Assignment_2(), "rule__Comparison__Op2Assignment_2");
@@ -314,8 +321,12 @@ public class SqlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getBetweenAccess().getOp2Assignment_1(), "rule__Between__Op2Assignment_1");
 					put(grammarAccess.getBetweenAccess().getOp3Assignment_3(), "rule__Between__Op3Assignment_3");
 					put(grammarAccess.getInOperatorAccess().getOpAssignment_1(), "rule__InOperator__OpAssignment_1");
-					put(grammarAccess.getInOperatorAccess().getSubqueryAssignment_3_0(), "rule__InOperator__SubqueryAssignment_3_0");
-					put(grammarAccess.getInOperatorAccess().getOpListAssignment_3_1(), "rule__InOperator__OpListAssignment_3_1");
+					put(grammarAccess.getInOperatorAccess().getSubqueryAssignment_2_0(), "rule__InOperator__SubqueryAssignment_2_0");
+					put(grammarAccess.getInOperatorAccess().getOpListAssignment_2_1(), "rule__InOperator__OpListAssignment_2_1");
+					put(grammarAccess.getExistsOperatorAccess().getOpAssignment_1(), "rule__ExistsOperator__OpAssignment_1");
+					put(grammarAccess.getExistsOperatorAccess().getSubqueryAssignment_2_0(), "rule__ExistsOperator__SubqueryAssignment_2_0");
+					put(grammarAccess.getExistsOperatorAccess().getOpListAssignment_2_1(), "rule__ExistsOperator__OpListAssignment_2_1");
+					put(grammarAccess.getOperandListGroupAccess().getOpGroupAssignment_1(), "rule__OperandListGroup__OpGroupAssignment_1");
 					put(grammarAccess.getOperandListAccess().getEntriesAssignment_1_1_1(), "rule__OperandList__EntriesAssignment_1_1_1");
 					put(grammarAccess.getOperandAccess().getOp1Assignment_0(), "rule__Operand__Op1Assignment_0");
 					put(grammarAccess.getOperandAccess().getRightAssignment_1_1(), "rule__Operand__RightAssignment_1_1");

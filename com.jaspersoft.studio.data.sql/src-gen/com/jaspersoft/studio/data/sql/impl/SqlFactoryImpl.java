@@ -109,6 +109,8 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
       case SqlPackage.LIKE_OPERAND: return createLikeOperand();
       case SqlPackage.BETWEEN: return createBetween();
       case SqlPackage.IN_OPER: return createInOper();
+      case SqlPackage.EXISTS_OPER: return createExistsOper();
+      case SqlPackage.OPERAND_LIST_GROUP: return createOperandListGroup();
       case SqlPackage.OPERAND_LIST: return createOperandList();
       case SqlPackage.OPERANDS: return createOperands();
       case SqlPackage.OPERAND: return createOperand();
@@ -675,6 +677,28 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
   {
     InOperImpl inOper = new InOperImpl();
     return inOper;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public ExistsOper createExistsOper()
+  {
+    ExistsOperImpl existsOper = new ExistsOperImpl();
+    return existsOper;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public OperandListGroup createOperandListGroup()
+  {
+    OperandListGroupImpl operandListGroup = new OperandListGroupImpl();
+    return operandListGroup;
   }
 
   /**

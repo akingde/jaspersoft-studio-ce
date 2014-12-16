@@ -295,6 +295,16 @@ public class SqlAdapterFactory extends AdapterFactoryImpl
         return createInOperAdapter();
       }
       @Override
+      public Adapter caseExistsOper(ExistsOper object)
+      {
+        return createExistsOperAdapter();
+      }
+      @Override
+      public Adapter caseOperandListGroup(OperandListGroup object)
+      {
+        return createOperandListGroupAdapter();
+      }
+      @Override
       public Adapter caseOperandList(OperandList object)
       {
         return createOperandListAdapter();
@@ -1197,6 +1207,36 @@ public class SqlAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createInOperAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.ExistsOper <em>Exists Oper</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.ExistsOper
+   * @generated
+   */
+  public Adapter createExistsOperAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.OperandListGroup <em>Operand List Group</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.OperandListGroup
+   * @generated
+   */
+  public Adapter createOperandListGroupAdapter()
   {
     return null;
   }

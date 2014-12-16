@@ -402,6 +402,20 @@ public class SqlSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
+      case SqlPackage.EXISTS_OPER:
+      {
+        ExistsOper existsOper = (ExistsOper)theEObject;
+        T result = caseExistsOper(existsOper);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.OPERAND_LIST_GROUP:
+      {
+        OperandListGroup operandListGroup = (OperandListGroup)theEObject;
+        T result = caseOperandListGroup(operandListGroup);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
       case SqlPackage.OPERAND_LIST:
       {
         OperandList operandList = (OperandList)theEObject;
@@ -1462,6 +1476,38 @@ public class SqlSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseInOper(InOper object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Exists Oper</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Exists Oper</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseExistsOper(ExistsOper object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Operand List Group</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Operand List Group</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseOperandListGroup(OperandListGroup object)
   {
     return null;
   }

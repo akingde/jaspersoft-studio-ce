@@ -145,9 +145,10 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//FullExpression/expgroup"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//FullExpression/exp"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//FullExpression/xexp"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//FullExpression/in"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//FullExpression/exists"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//FullExpression/op1"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//FullExpression/isnull"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//FullExpression/in"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//FullExpression/between"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//FullExpression/like"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//FullExpression/comp"/>
@@ -191,6 +192,14 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//InOper/op"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//InOper/subquery"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//InOper/opList"/>
+    </genClasses>
+    <genClasses ecoreClass="Sql.ecore#//ExistsOper">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//ExistsOper/op"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//ExistsOper/subquery"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//ExistsOper/opList"/>
+    </genClasses>
+    <genClasses ecoreClass="Sql.ecore#//OperandListGroup">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//OperandListGroup/opGroup"/>
     </genClasses>
     <genClasses ecoreClass="Sql.ecore#//OperandList"/>
     <genClasses ecoreClass="Sql.ecore#//Operands">

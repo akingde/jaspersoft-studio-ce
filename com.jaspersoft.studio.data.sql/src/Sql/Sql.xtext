@@ -121,7 +121,8 @@ ExpressionFragmentSecond returns FullExpression:
 	((c=('AND' | 'OR') efrag=ExpressionFragment) | notPrm=JRNPARAM);
 
 ExpressionFragment returns FullExpression:
-	expgroup=ExpressionGroup | exp=Expression | xexp=(XExpression | XExpression_) | notPrm=JRNPARAM;
+	expgroup=ExpressionGroup | exp=Expression | xexp=(XExpression | XExpression_) | notPrm=JRNPARAM | in=InOperator |
+	exists=ExistsOperator;
 
 ExpressionGroup returns ExprGroup:
 	{ExprGroup} isnot=('NOT ' | 'NOT\n')? '(' expr=FullExpression ')';
@@ -139,7 +140,8 @@ JRParameter:
 	jrprm=ID;
 
 Expression returns FullExpression:
-	op1=Operand (isnull=('IS NULL' | 'IS NOT NULL') | in=InOperator | between=Between | like=Like | comp=Comparison);
+	op1=Operand (isnull=('IS NULL' | 'IS NOT NULL') | in=InOperator | exists=ExistsOperator | between=Between | like=Like
+	| comp=Comparison);
 
 Comparison:
 	operator=('>' | '>=' | '<' | '<=' | '=' | '<>' | '!=' | '^=') subOperator=('ANY' | 'ALL' | 'SOME')? op2=Operand;
@@ -154,7 +156,13 @@ Between:
 	opBetween=('BETWEEN' | 'NOT BETWEEN') op2=Operand 'AND' op3=Operand;
 
 InOperator returns InOper:
-	{InOper} op=('NOT IN' | 'IN') '(' (subquery=SubQueryOperand | opList=OperandList) ')';
+	{InOper} op=('NOT IN' | 'IN') (subquery=SubQueryOperand | opList=OperandListGroup);
+
+ExistsOperator returns ExistsOper:
+	{ExistsOper} op=('NOT EXISTS' | 'EXISTS') (subquery=SubQueryOperand | opList=OperandListGroup);
+
+OperandListGroup:
+	'(' opGroup=OperandList ')';
 
 OperandList:
 	ScalarOperand ({OpList.entries+=current} ("," entries+=ScalarOperand)+)?;

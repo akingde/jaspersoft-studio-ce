@@ -2,7 +2,7 @@
  */
 package com.jaspersoft.studio.data.sql.impl;
 
-import com.jaspersoft.studio.data.sql.InOper;
+import com.jaspersoft.studio.data.sql.ExistsOper;
 import com.jaspersoft.studio.data.sql.OperandListGroup;
 import com.jaspersoft.studio.data.sql.SqlPackage;
 import com.jaspersoft.studio.data.sql.SubQueryOperand;
@@ -18,20 +18,20 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>In Oper</b></em>'.
+ * An implementation of the model object '<em><b>Exists Oper</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link com.jaspersoft.studio.data.sql.impl.InOperImpl#getOp <em>Op</em>}</li>
- *   <li>{@link com.jaspersoft.studio.data.sql.impl.InOperImpl#getSubquery <em>Subquery</em>}</li>
- *   <li>{@link com.jaspersoft.studio.data.sql.impl.InOperImpl#getOpList <em>Op List</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.impl.ExistsOperImpl#getOp <em>Op</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.impl.ExistsOperImpl#getSubquery <em>Subquery</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.impl.ExistsOperImpl#getOpList <em>Op List</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
-public class InOperImpl extends MinimalEObjectImpl.Container implements InOper
+public class ExistsOperImpl extends MinimalEObjectImpl.Container implements ExistsOper
 {
   /**
    * The default value of the '{@link #getOp() <em>Op</em>}' attribute.
@@ -78,7 +78,7 @@ public class InOperImpl extends MinimalEObjectImpl.Container implements InOper
    * <!-- end-user-doc -->
    * @generated
    */
-  protected InOperImpl()
+  protected ExistsOperImpl()
   {
     super();
   }
@@ -91,7 +91,7 @@ public class InOperImpl extends MinimalEObjectImpl.Container implements InOper
   @Override
   protected EClass eStaticClass()
   {
-    return SqlPackage.Literals.IN_OPER;
+    return SqlPackage.Literals.EXISTS_OPER;
   }
 
   /**
@@ -114,7 +114,7 @@ public class InOperImpl extends MinimalEObjectImpl.Container implements InOper
     String oldOp = op;
     op = newOp;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.IN_OPER__OP, oldOp, op));
+      eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.EXISTS_OPER__OP, oldOp, op));
   }
 
   /**
@@ -138,7 +138,7 @@ public class InOperImpl extends MinimalEObjectImpl.Container implements InOper
     subquery = newSubquery;
     if (eNotificationRequired())
     {
-      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SqlPackage.IN_OPER__SUBQUERY, oldSubquery, newSubquery);
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SqlPackage.EXISTS_OPER__SUBQUERY, oldSubquery, newSubquery);
       if (msgs == null) msgs = notification; else msgs.add(notification);
     }
     return msgs;
@@ -155,14 +155,14 @@ public class InOperImpl extends MinimalEObjectImpl.Container implements InOper
     {
       NotificationChain msgs = null;
       if (subquery != null)
-        msgs = ((InternalEObject)subquery).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SqlPackage.IN_OPER__SUBQUERY, null, msgs);
+        msgs = ((InternalEObject)subquery).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SqlPackage.EXISTS_OPER__SUBQUERY, null, msgs);
       if (newSubquery != null)
-        msgs = ((InternalEObject)newSubquery).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SqlPackage.IN_OPER__SUBQUERY, null, msgs);
+        msgs = ((InternalEObject)newSubquery).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SqlPackage.EXISTS_OPER__SUBQUERY, null, msgs);
       msgs = basicSetSubquery(newSubquery, msgs);
       if (msgs != null) msgs.dispatch();
     }
     else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.IN_OPER__SUBQUERY, newSubquery, newSubquery));
+      eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.EXISTS_OPER__SUBQUERY, newSubquery, newSubquery));
   }
 
   /**
@@ -186,7 +186,7 @@ public class InOperImpl extends MinimalEObjectImpl.Container implements InOper
     opList = newOpList;
     if (eNotificationRequired())
     {
-      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SqlPackage.IN_OPER__OP_LIST, oldOpList, newOpList);
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SqlPackage.EXISTS_OPER__OP_LIST, oldOpList, newOpList);
       if (msgs == null) msgs = notification; else msgs.add(notification);
     }
     return msgs;
@@ -203,14 +203,14 @@ public class InOperImpl extends MinimalEObjectImpl.Container implements InOper
     {
       NotificationChain msgs = null;
       if (opList != null)
-        msgs = ((InternalEObject)opList).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SqlPackage.IN_OPER__OP_LIST, null, msgs);
+        msgs = ((InternalEObject)opList).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SqlPackage.EXISTS_OPER__OP_LIST, null, msgs);
       if (newOpList != null)
-        msgs = ((InternalEObject)newOpList).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SqlPackage.IN_OPER__OP_LIST, null, msgs);
+        msgs = ((InternalEObject)newOpList).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SqlPackage.EXISTS_OPER__OP_LIST, null, msgs);
       msgs = basicSetOpList(newOpList, msgs);
       if (msgs != null) msgs.dispatch();
     }
     else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.IN_OPER__OP_LIST, newOpList, newOpList));
+      eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.EXISTS_OPER__OP_LIST, newOpList, newOpList));
   }
 
   /**
@@ -223,9 +223,9 @@ public class InOperImpl extends MinimalEObjectImpl.Container implements InOper
   {
     switch (featureID)
     {
-      case SqlPackage.IN_OPER__SUBQUERY:
+      case SqlPackage.EXISTS_OPER__SUBQUERY:
         return basicSetSubquery(null, msgs);
-      case SqlPackage.IN_OPER__OP_LIST:
+      case SqlPackage.EXISTS_OPER__OP_LIST:
         return basicSetOpList(null, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
@@ -241,11 +241,11 @@ public class InOperImpl extends MinimalEObjectImpl.Container implements InOper
   {
     switch (featureID)
     {
-      case SqlPackage.IN_OPER__OP:
+      case SqlPackage.EXISTS_OPER__OP:
         return getOp();
-      case SqlPackage.IN_OPER__SUBQUERY:
+      case SqlPackage.EXISTS_OPER__SUBQUERY:
         return getSubquery();
-      case SqlPackage.IN_OPER__OP_LIST:
+      case SqlPackage.EXISTS_OPER__OP_LIST:
         return getOpList();
     }
     return super.eGet(featureID, resolve, coreType);
@@ -261,13 +261,13 @@ public class InOperImpl extends MinimalEObjectImpl.Container implements InOper
   {
     switch (featureID)
     {
-      case SqlPackage.IN_OPER__OP:
+      case SqlPackage.EXISTS_OPER__OP:
         setOp((String)newValue);
         return;
-      case SqlPackage.IN_OPER__SUBQUERY:
+      case SqlPackage.EXISTS_OPER__SUBQUERY:
         setSubquery((SubQueryOperand)newValue);
         return;
-      case SqlPackage.IN_OPER__OP_LIST:
+      case SqlPackage.EXISTS_OPER__OP_LIST:
         setOpList((OperandListGroup)newValue);
         return;
     }
@@ -284,13 +284,13 @@ public class InOperImpl extends MinimalEObjectImpl.Container implements InOper
   {
     switch (featureID)
     {
-      case SqlPackage.IN_OPER__OP:
+      case SqlPackage.EXISTS_OPER__OP:
         setOp(OP_EDEFAULT);
         return;
-      case SqlPackage.IN_OPER__SUBQUERY:
+      case SqlPackage.EXISTS_OPER__SUBQUERY:
         setSubquery((SubQueryOperand)null);
         return;
-      case SqlPackage.IN_OPER__OP_LIST:
+      case SqlPackage.EXISTS_OPER__OP_LIST:
         setOpList((OperandListGroup)null);
         return;
     }
@@ -307,11 +307,11 @@ public class InOperImpl extends MinimalEObjectImpl.Container implements InOper
   {
     switch (featureID)
     {
-      case SqlPackage.IN_OPER__OP:
+      case SqlPackage.EXISTS_OPER__OP:
         return OP_EDEFAULT == null ? op != null : !OP_EDEFAULT.equals(op);
-      case SqlPackage.IN_OPER__SUBQUERY:
+      case SqlPackage.EXISTS_OPER__SUBQUERY:
         return subquery != null;
-      case SqlPackage.IN_OPER__OP_LIST:
+      case SqlPackage.EXISTS_OPER__OP_LIST:
         return opList != null;
     }
     return super.eIsSet(featureID);
@@ -334,4 +334,4 @@ public class InOperImpl extends MinimalEObjectImpl.Container implements InOper
     return result.toString();
   }
 
-} //InOperImpl
+} //ExistsOperImpl

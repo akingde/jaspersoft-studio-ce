@@ -4,6 +4,7 @@ package com.jaspersoft.studio.data.sql.impl;
 
 import com.jaspersoft.studio.data.sql.Between;
 import com.jaspersoft.studio.data.sql.Comparison;
+import com.jaspersoft.studio.data.sql.ExistsOper;
 import com.jaspersoft.studio.data.sql.ExprGroup;
 import com.jaspersoft.studio.data.sql.FullExpression;
 import com.jaspersoft.studio.data.sql.InOper;
@@ -33,9 +34,10 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.FullExpressionImpl#getExpgroup <em>Expgroup</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.FullExpressionImpl#getExp <em>Exp</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.FullExpressionImpl#getXexp <em>Xexp</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.impl.FullExpressionImpl#getIn <em>In</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.impl.FullExpressionImpl#getExists <em>Exists</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.FullExpressionImpl#getOp1 <em>Op1</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.FullExpressionImpl#getIsnull <em>Isnull</em>}</li>
- *   <li>{@link com.jaspersoft.studio.data.sql.impl.FullExpressionImpl#getIn <em>In</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.FullExpressionImpl#getBetween <em>Between</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.FullExpressionImpl#getLike <em>Like</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.FullExpressionImpl#getComp <em>Comp</em>}</li>
@@ -127,6 +129,26 @@ public class FullExpressionImpl extends OrExprImpl implements FullExpression
   protected XExpr xexp;
 
   /**
+   * The cached value of the '{@link #getIn() <em>In</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getIn()
+   * @generated
+   * @ordered
+   */
+  protected InOper in;
+
+  /**
+   * The cached value of the '{@link #getExists() <em>Exists</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getExists()
+   * @generated
+   * @ordered
+   */
+  protected ExistsOper exists;
+
+  /**
    * The cached value of the '{@link #getOp1() <em>Op1</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -155,16 +177,6 @@ public class FullExpressionImpl extends OrExprImpl implements FullExpression
    * @ordered
    */
   protected String isnull = ISNULL_EDEFAULT;
-
-  /**
-   * The cached value of the '{@link #getIn() <em>In</em>}' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getIn()
-   * @generated
-   * @ordered
-   */
-  protected InOper in;
 
   /**
    * The cached value of the '{@link #getBetween() <em>Between</em>}' containment reference.
@@ -460,6 +472,102 @@ public class FullExpressionImpl extends OrExprImpl implements FullExpression
    * <!-- end-user-doc -->
    * @generated
    */
+  public InOper getIn()
+  {
+    return in;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public NotificationChain basicSetIn(InOper newIn, NotificationChain msgs)
+  {
+    InOper oldIn = in;
+    in = newIn;
+    if (eNotificationRequired())
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SqlPackage.FULL_EXPRESSION__IN, oldIn, newIn);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setIn(InOper newIn)
+  {
+    if (newIn != in)
+    {
+      NotificationChain msgs = null;
+      if (in != null)
+        msgs = ((InternalEObject)in).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SqlPackage.FULL_EXPRESSION__IN, null, msgs);
+      if (newIn != null)
+        msgs = ((InternalEObject)newIn).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SqlPackage.FULL_EXPRESSION__IN, null, msgs);
+      msgs = basicSetIn(newIn, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.FULL_EXPRESSION__IN, newIn, newIn));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public ExistsOper getExists()
+  {
+    return exists;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public NotificationChain basicSetExists(ExistsOper newExists, NotificationChain msgs)
+  {
+    ExistsOper oldExists = exists;
+    exists = newExists;
+    if (eNotificationRequired())
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SqlPackage.FULL_EXPRESSION__EXISTS, oldExists, newExists);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setExists(ExistsOper newExists)
+  {
+    if (newExists != exists)
+    {
+      NotificationChain msgs = null;
+      if (exists != null)
+        msgs = ((InternalEObject)exists).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SqlPackage.FULL_EXPRESSION__EXISTS, null, msgs);
+      if (newExists != null)
+        msgs = ((InternalEObject)newExists).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SqlPackage.FULL_EXPRESSION__EXISTS, null, msgs);
+      msgs = basicSetExists(newExists, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.FULL_EXPRESSION__EXISTS, newExists, newExists));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public Operands getOp1()
   {
     return op1;
@@ -524,54 +632,6 @@ public class FullExpressionImpl extends OrExprImpl implements FullExpression
     isnull = newIsnull;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.FULL_EXPRESSION__ISNULL, oldIsnull, isnull));
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public InOper getIn()
-  {
-    return in;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public NotificationChain basicSetIn(InOper newIn, NotificationChain msgs)
-  {
-    InOper oldIn = in;
-    in = newIn;
-    if (eNotificationRequired())
-    {
-      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SqlPackage.FULL_EXPRESSION__IN, oldIn, newIn);
-      if (msgs == null) msgs = notification; else msgs.add(notification);
-    }
-    return msgs;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public void setIn(InOper newIn)
-  {
-    if (newIn != in)
-    {
-      NotificationChain msgs = null;
-      if (in != null)
-        msgs = ((InternalEObject)in).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SqlPackage.FULL_EXPRESSION__IN, null, msgs);
-      if (newIn != null)
-        msgs = ((InternalEObject)newIn).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SqlPackage.FULL_EXPRESSION__IN, null, msgs);
-      msgs = basicSetIn(newIn, msgs);
-      if (msgs != null) msgs.dispatch();
-    }
-    else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.FULL_EXPRESSION__IN, newIn, newIn));
   }
 
   /**
@@ -736,10 +796,12 @@ public class FullExpressionImpl extends OrExprImpl implements FullExpression
         return basicSetExp(null, msgs);
       case SqlPackage.FULL_EXPRESSION__XEXP:
         return basicSetXexp(null, msgs);
-      case SqlPackage.FULL_EXPRESSION__OP1:
-        return basicSetOp1(null, msgs);
       case SqlPackage.FULL_EXPRESSION__IN:
         return basicSetIn(null, msgs);
+      case SqlPackage.FULL_EXPRESSION__EXISTS:
+        return basicSetExists(null, msgs);
+      case SqlPackage.FULL_EXPRESSION__OP1:
+        return basicSetOp1(null, msgs);
       case SqlPackage.FULL_EXPRESSION__BETWEEN:
         return basicSetBetween(null, msgs);
       case SqlPackage.FULL_EXPRESSION__LIKE:
@@ -772,12 +834,14 @@ public class FullExpressionImpl extends OrExprImpl implements FullExpression
         return getExp();
       case SqlPackage.FULL_EXPRESSION__XEXP:
         return getXexp();
+      case SqlPackage.FULL_EXPRESSION__IN:
+        return getIn();
+      case SqlPackage.FULL_EXPRESSION__EXISTS:
+        return getExists();
       case SqlPackage.FULL_EXPRESSION__OP1:
         return getOp1();
       case SqlPackage.FULL_EXPRESSION__ISNULL:
         return getIsnull();
-      case SqlPackage.FULL_EXPRESSION__IN:
-        return getIn();
       case SqlPackage.FULL_EXPRESSION__BETWEEN:
         return getBetween();
       case SqlPackage.FULL_EXPRESSION__LIKE:
@@ -816,14 +880,17 @@ public class FullExpressionImpl extends OrExprImpl implements FullExpression
       case SqlPackage.FULL_EXPRESSION__XEXP:
         setXexp((XExpr)newValue);
         return;
+      case SqlPackage.FULL_EXPRESSION__IN:
+        setIn((InOper)newValue);
+        return;
+      case SqlPackage.FULL_EXPRESSION__EXISTS:
+        setExists((ExistsOper)newValue);
+        return;
       case SqlPackage.FULL_EXPRESSION__OP1:
         setOp1((Operands)newValue);
         return;
       case SqlPackage.FULL_EXPRESSION__ISNULL:
         setIsnull((String)newValue);
-        return;
-      case SqlPackage.FULL_EXPRESSION__IN:
-        setIn((InOper)newValue);
         return;
       case SqlPackage.FULL_EXPRESSION__BETWEEN:
         setBetween((Between)newValue);
@@ -866,14 +933,17 @@ public class FullExpressionImpl extends OrExprImpl implements FullExpression
       case SqlPackage.FULL_EXPRESSION__XEXP:
         setXexp((XExpr)null);
         return;
+      case SqlPackage.FULL_EXPRESSION__IN:
+        setIn((InOper)null);
+        return;
+      case SqlPackage.FULL_EXPRESSION__EXISTS:
+        setExists((ExistsOper)null);
+        return;
       case SqlPackage.FULL_EXPRESSION__OP1:
         setOp1((Operands)null);
         return;
       case SqlPackage.FULL_EXPRESSION__ISNULL:
         setIsnull(ISNULL_EDEFAULT);
-        return;
-      case SqlPackage.FULL_EXPRESSION__IN:
-        setIn((InOper)null);
         return;
       case SqlPackage.FULL_EXPRESSION__BETWEEN:
         setBetween((Between)null);
@@ -910,12 +980,14 @@ public class FullExpressionImpl extends OrExprImpl implements FullExpression
         return exp != null;
       case SqlPackage.FULL_EXPRESSION__XEXP:
         return xexp != null;
+      case SqlPackage.FULL_EXPRESSION__IN:
+        return in != null;
+      case SqlPackage.FULL_EXPRESSION__EXISTS:
+        return exists != null;
       case SqlPackage.FULL_EXPRESSION__OP1:
         return op1 != null;
       case SqlPackage.FULL_EXPRESSION__ISNULL:
         return ISNULL_EDEFAULT == null ? isnull != null : !ISNULL_EDEFAULT.equals(isnull);
-      case SqlPackage.FULL_EXPRESSION__IN:
-        return in != null;
       case SqlPackage.FULL_EXPRESSION__BETWEEN:
         return between != null;
       case SqlPackage.FULL_EXPRESSION__LIKE:

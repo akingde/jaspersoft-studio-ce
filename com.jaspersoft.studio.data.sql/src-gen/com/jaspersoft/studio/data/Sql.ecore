@@ -171,10 +171,12 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="xexp" eType="#//XExpr"
         containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="in" eType="#//InOper" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="exists" eType="#//ExistsOper"
+        containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="op1" eType="#//Operands"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="isnull" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="in" eType="#//InOper" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="between" eType="#//Between"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="like" eType="#//Like" containment="true"/>
@@ -230,7 +232,18 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="op" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="subquery" eType="#//SubQueryOperand"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="opList" eType="#//OperandList"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="opList" eType="#//OperandListGroup"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ExistsOper">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="op" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="subquery" eType="#//SubQueryOperand"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="opList" eType="#//OperandListGroup"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OperandListGroup">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="opGroup" eType="#//OperandList"
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="OperandList"/>

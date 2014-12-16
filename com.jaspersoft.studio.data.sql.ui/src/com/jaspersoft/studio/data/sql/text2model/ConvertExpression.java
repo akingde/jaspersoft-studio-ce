@@ -15,7 +15,6 @@ package com.jaspersoft.studio.data.sql.text2model;
 import java.math.BigDecimal;
 import java.sql.Time;
 import java.sql.Timestamp;
-import java.util.Date;
 import java.util.List;
 
 import net.sf.jasperreports.engine.design.JRDesignDataset;
@@ -41,7 +40,6 @@ import com.jaspersoft.studio.data.sql.impl.DbObjectNameImpl;
 import com.jaspersoft.studio.data.sql.impl.OperandImpl;
 import com.jaspersoft.studio.data.sql.impl.ScalarOperandImpl;
 import com.jaspersoft.studio.data.sql.impl.SelectImpl;
-import com.jaspersoft.studio.data.sql.messages.Messages;
 import com.jaspersoft.studio.data.sql.model.enums.Operator;
 import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
 import com.jaspersoft.studio.data.sql.model.query.expression.AMExpression;
@@ -58,7 +56,6 @@ import com.jaspersoft.studio.data.sql.model.query.operand.ScalarOperand;
 import com.jaspersoft.studio.data.sql.model.query.operand.UnknownOperand;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelect;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelectSubQuery;
-import com.jaspersoft.studio.data.sql.widgets.Factory;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.util.KeyValue;
 import com.jaspersoft.studio.utils.Misc;
@@ -309,7 +306,7 @@ public class ConvertExpression {
 		String schema = ConvertUtil.getDbObjectName(eContents, 3);
 		// String catalog = getDbObjectName(eContents, 3);
 		KeyValue<MSQLColumn, MFromTable> kv = ConvertUtil.findColumn(msel,
-				schema, table, column);
+				schema, table, column, designer);
 		if (kv != null)
 			return new FieldOperand(kv.key, kv.value, mexpr);
 		return null;

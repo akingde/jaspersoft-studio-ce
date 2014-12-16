@@ -53,11 +53,13 @@ import com.jaspersoft.studio.model.util.KeyValue;
 import com.jaspersoft.studio.utils.Misc;
 
 public class ConvertSelectColumns {
-	public static void convertSelectColumns(SQLQueryDesigner designer, ANode qroot, OrColumn cols) {
+	public static void convertSelectColumns(SQLQueryDesigner designer,
+			ANode qroot, OrColumn cols) {
 		if (cols == null)
 			return;
 		if (cols instanceof ColumnOrAlias)
-			doColumns(designer, qroot, Util.getKeyword(qroot, MSelect.class), (ColumnOrAlias) cols);
+			doColumns(designer, qroot, Util.getKeyword(qroot, MSelect.class),
+					(ColumnOrAlias) cols);
 		else if (cols instanceof OrColumnImpl) {
 			MSelect msel = Util.getKeyword(qroot, MSelect.class);
 			for (ColumnOrAlias fcol : cols.getEntries())
@@ -65,24 +67,31 @@ public class ConvertSelectColumns {
 		}
 	}
 
-	private static void doColumns(SQLQueryDesigner designer, ANode qroot, MSelect msel, ColumnOrAlias fcol) {
+	private static void doColumns(SQLQueryDesigner designer, ANode qroot,
+			MSelect msel, ColumnOrAlias fcol) {
 		try {
 			if (fcol.getAllCols() != null)
 				new MSelectExpression(msel, "*");
 			else if (fcol.getDbAllCols() != null) {
-				new MSelectExpression(msel, fcol.getDbAllCols().getDbname() + ".*");
+				new MSelectExpression(msel, fcol.getDbAllCols().getDbname()
+						+ ".*");
 			} else {
 				Operands ce = fcol.getCe();
 				if (ce != null) {
 					if (ce instanceof OperandImpl)
-						setupAlias(getMSelectColumn(designer, qroot, (OperandImpl) ce, msel), fcol);
+						setupAlias(
+								getMSelectColumn(designer, qroot,
+										(OperandImpl) ce, msel), fcol);
 					else if (ce instanceof OperandsImpl) {
 						AMQueryAliased<?> mscol = null;
-						if (ce.getOp1() != null && ce.getLeft() == null && ce.getRight() == null)
-							mscol = getMSelectColumn(designer, qroot, (OperandImpl) ce.getOp1(), msel);
+						if (ce.getOp1() != null && ce.getLeft() == null
+								&& ce.getRight() == null)
+							mscol = getMSelectColumn(designer, qroot,
+									(OperandImpl) ce.getOp1(), msel);
 						else {
 							mscol = getColumnUnknown(msel, "");
-							mscol.setValue(operands2String(designer, qroot, mscol, ce, msel));
+							mscol.setValue(operands2String(designer, qroot,
+									mscol, ce, msel));
 						}
 						setupAlias(mscol, fcol);
 					}
@@ -93,7 +102,8 @@ public class ConvertSelectColumns {
 		}
 	}
 
-	public static String operands2String(SQLQueryDesigner designer, ANode qroot, ANode parent, Operands ops, MSelect msel) {
+	public static String operands2String(SQLQueryDesigner designer,
+			ANode qroot, ANode parent, Operands ops, MSelect msel) {
 		Operand op = ops.getOp1();
 		if (op == null && ops.getLeft() != null)
 			op = ops.getLeft().getOp1();
@@ -115,20 +125,24 @@ public class ConvertSelectColumns {
 		return str;
 	}
 
-	private static AMQueryAliased<?> getMSelectColumn(SQLQueryDesigner designer, ANode qroot, OperandImpl op, MSelect msel) {
+	private static AMQueryAliased<?> getMSelectColumn(
+			SQLQueryDesigner designer, ANode qroot, OperandImpl op, MSelect msel) {
 		AMQueryAliased<?> mscol = null;
 		if (op.getSubq() != null) {
 			mscol = new MSelectSubQuery(msel);
 			Util.createSelect(mscol);
-			Text2Model.convertSelect(designer, mscol, (SelectImpl) op.getSubq().getSel());
+			Text2Model.convertSelect(designer, mscol, (SelectImpl) op.getSubq()
+					.getSel());
 		} else if (op.getColumn() != null)
-			mscol = getColumn(msel, op.getColumn().getCfull());
+			mscol = getColumn(msel, op.getColumn().getCfull(), designer);
 		else if (op.getFunc() != null) {
 			mscol = getColumnUnknown(msel, "");
-			mscol.setValue(getFunctionString(designer, qroot, mscol, op.getFunc(), msel));
+			mscol.setValue(getFunctionString(designer, qroot, mscol,
+					op.getFunc(), msel));
 		} else if (op.getFcast() != null) {
 			mscol = getColumnUnknown(msel, "");
-			mscol.setValue(getFunctionString(designer, qroot, mscol, op.getFcast(), msel));
+			mscol.setValue(getFunctionString(designer, qroot, mscol,
+					op.getFcast(), msel));
 		} else if (op.getParam() != null)
 			mscol = getColumnUnknown(msel, op.getParam().getPrm());
 		else if (op.getEparam() != null)
@@ -137,27 +151,39 @@ public class ConvertSelectColumns {
 			mscol = getColumnUnknown(msel, getScalarString(op.getScalar()));
 		else if (op.getSqlcase() != null) {
 			mscol = getColumnUnknown(msel, "");
-			mscol.setValue(case2string(designer, qroot, mscol, op.getSqlcase(), msel));
+			mscol.setValue(case2string(designer, qroot, mscol, op.getSqlcase(),
+					msel));
 		} else if (op.getXop() != null)
-			mscol = getMSelectColumn(designer, qroot, (OperandImpl) op.getXop(), msel);
+			mscol = getMSelectColumn(designer, qroot,
+					(OperandImpl) op.getXop(), msel);
 		return mscol;
 	}
 
-	protected static String case2string(SQLQueryDesigner designer, ANode qroot, ANode parent, SQLCaseOperand scase, MSelect msel) {
+	protected static String case2string(SQLQueryDesigner designer, ANode qroot,
+			ANode parent, SQLCaseOperand scase, MSelect msel) {
 		String res = "CASE ";
 		if (scase.getExpr() != null)
-			res += " " + ConvertExpression.convertExpression2String(designer, qroot, parent, scase.getExpr());
+			res += " "
+					+ ConvertExpression.convertExpression2String(designer,
+							qroot, parent, scase.getExpr());
 		if (scase.getWhen() != null) {
 			for (EObject eobj : scase.getWhen().eContents()) {
 				if (eobj instanceof SqlCaseWhen) {
 					SqlCaseWhen scasewhen = (SqlCaseWhen) eobj;
 					res += "\nWHEN ";
 					if (scasewhen.getExpr() != null)
-						res += " " + ConvertExpression.convertExpression2String(designer, qroot, parent, scasewhen.getExpr());
+						res += " "
+								+ ConvertExpression.convertExpression2String(
+										designer, qroot, parent,
+										scasewhen.getExpr());
 					if (scasewhen.getTexp() != null)
-						res += "THEN " + operands2String(designer, qroot, parent, scasewhen.getTexp(), msel);
+						res += "THEN "
+								+ operands2String(designer, qroot, parent,
+										scasewhen.getTexp(), msel);
 					if (scasewhen.getEexp() != null)
-						res += "ELSE " + operands2String(designer, qroot, parent, scasewhen.getEexp(), msel);
+						res += "ELSE "
+								+ operands2String(designer, qroot, parent,
+										scasewhen.getEexp(), msel);
 				}
 			}
 		}
@@ -165,7 +191,8 @@ public class ConvertSelectColumns {
 		return res + "\nEND";
 	}
 
-	protected static String operand2String(SQLQueryDesigner designer, ANode qroot, ANode parent, Operand oper, MSelect msel) {
+	protected static String operand2String(SQLQueryDesigner designer,
+			ANode qroot, ANode parent, Operand oper, MSelect msel) {
 		// if (oper.getSubq() != null) {
 		// MSelectSubQuery qroot = new MSelectSubQuery(msel);
 		// Util.createSelect(qroot);
@@ -173,11 +200,13 @@ public class ConvertSelectColumns {
 		// oper.getSubq().getSel());
 		// } else
 		if (oper.getColumn() != null)
-			return getColumn(oper.getColumn().getCfull(), msel);
+			return getColumn(oper.getColumn().getCfull(), msel, designer);
 		if (oper.getFunc() != null)
-			return getFunctionString(designer, qroot, parent, oper.getFunc(), msel);
+			return getFunctionString(designer, qroot, parent, oper.getFunc(),
+					msel);
 		if (oper.getFcast() != null)
-			return getFunctionString(designer, qroot, parent, oper.getFcast(), msel);
+			return getFunctionString(designer, qroot, parent, oper.getFcast(),
+					msel);
 		if (oper.getParam() != null)
 			return oper.getParam().getPrm();
 		if (oper.getEparam() != null)
@@ -191,7 +220,8 @@ public class ConvertSelectColumns {
 		return "";
 	}
 
-	public static String getFunctionString(SQLQueryDesigner designer, ANode qroot, ANode parent, OpFunction f, MSelect msel) {
+	public static String getFunctionString(SQLQueryDesigner designer,
+			ANode qroot, ANode parent, OpFunction f, MSelect msel) {
 		String sargs = " ";
 		OpFunctionArg args = f.getArgs();
 		if (args != null) {
@@ -199,9 +229,11 @@ public class ConvertSelectColumns {
 			for (EObject eobj : args.eContents()) {
 				sargs += sep;
 				if (eobj instanceof OperandImpl)
-					sargs += operand2String(designer, qroot, parent, (OperandImpl) eobj, msel);
+					sargs += operand2String(designer, qroot, parent,
+							(OperandImpl) eobj, msel);
 				else if (eobj instanceof ColumnOperand)
-					sargs += getColumn(((ColumnOperand) eobj).getCfull(), msel);
+					sargs += getColumn(((ColumnOperand) eobj).getCfull(), msel,
+							designer);
 				else if (eobj instanceof POperand)
 					sargs += ((POperand) eobj).getPrm();
 				else if (eobj instanceof ExpOperand)
@@ -209,21 +241,25 @@ public class ConvertSelectColumns {
 				else if (eobj instanceof ScalarOperand)
 					sargs += eobj.toString();
 				else if (eobj instanceof Operands)
-					sargs += operands2String(designer, qroot, parent, (Operands) eobj, msel);
+					sargs += operands2String(designer, qroot, parent,
+							(Operands) eobj, msel);
 				sep = ",";
 			}
 		}
 		return f.getFname() + sargs + ")";
 	}
 
-	public static String getFunctionString(SQLQueryDesigner designer, ANode qroot, ANode parent, OpFunctionCast f, MSelect msel) {
+	public static String getFunctionString(SQLQueryDesigner designer,
+			ANode qroot, ANode parent, OpFunctionCast f, MSelect msel) {
 		String sargs = "";
 
 		EObject eobj = f.getOp();
 		if (eobj instanceof OperandImpl)
-			sargs += operand2String(designer, qroot, parent, (OperandImpl) eobj, msel);
+			sargs += operand2String(designer, qroot, parent,
+					(OperandImpl) eobj, msel);
 		else if (eobj instanceof ColumnOperand)
-			sargs += getColumn(((ColumnOperand) eobj).getCfull(), msel);
+			sargs += getColumn(((ColumnOperand) eobj).getCfull(), msel,
+					designer);
 		else if (eobj instanceof POperand)
 			sargs += ((POperand) eobj).getPrm();
 		else if (eobj instanceof ExpOperand)
@@ -231,7 +267,8 @@ public class ConvertSelectColumns {
 		else if (eobj instanceof ScalarOperand)
 			sargs += eobj.toString();
 		else if (eobj instanceof Operands)
-			sargs += operands2String(designer, qroot, parent, (Operands) eobj, msel);
+			sargs += operands2String(designer, qroot, parent, (Operands) eobj,
+					msel);
 
 		if (f.getType() != null)
 			sargs += " AS " + f.getType();
@@ -266,7 +303,8 @@ public class ConvertSelectColumns {
 			mscol.setAlias(fcol.getColAlias().getDbname());
 	}
 
-	private static String getColumn(ColumnFull tf, MSelect msel) {
+	private static String getColumn(ColumnFull tf, MSelect msel,
+			SQLQueryDesigner designer) {
 		EList<EObject> eContents = tf.eContents();
 		String column = null;
 		if (tf instanceof DbObjectNameImpl)
@@ -276,7 +314,7 @@ public class ConvertSelectColumns {
 		String table = ConvertUtil.getDbObjectName(eContents, 2);
 		String schema = ConvertUtil.getDbObjectName(eContents, 3);
 		// String catalog = getDbObjectName(eContents, 3);
-		ConvertUtil.findColumn(msel, schema, table, column);
+		ConvertUtil.findColumn(msel, schema, table, column, designer);
 		if (table != null)
 			column = table + "." + column;
 		if (schema != null)
@@ -284,7 +322,8 @@ public class ConvertSelectColumns {
 		return column;
 	}
 
-	private static AMQueryAliased<?> getColumn(MSelect msel, ColumnFull tf) {
+	private static AMQueryAliased<?> getColumn(MSelect msel, ColumnFull tf,
+			SQLQueryDesigner designer) {
 		EList<EObject> eContents = tf.eContents();
 		String column = null;
 		if (tf instanceof DbObjectNameImpl)
@@ -294,18 +333,22 @@ public class ConvertSelectColumns {
 		String table = ConvertUtil.getDbObjectName(eContents, 2);
 		String schema = ConvertUtil.getDbObjectName(eContents, 3);
 		// String catalog = getDbObjectName(eContents, 3);
-		MSelectColumn msqlt = findColumn(msel, schema, table, column);
+		MSelectColumn msqlt = findColumn(msel, schema, table, column, designer);
 		if (msqlt == null)
 			return getColumnUnknown(msel, column);
 		return msqlt;
 	}
 
-	private static MSelectExpression getColumnUnknown(MSelect msel, String column) {
+	private static MSelectExpression getColumnUnknown(MSelect msel,
+			String column) {
 		return new MSelectExpression(msel, column);
 	}
 
-	private static MSelectColumn findColumn(final MSelect msel, final String schema, final String table, final String column) {
-		KeyValue<MSQLColumn, MFromTable> kv = ConvertUtil.findColumn(msel, schema, table, column);
+	private static MSelectColumn findColumn(final MSelect msel,
+			final String schema, final String table, final String column,
+			SQLQueryDesigner designer) {
+		KeyValue<MSQLColumn, MFromTable> kv = ConvertUtil.findColumn(msel,
+				schema, table, column, designer);
 		if (kv != null)
 			return new MSelectColumn(msel, kv.key, kv.value);
 		return null;

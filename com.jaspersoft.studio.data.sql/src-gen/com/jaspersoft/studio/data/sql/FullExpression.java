@@ -17,9 +17,10 @@ package com.jaspersoft.studio.data.sql;
  *   <li>{@link com.jaspersoft.studio.data.sql.FullExpression#getExpgroup <em>Expgroup</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.FullExpression#getExp <em>Exp</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.FullExpression#getXexp <em>Xexp</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.FullExpression#getIn <em>In</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.FullExpression#getExists <em>Exists</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.FullExpression#getOp1 <em>Op1</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.FullExpression#getIsnull <em>Isnull</em>}</li>
- *   <li>{@link com.jaspersoft.studio.data.sql.FullExpression#getIn <em>In</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.FullExpression#getBetween <em>Between</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.FullExpression#getLike <em>Like</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.FullExpression#getComp <em>Comp</em>}</li>
@@ -189,6 +190,58 @@ public interface FullExpression extends OrExpr
   void setXexp(XExpr value);
 
   /**
+   * Returns the value of the '<em><b>In</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>In</em>' containment reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>In</em>' containment reference.
+   * @see #setIn(InOper)
+   * @see com.jaspersoft.studio.data.sql.SqlPackage#getFullExpression_In()
+   * @model containment="true"
+   * @generated
+   */
+  InOper getIn();
+
+  /**
+   * Sets the value of the '{@link com.jaspersoft.studio.data.sql.FullExpression#getIn <em>In</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>In</em>' containment reference.
+   * @see #getIn()
+   * @generated
+   */
+  void setIn(InOper value);
+
+  /**
+   * Returns the value of the '<em><b>Exists</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Exists</em>' containment reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Exists</em>' containment reference.
+   * @see #setExists(ExistsOper)
+   * @see com.jaspersoft.studio.data.sql.SqlPackage#getFullExpression_Exists()
+   * @model containment="true"
+   * @generated
+   */
+  ExistsOper getExists();
+
+  /**
+   * Sets the value of the '{@link com.jaspersoft.studio.data.sql.FullExpression#getExists <em>Exists</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Exists</em>' containment reference.
+   * @see #getExists()
+   * @generated
+   */
+  void setExists(ExistsOper value);
+
+  /**
    * Returns the value of the '<em><b>Op1</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <p>
@@ -239,32 +292,6 @@ public interface FullExpression extends OrExpr
    * @generated
    */
   void setIsnull(String value);
-
-  /**
-   * Returns the value of the '<em><b>In</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>In</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
-   * <!-- end-user-doc -->
-   * @return the value of the '<em>In</em>' containment reference.
-   * @see #setIn(InOper)
-   * @see com.jaspersoft.studio.data.sql.SqlPackage#getFullExpression_In()
-   * @model containment="true"
-   * @generated
-   */
-  InOper getIn();
-
-  /**
-   * Sets the value of the '{@link com.jaspersoft.studio.data.sql.FullExpression#getIn <em>In</em>}' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @param value the new value of the '<em>In</em>' containment reference.
-   * @see #getIn()
-   * @generated
-   */
-  void setIn(InOper value);
 
   /**
    * Returns the value of the '<em><b>Between</b></em>' containment reference.

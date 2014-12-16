@@ -16,6 +16,7 @@ import com.jaspersoft.studio.data.sql.Concat;
 import com.jaspersoft.studio.data.sql.DbObjectName;
 import com.jaspersoft.studio.data.sql.DbObjectNameAll;
 import com.jaspersoft.studio.data.sql.Div;
+import com.jaspersoft.studio.data.sql.ExistsOper;
 import com.jaspersoft.studio.data.sql.ExpOperand;
 import com.jaspersoft.studio.data.sql.ExprGroup;
 import com.jaspersoft.studio.data.sql.FetchFirst;
@@ -43,6 +44,7 @@ import com.jaspersoft.studio.data.sql.OpFunctionCast;
 import com.jaspersoft.studio.data.sql.OpList;
 import com.jaspersoft.studio.data.sql.Operand;
 import com.jaspersoft.studio.data.sql.OperandList;
+import com.jaspersoft.studio.data.sql.OperandListGroup;
 import com.jaspersoft.studio.data.sql.Operands;
 import com.jaspersoft.studio.data.sql.OrColumn;
 import com.jaspersoft.studio.data.sql.OrExpr;
@@ -418,6 +420,20 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * @generated
    */
   private EClass inOperEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass existsOperEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass operandListGroupEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -1809,7 +1825,7 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getFullExpression_Op1()
+  public EReference getFullExpression_In()
   {
     return (EReference)fullExpressionEClass.getEStructuralFeatures().get(6);
   }
@@ -1819,9 +1835,9 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getFullExpression_Isnull()
+  public EReference getFullExpression_Exists()
   {
-    return (EAttribute)fullExpressionEClass.getEStructuralFeatures().get(7);
+    return (EReference)fullExpressionEClass.getEStructuralFeatures().get(7);
   }
 
   /**
@@ -1829,7 +1845,7 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getFullExpression_In()
+  public EReference getFullExpression_Op1()
   {
     return (EReference)fullExpressionEClass.getEStructuralFeatures().get(8);
   }
@@ -1839,9 +1855,9 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getFullExpression_Between()
+  public EAttribute getFullExpression_Isnull()
   {
-    return (EReference)fullExpressionEClass.getEStructuralFeatures().get(9);
+    return (EAttribute)fullExpressionEClass.getEStructuralFeatures().get(9);
   }
 
   /**
@@ -1849,7 +1865,7 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getFullExpression_Like()
+  public EReference getFullExpression_Between()
   {
     return (EReference)fullExpressionEClass.getEStructuralFeatures().get(10);
   }
@@ -1859,9 +1875,19 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getFullExpression_Comp()
+  public EReference getFullExpression_Like()
   {
     return (EReference)fullExpressionEClass.getEStructuralFeatures().get(11);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getFullExpression_Comp()
+  {
+    return (EReference)fullExpressionEClass.getEStructuralFeatures().get(12);
   }
 
   /**
@@ -2172,6 +2198,66 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
   public EReference getInOper_OpList()
   {
     return (EReference)inOperEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getExistsOper()
+  {
+    return existsOperEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getExistsOper_Op()
+  {
+    return (EAttribute)existsOperEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getExistsOper_Subquery()
+  {
+    return (EReference)existsOperEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getExistsOper_OpList()
+  {
+    return (EReference)existsOperEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getOperandListGroup()
+  {
+    return operandListGroupEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getOperandListGroup_OpGroup()
+  {
+    return (EReference)operandListGroupEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -3408,9 +3494,10 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
     createEReference(fullExpressionEClass, FULL_EXPRESSION__EXPGROUP);
     createEReference(fullExpressionEClass, FULL_EXPRESSION__EXP);
     createEReference(fullExpressionEClass, FULL_EXPRESSION__XEXP);
+    createEReference(fullExpressionEClass, FULL_EXPRESSION__IN);
+    createEReference(fullExpressionEClass, FULL_EXPRESSION__EXISTS);
     createEReference(fullExpressionEClass, FULL_EXPRESSION__OP1);
     createEAttribute(fullExpressionEClass, FULL_EXPRESSION__ISNULL);
-    createEReference(fullExpressionEClass, FULL_EXPRESSION__IN);
     createEReference(fullExpressionEClass, FULL_EXPRESSION__BETWEEN);
     createEReference(fullExpressionEClass, FULL_EXPRESSION__LIKE);
     createEReference(fullExpressionEClass, FULL_EXPRESSION__COMP);
@@ -3454,6 +3541,14 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
     createEAttribute(inOperEClass, IN_OPER__OP);
     createEReference(inOperEClass, IN_OPER__SUBQUERY);
     createEReference(inOperEClass, IN_OPER__OP_LIST);
+
+    existsOperEClass = createEClass(EXISTS_OPER);
+    createEAttribute(existsOperEClass, EXISTS_OPER__OP);
+    createEReference(existsOperEClass, EXISTS_OPER__SUBQUERY);
+    createEReference(existsOperEClass, EXISTS_OPER__OP_LIST);
+
+    operandListGroupEClass = createEClass(OPERAND_LIST_GROUP);
+    createEReference(operandListGroupEClass, OPERAND_LIST_GROUP__OP_GROUP);
 
     operandListEClass = createEClass(OPERAND_LIST);
 
@@ -3818,9 +3913,10 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
     initEReference(getFullExpression_Expgroup(), this.getExprGroup(), null, "expgroup", null, 0, 1, FullExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getFullExpression_Exp(), this.getFullExpression(), null, "exp", null, 0, 1, FullExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getFullExpression_Xexp(), this.getXExpr(), null, "xexp", null, 0, 1, FullExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getFullExpression_In(), this.getInOper(), null, "in", null, 0, 1, FullExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getFullExpression_Exists(), this.getExistsOper(), null, "exists", null, 0, 1, FullExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getFullExpression_Op1(), this.getOperands(), null, "op1", null, 0, 1, FullExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getFullExpression_Isnull(), ecorePackage.getEString(), "isnull", null, 0, 1, FullExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getFullExpression_In(), this.getInOper(), null, "in", null, 0, 1, FullExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getFullExpression_Between(), this.getBetween(), null, "between", null, 0, 1, FullExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getFullExpression_Like(), this.getLike(), null, "like", null, 0, 1, FullExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getFullExpression_Comp(), this.getComparison(), null, "comp", null, 0, 1, FullExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -3863,7 +3959,15 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
     initEClass(inOperEClass, InOper.class, "InOper", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getInOper_Op(), ecorePackage.getEString(), "op", null, 0, 1, InOper.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getInOper_Subquery(), this.getSubQueryOperand(), null, "subquery", null, 0, 1, InOper.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getInOper_OpList(), this.getOperandList(), null, "opList", null, 0, 1, InOper.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getInOper_OpList(), this.getOperandListGroup(), null, "opList", null, 0, 1, InOper.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(existsOperEClass, ExistsOper.class, "ExistsOper", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getExistsOper_Op(), ecorePackage.getEString(), "op", null, 0, 1, ExistsOper.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getExistsOper_Subquery(), this.getSubQueryOperand(), null, "subquery", null, 0, 1, ExistsOper.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getExistsOper_OpList(), this.getOperandListGroup(), null, "opList", null, 0, 1, ExistsOper.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(operandListGroupEClass, OperandListGroup.class, "OperandListGroup", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getOperandListGroup_OpGroup(), this.getOperandList(), null, "opGroup", null, 0, 1, OperandListGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(operandListEClass, OperandList.class, "OperandList", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 

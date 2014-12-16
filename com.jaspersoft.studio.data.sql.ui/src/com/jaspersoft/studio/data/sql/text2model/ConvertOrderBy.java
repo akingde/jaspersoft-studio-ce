@@ -55,7 +55,7 @@ public class ConvertOrderBy {
 			String table = ConvertUtil.getDbObjectName(eContents, 2);
 			String schema = ConvertUtil.getDbObjectName(eContents, 3);
 			// String catalog = getDbObjectName(eContents, 3);
-			MOrderByColumn mocol = findColumn(msel, schema, table, column);
+			MOrderByColumn mocol = findColumn(msel, schema, table, column, designer);
 			if (mocol != null) {
 				String direction = tf.getDirection();
 				if (direction != null)
@@ -76,8 +76,8 @@ public class ConvertOrderBy {
 	// return null;
 	// }
 
-	private static MOrderByColumn findColumn(final MSelect msel, final String schema, final String table, final String column) {
-		KeyValue<MSQLColumn, MFromTable> kv = ConvertUtil.findColumn(msel, schema, table, column);
+	private static MOrderByColumn findColumn(final MSelect msel, final String schema, final String table, final String column, SQLQueryDesigner designer) {
+		KeyValue<MSQLColumn, MFromTable> kv = ConvertUtil.findColumn(msel, schema, table, column, designer);
 		if (kv != null)
 			return new MOrderByColumn(Util.getKeyword(msel.getParent(), MOrderBy.class), kv.key, kv.value);
 		return null;

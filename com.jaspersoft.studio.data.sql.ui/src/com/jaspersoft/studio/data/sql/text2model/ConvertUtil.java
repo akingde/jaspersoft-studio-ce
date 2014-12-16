@@ -30,6 +30,7 @@ import com.jaspersoft.studio.data.sql.model.metadata.MTables;
 import com.jaspersoft.studio.data.sql.model.query.from.MFrom;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelect;
+import com.jaspersoft.studio.data.sql.model.query.select.MSelectExpression;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MDummy;
@@ -69,7 +70,8 @@ public class ConvertUtil {
 			public void iterate(INode node) {
 				List<INode> toRemove = null;
 				for (INode n : node.getChildren()) {
-					if (n instanceof INotInMetadata && ((INotInMetadata) n).isNotInMetadata()) {
+					if (n instanceof INotInMetadata
+							&& ((INotInMetadata) n).isNotInMetadata()) {
 						if (toRemove == null)
 							toRemove = new ArrayList<INode>();
 						toRemove.add(n);
@@ -104,12 +106,15 @@ public class ConvertUtil {
 		return true;
 	}
 
-	public static KeyValue<MSQLColumn, MFromTable> findColumn(final MSelect msel, String sch, String tbl, String clmn) {
+	public static KeyValue<MSQLColumn, MFromTable> findColumn(
+			final MSelect msel, String sch, String tbl, String clmn,
+			SQLQueryDesigner designer) {
 		final String schema = getDbName(sch);
 		final String table = getDbName(tbl);
 		final String column = getDbName(clmn);
 		MFrom mfrom = Util.getKeyword(msel, MFrom.class);
-		KeyValue<MSQLColumn, MFromTable> key = new ModelVisitor<KeyValue<MSQLColumn, MFromTable>>(mfrom) {
+		KeyValue<MSQLColumn, MFromTable> key = new ModelVisitor<KeyValue<MSQLColumn, MFromTable>>(
+				mfrom) {
 
 			@Override
 			public boolean visit(INode n) {
@@ -118,15 +123,19 @@ public class ConvertUtil {
 					MSqlTable msqltable = ft.getValue();
 					if (!isInSchema(msqltable, schema))
 						return true;
-					if (table != null && !msqltable.getValue().equalsIgnoreCase(table)) {
-						if (ft.getAlias() == null || (ft.getAlias() != null && !ft.getAlias().equalsIgnoreCase(table)))
+					if (table != null
+							&& !msqltable.getValue().equalsIgnoreCase(table)) {
+						if (ft.getAlias() == null
+								|| (ft.getAlias() != null && !ft.getAlias()
+										.equalsIgnoreCase(table)))
 							return true;
 					}
 					for (INode c : msqltable.getChildren()) {
 						if (c instanceof MSQLColumn) {
 							MSQLColumn mcol = (MSQLColumn) c;
 							if (mcol.getValue().equalsIgnoreCase(column)) {
-								setObject(new KeyValue<MSQLColumn, MFromTable>(mcol, ft));
+								setObject(new KeyValue<MSQLColumn, MFromTable>(
+										mcol, ft));
 								stop();
 							}
 						}
@@ -138,34 +147,80 @@ public class ConvertUtil {
 		}.getObject();
 		if (key == null) {
 			for (MFromTable mft : Util.getFromTables(msel)) {
-				if (mft.getValue().isNotInMetadata() && mft.getValue().getValue().equalsIgnoreCase(table))
-					return new KeyValue<MSQLColumn, MFromTable>(new MSQLColumn(mft.getValue(), column, null), mft);
+				if (mft.getValue().isNotInMetadata()
+						&& mft.getValue().getValue().equalsIgnoreCase(table))
+					return new KeyValue<MSQLColumn, MFromTable>(new MSQLColumn(
+							mft.getValue(), column, null), mft);
+			}
+		}
+		if (key == null) {
+			// last try, let's look if there is a star
+			MSelectExpression star = null;
+			for (INode sn : msel.getChildren()) {
+				if (sn instanceof MSelectExpression) {
+					MSelectExpression mse = (MSelectExpression) sn;
+					String val = mse.getValue();
+					if (val.equals("*") || val.endsWith(".*")) {
+						star = mse;
+						break;
+					}
+				}
+			}
+			if (star != null) {
+				// let's look if we have the table, we assign to this one
+				if (star.getValue().endsWith(".*")) {
+					String tblName = star.getValue().substring(0,
+							star.getValue().length() - 2);
+					for (MFromTable mft : Util.getFromTables(msel)) {
+						MSqlTable v = mft.getValue();
+						if (v.isNotInMetadata())
+							continue;
+						if (v.getValue().equalsIgnoreCase(tblName))
+							return new KeyValue<MSQLColumn, MFromTable>(
+									new MSQLColumn(v, column, null), mft);
+					}
+					getTableUnknown(msel.getRoot(), schema, tblName, designer);
+				}
+				// let's assign it to the first table
+				if (star.getValue().equals("*"))
+					for (MFromTable mft : Util.getFromTables(msel)) {
+						MSqlTable v = mft.getValue();
+						return new KeyValue<MSQLColumn, MFromTable>(
+								new MSQLColumn(v, column, null), mft);
+					}
+				getTableUnknown(msel.getRoot(), schema, "", designer);
 			}
 		}
 		return key;
 	}
 
-	public static MSqlTable getTableUnknown(MRoot dbroot, String schema, String table, SQLQueryDesigner designer) {
+	public static MSqlTable getTableUnknown(MRoot dbroot, String schema,
+			String table, SQLQueryDesigner designer) {
 		table = getDbName(table);
-		MSqlSchema msqlschem = ConvertUtil.findSchema(dbroot, Misc.nvl(schema), designer);
+		MSqlSchema msqlschem = ConvertUtil.findSchema(dbroot, Misc.nvl(schema),
+				designer);
 		MSqlTable mtbl = findTable(dbroot, schema, Misc.nvl(table), designer);
 		if (mtbl == null) {
 			for (INode n : msqlschem.getChildren())
 				if (n instanceof MTables)
 					return new MSqlTable((MTables) n, Misc.nvl(table), true);
-			return new MSqlTable(new MTables(msqlschem, "Table"), Misc.nvl(table), true);
+			return new MSqlTable(new MTables(msqlschem, "Table"),
+					Misc.nvl(table), true);
 		}
 		return mtbl;
 	}
 
-	public static MSqlSchema findSchema(MRoot dbroot, String schema, SQLQueryDesigner designer) {
+	public static MSqlSchema findSchema(MRoot dbroot, String schema,
+			SQLQueryDesigner designer) {
 		if (schema == null)
 			schema = "";
 		schema = getDbName(schema);
 		boolean isNull = schema.isEmpty();
 		for (INode n : dbroot.getChildren()) {
 			MSqlSchema ms = (MSqlSchema) n;
-			if ((!isNull && ms.getValue().equalsIgnoreCase(schema)) || (isNull && (ms.isCurrent() || ms.getValue().equals(schema)))) {
+			if ((!isNull && ms.getValue().equalsIgnoreCase(schema))
+					|| (isNull && (ms.isCurrent() || ms.getValue().equals(
+							schema)))) {
 				designer.getDbMetadata().loadSchema(ms);
 				return ms;
 			}
@@ -178,7 +233,8 @@ public class ConvertUtil {
 		return new MSqlSchema(dbroot, schema, null, true);
 	}
 
-	public static MSqlTable findTable(MRoot dbroot, String schema, String table, final SQLQueryDesigner designer) {
+	public static MSqlTable findTable(MRoot dbroot, String schema,
+			String table, final SQLQueryDesigner designer) {
 		final String tbl = getDbName(table);
 		MSqlSchema ms = findSchema(dbroot, schema, designer);
 		return new ModelVisitor<MSqlTable>(ms) {
@@ -187,7 +243,8 @@ public class ConvertUtil {
 				if (n instanceof MSqlTable) {
 					MSqlTable mt = (MSqlTable) n;
 					if (mt.getValue().equalsIgnoreCase(tbl)) {
-						if (mt.getChildren().isEmpty() || mt.getChildren().get(0) instanceof MDummy)
+						if (mt.getChildren().isEmpty()
+								|| mt.getChildren().get(0) instanceof MDummy)
 							designer.getDbMetadata().loadTable(mt);
 						setObject(mt);
 						stop();

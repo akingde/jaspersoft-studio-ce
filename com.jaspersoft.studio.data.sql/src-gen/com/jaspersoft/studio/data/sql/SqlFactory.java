@@ -419,6 +419,24 @@ public interface SqlFactory extends EFactory
   InOper createInOper();
 
   /**
+   * Returns a new object of class '<em>Exists Oper</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Exists Oper</em>'.
+   * @generated
+   */
+  ExistsOper createExistsOper();
+
+  /**
+   * Returns a new object of class '<em>Operand List Group</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Operand List Group</em>'.
+   * @generated
+   */
+  OperandListGroup createOperandListGroup();
+
+  /**
    * Returns a new object of class '<em>Operand List</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
