@@ -112,7 +112,7 @@ GroupByColumns returns OrGroupByColumn:
 	GroupByColumnFull ({OrGroupByColumn.entries+=current} ("," entries+=GroupByColumnFull)+)?;
 
 GroupByColumnFull:
-	colGrBy=ColumnFull;
+	colGrBy=ColumnFull | gbFunction=OperandFunction;
 
 FullExpression returns OrExpr:
 	ExpressionFragment ({OrExpr.entries+=current} (entries+=ExpressionFragmentSecond)+)?;

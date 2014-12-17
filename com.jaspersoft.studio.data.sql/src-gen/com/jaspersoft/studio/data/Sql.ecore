@@ -155,6 +155,8 @@
   <eClassifiers xsi:type="ecore:EClass" name="GroupByColumnFull" eSuperTypes="#//OrGroupByColumn">
     <eStructuralFeatures xsi:type="ecore:EReference" name="colGrBy" eType="#//ColumnFull"
         containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="gbFunction" eType="#//OpFunction"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="OrExpr">
     <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"

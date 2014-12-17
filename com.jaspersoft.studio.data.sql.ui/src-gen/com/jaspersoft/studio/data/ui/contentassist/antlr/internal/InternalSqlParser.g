@@ -1078,9 +1078,9 @@ ruleGroupByColumnFull
     }
     :
 (
-{ before(grammarAccess.getGroupByColumnFullAccess().getColGrByAssignment()); }
-(rule__GroupByColumnFull__ColGrByAssignment)
-{ after(grammarAccess.getGroupByColumnFullAccess().getColGrByAssignment()); }
+{ before(grammarAccess.getGroupByColumnFullAccess().getAlternatives()); }
+(rule__GroupByColumnFull__Alternatives)
+{ after(grammarAccess.getGroupByColumnFullAccess().getAlternatives()); }
 )
 
 ;
@@ -2833,6 +2833,28 @@ rule__OrderByColumnFull__DirectionAlternatives_1_0
 	KEYWORD_36 
 
 { after(grammarAccess.getOrderByColumnFullAccess().getDirectionDESCKeyword_1_0_1()); }
+)
+
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__GroupByColumnFull__Alternatives
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+(
+{ before(grammarAccess.getGroupByColumnFullAccess().getColGrByAssignment_0()); }
+(rule__GroupByColumnFull__ColGrByAssignment_0)
+{ after(grammarAccess.getGroupByColumnFullAccess().getColGrByAssignment_0()); }
+)
+
+    |(
+{ before(grammarAccess.getGroupByColumnFullAccess().getGbFunctionAssignment_1()); }
+(rule__GroupByColumnFull__GbFunctionAssignment_1)
+{ after(grammarAccess.getGroupByColumnFullAccess().getGbFunctionAssignment_1()); }
 )
 
 ;
@@ -15734,14 +15756,29 @@ finally {
 	restoreStackSize(stackSize);
 }
 
-rule__GroupByColumnFull__ColGrByAssignment
+rule__GroupByColumnFull__ColGrByAssignment_0
     @init {
 		int stackSize = keepStackSize();
     }
 :
 (
-{ before(grammarAccess.getGroupByColumnFullAccess().getColGrByColumnFullParserRuleCall_0()); }
-	ruleColumnFull{ after(grammarAccess.getGroupByColumnFullAccess().getColGrByColumnFullParserRuleCall_0()); }
+{ before(grammarAccess.getGroupByColumnFullAccess().getColGrByColumnFullParserRuleCall_0_0()); }
+	ruleColumnFull{ after(grammarAccess.getGroupByColumnFullAccess().getColGrByColumnFullParserRuleCall_0_0()); }
+)
+
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__GroupByColumnFull__GbFunctionAssignment_1
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+(
+{ before(grammarAccess.getGroupByColumnFullAccess().getGbFunctionOperandFunctionParserRuleCall_1_0()); }
+	ruleOperandFunction{ after(grammarAccess.getGroupByColumnFullAccess().getGbFunctionOperandFunctionParserRuleCall_1_0()); }
 )
 
 ;

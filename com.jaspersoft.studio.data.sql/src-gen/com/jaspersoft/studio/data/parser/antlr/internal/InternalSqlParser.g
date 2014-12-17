@@ -2426,10 +2426,10 @@ ruleGroupByColumnFull returns [EObject current=null]
     @init { enterRule(); 
     }
     @after { leaveRule(); }:
-(
+((
 (
 		{ 
-	        newCompositeNode(grammarAccess.getGroupByColumnFullAccess().getColGrByColumnFullParserRuleCall_0()); 
+	        newCompositeNode(grammarAccess.getGroupByColumnFullAccess().getColGrByColumnFullParserRuleCall_0_0()); 
 	    }
 		lv_colGrBy_0_0=ruleColumnFull		{
 	        if ($current==null) {
@@ -2445,6 +2445,25 @@ ruleGroupByColumnFull returns [EObject current=null]
 
 )
 )
+    |(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getGroupByColumnFullAccess().getGbFunctionOperandFunctionParserRuleCall_1_0()); 
+	    }
+		lv_gbFunction_1_0=ruleOperandFunction		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getGroupByColumnFullRule());
+	        }
+       		set(
+       			$current, 
+       			"gbFunction",
+        		lv_gbFunction_1_0, 
+        		"OperandFunction");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+))
 ;
 
 

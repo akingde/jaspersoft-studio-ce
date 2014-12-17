@@ -1234,13 +1234,22 @@ public interface SqlPackage extends EPackage
   int GROUP_BY_COLUMN_FULL__COL_GR_BY = OR_GROUP_BY_COLUMN_FEATURE_COUNT + 0;
 
   /**
+   * The feature id for the '<em><b>Gb Function</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GROUP_BY_COLUMN_FULL__GB_FUNCTION = OR_GROUP_BY_COLUMN_FEATURE_COUNT + 1;
+
+  /**
    * The number of structural features of the '<em>Group By Column Full</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int GROUP_BY_COLUMN_FULL_FEATURE_COUNT = OR_GROUP_BY_COLUMN_FEATURE_COUNT + 1;
+  int GROUP_BY_COLUMN_FULL_FEATURE_COUNT = OR_GROUP_BY_COLUMN_FEATURE_COUNT + 2;
 
   /**
    * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.OrExprImpl <em>Or Expr</em>}' class.
@@ -4467,6 +4476,17 @@ public interface SqlPackage extends EPackage
   EReference getGroupByColumnFull_ColGrBy();
 
   /**
+   * Returns the meta object for the containment reference '{@link com.jaspersoft.studio.data.sql.GroupByColumnFull#getGbFunction <em>Gb Function</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Gb Function</em>'.
+   * @see com.jaspersoft.studio.data.sql.GroupByColumnFull#getGbFunction()
+   * @see #getGroupByColumnFull()
+   * @generated
+   */
+  EReference getGroupByColumnFull_GbFunction();
+
+  /**
    * Returns the meta object for class '{@link com.jaspersoft.studio.data.sql.OrExpr <em>Or Expr</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -6983,6 +7003,14 @@ public interface SqlPackage extends EPackage
      * @generated
      */
     EReference GROUP_BY_COLUMN_FULL__COL_GR_BY = eINSTANCE.getGroupByColumnFull_ColGrBy();
+
+    /**
+     * The meta object literal for the '<em><b>Gb Function</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference GROUP_BY_COLUMN_FULL__GB_FUNCTION = eINSTANCE.getGroupByColumnFull_GbFunction();
 
     /**
      * The meta object literal for the '{@link com.jaspersoft.studio.data.sql.impl.OrExprImpl <em>Or Expr</em>}' class.

@@ -4,6 +4,7 @@ package com.jaspersoft.studio.data.sql.impl;
 
 import com.jaspersoft.studio.data.sql.ColumnFull;
 import com.jaspersoft.studio.data.sql.GroupByColumnFull;
+import com.jaspersoft.studio.data.sql.OpFunction;
 import com.jaspersoft.studio.data.sql.SqlPackage;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -22,6 +23,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * The following features are implemented:
  * <ul>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.GroupByColumnFullImpl#getColGrBy <em>Col Gr By</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.impl.GroupByColumnFullImpl#getGbFunction <em>Gb Function</em>}</li>
  * </ul>
  * </p>
  *
@@ -38,6 +40,16 @@ public class GroupByColumnFullImpl extends OrGroupByColumnImpl implements GroupB
    * @ordered
    */
   protected ColumnFull colGrBy;
+
+  /**
+   * The cached value of the '{@link #getGbFunction() <em>Gb Function</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getGbFunction()
+   * @generated
+   * @ordered
+   */
+  protected OpFunction gbFunction;
 
   /**
    * <!-- begin-user-doc -->
@@ -113,6 +125,54 @@ public class GroupByColumnFullImpl extends OrGroupByColumnImpl implements GroupB
    * <!-- end-user-doc -->
    * @generated
    */
+  public OpFunction getGbFunction()
+  {
+    return gbFunction;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public NotificationChain basicSetGbFunction(OpFunction newGbFunction, NotificationChain msgs)
+  {
+    OpFunction oldGbFunction = gbFunction;
+    gbFunction = newGbFunction;
+    if (eNotificationRequired())
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SqlPackage.GROUP_BY_COLUMN_FULL__GB_FUNCTION, oldGbFunction, newGbFunction);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setGbFunction(OpFunction newGbFunction)
+  {
+    if (newGbFunction != gbFunction)
+    {
+      NotificationChain msgs = null;
+      if (gbFunction != null)
+        msgs = ((InternalEObject)gbFunction).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SqlPackage.GROUP_BY_COLUMN_FULL__GB_FUNCTION, null, msgs);
+      if (newGbFunction != null)
+        msgs = ((InternalEObject)newGbFunction).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SqlPackage.GROUP_BY_COLUMN_FULL__GB_FUNCTION, null, msgs);
+      msgs = basicSetGbFunction(newGbFunction, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.GROUP_BY_COLUMN_FULL__GB_FUNCTION, newGbFunction, newGbFunction));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   @Override
   public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
   {
@@ -120,6 +180,8 @@ public class GroupByColumnFullImpl extends OrGroupByColumnImpl implements GroupB
     {
       case SqlPackage.GROUP_BY_COLUMN_FULL__COL_GR_BY:
         return basicSetColGrBy(null, msgs);
+      case SqlPackage.GROUP_BY_COLUMN_FULL__GB_FUNCTION:
+        return basicSetGbFunction(null, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -136,6 +198,8 @@ public class GroupByColumnFullImpl extends OrGroupByColumnImpl implements GroupB
     {
       case SqlPackage.GROUP_BY_COLUMN_FULL__COL_GR_BY:
         return getColGrBy();
+      case SqlPackage.GROUP_BY_COLUMN_FULL__GB_FUNCTION:
+        return getGbFunction();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -152,6 +216,9 @@ public class GroupByColumnFullImpl extends OrGroupByColumnImpl implements GroupB
     {
       case SqlPackage.GROUP_BY_COLUMN_FULL__COL_GR_BY:
         setColGrBy((ColumnFull)newValue);
+        return;
+      case SqlPackage.GROUP_BY_COLUMN_FULL__GB_FUNCTION:
+        setGbFunction((OpFunction)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -170,6 +237,9 @@ public class GroupByColumnFullImpl extends OrGroupByColumnImpl implements GroupB
       case SqlPackage.GROUP_BY_COLUMN_FULL__COL_GR_BY:
         setColGrBy((ColumnFull)null);
         return;
+      case SqlPackage.GROUP_BY_COLUMN_FULL__GB_FUNCTION:
+        setGbFunction((OpFunction)null);
+        return;
     }
     super.eUnset(featureID);
   }
@@ -186,6 +256,8 @@ public class GroupByColumnFullImpl extends OrGroupByColumnImpl implements GroupB
     {
       case SqlPackage.GROUP_BY_COLUMN_FULL__COL_GR_BY:
         return colGrBy != null;
+      case SqlPackage.GROUP_BY_COLUMN_FULL__GB_FUNCTION:
+        return gbFunction != null;
     }
     return super.eIsSet(featureID);
   }

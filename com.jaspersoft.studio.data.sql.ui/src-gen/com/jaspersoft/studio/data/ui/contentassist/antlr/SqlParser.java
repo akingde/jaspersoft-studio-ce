@@ -50,6 +50,7 @@ public class SqlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getPivotColumnsAccess().getAlternatives(), "rule__PivotColumns__Alternatives");
 					put(grammarAccess.getOrderByColumnFullAccess().getAlternatives_0(), "rule__OrderByColumnFull__Alternatives_0");
 					put(grammarAccess.getOrderByColumnFullAccess().getDirectionAlternatives_1_0(), "rule__OrderByColumnFull__DirectionAlternatives_1_0");
+					put(grammarAccess.getGroupByColumnFullAccess().getAlternatives(), "rule__GroupByColumnFull__Alternatives");
 					put(grammarAccess.getExpressionFragmentSecondAccess().getAlternatives(), "rule__ExpressionFragmentSecond__Alternatives");
 					put(grammarAccess.getExpressionFragmentSecondAccess().getCAlternatives_0_0_0(), "rule__ExpressionFragmentSecond__CAlternatives_0_0_0");
 					put(grammarAccess.getExpressionFragmentAccess().getAlternatives(), "rule__ExpressionFragment__Alternatives");
@@ -280,7 +281,8 @@ public class SqlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getOrderByColumnFullAccess().getColOrderIntAssignment_0_1(), "rule__OrderByColumnFull__ColOrderIntAssignment_0_1");
 					put(grammarAccess.getOrderByColumnFullAccess().getDirectionAssignment_1(), "rule__OrderByColumnFull__DirectionAssignment_1");
 					put(grammarAccess.getGroupByColumnsAccess().getEntriesAssignment_1_1_1(), "rule__GroupByColumns__EntriesAssignment_1_1_1");
-					put(grammarAccess.getGroupByColumnFullAccess().getColGrByAssignment(), "rule__GroupByColumnFull__ColGrByAssignment");
+					put(grammarAccess.getGroupByColumnFullAccess().getColGrByAssignment_0(), "rule__GroupByColumnFull__ColGrByAssignment_0");
+					put(grammarAccess.getGroupByColumnFullAccess().getGbFunctionAssignment_1(), "rule__GroupByColumnFull__GbFunctionAssignment_1");
 					put(grammarAccess.getFullExpressionAccess().getEntriesAssignment_1_1(), "rule__FullExpression__EntriesAssignment_1_1");
 					put(grammarAccess.getExpressionFragmentSecondAccess().getCAssignment_0_0(), "rule__ExpressionFragmentSecond__CAssignment_0_0");
 					put(grammarAccess.getExpressionFragmentSecondAccess().getEfragAssignment_0_1(), "rule__ExpressionFragmentSecond__EfragAssignment_0_1");

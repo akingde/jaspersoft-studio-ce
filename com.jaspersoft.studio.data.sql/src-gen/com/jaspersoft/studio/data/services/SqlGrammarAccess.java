@@ -1462,18 +1462,30 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 
 	public class GroupByColumnFullElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "GroupByColumnFull");
-		private final Assignment cColGrByAssignment = (Assignment)rule.eContents().get(1);
-		private final RuleCall cColGrByColumnFullParserRuleCall_0 = (RuleCall)cColGrByAssignment.eContents().get(0);
+		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
+		private final Assignment cColGrByAssignment_0 = (Assignment)cAlternatives.eContents().get(0);
+		private final RuleCall cColGrByColumnFullParserRuleCall_0_0 = (RuleCall)cColGrByAssignment_0.eContents().get(0);
+		private final Assignment cGbFunctionAssignment_1 = (Assignment)cAlternatives.eContents().get(1);
+		private final RuleCall cGbFunctionOperandFunctionParserRuleCall_1_0 = (RuleCall)cGbFunctionAssignment_1.eContents().get(0);
 		
 		//GroupByColumnFull:
-		//	colGrBy=ColumnFull;
+		//	colGrBy=ColumnFull | gbFunction=OperandFunction;
 		public ParserRule getRule() { return rule; }
 
+		//colGrBy=ColumnFull | gbFunction=OperandFunction
+		public Alternatives getAlternatives() { return cAlternatives; }
+
 		//colGrBy=ColumnFull
-		public Assignment getColGrByAssignment() { return cColGrByAssignment; }
+		public Assignment getColGrByAssignment_0() { return cColGrByAssignment_0; }
 
 		//ColumnFull
-		public RuleCall getColGrByColumnFullParserRuleCall_0() { return cColGrByColumnFullParserRuleCall_0; }
+		public RuleCall getColGrByColumnFullParserRuleCall_0_0() { return cColGrByColumnFullParserRuleCall_0_0; }
+
+		//gbFunction=OperandFunction
+		public Assignment getGbFunctionAssignment_1() { return cGbFunctionAssignment_1; }
+
+		//OperandFunction
+		public RuleCall getGbFunctionOperandFunctionParserRuleCall_1_0() { return cGbFunctionOperandFunctionParserRuleCall_1_0; }
 	}
 
 	public class FullExpressionElements extends AbstractParserRuleElementFinder {
@@ -4211,7 +4223,7 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//GroupByColumnFull:
-	//	colGrBy=ColumnFull;
+	//	colGrBy=ColumnFull | gbFunction=OperandFunction;
 	public GroupByColumnFullElements getGroupByColumnFullAccess() {
 		return (pGroupByColumnFull != null) ? pGroupByColumnFull : (pGroupByColumnFull = new GroupByColumnFullElements());
 	}
