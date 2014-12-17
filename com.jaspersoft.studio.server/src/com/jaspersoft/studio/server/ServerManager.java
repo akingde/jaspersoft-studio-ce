@@ -239,18 +239,23 @@ public class ServerManager {
 				String[] urlt = urls.split("\n");
 				String url = urlt[0];
 				String user = urlt[1];
+				if (urlt.length > 0)
+					user = urlt[1];
 				String organization = null;
-				if (urlt.length > 2)
+				if (urlt.length > 1)
 					organization = urlt[2];
 				for (MServerProfile sp : serverProfiles.keySet()) {
 					ServerProfile serv = sp.getValue();
-					if (serv.getName().equals(name)
-							&& url != null
-							&& serv.getUrl().equals(url)
-							&& serv.getUser().equals(user)
-							&& (organization == null || (serv.getOrganisation() != null && serv
-									.getOrganisation().equals(organization))))
-						return sp;
+					if (serv.getName().equals(name) && url != null
+							&& serv.getUrl().equals(url)) {
+						if (user == null)
+							return sp;
+						if (serv.getUser().equals(user)
+								&& (organization == null || (serv
+										.getOrganisation() != null && serv
+										.getOrganisation().equals(organization))))
+							return sp;
+					}
 				}
 			}
 		}
