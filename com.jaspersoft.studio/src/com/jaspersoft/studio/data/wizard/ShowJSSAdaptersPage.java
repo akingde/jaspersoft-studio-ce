@@ -12,6 +12,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.wizard;
 
+import java.io.File;
 import java.io.StringReader;
 import java.util.Properties;
 
@@ -24,6 +25,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
 
+import com.jaspersoft.studio.data.adapter.JSSDescriptor;
+import com.jaspersoft.studio.data.storage.PreferencesDataAdapterStorage;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.wizards.ContextHelpIDs;
 
@@ -47,25 +50,51 @@ public class ShowJSSAdaptersPage extends ShowAdaptersPage {
 	protected void createCheckboxes(Properties prop){
 		String connectionXML = prop.getProperty("dataAdapters"); //$NON-NLS-1$
 		Document document;
-		try {
-			document = JRXmlUtils.parse(new InputSource(new StringReader(connectionXML)));
-			Node actualNode = document.getFirstChild();
-			if (actualNode.hasChildNodes()) actualNode = actualNode.getFirstChild();
-			else actualNode = null;
-			while(actualNode != null){
-				if (actualNode.getAttributes() != null){
-					String name = actualNode.getChildNodes().item(0).getTextContent();
-					String type = actualNode.getAttributes().getNamedItem("class").getTextContent();
-					type = type.substring(type.lastIndexOf(".")+1);
-					Button checkButton = new Button(content, SWT.CHECK);
-					checkButton.setText(name+" ("+ type + ")"); //$NON-NLS-1$ //$NON-NLS-2$
-					checkButton.setData(actualNode);
-					selectedElements.add(checkButton);
+		if (connectionXML != null){
+			try {
+				document = JRXmlUtils.parse(new InputSource(new StringReader(connectionXML)));
+				Node actualNode = document.getFirstChild();
+				if (actualNode.hasChildNodes()) actualNode = actualNode.getFirstChild();
+				else actualNode = null;
+				while(actualNode != null){
+					if (actualNode.getAttributes() != null){
+						String name = actualNode.getChildNodes().item(0).getTextContent();
+						String type = actualNode.getAttributes().getNamedItem("class").getTextContent();
+						type = type.substring(type.lastIndexOf(".")+1);
+						Button checkButton = new Button(content, SWT.CHECK);
+						checkButton.setText(name+" ("+ type + ")"); //$NON-NLS-1$ //$NON-NLS-2$
+						checkButton.setData(actualNode);
+						selectedElements.add(checkButton);
+					}
+					actualNode = actualNode.getNextSibling();
 				}
-				actualNode = actualNode.getNextSibling();
+			} catch (JRException e) {
+				e.printStackTrace();
 			}
-		} catch (JRException e) {
-			e.printStackTrace();
+		}
+		JSSDescriptor jssInstallation =  (JSSDescriptor)selectedInstallation;
+		File[] dasFileStorage = jssInstallation.getStorageResources(PreferencesDataAdapterStorage.PREF_KEYS_DATA_ADAPTERS);
+		for(File fileDA : dasFileStorage){
+			try {
+				document = JRXmlUtils.parse(fileDA);
+				Node actualNode = document.getFirstChild();
+				//if (actualNode.hasChildNodes()) actualNode = actualNode.getFirstChild();
+				//else actualNode = null;
+				while(actualNode != null){
+					if (actualNode.getAttributes() != null){
+						String name = actualNode.getChildNodes().item(0).getTextContent();
+						String type = actualNode.getAttributes().getNamedItem("class").getTextContent();
+						type = type.substring(type.lastIndexOf(".")+1);
+						Button checkButton = new Button(content, SWT.CHECK);
+						checkButton.setText(name+" ("+ type + ")"); //$NON-NLS-1$ //$NON-NLS-2$
+						checkButton.setData(actualNode);
+						selectedElements.add(checkButton);
+					}
+					actualNode = actualNode.getNextSibling();
+				}
+			} catch (JRException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	

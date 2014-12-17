@@ -112,6 +112,25 @@ public class ImportJSSServersWizard extends Wizard implements IImportWizard {
 			} catch (JRException e) {
 				e.printStackTrace();
 			}
+			//CHECK ON THE FILE STORAGE
+			JSSDescriptor jssInstallation =  (JSSDescriptor)selectedInstallation;
+			File[] serversFileStorage = jssInstallation.getStorageResources(ServerManager.PREF_TAG);
+			for(File fileServer : serversFileStorage){
+				try {
+					document = JRXmlUtils.parse(fileServer);
+					Node actualNode = document.getFirstChild();
+					if (actualNode.getNodeName().equals("serverProfile")) {
+						Node child = actualNode.getFirstChild();
+						while (child != null) {
+							ServerProfile sprof = (ServerProfile) CastorUtil.read(child, MServerProfile.MAPPINGFILE);
+							result.add(sprof);
+							child = child.getNextSibling();
+						}
+					}
+				} catch (JRException e) {
+					e.printStackTrace();
+				}
+			}
 			return result;
 		}
 
