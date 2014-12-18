@@ -1,0 +1,31 @@
+({
+    //optimize: 'none', // Uncomment this property to disable the uglify of the libraries
+    baseUrl: '',
+    paths: {
+	#foreach( $library in $libraries )
+		'$library.getName()': '$library.getFileName()' #if( $foreach.hasNext ), #end		
+		
+	#end}, 
+	#if ($hasShim)
+	
+	shim: {
+	#foreach( $library in $shimlibraries )
+		'$library.getName()' : {
+		#if ($library.hasDependencies())
+			deps: [$library.getDependencies()],
+		#end
+		exports: '$library.getExportName()'
+		} #if( $foreach.hasNext ), #end	
+	#end
+    },
+    
+    #end
+	
+	wrap: {
+        start: "if (typeof define === 'function' && define.amd){}\nelse if (typeof __visualize__ !== 'undefined' &&\ntypeof __visualize__.define === 'function')\n{\n}\n\n(function(root){\n\nvar define = root.define;\n\n",
+        end: "\n\n}(typeof __visualize__ != 'undefined' ? __visualize__ : window));"
+    },
+    
+    name: "${modulename}",
+    out: "${outputname}"
+})

@@ -1,0 +1,6 @@
+		new Label(this, SWT.NONE).setText("$controlLabel");
+		PropertyListControl $controlName = new PropertyListControl(this, "$elementType");
+		${controlName}.setData(BIND_KEY, "$bindName");
+		${controlName}.setData(TYPE_KEY, "collection");
+		${controlName}.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		generatedControls.add($controlName);
