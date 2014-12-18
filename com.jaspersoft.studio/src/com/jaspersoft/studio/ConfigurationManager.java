@@ -59,7 +59,7 @@ public class ConfigurationManager {
 	private static void intializePath(){
 		String path = null;
 		Location configArea = Platform.getInstallLocation();
-		String product = Platform.getProduct().getName();
+		String product = Platform.getProduct().getProperty("appName"); //$NON-NLS-1$ 
 		if (configArea != null) {
 			if (Util.isMac()) {
 				path = configArea.getURL().toExternalForm() + "/" + product + ".app/Contents/MacOS/";
