@@ -6,14 +6,13 @@ package com.jaspersoft.studio.data.parseTreeConstruction;
 import org.eclipse.emf.ecore.*;
 import org.eclipse.xtext.*;
 import org.eclipse.xtext.parsetree.reconstr.IEObjectConsumer;
-import org.eclipse.xtext.parsetree.reconstr.impl.AbstractParseTreeConstructor;
 
 import com.jaspersoft.studio.data.services.SqlGrammarAccess;
 
 import com.google.inject.Inject;
 
 @SuppressWarnings("all")
-public class SqlParsetreeConstructor extends AbstractParseTreeConstructor {
+public class SqlParsetreeConstructor extends org.eclipse.xtext.parsetree.reconstr.impl.AbstractParseTreeConstructor {
 		
 	@Inject
 	private SqlGrammarAccess grammarAccess;
