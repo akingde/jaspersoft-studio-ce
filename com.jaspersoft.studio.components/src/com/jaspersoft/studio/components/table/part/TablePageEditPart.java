@@ -12,15 +12,21 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.table.part;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.sf.jasperreports.engine.design.JRDesignElement;
 
 import org.eclipse.draw2d.geometry.Dimension;
 
+import com.jaspersoft.studio.callout.MCallout;
 import com.jaspersoft.studio.components.table.model.MTable;
 import com.jaspersoft.studio.editor.gef.figures.APageFigure;
 import com.jaspersoft.studio.editor.gef.figures.ContainerPageFigure;
 import com.jaspersoft.studio.editor.gef.parts.PageEditPart;
+import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.model.util.ShowChildrenModelVisitor;
 import com.jaspersoft.studio.property.dataset.dialog.IDatasetDialogSupport;
 
 public class TablePageEditPart extends PageEditPart implements
@@ -57,5 +63,25 @@ public class TablePageEditPart extends PageEditPart implements
 			containerSize = d;
 		} else
 			containerSize = new Dimension(4000, 4000);
+	}
+	
+	@Override
+	protected List<Object> getModelChildren() {
+		final List<Object> list = new ArrayList<Object>();
+		new ShowChildrenModelVisitor<Object>(getPage()) {
+
+			@Override
+			public boolean visit(INode n) {
+				if (n instanceof MCallout) {
+					list.add(n);
+					for (INode node : n.getChildren())
+						list.add(node);
+				} else if (n instanceof IGraphicElement && n.getValue() != null)
+					list.add(n);
+
+				return true;
+			}
+		};
+		return list;
 	}
 }

@@ -490,9 +490,4 @@ public class MCell extends MColumn implements IGraphicElement,
 		}
 		return result;
 	}
-
-	@Override
-	public List<INode> initModel() {
-		return getChildren();
-	}
 }

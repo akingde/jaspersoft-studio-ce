@@ -479,11 +479,6 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable, 
 	}
 
 	@Override
-	public List<INode> initModel() {
-		return getChildren();
-	}
-
-	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		HashSet<String> graphicalProperties = getGraphicalProperties();
 		if (graphicalProperties.contains(evt.getPropertyName())) {

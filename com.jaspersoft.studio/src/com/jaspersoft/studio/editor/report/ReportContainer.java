@@ -31,7 +31,6 @@ import net.sf.jasperreports.engine.design.JRDesignReportTemplate;
 import net.sf.jasperreports.engine.design.JRDesignScriptlet;
 import net.sf.jasperreports.engine.design.JRDesignSubreport;
 import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.design.events.JRChangeEventsSupport;
 import net.sf.jasperreports.repo.RepositoryUtil;
 
 import org.eclipse.core.resources.IProject;
@@ -64,7 +63,6 @@ import com.jaspersoft.studio.editor.part.MultiPageToolbarEditorPart;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
-import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.MPage;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.style.StyleTemplateFactory;
@@ -250,7 +248,9 @@ public class ReportContainer extends MultiPageToolbarEditorPart implements ITabb
 				MPage rep = new MPage(root, jd);
 				rep.setJasperConfiguration(jrContext);
 				ANode node = m.createNode(rep, obj, -1);
-
+				//Initialize the subeditors
+				node.createSubeditor();
+				
 				ave = m.getEditor(obj, jrContext);
 				if (ave != null) {
 					ave.getEditDomain().setCommandStack(reportEditor.getEditDomain().getCommandStack());
@@ -421,7 +421,7 @@ public class ReportContainer extends MultiPageToolbarEditorPart implements ITabb
 	 * @param searchNode the starting node
 	 * @return the node modified by the subeditor
 	 */
-	private INode getInnerModel(INode searchNode){
+	/*private INode getInnerModel(INode searchNode){
 		INode actualNode = searchNode;
 		if (actualNode instanceof MRoot && actualNode.getChildren().size() >0){
 			return getInnerModel(actualNode.getChildren().get(0));
@@ -429,17 +429,18 @@ public class ReportContainer extends MultiPageToolbarEditorPart implements ITabb
 			return actualNode.getChildren().get(actualNode.getChildren().size()-1);
 		}
 		return actualNode;
-	}
+	}*/
 
 	@Override
 	protected void postPageChange(int newPageIndex, int oldPageIndex) {
 		AbstractVisualEditor activeEditor = editors.get(newPageIndex);
+		//FIXME: This forced refresh should be not necessary since now every element has it's own full model and the event are handled natively
 		//request the rapaint of the element on the main editor node when switching between the subeditors, supposing they were modified in the subeditor
-		if (oldPageIndex > 0){
-			AbstractVisualEditor oldEditor = editors.get(oldPageIndex);
-			INode subModel = getInnerModel(oldEditor.getModel());
-			((JRChangeEventsSupport)subModel.getValue()).getEventSupport().firePropertyChange(MGraphicElement.FORCE_GRAPHICAL_REFRESH, null, null);
-		}
+		//if (oldPageIndex > 0){
+			//AbstractVisualEditor oldEditor = editors.get(oldPageIndex);
+			//INode subModel = getInnerModel(oldEditor.getModel());
+			//((JRChangeEventsSupport)subModel.getValue()).getEventSupport().firePropertyChange(MGraphicElement.FORCE_GRAPHICAL_REFRESH, null, null);
+		//}
 		IEditorActionBarContributor contributor = parent.getEditorSite().getActionBarContributor();
 		if (contributor != null && contributor instanceof MultiPageEditorActionBarContributor) {
 

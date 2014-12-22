@@ -22,7 +22,6 @@ import com.jaspersoft.studio.editor.AMultiEditor;
 import com.jaspersoft.studio.editor.JrxmlEditor;
 import com.jaspersoft.studio.editor.report.ReportContainer;
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.model.IGraphicalPropertiesHandler;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -74,29 +73,13 @@ public class CloseSubeditorsCommand extends Command{
 	}
 	
 	/**
-	 * Return a list of children of a model. If the model support it 
-	 * it will be initialized (this is done for the element that dosen't normally keep
-	 * a list of children inside, like table, crosstab and list element).
-	 * 
-	 * @param parent the element
-	 * @return list of children of the element
-	 */
-	private List<INode> getChildren(INode parent){
-		if (parent instanceof IGraphicalPropertiesHandler){
-			return ((IGraphicalPropertiesHandler)parent).initModel();
-		} else {
-			return parent.getChildren();
-		}
-	}
-	
-	/**
 	 * It send the event to close the editor recursively to all the children
 	 * of the element and then execute the delete command
 	 */
 	@Override
 	public void execute() {
 		//Send the event only if there are subeditors opened
-		if (areSubeditorOpened(element)) sendDeleteEvent(getChildren(element));
+		if (areSubeditorOpened(element)) sendDeleteEvent(element.getChildren());
 		deleteCommand.execute();
 	}
 	
@@ -109,7 +92,7 @@ public class CloseSubeditorsCommand extends Command{
 	private void sendDeleteEvent(List<INode> children){
 		if (children == null) return;
 		for (INode child : children){
-			sendDeleteEvent(getChildren(child));
+			sendDeleteEvent(child.getChildren());
 			if (child.getValue() instanceof JRChangeEventsSupport){
 				JRChangeEventsSupport eventElement = (JRChangeEventsSupport)child.getValue();
 				eventElement.getEventSupport().firePropertyChange(ReportContainer.CLOSE_EDITOR_PROPERTY, child.getValue(), null);

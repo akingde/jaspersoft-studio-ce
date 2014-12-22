@@ -38,7 +38,6 @@ import com.jaspersoft.studio.model.IPastableGraphic;
 import com.jaspersoft.studio.model.MGraphicElementLineBox;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
-import com.jaspersoft.studio.model.util.ReportFactory;
 import com.jaspersoft.studio.property.descriptor.combo.RComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.utils.Misc;
 
@@ -236,21 +235,7 @@ public class MFrame extends MGraphicElementLineBox implements IPastable, IPastab
 	public JRPropertiesHolder[] getPropertyHolder() {
 		return new JRPropertiesHolder[] { getValue() };
 	}
-
-	/**
-	 * If the model has the children not in sync with the JRElement the build the correct list
-	 */
-	@Override
-	public List<INode> initModel() {
-		if (getValue().getChildren().size() > 0 && (getChildren() == null || getChildren().size() == 0)) {
-			MFrame copy = new MFrame();
-			copy.setValue(getValue());
-			ReportFactory.createElementsForBand(copy, getValue().getChildren());
-			return copy.getChildren();
-		} else
-			return getChildren();
-	}
-
+	
 	@Override
 	public HashSet<String> getUsedStyles() {
 		HashSet<String> usedStyles = super.getUsedStyles();

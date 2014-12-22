@@ -854,15 +854,6 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		return result;
 	}
 	
-	/**
-	 * By default the model is already created, so this method does nothing 
-	 * and simply return the list of children
-	 */
-	@Override
-	public List<INode> initModel() {
-		return getChildren();
-	}
-	
 	protected SetValueCommand generateSetCommand(APropertyNode target, String propertyId, Object value){
 		SetValueCommand result = new SetValueCommand();
 		result.setTarget(target);

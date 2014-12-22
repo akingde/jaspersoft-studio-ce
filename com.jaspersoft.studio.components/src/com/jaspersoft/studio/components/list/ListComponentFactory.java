@@ -12,8 +12,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.list;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -91,44 +89,25 @@ public class ListComponentFactory implements IComponentFactory {
 				&& ((JRDesignComponentElement) jrObject).getComponent() instanceof StandardListComponent) {
 			StandardListComponent list = (StandardListComponent) ((JRDesignComponentElement) jrObject).getComponent();
 			MList mlist = new MList(parent,(JRDesignComponentElement) jrObject, newIndex);
-			if (mlist.getParent() instanceof MPage) {
-				final JasperDesign jd = mlist.getJasperDesign();
-				ReportFactory.createStyles(mlist.getJasperConfiguration(), jd,mlist.getParent(), 0);
-
-				ReportFactory.createElementsForBand(mlist, list.getContents().getChildren());
-
-				StandardListComponent st = mlist.getList();
-
-				DSListener dslistner = new DSListener(parent, jd, st);
-				setDataset(parent, jd, st, dslistner);
-
-				st.getEventSupport().addPropertyChangeListener(dslistner);
-
-				MCallout.createCallouts(mlist);
-			}
+			ReportFactory.createElementsForBand(mlist, list.getContents().getChildren());
 			return mlist;
 		}
 		return null;
 	}
+	
+	public static void createSubeditor(MList mlist){
+		ANode parent = mlist.getParent();
+		JasperDesign jd = mlist.getJasperDesign();
+		ReportFactory.createStyles(mlist.getJasperConfiguration(), jd,mlist.getParent(), 0);
+		StandardListComponent st = mlist.getList();
 
-	class DSListener implements PropertyChangeListener {
-		private ANode parent;
-		private JasperDesign jd;
-		private StandardListComponent st;
+		DSListener dslistner = new DSListener(parent, jd, st);
+		setDataset(parent, jd, st, dslistner);
+		MCallout.createCallouts(mlist);
+		st.getEventSupport().addPropertyChangeListener(dslistner);
+	}
 
-		public DSListener(ANode parent, JasperDesign jd,
-				StandardListComponent st) {
-			this.parent = parent;
-			this.jd = jd;
-			this.st = st;
-		}
-
-		public void propertyChange(PropertyChangeEvent evt) {
-			setDataset(parent, jd, st, this);
-		}
-	};
-
-	public void setDataset(ANode parent, final JasperDesign jd,
+	protected static void setDataset(ANode parent, final JasperDesign jd,
 			StandardListComponent st, DSListener dslistner) {
 		for (INode n : parent.getChildren())
 			if (n instanceof MDataset)

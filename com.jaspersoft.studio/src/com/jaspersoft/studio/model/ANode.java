@@ -584,4 +584,26 @@ public abstract class ANode implements INode, Serializable, IAdaptable, Cloneabl
 	public void setVisible(boolean visible) {
 		this.visible = visible;
 	}
+	
+	/**
+	 * Boolean flag to declare if the children are visible or not. By
+	 * default are always visible. But some elements are editable only
+	 * inside a subeditor, in this cases the children can be shown only
+	 * when the user is inside the subeditor
+	 * 
+	 * @return true if the children are visible, false otherwise
+	 */
+	public boolean showChildren(){
+		return true;
+	}
+	
+	/**
+	 * Some elements can be edited inside a subeditor. This method
+	 * can be overridden to create the subeditor, like putting styles
+	 * or dataset item. Every model that can be edited inside a subeditor can
+	 * define how it is initialized
+	 */
+	public void createSubeditor(){
+		
+	}
 }

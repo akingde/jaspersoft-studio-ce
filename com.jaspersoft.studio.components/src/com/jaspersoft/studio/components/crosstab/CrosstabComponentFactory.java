@@ -12,8 +12,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.crosstab;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -168,41 +166,27 @@ public class CrosstabComponentFactory implements IComponentFactory {
 			ct.preprocess();
 			CrosstabManager ctManager = new CrosstabManager(ct);
 			MCrosstab mCrosstab = new MCrosstab(parent, ct, newIndex, ctManager);
-			if (parent instanceof MPage) {
-				final JasperDesign jd = parent.getJasperDesign();
-				ReportFactory.createStyles(parent.getJasperConfiguration(), jd, parent, 0);
+			MCrosstabParameters mp = new MCrosstabParameters(mCrosstab, ct, JRDesignCrosstab.PROPERTY_PARAMETERS);
+			if (ct.getParameters() != null)
+				for (JRCrosstabParameter p : ct.getParameters())
+					ReportFactory.createNode(mp, p, -1);
 
-				MCrosstabParameters mp = new MCrosstabParameters(mCrosstab, ct, JRDesignCrosstab.PROPERTY_PARAMETERS);
-				if (ct.getParameters() != null)
-					for (JRCrosstabParameter p : ct.getParameters())
-						ReportFactory.createNode(mp, p, -1);
+			MRowGroups mrg = new MRowGroups(mCrosstab, ct, JRDesignCrosstab.PROPERTY_ROW_GROUPS);
+			if (ct.getRowGroups() != null)
+				for (JRCrosstabRowGroup p : ct.getRowGroups())
+					ReportFactory.createNode(mrg, p, -1);
 
-				MRowGroups mrg = new MRowGroups(mCrosstab, ct, JRDesignCrosstab.PROPERTY_ROW_GROUPS);
-				if (ct.getRowGroups() != null)
-					for (JRCrosstabRowGroup p : ct.getRowGroups())
-						ReportFactory.createNode(mrg, p, -1);
+			MColumnGroups mcg = new MColumnGroups(mCrosstab, ct, JRDesignCrosstab.PROPERTY_COLUMN_GROUPS);
+			if (ct.getColumnGroups() != null)
+				for (JRCrosstabColumnGroup p : ct.getColumnGroups())
+					ReportFactory.createNode(mcg, p, -1);
 
-				MColumnGroups mcg = new MColumnGroups(mCrosstab, ct, JRDesignCrosstab.PROPERTY_COLUMN_GROUPS);
-				if (ct.getColumnGroups() != null)
-					for (JRCrosstabColumnGroup p : ct.getColumnGroups())
-						ReportFactory.createNode(mcg, p, -1);
-
-				MMeasures mm = new MMeasures(mCrosstab, ct, JRDesignCrosstab.PROPERTY_MEASURES);
-				if (ct.getMeasures() != null)
-					for (JRCrosstabMeasure p : ct.getMeasures())
-						ReportFactory.createNode(mm, p, -1);
-				// ---------------------------------
-				createCellNodes(ct, mCrosstab);
-
-				JRDesignCrosstab st = mCrosstab.getValue();
-
-				DSListener dslistner = new DSListener(parent, jd, st);
-				setDataset(parent, jd, st, dslistner);
-
-				((JRDesignCrosstabDataset) st.getDataset()).getEventSupport().addPropertyChangeListener(dslistner);
-
-				MCallout.createCallouts(mCrosstab);
-			}
+			MMeasures mm = new MMeasures(mCrosstab, ct, JRDesignCrosstab.PROPERTY_MEASURES);
+			if (ct.getMeasures() != null)
+				for (JRCrosstabMeasure p : ct.getMeasures())
+					ReportFactory.createNode(mm, p, -1);
+			// ---------------------------------
+			createCellNodes(ct, mCrosstab);
 			return mCrosstab;
 		}
 		if (jrObject instanceof JRCrosstabRowGroup)
@@ -213,55 +197,20 @@ public class CrosstabComponentFactory implements IComponentFactory {
 			return new MMeasure(parent, (JRCrosstabMeasure) jrObject, newIndex);
 		return null;
 	}
-
-	public static ANode createCrosstab(MCrosstab mc) {
-		JRDesignCrosstab ct = (JRDesignCrosstab) mc.getValue();
-		MCrosstab mCrosstab = new MCrosstab();
-		mCrosstab.setJasperConfiguration(mc.getJasperConfiguration());
-		MCrosstabParameters mp = new MCrosstabParameters(mCrosstab, ct, JRDesignCrosstab.PROPERTY_PARAMETERS);
-		if (ct.getParameters() != null)
-			for (JRCrosstabParameter p : ct.getParameters())
-				ReportFactory.createNode(mp, p, -1);
-
-		MRowGroups mrg = new MRowGroups(mCrosstab, ct, JRDesignCrosstab.PROPERTY_ROW_GROUPS);
-		if (ct.getRowGroups() != null)
-			for (JRCrosstabRowGroup p : ct.getRowGroups())
-				ReportFactory.createNode(mrg, p, -1);
-
-		MColumnGroups mcg = new MColumnGroups(mCrosstab, ct, JRDesignCrosstab.PROPERTY_COLUMN_GROUPS);
-		if (ct.getColumnGroups() != null)
-			for (JRCrosstabColumnGroup p : ct.getColumnGroups())
-				ReportFactory.createNode(mcg, p, -1);
-
-		MMeasures mm = new MMeasures(mCrosstab, ct, JRDesignCrosstab.PROPERTY_MEASURES);
-		if (ct.getMeasures() != null)
-			for (JRCrosstabMeasure p : ct.getMeasures())
-				ReportFactory.createNode(mm, p, -1);
-		// ---------------------------------
-		createCellNodes(ct, mCrosstab);
-
-		// MCallout.createCallouts(mCrosstab);
-
-		return mCrosstab;
+	
+	public static void createSubeditor(MCrosstab mc){
+		ANode parent = mc.getParent();
+		JasperDesign jd = mc.getJasperDesign();
+		JRDesignCrosstab st = mc.getValue();
+		
+		ReportFactory.createStyles(parent.getJasperConfiguration(), jd, parent, 0);
+		DSListener dslistner = new DSListener(parent, jd, st);
+		setDataset(parent, jd, st, dslistner);
+		MCallout.createCallouts(mc);
+		((JRDesignCrosstabDataset) st.getDataset()).getEventSupport().addPropertyChangeListener(dslistner);
 	}
-
-	class DSListener implements PropertyChangeListener {
-		private ANode parent;
-		private JasperDesign jd;
-		private JRDesignCrosstab st;
-
-		public DSListener(ANode parent, JasperDesign jd, JRDesignCrosstab st) {
-			this.parent = parent;
-			this.jd = jd;
-			this.st = st;
-		}
-
-		public void propertyChange(PropertyChangeEvent evt) {
-			setDataset(parent, jd, st, this);
-		}
-	};
-
-	public void setDataset(ANode parent, final JasperDesign jd, JRDesignCrosstab st, DSListener dslistner) {
+	
+	protected static void setDataset(ANode parent, final JasperDesign jd, JRDesignCrosstab st, DSListener dslistner) {
 		for (INode n : parent.getChildren())
 			if (n instanceof MDataset)
 				parent.removeChild((ANode) n);

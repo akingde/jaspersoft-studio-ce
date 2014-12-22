@@ -12,8 +12,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.table;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -45,10 +43,10 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.action.Action;
 import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.internal.Workbench;
 import org.eclipse.ui.part.WorkbenchPart;
 
 import com.jaspersoft.studio.JSSCompoundCommand;
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.callout.MCallout;
 import com.jaspersoft.studio.components.table.action.EditTableStyleAction;
 import com.jaspersoft.studio.components.table.action.RemoveTableStylesAction;
@@ -159,51 +157,23 @@ public class TableComponentFactory implements IComponentFactory {
 				JasperDesign jasperDesign = parent.getJasperConfiguration().getJasperDesign();
 				TableManager tblManager = new TableManager(tbl, jasperDesign);
 				MTable mt = new MTable(parent, tbl, newIndex, tblManager);
-				if (parent instanceof MPage) {
-					createTable(mt);
-					//Removed a lot of old listener in this class on the 10-06-2014, need test
-					//to see if all it's working
-					JasperDesign jd = mt.getJasperDesign();
-					ReportFactory.createStyles(parent.getJasperConfiguration(), jd, parent, 0);
-
-					StandardTable st = TableManager.getTable(mt);
-					DSListener dslistner = new DSListener(parent, jd, st);
-					setDataset(parent, jd, st);
-
-					st.getEventSupport().addPropertyChangeListener(dslistner);
-
-					MCallout.createCallouts(mt);
-				}
+				createTable(mt);
 				return mt;
 			}
 		}
 		return null;
 	}
-
-	/**
-	 * Listener to update the dataset inside the table designer when the dataset
-	 * run is changed
-	 * 
-	 * @author Orlandin Marco
-	 *
-	 */
-	class DSListener implements PropertyChangeListener {
-		private ANode parent;
-		private JasperDesign jd;
-		private StandardTable st;
-
-		public DSListener(ANode parent, JasperDesign jd, StandardTable st) {
-			this.parent = parent;
-			this.jd = jd;
-			this.st = st;
-		}
-
-		public void propertyChange(PropertyChangeEvent evt) {
-			if (StandardTable.PROPERTY_DATASET_RUN.equals(evt.getPropertyName())){
-					setDataset(parent, jd, st);
-			}
-		}
-	};
+	
+	public static void createSubeditor(MTable mt){
+		ANode parent = mt.getParent();
+		JasperDesign jd = mt.getJasperDesign();
+		ReportFactory.createStyles(mt.getJasperConfiguration(), jd, parent, 0);
+		StandardTable st = TableManager.getTable(mt);
+		DSListener dslistner = new DSListener(parent, jd, st);
+		setDataset(parent, jd, st);
+		MCallout.createCallouts(mt);
+		st.getEventSupport().addPropertyChangeListener(dslistner);
+	}
 
 	/**
 	 * Remove the old dataset from the mpage of a table and add the new one, read
@@ -213,7 +183,7 @@ public class TableComponentFactory implements IComponentFactory {
 	 * @param jd the jasperdesign
 	 * @param st the table element inside the table editor
 	 */
-	public void setDataset(ANode parent, final JasperDesign jd, StandardTable st) {
+	public static void setDataset(ANode parent, final JasperDesign jd, StandardTable st) {
 		//Remove all the old dataset inside the page
 		for (INode n : parent.getChildren()){
 			if (n instanceof MDataset) parent.removeChild((ANode) n);
@@ -235,7 +205,7 @@ public class TableComponentFactory implements IComponentFactory {
 		}
 	}
 
-	public static ANode createTable(MTable mt) {
+	protected static ANode createTable(MTable mt) {
 		JRDesignComponentElement tbl = (JRDesignComponentElement) mt.getValue();
 		StandardTable table = (StandardTable) tbl.getComponent();
 		MTableHeader mth = new MTableHeader(mt, tbl, StandardColumn.PROPERTY_TABLE_HEADER);
@@ -547,7 +517,7 @@ public class TableComponentFactory implements IComponentFactory {
 					
 					//The parent even if it is a MTable could not have the children if we are in the main editor
 					//so we must open the table editor and take the table from there to get the children
-					IEditorPart editorPart = Workbench.getInstance().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+					IEditorPart editorPart =  JaspersoftStudioPlugin.getInstance().getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 					INode tableEditorModel = null;
 					if (editorPart instanceof JrxmlEditor){
 						JrxmlEditor jrxmlEditor = (JrxmlEditor)editorPart;

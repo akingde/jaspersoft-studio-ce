@@ -27,7 +27,6 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.model.IGraphicalPropertiesHandler;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.field.MField;
 import com.jaspersoft.studio.model.parameter.MParameter;
@@ -91,13 +90,8 @@ public class RenameDatasetObjectNameCommand extends Command {
 	 */
 	private void setModelRefresh(List<INode> childerns){
 		for(INode child : childerns){
-			if (child instanceof IGraphicalPropertiesHandler){
-				IGraphicalPropertiesHandler graphicalElement = (IGraphicalPropertiesHandler)child;
-				graphicalElement.initModel();
-			}
 			setModelRefresh(child.getChildren());
 		}
-		
 	}
 	
 

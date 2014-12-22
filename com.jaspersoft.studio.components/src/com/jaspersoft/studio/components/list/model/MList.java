@@ -330,7 +330,6 @@ public class MList extends MGraphicElement implements IPastable, IPastableGraphi
 
 	@Override
 	public void setValue(Object value) {
-		fullModelList = null;
 		if (getValue() != null) {
 			JRDesignComponentElement jrcomp = (JRDesignComponentElement) getValue();
 			JRElementGroup elementGroup = getJRElementGroup(jrcomp);
@@ -351,9 +350,6 @@ public class MList extends MGraphicElement implements IPastable, IPastableGraphi
 		HashSet<String> graphicalProperties = getGraphicalProperties();
 		if (graphicalProperties.contains(evt.getPropertyName())) {
 			setChangedProperty(true);
-		}
-		if (evt.getPropertyName().equals(JRDesignElementGroup.PROPERTY_CHILDREN) || evt.getPropertyName().equals(JRDesignElement.PROPERTY_ELEMENT_GROUP)) {
-			fullModelList = null;
 		}
 		if (evt.getSource() == getValue()) {
 			if (evt.getPropertyName().equals(JRDesignElement.PROPERTY_HEIGHT)) {
@@ -435,12 +431,6 @@ public class MList extends MGraphicElement implements IPastable, IPastableGraphi
 		return datasetList;
 	}
 
-	/**
-	 * Cache for the real model. The cache is build only we needed and is
-	 * discarded when elements are added or removed to the model
-	 */
-	private ANode fullModelList = null;
-
 	private void fillUsedStyles(List<INode> children, HashSet<String> map) {
 		for (INode node : children) {
 			if (node instanceof IGraphicalPropertiesHandler) {
@@ -452,23 +442,9 @@ public class MList extends MGraphicElement implements IPastable, IPastableGraphi
 
 	@Override
 	public HashSet<String> getUsedStyles() {
-		initModel();
 		HashSet<String> result = super.getUsedStyles();
-		fillUsedStyles(fullModelList.getChildren(), result);
+		fillUsedStyles(getChildren(), result);
 		return result;
-	}
-
-	@Override
-	public List<INode> initModel() {
-		if (fullModelList == null) {
-			if (getChildren().isEmpty()) {
-				fullModelList = ListComponentFactory.INST().createNode(null, getValue(), -1);
-				StandardListComponent list = (StandardListComponent) getValue().getComponent();
-				ReportFactory.createElementsForBand(fullModelList, list.getContents().getChildren());
-			} else
-				fullModelList = this;
-		}
-		return fullModelList.getChildren();
 	}
 
 	@Override
@@ -497,4 +473,13 @@ public class MList extends MGraphicElement implements IPastable, IPastableGraphi
 
 	}
 
+	@Override
+	public boolean showChildren() {
+		return getParent() instanceof MPage;
+	}
+	
+	@Override
+	public void createSubeditor() {
+		ListComponentFactory.createSubeditor(this);
+	}
 }

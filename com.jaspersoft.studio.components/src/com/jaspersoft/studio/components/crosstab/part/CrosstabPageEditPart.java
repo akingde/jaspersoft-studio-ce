@@ -25,7 +25,7 @@ import com.jaspersoft.studio.editor.gef.figures.ContainerPageFigure;
 import com.jaspersoft.studio.editor.gef.parts.PageEditPart;
 import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.model.INode;
-import com.jaspersoft.studio.model.util.ModelVisitor;
+import com.jaspersoft.studio.model.util.ShowChildrenModelVisitor;
 import com.jaspersoft.studio.property.dataset.dialog.IDatasetDialogSupport;
 
 public class CrosstabPageEditPart extends PageEditPart implements
@@ -62,10 +62,11 @@ public class CrosstabPageEditPart extends PageEditPart implements
 		} else
 			containerSize = null;
 	}
-
+	
+	@Override
 	protected List<Object> getModelChildren() {
 		final List<Object> list = new ArrayList<Object>();
-		new ModelVisitor(getPage()) {
+		new ShowChildrenModelVisitor<Object>(getPage()) {
 
 			@Override
 			public boolean visit(INode n) {

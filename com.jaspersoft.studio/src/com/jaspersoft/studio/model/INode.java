@@ -122,4 +122,11 @@ public interface INode extends PropertyChangeListener {
 	 * @return the JasperDesign that subtends this model
 	 */
 	public JasperDesign getJasperDesign();
+	
+	/**
+	 * Boolean flag to declare if the children are visible or not
+	 * 
+	 * @return true if the children are visible, false otherwise
+	 */
+	public boolean showChildren();
 }

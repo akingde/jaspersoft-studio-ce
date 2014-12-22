@@ -141,7 +141,7 @@ public class ReportPageEditPart extends PageEditPart implements PropertyChangeLi
 	}
 
 	/**
-	 * Gets the node children.
+	 * Gets the node children that need to be shown
 	 * 
 	 * @param node
 	 *          the node
@@ -150,10 +150,12 @@ public class ReportPageEditPart extends PageEditPart implements PropertyChangeLi
 	 * @return the node children
 	 */
 	private void getNodeChildren(INode node, List<Object> list) {
-		for (INode nod : node.getChildren()) {
-			if (nod instanceof IGraphicElement)
-				list.add(nod);
-			getNodeChildren(nod, list);
+		if (node.showChildren()){
+			for (INode nod : node.getChildren()) {
+				if (nod instanceof IGraphicElement)
+					list.add(nod);
+				getNodeChildren(nod, list);
+			}
 		}
 	}
 
