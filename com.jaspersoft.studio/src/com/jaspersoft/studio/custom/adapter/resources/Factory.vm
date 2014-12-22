@@ -91,7 +91,7 @@ public class $factoryName implements DataAdapterFactory {
 	 * @return the service for the data adapter or null
 	 */
 	@Override
-	public DataAdapterService createDataAdapterService(DataAdapter dataAdapter) {
+	public DataAdapterService createDataAdapterService(JasperReportsContext jasperReportsContext, DataAdapter dataAdapter) {
 		if (dataAdapter instanceof $dataAdapterType)
 			return new $dataAdapterService(DefaultJasperReportsContext.getInstance(), ($dataAdapterType) dataAdapter);
 		return null;
