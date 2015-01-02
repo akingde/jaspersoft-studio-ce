@@ -22,8 +22,9 @@ import java.util.Set;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
+import jersey.repackaged.com.google.common.collect.BiMap;
+import jersey.repackaged.com.google.common.collect.HashBiMap;
+
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.jasperserver.dto.ClientUnknown;
 import com.jaspersoft.jasperserver.dto.resources.ClientAdhocDataView;

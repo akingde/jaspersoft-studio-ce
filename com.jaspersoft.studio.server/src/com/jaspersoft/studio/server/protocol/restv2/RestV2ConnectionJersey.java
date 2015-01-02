@@ -38,7 +38,7 @@ import net.sf.jasperreports.eclipse.util.FileExtension;
 
 import org.apache.http.client.CookieStore;
 import org.apache.http.client.HttpResponseException;
-import org.apache.http.impl.conn.PoolingClientConnectionManager;
+import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.glassfish.jersey.SslConfigurator;
 import org.glassfish.jersey.apache.connector.ApacheClientProperties;
@@ -119,7 +119,7 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 		SslConfigurator sslConfig = SslConfigurator.newInstance(true);
 		clientConfig.property(ApacheClientProperties.SSL_CONFIG, sslConfig);
 
-		PoolingClientConnectionManager cxMgr = new PoolingClientConnectionManager();
+		PoolingHttpClientConnectionManager cxMgr = new PoolingHttpClientConnectionManager();
 		cxMgr.setMaxTotal(50);
 		cxMgr.setDefaultMaxPerRoute(20);
 		clientConfig.property(ApacheClientProperties.CONNECTION_MANAGER, cxMgr);

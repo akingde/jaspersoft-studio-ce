@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import jersey.repackaged.com.google.common.collect.BiMap;
+import jersey.repackaged.com.google.common.collect.HashBiMap;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 import org.apache.commons.lang.SystemUtils;
@@ -56,8 +58,6 @@ import org.eclipse.ui.forms.events.ExpansionEvent;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.Section;
 
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.jasperserver.dto.resources.ClientResourceLookup;
 import com.jaspersoft.studio.server.AFinderUI;
