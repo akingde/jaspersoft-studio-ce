@@ -492,7 +492,7 @@ public class ReportControler {
 			if (page == 0) {
 				UIUtils.getDisplay().syncExec(new Runnable() {
 					public void run() {
-						refreshRightView();
+						pcontainer.getRightContainer().switchView(stats, pcontainer.getDefaultViewer());
 					}
 				});
 			}
@@ -612,7 +612,7 @@ public class ReportControler {
 		return errorView;
 	}
 
-	private void refreshRightView() {
-		pcontainer.switchRightView(pcontainer.getDefaultViewer(), stats, pcontainer.getRightContainer());
-	}
+	// private void refreshRightView() {
+	// pcontainer.switchRightView(pcontainer.getDefaultViewer(), stats, pcontainer.getRightContainer());
+	// }
 }

@@ -112,7 +112,8 @@ public class SWTViewer extends APreview implements IJRPrintable, IPreferencePage
 	}
 
 	public void setJRPRint(Statistics stats, JasperPrint jrprint, boolean refresh) {
-		doUpdatePage(jrprint, Math.max(0, rptviewer.getPageIndex()));
+		rptviewer.setPageIndex(Math.max(0, rptviewer.getPageIndex()));
+		doUpdatePage(jrprint, rptviewer.getPageIndex());
 	}
 
 	private boolean refresh = false;
@@ -121,7 +122,7 @@ public class SWTViewer extends APreview implements IJRPrintable, IPreferencePage
 
 	@Override
 	public void pageGenerated(final JasperPrint arg0, int page) {
-		doUpdatePage(arg0, rptviewer.getPageIndex());
+		doUpdatePage(arg0, page);
 	}
 
 	@Override
@@ -138,12 +139,11 @@ public class SWTViewer extends APreview implements IJRPrintable, IPreferencePage
 		}
 		lastJR = null;
 		refresh = true;
-		UIUtils.getDisplay().syncExec(new Runnable() {
+		UIUtils.getDisplay().asyncExec(new Runnable() {
 
 			@Override
 			public void run() {
-				rptviewer.setReport(arg0);
-				rptviewer.setPageIndex(page);
+				rptviewer.setReport(arg0, page);
 				jrprint = arg0;
 				refresh = false;
 				if (lastJR != null)
