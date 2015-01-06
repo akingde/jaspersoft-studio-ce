@@ -12,6 +12,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.jdbc;
 
+import java.sql.Clob;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -47,7 +48,9 @@ public class JDBCFieldsProvider implements IFieldsProvider {
 		return true;
 	}
 
-	public List<JRDesignField> getFields(DataAdapterService con, JasperReportsConfiguration jConfig, JRDataset jDataset) throws JRException, UnsupportedOperationException {
+	public List<JRDesignField> getFields(DataAdapterService con,
+			JasperReportsConfiguration jConfig, JRDataset jDataset)
+			throws JRException, UnsupportedOperationException {
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		con.contributeParameters(parameters);
 
@@ -61,9 +64,13 @@ public class JDBCFieldsProvider implements IFieldsProvider {
 
 			// JasperReports query executer instances require
 			// REPORT_PARAMETERS_MAP parameter to be defined and not null
-			Map<String, JRValueParameter> tmpMap = ParameterUtil.convertMap(parameters, jDataset);
-			tmpMap.put(JRParameter.REPORT_PARAMETERS_MAP, new SimpleValueParameter(new HashMap<String, JRValueParameter>()));
-			JRJdbcQueryExecuter qe = new JRJdbcQueryExecuter(jConfig, jDataset, tmpMap);
+			Map<String, JRValueParameter> tmpMap = ParameterUtil.convertMap(
+					parameters, jDataset);
+			tmpMap.put(JRParameter.REPORT_PARAMETERS_MAP,
+					new SimpleValueParameter(
+							new HashMap<String, JRValueParameter>()));
+			JRJdbcQueryExecuter qe = new JRJdbcQueryExecuter(jConfig, jDataset,
+					tmpMap);
 			qe.createDatasource();
 
 			ResultSet rs = qe.getResultSet();
@@ -87,10 +94,14 @@ public class JDBCFieldsProvider implements IFieldsProvider {
 						String catalog = metaData.getCatalogName(i);
 						String schema = metaData.getSchemaName(i);
 						String table = metaData.getTableName(i);
-						if (!(Misc.isNullOrEmpty(catalog) && Misc.isNullOrEmpty(schema) && Misc.isNullOrEmpty(table))) {
-							ResultSet rsmc = c.getMetaData().getColumns(catalog, schema, table, name);
+						if (!(Misc.isNullOrEmpty(catalog)
+								&& Misc.isNullOrEmpty(schema) && Misc
+									.isNullOrEmpty(table))) {
+							ResultSet rsmc = c.getMetaData().getColumns(
+									catalog, schema, table, name);
 							while (rsmc.next()) {
-								field.setDescription(StringUtils.xmlEncode(rsmc.getString("REMARKS"), null));
+								field.setDescription(StringUtils.xmlEncode(
+										rsmc.getString("REMARKS"), null));
 								break;
 							}
 						}
@@ -130,6 +141,7 @@ public class JDBCFieldsProvider implements IFieldsProvider {
 				case Types.DECIMAL:
 					return "java.math.BigDecimal";
 				case Types.BIT:
+				case Types.BOOLEAN:
 					return "java.lang.Boolean";
 				case Types.TINYINT:
 					return "java.lang.Byte";
@@ -140,20 +152,32 @@ public class JDBCFieldsProvider implements IFieldsProvider {
 				case Types.BIGINT:
 					return "java.lang.Long";
 				case Types.REAL:
-					return "java.lang.Real";
+					return "java.lang.Float";
 				case Types.FLOAT:
 				case Types.DOUBLE:
 					return "java.lang.Double";
 				case Types.BINARY:
 				case Types.VARBINARY:
 				case Types.LONGVARBINARY:
-					return "java.lang.Byte[]";
+					return "byte[]";
 				case Types.DATE:
 					return "java.sql.Date";
 				case Types.TIME:
 					return "java.sql.Time";
 				case Types.TIMESTAMP:
 					return "java.sql.Timestamp";
+				case Types.CLOB:
+					return "java.sql.Clob";
+				case Types.BLOB:
+					return "java.sql.Blob";
+				case Types.ARRAY:
+					return "java.sql.Array";
+				case Types.STRUCT:
+					return "java.sql.Struct";
+				case Types.REF:
+					return "java.sql.Ref";
+				case Types.DATALINK:
+					return "java.net.URL";
 				}
 			} catch (SQLException ex2) {
 				ex2.printStackTrace();
