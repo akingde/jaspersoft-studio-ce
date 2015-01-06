@@ -23,6 +23,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.Set;
+import java.util.Vector;
 
 import net.sf.jasperreports.components.ComponentsExtensionsRegistryFactory;
 import net.sf.jasperreports.components.ComponentsManager;
@@ -46,8 +47,6 @@ import net.sf.jasperreports.engine.util.MessageProviderFactory;
 import net.sf.jasperreports.engine.util.ResourceBundleMessageProviderFactory;
 import net.sf.jasperreports.engine.xml.JRXmlDigester;
 import net.sf.jasperreports.engine.xml.JRXmlDigesterFactory;
-import net.sf.jasperreports.extensions.DefaultExtensionsRegistry;
-import net.sf.jasperreports.extensions.ExtensionsEnvironment;
 import net.sf.jasperreports.functions.FunctionsBundle;
 import net.sf.jasperreports.repo.FileRepositoryPersistenceServiceFactory;
 import net.sf.jasperreports.repo.FileRepositoryService;
@@ -564,7 +563,7 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 	@SuppressWarnings("unchecked")
 	private List<FontFamily> getExtensionFonts() {
 		if (lst == null) {
-			lst = new ArrayList<FontFamily>();
+			lst = new Vector<FontFamily>();
 		}
 		if (refreshFonts) {
 			String strprop = getProperty(FontsPreferencePage.FPP_FONT_LIST);
