@@ -191,6 +191,7 @@ public class ConfigurationManager {
 				}
 				prefs.remove(preferenceKey);
 			} catch (Exception e) {
+				JaspersoftStudioPlugin.getInstance().logError("Error converting the element",e);
 				//Do the revert of the created files
 				for(File createdElement : createtElements){
 					if (createdElement.exists()) createdElement.delete();
