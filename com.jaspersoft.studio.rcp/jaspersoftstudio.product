@@ -28,7 +28,8 @@ Special thanks to all people who support this software.
 -XX:MaxPermSize=256M
 -XX:+CMSClassUnloadingEnabled
 -XX:+UseConcMarkSweepGC
--Dfile.encoding=UTF-8</vmArgs>
+-Dfile.encoding=UTF-8
+-Djava.net.preferIPv4Stack=true</vmArgs>
       <vmArgsLin>-Dorg.eclipse.swt.browser.DefaultType=mozilla</vmArgsLin>
       <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts</vmArgsMac>
    </launcherArgs>
