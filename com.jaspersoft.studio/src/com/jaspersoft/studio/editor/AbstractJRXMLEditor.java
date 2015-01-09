@@ -516,8 +516,8 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 			} catch (UnsupportedEncodingException e) {
 				UIUtils.showError(e);
 			}
+			version = JRXmlWriterHelper.getVersion(resource, jrContext, true);
 			if ((!xmlEditor.isDirty() && getDesignEditor().isDirty()) || getActiveEditor() != xmlEditor) {
-				version = JRXmlWriterHelper.getVersion(resource, jrContext, true);
 				model2xml(version);
 			} else {
 				IDocumentProvider dp = xmlEditor.getDocumentProvider();
