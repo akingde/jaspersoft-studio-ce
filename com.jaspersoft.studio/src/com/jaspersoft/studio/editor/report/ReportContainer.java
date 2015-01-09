@@ -459,7 +459,7 @@ public class ReportContainer extends MultiPageToolbarEditorPart implements ITabb
 				if (getEditorInput() instanceof FileEditorInput) {
 					JRDesignSubreport s = (JRDesignSubreport) obj;
 					if (s.getExpression() != null) {
-						String path = ExpressionUtil.eval(s.getExpression(), jrContext);
+						String path = ExpressionUtil.cachedExpressionEvaluationString(s.getExpression(), jrContext);
 						if (path != null) {
 							String fpath = path.replaceAll(".jasper", ".jrxml");
 							try {

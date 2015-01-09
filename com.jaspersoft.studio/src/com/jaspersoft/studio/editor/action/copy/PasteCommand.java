@@ -119,7 +119,13 @@ public class PasteCommand extends Command {
 						createdNodes++;
 						list.put(node, cmd);
 					} if (node instanceof MConditionalStyle) {
-						Command cmdc = new CreateConditionalStyleCommand((MStyle)parent, (JRDesignConditionalStyle)n.getValue());
+						MStyle newParent = (MStyle)parent;
+						//If the current selected node is a conditional style take
+						//its parent
+						if (parent instanceof MConditionalStyle){
+							newParent = (MStyle)((MConditionalStyle) parent).getParent();
+						}
+						Command cmdc = new CreateConditionalStyleCommand(newParent, (JRDesignConditionalStyle)n.getValue());
 						cmd.add(cmdc);
 						createdNodes++;
 						list.put(node, cmd);

@@ -17,7 +17,7 @@ import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.internal.Workbench;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.part.MultiPageEditorSite;
 
@@ -25,7 +25,6 @@ import com.jaspersoft.studio.editor.IJROBjectEditor;
 import com.jaspersoft.studio.model.ANode;
 
 public class EditableFigureEditPart extends FigureEditPart {
-	
 	
 	@Override
 	public void performRequest(Request req) {
@@ -43,7 +42,7 @@ public class EditableFigureEditPart extends FigureEditPart {
 			if (mpep instanceof IJROBjectEditor)
 				doOpenEditor(val, (IJROBjectEditor) mpep, node);
 		} else {
-			editor = Workbench.getInstance().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+			editor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 			if (editor instanceof IJROBjectEditor)
 				doOpenEditor(val, (IJROBjectEditor) editor, node);
 		}

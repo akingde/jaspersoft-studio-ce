@@ -341,17 +341,19 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 							Object obj = ti[0].getData();
 							if (obj instanceof TreeEditPart && editor instanceof AbstractVisualEditor) {
 
-								EditPart part = (EditPart) ((AbstractVisualEditor) editor).getGraphicalViewer().getEditPartRegistry()
-										.get(((TreeEditPart) obj).getModel());
+								EditPart part = (EditPart) ((AbstractVisualEditor) editor).getGraphicalViewer().getEditPartRegistry().get(((TreeEditPart) obj).getModel());
+								SelectionRequest request = new SelectionRequest();
+								request.setType(RequestConstants.REQ_OPEN);
 								if (part != null) {
-									SelectionRequest request = new SelectionRequest();
-									request.setType(RequestConstants.REQ_OPEN);
 									part.performRequest(request);
 								} else {
 									TreeEditPart atep = (TreeEditPart) obj;
-									if (atep.getModel() instanceof ANode) {
-										EditableFigureEditPart.openEditor(((ANode) atep.getModel()).getValue(), (IEditorPart) editor,
-												(ANode) atep.getModel());
+									//If the part can understand the request perform it on the edit part
+									//otherwise use a general open editor method
+									if (atep.understandsRequest(request)){
+										atep.performRequest(request);
+									} else if (atep.getModel() instanceof ANode) {
+										EditableFigureEditPart.openEditor(((ANode) atep.getModel()).getValue(), (IEditorPart) editor,(ANode) atep.getModel());
 									}
 								}
 							}
