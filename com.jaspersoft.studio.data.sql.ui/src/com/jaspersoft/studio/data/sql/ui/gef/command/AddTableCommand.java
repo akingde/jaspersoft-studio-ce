@@ -118,19 +118,15 @@ public class AddTableCommand extends Command {
 			// tables
 			boolean createFKs = false;
 			if (!keys.isEmpty())
-				switch (joinOnDND) {
-				case SQLEditorPreferencesPage.DROP:
+				if (joinOnDND.equals(SQLEditorPreferencesPage.DROP))
 					createFKs = dndDetail == DND.DROP_MOVE;
-					break;
-				case SQLEditorPreferencesPage.ASK:
+				else if (joinOnDND.equals(SQLEditorPreferencesPage.ASK))
 					createFKs = UIUtils.showConfirmation(
 							Messages.AddTableCommand_0,
 							Messages.AddTableCommand_1);
-					break;
-				case SQLEditorPreferencesPage.CTRL_DROP:
+				else if (joinOnDND.equals(SQLEditorPreferencesPage.CTRL_DROP))
 					createFKs = dndDetail == DND.DROP_COPY;
-					break;
-				}
+
 			if (createFKs)
 				for (ForeignKey fk : keys.keySet()) {
 					for (MSQLColumn c : fk.getDestColumns()) {
