@@ -22,8 +22,10 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.dialogs.TrayDialog;
+import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.application.IWorkbenchConfigurer;
 import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
 import org.eclipse.ui.application.WorkbenchAdvisor;
@@ -117,6 +119,15 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 		super.preStartup();
 		IDE.registerAdapters();
 		//setRepositories();
+	}
+	
+	@Override
+	public void postStartup() {
+		super.postStartup();
+		//Remove the workspace preference page from the preferences
+		//since it offers some option not compatible with the JSS workspace selection
+		PreferenceManager pm = PlatformUI.getWorkbench().getPreferenceManager( );
+		pm.remove("org.eclipse.ui.preferencePages.Workbench/org.eclipse.ui.preferencePages.Startup/org.eclipse.ui.preferencePages.Startup.Workspaces" );
 	}
 	
 	/**
