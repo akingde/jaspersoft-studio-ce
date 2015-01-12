@@ -16,7 +16,10 @@ import org.eclipse.osgi.util.NLS;
 
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "com.jaspersoft.studio.data.sql.messages.messages"; //$NON-NLS-1$
+	public static String AddTableCommand_0;
+	public static String AddTableCommand_1;
 	public static String ColumnsDialog_0;
+	public static String CreateTable_0;
 	public static String DBMetadata_0;
 	public static String DBMetadata_1;
 	public static String DBMetadata_2;
@@ -68,6 +71,10 @@ public class Messages extends NLS {
 	public static String SQLQueryDiagram_8;
 	public static String SQLEditorPreferencesPage_0;
 	public static String SQLEditorPreferencesPage_1;
+	public static String SQLEditorPreferencesPage_2;
+	public static String SQLEditorPreferencesPage_3;
+	public static String SQLEditorPreferencesPage_4;
+	public static String SQLEditorPreferencesPage_5;
 	public static String SQLEditorPreferencesPage_comboLabel;
 	public static String SQLEditorPreferencesPage_dialogTitle;
 	public static String Text2Model_warn;

@@ -77,16 +77,20 @@ public class FromEditPart extends AbstractGraphicalEditPart {
 
 	@Override
 	protected void createEditPolicies() {
-		installEditPolicy(EditPolicy.CONTAINER_ROLE, new FromContainerEditPolicy());
+		installEditPolicy(EditPolicy.CONTAINER_ROLE,
+				new FromContainerEditPolicy());
 		installEditPolicy(EditPolicy.LAYOUT_ROLE, new XYLayoutEditPolicy() {
 
 			@Override
-			protected Command createChangeConstraintCommand(ChangeBoundsRequest request, EditPart child, Object constraint) {
+			protected Command createChangeConstraintCommand(
+					ChangeBoundsRequest request, EditPart child,
+					Object constraint) {
 				Rectangle r = (Rectangle) constraint;
 				if (child instanceof TableEditPart) {
 					SetValueCommand cmd = new SetValueCommand();
 					cmd.setPropertyId(MFromTable.PROP_X);
-					cmd.setPropertyValue(new Point(Math.max(0, r.x), Math.max(0, r.y)));
+					cmd.setPropertyValue(new Point(Math.max(0, r.x), Math.max(
+							0, r.y)));
 					cmd.setTarget(((TableEditPart) child).getModel());
 					return cmd;
 				}
@@ -128,7 +132,8 @@ public class FromEditPart extends AbstractGraphicalEditPart {
 						return false;
 					else
 						list.add((ANode) n);
-					if (((MFromTable) n).getPropertyActualValue(MFromTable.PROP_X) == null)
+					if (((MFromTable) n)
+							.getPropertyActualValue(MFromTable.PROP_X) == null)
 						layout = false;
 				}
 				return true;
@@ -153,7 +158,8 @@ public class FromEditPart extends AbstractGraphicalEditPart {
 		RoundedRectangle f = (RoundedRectangle) getFigure();
 		setupLayoutManager();
 		MFrom mfrom = getModel();
-		getFigure().setToolTip(new Label(QueryWriter.writeSubQuery(mfrom.getParent())));
+		getFigure().setToolTip(
+				new Label(QueryWriter.writeSubQuery(mfrom.getParent())));
 
 		AbstractGraphicalEditPart parent = (AbstractGraphicalEditPart) getParent();
 		Point location = f.getLocation();
@@ -161,7 +167,8 @@ public class FromEditPart extends AbstractGraphicalEditPart {
 			location.x = (Integer) mfrom.getPropertyValue(MFromTable.PROP_X);
 		if (mfrom.getPropertyActualValue(MFromTable.PROP_Y) != null)
 			location.y = (Integer) mfrom.getPropertyValue(MFromTable.PROP_Y);
-		parent.setLayoutConstraint(this, f, new Rectangle(location.x, location.y, -1, -1));
+		parent.setLayoutConstraint(this, f, new Rectangle(location.x,
+				location.y, -1, -1));
 	}
 
 	private boolean layout = false;
@@ -176,7 +183,9 @@ public class FromEditPart extends AbstractGraphicalEditPart {
 			if (Misc.nvl(new ModelVisitor<Boolean>(getModel()) {
 				@Override
 				public boolean visit(INode n) {
-					if (n instanceof AMapElement && ((AMapElement) n).getPropertyActualValue(MFromTable.PROP_X) == null) {
+					if (n instanceof AMapElement
+							&& ((AMapElement) n)
+									.getPropertyActualValue(MFromTable.PROP_X) == null) {
 						setObject(Boolean.FALSE);
 						stop();
 					}
@@ -217,10 +226,12 @@ public class FromEditPart extends AbstractGraphicalEditPart {
 
 	class FromLayout extends XYLayout {
 
-		protected Dimension calculatePreferredSize(IFigure container, int wHint, int hHint) {
+		protected Dimension calculatePreferredSize(IFigure container,
+				int wHint, int hHint) {
 			container.validate();
 			List<IFigure> children = container.getChildren();
-			Rectangle result = new Rectangle().setLocation(container.getClientArea().getLocation());
+			Rectangle result = new Rectangle().setLocation(container
+					.getClientArea().getLocation());
 			for (IFigure c : children)
 				result.union(c.getBounds());
 			Insets ins = container.getInsets();

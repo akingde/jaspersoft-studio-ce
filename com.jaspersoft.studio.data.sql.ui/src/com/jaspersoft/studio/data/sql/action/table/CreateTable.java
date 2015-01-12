@@ -18,12 +18,12 @@ import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.window.Window;
-import org.eclipse.swt.widgets.Display;
 
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.Util;
 import com.jaspersoft.studio.data.sql.action.AAction;
 import com.jaspersoft.studio.data.sql.dialogs.TablesDialog;
+import com.jaspersoft.studio.data.sql.messages.Messages;
 import com.jaspersoft.studio.data.sql.model.metadata.MSqlTable;
 import com.jaspersoft.studio.data.sql.model.query.from.MFrom;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
@@ -32,7 +32,7 @@ public class CreateTable extends AAction {
 	private SQLQueryDesigner designer;
 
 	public CreateTable(SQLQueryDesigner designer, TreeViewer treeViewer) {
-		super("&Add Table", treeViewer);
+		super(Messages.CreateTable_0, treeViewer);
 		this.designer = designer;
 	}
 
@@ -48,7 +48,7 @@ public class CreateTable extends AAction {
 
 	@Override
 	public void run() {
-		TablesDialog dialog = new TablesDialog(Display.getDefault().getActiveShell());
+		TablesDialog dialog = new TablesDialog(UIUtils.getShell());
 		dialog.setRoot(designer.getDbMetadata().getRoot());
 		if (dialog.open() == Window.OK)
 			run(dialog.getTable());

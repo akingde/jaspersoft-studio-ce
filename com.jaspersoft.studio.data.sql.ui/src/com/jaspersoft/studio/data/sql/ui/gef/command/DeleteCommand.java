@@ -65,6 +65,9 @@ public class DeleteCommand extends Command {
 								((MFromTable) n).getValue());
 						mft.setAlias(((MFromTable) n).getAlias());
 						mft.setAliasKeyword(((MFromTable) n).getAliasKeyword());
+
+						node.copyProperties((MFromTable) n);
+
 						mapAdd.put(mft, node.getParent());
 						mapAddIndex.put(mft, indx + i);
 					}
@@ -77,6 +80,8 @@ public class DeleteCommand extends Command {
 			mft.setParent(null, -1);
 		for (ANode mft : mapAdd.keySet())
 			mft.setParent(mapAdd.get(mft), mapAddIndex.get(mft));
+		parent.getRoot().getPropertyChangeSupport()
+				.firePropertyChange("wrongvalue", true, false);
 	}
 
 	public void undo() {
@@ -84,6 +89,8 @@ public class DeleteCommand extends Command {
 			mft.setParent(null, -1);
 		for (ANode key : mapDel.keySet())
 			key.setParent(mapDel.get(key), mapDelIndex.get(key));
+		parent.getRoot().getPropertyChangeSupport()
+				.firePropertyChange("wrongvalue", true, false);
 	}
 
 	protected void doDeleteMore(ANode parent, MFromTable todel) {

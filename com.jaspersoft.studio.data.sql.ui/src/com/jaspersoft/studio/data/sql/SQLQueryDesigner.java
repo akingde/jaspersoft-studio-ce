@@ -70,7 +70,8 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 	public SQLQueryDesigner() {
 		super();
 		refreshViewer();
-		JaspersoftStudioPlugin.getInstance().addPreferenceListener(preferenceListener);
+		JaspersoftStudioPlugin.getInstance().addPreferenceListener(
+				preferenceListener);
 	}
 
 	@Override
@@ -100,7 +101,8 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				if (source.isDirty())
-					Text2Model.text2model(SQLQueryDesigner.this, source.getXTextDocument(), true);
+					Text2Model.text2model(SQLQueryDesigner.this,
+							source.getXTextDocument(), true);
 				switch (tabFolder.getSelectionIndex()) {
 				case 1:
 					outline.scheduleRefresh();
@@ -281,7 +283,9 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 				getRoot().setValue(getjDataset());
 				container.run(true, true, new IRunnableWithProgress() {
 
-					public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+					public void run(IProgressMonitor monitor)
+							throws InvocationTargetException,
+							InterruptedException {
 						if (runningthread != null) {
 							runningmonitor.setCanceled(true);
 							if (runningthread != null)
@@ -290,9 +294,13 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 						runningmonitor = monitor;
 						runningthread = Thread.currentThread();
 						try {
-							monitor.beginTask(Messages.SQLQueryDesigner_readmetadata, IProgressMonitor.UNKNOWN);
+							monitor.beginTask(
+									Messages.SQLQueryDesigner_readmetadata,
+									IProgressMonitor.UNKNOWN);
 							dbMetadata.closeConnection();
-							DataAdapterService das = DataAdapterServiceUtil.getInstance(jConfig).getService(da.getDataAdapter());
+							DataAdapterService das = DataAdapterServiceUtil
+									.getInstance(jConfig).getService(
+											da.getDataAdapter());
 							dbMetadata.updateMetadata(da, das, monitor);
 						} finally {
 							monitor.done();
@@ -328,7 +336,8 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 			outline.dispose();
 		if (diagram != null)
 			diagram.dispose();
-		JaspersoftStudioPlugin.getInstance().removePreferenceListener(preferenceListener);
+		JaspersoftStudioPlugin.getInstance().removePreferenceListener(
+				preferenceListener);
 		super.dispose();
 	}
 
@@ -341,7 +350,8 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 	}
 
 	@Override
-	public void setQuery(JasperDesign jDesign, JRDataset jDataset, JasperReportsConfiguration jConfig) {
+	public void setQuery(JasperDesign jDesign, JRDataset jDataset,
+			JasperReportsConfiguration jConfig) {
 		super.setQuery(jDesign, jDataset, jConfig);
 		doRefreshRoots(false);
 	}
@@ -350,12 +360,14 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 
 	public MSQLRoot createRoot(MSQLRoot oldRoot) {
 		if (oldRoot != null) {
-			oldRoot.getPropertyChangeSupport().removePropertyChangeListener(tblListener);
+			oldRoot.getPropertyChangeSupport().removePropertyChangeListener(
+					tblListener);
 			roots.remove(oldRoot);
 		}
 		MSQLRoot rt = new MSQLRoot(null, getjDataset());
 		if (jConfig != null)
-			rt.setIdentifierQuote(jConfig.getProperty(SQLEditorPreferencesPage.P_IDENTIFIER_QUOTE, "")); //$NON-NLS-1$
+			rt.setIdentifierQuote(jConfig.getProperty(
+					SQLEditorPreferencesPage.P_IDENTIFIER_QUOTE, "")); //$NON-NLS-1$
 		roots.add(rt);
 		rt.getPropertyChangeSupport().addPropertyChangeListener(tblListener);
 		return rt;
@@ -374,10 +386,14 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 				public boolean visit(INode n) {
 					if (n instanceof MFromTable) {
 						MFromTable ft = (MFromTable) n;
-						Object x = ((MFromTable) n).getPropertyActualValue(MFromTable.PROP_X);
-						Object y = ((MFromTable) n).getPropertyActualValue(MFromTable.PROP_Y);
+						Object x = ((MFromTable) n)
+								.getPropertyActualValue(MFromTable.PROP_X);
+						Object y = ((MFromTable) n)
+								.getPropertyActualValue(MFromTable.PROP_Y);
 						if (x != null && y != null)
-							tables.add(ft.getValue().toSQLString() + ft.getAliasKeyString() + "," + x + "," + y + ";");
+							tables.add(ft.getValue().toSQLString()
+									+ ft.getAliasKeyString() + "," + x + ","
+									+ y + "," + ft.getId() + ";");
 					}
 					return true;
 				}
@@ -386,7 +402,9 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 				String input = "";
 				for (String t : tables)
 					input += t;
-				getjDataset().setProperty(SQLQueryDiagram.SQL_EDITOR_TABLES, new Base64Encoder(input).processString());
+
+				getjDataset().setProperty(SQLQueryDiagram.SQL_EDITOR_TABLES,
+						new Base64Encoder(input).processString());
 			}
 		}
 	};
@@ -394,7 +412,8 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 
 	private final class PreferenceListener implements IPropertyChangeListener {
 
-		public void propertyChange(org.eclipse.jface.util.PropertyChangeEvent event) {
+		public void propertyChange(
+				org.eclipse.jface.util.PropertyChangeEvent event) {
 			String p = event.getProperty();
 			if (p.equals(SQLEditorPreferencesPage.P_IDENTIFIER_QUOTE)) {
 				doRefreshRoots(true);
@@ -414,11 +433,16 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 	}
 
 	public void doRefreshRoots(boolean updateText) {
-		String iq = jConfig.getProperty(SQLEditorPreferencesPage.P_IDENTIFIER_QUOTE, ""); //$NON-NLS-1$
-		boolean useJDBCQuote = jConfig.getPropertyBoolean(SQLEditorPreferencesPage.P_USE_JDBC_QUOTE, true); //$NON-NLS-1$
+		String iq = jConfig.getProperty(
+				SQLEditorPreferencesPage.P_IDENTIFIER_QUOTE, ""); //$NON-NLS-1$
+		boolean useJDBCQuote = jConfig.getPropertyBoolean(
+				SQLEditorPreferencesPage.P_USE_JDBC_QUOTE, true); //$NON-NLS-1$
 		if (useJDBCQuote)
 			iq = dbMetadata.getIdentifierQuote();
-		boolean quoteExceptions = jConfig.getPropertyBoolean(SQLEditorPreferencesPage.P_IDENTIFIER_QUOTEONLYEXCEPTIONS, true); //$NON-NLS-1$
+		boolean quoteExceptions = jConfig
+				.getPropertyBoolean(
+						SQLEditorPreferencesPage.P_IDENTIFIER_QUOTEONLYEXCEPTIONS,
+						true); //$NON-NLS-1$
 		for (MSQLRoot r : roots) {
 			r.setIdentifierQuote(iq);
 			r.setQuoteExceptions(quoteExceptions);

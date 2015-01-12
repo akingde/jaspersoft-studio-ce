@@ -102,13 +102,14 @@ public class TableEditPart extends AbstractGraphicalEditPart {
 		AbstractGraphicalEditPart parent = (AbstractGraphicalEditPart) getParent();
 		Point location = f.getLocation();
 		if (fromTable.getPropertyActualValue(MFromTable.PROP_X) != null)
-			location.x = (Integer) fromTable.getPropertyValue(MFromTable.PROP_X);
+			location.x = (Integer) fromTable
+					.getPropertyValue(MFromTable.PROP_X);
 		if (fromTable.getPropertyActualValue(MFromTable.PROP_Y) != null)
-			location.y = (Integer) fromTable.getPropertyValue(MFromTable.PROP_Y);
-		parent.setLayoutConstraint(this, f, new Rectangle(location.x, location.y, -1, -1));
-		f.setToolTip(new Label(fromTable.getToolTip()));
-		// System.out.println(tblName + ": " + location.x + "," + location.y);
-		// new Exception().printStackTrace();
+			location.y = (Integer) fromTable
+					.getPropertyValue(MFromTable.PROP_Y);
+		parent.setLayoutConstraint(this, f, new Rectangle(location.x,
+				location.y, -1, -1));
+		f.setToolTip(new Label(fromTable.getDisplayText()));
 	}
 
 	public void refreshModel() {
@@ -142,14 +143,16 @@ public class TableEditPart extends AbstractGraphicalEditPart {
 
 	public SQLQueryDesigner getDesigner() {
 		if (designer == null)
-			designer = (SQLQueryDesigner) getViewer().getProperty(SQLQueryDiagram.SQLQUERYDIAGRAM);
+			designer = (SQLQueryDesigner) getViewer().getProperty(
+					SQLQueryDiagram.SQLQUERYDIAGRAM);
 		return designer;
 	}
 
 	@Override
 	public void performRequest(Request req) {
 		if (RequestConstants.REQ_OPEN.equals(req.getType())) {
-			EditTable ct = getDesigner().getOutline().getAfactory().getAction(EditTable.class);
+			EditTable ct = getDesigner().getOutline().getAfactory()
+					.getAction(EditTable.class);
 			if (ct.calculateEnabled(new Object[] { getModel() }))
 				ct.run();
 		}
@@ -164,25 +167,28 @@ public class TableEditPart extends AbstractGraphicalEditPart {
 			}
 		});
 
-		installEditPolicy(EditPolicy.GRAPHICAL_NODE_ROLE, new TableNodeEditPolicy());
+		installEditPolicy(EditPolicy.GRAPHICAL_NODE_ROLE,
+				new TableNodeEditPolicy());
 		installEditPolicy(EditPolicy.LAYOUT_ROLE, new TableLayoutEditPolicy());
-		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE, new SelectionEditPolicy() {
+		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE,
+				new SelectionEditPolicy() {
 
-			@Override
-			protected void hideSelection() {
-				getFigure().hideSelectedBorder();
-			}
+					@Override
+					protected void hideSelection() {
+						getFigure().hideSelectedBorder();
+					}
 
-			@Override
-			protected void showSelection() {
-				getFigure().showSelectedBorder();
-			}
-		});
+					@Override
+					protected void showSelection() {
+						getFigure().showSelectedBorder();
+					}
+				});
 	}
 
 	@Override
 	protected List<?> getModelSourceConnections() {
-		if (getModel().getTableJoins() != null && !getModel().getTableJoins().isEmpty()) {
+		if (getModel().getTableJoins() != null
+				&& !getModel().getTableJoins().isEmpty()) {
 			List<TableJoin> joins = new ArrayList<TableJoin>();
 			for (TableJoin tj : getModel().getTableJoins()) {
 				if (isSubQuery(tj))
@@ -195,7 +201,8 @@ public class TableEditPart extends AbstractGraphicalEditPart {
 	}
 
 	protected boolean isSubQuery(TableJoin tj) {
-		return tj.getFromTable().getValue() instanceof MQueryTable || tj.getJoinTable().getValue() instanceof MQueryTable;
+		return tj.getFromTable().getValue() instanceof MQueryTable
+				|| tj.getJoinTable().getValue() instanceof MQueryTable;
 	}
 
 	@Override
@@ -213,7 +220,8 @@ public class TableEditPart extends AbstractGraphicalEditPart {
 	/**
 	 * @see NodeEditPart#getSourceConnectionAnchor(org.eclipse.gef.ConnectionEditPart)
 	 */
-	public ConnectionAnchor getSourceConnectionAnchor(ConnectionEditPart connection) {
+	public ConnectionAnchor getSourceConnectionAnchor(
+			ConnectionEditPart connection) {
 		return new TopAnchor(getFigure());
 	}
 
@@ -227,7 +235,8 @@ public class TableEditPart extends AbstractGraphicalEditPart {
 	/**
 	 * @see NodeEditPart#getTargetConnectionAnchor(org.eclipse.gef.ConnectionEditPart)
 	 */
-	public ConnectionAnchor getTargetConnectionAnchor(ConnectionEditPart connection) {
+	public ConnectionAnchor getTargetConnectionAnchor(
+			ConnectionEditPart connection) {
 		return new BottomAnchor(getFigure());
 	}
 

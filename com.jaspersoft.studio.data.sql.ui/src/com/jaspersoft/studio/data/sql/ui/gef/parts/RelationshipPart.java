@@ -42,7 +42,8 @@ public class RelationshipPart extends AbstractConnectionEditPart {
 	 * @see org.eclipse.gef.editparts.AbstractEditPart#createEditPolicies()
 	 */
 	protected void createEditPolicies() {
-		installEditPolicy(EditPolicy.CONNECTION_ENDPOINTS_ROLE, new ConnectionEndpointEditPolicy());
+		installEditPolicy(EditPolicy.CONNECTION_ENDPOINTS_ROLE,
+				new ConnectionEndpointEditPolicy());
 	}
 
 	@Override
@@ -53,8 +54,10 @@ public class RelationshipPart extends AbstractConnectionEditPart {
 	@Override
 	public void performRequest(Request req) {
 		if (RequestConstants.REQ_OPEN.equals(req.getType())) {
-			SQLQueryDesigner designer = (SQLQueryDesigner) getViewer().getProperty(SQLQueryDiagram.SQLQUERYDIAGRAM);
-			EditTableJoin ct = designer.getOutline().getAfactory().getAction(EditTableJoin.class);
+			SQLQueryDesigner designer = (SQLQueryDesigner) getViewer()
+					.getProperty(SQLQueryDiagram.SQLQUERYDIAGRAM);
+			EditTableJoin ct = designer.getOutline().getAfactory()
+					.getAction(EditTableJoin.class);
 			if (ct.calculateEnabled(new Object[] { getModel().getJoinTable() }))
 				ct.run();
 		}
@@ -74,7 +77,8 @@ public class RelationshipPart extends AbstractConnectionEditPart {
 		super.refreshVisuals();
 		MFromTableJoin joinTable = getModel().getJoinTable();
 		final StringBuffer tt = new StringBuffer();
-		tt.append(getModel().getFromTable().getToolTip()).append(" ").append(joinTable.getToolTip());
+		tt.append(getModel().getFromTable().getToolTip()).append(" ")
+				.append(joinTable.getToolTip());
 		new ModelVisitor<Object>(joinTable) {
 
 			@Override
@@ -86,11 +90,6 @@ public class RelationshipPart extends AbstractConnectionEditPart {
 		};
 		PolylineConnection f = (PolylineConnection) getFigure();
 		f.setToolTip(new Label(tt.toString()));
-		// f.setLayoutManager(new DelegatingLayout());
-		//
-		// Label label = new Label("middle");
-		// f.add(label, new ConnectionLocator(f, ConnectionLocator.MIDDLE));
-
 		if (joinTable.getJoin().equals(AMKeyword.INNER_JOIN)) {
 			f.setTargetDecoration(getInnerDecoration());
 			f.setSourceDecoration(getInnerDecoration());
