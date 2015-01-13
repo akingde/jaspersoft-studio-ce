@@ -25,6 +25,8 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.gef.DefaultEditDomain;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
+import org.eclipse.gef.Request;
+import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.editparts.AbstractTreeEditPart;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Tree;
@@ -35,8 +37,11 @@ import org.eclipse.ui.IFileEditorInput;
 
 import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.editor.JrxmlEditor;
 import com.jaspersoft.studio.editor.outline.editpolicy.ElementEditPolicy;
 import com.jaspersoft.studio.editor.outline.editpolicy.ElementTreeEditPolicy;
+import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
+import com.jaspersoft.studio.editor.report.ReportContainer;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MLockableRefresh;
@@ -50,6 +55,55 @@ import com.jaspersoft.studio.utils.SelectionHelper;
 public class TreeEditPart extends AbstractTreeEditPart implements PropertyChangeListener {
 
 	private IResource associatedFile;
+	
+	/**
+	 * In some cases a feedback can be shown on the edit part on the main editor that 
+	 * has the same model of the target one. This is the edit part on the main editor that has
+	 * the last added feedback. 
+	 */
+	protected EditPart lastEditorFeedback = null;
+
+	/**
+	 * If the request is an add this search an edit part with the same model of the 
+	 * target one on the main editor and paint a feedback on it. Before to pain the feedback
+	 * any previous feedback is removed. All the checks are done to be sure that the
+	 * visual editor exist
+	 * 
+	 * @param request the current request
+	 */
+	protected void showTargetFeedbackOnEditor(Request request) {
+		if (RequestConstants.REQ_ADD.equals(request.getType())){
+			EditPart targetPart = getTargetEditPart(request);
+			IEditorPart currentEditor = SelectionHelper.getActiveJRXMLEditor();
+			if (currentEditor instanceof JrxmlEditor){
+				JrxmlEditor jrxmlEditor = (JrxmlEditor)currentEditor;
+				ReportContainer reportContainer =  jrxmlEditor.getReportContainer();
+				IEditorPart activeEditor = reportContainer.getActiveEditor();
+				if (targetPart != null && activeEditor instanceof AbstractVisualEditor){
+					AbstractVisualEditor reportEditor = (AbstractVisualEditor) activeEditor;
+					EditPart editorPart = (EditPart) reportEditor.getGraphicalViewer().getEditPartRegistry().get(targetPart.getModel());
+					if (editorPart != null){
+						eraseTargetFeedback(request);
+						editorPart.showTargetFeedback(request);
+						lastEditorFeedback = editorPart;
+					}
+				}
+			}
+		}
+	}
+	
+	/**
+	 * If there is a feedback on an editor part then it is removed, otherwise
+	 * it dosen't do anything
+	 * 
+	 * @param request the current request
+	 */
+	protected void eraseTargetFeedbackOnEditor(Request request) {
+		if (lastEditorFeedback != null){
+			lastEditorFeedback.eraseTargetFeedback(request);
+			lastEditorFeedback = null;
+		}
+	}
 
 	@Override
 	protected void addChild(EditPart child, int index) {

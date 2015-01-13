@@ -241,20 +241,6 @@ public class JSSTemplateTransferDropTargetListener extends TemplateTransferDropT
 		return target;
 	}
 
-	private int getItemIndex(TreeItem item) {
-		TreeItem parent = item.getParentItem();
-		TreeItem[] items = parent.getItems();
-		int index = 0;
-		for (int i = 0; i < items.length; i++) {
-			if (items[i] == item) {
-				index = i;
-				break;
-			}
-		}
-		return index;
-	}
-	
-
 	/**
 	 * Check if the user is dragging a detail band to move it before or after another detail band. In this case it return
 	 * the command to do this operation, otherwise null

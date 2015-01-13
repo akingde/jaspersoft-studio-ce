@@ -132,6 +132,7 @@ public class FrameFigureEditPart extends FigureEditPart implements IContainer {
 			/**
 			 * Show the feedback during drag and drop
 			 */
+			@Override
 			protected void showLayoutTargetFeedback(Request request) {
 				super.showLayoutTargetFeedback(request);
 				getLayoutTargetFeedback(request);
@@ -140,6 +141,7 @@ public class FrameFigureEditPart extends FigureEditPart implements IContainer {
 			/**
 			 * Erase the feedback from a ban when no element is dragged into it
 			 */
+			@Override
 			protected void eraseLayoutTargetFeedback(Request request) {
 				super.eraseLayoutTargetFeedback(request);
 				if (targetFeedback != null) {

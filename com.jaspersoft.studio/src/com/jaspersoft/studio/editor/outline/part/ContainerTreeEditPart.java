@@ -69,6 +69,20 @@ public class ContainerTreeEditPart extends TreeEditPart {
 		return super.understandsRequest(req);
 	}
 	
+	//These two methods allow to show a visual feedback on the main editor, if available
+	
+	@Override
+	public void showTargetFeedback(Request request) {
+		super.showTargetFeedback(request);
+		showTargetFeedbackOnEditor(request);
+	}
+	
+	@Override
+	public void eraseTargetFeedback(Request request) {
+		super.eraseTargetFeedback(request);
+		eraseTargetFeedbackOnEditor(request);
+	}
+	
 	/**
 	 * If the node is an MConditionalStyle open the editor to edit its expression
 	 */
