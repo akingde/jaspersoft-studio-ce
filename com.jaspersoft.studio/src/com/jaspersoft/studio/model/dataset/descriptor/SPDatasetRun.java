@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.model.dataset.descriptor;
 
@@ -49,19 +45,19 @@ import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class SPDatasetRun extends ASPropertyWidget {
-	
+
 	private Combo dsetCombo;
 
 	private Button returns;
-	
+
 	private Button params;
-	
+
 	private Button paramMap;
 
 	private boolean alldatasets = true;
-	
+
 	protected APropertyNode pnode;
-	
+
 	protected MDatasetRun mDataSet;
 
 	protected DatasetRunWidgetRadio dsRunWidget;
@@ -83,7 +79,8 @@ public class SPDatasetRun extends ASPropertyWidget {
 			public void widgetSelected(SelectionEvent e) {
 				boolean en = !dsetCombo.getText().equals(ModelUtils.MAIN_DATASET);
 				setDatasetEnabled(en);
-				changeProperty(section, pDescriptor.getId(), JRDesignDatasetRun.PROPERTY_DATASET_NAME, en ? dsetCombo.getText(): ""); //$NON-NLS-1$
+				changeProperty(section, pDescriptor.getId(), JRDesignDatasetRun.PROPERTY_DATASET_NAME, en ? dsetCombo.getText()
+						: ""); //$NON-NLS-1$
 			}
 		});
 
@@ -125,24 +122,24 @@ public class SPDatasetRun extends ASPropertyWidget {
 		gd = new GridData(GridData.HORIZONTAL_ALIGN_CENTER);
 		gd.horizontalSpan = 2;
 		c.setLayoutData(gd);
-		
-		//Create the button to edit the return parameters
+
+		// Create the button to edit the return parameters
 		returns = section.getWidgetFactory().createButton(c, Messages.common_return_values, SWT.PUSH | SWT.FLAT);
 		returns.addSelectionListener(new SelectionAdapter() {
-			
+
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				DatasetRunRVPropertyEditor wizard = new DatasetRunRVPropertyEditor(mDataSet);
 				WizardDialog dialog = new WizardDialog(returns.getShell(), wizard);
 				dialog.create();
 				UIUtils.resizeAndCenterShell(dialog.getShell(), RVPropertyPage.WIDTH_HINT, -1);
-				if (dialog.open() == Dialog.OK){
+				if (dialog.open() == Dialog.OK) {
 					section.changePropertyOn(JRDesignDatasetRun.PROPERTY_RETURN_VALUES, wizard.getValue(), mDataSet);
 				}
 			}
 
 		});
-		
+
 		params = section.getWidgetFactory().createButton(c, Messages.SPDatasetRun_2, SWT.PUSH | SWT.FLAT);
 		params.addSelectionListener(new SelectionAdapter() {
 
@@ -215,6 +212,7 @@ public class SPDatasetRun extends ASPropertyWidget {
 		}
 		dsetCombo.setItems(items);
 		dsetCombo.select(dsindex);
+		dsetCombo.getParent().layout();
 		setDatasetEnabled(!dsetCombo.getText().equals(ModelUtils.MAIN_DATASET));
 		dsRunWidget.setData(datasetRun);
 
