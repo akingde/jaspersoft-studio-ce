@@ -144,6 +144,7 @@ public abstract class SPGroupTypeCombo extends ASPropertyWidget {
 		}
 		combo.setItems(comboItems);
 		combo.select(selection);
+		combo.getParent().layout();
 	}
 
 	/**
