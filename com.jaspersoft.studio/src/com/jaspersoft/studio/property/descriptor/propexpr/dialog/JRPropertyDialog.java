@@ -278,7 +278,7 @@ public class JRPropertyDialog extends Dialog {
 		tvalue.setText(getValueText(value.getValue()));
 	}
 
-	private String getValueText(Object value) {
+	protected String getValueText(Object value) {
 		if(value instanceof String) {
 			// here we care only about strings
 			return (String) value;

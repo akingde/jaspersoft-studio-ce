@@ -63,6 +63,12 @@ public class JRPropertyExpressionDialog extends JRPropertyDialog
 	 */
 	protected Composite vexp;
 	
+	/**
+	 * Boolean guard to avoid recursive calls when the text of the value
+	 * is modified from the modify listener itself
+	 */
+	private boolean updating = false;
+	
 	public JRPropertyExpressionDialog(Shell parentShell) {
 		super(parentShell);
 	}
@@ -109,6 +115,13 @@ public class JRPropertyExpressionDialog extends JRPropertyDialog
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		Composite composite = (Composite)super.createDialogArea(parent);
+		tvalue.addModifyListener(new ModifyListener() {
+			
+			@Override
+			public void modifyText(ModifyEvent e) {
+				synchText();
+			}
+		});
 		vexp = createValueExpressionControl(stackComposite);
 		buseexpr.addSelectionListener(new SelectionListener() {
 
@@ -145,6 +158,12 @@ public class JRPropertyExpressionDialog extends JRPropertyDialog
 		label.setText("Value Expression");
 
 		evalue = new WTextExpression(composite, SWT.NONE, 1);
+		evalue.addModifyListener(new ExpressionModifiedListener() {
+			@Override
+			public void expressionModified(ExpressionModifiedEvent event) {
+				synchText();	
+			}
+		});
 		evalue.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.HORIZONTAL_ALIGN_FILL));
 		evalue.addModifyListener(new ExpressionModifiedListener() {
 			@Override
@@ -156,6 +175,11 @@ public class JRPropertyExpressionDialog extends JRPropertyDialog
 		return composite;
 	}
 	
+	/**
+	 * Set the current value insde the value controls
+	 * 
+	 * @param value value to set
+	 */
 	private void fillValue(PropertyDTO value) {
 		ANode node =  value.getPnode();
 		evalue.setExpressionContext(ModelUtils.getElementExpressionContext(null, node));		
@@ -163,12 +187,46 @@ public class JRPropertyExpressionDialog extends JRPropertyDialog
 		if (value.getValue() != null) {
 			if (value.getValue() instanceof JRExpression) {
 				buseexpr.setSelection(true);
-				evalue.setExpression((JRDesignExpression) value.getValue());
+				JRDesignExpression expr = (JRDesignExpression) value.getValue();
+				evalue.setExpression(expr);
+				tvalue.setText(expr.getText());
 			} else {
 				buseexpr.setSelection(false);
-				tvalue.setText(Misc.nvl((String) value.getValue()));
+				String text = Misc.nvl((String) value.getValue());
+				tvalue.setText(text);
+				evalue.setExpression(new JRDesignExpression(text));
 			}
 		}
 	}
+
+	/**
+	 * Method called when one of the value controls are modfied
+	 * and it synch the value on the other control
+	 */
+	protected synchronized void synchText(){
+		if (!updating){
+			updating = true;
+			if (buseexpr.getSelection()){
+				tvalue.setText(evalue.getText());
+			} else {
+				evalue.setExpression(new JRDesignExpression(tvalue.getText()));
+			}
+			updating = false;
+		}
+	}
 	
+	/**
+	 * Return a value as string, it can handle string
+	 * and expressions. If the value can't be converted
+	 * it return an empty string
+	 */
+	@Override
+	protected String getValueText(Object value) {
+		if(value instanceof String) {
+			return (String) value;
+		} else if (value instanceof JRExpression){
+			return ((JRExpression)value).getText();
+		}
+		return "";
+	}
 }
