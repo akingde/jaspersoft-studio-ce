@@ -7,10 +7,8 @@
     <package 
        uri = "http://www.com.jaspersoft.studio.data.Sql" 
        class = "com.jaspersoft.studio.data.sql.SqlPackage"
-       genModel = "com/jaspersoft/studio/data/Sql.genmodel" /> 
+       genModel = "src-gen/com/jaspersoft/studio/data/Sql.genmodel" /> 
 	
   </extension>
-
-
 
 </plugin>

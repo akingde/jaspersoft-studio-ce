@@ -7,12 +7,12 @@
     <package 
        uri = "http://www.jaspersoft.com/studio/editor/jrexpressions/JavaJRExpression" 
        class = "com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JavaJRExpressionPackage"
-       genModel = "com/jaspersoft/studio/editor/jrexpressions/JavaJRExpression.genmodel" /> 
+       genModel = "src-gen/com/jaspersoft/studio/editor/jrexpressions/JavaJRExpression.genmodel" /> 
 	
   </extension>
   <extension
         point="com.jaspersoft.studio.babel.editor.resourceInput">
-     <input
+     <input 
            class="com.jaspersoft.studio.editor.jrexpressions.messages.ResourcePublisher">
      </input>
   </extension>
