@@ -71,6 +71,7 @@ public class DesignerPreferencePage extends FieldEditorOverlayPage {
 	public static final String P_SAVE_ON_PREVIEW = "saveOnPreview"; //$NON-NLS-1$
 	public static final String P_CENTER_SELECTION = "centerSelectedElement"; //$NON-NLS-1$
 	public static final String P_RESIZE_CONTAINER = "resizeParentContainer"; //$NON-NLS-1$
+	public static final String P_SHOW_VARIABLES_DEFAULTS = "showVariablesDefault"; //$NON-NLS-1$
 	public static final String P_CONTAINER_MARGIN_COLOR = "containerMarginColor"; //$NON-NLS-1$
 	public static final String P_PAGE_MARGIN_COLOR = "pageMarginColor"; //$NON-NLS-1$
 	public static final String P_PAGE_BACKGROUND = "pageBackground"; //$NON-NLS-1$
@@ -127,6 +128,7 @@ public class DesignerPreferencePage extends FieldEditorOverlayPage {
 		addField(new BooleanFieldEditor(P_SAVE_ON_PREVIEW, Messages.DesignerPreferencePage_savereportonpreview, getFieldEditorParent()));
 		addField(new BooleanFieldEditor(P_CENTER_SELECTION, Messages.DesignerPreferencePage_centerEditorOption, getFieldEditorParent()));
 		addField(new BooleanFieldEditor(P_RESIZE_CONTAINER, Messages.DesignerPreferencePage_autoresizeBand, getFieldEditorParent()));
+		addField(new BooleanFieldEditor(P_SHOW_VARIABLES_DEFAULTS, Messages.DesignerPreferencePage_showDefaultsVariablesParameters, getFieldEditorParent()));
 	}
 
 	/*
@@ -152,6 +154,7 @@ public class DesignerPreferencePage extends FieldEditorOverlayPage {
 		store.setDefault(P_SAVE_ON_PREVIEW, false);
 		store.setDefault(P_CENTER_SELECTION, true);
 		store.setDefault(P_RESIZE_CONTAINER, true);
+		store.setDefault(P_SHOW_VARIABLES_DEFAULTS, true);
 	}
 
 	@Override

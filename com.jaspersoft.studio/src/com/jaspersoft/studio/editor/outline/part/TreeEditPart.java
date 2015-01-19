@@ -46,8 +46,12 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MLockableRefresh;
 import com.jaspersoft.studio.model.field.MField;
+import com.jaspersoft.studio.model.parameter.MParameterSystem;
 import com.jaspersoft.studio.model.sortfield.MSortField;
+import com.jaspersoft.studio.model.variable.MVariableSystem;
+import com.jaspersoft.studio.preferences.DesignerPreferencePage;
 import com.jaspersoft.studio.utils.SelectionHelper;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /*
  * The Class ATreeEditPart.
@@ -225,10 +229,18 @@ public class TreeEditPart extends AbstractTreeEditPart implements PropertyChange
 	protected List<?> getModelChildren() {
 		List<Object> list = new ArrayList<Object>();
 		ANode modelNode = (ANode)getModel();
-		if (modelNode != null && modelNode.showChildren())
+		if (modelNode != null && modelNode.showChildren()){
+			//Check if the default parameters and variables should be hidden
+			JasperReportsConfiguration jConfig = modelNode.getJasperConfiguration();
+			boolean showDefaults = jConfig != null? jConfig.getPropertyBoolean(DesignerPreferencePage.P_SHOW_VARIABLES_DEFAULTS, Boolean.TRUE) : true;
 			for (INode node : ((ANode) getModel()).getChildren()) {
-				list.add(node);
+				if (showDefaults){ 
+					list.add(node);
+				} else if (!node.getClass().equals(MParameterSystem.class) && !node.getClass().equals(MVariableSystem.class)){
+					list.add(node);
+				}
 			}
+		}
 		return list;
 	}
 	
