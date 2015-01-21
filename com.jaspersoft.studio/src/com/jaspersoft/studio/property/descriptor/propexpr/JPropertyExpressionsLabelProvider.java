@@ -31,14 +31,8 @@ public class JPropertyExpressionsLabelProvider extends LabelProvider {
 			return ""; //$NON-NLS-1$
 		if (element instanceof PropertyExpressionsDTO) {
 			PropertyExpressionsDTO dto = (PropertyExpressionsDTO) element;
-			int expsize = 0;
-			if (dto.getPropExpressions() != null)
-				expsize += dto.getPropExpressions().length;
-			int pmapsize = 0;
-			if (dto.getPropMap() != null && dto.getPropMap().getPropertyNames() != null)
-				pmapsize += dto.getPropMap().getPropertyNames().length;
-			return "[" + Messages.common_properties + ": " + (expsize + pmapsize) + "]";
-		} //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			return "[" + Messages.common_properties + ": " + dto.getProperties().size() + "]";
+		} 
 		return element.toString();
 	}
 

@@ -33,7 +33,8 @@ public class JPropertyExpressionsCellEditor extends DialogCellEditor {
 	@Override
 	protected Object openDialogBox(Control cellEditorWindow) {
 		JRPropertyExpressionEditor wizard = new JRPropertyExpressionEditor();
-		wizard.setValue((PropertyExpressionsDTO) getValue());
+		//clone the object to avoid side effect
+		wizard.setValue(((PropertyExpressionsDTO) getValue()).clone());
 		WizardDialog dialog = new WizardDialog(cellEditorWindow.getShell(), wizard);
 		dialog.create();
 		if (dialog.open() == Dialog.OK)

@@ -20,9 +20,21 @@ import org.eclipse.gef.ui.actions.Clipboard;
 
 import com.jaspersoft.studio.model.ICopyable;
 
+/**
+ * Command used to copy the selected elements inside the editor into the clipboard
+ */
 public class CopyCommand extends Command {
+	
+	/**
+	 * List of the copied elements
+	 */
 	protected List<ICopyable> list = new ArrayList<ICopyable>();
 
+	/**
+	 * Add an element to the list of the copied elements if it was not already inside
+	 * 
+	 * @return true if the element was added to the list, false otherwise
+	 */
 	public boolean addElement(ICopyable node) {
 		if (!list.contains(node))
 			return list.add(node);
@@ -34,10 +46,16 @@ public class CopyCommand extends Command {
 		return false;
 	}
 
+	/**
+	 * Create the container for the paste of editor elements and
+	 * put it inside the clipboard
+	 */
 	@Override
 	public void execute() {
-		if (canExecute())
-			Clipboard.getDefault().setContents(list);
+		if (canExecute()){
+			PastableElements container = new PastableElements(list);
+			Clipboard.getDefault().setContents(container);
+		}
 	}
 
 	@Override

@@ -40,7 +40,6 @@ import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.wb.swt.SWTResourceManager;
 
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.property.descriptor.properties.dialog.PropertiesList;
 import com.jaspersoft.studio.property.descriptor.properties.dialog.PropertyDTO;
 import com.jaspersoft.studio.property.infoList.ElementDescription;
 import com.jaspersoft.studio.property.infoList.SelectableComposite;
@@ -122,13 +121,8 @@ public class JRPropertyDialog extends Dialog {
 			@Override
 			public void modifyText(ModifyEvent e) {
 				String newtext = cprop.getText();
-				value.setProperty(newtext);
+				value.setName(newtext);
 				if (propertiesSuggestions != null) propertiesSuggestions.showOnlyElement(newtext);
-				PropertyDTO dto = PropertiesList.getDTO(value.getProperty());
-				if (dto != null) {
-					value.setValue(dto.getDefValue());
-					tvalue.setText((String) dto.getDefValue());
-				}
 			}
 		};
 	}
@@ -274,7 +268,7 @@ public class JRPropertyDialog extends Dialog {
 	}
 
 	private void fillValue(PropertyDTO value) {
-		cprop.setText(Misc.nvl(value.getProperty()));
+		cprop.setText(Misc.nvl(value.getName()));
 		tvalue.setText(getValueText(value.getValue()));
 	}
 

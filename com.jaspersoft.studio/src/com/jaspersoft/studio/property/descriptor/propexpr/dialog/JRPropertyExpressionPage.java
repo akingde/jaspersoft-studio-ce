@@ -15,40 +15,35 @@ package com.jaspersoft.studio.property.descriptor.propexpr.dialog;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.jasperreports.engine.JRExpression;
-import net.sf.jasperreports.engine.JRPropertiesMap;
-import net.sf.jasperreports.engine.JRPropertyExpression;
-import net.sf.jasperreports.engine.design.JRDesignPropertyExpression;
-
+import org.eclipse.gef.ui.actions.Clipboard;
 import org.eclipse.jface.viewers.ColumnWeightData;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.graphics.Rectangle;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Listener;
-import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.swt.widgets.TableItem;
 
+import com.jaspersoft.studio.editor.action.copy.PastableProperties;
 import com.jaspersoft.studio.help.TableHelpListener;
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.property.descriptor.properties.dialog.PropertiesList;
+import com.jaspersoft.studio.model.CopyElementExpressionProperty;
+import com.jaspersoft.studio.model.CopyElementProperty;
+import com.jaspersoft.studio.model.ICopyable;
 import com.jaspersoft.studio.property.descriptor.properties.dialog.PropertyDTO;
 import com.jaspersoft.studio.property.descriptor.properties.dialog.TPropertyLabelProvider;
+import com.jaspersoft.studio.property.descriptor.propexpr.PropertyExpressionDTO;
 import com.jaspersoft.studio.property.descriptor.propexpr.PropertyExpressionsDTO;
 import com.jaspersoft.studio.swt.widgets.table.DeleteButton;
 import com.jaspersoft.studio.swt.widgets.table.EditButton;
@@ -61,51 +56,26 @@ import com.jaspersoft.studio.wizards.ContextHelpIDs;
 import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
 
 public class JRPropertyExpressionPage extends JSSHelpWizardPage {
+	
 	private final class EditElement implements IEditElement<PropertyDTO> {
 		@Override
 		public void editElement(List<PropertyDTO> input, int pos) {
 			PropertyDTO v = (PropertyDTO) input.get(pos);
-			if (v == null)
-				return;
-				v =  v.clone();
-				JRPropertyExpressionDialog dialog = new JRPropertyExpressionDialog(Display.getDefault().getActiveShell());
-				dialog.setValue(v);
-				if (dialog.open() == Window.OK)
-					input.set(pos, v);
+			if (v == null) return;
+			JRPropertyExpressionDialog dialog = new JRPropertyExpressionDialog(Display.getDefault().getActiveShell());
+			dialog.setValue(v);
+			if (dialog.open() == Window.OK)
+				input.set(pos, v);
 		}
 	}
 
 	private PropertyExpressionsDTO value;
 	private Table table;
 	private TableViewer tableViewer;
-	private List<PropertyDTO> defaultProperties;
 	private EditButton<PropertyDTO> editButton;
 
 	public PropertyExpressionsDTO getValue() {
-		return new PropertyExpressionsDTO(value.getPropExpressions(), value.getPropMap(), value.getPnode());
-	}
-
-	@Override
-	public void dispose() {
-		// clear all properties
-		List<PropertyDTO> props = (List<PropertyDTO>) tableViewer.getInput();
-		List<JRPropertyExpression> pexpr = new ArrayList<JRPropertyExpression>();
-		for (String str : value.getPropMap().getPropertyNames())
-			value.getPropMap().removeProperty(str);
-		value.setPropExpressions(null);
-		for (PropertyDTO p : props) {
-			if (p.getValue() instanceof JRExpression) {
-				JRDesignPropertyExpression jrpexp = new JRDesignPropertyExpression();
-				jrpexp.setName(p.getProperty());
-				jrpexp.setValueExpression((JRExpression) p.getValue());
-				pexpr.add(jrpexp);
-			} else if (p.getValue() instanceof String) {
-				value.getPropMap().setProperty(p.getProperty(), (String) p.getValue());
-			}
-		}
-		if (pexpr != null && !pexpr.isEmpty())
-			value.setPropExpressions(pexpr.toArray(new JRPropertyExpression[pexpr.size()]));
-		super.dispose();
+		return value;
 	}
 
 	public void setValue(PropertyExpressionsDTO value) {
@@ -152,7 +122,7 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 				while (getName(input, name, i) == null)
 					i++;
 				name += "_" + i; //$NON-NLS-1$
-				PropertyDTO v = new PropertyDTO(name, "NEW_VALUE");
+				PropertyExpressionDTO v = new PropertyExpressionDTO(false,name, "NEW_VALUE");
 				v.setPnode(value.getPnode());
 				JRPropertyExpressionDialog dialog = new JRPropertyExpressionDialog(Display.getDefault().getActiveShell());
 				dialog.setValue(v);
@@ -165,7 +135,7 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 				name += "_" + i;
 				for (Object dto : input) {
 					PropertyDTO prm = (PropertyDTO) dto;
-					if (prm.getProperty() != null && prm.getProperty().trim().equals(name)) {
+					if (prm.getName() != null && prm.getName().trim().equals(name)) {
 						return null;
 					}
 				}
@@ -180,7 +150,7 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 	}
 
 	private void buildTable(Composite composite) {
-		table = new Table(composite, SWT.BORDER | SWT.SINGLE | SWT.FULL_SELECTION | SWT.V_SCROLL);
+		table = new Table(composite, SWT.BORDER | SWT.MULTI | SWT.FULL_SELECTION | SWT.V_SCROLL);
 		table.setHeaderVisible(true);
 		table.addMouseListener(new MouseListener() {
 
@@ -203,10 +173,7 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 		tableViewer = new TableViewer(table);
 		tableViewer.setContentProvider(new ListContentProvider());
 		tableViewer.setLabelProvider(new TPropertyLabelProvider());
-		// attachCellEditors(tableViewer, table);
-
-		setColumnToolTip();
-
+		
 		TableColumn[] column = new TableColumn[2];
 		column[0] = new TableColumn(table, SWT.NONE);
 		column[0].setText(Messages.common_name);
@@ -223,133 +190,37 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 		tlayout.addColumnData(new ColumnWeightData(50, true));
 		tlayout.addColumnData(new ColumnWeightData(50, true));
 		table.setLayout(tlayout);
-
-		table.addSelectionListener(new SelectionListener() {
-
+		
+		//Crete the popup menu
+		Menu tableMenu = new Menu(table);
+		MenuItem refreshItem = new MenuItem(tableMenu, SWT.NONE);
+		refreshItem.setText(Messages.common_copy);
+		refreshItem.addSelectionListener(new SelectionAdapter() {
+			
+			@Override
 			public void widgetSelected(SelectionEvent e) {
-				if (e.item instanceof TableItem)
-					setMessage(getDescription(((TableItem) e.item)));
+				StructuredSelection selection = (StructuredSelection)tableViewer.getSelection();
+				List<ICopyable> copyList = new ArrayList<ICopyable>();
+				for(Object selected : selection.toList()){
+					PropertyDTO prop = (PropertyDTO)selected;
+					if (prop.isExpression()){
+						copyList.add(new CopyElementExpressionProperty(prop.getName(), prop.getValue()));
+					} else {
+						copyList.add(new CopyElementProperty(prop.getName(), prop.getValue()));
+					}
+				}
+				//set the container inside the clipboard
+				if (!copyList.isEmpty()){
+					PastableProperties container = new PastableProperties(copyList);
+					Clipboard.getDefault().setContents(container);
+				}
 			}
-
-			public void widgetDefaultSelected(SelectionEvent e) {
-			}
+			
 		});
+		table.setMenu(tableMenu);
 	}
 
 	private void fillTable(Table table) {
-		List<PropertyDTO> props = new ArrayList<PropertyDTO>();
-		if (value.getPropExpressions() != null)
-			for (JRPropertyExpression pe : value.getPropExpressions())
-				if (pe != null) {
-					PropertyDTO dto = new PropertyDTO(pe.getName(), pe.getValueExpression());
-					dto.setPnode(value.getPnode());
-					props.add(dto);
-				}
-		JRPropertiesMap pmap = value.getPropMap();
-		if (pmap != null)
-			for (String pe : pmap.getPropertyNames()) {
-				PropertyDTO dto = new PropertyDTO(pe, pmap.getProperty(pe));
-				dto.setPnode(value.getPnode());
-				props.add(dto);
-			}
-		tableViewer.setInput(props);
-	}
-
-	private void setColumnToolTip() {
-		final Listener labelListener = new Listener() {
-			public void handleEvent(Event event) {
-				Label label = (Label) event.widget;
-				Shell shell = label.getShell();
-				switch (event.type) {
-				case SWT.MouseDown:
-					Event e = new Event();
-					e.item = (TableItem) label.getData("_TABLEITEM"); //$NON-NLS-1$
-					// Assuming table is single select, set the selection as if
-					// the mouse down event went through to the table
-					table.setSelection(new TableItem[] { (TableItem) e.item });
-					table.notifyListeners(SWT.Selection, e);
-					// fall through
-				case SWT.MouseExit:
-					shell.dispose();
-					break;
-				}
-			}
-		};
-
-		Listener tableListener = new Listener() {
-			Shell tip = null;
-
-			Label label = null;
-
-			public void handleEvent(Event event) {
-				switch (event.type) {
-				case SWT.Dispose:
-				case SWT.KeyDown:
-				case SWT.MouseMove: {
-					if (tip == null)
-						break;
-					tip.dispose();
-					tip = null;
-					label = null;
-					break;
-				}
-				case SWT.MouseHover: {
-					TableItem item = table.getItem(new Point(event.x, event.y));
-					String description = getDescription(item);
-					if (item != null && !description.equals("")) { //$NON-NLS-1$
-
-						if (tip != null && !tip.isDisposed())
-							tip.dispose();
-						tip = new Shell(table.getShell(), SWT.ON_TOP | SWT.TOOL);
-						tip.setLayout(new FillLayout());
-						label = new Label(tip, SWT.NONE);
-						label.setForeground(table.getShell().getDisplay().getSystemColor(SWT.COLOR_INFO_FOREGROUND));
-						label.setBackground(table.getShell().getDisplay().getSystemColor(SWT.COLOR_INFO_BACKGROUND));
-						label.setData("_TABLEITEM", item); //$NON-NLS-1$
-
-						label.setText(description);
-						label.addListener(SWT.MouseExit, labelListener);
-						label.addListener(SWT.MouseDown, labelListener);
-						Point size = tip.computeSize(SWT.DEFAULT, SWT.DEFAULT);
-						Rectangle rect = item.getBounds(0);
-						Point pt = table.toDisplay(rect.x, rect.y);
-						tip.setBounds(pt.x, pt.y, size.x, size.y);
-						tip.setVisible(true);
-					}
-				}
-				}
-			}
-		};
-		table.addListener(SWT.Dispose, tableListener);
-		table.addListener(SWT.KeyDown, tableListener);
-		table.addListener(SWT.MouseMove, tableListener);
-		table.addListener(SWT.MouseHover, tableListener);
-	}
-
-	private String[] getDefaultPropertyItems() {
-		defaultProperties = getDefaultProperties();
-		String[] strnames = new String[defaultProperties.size()];
-		for (int i = 0; i < strnames.length; i++)
-			strnames[i] = defaultProperties.get(i).getProperty();
-		return strnames;
-	}
-
-	private List<PropertyDTO> getDefaultProperties() {
-		if (defaultProperties == null) {
-			defaultProperties = PropertiesList.getJRProperties();
-		}
-		return defaultProperties;
-	}
-
-	private String getDescription(TableItem item) {
-		if (item != null && item.getData() != null) {
-			String key = ((PropertyDTO) item.getData()).getProperty();
-			List<PropertyDTO> dp = getDefaultProperties();
-			for (PropertyDTO p : dp) {
-				if (p.getProperty().equals(key))
-					return p.getDescription();
-			}
-		}
-		return getDescription(); //$NON-NLS-1$
+		tableViewer.setInput(value.getProperties());
 	}
 }

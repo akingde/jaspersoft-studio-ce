@@ -41,11 +41,13 @@ import com.jaspersoft.studio.model.style.MConditionalStyle;
 import com.jaspersoft.studio.model.style.MStyle;
 import com.jaspersoft.studio.model.style.command.CreateConditionalStyleCommand;
 
+/**
+ *  Command used to paste in the editor a graphical object
+ */
 public class PasteCommand extends Command {
 	protected Map<ANode, Command> list;
 	protected IPastable parent;
 	protected int createdNodes;
-	
 	
 	/**
 	 * List of the graphical nodes created by the paste command
@@ -65,13 +67,15 @@ public class PasteCommand extends Command {
 			if (obj == null)
 				return false;
 			list = new LinkedHashMap<ANode, Command>();
-			if (obj instanceof Collection<?>) {
-				Collection<ANode> bList = (Collection<ANode>) obj;
+			if (obj instanceof AbstractPastableObject) {
+				Collection<ICopyable> bList = ((AbstractPastableObject)obj).getCopyedElements();
 				if (bList.isEmpty())
 					return false;
-				for (ANode node : bList) {
-					if (isPastableNode(node))
-						list.put(node, null);
+				for (ICopyable copyableNode : bList) {
+					if (copyableNode instanceof ANode){
+						ANode node = (ANode) copyableNode;
+						if (isPastableNode(node)) list.put(node, null);
+					}
 				}
 			} else if (obj instanceof ANode && isPastableNode(obj))
 				list.put((ANode) obj, null);

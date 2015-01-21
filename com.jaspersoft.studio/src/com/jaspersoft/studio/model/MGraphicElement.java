@@ -36,6 +36,7 @@ import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignGenericElement;
 import net.sf.jasperreports.engine.design.JRDesignGraphicElement;
+import net.sf.jasperreports.engine.design.JRDesignPropertyExpression;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.ModeEnum;
@@ -64,6 +65,7 @@ import com.jaspersoft.studio.property.descriptor.combo.RWStyleComboBoxPropertyDe
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.propexpr.JPropertyExpressionsDescriptor;
+import com.jaspersoft.studio.property.descriptor.propexpr.PropertyExpressionDTO;
 import com.jaspersoft.studio.property.descriptor.propexpr.PropertyExpressionsDTO;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
@@ -514,7 +516,6 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 
 	}
 
-	public static final String PROPERTY_MAP = "PROPERTY_MAP"; //$NON-NLS-1$
 	private RWComboBoxPropertyDescriptor styleD;
 	private RComboBoxPropertyDescriptor groupChangesD;
 	private static JSSEnumPropertyDescriptor positionTypeD;
@@ -665,25 +666,33 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		} else if (id.equals(JRDesignElement.PROPERTY_PROPERTY_EXPRESSIONS)) {
 			if (value instanceof PropertyExpressionsDTO) {
 				PropertyExpressionsDTO dto = (PropertyExpressionsDTO) value;
-				JRPropertyExpression[] v = dto.getPropExpressions();
 				JRPropertyExpression[] expr = jrElement.getPropertyExpressions();
-				if (expr != null)
+				//Remove the old expression properties if any
+				if (expr != null){
 					for (JRPropertyExpression ex : expr)
 						jrElement.removePropertyExpression(ex);
-				if (v != null)
-					for (JRPropertyExpression p : v)
-						jrElement.addPropertyExpression(p);
-				// now change properties
-				JRPropertiesMap vmap = dto.getPropMap();
-				String[] names = jrElement.getPropertiesMap().getPropertyNames();
-				for (int i = 0; i < names.length; i++)
-					jrElement.getPropertiesMap().removeProperty(names[i]);
-				if (vmap != null) {
-					names = vmap.getPropertyNames();
-					for (int i = 0; i < names.length; i++)
-						jrElement.getPropertiesMap().setProperty(names[i], vmap.getProperty(names[i]));
-					this.getPropertyChangeSupport().firePropertyChange(PROPERTY_MAP, false, true);
 				}
+				//Add the new expression properties
+				for (PropertyExpressionDTO p : dto.getProperties()){
+						if (p.isExpression())  {
+							JRDesignPropertyExpression newExp = new JRDesignPropertyExpression();
+							newExp.setName(p.getName());
+							newExp.setValueExpression(p.getValueAsExpression());
+							jrElement.addPropertyExpression(newExp);
+						}
+				}
+				// now change properties, first remove the old ones if any
+				String[] names = jrElement.getPropertiesMap().getPropertyNames();
+				for (int i = 0; i < names.length; i++){
+					jrElement.getPropertiesMap().removeProperty(names[i]);
+				}
+				// now add the new properties
+				for (PropertyExpressionDTO p : dto.getProperties()){
+					if (!p.isExpression())  {
+						jrElement.getPropertiesMap().setProperty(p.getName(), p.getValue());
+					}
+				}
+				this.getPropertyChangeSupport().firePropertyChange(PROPERTY_MAP, false, true);
 			}
 		} else if (id.equals(JRDesignElement.PROPERTY_HEIGHT)) {
 			jrElement.setHeight((Integer) Misc.nvl(value, Integer.valueOf(0)));

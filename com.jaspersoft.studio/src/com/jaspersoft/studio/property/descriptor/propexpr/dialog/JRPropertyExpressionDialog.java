@@ -31,8 +31,8 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.property.descriptor.properties.dialog.PropertiesList;
 import com.jaspersoft.studio.property.descriptor.properties.dialog.PropertyDTO;
+import com.jaspersoft.studio.property.descriptor.propexpr.PropertyExpressionDTO;
 import com.jaspersoft.studio.swt.events.ExpressionModifiedEvent;
 import com.jaspersoft.studio.swt.events.ExpressionModifiedListener;
 import com.jaspersoft.studio.swt.widgets.WTextExpression;
@@ -90,13 +90,7 @@ public class JRPropertyExpressionDialog extends JRPropertyDialog
 			public void modifyText(ModifyEvent e) {
 				String newtext = cprop.getText();
 				if (propertiesSuggestions != null) propertiesSuggestions.showOnlyElement(newtext);
-				value.setProperty(newtext);
-				PropertyDTO dto = PropertiesList.getDTO(value.getProperty());
-				if (dto != null) {
-					value.setValue(dto.getDefValue());
-					tvalue.setText((String) dto.getDefValue());
-					buseexpr.setSelection(false);
-				}
+				value.setName(newtext);
 			}
 		};
 	}
@@ -129,8 +123,9 @@ public class JRPropertyExpressionDialog extends JRPropertyDialog
 			public void widgetSelected(SelectionEvent e) {
 				stackLayout.topControl = buseexpr.getSelection() ? vexp : vcmp;
 				stackComposite.layout();
+				((PropertyExpressionDTO)value).setExpression(buseexpr.getSelection());
 				if (buseexpr.getSelection())
-					value.setValue(evalue.getExpression());
+					value.setValue(evalue.getExpression().getText());
 				else
 					value.setValue(tvalue.getText());
 			}
@@ -168,7 +163,7 @@ public class JRPropertyExpressionDialog extends JRPropertyDialog
 		evalue.addModifyListener(new ExpressionModifiedListener() {
 			@Override
 			public void expressionModified(ExpressionModifiedEvent event) {
-				value.setValue(evalue.getExpression());
+				value.setValue(evalue.getExpression().getText());
 			}
 		});
 
@@ -183,20 +178,11 @@ public class JRPropertyExpressionDialog extends JRPropertyDialog
 	private void fillValue(PropertyDTO value) {
 		ANode node =  value.getPnode();
 		evalue.setExpressionContext(ModelUtils.getElementExpressionContext(null, node));		
-		cprop.setText(Misc.nvl(value.getProperty()));
-		if (value.getValue() != null) {
-			if (value.getValue() instanceof JRExpression) {
-				buseexpr.setSelection(true);
-				JRDesignExpression expr = (JRDesignExpression) value.getValue();
-				evalue.setExpression(expr);
-				tvalue.setText(expr.getText());
-			} else {
-				buseexpr.setSelection(false);
-				String text = Misc.nvl((String) value.getValue());
-				tvalue.setText(text);
-				evalue.setExpression(new JRDesignExpression(text));
-			}
-		}
+		cprop.setText(Misc.nvl(value.getName()));
+		buseexpr.setSelection(value.isExpression());
+		String text = Misc.nvl((String) value.getValue());
+		tvalue.setText(text);
+		evalue.setExpression(new JRDesignExpression(text));
 	}
 
 	/**

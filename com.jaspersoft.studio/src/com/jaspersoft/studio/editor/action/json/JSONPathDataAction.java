@@ -8,29 +8,25 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.action.json;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.JRPropertiesUtil;
-import net.sf.jasperreports.engine.JRPropertyExpression;
 import net.sf.jasperreports.engine.design.JRDesignElement;
-import net.sf.jasperreports.engine.design.JRDesignPropertyExpression;
 
 import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.IWorkbenchPart;
 
-import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.editor.gef.decorator.json.PathAndDataDialog;
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.frame.MFrame;
 import com.jaspersoft.studio.model.text.MTextElement;
 import com.jaspersoft.studio.property.SetValueCommand;
+import com.jaspersoft.studio.property.descriptor.propexpr.PropertyExpressionDTO;
 import com.jaspersoft.studio.property.descriptor.propexpr.PropertyExpressionsDTO;
 
 /**
@@ -137,73 +133,40 @@ public class JSONPathDataAction extends JSONAction {
 		if (n == null)
 			return null;
 
-		PropertyExpressionsDTO peDTO = (PropertyExpressionsDTO) n
-				.getPropertyValue(JRDesignElement.PROPERTY_PROPERTY_EXPRESSIONS);
-		JRPropertiesMap map = (JRPropertiesMap) n.getPropertyValue(MGraphicElement.PROPERTY_MAP);
-		if (map == null)
-			map = new JRPropertiesMap();
+		PropertyExpressionsDTO peDTO = (PropertyExpressionsDTO) n.getPropertyValue(JRDesignElement.PROPERTY_PROPERTY_EXPRESSIONS);
 
 		if (path == null) {
-			map.removeProperty(JSON_EXPORTER_PATH_PROPERTY);
-			map.removeProperty(JSON_EXPORTER_REPEAT_VALUE_PROPERTY);
-
+			peDTO.removeProperty(JSON_EXPORTER_PATH_PROPERTY, false);
+			peDTO.removeProperty(JSON_EXPORTER_REPEAT_VALUE_PROPERTY, false);
 			removeDataPropertyExpression(peDTO);
 		} else {
-			map.setProperty(JSON_EXPORTER_PATH_PROPERTY, path);
+			peDTO.setProperty(JSON_EXPORTER_PATH_PROPERTY, path, false);
 			if (repeat)
-				map.setProperty(JSON_EXPORTER_REPEAT_VALUE_PROPERTY, "true"); //$NON-NLS-1$
+				peDTO.setProperty(JSON_EXPORTER_REPEAT_VALUE_PROPERTY, "true", false); //$NON-NLS-1$
 			else
-				map.removeProperty(JSON_EXPORTER_REPEAT_VALUE_PROPERTY);
+				peDTO.removeProperty(JSON_EXPORTER_REPEAT_VALUE_PROPERTY, false);
 		}
 
 		if (data == null)
 			removeDataPropertyExpression(peDTO);
 		else {
-			if (peDTO.getPropExpressions() == null)
-				peDTO.setPropExpressions(new JRPropertyExpression[0]);
-			List<JRPropertyExpression> newPE = new ArrayList<JRPropertyExpression>();
-			JRDesignPropertyExpression dpe = null;
-			for (JRPropertyExpression pe : peDTO.getPropExpressions()) {
-				newPE.add(pe);
-				if (pe.getName().equals(JSON_EXPORTER_DATA_PROPERTY))
-					dpe = (JRDesignPropertyExpression) pe;
+			PropertyExpressionDTO dpe = peDTO.getProperty(JSON_EXPORTER_DATA_PROPERTY, true);
+			if (dpe == null){
+				peDTO.addProperty(JSON_EXPORTER_DATA_PROPERTY, data.getText(), true);
+			} else {
+				dpe.setValue(data.getText());
 			}
-			if (dpe == null)
-				dpe = new JRDesignPropertyExpression();
-			dpe.setName(JSON_EXPORTER_DATA_PROPERTY);
-			dpe.setValueExpression(data);
-			newPE.add(dpe);
-			peDTO.setPropExpressions(newPE.toArray(new JRPropertyExpression[newPE.size()]));
 		}
-		peDTO.setPropMap(map);
-
-		JSSCompoundCommand command = new JSSCompoundCommand(null);
-		command.setDebugLabel(getText());
-		command.setReferenceNodeIfNull(n);
 
 		SetValueCommand cmd = new SetValueCommand();
 		cmd.setTarget(n);
-		cmd.setPropertyId(MGraphicElement.PROPERTY_MAP);
-		cmd.setPropertyValue(map);
-		command.add(cmd);
-
-		cmd = new SetValueCommand();
-		cmd.setTarget(n);
+		cmd.setDebugLabel(getText());
 		cmd.setPropertyId(JRDesignElement.PROPERTY_PROPERTY_EXPRESSIONS);
 		cmd.setPropertyValue(peDTO);
-		command.add(cmd);
-
-		return command;
+		return cmd;
 	}
 
 	protected void removeDataPropertyExpression(PropertyExpressionsDTO peDTO) {
-		if (peDTO.getPropExpressions() == null)
-			return;
-		List<JRPropertyExpression> newPE = new ArrayList<JRPropertyExpression>();
-		for (JRPropertyExpression pe : peDTO.getPropExpressions()) {
-			if (!pe.getName().equals(JSON_EXPORTER_DATA_PROPERTY))
-				newPE.add(pe);
-		}
-		peDTO.setPropExpressions(newPE.toArray(new JRPropertyExpression[newPE.size()]));
+		peDTO.removeProperty(JSON_EXPORTER_DATA_PROPERTY, true);
 	}
 }

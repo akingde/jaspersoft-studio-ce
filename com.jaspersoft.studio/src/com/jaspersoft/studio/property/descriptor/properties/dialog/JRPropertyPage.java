@@ -17,6 +17,7 @@ import java.util.List;
 
 import net.sf.jasperreports.engine.JRPropertiesMap;
 
+import org.eclipse.gef.ui.actions.Clipboard;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.DoubleClickEvent;
@@ -30,18 +31,22 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.swt.widgets.TableItem;
 
+import com.jaspersoft.studio.editor.action.copy.PastableProperties;
 import com.jaspersoft.studio.help.TableHelpListener;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.model.CopyElementExpressionProperty;
+import com.jaspersoft.studio.model.CopyElementProperty;
+import com.jaspersoft.studio.model.ICopyable;
 import com.jaspersoft.studio.property.descriptor.propexpr.dialog.JRPropertyDialog;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.swt.widgets.table.ListOrderButtons;
@@ -55,8 +60,6 @@ public class JRPropertyPage extends JSSHelpWizardPage {
 	private Table table;
 	
 	private TableViewer tableViewer;
-	
-	private List<PropertyDTO> defaultProperties;
 	
 	private List<PropertyDTO> props = new ArrayList<PropertyDTO>();
 	
@@ -75,8 +78,8 @@ public class JRPropertyPage extends JSSHelpWizardPage {
 		// clear all properties
 		value = new JRPropertiesMap();
 		for (PropertyDTO p : props) {
-			if (p.getProperty() != null && !p.getProperty().equals("")) //$NON-NLS-1$
-				value.setProperty(p.getProperty(), p.getValue().toString());
+			if (p.getName() != null && !p.getName().equals("")) //$NON-NLS-1$
+				value.setProperty(p.getName(), p.getValue().toString());
 		}
 		super.dispose();
 	}
@@ -129,9 +132,7 @@ public class JRPropertyPage extends JSSHelpWizardPage {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				PropertyDTO p = new PropertyDTO();
-				p.setProperty(getPropertyName());
-				p.setValue("NEW_VALUE");
+				PropertyDTO p = new PropertyDTO(getPropertyName(), "NEW_VALUE");
 				JRPropertyDialog dialog = new JRPropertyDialog(Display.getDefault().getActiveShell());
 				dialog.setValue(p);
 				if (dialog.open() == Window.OK){
@@ -193,7 +194,7 @@ public class JRPropertyPage extends JSSHelpWizardPage {
 	
 	private boolean nameExist(String name){
 		for (PropertyDTO prm : props) {
-			if (prm.getProperty() != null && prm.getProperty().trim().equals(name)) {
+			if (prm.getName() != null && prm.getName().trim().equals(name)) {
 				return true;
 			}
 		}
@@ -217,7 +218,7 @@ public class JRPropertyPage extends JSSHelpWizardPage {
 	}
 
 	private void buildTable(Composite composite) {
-		table = new Table(composite, SWT.BORDER | SWT.SINGLE | SWT.FULL_SELECTION | SWT.V_SCROLL);
+		table = new Table(composite, SWT.BORDER | SWT.MULTI | SWT.FULL_SELECTION | SWT.V_SCROLL);
 		table.setHeaderVisible(true);
 
 		tableViewer = new TableViewer(table);
@@ -244,18 +245,33 @@ public class JRPropertyPage extends JSSHelpWizardPage {
 		table.setLayout(tlayout);
 		//Set the help for the elements
 		TableHelpListener.setTableHelp(table);
-
-		table.addSelectionListener(new SelectionListener() {
-
+		
+		//Crete the popup menu
+		Menu tableMenu = new Menu(table);
+		MenuItem refreshItem = new MenuItem(tableMenu, SWT.NONE);
+		refreshItem.setText(Messages.common_copy);
+		refreshItem.addSelectionListener(new SelectionAdapter() {
+			
+			@Override
 			public void widgetSelected(SelectionEvent e) {
-				if (e.item instanceof TableItem) {
-					setMessage(getDescription(((TableItem) e.item)));
+				StructuredSelection selection = (StructuredSelection)tableViewer.getSelection();
+				List<ICopyable> copyList = new ArrayList<ICopyable>();
+				for(Object selected : selection.toList()){
+					PropertyDTO prop = (PropertyDTO)selected;
+					if (prop.isExpression()){
+						copyList.add(new CopyElementExpressionProperty(prop.getName(), prop.getValue()));
+					} else {
+						copyList.add(new CopyElementProperty(prop.getName(), prop.getValue()));
+					}
+				}
+				if (!copyList.isEmpty()){
+					PastableProperties container = new PastableProperties(copyList);
+					Clipboard.getDefault().setContents(container);
 				}
 			}
-
-			public void widgetDefaultSelected(SelectionEvent e) {
-			}
+			
 		});
+		table.setMenu(tableMenu);
 	}
 
 	private void attachCellEditors(final TableViewer viewer, Composite parent) {
@@ -289,31 +305,10 @@ public class JRPropertyPage extends JSSHelpWizardPage {
 		props.clear();
 		String[] names = value.getPropertyNames();
 		for (int i = 0; i < names.length; i++) {
-			PropertyDTO p = new PropertyDTO();
-			p.setProperty(names[i]);
-			p.setValue(value.getProperty(names[i]));
+			PropertyDTO p = new PropertyDTO(names[i], value.getProperty(names[i]));
 			props.add(p);
 		}
 		tableViewer.setInput(props);
-	}
-
-	private List<PropertyDTO> getDefaultProperties() {
-		if (defaultProperties == null) {
-			defaultProperties = PropertiesList.getJRProperties();
-		}
-		return defaultProperties;
-	}
-
-	private String getDescription(TableItem item) {
-		if (item != null && item.getData() != null) {
-			String key = ((PropertyDTO) item.getData()).getProperty();
-			List<PropertyDTO> dp = getDefaultProperties();
-			for (PropertyDTO p : dp) {
-				if (p.getProperty().equals(key))
-					return p.getDescription();
-			}
-		}
-		return getDescription(); 
 	}
 	
 	public JRPropertiesMap getValue() {

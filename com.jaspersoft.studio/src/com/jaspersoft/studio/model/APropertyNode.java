@@ -35,6 +35,8 @@ public abstract class APropertyNode extends ANode implements IPropertySource, IP
 	
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
+	public static final String PROPERTY_MAP = "PROPERTY_MAP"; //$NON-NLS-1$
+	
 	private boolean editable = true;
 	
 	/** The descriptors. */

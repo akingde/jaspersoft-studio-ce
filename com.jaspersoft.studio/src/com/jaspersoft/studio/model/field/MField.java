@@ -138,9 +138,6 @@ public class MField extends APropertyNode implements ICopyable, IDragable {
 		descriptors = descriptors1;
 		defaultsMap = defaultsMap1;
 	}
-
-	private static final String PROPERTY_MAP = "PROPERTY_MAP"; //$NON-NLS-1$
-
 	
 	@Override
 	protected void postDescriptors(IPropertyDescriptor[] descriptors) {
@@ -201,8 +198,23 @@ public class MField extends APropertyNode implements ICopyable, IDragable {
 		if (id.equals(JRDesignField.PROPERTY_DESCRIPTION))
 			return jrField.getDescription();
 		if (id.equals(PROPERTY_MAP))
-			return jrField.getPropertiesMap();
+			return getPropertiesMapClone(jrField);
 		return null;
+	}
+	
+	/**
+	 * Return a copy of the properties map
+	 * 
+	 * @param jrField field for where the map is read
+	 * 
+	 * @return copy of the properties map, if the map was null
+	 * then it retrun null
+	 */
+	protected JRPropertiesMap getPropertiesMapClone(JRDesignField jrField) {
+		JRPropertiesMap propertiesMap = jrField.getPropertiesMap();
+		if (propertiesMap != null)
+			propertiesMap = propertiesMap.cloneProperties();
+		return propertiesMap;
 	}
 	
 	@Override

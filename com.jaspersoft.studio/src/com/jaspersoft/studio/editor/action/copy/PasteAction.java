@@ -19,6 +19,7 @@ import java.util.List;
 
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
+import org.eclipse.gef.ui.actions.Clipboard;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPart;
@@ -30,7 +31,6 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.IPastable;
-import com.jaspersoft.studio.model.band.MBand;
 
 public class PasteAction extends ACachedSelectionAction {
 
@@ -54,83 +54,27 @@ public class PasteAction extends ACachedSelectionAction {
 
 	@Override
 	protected boolean calculateEnabled() {
-		List<?> selection = getSelectedObjects();
-		for (Object obj : selection) {
-			if (obj instanceof MBand)
-				command = createCommand(selection);
-			else if (obj instanceof EditPart && ((EditPart) obj).getModel() instanceof MBand)
-				command = createCommand(selection);
+		if (!fresh){
+			command = null;
+			Object obj = Clipboard.getDefault().getContents();
+			if (obj instanceof AbstractPastableObject){
+				command = ((AbstractPastableObject)obj).getPasteCommand(getSelectedObjects());
+			}
+			fresh = true;
 		}
-		if (!fresh)
-			command = createCommand(selection);
-		fresh = true;
 		return command != null && command.canExecute();
-	}
-
-	protected PasteCommand createCommand(List<?> selectedObjects) {
-		for (Object selection : selectedObjects) {
-			PasteCommand cmd = getPasteComand(selection);
-			if (cmd != null)
-				return cmd;
-			if (selection instanceof StructuredSelection) {
-				StructuredSelection s = (StructuredSelection) selection;
-				for (Iterator<?> it = s.iterator(); it.hasNext();) {
-					Object o = it.next();
-					cmd = getPasteComand(o);
-					if (cmd != null)
-						return cmd;
-				}
-			}
-		}
-		return null;
-	}
-
-	private PasteCommand getPasteComand(Object selection) {
-		if (selection instanceof EditPart) {
-			Object modelObj = ((EditPart) selection).getModel();
-			// PasteDatasetCommand pasteDataset = null;
-			// if (modelObj instanceof ANode) {
-			// pasteDataset = new PasteDatasetCommand(((ANode) modelObj).getJasperDesign());
-			// if (pasteDataset.canExecute())
-			// return pasteDataset;
-			// } else
-			if (modelObj instanceof ANode) {
-				IPastable past = getParent2Paste((ANode) modelObj);
-				if (past != null) {
-					return new PasteCommand(past);
-				}
-			}
-		} else if (selection instanceof ANode) {
-			IPastable past = getParent2Paste((ANode) selection);
-			if (past != null) {
-				return new PasteCommand(past);
-			}
-		}
-		return null;
-	}
-
-	private IPastable getParent2Paste(ANode n) {
-		while (n != null) {
-			if (n instanceof IPastable) {
-				if (n instanceof MBand && n.getValue() == null)
-					return null;
-				return (IPastable) n;
-			}
-			n = (ANode) n.getParent();
-		}
-		return null;
 	}
 
 	@Override
 	public void run() {
-		PasteCommand command = createCommand(getSelectedObjects());
 		execute(command);
 
 		// Select the pasted edit part
 		GraphicalViewer viewer = (GraphicalViewer) getWorkbenchPart().getAdapter(GraphicalViewer.class);
-		if (viewer != null) {
-			viewer.setSelection(new StructuredSelection(getSelectableEditParts(viewer, command.getPasteParent(),
-					command.getCreatedNodesNumber())));
+		if (viewer != null && command instanceof PasteCommand) {
+			PasteCommand standardPasteCommand = (PasteCommand)command;
+			viewer.setSelection(new StructuredSelection(getSelectableEditParts(viewer, standardPasteCommand.getPasteParent(),
+																																					standardPasteCommand.getCreatedNodesNumber())));
 		}
 	}
 
