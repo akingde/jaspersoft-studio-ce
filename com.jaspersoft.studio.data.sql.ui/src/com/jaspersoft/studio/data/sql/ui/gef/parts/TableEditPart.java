@@ -44,6 +44,7 @@ import com.jaspersoft.studio.data.sql.model.query.select.MSelect;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelectColumn;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelectExpression;
 import com.jaspersoft.studio.data.sql.model.query.subquery.MQueryTable;
+import com.jaspersoft.studio.data.sql.prefs.SQLEditorPreferencesPage;
 import com.jaspersoft.studio.data.sql.text2model.ConvertUtil;
 import com.jaspersoft.studio.data.sql.ui.gef.SQLQueryDiagram;
 import com.jaspersoft.studio.data.sql.ui.gef.anchors.BottomAnchor;
@@ -163,7 +164,11 @@ public class TableEditPart extends AbstractGraphicalEditPart {
 		installEditPolicy(EditPolicy.COMPONENT_ROLE, new ComponentEditPolicy() {
 			@Override
 			protected Command createDeleteCommand(GroupRequest deleteRequest) {
-				return new DeleteCommand(getModel());
+				DeleteCommand cmd = new DeleteCommand(getModel());
+				cmd.setDropSubquery(getDesigner().getjConfig().getProperty(
+						SQLEditorPreferencesPage.P_DELSUBQUERY,
+						SQLEditorPreferencesPage.ASK));
+				return cmd;
 			}
 		});
 

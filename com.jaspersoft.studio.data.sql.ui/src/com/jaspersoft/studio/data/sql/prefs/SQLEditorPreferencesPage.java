@@ -25,10 +25,14 @@ public class SQLEditorPreferencesPage extends FieldEditorOverlayPage {
 	public static final String ASK = "ask"; //$NON-NLS-1$
 	public static final String DROP = "drop"; //$NON-NLS-1$
 	public static final String CTRL_DROP = "ctrl-drop"; //$NON-NLS-1$
+
+	public static final String KEEP = "keep"; //$NON-NLS-1$
+
 	public static final String P_USE_JDBC_QUOTE = "com.jaspersoft.studio.data.sql.prefs.USEJDBCQUOTE"; //$NON-NLS-1$
 	public static final String P_IDENTIFIER_QUOTE = "com.jaspersoft.studio.data.sql.prefs.IDENTIFIER_QUOTE"; //$NON-NLS-1$
 	public static final String P_IDENTIFIER_QUOTEONLYEXCEPTIONS = "com.jaspersoft.studio.data.sql.prefs.QUOTE_ONLY_EXCEPTIONS"; //$NON-NLS-1$
 	public static final String P_JOIN_ON_DND = "com.jaspersoft.studio.data.sql.prefs.join_on_dnd"; //$NON-NLS-1$
+	public static final String P_DELSUBQUERY = "com.jaspersoft.studio.data.sql.prefs.delsubquery"; //$NON-NLS-1$
 
 	public SQLEditorPreferencesPage() {
 		super(GRID);
@@ -54,11 +58,17 @@ public class SQLEditorPreferencesPage extends FieldEditorOverlayPage {
 				new String[][] {
 						{ "id", "" }, { "\"id\"", "\"" }, { "`id`", "`" }, { "[id]", "[" } }, getFieldEditorParent())); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$
 
-		addField(new ComboFieldEditor(
-				P_JOIN_ON_DND,
-				Messages.SQLEditorPreferencesPage_2,
-				new String[][] {
-						{ Messages.SQLEditorPreferencesPage_3, DROP }, { Messages.SQLEditorPreferencesPage_4, CTRL_DROP }, { Messages.SQLEditorPreferencesPage_5, ASK } }, getFieldEditorParent()));
+		addField(new ComboFieldEditor(P_JOIN_ON_DND,
+				Messages.SQLEditorPreferencesPage_2, new String[][] {
+						{ Messages.SQLEditorPreferencesPage_3, DROP },
+						{ Messages.SQLEditorPreferencesPage_4, CTRL_DROP },
+						{ Messages.SQLEditorPreferencesPage_5, ASK } },
+				getFieldEditorParent()));
+		addField(new ComboFieldEditor(P_DELSUBQUERY,
+				"Drop subquery on delete if empty?", new String[][] {
+						{ Messages.SQLEditorPreferencesPage_3, DROP },
+						{ "Keep", KEEP }, { "Aske what to do", ASK } },
+				getFieldEditorParent()));
 	}
 
 	public static void getDefaults(IPreferenceStore store) {
@@ -66,6 +76,7 @@ public class SQLEditorPreferencesPage extends FieldEditorOverlayPage {
 		store.setDefault(P_USE_JDBC_QUOTE, true); //$NON-NLS-1$
 		store.setDefault(P_IDENTIFIER_QUOTEONLYEXCEPTIONS, true); //$NON-NLS-1$
 		store.setDefault(P_JOIN_ON_DND, DROP); //$NON-NLS-1$
+		store.setDefault(P_DELSUBQUERY, ASK); //$NON-NLS-1$
 	}
 
 	public static final String PAGE_ID = "com.jaspersoft.studio.data.sql.prefs.SQLEditorPreferencesPage.property"; //$NON-NLS-1$
