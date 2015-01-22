@@ -100,14 +100,7 @@ public abstract class APropertyNode extends ANode implements IPropertySource, IP
 		// the superclass one first in order not to break the expression context setting of
 		// other property descriptors.
 		try {
-			JRDesignElement designEl = null;
-			if (this.getValue() instanceof JRDesignElement) {
-				designEl = (JRDesignElement) this.getValue();
-			}
-			ExpressionContext elementExpressionContext = (ExpressionContext) this.getAdapter(ExpressionContext.class);
-			if(elementExpressionContext==null){
-				elementExpressionContext = ModelUtils.getElementExpressionContext(designEl, this);
-			}
+			ExpressionContext elementExpressionContext = getExpressionContext();
 			for (IPropertyDescriptor desc : descriptors) {
 				if (desc instanceof IExpressionContextSetter) {
 					((IExpressionContextSetter) desc).setExpressionContext(elementExpressionContext);
@@ -117,6 +110,18 @@ public abstract class APropertyNode extends ANode implements IPropertySource, IP
 			// Unable to get a valid context expression, a default one will be used.
 			// Maybe we should log for debug purpose.
 		}
+	}
+
+	public ExpressionContext getExpressionContext() {
+		JRDesignElement designEl = null;
+		if (this.getValue() instanceof JRDesignElement) {
+			designEl = (JRDesignElement) this.getValue();
+		}
+		ExpressionContext elementExpressionContext = (ExpressionContext) this.getAdapter(ExpressionContext.class);
+		if (elementExpressionContext == null) {
+			elementExpressionContext = ModelUtils.getElementExpressionContext(designEl, this);
+		}
+		return elementExpressionContext;
 	}
 
 	public IPropertyDescriptor getPropertyDescriptor(Object id) {
@@ -133,8 +138,9 @@ public abstract class APropertyNode extends ANode implements IPropertySource, IP
 	 * @see org.eclipse.ui.views.properties.IPropertySource#getPropertyDescriptors()
 	 */
 	public IPropertyDescriptor[] getPropertyDescriptors() {
-		if (getValue() == null)
-			return new IPropertyDescriptor[0];
+		// if we cache sections ... we have to return descriptors always
+		// if (getValue() == null)
+		// return new IPropertyDescriptor[0];
 		IPropertyDescriptor[] descriptors = getDescriptors();
 		if (descriptors == null) {
 			Map<String, Object> defaultsMap = new HashMap<String, Object>();

@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.property.descriptor.returnvalue;
 
@@ -54,59 +50,58 @@ import com.jaspersoft.studio.wizards.ContextHelpIDs;
 import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
 
 /**
- * Wizard page to show the return values of a component and to
- * interact with them
+ * Wizard page to show the return values of a component and to interact with them
  * 
  * @author Orlandin Marco
- *
+ * 
  */
 public abstract class RVPropertyPage extends JSSHelpWizardPage {
-	
+
 	/**
 	 * Suggested width int for the page
 	 */
-	public final static int WIDTH_HINT = 600; 
-	
+	public final static int WIDTH_HINT = 730;
+
 	/**
 	 * The actual values shown inside the dialog
 	 */
 	protected List<ReturnValueContainer> values;
-	
+
 	/**
 	 * The table where the value are shown
 	 */
 	protected Table table;
-	
+
 	/**
 	 * The viewer for the table
 	 */
 	protected TableViewer tableViewer;
-	
+
 	/**
 	 * The button to add a return value
 	 */
 	private Button addButton;
-	
+
 	/**
 	 * The button to edit the return value selected in the table
 	 */
 	private Button editButton;
-	
+
 	/**
 	 * The button to delete the return value selected in the table
 	 */
 	private Button deleteButton;
-	
+
 	/**
 	 * The list of toVariables currently used
 	 */
 	protected String[] toVariables;
-	
+
 	/**
 	 * A list of modify listener that are called when the values in the table changes
 	 */
 	private List<ModifyListener> returnValuesModified = new ArrayList<ModifyListener>();
-	
+
 	/**
 	 * Text provider for the column of the table
 	 */
@@ -135,32 +130,34 @@ public abstract class RVPropertyPage extends JSSHelpWizardPage {
 	/**
 	 * Create the class
 	 * 
-	 * @param pageName name of the page
+	 * @param pageName
+	 *          name of the page
 	 */
 	protected RVPropertyPage(String pageName) {
 		super(pageName);
 	}
 
 	/**
-	 * Create the buttons to add, edit, delete or remove an element, plus
-	 * the buttons to move the selected element up or down
+	 * Create the buttons to add, edit, delete or remove an element, plus the buttons to move the selected element up or
+	 * down
 	 * 
-	 * @param bGroup container composite of the buttons
+	 * @param bGroup
+	 *          container composite of the buttons
 	 */
-	private void createButtons(Composite bGroup){
-		
-		//CREATE THE ADD BUTTON
-		
+	private void createButtons(Composite bGroup) {
+
+		// CREATE THE ADD BUTTON
+
 		addButton = new Button(bGroup, SWT.PUSH);
 		addButton.setText(Messages.common_add);
 		addButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		addButton.addSelectionListener(new SelectionAdapter() {
-			
+
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				ReturnValueContainer container = new ReturnValueContainer();
 				InputReturnValueDialog inputDialog = new InputReturnValueDialog(getShell(), container, getToVariablesNames());
-				if (inputDialog.open() == Dialog.OK){
+				if (inputDialog.open() == Dialog.OK) {
 					values.add(container);
 					tableViewer.refresh();
 					toVariables = null;
@@ -169,38 +166,38 @@ public abstract class RVPropertyPage extends JSSHelpWizardPage {
 				}
 			}
 		});
-		
-		//CREATE THE EDIT BUTTON
-		
+
+		// CREATE THE EDIT BUTTON
+
 		editButton = new Button(bGroup, SWT.PUSH);
 		editButton.setText(Messages.common_edit);
 		editButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		editButton.addSelectionListener(new SelectionAdapter() {
-			
+
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				StructuredSelection selection = (StructuredSelection)tableViewer.getSelection();
-				if (selection.size() > 0){
-					ReturnValueContainer selectedValue = (ReturnValueContainer)selection.getFirstElement();
+				StructuredSelection selection = (StructuredSelection) tableViewer.getSelection();
+				if (selection.size() > 0) {
+					ReturnValueContainer selectedValue = (ReturnValueContainer) selection.getFirstElement();
 					editElement(selectedValue);
 				}
 			}
 		});
-		
+
 		editButton.setEnabled(false);
-		
-		//CREATE THE DELETE BUTTON
-		
+
+		// CREATE THE DELETE BUTTON
+
 		deleteButton = new Button(bGroup, SWT.PUSH);
 		deleteButton.setText(Messages.common_delete);
 		deleteButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		deleteButton.addSelectionListener(new SelectionAdapter() {
-			
+
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				StructuredSelection selection = (StructuredSelection)tableViewer.getSelection();
-				if (selection.size() > 0){
-					ReturnValueContainer selectedValue = (ReturnValueContainer)selection.getFirstElement();
+				StructuredSelection selection = (StructuredSelection) tableViewer.getSelection();
+				if (selection.size() > 0) {
+					ReturnValueContainer selectedValue = (ReturnValueContainer) selection.getFirstElement();
 					int index = values.indexOf(selectedValue);
 					values.remove(index);
 					tableViewer.refresh();
@@ -210,47 +207,48 @@ public abstract class RVPropertyPage extends JSSHelpWizardPage {
 				}
 			}
 		});
-		
+
 		deleteButton.setEnabled(false);
-		
-		//CREATE THE MOVMENT BUTTON 
-		
-		ListOrderButtons upDownButtons =  new ListOrderButtons();
+
+		// CREATE THE MOVMENT BUTTON
+
+		ListOrderButtons upDownButtons = new ListOrderButtons();
 		upDownButtons.createOrderButtons(bGroup, tableViewer);
 		upDownButtons.addChangeListener(new ChangeListener() {
-			
+
 			@Override
 			public void changed(ChangeEvent event) {
 				callModifyListeners();
 			}
 		});
-		
-		//ADD THE LISTENER TO ENABLE OR DISABLE THE EDIT BUTTON
-		
+
+		// ADD THE LISTENER TO ENABLE OR DISABLE THE EDIT BUTTON
+
 		tableViewer.addSelectionChangedListener(new ISelectionChangedListener() {
-			
+
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
-				StructuredSelection selection = (StructuredSelection)tableViewer.getSelection();
+				StructuredSelection selection = (StructuredSelection) tableViewer.getSelection();
 				boolean enabledStatus = selection != null && selection.size() > 0;
 				editButton.setEnabled(enabledStatus);
 				deleteButton.setEnabled(enabledStatus);
 			}
 		});
-		
+
 		updateButtonsStatus();
 	}
-	
+
 	/**
-	 * Open the dialog to edit an existing element and replace it when
-	 * the dialog is closed with the ok button
+	 * Open the dialog to edit an existing element and replace it when the dialog is closed with the ok button
 	 * 
-	 * @param edited the element to edit
+	 * @param edited
+	 *          the element to edit
 	 */
-	private void editElement(ReturnValueContainer edited){
+	private void editElement(ReturnValueContainer edited) {
 		ReturnValueContainer result = edited.clone();
-		InputReturnValueDialog inputDialog = new InputReturnValueDialog(getShell(), result, addToVariablesPlusElement(edited.getToVariable()));
-		if (inputDialog.open() == Dialog.OK){
+		InputReturnValueDialog inputDialog = new InputReturnValueDialog(getShell(), result,
+				addToVariablesPlusElement(edited.getToVariable()));
+		if (inputDialog.open() == Dialog.OK) {
 			int index = values.indexOf(edited);
 			values.set(index, result);
 			tableViewer.refresh();
@@ -259,14 +257,13 @@ public abstract class RVPropertyPage extends JSSHelpWizardPage {
 			callModifyListeners();
 		}
 	}
-	
+
 	/**
-	 * Update the status of the buttons enabling or disabling 
-	 * them if there are input errors
+	 * Update the status of the buttons enabling or disabling them if there are input errors
 	 */
-	private void updateButtonsStatus(){
-		if (addButton != null){
-			if (getToVariablesNames().length == 0){
+	private void updateButtonsStatus() {
+		if (addButton != null) {
+			if (getToVariablesNames().length == 0) {
 				addButton.setEnabled(false);
 				setErrorMessage(Messages.RVPropertyPage_error_message_report_variables_all_used);
 			} else {
@@ -279,7 +276,8 @@ public abstract class RVPropertyPage extends JSSHelpWizardPage {
 	/**
 	 * Create the table control and attach to it the viewer
 	 * 
-	 * @param composite parent of the table
+	 * @param composite
+	 *          parent of the table
 	 */
 	private void buildTable(Composite composite) {
 		table = new Table(composite, SWT.BORDER | SWT.SINGLE | SWT.FULL_SELECTION | SWT.V_SCROLL);
@@ -291,10 +289,10 @@ public abstract class RVPropertyPage extends JSSHelpWizardPage {
 		attachCellEditors(tableViewer, table);
 
 		TableLayout tlayout = new TableLayout();
-		tlayout.addColumnData(new ColumnWeightData(50, 75, true));
-		tlayout.addColumnData(new ColumnWeightData(50, 75, true));
-		tlayout.addColumnData(new ColumnWeightData(50, 75, true));
-		tlayout.addColumnData(new ColumnWeightData(50, 100, true));
+		tlayout.addColumnData(new ColumnWeightData(15, 55, true));
+		tlayout.addColumnData(new ColumnWeightData(15, 55, true));
+		tlayout.addColumnData(new ColumnWeightData(15, 55, true));
+		tlayout.addColumnData(new ColumnWeightData(55, 100, true));
 		table.setLayout(tlayout);
 
 		TableColumn[] column = new TableColumn[4];
@@ -311,58 +309,55 @@ public abstract class RVPropertyPage extends JSSHelpWizardPage {
 		column[3].setText(Messages.RVPropertyPage_incrementer_factory_class);
 
 		fillTable();
-		for (int i = 0, n = column.length; i < n; i++) {
+		for (int i = 0, n = column.length; i < n; i++)
 			column[i].pack();
-		}
 	}
 
 	/**
-	 * Attach to the table the cell editors to directly edit the return
-	 * parameter value without enter inside the edit dialog
+	 * Attach to the table the cell editors to directly edit the return parameter value without enter inside the edit
+	 * dialog
 	 * 
-	 * @param viewer viewer of the table
-	 * @param parent container for the cell editor controls
+	 * @param viewer
+	 *          viewer of the table
+	 * @param parent
+	 *          container for the cell editor controls
 	 */
 	private void attachCellEditors(final TableViewer viewer, Composite parent) {
-		
+
 		viewer.addDoubleClickListener(new IDoubleClickListener() {
-			
+
 			@Override
 			public void doubleClick(DoubleClickEvent event) {
 				int selectedIndex = table.getSelectionIndex();
-				if (selectedIndex != -1){
+				if (selectedIndex != -1) {
 					ReturnValueContainer selectedElement = values.get(selectedIndex);
 					editElement(selectedElement);
 				}
 			}
 		});
 
-		viewer.setColumnProperties(new String[] { "FROMVARIABLE", "TOVARIABLE", "CALCULATIONTYPE", "INCREMENTERFACTORYCLASS" }); 
+		viewer.setColumnProperties(new String[] { "FROMVARIABLE", "TOVARIABLE", "CALCULATIONTYPE",
+				"INCREMENTERFACTORYCLASS" });
 	}
-	
 
 	/**
-	 * Return an hashset of the variable names that
-	 * are already used as to variables
+	 * Return an hashset of the variable names that are already used as to variables
 	 * 
-	 * @return not null hashset of variables already used 
-	 * as a to variable
+	 * @return not null hashset of variables already used as a to variable
 	 */
-	private HashSet<String> getAlreadyUsedVariables(){
+	private HashSet<String> getAlreadyUsedVariables() {
 		HashSet<String> result = new HashSet<String>();
-		for(ReturnValueContainer value : values){
+		for (ReturnValueContainer value : values) {
 			result.add(value.getToVariable());
 		}
 		return result;
 	}
-	
+
 	/**
-	 * Get an array of all the variables that can be used 
-	 * as to variable. These are variables defined for the element
-	 * on its dataset that aren't already used as to variable
+	 * Get an array of all the variables that can be used as to variable. These are variables defined for the element on
+	 * its dataset that aren't already used as to variable
 	 * 
-	 * @return a not null array of variable names that can be 
-	 * used as to variables
+	 * @return a not null array of variable names that can be used as to variables
 	 */
 	private String[] getToVariablesNames() {
 		if (toVariables == null) {
@@ -378,45 +373,41 @@ public abstract class RVPropertyPage extends JSSHelpWizardPage {
 		}
 		return toVariables;
 	}
-	
+
 	/**
-	 * Do the same of get to getToVariableNames() but add the parameter
-	 * to the top of the variable names. Used when edit a return parameter
-	 * to provide in the list of the to variables also the one already used
-	 * by the edited element
+	 * Do the same of get to getToVariableNames() but add the parameter to the top of the variable names. Used when edit a
+	 * return parameter to provide in the list of the to variables also the one already used by the edited element
 	 * 
-	 * @param elementToAdd element to add to the available variables array
-	 * @return not null array of variable names that can be 
-	 * used as to variables plus a static value added to the top
+	 * @param elementToAdd
+	 *          element to add to the available variables array
+	 * @return not null array of variable names that can be used as to variables plus a static value added to the top
 	 */
-	private String[] addToVariablesPlusElement(String elementToAdd){
+	private String[] addToVariablesPlusElement(String elementToAdd) {
 		String[] toVariables = getToVariablesNames();
-		String[] result = new String[toVariables.length+1];
+		String[] result = new String[toVariables.length + 1];
 		result[0] = elementToAdd;
-		for(int i=1; i<result.length; i++){
-			result[i] = toVariables[i-1];
+		for (int i = 1; i < result.length; i++) {
+			result[i] = toVariables[i - 1];
 		}
 		return result;
 	}
-	
+
 	/**
 	 * Call all the modify listeners defined
 	 */
-	private void callModifyListeners(){
+	private void callModifyListeners() {
 		Event e = new Event();
 		e.data = values;
 		e.widget = table;
 		ModifyEvent modEvent = new ModifyEvent(e);
-		for(ModifyListener listener : returnValuesModified){
+		for (ModifyListener listener : returnValuesModified) {
 			listener.modifyText(modEvent);
 		}
 	}
-	
+
 	/**
-	 * When a return parameter is edited directly from the table then 
-	 * it is validated to allow to exit the dialog only if there aren't 
-	 * error. The only checked error is that more then one return values
-	 * uses the same to variable
+	 * When a return parameter is edited directly from the table then it is validated to allow to exit the dialog only if
+	 * there aren't error. The only checked error is that more then one return values uses the same to variable
 	 */
 	protected boolean validate() {
 		// validate toVariable is unique
@@ -442,7 +433,7 @@ public abstract class RVPropertyPage extends JSSHelpWizardPage {
 	protected void fillTable() {
 		tableViewer.setInput(values);
 	}
-	
+
 	/**
 	 * Return the context name for the help of this page
 	 */
@@ -450,7 +441,7 @@ public abstract class RVPropertyPage extends JSSHelpWizardPage {
 	protected String getContextName() {
 		return ContextHelpIDs.WIZARD_RETURN_VALUE;
 	}
-	
+
 	/**
 	 * Create the controls of the page
 	 */
@@ -465,8 +456,9 @@ public abstract class RVPropertyPage extends JSSHelpWizardPage {
 		buildTable(composite);
 
 		GridData gd = new GridData(GridData.FILL_BOTH);
-		gd.heightHint = 200;
-		gd.widthHint = 200;
+		gd.heightHint = 300;
+		gd.minimumWidth = 500;
+		gd.widthHint = 500;
 		table.setLayoutData(gd);
 
 		Composite bGroup = new Composite(composite, SWT.NONE);
@@ -475,13 +467,13 @@ public abstract class RVPropertyPage extends JSSHelpWizardPage {
 
 		createButtons(bGroup);
 	}
-	
+
 	/**
-	 * Set the values showed inside the control when it is created.
-	 * The list of value is cloned so it isn't modified directly. If
-	 * the value is null an empty list is used
+	 * Set the values showed inside the control when it is created. The list of value is cloned so it isn't modified
+	 * directly. If the value is null an empty list is used
 	 * 
-	 * @param value the list to show in the dialog when it is created
+	 * @param value
+	 *          the list to show in the dialog when it is created
 	 */
 	public void setValue(List<ReturnValueContainer> value) {
 		if (value == null) {
@@ -489,29 +481,29 @@ public abstract class RVPropertyPage extends JSSHelpWizardPage {
 		} else {
 			this.values = new ArrayList<ReturnValueContainer>(value);
 		}
-		if (table != null){
+		if (table != null) {
 			fillTable();
 		}
 		updateButtonsStatus();
 	}
-	
+
 	/**
 	 * Return the list actual list of value as it is shown inside the table
 	 * 
-	 * @return a not null list of value. If the wizard ends correctly it can
-	 * be used to update the return values on the element
+	 * @return a not null list of value. If the wizard ends correctly it can be used to update the return values on the
+	 *         element
 	 */
 	public List<ReturnValueContainer> getValue() {
 		return values;
 	}
-	
+
 	/**
-	 * Add a modify listener that will be colled when a return value is added,
-	 * edited or deleted
+	 * Add a modify listener that will be colled when a return value is added, edited or deleted
 	 * 
-	 * @param listener the listener to call
+	 * @param listener
+	 *          the listener to call
 	 */
-	public void addModifyListener(ModifyListener listener){
+	public void addModifyListener(ModifyListener listener) {
 		returnValuesModified.add(listener);
 	}
 

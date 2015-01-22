@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.property.section.widgets;
 
@@ -119,20 +115,21 @@ public abstract class SPGroupTypeCombo extends ASPropertyWidget {
 		int selection = 0;
 		JREnum sel = EnumHelper.getSetValue(getEnumValues(), et, 1, false);
 		boolean found = false;
-		for (int i = 0; i < items.length; i++) {
-			if (items[i].equals(sel.getName())) {
-				selection = i;
-				found = true;
-				break;
-			}
-			if (items[i].startsWith(GROUPPREFIX) && sel.equals(getGroupEnum())) {
-				if (items[i].substring(GROUPPREFIX.length()).equals(group)) {
+		if (sel != null)
+			for (int i = 0; i < items.length; i++) {
+				if (items[i].equals(sel.getName())) {
 					selection = i;
 					found = true;
 					break;
 				}
+				if (items[i].startsWith(GROUPPREFIX) && sel.equals(getGroupEnum())) {
+					if (items[i].substring(GROUPPREFIX.length()).equals(group)) {
+						selection = i;
+						found = true;
+						break;
+					}
+				}
 			}
-		}
 		String[] comboItems = items;
 		// If the group can't be found set a fake item
 		if (!found && group != null && !group.isEmpty()) {

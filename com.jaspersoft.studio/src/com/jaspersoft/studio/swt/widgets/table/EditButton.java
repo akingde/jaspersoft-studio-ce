@@ -11,6 +11,8 @@ package com.jaspersoft.studio.swt.widgets.table;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
@@ -54,7 +56,7 @@ public class EditButton<T> {
 			editElement.editElement(inlist, index);
 			afterElementModified(s.getFirstElement(), inlist, index);
 			tableViewer.refresh();
-			tableViewer.setSelection(s);
+			tableViewer.setSelection(new StructuredSelection(inlist.get(index)));
 			tableViewer.reveal(s.getFirstElement());
 		}
 
@@ -66,6 +68,16 @@ public class EditButton<T> {
 		editB.setLayoutData(new GridData(GridData.FILL_HORIZONTAL | GridData.VERTICAL_ALIGN_BEGINNING));
 		listener = new EditListener(tableViewer, editElement);
 		editB.addSelectionListener(listener);
+	}
+
+	public void editOnDoubleClick() {
+		listener.tableViewer.addDoubleClickListener(new IDoubleClickListener() {
+
+			@Override
+			public void doubleClick(DoubleClickEvent event) {
+				push();
+			}
+		});
 	}
 
 	public void push() {

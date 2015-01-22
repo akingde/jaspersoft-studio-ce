@@ -82,8 +82,8 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 	public ASPropertyWidget createWidget4Property(Composite composite, Object property, boolean showLabel) {
 		return createWidget4Property(getElement(), composite, property, showLabel);
 	}
-	
-	public ASPropertyWidget createWidget(Composite composite, Object property, boolean showLabel, IPropertyDescriptor pd){
+
+	public ASPropertyWidget createWidget(Composite composite, Object property, boolean showLabel, IPropertyDescriptor pd) {
 		CLabel label = createLabel(composite, showLabel, pd);
 		ASPropertyWidget widget = SPWidgetFactory.createWidget(composite, this, pd);
 		if (widget != null) {
@@ -415,5 +415,9 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 
 	public IHighlightPropertyWidget getWidgetForProperty(Object propertyId) {
 		return widgets.get(propertyId);
+	}
+
+	public JasperReportsContext getJasperReportsContext() {
+		return jasperReportsContext;
 	}
 }

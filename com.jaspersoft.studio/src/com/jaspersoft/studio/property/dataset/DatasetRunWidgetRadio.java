@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.property.dataset;
 
@@ -31,6 +27,7 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.swt.events.ExpressionModifiedEvent;
 import com.jaspersoft.studio.swt.events.ExpressionModifiedListener;
 import com.jaspersoft.studio.swt.widgets.WTextExpression;
+import com.jaspersoft.studio.utils.Misc;
 
 public class DatasetRunWidgetRadio implements IExpressionContextSetter {
 
@@ -39,37 +36,37 @@ public class DatasetRunWidgetRadio implements IExpressionContextSetter {
 	protected boolean ignoreUpdates = false;
 
 	private boolean isReportConnection = false;
-	
+
 	private boolean isEmptyDatasource = false;
 
 	private boolean isUseParentConnection = false;
-	
+
 	private boolean isUseConnectionExpression = false;
-	
+
 	private boolean isUseDatasourceExpression = false;
-	
+
 	private boolean isUseEmptyDatasource = false;
-	
+
 	private boolean isNoConnection = false;
-	
+
 	private Composite composite;
-	
+
 	private WTextExpression datasourceExpressionBox;
-	
+
 	private WTextExpression connectionExpressionBox;
-	
+
 	private Button radioUseParentConnection;
-	
+
 	private Button radioUseConnectionExpression;
-	
+
 	private Button radioUseDatasourceExpression;
-	
+
 	private Button radioUseEmptyDatasource;
-	
+
 	private Button radioNoConnection;
-	
+
 	private Listener listener;
-	
+
 	public DatasetRunWidgetRadio(Composite parent) {
 		createControl(parent);
 	}
@@ -89,18 +86,21 @@ public class DatasetRunWidgetRadio implements IExpressionContextSetter {
 		isNoConnection = false;
 
 		if (datasetrun != null) {
-			if (datasetrun.getConnectionExpression() != null) {
+			if (Misc.isNullOrEmpty(datasetrun.getDatasetName())) {
+				isNoConnection = true;
+			} else if (datasetrun.getConnectionExpression() != null) {
 				isReportConnection = datasetrun.getConnectionExpression().getText().equals("$P{REPORT_CONNECTION}");
 				isUseParentConnection = isReportConnection;
 				isUseConnectionExpression = !isReportConnection;
 			} else if (datasetrun.getDataSourceExpression() != null) {
-				isEmptyDatasource = datasetrun.getDataSourceExpression().getText().equals("new net.sf.jasperreports.engine.JREmptyDataSource()");
+				isEmptyDatasource = datasetrun.getDataSourceExpression().getText()
+						.equals("new net.sf.jasperreports.engine.JREmptyDataSource()");
 				isUseEmptyDatasource = isEmptyDatasource;
 				isUseDatasourceExpression = !isEmptyDatasource;
-			} else {
+			} else
 				isNoConnection = true;
-			}
-		}
+		} else
+			isNoConnection = true;
 		setEnabledWidgets();
 		addListeners();
 	}

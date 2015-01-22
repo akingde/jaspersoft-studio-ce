@@ -1879,6 +1879,11 @@ public class Messages extends NLS {
 	public static String common_yes;
 	public static String common_no;
 	public static String commons_bookmarks;
+	
+	public static String ItemPropertyDialog_EditItemProperty;
+	public static String ItemPropertyDialog_PropertyName;
+	public static String ItemPropertyDialog_PropertyValue;
+	public static String ItemPropertyDialog_UseExpression;
 
 	public static String VariableNameValidator_variableDuplicatedName;
 	public static String VErrorPreview_bytesLabel;

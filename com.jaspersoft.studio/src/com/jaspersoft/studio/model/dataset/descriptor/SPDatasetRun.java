@@ -251,6 +251,7 @@ public class SPDatasetRun extends ASPropertyWidget {
 	}
 
 	private void setDatasetEnabled(boolean enabled) {
+		returns.setEnabled(enabled);
 		paramMap.setEnabled(enabled);
 		params.setEnabled(enabled);
 		if (!enabled)

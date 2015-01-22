@@ -8,11 +8,15 @@
  ******************************************************************************/
 package com.jaspersoft.studio.swt.widgets.table;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
@@ -119,6 +123,16 @@ public class ListOrderButtons {
 		downFields.setText(Messages.common_down);
 		downFields.setLayoutData(new GridData(GridData.FILL_HORIZONTAL | GridData.VERTICAL_ALIGN_BEGINNING));
 		downFields.addSelectionListener(new ElementOrderChanger(tableViewer, false));
+		Object obj = tableViewer.getInput();
+		setEnabled(obj != null && obj instanceof Collection<?> && !((Collection<?>) obj).isEmpty());
+		tableViewer.addSelectionChangedListener(new ISelectionChangedListener() {
+
+			@Override
+			public void selectionChanged(SelectionChangedEvent event) {
+				ISelection sel = event.getSelection();
+				setEnabled(sel != null && !sel.isEmpty());
+			}
+		});
 	}
 
 	public void setEnabled(boolean enabled) {
