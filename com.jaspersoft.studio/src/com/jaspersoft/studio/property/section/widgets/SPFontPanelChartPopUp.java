@@ -313,7 +313,7 @@ public class SPFontPanelChartPopUp extends ASPropertyWidget {
 			String strfontname =  JRStyleResolver.getFontName(fontValue);
 			fontName.setText(strfontname);
 			
-			String strfontsize =  Integer.toString(JRStyleResolver.getFontSize(fontValue)); 
+			String strfontsize =  Float.toString(JRStyleResolver.getFontsize(fontValue)); 
 			String[] items = fontSize.getItems();
 			fontSize.setText(strfontsize != null ? strfontsize : ""); 
 			for (int i = 0; i < items.length; i++) {

@@ -320,7 +320,7 @@ public class SPFont extends ASPropertyWidget {
 			String strfontname = JRStyleResolver.getFontName(fontValue);
 			fontName.setText(strfontname);
 
-			String strfontsize = Integer.toString(JRStyleResolver.getFontSize(fontValue));
+			String strfontsize = Float.toString(JRStyleResolver.getFontsize(fontValue));
 			fontSize.setText(strfontsize != null ? strfontsize : "");
 
 			Boolean b = JRStyleResolver.isBold(fontValue);
