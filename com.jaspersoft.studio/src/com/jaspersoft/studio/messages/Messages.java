@@ -780,6 +780,7 @@ public class Messages extends NLS {
 	public static String HyperlinkParameterPage_Description;
 	public static String HyperlinkParameterPage_Title;
 	public static String HyperlinkSection_hyperlinkSectionTitle;
+	public static String ImageAlignSection_imageAlignLabel;
 	public static String ImageSelectionDialog_Browse;
 	public static String ImageSelectionDialog_bytes;
 	public static String ImageContributionItem_actionName;
@@ -1234,6 +1235,8 @@ public class Messages extends NLS {
 	public static String MStyle_font_size_description;
 	public static String MStyle_forecolor_description;
 	public static String MStyle_horizontal_alignment_description;
+	public static String MStyle_imageHorizontal;
+	public static String MStyle_imageVertical;
 	public static String MStyle_line_box_description;
 	public static String MStyle_line_pen_description;
 	public static String MStyle_markup;
@@ -1248,6 +1251,8 @@ public class Messages extends NLS {
 	public static String MStyle_scale_description;
 	public static String MStyle_Style_properties;
 	public static String MStyle_text_font_category;
+	public static String MStyle_textHorizontal;
+	public static String MStyle_textVertical;
 	public static String MStyle_vertical_alignment_description;
 	public static String MStyleTemplate_source_expression;
 	public static String MStyleTemplate_source_expression_description;
@@ -1744,6 +1749,7 @@ public class Messages extends NLS {
 	public static String TemplateLocationsPreferencePage_Description;
 	public static String TemplateLocationsPreferencePage_Locations;
 	public static String TemplateLocationsPreferencePage_Message;
+	public static String TextAlignSection_textAlignmentLabel;
 	public static String TextExporterPreferencePage_10;
 	public static String TextExporterPreferencePage_11;
 	public static String TextExporterPreferencePage_12;

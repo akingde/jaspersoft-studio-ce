@@ -10,7 +10,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
-package com.jaspersoft.studio.property.section.text;
+package com.jaspersoft.studio.property.section.image;
 
 import net.sf.jasperreports.engine.base.JRBaseStyle;
 
@@ -27,7 +27,7 @@ import com.jaspersoft.studio.property.section.AbstractRealValueSection;
  * 
  * @author Chicu Veaceslav
  */
-public class AlignSection extends AbstractRealValueSection {
+public class ImageAlignSection extends AbstractRealValueSection {
 	
 	/**
 	 * @see org.eclipse.ui.views.properties.tabbed.ITabbedPropertySection#createControls(org.eclipse.swt.widgets.Composite,
@@ -38,20 +38,20 @@ public class AlignSection extends AbstractRealValueSection {
 
 		parent.setLayout(new GridLayout(4, false));
 
-		getWidgetFactory().createCLabel(parent, Messages.AlignSection_common_align, SWT.RIGHT);
+		getWidgetFactory().createCLabel(parent, Messages.ImageAlignSection_imageAlignLabel, SWT.RIGHT);
 
-		createWidget4Property(parent, JRBaseStyle.PROPERTY_HORIZONTAL_ALIGNMENT, false);
+		createWidget4Property(parent, JRBaseStyle.PROPERTY_HORIZONTAL_IMAGE_ALIGNMENT, false);
 
-		getWidgetFactory().createCLabel(parent, "", SWT.SEPARATOR | SWT.VERTICAL);
+		getWidgetFactory().createCLabel(parent, "", SWT.SEPARATOR | SWT.VERTICAL); //$NON-NLS-1$
 
-		createWidget4Property(parent, JRBaseStyle.PROPERTY_VERTICAL_ALIGNMENT, false);
+		createWidget4Property(parent, JRBaseStyle.PROPERTY_VERTICAL_IMAGE_ALIGNMENT, false);
 	}
 	
 	@Override
 	protected void initializeProvidedProperties() {
 		super.initializeProvidedProperties();
-		addProvidedProperties(JRBaseStyle.PROPERTY_HORIZONTAL_ALIGNMENT, Messages.common_horizontal_alignment);
-		addProvidedProperties(JRBaseStyle.PROPERTY_VERTICAL_ALIGNMENT, Messages.common_vertical_alignment);
+		addProvidedProperties(JRBaseStyle.PROPERTY_HORIZONTAL_IMAGE_ALIGNMENT, Messages.common_horizontal_alignment);
+		addProvidedProperties(JRBaseStyle.PROPERTY_VERTICAL_IMAGE_ALIGNMENT, Messages.common_vertical_alignment);
 	}
 	
 

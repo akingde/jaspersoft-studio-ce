@@ -65,7 +65,8 @@ public class ResetStyleCommand extends Command {
 		dest.setFontName(source.getOwnFontName());
 		dest.setFontSize(source.getOwnFontsize());
 		dest.setForecolor(source.getOwnForecolor());
-		dest.setHorizontalAlignment(source.getOwnHorizontalAlignmentValue());
+		dest.setHorizontalTextAlign(source.getOwnHorizontalTextAlign());
+		dest.setHorizontalImageAlign(source.getOwnHorizontalImageAlign());
 		dest.setItalic(source.isOwnItalic());
 		dest.setMarkup(source.getOwnMarkup());
 		dest.setMode(source.getOwnModeValue());
@@ -80,7 +81,8 @@ public class ResetStyleCommand extends Command {
 		dest.setScaleImage(source.getOwnScaleImageValue());
 		dest.setStrikeThrough(source.isOwnStrikeThrough());
 		dest.setUnderline(source.isOwnUnderline());
-		dest.setVerticalAlignment(source.getOwnVerticalAlignmentValue());
+		dest.setVerticalTextAlign(source.getOwnVerticalTextAlign());
+		dest.setVerticalImageAlign(source.getOwnVerticalImageAlign());
 		
 		//COPY THE BOX
 		

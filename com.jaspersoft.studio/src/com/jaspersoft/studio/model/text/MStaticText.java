@@ -69,9 +69,9 @@ public class MStaticText extends MTextElement {
 			return result;
 		JRStaticText element = (JRStaticText) getValue();
 		result.put(JRDesignStyle.PROPERTY_FONT_NAME, element.getOwnFontName());
-		result.put(JRDesignStyle.PROPERTY_HORIZONTAL_ALIGNMENT, element.getOwnHorizontalAlignmentValue());
+		result.put(JRDesignStyle.PROPERTY_HORIZONTAL_TEXT_ALIGNMENT, element.getOwnHorizontalTextAlign());
 		result.put(JRDesignStyle.PROPERTY_MARKUP, element.getOwnMarkup());
-		result.put(JRDesignStyle.PROPERTY_VERTICAL_ALIGNMENT, element.getOwnVerticalAlignmentValue());
+		result.put(JRDesignStyle.PROPERTY_VERTICAL_TEXT_ALIGNMENT, element.getOwnVerticalTextAlign());
 		return result;
 	}
 

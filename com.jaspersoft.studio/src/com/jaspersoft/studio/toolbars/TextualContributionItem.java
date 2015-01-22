@@ -20,8 +20,8 @@ import java.util.List;
 import net.sf.jasperreports.engine.base.JRBaseFont;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
-import net.sf.jasperreports.engine.type.HorizontalAlignEnum;
-import net.sf.jasperreports.engine.type.VerticalAlignEnum;
+import net.sf.jasperreports.engine.type.HorizontalTextAlignEnum;
+import net.sf.jasperreports.engine.type.VerticalTextAlignEnum;
 
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
@@ -288,8 +288,8 @@ public class TextualContributionItem extends CommonToolbarHandler {
 					JSSCompoundCommand changeSizeCommands = new JSSCompoundCommand(null);
 					String property = "";
 					Object data = e.widget.getData();
-					if (data instanceof VerticalAlignEnum) property = JRBaseStyle.PROPERTY_VERTICAL_ALIGNMENT;
-					else if (data instanceof HorizontalAlignEnum) property = JRBaseStyle.PROPERTY_HORIZONTAL_ALIGNMENT;
+					if (data instanceof VerticalTextAlignEnum) property = JRBaseStyle.PROPERTY_VERTICAL_TEXT_ALIGNMENT;
+					else if (data instanceof HorizontalTextAlignEnum) property = JRBaseStyle.PROPERTY_HORIZONTAL_TEXT_ALIGNMENT;
 					else return;
 					for (Object textElement : selection){	
 						changeSizeCommands.setReferenceNodeIfNull(textElement);
@@ -359,39 +359,39 @@ public class TextualContributionItem extends CommonToolbarHandler {
 		
 		ToolItem alignButton = new ToolItem(buttons, SWT.PUSH);
 		alignButton.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/left_align.gif"));
-		alignButton.setData(HorizontalAlignEnum.LEFT);
+		alignButton.setData(HorizontalTextAlignEnum.LEFT);
 		alignButton.addSelectionListener(pushButtonPressed);
 		
 		alignButton = new ToolItem(buttons, SWT.PUSH);
 		alignButton.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/center_align.gif"));
-		alignButton.setData(HorizontalAlignEnum.CENTER);
+		alignButton.setData(HorizontalTextAlignEnum.CENTER);
 		alignButton.addSelectionListener(pushButtonPressed);
 		
 		alignButton = new ToolItem(buttons, SWT.PUSH);
 		alignButton.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/right_align.gif"));
-		alignButton.setData(HorizontalAlignEnum.RIGHT);
+		alignButton.setData(HorizontalTextAlignEnum.RIGHT);
 		alignButton.addSelectionListener(pushButtonPressed);
 		
 		alignButton = new ToolItem(buttons, SWT.PUSH);
 		alignButton.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/justified_align.gif"));
-		alignButton.setData(HorizontalAlignEnum.JUSTIFIED);
+		alignButton.setData(HorizontalTextAlignEnum.JUSTIFIED);
 		alignButton.addSelectionListener(pushButtonPressed);
 		
 		new ToolItem(buttons, SWT.SEPARATOR);
 		
 		alignButton = new ToolItem(buttons, SWT.PUSH);
 		alignButton.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/formatting/edit-vertical-alignment-top.png"));
-		alignButton.setData(VerticalAlignEnum.TOP);
+		alignButton.setData(VerticalTextAlignEnum.TOP);
 		alignButton.addSelectionListener(pushButtonPressed);
 		
 		alignButton = new ToolItem(buttons, SWT.PUSH);
 		alignButton.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/formatting/edit-vertical-alignment-middle.png"));
-		alignButton.setData(VerticalAlignEnum.MIDDLE);
+		alignButton.setData(VerticalTextAlignEnum.MIDDLE);
 		alignButton.addSelectionListener(pushButtonPressed);
 		
 		alignButton = new ToolItem(buttons, SWT.PUSH);
 		alignButton.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/formatting/edit-vertical-alignment.png"));
-		alignButton.setData(VerticalAlignEnum.BOTTOM);
+		alignButton.setData(VerticalTextAlignEnum.BOTTOM);
 		alignButton.addSelectionListener(pushButtonPressed);
 		
 		setAllControlsData();

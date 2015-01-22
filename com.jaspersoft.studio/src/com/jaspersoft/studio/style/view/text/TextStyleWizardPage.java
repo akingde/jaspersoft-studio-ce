@@ -18,9 +18,9 @@ import java.util.ArrayList;
 import net.sf.jasperreports.engine.JRFont;
 import net.sf.jasperreports.engine.base.JRBaseFont;
 import net.sf.jasperreports.engine.base.JRBaseLineBox;
-import net.sf.jasperreports.engine.type.HorizontalAlignEnum;
+import net.sf.jasperreports.engine.type.HorizontalTextAlignEnum;
 import net.sf.jasperreports.engine.type.RotationEnum;
-import net.sf.jasperreports.engine.type.VerticalAlignEnum;
+import net.sf.jasperreports.engine.type.VerticalTextAlignEnum;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ControlAdapter;
@@ -408,31 +408,31 @@ public class TextStyleWizardPage extends JSSHelpWizardPage {
 		transparent.addSelectionListener(valueSelectionListener);
 	}
 	
-	private HorizontalAlignEnum getHorizonltalAlignment(){
-		if (rightHAlignment.getSelection()) return HorizontalAlignEnum.RIGHT;
-		else if (centerHAlignment.getSelection()) return HorizontalAlignEnum.CENTER;
-		else if (justifiedHAlignment.getSelection()) return HorizontalAlignEnum.JUSTIFIED;
-		else return HorizontalAlignEnum.LEFT;
+	private HorizontalTextAlignEnum getHorizonltalAlignment(){
+		if (rightHAlignment.getSelection()) return HorizontalTextAlignEnum.RIGHT;
+		else if (centerHAlignment.getSelection()) return HorizontalTextAlignEnum.CENTER;
+		else if (justifiedHAlignment.getSelection()) return HorizontalTextAlignEnum.JUSTIFIED;
+		else return HorizontalTextAlignEnum.LEFT;
 	}
 	
 	private void setHorizonltalAlignment(){
-		HorizontalAlignEnum align = element.getHorizontalAlignmen();
-		if (HorizontalAlignEnum.RIGHT.equals(align)) rightHAlignment.setSelection(true);
-		else if (HorizontalAlignEnum.CENTER.equals(align)) centerHAlignment.setSelection(true);
-		else if (HorizontalAlignEnum.JUSTIFIED.equals(align)) justifiedHAlignment.setSelection(true);
+		HorizontalTextAlignEnum align = element.getHorizontalAlignmen();
+		if (HorizontalTextAlignEnum.RIGHT.equals(align)) rightHAlignment.setSelection(true);
+		else if (HorizontalTextAlignEnum.CENTER.equals(align)) centerHAlignment.setSelection(true);
+		else if (HorizontalTextAlignEnum.JUSTIFIED.equals(align)) justifiedHAlignment.setSelection(true);
 		else  leftHAlignment.setSelection(true);
 	}
 	
-	private VerticalAlignEnum getVerticalAlignment(){
-		if (middleVAlignment.getSelection()) return VerticalAlignEnum.MIDDLE;
-		else if (bottomVAlignment.getSelection()) return VerticalAlignEnum.BOTTOM;
-		else return VerticalAlignEnum.TOP;
+	private VerticalTextAlignEnum getVerticalAlignment(){
+		if (middleVAlignment.getSelection()) return VerticalTextAlignEnum.MIDDLE;
+		else if (bottomVAlignment.getSelection()) return VerticalTextAlignEnum.BOTTOM;
+		else return VerticalTextAlignEnum.TOP;
 	}
 	
 	private void setVerticalAlignment(){
-		VerticalAlignEnum align = element.getVerticalAlignmen();
-		if (VerticalAlignEnum.MIDDLE.equals(align)) middleVAlignment.setSelection(true);
-		else if (VerticalAlignEnum.BOTTOM.equals(align)) bottomVAlignment.setSelection(true);
+		VerticalTextAlignEnum align = element.getVerticalAlignmen();
+		if (VerticalTextAlignEnum.MIDDLE.equals(align)) middleVAlignment.setSelection(true);
+		else if (VerticalTextAlignEnum.BOTTOM.equals(align)) bottomVAlignment.setSelection(true);
 		else topVAlignment.setSelection(true);
 	}
 	
@@ -499,8 +499,8 @@ public class TextStyleWizardPage extends JSSHelpWizardPage {
 		TextStyle defaultTextStyle = new TextStyle();
 		defaultTextStyle.setBackGround(AlfaRGB.getFullyOpaque(new RGB(255,255,255)));
 		defaultTextStyle.setForeGround(AlfaRGB.getFullyOpaque(new RGB(0,0,0)));
-		defaultTextStyle.setHorizontalAlignmen(HorizontalAlignEnum.LEFT);
-		defaultTextStyle.setVerticalAlignmen(VerticalAlignEnum.TOP);
+		defaultTextStyle.setHorizontalAlignmen(HorizontalTextAlignEnum.LEFT);
+		defaultTextStyle.setVerticalAlignmen(VerticalTextAlignEnum.TOP);
 		defaultTextStyle.setTransparent(true);
 		defaultTextStyle.setRotation(RotationEnum.NONE);
 		

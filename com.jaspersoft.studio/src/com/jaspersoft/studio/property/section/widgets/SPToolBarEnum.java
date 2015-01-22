@@ -66,6 +66,13 @@ public class SPToolBarEnum extends ASPropertyWidget {
 			toolItems[i].setToolTipText(pd.getJrEnums()[i].getName());
 			toolItems[i].addSelectionListener(new SelectionAdapter() {
 				public void widgetSelected(SelectionEvent e) {
+					//eventually deselect other selected items. It is possible use SWT.RADIO as toolitem
+					//stylebit but this sometimes dosen't highlight the selected item
+					for(ToolItem item : toolItems){
+						if (item != e.widget){
+							item.setSelection(false);
+						}
+					}
 					int val = index;
 					if (pd.getType() != NullEnum.NOTNULL)
 						val++;

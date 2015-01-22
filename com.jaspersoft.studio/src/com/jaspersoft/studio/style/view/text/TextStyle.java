@@ -20,11 +20,11 @@ import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.base.JRBaseFont;
 import net.sf.jasperreports.engine.base.JRBaseLineBox;
 import net.sf.jasperreports.engine.base.JRBoxPen;
-import net.sf.jasperreports.engine.type.HorizontalAlignEnum;
+import net.sf.jasperreports.engine.type.HorizontalTextAlignEnum;
 import net.sf.jasperreports.engine.type.LineStyleEnum;
 import net.sf.jasperreports.engine.type.ModeEnum;
 import net.sf.jasperreports.engine.type.RotationEnum;
-import net.sf.jasperreports.engine.type.VerticalAlignEnum;
+import net.sf.jasperreports.engine.type.VerticalTextAlignEnum;
 
 import org.eclipse.swt.graphics.RGB;
 import org.w3c.dom.NamedNodeMap;
@@ -75,8 +75,8 @@ public class TextStyle extends TemplateStyle {
 		setTransparent(style.getOwnModeValue() != null ? ModeEnum.TRANSPARENT.equals(style.getOwnModeValue()) : true);
 		setBackGround(style.getOwnBackcolor());
 		setForeGround(style.getOwnForecolor());
-		setVerticalAlignmen(style.getOwnVerticalAlignmentValue() != null ? style.getOwnVerticalAlignmentValue() : VerticalAlignEnum.TOP);
-		setHorizontalAlignmen(style.getOwnHorizontalAlignmentValue() != null ? style.getOwnHorizontalAlignmentValue() : HorizontalAlignEnum.LEFT);
+		setVerticalAlignmen(style.getOwnVerticalTextAlign() != null ? style.getOwnVerticalTextAlign() : VerticalTextAlignEnum.TOP);
+		setHorizontalAlignmen(style.getOwnHorizontalTextAlign() != null ? style.getOwnHorizontalTextAlign() : HorizontalTextAlignEnum.LEFT);
 		setRotation(style.getOwnRotationValue() != null ? style.getOwnRotationValue() : RotationEnum.NONE);
 		
 		JRFont font = new JRBaseFont();
@@ -129,12 +129,12 @@ public class TextStyle extends TemplateStyle {
 	}
 
 
-	public VerticalAlignEnum getVerticalAlignmen(){
-		return (VerticalAlignEnum)getProperty(VERTICAL_ALIGNMENT);
+	public VerticalTextAlignEnum getVerticalAlignmen(){
+		return (VerticalTextAlignEnum)getProperty(VERTICAL_ALIGNMENT);
 	}
 	
-	public HorizontalAlignEnum getHorizontalAlignmen(){
-		return (HorizontalAlignEnum)getProperty(HORIZONTAL_ALIGNMENT);
+	public HorizontalTextAlignEnum getHorizontalAlignmen(){
+		return (HorizontalTextAlignEnum)getProperty(HORIZONTAL_ALIGNMENT);
 	}
 	
 	public RotationEnum getRotation(){
@@ -172,11 +172,11 @@ public class TextStyle extends TemplateStyle {
 		storePropertiy(FOREGROUND_COLOR,aColor);
 	}
 
-	public void setVerticalAlignmen(VerticalAlignEnum value){
+	public void setVerticalAlignmen(VerticalTextAlignEnum value){
 		storePropertiy(VERTICAL_ALIGNMENT, value);
 	}
 	
-	public void setHorizontalAlignmen(HorizontalAlignEnum value){
+	public void setHorizontalAlignmen(HorizontalTextAlignEnum value){
 		storePropertiy(HORIZONTAL_ALIGNMENT, value);
 	}
 	
@@ -352,8 +352,8 @@ public class TextStyle extends TemplateStyle {
 	public TemplateStyle buildFromXML(Node xmlNode) {
 		try{
 			NamedNodeMap rootAttributes = xmlNode.getAttributes();
-			VerticalAlignEnum verticalAlignment = VerticalAlignEnum.getByValue(Byte.valueOf(rootAttributes.getNamedItem("verticalAlignment").getNodeValue()));
-			HorizontalAlignEnum horizontalAlignment = HorizontalAlignEnum.getByValue(Byte.valueOf(rootAttributes.getNamedItem("horizontalAlignment").getNodeValue()));
+			VerticalTextAlignEnum verticalAlignment = VerticalTextAlignEnum.getByValue(Byte.valueOf(rootAttributes.getNamedItem("verticalAlignment").getNodeValue()));
+			HorizontalTextAlignEnum horizontalAlignment = HorizontalTextAlignEnum.getByValue(Byte.valueOf(rootAttributes.getNamedItem("horizontalAlignment").getNodeValue()));
 			RotationEnum rotation = RotationEnum.getByValue(Byte.valueOf(rootAttributes.getNamedItem("rotation").getNodeValue()));
 			boolean transparent = rootAttributes.getNamedItem("isTransparent").getNodeValue().equals("true"); 
 			

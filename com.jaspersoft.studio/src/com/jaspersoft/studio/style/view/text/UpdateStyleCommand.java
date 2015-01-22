@@ -97,8 +97,8 @@ public class UpdateStyleCommand extends Command{
 	
 	
 	private void copyTextStyleToStyle(JRDesignStyle style){
-		style.setHorizontalAlignment(newStyleTemplate.getHorizontalAlignmen());
-		style.setVerticalAlignment(newStyleTemplate.getVerticalAlignmen());
+		style.setHorizontalTextAlign(newStyleTemplate.getHorizontalAlignmen());
+		style.setVerticalTextAlign(newStyleTemplate.getVerticalAlignmen());
 		style.setRotation(newStyleTemplate.getRotation());
 		style.setBackcolor(newStyleTemplate.getBackGroundColor());
 		style.setForecolor(newStyleTemplate.getForeGroundColor());
@@ -159,8 +159,8 @@ public class UpdateStyleCommand extends Command{
 	 * @param style the style to apply
 	 */
 	public static void applayStyleToTextElement(TextStyle style, JRDesignTextElement element){
-		element.setHorizontalAlignment(style.getHorizontalAlignmen());
-		element.setVerticalAlignment(style.getVerticalAlignmen());
+		element.setHorizontalTextAlign(style.getHorizontalAlignmen());
+		element.setVerticalTextAlign(style.getVerticalAlignmen());
 		element.setRotation(style.getRotation());
 		element.setBackcolor(style.getBackGroundColor());
 		element.setForecolor(style.getForeGroundColor());

@@ -22,12 +22,12 @@ import net.sf.jasperreports.engine.base.JRBaseLineBox;
 import net.sf.jasperreports.engine.base.JRBasePen;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
 import net.sf.jasperreports.engine.type.FillEnum;
-import net.sf.jasperreports.engine.type.HorizontalAlignEnum;
+import net.sf.jasperreports.engine.type.HorizontalTextAlignEnum;
 import net.sf.jasperreports.engine.type.LineStyleEnum;
 import net.sf.jasperreports.engine.type.ModeEnum;
 import net.sf.jasperreports.engine.type.RotationEnum;
 import net.sf.jasperreports.engine.type.ScaleImageEnum;
-import net.sf.jasperreports.engine.type.VerticalAlignEnum;
+import net.sf.jasperreports.engine.type.VerticalTextAlignEnum;
 import net.sf.jasperreports.engine.util.JRProperties;
 
 import com.jaspersoft.studio.model.image.MImage;
@@ -108,8 +108,10 @@ public class DefaultValuesMap {
 			result.put(JRDesignStyle.PROPERTY_UNDERLINE, null);
 			result.put(JRDesignStyle.PROPERTY_STRIKE_THROUGH, null);
 			result.put(JRDesignStyle.PROPERTY_BLANK_WHEN_NULL,null);
-			result.put(JRDesignStyle.PROPERTY_VERTICAL_ALIGNMENT,null);
-			result.put(JRDesignStyle.PROPERTY_HORIZONTAL_ALIGNMENT,null);
+			result.put(JRDesignStyle.PROPERTY_VERTICAL_TEXT_ALIGNMENT,null);
+			result.put(JRDesignStyle.PROPERTY_HORIZONTAL_TEXT_ALIGNMENT,null);
+			result.put(JRDesignStyle.PROPERTY_VERTICAL_IMAGE_ALIGNMENT,null);
+			result.put(JRDesignStyle.PROPERTY_HORIZONTAL_IMAGE_ALIGNMENT,null);
 			result.put(JRDesignStyle.PROPERTY_SCALE_IMAGE,null);
 			result.put(JRDesignStyle.PROPERTY_ROTATION,null);
 			result.put(JRDesignStyle.PROPERTY_RADIUS,null);
@@ -138,8 +140,8 @@ public class DefaultValuesMap {
 				result.put(JRDesignStyle.PROPERTY_ITALIC, false);
 				result.put(JRDesignStyle.PROPERTY_UNDERLINE, false);
 				result.put(JRDesignStyle.PROPERTY_STRIKE_THROUGH, false);
-				result.put(JRDesignStyle.PROPERTY_VERTICAL_ALIGNMENT,VerticalAlignEnum.TOP);
-				result.put(JRDesignStyle.PROPERTY_HORIZONTAL_ALIGNMENT,HorizontalAlignEnum.LEFT);
+				result.put(JRDesignStyle.PROPERTY_VERTICAL_TEXT_ALIGNMENT,VerticalTextAlignEnum.TOP);
+				result.put(JRDesignStyle.PROPERTY_HORIZONTAL_TEXT_ALIGNMENT,HorizontalTextAlignEnum.LEFT);
 				result.put(JRDesignStyle.PROPERTY_ROTATION,RotationEnum.NONE);
 				transparency = ModeEnum.getByValue(ModeEnum.TRANSPARENT.getValue());
 			}

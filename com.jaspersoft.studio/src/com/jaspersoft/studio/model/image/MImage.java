@@ -32,10 +32,10 @@ import net.sf.jasperreports.engine.design.JRDesignImage;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.EvaluationTimeEnum;
 import net.sf.jasperreports.engine.type.FillEnum;
-import net.sf.jasperreports.engine.type.HorizontalAlignEnum;
+import net.sf.jasperreports.engine.type.HorizontalImageAlignEnum;
 import net.sf.jasperreports.engine.type.OnErrorTypeEnum;
 import net.sf.jasperreports.engine.type.ScaleImageEnum;
-import net.sf.jasperreports.engine.type.VerticalAlignEnum;
+import net.sf.jasperreports.engine.type.VerticalImageAlignEnum;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
@@ -55,10 +55,10 @@ import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescri
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptors.HAlignPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.ImageHAlignPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.ImageVAlignPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.SpinnerPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptors.VAlignPropertyDescriptor;
 
 /*
  * The Class MImage.
@@ -195,13 +195,13 @@ public class MImage extends MGraphicElementLineBox {
 		scaleImageD.setDescription(Messages.MImage_scale_image_description);
 		desc.add(scaleImageD);
 
-		hAlignD = new HAlignPropertyDescriptor(JRBaseStyle.PROPERTY_HORIZONTAL_ALIGNMENT,
-				Messages.common_horizontal_alignment, HorizontalAlignEnum.class, NullEnum.INHERITED);
+		hAlignD = new ImageHAlignPropertyDescriptor(JRBaseStyle.PROPERTY_HORIZONTAL_IMAGE_ALIGNMENT,
+				Messages.common_horizontal_alignment, HorizontalImageAlignEnum.class, NullEnum.INHERITED);
 		hAlignD.setDescription(Messages.MImage_horizontal_alignment_description);
 		desc.add(hAlignD);
 
-		vAlignD = new VAlignPropertyDescriptor(JRBaseStyle.PROPERTY_VERTICAL_ALIGNMENT, Messages.common_vertical_alignment,
-				VerticalAlignEnum.class, NullEnum.INHERITED);
+		vAlignD = new ImageVAlignPropertyDescriptor(JRBaseStyle.PROPERTY_VERTICAL_IMAGE_ALIGNMENT, Messages.common_vertical_alignment,
+				VerticalImageAlignEnum.class, NullEnum.INHERITED);
 		vAlignD.setDescription(Messages.MImage_vertical_alignment_description);
 		desc.add(vAlignD);
 
@@ -260,8 +260,8 @@ public class MImage extends MGraphicElementLineBox {
 
 		defaultsMap.put(JRBaseStyle.PROPERTY_FILL, null);
 		defaultsMap.put(JRBaseStyle.PROPERTY_SCALE_IMAGE, null);
-		defaultsMap.put(JRBaseStyle.PROPERTY_HORIZONTAL_ALIGNMENT, null);
-		defaultsMap.put(JRBaseStyle.PROPERTY_VERTICAL_ALIGNMENT, null);
+		defaultsMap.put(JRBaseStyle.PROPERTY_HORIZONTAL_IMAGE_ALIGNMENT, null);
+		defaultsMap.put(JRBaseStyle.PROPERTY_VERTICAL_IMAGE_ALIGNMENT, null);
 		defaultsMap.put(JRBaseImage.PROPERTY_ON_ERROR_TYPE, onErrorTypeD.getEnumValue(OnErrorTypeEnum.ERROR));
 		defaultsMap.put(JRDesignImage.PROPERTY_EVALUATION_TIME, EvaluationTimeEnum.NOW);
 		defaultsMap.put(JRDesignImage.PROPERTY_EXPRESSION, "java.lang.String"); //$NON-NLS-1$
@@ -284,10 +284,10 @@ public class MImage extends MGraphicElementLineBox {
 			return fillD.getEnumValue(jrElement.getOwnFillValue());
 		if (id.equals(JRBaseStyle.PROPERTY_SCALE_IMAGE))
 			return scaleImageD.getEnumValue(jrElement.getOwnScaleImageValue());
-		if (id.equals(JRBaseStyle.PROPERTY_HORIZONTAL_ALIGNMENT))
-			return hAlignD.getEnumValue(jrElement.getOwnHorizontalAlignmentValue());
-		if (id.equals(JRBaseStyle.PROPERTY_VERTICAL_ALIGNMENT))
-			return vAlignD.getEnumValue(jrElement.getOwnVerticalAlignmentValue());
+		if (id.equals(JRBaseStyle.PROPERTY_HORIZONTAL_IMAGE_ALIGNMENT))
+			return hAlignD.getEnumValue(jrElement.getOwnHorizontalImageAlign());
+		if (id.equals(JRBaseStyle.PROPERTY_VERTICAL_IMAGE_ALIGNMENT))
+			return vAlignD.getEnumValue(jrElement.getOwnVerticalImageAlign());
 		if (id.equals(JRBaseImage.PROPERTY_ON_ERROR_TYPE))
 			return onErrorTypeD.getEnumValue(jrElement.getOnErrorTypeValue());
 		if (id.equals(JRDesignImage.PROPERTY_EVALUATION_TIME))
@@ -340,10 +340,10 @@ public class MImage extends MGraphicElementLineBox {
 			return fillD.getEnumValue(jrElement.getFillValue());
 		if (id.equals(JRBaseStyle.PROPERTY_SCALE_IMAGE))
 			return scaleImageD.getEnumValue(jrElement.getScaleImageValue());
-		if (id.equals(JRBaseStyle.PROPERTY_HORIZONTAL_ALIGNMENT))
-			return hAlignD.getEnumValue(jrElement.getHorizontalAlignmentValue());
-		if (id.equals(JRBaseStyle.PROPERTY_VERTICAL_ALIGNMENT))
-			return vAlignD.getEnumValue(jrElement.getVerticalAlignmentValue());
+		if (id.equals(JRBaseStyle.PROPERTY_HORIZONTAL_IMAGE_ALIGNMENT))
+			return hAlignD.getEnumValue(jrElement.getHorizontalImageAlign());
+		if (id.equals(JRBaseStyle.PROPERTY_VERTICAL_IMAGE_ALIGNMENT))
+			return vAlignD.getEnumValue(jrElement.getVerticalImageAlign());
 		if (id.equals(JRBaseImage.PROPERTY_ON_ERROR_TYPE))
 			return onErrorTypeD.getEnumValue(jrElement.getOnErrorTypeValue());
 		if (id.equals(JRDesignImage.PROPERTY_EVALUATION_TIME))
@@ -385,10 +385,10 @@ public class MImage extends MGraphicElementLineBox {
 			jrElement.setFill((FillEnum) fillD.getEnumValue(value));
 		else if (id.equals(JRBaseStyle.PROPERTY_SCALE_IMAGE))
 			jrElement.setScaleImage((ScaleImageEnum) scaleImageD.getEnumValue(value));
-		else if (id.equals(JRBaseStyle.PROPERTY_HORIZONTAL_ALIGNMENT))
-			jrElement.setHorizontalAlignment((HorizontalAlignEnum) hAlignD.getEnumValue(value));
-		else if (id.equals(JRBaseStyle.PROPERTY_VERTICAL_ALIGNMENT))
-			jrElement.setVerticalAlignment((VerticalAlignEnum) vAlignD.getEnumValue(value));
+		else if (id.equals(JRBaseStyle.PROPERTY_HORIZONTAL_IMAGE_ALIGNMENT))
+			jrElement.setHorizontalImageAlign((HorizontalImageAlignEnum) hAlignD.getEnumValue(value));
+		else if (id.equals(JRBaseStyle.PROPERTY_VERTICAL_IMAGE_ALIGNMENT))
+			jrElement.setVerticalImageAlign((VerticalImageAlignEnum) vAlignD.getEnumValue(value));
 		else if (id.equals(JRBaseImage.PROPERTY_ON_ERROR_TYPE))
 			jrElement.setOnErrorType((OnErrorTypeEnum) onErrorTypeD.getEnumValue(value));
 		else if (id.equals(JRDesignImage.PROPERTY_EVALUATION_TIME))
@@ -510,8 +510,8 @@ public class MImage extends MGraphicElementLineBox {
 		HashSet<String> result = super.generateGraphicalProperties();
 		result.add(JRBaseStyle.PROPERTY_FILL);
 		result.add(JRBaseStyle.PROPERTY_SCALE_IMAGE);
-		result.add(JRBaseStyle.PROPERTY_HORIZONTAL_ALIGNMENT);
-		result.add(JRBaseStyle.PROPERTY_VERTICAL_ALIGNMENT);
+		result.add(JRBaseStyle.PROPERTY_HORIZONTAL_IMAGE_ALIGNMENT);
+		result.add(JRBaseStyle.PROPERTY_VERTICAL_IMAGE_ALIGNMENT);
 		result.add(JRDesignImage.PROPERTY_EXPRESSION);
 		return result;
 	}
@@ -525,8 +525,8 @@ public class MImage extends MGraphicElementLineBox {
 			JRDesignImage jrTarget = (JRDesignImage)target;
 			jrTarget.setFill(jrSource.getOwnFillValue());
 			jrTarget.setScaleImage(jrSource.getOwnScaleImageValue());
-			jrTarget.setHorizontalAlignment(jrSource.getOwnHorizontalAlignmentValue());
-			jrTarget.setVerticalAlignment(jrSource.getOwnVerticalAlignmentValue());
+			jrTarget.setHorizontalImageAlign(jrSource.getOwnHorizontalImageAlign());
+			jrTarget.setVerticalImageAlign(jrSource.getOwnVerticalImageAlign());
 			jrTarget.setOnErrorType(jrSource.getOnErrorTypeValue());
 			jrTarget.setUsingCache(jrSource.getUsingCache());
 			jrTarget.setLazy(jrSource.isLazy());

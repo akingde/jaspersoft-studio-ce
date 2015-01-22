@@ -305,9 +305,9 @@ public class CustomStyleResolver {
 	private static void copyInheritedTextualAttributes(JRDesignElement target, JRStyle style){
 		JRDesignTextElement jrTarget = (JRDesignTextElement)target;
 		
-		if (jrTarget.getOwnHorizontalAlignmentValue() == null) jrTarget.setHorizontalAlignment(style.getHorizontalAlignmentValue());
-		if (jrTarget.getOwnVerticalAlignmentValue() == null) jrTarget.setVerticalAlignment(style.getVerticalAlignmentValue());
-		if (jrTarget.getOwnVerticalAlignmentValue() == null) jrTarget.setMarkup(getMarkup(style));
+		if (jrTarget.getOwnHorizontalTextAlign() == null) jrTarget.setHorizontalTextAlign(style.getHorizontalTextAlign());
+		if (jrTarget.getOwnVerticalTextAlign() == null) jrTarget.setVerticalTextAlign(style.getVerticalTextAlign());
+		if (jrTarget.getOwnMarkup() == null) jrTarget.setMarkup(getMarkup(style));
 		if (jrTarget.getOwnRotationValue() == null) jrTarget.setRotation(style.getRotationValue());
 		
 		if (jrTarget.isOwnBold() == null) jrTarget.setBold(style.isBold());
@@ -345,8 +345,8 @@ public class CustomStyleResolver {
 		JRDesignImage jrTarget = (JRDesignImage)target;
 		if (jrTarget.getOwnFillValue() == null) jrTarget.setFill(style.getFillValue());
 		if (jrTarget.getOwnScaleImageValue() == null) jrTarget.setScaleImage(style.getScaleImageValue());
-		if (jrTarget.getOwnHorizontalAlignmentValue() == null) jrTarget.setHorizontalAlignment(style.getHorizontalAlignmentValue());
-		if (jrTarget.getOwnVerticalAlignmentValue() == null) jrTarget.setVerticalAlignment(style.getVerticalAlignmentValue());
+		if (jrTarget.getOwnHorizontalImageAlign() == null) jrTarget.setHorizontalImageAlign(style.getHorizontalImageAlign());
+		if (jrTarget.getOwnVerticalImageAlign() == null) jrTarget.setVerticalImageAlign(style.getVerticalImageAlign());
 	}
 	
 	/**

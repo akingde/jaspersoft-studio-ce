@@ -18,8 +18,8 @@ import java.util.Collection;
 import java.util.List;
 
 import net.sf.jasperreports.engine.JRStyle;
-import net.sf.jasperreports.engine.type.HorizontalAlignEnum;
-import net.sf.jasperreports.engine.type.VerticalAlignEnum;
+import net.sf.jasperreports.engine.type.HorizontalTextAlignEnum;
+import net.sf.jasperreports.engine.type.VerticalTextAlignEnum;
 
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.dnd.AbstractTransferDropTargetListener;
@@ -466,8 +466,8 @@ public class TextStyleView implements TemplateViewProvider {
 						//Remove the border and use a standard alignment to improve visibility
 						normalized.setDescription(text);
 						normalized.setBorders(null);
-						normalized.setHorizontalAlignmen(HorizontalAlignEnum.LEFT);
-						normalized.setVerticalAlignmen(VerticalAlignEnum.TOP);
+						normalized.setHorizontalAlignmen(HorizontalTextAlignEnum.LEFT);
+						normalized.setVerticalAlignmen(VerticalTextAlignEnum.TOP);
 						int fontSize = normalized.getFont().getOwnFontsize().intValue();
 						ImageData previewData = PreviewGenerator.generatePreview(normalized, fontSize*text.length()+width, fontSize + height, sampleComposite.getBackground().getRGB());
 						if (normalized.getFont().getOwnFontsize()>height) previewData = cropImage(previewData, 0, 0, height, width);

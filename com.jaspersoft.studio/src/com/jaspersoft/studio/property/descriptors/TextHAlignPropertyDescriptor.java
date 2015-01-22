@@ -23,18 +23,18 @@ import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 import com.jaspersoft.studio.property.section.widgets.SPToolBarEnum;
 
-public class VAlignPropertyDescriptor extends JSSEnumPropertyDescriptor {
+public class TextHAlignPropertyDescriptor extends JSSEnumPropertyDescriptor {
 
-	public VAlignPropertyDescriptor(Object id, String displayName, Class<? extends JREnum> jrEnum, NullEnum type) {
+	public TextHAlignPropertyDescriptor(Object id, String displayName, Class<? extends JREnum> jrEnum, NullEnum type) {
 		super(id, displayName, jrEnum, type);
 	}
 
 	public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
-		Image[] images = new Image[] {
-				JaspersoftStudioPlugin.getInstance().getImage("icons/resources/formatting/edit-vertical-alignment-top.png"),
-				JaspersoftStudioPlugin.getInstance().getImage("icons/resources/formatting/edit-vertical-alignment-middle.png"),
-				JaspersoftStudioPlugin.getInstance().getImage("icons/resources/formatting/edit-vertical-alignment.png"),
-				JaspersoftStudioPlugin.getInstance().getImage("icons/resources/formatting/edit-vertical-alignment-middle.png"), };
+		Image[] images = new Image[] { 
+				JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/left_align.gif"),
+				JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/center_align.gif"),
+				JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/right_align.gif"),
+				JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/justified_align.gif") };
 		return new SPToolBarEnum(parent, section, this, images, false);
 	}
 }

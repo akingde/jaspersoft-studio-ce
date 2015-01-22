@@ -26,9 +26,9 @@ import net.sf.jasperreports.engine.base.JRBaseStyle;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
 import net.sf.jasperreports.engine.design.JRDesignTextElement;
-import net.sf.jasperreports.engine.type.HorizontalAlignEnum;
+import net.sf.jasperreports.engine.type.HorizontalTextAlignEnum;
 import net.sf.jasperreports.engine.type.RotationEnum;
-import net.sf.jasperreports.engine.type.VerticalAlignEnum;
+import net.sf.jasperreports.engine.type.VerticalTextAlignEnum;
 
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
@@ -39,10 +39,10 @@ import com.jaspersoft.studio.model.MGraphicElementLineBox;
 import com.jaspersoft.studio.property.descriptor.JRPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptors.HAlignPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.TextHAlignPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.RotationPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptors.VAlignPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.TextVAlignPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
 import com.jaspersoft.studio.utils.ModelUtils;
 
@@ -83,13 +83,13 @@ public abstract class MTextElement extends MGraphicElementLineBox implements IRo
 		markupD.setDescription(Messages.MTextElement_markup_description);
 		desc.add(markupD);
 
-		hAlignD = new HAlignPropertyDescriptor(JRBaseStyle.PROPERTY_HORIZONTAL_ALIGNMENT,
-				Messages.common_horizontal_alignment, HorizontalAlignEnum.class, NullEnum.INHERITED);
+		hAlignD = new TextHAlignPropertyDescriptor(JRBaseStyle.PROPERTY_HORIZONTAL_TEXT_ALIGNMENT,
+				Messages.common_horizontal_alignment, HorizontalTextAlignEnum.class, NullEnum.INHERITED);
 		hAlignD.setDescription(Messages.MTextElement_horizontal_alignment_description);
 		desc.add(hAlignD);
 
-		vAlignD = new VAlignPropertyDescriptor(JRBaseStyle.PROPERTY_VERTICAL_ALIGNMENT, Messages.common_vertical_alignment,
-				VerticalAlignEnum.class, NullEnum.INHERITED);
+		vAlignD = new TextVAlignPropertyDescriptor(JRBaseStyle.PROPERTY_VERTICAL_TEXT_ALIGNMENT, Messages.common_vertical_alignment,
+				VerticalTextAlignEnum.class, NullEnum.INHERITED);
 		vAlignD.setDescription(Messages.MTextElement_vertical_alignment_description);
 		desc.add(vAlignD);
 
@@ -112,8 +112,8 @@ public abstract class MTextElement extends MGraphicElementLineBox implements IRo
 		vAlignD.setCategory(Messages.MTextElement_text_properties_category);
 		rotationD.setCategory(Messages.MTextElement_text_properties_category);
 
-		defaultsMap.put(JRBaseStyle.PROPERTY_HORIZONTAL_ALIGNMENT, null);
-		defaultsMap.put(JRBaseStyle.PROPERTY_VERTICAL_ALIGNMENT, null);
+		defaultsMap.put(JRBaseStyle.PROPERTY_HORIZONTAL_TEXT_ALIGNMENT, null);
+		defaultsMap.put(JRBaseStyle.PROPERTY_VERTICAL_TEXT_ALIGNMENT, null);
 		defaultsMap.put(JRBaseStyle.PROPERTY_ROTATION, null);
 
 	}
@@ -148,10 +148,10 @@ public abstract class MTextElement extends MGraphicElementLineBox implements IRo
 			return mParagraph;
 		}
 
-		if (id.equals(JRBaseStyle.PROPERTY_HORIZONTAL_ALIGNMENT))
-			return hAlignD.getEnumValue(jrElement.getHorizontalAlignmentValue());
-		if (id.equals(JRBaseStyle.PROPERTY_VERTICAL_ALIGNMENT))
-			return vAlignD.getEnumValue(jrElement.getVerticalAlignmentValue());
+		if (id.equals(JRBaseStyle.PROPERTY_HORIZONTAL_TEXT_ALIGNMENT))
+			return hAlignD.getEnumValue(jrElement.getHorizontalTextAlign());
+		if (id.equals(JRBaseStyle.PROPERTY_VERTICAL_TEXT_ALIGNMENT))
+			return vAlignD.getEnumValue(jrElement.getVerticalTextAlign());
 		if (id.equals(JRBaseStyle.PROPERTY_ROTATION))
 			return rotationD.getEnumValue(jrElement.getRotationValue());
 
@@ -179,13 +179,13 @@ public abstract class MTextElement extends MGraphicElementLineBox implements IRo
 			return mParagraph;
 		}
 
-		if (id.equals(JRBaseStyle.PROPERTY_HORIZONTAL_ALIGNMENT)){
+		if (id.equals(JRBaseStyle.PROPERTY_HORIZONTAL_TEXT_ALIGNMENT)){
 			if (hAlignD == null) getPropertyDescriptors();
-			return hAlignD.getEnumValue(jrElement.getOwnHorizontalAlignmentValue());
+			return hAlignD.getEnumValue(jrElement.getOwnHorizontalTextAlign());
 		}
-		if (id.equals(JRBaseStyle.PROPERTY_VERTICAL_ALIGNMENT)){
+		if (id.equals(JRBaseStyle.PROPERTY_VERTICAL_TEXT_ALIGNMENT)){
 			if (vAlignD == null) getPropertyDescriptors();
-			return vAlignD.getEnumValue(jrElement.getOwnVerticalAlignmentValue());
+			return vAlignD.getEnumValue(jrElement.getOwnVerticalTextAlign());
 		}
 		if (id.equals(JRBaseStyle.PROPERTY_ROTATION)){
 			if (rotationD == null) getPropertyDescriptors();
@@ -208,13 +208,13 @@ public abstract class MTextElement extends MGraphicElementLineBox implements IRo
 		if (id.equals(JRBaseStyle.PROPERTY_MARKUP))
 			jrElement.setMarkup((String) value);
 
-		else if (id.equals(JRBaseStyle.PROPERTY_HORIZONTAL_ALIGNMENT))
-			jrElement.setHorizontalAlignment((HorizontalAlignEnum) hAlignD.getEnumValue(value));
-		else if (id.equals(JRBaseStyle.PROPERTY_VERTICAL_ALIGNMENT)) {
-			VerticalAlignEnum va = (VerticalAlignEnum) EnumHelper.getSetValue(VerticalAlignEnum.values(), value, 1, true);
-			if (va != null && va.equals(VerticalAlignEnum.JUSTIFIED))
-				va = VerticalAlignEnum.MIDDLE;
-			jrElement.setVerticalAlignment(va);
+		else if (id.equals(JRBaseStyle.PROPERTY_HORIZONTAL_TEXT_ALIGNMENT))
+			jrElement.setHorizontalTextAlign((HorizontalTextAlignEnum) hAlignD.getEnumValue(value));
+		else if (id.equals(JRBaseStyle.PROPERTY_VERTICAL_TEXT_ALIGNMENT)) {
+			VerticalTextAlignEnum va = (VerticalTextAlignEnum) EnumHelper.getSetValue(VerticalTextAlignEnum.values(), value, 1, true);
+			if (va != null && va.equals(VerticalTextAlignEnum.JUSTIFIED))
+				va = VerticalTextAlignEnum.MIDDLE;
+			jrElement.setVerticalTextAlign(va);
 		} else if (id.equals(JRBaseStyle.PROPERTY_ROTATION))
 			jrElement.setRotation((RotationEnum) rotationD.getEnumValue(value));
 
@@ -228,8 +228,7 @@ public abstract class MTextElement extends MGraphicElementLineBox implements IRo
 	 */
 	public HashSet<String> generateGraphicalProperties(){
 		HashSet<String> result = super.generateGraphicalProperties();
-		result.add(JRBaseStyle.PROPERTY_HORIZONTAL_ALIGNMENT);
-		result.add(JRBaseStyle.PROPERTY_VERTICAL_ALIGNMENT);
+		result.add(JRBaseStyle.PROPERTY_HORIZONTAL_TEXT_ALIGNMENT);
 		result.add(JRBaseStyle.PROPERTY_ROTATION);
 		
 		result.add(JRBaseParagraph.PROPERTY_LINE_SPACING);
@@ -241,7 +240,7 @@ public abstract class MTextElement extends MGraphicElementLineBox implements IRo
 		result.add(JRBaseParagraph.PROPERTY_SPACING_AFTER);
 		result.add(JRBaseParagraph.PROPERTY_TAB_STOP_WIDTH);
 		
-		result.add(JRBaseStyle.PROPERTY_VERTICAL_ALIGNMENT);
+		result.add(JRBaseStyle.PROPERTY_VERTICAL_TEXT_ALIGNMENT);
 		result.add(JRBaseFont.PROPERTY_BOLD);
 		result.add(JRBaseFont.PROPERTY_UNDERLINE);
 		result.add(JRBaseFont.PROPERTY_STRIKE_THROUGH);
@@ -257,8 +256,8 @@ public abstract class MTextElement extends MGraphicElementLineBox implements IRo
 		JRDesignTextElement jrSource = (JRDesignTextElement) getValue();
 		JRDesignTextElement jrTarget = (JRDesignTextElement)target;
 		
-		jrTarget.setHorizontalAlignment(jrSource.getOwnHorizontalAlignmentValue());
-		jrTarget.setVerticalAlignment(jrSource.getOwnVerticalAlignmentValue());
+		jrTarget.setHorizontalTextAlign(jrSource.getOwnHorizontalTextAlign());
+		jrTarget.setVerticalTextAlign(jrSource.getOwnVerticalTextAlign());
 		jrTarget.setMarkup(getStringClone(jrSource.getOwnMarkup()));
 		jrTarget.setRotation(jrSource.getOwnRotationValue());
 		

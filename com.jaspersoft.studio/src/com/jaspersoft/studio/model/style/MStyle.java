@@ -27,11 +27,13 @@ import net.sf.jasperreports.engine.design.JRDesignStyle;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.design.events.CollectionElementAddedEvent;
 import net.sf.jasperreports.engine.type.FillEnum;
-import net.sf.jasperreports.engine.type.HorizontalAlignEnum;
+import net.sf.jasperreports.engine.type.HorizontalImageAlignEnum;
+import net.sf.jasperreports.engine.type.HorizontalTextAlignEnum;
 import net.sf.jasperreports.engine.type.ModeEnum;
 import net.sf.jasperreports.engine.type.RotationEnum;
 import net.sf.jasperreports.engine.type.ScaleImageEnum;
-import net.sf.jasperreports.engine.type.VerticalAlignEnum;
+import net.sf.jasperreports.engine.type.VerticalImageAlignEnum;
+import net.sf.jasperreports.engine.type.VerticalTextAlignEnum;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.widgets.Composite;
@@ -70,13 +72,15 @@ import com.jaspersoft.studio.property.descriptor.combo.RWFloatComboBoxPropertyDe
 import com.jaspersoft.studio.property.descriptor.combo.RWStyleComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.pattern.PatternPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.pen.PenPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptors.HAlignPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.ImageHAlignPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.ImageVAlignPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.IntegerPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSValidatedTextPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.OpaqueModePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.RotationPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptors.VAlignPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.TextHAlignPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.TextVAlignPropertyDescriptor;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 import com.jaspersoft.studio.property.section.widgets.SPBooleanToggle;
@@ -206,14 +210,16 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		result.put(JRDesignStyle.PROPERTY_ITALIC, element.isOwnItalic());
 		result.put(JRDesignStyle.PROPERTY_UNDERLINE, element.isOwnUnderline());
 		result.put(JRDesignStyle.PROPERTY_STRIKE_THROUGH, element.isOwnStrikeThrough());
-		result.put(JRDesignStyle.PROPERTY_HORIZONTAL_ALIGNMENT, element.getOwnHorizontalAlignmentValue());
+		result.put(JRDesignStyle.PROPERTY_HORIZONTAL_IMAGE_ALIGNMENT, element.getOwnHorizontalImageAlign());
+		result.put(JRDesignStyle.PROPERTY_HORIZONTAL_TEXT_ALIGNMENT, element.getOwnHorizontalTextAlign());
 		result.put(JRDesignStyle.PROPERTY_MARKUP, element.getOwnMarkup());
 		result.put(JRDesignStyle.PROPERTY_MODE, element.getOwnModeValue());
 		result.put(JRDesignStyle.PROPERTY_PATTERN, element.getOwnPattern());
 		result.put(JRDesignStyle.PROPERTY_RADIUS, element.getOwnRadius());
 		result.put(JRDesignStyle.PROPERTY_ROTATION, element.getOwnRotationValue());
 		result.put(JRDesignStyle.PROPERTY_SCALE_IMAGE, element.getOwnScaleImageValue());
-		result.put(JRDesignStyle.PROPERTY_VERTICAL_ALIGNMENT, element.getOwnVerticalAlignmentValue());
+		result.put(JRDesignStyle.PROPERTY_VERTICAL_TEXT_ALIGNMENT, element.getOwnVerticalTextAlign());
+		result.put(JRDesignStyle.PROPERTY_VERTICAL_IMAGE_ALIGNMENT, element.getOwnVerticalImageAlign());
 		result.put(JRDesignStyle.PROPERTY_BLANK_WHEN_NULL, element.isOwnBlankWhenNull());
 		result.put(PARAGRAPH, getPropertyValue(PARAGRAPH));
 		MLinePen linePen = (MLinePen) getPropertyValue(LINE_PEN);
@@ -232,10 +238,10 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 
-		styleD = new RWStyleComboBoxPropertyDescriptor(JRDesignStyle.PROPERTY_PARENT_STYLE, Messages.common_parent_style, new String[] { "" }, 	NullEnum.NULL);
+		styleD = new RWStyleComboBoxPropertyDescriptor(JRDesignStyle.PROPERTY_PARENT_STYLE, Messages.common_parent_style, new String[] { "" }, 	NullEnum.NULL); //$NON-NLS-1$
 		styleD.setDescription(Messages.MStyle_parent_style_description);
 		styleD.setHelpRefBuilder(new HelpReferenceBuilder(
-				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#reportElement_style"));
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#reportElement_style")); //$NON-NLS-1$
 		desc.add(styleD);
 
 		validator = new StyleNameValidator();
@@ -278,15 +284,25 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		scaleD.setDescription(Messages.MStyle_scale_description);
 		desc.add(scaleD);
 
-		halignD = new HAlignPropertyDescriptor(JRBaseStyle.PROPERTY_HORIZONTAL_ALIGNMENT,
-				Messages.common_horizontal_alignment, HorizontalAlignEnum.class, NullEnum.INHERITED);
-		halignD.setDescription(Messages.MStyle_horizontal_alignment_description);
-		desc.add(halignD);
+		halignText = new TextHAlignPropertyDescriptor(JRBaseStyle.PROPERTY_HORIZONTAL_TEXT_ALIGNMENT,
+				Messages.MStyle_textHorizontal, HorizontalTextAlignEnum.class, NullEnum.INHERITED);
+		halignText.setDescription(Messages.MStyle_horizontal_alignment_description);
+		desc.add(halignText);
 
-		valignD = new VAlignPropertyDescriptor(JRBaseStyle.PROPERTY_VERTICAL_ALIGNMENT, Messages.common_vertical_alignment,
-				VerticalAlignEnum.class, NullEnum.INHERITED);
-		valignD.setDescription(Messages.MStyle_vertical_alignment_description);
-		desc.add(valignD);
+		valignText = new TextVAlignPropertyDescriptor(JRBaseStyle.PROPERTY_VERTICAL_TEXT_ALIGNMENT, Messages.MStyle_textVertical,
+				VerticalTextAlignEnum.class, NullEnum.INHERITED);
+		valignText.setDescription(Messages.MStyle_vertical_alignment_description);
+		desc.add(valignText);
+		
+		halignImage = new ImageHAlignPropertyDescriptor(JRBaseStyle.PROPERTY_HORIZONTAL_IMAGE_ALIGNMENT,
+				Messages.MStyle_imageHorizontal, HorizontalImageAlignEnum.class, NullEnum.INHERITED);
+		halignImage.setDescription(Messages.MStyle_horizontal_alignment_description);
+		desc.add(halignImage);
+
+		valignImage = new ImageVAlignPropertyDescriptor(JRBaseStyle.PROPERTY_VERTICAL_IMAGE_ALIGNMENT, Messages.MStyle_imageVertical,
+				VerticalImageAlignEnum.class, NullEnum.INHERITED);
+		valignImage.setDescription(Messages.MStyle_vertical_alignment_description);
+		desc.add(valignImage);
 
 		rotationD = new RotationPropertyDescriptor(JRBaseStyle.PROPERTY_ROTATION, Messages.common_rotation,
 				RotationEnum.class, NullEnum.INHERITED);
@@ -310,7 +326,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 			@Override
 			public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
 				return new SPBooleanToggle(parent, section, this, JaspersoftStudioPlugin.getInstance().getImage(
-						"icons/resources/bold.png"));
+						"icons/resources/bold.png")); //$NON-NLS-1$
 			}
 		};
 		boldD.setDescription(Messages.MFont_bold_description);
@@ -321,7 +337,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 			@Override
 			public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
 				return new SPBooleanToggle(parent, section, this, JaspersoftStudioPlugin.getInstance().getImage(
-						"icons/resources/italic.png"));
+						"icons/resources/italic.png")); //$NON-NLS-1$
 			}
 		};
 		italicD.setDescription(Messages.MFont_italic_description);
@@ -332,7 +348,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 			@Override
 			public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
 				return new SPBooleanToggle(parent, section, this, JaspersoftStudioPlugin.getInstance().getImage(
-						"icons/resources/underline.png"));
+						"icons/resources/underline.png")); //$NON-NLS-1$
 			}
 		};
 		underlineD.setDescription(Messages.MFont_underline_description);
@@ -343,7 +359,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 			@Override
 			public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
 				return new SPBooleanToggle(parent, section, this, JaspersoftStudioPlugin.getInstance().getImage(
-						"icons/resources/strikethrought.png"));
+						"icons/resources/strikethrought.png")); //$NON-NLS-1$
 			}
 		};
 		strikeThroughD.setDescription(Messages.MFont_strike_trough_description);
@@ -378,7 +394,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		patternD.setDescription(Messages.MStyle_pattern_description);
 		desc.add(patternD);
 
-		JRPropertyDescriptor paragraph = new JRPropertyDescriptor(PARAGRAPH, "Paragraph");
+		JRPropertyDescriptor paragraph = new JRPropertyDescriptor(PARAGRAPH, "Paragraph"); //$NON-NLS-1$
 		desc.add(paragraph);
 
 		paragraph.setCategory(Messages.common_text);
@@ -400,8 +416,10 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		blankWhenNullD.setCategory(Messages.common_text);
 		rotationD.setCategory(Messages.common_text);
 		markupD.setCategory(Messages.common_text);
-		halignD.setCategory(Messages.common_text);
-		valignD.setCategory(Messages.common_text);
+		halignText.setCategory(Messages.common_text);
+		valignText.setCategory(Messages.common_text);
+		halignImage.setCategory(Messages.common_text);
+		valignImage.setCategory(Messages.common_text);
 
 		fontNameD.setCategory(Messages.MStyle_text_font_category);
 		fontSizeD.setCategory(Messages.MStyle_text_font_category);
@@ -415,8 +433,10 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 
 		defaultsMap.put(JRBaseStyle.PROPERTY_FILL, null);
 		defaultsMap.put(JRBaseStyle.PROPERTY_SCALE_IMAGE, null);
-		defaultsMap.put(JRBaseStyle.PROPERTY_HORIZONTAL_ALIGNMENT, null);
-		defaultsMap.put(JRBaseStyle.PROPERTY_VERTICAL_ALIGNMENT, null);
+		defaultsMap.put(JRBaseStyle.PROPERTY_HORIZONTAL_TEXT_ALIGNMENT, null);
+		defaultsMap.put(JRBaseStyle.PROPERTY_VERTICAL_TEXT_ALIGNMENT, null);
+		defaultsMap.put(JRBaseStyle.PROPERTY_HORIZONTAL_IMAGE_ALIGNMENT, null);
+		defaultsMap.put(JRBaseStyle.PROPERTY_VERTICAL_IMAGE_ALIGNMENT, null);
 		defaultsMap.put(JRBaseStyle.PROPERTY_ROTATION, null);
 		defaultsMap.put(JRBaseStyle.PROPERTY_MODE, modeD.getEnumValue(ModeEnum.OPAQUE));
 
@@ -428,7 +448,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		defaultsMap.put(JRBaseStyle.PROPERTY_FONT_NAME, "SansSerif"); //$NON-NLS-1$
 		defaultsMap.put(JRBaseStyle.PROPERTY_FONT_SIZE, "10"); //$NON-NLS-1$
 
-		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#style");
+		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#style"); //$NON-NLS-1$
 	}
 
 	private MLinePen linePen;
@@ -437,8 +457,10 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 	private static RWComboBoxPropertyDescriptor styleD;
 	private static JSSEnumPropertyDescriptor fillD;
 	private static JSSEnumPropertyDescriptor scaleD;
-	private static JSSEnumPropertyDescriptor halignD;
-	private static JSSEnumPropertyDescriptor valignD;
+	private static JSSEnumPropertyDescriptor halignText;
+	private static JSSEnumPropertyDescriptor valignText;
+	private static JSSEnumPropertyDescriptor halignImage;
+	private static JSSEnumPropertyDescriptor valignImage;
 	private static JSSEnumPropertyDescriptor rotationD;
 	private static JSSEnumPropertyDescriptor modeD;
 
@@ -517,10 +539,14 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 			return fillD.getEnumValue(jrstyle.getOwnFillValue());
 		if (id.equals(JRBaseStyle.PROPERTY_SCALE_IMAGE))
 			return scaleD.getEnumValue(jrstyle.getOwnScaleImageValue());
-		if (id.equals(JRBaseStyle.PROPERTY_HORIZONTAL_ALIGNMENT))
-			return halignD.getEnumValue(jrstyle.getOwnHorizontalAlignmentValue());
-		if (id.equals(JRBaseStyle.PROPERTY_VERTICAL_ALIGNMENT))
-			return valignD.getEnumValue(jrstyle.getOwnVerticalAlignmentValue());
+		if (id.equals(JRBaseStyle.PROPERTY_HORIZONTAL_TEXT_ALIGNMENT))
+			return halignText.getEnumValue(jrstyle.getOwnHorizontalTextAlign());
+		if (id.equals(JRBaseStyle.PROPERTY_VERTICAL_TEXT_ALIGNMENT))
+			return valignText.getEnumValue(jrstyle.getOwnVerticalTextAlign());
+		if (id.equals(JRBaseStyle.PROPERTY_HORIZONTAL_IMAGE_ALIGNMENT))
+			return halignImage.getEnumValue(jrstyle.getOwnHorizontalImageAlign());
+		if (id.equals(JRBaseStyle.PROPERTY_VERTICAL_IMAGE_ALIGNMENT))
+			return valignImage.getEnumValue(jrstyle.getOwnVerticalImageAlign());
 		if (id.equals(JRBaseStyle.PROPERTY_ROTATION))
 			return rotationD.getEnumValue(jrstyle.getOwnRotationValue());
 		if (id.equals(JRBaseStyle.PROPERTY_MODE)) {
@@ -576,10 +602,14 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 			return fillD.getEnumValue(jrstyle.getFillValue());
 		if (id.equals(JRBaseStyle.PROPERTY_SCALE_IMAGE))
 			return scaleD.getEnumValue(jrstyle.getScaleImageValue());
-		if (id.equals(JRBaseStyle.PROPERTY_HORIZONTAL_ALIGNMENT))
-			return halignD.getEnumValue(jrstyle.getHorizontalAlignmentValue());
-		if (id.equals(JRBaseStyle.PROPERTY_VERTICAL_ALIGNMENT))
-			return valignD.getEnumValue(jrstyle.getVerticalAlignmentValue());
+		if (id.equals(JRBaseStyle.PROPERTY_HORIZONTAL_TEXT_ALIGNMENT))
+			return halignImage.getEnumValue(jrstyle.getHorizontalTextAlign());
+		if (id.equals(JRBaseStyle.PROPERTY_VERTICAL_TEXT_ALIGNMENT))
+			return valignImage.getEnumValue(jrstyle.getVerticalTextAlign());
+		if (id.equals(JRBaseStyle.PROPERTY_HORIZONTAL_IMAGE_ALIGNMENT))
+			return halignImage.getEnumValue(jrstyle.getHorizontalImageAlign());
+		if (id.equals(JRBaseStyle.PROPERTY_VERTICAL_IMAGE_ALIGNMENT))
+			return valignImage.getEnumValue(jrstyle.getVerticalImageAlign());
 		if (id.equals(JRBaseStyle.PROPERTY_ROTATION))
 			return rotationD.getEnumValue(jrstyle.getRotationValue());
 		if (id.equals(JRBaseStyle.PROPERTY_MODE)) {
@@ -668,10 +698,14 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 			jrstyle.setFill((FillEnum) fillD.getEnumValue(value));
 		else if (id.equals(JRBaseStyle.PROPERTY_SCALE_IMAGE))
 			jrstyle.setScaleImage((ScaleImageEnum) scaleD.getEnumValue(value));
-		else if (id.equals(JRBaseStyle.PROPERTY_HORIZONTAL_ALIGNMENT))
-			jrstyle.setHorizontalAlignment((HorizontalAlignEnum) halignD.getEnumValue(value));
-		else if (id.equals(JRBaseStyle.PROPERTY_VERTICAL_ALIGNMENT))
-			jrstyle.setVerticalAlignment((VerticalAlignEnum) valignD.getEnumValue(value));
+		else if (id.equals(JRBaseStyle.PROPERTY_HORIZONTAL_TEXT_ALIGNMENT))
+			jrstyle.setHorizontalTextAlign((HorizontalTextAlignEnum) halignText.getEnumValue(value));
+		else if (id.equals(JRBaseStyle.PROPERTY_VERTICAL_TEXT_ALIGNMENT))
+			jrstyle.setVerticalTextAlign((VerticalTextAlignEnum) valignText.getEnumValue(value));
+		else if (id.equals(JRBaseStyle.PROPERTY_HORIZONTAL_IMAGE_ALIGNMENT))
+			jrstyle.setHorizontalImageAlign((HorizontalImageAlignEnum) halignImage.getEnumValue(value));
+		else if (id.equals(JRBaseStyle.PROPERTY_VERTICAL_IMAGE_ALIGNMENT))
+			jrstyle.setVerticalImageAlign((VerticalImageAlignEnum) valignImage.getEnumValue(value));
 		else if (id.equals(JRBaseStyle.PROPERTY_ROTATION))
 			jrstyle.setRotation((RotationEnum) rotationD.getEnumValue(value));
 		else if (id.equals(JRBaseStyle.PROPERTY_MODE))
