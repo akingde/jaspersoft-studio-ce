@@ -543,6 +543,7 @@ public class Messages extends NLS {
 	public static String EmptyDataAdapterFactory_description;
 	public static String EmptyDataAdapterFactory_label;
 	public static String EmptyWizardDataEditorComposite_TitleMsg;
+	public static String EncloseIntoFrameAction_actionTitle;
 	public static String EqualsHSpaceAction_actionDescription;
 	public static String EqualsHSpaceAction_actionName;
 	public static String EqualsVSpaceAction_actionDescription;

@@ -27,6 +27,7 @@ import org.eclipse.ui.actions.ActionFactory;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.callout.action.CreatePinAction;
 import com.jaspersoft.studio.editor.AContextMenuProvider;
+import com.jaspersoft.studio.editor.action.EncloseIntoFrameAction;
 import com.jaspersoft.studio.editor.action.HideElementsAction;
 import com.jaspersoft.studio.editor.action.MoveDetailDownAction;
 import com.jaspersoft.studio.editor.action.MoveDetailUpAction;
@@ -144,6 +145,10 @@ public class AppContextMenuProvider extends AContextMenuProvider {
 			menu.appendToGroup(GEFActionConstants.GROUP_COPY, action);
 		
 		action = getActionRegistry().getAction(CopyFormatAction.ID);
+		if (action.isEnabled())
+			menu.appendToGroup(GEFActionConstants.GROUP_COPY, action);
+		
+		action = getActionRegistry().getAction(EncloseIntoFrameAction.ID);
 		if (action.isEnabled())
 			menu.appendToGroup(GEFActionConstants.GROUP_COPY, action);
 		

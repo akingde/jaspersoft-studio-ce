@@ -70,6 +70,7 @@ import com.jaspersoft.studio.callout.action.CreatePinAction;
 import com.jaspersoft.studio.editor.IGraphicalEditor;
 import com.jaspersoft.studio.editor.ZoomActualAction;
 import com.jaspersoft.studio.editor.action.CustomDeleteAction;
+import com.jaspersoft.studio.editor.action.EncloseIntoFrameAction;
 import com.jaspersoft.studio.editor.action.HideElementsAction;
 import com.jaspersoft.studio.editor.action.MoveDetailDownAction;
 import com.jaspersoft.studio.editor.action.MoveDetailUpAction;
@@ -967,6 +968,10 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		selectionActions.add(action.getId());
 
 		action = new MoveDetailDownAction(this);
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
+		
+		action = new EncloseIntoFrameAction(this);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
 
