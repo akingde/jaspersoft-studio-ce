@@ -13,6 +13,7 @@ import java.util.List;
 import net.sf.jasperreports.components.map.Item;
 import net.sf.jasperreports.components.map.ItemData;
 import net.sf.jasperreports.components.map.ItemProperty;
+import net.sf.jasperreports.components.map.StandardItemProperty;
 
 import org.eclipse.swt.graphics.Image;
 
@@ -33,6 +34,13 @@ public abstract class ADescriptor {
 		if (itemProperties == null)
 			initItemPropertyDescriptors();
 		return itemProperties;
+	}
+
+	public void setupDefaultValue(Item selected, StandardItemProperty newitem) {
+	}
+
+	public String getDisplayName() {
+		return "Item";
 	}
 
 	protected abstract void initItemPropertyDescriptors();
