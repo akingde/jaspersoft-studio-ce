@@ -29,6 +29,10 @@ public class ItemPropertyLabelProvider extends ColumnLabelProvider implements IT
 
 	@Override
 	public String getText(Object element) {
+		return getTextLabel(element);
+	}
+
+	private String getTextLabel(Object element) {
 		if (element != null && element instanceof ItemProperty) {
 			ItemProperty ip = (ItemProperty) element;
 			if (ip.getValueExpression() != null)
@@ -50,7 +54,7 @@ public class ItemPropertyLabelProvider extends ColumnLabelProvider implements IT
 			case 0:
 				return ((ItemProperty) element).getName();
 			case 1:
-				return getText(element);
+				return getTextLabel(element);
 			}
 		return null;
 	}
