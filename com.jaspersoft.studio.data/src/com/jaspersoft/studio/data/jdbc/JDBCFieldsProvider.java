@@ -12,7 +12,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.jdbc;
 
-import java.sql.Clob;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -56,7 +55,7 @@ public class JDBCFieldsProvider implements IFieldsProvider {
 
 		ParameterUtil.setParameters(jConfig, jDataset, parameters);
 		parameters.put(JRJdbcQueryExecuterFactory.PROPERTY_JDBC_FETCH_SIZE, 0);
-		parameters.put(JRParameter.REPORT_MAX_COUNT, 0);
+		parameters.put(JRParameter.REPORT_MAX_COUNT, 1);
 		List<JRDesignField> columns = null;
 		Connection c = null;
 		try {

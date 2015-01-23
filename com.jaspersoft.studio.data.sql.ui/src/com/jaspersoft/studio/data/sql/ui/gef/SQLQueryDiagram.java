@@ -409,6 +409,8 @@ public class SQLQueryDiagram {
 		}
 
 		private void doDrop(List<ANode> node) {
+			if (getCurrentEvent() == null)
+				return;
 			final Set<MSqlTable> tablesset = new LinkedHashSet<MSqlTable>();
 			Set<MSQLColumn> colsset = new LinkedHashSet<MSQLColumn>();
 			Set<ANode> others = new LinkedHashSet<ANode>();
@@ -461,25 +463,34 @@ public class SQLQueryDiagram {
 						}
 
 					});
-					Command command = getTargetEditPart().getCommand(tgReq);
-					if (command instanceof AddTableCommand) {
-						AddTableCommand c = (AddTableCommand) command;
-						c.setJoinOnDND(designer.getjConfig().getProperty(
-								SQLEditorPreferencesPage.P_JOIN_ON_DND,
-								SQLEditorPreferencesPage.DROP));
-						c.setDnDDetail(getCurrentEvent().detail);
-					}
-					if (command instanceof DialogEnabledCommand
-							&& command.canExecute()) {
-						// If we have a special command that supports dialog
-						// (i.e: image
-						// creation)
-						// we'll show the popup dialog and continue with
-						// creation only if
-						// the user has confirmed.
-						if (((DialogEnabledCommand) command).openDialog() == Dialog.CANCEL) {
-							getCurrentEvent().detail = DND.DROP_NONE;
-							return;
+					Command command = null;
+					if (getTargetEditPart() != null) {
+						command = getTargetEditPart().getCommand(tgReq);
+						if (command != null) {
+							if (command instanceof AddTableCommand) {
+								AddTableCommand c = (AddTableCommand) command;
+								c.setJoinOnDND(designer
+										.getjConfig()
+										.getProperty(
+												SQLEditorPreferencesPage.P_JOIN_ON_DND,
+												SQLEditorPreferencesPage.DROP));
+								c.setDnDDetail(getCurrentEvent().detail);
+							}
+							if (command instanceof DialogEnabledCommand
+									&& command.canExecute()) {
+								// If we have a special command that supports
+								// dialog
+								// (i.e: image
+								// creation)
+								// we'll show the popup dialog and continue with
+								// creation only if
+								// the user has confirmed.
+								if (((DialogEnabledCommand) command)
+										.openDialog() == Dialog.CANCEL) {
+									getCurrentEvent().detail = DND.DROP_NONE;
+									return;
+								}
+							}
 						}
 					}
 					if (command != null && command.canExecute())
