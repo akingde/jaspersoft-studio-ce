@@ -32,6 +32,7 @@ import org.eclipse.swt.widgets.Text;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
+import com.jaspersoft.studio.property.itemproperty.desc.ADescriptor;
 import com.jaspersoft.studio.property.itemproperty.dialog.ItemPropertyElementDialog;
 import com.jaspersoft.studio.property.itemproperty.event.ItemPropertyModifiedEvent;
 import com.jaspersoft.studio.property.itemproperty.event.ItemPropertyModifiedListener;
@@ -89,6 +90,7 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 	private Text textExpression;
 	private Button btnEditExpression;
 	private Label label;
+	private ADescriptor descriptor;
 
 	// Expression modify listeners
 	private List<ItemPropertyModifiedListener> listeners = new ArrayList<ItemPropertyModifiedListener>();
@@ -101,8 +103,8 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 	 * @param style
 	 *          widget style
 	 */
-	public WItemProperty(Composite parent, int style) {
-		this(parent, style, null, LABEL_NONE, -1);
+	public WItemProperty(Composite parent, int style, ADescriptor descriptor) {
+		this(parent, style, null, LABEL_NONE, -1, descriptor);
 	}
 
 	/**
@@ -115,8 +117,8 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 	 * @param number
 	 *          of text lines to show
 	 */
-	public WItemProperty(Composite parent, int style, int linesNum) {
-		this(parent, style, null, LABEL_NONE, linesNum);
+	public WItemProperty(Composite parent, int style, int linesNum, ADescriptor descriptor) {
+		this(parent, style, null, LABEL_NONE, linesNum, descriptor);
 	}
 
 	/**
@@ -136,8 +138,8 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 	 *          flag to specify the label position
 	 * 
 	 */
-	public WItemProperty(Composite parent, int style, String textLabel, int showMode) {
-		this(parent, style, textLabel, showMode, -1);
+	public WItemProperty(Composite parent, int style, String textLabel, int showMode, ADescriptor descriptor) {
+		this(parent, style, textLabel, showMode, -1, descriptor);
 	}
 
 	/**
@@ -161,8 +163,9 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 	 *          of text lines to show
 	 * 
 	 */
-	public WItemProperty(Composite parent, int style, String textLabel, int showMode, int linesNum) {
+	public WItemProperty(Composite parent, int style, String textLabel, int showMode, int linesNum, ADescriptor descriptor) {
 		super(parent, style);
+		this.descriptor = descriptor;
 		this.customTextLinesNumber = linesNum;
 		setLayout(new FormLayout());
 
@@ -314,7 +317,7 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 		return TEXT_LINE_NUMBERS;
 	}
 
-	private ItemPropertyLabelProvider lprovider = new ItemPropertyLabelProvider();
+	private ItemPropertyLabelProvider lprovider = new ItemPropertyLabelProvider(descriptor);
 
 	/**
 	 * Returns the text contained inside the widget text-box that represents the actual {@link JRDesignExpression}

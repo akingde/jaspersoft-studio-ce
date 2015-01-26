@@ -16,7 +16,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
@@ -30,7 +29,7 @@ import com.jaspersoft.studio.utils.ModelUtils;
 public class SPItemProperty extends ASPropertyWidget implements IExpressionContextSetter {
 	private WItemProperty expr;
 
-	public SPItemProperty(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
+	public SPItemProperty(Composite parent, AbstractSection section, ItemPropertyDescriptor pDescriptor) {
 		super(parent, section, pDescriptor);
 	}
 
@@ -45,7 +44,7 @@ public class SPItemProperty extends ASPropertyWidget implements IExpressionConte
 	}
 
 	protected void createComponent(Composite parent) {
-		expr = new WItemProperty(parent, SWT.NONE, 1);
+		expr = new WItemProperty(parent, SWT.NONE, 1, ((ItemPropertyDescriptor) pDescriptor).getDescriptor());
 		expr.addModifyListener(new ItemPropertyModifiedListener() {
 			@Override
 			public void itemModified(ItemPropertyModifiedEvent event) {
@@ -53,10 +52,8 @@ public class SPItemProperty extends ASPropertyWidget implements IExpressionConte
 				section.changeProperty(pDescriptor.getId(), exp != null ? exp.clone() : null);
 			}
 		});
-		if (parent.getLayout() instanceof GridLayout) {
-			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-			expr.setLayoutData(gd);
-		}
+		if (parent.getLayout() instanceof GridLayout)
+			expr.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		expr.getTextControl().addFocusListener(focusListener);
 	}
 

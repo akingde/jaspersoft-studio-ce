@@ -17,21 +17,25 @@ import org.eclipse.swt.widgets.Control;
 
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.property.descriptor.JSSDialogCellEditor;
+import com.jaspersoft.studio.property.itemproperty.desc.ADescriptor;
 import com.jaspersoft.studio.property.itemproperty.dialog.ItemPropertyElementDialog;
 
 public class ItemPropertyCellEditor extends JSSDialogCellEditor {
 	private String id;
 	private ExpressionContext expContext;
+	private ADescriptor descriptor;
 
-	public ItemPropertyCellEditor(Composite parent, ExpressionContext expContext, String id) {
+	public ItemPropertyCellEditor(Composite parent, ExpressionContext expContext, String id, ADescriptor descriptor) {
 		super(parent, true);
 		this.expContext = expContext;
 		this.id = id;
+		this.descriptor = descriptor;
 	}
 
-	public ItemPropertyCellEditor(Composite parent, int style, ExpressionContext expContext) {
+	public ItemPropertyCellEditor(Composite parent, int style, ExpressionContext expContext, ADescriptor descriptor) {
 		super(parent, style, true);
 		this.expContext = expContext;
+		this.descriptor = descriptor;
 	}
 
 	@Override
@@ -53,7 +57,7 @@ public class ItemPropertyCellEditor extends JSSDialogCellEditor {
 		if (getDefaultLabel() == null)
 			return;
 		if (labelProvider == null)
-			labelProvider = new ItemPropertyLabelProvider();
+			labelProvider = new ItemPropertyLabelProvider(descriptor);
 		String text = labelProvider.getText(value);
 		getDefaultLabel().setText(text);
 	}

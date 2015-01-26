@@ -9,6 +9,7 @@
 package com.jaspersoft.studio.property.itemproperty.dialog;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 
 import net.sf.jasperreports.components.map.ItemProperty;
@@ -33,6 +34,7 @@ import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
+import com.jaspersoft.studio.editor.expression.ExpressionContext.Visibility;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.property.infoList.ElementDescription;
 import com.jaspersoft.studio.property.infoList.SelectableComposite;
@@ -106,6 +108,8 @@ public class ItemPropertyDialog extends ATitledDialog implements IExpressionCont
 		gd_propertyValueExpression.heightHint = 50;
 		propertyValueExpression.setLayoutData(gd_propertyValueExpression);
 		propertyValueExpression.setExpressionContext(this.expContext);
+		if (descriptor.getItemData() != null && descriptor.getItemData().getDataset() != null)
+			expContext.setVisibilities(EnumSet.noneOf(Visibility.class));
 
 		infoPanel = new SelectableComposite(dialogArea);
 		infoPanel.setItems(getPropertiesInformation());
@@ -128,9 +132,8 @@ public class ItemPropertyDialog extends ATitledDialog implements IExpressionCont
 
 	private List<ElementDescription> getPropertiesInformation() {
 		List<ElementDescription> descriptions = new ArrayList<ElementDescription>();
-		for (ItemPropertyDescriptor<?> ipd : descriptor.getItemPropertyDescriptors()) {
+		for (ItemPropertyDescriptor<?> ipd : descriptor.getItemPropertyDescriptors())
 			descriptions.add(new ElementDescription(ipd.getName(), ipd.getDescription(), false));
-		}
 		return descriptions;
 	}
 
@@ -141,7 +144,7 @@ public class ItemPropertyDialog extends ATitledDialog implements IExpressionCont
 		if (this.itemProperty.getValue() != null) {
 			useExpressionCheckbox.setSelection(false);
 			propertyName.setText(Misc.nvl(itemProperty.getName()));
-			propertyValue.setText(itemProperty.getValue());
+			propertyValue.setText(Misc.nvl(itemProperty.getValue()));
 			propertyValueExpression.setVisible(false);
 			propertyValueExpression.setEnabled(false);
 			propertyValueExpression.setExpression(null);
@@ -194,6 +197,7 @@ public class ItemPropertyDialog extends ATitledDialog implements IExpressionCont
 					propertyValue.setVisible(false);
 					propertyValue.setEnabled(false);
 					((GridData) propertyValue.getLayoutData()).exclude = true;
+
 					// and show expression widget
 					propertyValueExpression.setVisible(true);
 					propertyValueExpression.setEnabled(true);
@@ -204,6 +208,7 @@ public class ItemPropertyDialog extends ATitledDialog implements IExpressionCont
 					propertyValueExpression.setEnabled(false);
 					propertyValueExpression.setExpression(null);
 					((GridData) propertyValueExpression.getLayoutData()).exclude = true;
+
 					// and show the normal textbox
 					propertyValue.setText(""); //$NON-NLS-1$
 					propertyValue.setVisible(true);

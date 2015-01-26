@@ -68,6 +68,10 @@ public abstract class ADescriptor {
 		this.itemData = itemData;
 	}
 
+	public ItemData getItemData() {
+		return itemData;
+	}
+
 	public void setItemDatas(List<ItemData> itemDatas) {
 		this.itemDatas = itemDatas;
 	}
@@ -84,4 +88,5 @@ public abstract class ADescriptor {
 			}
 		}
 	}
+
 }

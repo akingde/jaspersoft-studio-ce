@@ -41,23 +41,28 @@ public class EditButton<T> {
 
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			StructuredSelection s = (StructuredSelection) tableViewer.getSelection();
+			editB.setEnabled(false);
+			try {
+				StructuredSelection s = (StructuredSelection) tableViewer.getSelection();
 
-			List<T> inlist = (List<T>) tableViewer.getInput();
-			if (inlist == null) {
-				inlist = new ArrayList<T>();
-				tableViewer.setInput(inlist);
+				List<T> inlist = (List<T>) tableViewer.getInput();
+				if (inlist == null) {
+					inlist = new ArrayList<T>();
+					tableViewer.setInput(inlist);
+				}
+				int index = -1;
+				if (!s.isEmpty())
+					index = inlist.indexOf(s.getFirstElement());
+				else
+					return;
+				editElement.editElement(inlist, index);
+				afterElementModified(s.getFirstElement(), inlist, index);
+				tableViewer.refresh();
+				tableViewer.setSelection(new StructuredSelection(inlist.get(index)));
+				tableViewer.reveal(s.getFirstElement());
+			} finally {
+				editB.setEnabled(true);
 			}
-			int index = -1;
-			if (!s.isEmpty())
-				index = inlist.indexOf(s.getFirstElement());
-			else
-				return;
-			editElement.editElement(inlist, index);
-			afterElementModified(s.getFirstElement(), inlist, index);
-			tableViewer.refresh();
-			tableViewer.setSelection(new StructuredSelection(inlist.get(index)));
-			tableViewer.reveal(s.getFirstElement());
 		}
 
 	}

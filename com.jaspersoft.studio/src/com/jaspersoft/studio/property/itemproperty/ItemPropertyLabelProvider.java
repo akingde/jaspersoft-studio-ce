@@ -16,15 +16,19 @@ import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.property.itemproperty.desc.ADescriptor;
 import com.jaspersoft.studio.utils.Misc;
 
 /*
  * @author Chicu Veaceslav
  */
 public class ItemPropertyLabelProvider extends ColumnLabelProvider implements ITableLabelProvider {
+	private ADescriptor descriptor;
 
-	public ItemPropertyLabelProvider() {
+	public ItemPropertyLabelProvider(ADescriptor descriptor) {
 		super();
+		this.descriptor = descriptor;
 	}
 
 	@Override
@@ -43,7 +47,23 @@ public class ItemPropertyLabelProvider extends ColumnLabelProvider implements IT
 	}
 
 	@Override
+	public Image getImage(Object element) {
+		return null;
+	}
+
+	@Override
 	public Image getColumnImage(Object element, int columnIndex) {
+		if (element instanceof ItemProperty && columnIndex == 1)
+			return getImageIcon(element);
+		return null;
+	}
+
+	private Image getImageIcon(Object element) {
+		if (element != null && element instanceof ItemProperty) {
+			ItemProperty ip = (ItemProperty) element;
+			if (ip.getValueExpression() != null)
+				return JaspersoftStudioPlugin.getInstance().getImage("icons/functions_icon.png");
+		}
 		return null;
 	}
 

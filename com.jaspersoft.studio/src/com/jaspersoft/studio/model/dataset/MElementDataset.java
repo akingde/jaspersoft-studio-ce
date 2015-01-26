@@ -176,9 +176,8 @@ public class MElementDataset extends APropertyNode implements IContainer, IConta
 		}
 		if (id.equals(JRDesignElementDataset.PROPERTY_DATASET_RUN)) {
 			JRDatasetRun j = jrElement.getDatasetRun();
-			if (j == null) {
+			if (j == null)
 				j = new JRDesignDatasetRun();
-			}
 			if (mDatasetRun != null)
 				mDatasetRun.setValue(j);
 			else

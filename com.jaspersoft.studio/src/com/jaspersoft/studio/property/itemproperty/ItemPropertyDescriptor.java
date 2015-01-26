@@ -11,13 +11,13 @@ package com.jaspersoft.studio.property.itemproperty;
 import java.util.List;
 
 import org.eclipse.jface.viewers.CellEditor;
-import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 import com.jaspersoft.studio.property.infoList.ElementDescription;
+import com.jaspersoft.studio.property.itemproperty.desc.ADescriptor;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 import com.jaspersoft.studio.property.section.widgets.IPropertyDescriptorWidget;
@@ -25,24 +25,22 @@ import com.jaspersoft.studio.property.section.widgets.IPropertyDescriptorWidget;
 public class ItemPropertyDescriptor extends NTextPropertyDescriptor implements IPropertyDescriptorWidget,
 		IExpressionContextSetter {
 	private ExpressionContext expContext;
-
 	private SPItemProperty expEditor;
+	private ADescriptor descriptor;
 
-	public ItemPropertyDescriptor(Object id, String displayName) {
+	public ItemPropertyDescriptor(Object id, String displayName, ADescriptor descriptor) {
 		super(id, displayName);
-		setLabelProvider(new ItemPropertyLabelProvider());
+		this.descriptor = descriptor;
+		setLabelProvider(new ItemPropertyLabelProvider(descriptor));
+	}
+
+	public ADescriptor getDescriptor() {
+		return descriptor;
 	}
 
 	public CellEditor createPropertyEditor(Composite parent) {
-		cellEditor = new ItemPropertyCellEditor(parent, expContext, (String) getId());
+		cellEditor = new ItemPropertyCellEditor(parent, expContext, (String) getId(), descriptor);
 		return cellEditor;
-	}
-
-	@Override
-	public ILabelProvider getLabelProvider() {
-		if (isLabelProviderSet())
-			return super.getLabelProvider();
-		return new ItemPropertyLabelProvider();
 	}
 
 	public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
