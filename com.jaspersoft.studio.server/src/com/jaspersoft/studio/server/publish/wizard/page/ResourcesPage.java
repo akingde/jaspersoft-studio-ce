@@ -99,14 +99,16 @@ public class ResourcesPage extends JSSHelpWizardPage {
 		setControl(composite);
 		composite.setLayout(new GridLayout());
 
-		tableViewer = new TableViewer(composite, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.BORDER);
+		tableViewer = new TableViewer(composite, SWT.SINGLE | SWT.H_SCROLL
+				| SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.BORDER);
 		tableViewer.setContentProvider(new ListContentProvider());
 		ColumnViewerToolTipSupport.enableFor(tableViewer);
 		Table table = (Table) tableViewer.getControl();
 		table.setHeaderVisible(true);
 		table.setLayoutData(new GridData(GridData.FILL_BOTH));
 
-		TableViewerColumn viewerColumn = new TableViewerColumn(tableViewer, SWT.NONE);
+		TableViewerColumn viewerColumn = new TableViewerColumn(tableViewer,
+				SWT.NONE);
 		TableColumn column = viewerColumn.getColumn();
 		column.setText(Messages.ResourcesPage_table_resource);
 		column.setWidth(300);
@@ -124,14 +126,21 @@ public class ResourcesPage extends JSSHelpWizardPage {
 				MResource fr = (MResource) element;
 				ImageDescriptor id = fr.getThisIconDescriptor().getIcon16();
 				PublishOptions popt = fr.getPublishOptions();
-				if (popt.getPublishMethod() != ResourcePublishMethod.LOCAL && popt.getReferencedResource() == null) {
-					FieldDecoration fd = FieldDecorationRegistry.getDefault().getFieldDecoration(FieldDecorationRegistry.DEC_ERROR);
+				if (popt.getPublishMethod() != ResourcePublishMethod.LOCAL
+						&& popt.getReferencedResource() == null) {
+					FieldDecoration fd = FieldDecorationRegistry.getDefault()
+							.getFieldDecoration(
+									FieldDecorationRegistry.DEC_ERROR);
 					setErrorMessage("Please fix the referenced missing resources.");
 					ResourcesPage.this.setPageComplete(false);
-					return ResourceManager.decorateImage(id.createImage(), fd.getImage(), ResourceManager.BOTTOM_LEFT);
+					return ResourceManager.decorateImage(id.createImage(),
+							fd.getImage(), ResourceManager.BOTTOM_LEFT);
 				}
 				if (popt.getPublishMethod() == ResourcePublishMethod.REFERENCE)
-					return Activator.getDefault().getImage(ResourceManager.decorateImage(id, MResource.LINK_DECORATOR, ResourceManager.BOTTOM_LEFT));
+					return Activator.getDefault().getImage(
+							ResourceManager.decorateImage(id,
+									MResource.LINK_DECORATOR,
+									ResourceManager.BOTTOM_LEFT));
 				return Activator.getDefault().getImage(id);
 			}
 		});
@@ -141,18 +150,21 @@ public class ResourcesPage extends JSSHelpWizardPage {
 		column.setText(Messages.ResourcesPage_table_overwrite);
 		column.setWidth(80);
 		viewerColumn.setLabelProvider(new TLabelProvider() {
-			private CheckBoxLabelProvider chLabelProvider = new CheckBoxLabelProvider(NullEnum.NOTNULL);
+			private CheckBoxLabelProvider chLabelProvider = new CheckBoxLabelProvider(
+					NullEnum.NOTNULL);
 
 			@Override
 			public String getText(Object element) {
 				MResource fr = (MResource) element;
-				return chLabelProvider.getText(fr.getPublishOptions().isOverwrite());
+				return chLabelProvider.getText(fr.getPublishOptions()
+						.isOverwrite());
 			}
 
 			@Override
 			public Image getImage(Object element) {
 				MResource fr = (MResource) element;
-				return chLabelProvider.getCellEditorImage(fr.getPublishOptions().isOverwrite());
+				return chLabelProvider.getCellEditorImage(fr
+						.getPublishOptions().isOverwrite());
 			}
 		});
 
@@ -198,13 +210,18 @@ public class ResourcesPage extends JSSHelpWizardPage {
 		MenuManager menuMgr = new MenuManager();
 		menuMgr.setRemoveAllWhenShown(true);
 		menuMgr.addMenuListener(new IMenuListener() {
-			private ReferenceResourceAction sresource = new ReferenceResourceAction(tableViewer);
-			private ResourceToFolderAction sres = new ResourceToFolderAction(tableViewer);
-			private SelectLocalAction slocal = new SelectLocalAction(tableViewer);
-			private ResourceExpressionAction rexp = new ResourceExpressionAction(tableViewer);
+			private ReferenceResourceAction sresource = new ReferenceResourceAction(
+					tableViewer);
+			private ResourceToFolderAction sres = new ResourceToFolderAction(
+					tableViewer);
+			private SelectLocalAction slocal = new SelectLocalAction(
+					tableViewer);
+			private ResourceExpressionAction rexp = new ResourceExpressionAction(
+					tableViewer);
 
 			public void menuAboutToShow(IMenuManager menu) {
-				StructuredSelection s = (StructuredSelection) tableViewer.getSelection();
+				StructuredSelection s = (StructuredSelection) tableViewer
+						.getSelection();
 				if (s != null) {
 					MResource mres = (MResource) s.getFirstElement();
 					if (mres != null && mres.getPublishOptions().isOverwrite()) {
@@ -224,7 +241,7 @@ public class ResourcesPage extends JSSHelpWizardPage {
 		Menu menu = menuMgr.createContextMenu(tableViewer.getControl());
 		tableViewer.getControl().setMenu(menu);
 
-		//fillData(false);
+		// fillData(false);
 	}
 
 	private void attachCellEditors(final TableViewer viewer, Composite parent) {
@@ -232,7 +249,9 @@ public class ResourcesPage extends JSSHelpWizardPage {
 			public boolean canModify(Object element, String property) {
 				if (property.equals("VALUE")) //$NON-NLS-1$
 					return true;
-				if (property.equals("EXPRESSION") && ((MResource) element).getPublishOptions().getjExpression() != null)
+				if (property.equals("EXPRESSION")
+						&& ((MResource) element).getPublishOptions()
+								.getjExpression() != null)
 					return true;
 				return false;
 			}
@@ -261,19 +280,26 @@ public class ResourcesPage extends JSSHelpWizardPage {
 				if ("VALUE".equals(property)) //$NON-NLS-1$
 					data.getPublishOptions().setOverwrite((Boolean) value);
 				if ("EXPRESSION".equals(property)) //$NON-NLS-1$
-					data.getPublishOptions().setExpression(((JRDesignExpression) value).getText());
+					data.getPublishOptions().setExpression(
+							value == null ? null : ((JRDesignExpression) value)
+									.getText());
 				tableViewer.update(element, new String[] { property });
 				tableViewer.refresh();
 			}
 		});
 
-		JRExpressionCellEditor expEditor = new JRExpressionCellEditor(parent, new ExpressionContext(jConfig));
-		viewer.setCellEditors(new CellEditor[] { new TextCellEditor(parent), new CheckboxCellEditor(parent), expEditor, new TextCellEditor(parent, SWT.RIGHT) });
-		viewer.setColumnProperties(new String[] { "NAME", "VALUE", "EXPRESSION", "FILESIZE" }); //$NON-NLS-1$ //$NON-NLS-2$
+		JRExpressionCellEditor expEditor = new JRExpressionCellEditor(parent,
+				new ExpressionContext(jConfig));
+		viewer.setCellEditors(new CellEditor[] { new TextCellEditor(parent),
+				new CheckboxCellEditor(parent), expEditor,
+				new TextCellEditor(parent, SWT.RIGHT) });
+		viewer.setColumnProperties(new String[] {
+				"NAME", "VALUE", "EXPRESSION", "FILESIZE" }); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	public void fillData(boolean isNew) {
-		List<MResource> res = PublishUtil.getResources(pres, new NullProgressMonitor(), jConfig);
+		List<MResource> res = PublishUtil.getResources(pres,
+				new NullProgressMonitor(), jConfig);
 		if (isNew)
 			for (MResource r : res)
 				r.getPublishOptions().setOverwrite(true);
@@ -295,16 +321,24 @@ public class ResourcesPage extends JSSHelpWizardPage {
 			else if (mres.getPublishOptions().getPublishMethod() == ResourcePublishMethod.REFERENCE) {
 				tt += "\nURI: " + mres.getValue().getUriString();
 				if (mres.getPublishOptions().getReferencedResource() != null)
-					tt += "\nReference To: " + mres.getPublishOptions().getReferencedResource().getUriString();
+					tt += "\nReference To: "
+							+ mres.getPublishOptions().getReferencedResource()
+									.getUriString();
 			} else if (mres.getPublishOptions().getPublishMethod() == ResourcePublishMethod.RESOURCE) {
 				if (mres.getPublishOptions().getReferencedResource() != null)
-					tt += "\nURI: " + mres.getPublishOptions().getReferencedResource().getUriString();
+					tt += "\nURI: "
+							+ mres.getPublishOptions().getReferencedResource()
+									.getUriString();
 			} else if (mres.getPublishOptions().getPublishMethod() == ResourcePublishMethod.REWRITEEXPRESSION)
 				if (mres.getPublishOptions().getReferencedResource() != null)
-					tt += "\nURI: " + mres.getPublishOptions().getReferencedResource().getUriString();
+					tt += "\nURI: "
+							+ mres.getPublishOptions().getReferencedResource()
+									.getUriString();
 
-			if (element instanceof AFileResource && ((AFileResource) element).getFile() != null)
-				tt += "\nFile: " + ((AFileResource) element).getFile().getAbsolutePath();
+			if (element instanceof AFileResource
+					&& ((AFileResource) element).getFile() != null)
+				tt += "\nFile: "
+						+ ((AFileResource) element).getFile().getAbsolutePath();
 			return tt;
 		}
 
