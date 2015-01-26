@@ -134,9 +134,13 @@ public class ImpDataAdapter extends AImpObject {
 				DataAdapterDescriptor dad = FileDataAdapterStorage
 						.readDataADapter(is, prj);
 				if (dad != null) {
-					DataAdapter da = dad.getDataAdapter();
+					final DataAdapter da = dad.getDataAdapter();
 					String fname = getFileName(da);
-					if (fname != null) {
+					if (fname != null
+							&& !(fname.startsWith("http://")
+									|| fname.startsWith("https://") || fname
+										.startsWith("ftp://"))) {
+
 						InputStream fis = null;
 						OutputStream fos = null;
 						try {
@@ -164,12 +168,23 @@ public class ImpDataAdapter extends AImpObject {
 								MRDataAdapterFile mdaf = new MRDataAdapterFile(
 										mrunit, rd, -1);
 								mdaf.setFile(file);
-								mdaf.setPublishOptions(new PublishOptions());
+								PublishOptions fpopt = new PublishOptions();
+								mdaf.setPublishOptions(fpopt);
+								fpopt.setValueSetter(popt.new ValueSetter<DataAdapter>(
+										da) {
+
+									@Override
+									public void setup() {
+										setFileName(da, value);
+									}
+								});
+								fpopt.getValueSetter().setValue(
+										"repo:" + rd.getUriString());
 
 								PublishUtil.getResources(mrunit, monitor,
 										jrConfig).add(mdaf);
 
-								setFileName(da, "repo:" + rd.getUriString());
+								// setFileName(da, "repo:" + rd.getUriString());
 								f = FileUtils.createTempFile("tmp", "");
 								org.apache.commons.io.FileUtils
 										.writeStringToFile(f,

@@ -113,7 +113,7 @@ public class PublishOptions {
 
 		public abstract void setup();
 
-		private String value;
+		protected String value;
 
 		public String getValue() {
 			return value;
