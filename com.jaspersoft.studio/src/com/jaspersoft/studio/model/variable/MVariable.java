@@ -120,10 +120,13 @@ public class MVariable extends MVariableSystem implements ICopyable {
 	@Override
 	protected void postDescriptors(IPropertyDescriptor[] descriptors) {
 		super.postDescriptors(descriptors);
-		String[] items = getGroupList();
-		if (items != null) {
-			resetGroupD.setItems(items);
-			incrementGroupD.setItems(items);
+		//Don't update the descriptor when the parent is null (element removed)
+		if (getParent() != null){
+			String[] items = getGroupList();
+			if (items != null) {
+				resetGroupD.setItems(items);
+				incrementGroupD.setItems(items);
+			}
 		}
 	}
 
