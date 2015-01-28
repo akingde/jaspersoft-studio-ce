@@ -66,6 +66,10 @@ import org.eclipse.ui.views.contentoutline.ContentOutline;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.background.action.BackgroundEndTransformationAction;
+import com.jaspersoft.studio.background.action.BackgroundFitAction;
+import com.jaspersoft.studio.background.action.BackgroundKeepRatioAction;
+import com.jaspersoft.studio.background.action.BackgroundTransparencyAction;
 import com.jaspersoft.studio.callout.action.CreatePinAction;
 import com.jaspersoft.studio.editor.IGraphicalEditor;
 import com.jaspersoft.studio.editor.ZoomActualAction;
@@ -983,6 +987,63 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		action = new OpenEditorAction(this);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
+		
+		//Action to handle the background
+		
+		action = new BackgroundFitAction(this);
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
+		
+		action = new BackgroundKeepRatioAction(this);
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
+		
+		action = new BackgroundEndTransformationAction(this);
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
+		
+		
+		action = new BackgroundTransparencyAction(this, BackgroundTransparencyAction.TRANSPARENCY_5);
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
+		
+		action = new BackgroundTransparencyAction(this, BackgroundTransparencyAction.TRANSPARENCY_10);
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
+		
+		action = new BackgroundTransparencyAction(this, BackgroundTransparencyAction.TRANSPARENCY_15);
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
+		
+		action = new BackgroundTransparencyAction(this, BackgroundTransparencyAction.TRANSPARENCY_20);
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
+		
+		action = new BackgroundTransparencyAction(this, BackgroundTransparencyAction.TRANSPARENCY_25);
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
+		
+		action = new BackgroundTransparencyAction(this, BackgroundTransparencyAction.TRANSPARENCY_30);
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
+		
+		action = new BackgroundTransparencyAction(this, BackgroundTransparencyAction.TRANSPARENCY_40);
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
+		
+		action = new BackgroundTransparencyAction(this, BackgroundTransparencyAction.TRANSPARENCY_50);
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
+		
+		action = new BackgroundTransparencyAction(this, BackgroundTransparencyAction.TRANSPARENCY_75);
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
+		
+		action = new BackgroundTransparencyAction(this, BackgroundTransparencyAction.TRANSPARENCY_100);
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
+		
+		//End of the background actions
 	}
 
 	protected void createEditorActions(ActionRegistry registry) {

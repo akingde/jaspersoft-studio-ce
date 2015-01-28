@@ -751,6 +751,13 @@
                image="icons/callout-16.png"
                label="%labelCallout">
          </propertyTab>
+         <propertyTab
+               category="element"
+               id="com.jaspersoft.studio.background.BackgroundImage"
+               image="icons/resources/image-16.png"
+               label="%Background"
+               scrollable="true">
+         </propertyTab>
       </propertyTabs>
    </extension>
    <extension
@@ -1314,6 +1321,14 @@
                   type="com.jaspersoft.studio.model.style.MStyle">
             </input>
          </propertySection>
+         <propertySection
+               class="com.jaspersoft.studio.background.BackgroundImageSection"
+               id="com.jaspersoft.studio.background.BackgroundImageSection"
+               tab="com.jaspersoft.studio.background.BackgroundImage">
+            <input
+                  type="com.jaspersoft.studio.background.MBackgrounImage">
+            </input>
+         </propertySection>
       </propertySections>
    </extension>
    <extension
@@ -1512,6 +1527,26 @@
    <command
          id="com.jaspersoft.studio.compileJrxmlFile"
          name="CompileReportCommand">
+   </command>
+   <command
+         defaultHandler="com.jaspersoft.studio.background.commands.TransformBackgroundHandler"
+         id="com.jaspersoft.studio.background.commands.TransformBackgroundCommand"
+         name="Transform Background">
+   </command>
+   <command
+         defaultHandler="com.jaspersoft.studio.background.commands.SelectBackgroundHandler"
+         id="com.jaspersoft.studio.background.commands.SelectBackgroundHandler"
+         name="Import Background Image">
+   </command>
+   <command
+         defaultHandler="com.jaspersoft.studio.background.commands.ShowBackgroundHandler"
+         id="com.jaspersoft.studio.background.commands.ShowBackgroundHandler"
+         name="Show Background Image">
+   </command>
+   <command
+         defaultHandler="com.jaspersoft.studio.background.commands.DeleteBackgroundHandler"
+         id="com.jaspersoft.studio.background.commands.DeleteBackgroundHandler"
+         name="Delete Background Image">
    </command>
 	</extension>
     <extension

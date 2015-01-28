@@ -956,6 +956,15 @@ public class Messages extends NLS {
 	public static String MatchSizeAction_widthTooltip;
 	public static String MaximizeContainerAction_name;
 	public static String MaximizeContainerAction_tooltip;
+	public static String MBackgrounImage_descriptionKeepRatio;
+	public static String MBackgrounImage_descriptionTransparency;
+	public static String MBackgrounImage_imageDialogTitle;
+	public static String MBackgrounImage_labelAppearance;
+	public static String MBackgrounImage_labelCategory;
+	public static String MBackgrounImage_labelEndTransformation;
+	public static String MBackgrounImage_labelFitWidth;
+	public static String MBackgrounImage_labelKeepRatio;
+	public static String MBackgrounImage_labelTransparency;
 	public static String MBand_detail;
 	public static String MBand_height_description;
 	public static String MBand_hiddenLabel;

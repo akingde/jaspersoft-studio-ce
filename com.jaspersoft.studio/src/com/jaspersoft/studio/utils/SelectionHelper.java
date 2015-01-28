@@ -33,6 +33,7 @@ import org.eclipse.core.resources.IStorage;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.gef.EditPart;
+import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
@@ -52,11 +53,13 @@ import org.eclipse.ui.part.FileEditorInput;
 
 import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.background.MBackgrounImage;
 import com.jaspersoft.studio.editor.IMultiEditor;
 import com.jaspersoft.studio.editor.JrxmlEditor;
 import com.jaspersoft.studio.editor.util.StringInput;
 import com.jaspersoft.studio.editor.util.StringStorage;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.MRoot;
 
@@ -75,6 +78,25 @@ public class SelectionHelper {
 		MRoot root = (MRoot) jrxmlEditor.getModel();
 		ANode node = ((MReport) root.getChildren().get(0)).getNode(jrElement);
 		return node;
+	}
+	
+	/**
+	 * Extract from the current jrxml editor the background edit part and return it
+	 * 
+	 * @return a background edit part from the current editor if it was found, or null 
+	 * if the editor or the part are not found
+	 */
+	public static EditPart getBackgroundEditPart(){
+		JrxmlEditor jrxmlEditor = (JrxmlEditor) getActiveJRXMLEditor();
+		if (jrxmlEditor != null){
+			MRoot root = (MRoot) jrxmlEditor.getModel();
+			for(INode node : ((MReport) root.getChildren().get(0)).getChildren()){
+				if (node instanceof MBackgrounImage) {
+					return ((MBackgrounImage) node).getFigureEditPart();
+				}
+			}
+		}
+		return null;
 	}
 
 	/**
@@ -145,6 +167,47 @@ public class SelectionHelper {
 			}
 		}
 
+	}
+	
+	/**
+	 * Select the background edit part, if available, otherwise it 
+	 * dosen't nothing. The background must be visible otherwise it dosen't
+	 * do nothing
+	 */
+	public static void setBackgroundSelected() {
+		EditPart ep = getBackgroundEditPart();
+		if (ep != null && ((GraphicalEditPart)ep).getFigure().isVisible()) {
+			// The selection is set only if the refresh is enabled
+			ep.getViewer().deselectAll();
+			ep.getViewer().select(ep);
+		}
+	}
+	
+	/**
+	 * Deselect the background edit part, if available, otherwise it 
+	 * dosen't nothing.
+	 */
+	public static void deselectBackground(){
+		EditPart ep = getBackgroundEditPart();
+		if (ep != null){
+			ep.getViewer().deselect(ep);
+		}
+	}
+	
+	/**
+	 * Check if the background in the current editor is in edit mode
+	 * 
+	 * @return true if the background in the current editor is editable,
+	 * false otherwise. If the background or the editor are not found it
+	 * return false
+	 */
+	public static boolean isBackgroundEditable(){
+		IEditorPart currentEditor = getActiveJRXMLEditor();
+		if (currentEditor instanceof JrxmlEditor){
+			JrxmlEditor jrxmlEditor = (JrxmlEditor)currentEditor;
+			return jrxmlEditor.getReportContainer().isBackgroundImageEditable();
+		}
+		return false;
 	}
 
 	public static final void openEditor(File file) {

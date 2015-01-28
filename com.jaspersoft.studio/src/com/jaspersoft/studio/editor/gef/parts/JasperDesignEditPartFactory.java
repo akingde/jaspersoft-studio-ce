@@ -16,6 +16,8 @@ import java.util.List;
 
 import org.eclipse.gef.EditPart;
 
+import com.jaspersoft.studio.background.BackgroundImageEditPart;
+import com.jaspersoft.studio.background.MBackgrounImage;
 import com.jaspersoft.studio.callout.CalloutEditPart;
 import com.jaspersoft.studio.callout.MCallout;
 import com.jaspersoft.studio.callout.pin.MPin;
@@ -67,14 +69,14 @@ public class JasperDesignEditPartFactory extends AEditPartFactory {
 			editPart = new ImageFigureEditPart();
 		else if (model instanceof MFrame)
 			editPart = new FrameFigureEditPart();
-
 		else if (model instanceof MCallout)
 			editPart = new CalloutEditPart();
 		else if (model instanceof MPin)
 			editPart = new PinEditPart();
+		else if (model instanceof MBackgrounImage)
+			editPart = new BackgroundImageEditPart();
 		else if (model instanceof IGraphicElement)
 			editPart = new FigureEditPart();
-
 		return editPart;
 	}
 

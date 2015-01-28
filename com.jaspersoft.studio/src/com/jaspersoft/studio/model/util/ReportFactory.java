@@ -60,6 +60,7 @@ import net.sf.jasperreports.engine.type.BandTypeEnum;
 import org.eclipse.core.resources.IFile;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.background.MBackgrounImage;
 import com.jaspersoft.studio.callout.MCallout;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
@@ -134,7 +135,8 @@ public class ReportFactory {
 			}
 
 		}
-
+		//Create the background element
+		new MBackgrounImage(report);
 		createReportBands(jd, report);
 		MCallout.createCallouts(report);
 

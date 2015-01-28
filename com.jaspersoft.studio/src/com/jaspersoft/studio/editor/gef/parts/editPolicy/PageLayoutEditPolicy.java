@@ -37,6 +37,7 @@ import org.eclipse.gef.requests.CreateRequest;
 import org.eclipse.gef.rulers.RulerProvider;
 
 import com.jaspersoft.studio.JSSCompoundCommand;
+import com.jaspersoft.studio.background.BackgroundImageEditPart;
 import com.jaspersoft.studio.callout.CalloutEditPart;
 import com.jaspersoft.studio.callout.CalloutElementResizableEditPolicy;
 import com.jaspersoft.studio.callout.command.CalloutSetConstraintCommand;
@@ -396,6 +397,19 @@ public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
 		if (child instanceof PinEditPart)
 			return new PinMoveEditPolicy();
 		return super.createChildEditPolicy(child);
+	}
+	
+	/**
+	 * Override of the method to avoid to add the standard edit policy on the 
+	 * background elements, since it need its own policies to be handled correctly,
+	 * for example it has a drag behavior really different from the other elements
+	 */
+	@Override
+	protected void decorateChild(EditPart child) {
+		if (!(child instanceof BackgroundImageEditPart)){
+			EditPolicy policy = createChildEditPolicy(child);
+			child.installEditPolicy(EditPolicy.PRIMARY_DRAG_ROLE, policy);
+		}
 	}
 
 }

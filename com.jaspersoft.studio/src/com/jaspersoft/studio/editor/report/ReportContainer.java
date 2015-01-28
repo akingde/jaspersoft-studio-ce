@@ -92,6 +92,18 @@ public class ReportContainer extends MultiPageToolbarEditorPart implements ITabb
 	 */
 	public static final String CLOSE_EDITOR_PROPERTY = "closeElementEditor";
 	
+	/**
+	 * Flag used to know if in the current editor the background image should 
+	 * be shown if available
+	 */
+	private boolean showBackgroundImage = true;
+	
+	/**
+	 * Flag used to know if in the current editor the background image is 
+	 * in edit mode, if available
+	 */
+	private boolean editBackgroundImage = false;
+	
 	/** 
 	 * The model. 
 	 */
@@ -538,13 +550,49 @@ public class ReportContainer extends MultiPageToolbarEditorPart implements ITabb
 								prnt.getParent().setSize(size.x, size.y);
 							}
 						});
-
-						// if (obj instanceof JRDesignElement)
-						// SelectionHelper.setSelection((JRDesignElement) obj, true);
-						// ave.getGraphicalViewer().setSelection(new StructuredSelection(obj));
 					}
 				}
 			}
 		}
+	}
+	
+	/**
+	 * Check if in the current editor the background image should 
+	 * be editable
+	 * 
+	 * @return true if the background image is editable, false otherwise
+	 */
+	public boolean isBackgroundImageEditable(){
+		return editBackgroundImage;
+	}
+	
+	/**
+	 * Set in the current editor the edit mode for the background image. However
+	 * it will be shown only if there is a background image defined
+	 * 
+	 * @param value true if the background should be editable, false otherwise
+	 */
+	public void setBackgroundImageEditable(boolean value){
+		editBackgroundImage = value;
+	}
+
+	/**
+	 * Check if in the current editor the background image is visible. However
+	 * it will be shown only if there is a background image defined
+	 * 
+	 * @return true if the background image is visible, false otherwise
+	 */
+	public boolean isBackgroundImageVisible(){
+		return showBackgroundImage;
+	}
+	
+	/**
+	 * Set in the current editor the visibility for the background image. However
+	 * it will be shown only if there is a background image defined
+	 * 
+	 * @param value true if the background should be visible, false otherwise
+	 */
+	public void setBackgroundImageVisible(boolean value){
+		this.showBackgroundImage = value;
 	}
 }

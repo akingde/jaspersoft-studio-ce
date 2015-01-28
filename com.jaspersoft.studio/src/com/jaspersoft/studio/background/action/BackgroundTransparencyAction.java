@@ -1,0 +1,112 @@
+
+/*******************************************************************************
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
+ * http://www.jaspersoft.com.
+ * 
+ * Unless you have purchased  a commercial license agreement from Jaspersoft,
+ * the following license terms  apply:
+ * 
+ * This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ ******************************************************************************/
+package com.jaspersoft.studio.background.action;
+
+import java.util.List;
+
+import org.eclipse.gef.commands.Command;
+import org.eclipse.ui.IWorkbenchPart;
+
+import com.jaspersoft.studio.background.MBackgrounImage;
+import com.jaspersoft.studio.editor.action.ACachedSelectionAction;
+import com.jaspersoft.studio.property.SetValueCommand;
+
+/**
+ * Action to enclose the selected elements into a frame. All
+ * the selected elements must have the same parent
+ * 
+ * @author Orlandin Marco
+ * 
+ */
+public class BackgroundTransparencyAction extends ACachedSelectionAction {
+  
+  private static final String BASE_ID = "BackgroundTransaparencyTo"; //$NON-NLS-1$
+  
+  public static final String TRANSPARENCY_5 = BASE_ID + "5";
+  
+  public static final String TRANSPARENCY_10 = BASE_ID + "10";
+  
+  public static final String TRANSPARENCY_15 = BASE_ID + "15";
+  
+  public static final String TRANSPARENCY_20 = BASE_ID + "20";
+  
+  public static final String TRANSPARENCY_25 = BASE_ID + "25";
+  
+  public static final String TRANSPARENCY_30 = BASE_ID + "30";
+  
+  public static final String TRANSPARENCY_40 = BASE_ID + "40";
+  
+  public static final String TRANSPARENCY_50 = BASE_ID + "50";
+  
+  public static final String TRANSPARENCY_75 = BASE_ID + "75";
+  
+  public static final String TRANSPARENCY_100 = BASE_ID + "100";
+	
+  private float transparencyValue;
+  
+	public BackgroundTransparencyAction(IWorkbenchPart part, String ID) {
+		super(part);
+		setLazyEnablementCalculation(true);
+		if (TRANSPARENCY_5.equals(ID)){
+			setId(TRANSPARENCY_5);
+			transparencyValue = 0.05f;
+		} else if (TRANSPARENCY_10.equals(ID)){
+			setId(TRANSPARENCY_10);
+			transparencyValue = 0.10f;
+		}  else if (TRANSPARENCY_15.equals(ID)){
+			setId(TRANSPARENCY_15);
+			transparencyValue = 0.15f;
+		}  else if (TRANSPARENCY_20.equals(ID)){
+			setId(TRANSPARENCY_20);
+			transparencyValue = 0.20f;
+		}  else if (TRANSPARENCY_25.equals(ID)){
+			setId(TRANSPARENCY_25);
+			transparencyValue = 0.25f;
+		}  else if (TRANSPARENCY_30.equals(ID)){
+			setId(TRANSPARENCY_30);
+			transparencyValue = 0.30f;
+		}  else if (TRANSPARENCY_40.equals(ID)){
+			setId(TRANSPARENCY_40);
+			transparencyValue = 0.40f;
+		}  else if (TRANSPARENCY_50.equals(ID)){
+			setId(TRANSPARENCY_50);
+			transparencyValue = 0.50f;
+		}  else if (TRANSPARENCY_75.equals(ID)){
+			setId(TRANSPARENCY_75);
+			transparencyValue = 0.75f;
+		}  else {
+			setId(TRANSPARENCY_100);
+			transparencyValue = 1.0f;
+		}  
+		String percentage = String.valueOf(Math.round(transparencyValue*100));
+		setText(percentage+"%");
+	}
+	
+	@Override
+	protected void init() {
+		super.init();
+		setEnabled(false);
+	}
+
+	@Override
+	protected Command createCommand() {
+		List<Object> background = editor.getSelectionCache().getSelectionModelForType(MBackgrounImage.class);
+		if (background.isEmpty()) return null;
+		SetValueCommand command = new SetValueCommand();
+		command.setTarget((MBackgrounImage)background.get(0));
+		command.setPropertyId(MBackgrounImage.PROPERTY_ALPHA);
+		command.setPropertyValue(transparencyValue);
+		return command;
+	}
+}

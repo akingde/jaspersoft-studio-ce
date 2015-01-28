@@ -37,6 +37,7 @@ import org.eclipse.ui.IFileEditorInput;
 
 import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.background.MBackgrounImage;
 import com.jaspersoft.studio.editor.JrxmlEditor;
 import com.jaspersoft.studio.editor.outline.editpolicy.ElementEditPolicy;
 import com.jaspersoft.studio.editor.outline.editpolicy.ElementTreeEditPolicy;
@@ -234,10 +235,13 @@ public class TreeEditPart extends AbstractTreeEditPart implements PropertyChange
 			JasperReportsConfiguration jConfig = modelNode.getJasperConfiguration();
 			boolean showDefaults = jConfig != null? jConfig.getPropertyBoolean(DesignerPreferencePage.P_SHOW_VARIABLES_DEFAULTS, Boolean.TRUE) : true;
 			for (INode node : ((ANode) getModel()).getChildren()) {
-				if (showDefaults){ 
-					list.add(node);
-				} else if (!node.getClass().equals(MParameterSystem.class) && !node.getClass().equals(MVariableSystem.class)){
-					list.add(node);
+				//The background is never shown inside the outline
+				if (!node.getClass().equals(MBackgrounImage.class)){
+					if (showDefaults){ 
+						list.add(node);
+					} else if (!node.getClass().equals(MParameterSystem.class) && !node.getClass().equals(MVariableSystem.class)){
+						list.add(node);
+					}
 				}
 			}
 		}

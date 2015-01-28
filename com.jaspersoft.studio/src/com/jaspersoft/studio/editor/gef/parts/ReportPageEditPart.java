@@ -28,6 +28,7 @@ import org.eclipse.gef.SnapToGrid;
 import org.eclipse.jface.resource.StringConverter;
 import org.eclipse.swt.graphics.RGB;
 
+import com.jaspersoft.studio.background.MBackgrounImage;
 import com.jaspersoft.studio.callout.MCallout;
 import com.jaspersoft.studio.editor.gef.figures.APageFigure;
 import com.jaspersoft.studio.editor.gef.figures.ReportPageFigure;
@@ -48,7 +49,7 @@ import com.jaspersoft.studio.utils.ModelUtils;
  * @author Chicu Veaceslav
  */
 public class ReportPageEditPart extends PageEditPart implements PropertyChangeListener, IDatasetDialogSupport {
-
+	
 	protected APageFigure newPageFigure() {
 		return new ReportPageFigure(getJasperDesign(), true, this);
 	}
@@ -107,7 +108,7 @@ public class ReportPageEditPart extends PageEditPart implements PropertyChangeLi
 		getViewer().setProperty(SnapToGrid.PROPERTY_GRID_ORIGIN,
 				new Point(tx, ReportPageFigure.PAGE_BORDER.top + jd.getTopMargin()));
 	}
-
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -116,21 +117,19 @@ public class ReportPageEditPart extends PageEditPart implements PropertyChangeLi
 	protected List<Object> getModelChildren() {
 		List<Object> list = new ArrayList<Object>();
 		List<Object> sList = new ArrayList<Object>();
-		// put bands first
-
 		for (INode node : getPage().getChildren()) {
-			if (node instanceof MCallout) {
+			//The background element is always the first one
+			if (node instanceof MBackgrounImage) {
+				list.add(0, node);
+			} else if (node instanceof MCallout) {
 				sList.add(node);
 				for (INode n : node.getChildren())
 					sList.add(n);
 			} else if (node instanceof IGraphicElement && node.getValue() != null) {
 				if (node instanceof MBand) {
 					MBand band = (MBand) node;
-					// if (!(band.getBandType().equals(BandTypeEnum.BACKGROUND) ||
-					// band.getBandType().equals(BandTypeEnum.NO_DATA))) {
 					list.add(band);
 					getNodeChildren(node, sList);
-					// }
 					continue;
 				}
 				sList.add(node);
@@ -174,4 +173,5 @@ public class ReportPageEditPart extends PageEditPart implements PropertyChangeLi
 		}
 		super.propertyChange(arg0);
 	}
+
 }

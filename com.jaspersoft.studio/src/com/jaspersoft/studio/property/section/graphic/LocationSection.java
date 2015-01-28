@@ -73,6 +73,4 @@ public class LocationSection extends AbstractSection {
 		addProvidedProperties(JRDesignElement.PROPERTY_Y, Messages.LocationSection_yCoordinateLabel);
 		addProvidedProperties(JRDesignElement.PROPERTY_POSITION_TYPE, Messages.common_position_type);
 	}
-	
-
 }

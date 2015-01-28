@@ -46,6 +46,7 @@ import org.eclipse.ui.part.MultiPageEditorActionBarContributor;
 import org.eclipse.ui.texteditor.ITextEditor;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.background.BackgroundMenuContributior;
 import com.jaspersoft.studio.editor.action.IGlobalAction;
 import com.jaspersoft.studio.editor.action.snap.SizeGridAction;
 import com.jaspersoft.studio.editor.action.snap.SnapToGridAction;
@@ -411,6 +412,8 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 		MenuManager viewMenu = new MenuManager(Messages.JrxmlEditorContributor_view);
 		viewMenu.add(getAction(GEFActionConstants.ZOOM_IN));
 		viewMenu.add(getAction(GEFActionConstants.ZOOM_OUT));
+		viewMenu.add(new Separator());
+		viewMenu.add(BackgroundMenuContributior.getBackgroundMenu());
 		viewMenu.add(new Separator());
 		viewMenu.add(getAction(GEFActionConstants.TOGGLE_RULER_VISIBILITY));
 		viewMenu.add(getAction(SnapToGuidesAction.ID));

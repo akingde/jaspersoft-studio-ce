@@ -14,7 +14,9 @@ package com.jaspersoft.studio.editor.menu;
 
 import java.util.List;
 
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartViewer;
+import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.gef.internal.InternalImages;
 import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.gef.ui.actions.GEFActionConstants;
@@ -22,11 +24,17 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.actions.ActionFactory;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.background.action.BackgroundEndTransformationAction;
+import com.jaspersoft.studio.background.action.BackgroundFitAction;
+import com.jaspersoft.studio.background.action.BackgroundKeepRatioAction;
+import com.jaspersoft.studio.background.action.BackgroundTransparencyAction;
 import com.jaspersoft.studio.callout.action.CreatePinAction;
 import com.jaspersoft.studio.editor.AContextMenuProvider;
+import com.jaspersoft.studio.editor.JrxmlEditor;
 import com.jaspersoft.studio.editor.action.EncloseIntoFrameAction;
 import com.jaspersoft.studio.editor.action.HideElementsAction;
 import com.jaspersoft.studio.editor.action.MoveDetailDownAction;
@@ -68,6 +76,7 @@ import com.jaspersoft.studio.editor.outline.actions.DeleteGroupReportAction;
 import com.jaspersoft.studio.editor.outline.actions.ExportStyleAsTemplateAction;
 import com.jaspersoft.studio.editor.outline.actions.RefreshTemplateStyleExpression;
 import com.jaspersoft.studio.editor.outline.actions.ResetStyleAction;
+import com.jaspersoft.studio.editor.report.ReportContainer;
 import com.jaspersoft.studio.formatting.actions.CenterInParentAction;
 import com.jaspersoft.studio.formatting.actions.DecreaseHSpaceAction;
 import com.jaspersoft.studio.formatting.actions.DecreaseVSpaceAction;
@@ -90,6 +99,7 @@ import com.jaspersoft.studio.plugin.IComponentFactory;
 import com.jaspersoft.studio.property.dataset.dialog.ContextualDatasetAction;
 import com.jaspersoft.studio.property.section.report.action.PageFormatAction;
 import com.jaspersoft.studio.property.section.report.action.PageRemoveMarginsAction;
+import com.jaspersoft.studio.utils.SelectionHelper;
 
 /*
  * The Class AppContextMenuProvider.
@@ -115,12 +125,82 @@ public class AppContextMenuProvider extends AContextMenuProvider {
 	 */
 	@Override
 	public void buildContextMenu(IMenuManager menu) {
+	
+		IAction action = null;
+		
+		//Create the background actions
+		
+		if (isBackgroundEditable()){
+			
+			action = getActionRegistry().getAction(BackgroundFitAction.ID);
+			if (action != null && action.isEnabled())
+				menu.add(action);
+			
+			MenuManager submenu = new MenuManager(Messages.MBackgrounImage_labelTransparency, null, "BackgroundTransparency");//$NON-NLS-1$
+			
+			action = getActionRegistry().getAction(BackgroundTransparencyAction.TRANSPARENCY_5);
+			if (action != null && action.isEnabled())
+				submenu.add(action);
+			
+			action = getActionRegistry().getAction(BackgroundTransparencyAction.TRANSPARENCY_10);
+			if (action != null && action.isEnabled())
+				submenu.add(action);
+			
+			action = getActionRegistry().getAction(BackgroundTransparencyAction.TRANSPARENCY_15);
+			if (action != null && action.isEnabled())
+				submenu.add(action);
+			
+			action = getActionRegistry().getAction(BackgroundTransparencyAction.TRANSPARENCY_20);
+			if (action != null && action.isEnabled())
+				submenu.add(action);
+			
+			action = getActionRegistry().getAction(BackgroundTransparencyAction.TRANSPARENCY_25);
+			if (action != null && action.isEnabled())
+				submenu.add(action);
+			
+			action = getActionRegistry().getAction(BackgroundTransparencyAction.TRANSPARENCY_30);
+			if (action != null && action.isEnabled())
+				submenu.add(action);
+			
+			action = getActionRegistry().getAction(BackgroundTransparencyAction.TRANSPARENCY_40);
+			if (action != null && action.isEnabled())
+				submenu.add(action);
+			
+			action = getActionRegistry().getAction(BackgroundTransparencyAction.TRANSPARENCY_50);
+			if (action != null && action.isEnabled())
+				submenu.add(action);
+			
+			action = getActionRegistry().getAction(BackgroundTransparencyAction.TRANSPARENCY_75);
+			if (action != null && action.isEnabled())
+				submenu.add(action);
+			
+			action = getActionRegistry().getAction(BackgroundTransparencyAction.TRANSPARENCY_100);
+			if (action != null && action.isEnabled())
+				submenu.add(action);
+			
+			menu.add(submenu);
+			
+			action = getActionRegistry().getAction(BackgroundKeepRatioAction.ID);
+			if (action != null && action.isEnabled())
+				menu.add(action);
+			
+			menu.add(new Separator());
+			
+			//The return on this action  avoid to add any unnecessary other action to 
+			//the background operations
+			action = getActionRegistry().getAction(BackgroundEndTransformationAction.ID);
+			if (action != null && action.isEnabled()){
+				menu.add(action);
+				return;
+			}
+		}
+		
 		// Add component actions group
 		menu.add(new Separator(IComponentFactory.GROUP_COMPONENT));
 
 		GEFActionConstants.addStandardActionGroups(menu);
 
-		IAction action = getActionRegistry().getAction(ActionFactory.UNDO.getId());
+		action = getActionRegistry().getAction(ActionFactory.UNDO.getId());
 		menu.appendToGroup(GEFActionConstants.GROUP_UNDO, action);
 
 		action = getActionRegistry().getAction(ActionFactory.REDO.getId());
@@ -545,7 +625,20 @@ public class AppContextMenuProvider extends AContextMenuProvider {
 		action = getActionRegistry().getAction(ContextualDatasetAction.ID);
 		if (action != null && action.isEnabled())
 			menu.appendToGroup(GEFActionConstants.GROUP_VIEW, action);
-
+	}
+	
+	private boolean isBackgroundEditable(){
+		IEditorPart currentEditor = SelectionHelper.getActiveJRXMLEditor();
+		if (currentEditor instanceof JrxmlEditor){
+			ReportContainer container = ((JrxmlEditor)currentEditor).getReportContainer();
+			if (container.isBackgroundImageEditable()){
+				EditPart backgroundPart = SelectionHelper.getBackgroundEditPart();
+				if (backgroundPart != null){
+					return ((AbstractGraphicalEditPart)backgroundPart).getFigure().isVisible();
+				}
+			}
+		}
+		return false;
 	}
 
 }

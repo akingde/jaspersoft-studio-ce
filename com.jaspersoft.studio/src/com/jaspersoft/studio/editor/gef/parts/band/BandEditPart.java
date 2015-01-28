@@ -76,6 +76,7 @@ import com.jaspersoft.studio.preferences.RulersGridPreferencePage;
 import com.jaspersoft.studio.property.SetValueCommand;
 import com.jaspersoft.studio.property.dataset.dialog.IDatasetDialogSupport;
 import com.jaspersoft.studio.utils.ModelUtils;
+import com.jaspersoft.studio.utils.SelectionHelper;
 
 /*
  * BandEditPart creates the figure for the band. The figure is actually just the bottom border of the band. This allows
@@ -148,7 +149,11 @@ public class BandEditPart extends APrefFigureEditPart implements PropertyChangeL
 	 */
 	@Override
 	public DragTracker getDragTracker(Request request) {
-		return new NotMovablePartDragTracker(this);
+		//When editing the background the tracker of the band is not used to 
+		//avoid to show the marquee when dragging the background since it is under the band
+		if (SelectionHelper.isBackgroundEditable()){
+			return SelectionHelper.getBackgroundEditPart().getDragTracker(request);
+		} else return new NotMovablePartDragTracker(this);
 	}
 
 	/*
