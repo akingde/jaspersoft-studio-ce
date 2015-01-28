@@ -108,7 +108,7 @@ public class ItemPropertyDialog extends ATitledDialog implements IExpressionCont
 		gd_propertyValueExpression.heightHint = 50;
 		propertyValueExpression.setLayoutData(gd_propertyValueExpression);
 		propertyValueExpression.setExpressionContext(this.expContext);
-		if (descriptor.getItemData() != null && descriptor.getItemData().getDataset() != null)
+		if (descriptor.getItemData() != null && descriptor.getItemData().getDataset() == null)
 			expContext.setVisibilities(EnumSet.noneOf(Visibility.class));
 
 		infoPanel = new SelectableComposite(dialogArea);
