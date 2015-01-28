@@ -41,6 +41,8 @@ import com.jaspersoft.studio.property.descriptors.TransparencyPropertyDescriptor
 
 /**
  * 
+ * Model element for the background image
+ * 
  * @author Orlandin Marco
  * 
  */

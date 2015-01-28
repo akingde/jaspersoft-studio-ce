@@ -1,4 +1,3 @@
-
 /*******************************************************************************
  * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
  * http://www.jaspersoft.com.
@@ -23,8 +22,8 @@ import com.jaspersoft.studio.editor.action.ACachedSelectionAction;
 import com.jaspersoft.studio.property.SetValueCommand;
 
 /**
- * Action to enclose the selected elements into a frame. All
- * the selected elements must have the same parent
+ * Action to set the transparency of the background images from a contextual
+ * menu
  * 
  * @author Orlandin Marco
  * 
@@ -33,25 +32,25 @@ public class BackgroundTransparencyAction extends ACachedSelectionAction {
   
   private static final String BASE_ID = "BackgroundTransaparencyTo"; //$NON-NLS-1$
   
-  public static final String TRANSPARENCY_5 = BASE_ID + "5";
+  public static final String TRANSPARENCY_5 = BASE_ID + "5"; //$NON-NLS-1$
   
-  public static final String TRANSPARENCY_10 = BASE_ID + "10";
+  public static final String TRANSPARENCY_10 = BASE_ID + "10"; //$NON-NLS-1$
   
-  public static final String TRANSPARENCY_15 = BASE_ID + "15";
+  public static final String TRANSPARENCY_15 = BASE_ID + "15"; //$NON-NLS-1$
   
-  public static final String TRANSPARENCY_20 = BASE_ID + "20";
+  public static final String TRANSPARENCY_20 = BASE_ID + "20"; //$NON-NLS-1$
   
-  public static final String TRANSPARENCY_25 = BASE_ID + "25";
+  public static final String TRANSPARENCY_25 = BASE_ID + "25"; //$NON-NLS-1$
   
-  public static final String TRANSPARENCY_30 = BASE_ID + "30";
+  public static final String TRANSPARENCY_30 = BASE_ID + "30"; //$NON-NLS-1$
   
-  public static final String TRANSPARENCY_40 = BASE_ID + "40";
+  public static final String TRANSPARENCY_40 = BASE_ID + "40"; //$NON-NLS-1$
   
-  public static final String TRANSPARENCY_50 = BASE_ID + "50";
+  public static final String TRANSPARENCY_50 = BASE_ID + "50"; //$NON-NLS-1$
   
-  public static final String TRANSPARENCY_75 = BASE_ID + "75";
+  public static final String TRANSPARENCY_75 = BASE_ID + "75"; //$NON-NLS-1$
   
-  public static final String TRANSPARENCY_100 = BASE_ID + "100";
+  public static final String TRANSPARENCY_100 = BASE_ID + "100"; //$NON-NLS-1$
 	
   private float transparencyValue;
   
