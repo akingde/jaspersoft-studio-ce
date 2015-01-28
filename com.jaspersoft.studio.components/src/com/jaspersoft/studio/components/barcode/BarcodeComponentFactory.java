@@ -31,6 +31,7 @@ import net.sf.jasperreports.components.barcode4j.RoyalMailCustomerComponent;
 import net.sf.jasperreports.components.barcode4j.UPCAComponent;
 import net.sf.jasperreports.components.barcode4j.UPCEComponent;
 import net.sf.jasperreports.components.barcode4j.USPSIntelligentMailComponent;
+import net.sf.jasperreports.components.barcode4j.qrcode.QRCodeComponent;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 
 import org.eclipse.draw2d.IFigure;
@@ -56,6 +57,7 @@ import com.jaspersoft.studio.components.barcode.model.barcode4j.MFourStateBarcod
 import com.jaspersoft.studio.components.barcode.model.barcode4j.MInterleaved2Of5;
 import com.jaspersoft.studio.components.barcode.model.barcode4j.MPDF417;
 import com.jaspersoft.studio.components.barcode.model.barcode4j.MPOSTNET;
+import com.jaspersoft.studio.components.barcode.model.barcode4j.MQRCode;
 import com.jaspersoft.studio.components.barcode.model.barcode4j.MRoyalMail;
 import com.jaspersoft.studio.components.barcode.model.barcode4j.MUPCA;
 import com.jaspersoft.studio.components.barcode.model.barcode4j.MUPCE;
@@ -77,7 +79,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 public class BarcodeComponentFactory implements IComponentFactory {
 
 	private static List<Class<?>> knownClasses;
-	
+
 	static {
 		knownClasses = new ArrayList<Class<?>>(18);
 		knownClasses.add(MBarcode.class);
@@ -91,6 +93,7 @@ public class BarcodeComponentFactory implements IComponentFactory {
 		knownClasses.add(MEAN8.class);
 		knownClasses.add(MFourStateBarcode.class);
 		knownClasses.add(MRoyalMail.class);
+		knownClasses.add(MQRCode.class);
 		knownClasses.add(MUSPSIntelligent.class);
 		knownClasses.add(MInterleaved2Of5.class);
 		knownClasses.add(MPDF417.class);
@@ -155,6 +158,9 @@ public class BarcodeComponentFactory implements IComponentFactory {
 			else if (((JRDesignComponentElement) jrObject).getComponent() instanceof UPCEComponent)
 				return new MUPCE(parent, (JRDesignComponentElement) jrObject,
 						newIndex);
+			else if (((JRDesignComponentElement) jrObject).getComponent() instanceof QRCodeComponent)
+				return new MQRCode(parent, (JRDesignComponentElement) jrObject,
+						newIndex);
 
 		}
 		return null;
@@ -162,7 +168,7 @@ public class BarcodeComponentFactory implements IComponentFactory {
 
 	public IFigure createFigure(ANode node) {
 		if (node instanceof MBarcodeBarbecue || node instanceof MBarcode4j)
-			return new BarcodeFigure((MGraphicElement)node);
+			return new BarcodeFigure((MGraphicElement) node);
 		return null;
 	}
 

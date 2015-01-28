@@ -51,7 +51,7 @@ public class MapSection extends AbstractSection {
 		parent.setLayout(new GridLayout(2, false));
 
 		FormText mapPickSuggestion=new FormText(parent, SWT.NONE);
-		mapPickSuggestion.setText("<form><p><b>You can pickup the map center, zooom and type by</b><a href=\"\">clicking here</a></p></form>", true, false);
+		mapPickSuggestion.setText("<form><p><b>You can pickup the map center, zooom and type by </b><a href=\"\">clicking here</a></p></form>", true, false);
 		mapPickSuggestion.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false,2,1));
 		mapPickSuggestion.setWhitespaceNormalized(true);
 		mapPickSuggestion.addHyperlinkListener(new HyperlinkAdapter() {
