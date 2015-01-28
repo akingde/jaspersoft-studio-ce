@@ -344,9 +344,16 @@ public class JavaExpressionEditorComposite extends ExpressionEditorComposite {
 						Category.VARIABLES);
 				variablesCategoryItem.setData(ExpressionContextUtils
 						.getAllDatasetsVariables(exprContext));
-				rootCategories.add(parametersCategoryItem);
-				rootCategories.add(fieldsCategoryItem);
-				rootCategories.add(variablesCategoryItem);
+				
+				if(exprContext.canShowParameters()){
+					rootCategories.add(parametersCategoryItem);
+				}
+				if(exprContext.canShowFields()){
+					rootCategories.add(fieldsCategoryItem);
+				}
+				if(exprContext.canShowVariables()){
+					rootCategories.add(variablesCategoryItem);
+				}
 			}
 			else if(contextDatasets.size() > 1){
 				List<ObjectCategoryItem> paramsDatasets = new ArrayList<ObjectCategoryItem>();
