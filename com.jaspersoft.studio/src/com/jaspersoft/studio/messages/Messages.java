@@ -956,6 +956,7 @@ public class Messages extends NLS {
 	public static String MatchSizeAction_widthTooltip;
 	public static String MaximizeContainerAction_name;
 	public static String MaximizeContainerAction_tooltip;
+	public static String MBackgroundImage_menuLabel;
 	public static String MBackgrounImage_descriptionKeepRatio;
 	public static String MBackgrounImage_descriptionTransparency;
 	public static String MBackgrounImage_imageDialogTitle;

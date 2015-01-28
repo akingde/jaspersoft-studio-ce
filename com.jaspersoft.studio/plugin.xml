@@ -1531,22 +1531,22 @@
    <command
          defaultHandler="com.jaspersoft.studio.background.commands.TransformBackgroundHandler"
          id="com.jaspersoft.studio.background.commands.TransformBackgroundCommand"
-         name="Transform Background">
+         name="%transformBackground">
    </command>
    <command
          defaultHandler="com.jaspersoft.studio.background.commands.SelectBackgroundHandler"
          id="com.jaspersoft.studio.background.commands.SelectBackgroundHandler"
-         name="Import Background Image">
+         name="%importBackground">
    </command>
    <command
          defaultHandler="com.jaspersoft.studio.background.commands.ShowBackgroundHandler"
          id="com.jaspersoft.studio.background.commands.ShowBackgroundHandler"
-         name="Show Background Image">
+         name="%showBackground">
    </command>
    <command
          defaultHandler="com.jaspersoft.studio.background.commands.DeleteBackgroundHandler"
          id="com.jaspersoft.studio.background.commands.DeleteBackgroundHandler"
-         name="Delete Background Image">
+         name="%deleteBackground">
    </command>
 	</extension>
     <extension

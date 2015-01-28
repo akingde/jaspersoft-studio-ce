@@ -316,10 +316,9 @@ public class MBackgrounImage extends APropertyNode implements IGraphicElement {
 		return (JasperDesign)super.getValue();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.jaspersoft.studio.model.ANode#setValue(java.lang.Object)
+	/**
+	 * Add the listener to the properties map of the report, since the background image relay on that
+	 * to store its informations
 	 */
 	@Override
 	public void setValue(Object value) {

@@ -26,6 +26,8 @@ import org.eclipse.ui.menus.ExtensionContributionFactory;
 import org.eclipse.ui.menus.IContributionRoot;
 import org.eclipse.ui.services.IServiceLocator;
 
+import com.jaspersoft.studio.messages.Messages;
+
 public class BackgroundMenuContributior extends ExtensionContributionFactory {
 
 	@Override
@@ -39,16 +41,15 @@ public class BackgroundMenuContributior extends ExtensionContributionFactory {
 		});
 	}
 
-	
 	public static MenuManager getBackgroundMenu(){
-	   MenuManager submenu = new MenuManager("Background Image", "com.jaspersoft.studio.background.backgroundmenu");
-	    IContributionItem dynamicItem = new CompoundContributionItem("org.eclipse.ui.views.problems.groupBy.items") {
+	   MenuManager submenu = new MenuManager(Messages.MBackgroundImage_menuLabel, "com.jaspersoft.studio.background.backgroundmenu"); //$NON-NLS-2$
+	    IContributionItem dynamicItem = new CompoundContributionItem("org.eclipse.ui.views.problems.groupBy.items") { //$NON-NLS-1$
 	        protected IContributionItem[] getContributionItems() {
 	          IContributionItem[] list = new IContributionItem[4];
-	          list[0] = new CommandContributionItem(new CommandContributionItemParameter(PlatformUI.getWorkbench(), "SelectBackgroundHandler", "com.jaspersoft.studio.background.commands.SelectBackgroundHandler", CommandContributionItem.STYLE_PUSH));
-	          list[1] = new CommandContributionItem(new CommandContributionItemParameter(PlatformUI.getWorkbench(), "TransformBackgroundCommand",  "com.jaspersoft.studio.background.commands.TransformBackgroundCommand", CommandContributionItem.STYLE_CHECK));
-	          list[2] = new CommandContributionItem(new CommandContributionItemParameter(PlatformUI.getWorkbench(), "ShowBackgroundHandler",  "com.jaspersoft.studio.background.commands.ShowBackgroundHandler", CommandContributionItem.STYLE_CHECK));
-	          list[3] = new CommandContributionItem(new CommandContributionItemParameter(PlatformUI.getWorkbench(), "DeleteBackgroundHandler",  "com.jaspersoft.studio.background.commands.DeleteBackgroundHandler", CommandContributionItem.STYLE_PUSH));
+	          list[0] = new CommandContributionItem(new CommandContributionItemParameter(PlatformUI.getWorkbench(), "SelectBackgroundHandler", "com.jaspersoft.studio.background.commands.SelectBackgroundHandler", CommandContributionItem.STYLE_PUSH)); //$NON-NLS-1$ //$NON-NLS-2$
+	          list[1] = new CommandContributionItem(new CommandContributionItemParameter(PlatformUI.getWorkbench(), "TransformBackgroundCommand",  "com.jaspersoft.studio.background.commands.TransformBackgroundCommand", CommandContributionItem.STYLE_CHECK)); //$NON-NLS-1$ //$NON-NLS-2$
+	          list[2] = new CommandContributionItem(new CommandContributionItemParameter(PlatformUI.getWorkbench(), "ShowBackgroundHandler",  "com.jaspersoft.studio.background.commands.ShowBackgroundHandler", CommandContributionItem.STYLE_CHECK)); //$NON-NLS-1$ //$NON-NLS-2$
+	          list[3] = new CommandContributionItem(new CommandContributionItemParameter(PlatformUI.getWorkbench(), "DeleteBackgroundHandler",  "com.jaspersoft.studio.background.commands.DeleteBackgroundHandler", CommandContributionItem.STYLE_PUSH)); //$NON-NLS-1$ //$NON-NLS-2$
 	        	return list;
 	        }
 	    };
