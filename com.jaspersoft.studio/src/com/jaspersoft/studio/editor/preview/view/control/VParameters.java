@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.editor.preview.view.control;
 
@@ -33,7 +29,6 @@ import com.jaspersoft.studio.editor.preview.input.BooleanNumericInput;
 import com.jaspersoft.studio.editor.preview.input.IDataInput;
 import com.jaspersoft.studio.editor.preview.input.ParameterJasper;
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.utils.ExpressionInterpreter;
 import com.jaspersoft.studio.utils.ExpressionUtil;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -95,13 +90,12 @@ public class VParameters extends AVParameters {
 						if (p.getName().equals(pname)) {
 							if (params.get(pname) != null)
 								continue;
-							if (p.getDefaultValueExpression() != null) {
-								params.put(pname, getInter(mDataset).interpretExpression(p.getDefaultValueExpression().getText()));
-							} else
-								params.put(pname, null);
+							if (p.getDefaultValueExpression() != null)
+								params.put(pname, ExpressionUtil.cachedExpressionEvaluation(p.getDefaultValueExpression(), jContext));
+							else
+								params.remove(pname);
 							keys.add(pname);
 						}
-
 					}
 					updateControlInput(keys);
 				} finally {
@@ -109,15 +103,6 @@ public class VParameters extends AVParameters {
 				}
 				return Status.OK_STATUS;
 			}
-
-			private ExpressionInterpreter eint;
-
-			private ExpressionInterpreter getInter(JRDesignDataset mDataset) {
-				if (eint == null)
-					eint = ExpressionUtil.getInterpreter(mDataset, jContext, jContext.getJasperDesign());
-				return eint;
-			}
-
 		};
 		defaultNonDirtyJob.setPriority(Job.SHORT);
 		defaultNonDirtyJob.schedule();
@@ -138,13 +123,12 @@ public class VParameters extends AVParameters {
 						if (p == null || (!isSystem && p.isSystemDefined()) || (isSystem && !p.isSystemDefined()))
 							continue;
 						if (p.getName().equals(pname)) {
-							if (p.getDefaultValueExpression() != null) {
-								params.put(pname, getInter(mDataset).interpretExpression(p.getDefaultValueExpression().getText()));
-							} else
-								params.put(pname, null);
+							if (p.getDefaultValueExpression() != null)
+								params.put(pname, ExpressionUtil.cachedExpressionEvaluation(p.getDefaultValueExpression(), jContext));
+							else
+								params.remove(pname);
 							keys.add(pname);
 						}
-
 					}
 					updateControlInput(keys);
 				} finally {
@@ -152,15 +136,6 @@ public class VParameters extends AVParameters {
 				}
 				return Status.OK_STATUS;
 			}
-
-			private ExpressionInterpreter eint;
-
-			private ExpressionInterpreter getInter(JRDesignDataset mDataset) {
-				if (eint == null)
-					eint = ExpressionUtil.getInterpreter(mDataset, jContext, jContext.getJasperDesign());
-				return eint;
-			}
-
 		};
 		defaultJob.setPriority(Job.SHORT);
 		defaultJob.schedule();

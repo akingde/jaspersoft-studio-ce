@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.model.style;
 
@@ -66,10 +62,10 @@ public class StyleTemplateFactory {
 
 	public static ANode createTemplate(ANode parent, JRDesignReportTemplate jrObject, int newIndex, IFile file) {
 		MStyleTemplate mStyleTemplate = new MStyleTemplate(parent, (JRDesignReportTemplate) jrObject, newIndex);
-		JasperReportsConfiguration jConf =  parent.getJasperConfiguration();
+		JasperReportsConfiguration jConf = parent.getJasperConfiguration();
 		IFile project = (IFile) jConf.get(FileUtils.KEY_FILE);
-		//Use the style manager to retrive the styles, so the result is cached
-		String str = ExternalStylesManager.evaluateStyleExpression( (JRDesignReportTemplate) jrObject, project,jConf); 
+		// Use the style manager to retrive the styles, so the result is cached
+		String str = ExternalStylesManager.evaluateStyleExpression((JRDesignReportTemplate) jrObject, project, jConf);
 		if (str != null) {
 			Set<String> set = new HashSet<String>();
 			if (file == null) {
@@ -84,7 +80,7 @@ public class StyleTemplateFactory {
 	}
 
 	public static final File getFile(String location, IFile file) {
-		//return SelectionHelper.getFileResolver(file).resoolveInTheWorkspace(location, file);
+		// return SelectionHelper.getFileResolver(file).resoolveInTheWorkspace(location, file);
 		return SelectionHelper.getFileResolver(file).resolveFile(location);
 	}
 
@@ -144,7 +140,7 @@ public class StyleTemplateFactory {
 				JRDesignReportTemplate s = (JRDesignReportTemplate) obj;
 				if (s.getSourceExpression() != null)
 					SelectionHelper.openEditor((FileEditorInput) editorInput,
-							ExpressionUtil.eval(s.getSourceExpression(), node.getJasperConfiguration()));
+							ExpressionUtil.cachedExpressionEvaluationString(s.getSourceExpression(), node.getJasperConfiguration()));
 			}
 			return;
 		}
@@ -173,16 +169,17 @@ public class StyleTemplateFactory {
 		JasperDesign jd = jConf.getJasperDesign();
 		String[] items = cstyles.get(jd);
 		if (items == null) {
-			//If i have not a JD i return an empty array to avoid exception
-			if (jd == null) return new String[]{};
+			// If i have not a JD i return an empty array to avoid exception
+			if (jd == null)
+				return new String[] {};
 			JRStyle[] styles = jd.getStyles();
 			List<JRStyle> slist = getStyles(jConf, jd, (IFile) jConf.get(FileUtils.KEY_FILE));
 			List<String> itemsList = new ArrayList<String>();
 			itemsList.add("");
-			for(JRStyle style : styles){
+			for (JRStyle style : styles) {
 				itemsList.add(style.getName());
 			}
-			for(JRStyle style : slist){
+			for (JRStyle style : slist) {
 				itemsList.add(style.getName());
 			}
 			items = itemsList.toArray(new String[itemsList.size()]);
@@ -190,19 +187,21 @@ public class StyleTemplateFactory {
 		}
 		return items;
 	}
-	
+
 	public static String[] getAllStyles(JasperReportsConfiguration jConf, JRBaseStyle jrStyle) {
 		JasperDesign jd = jConf.getJasperDesign();
-		//If i have not a JD i return an empty array to avoid exception
-		if (jd == null) return new String[]{};
+		// If i have not a JD i return an empty array to avoid exception
+		if (jd == null)
+			return new String[] {};
 		JRStyle[] styles = jd.getStyles();
 		List<JRStyle> slist = getStyles(jConf, jd, (IFile) jConf.get(FileUtils.KEY_FILE));
 		String actualStyleName = jrStyle.getName();
 		List<String> availableStyles = new ArrayList<String>();
 		availableStyles.add("");
 		for (JRStyle style : styles)
-			if (!style.getName().equals(actualStyleName)) availableStyles.add(style.getName());
-		for(JRStyle style : slist)
+			if (!style.getName().equals(actualStyleName))
+				availableStyles.add(style.getName());
+		for (JRStyle style : slist)
 			availableStyles.add(style.getName());
 		return availableStyles.toArray(new String[availableStyles.size()]);
 	}
@@ -234,7 +233,7 @@ public class StyleTemplateFactory {
 			}
 		}
 	}
-	
+
 	public static void getStylesReference(String absoulteLocation, List<JRStyle> list, Set<File> files) {
 		if (absoulteLocation == null)
 			return;
@@ -259,7 +258,7 @@ public class StyleTemplateFactory {
 	protected static IFile resolveTemplates(IFile refFile, List<Object> plist, JasperReportsConfiguration jConfig,
 			JRDesignReportTemplate drt) {
 		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-		String str = ExpressionUtil.eval(drt.getSourceExpression(), jConfig);
+		String str = ExpressionUtil.cachedExpressionEvaluationString(drt.getSourceExpression(), jConfig);
 		if (str != null) {
 			if (refFile == null)
 				refFile = ((IFileEditorInput) SelectionHelper.getActiveJRXMLEditor().getEditorInput()).getFile();
@@ -267,7 +266,8 @@ public class StyleTemplateFactory {
 			for (int i = plist.size() - 1; i >= 0; i--) {
 				Object obj = plist.get(i);
 				if (obj instanceof JRDesignReportTemplate) {
-					str = ExpressionUtil.eval(((JRDesignReportTemplate) obj).getSourceExpression(), jConfig);
+					str = ExpressionUtil.cachedExpressionEvaluationString(((JRDesignReportTemplate) obj).getSourceExpression(),
+							jConfig);
 				} else if (obj instanceof JRTemplateReference) {
 					str = ((JRTemplateReference) obj).getLocation();
 				}

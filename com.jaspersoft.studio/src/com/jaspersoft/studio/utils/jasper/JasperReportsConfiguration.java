@@ -66,6 +66,7 @@ import com.jaspersoft.studio.preferences.fonts.FontsPreferencePage;
 import com.jaspersoft.studio.preferences.fonts.utils.FontUtils;
 import com.jaspersoft.studio.prm.ParameterSet;
 import com.jaspersoft.studio.prm.ParameterSetProvider;
+import com.jaspersoft.studio.utils.ExpressionUtil;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ModelUtils;
 
@@ -286,6 +287,7 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 	}
 
 	public void dispose() {
+		ExpressionUtil.removeAllReportInterpreters(this);
 		JaspersoftStudioPlugin.getInstance().removePreferenceListener(preferenceListener);
 		if (javaclassloader != null)
 			javaclassloader.removeClasspathListener(classpathlistener);

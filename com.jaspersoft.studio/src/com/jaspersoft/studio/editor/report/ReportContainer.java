@@ -499,7 +499,7 @@ public class ReportContainer extends MultiPageToolbarEditorPart implements ITabb
 					JRDesignImage s = (JRDesignImage) obj;
 					if (s.getExpression() != null)
 						SelectionHelper.openEditor((FileEditorInput) getEditorInput(),
-								ExpressionUtil.eval(s.getExpression(), jrContext));
+								ExpressionUtil.cachedExpressionEvaluationString(s.getExpression(), jrContext));
 				}
 				return;
 			}

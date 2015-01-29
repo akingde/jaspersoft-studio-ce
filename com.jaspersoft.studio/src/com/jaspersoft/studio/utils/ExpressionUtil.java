@@ -18,6 +18,7 @@ import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRField;
 import net.sf.jasperreports.engine.JRParameter;
+import net.sf.jasperreports.engine.JRScriptlet;
 import net.sf.jasperreports.engine.JRSortField;
 import net.sf.jasperreports.engine.JRVariable;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
@@ -56,6 +57,10 @@ public class ExpressionUtil {
 		for (JRField field : parentDataset.getFields()) {
 			if (field instanceof JRChangeEventsSupport)
 				addEventIfnecessary((JRChangeEventsSupport) field, parentDataset);
+		}
+		for (JRScriptlet scriptlet : parentDataset.getScriptlets()) {
+			if (scriptlet instanceof JRChangeEventsSupport)
+				addEventIfnecessary((JRChangeEventsSupport) scriptlet, parentDataset);
 		}
 	}
 

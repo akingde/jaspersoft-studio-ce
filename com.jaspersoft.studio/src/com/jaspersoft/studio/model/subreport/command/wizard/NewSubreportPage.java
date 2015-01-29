@@ -293,7 +293,7 @@ public class NewSubreportPage extends JSSWizardSelectionPage implements IExpress
 		JRDesignExpression exp = subreportExpressionEditor.getExpression();
 		selectedSubreportExpression = exp;
 
-		String fpath = ExpressionUtil.eval(exp, ((JSSWizard) getWizard()).getConfig());
+		String fpath = ExpressionUtil.cachedExpressionEvaluationString(exp, ((JSSWizard) getWizard()).getConfig());
 
 		IFile contextfile = (IFile) ((JSSWizard) getWizard()).getConfig().get(FileUtils.KEY_FILE);
 		try {

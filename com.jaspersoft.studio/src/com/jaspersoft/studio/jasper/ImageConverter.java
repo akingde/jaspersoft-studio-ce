@@ -184,7 +184,7 @@ public final class ImageConverter extends ElementConverter {
 			JRPrintImage printImage, KeyValue<JasperReportsContext, String> key) {
 		// long ctime = System.currentTimeMillis();
 		Renderable r = null;
-		String location = ExpressionUtil.eval(imageElement.getExpression(),
+		String location = ExpressionUtil.cachedExpressionEvaluationString(imageElement.getExpression(),
 				(JasperReportsConfiguration) jasperReportsContext);
 		// JRExpressionUtil.getSimpleExpressionText(imageElement.getExpression());
 		// long etime = System.currentTimeMillis();

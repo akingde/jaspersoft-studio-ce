@@ -1,19 +1,16 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.utils.expr;
 
 import java.util.HashSet;
 import java.util.Locale;
+import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
 
@@ -109,8 +106,8 @@ public abstract class AInterpreter {
 			if (!literals.contains(pnameLiteral))
 				recursiveInterpreter(recursion, pr);
 		}
-		
-		//Try to evaluate the variable
+
+		// Try to evaluate the variable
 		while (expression.indexOf("$V{") >= 0) {
 			String vname = Misc.extract(expression, "$V{", "}");
 			JRVariable vr = null;
@@ -123,13 +120,13 @@ public abstract class AInterpreter {
 			if (!literals.contains(pnameLiteral))
 				recursiveInterpreter(recursion, vr);
 		}
-		
-		//Remove the field since it can't be evaluated and change it with null
+
+		// Remove the field since it can't be evaluated and change it with null
 		while (expression.indexOf("$F{") >= 0) {
 			String fname = Misc.extract(expression, "$F{", "}");
 			expression = Misc.strReplace("(null)", "$F{" + fname + "}", expression);
 		}
-		
+
 		while (expression.indexOf("$R{") >= 0) {
 			String pname = Misc.extract(expression, "$R{", "}");
 			String baseName = getBundleName();
@@ -148,23 +145,28 @@ public abstract class AInterpreter {
 		String pliteral = getLiteral(prm.getName());
 		if (literals.contains(pliteral))
 			return get(pliteral);
-		if (prm.getName().equals("JASPER_REPORTS_CONTEXT"))
+		Map<String, Object> pmap = jConfig.getJRParameters();
+		if (pmap.containsKey(prm.getName()))
+			return setValue(pmap.get(prm.getName()), pliteral);
+		if (prm.getName().equals(JRParameter.JASPER_REPORTS_CONTEXT))
 			return setValue(jConfig, pliteral);
 		JRExpression exp = prm.getDefaultValueExpression();
 		if (recursion > 100 || exp == null || Misc.isNullOrEmpty(exp.getText()))
 			return getNull(pliteral, prm);
 		return setValue(eval(prepareExpression(exp.getText(), recursion)), pliteral);
 	}
-	
+
 	protected Object recursiveInterpreter(int recursion, JRVariable vrb) throws Exception {
 		++recursion;
 		String pliteral = getVariableLiteral(vrb.getName());
 		if (literals.contains(pliteral))
 			return get(pliteral);
 		JRExpression exp = vrb.getInitialValueExpression();
-		if (recursion > 100 || exp == null || Misc.isNullOrEmpty(exp.getText())){
-			if (vrb.getValueClass().equals(String.class)) return setValue("", pliteral);
-			else return setValue(null, pliteral);
+		if (recursion > 100 || exp == null || Misc.isNullOrEmpty(exp.getText())) {
+			if (vrb.getValueClass().equals(String.class))
+				return setValue("", pliteral);
+			else
+				return setValue(null, pliteral);
 		}
 		return setValue(eval(prepareExpression(exp.getText(), recursion)), pliteral);
 	}
@@ -184,7 +186,7 @@ public abstract class AInterpreter {
 	private String getLiteral(String pname) {
 		return "param_" + JRStringUtil.escapeJavaStringLiteral(pname).replace(".", "_");
 	}
-	
+
 	private String getVariableLiteral(String vname) {
 		return "var_" + JRStringUtil.escapeJavaStringLiteral(vname).replace(".", "_");
 	}

@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.jasper;
 
@@ -34,6 +30,7 @@ import net.sf.jasperreports.engine.base.JRBasePrintImage;
 import net.sf.jasperreports.engine.component.ComponentDesignConverter;
 import net.sf.jasperreports.engine.convert.ElementIconConverter;
 import net.sf.jasperreports.engine.convert.ReportConverter;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.HorizontalAlignEnum;
 import net.sf.jasperreports.engine.type.OnErrorTypeEnum;
@@ -197,8 +194,8 @@ public class MapDesignConverter extends ElementIconConverter implements Componen
 					String language = evaluate(map.getLanguageExpression(), jrd, jrContext, "");
 					String markers = "";
 
-					String imageLocation = "http://maps.google.com/maps/api/staticmap?center=" + (latitude%90) + "," + (longitude%180)
-							+ "&size=" + element.getWidth() + "x" + element.getHeight() + "&zoom=" + zoom
+					String imageLocation = "http://maps.google.com/maps/api/staticmap?center=" + (latitude % 90) + ","
+							+ (longitude % 180) + "&size=" + element.getWidth() + "x" + element.getHeight() + "&zoom=" + zoom
 							+ (mapType == null ? "" : "&maptype=" + mapType) + (mapFormat == null ? "" : "&format=" + mapFormat)
 							+ (mapScale == null ? "" : "&scale=" + mapScale) + markers + "&sensor=false"
 							+ (language == null ? "" : "&language=" + language);
@@ -234,7 +231,7 @@ public class MapDesignConverter extends ElementIconConverter implements Componen
 
 	private <T> T evaluate(JRExpression expr, JRDataset jrd, JasperReportsConfiguration jConfig, T def) {
 		if (expr != null) {
-			Object l = ExpressionUtil.eval(expr, jrd, jConfig);
+			Object l = ExpressionUtil.cachedExpressionEvaluation(expr, jConfig, (JRDesignDataset) jrd);
 			if (l != null)
 				try {
 					return (T) l;
