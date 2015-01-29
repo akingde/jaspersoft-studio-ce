@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.editor.report;
 
@@ -78,47 +74,45 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  * 
  * @author Chicu Veaceslav
  */
-public class ReportContainer extends MultiPageToolbarEditorPart implements ITabbedPropertySheetPageContributor, IJROBjectEditor, CachedSelectionProvider {
+public class ReportContainer extends MultiPageToolbarEditorPart implements ITabbedPropertySheetPageContributor,
+		IJROBjectEditor, CachedSelectionProvider {
 
 	/**
 	 * Key used to save, retrieve the selection cache from the jasper reprots configuration
 	 */
 	public static final String SELECTION_CACHE_KEY = "SELECTION_CACHE_PROVIDER";
-	
+
 	/**
 	 * Property used by an element to ask to the container to check if for that element there is an editor opened and in
 	 * that case close it. The property change event must have the old value set with the JRelement that it is requesting
 	 * the editor closing
 	 */
 	public static final String CLOSE_EDITOR_PROPERTY = "closeElementEditor";
-	
+
 	/**
-	 * Flag used to know if in the current editor the background image should 
-	 * be shown if available
+	 * Flag used to know if in the current editor the background image should be shown if available
 	 */
 	private boolean showBackgroundImage = true;
-	
+
 	/**
-	 * Flag used to know if in the current editor the background image is 
-	 * in edit mode, if available
+	 * Flag used to know if in the current editor the background image is in edit mode, if available
 	 */
 	private boolean editBackgroundImage = false;
-	
-	/** 
-	 * The model. 
+
+	/**
+	 * The model.
 	 */
 	private INode model = null;
 
-	/** 
-	 * The editors. 
+	/**
+	 * The editors.
 	 */
 	private List<AbstractVisualEditor> editors = new ArrayList<AbstractVisualEditor>();
 
-	
 	/**
-	 * The selection cache used by all the editors in this container (report editor and eventually its subeditors)
-	 * The selection cache is passed to the subeditors trough the jasper configuration. The cached is stored
-	 * when this container is created and can be retrieved with the SELECTION_CACHE_KEY
+	 * The selection cache used by all the editors in this container (report editor and eventually its subeditors) The
+	 * selection cache is passed to the subeditors trough the jasper configuration. The cached is stored when this
+	 * container is created and can be retrieved with the SELECTION_CACHE_KEY
 	 */
 	private CommonSelectionCacheProvider selectionCache;
 
@@ -143,7 +137,7 @@ public class ReportContainer extends MultiPageToolbarEditorPart implements ITabb
 		this.parent = parent;
 		this.jrContext = jrContext;
 		this.selectionCache = new CommonSelectionCacheProvider();
-		//Store the selection cache
+		// Store the selection cache
 		jrContext.put(SELECTION_CACHE_KEY, selectionCache);
 	}
 
@@ -260,26 +254,28 @@ public class ReportContainer extends MultiPageToolbarEditorPart implements ITabb
 				MPage rep = new MPage(root, jd);
 				rep.setJasperConfiguration(jrContext);
 				ANode node = m.createNode(rep, obj, -1);
-				//Initialize the subeditors
-				node.createSubeditor();
-				
-				ave = m.getEditor(obj, jrContext);
-				if (ave != null) {
-					ave.getEditDomain().setCommandStack(reportEditor.getEditDomain().getCommandStack());
-					//Necessary to create element with the drag and drop inside a subeditor
-					ave.getEditDomain().setPaletteViewer(reportEditor.getEditDomain().getPaletteViewer());
-					
-					final int index = addPage(ave, getEditorInput());
+				if (node != null) {
+					// Initialize the subeditors
+					node.createSubeditor();
 
-					editors.add(ave);
-					ccMap.put(node.getValue(), ave);
-					ave.setModel(root);
-					setPageText(index, ave.getPartName());
-					setPageImage(index, ave.getPartImage());
+					ave = m.getEditor(obj, jrContext);
+					if (ave != null) {
+						ave.getEditDomain().setCommandStack(reportEditor.getEditDomain().getCommandStack());
+						// Necessary to create element with the drag and drop inside a subeditor
+						ave.getEditDomain().setPaletteViewer(reportEditor.getEditDomain().getPaletteViewer());
 
-					rep.getPropertyChangeSupport().addPropertyChangeListener(modelListener);
+						final int index = addPage(ave, getEditorInput());
 
-					ave.addPropertyListener(titleListener);
+						editors.add(ave);
+						ccMap.put(node.getValue(), ave);
+						ave.setModel(root);
+						setPageText(index, ave.getPartName());
+						setPageImage(index, ave.getPartImage());
+
+						rep.getPropertyChangeSupport().addPropertyChangeListener(modelListener);
+
+						ave.addPropertyListener(titleListener);
+					}
 				}
 			}
 		} catch (PartInitException e) {
@@ -401,8 +397,8 @@ public class ReportContainer extends MultiPageToolbarEditorPart implements ITabb
 
 		return propertySheetPage;
 	}
-	
-	public CommonSelectionCacheProvider getSelectionCache(){
+
+	public CommonSelectionCacheProvider getSelectionCache() {
 		return selectionCache;
 	}
 
@@ -414,45 +410,47 @@ public class ReportContainer extends MultiPageToolbarEditorPart implements ITabb
 	public String getContributorId() {
 		return "com.jaspersoft.studio.editor.report.ReportContainer"; //$NON-NLS-1$
 	}
-	
+
 	/**
-	 * Create a fake command to force the refresh of the editor and outline panels, this override
-	 * the disable refresh flag, so calling this the editor area is always updated
+	 * Create a fake command to force the refresh of the editor and outline panels, this override the disable refresh
+	 * flag, so calling this the editor area is always updated
 	 */
-	protected void refreshVisuals(INode report){
-			 if (report != null){
-				 PropertyChangeEvent event = new PropertyChangeEvent(report.getJasperDesign(), JSSCompoundCommand.REFRESH_UI_EVENT, null, null);
-				 report.getPropertyChangeSupport().firePropertyChange(event);
-			 }
+	protected void refreshVisuals(INode report) {
+		if (report != null) {
+			PropertyChangeEvent event = new PropertyChangeEvent(report.getJasperDesign(),
+					JSSCompoundCommand.REFRESH_UI_EVENT, null, null);
+			report.getPropertyChangeSupport().firePropertyChange(event);
+		}
 	}
-	
+
 	/**
-	 * Get the object that is modified by a subeditor. It calculated searching the last node 
-	 * of the mpage of the subeditor (since the first are the styles, the dataset...)
+	 * Get the object that is modified by a subeditor. It calculated searching the last node of the mpage of the subeditor
+	 * (since the first are the styles, the dataset...)
 	 * 
-	 * @param searchNode the starting node
+	 * @param searchNode
+	 *          the starting node
 	 * @return the node modified by the subeditor
 	 */
-	/*private INode getInnerModel(INode searchNode){
-		INode actualNode = searchNode;
-		if (actualNode instanceof MRoot && actualNode.getChildren().size() >0){
-			return getInnerModel(actualNode.getChildren().get(0));
-		} else if (actualNode instanceof MPage && actualNode.getChildren().size()>0){
-			return actualNode.getChildren().get(actualNode.getChildren().size()-1);
-		}
-		return actualNode;
-	}*/
+	/*
+	 * private INode getInnerModel(INode searchNode){ INode actualNode = searchNode; if (actualNode instanceof MRoot &&
+	 * actualNode.getChildren().size() >0){ return getInnerModel(actualNode.getChildren().get(0)); } else if (actualNode
+	 * instanceof MPage && actualNode.getChildren().size()>0){ return
+	 * actualNode.getChildren().get(actualNode.getChildren().size()-1); } return actualNode; }
+	 */
 
 	@Override
 	protected void postPageChange(int newPageIndex, int oldPageIndex) {
 		AbstractVisualEditor activeEditor = editors.get(newPageIndex);
-		//FIXME: This forced refresh should be not necessary since now every element has it's own full model and the event are handled natively
-		//request the rapaint of the element on the main editor node when switching between the subeditors, supposing they were modified in the subeditor
-		//if (oldPageIndex > 0){
-			//AbstractVisualEditor oldEditor = editors.get(oldPageIndex);
-			//INode subModel = getInnerModel(oldEditor.getModel());
-			//((JRChangeEventsSupport)subModel.getValue()).getEventSupport().firePropertyChange(MGraphicElement.FORCE_GRAPHICAL_REFRESH, null, null);
-		//}
+		// FIXME: This forced refresh should be not necessary since now every element has it's own full model and the event
+		// are handled natively
+		// request the rapaint of the element on the main editor node when switching between the subeditors, supposing they
+		// were modified in the subeditor
+		// if (oldPageIndex > 0){
+		// AbstractVisualEditor oldEditor = editors.get(oldPageIndex);
+		// INode subModel = getInnerModel(oldEditor.getModel());
+		// ((JRChangeEventsSupport)subModel.getValue()).getEventSupport().firePropertyChange(MGraphicElement.FORCE_GRAPHICAL_REFRESH,
+		// null, null);
+		// }
 		IEditorActionBarContributor contributor = parent.getEditorSite().getActionBarContributor();
 		if (contributor != null && contributor instanceof MultiPageEditorActionBarContributor) {
 
@@ -555,44 +553,45 @@ public class ReportContainer extends MultiPageToolbarEditorPart implements ITabb
 			}
 		}
 	}
-	
+
 	/**
-	 * Check if in the current editor the background image should 
-	 * be editable
+	 * Check if in the current editor the background image should be editable
 	 * 
 	 * @return true if the background image is editable, false otherwise
 	 */
-	public boolean isBackgroundImageEditable(){
+	public boolean isBackgroundImageEditable() {
 		return editBackgroundImage;
 	}
-	
+
 	/**
-	 * Set in the current editor the edit mode for the background image. However
-	 * it will be shown only if there is a background image defined
+	 * Set in the current editor the edit mode for the background image. However it will be shown only if there is a
+	 * background image defined
 	 * 
-	 * @param value true if the background should be editable, false otherwise
+	 * @param value
+	 *          true if the background should be editable, false otherwise
 	 */
-	public void setBackgroundImageEditable(boolean value){
+	public void setBackgroundImageEditable(boolean value) {
 		editBackgroundImage = value;
 	}
 
 	/**
-	 * Check if in the current editor the background image is visible. However
-	 * it will be shown only if there is a background image defined
+	 * Check if in the current editor the background image is visible. However it will be shown only if there is a
+	 * background image defined
 	 * 
 	 * @return true if the background image is visible, false otherwise
 	 */
-	public boolean isBackgroundImageVisible(){
+	public boolean isBackgroundImageVisible() {
 		return showBackgroundImage;
 	}
-	
+
 	/**
-	 * Set in the current editor the visibility for the background image. However
-	 * it will be shown only if there is a background image defined
+	 * Set in the current editor the visibility for the background image. However it will be shown only if there is a
+	 * background image defined
 	 * 
-	 * @param value true if the background should be visible, false otherwise
+	 * @param value
+	 *          true if the background should be visible, false otherwise
 	 */
-	public void setBackgroundImageVisible(boolean value){
+	public void setBackgroundImageVisible(boolean value) {
 		this.showBackgroundImage = value;
 	}
 }
