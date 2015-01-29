@@ -64,10 +64,10 @@ public class VParameters extends AVParameters {
 		if (defaultNonDirtyJob != null)
 			defaultNonDirtyJob.cancel();
 		if (showEmptyParametersWarning) {
-			setupDefaultValues();
+			// setupDefaultValues();
 			setDirty(false);
 		} else
-			setupDefaultValuesNonDirty();
+			;// setupDefaultValuesNonDirty();
 		showEmptyParametersWarning = false;
 	}
 
@@ -153,6 +153,12 @@ public class VParameters extends AVParameters {
 				}
 			}
 		});
+	}
+
+	public void update() {
+		for (IDataInput di : incontrols.values()) {
+			di.updateInput();
+		}
 	}
 
 	protected boolean isParameterToShow(JRParameter p) {

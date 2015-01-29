@@ -34,6 +34,7 @@ import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.core.runtime.jobs.Job;
@@ -70,6 +71,7 @@ import com.jaspersoft.studio.editor.preview.view.report.html.ABrowserViewer;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.execution.VirtualizerHelper;
 import com.jaspersoft.studio.utils.Console;
+import com.jaspersoft.studio.utils.ExpressionUtil;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class ReportControler {
@@ -128,8 +130,9 @@ public class ReportControler {
 		if (jrContext.getJasperDesign() != null)
 			prompts = jrContext.getJasperDesign().getParametersList();
 		setParameters();
-		if (viewmap != null)
-			fillForms();
+		// ExpressionUtil.initBuiltInParameters(jrContext);
+		// if (viewmap != null)
+		// fillForms();
 	}
 
 	public void resetParametersToDefault() {
@@ -199,8 +202,14 @@ public class ReportControler {
 	private VReportParameters prmRepInput;
 
 	private void fillForms() {
-		prmInput = (VParameters) viewmap.get(FORM_PARAMETERS);
-		prmInput.createInputControls(prompts, jasperParameters);
+		UIUtils.getDisplay().syncExec(new Runnable() {
+
+			@Override
+			public void run() {
+				prmInput = (VParameters) viewmap.get(FORM_PARAMETERS);
+				prmInput.createInputControls(prompts, jasperParameters);
+			}
+		});
 
 		UIUtils.getDisplay().asyncExec(new Runnable() {
 
@@ -234,6 +243,7 @@ public class ReportControler {
 			pcontainer.setJasperPrint(null, null);
 		// jasperParameters.clear();
 		fillError = null;
+		jasperReport = null;
 		stats = new Statistics();
 		stats.startCount(ST_REPORTEXECUTIONTIME);
 		c.addMessage(Messages.ReportControler_stats_start);
@@ -289,6 +299,7 @@ public class ReportControler {
 		});
 	}
 
+	private JasperReport jasperReport;
 	private RecordCountScriptletFactory scfactory;
 
 	private void runJob(final PreviewContainer pcontainer) {
@@ -307,13 +318,17 @@ public class ReportControler {
 
 					final IFile file = ((IFileEditorInput) pcontainer.getEditorInput()).getFile();
 
-					monitor.beginTask(Messages.PreviewEditor_starting, IProgressMonitor.UNKNOWN);
+					monitor.beginTask("Form initialisation", IProgressMonitor.UNKNOWN);
 
-					jd = jrContext.getJasperDesign();// ModelUtils.copyJasperDesign(jrContext.getJasperDesign());
+					jd = jrContext.getJasperDesign();
 
-					JasperReport jasperReport = compileJasperDesign(file, jd, monitor);
-
+					if (jasperReport == null)
+						jasperReport = compileJasperDesign(file, jd, monitor);
 					if (jasperReport != null) {
+						ExpressionUtil.initBuiltInParameters(jrContext, jasperReport);
+						if (viewmap != null)
+							fillForms();
+						c.startMessage(Messages.PreviewEditor_starting);
 						if (!prmInput.checkFieldsFilled())
 							return Status.CANCEL_STATUS;
 
@@ -551,10 +566,16 @@ public class ReportControler {
 	}
 
 	protected void setupRecordCounters() {
-		List<ScriptletFactory> extensions = new ArrayList<ScriptletFactory>();
-		scfactory = new RecordCountScriptletFactory();
-		extensions.add(scfactory);
-		jrContext.setExtensions(ScriptletFactory.class, extensions);
+		List<ScriptletFactory> sexts = jrContext.getExtensions(ScriptletFactory.class);
+		if (sexts == null) {
+			sexts = new ArrayList<ScriptletFactory>();
+			jrContext.setExtensions(ScriptletFactory.class, sexts);
+		}
+		if (scfactory == null)
+			scfactory = new RecordCountScriptletFactory();
+		int ind = sexts.indexOf(scfactory);
+		if (ind < 0)
+			sexts.add(scfactory);
 	}
 
 	private void finishUpdateViewer(final PreviewContainer pcontainer, final JasperPrint jPrint) {

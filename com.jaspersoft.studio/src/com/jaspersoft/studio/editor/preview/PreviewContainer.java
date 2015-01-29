@@ -17,6 +17,7 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.viewer.action.AReportAction;
 import net.sf.jasperreports.eclipse.viewer.action.ZoomActualSizeAction;
 import net.sf.jasperreports.eclipse.viewer.action.ZoomInAction;
@@ -418,7 +419,7 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 	}
 
 	public void setJasperDesign(final JasperReportsConfiguration jConfig) {
-		Display.getDefault().asyncExec(new Runnable() {
+		UIUtils.getDisplay().asyncExec(new Runnable() {
 
 			@Override
 			public void run() {
