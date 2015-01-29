@@ -42,19 +42,20 @@ public class ShowBackgroundHandler extends AbstractHandler implements IElementUp
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		IEditorPart currentEditor = SelectionHelper.getActiveJRXMLEditor();
-		if (currentEditor instanceof JrxmlEditor){
-			JrxmlEditor editor = (JrxmlEditor) currentEditor;
-			ReportContainer currentContainer =  editor.getReportContainer();
-			currentContainer.setBackgroundImageVisible(!currentContainer.isBackgroundImageVisible());
-			if (!currentContainer.isBackgroundImageVisible())	{
-				currentContainer.setBackgroundImageEditable(false);
-				SelectionHelper.deselectBackground();
-			}
-			Object value = editor.getReportContainer().getModel().getValue();
-			if (value instanceof JasperDesign){
-				JasperDesign jd = (JasperDesign)value;
-				jd.getEventSupport().firePropertyChange(JRPropertiesMap.PROPERTY_VALUE, !currentContainer.isBackgroundImageVisible(), currentContainer.isBackgroundImageVisible());
+		BackgroundImageFigure figure = getBackgroundFigure();
+		if (figure != null){
+			figure.setBackgroundImageVisible(!figure.isBackgroundImageVisible());
+			ReportContainer currentContainer = getReportContainer();
+			if (currentContainer != null){
+				if (!figure.isBackgroundImageVisible())	{
+					currentContainer.setBackgroundImageEditable(false);
+					SelectionHelper.deselectBackground();
+				}
+				Object value = currentContainer.getModel().getValue();
+				if (value instanceof JasperDesign){
+					JasperDesign jd = (JasperDesign)value;
+					jd.getEventSupport().firePropertyChange(JRPropertiesMap.PROPERTY_VALUE, !figure.isBackgroundImageVisible(), figure.isBackgroundImageVisible());
+				}
 			}
 		}
 		return null;
@@ -67,12 +68,42 @@ public class ShowBackgroundHandler extends AbstractHandler implements IElementUp
 	@SuppressWarnings("rawtypes")
 	@Override
 	public void updateElement(UIElement element, Map parameters) {
+		BackgroundImageFigure figure = getBackgroundFigure();
+		if (figure != null){
+			element.setChecked(figure.isBackgroundImageVisible());
+		}
+	}
+	
+	/**
+	 * Return the background figure of the current editor. If the current 
+	 * editor dosen't contains a valid figure or there isn't a valid
+	 * editor opened it return null
+	 * 
+	 * @return the background figure or null if it can't be found
+	 */
+	protected BackgroundImageFigure getBackgroundFigure(){
+		EditPart backgroundPart = SelectionHelper.getBackgroundEditPart();
+		if (backgroundPart != null){
+			return (BackgroundImageFigure)((AbstractGraphicalEditPart)backgroundPart).getFigure();
+		}
+		return null;
+	}
+	
+	/**
+	 * Return the report container of the current editor. If the current 
+	 * editor dosen't contains a report container or there isn't a valid
+	 * editor opened it return null
+	 * 
+	 * @return the current report container or null if it can't be found
+	 */
+	protected ReportContainer getReportContainer(){
 		IEditorPart currentEditor = SelectionHelper.getActiveJRXMLEditor();
 		if (currentEditor instanceof JrxmlEditor){
 			JrxmlEditor editor = (JrxmlEditor) currentEditor;
 			ReportContainer currentContainer =  editor.getReportContainer();
-			element.setChecked(currentContainer.isBackgroundImageVisible());
+			return currentContainer;
 		}
+		return null;
 	}
 	
 	/**

@@ -88,12 +88,7 @@ public class ReportContainer extends MultiPageToolbarEditorPart implements ITabb
 	 * the editor closing
 	 */
 	public static final String CLOSE_EDITOR_PROPERTY = "closeElementEditor";
-
-	/**
-	 * Flag used to know if in the current editor the background image should be shown if available
-	 */
-	private boolean showBackgroundImage = true;
-
+	
 	/**
 	 * Flag used to know if in the current editor the background image is in edit mode, if available
 	 */
@@ -572,26 +567,5 @@ public class ReportContainer extends MultiPageToolbarEditorPart implements ITabb
 	 */
 	public void setBackgroundImageEditable(boolean value) {
 		editBackgroundImage = value;
-	}
-
-	/**
-	 * Check if in the current editor the background image is visible. However it will be shown only if there is a
-	 * background image defined
-	 * 
-	 * @return true if the background image is visible, false otherwise
-	 */
-	public boolean isBackgroundImageVisible() {
-		return showBackgroundImage;
-	}
-
-	/**
-	 * Set in the current editor the visibility for the background image. However it will be shown only if there is a
-	 * background image defined
-	 * 
-	 * @param value
-	 *          true if the background should be visible, false otherwise
-	 */
-	public void setBackgroundImageVisible(boolean value) {
-		this.showBackgroundImage = value;
 	}
 }

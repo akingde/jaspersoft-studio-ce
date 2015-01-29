@@ -18,9 +18,12 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.gef.EditPart;
+import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.ui.IEditorPart;
 
+import com.jaspersoft.studio.background.BackgroundImageFigure;
 import com.jaspersoft.studio.background.MBackgrounImage;
 import com.jaspersoft.studio.editor.JrxmlEditor;
 import com.jaspersoft.studio.messages.Messages;
@@ -56,13 +59,27 @@ public class SelectBackgroundHandler extends AbstractHandler {
 				Object value = jrxmlEditor.getReportContainer().getModel().getValue();
 				if (value instanceof JasperDesign){
 					JasperDesign jd = (JasperDesign)value;
-					jrxmlEditor.getReportContainer().setBackgroundImageVisible(true);
+					setFigureVisible();
 					jrxmlEditor.getReportContainer().setBackgroundImageEditable(false);
 					jd.setProperty(MBackgrounImage.PROPERTY_PATH, path);
 				}
 			}
 		}
 		return null;
+	}
+	
+	/**
+	 * Get the background figure of the current editor and set it visible. If the current 
+	 * editor dosen't contains a valid figure or there isn't a valid
+	 * editor opened it dosen't do nothing
+	 * 
+	 */
+	protected void setFigureVisible(){
+		EditPart backgroundPart = SelectionHelper.getBackgroundEditPart();
+		if (backgroundPart != null){
+			BackgroundImageFigure figure = (BackgroundImageFigure)((AbstractGraphicalEditPart)backgroundPart).getFigure();
+			figure.setBackgroundImageVisible(true);
+		}
 	}
 	
 	/**

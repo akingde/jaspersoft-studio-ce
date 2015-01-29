@@ -27,13 +27,9 @@ import org.eclipse.draw2d.OrderedLayout;
 import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.draw2d.geometry.Point;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.wb.swt.ResourceManager;
 
-import com.jaspersoft.studio.editor.JrxmlEditor;
 import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
-import com.jaspersoft.studio.editor.report.ReportContainer;
-import com.jaspersoft.studio.utils.SelectionHelper;
 
 /**
  * Figure used to show the background image
@@ -42,6 +38,11 @@ import com.jaspersoft.studio.utils.SelectionHelper;
  *
  */
 public class BackgroundImageFigure extends RectangleFigure {
+
+		/**
+		 * Flag used to know if in the current editor the background image should be shown if available
+		 */
+		private boolean showBackgroundImage = true;
 
 		/**
 		 * The model from where the figure is created
@@ -164,7 +165,7 @@ public class BackgroundImageFigure extends RectangleFigure {
 		@Override
 		public boolean isVisible() {
 			loadImage();
-			return image != null && isVisibleFlagCheck();
+			return image != null && showBackgroundImage;
 		}
 		
 		/**
@@ -190,27 +191,23 @@ public class BackgroundImageFigure extends RectangleFigure {
 		}
 		
 		/**
-		 * Get the current report container and cache if for the next calls
+		 * Check if in the current editor the background image is visible. However it will be shown only if there is a
+		 * background image defined
 		 * 
-		 * @return a report container or null if it isn't available
+		 * @return true if the background image is visible, false otherwise
 		 */
-		private ReportContainer getCurrentContainer(){
-			IEditorPart editor = SelectionHelper.getActiveJRXMLEditor();
-			if (editor instanceof JrxmlEditor){
-				JrxmlEditor currentEditor = (JrxmlEditor) editor;
-				return currentEditor.getReportContainer();
-			}
-			return  null;
+		public boolean isBackgroundImageVisible() {
+			return showBackgroundImage;
 		}
-		
+
 		/**
-		 * Check if the editor has the show background option enabled
+		 * Set in the current editor the visibility for the background image. However it will be shown only if there is a
+		 * background image defined
 		 * 
-		 * @return true if the option is enabled, false otherwise
+		 * @param value
+		 *          true if the background should be visible, false otherwise
 		 */
-		protected boolean isVisibleFlagCheck(){
-			ReportContainer container = getCurrentContainer();
-			if (container != null) return container.isBackgroundImageVisible();
-			else return true;
+		public void setBackgroundImageVisible(boolean value) {
+			this.showBackgroundImage = value;
 		}
 }
