@@ -61,7 +61,7 @@ public class BackgroundImageFigure extends RectangleFigure {
 		/**
 		 * Report container used to check if the image is in edit mode
 		 */
-		private ReportContainer currentContainer = null;
+		private JrxmlEditor currentEditor = null;
 		
 		/**
 		 * Create the image and if it is available load the image resource
@@ -200,14 +200,13 @@ public class BackgroundImageFigure extends RectangleFigure {
 		 * @return a report container or null if it isn't available
 		 */
 		private ReportContainer getCurrentContainer(){
-			if (currentContainer == null){
-				IEditorPart currentEditor = SelectionHelper.getActiveJRXMLEditor();
-				if (currentEditor instanceof JrxmlEditor){
-					JrxmlEditor editor = (JrxmlEditor) currentEditor;
-					currentContainer =  editor.getReportContainer();
+			if (currentEditor == null){
+				IEditorPart editor = SelectionHelper.getActiveJRXMLEditor();
+				if (editor instanceof JrxmlEditor){
+					currentEditor = (JrxmlEditor) editor;
 				}
 			}
-			return currentContainer;
+			return currentEditor != null ? currentEditor.getReportContainer() : null;
 		}
 		
 		/**
