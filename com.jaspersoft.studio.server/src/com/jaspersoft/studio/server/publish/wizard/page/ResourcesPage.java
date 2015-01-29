@@ -27,6 +27,7 @@ import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.CheckboxCellEditor;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
+import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
@@ -205,17 +206,37 @@ public class ResourcesPage extends JSSHelpWizardPage {
 
 		});
 
+		viewerColumn = new TableViewerColumn(tableViewer, SWT.NONE);
+		column = viewerColumn.getColumn();
+		column.setText("Type");
+		column.setWidth(100);
+		viewerColumn.setLabelProvider(new TLabelProvider() {
+
+			@Override
+			public String getText(Object element) {
+				if (element instanceof AFileResource) {
+					AFileResource mres = (AFileResource) element;
+					if (mres.getPublishOptions().getPublishMethod() == ResourcePublishMethod.RESOURCE)
+						return sres.getText();
+					if (mres.getPublishOptions().getPublishMethod() == ResourcePublishMethod.REFERENCE)
+						return sresource.getText();
+					if (mres.getPublishOptions().getPublishMethod() == ResourcePublishMethod.LOCAL)
+						return slocal.getText();
+				}
+				return "";
+			}
+
+		});
+
+		sresource = new ReferenceResourceAction(tableViewer);
+		sres = new ResourceToFolderAction(tableViewer);
+		slocal = new SelectLocalAction(tableViewer);
+
 		attachCellEditors(tableViewer, table);
 
 		MenuManager menuMgr = new MenuManager();
 		menuMgr.setRemoveAllWhenShown(true);
 		menuMgr.addMenuListener(new IMenuListener() {
-			private ReferenceResourceAction sresource = new ReferenceResourceAction(
-					tableViewer);
-			private ResourceToFolderAction sres = new ResourceToFolderAction(
-					tableViewer);
-			private SelectLocalAction slocal = new SelectLocalAction(
-					tableViewer);
 			private ResourceExpressionAction rexp = new ResourceExpressionAction(
 					tableViewer);
 
@@ -244,6 +265,10 @@ public class ResourcesPage extends JSSHelpWizardPage {
 		// fillData(false);
 	}
 
+	private ReferenceResourceAction sresource;
+	private ResourceToFolderAction sres;
+	private SelectLocalAction slocal;
+
 	private void attachCellEditors(final TableViewer viewer, Composite parent) {
 		viewer.setCellModifier(new ICellModifier() {
 			public boolean canModify(Object element, String property) {
@@ -253,6 +278,9 @@ public class ResourcesPage extends JSSHelpWizardPage {
 						&& ((MResource) element).getPublishOptions()
 								.getjExpression() != null)
 					return true;
+				if (property.equals("TYPE")) //$NON-NLS-1$
+					if (element instanceof AFileResource)
+						return true;
 				return false;
 			}
 
@@ -271,6 +299,18 @@ public class ResourcesPage extends JSSHelpWizardPage {
 					jd.setText(prop.getPublishOptions().getExpression());
 					return jd;
 				}
+				if ("TYPE".equals(property)) {
+					if (prop instanceof AFileResource) {
+						AFileResource mres = (AFileResource) element;
+						if (mres.getPublishOptions().getPublishMethod() == ResourcePublishMethod.RESOURCE)
+							return 0;
+						if (mres.getPublishOptions().getPublishMethod() == ResourcePublishMethod.REFERENCE)
+							return 1;
+						if (mres.getPublishOptions().getPublishMethod() == ResourcePublishMethod.LOCAL)
+							return 2;
+					}
+					return 2;
+				}
 				return ""; //$NON-NLS-1$
 			}
 
@@ -283,6 +323,25 @@ public class ResourcesPage extends JSSHelpWizardPage {
 					data.getPublishOptions().setExpression(
 							value == null ? null : ((JRDesignExpression) value)
 									.getText());
+				if ("TYPE".equals(property)) { //$NON-NLS-1$
+					if (value instanceof Integer) {
+						int intValue = ((Integer) value).intValue();
+						switch (intValue) {
+						case 0:
+							sres.calculateEnabled(data);
+							sres.run();
+							break;
+						case 1:
+							sresource.calculateEnabled(data);
+							sresource.run();
+							break;
+						case 2:
+							slocal.calculateEnabled(data);
+							slocal.run();
+							break;
+						}
+					}
+				}
 				tableViewer.update(element, new String[] { property });
 				tableViewer.refresh();
 			}
@@ -290,11 +349,15 @@ public class ResourcesPage extends JSSHelpWizardPage {
 
 		JRExpressionCellEditor expEditor = new JRExpressionCellEditor(parent,
 				new ExpressionContext(jConfig));
-		viewer.setCellEditors(new CellEditor[] { new TextCellEditor(parent),
-				new CheckboxCellEditor(parent), expEditor,
-				new TextCellEditor(parent, SWT.RIGHT) });
+		viewer.setCellEditors(new CellEditor[] {
+				new TextCellEditor(parent),
+				new CheckboxCellEditor(parent),
+				expEditor,
+				new TextCellEditor(parent, SWT.RIGHT),
+				new ComboBoxCellEditor(parent, new String[] { sres.getText(),
+						sresource.getText(), slocal.getText() }) });
 		viewer.setColumnProperties(new String[] {
-				"NAME", "VALUE", "EXPRESSION", "FILESIZE" }); //$NON-NLS-1$ //$NON-NLS-2$
+				"NAME", "VALUE", "EXPRESSION", "FILESIZE", "TYPE" }); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	public void fillData(boolean isNew) {

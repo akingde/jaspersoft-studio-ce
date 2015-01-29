@@ -347,13 +347,42 @@
            ClassFactory="com.jaspersoft.studio.server.publish.action.ServerSettingsEditorMenuContributor">
      </EditorSettingsMenu>
   </extension>
+  
   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="com.jaspersoft.studio.server.preferences.JRSPreferenceInitializer">
+      </initializer> 
+   </extension>
+   
+  <extension
+        id="com.jaspersoft.studio.preferences"
         point="org.eclipse.ui.preferencePages">
      <page
-           category="com.jaspersoft.studio.preferences.StudioPreferencePage"
+           category="com.jaspersoft.studio.server.preferences.JRSPreferencesPage"
            class="com.jaspersoft.studio.server.preferences.CASPreferencePage"
            id="com.jaspersoft.studio.server.preferences.CASPreferencePage.property"
            name="Single Sign On Servers">
+     </page>
+     <page
+           category="com.jaspersoft.studio.preferences.StudioPreferencePage"
+           class="com.jaspersoft.studio.server.preferences.JRSPreferencesPage"
+           id="com.jaspersoft.studio.server.preferences.JRSPreferencesPage"
+           name="Jaspersoft Server Settings">
+     </page>
+  </extension>
+  <extension
+        point="org.eclipse.ui.propertyPages">
+     <page
+           category="com.jaspersoft.studio.preferences.StudioPreferencePage.property"
+           class="com.jaspersoft.studio.server.preferences.JRSPreferencesPage"
+           id="com.jaspersoft.studio.server.preferences.JRSPreferencesPage.property"
+           name="Jaspersoft Server Settings">
+        <enabledWhen>
+           <reference
+                 definitionId="com.jaspersoft.studio.project">
+           </reference>
+        </enabledWhen>
      </page>
   </extension>
   <extension

@@ -577,7 +577,6 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 	 * 
 	 * @return a not null font extension
 	 */
-	@SuppressWarnings("unchecked")
 	private List<FontFamily> getExtensionFonts() {
 		if (lst == null) {
 			lst = new Vector<FontFamily>();
@@ -617,7 +616,6 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 	 * 
 	 * @return a not null components extension
 	 */
-	@SuppressWarnings("unchecked")
 	private List<ComponentsBundle> getExtensionComponents() {
 		if (bundles == null || refreshBundles) {
 			bundles = super.getExtensions(ComponentsBundle.class);
@@ -643,7 +641,6 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 	 * 
 	 * @return a not null functions extension
 	 */
-	@SuppressWarnings("unchecked")
 	private List<FunctionsBundle> getExtensionFunctions() {
 		if (functionsBundles == null || refreshFunctionsBundles) {
 			// We need to be sure that the resource bundles are fresh new

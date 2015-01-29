@@ -19,7 +19,6 @@ import java.util.Map;
 import net.sf.jasperreports.eclipse.MScopedPreferenceStore;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
-import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -37,6 +36,7 @@ import com.jaspersoft.studio.editor.AbstractJRXMLEditor;
 import com.jaspersoft.studio.editor.IEditorContributor;
 import com.jaspersoft.studio.server.Activator;
 import com.jaspersoft.studio.server.export.AExporter;
+import com.jaspersoft.studio.server.preferences.JRSPreferencesPage;
 import com.jaspersoft.studio.server.publish.PublishUtil;
 import com.jaspersoft.studio.server.publish.action.JrxmlPublishAction;
 import com.jaspersoft.studio.server.publish.wizard.SaveConfirmationDialog;
@@ -82,6 +82,11 @@ public class JRSEditorContributor implements IEditorContributor {
 				(IFile) jrConfig.getValue(FileUtils.KEY_FILE), monitor);
 		if (prop == null || prop[0] == null)
 			return;
+		Boolean doSave = jConfig.getPropertyBoolean(
+				JRSPreferencesPage.PUBLISH_REPORT_TOJRSONSAVE, Boolean.TRUE);
+		if (!doSave)
+			return;
+
 		MScopedPreferenceStore pStore = (MScopedPreferenceStore) jConfig
 				.getPrefStore();
 		pStore.setWithDefault(false);
@@ -146,12 +151,12 @@ public class JRSEditorContributor implements IEditorContributor {
 
 	public void onRun(JasperReportsConfiguration jrConfig, JasperReport jr,
 			Map<String, Object> params) {
-		for (JRParameter p : jr.getParameters()) {
-			// look if there are JRS built-in parameters, set server value, for
-			// this
-			// connection
-			// cache all of this, preference to do this ?
-		}
+		// for (JRParameter p : jr.getParameters()) {
+		// look if there are JRS built-in parameters, set server value, for
+		// this
+		// connection
+		// cache all of this, preference to do this ?
+		// }
 	}
 
 	public AContributorAction[] getActions() {

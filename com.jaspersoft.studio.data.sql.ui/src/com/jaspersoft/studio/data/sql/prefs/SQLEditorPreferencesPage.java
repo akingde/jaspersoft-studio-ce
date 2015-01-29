@@ -39,6 +39,7 @@ public class SQLEditorPreferencesPage extends FieldEditorOverlayPage {
 		setPreferenceStore(JaspersoftStudioPlugin.getInstance()
 				.getPreferenceStore());
 		setDescription(Messages.SQLEditorPreferencesPage_dialogTitle);
+		getDefaults(getPreferenceStore());
 	}
 
 	@Override
