@@ -24,7 +24,8 @@ public class CutCommand extends CopyCommand {
 		if (canExecute()) {
 			for (ICopyable n : list)
 				((ANode) n).setCut(true);
-			Clipboard.getDefault().setContents(list);
+			PastableElements container = new PastableElements(list);
+			Clipboard.getDefault().setContents(container);
 		}
 	}
 
