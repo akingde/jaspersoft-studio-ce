@@ -27,6 +27,12 @@ import com.jaspersoft.studio.editor.JrxmlEditor;
 import com.jaspersoft.studio.editor.report.ReportContainer;
 import com.jaspersoft.studio.utils.SelectionHelper;
 
+/**
+ * Action used to set the editor in edit background mode
+ * 
+ * @author Orlandin Marco
+ *
+ */
 public class TransformBackgroundHandler extends AbstractHandler implements IElementUpdater {
 
 	@Override
@@ -42,6 +48,10 @@ public class TransformBackgroundHandler extends AbstractHandler implements IElem
 		return null;
 	}
 
+	/**
+	 * Since this is a check action this method show the action checked or not
+	 * when the flag is true or false
+	 */
 	@SuppressWarnings("rawtypes")
 	@Override
 	public void updateElement(UIElement element, Map parameters) {
@@ -53,6 +63,10 @@ public class TransformBackgroundHandler extends AbstractHandler implements IElem
 		}
 	}
 	
+	/**
+	 * The action is enabled if the editor is a jrxml editor and if there
+	 * is a background figure visible
+	 */
 	@Override
 	public boolean isEnabled() {
 		IEditorPart currentEditor = SelectionHelper.getActiveJRXMLEditor();

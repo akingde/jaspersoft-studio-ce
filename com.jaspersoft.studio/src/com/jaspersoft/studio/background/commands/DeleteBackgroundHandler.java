@@ -25,6 +25,12 @@ import com.jaspersoft.studio.background.MBackgrounImage;
 import com.jaspersoft.studio.editor.JrxmlEditor;
 import com.jaspersoft.studio.utils.SelectionHelper;
 
+/**
+ * Action to delete the background and all its properties
+ * 
+ * @author Orlandin Marco
+ *
+ */
 public class DeleteBackgroundHandler extends AbstractHandler {
 	
 	@Override
@@ -47,6 +53,10 @@ public class DeleteBackgroundHandler extends AbstractHandler {
 		return null;
 	}
 	
+	/**
+	 * The action is enabled if the current editor is a jrxml editor and 
+	 * if there is a visible background
+	 */
 	@Override
 	public boolean isEnabled() {
 		IEditorPart currentEditor = SelectionHelper.getActiveJRXMLEditor();

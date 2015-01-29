@@ -16,7 +16,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
 import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
@@ -48,35 +47,75 @@ import com.jaspersoft.studio.property.descriptors.TransparencyPropertyDescriptor
  */
 public class MBackgrounImage extends APropertyNode implements IGraphicElement {
 
+	/**
+	 * Key of the properties that store the transparency of the background. 
+	 * It is stored as a Float and it should go from 0f to 1.0f
+	 */
 	public static final String PROPERTY_ALPHA = "background.image.alpha"; //$NON-NLS-1$
 	
+	/**
+	 * Key of the properties that store the path of the image to use as background. 
+	 * It is stored as a String
+	 */	
 	public static final String PROPERTY_PATH = "background.image.path"; //$NON-NLS-1$
 	
+	/**
+	 * Key of the properties that store the width of the background. 
+	 * It is stored as an Integer
+	 */
 	public static final String PROPERTY_WIDTH = "background.image.widht"; //$NON-NLS-1$
 	
+	/**
+	 * Key of the properties that store the height of the background. 
+	 * It is stored as an Integer
+	 */
 	public static final String PROPERTY_HEIGHT = "background.image.height"; //$NON-NLS-1$
 	
+	/**
+	 * Key of the properties that store the x position of the background. 
+	 * It is stored as an Integer
+	 */
 	public static final String PROPERTY_X = "background.image.x"; //$NON-NLS-1$
 	
+	/**
+	 * Key of the properties that store the y position of the background. 
+	 * It is stored as an Integer
+	 */
 	public static final String PROPERTY_Y = "background.image.y"; //$NON-NLS-1$
 	
+	/**
+	 * Key of the properties that store if the background image must keep
+	 * its ratio on resize. It is stored as a boolean
+	 */
 	public static final String PROPERTY_KEEP_RATIO = "background.image.keep_ratio"; //$NON-NLS-1$
 	
-	private static final long serialVersionUID = 757632360685857870L;
+	/**
+	 * Cache for the properties descriptor
+	 */
+	private IPropertyDescriptor[] descriptors;
 	
+	/**
+	 * Map for the default proeprties value
+	 */
+	private static Map<String, Object> defaultsMap;
+	
+	/**
+	 * Path of the last background image loaded
+	 */
 	private String lastPath;
 	
+	/**
+	 * Data of the last image loaded
+	 */
 	private ImageData lastImageData;
 	
-	public MBackgrounImage() {
-		super();
-	}
+	private static final long serialVersionUID = 757632360685857870L;
 
-	public MBackgrounImage(ANode parent, Properties properties) {
-		super(parent, -1);
-		setValue(getJasperDesign());
-	}
-
+	/**
+	 * Create the background model element
+	 * 
+	 * @param parent parent of the node
+	 */
 	public MBackgrounImage(ANode parent) {
 		super(parent, -1);
 		setValue(getJasperDesign());
@@ -85,50 +124,38 @@ public class MBackgrounImage extends APropertyNode implements IGraphicElement {
 	/**
 	 * Gets the icon descriptor.
 	 * 
-	 * @return the icon descriptor
+	 * @return always null, the background has not an icon
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		return null;
 	}
+	
+	@Override
+	public ImageDescriptor getImagePath() {
+		return null;
+	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.jaspersoft.studio.model.MGeneric#getDisplayText()
-	 */
 	@Override
 	public String getDisplayText() {
 		return "Background"; //$NON-NLS-1$
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.jaspersoft.studio.model.MGeneric#getImagePath()
-	 */
-	@Override
-	public ImageDescriptor getImagePath() {
-		return getIconDescriptor().getIcon16();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.jaspersoft.studio.model.MGeneric#getToolTip()
-	 */
 	@Override
 	public String getToolTip() {
-		return getIconDescriptor().getToolTip();
+		return "Image shown on the background"; //$NON-NLS-1$
 	}
 
-	private IPropertyDescriptor[] descriptors;
-	private static Map<String, Object> defaultsMap;
-
+	/**
+	 * Return the map of the default values of the element
+	 */
 	@Override
 	public Map<String, Object> getDefaultsMap() {
 		return defaultsMap;
 	}
 
+	/**
+	 * Return the property descriptors of the element
+	 */
 	@Override
 	public IPropertyDescriptor[] getDescriptors() {
 		return descriptors;
@@ -141,10 +168,7 @@ public class MBackgrounImage extends APropertyNode implements IGraphicElement {
 	}
 
 	/**
-	 * Creates the property descriptors.
-	 * 
-	 * @param desc
-	 *          the desc
+	 * Creates the property descriptors for the background and initialize the default map
 	 */
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
@@ -178,25 +202,14 @@ public class MBackgrounImage extends APropertyNode implements IGraphicElement {
 		keepRatio.setCategory(Messages.MBackgrounImage_labelCategory); 
 		keepRatio.setDescription(Messages.MBackgrounImage_descriptionKeepRatio);
 		desc.add(keepRatio);
+		
+		defaultsMap.put(PROPERTY_KEEP_RATIO, false);
+		defaultsMap.put(PROPERTY_ALPHA, 0.5f);
+		defaultsMap.put(PROPERTY_HEIGHT, 100);
+		defaultsMap.put(PROPERTY_WIDTH, 100);
+		defaultsMap.put(PROPERTY_X, 10);
+		defaultsMap.put(PROPERTY_Y, 10);
 	}
-	
-	protected ImageData getImageData() {
-		String fileName = (String) getPropertyValue(PROPERTY_PATH);
-		if (fileName == null) return null;
-		if (fileName.equals(lastPath)) return lastImageData;
-		lastPath = fileName;
-		try {
-			FileInputStream stream = new FileInputStream(fileName);
-			Image tempImage = new Image(null, stream);
-			lastImageData = tempImage.getImageData();
-			tempImage.dispose();
-			stream.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return lastImageData;
-	}
-
 
 	@Override
 	public Object getPropertyValue(Object id) {
@@ -252,6 +265,35 @@ public class MBackgrounImage extends APropertyNode implements IGraphicElement {
 		}
 	}
 	
+	/**
+	 * Load the image data from the path written in the model.
+	 * The image data is cached until the path changes. 
+	 * 
+	 * @return the loaded image data, can be null if the path is not valid
+	 */
+	protected ImageData getImageData() {
+		String fileName = (String) getPropertyValue(PROPERTY_PATH);
+		if (fileName == null) return null;
+		if (fileName.equals(lastPath)) return lastImageData;
+		lastPath = fileName;
+		try {
+			FileInputStream stream = new FileInputStream(fileName);
+			Image tempImage = new Image(null, stream);
+			lastImageData = tempImage.getImageData();
+			tempImage.dispose();
+			stream.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return lastImageData;
+	}
+	
+	/**
+	 * Return the alpha value written in the model, if it is not available
+	 * return a default value of 0.5f.
+	 * 
+	 * @return a not null and valid alpha value
+	 */
 	public float getAlpha(){
 		Float alpha = (Float)getPropertyValue(PROPERTY_ALPHA);
 		if (alpha != null) return alpha;
@@ -263,6 +305,13 @@ public class MBackgrounImage extends APropertyNode implements IGraphicElement {
 		return new Rectangle(getDefaultX(), getDefaultY(), getDefaultWidth(), getDefaultHeight());
 	}
 
+	/**
+	 * Return the width value written in the model, if it is not available
+	 * try to read it from the image if a path is defined. If the path is 
+	 * not defined or the image is not found return a default value
+	 * 
+	 * @return a not null and valid width value
+	 */
 	@Override
 	public int getDefaultWidth() {
 		Integer width = (Integer)getPropertyValue(PROPERTY_WIDTH);
@@ -272,6 +321,13 @@ public class MBackgrounImage extends APropertyNode implements IGraphicElement {
 		return 100;
 	}
 
+	/**
+	 * Return the height value written in the model, if it is not available
+	 * try to read it from the image if a path is defined. If the path is 
+	 * not defined or the image is not found return a default value
+	 * 
+	 * @return a not null and valid height value
+	 */
 	@Override
 	public int getDefaultHeight() {
 		Integer height = (Integer)getPropertyValue(PROPERTY_HEIGHT);
@@ -281,29 +337,53 @@ public class MBackgrounImage extends APropertyNode implements IGraphicElement {
 		return 100;
 	}
 	
+	/**
+	 * Return the x value written in the model, if it is not available
+	 * return a default value of 10.
+	 * 
+	 * @return a not null and valid x value
+	 */
 	public int getDefaultX(){
 		Integer x = (Integer)getPropertyValue(PROPERTY_X);
 		if (x != null) return x;
 		return 10;
 	}
 	
+	/**
+	 * Return the y value written in the model, if it is not available
+	 * return a default value of 10.
+	 * 
+	 * @return a not null and valid y value
+	 */
 	public int getDefaultY(){
 		Integer y = (Integer)getPropertyValue(PROPERTY_Y);
 		if (y != null) return y;
 		return 10;
 	}
 	
+	/**
+	 * Return the keep ratio value written in the model, if it is not available
+	 * return a default value false.
+	 * 
+	 * @return a not null and valid keep ratio value
+	 */
 	public boolean isKeepRatio(){
 		Boolean keepRatio = (Boolean)getPropertyValue(PROPERTY_KEEP_RATIO);
 		if (keepRatio != null) return keepRatio;
 		return false;
 	}
 
+	/**
+	 * The background dosen't provide a jr element
+	 */
 	@Override
 	public JRDesignElement createJRElement(JasperDesign jasperDesign) {
 		return null;
 	}
 	
+	/**
+	 * Search the editpart between it listeners
+	 */
 	public EditPart getFigureEditPart() {
 		for (Object o : getPropertyChangeSupport().getPropertyChangeListeners()) {
 			if (o instanceof BackgroundImageEditPart)

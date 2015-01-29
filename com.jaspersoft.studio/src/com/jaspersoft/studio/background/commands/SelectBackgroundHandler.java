@@ -26,8 +26,19 @@ import com.jaspersoft.studio.editor.JrxmlEditor;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.utils.SelectionHelper;
 
+/**
+ * Action to select the background file. When a new image is selected
+ * the editor disable the background edit mode if it was enabled and
+ * enable the background visible figure flag
+ * 
+ * @author Orlandin Marco
+ *
+ */
 public class SelectBackgroundHandler extends AbstractHandler {
 
+	/**
+	 * Supported extension
+	 */
 	private static final String[] FILTER_EXTS = { "*.jpg", "*.png", "*.bmp", "*.*"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 	
 	@Override
@@ -54,6 +65,9 @@ public class SelectBackgroundHandler extends AbstractHandler {
 		return null;
 	}
 	
+	/**
+	 * The action is available if the current editor is a jrxml editor
+	 */
 	@Override
 	public boolean isEnabled() {
 		IEditorPart currentEditor = SelectionHelper.getActiveJRXMLEditor();

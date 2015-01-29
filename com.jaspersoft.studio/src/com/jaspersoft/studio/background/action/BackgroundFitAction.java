@@ -26,8 +26,7 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.property.SetValueCommand;
 
 /**
- * Action to enclose the selected elements into a frame. All
- * the selected elements must have the same parent
+ * Action to made the background fit the report page width
  * 
  * @author Orlandin Marco
  * 

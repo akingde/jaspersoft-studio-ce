@@ -57,6 +57,9 @@ public class BackgroundImageEditPart extends AbstractGraphicalEditPart  implemen
 		return figure;
 	}
 	
+	/**
+	 * When the figure is activated it start to listen on the relative model
+	 */
 	@Override
 	public void activate() {
 		super.activate();
@@ -64,10 +67,8 @@ public class BackgroundImageEditPart extends AbstractGraphicalEditPart  implemen
 			((ANode) getModel()).getPropertyChangeSupport().addPropertyChangeListener(this);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.gef.editparts.AbstractEditPart#deactivate()
+	/**
+	 * When the figure is activated it stop to listen on the relative model
 	 */
 	@Override
 	public void deactivate() {
@@ -172,13 +173,13 @@ public class BackgroundImageEditPart extends AbstractGraphicalEditPart  implemen
 				if (isImageEditable()) addSelectionHandles();
 			}
 		});
-
 	}
 	
 	/**
 	 * Check if the editor is set in background edit mode
 	 * 
-	 * @return
+	 * @return true if the editor is currently in edit background mode
+	 * false otherwise. It return false also if the editor is not available
 	 */
 	private boolean isImageEditable(){
 		IEditorPart currentEditor = SelectionHelper.getActiveJRXMLEditor();

@@ -43,6 +43,8 @@ public class Application implements IApplication {
 		
 	
 		OpenDocumentEventProcessor openDocProcessor = new OpenDocumentEventProcessor();
+		//org.eclipse.ui.internal.misc.Policy.DEBUG_SWT_GRAPHICS = true;
+		//org.eclipse.ui.internal.misc.Policy.DEBUG_SWT_DEBUG = true;
 		Display display = PlatformUI.createDisplay();
 		display.addListener(SWT.OpenDocument, openDocProcessor);
 		

@@ -31,6 +31,13 @@ import com.jaspersoft.studio.editor.JrxmlEditor;
 import com.jaspersoft.studio.editor.report.ReportContainer;
 import com.jaspersoft.studio.utils.SelectionHelper;
 
+/**
+ * Action to enable or disable the show background flag, used to hide
+ * the background without remove it
+ * 
+ * @author Orlandin Marco
+ *
+ */
 public class ShowBackgroundHandler extends AbstractHandler implements IElementUpdater {
 
 	@Override
@@ -53,6 +60,10 @@ public class ShowBackgroundHandler extends AbstractHandler implements IElementUp
 		return null;
 	}
 
+	/**
+	 * Since this is a check action this method show the action checked or not
+	 * when the flag is true or false
+	 */
 	@SuppressWarnings("rawtypes")
 	@Override
 	public void updateElement(UIElement element, Map parameters) {
@@ -64,6 +75,10 @@ public class ShowBackgroundHandler extends AbstractHandler implements IElementUp
 		}
 	}
 	
+	/**
+	 * Enable if the current editor is a jrxml editor and if the current background
+	 * image is defined
+	 */
 	@Override
 	public boolean isEnabled() {
 		IEditorPart currentEditor = SelectionHelper.getActiveJRXMLEditor();

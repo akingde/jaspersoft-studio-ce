@@ -25,8 +25,8 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.property.SetValueCommand;
 
 /**
- * Action to enclose the selected elements into a frame. All
- * the selected elements must have the same parent
+ * Action to enable or disable the fit width flag on the background element.
+ * This is a checkbox action, so the status is shown directly on the menu
  * 
  * @author Orlandin Marco
  * 
@@ -74,6 +74,10 @@ public class BackgroundKeepRatioAction extends ACachedSelectionAction {
 		firePropertyChange(new PropertyChangeEvent(this, IAction.CHECKED, false, true));
 	}
 	
+	/**
+	 * Since this is a checkbox this one return the current if the action is actually 
+	 * checked (if the image must keep it's ratio) or not.
+	 */
 	@Override
 	public boolean isChecked() {
 		List<Object> background = editor.getSelectionCache().getSelectionModelForType(MBackgrounImage.class);

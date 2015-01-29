@@ -28,6 +28,12 @@ import org.eclipse.ui.services.IServiceLocator;
 
 import com.jaspersoft.studio.messages.Messages;
 
+/**
+ * Provide the menu to show some configuring option for the image
+ * 
+ * @author Orlandin Marco
+ *
+ */
 public class BackgroundMenuContributior extends ExtensionContributionFactory {
 
 	@Override
@@ -41,6 +47,11 @@ public class BackgroundMenuContributior extends ExtensionContributionFactory {
 		});
 	}
 
+	/**
+	 * Build the menu with the action to use a background image and return it
+	 * 
+	 * @return a not null menu manager with all the action inside
+	 */
 	public static MenuManager getBackgroundMenu(){
 	   MenuManager submenu = new MenuManager(Messages.MBackgroundImage_menuLabel, "com.jaspersoft.studio.background.backgroundmenu"); //$NON-NLS-2$
 	    IContributionItem dynamicItem = new CompoundContributionItem("org.eclipse.ui.views.problems.groupBy.items") { //$NON-NLS-1$

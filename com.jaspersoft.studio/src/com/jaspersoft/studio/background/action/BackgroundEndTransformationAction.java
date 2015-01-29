@@ -26,8 +26,7 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.utils.SelectionHelper;
 
 /**
- * Action to enclose the selected elements into a frame. All
- * the selected elements must have the same parent
+ * Action to set the current editor in background not editable mode.
  * 
  * @author Orlandin Marco
  * 
@@ -36,6 +35,13 @@ public class BackgroundEndTransformationAction extends ACachedSelectionAction {
   
   public static final String ID = "BackgroundEndTransofrmation"; //$NON-NLS-1$
   
+  /**
+   * Command used to change the status of the editor editable background flag.
+   * It can be undone. 
+   * 
+   * @author Orlandin Marco
+   *
+   */
   private class ChangeTransformationCommand extends Command{
   	
   	@Override

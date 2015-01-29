@@ -23,37 +23,81 @@ import com.jaspersoft.studio.property.SetValueCommand;
 
 /**
  * Action to set the transparency of the background images from a contextual
- * menu
+ * menu. It can be created with various level of fixed transparencies
  * 
  * @author Orlandin Marco
  * 
  */
 public class BackgroundTransparencyAction extends ACachedSelectionAction {
   
+	/**
+	 * Base id used to create the id of the action along with the transparency level
+	 */
   private static final String BASE_ID = "BackgroundTransaparencyTo"; //$NON-NLS-1$
   
+  /**
+   * Id to use on the constructor of the action to have a transparency of the 5%
+   */
   public static final String TRANSPARENCY_5 = BASE_ID + "5"; //$NON-NLS-1$
   
+  /**
+   * Id to use on the constructor of the action to have a transparency of the 10%
+   */
   public static final String TRANSPARENCY_10 = BASE_ID + "10"; //$NON-NLS-1$
   
+  /**
+   * Id to use on the constructor of the action to have a transparency of the 15%
+   */
   public static final String TRANSPARENCY_15 = BASE_ID + "15"; //$NON-NLS-1$
   
+  /**
+   * Id to use on the constructor of the action to have a transparency of the 20%
+   */
   public static final String TRANSPARENCY_20 = BASE_ID + "20"; //$NON-NLS-1$
   
+  /**
+   * Id to use on the constructor of the action to have a transparency of the 25%
+   */
   public static final String TRANSPARENCY_25 = BASE_ID + "25"; //$NON-NLS-1$
   
+  /**
+   * Id to use on the constructor of the action to have a transparency of the 30%
+   */
   public static final String TRANSPARENCY_30 = BASE_ID + "30"; //$NON-NLS-1$
   
+  /**
+   * Id to use on the constructor of the action to have a transparency of the 40%
+   */
   public static final String TRANSPARENCY_40 = BASE_ID + "40"; //$NON-NLS-1$
   
+  /**
+   * Id to use on the constructor of the action to have a transparency of the 50%
+   */
   public static final String TRANSPARENCY_50 = BASE_ID + "50"; //$NON-NLS-1$
   
+  /**
+   * Id to use on the constructor of the action to have a transparency of the 75%
+   */
   public static final String TRANSPARENCY_75 = BASE_ID + "75"; //$NON-NLS-1$
   
+  /**
+   * Id to use on the constructor of the action to have a transparency of the 100%
+   */
   public static final String TRANSPARENCY_100 = BASE_ID + "100"; //$NON-NLS-1$
 	
+  /**
+   * Transparency value of the current action
+   */
   private float transparencyValue;
   
+  /**
+   * Construction of the action
+   * 
+   * @param part workbench part
+   * @param ID id of the action, must be one of the static id provided by the 
+   * BackgroundTransparencyAction class. Otherwise it will be used a a transparency
+   *  100% action
+   */
 	public BackgroundTransparencyAction(IWorkbenchPart part, String ID) {
 		super(part);
 		setLazyEnablementCalculation(true);

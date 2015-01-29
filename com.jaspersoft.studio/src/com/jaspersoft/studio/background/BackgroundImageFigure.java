@@ -35,16 +35,40 @@ import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
 import com.jaspersoft.studio.editor.report.ReportContainer;
 import com.jaspersoft.studio.utils.SelectionHelper;
 
+/**
+ * Figure used to show the background image
+ * 
+ * @author Orlandin Marco
+ *
+ */
 public class BackgroundImageFigure extends RectangleFigure {
 
+		/**
+		 * The model from where the figure is created
+		 */
 		private MBackgrounImage model;
 		
+		/**
+		 * The image file to display, it is cached to avoid the reloading
+		 */
 		private Image image = null;
 		
+		/**
+		 * The path of the last displayed image
+		 */
 		private String lastPath = null;
 		
+		/**
+		 * Report container used to check if the image is in edit mode
+		 */
 		private ReportContainer currentContainer = null;
 		
+		/**
+		 * Create the image and if it is available load the image resource
+		 * from the file system
+		 * 
+		 * @param model model with the informations to create the image
+		 */
 		public BackgroundImageFigure(MBackgrounImage model){
 			super();
 			this.model = model;
@@ -54,10 +78,14 @@ public class BackgroundImageFigure extends RectangleFigure {
 			layout.setSpacing(5);
 			setLayoutManager(layout);
 			setBackgroundColor(ResourceManager.getColor(255, 255, 255));
-			loadImage();
-			
+			loadImage();	
 		}
 	
+		/**
+		 * Load the image on the filesystem and cache it. It is loaded
+		 * if a path is available and valid inside the model and if the 
+		 * image cached has a different path. 
+		 */
 		private void loadImage()
 		{
 			String path = (String)model.getPropertyValue(MBackgrounImage.PROPERTY_PATH);
@@ -74,11 +102,14 @@ public class BackgroundImageFigure extends RectangleFigure {
 			}
 		}
 		
+		/**
+		 * Update the size of the figure accordingly to the ones provided
+		 * by the model
+		 */
 		private void updateSize(){
 			setSize(model.getDefaultWidth(), model.getDefaultHeight());
 			setLocation(new Point(model.getDefaultX(), model.getDefaultY()));
 		}
-		
 		
 		@Override
 		public void paint(Graphics graphics) {
@@ -102,6 +133,14 @@ public class BackgroundImageFigure extends RectangleFigure {
 			}			
 		}
 		
+		/**
+		 * Used when the image is painted in the figure keeping its aspect
+		 * ratio. calculate the best width and height that can fit most the
+		 * figure without loosing the aspect ratio
+		 * 
+		 * @return the width and height of the image keeping the ratio and 
+		 * filling most of the surface of the figure
+		 */
 		private Point calculateWidestRation(){
 			int originalWidth = image.getWidth(null);
 			int originalHeight = image.getHeight(null);
@@ -123,23 +162,43 @@ public class BackgroundImageFigure extends RectangleFigure {
 			}
 		}
 		
+		/**
+		 * The image is visible if there is an available resource and
+		 * if the editor has the show background option enabled
+		 */
 		@Override
 		public boolean isVisible() {
 			loadImage();
 			return image != null && isVisibleFlagCheck();
 		}
 		
+		/**
+		 * Update the model of the image and discard the cache
+		 * 
+		 * @param model the model
+		 */
 		protected void setModel(MBackgrounImage model){
 			lastPath = null;
 			image = null;
 			this.model = model;
 		}
 		
+		/**
+		 * Check if the image resource is available, if was not loaded
+		 * yet it try to load it
+		 * 
+		 * @return true if there is an image to display, false otherwise
+		 */
 		public boolean hasImage(){
 			loadImage();
 			return image != null;
 		}
 		
+		/**
+		 * Get the current report container and cache if for the next calls
+		 * 
+		 * @return a report container or null if it isn't available
+		 */
 		private ReportContainer getCurrentContainer(){
 			if (currentContainer == null){
 				IEditorPart currentEditor = SelectionHelper.getActiveJRXMLEditor();
@@ -151,6 +210,11 @@ public class BackgroundImageFigure extends RectangleFigure {
 			return currentContainer;
 		}
 		
+		/**
+		 * Check if the editor has the show background option enabled
+		 * 
+		 * @return true if the option is enabled, false otherwise
+		 */
 		protected boolean isVisibleFlagCheck(){
 			ReportContainer container = getCurrentContainer();
 			if (container != null) return container.isBackgroundImageVisible();
