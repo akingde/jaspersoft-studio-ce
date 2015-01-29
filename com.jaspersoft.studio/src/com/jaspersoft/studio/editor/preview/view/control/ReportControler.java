@@ -8,6 +8,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.preview.view.control;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -405,8 +407,15 @@ public class ReportControler {
 			compiler = new JasperReportCompiler();
 			compiler.setErrorHandler(new JRMarkerErrorHandler(c, file));
 			compiler.setProject(file.getProject());
-		}
-		((JRErrorHandler) compiler.getErrorHandler()).reset();
+			jrContext.getPropertyChangeSupport().addPropertyChangeListener(new PropertyChangeListener() {
+
+				@Override
+				public void propertyChange(PropertyChangeEvent evt) {
+					compiler.clean();
+				}
+			});
+		} else
+			((JRErrorHandler) compiler.getErrorHandler()).reset();
 		JasperReport jasperReport = compiler.compileReport(jrContext, jd);// JasperCompileManager.getInstance(jrContext).compile(jd);
 		stats.endCount(ST_COMPILATIONTIME);
 		if (((JRErrorHandler) compiler.getErrorHandler()).hasErrors()) {

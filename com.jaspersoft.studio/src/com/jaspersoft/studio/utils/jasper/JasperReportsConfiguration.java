@@ -10,10 +10,12 @@ package com.jaspersoft.studio.utils.jasper;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -76,6 +78,7 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 	public static final String KEY_JASPERDESIGN = "JasperDesign";
 	public static final String KEY_JRPARAMETERS = "KEY_PARAMETERS";
 
+	private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);;
 	private ClasspathListener classpathlistener;
 	private PreferenceListener preferenceListener;
 	// private IPreferencesService service;
@@ -137,6 +140,7 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 			} else if (prmProvider != null && property.startsWith(ParameterSet.PARAMETER_SET)) {
 				prmProvider.reset();
 			}
+			propertyChangeSupport.firePropertyChange(new PropertyChangeEvent(this, "preferences", null, event));
 		}
 	}
 
@@ -151,14 +155,20 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 			functionsBundles = null;
 			messageProviderFactory = null;
 			fontList = null;
-//			try {
-//				DefaultExtensionsRegistry extensionsRegistry = new DefaultExtensionsRegistry();
-//				ExtensionsEnvironment.setSystemExtensionsRegistry(extensionsRegistry);
-//			} catch (Throwable e) {
-//				JaspersoftStudioPlugin.getInstance().logError(
-//						"Cannot complete operations successfully after a classpath change occurred.", e);
-//			}
+			ExpressionUtil.removeAllReportInterpreters(JasperReportsConfiguration.this);
+			propertyChangeSupport.firePropertyChange(new PropertyChangeEvent(this, "classpath", null, arg0));
+			// try {
+			// DefaultExtensionsRegistry extensionsRegistry = new DefaultExtensionsRegistry();
+			// ExtensionsEnvironment.setSystemExtensionsRegistry(extensionsRegistry);
+			// } catch (Throwable e) {
+			// JaspersoftStudioPlugin.getInstance().logError(
+			// "Cannot complete operations successfully after a classpath change occurred.", e);
+			// }
 		}
+	}
+
+	public PropertyChangeSupport getPropertyChangeSupport() {
+		return propertyChangeSupport;
 	}
 
 	/**
@@ -215,6 +225,8 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 			if (file != null) {
 				IProject project = file.getProject();
 				if (project != null && project.getNature(JavaCore.NATURE_ID) != null) {
+					if (javaclassloader != null && classpathlistener != null)
+						javaclassloader.removeClasspathListener(classpathlistener);
 					javaclassloader = JavaProjectClassLoader.instance(JavaCore.create(project), cl);
 					classpathlistener = new ClasspathListener();
 					javaclassloader.addClasspathListener(classpathlistener);
@@ -291,6 +303,9 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 		JaspersoftStudioPlugin.getInstance().removePreferenceListener(preferenceListener);
 		if (javaclassloader != null)
 			javaclassloader.removeClasspathListener(classpathlistener);
+		for (PropertyChangeListener l : Arrays.asList(propertyChangeSupport.getPropertyChangeListeners())) {
+			propertyChangeSupport.removePropertyChangeListener(l);
+		}
 	}
 
 	public void put(String key, Object value) {
