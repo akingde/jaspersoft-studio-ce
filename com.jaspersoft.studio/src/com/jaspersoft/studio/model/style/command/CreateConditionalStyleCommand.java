@@ -50,7 +50,6 @@ public class CreateConditionalStyleCommand extends Command {
 		this.index = index;
 		this.jrStyle = (JRDesignStyle) destNode.getValue();
 		if (srcNode != null && srcNode.getValue() != null) {
-			srcNode.setParent(destNode, -1);
 			this.jrConditionalStyle = (JRDesignConditionalStyle) srcNode.getValue();
 		}
 	}
@@ -83,11 +82,9 @@ public class CreateConditionalStyleCommand extends Command {
 		if (jrConditionalStyle != null) {
 			if (index < 0 || index > jrStyle.getConditionalStyleList().size()){
 				jrStyle.addConditionalStyle(jrConditionalStyle);
-				//new MConditionalStyle(destNode, jrConditionalStyle, -1);
 			}
 			else {
 				jrStyle.addConditionalStyle(index, jrConditionalStyle);
-				//new MConditionalStyle(destNode, jrConditionalStyle, index);
 			}
 		}
 	}

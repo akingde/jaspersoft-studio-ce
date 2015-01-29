@@ -582,6 +582,11 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 			return new NoActionCommand();
 		if (child instanceof MVariableSystem)
 			return new NoActionCommand();
+		//This condition must be placed before the MStyle check, since MConditionalStyle is also
+		//an mstyle and so it will be catched in the mstyle branch
+		if (child instanceof MConditionalStyle)
+			if (parent instanceof MStyle)
+				return new OrphanConditionalStyleCommand((MStyle) parent, (MConditionalStyle) child);
 		if (child instanceof MStyle)
 			return new NoActionCommand();
 
@@ -589,9 +594,6 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 			return new OrphanElementCommand(parent, (MGraphicElement) child);
 		if (child instanceof MElementGroup)
 			return new OrphanElementGroupCommand(parent, (MElementGroup) child);
-		if (child instanceof MConditionalStyle)
-			if (parent instanceof MStyle)
-				return new OrphanConditionalStyleCommand((MStyle) parent, (MConditionalStyle) child);
 		return UnexecutableCommand.INSTANCE;
 	}
 }
