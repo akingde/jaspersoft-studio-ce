@@ -178,6 +178,7 @@ public class ReportControler {
 			jasperParameters.clear();
 			jasperParameters.putAll(map);
 		}
+		jasperParameters.remove(JRParameter.REPORT_MAX_COUNT);
 		jrContext.setJRParameters(jasperParameters);
 		return jasperParameters;
 	}
@@ -326,7 +327,7 @@ public class ReportControler {
 					if (jasperReport == null)
 						jasperReport = compileJasperDesign(file, jd, monitor);
 					if (jasperReport != null) {
-						ExpressionUtil.initBuiltInParameters(jrContext, jasperReport);
+ 						ExpressionUtil.initBuiltInParameters(jrContext, jasperReport);
 						if (viewmap != null)
 							fillForms();
 						c.startMessage(Messages.PreviewEditor_starting);

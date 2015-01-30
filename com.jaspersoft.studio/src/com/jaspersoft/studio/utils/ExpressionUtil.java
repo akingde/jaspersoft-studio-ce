@@ -342,11 +342,15 @@ public class ExpressionUtil {
 		} catch (JRException e) {
 			e.printStackTrace();
 		} finally {
-			if (prms != null)
+			if (prms != null) {
+				prms.remove(JRParameter.REPORT_PARAMETERS_MAP);
+				prms.remove(JRParameter.REPORT_DATA_SOURCE);
+				prms.remove(JRParameter.REPORT_CONNECTION);
 				if (oldDA != null)
 					prms.put(DataAdapterParameterContributorFactory.PARAMETER_DATA_ADAPTER, oldDA);
 				else
 					prms.remove(DataAdapterParameterContributorFactory.PARAMETER_DATA_ADAPTER);
+			}
 			if (sexts != null)
 				sexts.remove(sfactory);
 		}
