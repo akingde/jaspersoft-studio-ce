@@ -344,37 +344,6 @@ public class MImage extends MGraphicElementLineBox {
 			return hAlignD.getEnumValue(jrElement.getHorizontalImageAlign());
 		if (id.equals(JRBaseStyle.PROPERTY_VERTICAL_IMAGE_ALIGNMENT))
 			return vAlignD.getEnumValue(jrElement.getVerticalImageAlign());
-		if (id.equals(JRBaseImage.PROPERTY_ON_ERROR_TYPE))
-			return onErrorTypeD.getEnumValue(jrElement.getOnErrorTypeValue());
-		if (id.equals(JRDesignImage.PROPERTY_EVALUATION_TIME))
-			return evaluationTimeD.getEnumValue(jrElement.getEvaluationTimeValue());
-		if (id.equals(JRDesignImage.PROPERTY_EXPRESSION))
-			return ExprUtil.getExpression(jrElement.getExpression());
-
-		if (id.equals(JRDesignImage.PROPERTY_EVALUATION_GROUP)) {
-			if (jrElement.getEvaluationGroup() != null)
-				return jrElement.getEvaluationGroup().getName();
-			return ""; //$NON-NLS-1$
-		}
-		if (id.equals(JRBaseImage.PROPERTY_USING_CACHE))
-			return jrElement.getUsingCache();
-		if (id.equals(JRBaseImage.PROPERTY_LAZY))
-			return new Boolean(jrElement.isLazy());
-		// hyperlink --------------------------------------
-		if (id.equals(JRDesignHyperlink.PROPERTY_LINK_TARGET))
-			return jrElement.getLinkTarget();
-		if (id.equals(JRDesignHyperlink.PROPERTY_LINK_TYPE))
-			return jrElement.getLinkType();
-		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_ANCHOR_EXPRESSION))
-			return ExprUtil.getExpression(jrElement.getHyperlinkAnchorExpression());
-		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_PAGE_EXPRESSION))
-			return ExprUtil.getExpression(jrElement.getHyperlinkPageExpression());
-		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_REFERENCE_EXPRESSION))
-			return ExprUtil.getExpression(jrElement.getHyperlinkReferenceExpression());
-		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_TOOLTIP_EXPRESSION))
-			return ExprUtil.getExpression(jrElement.getHyperlinkTooltipExpression());
-		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_WHEN_EXPRESSION))
-			return ExprUtil.getExpression(jrElement.getHyperlinkWhenExpression());
 		return super.getPropertyActualValue(id);
 	}
 
