@@ -17,6 +17,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import net.sf.jasperreports.engine.type.HorizontalTextAlignEnum;
+import net.sf.jasperreports.engine.type.LineStyleEnum;
+import net.sf.jasperreports.engine.type.RotationEnum;
+import net.sf.jasperreports.engine.type.VerticalTextAlignEnum;
+
 import org.eclipse.swt.graphics.RGB;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -270,6 +275,78 @@ public abstract class TemplateStyle implements Serializable {
 		int b = Integer.parseInt(colorAttributes.getNamedItem("b").getNodeValue());
 		int alpha = Integer.parseInt(colorAttributes.getNamedItem("alpha").getNodeValue());
 		return new AlfaRGB(new RGB(r,g,b), alpha);
+	}
+	
+	/**
+	 * Convert a value into a LineStyleEnum. The only supported value at 
+	 * the moment is String. If the passed value is of a different type or 
+	 * a not valid string it return a default value
+	 * 
+	 * @param value the value to convert
+	 * @return a not null enumeration
+	 */
+	protected static LineStyleEnum getLineStyleFromValue(Object value){
+		if (value instanceof String){
+			String v = (String) value;
+			for (LineStyleEnum en : LineStyleEnum.values())
+				if (en.getName().equals(v))
+					return en;
+		}
+		return LineStyleEnum.SOLID;
+	}
+	
+	/**
+	 * Convert a value into a VerticalTextAlignEnum. The only supported value at 
+	 * the moment is String. If the passed value is of a different type or 
+	 * a not valid string it return a default value
+	 * 
+	 * @param value the value to convert
+	 * @return a not null enumeration
+	 */
+	protected static VerticalTextAlignEnum getTextVAlignmentFromValue(Object value){
+		if (value instanceof String){
+			String v = (String) value;
+			for (VerticalTextAlignEnum en : VerticalTextAlignEnum.values())
+				if (en.getName().equals(v))
+					return en;
+		}
+		return VerticalTextAlignEnum.TOP;
+	}
+	
+	/**
+	 * Convert a value into a HorizontalTextAlignEnum. The only supported value at 
+	 * the moment is String. If the passed value is of a different type or 
+	 * a not valid string it return a default value
+	 * 
+	 * @param value the value to convert
+	 * @return a not null enumeration
+	 */
+	protected static HorizontalTextAlignEnum getTextHAlignmentFromValue(Object value){
+		if (value instanceof String){
+			String v = (String) value;
+			for (HorizontalTextAlignEnum en : HorizontalTextAlignEnum.values())
+				if (en.getName().equals(v))
+					return en;
+		}
+		return HorizontalTextAlignEnum.LEFT;
+	}
+	
+	/**
+	 * Convert a value into a RotationEnum. The only supported value at 
+	 * the moment is String. If the passed value is of a different type or 
+	 * a not valid string it return a default value
+	 * 
+	 * @param value the value to convert
+	 * @return a not null enumeration
+	 */
+	protected static RotationEnum getRotationFromValue(Object value){
+		if (value instanceof String){
+			String v = (String) value;
+			for (RotationEnum en : RotationEnum.values())
+				if (en.getName().equals(v))
+					return en;
+		}
+		return RotationEnum.NONE;
 	}
 	
 	/**

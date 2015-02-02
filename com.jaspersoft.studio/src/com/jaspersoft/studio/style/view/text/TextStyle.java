@@ -27,10 +27,6 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
 import com.jaspersoft.studio.editor.style.TemplateStyle;
-import com.jaspersoft.studio.property.descriptor.NullEnum;
-import com.jaspersoft.studio.property.descriptors.RotationPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptors.TextHAlignPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptors.TextVAlignPropertyDescriptor;
 import com.jaspersoft.studio.utils.AlfaRGB;
 import com.jaspersoft.translation.resources.AbstractResourceDefinition;
 
@@ -42,7 +38,7 @@ import com.jaspersoft.translation.resources.AbstractResourceDefinition;
  *
  */
 public class TextStyle extends TemplateStyle {
-
+	
 	/**
 	 * The type of this template
 	 */
@@ -249,7 +245,7 @@ public class TextStyle extends TemplateStyle {
 		LineStyleEnum style = value.getOwnLineStyleValue() != null ? value.getOwnLineStyleValue() : LineStyleEnum.SOLID;
 		float lineWidth = value.getOwnLineWidth() != null ? value.getOwnLineWidth() : 0f;
 		Color color = value.getOwnLineColor() != null ? value.getOwnLineColor() : new Color(0, 0, 0);
-		String result = "<" + tagName + " lineStyle=\"" + style.getValueByte() + "\" ";
+		String result = "<" + tagName + " lineStyle=\"" + style.getName() + "\" ";
 		result += "lineWidth=\"" + lineWidth + "\">";
 		result += xmlColor("lineColor", colorToAlfaRGB(color));
 		result += "</" + tagName + ">";
@@ -258,8 +254,7 @@ public class TextStyle extends TemplateStyle {
 
 	private static void buildPen(Node xmlPenNode, JRBoxPen sourcePen) {
 		NamedNodeMap penAttributes = xmlPenNode.getAttributes();
-		LineStyleEnum lineStyle = LineStyleEnum.getByValue(Byte.valueOf(penAttributes.getNamedItem("lineStyle")
-				.getNodeValue()));
+		LineStyleEnum lineStyle = getLineStyleFromValue(penAttributes.getNamedItem("lineStyle").getNodeValue()); 
 		float lineWidth = Float.parseFloat(penAttributes.getNamedItem("lineWidth").getNodeValue());
 		AlfaRGB lineColor = null;
 		Node firstChild = xmlPenNode.getFirstChild();
@@ -353,10 +348,6 @@ public class TextStyle extends TemplateStyle {
 		return result;
 	}
 
-	private static TextVAlignPropertyDescriptor vadesc = new TextVAlignPropertyDescriptor(null, null, NullEnum.NOTNULL);
-	private static TextHAlignPropertyDescriptor hadesc = new TextHAlignPropertyDescriptor(null, null, NullEnum.NOTNULL);
-	private static RotationPropertyDescriptor rodesc = new RotationPropertyDescriptor(null, null, NullEnum.NOTNULL);
-
 	/**
 	 * Rebuild a CrosstabStyle from its XML representation
 	 * 
@@ -368,11 +359,9 @@ public class TextStyle extends TemplateStyle {
 	public TemplateStyle buildFromXML(Node xmlNode) {
 		try {
 			NamedNodeMap rootAttributes = xmlNode.getAttributes();
-			VerticalTextAlignEnum verticalAlignment = vadesc.getEnumValue(Byte.valueOf(rootAttributes.getNamedItem(
-					"verticalAlignment").getNodeValue()));
-			HorizontalTextAlignEnum horizontalAlignment = hadesc.getEnumValue(Byte.valueOf(rootAttributes.getNamedItem(
-					"horizontalAlignment").getNodeValue()));
-			RotationEnum rotation = rodesc.getEnumValue(Byte.valueOf(rootAttributes.getNamedItem("rotation").getNodeValue()));
+			VerticalTextAlignEnum verticalAlignment = getTextVAlignmentFromValue(rootAttributes.getNamedItem("verticalAlignment").getNodeValue());
+			HorizontalTextAlignEnum horizontalAlignment = getTextHAlignmentFromValue(rootAttributes.getNamedItem("horizontalAlignment").getNodeValue());
+			RotationEnum rotation = getRotationFromValue(rootAttributes.getNamedItem("rotation").getNodeValue());
 			boolean transparent = rootAttributes.getNamedItem("isTransparent").getNodeValue().equals("true");
 
 			AlfaRGB background = null;
