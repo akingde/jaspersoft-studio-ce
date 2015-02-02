@@ -12,6 +12,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.barcode.model.barcode4j;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -120,6 +121,13 @@ public class MDataMatrix extends MBarcode4j {
 
 		super.setPropertyValue(id, value);
 	}
+	
+	@Override
+	public HashSet<String> generateGraphicalProperties() {
+		HashSet<String> properties = super.generateGraphicalProperties();
+		properties.add(DataMatrixComponent.PROPERTY_SHAPE);
+		return properties;
+	}	
 	
 	@Override
 	public void trasnferProperties(JRElement target){

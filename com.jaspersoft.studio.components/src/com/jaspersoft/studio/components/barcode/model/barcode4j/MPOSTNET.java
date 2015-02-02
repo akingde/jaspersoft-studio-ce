@@ -12,6 +12,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.barcode.model.barcode4j;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -174,6 +175,17 @@ public class MPOSTNET extends MBarcode4j {
 			jrList.setDisplayChecksum((Boolean) value);
 		else
 			super.setPropertyValue(id, value);
+	}
+	
+	@Override
+	public HashSet<String> generateGraphicalProperties() {
+		HashSet<String> properties = super.generateGraphicalProperties();
+		properties.add(POSTNETComponent.PROPERTY_SHORT_BAR_HEIGHT);
+		properties.add(POSTNETComponent.PROPERTY_INTERCHAR_GAP_WIDTH);
+		properties.add(POSTNETComponent.PROPERTY_CHECKSUM_MODE);
+		properties.add(POSTNETComponent.PROPERTY_BASELINE_POSITION);
+		properties.add(POSTNETComponent.PROPERTY_DISPLAY_CHECKSUM);
+		return properties;
 	}
 	
 	@Override

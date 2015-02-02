@@ -12,6 +12,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.barcode.model.barcode4j;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -173,6 +174,18 @@ public class MPDF417 extends MBarcode4j {
 			jrList.setErrorCorrectionLevel((Integer) value);
 
 		super.setPropertyValue(id, value);
+	}
+	
+	@Override
+	public HashSet<String> generateGraphicalProperties() {
+		HashSet<String> properties = super.generateGraphicalProperties();
+		properties.add(PDF417Component.PROPERTY_MIN_ROWS);
+		properties.add(PDF417Component.PROPERTY_MAX_ROWS);
+		properties.add(PDF417Component.PROPERTY_MIN_COLUMNS);
+		properties.add(PDF417Component.PROPERTY_MAX_COLUMNS);
+		properties.add(PDF417Component.PROPERTY_WIDTH_TO_HEIGHT_RATIO);
+		properties.add(PDF417Component.PROPERTY_ERROR_CORRECTION_LEVEL);
+		return properties;
 	}
 	
 	@Override

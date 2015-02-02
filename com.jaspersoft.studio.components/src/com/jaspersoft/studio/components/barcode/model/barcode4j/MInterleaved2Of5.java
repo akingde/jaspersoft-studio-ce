@@ -12,6 +12,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.barcode.model.barcode4j;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -149,6 +150,15 @@ public class MInterleaved2Of5 extends MBarcode4j {
 			jrList.setDisplayChecksum((Boolean) value);
 		else
 			super.setPropertyValue(id, value);
+	}
+	
+	@Override
+	public HashSet<String> generateGraphicalProperties() {
+		HashSet<String> properties = super.generateGraphicalProperties();
+		properties.add(Interleaved2Of5Component.PROPERTY_CHECKSUM_MODE);
+		properties.add(Interleaved2Of5Component.PROPERTY_WIDE_FACTOR);
+		properties.add(Interleaved2Of5Component.PROPERTY_DISPLAY_CHECKSUM);
+		return properties;
 	}
 	
 	@Override

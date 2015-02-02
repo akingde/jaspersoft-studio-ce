@@ -12,6 +12,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.barcode.model;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -148,6 +149,17 @@ public class MBarcodeBarbecue extends MBarcode implements IRotatable {
 			Map<String, Object> defaultsMap1) {
 		descriptors = descriptors1;
 		defaultsMap = defaultsMap1;
+	}
+	
+	@Override
+	public HashSet<String> generateGraphicalProperties() {
+		HashSet<String> properties = super.generateGraphicalProperties();
+		properties.add(StandardBarbecueComponent.PROPERTY_BAR_WIDTH);
+		properties.add(StandardBarbecueComponent.PROPERTY_BAR_HEIGTH);
+		properties.add(StandardBarbecueComponent.PROPERTY_TYPE);
+		properties.add(StandardBarbecueComponent.PROPERTY_ROTATION);
+		properties.add(StandardBarbecueComponent.PROPERTY_DRAW_TEXT);
+		return properties;
 	}
 
 	/**

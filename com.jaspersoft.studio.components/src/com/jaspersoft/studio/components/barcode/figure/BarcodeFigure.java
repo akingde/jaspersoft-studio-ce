@@ -27,5 +27,10 @@ public class BarcodeFigure extends JRComponentFigure {
 	public BarcodeFigure(MGraphicElement model) {
 		super(model);
 	}
+	
+	@Override
+	protected boolean allowsFigureDrawCache() {
+		return true;
+	}
 
 }

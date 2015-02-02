@@ -12,6 +12,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.barcode.model.barcode4j;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -95,6 +96,13 @@ public class MCodabar extends MBarcode4j {
 		desc.add(wideFactorD);
 
 		wideFactorD.setCategory(Messages.MCodabar_properties_category);
+	}
+	
+	@Override
+	public HashSet<String> generateGraphicalProperties() {
+		HashSet<String> properties = super.generateGraphicalProperties();
+		properties.add(CodabarComponent.PROPERTY_WIDE_FACTOR);
+		return properties;
 	}
 
 	@Override

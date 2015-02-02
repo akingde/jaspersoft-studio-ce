@@ -12,6 +12,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.barcode.model;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -107,6 +108,13 @@ public abstract class MBarcode extends MGraphicElement {
 		super.setGroupItems(items);
 		if (evaluationGroupNameD != null)
 			evaluationGroupNameD.setItems(items);
+	}
+	
+	@Override
+	public HashSet<String> generateGraphicalProperties() {
+		HashSet<String> properties = super.generateGraphicalProperties();
+		properties.add(StandardBarbecueComponent.PROPERTY_CODE_EXPRESSION);
+		return properties;
 	}
 
 	private RComboBoxPropertyDescriptor evaluationGroupNameD;

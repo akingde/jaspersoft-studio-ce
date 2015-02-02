@@ -12,6 +12,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.barcode.model.barcode4j;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -142,6 +143,16 @@ public class MFourStateBarcode extends MBarcode4j {
 			jrList.setTrackHeight((Double) value);
 		else
 			super.setPropertyValue(id, value);
+	}
+	
+	@Override
+	public HashSet<String> generateGraphicalProperties() {
+		HashSet<String> properties = super.generateGraphicalProperties();
+		properties.add(FourStateBarcodeComponent.PROPERTY_INTERCHAR_GAP_WIDTH);
+		properties.add(FourStateBarcodeComponent.PROPERTY_CHECKSUM_MODE);
+		properties.add(FourStateBarcodeComponent.PROPERTY_ASCENDER_HEIGHT);
+		properties.add(FourStateBarcodeComponent.PROPERTY_TRACK_HEIGHT);
+		return properties;
 	}
 	
 	@Override

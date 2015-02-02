@@ -12,6 +12,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.barcode.model.barcode4j;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -116,6 +117,13 @@ public class MUPCE extends MBarcode4j {
 					.getChecksumMode4Pos((Integer) value));
 		else
 			super.setPropertyValue(id, value);
+	}
+	
+	@Override
+	public HashSet<String> generateGraphicalProperties() {
+		HashSet<String> properties = super.generateGraphicalProperties();
+		properties.add(UPCEComponent.PROPERTY_CHECKSUM_MODE);
+		return properties;
 	}
 	
 	@Override

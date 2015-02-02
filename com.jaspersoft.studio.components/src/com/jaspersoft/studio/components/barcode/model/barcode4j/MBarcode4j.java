@@ -12,6 +12,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.barcode.model.barcode4j;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -258,6 +259,13 @@ public class MBarcode4j extends MBarcode {
 					jrList.getCodeExpression(), value, null));
 		} else
 			super.setPropertyValue(id, value);
+	}
+	
+	@Override
+	public HashSet<String> generateGraphicalProperties() {
+		HashSet<String> properties = super.generateGraphicalProperties();
+		properties.add(StandardBarbecueComponent.PROPERTY_CODE_EXPRESSION);
+		return properties;
 	}
 
 	@Override

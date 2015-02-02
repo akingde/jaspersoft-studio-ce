@@ -12,6 +12,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.barcode.model.barcode4j;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -184,6 +185,18 @@ public class MCode39 extends MBarcode4j {
 			jrList.setExtendedCharSetEnabled((Boolean) value);
 		else
 			super.setPropertyValue(id, value);
+	}
+	
+	@Override
+	public HashSet<String> generateGraphicalProperties() {
+		HashSet<String> properties = super.generateGraphicalProperties();
+		properties.add(Code39Component.PROPERTY_WIDE_FACTOR);
+		properties.add(Code39Component.PROPERTY_INTERCHAR_GAP_WIDTH);
+		properties.add(Code39Component.PROPERTY_CHECKSUM_MODE);
+		properties.add(Code39Component.PROPERTY_DISPLAY_CHECKSUM);
+		properties.add(Code39Component.PROPERTY_DISPLAY_START_STOP);
+		properties.add(Code39Component.PROPERTY_EXTENDED_CHARSET_ENABLED);
+		return properties;
 	}
 	
 	@Override
