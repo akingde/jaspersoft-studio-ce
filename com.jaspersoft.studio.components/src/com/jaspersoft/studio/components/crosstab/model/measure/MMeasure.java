@@ -26,8 +26,8 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.crosstab.CrosstabNodeIconDescriptor;
 import com.jaspersoft.studio.components.crosstab.messages.Messages;
+import com.jaspersoft.studio.components.crosstab.model.MDatasetGroupNode;
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.ICopyable;
 import com.jaspersoft.studio.model.IDragable;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
@@ -38,7 +38,7 @@ import com.jaspersoft.studio.property.descriptor.expression.JRExpressionProperty
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 
-public class MMeasure extends APropertyNode implements ICopyable, IDragable {
+public class MMeasure extends MDatasetGroupNode implements ICopyable, IDragable {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
@@ -245,5 +245,4 @@ public class MMeasure extends APropertyNode implements ICopyable, IDragable {
 			return true;
 		return false;
 	}
-
 }

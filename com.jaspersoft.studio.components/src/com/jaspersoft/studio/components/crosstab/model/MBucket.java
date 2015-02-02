@@ -25,6 +25,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.crosstab.messages.Messages;
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.classname.NClassTypePropertyDescriptor;
@@ -35,19 +36,20 @@ import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 public class MBucket extends APropertyNode {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
+	private APropertyNode bucketContainer;
+	
 	/**
-	 * Instantiates a new m field.
+	 * Instantiates a new bucked.
 	 * 
-	 * @param parent
-	 *            the parent
-	 * @param jfRield
-	 *            the jf rield
-	 * @param newIndex
-	 *            the new index
+	 * @param jfRield the jf rield
+	 * @param bucketContainer the node in the model hierarchy from where the bucked was created.
+	 * It is essentially the parent and it is used to build the expression context. But the bucked
+	 * node will not be saw as the child of its container
 	 */
-	public MBucket(JRCrosstabBucket jfRield) {
+	public MBucket(JRCrosstabBucket jfRield, APropertyNode bucketContainer) {
 		super();
 		setValue(jfRield);
+		this.bucketContainer = bucketContainer;
 	}
 
 	/*
@@ -189,5 +191,10 @@ public class MBucket extends APropertyNode {
 					jrField.getExpression(), value));
 		else if (id.equals(JRDesignCrosstabBucket.PROPERTY_VALUE_CLASS))
 			jrField.setValueClassName((String) value);
+	}
+	
+	@Override
+	public ExpressionContext getExpressionContext() {
+		return bucketContainer.getExpressionContext();
 	}
 }

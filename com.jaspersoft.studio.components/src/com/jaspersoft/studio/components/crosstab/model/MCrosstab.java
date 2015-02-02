@@ -54,6 +54,7 @@ import com.jaspersoft.studio.components.crosstab.model.title.MTitle;
 import com.jaspersoft.studio.components.crosstab.model.title.MTitleCell;
 import com.jaspersoft.studio.components.section.name.NameSection;
 import com.jaspersoft.studio.editor.defaults.DefaultManager;
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IContainer;
@@ -554,6 +555,11 @@ public class MCrosstab extends MGraphicElementLineBox implements IContainer, ICo
 	@Override
 	public void createSubeditor() {
 		CrosstabComponentFactory.createSubeditor(this);
+	}
+	
+	@Override
+	public ExpressionContext getExpressionContext() {
+		return new ExpressionContext(getValue(), getJasperConfiguration());
 	}
 }		
 

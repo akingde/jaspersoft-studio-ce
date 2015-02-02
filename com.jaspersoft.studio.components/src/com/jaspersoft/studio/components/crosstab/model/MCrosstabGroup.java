@@ -26,14 +26,12 @@ import org.eclipse.ui.views.properties.IPropertySource;
 
 import com.jaspersoft.studio.components.crosstab.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.model.APropertyNode;
-import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.property.descriptor.JRPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 
-public abstract class MCrosstabGroup extends APropertyNode implements
+public abstract class MCrosstabGroup extends MDatasetGroupNode implements
 		IPropertySource {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
@@ -135,7 +133,7 @@ public abstract class MCrosstabGroup extends APropertyNode implements
 			return totalPositionD.getEnumValue(jrField.getTotalPositionValue());
 		if (id.equals(JRDesignCrosstabGroup.PROPERTY_BUCKET)) {
 			if (mBucket == null) {
-				mBucket = new MBucket(jrField.getBucket());
+				mBucket = new MBucket(jrField.getBucket(), this);
 				setChildListener(mBucket);
 			}
 			mBucket.setValue(jrField.getBucket());
@@ -178,16 +176,4 @@ public abstract class MCrosstabGroup extends APropertyNode implements
 							null, value));
 		}
 	}
-
-	public MCrosstab getMCrosstab() {
-		INode node = getParent();
-		while (node != null) {
-			if (node instanceof MCrosstab) {
-				return (MCrosstab) node;
-			}
-			node = node.getParent();
-		}
-		return null;
-	}
-
 }
