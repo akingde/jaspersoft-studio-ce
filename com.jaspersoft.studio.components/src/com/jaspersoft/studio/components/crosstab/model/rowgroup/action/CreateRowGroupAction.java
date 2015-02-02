@@ -24,8 +24,11 @@ import com.jaspersoft.studio.components.crosstab.messages.Messages;
 import com.jaspersoft.studio.components.crosstab.model.MCrosstab;
 import com.jaspersoft.studio.components.crosstab.model.dialog.ApplyCrosstabStyleAction;
 import com.jaspersoft.studio.components.crosstab.model.rowgroup.MRowGroup;
+import com.jaspersoft.studio.components.crosstab.model.rowgroup.MRowGroups;
 import com.jaspersoft.studio.editor.outline.actions.ACreateAction;
 import com.jaspersoft.studio.editor.palette.JDPaletteCreationFactory;
+import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.model.MRoot;
 /*
  * The Class CreateGroupAction.
  */
@@ -52,13 +55,24 @@ public class CreateRowGroupAction extends ACreateAction {
 		Object selected = getSelectedObjects().get(0);
 		if (selected instanceof EditPart) {
 			EditPart part = (EditPart) selected;
-			if (part.getModel() instanceof MCrosstab) crosstab = (MCrosstab)part.getModel();
+			if (part.getModel() instanceof INode) crosstab = getCrosstab((INode)part.getModel());
 		} 
 		if (crosstab != null){
 			ApplyCrosstabStyleAction applyStyle = new ApplyCrosstabStyleAction(new ArrayList<JRDesignStyle>(), crosstab.getValue());
 			applyStyle.rebuildStylesFromCrosstab();
 			applyStyle.applayStyle(crosstab.getJasperDesign());
 		}
+	}
+	
+	public MCrosstab getCrosstab(INode startNode) {
+		INode node = startNode;
+		while (node != null && node.getParent() != null
+				&& !(node instanceof MCrosstab) && !(node instanceof MRoot)) {
+			node = node.getParent();
+		}
+		if (node instanceof MCrosstab)
+			return (MCrosstab) node;
+		return null;
 	}
 
 	/**
@@ -73,6 +87,14 @@ public class CreateRowGroupAction extends ACreateAction {
 		setImageDescriptor(Activator.getDefault().getImageDescriptor("icons/add-crosstabrows-16.png"));
 		setDisabledImageDescriptor(Activator.getDefault().getImageDescriptor("icons/add-crosstabrows-16.png"));
 		setEnabled(false);
+	}
+	
+	@Override
+	public boolean isEnabled() {
+		if (getSelectedObjects().size() == 1){
+			return (((EditPart)getSelectedObjects().get(0)).getModel() instanceof MRowGroups);
+		}
+		return false;
 	}
 
 }

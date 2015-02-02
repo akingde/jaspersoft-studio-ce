@@ -12,12 +12,14 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.crosstab.model.measure.action;
 
+import org.eclipse.gef.EditPart;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 
 import com.jaspersoft.studio.components.crosstab.messages.Messages;
 import com.jaspersoft.studio.components.crosstab.model.measure.MMeasure;
+import com.jaspersoft.studio.components.crosstab.model.measure.MMeasures;
 import com.jaspersoft.studio.editor.outline.actions.ACreateAction;
 import com.jaspersoft.studio.editor.palette.JDPaletteCreationFactory;
 /*
@@ -53,5 +55,12 @@ public class CreateMeasureAction extends ACreateAction {
 		setDisabledImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_NEW_WIZARD_DISABLED));
 		setEnabled(false);
 	}
-
+	
+	@Override
+	public boolean isEnabled() {
+		if (getSelectedObjects().size() == 1){
+			return (((EditPart)getSelectedObjects().get(0)).getModel() instanceof MMeasures);
+		}
+		return false;
+	}
 }

@@ -186,8 +186,10 @@ public class CrosstabCellEditPart extends ACrosstabCellEditPart {
 		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE, new CrosstabCellResizableEditPolicy() {
 			@Override
 			protected void showSelection() {
-				super.showSelection();
-				updateRulers();
+				if (getFigure().getBounds().height>0){
+					super.showSelection();
+					updateRulers();
+				}
 			}
 		});
 	}

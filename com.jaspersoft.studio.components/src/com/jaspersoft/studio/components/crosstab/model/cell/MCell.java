@@ -175,13 +175,13 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable, 
 		descriptors = descriptors1;
 		defaultsMap = defaultsMap1;
 	}
-
+	
 	@Override
 	protected void postDescriptors(IPropertyDescriptor[] descriptors) {
 		super.postDescriptors(descriptors);
 		// initialize style
 		JasperDesign jasperDesign = getJasperDesign();
-		if (jasperDesign != null && getValue() != null) {
+		if (jasperDesign != null) {
 			if (styleD != null) {
 				JRDesignCellContents jrElement = (JRDesignCellContents) getValue();
 				JRStyle[] styles = jasperDesign.getStyles();
