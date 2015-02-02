@@ -44,11 +44,11 @@ import com.jaspersoft.studio.property.combomenu.ComboButton;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.utils.UIUtil;
 
-public abstract class ASPropertyWidget implements IHighlightPropertyWidget {
-	protected IPropertyDescriptor pDescriptor;
+public abstract class ASPropertyWidget<T extends IPropertyDescriptor> implements IHighlightPropertyWidget {
+	protected T pDescriptor;
 	protected AbstractSection section;
 
-	public ASPropertyWidget(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
+	public ASPropertyWidget(Composite parent, AbstractSection section, T pDescriptor) {
 		this.pDescriptor = pDescriptor;
 		this.section = section;
 		createComponent(parent);

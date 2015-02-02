@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.model.sortfield;
 
@@ -42,7 +38,7 @@ import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.model.variable.MVariable;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.combo.RComboBoxPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 import com.jaspersoft.studio.property.section.widgets.SPToolBarEnum;
@@ -161,15 +157,15 @@ public class MSortField extends APropertyNode implements ICopyable, IDragable {
 				if (sortField.getType().equals(SortFieldTypeEnum.FIELD)) {
 					for (JRField f : jrDataset.getFieldsList()) {
 						JRSortField checkIfPresent = sortFields.get(f.getName() + "|" + SortFieldTypeEnum.FIELD.getName());
-						//If a field with the same name is not present or if it is present but with a different type then show it
-						if (checkIfPresent == null){
+						// If a field with the same name is not present or if it is present but with a different type then show it
+						if (checkIfPresent == null) {
 							items.add(f.getName());
 						}
 					}
 				} else {
 					for (JRVariable f : jrDataset.getVariablesList()) {
 						JRSortField checkIfPresent = sortFields.get(f.getName() + "|" + SortFieldTypeEnum.VARIABLE.getName());
-						if (checkIfPresent == null){
+						if (checkIfPresent == null) {
 							items.add(f.getName());
 						}
 					}
@@ -180,8 +176,8 @@ public class MSortField extends APropertyNode implements ICopyable, IDragable {
 	}
 
 	private JRDesignDataset dataset;
-	private static JSSEnumPropertyDescriptor typeD;
-	private static JSSEnumPropertyDescriptor orderD;
+	private static NamedEnumPropertyDescriptor<SortFieldTypeEnum> typeD;
+	private static NamedEnumPropertyDescriptor<SortOrderEnum> orderD;
 
 	protected JRDesignDataset getDataSet() {
 		if (dataset != null)
@@ -201,25 +197,27 @@ public class MSortField extends APropertyNode implements ICopyable, IDragable {
 		nameD.setDescription(Messages.MSortField_name_description);
 		desc.add(nameD);
 
-		typeD = new JSSEnumPropertyDescriptor(JRDesignSortField.PROPERTY_TYPE, Messages.MSortField_typeTitle,
-				SortFieldTypeEnum.class, NullEnum.NOTNULL) {
-			public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
+		typeD = new NamedEnumPropertyDescriptor<SortFieldTypeEnum>(JRDesignSortField.PROPERTY_TYPE,
+				Messages.MSortField_typeTitle, SortFieldTypeEnum.FIELD, NullEnum.NOTNULL) {
+			public ASPropertyWidget<NamedEnumPropertyDescriptor<SortFieldTypeEnum>> createWidget(Composite parent,
+					AbstractSection section) {
 				Image[] images = new Image[] {
 						JaspersoftStudioPlugin.getInstance().getImage("icons/resources/fields-sort-16.png"), //$NON-NLS-1$
 						JaspersoftStudioPlugin.getInstance().getImage("icons/resources/variables-sort-16.png") }; //$NON-NLS-1$
-				return new SPToolBarEnum(parent, section, this, images, false);
+				return new SPToolBarEnum<NamedEnumPropertyDescriptor<SortFieldTypeEnum>>(parent, section, this, images, false);
 			}
 		};
 		typeD.setDescription("Sort field type"); //$NON-NLS-1$
 		desc.add(typeD);
 
-		orderD = new JSSEnumPropertyDescriptor(JRDesignSortField.PROPERTY_ORDER, Messages.common_order,
-				SortOrderEnum.class, NullEnum.NOTNULL) {
-			public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
+		orderD = new NamedEnumPropertyDescriptor<SortOrderEnum>(JRDesignSortField.PROPERTY_ORDER, Messages.common_order,
+				SortOrderEnum.ASCENDING, NullEnum.NOTNULL) {
+			public ASPropertyWidget<NamedEnumPropertyDescriptor<SortOrderEnum>> createWidget(Composite parent,
+					AbstractSection section) {
 				Image[] images = new Image[] {
 						JaspersoftStudioPlugin.getInstance().getImage("icons/resources/sort-number-column.png"), //$NON-NLS-1$
 						JaspersoftStudioPlugin.getInstance().getImage("icons/resources/sort-number-descending.png") }; //$NON-NLS-1$
-				return new SPToolBarEnum(parent, section, this, images, false);
+				return new SPToolBarEnum<NamedEnumPropertyDescriptor<SortOrderEnum>>(parent, section, this, images, false);
 			}
 		};
 		orderD.setDescription(Messages.MSortField_order_description);
@@ -243,12 +241,12 @@ public class MSortField extends APropertyNode implements ICopyable, IDragable {
 		if (id.equals(JRDesignSortField.PROPERTY_ORDER)) {
 			if (orderD == null)
 				getPropertyDescriptors();
-			return orderD.getEnumValue(jrField.getOrderValue());
+			return orderD.getIntValue(jrField.getOrderValue());
 		}
 		if (id.equals(JRDesignSortField.PROPERTY_TYPE)) {
 			if (typeD == null)
 				getPropertyDescriptors();
-			return typeD.getEnumValue(jrField.getType());
+			return typeD.getIntValue(jrField.getType());
 		}
 		return null;
 	}
@@ -266,23 +264,27 @@ public class MSortField extends APropertyNode implements ICopyable, IDragable {
 	private String getSortFieldKey(JRSortField sortField) {
 		return getSortFieldKey(sortField.getName(), sortField.getType().getName());
 	}
-	
-	private String getSortFieldKey(String name, String type){
+
+	private String getSortFieldKey(String name, String type) {
 		return name + "|" + type;
 	}
 
-	
 	/**
-	 * Change the name and the type of the sortfields updating also its entry
-	 * in the dataset map
+	 * Change the name and the type of the sortfields updating also its entry in the dataset map
 	 * 
-	 * @param oldName the old name
-	 * @param oldType the old type
-	 * @param newName the new name
-	 * @param newType the new type
-	 * @param field the field
+	 * @param oldName
+	 *          the old name
+	 * @param oldType
+	 *          the old type
+	 * @param newName
+	 *          the new name
+	 * @param newType
+	 *          the new type
+	 * @param field
+	 *          the field
 	 */
-	private void changeNameAndType(String oldName, String oldType, String newName, SortFieldTypeEnum newType, JRSortField field){
+	private void changeNameAndType(String oldName, String oldType, String newName, SortFieldTypeEnum newType,
+			JRSortField field) {
 		JRDesignDataset d = ModelUtils.getDataset(this);
 		if (d != null) {
 			String oldKey = getSortFieldKey(oldName, oldType);
@@ -293,37 +295,37 @@ public class MSortField extends APropertyNode implements ICopyable, IDragable {
 			jrField.setType(newType);
 		}
 	}
-	
+
 	/**
-	 * Change the type of the sort fields and give to it also a new available name 
-	 * according the its new type (the first free name). If there aren't free names 
-	 * available for that type then the type is not change either
+	 * Change the type of the sort fields and give to it also a new available name according the its new type (the first
+	 * free name). If there aren't free names available for that type then the type is not change either
 	 * 
-	 * @param newType the new type of the sort field
+	 * @param newType
+	 *          the new type of the sort field
 	 * @return true if the type and renaming option was successful, false otherwise
 	 */
-	private boolean selectFirstAvailableName(SortFieldTypeEnum newType){
+	private boolean selectFirstAvailableName(SortFieldTypeEnum newType) {
 		JRDesignDataset d = ModelUtils.getDataset(this);
 		JRDesignSortField jrField = (JRDesignSortField) getValue();
-		//chek if the type is the same
-		if (!newType.equals(jrField.getType())){
+		// chek if the type is the same
+		if (!newType.equals(jrField.getType())) {
 			String oldType = jrField.getType().getName();
 			if (newType.equals(SortFieldTypeEnum.FIELD)) {
 				List<JRField> fields = d.getFieldsList();
-				for (JRField field : fields){
+				for (JRField field : fields) {
 					String newName = field.getName();
 					String key = getSortFieldKey(newName, SortFieldTypeEnum.FIELD.getName());
-					if (!d.getSortFieldsMap().containsKey(key)){
+					if (!d.getSortFieldsMap().containsKey(key)) {
 						changeNameAndType(jrField.getName(), oldType, newName, SortFieldTypeEnum.FIELD, jrField);
 						return true;
 					}
 				}
 			} else {
 				List<JRVariable> variables = d.getVariablesList();
-				for (JRVariable variable : variables){
+				for (JRVariable variable : variables) {
 					String newName = variable.getName();
 					String key = getSortFieldKey(newName, SortFieldTypeEnum.VARIABLE.getName());
-					if (!d.getSortFieldsMap().containsKey(key)){
+					if (!d.getSortFieldsMap().containsKey(key)) {
 						changeNameAndType(jrField.getName(), oldType, newName, SortFieldTypeEnum.VARIABLE, jrField);
 						return true;
 					}
@@ -332,7 +334,7 @@ public class MSortField extends APropertyNode implements ICopyable, IDragable {
 		}
 		return false;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -345,8 +347,8 @@ public class MSortField extends APropertyNode implements ICopyable, IDragable {
 				String oldName = jrField.getName();
 				String oldType = jrField.getType().getName();
 				String newName = (String) value;
-				//The type is the same
-				changeNameAndType(oldName, oldType, newName,  jrField.getType(), jrField);
+				// The type is the same
+				changeNameAndType(oldName, oldType, newName, jrField.getType(), jrField);
 			}
 		} else if (id.equals(JRDesignSortField.PROPERTY_ORDER))
 			jrField.setOrder((SortOrderEnum) orderD.getEnumValue(value));

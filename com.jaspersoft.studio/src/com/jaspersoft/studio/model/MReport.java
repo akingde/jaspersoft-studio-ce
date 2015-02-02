@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.model;
 
@@ -68,6 +64,7 @@ import com.jaspersoft.studio.property.descriptor.properties.JPropertiesPropertyD
 import com.jaspersoft.studio.property.descriptors.IntegerPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSTextPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.PixelPropertyDescriptor;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.report.PageFormatUtils;
@@ -83,45 +80,45 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  * 
  * @author Chicu Veaceslav
  */
-public class MReport extends MLockableRefresh implements IGraphicElement, IContainerEditPart, IContainerLayout, IPastable {
-	
+public class MReport extends MLockableRefresh implements IGraphicElement, IContainerEditPart, IContainerLayout,
+		IPastable {
+
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
-	
+
 	public static final String PROPERY_CREATE_BOOKMARKS = "createBookmarks"; //$NON-NLS-1$
-	
+
 	private static final String JR_CREATE_BOOKMARKS = "net.sf.jasperreports.print.create.bookmarks"; //$NON-NLS-1$
-	
+
 	private Map<Object, Integer> bandIndexMap = new HashMap<Object, Integer>();
 
-	private static JSSEnumPropertyDescriptor orientationD;
-	
+	private static NamedEnumPropertyDescriptor<OrientationEnum> orientationD;
+
 	private static JSSEnumPropertyDescriptor printOrderD;
-	
+
 	private static JSSEnumPropertyDescriptor whenNoDataD;
-	
-	/** 
-	 * The icon descriptor. 
+
+	/**
+	 * The icon descriptor.
 	 */
 	private static IIconDescriptor iconDescriptor;
 
 	private static IPropertyDescriptor[] descriptors;
-	
+
 	private static Map<String, Object> defaultsMap;
 
 	private Map<String, Object> parameters;
-	
+
 	private MDataset mDataset;
 
 	private Map<Object, ANode> obj2Node = new HashMap<Object, ANode>();
 
 	/**
-	 * used when we need to change the position of a band. The differences between this and 
-	 * for example JRDesignSection.PROPERTY_BANDS is that this key uses a more light method to
-	 * do the changes and since the hierarchy remains the same it will keep also all the listeners
+	 * used when we need to change the position of a band. The differences between this and for example
+	 * JRDesignSection.PROPERTY_BANDS is that this key uses a more light method to do the changes and since the hierarchy
+	 * remains the same it will keep also all the listeners
 	 */
 	public static final String CHANGE_BAND_POSITION = "changeBandPosition"; //$NON-NLS-1$
-	
-	
+
 	@Override
 	public INode getRoot() {
 		return this;
@@ -207,7 +204,7 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Creates the property descriptors.
 	 * 
@@ -302,13 +299,14 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 		languageD.setCategory(Messages.common_report);
 		desc.add(languageD);
 
-		orientationD = new JSSEnumPropertyDescriptor(JasperDesign.PROPERTY_ORIENTATION, Messages.MReport_page_orientation,
-				OrientationEnum.class, NullEnum.NOTNULL) {
+		orientationD = new NamedEnumPropertyDescriptor<OrientationEnum>(JasperDesign.PROPERTY_ORIENTATION,
+				Messages.MReport_page_orientation, OrientationEnum.LANDSCAPE, NullEnum.NOTNULL) {
 			@Override
-			public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
+			public ASPropertyWidget<NamedEnumPropertyDescriptor<OrientationEnum>> createWidget(Composite parent,
+					AbstractSection section) {
 				Image[] images = new Image[] { JaspersoftStudioPlugin.getInstance().getImage("icons/resources/portrait16.png"), //$NON-NLS-1$
 						JaspersoftStudioPlugin.getInstance().getImage("icons/resources/landscape16.png") }; //$NON-NLS-1$
-				return new SPToolBarEnum(parent, section, this, images);
+				return new SPToolBarEnum<NamedEnumPropertyDescriptor<OrientationEnum>>(parent, section, this, images);
 			}
 		};
 		orientationD.setDescription(Messages.MReport_page_orientation_description);
@@ -353,11 +351,13 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 		ignorePaginationD.setDescription(Messages.MReport_ignore_pagination_description);
 		desc.add(ignorePaginationD);
 
-		JPropertiesPropertyDescriptor propertiesMapD = new JPropertiesPropertyDescriptor(MGraphicElement.PROPERTY_MAP,Messages.common_properties);
+		JPropertiesPropertyDescriptor propertiesMapD = new JPropertiesPropertyDescriptor(MGraphicElement.PROPERTY_MAP,
+				Messages.common_properties);
 		propertiesMapD.setDescription(Messages.common_properties);
 		desc.add(propertiesMapD);
-		
-		CheckBoxPropertyDescriptor createBookmarks = new CheckBoxPropertyDescriptor(PROPERY_CREATE_BOOKMARKS, Messages.MReport_createBookmarksTitle);
+
+		CheckBoxPropertyDescriptor createBookmarks = new CheckBoxPropertyDescriptor(PROPERY_CREATE_BOOKMARKS,
+				Messages.MReport_createBookmarksTitle);
 		titleNewPageD.setDescription(Messages.MReport_createBookmarksDescription);
 		desc.add(createBookmarks);
 
@@ -379,7 +379,7 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 		defaultsMap.put(JasperDesign.PROPERTY_COLUMN_COUNT, new Integer(1));
 		defaultsMap.put(JasperDesign.PROPERTY_COLUMN_WIDTH, new Integer(555));
 		defaultsMap.put(JasperDesign.PROPERTY_COLUMN_SPACING, new Integer(0));
-		defaultsMap.put(JasperDesign.PROPERTY_ORIENTATION, orientationD.getEnumValue(OrientationEnum.PORTRAIT));
+		defaultsMap.put(JasperDesign.PROPERTY_ORIENTATION, orientationD.getIntValue(OrientationEnum.PORTRAIT));
 		defaultsMap.put(JasperDesign.PROPERTY_PRINT_ORDER, printOrderD.getEnumValue(PrintOrderEnum.VERTICAL));
 		defaultsMap.put(JasperDesign.PROPERTY_WHEN_NO_DATA_TYPE, whenNoDataD.getEnumValue(WhenNoDataTypeEnum.NO_PAGES));
 		defaultsMap.put(JasperDesign.PROPERTY_TITLE_NEW_PAGE, Boolean.FALSE);
@@ -450,7 +450,7 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 			return jrDesign.getLanguage();
 
 		if (id.equals(JasperDesign.PROPERTY_ORIENTATION))
-			return orientationD.getEnumValue(jrDesign.getOrientationValue());
+			return orientationD.getIntValue(jrDesign.getOrientationValue());
 		if (id.equals(JasperDesign.PROPERTY_PRINT_ORDER))
 			return printOrderD.getEnumValue(jrDesign.getPrintOrderValue());
 		if (id.equals(JasperDesign.PROPERTY_WHEN_NO_DATA_TYPE))
@@ -470,10 +470,12 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 			// to avoid duplication I remove it first
 			return (JRPropertiesMap) jrDesign.getPropertiesMap().cloneProperties();
 		}
-		if(id.equals(PROPERY_CREATE_BOOKMARKS)){
-			String value =  jrDesign.getPropertiesMap().getProperty(JR_CREATE_BOOKMARKS);
-			if (value == null) return false;
-			else return Boolean.parseBoolean(value);
+		if (id.equals(PROPERY_CREATE_BOOKMARKS)) {
+			String value = jrDesign.getPropertiesMap().getProperty(JR_CREATE_BOOKMARKS);
+			if (value == null)
+				return false;
+			else
+				return Boolean.parseBoolean(value);
 		}
 		return null;
 	}
@@ -562,10 +564,10 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 			for (String str : v.getPropertyNames())
 				jrDesign.setProperty(str, v.getProperty(str));
 			this.getPropertyChangeSupport().firePropertyChange(MGraphicElement.PROPERTY_MAP, false, true);
-		} else 	if(id.equals(PROPERY_CREATE_BOOKMARKS)){
-			 jrDesign.getPropertiesMap().setProperty(JR_CREATE_BOOKMARKS, Boolean.toString((Boolean)value));
-			 //Necessary event to made the properties view update correctly, removing the old map from the entry widget
-			 this.getPropertyChangeSupport().firePropertyChange(MGraphicElement.PROPERTY_MAP, false, true);
+		} else if (id.equals(PROPERY_CREATE_BOOKMARKS)) {
+			jrDesign.getPropertiesMap().setProperty(JR_CREATE_BOOKMARKS, Boolean.toString((Boolean) value));
+			// Necessary event to made the properties view update correctly, removing the old map from the entry widget
+			this.getPropertyChangeSupport().firePropertyChange(MGraphicElement.PROPERTY_MAP, false, true);
 		}
 	}
 
@@ -621,11 +623,11 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 	 */
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		if (evt.getPropertyName().equals(JasperDesign.PROPERTY_COLUMN_COUNT) || 
-				evt.getPropertyName().equals(JasperDesign.PROPERTY_LEFT_MARGIN) ||
-				evt.getPropertyName().equals(JasperDesign.PROPERTY_RIGHT_MARGIN) || 
-				evt.getPropertyName().equals(JasperDesign.PROPERTY_PAGE_WIDTH) || 
-				evt.getPropertyName().equals(JasperDesign.PROPERTY_COLUMN_SPACING)){
+		if (evt.getPropertyName().equals(JasperDesign.PROPERTY_COLUMN_COUNT)
+				|| evt.getPropertyName().equals(JasperDesign.PROPERTY_LEFT_MARGIN)
+				|| evt.getPropertyName().equals(JasperDesign.PROPERTY_RIGHT_MARGIN)
+				|| evt.getPropertyName().equals(JasperDesign.PROPERTY_PAGE_WIDTH)
+				|| evt.getPropertyName().equals(JasperDesign.PROPERTY_COLUMN_SPACING)) {
 			PageFormatUtils.updateColumnWidth(getValue());
 		} else if (evt.getPropertyName().equals(JasperDesign.PROPERTY_DATASETS)) {
 			handleDatasourceChanged(evt);
@@ -718,7 +720,8 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 	/**
 	 * Handle the change of the position of a band
 	 * 
-	 * @param evt the event that changed the band position
+	 * @param evt
+	 *          the event that changed the band position
 	 */
 	protected void handleChangeOrder(PropertyChangeEvent evt) {
 		if (evt instanceof IndexedPropertyChangeEvent && evt.getNewValue() instanceof Integer) {
@@ -739,7 +742,7 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 			}
 		}
 	}
-	
+
 	/**
 	 * Handle detail band changed.
 	 * 
@@ -960,7 +963,7 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 			for (JRGroup obj : jrDesignDataset.getGroupsList()) {
 				removeGroupListener((JRDesignGroup) obj);
 			}
-			
+
 			JRPropertiesMap pmap = jrDesignDataset.getPropertiesMap();
 			pmap.getEventSupport().removePropertyChangeListener(this);
 			if (mDataset != null)
@@ -970,7 +973,7 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 			JasperDesign jasperDesign = (JasperDesign) value;
 			JRDesignDataset jrDesignDataset = (JRDesignDataset) jasperDesign.getMainDataset();
 			jrDesignDataset.getEventSupport().addPropertyChangeListener(this);
-			for (JRGroup obj : jrDesignDataset.getGroupsList()){
+			for (JRGroup obj : jrDesignDataset.getGroupsList()) {
 				addGroupListener((JRDesignGroup) obj);
 			}
 
@@ -1018,7 +1021,6 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 				- jd.getRightMargin(), jd.getPageHeight() - jd.getTopMargin() - jd.getBottomMargin());
 	}
 
-
 	public Object getParameter(String key) {
 		if (parameters == null)
 			parameters = new HashMap<String, Object>();
@@ -1049,9 +1051,9 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 	public void setBandIndex(int index, Object band) {
 		bandIndexMap.put(band, index);
 	}
-	
+
 	@Override
 	public boolean canAcceptChildren(ANode child) {
-		return (child instanceof MBand); 
+		return (child instanceof MBand);
 	}
 }

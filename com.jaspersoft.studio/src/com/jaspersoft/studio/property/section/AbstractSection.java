@@ -51,7 +51,7 @@ import com.jaspersoft.studio.property.section.widgets.SPWidgetFactory;
  */
 public abstract class AbstractSection extends AbstractPropertySection implements PropertyChangeListener,
 		IWidgetsProviderSection {
-	protected Map<Object, ASPropertyWidget> widgets = new HashMap<Object, ASPropertyWidget>();
+	protected Map<Object, ASPropertyWidget<?>> widgets = new HashMap<Object, ASPropertyWidget<?>>();
 
 	protected JasperReportsContext jasperReportsContext;
 	private List<APropertyNode> elements;
@@ -75,17 +75,18 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 		setRefreshing(false);
 	}
 
-	public ASPropertyWidget createWidget4Property(Composite composite, Object property) {
+	public ASPropertyWidget<?> createWidget4Property(Composite composite, Object property) {
 		return createWidget4Property(composite, property, true);
 	}
 
-	public ASPropertyWidget createWidget4Property(Composite composite, Object property, boolean showLabel) {
+	public ASPropertyWidget<?> createWidget4Property(Composite composite, Object property, boolean showLabel) {
 		return createWidget4Property(getElement(), composite, property, showLabel);
 	}
 
-	public ASPropertyWidget createWidget(Composite composite, Object property, boolean showLabel, IPropertyDescriptor pd) {
+	public ASPropertyWidget<?> createWidget(Composite composite, Object property, boolean showLabel,
+			IPropertyDescriptor pd) {
 		CLabel label = createLabel(composite, showLabel, pd);
-		ASPropertyWidget widget = SPWidgetFactory.createWidget(composite, this, pd);
+		ASPropertyWidget<?> widget = SPWidgetFactory.createWidget(composite, this, pd);
 		if (widget != null) {
 			widget.setLabel(label);
 			widgets.put(pd.getId(), widget);
@@ -94,14 +95,14 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 		return null;
 	}
 
-	public ASPropertyWidget createWidget4Property(APropertyNode element, Composite composite, Object property,
+	public ASPropertyWidget<?> createWidget4Property(APropertyNode element, Composite composite, Object property,
 			boolean showLabel) {
 		if (element != null) {
 			IPropertyDescriptor[] pds = element.getPropertyDescriptors();
 			for (IPropertyDescriptor pd : pds) {
 				if (pd.getId().equals(property)) {
 					CLabel label = createLabel(composite, showLabel, pd);
-					ASPropertyWidget widget = SPWidgetFactory.createWidget(composite, this, pd);
+					ASPropertyWidget<?> widget = SPWidgetFactory.createWidget(composite, this, pd);
 					if (widget != null) {
 						widget.setLabel(label);
 						widgets.put(pd.getId(), widget);
@@ -305,9 +306,11 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 			JSSCompoundCommand cc = new JSSCompoundCommand("Set " + property, null);
 			for (APropertyNode n : elements) {
 				cc.setReferenceNodeIfNull(n);
-				Command c = getChangePropertyCommand(property, newValue, n);
-				if (c != null)
-					cc.add(c);
+				if (isChanged(property, newValue, n)) {
+					Command c = getChangePropertyCommand(property, newValue, n);
+					if (c != null)
+						cc.add(c);
+				}
 			}
 			if (!cc.getCommands().isEmpty()) {
 				if (commands != null)
@@ -327,23 +330,33 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 	public void changePropertyOn(Object property, Object newValue, APropertyNode n, List<Command> commands) {
 		if (!isRefreshing() && elements != null && !elements.isEmpty() && getEditDomain() != null) {
 			CommandStack cs = getEditDomain().getCommandStack();
-			JSSCompoundCommand cc = new JSSCompoundCommand("Set " + property, n);
-			Command c = getChangePropertyCommand(property, newValue, n);
-			if (c != null)
-				cc.add(c);
-			if (!cc.getCommands().isEmpty()) {
-				if (commands != null)
-					for (Command c1 : commands)
-						cc.add(c1);
-				cs.execute(cc);
+			if (isChanged(property, newValue, n)) {
+				JSSCompoundCommand cc = new JSSCompoundCommand("Set " + property, n);
+				Command c = getChangePropertyCommand(property, newValue, n);
+				if (c != null)
+					cc.add(c);
+				if (!cc.getCommands().isEmpty()) {
+					if (commands != null)
+						for (Command c1 : commands)
+							cc.add(c1);
+					cs.execute(cc);
+				}
 			}
 		}
 	}
 
-	protected Command getChangePropertyCommand(Object property, Object newValue, APropertyNode n) {
+	private boolean isChanged(Object property, Object newValue, APropertyNode n) {
 		Object oldValue = n.getPropertyValue(property);
-		if (((oldValue == null && newValue != null) || (oldValue != null && newValue == null) || (newValue != null && !newValue
-				.equals(oldValue))) && getEditDomain() != null) {
+		if (oldValue == null && newValue == null)
+			return false;
+		if (oldValue != null && newValue != null && oldValue.equals(newValue) && getEditDomain() != null)
+			return false;
+		return true;
+
+	}
+
+	protected Command getChangePropertyCommand(Object property, Object newValue, APropertyNode n) {
+		if (isChanged(property, newValue, n)) {
 			SetValueCommand setCommand = new SetValueCommand(n.getDisplayText());
 			setCommand.setTarget(n);
 			setCommand.setPropertyId(property);

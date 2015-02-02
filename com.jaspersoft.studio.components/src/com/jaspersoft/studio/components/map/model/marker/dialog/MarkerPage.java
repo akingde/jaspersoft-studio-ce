@@ -71,7 +71,8 @@ public class MarkerPage extends WizardPage {
 			if (v == null)
 				return;
 			v = (Item) v.clone();
-			MarkerDialog dialog = new MarkerDialog(Display.getDefault().getActiveShell());
+			MarkerDialog dialog = new MarkerDialog(Display.getDefault()
+					.getActiveShell());
 			dialog.setValue((StandardItem) v, expContext);
 			if (dialog.open() == Window.OK)
 				input.set(pos, v);
@@ -114,47 +115,56 @@ public class MarkerPage extends WizardPage {
 		GridLayout layout = new GridLayout(2, false);
 		composite.setLayout(layout);
 		setControl(composite);
-		
-		FormText mapPickSuggestion=new FormText(composite, SWT.NONE);
+
+		FormText mapPickSuggestion = new FormText(composite, SWT.NONE);
 		mapPickSuggestion.setText(Messages.MarkerPage_0, true, false);
-		mapPickSuggestion.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false,2,1));
+		mapPickSuggestion.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
+				true, false, 2, 1));
 		mapPickSuggestion.setWhitespaceNormalized(true);
 		mapPickSuggestion.addHyperlinkListener(new HyperlinkAdapter() {
 			@Override
 			public void linkActivated(HyperlinkEvent e) {
-				MarkersPickupDialog staticMarkersDialog = new MarkersPickupDialog(getShell()){
+				MarkersPickupDialog staticMarkersDialog = new MarkersPickupDialog(
+						getShell()) {
 					@Override
 					protected void configureShell(Shell newShell) {
 						super.configureShell(newShell);
 						UIUtils.resizeAndCenterShell(newShell, 800, 600);
 					}
 				};
-				if(mapInfo==null){
-					mapInfo=getBasicMapInformation();
+				if (mapInfo == null) {
+					mapInfo = getBasicMapInformation();
 				}
-				if(mapInfo.getLatitude()!=null && mapInfo.getLongitude()!=null){
-					staticMarkersDialog.setInitialPosition(new LatLng(mapInfo.getLatitude(), mapInfo.getLongitude(), true));
+				if (mapInfo.getLatitude() != null
+						&& mapInfo.getLongitude() != null) {
+					staticMarkersDialog.setInitialPosition(new LatLng(mapInfo
+							.getLatitude(), mapInfo.getLongitude(), true));
 				}
-				if(mapInfo.getMapType()!=null) {
-					staticMarkersDialog.setType(
-							MapType.fromStringID(mapInfo.getMapType().getName()));
+				if (mapInfo.getMapType() != null) {
+					staticMarkersDialog.setType(MapType.fromStringID(mapInfo
+							.getMapType().getName()));
 				}
-				if(mapInfo.getZoom()!=0){
+				if (mapInfo.getZoom() != 0) {
 					staticMarkersDialog.setZoom(mapInfo.getZoom());
 				}
-				if(staticMarkersDialog.open()==Window.OK) {
-					List<LatLng> markersList = staticMarkersDialog.getMarkersList();
-					for(LatLng m : markersList) {
+				if (staticMarkersDialog.open() == Window.OK) {
+					List<LatLng> markersList = staticMarkersDialog
+							.getMarkersList();
+					for (LatLng m : markersList) {
 						StandardItem newMarker = new StandardItem();
-						newMarker.addItemProperty(new StandardItemProperty("latitude", null, new JRDesignExpression(m.getLat().floatValue()+"f"))); //$NON-NLS-1$ //$NON-NLS-2$
-						newMarker.addItemProperty(new StandardItemProperty("longitude", null, new JRDesignExpression(m.getLng().floatValue()+"f"))); //$NON-NLS-1$ //$NON-NLS-2$
+						newMarker
+								.addItemProperty(new StandardItemProperty(
+										"latitude", null, new JRDesignExpression(m.getLat().floatValue() + "f"))); //$NON-NLS-1$ //$NON-NLS-2$
+						newMarker
+								.addItemProperty(new StandardItemProperty(
+										"longitude", null, new JRDesignExpression(m.getLng().floatValue() + "f"))); //$NON-NLS-1$ //$NON-NLS-2$
 						value.getMarkers().add(newMarker);
 					}
 					tableViewer.setInput(value.getMarkers());
 				}
 			}
 		});
-		
+
 		buildTable(composite);
 
 		GridData gd = new GridData(GridData.FILL_BOTH);
@@ -165,23 +175,29 @@ public class MarkerPage extends WizardPage {
 		bGroup.setLayout(new GridLayout(1, false));
 		bGroup.setLayoutData(new GridData(GridData.FILL_VERTICAL));
 
-		new NewButton().createNewButtons(bGroup, tableViewer, new INewElement() {
+		new NewButton().createNewButtons(bGroup, tableViewer,
+				new INewElement() {
 
-			public Object newElement(List<?> input, int pos) {
-				ArrayList<ItemProperty> props = new ArrayList<ItemProperty>();
-				props.add(new StandardItemProperty("id", "CHANGE_ME_ID", null)); //$NON-NLS-1$ //$NON-NLS-2$
-				props.add(new StandardItemProperty("label", "CHANGE_ME_LABEL", null)); //$NON-NLS-1$ //$NON-NLS-2$
-				props.add(new StandardItemProperty("latitude", "0", null)); //$NON-NLS-1$ //$NON-NLS-2$
-				props.add(new StandardItemProperty("longitude", "0", null)); //$NON-NLS-1$ //$NON-NLS-2$
+					public Object newElement(List<?> input, int pos) {
+						ArrayList<ItemProperty> props = new ArrayList<ItemProperty>();
+						props.add(new StandardItemProperty(
+								"id", "CHANGE_ME_ID", null)); //$NON-NLS-1$ //$NON-NLS-2$
+						props.add(new StandardItemProperty(
+								"label", "CHANGE_ME_LABEL", null)); //$NON-NLS-1$ //$NON-NLS-2$
+						props.add(new StandardItemProperty(
+								"latitude", "0", null)); //$NON-NLS-1$ //$NON-NLS-2$
+						props.add(new StandardItemProperty(
+								"longitude", "0", null)); //$NON-NLS-1$ //$NON-NLS-2$
 
-				StandardItem v = new StandardItem(props);
-				MarkerDialog dialog = new MarkerDialog(Display.getDefault().getActiveShell());
-				dialog.setValue(v, expContext);
-				if (dialog.open() == Window.OK)
-					return v;
-				return null;
-			}
-		});
+						StandardItem v = new StandardItem(props);
+						MarkerDialog dialog = new MarkerDialog(Display
+								.getDefault().getActiveShell());
+						dialog.setValue(v, expContext);
+						if (dialog.open() == Window.OK)
+							return v;
+						return null;
+					}
+				});
 
 		editButton = new EditButton<Item>();
 		editButton.createEditButtons(bGroup, tableViewer, new EditElement());
@@ -189,14 +205,16 @@ public class MarkerPage extends WizardPage {
 		new ListOrderButtons().createOrderButtons(bGroup, tableViewer);
 
 		table.setFocus();
-		
+
 		if (value.getPnode() instanceof MMap) {
-			expContext = ((MMap)value.getPnode()).getMarkersExpressionContext();
+			expContext = ((MMap) value.getPnode())
+					.getMarkersExpressionContext();
 		}
 	}
 
 	private void buildTable(Composite composite) {
-		table = new Table(composite, SWT.BORDER | SWT.SINGLE | SWT.FULL_SELECTION | SWT.V_SCROLL);
+		table = new Table(composite, SWT.BORDER | SWT.SINGLE
+				| SWT.FULL_SELECTION | SWT.V_SCROLL);
 		table.setHeaderVisible(true);
 		table.addMouseListener(new MouseListener() {
 
@@ -226,7 +244,7 @@ public class MarkerPage extends WizardPage {
 
 		column[1] = new TableColumn(table, SWT.NONE);
 		column[1].setText(Messages.MarkerPage_LabelColumn);
-		
+
 		column[2] = new TableColumn(table, SWT.NONE);
 		column[2].setText(Messages.MarkerPage_LatitudeColumn);
 
@@ -258,42 +276,48 @@ public class MarkerPage extends WizardPage {
 		MMap mapRef = (MMap) value.getPnode();
 		BasicMapInfo info = new BasicMapInfo();
 		JRDesignDataset dataset = ModelUtils.getDataset(mapRef);
-		if(dataset==null){
-			dataset = (JRDesignDataset) mapRef.getJasperDesign().getMainDataset();
+		if (dataset == null) {
+			dataset = (JRDesignDataset) mapRef.getJasperDesign()
+					.getMainDataset();
 		}
-		ExpressionInterpreter expIntr = 
-				new ExpressionInterpreter(dataset, mapRef.getJasperDesign(), mapRef.getJasperConfiguration());
+		ExpressionInterpreter expIntr = new ExpressionInterpreter(dataset,
+				mapRef.getJasperDesign(), mapRef.getJasperConfiguration());
 		// Center
-		JRDesignExpression latitudeExpr = (JRDesignExpression) mapRef.getPropertyValue(StandardMapComponent.PROPERTY_LATITUDE_EXPRESSION);
-		JRDesignExpression longitudeExpr = (JRDesignExpression) mapRef.getPropertyValue(StandardMapComponent.PROPERTY_LONGITUDE_EXPRESSION);
-		if(latitudeExpr!=null && longitudeExpr!=null) {
-			Object latObj = expIntr.interpretExpression(Misc.nvl(latitudeExpr.getText()));
-			Object lngObj = expIntr.interpretExpression(Misc.nvl(longitudeExpr.getText()));
-			if(latObj instanceof Number && lngObj instanceof Number) {
-				info.setLatitude(((Number)latObj).doubleValue());
-				info.setLongitude(((Number)lngObj).doubleValue());
+		JRDesignExpression latitudeExpr = (JRDesignExpression) mapRef
+				.getPropertyValue(StandardMapComponent.PROPERTY_LATITUDE_EXPRESSION);
+		JRDesignExpression longitudeExpr = (JRDesignExpression) mapRef
+				.getPropertyValue(StandardMapComponent.PROPERTY_LONGITUDE_EXPRESSION);
+		if (latitudeExpr != null && longitudeExpr != null) {
+			Object latObj = expIntr.interpretExpression(Misc.nvl(latitudeExpr
+					.getText()));
+			Object lngObj = expIntr.interpretExpression(Misc.nvl(longitudeExpr
+					.getText()));
+			if (latObj instanceof Number && lngObj instanceof Number) {
+				info.setLatitude(((Number) latObj).doubleValue());
+				info.setLongitude(((Number) lngObj).doubleValue());
 			}
 		}
 		// Zoom
-		JRDesignExpression zoomExpr = (JRDesignExpression) mapRef.getPropertyValue(StandardMapComponent.PROPERTY_ZOOM_EXPRESSION);
-		if(zoomExpr!=null) {
+		JRDesignExpression zoomExpr = (JRDesignExpression) mapRef
+				.getPropertyValue(StandardMapComponent.PROPERTY_ZOOM_EXPRESSION);
+		if (zoomExpr != null) {
 			Object zoomObj = expIntr.interpretExpression(zoomExpr.getText());
-			if(zoomObj instanceof Number) {
+			if (zoomObj instanceof Number) {
 				info.setZoom(((Number) zoomObj).intValue());
-			}
-			else {
+			} else {
 				info.setZoom(MapComponent.DEFAULT_ZOOM);
 			}
-		}		
+		}
 		// Map Type
-		Integer type = (Integer) mapRef.getPropertyValue(StandardMapComponent.PROPERTY_MAP_TYPE);
-		if(type!=null){
-			MapTypeEnum typeVal = MapTypeEnum.getByValue(type.byteValue());
+		Integer type = (Integer) mapRef
+				.getPropertyValue(StandardMapComponent.PROPERTY_MAP_TYPE);
+		if (type != null) {
+			MapTypeEnum typeVal = mapRef.getMapTypeD().getEnumValue(type);
 			info.setMapType(typeVal);
 		}
 		return info;
 	}
-	
+
 	class BasicMapInfo {
 
 		private Double latitude;

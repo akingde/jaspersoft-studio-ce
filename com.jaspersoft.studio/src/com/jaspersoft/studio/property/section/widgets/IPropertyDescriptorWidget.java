@@ -25,5 +25,5 @@ public interface IPropertyDescriptorWidget {
 	 * @param section
 	 * @return
 	 */
-	public ASPropertyWidget createWidget(Composite parent, AbstractSection section);
+	public ASPropertyWidget<?> createWidget(Composite parent, AbstractSection section);
 }

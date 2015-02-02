@@ -42,6 +42,7 @@ import com.jaspersoft.studio.components.barcode.model.barcode4j.MEAN8;
 import com.jaspersoft.studio.components.barcode.model.barcode4j.MInterleaved2Of5;
 import com.jaspersoft.studio.components.barcode.model.barcode4j.MPDF417;
 import com.jaspersoft.studio.components.barcode.model.barcode4j.MPOSTNET;
+import com.jaspersoft.studio.components.barcode.model.barcode4j.MQRCode;
 import com.jaspersoft.studio.components.barcode.model.barcode4j.MRoyalMail;
 import com.jaspersoft.studio.components.barcode.model.barcode4j.MUPCA;
 import com.jaspersoft.studio.components.barcode.model.barcode4j.MUPCE;
@@ -102,6 +103,8 @@ public class BarcodeWizardPage extends JSSHelpWizardPage {
 				barcode = new MUSPSIntelligent();
 			else if (b4jCode.equals("PostNet")) //$NON-NLS-1$
 				barcode = new MPOSTNET();
+			else if (b4jCode.equals("QRCode")) //$NON-NLS-1$
+				barcode = new MQRCode();
 		} else if (bbcCode != null) {
 			barcode = new MBarcodeBarbecue();
 			JRDesignComponentElement de = (JRDesignComponentElement) barcode
@@ -209,7 +212,7 @@ public class BarcodeWizardPage extends JSSHelpWizardPage {
 
 		String[] items = new String[] {
 				"Codabar", "Code128", "Code39", "EAN128", "EAN13", "EAN8", "PDF417", "PostNet", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
-				"DataMatrix", "Int2of5", "RoyalMailCustomer", "UPCA", "UPCE", "USPS" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
+				"DataMatrix", "Int2of5", "RoyalMailCustomer", "UPCA", "UPCE", "USPS", "QRCode" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
 		for (int i = 0; i < items.length; i++) {
 			TableItem ti = new TableItem(table, SWT.NONE);
 			ti.setText(items[i]);

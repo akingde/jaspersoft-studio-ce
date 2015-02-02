@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.model.image;
 
@@ -32,10 +28,8 @@ import net.sf.jasperreports.engine.design.JRDesignImage;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.EvaluationTimeEnum;
 import net.sf.jasperreports.engine.type.FillEnum;
-import net.sf.jasperreports.engine.type.HorizontalImageAlignEnum;
 import net.sf.jasperreports.engine.type.OnErrorTypeEnum;
 import net.sf.jasperreports.engine.type.ScaleImageEnum;
-import net.sf.jasperreports.engine.type.VerticalImageAlignEnum;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
@@ -131,34 +125,35 @@ public class MImage extends MGraphicElementLineBox {
 		if (evalGroupD != null)
 			evalGroupD.setItems(items);
 	}
-	
+
 	@Override
-	public JRDataset getElementDataset(){
+	public JRDataset getElementDataset() {
 		return getElementDataset(this);
 	}
-	
+
 	/**
 	 * Return the dataset nearest to this element
 	 * 
-	 * @param node the actual node
+	 * @param node
+	 *          the actual node
 	 * @return the dataset nearest to this element or null if it can't be found
 	 */
-	private JRDataset getElementDataset(ANode node){
-		if (node instanceof APropertyNode){
-			APropertyNode pnode = (APropertyNode)node;
+	private JRDataset getElementDataset(ANode node) {
+		if (node instanceof APropertyNode) {
+			APropertyNode pnode = (APropertyNode) node;
 			MDatasetRun mdataset = (MDatasetRun) pnode.getPropertyValue(JRDesignElementDataset.PROPERTY_DATASET_RUN);
 			if (mdataset != null) {
-					JRDesignDatasetRun datasetRun = mdataset.getValue();
-					if (datasetRun != null) {
-						String dsname = datasetRun.getDatasetName();
-						return getJasperDesign().getDatasetMap().get(dsname);
-					}
-			} 
+				JRDesignDatasetRun datasetRun = mdataset.getValue();
+				if (datasetRun != null) {
+					String dsname = datasetRun.getDatasetName();
+					return getJasperDesign().getDatasetMap().get(dsname);
+				}
+			}
 		}
 		ANode parent = node.getParent();
-		if (parent != null){
+		if (parent != null) {
 			return getElementDataset(parent);
-		} else if (getJasperDesign() != null){
+		} else if (getJasperDesign() != null) {
 			return getJasperDesign().getMainDataset();
 		} else {
 			return null;
@@ -188,7 +183,8 @@ public class MImage extends MGraphicElementLineBox {
 				NullEnum.INHERITED);
 		fillD.setDescription(Messages.MImage_fill_description);
 		desc.add(fillD);
-		fillD.setHelpRefBuilder(new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#style_fill"));
+		fillD.setHelpRefBuilder(new HelpReferenceBuilder(
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#style_fill"));
 
 		scaleImageD = new JSSEnumPropertyDescriptor(JRBaseStyle.PROPERTY_SCALE_IMAGE, Messages.MImage_scale_image,
 				ScaleImageEnum.class, NullEnum.INHERITED);
@@ -196,12 +192,12 @@ public class MImage extends MGraphicElementLineBox {
 		desc.add(scaleImageD);
 
 		hAlignD = new ImageHAlignPropertyDescriptor(JRBaseStyle.PROPERTY_HORIZONTAL_IMAGE_ALIGNMENT,
-				Messages.common_horizontal_alignment, HorizontalImageAlignEnum.class, NullEnum.INHERITED);
+				Messages.common_horizontal_alignment, NullEnum.INHERITED);
 		hAlignD.setDescription(Messages.MImage_horizontal_alignment_description);
 		desc.add(hAlignD);
 
-		vAlignD = new ImageVAlignPropertyDescriptor(JRBaseStyle.PROPERTY_VERTICAL_IMAGE_ALIGNMENT, Messages.common_vertical_alignment,
-				VerticalImageAlignEnum.class, NullEnum.INHERITED);
+		vAlignD = new ImageVAlignPropertyDescriptor(JRBaseStyle.PROPERTY_VERTICAL_IMAGE_ALIGNMENT,
+				Messages.common_vertical_alignment, NullEnum.INHERITED);
 		vAlignD.setDescription(Messages.MImage_vertical_alignment_description);
 		desc.add(vAlignD);
 
@@ -216,7 +212,7 @@ public class MImage extends MGraphicElementLineBox {
 		desc.add(evaluationTimeD);
 
 		evalGroupD = new RWComboBoxPropertyDescriptor(JRDesignImage.PROPERTY_EVALUATION_GROUP,
-				Messages.MTextField_evaluation_group, new String[] { "" },  NullEnum.NULL); //$NON-NLS-1$
+				Messages.MTextField_evaluation_group, new String[] { "" }, NullEnum.NULL); //$NON-NLS-1$
 		evalGroupD.setDescription(Messages.MTextField_evaluation_group_description);
 		desc.add(evalGroupD);
 
@@ -232,15 +228,18 @@ public class MImage extends MGraphicElementLineBox {
 
 		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#image");
 
-		JRExpressionPropertyDescriptor anchorNameExp = new JRExpressionPropertyDescriptor(JRDesignImage.PROPERTY_ANCHOR_NAME_EXPRESSION, Messages.MTextField_anchorNameLabel);
+		JRExpressionPropertyDescriptor anchorNameExp = new JRExpressionPropertyDescriptor(
+				JRDesignImage.PROPERTY_ANCHOR_NAME_EXPRESSION, Messages.MTextField_anchorNameLabel);
 		anchorNameExp.setDescription(Messages.MTextField_anchorNameDescription);
 		desc.add(anchorNameExp);
-		
-		SpinnerPropertyDescriptor bookmarkLevel = new SpinnerPropertyDescriptor(JRDesignImage.PROPERTY_BOOKMARK_LEVEL, Messages.MTextField_bookmarkLevelLabel);
+
+		SpinnerPropertyDescriptor bookmarkLevel = new SpinnerPropertyDescriptor(JRDesignImage.PROPERTY_BOOKMARK_LEVEL,
+				Messages.MTextField_bookmarkLevelLabel);
 		bookmarkLevel.setDescription(Messages.MTextField_bookmarkLevelDescription);
-		bookmarkLevel.setHelpRefBuilder(new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#chart_bookmarkLevel")); //$NON-NLS-1$
+		bookmarkLevel.setHelpRefBuilder(new HelpReferenceBuilder(
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#chart_bookmarkLevel")); //$NON-NLS-1$
 		desc.add(bookmarkLevel);
-		
+
 		if (mHyperLink == null)
 			mHyperLink = new MHyperLink(null);
 		mHyperLink.createPropertyDescriptors(desc, defaultsMap);
@@ -271,9 +270,9 @@ public class MImage extends MGraphicElementLineBox {
 	private MHyperLink mHyperLink;
 
 	private static JSSEnumPropertyDescriptor scaleImageD;
-	private static JSSEnumPropertyDescriptor hAlignD;
+	private static ImageHAlignPropertyDescriptor hAlignD;
 	private static JSSEnumPropertyDescriptor fillD;
-	private static JSSEnumPropertyDescriptor vAlignD;
+	private static ImageVAlignPropertyDescriptor vAlignD;
 	private static JSSEnumPropertyDescriptor onErrorTypeD;
 	private static JSSEnumPropertyDescriptor evaluationTimeD;
 
@@ -285,9 +284,9 @@ public class MImage extends MGraphicElementLineBox {
 		if (id.equals(JRBaseStyle.PROPERTY_SCALE_IMAGE))
 			return scaleImageD.getEnumValue(jrElement.getOwnScaleImageValue());
 		if (id.equals(JRBaseStyle.PROPERTY_HORIZONTAL_IMAGE_ALIGNMENT))
-			return hAlignD.getEnumValue(jrElement.getOwnHorizontalImageAlign());
+			return hAlignD.getIntValue(jrElement.getOwnHorizontalImageAlign());
 		if (id.equals(JRBaseStyle.PROPERTY_VERTICAL_IMAGE_ALIGNMENT))
-			return vAlignD.getEnumValue(jrElement.getOwnVerticalImageAlign());
+			return vAlignD.getIntValue(jrElement.getOwnVerticalImageAlign());
 		if (id.equals(JRBaseImage.PROPERTY_ON_ERROR_TYPE))
 			return onErrorTypeD.getEnumValue(jrElement.getOnErrorTypeValue());
 		if (id.equals(JRDesignImage.PROPERTY_EVALUATION_TIME))
@@ -324,10 +323,10 @@ public class MImage extends MGraphicElementLineBox {
 		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_WHEN_EXPRESSION)) {
 			return ExprUtil.getExpression(jrElement.getHyperlinkWhenExpression());
 		}
-		if (id.equals(JRDesignImage.PROPERTY_ANCHOR_NAME_EXPRESSION)){
+		if (id.equals(JRDesignImage.PROPERTY_ANCHOR_NAME_EXPRESSION)) {
 			return ExprUtil.getExpression(jrElement.getAnchorNameExpression());
 		}
-		if (id.equals(JRDesignImage.PROPERTY_BOOKMARK_LEVEL)){
+		if (id.equals(JRDesignImage.PROPERTY_BOOKMARK_LEVEL)) {
 			return jrElement.getBookmarkLevel();
 		}
 		return super.getPropertyValue(id);
@@ -341,9 +340,40 @@ public class MImage extends MGraphicElementLineBox {
 		if (id.equals(JRBaseStyle.PROPERTY_SCALE_IMAGE))
 			return scaleImageD.getEnumValue(jrElement.getScaleImageValue());
 		if (id.equals(JRBaseStyle.PROPERTY_HORIZONTAL_IMAGE_ALIGNMENT))
-			return hAlignD.getEnumValue(jrElement.getHorizontalImageAlign());
+			return hAlignD.getIntValue(jrElement.getHorizontalImageAlign());
 		if (id.equals(JRBaseStyle.PROPERTY_VERTICAL_IMAGE_ALIGNMENT))
-			return vAlignD.getEnumValue(jrElement.getVerticalImageAlign());
+			return vAlignD.getIntValue(jrElement.getVerticalImageAlign());
+		if (id.equals(JRBaseImage.PROPERTY_ON_ERROR_TYPE))
+			return onErrorTypeD.getEnumValue(jrElement.getOnErrorTypeValue());
+		if (id.equals(JRDesignImage.PROPERTY_EVALUATION_TIME))
+			return evaluationTimeD.getEnumValue(jrElement.getEvaluationTimeValue());
+		if (id.equals(JRDesignImage.PROPERTY_EXPRESSION))
+			return ExprUtil.getExpression(jrElement.getExpression());
+
+		if (id.equals(JRDesignImage.PROPERTY_EVALUATION_GROUP)) {
+			if (jrElement.getEvaluationGroup() != null)
+				return jrElement.getEvaluationGroup().getName();
+			return ""; //$NON-NLS-1$
+		}
+		if (id.equals(JRBaseImage.PROPERTY_USING_CACHE))
+			return jrElement.getUsingCache();
+		if (id.equals(JRBaseImage.PROPERTY_LAZY))
+			return new Boolean(jrElement.isLazy());
+		// hyperlink --------------------------------------
+		if (id.equals(JRDesignHyperlink.PROPERTY_LINK_TARGET))
+			return jrElement.getLinkTarget();
+		if (id.equals(JRDesignHyperlink.PROPERTY_LINK_TYPE))
+			return jrElement.getLinkType();
+		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_ANCHOR_EXPRESSION))
+			return ExprUtil.getExpression(jrElement.getHyperlinkAnchorExpression());
+		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_PAGE_EXPRESSION))
+			return ExprUtil.getExpression(jrElement.getHyperlinkPageExpression());
+		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_REFERENCE_EXPRESSION))
+			return ExprUtil.getExpression(jrElement.getHyperlinkReferenceExpression());
+		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_TOOLTIP_EXPRESSION))
+			return ExprUtil.getExpression(jrElement.getHyperlinkTooltipExpression());
+		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_WHEN_EXPRESSION))
+			return ExprUtil.getExpression(jrElement.getHyperlinkWhenExpression());
 		return super.getPropertyActualValue(id);
 	}
 
@@ -355,16 +385,16 @@ public class MImage extends MGraphicElementLineBox {
 		else if (id.equals(JRBaseStyle.PROPERTY_SCALE_IMAGE))
 			jrElement.setScaleImage((ScaleImageEnum) scaleImageD.getEnumValue(value));
 		else if (id.equals(JRBaseStyle.PROPERTY_HORIZONTAL_IMAGE_ALIGNMENT))
-			jrElement.setHorizontalImageAlign((HorizontalImageAlignEnum) hAlignD.getEnumValue(value));
+			jrElement.setHorizontalImageAlign(hAlignD.getEnumValue(value));
 		else if (id.equals(JRBaseStyle.PROPERTY_VERTICAL_IMAGE_ALIGNMENT))
-			jrElement.setVerticalImageAlign((VerticalImageAlignEnum) vAlignD.getEnumValue(value));
+			jrElement.setVerticalImageAlign(vAlignD.getEnumValue(value));
 		else if (id.equals(JRBaseImage.PROPERTY_ON_ERROR_TYPE))
 			jrElement.setOnErrorType((OnErrorTypeEnum) onErrorTypeD.getEnumValue(value));
 		else if (id.equals(JRDesignImage.PROPERTY_EVALUATION_TIME))
 			jrElement.setEvaluationTime((EvaluationTimeEnum) evaluationTimeD.getEnumValue(value));
 		else if (id.equals(JRDesignImage.PROPERTY_EVALUATION_GROUP)) {
 			if (value != null && !value.equals("")) { //$NON-NLS-1$
-				JRDesignDataset dataset = (JRDesignDataset)getElementDataset();
+				JRDesignDataset dataset = (JRDesignDataset) getElementDataset();
 				JRGroup group = (JRGroup) dataset.getGroupsMap().get(value);
 				jrElement.setEvaluationGroup(group);
 			}
@@ -391,16 +421,16 @@ public class MImage extends MGraphicElementLineBox {
 		} else if (id.equals(JRDesignImage.PROPERTY_ANCHOR_NAME_EXPRESSION))
 			jrElement.setAnchorNameExpression(ExprUtil.setValues(jrElement.getAnchorNameExpression(), value));
 		else if (id.equals(JRDesignImage.PROPERTY_BOOKMARK_LEVEL))
-			jrElement.setBookmarkLevel(value != null ? Integer.parseInt(value.toString()) : 0); 
+			jrElement.setBookmarkLevel(value != null ? Integer.parseInt(value.toString()) : 0);
 		else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_PARAMETERS)) {
 			JRHyperlinkParameter[] oldParameters = jrElement.getHyperlinkParameters();
 			JRHyperlinkParameter[] newParameters = (JRHyperlinkParameter[]) value;
-			if (oldParameters != null){
-				for (JRHyperlinkParameter prm : oldParameters){
+			if (oldParameters != null) {
+				for (JRHyperlinkParameter prm : oldParameters) {
 					jrElement.removeHyperlinkParameter(prm);
 				}
 			}
-			for (JRHyperlinkParameter param : newParameters){
+			for (JRHyperlinkParameter param : newParameters) {
 				jrElement.addHyperlinkParameter(param);
 			}
 		}
@@ -409,14 +439,16 @@ public class MImage extends MGraphicElementLineBox {
 
 	@Override
 	public int getDefaultHeight() {
-		Object defaultValue = DefaultManager.INSTANCE.getDefaultPropertiesValue(this.getClass(), JRDesignElement.PROPERTY_HEIGHT);
-		return defaultValue != null ? (Integer)defaultValue : 50;
+		Object defaultValue = DefaultManager.INSTANCE.getDefaultPropertiesValue(this.getClass(),
+				JRDesignElement.PROPERTY_HEIGHT);
+		return defaultValue != null ? (Integer) defaultValue : 50;
 	}
 
 	@Override
 	public int getDefaultWidth() {
-		Object defaultValue = DefaultManager.INSTANCE.getDefaultPropertiesValue(this.getClass(), JRDesignElement.PROPERTY_WIDTH);
-		return defaultValue != null ? (Integer)defaultValue : 50;
+		Object defaultValue = DefaultManager.INSTANCE.getDefaultPropertiesValue(this.getClass(),
+				JRDesignElement.PROPERTY_WIDTH);
+		return defaultValue != null ? (Integer) defaultValue : 50;
 	}
 
 	/*
@@ -427,7 +459,7 @@ public class MImage extends MGraphicElementLineBox {
 	@Override
 	public JRDesignElement createJRElement(JasperDesign jasperDesign) {
 		JRDesignElement jrDesignElement = new JRDesignImage(jasperDesign);
-		
+
 		DefaultManager.INSTANCE.applyDefault(this.getClass(), jrDesignElement);
 
 		jrDesignElement.setWidth(getDefaultWidth());
@@ -471,11 +503,11 @@ public class MImage extends MGraphicElementLineBox {
 		}
 		return getIconDescriptor().getToolTip();
 	}
-	
+
 	/**
 	 * Return the graphical properties for an MImage
 	 */
-	public HashSet<String> generateGraphicalProperties(){
+	public HashSet<String> generateGraphicalProperties() {
 		HashSet<String> result = super.generateGraphicalProperties();
 		result.add(JRBaseStyle.PROPERTY_FILL);
 		result.add(JRBaseStyle.PROPERTY_SCALE_IMAGE);
@@ -484,14 +516,14 @@ public class MImage extends MGraphicElementLineBox {
 		result.add(JRDesignImage.PROPERTY_EXPRESSION);
 		return result;
 	}
-	
+
 	@Override
-	public void trasnferProperties(JRElement target){
+	public void trasnferProperties(JRElement target) {
 		super.trasnferProperties(target);
-		
+
 		JRDesignImage jrSource = (JRDesignImage) getValue();
-		if (jrSource != null){
-			JRDesignImage jrTarget = (JRDesignImage)target;
+		if (jrSource != null) {
+			JRDesignImage jrTarget = (JRDesignImage) target;
 			jrTarget.setFill(jrSource.getOwnFillValue());
 			jrTarget.setScaleImage(jrSource.getOwnScaleImageValue());
 			jrTarget.setHorizontalImageAlign(jrSource.getOwnHorizontalImageAlign());

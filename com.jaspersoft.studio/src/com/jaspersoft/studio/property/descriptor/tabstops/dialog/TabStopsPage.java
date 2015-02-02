@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.property.descriptor.tabstops.dialog;
 
@@ -39,6 +35,7 @@ import org.eclipse.swt.widgets.TableItem;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
+import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 import com.jaspersoft.studio.swt.widgets.table.DeleteButton;
 import com.jaspersoft.studio.swt.widgets.table.INewElement;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
@@ -158,6 +155,9 @@ public class TabStopsPage extends WizardPage {
 		table.setLayout(tlayout);
 	}
 
+	private NamedEnumPropertyDescriptor<TabStopAlignEnum> sfdesc = new NamedEnumPropertyDescriptor<TabStopAlignEnum>(
+			null, null, TabStopAlignEnum.CENTER, NullEnum.NOTNULL);
+
 	private void attachCellEditors(final TableViewer viewer, Composite parent) {
 		viewer.setCellModifier(new ICellModifier() {
 			public boolean canModify(Object element, String property) {
@@ -174,7 +174,7 @@ public class TabStopsPage extends WizardPage {
 					return Integer.toString(prop.getPosition());
 
 				if ("ALIGNEMENT".equals(property)) { //$NON-NLS-1$
-					return EnumHelper.getValue(prop.getAlignment(), 1, false);
+					return sfdesc.getIntValue(prop.getAlignment());
 				}
 				return ""; //$NON-NLS-1$
 			}
@@ -192,7 +192,7 @@ public class TabStopsPage extends WizardPage {
 					}
 
 				} else if ("ALIGNEMENT".equals(property)) { //$NON-NLS-1$
-					data.setAlignment((TabStopAlignEnum) EnumHelper.getSetValue(TabStopAlignEnum.values(), value, 1, false));
+					data.setAlignment(sfdesc.getEnumValue(TabStopAlignEnum.values()));
 				}
 				tableViewer.update(element, new String[] { property });
 				tableViewer.refresh();

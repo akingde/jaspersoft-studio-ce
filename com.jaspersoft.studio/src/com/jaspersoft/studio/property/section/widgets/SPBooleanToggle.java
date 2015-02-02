@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.property.section.widgets;
 
@@ -21,17 +17,17 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
-import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
-public class SPBooleanToggle extends ASPropertyWidget {
+public class SPBooleanToggle extends ASPropertyWidget<CheckBoxPropertyDescriptor> {
 	private ToolItem cmb3Bool;
-	
+
 	private Composite parent;
 
-	public SPBooleanToggle(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor, Image image) {
+	public SPBooleanToggle(Composite parent, AbstractSection section, CheckBoxPropertyDescriptor pDescriptor, Image image) {
 		super(parent, section, pDescriptor);
 		if (image != null)
 			cmb3Bool.setImage(image);
@@ -41,16 +37,15 @@ public class SPBooleanToggle extends ASPropertyWidget {
 	public Control getControl() {
 		return null;
 	}
-	
+
 	@Override
 	public Control getControlToBorder() {
 		return parent;
 	}
-	
-	protected PaintListener getPaintControlListener(){
+
+	protected PaintListener getPaintControlListener() {
 		return DefaultWidgetsHighlighters.getWidgetForType(ToolItem.class);
 	}
-	
 
 	public void createComponent(Composite parent) {
 		this.parent = parent;

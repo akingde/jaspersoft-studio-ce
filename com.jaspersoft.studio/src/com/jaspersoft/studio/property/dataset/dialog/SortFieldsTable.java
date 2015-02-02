@@ -47,6 +47,7 @@ import com.jaspersoft.studio.model.sortfield.MSortField;
 import com.jaspersoft.studio.model.sortfield.command.wizard.SortFieldWizard;
 import com.jaspersoft.studio.model.variable.MVariable;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
+import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 import com.jaspersoft.studio.swt.widgets.table.DeleteButton;
 import com.jaspersoft.studio.swt.widgets.table.INewElement;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
@@ -167,6 +168,9 @@ public class SortFieldsTable {
 		return (List<JRDesignSortField>) tviewer.getInput();
 	}
 
+	NamedEnumPropertyDescriptor<SortFieldTypeEnum> sfdesc = new NamedEnumPropertyDescriptor<SortFieldTypeEnum>(null,
+			null, SortFieldTypeEnum.FIELD, NullEnum.NOTNULL);
+
 	private void attachCellEditors(final TableViewer viewer, Composite parent) {
 		viewer.setCellModifier(new ICellModifier() {
 			public boolean canModify(Object element, String property) {
@@ -184,7 +188,7 @@ public class SortFieldsTable {
 				if ("NAME".equals(property)) //$NON-NLS-1$
 					return prop.getName();
 				if ("TYPE".equals(property)) //$NON-NLS-1$
-					return EnumHelper.getValue(prop.getType(), 0, false);
+					return sfdesc.getIntValue(prop.getType());
 				if ("ORDER".equals(property)) //$NON-NLS-1$
 					return EnumHelper.getValue(prop.getOrderValue(), 1, false);
 
@@ -197,7 +201,7 @@ public class SortFieldsTable {
 				if ("NAME".equals(property)) { //$NON-NLS-1$
 					field.setName((String) value);
 				} else if ("TYPE".equals(property)) { //$NON-NLS-1$
-					field.setType((SortFieldTypeEnum) EnumHelper.getSetValue(SortFieldTypeEnum.values(), value, 0, false));
+					field.setType((SortFieldTypeEnum) sfdesc.getEnumValue(value));
 				} else if ("ORDER".equals(property)) { //$NON-NLS-1$
 					field.setOrder((SortOrderEnum) EnumHelper.getSetValue(SortOrderEnum.values(), value, 1, false));
 				}

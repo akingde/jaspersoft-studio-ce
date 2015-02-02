@@ -62,64 +62,74 @@ import com.jaspersoft.studio.model.MPage;
 import com.jaspersoft.studio.model.dataset.MDatasetRun;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
-import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 import com.jaspersoft.studio.utils.Misc;
 
-public class MTable extends MGraphicElement implements IContainer, IContainerEditPart, IGroupElement, IContainerLayout, IDatasetContainer {
-	
+public class MTable extends MGraphicElement implements IContainer,
+		IContainerEditPart, IGroupElement, IContainerLayout, IDatasetContainer {
+
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	private static IIconDescriptor iconDescriptor;
-	
+
 	private TableManager ctManager;
-	
+
 	/**
 	 * The dataset where the group listener was placed last
 	 */
 	private JRDesignDataset datasetWithListener = null;
-	
+
 	/**
-	 * Listener put on the current dataset to refresh the group node on the tables
-	 * when a group is added on removed on his dataset
+	 * Listener put on the current dataset to refresh the group node on the
+	 * tables when a group is added on removed on his dataset
 	 */
 	private PropertyChangeListener datasetGroupListener = new PropertyChangeListener() {
-		
+
 		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
-			if (evt.getPropertyName().equals(JRDesignDataset.PROPERTY_GROUPS)){
-				//this need to be done only inside the table editor
-				if (evt.getNewValue() != null && evt.getOldValue() == null && getChildren().size()>0){
+			if (evt.getPropertyName().equals(JRDesignDataset.PROPERTY_GROUPS)) {
+				// this need to be done only inside the table editor
+				if (evt.getNewValue() != null && evt.getOldValue() == null
+						&& getChildren().size() > 0) {
 					MTableDetail detailNode = null;
-					for(INode child : getChildren()){
-						if (detailNode == null && child instanceof MTableDetail){
+					for (INode child : getChildren()) {
+						if (detailNode == null && child instanceof MTableDetail) {
 							detailNode = (MTableDetail) child;
 							break;
 						}
 					}
 					int detailIndex = getChildren().indexOf(detailNode);
-					JRDesignGroup jrGroup = (JRDesignGroup)evt.getNewValue();
-					MTableGroupHeader newHeader = new MTableGroupHeader(MTable.this, (JRDesignComponentElement)getValue(), jrGroup, "");
+					JRDesignGroup jrGroup = (JRDesignGroup) evt.getNewValue();
+					MTableGroupHeader newHeader = new MTableGroupHeader(
+							MTable.this, (JRDesignComponentElement) getValue(),
+							jrGroup, "");
 					addChild(newHeader, detailIndex);
-					detailIndex+=2;
-					MTableGroupFooter newFooter = new MTableGroupFooter(MTable.this, (JRDesignComponentElement)getValue(), jrGroup, "");
+					detailIndex += 2;
+					MTableGroupFooter newFooter = new MTableGroupFooter(
+							MTable.this, (JRDesignComponentElement) getValue(),
+							jrGroup, "");
 					addChild(newFooter, detailIndex);
 					List<BaseColumn> columns = getStandardTable().getColumns();
 					for (int i = 0; i < columns.size(); i++) {
 						BaseColumn bc = columns.get(i);
-						TableComponentFactory.createCellGroupHeader(newHeader, bc, i + 1, jrGroup.getName(), i);
-						TableComponentFactory.createCellGroupFooter(newFooter, bc, i + 1, jrGroup.getName(), i);
+						TableComponentFactory.createCellGroupHeader(newHeader,
+								bc, i + 1, jrGroup.getName(), i);
+						TableComponentFactory.createCellGroupFooter(newFooter,
+								bc, i + 1, jrGroup.getName(), i);
 					}
-				} else if (evt.getNewValue() == null && evt.getOldValue() != null){
-					JRDesignGroup jrGroup = (JRDesignGroup)evt.getOldValue();
+				} else if (evt.getNewValue() == null
+						&& evt.getOldValue() != null) {
+					JRDesignGroup jrGroup = (JRDesignGroup) evt.getOldValue();
 					deleteGroup(jrGroup.getName());
 				}
-				//Run an event on the table to force a grapghical refresh of the columnss
+				// Run an event on the table to force a grapghical refresh of
+				// the columnss
 				setChangedProperty(true);
-				MTable.this.propertyChange(new PropertyChangeEvent(getValue(), StandardTable.PROPERTY_COLUMNS, null, null));
-			} 
+				MTable.this.propertyChange(new PropertyChangeEvent(getValue(),
+						StandardTable.PROPERTY_COLUMNS, null, null));
+			}
 		}
 	};
-	
 
 	/**
 	 * Instantiates a new m chart.
@@ -132,11 +142,11 @@ public class MTable extends MGraphicElement implements IContainer, IContainerEdi
 		super(parent, newIndex);
 		this.ctManager = ctManager;
 	}
-	
+
 	public TableManager getTableManager() {
 		return ctManager;
 	}
-	
+
 	/**
 	 * Gets the icon descriptor.
 	 * 
@@ -147,18 +157,18 @@ public class MTable extends MGraphicElement implements IContainer, IContainerEdi
 			iconDescriptor = new TableNodeIconDescriptor("table"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
-	
 
 	/**
 	 * 
 	 * @param parent
-	 *          the parent
+	 *            the parent
 	 * @param jrTable
-	 *          the jr chart
+	 *            the jr chart
 	 * @param newIndex
-	 *          the new index
+	 *            the new index
 	 */
-	public MTable(ANode parent, JRDesignComponentElement jrTable, int newIndex, TableManager ctManager) {
+	public MTable(ANode parent, JRDesignComponentElement jrTable, int newIndex,
+			TableManager ctManager) {
 		super(parent, newIndex);
 		setValue(jrTable);
 		this.ctManager = ctManager;
@@ -178,7 +188,8 @@ public class MTable extends MGraphicElement implements IContainer, IContainerEdi
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1,
+			Map<String, Object> defaultsMap1) {
 		descriptors = descriptors1;
 		defaultsMap = defaultsMap1;
 	}
@@ -187,29 +198,37 @@ public class MTable extends MGraphicElement implements IContainer, IContainerEdi
 	 * Creates the property descriptors.
 	 * 
 	 * @param desc
-	 *          the desc
+	 *            the desc
 	 */
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc,
+			Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		TableDatasetRunProperyDescriptor datasetRunD = new TableDatasetRunProperyDescriptor(StandardTable.PROPERTY_DATASET_RUN, Messages.MTable_dataset_run, false);
+		TableDatasetRunProperyDescriptor datasetRunD = new TableDatasetRunProperyDescriptor(
+				StandardTable.PROPERTY_DATASET_RUN,
+				Messages.MTable_dataset_run, false);
 		datasetRunD.setDescription(Messages.MTable_dataset_run_description);
 		datasetRunD.setCategory(Messages.MTable_table_properties_category);
 		desc.add(datasetRunD);
 
-		whennodataD = new JSSEnumPropertyDescriptor(StandardTable.PROPERTY_WHEN_NO_DATA_TYPE, Messages.MTable_whennodatalabel, WhenNoDataTypeTableEnum.class, NullEnum.NULL);
+		whennodataD = new NamedEnumPropertyDescriptor<WhenNoDataTypeTableEnum>(
+				StandardTable.PROPERTY_WHEN_NO_DATA_TYPE,
+				Messages.MTable_whennodatalabel, WhenNoDataTypeTableEnum.BLANK,
+				NullEnum.NULL);
 		whennodataD.setDescription(Messages.MTable_whennodatadescription);
 		desc.add(whennodataD);
 		whennodataD.setCategory(Messages.MTable_table_properties_category);
 
-		defaultsMap.put(StandardTable.PROPERTY_WHEN_NO_DATA_TYPE, whennodataD.getEnumValue(WhenNoDataTypeTableEnum.BLANK));
+		defaultsMap.put(StandardTable.PROPERTY_WHEN_NO_DATA_TYPE,
+				whennodataD.getEnumValue(WhenNoDataTypeTableEnum.BLANK));
 
-		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/components.schema.reference.html#table");
+		setHelpPrefix(desc,
+				"net.sf.jasperreports.doc/docs/components.schema.reference.html#table");
 	}
 
 	private MDatasetRun mDatasetRun;
-	private static JSSEnumPropertyDescriptor whennodataD;
+	private static NamedEnumPropertyDescriptor<WhenNoDataTypeTableEnum> whennodataD;
 
 	@Override
 	public void setGroupItems(String[] items) {
@@ -234,7 +253,7 @@ public class MTable extends MGraphicElement implements IContainer, IContainerEdi
 			return mDatasetRun;
 		}
 		if (id.equals(StandardTable.PROPERTY_WHEN_NO_DATA_TYPE))
-			return whennodataD.getEnumValue(jrTable.getWhenNoDataType());
+			return whennodataD.getIntValue(jrTable.getWhenNoDataType());
 
 		return super.getPropertyValue(id);
 	}
@@ -244,7 +263,8 @@ public class MTable extends MGraphicElement implements IContainer, IContainerEdi
 		StandardTable jrTable = getStandardTable();
 
 		if (id.equals(StandardTable.PROPERTY_WHEN_NO_DATA_TYPE))
-			jrTable.setWhenNoDataType((WhenNoDataTypeTableEnum) whennodataD.getEnumValue(value));
+			jrTable.setWhenNoDataType((WhenNoDataTypeTableEnum) whennodataD
+					.getEnumValue(value));
 		else if (id.equals(StandardTable.PROPERTY_DATASET_RUN)) {
 			MDatasetRun mdr = (MDatasetRun) value;
 			JRDesignDatasetRun dr = (JRDesignDatasetRun) mdr.getValue();
@@ -264,14 +284,18 @@ public class MTable extends MGraphicElement implements IContainer, IContainerEdi
 
 	@Override
 	public int getDefaultHeight() {
-		Object defaultValue = DefaultManager.INSTANCE.getDefaultPropertiesValue(this.getClass(), JRDesignElement.PROPERTY_HEIGHT);
-		return defaultValue != null ? (Integer)defaultValue : 200;
+		Object defaultValue = DefaultManager.INSTANCE
+				.getDefaultPropertiesValue(this.getClass(),
+						JRDesignElement.PROPERTY_HEIGHT);
+		return defaultValue != null ? (Integer) defaultValue : 200;
 	}
 
 	@Override
 	public int getDefaultWidth() {
-		Object defaultValue = DefaultManager.INSTANCE.getDefaultPropertiesValue(this.getClass(), JRDesignElement.PROPERTY_WIDTH);
-		return defaultValue != null ? (Integer)defaultValue : 200;
+		Object defaultValue = DefaultManager.INSTANCE
+				.getDefaultPropertiesValue(this.getClass(),
+						JRDesignElement.PROPERTY_WIDTH);
+		return defaultValue != null ? (Integer) defaultValue : 200;
 	}
 
 	@Override
@@ -280,10 +304,12 @@ public class MTable extends MGraphicElement implements IContainer, IContainerEdi
 		StandardTable component = new StandardTable();
 
 		((JRDesignComponentElement) jrElement).setComponent(component);
-		((JRDesignComponentElement) jrElement).setComponentKey(new ComponentKey("http://jasperreports.sourceforge.net/jasperreports/components", "jr", "table")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		((JRDesignComponentElement) jrElement)
+				.setComponentKey(new ComponentKey(
+						"http://jasperreports.sourceforge.net/jasperreports/components", "jr", "table")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		JRDesignDatasetRun datasetRun = new JRDesignDatasetRun();
 		component.setDatasetRun(datasetRun);
-		
+
 		DefaultManager.INSTANCE.applyDefault(this.getClass(), jrElement);
 
 		return jrElement;
@@ -296,7 +322,8 @@ public class MTable extends MGraphicElement implements IContainer, IContainerEdi
 	 */
 	@Override
 	public String getDisplayText() {
-		String name = getPropertiesMap().getProperty(NameSection.getNamePropertyId(this));
+		String name = getPropertiesMap().getProperty(
+				NameSection.getNamePropertyId(this));
 		return getIconDescriptor().getTitle() + " " + Misc.nvl(name);
 	}
 
@@ -327,11 +354,12 @@ public class MTable extends MGraphicElement implements IContainer, IContainerEdi
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 
-		if (evt.getPropertyName().equals(StandardTable.PROPERTY_DATASET_RUN)){
+		if (evt.getPropertyName().equals(StandardTable.PROPERTY_DATASET_RUN)) {
 			addDatasetGroupListener();
-		}	
+		}
 
-		if (evt.getPropertyName().equals(MGraphicElement.FORCE_GRAPHICAL_REFRESH)) {
+		if (evt.getPropertyName().equals(
+				MGraphicElement.FORCE_GRAPHICAL_REFRESH)) {
 			ANode parent = getParent();
 			IGraphicalPropertiesHandler upperGrahpicHandler = null;
 			while (parent != null) {
@@ -341,12 +369,21 @@ public class MTable extends MGraphicElement implements IContainer, IContainerEdi
 				parent = parent.getParent();
 			}
 			if (upperGrahpicHandler != null) {
-				((MGraphicElement) upperGrahpicHandler).getValue().getEventSupport().firePropertyChange(MGraphicElement.FORCE_GRAPHICAL_REFRESH, null, null);
+				((MGraphicElement) upperGrahpicHandler)
+						.getValue()
+						.getEventSupport()
+						.firePropertyChange(
+								MGraphicElement.FORCE_GRAPHICAL_REFRESH, null,
+								null);
 			}
 		}
 
 		if (getTableManager() != null
-				&& (getParent() instanceof MPage && evt instanceof CollectionElementAddedEvent || evt instanceof CollectionElementRemovedEvent || evt.getOldValue() instanceof DesignCell || evt.getNewValue() instanceof DesignCell))
+				&& (getParent() instanceof MPage
+						&& evt instanceof CollectionElementAddedEvent
+						|| evt instanceof CollectionElementRemovedEvent
+						|| evt.getOldValue() instanceof DesignCell || evt
+							.getNewValue() instanceof DesignCell))
 			getTableManager().update();
 		else if (getTableManager() != null)
 			getTableManager().update();
@@ -382,7 +419,8 @@ public class MTable extends MGraphicElement implements IContainer, IContainerEdi
 	@Override
 	public List<MDatasetRun> getDatasetRunList() {
 		List<MDatasetRun> datasetList = new ArrayList<MDatasetRun>();
-		datasetList.add((MDatasetRun) getPropertyValue(StandardTable.PROPERTY_DATASET_RUN));
+		datasetList
+				.add((MDatasetRun) getPropertyValue(StandardTable.PROPERTY_DATASET_RUN));
 		return datasetList;
 	}
 
@@ -400,49 +438,55 @@ public class MTable extends MGraphicElement implements IContainer, IContainerEdi
 		super.setValue(value);
 		addDatasetGroupListener();
 	}
-	
+
 	/**
-	 * Delete a group node from the table, both header
-	 * and footer if present
+	 * Delete a group node from the table, both header and footer if present
 	 * 
-	 * @param groupName the name of the group
+	 * @param groupName
+	 *            the name of the group
 	 */
-	private void deleteGroup(String groupName){
+	private void deleteGroup(String groupName) {
 		MTableGroupFooter footer = null;
 		MTableGroupHeader header = null;
-		for(INode child : getChildren()){
-			if (child instanceof MTableGroupHeader){
-				MTableGroupHeader groupHeader = (MTableGroupHeader)child;
-				if (groupHeader.getJrDesignGroup().getName().equals(groupName)){
+		for (INode child : getChildren()) {
+			if (child instanceof MTableGroupHeader) {
+				MTableGroupHeader groupHeader = (MTableGroupHeader) child;
+				if (groupHeader.getJrDesignGroup().getName().equals(groupName)) {
 					header = groupHeader;
 				}
-			} else if (child instanceof MTableGroupFooter){
-				MTableGroupFooter groupFooter = (MTableGroupFooter)child;
-				if (groupFooter.getJrDesignGroup().getName().equals(groupName)){
+			} else if (child instanceof MTableGroupFooter) {
+				MTableGroupFooter groupFooter = (MTableGroupFooter) child;
+				if (groupFooter.getJrDesignGroup().getName().equals(groupName)) {
 					footer = groupFooter;
 				}
 			}
-			if (footer != null && header != null) break;
+			if (footer != null && header != null)
+				break;
 		}
-		if (footer != null) removeChild(footer);
-		if (header != null) removeChild(header);
+		if (footer != null)
+			removeChild(footer);
+		if (header != null)
+			removeChild(header);
 	}
-	
+
 	/**
-	 * Add the dataset group listener to the current table dataset, but before remove
-	 * the old one if present
+	 * Add the dataset group listener to the current table dataset, but before
+	 * remove the old one if present
 	 */
-	private void addDatasetGroupListener(){
-		if (datasetWithListener != null){
-			datasetWithListener.getEventSupport().removePropertyChangeListener(datasetGroupListener);
+	private void addDatasetGroupListener() {
+		if (datasetWithListener != null) {
+			datasetWithListener.getEventSupport().removePropertyChangeListener(
+					datasetGroupListener);
 		}
 		JRDatasetRun datasetRun = getStandardTable().getDatasetRun();
 		JasperDesign design = getJasperDesign();
-		if (design != null){
-			JRDesignDataset dataset = (JRDesignDataset)design.getDatasetMap().get(datasetRun.getDatasetName());
+		if (design != null) {
+			JRDesignDataset dataset = (JRDesignDataset) design.getDatasetMap()
+					.get(datasetRun.getDatasetName());
 			datasetWithListener = dataset;
-			if (dataset != null){
-				dataset.getEventSupport().addPropertyChangeListener(datasetGroupListener);
+			if (dataset != null) {
+				dataset.getEventSupport().addPropertyChangeListener(
+						datasetGroupListener);
 			}
 		}
 	}
@@ -453,12 +497,12 @@ public class MTable extends MGraphicElement implements IContainer, IContainerEdi
 		fillUsedStyles(getChildren(), result);
 		return result;
 	}
-	
+
 	@Override
 	public boolean showChildren() {
 		return getParent() instanceof MPage;
 	}
-	
+
 	@Override
 	public void createSubeditor() {
 		TableComponentFactory.createSubeditor(this);

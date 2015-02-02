@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.model;
 
@@ -69,7 +65,6 @@ import com.jaspersoft.studio.property.descriptor.propexpr.PropertyExpressionDTO;
 import com.jaspersoft.studio.property.descriptor.propexpr.PropertyExpressionsDTO;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptors.OpaqueModePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.PixelPropertyDescriptor;
 import com.jaspersoft.studio.utils.AlfaRGB;
 import com.jaspersoft.studio.utils.Colors;
@@ -79,7 +74,8 @@ import com.jaspersoft.studio.utils.ModelUtils;
 /*
  * The Class MGeneric.
  */
-public class MGraphicElement extends APropertyNode implements IGraphicElement, ICopyable, IGuidebleElement, IDragable, IGraphicalPropertiesHandler{
+public class MGraphicElement extends APropertyNode implements IGraphicElement, ICopyable, IGuidebleElement, IDragable,
+		IGraphicalPropertiesHandler {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	private ReportRulerGuide verticalGuide, horizontalGuide;
 
@@ -87,7 +83,7 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 	 * Special propery id to force the refresh of the graphic element
 	 */
 	public static String FORCE_GRAPHICAL_REFRESH = "forceGraphicalRefresh";
-	
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -218,14 +214,15 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 	}
 
 	public int getDefaultHeight() {
-		Object defaultValue = DefaultManager.INSTANCE.getDefaultPropertiesValue(this.getClass(), JRDesignElement.PROPERTY_HEIGHT);
-		return defaultValue != null ? (Integer)defaultValue : 30;
+		Object defaultValue = DefaultManager.INSTANCE.getDefaultPropertiesValue(this.getClass(),
+				JRDesignElement.PROPERTY_HEIGHT);
+		return defaultValue != null ? (Integer) defaultValue : 30;
 	}
 
-
 	public int getDefaultWidth() {
-		Object defaultValue = DefaultManager.INSTANCE.getDefaultPropertiesValue(this.getClass(), JRDesignElement.PROPERTY_WIDTH);
-		return defaultValue != null ? (Integer)defaultValue : 100;
+		Object defaultValue = DefaultManager.INSTANCE.getDefaultPropertiesValue(this.getClass(),
+				JRDesignElement.PROPERTY_WIDTH);
+		return defaultValue != null ? (Integer) defaultValue : 100;
 	}
 
 	/*
@@ -280,7 +277,7 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 			} else if (node instanceof IGraphicElement) {
 				Rectangle b = ((IGraphicElement) node).getBounds();
 				if (b == null) {
-					// FIXME - Need to be verified, temporary solve the issue reported here: 
+					// FIXME - Need to be verified, temporary solve the issue reported here:
 					// http://community.jaspersoft.com/questions/826441/javalangnullpointerexception-crosstabs
 					return new Rectangle(jr.getX(), jr.getY(), jr.getWidth(), jr.getHeight());
 				}
@@ -314,7 +311,7 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		descriptors = descriptors1;
 		defaultsMap = defaultsMap1;
 	}
-	
+
 	@Override
 	protected void postDescriptors(IPropertyDescriptor[] descriptors) {
 		super.postDescriptors(descriptors);
@@ -322,8 +319,8 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		JasperDesign jd = getJasperDesign();
 		if (jd != null && getValue() != null) {
 			JRDataset dataset = getElementDataset();
-			//Calculate the groups list for the current element
-			if (dataset != null){
+			// Calculate the groups list for the current element
+			if (dataset != null) {
 				JRGroup[] groups = dataset.getGroups();
 				String[] items = new String[groups.length];
 				for (int j = 0; j < groups.length; j++) {
@@ -333,27 +330,27 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 			}
 		}
 	}
-	
+
 	/**
 	 * Return the dataset used by the element
 	 * 
 	 * @return the dataset nearest to this element
 	 */
-	public JRDataset getElementDataset(){
-		JRDataset dataset =  ModelUtils.getDataset(this);
-		if (dataset == null && getJasperDesign() != null){
+	public JRDataset getElementDataset() {
+		JRDataset dataset = ModelUtils.getDataset(this);
+		if (dataset == null && getJasperDesign() != null) {
 			dataset = getJasperDesign().getMainDataset();
 		}
 		return dataset;
 	}
 
 	protected void setGroupItems(String[] items) {
-		if (groupChangesD != null){
-			//Appen to the array the element to unselect the group
-			String[] itemsEmpty = new String[items.length+1];
+		if (groupChangesD != null) {
+			// Appen to the array the element to unselect the group
+			String[] itemsEmpty = new String[items.length + 1];
 			itemsEmpty[0] = "";
 			int j = 1;
-			for(String item : items){
+			for (String item : items) {
 				itemsEmpty[j] = item;
 				j++;
 			}
@@ -381,7 +378,8 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 	 */
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		styleD = new RWStyleComboBoxPropertyDescriptor(JRDesignElement.PROPERTY_PARENT_STYLE, Messages.common_parent_style, new String[] { "" }, NullEnum.NULL); //$NON-NLS-1$
+		styleD = new RWStyleComboBoxPropertyDescriptor(JRDesignElement.PROPERTY_PARENT_STYLE, Messages.common_parent_style,
+				new String[] { "" }, NullEnum.NULL); //$NON-NLS-1$
 		styleD.setDescription(Messages.MGraphicElement_parent_style_description);
 		desc.add(styleD);
 		styleD.setHelpRefBuilder(new HelpReferenceBuilder(
@@ -430,8 +428,8 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		forecolorD.setDescription(Messages.MGraphicElement_forecolor_description);
 		desc.add(forecolorD);
 
-		opaqueD = new OpaqueModePropertyDescriptor(JRBaseStyle.PROPERTY_MODE, Messages.common_opaque, ModeEnum.class,
-				NullEnum.INHERITED);
+		// OpaqueModePropertyDescriptor opaqueD = new OpaqueModePropertyDescriptor(JRBaseStyle.PROPERTY_MODE,
+		// Messages.common_opaque, NullEnum.INHERITED);
 		// opaqueD.setDescription(Messages.MGraphicElement_opaque_description);
 		// opaqueD.setCategory(Messages.common_graphic);
 		// desc.add(opaqueD);
@@ -520,25 +518,24 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 	private RComboBoxPropertyDescriptor groupChangesD;
 	private static JSSEnumPropertyDescriptor positionTypeD;
 	// private static JSSEnumPropertyDescriptor opaqueD;
-	private static JSSEnumPropertyDescriptor opaqueD;
 	private static JSSEnumPropertyDescriptor stretchTypeD;
 
 	/**
-	 * Return the internal style used. If the internal style is a reference to a removed style
-	 * then it is also removed from the element
+	 * Return the internal style used. If the internal style is a reference to a removed style then it is also removed
+	 * from the element
 	 */
-	public JRStyle getActualStyle(){
+	public JRStyle getActualStyle() {
 		JRDesignElement jrElement = (JRDesignElement) getValue();
-		//Check if the used style is valid otherwise set it to null
-		if (jrElement.getStyle() != null && !getJasperDesign().getStylesMap().containsKey(jrElement.getStyle().getName())){
+		// Check if the used style is valid otherwise set it to null
+		if (jrElement.getStyle() != null && !getJasperDesign().getStylesMap().containsKey(jrElement.getStyle().getName())) {
 			setPropertyValue(JRDesignElement.PROPERTY_PARENT_STYLE, null);
 		}
-		if (jrElement.getStyle() != null){
+		if (jrElement.getStyle() != null) {
 			return jrElement.getStyle();
 		}
 		return null;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -642,7 +639,8 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 				if (!value.equals("")) { //$NON-NLS-1$
 					JRStyle style = (JRStyle) getJasperDesign().getStylesMap().get(value);
 					if (style != null) {
-						//FIXME: It is important to set a null first the external style, because it is returned first on the getPropertyValue and this raise a lot of events
+						// FIXME: It is important to set a null first the external style, because it is returned first on the
+						// getPropertyValue and this raise a lot of events
 						jrElement.setStyleNameReference(null);
 						jrElement.setStyle(style);
 					} else {
@@ -659,7 +657,7 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 			jrElement.setPrintWhenExpression(ExprUtil.setValues(jrElement.getPrintWhenExpression(), value));
 		else if (id.equals(JRDesignElement.PROPERTY_PRINT_WHEN_GROUP_CHANGES)) {
 			if (!value.equals("")) { //$NON-NLS-1$
-				JRDesignDataset jrDataset = (JRDesignDataset)getElementDataset();
+				JRDesignDataset jrDataset = (JRDesignDataset) getElementDataset();
 				JRGroup group = jrDataset.getGroupsMap().get(value);
 				jrElement.setPrintWhenGroupChanges(group);
 			}
@@ -667,28 +665,28 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 			if (value instanceof PropertyExpressionsDTO) {
 				PropertyExpressionsDTO dto = (PropertyExpressionsDTO) value;
 				JRPropertyExpression[] expr = jrElement.getPropertyExpressions();
-				//Remove the old expression properties if any
-				if (expr != null){
+				// Remove the old expression properties if any
+				if (expr != null) {
 					for (JRPropertyExpression ex : expr)
 						jrElement.removePropertyExpression(ex);
 				}
-				//Add the new expression properties
-				for (PropertyExpressionDTO p : dto.getProperties()){
-						if (p.isExpression())  {
-							JRDesignPropertyExpression newExp = new JRDesignPropertyExpression();
-							newExp.setName(p.getName());
-							newExp.setValueExpression(p.getValueAsExpression());
-							jrElement.addPropertyExpression(newExp);
-						}
+				// Add the new expression properties
+				for (PropertyExpressionDTO p : dto.getProperties()) {
+					if (p.isExpression()) {
+						JRDesignPropertyExpression newExp = new JRDesignPropertyExpression();
+						newExp.setName(p.getName());
+						newExp.setValueExpression(p.getValueAsExpression());
+						jrElement.addPropertyExpression(newExp);
+					}
 				}
 				// now change properties, first remove the old ones if any
 				String[] names = jrElement.getPropertiesMap().getPropertyNames();
-				for (int i = 0; i < names.length; i++){
+				for (int i = 0; i < names.length; i++) {
 					jrElement.getPropertiesMap().removeProperty(names[i]);
 				}
 				// now add the new properties
-				for (PropertyExpressionDTO p : dto.getProperties()){
-					if (!p.isExpression())  {
+				for (PropertyExpressionDTO p : dto.getProperties()) {
+					if (!p.isExpression()) {
 						jrElement.getPropertiesMap().setProperty(p.getName(), p.getValue());
 					}
 				}
@@ -748,18 +746,17 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 			return true;
 		return false;
 	}
-	
+
 	/**
-	 * Flag changed when some property that has graphical impact on the element is changed.
-	 * This is used to redraw the elemnt only when something graphical is changed isndie it,
-	 * all the other times can just be copied
+	 * Flag changed when some property that has graphical impact on the element is changed. This is used to redraw the
+	 * elemnt only when something graphical is changed isndie it, all the other times can just be copied
 	 */
 	private boolean visualPropertyChanged = true;
 
 	/**
 	 * Return the graphical properties for an MGraphicalElement
 	 */
-	public HashSet<String> generateGraphicalProperties(){
+	public HashSet<String> generateGraphicalProperties() {
 		HashSet<String> result = new HashSet<String>();
 		result.add(FORCE_GRAPHICAL_REFRESH);
 		result.add(JRDesignElement.PROPERTY_PARENT_STYLE);
@@ -772,56 +769,54 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		result.add(JRBaseStyle.PROPERTY_MODE);
 		return result;
 	}
-	
+
 	/**
-	 * Static cache map of the graphic properties for every type of element. The cache is created 
-	 * when the element graphical properties are requested
+	 * Static cache map of the graphic properties for every type of element. The cache is created when the element
+	 * graphical properties are requested
 	 */
 	private static HashMap<Class<?>, HashSet<String>> cachedGraphicalProperties = new HashMap<Class<?>, HashSet<String>>();
-	
+
 	/**
-	 * Return the graphical property for the actual type of element. If the are stored 
-	 * inside the cache then the cached version is returned. Otherwise they are calculated,
-	 * cached an returned 
+	 * Return the graphical property for the actual type of element. If the are stored inside the cache then the cached
+	 * version is returned. Otherwise they are calculated, cached an returned
 	 * 
-	 * @return an hashset of string that contains the graphical properties of the actual type of element. 
-	 * The graphical properties of an element are those properties that affect the appearance of an element
-	 * when changed
+	 * @return an hashset of string that contains the graphical properties of the actual type of element. The graphical
+	 *         properties of an element are those properties that affect the appearance of an element when changed
 	 */
 	@Override
-	public HashSet<String> getGraphicalProperties(){
+	public HashSet<String> getGraphicalProperties() {
 		HashSet<String> result = cachedGraphicalProperties.get(this.getClass());
-		if (result == null){
+		if (result == null) {
 			result = generateGraphicalProperties();
 			cachedGraphicalProperties.put(this.getClass(), result);
 		}
 		return result;
 	}
-	
+
 	/**
 	 * True if some graphical property is changed for the element, false otherwise
 	 */
 	@Override
-	public boolean hasChangedProperty(){
+	public boolean hasChangedProperty() {
 		synchronized (this) {
 			return visualPropertyChanged;
 		}
 	}
-	
+
 	/**
 	 * Set the actual state of the property change flag
 	 */
 	@Override
-	public void setChangedProperty(boolean value){
+	public void setChangedProperty(boolean value) {
 		synchronized (this) {
-			if (value){
+			if (value) {
 				ANode parent = getParent();
-				while(parent != null){
-					if (parent instanceof IGraphicalPropertiesHandler){
-						IGraphicalPropertiesHandler handler = (IGraphicalPropertiesHandler)parent;
+				while (parent != null) {
+					if (parent instanceof IGraphicalPropertiesHandler) {
+						IGraphicalPropertiesHandler handler = (IGraphicalPropertiesHandler) parent;
 						handler.setChangedProperty(true);
-						//We can exit the cycle since the setChangedProperty on the parent will propagate the
-						//refresh on the upper levels
+						// We can exit the cycle since the setChangedProperty on the parent will propagate the
+						// refresh on the upper levels
 						break;
 					} else {
 						parent = parent.getParent();
@@ -831,25 +826,26 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 			visualPropertyChanged = value;
 		}
 	}
-	
+
 	/**
-	 * When a property change event occur, if the changed property is a graphical one then
-	 * the visual property change flag is set to true
+	 * When a property change event occur, if the changed property is a graphical one then the visual property change flag
+	 * is set to true
 	 * 
-	 * @param evt the change event
+	 * @param evt
+	 *          the change event
 	 */
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		HashSet<String> graphicalProperties = getGraphicalProperties();
-		if (graphicalProperties.contains(evt.getPropertyName())){
+		if (graphicalProperties.contains(evt.getPropertyName())) {
 			setChangedProperty(true);
 		}
 		super.propertyChange(evt);
 	}
 
 	/**
-	 * Return a list of used styles by the element. This is very useful in case of 
-	 * and element like table or crosstab that can use many styles
+	 * Return a list of used styles by the element. This is very useful in case of and element like table or crosstab that
+	 * can use many styles
 	 * 
 	 * @return a not null hashset of the names of all the styles used by this element
 	 */
@@ -857,51 +853,56 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 	public HashSet<String> getUsedStyles() {
 		HashSet<String> result = new HashSet<String>();
 		JRStyle style = getValue().getStyle();
-		if (style != null){
+		if (style != null) {
 			result.add(style.getName());
 		}
 		return result;
 	}
-	
-	protected SetValueCommand generateSetCommand(APropertyNode target, String propertyId, Object value){
+
+	protected SetValueCommand generateSetCommand(APropertyNode target, String propertyId, Object value) {
 		SetValueCommand result = new SetValueCommand();
 		result.setTarget(target);
 		result.setPropertyId(propertyId);
 		result.setPropertyValue(value);
 		return result;
 	}
-	
-	protected Color getColorClone(Color source){
-		if (source == null) return null;
-		else return new Color(source.getRed(), source.getGreen(), source.getBlue(), source.getAlpha());
+
+	protected Color getColorClone(Color source) {
+		if (source == null)
+			return null;
+		else
+			return new Color(source.getRed(), source.getGreen(), source.getBlue(), source.getAlpha());
 	}
-	
-	protected String getStringClone(String source){
-		if (source == null) return null;
-		else return new String(source);
+
+	protected String getStringClone(String source) {
+		if (source == null)
+			return null;
+		else
+			return new String(source);
 	}
-	
-	protected JRFont getFontClone(JRFont sourceFont){
-		if (sourceFont == null) return null;
-		if (sourceFont instanceof JRBaseFont){
-			return (JRBaseFont)((JRBaseFont)sourceFont).clone();
+
+	protected JRFont getFontClone(JRFont sourceFont) {
+		if (sourceFont == null)
+			return null;
+		if (sourceFont instanceof JRBaseFont) {
+			return (JRBaseFont) ((JRBaseFont) sourceFont).clone();
 		}
-		if (sourceFont instanceof JRTextElement){
-			return (JRTextElement)((JRTextElement)sourceFont).clone();
+		if (sourceFont instanceof JRTextElement) {
+			return (JRTextElement) ((JRTextElement) sourceFont).clone();
 		}
 		return null;
 	}
-	
+
 	/**
-	 * Copy all the report independent properties from this element to 
-	 * the target one. The target must have the same type, or a subtype,
-	 * of the value of this element. The report dependent properties are 
-	 * expressions, groups and styles essentially
+	 * Copy all the report independent properties from this element to the target one. The target must have the same type,
+	 * or a subtype, of the value of this element. The report dependent properties are expressions, groups and styles
+	 * essentially
 	 * 
-	 * @param target the target of the copy
+	 * @param target
+	 *          the target of the copy
 	 */
-	public void trasnferProperties(JRElement target){
-		JRDesignElement jrTarget = (JRDesignElement)target;
+	public void trasnferProperties(JRElement target) {
+		JRDesignElement jrTarget = (JRDesignElement) target;
 		JRDesignElement jrSource = getValue();
 		jrTarget.setKey(getStringClone(jrSource.getKey()));
 		jrTarget.setWidth(jrSource.getWidth());

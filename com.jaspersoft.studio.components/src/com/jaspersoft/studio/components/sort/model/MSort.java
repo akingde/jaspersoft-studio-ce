@@ -23,9 +23,9 @@ import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.design.events.JRChangeEventsSupport;
 import net.sf.jasperreports.engine.type.EvaluationTimeEnum;
-import net.sf.jasperreports.engine.type.HorizontalAlignEnum;
+import net.sf.jasperreports.engine.type.HorizontalImageAlignEnum;
 import net.sf.jasperreports.engine.type.SortFieldTypeEnum;
-import net.sf.jasperreports.engine.type.VerticalAlignEnum;
+import net.sf.jasperreports.engine.type.VerticalImageAlignEnum;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
@@ -41,6 +41,9 @@ import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.color.ColorPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.ImageHAlignPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.ImageVAlignPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 import com.jaspersoft.studio.utils.AlfaRGB;
 import com.jaspersoft.studio.utils.Colors;
 import com.jaspersoft.studio.utils.EnumHelper;
@@ -63,7 +66,7 @@ public class MSort extends MGraphicElement {
 
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
-	
+
 	private RComboBoxPropertyDescriptor evaluationGroupNameD;
 
 	@Override
@@ -101,10 +104,12 @@ public class MSort extends MGraphicElement {
 		SortComponent component = new SortComponent();
 		component.setSortFieldType(SortFieldTypeEnum.FIELD);
 		jrcomponent.setComponent(component);
-		jrcomponent.setComponentKey(new ComponentKey("http://jasperreports.sourceforge.net/jasperreports/components", "c", "sort")); //$NON-NLS-1$
-		
+		jrcomponent
+				.setComponentKey(new ComponentKey(
+						"http://jasperreports.sourceforge.net/jasperreports/components", "c", "sort")); //$NON-NLS-1$
+
 		DefaultManager.INSTANCE.applyDefault(this.getClass(), jrcomponent);
-		
+
 		return jrcomponent;
 	}
 
@@ -151,6 +156,25 @@ public class MSort extends MGraphicElement {
 
 	private IPropertyDescriptor[] descriptors;
 	private static Map<String, Object> defaultsMap;
+
+	private ImageHAlignPropertyDescriptor horizAlign;
+
+	private ImageVAlignPropertyDescriptor vertAlign;
+
+	private static NamedEnumPropertyDescriptor<SortFieldTypeEnum> sortFieldType;
+
+	/**
+	 * @return the sortFieldType
+	 */
+	public static NamedEnumPropertyDescriptor<SortFieldTypeEnum> getSortFieldType() {
+		if (sortFieldType == null) {
+			new NamedEnumPropertyDescriptor<SortFieldTypeEnum>(
+					SortComponent.PROPERTY_COLUMN_TYPE, "SortField Type",
+					SortFieldTypeEnum.FIELD, NullEnum.NOTNULL);
+			sortFieldType.setDescription("SortField type");
+		}
+		return sortFieldType;
+	}
 
 	@Override
 	public Map<String, Object> getDefaultsMap() {
@@ -202,25 +226,19 @@ public class MSort extends MGraphicElement {
 		color.setDescription("Handler color");
 		desc.add(color);
 
-		ComboBoxPropertyDescriptor horizAlign = new ComboBoxPropertyDescriptor(
+		horizAlign = new ImageHAlignPropertyDescriptor(
 				SortComponent.PROPERTY_HANDLER_HORIZONTAL_ALIGN,
-				"Handler Horizontal Alignement", EnumHelper.getEnumNames(
-						HorizontalAlignEnum.values(), NullEnum.NOTNULL));
+				"Handler Horizontal Alignement", NullEnum.NOTNULL);
 		horizAlign.setDescription("Handler horizontal alignement");
 		desc.add(horizAlign);
 
-		ComboBoxPropertyDescriptor vertAlign = new ComboBoxPropertyDescriptor(
+		vertAlign = new ImageVAlignPropertyDescriptor(
 				SortComponent.PROPERTY_HANDLER_VERTICAL_ALIGN,
-				"Handler Vertical Alignement", EnumHelper.getEnumNames(
-						VerticalAlignEnum.values(), NullEnum.NOTNULL));
+				"Handler Vertical Alignement", NullEnum.NOTNULL);
 		vertAlign.setDescription("Handler vertical alignement");
 		desc.add(vertAlign);
 
-		ComboBoxPropertyDescriptor sortFieldType = new ComboBoxPropertyDescriptor(
-				SortComponent.PROPERTY_COLUMN_TYPE, "SortField Type",
-				EnumHelper.getEnumNames(SortFieldTypeEnum.values(),
-						NullEnum.NOTNULL));
-		sortFieldType.setDescription("SortField type");
+		sortFieldType = getSortFieldType();
 		desc.add(sortFieldType);
 
 		NTextPropertyDescriptor sortFieldName = new NTextPropertyDescriptor(
@@ -238,9 +256,9 @@ public class MSort extends MGraphicElement {
 		evaluationGroupNameD.setCategory("Sort Properties");
 
 		defaultsMap.put(SortComponent.PROPERTY_HANDLER_VERTICAL_ALIGN,
-				VerticalAlignEnum.MIDDLE);
+				VerticalImageAlignEnum.MIDDLE);
 		defaultsMap.put(SortComponent.PROPERTY_HANDLER_HORIZONTAL_ALIGN,
-				HorizontalAlignEnum.LEFT);
+				HorizontalImageAlignEnum.LEFT);
 		defaultsMap.put(SortComponent.PROPERTY_EVALUATION_TIME,
 				EvaluationTimeEnum.NOW);
 		defaultsMap.put(SortComponent.PROPERTY_HANDLER_COLOR, null);
@@ -248,7 +266,7 @@ public class MSort extends MGraphicElement {
 				SortFieldTypeEnum.FIELD);
 
 	}
-	
+
 	@Override
 	protected void setGroupItems(String[] items) {
 		super.setGroupItems(items);
@@ -266,18 +284,18 @@ public class MSort extends MGraphicElement {
 		if (id.equals(SortComponent.PROPERTY_COLUMN_NAME))
 			return component.getSortFieldName();
 		if (id.equals(SortComponent.PROPERTY_COLUMN_TYPE))
-			return EnumHelper.getValue(component.getSortFieldType(), 0, false);
+			return sortFieldType.getIntValue(component.getSortFieldType());
 
 		if (id.equals(SortComponent.PROPERTY_EVALUATION_TIME))
 			return EnumHelper.getValue(component.getEvaluationTime(), 1, false);
 		if (id.equals(SortComponent.PROPERTY_EVALUATION_GROUP))
 			return component.getEvaluationGroup();
 		if (id.equals(SortComponent.PROPERTY_HANDLER_HORIZONTAL_ALIGN))
-			return EnumHelper.getValue(component.getHandlerHorizontalAlign(),
-					1, false);
+			return horizAlign.getIntValue(component
+					.getHandlerHorizontalImageAlign());
 		if (id.equals(SortComponent.PROPERTY_HANDLER_VERTICAL_ALIGN))
-			return EnumHelper.getValue(component.getHandlerVerticalAlign(), 1,
-					false);
+			return vertAlign.getIntValue(component
+					.getHandlerVerticalImageAlign());
 		return super.getPropertyValue(id);
 	}
 
@@ -287,12 +305,12 @@ public class MSort extends MGraphicElement {
 		SortComponent component = (SortComponent) jrElement.getComponent();
 
 		if (id.equals(SortComponent.PROPERTY_HANDLER_COLOR))
-			component.setHandlerColor(Colors.getAWT4SWTRGBColor((AlfaRGB) value));
+			component.setHandlerColor(Colors
+					.getAWT4SWTRGBColor((AlfaRGB) value));
 		else if (id.equals(SortComponent.PROPERTY_COLUMN_NAME))
 			component.setSortFieldName((String) value);
 		else if (id.equals(SortComponent.PROPERTY_COLUMN_TYPE))
-			component.setSortFieldType((SortFieldTypeEnum) EnumHelper
-					.getSetValue(SortFieldTypeEnum.values(), value, 0, false));
+			component.setSortFieldType(sortFieldType.getEnumValue(value));
 
 		else if (id.equals(SortComponent.PROPERTY_EVALUATION_TIME))
 			component.setEvaluationTime((EvaluationTimeEnum) EnumHelper
@@ -300,29 +318,32 @@ public class MSort extends MGraphicElement {
 		else if (id.equals(SortComponent.PROPERTY_EVALUATION_GROUP)) {
 			component.setEvaluationGroup((String) value);
 		} else if (id.equals(SortComponent.PROPERTY_HANDLER_HORIZONTAL_ALIGN)) {
-			component
-					.setHandlerHorizontalAlign((HorizontalAlignEnum) EnumHelper
-							.getSetValue(HorizontalAlignEnum.values(), value,
-									1, false));
+			component.setHandlerHorizontalImageAlign(horizAlign
+					.getEnumValue(value));
 		} else if (id.equals(SortComponent.PROPERTY_HANDLER_VERTICAL_ALIGN)) {
-			component.setHandlerVerticalAlign((VerticalAlignEnum) EnumHelper
-					.getSetValue(VerticalAlignEnum.values(), value, 1, false));
+			component.setHandlerVerticalImageAlign(vertAlign
+					.getEnumValue(value));
 		} else
 			super.setPropertyValue(id, value);
 	}
 
 	@Override
-	public void trasnferProperties(JRElement target){
+	public void trasnferProperties(JRElement target) {
 		super.trasnferProperties(target);
-		
+
 		JRDesignComponentElement jrSourceElement = (JRDesignComponentElement) getValue();
-		SortComponent jrSourceSort = (SortComponent) jrSourceElement.getComponent();
-		
+		SortComponent jrSourceSort = (SortComponent) jrSourceElement
+				.getComponent();
+
 		JRDesignComponentElement jrTargetElement = (JRDesignComponentElement) target;
-		SortComponent jrTargetSort = (SortComponent) jrTargetElement.getComponent();
-		
-		jrTargetSort.setHandlerColor(getColorClone(jrSourceSort.getHandlerColor()));
-		jrTargetSort.setHandlerHorizontalAlign(jrSourceSort.getHandlerHorizontalAlign());
-		jrTargetSort.setHandlerVerticalAlign(jrSourceSort.getHandlerVerticalAlign());
+		SortComponent jrTargetSort = (SortComponent) jrTargetElement
+				.getComponent();
+
+		jrTargetSort.setHandlerColor(getColorClone(jrSourceSort
+				.getHandlerColor()));
+		jrTargetSort.setHandlerHorizontalImageAlign(jrSourceSort
+				.getHandlerHorizontalImageAlign());
+		jrTargetSort.setHandlerVerticalImageAlign(jrSourceSort
+				.getHandlerVerticalImageAlign());
 	}
 }

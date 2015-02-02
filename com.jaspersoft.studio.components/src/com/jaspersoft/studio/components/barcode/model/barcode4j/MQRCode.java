@@ -15,7 +15,7 @@ package com.jaspersoft.studio.components.barcode.model.barcode4j;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.jasperreports.components.barcode4j.qrcode.QRCodeComponent;
+import net.sf.jasperreports.components.barcode4j.QRCodeComponent;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.component.ComponentKey;

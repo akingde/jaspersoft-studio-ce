@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.property.section.obj;
 
@@ -35,13 +31,13 @@ public class SortFieldSection extends AbstractSection {
 
 		parent.setLayout(new GridLayout(2, false));
 
-		ASPropertyWidget nameWidget = createWidget4Property(parent, JRDesignSortField.PROPERTY_NAME);
+		ASPropertyWidget<?> nameWidget = createWidget4Property(parent, JRDesignSortField.PROPERTY_NAME);
 		nameWidget.getControl().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		
+
 		createWidget4Property(parent, JRDesignSortField.PROPERTY_TYPE);
 		createWidget4Property(parent, JRDesignSortField.PROPERTY_ORDER);
 	}
-	
+
 	@Override
 	protected void initializeProvidedProperties() {
 		super.initializeProvidedProperties();
@@ -49,20 +45,21 @@ public class SortFieldSection extends AbstractSection {
 		addProvidedProperties(JRDesignSortField.PROPERTY_TYPE, Messages.MSortField_typeTitle);
 		addProvidedProperties(JRDesignSortField.PROPERTY_ORDER, Messages.common_order);
 	}
-	
+
 	@Override
 	public boolean changeProperty(Object property, Object newValue) {
 		boolean result = super.changeProperty(property, newValue);
-		refresh();
+		if (result)
+			refresh();
 		return result;
 	}
-	
+
 	protected Command getChangePropertyCommand(Object property, Object newValue, APropertyNode n) {
-		if (property.equals(JRDesignSortField.PROPERTY_TYPE)){
-			//reopen the wizard to select an unique name
-			return new ChangeSortFieldTypeCommand((MSortFields)n.getParent(), (MSortField)n);
-		} else if (property.equals(JRDesignSortField.PROPERTY_NAME)){
-			return new ChangeSortFieldNameCommand((MSortFields)n.getParent(), (MSortField)n, (String)newValue);
+		if (property.equals(JRDesignSortField.PROPERTY_TYPE)) {
+			// reopen the wizard to select an unique name
+			return new ChangeSortFieldTypeCommand((MSortFields) n.getParent(), (MSortField) n);
+		} else if (property.equals(JRDesignSortField.PROPERTY_NAME)) {
+			return new ChangeSortFieldNameCommand((MSortFields) n.getParent(), (MSortField) n, (String) newValue);
 		} else {
 			return super.getChangePropertyCommand(property, newValue, n);
 		}

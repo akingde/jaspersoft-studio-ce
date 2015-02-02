@@ -62,6 +62,7 @@ import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.DoublePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.EdgePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.SpinnerPropertyDescriptor;
 import com.jaspersoft.studio.utils.AlfaRGB;
 import com.jaspersoft.studio.utils.Colors;
@@ -80,7 +81,8 @@ public class MSpiderChart extends MGraphicElement implements IDatasetContainer {
 		super();
 	}
 
-	public MSpiderChart(ANode parent, JRDesignComponentElement jrObject, int newIndex) {
+	public MSpiderChart(ANode parent, JRDesignComponentElement jrObject,
+			int newIndex) {
 		super(parent, jrObject, newIndex);
 	}
 
@@ -142,7 +144,8 @@ public class MSpiderChart extends MGraphicElement implements IDatasetContainer {
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1,
+			Map<String, Object> defaultsMap1) {
 		descriptors = descriptors1;
 		defaultsMap = defaultsMap1;
 	}
@@ -151,129 +154,197 @@ public class MSpiderChart extends MGraphicElement implements IDatasetContainer {
 	 * Creates the property descriptors.
 	 * 
 	 * @param desc
-	 *          the desc
+	 *            the desc
 	 */
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc,
+			Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		titlePositionD = new EdgePropertyDescriptor(StandardChartSettings.PROPERTY_TITLE_POSITION, Messages.MChart_title_position, EdgeEnum.class, NullEnum.NULL);
-		titlePositionD.setDescription(Messages.MChart_title_position_description);
+		titlePositionD = new EdgePropertyDescriptor(
+				StandardChartSettings.PROPERTY_TITLE_POSITION,
+				Messages.MChart_title_position, NullEnum.NULL);
+		titlePositionD
+				.setDescription(Messages.MChart_title_position_description);
 		desc.add(titlePositionD);
 
-		legendPositionD = new EdgePropertyDescriptor(StandardChartSettings.PROPERTY_LEGEND_POSITION, Messages.MChart_legend_position, EdgeEnum.class, NullEnum.NULL);
-		legendPositionD.setDescription(Messages.MChart_legend_position_description);
+		legendPositionD = new EdgePropertyDescriptor(
+				StandardChartSettings.PROPERTY_LEGEND_POSITION,
+				Messages.MChart_legend_position, NullEnum.NULL);
+		legendPositionD
+				.setDescription(Messages.MChart_legend_position_description);
 		desc.add(legendPositionD);
 
-		ColorPropertyDescriptor titleColorD = new ColorPropertyDescriptor(StandardChartSettings.PROPERTY_TITLE_COLOR, Messages.MChart_title_color, NullEnum.INHERITED);
+		ColorPropertyDescriptor titleColorD = new ColorPropertyDescriptor(
+				StandardChartSettings.PROPERTY_TITLE_COLOR,
+				Messages.MChart_title_color, NullEnum.INHERITED);
 		titleColorD.setDescription(Messages.MChart_title_color_description);
 		desc.add(titleColorD);
 
-		JRExpressionPropertyDescriptor titleExprD = new JRExpressionPropertyDescriptor(StandardChartSettings.PROPERTY_TITLE_EXPRESSION, Messages.MChart_title_expression);
+		JRExpressionPropertyDescriptor titleExprD = new JRExpressionPropertyDescriptor(
+				StandardChartSettings.PROPERTY_TITLE_EXPRESSION,
+				Messages.MChart_title_expression);
 		titleExprD.setDescription(Messages.MChart_title_expression_description);
 		desc.add(titleExprD);
 
-		ColorPropertyDescriptor subtitleColorD = new ColorPropertyDescriptor(StandardChartSettings.PROPERTY_SUBTITLE_COLOR, Messages.MChart_subtitle_color, NullEnum.INHERITED);
-		subtitleColorD.setDescription(Messages.MChart_subtitle_color_description);
+		ColorPropertyDescriptor subtitleColorD = new ColorPropertyDescriptor(
+				StandardChartSettings.PROPERTY_SUBTITLE_COLOR,
+				Messages.MChart_subtitle_color, NullEnum.INHERITED);
+		subtitleColorD
+				.setDescription(Messages.MChart_subtitle_color_description);
 		desc.add(subtitleColorD);
 
-		JRExpressionPropertyDescriptor subtitleExprD = new JRExpressionPropertyDescriptor(StandardChartSettings.PROPERTY_SUBTITLE_EXPRESSION, Messages.MChart_subtitle_expression);
-		subtitleExprD.setDescription(Messages.MChart_subtitle_expression_description);
+		JRExpressionPropertyDescriptor subtitleExprD = new JRExpressionPropertyDescriptor(
+				StandardChartSettings.PROPERTY_SUBTITLE_EXPRESSION,
+				Messages.MChart_subtitle_expression);
+		subtitleExprD
+				.setDescription(Messages.MChart_subtitle_expression_description);
 		desc.add(subtitleExprD);
 
-		ColorPropertyDescriptor legendColorD = new ColorPropertyDescriptor(StandardChartSettings.PROPERTY_LEGEND_COLOR, Messages.MChart_legend_color, NullEnum.INHERITED);
+		ColorPropertyDescriptor legendColorD = new ColorPropertyDescriptor(
+				StandardChartSettings.PROPERTY_LEGEND_COLOR,
+				Messages.MChart_legend_color, NullEnum.INHERITED);
 		legendColorD.setDescription(Messages.MChart_legend_color_description);
 		desc.add(legendColorD);
 
-		ColorPropertyDescriptor legendBackColorD = new ColorPropertyDescriptor(StandardChartSettings.PROPERTY_LEGEND_BACKGROUND_COLOR, Messages.MChart_legend_background_color, NullEnum.INHERITED);
-		legendBackColorD.setDescription(Messages.MChart_legend_background_color_description);
+		ColorPropertyDescriptor legendBackColorD = new ColorPropertyDescriptor(
+				StandardChartSettings.PROPERTY_LEGEND_BACKGROUND_COLOR,
+				Messages.MChart_legend_background_color, NullEnum.INHERITED);
+		legendBackColorD
+				.setDescription(Messages.MChart_legend_background_color_description);
 		desc.add(legendBackColorD);
 
-		ClassTypePropertyDescriptor classD = new ClassTypePropertyDescriptor(StandardChartSettings.PROPERTY_CUSTOMIZER_CLASS, Messages.MChart_customizer_class);
+		ClassTypePropertyDescriptor classD = new ClassTypePropertyDescriptor(
+				StandardChartSettings.PROPERTY_CUSTOMIZER_CLASS,
+				Messages.MChart_customizer_class);
 		classD.setDescription(Messages.MChart_customizer_class_description);
 		desc.add(classD);
 
-		CheckBoxPropertyDescriptor showLegendD = new CheckBoxPropertyDescriptor(StandardChartSettings.PROPERTY_SHOW_LEGEND, Messages.MChart_show_legend, NullEnum.NULL);
+		CheckBoxPropertyDescriptor showLegendD = new CheckBoxPropertyDescriptor(
+				StandardChartSettings.PROPERTY_SHOW_LEGEND,
+				Messages.MChart_show_legend, NullEnum.NULL);
 		showLegendD.setDescription(Messages.MChart_show_legend_description);
 		desc.add(showLegendD);
 
-		RWComboBoxPropertyDescriptor rendererTypeD = new RWComboBoxPropertyDescriptor(StandardChartSettings.PROPERTY_RENDER_TYPE, Messages.MChart_renderer_type,
-				new String[] { "", "draw", "image", "svg" }, NullEnum.NULL); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+		RWComboBoxPropertyDescriptor rendererTypeD = new RWComboBoxPropertyDescriptor(
+				StandardChartSettings.PROPERTY_RENDER_TYPE,
+				Messages.MChart_renderer_type, new String[] {
+						"", "draw", "image", "svg" }, NullEnum.NULL); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 		rendererTypeD.setDescription(Messages.MChart_renderer_type_description);
 		desc.add(rendererTypeD);
 
-		FontPropertyDescriptor titleFontD = new FontPropertyDescriptor(StandardChartSettings.PROPERTY_TITLE_FONT, Messages.MChart_title_font);
+		FontPropertyDescriptor titleFontD = new FontPropertyDescriptor(
+				StandardChartSettings.PROPERTY_TITLE_FONT,
+				Messages.MChart_title_font);
 		titleFontD.setDescription(Messages.MChart_title_font_description);
 		desc.add(titleFontD);
 
-		FontPropertyDescriptor subtitleFontD = new FontPropertyDescriptor(StandardChartSettings.PROPERTY_SUBTITLE_FONT, Messages.MChart_subtitle_font);
+		FontPropertyDescriptor subtitleFontD = new FontPropertyDescriptor(
+				StandardChartSettings.PROPERTY_SUBTITLE_FONT,
+				Messages.MChart_subtitle_font);
 		subtitleFontD.setDescription(Messages.MChart_subtitle_font_description);
 		desc.add(subtitleFontD);
 
-		FontPropertyDescriptor legendFontD = new FontPropertyDescriptor(StandardChartSettings.PROPERTY_LEGEND_FONT, Messages.MChart_legend_font);
+		FontPropertyDescriptor legendFontD = new FontPropertyDescriptor(
+				StandardChartSettings.PROPERTY_LEGEND_FONT,
+				Messages.MChart_legend_font);
 		legendFontD.setDescription(Messages.MChart_legend_font_description);
 		desc.add(legendFontD);
 
-		evaluationTimeD = new JSSEnumPropertyDescriptor(SpiderChartComponent.PROPERTY_EVALUATION_TIME, "", EvaluationTimeEnum.class, //$NON-NLS-1$
+		evaluationTimeD = new JSSEnumPropertyDescriptor(
+				SpiderChartComponent.PROPERTY_EVALUATION_TIME,
+				"", EvaluationTimeEnum.class, //$NON-NLS-1$
 				NullEnum.NOTNULL);
 		evaluationTimeD.setDescription(""); //$NON-NLS-1$
 		desc.add(evaluationTimeD);
 
-		evaluationGroupNameD = new RComboBoxPropertyDescriptor(SpiderChartComponent.PROPERTY_EVALUATION_GROUP, "", //$NON-NLS-1$
+		evaluationGroupNameD = new RComboBoxPropertyDescriptor(
+				SpiderChartComponent.PROPERTY_EVALUATION_GROUP, "", //$NON-NLS-1$
 				new String[] { "" }); //$NON-NLS-2$ //$NON-NLS-1$
 		evaluationGroupNameD.setDescription(""); //$NON-NLS-1$
 		desc.add(evaluationGroupNameD);
 
-		JRExpressionPropertyDescriptor anchorNameExp = new JRExpressionPropertyDescriptor(StandardChartSettings.PROPERTY_ANCHOR_NAME_EXPRESSION,
+		JRExpressionPropertyDescriptor anchorNameExp = new JRExpressionPropertyDescriptor(
+				StandardChartSettings.PROPERTY_ANCHOR_NAME_EXPRESSION,
 				com.jaspersoft.studio.messages.Messages.MTextField_anchorNameLabel);
-		anchorNameExp.setDescription(com.jaspersoft.studio.messages.Messages.MTextField_anchorNameDescription);
+		anchorNameExp
+				.setDescription(com.jaspersoft.studio.messages.Messages.MTextField_anchorNameDescription);
 		desc.add(anchorNameExp);
 
-		SpinnerPropertyDescriptor bookmarkLevel = new SpinnerPropertyDescriptor(StandardChartSettings.PROPERTY_BOOKMARK_LEVEL, com.jaspersoft.studio.messages.Messages.MTextField_bookmarkLevelLabel);
-		bookmarkLevel.setDescription(com.jaspersoft.studio.messages.Messages.MTextField_bookmarkLevelDescription);
-		bookmarkLevel.setHelpRefBuilder(new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#chart_bookmarkLevel")); //$NON-NLS-1$
+		SpinnerPropertyDescriptor bookmarkLevel = new SpinnerPropertyDescriptor(
+				StandardChartSettings.PROPERTY_BOOKMARK_LEVEL,
+				com.jaspersoft.studio.messages.Messages.MTextField_bookmarkLevelLabel);
+		bookmarkLevel
+				.setDescription(com.jaspersoft.studio.messages.Messages.MTextField_bookmarkLevelDescription);
+		bookmarkLevel
+				.setHelpRefBuilder(new HelpReferenceBuilder(
+						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#chart_bookmarkLevel")); //$NON-NLS-1$
 		desc.add(bookmarkLevel);
 
 		if (mHyperLink == null)
 			mHyperLink = new MHyperLink(null);
 		mHyperLink.createPropertyDescriptors(desc, defaultsMap);
 
-		ColorPropertyDescriptor axLineColorD = new ColorPropertyDescriptor(StandardSpiderPlot.PROPERTY_AXIS_LINE_COLOR, Messages.MSpiderChart_axisLineColorTitle, NullEnum.INHERITED);
+		ColorPropertyDescriptor axLineColorD = new ColorPropertyDescriptor(
+				StandardSpiderPlot.PROPERTY_AXIS_LINE_COLOR,
+				Messages.MSpiderChart_axisLineColorTitle, NullEnum.INHERITED);
 		axLineColorD.setDescription(Messages.MSpiderChart_axisLineColorDesc);
 		desc.add(axLineColorD);
 		axLineColorD.setCategory(Messages.MChart_plot);
 
-		NTextPropertyDescriptor axLineWidthD = new NTextPropertyDescriptor(StandardSpiderPlot.PROPERTY_AXIS_LINE_WIDTH, Messages.MSpiderChart_axisLineWidthTitle);
-		axLineWidthD.setDescription(Messages.MSpiderChart_axisLineWidthDescription);
+		NTextPropertyDescriptor axLineWidthD = new NTextPropertyDescriptor(
+				StandardSpiderPlot.PROPERTY_AXIS_LINE_WIDTH,
+				Messages.MSpiderChart_axisLineWidthTitle);
+		axLineWidthD
+				.setDescription(Messages.MSpiderChart_axisLineWidthDescription);
 		desc.add(axLineWidthD);
 		axLineWidthD.setCategory(Messages.MChart_plot);
 
-		JRExpressionPropertyDescriptor maxValExpr = new JRExpressionPropertyDescriptor(StandardSpiderPlot.PROPERTY_MAX_VALUE_EXPRESSION, Messages.MSpiderChart_maxValueExpTitle);
+		JRExpressionPropertyDescriptor maxValExpr = new JRExpressionPropertyDescriptor(
+				StandardSpiderPlot.PROPERTY_MAX_VALUE_EXPRESSION,
+				Messages.MSpiderChart_maxValueExpTitle);
 		maxValExpr.setDescription(Messages.MSpiderChart_maxValueExpDescription);
 		desc.add(maxValExpr);
 
-		rotation = new JSSEnumPropertyDescriptor(StandardSpiderPlot.PROPERTY_ROTATION, Messages.MChart_title_position, SpiderRotationEnum.class, NullEnum.NULL);
+		rotation = new NamedEnumPropertyDescriptor<SpiderRotationEnum>(
+				StandardSpiderPlot.PROPERTY_ROTATION,
+				Messages.MChart_title_position, SpiderRotationEnum.CLOCKWISE,
+				NullEnum.NULL);
 		rotation.setDescription(Messages.MChart_title_position_description);
 		desc.add(rotation);
 
-		tableOrder = new JSSEnumPropertyDescriptor(StandardSpiderPlot.PROPERTY_TABLE_ORDER, Messages.MSpiderChart_tableOrderTitle, TableOrderEnum.class, NullEnum.NULL);
-		tableOrder.setDescription(Messages.MSpiderChart_tableOrderTitledescription);
+		tableOrder = new NamedEnumPropertyDescriptor<TableOrderEnum>(
+				StandardSpiderPlot.PROPERTY_TABLE_ORDER,
+				Messages.MSpiderChart_tableOrderTitle, TableOrderEnum.BY_ROW,
+				NullEnum.NULL);
+		tableOrder
+				.setDescription(Messages.MSpiderChart_tableOrderTitledescription);
 		desc.add(tableOrder);
 
-		CheckBoxPropertyDescriptor webFilled = new CheckBoxPropertyDescriptor(StandardSpiderPlot.PROPERTY_WEB_FILLED, Messages.MSpiderChart_webFilledTitle, NullEnum.NULL);
+		CheckBoxPropertyDescriptor webFilled = new CheckBoxPropertyDescriptor(
+				StandardSpiderPlot.PROPERTY_WEB_FILLED,
+				Messages.MSpiderChart_webFilledTitle, NullEnum.NULL);
 		webFilled.setDescription(Messages.MSpiderChart_webFilledDescription);
 		desc.add(webFilled);
 
-		DoublePropertyDescriptor startAngle = new DoublePropertyDescriptor(StandardSpiderPlot.PROPERTY_START_ANGLE, Messages.MSpiderChart_startAngleTitle);
+		DoublePropertyDescriptor startAngle = new DoublePropertyDescriptor(
+				StandardSpiderPlot.PROPERTY_START_ANGLE,
+				Messages.MSpiderChart_startAngleTitle);
 		startAngle.setDescription(Messages.MSpiderChart_startAngleDescription);
 		desc.add(startAngle);
 
-		DoublePropertyDescriptor headPercent = new DoublePropertyDescriptor(StandardSpiderPlot.PROPERTY_HEAD_PERCENT, Messages.MSpiderChart_headPercentTitle);
-		headPercent.setDescription(Messages.MSpiderChart_headPercentDescription);
+		DoublePropertyDescriptor headPercent = new DoublePropertyDescriptor(
+				StandardSpiderPlot.PROPERTY_HEAD_PERCENT,
+				Messages.MSpiderChart_headPercentTitle);
+		headPercent
+				.setDescription(Messages.MSpiderChart_headPercentDescription);
 		desc.add(headPercent);
 
-		DoublePropertyDescriptor interiorGap = new DoublePropertyDescriptor(StandardSpiderPlot.PROPERTY_INTERIOR_GAP, Messages.MSpiderChart_interiorGapTitle);
-		interiorGap.setDescription(Messages.MSpiderChart_interiorGapDescription);
+		DoublePropertyDescriptor interiorGap = new DoublePropertyDescriptor(
+				StandardSpiderPlot.PROPERTY_INTERIOR_GAP,
+				Messages.MSpiderChart_interiorGapTitle);
+		interiorGap
+				.setDescription(Messages.MSpiderChart_interiorGapDescription);
 		desc.add(interiorGap);
 
 		startAngle.setCategory(Messages.MChart_chart_title_category);
@@ -292,7 +363,8 @@ public class MSpiderChart extends MGraphicElement implements IDatasetContainer {
 		subtitleExprD.setCategory(Messages.MChart_chart_subtitle_category);
 		subtitleColorD.setCategory(Messages.MChart_chart_subtitle_category);
 
-		evaluationGroupNameD.setCategory(Messages.MChart_common_chart_properties_category);
+		evaluationGroupNameD
+				.setCategory(Messages.MChart_common_chart_properties_category);
 
 		classD.setCategory(Messages.MChart_common_chart_properties_category);
 
@@ -302,9 +374,11 @@ public class MSpiderChart extends MGraphicElement implements IDatasetContainer {
 		legendPositionD.setCategory(Messages.MChart_chart_legend_category);
 		showLegendD.setCategory(Messages.MChart_chart_legend_category);
 
-		evaluationTimeD.setCategory(Messages.MChart_common_chart_properties_category);
+		evaluationTimeD
+				.setCategory(Messages.MChart_common_chart_properties_category);
 
-		rendererTypeD.setCategory(Messages.MChart_common_chart_properties_category);
+		rendererTypeD
+				.setCategory(Messages.MChart_common_chart_properties_category);
 
 		defaultsMap.put(StandardSpiderPlot.PROPERTY_START_ANGLE, null);
 		defaultsMap.put(StandardSpiderPlot.PROPERTY_HEAD_PERCENT, null);
@@ -313,11 +387,13 @@ public class MSpiderChart extends MGraphicElement implements IDatasetContainer {
 		defaultsMap.put(StandardSpiderPlot.PROPERTY_ROTATION, null);
 		defaultsMap.put(StandardSpiderPlot.PROPERTY_TABLE_ORDER, null);
 		defaultsMap.put(StandardChartSettings.PROPERTY_CUSTOMIZER_CLASS, null);
-		defaultsMap.put(StandardChartSettings.PROPERTY_SHOW_LEGEND, new Boolean(true));
+		defaultsMap.put(StandardChartSettings.PROPERTY_SHOW_LEGEND,
+				new Boolean(true));
 		defaultsMap.put(StandardChartSettings.PROPERTY_TITLE_COLOR, null);
 		defaultsMap.put(StandardChartSettings.PROPERTY_SUBTITLE_COLOR, null);
 		defaultsMap.put(StandardChartSettings.PROPERTY_LEGEND_COLOR, null);
-		defaultsMap.put(StandardChartSettings.PROPERTY_LEGEND_BACKGROUND_COLOR, null);
+		defaultsMap.put(StandardChartSettings.PROPERTY_LEGEND_BACKGROUND_COLOR,
+				null);
 
 		defaultsMap.put(StandardChartSettings.PROPERTY_TITLE_FONT, null);
 		defaultsMap.put(StandardChartSettings.PROPERTY_SUBTITLE_FONT, null);
@@ -325,7 +401,8 @@ public class MSpiderChart extends MGraphicElement implements IDatasetContainer {
 
 		defaultsMap.put(StandardChartSettings.PROPERTY_TITLE_POSITION, null);
 		defaultsMap.put(StandardChartSettings.PROPERTY_LEGEND_POSITION, null);
-		defaultsMap.put(StandardChartSettings.PROPERTY_EVALUATION_TIME, EnumHelper.getValue(EvaluationTimeEnum.NOW, 1, false));
+		defaultsMap.put(StandardChartSettings.PROPERTY_EVALUATION_TIME,
+				EnumHelper.getValue(EvaluationTimeEnum.NOW, 1, false));
 
 		defaultsMap.put(StandardSpiderPlot.PROPERTY_AXIS_LINE_COLOR, null);
 		defaultsMap.put(StandardSpiderPlot.PROPERTY_AXIS_LINE_WIDTH, null);
@@ -336,13 +413,15 @@ public class MSpiderChart extends MGraphicElement implements IDatasetContainer {
 	@Override
 	public Object getPropertyValue(Object id) {
 		JRDesignComponentElement jrElement = (JRDesignComponentElement) getValue();
-		SpiderChartComponent component = (SpiderChartComponent) jrElement.getComponent();
-		StandardChartSettings cs = (StandardChartSettings) component.getChartSettings();
+		SpiderChartComponent component = (SpiderChartComponent) jrElement
+				.getComponent();
+		StandardChartSettings cs = (StandardChartSettings) component
+				.getChartSettings();
 
 		if (id.equals(StandardChartSettings.PROPERTY_TITLE_POSITION))
-			return titlePositionD.getEnumValue(cs.getTitlePosition());
+			return titlePositionD.getIntValue(cs.getTitlePosition());
 		if (id.equals(StandardChartSettings.PROPERTY_LEGEND_POSITION))
-			return legendPositionD.getEnumValue(cs.getLegendPosition());
+			return legendPositionD.getIntValue(cs.getLegendPosition());
 
 		if (id.equals(StandardChartSettings.PROPERTY_RENDER_TYPE))
 			return cs.getRenderType();
@@ -388,15 +467,18 @@ public class MSpiderChart extends MGraphicElement implements IDatasetContainer {
 		}
 
 		if (id.equals(StandardChartSettings.PROPERTY_TITLE_FONT)) {
-			tFont = MFontUtil.getMFont(tFont, cs.getTitleFont(), jrElement.getStyle(), this);
+			tFont = MFontUtil.getMFont(tFont, cs.getTitleFont(),
+					jrElement.getStyle(), this);
 			return tFont;
 		}
 		if (id.equals(StandardChartSettings.PROPERTY_SUBTITLE_FONT)) {
-			stFont = MFontUtil.getMFont(stFont, cs.getSubtitleFont(), jrElement.getStyle(), this);
+			stFont = MFontUtil.getMFont(stFont, cs.getSubtitleFont(),
+					jrElement.getStyle(), this);
 			return stFont;
 		}
 		if (id.equals(StandardChartSettings.PROPERTY_LEGEND_FONT)) {
-			lFont = MFontUtil.getMFont(lFont, cs.getLegendFont(), jrElement.getStyle(), this);
+			lFont = MFontUtil.getMFont(lFont, cs.getLegendFont(),
+					jrElement.getStyle(), this);
 			return lFont;
 		}
 
@@ -421,15 +503,16 @@ public class MSpiderChart extends MGraphicElement implements IDatasetContainer {
 		if (id.equals(StandardSpiderPlot.PROPERTY_LABEL_GAP))
 			return sp.getLabelGap();
 		if (id.equals(StandardSpiderPlot.PROPERTY_LABEL_FONT)) {
-			plFont = MFontUtil.getMFont(plFont, sp.getLabelFont(), jrElement.getStyle(), this);
+			plFont = MFontUtil.getMFont(plFont, sp.getLabelFont(),
+					jrElement.getStyle(), this);
 			return plFont;
 		}
 		if (id.equals(StandardSpiderPlot.PROPERTY_MAX_VALUE_EXPRESSION))
 			return ExprUtil.getExpression(sp.getMaxValueExpression());
 		if (id.equals(StandardSpiderPlot.PROPERTY_ROTATION))
-			return rotation.getEnumValue(sp.getRotation());
+			return rotation.getIntValue(sp.getRotation());
 		if (id.equals(StandardSpiderPlot.PROPERTY_TABLE_ORDER))
-			return tableOrder.getEnumValue(sp.getTableOrder());
+			return tableOrder.getIntValue(sp.getTableOrder());
 		if (id.equals(StandardSpiderPlot.PROPERTY_WEB_FILLED))
 			return sp.getWebFilled();
 		if (id.equals(StandardSpiderPlot.PROPERTY_START_ANGLE))
@@ -449,8 +532,10 @@ public class MSpiderChart extends MGraphicElement implements IDatasetContainer {
 	@Override
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignComponentElement jrElement = (JRDesignComponentElement) getValue();
-		SpiderChartComponent component = (SpiderChartComponent) jrElement.getComponent();
-		StandardChartSettings cs = (StandardChartSettings) component.getChartSettings();
+		SpiderChartComponent component = (SpiderChartComponent) jrElement
+				.getComponent();
+		StandardChartSettings cs = (StandardChartSettings) component
+				.getChartSettings();
 		StandardSpiderPlot cp = (StandardSpiderPlot) component.getPlot();
 
 		if (id.equals(StandardSpiderPlot.PROPERTY_AXIS_LINE_COLOR)) {
@@ -466,7 +551,8 @@ public class MSpiderChart extends MGraphicElement implements IDatasetContainer {
 		} else if (id.equals(StandardSpiderPlot.PROPERTY_LABEL_FONT)) {
 			cp.setLabelFont(MFontUtil.setMFont(value));
 		} else if (id.equals(StandardSpiderPlot.PROPERTY_MAX_VALUE_EXPRESSION))
-			cp.setMaxValueExpression(ExprUtil.setValues(cp.getMaxValueExpression(), value));
+			cp.setMaxValueExpression(ExprUtil.setValues(
+					cp.getMaxValueExpression(), value));
 		else if (id.equals(StandardSpiderPlot.PROPERTY_ROTATION)) {
 			int pos = (Integer) value;
 			if (pos == 0)
@@ -513,47 +599,66 @@ public class MSpiderChart extends MGraphicElement implements IDatasetContainer {
 		} else if (id.equals(StandardChartSettings.PROPERTY_LEGEND_COLOR)) {
 			if (value instanceof AlfaRGB)
 				cs.setLegendColor(Colors.getAWT4SWTRGBColor((AlfaRGB) value));
-		} else if (id.equals(StandardChartSettings.PROPERTY_LEGEND_BACKGROUND_COLOR)) {
+		} else if (id
+				.equals(StandardChartSettings.PROPERTY_LEGEND_BACKGROUND_COLOR)) {
 			if (value instanceof AlfaRGB)
-				cs.setLegendBackgroundColor(Colors.getAWT4SWTRGBColor((AlfaRGB) value));
+				cs.setLegendBackgroundColor(Colors
+						.getAWT4SWTRGBColor((AlfaRGB) value));
 		} else if (id.equals(StandardChartSettings.PROPERTY_CUSTOMIZER_CLASS)) {
 			value = Misc.nullValue((String) value);
 			cs.setCustomizerClass((String) value);
 		} else if (id.equals(StandardChartSettings.PROPERTY_TITLE_EXPRESSION)) {
-			cs.setTitleExpression(ExprUtil.setValues(cs.getTitleExpression(), value));
-		} else if (id.equals(StandardChartSettings.PROPERTY_SUBTITLE_EXPRESSION)) {
-			cs.setSubtitleExpression(ExprUtil.setValues(cs.getSubtitleExpression(), value));
-		} else if (id.equals(StandardChartSettings.PROPERTY_ANCHOR_NAME_EXPRESSION))
-			cs.setAnchorNameExpression(ExprUtil.setValues(cs.getAnchorNameExpression(), value));
+			cs.setTitleExpression(ExprUtil.setValues(cs.getTitleExpression(),
+					value));
+		} else if (id
+				.equals(StandardChartSettings.PROPERTY_SUBTITLE_EXPRESSION)) {
+			cs.setSubtitleExpression(ExprUtil.setValues(
+					cs.getSubtitleExpression(), value));
+		} else if (id
+				.equals(StandardChartSettings.PROPERTY_ANCHOR_NAME_EXPRESSION))
+			cs.setAnchorNameExpression(ExprUtil.setValues(
+					cs.getAnchorNameExpression(), value));
 		else if (id.equals(StandardChartSettings.PROPERTY_BOOKMARK_LEVEL))
-			cs.setBookmarkLevel(value != null ? Integer.parseInt(value.toString()) : 0);
+			cs.setBookmarkLevel(value != null ? Integer.parseInt(value
+					.toString()) : 0);
 		else if (id.equals(JRDesignHyperlink.PROPERTY_LINK_TARGET))
 			cs.setLinkTarget((String) value);
 		else if (id.equals(JRDesignHyperlink.PROPERTY_LINK_TYPE))
 			cs.setLinkType((String) value);
-		else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_ANCHOR_EXPRESSION))
-			cs.setHyperlinkAnchorExpression(ExprUtil.setValues(cs.getHyperlinkAnchorExpression(), value));
-		else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_PAGE_EXPRESSION))
-			cs.setHyperlinkPageExpression(ExprUtil.setValues(cs.getHyperlinkPageExpression(), value));
-		else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_REFERENCE_EXPRESSION))
-			cs.setHyperlinkReferenceExpression(ExprUtil.setValues(cs.getHyperlinkReferenceExpression(), value));
-		else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_TOOLTIP_EXPRESSION))
-			cs.setHyperlinkTooltipExpression(ExprUtil.setValues(cs.getHyperlinkTooltipExpression(), value));
-		else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_WHEN_EXPRESSION)) {
-			cs.setHyperlinkWhenExpression(ExprUtil.setValues(cs.getHyperlinkWhenExpression(), value));
+		else if (id
+				.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_ANCHOR_EXPRESSION))
+			cs.setHyperlinkAnchorExpression(ExprUtil.setValues(
+					cs.getHyperlinkAnchorExpression(), value));
+		else if (id
+				.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_PAGE_EXPRESSION))
+			cs.setHyperlinkPageExpression(ExprUtil.setValues(
+					cs.getHyperlinkPageExpression(), value));
+		else if (id
+				.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_REFERENCE_EXPRESSION))
+			cs.setHyperlinkReferenceExpression(ExprUtil.setValues(
+					cs.getHyperlinkReferenceExpression(), value));
+		else if (id
+				.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_TOOLTIP_EXPRESSION))
+			cs.setHyperlinkTooltipExpression(ExprUtil.setValues(
+					cs.getHyperlinkTooltipExpression(), value));
+		else if (id
+				.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_WHEN_EXPRESSION)) {
+			cs.setHyperlinkWhenExpression(ExprUtil.setValues(
+					cs.getHyperlinkWhenExpression(), value));
 		} else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_PARAMETERS)) {
 			JRHyperlinkParameter[] oldParameters = cs.getHyperlinkParameters();
 			JRHyperlinkParameter[] newParameters = (JRHyperlinkParameter[]) value;
-			if (oldParameters != null){
-				for (JRHyperlinkParameter prm : oldParameters){
+			if (oldParameters != null) {
+				for (JRHyperlinkParameter prm : oldParameters) {
 					cs.removeHyperlinkParameter(prm);
 				}
 			}
-			for (JRHyperlinkParameter param : newParameters){
+			for (JRHyperlinkParameter param : newParameters) {
 				cs.addHyperlinkParameter(param);
 			}
 		} else if (id.equals(SpiderChartComponent.PROPERTY_EVALUATION_TIME))
-			component.setEvaluationTime((EvaluationTimeEnum) EnumHelper.getSetValue(EvaluationTimeEnum.values(), value, 1, false));
+			component.setEvaluationTime((EvaluationTimeEnum) EnumHelper
+					.getSetValue(EvaluationTimeEnum.values(), value, 1, false));
 		else if (id.equals(SpiderChartComponent.PROPERTY_EVALUATION_GROUP)) {
 			component.setEvaluationGroup((String) value);
 		} else
@@ -568,27 +673,33 @@ public class MSpiderChart extends MGraphicElement implements IDatasetContainer {
 	}
 
 	private RComboBoxPropertyDescriptor evaluationGroupNameD;
-	private static JSSEnumPropertyDescriptor titlePositionD;
-	private static JSSEnumPropertyDescriptor legendPositionD;
+	private static EdgePropertyDescriptor titlePositionD;
+	private static EdgePropertyDescriptor legendPositionD;
 	private static JSSEnumPropertyDescriptor evaluationTimeD;
-	private static JSSEnumPropertyDescriptor rotation;
-	private static JSSEnumPropertyDescriptor tableOrder;
+	private static NamedEnumPropertyDescriptor<SpiderRotationEnum> rotation;
+	private static NamedEnumPropertyDescriptor<TableOrderEnum> tableOrder;
 
 	@Override
 	public void setValue(Object value) {
 		if (getValue() != null) {
 			SpiderChartComponent obj = getComponent();
 			if (obj instanceof JRChangeEventsSupport)
-				((JRChangeEventsSupport) obj).getEventSupport().removePropertyChangeListener(this);
-			((StandardChartSettings) obj.getChartSettings()).getEventSupport().removePropertyChangeListener(this);
-			((StandardSpiderPlot) obj.getPlot()).getEventSupport().removePropertyChangeListener(this);
+				((JRChangeEventsSupport) obj).getEventSupport()
+						.removePropertyChangeListener(this);
+			((StandardChartSettings) obj.getChartSettings()).getEventSupport()
+					.removePropertyChangeListener(this);
+			((StandardSpiderPlot) obj.getPlot()).getEventSupport()
+					.removePropertyChangeListener(this);
 		}
 		if (value != null) {
 			SpiderChartComponent obj = getComponent(value);
 			if (value instanceof JRChangeEventsSupport)
-				((JRChangeEventsSupport) obj).getEventSupport().addPropertyChangeListener(this);
-			((StandardChartSettings) obj.getChartSettings()).getEventSupport().addPropertyChangeListener(this);
-			((StandardSpiderPlot) obj.getPlot()).getEventSupport().addPropertyChangeListener(this);
+				((JRChangeEventsSupport) obj).getEventSupport()
+						.addPropertyChangeListener(this);
+			((StandardChartSettings) obj.getChartSettings()).getEventSupport()
+					.addPropertyChangeListener(this);
+			((StandardSpiderPlot) obj.getPlot()).getEventSupport()
+					.addPropertyChangeListener(this);
 		}
 		super.setValue(value);
 	}
@@ -607,16 +718,19 @@ public class MSpiderChart extends MGraphicElement implements IDatasetContainer {
 
 	@Override
 	public int getDefaultHeight() {
-		Object defaultValue = DefaultManager.INSTANCE.getDefaultPropertiesValue(this.getClass(), JRDesignElement.PROPERTY_HEIGHT);
-		return defaultValue != null ? (Integer)defaultValue : 200;
+		Object defaultValue = DefaultManager.INSTANCE
+				.getDefaultPropertiesValue(this.getClass(),
+						JRDesignElement.PROPERTY_HEIGHT);
+		return defaultValue != null ? (Integer) defaultValue : 200;
 	}
 
 	@Override
 	public int getDefaultWidth() {
-		Object defaultValue = DefaultManager.INSTANCE.getDefaultPropertiesValue(this.getClass(), JRDesignElement.PROPERTY_WIDTH);
-		return defaultValue != null ? (Integer)defaultValue : 200;
+		Object defaultValue = DefaultManager.INSTANCE
+				.getDefaultPropertiesValue(this.getClass(),
+						JRDesignElement.PROPERTY_WIDTH);
+		return defaultValue != null ? (Integer) defaultValue : 200;
 	}
-
 
 	@Override
 	public JRDesignComponentElement createJRElement(JasperDesign jasperDesign) {
@@ -632,10 +746,12 @@ public class MSpiderChart extends MGraphicElement implements IDatasetContainer {
 		component.setPlot(spiderPlot);
 
 		jrcomponent.setComponent(component);
-		jrcomponent.setComponentKey(new ComponentKey("http://jasperreports.sourceforge.net/jasperreports/components", "sc", "spiderChart")); //$NON-NLS-1$
-		
+		jrcomponent
+				.setComponentKey(new ComponentKey(
+						"http://jasperreports.sourceforge.net/jasperreports/components", "sc", "spiderChart")); //$NON-NLS-1$
+
 		DefaultManager.INSTANCE.applyDefault(this.getClass(), jrcomponent);
-		
+
 		return jrcomponent;
 	}
 
@@ -643,10 +759,12 @@ public class MSpiderChart extends MGraphicElement implements IDatasetContainer {
 	public List<MDatasetRun> getDatasetRunList() {
 		if (getValue() != null) {
 			JRDesignComponentElement jrElement = (JRDesignComponentElement) getValue();
-			SpiderChartComponent component = (SpiderChartComponent) jrElement.getComponent();
+			SpiderChartComponent component = (SpiderChartComponent) jrElement
+					.getComponent();
 			if (component != null && component.getDataset() != null) {
 				List<MDatasetRun> datasetList = new ArrayList<MDatasetRun>();
-				MDatasetRun mDatasetRun = new MDatasetRun(component.getDataset().getDatasetRun(), getJasperDesign());
+				MDatasetRun mDatasetRun = new MDatasetRun(component
+						.getDataset().getDatasetRun(), getJasperDesign());
 				mDatasetRun.setJasperConfiguration(getJasperConfiguration());
 				datasetList.add(mDatasetRun);
 				return datasetList;
@@ -654,22 +772,29 @@ public class MSpiderChart extends MGraphicElement implements IDatasetContainer {
 		}
 		return null;
 	}
-	
+
 	@Override
-	public void trasnferProperties(JRElement target){
+	public void trasnferProperties(JRElement target) {
 		super.trasnferProperties(target);
-		
+
 		JRDesignComponentElement jrSourceElement = (JRDesignComponentElement) getValue();
-		SpiderChartComponent jrSourceComponent = (SpiderChartComponent) jrSourceElement.getComponent();
-		StandardChartSettings jrSourceSetting = (StandardChartSettings) jrSourceComponent.getChartSettings();
-		StandardSpiderPlot jrSourcePlot = (StandardSpiderPlot) jrSourceComponent.getPlot();
-		
+		SpiderChartComponent jrSourceComponent = (SpiderChartComponent) jrSourceElement
+				.getComponent();
+		StandardChartSettings jrSourceSetting = (StandardChartSettings) jrSourceComponent
+				.getChartSettings();
+		StandardSpiderPlot jrSourcePlot = (StandardSpiderPlot) jrSourceComponent
+				.getPlot();
+
 		JRDesignComponentElement jrTargetElement = (JRDesignComponentElement) getValue();
-		SpiderChartComponent jrTargetComponent = (SpiderChartComponent) jrTargetElement.getComponent();
-		StandardChartSettings jrTargetSetting = (StandardChartSettings) jrTargetComponent.getChartSettings();
-		StandardSpiderPlot jrTargetPlot = (StandardSpiderPlot) jrTargetComponent.getPlot();
-		
-		jrTargetPlot.setAxisLineColor(getColorClone(jrSourcePlot.getAxisLineColor()));
+		SpiderChartComponent jrTargetComponent = (SpiderChartComponent) jrTargetElement
+				.getComponent();
+		StandardChartSettings jrTargetSetting = (StandardChartSettings) jrTargetComponent
+				.getChartSettings();
+		StandardSpiderPlot jrTargetPlot = (StandardSpiderPlot) jrTargetComponent
+				.getPlot();
+
+		jrTargetPlot.setAxisLineColor(getColorClone(jrSourcePlot
+				.getAxisLineColor()));
 		jrTargetPlot.setAxisLineWidth(jrSourcePlot.getAxisLineWidth());
 		jrTargetPlot.setLabelColor(getColorClone(jrSourcePlot.getLabelColor()));
 		jrTargetPlot.setLabelGap(jrSourcePlot.getLabelGap());
@@ -680,17 +805,24 @@ public class MSpiderChart extends MGraphicElement implements IDatasetContainer {
 		jrTargetPlot.setStartAngle(jrSourcePlot.getStartAngle());
 		jrTargetPlot.setInteriorGap(jrSourcePlot.getInteriorGap());
 		jrTargetPlot.setHeadPercent(jrSourcePlot.getHeadPercent());
-		
-		jrTargetSetting.setTitleFont(getFontClone(jrSourceSetting.getTitleFont()));
-		jrTargetSetting.setSubtitleFont(getFontClone(jrSourceSetting.getSubtitleFont()));
-		jrTargetSetting.setLegendFont(getFontClone(jrSourceSetting.getLegendFont()));
+
+		jrTargetSetting.setTitleFont(getFontClone(jrSourceSetting
+				.getTitleFont()));
+		jrTargetSetting.setSubtitleFont(getFontClone(jrSourceSetting
+				.getSubtitleFont()));
+		jrTargetSetting.setLegendFont(getFontClone(jrSourceSetting
+				.getLegendFont()));
 		jrTargetSetting.setTitlePosition(jrSourceSetting.getTitlePosition());
 		jrTargetSetting.setLegendPosition(jrSourceSetting.getLegendPosition());
 		jrTargetSetting.setShowLegend(jrSourceSetting.getShowLegend());
 		jrTargetSetting.setRenderType(jrSourceSetting.getRenderType());
-		jrTargetSetting.setTitleColor(getColorClone(jrSourceSetting.getTitleColor()));
-		jrTargetSetting.setLegendColor(getColorClone(jrSourceSetting.getLegendColor()));
-		jrTargetSetting.setSubtitleColor(getColorClone(jrSourceSetting.getSubtitleColor()));
-		jrTargetSetting.setLegendBackgroundColor(getColorClone(jrSourceSetting.getLegendBackgroundColor()));
+		jrTargetSetting.setTitleColor(getColorClone(jrSourceSetting
+				.getTitleColor()));
+		jrTargetSetting.setLegendColor(getColorClone(jrSourceSetting
+				.getLegendColor()));
+		jrTargetSetting.setSubtitleColor(getColorClone(jrSourceSetting
+				.getSubtitleColor()));
+		jrTargetSetting.setLegendBackgroundColor(getColorClone(jrSourceSetting
+				.getLegendBackgroundColor()));
 	}
 }

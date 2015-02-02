@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.property.descriptors;
 
@@ -23,19 +19,21 @@ import com.jaspersoft.studio.help.IHelp;
 import com.jaspersoft.studio.help.IHelpRefBuilder;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.section.AbstractSection;
-import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 import com.jaspersoft.studio.property.section.widgets.IPropertyDescriptorWidget;
 import com.jaspersoft.studio.property.section.widgets.SPReadComboEnum;
 import com.jaspersoft.studio.utils.EnumHelper;
 
-public class JSSEnumPropertyDescriptor extends ComboBoxPropertyDescriptor implements IPropertyDescriptorWidget, IHelp {
+public class JSSEnumPropertyDescriptor extends ComboBoxPropertyDescriptor implements IPropertyDescriptorWidget, IHelp,
+		IEnumDescriptors {
 	private NullEnum type;
 	private int start = 0;
 	private JREnum[] jrEnums;
+	private String[] enumItems;
 
 	public JSSEnumPropertyDescriptor(Object id, String displayName, Class<? extends JREnum> jrEnum, NullEnum type,
-			int skipPositions) {
+			Integer... skipPositions) {
 		super(id, displayName, EnumHelper.getEnumNames(jrEnum.getEnumConstants(), type, skipPositions));
+		enumItems = EnumHelper.getEnumNames(jrEnum.getEnumConstants(), type, skipPositions);
 		this.type = type;
 		jrEnums = jrEnum.getEnumConstants();
 		this.start = jrEnums[0].getValue();
@@ -44,8 +42,14 @@ public class JSSEnumPropertyDescriptor extends ComboBoxPropertyDescriptor implem
 	public JSSEnumPropertyDescriptor(Object id, String displayName, Class<? extends JREnum> jrEnum, NullEnum type) {
 		super(id, displayName, EnumHelper.getEnumNames(jrEnum.getEnumConstants(), type));
 		this.type = type;
+		enumItems = EnumHelper.getEnumNames(jrEnum.getEnumConstants(), type);
 		jrEnums = jrEnum.getEnumConstants();
 		this.start = jrEnums[0].getValue();
+	}
+
+	@Override
+	public String[] getEnumItems() {
+		return enumItems;
 	}
 
 	@Override
@@ -63,8 +67,8 @@ public class JSSEnumPropertyDescriptor extends ComboBoxPropertyDescriptor implem
 		return EnumHelper.getSetValue(jrEnums, value, start, type != NullEnum.NOTNULL);
 	}
 
-	public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
-		return new SPReadComboEnum(parent, section, this);
+	public SPReadComboEnum<JSSEnumPropertyDescriptor> createWidget(Composite parent, AbstractSection section) {
+		return new SPReadComboEnum<JSSEnumPropertyDescriptor>(parent, section, this);
 	}
 
 	public NullEnum getType() {
@@ -92,4 +96,5 @@ public class JSSEnumPropertyDescriptor extends ComboBoxPropertyDescriptor implem
 			return refBuilder.getHelpReference();
 		return null;
 	}
+
 }
