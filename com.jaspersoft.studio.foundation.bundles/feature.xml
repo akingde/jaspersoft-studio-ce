@@ -27,6 +27,7 @@
       <import plugin="org.apache.commons.logging"/>
       <import plugin="org.apache.servicemix.bundles.commons-collections"/>
       <import plugin="com.jaspersoft.studio.bundles.commons-beanutils"/>
+      <import plugin="com.jaspersoft.studio.bundles.bouncycastle"/>
       <import plugin="org.apache.servicemix.bundles.xmlbeans"/>
       <import plugin="org.junit"/>
       <import plugin="org.apache.commons.codec"/>
@@ -35,8 +36,7 @@
       <import plugin="com.fasterxml.jackson.core.jackson-annotations"/>
       <import plugin="com.fasterxml.jackson.core.jackson-core"/>
       <import plugin="org.apache.servicemix.bundles.jcommon"/>
-      <import plugin="org.apache.xml.resolver"/>
-      <import plugin="com.jaspersoft.studio.bundles.bouncycastle"/>
+      <import plugin="org.w3c.dom.svg" version="1.1.0" match="greaterOrEqual"/>
    </requires>
 
    <plugin
@@ -178,13 +178,6 @@
          unpack="false"/>
 
    <plugin
-         id="org.apache.servicemix.bundles.xerces"
-         download-size="0"
-         install-size="0"
-         version="2.10.0.1"
-         unpack="false"/>
-
-   <plugin
          id="org.apache.servicemix.bundles.xmlbeans"
          download-size="0"
          install-size="0"
@@ -203,6 +196,14 @@
          download-size="0"
          install-size="0"
          version="1.4.6"
+         unpack="false"/>
+
+   <plugin
+         id="org.w3c.dom.svg.patch"
+         download-size="0"
+         install-size="0"
+         version="1.1.0"
+         fragment="true"
          unpack="false"/>
 
 </feature>
