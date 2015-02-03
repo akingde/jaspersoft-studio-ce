@@ -12,9 +12,11 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.barcode.model.barcode4j;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.components.barcode4j.ErrorCorrectionLevelEnum;
 import net.sf.jasperreports.components.barcode4j.QRCodeComponent;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRElement;
@@ -25,10 +27,14 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.components.barcode.model.MBarcode;
 import com.jaspersoft.studio.editor.defaults.DefaultManager;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.property.descriptor.NullEnum;
+import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.PixelPropertyDescriptor;
 
-public class MQRCode extends MBarcode4j {
+public class MQRCode extends MBarcode {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	public MQRCode() {
@@ -37,7 +43,8 @@ public class MQRCode extends MBarcode4j {
 
 	public MQRCode(ANode parent, JRDesignComponentElement jrBarcode,
 			int newIndex) {
-		super(parent, jrBarcode, newIndex);
+		super(parent, newIndex);
+		setValue(jrBarcode);
 	}
 
 	@Override
@@ -58,6 +65,7 @@ public class MQRCode extends MBarcode4j {
 
 	private static IPropertyDescriptor[] descriptors;
 	private static Map<String, Object> defaultsMap;
+	private NamedEnumPropertyDescriptor<ErrorCorrectionLevelEnum> errLevelD;
 
 	@Override
 	public Map<String, Object> getDefaultsMap() {
@@ -87,35 +95,47 @@ public class MQRCode extends MBarcode4j {
 			Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		// DoublePropertyDescriptor wideFactorD = new DoublePropertyDescriptor(
-		// CodabarComponent.PROPERTY_WIDE_FACTOR,
-		// Messages.common_wide_factor);
-		// wideFactorD.setDescription(Messages.MCodabar_wide_factor_description);
-		// desc.add(wideFactorD);
+		errLevelD = new NamedEnumPropertyDescriptor<ErrorCorrectionLevelEnum>(
+				QRCodeComponent.PROPERTY_ERROR_CORRECTION_LEVEL,
+				"Error Correction Level", ErrorCorrectionLevelEnum.H,
+				NullEnum.NOTNULL);
+		errLevelD.setDescription("Error correction level.");
+		errLevelD.setCategory("QR Code");
+		desc.add(errLevelD);
 
-		// wideFactorD.setCategory(Messages.MCodabar_properties_category);
+		PixelPropertyDescriptor margind = new PixelPropertyDescriptor(
+				QRCodeComponent.PROPERTY_MARGIN, "Margin");
+		margind.setDescription("Margin");
+		margind.setCategory("QR Code");
+		desc.add(margind);
+
+		defaultsMap.put(QRCodeComponent.PROPERTY_ERROR_CORRECTION_LEVEL,
+				ErrorCorrectionLevelEnum.H);
+		defaultsMap.put(QRCodeComponent.PROPERTY_MARGIN, new Integer(1));
 	}
 
 	@Override
 	public Object getPropertyValue(Object id) {
-		// JRDesignComponentElement jrElement = (JRDesignComponentElement)
-		// getValue();
-		// QRCodeComponent jrList = (QRCodeComponent) jrElement.getComponent();
-		//
-		// if (id.equals(CodabarComponent.PROPERTY_WIDE_FACTOR))
-		// return jrList.getWideFactor();
+		JRDesignComponentElement jrElement = (JRDesignComponentElement) getValue();
+		QRCodeComponent jrList = (QRCodeComponent) jrElement.getComponent();
+
+		if (id.equals(QRCodeComponent.PROPERTY_ERROR_CORRECTION_LEVEL))
+			return errLevelD.getIntValue(jrList.getErrorCorrectionLevel());
+		if (id.equals(QRCodeComponent.PROPERTY_MARGIN))
+			return jrList.getMargin();
 
 		return super.getPropertyValue(id);
 	}
 
 	@Override
 	public void setPropertyValue(Object id, Object value) {
-		// JRDesignComponentElement jrElement = (JRDesignComponentElement)
-		// getValue();
-		// QRCodeComponent jrList = (QRCodeComponent) jrElement.getComponent();
-		//
-		// if (id.equals(CodabarComponent.PROPERTY_WIDE_FACTOR))
-		// jrList.setWideFactor((Double) value);
+		JRDesignComponentElement jrElement = (JRDesignComponentElement) getValue();
+		QRCodeComponent jrList = (QRCodeComponent) jrElement.getComponent();
+
+		if (id.equals(QRCodeComponent.PROPERTY_ERROR_CORRECTION_LEVEL))
+			jrList.setErrorCorrectionLevel(errLevelD.getEnumValue(value));
+		if (id.equals(QRCodeComponent.PROPERTY_MARGIN))
+			jrList.setMargin((Integer) value);
 
 		super.setPropertyValue(id, value);
 	}
@@ -132,6 +152,16 @@ public class MQRCode extends MBarcode4j {
 		QRCodeComponent jrTargetBarcode = (QRCodeComponent) jrTargetElement
 				.getComponent();
 
-		// jrTargetBarcode.setWideFactor(jrSourceBarcode.getWideFactor());
+		jrTargetBarcode.setMargin(jrSourceBarcode.getMargin());
+		jrTargetBarcode.setErrorCorrectionLevel(jrSourceBarcode
+				.getErrorCorrectionLevel());
+	}
+
+	@Override
+	public HashSet<String> generateGraphicalProperties() {
+		HashSet<String> properties = super.generateGraphicalProperties();
+		properties.add(QRCodeComponent.PROPERTY_ERROR_CORRECTION_LEVEL);
+		properties.add(QRCodeComponent.PROPERTY_MARGIN);
+		return properties;
 	}
 }

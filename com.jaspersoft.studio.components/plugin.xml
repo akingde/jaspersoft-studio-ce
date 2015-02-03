@@ -734,6 +734,15 @@
                   type="com.jaspersoft.studio.components.list.model.MList">
             </input>
          </propertySection>
+         <propertySection
+               afterSection="com.jaspersoft.studio.components.barcode.property.BarcodeSection"
+               class="com.jaspersoft.studio.components.barcode.property.QRCodeSection"
+               id="com.jaspersoft.studio.components.barcode.property.QRCodeSection"
+               tab="com.jaspersoft.studio.components.barcode">
+            <input
+                  type="com.jaspersoft.studio.components.barcode.model.barcode4j.MQRCode">
+            </input>
+         </propertySection>
       </propertySections>
    </extension>
    <extension
@@ -965,5 +974,14 @@
                id="com.jaspersoft.studio.editor.action.createcolumngroup">
          </toolitem>
       </toolitemsets>
+   </extension>
+   <extension
+         point="com.jaspersoft.studio.componentConverter">
+      <componentConverter
+            ClassFactory="com.jaspersoft.studio.components.map.figure.MapDesignConverter">
+      </componentConverter>
+      <componentConverter
+            ClassFactory="com.jaspersoft.studio.components.barcode.figure.LazyBarcodeDesignConverter">
+      </componentConverter>
    </extension>
 </plugin>

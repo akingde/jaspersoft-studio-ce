@@ -45,6 +45,7 @@ import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.map.MapNodeIconDescriptor;
+import com.jaspersoft.studio.components.map.figure.MapDesignConverter;
 import com.jaspersoft.studio.components.map.messages.Messages;
 import com.jaspersoft.studio.components.map.model.itemdata.ElementDataHelper;
 import com.jaspersoft.studio.components.map.model.itemdata.dto.MapDataElementsConfiguration;
@@ -55,7 +56,6 @@ import com.jaspersoft.studio.components.map.model.style.MapStylesDescriptor;
 import com.jaspersoft.studio.editor.defaults.DefaultManager;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.help.HelpReferenceBuilder;
-import com.jaspersoft.studio.jasper.MapDesignConverter;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IDatasetContainer;
 import com.jaspersoft.studio.model.MGraphicElement;

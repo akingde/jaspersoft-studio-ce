@@ -27,8 +27,6 @@ import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.Vector;
 
-import net.sf.jasperreports.components.ComponentsExtensionsRegistryFactory;
-import net.sf.jasperreports.components.ComponentsManager;
 import net.sf.jasperreports.data.AbstractClasspathAwareDataAdapterService;
 import net.sf.jasperreports.eclipse.MScopedPreferenceStore;
 import net.sf.jasperreports.eclipse.classpath.JavaProjectClassLoader;
@@ -37,7 +35,6 @@ import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.eclipse.util.query.EmptyQueryExecuterFactoryBundle;
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.JasperReportsContext;
-import net.sf.jasperreports.engine.component.ComponentManager;
 import net.sf.jasperreports.engine.component.ComponentsBundle;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.fonts.FontFamily;
@@ -63,7 +60,6 @@ import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
-import com.jaspersoft.studio.jasper.MapDesignConverter;
 import com.jaspersoft.studio.preferences.fonts.FontsPreferencePage;
 import com.jaspersoft.studio.preferences.fonts.utils.FontUtils;
 import com.jaspersoft.studio.prm.ParameterSet;
@@ -622,14 +618,8 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 			// remove all duplicates
 			Set<ComponentsBundle> components = new LinkedHashSet<ComponentsBundle>(bundles);
 			bundles = new ArrayList<ComponentsBundle>(components);
-			for (ComponentsBundle cb : bundles) {
-				try {
-					ComponentManager cm = cb.getComponentManager(ComponentsExtensionsRegistryFactory.MAP_COMPONENT_NAME);
-					if (cm != null && cm instanceof ComponentsManager)
-						((ComponentsManager) cm).setDesignConverter(MapDesignConverter.getInstance());
-				} catch (Exception e) {
-				}
-			}
+			for (ComponentsBundle cb : bundles) 
+				JaspersoftStudioPlugin.getComponentConverterManager().setupComponentConvertor(cb); 
 			refreshBundles = false;
 		}
 		return bundles;

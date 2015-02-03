@@ -30,7 +30,7 @@ public class BarcodeFigure extends JRComponentFigure {
 	
 	@Override
 	protected boolean allowsFigureDrawCache() {
-		return true;
+		return false;
 	}
 
 }

@@ -2,6 +2,7 @@
 <?eclipse version="3.0"?>
 <plugin>
    <extension-point id="components" name="Components" schema="schema/components.exsd"/>
+   <extension-point id="componentConverter" name="Component converter" schema="schema/componentConverter.exsd"/>
    <extension-point id="EditorSettingsMenu" name="Decorators" schema="schema/editorSettingsMenu.exsd"/>
    <extension-point id="decorators" name="Decorators" schema="schema/decorator.exsd"/>
    <extension-point id="defaultDA" name="Default DataAdapters" schema="schema/defaultDA.exsd"/>

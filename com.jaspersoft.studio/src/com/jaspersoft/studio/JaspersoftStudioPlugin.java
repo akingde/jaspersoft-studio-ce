@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio;
 
@@ -35,6 +31,7 @@ import com.jaspersoft.studio.editor.gef.decorator.DecoratorManager;
 import com.jaspersoft.studio.editor.gef.ui.actions.EditorSettingsContributorManager;
 import com.jaspersoft.studio.editor.preview.input.ext.InputControlTypeManager;
 import com.jaspersoft.studio.editor.toolitems.ToolItemsManager;
+import com.jaspersoft.studio.jasper.ComponentConverterManager;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.plugin.ExtensionManager;
 import com.jaspersoft.studio.preferences.GlobalPreferencePage;
@@ -76,7 +73,7 @@ public class JaspersoftStudioPlugin extends AbstractJRUIPlugin {
 	@Override
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
-		
+
 		// Sets the branding information
 		BrandingInfo info = new BrandingInfo();
 		info.setProductName(Messages.JaspersoftStudioPlugin_BrandingInfoJSSPlugin);
@@ -84,7 +81,7 @@ public class JaspersoftStudioPlugin extends AbstractJRUIPlugin {
 		info.setProductMainBundleID(PLUGIN_ID);
 		setBrandingInformation(info);
 		logInfo(NLS.bind(Messages.JaspersoftStudioPlugin_StartingJSSBundleMsg, info.getProductVersion()));
-		
+
 		// Some property checks
 		JasperReportsConfiguration c = JasperReportsConfiguration.getDefaultInstance();
 		String key = "net.sf.jasperreports.default.font.name"; //$NON-NLS-1$
@@ -113,16 +110,16 @@ public class JaspersoftStudioPlugin extends AbstractJRUIPlugin {
 		plugin = null;
 		super.stop(context);
 	}
-	
+
 	@Override
 	protected void postStartOperations() {
 		super.postStartOperations();
-		
+
 		// Initialize the extension manager
 		getExtensionManager();
 
 		// Pre-cache template images
-		Job precacheImagesJob = new Job(Messages.JaspersoftStudioPlugin_CachingTemplateImagesJob){
+		Job precacheImagesJob = new Job(Messages.JaspersoftStudioPlugin_CachingTemplateImagesJob) {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				ReportTemplatesWizardPage.templateImagesPreCache();
@@ -133,7 +130,7 @@ public class JaspersoftStudioPlugin extends AbstractJRUIPlugin {
 		precacheImagesJob.schedule();
 
 		// Force the initialization of some JR extensions
-		Job extensionsPreloadingJob = new Job(Messages.JaspersoftStudioPlugin_CachingJRExtensionsJob){
+		Job extensionsPreloadingJob = new Job(Messages.JaspersoftStudioPlugin_CachingJRExtensionsJob) {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				ExtensionLoader.initializeJRExtensions(monitor);
@@ -154,7 +151,7 @@ public class JaspersoftStudioPlugin extends AbstractJRUIPlugin {
 		};
 		digesterJob.setPriority(Job.LONG);
 		digesterJob.schedule();
-		
+
 		// JSS console activation (if requested)
 		if (getInstance().getPreferenceStore().getBoolean(GlobalPreferencePage.JSS_ENABLE_INTERNAL_CONSOLE)) {
 			UIJob j = new UIJob(Messages.JaspersoftStudioPlugin_InstallingJSSConsoleJob) {
@@ -163,8 +160,7 @@ public class JaspersoftStudioPlugin extends AbstractJRUIPlugin {
 					try {
 						installJSSConsole();
 						return Status.OK_STATUS;
-					}
-					catch (Exception e) {
+					} catch (Exception e) {
 						// something went wrong while trying to re-assign the standard output and error streams.
 						return new Status(IStatus.ERROR, PLUGIN_ID, Messages.JaspersoftStudioPlugin_ConsoleInstallationError, e);
 					}
@@ -182,6 +178,16 @@ public class JaspersoftStudioPlugin extends AbstractJRUIPlugin {
 			extensionManager.init();
 		}
 		return extensionManager;
+	}
+
+	private static ComponentConverterManager converterManager;
+
+	public static ComponentConverterManager getComponentConverterManager() {
+		if (converterManager == null) {
+			converterManager = new ComponentConverterManager();
+			converterManager.init();
+		}
+		return converterManager;
 	}
 
 	private static DecoratorManager decoratorManager;
@@ -297,15 +303,14 @@ public class JaspersoftStudioPlugin extends AbstractJRUIPlugin {
 	public static boolean shouldUseSecureStorage() {
 		return getInstance().getPreferenceStore().getBoolean(GlobalPreferencePage.JSS_USE_SECURE_STORAGE);
 	}
-	
+
 	/**
-	 * Creates an additional Console for the Console view.
-	 * Once installed, all the messages printed on the System.out and System.err streams
-	 * will be redirected here.
+	 * Creates an additional Console for the Console view. Once installed, all the messages printed on the System.out and
+	 * System.err streams will be redirected here.
 	 */
 	private static void installJSSConsole() {
 		MessageConsole jssConsole = new MessageConsole(Messages.JaspersoftStudioPlugin_JSSConsoleTitle, null);
-		ConsolePlugin.getDefault().getConsoleManager().addConsoles(new IConsole[]{jssConsole});
+		ConsolePlugin.getDefault().getConsoleManager().addConsoles(new IConsole[] { jssConsole });
 		MessageConsoleStream consoleStream = jssConsole.newMessageStream();
 		PrintStream pstream = new PrintStream(consoleStream);
 		System.setOut(pstream);
