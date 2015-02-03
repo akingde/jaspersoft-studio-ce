@@ -14,16 +14,20 @@ package com.jaspersoft.studio.background;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.List;
 
 import org.eclipse.draw2d.ColorConstants;
+import org.eclipse.draw2d.Cursors;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.draw2d.geometry.PrecisionRectangle;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
+import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
@@ -98,6 +102,25 @@ public class BackgroundImageEditPart extends AbstractGraphicalEditPart  implemen
 				setCommand.setPropertyId(MBackgrounImage.PROPERTY_HEIGHT);
 				setCommand.setPropertyValue(newBounds.height);
 				cc.add(setCommand);
+				int dir = request.getResizeDirection();
+				if (dir == PositionConstants.NORTH || dir == PositionConstants.NORTH_EAST || dir == PositionConstants.NORTH_WEST){
+					int delta_y = model.getDefaultHeight()-newBounds.height;
+					int current_y = model.getDefaultY();
+					setCommand = new SetValueCommand();
+					setCommand.setTarget(model);
+					setCommand.setPropertyId(MBackgrounImage.PROPERTY_Y);
+					setCommand.setPropertyValue(current_y+delta_y);
+					cc.add(setCommand);
+				}
+				if (dir == PositionConstants.WEST || dir == PositionConstants.SOUTH_WEST || dir == PositionConstants.NORTH_WEST){
+					int delta_x = model.getDefaultWidth()-newBounds.width;
+					int current_x = model.getDefaultX();
+					setCommand = new SetValueCommand();
+					setCommand.setTarget(model);
+					setCommand.setPropertyId(MBackgrounImage.PROPERTY_X);
+					setCommand.setPropertyValue(current_x+delta_x);
+					cc.add(setCommand);
+				}
 				return cc;
 			}
 			
@@ -171,6 +194,15 @@ public class BackgroundImageEditPart extends AbstractGraphicalEditPart  implemen
 			@Override
 			protected void showSelection() {
 				if (isImageEditable()) addSelectionHandles();
+			}
+			
+			@SuppressWarnings({ "unchecked", "rawtypes" })
+			@Override
+			protected void createResizeHandle(List handles, int direction) {
+				BackgroundResizeHandles handle = new BackgroundResizeHandles((GraphicalEditPart) getHost(), direction);
+				handle.setDragTracker(getResizeTracker(direction));
+				handle.setCursor(Cursors.getDirectionalCursor(direction, getHostFigure().isMirrored()));
+				handles.add(handle);
 			}
 		});
 	}

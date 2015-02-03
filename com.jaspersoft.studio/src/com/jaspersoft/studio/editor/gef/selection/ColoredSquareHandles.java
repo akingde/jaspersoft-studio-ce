@@ -84,7 +84,7 @@ public class ColoredSquareHandles extends ResizeHandle {
 	 *          value from 0 to 1 that represent the base color H in HSB system
 	 * @return an array of colors, different version of the base color
 	 */
-	private Color[] CreateColor(float baseColor) {
+	protected Color[] CreateColor(float baseColor) {
 		Color[] result = { Color.getHSBColor(baseColor, 0.9f, 0.4f), Color.getHSBColor(baseColor, 0.8f, 0.2f),
 				Color.getHSBColor(baseColor, 0.5f, 0.9f) };
 		return result;
