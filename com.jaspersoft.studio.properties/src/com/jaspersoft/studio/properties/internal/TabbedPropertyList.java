@@ -78,29 +78,31 @@ public class TabbedPropertyList {
 					itemBounds.y = pt.y;
 					ToolBar bar = (ToolBar) item.getControl();
 					ToolItem[] tools = bar.getItems();
-
 					int i = 0;
+					//The width dosen't start from zero to compensate the presence of the border
+					int toolsWidth = 28;
 					while (i < tools.length) {
 						Rectangle toolBounds = tools[i].getBounds();
-						pt = bar.toDisplay(new Point(toolBounds.x, toolBounds.y));
-						toolBounds.x = pt.x;
-						toolBounds.y = pt.y;
+						//pt = bar.toDisplay(new Point(toolBounds.x, toolBounds.y));
+						//toolBounds.x = pt.x;
+						//toolBounds.y = pt.y;
 
 						/*
 						 * Figure out the visible portion of the tool by looking
 						 * at the intersection of the tool bounds with the cool
 						 * item bounds.
 						 */
-						Rectangle intersection = itemBounds
-								.intersection(toolBounds);
+						//Rectangle intersection = itemBounds.intersection(toolBounds);
 
 						/*
 						 * If the tool is not completely within the cool item
 						 * bounds, then it is partially hidden, and all
 						 * remaining tools are completely hidden.
 						 */
-						if (!intersection.equals(toolBounds))
-							break;
+						//if (!intersection.equals(toolBounds))
+							//break;
+						toolsWidth += toolBounds.width;
+						if (toolsWidth>itemBounds.width) break;
 						i++;
 					}
 
