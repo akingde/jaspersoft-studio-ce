@@ -62,7 +62,7 @@ public class TabbedPropertyList {
 		cBar = new CoolBar(parent, SWT.HORIZONTAL);
 		cBar.setLocked(true);
 		coolItem = new CoolItem(cBar, SWT.DROP_DOWN | SWT.NO_FOCUS);
-		ToolBar toolBar = new ToolBar(cBar, SWT.FLAT | SWT.RIGHT | SWT.NO_FOCUS);
+		final ToolBar toolBar = new ToolBar(cBar, SWT.FLAT | SWT.RIGHT | SWT.NO_FOCUS);
 		toolBarManager = new ToolBarManager(toolBar);
 
 		coolItem.setControl(toolBar);
@@ -79,8 +79,8 @@ public class TabbedPropertyList {
 					ToolBar bar = (ToolBar) item.getControl();
 					ToolItem[] tools = bar.getItems();
 					int i = 0;
-					//The width dosen't start from zero to compensate the presence of the border
-					int toolsWidth = 28;
+					//The width dosen't start from zero to compensate the presence of the arrow button
+					int toolsWidth = cBar.getBounds().width-toolBar.getBounds().width;
 					while (i < tools.length) {
 						Rectangle toolBounds = tools[i].getBounds();
 						//pt = bar.toDisplay(new Point(toolBounds.x, toolBounds.y));
