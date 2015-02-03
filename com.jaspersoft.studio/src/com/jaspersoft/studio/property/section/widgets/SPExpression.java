@@ -83,7 +83,6 @@ public class SPExpression extends AHistorySPropertyWidget implements IExpression
 		}
 		// Try to get an expression context for the node if any
 		Object expContextAdapter = pnode.getAdapter(ExpressionContext.class);
-		if (expContextAdapter == null) expContextAdapter = pnode.getExpressionContext();
 		if(expContextAdapter!=null){
 			expr.setExpressionContext((ExpressionContext)expContextAdapter);
 		}

@@ -80,4 +80,12 @@ public abstract class MDatasetGroupNode extends APropertyNode {
 		}
 		return null;
 	}
+	
+	@SuppressWarnings("rawtypes")
+	@Override
+	public Object getAdapter(Class adapter) {
+		if (ExpressionContext.class.equals(adapter)){
+			return getExpressionContext();
+		} else return super.getAdapter(adapter);
+	}
 }

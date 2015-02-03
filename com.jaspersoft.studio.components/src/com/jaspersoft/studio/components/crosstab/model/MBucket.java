@@ -18,6 +18,7 @@ import java.util.Map;
 import net.sf.jasperreports.crosstabs.JRCrosstabBucket;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabBucket;
 import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.analytics.dataset.BucketOrder;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.type.SortOrderEnum;
 
@@ -31,7 +32,7 @@ import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.classname.NClassTypePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 
 public class MBucket extends APropertyNode {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
@@ -82,7 +83,7 @@ public class MBucket extends APropertyNode {
 
 	private static IPropertyDescriptor[] descriptors;
 	private static Map<String, Object> defaultsMap;
-	private static JSSEnumPropertyDescriptor orderD;
+	private static NamedEnumPropertyDescriptor<SortOrderEnum> orderD;
 
 	@Override
 	public Map<String, Object> getDefaultsMap() {
@@ -110,9 +111,7 @@ public class MBucket extends APropertyNode {
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc,
 			Map<String, Object> defaultsMap) {
-		orderD = new JSSEnumPropertyDescriptor(
-				JRDesignCrosstabBucket.PROPERTY_ORDER, Messages.common_order,
-				SortOrderEnum.class, NullEnum.NOTNULL);
+		orderD = new NamedEnumPropertyDescriptor<SortOrderEnum>(JRDesignCrosstabBucket.PROPERTY_ORDER, Messages.common_order,SortOrderEnum.ASCENDING, NullEnum.NOTNULL);
 		orderD.setDescription(Messages.MBucket_order_description);
 		desc.add(orderD);
 
@@ -154,8 +153,10 @@ public class MBucket extends APropertyNode {
 	 */
 	public Object getPropertyValue(Object id) {
 		JRDesignCrosstabBucket jrField = (JRDesignCrosstabBucket) getValue();
-		if (id.equals(JRDesignCrosstabBucket.PROPERTY_ORDER))
-			return orderD.getEnumValue(jrField.getOrderValue());
+		if (id.equals(JRDesignCrosstabBucket.PROPERTY_ORDER)){
+			SortOrderEnum sortOrder = BucketOrder.toSortOrderEnum(jrField.getOrder());
+			return orderD.getIntValue(sortOrder);
+		}
 		if (id.equals(JRDesignCrosstabBucket.PROPERTY_COMPARATOR_EXPRESSION))
 			return ExprUtil.getExpression(jrField.getComparatorExpression());
 		if (id.equals(JRDesignCrosstabBucket.PROPERTY_ORDER_BY_EXPRESSION))
@@ -177,9 +178,11 @@ public class MBucket extends APropertyNode {
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignCrosstabBucket jrField = (JRDesignCrosstabBucket) getValue();
 
-		if (id.equals(JRDesignCrosstabBucket.PROPERTY_ORDER))
-			jrField.setOrder((SortOrderEnum) orderD.getEnumValue(value));
-		else if (id
+		if (id.equals(JRDesignCrosstabBucket.PROPERTY_ORDER)){
+			SortOrderEnum sortOrder = (SortOrderEnum) orderD.getEnumValue(value);
+			BucketOrder order = BucketOrder.fromSortOrderEnum(sortOrder);
+			jrField.setOrder(order);
+		} else if (id
 				.equals(JRDesignCrosstabBucket.PROPERTY_COMPARATOR_EXPRESSION))
 			jrField.setComparatorExpression(ExprUtil.setValues(
 					jrField.getComparatorExpression(), value));
@@ -193,8 +196,18 @@ public class MBucket extends APropertyNode {
 			jrField.setValueClassName((String) value);
 	}
 	
+	//Code to provide the expression context to the descriptors
+	
 	@Override
 	public ExpressionContext getExpressionContext() {
 		return bucketContainer.getExpressionContext();
+	}
+	
+	@SuppressWarnings("rawtypes")
+	@Override
+	public Object getAdapter(Class adapter) {
+		if (ExpressionContext.class.equals(adapter)){
+			return getExpressionContext();
+		} else return super.getAdapter(adapter);
 	}
 }
