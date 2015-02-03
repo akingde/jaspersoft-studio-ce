@@ -30,8 +30,6 @@ import org.eclipse.jface.dialogs.IPageChangingListener;
 import org.eclipse.jface.dialogs.PageChangedEvent;
 import org.eclipse.jface.dialogs.PageChangingEvent;
 import org.eclipse.jface.operation.IRunnableWithProgress;
-import org.eclipse.jface.wizard.IWizard;
-import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -65,12 +63,7 @@ public abstract class AbstractDataAdapterWizard extends JSSWizard implements Sel
 		super();
 		setNeedsProgressMonitor(true);
 	}
-
-	public AbstractDataAdapterWizard(IWizard parentWizard, IWizardPage fallbackPage) {
-		super(parentWizard, fallbackPage);
-		setNeedsProgressMonitor(true);
-	}
-
+	
 	/**
 	 * Sets the wizard dialog that is used to display the wizard.
 	 * 

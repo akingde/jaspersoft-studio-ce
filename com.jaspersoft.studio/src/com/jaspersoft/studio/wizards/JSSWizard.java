@@ -54,7 +54,7 @@ public abstract class JSSWizard extends Wizard implements JSSWizardPageChangeLis
 	public static final String FILE_NAME = "file_name";
 
 	private IWizard parentWizard;
-	private IWizardPage fallbackPage;
+	protected IWizardPage fallbackPage;
 	private List<IWizard> childWizards = new ArrayList<IWizard>();
 
 	private Map<String, Object> settings = new HashMap<String, Object>();

@@ -371,4 +371,12 @@ public class ReportNewWizard extends JSSWizard implements INewWizard {
 		return (new FileCreator(getFileLocationStep())).createFile();
 	}
 	
+	/**
+	 * Return the fallback page
+	 * 
+	 * @return the fallback page or null if it is not available
+	 */
+	public IWizardPage getFallbackPage(){
+		return fallbackPage;
+	}
 }

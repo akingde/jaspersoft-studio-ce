@@ -42,16 +42,27 @@ public class ReportWizardFieldsGroupByDynamicPage extends StaticWizardFieldsGrou
 	}
 
 	/**
-	 * Return the congratulation page if it is available
+	 * Return the congratulation page if it is available or the fallback page
+	 * if this was a subwizard. If the fallback page is available it is not neccessary
+	 * to set the wizard on it since it is supposed it has already it, since it was
+	 * a wizard created externally. If both the fallback page and the congratulation page
+	 * are available the fallback has the priority
 	 * 
-	 * @return the congratulation page or null if the congratulation page
+	 * @return the fallback page or the congratulation page or null if the congratulation page
 	 * shouldn't be displayed
 	 */
 	@Override
 	public IWizardPage getNextPage() {
-		CongratulationsWizardPage congratPage = ((ReportNewWizard)getWizard()).getCongratulationsStep();
-		congratPage.setWizard(getWizard());
-		return (congratPage);
+		ReportNewWizard container = (ReportNewWizard)getWizard();
+		if (container.getFallbackPage() != null) {
+			IWizardPage fallback = container.getFallbackPage();
+			return fallback;
+		} else if (container.hasCongratulationStep()) {
+			CongratulationsWizardPage congratPage = (container).getCongratulationsStep();
+			congratPage.setWizard(getWizard());
+			return congratPage;
+		}
+		return null;
 	}
 	
 	/**
@@ -67,11 +78,11 @@ public class ReportWizardFieldsGroupByDynamicPage extends StaticWizardFieldsGrou
 	
 	/**
 	 * To advance to the next page the page must have a status complete
-	 * and there must be the congratulation page
+	 * and there must be the congratulation page or a fallback page
 	 */
 	@Override
 	public boolean canFlipToNextPage() {
 		ReportNewWizard container = (ReportNewWizard)getWizard();
-		return isPageComplete() && container.hasCongratulationStep();
+		return isPageComplete() && (container.hasCongratulationStep() || container.getFallbackPage() != null);
 	}
 }
