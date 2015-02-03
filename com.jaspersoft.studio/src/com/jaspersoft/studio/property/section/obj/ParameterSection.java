@@ -26,7 +26,6 @@ import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.ExpressionContext.Visibility;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
-import com.jaspersoft.studio.model.parameter.MParameter;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.SPExpression;
@@ -67,13 +66,11 @@ public class ParameterSection extends AbstractSection {
 
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		createWidget4Property(rootComposite, JRDesignParameter.PROPERTY_DESCRIPTION).getControl().setLayoutData(gd);
-		if (getElement() instanceof MParameter) {
-			MParameter p = (MParameter) getElement();
-			if (p.isMainDataset())
-				createWidget4Property(rootComposite, JRDesignParameter.PROPERTY_FOR_PROMPTING);
-		}
+
+		createWidget4Property(rootComposite, JRDesignParameter.PROPERTY_FOR_PROMPTING);
 		createWidget4Property(rootComposite, JRDesignParameter.PROPERTY_DEFAULT_VALUE_EXPRESSION);
 	}
+
 	
 	@Override
 	protected void initializeProvidedProperties() {
