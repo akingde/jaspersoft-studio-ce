@@ -100,20 +100,21 @@ public class WHyperlink extends Composite implements IExpressionContextSetter {
 //	private Composite whenExprContent;
 //	private WTextExpression whenExpr;
 	
-	// Enumeration combo stuff
-	private static String[] linkTargetItems=new String[]{
+	// Supported target types
+	public static final String[] LINK_TARGET_ITEMS=new String[]{
 		HyperlinkTargetEnum.SELF.getName(),
 		HyperlinkTargetEnum.BLANK.getName(),
 		HyperlinkTargetEnum.TOP.getName(),
 		HyperlinkTargetEnum.PARENT.getName(),};
-	private static String[] linkTypeItems;
+	// Supported hyperlink types
+	public static final String[] LINK_TYPE_ITEMS;
 	
 	static {
 		ArrayList<HyperlinkTypeEnum> filteredTypes = new ArrayList<HyperlinkTypeEnum>(2);
 		filteredTypes.add(HyperlinkTypeEnum.CUSTOM);	// Will be used automatically when user write a custom entry
 		filteredTypes.add(HyperlinkTypeEnum.NULL);		// Makes no much sense into this widget
 		List<String> alltypes=ModelUtils.getHyperlinkTypeNames4Widget(filteredTypes);		
-		linkTypeItems=alltypes.toArray(new String[alltypes.size()]);
+		LINK_TYPE_ITEMS=alltypes.toArray(new String[alltypes.size()]);
 	}
 	
 
@@ -137,7 +138,7 @@ public class WHyperlink extends Composite implements IExpressionContextSetter {
 		GridData gd_comboHyperlinkTarget = new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1);
 		gd_comboHyperlinkTarget.widthHint = 195;
 		comboHyperlinkTarget.setLayoutData(gd_comboHyperlinkTarget);
-		comboHyperlinkTarget.setItems(linkTargetItems);
+		comboHyperlinkTarget.setItems(LINK_TARGET_ITEMS);
 		comboHyperlinkTarget.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
 				HyperlinkTargetEnum selectedTarget=HyperlinkTargetEnum.getByName(comboHyperlinkTarget.getText());
@@ -160,7 +161,7 @@ public class WHyperlink extends Composite implements IExpressionContextSetter {
 		GridData gd_comboHyperlinkType = new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1);
 		gd_comboHyperlinkType.widthHint = 195;
 		comboHyperlinkType.setLayoutData(gd_comboHyperlinkType);
-		comboHyperlinkType.setItems(linkTypeItems);
+		comboHyperlinkType.setItems(LINK_TYPE_ITEMS);
 		comboHyperlinkType.addModifyListener(new ModifyListener() {
 			private HyperlinkTypeEnum previousSelected=HyperlinkTypeEnum.NULL;
 			
