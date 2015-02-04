@@ -117,6 +117,10 @@ public class PreferencesDataAdapterStorage extends ADataAdapterStorage {
 			}
 		}
 		for (DataAdapterDescriptor dad : JaspersoftStudioPlugin.getDefaultDAManager().getDefaultDAs()) {
+			DataAdapterDescriptor oldDa = daDescriptors.get(dad.getName());
+			// maybe name is the same, but if type changed, we should change dataadapter
+			if (oldDa != null && !oldDa.getClass().getCanonicalName().equals(dad.getClass().getCanonicalName())) 
+				removeDataAdapter(oldDa); 
 			addDataAdapter(dad);
 		}
 	}
