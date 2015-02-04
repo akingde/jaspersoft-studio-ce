@@ -29,6 +29,7 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescript
 import com.jaspersoft.studio.server.ResourceFactory;
 import com.jaspersoft.studio.server.model.AFileResource;
 import com.jaspersoft.studio.server.model.MReportUnit;
+import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.publish.PublishOptions;
 import com.jaspersoft.studio.server.publish.PublishUtil;
 import com.jaspersoft.studio.utils.ExpressionUtil;
@@ -98,13 +99,16 @@ public abstract class AImpObject {
 			rd.setUriString(rd.getParentFolder() + "/" + rd.getName());
 		}
 
-		AFileResource mres = (AFileResource) ResourceFactory.getResource(
-				mrunit, rd, -1);
-		mres.setFile(f);
-		mres.setPublishOptions(popt);
+		MResource res = ResourceFactory.getResource(mrunit, rd, -1);
+		if (res instanceof AFileResource) {
+			AFileResource mres = (AFileResource) res;
+			mres.setFile(f);
+			mres.setPublishOptions(popt);
 
-		PublishUtil.getResources(mrunit, monitor, jrConfig).add(mres);
-		return mres;
+			PublishUtil.getResources(mrunit, monitor, jrConfig).add(mres);
+			return mres;
+		}
+		return null;
 	}
 
 	protected File findFile(IFile file, String str) {
