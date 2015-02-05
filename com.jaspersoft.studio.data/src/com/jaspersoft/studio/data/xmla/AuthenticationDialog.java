@@ -124,6 +124,17 @@ public class AuthenticationDialog extends Dialog{
 			}
 		}
 	}
+	
+	/**
+	 * Create the dialog with prefilled username and password
+	 * 
+	 */
+	public AuthenticationDialog(Shell parent, String urlString, String username, String password) {
+		super(parent);
+		this.username = username;
+		this.password = password;
+	}
+
 
 	@Override
 	protected Control createDialogArea(Composite parent) {
@@ -133,7 +144,9 @@ public class AuthenticationDialog extends Dialog{
 		lblUserName.setText(Messages.AuthenticationDialog_usernameLbl);
 		usernameText = new Text(dialogArea, SWT.BORDER);
 		usernameText.setText(username);
-		usernameText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		GridData usernameData = new GridData(GridData.FILL_HORIZONTAL);
+		usernameData.widthHint = 200;
+		usernameText.setLayoutData(usernameData);
 		usernameText.addModifyListener(new ModifyListener() {
 
 			@Override

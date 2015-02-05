@@ -350,7 +350,8 @@ public class MetadataDiscover {
 			SOAPFault fault = soapBody.getFault();
 			if (fault != null)
 			{
-				return null;
+				// Get the ExecuteResponse-Node
+				throw new RuntimeException(fault.getFaultString());
 			}
 
 			Name eName = soapEnvelope.createName("DiscoverResponse", "", XMLA_URI);

@@ -17,8 +17,6 @@ import java.net.HttpURLConnection;
 import java.net.PasswordAuthentication;
 import java.net.URL;
 import java.text.MessageFormat;
-import java.util.HashMap;
-import java.util.Map;
 
 import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.xmla.XmlaDataAdapter;
@@ -28,6 +26,7 @@ import net.sf.jasperreports.util.SecretsUtil;
 
 import org.eclipse.core.databinding.beans.PojoObservables;
 import org.eclipse.jface.databinding.swt.SWTObservables;
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -46,7 +45,6 @@ import com.jaspersoft.studio.data.messages.Messages;
 import com.jaspersoft.studio.data.secret.DataAdaptersSecretsProvider;
 import com.jaspersoft.studio.swt.widgets.WSecretText;
 import com.jaspersoft.studio.utils.Misc;
-import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class XmlaDataAdapterComposite extends ADataAdapterComposite {
 
@@ -59,11 +57,6 @@ public class XmlaDataAdapterComposite extends ADataAdapterComposite {
 	private DataSourceTreeElement[] dstes;
 	private DataSourceTreeElement[] catalogs;
 	private XmlaDataAdapter adapter;
-
-	/**
-	 * Map with all the authentication for each url
-	 */
-	private static Map<String, PasswordAuthentication> authenticationMap = new HashMap<String, PasswordAuthentication>();
 
 	/**
 	 * Inner class used only to store the result of a connection operation
@@ -227,41 +220,41 @@ public class XmlaDataAdapterComposite extends ADataAdapterComposite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				String url = xmlaUri.getText();
-				ReturnResponse response = validateUsernamePassword(url);
-				boolean loginSuccesfull = response.isSuccessfull();
-				if (loginSuccesfull) {
-					try {
-						PasswordAuthentication auth = authenticationMap
-								.get(url);
-						if (auth == null) {
-							// The access to the server dosen't need a username
-							// or a password
-							auth = new PasswordAuthentication(
-									"", "".toCharArray()); //$NON-NLS-1$ //$NON-NLS-2$
+				AuthenticationDialog dialog = new AuthenticationDialog(getShell(), url, textUsername.getText(), getPassword());
+				if (dialog.open() == Dialog.OK){
+					ReturnResponse response = validateUsernamePassword(url, dialog.getUsername(), dialog.getPassword());
+					boolean loginSuccesfull = response.isSuccessfull();
+					if (loginSuccesfull) {
+						try {
+							MetadataDiscover discover = new MetadataDiscover(url, dialog.getUsername(), dialog.getPassword());
+							handleMetaDataChanged(discover);
+							if (textUsername.getText().isEmpty()) textUsername.setText(dialog.getUsername());
+							if (textPassword.getText().isEmpty()) textPassword.setText(dialog.getPassword());
+							UIUtils.showInformation(Messages.XmlaDataAdapterComposite_successTitle, Messages.XmlaDataAdapterComposite_successText);
+						} catch (Exception e1) {
+							String message = Messages.XmlaDataAdapterComposite_failedText + "\n" + 
+									 				MessageFormat.format(Messages.XmlaDataAdapterComposite_errorCode, new Object[]{e1.getMessage()}); //$NON-NLS-1$
+							UIUtils.showWarning(Messages.XmlaDataAdapterComposite_failedTitle,message);
+							JaspersoftStudioPlugin.getInstance().logError(message, e1);
+							e1.printStackTrace();
 						}
-						MetadataDiscover discover = new MetadataDiscover(url,
-								auth.getUserName(), new String(auth
-										.getPassword()));
-						handleMetaDataChanged(discover);
-						UIUtils.showInformation(
-								Messages.XmlaDataAdapterComposite_successTitle,
-								Messages.XmlaDataAdapterComposite_successText);
-					} catch (Exception e1) {
-						e1.printStackTrace();
-					}
-				} else {
-					String message;
-					if (response.isException()) {
-						message = Messages.XmlaDataAdapterComposite_failedText
-								+ "\n" + MessageFormat.format(Messages.XmlaDataAdapterComposite_errorException, new Object[] { response.getException().getMessage() }); //$NON-NLS-1$
 					} else {
-						message = Messages.XmlaDataAdapterComposite_failedText
-								+ "\n" + MessageFormat.format(Messages.XmlaDataAdapterComposite_errorCode, new Object[] { response.getReturnCode() }); //$NON-NLS-1$
+						String message;
+						if (response.isException()) {
+							message = Messages.XmlaDataAdapterComposite_failedText
+									+ "\n" + MessageFormat.format(Messages.XmlaDataAdapterComposite_errorException, new Object[] { response.getException().getMessage() }); //$NON-NLS-1$
+						} else {
+							message = Messages.XmlaDataAdapterComposite_failedText
+									+ "\n" + MessageFormat.format(Messages.XmlaDataAdapterComposite_errorCode, new Object[] { response.getReturnCode() }); //$NON-NLS-1$
+						}
+						UIUtils.showWarning(
+								Messages.XmlaDataAdapterComposite_failedTitle,
+								message);
 					}
-					UIUtils.showInformation(
-							Messages.XmlaDataAdapterComposite_failedTitle,
-							message);
 				}
+				
+				
+				
 			}
 		});
 
@@ -438,14 +431,8 @@ public class XmlaDataAdapterComposite extends ADataAdapterComposite {
 	 *            the url of the server
 	 * @return true if the operation was aborted, false otherwise
 	 */
-	private ReturnResponse validateUsernamePassword(final String url) {
+	private ReturnResponse validateUsernamePassword(final String url, final String username, final String password) {
 		try {
-			/**
-			 * Create the dialog
-			 */
-			final AuthenticationDialog ad = new AuthenticationDialog(
-					UIUtils.getShell(), url);
-
 			/**
 			 * Set the dialog as authenticator
 			 */
@@ -453,39 +440,14 @@ public class XmlaDataAdapterComposite extends ADataAdapterComposite {
 
 				@Override
 				protected PasswordAuthentication getPasswordAuthentication() {
-					// If the user used the cancel key on the dialog then the
-					// operation is aborted to the
-					// authenticator must return null
-					authenticationMap.remove(url);
-					if (ad.cancelOperation())
-						return null;
-					PasswordAuthentication auth = null;
-					if (ad.getAuthenticationAttempt() == 0) {
-						// Otherwise the fields are reseted to do another try
-						// and the dialog opened
-						ad.resetFields(textUsername.getText(), getPassword());
-						ad.incrementAuthAttempt();
-						auth = new PasswordAuthentication(ad.getUsername(), ad
-								.getPasswordCA());
-					} else {
-						// Otherwise the fields are reseted to do another try
-						// and the dialog opened
-						ad.resetFields();
-						ad.openDialog();
-						ad.incrementAuthAttempt();
-						auth = new PasswordAuthentication(ad.getUsername(), ad
-								.getPasswordCA());
-					}
-					authenticationMap.put(url, auth);
-					return auth;
+					return new PasswordAuthentication(username, password.toCharArray());
 				}
 			});
 			URL endpoint = new URL(url);
 			HttpURLConnection urlConnection = (HttpURLConnection) endpoint
 					.openConnection();
 			int code = urlConnection.getResponseCode();
-			ReturnResponse response = new ReturnResponse(!ad.cancelOperation()
-					&& (code == 405 || code == 500), code);
+			ReturnResponse response = new ReturnResponse((code == 405 || code == 500) , code);
 			return response;
 		} catch (Exception e) {
 			e.printStackTrace();
