@@ -20,6 +20,7 @@ import net.sf.jasperreports.engine.JRFont;
 import net.sf.jasperreports.engine.JRPen;
 import net.sf.jasperreports.engine.base.JRBaseLineBox;
 import net.sf.jasperreports.engine.base.JRBasePen;
+import net.sf.jasperreports.engine.design.JRDesignFont;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
 import net.sf.jasperreports.engine.type.FillEnum;
 import net.sf.jasperreports.engine.type.HorizontalTextAlignEnum;
@@ -121,6 +122,9 @@ public class DefaultValuesMap {
 			result.put(JRDesignStyle.PROPERTY_FORECOLOR, null);
 			result.put(JRDesignStyle.PROPERTY_FILL, null);
 			result.put(JRDesignStyle.PROPERTY_MODE, ModeEnum.OPAQUE.getValue());
+			result.put(JRDesignStyle.PROPERTY_PDF_FONT_NAME, JRProperties.getProperty(JRFont.DEFAULT_PDF_FONT_NAME));
+			result.put(JRDesignStyle.PROPERTY_PDF_ENCODING, JRProperties.getProperty(JRFont.DEFAULT_PDF_ENCODING));
+			result.put(JRDesignStyle.PROPERTY_PDF_EMBEDDED, JRProperties.getBooleanProperty(JRFont.DEFAULT_PDF_EMBEDDED));
 			createBaseLinePen(result, MLineBox.LINE_PEN);
 			createBaseLineBox(result, MGraphicElementLineBox.LINE_BOX);
 		} else {
@@ -143,6 +147,9 @@ public class DefaultValuesMap {
 				result.put(JRDesignStyle.PROPERTY_VERTICAL_TEXT_ALIGNMENT,VerticalTextAlignEnum.TOP);
 				result.put(JRDesignStyle.PROPERTY_HORIZONTAL_TEXT_ALIGNMENT,HorizontalTextAlignEnum.LEFT);
 				result.put(JRDesignStyle.PROPERTY_ROTATION,RotationEnum.NONE);
+				result.put(JRDesignFont.PROPERTY_PDF_FONT_NAME, JRProperties.getProperty(JRFont.DEFAULT_PDF_FONT_NAME));
+				result.put(JRDesignFont.PROPERTY_PDF_ENCODING, JRProperties.getProperty(JRFont.DEFAULT_PDF_ENCODING));
+				result.put(JRDesignFont.PROPERTY_PDF_EMBEDDED, JRProperties.getBooleanProperty(JRFont.DEFAULT_PDF_EMBEDDED));
 				transparency = ModeEnum.getByValue(ModeEnum.TRANSPARENT.getValue());
 			}
 			

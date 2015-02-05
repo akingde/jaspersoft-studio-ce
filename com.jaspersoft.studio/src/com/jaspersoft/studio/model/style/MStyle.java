@@ -217,6 +217,9 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		result.put(JRDesignStyle.PROPERTY_VERTICAL_TEXT_ALIGNMENT, element.getOwnVerticalTextAlign());
 		result.put(JRDesignStyle.PROPERTY_VERTICAL_IMAGE_ALIGNMENT, element.getOwnVerticalImageAlign());
 		result.put(JRDesignStyle.PROPERTY_BLANK_WHEN_NULL, element.isOwnBlankWhenNull());
+		result.put(JRDesignStyle.PROPERTY_PDF_FONT_NAME, element.getOwnPdfFontName());
+		result.put(JRDesignStyle.PROPERTY_PDF_ENCODING, element.getOwnPdfEncoding());
+		result.put(JRDesignStyle.PROPERTY_PDF_EMBEDDED, element.isOwnPdfEmbedded());
 		result.put(PARAGRAPH, getPropertyValue(PARAGRAPH));
 		MLinePen linePen = (MLinePen) getPropertyValue(LINE_PEN);
 		result.put(LINE_PEN, linePen);
