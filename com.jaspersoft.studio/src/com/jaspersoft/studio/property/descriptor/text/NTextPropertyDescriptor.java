@@ -19,6 +19,10 @@ import org.eclipse.swt.widgets.Composite;
 import com.jaspersoft.studio.help.HelpSystem;
 import com.jaspersoft.studio.property.descriptors.JSSTextPropertyDescriptor;
 
+/**
+ * Similar to the JSSTextPropertyDescriptor but the cell editor in the advanced
+ * view support the null value for the text
+ */
 public class NTextPropertyDescriptor extends JSSTextPropertyDescriptor {
 
 	public NTextPropertyDescriptor(Object id, String displayName, int style) {

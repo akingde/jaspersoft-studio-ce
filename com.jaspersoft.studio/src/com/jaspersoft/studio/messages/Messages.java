@@ -1024,6 +1024,7 @@ public class Messages extends NLS {
 	public static String MFont_pdf_encoding_description;
 	public static String MFont_pdf_font_name;
 	public static String MFont_pdf_font_name_description;
+	public static String MFont_pdfCategory;
 	public static String MFont_strike_trough_description;
 	public static String MFont_underline_description;
 	public static String MGenericElement_evaluation_group_name;

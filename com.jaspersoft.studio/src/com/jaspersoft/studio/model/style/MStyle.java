@@ -376,7 +376,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 				Messages.common_font_name, getJasperConfiguration().getFontList(), NullEnum.INHERITED);
 		fontNameD.setDescription(Messages.MStyle_font_name_description);
 		desc.add(fontNameD);
-
+		
 		RWFloatComboBoxPropertyDescriptor fontSizeD = new RWFloatComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_FONT_SIZE,
 				Messages.common_font_size, ModelUtils.FONT_SIZES, NullEnum.INHERITED, false);
 		fontSizeD.setDescription(Messages.MStyle_font_size_description);
@@ -393,6 +393,21 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 
 		JRPropertyDescriptor paragraph = new JRPropertyDescriptor(PARAGRAPH, "Paragraph"); //$NON-NLS-1$
 		desc.add(paragraph);
+		
+		RWComboBoxPropertyDescriptor pdfFontNameD = new RWComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_PDF_FONT_NAME, Messages.MFont_pdf_font_name, ModelUtils.getPDFFontNames(), NullEnum.INHERITED);
+		pdfFontNameD.setDescription(Messages.MFont_pdf_font_name_description);
+		pdfFontNameD.setCategory(Messages.MFont_pdfCategory);
+		desc.add(pdfFontNameD);
+		
+		RWComboBoxPropertyDescriptor pdfEncodingD = new RWComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_PDF_ENCODING, Messages.MFont_pdf_encoding, ModelUtils.getPDFEncodings(), NullEnum.INHERITED);
+		pdfEncodingD.setDescription(Messages.MFont_pdf_encoding_description);
+		pdfEncodingD.setCategory(Messages.MFont_pdfCategory);
+		desc.add(pdfEncodingD);
+		
+		CheckBoxPropertyDescriptor pdfEmbedded = new CheckBoxPropertyDescriptor(JRBaseStyle.PROPERTY_PDF_EMBEDDED, Messages.MFont_pdf_embedded);
+		pdfEmbedded.setDescription(Messages.MFont_pdf_embedded_description);
+		pdfEmbedded.setCategory(Messages.MFont_pdfCategory);
+		desc.add(pdfEmbedded);
 
 		paragraph.setCategory(Messages.common_text);
 		styleD.setCategory(Messages.MStyle_Style_properties);
@@ -566,6 +581,12 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 			return jrstyle.getOwnFontName();
 		if (id.equals(JRBaseStyle.PROPERTY_FONT_SIZE))
 			return jrstyle.getOwnFontsize() != null ? jrstyle.getOwnFontsize().toString() : ""; //$NON-NLS-1$
+		if (id.equals(JRBaseStyle.PROPERTY_PDF_FONT_NAME))
+			return jrstyle.getOwnPdfFontName();
+		if (id.equals(JRBaseStyle.PROPERTY_PDF_ENCODING))
+			return jrstyle.getOwnPdfEncoding();
+		if (id.equals(JRBaseStyle.PROPERTY_PDF_EMBEDDED))
+			return jrstyle.isOwnPdfEmbedded();
 		if (lineBox != null) {
 			Object val = lineBox.getPropertyValue(id);
 			if (val != null)
@@ -631,6 +652,12 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 			return jrstyle.getFontName();
 		if (id.equals(JRBaseStyle.PROPERTY_FONT_SIZE))
 			return jrstyle.getFontsize() != null ? jrstyle.getFontsize().toString() : ""; //$NON-NLS-1$
+		if (id.equals(JRBaseStyle.PROPERTY_PDF_FONT_NAME))
+			return jrstyle.getPdfFontName();
+		if (id.equals(JRBaseStyle.PROPERTY_PDF_ENCODING))
+			return jrstyle.getPdfEncoding();
+		if (id.equals(JRBaseStyle.PROPERTY_PDF_EMBEDDED))
+			return jrstyle.isPdfEmbedded();
 		if (lineBox != null) {
 			Object val = lineBox.getPropertyActualValue(id);
 			if (val != null)
@@ -723,11 +750,18 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 			jrstyle.setBold((Boolean) value);
 		else if (id.equals(JRBaseStyle.PROPERTY_FONT_NAME))
 			jrstyle.setFontName((String) value);
-		else if (id.equals(JRBaseStyle.PROPERTY_FONT_SIZE))
+		else if (id.equals(JRBaseStyle.PROPERTY_FONT_SIZE)){
 			if ((value instanceof String && value.toString().length() == 0) || value == null)
 				jrstyle.setFontSize((Float) null);
 			else
 				jrstyle.setFontSize(new Float((String) value));
+		}
+		else if (id.equals(JRBaseStyle.PROPERTY_PDF_FONT_NAME))
+			jrstyle.setPdfFontName((String) value);
+		else if (id.equals(JRBaseStyle.PROPERTY_PDF_ENCODING))
+			jrstyle.setPdfEncoding((String) value);
+		else if (id.equals(JRBaseStyle.PROPERTY_PDF_EMBEDDED))
+			jrstyle.setPdfEmbedded((Boolean) value);
 		else if (lineBox != null) {
 			lineBox.setPropertyValue(id, value);
 		}

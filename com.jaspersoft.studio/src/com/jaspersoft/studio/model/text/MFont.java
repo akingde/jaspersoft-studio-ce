@@ -101,17 +101,19 @@ public class MFont extends APropertyNode {
 		RWComboBoxPropertyDescriptor pdfFontNameD = new RWComboBoxPropertyDescriptor(JRBaseFont.PROPERTY_PDF_FONT_NAME,
 				Messages.MFont_pdf_font_name, ModelUtils.getPDFFontNames(), NullEnum.INHERITED);
 		pdfFontNameD.setDescription(Messages.MFont_pdf_font_name_description);
+		pdfFontNameD.setCategory(Messages.MFont_pdfCategory);
 		desc.add(pdfFontNameD);
 
 		RWComboBoxPropertyDescriptor pdfEncodingD = new RWComboBoxPropertyDescriptor(JRBaseFont.PROPERTY_PDF_ENCODING,
 				Messages.MFont_pdf_encoding, ModelUtils.getPDFEncodings(), NullEnum.INHERITED);
 		pdfEncodingD.setDescription(Messages.MFont_pdf_encoding_description);
+		pdfEncodingD.setCategory(Messages.MFont_pdfCategory);
 		desc.add(pdfEncodingD);
 
 		CheckBoxPropertyDescriptor boldD = new CheckBoxPropertyDescriptor(JRBaseFont.PROPERTY_BOLD, Messages.common_bold,
 				NullEnum.INHERITED) {
 			@Override
-			public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
+			public ASPropertyWidget<CheckBoxPropertyDescriptor> createWidget(Composite parent, AbstractSection section) {
 				return new SPBooleanToggle(parent, section, this, JaspersoftStudioPlugin.getInstance().getImage(
 						"icons/resources/edit-bold.png"));
 			}
@@ -122,7 +124,7 @@ public class MFont extends APropertyNode {
 		CheckBoxPropertyDescriptor italicD = new CheckBoxPropertyDescriptor(JRBaseFont.PROPERTY_ITALIC,
 				Messages.common_italic, NullEnum.INHERITED) {
 			@Override
-			public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
+			public ASPropertyWidget<CheckBoxPropertyDescriptor> createWidget(Composite parent, AbstractSection section) {
 				return new SPBooleanToggle(parent, section, this, JaspersoftStudioPlugin.getInstance().getImage(
 						"icons/resources/edit-italic.png"));
 			}
@@ -133,7 +135,7 @@ public class MFont extends APropertyNode {
 		CheckBoxPropertyDescriptor underlineD = new CheckBoxPropertyDescriptor(JRBaseFont.PROPERTY_UNDERLINE,
 				Messages.common_underline, NullEnum.INHERITED) {
 			@Override
-			public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
+			public ASPropertyWidget<CheckBoxPropertyDescriptor> createWidget(Composite parent, AbstractSection section) {
 				return new SPBooleanToggle(parent, section, this, JaspersoftStudioPlugin.getInstance().getImage(
 						"icons/resources/edit-underline.png"));
 			}
@@ -144,7 +146,7 @@ public class MFont extends APropertyNode {
 		CheckBoxPropertyDescriptor strikeTroughD = new CheckBoxPropertyDescriptor(JRBaseFont.PROPERTY_STRIKE_THROUGH,
 				Messages.common_strike_trough, NullEnum.INHERITED) {
 			@Override
-			public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
+			public ASPropertyWidget<CheckBoxPropertyDescriptor> createWidget(Composite parent, AbstractSection section) {
 				return new SPBooleanToggle(parent, section, this, JaspersoftStudioPlugin.getInstance().getImage(
 						"icons/resources/edit-strike.png"));
 			}
@@ -155,6 +157,7 @@ public class MFont extends APropertyNode {
 		CheckBoxPropertyDescriptor pdfEmbedD = new CheckBoxPropertyDescriptor(JRBaseFont.PROPERTY_PDF_EMBEDDED,
 				Messages.MFont_pdf_embedded, NullEnum.INHERITED);
 		pdfEmbedD.setDescription(Messages.MFont_pdf_embedded_description);
+		pdfEmbedD.setCategory(Messages.MFont_pdfCategory);
 		desc.add(pdfEmbedD);
 
 		defaultsMap.put(JRBaseFont.PROPERTY_FONT_NAME, "SansSerif"); //$NON-NLS-1$
@@ -166,13 +169,10 @@ public class MFont extends APropertyNode {
 
 		fontNameD.setCategory(Messages.common_font);
 		fontSizeD.setCategory(Messages.common_font);
-		pdfFontNameD.setCategory(Messages.common_font);
-		pdfEncodingD.setCategory(Messages.common_font);
 		boldD.setCategory(Messages.common_font);
 		italicD.setCategory(Messages.common_font);
 		underlineD.setCategory(Messages.common_font);
 		strikeTroughD.setCategory(Messages.common_font);
-		pdfEmbedD.setCategory(Messages.common_font);
 
 		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#font");
 	}
