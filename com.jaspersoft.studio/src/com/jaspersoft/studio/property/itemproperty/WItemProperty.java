@@ -19,11 +19,17 @@ import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
@@ -173,21 +179,59 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 			// Create the needed label
 			label = new Label(this, SWT.NONE);
 			label.setText(textLabel);
-		} else {
+		} else
 			showMode = LABEL_NONE;
-		}
 
-		textExpression = new Text(this, SWT.BORDER | SWT.WRAP | SWT.V_SCROLL | SWT.READ_ONLY);
+		txtCmp = new Composite(this, SWT.BORDER);
+		GridLayout layout = new GridLayout(2, false);
+		layout.marginHeight = 0;
+		layout.marginWidth = 0;
+		layout.horizontalSpacing = 0;
+		layout.verticalSpacing = 0;
+		txtCmp.setLayout(layout);
+
+		txtLabel = new Label(txtCmp, SWT.NONE);
+		GridData gd = new GridData(GridData.VERTICAL_ALIGN_BEGINNING | GridData.HORIZONTAL_ALIGN_CENTER);
+		gd.widthHint = 24;
+		gd.heightHint = 24;
+		txtLabel.setLayoutData(gd);
+		txtLabel.addMouseListener(new MouseListener() {
+
+			@Override
+			public void mouseUp(MouseEvent e) {
+
+			}
+
+			@Override
+			public void mouseDown(MouseEvent e) {
+				handleEditButton();
+			}
+
+			@Override
+			public void mouseDoubleClick(MouseEvent e) {
+
+			}
+		});
+
+		textExpression = new Text(txtCmp, SWT.WRAP | SWT.V_SCROLL);
+		textExpression.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		textExpression.addModifyListener(new ModifyListener() {
+
+			@Override
+			public void modifyText(ModifyEvent e) {
+				if (value.getValueExpression() != null)
+					((JRDesignExpression) value.getValueExpression()).setText(textExpression.getText());
+				else
+					value.setValue(textExpression.getText());
+			}
+		});
 
 		btnEditExpression = new Button(this, SWT.FLAT);
 		btnEditExpression.setImage(JaspersoftStudioPlugin.getInstance().getImage(BUTTON_ICON_PATH));
 		btnEditExpression.addSelectionListener(new SelectionAdapter() {
 
 			public void widgetSelected(SelectionEvent e) {
-				ItemPropertyElementDialog dialog = new ItemPropertyElementDialog(UIUtils.getShell(), value);
-				dialog.setExpressionContext(expContext);
-				if (dialog.open() == Dialog.OK)
-					setValue(dialog.getElementName());
+				handleEditButton();
 			}
 
 		});
@@ -219,7 +263,7 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 			fd_textExpression.right = new FormAttachment(btnEditExpression, -5, SWT.LEFT);
 			fd_textExpression.left = new FormAttachment(label, 5);
 			fd_textExpression.height = heightHint;
-			textExpression.setLayoutData(fd_textExpression);
+			txtCmp.setLayoutData(fd_textExpression);
 		} else if (showMode == LABEL_ON_TOP) {
 			// Configuration with label on top
 			FormData fd_label = new FormData();
@@ -239,7 +283,7 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 			fd_textExpression.bottom = new FormAttachment(100);
 			fd_textExpression.left = new FormAttachment(0);
 			fd_textExpression.height = heightHint;
-			textExpression.setLayoutData(fd_textExpression);
+			txtCmp.setLayoutData(fd_textExpression);
 		} else {
 			// Standard configuration
 			final FormData fd_textExpression = new FormData();
@@ -248,7 +292,7 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 			fd_textExpression.left = new FormAttachment(0);
 			fd_textExpression.right = new FormAttachment(btnEditExpression, -5);
 			fd_textExpression.height = heightHint;
-			textExpression.setLayoutData(fd_textExpression);
+			txtCmp.setLayoutData(fd_textExpression);
 
 			FormData fd_btnEditExpression = new FormData();
 			fd_btnEditExpression.right = new FormAttachment(100);
@@ -281,6 +325,10 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 		textExpression.setToolTipText(txt);
 		if (txt.length() >= oldpos)
 			textExpression.setSelection(oldpos, oldpos);
+		if (exp.getValueExpression() != null)
+			txtLabel.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/functions_icon.png"));
+		else
+			txtLabel.setImage(null);
 
 		// Notifies the listeners of the new expression
 		fireModifyEvent();
@@ -318,6 +366,8 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 	}
 
 	private ItemPropertyLabelProvider lprovider = new ItemPropertyLabelProvider(descriptor);
+	private Composite txtCmp;
+	private Label txtLabel;
 
 	/**
 	 * Returns the text contained inside the widget text-box that represents the actual {@link JRDesignExpression}
@@ -391,6 +441,13 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 		listeners.clear();
 		listeners = null;
 		super.dispose();
+	}
+
+	private void handleEditButton() {
+		ItemPropertyElementDialog dialog = new ItemPropertyElementDialog(UIUtils.getShell(), value);
+		dialog.setExpressionContext(expContext);
+		if (dialog.open() == Dialog.OK)
+			setValue(dialog.getElementName());
 	}
 
 }

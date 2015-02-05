@@ -43,7 +43,7 @@ public class ItemPropertyDescriptor extends NTextPropertyDescriptor implements I
 		return cellEditor;
 	}
 
-	public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
+	public ASPropertyWidget<ItemPropertyDescriptor> createWidget(Composite parent, AbstractSection section) {
 		expEditor = new SPItemProperty(parent, section, this);
 		expEditor.setExpressionContext(expContext);
 		return expEditor;

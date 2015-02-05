@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.editor.gef.parts.band;
 
@@ -33,6 +29,7 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.CompoundSnapToHelper;
 import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditPart;
+import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
@@ -149,11 +146,12 @@ public class BandEditPart extends APrefFigureEditPart implements PropertyChangeL
 	 */
 	@Override
 	public DragTracker getDragTracker(Request request) {
-		//When editing the background the tracker of the band is not used to 
-		//avoid to show the marquee when dragging the background since it is under the band
-		if (SelectionHelper.isBackgroundEditable()){
+		// When editing the background the tracker of the band is not used to
+		// avoid to show the marquee when dragging the background since it is under the band
+		if (SelectionHelper.isBackgroundEditable()) {
 			return SelectionHelper.getBackgroundEditPart().getDragTracker(request);
-		} else return new NotMovablePartDragTracker(this);
+		} else
+			return new NotMovablePartDragTracker(this);
 	}
 
 	/*
@@ -235,7 +233,6 @@ public class BandEditPart extends APrefFigureEditPart implements PropertyChangeL
 				rect = rect.getTranslated(-ReportPageFigure.PAGE_BORDER.left, -ReportPageFigure.PAGE_BORDER.right);
 				return super.getCreateCommand(parent, obj, rect, index);
 			}
-			
 
 			@Override
 			protected Command createAddCommand(EditPart child, Object constraint) {
@@ -244,12 +241,12 @@ public class BandEditPart extends APrefFigureEditPart implements PropertyChangeL
 				if (child.getModel() instanceof MGraphicElement) {
 					MGraphicElement cmodel = (MGraphicElement) child.getModel();
 					MBand mband = getModel();
-					//REMOVED CODE FOR Bug 38971. However is not good that the band itself can decide the target of the creation
-					//operation. The creation is requested by the SearchParentDragTracker and it requested it on the current edit
-					//part, so it want the command for the edit part where the request was done. The logic to choose the 
-					//parent should be in the drag tracker, not there
-					//MBand hoveredBand = ModelUtils.getBand4Point(mband.getRoot(),new Point(rect.x, rect.y));
-					//if (hoveredBand != null) mband = hoveredBand;
+					// REMOVED CODE FOR Bug 38971. However is not good that the band itself can decide the target of the creation
+					// operation. The creation is requested by the SearchParentDragTracker and it requested it on the current edit
+					// part, so it want the command for the edit part where the request was done. The logic to choose the
+					// parent should be in the drag tracker, not there
+					// MBand hoveredBand = ModelUtils.getBand4Point(mband.getRoot(),new Point(rect.x, rect.y));
+					// if (hoveredBand != null) mband = hoveredBand;
 					if (cmodel.getParent() instanceof MBand && cmodel.getParent() == mband) {
 						return super.createChangeConstraintCommand(child, rect);
 					} else {
@@ -389,17 +386,20 @@ public class BandEditPart extends APrefFigureEditPart implements PropertyChangeL
 		if (getSelected() == 1)
 			updateRulers();
 		else {
-			List<?> selected = getViewer().getSelectedEditParts();
-			if (selected.isEmpty())
-				updateRulers();
-			else
-				for (Object obj : selected) {
-					if (obj instanceof FigureEditPart) {
-						FigureEditPart figEditPart = (FigureEditPart) obj;
-						if (figEditPart.getModel().getParent() == bandNode)
-							figEditPart.updateRulers();
+			EditPartViewer viewer = getViewer();
+			if (viewer != null) {
+				List<?> selected = viewer.getSelectedEditParts();
+				if (selected.isEmpty())
+					updateRulers();
+				else
+					for (Object obj : selected) {
+						if (obj instanceof FigureEditPart) {
+							FigureEditPart figEditPart = (FigureEditPart) obj;
+							if (figEditPart.getModel().getParent() == bandNode)
+								figEditPart.updateRulers();
+						}
 					}
-				}
+			}
 		}
 	}
 

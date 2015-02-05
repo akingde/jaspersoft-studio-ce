@@ -26,7 +26,7 @@ import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 import com.jaspersoft.studio.utils.ModelUtils;
 
-public class SPItemProperty extends ASPropertyWidget implements IExpressionContextSetter {
+public class SPItemProperty extends ASPropertyWidget<ItemPropertyDescriptor> implements IExpressionContextSetter {
 	private WItemProperty expr;
 
 	public SPItemProperty(Composite parent, AbstractSection section, ItemPropertyDescriptor pDescriptor) {
