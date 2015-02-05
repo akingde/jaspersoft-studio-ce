@@ -77,7 +77,7 @@ public class BackgroundImageSection extends AbstractSection {
 		Composite container = getWidgetFactory().createSection(parent, Messages.SizeSection_sizeSectionTitle, true, 4);
 		sectionSize = (ExpandableComposite)container.getParent();
 		
-		ASPropertyWidget hw = createWidget4Property(container, MBackgrounImage.PROPERTY_WIDTH);
+		ASPropertyWidget<?> hw = createWidget4Property(container, MBackgrounImage.PROPERTY_WIDTH);
 		CLabel lbl = hw.getLabel();
 		lbl.setText(Messages.SizeSection_widthLabel);
 		lbl.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
@@ -91,7 +91,7 @@ public class BackgroundImageSection extends AbstractSection {
 		container = getWidgetFactory().createSection(parent, Messages.LocationSection_locationLabel, true, 4);
 		sectionLocation = (ExpandableComposite)container.getParent();
 
-		ASPropertyWidget pw = createWidget4Property(container, MBackgrounImage.PROPERTY_X);
+		ASPropertyWidget<?> pw = createWidget4Property(container, MBackgrounImage.PROPERTY_X);
 		lbl = pw.getLabel();
 		lbl.setText(Messages.LocationSection_xCoordinateLabel);
 		lbl.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));

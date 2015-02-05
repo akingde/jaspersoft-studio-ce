@@ -16,6 +16,7 @@ import java.awt.AlphaComposite;
 import java.awt.Composite;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -52,7 +53,13 @@ public class BackgroundImageFigure extends RectangleFigure {
 		/**
 		 * The image file to display, it is cached to avoid the reloading
 		 */
-		private Image image = null;
+		private BufferedImage image = null;
+		
+		/**
+		 * To avoid to reascle the source image on each repaint keep 
+		 * an already scaled version that fit the image
+		 */
+		private Image scaledImage = null;
 		
 		/**
 		 * The path of the last displayed image
@@ -87,8 +94,10 @@ public class BackgroundImageFigure extends RectangleFigure {
 			String path = (String)model.getPropertyValue(MBackgrounImage.PROPERTY_PATH);
 			if (path == null){
 				image = null;
+				scaledImage = null;
 			} else if (!path.equals(lastPath)){
 				BufferedImage img = null;
+				scaledImage = null;
 				try {
 				  img = ImageIO.read(new File(path));
 				  lastPath = path;
@@ -119,12 +128,22 @@ public class BackgroundImageFigure extends RectangleFigure {
 				int type = AlphaComposite.SRC_OVER; 
 				AlphaComposite composite = AlphaComposite.getInstance(type, alpha);
 				graphics2d.setComposite( composite );
+				int scaledWidth;
+				int scaledHeight;
+				//Calculate the image size
 				if (model.isKeepRatio()) {
 					Point ratioSize = calculateWidestRation();
-					graphics2d.drawImage(image, getLocation().x, getLocation().y, ratioSize.x, ratioSize.y, null);
+					scaledHeight = ratioSize.y;
+					scaledWidth = ratioSize.x;
 				} else {
-					graphics2d.drawImage(image, getLocation().x, getLocation().y, getSize().width, getSize().height, null);
+					scaledWidth = getSize().width;
+					scaledHeight = getSize().height;
 				}
+				//Recalculate the scaled image if necessary
+				if (scaledImage == null || scaledImage.getWidth(null) != scaledWidth || scaledImage.getHeight(null) != scaledHeight){
+					scaledImage = resizeImageWithHint(image, scaledWidth, scaledHeight);
+				}
+				graphics2d.drawImage(scaledImage, getLocation().x, getLocation().y, null);
 				graphics2d.setComposite(oldComposite);
 			}			
 		}
@@ -210,4 +229,28 @@ public class BackgroundImageFigure extends RectangleFigure {
 		public void setBackgroundImageVisible(boolean value) {
 			this.showBackgroundImage = value;
 		}
+		
+		/**
+		 * Scale the source image to a specific width and height
+		 * 
+		 * @param originalImage the original image, must be not null
+		 * @param imageNewWidthm the new width
+		 * @param imageNewHeight the new height
+		 * @return a new image, that is the scaled version of the original one
+		 */
+    private BufferedImage resizeImageWithHint(BufferedImage originalImage, int imageNewWidthm, int imageNewHeight){
+			BufferedImage resizedImage = new BufferedImage(imageNewWidthm, imageNewHeight, originalImage.getType());
+			Graphics2D g = resizedImage.createGraphics();
+			g.drawImage(originalImage, 0, 0, imageNewWidthm, imageNewHeight, null);
+			g.dispose();	
+			g.setComposite(AlphaComposite.Src);
+		 
+			g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
+			RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+			g.setRenderingHint(RenderingHints.KEY_RENDERING,
+			RenderingHints.VALUE_RENDER_QUALITY);
+			g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+			RenderingHints.VALUE_ANTIALIAS_ON);
+			return resizedImage;
+    }	
 }
