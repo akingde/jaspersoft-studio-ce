@@ -76,7 +76,7 @@ public class ProxyConnection implements IConnection {
 
 	@Override
 	public boolean connect(IProgressMonitor monitor, ServerProfile sp)
-			throws Exception { 
+			throws Exception {
 		Exception exc = null;
 		for (IConnection co : cons) {
 			String connName = co.getClass().getName().toUpperCase();
