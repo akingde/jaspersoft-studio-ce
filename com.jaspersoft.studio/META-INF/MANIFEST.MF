@@ -821,6 +821,7 @@ Export-Package: com.jaspersoft.studio;
    org.eclipse.swt.widgets,
    bsh",
  com.jaspersoft.studio.utils.compatibility,
+ com.jaspersoft.studio.utils.inputhistory,
  com.jaspersoft.studio.utils.jasper;
   uses:="net.sf.jasperreports.engine.design,
    org.eclipse.core.resources,
