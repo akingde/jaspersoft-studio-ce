@@ -388,7 +388,7 @@ public class Rest2Soap {
 
 	public static ResourceDescriptor getInputControl(ARestV2Connection rc, ReportInputControl cr, ResourceDescriptor rd) throws ParseException {
 		rd.setName(cr.getId());
-		rd.setUriString(cr.getUri());
+		rd.setUriString(cr.getUri().replaceFirst("repo:", ""));
 		rd.setLabel(cr.getLabel());
 		rd.setDescription(cr.getDescription());
 		rd.setWsType(ResourceDescriptor.TYPE_INPUT_CONTROL);
