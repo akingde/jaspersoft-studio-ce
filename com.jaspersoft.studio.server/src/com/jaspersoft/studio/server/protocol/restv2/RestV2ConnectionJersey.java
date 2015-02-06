@@ -315,13 +315,15 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 		String rtype = WsTypes.INST().toRestType(rd.getWsType());
 		Builder req = null;
 		if (rtype == null)
-			req = tgt.request();
+			req = tgt.request("application/repository.file+" + FORMAT);
 		else
 			req = tgt.request("application/repository." + rtype + "+" + FORMAT);
 		Object obj = toObj(connector.get(req, monitor),
 				WsTypes.INST().getType(rtype), monitor);
 		if (obj instanceof ClientResource<?>) {
 			ClientResource<?> crl = (ClientResource<?>) obj;
+			if (rd.getWsType() == null)
+				rd.setWsType(WsTypes.INST().getRestType(crl));
 			if (crl != null) {
 				if (f != null && crl instanceof ClientFile) {
 					ClientFile cf = (ClientFile) crl;
