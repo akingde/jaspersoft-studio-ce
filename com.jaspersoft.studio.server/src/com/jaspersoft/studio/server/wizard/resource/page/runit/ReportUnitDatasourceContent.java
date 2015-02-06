@@ -31,15 +31,18 @@ import com.jaspersoft.studio.server.publish.wizard.page.DatasourceSelectionListe
 import com.jaspersoft.studio.server.wizard.resource.APageContent;
 import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorDatasource;
 
-public class ReportUnitDatasourceContent extends APageContent implements DatasourceSelectionListener {
+public class ReportUnitDatasourceContent extends APageContent implements
+		DatasourceSelectionListener {
 	private boolean mandatory = false;
 	private DatasourceSelectionComposite datasourceSelectionCmp;
 
-	public ReportUnitDatasourceContent(ANode parent, MResource resource, DataBindingContext bindingContext) {
+	public ReportUnitDatasourceContent(ANode parent, MResource resource,
+			DataBindingContext bindingContext) {
 		super(parent, resource, bindingContext);
 	}
 
-	public ReportUnitDatasourceContent(ANode parent, MResource resource, boolean mandatory) {
+	public ReportUnitDatasourceContent(ANode parent, MResource resource,
+			boolean mandatory) {
 		this(parent, resource);
 		this.mandatory = mandatory;
 	}
@@ -73,7 +76,8 @@ public class ReportUnitDatasourceContent extends APageContent implements Datasou
 
 	@Override
 	public Control createContent(Composite parent) {
-		datasourceSelectionCmp = new SelectorDatasource().createDatasource(parent, pnode, res, mandatory, getExcludedTypes(res));
+		datasourceSelectionCmp = new SelectorDatasource().createDatasource(
+				parent, pnode, res, mandatory, getExcludedTypes(res));
 		datasourceSelectionCmp.addDatasourceSelectionListener(this);
 		rebind();
 		return datasourceSelectionCmp;
@@ -83,7 +87,8 @@ public class ReportUnitDatasourceContent extends APageContent implements Datasou
 	protected void rebind() {
 		final ResourceDescriptor rd = res.getValue();
 		final IConnection con = getWsClient();
-		if (!rd.getIsNew() && !con.isSupported(Feature.SEARCHREPOSITORY) && res instanceof MAdHocDataView) {
+		if (!rd.getIsNew() && !con.isSupported(Feature.SEARCHREPOSITORY)
+				&& res instanceof MAdHocDataView) {
 			datasourceSelectionCmp.setEnabled(false);
 			UIUtils.getDisplay().asyncExec(new Runnable() {
 
@@ -98,11 +103,22 @@ public class ReportUnitDatasourceContent extends APageContent implements Datasou
 
 	@Override
 	public boolean isPageComplete() {
-		return datasourceSelectionCmp != null && datasourceSelectionCmp.isDatasourceSelectionValid();
+		return datasourceSelectionCmp != null
+				&& datasourceSelectionCmp.isDatasourceSelectionValid();
 	}
+
+	private boolean refresh = false;
 
 	@Override
 	public void datasourceSelectionChanged() {
+		if (refresh)
+			return;
+		refresh = true;
 		setPageComplete(isPageComplete());
+		if (datasourceSelectionCmp.isDatasourceSelectionValid())
+			page.setErrorMessage(null);
+		else
+			page.setErrorMessage("There is a problem with selected Datasource which is not valid");
+		refresh = false;
 	}
 }

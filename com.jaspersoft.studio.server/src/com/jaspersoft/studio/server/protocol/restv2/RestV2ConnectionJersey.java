@@ -313,8 +313,11 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 		tgt = tgt.queryParam("expanded", "true");
 
 		String rtype = WsTypes.INST().toRestType(rd.getWsType());
-		Builder req = tgt.request("application/repository." + rtype + "+"
-				+ FORMAT);
+		Builder req = null;
+		if (rtype == null)
+			req = tgt.request();
+		else
+			req = tgt.request("application/repository." + rtype + "+" + FORMAT);
 		Object obj = toObj(connector.get(req, monitor),
 				WsTypes.INST().getType(rtype), monitor);
 		if (obj instanceof ClientResource<?>) {

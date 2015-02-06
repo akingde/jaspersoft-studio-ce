@@ -35,7 +35,8 @@ import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
  * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
  * 
  */
-public class DatasourceSelectionPage extends JSSHelpWizardPage {
+public class DatasourceSelectionPage extends JSSHelpWizardPage implements
+		DatasourceSelectionListener {
 
 	public static final String PAGE_NAME = "ruDatasourceSelectionPage"; //$NON-NLS-1$
 	private JasperReportsConfiguration jConfig;
@@ -58,23 +59,52 @@ public class DatasourceSelectionPage extends JSSHelpWizardPage {
 
 	@Override
 	public void createControl(Composite parent) {
-		datasourceCmp = new DatasourceSelectionComposite(parent, SWT.NONE, false, new String[] { ResourceDescriptor.TYPE_OLAP_XMLA_CONNECTION });
+		datasourceCmp = new DatasourceSelectionComposite(parent, SWT.NONE,
+				false,
+				new String[] { ResourceDescriptor.TYPE_OLAP_XMLA_CONNECTION });
+		datasourceCmp.addDatasourceSelectionListener(this);
 		setControl(datasourceCmp);
 	}
 
 	public void configurePage(ANode parent, MResource resource) {
+		if (refresh)
+			return;
 		if (resource instanceof MReportUnit) {
 			try {
 				ResourceDescriptor oldru = ((MReportUnit) resource).getValue();
 				if (SelectorDatasource.getDatasource(oldru) == null) {
-					ResourceDescriptor ru = WSClientHelper.getResource(new NullProgressMonitor(), resource, oldru);
-					oldru.getChildren().add(SelectorDatasource.getDatasource(ru));
+					ResourceDescriptor ru = WSClientHelper.getResource(
+							new NullProgressMonitor(), resource, oldru);
+					oldru.getChildren().add(
+							SelectorDatasource.getDatasource(ru));
 				}
 			} catch (Exception e) {
 				// e.printStackTrace();
 			}
 		}
-		datasourceCmp.setExcludeTypes(ReportUnitDatasourceContent.getExcludedTypes(resource));
+		datasourceCmp.setExcludeTypes(ReportUnitDatasourceContent
+				.getExcludedTypes(resource));
 		datasourceCmp.configurePage(parent, resource);
+	}
+
+	@Override
+	public boolean isPageComplete() {
+		return datasourceCmp != null
+				&& datasourceCmp.isDatasourceSelectionValid();
+	}
+
+	private boolean refresh = false;
+
+	@Override
+	public void datasourceSelectionChanged() {
+		if (refresh)
+			return;
+		refresh = true;
+		setPageComplete(isPageComplete());
+		if (datasourceCmp.isDatasourceSelectionValid())
+			setErrorMessage(null);
+		else
+			setErrorMessage("There is a problem with selected Datasource which is not valid");
+		refresh = false;
 	}
 }

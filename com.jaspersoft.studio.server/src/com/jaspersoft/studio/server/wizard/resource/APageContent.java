@@ -34,7 +34,8 @@ public abstract class APageContent implements IPageCompleteListener {
 		this(parent, resource, new DataBindingContext());
 	}
 
-	public APageContent(ANode parent, MResource resource, DataBindingContext bindingContext) {
+	public APageContent(ANode parent, MResource resource,
+			DataBindingContext bindingContext) {
 		this.res = resource;
 		this.pnode = parent;
 		this.bindingContext = bindingContext;
@@ -68,7 +69,8 @@ public abstract class APageContent implements IPageCompleteListener {
 
 	public abstract Control createContent(Composite parent);
 
-	public static IWizardPage[] getPages(MResource res, APageContent... rcontent) {
+	public static IWizardPage[] getPages(MResource res,
+			APageContent... rcontent) {
 		if (res.getValue() != null && res.getValue().getIsNew()) {
 			IWizardPage[] pages = new IWizardPage[rcontent.length];
 			for (int i = 0; i < pages.length; i++)
@@ -88,9 +90,19 @@ public abstract class APageContent implements IPageCompleteListener {
 		return isPageComplete;
 	}
 
+	private boolean refresh = false;
+
 	@Override
 	public void pageCompleted(boolean completed) {
+		if (refresh)
+			return;
+		refresh = true;
 		setPageComplete(completed);
+		if (completed)
+			page.setErrorMessage(null);
+		else
+			page.setErrorMessage("There is a problem with selected Datasource which is not valid");
+		refresh = false;
 	}
 
 	public void setPageComplete(boolean complete) {

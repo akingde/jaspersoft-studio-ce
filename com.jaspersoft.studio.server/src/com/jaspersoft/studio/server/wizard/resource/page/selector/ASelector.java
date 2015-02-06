@@ -17,10 +17,16 @@ import java.util.List;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -44,6 +50,7 @@ import com.jaspersoft.studio.server.utils.IPageCompleteListener;
 import com.jaspersoft.studio.server.wizard.find.FindResourceJob;
 import com.jaspersoft.studio.server.wizard.resource.ResourceWizard;
 import com.jaspersoft.studio.utils.Misc;
+import com.jaspersoft.studio.utils.inputhistory.InputHistoryCache;
 
 public abstract class ASelector {
 	protected Button brRepo;
@@ -55,7 +62,8 @@ public abstract class ASelector {
 	protected MResource res;
 	protected ResourceDescriptor resRD;
 
-	public Control createControls(Composite cmp, final ANode parent, final MResource res) {
+	public Control createControls(Composite cmp, final ANode parent,
+			final MResource res) {
 		this.res = res;
 		this.resRD = res.getValue();
 
@@ -72,6 +80,9 @@ public abstract class ASelector {
 		return composite;
 	}
 
+	private boolean valid = true;
+	private boolean refresh = false;
+
 	protected void createRepository(Composite parent, final ANode pnode) {
 		brRepo = new Button(parent, SWT.RADIO);
 		brRepo.setText(Messages.SelectorQuery_selectfromrepository);
@@ -85,21 +96,71 @@ public abstract class ASelector {
 			}
 		});
 
-		jsRefDS = new Text(parent, SWT.BORDER | SWT.READ_ONLY);
+		jsRefDS = new Text(parent, SWT.BORDER);
 		jsRefDS.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		jsRefDS.addModifyListener(new ModifyListener() {
+
+			@Override
+			public void modifyText(ModifyEvent e) {
+				if (!refresh) {
+					final String uri = jsRefDS.getText().trim();
+					Job job = new Job("Validating") {
+						private ResourceDescriptor newrd;
+
+						@Override
+						protected IStatus run(IProgressMonitor monitor) {
+							IStatus status = Status.OK_STATUS;
+							try {
+								ResourceDescriptor rd = createLocal(null);
+								rd.setUriString(uri);
+								newrd = WSClientHelper.getResource(monitor,
+										res.getWsClient(), rd, null);
+								valid = newrd != null
+										&& isResCompatible(ResourceFactory
+												.getResource(null, newrd, -1));
+
+							} catch (Exception e) {
+								valid = false;
+								e.printStackTrace();
+							} finally {
+								monitor.done();
+							}
+							UIUtils.getDisplay().asyncExec(new Runnable() {
+
+								@Override
+								public void run() {
+									if (valid)
+										setRemoteResource(newrd, res, false);
+									firePageComplete();
+								}
+							});
+							return status;
+						}
+					};
+					job.setPriority(Job.SHORT);
+					job.setSystem(false);
+					job.setUser(true);
+					job.schedule();
+				}
+			}
+		});
+		InputHistoryCache.bindText(jsRefDS, this.getClass().getName());
 
 		bRef = new Button(parent, SWT.PUSH);
 		bRef.setText("...");
 		bRef.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				MServerProfile msp = ServerManager.getMServerProfileCopy((MServerProfile) pnode.getRoot());
+				MServerProfile msp = ServerManager
+						.getMServerProfileCopy((MServerProfile) pnode.getRoot());
 				if (msp.isSupported(Feature.SEARCHREPOSITORY)) {
-					ResourceDescriptor rd = FindResourceJob.doFindResource(msp, getIncludeTypes(), getExcludeTypes());
+					ResourceDescriptor rd = FindResourceJob.doFindResource(msp,
+							getIncludeTypes(), getExcludeTypes());
 					if (rd != null)
-						setRemoteResource(rd, pnode);
+						setRemoteResource(rd, pnode, true);
 				} else {
-					RepositoryDialog rd = new RepositoryDialog(bRef.getShell(), msp) {
+					RepositoryDialog rd = new RepositoryDialog(bRef.getShell(),
+							msp) {
 
 						@Override
 						public boolean isResourceCompatible(MResource r) {
@@ -109,25 +170,29 @@ public abstract class ASelector {
 					if (rd.open() == Dialog.OK) {
 						MResource rs = rd.getResource();
 						if (rs != null)
-							setRemoteResource(rs.getValue(), pnode);
+							setRemoteResource(rs.getValue(), pnode, true);
+						valid = true;
 					}
 				}
 			}
 		});
 	}
 
-	private void setRemoteResource(ResourceDescriptor rd, ANode pnode) {
+	private void setRemoteResource(ResourceDescriptor rd, ANode pnode,
+			boolean modifyText) {
 		ResourceDescriptor runit = resRD;
 		try {
-			rd = WSClientHelper.getResource(new NullProgressMonitor(), pnode, rd);
+			rd = WSClientHelper.getResource(new NullProgressMonitor(), pnode,
+					rd);
 			rd.setIsReference(true);
 			rd.setReferenceUri(rd.getUriString());
-			rd.setParentFolder(runit.getParentFolder() + "/" + runit.getName() + "_files"); //$NON-NLS-1$ //$NON-NLS-2$
+			rd.setParentFolder(runit.getParentFolder()
+					+ "/" + runit.getName() + "_files"); //$NON-NLS-1$ //$NON-NLS-2$
 			rd.setUriString(rd.getParentFolder() + "/" + rd.getName());//$NON-NLS-1$
 			setupResource(rd);
 			replaceChildren(rd);
-
-			jsRefDS.setText(rd.getReferenceUri());
+			if (modifyText)
+				jsRefDS.setText(rd.getReferenceUri());
 		} catch (Exception e1) {
 			UIUtils.showError(e1);
 		}
@@ -201,7 +266,8 @@ public abstract class ASelector {
 				// if (newref)
 				replaceChildren(ref);
 				// else
-				// ASelector.copyFields(getResourceDescriptor(runit), r.getValue());
+				// ASelector.copyFields(getResourceDescriptor(runit),
+				// r.getValue());
 				// ASelector.copyFields(res.getValue(), ref);
 				jsLocDS.setText(Misc.nvl(ref.getName()));
 				firePageComplete();
@@ -209,11 +275,13 @@ public abstract class ASelector {
 		});
 	}
 
-	protected MResource getLocalResource(MResource res, ResourceDescriptor runit, ANode pnode) {
+	protected MResource getLocalResource(MResource res,
+			ResourceDescriptor runit, ANode pnode) {
 		ResourceDescriptor ref = createLocal(res);
 		ref.setIsNew(true);
 		ref.setIsReference(false);
-		ref.setParentFolder(runit.getParentFolder() + "/" + runit.getName() + "_files"); //$NON-NLS-1$
+		ref.setParentFolder(runit.getParentFolder()
+				+ "/" + runit.getName() + "_files"); //$NON-NLS-1$
 		setupResource(ref);
 		ref.setDirty(true);
 
@@ -235,7 +303,9 @@ public abstract class ASelector {
 	}
 
 	public static boolean isReference(ResourceDescriptor ref) {
-		return ref != null && (ref.getIsReference() || ref.getWsType().equals(ResourceDescriptor.TYPE_REFERENCE));
+		return ref != null
+				&& (ref.getIsReference() || ref.getWsType().equals(
+						ResourceDescriptor.TYPE_REFERENCE));
 	}
 
 	protected abstract ResourceDescriptor createLocal(MResource res);
@@ -245,7 +315,10 @@ public abstract class ASelector {
 	}
 
 	public boolean isPageComplete() {
-		return getResourceDescriptor(resRD) != null;
+		boolean val = getResourceDescriptor(resRD) != null;
+		if (val && brRepo.getSelection())
+			return valid;
+		return val;
 	}
 
 	private List<IPageCompleteListener> listeners = new ArrayList<IPageCompleteListener>();
@@ -264,9 +337,13 @@ public abstract class ASelector {
 		listeners.remove(listener);
 	}
 
-	protected abstract ResourceDescriptor getResourceDescriptor(ResourceDescriptor ru);
+	protected abstract ResourceDescriptor getResourceDescriptor(
+			ResourceDescriptor ru);
 
 	protected void setEnabled(int pos) {
+		if (refresh)
+			return;
+		refresh = true;
 		bRef.setEnabled(false);
 		jsRefDS.setEnabled(false);
 
@@ -292,7 +369,7 @@ public abstract class ASelector {
 		case 0:
 			bRef.setEnabled(true);
 			brRepo.setSelection(true);
-			// jsRefDS.setEnabled(true);
+			jsRefDS.setEnabled(true);
 			if (isReference(r))
 				jsRefDS.setText(Misc.nvl(r.getReferenceUri()));
 			break;
@@ -300,10 +377,12 @@ public abstract class ASelector {
 			brLocal.setSelection(true);
 			bLoc.setEnabled(true);
 			// jsLocDS.setEnabled(true);
-			if (r != null && !r.getIsReference() && !r.getWsType().equals(ResourceDescriptor.TYPE_REFERENCE))
+			if (r != null && !r.getIsReference()
+					&& !r.getWsType().equals(ResourceDescriptor.TYPE_REFERENCE))
 				jsLocDS.setText(Misc.nvl(r.getName()));
 			break;
 		}
+		refresh = false;
 	}
 
 	public static void copyFields(ResourceDescriptor rd, ResourceDescriptor rnew) {
