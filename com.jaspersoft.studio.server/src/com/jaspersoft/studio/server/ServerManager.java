@@ -238,7 +238,9 @@ public class ServerManager {
 				String urls = new String(Base64.decodeBase64(tokens[2]));
 				String[] urlt = urls.split("\n");
 				String url = urlt[0];
-				String user = urlt[1];
+				String user = null;
+				if (urlt.length > 1)
+					user = urlt[1];
 				if (urlt.length >= 2)
 					user = urlt[1];
 				String organization = null;
