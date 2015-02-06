@@ -232,7 +232,7 @@ public class ServerManager {
 			String[] tokens = key.split(":");
 
 			// StringTokenizer st = new StringTokenizer(key, ":");
-			String name = tokens[0];
+			String name = new String(Base64.decodeBase64(tokens[0]));
 			// String path = tokens[1];
 			if (tokens.length > 2) {
 				String urls = new String(Base64.decodeBase64(tokens[2]));
@@ -356,7 +356,7 @@ public class ServerManager {
 				srvurl += "\n";
 			if (!Misc.isNullOrEmpty(option))
 				srvurl += "\n" + option;
-			return serv.getName()
+			return Base64.encodeBase64String(serv.getName().getBytes())
 					+ ":" + uri + ":" + Base64.encodeBase64String(srvurl.getBytes());//$NON-NLS-1$ //$NON-NLS-2$  
 		}
 		return null;
