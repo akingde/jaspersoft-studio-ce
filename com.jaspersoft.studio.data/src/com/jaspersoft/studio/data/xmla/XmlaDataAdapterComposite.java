@@ -220,41 +220,52 @@ public class XmlaDataAdapterComposite extends ADataAdapterComposite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				String url = xmlaUri.getText();
-				AuthenticationDialog dialog = new AuthenticationDialog(getShell(), url, textUsername.getText(), getPassword());
-				if (dialog.open() == Dialog.OK){
-					ReturnResponse response = validateUsernamePassword(url, dialog.getUsername(), dialog.getPassword());
+				String username = textUsername.getText();
+				String password = textPassword.getText();
+				boolean firstConnectionSuccessfull = false;
+				//Try first to use the provided username and password for the connection
+				if (!username.isEmpty() && !password.isEmpty()){
+					ReturnResponse response = validateUsernamePassword(url, username, password);
 					boolean loginSuccesfull = response.isSuccessfull();
 					if (loginSuccesfull) {
 						try {
-							MetadataDiscover discover = new MetadataDiscover(url, dialog.getUsername(), dialog.getPassword());
+							MetadataDiscover discover = new MetadataDiscover(url, username, password);
 							handleMetaDataChanged(discover);
-							if (textUsername.getText().isEmpty()) textUsername.setText(dialog.getUsername());
-							if (textPassword.getText().isEmpty()) textPassword.setText(dialog.getPassword());
+							firstConnectionSuccessfull = true;
 							UIUtils.showInformation(Messages.XmlaDataAdapterComposite_successTitle, Messages.XmlaDataAdapterComposite_successText);
-						} catch (Exception e1) {
-							String message = Messages.XmlaDataAdapterComposite_failedText + "\n" + 
-									 				MessageFormat.format(Messages.XmlaDataAdapterComposite_errorCode, new Object[]{e1.getMessage()}); //$NON-NLS-1$
-							UIUtils.showWarning(Messages.XmlaDataAdapterComposite_failedTitle,message);
-							JaspersoftStudioPlugin.getInstance().logError(message, e1);
-							e1.printStackTrace();
-						}
-					} else {
-						String message;
-						if (response.isException()) {
-							message = Messages.XmlaDataAdapterComposite_failedText
-									+ "\n" + MessageFormat.format(Messages.XmlaDataAdapterComposite_errorException, new Object[] { response.getException().getMessage() }); //$NON-NLS-1$
-						} else {
-							message = Messages.XmlaDataAdapterComposite_failedText
-									+ "\n" + MessageFormat.format(Messages.XmlaDataAdapterComposite_errorCode, new Object[] { response.getReturnCode() }); //$NON-NLS-1$
-						}
-						UIUtils.showWarning(
-								Messages.XmlaDataAdapterComposite_failedTitle,
-								message);
+						} catch (Exception e1) {}
 					}
 				}
-				
-				
-				
+				if (!firstConnectionSuccessfull){
+					//If the first attempt was not successful need to ask the connection data because with the provided ones the connection was unsuccessful
+					AuthenticationDialog dialog = new AuthenticationDialog(getShell(), url, textUsername.getText(), getPassword());
+					if (dialog.open() == Dialog.OK){
+						ReturnResponse response = validateUsernamePassword(url, dialog.getUsername(), dialog.getPassword());
+						boolean loginSuccesfull = response.isSuccessfull();
+						if (loginSuccesfull) {
+							try {
+								MetadataDiscover discover = new MetadataDiscover(url, dialog.getUsername(), dialog.getPassword());
+								handleMetaDataChanged(discover);
+								textUsername.setText(dialog.getUsername());
+								textPassword.setText(dialog.getPassword());
+								UIUtils.showInformation(Messages.XmlaDataAdapterComposite_successTitle, Messages.XmlaDataAdapterComposite_successText);
+							} catch (Exception e1) {
+								String message = Messages.XmlaDataAdapterComposite_failedText + "\n" + MessageFormat.format(Messages.XmlaDataAdapterComposite_errorCode, new Object[]{e1.getMessage()}); //$NON-NLS-1$
+								UIUtils.showWarning(Messages.XmlaDataAdapterComposite_failedTitle,message);
+								JaspersoftStudioPlugin.getInstance().logError(message, e1);
+								e1.printStackTrace();
+							}
+						} else {
+							String message;
+							if (response.isException()) {
+								message = Messages.XmlaDataAdapterComposite_failedText + "\n" + MessageFormat.format(Messages.XmlaDataAdapterComposite_errorException, new Object[] { response.getException().getMessage() }); //$NON-NLS-1$
+							} else {
+								message = Messages.XmlaDataAdapterComposite_failedText + "\n" + MessageFormat.format(Messages.XmlaDataAdapterComposite_errorCode, new Object[] { response.getReturnCode() }); //$NON-NLS-1$
+							}
+							UIUtils.showWarning(Messages.XmlaDataAdapterComposite_failedTitle,message);
+						}
+					}
+				}
 			}
 		});
 
