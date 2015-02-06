@@ -20,10 +20,13 @@ import java.util.List;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.rulers.RulerChangeListener;
 import org.eclipse.gef.rulers.RulerProvider;
+import org.eclipse.jface.util.IPropertyChangeListener;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.gef.rulers.command.CreateGuideCommand;
 import com.jaspersoft.studio.editor.gef.rulers.command.DeleteGuideCommand;
 import com.jaspersoft.studio.editor.gef.rulers.command.MoveGuideCommand;
+import com.jaspersoft.studio.preferences.DesignerPreferencePage;
 /*
  * The Class ReportRulerProvider.
  * 
@@ -48,8 +51,9 @@ public class ReportRulerProvider extends RulerProvider {
 					((RulerChangeListener) listeners.get(i)).notifyGuideReparented(guide);
 				}
 			} else {
+				int newUnit = getUnit();
 				for (int i = 0; i < listeners.size(); i++) {
-					((RulerChangeListener) listeners.get(i)).notifyUnitsChanged(ruler.getUnit());
+					((RulerChangeListener) listeners.get(i)).notifyUnitsChanged(newUnit);
 				}
 			}
 		}
@@ -69,7 +73,23 @@ public class ReportRulerProvider extends RulerProvider {
 			}
 		}
 	};
-
+	
+	/**
+	 * Listen for changes in the preferences for the measure unit of the ruler
+	 */
+	private IPropertyChangeListener preferencesListener = new IPropertyChangeListener() {
+		
+		@Override
+		public void propertyChange(org.eclipse.jface.util.PropertyChangeEvent event) {
+			if (event.getProperty().equals(DesignerPreferencePage.P_RULER_MEASURE)){
+				int newUnit = getUnit();
+				for (int i = 0; i < listeners.size(); i++) {
+					((RulerChangeListener) listeners.get(i)).notifyUnitsChanged(newUnit);
+				}
+			}
+		}
+	};
+	
 	/**
 	 * Instantiates a new report ruler provider.
 	 * 
@@ -79,6 +99,7 @@ public class ReportRulerProvider extends RulerProvider {
 	public ReportRulerProvider(ReportRuler ruler) {
 		this.ruler = ruler;
 		this.ruler.addPropertyChangeListener(rulerListener);
+		JaspersoftStudioPlugin.getInstance().getPreferenceStore().addPropertyChangeListener(preferencesListener);
 		List<ReportRulerGuide> guides = getGuides();
 		for (int i = 0; i < guides.size(); i++) {
 			(guides.get(i)).addPropertyChangeListener(guideListener);
@@ -144,22 +165,21 @@ public class ReportRulerProvider extends RulerProvider {
 		return ruler;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.gef.rulers.RulerProvider#getUnit()
+	/**
+	 * The unit is read directly form the preferences. If the unit is not found the
+	 * default value (pixel) is used
 	 */
 	public int getUnit() {
-		return ruler.getUnit();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.gef.rulers.RulerProvider#setUnit(int)
-	 */
-	public void setUnit(int newUnit) {
-		ruler.setUnit(newUnit);
+		String measure = JaspersoftStudioPlugin.getInstance().getPreferenceStore().getString(DesignerPreferencePage.P_RULER_MEASURE);
+		int value = RulerProvider.UNIT_INCHES;
+		try{
+			if (measure != null) {
+				value = Integer.parseInt(measure);
+			}
+		} catch(Exception ex){
+			JaspersoftStudioPlugin.getInstance().logError("Invalid Ruler Measure Unit in Preferences", ex);
+		}
+		return value;
 	}
 
 	/*

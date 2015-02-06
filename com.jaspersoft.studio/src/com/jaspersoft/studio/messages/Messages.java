@@ -490,6 +490,7 @@ public class Messages extends NLS {
 	public static String DeleteGuideCommand_delete_guide;
 	public static String DesignerPreferencePage_autoresizeBand;
 	public static String DesignerPreferencePage_centerEditorOption;
+	public static String DesignerPreferencePage_centimeterMeasure;
 	public static String DesignerPreferencePage_common_bandmargincolor;
 	public static String DesignerPreferencePage_corners;
 	public static String DesignerPreferencePage_description;
@@ -500,10 +501,13 @@ public class Messages extends NLS {
 	public static String DesignerPreferencePage_field_behavior_ask;
 	public static String DesignerPreferencePage_field_behavior_label;
 	public static String DesignerPreferencePage_field_behavior_nothing;
+	public static String DesignerPreferencePage_inchMeasure;
 	public static String DesignerPreferencePage_InternalEditorsFont;
 	public static String DesignerPreferencePage_page_border_style;
 	public static String DesignerPreferencePage_pagebackground;
 	public static String DesignerPreferencePage_pageprintmargincolor;
+	public static String DesignerPreferencePage_pixelMeasure;
+	public static String DesignerPreferencePage_rulerMeasureLabel;
 	public static String DesignerPreferencePage_savereportonpreview;
 	public static String DesignerPreferencePage_show_band_names;
 	public static String DesignerPreferencePage_showDefaultsVariablesParameters;

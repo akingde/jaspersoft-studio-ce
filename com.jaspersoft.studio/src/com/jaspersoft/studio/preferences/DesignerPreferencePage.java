@@ -12,6 +12,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.preferences;
 
+import org.eclipse.gef.rulers.RulerProvider;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.ColorFieldEditor;
 import org.eclipse.jface.preference.ComboFieldEditor;
@@ -75,6 +76,7 @@ public class DesignerPreferencePage extends FieldEditorOverlayPage {
 	public static final String P_CONTAINER_MARGIN_COLOR = "containerMarginColor"; //$NON-NLS-1$
 	public static final String P_PAGE_MARGIN_COLOR = "pageMarginColor"; //$NON-NLS-1$
 	public static final String P_PAGE_BACKGROUND = "pageBackground"; //$NON-NLS-1$
+	public static final String P_RULER_MEASURE = "rulerMeasure"; //$NON-NLS-1$
 
 	public static final String P_ELEMENT_DESIGN_BORDER_COLOR = "elementDesignBorderColor"; //$NON-NLS-1$
 
@@ -123,14 +125,26 @@ public class DesignerPreferencePage extends FieldEditorOverlayPage {
 				new String[][] { { Messages.DesignerPreferencePage_field_behavior_label, BEHAVIOR_CREATE_LABEL },
 						{ Messages.DesignerPreferencePage_field_behavior_nothing, BEHAVIOR_DO_NOTHING },
 						{ Messages.DesignerPreferencePage_field_behavior_ask, BEHAVIOR_ASK_EVERYTIME } }, getFieldEditorParent()));
-		addField(new BooleanFieldEditor(P_USE_FIELD_DESCRIPTION, Messages.DesignerPreferencePage_UseDescriptionForLabelText,
-				getFieldEditorParent()));
+		
+		createRulerEntry();
+		
+		addField(new BooleanFieldEditor(P_USE_FIELD_DESCRIPTION, Messages.DesignerPreferencePage_UseDescriptionForLabelText,getFieldEditorParent()));
 		addField(new BooleanFieldEditor(P_SAVE_ON_PREVIEW, Messages.DesignerPreferencePage_savereportonpreview, getFieldEditorParent()));
 		addField(new BooleanFieldEditor(P_CENTER_SELECTION, Messages.DesignerPreferencePage_centerEditorOption, getFieldEditorParent()));
 		addField(new BooleanFieldEditor(P_RESIZE_CONTAINER, Messages.DesignerPreferencePage_autoresizeBand, getFieldEditorParent()));
 		addField(new BooleanFieldEditor(P_SHOW_VARIABLES_DEFAULTS, Messages.DesignerPreferencePage_showDefaultsVariablesParameters, getFieldEditorParent()));
 	}
 
+	/**
+	 * Create the control to set the ruler measure unit
+	 */
+	private void createRulerEntry(){
+		addField(new ComboFieldEditor(P_RULER_MEASURE, Messages.DesignerPreferencePage_rulerMeasureLabel,
+				new String[][] {{Messages.DesignerPreferencePage_pixelMeasure, String.valueOf(RulerProvider.UNIT_PIXELS) },
+						{Messages.DesignerPreferencePage_centimeterMeasure, String.valueOf(RulerProvider.UNIT_CENTIMETERS) },
+						{Messages.DesignerPreferencePage_inchMeasure, String.valueOf(RulerProvider.UNIT_INCHES)}}, getFieldEditorParent()));
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -155,6 +169,7 @@ public class DesignerPreferencePage extends FieldEditorOverlayPage {
 		store.setDefault(P_CENTER_SELECTION, true);
 		store.setDefault(P_RESIZE_CONTAINER, true);
 		store.setDefault(P_SHOW_VARIABLES_DEFAULTS, true);
+		store.setDefault(P_RULER_MEASURE, String.valueOf(RulerProvider.UNIT_INCHES));
 	}
 
 	@Override

@@ -25,7 +25,9 @@ import org.eclipse.gef.editparts.ZoomListener;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.rulers.RulerProvider;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.widgets.Display;
+
+import com.jaspersoft.studio.utils.Misc;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class JDRulerFigure extends Figure {
 
@@ -66,13 +68,24 @@ public class JDRulerFigure extends Figure {
 		setOpaque(true);
 		setLayoutManager(new JDRulerLayout());
 	}
+	
+	/**
+	 * Return the number of dpi specified in the jasper report configuration,
+	 * doesen't take it from the monitor like the standard ruler will does
+	 * 
+	 * @return The number of dpi
+	 */
+	protected org.eclipse.swt.graphics.Point getDpi(){
+		int dpi = Misc.nvl(JasperReportsConfiguration.getDefaultInstance().getPropertyInteger("net.sf.jasperreports.image.dpi"), 72);
+		return new org.eclipse.swt.graphics.Point(dpi, dpi);
+	}
 
 	protected double getDPU() {
 		if (dpu <= 0) {
 			if (getUnit() == RulerProvider.UNIT_PIXELS) {
 				dpu = 1.0;
 			} else {
-				dpu = transposer.t(new Dimension(Display.getCurrent().getDPI())).height;
+				dpu = transposer.t(new Dimension(getDpi())).height;
 				if (getUnit() == RulerProvider.UNIT_CENTIMETERS) {
 					dpu = dpu / 2.54;
 				}
