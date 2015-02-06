@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.utils.inputhistory;
 
@@ -16,6 +12,12 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
+import org.eclipse.jface.fieldassist.AutoCompleteField;
+import org.eclipse.jface.fieldassist.TextContentAdapter;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
+import org.eclipse.swt.widgets.Text;
 
 public class InputHistoryCache {
 	private static Map<Object, Set<String>> cache = new HashMap<Object, Set<String>>();
@@ -35,5 +37,26 @@ public class InputHistoryCache {
 			cache.put(key, set);
 		}
 		((HashSet<String>) set).add(value);
+	}
+
+	public static void bindText(final Text control, final String key) {
+		final AutoCompleteField autocomplete = new AutoCompleteField(control, new TextContentAdapter(),
+				InputHistoryCache.get(key));
+		control.addFocusListener(new FocusListener() {
+
+			@Override
+			public void focusLost(FocusEvent e) {
+				if (autocomplete != null) {
+					autocomplete.setProposals(InputHistoryCache.get(null));
+					InputHistoryCache.put(key, control.getText().trim());
+				}
+			}
+
+			@Override
+			public void focusGained(FocusEvent e) {
+				if (autocomplete != null)
+					autocomplete.setProposals(InputHistoryCache.get(key));
+			}
+		});
 	}
 }
