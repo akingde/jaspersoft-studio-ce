@@ -1,0 +1,23 @@
+		new Label(this, SWT.NONE).setText("$controlLabel");
+		Text $controlName = new Text(this, SWT.BORDER);
+		${controlName}.setData(BIND_KEY, "$bindName");
+		${controlName}.setData(TYPE_KEY, "float");
+		${controlName}.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		//The verify listener avoid to insert in the text are invalid characters for a float number
+		${controlName}.addVerifyListener(new VerifyListener() {
+			@Override
+			public void verifyText(VerifyEvent e) {
+				Text text = (Text) e.getSource();
+				final String oldS = text.getText();
+				String newS = oldS.substring(0, e.start) + e.text + oldS.substring(e.end);
+				boolean isFloat = true;
+				try {
+					Float.parseFloat(newS);
+				} catch (NumberFormatException ex) {
+					isFloat = false;
+				}
+				if (!isFloat)
+					e.doit = false;
+			}
+		});
+		generatedControls.add($controlName);

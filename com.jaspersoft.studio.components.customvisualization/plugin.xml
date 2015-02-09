@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension-point id="ComponentSamples" name="ComponentSamples" schema="schema/ComponentSamples.exsd"/>
+   <extension
+         point="com.jaspersoft.studio.components">
+      <component
+            ClassFactory="com.jaspersoft.studio.components.customvisualization.CVComponentFactory">
+      </component>
+   </extension>
+   <extension
+         point="com.jaspersoft.studio.properties.propertyTabs">
+      <propertyTabs
+            contributorId="com.jaspersoft.studio.editor.report.ReportContainer">
+         <propertyTab
+               afterTab="com.jaspersoft.studio.components.customvisualization.tab"
+               category="element"
+               id="com.jaspersoft.studio.components.customvisualization.tab"
+               image="icons/cvcomponent-16.png"
+               label="%propertyTab">
+         </propertyTab>
+      </propertyTabs>
+   </extension>
+   <extension
+         point="com.jaspersoft.studio.properties.propertySections">
+      <propertySections
+            contributorId="com.jaspersoft.studio.editor.report.ReportContainer">
+         <propertySection
+               class="com.jaspersoft.studio.components.customvisualization.properties.CVSection"
+               id="com.jaspersoft.studio.components.customvisualization.properties.CVSection"
+               tab="com.jaspersoft.studio.components.customvisualization.tab">
+            <input
+                  type="com.jaspersoft.studio.components.customvisualization.model.MCustomVisualization">
+            </input>
+         </propertySection>
+      </propertySections>
+   </extension>
+   <extension
+         point="com.jaspersoft.studio.server.publisher">
+      <publisher
+            ClassFactory="com.jaspersoft.studio.components.customvisualization.server.CVCContributor">
+      </publisher>
+   </extension>
+    <extension point="org.eclipse.core.expressions.propertyTesters">
+       <propertyTester
+             class="com.jaspersoft.studio.components.customvisualization.creation.CompileFileTester"
+             id="testCustomComponentFile"
+             namespace="com.jaspersoft.studio.components.customvisualization.creation"
+             properties="checkNatureFile"
+             type="java.lang.Object">
+       </propertyTester>
+       <propertyTester
+             class="com.jaspersoft.studio.components.customvisualization.creation.CompileAllTester"
+             id="testCustomComponentContainer"
+             namespace="com.jaspersoft.studio.components.customvisualization.creation"
+             properties="checkNatureContainer"
+             type="java.lang.Object">
+       </propertyTester>
+    </extension>
+    <extension
+          id="customcomponentnature"
+          name="Custom Component Nature"
+          point="org.eclipse.core.resources.natures">
+       <runtime>
+          <run
+                class="com.jaspersoft.studio.components.customvisualization.creation.CustomComponentNature">
+          </run>
+       </runtime>
+    </extension>
+    <extension
+          point="org.eclipse.ui.ide.projectNatureImages">
+       <image
+             icon="icons/cvcomponent-16.png"
+             id="com.jaspersoft.studio.javascript.image.CustomComponentNature"
+             natureId="com.jaspersoft.studio.components.customvisualization.customcomponentnature">
+       </image>
+    </extension>
+   	<extension point="org.eclipse.ui.commands">
+	   <command
+	         id="com.jaspersoft.studio.components.customvisualization.creation.buildComponent"
+	         name="BuildComponentCommand">
+	   </command>
+	</extension>
+	<extension point="org.eclipse.ui.handlers">
+  		<handler
+        	class="com.jaspersoft.studio.components.customvisualization.creation.BuildComponentHandler"
+       	 	commandId="com.jaspersoft.studio.components.customvisualization.creation.buildComponent">
+  		</handler>
+  	</extension>
+  	<extension id="com.jaspersoft.studio.menus.saveReportTo" point="org.eclipse.ui.menus">
+  		<menuContribution locationURI="popup:org.eclipse.ui.popup.any?after=export">
+		     <command
+		           commandId="com.jaspersoft.studio.components.customvisualization.creation.buildComponent"
+		           icon="icons/cvcomponent-16.png"
+		           id="com.jaspersoft.studio.javascript.build"
+		           label="%buildComponent"
+		           style="push">
+		        <visibleWhen
+		              checkEnabled="false">
+		           <and>
+		              <test
+		                    forcePluginActivation="true"
+		                    property="com.jaspersoft.studio.components.customvisualization.creation.checkNatureFile">
+		              </test>
+		           </and>
+		        </visibleWhen>
+		     </command>
+		     <command
+		           commandId="com.jaspersoft.studio.components.customvisualization.creation.buildComponent"
+		           icon="icons/cvcomponent-16.png"
+		           id="com.jaspersoft.studio.javascript.build"
+		           label="%buildComponents"
+		           style="push">
+		        <visibleWhen
+		              checkEnabled="false">
+		           <and>
+		              <test
+		                    forcePluginActivation="true"
+		                    property="com.jaspersoft.studio.components.customvisualization.creation.checkNatureContainer">
+		              </test>
+		           </and>
+		        </visibleWhen>
+		     </command>
+  		</menuContribution>
+  	</extension>
+  	<extension point="org.eclipse.ui.newWizards">
+      <category
+            id="com.jaspersoft.studio"
+            name="Jaspersoft Studio">
+      </category>
+      <wizard
+         category="com.jaspersoft.studio"
+         class="com.jaspersoft.studio.components.customvisualization.creation.wizard.CustomVisualizationComponentWizard"
+         icon="icons/cvcomponent-16.png"
+         id="com.jaspersoft.studio.wizards.custom_component_wizard"
+         name="Custom Visualization Component">
+        <description>
+           %newComponentWizardDescription
+        </description>
+      </wizard>
+    </extension>
+</plugin>
