@@ -41,6 +41,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.jaspersoft.studio.editor.gef.figures.ACachedGraphics;
+
 /**
  * This new graphics 2d was created in order to speed up the painting of the elements.
  * Calculate how an element should be painted is a really time expensive operation. This 
@@ -55,7 +57,7 @@ import java.util.Map;
  * @author Orlandin Marco
  *
  */
-public class StackGraphics2D extends Graphics2D {
+public class StackGraphics2D extends ACachedGraphics {
 	
 	/**
 	 * The interface of a command that can be inserted inside the stack
@@ -354,6 +356,12 @@ public class StackGraphics2D extends Graphics2D {
 	private List<ExecutableCommand> stack = new ArrayList<StackGraphics2D.ExecutableCommand>();
 	
 	/**
+	 * List of subgraphics. A subgraphics is create when from this graphics a new one is
+	 * requested using the method create()
+	 */
+	private List<StackGraphics2D> subGraphics = new ArrayList<StackGraphics2D>();
+	
+	/**
 	 * Create an instance of the class
 	 * 
 	 * @param realDrawer Real graphic2D that will be used to draw the stuff specified in the stack
@@ -367,16 +375,20 @@ public class StackGraphics2D extends Graphics2D {
 	 * 
 	 * @param realDrawer Real graphic2D that will be used to draw the stuff specified in the stack, must be not null
 	 */
-	public void setRealDrawer(Graphics2D realDrawer){
-		this.realDrawer = realDrawer;
+	public void setGraphics(Graphics2D graphics){
+		this.realDrawer = graphics;
 	}
 	
 	/**
-	 * Execute all the commands in the stack
+	 * Execute all the commands in the stack and recursively also
+	 * in all the subgraphics
 	 */
-	public void paintStack(){
+	public void paintCache(){
 		for(ExecutableCommand definition : stack){
 			definition.execute();
+		}
+		for(StackGraphics2D subGraphic : subGraphics){
+			subGraphic.paintCache();
 		}
 	}
 	
@@ -1094,9 +1106,14 @@ public class StackGraphics2D extends Graphics2D {
 		return realDrawer.getFontMetrics(arg0);
 	}
 
+	/**
+	 * Create a new subgraphic for the curren graphic
+	 */
 	@Override
 	public Graphics create() {
-		return realDrawer.create();
+		StackGraphics2D subGraphic = new StackGraphics2D((Graphics2D)realDrawer.create());
+		subGraphics.add(subGraphic);
+		return subGraphic;
 	}
 
 	@Override

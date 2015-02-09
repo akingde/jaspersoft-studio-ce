@@ -12,7 +12,11 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.barcode.figure;
 
+import java.awt.Graphics2D;
+
+import com.jaspersoft.studio.editor.gef.figures.ACachedGraphics;
 import com.jaspersoft.studio.editor.gef.figures.JRComponentFigure;
+import com.jaspersoft.studio.editor.java2d.ImageGraphics2D;
 import com.jaspersoft.studio.model.MGraphicElement;
 
 /*
@@ -30,7 +34,17 @@ public class BarcodeFigure extends JRComponentFigure {
 	
 	@Override
 	protected boolean allowsFigureDrawCache() {
-		return false;
+		return true;
 	}
 
+	/**
+	 * The bar code figure is not compatible with the StackGraphics2D, since the 
+	 * bar code are painted trough the batik library and the paint process is pretty
+	 * complicate. In this case the ImageGraphics2D is more reliable since it act
+	 * like a standard Graphics2D
+	 */
+	@Override
+	protected ACachedGraphics getCachedGraphics(Graphics2D originalGraphics) {
+		return new ImageGraphics2D(originalGraphics);
+	}
 }

@@ -22,7 +22,6 @@ import net.sf.jasperreports.engine.JRPrintElement;
 
 import org.eclipse.draw2d.geometry.Rectangle;
 
-import com.jaspersoft.studio.editor.java2d.StackGraphics2D;
 import com.jaspersoft.studio.jasper.JSSDrawVisitor;
 import com.jaspersoft.studio.jasper.LazyImageConverter;
 import com.jaspersoft.studio.model.MGraphicElement;
@@ -61,7 +60,7 @@ public class ImageFigure extends FrameFigure {
 	protected void draw(JSSDrawVisitor drawVisitor, JRElement jrElement) {
 		if (cachedGraphics == null || model.hasChangedProperty()){
 			Graphics2D oldGraphics = drawVisitor.getGraphics2d();
-			cachedGraphics = new StackGraphics2D(oldGraphics);
+			cachedGraphics = getCachedGraphics(oldGraphics);
 			drawVisitor.setGraphics2D(cachedGraphics);
 			visitElement(drawVisitor, model);
 			drawVisitor.setGraphics2D(oldGraphics);
@@ -70,8 +69,8 @@ public class ImageFigure extends FrameFigure {
 			//If the image dosen't need to be reloaded than a recheck is launched to see if it was updated
 			LazyImageConverter.getInstance().convertImage(drawVisitor.getReportConverter(), model);
 		}
-		cachedGraphics.setRealDrawer(drawVisitor.getGraphics2d());
-		cachedGraphics.paintStack();
+		cachedGraphics.setGraphics(drawVisitor.getGraphics2d());
+		cachedGraphics.paintCache();
 	}
 
 	protected JRPen getLinePen() {

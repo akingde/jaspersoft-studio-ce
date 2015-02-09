@@ -17,7 +17,6 @@ import java.awt.Graphics2D;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRRectangle;
 
-import com.jaspersoft.studio.editor.java2d.StackGraphics2D;
 import com.jaspersoft.studio.jasper.JSSDrawVisitor;
 import com.jaspersoft.studio.model.MRectangle;
 /*
@@ -40,13 +39,13 @@ public class RectangleFigure extends LineFigure {
 		if (cachedGraphics == null || model.hasChangedProperty()){
 			model.setChangedProperty(false);
 			Graphics2D oldGraphics = drawVisitor.getGraphics2d();
-			cachedGraphics = new StackGraphics2D(oldGraphics);
+			cachedGraphics = getCachedGraphics(oldGraphics);
 			drawVisitor.setGraphics2D(cachedGraphics);
 			drawVisitor.visitRectangle((JRRectangle) jrElement);
 			drawVisitor.setGraphics2D(oldGraphics);
 		}
-		cachedGraphics.setRealDrawer(drawVisitor.getGraphics2d());
-		cachedGraphics.paintStack();
+		cachedGraphics.setGraphics(drawVisitor.getGraphics2d());
+		cachedGraphics.paintCache();
 	}
 
 }

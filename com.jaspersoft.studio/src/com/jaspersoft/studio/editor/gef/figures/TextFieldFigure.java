@@ -17,7 +17,6 @@ import java.awt.Graphics2D;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRTextField;
 
-import com.jaspersoft.studio.editor.java2d.StackGraphics2D;
 import com.jaspersoft.studio.jasper.JSSDrawVisitor;
 import com.jaspersoft.studio.model.text.MTextField;
 /*
@@ -44,16 +43,19 @@ public class TextFieldFigure extends FrameFigure {
 	 */
 	@Override
 	protected void draw(JSSDrawVisitor drawVisitor, JRElement jrElement) {
-		if (cachedGraphics == null || model.hasChangedProperty()){
-			Graphics2D oldGraphics = drawVisitor.getGraphics2d();
-			cachedGraphics = new StackGraphics2D(oldGraphics);
-			drawVisitor.setGraphics2D(cachedGraphics);
+		if (model != null && allowsFigureDrawCache()){
+			if (cachedGraphics == null || model.hasChangedProperty()){
+				Graphics2D oldGraphics = drawVisitor.getGraphics2d();
+				cachedGraphics = getCachedGraphics(oldGraphics);
+				drawVisitor.setGraphics2D(cachedGraphics);
+				drawVisitor.visitTextField((JRTextField) jrElement);
+				drawVisitor.setGraphics2D(oldGraphics);
+				model.setChangedProperty(false);
+			}
+			cachedGraphics.setGraphics(drawVisitor.getGraphics2d());
+			cachedGraphics.paintCache();
+		} else {
 			drawVisitor.visitTextField((JRTextField) jrElement);
-			drawVisitor.setGraphics2D(oldGraphics);
-			model.setChangedProperty(false);
 		}
-		cachedGraphics.setRealDrawer(drawVisitor.getGraphics2d());
-		cachedGraphics.paintStack();
 	}
-
 }

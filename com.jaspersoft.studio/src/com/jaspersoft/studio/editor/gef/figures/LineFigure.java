@@ -32,7 +32,7 @@ public class LineFigure extends AHandleBoundsFigure implements IModelFigure {
 
 	protected MGraphicElement model = null;
 	
-	protected StackGraphics2D cachedGraphics = null;
+	protected ACachedGraphics cachedGraphics = null;
 	
 	/**
 	 * Instantiates a new line figure.
@@ -54,13 +54,13 @@ public class LineFigure extends AHandleBoundsFigure implements IModelFigure {
 		if (cachedGraphics == null || model.hasChangedProperty()){
 			model.setChangedProperty(false);
 			Graphics2D oldGraphics = drawVisitor.getGraphics2d();
-			cachedGraphics = new StackGraphics2D(oldGraphics);
+			cachedGraphics = getCachedGraphics(oldGraphics);
 			drawVisitor.setGraphics2D(cachedGraphics);
 			drawVisitor.visitLine((JRLine) jrElement);
 			drawVisitor.setGraphics2D(oldGraphics);
 		}
-		cachedGraphics.setRealDrawer(drawVisitor.getGraphics2d());
-		cachedGraphics.paintStack();
+		cachedGraphics.setGraphics(drawVisitor.getGraphics2d());
+		cachedGraphics.paintCache();
 	}
 
 	/*
@@ -124,5 +124,18 @@ public class LineFigure extends AHandleBoundsFigure implements IModelFigure {
 	 */
 	public MGraphicElement getModel(){
 		return model;
+	}
+	
+	protected ACachedGraphics getCachedGraphics(Graphics2D originalGraphics){
+		return new StackGraphics2D(originalGraphics);
+	}
+	
+	/**
+	 * Used to make explicit if the figure allow the caching of the drawing
+	 * 
+	 * @return true if the figure allow the caching, false otherwise
+	 */
+	protected boolean allowsFigureDrawCache(){
+		return true;
 	}
 }

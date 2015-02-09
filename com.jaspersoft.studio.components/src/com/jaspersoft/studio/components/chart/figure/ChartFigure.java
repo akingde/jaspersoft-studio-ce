@@ -42,14 +42,14 @@ public class ChartFigure extends FrameFigure {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.jaspersoft.studio.editor.gef.figures.GenericFigure#draw(net.sf.jasperreports.engine.export.draw.DrawVisitor,
+	 * @see com.jaspersoft.studio.editor.gef.figures.GenericFigure#draw(net.sf.
+	 * jasperreports.engine.export.draw.DrawVisitor,
 	 * net.sf.jasperreports.engine.JRElement)
 	 */
 	@Override
 	protected void draw(JSSDrawVisitor drawVisitor, JRElement jrElement) {
-		if (model != null){
-			if (cachedGraphics == null || model.hasChangedProperty()){
+		if (model != null && allowsFigureDrawCache()) {
+			if (cachedGraphics == null || model.hasChangedProperty()) {
 				Graphics2D oldGraphics = drawVisitor.getGraphics2d();
 				cachedGraphics = new StackGraphics2D(oldGraphics);
 				drawVisitor.setGraphics2D(cachedGraphics);
@@ -57,8 +57,8 @@ public class ChartFigure extends FrameFigure {
 				drawVisitor.setGraphics2D(oldGraphics);
 				model.setChangedProperty(false);
 			}
-			cachedGraphics.setRealDrawer(drawVisitor.getGraphics2d());
-			cachedGraphics.paintStack();
+			cachedGraphics.setGraphics(drawVisitor.getGraphics2d());
+			cachedGraphics.paintCache();
 		} else {
 			fallbackDraw(drawVisitor, jrElement);
 		}

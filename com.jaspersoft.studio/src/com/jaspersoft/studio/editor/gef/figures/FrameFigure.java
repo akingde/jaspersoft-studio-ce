@@ -38,7 +38,7 @@ public class FrameFigure extends AHandleBoundsFigure implements IModelFigure {
 	 */
 	protected MGraphicElement model = null;
 	
-	protected StackGraphics2D cachedGraphics = null;
+	protected ACachedGraphics cachedGraphics = null;
 	
 	/**
 	 * Instantiates a new text field figure.
@@ -65,20 +65,21 @@ public class FrameFigure extends AHandleBoundsFigure implements IModelFigure {
 	 */
 	@Override
 	protected void draw(JSSDrawVisitor drawVisitor, JRElement jrElement) {
-		if (model == null){
+		if (model == null || !allowsFigureDrawCache()){
 			drawVisitor.visitFrame((JRFrame) jrElement);
 			return;
 		} else if (cachedGraphics == null || model.hasChangedProperty()){
 			model.setChangedProperty(false);
 			Graphics2D oldGraphics = drawVisitor.getGraphics2d();
-			cachedGraphics = new StackGraphics2D(oldGraphics);
+			cachedGraphics = getCachedGraphics(oldGraphics);
 			drawVisitor.setGraphics2D(cachedGraphics);
 			drawVisitor.visitFrame((JRFrame) jrElement);
 			drawVisitor.setGraphics2D(oldGraphics);
 		}
-		cachedGraphics.setRealDrawer(drawVisitor.getGraphics2d());
-		cachedGraphics.paintStack();
+		cachedGraphics.setGraphics(drawVisitor.getGraphics2d());
+		cachedGraphics.paintCache();
 	}
+
 
 	/*
 	 * (non-Javadoc)
@@ -156,5 +157,18 @@ public class FrameFigure extends AHandleBoundsFigure implements IModelFigure {
 	 */
 	public MGraphicElement getModel(){
 		return model;
+	}
+	
+	protected ACachedGraphics getCachedGraphics(Graphics2D originalGraphics){
+		return new StackGraphics2D(originalGraphics);
+	}
+	
+	/**
+	 * Used to make explicit if the figure allow the caching of the drawing
+	 * 
+	 * @return true if the figure allow the caching, false otherwise
+	 */
+	protected boolean allowsFigureDrawCache(){
+		return true;
 	}
 }

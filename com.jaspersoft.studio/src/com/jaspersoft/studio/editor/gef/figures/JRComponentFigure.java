@@ -17,11 +17,11 @@ import java.awt.Graphics2D;
 import net.sf.jasperreports.engine.JRComponentElement;
 import net.sf.jasperreports.engine.JRElement;
 
-import com.jaspersoft.studio.editor.java2d.StackGraphics2D;
 import com.jaspersoft.studio.jasper.JSSDrawVisitor;
 import com.jaspersoft.studio.model.MGraphicElement;
 
 public class JRComponentFigure extends FrameFigure {
+	
 	
 	public JRComponentFigure(MGraphicElement model) {
 		super(model);
@@ -40,21 +40,18 @@ public class JRComponentFigure extends FrameFigure {
 		} else if (cachedGraphics == null || model.hasChangedProperty()){
 			model.setChangedProperty(false);
 			Graphics2D oldGraphics = drawVisitor.getGraphics2d();
-			cachedGraphics = new StackGraphics2D(oldGraphics);
+			cachedGraphics = getCachedGraphics(oldGraphics);
 			drawVisitor.setGraphics2D(cachedGraphics);
 			drawVisitor.visitComponentElement((JRComponentElement) jrElement);
 			drawVisitor.setGraphics2D(oldGraphics);
 		}
-		cachedGraphics.setRealDrawer(drawVisitor.getGraphics2d());
-		cachedGraphics.paintStack();
+		cachedGraphics.setGraphics(drawVisitor.getGraphics2d());
+		cachedGraphics.paintCache();
 	}
 	
-	/**
-	 * Used to make explicit if the figure allow the caching of the drawing
-	 * 
-	 * @return true if the figure allow the caching, false otherwise
-	 */
-	protected boolean allowsFigureDrawCache(){
+	@Override
+	protected boolean allowsFigureDrawCache() {
 		return false;
 	}
+
 }

@@ -17,7 +17,6 @@ import java.awt.Graphics2D;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRSubreport;
 
-import com.jaspersoft.studio.editor.java2d.StackGraphics2D;
 import com.jaspersoft.studio.jasper.JSSDrawVisitor;
 import com.jaspersoft.studio.model.subreport.MSubreport;
 /*
@@ -43,15 +42,19 @@ public class SubreportFigure extends FrameFigure {
 	 */
 	@Override
 	protected void draw(JSSDrawVisitor drawVisitor, JRElement jrElement) {
-		if (cachedGraphics == null || model.hasChangedProperty()){
-			model.setChangedProperty(false);
-			Graphics2D oldGraphics = drawVisitor.getGraphics2d();
-			cachedGraphics = new StackGraphics2D(oldGraphics);
-			drawVisitor.setGraphics2D(cachedGraphics);
+		if (model != null && allowsFigureDrawCache()) {
+			if (cachedGraphics == null || model.hasChangedProperty()) {
+				model.setChangedProperty(false);
+				Graphics2D oldGraphics = drawVisitor.getGraphics2d();
+				cachedGraphics = getCachedGraphics(oldGraphics);
+				drawVisitor.setGraphics2D(cachedGraphics);
+				drawVisitor.visitSubreport((JRSubreport) jrElement);
+				drawVisitor.setGraphics2D(oldGraphics);
+			}
+			cachedGraphics.setGraphics(drawVisitor.getGraphics2d());
+			cachedGraphics.paintCache();
+		} else {
 			drawVisitor.visitSubreport((JRSubreport) jrElement);
-			drawVisitor.setGraphics2D(oldGraphics);
 		}
-		cachedGraphics.setRealDrawer(drawVisitor.getGraphics2d());
-		cachedGraphics.paintStack();
 	}
 }

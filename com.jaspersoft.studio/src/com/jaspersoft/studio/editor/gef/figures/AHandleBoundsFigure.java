@@ -36,5 +36,4 @@ public abstract class AHandleBoundsFigure extends ComponentFigure implements Han
 		return handleBounds;
 
 	}
-
 }

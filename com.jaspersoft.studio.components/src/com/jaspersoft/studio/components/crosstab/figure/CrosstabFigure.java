@@ -21,7 +21,6 @@ import org.eclipse.draw2d.XYLayout;
 
 import com.jaspersoft.studio.components.crosstab.model.MCrosstab;
 import com.jaspersoft.studio.editor.gef.figures.FrameFigure;
-import com.jaspersoft.studio.editor.java2d.StackGraphics2D;
 import com.jaspersoft.studio.jasper.JSSDrawVisitor;
 
 public class CrosstabFigure extends FrameFigure {
@@ -44,17 +43,19 @@ public class CrosstabFigure extends FrameFigure {
 	 */
 	@Override
 	protected void draw(JSSDrawVisitor drawVisitor, JRElement jrElement) {
-		if (model != null){
+		if (model != null && allowsFigureDrawCache()){
 			if (cachedGraphics == null || model.hasChangedProperty()){
 				Graphics2D oldGraphics = drawVisitor.getGraphics2d();
-				cachedGraphics = new StackGraphics2D(oldGraphics);
+				cachedGraphics = getCachedGraphics(oldGraphics);
 				drawVisitor.setGraphics2D(cachedGraphics);
 				drawVisitor.visitCrosstab((JRCrosstab) jrElement);
 				drawVisitor.setGraphics2D(oldGraphics);
 				model.setChangedProperty(false);
 			}
-			cachedGraphics.setRealDrawer(drawVisitor.getGraphics2d());
-			cachedGraphics.paintStack();
+			cachedGraphics.setGraphics(drawVisitor.getGraphics2d());
+			cachedGraphics.paintCache();
+		} else {
+			drawVisitor.visitCrosstab((JRCrosstab) jrElement);
 		}
 	}
 
