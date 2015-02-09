@@ -116,7 +116,8 @@ public class ParameterSection extends AbstractSection {
 			element.getPropertyDescriptors();
 			for (Object key : widgets.keySet()) {
 				if (key.equals(JRDesignParameter.PROPERTY_NESTED_TYPE_NAME)){
-					String type = element.getPropertyValue(JRDesignVariable.PROPERTY_VALUE_CLASS_NAME).toString();
+					Object value = element.getPropertyValue(JRDesignVariable.PROPERTY_VALUE_CLASS_NAME);
+					String type = value != null ? value.toString() : null;
 					if (isClassCollection(type)) setCompVisible(true);
 					else setCompVisible(false);
 				}
