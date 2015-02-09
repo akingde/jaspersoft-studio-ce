@@ -69,8 +69,7 @@ public class JrxmlPublishContributor implements IPublishContributor {
 			throws Exception {
 		init(mrunit.getJasperConfiguration(), version);
 		publishJrxml(mrunit, monitor, jasper, fileset, file);
-		if (mrunit instanceof MReportUnit
-				&& ResourceDescriptorUtil.isReportMain(file))
+		if (ResourceDescriptorUtil.isReportMain(file))
 			publishParameters((MReportUnit) mrunit, monitor, jasper);
 	}
 
