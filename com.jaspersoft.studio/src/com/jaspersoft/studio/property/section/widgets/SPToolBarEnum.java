@@ -64,13 +64,14 @@ public class SPToolBarEnum<T extends IPropertyDescriptor & IEnumDescriptors> ext
 		if (pDescriptor.getType() != NullEnum.NOTNULL) {
 			toolItems = new ToolItem[enumItems.length - 1];
 			j++;
-		} else
+		} else {
 			toolItems = new ToolItem[enumItems.length];
+		}
 		for (int i = 0; i < toolItems.length; i++) {
 			final int index = i;
 			toolItems[i] = new ToolItem(toolBar, SWT.CHECK);
-			toolItems[i].setText(enumItems[j]);
-			toolItems[i].setToolTipText(enumItems[j]);
+			toolItems[i].setText(enumItems[index + j]);
+			toolItems[i].setToolTipText(enumItems[index + j]);
 			toolItems[i].addSelectionListener(new SelectionAdapter() {
 				public void widgetSelected(SelectionEvent e) {
 					if (refresh)
