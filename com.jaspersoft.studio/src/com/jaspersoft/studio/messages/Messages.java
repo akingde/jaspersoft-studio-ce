@@ -62,8 +62,6 @@ public class Messages extends NLS {
 	public static String common_edit;
 	public static String common_elements;
 	public static String common_error_creating_nested_visual_editor;
-	public static String common_error_message_non_empty_properties_string_name;
-	public static String common_error_message_unique_properties;
 	public static String common_evaluation_time;
 	public static String common_expression;
 	public static String common_expression_editor;
@@ -144,7 +142,6 @@ public class Messages extends NLS {
 	public static String common_strike_trough;
 	public static String common_subreport_parameters;
 	public static String common_subreport;
-	public static String common_table_is_empty;
 	public static String common_text;
 	public static String common_this_is_not_an_integer_number;
 	public static String common_time;
@@ -339,7 +336,6 @@ public class Messages extends NLS {
 	public static String CreateVariableAction_create_variable_tool_tip;
 	public static String CSVColDataAction_0;
 	public static String CSVColDataAction_1;
-	public static String CSVColDataAction_InsertColNameDialog;
 	public static String CSVElementDecorator_changeColumnsOrder;
 	public static String CSVElementDecorator_CreateColumn;
 	public static String CSVElementDecorator_CSVMenuLabel;
@@ -683,7 +679,6 @@ public class Messages extends NLS {
 	public static String ExportMetadataPage_9;
 	public static String ExportStyleAsTemplateAction_actionName;
 	public static String ExportStyleAsTemplateAction_actionTooltip;
-	public static String ExpressionEditorPreferencePage_includeStatic;
 	public static String ExpressionEditorPreferencePage_subtitle;
 	public static String ExpressionEditorPreferencePage_userDefinedExpressions;
 	public static String ExpressionEditorSupportUtil_ConfirmOnCloseMessage;
@@ -781,8 +776,6 @@ public class Messages extends NLS {
 	public static String HTMLExporterPreferencePage_30;
 	public static String HTMLExporterPreferencePage_31;
 	public static String HTMLExporterPreferencePage_32;
-	public static String HyperlinkParameterPage_Description;
-	public static String HyperlinkParameterPage_Title;
 	public static String HyperlinkSection_hyperlinkSectionTitle;
 	public static String ImageAlignSection_imageAlignLabel;
 	public static String ImageSelectionDialog_Browse;
@@ -888,7 +881,6 @@ public class Messages extends NLS {
 	public static String JRPropertyDialog_spacialProperties;
 	public static String JRPropertyDialog_valuePlaceHolder;
 	public static String JRPropertyPage_description;
-	public static String JRPropertyPage_error_message_property_must_not_be_empty;
 	public static String JRPropertyPage_value;
 	public static String JRQueryPage_description;
 	public static String JrxmlEditor_design;
@@ -1393,9 +1385,6 @@ public class Messages extends NLS {
 	public static String ParameterDialog_7;
 	public static String ParameterPage_dataset_parameters;
 	public static String ParameterPage_description;
-	public static String ParameterPage_generic_elements_parameters;
-	public static String ParameterPage_parameter;
-	public static String ParameterPage_skip_empty;
 	public static String ParametersDialog_built_in_parameters;
 	public static String ParametersDialog_report_parameters;
 	public static String ParametersDialog_user_parameters;
@@ -1607,7 +1596,6 @@ public class Messages extends NLS {
 	public static String ReportRunControler_1;
 	public static String ReportRunControler_22;
 	public static String ReportRunControler_3;
-	public static String ReportRunControler_statsstart;
 	public static String ReportSection_Dataset_Label;
 	public static String ReportTemplatesWizardPage_categories;
 	public static String ReportTemplatesWizardPage_description;
