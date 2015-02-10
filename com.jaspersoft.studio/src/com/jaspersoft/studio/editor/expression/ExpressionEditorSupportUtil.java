@@ -62,6 +62,10 @@ public class ExpressionEditorSupportUtil {
 	private static Boolean isExpressionEditorDialogOpen=Boolean.FALSE;
 	private static boolean showBuiltInParameters=true;
 	private static boolean showBuiltInVariables=true;
+	private static ExpObjectSortingInfo variablesSorting=new ExpObjectSortingInfo(ExpObject.TYPE_VARIABLE);
+	private static ExpObjectSortingInfo fieldsSorting=new ExpObjectSortingInfo(ExpObject.TYPE_FIELD);
+	private static ExpObjectSortingInfo parametersSorting=new ExpObjectSortingInfo(ExpObject.TYPE_PARAM);
+	private static ExpObjectSortingInfo rbkeysSorting=new ExpObjectSortingInfo(ExpObject.TYPE_RBKEY,false,true);
 
 	static {
 		supportFactory = JaspersoftStudioPlugin.getExtensionManager().getExpressionEditorSupportFactory();
@@ -430,5 +434,65 @@ public class ExpressionEditorSupportUtil {
 		return showBuiltInVariables;
 	}
 	
+	/**
+	 * Changes the flag that decides if items should be shown in increasing alphabetical order.
+	 * 
+	 * @param the type of {@link ExpObject}
+	 * @return the new status
+	 */
+	public static synchronized boolean toggleSortIncreaseItems(int type) {
+		return getSortingInfo(type).toggleSortIncreaseItems();
+	}
+
+	/**
+	 * Changes the flag that decides if items should be shown in decreasing alphabetical order.
+	 * 
+	 * @param the type of {@link ExpObject}
+	 * @return the new status
+	 */
+	public static synchronized boolean toggleSortDecreaseItems(int type) {
+		return getSortingInfo(type).toggleSortDecreaseItems();
+	}
 	
+	/**
+	 * @param the type of {@link ExpObject}
+	 * @return <code>true</code> if the items should be shown in decreasing alphabetical order, <code>false</code>
+	 *         otherwise.
+	 */
+	public static synchronized boolean isSortDecreaseItems(int type) {
+		return getSortingInfo(type).isSortDecreaseItems();
+	}
+
+	/**
+	 * @param the type of {@link ExpObject}
+	 * @return <code>true</code> if the items should be shown in increasing alphabetical order, <code>false</code>
+	 *         otherwise.
+	 */
+	public static synchronized boolean isSortIncreaseItems(int type) {
+		return getSortingInfo(type).isSortIncreaseItems();
+	}
+	
+	/**
+	 * @param the type of {@link ExpObject}
+	 * @return <code>true</code> if the items should not be ordered, <code>false</code> otherwise.
+	 */
+	public static synchronized boolean isShowUnorderedItems(int type) {
+		ExpObjectSortingInfo sortingInfo = getSortingInfo(type);
+		return !sortingInfo.isSortIncreaseItems() && !sortingInfo.isSortDecreaseItems();
+	}
+	
+	private static ExpObjectSortingInfo getSortingInfo(int type) {
+		switch (type) {
+		case ExpObject.TYPE_FIELD:
+			return fieldsSorting;
+		case ExpObject.TYPE_PARAM:
+			return parametersSorting;
+		case ExpObject.TYPE_RBKEY:
+			return rbkeysSorting;
+		case ExpObject.TYPE_VARIABLE:
+			return variablesSorting;
+		default:
+			throw new RuntimeException("The specified expession object type is invalid!");
+		}
+	}
 }

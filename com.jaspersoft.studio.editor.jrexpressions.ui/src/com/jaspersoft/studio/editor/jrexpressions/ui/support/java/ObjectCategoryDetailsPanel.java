@@ -85,6 +85,8 @@ public class ObjectCategoryDetailsPanel extends Composite {
 	private StackLayout additionalDetailsStackLayout;
 	private ToolItem hideBuiltinParams;
 	private ToolItem hideBuiltinVariables;
+	private ToolItem sortIncreaseItems;
+	private ToolItem sortDecreaseItems;
 	private ObjectItemStyledLabelProvider categoryContentLblProvider;
 	private SashForm panelSashForm;
 	private ToolBar buttonsToolbar;
@@ -210,6 +212,32 @@ public class ObjectCategoryDetailsPanel extends Composite {
 			}
 		});
 		hideBuiltinVariables.setToolTipText(Messages.ObjectCategoryDetailsPanel_HideBuiltinVars);
+		sortIncreaseItems = new ToolItem(buttonsToolbar, SWT.CHECK);
+		sortIncreaseItems.setImage(
+				ResourceManager.getPluginImage(JRExpressionsUIPlugin.PLUGIN_ID, "/resources/icons/sort_increase.png")); //$NON-NLS-1$
+		sortIncreaseItems.setEnabled(true);
+		sortIncreaseItems.setSelection(false);
+		sortIncreaseItems.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				ExpressionEditorSupportUtil.toggleSortIncreaseItems(getExpObjectType(selItem));
+				sortDecreaseItems.setSelection(false);
+				refreshPanelUI(selItem);
+			}
+		});
+		sortDecreaseItems = new ToolItem(buttonsToolbar, SWT.CHECK);
+		sortDecreaseItems.setImage(
+				ResourceManager.getPluginImage(JRExpressionsUIPlugin.PLUGIN_ID, "/resources/icons/sort_decrease.png")); //$NON-NLS-1$
+		sortDecreaseItems.setEnabled(true);
+		sortDecreaseItems.setSelection(false);
+		sortDecreaseItems.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				ExpressionEditorSupportUtil.toggleSortDecreaseItems(getExpObjectType(selItem));
+				sortIncreaseItems.setSelection(false);
+				refreshPanelUI(selItem);
+			}
+		});
 		
 		additionalDetailsCmp=new Composite(panelSashForm, SWT.NONE);
 		additionalDetailsCmp.setLayoutData(layoutData);
@@ -217,6 +245,24 @@ public class ObjectCategoryDetailsPanel extends Composite {
 		additionalDetailsCmp.setLayout(additionalDetailsStackLayout);
 		
 		panelSashForm.setWeights(new int[]{40,60});
+	}
+	
+	private int getExpObjectType(ObjectCategoryItem selItem) {
+		switch (selItem.getCategory()) {
+		case FDATASET:
+		case FIELDS:
+			return ExpObject.TYPE_FIELD;
+		case PDATASET:
+		case PARAMETERS:
+			return ExpObject.TYPE_PARAM;
+		case RESOURCE_KEYS:
+			return ExpObject.TYPE_RBKEY;
+		case VDATASET:
+		case VARIABLES:
+			return ExpObject.TYPE_VARIABLE;
+		default:
+			return -1;
+		}
 	}
 
 	/**
@@ -238,6 +284,8 @@ public class ObjectCategoryDetailsPanel extends Composite {
 				hideBuiltinVariables.setSelection(!ExpressionEditorSupportUtil.isShowBuiltInVariables());
 				hideBuiltinParams.setEnabled(true);
 				hideBuiltinParams.setSelection(!ExpressionEditorSupportUtil.isShowBuiltInParameters());
+				sortDecreaseItems.setSelection(ExpressionEditorSupportUtil.isSortDecreaseItems(ExpObject.TYPE_PARAM));
+				sortIncreaseItems.setSelection(ExpressionEditorSupportUtil.isSortIncreaseItems(ExpObject.TYPE_PARAM));
 	            List<ExpObject> paramsList = new ArrayList<ExpObject>();
 	            Object paramsNodedata = selItem.getData();
 	            if(paramsNodedata instanceof List<?>) {
@@ -251,6 +299,8 @@ public class ObjectCategoryDetailsPanel extends Composite {
 				hideBuiltinVariables.setSelection(!ExpressionEditorSupportUtil.isShowBuiltInVariables());
 				hideBuiltinParams.setEnabled(false);
 				hideBuiltinParams.setSelection(!ExpressionEditorSupportUtil.isShowBuiltInParameters());
+				sortDecreaseItems.setSelection(ExpressionEditorSupportUtil.isSortDecreaseItems(ExpObject.TYPE_VARIABLE));
+				sortIncreaseItems.setSelection(ExpressionEditorSupportUtil.isSortIncreaseItems(ExpObject.TYPE_VARIABLE));
 	            List<ExpObject> variablesList=new ArrayList<ExpObject>();
 	            Object variablesNodeData = selItem.getData();
 	            if(variablesNodeData instanceof List<?>){
@@ -264,6 +314,8 @@ public class ObjectCategoryDetailsPanel extends Composite {
 				hideBuiltinVariables.setSelection(!ExpressionEditorSupportUtil.isShowBuiltInVariables());
 				hideBuiltinParams.setEnabled(false);
 				hideBuiltinParams.setSelection(!ExpressionEditorSupportUtil.isShowBuiltInParameters());
+				sortDecreaseItems.setSelection(ExpressionEditorSupportUtil.isSortDecreaseItems(ExpObject.TYPE_FIELD));
+				sortIncreaseItems.setSelection(ExpressionEditorSupportUtil.isSortIncreaseItems(ExpObject.TYPE_FIELD));
 	            List<ExpObject> fieldsList=new ArrayList<ExpObject>();
 	            Object fieldsNodeData = selItem.getData();
 	            if(fieldsNodeData instanceof List<?>){
@@ -276,12 +328,12 @@ public class ObjectCategoryDetailsPanel extends Composite {
 				hideBuiltinVariables.setSelection(!ExpressionEditorSupportUtil.isShowBuiltInVariables());
 				hideBuiltinParams.setEnabled(false);
 				hideBuiltinParams.setSelection(!ExpressionEditorSupportUtil.isShowBuiltInParameters());
+				sortDecreaseItems.setSelection(ExpressionEditorSupportUtil.isSortDecreaseItems(ExpObject.TYPE_RBKEY));
+				sortIncreaseItems.setSelection(ExpressionEditorSupportUtil.isSortIncreaseItems(ExpObject.TYPE_RBKEY));
 	            List<ExpObject> rbKeysList=new ArrayList<ExpObject>();
 	            Object rbKeysListData = selItem.getData();
 	            if(rbKeysListData instanceof List<?>){
-	            	for(String rbk : (List<String>)rbKeysListData){
-	            		rbKeysList.add(new ExpObject(rbk, ExpObject.TYPE_RBKEY, "java.lang.String"));
-	            	}
+	            	rbKeysList.addAll(getRBKeysDTOList((List<String>) rbKeysListData));
 	            }
 	            categoryDetails.addAll(rbKeysList);
 				break;
@@ -609,7 +661,7 @@ public class ObjectCategoryDetailsPanel extends Composite {
             }
             tmpParamList.add(new ExpObject(parameter));
         }
-        Collections.sort(tmpParamList);
+        reorderList(tmpParamList);
 		return tmpParamList;
 	}
 	
@@ -622,7 +674,7 @@ public class ObjectCategoryDetailsPanel extends Composite {
             }
             tmpVarList.add(new ExpObject(variable));
         }
-        Collections.sort(tmpVarList);
+        reorderList(tmpVarList);
 		return tmpVarList;
 	}
 	
@@ -632,8 +684,27 @@ public class ObjectCategoryDetailsPanel extends Composite {
             ExpObject eo = new ExpObject(fields.next());
             tmpFieldList.add(eo);
         }
-        Collections.sort(tmpFieldList);
+        reorderList(tmpFieldList);
 		return tmpFieldList;
+	}
+	
+	private List<ExpObject> getRBKeysDTOList(List<String> rbkeys){
+		List<ExpObject> rbKeysList=new ArrayList<ExpObject>();
+    	for(String rbk : rbkeys){
+    		rbKeysList.add(new ExpObject(rbk, ExpObject.TYPE_RBKEY, "java.lang.String"));
+    	}
+        reorderList(rbKeysList);
+		return rbKeysList;
+	}
+	
+	private void reorderList(List<ExpObject> items) {
+		if(ExpressionEditorSupportUtil.isSortDecreaseItems(getExpObjectType(selItem))){
+			Collections.sort(items);
+			Collections.reverse(items);
+		}
+		else if(ExpressionEditorSupportUtil.isSortIncreaseItems(getExpObjectType(selItem))){
+			Collections.sort(items);
+		}
 	}
 	
 }

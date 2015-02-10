@@ -15,14 +15,14 @@ package com.jaspersoft.studio.editor.expression;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.Set;
-import java.util.TreeSet;
 
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
 import net.sf.jasperreports.engine.JRDataset;
@@ -175,29 +175,23 @@ public final class ExpressionContextUtils {
 	 * "duplicate" variables. We use as key the variable name.
 	 */
 	private static List<JRVariable> getUniqueVariables(List<JRVariable> variables){
-		Set<JRVariable> results = new TreeSet<JRVariable>(new Comparator<JRVariable>() {
-			@Override
-			public int compare(JRVariable o1, JRVariable o2) {
-				return o1.getName().compareTo(o2.getName());
-			}
-		});
-		results.addAll(variables);
-		return new ArrayList<JRVariable>(results);
+		Map<String, JRVariable> variablesMap = new LinkedHashMap<String, JRVariable>();
+		for(JRVariable v : variables){
+			variablesMap.put(v.getName(), v);			
+		}
+		return new ArrayList<JRVariable>(variablesMap.values());
 	}
 	
 	/*
 	 * Returns a list of "unique" parameters. From the input collection we get rid of the
 	 * "duplicate" parameters. We use as key the parameter name.
 	 */
-	private static List<JRParameter> getUniqueParameters(List<JRParameter> parameters){
-		Set<JRParameter> results = new TreeSet<JRParameter>(new Comparator<JRParameter>() {
-			@Override
-			public int compare(JRParameter o1, JRParameter o2) {
-				return o1.getName().compareTo(o2.getName());
-			}
-		});
-		results.addAll(parameters);
-		return new ArrayList<JRParameter>(results);
+	private static List<JRParameter> getUniqueParameters(List<JRParameter> parameters){	
+		Map<String, JRParameter> parametersMap = new LinkedHashMap<String, JRParameter>();
+		for(JRParameter p : parameters){
+			parametersMap.put(p.getName(), p);			
+		}
+		return new ArrayList<JRParameter>(parametersMap.values());
 	}
 	
 	/*
@@ -205,14 +199,11 @@ public final class ExpressionContextUtils {
 	 * "duplicate" fields. We use as key the field name.
 	 */
 	private static List<JRField> getUniqueFields(List<JRField> fields){
-		Set<JRField> results = new TreeSet<JRField>(new Comparator<JRField>() {
-			@Override
-			public int compare(JRField o1, JRField o2) {
-				return o1.getName().compareTo(o2.getName());
-			}
-		});
-		results.addAll(fields);
-		return new ArrayList<JRField>(results);
+		Map<String, JRField> fieldsMap = new LinkedHashMap<String, JRField>();
+		for(JRField f : fields){
+			fieldsMap.put(f.getName(), f);			
+		}
+		return new ArrayList<JRField>(fieldsMap.values());
 	}
 	
 	/**
@@ -223,7 +214,7 @@ public final class ExpressionContextUtils {
 	 * @return
 	 */
 	public static List<String> getResourceBundleKeys(ExpressionContext expContext) {
-		Set<String> keys=new HashSet<String>();
+		Set<String> keys=new LinkedHashSet<String>();
 		for(JRDataset ds : expContext.getDatasets()) {
 			ResourceBundle rb = getResourceBundle(ds, expContext.getJasperReportsConfiguration());
 			if(rb!=null) {
@@ -231,7 +222,6 @@ public final class ExpressionContextUtils {
 			}
 		}
 		ArrayList<String> keysLst = new ArrayList<String>(keys);
-		Collections.sort(keysLst);
 		return keysLst;
 	}
 	
