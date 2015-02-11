@@ -106,9 +106,8 @@ public class NodeTransfer extends ByteArrayTransfer {
 			out.writeInt(nodes.length);
 
 			/* write markers */
-			for (int i = 0; i < nodes.length; i++) {
+			for (int i = 0; i < nodes.length; i++)
 				writeNode((ANode) nodes[i], out);
-			}
 			out.close();
 			bytes = byteOut.toByteArray();
 		} catch (IOException e) {
@@ -120,7 +119,11 @@ public class NodeTransfer extends ByteArrayTransfer {
 		return bytes;
 	}
 
-	private void writeNode(ANode node, ObjectOutputStream dataOut) throws IOException {
-		dataOut.writeObject(node);
+	private void writeNode(ANode node, ObjectOutputStream dataOut) {
+		try {
+			dataOut.writeObject(node);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

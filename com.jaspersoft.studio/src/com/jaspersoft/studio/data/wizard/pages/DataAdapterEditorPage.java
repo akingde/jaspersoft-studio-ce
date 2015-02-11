@@ -29,6 +29,7 @@ import org.eclipse.ui.PlatformUI;
 import com.jaspersoft.studio.data.ADataAdapterComposite;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterEditor;
+import com.jaspersoft.studio.data.DataAdapterFactory;
 import com.jaspersoft.studio.data.DataAdapterManager;
 import com.jaspersoft.studio.data.storage.ADataAdapterStorage;
 import com.jaspersoft.studio.messages.Messages;
@@ -158,8 +159,10 @@ public class DataAdapterEditorPage extends WizardPage implements WizardEndingSta
 		if (newDataAdapterDescriptor.getEditor() == dataAdapterEditor)
 			return;
 
-		setSubTitle(DataAdapterManager.findFactoryByDataAdapterClass(
-				newDataAdapterDescriptor.getDataAdapter().getClass().getName()).getLabel());
+		DataAdapterFactory daFactory = DataAdapterManager.findFactoryByDataAdapterClass(newDataAdapterDescriptor
+				.getDataAdapter().getClass().getName());
+		if (daFactory != null)
+			setSubTitle(daFactory.getLabel());
 		// 1. get the DataAdapterEditor
 		dataAdapterEditor = newDataAdapterDescriptor.getEditor();
 

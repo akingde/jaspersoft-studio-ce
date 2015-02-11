@@ -903,7 +903,7 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 				ReportInputControlsListWrapper.class, monitor);
 		if (crl != null) {
 			List<ReportInputControl> ics = new ArrayList<ReportInputControl>();
-			for (ResourceDescriptor r : rds) {
+			for (ResourceDescriptor r : rds) { 
 				String ruri = "repo:" + r.getUriString();
 				for (ReportInputControl ric : crl.getInputParameters()) {
 					if (ruri.equals(ric.getUri()))

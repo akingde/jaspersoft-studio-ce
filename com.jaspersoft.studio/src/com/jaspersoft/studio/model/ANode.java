@@ -460,7 +460,7 @@ public abstract class ANode implements INode, Serializable, IAdaptable, Cloneabl
 		return null;
 	}
 
-	private JasperReportsConfiguration jConfig;
+	private transient JasperReportsConfiguration jConfig;
 
 	public void setJasperConfiguration(JasperReportsConfiguration jConfig) {
 		this.jConfig = jConfig;
