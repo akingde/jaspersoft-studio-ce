@@ -121,7 +121,11 @@ public class PreferencesDataAdapterStorage extends ADataAdapterStorage {
 			// maybe name is the same, but if type changed, we should change dataadapter
 			if (oldDa != null && !oldDa.getClass().getCanonicalName().equals(dad.getClass().getCanonicalName())) 
 				removeDataAdapter(oldDa); 
-			addDataAdapter(dad);
+			//Add new data adapter only if it has a factory
+			DataAdapter adapter = dad.getDataAdapter();
+			String adapterClassName = adapter.getClass().getName();
+			DataAdapterFactory factory = DataAdapterManager.findFactoryByDataAdapterClass(adapterClassName);
+			if (factory != null) addDataAdapter(dad);
 		}
 	}
 
