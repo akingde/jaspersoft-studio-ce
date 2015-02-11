@@ -27,10 +27,8 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescript
 import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.server.Activator;
-import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.model.AFileResource;
 import com.jaspersoft.studio.server.model.MJar;
-import com.jaspersoft.studio.server.model.MJrxml;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
@@ -80,20 +78,9 @@ public class JrxmlExporter extends AExporter {
 					jrConfig.dispose();
 			}
 		}
-		if (f != null) {
-			if (res.getParent() instanceof MReportUnit && res instanceof MJrxml) {
-				ResourceDescriptor runitrd = ((MReportUnit) res.getParent())
-						.getValue();
-				runitrd = res.getWsClient().get(monitor, runitrd, null);
-				if (runitrd != null) {
-					for (ResourceDescriptor r : runitrd.getChildren()) {
-						if (r.getUriString().equals(rd.getUriString()))
-							f.setPersistentProperty(KEY_REPORT_ISMAIN,
-									Boolean.toString(r.isMainReport()));
-					}
-				}
-			}
-		}
+		if (f != null)
+			f.setPersistentProperty(KEY_REPORT_ISMAIN,
+					Boolean.toString(res.getValue().isMainReport()));
 		return f;
 	}
 

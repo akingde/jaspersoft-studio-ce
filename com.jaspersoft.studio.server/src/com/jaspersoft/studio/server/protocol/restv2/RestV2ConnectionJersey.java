@@ -61,7 +61,9 @@ import com.jaspersoft.jasperserver.dto.reports.inputcontrols.InputControlOption;
 import com.jaspersoft.jasperserver.dto.reports.inputcontrols.InputControlState;
 import com.jaspersoft.jasperserver.dto.reports.inputcontrols.ReportInputControl;
 import com.jaspersoft.jasperserver.dto.reports.inputcontrols.ReportInputControlsListWrapper;
+import com.jaspersoft.jasperserver.dto.resources.AbstractClientReportUnit;
 import com.jaspersoft.jasperserver.dto.resources.ClientFile;
+import com.jaspersoft.jasperserver.dto.resources.ClientFile.FileType;
 import com.jaspersoft.jasperserver.dto.resources.ClientResource;
 import com.jaspersoft.jasperserver.dto.resources.ClientResourceListWrapper;
 import com.jaspersoft.jasperserver.dto.resources.ClientResourceLookup;
@@ -339,7 +341,10 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 						// for newer versions, we should show the error
 					}
 				}
-				return Rest2Soap.getRD(this, crl);
+				rd = Rest2Soap.getRD(this, crl);
+				if (crl instanceof ClientFile)
+					setMainReportFlag(monitor, rd, (ClientFile) crl);
+				return rd;
 			}
 		} else if (obj instanceof String) {
 			rd.setData(((String) obj).getBytes());
@@ -348,6 +353,26 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 			return rd;
 		}
 		return null;
+	}
+
+	private void setMainReportFlag(IProgressMonitor monitor,
+			ResourceDescriptor rd, ClientFile cf) throws IOException, Exception {
+		if (monitor.isCanceled())
+			return;
+		if (cf.getType().equals(FileType.jrxml)) {
+			String uri = rd.getParentFolder();
+			if (rd.getParentFolder().endsWith("_files"))
+				uri = uri.substring(0, uri.length() - "_files".length());
+			WebTarget tgt = target.path("resources" + uri);
+			tgt = tgt.queryParam("expanded", "false");
+
+			Builder req = tgt.request("application/repository.file+" + FORMAT);
+			Object obj = toObj(connector.get(req, monitor), (Class<?>) null,
+					monitor);
+			if (obj instanceof AbstractClientReportUnit)
+				rd.setMainReport(((AbstractClientReportUnit<?>) obj).getJrxml()
+						.getUri().equals(cf.getUri()));
+		}
 	}
 
 	@Override
