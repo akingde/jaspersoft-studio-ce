@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.editor.gef.commands;
 
@@ -128,7 +124,7 @@ public class SetPageConstraintCommand extends Command {
 					uuid = ((JRBaseElement) destValue).getUUID().toString();
 				if (destValue instanceof JRCommonElement) {
 					JRCommonElement jce = (JRCommonElement) destValue;
-					// Commented for back-compatibility in 3.6. 
+					// Commented for back-compatibility in 3.6.
 					// Replaced with the following line.
 					// d.setSize(jce.getWidth(), jce.getHeight());
 					d.setSize(new Dimension(jce.getWidth(), jce.getHeight()));
