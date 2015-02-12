@@ -110,6 +110,8 @@ public class Messages extends NLS {
 	public static String DeleteColumnCellAction_tooltip;
 	public static String DeleteRowAction_name;
 	public static String DeleteRowAction_tooltip;
+	public static String SelectAllCellsAction_1;
+	public static String SelectAllElementsAction_1;
 	public static String UnGroupColumnsAction_title;
 	public static String UnGroupColumnsAction_tooltip;
 	static {

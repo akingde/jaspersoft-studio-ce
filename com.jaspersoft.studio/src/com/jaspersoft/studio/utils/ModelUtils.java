@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.utils;
 
@@ -31,6 +27,12 @@ import net.sf.jasperreports.components.map.ItemData;
 import net.sf.jasperreports.components.map.MapComponent;
 import net.sf.jasperreports.components.map.StandardItemData;
 import net.sf.jasperreports.components.map.StandardMapComponent;
+import net.sf.jasperreports.components.table.BaseColumn;
+import net.sf.jasperreports.components.table.Cell;
+import net.sf.jasperreports.components.table.GroupCell;
+import net.sf.jasperreports.components.table.StandardColumn;
+import net.sf.jasperreports.components.table.StandardColumnGroup;
+import net.sf.jasperreports.components.table.StandardTable;
 import net.sf.jasperreports.crosstabs.JRCrosstab;
 import net.sf.jasperreports.crosstabs.JRCrosstabCell;
 import net.sf.jasperreports.crosstabs.JRCrosstabColumnGroup;
@@ -38,6 +40,7 @@ import net.sf.jasperreports.crosstabs.JRCrosstabRowGroup;
 import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
 import net.sf.jasperreports.engine.JRBand;
+import net.sf.jasperreports.engine.JRChild;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRDatasetRun;
 import net.sf.jasperreports.engine.JRElement;
@@ -56,6 +59,7 @@ import net.sf.jasperreports.engine.JRReport;
 import net.sf.jasperreports.engine.JRSection;
 import net.sf.jasperreports.engine.JRVariable;
 import net.sf.jasperreports.engine.JasperReportsContext;
+import net.sf.jasperreports.engine.component.Component;
 import net.sf.jasperreports.engine.design.JRCompiler;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
@@ -110,7 +114,7 @@ public class ModelUtils {
 	public static final String[] FONT_SIZES = new String[] { "", "8", "9", "10", "11", "12", "14", "16", "18", "20", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$ //$NON-NLS-10$
 			"22", "24", "26" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	public static final String MAIN_DATASET = Messages.ModelUtils_13;
-	private static final String[] DEFAULT_LANGUAGES = new String[]{"bsh","groovy","java","javascript"};
+	private static final String[] DEFAULT_LANGUAGES = new String[] { "bsh", "groovy", "java", "javascript" };
 
 	public static JRDesignDataset getDataset(ANode node) {
 		ANode n = node.getParent();
@@ -736,20 +740,20 @@ public class ModelUtils {
 			if (partsList != null)
 				res.addAll(Arrays.asList(partsList));
 		}
-		if (jd.getGroups() != null){
+		if (jd.getGroups() != null) {
 			for (Object g : jd.getGroupsList()) {
 				JRDesignGroup gr = (JRDesignGroup) g;
 				if (gr.getGroupHeaderSection() != null) {
 					res.addAll(Arrays.asList(gr.getGroupHeaderSection().getParts()));
 				}
-				if(gr.getGroupFooterSection() != null){
+				if (gr.getGroupFooterSection() != null) {
 					res.addAll(Arrays.asList(gr.getGroupFooterSection().getParts()));
 				}
 			}
 		}
 		return res;
 	}
-	
+
 	public static List<JRDesignElement> getAllElements(JasperDesign jd) {
 		List<JRDesignElement> list = getAllGElements(jd);
 
@@ -758,10 +762,49 @@ public class ModelUtils {
 			JRDesignElement ele = list.get(i);
 			if (ele instanceof JRDesignCrosstab) {
 				list2.addAll(getCrosstabElements((JRDesignCrosstab) ele));
+			} else if (ele instanceof JRDesignComponentElement) {
+				Component cmp = ((JRDesignComponentElement) ele).getComponent();
+				if (cmp instanceof StandardTable) {
+					list2.addAll(getTableElements((StandardTable) cmp));
+				}
 			}
 		}
 		list.addAll(list2);
 		return list;
+	}
+
+	public static List<JRDesignElement> getTableElements(StandardTable table) {
+		List<JRDesignElement> list2 = new ArrayList<JRDesignElement>();
+		getTableCellElements(table.getColumns(), list2);
+		return list2;
+	}
+
+	public static void getTableCellElements(List<BaseColumn> cols, List<JRDesignElement> list2) {
+		for (BaseColumn c : cols) {
+			getTableCellElements(c.getTableHeader(), list2);
+			getTableCellElements(c.getTableFooter(), list2);
+			getTableCellElements(c.getColumnHeader(), list2);
+			getTableCellElements(c.getColumnFooter(), list2);
+			for (GroupCell gc : c.getGroupHeaders())
+				if (gc != null)
+					getTableCellElements(gc.getCell(), list2);
+			for (GroupCell gc : c.getGroupFooters())
+				if (gc != null)
+					getTableCellElements(gc.getCell(), list2);
+			if (c instanceof StandardColumn)
+				getTableCellElements(((StandardColumn) c).getDetailCell(), list2);
+			if (c instanceof StandardColumnGroup)
+				getTableCellElements(((StandardColumnGroup) c).getColumns(), list2);
+		}
+	}
+
+	public static void getTableCellElements(Cell cell, List<JRDesignElement> list2) {
+		if (cell == null)
+			return;
+		for (JRChild child : cell.getChildren()) {
+			if (child instanceof JRDesignElement)
+				list2.add((JRDesignElement) child);
+		}
 	}
 
 	public static List<JRDesignElement> getGElements(JRElementGroup gr) {
@@ -777,7 +820,7 @@ public class ModelUtils {
 		}
 		return res;
 	}
-	
+
 	public static List<JRPart> getPartElements(JRElementGroup gr) {
 		List<JRPart> res = new ArrayList<JRPart>();
 		for (Object el : gr.getChildren()) {
@@ -1577,50 +1620,49 @@ public class ModelUtils {
 
 	public static ItemData getSingleMarkerData(MapComponent map) {
 		List<ItemData> markerDataList = map.getMarkerDataList();
-		if(markerDataList!=null && !markerDataList.isEmpty()) {
+		if (markerDataList != null && !markerDataList.isEmpty()) {
 			return markerDataList.get(0);
-		}
-		else {
+		} else {
 			return null;
 		}
 	}
-	
+
 	/**
 	 * Returns the list of available languages by default.
 	 */
 	public static String[] getDefaultReportLanguages() {
 		return DEFAULT_LANGUAGES;
 	}
-	
+
 	/**
-	 * Verifies if the specified element belongs to a dataset.
-	 * It makes sense for the element to be a field, variable or parameter.
+	 * Verifies if the specified element belongs to a dataset. It makes sense for the element to be a field, variable or
+	 * parameter.
 	 * 
-	 * @param element the element to check
-	 * @param datasetName the (target) dataset name
+	 * @param element
+	 *          the element to check
+	 * @param datasetName
+	 *          the (target) dataset name
 	 * @return <code>true</code> if the element belongs to the dataset, <code>false</code> otherwise
 	 */
 	public static boolean belongsToDataset(APropertyNode element, String datasetName) {
 		Assert.isNotNull(element);
 		Assert.isNotNull(datasetName);
-		if(datasetName!=null) {
+		if (datasetName != null) {
 			ANode upperParent = element.getParent().getParent();
-			if(upperParent instanceof MDataset) {
-				JRDesignDataset value = ((MDataset)upperParent).getValue();
+			if (upperParent instanceof MDataset) {
+				JRDesignDataset value = ((MDataset) upperParent).getValue();
 				String fDsName = value.getName();
 				return datasetName.equals(fDsName);
-			}
-			else if(upperParent instanceof MReport) {
-				MDataset mainDS = (MDataset) ((MReport)upperParent).getPropertyValue(JasperDesign.PROPERTY_MAIN_DATASET);
+			} else if (upperParent instanceof MReport) {
+				MDataset mainDS = (MDataset) ((MReport) upperParent).getPropertyValue(JasperDesign.PROPERTY_MAIN_DATASET);
 				String mainDSName = (String) mainDS.getPropertyValue(JRDesignDataset.PROPERTY_NAME);
-				return datasetName.equals(mainDSName);				
+				return datasetName.equals(mainDSName);
 			}
 		}
 		return false;
 	}
 
-
-	public static String getReportPropertyValue(JasperDesign jd, String key, String defaultValue){
+	public static String getReportPropertyValue(JasperDesign jd, String key, String defaultValue) {
 		String value = jd.getProperty(key);
 		return value != null ? value : defaultValue;
 	}

@@ -27,6 +27,8 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.components.section.name.NamedSubeditor;
 import com.jaspersoft.studio.components.table.action.EditTableStyleAction;
 import com.jaspersoft.studio.components.table.action.RemoveTableStylesAction;
+import com.jaspersoft.studio.components.table.action.SelectAllCellsAction;
+import com.jaspersoft.studio.components.table.action.SelectAllElementsAction;
 import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.components.table.model.MTable;
 import com.jaspersoft.studio.components.table.model.column.action.CreateColumnAfterAction;
@@ -61,7 +63,8 @@ public class TableEditor extends NamedSubeditor {
 	public TableEditor(JasperReportsConfiguration jrContext) {
 		super(jrContext);
 		setPartName(getDefaultPartName());
-		setPartImage(JaspersoftStudioPlugin.getInstance().getImage(MTable.getIconDescriptor().getIcon16()));
+		setPartImage(JaspersoftStudioPlugin.getInstance().getImage(
+				MTable.getIconDescriptor().getIcon16()));
 	}
 
 	/*
@@ -82,18 +85,25 @@ public class TableEditor extends NamedSubeditor {
 		graphicalViewer.setEditPartFactory(new JasperDesignEditPartFactory());
 
 		// set rulers providers
-		RulerProvider provider = new ReportRulerProvider(new ReportRuler(true, RulerProvider.UNIT_PIXELS));
-		graphicalViewer.setProperty(RulerProvider.PROPERTY_HORIZONTAL_RULER, provider);
+		RulerProvider provider = new ReportRulerProvider(new ReportRuler(true,
+				RulerProvider.UNIT_PIXELS));
+		graphicalViewer.setProperty(RulerProvider.PROPERTY_HORIZONTAL_RULER,
+				provider);
 
-		provider = new ReportRulerProvider(new ReportRuler(false, RulerProvider.UNIT_PIXELS));
-		graphicalViewer.setProperty(RulerProvider.PROPERTY_VERTICAL_RULER, provider);
+		provider = new ReportRulerProvider(new ReportRuler(false,
+				RulerProvider.UNIT_PIXELS));
+		graphicalViewer.setProperty(RulerProvider.PROPERTY_VERTICAL_RULER,
+				provider);
 
-		Boolean isRulerVisible = jrContext.getPropertyBoolean(RulersGridPreferencePage.P_PAGE_RULERGRID_SHOWRULER);
+		Boolean isRulerVisible = jrContext
+				.getPropertyBoolean(RulersGridPreferencePage.P_PAGE_RULERGRID_SHOWRULER);
 
-		graphicalViewer.setProperty(RulerProvider.PROPERTY_RULER_VISIBILITY, isRulerVisible);
+		graphicalViewer.setProperty(RulerProvider.PROPERTY_RULER_VISIBILITY,
+				isRulerVisible);
 
 		createAdditionalActions();
-		graphicalViewer.setKeyHandler(new JSSGraphicalViewerKeyHandler(graphicalViewer));
+		graphicalViewer.setKeyHandler(new JSSGraphicalViewerKeyHandler(
+				graphicalViewer));
 	}
 
 	@Override
@@ -120,6 +130,14 @@ public class TableEditor extends NamedSubeditor {
 		action = new EditTableStyleAction(this);
 		registry.registerAction(action);
 		selectionActions.add(EditTableStyleAction.ID);
+
+		action = new SelectAllElementsAction(this);
+		registry.registerAction(action);
+		selectionActions.add(SelectAllElementsAction.ID);
+
+		action = new SelectAllCellsAction(this);
+		registry.registerAction(action);
+		selectionActions.add(SelectAllCellsAction.ID);
 
 		action = new CreateColumnBeginAction(this);
 		registry.registerAction(action);

@@ -28,12 +28,22 @@ import com.jaspersoft.studio.model.MCollection;
 
 public abstract class AMCollection extends MCollection {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
-	
+
 	public static final String REFRESH_COLUM_NAMES = "refreshColumnNamesRequest";
 
 	public AMCollection(ANode parent, JRDesignComponentElement jrDataset,
 			String property) {
 		super(parent, jrDataset, property);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.jaspersoft.studio.model.ANode#getValue()
+	 */
+	@Override
+	public JRDesignComponentElement getValue() {
+		return (JRDesignComponentElement) super.getValue();
 	}
 
 	@Override
@@ -52,6 +62,12 @@ public abstract class AMCollection extends MCollection {
 				table.getEventSupport().addPropertyChangeListener(this);
 		}
 		super.setValue(value);
+	}
+
+	public StandardTable getStandardTable() {
+		if (getValue() == null)
+			return null;
+		return (StandardTable) getValue().getComponent();
 	}
 
 	@Override
@@ -88,7 +104,8 @@ public abstract class AMCollection extends MCollection {
 
 				MTable mTable = (MTable) getParent();
 				if (mTable == null) {
-					((JRChangeEventsSupport)evt.getSource()).getEventSupport().removePropertyChangeListener(this);
+					((JRChangeEventsSupport) evt.getSource()).getEventSupport()
+							.removePropertyChangeListener(this);
 				} else {
 					mTable.getTableManager().refresh();
 				}
@@ -96,7 +113,7 @@ public abstract class AMCollection extends MCollection {
 		}
 		super.propertyChange(evt);
 	}
-	
+
 	public abstract String getCellEvent();
 
 	public abstract void createColumn(ANode mth, BaseColumn bc, int i, int index);
