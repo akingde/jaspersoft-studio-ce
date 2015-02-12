@@ -276,6 +276,7 @@ public class MBackgrounImage extends APropertyNode implements IGraphicElement {
 		if (fileName == null) return null;
 		if (fileName.equals(lastPath)) return lastImageData;
 		lastPath = fileName;
+		lastImageData = null;
 		try {
 			FileInputStream stream = new FileInputStream(fileName);
 			Image tempImage = new Image(null, stream);
