@@ -115,8 +115,8 @@ public class CreateColumnCommand extends Command {
 		boolean createTFooter = true;
 		boolean createCHeader = true;
 		boolean createCFooter = true;
-		boolean createGHeader = true;
-		boolean createGFooter = true;
+		boolean createGHeader = false;
+		boolean createGFooter = false;
 		
 		List<BaseColumn> columns = TableUtil.getAllColumns(jrTable);
 		BaseColumn sibling = null;
