@@ -110,8 +110,7 @@ public class CreateColumnCommand extends Command {
 		}
 	}
 
-	public StandardBaseColumn createColumn(JasperDesign jrDesign, StandardTable jrTable) {
-		
+	public StandardBaseColumn createColumn(JasperDesign jrDesign, StandardTable jrTable) {		
 		boolean createTHeader = true;
 		boolean createTFooter = true;
 		boolean createCHeader = true;
@@ -125,8 +124,7 @@ public class CreateColumnCommand extends Command {
 			if (index >= columns.size()) sibling = columns.get(columns.size()-1);
 			else if (index<=0) sibling = columns.get(columns.size()-1);
 			else sibling = columns.get(index);
-		}
-		
+		}		
 		if (sibling != null){
 			createTHeader = sibling.getTableHeader() != null;
 			createTFooter = sibling.getTableFooter() != null;
@@ -134,8 +132,7 @@ public class CreateColumnCommand extends Command {
 			createCFooter = sibling.getColumnFooter() != null;
 			if (sibling.getGroupHeaders().size() > 0) createGHeader = sibling.getGroupHeaders().get(0) != null;
 			if (sibling.getGroupFooters().size() > 0) createGFooter = sibling.getGroupFooters().get(0) != null;
-		}
-		
+		}		
 		return CreateColumnCommand.addColWithSibling(jrDesign, jrTable, createTHeader, createTFooter, createCHeader, createCFooter, createGHeader, createGFooter, sibling);
 	}
 

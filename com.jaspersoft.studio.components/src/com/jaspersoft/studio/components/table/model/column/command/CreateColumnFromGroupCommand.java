@@ -15,6 +15,7 @@ package com.jaspersoft.studio.components.table.model.column.command;
 import java.util.Iterator;
 import java.util.List;
 
+import net.sf.jasperreports.components.table.BaseColumn;
 import net.sf.jasperreports.components.table.DesignCell;
 import net.sf.jasperreports.components.table.StandardBaseColumn;
 import net.sf.jasperreports.components.table.StandardColumn;
@@ -31,6 +32,7 @@ import com.jaspersoft.studio.components.table.model.column.MColumn;
 import com.jaspersoft.studio.components.table.model.columngroup.MColumnGroup;
 import com.jaspersoft.studio.components.table.model.columngroup.MColumnGroupCell;
 import com.jaspersoft.studio.components.table.util.TableColumnSize;
+
 /*
  * link nodes & together.
  * 
@@ -46,7 +48,8 @@ public class CreateColumnFromGroupCommand extends Command {
 
 	private int index;
 
-	public CreateColumnFromGroupCommand(MColumnGroup destNode, MColumn srcNode, int index) {
+	public CreateColumnFromGroupCommand(MColumnGroup destNode, MColumn srcNode,
+			int index) {
 		super();
 		this.jrGroup = (StandardColumnGroup) destNode.getValue();
 		this.index = index;
@@ -55,7 +58,8 @@ public class CreateColumnFromGroupCommand extends Command {
 		this.jrDesign = destNode.getJasperDesign();
 	}
 
-	public CreateColumnFromGroupCommand(MColumnGroupCell destNode, MColumn srcNode, int index) {
+	public CreateColumnFromGroupCommand(MColumnGroupCell destNode,
+			MColumn srcNode, int index) {
 		super();
 		this.jrGroup = (StandardColumnGroup) destNode.getValue();
 		this.index = index;
@@ -65,42 +69,85 @@ public class CreateColumnFromGroupCommand extends Command {
 	}
 
 	protected StandardBaseColumn createColumn() {
+		boolean createTHeader = true;
+		boolean createTFooter = true;
+		boolean createCHeader = true;
+		boolean createCFooter = true;
+		boolean createGHeader = false;
+		boolean createGFooter = false;
+
+		List<BaseColumn> columns = TableUtil.getAllColumns(jrTable);
+		BaseColumn sibling = null;
+		if (columns.size() > 0) {
+			if (index >= columns.size())
+				sibling = columns.get(columns.size() - 1);
+			else if (index <= 0)
+				sibling = columns.get(columns.size() - 1);
+			else
+				sibling = columns.get(index);
+		}
+		if (sibling != null) {
+			createTHeader = sibling.getTableHeader() != null;
+			createTFooter = sibling.getTableFooter() != null;
+			createCHeader = sibling.getColumnHeader() != null;
+			createCFooter = sibling.getColumnFooter() != null;
+			if (sibling.getGroupHeaders().size() > 0)
+				createGHeader = sibling.getGroupHeaders().get(0) != null;
+			if (sibling.getGroupFooters().size() > 0)
+				createGFooter = sibling.getGroupFooters().get(0) != null;
+		}
+
 		StandardColumn col = new StandardColumn();
 		col.setWidth(40);
-
-		DesignCell cell = new DesignCell();
-		cell.setHeight(TableColumnSize.getInitGroupHeight(jrTable, jrGroup, TableUtil.TABLE_HEADER, null));
-		col.setTableHeader(cell);
+		DesignCell cell = null;
+		if (createTHeader) {
+			cell = new DesignCell();
+			cell.setHeight(TableColumnSize.getInitGroupHeight(jrTable, jrGroup,
+					TableUtil.TABLE_HEADER, null));
+			col.setTableHeader(cell);
+		}
+		if (createTFooter) {
+			cell = new DesignCell();
+			cell.setHeight(TableColumnSize.getInitGroupHeight(jrTable, jrGroup,
+					TableUtil.TABLE_FOOTER, null));
+			col.setTableFooter(cell);
+		}
+		if (createCHeader) {
+			cell = new DesignCell();
+			cell.setHeight(TableColumnSize.getInitGroupHeight(jrTable, jrGroup,
+					TableUtil.COLUMN_HEADER, null));
+			col.setColumnHeader(cell);
+		}
+		if (createCFooter) {
+			cell = new DesignCell();
+			cell.setHeight(TableColumnSize.getInitGroupHeight(jrTable, jrGroup,
+					TableUtil.COLUMN_FOOTER, null));
+			col.setColumnFooter(cell);
+		}
 
 		cell = new DesignCell();
-		cell.setHeight(TableColumnSize.getInitGroupHeight(jrTable, jrGroup, TableUtil.TABLE_FOOTER, null));
-		col.setTableFooter(cell);
-
-		cell = new DesignCell();
-		cell.setHeight(TableColumnSize.getInitGroupHeight(jrTable, jrGroup, TableUtil.COLUMN_HEADER, null));
-		col.setColumnHeader(cell);
-
-		cell = new DesignCell();
-		cell.setHeight(TableColumnSize.getInitGroupHeight(jrTable, jrGroup, TableUtil.COLUMN_FOOTER, null));
-		col.setColumnFooter(cell);
-
-		cell = new DesignCell();
-		cell.setHeight(TableColumnSize.getInitGroupHeight(jrTable, jrGroup, TableUtil.COLUMN_DETAIL, null));
+		cell.setHeight(TableColumnSize.getInitGroupHeight(jrTable, jrGroup,
+				TableUtil.COLUMN_DETAIL, null));
 		col.setDetailCell(cell);
 
 		List<?> groupsList = TableUtil.getGroupList(jrTable, jrDesign);
 		if (groupsList != null)
 			for (Iterator<?> it = groupsList.iterator(); it.hasNext();) {
 				JRDesignGroup jrDesignGroup = (JRDesignGroup) it.next();
-				cell = new DesignCell();
-				cell.setHeight(TableColumnSize.getInitGroupHeight(jrTable, jrGroup, TableUtil.COLUMN_GROUP_HEADER,
-						jrDesignGroup.getName()));
-				col.setGroupHeader(jrDesignGroup.getName(), cell);
-
-				cell = new DesignCell();
-				cell.setHeight(TableColumnSize.getInitGroupHeight(jrTable, jrGroup, TableUtil.COLUMN_GROUP_FOOTER,
-						jrDesignGroup.getName()));
-				col.setGroupFooter(jrDesignGroup.getName(), cell);
+				if (createGHeader) {
+					cell = new DesignCell();
+					cell.setHeight(TableColumnSize.getInitGroupHeight(jrTable,
+							jrGroup, TableUtil.COLUMN_GROUP_HEADER,
+							jrDesignGroup.getName()));
+					col.setGroupHeader(jrDesignGroup.getName(), cell);
+				}
+				if (createGFooter) {
+					cell = new DesignCell();
+					cell.setHeight(TableColumnSize.getInitGroupHeight(jrTable,
+							jrGroup, TableUtil.COLUMN_GROUP_FOOTER,
+							jrDesignGroup.getName()));
+					col.setGroupFooter(jrDesignGroup.getName(), cell);
+				}
 			}
 		return col;
 	}
@@ -119,7 +166,8 @@ public class CreateColumnFromGroupCommand extends Command {
 			jrGroup.addColumn(index, jrColumn);
 		else
 			jrGroup.addColumn(jrColumn);
-		TableColumnSize.setGroupWidth2Top(jrTable.getColumns(), jrGroup, jrColumn.getWidth());
+		TableColumnSize.setGroupWidth2Top(jrTable.getColumns(), jrGroup,
+				jrColumn.getWidth());
 	}
 
 	/*
@@ -141,6 +189,7 @@ public class CreateColumnFromGroupCommand extends Command {
 	public void undo() {
 		index = jrGroup.getColumns().indexOf(jrColumn);
 		jrGroup.removeColumn(jrColumn);
-		TableColumnSize.setGroupWidth2Top(jrTable.getColumns(), jrGroup, -jrColumn.getWidth());
+		TableColumnSize.setGroupWidth2Top(jrTable.getColumns(), jrGroup,
+				-jrColumn.getWidth());
 	}
 }
