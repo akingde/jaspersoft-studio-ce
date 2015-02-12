@@ -269,16 +269,16 @@ public class HyperlinkSection extends AbstractSection {
 		if (hideList == null){
 			hideList = new HashMap<String, HyperlinkSection.ElementHider[]>();
 			hideList.put(linkTypeItems[0], new ElementHider[]{tooltip}); // HyperlinkTypeEnum.NONE
-			hideList.put(linkTypeItems[1], new ElementHider[]{tooltip, parameters, reference}); // HyperlinkTypeEnum.REFERENCE
-			hideList.put(linkTypeItems[2], new ElementHider[]{tooltip, parameters, anchor}); // HyperlinkTypeEnum.LOCAL_ANCHOR
-			hideList.put(linkTypeItems[3], new ElementHider[]{tooltip, parameters, page}); // HyperlinkTypeEnum.LOCAL_PAGE
-			hideList.put(linkTypeItems[4], new ElementHider[]{tooltip, parameters, reference, anchor}); // HyperlinkTypeEnum.REMOTE_ANCHOR
-			hideList.put(linkTypeItems[5], new ElementHider[]{tooltip, parameters, reference, page}); // HyperlinkTypeEnum.REMOTE_PAGE
+			hideList.put(linkTypeItems[1], new ElementHider[]{tooltip, reference}); // HyperlinkTypeEnum.REFERENCE
+			hideList.put(linkTypeItems[2], new ElementHider[]{tooltip, anchor}); // HyperlinkTypeEnum.LOCAL_ANCHOR
+			hideList.put(linkTypeItems[3], new ElementHider[]{tooltip, page}); // HyperlinkTypeEnum.LOCAL_PAGE
+			hideList.put(linkTypeItems[4], new ElementHider[]{tooltip, reference, anchor}); // HyperlinkTypeEnum.REMOTE_ANCHOR
+			hideList.put(linkTypeItems[5], new ElementHider[]{tooltip, reference, page}); // HyperlinkTypeEnum.REMOTE_PAGE
 			for(int i=6;i<linkTypeItems.length;i++) {
 				// the contributed ones...
-				hideList.put(linkTypeItems[i], new ElementHider[]{tooltip, parameters, reference, anchor, page});
+				hideList.put(linkTypeItems[i], new ElementHider[]{tooltip, parameters});
 			}
-			hideList.put("Custom", new ElementHider[]{tooltip, parameters, reference, anchor, page}); //$NON-NLS-1$
+			hideList.put("Custom", new ElementHider[]{tooltip, parameters}); //$NON-NLS-1$
 		}
 	}
 	
