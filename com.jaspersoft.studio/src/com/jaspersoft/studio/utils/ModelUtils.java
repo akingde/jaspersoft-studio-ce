@@ -80,8 +80,6 @@ import net.sf.jasperreports.engine.util.JRSaver;
 import net.sf.jasperreports.engine.util.MarkupProcessorFactory;
 
 import org.eclipse.core.runtime.Assert;
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.gef.EditPart;
@@ -1499,16 +1497,8 @@ public class ModelUtils {
 		for (HyperlinkTypeEnum type : HyperlinkTypeEnum.values()) {
 			alltypes.add(type.getName());
 		}
-		// Add also the contributed hyperlink types
-		IConfigurationElement[] contributedElements = Platform.getExtensionRegistry().getConfigurationElementsFor(
-				"com.jaspersoft.studio.hyperlinkTypes"); //$NON-NLS-1$
-		if (contributedElements != null) {
-			for (IConfigurationElement el : contributedElements) {
-				String type = el.getAttribute("type"); //$NON-NLS-1$
-				alltypes.add(type);
-			}
-		}
-
+		// Contributed ones
+		alltypes.addAll(JaspersoftStudioPlugin.getExtensionManager().getContributedHyperlinkTypes());
 		// Remove filtered types
 		for (HyperlinkTypeEnum t : filteredTypes) {
 			alltypes.remove(t.getName());

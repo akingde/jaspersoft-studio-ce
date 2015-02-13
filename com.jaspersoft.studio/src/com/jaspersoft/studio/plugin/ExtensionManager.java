@@ -40,6 +40,7 @@ import com.jaspersoft.studio.editor.expression.IExpressionEditorSupportFactory;
 import com.jaspersoft.studio.editor.preview.PreviewModeDetails;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.util.HyperlinkDefaultParameter;
 import com.jaspersoft.studio.repository.IRepositoryViewProvider;
 import com.jaspersoft.studio.style.view.TemplateViewProvider;
 import com.jaspersoft.studio.templates.TemplateProvider;
@@ -49,6 +50,9 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 public class ExtensionManager {
 
 	private static Map<Class<?>, IComponentFactory> factoryByNodeType = new HashMap<Class<?>, IComponentFactory>();
+	private List<IEditorContributor> eContributor = new ArrayList<IEditorContributor>();
+	private List<String> customHyperlinkTypes;
+	private Map<String, List<HyperlinkDefaultParameter>> defaultHyperlinkParametersByCustomType;
 
 	public void init() {
 		IConfigurationElement[] config = Platform.getExtensionRegistry().getConfigurationElementsFor(
@@ -396,8 +400,6 @@ public class ExtensionManager {
 		return null;
 	}
 
-	private List<IEditorContributor> eContributor = new ArrayList<IEditorContributor>();
-
 	public void onLoad(JasperDesign jd, EditorPart editor) {
 		for (IEditorContributor f : eContributor)
 			f.onLoad(jd, editor);
@@ -473,5 +475,60 @@ public class ExtensionManager {
 	 */
 	public List<PreviewModeDetails> getAllPreviewModeDetails() {
 		return getAllPreviewModeDetails(null);
+	}
+	
+	/**
+	 * Return the list of all contributed hyperlink types.
+	 * <p> 
+	 * 
+	 * A plugin can contribute custom hyperlink through the extension point with id
+	 * <code>com.jaspersoft.studio.hyperlinkTypes</code>.
+	 * 
+	 * @return list of custom hyperlink types
+	 */
+	public List<String> getContributedHyperlinkTypes() {
+		if(customHyperlinkTypes==null) {
+			IConfigurationElement[] contributedElements = Platform.getExtensionRegistry().getConfigurationElementsFor(
+					"com.jaspersoft.studio.hyperlinkTypes"); //$NON-NLS-1$
+			if (contributedElements != null && contributedElements.length!=0) {
+				customHyperlinkTypes = new ArrayList<String>();
+				defaultHyperlinkParametersByCustomType = new HashMap<String, List<HyperlinkDefaultParameter>>(contributedElements.length);
+				for (IConfigurationElement el : contributedElements) {
+					String type = el.getAttribute("type"); //$NON-NLS-1$
+					customHyperlinkTypes.add(type);
+					IConfigurationElement[] parameters = el.getChildren();
+					List<HyperlinkDefaultParameter> defaultParametersLst = new ArrayList<HyperlinkDefaultParameter>();
+					if(parameters!=null) {
+						for(IConfigurationElement p : parameters){
+							String parameterName = p.getAttribute("name");
+							String defaultValue = p.getAttribute("defaultValue");
+							defaultParametersLst.add(new HyperlinkDefaultParameter(parameterName, defaultValue));
+						}
+					}
+					defaultHyperlinkParametersByCustomType.put(type, defaultParametersLst);
+				}
+			}
+			else {
+				customHyperlinkTypes = new ArrayList<String>(0);
+				defaultHyperlinkParametersByCustomType = new HashMap<String, List<HyperlinkDefaultParameter>>(0);
+			}
+		}
+		return customHyperlinkTypes;
+	}
+
+	/**
+	 * Returns a list, maybe empty, of default parameters that can be suggested when choosing
+	 * the specified hyperlink type.
+	 * 
+	 * @param hyperlinkType
+	 * @return the list of default parameters, if any, associated to the hyperlink
+	 */
+	public List<HyperlinkDefaultParameter> getDefaultParametersForCustomHyperlink(String hyperlinkType) {
+		if(defaultHyperlinkParametersByCustomType==null) {
+			// Init the custom hyperlink types extension point information
+			getContributedHyperlinkTypes();
+		}
+		List<HyperlinkDefaultParameter> list = defaultHyperlinkParametersByCustomType.get(hyperlinkType);
+		return list!=null ? list : new ArrayList<HyperlinkDefaultParameter>(0);
 	}
 }

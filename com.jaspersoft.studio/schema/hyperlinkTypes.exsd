@@ -50,6 +50,9 @@ These ones can be used together with the original ones provided by the net.sf.ja
 
    <element name="hyperlinkType">
       <complexType>
+         <sequence minOccurs="0" maxOccurs="unbounded">
+            <element ref="suggestedParameter"/>
+         </sequence>
          <attribute name="id" type="string" use="required">
             <annotation>
                <documentation>
@@ -61,6 +64,25 @@ These ones can be used together with the original ones provided by the net.sf.ja
             <annotation>
                <documentation>
                   The Type string representation that will be saved in the JRXML report file. It will be saved in the hyperlinkType attribute as for example hyperlinkType=&quot;contributed_type_value&quot;.
+               </documentation>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="suggestedParameter">
+      <complexType>
+         <attribute name="name" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="defaultValue" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
                </documentation>
             </annotation>
          </attribute>

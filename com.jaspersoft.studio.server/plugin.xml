@@ -233,6 +233,9 @@
       <hyperlinkType
             id="com.jaspersoft.studio.server.hyperlink.types.reportExecution"
             type="ReportExecution">
+            <suggestedParameter
+                  name="_report" defaultValue="/public/Samples/Reports/MyReport">
+            </suggestedParameter>
       </hyperlinkType>
    </extension>
    <extension
