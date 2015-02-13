@@ -64,6 +64,13 @@ public class Messages extends NLS {
 	public static String CompileDialog_dialogTitle;
 	public static String CompileDialog_endCompilation;
 	public static String CompileDialog_startCompilation;
+	public static String ConsoleExecuter_checkBadCommand1;
+	public static String ConsoleExecuter_checkBadCommand2;
+	public static String ConsoleExecuter_checkSuccess;
+	public static String ConsoleExecuter_checkVersionStart;
+	public static String ConsoleExecuter_checkWrongVersion1;
+	public static String ConsoleExecuter_checkWrongVersion2;
+	public static String ConsoleExecuter_checkWrongVersion3;
 	public static String BuildComponentHandler_errorMessage;
 	public static String BuildComponentHandler_errorTitle;
 	public static String CustomVisualizationComponentLicensePage_acceptLicensesButton;

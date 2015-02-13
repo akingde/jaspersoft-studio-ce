@@ -22,6 +22,10 @@ public class CustomVisualizationActivator extends AbstractJRUIPlugin {
 
 	// The plug-in ID
 	public static final String PLUGIN_ID = "com.jaspersoft.studio.components.customvisualization"; //$NON-NLS-1$
+	
+	public static final String JAVA_PATH_PROPERTY = "com.jaspersoft.studio.components.customvisualization.javapath";
+	
+	public static final String SCRIPTS_PATH = "net.sf.jasperreports.web.resource.pattern.customvisualization.scripts";
 
 	// The shared instance
 	private static CustomVisualizationActivator plugin;
@@ -88,9 +92,9 @@ public class CustomVisualizationActivator extends AbstractJRUIPlugin {
 				PreferencesUtils.storeJasperReportsProperty(CVConstants.CV_REQUIREJS_PROPERTY, pathToRequireJs);
 			}
 			
-			if (PreferencesUtils.getJasperReportsProperty("net.sf.jasperreports.web.resource.pattern.customvisualization.scripts") == null)
+			if (PreferencesUtils.getJasperReportsProperty(SCRIPTS_PATH) == null)
 			{
-				PreferencesUtils.storeJasperReportsProperty("net.sf.jasperreports.web.resource.pattern.customvisualization.scripts", "com/jaspersoft/jasperreports/customvisualization/resources/require/.*");
+				PreferencesUtils.storeJasperReportsProperty(SCRIPTS_PATH, "com/jaspersoft/jasperreports/customvisualization/resources/require/.*");
 			}
 	}
 }
