@@ -58,6 +58,7 @@ public class Messages extends NLS {
 	public static String EditServerAction_jobname;
 	public static String EditServerAction_taskname;
 	public static String EditServerAction_title;
+	public static String EmptyStringValidator_EmptyError;
 	public static String ExportMetadataAction_0;
 	public static String ExportMetadataAction_1;
 	public static String ExportMetadataWizard_0;
@@ -307,6 +308,9 @@ public class Messages extends NLS {
 	public static String RunReportUnitAction_1;
 	public static String RunReportUnitAction_2;
 	public static String RunReportUnitAction_3;
+	public static String UsernameValidator_ErrorMsgNoSpaceChars;
+	public static String UsernameValidator_ErrorMsgNotAllowedChars;
+	public static String UsernameValidator_ErrorMsgUsernameTooLong;
 	public static String WSClient_errorWithMessage;
 	public static String WSClient_errorWithoutMessage;
 	static {
