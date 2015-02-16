@@ -283,8 +283,7 @@ public class MDataset extends APropertyNode implements ICopyable {
 		if (id.equals(JRDesignDataset.PROPERTY_SCRIPTLET_CLASS))
 			return jrDataset.getScriptletClass();
 		if (id.equals(PROPERTY_MAP)) {
-			// to avoid duplication I remove it first
-			JRPropertiesMap pmap = jrDataset.getPropertiesMap();
+			JRPropertiesMap pmap = jrDataset.getPropertiesMap().cloneProperties();
 			return pmap;
 		}
 		if (id.equals(JRDesignDataset.PROPERTY_WHEN_RESOURCE_MISSING_TYPE))
@@ -333,6 +332,7 @@ public class MDataset extends APropertyNode implements ICopyable {
 		} else if (id.equals(JRDesignDataset.PROPERTY_FILTER_EXPRESSION))
 			jrDataset.setFilterExpression(ExprUtil.setValues(jrDataset.getFilterExpression(), value));
 		else if (id.equals(PROPERTY_MAP)) {
+			// to avoid duplication I remove it first
 			JRPropertiesMap v = (JRPropertiesMap) value;
 			String[] names = jrDataset.getPropertiesMap().getPropertyNames();
 			for (int i = 0; i < names.length; i++) {
