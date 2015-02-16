@@ -125,9 +125,11 @@ public class RenameDatasetObjectNameCommand extends Command {
 	protected void doSetQuery(String oldVal, String newVal) {
 		if (type1.equals("$P{")) {
 			JRDesignQuery query = (JRDesignQuery) dataset.getQuery();
-			String q = query.getText();
-			// replace $P{} in query
-			query.setText(q.replaceAll(type + oldVal + "}", type + newVal + "}"));
+			if(query!=null) {
+				String q = query.getText();
+				// replace $P{} in query
+				query.setText(q.replaceAll(type + oldVal + "}", type + newVal + "}"));
+			}
 		}
 	}
 
