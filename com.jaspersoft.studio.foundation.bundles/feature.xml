@@ -2,7 +2,7 @@
 <feature
       id="com.jaspersoft.studio.foundation.bundles"
       label="Jaspersoft Studio Required Additional Bundles"
-      version="1.0.0"
+      version="1.0.1"
       provider-name="TIBCO Software Inc.">
 
    <description url="http://community.jaspersoft.com/project/jaspersoft-studio">
@@ -29,14 +29,15 @@
       <import plugin="com.jaspersoft.studio.bundles.commons-beanutils"/>
       <import plugin="com.jaspersoft.studio.bundles.bouncycastle"/>
       <import plugin="org.apache.servicemix.bundles.xmlbeans"/>
-      <import plugin="org.junit"/>
-      <import plugin="org.apache.commons.codec"/>
       <import plugin="org.dom4j"/>
       <import plugin="javax.servlet.jsp"/>
       <import plugin="com.fasterxml.jackson.core.jackson-annotations"/>
       <import plugin="com.fasterxml.jackson.core.jackson-core"/>
       <import plugin="org.apache.servicemix.bundles.jcommon"/>
       <import plugin="org.w3c.dom.svg" version="1.1.0" match="greaterOrEqual"/>
+      <import plugin="org.junit" version="4.10.0" match="greaterOrEqual"/>
+      <import plugin="org.apache.commons.codec" version="1.6.0" match="greaterOrEqual"/>
+      <import plugin="org.apache.commons.logging" version="1.1.1" match="greaterOrEqual"/>
    </requires>
 
    <plugin
@@ -98,7 +99,7 @@
          id="com.jaspersoft.studio.bundles.poi"
          download-size="0"
          install-size="0"
-         version="3.10.1"/>
+         version="3.10.1.201502161145"/>
 
    <plugin
          id="groovy-all"
