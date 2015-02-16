@@ -82,7 +82,7 @@ public class MapElementDialog extends Dialog implements IExpressionContextSetter
 		propertyValue.setLayoutData(gd_propertyValue);
 		
 		propertyValueExpression = new WTextExpression(dialogArea, SWT.NONE);
-		GridData gd_propertyValueExpression = new GridData(SWT.FILL,SWT.FILL,true,false);
+		GridData gd_propertyValueExpression = new GridData(SWT.FILL,SWT.FILL,true,true);
 		gd_propertyValueExpression.heightHint = 50;
 		gd_propertyValueExpression.widthHint = 250;
 		propertyValueExpression.setLayoutData(gd_propertyValueExpression);
@@ -188,5 +188,10 @@ public class MapElementDialog extends Dialog implements IExpressionContextSetter
 			}
 		}
 		super.okPressed();
+	}
+	
+	@Override
+	protected boolean isResizable() {
+		return true;
 	}
 }

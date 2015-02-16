@@ -229,4 +229,9 @@ public class MapElementDialog extends Dialog {
 			return null;
 		}
 	}
+	
+	@Override
+	protected boolean isResizable() {
+		return true;
+	}
 }
