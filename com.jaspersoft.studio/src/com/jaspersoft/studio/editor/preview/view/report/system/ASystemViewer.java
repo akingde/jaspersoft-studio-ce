@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.editor.preview.view.report.system;
 
@@ -35,41 +31,45 @@ public abstract class ASystemViewer extends SWTViewer {
 
 	protected abstract String getExtension(JasperPrint jrprint);
 
-	private boolean lastError = false;
-
 	@Override
-	public void setJRPRint(final Statistics stats, JasperPrint jrprint, boolean refresh) {
-		boolean same = this.jrprint == jrprint && !lastError;
+	public void setJRPRint(final Statistics stats, final JasperPrint jrprint, boolean refresh) {
 		super.setJRPRint(stats, jrprint, refresh);
-		if (this.jrprint != null && (!same || refresh)) {
+		if (jrprint != null) {
 			try {
 				final String ext = getExtension(jrprint);
 				final File tmpFile = File.createTempFile("report", ext);
-				AExportAction exp = createExporterAction(rptviewer);
+				final AExportAction exp = createExporterAction(rptviewer);
 				stats.startCount(ReportControler.ST_EXPORTTIME);
-				exp.export(tmpFile, new Callback<File>() {
+				UIUtils.getDisplay().asyncExec(new Runnable() {
 
 					@Override
-					public void completed(File value) {
-						stats.endCount(ReportControler.ST_EXPORTTIME);
-						stats.setValue(ReportControler.ST_REPORTSIZE, tmpFile.length());
+					public void run() {
+						try {
+							exp.export(tmpFile, jrprint, new Callback<File>() {
 
-						Program p = Program.findProgram(ext);
-						if (p != null)
-							p.execute(tmpFile.getAbsolutePath());
-						else
-							// TODO here we can propose a better dialog, like open with...(create association, etc.)
-							UIUtils.showWarning(String
-									.format(
-											"No file association defined in your sistem for: %s\nFile is located at: \n\n%s\n\nPlease open it manually or fix file association and retry.",
-											ext, tmpFile.getAbsolutePath()));
-						lastError = false;
+								@Override
+								public void completed(File value) {
+									stats.endCount(ReportControler.ST_EXPORTTIME);
+									stats.setValue(ReportControler.ST_REPORTSIZE, tmpFile.length());
+
+									Program p = Program.findProgram(ext);
+									if (p != null)
+										p.execute(tmpFile.getAbsolutePath());
+									else
+										// TODO here we can propose a better dialog, like open with...(create association, etc.)
+										UIUtils.showWarning(String
+												.format(
+														"No file association defined in your sistem for: %s\nFile is located at: \n\n%s\n\nPlease open it manually or fix file association and retry.",
+														ext, tmpFile.getAbsolutePath()));
+								}
+							});
+						} catch (Exception e) {
+							UIUtils.showError(e);
+						}
 					}
 				});
-
 			} catch (Exception e) {
 				UIUtils.showError(e);
-				lastError = true;
 			}
 		}
 	}

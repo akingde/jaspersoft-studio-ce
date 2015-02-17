@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.editor.preview.actions.export;
 
@@ -141,6 +137,28 @@ public abstract class AExportAction extends AReportViewerAction {
 
 	public void export(final File file, final Callback<File> callback) throws Exception {
 		final JasperPrint jrPrint = getReportViewer().getReport();
+		if (jrPrint == null || jrPrint.getPages() == null)
+			return;
+		Job job = new Job(Messages.AExportAction_exportreport) {
+			@Override
+			protected IStatus run(final IProgressMonitor monitor) {
+				doExport(file, jrPrint, monitor);
+				UIUtils.getDisplay().syncExec(new Runnable() {
+
+					@Override
+					public void run() {
+						callback.completed(file);
+					}
+				});
+				return Status.OK_STATUS;
+			}
+		};
+		job.setPriority(Job.LONG);
+		job.setUser(true);
+		job.schedule();
+	}
+
+	public void export(final File file, final JasperPrint jrPrint, final Callback<File> callback) throws Exception {
 		if (jrPrint == null || jrPrint.getPages() == null)
 			return;
 		Job job = new Job(Messages.AExportAction_exportreport) {
