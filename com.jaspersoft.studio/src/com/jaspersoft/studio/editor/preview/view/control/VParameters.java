@@ -8,6 +8,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.preview.view.control;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -41,6 +42,9 @@ public class VParameters extends AVParameters {
 	public void createInputControls(List<JRParameter> prompts, Map<String, Object> params) {
 		this.params = params;
 		this.prompts = prompts;
+		Map<String, Boolean> dirtyMap = new HashMap<String, Boolean>();
+		for (String key : incontrols.keySet())
+			dirtyMap.put(key, incontrols.get(key).isDirty());
 		incontrols.clear();
 		for (Control c : composite.getChildren())
 			c.dispose();
@@ -50,8 +54,12 @@ public class VParameters extends AVParameters {
 				if (isParameterToShow(p)) {
 					try {
 						boolean created = createInput(composite, (JRDesignParameter) p, this.params, first);
-						if (first && created)
+						if (first && created) {
 							first = false;
+							Boolean b = dirtyMap.get(p.getName());
+							if (b != null)
+								incontrols.get(p.getName()).setDirty(b);
+						}
 					} catch (Exception e) {
 						if (!(e instanceof ClassNotFoundException))
 							e.printStackTrace();
