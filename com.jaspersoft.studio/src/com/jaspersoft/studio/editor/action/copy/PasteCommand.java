@@ -68,7 +68,7 @@ public class PasteCommand extends Command {
 				return false;
 			list = new LinkedHashMap<ANode, Command>();
 			if (obj instanceof AbstractPastableObject) {
-				Collection<ICopyable> bList = ((AbstractPastableObject)obj).getCopyedElements();
+				Collection<ICopyable> bList = ((AbstractPastableObject)obj).getCopiedElements();
 				if (bList.isEmpty())
 					return false;
 				for (ICopyable copyableNode : bList) {

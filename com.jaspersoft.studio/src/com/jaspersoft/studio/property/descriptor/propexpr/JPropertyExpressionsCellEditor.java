@@ -26,10 +26,6 @@ public class JPropertyExpressionsCellEditor extends DialogCellEditor {
 		super(parent);
 	}
 
-	public JPropertyExpressionsCellEditor(Composite parent, int style) {
-		super(parent, style);
-	}
-
 	@Override
 	protected Object openDialogBox(Control cellEditorWindow) {
 		JRPropertyExpressionEditor wizard = new JRPropertyExpressionEditor();

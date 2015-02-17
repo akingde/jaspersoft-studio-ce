@@ -173,7 +173,21 @@ public class CopyElementExpressionProperty implements ICopyable {
 	 * @return true if the copied property is an expression property, false
 	 * if it is a standard value property
 	 */
-	protected boolean isExpression(){
+	public boolean isExpression(){
 		return true;
+	}
+
+	/**
+	 * Return the name of the property
+	 */
+	public String getPropertyName() {
+		return propertyName;
+	}
+
+	/**
+	 * Return the value of the property as string
+	 */
+	public String getValue() {
+		return value;
 	}
 }

@@ -28,10 +28,6 @@ public class JPropertiesCellEditor extends DialogCellEditor {
 		super(parent);
 	}
 
-	public JPropertiesCellEditor(Composite parent, int style) {
-		super(parent, style);
-	}
-
 	@Override
 	protected Object openDialogBox(Control cellEditorWindow) {
 		JRPropertyEditor wizard = new JRPropertyEditor();

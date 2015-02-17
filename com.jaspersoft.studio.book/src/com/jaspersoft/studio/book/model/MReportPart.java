@@ -83,10 +83,6 @@ public class MReportPart extends APropertyNode {
 	
 	public static final String COMPONENT_PARAMETERS = "component_parameters"; //$NON-NLS-1$
 	
-	public static final String PROPERTY_MAP = "property_map"; //$NON-NLS-1$
-	
-	//PROPERTIES
-	
 	public static final String REPORT_CONNECTION_PROPERTY = "REPORT_CONNECTION"; //$NON-NLS-1$
 	
 	public static final String REPORT_DATASOURCE_PROPERTY = "REPORT_DATA_SOURCE"; //$NON-NLS-1$

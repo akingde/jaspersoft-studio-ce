@@ -12,6 +12,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.action.copy;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -48,6 +49,19 @@ public class PastableProperties extends AbstractPastableObject{
 			cc.add(property.getPasteCommand(targets));
 		}
 		return cc;
+	}
+	
+	/**
+	 * Return a not null list of the copied properties, it can contains both expression
+	 * properties or normal properties
+	 */
+	public List<CopyElementExpressionProperty> getCopiedProperties(){
+		List<CopyElementExpressionProperty> result = new ArrayList<CopyElementExpressionProperty>();
+		for(Object obj : list){
+			CopyElementExpressionProperty property = (CopyElementExpressionProperty)obj;
+			result.add(property);
+		}
+		return result;
 	}
 
 }

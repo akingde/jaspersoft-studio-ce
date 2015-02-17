@@ -126,7 +126,7 @@ public class CopyElementProperty extends CopyElementExpressionProperty {
 	 * if it is a standard value property
 	 */
 	@Override
-	protected boolean isExpression() {
+	public boolean isExpression() {
 		return false;
 	}
 }

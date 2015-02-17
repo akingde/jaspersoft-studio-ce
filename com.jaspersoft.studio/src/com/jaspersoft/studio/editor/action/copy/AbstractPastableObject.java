@@ -52,7 +52,7 @@ public abstract class AbstractPastableObject {
 	 * 
 	 * @return the copied elements
 	 */
-	public Collection<ICopyable> getCopyedElements(){
+	public Collection<ICopyable> getCopiedElements(){
 		return list;
 	}
 	

@@ -29,6 +29,8 @@ import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MenuEvent;
+import org.eclipse.swt.events.MenuListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -89,8 +91,9 @@ public class JRPropertyPage extends JSSHelpWizardPage {
 		if (value == null) {
 			value = new JRPropertiesMap();
 		}
-		if (table != null)
-			fillTable(table);
+		if (table != null){
+			fillTable();
+		}
 	}
 
 	protected JRPropertyPage(String pageName) {
@@ -234,7 +237,7 @@ public class JRPropertyPage extends JSSHelpWizardPage {
 		column[1] = new TableColumn(table, SWT.NONE);
 		column[1].setText(Messages.JRPropertyPage_value);
 
-		fillTable(table);
+		fillTable();
 		for (int i = 0, n = column.length; i < n; i++) {
 			column[i].pack();
 		}
@@ -247,10 +250,14 @@ public class JRPropertyPage extends JSSHelpWizardPage {
 		TableHelpListener.setTableHelp(table);
 		
 		//Crete the popup menu
+		createPopoupMenu();
+	}
+	
+	private void createPopoupMenu(){
 		Menu tableMenu = new Menu(table);
-		MenuItem refreshItem = new MenuItem(tableMenu, SWT.NONE);
-		refreshItem.setText(Messages.common_copy);
-		refreshItem.addSelectionListener(new SelectionAdapter() {
+		final MenuItem copyItem = new MenuItem(tableMenu, SWT.NONE);
+		copyItem.setText(Messages.common_copy);
+		copyItem.addSelectionListener(new SelectionAdapter() {
 			
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -271,6 +278,44 @@ public class JRPropertyPage extends JSSHelpWizardPage {
 			}
 			
 		});
+		
+		final MenuItem pasteItem = new MenuItem(tableMenu, SWT.NONE);
+		pasteItem.setText(Messages.common_paste);
+		pasteItem.addSelectionListener(new SelectionAdapter() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				PastableProperties pasteContainer = (PastableProperties)Clipboard.getDefault().getContents();
+				List<CopyElementExpressionProperty> copiedProperties = pasteContainer.getCopiedProperties();
+				for(CopyElementExpressionProperty property : copiedProperties){
+					if (!property.isExpression() && !containsProperty(property.getPropertyName())){
+						props.add(new PropertyDTO(property.getPropertyName(), property.getValue()));
+					}
+				}
+				tableViewer.refresh();
+			}
+			
+		});
+		
+		tableMenu.addMenuListener(new MenuListener() {
+			
+			@Override
+			public void menuShown(MenuEvent e) {
+				copyItem.setEnabled(!tableViewer.getSelection().isEmpty());
+				boolean pasteEnabled = false;
+				if (Clipboard.getDefault().getContents() instanceof PastableProperties){
+					PastableProperties pasteContainer = (PastableProperties)Clipboard.getDefault().getContents();
+					List<CopyElementExpressionProperty> copiedProperties = pasteContainer.getCopiedProperties();
+					pasteEnabled = copiedProperties != null && !copiedProperties.isEmpty() && canPaste(copiedProperties);
+				} 
+				pasteItem.setEnabled(pasteEnabled);
+			}
+			
+			@Override
+			public void menuHidden(MenuEvent e) {
+			}
+		});
+		
 		table.setMenu(tableMenu);
 	}
 
@@ -301,7 +346,7 @@ public class JRPropertyPage extends JSSHelpWizardPage {
 		viewer.setColumnProperties(new String[] { "NAME", "VALUE" }); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
-	private void fillTable(Table table) {
+	private void fillTable() {
 		props.clear();
 		String[] names = value.getPropertyNames();
 		for (int i = 0; i < names.length; i++) {
@@ -309,6 +354,28 @@ public class JRPropertyPage extends JSSHelpWizardPage {
 			props.add(p);
 		}
 		tableViewer.setInput(props);
+	}
+	
+	private boolean containsProperty(String propertyName){
+		for(PropertyDTO property : props){
+			if (property.getName().equals(propertyName)) return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * Check if at least one of the copied properties can be pasted on the current element
+	 * 
+	 * @param copiedProperties the copied properties
+	 * @return true if at least one of the copied properties can be pasted, false otherwise
+	 */
+	private boolean canPaste(List<CopyElementExpressionProperty> copiedProperties){
+		for(CopyElementExpressionProperty property : copiedProperties){
+			if (!property.isExpression() && !containsProperty(property.getPropertyName())){
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	public JRPropertiesMap getValue() {
