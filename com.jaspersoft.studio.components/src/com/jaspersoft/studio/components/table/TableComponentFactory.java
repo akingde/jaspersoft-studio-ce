@@ -818,10 +818,11 @@ public class TableComponentFactory implements IComponentFactory {
 	public AbstractVisualEditor getEditor(Object node,
 			JasperReportsConfiguration jrContext) {
 		if (node != null && node instanceof JRDesignComponentElement) {
-			Component component = ((JRDesignComponentElement) node)
-					.getComponent();
-			if (component != null && component instanceof StandardTable)
-				return new TableEditor(jrContext);
+			Component component = ((JRDesignComponentElement) node).getComponent();
+			if (component != null && component instanceof StandardTable){
+				TableEditor editor = new TableEditor(jrContext);
+				return editor;
+			}
 		}
 		return null;
 	}

@@ -36,6 +36,7 @@ import com.jaspersoft.studio.editor.gef.rulers.ReportRuler;
 import com.jaspersoft.studio.editor.gef.rulers.ReportRulerProvider;
 import com.jaspersoft.studio.editor.gef.ui.actions.RZoomComboContributionItem;
 import com.jaspersoft.studio.editor.gef.ui.actions.ViewSettingsDropDownAction;
+import com.jaspersoft.studio.editor.java2d.J2DScrollingGraphicalViewer;
 import com.jaspersoft.studio.editor.outline.JDReportOutlineView;
 import com.jaspersoft.studio.editor.outline.actions.CreateBandAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateConditionalStyleAction;
@@ -54,6 +55,7 @@ import com.jaspersoft.studio.editor.outline.actions.ExportStyleAsTemplateAction;
 import com.jaspersoft.studio.editor.outline.actions.RefreshTemplateStyleExpression;
 import com.jaspersoft.studio.editor.outline.actions.ResetStyleAction;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.model.IContainer;
 import com.jaspersoft.studio.plugin.ExtensionManager;
 import com.jaspersoft.studio.preferences.RulersGridPreferencePage;
 import com.jaspersoft.studio.property.dataset.dialog.ContextualDatasetAction;
@@ -111,6 +113,9 @@ public class ReportEditor extends AbstractVisualEditor {
 
 		createAdditionalActions();
 		graphicalViewer.setKeyHandler(new JSSGraphicalViewerKeyHandler(graphicalViewer));
+		if (graphicalViewer instanceof J2DScrollingGraphicalViewer){
+			((J2DScrollingGraphicalViewer)graphicalViewer).setSelectionOverrider(new ParentSelectionOverrider(IContainer.class, true));
+		}
 	}
 
 	@Override

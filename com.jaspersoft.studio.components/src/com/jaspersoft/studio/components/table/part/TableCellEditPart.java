@@ -78,8 +78,17 @@ import com.jaspersoft.studio.model.MPage;
  * @author Chicu Veaceslav, Giulio Toffoli
  * 
  */
-public class TableCellEditPart extends APrefFigureEditPart implements
-		IContainerPart, IContainer {
+public class TableCellEditPart extends APrefFigureEditPart implements IContainerPart, IContainer {
+	
+	private TableCellResizableEditPolicy cellSelectionPolicy = new TableCellResizableEditPolicy() {
+		
+		@Override
+		protected void showSelection() {
+			super.showSelection();
+			updateRulers();
+		}
+
+	};
 
 	@Override
 	public Object getAdapter(@SuppressWarnings("rawtypes") Class key) {
@@ -220,17 +229,10 @@ public class TableCellEditPart extends APrefFigureEditPart implements
 			}
 
 		});
-		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE,
-				new TableCellResizableEditPolicy() {
-					@Override
-					protected void showSelection() {
-						super.showSelection();
-						updateRulers();
-					}
-
-				});
+		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE, cellSelectionPolicy);
+				
 	}
-
+	
 	public EditPolicy getEditPolicy() {
 		return new TableCellMoveEditPolicy();
 	}
@@ -337,5 +339,4 @@ public class TableCellEditPart extends APrefFigureEditPart implements
 		} else
 			containerSize = null;
 	}
-
 }

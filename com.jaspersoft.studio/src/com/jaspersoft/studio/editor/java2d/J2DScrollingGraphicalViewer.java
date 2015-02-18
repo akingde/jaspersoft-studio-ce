@@ -27,6 +27,12 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  */
 public class J2DScrollingGraphicalViewer extends ScrollingGraphicalViewer {
 
+	/**
+	 * Selection overrider for the current viewer, null is the default value
+	 * and means that not overrider is used
+	 */
+	private ISelectionOverrider selectionOverrider = null;
+	
 	public J2DScrollingGraphicalViewer(){
 		super();
 		setSelectionManager(new JSelectionManager());
@@ -61,4 +67,24 @@ public class J2DScrollingGraphicalViewer extends ScrollingGraphicalViewer {
 		}
 	}
 
+	/**
+	 * Append the provided editpart to the current selection, but only if there is not 
+	 * an overrider that override the current selection to select something else
+	 */
+	public void appendSelection(EditPart editpart) {
+		boolean wasOverride = false;
+		if (selectionOverrider != null){
+			wasOverride = selectionOverrider.overriddenSelection(editpart, this);
+		}
+		if (!wasOverride) super.appendSelection(editpart);
+	}
+
+	/**
+	 * Set a selection overrider for the current viewer 
+	 * 
+	 * @param overrider the overrider or null if no overrider should be used
+	 */
+	public void setSelectionOverrider(ISelectionOverrider overrider){
+		selectionOverrider = overrider;
+	}
 }
