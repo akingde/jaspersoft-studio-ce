@@ -12,10 +12,12 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.chart.model.theme;
 
+import java.beans.PropertyChangeEvent;
 import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.charts.type.EdgeEnum;
+import net.sf.jasperreports.chartthemes.simple.BlockFrameProvider;
 import net.sf.jasperreports.chartthemes.simple.LegendSettings;
 import net.sf.jasperreports.chartthemes.simple.PaintProvider;
 import net.sf.jasperreports.engine.JRConstants;
@@ -23,8 +25,6 @@ import net.sf.jasperreports.engine.JRConstants;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
-import org.jfree.chart.block.BlockBorder;
-import org.jfree.chart.block.BlockFrame;
 import org.jfree.ui.RectangleInsets;
 
 import com.jaspersoft.studio.components.chart.messages.Messages;
@@ -138,8 +138,7 @@ public class MLegendSettings extends APropertyNode {
 		pd.setDescription(Messages.MLegendSettings_legendBackgroundColorDescription);
 		desc.add(pd);
 
-		PadUtil.createPropertyDescriptors(desc, defaultsMap,
-				LegendSettings.PROPERTY_blockFrame, "Block Frame"); //$NON-NLS-1$
+		PadUtil.createBlockFramePropertyDescriptors(desc, defaultsMap, "Block Frame"); //$NON-NLS-1$
 
 		defaultsMap.put(LegendSettings.PROPERTY_backgroundPaint, null);
 		defaultsMap.put(LegendSettings.PROPERTY_foregroundPaint, null);
@@ -183,17 +182,15 @@ public class MLegendSettings extends APropertyNode {
 			return ts.getBackgroundPaint();
 		if (id.equals(LegendSettings.PROPERTY_foregroundPaint))
 			return ts.getForegroundPaint();
-
+		
 		Object pad = PadUtil.getPropertyValue(id, ts.getPadding());
 		if (pad != null)
 			return pad;
-		BlockFrame bf = ts.getBlockFrame();
-		if (bf != null) {
-			pad = PadUtil.getPropertyValue(id, bf.getInsets(),
-					LegendSettings.PROPERTY_blockFrame);
-			if (pad != null)
-				return pad;
-		}
+		
+		BlockFrameProvider bf = ts.getFrame();
+		pad = PadUtil.getBlockFrameValue(id, bf);
+		if (pad != null)
+			return pad;
 		return null;
 	}
 
@@ -218,14 +215,16 @@ public class MLegendSettings extends APropertyNode {
 
 		RectangleInsets ri = PadUtil.setPropertyValue(id, value,
 				ts.getPadding());
-		if (ri != null)
+		if (ri != null){
 			ts.setPadding(ri);
-		BlockFrame bf = ts.getBlockFrame();
-		ri = PadUtil.setPropertyValue(id, value,
-				bf == null ? null : bf.getInsets(),
-				LegendSettings.PROPERTY_blockFrame);
-		if (ri != null)
-			ts.setBlockFrame(new BlockBorder(ri.getTop(), ri.getLeft(), ri
-					.getBottom(), ri.getRight()));
+		} else {
+			PadUtil.setFramePropertyValue(id, value, ts);
+		}
+	}
+	
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		// TODO Auto-generated method stub
+		super.propertyChange(evt);
 	}
 }

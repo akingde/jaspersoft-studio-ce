@@ -12,21 +12,28 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.chart.property.section.theme;
 
+import java.beans.PropertyChangeEvent;
+
 import net.sf.jasperreports.chartthemes.simple.LegendSettings;
 
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 
 import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.components.chart.model.theme.util.PadUtil;
+import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
 public class LegendSettingsSection extends AbstractSection {
 	
 	private ExpandableComposite paddingSection;
+	
+	private Composite strokeContainer = null;
 	
 	@Override
 	public void createControls(Composite parent, TabbedPropertySheetPage aTabbedPropertySheetPage) {
@@ -44,8 +51,58 @@ public class LegendSettingsSection extends AbstractSection {
 		createWidget4Property(group, LegendSettings.PROPERTY_foregroundPaint);
 		createWidget4Property(group, LegendSettings.PROPERTY_backgroundPaint);
 
-		Composite paddingComposite = PadUtil.createWidgets4Property(parent, LegendSettings.PROPERTY_blockFrame, "Block Frame", this);
+		String preID = LegendSettings.PROPERTY_frame;
+		Composite paddingComposite = getWidgetFactory().createSection(parent, "Block Frame", true, 5);   
 		paddingSection = (ExpandableComposite)paddingComposite.getParent();
+		paddingSection.setExpanded(false);
+		
+		createWidget4Property(paddingComposite, preID + PadUtil.PADDING_TOP);
+		createWidget4Property(paddingComposite, preID + PadUtil.PADDING_BOTTOM);
+		strokeContainer = new Composite(paddingComposite, SWT.NONE);
+		GridLayout strokeLayout = new GridLayout(2,false);
+		strokeLayout.horizontalSpacing = 0;
+		strokeLayout.verticalSpacing = 0;
+		strokeLayout.marginWidth = 0;
+		strokeLayout.marginHeight = 0;
+		strokeContainer.setLayout(strokeLayout);
+		strokeContainer.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		createWidget4Property(strokeContainer, preID + PadUtil.FRAME_STROKE);
+		createWidget4Property(paddingComposite, preID + PadUtil.PADDING_LEFT);
+		createWidget4Property(paddingComposite, preID + PadUtil.PADDING_RIGHT);
+		new Label(paddingComposite, SWT.None);
+		
+		GridData colorData = new GridData(GridData.FILL_HORIZONTAL);
+		colorData.horizontalSpan = 4;
+		
+		createWidget4Property(paddingComposite, preID + PadUtil.FRAME_COLOR).getControl().setLayoutData(colorData);	
+		createWidget4Property(paddingComposite, preID + PadUtil.FRAME_FILL, false);
+	}
+	
+	private void updateFillControl(){
+		if (strokeContainer != null && getElement() != null){
+			Object isFill = getElement().getPropertyValue(LegendSettings.PROPERTY_frame + PadUtil.FRAME_FILL);
+			strokeContainer.setVisible(isFill != null? !((Boolean)isFill) : false);
+		}
+	}
+	
+	@Override
+	public void aboutToBeShown() {
+		updateFillControl();
+		super.aboutToBeShown();
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (evt.getPropertyName().equals(LegendSettings.PROPERTY_frame)){
+			if (!isDisposed()) {
+				setRefreshing(true);
+				APropertyNode element = getElement();
+				String preID = LegendSettings.PROPERTY_frame;
+				widgets.get(preID + PadUtil.FRAME_COLOR).setData(element, element.getPropertyValue(preID + PadUtil.FRAME_COLOR));
+				setRefreshing(false);
+			}
+			updateFillControl();
+		} else super.propertyChange(evt);
 	}
 	
 	private void expandSection(ExpandableComposite section){
@@ -54,7 +111,7 @@ public class LegendSettingsSection extends AbstractSection {
 	
 	@Override
 	public void expandForProperty(Object propertyId) {
-		if (propertyId.toString().startsWith(LegendSettings.PROPERTY_blockFrame)) expandSection(paddingSection);
+		if (propertyId.toString().startsWith(LegendSettings.PROPERTY_frame)) expandSection(paddingSection);
 	}
 	
 	@Override
@@ -66,9 +123,12 @@ public class LegendSettingsSection extends AbstractSection {
 		addProvidedProperties(LegendSettings.PROPERTY_verticalAlignment, Messages.MLegendSettings_legendVAlignTitle);
 		addProvidedProperties(LegendSettings.PROPERTY_foregroundPaint, Messages.MLegendSettings_legendForegroundColorTitle);
 		addProvidedProperties(LegendSettings.PROPERTY_backgroundPaint, Messages.MLegendSettings_legendBackgroundColorTitle);
-		addProvidedProperties(LegendSettings.PROPERTY_blockFrame+PadUtil.PADDING_TOP, com.jaspersoft.studio.messages.Messages.common_top);
-		addProvidedProperties(LegendSettings.PROPERTY_blockFrame+PadUtil.PADDING_BOTTOM, com.jaspersoft.studio.messages.Messages.common_bottom);
-		addProvidedProperties(LegendSettings.PROPERTY_blockFrame+PadUtil.PADDING_LEFT, com.jaspersoft.studio.messages.Messages.common_left);
-		addProvidedProperties(LegendSettings.PROPERTY_blockFrame+PadUtil.PADDING_RIGHT, com.jaspersoft.studio.messages.Messages.common_right);
+		addProvidedProperties(LegendSettings.PROPERTY_frame+PadUtil.PADDING_TOP, com.jaspersoft.studio.messages.Messages.common_top);
+		addProvidedProperties(LegendSettings.PROPERTY_frame+PadUtil.PADDING_BOTTOM, com.jaspersoft.studio.messages.Messages.common_bottom);
+		addProvidedProperties(LegendSettings.PROPERTY_frame+PadUtil.PADDING_LEFT, com.jaspersoft.studio.messages.Messages.common_left);
+		addProvidedProperties(LegendSettings.PROPERTY_frame+PadUtil.PADDING_RIGHT, com.jaspersoft.studio.messages.Messages.common_right);
+		addProvidedProperties(LegendSettings.PROPERTY_frame+PadUtil.FRAME_COLOR, "Color");
+		addProvidedProperties(LegendSettings.PROPERTY_frame+PadUtil.FRAME_FILL, "Fill");
+		addProvidedProperties(LegendSettings.PROPERTY_frame+PadUtil.FRAME_STROKE, "Stroke");
 	}
 }
