@@ -65,7 +65,7 @@ public class MQRCode extends MBarcode {
 
 	private static IPropertyDescriptor[] descriptors;
 	private static Map<String, Object> defaultsMap;
-	private NamedEnumPropertyDescriptor<ErrorCorrectionLevelEnum> errLevelD;
+	private static NamedEnumPropertyDescriptor<ErrorCorrectionLevelEnum> errLevelD;
 
 	@Override
 	public Map<String, Object> getDefaultsMap() {
