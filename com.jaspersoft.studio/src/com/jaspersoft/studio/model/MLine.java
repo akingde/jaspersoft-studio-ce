@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.model;
 
@@ -35,7 +31,7 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
-import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
 
 /*
@@ -81,8 +77,8 @@ public class MLine extends MGraphicElementLinePen {
 
 	private static IPropertyDescriptor[] descriptors;
 	private static Map<String, Object> defaultsMap;
-	private static JSSEnumPropertyDescriptor directionD;
-	private static JSSEnumPropertyDescriptor fillD;
+	private static NamedEnumPropertyDescriptor<LineDirectionEnum> directionD;
+	private static NamedEnumPropertyDescriptor<FillEnum> fillD;
 
 	@Override
 	public Map<String, Object> getDefaultsMap() {
@@ -110,8 +106,8 @@ public class MLine extends MGraphicElementLinePen {
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		directionD = new JSSEnumPropertyDescriptor(JRBaseLine.PROPERTY_DIRECTION, Messages.MLine_direction,
-				LineDirectionEnum.class, NullEnum.NULL);
+		directionD = new NamedEnumPropertyDescriptor<LineDirectionEnum>(JRBaseLine.PROPERTY_DIRECTION,
+				Messages.MLine_direction, LineDirectionEnum.BOTTOM_UP, NullEnum.NULL);
 		directionD.setDescription(Messages.MLine_direction_description);
 		directionD.setCategory(Messages.MLine_line_category);
 		desc.add(directionD);
@@ -121,7 +117,7 @@ public class MLine extends MGraphicElementLinePen {
 		 * NullEnum.INHERITED); fillD.setDescription(Messages.MLine_fill_description); desc.add(fillD);
 		 */
 
-		defaultsMap.put(JRBaseLine.PROPERTY_DIRECTION, EnumHelper.getValue(LineDirectionEnum.TOP_DOWN, 1, true));
+		defaultsMap.put(JRBaseLine.PROPERTY_DIRECTION,directionD.getIntValue(LineDirectionEnum.TOP_DOWN ));
 		defaultsMap.put(JRBaseStyle.PROPERTY_FILL, null);
 
 		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#line");
@@ -131,9 +127,9 @@ public class MLine extends MGraphicElementLinePen {
 	public Object getPropertyValue(Object id) {
 		JRDesignLine jrElement = (JRDesignLine) getValue();
 		if (id.equals(JRBaseLine.PROPERTY_DIRECTION))
-			return directionD.getEnumValue(jrElement.getDirectionValue());
+			return directionD.getIntValue(jrElement.getDirectionValue());
 		if (id.equals(JRBaseStyle.PROPERTY_FILL))
-			return fillD.getEnumValue(jrElement.getOwnFillValue());
+			return fillD.getIntValue(jrElement.getOwnFillValue());
 		return super.getPropertyValue(id);
 	}
 
@@ -141,23 +137,25 @@ public class MLine extends MGraphicElementLinePen {
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignLine jrElement = (JRDesignLine) getValue();
 		if (id.equals(JRBaseLine.PROPERTY_DIRECTION))
-			jrElement.setDirection((LineDirectionEnum) directionD.getEnumValue(value));
+			jrElement.setDirection(directionD.getEnumValue(value));
 		if (id.equals(JRBaseStyle.PROPERTY_FILL))
-			jrElement.setFill((FillEnum) fillD.getEnumValue(value));
+			jrElement.setFill(fillD.getEnumValue(value));
 		else
 			super.setPropertyValue(id, value);
 	}
 
 	@Override
 	public int getDefaultHeight() {
-		Object defaultValue = DefaultManager.INSTANCE.getDefaultPropertiesValue(this.getClass(), JRDesignElement.PROPERTY_HEIGHT);
-		return defaultValue != null ? (Integer)defaultValue : 30;
+		Object defaultValue = DefaultManager.INSTANCE.getDefaultPropertiesValue(this.getClass(),
+				JRDesignElement.PROPERTY_HEIGHT);
+		return defaultValue != null ? (Integer) defaultValue : 30;
 	}
 
 	@Override
 	public int getDefaultWidth() {
-		Object defaultValue = DefaultManager.INSTANCE.getDefaultPropertiesValue(this.getClass(), JRDesignElement.PROPERTY_WIDTH);
-		return defaultValue != null ? (Integer)defaultValue : 100;
+		Object defaultValue = DefaultManager.INSTANCE.getDefaultPropertiesValue(this.getClass(),
+				JRDesignElement.PROPERTY_WIDTH);
+		return defaultValue != null ? (Integer) defaultValue : 100;
 	}
 
 	/*
@@ -206,23 +204,23 @@ public class MLine extends MGraphicElementLinePen {
 		return getIconDescriptor().getToolTip();
 	}
 
-	public HashSet<String> generateGraphicalProperties(){
+	public HashSet<String> generateGraphicalProperties() {
 		HashSet<String> result = super.generateGraphicalProperties();
 		result.add(JRBaseLine.PROPERTY_DIRECTION);
 		result.add(JRBaseStyle.PROPERTY_FILL);
 		return result;
 	}
-	
+
 	@Override
-	public void trasnferProperties(JRElement target){
+	public void trasnferProperties(JRElement target) {
 		super.trasnferProperties(target);
-		
+
 		JRLine jrSource = (JRLine) getValue();
-		if (jrSource != null){
-			JRLine jrTarget = (JRLine)target;
+		if (jrSource != null) {
+			JRLine jrTarget = (JRLine) target;
 			jrTarget.setFill(jrSource.getOwnFillValue());
 			jrTarget.setDirection(jrSource.getDirectionValue());
 		}
 	}
-	
+
 }

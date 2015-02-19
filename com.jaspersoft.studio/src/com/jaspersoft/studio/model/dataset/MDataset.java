@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.model.dataset;
 
@@ -48,8 +44,8 @@ import com.jaspersoft.studio.property.descriptor.expression.JRExpressionProperty
 import com.jaspersoft.studio.property.descriptor.jrQuery.JRQueryButtonPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.properties.JPropertiesPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.resource.ResourceBundlePropertyDescriptor;
-import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSValidatedTextPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
@@ -233,8 +229,9 @@ public class MDataset extends APropertyNode implements ICopyable {
 		queryD.setHelpRefBuilder(new HelpReferenceBuilder(
 				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#queryString"));
 
-		whenResMissTypeD = new JSSEnumPropertyDescriptor(JRDesignDataset.PROPERTY_WHEN_RESOURCE_MISSING_TYPE,
-				Messages.MDataset_when_resource_missing_type, WhenResourceMissingTypeEnum.class, NullEnum.NOTNULL);
+		whenResMissTypeD = new NamedEnumPropertyDescriptor<WhenResourceMissingTypeEnum>(
+				JRDesignDataset.PROPERTY_WHEN_RESOURCE_MISSING_TYPE, Messages.MDataset_when_resource_missing_type,
+				WhenResourceMissingTypeEnum.EMPTY, NullEnum.NOTNULL);
 		whenResMissTypeD.setDescription(Messages.MDataset_when_resource_missing_type_description);
 		desc.add(whenResMissTypeD);
 
@@ -247,14 +244,14 @@ public class MDataset extends APropertyNode implements ICopyable {
 
 		defaultsMap.put(JRDesignDataset.PROPERTY_RESOURCE_BUNDLE, null);
 		defaultsMap.put(JRDesignDataset.PROPERTY_WHEN_RESOURCE_MISSING_TYPE,
-				EnumHelper.getValue(WhenResourceMissingTypeEnum.NULL, 1, false));
+				whenResMissTypeD.getIntValue(WhenResourceMissingTypeEnum.NULL));
 		defaultsMap.put(JRDesignDataset.PROPERTY_FILTER_EXPRESSION, null);
 
 		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#subDataset");
 	}
 
 	private MQuery mQuery;
-	private static JSSEnumPropertyDescriptor whenResMissTypeD;
+	private static NamedEnumPropertyDescriptor<WhenResourceMissingTypeEnum> whenResMissTypeD;
 
 	/*
 	 * (non-Javadoc)
@@ -287,7 +284,7 @@ public class MDataset extends APropertyNode implements ICopyable {
 			return pmap;
 		}
 		if (id.equals(JRDesignDataset.PROPERTY_WHEN_RESOURCE_MISSING_TYPE))
-			return whenResMissTypeD.getEnumValue(jrDataset.getWhenResourceMissingTypeValue());
+			return whenResMissTypeD.getIntValue(jrDataset.getWhenResourceMissingTypeValue());
 		if (id.equals(JRDesignDataset.PROPERTY_RESOURCE_BUNDLE))
 			return jrDataset.getResourceBundle();
 
@@ -343,7 +340,7 @@ public class MDataset extends APropertyNode implements ICopyable {
 				jrDataset.setProperty(names[i], v.getProperty(names[i]));
 			this.getPropertyChangeSupport().firePropertyChange(PROPERTY_MAP, false, true);
 		} else if (id.equals(JRDesignDataset.PROPERTY_WHEN_RESOURCE_MISSING_TYPE))
-			jrDataset.setWhenResourceMissingType((WhenResourceMissingTypeEnum) whenResMissTypeD.getEnumValue(value));
+			jrDataset.setWhenResourceMissingType(whenResMissTypeD.getEnumValue(value));
 		else if (id.equals(JRDesignDataset.PROPERTY_QUERY)) {
 			if (value instanceof MQuery) {
 				unsetChildListener(mQuery);

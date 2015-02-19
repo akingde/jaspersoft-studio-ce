@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.model.group;
 
@@ -39,9 +35,9 @@ import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSTextPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSValidatedTextPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.PixelPropertyDescriptor;
 import com.jaspersoft.studio.utils.ModelUtils;
 
@@ -118,7 +114,7 @@ public class MGroup extends APropertyNode implements ICopyable {
 
 	private static IPropertyDescriptor[] descriptors;
 	private static Map<String, Object> defaultsMap;
-	private static JSSEnumPropertyDescriptor positionD;
+	private static NamedEnumPropertyDescriptor<FooterPositionEnum> positionD;
 	private static GroupNameValidator validator;
 
 	@Override
@@ -136,19 +132,18 @@ public class MGroup extends APropertyNode implements ICopyable {
 		descriptors = descriptors1;
 		defaultsMap = defaultsMap1;
 	}
-	
+
 	@Override
 	protected void postDescriptors(IPropertyDescriptor[] descriptors) {
 		super.postDescriptors(descriptors);
-		//Set into the validator the actual reference
+		// Set into the validator the actual reference
 		updateValidator();
 	}
-	
+
 	/**
-	 * Update the reference into the static validator when the actual group is 
-	 * edited
+	 * Update the reference into the static validator when the actual group is edited
 	 */
-	public void updateValidator(){
+	public void updateValidator() {
 		validator.setTargetNode(this);
 	}
 
@@ -162,7 +157,8 @@ public class MGroup extends APropertyNode implements ICopyable {
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		validator = new GroupNameValidator();
 		validator.setTargetNode(this);
-		JSSTextPropertyDescriptor nameD = new JSSValidatedTextPropertyDescriptor(JRDesignGroup.PROPERTY_NAME, Messages.common_name, validator);
+		JSSTextPropertyDescriptor nameD = new JSSValidatedTextPropertyDescriptor(JRDesignGroup.PROPERTY_NAME,
+				Messages.common_name, validator);
 		nameD.setDescription(Messages.MGroup_name_description);
 		desc.add(nameD);
 
@@ -201,13 +197,13 @@ public class MGroup extends APropertyNode implements ICopyable {
 		keepToD.setDescription(Messages.MGroup_keepDescription);
 		desc.add(keepToD);
 
-		positionD = new JSSEnumPropertyDescriptor(JRBaseGroup.PROPERTY_FOOTER_POSITION, Messages.MGroup_footerPosTitle,
-				FooterPositionEnum.class, NullEnum.NOTNULL);
+		positionD = new NamedEnumPropertyDescriptor<FooterPositionEnum>(JRBaseGroup.PROPERTY_FOOTER_POSITION,
+				Messages.MGroup_footerPosTitle, FooterPositionEnum.COLLATE_AT_BOTTOM, NullEnum.NOTNULL);
 		positionD.setDescription(Messages.MGroup_footerPosDescription);
 		desc.add(positionD);
 
 		defaultsMap.put(JRDesignGroup.PROPERTY_MIN_HEIGHT_TO_START_NEW_PAGE, CONST_MIN_HEIGHT);
-		defaultsMap.put(JRDesignGroup.PROPERTY_FOOTER_POSITION, FooterPositionEnum.NORMAL);
+		defaultsMap.put(JRDesignGroup.PROPERTY_FOOTER_POSITION, positionD.getIntValue(FooterPositionEnum.NORMAL));
 		defaultsMap.put(JRDesignGroup.PROPERTY_KEEP_TOGETHER, Boolean.FALSE);
 		defaultsMap.put(JRDesignGroup.PROPERTY_REPRINT_HEADER_ON_EACH_PAGE, Boolean.FALSE);
 		defaultsMap.put(JRDesignGroup.PROPERTY_RESET_PAGE_NUMBER, Boolean.FALSE);
@@ -244,11 +240,11 @@ public class MGroup extends APropertyNode implements ICopyable {
 		if (id.equals(JRBaseGroup.PROPERTY_KEEP_TOGETHER))
 			return jrGroup.isKeepTogether();
 		if (id.equals(JRBaseGroup.PROPERTY_FOOTER_POSITION))
-			return positionD.getEnumValue(jrGroup.getFooterPositionValue());
+			return positionD.getIntValue(jrGroup.getFooterPositionValue());
 
 		return null;
 	}
-	
+
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		if (JRDesignGroup.PROPERTY_NAME.equals(evt.getPropertyName())) {
@@ -256,14 +252,14 @@ public class MGroup extends APropertyNode implements ICopyable {
 			// Should be done on JR-side. Let's keep the cache map of groups in sync.
 			JRDesignGroup jrGroup = (JRDesignGroup) getValue();
 			JasperDesign design = getJasperDesign();
-			if (design != null){
+			if (design != null) {
 				design.getGroupsMap().remove(evt.getOldValue());
 				design.getGroupsMap().put(jrGroup.getName(), jrGroup);
-				//JRDesignDataset dataset = ModelUtils.getDataset(this);
-				JRVariable groupVar =  getJasperDesign().getVariablesMap().get(evt.getOldValue()  + "_COUNT");
-				if (groupVar != null){
-					//This should launch the propertyChange event on the variable so the map is updated also for it
-					((JRDesignVariable)groupVar).setName(jrGroup.getName() + "_COUNT");
+				// JRDesignDataset dataset = ModelUtils.getDataset(this);
+				JRVariable groupVar = getJasperDesign().getVariablesMap().get(evt.getOldValue() + "_COUNT");
+				if (groupVar != null) {
+					// This should launch the propertyChange event on the variable so the map is updated also for it
+					((JRDesignVariable) groupVar).setName(jrGroup.getName() + "_COUNT");
 				}
 			}
 		}
@@ -279,8 +275,7 @@ public class MGroup extends APropertyNode implements ICopyable {
 		JRDesignGroup jrGroup = (JRDesignGroup) getValue();
 		if (id.equals(JRDesignGroup.PROPERTY_NAME)) {
 			jrGroup.setName((String) value);
-		}
-		else if (id.equals(JRDesignGroup.PROPERTY_EXPRESSION))
+		} else if (id.equals(JRDesignGroup.PROPERTY_EXPRESSION))
 			jrGroup.setExpression(ExprUtil.setValues(jrGroup.getExpression(), value, null));
 		else if (id.equals(JRBaseGroup.PROPERTY_MIN_HEIGHT_TO_START_NEW_PAGE)) {
 			int minH = 0;
@@ -298,7 +293,7 @@ public class MGroup extends APropertyNode implements ICopyable {
 		else if (id.equals(JRDesignGroup.PROPERTY_KEEP_TOGETHER))
 			jrGroup.setKeepTogether((Boolean) value);
 		else if (id.equals(JRDesignGroup.PROPERTY_FOOTER_POSITION))
-			jrGroup.setFooterPosition((FooterPositionEnum) positionD.getEnumValue(value));
+			jrGroup.setFooterPosition(positionD.getEnumValue(value));
 	}
 
 	/**
@@ -322,11 +317,11 @@ public class MGroup extends APropertyNode implements ICopyable {
 
 	@Override
 	public Object getAdapter(Class adapter) {
-		if(ExpressionContext.class.equals(adapter)){			
-			if(getParent()!=null){
+		if (ExpressionContext.class.equals(adapter)) {
+			if (getParent() != null) {
 				// Ideally parent should be an MGroups node
 				ExpressionContext expContext = (ExpressionContext) getParent().getAdapter(ExpressionContext.class);
-				if(expContext!=null) {
+				if (expContext != null) {
 					return expContext;
 				}
 			}

@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.model.text;
 
@@ -57,21 +53,21 @@ import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescrip
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.pattern.PatternPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.SpinnerPropertyDescriptor;
 
 /*
  * The Class MTextField.
  */
-public class MTextField extends MTextElement{
+public class MTextField extends MTextElement {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
 
 	private MHyperLink mHyperLink;
-	
-	private static JSSEnumPropertyDescriptor evaluationTimeD;
-	
+
+	private static NamedEnumPropertyDescriptor<EvaluationTimeEnum> evaluationTimeD;
+
 	/**
 	 * Gets the icon descriptor.
 	 * 
@@ -126,45 +122,45 @@ public class MTextField extends MTextElement{
 
 	@Override
 	protected void setGroupItems(String[] items) {
-		//Called by the post descriptors of MGraphicalElement
+		// Called by the post descriptors of MGraphicalElement
 		super.setGroupItems(items);
 		if (evalGroupD != null)
 			evalGroupD.setItems(items);
 	}
-	
+
 	@Override
-	public JRDataset getElementDataset(){
+	public JRDataset getElementDataset() {
 		return getElementDataset(this);
 	}
-	
+
 	/**
 	 * Return the dataset nearest to this element
 	 * 
-	 * @param node the actual node
+	 * @param node
+	 *          the actual node
 	 * @return the dataset nearest to this element or null if it can't be found
 	 */
-	private JRDataset getElementDataset(ANode node){
-		if (node instanceof APropertyNode){
-			APropertyNode pnode = (APropertyNode)node;
+	private JRDataset getElementDataset(ANode node) {
+		if (node instanceof APropertyNode) {
+			APropertyNode pnode = (APropertyNode) node;
 			MDatasetRun mdataset = (MDatasetRun) pnode.getPropertyValue(JRDesignElementDataset.PROPERTY_DATASET_RUN);
 			if (mdataset != null) {
-					JRDesignDatasetRun datasetRun = mdataset.getValue();
-					if (datasetRun != null) {
-						String dsname = datasetRun.getDatasetName();
-						return getJasperDesign().getDatasetMap().get(dsname);
-					}
-			} 
+				JRDesignDatasetRun datasetRun = mdataset.getValue();
+				if (datasetRun != null) {
+					String dsname = datasetRun.getDatasetName();
+					return getJasperDesign().getDatasetMap().get(dsname);
+				}
+			}
 		}
 		ANode parent = node.getParent();
-		if (parent != null){
+		if (parent != null) {
 			return getElementDataset(parent);
-		} else if (getJasperDesign() != null){
+		} else if (getJasperDesign() != null) {
 			return getJasperDesign().getMainDataset();
 		} else {
 			return null;
 		}
 	}
-	
 
 	private RWComboBoxPropertyDescriptor evalGroupD;
 
@@ -178,8 +174,8 @@ public class MTextField extends MTextElement{
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		evaluationTimeD = new JSSEnumPropertyDescriptor(JRDesignTextField.PROPERTY_EVALUATION_TIME,
-				Messages.common_evaluation_time, EvaluationTimeEnum.class, NullEnum.NOTNULL);
+		evaluationTimeD = new NamedEnumPropertyDescriptor<EvaluationTimeEnum>(JRDesignTextField.PROPERTY_EVALUATION_TIME,
+				Messages.common_evaluation_time, EvaluationTimeEnum.AUTO, NullEnum.NOTNULL);
 		evaluationTimeD.setDescription(Messages.MTextField_evaluation_time_description);
 		desc.add(evaluationTimeD);
 
@@ -204,26 +200,29 @@ public class MTextField extends MTextElement{
 		desc.add(exprD);
 		exprD.setHelpRefBuilder(new HelpReferenceBuilder(
 				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#textFieldExpression")); //$NON-NLS-1$
-		
-		JRExpressionPropertyDescriptor anchorNameExp = new JRExpressionPropertyDescriptor(JRDesignTextField.PROPERTY_ANCHOR_NAME_EXPRESSION, Messages.MTextField_anchorNameLabel);
+
+		JRExpressionPropertyDescriptor anchorNameExp = new JRExpressionPropertyDescriptor(
+				JRDesignTextField.PROPERTY_ANCHOR_NAME_EXPRESSION, Messages.MTextField_anchorNameLabel);
 		anchorNameExp.setDescription(Messages.MTextField_anchorNameDescription);
 		desc.add(anchorNameExp);
-		
-		SpinnerPropertyDescriptor bookmarkLevel = new SpinnerPropertyDescriptor(JRDesignTextField.PROPERTY_BOOKMARK_LEVEL, Messages.MTextField_bookmarkLevelLabel);
+
+		SpinnerPropertyDescriptor bookmarkLevel = new SpinnerPropertyDescriptor(JRDesignTextField.PROPERTY_BOOKMARK_LEVEL,
+				Messages.MTextField_bookmarkLevelLabel);
 		bookmarkLevel.setDescription(Messages.MTextField_bookmarkLevelDescription);
-		bookmarkLevel.setHelpRefBuilder(new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#chart_bookmarkLevel")); //$NON-NLS-1$
+		bookmarkLevel.setHelpRefBuilder(new HelpReferenceBuilder(
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#chart_bookmarkLevel")); //$NON-NLS-1$
 		desc.add(bookmarkLevel);
-		
+
 		PatternPropertyDescriptor patternD = new PatternPropertyDescriptor(JRDesignStyle.PROPERTY_PATTERN,
 				Messages.common_pattern);
 		patternD.setDescription(Messages.MTextField_pattern_description);
 		desc.add(patternD);
 
 		JRExpressionPropertyDescriptor pexprD = new JRExpressionPropertyDescriptor(
-				JRDesignTextField.PROPERTY_PATTERN_EXPRESSION, Messages.MTextField_patternExpressionTitle); 
+				JRDesignTextField.PROPERTY_PATTERN_EXPRESSION, Messages.MTextField_patternExpressionTitle);
 		pexprD.setDescription("Pattern expression"); //$NON-NLS-1$
 		desc.add(pexprD);
-		
+
 		pexprD.setHelpRefBuilder(new HelpReferenceBuilder(
 				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#patternExpression")); //$NON-NLS-1$
 
@@ -243,7 +242,7 @@ public class MTextField extends MTextElement{
 		stretchOverflowD.setCategory(Messages.MTextField_textfield_category);
 		pexprD.setCategory(Messages.MTextField_textfield_category);
 
-		defaultsMap.put(JRDesignTextField.PROPERTY_EVALUATION_TIME, EvaluationTimeEnum.NOW);
+		defaultsMap.put(JRDesignTextField.PROPERTY_EVALUATION_TIME, evaluationTimeD.getIntValue(EvaluationTimeEnum.NOW));
 		defaultsMap.put(JRDesignStyle.PROPERTY_BLANK_WHEN_NULL, Boolean.FALSE);
 		defaultsMap.put(JRBaseTextField.PROPERTY_STRETCH_WITH_OVERFLOW, Boolean.FALSE);
 	}
@@ -267,7 +266,7 @@ public class MTextField extends MTextElement{
 			return ExprUtil.getExpression(jrElement.getPatternExpression());
 
 		if (id.equals(JRDesignTextField.PROPERTY_EVALUATION_TIME))
-			return evaluationTimeD.getEnumValue(jrElement.getEvaluationTimeValue());
+			return evaluationTimeD.getIntValue(jrElement.getEvaluationTimeValue());
 		if (id.equals(JRDesignStyle.PROPERTY_BLANK_WHEN_NULL))
 			return jrElement.isOwnBlankWhenNull();
 		if (id.equals(JRBaseTextField.PROPERTY_STRETCH_WITH_OVERFLOW))
@@ -304,34 +303,33 @@ public class MTextField extends MTextElement{
 		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_WHEN_EXPRESSION)) {
 			return ExprUtil.getExpression(jrElement.getHyperlinkWhenExpression());
 		}
-		if (id.equals(JRDesignTextField.PROPERTY_ANCHOR_NAME_EXPRESSION)){
+		if (id.equals(JRDesignTextField.PROPERTY_ANCHOR_NAME_EXPRESSION)) {
 			return ExprUtil.getExpression(jrElement.getAnchorNameExpression());
 		}
-		if (id.equals(JRDesignTextField.PROPERTY_BOOKMARK_LEVEL)){
+		if (id.equals(JRDesignTextField.PROPERTY_BOOKMARK_LEVEL)) {
 			return jrElement.getBookmarkLevel();
 		}
 		return super.getPropertyValue(id);
 	}
-	
-	
+
 	@Override
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignTextField jrElement = (JRDesignTextField) getValue();
 
 		if (id.equals(JRDesignTextField.PROPERTY_EVALUATION_TIME))
-			jrElement.setEvaluationTime((EvaluationTimeEnum) evaluationTimeD.getEnumValue(value));
+			jrElement.setEvaluationTime(evaluationTimeD.getEnumValue(value));
 		else if (id.equals(JRDesignTextField.PROPERTY_EVALUATION_GROUP)) {
 			if (value != null && !value.equals("")) { //$NON-NLS-1$
-				JRDesignDataset dataset = (JRDesignDataset)getElementDataset();
+				JRDesignDataset dataset = (JRDesignDataset) getElementDataset();
 				JRGroup group = (JRGroup) dataset.getGroupsMap().get(value);
 				jrElement.setEvaluationGroup(group);
 			} else
 				jrElement.setEvaluationGroup(null);
-		} else if (id.equals(JRDesignTextField.PROPERTY_EXPRESSION)){
+		} else if (id.equals(JRDesignTextField.PROPERTY_EXPRESSION)) {
 			jrElement.setExpression(ExprUtil.setValues(jrElement.getExpression(), value));
-			JRDesignExpression expression = (JRDesignExpression)jrElement.getExpression();
-			//When the expression changes update also the listeners
-			if (expression != null){
+			JRDesignExpression expression = (JRDesignExpression) jrElement.getExpression();
+			// When the expression changes update also the listeners
+			if (expression != null) {
 				removeListeners(expression);
 				expression.getEventSupport().addPropertyChangeListener(new ExpressionNameChanged(this));
 			}
@@ -363,13 +361,13 @@ public class MTextField extends MTextElement{
 			jrElement.setBookmarkLevel(value != null ? Integer.parseInt(value.toString()) : 0);
 		else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_PARAMETERS)) {
 			JRHyperlinkParameter[] oldParameters = jrElement.getHyperlinkParameters();
-			JRHyperlinkParameter[] newParameters = (JRHyperlinkParameter[])value;
-			if (oldParameters != null){
-				for (JRHyperlinkParameter prm : oldParameters){
+			JRHyperlinkParameter[] newParameters = (JRHyperlinkParameter[]) value;
+			if (oldParameters != null) {
+				for (JRHyperlinkParameter prm : oldParameters) {
 					jrElement.removeHyperlinkParameter(prm);
 				}
 			}
-			for (JRHyperlinkParameter param :newParameters){
+			for (JRHyperlinkParameter param : newParameters) {
 				jrElement.addHyperlinkParameter(param);
 			}
 		} else
@@ -377,82 +375,84 @@ public class MTextField extends MTextElement{
 	}
 
 	/**
-	 * Listener for the expression of the element. This will ask for the
-	 * refresh of its container or eventually of the containers of the element
+	 * Listener for the expression of the element. This will ask for the refresh of its container or eventually of the
+	 * containers of the element
 	 * 
 	 * @author Orlandin Marco
 	 *
 	 */
 	private class ExpressionNameChanged implements PropertyChangeListener {
-		
+
 		/**
 		 * Element to refresh, owner of the expression
 		 */
 		private MTextField element;
-		
-		public ExpressionNameChanged(MTextField element){
+
+		public ExpressionNameChanged(MTextField element) {
 			this.element = element;
 		}
-		
+
 		/**
 		 * Wait the changes of the expression
 		 */
 		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
-			if (JRDesignExpression.PROPERTY_TEXT.equals(evt.getPropertyName()) && element != null){
+			if (JRDesignExpression.PROPERTY_TEXT.equals(evt.getPropertyName()) && element != null) {
 				ANode parent = element.getParent();
-				//Refresh also the container if it is a table or something like that
-				while (parent != null){
-					if (parent instanceof IGraphicalPropertiesHandler){
-						((IGraphicalPropertiesHandler)parent).setChangedProperty(true);
-						if (parent.getValue() instanceof JRChangeEventsSupport){
-							((JRChangeEventsSupport)parent.getValue()).getEventSupport().firePropertyChange(FORCE_GRAPHICAL_REFRESH, null, null);
+				// Refresh also the container if it is a table or something like that
+				while (parent != null) {
+					if (parent instanceof IGraphicalPropertiesHandler) {
+						((IGraphicalPropertiesHandler) parent).setChangedProperty(true);
+						if (parent.getValue() instanceof JRChangeEventsSupport) {
+							((JRChangeEventsSupport) parent.getValue()).getEventSupport().firePropertyChange(FORCE_GRAPHICAL_REFRESH,
+									null, null);
 						}
-						
+
 					}
 					parent = parent.getParent();
 				}
-				//Notify the change to the element, no need to set the the refresh to true, it will be done by
-				//the property change since the PROPERTY_EXPRESSION is a graphical property
-				element.getValue().getEventSupport().firePropertyChange(JRDesignTextField.PROPERTY_EXPRESSION, evt.getOldValue(), evt.getNewValue());
+				// Notify the change to the element, no need to set the the refresh to true, it will be done by
+				// the property change since the PROPERTY_EXPRESSION is a graphical property
+				element.getValue().getEventSupport()
+						.firePropertyChange(JRDesignTextField.PROPERTY_EXPRESSION, evt.getOldValue(), evt.getNewValue());
 			}
 		}
 	};
-	
+
 	/**
 	 * Remove all the ExpressionNameChanged listeners from an expression element
 	 * 
-	 * @param expression the expression element
+	 * @param expression
+	 *          the expression element
 	 */
-	private void removeListeners(JRDesignExpression expression){
+	private void removeListeners(JRDesignExpression expression) {
 		List<PropertyChangeListener> listenersToRemove = new ArrayList<PropertyChangeListener>();
-		for(PropertyChangeListener listener : expression.getEventSupport().getPropertyChangeListeners()){
-			if (listener instanceof ExpressionNameChanged){
+		for (PropertyChangeListener listener : expression.getEventSupport().getPropertyChangeListeners()) {
+			if (listener instanceof ExpressionNameChanged) {
 				listenersToRemove.add(listener);
 			}
 		}
-		for(PropertyChangeListener listener : listenersToRemove){
+		for (PropertyChangeListener listener : listenersToRemove) {
 			expression.getEventSupport().removePropertyChangeListener(listener);
 		}
 	}
-	
+
 	/**
-	 * When the value of the element is set, it will be removed also all the ExpressionNameChange from 
-	 * the expression of its value and will be set a new ExpressionNameChange on the expression for the actual 
-	 * model. This is done to avoid duplicate of the listener if for expample the JRElement is moved from a model
-	 * to another
+	 * When the value of the element is set, it will be removed also all the ExpressionNameChange from the expression of
+	 * its value and will be set a new ExpressionNameChange on the expression for the actual model. This is done to avoid
+	 * duplicate of the listener if for expample the JRElement is moved from a model to another
 	 */
 	@Override
 	public void setValue(Object value) {
 		super.setValue(value);
 		JRDesignTextField jrElement = (JRDesignTextField) getValue();
-		JRDesignExpression expression = (JRDesignExpression)jrElement.getExpression();
-		if (expression != null){
+		JRDesignExpression expression = (JRDesignExpression) jrElement.getExpression();
+		if (expression != null) {
 			removeListeners(expression);
 			expression.getEventSupport().addPropertyChangeListener(new ExpressionNameChanged(this));
 		}
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -463,7 +463,8 @@ public class MTextField extends MTextElement{
 		JRDesignTextField jrDesignTextField = new JRDesignTextField();
 		jrDesignTextField.setX(0);
 		jrDesignTextField.setY(0);
-		jrDesignTextField.setExpression(new JRDesignExpression("\"".concat(Messages.MTextField_common_text_field).concat("\""))); //$NON-NLS-1$
+		jrDesignTextField.setExpression(new JRDesignExpression(
+				"\"".concat(Messages.MTextField_common_text_field).concat("\""))); //$NON-NLS-1$
 
 		DefaultManager.INSTANCE.applyDefault(this.getClass(), jrDesignTextField);
 
@@ -508,18 +509,18 @@ public class MTextField extends MTextElement{
 	/**
 	 * Return the graphical properties for an MTextField
 	 */
-	public HashSet<String> generateGraphicalProperties(){
+	public HashSet<String> generateGraphicalProperties() {
 		HashSet<String> result = super.generateGraphicalProperties();
 		result.add(JRDesignTextField.PROPERTY_EXPRESSION);
 		return result;
 	}
-	
+
 	@Override
-	public void trasnferProperties(JRElement target){
+	public void trasnferProperties(JRElement target) {
 		super.trasnferProperties(target);
 		JRDesignTextField jrSource = (JRDesignTextField) getValue();
-		JRDesignTextField jrTarget = (JRDesignTextField)target;
-		
+		JRDesignTextField jrTarget = (JRDesignTextField) target;
+
 		jrTarget.setBlankWhenNull(jrSource.isOwnBlankWhenNull());
 		jrTarget.setPattern(getStringClone(jrSource.getOwnPattern()));
 		jrTarget.setStretchWithOverflow(jrSource.isStretchWithOverflow());

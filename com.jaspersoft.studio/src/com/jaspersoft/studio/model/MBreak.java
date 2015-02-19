@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.model;
 
@@ -31,7 +27,7 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
-import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 
 /*
  * The Class MBreak.
@@ -76,7 +72,7 @@ public class MBreak extends MGraphicElement {
 
 	private static IPropertyDescriptor[] descriptors;
 	private static Map<String, Object> defaultsMap;
-	private static JSSEnumPropertyDescriptor typeD;
+	private static NamedEnumPropertyDescriptor<BreakTypeEnum> typeD;
 
 	@Override
 	public Map<String, Object> getDefaultsMap() {
@@ -104,13 +100,13 @@ public class MBreak extends MGraphicElement {
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		typeD = new JSSEnumPropertyDescriptor(JRBaseBreak.PROPERTY_TYPE, Messages.MBreak_type, BreakTypeEnum.class,
-				NullEnum.NOTNULL);
+		typeD = new NamedEnumPropertyDescriptor<BreakTypeEnum>(JRBaseBreak.PROPERTY_TYPE, Messages.MBreak_type,
+				BreakTypeEnum.COLUMN, NullEnum.NOTNULL);
 		typeD.setDescription(Messages.MBreak_type_description);
 		desc.add(typeD);
 		typeD.setCategory(Messages.MBreak_break_properties_category);
 
-		defaultsMap.put(JRBaseBreak.PROPERTY_TYPE, typeD.getEnumValue(BreakTypeEnum.PAGE));
+		defaultsMap.put(JRBaseBreak.PROPERTY_TYPE, typeD.getIntValue(BreakTypeEnum.PAGE));
 
 		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#break");
 	}
@@ -119,7 +115,7 @@ public class MBreak extends MGraphicElement {
 	public Object getPropertyValue(Object id) {
 		JRDesignBreak jrElement = (JRDesignBreak) getValue();
 		if (id.equals(JRBaseBreak.PROPERTY_TYPE))
-			return typeD.getEnumValue(jrElement.getTypeValue());
+			return typeD.getIntValue(jrElement.getTypeValue());
 		return super.getPropertyValue(id);
 	}
 
@@ -128,21 +124,23 @@ public class MBreak extends MGraphicElement {
 		JRDesignBreak jrElement = (JRDesignBreak) getValue();
 
 		if (id.equals(JRBaseBreak.PROPERTY_TYPE))
-			jrElement.setType((BreakTypeEnum) typeD.getEnumValue(value));
+			jrElement.setType(typeD.getEnumValue(value));
 		else
 			super.setPropertyValue(id, value);
 	}
 
 	@Override
 	public int getDefaultHeight() {
-		Object defaultValue = DefaultManager.INSTANCE.getDefaultPropertiesValue(this.getClass(), JRDesignElement.PROPERTY_HEIGHT);
-		return defaultValue != null ? (Integer)defaultValue : 3;
+		Object defaultValue = DefaultManager.INSTANCE.getDefaultPropertiesValue(this.getClass(),
+				JRDesignElement.PROPERTY_HEIGHT);
+		return defaultValue != null ? (Integer) defaultValue : 3;
 	}
 
 	@Override
 	public int getDefaultWidth() {
-		Object defaultValue = DefaultManager.INSTANCE.getDefaultPropertiesValue(this.getClass(), JRDesignElement.PROPERTY_WIDTH);
-		return defaultValue != null ? (Integer)defaultValue : 100;
+		Object defaultValue = DefaultManager.INSTANCE.getDefaultPropertiesValue(this.getClass(),
+				JRDesignElement.PROPERTY_WIDTH);
+		return defaultValue != null ? (Integer) defaultValue : 100;
 	}
 
 	/*
@@ -155,9 +153,9 @@ public class MBreak extends MGraphicElement {
 		JRDesignBreak brk = new JRDesignBreak();
 		brk.setWidth(getDefaultWidth());
 		brk.setHeight(getDefaultHeight());
-		
+
 		DefaultManager.INSTANCE.applyDefault(this.getClass(), brk);
-		
+
 		return brk;
 	}
 
@@ -190,14 +188,14 @@ public class MBreak extends MGraphicElement {
 	public String getToolTip() {
 		return getIconDescriptor().getToolTip();
 	}
-	
+
 	@Override
-	public void trasnferProperties(JRElement target){
+	public void trasnferProperties(JRElement target) {
 		super.trasnferProperties(target);
-		
+
 		JRDesignBreak jrSource = (JRDesignBreak) getValue();
-		if (jrSource != null){
-			JRDesignBreak jrTarget = (JRDesignBreak)target;
+		if (jrSource != null) {
+			JRDesignBreak jrTarget = (JRDesignBreak) target;
 			jrTarget.setType(jrSource.getTypeValue());
 		}
 	}

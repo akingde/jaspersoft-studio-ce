@@ -51,7 +51,7 @@ import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.ImageHAlignPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.ImageVAlignPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.SpinnerPropertyDescriptor;
 
 /*
@@ -179,15 +179,15 @@ public class MImage extends MGraphicElementLineBox {
 		expressionD.setHelpRefBuilder(new HelpReferenceBuilder(
 				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#imageExpression"));
 
-		fillD = new JSSEnumPropertyDescriptor(JRBaseStyle.PROPERTY_FILL, Messages.common_fill, FillEnum.class,
+		fillD = new NamedEnumPropertyDescriptor<FillEnum>(JRBaseStyle.PROPERTY_FILL, Messages.common_fill, FillEnum.SOLID,
 				NullEnum.INHERITED);
 		fillD.setDescription(Messages.MImage_fill_description);
 		desc.add(fillD);
 		fillD.setHelpRefBuilder(new HelpReferenceBuilder(
 				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#style_fill"));
 
-		scaleImageD = new JSSEnumPropertyDescriptor(JRBaseStyle.PROPERTY_SCALE_IMAGE, Messages.MImage_scale_image,
-				ScaleImageEnum.class, NullEnum.INHERITED);
+		scaleImageD = new NamedEnumPropertyDescriptor<ScaleImageEnum>(JRBaseStyle.PROPERTY_SCALE_IMAGE,
+				Messages.MImage_scale_image, ScaleImageEnum.CLIP, NullEnum.INHERITED);
 		scaleImageD.setDescription(Messages.MImage_scale_image_description);
 		desc.add(scaleImageD);
 
@@ -201,13 +201,13 @@ public class MImage extends MGraphicElementLineBox {
 		vAlignD.setDescription(Messages.MImage_vertical_alignment_description);
 		desc.add(vAlignD);
 
-		onErrorTypeD = new JSSEnumPropertyDescriptor(JRBaseImage.PROPERTY_ON_ERROR_TYPE, Messages.MImage_on_error_type,
-				OnErrorTypeEnum.class, NullEnum.NULL);
+		onErrorTypeD = new NamedEnumPropertyDescriptor<OnErrorTypeEnum>(JRBaseImage.PROPERTY_ON_ERROR_TYPE,
+				Messages.MImage_on_error_type, OnErrorTypeEnum.BLANK, NullEnum.NULL);
 		onErrorTypeD.setDescription(Messages.MImage_on_error_type_description);
 		desc.add(onErrorTypeD);
 
-		evaluationTimeD = new JSSEnumPropertyDescriptor(JRDesignImage.PROPERTY_EVALUATION_TIME,
-				Messages.MImage_evaluation_type, EvaluationTimeEnum.class, NullEnum.NOTNULL);
+		evaluationTimeD = new NamedEnumPropertyDescriptor<EvaluationTimeEnum>(JRDesignImage.PROPERTY_EVALUATION_TIME,
+				Messages.MImage_evaluation_type, EvaluationTimeEnum.AUTO, NullEnum.NOTNULL);
 		evaluationTimeD.setDescription(Messages.MImage_evaluation_type_description);
 		desc.add(evaluationTimeD);
 
@@ -261,36 +261,36 @@ public class MImage extends MGraphicElementLineBox {
 		defaultsMap.put(JRBaseStyle.PROPERTY_SCALE_IMAGE, null);
 		defaultsMap.put(JRBaseStyle.PROPERTY_HORIZONTAL_IMAGE_ALIGNMENT, null);
 		defaultsMap.put(JRBaseStyle.PROPERTY_VERTICAL_IMAGE_ALIGNMENT, null);
-		defaultsMap.put(JRBaseImage.PROPERTY_ON_ERROR_TYPE, onErrorTypeD.getEnumValue(OnErrorTypeEnum.ERROR));
-		defaultsMap.put(JRDesignImage.PROPERTY_EVALUATION_TIME, EvaluationTimeEnum.NOW);
+		defaultsMap.put(JRBaseImage.PROPERTY_ON_ERROR_TYPE, onErrorTypeD.getIntValue(OnErrorTypeEnum.ERROR));
+		defaultsMap.put(JRDesignImage.PROPERTY_EVALUATION_TIME, evaluationTimeD.getIntValue(EvaluationTimeEnum.NOW));
 		defaultsMap.put(JRDesignImage.PROPERTY_EXPRESSION, "java.lang.String"); //$NON-NLS-1$
 		defaultsMap.put(JRBaseImage.PROPERTY_LAZY, Boolean.FALSE);
 	}
 
 	private MHyperLink mHyperLink;
 
-	private static JSSEnumPropertyDescriptor scaleImageD;
+	private static NamedEnumPropertyDescriptor<ScaleImageEnum> scaleImageD;
 	private static ImageHAlignPropertyDescriptor hAlignD;
-	private static JSSEnumPropertyDescriptor fillD;
+	private static NamedEnumPropertyDescriptor<FillEnum> fillD;
 	private static ImageVAlignPropertyDescriptor vAlignD;
-	private static JSSEnumPropertyDescriptor onErrorTypeD;
-	private static JSSEnumPropertyDescriptor evaluationTimeD;
+	private static NamedEnumPropertyDescriptor<OnErrorTypeEnum> onErrorTypeD;
+	private static NamedEnumPropertyDescriptor<EvaluationTimeEnum> evaluationTimeD;
 
 	@Override
 	public Object getPropertyValue(Object id) {
 		JRDesignImage jrElement = (JRDesignImage) getValue();
 		if (id.equals(JRBaseStyle.PROPERTY_FILL))
-			return fillD.getEnumValue(jrElement.getOwnFillValue());
+			return fillD.getIntValue(jrElement.getOwnFillValue());
 		if (id.equals(JRBaseStyle.PROPERTY_SCALE_IMAGE))
-			return scaleImageD.getEnumValue(jrElement.getOwnScaleImageValue());
+			return scaleImageD.getIntValue(jrElement.getOwnScaleImageValue());
 		if (id.equals(JRBaseStyle.PROPERTY_HORIZONTAL_IMAGE_ALIGNMENT))
 			return hAlignD.getIntValue(jrElement.getOwnHorizontalImageAlign());
 		if (id.equals(JRBaseStyle.PROPERTY_VERTICAL_IMAGE_ALIGNMENT))
 			return vAlignD.getIntValue(jrElement.getOwnVerticalImageAlign());
 		if (id.equals(JRBaseImage.PROPERTY_ON_ERROR_TYPE))
-			return onErrorTypeD.getEnumValue(jrElement.getOnErrorTypeValue());
+			return onErrorTypeD.getIntValue(jrElement.getOnErrorTypeValue());
 		if (id.equals(JRDesignImage.PROPERTY_EVALUATION_TIME))
-			return evaluationTimeD.getEnumValue(jrElement.getEvaluationTimeValue());
+			return evaluationTimeD.getIntValue(jrElement.getEvaluationTimeValue());
 		if (id.equals(JRDesignImage.PROPERTY_EXPRESSION))
 			return ExprUtil.getExpression(jrElement.getExpression());
 
@@ -336,17 +336,17 @@ public class MImage extends MGraphicElementLineBox {
 	public Object getPropertyActualValue(Object id) {
 		JRDesignImage jrElement = (JRDesignImage) getValue();
 		if (id.equals(JRBaseStyle.PROPERTY_FILL))
-			return fillD.getEnumValue(jrElement.getFillValue());
+			return fillD.getIntValue(jrElement.getFillValue());
 		if (id.equals(JRBaseStyle.PROPERTY_SCALE_IMAGE))
-			return scaleImageD.getEnumValue(jrElement.getScaleImageValue());
+			return scaleImageD.getIntValue(jrElement.getScaleImageValue());
 		if (id.equals(JRBaseStyle.PROPERTY_HORIZONTAL_IMAGE_ALIGNMENT))
 			return hAlignD.getIntValue(jrElement.getHorizontalImageAlign());
 		if (id.equals(JRBaseStyle.PROPERTY_VERTICAL_IMAGE_ALIGNMENT))
 			return vAlignD.getIntValue(jrElement.getVerticalImageAlign());
 		if (id.equals(JRBaseImage.PROPERTY_ON_ERROR_TYPE))
-			return onErrorTypeD.getEnumValue(jrElement.getOnErrorTypeValue());
+			return onErrorTypeD.getIntValue(jrElement.getOnErrorTypeValue());
 		if (id.equals(JRDesignImage.PROPERTY_EVALUATION_TIME))
-			return evaluationTimeD.getEnumValue(jrElement.getEvaluationTimeValue());
+			return evaluationTimeD.getIntValue(jrElement.getEvaluationTimeValue());
 		if (id.equals(JRDesignImage.PROPERTY_EXPRESSION))
 			return ExprUtil.getExpression(jrElement.getExpression());
 
@@ -381,17 +381,17 @@ public class MImage extends MGraphicElementLineBox {
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignImage jrElement = (JRDesignImage) getValue();
 		if (id.equals(JRBaseStyle.PROPERTY_FILL))
-			jrElement.setFill((FillEnum) fillD.getEnumValue(value));
+			jrElement.setFill(fillD.getEnumValue(value));
 		else if (id.equals(JRBaseStyle.PROPERTY_SCALE_IMAGE))
-			jrElement.setScaleImage((ScaleImageEnum) scaleImageD.getEnumValue(value));
+			jrElement.setScaleImage(scaleImageD.getEnumValue(value));
 		else if (id.equals(JRBaseStyle.PROPERTY_HORIZONTAL_IMAGE_ALIGNMENT))
 			jrElement.setHorizontalImageAlign(hAlignD.getEnumValue(value));
 		else if (id.equals(JRBaseStyle.PROPERTY_VERTICAL_IMAGE_ALIGNMENT))
 			jrElement.setVerticalImageAlign(vAlignD.getEnumValue(value));
 		else if (id.equals(JRBaseImage.PROPERTY_ON_ERROR_TYPE))
-			jrElement.setOnErrorType((OnErrorTypeEnum) onErrorTypeD.getEnumValue(value));
+			jrElement.setOnErrorType(onErrorTypeD.getEnumValue(value));
 		else if (id.equals(JRDesignImage.PROPERTY_EVALUATION_TIME))
-			jrElement.setEvaluationTime((EvaluationTimeEnum) evaluationTimeD.getEnumValue(value));
+			jrElement.setEvaluationTime(evaluationTimeD.getEnumValue(value));
 		else if (id.equals(JRDesignImage.PROPERTY_EVALUATION_GROUP)) {
 			if (value != null && !value.equals("")) { //$NON-NLS-1$
 				JRDesignDataset dataset = (JRDesignDataset) getElementDataset();

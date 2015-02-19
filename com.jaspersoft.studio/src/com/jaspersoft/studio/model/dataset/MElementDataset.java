@@ -37,7 +37,7 @@ import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.combo.RComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 
 public class MElementDataset extends APropertyNode implements IContainer, IContainerEditPart {
 	private static IIconDescriptor iconDescriptor;
@@ -105,13 +105,13 @@ public class MElementDataset extends APropertyNode implements IContainer, IConta
 
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		resetTypeD = new JSSEnumPropertyDescriptor(JRDesignElementDataset.PROPERTY_RESET_TYPE, Messages.common_reset_type,
-				ResetTypeEnum.class, NullEnum.NOTNULL);
+		resetTypeD = new NamedEnumPropertyDescriptor<ResetTypeEnum>(JRDesignElementDataset.PROPERTY_RESET_TYPE,
+				Messages.common_reset_type, ResetTypeEnum.COLUMN, NullEnum.NOTNULL);
 		resetTypeD.setDescription(Messages.MElementDataset_reset_type_description);
 		desc.add(resetTypeD);
 
-		inctypeD = new JSSEnumPropertyDescriptor(JRDesignElementDataset.PROPERTY_INCREMENT_TYPE,
-				Messages.common_increment_type, IncrementTypeEnum.class, NullEnum.NOTNULL);
+		inctypeD = new NamedEnumPropertyDescriptor<IncrementTypeEnum>(JRDesignElementDataset.PROPERTY_INCREMENT_TYPE,
+				Messages.common_increment_type, IncrementTypeEnum.COLUMN, NullEnum.NOTNULL);
 		inctypeD.setDescription(Messages.MElementDataset_increment_type_description);
 		desc.add(inctypeD);
 
@@ -159,9 +159,9 @@ public class MElementDataset extends APropertyNode implements IContainer, IConta
 		if (jrElement == null)
 			return null;
 		if (id.equals(JRDesignElementDataset.PROPERTY_RESET_TYPE))
-			return resetTypeD.getEnumValue(jrElement.getResetTypeValue());
+			return resetTypeD.getIntValue(jrElement.getResetTypeValue());
 		if (id.equals(JRDesignElementDataset.PROPERTY_INCREMENT_TYPE))
-			return inctypeD.getEnumValue(jrElement.getIncrementTypeValue());
+			return inctypeD.getIntValue(jrElement.getIncrementTypeValue());
 		if (id.equals(JRDesignElementDataset.PROPERTY_INCREMENT_WHEN_EXPRESSION))
 			return ExprUtil.getExpression(jrElement.getIncrementWhenExpression());
 		if (id.equals(JRDesignElementDataset.PROPERTY_RESET_GROUP)) {
@@ -193,8 +193,8 @@ public class MElementDataset extends APropertyNode implements IContainer, IConta
 	private RComboBoxPropertyDescriptor resetGroupD;
 
 	private JasperDesign jasperDesign;
-	private static JSSEnumPropertyDescriptor resetTypeD;
-	private static JSSEnumPropertyDescriptor inctypeD;
+	private static NamedEnumPropertyDescriptor<ResetTypeEnum> resetTypeD;
+	private static NamedEnumPropertyDescriptor<IncrementTypeEnum> inctypeD;
 
 	@Override
 	public JasperDesign getJasperDesign() {
@@ -209,9 +209,9 @@ public class MElementDataset extends APropertyNode implements IContainer, IConta
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignElementDataset jrElement = (JRDesignElementDataset) getValue();
 		if (id.equals(JRDesignElementDataset.PROPERTY_INCREMENT_TYPE))
-			jrElement.setIncrementType((IncrementTypeEnum) inctypeD.getEnumValue(value));
+			jrElement.setIncrementType(inctypeD.getEnumValue(value));
 		else if (id.equals(JRDesignElementDataset.PROPERTY_RESET_TYPE))
-			jrElement.setResetType((ResetTypeEnum) resetTypeD.getEnumValue(value));
+			jrElement.setResetType(resetTypeD.getEnumValue(value));
 		else if (id.equals(JRDesignElementDataset.PROPERTY_INCREMENT_WHEN_EXPRESSION))
 			jrElement.setIncrementWhenExpression(ExprUtil.setValues(jrElement.getIncrementWhenExpression(), value));
 		else if (id.equals(JRDesignElementDataset.PROPERTY_INCREMENT_GROUP)) {

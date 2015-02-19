@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.model.text;
 
@@ -31,42 +27,35 @@ import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.tabstops.TabStopsPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.FloatPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.PixelPropertyDescriptor;
 
 public class MParagraph extends APropertyNode {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
-	
+
 	public MParagraph(ANode parent, JRBaseParagraph bParagraph) {
 		super();
-		setJasperConfiguration(parent.getJasperConfiguration()); 
+		setJasperConfiguration(parent.getJasperConfiguration());
 		setValue(bParagraph);
 	}
 
-	
-	/*@Override
-	public HashMap<String,Object> getStylesDescriptors() {
-		HashMap<String, Object> result = new HashMap<String, Object>();
-		if (getValue() == null)
-			return result;
-		JRBaseParagraph jrElement = (JRBaseParagraph) getValue();
-		result.put(JRBaseParagraph.PROPERTY_SPACING_BEFORE, jrElement.getOwnSpacingBefore());
-		result.put(JRBaseParagraph.PROPERTY_SPACING_AFTER, jrElement.getOwnSpacingAfter());
-		result.put(JRBaseParagraph.PROPERTY_FIRST_LINE_INDENT, jrElement.getOwnFirstLineIndent());
-		result.put(JRBaseParagraph.PROPERTY_LEFT_INDENT, jrElement.getOwnLeftIndent());
-		//result.put(JRBaseParagraph.PROPERTY_LINE_SPACING, jrElement.getOwnLineSpacing());
-		result.put(JRBaseParagraph.PROPERTY_LINE_SPACING_SIZE, jrElement.getOwnLineSpacingSize());
-		result.put(JRBaseParagraph.PROPERTY_RIGHT_INDENT, jrElement.getOwnRightIndent());
-		result.put(JRBaseParagraph.PROPERTY_TAB_STOP_WIDTH, jrElement.getOwnTabStopWidth());
-		return result;
-	}*/
+	/*
+	 * @Override public HashMap<String,Object> getStylesDescriptors() { HashMap<String, Object> result = new
+	 * HashMap<String, Object>(); if (getValue() == null) return result; JRBaseParagraph jrElement = (JRBaseParagraph)
+	 * getValue(); result.put(JRBaseParagraph.PROPERTY_SPACING_BEFORE, jrElement.getOwnSpacingBefore());
+	 * result.put(JRBaseParagraph.PROPERTY_SPACING_AFTER, jrElement.getOwnSpacingAfter());
+	 * result.put(JRBaseParagraph.PROPERTY_FIRST_LINE_INDENT, jrElement.getOwnFirstLineIndent());
+	 * result.put(JRBaseParagraph.PROPERTY_LEFT_INDENT, jrElement.getOwnLeftIndent());
+	 * //result.put(JRBaseParagraph.PROPERTY_LINE_SPACING, jrElement.getOwnLineSpacing());
+	 * result.put(JRBaseParagraph.PROPERTY_LINE_SPACING_SIZE, jrElement.getOwnLineSpacingSize());
+	 * result.put(JRBaseParagraph.PROPERTY_RIGHT_INDENT, jrElement.getOwnRightIndent());
+	 * result.put(JRBaseParagraph.PROPERTY_TAB_STOP_WIDTH, jrElement.getOwnTabStopWidth()); return result; }
+	 */
 
-
-	
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		lineSpacingD = new JSSEnumPropertyDescriptor(JRBaseParagraph.PROPERTY_LINE_SPACING, Messages.common_line_spacing,
-				LineSpacingEnum.class, NullEnum.INHERITED);
+		lineSpacingD = new NamedEnumPropertyDescriptor<LineSpacingEnum>(JRBaseParagraph.PROPERTY_LINE_SPACING,
+				Messages.common_line_spacing, LineSpacingEnum.AT_LEAST, NullEnum.INHERITED);
 		lineSpacingD.setDescription(Messages.MTextElement_line_spacing_description);
 		desc.add(lineSpacingD);
 
@@ -75,8 +64,8 @@ public class MParagraph extends APropertyNode {
 		lineSpacingSize.setDescription(Messages.MParagraph_lineSpacingSizeDescription);
 		desc.add(lineSpacingSize);
 
-		PixelPropertyDescriptor firstLineIdent = new PixelPropertyDescriptor(
-				JRBaseParagraph.PROPERTY_FIRST_LINE_INDENT, Messages.MParagraph_firstIdentTitle);
+		PixelPropertyDescriptor firstLineIdent = new PixelPropertyDescriptor(JRBaseParagraph.PROPERTY_FIRST_LINE_INDENT,
+				Messages.MParagraph_firstIdentTitle);
 		firstLineIdent.setDescription(Messages.MParagraph_firstIdentDescription);
 		desc.add(firstLineIdent);
 
@@ -125,7 +114,7 @@ public class MParagraph extends APropertyNode {
 
 	private static IPropertyDescriptor[] descriptors;
 	private static Map<String, Object> defaultsMap;
-	private static JSSEnumPropertyDescriptor lineSpacingD;
+	private static NamedEnumPropertyDescriptor<LineSpacingEnum> lineSpacingD;
 
 	@Override
 	public Map<String, Object> getDefaultsMap() {
@@ -142,13 +131,12 @@ public class MParagraph extends APropertyNode {
 		descriptors = descriptors1;
 		defaultsMap = defaultsMap1;
 	}
-	
-	
+
 	public Object getPropertyActualValue(Object id) {
 		JRBaseParagraph jrElement = (JRBaseParagraph) getValue();
 		if (jrElement != null) {
 			if (id.equals(JRBaseParagraph.PROPERTY_LINE_SPACING))
-				return lineSpacingD.getEnumValue(jrElement.getLineSpacing());
+				return lineSpacingD.getIntValue(jrElement.getLineSpacing());
 			if (id.equals(JRBaseParagraph.PROPERTY_LINE_SPACING_SIZE))
 				return jrElement.getLineSpacingSize();
 
@@ -179,7 +167,7 @@ public class MParagraph extends APropertyNode {
 		JRBaseParagraph jrElement = (JRBaseParagraph) getValue();
 		if (jrElement != null) {
 			if (id.equals(JRBaseParagraph.PROPERTY_LINE_SPACING))
-				return lineSpacingD.getEnumValue(jrElement.getOwnLineSpacing());
+				return lineSpacingD.getIntValue(jrElement.getOwnLineSpacing());
 			if (id.equals(JRBaseParagraph.PROPERTY_LINE_SPACING_SIZE))
 				return jrElement.getOwnLineSpacingSize();
 
@@ -216,7 +204,7 @@ public class MParagraph extends APropertyNode {
 		JRBaseParagraph jrElement = (JRBaseParagraph) getValue();
 		if (jrElement != null) {
 			if (id.equals(JRBaseParagraph.PROPERTY_LINE_SPACING))
-				jrElement.setLineSpacing((LineSpacingEnum) lineSpacingD.getEnumValue(value));
+				jrElement.setLineSpacing(lineSpacingD.getEnumValue(value));
 			if (id.equals(JRBaseParagraph.PROPERTY_LINE_SPACING_SIZE))
 				jrElement.setLineSpacingSize((Float) value);
 			if (id.equals(JRBaseParagraph.PROPERTY_FIRST_LINE_INDENT))

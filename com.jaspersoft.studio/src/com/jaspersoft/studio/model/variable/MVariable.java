@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.model.variable;
 
@@ -38,7 +34,7 @@ import com.jaspersoft.studio.property.descriptor.classname.NClassTypePropertyDes
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
@@ -113,15 +109,15 @@ public class MVariable extends MVariableSystem implements ICopyable {
 		descriptors = descriptors1;
 		defaultsMap = defaultsMap1;
 	}
-	
+
 	/**
 	 * When the descriptor are read the group information are updated
 	 */
 	@Override
 	protected void postDescriptors(IPropertyDescriptor[] descriptors) {
 		super.postDescriptors(descriptors);
-		//Don't update the descriptor when the parent is null (element removed)
-		if (getParent() != null){
+		// Don't update the descriptor when the parent is null (element removed)
+		if (getParent() != null) {
 			String[] items = getGroupList();
 			if (items != null) {
 				resetGroupD.setItems(items);
@@ -152,18 +148,18 @@ public class MVariable extends MVariableSystem implements ICopyable {
 		incrementGroupD.setDescription(Messages.MVariable_increment_group_description);
 		desc.add(incrementGroupD);
 
-		calculationD = new JSSEnumPropertyDescriptor(JRDesignVariable.PROPERTY_CALCULATION, Messages.MVariable_calculation,
-				CalculationEnum.class, NullEnum.NOTNULL);
+		calculationD = new NamedEnumPropertyDescriptor<CalculationEnum>(JRDesignVariable.PROPERTY_CALCULATION,
+				Messages.MVariable_calculation, CalculationEnum.AVERAGE, NullEnum.NOTNULL);
 		calculationD.setDescription(Messages.MVariable_calculation_description);
 		desc.add(calculationD);
 
-		resetTypeD = new JSSEnumPropertyDescriptor(JRDesignVariable.PROPERTY_RESET_TYPE, Messages.common_reset_type,
-				ResetTypeEnum.class, NullEnum.NOTNULL);
+		resetTypeD = new NamedEnumPropertyDescriptor<ResetTypeEnum>(JRDesignVariable.PROPERTY_RESET_TYPE,
+				Messages.common_reset_type, ResetTypeEnum.COLUMN, NullEnum.NOTNULL);
 		resetTypeD.setDescription(Messages.MVariable_reset_type_description);
 		desc.add(resetTypeD);
 
-		incrementTypeD = new JSSEnumPropertyDescriptor(JRDesignVariable.PROPERTY_INCREMENT_TYPE,
-				Messages.common_increment_type, IncrementTypeEnum.class, NullEnum.NOTNULL);
+		incrementTypeD = new NamedEnumPropertyDescriptor<IncrementTypeEnum>(JRDesignVariable.PROPERTY_INCREMENT_TYPE,
+				Messages.common_increment_type, IncrementTypeEnum.COLUMN, NullEnum.NOTNULL);
 		incrementTypeD.setDescription(Messages.MVariable_increment_type_description);
 		desc.add(incrementTypeD);
 
@@ -186,9 +182,9 @@ public class MVariable extends MVariableSystem implements ICopyable {
 		factoryClassName.setDescription(Messages.MVariable_incrementer_factory_class_name_description);
 		desc.add(factoryClassName);
 
-		defaultsMap.put(JRDesignVariable.PROPERTY_CALCULATION, EnumHelper.getValue(CalculationEnum.NOTHING, 0, false));
-		defaultsMap.put(JRDesignVariable.PROPERTY_RESET_TYPE, EnumHelper.getValue(ResetTypeEnum.REPORT, 1, false));
-		defaultsMap.put(JRDesignVariable.PROPERTY_INCREMENT_TYPE, EnumHelper.getValue(IncrementTypeEnum.NONE, 1, false));
+		defaultsMap.put(JRDesignVariable.PROPERTY_CALCULATION, calculationD.getIntValue(CalculationEnum.NOTHING));
+		defaultsMap.put(JRDesignVariable.PROPERTY_RESET_TYPE, resetTypeD.getIntValue(ResetTypeEnum.REPORT));
+		defaultsMap.put(JRDesignVariable.PROPERTY_INCREMENT_TYPE, incrementTypeD.getIntValue(IncrementTypeEnum.NONE));
 
 		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#variable");
 	}
@@ -217,26 +213,26 @@ public class MVariable extends MVariableSystem implements ICopyable {
 			return s;
 		if (id.equals(JRDesignVariable.PROPERTY_RESET_GROUP)) {
 			if (jrVariable.getResetTypeValue().equals(ResetTypeEnum.GROUP) && resetGroupD != null) {
-					if (jrVariable.getResetGroup() != null){
-						return jrVariable.getResetGroup().getName();
-					}
+				if (jrVariable.getResetGroup() != null) {
+					return jrVariable.getResetGroup().getName();
+				}
 			}
 			return ""; //$NON-NLS-1$
 		}
 		if (id.equals(JRDesignVariable.PROPERTY_INCREMENT_GROUP)) {
 			if (jrVariable.getIncrementTypeValue().equals(IncrementTypeEnum.GROUP) && incrementGroupD != null) {
-					if (jrVariable.getIncrementGroup() != null){
-						return jrVariable.getIncrementGroup().getName();
-					}
+				if (jrVariable.getIncrementGroup() != null) {
+					return jrVariable.getIncrementGroup().getName();
+				}
 			}
 			return ""; //$NON-NLS-1$
 		}
 		if (id.equals(JRDesignVariable.PROPERTY_CALCULATION))
-			return calculationD.getEnumValue(jrVariable.getCalculationValue());
+			return calculationD.getIntValue(jrVariable.getCalculationValue());
 		if (id.equals(JRDesignVariable.PROPERTY_RESET_TYPE))
-			return resetTypeD.getEnumValue(jrVariable.getResetTypeValue());
+			return resetTypeD.getIntValue(jrVariable.getResetTypeValue());
 		if (id.equals(JRDesignVariable.PROPERTY_INCREMENT_TYPE))
-			return incrementTypeD.getEnumValue(jrVariable.getIncrementTypeValue());
+			return incrementTypeD.getIntValue(jrVariable.getIncrementTypeValue());
 		if (id.equals(JRDesignVariable.PROPERTY_INCREMENTER_FACTORY_CLASS_NAME))
 			return jrVariable.getIncrementerFactoryClassName();
 		if (id.equals(JRDesignVariable.PROPERTY_EXPRESSION)) {
@@ -247,15 +243,13 @@ public class MVariable extends MVariableSystem implements ICopyable {
 		}
 		return null;
 	}
-	
+
 	/**
-	 * Return the list of group for the dataset parent of the variable
-	 * or null if there isn't any group
+	 * Return the list of group for the dataset parent of the variable or null if there isn't any group
 	 * 
-	 * @return An array of string with the name of every group inside 
-	 * the variable dataset, or null if there aren't groups
+	 * @return An array of string with the name of every group inside the variable dataset, or null if there aren't groups
 	 */
-	private String[] getGroupList(){
+	private String[] getGroupList() {
 		JRDesignDataset jrDataset = getDataSet();
 		JRGroup[] groups = jrDataset.getGroups();
 		String[] items = null;
@@ -283,7 +277,8 @@ public class MVariable extends MVariableSystem implements ICopyable {
 				JRDesignDataset jrDataset = getDataSet();
 				JRGroup group = (JRGroup) jrDataset.getGroupsMap().get(value);
 				jrVariable.setResetGroup(group);
-			} else jrVariable.setResetGroup(null);
+			} else
+				jrVariable.setResetGroup(null);
 		} else if (id.equals(JRDesignVariable.PROPERTY_EXPRESSION))
 			jrVariable.setExpression(ExprUtil.setValues(jrVariable.getExpression(), value));
 		else if (id.equals(JRDesignVariable.PROPERTY_INITIAL_VALUE_EXPRESSION))
@@ -293,15 +288,16 @@ public class MVariable extends MVariableSystem implements ICopyable {
 				JRDesignDataset jrDataset = getDataSet();
 				JRGroup group = (JRGroup) jrDataset.getGroupsMap().get(value);
 				jrVariable.setIncrementGroup(group);
-			}  else jrVariable.setIncrementGroup(null);
+			} else
+				jrVariable.setIncrementGroup(null);
 		} else if (id.equals(JRDesignVariable.PROPERTY_CALCULATION))
-			jrVariable.setCalculation((CalculationEnum) calculationD.getEnumValue(value));
+			jrVariable.setCalculation(calculationD.getEnumValue(value));
 		else if (id.equals(JRDesignVariable.PROPERTY_RESET_TYPE)) {
-			jrVariable.setResetType((ResetTypeEnum) resetTypeD.getEnumValue(value));
+			jrVariable.setResetType(resetTypeD.getEnumValue(value));
 			if (!jrVariable.getResetTypeValue().equals(ResetTypeEnum.GROUP))
 				jrVariable.setResetGroup(null);
 		} else if (id.equals(JRDesignVariable.PROPERTY_INCREMENT_TYPE)) {
-			jrVariable.setIncrementType((IncrementTypeEnum) incrementTypeD.getEnumValue(value));
+			jrVariable.setIncrementType(incrementTypeD.getEnumValue(value));
 			if (!jrVariable.getIncrementTypeValue().equals(IncrementTypeEnum.GROUP))
 				jrVariable.setIncrementGroup(null);
 		} else if (id.equals(JRDesignVariable.PROPERTY_INCREMENTER_FACTORY_CLASS_NAME)) {
@@ -313,9 +309,9 @@ public class MVariable extends MVariableSystem implements ICopyable {
 		}
 	}
 
-	private static JSSEnumPropertyDescriptor calculationD;
-	private static JSSEnumPropertyDescriptor resetTypeD;
-	private static JSSEnumPropertyDescriptor incrementTypeD;
+	private static NamedEnumPropertyDescriptor<CalculationEnum> calculationD;
+	private static NamedEnumPropertyDescriptor<ResetTypeEnum> resetTypeD;
+	private static NamedEnumPropertyDescriptor<IncrementTypeEnum> incrementTypeD;
 
 	protected JRDesignDataset getDataSet() {
 		return ModelUtils.getDataset(this);
@@ -348,7 +344,7 @@ public class MVariable extends MVariableSystem implements ICopyable {
 		}
 		return super.getAdapter(adapter);
 	}
-	
+
 	@Override
 	public void setValue(Object value) {
 		super.setValue(value);

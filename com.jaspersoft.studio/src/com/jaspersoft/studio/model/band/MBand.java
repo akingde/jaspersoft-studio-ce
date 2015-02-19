@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.model.band;
 
@@ -55,7 +51,7 @@ import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.properties.JPropertiesPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.PixelPropertyDescriptor;
 import com.jaspersoft.studio.utils.Misc;
 
@@ -215,23 +211,23 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 	 */
 	public String getDisplayText() {
 		JRDesignBand value = (JRDesignBand) getValue();
-		
+
 		String hiddenText = new String();
-		if (!isVisible()){
+		if (!isVisible()) {
 			hiddenText = Messages.MBand_hiddenLabel;
 		}
-		
+
 		if (bandType.equals(BandTypeEnum.DETAIL)) {
 			String index = ""; //$NON-NLS-1$
 			if (bandIndex != -1)
 				index = " " + String.valueOf(bandIndex); //$NON-NLS-1$
 			if (value != null)
-				return Messages.MBand_detail + index + " [" + value.getHeight() + "px]"+hiddenText;// + value.hashCode(); //$NON-NLS-1$ //$NON-NLS-2$
+				return Messages.MBand_detail + index + " [" + value.getHeight() + "px]" + hiddenText;// + value.hashCode(); //$NON-NLS-1$ //$NON-NLS-2$
 			return Messages.MBand_detail + index + " "; //$NON-NLS-1$
 		}
 		if (value == null)
 			return MessagesByKeys.getString(bandType.getName());
-		return MessagesByKeys.getString(value.getOrigin().getBandTypeValue().getName()+hiddenText);
+		return MessagesByKeys.getString(value.getOrigin().getBandTypeValue().getName() + hiddenText);
 	}
 
 	/**
@@ -303,11 +299,10 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 		descriptors = descriptors1;
 		defaultsMap = defaultsMap1;
 	}
-	
+
 	/**
-	 * For a model band it can be normal to not have a 
-	 * jr object inside, in this case it should anyway
-	 * return it's descriptors
+	 * For a model band it can be normal to not have a jr object inside, in this case it should anyway return it's
+	 * descriptors
 	 */
 	public IPropertyDescriptor[] getPropertyDescriptors() {
 		IPropertyDescriptor[] descriptors = getDescriptors();
@@ -336,8 +331,8 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 		heightD.setDescription(Messages.MBand_height_description);
 		desc.add(heightD);
 
-		splitStyleD = new JSSEnumPropertyDescriptor(JRDesignBand.PROPERTY_SPLIT_TYPE, Messages.common_split_type,
-				SplitTypeEnum.class, NullEnum.NULL);
+		splitStyleD = new NamedEnumPropertyDescriptor<SplitTypeEnum>(JRDesignBand.PROPERTY_SPLIT_TYPE,
+				Messages.common_split_type, SplitTypeEnum.IMMEDIATE, NullEnum.NULL);
 		splitStyleD.setDescription(Messages.MBand_split_type_dscription);
 		desc.add(splitStyleD);
 		splitStyleD.setHelpRefBuilder(new HelpReferenceBuilder(
@@ -374,7 +369,7 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 			if (id.equals(JRDesignBand.PROPERTY_HEIGHT))
 				return new Integer(jrband.getHeight());
 			if (id.equals(JRDesignBand.PROPERTY_SPLIT_TYPE))
-				return splitStyleD.getEnumValue(jrband.getSplitTypeValue());
+				return splitStyleD.getIntValue(jrband.getSplitTypeValue());
 			if (id.equals(JRDesignBand.PROPERTY_PRINT_WHEN_EXPRESSION)) {
 				return ExprUtil.getExpression(jrband.getPrintWhenExpression());
 			}
@@ -397,7 +392,7 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 			if (id.equals(JRDesignBand.PROPERTY_HEIGHT)) {
 				jrband.setHeight(Math.max(0, (Integer) Misc.nvl(value, Integer.valueOf(0))));
 			} else if (id.equals(JRDesignBand.PROPERTY_SPLIT_TYPE))
-				jrband.setSplitType((SplitTypeEnum) splitStyleD.getEnumValue(value));
+				jrband.setSplitType(splitStyleD.getEnumValue(value));
 			else if (id.equals(JRDesignBand.PROPERTY_PRINT_WHEN_EXPRESSION))
 				jrband.setPrintWhenExpression(ExprUtil.setValues(jrband.getPrintWhenExpression(), value, null));
 			else if (id.equals(MGraphicElement.PROPERTY_MAP)) {
@@ -480,7 +475,7 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 	}
 
 	private static int BAND_GAP = 0;
-	private static JSSEnumPropertyDescriptor splitStyleD;
+	private static NamedEnumPropertyDescriptor<SplitTypeEnum> splitStyleD;
 
 	@Override
 	public JRPropertiesHolder[] getPropertyHolder() {

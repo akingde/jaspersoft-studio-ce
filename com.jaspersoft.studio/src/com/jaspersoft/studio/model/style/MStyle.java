@@ -71,8 +71,8 @@ import com.jaspersoft.studio.property.descriptor.pen.PenPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.ImageHAlignPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.ImageVAlignPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.IntegerPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSValidatedTextPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.OpaqueModePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.RotationPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.TextHAlignPropertyDescriptor;
@@ -275,13 +275,13 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		radiusD.setDescription(Messages.MStyle_radius_description);
 		desc.add(radiusD);
 
-		fillD = new JSSEnumPropertyDescriptor(JRBaseStyle.PROPERTY_FILL, Messages.common_fill, FillEnum.class,
+		fillD = new NamedEnumPropertyDescriptor<FillEnum>(JRBaseStyle.PROPERTY_FILL, Messages.common_fill, FillEnum.SOLID,
 				NullEnum.UNDEFINED);
 		fillD.setDescription(Messages.MStyle_fill_description);
 		desc.add(fillD);
 
-		scaleD = new JSSEnumPropertyDescriptor(JRBaseStyle.PROPERTY_SCALE_IMAGE, Messages.MStyle_scale,
-				ScaleImageEnum.class, NullEnum.UNDEFINED);
+		scaleD = new NamedEnumPropertyDescriptor<ScaleImageEnum>(JRBaseStyle.PROPERTY_SCALE_IMAGE, Messages.MStyle_scale,
+				ScaleImageEnum.CLIP, NullEnum.UNDEFINED);
 		scaleD.setDescription(Messages.MStyle_scale_description);
 		desc.add(scaleD);
 
@@ -379,7 +379,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 				Messages.common_font_name, getJasperConfiguration().getFontList(), NullEnum.INHERITED);
 		fontNameD.setDescription(Messages.MStyle_font_name_description);
 		desc.add(fontNameD);
-		
+
 		RWFloatComboBoxPropertyDescriptor fontSizeD = new RWFloatComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_FONT_SIZE,
 				Messages.common_font_size, ModelUtils.FONT_SIZES, NullEnum.INHERITED, false);
 		fontSizeD.setDescription(Messages.MStyle_font_size_description);
@@ -396,18 +396,21 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 
 		JRPropertyDescriptor paragraph = new JRPropertyDescriptor(PARAGRAPH, "Paragraph"); //$NON-NLS-1$
 		desc.add(paragraph);
-		
-		RWComboBoxPropertyDescriptor pdfFontNameD = new RWComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_PDF_FONT_NAME, Messages.MFont_pdf_font_name, ModelUtils.getPDFFontNames(), NullEnum.INHERITED);
+
+		RWComboBoxPropertyDescriptor pdfFontNameD = new RWComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_PDF_FONT_NAME,
+				Messages.MFont_pdf_font_name, ModelUtils.getPDFFontNames(), NullEnum.INHERITED);
 		pdfFontNameD.setDescription(Messages.MFont_pdf_font_name_description);
 		pdfFontNameD.setCategory(Messages.MFont_pdfCategory);
 		desc.add(pdfFontNameD);
-		
-		RWComboBoxPropertyDescriptor pdfEncodingD = new RWComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_PDF_ENCODING, Messages.MFont_pdf_encoding, ModelUtils.getPDFEncodings(), NullEnum.INHERITED);
+
+		RWComboBoxPropertyDescriptor pdfEncodingD = new RWComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_PDF_ENCODING,
+				Messages.MFont_pdf_encoding, ModelUtils.getPDFEncodings(), NullEnum.INHERITED);
 		pdfEncodingD.setDescription(Messages.MFont_pdf_encoding_description);
 		pdfEncodingD.setCategory(Messages.MFont_pdfCategory);
 		desc.add(pdfEncodingD);
-		
-		CheckBoxPropertyDescriptor pdfEmbedded = new CheckBoxPropertyDescriptor(JRBaseStyle.PROPERTY_PDF_EMBEDDED, Messages.MFont_pdf_embedded);
+
+		CheckBoxPropertyDescriptor pdfEmbedded = new CheckBoxPropertyDescriptor(JRBaseStyle.PROPERTY_PDF_EMBEDDED,
+				Messages.MFont_pdf_embedded);
 		pdfEmbedded.setDescription(Messages.MFont_pdf_embedded_description);
 		pdfEmbedded.setCategory(Messages.MFont_pdfCategory);
 		desc.add(pdfEmbedded);
@@ -453,7 +456,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		defaultsMap.put(JRBaseStyle.PROPERTY_HORIZONTAL_IMAGE_ALIGNMENT, null);
 		defaultsMap.put(JRBaseStyle.PROPERTY_VERTICAL_IMAGE_ALIGNMENT, null);
 		defaultsMap.put(JRBaseStyle.PROPERTY_ROTATION, null);
-		defaultsMap.put(JRBaseStyle.PROPERTY_MODE, modeD.getEnumValue(ModeEnum.OPAQUE));
+		defaultsMap.put(JRBaseStyle.PROPERTY_MODE, modeD.getIntValue(ModeEnum.OPAQUE));
 
 		defaultsMap.put(JRDesignStyle.PROPERTY_BLANK_WHEN_NULL, Boolean.FALSE);
 		defaultsMap.put(JRBaseStyle.PROPERTY_STRIKE_THROUGH, Boolean.FALSE);
@@ -470,8 +473,8 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 	private MLineBox lineBox;
 	private MParagraph mParagraph;
 	private static RWComboBoxPropertyDescriptor styleD;
-	private static JSSEnumPropertyDescriptor fillD;
-	private static JSSEnumPropertyDescriptor scaleD;
+	private static NamedEnumPropertyDescriptor<FillEnum> fillD;
+	private static NamedEnumPropertyDescriptor<ScaleImageEnum> scaleD;
 	private static TextHAlignPropertyDescriptor halignText;
 	private static TextVAlignPropertyDescriptor valignText;
 	private static ImageHAlignPropertyDescriptor halignImage;
@@ -551,9 +554,9 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 			return Colors.getSWTRGB4AWTGBColor(jrstyle.getOwnBackcolor());
 
 		if (id.equals(JRBaseStyle.PROPERTY_FILL))
-			return fillD.getEnumValue(jrstyle.getOwnFillValue());
+			return fillD.getIntValue(jrstyle.getOwnFillValue());
 		if (id.equals(JRBaseStyle.PROPERTY_SCALE_IMAGE))
-			return scaleD.getEnumValue(jrstyle.getOwnScaleImageValue());
+			return scaleD.getIntValue(jrstyle.getOwnScaleImageValue());
 		if (id.equals(JRBaseStyle.PROPERTY_HORIZONTAL_TEXT_ALIGNMENT))
 			return halignText.getIntValue(jrstyle.getOwnHorizontalTextAlign());
 		if (id.equals(JRBaseStyle.PROPERTY_VERTICAL_TEXT_ALIGNMENT))
@@ -619,9 +622,9 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 			return Colors.getSWTRGB4AWTGBColor(jrstyle.getBackcolor());
 
 		if (id.equals(JRBaseStyle.PROPERTY_FILL))
-			return fillD.getEnumValue(jrstyle.getFillValue());
+			return fillD.getIntValue(jrstyle.getFillValue());
 		if (id.equals(JRBaseStyle.PROPERTY_SCALE_IMAGE))
-			return scaleD.getEnumValue(jrstyle.getScaleImageValue());
+			return scaleD.getIntValue(jrstyle.getScaleImageValue());
 		if (id.equals(JRBaseStyle.PROPERTY_HORIZONTAL_TEXT_ALIGNMENT))
 			return halignText.getIntValue(jrstyle.getHorizontalTextAlign());
 		if (id.equals(JRBaseStyle.PROPERTY_VERTICAL_TEXT_ALIGNMENT))
@@ -721,9 +724,9 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 			jrstyle.setBackcolor(Colors.getAWT4SWTRGBColor((AlfaRGB) value));
 
 		else if (id.equals(JRBaseStyle.PROPERTY_FILL))
-			jrstyle.setFill((FillEnum) fillD.getEnumValue(value));
+			jrstyle.setFill(fillD.getEnumValue(value));
 		else if (id.equals(JRBaseStyle.PROPERTY_SCALE_IMAGE))
-			jrstyle.setScaleImage((ScaleImageEnum) scaleD.getEnumValue(value));
+			jrstyle.setScaleImage(scaleD.getEnumValue(value));
 		else if (id.equals(JRBaseStyle.PROPERTY_HORIZONTAL_TEXT_ALIGNMENT))
 			jrstyle.setHorizontalTextAlign((HorizontalTextAlignEnum) halignText.getEnumValue(value));
 		else if (id.equals(JRBaseStyle.PROPERTY_VERTICAL_TEXT_ALIGNMENT))
@@ -753,13 +756,12 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 			jrstyle.setBold((Boolean) value);
 		else if (id.equals(JRBaseStyle.PROPERTY_FONT_NAME))
 			jrstyle.setFontName((String) value);
-		else if (id.equals(JRBaseStyle.PROPERTY_FONT_SIZE)){
+		else if (id.equals(JRBaseStyle.PROPERTY_FONT_SIZE)) {
 			if ((value instanceof String && value.toString().length() == 0) || value == null)
 				jrstyle.setFontSize((Float) null);
 			else
 				jrstyle.setFontSize(new Float((String) value));
-		}
-		else if (id.equals(JRBaseStyle.PROPERTY_PDF_FONT_NAME))
+		} else if (id.equals(JRBaseStyle.PROPERTY_PDF_FONT_NAME))
 			jrstyle.setPdfFontName((String) value);
 		else if (id.equals(JRBaseStyle.PROPERTY_PDF_ENCODING))
 			jrstyle.setPdfEncoding((String) value);

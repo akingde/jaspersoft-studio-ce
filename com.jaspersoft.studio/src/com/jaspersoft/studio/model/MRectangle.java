@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.model;
 
@@ -34,7 +30,7 @@ import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptors.IntegerPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 
 /*
  * The Class MRectangle.
@@ -79,7 +75,7 @@ public class MRectangle extends MGraphicElementLinePen {
 
 	private static IPropertyDescriptor[] descriptors;
 	private static Map<String, Object> defaultsMap;
-	private static JSSEnumPropertyDescriptor fillD;
+	private static NamedEnumPropertyDescriptor<FillEnum> fillD;
 
 	@Override
 	public Map<String, Object> getDefaultsMap() {
@@ -107,7 +103,7 @@ public class MRectangle extends MGraphicElementLinePen {
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		fillD = new JSSEnumPropertyDescriptor(JRBaseStyle.PROPERTY_FILL, Messages.common_fill, FillEnum.class,
+		fillD = new NamedEnumPropertyDescriptor<FillEnum>(JRBaseStyle.PROPERTY_FILL, Messages.common_fill, FillEnum.SOLID,
 				NullEnum.INHERITED);
 		fillD.setDescription(Messages.MRectangle_fill_description);
 		desc.add(fillD);
@@ -130,7 +126,7 @@ public class MRectangle extends MGraphicElementLinePen {
 		if (id.equals(JRBaseStyle.PROPERTY_RADIUS))
 			return jrElement.getOwnRadius();
 		if (id.equals(JRBaseStyle.PROPERTY_FILL))
-			return fillD.getEnumValue(jrElement.getFillValue());
+			return fillD.getIntValue(jrElement.getFillValue());
 		return super.getPropertyValue(id);
 	}
 
@@ -138,7 +134,7 @@ public class MRectangle extends MGraphicElementLinePen {
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignRectangle jrElement = (JRDesignRectangle) getValue();
 		if (id.equals(JRBaseStyle.PROPERTY_FILL))
-			jrElement.setFill((FillEnum) fillD.getEnumValue(value));
+			jrElement.setFill(fillD.getEnumValue(value));
 		else if (id.equals(JRBaseStyle.PROPERTY_RADIUS)) {
 			jrElement.setRadius(value != null ? ((Integer) value).intValue() : 0);
 
@@ -148,14 +144,16 @@ public class MRectangle extends MGraphicElementLinePen {
 
 	@Override
 	public int getDefaultHeight() {
-		Object defaultValue = DefaultManager.INSTANCE.getDefaultPropertiesValue(this.getClass(), JRDesignElement.PROPERTY_HEIGHT);
-		return defaultValue != null ? (Integer)defaultValue : 50;
+		Object defaultValue = DefaultManager.INSTANCE.getDefaultPropertiesValue(this.getClass(),
+				JRDesignElement.PROPERTY_HEIGHT);
+		return defaultValue != null ? (Integer) defaultValue : 50;
 	}
 
 	@Override
 	public int getDefaultWidth() {
-		Object defaultValue = DefaultManager.INSTANCE.getDefaultPropertiesValue(this.getClass(), JRDesignElement.PROPERTY_WIDTH);
-		return defaultValue != null ? (Integer)defaultValue : 100;
+		Object defaultValue = DefaultManager.INSTANCE.getDefaultPropertiesValue(this.getClass(),
+				JRDesignElement.PROPERTY_WIDTH);
+		return defaultValue != null ? (Integer) defaultValue : 100;
 	}
 
 	/*
@@ -166,7 +164,7 @@ public class MRectangle extends MGraphicElementLinePen {
 	@Override
 	public JRDesignElement createJRElement(JasperDesign jasperDesign) {
 		JRDesignRectangle jrDesignRectangle = new JRDesignRectangle(jasperDesign);
-		
+
 		DefaultManager.INSTANCE.applyDefault(this.getClass(), jrDesignRectangle);
 
 		jrDesignRectangle.setWidth(getDefaultWidth());
@@ -204,20 +202,20 @@ public class MRectangle extends MGraphicElementLinePen {
 		return getIconDescriptor().getToolTip();
 	}
 
-	public HashSet<String> generateGraphicalProperties(){
+	public HashSet<String> generateGraphicalProperties() {
 		HashSet<String> result = super.generateGraphicalProperties();
 		result.add(JRBaseStyle.PROPERTY_FILL);
 		result.add(JRBaseStyle.PROPERTY_RADIUS);
 		return result;
 	}
-	
+
 	@Override
-	public void trasnferProperties(JRElement target){
+	public void trasnferProperties(JRElement target) {
 		super.trasnferProperties(target);
-		
+
 		JRRectangle jrSource = (JRRectangle) getValue();
-		if (jrSource != null){
-			JRRectangle jrTarget = (JRRectangle)target;
+		if (jrSource != null) {
+			JRRectangle jrTarget = (JRRectangle) target;
 			jrTarget.setFill(jrSource.getOwnFillValue());
 			jrTarget.setRadius(jrSource.getOwnRadius());
 		}

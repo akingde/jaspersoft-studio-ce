@@ -62,7 +62,6 @@ import com.jaspersoft.studio.property.descriptor.classname.NClassTypePropertyDes
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.properties.JPropertiesPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.IntegerPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSTextPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.PixelPropertyDescriptor;
@@ -93,9 +92,9 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 
 	private static NamedEnumPropertyDescriptor<OrientationEnum> orientationD;
 
-	private static JSSEnumPropertyDescriptor printOrderD;
+	private static NamedEnumPropertyDescriptor<PrintOrderEnum> printOrderD;
 
-	private static JSSEnumPropertyDescriptor whenNoDataD;
+	private static NamedEnumPropertyDescriptor<WhenNoDataTypeEnum> whenNoDataD;
 
 	/**
 	 * The icon descriptor.
@@ -313,14 +312,14 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 		orientationD.setCategory(Messages.MReport_report_page_category);
 		desc.add(orientationD);
 
-		printOrderD = new JSSEnumPropertyDescriptor(JasperDesign.PROPERTY_PRINT_ORDER, Messages.MReport_print_order,
-				PrintOrderEnum.class, NullEnum.NULL);
+		printOrderD = new NamedEnumPropertyDescriptor<PrintOrderEnum>(JasperDesign.PROPERTY_PRINT_ORDER,
+				Messages.MReport_print_order, PrintOrderEnum.HORIZONTAL, NullEnum.NULL);
 		printOrderD.setDescription(Messages.MReport_print_order_description);
 		printOrderD.setCategory(Messages.MReport_columns_category);
 		desc.add(printOrderD);
 
-		whenNoDataD = new JSSEnumPropertyDescriptor(JasperDesign.PROPERTY_WHEN_NO_DATA_TYPE,
-				Messages.MReport_when_no_data_type, WhenNoDataTypeEnum.class, NullEnum.NULL);
+		whenNoDataD = new NamedEnumPropertyDescriptor<WhenNoDataTypeEnum>(JasperDesign.PROPERTY_WHEN_NO_DATA_TYPE,
+				Messages.MReport_when_no_data_type, WhenNoDataTypeEnum.ALL_SECTIONS_NO_DETAIL, NullEnum.NULL);
 		whenNoDataD.setDescription(Messages.MReport_when_no_data_type_description);
 		whenNoDataD.setCategory(Messages.common_report);
 		desc.add(whenNoDataD);
@@ -380,8 +379,8 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 		defaultsMap.put(JasperDesign.PROPERTY_COLUMN_WIDTH, new Integer(555));
 		defaultsMap.put(JasperDesign.PROPERTY_COLUMN_SPACING, new Integer(0));
 		defaultsMap.put(JasperDesign.PROPERTY_ORIENTATION, orientationD.getIntValue(OrientationEnum.PORTRAIT));
-		defaultsMap.put(JasperDesign.PROPERTY_PRINT_ORDER, printOrderD.getEnumValue(PrintOrderEnum.VERTICAL));
-		defaultsMap.put(JasperDesign.PROPERTY_WHEN_NO_DATA_TYPE, whenNoDataD.getEnumValue(WhenNoDataTypeEnum.NO_PAGES));
+		defaultsMap.put(JasperDesign.PROPERTY_PRINT_ORDER, printOrderD.getIntValue(PrintOrderEnum.VERTICAL));
+		defaultsMap.put(JasperDesign.PROPERTY_WHEN_NO_DATA_TYPE, whenNoDataD.getIntValue(WhenNoDataTypeEnum.NO_PAGES));
 		defaultsMap.put(JasperDesign.PROPERTY_TITLE_NEW_PAGE, Boolean.FALSE);
 		defaultsMap.put(JasperDesign.PROPERTY_SUMMARY_NEW_PAGE, Boolean.FALSE);
 		defaultsMap.put(JasperDesign.PROPERTY_SUMMARY_WITH_PAGE_HEADER_AND_FOOTER, Boolean.FALSE);
@@ -452,9 +451,9 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 		if (id.equals(JasperDesign.PROPERTY_ORIENTATION))
 			return orientationD.getIntValue(jrDesign.getOrientationValue());
 		if (id.equals(JasperDesign.PROPERTY_PRINT_ORDER))
-			return printOrderD.getEnumValue(jrDesign.getPrintOrderValue());
+			return printOrderD.getIntValue(jrDesign.getPrintOrderValue());
 		if (id.equals(JasperDesign.PROPERTY_WHEN_NO_DATA_TYPE))
-			return whenNoDataD.getEnumValue(jrDesign.getWhenNoDataTypeValue());
+			return whenNoDataD.getIntValue(jrDesign.getWhenNoDataTypeValue());
 
 		if (id.equals(JasperDesign.PROPERTY_TITLE_NEW_PAGE))
 			return new Boolean(jrDesign.isTitleNewPage());
@@ -540,9 +539,9 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 		else if (id.equals(JasperDesign.PROPERTY_ORIENTATION))
 			jrDesign.setOrientation((OrientationEnum) orientationD.getEnumValue(value));
 		else if (id.equals(JasperDesign.PROPERTY_PRINT_ORDER))
-			jrDesign.setPrintOrder((PrintOrderEnum) printOrderD.getEnumValue(value));
+			jrDesign.setPrintOrder(printOrderD.getEnumValue(value));
 		else if (id.equals(JasperDesign.PROPERTY_WHEN_NO_DATA_TYPE))
-			jrDesign.setWhenNoDataType((WhenNoDataTypeEnum) whenNoDataD.getEnumValue(value));
+			jrDesign.setWhenNoDataType(whenNoDataD.getEnumValue(value));
 		// -- booleans
 		else if (id.equals(JasperDesign.PROPERTY_TITLE_NEW_PAGE))
 			jrDesign.setTitleNewPage(((Boolean) value).booleanValue());

@@ -64,7 +64,7 @@ import com.jaspersoft.studio.property.descriptor.propexpr.JPropertyExpressionsDe
 import com.jaspersoft.studio.property.descriptor.propexpr.PropertyExpressionDTO;
 import com.jaspersoft.studio.property.descriptor.propexpr.PropertyExpressionsDTO;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.PixelPropertyDescriptor;
 import com.jaspersoft.studio.utils.AlfaRGB;
 import com.jaspersoft.studio.utils.Colors;
@@ -439,8 +439,8 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		opaqueDBool.setDescription(Messages.MGraphicElement_opaque_description);
 		desc.add(opaqueDBool);
 
-		positionTypeD = new JSSEnumPropertyDescriptor(JRDesignElement.PROPERTY_POSITION_TYPE,
-				Messages.common_position_type, PositionTypeEnum.class, NullEnum.NOTNULL);
+		positionTypeD = new NamedEnumPropertyDescriptor<PositionTypeEnum>(JRDesignElement.PROPERTY_POSITION_TYPE,
+				Messages.common_position_type, PositionTypeEnum.FIX_RELATIVE_TO_BOTTOM, NullEnum.NOTNULL);
 		positionTypeD.setDescription(Messages.MGraphicElement_position_type_description);
 		desc.add(positionTypeD);
 		positionTypeD.setCategory(Messages.MGraphicElement_location_category);
@@ -481,8 +481,8 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 
 		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#reportElement");
 
-		stretchTypeD = new JSSEnumPropertyDescriptor(JRDesignElement.PROPERTY_STRETCH_TYPE, Messages.common_stretch_type,
-				StretchTypeEnum.class, NullEnum.NOTNULL);
+		stretchTypeD = new NamedEnumPropertyDescriptor<StretchTypeEnum>(JRDesignElement.PROPERTY_STRETCH_TYPE,
+				Messages.common_stretch_type, StretchTypeEnum.NO_STRETCH, NullEnum.NOTNULL);
 		stretchTypeD.setCategory(Messages.common_size);
 		stretchTypeD.setDescription(Messages.MGraphicElement_stretch_type_description);
 		desc.add(stretchTypeD);
@@ -504,7 +504,7 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 
 		defaultsMap.put(JRBaseStyle.PROPERTY_MODE, Boolean.FALSE);
 		defaultsMap.put(JRDesignElement.PROPERTY_POSITION_TYPE,
-				positionTypeD.getEnumValue(PositionTypeEnum.FIX_RELATIVE_TO_TOP));
+				positionTypeD.getIntValue(PositionTypeEnum.FIX_RELATIVE_TO_TOP));
 		defaultsMap.put(JRDesignElement.PROPERTY_STRETCH_TYPE, stretchTypeD.getEnumValue(StretchTypeEnum.NO_STRETCH));
 		defaultsMap.put(JRDesignElement.PROPERTY_PRINT_REPEATED_VALUES, Boolean.TRUE);
 		defaultsMap.put(JRDesignElement.PROPERTY_REMOVE_LINE_WHEN_BLANK, Boolean.FALSE);
@@ -516,9 +516,9 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 
 	private RWComboBoxPropertyDescriptor styleD;
 	private RComboBoxPropertyDescriptor groupChangesD;
-	private static JSSEnumPropertyDescriptor positionTypeD;
+	private static NamedEnumPropertyDescriptor<PositionTypeEnum> positionTypeD;
 	// private static JSSEnumPropertyDescriptor opaqueD;
-	private static JSSEnumPropertyDescriptor stretchTypeD;
+	private static NamedEnumPropertyDescriptor<StretchTypeEnum> stretchTypeD;
 
 	/**
 	 * Return the internal style used. If the internal style is a reference to a removed style then it is also removed
@@ -585,9 +585,9 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 			return modeValue != null ? modeValue.equals(ModeEnum.TRANSPARENT) : null;
 		}
 		if (id.equals(JRDesignElement.PROPERTY_POSITION_TYPE))
-			return positionTypeD.getEnumValue(jrElement.getPositionTypeValue());
+			return positionTypeD.getIntValue(jrElement.getPositionTypeValue());
 		if (id.equals(JRDesignElement.PROPERTY_STRETCH_TYPE))
-			return stretchTypeD.getEnumValue(jrElement.getStretchTypeValue());
+			return stretchTypeD.getIntValue(jrElement.getStretchTypeValue());
 
 		if (id.equals(JRDesignElement.PROPERTY_PRINT_REPEATED_VALUES))
 			return new Boolean(jrElement.isPrintRepeatedValues());
@@ -716,9 +716,9 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 			else
 				jrElement.setMode(ModeEnum.OPAQUE);
 		else if (id.equals(JRDesignElement.PROPERTY_POSITION_TYPE))
-			jrElement.setPositionType((PositionTypeEnum) positionTypeD.getEnumValue(value));
+			jrElement.setPositionType(positionTypeD.getEnumValue(value));
 		else if (id.equals(JRDesignElement.PROPERTY_STRETCH_TYPE))
-			jrElement.setStretchType((StretchTypeEnum) stretchTypeD.getEnumValue(value));
+			jrElement.setStretchType(stretchTypeD.getEnumValue(value));
 
 		else if (id.equals(JRDesignElement.PROPERTY_PRINT_REPEATED_VALUES))
 			jrElement.setPrintRepeatedValues(((Boolean) value).booleanValue());
