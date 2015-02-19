@@ -33,7 +33,7 @@ import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.classname.NClassTypePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RComboBoxPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 
 /**
  * Model object representing the Custom Visualization component element.
@@ -41,21 +41,23 @@ import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
  * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
  *
  */
-public class MCustomVisualization extends MGraphicElement implements IDatasetContainer {
+public class MCustomVisualization extends MGraphicElement implements
+		IDatasetContainer {
 
 	private static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	private static IIconDescriptor iconDescriptor;
 	private IPropertyDescriptor[] descriptors;
 	private static Map<String, Object> defaultsMap;
 	private RComboBoxPropertyDescriptor evaluationGroupNameD;
-	private static JSSEnumPropertyDescriptor evaluationTimeD;
-	private static JSSEnumPropertyDescriptor onErrorTypeD;
+	private static NamedEnumPropertyDescriptor<EvaluationTimeEnum> evaluationTimeD;
+	private static NamedEnumPropertyDescriptor<OnErrorTypeEnum> onErrorTypeD;
 
 	public MCustomVisualization() {
 		super();
 	}
 
-	public MCustomVisualization(ANode parent, JRDesignComponentElement jrObject, int newIndex) {
+	public MCustomVisualization(ANode parent,
+			JRDesignComponentElement jrObject, int newIndex) {
 		super(parent, jrObject, newIndex);
 	}
 
@@ -75,13 +77,13 @@ public class MCustomVisualization extends MGraphicElement implements IDatasetCon
 		descriptors = descriptors1;
 		defaultsMap = defaultsMap1;
 	}
-	
+
 	@Override
 	public List<MDatasetRun> getDatasetRunList() {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
+
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
 			iconDescriptor = new CVNodeIconDescriptor("customvisualization"); //$NON-NLS-1$
@@ -102,7 +104,7 @@ public class MCustomVisualization extends MGraphicElement implements IDatasetCon
 	public String getToolTip() {
 		return getIconDescriptor().getToolTip();
 	}
-	
+
 	@Override
 	public JRDesignComponentElement createJRElement(JasperDesign jasperDesign) {
 		JRDesignComponentElement el = new JRDesignComponentElement();
@@ -112,7 +114,7 @@ public class MCustomVisualization extends MGraphicElement implements IDatasetCon
 				"http://www.jaspersoft.com/cvcomponent", "cvc", "customvisualization")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		return el;
 	}
-	
+
 	@Override
 	public void setValue(Object value) {
 		if (getValue() != null) {
@@ -141,16 +143,16 @@ public class MCustomVisualization extends MGraphicElement implements IDatasetCon
 		}
 		return null;
 	}
-	
+
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc,
 			Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		evaluationTimeD = new JSSEnumPropertyDescriptor(
+		evaluationTimeD = new NamedEnumPropertyDescriptor<EvaluationTimeEnum>(
 				CVDesignComponent.PROPERTY_EVALUATION_TIME,
-				Messages.MCustomVisualization_EvalTime, EvaluationTimeEnum.class,
-				NullEnum.NOTNULL);
+				Messages.MCustomVisualization_EvalTime,
+				EvaluationTimeEnum.AUTO, NullEnum.NOTNULL);
 		evaluationTimeD
 				.setDescription(Messages.MCustomVisualization_EvalTimeDesc);
 		desc.add(evaluationTimeD);
@@ -163,33 +165,49 @@ public class MCustomVisualization extends MGraphicElement implements IDatasetCon
 		desc.add(evaluationGroupNameD);
 
 		NClassTypePropertyDescriptor processingClassD = new NClassTypePropertyDescriptor(
-				CVDesignComponent.PROPERTY_PROCESSING_CLASS, Messages.MCustomVisualization_ProcessingClass);
-		processingClassD.setDescription(Messages.MCustomVisualization_ProcessingClassDesc);
+				CVDesignComponent.PROPERTY_PROCESSING_CLASS,
+				Messages.MCustomVisualization_ProcessingClass);
+		processingClassD
+				.setDescription(Messages.MCustomVisualization_ProcessingClassDesc);
 		desc.add(processingClassD);
-		
-		CVItemPropertiesDescriptor bItemPropsD = new CVItemPropertiesDescriptor(CVDesignComponent.PROPERTY_ITEM_PROPERTIES, Messages.MCustomVisualization_ItemProperties);
-		bItemPropsD.setDescription(Messages.MCustomVisualization_ItemPropertiesDesc);
+
+		CVItemPropertiesDescriptor bItemPropsD = new CVItemPropertiesDescriptor(
+				CVDesignComponent.PROPERTY_ITEM_PROPERTIES,
+				Messages.MCustomVisualization_ItemProperties);
+		bItemPropsD
+				.setDescription(Messages.MCustomVisualization_ItemPropertiesDesc);
 		desc.add(bItemPropsD);
 
-		CVItemDataDescriptor bItemDataD = new CVItemDataDescriptor(CVDesignComponent.PROPERTY_ITEM_DATA, Messages.MCustomVisualization_ItemData);
+		CVItemDataDescriptor bItemDataD = new CVItemDataDescriptor(
+				CVDesignComponent.PROPERTY_ITEM_DATA,
+				Messages.MCustomVisualization_ItemData);
 		bItemDataD.setDescription(Messages.MCustomVisualization_ItemDataDesc);
 		desc.add(bItemDataD);
-		
-		evaluationTimeD.setCategory(Messages.MCustomVisualization_CVPropertiesCategory);
-		evaluationGroupNameD.setCategory(Messages.MCustomVisualization_CVPropertiesCategory);
-		processingClassD.setCategory(Messages.MCustomVisualization_CVPropertiesCategory);
-		bItemPropsD.setCategory(Messages.MCustomVisualization_CVPropertiesCategory);
-		bItemDataD.setCategory(Messages.MCustomVisualization_CVPropertiesCategory);
-		
+
+		evaluationTimeD
+				.setCategory(Messages.MCustomVisualization_CVPropertiesCategory);
+		evaluationGroupNameD
+				.setCategory(Messages.MCustomVisualization_CVPropertiesCategory);
+		processingClassD
+				.setCategory(Messages.MCustomVisualization_CVPropertiesCategory);
+		bItemPropsD
+				.setCategory(Messages.MCustomVisualization_CVPropertiesCategory);
+		bItemDataD
+				.setCategory(Messages.MCustomVisualization_CVPropertiesCategory);
+
 		defaultsMap.put(CVDesignComponent.PROPERTY_EVALUATION_TIME,
-				evaluationTimeD.getEnumValue(EvaluationTimeEnum.NOW));
-		
-		onErrorTypeD = new JSSEnumPropertyDescriptor(CVDesignComponent.PROPERTY_ON_ERROR_TYPE, Messages.MCustomVisualization_OnErrorType,
-				OnErrorTypeEnum.class, NullEnum.NULL);
-		onErrorTypeD.setDescription(Messages.MCustomVisualization_OnErrorTypeDesc);
+				evaluationTimeD.getIntValue(EvaluationTimeEnum.NOW));
+
+		onErrorTypeD = new NamedEnumPropertyDescriptor<OnErrorTypeEnum>(
+				CVDesignComponent.PROPERTY_ON_ERROR_TYPE,
+				Messages.MCustomVisualization_OnErrorType,
+				OnErrorTypeEnum.BLANK, NullEnum.NULL);
+		onErrorTypeD
+				.setDescription(Messages.MCustomVisualization_OnErrorTypeDesc);
 		desc.add(onErrorTypeD);
-		
-		defaultsMap.put(CVDesignComponent.PROPERTY_ON_ERROR_TYPE, onErrorTypeD.getEnumValue(OnErrorTypeEnum.ERROR));
+
+		defaultsMap.put(CVDesignComponent.PROPERTY_ON_ERROR_TYPE,
+				onErrorTypeD.getIntValue(OnErrorTypeEnum.ERROR));
 	}
 
 	@Override
@@ -198,30 +216,25 @@ public class MCustomVisualization extends MGraphicElement implements IDatasetCon
 		if (evaluationGroupNameD != null)
 			evaluationGroupNameD.setItems(items);
 	}
-	
+
 	@Override
 	public Object getPropertyValue(Object id) {
 		JRDesignComponentElement jrElement = (JRDesignComponentElement) getValue();
 		CVDesignComponent cvComp = (CVDesignComponent) jrElement.getComponent();
 		if (CVDesignComponent.PROPERTY_EVALUATION_TIME.equals(id)) {
-			return evaluationTimeD.getEnumValue(cvComp.getEvaluationTime());
-		}
-		else if (CVDesignComponent.PROPERTY_EVALUATION_GROUP.equals(id)) {
-			return cvComp.getEvaluationGroup();			
-		}
-		else if (CVDesignComponent.PROPERTY_PROCESSING_CLASS.equals(id)) {
+			return evaluationTimeD.getIntValue(cvComp.getEvaluationTime());
+		} else if (CVDesignComponent.PROPERTY_EVALUATION_GROUP.equals(id)) {
+			return cvComp.getEvaluationGroup();
+		} else if (CVDesignComponent.PROPERTY_PROCESSING_CLASS.equals(id)) {
 			return cvComp.getProcessingClass();
-		}
-		else if (CVDesignComponent.PROPERTY_ITEM_PROPERTIES.equals(id)){
+		} else if (CVDesignComponent.PROPERTY_ITEM_PROPERTIES.equals(id)) {
 			return JRCloneUtils.cloneList(cvComp.getItemProperties());
-		}
-		else if (CVDesignComponent.PROPERTY_ITEM_DATA.equals(id)) {
+		} else if (CVDesignComponent.PROPERTY_ITEM_DATA.equals(id)) {
 			return JRCloneUtils.cloneList(cvComp.getItemData());
 		}
 		if (id.equals(CVDesignComponent.PROPERTY_ON_ERROR_TYPE)) {
-			return onErrorTypeD.getEnumValue(cvComp.getOnErrorType());
-		}
-		else {
+			return onErrorTypeD.getIntValue(cvComp.getOnErrorType());
+		} else {
 			return super.getPropertyValue(id);
 		}
 	}
@@ -232,41 +245,36 @@ public class MCustomVisualization extends MGraphicElement implements IDatasetCon
 		JRDesignComponentElement jrElement = (JRDesignComponentElement) getValue();
 		CVDesignComponent cvComp = (CVDesignComponent) jrElement.getComponent();
 		if (CVDesignComponent.PROPERTY_EVALUATION_TIME.equals(id)) {
-			cvComp.setEvaluationTime((EvaluationTimeEnum) evaluationTimeD
-					.getEnumValue(value));
-		}
-		else if (CVDesignComponent.PROPERTY_EVALUATION_GROUP.equals(id)) {
+			cvComp.setEvaluationTime(evaluationTimeD.getEnumValue(value));
+		} else if (CVDesignComponent.PROPERTY_EVALUATION_GROUP.equals(id)) {
 			cvComp.setEvaluationGroup((String) value);
-		}
-		else if (CVDesignComponent.PROPERTY_PROCESSING_CLASS.equals(id)) {
+		} else if (CVDesignComponent.PROPERTY_PROCESSING_CLASS.equals(id)) {
 			if (value instanceof String && ((String) value).trim().isEmpty())
 				value = null;
 			cvComp.setProcessingClass((String) value);
-		}
-		else if (CVDesignComponent.PROPERTY_ITEM_PROPERTIES.equals(id)) {
-			CVItemProperty[] toRemove = cvComp.getItemProperties().toArray(new CVItemProperty[]{});
+		} else if (CVDesignComponent.PROPERTY_ITEM_PROPERTIES.equals(id)) {
+			CVItemProperty[] toRemove = cvComp.getItemProperties().toArray(
+					new CVItemProperty[] {});
 			for (CVItemProperty i : toRemove) {
 				cvComp.removeItemProperty(i);
 			}
 			for (CVItemProperty i : (List<CVItemProperty>) value) {
 				cvComp.addItemProperty(i);
 			}
-		}
-		else if (CVDesignComponent.PROPERTY_ITEM_DATA.equals(id)) {
-			CVItemData[] toRemove = cvComp.getItemData().toArray(new CVItemData[]{});
+		} else if (CVDesignComponent.PROPERTY_ITEM_DATA.equals(id)) {
+			CVItemData[] toRemove = cvComp.getItemData().toArray(
+					new CVItemData[] {});
 			for (CVItemData i : toRemove) {
 				cvComp.removeItemData(i);
 			}
-			for (CVItemData i : (List<CVItemData>)value){
+			for (CVItemData i : (List<CVItemData>) value) {
 				cvComp.addItemData(i);
 			}
-		}
-		else if(CVDesignComponent.PROPERTY_ON_ERROR_TYPE.equals(id)) {
-			cvComp.setOnErrorType((OnErrorTypeEnum) onErrorTypeD.getEnumValue(value));
-		}
-		else {
+		} else if (CVDesignComponent.PROPERTY_ON_ERROR_TYPE.equals(id)) {
+			cvComp.setOnErrorType(onErrorTypeD.getEnumValue(value));
+		} else {
 			super.setPropertyValue(id, value);
 		}
 	}
-	
+
 }
