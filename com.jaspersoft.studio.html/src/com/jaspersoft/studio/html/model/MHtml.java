@@ -24,9 +24,9 @@ import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.design.events.JRChangeEventsSupport;
 import net.sf.jasperreports.engine.type.EvaluationTimeEnum;
-import net.sf.jasperreports.engine.type.HorizontalAlignEnum;
+import net.sf.jasperreports.engine.type.HorizontalImageAlignEnum;
 import net.sf.jasperreports.engine.type.ScaleImageEnum;
-import net.sf.jasperreports.engine.type.VerticalAlignEnum;
+import net.sf.jasperreports.engine.type.VerticalImageAlignEnum;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
@@ -41,7 +41,7 @@ import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescri
 import com.jaspersoft.studio.property.descriptor.combo.RComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 
 public class MHtml extends MGraphicElement {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
@@ -49,10 +49,10 @@ public class MHtml extends MGraphicElement {
 	private static Map<String, Object> defaultsMap;
 	private static IIconDescriptor iconDescriptor;
 	private RComboBoxPropertyDescriptor evaluationGroupNameD;
-	private static JSSEnumPropertyDescriptor scaleTypeD;
-	private static JSSEnumPropertyDescriptor hAlignD;
-	private static JSSEnumPropertyDescriptor vAlignD;
-	private static JSSEnumPropertyDescriptor evaluationTimeD;
+	private static NamedEnumPropertyDescriptor<ScaleImageEnum> scaleTypeD;
+	private static NamedEnumPropertyDescriptor<HorizontalImageAlignEnum> hAlignD;
+	private static NamedEnumPropertyDescriptor<VerticalImageAlignEnum> vAlignD;
+	private static NamedEnumPropertyDescriptor<EvaluationTimeEnum> evaluationTimeD;
 
 	/**
 	 * Gets the icon descriptor.
@@ -156,9 +156,9 @@ public class MHtml extends MGraphicElement {
 				.setDescription(Messages.MHtml_content_expression_description);
 		desc.add(contentExprD);
 
-		scaleTypeD = new JSSEnumPropertyDescriptor(
+		scaleTypeD = new NamedEnumPropertyDescriptor<ScaleImageEnum>(
 				HtmlComponent.PROPERTY_SCALE_TYPE, Messages.MHtml_scaletype,
-				ScaleImageEnum.class, NullEnum.NOTNULL);
+				ScaleImageEnum.CLIP, NullEnum.NOTNULL);
 		scaleTypeD.setDescription(Messages.MHtml_scaletype_description);
 		desc.add(scaleTypeD);
 
@@ -168,23 +168,23 @@ public class MHtml extends MGraphicElement {
 		clipOverflow.setDescription(Messages.MHtml_cliponoverflow_desc);
 		desc.add(clipOverflow);
 
-		hAlignD = new JSSEnumPropertyDescriptor(
+		hAlignD = new NamedEnumPropertyDescriptor<HorizontalImageAlignEnum>(
 				HtmlComponent.PROPERTY_HORIZONTAL_ALIGN,
-				Messages.MHtml_horizontalalign, HorizontalAlignEnum.class,
-				NullEnum.NOTNULL, 3);
+				Messages.MHtml_horizontalalign,
+				HorizontalImageAlignEnum.CENTER, NullEnum.NOTNULL);
 		hAlignD.setDescription(Messages.MHtml_horizontalalign_description);
 		desc.add(hAlignD);
 
-		vAlignD = new JSSEnumPropertyDescriptor(
+		vAlignD = new NamedEnumPropertyDescriptor<VerticalImageAlignEnum>(
 				HtmlComponent.PROPERTY_VERTICAL_ALIGN,
-				Messages.MHtml_verticalalign, VerticalAlignEnum.class,
-				NullEnum.NOTNULL, 3);
+				Messages.MHtml_verticalalign, VerticalImageAlignEnum.BOTTOM,
+				NullEnum.NOTNULL);
 		vAlignD.setDescription(Messages.MHtml_verticalalign_description);
 		desc.add(vAlignD);
 
-		evaluationTimeD = new JSSEnumPropertyDescriptor(
+		evaluationTimeD = new NamedEnumPropertyDescriptor<EvaluationTimeEnum>(
 				HtmlComponent.PROPERTY_EVALUATION_TIME,
-				Messages.MHtml_evaluation_time, EvaluationTimeEnum.class,
+				Messages.MHtml_evaluation_time, EvaluationTimeEnum.AUTO,
 				NullEnum.NOTNULL);
 		evaluationTimeD
 				.setDescription(Messages.MHtml_evaluation_time_description);
@@ -206,13 +206,13 @@ public class MHtml extends MGraphicElement {
 		clipOverflow.setCategory(Messages.common_properties_category);
 
 		defaultsMap.put(HtmlComponent.PROPERTY_EVALUATION_TIME,
-				evaluationTimeD.getEnumValue(EvaluationTimeEnum.NOW));
+				evaluationTimeD.getIntValue(EvaluationTimeEnum.NOW));
 		defaultsMap.put(HtmlComponent.PROPERTY_SCALE_TYPE,
-				scaleTypeD.getEnumValue(ScaleImageEnum.RETAIN_SHAPE));
+				scaleTypeD.getIntValue(ScaleImageEnum.RETAIN_SHAPE));
 		defaultsMap.put(HtmlComponent.PROPERTY_HORIZONTAL_ALIGN,
-				hAlignD.getEnumValue(HorizontalAlignEnum.LEFT));
+				hAlignD.getIntValue(HorizontalImageAlignEnum.LEFT));
 		defaultsMap.put(HtmlComponent.PROPERTY_VERTICAL_ALIGN,
-				vAlignD.getEnumValue(VerticalAlignEnum.MIDDLE));
+				vAlignD.getIntValue(VerticalImageAlignEnum.MIDDLE));
 		defaultsMap.put(HtmlComponent.PROPERTY_CLIP_ON_OVERFLOW, Boolean.FALSE);
 	}
 
@@ -258,15 +258,15 @@ public class MHtml extends MGraphicElement {
 		HtmlComponent htmlComp = (HtmlComponent) jrElement.getComponent();
 
 		if (id.equals(HtmlComponent.PROPERTY_EVALUATION_TIME))
-			return evaluationTimeD.getEnumValue(htmlComp.getEvaluationTime());
+			return evaluationTimeD.getIntValue(htmlComp.getEvaluationTime());
 		if (id.equals(HtmlComponent.PROPERTY_EVALUATION_GROUP))
 			return htmlComp.getEvaluationGroup();
 		if (id.equals(HtmlComponent.PROPERTY_SCALE_TYPE))
-			return scaleTypeD.getEnumValue(htmlComp.getScaleType());
+			return scaleTypeD.getIntValue(htmlComp.getScaleType());
 		if (id.equals(HtmlComponent.PROPERTY_HORIZONTAL_ALIGN))
-			return hAlignD.getEnumValue(htmlComp.getHorizontalAlign());
+			return hAlignD.getIntValue(htmlComp.getHorizontalImageAlign());
 		if (id.equals(HtmlComponent.PROPERTY_VERTICAL_ALIGN))
-			return vAlignD.getEnumValue(htmlComp.getVerticalAlign());
+			return vAlignD.getIntValue(htmlComp.getVerticalImageAlign());
 		if (id.equals(HtmlComponent.PROPERTY_HTMLCONTENT_EXPRESSION))
 			return ExprUtil.getExpression(htmlComp.getHtmlContentExpression());
 		if (id.equals(HtmlComponent.PROPERTY_CLIP_ON_OVERFLOW))
@@ -281,19 +281,15 @@ public class MHtml extends MGraphicElement {
 		HtmlComponent htmlComp = (HtmlComponent) jrElement.getComponent();
 
 		if (id.equals(HtmlComponent.PROPERTY_EVALUATION_TIME))
-			htmlComp.setEvaluationTime((EvaluationTimeEnum) evaluationTimeD
-					.getEnumValue(value));
+			htmlComp.setEvaluationTime(evaluationTimeD.getEnumValue(value));
 		else if (id.equals(HtmlComponent.PROPERTY_EVALUATION_GROUP))
 			htmlComp.setEvaluationGroup((String) value);
 		else if (id.equals(HtmlComponent.PROPERTY_SCALE_TYPE))
-			htmlComp.setScaleType((ScaleImageEnum) scaleTypeD
-					.getEnumValue(value));
+			htmlComp.setScaleType(scaleTypeD.getEnumValue(value));
 		else if (id.equals(HtmlComponent.PROPERTY_HORIZONTAL_ALIGN))
-			htmlComp.setHorizontalAlign((HorizontalAlignEnum) hAlignD
-					.getEnumValue(value));
+			htmlComp.setHorizontalImageAlign(hAlignD.getEnumValue(value));
 		else if (id.equals(HtmlComponent.PROPERTY_VERTICAL_ALIGN))
-			htmlComp.setVerticalAlign((VerticalAlignEnum) vAlignD
-					.getEnumValue(value));
+			htmlComp.setVerticalImageAlign(vAlignD.getEnumValue(value));
 		else if (id.equals(HtmlComponent.PROPERTY_HTMLCONTENT_EXPRESSION))
 			htmlComp.setHtmlContentExpression(ExprUtil.setValues(
 					htmlComp.getHtmlContentExpression(), value));
