@@ -29,7 +29,7 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.property.descriptor.JRPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 
 public abstract class MCrosstabGroup extends MDatasetGroupNode implements
 		IPropertySource {
@@ -95,10 +95,10 @@ public abstract class MCrosstabGroup extends MDatasetGroupNode implements
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc,
 			Map<String, Object> defaultsMap) {
-		totalPositionD = new JSSEnumPropertyDescriptor(
+		totalPositionD = new NamedEnumPropertyDescriptor<CrosstabTotalPositionEnum>(
 				JRDesignCrosstabGroup.PROPERTY_TOTAL_POSITION,
-				Messages.common_total_position,
-				CrosstabTotalPositionEnum.class, NullEnum.NOTNULL);
+				Messages.common_total_position, CrosstabTotalPositionEnum.NONE,
+				NullEnum.NOTNULL);
 		totalPositionD
 				.setDescription(Messages.MCrosstabGroup_total_position_description);
 		desc.add(totalPositionD);
@@ -116,7 +116,7 @@ public abstract class MCrosstabGroup extends MDatasetGroupNode implements
 	}
 
 	private MBucket mBucket;
-	private static JSSEnumPropertyDescriptor totalPositionD;
+	private static NamedEnumPropertyDescriptor<CrosstabTotalPositionEnum> totalPositionD;
 
 	/*
 	 * (non-Javadoc)
@@ -130,7 +130,7 @@ public abstract class MCrosstabGroup extends MDatasetGroupNode implements
 		if (id.equals(JRDesignCrosstabGroup.PROPERTY_NAME))
 			return jrField.getName();
 		if (id.equals(JRDesignCrosstabGroup.PROPERTY_TOTAL_POSITION))
-			return totalPositionD.getEnumValue(jrField.getTotalPositionValue());
+			return totalPositionD.getIntValue(jrField.getTotalPositionValue());
 		if (id.equals(JRDesignCrosstabGroup.PROPERTY_BUCKET)) {
 			if (mBucket == null) {
 				mBucket = new MBucket(jrField.getBucket(), this);
@@ -141,16 +141,18 @@ public abstract class MCrosstabGroup extends MDatasetGroupNode implements
 		}
 		return null;
 	}
-	
+
 	/**
-	 * Called when the group name changes, it must search the cells
-	 * using that group and update their reference as well
+	 * Called when the group name changes, it must search the cells using that
+	 * group and update their reference as well
 	 * 
-	 * @param oldName the old name of the group
-	 * @param newName the new name of the group
+	 * @param oldName
+	 *            the old name of the group
+	 * @param newName
+	 *            the new name of the group
 	 */
 	protected abstract void updateGroups(String oldName, String newName);
-	
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -160,14 +162,14 @@ public abstract class MCrosstabGroup extends MDatasetGroupNode implements
 	 */
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignCrosstabGroup jrField = (JRDesignCrosstabGroup) getValue();
-		if (id.equals(JRDesignCrosstabGroup.PROPERTY_NAME)){
+		if (id.equals(JRDesignCrosstabGroup.PROPERTY_NAME)) {
 			String oldName = jrField.getName();
 			jrField.setName((String) value);
-			//Request the update of the name of the cells associated with this group
+			// Request the update of the name of the cells associated with this
+			// group
 			updateGroups(oldName, jrField.getName());
 		} else if (id.equals(JRDesignCrosstabGroup.PROPERTY_TOTAL_POSITION)) {
-			jrField.setTotalPosition((CrosstabTotalPositionEnum) totalPositionD
-					.getEnumValue(value));
+			jrField.setTotalPosition(totalPositionD.getEnumValue(value));
 			MCrosstab cross = getMCrosstab();
 			cross.getCrosstabManager().refresh();
 			getPropertyChangeSupport().firePropertyChange(

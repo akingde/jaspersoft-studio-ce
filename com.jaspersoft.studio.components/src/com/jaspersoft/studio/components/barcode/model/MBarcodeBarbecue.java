@@ -40,7 +40,7 @@ import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescri
 import com.jaspersoft.studio.property.descriptor.combo.RComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.PixelPropertyDescriptor;
 
 /*
@@ -93,10 +93,11 @@ public class MBarcodeBarbecue extends MBarcode implements IRotatable {
 		exp.setText("\"1234\""); //$NON-NLS-1$
 		component.setCodeExpression(exp);
 		el.setComponent(component);
-		el.setComponentKey(new ComponentKey("http://jasperreports.sourceforge.net/jasperreports/components", "jr", "barbecue")); //$NON-NLS-1$
-		
+		el.setComponentKey(new ComponentKey(
+				"http://jasperreports.sourceforge.net/jasperreports/components", "jr", "barbecue")); //$NON-NLS-1$
+
 		DefaultManager.INSTANCE.applyDefault(this.getClass(), el);
-		
+
 		return el;
 	}
 
@@ -132,7 +133,7 @@ public class MBarcodeBarbecue extends MBarcode implements IRotatable {
 
 	private static IPropertyDescriptor[] descriptors;
 	private static Map<String, Object> defaultsMap;
-	private static JSSEnumPropertyDescriptor rotationD;
+	private static NamedEnumPropertyDescriptor<RotationEnum> rotationD;
 
 	@Override
 	public Map<String, Object> getDefaultsMap() {
@@ -150,7 +151,7 @@ public class MBarcodeBarbecue extends MBarcode implements IRotatable {
 		descriptors = descriptors1;
 		defaultsMap = defaultsMap1;
 	}
-	
+
 	@Override
 	public HashSet<String> generateGraphicalProperties() {
 		HashSet<String> properties = super.generateGraphicalProperties();
@@ -217,9 +218,9 @@ public class MBarcodeBarbecue extends MBarcode implements IRotatable {
 				.setDescription(Messages.MBarcodeBarbecue_draw_text_description);
 		desc.add(drawTextD);
 
-		rotationD = new JSSEnumPropertyDescriptor(
+		rotationD = new NamedEnumPropertyDescriptor<RotationEnum>(
 				StandardBarbecueComponent.PROPERTY_ROTATION,
-				Messages.MBarcodeBarbecue_rotation, RotationEnum.class,
+				Messages.MBarcodeBarbecue_rotation, RotationEnum.LEFT,
 				NullEnum.INHERITED);
 		rotationD
 				.setDescription(Messages.MBarcodeBarbecue_rotation_description);
@@ -234,7 +235,7 @@ public class MBarcodeBarbecue extends MBarcode implements IRotatable {
 		appIDexprD.setCategory(Messages.common_properties_category);
 
 		defaultsMap.put(StandardBarbecueComponent.PROPERTY_EVALUATION_TIME,
-				evaluationTimeD.getEnumValue(EvaluationTimeEnum.NOW));
+				evaluationTimeD.getIntValue(EvaluationTimeEnum.NOW));
 		defaultsMap.put(StandardBarbecueComponent.PROPERTY_ROTATION, null);
 	}
 
@@ -245,8 +246,7 @@ public class MBarcodeBarbecue extends MBarcode implements IRotatable {
 				.getComponent();
 
 		if (id.equals(StandardBarbecueComponent.PROPERTY_EVALUATION_TIME))
-			return evaluationTimeD
-					.getEnumValue(jrList.getEvaluationTimeValue());
+			return evaluationTimeD.getIntValue(jrList.getEvaluationTimeValue());
 		if (id.equals(StandardBarbecueComponent.PROPERTY_EVALUATION_GROUP))
 			return jrList.getEvaluationGroup();
 		if (id.equals(StandardBarbecueComponent.PROPERTY_CHECKSUM_REQUIRED))
@@ -264,7 +264,7 @@ public class MBarcodeBarbecue extends MBarcode implements IRotatable {
 		if (id.equals(StandardBarbecueComponent.PROPERTY_CODE_EXPRESSION))
 			return ExprUtil.getExpression(jrList.getCodeExpression());
 		if (id.equals(StandardBarbecueComponent.PROPERTY_ROTATION))
-			return rotationD.getEnumValue(jrList.getOwnRotation());
+			return rotationD.getIntValue(jrList.getOwnRotation());
 		if (id.equals(StandardBarbecueComponent.PROPERTY_APPLICATION_IDENTIFIER_EXPRESSION))
 			return ExprUtil.getExpression(jrList
 					.getApplicationIdentifierExpression());
@@ -278,8 +278,7 @@ public class MBarcodeBarbecue extends MBarcode implements IRotatable {
 				.getComponent();
 
 		if (id.equals(StandardBarbecueComponent.PROPERTY_EVALUATION_TIME))
-			jrList.setEvaluationTimeValue((EvaluationTimeEnum) evaluationTimeD
-					.getEnumValue(value));
+			jrList.setEvaluationTimeValue(evaluationTimeD.getEnumValue(value));
 		else if (id.equals(StandardBarbecueComponent.PROPERTY_EVALUATION_GROUP))
 			jrList.setEvaluationGroup((String) value);
 		else if (id
@@ -290,7 +289,7 @@ public class MBarcodeBarbecue extends MBarcode implements IRotatable {
 		else if (id.equals(StandardBarbecueComponent.PROPERTY_TYPE))
 			jrList.setType((String) value);
 		else if (id.equals(StandardBarbecueComponent.PROPERTY_ROTATION))
-			jrList.setRotation((RotationEnum) rotationD.getEnumValue(value));
+			jrList.setRotation(rotationD.getEnumValue(value));
 
 		else if (id.equals(StandardBarbecueComponent.PROPERTY_BAR_HEIGTH))
 			jrList.setBarHeight((Integer) value);
@@ -306,17 +305,19 @@ public class MBarcodeBarbecue extends MBarcode implements IRotatable {
 		} else
 			super.setPropertyValue(id, value);
 	}
-	
+
 	@Override
-	public void trasnferProperties(JRElement target){
+	public void trasnferProperties(JRElement target) {
 		super.trasnferProperties(target);
-		
+
 		JRDesignComponentElement jrSourceElement = (JRDesignComponentElement) getValue();
-		StandardBarbecueComponent jrSourceCode = (StandardBarbecueComponent) jrSourceElement.getComponent();
-		
+		StandardBarbecueComponent jrSourceCode = (StandardBarbecueComponent) jrSourceElement
+				.getComponent();
+
 		JRDesignComponentElement jrTargetElement = (JRDesignComponentElement) target;
-		StandardBarbecueComponent jrTargetCode = (StandardBarbecueComponent) jrTargetElement.getComponent();
-		
+		StandardBarbecueComponent jrTargetCode = (StandardBarbecueComponent) jrTargetElement
+				.getComponent();
+
 		jrTargetCode.setChecksumRequired(jrSourceCode.isChecksumRequired());
 		jrTargetCode.setDrawText(jrSourceCode.isDrawText());
 		jrTargetCode.setType(getStringClone(jrSourceCode.getType()));

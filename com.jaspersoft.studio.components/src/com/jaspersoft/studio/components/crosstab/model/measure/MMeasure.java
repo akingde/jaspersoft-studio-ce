@@ -36,7 +36,7 @@ import com.jaspersoft.studio.property.descriptor.classname.NClassTypePropertyDes
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 
 public class MMeasure extends MDatasetGroupNode implements ICopyable, IDragable {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
@@ -106,8 +106,8 @@ public class MMeasure extends MDatasetGroupNode implements ICopyable, IDragable 
 
 	private static IPropertyDescriptor[] descriptors;
 	private static Map<String, Object> defaultsMap;
-	private static JSSEnumPropertyDescriptor calculationD;
-	private static JSSEnumPropertyDescriptor percentOfTypeD;
+	private static NamedEnumPropertyDescriptor<CalculationEnum> calculationD;
+	private static NamedEnumPropertyDescriptor<CrosstabPercentageEnum> percentOfTypeD;
 
 	@Override
 	public Map<String, Object> getDefaultsMap() {
@@ -140,17 +140,17 @@ public class MMeasure extends MDatasetGroupNode implements ICopyable, IDragable 
 		nameD.setDescription(Messages.MMeasure_name_description);
 		desc.add(nameD);
 
-		calculationD = new JSSEnumPropertyDescriptor(
+		calculationD = new NamedEnumPropertyDescriptor<CalculationEnum>(
 				JRDesignCrosstabMeasure.PROPERTY_CALCULATION,
-				Messages.common_calculation, CalculationEnum.class,
+				Messages.common_calculation, CalculationEnum.AVERAGE,
 				NullEnum.NOTNULL);
 		calculationD.setDescription(Messages.MMeasure_calculation_description);
 		desc.add(calculationD);
 
-		percentOfTypeD = new JSSEnumPropertyDescriptor(
+		percentOfTypeD = new NamedEnumPropertyDescriptor<CrosstabPercentageEnum>(
 				JRDesignCrosstabMeasure.PROPERTY_PERCENTAGE_OF_TYPE,
 				Messages.MMeasure_percentage_of_type,
-				CrosstabPercentageEnum.class, NullEnum.NOTNULL);
+				CrosstabPercentageEnum.GRAND_TOTAL, NullEnum.NOTNULL);
 		percentOfTypeD
 				.setDescription(Messages.MMeasure_percentage_of_type_description);
 		desc.add(percentOfTypeD);
@@ -195,9 +195,9 @@ public class MMeasure extends MDatasetGroupNode implements ICopyable, IDragable 
 		if (id.equals(JRDesignCrosstabMeasure.PROPERTY_NAME))
 			return jrField.getName();
 		if (id.equals(JRDesignCrosstabMeasure.PROPERTY_CALCULATION))
-			return calculationD.getEnumValue(jrField.getCalculationValue());
+			return calculationD.getIntValue(jrField.getCalculationValue());
 		if (id.equals(JRDesignCrosstabMeasure.PROPERTY_PERCENTAGE_OF_TYPE))
-			return percentOfTypeD.getEnumValue(jrField.getPercentageType());
+			return percentOfTypeD.getIntValue(jrField.getPercentageType());
 		if (id.equals(JRDesignCrosstabMeasure.PROPERTY_VALUE_EXPRESSION))
 			return ExprUtil.getExpression(jrField.getValueExpression());
 
@@ -222,11 +222,9 @@ public class MMeasure extends MDatasetGroupNode implements ICopyable, IDragable 
 		if (id.equals(JRDesignCrosstabMeasure.PROPERTY_NAME))
 			jrField.setName((String) value);
 		else if (id.equals(JRDesignCrosstabMeasure.PROPERTY_CALCULATION))
-			jrField.setCalculation((CalculationEnum) calculationD
-					.getEnumValue(value));
+			jrField.setCalculation(calculationD.getEnumValue(value));
 		else if (id.equals(JRDesignCrosstabMeasure.PROPERTY_PERCENTAGE_OF_TYPE))
-			jrField.setPercentageType((CrosstabPercentageEnum) percentOfTypeD
-					.getEnumValue(value));
+			jrField.setPercentageType(percentOfTypeD.getEnumValue(value));
 		else if (id.equals(JRDesignCrosstabMeasure.PROPERTY_VALUE_EXPRESSION))
 			jrField.setValueExpression(ExprUtil.setValues(
 					jrField.getValueExpression(), value));

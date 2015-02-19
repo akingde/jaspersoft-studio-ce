@@ -32,7 +32,7 @@ import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.color.ColorPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.FloatPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.TransparencyPropertyDescriptor;
 import com.jaspersoft.studio.utils.AlfaRGB;
 import com.jaspersoft.studio.utils.Colors;
@@ -46,38 +46,54 @@ public class MChartPlot extends APropertyNode {
 	}
 
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		ColorPropertyDescriptor backcolorD = new ColorPropertyDescriptor(JRBaseChartPlot.PROPERTY_BACKCOLOR, Messages.MChartPlot_backcolor, NullEnum.INHERITED);
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc,
+			Map<String, Object> defaultsMap) {
+		ColorPropertyDescriptor backcolorD = new ColorPropertyDescriptor(
+				JRBaseChartPlot.PROPERTY_BACKCOLOR,
+				Messages.MChartPlot_backcolor, NullEnum.INHERITED);
 		backcolorD.setDescription(Messages.MChartPlot_backcolor_description);
 		desc.add(backcolorD);
 
-		FloatPropertyDescriptor backAlphaD = new TransparencyPropertyDescriptor(JRBaseChartPlot.PROPERTY_BACKGROUND_ALPHA, Messages.MChartPlot_background_alpha_percent);
-		backAlphaD.setDescription(Messages.MChartPlot_background_alpha_percent_description);
+		FloatPropertyDescriptor backAlphaD = new TransparencyPropertyDescriptor(
+				JRBaseChartPlot.PROPERTY_BACKGROUND_ALPHA,
+				Messages.MChartPlot_background_alpha_percent);
+		backAlphaD
+				.setDescription(Messages.MChartPlot_background_alpha_percent_description);
 		desc.add(backAlphaD);
 
-		FloatPropertyDescriptor foreAlphaD = new TransparencyPropertyDescriptor(JRBaseChartPlot.PROPERTY_FOREGROUND_ALPHA, Messages.MChartPlot_foreground_alpha_percent);
-		foreAlphaD.setDescription(Messages.MChartPlot_foreground_alpha_percent_description);
+		FloatPropertyDescriptor foreAlphaD = new TransparencyPropertyDescriptor(
+				JRBaseChartPlot.PROPERTY_FOREGROUND_ALPHA,
+				Messages.MChartPlot_foreground_alpha_percent);
+		foreAlphaD
+				.setDescription(Messages.MChartPlot_foreground_alpha_percent_description);
 		desc.add(foreAlphaD);
 
-		orientationD = new JSSEnumPropertyDescriptor(JRBaseChartPlot.PROPERTY_ORIENTATION, Messages.MChartPlot_orientation, com.jaspersoft.studio.components.chart.model.enums.PlotOrientationEnum.class,
-				NullEnum.NULL);
-		orientationD.setDescription(Messages.MChartPlot_orientation_description);
+		orientationD = new NamedEnumPropertyDescriptor<PlotOrientationEnum>(
+				JRBaseChartPlot.PROPERTY_ORIENTATION,
+				Messages.MChartPlot_orientation,
+				PlotOrientationEnum.HORIZONTAL, NullEnum.NULL);
+		orientationD
+				.setDescription(Messages.MChartPlot_orientation_description);
 		desc.add(orientationD);
 
-		SeriesColorPropertyDescriptor scpd = new SeriesColorPropertyDescriptor(JRBaseChartPlot.PROPERTY_SERIES_COLORS, Messages.MChartPlot_series_colors);
+		SeriesColorPropertyDescriptor scpd = new SeriesColorPropertyDescriptor(
+				JRBaseChartPlot.PROPERTY_SERIES_COLORS,
+				Messages.MChartPlot_series_colors);
 		scpd.setDescription(Messages.MChartPlot_series_colors_description);
 		desc.add(scpd);
-		scpd.setHelpRefBuilder(new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#seriesColor"));
+		scpd.setHelpRefBuilder(new HelpReferenceBuilder(
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#seriesColor"));
 
 		defaultsMap.put(JRBaseChartPlot.PROPERTY_BACKGROUND_ALPHA, null);
 		defaultsMap.put(JRBaseChartPlot.PROPERTY_FOREGROUND_ALPHA, null);
 
-		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#plot");
+		setHelpPrefix(desc,
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#plot");
 	}
 
 	private static IPropertyDescriptor[] descriptors;
 	private static Map<String, Object> defaultsMap;
-	private static JSSEnumPropertyDescriptor orientationD;
+	private static NamedEnumPropertyDescriptor<PlotOrientationEnum> orientationD;
 
 	@Override
 	public Map<String, Object> getDefaultsMap() {
@@ -90,7 +106,8 @@ public class MChartPlot extends APropertyNode {
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1,
+			Map<String, Object> defaultsMap1) {
 		descriptors = descriptors1;
 		defaultsMap = defaultsMap1;
 	}
@@ -98,7 +115,8 @@ public class MChartPlot extends APropertyNode {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java
+	 * @see
+	 * org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java
 	 * .lang.Object)
 	 */
 	public Object getPropertyValue(Object id) {
@@ -109,14 +127,8 @@ public class MChartPlot extends APropertyNode {
 			return jrElement.getBackgroundAlphaFloat();
 		if (id.equals(JRBaseChartPlot.PROPERTY_FOREGROUND_ALPHA))
 			return jrElement.getForegroundAlphaFloat();
-		if (id.equals(JRBaseChartPlot.PROPERTY_ORIENTATION)) {
-			if (jrElement.getOrientationValue() == null)
-				return 0;
-			if (jrElement.getOrientationValue() == PlotOrientationEnum.HORIZONTAL)
-				return 1;
-			else
-				return 2;
-		}
+		if (id.equals(JRBaseChartPlot.PROPERTY_ORIENTATION))
+			return orientationD.getIntValue(jrElement.getOrientationValue());
 		if (id.equals(JRBaseChartPlot.PROPERTY_SERIES_COLORS))
 			return jrElement.getSeriesColors();
 
@@ -141,33 +153,23 @@ public class MChartPlot extends APropertyNode {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java
+	 * @see
+	 * org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java
 	 * .lang.Object, java.lang.Object)
 	 */
 	public void setPropertyValue(Object id, Object value) {
 		JRBaseChartPlot jrElement = (JRBaseChartPlot) getValue();
 		if (id.equals(JRBaseChartPlot.PROPERTY_BACKCOLOR)) {
 			if (value instanceof AlfaRGB)
-				jrElement.setBackcolor(Colors.getAWT4SWTRGBColor((AlfaRGB) value));
-		} else if (id.equals(JRBaseChartPlot.PROPERTY_BACKGROUND_ALPHA)) {
+				jrElement.setBackcolor(Colors
+						.getAWT4SWTRGBColor((AlfaRGB) value));
+		} else if (id.equals(JRBaseChartPlot.PROPERTY_BACKGROUND_ALPHA))
 			jrElement.setBackgroundAlpha((Float) value);
-		} else if (id.equals(JRBaseChartPlot.PROPERTY_FOREGROUND_ALPHA)) {
+		else if (id.equals(JRBaseChartPlot.PROPERTY_FOREGROUND_ALPHA))
 			jrElement.setForegroundAlpha((Float) value);
-		} else if (id.equals(JRBaseChartPlot.PROPERTY_ORIENTATION)) {
-			switch ((Integer) value) {
-			case 0:
-				jrElement.setOrientation((PlotOrientationEnum) null);
-				break;
-			case 1:
-				jrElement.setOrientation(PlotOrientationEnum.HORIZONTAL);
-				break;
-			case 2:
-				jrElement.setOrientation(PlotOrientationEnum.VERTICAL);
-				break;
-			}
-			// jrElement.setOrientation((PlotOrientationEnum) orientationD
-			// .getEnumValue(value));
-		} else if (id.equals(JRBaseChartPlot.PROPERTY_SERIES_COLORS)) {
+		else if (id.equals(JRBaseChartPlot.PROPERTY_ORIENTATION))
+			jrElement.setOrientation(orientationD.getEnumValue(value));
+		else if (id.equals(JRBaseChartPlot.PROPERTY_SERIES_COLORS)) {
 			jrElement.setSeriesColors((Collection<JRSeriesColor>) value);
 			// jrElement.clearSeriesColors();
 			// if (value instanceof SortedSet) {

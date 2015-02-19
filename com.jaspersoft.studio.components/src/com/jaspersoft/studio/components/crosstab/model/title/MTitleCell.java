@@ -30,7 +30,7 @@ import com.jaspersoft.studio.components.crosstab.messages.Messages;
 import com.jaspersoft.studio.components.crosstab.model.cell.MCell;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
-import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.PixelPropertyDescriptor;
 
 public class MTitleCell extends MCell {
@@ -43,7 +43,8 @@ public class MTitleCell extends MCell {
 	private DesignCrosstabColumnCell colCell;
 
 	public MTitleCell(ANode parent, CrosstabColumnCell jfRield, int index) {
-		super(parent, jfRield.getCellContents(), Messages.MTitleCell_titlecell, index);
+		super(parent, jfRield.getCellContents(), Messages.MTitleCell_titlecell,
+				index);
 		this.colCell = (DesignCrosstabColumnCell) jfRield;
 	}
 
@@ -61,7 +62,7 @@ public class MTitleCell extends MCell {
 	@Override
 	public Object getPropertyValue(Object id) {
 		if (id.equals(DesignCrosstabColumnCell.PROPERTY_CONTENTS_POSITION))
-			return positionD.getEnumValue(colCell.getContentsPosition());
+			return positionD.getIntValue(colCell.getContentsPosition());
 		if (id.equals(DesignCrosstabColumnCell.PROPERTY_HEIGHT))
 			return colCell.getHeight();
 		return super.getPropertyValue(id);
@@ -70,12 +71,14 @@ public class MTitleCell extends MCell {
 	@Override
 	public void setPropertyValue(Object id, Object value) {
 		if (id.equals(DesignCrosstabColumnCell.PROPERTY_CONTENTS_POSITION))
-			colCell.setContentsPosition((CrosstabColumnPositionEnum) positionD.getEnumValue(value));
+			colCell.setContentsPosition(positionD.getEnumValue(value));
 		if (id.equals(DesignCrosstabColumnCell.PROPERTY_HEIGHT)) {
 			colCell.setHeight((Integer) value);
 
 			getCrosstab().getCrosstabManager().refresh();
-			getPropertyChangeSupport().firePropertyChange(new PropertyChangeEvent(this, JRDesignCrosstabCell.PROPERTY_HEIGHT, null, value));
+			getPropertyChangeSupport().firePropertyChange(
+					new PropertyChangeEvent(this,
+							JRDesignCrosstabCell.PROPERTY_HEIGHT, null, value));
 		}
 		super.setPropertyValue(id, value);
 	}
@@ -87,7 +90,7 @@ public class MTitleCell extends MCell {
 
 	private static IPropertyDescriptor[] descriptors;
 	private static Map<String, Object> defaultsMap;
-	private static JSSEnumPropertyDescriptor positionD;
+	private static NamedEnumPropertyDescriptor<CrosstabColumnPositionEnum> positionD;
 
 	@Override
 	public Map<String, Object> getDefaultsMap() {
@@ -100,14 +103,19 @@ public class MTitleCell extends MCell {
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1,
+			Map<String, Object> defaultsMap1) {
 		descriptors = descriptors1;
 		defaultsMap = defaultsMap1;
 	}
 
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		positionD = new JSSEnumPropertyDescriptor(DesignCrosstabColumnCell.PROPERTY_CONTENTS_POSITION, Messages.MTitleCell_contentPosition, CrosstabColumnPositionEnum.class, NullEnum.NOTNULL);
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc,
+			Map<String, Object> defaultsMap) {
+		positionD = new NamedEnumPropertyDescriptor<CrosstabColumnPositionEnum>(
+				DesignCrosstabColumnCell.PROPERTY_CONTENTS_POSITION,
+				Messages.MTitleCell_contentPosition,
+				CrosstabColumnPositionEnum.CENTER, NullEnum.NOTNULL);
 		positionD.setDescription(Messages.MTitleCell_contentPosition);
 		desc.add(positionD);
 

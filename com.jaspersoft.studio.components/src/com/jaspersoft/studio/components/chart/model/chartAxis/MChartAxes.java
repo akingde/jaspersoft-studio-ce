@@ -40,7 +40,7 @@ import com.jaspersoft.studio.model.MElementGroup;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.JRPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
-import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 
 public class MChartAxes extends APropertyNode implements IDragable, ICopyable {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
@@ -102,7 +102,8 @@ public class MChartAxes extends APropertyNode implements IDragable, ICopyable {
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1,
+			Map<String, Object> defaultsMap1) {
 		descriptors = descriptors1;
 		defaultsMap = defaultsMap1;
 	}
@@ -111,17 +112,22 @@ public class MChartAxes extends APropertyNode implements IDragable, ICopyable {
 	 * Creates the property descriptors.
 	 * 
 	 * @param desc
-	 *          the desc
+	 *            the desc
 	 */
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc,
+			Map<String, Object> defaultsMap) {
 		// super.createPropertyDescriptors(desc, defaultsMap);
 
-		positionD = new JSSEnumPropertyDescriptor(JRDesignChartAxis.PROPERTY_POSITION, Messages.MChartAxes_position, AxisPositionEnum.class, NullEnum.NOTNULL);
+		positionD = new NamedEnumPropertyDescriptor<AxisPositionEnum>(
+				JRDesignChartAxis.PROPERTY_POSITION,
+				Messages.MChartAxes_position, AxisPositionEnum.LEFT_OR_TOP,
+				NullEnum.NOTNULL);
 		positionD.setDescription(Messages.MChartAxes_position_description);
 		desc.add(positionD);
 
-		JRPropertyDescriptor chartD = new JRPropertyDescriptor(JRDesignChartAxis.PROPERTY_CHART, Messages.MChartAxes_chart);
+		JRPropertyDescriptor chartD = new JRPropertyDescriptor(
+				JRDesignChartAxis.PROPERTY_CHART, Messages.MChartAxes_chart);
 		chartD.setDescription(Messages.MChartAxes_chart_description);
 		desc.add(chartD);
 		//
@@ -131,7 +137,8 @@ public class MChartAxes extends APropertyNode implements IDragable, ICopyable {
 		// }
 		// mChart.createPropertyDescriptors(desc, defaultsMap);
 
-		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#axis");
+		setHelpPrefix(desc,
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#axis");
 	}
 
 	@Override
@@ -157,13 +164,13 @@ public class MChartAxes extends APropertyNode implements IDragable, ICopyable {
 	}
 
 	private MChart mChart;
-	private static JSSEnumPropertyDescriptor positionD;
+	private static NamedEnumPropertyDescriptor<AxisPositionEnum> positionD;
 
 	public Object getPropertyValue(Object id) {
 		JRDesignChartAxis jrElement = (JRDesignChartAxis) getValue();
 
 		if (id.equals(JRDesignChartAxis.PROPERTY_POSITION))
-			return positionD.getEnumValue(jrElement.getPositionValue());
+			return positionD.getIntValue(jrElement.getPositionValue());
 
 		if (id.equals(JRDesignChartAxis.PROPERTY_CHART)) {
 			if (mChart == null)
@@ -179,7 +186,7 @@ public class MChartAxes extends APropertyNode implements IDragable, ICopyable {
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignChartAxis jrElement = (JRDesignChartAxis) getValue();
 		if (id.equals(JRDesignChartAxis.PROPERTY_POSITION))
-			jrElement.setPosition((AxisPositionEnum) positionD.getEnumValue(value));
+			jrElement.setPosition(positionD.getEnumValue(value));
 		else if (mChart != null) {
 			mChart.setPropertyValue(id, value);
 		}
@@ -191,15 +198,18 @@ public class MChartAxes extends APropertyNode implements IDragable, ICopyable {
 		JRDesignChartAxis newObject = (JRDesignChartAxis) value;
 
 		if (oldObject != null)
-			((JRDesignChart) oldObject.getChart()).getEventSupport().removePropertyChangeListener(this);
+			((JRDesignChart) oldObject.getChart()).getEventSupport()
+					.removePropertyChangeListener(this);
 		if (newObject != null)
-			((JRDesignChart) newObject.getChart()).getEventSupport().addPropertyChangeListener(this);
+			((JRDesignChart) newObject.getChart()).getEventSupport()
+					.addPropertyChangeListener(this);
 		super.setValue(value);
 	}
 
 	@Override
 	public boolean isCopyable2(Object parent) {
-		if (parent instanceof MChart || parent instanceof MElementGroup || parent instanceof IPastableGraphic)
+		if (parent instanceof MChart || parent instanceof MElementGroup
+				|| parent instanceof IPastableGraphic)
 			return true;
 		return false;
 	}

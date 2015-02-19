@@ -61,12 +61,10 @@ import com.jaspersoft.studio.property.descriptor.text.FontPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.DoublePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.EdgePropertyDescriptor;
-import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.SpinnerPropertyDescriptor;
 import com.jaspersoft.studio.utils.AlfaRGB;
 import com.jaspersoft.studio.utils.Colors;
-import com.jaspersoft.studio.utils.EnumHelper;
 import com.jaspersoft.studio.utils.Misc;
 
 /**
@@ -251,9 +249,9 @@ public class MSpiderChart extends MGraphicElement implements IDatasetContainer {
 		legendFontD.setDescription(Messages.MChart_legend_font_description);
 		desc.add(legendFontD);
 
-		evaluationTimeD = new JSSEnumPropertyDescriptor(
+		evaluationTimeD = new NamedEnumPropertyDescriptor<EvaluationTimeEnum>(
 				SpiderChartComponent.PROPERTY_EVALUATION_TIME,
-				"", EvaluationTimeEnum.class, //$NON-NLS-1$
+				"", EvaluationTimeEnum.AUTO, //$NON-NLS-1$
 				NullEnum.NOTNULL);
 		evaluationTimeD.setDescription(""); //$NON-NLS-1$
 		desc.add(evaluationTimeD);
@@ -402,7 +400,7 @@ public class MSpiderChart extends MGraphicElement implements IDatasetContainer {
 		defaultsMap.put(StandardChartSettings.PROPERTY_TITLE_POSITION, null);
 		defaultsMap.put(StandardChartSettings.PROPERTY_LEGEND_POSITION, null);
 		defaultsMap.put(StandardChartSettings.PROPERTY_EVALUATION_TIME,
-				EnumHelper.getValue(EvaluationTimeEnum.NOW, 1, false));
+				evaluationTimeD.getIntValue(EvaluationTimeEnum.NOW));
 
 		defaultsMap.put(StandardSpiderPlot.PROPERTY_AXIS_LINE_COLOR, null);
 		defaultsMap.put(StandardSpiderPlot.PROPERTY_AXIS_LINE_WIDTH, null);
@@ -488,7 +486,7 @@ public class MSpiderChart extends MGraphicElement implements IDatasetContainer {
 			return ExprUtil.getExpression(cs.getSubtitleExpression());
 
 		if (id.equals(SpiderChartComponent.PROPERTY_EVALUATION_TIME))
-			return evaluationTimeD.getEnumValue(component.getEvaluationTime());
+			return evaluationTimeD.getIntValue(component.getEvaluationTime());
 		if (id.equals(SpiderChartComponent.PROPERTY_EVALUATION_GROUP))
 			return component.getEvaluationGroup();
 
@@ -657,8 +655,7 @@ public class MSpiderChart extends MGraphicElement implements IDatasetContainer {
 				cs.addHyperlinkParameter(param);
 			}
 		} else if (id.equals(SpiderChartComponent.PROPERTY_EVALUATION_TIME))
-			component.setEvaluationTime((EvaluationTimeEnum) EnumHelper
-					.getSetValue(EvaluationTimeEnum.values(), value, 1, false));
+			component.setEvaluationTime(evaluationTimeD.getEnumValue(value));
 		else if (id.equals(SpiderChartComponent.PROPERTY_EVALUATION_GROUP)) {
 			component.setEvaluationGroup((String) value);
 		} else
@@ -675,7 +672,7 @@ public class MSpiderChart extends MGraphicElement implements IDatasetContainer {
 	private RComboBoxPropertyDescriptor evaluationGroupNameD;
 	private static EdgePropertyDescriptor titlePositionD;
 	private static EdgePropertyDescriptor legendPositionD;
-	private static JSSEnumPropertyDescriptor evaluationTimeD;
+	private static NamedEnumPropertyDescriptor<EvaluationTimeEnum> evaluationTimeD;
 	private static NamedEnumPropertyDescriptor<SpiderRotationEnum> rotation;
 	private static NamedEnumPropertyDescriptor<TableOrderEnum> tableOrder;
 

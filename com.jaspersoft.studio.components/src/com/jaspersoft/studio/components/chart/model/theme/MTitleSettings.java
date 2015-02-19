@@ -35,13 +35,14 @@ import com.jaspersoft.studio.model.text.MFontUtil;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.text.FontPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 
 public class MTitleSettings extends APropertyNode {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	private String displayText;
 
-	public MTitleSettings(MChartThemeSettings parent, TitleSettings ts, String displayText) {
+	public MTitleSettings(MChartThemeSettings parent, TitleSettings ts,
+			String displayText) {
 		super(parent, -1);
 		setValue(ts);
 		this.displayText = displayText;
@@ -76,7 +77,8 @@ public class MTitleSettings extends APropertyNode {
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1,
+			Map<String, Object> defaultsMap1) {
 		descriptors = descriptors1;
 		defaultsMap = defaultsMap1;
 	}
@@ -85,37 +87,54 @@ public class MTitleSettings extends APropertyNode {
 	 * Creates the property descriptors.
 	 * 
 	 * @param desc
-	 *          the desc
+	 *            the desc
 	 */
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		CheckBoxPropertyDescriptor showTitleD = new CheckBoxPropertyDescriptor(TitleSettings.PROPERTY_showTitle, Messages.MTitleSettings_showTitleTitle);
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc,
+			Map<String, Object> defaultsMap) {
+		CheckBoxPropertyDescriptor showTitleD = new CheckBoxPropertyDescriptor(
+				TitleSettings.PROPERTY_showTitle,
+				Messages.MTitleSettings_showTitleTitle);
 		showTitleD.setDescription(Messages.MTitleSettings_showTitleDescription);
 		desc.add(showTitleD);
 
-		FontPropertyDescriptor fontD = new FontPropertyDescriptor(TitleSettings.PROPERTY_font, "Font");
+		FontPropertyDescriptor fontD = new FontPropertyDescriptor(
+				TitleSettings.PROPERTY_font, "Font");
 		fontD.setDescription("Font");
 		desc.add(fontD);
 
-		posD = new JSSEnumPropertyDescriptor(TitleSettings.PROPERTY_position, Messages.MTitleSettings_positionTitle, EdgeEnum.class, NullEnum.NULL);
+		posD = new NamedEnumPropertyDescriptor<EdgeEnum>(
+				TitleSettings.PROPERTY_position,
+				Messages.MTitleSettings_positionTitle, EdgeEnum.BOTTOM,
+				NullEnum.NULL);
 		posD.setDescription(Messages.MTitleSettings_positionDescription);
 		desc.add(posD);
 
-		hp = new JSSEnumPropertyDescriptor(TitleSettings.PROPERTY_horizontalAlignment, Messages.MTitleSettings_horizontalAlignmentTitle, JFreeChartHorizontalAlignmentEnum.class, NullEnum.NULL);
+		hp = new NamedEnumPropertyDescriptor<JFreeChartHorizontalAlignmentEnum>(
+				TitleSettings.PROPERTY_horizontalAlignment,
+				Messages.MTitleSettings_horizontalAlignmentTitle,
+				JFreeChartHorizontalAlignmentEnum.CENTER, NullEnum.NULL);
 		hp.setDescription(Messages.MTitleSettings_horizontalAlignmentDescription);
 		desc.add(hp);
 
-		vp = new JSSEnumPropertyDescriptor(TitleSettings.PROPERTY_verticalAlignment, Messages.MTitleSettings_verticalAlignementTitle, JFreeChartVerticalAlignmentEnum.class, NullEnum.NULL);
+		vp = new NamedEnumPropertyDescriptor<JFreeChartVerticalAlignmentEnum>(
+				TitleSettings.PROPERTY_verticalAlignment,
+				Messages.MTitleSettings_verticalAlignementTitle,
+				JFreeChartVerticalAlignmentEnum.BOTTOM, NullEnum.NULL);
 		vp.setDescription(Messages.MTitleSettings_verticalAlignementDescription);
 		desc.add(vp);
 
 		PadUtil.createPropertyDescriptors(desc, defaultsMap);
 
-		PaintProviderPropertyDescriptor fgPaint = new PaintProviderPropertyDescriptor(TitleSettings.PROPERTY_foregroundPaint, Messages.MTitleSettings_foregroundColorTitle);
+		PaintProviderPropertyDescriptor fgPaint = new PaintProviderPropertyDescriptor(
+				TitleSettings.PROPERTY_foregroundPaint,
+				Messages.MTitleSettings_foregroundColorTitle);
 		fgPaint.setDescription(Messages.MTitleSettings_foregroundColorDescription);
 		desc.add(fgPaint);
 
-		PaintProviderPropertyDescriptor bgPaint = new PaintProviderPropertyDescriptor(TitleSettings.PROPERTY_backgroundPaint, Messages.MTitleSettings_backgroundColorTitle);
+		PaintProviderPropertyDescriptor bgPaint = new PaintProviderPropertyDescriptor(
+				TitleSettings.PROPERTY_backgroundPaint,
+				Messages.MTitleSettings_backgroundColorTitle);
 		bgPaint.setDescription(Messages.MTitleSettings_backgroundColorDescription);
 		desc.add(bgPaint);
 
@@ -123,16 +142,21 @@ public class MTitleSettings extends APropertyNode {
 		defaultsMap.put(TitleSettings.PROPERTY_foregroundPaint, null);
 
 		defaultsMap.put(TitleSettings.PROPERTY_showTitle, Boolean.TRUE);
-		defaultsMap.put(TitleSettings.PROPERTY_position, EdgeEnum.TOP);
-		defaultsMap.put(TitleSettings.PROPERTY_horizontalAlignment, JFreeChartHorizontalAlignmentEnum.LEFT);
-		defaultsMap.put(TitleSettings.PROPERTY_verticalAlignment, JFreeChartVerticalAlignmentEnum.TOP);
+		defaultsMap.put(TitleSettings.PROPERTY_position,
+				posD.getIntValue(EdgeEnum.TOP));
+		defaultsMap.put(TitleSettings.PROPERTY_horizontalAlignment,
+				hp.getIntValue(JFreeChartHorizontalAlignmentEnum.LEFT));
+		defaultsMap.put(TitleSettings.PROPERTY_verticalAlignment,
+				vp.getIntValue(JFreeChartVerticalAlignmentEnum.TOP));
 
-		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/sample.reference/chartthemes/index.html#chartthemes"); //$NON-NLS-1$
+		setHelpPrefix(
+				desc,
+				"net.sf.jasperreports.doc/docs/sample.reference/chartthemes/index.html#chartthemes"); //$NON-NLS-1$
 	}
 
-	private static JSSEnumPropertyDescriptor posD;
-	private static JSSEnumPropertyDescriptor hp;
-	private static JSSEnumPropertyDescriptor vp;
+	private static NamedEnumPropertyDescriptor<EdgeEnum> posD;
+	private static NamedEnumPropertyDescriptor<JFreeChartHorizontalAlignmentEnum> hp;
+	private static NamedEnumPropertyDescriptor<JFreeChartVerticalAlignmentEnum> vp;
 	private MFont clFont;
 
 	@Override
@@ -145,11 +169,13 @@ public class MTitleSettings extends APropertyNode {
 			return clFont;
 		}
 		if (id.equals(TitleSettings.PROPERTY_position))
-			return posD.getEnumValue(ts.getPositionValue());
+			return posD.getIntValue(ts.getPositionValue());
 		if (id.equals(TitleSettings.PROPERTY_horizontalAlignment))
-			return hp.getEnumValue(JFreeChartHorizontalAlignmentEnum.getValue(ts.getHorizontalAlignment()));
+			return hp.getIntValue(JFreeChartHorizontalAlignmentEnum.getValue(ts
+					.getHorizontalAlignment()));
 		if (id.equals(TitleSettings.PROPERTY_verticalAlignment))
-			return vp.getEnumValue(JFreeChartVerticalAlignmentEnum.getValue(ts.getVerticalAlignment()));
+			return vp.getIntValue(JFreeChartVerticalAlignmentEnum.getValue(ts
+					.getVerticalAlignment()));
 		if (id.equals(TitleSettings.PROPERTY_backgroundPaint))
 			return ts.getBackgroundPaint();
 		if (id.equals(TitleSettings.PROPERTY_foregroundPaint))
@@ -169,17 +195,19 @@ public class MTitleSettings extends APropertyNode {
 		else if (id.equals(TitleSettings.PROPERTY_font))
 			ts.setFont(MFontUtil.setMFont(value));
 		else if (id.equals(TitleSettings.PROPERTY_position))
-			ts.setPosition((EdgeEnum) posD.getEnumValue(value));
+			ts.setPosition(posD.getEnumValue(value));
 		else if (id.equals(TitleSettings.PROPERTY_horizontalAlignment))
-			ts.setHorizontalAlignment(((JFreeChartHorizontalAlignmentEnum) hp.getEnumValue(value)).getJFreeChartValue());
+			ts.setHorizontalAlignment(hp.getEnumValue(value)
+					.getJFreeChartValue());
 		else if (id.equals(TitleSettings.PROPERTY_verticalAlignment))
-			ts.setVerticalAlignment(((JFreeChartVerticalAlignmentEnum) vp.getEnumValue(value)).getJFreeChartValue());
+			ts.setVerticalAlignment(vp.getEnumValue(value).getJFreeChartValue());
 		else if (id.equals(TitleSettings.PROPERTY_backgroundPaint))
 			ts.setBackgroundPaint((PaintProvider) value);
 		else if (id.equals(TitleSettings.PROPERTY_foregroundPaint))
 			ts.setForegroundPaint((PaintProvider) value);
 
-		RectangleInsets ri = PadUtil.setPropertyValue(id, value, ts.getPadding());
+		RectangleInsets ri = PadUtil.setPropertyValue(id, value,
+				ts.getPadding());
 		if (ri != null)
 			ts.setPadding(ri);
 	}

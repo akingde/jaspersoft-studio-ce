@@ -37,13 +37,14 @@ import com.jaspersoft.studio.property.descriptors.DegreePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.DoublePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.FloatPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.IntegerPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 
 public class MAxisSettings extends APropertyNode {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	private String displayText;
 
-	public MAxisSettings(MChartThemeSettings parent, AxisSettings as, String displayText) {
+	public MAxisSettings(MChartThemeSettings parent, AxisSettings as,
+			String displayText) {
 		super(parent, -1);
 		setValue(as);
 		this.displayText = displayText;
@@ -78,7 +79,8 @@ public class MAxisSettings extends APropertyNode {
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1,
+			Map<String, Object> defaultsMap1) {
 		descriptors = descriptors1;
 		defaultsMap = defaultsMap1;
 	}
@@ -87,35 +89,42 @@ public class MAxisSettings extends APropertyNode {
 	 * Creates the property descriptors.
 	 * 
 	 * @param desc
-	 *          the desc
+	 *            the desc
 	 */
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		PropertyDescriptor pd = new CheckBoxPropertyDescriptor(AxisSettings.PROPERTY_visible, "Visible");
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc,
+			Map<String, Object> defaultsMap) {
+		PropertyDescriptor pd = new CheckBoxPropertyDescriptor(
+				AxisSettings.PROPERTY_visible, "Visible");
 		pd.setDescription("Visible");
 		desc.add(pd);
 
-		pd = new CheckBoxPropertyDescriptor(AxisSettings.PROPERTY_lineVisible, "Visible");
+		pd = new CheckBoxPropertyDescriptor(AxisSettings.PROPERTY_lineVisible,
+				"Visible");
 		pd.setDescription("Line Visible");
 		pd.setCategory("Line");
 		desc.add(pd);
 
-		pd = new CheckBoxPropertyDescriptor(AxisSettings.PROPERTY_labelVisible, "Visible");
+		pd = new CheckBoxPropertyDescriptor(AxisSettings.PROPERTY_labelVisible,
+				"Visible");
 		pd.setDescription("Label Visible");
 		pd.setCategory("Label");
 		desc.add(pd);
 
-		pd = new CheckBoxPropertyDescriptor(AxisSettings.PROPERTY_tickLabelsVisible, "Visible");
+		pd = new CheckBoxPropertyDescriptor(
+				AxisSettings.PROPERTY_tickLabelsVisible, "Visible");
 		pd.setDescription("Tick Labels Visible");
 		pd.setCategory("Tick Labels");
 		desc.add(pd);
 
-		pd = new CheckBoxPropertyDescriptor(AxisSettings.PROPERTY_tickMarksVisible, "Visible");
+		pd = new CheckBoxPropertyDescriptor(
+				AxisSettings.PROPERTY_tickMarksVisible, "Visible");
 		pd.setDescription("Tick Marks Visible");
 		pd.setCategory("Tick Mark");
 		desc.add(pd);
 
-		pd = new CheckBoxPropertyDescriptor(AxisSettings.PROPERTY_axisIntegerUnit, "Axis Integer Unit");
+		pd = new CheckBoxPropertyDescriptor(
+				AxisSettings.PROPERTY_axisIntegerUnit, "Axis Integer Unit");
 		pd.setDescription("Axis Integer Unit");
 		desc.add(pd);
 
@@ -124,61 +133,75 @@ public class MAxisSettings extends APropertyNode {
 		pd.setCategory("Label");
 		desc.add(pd);
 
-		pd = new FontPropertyDescriptor(AxisSettings.PROPERTY_tickLabelFont, "Font");
+		pd = new FontPropertyDescriptor(AxisSettings.PROPERTY_tickLabelFont,
+				"Font");
 		pd.setDescription("Tick Label Font");
 		pd.setCategory("Tick Labels");
 		desc.add(pd);
 
-		pd = new FloatPropertyDescriptor(AxisSettings.PROPERTY_tickMarksInsideLength, "Inside Lenght");
+		pd = new FloatPropertyDescriptor(
+				AxisSettings.PROPERTY_tickMarksInsideLength, "Inside Lenght");
 		pd.setDescription("Tick Marks Inside Lenght");
 		pd.setCategory("Tick Mark");
 		desc.add(pd);
 
-		pd = new FloatPropertyDescriptor(AxisSettings.PROPERTY_tickMarksOutsideLength, "Outside Lenght");
+		pd = new FloatPropertyDescriptor(
+				AxisSettings.PROPERTY_tickMarksOutsideLength, "Outside Lenght");
 		pd.setDescription("Tick Marks Outside Lenght");
 		pd.setCategory("Tick Mark");
 		desc.add(pd);
 
-		pd = new DegreePropertyDescriptor(AxisSettings.PROPERTY_labelAngle, "Angle");
+		pd = new DegreePropertyDescriptor(AxisSettings.PROPERTY_labelAngle,
+				"Angle");
 		pd.setDescription("Label Angle");
 		pd.setCategory("Label");
 		desc.add(pd);
 
-		pd = new DoublePropertyDescriptor(AxisSettings.PROPERTY_tickInterval, "Interval");
+		pd = new DoublePropertyDescriptor(AxisSettings.PROPERTY_tickInterval,
+				"Interval");
 		pd.setDescription("Tick Interval");
 		pd.setCategory("Tick");
 		desc.add(pd);
 
-		pd = new IntegerPropertyDescriptor(AxisSettings.PROPERTY_tickCount, "Count");
+		pd = new IntegerPropertyDescriptor(AxisSettings.PROPERTY_tickCount,
+				"Count");
 		pd.setDescription("Tick Count");
 		pd.setCategory("Tick");
 		desc.add(pd);
 
-		PadUtil.createPropertyDescriptors(desc, defaultsMap, PROP_LABEL, "Label Padding");
+		PadUtil.createPropertyDescriptors(desc, defaultsMap, PROP_LABEL,
+				"Label Padding");
 
-		PadUtil.createPropertyDescriptors(desc, defaultsMap, "Tick Label Padding");
+		PadUtil.createPropertyDescriptors(desc, defaultsMap,
+				"Tick Label Padding");
 
-		pd = new PaintProviderPropertyDescriptor(AxisSettings.PROPERTY_linePaint, "Paint");
+		pd = new PaintProviderPropertyDescriptor(
+				AxisSettings.PROPERTY_linePaint, "Paint");
 		pd.setDescription("Line paint");
 		pd.setCategory("Line");
 		desc.add(pd);
 
-		pd = new PaintProviderPropertyDescriptor(AxisSettings.PROPERTY_labelPaint, "Paint");
+		pd = new PaintProviderPropertyDescriptor(
+				AxisSettings.PROPERTY_labelPaint, "Paint");
 		pd.setDescription("Label paint");
 		pd.setCategory("Label");
 		desc.add(pd);
 
-		pd = new PaintProviderPropertyDescriptor(AxisSettings.PROPERTY_tickLabelPaint, "Paint");
+		pd = new PaintProviderPropertyDescriptor(
+				AxisSettings.PROPERTY_tickLabelPaint, "Paint");
 		pd.setDescription("Tick Label paint");
 		pd.setCategory("Tick Labels");
 		desc.add(pd);
 
-		pd = new PaintProviderPropertyDescriptor(AxisSettings.PROPERTY_tickMarksPaint, "Paint");
+		pd = new PaintProviderPropertyDescriptor(
+				AxisSettings.PROPERTY_tickMarksPaint, "Paint");
 		pd.setDescription("Tick Mark paint");
 		pd.setCategory("Tick Mark");
 		desc.add(pd);
 
-		location = new JSSEnumPropertyDescriptor(AxisSettings.PROPERTY_location, "Location", JFreeChartAxisLocationEnum.class, NullEnum.NOTNULL);
+		location = new NamedEnumPropertyDescriptor<JFreeChartAxisLocationEnum>(
+				AxisSettings.PROPERTY_location, "Location",
+				JFreeChartAxisLocationEnum.BOTTOM_OR_LEFT, NullEnum.NOTNULL);
 		location.setDescription("Location");
 		desc.add(location);
 
@@ -194,13 +217,15 @@ public class MAxisSettings extends APropertyNode {
 		defaultsMap.put(AxisSettings.PROPERTY_tickMarksVisible, Boolean.TRUE);
 		defaultsMap.put(AxisSettings.PROPERTY_axisIntegerUnit, Boolean.TRUE);
 
-		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/sample.reference/chartthemes/index.html#chartthemes");
+		setHelpPrefix(
+				desc,
+				"net.sf.jasperreports.doc/docs/sample.reference/chartthemes/index.html#chartthemes");
 	}
 
 	public static final String PROP_LABEL = "LABEL";
 	private MFont lFont;
 	private MFont tlFont;
-	private static JSSEnumPropertyDescriptor location;
+	private static NamedEnumPropertyDescriptor<JFreeChartAxisLocationEnum> location;
 
 	@Override
 	public Object getPropertyValue(Object id) {
@@ -222,7 +247,8 @@ public class MAxisSettings extends APropertyNode {
 			return lFont;
 		}
 		if (id.equals(AxisSettings.PROPERTY_tickLabelFont)) {
-			tlFont = MFontUtil.getMFont(tlFont, ts.getTickLabelFont(), null, this);
+			tlFont = MFontUtil.getMFont(tlFont, ts.getTickLabelFont(), null,
+					this);
 			return tlFont;
 		}
 		if (id.equals(AxisSettings.PROPERTY_tickMarksInsideLength))
@@ -244,7 +270,8 @@ public class MAxisSettings extends APropertyNode {
 		if (id.equals(AxisSettings.PROPERTY_tickMarksPaint))
 			return ts.getTickMarksPaint();
 		if (id.equals(AxisSettings.PROPERTY_location))
-			return location.getEnumValue(JFreeChartAxisLocationEnum.getValue(ts.getLocation()));
+			return location.getIntValue(JFreeChartAxisLocationEnum.getValue(ts
+					.getLocation()));
 
 		Object pad = PadUtil.getPropertyValue(id, ts.getTickLabelInsets());
 		if (pad != null)
@@ -293,9 +320,10 @@ public class MAxisSettings extends APropertyNode {
 		else if (id.equals(AxisSettings.PROPERTY_tickMarksPaint))
 			ts.setTickMarksPaint((PaintProvider) value);
 		else if (id.equals(AxisSettings.PROPERTY_location))
-			ts.setLocation(((JFreeChartAxisLocationEnum) location.getEnumValue(value)).getJFreeChartValue());
+			ts.setLocation(location.getEnumValue(value).getJFreeChartValue());
 
-		RectangleInsets ri = PadUtil.setPropertyValue(id, value, ts.getTickLabelInsets());
+		RectangleInsets ri = PadUtil.setPropertyValue(id, value,
+				ts.getTickLabelInsets());
 		if (ri != null)
 			ts.setTickLabelInsets(ri);
 

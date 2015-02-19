@@ -67,7 +67,6 @@ import com.jaspersoft.studio.property.descriptor.combo.RComboBoxPropertyDescript
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
 import com.jaspersoft.studio.utils.ModelUtils;
@@ -158,7 +157,7 @@ public class MMap extends MGraphicElement implements IDatasetContainer {
 	}
 
 	private IPropertyDescriptor[] descriptors;
-	private JSSEnumPropertyDescriptor onErrorTypeD;
+	private NamedEnumPropertyDescriptor<OnErrorTypeEnum> onErrorTypeD;
 	private static Map<String, Object> defaultsMap;
 
 	@Override
@@ -255,9 +254,9 @@ public class MMap extends MGraphicElement implements IDatasetContainer {
 		imageTypeD.setDescription(Messages.MMap_imageTypeDescription);
 		desc.add(imageTypeD);
 
-		onErrorTypeD = new JSSEnumPropertyDescriptor(
+		onErrorTypeD = new NamedEnumPropertyDescriptor<OnErrorTypeEnum>(
 				StandardMapComponent.PROPERTY_ON_ERROR_TYPE,
-				Messages.MMap_OnErrorType, OnErrorTypeEnum.class, NullEnum.NULL);
+				Messages.MMap_OnErrorType, OnErrorTypeEnum.BLANK, NullEnum.NULL);
 		onErrorTypeD.setDescription(Messages.MMap_OnErrorTypeDescription);
 		desc.add(onErrorTypeD);
 
@@ -333,11 +332,11 @@ public class MMap extends MGraphicElement implements IDatasetContainer {
 		defaultsMap.put(StandardMapComponent.PROPERTY_MAP_TYPE,
 				mapTypeD.getIntValue(MapTypeEnum.ROADMAP));
 		defaultsMap.put(StandardMapComponent.PROPERTY_MAP_TYPE,
-				MapScaleEnum.ONE);
+				mapScaleD.getIntValue(MapScaleEnum.ONE));
 		defaultsMap.put(StandardMapComponent.PROPERTY_IMAGE_TYPE,
-				MapImageTypeEnum.PNG);
+				imageTypeD.getIntValue(MapImageTypeEnum.PNG));
 		defaultsMap.put(StandardMapComponent.PROPERTY_ON_ERROR_TYPE,
-				onErrorTypeD.getEnumValue(OnErrorTypeEnum.ERROR));
+				onErrorTypeD.getIntValue(OnErrorTypeEnum.ERROR));
 		defaultsMap.put(StandardMapComponent.PROPERTY_EVALUATION_TIME,
 				EvaluationTimeEnum.NOW);
 		defaultsMap.put(StandardMapComponent.PROPERTY_ZOOM_EXPRESSION,
@@ -407,7 +406,7 @@ public class MMap extends MGraphicElement implements IDatasetContainer {
 		if (id.equals(StandardMapComponent.PROPERTY_IMAGE_TYPE))
 			return imageTypeD.getIntValue(component.getImageType());
 		if (id.equals(StandardMapComponent.PROPERTY_ON_ERROR_TYPE)) {
-			return onErrorTypeD.getEnumValue(component.getOnErrorType());
+			return onErrorTypeD.getIntValue(component.getOnErrorType());
 		}
 
 		// map authentication info
@@ -514,8 +513,7 @@ public class MMap extends MGraphicElement implements IDatasetContainer {
 			component.setImageType((MapImageTypeEnum) imageTypeD
 					.getEnumValue(value));
 		else if (id.equals(StandardMapComponent.PROPERTY_ON_ERROR_TYPE)) {
-			component.setOnErrorType((OnErrorTypeEnum) onErrorTypeD
-					.getEnumValue(value));
+			component.setOnErrorType(onErrorTypeD.getEnumValue(value));
 		} else if (id.equals(MapComponent.PROPERTY_KEY)) {
 			if (value instanceof String) {
 				getJasperDesign().setProperty(MapComponent.PROPERTY_KEY,

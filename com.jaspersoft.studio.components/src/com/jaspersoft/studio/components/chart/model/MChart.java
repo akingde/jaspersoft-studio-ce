@@ -109,7 +109,7 @@ import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.text.FontPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.EdgePropertyDescriptor;
-import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.SpinnerPropertyDescriptor;
 import com.jaspersoft.studio.utils.AlfaRGB;
 import com.jaspersoft.studio.utils.Colors;
@@ -209,9 +209,9 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 						"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#chartTitle_position"));
 		desc.add(titlePositionD);
 
-		evaluationTimeD = new JSSEnumPropertyDescriptor(
+		evaluationTimeD = new NamedEnumPropertyDescriptor<EvaluationTimeEnum>(
 				JRDesignChart.PROPERTY_EVALUATION_TIME,
-				Messages.MChart_evaluation_time, EvaluationTimeEnum.class,
+				Messages.MChart_evaluation_time, EvaluationTimeEnum.AUTO,
 				NullEnum.NOTNULL);
 		evaluationTimeD
 				.setDescription(Messages.MChart_evaluation_time_description);
@@ -416,7 +416,7 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 		defaultsMap.put(JRBaseChart.PROPERTY_TITLE_POSITION, null);
 		defaultsMap.put(JRBaseChart.PROPERTY_LEGEND_POSITION, null);
 		defaultsMap.put(JRDesignChart.PROPERTY_EVALUATION_TIME,
-				EnumHelper.getValue(EvaluationTimeEnum.NOW, 1, false));
+				evaluationTimeD.getIntValue(EvaluationTimeEnum.NOW));
 	}
 
 	@Override
@@ -436,7 +436,7 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 
 	private static EdgePropertyDescriptor titlePositionD;
 	private static EdgePropertyDescriptor legendPositionD;
-	private static JSSEnumPropertyDescriptor evaluationTimeD;
+	private static NamedEnumPropertyDescriptor<EvaluationTimeEnum> evaluationTimeD;
 
 	@Override
 	public Object getPropertyValue(Object id) {
@@ -449,7 +449,7 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 			return legendPositionD.getIntValue(jrElement
 					.getLegendPositionValue());
 		if (id.equals(JRDesignChart.PROPERTY_EVALUATION_TIME))
-			return evaluationTimeD.getEnumValue(jrElement
+			return evaluationTimeD.getIntValue(jrElement
 					.getEvaluationTimeValue());
 		if (id.equals(JRBaseChart.PROPERTY_RENDER_TYPE))
 			return jrElement.getRenderType();
@@ -591,8 +591,7 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 			jrElement.setLegendPosition((EdgeEnum) legendPositionD
 					.getEnumValue(value));
 		else if (id.equals(JRDesignChart.PROPERTY_EVALUATION_TIME))
-			jrElement.setEvaluationTime((EvaluationTimeEnum) evaluationTimeD
-					.getEnumValue(value));
+			jrElement.setEvaluationTime(evaluationTimeD.getEnumValue(value));
 		else if (id.equals(JRBaseChart.PROPERTY_SHOW_LEGEND))
 			jrElement.setShowLegend((Boolean) value);
 		else if (id.equals(JRBaseChart.PROPERTY_RENDER_TYPE)) {

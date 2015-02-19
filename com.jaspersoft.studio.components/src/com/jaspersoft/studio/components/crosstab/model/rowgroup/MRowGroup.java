@@ -39,7 +39,7 @@ import com.jaspersoft.studio.model.ICopyable;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
-import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.PixelPropertyDescriptor;
 
 public class MRowGroup extends MCrosstabGroup implements ICopyable {
@@ -100,7 +100,7 @@ public class MRowGroup extends MCrosstabGroup implements ICopyable {
 
 	private static IPropertyDescriptor[] descriptors;
 	private static Map<String, Object> defaultsMap;
-	private static JSSEnumPropertyDescriptor columnPositionD;
+	private static NamedEnumPropertyDescriptor<CrosstabRowPositionEnum> columnPositionD;
 
 	@Override
 	public Map<String, Object> getDefaultsMap() {
@@ -130,10 +130,10 @@ public class MRowGroup extends MCrosstabGroup implements ICopyable {
 			Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		columnPositionD = new JSSEnumPropertyDescriptor(
+		columnPositionD = new NamedEnumPropertyDescriptor<CrosstabRowPositionEnum>(
 				JRDesignCrosstabRowGroup.PROPERTY_POSITION,
-				Messages.MRowGroup_row_position, CrosstabRowPositionEnum.class,
-				NullEnum.NOTNULL);
+				Messages.MRowGroup_row_position,
+				CrosstabRowPositionEnum.BOTTOM, NullEnum.NOTNULL);
 		columnPositionD
 				.setDescription(Messages.MRowGroup_row_position_description);
 		desc.add(columnPositionD);
@@ -156,47 +156,46 @@ public class MRowGroup extends MCrosstabGroup implements ICopyable {
 	public Object getPropertyValue(Object id) {
 		JRDesignCrosstabRowGroup jrField = (JRDesignCrosstabRowGroup) getValue();
 		if (id.equals(JRDesignCrosstabRowGroup.PROPERTY_POSITION))
-			return columnPositionD.getEnumValue(jrField.getPositionValue());
+			return columnPositionD.getIntValue(jrField.getPositionValue());
 		if (id.equals(JRDesignCrosstabRowGroup.PROPERTY_WIDTH))
 			return jrField.getWidth();
 		return super.getPropertyValue(id);
 	}
 
 	/**
-	 * Called when the name of a group change
-	 * Search in the crosstab the group cells that are using a reference
-	 * to the group and update also their references.
-	 * It update the group map in the JRCrosstabElement to keep it 
-	 * in sync with the current group name.
-	 * Finally since the cell uses the group name for the model display
-	 * name it run a fake event to update the cells in the editor
+	 * Called when the name of a group change Search in the crosstab the group
+	 * cells that are using a reference to the group and update also their
+	 * references. It update the group map in the JRCrosstabElement to keep it
+	 * in sync with the current group name. Finally since the cell uses the
+	 * group name for the model display name it run a fake event to update the
+	 * cells in the editor
 	 */
 	@Override
-	protected void updateGroups(String oldName, String newName){
+	protected void updateGroups(String oldName, String newName) {
 		ANode crosstab = getParent().getParent();
 		List<MGroupCell> cellsToRefresh = new ArrayList<MGroupCell>();
-		for(INode child : crosstab.getChildren()){
-			if (child instanceof MGroupCell){
-				MGroupCell cell = (MGroupCell)child;
+		for (INode child : crosstab.getChildren()) {
+			if (child instanceof MGroupCell) {
+				MGroupCell cell = (MGroupCell) child;
 				String rowGroup = cell.getCell().getRowTotalGroup();
-				if (rowGroup != null && rowGroup.equals(oldName)){
+				if (rowGroup != null && rowGroup.equals(oldName)) {
 					cell.getCell().setRowTotalGroup(newName);
 					cellsToRefresh.add(cell);
 				}
 			}
 		}
-		JRDesignCrosstab jrCrosstab = (JRDesignCrosstab)crosstab.getValue();
+		JRDesignCrosstab jrCrosstab = (JRDesignCrosstab) crosstab.getValue();
 		Map<String, Integer> groupMap = jrCrosstab.getRowGroupIndicesMap();
-		if (groupMap.containsKey(oldName)){
+		if (groupMap.containsKey(oldName)) {
 			Integer value = groupMap.remove(oldName);
 			groupMap.put(newName, value);
 		}
-		//The refresh must be done after the update of the map
-		for(MGroupCell cell : cellsToRefresh){
+		// The refresh must be done after the update of the map
+		for (MGroupCell cell : cellsToRefresh) {
 			JSSCompoundCommand.forceRefreshVisuals(cell);
 		}
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -208,8 +207,7 @@ public class MRowGroup extends MCrosstabGroup implements ICopyable {
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignCrosstabRowGroup jrField = (JRDesignCrosstabRowGroup) getValue();
 		if (id.equals(JRDesignCrosstabRowGroup.PROPERTY_POSITION))
-			jrField.setPosition((CrosstabRowPositionEnum) columnPositionD
-					.getEnumValue(value));
+			jrField.setPosition(columnPositionD.getEnumValue(value));
 		else if (id.equals(JRDesignCrosstabRowGroup.PROPERTY_WIDTH)) {
 			jrField.setWidth((Integer) value);
 			MCrosstab cross = getMCrosstab();

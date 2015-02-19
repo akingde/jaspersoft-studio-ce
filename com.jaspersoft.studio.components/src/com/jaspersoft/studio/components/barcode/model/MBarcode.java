@@ -30,7 +30,7 @@ import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.combo.RComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 
 public abstract class MBarcode extends MGraphicElement {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
@@ -80,9 +80,9 @@ public abstract class MBarcode extends MGraphicElement {
 		codeExprD.setDescription(Messages.MBarcode_code_expression_description);
 		desc.add(codeExprD);
 
-		evaluationTimeD = new JSSEnumPropertyDescriptor(
+		evaluationTimeD = new NamedEnumPropertyDescriptor<EvaluationTimeEnum>(
 				StandardBarbecueComponent.PROPERTY_EVALUATION_TIME,
-				Messages.MBarcode_evaluation_time, EvaluationTimeEnum.class,
+				Messages.MBarcode_evaluation_time, EvaluationTimeEnum.AUTO,
 				NullEnum.NOTNULL);
 		evaluationTimeD
 				.setDescription(Messages.MBarcode_evaluation_time_description);
@@ -100,7 +100,7 @@ public abstract class MBarcode extends MGraphicElement {
 		codeExprD.setCategory(Messages.common_properties_category);
 
 		defaultsMap.put(StandardBarbecueComponent.PROPERTY_EVALUATION_TIME,
-				evaluationTimeD.getEnumValue(EvaluationTimeEnum.NOW));
+				evaluationTimeD.getIntValue(EvaluationTimeEnum.NOW));
 	}
 
 	@Override
@@ -109,7 +109,7 @@ public abstract class MBarcode extends MGraphicElement {
 		if (evaluationGroupNameD != null)
 			evaluationGroupNameD.setItems(items);
 	}
-	
+
 	@Override
 	public HashSet<String> generateGraphicalProperties() {
 		HashSet<String> properties = super.generateGraphicalProperties();
@@ -118,7 +118,7 @@ public abstract class MBarcode extends MGraphicElement {
 	}
 
 	private RComboBoxPropertyDescriptor evaluationGroupNameD;
-	protected static JSSEnumPropertyDescriptor evaluationTimeD;
+	protected static NamedEnumPropertyDescriptor<EvaluationTimeEnum> evaluationTimeD;
 
 	@Override
 	public void setValue(Object value) {
