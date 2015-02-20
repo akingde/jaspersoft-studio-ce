@@ -34,7 +34,7 @@
 							<alias>${signing.alias}</alias>
 							<keystore>${signing.keystore}</keystore>
 							<storepass>${signing.storepass}</storepass>
-							<type>${signing.storetype}</type>
+							<storetype>${signing.storetype}</storetype>
 							<verify>true</verify>
 							<jarPath>${project.build.directory}/${project.artifactId}_${project.version}.${buildQualifier}.jar</jarPath>
 						</configuration>
