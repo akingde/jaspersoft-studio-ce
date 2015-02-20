@@ -15,6 +15,10 @@ package com.jaspersoft.studio.data;
 import java.io.File;
 
 import net.sf.jasperreports.data.DataAdapter;
+import net.sf.jasperreports.data.DataFile;
+import net.sf.jasperreports.data.FileDataAdapter;
+import net.sf.jasperreports.data.StandardRepositoryDataLocation;
+import net.sf.jasperreports.data.http.StandardHttpDataLocation;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.ui.validator.NotEmptyFileValidator;
 import net.sf.jasperreports.eclipse.util.FileUtils;
@@ -29,6 +33,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.databinding.fieldassist.ControlDecorationSupport;
 import org.eclipse.jface.databinding.fieldassist.ControlDecorationUpdater;
 import org.eclipse.jface.databinding.swt.SWTObservables;
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -43,6 +48,7 @@ import com.jaspersoft.studio.data.messages.Messages;
 
 public abstract class AFileDataAdapterComposite extends ADataAdapterComposite {
 	protected Text textFileName;
+	private Button btnBrowse;
 
 	public AFileDataAdapterComposite(Composite parent, int style,
 			JasperReportsContext jrContext) {
@@ -58,13 +64,12 @@ public abstract class AFileDataAdapterComposite extends ADataAdapterComposite {
 		gd.horizontalIndent = 8;
 		textFileName.setLayoutData(gd);
 
-		Button btnBrowse = new Button(parent, SWT.NONE);
+		btnBrowse = new Button(parent, SWT.PUSH);
 		GridData gd_btnBrowse = new GridData(SWT.CENTER, SWT.CENTER, false,
 				false, 1, 1);
 		gd_btnBrowse.widthHint = 100;
 		btnBrowse.setLayoutData(gd_btnBrowse);
-		btnBrowse.setText(Messages.XLSXDataAdapterComposite_1);
-
+		btnBrowse.setText("File");
 		/*
 		 * UI ELEMENTS LISTENERS
 		 */
@@ -73,26 +78,38 @@ public abstract class AFileDataAdapterComposite extends ADataAdapterComposite {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-				FileDialog fd = new FileDialog(UIUtils.getShell());
-				fd.setFileName(textFileName.getText());
-				fd.setFilterPath(root.getLocation().toOSString());
-				fd.setFilterExtensions(getFileExtensions()); //$NON-NLS-1$ //$NON-NLS-2$
-				String selection = fd.open();
-				if (selection != null) {
-					IFile contextfile = (IFile) getJrContext().getValue(
-							FileUtils.KEY_FILE);
+				if (textFileName.getText().matches("^(?i)(https?)://.*$")) {
+					FileDataAdapter fda = getFileDataAdapter();
+					DataFile dataFile = fda.getDataFile();
+					HttpParametersDialog d = new HttpParametersDialog(
+							getShell(), (StandardHttpDataLocation) dataFile
+									.clone());
+					if (d.open() == Dialog.OK)
+						fda.setDataFile(d.getDataFile());
+				} else {
+					IWorkspaceRoot root = ResourcesPlugin.getWorkspace()
+							.getRoot();
+					FileDialog fd = new FileDialog(UIUtils.getShell());
+					fd.setFileName(textFileName.getText());
+					fd.setFilterPath(root.getLocation().toOSString());
+					fd.setFilterExtensions(getFileExtensions()); //$NON-NLS-1$ //$NON-NLS-2$
+					String selection = fd.open();
+					if (selection != null) {
+						IFile contextfile = (IFile) getJrContext().getValue(
+								FileUtils.KEY_FILE);
 
-					IFile[] resource = root.findFilesForLocationURI(new File(
-							selection).toURI());
-					if (contextfile != null
-							&& resource != null
-							&& resource.length > 0
-							&& contextfile.getProject().equals(
-									resource[0].getProject()))
-						selection = resource[0].getProjectRelativePath()
-								.toOSString();
-					textFileName.setText(selection);
+						IFile[] resource = root
+								.findFilesForLocationURI(new File(selection)
+										.toURI());
+						if (contextfile != null
+								&& resource != null
+								&& resource.length > 0
+								&& contextfile.getProject().equals(
+										resource[0].getProject()))
+							selection = resource[0].getProjectRelativePath()
+									.toOSString();
+						textFileName.setText(selection);
+					}
 				}
 			}
 		});
@@ -105,11 +122,57 @@ public abstract class AFileDataAdapterComposite extends ADataAdapterComposite {
 				getJrContext());
 		Binding binding = bindingContext.bindValue(SWTObservables.observeText(
 				textFileName, SWT.Modify), PojoObservables.observeValue(
-				dataAdapter, "fileName"), //$NON-NLS-1$
+				new DAProxy((FileDataAdapter) dataAdapter), "dataFile"), //$NON-NLS-1$
 				new UpdateValueStrategy()
 						.setAfterConvertValidator(nefValidator), null);
 		nefValidator.setBinding(binding);
 		ControlDecorationSupport.create(binding, SWT.TOP | SWT.LEFT, null,
 				new ControlDecorationUpdater());
 	}
+
+	private FileDataAdapter getFileDataAdapter() {
+		return (FileDataAdapter) dataAdapterDesc.getDataAdapter();
+	}
+
+	class DAProxy {
+		private FileDataAdapter da;
+
+		public DAProxy(FileDataAdapter da) {
+			this.da = da;
+		}
+
+		public void setDataFile(String str) {
+			DataFile dataFile = da.getDataFile();
+			if (str.matches("^(?i)(https?)://.*$")) {
+				btnBrowse.setText("Options");
+				DataFile dl = da.getDataFile();
+				if (dataFile == null
+						|| !(dataFile instanceof StandardHttpDataLocation)) {
+					dl = new StandardHttpDataLocation();
+					da.setDataFile(dl);
+				}
+				((StandardHttpDataLocation) dl).setUrl(str);
+			} else {
+				btnBrowse.setText("File");
+				DataFile dl = da.getDataFile();
+				if (dataFile == null
+						|| !(dataFile instanceof StandardRepositoryDataLocation)) {
+					dl = new StandardRepositoryDataLocation();
+					da.setDataFile(dl);
+				}
+				((StandardRepositoryDataLocation) dl).setLocation(str);
+			}
+			btnBrowse.getParent().layout();
+		}
+
+		public String getDataFile() {
+			DataFile df = da.getDataFile();
+			if (df instanceof StandardRepositoryDataLocation)
+				return ((StandardRepositoryDataLocation) df).getLocation();
+			if (df instanceof StandardHttpDataLocation)
+				return ((StandardHttpDataLocation) df).getUrl();
+			return "";
+		}
+	}
+
 }

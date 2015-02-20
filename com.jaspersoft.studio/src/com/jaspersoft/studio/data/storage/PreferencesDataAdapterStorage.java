@@ -119,13 +119,14 @@ public class PreferencesDataAdapterStorage extends ADataAdapterStorage {
 		for (DataAdapterDescriptor dad : JaspersoftStudioPlugin.getDefaultDAManager().getDefaultDAs()) {
 			DataAdapterDescriptor oldDa = daDescriptors.get(dad.getName());
 			// maybe name is the same, but if type changed, we should change dataadapter
-			if (oldDa != null && !oldDa.getClass().getCanonicalName().equals(dad.getClass().getCanonicalName())) 
-				removeDataAdapter(oldDa); 
-			//Add new data adapter only if it has a factory
+			if (oldDa != null && !oldDa.getClass().getCanonicalName().equals(dad.getClass().getCanonicalName()))
+				removeDataAdapter(oldDa);
+			// Add new data adapter only if it has a factory
 			DataAdapter adapter = dad.getDataAdapter();
 			String adapterClassName = adapter.getClass().getName();
 			DataAdapterFactory factory = DataAdapterManager.findFactoryByDataAdapterClass(adapterClassName);
-			if (factory != null) addDataAdapter(dad);
+			if (factory != null)
+				addDataAdapter(dad);
 		}
 	}
 
@@ -139,6 +140,7 @@ public class PreferencesDataAdapterStorage extends ADataAdapterStorage {
 	}
 
 	protected void save(DataAdapterDescriptor adapter, String fileName) {
+		FileOutputStream stream = null;
 		try {
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder builder = factory.newDocumentBuilder();
@@ -149,13 +151,14 @@ public class PreferencesDataAdapterStorage extends ADataAdapterStorage {
 			DOMSource source = new DOMSource(doc);
 			File storage = ConfigurationManager.getStorage(PREF_KEYS_DATA_ADAPTERS);
 			File destination = new File(storage, fileName);
-			FileOutputStream stream = new FileOutputStream(destination);
+			stream = new FileOutputStream(destination);
 			StreamResult result = new StreamResult(stream);
 			transformer.transform(source, result);
-			stream.close();
 			fileAdapterMap.put(adapter, fileName);
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			FileUtils.closeStream(stream);
 		}
 	}
 
