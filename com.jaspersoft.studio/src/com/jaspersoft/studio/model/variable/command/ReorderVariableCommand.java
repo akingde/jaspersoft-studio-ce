@@ -22,6 +22,8 @@ import org.eclipse.gef.commands.Command;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.variable.MVariable;
 import com.jaspersoft.studio.model.variable.MVariables;
+import com.jaspersoft.studio.preferences.DesignerPreferencePage;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /*
  * /* The Class ReorderVariableCommand.
@@ -35,7 +37,7 @@ public class ReorderVariableCommand extends Command {
 	private JRDesignVariable jrVariable;
 
 	/** The jr dataset. */
-	private JRDesignDataset jrDataset;
+	private MVariables parent;
 
 	/**
 	 * Instantiates a new reorder variable command.
@@ -51,7 +53,7 @@ public class ReorderVariableCommand extends Command {
 		super(Messages.common_reorder_elements);
 
 		this.newIndex = Math.max(0, newIndex);
-		this.jrDataset = (JRDesignDataset) parent.getValue();
+		this.parent = parent;
 		this.jrVariable = (JRDesignVariable) child.getValue();
 	}
 
@@ -62,8 +64,10 @@ public class ReorderVariableCommand extends Command {
 	 */
 	@Override
 	public void execute() {
+		JRDesignDataset jrDataset = parent.getValue();
 		oldIndex = jrDataset.getVariablesList().indexOf(jrVariable);
-
+		JasperReportsConfiguration jConfig = parent.getJasperConfiguration();
+		boolean showDefaults = jConfig != null? jConfig.getPropertyBoolean(DesignerPreferencePage.P_SHOW_VARIABLES_DEFAULTS, Boolean.TRUE) : true;
 		try {
 			int i = 0;
 			for (JRVariable v : jrDataset.getVariablesList()) {
@@ -72,7 +76,8 @@ public class ReorderVariableCommand extends Command {
 				else
 					break;
 			}
-			newIndex = Math.max(newIndex, i);
+			if (!showDefaults) newIndex+=i;
+			else newIndex = Math.max(newIndex, i);
 			jrDataset.removeVariable(jrVariable);
 			if (newIndex < 0 || newIndex > jrDataset.getVariablesList().size())
 				jrDataset.addVariable(jrVariable);
@@ -91,6 +96,7 @@ public class ReorderVariableCommand extends Command {
 	@Override
 	public void undo() {
 		try {
+			JRDesignDataset jrDataset = parent.getValue();
 			jrDataset.removeVariable(jrVariable);
 			if (oldIndex < 0 || oldIndex > jrDataset.getVariablesList().size())
 				jrDataset.addVariable(jrVariable);

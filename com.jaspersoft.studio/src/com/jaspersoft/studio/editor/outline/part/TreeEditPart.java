@@ -28,6 +28,7 @@ import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.editparts.AbstractTreeEditPart;
+import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
@@ -67,6 +68,26 @@ public class TreeEditPart extends AbstractTreeEditPart implements PropertyChange
 	 * the last added feedback. 
 	 */
 	protected EditPart lastEditorFeedback = null;
+	
+	
+	/**
+	 * Listen for changes in the preferences to refresh the view when the visibility of the
+	 * variables of parameters is changed
+	 */
+	protected IPropertyChangeListener preferencesListener = new IPropertyChangeListener() {
+		
+		@Override
+		public void propertyChange(org.eclipse.jface.util.PropertyChangeEvent event) {
+			if (event.getProperty().equals(DesignerPreferencePage.P_SHOW_VARIABLES_DEFAULTS)){
+				refresh();
+			}
+		}
+	};
+	
+	public TreeEditPart() {
+		JaspersoftStudioPlugin.getInstance().getPreferenceStore().addPropertyChangeListener(preferencesListener);
+	}
+	
 
 	/**
 	 * If the request is an add this search an edit part with the same model of the 

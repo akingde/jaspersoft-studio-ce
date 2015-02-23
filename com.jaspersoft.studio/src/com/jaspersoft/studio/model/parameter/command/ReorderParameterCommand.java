@@ -22,6 +22,8 @@ import org.eclipse.gef.commands.Command;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.parameter.MParameter;
 import com.jaspersoft.studio.model.parameter.MParameters;
+import com.jaspersoft.studio.preferences.DesignerPreferencePage;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /*
  * /* The Class ReorderParameterCommand.
@@ -35,7 +37,8 @@ public class ReorderParameterCommand extends Command {
 	private JRDesignParameter jrParameter;
 
 	/** The jr dataset. */
-	private JRDesignDataset jrDataset;
+	private MParameters<?> parent;
+	
 
 	/**
 	 * Instantiates a new reorder parameter command.
@@ -47,11 +50,11 @@ public class ReorderParameterCommand extends Command {
 	 * @param newIndex
 	 *          the new index
 	 */
-	public ReorderParameterCommand(MParameter child, MParameters parent, int newIndex) {
+	public ReorderParameterCommand(MParameter child, MParameters<?> parent, int newIndex) {
 		super(Messages.common_reorder_elements);
 
 		this.newIndex = Math.max(0, newIndex);
-		this.jrDataset = (JRDesignDataset) parent.getValue();
+		this.parent = parent;
 		this.jrParameter = (JRDesignParameter) child.getValue();
 	}
 
@@ -62,8 +65,10 @@ public class ReorderParameterCommand extends Command {
 	 */
 	@Override
 	public void execute() {
+		JRDesignDataset jrDataset = (JRDesignDataset)parent.getValue();
 		oldIndex = jrDataset.getParametersList().indexOf(jrParameter);
-
+		JasperReportsConfiguration jConfig = parent.getJasperConfiguration();
+		boolean showDefaults = jConfig != null? jConfig.getPropertyBoolean(DesignerPreferencePage.P_SHOW_VARIABLES_DEFAULTS, Boolean.TRUE) : true;
 		try {
 			int i = 0;
 			for (JRParameter v : jrDataset.getParametersList()) {
@@ -72,7 +77,9 @@ public class ReorderParameterCommand extends Command {
 				else
 					break;
 			}
-			newIndex = Math.max(newIndex, i);
+			if (!showDefaults) newIndex+=i;
+			else newIndex = Math.max(newIndex, i);
+			
 			jrDataset.removeParameter(jrParameter);
 			if (newIndex < 0 || newIndex > jrDataset.getParametersList().size())
 				jrDataset.addParameter(jrParameter);
@@ -91,6 +98,7 @@ public class ReorderParameterCommand extends Command {
 	@Override
 	public void undo() {
 		try {
+			JRDesignDataset jrDataset = (JRDesignDataset)parent.getValue();
 			jrDataset.removeParameter(jrParameter);
 			if (oldIndex < 0 || oldIndex > jrDataset.getParametersList().size())
 				jrDataset.addParameter(jrParameter);

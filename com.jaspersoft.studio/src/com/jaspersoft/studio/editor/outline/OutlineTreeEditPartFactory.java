@@ -339,7 +339,7 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 			if (parent instanceof MParameters) {
 				JRDesignParameter p = (JRDesignParameter) child.getValue();
 				if (!p.isSystemDefined()) {
-					return new ReorderParameterCommand((MParameter) child, (MParameters) parent, newIndex);
+					return new ReorderParameterCommand((MParameter) child, (MParameters<?>) parent, newIndex);
 				}
 			}
 		} else if (child instanceof MField) {
@@ -413,7 +413,7 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 				if (parent instanceof MParameters) {
 					JRDesignParameter p = (JRDesignParameter) child.getValue();
 					if (p == null || !p.isSystemDefined())
-						return new CreateParameterCommand((MParameters) parent, (MParameter) child, newIndex);
+						return new CreateParameterCommand((MParameters<?>) parent, (MParameter) child, newIndex);
 				}
 			}
 			if (child.getValue() != null
