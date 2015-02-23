@@ -1,17 +1,15 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.editor.action.order;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.eclipse.gef.commands.Command;
@@ -45,6 +43,7 @@ public class BringToBackAction extends ACachedSelectionAction implements IGlobal
 		setLazyEnablementCalculation(false);
 	}
 
+	
 
 	/**
 	 * Create a command to create the selected objects.
@@ -56,8 +55,10 @@ public class BringToBackAction extends ACachedSelectionAction implements IGlobal
 	@Override
 	public Command createCommand() {
 		List<Object> graphicalElements = editor.getSelectionCache().getSelectionModelForType(MGraphicElement.class);
-		if (graphicalElements.isEmpty()) return null;
+		if (graphicalElements.isEmpty())
+			return null;
 
+		OrderUtil.reorderElements(graphicalElements);
 		JSSCompoundCommand compoundCmd = new JSSCompoundCommand("Bring To Back", null); //$NON-NLS-1$
 		int j = 0;
 		for (Object model : graphicalElements) {
@@ -90,10 +91,10 @@ public class BringToBackAction extends ACachedSelectionAction implements IGlobal
 		setText(Messages.BringToBackAction_send_to_back);
 		setToolTipText(Messages.BringToBackAction_send_to_back_tool_tip);
 		setId(BringToBackAction.ID);
-		setImageDescriptor(
-				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/eclipseapps/elcl16/send_to_back.gif")); //$NON-NLS-1$
-		setDisabledImageDescriptor(
-				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/eclipseapps/elcl16/send_to_back.gif")); //$NON-NLS-1$
+		setImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor(
+				"icons/eclipseapps/elcl16/send_to_back.gif")); //$NON-NLS-1$
+		setDisabledImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor(
+				"icons/eclipseapps/elcl16/send_to_back.gif")); //$NON-NLS-1$
 		setEnabled(false);
 	}
 }

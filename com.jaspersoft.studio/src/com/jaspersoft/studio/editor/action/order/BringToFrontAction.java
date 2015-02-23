@@ -1,17 +1,14 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.editor.action.order;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.gef.commands.Command;
@@ -55,8 +52,10 @@ public class BringToFrontAction extends ACachedSelectionAction implements IGloba
 	@Override
 	public Command createCommand() {
 		List<Object> graphicalElements = editor.getSelectionCache().getSelectionModelForType(MGraphicElement.class);
-		if (graphicalElements.isEmpty()) return null;
-		
+		if (graphicalElements.isEmpty())
+			return null;
+
+		OrderUtil.reorderReverseElements(graphicalElements);
 		JSSCompoundCommand compoundCmd = new JSSCompoundCommand("Bring To Front", null); //$NON-NLS-1$
 		int j = 0;
 		for (Object model : graphicalElements) {
@@ -92,10 +91,10 @@ public class BringToFrontAction extends ACachedSelectionAction implements IGloba
 		setText(Messages.BringToFrontAction_bring_to_front);
 		setToolTipText(Messages.BringToFrontAction_bring_to_front_tool_tip);
 		setId(BringToFrontAction.ID);
-		setImageDescriptor(
-				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/eclipseapps/elcl16/bring_to_front.gif")); //$NON-NLS-1$
-		setDisabledImageDescriptor(
-				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/formatting/bring_to_front.gif")); //$NON-NLS-1$
+		setImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor(
+				"icons/eclipseapps/elcl16/bring_to_front.gif")); //$NON-NLS-1$
+		setDisabledImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor(
+				"icons/resources/formatting/bring_to_front.gif")); //$NON-NLS-1$
 		setEnabled(false);
 	}
 }

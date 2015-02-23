@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.editor.action.order;
 
@@ -55,7 +51,10 @@ public class BringForwardAction extends ACachedSelectionAction implements IGloba
 	@Override
 	public Command createCommand() {
 		List<Object> graphicalElements = editor.getSelectionCache().getSelectionModelForType(MGraphicElement.class);
-		if (graphicalElements.isEmpty()) return null;
+		if (graphicalElements.isEmpty())
+			return null;
+
+		OrderUtil.reorderReverseElements(graphicalElements);
 
 		JSSCompoundCommand compoundCmd = new JSSCompoundCommand("Bring Forward", null); //$NON-NLS-1$
 		for (Object model : graphicalElements) {
@@ -90,10 +89,10 @@ public class BringForwardAction extends ACachedSelectionAction implements IGloba
 		setText(Messages.BringForwardAction_bring_forward);
 		setToolTipText(Messages.BringForwardAction_bring_forward_tool_tip);
 		setId(BringForwardAction.ID);
-		setImageDescriptor(
-				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/eclipseapps/elcl16/bring_forward.gif")); //$NON-NLS-1$
-		setDisabledImageDescriptor(
-				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/eclipseapps/dlcl16/bring_forward.gif")); //$NON-NLS-1$
+		setImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor(
+				"icons/eclipseapps/elcl16/bring_forward.gif")); //$NON-NLS-1$
+		setDisabledImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor(
+				"icons/eclipseapps/dlcl16/bring_forward.gif")); //$NON-NLS-1$
 		setEnabled(false);
 	}
 }
