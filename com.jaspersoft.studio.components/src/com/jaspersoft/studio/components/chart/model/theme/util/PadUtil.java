@@ -26,7 +26,6 @@ import net.sf.jasperreports.chartthemes.simple.LegendSettings;
 import net.sf.jasperreports.chartthemes.simple.LineBorderProvider;
 import net.sf.jasperreports.chartthemes.simple.PaintProvider;
 
-import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
@@ -34,14 +33,11 @@ import org.eclipse.ui.views.properties.PropertyDescriptor;
 import org.jfree.chart.block.BlockFrame;
 import org.jfree.ui.RectangleInsets;
 
+import com.jaspersoft.studio.components.chart.model.theme.paintprovider.PaintProviderPropertyDescriptor;
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptor.color.ColorPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.DoublePropertyDescriptor;
 import com.jaspersoft.studio.property.section.AbstractSection;
-import com.jaspersoft.studio.utils.AlfaRGB;
-import com.jaspersoft.studio.utils.Colors;
 
 public class PadUtil {
 
@@ -54,6 +50,9 @@ public class PadUtil {
 	public static final String FRAME_FILL = "RectangleFrameFill";//$NON-NLS-1$
 	public static final String FRAME_COLOR = "RectangleFrameColor";//$NON-NLS-1$
 	
+	/**
+	 * Map of the default values for the frame provider
+	 */
 	public static final Map<String, Object> frameDefaultValues = new HashMap<String, Object>();
 	
 	public static void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
@@ -64,25 +63,25 @@ public class PadUtil {
 		createPropertyDescriptors(desc, defaultsMap, "", prefix);//$NON-NLS-1$
 	}
 
-	public static void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap, String preID, String prefix) {
+	public static void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap, String preID, String category) {
 		PropertyDescriptor pd = new DoublePropertyDescriptor(preID + PadUtil.PADDING_TOP, Messages.common_top);
 		pd.setDescription(Messages.common_top);
-		pd.setCategory(prefix);
+		pd.setCategory(category);
 		desc.add(pd);
 
 		pd = new DoublePropertyDescriptor(preID + PadUtil.PADDING_BOTTOM, Messages.common_bottom);
 		pd.setDescription(Messages.common_bottom);
-		pd.setCategory(prefix);
+		pd.setCategory(category);
 		desc.add(pd);
 
 		pd = new DoublePropertyDescriptor(preID + PadUtil.PADDING_LEFT, Messages.common_left);
 		pd.setDescription(Messages.common_left);
-		pd.setCategory(prefix);
+		pd.setCategory(category);
 		desc.add(pd);
 
 		pd = new DoublePropertyDescriptor(preID + PadUtil.PADDING_RIGHT, Messages.common_right);
 		pd.setDescription(Messages.common_right);
-		pd.setCategory(prefix);
+		pd.setCategory(category);
 		desc.add(pd);
 		
 		defaultsMap.put(preID + PadUtil.PADDING_TOP, 0.0d);
@@ -91,6 +90,14 @@ public class PadUtil {
 		defaultsMap.put(preID + PadUtil.PADDING_RIGHT, 0.0d);
 	}
 	
+	/**
+	 * Create the property descriptor for the block frame provider. Initialize also the default values
+	 * for the default values map frameDefaultValues
+	 * 
+	 * @param desc array where the descriptor will be inserted
+	 * @param defaultsMap map for the default values
+	 * @param category category where the widget will be grouped
+	 */
 	public static void createBlockFramePropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap, String category) {
 		String preID = LegendSettings.PROPERTY_frame;
 		frameDefaultValues.clear();
@@ -107,18 +114,26 @@ public class PadUtil {
 		pd.setCategory(category);
 		desc.add(pd);
 		
-		pd = new ColorPropertyDescriptor(preID + FRAME_COLOR, Messages.common_line_color, NullEnum.INHERITED);
+		pd = new PaintProviderPropertyDescriptor(preID + FRAME_COLOR, Messages.common_line_color);
 		pd.setDescription(Messages.common_line_color);
 		pd.setCategory(category);
 		desc.add(pd);
 
 		frameDefaultValues.put(preID + PadUtil.FRAME_STROKE, 1.0d);
 		frameDefaultValues.put(preID + PadUtil.FRAME_FILL, true);
-		frameDefaultValues.put(preID + FRAME_COLOR, AlfaRGB.getFullyOpaque(new RGB(0, 0, 0)));
+		frameDefaultValues.put(preID + FRAME_COLOR, new ColorProvider(new Color(0, 0, 0)));
 		
 		defaultsMap.putAll(frameDefaultValues);
 	}
 	
+	/**
+	 * Method used to extract a property from a block frame provider using an id of 
+	 * the property. If the blockframe is undefined a default value is given
+	 * 
+	 * @param id identifier of the property
+	 * @param provider object from where the property is extracted
+	 * @return the result, can be null
+	 */
 	public static Object getBlockFrameValue(Object id, BlockFrameProvider provider){
 		if (provider == null) {
 			return frameDefaultValues.get(id);
@@ -132,13 +147,20 @@ public class PadUtil {
 					return stroke != null ? stroke.getLineWidth() : null;
 				} else return null;
 			} else if (id.equals(preID + FRAME_COLOR)){
-				return getPaintColor(provider);
+				return getPaint(provider);
 			} else {
 				return getPropertyValue(id, provider.getBlockFrame().getInsets(), preID);
 			}
 		}
 	}
 	
+	/**
+	 * Method used to set the property of a blockframe.
+	 * 	
+	 * @param id Identifier of the property to set
+	 * @param value value of the property
+	 * @param settings LegendSettings that contains the block frame provider that will be set
+	 */
 	public static void setFramePropertyValue(Object id, Object value, LegendSettings settings) {
 		if (settings == null) return;
 		String preID = LegendSettings.PROPERTY_frame;
@@ -168,7 +190,7 @@ public class PadUtil {
 			}
 		} else if (id.equals(preID + FRAME_COLOR)){
 			checkValidFrame(settings);
-			setFrameColor(settings.getFrame(), (AlfaRGB)value, settings);
+			setFrameColor(settings.getFrame(), (PaintProvider)value, settings);
 		} else if (id.equals(preID + PadUtil.PADDING_TOP) || id.equals(preID + PadUtil.PADDING_BOTTOM) 
 					|| id.equals(preID + PadUtil.PADDING_LEFT) || id.equals(preID + PADDING_RIGHT)){
 			checkValidFrame(settings);
@@ -179,6 +201,14 @@ public class PadUtil {
 		}
 	}
 	
+	/**
+	 * Set the insets of a block frame. Since a block frame dosen't allow to set the insets
+	 * a new frame of the same type is created with the new insets
+	 * 
+	 * @param newInsets the new insets, can be null
+	 * @param provider the provider where the insets should be set
+	 * @param settings the LegendSettings where the new block frame is set
+	 */
 	private static void setFrameInstets(RectangleInsets newInsets, BlockFrameProvider provider, LegendSettings settings){
 		if (provider instanceof BlockBorderProvider){
 			BlockBorderProvider newProvider = new BlockBorderProvider(newInsets, ((BlockBorderProvider) provider).getPaint());
@@ -190,6 +220,12 @@ public class PadUtil {
 		}
 	}
 	
+	/**
+	 * Check if the current legend settings has a block frame set. If
+	 * not a default one is created
+	 * 
+	 * @param settigns the legend settings to check, must be not null
+	 */
 	private static void checkValidFrame(LegendSettings settigns){
 		if (settigns.getFrame() == null){
 			BlockBorderProvider fillFrame = new BlockBorderProvider(RECTANGLE_INSETS, new ColorProvider(new Color(0, 0, 0)));
@@ -197,18 +233,32 @@ public class PadUtil {
 		}
 	}
 	
-	private static void setFrameColor(BlockFrameProvider provider, AlfaRGB color, LegendSettings settings){
+	/**
+	 * Set the color of a block frame. Since a block frame dosen't allow to set the color on a defined instance
+	 * a new frame of the same type is created with the new color
+	 * 
+	 * @param provider the provider where the color should be set
+	 * @color color the new color
+	 * @param settings the LegendSettings where the new block frame is set
+	 */
+	private static void setFrameColor(BlockFrameProvider provider, PaintProvider color, LegendSettings settings){
 		if (provider instanceof LineBorderProvider){
-			ColorProvider newColor = new ColorProvider(Colors.getAWT4SWTRGBColor(color));
-			((LineBorderProvider)provider).setPaint(newColor);
+			((LineBorderProvider)provider).setPaint(color);
 		} else if (provider instanceof BlockBorderProvider){
-			ColorProvider newColor = new ColorProvider(Colors.getAWT4SWTRGBColor(color));
-			((BlockBorderProvider)provider).setPaint(newColor);
+			((BlockBorderProvider)provider).setPaint(color);
 		}
+		//Need to do this to fire the refresh
 		settings.setFrame(null);
 		settings.setFrame(provider);
 	}
 	
+	/**
+	 * Get the insets of the current frame, if the frame or the provider
+	 * are not available return null
+	 * 
+	 * @param provider the provider from where the insets are read
+	 * @return the insets of the frame or null if they are not available
+	 */
 	private static RectangleInsets getFrameInstets(BlockFrameProvider provider){
 		if (provider == null) return null;
 		BlockFrame frame = provider.getBlockFrame();
@@ -216,28 +266,19 @@ public class PadUtil {
 		return frame.getInsets();
 	}
 	
+	/**
+	 * Get the paint provider of the current frame, if the frame or the provider
+	 * are not available return null
+	 * 
+	 * @param provider the provider from where the insets are read
+	 * @return the paint provider if available, otherwise null
+	 */
 	private static PaintProvider getPaint(BlockFrameProvider provider){
 		if (provider instanceof LineBorderProvider){
 			return ((LineBorderProvider)provider).getPaint();
 		} else if (provider instanceof BlockBorderProvider){
 			return ((BlockBorderProvider)provider).getPaint();
 		} else return null;
-	}
-	
-	private static AlfaRGB getPaintColor(BlockFrameProvider provider){
-		if (provider instanceof LineBorderProvider){
-			return getPaintColor(((LineBorderProvider)provider).getPaint());
-		} else if (provider instanceof BlockBorderProvider){
-			return getPaintColor(((BlockBorderProvider)provider).getPaint());
-		} else return null;
-	}
-	
-	private static AlfaRGB getPaintColor(PaintProvider provider){
-		if (provider != null && provider.getPaint() instanceof Color){
-			Color color = (Color)provider.getPaint();
-			return Colors.getSWTRGB4AWTGBColor(color);
-		}
-		return null;
 	}
 	
 	public static Object getPropertyValue(Object id, RectangleInsets ri) {

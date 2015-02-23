@@ -29,6 +29,12 @@ import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
+/**
+ * Legend settings section used in the chart theme for the legend items
+ * 
+ * @author Orlandin Marco
+ *
+ */
 public class LegendSettingsSection extends AbstractSection {
 	
 	private ExpandableComposite paddingSection;
@@ -51,6 +57,7 @@ public class LegendSettingsSection extends AbstractSection {
 		createWidget4Property(group, LegendSettings.PROPERTY_foregroundPaint);
 		createWidget4Property(group, LegendSettings.PROPERTY_backgroundPaint);
 
+		//Block frame properties
 		String preID = LegendSettings.PROPERTY_frame;
 		Composite paddingComposite = getWidgetFactory().createSection(parent, "Block Frame", true, 5);   
 		paddingSection = (ExpandableComposite)paddingComposite.getParent();
@@ -71,13 +78,17 @@ public class LegendSettingsSection extends AbstractSection {
 		createWidget4Property(paddingComposite, preID + PadUtil.PADDING_RIGHT);
 		new Label(paddingComposite, SWT.None);
 		
-		GridData colorData = new GridData(GridData.FILL_HORIZONTAL);
+		GridData colorData = new GridData();
 		colorData.horizontalSpan = 4;
+		colorData.widthHint = 200;
 		
 		createWidget4Property(paddingComposite, preID + PadUtil.FRAME_COLOR).getControl().setLayoutData(colorData);	
 		createWidget4Property(paddingComposite, preID + PadUtil.FRAME_FILL, false);
 	}
 	
+	/**
+	 * Show the stroke control if the frame is of type fill, otherwise hide it
+	 */
 	private void updateFillControl(){
 		if (strokeContainer != null && getElement() != null){
 			Object isFill = getElement().getPropertyValue(LegendSettings.PROPERTY_frame + PadUtil.FRAME_FILL);
@@ -85,12 +96,19 @@ public class LegendSettingsSection extends AbstractSection {
 		}
 	}
 	
+	/**
+	 * Need to check if the stroke controls is visible or not
+	 */
 	@Override
 	public void aboutToBeShown() {
 		updateFillControl();
 		super.aboutToBeShown();
 	}
 
+	/**
+	 * Since the changes on the block frame fire a property with an id different 
+	 * from any widget, the update must be done manually
+	 */
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		if (evt.getPropertyName().equals(LegendSettings.PROPERTY_frame)){
@@ -127,8 +145,8 @@ public class LegendSettingsSection extends AbstractSection {
 		addProvidedProperties(LegendSettings.PROPERTY_frame+PadUtil.PADDING_BOTTOM, com.jaspersoft.studio.messages.Messages.common_bottom);
 		addProvidedProperties(LegendSettings.PROPERTY_frame+PadUtil.PADDING_LEFT, com.jaspersoft.studio.messages.Messages.common_left);
 		addProvidedProperties(LegendSettings.PROPERTY_frame+PadUtil.PADDING_RIGHT, com.jaspersoft.studio.messages.Messages.common_right);
-		addProvidedProperties(LegendSettings.PROPERTY_frame+PadUtil.FRAME_COLOR, "Color");
-		addProvidedProperties(LegendSettings.PROPERTY_frame+PadUtil.FRAME_FILL, "Fill");
-		addProvidedProperties(LegendSettings.PROPERTY_frame+PadUtil.FRAME_STROKE, "Stroke");
+		addProvidedProperties(LegendSettings.PROPERTY_frame+PadUtil.FRAME_COLOR, com.jaspersoft.studio.messages.Messages.common_line_color);
+		addProvidedProperties(LegendSettings.PROPERTY_frame+PadUtil.FRAME_FILL, com.jaspersoft.studio.messages.Messages.common_fill);
+		addProvidedProperties(LegendSettings.PROPERTY_frame+PadUtil.FRAME_STROKE, com.jaspersoft.studio.messages.Messages.MLinePen_line_width);
 	}
 }
