@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.editor.outline;
 
@@ -42,6 +38,7 @@ import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.Util;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -84,6 +81,10 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IDragable;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.band.MBand;
+import com.jaspersoft.studio.model.parameter.MParameters;
+import com.jaspersoft.studio.model.util.EditPartVisitor;
+import com.jaspersoft.studio.model.variable.MVariables;
+import com.jaspersoft.studio.preferences.DesignerPreferencePage;
 import com.jaspersoft.studio.utils.Misc;
 
 /*
@@ -156,9 +157,38 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 		for (Iterator<IAction> it = registry.getActions(); it.hasNext();) {
 			IAction ia = it.next();
 			bars.setGlobalActionHandler(ia.getId(), ia);
+			JaspersoftStudioPlugin.getInstance().addPreferenceListener(preferenceListener);
 		}
 
 		bars.updateActionBars();
+	}
+
+	private PreferenceListener preferenceListener = new PreferenceListener();
+
+	private final class PreferenceListener implements IPropertyChangeListener {
+
+		public void propertyChange(org.eclipse.jface.util.PropertyChangeEvent event) {
+			String property = event.getProperty();
+			if (property.equals(DesignerPreferencePage.P_SHOW_VARIABLES_DEFAULTS)) {
+
+				RootEditPart rep = getViewer().getRootEditPart();
+				new EditPartVisitor<String>(rep) {
+					private int refreshes = 0;
+
+					@Override
+					public boolean visit(EditPart n) {
+						if (n.getModel() instanceof MParameters || n.getModel() instanceof MVariables) {
+							n.refresh();
+							refreshes++;
+							if (refreshes >= 2)
+								stop();
+							return false;
+						}
+						return true;
+					}
+				};
+			}
+		}
 	}
 
 	protected void initActions(ActionRegistry registry, IActionBars bars) {
@@ -168,18 +198,15 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 	protected ContextMenuProvider getMenuContentProvider() {
 		return new AppContextMenuProvider(getViewer(), editor.getActionRegistry());
 	}
-	
+
 	/**
-	 * Check if the outline page was closed. When the outline page is closed 
-	 * the control inside the viewer is disposed and removed (so this method 
-	 * will always catch the getViewer().getControl() == null when the outline 
-	 * was closed).
+	 * Check if the outline page was closed. When the outline page is closed the control inside the viewer is disposed and
+	 * removed (so this method will always catch the getViewer().getControl() == null when the outline was closed).
 	 * 
 	 * @return true if the outline was closed and its control disposed. False otherwise
 	 */
-	public boolean isDisposed(){
-		return (getViewer() == null || getViewer().getControl() == null 
-					|| getViewer().getControl().isDisposed());
+	public boolean isDisposed() {
+		return (getViewer() == null || getViewer().getControl() == null || getViewer().getControl().isDisposed());
 	}
 
 	/**
@@ -206,9 +233,10 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 							if (model instanceof IDragable) {
 								models.add(model);
 							}
-							if (model instanceof MBand){
-								BandTypeEnum bandType =((MBand)model).getBandType();
-								if (BandTypeEnum.DETAIL.equals(bandType) || BandTypeEnum.GROUP_FOOTER.equals(bandType) || BandTypeEnum.GROUP_HEADER.equals(bandType)){
+							if (model instanceof MBand) {
+								BandTypeEnum bandType = ((MBand) model).getBandType();
+								if (BandTypeEnum.DETAIL.equals(bandType) || BandTypeEnum.GROUP_FOOTER.equals(bandType)
+										|| BandTypeEnum.GROUP_HEADER.equals(bandType)) {
 									models.add(model);
 								}
 							}
@@ -228,25 +256,26 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 
 		IToolBarManager tbm = site.getActionBars().getToolBarManager();
 		registerToolbarAction(tbm);
-		
+
 		showPage(ID_ACTION_OUTLINE);
 	}
-	
+
 	/**
-	 * Create on the table manger the toolbar actions for the outline. The actions are created 
-	 * only if the toolbar manager dosen't contains them already. Actually the added action are 
-	 * the one the show the standard outline and the one to show the thumbnail of the report.
+	 * Create on the table manger the toolbar actions for the outline. The actions are created only if the toolbar manager
+	 * dosen't contains them already. Actually the added action are the one the show the standard outline and the one to
+	 * show the thumbnail of the report.
 	 * 
-	 * @param tbm the toolbar manager for the outline.
+	 * @param tbm
+	 *          the toolbar manager for the outline.
 	 */
-	public void registerToolbarAction(IToolBarManager tbm){
+	public void registerToolbarAction(IToolBarManager tbm) {
 		IContributionItem items[] = tbm.getItems();
 		HashSet<String> existingItems = new HashSet<String>();
-		for(IContributionItem item : items){
+		for (IContributionItem item : items) {
 			existingItems.add(item.getId());
 		}
-		
-		showOutlineAction = new Action(){
+
+		showOutlineAction = new Action() {
 			@Override
 			public void run() {
 				showPage(ID_ACTION_OUTLINE);
@@ -255,12 +284,12 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 		showOutlineAction.setId(ID_ACTION_OUTLINE);
 		showOutlineAction.setImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/outline.gif")); //$NON-NLS-1$
 		showOutlineAction.setToolTipText(Messages.JDReportOutlineView_show_outline_tool_tip);
-		if (!existingItems.contains(ID_ACTION_OUTLINE)){
+		if (!existingItems.contains(ID_ACTION_OUTLINE)) {
 			ActionContributionItem showOutlineItem = new ActionContributionItem(showOutlineAction);
 			showOutlineItem.setVisible(true);
 			tbm.add(showOutlineItem);
 		}
-		
+
 		showOverviewAction = new Action() {
 			@Override
 			public void run() {
@@ -268,9 +297,10 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 			}
 		};
 		showOverviewAction.setId(ID_ACTION_OVERVIEW);
-		showOverviewAction.setImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/overview.gif")); //$NON-NLS-1$
+		showOverviewAction
+				.setImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/overview.gif")); //$NON-NLS-1$
 		showOverviewAction.setToolTipText(Messages.JDReportOutlineView_show_overview_tool_tip);
-		if (!existingItems.contains(ID_ACTION_OVERVIEW)){
+		if (!existingItems.contains(ID_ACTION_OVERVIEW)) {
 			ActionContributionItem showOverviewItem = new ActionContributionItem(showOverviewAction);
 			showOverviewItem.setVisible(true);
 			tbm.add(showOverviewItem);
@@ -341,19 +371,21 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 							Object obj = ti[0].getData();
 							if (obj instanceof TreeEditPart && editor instanceof AbstractVisualEditor) {
 
-								EditPart part = (EditPart) ((AbstractVisualEditor) editor).getGraphicalViewer().getEditPartRegistry().get(((TreeEditPart) obj).getModel());
+								EditPart part = (EditPart) ((AbstractVisualEditor) editor).getGraphicalViewer().getEditPartRegistry()
+										.get(((TreeEditPart) obj).getModel());
 								SelectionRequest request = new SelectionRequest();
 								request.setType(RequestConstants.REQ_OPEN);
 								if (part != null) {
 									part.performRequest(request);
 								} else {
 									TreeEditPart atep = (TreeEditPart) obj;
-									//If the part can understand the request perform it on the edit part
-									//otherwise use a general open editor method
-									if (atep.understandsRequest(request)){
+									// If the part can understand the request perform it on the edit part
+									// otherwise use a general open editor method
+									if (atep.understandsRequest(request)) {
 										atep.performRequest(request);
 									} else if (atep.getModel() instanceof ANode) {
-										EditableFigureEditPart.openEditor(((ANode) atep.getModel()).getValue(), (IEditorPart) editor,(ANode) atep.getModel());
+										EditableFigureEditPart.openEditor(((ANode) atep.getModel()).getValue(), (IEditorPart) editor,
+												(ANode) atep.getModel());
 									}
 								}
 							}
@@ -394,6 +426,7 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 	 */
 	@Override
 	public void dispose() {
+		JaspersoftStudioPlugin.getInstance().removePreferenceListener(preferenceListener);
 		unhookOutlineViewer();
 		if (thumbnail != null)
 			thumbnail = null;
@@ -457,7 +490,7 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 		RootEditPart rep = editor.getGraphicalViewer().getRootEditPart();
 		if (rep instanceof MainDesignerRootEditPart) {
 			ScalableFreeformRootEditPart root = (ScalableFreeformRootEditPart) rep;
-			thumbnail = new JSSScrollableThumbnail((Viewport) root.getFigure(), (MRoot)getViewer().getContents().getModel());
+			thumbnail = new JSSScrollableThumbnail((Viewport) root.getFigure(), (MRoot) getViewer().getContents().getModel());
 			thumbnail.setSource(root.getLayer(LayerConstants.PRINTABLE_LAYERS));
 			lws.setContents(thumbnail);
 			disposeListener = new DisposeListener() {
@@ -480,10 +513,10 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 	 *          the new contents
 	 */
 	public void setContents(Object contents) {
-		if (getViewer().getEditPartFactory() != null){
-			//Really important to deselect all the element before set the content
-			//otherwise the treeviewer can try to select the old elements after the set
-			//content but it can may be disposed cause the change of content
+		if (getViewer().getEditPartFactory() != null) {
+			// Really important to deselect all the element before set the content
+			// otherwise the treeviewer can try to select the old elements after the set
+			// content but it can may be disposed cause the change of content
 			getViewer().deselectAll();
 			getViewer().setContents(contents);
 		}

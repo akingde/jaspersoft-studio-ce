@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.editor.outline.part;
 
@@ -28,7 +24,6 @@ import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.editparts.AbstractTreeEditPart;
-import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
@@ -61,54 +56,37 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 public class TreeEditPart extends AbstractTreeEditPart implements PropertyChangeListener {
 
 	private IResource associatedFile;
-	
-	/**
-	 * In some cases a feedback can be shown on the edit part on the main editor that 
-	 * has the same model of the target one. This is the edit part on the main editor that has
-	 * the last added feedback. 
-	 */
-	protected EditPart lastEditorFeedback = null;
-	
-	
-	/**
-	 * Listen for changes in the preferences to refresh the view when the visibility of the
-	 * variables of parameters is changed
-	 */
-	protected IPropertyChangeListener preferencesListener = new IPropertyChangeListener() {
-		
-		@Override
-		public void propertyChange(org.eclipse.jface.util.PropertyChangeEvent event) {
-			if (event.getProperty().equals(DesignerPreferencePage.P_SHOW_VARIABLES_DEFAULTS)){
-				refresh();
-			}
-		}
-	};
-	
-	public TreeEditPart() {
-		JaspersoftStudioPlugin.getInstance().getPreferenceStore().addPropertyChangeListener(preferencesListener);
-	}
-	
 
 	/**
-	 * If the request is an add this search an edit part with the same model of the 
-	 * target one on the main editor and paint a feedback on it. Before to pain the feedback
-	 * any previous feedback is removed. All the checks are done to be sure that the
-	 * visual editor exist
+	 * In some cases a feedback can be shown on the edit part on the main editor that has the same model of the target
+	 * one. This is the edit part on the main editor that has the last added feedback.
+	 */
+	protected EditPart lastEditorFeedback = null;
+
+	public TreeEditPart() {
+	}
+
+	/**
+	 * If the request is an add this search an edit part with the same model of the target one on the main editor and
+	 * paint a feedback on it. Before to pain the feedback any previous feedback is removed. All the checks are done to be
+	 * sure that the visual editor exist
 	 * 
-	 * @param request the current request
+	 * @param request
+	 *          the current request
 	 */
 	protected void showTargetFeedbackOnEditor(Request request) {
-		if (RequestConstants.REQ_ADD.equals(request.getType())){
+		if (RequestConstants.REQ_ADD.equals(request.getType())) {
 			EditPart targetPart = getTargetEditPart(request);
 			IEditorPart currentEditor = SelectionHelper.getActiveJRXMLEditor();
-			if (currentEditor instanceof JrxmlEditor){
-				JrxmlEditor jrxmlEditor = (JrxmlEditor)currentEditor;
-				ReportContainer reportContainer =  jrxmlEditor.getReportContainer();
+			if (currentEditor instanceof JrxmlEditor) {
+				JrxmlEditor jrxmlEditor = (JrxmlEditor) currentEditor;
+				ReportContainer reportContainer = jrxmlEditor.getReportContainer();
 				IEditorPart activeEditor = reportContainer.getActiveEditor();
-				if (targetPart != null && activeEditor instanceof AbstractVisualEditor){
+				if (targetPart != null && activeEditor instanceof AbstractVisualEditor) {
 					AbstractVisualEditor reportEditor = (AbstractVisualEditor) activeEditor;
-					EditPart editorPart = (EditPart) reportEditor.getGraphicalViewer().getEditPartRegistry().get(targetPart.getModel());
-					if (editorPart != null){
+					EditPart editorPart = (EditPart) reportEditor.getGraphicalViewer().getEditPartRegistry()
+							.get(targetPart.getModel());
+					if (editorPart != null) {
 						eraseTargetFeedback(request);
 						editorPart.showTargetFeedback(request);
 						lastEditorFeedback = editorPart;
@@ -117,15 +95,15 @@ public class TreeEditPart extends AbstractTreeEditPart implements PropertyChange
 			}
 		}
 	}
-	
+
 	/**
-	 * If there is a feedback on an editor part then it is removed, otherwise
-	 * it dosen't do anything
+	 * If there is a feedback on an editor part then it is removed, otherwise it dosen't do anything
 	 * 
-	 * @param request the current request
+	 * @param request
+	 *          the current request
 	 */
 	protected void eraseTargetFeedbackOnEditor(Request request) {
-		if (lastEditorFeedback != null){
+		if (lastEditorFeedback != null) {
 			lastEditorFeedback.eraseTargetFeedback(request);
 			lastEditorFeedback = null;
 		}
@@ -193,11 +171,11 @@ public class TreeEditPart extends AbstractTreeEditPart implements PropertyChange
 			}
 		});
 	}
-	
+
 	/**
 	 * Refresh a specific tree item
 	 */
-	private void refreshItem(TreeItem item, ANode node){
+	private void refreshItem(TreeItem item, ANode node) {
 		if (node != null && checkTreeItem(item)) {
 			if (node.getImagePath() != null) {
 				Image image = JaspersoftStudioPlugin.getInstance().getImage(node.getImagePath());
@@ -227,16 +205,16 @@ public class TreeEditPart extends AbstractTreeEditPart implements PropertyChange
 				setWidgetText(item, "Unknown");
 		}
 	}
-	
+
 	protected final boolean checkTreeItem(TreeItem widget) {
 		return !(widget == null || widget.isDisposed());
 	}
-	
+
 	protected void setWidgetText(TreeItem item, String text) {
 		if (checkTreeItem(item))
 			item.setText(text);
 	}
-	
+
 	protected void setWidgetImage(TreeItem item, Image image) {
 		if (checkTreeItem(item))
 			item.setImage(image);
@@ -250,17 +228,18 @@ public class TreeEditPart extends AbstractTreeEditPart implements PropertyChange
 	@Override
 	protected List<?> getModelChildren() {
 		List<Object> list = new ArrayList<Object>();
-		ANode modelNode = (ANode)getModel();
-		if (modelNode != null && modelNode.showChildren()){
-			//Check if the default parameters and variables should be hidden
+		ANode modelNode = (ANode) getModel();
+		if (modelNode != null && modelNode.showChildren()) {
+			// Check if the default parameters and variables should be hidden
 			JasperReportsConfiguration jConfig = modelNode.getJasperConfiguration();
-			boolean showDefaults = jConfig != null? jConfig.getPropertyBoolean(DesignerPreferencePage.P_SHOW_VARIABLES_DEFAULTS, Boolean.TRUE) : true;
+			boolean showDefaults = jConfig != null ? jConfig.getPropertyBoolean(
+					DesignerPreferencePage.P_SHOW_VARIABLES_DEFAULTS, Boolean.TRUE) : true;
 			for (INode node : ((ANode) getModel()).getChildren()) {
-				//The background is never shown inside the outline
-				if (!node.getClass().equals(MBackgrounImage.class)){
-					if (showDefaults){ 
+				// The background is never shown inside the outline
+				if (!node.getClass().equals(MBackgrounImage.class)) {
+					if (showDefaults) {
 						list.add(node);
-					} else if (!node.getClass().equals(MParameterSystem.class) && !node.getClass().equals(MVariableSystem.class)){
+					} else if (!node.getClass().equals(MParameterSystem.class) && !node.getClass().equals(MVariableSystem.class)) {
 						list.add(node);
 					}
 				}
@@ -268,10 +247,10 @@ public class TreeEditPart extends AbstractTreeEditPart implements PropertyChange
 		}
 		return list;
 	}
-	
+
 	/**
-	 * Map of EditPart that need a refresh, they can be queued when the refresh is disabled refreshed
-	 * at the end. Using an hashset avoid to refresh the same part more than one time
+	 * Map of EditPart that need a refresh, they can be queued when the refresh is disabled refreshed at the end. Using an
+	 * hashset avoid to refresh the same part more than one time
 	 */
 	private static HashSet<EditPart> nodeToRefresh = new HashSet<EditPart>();
 
@@ -279,55 +258,55 @@ public class TreeEditPart extends AbstractTreeEditPart implements PropertyChange
 	 * Cache the node to check the refresh event
 	 */
 	private MLockableRefresh refreshReferenceNode = null;
-	
+
 	/**
 	 * Return the node to check the refresh event and cache it
 	 * 
 	 * @return the node to check if the refresh events are enabled or not
 	 */
-	private MLockableRefresh getLockReferenceNode(){
-		if (refreshReferenceNode == null){
-			EditPart root = (EditPart)getRoot().getChildren().get(0);
-			ANode modelNode = (ANode)root.getModel();
-			refreshReferenceNode = (MLockableRefresh)JSSCompoundCommand.getMainNode(modelNode);
+	private MLockableRefresh getLockReferenceNode() {
+		if (refreshReferenceNode == null) {
+			EditPart root = (EditPart) getRoot().getChildren().get(0);
+			ANode modelNode = (ANode) root.getModel();
+			refreshReferenceNode = (MLockableRefresh) JSSCompoundCommand.getMainNode(modelNode);
 		}
 		return refreshReferenceNode;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * 
 	 * @see java.beans.PropertyChangeListener#propertyChange(java.beans.PropertyChangeEvent)
 	 */
 	public void propertyChange(PropertyChangeEvent evt) {
-		if (evt.getPropertyName().equals(JSSCompoundCommand.REFRESH_UI_EVENT)){
+		if (evt.getPropertyName().equals(JSSCompoundCommand.REFRESH_UI_EVENT)) {
 			refreshCached();
 			return;
 		}
-		//FIXME: maybe compare the source of the event with the model of the current part to avoid
-		//to refresh this part for an event not generated from the contained jr element
+		// FIXME: maybe compare the source of the event with the model of the current part to avoid
+		// to refresh this part for an event not generated from the contained jr element
 		MLockableRefresh refrenceNode = getLockReferenceNode();
-		if (refrenceNode != null && refrenceNode.isRefreshEventIgnored()){
+		if (refrenceNode != null && refrenceNode.isRefreshEventIgnored()) {
 			nodeToRefresh.add(this);
 		} else {
 			refresh();
 		}
 	}
-	
+
 	/**
 	 * Refresh all the cached node, avoid to refresh the node that will be delete (parent null)
 	 */
-	private void refreshCached(){
-		//The refresh should be executed inside the graphic thread to avoid
-		//invalid thread access exception, since it involve the painting of 
-		//editparts and so swt stuff
-		UIUtils.getDisplay().syncExec(new Runnable() {			
+	private void refreshCached() {
+		// The refresh should be executed inside the graphic thread to avoid
+		// invalid thread access exception, since it involve the painting of
+		// editparts and so swt stuff
+		UIUtils.getDisplay().syncExec(new Runnable() {
 			@Override
 			public void run() {
-				for(EditPart part : nodeToRefresh){
-					//Check if the part model has a parent, if not the part
-					//will be probably removed so avoid to refresh it
-					if (((ANode)part.getModel()).getParent() != null) {
+				for (EditPart part : nodeToRefresh) {
+					// Check if the part model has a parent, if not the part
+					// will be probably removed so avoid to refresh it
+					if (((ANode) part.getModel()).getParent() != null) {
 						part.refresh();
 					}
 				}

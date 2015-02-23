@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.model.parameter.command;
 
@@ -37,8 +33,8 @@ public class ReorderParameterCommand extends Command {
 	private JRDesignParameter jrParameter;
 
 	/** The jr dataset. */
-	private MParameters<?> parent;
-	
+	private JRDesignDataset jrDataset;
+	private JasperReportsConfiguration jrContext;
 
 	/**
 	 * Instantiates a new reorder parameter command.
@@ -52,9 +48,9 @@ public class ReorderParameterCommand extends Command {
 	 */
 	public ReorderParameterCommand(MParameter child, MParameters<?> parent, int newIndex) {
 		super(Messages.common_reorder_elements);
-
+		jrContext = parent.getJasperConfiguration();
 		this.newIndex = Math.max(0, newIndex);
-		this.parent = parent;
+		this.jrDataset = (JRDesignDataset) parent.getValue();
 		this.jrParameter = (JRDesignParameter) child.getValue();
 	}
 
@@ -65,10 +61,7 @@ public class ReorderParameterCommand extends Command {
 	 */
 	@Override
 	public void execute() {
-		JRDesignDataset jrDataset = (JRDesignDataset)parent.getValue();
-		oldIndex = jrDataset.getParametersList().indexOf(jrParameter);
-		JasperReportsConfiguration jConfig = parent.getJasperConfiguration();
-		boolean showDefaults = jConfig != null? jConfig.getPropertyBoolean(DesignerPreferencePage.P_SHOW_VARIABLES_DEFAULTS, Boolean.TRUE) : true;
+		oldIndex = jrDataset.getParametersList().indexOf(jrParameter); 
 		try {
 			int i = 0;
 			for (JRParameter v : jrDataset.getParametersList()) {
@@ -77,9 +70,11 @@ public class ReorderParameterCommand extends Command {
 				else
 					break;
 			}
-			if (!showDefaults) newIndex+=i;
-			else newIndex = Math.max(newIndex, i);
-			
+			boolean showDefaults = jrContext != null ? jrContext.getPropertyBoolean(
+					DesignerPreferencePage.P_SHOW_VARIABLES_DEFAULTS, Boolean.TRUE) : true;
+			if (!showDefaults)
+				newIndex += i;
+			newIndex = Math.max(newIndex, i);
 			jrDataset.removeParameter(jrParameter);
 			if (newIndex < 0 || newIndex > jrDataset.getParametersList().size())
 				jrDataset.addParameter(jrParameter);
@@ -98,7 +93,6 @@ public class ReorderParameterCommand extends Command {
 	@Override
 	public void undo() {
 		try {
-			JRDesignDataset jrDataset = (JRDesignDataset)parent.getValue();
 			jrDataset.removeParameter(jrParameter);
 			if (oldIndex < 0 || oldIndex > jrDataset.getParametersList().size())
 				jrDataset.addParameter(jrParameter);
