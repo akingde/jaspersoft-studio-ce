@@ -16,6 +16,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.components.barbecue.StandardBarbecueComponent;
 import net.sf.jasperreports.components.barcode4j.ErrorCorrectionLevelEnum;
 import net.sf.jasperreports.components.barcode4j.QRCodeComponent;
 import net.sf.jasperreports.engine.JRConstants;
@@ -31,6 +32,7 @@ import com.jaspersoft.studio.components.barcode.model.MBarcode;
 import com.jaspersoft.studio.editor.defaults.DefaultManager;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
+import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.PixelPropertyDescriptor;
 
@@ -123,7 +125,10 @@ public class MQRCode extends MBarcode {
 			return errLevelD.getIntValue(jrList.getErrorCorrectionLevel());
 		if (id.equals(QRCodeComponent.PROPERTY_MARGIN))
 			return jrList.getMargin();
-
+		if (id.equals(StandardBarbecueComponent.PROPERTY_CODE_EXPRESSION))
+			return ExprUtil.getExpression(jrList.getCodeExpression());
+		if (id.equals(StandardBarbecueComponent.PROPERTY_EVALUATION_TIME))
+			return evaluationTimeD.getIntValue(jrList.getEvaluationTimeValue());
 		return super.getPropertyValue(id);
 	}
 
@@ -134,9 +139,13 @@ public class MQRCode extends MBarcode {
 
 		if (id.equals(QRCodeComponent.PROPERTY_ERROR_CORRECTION_LEVEL))
 			jrList.setErrorCorrectionLevel(errLevelD.getEnumValue(value));
-		if (id.equals(QRCodeComponent.PROPERTY_MARGIN))
+		else if (id.equals(QRCodeComponent.PROPERTY_MARGIN))
 			jrList.setMargin((Integer) value);
-
+		else if (id.equals(StandardBarbecueComponent.PROPERTY_CODE_EXPRESSION))
+			jrList.setCodeExpression(ExprUtil.setValues(
+					jrList.getCodeExpression(), value, null));
+		else if (id.equals(StandardBarbecueComponent.PROPERTY_EVALUATION_TIME))
+			jrList.setEvaluationTimeValue(evaluationTimeD.getEnumValue(value));
 		super.setPropertyValue(id, value);
 	}
 
