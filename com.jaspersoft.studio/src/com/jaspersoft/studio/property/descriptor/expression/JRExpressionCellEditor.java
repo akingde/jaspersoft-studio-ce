@@ -42,7 +42,8 @@ public class JRExpressionCellEditor extends JSSDialogCellEditor {
 	protected Object openDialogBox(Control cellEditorWindow) {
 		if(!ExpressionEditorSupportUtil.isExpressionEditorDialogOpen()) {
 			JRExpressionEditor wizard = new JRExpressionEditor();
-			wizard.setValue((JRDesignExpression) getValue());
+			JRDesignExpression originalValue = (JRDesignExpression) getValue();
+			wizard.setValue(originalValue);
 			wizard.setExpressionContext(expContext);
 			WizardDialog dialog = ExpressionEditorSupportUtil.getExpressionEditorWizardDialog(cellEditorWindow.getShell(), wizard);
 			dialog.create();
@@ -50,6 +51,9 @@ public class JRExpressionCellEditor extends JSSDialogCellEditor {
 				JRDesignExpression value = wizard.getValue();
 				// updateContents(value);
 				return value;
+			}
+			else {
+				return originalValue;
 			}
 		}
 		return null;
