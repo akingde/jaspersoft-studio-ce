@@ -165,23 +165,26 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 
 	private PreferenceListener preferenceListener = new PreferenceListener();
 
+	/**
+	 * Listener for the preferences, when the flags to show or hide default
+	 * parameters and variables changes then it refresh all the MParameters and
+	 * Mvariables nodes on the tree
+	 */
 	private final class PreferenceListener implements IPropertyChangeListener {
 
 		public void propertyChange(org.eclipse.jface.util.PropertyChangeEvent event) {
 			String property = event.getProperty();
 			if (property.equals(DesignerPreferencePage.P_SHOW_VARIABLES_DEFAULTS)) {
-
 				RootEditPart rep = getViewer().getRootEditPart();
 				new EditPartVisitor<String>(rep) {
-					private int refreshes = 0;
-
 					@Override
 					public boolean visit(EditPart n) {
 						if (n.getModel() instanceof MParameters || n.getModel() instanceof MVariables) {
-							n.refresh();
-							refreshes++;
-							if (refreshes >= 2)
-								stop();
+							//We must be sure that the node has the widget already created, a refresh on a node 
+							//without widget throw an NPE
+							if (((TreeEditPart)n).getWidget() != null) n.refresh();
+							//We can't stop the research when an MParameters and an MVariables are found, because
+							//in this way we will miss to hide the default values of subdatasets
 							return false;
 						}
 						return true;
