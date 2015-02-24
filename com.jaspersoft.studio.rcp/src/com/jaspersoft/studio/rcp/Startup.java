@@ -28,6 +28,7 @@ import org.eclipse.ui.IEditorRegistry;
 import org.eclipse.ui.IStartup;
 import org.eclipse.ui.PlatformUI;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.rcp.heartbeat.Heartbeat;
 import com.jaspersoft.studio.rcp.messages.Messages;
 
@@ -40,8 +41,9 @@ public class Startup implements IStartup {
 		IProject project = ResourcesPlugin.getWorkspace().getRoot()
 				.getProject(FileUtils.DEFAULT_PROJECT); //$NON-NLS-1$
 		IProgressMonitor monitor = new NullProgressMonitor();
+		boolean defaultPrjCreatedOnce = JaspersoftStudioPlugin.getInstance().getPreferenceStore().getBoolean(FileUtils.DEFAULT_PROJECT_PROPERTY);
 		try {
-			if (!project.exists()) {
+			if (!project.exists() && !defaultPrjCreatedOnce) {
 				project.create(monitor);
 				project.open(monitor);
 				ProjectUtil.createJRProject(monitor, project);
@@ -49,6 +51,7 @@ public class Startup implements IStartup {
 				description.setName(Messages.Startup_jss_project);
 				project.setDescription(description, monitor);
 			}
+			JaspersoftStudioPlugin.getInstance().getPreferenceStore().setValue(FileUtils.DEFAULT_PROJECT_PROPERTY, true);
 			IEditorRegistry registry = PlatformUI.getWorkbench().getEditorRegistry();
 			registry.setDefaultEditor("*.properties", "com.essiembre.rbe.eclipse.editor.ResourceBundleEditor");
 		} catch (CoreException e) {
