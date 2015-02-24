@@ -17,6 +17,8 @@
 ; MUI 1.67 compatible ------
 !include "MUI.nsh"
 !include fileassoc.nsh
+!include "nsProcess.nsh"
+!include "LogicLib.nsh"
 
 ; set execution level for Windows Vista
 ; RequestExecutionLevel user
@@ -134,6 +136,12 @@ Function un.onUninstSuccess
 FunctionEnd
 
 Function un.onInit
+  ${nsProcess::FindProcess} "${SHORT_PRODUCT_NAME}.exe" $R0
+  ${If} $R0 == "0"
+	# it's running
+    MessageBox MB_ICONSTOP|MB_OK "An instance of the application is running. Please close and launch again uninstall."
+    Abort
+  ${EndIf}
   MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 "Are you sure you want to completely remove $(^Name) and all of its components?" /SD IDYES IDYES +2
   Abort
 FunctionEnd
