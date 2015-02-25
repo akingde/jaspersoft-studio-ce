@@ -90,6 +90,9 @@ public class Messages extends NLS {
 	public static String HibernateDataAdapterComposite_8;
 	public static String HibernateDataAdapterFactory_description;
 	public static String HibernateDataAdapterFactory_label;
+	public static String HttpParametersDialog_0;
+	public static String HttpParametersDialog_1;
+	public static String HttpParametersDialog_2;
 	public static String JDBCCreator_ErrSecurPrefStorage;
 	public static String JDBCDataAdapterComposite_attention;
 	public static String JDBCDataAdapterComposite_attentionlable;

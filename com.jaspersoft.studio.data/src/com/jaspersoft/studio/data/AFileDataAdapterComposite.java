@@ -167,10 +167,14 @@ public abstract class AFileDataAdapterComposite extends ADataAdapterComposite {
 
 		public String getDataFile() {
 			DataFile df = da.getDataFile();
-			if (df instanceof StandardRepositoryDataLocation)
+			if (df instanceof StandardRepositoryDataLocation) {
+				btnBrowse.setText("File");
 				return ((StandardRepositoryDataLocation) df).getLocation();
-			if (df instanceof StandardHttpDataLocation)
+			}
+			if (df instanceof StandardHttpDataLocation) {
+				btnBrowse.setText("Options");
 				return ((StandardHttpDataLocation) df).getUrl();
+			}
 			return "";
 		}
 	}

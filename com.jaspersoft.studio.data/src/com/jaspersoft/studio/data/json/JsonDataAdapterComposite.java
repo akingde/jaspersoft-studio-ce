@@ -286,53 +286,6 @@ public class JsonDataAdapterComposite extends AFileDataAdapterComposite {
 	}
 
 	@Override
-	protected void createFileNameWidgets(Composite parent) {
-		Label lblNewLabel = new Label(parent, SWT.NONE);
-		lblNewLabel.setText(Messages.JsonDataAdapterComposite_FileOrURL);
-
-		textFileName = new Text(parent, SWT.BORDER);
-		GridData gd = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
-		gd.horizontalIndent = 8;
-		textFileName.setLayoutData(gd);
-
-		Button btnBrowse = new Button(parent, SWT.NONE);
-		GridData gd_btnBrowse = new GridData(SWT.CENTER, SWT.CENTER, false,
-				false, 1, 1);
-		gd_btnBrowse.widthHint = 100;
-		btnBrowse.setLayoutData(gd_btnBrowse);
-		btnBrowse.setText(Messages.JsonDataAdapterComposite_Browse);
-
-		btnBrowse.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-				FileDialog fd = new FileDialog(Display.getDefault()
-						.getActiveShell());
-				fd.setFileName(textFileName.getText());
-				fd.setFilterPath(root.getLocation().toOSString());
-				fd.setFilterExtensions(getFileExtensions()); //$NON-NLS-1$ //$NON-NLS-2$
-				String selection = fd.open();
-				if (selection != null) {
-					IFile contextfile = (IFile) getJrContext().getValue(
-							FileUtils.KEY_FILE);
-
-					IFile[] resource = root.findFilesForLocationURI(new File(
-							selection).toURI());
-					if (contextfile != null
-							&& resource != null
-							&& resource.length > 0
-							&& contextfile.getProject().equals(
-									resource[0].getProject()))
-						selection = resource[0].getProjectRelativePath()
-								.toOSString();
-					textFileName.setText(selection);
-				}
-			}
-		});
-	}
-
-	@Override
 	protected void bindWidgets(DataAdapter dataAdapter) {
 		JsonDataAdapter xmlDataAdapter = (JsonDataAdapter) dataAdapter;
 
