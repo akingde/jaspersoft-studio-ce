@@ -12,20 +12,15 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.json;
 
-import java.io.File;
 import java.util.Locale;
 import java.util.TimeZone;
 
 import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.json.JsonDataAdapter;
-import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.JasperReportsContext;
 
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.beans.PojoObservables;
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IWorkspaceRoot;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.wizard.WizardDialog;
@@ -37,8 +32,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;

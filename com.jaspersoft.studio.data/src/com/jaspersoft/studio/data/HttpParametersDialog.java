@@ -61,6 +61,7 @@ import com.jaspersoft.studio.utils.UIUtil;
  */
 public class HttpParametersDialog extends ATitledDialog {
 	private StandardHttpDataLocation dataFile;
+	private CTabFolder tabFolder;
 
 	/**
 	 * @param parentShell
@@ -69,7 +70,7 @@ public class HttpParametersDialog extends ATitledDialog {
 			StandardHttpDataLocation dataFile) {
 		super(parentShell);
 		setTitle(Messages.HttpParametersDialog_0);
-		setDescription("Setup connection options. URL Parameters will be added to the url string.\n1In case you use POST request POST parameters will be added to the request body.");
+		setDescription(Messages.HttpParametersDialog_3);
 		this.dataFile = dataFile;
 	}
 
@@ -111,7 +112,7 @@ public class HttpParametersDialog extends ATitledDialog {
 		user.setText(Misc.nvl(dataFile.getUsername()));
 		password.setText(Misc.nvl(dataFile.getPassword()));
 
-		new Label(cmp, SWT.NONE).setText("Request Type");
+		new Label(cmp, SWT.NONE).setText(Messages.HttpParametersDialog_4);
 
 		final Combo cmb = new Combo(cmp, SWT.READ_ONLY);
 		cmb.setItems(new String[] { RequestMethod.GET.name(),
@@ -120,19 +121,15 @@ public class HttpParametersDialog extends ATitledDialog {
 			cmb.select(1);
 		else
 			cmb.select(0);
+
 		cmb.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				switch (cmb.getSelectionIndex()) {
-				case 0:
-					dataFile.setMethod(RequestMethod.GET);
-				case 1:
-					dataFile.setMethod(RequestMethod.POST);
-				}
+				setupMethod(cmb);
 			}
 		});
 
-		CTabFolder tabFolder = new CTabFolder(cmp, SWT.FLAT | SWT.TOP);
+		tabFolder = new CTabFolder(cmp, SWT.FLAT | SWT.TOP);
 		GridData gd = new GridData(GridData.FILL_BOTH);
 		gd.horizontalSpan = 2;
 		tabFolder.setLayoutData(gd);
@@ -142,17 +139,16 @@ public class HttpParametersDialog extends ATitledDialog {
 		if (dataFile.getPostParameters() == null)
 			dataFile.setPostParameters(new ArrayList<HttpLocationParameter>());
 
-		final TableViewer tv = createParameters(tabFolder, "URL Parameters");
-		final TableViewer tvp = createParameters(tabFolder, "POST Parameters");
+		final TableViewer tv = createParameters(tabFolder, Messages.HttpParametersDialog_5);
 
 		tabFolder.setSelection(0);
+		setupMethod(cmb);
 
 		UIUtils.getDisplay().asyncExec(new Runnable() {
 
 			@Override
 			public void run() {
 				tv.setInput(dataFile.getUrlParameters());
-				tvp.setInput(dataFile.getPostParameters());
 			}
 		});
 
@@ -175,7 +171,7 @@ public class HttpParametersDialog extends ATitledDialog {
 			Composite composite = (Composite) super.createDialogArea(parent);
 			composite.setLayout(new GridLayout(2, false));
 			Label label = new Label(composite, SWT.NONE);
-			label.setText("Name");
+			label.setText(Messages.HttpParametersDialog_6);
 
 			final Text text = new Text(composite, SWT.BORDER);
 			text.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL
@@ -190,12 +186,12 @@ public class HttpParametersDialog extends ATitledDialog {
 			});
 
 			label = new Label(composite, SWT.NONE);
-			label.setText("Value");
+			label.setText(Messages.HttpParametersDialog_7);
 
 			final Text tname = new Text(composite, SWT.BORDER);
 			tname.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL
 					| GridData.HORIZONTAL_ALIGN_FILL));
-			tname.setText(Misc.nvl(pvalue, "Value"));
+			tname.setText(Misc.nvl(pvalue, Messages.HttpParametersDialog_7));
 			tname.addModifyListener(new ModifyListener() {
 
 				@Override
@@ -216,7 +212,7 @@ public class HttpParametersDialog extends ATitledDialog {
 		protected void configureShell(Shell newShell) {
 			super.configureShell(newShell);
 			newShell.setSize(500, 200);
-			newShell.setText("Parameter Dialog");
+			newShell.setText(Messages.HttpParametersDialog_9);
 		}
 
 		public String getPName() {
@@ -245,7 +241,7 @@ public class HttpParametersDialog extends ATitledDialog {
 		tviewer.getTable().setHeaderVisible(true);
 
 		TableViewerColumn column = new TableViewerColumn(tviewer, SWT.NONE);
-		column.getColumn().setText("Name");
+		column.getColumn().setText(Messages.HttpParametersDialog_6);
 		column.getColumn().setWidth(250);
 		column.setLabelProvider(new ColumnLabelProvider() {
 			public String getText(Object element) {
@@ -259,7 +255,7 @@ public class HttpParametersDialog extends ATitledDialog {
 		});
 
 		column = new TableViewerColumn(tviewer, SWT.NONE);
-		column.getColumn().setText("Value");
+		column.getColumn().setText(Messages.HttpParametersDialog_7);
 		column.getColumn().setWidth(250);
 		column.setLabelProvider(new ColumnLabelProvider() {
 
@@ -284,8 +280,8 @@ public class HttpParametersDialog extends ATitledDialog {
 		new NewButton().createNewButtons(bGroup, tviewer, new INewElement() {
 
 			public Object newElement(List<?> input, int pos) {
-				HttpLocationParameter hlp = new HttpLocationParameter("prm",
-						"value");
+				HttpLocationParameter hlp = new HttpLocationParameter(Messages.HttpParametersDialog_12,
+						Messages.HttpParametersDialog_13);
 				PEditDialog pd = new PEditDialog(getShell(), hlp);
 				if (pd.open() == Dialog.OK) {
 					hlp.setName(pd.getPName());
@@ -324,5 +320,27 @@ public class HttpParametersDialog extends ATitledDialog {
 
 		bptab.setControl(cmp);
 		return tviewer;
+	}
+
+	private void setupMethod(final Combo cmb) {
+		switch (cmb.getSelectionIndex()) {
+		case 0:
+			dataFile.setMethod(RequestMethod.GET);
+			if (tabFolder.getItemCount() > 1)
+				tabFolder.getItem(1).dispose();
+			break;
+		case 1:
+			dataFile.setMethod(RequestMethod.POST);
+			final TableViewer tvp = createParameters(tabFolder,
+					Messages.HttpParametersDialog_14);
+			UIUtils.getDisplay().asyncExec(new Runnable() {
+
+				@Override
+				public void run() {
+					tvp.setInput(dataFile.getPostParameters());
+				}
+			});
+			break;
+		}
 	}
 }
