@@ -39,14 +39,14 @@ public class NClassTypePropertyDescriptor extends ClassTypePropertyDescriptor im
 
 	public CellEditor createPropertyEditor(Composite parent) {
 		CellEditor editor = new ClassTypeCellEditor(parent);
-		editor.setValidator(NClassTypeCellEditorValidator.instance());
-		setValidator(NClassTypeCellEditorValidator.instance());
+		editor.setValidator(ClassTypeCellEditorValidator.instance());
+		setValidator(ClassTypeCellEditorValidator.instance());
 		HelpSystem.bindToHelp(this, editor.getControl());
 		return editor;
 	}
 
-	public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
-		ASPropertyWidget classNameWidget = new SPClassType(parent, section, this);
+	public ASPropertyWidget<?> createWidget(Composite parent, AbstractSection section) {
+		ASPropertyWidget<?> classNameWidget = new SPClassType(parent, section, this);
 		classNameWidget.setReadOnly(readOnly);
 		return classNameWidget;
 	}
