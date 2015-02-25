@@ -270,7 +270,7 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable,
 		JRDesignCellContents jrElement = getValue();
 		if (jrElement != null) {
 			if (id.equals(JRBaseStyle.PROPERTY_MODE))
-				return opaqueD.getEnumValue(jrElement.getModeValue());
+				return opaqueD.getIntValue(jrElement.getModeValue());
 			if (id.equals(JRBaseStyle.PROPERTY_BACKCOLOR))
 				return Colors.getSWTRGB4AWTGBColor(jrElement.getBackcolor());
 			if (id.equals(JRDesignCellContents.PROPERTY_STYLE)) {
