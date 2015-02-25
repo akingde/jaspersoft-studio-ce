@@ -15,8 +15,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import net.sf.jasperreports.data.DataAdapter;
-import net.sf.jasperreports.data.empty.EmptyDataAdapterImpl;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExpression;
@@ -26,17 +24,14 @@ import net.sf.jasperreports.engine.JRScriptlet;
 import net.sf.jasperreports.engine.JRSortField;
 import net.sf.jasperreports.engine.JRVariable;
 import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.design.events.JRChangeEventsSupport;
-import net.sf.jasperreports.engine.scriptlets.ScriptletFactory;
+import net.sf.jasperreports.engine.fill.JRParameterDefaultValuesEvaluator;
 import net.sf.jasperreports.engine.util.JRExpressionUtil;
 
-import com.jaspersoft.studio.data.adapter.DataAdapterParameterContributorFactory;
-import com.jaspersoft.studio.utils.expr.InitReportScriptletFactory;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class ExpressionUtil {
@@ -310,49 +305,23 @@ public class ExpressionUtil {
 		return new ExpressionInterpreter(jrd, jd, jConfig);
 	}
 
-	private static final InitReportScriptletFactory sfactory = new InitReportScriptletFactory();
-
 	public static void initBuiltInParameters(JasperReportsConfiguration jrConfig, JasperReport jr) {
-		List<ScriptletFactory> sexts = null;
-		DataAdapter oldDA = null;
 		Map<String, Object> prms = null;
 		try {
 			if (jr == null)
 				jr = JasperCompileManager.getInstance(jrConfig).compile(jrConfig.getJasperDesign());
 
-			sexts = jrConfig.getExtensions(ScriptletFactory.class);
-			if (sexts == null) {
-				sexts = new ArrayList<ScriptletFactory>();
-				jrConfig.setExtensions(ScriptletFactory.class, sexts);
-			}
-			int ind = sexts.indexOf(sfactory);
-			if (ind < 0)
-				sexts.add(sfactory);
-
 			prms = jrConfig.getJRParameters();
 			if (prms == null)
 				prms = new HashMap<String, Object>();
-			oldDA = (DataAdapter) prms.get(DataAdapterParameterContributorFactory.PARAMETER_DATA_ADAPTER);
-			EmptyDataAdapterImpl da = new EmptyDataAdapterImpl();
-			da.setRecordCount(new Integer(1));
-			prms.put(DataAdapterParameterContributorFactory.PARAMETER_DATA_ADAPTER, da);
-			JasperFillManager.getInstance(jrConfig).fill(jr, prms);
+			prms = JRParameterDefaultValuesEvaluator.evaluateParameterDefaultValues(jrConfig, jr, prms);
+			jrConfig.setJRParameters(prms);
 
 			removeAllReportInterpreters(jrConfig);
 		} catch (JRException e) {
 			e.printStackTrace();
-		} finally {
-			if (prms != null) {
-				prms.remove(JRParameter.REPORT_PARAMETERS_MAP);
-				prms.remove(JRParameter.REPORT_DATA_SOURCE);
-				prms.remove(JRParameter.REPORT_CONNECTION);
-				if (oldDA != null)
-					prms.put(DataAdapterParameterContributorFactory.PARAMETER_DATA_ADAPTER, oldDA);
-				else
-					prms.remove(DataAdapterParameterContributorFactory.PARAMETER_DATA_ADAPTER);
-			}
-			if (sexts != null)
-				sexts.remove(sfactory);
+		} catch (Throwable e) {
+			e.printStackTrace();
 		}
 	}
 
