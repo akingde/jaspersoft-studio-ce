@@ -29,6 +29,7 @@ import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.swt.events.ExpressionModifiedEvent;
 import com.jaspersoft.studio.swt.events.ExpressionModifiedListener;
 import com.jaspersoft.studio.swt.widgets.WTextExpression;
@@ -51,7 +52,7 @@ public class ItemPropertyElementDialog extends ATitledDialog implements IExpress
 	public ItemPropertyElementDialog(Shell parentShell, StandardItemProperty pname) {
 		super(parentShell);
 		this.pname = (StandardItemProperty) pname.clone();
-		setTitle(NLS.bind("Enter value for the {0}", pname != null ? pname.getName() : ""));
+		setTitle(NLS.bind(Messages.ItemPropertyElementDialog_0, pname != null ? pname.getName() : "")); //$NON-NLS-2$
 	}
 
 	@Override
@@ -60,12 +61,15 @@ public class ItemPropertyElementDialog extends ATitledDialog implements IExpress
 		dialogArea.setLayout(new GridLayout(1, false));
 
 		useExpressionCheckbox = new Button(dialogArea, SWT.CHECK);
-		useExpressionCheckbox.setText("Use Expression");
+		useExpressionCheckbox.setText(Messages.ItemPropertyElementDialog_2);
 		useExpressionCheckbox.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 
-		propertyValue = new Text(dialogArea, SWT.BORDER);
+		propertyValue = new Text(dialogArea, isMultiline() ? SWT.WRAP | SWT.BORDER | SWT.MULTI | SWT.V_SCROLL
+				| SWT.H_SCROLL | SWT.BORDER : SWT.BORDER);
 		GridData gd_propertyValue = new GridData(SWT.FILL, SWT.FILL, true, false);
 		gd_propertyValue.widthHint = 400;
+		if (isMultiline())
+			gd_propertyValue.heightHint = 100;
 		propertyValue.setLayoutData(gd_propertyValue);
 
 		propertyValueExpression = new WTextExpression(dialogArea, SWT.NONE);
@@ -79,6 +83,10 @@ public class ItemPropertyElementDialog extends ATitledDialog implements IExpress
 		addListeners();
 
 		return dialogArea;
+	}
+
+	public boolean isMultiline() {
+		return false;
 	}
 
 	private void initWidgets() {

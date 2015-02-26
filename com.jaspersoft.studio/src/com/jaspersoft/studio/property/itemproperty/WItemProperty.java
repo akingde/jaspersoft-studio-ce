@@ -39,6 +39,7 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
 import com.jaspersoft.studio.property.itemproperty.desc.ADescriptor;
+import com.jaspersoft.studio.property.itemproperty.desc.ItemPropertyDescription;
 import com.jaspersoft.studio.property.itemproperty.dialog.ItemPropertyElementDialog;
 import com.jaspersoft.studio.property.itemproperty.event.ItemPropertyModifiedEvent;
 import com.jaspersoft.studio.property.itemproperty.event.ItemPropertyModifiedListener;
@@ -322,7 +323,10 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 		// loop due to the modifyEvent raised after a setText call.
 		String txt = lprovider.getText(exp);
 		textExpression.setText(txt);
-		textExpression.setToolTipText(txt);
+		String tooltip = txt;
+		if (ipDesc != null)
+			tooltip += "\n" + ipDesc.getDescription();
+		textExpression.setToolTipText(tooltip);
 		if (txt.length() >= oldpos)
 			textExpression.setSelection(oldpos, oldpos);
 		if (exp.getValueExpression() != null)
@@ -444,10 +448,25 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 	}
 
 	private void handleEditButton() {
-		ItemPropertyElementDialog dialog = new ItemPropertyElementDialog(UIUtils.getShell(), value);
+		ItemPropertyElementDialog dialog = new ItemPropertyElementDialog(UIUtils.getShell(), value) {
+			@Override
+			public boolean isMultiline() {
+				if (ipDesc != null)
+					return ipDesc.isMultiline();
+				return super.isMultiline();
+			}
+		};
+		if (ipDesc != null)
+			dialog.setDescription(ipDesc.getDescription());
 		dialog.setExpressionContext(expContext);
 		if (dialog.open() == Dialog.OK)
 			setValue(dialog.getElementName());
 	}
 
+	private ItemPropertyDescription<?> ipDesc;
+
+	public void setDescription(ItemPropertyDescription<?> ipDesc) {
+		this.ipDesc = ipDesc;
+		textExpression.setToolTipText(ipDesc.getDescription());
+	}
 }

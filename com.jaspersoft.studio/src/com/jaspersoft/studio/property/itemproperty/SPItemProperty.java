@@ -44,7 +44,7 @@ public class SPItemProperty extends ASPropertyWidget<ItemPropertyDescriptor> imp
 	}
 
 	protected void createComponent(Composite parent) {
-		expr = new WItemProperty(parent, SWT.NONE, 1, ((ItemPropertyDescriptor) pDescriptor).getDescriptor());
+		expr = new WItemProperty(parent, SWT.NONE, 1, pDescriptor.getDescriptor());
 		expr.addModifyListener(new ItemPropertyModifiedListener() {
 			@Override
 			public void itemModified(ItemPropertyModifiedEvent event) {
@@ -55,6 +55,7 @@ public class SPItemProperty extends ASPropertyWidget<ItemPropertyDescriptor> imp
 		if (parent.getLayout() instanceof GridLayout)
 			expr.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		expr.getTextControl().addFocusListener(focusListener);
+		expr.setDescription(pDescriptor.getDescriptor().getDescriptor((String) pDescriptor.getId()));
 	}
 
 	public void setData(APropertyNode pnode, Object b) {

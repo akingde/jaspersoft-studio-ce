@@ -8,6 +8,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.itemproperty.desc;
 
+
 public class ItemPropertyDescription<T> {
 	private String name;
 	private String label;
@@ -34,6 +35,10 @@ public class ItemPropertyDescription<T> {
 		this.description = description;
 		this.mandatory = mandatory;
 		this.defaultValue = defaultValue;
+	}
+
+	public boolean isMultiline() {
+		return false;
 	}
 
 	public String getLabel() {
