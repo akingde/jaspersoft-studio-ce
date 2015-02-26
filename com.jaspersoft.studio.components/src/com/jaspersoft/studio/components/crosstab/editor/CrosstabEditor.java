@@ -43,7 +43,7 @@ import com.jaspersoft.studio.editor.gef.parts.JasperDesignEditPartFactory;
 import com.jaspersoft.studio.editor.gef.parts.MainDesignerRootEditPart;
 import com.jaspersoft.studio.editor.gef.rulers.ReportRuler;
 import com.jaspersoft.studio.editor.gef.rulers.ReportRulerProvider;
-import com.jaspersoft.studio.editor.java2d.J2DScrollingGraphicalViewer;
+import com.jaspersoft.studio.editor.java2d.JSSScrollingGraphicalViewer;
 import com.jaspersoft.studio.editor.report.ParentSelectionOverrider;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
@@ -95,8 +95,8 @@ public class CrosstabEditor extends NamedSubeditor {
 
 		createAdditionalActions();
 		graphicalViewer.setKeyHandler(new JSSGraphicalViewerKeyHandler(graphicalViewer));
-		if (graphicalViewer instanceof J2DScrollingGraphicalViewer){
-			((J2DScrollingGraphicalViewer)graphicalViewer).setSelectionOverrider(new ParentSelectionOverrider(MCell.class, false));
+		if (graphicalViewer instanceof JSSScrollingGraphicalViewer){
+			((JSSScrollingGraphicalViewer)graphicalViewer).setSelectionOverrider(new ParentSelectionOverrider(MCell.class, false));
 		}
 	}
 

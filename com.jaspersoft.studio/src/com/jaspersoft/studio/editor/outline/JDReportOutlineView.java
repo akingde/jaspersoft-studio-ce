@@ -71,6 +71,7 @@ import com.jaspersoft.studio.editor.dnd.JSSTemplateTransferDropTargetListener;
 import com.jaspersoft.studio.editor.gef.parts.EditableFigureEditPart;
 import com.jaspersoft.studio.editor.gef.parts.MainDesignerRootEditPart;
 import com.jaspersoft.studio.editor.java2d.J2DLightweightSystem;
+import com.jaspersoft.studio.editor.java2d.JSSScrollingGraphicalViewer;
 import com.jaspersoft.studio.editor.java2d.figure.JSSScrollableThumbnail;
 import com.jaspersoft.studio.editor.menu.AppContextMenuProvider;
 import com.jaspersoft.studio.editor.outline.part.TreeEditPart;
@@ -541,9 +542,11 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 			showOutlineAction.setChecked(true);
 			showOverviewAction.setChecked(false);
 			pageBook.showPage(outline);
+			((JSSScrollingGraphicalViewer)editor.getGraphicalViewer()).setPaintOnlyVisibleElements(true);
 			if (thumbnail != null)
 				thumbnail.setVisible(false);
 		} else if (ID_ACTION_OVERVIEW.equals(id)) {
+			((JSSScrollingGraphicalViewer)editor.getGraphicalViewer()).setPaintOnlyVisibleElements(false);
 			if (thumbnail == null)
 				initializeOverview();
 			showOutlineAction.setChecked(false);

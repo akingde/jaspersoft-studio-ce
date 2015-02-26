@@ -54,6 +54,7 @@ import com.jaspersoft.studio.book.model.MBookReport;
 import com.jaspersoft.studio.editor.AGraphicEditor;
 import com.jaspersoft.studio.editor.gef.parts.JSSGraphicalViewerKeyHandler;
 import com.jaspersoft.studio.editor.gef.parts.MainDesignerRootEditPart;
+import com.jaspersoft.studio.editor.java2d.JSSScrollingGraphicalViewer;
 import com.jaspersoft.studio.editor.outline.JDReportOutlineView;
 import com.jaspersoft.studio.editor.outline.actions.CreateFieldAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateParameterAction;
@@ -133,7 +134,7 @@ public class JRBookDesignEditor extends AGraphicEditor {
 	
 	@Override
 	protected void createGraphicalViewer(Composite parent) {
-		ScrollingGraphicalViewer viewer = new ScrollingGraphicalViewer();
+		ScrollingGraphicalViewer viewer = new JSSScrollingGraphicalViewer();
 		viewer.createControl(parent).setLayoutData(new GridData(GridData.FILL_BOTH));
 		setGraphicalViewer(viewer);
 		configureGraphicalViewer();

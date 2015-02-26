@@ -16,7 +16,6 @@ import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 
 import org.eclipse.draw2d.LightweightSystem;
 import org.eclipse.gef.EditPart;
-import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
 
 import com.jaspersoft.studio.editor.gef.selection.JSelectionManager;
 import com.jaspersoft.studio.model.ANode;
@@ -25,13 +24,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 /*
  * The Class J2DScrollingGraphicalViewer.
  */
-public class J2DScrollingGraphicalViewer extends ScrollingGraphicalViewer {
-
-	/**
-	 * Selection overrider for the current viewer, null is the default value
-	 * and means that not overrider is used
-	 */
-	private ISelectionOverrider selectionOverrider = null;
+public class J2DScrollingGraphicalViewer extends JSSScrollingGraphicalViewer {
 	
 	public J2DScrollingGraphicalViewer(){
 		super();
@@ -65,26 +58,5 @@ public class J2DScrollingGraphicalViewer extends ScrollingGraphicalViewer {
 		if (jrContext.getPropertyBoolean(DesignerPreferencePage.P_CENTER_SELECTION, Boolean.TRUE)) {
 			super.reveal(part);
 		}
-	}
-
-	/**
-	 * Append the provided editpart to the current selection, but only if there is not 
-	 * an overrider that override the current selection to select something else
-	 */
-	public void appendSelection(EditPart editpart) {
-		boolean wasOverride = false;
-		if (selectionOverrider != null){
-			wasOverride = selectionOverrider.overriddenSelection(editpart, this);
-		}
-		if (!wasOverride) super.appendSelection(editpart);
-	}
-
-	/**
-	 * Set a selection overrider for the current viewer 
-	 * 
-	 * @param overrider the overrider or null if no overrider should be used
-	 */
-	public void setSelectionOverrider(ISelectionOverrider overrider){
-		selectionOverrider = overrider;
 	}
 }

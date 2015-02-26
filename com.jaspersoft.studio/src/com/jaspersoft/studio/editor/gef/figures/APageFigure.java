@@ -26,6 +26,7 @@ import org.eclipse.wb.swt.SWTResourceManager;
 
 import com.jaspersoft.studio.editor.gef.figures.layers.GridLayer;
 import com.jaspersoft.studio.editor.gef.parts.PageEditPart;
+import com.jaspersoft.studio.editor.java2d.JSSScrollingGraphicalViewer;
 
 /*
  * The Class PageFigure.
@@ -212,6 +213,8 @@ public abstract class APageFigure extends FreeformLayeredPane implements HandleB
 	 * @return true if the figure intersect the visible area, false otherwise
 	 */
 	public boolean isFigureVisible(IFigure figure){
+		boolean paintOnlyVisible = ((JSSScrollingGraphicalViewer)page.getViewer()).isPaintOnlyVisibleElements();
+		if (!paintOnlyVisible) return true;
 		if (figure == null) return false;
 		double zoom = getZoom();
 		Rectangle visibleArea = getViewPort().getClientArea();
