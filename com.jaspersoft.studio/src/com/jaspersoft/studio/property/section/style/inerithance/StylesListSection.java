@@ -689,19 +689,21 @@ public class StylesListSection extends AbstractSection {
 		if (titleValue != null) {
 			final StyleContainer styleReference = styleMaps.get(getStyleKey(element));
 			//Print a different label if the style is external or internal
-			if (styleReference != null && styleReference.isExternal()) {
-				Label titleLabel = printTitle(parent, titleValue);
-				// If the style is external i made its editor open by double clicking on the style title
-				titleLabel.setText(titleLabel.getText().concat(Messages.StylesListSection_NotEditable_Visual_Marker));
-				titleLabel.addMouseListener(new MouseAdapter() {
-					@Override
-					public void mouseDoubleClick(MouseEvent e) {
-						EditableFigureEditPart.openEditor(styleReference.getTemplateValue(), ((DefaultEditDomain) getEditDomain()).getEditorPart(), styleReference.getTemplate());
-					}
-				});
-			} else {
-				//Print the label with the possibility to remove reset the style
-				printTitleWithButton(parent, titleValue, new StyleContextualMenu(this, styleReference.getStyle()));
+			if (styleReference != null) {
+				if (styleReference.isExternal()){
+					Label titleLabel = printTitle(parent, titleValue);
+					// If the style is external i made its editor open by double clicking on the style title
+					titleLabel.setText(titleLabel.getText().concat(Messages.StylesListSection_NotEditable_Visual_Marker));
+					titleLabel.addMouseListener(new MouseAdapter() {
+						@Override
+						public void mouseDoubleClick(MouseEvent e) {
+							EditableFigureEditPart.openEditor(styleReference.getTemplateValue(), ((DefaultEditDomain) getEditDomain()).getEditorPart(), styleReference.getTemplate());
+						}
+					});
+				} else {
+					//Print the label with the possibility to remove reset the style
+					printTitleWithButton(parent, titleValue, new StyleContextualMenu(this, styleReference.getStyle()));
+				}
 			}
 		}
 	}
@@ -722,7 +724,10 @@ public class StylesListSection extends AbstractSection {
 			printStyleAttribute(parent, style, null, AttributeParent.STYLE); //$NON-NLS-1$
 			if (style == defaultStyle) hasDefaultStyleInGerarchy = true;
 		}
-		if (!hasDefaultStyleInGerarchy && defaultStyle != null && defaultStyle != getElement()){
+		//FIXME: JR has a bug where it dosen't use the default styles if the element has at least one style
+		//unit it will be fixed, to show the effective hierarchy, the default style is print only if there 
+		//aren't other styles on the element
+		if (styles.isEmpty() && !hasDefaultStyleInGerarchy && defaultStyle != null && defaultStyle != getElement()){
 			String titleLabelText = MessageFormat.format(Messages.StylesListSection_Inherited_From_Default_Style, new Object[]{defaultStyle.getPropertyValue(JRDesignStyle.PROPERTY_NAME)});
 			printStyleTitle(titleLabelText, defaultStyle, parent);
 			printStyleAttribute(parent, defaultStyle, null, AttributeParent.STYLE); //$NON-NLS-1$ 
