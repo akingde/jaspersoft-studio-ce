@@ -25,15 +25,22 @@ import com.jaspersoft.studio.utils.Misc;
  * 
  */
 public abstract class ADescriptor {
-	protected ItemPropertyDescriptor<?>[] itemProperties;
+	protected ItemPropertyDescription<?>[] itemProperties;
 
 	/**
 	 * @return the itemProperties
 	 */
-	public ItemPropertyDescriptor<?>[] getItemPropertyDescriptors() {
+	public ItemPropertyDescription<?>[] getItemPropertyDescriptors() {
 		if (itemProperties == null)
 			initItemPropertyDescriptors();
 		return itemProperties;
+	}
+
+	public ItemPropertyDescription<?> getDescriptor(String id) {
+		for (ItemPropertyDescription<?> ip : getItemPropertyDescriptors())
+			if (ip.getName().equals(id))
+				return ip;
+		return null;
 	}
 
 	public void setupDefaultValue(Item selected, StandardItemProperty newitem) {

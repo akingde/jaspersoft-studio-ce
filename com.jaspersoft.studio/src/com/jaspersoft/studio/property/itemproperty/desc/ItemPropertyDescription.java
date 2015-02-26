@@ -1,35 +1,43 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.property.itemproperty.desc;
 
-public class ItemPropertyDescriptor<T> {
+public class ItemPropertyDescription<T> {
 	private String name;
+	private String label;
 	private String description;
 	private boolean mandatory;
 	private T defaultValue;
 
-	public ItemPropertyDescriptor(String name, String description,
-			boolean mandatory) {
-		this(name, description, mandatory, null);
+	public ItemPropertyDescription(String name, String description, boolean mandatory) {
+		this(name, name, description, mandatory, null);
 	}
 
-	public ItemPropertyDescriptor(String name, String description,
-			boolean mandatory, T defaultValue) {
+	public ItemPropertyDescription(String name, String label, String description, boolean mandatory) {
+		this(name, label, description, mandatory, null);
+	}
+
+	public ItemPropertyDescription(String name, String description, boolean mandatory, T defaultValue) {
+		this(name, name, description, mandatory, defaultValue);
+	}
+
+	public ItemPropertyDescription(String name, String label, String description, boolean mandatory, T defaultValue) {
 		super();
 		this.name = name;
+		this.label = label;
 		this.description = description;
 		this.mandatory = mandatory;
 		this.defaultValue = defaultValue;
+	}
+
+	public String getLabel() {
+		return label;
 	}
 
 	public String getName() {

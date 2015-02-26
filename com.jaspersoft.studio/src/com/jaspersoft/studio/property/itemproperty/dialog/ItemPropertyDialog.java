@@ -39,7 +39,7 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.property.infoList.ElementDescription;
 import com.jaspersoft.studio.property.infoList.SelectableComposite;
 import com.jaspersoft.studio.property.itemproperty.desc.ADescriptor;
-import com.jaspersoft.studio.property.itemproperty.desc.ItemPropertyDescriptor;
+import com.jaspersoft.studio.property.itemproperty.desc.ItemPropertyDescription;
 import com.jaspersoft.studio.swt.events.ExpressionModifiedEvent;
 import com.jaspersoft.studio.swt.events.ExpressionModifiedListener;
 import com.jaspersoft.studio.swt.widgets.WTextExpression;
@@ -132,7 +132,7 @@ public class ItemPropertyDialog extends ATitledDialog implements IExpressionCont
 
 	private List<ElementDescription> getPropertiesInformation() {
 		List<ElementDescription> descriptions = new ArrayList<ElementDescription>();
-		for (ItemPropertyDescriptor<?> ipd : descriptor.getItemPropertyDescriptors())
+		for (ItemPropertyDescription<?> ipd : descriptor.getItemPropertyDescriptors())
 			descriptions.add(new ElementDescription(ipd.getName(), ipd.getDescription(), false));
 		return descriptions;
 	}
@@ -157,7 +157,7 @@ public class ItemPropertyDialog extends ATitledDialog implements IExpressionCont
 			propertyValue.setEnabled(false);
 			((GridData) propertyValue.getLayoutData()).exclude = true;
 		}
-		for (ItemPropertyDescriptor<?> ipd : descriptor.getItemPropertyDescriptors()) {
+		for (ItemPropertyDescription<?> ipd : descriptor.getItemPropertyDescriptors()) {
 			if (ipd.getName().equals(itemProperty.getName()) && ipd.isMandatory()) {
 				propertyName.setEnabled(false);
 				break;
