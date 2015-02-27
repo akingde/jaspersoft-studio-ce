@@ -45,7 +45,7 @@ import com.jaspersoft.studio.server.model.server.MServerProfile;
 
 /**
  * @author Veaceslav Chicu (schicu@users.sourceforge.net)
- *
+ * 
  */
 public class RepositoryComposite extends Composite {
 
@@ -59,7 +59,7 @@ public class RepositoryComposite extends Composite {
 		createWidget();
 	}
 
-	private void createWidget() {
+	protected void createWidget() {
 		GridLayout layout = new GridLayout();
 		layout.marginHeight = 0;
 		layout.marginWidth = 0;
@@ -128,8 +128,14 @@ public class RepositoryComposite extends Composite {
 
 			}
 		});
+		UIUtils.getDisplay().asyncExec(new Runnable() {
 
-		createReadRepositoryJob();
+			@Override
+			public void run() {
+				createReadRepositoryJob();
+			}
+		});
+
 	}
 
 	protected void createReadRepositoryJob() {

@@ -369,11 +369,15 @@ public class DatasourceSelectionComposite extends Composite {
 				for (int i = 0; i < excludeTypes.length; i++)
 					exclude[i] = WsTypes.INST().toRestType(excludeTypes[i]);
 			}
-
-			ResourceDescriptor rd = FindResourceJob.doFindResource(msp,
-					dsArray, exclude);
-			if (rd != null)
-				setResource(res, rd, true);
+			btnSelectDSFromRepo.setEnabled(false);
+			try {
+				ResourceDescriptor rd = FindResourceJob.doFindResource(msp,
+						dsArray, exclude);
+				if (rd != null)
+					setResource(res, rd, true);
+			} finally {
+				btnSelectDSFromRepo.setEnabled(true);
+			}
 		} else {
 			RepositoryDialog rd = new RepositoryDialog(UIUtils.getShell(), msp) {
 				@Override
