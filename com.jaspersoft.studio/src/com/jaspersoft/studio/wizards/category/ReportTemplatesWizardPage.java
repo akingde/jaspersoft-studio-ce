@@ -62,6 +62,7 @@ import com.jaspersoft.studio.wizards.BuiltInCategories;
 import com.jaspersoft.studio.wizards.ContextHelpIDs;
 import com.jaspersoft.studio.wizards.JSSWizardPage;
 import com.jaspersoft.templates.TemplateBundle;
+import com.jaspersoft.templates.ValidatedTemplateBundle;
 import com.jaspersoft.templates.WizardTemplateBundle;
 
 /**
@@ -74,6 +75,8 @@ import com.jaspersoft.templates.WizardTemplateBundle;
  */
 public class ReportTemplatesWizardPage extends JSSWizardPage {
 
+	protected static final String TEMPLATE_KEY = "template";
+	
 	private static final int GALLERY_HEIGHT = 100;
 
 	private static final int GALLERY_WIDTH = 100;
@@ -205,6 +208,7 @@ public class ReportTemplatesWizardPage extends JSSWizardPage {
 			setPageComplete(validatePage());
 		}
 		storeSettings();
+		setPageComplete(validatePage());
 		zoomModified();
 	}
 
@@ -257,9 +261,9 @@ public class ReportTemplatesWizardPage extends JSSWizardPage {
 		List<TemplateBundle> bundles = StudioTemplateManager.getInstance().getTemplateBundles();
 		for (TemplateBundle b : bundles) {
 			if (b instanceof WizardTemplateBundle) {
-				// itemImage is already cached in the ResourceManager by the class JrxmlTemplateBundle
+				//use the ResourceManager cache for the images
 				WizardTemplateBundle wizardBundle = (WizardTemplateBundle) b;
-				Image itemImage = wizardBundle.getIcon();
+				Image itemImage = ResourceManager.getImage(wizardBundle.getIcon());
 
 				if (itemImage != null) {
 					// Add viewer required effects to the images shown...
@@ -309,12 +313,12 @@ public class ReportTemplatesWizardPage extends JSSWizardPage {
 										HashSet<String> bundleCategories = categoryCache.get(b);
 										if (categoryName.equals(universalCategory) || bundleCategories.contains(categoryName)) {
 											GalleryItem item = new GalleryItem(itemGroup, SWT.NONE);
-											item.setData("template", b); //$NON-NLS-1$
+											item.setData(TEMPLATE_KEY, b);
 
 											if (b instanceof WizardTemplateBundle) {
 												//itemImage is already cached in the ResourceManager by the class JrxmlTemplateBundle
 												WizardTemplateBundle jrxmlBundle = (WizardTemplateBundle)b;
-												Image itemImage = jrxmlBundle.getIcon();
+												Image itemImage = ResourceManager.getImage(jrxmlBundle.getIcon());
 
 												if (itemImage != null) {
 													// Add viewer required effects to the images shown...
@@ -552,13 +556,35 @@ public class ReportTemplatesWizardPage extends JSSWizardPage {
 	}
 
 	/**
-	 * We don't want to proceed until a template has been selected... In this method we check if the user has made her
-	 * selection
+	 * We don't want to proceed until a template has been selected. In this method we check if the user has made her
+	 * selection. Also if the template support the validation then the method to validate the configuration is called
+	 * and the user can proceed only if the validation doesn't return any error
 	 */
 	public boolean validatePage() {
 		Gallery gal = (Gallery) layout.topControl;
-		if (gal.getSelectionCount() == 0)
+		if (gal.getSelectionCount() == 0){
 			return false;
+		} else {
+			GalleryItem selectedItem = gal.getSelection()[0];
+			TemplateBundle selectedBundle = (TemplateBundle)selectedItem.getData(TEMPLATE_KEY);
+			if (selectedBundle instanceof ValidatedTemplateBundle){
+				ValidatedTemplateBundle validatedBundle = (ValidatedTemplateBundle)selectedBundle;
+				List<String> errors = validatedBundle.validateConfiguration();
+				if (errors != null && !errors.isEmpty()){
+					String errorMessage = "";
+					String last = errors.get(errors.size()-1);
+					for(String error : errors){
+						errorMessage+=error;
+						if (error != last){
+							errorMessage+="\n";
+						}
+					}
+					setErrorMessage(errorMessage);
+					return false;
+				}
+			}
+		}
+		setErrorMessage(null);
 		return true;
 	}
 
@@ -576,10 +602,10 @@ public class ReportTemplatesWizardPage extends JSSWizardPage {
 
 		if (selection != null && selection.length > 0) {
 
-			selectedTemplate = (TemplateBundle) selection[0].getData("template"); //$NON-NLS-1$
-			getSettings().put("template", selectedTemplate); //$NON-NLS-1$
+			selectedTemplate = (TemplateBundle) selection[0].getData(TEMPLATE_KEY); //$NON-NLS-1$
+			getSettings().put(TEMPLATE_KEY, selectedTemplate);
 		} else {
-			getSettings().remove("template"); //$NON-NLS-1$
+			getSettings().remove(TEMPLATE_KEY); 
 			selectedTemplate = null;
 		}
 	}

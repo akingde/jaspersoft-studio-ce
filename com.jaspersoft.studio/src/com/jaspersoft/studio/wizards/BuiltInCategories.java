@@ -35,6 +35,11 @@ public class BuiltInCategories {
 	public static final String NAME_KEY = "template.name";
 	
 	/**
+	 * Key of the minimum required JR version, stored in the template properties
+	 */
+	public static final String REQUIRED_JR_VERSION = "jr.required.version";
+	
+	/**
 	 * Key of the category values stored in the template properties
 	 */
 	public static final String CATEGORY_KEY = "template.category";

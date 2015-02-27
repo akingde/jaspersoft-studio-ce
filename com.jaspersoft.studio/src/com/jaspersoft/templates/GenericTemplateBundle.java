@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -22,10 +23,11 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.wb.swt.ResourceManager;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
+import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.preferences.StudioPreferencePage;
 import com.jaspersoft.studio.templates.DefaultTemplateProvider;
 import com.jaspersoft.studio.templates.IconedTemplateBundle;
 import com.jaspersoft.studio.templates.engine.DefaultTemplateEngine;
@@ -43,11 +45,11 @@ import com.jaspersoft.studio.wizards.BuiltInCategories;
  * @author Giulio Toffoli & Orlandin Marco
  * 
  */
-public class GenericTemplateBundle implements IconedTemplateBundle {
+public class GenericTemplateBundle implements IconedTemplateBundle, ValidatedTemplateBundle {
 
-	public static final String MAIN_REPORT = "MAIN_REPORT";
+	public static final String MAIN_REPORT = "MAIN_REPORT"; //$NON-NLS-1$
 
-	public static final String DEFAULT_ICON = "blank_a4.png";
+	public static final String DEFAULT_ICON = "blank_a4.png"; //$NON-NLS-1$
 
 	private String label;
 
@@ -91,7 +93,7 @@ public class GenericTemplateBundle implements IconedTemplateBundle {
 	/**
 	 * The icon for the report inside JSS
 	 */
-	private Image icon = null;
+	private ImageDescriptor icon = null;
 
 	/**
 	 * The current context
@@ -128,9 +130,9 @@ public class GenericTemplateBundle implements IconedTemplateBundle {
 		this.jrContext = jrContext;
 		this.templateURL = url;
 		this.isExternal = isExternal;
-		String urlPath = URLDecoder.decode(templateURL.toExternalForm(), "utf-8");
+		String urlPath = URLDecoder.decode(templateURL.toExternalForm(), "utf-8"); //$NON-NLS-1$
 		if (urlPath.endsWith(FileExtension.PointJRXML)) {
-			String propertiesPath = urlPath.substring(0, urlPath.length() - 6).concat("_descriptor.properties");
+			String propertiesPath = urlPath.substring(0, urlPath.length() - 6).concat("_descriptor.properties"); //$NON-NLS-1$
 
 			URL propertiesFile = new URL(propertiesPath);
 			if (!isExternal() || (new File(propertiesFile.getFile())).exists()) {
@@ -147,9 +149,9 @@ public class GenericTemplateBundle implements IconedTemplateBundle {
 			// read information from the jasper design object...
 			readProperties();
 			// locate the template thumbnail by replacing the .jrxml with png....
-			String[] imageExtensions = new String[] { ".png", ".gif", ".jpg" };
+			String[] imageExtensions = new String[] { ".png", ".gif", ".jpg" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
-			String baseImageUrl = URLDecoder.decode(templateURL.toExternalForm(), "utf-8");
+			String baseImageUrl = URLDecoder.decode(templateURL.toExternalForm(), "utf-8"); //$NON-NLS-1$
 			// remove the .jrxml...
 			baseImageUrl = baseImageUrl.substring(0, baseImageUrl.length() - FileExtension.PointJRXML.length());
 			for (String extension : imageExtensions) {
@@ -164,8 +166,7 @@ public class GenericTemplateBundle implements IconedTemplateBundle {
 			}
 			if (getIcon() == null) {
 				// Use a default icon
-				setIcon(ResourceManager.getImage(JaspersoftStudioPlugin.getInstance().getImageDescriptor(
-						"templates/blank_a4.png")));
+				setIcon(JaspersoftStudioPlugin.getInstance().getImageDescriptor("templates/blank_a4.png")); //$NON-NLS-1$
 			}
 		}
 
@@ -233,7 +234,7 @@ public class GenericTemplateBundle implements IconedTemplateBundle {
 		if (resourceNames == null) {
 			resourceNames = new ArrayList<String>();
 			List<JRDesignElement> list = ModelUtils.getAllGElements(getJasperDesign());
-			System.out.println("Elements found: " + list);
+			System.out.println("Elements found: " + list); //$NON-NLS-1$
 			for (JRDesignElement el : list) {
 				// Check for images...
 				if (el instanceof JRImage) {
@@ -247,8 +248,8 @@ public class GenericTemplateBundle implements IconedTemplateBundle {
 				if (el instanceof JRSubreport) {
 					JRSubreport sr = (JRSubreport) el;
 					String res = evalResourceName(sr.getExpression());
-					if (res.endsWith(".jasper")) {
-						res = res.substring(0, res.length() - ".jasper".length()) + ".jrxml";
+					if (res.endsWith(".jasper")) { //$NON-NLS-1$
+						res = res.substring(0, res.length() - ".jasper".length()) + ".jrxml"; //$NON-NLS-1$ //$NON-NLS-2$
 						resourceNames.add(res);
 					}
 				}
@@ -338,17 +339,17 @@ public class GenericTemplateBundle implements IconedTemplateBundle {
 	 *          the url of the icon
 	 * @return the icon or null if it can't be found
 	 */
-	private Image getIconFromUrl(URL iconURL) {
+	private ImageDescriptor getIconFromUrl(URL iconURL) {
 		ImageDescriptor descriptor = ImageDescriptor.createFromURL(iconURL);
 		if (descriptor != null && descriptor.getImageData() != null)
-			return ResourceManager.getImage(descriptor);
+			return descriptor;
 		return null;
 	}
 
 	/**
 	 * @return the templateIcon
 	 */
-	public Image getIcon() {
+	public ImageDescriptor getIcon() {
 		return icon;
 	}
 
@@ -356,7 +357,7 @@ public class GenericTemplateBundle implements IconedTemplateBundle {
 	 * @param templateIcon
 	 *          the templateIcon to set
 	 */
-	public void setIcon(Image templateIcon) {
+	public void setIcon(ImageDescriptor templateIcon) {
 		this.icon = templateIcon;
 	}
 
@@ -388,7 +389,6 @@ public class GenericTemplateBundle implements IconedTemplateBundle {
 
 	/**
 	 * Introspect the properties file or jasperdesign to set template label and engine informations
-	 * 
 	 */
 	protected void readProperties() {
 		String name = null;
@@ -413,4 +413,79 @@ public class GenericTemplateBundle implements IconedTemplateBundle {
 		return isExternal;
 	}
 
+	/**
+	 * Validate the template using the version property. If a template specify a property with the key
+	 * BuiltInCategories.REQUIRED_JR_VERSION and with value the minimum required version then that version
+	 * is compared with the current JSS compatibility version and if the current is equal or greater it return
+	 * null, otherwise it return an error message. If the bundle doesn't specify the property then the version
+	 * is simply not checked and the template will be assumed valid for the current configuration
+	 */
+	@Override
+	public List<String> validateConfiguration() {
+		Object requestedVersion = getProperty(BuiltInCategories.REQUIRED_JR_VERSION);
+		if (requestedVersion != null){
+			String currentVersion = getCurrentVersion();
+			boolean validVersion = versionCompare(currentVersion, (String)requestedVersion)>=0;
+			if (!validVersion){
+				List<String> errors = new ArrayList<String>();
+				errors.add(MessageFormat.format(Messages.GenericTemplateBundle_invalidVersionMessage, new Object[]{requestedVersion, currentVersion}));
+				return errors;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Return the version of the current JSS configuration. If the version is last
+	 * it check for the last version from the JR plugin. 
+	 * 
+	 * @return a version number like x.y.z
+	 */
+	private String getCurrentVersion() {
+		// assume last version as safe fall-back
+		String ver = JaspersoftStudioPlugin.getInstance().getPreferenceStore().getString(StudioPreferencePage.JSS_COMPATIBILITY_VERSION);
+		if (JRXmlWriterHelper.LAST_VERSION.equals(ver)) {
+			return net.sf.jasperreports.engine.JasperCompileManager.class.getPackage().getImplementationVersion();
+		} else {
+			return ver;
+		}
+	}
+	
+	/**
+	 * Compares two version strings. 
+	 * 
+	 * Use this instead of String.compareTo() for a non-lexicographical 
+	 * comparison that works for version strings. e.g. "1.10".compareTo("1.6").
+	 * 
+	 * @note It does not work if "1.10" is supposed to be equal to "1.10.0".
+	 * 
+	 * @param str1 a string of ordinal numbers separated by decimal points. 
+	 * @param str2 a string of ordinal numbers separated by decimal points.
+	 * @return The result is a negative integer if str1 is _numerically_ less than str2. 
+	 *         The result is a positive integer if str1 is _numerically_ greater than str2. 
+	 *         The result is zero if the strings are _numerically_ equal.
+	 */
+	private Integer versionCompare(String str1, String str2)
+	{
+	    String[] vals1 = str1.split("\\."); //$NON-NLS-1$
+	    String[] vals2 = str2.split("\\."); //$NON-NLS-1$
+	    int i = 0;
+	    // set index to first non-equal ordinal or length of shortest version string
+	    while (i < vals1.length && i < vals2.length && vals1[i].equals(vals2[i])) 
+	    {
+	      i++;
+	    }
+	    // compare first non-equal ordinal number
+	    if (i < vals1.length && i < vals2.length) 
+	    {
+	        int diff = Integer.valueOf(vals1[i]).compareTo(Integer.valueOf(vals2[i]));
+	        return Integer.signum(diff);
+	    }
+	    // the strings are equal or one string is a substring of the other
+	    // e.g. "1.2.3" = "1.2.3" or "1.2.3" < "1.2.3.4"
+	    else
+	    {
+	        return Integer.signum(vals1.length - vals2.length);
+	    }
+	}
 }
