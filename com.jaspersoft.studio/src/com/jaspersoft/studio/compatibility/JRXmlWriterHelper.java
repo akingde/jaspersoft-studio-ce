@@ -33,6 +33,7 @@ import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.compatibility.dialog.VersionDialog;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.StudioPreferencePage;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
@@ -47,7 +48,7 @@ public class JRXmlWriterHelper {
 
 	static {
 		for (Field f : JRConstants.class.getFields()) {
-			if (f.getName().startsWith("VERSION_"))
+			if (f.getName().startsWith(Messages.JRXmlWriterHelper_0))
 				try {
 					writers.add((String) f.get(null));
 				} catch (IllegalArgumentException e) {
@@ -66,10 +67,12 @@ public class JRXmlWriterHelper {
 		Collections.sort(sl);
 		Collections.reverse(sl);
 		String[][] r = new String[sl.size() + 1][2];
-		r[0] = new String[] { "Last Version" + " (" + getInstalledJasperReportsVersion() + ")", "last" };
+		r[0] = new String[] { Messages.JRXmlWriterHelper_1, "last" }; //$NON-NLS-2$
 		int i = 1;
 		for (String key : sl) {
-			r[i][0] = "JasperReports " + key.replace('_', '.');
+			r[i][0] = "JasperReports " + key.replace('_', '.'); //$NON-NLS-1$
+			if (i == 1)
+				r[i][0] += Messages.JRXmlWriterHelper_4;
 			r[i][1] = key;
 			i++;
 		}
@@ -87,7 +90,7 @@ public class JRXmlWriterHelper {
 	}
 
 	public static String writeReport(JasperReportsContext jrContext, JRReport report, String version) throws Exception {
-		return writeReport(jrContext, report, fixencoding("UTF-8"), version);
+		return writeReport(jrContext, report, fixencoding("UTF-8"), version); //$NON-NLS-1$
 	}
 
 	public static String writeReport(JasperReportsContext jrContext, JRReport report, String encoding, String version)
@@ -111,11 +114,11 @@ public class JRXmlWriterHelper {
 			xml = new JRXmlWriter(jrContext).write(report, encoding);
 			// request Bug 37455 - [Case #48613] Simple jrxml timestamp on Save or Save As
 			// + community bug #3936 over-aggressive time stamp
-			String timestamp = "";
+			String timestamp = ""; //$NON-NLS-1$
 			if (jrContext instanceof JasperReportsConfiguration) {
 				if (((JasperReportsConfiguration) jrContext)
 						.getPropertyBoolean(StudioPreferencePage.JSS_TIMESTAMP_ONSAVE, true)) {
-					timestamp = "<!-- " + DateFormatUtils.ISO_DATETIME_FORMAT.format(new Date()) + " -->\r\n";
+					timestamp = "<!-- " + DateFormatUtils.ISO_DATETIME_FORMAT.format(new Date()) + " -->\r\n"; //$NON-NLS-1$ //$NON-NLS-2$
 				}
 			}
 			// Replace with a more meaningful JR version
@@ -124,10 +127,10 @@ public class JRXmlWriterHelper {
 			}
 			// Get JSS bundle version
 			String jssPluginVersion = JaspersoftStudioPlugin.getInstance().getBundle().getVersion().toString();
-			String jrVersionTxt = " using JasperReports Library version " + version + " ";
+			String jrVersionTxt = Messages.JRXmlWriterHelper_9 + version + " "; //$NON-NLS-2$
 			xml = xml
 					.replaceFirst(
-							"<jasperReport ", "<!-- Created with Jaspersoft Studio version " + jssPluginVersion + jrVersionTxt + " -->\r\n" + timestamp + "<jasperReport "); //$NON-NLS-1$ //$NON-NLS-2$
+							"<jasperReport ", "<!-- Created with Jaspersoft Studio version " + jssPluginVersion + jrVersionTxt + " -->\r\n" + timestamp + "<jasperReport "); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		} finally {
 			if (disposeContext)
 				((JasperReportsConfiguration) jrContext).dispose();
@@ -136,7 +139,7 @@ public class JRXmlWriterHelper {
 	}
 
 	public static String fixencoding(String encoding) {
-		return "UTF-8";
+		return "UTF-8"; //$NON-NLS-1$
 		// String tmp = EncodingMap.getJava2IANAMapping(encoding);
 		// if (tmp != null)
 		// return tmp;
@@ -176,7 +179,7 @@ public class JRXmlWriterHelper {
 		return version;
 	}
 
-	public static final String LAST_VERSION = "last";
+	public static final String LAST_VERSION = "last"; //$NON-NLS-1$
 
 	public static String getInstalledJasperReportsVersion() {
 		try {

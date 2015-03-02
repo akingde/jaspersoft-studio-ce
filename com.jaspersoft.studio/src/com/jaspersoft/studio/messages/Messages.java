@@ -884,6 +884,10 @@ public class Messages extends NLS {
 	public static String JRPropertyPage_description;
 	public static String JRPropertyPage_value;
 	public static String JRQueryPage_description;
+	public static String JRXmlWriterHelper_0;
+	public static String JRXmlWriterHelper_1;
+	public static String JRXmlWriterHelper_4;
+	public static String JRXmlWriterHelper_9;
 	public static String JrxmlEditor_design;
 	public static String JrxmlEditor_preview;
 	public static String JrxmlEditorContributor_grid_size;
