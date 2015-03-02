@@ -286,7 +286,7 @@ public class ReportControler {
 			public void run() {
 				c.addMessage(Messages.ReportControler_msg_reportfinished);
 				pcontainer.setNotRunning(true);
-				boolean notprmfiled = !prmInput.checkFieldsFilled();
+				boolean notprmfiled = prmInput != null && !prmInput.checkFieldsFilled();
 				if (notprmfiled) {
 					c.addMessage(Messages.ReportControler_msg_fillparameters);
 					VSimpleErrorPreview errorView = showErrorView(pcontainer);
@@ -327,9 +327,12 @@ public class ReportControler {
 					if (jasperReport == null)
 						jasperReport = compileJasperDesign(file, jd, monitor);
 					if (jasperReport != null) {
- 						ExpressionUtil.initBuiltInParameters(jrContext, jasperReport);
-						if (viewmap != null)
-							fillForms();
+						if (pcontainer.isRunDirty()) {
+							ExpressionUtil.initBuiltInParameters(jrContext, jasperReport);
+							if (viewmap != null)
+								fillForms();
+						}
+						pcontainer.setRunDirty(false);
 						c.startMessage(Messages.PreviewEditor_starting);
 						if (!prmInput.checkFieldsFilled())
 							return Status.CANCEL_STATUS;

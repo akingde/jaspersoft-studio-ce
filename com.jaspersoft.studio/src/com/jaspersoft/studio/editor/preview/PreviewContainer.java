@@ -1,17 +1,15 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.editor.preview;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -23,6 +21,7 @@ import net.sf.jasperreports.eclipse.viewer.action.ZoomActualSizeAction;
 import net.sf.jasperreports.eclipse.viewer.action.ZoomInAction;
 import net.sf.jasperreports.eclipse.viewer.action.ZoomOutAction;
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
@@ -393,7 +392,6 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 			getLeftContainer().setEnabled(true);
 			leftToolbar.setEnabled(true);
 		}
-		isRunDirty = false;
 	}
 
 	public void showParameters(boolean showprm) {
@@ -406,17 +404,24 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 	private ReportControler reportControler;
 
 	public ReportControler getReportControler() {
-		if (reportControler == null) {
+		if (reportControler == null)
 			reportControler = new ReportControler(this, jrContext);
-		}
 		return reportControler;
 	}
 
+	protected boolean isParameterDirty = true;
 	protected boolean isRunDirty = true;
+
+	public boolean isRunDirty() {
+		return isParameterDirty;
+	}
 
 	public void setRunDirty(boolean isRunDirty) {
 		this.isRunDirty = isRunDirty;
+		isParameterDirty = isRunDirty;
 	}
+
+	private PropertyChangeListener propChangeListener;
 
 	public void setJasperDesign(final JasperReportsConfiguration jConfig) {
 		UIUtils.getDisplay().asyncExec(new Runnable() {
@@ -429,7 +434,17 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 
 				if (isRunDirty || getJasperPrint() == null)
 					runReport(dataAdapterDesc);
-				isRunDirty = false;
+				propChangeListener = new PropertyChangeListener() {
+
+					@Override
+					public void propertyChange(PropertyChangeEvent evt) {
+						if (evt.getPropertyName().equals(JRDesignDataset.PROPERTY_PARAMETERS)
+								|| evt.getPropertyName().equals(JRDesignDataset.PROPERTY_SCRIPTLETS))
+							isParameterDirty = true;
+					}
+				};
+				jrContext.getJasperDesign().getMainDesignDataset().getEventSupport()
+						.addPropertyChangeListener(propChangeListener);
 			}
 		});
 	}
