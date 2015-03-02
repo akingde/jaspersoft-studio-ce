@@ -246,7 +246,7 @@ public final class ExpressionContextUtils {
 				locale = (Locale) obj;
 			}
 			try {
-				loadedBundle = JRResourcesUtil.loadResourceBundle(baseName, locale, jconfig.getClassLoader());
+				loadedBundle = JRResourcesUtil.loadResourceBundle(jconfig, baseName, locale);
 			}
 			catch (MissingResourceException e) {
 				JaspersoftStudioPlugin.getInstance().logError(

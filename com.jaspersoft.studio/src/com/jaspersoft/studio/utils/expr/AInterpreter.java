@@ -212,7 +212,7 @@ public abstract class AInterpreter {
 
 	protected ResourceBundle getResourceBundle() {
 		if (rb == null)
-			rb = JRResourcesUtil.loadResourceBundle(getBundleName(), getLocale(), jConfig.getClassLoader());
+			rb = JRResourcesUtil.loadResourceBundle(jConfig, getBundleName(), getLocale());
 		return rb;
 	}
 
