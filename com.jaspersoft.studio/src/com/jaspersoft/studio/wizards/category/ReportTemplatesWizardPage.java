@@ -300,7 +300,7 @@ public class ReportTemplatesWizardPage extends JSSWizardPage {
 			@Override
 			public void run() {
 				try {
-					getContainer().run(true, true, new IRunnableWithProgress() {
+					getContainer().run(false, false, new IRunnableWithProgress() {
 
 						@Override
 						public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
@@ -357,6 +357,7 @@ public class ReportTemplatesWizardPage extends JSSWizardPage {
 							});
 						}
 					});
+					getContainer().updateButtons();
 				} catch (InvocationTargetException e) {
 					UIUtils.showError(e);
 				} catch (InterruptedException e) {
