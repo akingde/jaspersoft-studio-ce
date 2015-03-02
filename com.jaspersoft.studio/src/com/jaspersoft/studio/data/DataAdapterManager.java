@@ -18,6 +18,7 @@ import java.util.Map;
 
 import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.eclipse.wizard.project.ProjectUtil;
+import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.util.CastorUtil;
 
 import org.eclipse.core.resources.IFile;
@@ -159,8 +160,8 @@ public class DataAdapterManager {
 	// return listOfDataAdapters;
 	// }
 
-	public static String toDataAdapterFile(DataAdapterDescriptor dataAdapter) {
-		return "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\r\n" + dataAdapter.toXml();
+	public static String toDataAdapterFile(DataAdapterDescriptor dataAdapter, JasperReportsContext jrContext) {
+		return "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\r\n" + dataAdapter.toXml(jrContext);
 	}
 
 	/**
@@ -171,12 +172,12 @@ public class DataAdapterManager {
 	 * @param dataAdapter
 	 * @return
 	 */
-	public static DataAdapterDescriptor cloneDataAdapter(DataAdapterDescriptor src) {
+	public static DataAdapterDescriptor cloneDataAdapter(DataAdapterDescriptor src, JasperReportsContext jrContext) {
 		DataAdapter srcDataAdapter = src.getDataAdapter();
 		DataAdapterFactory factory = findFactoryByDataAdapterClass(srcDataAdapter.getClass().getName());
 		DataAdapterDescriptor copy = factory.createDataAdapter();
 		copy.setName(src.name);
-		srcDataAdapter = (DataAdapter) CastorUtil.read(new ByteArrayInputStream(src.toXml().getBytes()),
+		srcDataAdapter = (DataAdapter) CastorUtil.read(new ByteArrayInputStream(src.toXml(jrContext).getBytes()),
 				srcDataAdapter.getClass());
 		copy.setDataAdapter(srcDataAdapter);
 		return copy;

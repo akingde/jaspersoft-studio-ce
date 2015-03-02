@@ -146,7 +146,8 @@ public class PreferencesDataAdapterStorage extends ADataAdapterStorage {
 		try {
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder builder = factory.newDocumentBuilder();
-			Document doc = builder.parse(new InputSource(new StringReader(adapter.toXml())));
+			Document doc = builder.parse(new InputSource(new StringReader(adapter.toXml(JasperReportsConfiguration
+					.getDefaultInstance()))));
 			// Write the parsed document to an xml file
 			TransformerFactory transformerFactory = TransformerFactory.newInstance();
 			Transformer transformer = transformerFactory.newTransformer();

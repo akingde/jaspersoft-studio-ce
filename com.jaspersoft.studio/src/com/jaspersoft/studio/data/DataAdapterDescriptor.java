@@ -12,6 +12,7 @@ import java.io.Serializable;
 
 import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.util.CastorUtil;
 
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -20,7 +21,6 @@ import org.eclipse.swt.graphics.Image;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.ui.DefaultDataAdapterEditor;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
-import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /*
  * 
@@ -92,8 +92,8 @@ public abstract class DataAdapterDescriptor implements IIconDescriptor, Serializ
 	 * It just write a portion of XML to persist the data adapter it is used by the DataAdapterManager and can be used to
 	 * export this data adapter too. FIXME consider remove
 	 */
-	public final String toXml() {
-		return CastorUtil.getInstance(JasperReportsConfiguration.getDefaultInstance()).writeToString(getDataAdapter());
+	public final String toXml(JasperReportsContext jrContext) {
+		return CastorUtil.getInstance(jrContext).writeToString(getDataAdapter());
 	}
 
 	@Override

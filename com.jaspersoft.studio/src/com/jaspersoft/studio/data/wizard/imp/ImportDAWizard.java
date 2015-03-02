@@ -25,6 +25,7 @@ import com.jaspersoft.studio.data.DataAdapterManager;
 import com.jaspersoft.studio.data.MDataAdapters;
 import com.jaspersoft.studio.data.storage.ADataAdapterStorage;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class ImportDAWizard extends Wizard implements IImportWizard {
 	private ImportDAPage page0;
@@ -64,7 +65,8 @@ public class ImportDAWizard extends Wizard implements IImportWizard {
 						monitor.subTask(da.getName());
 						if (overwrite)
 							storage.removeDataAdapter(da);
-						DataAdapterDescriptor cloneDataAdapter = DataAdapterManager.cloneDataAdapter(da);
+						DataAdapterDescriptor cloneDataAdapter = DataAdapterManager.cloneDataAdapter(da,
+								JasperReportsConfiguration.getDefaultInstance());
 						cloneDataAdapter.setName(null);
 						storage.addDataAdapter(cloneDataAdapter);
 						monitor.internalWorked(1);

@@ -52,6 +52,7 @@ import com.jaspersoft.studio.data.DefaultDataAdapterDescriptor;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.XMLUtils;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class FileDataAdapterStorage extends ADataAdapterStorage {
 	private final class ResourceVisitor implements IResourceProxyVisitor {
@@ -172,8 +173,8 @@ public class FileDataAdapterStorage extends ADataAdapterStorage {
 	public boolean addDataAdapter(DataAdapterDescriptor adapter) {
 		boolean result = super.addDataAdapter(adapter);
 		if (result) {
-			String xml = DataAdapterManager.toDataAdapterFile(adapter);
 			IFile file = project.getFile(adapter.getName());
+			String xml = DataAdapterManager.toDataAdapterFile(adapter, JasperReportsConfiguration.getDefaultJRConfig(file));
 			try {
 				if (file.exists())
 					file.setContents(new ByteArrayInputStream(xml.getBytes()), true, true, new NullProgressMonitor());

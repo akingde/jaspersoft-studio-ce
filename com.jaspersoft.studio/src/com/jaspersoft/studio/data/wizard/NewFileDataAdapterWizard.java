@@ -221,7 +221,7 @@ public class NewFileDataAdapterWizard extends AbstractDataAdapterWizard implemen
 		super.createPageControls(pageContainer);
 
 		if (this.dataAdapter != null) {
-			DataAdapterDescriptor editedDataAdapter = DataAdapterManager.cloneDataAdapter(this.dataAdapter);
+			DataAdapterDescriptor editedDataAdapter = DataAdapterManager.cloneDataAdapter(this.dataAdapter, getConfig());
 			dataAdapterEditorPage.setDataAdapter(editedDataAdapter);
 		}
 	}
@@ -288,7 +288,7 @@ public class NewFileDataAdapterWizard extends AbstractDataAdapterWizard implemen
 
 		InputStream in = null;
 		try {
-			String xml = DataAdapterManager.toDataAdapterFile(dataAdapter);
+			String xml = DataAdapterManager.toDataAdapterFile(dataAdapter, getConfig());
 			in = new ByteArrayInputStream(xml.getBytes());
 			if (file.exists())
 				file.setContents(in, true, true, monitor);

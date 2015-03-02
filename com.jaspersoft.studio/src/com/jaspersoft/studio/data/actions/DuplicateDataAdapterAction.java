@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.data.actions;
 
@@ -30,6 +26,7 @@ import com.jaspersoft.studio.data.MDataAdapters;
 import com.jaspersoft.studio.data.storage.ADataAdapterStorage;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class DuplicateDataAdapterAction extends Action {
 	public static final String COPY_OF = Messages.DuplicateDataAdapterAction_newAdapterPrefix;
@@ -66,7 +63,8 @@ public class DuplicateDataAdapterAction extends Action {
 				MDataAdapter mDataAdapter = (MDataAdapter) obj;
 				mdas = (MDataAdapters) mDataAdapter.getParent();
 				ADataAdapterStorage storage = ((MDataAdapters) mDataAdapter.getParent()).getValue();
-				DataAdapterDescriptor copyDataAdapter = DataAdapterManager.cloneDataAdapter(mDataAdapter.getValue());
+				DataAdapterDescriptor copyDataAdapter = DataAdapterManager.cloneDataAdapter(mDataAdapter.getValue(),
+						JasperReportsConfiguration.getDefaultInstance());
 				String name = COPY_OF + copyDataAdapter.getName();
 				for (int j = 1; j < 1000; j++) {
 					if (storage.isDataAdapterNameValid(name))

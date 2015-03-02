@@ -32,6 +32,7 @@ import com.jaspersoft.studio.data.DataAdapterEditorPart;
 import com.jaspersoft.studio.data.DataAdapterManager;
 import com.jaspersoft.studio.data.MDataAdapter;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class ExportDataAdapterAction extends Action {
 	public static final String ID = "exportDataAdapteraction"; //$NON-NLS-1$
@@ -84,7 +85,7 @@ public class ExportDataAdapterAction extends Action {
 					public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 						try {
 							DataAdapterDescriptor m = ((MDataAdapter) obj).getValue();
-							String xml = DataAdapterManager.toDataAdapterFile(m);
+							String xml = DataAdapterManager.toDataAdapterFile(m, JasperReportsConfiguration.getDefaultJRConfig(file));
 							if (file.exists())
 								file.setContents(new ByteArrayInputStream(xml.getBytes("UTF-8")), true, true, monitor); //$NON-NLS-1$
 							else

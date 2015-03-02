@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.dnd;
 
@@ -34,38 +30,38 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.DataAdapterManager;
 import com.jaspersoft.studio.data.MDataAdapter;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /**
- * Implementation of a {@link TransferDragSourceListener} that is supposed to handle
- * the drag operation of an {@link MDataAdapter} node from the Repository View.
+ * Implementation of a {@link TransferDragSourceListener} that is supposed to handle the drag operation of an
+ * {@link MDataAdapter} node from the Repository View.
  * 
  * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
- *
+ * 
  */
 public class DataAdapterDragSourceListener implements TransferDragSourceListener {
-	
+
 	private static final String ENCODING = "UTF-8"; //$NON-NLS-1$
 	private static final String DATA_ADAPTER_FILE_PREFIX = "dataAdapter"; //$NON-NLS-1$
-	private static final String DATA_ADAPTER_FILE_EXT = ".xml";  //$NON-NLS-1$
-	private String[] dataAdapterFilesLocations=new String[0];
+	private static final String DATA_ADAPTER_FILE_EXT = ".xml"; //$NON-NLS-1$
+	private String[] dataAdapterFilesLocations = new String[0];
 
 	@Override
 	public void dragStart(DragSourceEvent event) {
-		event.doit = !getDragSelection(event).isEmpty();	
+		event.doit = !getDragSelection(event).isEmpty();
 	}
 
 	@Override
 	public void dragSetData(DragSourceEvent event) {
-		if(getTransfer().isSupportedType(event.dataType)){
+		if (getTransfer().isSupportedType(event.dataType)) {
 			List<MDataAdapter> dataAdaptersSelected = getDragSelection(event);
 			List<String> locations = new ArrayList<String>(dataAdaptersSelected.size());
-			for(MDataAdapter da : dataAdaptersSelected){
+			for (MDataAdapter da : dataAdaptersSelected) {
 				locations.add(createTemDataAdapterFile(da));
 			}
 			dataAdapterFilesLocations = locations.toArray(new String[locations.size()]);
 			event.data = dataAdapterFilesLocations;
-		}
-		else {
+		} else {
 			dataAdapterFilesLocations = new String[0];
 			event.data = null;
 		}
@@ -73,7 +69,7 @@ public class DataAdapterDragSourceListener implements TransferDragSourceListener
 
 	@Override
 	public void dragFinished(DragSourceEvent event) {
-		for(String daFileLocation : dataAdapterFilesLocations){
+		for (String daFileLocation : dataAdapterFilesLocations) {
 			FileUtils.deleteQuietly(new File(daFileLocation));
 		}
 	}
@@ -82,23 +78,22 @@ public class DataAdapterDragSourceListener implements TransferDragSourceListener
 	public Transfer getTransfer() {
 		return FileTransfer.getInstance();
 	}
-	
+
 	/*
-	 * Gets the list of data adapters selected. 
+	 * Gets the list of data adapters selected.
 	 */
-	private List<MDataAdapter> getDragSelection(DragSourceEvent event){
-		if(event.getSource() instanceof DragSource){
+	private List<MDataAdapter> getDragSelection(DragSourceEvent event) {
+		if (event.getSource() instanceof DragSource) {
 			List<MDataAdapter> dataAdapters = new ArrayList<MDataAdapter>();
-			Control control = ((DragSource)event.getSource()).getControl();
-			if(control instanceof Tree && 
-					((Tree) control).getSelection().length>0){
-				for(TreeItem tItem : ((Tree) control).getSelection()){
+			Control control = ((DragSource) event.getSource()).getControl();
+			if (control instanceof Tree && ((Tree) control).getSelection().length > 0) {
+				for (TreeItem tItem : ((Tree) control).getSelection()) {
 					Object data = tItem.getData();
-					if(data instanceof MDataAdapter){
+					if (data instanceof MDataAdapter) {
 						dataAdapters.add((MDataAdapter) data);
 					}
 				}
-				return dataAdapters;				
+				return dataAdapters;
 			}
 		}
 		return new ArrayList<MDataAdapter>(0);
@@ -117,7 +112,10 @@ public class DataAdapterDragSourceListener implements TransferDragSourceListener
 				// fallback solution
 				tempDataAdapterFile = File.createTempFile(DATA_ADAPTER_FILE_PREFIX, DATA_ADAPTER_FILE_EXT);
 			}
-			String xml = DataAdapterManager.toDataAdapterFile(dataAdapter.getValue());
+			JasperReportsConfiguration jrConfig = dataAdapter.getJasperConfiguration();
+			if (jrConfig == null)
+				jrConfig = JasperReportsConfiguration.getDefaultInstance();
+			String xml = DataAdapterManager.toDataAdapterFile(dataAdapter.getValue(), jrConfig);
 			FileUtils.writeByteArrayToFile(tempDataAdapterFile, xml.getBytes(ENCODING));
 			return tempDataAdapterFile.getAbsolutePath();
 		} catch (UnsupportedEncodingException e) {
@@ -128,5 +126,5 @@ public class DataAdapterDragSourceListener implements TransferDragSourceListener
 		}
 		return null;
 	}
-	
+
 }

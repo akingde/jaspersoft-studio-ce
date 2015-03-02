@@ -85,7 +85,7 @@ public class DataAdapterEditorPart extends ABasicEditor {
 			descriptor = dacomposite.getDataAdapter();
 			dacomposite.performAdditionalUpdates();
 
-			String xml = DataAdapterManager.toDataAdapterFile(descriptor);
+			String xml = DataAdapterManager.toDataAdapterFile(descriptor, jrContext);
 
 			file.setContents(new ByteArrayInputStream(xml.getBytes()), true, true, monitor);
 			Markers.deleteMarkers(resource);

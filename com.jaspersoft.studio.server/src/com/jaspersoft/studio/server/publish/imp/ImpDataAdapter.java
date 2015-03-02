@@ -189,7 +189,8 @@ public class ImpDataAdapter extends AImpObject {
 								org.apache.commons.io.FileUtils
 										.writeStringToFile(f,
 												DataAdapterManager
-														.toDataAdapterFile(dad));
+														.toDataAdapterFile(dad,
+																jrConfig));
 								mres.setFile(f);
 							}
 						} catch (JRException e) {
