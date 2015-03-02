@@ -18,6 +18,7 @@ import java.io.IOException;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.xml.JRXmlBaseWriter;
 import net.sf.jasperreports.util.CastorUtil;
 
 import org.eclipse.core.resources.IFolder;
@@ -51,9 +52,9 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  *
  */
 public class MServerProfile extends ANode {
-	
+
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
-	
+
 	public static final String MAPPINGFILE = "com/jaspersoft/studio/server/model/server/ServerProfileImpl.xml"; //$NON-NLS-1$
 
 	public MServerProfile(ANode parent, ServerProfile server) {
@@ -73,11 +74,12 @@ public class MServerProfile extends ANode {
 	public INode getRoot() {
 		return this;
 	}
-	
+
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		if (evt.getPropertyName().equals(ServerProfile.PROPERTY_NAME) && getParent() != null){
-			//The name is changed, ask the parent to reorder the node
+		if (evt.getPropertyName().equals(ServerProfile.PROPERTY_NAME)
+				&& getParent() != null) {
+			// The name is changed, ask the parent to reorder the node
 			getParent().propertyChange(evt);
 		}
 	}
@@ -87,6 +89,9 @@ public class MServerProfile extends ANode {
 		super.setJasperConfiguration(jConfig);
 		if (getParent() != null)
 			((ANode) getParent().getRoot()).setJasperConfiguration(jConfig);
+		if (getValue() != null)
+			jConfig.setProperty(JRXmlBaseWriter.PROPERTY_REPORT_VERSION,
+					getValue().getJrVersion());
 	}
 
 	/**
@@ -149,13 +154,19 @@ public class MServerProfile extends ANode {
 			try {
 				ServerInfo info = wsClient.getServerInfo(null);
 				tt += Messages.MServerProfile_5 + info.getVersion();
-				tt += Messages.MServerProfile_6 + Misc.nvl(info.getEditionName()) + " " + (info.getEdition() != null ? info.getEdition() : ""); //$NON-NLS-2$ //$NON-NLS-3$
+				tt += Messages.MServerProfile_6
+						+ Misc.nvl(info.getEditionName())
+						+ " " + (info.getEdition() != null ? info.getEdition() : ""); //$NON-NLS-2$ //$NON-NLS-3$
 				tt += Messages.MServerProfile_9 + Misc.nvl(info.getBuild());
-				tt += Messages.MServerProfile_10 + Misc.nvl(info.getLicenseType());
-				tt += Messages.MServerProfile_11 + Misc.nvl(info.getExpiration());
+				tt += Messages.MServerProfile_10
+						+ Misc.nvl(info.getLicenseType());
+				tt += Messages.MServerProfile_11
+						+ Misc.nvl(info.getExpiration());
 				tt += Messages.MServerProfile_12 + Misc.nvl(info.getFeatures());
-				tt += Messages.MServerProfile_13 + Misc.nvl(info.getDateFormatPattern());
-				tt += Messages.MServerProfile_14 + Misc.nvl(info.getDatetimeFormatPattern());
+				tt += Messages.MServerProfile_13
+						+ Misc.nvl(info.getDateFormatPattern());
+				tt += Messages.MServerProfile_14
+						+ Misc.nvl(info.getDatetimeFormatPattern());
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -218,8 +229,21 @@ public class MServerProfile extends ANode {
 		Object oldValue = getValue();
 		super.setValue(value);
 		resetTmpPaths();
-		//When the value changes maybe is changed the name so send the event to reorder the node
-		if (getParent() != null) getParent().propertyChange(new PropertyChangeEvent(this, ServerManager.SERVERPROFILE, oldValue, value));
+		// When the value changes maybe is changed the name so send the event to
+		// reorder the node
+		if (getParent() != null)
+			getParent().propertyChange(
+					new PropertyChangeEvent(this, ServerManager.SERVERPROFILE,
+							oldValue, value));
+		if (getJasperConfiguration() != null) {
+			if (value == null)
+				getJasperConfiguration().removeProperty(
+						JRXmlBaseWriter.PROPERTY_REPORT_VERSION);
+			else
+				getJasperConfiguration().setProperty(
+						JRXmlBaseWriter.PROPERTY_REPORT_VERSION,
+						((ServerProfile) value).getJrVersion());
+		}
 	}
 
 	protected void resetTmpPaths() {
@@ -234,7 +258,8 @@ public class MServerProfile extends ANode {
 		resetTmpPaths();
 	}
 
-	public IFolder getTmpDir(IProgressMonitor monitor) throws IOException, CoreException {
+	public IFolder getTmpDir(IProgressMonitor monitor) throws IOException,
+			CoreException {
 		if (tmpDir == null || !tmpDir.exists()) {
 			String prjpath = getValue().getProjectPath();
 			if (prjpath != null && !prjpath.trim().isEmpty()) {
@@ -245,10 +270,16 @@ public class MServerProfile extends ANode {
 				String ppath = indx >= 0 ? path.substring(0, indx) : path;
 				String fpath = indx >= 0 ? path.substring(indx) : "/"; //$NON-NLS-1$
 
-				IProject prj = ResourcesPlugin.getWorkspace().getRoot().getProject(ppath);
+				IProject prj = ResourcesPlugin.getWorkspace().getRoot()
+						.getProject(ppath);
 				tmpDir = prj.getFolder(fpath);
 			} else
-				tmpDir = FileUtils.getInProjectFolder(FileUtils.createTempDir(getValue().getName().replace(" ", "") + "-").toURI(), monitor); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				tmpDir = FileUtils
+						.getInProjectFolder(
+								FileUtils
+										.createTempDir(
+												getValue().getName().replace(
+														" ", "") + "-").toURI(), monitor); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			if (!tmpDir.exists())
 				tmpDir.create(true, true, monitor);
 		}
