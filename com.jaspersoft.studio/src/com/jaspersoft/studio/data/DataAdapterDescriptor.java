@@ -20,6 +20,7 @@ import org.eclipse.swt.graphics.Image;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.ui.DefaultDataAdapterEditor;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /*
  * 
@@ -92,8 +93,7 @@ public abstract class DataAdapterDescriptor implements IIconDescriptor, Serializ
 	 * export this data adapter too. FIXME consider remove
 	 */
 	public final String toXml() {
-
-		return CastorUtil.write(getDataAdapter());
+		return CastorUtil.getInstance(JasperReportsConfiguration.getDefaultInstance()).writeToString(getDataAdapter());
 	}
 
 	@Override

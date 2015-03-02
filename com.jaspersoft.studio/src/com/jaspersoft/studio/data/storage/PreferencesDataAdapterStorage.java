@@ -44,6 +44,7 @@ import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterFactory;
 import com.jaspersoft.studio.data.DataAdapterManager;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class PreferencesDataAdapterStorage extends ADataAdapterStorage {
 
@@ -89,6 +90,7 @@ public class PreferencesDataAdapterStorage extends ADataAdapterStorage {
 
 				DataAdapterDescriptor dataAdapterDescriptor = factory.createDataAdapter();
 				DataAdapter dataAdapter = dataAdapterDescriptor.getDataAdapter();
+				// maybe we should get context for this file?
 				dataAdapter = (DataAdapter) CastorUtil.read(adapterNode, dataAdapter.getClass());
 				dataAdapterDescriptor.setDataAdapter(dataAdapter);
 				// Always add the data adapter read from the file regardless of the name
