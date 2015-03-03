@@ -233,9 +233,16 @@
       <hyperlinkType
             id="com.jaspersoft.studio.server.hyperlink.types.reportExecution"
             type="ReportExecution">
-            <suggestedParameter
-                  name="_report" defaultValue="/public/Samples/Reports/MyReport">
-            </suggestedParameter>
+            <parameters>
+				<suggestedParameter
+	                  name="_report" defaultValue="/public/Samples/Reports/MyReport">
+	            </suggestedParameter>
+            </parameters>
+            <uiElements>
+               <uiElement
+                     id="Tooltip">
+               </uiElement>
+            </uiElements>
       </hyperlinkType>
    </extension>
    <extension

@@ -117,6 +117,11 @@ public class WHyperlink extends Composite implements IExpressionContextSetter {
 		LINK_TYPE_ITEMS=alltypes.toArray(new String[alltypes.size()]);
 	}
 	
+	/** Enum for listing different re-usable UI Elements for the custom hyperlink types */
+	public enum UIElement {
+		PAGE, ANCHOR, REFERENCE, PARAMETERS, TOOLTIP
+	}
+	
 
 	/**
 	 * Create the hyperlink widget.

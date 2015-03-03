@@ -28,6 +28,7 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.palette.PaletteEntry;
 import org.eclipse.jface.action.Action;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.part.WorkbenchPart;
 
@@ -43,6 +44,7 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.util.HyperlinkDefaultParameter;
 import com.jaspersoft.studio.repository.IRepositoryViewProvider;
 import com.jaspersoft.studio.style.view.TemplateViewProvider;
+import com.jaspersoft.studio.swt.widgets.WHyperlink;
 import com.jaspersoft.studio.templates.TemplateProvider;
 import com.jaspersoft.studio.utils.AContributorAction;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
@@ -53,6 +55,7 @@ public class ExtensionManager {
 	private List<IEditorContributor> eContributor = new ArrayList<IEditorContributor>();
 	private List<String> customHyperlinkTypes;
 	private Map<String, List<HyperlinkDefaultParameter>> defaultHyperlinkParametersByCustomType;
+	private Map<String, List<WHyperlink.UIElement>> uiElementsIDByCustomType;
 
 	public void init() {
 		IConfigurationElement[] config = Platform.getExtensionRegistry().getConfigurationElementsFor(
@@ -490,27 +493,57 @@ public class ExtensionManager {
 		if(customHyperlinkTypes==null) {
 			IConfigurationElement[] contributedElements = Platform.getExtensionRegistry().getConfigurationElementsFor(
 					"com.jaspersoft.studio.hyperlinkTypes"); //$NON-NLS-1$
-			if (contributedElements != null && contributedElements.length!=0) {
-				customHyperlinkTypes = new ArrayList<String>();
+			if (contributedElements.length!=0) {
+				customHyperlinkTypes = new ArrayList<String>(contributedElements.length);
 				defaultHyperlinkParametersByCustomType = new HashMap<String, List<HyperlinkDefaultParameter>>(contributedElements.length);
+				uiElementsIDByCustomType = new HashMap<String, List<WHyperlink.UIElement>>(contributedElements.length);
 				for (IConfigurationElement el : contributedElements) {
 					String type = el.getAttribute("type"); //$NON-NLS-1$
 					customHyperlinkTypes.add(type);
-					IConfigurationElement[] parameters = el.getChildren();
-					List<HyperlinkDefaultParameter> defaultParametersLst = new ArrayList<HyperlinkDefaultParameter>();
-					if(parameters!=null) {
-						for(IConfigurationElement p : parameters){
+					// lookup for default parameters
+					IConfigurationElement[] elements = el.getChildren("parameters");
+					if(elements.length==1){
+						IConfigurationElement[] params = elements[0].getChildren();
+						List<HyperlinkDefaultParameter> defaultParametersLst = new ArrayList<HyperlinkDefaultParameter>(params.length);
+						for(IConfigurationElement p : params){
 							String parameterName = p.getAttribute("name");
 							String defaultValue = p.getAttribute("defaultValue");
 							defaultParametersLst.add(new HyperlinkDefaultParameter(parameterName, defaultValue));
 						}
+						defaultHyperlinkParametersByCustomType.put(type, defaultParametersLst);
 					}
-					defaultHyperlinkParametersByCustomType.put(type, defaultParametersLst);
+					else {
+						defaultHyperlinkParametersByCustomType.put(type, new ArrayList<HyperlinkDefaultParameter>(0));
+					}
+					// lookup for ui elements
+					elements = el.getChildren("uiElements");
+					if(elements.length==1){
+						IConfigurationElement[] uiElements = elements[0].getChildren("uiElement");
+						List<WHyperlink.UIElement> uiElementsList = new ArrayList<WHyperlink.UIElement>(uiElements.length);
+						for(IConfigurationElement u : uiElements) {
+							String id = u.getAttribute("id");
+							try {
+								uiElementsList.add(WHyperlink.UIElement.valueOf(id));
+							} catch (NullPointerException e1) {
+								JaspersoftStudioPlugin.getInstance().logWarning(
+										NLS.bind("Custom Hyperlink Type {0} - The attribute id for the uiElement tag can not be null", type));
+							} catch (IllegalArgumentException e2) {
+								JaspersoftStudioPlugin.getInstance().logWarning(
+										NLS.bind("Custom Hyperlink Type {0} - The value {1} for the attribute id is not valid", type,id));
+							}
+						}
+						uiElementsIDByCustomType.put(type, uiElementsList);
+					}
+					else {
+						uiElementsIDByCustomType.put(type, new ArrayList<WHyperlink.UIElement>(0));
+					}
 				}
 			}
 			else {
+				// No custom type found
 				customHyperlinkTypes = new ArrayList<String>(0);
 				defaultHyperlinkParametersByCustomType = new HashMap<String, List<HyperlinkDefaultParameter>>(0);
+				uiElementsIDByCustomType = new HashMap<String, List<WHyperlink.UIElement>>(0);
 			}
 		}
 		return customHyperlinkTypes;

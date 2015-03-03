@@ -50,8 +50,9 @@ These ones can be used together with the original ones provided by the net.sf.ja
 
    <element name="hyperlinkType">
       <complexType>
-         <sequence minOccurs="0" maxOccurs="unbounded">
-            <element ref="suggestedParameter"/>
+         <sequence minOccurs="0" maxOccurs="1">
+            <element ref="parameters"/>
+            <element ref="uiElements"/>
          </sequence>
          <attribute name="id" type="string" use="required">
             <annotation>
@@ -86,6 +87,34 @@ These ones can be used together with the original ones provided by the net.sf.ja
                </documentation>
             </annotation>
          </attribute>
+      </complexType>
+   </element>
+
+   <element name="parameters">
+      <complexType>
+         <sequence>
+            <element ref="suggestedParameter" minOccurs="1" maxOccurs="unbounded"/>
+         </sequence>
+      </complexType>
+   </element>
+
+   <element name="uiElement">
+      <complexType>
+         <attribute name="id" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="uiElements">
+      <complexType>
+         <sequence>
+            <element ref="uiElement" minOccurs="1" maxOccurs="unbounded"/>
+         </sequence>
       </complexType>
    </element>
 
