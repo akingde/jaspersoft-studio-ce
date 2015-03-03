@@ -316,7 +316,7 @@ public class ReportControler {
 				try {
 					Thread.currentThread().setContextClassLoader(jrContext.getClassLoader());
 
-					setParameters();
+					// setParameters();
 
 					final IFile file = ((IFileEditorInput) pcontainer.getEditorInput()).getFile();
 
@@ -332,7 +332,7 @@ public class ReportControler {
 							if (viewmap != null)
 								fillForms();
 						}
-						pcontainer.setRunDirty(false);
+						pcontainer.setRunDirty(false); 
 						c.startMessage(Messages.PreviewEditor_starting);
 						if (!prmInput.checkFieldsFilled())
 							return Status.CANCEL_STATUS;

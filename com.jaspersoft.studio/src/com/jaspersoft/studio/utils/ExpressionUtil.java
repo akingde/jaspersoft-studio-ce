@@ -314,8 +314,8 @@ public class ExpressionUtil {
 			prms = jrConfig.getJRParameters();
 			if (prms == null)
 				prms = new HashMap<String, Object>();
-			prms = JRParameterDefaultValuesEvaluator.evaluateParameterDefaultValues(jrConfig, jr, prms);
-			jrConfig.setJRParameters(prms);
+			prms.clear();
+			prms.putAll(JRParameterDefaultValuesEvaluator.evaluateParameterDefaultValues(jrConfig, jr, prms));
 
 			removeAllReportInterpreters(jrConfig);
 		} catch (JRException e) {
