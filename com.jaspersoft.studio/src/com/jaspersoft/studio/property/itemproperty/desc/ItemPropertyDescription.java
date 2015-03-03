@@ -8,7 +8,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.itemproperty.desc;
 
-
 public class ItemPropertyDescription<T> {
 	private String name;
 	private String label;
@@ -89,4 +88,11 @@ public class ItemPropertyDescription<T> {
 		return String.class;
 	}
 
+	public String toSimpleString(String original) {
+		return original;
+	}
+
+	public String toOriginalString(String simple) {
+		return simple;
+	}
 }

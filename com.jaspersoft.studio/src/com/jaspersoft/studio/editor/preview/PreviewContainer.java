@@ -21,8 +21,12 @@ import net.sf.jasperreports.eclipse.viewer.action.ZoomActualSizeAction;
 import net.sf.jasperreports.eclipse.viewer.action.ZoomInAction;
 import net.sf.jasperreports.eclipse.viewer.action.ZoomOutAction;
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
+import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
+import net.sf.jasperreports.engine.design.JRDesignParameter;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.design.events.CollectionElementAddedEvent;
+import net.sf.jasperreports.engine.design.events.CollectionElementRemovedEvent;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
 import org.eclipse.core.resources.IFile;
@@ -438,13 +442,27 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 
 					@Override
 					public void propertyChange(PropertyChangeEvent evt) {
-						if (evt.getPropertyName().equals(JRDesignDataset.PROPERTY_PARAMETERS)
-								|| evt.getPropertyName().equals(JRDesignDataset.PROPERTY_SCRIPTLETS))
+						String pname = evt.getPropertyName();
+						if (pname.equals(JRDesignDataset.PROPERTY_PARAMETERS)) {
+							if (evt instanceof CollectionElementAddedEvent)
+								((JRDesignParameter) ((CollectionElementAddedEvent) evt).getAddedValue()).getEventSupport()
+										.addPropertyChangeListener(propChangeListener);
+							else if (evt instanceof CollectionElementRemovedEvent)
+								((JRDesignParameter) ((CollectionElementRemovedEvent) evt).getRemovedValue()).getEventSupport()
+										.removePropertyChangeListener(propChangeListener);
+						}
+						if (evt.getSource() instanceof JRParameter)
+							isParameterDirty = true;
+						else if (pname.equals(JRDesignDataset.PROPERTY_PARAMETERS)
+								|| pname.equals(JRDesignDataset.PROPERTY_SCRIPTLETS))
 							isParameterDirty = true;
 					}
 				};
-				jrContext.getJasperDesign().getMainDesignDataset().getEventSupport()
-						.addPropertyChangeListener(propChangeListener);
+				JRDesignDataset mds = jrContext.getJasperDesign().getMainDesignDataset();
+				mds.getEventSupport().addPropertyChangeListener(propChangeListener);
+
+				for (JRParameter p : mds.getParametersList())
+					((JRDesignParameter) p).getEventSupport().addPropertyChangeListener(propChangeListener);
 			}
 		});
 	}
