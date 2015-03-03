@@ -240,7 +240,10 @@
             </parameters>
             <uiElements>
                <uiElement
-                     id="Tooltip">
+                     id="PARAMETERS">
+               </uiElement>            
+               <uiElement
+                     id="TOOLTIP">
                </uiElement>
             </uiElements>
       </hyperlinkType>
