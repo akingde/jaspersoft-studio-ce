@@ -34,6 +34,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.help.HelpSystem;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
@@ -46,6 +47,7 @@ import com.jaspersoft.studio.property.section.graphic.ASHighlightControl;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 import com.jaspersoft.studio.property.section.widgets.BackgroundHighlight;
 import com.jaspersoft.studio.property.section.widgets.SPHyperlinkParameter;
+import com.jaspersoft.studio.swt.widgets.WHyperlink.UIElement;
 import com.jaspersoft.studio.utils.ModelUtils;
 
 /**
@@ -276,9 +278,27 @@ public class HyperlinkSection extends AbstractSection {
 			hideList.put(linkTypeItems[5], new ElementHider[]{tooltip, reference, page}); // HyperlinkTypeEnum.REMOTE_PAGE
 			for(int i=6;i<linkTypeItems.length;i++) {
 				// the contributed ones...
-				hideList.put(linkTypeItems[i], new ElementHider[]{tooltip, parameters});
+				List<UIElement> uiElements = JaspersoftStudioPlugin.getExtensionManager().getUIElementsForCustomHyperlink(linkTypeItems[i]);
+				List<ElementHider> elHiders = new ArrayList<HyperlinkSection.ElementHider>();
+				if(uiElements.contains(UIElement.ANCHOR)){
+					elHiders.add(anchor);
+				}
+				if(uiElements.contains(UIElement.PAGE)){
+					elHiders.add(page);
+				}
+				if(uiElements.contains(UIElement.REFERENCE)){
+					elHiders.add(reference);
+				}
+				if(uiElements.contains(UIElement.TOOLTIP)){
+					elHiders.add(tooltip);
+				}
+				if(uiElements.contains(UIElement.PARAMETERS)){
+					elHiders.add(parameters);
+				}
+				hideList.put(linkTypeItems[i], elHiders.toArray(new ElementHider[elHiders.size()]));
 			}
-			hideList.put("Custom", new ElementHider[]{tooltip, parameters}); //$NON-NLS-1$
+			// Default all for unknown custom types
+			hideList.put("Custom", new ElementHider[]{tooltip, anchor, page, reference, parameters}); //$NON-NLS-1$
 		}
 	}
 	
