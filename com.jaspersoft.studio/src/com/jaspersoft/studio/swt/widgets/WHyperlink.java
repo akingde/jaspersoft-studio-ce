@@ -51,6 +51,7 @@ import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Table;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
 import com.jaspersoft.studio.jface.dialogs.ElementWithValueExpressionDialog;
@@ -176,9 +177,9 @@ public class WHyperlink extends Composite implements IExpressionContextSetter {
 					selectedType=HyperlinkTypeEnum.CUSTOM;
 				}
 
-				if(selectedType!=previousSelected){
+//				if(selectedType!=previousSelected){
 					refreshSubTabs(selectedType);
-				}
+//				}
 				previousSelected=selectedType;
 				
 				if(!init){
@@ -446,52 +447,99 @@ public class WHyperlink extends Composite implements IExpressionContextSetter {
 		tbtmAnchor.dispose();
 		tbtmPage.dispose();
 		tbtmHyperlinkParameters.dispose();
+		tbtmTooltip.dispose();
 		
 		// And recreates only the necessary ones
 		switch (selectedType) {
 			case CUSTOM:
-				tbtmHyperlinkParameters = new TabItem(tabFolder, SWT.NONE, tabFolder.getItemCount()-1);
-				tbtmHyperlinkParameters.setText(Messages.WHyperlink_ParametersTab);
-				tbtmHyperlinkParameters.setControl(hyperlinkParamsContent);
+				createDefaultTabsForContributedTypes();
 				break;
 			case LOCAL_ANCHOR:
-				tbtmAnchor=new TabItem(tabFolder, SWT.NONE,tabFolder.getItemCount()-1);
+				tbtmAnchor=new TabItem(tabFolder, SWT.NONE);
 				tbtmAnchor.setText(Messages.WHyperlink_AnchorTab);
 				tbtmAnchor.setControl(anchorContent);
+				tbtmTooltip = new TabItem(tabFolder, SWT.NONE);
+				tbtmTooltip.setText(Messages.WHyperlink_TooltipTab);
+				tbtmTooltip.setControl(tooltipContent);
 				break;
 			case LOCAL_PAGE:
-				tbtmPage=new TabItem(tabFolder, SWT.NONE,tabFolder.getItemCount()-1);
+				tbtmPage=new TabItem(tabFolder, SWT.NONE);
 				tbtmPage.setText(Messages.WHyperlink_PageTab);
 				tbtmPage.setControl(pageContent);
+				tbtmTooltip = new TabItem(tabFolder, SWT.NONE);
+				tbtmTooltip.setText(Messages.WHyperlink_TooltipTab);
+				tbtmTooltip.setControl(tooltipContent);
 				break;
 			case NONE:
 				break;
 			case REFERENCE:
-				tbtmReference=new TabItem(tabFolder, SWT.NONE,tabFolder.getItemCount()-1);
+				tbtmReference=new TabItem(tabFolder, SWT.NONE);
 				tbtmReference.setText(Messages.WHyperlink_ReferenceTab);
 				tbtmReference.setControl(referenceContent);
+				tbtmTooltip = new TabItem(tabFolder, SWT.NONE);
+				tbtmTooltip.setText(Messages.WHyperlink_TooltipTab);
+				tbtmTooltip.setControl(tooltipContent);
 				break;
 			case REMOTE_ANCHOR:
-				tbtmReference=new TabItem(tabFolder, SWT.NONE,tabFolder.getItemCount()-1);
+				tbtmReference=new TabItem(tabFolder, SWT.NONE);
 				tbtmReference.setText(Messages.WHyperlink_ReferenceTab);
 				tbtmReference.setControl(referenceContent);
-				tbtmAnchor=new TabItem(tabFolder, SWT.NONE,tabFolder.getItemCount()-1);
+				tbtmAnchor=new TabItem(tabFolder, SWT.NONE);
 				tbtmAnchor.setText(Messages.WHyperlink_AnchorTab);
-				tbtmAnchor.setControl(anchorContent);				
+				tbtmAnchor.setControl(anchorContent);
+				tbtmTooltip = new TabItem(tabFolder, SWT.NONE);
+				tbtmTooltip.setText(Messages.WHyperlink_TooltipTab);
+				tbtmTooltip.setControl(tooltipContent);
 				break;
 			case REMOTE_PAGE:
-				tbtmReference=new TabItem(tabFolder, SWT.NONE,tabFolder.getItemCount()-1);
+				tbtmReference=new TabItem(tabFolder, SWT.NONE);
 				tbtmReference.setText(Messages.WHyperlink_ReferenceTab);
 				tbtmReference.setControl(referenceContent);
-				tbtmPage=new TabItem(tabFolder, SWT.NONE,tabFolder.getItemCount()-1);
+				tbtmPage=new TabItem(tabFolder, SWT.NONE);
 				tbtmPage.setText(Messages.WHyperlink_PageTab);
 				tbtmPage.setControl(pageContent);
+				tbtmTooltip = new TabItem(tabFolder, SWT.NONE);
+				tbtmTooltip.setText(Messages.WHyperlink_TooltipTab);
+				tbtmTooltip.setControl(tooltipContent);
 				break;
+		default:
+			break;
 		}
 		
 		tabFolder.setSelection(0);
 //		resetHyperlinkDataAndTabsContent();
 	}
+	
+	private void createDefaultTabsForContributedTypes() {
+		String typeTxt = comboHyperlinkType.getText();
+		List<UIElement> uiElements = JaspersoftStudioPlugin.getExtensionManager().getUIElementsForCustomHyperlink(typeTxt);
+		if(uiElements.contains(UIElement.ANCHOR)) {
+			tbtmAnchor=new TabItem(tabFolder, SWT.NONE);
+			tbtmAnchor.setText(Messages.WHyperlink_AnchorTab);
+			tbtmAnchor.setControl(anchorContent);
+		}
+		if(uiElements.contains(UIElement.PAGE)){
+			tbtmPage=new TabItem(tabFolder, SWT.NONE);
+			tbtmPage.setText(Messages.WHyperlink_PageTab);
+			tbtmPage.setControl(pageContent);
+		}
+		if(uiElements.contains(UIElement.REFERENCE)){
+			tbtmReference=new TabItem(tabFolder, SWT.NONE);
+			tbtmReference.setText(Messages.WHyperlink_ReferenceTab);
+			tbtmReference.setControl(referenceContent);
+		}
+		if(uiElements.contains(UIElement.PARAMETERS)){
+			tbtmHyperlinkParameters = new TabItem(tabFolder, SWT.NONE);
+			tbtmHyperlinkParameters.setText(Messages.WHyperlink_ParametersTab);
+			tbtmHyperlinkParameters.setControl(hyperlinkParamsContent);
+		}
+		if(uiElements.contains(UIElement.TOOLTIP)){
+			tbtmTooltip = new TabItem(tabFolder, SWT.NONE);
+			tbtmTooltip.setText(Messages.WHyperlink_TooltipTab);
+			tbtmTooltip.setControl(tooltipContent);
+		}
+	}
+	
 	
 	/**
 	 * Sets the new hyperlink object and updates the UI content according.
@@ -599,9 +647,23 @@ public class WHyperlink extends Composite implements IExpressionContextSetter {
 		boolean clearParameters=false;
 		switch (this.hyperlink.getHyperlinkTypeValue()) {
 			case CUSTOM:
-				this.hyperlink.setHyperlinkAnchorExpression(null);
-				this.hyperlink.setHyperlinkPageExpression(null);
-				this.hyperlink.setHyperlinkReferenceExpression(null);
+				String typeTxt = comboHyperlinkType.getText();
+				List<UIElement> uiElements = JaspersoftStudioPlugin.getExtensionManager().getUIElementsForCustomHyperlink(typeTxt);
+				if(!uiElements.contains(UIElement.ANCHOR)) {
+					this.hyperlink.setHyperlinkAnchorExpression(null);
+				}
+				if(!uiElements.contains(UIElement.PAGE)){
+					this.hyperlink.setHyperlinkPageExpression(null);
+				}
+				if(!uiElements.contains(UIElement.REFERENCE)){
+					this.hyperlink.setHyperlinkReferenceExpression(null);
+				}
+				if(!uiElements.contains(UIElement.PARAMETERS)){
+					clearParameters = true;
+				}
+				if(!uiElements.contains(UIElement.TOOLTIP)){
+					this.hyperlink.setHyperlinkTooltipExpression(null);
+				}
 				break;
 			case LOCAL_ANCHOR:
 				this.hyperlink.setHyperlinkPageExpression(null);

@@ -9,6 +9,7 @@
 package com.jaspersoft.studio.plugin;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,6 +46,7 @@ import com.jaspersoft.studio.model.util.HyperlinkDefaultParameter;
 import com.jaspersoft.studio.repository.IRepositoryViewProvider;
 import com.jaspersoft.studio.style.view.TemplateViewProvider;
 import com.jaspersoft.studio.swt.widgets.WHyperlink;
+import com.jaspersoft.studio.swt.widgets.WHyperlink.UIElement;
 import com.jaspersoft.studio.templates.TemplateProvider;
 import com.jaspersoft.studio.utils.AContributorAction;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
@@ -563,5 +565,24 @@ public class ExtensionManager {
 		}
 		List<HyperlinkDefaultParameter> list = defaultHyperlinkParametersByCustomType.get(hyperlinkType);
 		return list!=null ? list : new ArrayList<HyperlinkDefaultParameter>(0);
+	}
+	
+	/**
+	 * Returns a list, maybe empty, of ids that refer to UI elements that 
+	 * are supposed to be used in dialogs, widgets and composites that 
+	 * allow the final user to modify hyperlinks.
+	 * 
+	 * @param hyperlinkType
+	 * @return the list of ui elements, if any, associated to the hyperlink
+	 */
+	public List<UIElement> getUIElementsForCustomHyperlink(String hyperlinkType) {
+		if(uiElementsIDByCustomType==null){
+			// Init the custom hyperlink types extension point information
+			getContributedHyperlinkTypes();
+		}
+		List<UIElement> list = uiElementsIDByCustomType.get(hyperlinkType);
+		// When the list is null then there is no contribution at plugin.xml level
+		// As fallback solution we return all the available UI elements
+		return list!=null ? list : Arrays.asList(UIElement.values());
 	}
 }
