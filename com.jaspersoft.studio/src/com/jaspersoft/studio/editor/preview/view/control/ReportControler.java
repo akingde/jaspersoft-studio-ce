@@ -212,6 +212,7 @@ public class ReportControler {
 				prmInput.createInputControls(prompts, jasperParameters);
 			}
 		});
+		prmInput.setDirty(false);
 
 		UIUtils.getDisplay().asyncExec(new Runnable() {
 
@@ -219,6 +220,7 @@ public class ReportControler {
 			public void run() {
 				prmRepInput = (VReportParameters) viewmap.get(FORM_REPORT_PARAMETERS);
 				prmRepInput.createInputControls(prompts, jasperParameters);
+				prmRepInput.setDirty(false);
 
 				VSorting vs = (VSorting) viewmap.get(FORM_SORTING);
 				vs.setJasperReports(jrContext.getJasperDesign(), prompts, jasperParameters);
@@ -332,7 +334,7 @@ public class ReportControler {
 							if (viewmap != null)
 								fillForms();
 						}
-						pcontainer.setRunDirty(false); 
+						pcontainer.setRunDirty(false);
 						c.startMessage(Messages.PreviewEditor_starting);
 						if (!prmInput.checkFieldsFilled())
 							return Status.CANCEL_STATUS;
