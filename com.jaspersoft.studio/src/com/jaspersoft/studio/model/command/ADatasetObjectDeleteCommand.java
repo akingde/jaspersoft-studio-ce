@@ -58,7 +58,7 @@ public abstract class ADatasetObjectDeleteCommand extends Command implements Mes
 		List<JRExpression> datasetExpressions = datasetCollector.getExpressions();
 		for (JRExpression expr : datasetExpressions) {
 			String s = expr.getText();
-			if (s != null && s.length() > 4 && s.contains(objectName)) {
+			if (s != null && s.length() > 4 && s.contains(objectName) && !isOwnExpression(expr)) {
 				return
 						new CommandMessage(
 								CommandMessage.Status.WARNING,
@@ -68,4 +68,16 @@ public abstract class ADatasetObjectDeleteCommand extends Command implements Mes
 		return null;
 	}
 
+	/**
+	 * Check if the passed expression belong to the current element. This is 
+	 * avoid to show the waring message when the dataset element is only 
+	 * autoreferencing itself
+	 * 
+	 * @param expr the expression 
+	 * @return true if the expression belong to the deleted element, false otherwise. By default
+	 * this return always false
+	 */
+	protected boolean isOwnExpression(JRExpression expr){
+		return false;
+	}
 }

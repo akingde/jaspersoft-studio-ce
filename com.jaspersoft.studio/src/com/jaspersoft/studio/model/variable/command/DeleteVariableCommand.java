@@ -13,6 +13,7 @@
 package com.jaspersoft.studio.model.variable.command;
 
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRSortField;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignVariable;
@@ -114,5 +115,18 @@ public class DeleteVariableCommand extends ADatasetObjectDeleteCommand{
 		} catch (JRException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	/**
+	 * Check if the expression passed is the variable expression or variable initial value expression.
+	 * The check is done on the reference, they must be the same object, not two objects with the same 
+	 * value
+	 * 
+	 * @param expr the expression 
+	 * @return true if the expression belong to the deleted variable, false otherwise. 
+	 */
+	@Override
+	protected boolean isOwnExpression(JRExpression expr) {
+		return jrVariable.getExpression() == expr || jrVariable.getInitialValueExpression() == expr;
 	}
 }

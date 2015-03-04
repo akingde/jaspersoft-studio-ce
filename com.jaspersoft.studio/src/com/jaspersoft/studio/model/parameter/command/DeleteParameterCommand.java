@@ -13,6 +13,7 @@
 package com.jaspersoft.studio.model.parameter.command;
 
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
@@ -98,5 +99,18 @@ public class DeleteParameterCommand extends ADatasetObjectDeleteCommand{
 		} catch (JRException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	/**
+	 * Check if the expression passed is the parameter initial value expression.
+	 * The check is done on the reference, they must be the same object, not two objects with the same 
+	 * value
+	 * 
+	 * @param expr the expression 
+	 * @return true if the expression belong to the deleted parameter, false otherwise. 
+	 */
+	@Override
+	protected boolean isOwnExpression(JRExpression expr) {
+		return jrParameter.getDefaultValueExpression() == expr;
 	}
 }
