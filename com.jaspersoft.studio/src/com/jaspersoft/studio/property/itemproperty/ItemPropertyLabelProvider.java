@@ -18,6 +18,7 @@ import org.eclipse.swt.graphics.Point;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.property.itemproperty.desc.ADescriptor;
+import com.jaspersoft.studio.property.itemproperty.desc.ItemPropertyDescription;
 import com.jaspersoft.studio.utils.Misc;
 
 /*
@@ -41,6 +42,11 @@ public class ItemPropertyLabelProvider extends ColumnLabelProvider implements IT
 			ItemProperty ip = (ItemProperty) element;
 			if (ip.getValueExpression() != null)
 				return Misc.nvl(ip.getValueExpression().getText());
+			if (descriptor != null) {
+				ItemPropertyDescription<?> ipDesc = descriptor.getDescriptor(ip.getName());
+				if (ipDesc != null)
+					return ipDesc.toSimpleString(Misc.nvl(ip.getValue()));
+			}
 			return Misc.nvl(ip.getValue());
 		}
 		return ""; //$NON-NLS-1$

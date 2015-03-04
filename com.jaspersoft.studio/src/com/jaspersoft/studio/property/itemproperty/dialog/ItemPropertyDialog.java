@@ -23,6 +23,7 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -33,8 +34,8 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
-import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
 import com.jaspersoft.studio.editor.expression.ExpressionContext.Visibility;
+import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.property.infoList.ElementDescription;
 import com.jaspersoft.studio.property.infoList.SelectableComposite;
@@ -99,8 +100,9 @@ public class ItemPropertyDialog extends ATitledDialog implements IExpressionCont
 		lblPropertyValue.setText(Messages.ItemPropertyDialog_PropertyValue);
 		lblPropertyValue.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 
-		propertyValue = new Text(dialogArea, SWT.BORDER);
+		propertyValue = new Text(dialogArea, SWT.WRAP | SWT.BORDER | SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL | SWT.BORDER);
 		GridData gd_propertyValue = new GridData(SWT.FILL, SWT.FILL, true, false);
+		gd_propertyValue.heightHint = 70;
 		propertyValue.setLayoutData(gd_propertyValue);
 
 		propertyValueExpression = new WTextExpression(dialogArea, SWT.NONE);
@@ -120,7 +122,15 @@ public class ItemPropertyDialog extends ATitledDialog implements IExpressionCont
 		infoPanel.SetDoubleClickListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				propertyName.setText(infoPanel.getSelectedElement().getName());
+				String newname = infoPanel.getSelectedElement().getName();
+				ItemPropertyDescription<?> ipDesc = descriptor.getDescriptor(newname);
+				if (ipDesc != null) {
+					itemProperty.setName(newname);
+					itemProperty.setValue(ipDesc.getDefaultValueString());
+					itemProperty.setValueExpression(null);
+					ipDesc.handleEdit(propertyValue, itemProperty);
+					initWidgets();
+				}
 			}
 		});
 
@@ -138,32 +148,47 @@ public class ItemPropertyDialog extends ATitledDialog implements IExpressionCont
 	}
 
 	private void initWidgets() {
-		if (this.itemProperty == null) {
-			this.itemProperty = new StandardItemProperty("", "", null); //$NON-NLS-1$ //$NON-NLS-2$
-		}
-		if (this.itemProperty.getValue() != null) {
-			useExpressionCheckbox.setSelection(false);
-			propertyName.setText(Misc.nvl(itemProperty.getName()));
-			propertyValue.setText(Misc.nvl(itemProperty.getValue()));
-			propertyValueExpression.setVisible(false);
-			propertyValueExpression.setEnabled(false);
-			propertyValueExpression.setExpression(null);
-			((GridData) propertyValueExpression.getLayoutData()).exclude = true;
-		} else {
-			useExpressionCheckbox.setSelection(true);
-			propertyName.setText(Misc.nvl(itemProperty.getName()));
-			propertyValueExpression.setExpression((JRDesignExpression) itemProperty.getValueExpression());
-			propertyValue.setVisible(false);
-			propertyValue.setEnabled(false);
-			((GridData) propertyValue.getLayoutData()).exclude = true;
-		}
-		for (ItemPropertyDescription<?> ipd : descriptor.getItemPropertyDescriptors()) {
-			if (ipd.getName().equals(itemProperty.getName()) && ipd.isMandatory()) {
-				propertyName.setEnabled(false);
-				break;
+		refresh = true;
+		try {
+			if (this.itemProperty == null)
+				this.itemProperty = new StandardItemProperty("", "", null); //$NON-NLS-1$ //$NON-NLS-2$ 
+			if (this.itemProperty.getValue() != null) {
+				if (useExpressionCheckbox.getSelection())
+					useExpressionCheckbox.setSelection(false);
+				propertyName.setText(Misc.nvl(itemProperty.getName()));
+				propertyValue.setText(Misc.nvl(itemProperty.getValue()));
+				if (propertyValueExpression.isVisible())
+					propertyValueExpression.setVisible(false);
+				if (propertyValueExpression.isEnabled())
+					propertyValueExpression.setEnabled(false);
+				propertyValueExpression.setExpression(null);
+				if (!((GridData) propertyValueExpression.getLayoutData()).exclude)
+					((GridData) propertyValueExpression.getLayoutData()).exclude = true;
+			} else {
+				if (!useExpressionCheckbox.getSelection())
+					useExpressionCheckbox.setSelection(true);
+				propertyName.setText(Misc.nvl(itemProperty.getName()));
+				propertyValueExpression.setExpression((JRDesignExpression) itemProperty.getValueExpression());
+				if (propertyValue.isVisible())
+					propertyValue.setVisible(false);
+				if (propertyValue.isEnabled())
+					propertyValue.setEnabled(false);
+				if (!((GridData) propertyValue.getLayoutData()).exclude)
+					((GridData) propertyValue.getLayoutData()).exclude = true;
 			}
+			for (ItemPropertyDescription<?> ipd : descriptor.getItemPropertyDescriptors()) {
+				if (ipd.getName().equals(itemProperty.getName()) && ipd.isMandatory()) {
+					if (propertyName.isEnabled())
+						propertyName.setEnabled(false);
+					break;
+				}
+			}
+		} finally {
+			refresh = false;
 		}
 	}
+
+	private boolean refresh = false;
 
 	private void addListeners() {
 		propertyName.addModifyListener(new ModifyListener() {
@@ -176,8 +201,22 @@ public class ItemPropertyDialog extends ATitledDialog implements IExpressionCont
 		propertyValue.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
-				itemProperty.setValue(propertyValue.getText());
-				validateDialog();
+				if (refresh)
+					return;
+				refresh = true;
+				try {
+					ItemPropertyDescription<?> ipDesc = descriptor.getDescriptor(propertyName.getText());
+					if (ipDesc != null) {
+						Point p = propertyValue.getSelection();
+						ipDesc.handleEdit(propertyValue, itemProperty);
+						propertyValue.setText(itemProperty.getValue());
+						propertyValue.setSelection(p);
+					} else
+						itemProperty.setValue(propertyValue.getText());
+					validateDialog();
+				} finally {
+					refresh = false;
+				}
 			}
 		});
 		propertyValueExpression.addModifyListener(new ExpressionModifiedListener() {
@@ -190,33 +229,48 @@ public class ItemPropertyDialog extends ATitledDialog implements IExpressionCont
 		useExpressionCheckbox.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				if (useExpressionCheckbox.getSelection()) {
-					// hide normal textbox
-					propertyValue.setText(""); //$NON-NLS-1$
-					itemProperty.setValue(null);
-					propertyValue.setVisible(false);
-					propertyValue.setEnabled(false);
-					((GridData) propertyValue.getLayoutData()).exclude = true;
+				if (refresh)
+					return;
+				refresh = true;
+				try {
+					if (useExpressionCheckbox.getSelection()) {
+						// hide normal textbox
+						propertyValue.setText(""); //$NON-NLS-1$
+						itemProperty.setValue(null);
+						if (propertyValue.isVisible())
+							propertyValue.setVisible(false);
+						if (propertyValue.isEnabled())
+							propertyValue.setEnabled(false);
+						((GridData) propertyValue.getLayoutData()).exclude = true;
 
-					// and show expression widget
-					propertyValueExpression.setVisible(true);
-					propertyValueExpression.setEnabled(true);
-					((GridData) propertyValueExpression.getLayoutData()).exclude = false;
-				} else {
-					// hide the expression widget
-					propertyValueExpression.setVisible(false);
-					propertyValueExpression.setEnabled(false);
-					propertyValueExpression.setExpression(null);
-					((GridData) propertyValueExpression.getLayoutData()).exclude = true;
+						// and show expression widget
+						if (!propertyValueExpression.isVisible())
+							propertyValueExpression.setVisible(true);
+						if (!propertyValueExpression.isEnabled())
+							propertyValueExpression.setEnabled(true);
+						((GridData) propertyValueExpression.getLayoutData()).exclude = false;
+					} else {
+						// hide the expression widget
+						if (propertyValueExpression.isVisible())
+							propertyValueExpression.setVisible(false);
+						if (propertyValueExpression.isEnabled())
+							propertyValueExpression.setEnabled(false);
+						propertyValueExpression.setExpression(null);
+						((GridData) propertyValueExpression.getLayoutData()).exclude = true;
 
-					// and show the normal textbox
-					propertyValue.setText(""); //$NON-NLS-1$
-					propertyValue.setVisible(true);
-					propertyValue.setEnabled(true);
-					((GridData) propertyValue.getLayoutData()).exclude = false;
+						// and show the normal textbox
+						propertyValue.setText(""); //$NON-NLS-1$
+						if (!propertyValue.isVisible())
+							propertyValue.setVisible(true);
+						if (!propertyValue.isEnabled())
+							propertyValue.setEnabled(true);
+						((GridData) propertyValue.getLayoutData()).exclude = false;
+					}
+					validateDialog();
+					dialogArea.layout();
+				} finally {
+					refresh = false;
 				}
-				validateDialog();
-				dialogArea.layout();
 			}
 		});
 	}
@@ -232,6 +286,8 @@ public class ItemPropertyDialog extends ATitledDialog implements IExpressionCont
 			str = e.getMessage();
 			ok.setEnabled(false);
 		}
+		if (Misc.isNullOrEmpty(str) && Misc.isNullOrEmpty(errormsg))
+			return;
 		setError(str);
 	}
 

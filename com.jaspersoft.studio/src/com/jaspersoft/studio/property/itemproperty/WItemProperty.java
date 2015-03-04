@@ -21,10 +21,11 @@ import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
@@ -196,34 +197,41 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 		gd.widthHint = 24;
 		gd.heightHint = 24;
 		txtLabel.setLayoutData(gd);
-		txtLabel.addMouseListener(new MouseListener() {
-
-			@Override
-			public void mouseUp(MouseEvent e) {
-
-			}
+		txtLabel.addMouseListener(new MouseAdapter() {
 
 			@Override
 			public void mouseDown(MouseEvent e) {
 				handleEditButton();
 			}
 
-			@Override
-			public void mouseDoubleClick(MouseEvent e) {
-
-			}
 		});
 
 		textExpression = new Text(txtCmp, SWT.WRAP | SWT.V_SCROLL);
 		textExpression.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		textExpression.addMouseListener(new MouseAdapter() {
+
+			@Override
+			public void mouseDown(MouseEvent e) {
+				// if (ipDesc != null) {
+				// Point p = textExpression.getSelection();
+				// ipDesc.handleEdit(textExpression, value);
+				// setValue(value);
+				// textExpression.setSelection(p);
+				// }
+			}
+
+		});
 		textExpression.addModifyListener(new ModifyListener() {
 
 			@Override
 			public void modifyText(ModifyEvent e) {
-				if (value.getValueExpression() != null)
-					((JRDesignExpression) value.getValueExpression()).setText(textExpression.getText());
-				else
-					value.setValue(textExpression.getText());
+				if (isRefresh)
+					return;
+				Point p = textExpression.getSelection();
+				if (ipDesc != null)
+					ipDesc.handleEdit(textExpression, value);
+				setValue(value);
+				textExpression.setSelection(p);
 			}
 		});
 
@@ -317,25 +325,32 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 	 *          the expression to set
 	 */
 	public void setValue(StandardItemProperty exp) {
-		this.value = exp;
+		isRefresh = true;
+		try {
+			this.value = exp;
 
-		// PAY ATTENTION: Checks are needed in order to avoid notification
-		// loop due to the modifyEvent raised after a setText call.
-		String txt = lprovider.getText(exp);
-		textExpression.setText(txt);
-		String tooltip = txt;
-		if (ipDesc != null)
-			tooltip += "\n" + ipDesc.getDescription();
-		textExpression.setToolTipText(tooltip);
-		if (txt.length() >= oldpos)
-			textExpression.setSelection(oldpos, oldpos);
-		if (exp.getValueExpression() != null)
-			txtLabel.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/functions_icon.png"));
-		else
-			txtLabel.setImage(null);
+			// PAY ATTENTION: Checks are needed in order to avoid notification
+			// loop due to the modifyEvent raised after a setText call.
+			String txt = lprovider.getText(exp);
+			if (ipDesc != null)
+				txt = ipDesc.toSimpleString(txt);
+			textExpression.setText(txt);
+			String tooltip = txt;
+			if (ipDesc != null)
+				tooltip += "\n\n" + lprovider.getText(exp) + "\n\n" + ipDesc.getDescription();
+			textExpression.setToolTipText(tooltip);
+			if (txt.length() >= oldpos)
+				textExpression.setSelection(oldpos, oldpos);
+			if (exp.getValueExpression() != null)
+				txtLabel.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/functions_icon.png"));
+			else
+				txtLabel.setImage(null);
 
-		// Notifies the listeners of the new expression
-		fireModifyEvent();
+			// Notifies the listeners of the new expression
+			fireModifyEvent();
+		} finally {
+			isRefresh = false;
+		}
 	}
 
 	@Override
@@ -448,20 +463,13 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 	}
 
 	private void handleEditButton() {
-		ItemPropertyElementDialog dialog = new ItemPropertyElementDialog(UIUtils.getShell(), value) {
-			@Override
-			public boolean isMultiline() {
-				if (ipDesc != null)
-					return ipDesc.isMultiline();
-				return super.isMultiline();
-			}
-		};
-		if (ipDesc != null)
-			dialog.setDescription(ipDesc.getDescription());
+		ItemPropertyElementDialog dialog = new ItemPropertyElementDialog(UIUtils.getShell(), value, descriptor);
 		dialog.setExpressionContext(expContext);
 		if (dialog.open() == Dialog.OK)
 			setValue(dialog.getElementName());
 	}
+
+	private boolean isRefresh = false;
 
 	private ItemPropertyDescription<?> ipDesc;
 

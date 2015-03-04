@@ -30,6 +30,8 @@ import org.eclipse.swt.widgets.Text;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.property.itemproperty.desc.ADescriptor;
+import com.jaspersoft.studio.property.itemproperty.desc.ItemPropertyDescription;
 import com.jaspersoft.studio.swt.events.ExpressionModifiedEvent;
 import com.jaspersoft.studio.swt.events.ExpressionModifiedListener;
 import com.jaspersoft.studio.swt.widgets.WTextExpression;
@@ -48,11 +50,14 @@ public class ItemPropertyElementDialog extends ATitledDialog implements IExpress
 	private ExpressionContext expContext;
 	private StandardItemProperty pname;
 	private Composite dialogArea;
+	private ItemPropertyDescription<?> ipDesc;
 
-	public ItemPropertyElementDialog(Shell parentShell, StandardItemProperty pname) {
+	public ItemPropertyElementDialog(Shell parentShell, StandardItemProperty pname, ADescriptor descriptor) {
 		super(parentShell);
 		this.pname = (StandardItemProperty) pname.clone();
+		ipDesc = descriptor.getDescriptor(pname.getName());
 		setTitle(NLS.bind(Messages.ItemPropertyElementDialog_0, pname != null ? pname.getName() : "")); //$NON-NLS-2$
+		setDescription(ipDesc.getDescription());
 	}
 
 	@Override
@@ -64,11 +69,11 @@ public class ItemPropertyElementDialog extends ATitledDialog implements IExpress
 		useExpressionCheckbox.setText(Messages.ItemPropertyElementDialog_2);
 		useExpressionCheckbox.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 
-		propertyValue = new Text(dialogArea, isMultiline() ? SWT.WRAP | SWT.BORDER | SWT.MULTI | SWT.V_SCROLL
+		propertyValue = new Text(dialogArea, ipDesc.isMultiline() ? SWT.WRAP | SWT.BORDER | SWT.MULTI | SWT.V_SCROLL
 				| SWT.H_SCROLL | SWT.BORDER : SWT.BORDER);
 		GridData gd_propertyValue = new GridData(SWT.FILL, SWT.FILL, true, false);
 		gd_propertyValue.widthHint = 400;
-		if (isMultiline())
+		if (ipDesc.isMultiline())
 			gd_propertyValue.heightHint = 100;
 		propertyValue.setLayoutData(gd_propertyValue);
 
@@ -83,10 +88,6 @@ public class ItemPropertyElementDialog extends ATitledDialog implements IExpress
 		addListeners();
 
 		return dialogArea;
-	}
-
-	public boolean isMultiline() {
-		return false;
 	}
 
 	private void initWidgets() {
@@ -109,12 +110,22 @@ public class ItemPropertyElementDialog extends ATitledDialog implements IExpress
 		}
 	}
 
+	private boolean refresh = false;
+
 	private void addListeners() {
 		propertyValue.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
-				pname.setValue(propertyValue.getText());
-				propertyValue.setToolTipText(propertyValue.getText());
+				if (refresh)
+					return;
+				refresh = true;
+				try {
+					ipDesc.handleEdit(propertyValue, pname);
+					propertyValue.setToolTipText(propertyValue.getText());
+					propertyValue.setText(pname.getValue());
+				} finally {
+					refresh = false;
+				}
 			}
 		});
 		propertyValueExpression.addModifyListener(new ExpressionModifiedListener() {
@@ -126,29 +137,36 @@ public class ItemPropertyElementDialog extends ATitledDialog implements IExpress
 		useExpressionCheckbox.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				if (useExpressionCheckbox.getSelection()) {
-					// hide normal textbox
-					propertyValue.setText(""); //$NON-NLS-1$
-					propertyValue.setVisible(false);
-					propertyValue.setEnabled(false);
-					((GridData) propertyValue.getLayoutData()).exclude = true;
-					// and show expression widget
-					propertyValueExpression.setVisible(true);
-					propertyValueExpression.setEnabled(true);
-					((GridData) propertyValueExpression.getLayoutData()).exclude = false;
-				} else {
-					// hide the expression widget
-					propertyValueExpression.setVisible(false);
-					propertyValueExpression.setEnabled(false);
-					propertyValueExpression.setExpression(null);
-					((GridData) propertyValueExpression.getLayoutData()).exclude = true;
-					// and show the normal textbox
-					propertyValue.setText(""); //$NON-NLS-1$
-					propertyValue.setVisible(true);
-					propertyValue.setEnabled(true);
-					((GridData) propertyValue.getLayoutData()).exclude = false;
+				if (refresh)
+					return;
+				refresh = true;
+				try {
+					if (useExpressionCheckbox.getSelection()) {
+						// hide normal textbox
+						propertyValue.setText(""); //$NON-NLS-1$
+						propertyValue.setVisible(false);
+						propertyValue.setEnabled(false);
+						((GridData) propertyValue.getLayoutData()).exclude = true;
+						// and show expression widget
+						propertyValueExpression.setVisible(true);
+						propertyValueExpression.setEnabled(true);
+						((GridData) propertyValueExpression.getLayoutData()).exclude = false;
+					} else {
+						// hide the expression widget
+						propertyValueExpression.setVisible(false);
+						propertyValueExpression.setEnabled(false);
+						propertyValueExpression.setExpression(null);
+						((GridData) propertyValueExpression.getLayoutData()).exclude = true;
+						// and show the normal textbox
+						propertyValue.setText(""); //$NON-NLS-1$
+						propertyValue.setVisible(true);
+						propertyValue.setEnabled(true);
+						((GridData) propertyValue.getLayoutData()).exclude = false;
+					}
+					UIUtils.relayoutDialog(getShell(), defwidth, defheight);
+				} finally {
+					refresh = false;
 				}
-				UIUtils.relayoutDialog(getShell(), defwidth, defheight);
 			}
 		});
 	}

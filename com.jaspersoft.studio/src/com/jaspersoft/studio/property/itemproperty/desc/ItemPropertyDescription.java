@@ -8,6 +8,11 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.itemproperty.desc;
 
+import net.sf.jasperreports.components.map.StandardItemProperty;
+import net.sf.jasperreports.engine.design.JRDesignExpression;
+
+import org.eclipse.swt.widgets.Text;
+
 public class ItemPropertyDescription<T> {
 	private String name;
 	private String label;
@@ -92,7 +97,10 @@ public class ItemPropertyDescription<T> {
 		return original;
 	}
 
-	public String toOriginalString(String simple) {
-		return simple;
+	public void handleEdit(Text txt, StandardItemProperty value) {
+		if (value.getValueExpression() != null)
+			((JRDesignExpression) value.getValueExpression()).setText(txt.getText());
+		else
+			value.setValue(txt.getText());
 	}
 }
