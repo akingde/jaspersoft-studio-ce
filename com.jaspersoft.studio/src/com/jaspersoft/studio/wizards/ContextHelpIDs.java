@@ -99,4 +99,6 @@ public class ContextHelpIDs {
 	public static final String WIZARD_INSTALL_TRANSLATION_STEP2 = PREFIX.concat("createTranslationFragmentStep2");
 	
 	public static final String WIZARD_CONNECT_TO_DOMAIN = PREFIX.concat("domainConnectionWizardDialog");
+	
+	public static final String WIZARD_BACKWARD_COMPILER = PREFIX.concat("backwardCompilation");
 }

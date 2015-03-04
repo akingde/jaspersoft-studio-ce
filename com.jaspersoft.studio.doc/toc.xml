@@ -118,9 +118,11 @@
         </topic>
         <anchor id="jssextensionpoints"/>
      </topic>
-     <topic href="html/wizard/expressioneditor/extendeditor.html" label="Expression Editor: how to extend it and contribute your own functions">
+     <topic href="html/wizard/backwardcompilation/backcompilation.html" label="Compile with older JasperReports version from Jaspersoft Studio">
      </topic>
      <anchor id="jssdeveloperguide"/>
+     <topic label="Topic">
+     </topic>
   </topic>
   <anchor id="jsspluginhelp"/>
 

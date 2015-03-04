@@ -21,6 +21,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.wizards.ContextHelpIDs;
 import com.jaspersoft.studio.wizards.JSSWizardPage;
 
 /**
@@ -89,11 +90,6 @@ public class SummaryWizardPage extends JSSWizardPage {
 		});
 	}
 	
-	@Override
-	protected String getContextName() {
-		return null;
-	}
-	
 	/**
 	 * Set if the current operation was aborted. It will
 	 * update the content of the page
@@ -119,5 +115,10 @@ public class SummaryWizardPage extends JSSWizardPage {
 	@Override
 	public boolean isPageComplete() {
 		return true;
+	}
+	
+	@Override
+	protected String getContextName() {
+		return ContextHelpIDs.WIZARD_BACKWARD_COMPILER;
 	}
 }

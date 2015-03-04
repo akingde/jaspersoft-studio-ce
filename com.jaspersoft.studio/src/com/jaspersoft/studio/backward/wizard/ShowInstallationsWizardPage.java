@@ -28,6 +28,7 @@ import org.eclipse.swt.widgets.Label;
 import com.jaspersoft.studio.backward.JRDefinition;
 import com.jaspersoft.studio.backward.JRBackwardManager;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.wizards.ContextHelpIDs;
 import com.jaspersoft.studio.wizards.JSSWizardPage;
 
 /**
@@ -109,7 +110,7 @@ public class ShowInstallationsWizardPage extends JSSWizardPage {
 
 	@Override
 	protected String getContextName() {
-		return null;
+		return ContextHelpIDs.WIZARD_BACKWARD_COMPILER;
 	}
 
 }
