@@ -76,7 +76,7 @@ public class DSPie extends ADSComponent {
 
 	@Override
 	public String getName() {
-		return "Pie Dataset";
+		return "Pie Dataset"; //$NON-NLS-1$
 	}
 
 	@Override
@@ -92,7 +92,7 @@ public class DSPie extends ADSComponent {
 			minSlice.setText(NumberFormat.getInstance().format(
 					dataset.getMinPercentage()));
 		else
-			minSlice.setText("");
+			minSlice.setText(""); //$NON-NLS-1$
 		maxSlice.setSelection(dataset.getMaxCount() != null ? dataset
 				.getMaxCount().intValue() : 0);
 	}
@@ -102,7 +102,7 @@ public class DSPie extends ADSComponent {
 		if (!seriesList.isEmpty()) {
 			String[] srnames = new String[seriesList.size()];
 			for (int i = 0; i < seriesList.size(); i++) {
-				srnames[i] = String.format("Pie series (%d)", i);
+				srnames[i] = String.format("Pie series (%d)", i); //$NON-NLS-1$
 			}
 			seriesCombo.setItems(srnames);
 			seriesCombo.select(selection);
@@ -121,9 +121,9 @@ public class DSPie extends ADSComponent {
 		if (selection >= 0 && selection < dataset.getSeriesList().size())
 			serie = dataset.getSeriesList().get(selection);
 
-		valueWidget.bindObject(serie, "ValueExpression");
-		key.bindObject(serie, "KeyExpression");
-		labelWidget.bindObject(serie, "LabelExpression");
+		valueWidget.bindObject(serie, "ValueExpression"); //$NON-NLS-1$
+		key.bindObject(serie, "KeyExpression"); //$NON-NLS-1$
+		labelWidget.bindObject(serie, "LabelExpression"); //$NON-NLS-1$
 		hyperlinkBtn.setText(MessageFormat.format(Messages.DSCategory_defineHyperlinkButtton,seriesCombo.getText()));
 	}
 
@@ -134,12 +134,13 @@ public class DSPie extends ADSComponent {
 
 		Label lbl = new Label(yCompo, SWT.NONE);
 		lbl.setText(Messages.DSCategory_seriesLabel);
-
+		lbl.setToolTipText(Messages.DSPie_seriesTooltip);
 		seriesCombo = new Combo(yCompo, SWT.READ_ONLY | SWT.BORDER);
+		seriesCombo.setToolTipText(Messages.DSPie_seriesTooltip);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.widthHint = 300;
 		seriesCombo.setLayoutData(gd);
-		seriesCombo.setItems(new String[] { "series 1" });
+		seriesCombo.setItems(new String[] { "series 1" }); //$NON-NLS-1$
 		seriesCombo.addSelectionListener(new SelectionListener() {
 
 			public void widgetSelected(SelectionEvent e) {
@@ -154,7 +155,7 @@ public class DSPie extends ADSComponent {
 		});
 
 		final Button btn = new Button(yCompo, SWT.PUSH | SWT.FLAT);
-		btn.setText("...");
+		btn.setText("..."); //$NON-NLS-1$
 		btn.addSelectionListener(new SelectionListener() {
 
 			public void widgetSelected(SelectionEvent e) {
@@ -230,8 +231,9 @@ public class DSPie extends ADSComponent {
 		yCompo.setLayout(new GridLayout(3, false));
 
 		valueWidget = new ExpressionWidget(yCompo, Messages.DSCategory_valueLabel);
+		valueWidget.setToolTipText(Messages.DSPie_valueTooltip);
 		labelWidget = new ExpressionWidget(yCompo, Messages.DSCategory_labelLabel);
-
+		labelWidget.setToolTipText(Messages.DSPie_labelTooltip);
 		return yCompo;
 	}
 
@@ -241,8 +243,8 @@ public class DSPie extends ADSComponent {
 		yCompo.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_CENTER));
 		yCompo.setLayout(new GridLayout(10, false));
 
-		key = new ExpressionWidget(yCompo, "Key");
-
+		key = new ExpressionWidget(yCompo, "Key"); //$NON-NLS-1$
+		key.setToolTipText(Messages.DSPie_keyTooltip);
 		return yCompo;
 	}
 
@@ -252,7 +254,7 @@ public class DSPie extends ADSComponent {
 		yCompo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		yCompo.setLayout(new GridLayout(2, false));
 
-		new Label(yCompo, SWT.NONE).setText("Min slice percentage");
+		new Label(yCompo, SWT.NONE).setText(Messages.DSPie_minSlicePercentage);
 		minSlice = new Text(yCompo, SWT.BORDER);
 		minSlice.addListener(SWT.Verify, new Listener() {
 
@@ -289,7 +291,7 @@ public class DSPie extends ADSComponent {
 			}
 		});
 
-		new Label(yCompo, SWT.NONE).setText("Max slices to show");
+		new Label(yCompo, SWT.NONE).setText(Messages.DSPie_maxSlices);
 		maxSlice = new Spinner(yCompo, SWT.BORDER);
 		maxSlice.addModifyListener(new ModifyListener() {
 
@@ -301,7 +303,7 @@ public class DSPie extends ADSComponent {
 		});
 		
 		obtn = new Button(yCompo, SWT.PUSH);
-		obtn.setText("Other Section");
+		obtn.setText(Messages.DSPie_otherSectionButton);
 		obtn.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false, 2, 1));
 		obtn.addSelectionListener(new SelectionListener() {
 

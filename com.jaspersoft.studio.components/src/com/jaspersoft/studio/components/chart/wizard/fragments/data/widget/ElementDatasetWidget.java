@@ -417,17 +417,17 @@ public class ElementDatasetWidget implements IExpressionContextSetter {
 				| GridData.VERTICAL_ALIGN_BEGINNING));
 
 		new Label(leftComposite, SWT.NONE).setText(Messages.ElementDatasetWidget_incrementOnLabel);
-		cbIncrement = new Combo(leftComposite, SWT.BORDER | SWT.READ_ONLY
-				| SWT.SINGLE);
+		cbIncrement = new Combo(leftComposite, SWT.BORDER | SWT.READ_ONLY| SWT.SINGLE);
 		cbIncrement.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		cbIncrement.setToolTipText("Define the moment during the execution of the report when the chart will read the current and use its values to populate itslef. None means each record, report only at the end, page and column each page or column or group when the group changes");
 		btnIncrement = new Button(leftComposite, SWT.PUSH);
 		btnIncrement.setText("..."); //$NON-NLS-1$
 		btnIncrement.setToolTipText(Messages.ElementDatasetWidget_buttonTooltip);
 
 		new Label(leftComposite, SWT.NONE).setText(Messages.ElementDatasetWidget_resetOnLabel);
-		cbReset = new Combo(leftComposite, SWT.BORDER | SWT.READ_ONLY
-				| SWT.SINGLE);
+		cbReset = new Combo(leftComposite, SWT.BORDER | SWT.READ_ONLY| SWT.SINGLE);
 		cbReset.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		cbReset.setToolTipText("Define the moment during the execution when the chart delete the acquired data from the previous record and start from the current record. This can be used when the chart is printed on more paged and it need to show only a subset of the dataset record in the moment it is printed");
 
 		new Label(leftComposite, SWT.NONE);
 

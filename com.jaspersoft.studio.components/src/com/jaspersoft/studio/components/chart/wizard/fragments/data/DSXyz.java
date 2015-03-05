@@ -117,8 +117,11 @@ public class DSXyz extends ADSComponent {
 
 		Label lbl = new Label(yCompo, SWT.NONE);
 		lbl.setText(Messages.DSCategory_seriesLabel);
+		lbl.setToolTipText(Messages.DSCategory_seriesTooltip);
 
 		seriesCombo = new Combo(yCompo, SWT.READ_ONLY | SWT.BORDER);
+		seriesCombo.setToolTipText(Messages.DSXyz_seriesTooltip);
+
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.widthHint = 300;
 		seriesCombo.setLayoutData(gd);
@@ -212,7 +215,9 @@ public class DSXyz extends ADSComponent {
 		yCompo.setLayout(new GridLayout(3, false));
 
 		yvalueWidget = new ExpressionWidget(yCompo, Messages.DSXy_valueYLabel);
+		yvalueWidget.setToolTipText(Messages.DSXyz_yTooltip);
 		zvalueWidget = new ExpressionWidget(yCompo, Messages.DSXyz_valuzeZLabel);
+		zvalueWidget.setToolTipText(Messages.DSXyz_zTooltip);
 		return yCompo;
 	}
 
@@ -223,6 +228,7 @@ public class DSXyz extends ADSComponent {
 		yCompo.setLayout(new GridLayout(3, false));
 
 		xvalueWidget = new ExpressionWidget(yCompo, Messages.DSXy_valueXLabel);
+		xvalueWidget.setToolTipText(Messages.DSXyz_xTooltip);
 		return yCompo;
 	}
 

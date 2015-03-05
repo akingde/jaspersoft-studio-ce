@@ -188,4 +188,14 @@ public class ExpressionWidget {
 	public boolean isEnabled() {
 		return expButton.isEnabled() && expText.isEnabled();
 	}
+	
+	/**
+	 * Set the tooltip of the label and of the text area
+	 * 
+	 * @param text the tooltip text
+	 */
+	public void setToolTipText(String text){
+		expText.setToolTipText(text);
+		expLabel.setToolTipText(text);
+	}
 }

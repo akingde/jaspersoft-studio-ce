@@ -116,8 +116,10 @@ public class DSCategory extends ADSComponent {
 
 		Label lbl = new Label(yCompo, SWT.NONE);
 		lbl.setText(Messages.DSCategory_seriesLabel);
+		lbl.setToolTipText(Messages.DSCategory_seriesTooltip);
 
 		seriesCombo = new Combo(yCompo, SWT.READ_ONLY | SWT.BORDER);
+		seriesCombo.setToolTipText(Messages.DSCategory_seriesTooltip);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.widthHint = 300;
 		seriesCombo.setLayoutData(gd);
@@ -220,6 +222,7 @@ public class DSCategory extends ADSComponent {
 		yCompo.setLayout(new GridLayout(3, false));
 
 		valueWidget = new ExpressionWidget(yCompo, Messages.DSCategory_valueLabel);
+		valueWidget.setToolTipText(Messages.DSCategory_valueTooltip);
 		return yCompo;
 	}
 
@@ -230,6 +233,7 @@ public class DSCategory extends ADSComponent {
 		xCompo.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_CENTER));
 
 		categWidget = new ExpressionWidget(xCompo, Messages.DSCategory_categoryLabel);
+		categWidget.setToolTipText(Messages.DSCategory_categoryTooltip);
 		return xCompo;
 	}
 
