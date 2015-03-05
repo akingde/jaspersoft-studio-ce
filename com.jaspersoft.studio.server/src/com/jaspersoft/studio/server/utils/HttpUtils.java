@@ -46,10 +46,9 @@ public class HttpUtils {
 	public static Executor setupProxy(Executor exec, URI uri) {
 		for (IProxyData d : proxyService.select(uri)) {
 			Credentials c = getCredentials(d);
-			if (c != null) {
+			if (c != null)
 				exec.auth(new HttpHost(d.getHost(), d.getPort()), c);
-				exec.authPreemptiveProxy(new HttpHost(d.getHost(), d.getPort()));
-			}
+			exec.authPreemptiveProxy(new HttpHost(d.getHost(), d.getPort()));
 			break;
 		}
 		executors.put(exec, uri);
