@@ -1750,6 +1750,7 @@ public class Messages extends NLS {
 	public static String StyleTemplateImportWizard_title;
 	public static String StyleTemplateNewWizard_description;
 	public static String StyleTemplateNewWizard_title;
+	public static String StyleTemplateNewWizard_VirtualFolderErr;
 	public static String StyleTemplateNewWizard_wizardtitle;
 	public static String SubreportParameterPage_copyFromMaster;
 	public static String SubreportPropertiesLabelProvider_numbers_of_parameters;
@@ -1967,6 +1968,7 @@ public class Messages extends NLS {
 	public static String WizardSortFieldPage_Title;
 	public static String NewFileDataAdapterWizard_1;
 	public static String NewFileDataAdapterWizard_2;
+	public static String NewFileDataAdapterWizard_VirtualFolderError;
 	public static String NewSubreportPage_useReport_text;
 	public static String NewSubreportPage_newReport_text;
 	public static String NewSubreportPage_useReportB_text;
@@ -1983,6 +1985,7 @@ public class Messages extends NLS {
 	public static String DuplicateDataAdapterAction_duplicateName;
 	public static String DuplicateDataAdapterAction_duplicateToolTip;
 	public static String DuplicateDataAdapterAction_newAdapterPrefix;
+	public static String DynamicNewFileCreationWizard_VirtualFolderError;
 
 	static {
 		// initialize resource bundle

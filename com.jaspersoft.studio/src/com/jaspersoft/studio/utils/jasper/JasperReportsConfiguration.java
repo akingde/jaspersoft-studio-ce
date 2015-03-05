@@ -257,9 +257,12 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 			list = new ArrayList<RepositoryService>();
 		if (file != null) {
 			Set<String> rset = new HashSet<String>();
-			if (file.isLinked())
+			if (file.isLinked()) {
 				add(list, rset, file.getRawLocation().toFile().getParentFile().getAbsolutePath());
-			add(list, rset, file.getParent().getLocation().toFile().getAbsolutePath());
+			}
+			if(!file.getParent().isVirtual()) {
+				add(list, rset, file.getParent().getLocation().toFile().getAbsolutePath());
+			}
 			add(list, rset, file.getProject().getLocation().toFile().getAbsolutePath());
 		}
 		repositoryServices = new ArrayList<RepositoryService>();

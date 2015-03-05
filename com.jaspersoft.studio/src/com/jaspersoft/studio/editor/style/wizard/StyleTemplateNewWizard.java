@@ -16,6 +16,7 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 
+import net.sf.jasperreports.eclipse.builder.jdt.JDTUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.eclipse.wizard.project.ProjectUtil;
 import net.sf.jasperreports.engine.JRException;
@@ -75,7 +76,7 @@ import com.jaspersoft.studio.wizards.ContextHelpIDs;
  */
 
 public class StyleTemplateNewWizard extends Wizard implements INewWizard {
-	public static final String WIZARD_ID = "com.jaspersoft.studio.wizards.StyleTemplateNewWizard";
+	public static final String WIZARD_ID = "com.jaspersoft.studio.wizards.StyleTemplateNewWizard"; //$NON-NLS-1$
 	private static final String NEW_STYLE_NAME = "NEW_STYLE";//$NON-NLS-1$
 	private static final String NEW_STYLE_EXT = ".jrtx";//$NON-NLS-1$
 	protected static final String NEW_STYLE_JRTX = NEW_STYLE_NAME + NEW_STYLE_EXT;
@@ -89,6 +90,7 @@ public class StyleTemplateNewWizard extends Wizard implements INewWizard {
 		super();
 		setWindowTitle(Messages.StyleTemplateNewWizard_wizardtitle);
 		setNeedsProgressMonitor(true);
+		JDTUtils.deactivateLinkedResourcesSupport();
 	}
 
 	/**
@@ -170,7 +172,9 @@ public class StyleTemplateNewWizard extends Wizard implements INewWizard {
 	 * This method is called when 'Finish' button is pressed in the wizard. We will create an operation and run it using
 	 * wizard as execution context.
 	 */
+	@Override
 	public boolean performFinish() {
+		JDTUtils.restoreLinkedResourcesSupport();
 		final String containerName = step1.getContainerFullPath().toPortableString();
 		final String fileName = step1.getFileName();
 		IRunnableWithProgress op = new IRunnableWithProgress() {
@@ -195,7 +199,22 @@ public class StyleTemplateNewWizard extends Wizard implements INewWizard {
 		}
 		return true;
 	}
+	
+	@Override
+	public boolean performCancel() {
+		JDTUtils.restoreLinkedResourcesSupport();
+		return super.performCancel();
+	}
 
+	@Override
+	public boolean canFinish() {
+		if(JDTUtils.isVirtualResource(step1.getContainerFullPath())) {
+			step1.setErrorMessage(Messages.StyleTemplateNewWizard_VirtualFolderErr);
+			return false;
+		}
+		return super.canFinish();
+	}
+	
 	private IFile file;
 
 	/**
@@ -210,6 +229,9 @@ public class StyleTemplateNewWizard extends Wizard implements INewWizard {
 		IResource resource = root.findMember(new Path(containerName));
 		if (!resource.exists() || !(resource instanceof IContainer)) {
 			throwCoreException("Container \"" + containerName + "\" does not exist."); //$NON-NLS-1$ //$NON-NLS-2$
+		}
+		if (resource.isVirtual()) {
+			throwCoreException("Container \"" + containerName + "\" is a virtual folder."); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		Display.getDefault().syncExec(new Runnable() {
 

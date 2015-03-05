@@ -12,6 +12,7 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 
+import net.sf.jasperreports.eclipse.builder.jdt.JDTUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.eclipse.wizard.project.ProjectUtil;
 
@@ -84,6 +85,7 @@ public class NewFileDataAdapterWizard extends AbstractDataAdapterWizard implemen
 		setWindowTitle(Messages.DataAdapterWizard_windowtitle);
 		this.storage = DataAdapterManager.getPreferencesStorage();
 		setConfig(JasperReportsConfiguration.getDefaultJRConfig());
+		JDTUtils.deactivateLinkedResourcesSupport();
 	}
 
 	/**
@@ -140,6 +142,20 @@ public class NewFileDataAdapterWizard extends AbstractDataAdapterWizard implemen
 				PlatformUI.getWorkbench().getHelpSystem().displayHelp(contextName);
 			}
 		};
+		
+		@Override
+		public boolean canFlipToNextPage() {
+			if(JDTUtils.isVirtualResource(getContainerFullPath())) {
+				setErrorMessage(Messages.NewFileDataAdapterWizard_VirtualFolderError);
+				return false;
+			}
+			return super.canFlipToNextPage();
+		}
+		
+		@Override
+		public boolean isPageComplete() {
+			return !JDTUtils.isVirtualResource(getContainerFullPath()) && super.isPageComplete();
+		}
 	}
 
 	@Override
@@ -229,6 +245,7 @@ public class NewFileDataAdapterWizard extends AbstractDataAdapterWizard implemen
 	// Save the new adapter using the manager
 	@Override
 	public boolean performFinish() {
+		JDTUtils.restoreLinkedResourcesSupport();
 		DataAdapterDescriptor editedDataAdapter = dataAdapterEditorPage.getDataAdapter();
 		dataAdapterEditorPage.performFinishInvoked();
 
@@ -264,6 +281,12 @@ public class NewFileDataAdapterWizard extends AbstractDataAdapterWizard implemen
 			return false;
 		}
 		return true;
+	}
+	
+	@Override
+	public boolean performCancel() {
+		JDTUtils.restoreLinkedResourcesSupport();
+		return super.performCancel();
 	}
 
 	private IFile file;

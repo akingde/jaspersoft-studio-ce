@@ -11,6 +11,7 @@ package com.jaspersoft.studio.wizards;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
+import net.sf.jasperreports.eclipse.builder.jdt.JDTUtils;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.wizard.project.ProjectUtil;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -122,6 +123,7 @@ public class ReportNewWizard extends JSSWizard implements INewWizard {
 		JasperReportsConfiguration jrConfig = JasperReportsConfiguration.getDefaultJRConfig();
 		jrConfig.setJasperDesign(new JasperDesign());
 		setConfig(jrConfig);
+		JDTUtils.deactivateLinkedResourcesSupport();
 	}
 
 	public ReportNewWizard(IWizard parentWizard, IWizardPage fallbackPage) {
@@ -129,6 +131,7 @@ public class ReportNewWizard extends JSSWizard implements INewWizard {
 		setWindowTitle(Messages.ReportNewWizard_title);
 		setNeedsProgressMonitor(true);
 		showCongratulationsStep = false;
+		JDTUtils.deactivateLinkedResourcesSupport();
 	}
 
 	/**
@@ -157,6 +160,7 @@ public class ReportNewWizard extends JSSWizard implements INewWizard {
 	 */
 	@Override
 	public boolean performCancel() {
+		JDTUtils.restoreLinkedResourcesSupport();
 		templateChooserStep.getTemplateBundle().doCancel();
 		return super.performCancel();
 	}
@@ -169,6 +173,7 @@ public class ReportNewWizard extends JSSWizard implements INewWizard {
 	@Override
 	public boolean performFinish() {
 		try {
+			JDTUtils.restoreLinkedResourcesSupport();
 			Map<String, Object> settings = getSettings();
 			//Store in the settings some information from the location step
 			settings.put(CONTAINER_NAME_KEY, fileLocationStep.getContainerFullPath().toPortableString()); 

@@ -29,6 +29,7 @@ import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IStorage;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -38,6 +39,7 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorReference;
@@ -367,6 +369,23 @@ public class SelectionHelper {
 		IEditorPart activeJRXMLEditor = getActiveJRXMLEditor();
 		if(activeJRXMLEditor instanceof JrxmlEditor) {
 			return ((JrxmlEditor)activeJRXMLEditor).getReportContainer().getActivePage() == 0;
+		}
+		return false;
+	}
+	
+	/**
+	 * Checks if the current selection of the active workbench window is virtual resource.
+	 * 
+	 * @return <code>true</code> if selection is a virtual resource, <code>false</code> otherwise
+	 * @see IResource#isVirtual()
+	 */
+	public static boolean isCurrentSelectionVirtualResource() {
+		ISelection selection = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().getSelection();
+		if(selection instanceof IStructuredSelection) {
+			Object firstElement = ((IStructuredSelection) selection).getFirstElement();
+			if(firstElement instanceof IResource && ((IResource) firstElement).isVirtual()){
+				return true;
+			}
 		}
 		return false;
 	}

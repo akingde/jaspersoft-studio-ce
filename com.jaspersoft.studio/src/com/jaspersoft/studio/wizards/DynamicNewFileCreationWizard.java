@@ -12,10 +12,13 @@
  ******************************************************************************/
 package com.jaspersoft.studio.wizards;
 
+import net.sf.jasperreports.eclipse.builder.jdt.JDTUtils;
+
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardPage;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.wizards.category.ReportTemplatesWizardPage;
 
 /**
@@ -49,10 +52,19 @@ public class DynamicNewFileCreationWizard extends NewFileCreationWizard {
 	 */
 	@Override
 	public boolean canFlipToNextPage() {
+		if(JDTUtils.isVirtualResource(getContainerFullPath())) {
+			setErrorMessage(Messages.DynamicNewFileCreationWizard_VirtualFolderError);
+			return false;
+		}
 		ReportNewWizard container = (ReportNewWizard)getWizard();
 		ReportTemplatesWizardPage firstStaticStep = container.getTemplateChooserStep();
 		WizardPage[] pages = firstStaticStep.getTemplateBundle().getCustomWizardPages();
 		return  isPageComplete() && (pages.length>0 || container.hasCongratulationStep());
+	}
+	
+	@Override
+	public boolean isPageComplete() {
+		return !JDTUtils.isVirtualResource(getContainerFullPath()) && super.isPageComplete();
 	}
 
 }
