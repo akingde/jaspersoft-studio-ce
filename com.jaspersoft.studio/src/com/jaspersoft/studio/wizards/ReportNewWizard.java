@@ -92,7 +92,7 @@ public class ReportNewWizard extends JSSWizard implements INewWizard {
 	/**
 	 * Step where the user can choose the location on the workspace of the report file and its name
 	 */
-	private DynamicNewFileCreationWizard fileLocationStep;
+	private DynamicNewFileCreationWizardPage fileLocationStep;
 
 	/**
 	 * Congratulation page placed at the end of the wizard. This page is optional and the flag showCongratulationStep
@@ -142,7 +142,7 @@ public class ReportNewWizard extends JSSWizard implements INewWizard {
 		templateChooserStep = new ReportTemplatesWizardPage();
 		addPage(templateChooserStep);
 
-		fileLocationStep = new DynamicNewFileCreationWizard("newFilePage1", (IStructuredSelection) selection);//$NON-NLS-1$
+		fileLocationStep = new DynamicNewFileCreationWizardPage("newFilePage1", (IStructuredSelection) selection);//$NON-NLS-1$
 		addPage(fileLocationStep);
 
 		if (showCongratulationsStep) {
@@ -301,7 +301,7 @@ public class ReportNewWizard extends JSSWizard implements INewWizard {
 	 * 
 	 * @return a not null wizard page where the user choose a report template
 	 */
-	public NewFileCreationWizard getFileLocationStep() {
+	public NewFileCreationWizardPage getFileLocationStep() {
 		return fileLocationStep;
 	}
 
@@ -334,7 +334,7 @@ public class ReportNewWizard extends JSSWizard implements INewWizard {
 		 * The File Location, that contains the information and the 
 		 * methods to create the file
 		 */
-		private NewFileCreationWizard creationWizard;
+		private NewFileCreationWizardPage creationWizard;
 		
 		/**
 		 * Create a FileCreator for a specific wizard
@@ -342,7 +342,7 @@ public class ReportNewWizard extends JSSWizard implements INewWizard {
 		 * @param creationWizard wizard from where the File Location
 		 * step is read
 		 */
-		public FileCreator(NewFileCreationWizard creationWizard){
+		public FileCreator(NewFileCreationWizardPage creationWizard){
 			this.creationWizard = creationWizard;
 		}
 		

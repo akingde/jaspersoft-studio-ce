@@ -41,7 +41,7 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.templates.TemplateBundle;
 
-public class NewFileCreationWizard extends WizardNewFileCreationPage implements ContextData {
+public class NewFileCreationWizardPage extends WizardNewFileCreationPage implements ContextData {
 
 	protected IStructuredSelection currentSelection = null;
 	
@@ -56,7 +56,7 @@ public class NewFileCreationWizard extends WizardNewFileCreationPage implements 
 	 */
 	// boolean firstLoad = true;
 
-	public NewFileCreationWizard(String pageName, IStructuredSelection selection) {
+	public NewFileCreationWizardPage(String pageName, IStructuredSelection selection) {
 		super(pageName, selection);
 
 		this.currentSelection = selection;

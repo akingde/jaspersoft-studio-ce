@@ -53,7 +53,7 @@ import com.jaspersoft.studio.templates.StudioTemplateManager;
 import com.jaspersoft.studio.templates.engine.DefaultTemplateEngine;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.wizards.JSSWizard;
-import com.jaspersoft.studio.wizards.NewFileCreationWizard;
+import com.jaspersoft.studio.wizards.NewFileCreationWizardPage;
 import com.jaspersoft.templates.ReportBundle;
 import com.jaspersoft.templates.TemplateBundle;
 import com.jaspersoft.templates.TemplateEngine;
@@ -70,7 +70,7 @@ public class DefaultNewWizard extends JSSWizard implements INewWizard {
 	/**
 	 * Set to select the template set location
 	 */
-	private NewFileCreationWizard step1;
+	private NewFileCreationWizardPage step1;
 	
 	/**
 	 * The generated resource at the end of the wizard
@@ -98,7 +98,7 @@ public class DefaultNewWizard extends JSSWizard implements INewWizard {
 	 */
 	@Override
 	public void addPages() {
-		step1 = new NewFileCreationWizard("newFilePage1", StructuredSelection.EMPTY);//$NON-NLS-1$
+		step1 = new NewFileCreationWizardPage("newFilePage1", StructuredSelection.EMPTY);//$NON-NLS-1$
 		step1.setBaseName("template_set.jrxml"); //$NON-NLS-1$
 		addPage(step1);
 

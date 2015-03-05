@@ -156,6 +156,12 @@ public class NewFileDataAdapterWizard extends AbstractDataAdapterWizard implemen
 		public boolean isPageComplete() {
 			return !JDTUtils.isVirtualResource(getContainerFullPath()) && super.isPageComplete();
 		}
+		
+		@Override
+		public void setVisible(boolean visible) {
+			JDTUtils.deactivateLinkedResourcesSupport(visible);
+			super.setVisible(visible);
+		}
 	}
 
 	@Override

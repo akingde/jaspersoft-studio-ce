@@ -129,6 +129,12 @@ public class ChartThemeNewWizard extends Wizard implements INewWizard {
 			});
 			setHelpData();
 		};
+		
+		@Override
+		public void setVisible(boolean visible) {
+			JDTUtils.deactivateLinkedResourcesSupport(visible);
+			super.setVisible(visible);
+		}
 	}
 
 	/**

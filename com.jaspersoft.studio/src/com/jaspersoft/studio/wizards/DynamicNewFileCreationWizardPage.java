@@ -29,9 +29,9 @@ import com.jaspersoft.studio.wizards.category.ReportTemplatesWizardPage;
  * @author Orlandin Marco
  *
  */
-public class DynamicNewFileCreationWizard extends NewFileCreationWizard {
+public class DynamicNewFileCreationWizardPage extends NewFileCreationWizardPage {
 
-	public DynamicNewFileCreationWizard(String pageName, IStructuredSelection selection) {
+	public DynamicNewFileCreationWizardPage(String pageName, IStructuredSelection selection) {
 		super(pageName, selection);
 	}
 	
@@ -65,6 +65,12 @@ public class DynamicNewFileCreationWizard extends NewFileCreationWizard {
 	@Override
 	public boolean isPageComplete() {
 		return !JDTUtils.isVirtualResource(getContainerFullPath()) && super.isPageComplete();
+	}
+	
+	@Override
+	public void setVisible(boolean visible) {
+		JDTUtils.deactivateLinkedResourcesSupport(visible);
+		super.setVisible(visible);
 	}
 
 }
