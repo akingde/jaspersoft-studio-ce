@@ -45,8 +45,11 @@ public class HttpUtils {
 
 	public static Executor setupProxy(Executor exec, URI uri) {
 		for (IProxyData d : proxyService.select(uri)) {
-			exec.auth(new HttpHost(d.getHost(), d.getPort()), getCredentials(d));
-			exec.authPreemptiveProxy(new HttpHost(d.getHost(), d.getPort()));
+			Credentials c = getCredentials(d);
+			if (c != null) {
+				exec.auth(new HttpHost(d.getHost(), d.getPort()), c);
+				exec.authPreemptiveProxy(new HttpHost(d.getHost(), d.getPort()));
+			}
 			break;
 		}
 		executors.put(exec, uri);
@@ -54,10 +57,16 @@ public class HttpUtils {
 	}
 
 	public static void setupProxy(ClientConfig clientConfig, URI uri) {
-		CredentialsProvider cp = (CredentialsProvider) clientConfig.getProperty(ApacheClientProperties.CREDENTIALS_PROVIDER);
+		CredentialsProvider cp = (CredentialsProvider) clientConfig
+				.getProperty(ApacheClientProperties.CREDENTIALS_PROVIDER);
 		for (IProxyData d : proxyService.select(uri)) {
-			cp.setCredentials(new AuthScope(new HttpHost(d.getHost(), d.getPort())), getCredentials(d));
-			clientConfig.property(ClientProperties.PROXY_URI, d.getHost());
+			Credentials c = getCredentials(d);
+			if (c != null) {
+				cp.setCredentials(
+						new AuthScope(new HttpHost(d.getHost(), d.getPort())),
+						c);
+				clientConfig.property(ClientProperties.PROXY_URI, d.getHost());
+			}
 			break;
 		}
 		clientConfigs.put(clientConfig, uri);
@@ -74,27 +83,33 @@ public class HttpUtils {
 		return req;
 	}
 
-	public static Request get(String url, ServerProfile sp) throws HttpException, IOException {
+	public static Request get(String url, ServerProfile sp)
+			throws HttpException, IOException {
 		System.out.println(url);
 		return HttpUtils.setRequest(Request.Get(url), sp);
 	}
 
-	public static Request put(String url, ServerProfile sp) throws HttpException, IOException {
+	public static Request put(String url, ServerProfile sp)
+			throws HttpException, IOException {
 		System.out.println(url);
 		return HttpUtils.setRequest(Request.Put(url), sp);
 	}
 
-	public static Request post(String url, ServerProfile sp) throws HttpException, IOException {
+	public static Request post(String url, ServerProfile sp)
+			throws HttpException, IOException {
 		System.out.println(url);
 		return HttpUtils.setRequest(Request.Post(url), sp);
 	}
 
-	public static Request post(String url, Form form, ServerProfile sp) throws HttpException, IOException {
+	public static Request post(String url, Form form, ServerProfile sp)
+			throws HttpException, IOException {
 		System.out.println(url);
-		return HttpUtils.setRequest(Request.Post(url).bodyForm(form.build()), sp);
+		return HttpUtils.setRequest(Request.Post(url).bodyForm(form.build()),
+				sp);
 	}
 
-	public static Request delete(String url, ServerProfile sp) throws HttpException, IOException {
+	public static Request delete(String url, ServerProfile sp)
+			throws HttpException, IOException {
 		System.out.println(url);
 		return HttpUtils.setRequest(Request.Delete(url), sp);
 	}
@@ -103,8 +118,10 @@ public class HttpUtils {
 	private static Map<ClientConfig, URI> clientConfigs = new HashMap<ClientConfig, URI>();
 
 	public static IProxyService getProxyService() {
-		BundleContext bc = Activator.getDefault().getBundle().getBundleContext();
-		ServiceReference  serviceReference = bc.getServiceReference(IProxyService.class.getName());
+		BundleContext bc = Activator.getDefault().getBundle()
+				.getBundleContext();
+		ServiceReference serviceReference = bc
+				.getServiceReference(IProxyService.class.getName());
 		IProxyService service = (IProxyService) bc.getService(serviceReference);
 		service.addProxyChangeListener(new IProxyChangeListener() {
 
@@ -123,7 +140,8 @@ public class HttpUtils {
 
 	protected static Credentials getCredentials(IProxyData data) {
 		String userId = data.getUserId();
-		Credentials proxyCred = new UsernamePasswordCredentials(userId, data.getPassword());
+		Credentials proxyCred = new UsernamePasswordCredentials(userId,
+				data.getPassword());
 		// if the username is in the form "user\domain"
 		// then use NTCredentials instead.
 		int domainIndex = userId.indexOf("\\");
@@ -131,7 +149,8 @@ public class HttpUtils {
 			String domain = userId.substring(0, domainIndex);
 			if (userId.length() > domainIndex + 1) {
 				String user = userId.substring(domainIndex + 1);
-				proxyCred = new NTCredentials(user, data.getPassword(), data.getHost(), domain);
+				proxyCred = new NTCredentials(user, data.getPassword(),
+						data.getHost(), domain);
 			}
 		}
 		return proxyCred;
