@@ -61,12 +61,11 @@ public class HttpUtils {
 				.getProperty(ApacheClientProperties.CREDENTIALS_PROVIDER);
 		for (IProxyData d : proxyService.select(uri)) {
 			Credentials c = getCredentials(d);
-			if (c != null) {
+			if (c != null)
 				cp.setCredentials(
 						new AuthScope(new HttpHost(d.getHost(), d.getPort())),
 						c);
-				clientConfig.property(ClientProperties.PROXY_URI, d.getHost());
-			}
+			clientConfig.property(ClientProperties.PROXY_URI, d.getHost());
 			break;
 		}
 		clientConfigs.put(clientConfig, uri);
@@ -140,19 +139,22 @@ public class HttpUtils {
 
 	protected static Credentials getCredentials(IProxyData data) {
 		String userId = data.getUserId();
-		Credentials proxyCred = new UsernamePasswordCredentials(userId,
-				data.getPassword());
-		// if the username is in the form "user\domain"
-		// then use NTCredentials instead.
-		int domainIndex = userId.indexOf("\\");
-		if (domainIndex > 0) {
-			String domain = userId.substring(0, domainIndex);
-			if (userId.length() > domainIndex + 1) {
-				String user = userId.substring(domainIndex + 1);
-				proxyCred = new NTCredentials(user, data.getPassword(),
-						data.getHost(), domain);
+		if (userId != null) {
+			Credentials proxyCred = new UsernamePasswordCredentials(userId,
+					data.getPassword());
+			// if the username is in the form "user\domain"
+			// then use NTCredentials instead.
+			int domainIndex = userId.indexOf("\\");
+			if (domainIndex > 0) {
+				String domain = userId.substring(0, domainIndex);
+				if (userId.length() > domainIndex + 1) {
+					String user = userId.substring(domainIndex + 1);
+					proxyCred = new NTCredentials(user, data.getPassword(),
+							data.getHost(), domain);
+				}
 			}
+			return proxyCred;
 		}
-		return proxyCred;
+		return null;
 	}
 }
