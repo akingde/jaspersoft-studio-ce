@@ -153,26 +153,28 @@ public class ReportControler {
 			setDefaultParameterValues(jasperParameters, jrContext);
 		} else {
 			Map<String, Object> map = new HashMap<String, Object>();
-			List<JRParameter> prm = jrContext.getJasperDesign().getParametersList();
-			for (JRParameter p : prm) {
-				Object obj = jasperParameters.get(p.getName());
-				if (p.getName().endsWith(JRScriptlet.SCRIPTLET_PARAMETER_NAME_SUFFIX))
-					continue;
-				if (p.getName().equals(JRParameter.REPORT_DATA_SOURCE))
-					continue;
-				if (p.getName().equals(JRParameter.REPORT_CONNECTION))
-					continue;
-				if (p.getName().startsWith("XML_") || p.getName().startsWith("MONDRIAN_") //$NON-NLS-1$ //$NON-NLS-1$
-						|| p.getName().startsWith("XLSX_") || p.getName().startsWith("XLS_") //$NON-NLS-1$ //$NON-NLS-1$
-						|| p.getName().startsWith("JSON_") || p.getName().startsWith("HIBERNATE_") //$NON-NLS-1$ //$NON-NLS-1$
-						|| p.getName().startsWith("JPA_") || p.getName().startsWith("CSV_") //$NON-NLS-1$ //$NON-NLS-1$
-						|| p.getName().contains("csv.source") || p.getName().startsWith("XMLA_")) //$NON-NLS-1$ //$NON-NLS-1$
-					continue;
-				try {
-					if (obj != null && p.getValueClass().isAssignableFrom(obj.getClass()) && p.isForPrompting()) {
-						map.put(p.getName(), obj);
+			if (jrContext.getJasperDesign() != null) {
+				List<JRParameter> prm = jrContext.getJasperDesign().getParametersList();
+				for (JRParameter p : prm) {
+					Object obj = jasperParameters.get(p.getName());
+					if (p.getName().endsWith(JRScriptlet.SCRIPTLET_PARAMETER_NAME_SUFFIX))
+						continue;
+					if (p.getName().equals(JRParameter.REPORT_DATA_SOURCE))
+						continue;
+					if (p.getName().equals(JRParameter.REPORT_CONNECTION))
+						continue;
+					if (p.getName().startsWith("XML_") || p.getName().startsWith("MONDRIAN_") //$NON-NLS-1$ //$NON-NLS-1$
+							|| p.getName().startsWith("XLSX_") || p.getName().startsWith("XLS_") //$NON-NLS-1$ //$NON-NLS-1$
+							|| p.getName().startsWith("JSON_") || p.getName().startsWith("HIBERNATE_") //$NON-NLS-1$ //$NON-NLS-1$
+							|| p.getName().startsWith("JPA_") || p.getName().startsWith("CSV_") //$NON-NLS-1$ //$NON-NLS-1$
+							|| p.getName().contains("csv.source") || p.getName().startsWith("XMLA_")) //$NON-NLS-1$ //$NON-NLS-1$
+						continue;
+					try {
+						if (obj != null && p.getValueClass().isAssignableFrom(obj.getClass()) && p.isForPrompting()) {
+							map.put(p.getName(), obj);
+						}
+					} catch (Exception e) {
 					}
-				} catch (Exception e) {
 				}
 			}
 			jasperParameters.clear();
