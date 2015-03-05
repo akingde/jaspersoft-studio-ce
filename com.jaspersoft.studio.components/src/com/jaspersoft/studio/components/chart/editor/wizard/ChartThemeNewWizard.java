@@ -17,6 +17,7 @@ import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 
 import net.sf.jasperreports.chartthemes.simple.XmlChartTheme;
+import net.sf.jasperreports.eclipse.builder.jdt.JDTUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.eclipse.wizard.project.ProjectUtil;
 
@@ -59,6 +60,7 @@ import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.FileEditorInput;
 
 import com.jaspersoft.studio.components.chart.ContextHelpIDs;
+import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.utils.SelectionHelper;
 import com.jaspersoft.studio.wizards.ContextData;
 
@@ -70,7 +72,7 @@ import com.jaspersoft.studio.wizards.ContextData;
  */
 
 public class ChartThemeNewWizard extends Wizard implements INewWizard {
-	public static final String WIZARD_ID = "com.jaspersoft.studio.components.chart.editor.wizard.ChartThemeNewWizard";
+	public static final String WIZARD_ID = "com.jaspersoft.studio.components.chart.editor.wizard.ChartThemeNewWizard"; //$NON-NLS-1$
 	private static final String NEW_NAME = "chart_template";//$NON-NLS-1$
 	private static final String NEW_EXT = ".jrctx";//$NON-NLS-1$
 	private static final String NEW_FILENAME = NEW_NAME + NEW_EXT;
@@ -82,8 +84,9 @@ public class ChartThemeNewWizard extends Wizard implements INewWizard {
 	 */
 	public ChartThemeNewWizard() {
 		super();
-		setWindowTitle("New Chart Theme Wizard");
+		setWindowTitle(Messages.ChartThemeNewWizard_WindowTitle);
 		setNeedsProgressMonitor(true);
+		JDTUtils.deactivateLinkedResourcesSupport();
 	}
 
 	/**
@@ -133,8 +136,8 @@ public class ChartThemeNewWizard extends Wizard implements INewWizard {
 	 */
 	public void addPages() {
 		step1 = new WizardHelpNewFileCreationPage("newFilePage1", (IStructuredSelection) selection);//$NON-NLS-1$
-		step1.setTitle("Chart Theme File");
-		step1.setDescription("New Chart Theme Wizard");
+		step1.setTitle(Messages.ChartThemeNewWizard_PageTitle);
+		step1.setDescription(Messages.ChartThemeNewWizard_PageDescription);
 		step1.setFileExtension("jrctx");//$NON-NLS-1$
 		setupNewFileName();
 		addPage(step1);
@@ -162,11 +165,27 @@ public class ChartThemeNewWizard extends Wizard implements INewWizard {
 		}
 	}
 
+	@Override
+	public boolean performCancel() {
+		JDTUtils.restoreLinkedResourcesSupport();
+		return super.performCancel();
+	}
+	
+	@Override
+	public boolean canFinish() {
+		if(JDTUtils.isVirtualResource(step1.getContainerFullPath())) {
+			step1.setErrorMessage(Messages.ChartThemeNewWizard_VirtualFolderError);
+			return false;
+		}
+		return super.canFinish();
+	}
+	
 	/**
 	 * This method is called when 'Finish' button is pressed in the wizard. We
 	 * will create an operation and run it using wizard as execution context.
 	 */
 	public boolean performFinish() {
+		JDTUtils.restoreLinkedResourcesSupport();
 		final String containerName = step1.getContainerFullPath().toPortableString();
 		final String fileName = step1.getFileName();
 		IRunnableWithProgress op = new IRunnableWithProgress() {

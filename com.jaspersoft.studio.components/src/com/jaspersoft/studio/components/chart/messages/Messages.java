@@ -100,6 +100,10 @@ public class Messages extends NLS {
 	public static String ChartAxesWizardPage_chartaxis_wizard_description;
 	public static String ChartDataPage_description;
 	public static String ChartDataPage_title;
+	public static String ChartThemeNewWizard_PageDescription;
+	public static String ChartThemeNewWizard_PageTitle;
+	public static String ChartThemeNewWizard_VirtualFolderError;
+	public static String ChartThemeNewWizard_WindowTitle;
 	public static String ChartWizardPage_chart_wizard_description;
 	public static String CreateCategorySeriesAction_create_category_series;
 	public static String CreateCategorySeriesAction_create_category_series_tool_tip;
