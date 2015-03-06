@@ -322,9 +322,6 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 	@Override
 	protected Composite createRight(Composite parent) {
 		super.createRight(parent);
-
-		jiveViewer = new ABrowserViewer(rightComposite, jrContext);
-
 		return rightComposite;
 	}
 
@@ -369,8 +366,8 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 		}
 		APreview view = null;
 		if (RunStopAction.MODERUN_JIVE.equals(this.runMode)) {
-			view = jiveViewer;
-			getRightContainer().switchView(null, jiveViewer);
+			view = getJiveViewer();
+			getRightContainer().switchView(null, getJiveViewer());
 		} else if (RunStopAction.MODERUN_LOCAL.equals(this.runMode)) {
 			getRightContainer().switchView(null, getDefaultViewerKey());
 			view = getDefaultViewer();
@@ -488,7 +485,7 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 	public void setMode(String mode) {
 		this.runMode = mode;
 		if (mode.equals(RunStopAction.MODERUN_JIVE)) {
-			getRightContainer().switchView(null, jiveViewer);
+			getRightContainer().switchView(null, getJiveViewer());
 		} else if (mode.equals(RunStopAction.MODERUN_LOCAL)) {
 			getRightContainer().switchView(null, getDefaultViewerKey());
 		}
@@ -499,6 +496,9 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 	}
 
 	public ABrowserViewer getJiveViewer() {
+		if(jiveViewer==null){
+			jiveViewer = new ABrowserViewer(rightComposite, jrContext);
+		}
 		return jiveViewer;
 	}
 

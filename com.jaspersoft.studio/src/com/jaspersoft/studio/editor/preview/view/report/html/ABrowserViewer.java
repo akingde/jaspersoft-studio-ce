@@ -12,16 +12,14 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.preview.view.report.html;
 
-import java.util.List;
-
-import javax.servlet.http.Cookie;
-
 import net.sf.jasperreports.eclipse.viewer.BrowserUtils;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -38,6 +36,14 @@ public class ABrowserViewer extends APreview implements IURLViewable {
 
 	public ABrowserViewer(Composite parent, JasperReportsConfiguration jContext) {
 		super(parent, jContext);
+		parent.addDisposeListener(new DisposeListener() {
+			@Override
+			public void widgetDisposed(DisposeEvent e) {
+				if(browser!=null) {
+					browser.dispose();
+				}
+			}
+		});
 	}
 
 	@Override
