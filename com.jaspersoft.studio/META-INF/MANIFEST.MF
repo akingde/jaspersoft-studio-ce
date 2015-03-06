@@ -719,6 +719,7 @@ Export-Package: com.jaspersoft.studio;
  com.jaspersoft.studio.property.itemproperty,
  com.jaspersoft.studio.property.itemproperty.desc,
  com.jaspersoft.studio.property.itemproperty.dialog,
+ com.jaspersoft.studio.property.itemproperty.event,
  com.jaspersoft.studio.property.propertiesviewer;
   uses:="org.eclipse.swt.custom,
    org.eclipse.jface.viewers,
