@@ -40,6 +40,7 @@ import com.jaspersoft.studio.editor.IEditorContributor;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.IExpressionEditorSupportFactory;
 import com.jaspersoft.studio.editor.preview.PreviewModeDetails;
+import com.jaspersoft.studio.editor.preview.view.report.system.AExporterFactory;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.util.HyperlinkDefaultParameter;
@@ -215,7 +216,7 @@ public class ExtensionManager {
 	 * Return a list of the contributed Tab to visualize a series of Template Styles. The read styles are cached after the
 	 * first time they are red
 	 * 
-	 * @return a list of TemplateViewProvider
+	 * @return a not null list of TemplateViewProvider
 	 */
 	public List<TemplateViewProvider> getStylesViewProvider() {
 		if (stylesViewList == null) {
@@ -241,6 +242,45 @@ public class ExtensionManager {
 			}
 		}
 		return stylesViewList;
+	}
+	
+	/**
+	 * A list of the contributed exporter factories
+	 */
+	private ArrayList<AExporterFactory> exportersFactories = null;
+	
+	/**
+	 * Return a list of the contributed exporter factories, that can be accessed from the preview. An exporter factory
+	 * define how the generated report is exported to another format
+	 * 
+	 * @return a not null list of AExporterFactory
+	 */
+	public List<AExporterFactory> getExportersFactories(){
+		if (exportersFactories == null){
+			IConfigurationElement[] config = Platform.getExtensionRegistry().getConfigurationElementsFor(JaspersoftStudioPlugin.PLUGIN_ID, "exporterFactory");
+			exportersFactories = new ArrayList<AExporterFactory>();
+			for (IConfigurationElement el : config) {
+				Object defaultSupportClazz;
+				try {
+					defaultSupportClazz = el.createExecutableExtension("factoryClass");
+					if (defaultSupportClazz instanceof AExporterFactory) {
+						AExporterFactory factory = (AExporterFactory) defaultSupportClazz;
+						exportersFactories.add(factory);
+						String rawSeparateBefore = el.getAttribute("separatorBefore");
+						Boolean separatorBeofre = rawSeparateBefore == null ? false : Boolean.valueOf(rawSeparateBefore);
+						factory.setSeparatorPlacedBefore(separatorBeofre);
+					}
+				} catch (CoreException e) {
+					JaspersoftStudioPlugin
+							.getInstance()
+							.getLog()
+							.log(
+									new Status(IStatus.ERROR, JaspersoftStudioPlugin.PLUGIN_ID,
+											"An error occurred while trying to create the new class.", e));
+				}
+			}
+		}
+		return exportersFactories;
 	}
 
 	public List<PaletteGroup> getPaletteGroups() {

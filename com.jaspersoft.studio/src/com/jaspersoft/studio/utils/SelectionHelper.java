@@ -390,4 +390,25 @@ public class SelectionHelper {
 		return false;
 	}
 	
+	/**
+	 * Return a list of all the editors currently opened. The editor must had been in foreground
+	 * at least once during the session to consider it opened
+	 * 
+	 * @return a not null list of jrxml editor
+	 */
+	public static List<JrxmlEditor> getOpenedEditors(){
+		List<JrxmlEditor> editors = new ArrayList<JrxmlEditor>();
+		IWorkbenchWindow activeWorkbenchWindow = JaspersoftStudioPlugin.getInstance().getWorkbench().getActiveWorkbenchWindow();
+		if (activeWorkbenchWindow != null && activeWorkbenchWindow.getActivePage() != null) {
+			IEditorReference[] editorRefs = activeWorkbenchWindow.getActivePage().getEditorReferences();
+			for(IEditorReference editorRef : editorRefs){
+				IEditorPart editor = editorRef.getEditor(false);
+				if (editor instanceof JrxmlEditor){
+					editors.add((JrxmlEditor)editor);
+				}
+			}
+		}
+		return editors;
+	}
+	
 }

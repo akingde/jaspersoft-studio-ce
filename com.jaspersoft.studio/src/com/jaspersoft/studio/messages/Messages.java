@@ -1957,6 +1957,8 @@ public class Messages extends NLS {
 	public static String ViewExecutionInfoAction_tooltip;
 	public static String ViewSettingsDropDownAction_previewFormatMenu;
 	public static String ViewSettingsDropDownAction_settingsName;
+	public static String ViewsFactory_errorExporterDuplicated;
+	public static String ViewsFactory_errorExporterNull;
 	public static String VInputControls_0;
 	public static String VParameters_calculate_default_values;
 	public static String VParameters_resetparameters;
