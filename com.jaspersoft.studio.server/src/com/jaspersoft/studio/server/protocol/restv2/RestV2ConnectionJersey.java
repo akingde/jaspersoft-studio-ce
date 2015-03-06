@@ -36,6 +36,7 @@ import javax.ws.rs.core.Response;
 
 import net.sf.jasperreports.eclipse.util.FileExtension;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.http.client.CookieStore;
 import org.apache.http.client.HttpResponseException;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
@@ -64,6 +65,7 @@ import com.jaspersoft.jasperserver.dto.reports.inputcontrols.ReportInputControls
 import com.jaspersoft.jasperserver.dto.resources.AbstractClientReportUnit;
 import com.jaspersoft.jasperserver.dto.resources.ClientFile;
 import com.jaspersoft.jasperserver.dto.resources.ClientFile.FileType;
+import com.jaspersoft.jasperserver.dto.resources.ClientReportUnit;
 import com.jaspersoft.jasperserver.dto.resources.ClientResource;
 import com.jaspersoft.jasperserver.dto.resources.ClientResourceListWrapper;
 import com.jaspersoft.jasperserver.dto.resources.ClientResourceLookup;
@@ -432,6 +434,37 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 		String rtype = WsTypes.INST().toRestType(rd.getWsType());
 		ClientResource<?> cr = Soap2Rest.getResource(this, rd);
 		Response r = null;
+		if (cr instanceof ClientReportUnit) {
+			ClientReportUnit cru = (ClientReportUnit) cr;
+			if (cru.getJrxml() == null) {
+				ResourceDescriptor newrd = get(monitor, rd, inFile);
+				for (ResourceDescriptor rc : newrd.getChildren()) {
+					if (rc.getWsType().equals(ResourceDescriptor.TYPE_JRXML)
+							&& rc.isMainReport())
+						rd.getChildren().add(rc);
+				}
+				cr = Soap2Rest.getResource(this, newrd);
+				cru = (ClientReportUnit) cr;
+			}
+			if (cru.getJrxml() instanceof ClientFile) {
+				ClientFile cf = (ClientFile) cru.getJrxml();
+				if (cf.getContent() == null) {
+					WebTarget tgt = target.path("resources" + cf.getUri());
+					try {
+						Builder req = tgt.request(cf.getType().getMimeType())
+								.header("Accept", cf.getType().getMimeType());
+						cf.setContent(new String(Base64.encodeBase64(readFile(
+								connector.get(req, monitor), monitor))));
+					} catch (HttpResponseException e) {
+						if (e.getStatusCode() == 500)
+							;// jrs 5.5 returns 500 if file is not existing, a
+								// bug
+						// for newer versions, we should show the error
+					}
+				}
+			}
+		}
+
 		if (rd.getWsType().equals(ResourceDescriptor.TYPE_REPORT_OPTIONS)) {
 			ResourceProperty resprop = ResourceDescriptorUtil.getProperty(
 					"PROP_RU_URI", rd.getProperties());
@@ -552,8 +585,8 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 	}
 
 	@Override
-	public void delete(IProgressMonitor monitor, ResourceDescriptor rd,
-			ResourceDescriptor runit) throws Exception {
+	public ResourceDescriptor delete(IProgressMonitor monitor,
+			ResourceDescriptor rd, ResourceDescriptor runit) throws Exception {
 		ResourceDescriptor rdrem = null;
 		for (ResourceDescriptor r : runit.getChildren())
 			if (r.getUriString().equals(rd.getUriString())) {
@@ -562,8 +595,9 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 			}
 		if (rdrem != null) {
 			runit.getChildren().remove(rdrem);
-			addOrModifyResource(monitor, runit, null);
+			return addOrModifyResource(monitor, runit, null);
 		}
+		return runit;
 	}
 
 	private CookieStore getCookieStore() {
@@ -903,7 +937,7 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 				ReportInputControlsListWrapper.class, monitor);
 		if (crl != null) {
 			List<ReportInputControl> ics = new ArrayList<ReportInputControl>();
-			for (ResourceDescriptor r : rds) { 
+			for (ResourceDescriptor r : rds) {
 				String ruri = "repo:" + r.getUriString();
 				for (ReportInputControl ric : crl.getInputParameters()) {
 					if (ruri.equals(ric.getUri()))

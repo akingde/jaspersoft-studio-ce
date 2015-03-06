@@ -79,7 +79,7 @@ public interface IConnection {
 	public void delete(IProgressMonitor monitor, ResourceDescriptor rd)
 			throws Exception;
 
-	public void delete(IProgressMonitor monitor, ResourceDescriptor rd,
+	public ResourceDescriptor delete(IProgressMonitor monitor, ResourceDescriptor rd,
 			ResourceDescriptor runit) throws Exception;
 
 	public ReportExecution runReport(IProgressMonitor monitor,

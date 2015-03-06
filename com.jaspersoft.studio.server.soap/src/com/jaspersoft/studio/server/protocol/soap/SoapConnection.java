@@ -305,9 +305,10 @@ public class SoapConnection implements IConnection {
 	}
 
 	@Override
-	public void delete(IProgressMonitor monitor, ResourceDescriptor rd,
-			ResourceDescriptor runit) throws Exception {
+	public ResourceDescriptor delete(IProgressMonitor monitor,
+			ResourceDescriptor rd, ResourceDescriptor runit) throws Exception {
 		client.delete(rd, runit.getUriString());
+		return runit;
 	}
 
 	@Override

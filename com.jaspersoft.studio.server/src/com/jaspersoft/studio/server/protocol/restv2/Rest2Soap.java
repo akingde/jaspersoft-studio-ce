@@ -179,7 +179,8 @@ public class Rest2Soap {
 
 	private static void getFile(ARestV2Connection rc, ClientFile cr,
 			ResourceDescriptor rd) throws ParseException {
-		cr.getContent();
+//		if (cr.getContent() != null)
+//			rd.setData(cr.getContent().getBytes());
 	}
 
 	private static void getLOV(ARestV2Connection rc, ClientListOfValues cr,

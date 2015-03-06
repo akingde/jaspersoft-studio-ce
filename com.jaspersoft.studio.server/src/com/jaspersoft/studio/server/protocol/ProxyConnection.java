@@ -348,8 +348,8 @@ public class ProxyConnection implements IConnection {
 	}
 
 	@Override
-	public void delete(IProgressMonitor monitor, ResourceDescriptor rd,
-			ResourceDescriptor runit) throws Exception {
+	public ResourceDescriptor delete(IProgressMonitor monitor,
+			ResourceDescriptor rd, ResourceDescriptor runit) throws Exception {
 		try {
 			c.delete(monitor, rd, runit);
 		} catch (Exception e) {
@@ -358,13 +358,13 @@ public class ProxyConnection implements IConnection {
 				if (he.getStatusCode() == 401 && !error401) {
 					c.connect(monitor, getServerProfile());
 					error401 = true;
-					c.delete(monitor, rd, runit);
-					return;
+					return c.delete(monitor, rd, runit);
 				}
 			}
 			error401 = false;
 			throw e;
 		}
+		return null;
 	}
 
 	@Override

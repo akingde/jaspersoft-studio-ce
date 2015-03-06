@@ -260,9 +260,10 @@ public class RestV2Connection extends ARestV2Connection {
 	}
 
 	@Override
-	public void delete(IProgressMonitor monitor, ResourceDescriptor rd,
-			ResourceDescriptor runit) throws Exception {
+	public ResourceDescriptor delete(IProgressMonitor monitor,
+			ResourceDescriptor rd, ResourceDescriptor runit) throws Exception {
 		delete(monitor, rd);
+		return runit;
 	}
 
 	@Override
