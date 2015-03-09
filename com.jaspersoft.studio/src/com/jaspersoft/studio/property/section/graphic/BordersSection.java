@@ -66,7 +66,6 @@ import com.jaspersoft.studio.property.section.widgets.SPLineStyleEnum;
 import com.jaspersoft.studio.swt.widgets.ColorStyledText;
 import com.jaspersoft.studio.utils.AlfaRGB;
 import com.jaspersoft.studio.utils.Colors;
-import com.jaspersoft.studio.utils.EnumHelper;
 import com.jaspersoft.studio.utils.UIUtil;
 
 /**
@@ -423,7 +422,7 @@ public class BordersSection extends AbstractSection {
 	private void createLineStyle(final String prop, final Composite composite) {
 		lineStyle = new SPLineStyleEnum(composite, this, prop) {
 			@Override
-			public void propertyChange(AbstractSection section, String property, Integer value) {
+			public void propertyChange(AbstractSection section, String property, Object value) {
 				((BordersSection) section).changeProperty(property, value);
 			}
 		};
@@ -832,7 +831,7 @@ public class BordersSection extends AbstractSection {
 				if (pen.getLineStyleValue() == null) {
 					lineStyle.setData(1);
 				} else {
-					int ls = EnumHelper.getValue(pen.getLineStyleValue(), LineStyleEnum.SOLID.getValue(), true).intValue();
+					int ls = lineStyle.getIndexByType(pen.getLineStyleValue());
 					lineStyle.setData(ls);
 				}
 			}

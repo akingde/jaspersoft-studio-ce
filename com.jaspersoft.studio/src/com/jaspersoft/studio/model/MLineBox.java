@@ -29,6 +29,17 @@ import com.jaspersoft.studio.property.descriptor.pen.PenPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.IntegerPropertyDescriptor;
 
 public class MLineBox extends APropertyNode implements IPropertySource {
+	
+	public static final String LINE_PEN = "LinePen"; //$NON-NLS-1$
+	
+	public static final String LINE_PEN_TOP = "LinePen_TOP"; //$NON-NLS-1$
+	
+	public static final String LINE_PEN_BOTTOM = "LinePen_BOTTOM"; //$NON-NLS-1$
+	
+	public static final String LINE_PEN_LEFT = "LinePen_LEFT"; //$NON-NLS-1$
+	
+	public static final String LINE_PEN_RIGHT = "LinePen_RIGHT"; //$NON-NLS-1$
+	
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	public MLineBox(JRLineBox lineBox) {
@@ -122,12 +133,6 @@ public class MLineBox extends APropertyNode implements IPropertySource {
 
 		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#box");
 	}
-
-	public static final String LINE_PEN = "LinePen"; //$NON-NLS-1$
-	public static final String LINE_PEN_TOP = "LinePen_TOP"; //$NON-NLS-1$
-	public static final String LINE_PEN_BOTTOM = "LinePen_BOTTOM"; //$NON-NLS-1$
-	public static final String LINE_PEN_LEFT = "LinePen_LEFT"; //$NON-NLS-1$
-	public static final String LINE_PEN_RIGHT = "LinePen_RIGHT"; //$NON-NLS-1$
 
 	private MLinePen linePen;
 	private MLinePen linePenTop;

@@ -78,7 +78,7 @@ public abstract class MGraphicElementLineBox extends MGraphicElement implements 
 	private MLineBox lineBox;
 
 	
-	private MLineBox getLineBox(){
+	public MLineBox getLineBox(){
 		if (lineBox == null) {
 			JRBoxContainer jrGraphicElement = (JRBoxContainer) getValue();
 			lineBox = new MLineBox(jrGraphicElement.getLineBox());

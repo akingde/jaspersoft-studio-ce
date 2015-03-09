@@ -12,7 +12,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.descriptors;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.jasperreports.engine.type.JREnum;
@@ -41,23 +40,15 @@ import com.jaspersoft.studio.utils.EnumHelper;
 public class JSSPopupPropertyDescriptor extends ComboBoxPropertyDescriptor implements IPropertyDescriptorWidget, IHelp {
 
 	private NullEnum type;
-	private int start = 0;
+	private String start;
 	private JREnum[] jrEnums;
 	private List<ComboItem> items;
-
-	public JSSPopupPropertyDescriptor(Object id, String displayName, Class<? extends JREnum> jrEnum, NullEnum type) {
-		super(id, displayName, EnumHelper.getEnumNames(jrEnum.getEnumConstants(), type));
-		this.type = type;
-		jrEnums = jrEnum.getEnumConstants();
-		this.start = jrEnums[0].getValue();
-		setItemsToDefault();
-	}
 
 	public JSSPopupPropertyDescriptor(Object id, String displayName, Class<? extends JREnum> jrEnum, NullEnum type,
 			List<ComboItem> items) {
 		super(id, displayName, EnumHelper.getEnumNames(jrEnum.getEnumConstants(), type));
 		jrEnums = jrEnum.getEnumConstants();
-		this.start = jrEnums[0].getValue();
+		this.start = jrEnums[0].getName();
 		this.items = items;
 	}
 
@@ -68,30 +59,9 @@ public class JSSPopupPropertyDescriptor extends ComboBoxPropertyDescriptor imple
 		return editor;
 	}
 
-	private void setItemsToDefault() {
-		items = new ArrayList<ComboItem>();
-		int offset = 0;
-		if (type != NullEnum.NOTNULL) {
-			items.add(new ComboItem(type.getName(), true, 0, type, 0));
-			offset = 1;
-		}
-		for (int i = 0; i < jrEnums.length; i++) {
-			JREnum actualValue = jrEnums[i];
-			items.add(new ComboItem(actualValue.getName(), true, i + offset, actualValue, i + offset));
-		}
-	}
-
-	public Integer getEnumValue(JREnum jrvalue) {
-		return EnumHelper.getValue(jrvalue, start, type != NullEnum.NOTNULL);
-	}
-
-	public JREnum getEnumValue(Object value) {
-		return EnumHelper.getSetValue(jrEnums, value, start, type != NullEnum.NOTNULL);
-	}
-
-	public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
+	public ASPropertyWidget<JSSPopupPropertyDescriptor> createWidget(Composite parent, AbstractSection section) {
 		// return new SPReadComboEnum(parent, section, this);
-		ASPropertyWidget widget = new SPRWPopUpCombo(parent, section, this, items);
+		ASPropertyWidget<JSSPopupPropertyDescriptor> widget = new SPRWPopUpCombo<JSSPopupPropertyDescriptor>(parent, section, this, items);
 		HelpSystem.bindToHelp(this, widget.getControl());
 		return widget;
 	}
@@ -100,7 +70,7 @@ public class JSSPopupPropertyDescriptor extends ComboBoxPropertyDescriptor imple
 		return type;
 	}
 
-	public int getStart() {
+	public String getStart() {
 		return start;
 	}
 

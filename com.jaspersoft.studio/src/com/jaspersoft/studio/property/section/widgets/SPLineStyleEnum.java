@@ -40,8 +40,13 @@ public class SPLineStyleEnum {
 	/**
 	 * The combo popup
 	 */
-	ComboMenuViewer combo;
+	private ComboMenuViewer combo;
 
+	/**
+	 * The list of element in the combo
+	 */
+	private List<ComboItem> itemsList;
+	
 	public SPLineStyleEnum(Composite parent, AbstractSection section, String property) {
 		createComponent(parent, section, property);
 	}
@@ -66,13 +71,13 @@ public class SPLineStyleEnum {
 		layout.marginLeft = 0;
 		composite.setLayout(layout);
 		//Creating the list of entry
-		List<ComboItem> itemsList = new ArrayList<ComboItem>();
+		itemsList = new ArrayList<ComboItem>();
 		//A blank space is added at the end of the string to compensate the size enlargement because a selected element is in bold
 		itemsList.add(new ComboItem("Inherited ", true,  ResourceManager.getImage(this.getClass(), "/icons/resources/inherited.png"),0, NullEnum.INHERITED, null));
-		itemsList.add(new ComboItem("Solid line ", true, ResourceManager.getImage(this.getClass(), "/icons/resources/line-solid.png"),1, LineStyleEnum.SOLID, new Integer(LineStyleEnum.SOLID.getValue() + 1)));
-		itemsList.add(new ComboItem("Dashed line ", true,  ResourceManager.getImage(this.getClass(), "/icons/resources/line-dashed.png"),2, LineStyleEnum.DASHED, new Integer(LineStyleEnum.DASHED.getValue() + 1)));
-		itemsList.add(new ComboItem("Dotted line ", true,  ResourceManager.getImage(this.getClass(), "/icons/resources/line-dotted.png"),3, LineStyleEnum.DOTTED, new Integer(LineStyleEnum.DOTTED.getValue() + 1)));
-		itemsList.add(new ComboItem("Double line ", true,  ResourceManager.getImage(this.getClass(), "/icons/resources/line-double.png"),4, LineStyleEnum.DOUBLE, new Integer(LineStyleEnum.DOUBLE.getValue() + 1)));
+		itemsList.add(new ComboItem("Solid line ", true, ResourceManager.getImage(this.getClass(), "/icons/resources/line-solid.png"),1, LineStyleEnum.SOLID, LineStyleEnum.SOLID));
+		itemsList.add(new ComboItem("Dashed line ", true,  ResourceManager.getImage(this.getClass(), "/icons/resources/line-dashed.png"),2, LineStyleEnum.DASHED, LineStyleEnum.DASHED));
+		itemsList.add(new ComboItem("Dotted line ", true,  ResourceManager.getImage(this.getClass(), "/icons/resources/line-dotted.png"),3, LineStyleEnum.DOTTED, LineStyleEnum.DOTTED));
+		itemsList.add(new ComboItem("Double line ", true,  ResourceManager.getImage(this.getClass(), "/icons/resources/line-double.png"),4, LineStyleEnum.DOUBLE, LineStyleEnum.DOUBLE));
 		//Creating the combo popup
 		combo = new ComboMenuViewer(composite, SWT.NORMAL, SPRWPopUpCombo.getLongest(itemsList));
 		combo.setItems(itemsList);
@@ -82,7 +87,7 @@ public class SPLineStyleEnum {
 				 */
 				@Override
 				public void exec() {
-						propertyChange(section,JRBasePen.PROPERTY_LINE_STYLE, combo.getSelectionValue() != null ? (Integer)combo.getSelectionValue() : null);			
+						propertyChange(section,JRBasePen.PROPERTY_LINE_STYLE, combo.getSelectionValue() != null ? combo.getSelectionValue() : null);			
 				}
 		});
 	}
@@ -95,8 +100,19 @@ public class SPLineStyleEnum {
 		combo.setHelp(href);
 	}
 
-	public void propertyChange(AbstractSection section, String property, Integer value) {
+	public void propertyChange(AbstractSection section, String property, Object value) {
 		section.changeProperty(property, value);
+	}
+	
+	public int getIndexByType(LineStyleEnum searched){
+		int index = 0;
+		for(ComboItem item : itemsList){
+			if (searched.equals(item.getItem())){
+				break;
+			}
+			index++;
+		}
+		return index;
 	}
 
 	/**

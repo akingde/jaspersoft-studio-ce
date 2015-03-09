@@ -65,14 +65,14 @@ public class MLinePen extends APropertyNode implements IPropertySource {
 		if (lineSpacingItems == null){
 			lineSpacingItems = new ArrayList<ComboItem>();
 			LineStyleEnum[] values = LineStyleEnum.class.getEnumConstants();
-			lineSpacingItems.add(new ComboItem(MessagesByKeys.getString("LineSpacing_nullEnum"), true,  ResourceManager.getImage(this.getClass(),"/icons/resources/inherited.png"), 0, NullEnum.INHERITED, 0));
+			lineSpacingItems.add(new ComboItem(MessagesByKeys.getString("LineSpacing_nullEnum"), true,  ResourceManager.getImage(this.getClass(),"/icons/resources/inherited.png"), 0, NullEnum.INHERITED, null));
 			Image[] images = new Image[] { ResourceManager.getImage(this.getClass(), "/icons/resources/line-solid.png"),
 																					ResourceManager.getImage(this.getClass(), "/icons/resources/line-dashed.png"),
 																					ResourceManager.getImage(this.getClass(), "/icons/resources/line-dotted.png"),
 																					ResourceManager.getImage(this.getClass(), "/icons/resources/line-double.png"), };
 			for(int i=0; i<values.length; i++){
 				LineStyleEnum value = values[i];
-				lineSpacingItems.add(new ComboItem(MessagesByKeys.getString("LineStyle_".concat(value.getName())), true, images[i], i+1, value , i+1));
+				lineSpacingItems.add(new ComboItem(MessagesByKeys.getString("LineStyle_".concat(value.getName())), true, images[i], i+1, value , value));
 			}
 		}
 		return lineSpacingItems;
@@ -94,8 +94,7 @@ public class MLinePen extends APropertyNode implements IPropertySource {
 		penLineWidthD.setHelpRefBuilder(new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#pen_lineWidth"));
 		desc.add(penLineWidthD);
 
-		penLineStyleD = new JSSPopupPropertyDescriptor(JRBasePen.PROPERTY_LINE_STYLE, Messages.common_line_style,
-				LineStyleEnum.class, NullEnum.INHERITED, createLineSpacingItems());
+		penLineStyleD = new JSSPopupPropertyDescriptor(JRBasePen.PROPERTY_LINE_STYLE, Messages.common_line_style,LineStyleEnum.class, NullEnum.INHERITED, createLineSpacingItems());
 		penLineStyleD.setDescription(Messages.MLinePen_line_style_description);
 		penLineStyleD.setHelpRefBuilder(new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#pen_lineStyle"));
 		desc.add(penLineStyleD);
@@ -139,7 +138,7 @@ public class MLinePen extends APropertyNode implements IPropertySource {
 			if (id.equals(JRBasePen.PROPERTY_LINE_WIDTH))
 				return linePen.getOwnLineWidth();
 			if (id.equals(JRBasePen.PROPERTY_LINE_STYLE))
-				return penLineStyleD.getEnumValue(linePen.getOwnLineStyleValue());
+				return linePen.getOwnLineStyleValue();
 		}
 		return null;
 	}
@@ -153,7 +152,7 @@ public class MLinePen extends APropertyNode implements IPropertySource {
 			if (id.equals(JRBasePen.PROPERTY_LINE_WIDTH))
 				return linePen.getLineWidth();
 			if (id.equals(JRBasePen.PROPERTY_LINE_STYLE))
-				return penLineStyleD.getEnumValue(linePen.getLineStyleValue());
+				return linePen.getLineStyleValue();
 		}
 		return null;
 	}
@@ -174,7 +173,7 @@ public class MLinePen extends APropertyNode implements IPropertySource {
 				else if (value instanceof AlfaRGB)
 					linePen.setLineColor(Colors.getAWT4SWTRGBColor((AlfaRGB) value));
 			} else if (id.equals(JRBasePen.PROPERTY_LINE_STYLE))
-				linePen.setLineStyle((LineStyleEnum) penLineStyleD.getEnumValue(value));
+				linePen.setLineStyle((LineStyleEnum) value);
 		}
 	}
 

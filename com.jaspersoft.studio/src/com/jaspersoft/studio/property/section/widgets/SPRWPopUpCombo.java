@@ -30,7 +30,7 @@ import com.jaspersoft.studio.property.section.AbstractSection;
  * @author Orlandin Marco
  *
  */
-public class SPRWPopUpCombo extends ASPropertyWidget {
+public class SPRWPopUpCombo<T extends IPropertyDescriptor> extends ASPropertyWidget<T> {
 	
 	/**
 	 * The combo item
@@ -49,7 +49,7 @@ public class SPRWPopUpCombo extends ASPropertyWidget {
 	 * @param pDescriptor descriptor of the property of this item
 	 * @param items List of entry in the popup menu
 	 */
-	public SPRWPopUpCombo(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor, List<ComboItem> items) {
+	public SPRWPopUpCombo(Composite parent, AbstractSection section, T pDescriptor, List<ComboItem> items) {
 		super(parent, section, pDescriptor);
 		this.items = items;
 		createComponent(parent);
@@ -65,8 +65,12 @@ public class SPRWPopUpCombo extends ASPropertyWidget {
 	public void setData(APropertyNode pnode, Object b) {
 		combo.setEnabled(pnode.isEditable());
 		int index = 0;
-		if (b != null)
-			index = ((Number) b).intValue();
+		for(ComboItem item : items){
+			if (item.getValue() == null ? b == null : item.getValue().equals(b)){
+				break;
+			}
+			index++;
+		}
 		combo.select(index);
 	}
 	
