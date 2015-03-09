@@ -30,6 +30,7 @@ public class SelectorQueryWithNon extends SelectorQuery {
 				if (rd != null)
 					res.getValue().getChildren().remove(rd);
 				setEnabled(2);
+				firePageComplete();
 			}
 		});
 	}
@@ -53,9 +54,6 @@ public class SelectorQueryWithNon extends SelectorQuery {
 
 	@Override
 	public boolean isPageComplete() {
-		ResourceDescriptor rd = getResourceDescriptor(resRD);
-		if (rd == null)
-			return true;
 		if (brRepo.getSelection())
 			return valid;
 		return true;
