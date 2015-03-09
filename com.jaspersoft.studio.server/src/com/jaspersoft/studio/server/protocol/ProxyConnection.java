@@ -86,6 +86,8 @@ public class ProxyConnection implements IConnection {
 				if (c == null && co.connect(monitor, sp))
 					c = co;
 				if (soap == null && connName.contains("SOAP")) {
+					if (sp.isUseSSO())
+						continue;
 					if (c == co)
 						soap = co;
 					else if (co.connect(monitor, sp))
@@ -134,7 +136,7 @@ public class ProxyConnection implements IConnection {
 	@Override
 	public ResourceDescriptor get(IProgressMonitor monitor,
 			ResourceDescriptor rd, File f) throws Exception {
-		if (useSoap(monitor, rd))
+		if (useSoap(monitor, rd) && soap != null)
 			rd = soap.get(monitor, rd, f);
 		else
 			try {
@@ -144,11 +146,15 @@ public class ProxyConnection implements IConnection {
 					HttpResponseException he = (HttpResponseException) e;
 					if (he.getStatusCode() == 500
 							&& he.getMessage().contains("Unexpected error")) {
+						if (soap == null)
+							throw e;
 						rd = soap.get(monitor, rd, f);
 						rd.setChildrenDirty(false);
 						return rd;
 					} else if (he.getStatusCode() == 403) {
 						try {
+							if (soap == null)
+								throw e;
 							rd = soap.get(monitor, rd, f);
 							rd.setChildrenDirty(false);
 						} catch (Exception e1) {
@@ -191,6 +197,8 @@ public class ProxyConnection implements IConnection {
 				if (he.getStatusCode() == 500) {// &&
 												// he.getMessage().contains("Unexpected error"))
 												// {
+					if (soap == null)
+						throw e;
 					list = soap.list(monitor, rd);
 					for (ResourceDescriptor r : list)
 						r.setChildrenDirty(false);
@@ -222,6 +230,8 @@ public class ProxyConnection implements IConnection {
 				if (he.getStatusCode() == 500) {// &&
 												// he.getMessage().contains("Unexpected error"))
 												// {
+					if (soap == null)
+						throw e;
 					list = soap.listDatasources(monitor, f);
 					for (ResourceDescriptor r : list)
 						r.setChildrenDirty(false);
