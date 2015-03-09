@@ -16,16 +16,18 @@ import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
-import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.utils.IPageCompleteListener;
 import com.jaspersoft.studio.server.wizard.resource.APageContent;
-import com.jaspersoft.studio.server.wizard.resource.page.QueryPageContent;
+import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorQueryWithNon;
 
 public class ReportUnitQueryContent extends APageContent {
 
-	public ReportUnitQueryContent(ANode parent, MResource resource, DataBindingContext bindingContext) {
+	private SelectorQueryWithNon sQuery;
+
+	public ReportUnitQueryContent(ANode parent, MResource resource,
+			DataBindingContext bindingContext) {
 		super(parent, resource, bindingContext);
 	}
 
@@ -34,8 +36,13 @@ public class ReportUnitQueryContent extends APageContent {
 	}
 
 	@Override
+	public boolean isPageComplete() {
+		return sQuery.isPageComplete();
+	}
+
+	@Override
 	public String getName() {
-		return Messages.RDReportUnitPage_reportunit;
+		return "Query";
 	}
 
 	@Override
@@ -43,24 +50,24 @@ public class ReportUnitQueryContent extends APageContent {
 		return "com.jaspersoft.studio.server.page.runit.query";
 	}
 
-	// @Override
-	// public boolean isPageComplete() {
-	// if (res != null)
-	// return SelectorJrxml2.getMainReport(res.getValue()) != null;
-	// return false;
-	// }
-
 	@Override
 	public Control createContent(Composite parent) {
-		ResourceDescriptor rd = res.getValue();
-		for (Object obj : rd.getChildren()) {
-			ResourceDescriptor r = (ResourceDescriptor) obj;
-			if (r.getWsType().equals(ResourceDescriptor.TYPE_QUERY)) {
-				return QueryPageContent.createContentComposite(parent, bindingContext, r, res);
+		sQuery = new SelectorQueryWithNon();
+		Composite cmp = (Composite) sQuery.createControls(parent, pnode, res);
+
+		sQuery.addPageCompleteListener(new IPageCompleteListener() {
+
+			@Override
+			public void pageCompleted(boolean completed) {
+				setPageComplete(sQuery.isPageComplete());
+				if (sQuery.isPageComplete())
+					page.setErrorMessage(null);
+				else
+					page.setErrorMessage("There is a problem with selected Query which is not valid");
 			}
-		}
+		});
 		rebind();
-		return null;
+		return cmp;
 	}
 
 	@Override
@@ -68,13 +75,4 @@ public class ReportUnitQueryContent extends APageContent {
 
 	}
 
-	public static boolean hasTypeQuery(MResource res) {
-		ResourceDescriptor rd = res.getValue();
-		for (Object obj : rd.getChildren()) {
-			ResourceDescriptor r = (ResourceDescriptor) obj;
-			if (r.getWsType().equals(ResourceDescriptor.TYPE_QUERY))
-				return true;
-		}
-		return false;
-	}
 }

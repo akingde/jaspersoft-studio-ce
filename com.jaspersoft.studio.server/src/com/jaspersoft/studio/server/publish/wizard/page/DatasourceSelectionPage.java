@@ -14,7 +14,10 @@ package com.jaspersoft.studio.server.publish.wizard.page;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.TabFolder;
+import org.eclipse.swt.widgets.TabItem;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.model.ANode;
@@ -24,6 +27,7 @@ import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.wizard.resource.page.runit.ReportUnitDatasourceContent;
 import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorDatasource;
+import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorQueryWithNon;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.wizards.ContextHelpIDs;
 import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
@@ -59,17 +63,35 @@ public class DatasourceSelectionPage extends JSSHelpWizardPage implements
 
 	@Override
 	public void createControl(Composite parent) {
-		datasourceCmp = new DatasourceSelectionComposite(parent, SWT.NONE,
+		TabFolder tabfolder = new TabFolder(parent, SWT.NONE);
+
+		TabItem tb = new TabItem(tabfolder, SWT.NONE);
+		tb.setText("Datasource");
+
+		datasourceCmp = new DatasourceSelectionComposite(tabfolder, SWT.NONE,
 				false,
 				new String[] { ResourceDescriptor.TYPE_OLAP_XMLA_CONNECTION });
 		datasourceCmp.addDatasourceSelectionListener(this);
-		setControl(datasourceCmp);
+		tb.setControl(datasourceCmp);
+
+		tb = new TabItem(tabfolder, SWT.NONE);
+		tb.setText("Query");
+
+		Composite cmp = new Composite(tabfolder, SWT.NONE);
+		cmp.setLayout(new GridLayout(2, false));
+
+		sQuery = new SelectorQueryWithNon();
+		sQuery.createControls(cmp, null, null);
+		tb.setControl(cmp);
+
+		setControl(tabfolder);
 	}
 
 	public void configurePage(ANode parent, MResource resource) {
 		if (refresh)
 			return;
 		if (resource instanceof MReportUnit) {
+			sQuery.setResource(resource.getParent(), resource);
 			try {
 				ResourceDescriptor oldru = ((MReportUnit) resource).getValue();
 				if (SelectorDatasource.getDatasource(oldru) == null) {
@@ -94,6 +116,7 @@ public class DatasourceSelectionPage extends JSSHelpWizardPage implements
 	}
 
 	private boolean refresh = false;
+	private SelectorQueryWithNon sQuery;
 
 	@Override
 	public void datasourceSelectionChanged() {

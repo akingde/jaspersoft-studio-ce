@@ -173,23 +173,25 @@ public class ResourceFactory {
 					page = APageContent.getPages(resource,
 							new ResourcePageContent(parent, resource));
 				else if (resource instanceof MReportUnit)
-					if (ReportUnitQueryContent.hasTypeQuery(resource))
-						page = APageContent.getPages(resource,
-								new ResourcePageContent(parent, resource),
-								new ReportUnitContent(parent, resource),
-								new ReportUnitDatasourceContent(parent,
-										resource), new ReportUnitQueryContent(
-										parent, resource),
-								new ReportUnitInputControlContent(parent,
-										resource));
-					else
-						page = APageContent.getPages(resource,
-								new ResourcePageContent(parent, resource),
-								new ReportUnitContent(parent, resource),
-								new ReportUnitDatasourceContent(parent,
-										resource),
-								new ReportUnitInputControlContent(parent,
-										resource));
+					// if (ReportUnitQueryContent.hasTypeQuery(resource))
+					page = APageContent
+							.getPages(
+									resource,
+									new ResourcePageContent(parent, resource),
+									new ReportUnitContent(parent, resource),
+									new ReportUnitDatasourceContent(parent,
+											resource),
+									new ReportUnitQueryContent(parent, resource),
+									new ReportUnitInputControlContent(parent,
+											resource));
+				// else
+				// page = APageContent.getPages(resource,
+				// new ResourcePageContent(parent, resource),
+				// new ReportUnitContent(parent, resource),
+				// new ReportUnitDatasourceContent(parent,
+				// resource),
+				// new ReportUnitInputControlContent(parent,
+				// resource));
 				else if (resource instanceof MInputControl)
 					page = APageContent.getPages(resource,
 							new ResourcePageContent(parent, resource),

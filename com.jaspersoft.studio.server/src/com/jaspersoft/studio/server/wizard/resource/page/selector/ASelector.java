@@ -61,11 +61,14 @@ public abstract class ASelector {
 	protected Button bRef;
 	protected MResource res;
 	protected ResourceDescriptor resRD;
+	protected ANode parent;
 
 	public Control createControls(Composite cmp, final ANode parent,
 			final MResource res) {
 		this.res = res;
-		this.resRD = res.getValue();
+		this.parent = parent;
+		if (res != null)
+			this.resRD = res.getValue();
 
 		Composite composite = new Composite(cmp, SWT.NONE);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -73,18 +76,18 @@ public abstract class ASelector {
 		composite.setLayoutData(gd);
 		composite.setLayout(new GridLayout(2, false));
 
-		createRepository(composite, parent);
+		createRepository(composite);
 
-		createLocal(composite, parent);
+		createLocal(composite);
 		init();
 		return composite;
 	}
 
-	private boolean valid = true;
+	protected boolean valid = true;
 	private boolean refresh = false;
 
-	protected void createRepository(Composite parent, final ANode pnode) {
-		brRepo = new Button(parent, SWT.RADIO);
+	protected void createRepository(Composite prnt) {
+		brRepo = new Button(prnt, SWT.RADIO);
 		brRepo.setText(Messages.SelectorQuery_selectfromrepository);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
@@ -96,7 +99,7 @@ public abstract class ASelector {
 			}
 		});
 
-		jsRefDS = new Text(parent, SWT.BORDER);
+		jsRefDS = new Text(prnt, SWT.BORDER);
 		jsRefDS.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		jsRefDS.addModifyListener(new ModifyListener() {
 
@@ -111,7 +114,7 @@ public abstract class ASelector {
 						protected IStatus run(IProgressMonitor monitor) {
 							IStatus status = Status.OK_STATUS;
 							try {
-								ResourceDescriptor rd = createLocal(null);
+								ResourceDescriptor rd = createLocal((MResource) null);
 								rd.setUriString(uri);
 								newrd = WSClientHelper.getResource(monitor,
 										res.getWsClient(), rd, null);
@@ -146,18 +149,19 @@ public abstract class ASelector {
 		});
 		InputHistoryCache.bindText(jsRefDS, this.getClass().getName());
 
-		bRef = new Button(parent, SWT.PUSH);
+		bRef = new Button(prnt, SWT.PUSH);
 		bRef.setText("...");
 		bRef.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				MServerProfile msp = ServerManager
-						.getMServerProfileCopy((MServerProfile) pnode.getRoot());
+						.getMServerProfileCopy((MServerProfile) parent
+								.getRoot());
 				if (msp.isSupported(Feature.SEARCHREPOSITORY)) {
 					ResourceDescriptor rd = FindResourceJob.doFindResource(msp,
 							getIncludeTypes(), getExcludeTypes());
 					if (rd != null)
-						setRemoteResource(rd, pnode, true);
+						setRemoteResource(rd, parent, true);
 				} else {
 					RepositoryDialog rd = new RepositoryDialog(bRef.getShell(),
 							msp) {
@@ -170,7 +174,7 @@ public abstract class ASelector {
 					if (rd.open() == Dialog.OK) {
 						MResource rs = rd.getResource();
 						if (rs != null)
-							setRemoteResource(rs.getValue(), pnode, true);
+							setRemoteResource(rs.getValue(), parent, true);
 						valid = true;
 					}
 				}
@@ -222,8 +226,8 @@ public abstract class ASelector {
 
 	protected abstract boolean isResCompatible(MResource r);
 
-	protected void createLocal(Composite parent, final ANode pnode) {
-		brLocal = new Button(parent, SWT.RADIO);
+	protected void createLocal(Composite prnt) {
+		brLocal = new Button(prnt, SWT.RADIO);
 		brLocal.setText(Messages.SelectorQuery_localresource);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
@@ -235,10 +239,10 @@ public abstract class ASelector {
 			}
 		});
 
-		jsLocDS = new Text(parent, SWT.BORDER | SWT.READ_ONLY);
+		jsLocDS = new Text(prnt, SWT.BORDER | SWT.READ_ONLY);
 		jsLocDS.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		bLoc = new Button(parent, SWT.PUSH);
+		bLoc = new Button(prnt, SWT.PUSH);
 		bLoc.setText("..."); //$NON-NLS-1$
 		bLoc.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -252,10 +256,10 @@ public abstract class ASelector {
 				if (ref != null) {
 					ref = cloneResource(ref);
 					r = ResourceFactory.getResource(null, ref, -1);
-					if (!showLocalWizard(r, pnode))
+					if (!showLocalWizard(r, parent))
 						return;
 				} else {
-					r = getLocalResource(res, runit, pnode);
+					r = getLocalResource(res, runit, parent);
 					if (r != null)
 						ref = r.getValue();
 					// newref = true;
@@ -357,7 +361,7 @@ public abstract class ASelector {
 		jsLocDS.setText(""); //$NON-NLS-1$
 
 		ResourceDescriptor r = getResourceDescriptor(resRD);
-		if (r == null) {
+		if (r == null && resRD != null) {
 			for (ResourceDescriptor rd : resRD.getChildren()) {
 				if (rd.getWsType().equals(ResourceDescriptor.TYPE_REFERENCE)) {
 					r = rd;
