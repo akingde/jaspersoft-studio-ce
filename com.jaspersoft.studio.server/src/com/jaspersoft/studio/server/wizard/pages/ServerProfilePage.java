@@ -22,7 +22,6 @@ import net.sf.jasperreports.eclipse.ui.validator.NotEmptyIFolderValidator;
 import net.sf.jasperreports.util.CastorUtil;
 
 import org.apache.commons.codec.binary.Base64;
-import org.bouncycastle.operator.bc.BcAsymmetricKeyWrapper;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.beans.PojoObservables;
@@ -376,7 +375,7 @@ public class ServerProfilePage extends WizardPage implements
 			public void widgetSelected(SelectionEvent e) {
 				if (bSSO.getSelection()) {
 					stackLayout.topControl = cmpCAS;
-					bUseSoap.setSelection(true);
+					bUseSoap.setSelection(false);
 					bUseSoap.setEnabled(false);
 				} else {
 					stackLayout.topControl = cmpUP;
@@ -472,7 +471,7 @@ public class ServerProfilePage extends WizardPage implements
 				// cversion.getControl().setEnabled(Version.isEstimated(si));
 				bdaterange.setEnabled(!Version.isDateRangeSupported(si));
 			}
-			bUseSoap.setEnabled(bSSO.getSelection());
+			bUseSoap.setEnabled(!bSSO.getSelection());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
