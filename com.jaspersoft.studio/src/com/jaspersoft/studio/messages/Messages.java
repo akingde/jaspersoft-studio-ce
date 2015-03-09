@@ -155,6 +155,7 @@ public class Messages extends NLS {
 	public static String common_xpath_locale;
 	public static String common_xpath_select;
 	public static String common_xpath_timezone;
+	public static String ABrowserViewer_ExternalBrowserPreviewMsg;
 	public static String ADataInput_mandatory;
 	public static String ADataInput_removeparam;
 	public static String ADataInput_removeparam_explain;
@@ -739,6 +740,7 @@ public class Messages extends NLS {
 	public static String GenerateFragmentWizard_congratsText5;
 	public static String GenericParameterLabelProvider_parametersCountLabel;
 	public static String GenericTemplateBundle_invalidVersionMessage;
+	public static String GlobalPreferencePage_EmbeddedBrowserSection;
 	public static String GlobalPreferencePage_flagDescription;
 	public static String GlobalPreferencePage_jettyServerTitle;
 	public static String GlobalPreferencePage_JSSConsoleFieldLabel;
@@ -747,6 +749,7 @@ public class Messages extends NLS {
 	public static String GlobalPreferencePage_NoteMsg;
 	public static String GlobalPreferencePage_port;
 	public static String GlobalPreferencePage_title;
+	public static String GlobalPreferencePage_UseExternalBrowserCheckbox;
 	public static String GraphicSection_Detail_Section_Title;
 	public static String GroupSection_SameNameErrorMsg;
 	public static String GroupSection_SameNameErrorTitle;

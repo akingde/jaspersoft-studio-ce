@@ -31,6 +31,7 @@ public class GlobalPreferencePage extends FieldEditorPreferencePage implements I
 	public static final String JSS_JETTY_PORT = "com.jaspersoft.studio.jetty.port"; //$NON-NLS-1$
 	public static final String JSS_USE_SECURE_STORAGE = "com.jaspersoft.studio.secure.storage"; //$NON-NLS-1$
 	public static final String JSS_ENABLE_INTERNAL_CONSOLE = "com.jaspersoft.studio.jss.console"; //$NON-NLS-1$
+	public static final String JSS_USE_ALWAYS_EXTERNAL_BROWSER = "com.jaspersoft.studio.jss.browser.external"; //$NON-NLS-1$
 
 	public GlobalPreferencePage() {
 		super(GRID);
@@ -57,6 +58,17 @@ public class GlobalPreferencePage extends FieldEditorPreferencePage implements I
 		Label separator = new Label(getFieldEditorParent(), SWT.SEPARATOR | SWT.HORIZONTAL);
 		separator.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,false,2,1));
 		
+		Label browserTitle = new Label(getFieldEditorParent(), SWT.NONE);
+		browserTitle.setText(Messages.GlobalPreferencePage_EmbeddedBrowserSection);
+		browserTitle.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,false,2,1));
+		
+		BooleanFieldEditor useAlwaysExternalBrowser = 
+				new BooleanFieldEditor(JSS_USE_ALWAYS_EXTERNAL_BROWSER, Messages.GlobalPreferencePage_UseExternalBrowserCheckbox,getFieldEditorParent());
+		addField(useAlwaysExternalBrowser);
+		
+		Label separator2 = new Label(getFieldEditorParent(), SWT.SEPARATOR | SWT.HORIZONTAL);
+		separator2.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,false,2,1));
+		
 		Label securityTitle = new Label(getFieldEditorParent(), SWT.NONE);
 		securityTitle.setText(Messages.GlobalPreferencePage_title);
 		securityTitle.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,false,2,1));
@@ -64,8 +76,8 @@ public class GlobalPreferencePage extends FieldEditorPreferencePage implements I
 		BooleanFieldEditor useSecStorage = new BooleanFieldEditor(JSS_USE_SECURE_STORAGE, Messages.GlobalPreferencePage_flagDescription,getFieldEditorParent());
 		addField(useSecStorage);
 		
-		Label separator2 = new Label(getFieldEditorParent(), SWT.SEPARATOR | SWT.HORIZONTAL);
-		separator2.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,false,2,1));
+		Label separator3 = new Label(getFieldEditorParent(), SWT.SEPARATOR | SWT.HORIZONTAL);
+		separator3.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,false,2,1));
 		
 		Label debuggingTitle = new Label(getFieldEditorParent(), SWT.NONE);
 		debuggingTitle.setText(Messages.GlobalPreferencePage_LoggingPrefs);
@@ -81,6 +93,7 @@ public class GlobalPreferencePage extends FieldEditorPreferencePage implements I
 		store.setDefault(JSS_JETTY_PORT, 0);
 		store.setDefault(JSS_USE_SECURE_STORAGE, false);
 		store.setDefault(JSS_ENABLE_INTERNAL_CONSOLE, false);
+		store.setDefault(JSS_USE_ALWAYS_EXTERNAL_BROWSER, false);
 	}
 
 	@Override

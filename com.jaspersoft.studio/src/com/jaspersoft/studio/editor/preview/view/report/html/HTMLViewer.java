@@ -150,7 +150,7 @@ public class HTMLViewer extends ABrowserViewer implements IJRPrintable, IPrefere
 			@Override
 			public void run() {
 				newRequest = false;
-				browser.refresh();
+				refreshBrowser();
 				isRefresh = false;
 				if (newRequest)
 					doRefresh();
