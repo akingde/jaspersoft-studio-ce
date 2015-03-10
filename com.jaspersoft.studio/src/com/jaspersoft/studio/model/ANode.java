@@ -51,16 +51,24 @@ public abstract class ANode implements INode, Serializable, IAdaptable, Cloneabl
 
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
-	/** The parent. */
+	/** 
+	 * The parent. 
+	 */
 	private ANode parent;
 
-	/** The children. */
+	/** 
+	 * The children. 
+	 */
 	private List<INode> children;
 
-	/** The value. */
+	/** 
+	 * The value. 
+	 */
 	private Object value;
 
-	/** The property change support. */
+	/** 
+	 * The property change support. 
+	 */
 	private PropertyChangeSupport propertyChangeSupport;
 
 	/**
@@ -68,6 +76,19 @@ public abstract class ANode implements INode, Serializable, IAdaptable, Cloneabl
 	 * the parent
 	 */
 	private boolean visible = true;
+	
+	/**
+	 * List of validation error for the current element. The error messages
+	 * can be cached using the flag redoValidation
+	 */
+	private List<String> validationErrors = null;
+	
+	/**
+	 * Flag used to know when something in the element change. If something
+	 * change the validation must be redone and the list of error messages
+	 * regenerated
+	 */
+	private boolean redoValidation = true;
 
 	/**
 	 * Instantiates a new a node.
@@ -331,6 +352,8 @@ public abstract class ANode implements INode, Serializable, IAdaptable, Cloneabl
 	 * @see java.beans.PropertyChangeListener#propertyChange(java.beans.PropertyChangeEvent)
 	 */
 	public void propertyChange(PropertyChangeEvent evt) {
+		//Redo the validation when something changes, for this element and the children
+		revalidateChildren();
 		if (evt.getPropertyName().equals(JRDesignElementGroup.PROPERTY_CHILDREN)) {
 			if (evt.getSource() == getValue()) {
 				if (evt.getOldValue() == null && evt.getNewValue() != null) {
@@ -606,5 +629,44 @@ public abstract class ANode implements INode, Serializable, IAdaptable, Cloneabl
 	 */
 	public void createSubeditor(){
 		
+	}
+	
+	/**
+	 * Validate the current element and return a list of validation error. By default
+	 * this method doesn't do any validation but can be overridden
+	 * 
+	 * @return null if the validation doesn't return errors, the list of errors 
+	 * otherwise
+	 */
+	protected List<String> doValidation(){
+		return null;
+	}
+	
+	/**
+	 * Request to redo the validation on the current element and on it's children.
+	 * This because in some case the validation of an element depends from the size
+	 * of the parent. Can be overridden to provide a different behavior
+	 */
+	protected void revalidateChildren(){
+		redoValidation = true;
+		for(INode node : getChildren()){
+			((ANode)node).revalidateChildren();
+		}
+	}
+	
+	/**
+	 * Validate the current element and return a list of validation error. The result
+	 * is cached until something changes on the node. To avoid to do the validation
+	 * when it isn't necessary
+	 * 
+	 * @return null if the validation doesn't return errors, the list of errors 
+	 * otherwise
+	 */
+	public List<String> validate(){
+		if (redoValidation){
+			validationErrors = doValidation();
+			redoValidation = false;
+		}
+		return validationErrors;
 	}
 }

@@ -27,10 +27,11 @@ import org.eclipse.wb.swt.ResourceManager;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.gef.decorator.IDecorator;
 import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
-import com.jaspersoft.studio.messages.Messages;
 
 /**
- * Design a border and a warning icon on an element that is out of bounds
+ * Design a border and a warning icon on an element that is out of bounds to warn
+ * the user about a validation error on the element and also can optionally provide a tooltip
+ * message on the error
  * 
  * @author Orlandin Marco
  * 
@@ -46,13 +47,11 @@ public class ErrorDecorator implements IDecorator {
 	 * The size of the warning border
 	 */
 	private static float JSS_WARNING_BORDER_SIZE = 1.0f;
-
+	
 	/**
-	 * Standard constructor, load the warningIcon
+	 * The tooltip to provide
 	 */
-	public ErrorDecorator() {
-
-	}
+	private String errorTooltip;
 
 	/**
 	 * Print the warning icon when an element is out of bound and set the tooltip text.
@@ -81,8 +80,11 @@ public class ErrorDecorator implements IDecorator {
 				g.drawRect(tempRect.x, tempRect.y, tempRect.width, tempRect.height);
 
 				RoundedPolygon.paintComplexWarning(r.x + r.width - 5, r.y - 2, 6, 12, JSS_WARNING_BORDER_SIZE, g);
-				fig.setToolTip(new org.eclipse.draw2d.Label(Messages.ErrorDecorator_PositionErrorToolTip, ResourceManager
-						.getPluginImage(JaspersoftStudioPlugin.PLUGIN_ID, "icons/resources/warning2.png"))); //$NON-NLS-2$
+				//Check if there is a tooltip message
+				if (errorTooltip != null){
+					fig.setToolTip(new org.eclipse.draw2d.Label(errorTooltip, ResourceManager
+							.getPluginImage(JaspersoftStudioPlugin.PLUGIN_ID, "icons/resources/warning2.png"))); //$NON-NLS-2$
+				}
 				g.setStroke(oldStroke);
 				g.setColor(oldColor);
 			}
@@ -113,5 +115,15 @@ public class ErrorDecorator implements IDecorator {
 	public boolean equals(Object obj) {
 		return this.getClass().equals(obj.getClass());
 	};
+	
+	/**
+	 * Set the tooltip message for the error. By default there is 
+	 * no tooltip message
+	 * 
+	 * @param message the message to show, null means no tooltip message.
+	 */
+	public void setErrorTooltip(String message){
+		errorTooltip = message;
+	}
 
 }

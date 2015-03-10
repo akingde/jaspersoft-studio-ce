@@ -8,6 +8,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.model.text;
 
+import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -16,6 +18,7 @@ import java.util.Map;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRFont;
+import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.base.JRBaseFont;
 import net.sf.jasperreports.engine.base.JRBaseParagraph;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
@@ -25,6 +28,7 @@ import net.sf.jasperreports.engine.design.JRDesignTextElement;
 import net.sf.jasperreports.engine.type.HorizontalTextAlignEnum;
 import net.sf.jasperreports.engine.type.RotationEnum;
 import net.sf.jasperreports.engine.type.VerticalTextAlignEnum;
+import net.sf.jasperreports.engine.util.JRStyleResolver;
 
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
@@ -95,7 +99,7 @@ public abstract class MTextElement extends MGraphicElementLineBox implements IRo
 		JRPropertyDescriptor paragraph = new JRPropertyDescriptor(PARAGRAPH, "Paragraph");
 		desc.add(paragraph);
 
-		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#textElement");
+		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#textElement"); //$NON-NLS-1$
 
 		tFont = getMFont();
 		tFont.createPropertyDescriptors(desc, defaultsMap);
@@ -281,4 +285,52 @@ public abstract class MTextElement extends MGraphicElementLineBox implements IRo
 		}
 	}
 
+	/**
+	 * A text element shouldn't provide a pdf font, since it is deprecated. So the validation
+	 * return an error message (in addition to the ones provided by the superclass) when 
+	 * the pdf font is used directly by the element or inherited by a style
+	 */
+	@Override
+	protected List<String> doValidation() {
+		List<String> errors = super.doValidation();
+		JRFont font = (JRFont) getValue();
+		//check if the element is using a pdf font
+		if (font.getOwnPdfFontName() != null || (font.isOwnPdfEmbedded() != null && font.isOwnPdfEmbedded())){
+			if (errors == null) errors = new ArrayList<String>();
+			errors.add(Messages.MTextElement_pdfError);
+		} else {
+			//The element is not using a pdf font, check if it is inherited from a style
+			JRStyle baseStyle = JRStyleResolver.getBaseStyle(font);
+			String inheritedFromStyle = getPdfFontName(baseStyle);
+			if (inheritedFromStyle != null){
+				if (errors == null) errors = new ArrayList<String>();
+				errors.add(MessageFormat.format(Messages.MTextElement_pdfErrorStyle, new Object[]{inheritedFromStyle}));
+			}
+		}
+		return errors;
+	}
+	
+	/**
+	 * Check recursively if a style provide a pdf font directly or inherited from a parent style
+	 * 
+	 * @param style the current style
+	 * @return the name of the style that provide a pdf font or null if no styles provide it
+	 */
+	private String getPdfFontName(JRStyle style)
+	{
+		if (style == null) return null;
+		String ownPdfFontName = style.getOwnPdfFontName();
+		if (ownPdfFontName != null || style.isOwnPdfEmbedded())
+		{
+			return style.getName();
+		}
+		JRStyle baseStyle = JRStyleResolver.getBaseStyle(style);
+		String pdfFontName = getPdfFontName(baseStyle);
+		if (pdfFontName != null || baseStyle.isOwnPdfEmbedded())
+		{
+			return baseStyle.getName();
+		}
+		return null;
+	}
+	
 }

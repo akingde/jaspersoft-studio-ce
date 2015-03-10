@@ -155,8 +155,35 @@ public class ComponentFigure extends RectangleFigure {
 			decorators.add(decorator);
 	}
 
+	/**
+	 * Remove a decorator from the element
+	 *  
+	 *  @param decorator the decorator that will be removed. The search
+	 *  of the decorator is done using the equals method from each decorator
+	 *  and the element with the passed one
+	 */
 	public void removeDecorator(IDecorator decorator) {
 		if (decorators != null)
 			decorators.remove(decorator);
+	}
+	
+	/**
+	 *  Remove a decorator with a specific type from the element
+	 *  
+	 *  @param dectType the decorator that will be removed. The search
+	 *  of the decorator is done comparing the type from each decorator on the element
+	 *  with the type of the passed one. The type must be exactly the same, subtype will
+	 *  not be considered.
+	 *  @return true if a decorator was found and removed, false otherwise
+	 */
+	public boolean removeDecorator(Class<? extends IDecorator> dectType){
+		if (decorators != null){
+			for(IDecorator decorator : decorators){
+				if (decorator.getClass().equals(dectType)){
+					return decorators.remove(decorator);
+				}
+			}
+		}
+		return false;
 	}
 }

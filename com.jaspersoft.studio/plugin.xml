@@ -1455,7 +1455,7 @@
     <extension
           point="com.jaspersoft.studio.decorators">
        <decorator
-             ClassFactory="com.jaspersoft.studio.editor.gef.decorator.error.PositionErrorDecorator">
+             ClassFactory="com.jaspersoft.studio.editor.gef.decorator.error.ElementErrorDecorator">
        </decorator>
        <decorator
              ClassFactory="com.jaspersoft.studio.editor.gef.decorator.pdf.PDF508ElementDecorator">

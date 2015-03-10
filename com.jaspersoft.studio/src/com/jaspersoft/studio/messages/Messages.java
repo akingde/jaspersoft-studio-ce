@@ -1305,6 +1305,8 @@ public class Messages extends NLS {
 	public static String MTextElement_line_spacing_description;
 	public static String MTextElement_markup;
 	public static String MTextElement_markup_description;
+	public static String MTextElement_pdfError;
+	public static String MTextElement_pdfErrorStyle;
 	public static String MTextElement_rotation_description;
 	public static String MTextElement_text_properties_category;
 	public static String MTextElement_vertical_alignment_description;

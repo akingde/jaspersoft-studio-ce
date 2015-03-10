@@ -10,14 +10,17 @@ package com.jaspersoft.studio.model;
 
 import java.awt.Color;
 import java.beans.PropertyChangeEvent;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.engine.JRBand;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRElement;
+import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.JRFont;
 import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.JRPropertiesMap;
@@ -28,6 +31,7 @@ import net.sf.jasperreports.engine.base.JRBaseElement;
 import net.sf.jasperreports.engine.base.JRBaseFont;
 import net.sf.jasperreports.engine.base.JRBasePen;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
+import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignGenericElement;
@@ -916,5 +920,67 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		jrTarget.setRemoveLineWhenBlank(jrSource.isRemoveLineWhenBlank());
 		jrTarget.setPrintInFirstWholeBand(jrSource.isPrintInFirstWholeBand());
 		jrTarget.setPrintWhenDetailOverflows(jrSource.isPrintWhenDetailOverflows());
+	}
+
+	/**
+	 * Evaluate if the current element is between the bounds of the father
+	 * 
+	 * @return a list with an informative message if the position is not valid, null
+	 * if it is valid
+	 */
+	@Override
+	protected List<String> doValidation() {
+		boolean isValidPosition = true;
+		if (getParent() instanceof APropertyNode) {
+			JRDesignElement item = getValue();
+			int x = item.getX();
+			int y = item.getY();
+			int w = item.getWidth();
+			int h = item.getHeight();
+
+			int fh = Integer.MAX_VALUE;
+			int fw = Integer.MAX_VALUE;
+
+			if (getParent() instanceof MGraphicElement) {
+				MGraphicElement fatherModel = (MGraphicElement) getParent();
+				JRDesignElement fitem = fatherModel.getValue();
+
+				fh = fitem.getHeight();
+				fw = fitem.getWidth();
+			} else if (getParent() instanceof MBand) {
+				JRDesignBand band = ((MBand) getParent()).getValue();
+				fh = band.getHeight();
+				fw = getJasperDesign().getPageWidth();
+			} else if (getParent() instanceof MPage) {
+				// I'm into a separate editor, here the relative dimensions inside the band dosen't count
+				x = 0;
+				y = 0;
+				MPage ge = (MPage) getParent();
+				JasperDesign jd = (JasperDesign) ge.getValue();
+				fh = jd.getPageHeight();
+				fw = jd.getPageWidth();
+			} else if (getParent() instanceof IGraphicElement) {
+				IGraphicElement ge = (IGraphicElement) getParent();
+				Rectangle r = ge.getBounds();
+				if (r != null) {
+					fh = r.height;
+					fw = r.width;
+				}
+			}
+			JRElementGroup elementGroup = getValue().getElementGroup();
+			if (elementGroup instanceof JRBand) {
+				// Integer father_width = itemModel.getRoot().getJasperDesign().getColumnWidth();
+				isValidPosition = y + h <= fh;
+			} else if (elementGroup != null) {
+				isValidPosition = fh >= h + y && x >= 0 && y >= 0 && fw >= x + w;
+			}
+		}
+		if (!isValidPosition){
+			List<String> error = new ArrayList<String>();
+			error.add(Messages.ErrorDecorator_PositionErrorToolTip);
+			return error;
+		} else {
+			return null;
+		}
 	}
 }
