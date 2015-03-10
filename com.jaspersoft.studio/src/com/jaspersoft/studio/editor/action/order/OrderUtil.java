@@ -17,7 +17,11 @@ public class OrderUtil {
 				MGraphicElement ge2 = (MGraphicElement) o2;
 				ANode p1 = ge1.getParent();
 				ANode p2 = ge2.getParent();
-				if (p1.hashCode() > p2.hashCode())
+				//null checks, avoid npe when deleting more elements at once
+				if (p1 == null && p2 == null) return 0;
+				else if (p1 == null) return 1;
+				else if (p2 == null) return -1;
+				if (p1.hashCode() < p2.hashCode())
 					return -1;
 				if (p1.hashCode() > p2.hashCode())
 					return 1;
