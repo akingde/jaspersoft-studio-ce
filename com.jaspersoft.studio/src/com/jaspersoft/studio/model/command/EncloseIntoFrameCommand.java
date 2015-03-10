@@ -26,6 +26,8 @@ import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.model.IGroupElement;
+import com.jaspersoft.studio.model.frame.MFrame;
 
 /**
  * 
@@ -125,7 +127,7 @@ public class EncloseIntoFrameCommand extends Command {
 		previousPositions.clear();
 		containerFrame = new JRDesignFrame();
 		Rectangle frameSize = getFrameSize();
-		addChild(parent.getValue(), containerFrame);
+		addChild(parent, containerFrame);
 		//The nodes must be ordered by their position, this because if the command is undone we 
 		//can move the nodes in the same order to have their original position restored. This because
 		//inserting a node into a list dosen't influence the positions of the ones above it.
@@ -149,7 +151,7 @@ public class EncloseIntoFrameCommand extends Command {
 			JRDesignElement movedElement = (JRDesignElement)node.getValue();
 			movedElement.setX(movedElement.getX()-frameSize.x);
 			movedElement.setY(movedElement.getY()-frameSize.y);
-			removeChild(nodeParent.getValue(), movedElement);
+			removeChild(nodeParent, movedElement);
 			addChild(containerFrame, (JRDesignElement)node.getValue());
 		}
 		containerFrame.setX(frameSize.x);
@@ -163,12 +165,12 @@ public class EncloseIntoFrameCommand extends Command {
 		//The nodes are already in the right order, need only to move them
 		containerFrame = new JRDesignFrame();
 		Rectangle frameSize = getFrameSize();
-		addChild(parent.getValue(), containerFrame);
+		addChild(parent, containerFrame);
 		for(APropertyNode node : nodeList){
 			JRDesignElement movedElement = (JRDesignElement)node.getValue();
 			movedElement.setX(movedElement.getX()-frameSize.x);
 			movedElement.setY(movedElement.getY()-frameSize.y);
-			removeChild(parent.getValue(), movedElement);
+			removeChild(parent, movedElement);
 			addChild(containerFrame, (JRDesignElement)node.getValue());
 		}
 		containerFrame.setX(frameSize.x);
@@ -183,9 +185,9 @@ public class EncloseIntoFrameCommand extends Command {
 			JRDesignElement movedElement = (JRDesignElement)node.movedNode.getValue();
 			movedElement.setX(node.oldX);
 			movedElement.setY(node.oldY);
-			addChild(node.nodeParent.getValue(), movedElement, node.nodeIndex);
+			addChild(node.nodeParent, movedElement, node.nodeIndex);
 		}
-		removeChild(parent.getValue(), containerFrame);
+		removeChild(parent, containerFrame);
 		containerFrame = null;
 	}
 	
@@ -211,23 +213,6 @@ public class EncloseIntoFrameCommand extends Command {
 	}
 	
 	/**
-	 * Add a child to a jr object into a specific index. The parent must be
-	 * a JRDesignFrame or a JRDesignElementGroup. This is done since there
-	 * is no common interface to manipulate the children of a jr container
-	 * 
-	 * @param jrParent the parent, it must be a JRDesignFrame or a JRDesignElementGroup
-	 * @param child the child to add
-	 * @param index the position of the child
-	 */
-	private void addChild(Object jrParent, JRDesignElement child, int index){
-		if (jrParent instanceof JRDesignFrame){
-			((JRDesignFrame)jrParent).addElement(index, child);
-		} else {
-			((JRDesignElementGroup)jrParent).addElement(index, child);
-		}
-	}
-	
-	/**
 	 * Add a child to a jr object, after the other children. The parent must be
 	 * a JRDesignFrame or a JRDesignElementGroup. This is done since there
 	 * is no common interface to manipulate the children of a jr container
@@ -243,19 +228,53 @@ public class EncloseIntoFrameCommand extends Command {
 		}
 	}
 	
+	
+	/**
+	 * Add a child to a jr object into a specific index. The parent must be
+	 * a Frame model or and IGroupElement model. This is done since there
+	 * is no common interface to manipulate the children of a container
+	 * 
+	 * @param parent the parent, it must be a MFrame or a IGroupElement
+	 * @param child the child to add
+	 * @param index the position of the child
+	 */
+	private void addChild(ANode parent, JRDesignElement child, int index){
+		if (parent instanceof MFrame){
+			((JRDesignFrame)parent.getValue()).addElement(index, child);
+		} else if (parent instanceof IGroupElement){
+			((JRDesignElementGroup)((IGroupElement)parent).getJRElementGroup()).addElement(index, child);
+		}
+	}
+	
+	/**
+	 * Add a child to a jr object, after the other children. The parent must be
+	 * a Frame model or and IGroupElement model. This is done since there
+	 * is no common interface to manipulate the children of a container
+	 * 
+	 * @param parent the parent, it must be a MFrame or a IGroupElement
+	 * @param child the child to add
+	 */
+	private void addChild(ANode parent, JRDesignElement child){
+		if (parent instanceof MFrame){
+			((JRDesignFrame)parent.getValue()).addElement(child);
+		} else if (parent instanceof IGroupElement){
+			((JRDesignElementGroup)((IGroupElement)parent).getJRElementGroup()).addElement(child);
+		}
+	}
+	
 	/**
 	 * Remove a child from a jr object. The parent must be
-	 * a JRDesignFrame or a JRDesignElementGroup. This is done since there
-	 * is no common interface to manipulate the children of a jr container
+	 * a Frame model or and IGroupElement model. This is done since there
+	 * is no common interface to manipulate the children of a container
 	 * 
-	 * @param jrParent the parent, it must be a JRDesignFrame or a JRDesignElementGroup
+	 * @param parent the parent, it must be a MFrame or a IGroupElement
 	 * @param child the child to remove
 	 */
-	private void removeChild(Object jrParent, JRDesignElement child){
-		if (jrParent instanceof JRDesignFrame){
-			((JRDesignFrame)jrParent).removeElement(child);
-		} else {
-			((JRDesignElementGroup)jrParent).removeElement(child);
+	private void removeChild(ANode parent, JRDesignElement child){
+		if (parent instanceof MFrame){
+			((JRDesignFrame)parent.getValue()).removeElement(child);
+		} else if (parent instanceof IGroupElement){
+			((JRDesignElementGroup)((IGroupElement)parent).getJRElementGroup()).removeElement(child);
 		}
 	}
 	
