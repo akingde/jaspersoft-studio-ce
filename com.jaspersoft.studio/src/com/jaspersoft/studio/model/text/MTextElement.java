@@ -286,51 +286,54 @@ public abstract class MTextElement extends MGraphicElementLineBox implements IRo
 	}
 
 	/**
-	 * A text element shouldn't provide a pdf font, since it is deprecated. So the validation
-	 * return an error message (in addition to the ones provided by the superclass) when 
-	 * the pdf font is used directly by the element or inherited by a style
+	 * A text element shouldn't provide a pdf font, since it is deprecated. So the validation return an error message (in
+	 * addition to the ones provided by the superclass) when the pdf font is used directly by the element or inherited by
+	 * a style
 	 */
 	@Override
 	protected List<String> doValidation() {
 		List<String> errors = super.doValidation();
 		JRFont font = (JRFont) getValue();
-		//check if the element is using a pdf font
-		if (font.getOwnPdfFontName() != null || (font.isOwnPdfEmbedded() != null && font.isOwnPdfEmbedded())){
-			if (errors == null) errors = new ArrayList<String>();
+		// check if the element is using a pdf font
+		if (font.getOwnPdfFontName() != null || (font.isOwnPdfEmbedded() != null && font.isOwnPdfEmbedded())) {
+			if (errors == null)
+				errors = new ArrayList<String>();
 			errors.add(Messages.MTextElement_pdfError);
 		} else {
-			//The element is not using a pdf font, check if it is inherited from a style
+			// The element is not using a pdf font, check if it is inherited from a style
 			JRStyle baseStyle = JRStyleResolver.getBaseStyle(font);
 			String inheritedFromStyle = getPdfFontName(baseStyle);
-			if (inheritedFromStyle != null){
-				if (errors == null) errors = new ArrayList<String>();
-				errors.add(MessageFormat.format(Messages.MTextElement_pdfErrorStyle, new Object[]{inheritedFromStyle}));
+			if (inheritedFromStyle != null) {
+				if (errors == null)
+					errors = new ArrayList<String>();
+				errors.add(MessageFormat.format(Messages.MTextElement_pdfErrorStyle, new Object[] { inheritedFromStyle }));
 			}
 		}
 		return errors;
 	}
-	
+
 	/**
 	 * Check recursively if a style provide a pdf font directly or inherited from a parent style
 	 * 
-	 * @param style the current style
+	 * @param style
+	 *          the current style
 	 * @return the name of the style that provide a pdf font or null if no styles provide it
 	 */
-	private String getPdfFontName(JRStyle style)
-	{
-		if (style == null) return null;
+	private String getPdfFontName(JRStyle style) {
+		if (style == null)
+			return null;
 		String ownPdfFontName = style.getOwnPdfFontName();
-		if (ownPdfFontName != null || style.isOwnPdfEmbedded())
-		{
+		if (ownPdfFontName != null || (style.isOwnPdfEmbedded() != null && style.isOwnPdfEmbedded())) {
 			return style.getName();
 		}
 		JRStyle baseStyle = JRStyleResolver.getBaseStyle(style);
+		if (baseStyle == null)
+			return null;
 		String pdfFontName = getPdfFontName(baseStyle);
-		if (pdfFontName != null || baseStyle.isOwnPdfEmbedded())
-		{
+		if (pdfFontName != null || (baseStyle.isOwnPdfEmbedded() != null && baseStyle.isOwnPdfEmbedded())) {
 			return baseStyle.getName();
 		}
 		return null;
 	}
-	
+
 }
