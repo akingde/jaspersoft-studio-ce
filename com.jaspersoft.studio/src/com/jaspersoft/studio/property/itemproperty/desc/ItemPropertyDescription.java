@@ -98,9 +98,12 @@ public class ItemPropertyDescription<T> {
 	}
 
 	public void handleEdit(Text txt, StandardItemProperty value) {
+		String tvalue = txt.getText();
+		if (tvalue.isEmpty())
+			tvalue = null;
 		if (value.getValueExpression() != null)
-			((JRDesignExpression) value.getValueExpression()).setText(txt.getText());
+			((JRDesignExpression) value.getValueExpression()).setText(tvalue);
 		else
-			value.setValue(txt.getText());
+			value.setValue(tvalue);
 	}
 }
