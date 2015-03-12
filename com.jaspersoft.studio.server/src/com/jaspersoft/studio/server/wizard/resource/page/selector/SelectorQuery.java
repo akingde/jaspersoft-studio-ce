@@ -38,6 +38,8 @@ public class SelectorQuery extends ASelector {
 		if (ru != null)
 			for (Object obj : ru.getChildren()) {
 				ResourceDescriptor r = (ResourceDescriptor) obj;
+				if (r == null)
+					continue;
 				String t = r.getWsType();
 				if (t.equals(ResourceDescriptor.TYPE_QUERY))
 					return r;
