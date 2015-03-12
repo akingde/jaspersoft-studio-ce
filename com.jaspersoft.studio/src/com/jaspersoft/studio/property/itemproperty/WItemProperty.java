@@ -45,6 +45,7 @@ import com.jaspersoft.studio.property.itemproperty.dialog.ItemPropertyElementDia
 import com.jaspersoft.studio.property.itemproperty.event.ItemPropertyModifiedEvent;
 import com.jaspersoft.studio.property.itemproperty.event.ItemPropertyModifiedListener;
 import com.jaspersoft.studio.swt.events.ExpressionModifiedListener;
+import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.UIUtil;
 
 /**
@@ -335,10 +336,12 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 			if (ipDesc != null)
 				txt = ipDesc.toSimpleString(txt);
 			textExpression.setText(txt);
-			String tooltip = txt;
+			String tooltip = "";
+			if (!Misc.isNullOrEmpty(txt))
+				tooltip += "\n\n" + txt;
 			if (ipDesc != null)
-				tooltip += "\n\n" + lprovider.getText(exp) + "\n\n" + ipDesc.getDescription();
-			textExpression.setToolTipText(tooltip);
+				tooltip += "\n\n" + ipDesc.getDescription();
+			textExpression.setToolTipText(tooltip.trim());
 			if (txt.length() >= oldpos)
 				textExpression.setSelection(oldpos, oldpos);
 			if (exp.getValueExpression() != null)
