@@ -25,7 +25,6 @@ import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -37,19 +36,22 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.PlatformUI;
 
 import com.jaspersoft.studio.jface.dialogs.LocaleDialog;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.editor.table.TableLabelProvider;
 import com.jaspersoft.studio.swt.widgets.table.DeleteButton;
 import com.jaspersoft.studio.swt.widgets.table.INewElement;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.swt.widgets.table.NewButton;
+import com.jaspersoft.studio.wizards.ContextHelpIDs;
+import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
 
-public class FontLocalesPage extends WizardPage {
+public class FontLocalesPage extends JSSHelpWizardPage {
 	private SimpleFontFamily fontFamily;
 
 	public FontLocalesPage(FontFamily fontFamily) {
 		super("fontlocalespage"); //$NON-NLS-1$
-		setTitle("Locales");
-		setDescription("Font locales mapping");
+		setTitle(Messages.FontLocalesPage_pageTitle);
+		setDescription(Messages.FontLocalesPage_pageDescrtiption);
 		this.fontFamily = (SimpleFontFamily) fontFamily;
 	}
 
@@ -73,11 +75,7 @@ public class FontLocalesPage extends WizardPage {
 		setControl(composite);
 
 		Label lbl = new Label(composite, SWT.WRAP);
-		lbl.setText("If you want to use this set of True Type Fonts only for a set of Locales, you can"
-				+ "specify them here. In example you can define this family to be used with Chinese, and select"
-				+ "the Chinese Locale. Subsequently you can define a new font extension like this one, with the "
-				+ "same family name but specifying a set of TrueType font files to be used with the Japanese locale."
-				+ "\nSpecify the Locales with wich this font should be used. Leave the list empty to support any locale.");
+		lbl.setText(Messages.FontLocalesPage_labelText);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		gd.widthHint = 300;
@@ -132,7 +130,7 @@ public class FontLocalesPage extends WizardPage {
 
 		TableColumn[] column = new TableColumn[1];
 		column[0] = new TableColumn(table, SWT.NONE);
-		column[0].setText("Locale");
+		column[0].setText(Messages.FontLocalesPage_colHeader);
 
 		for (int i = 0, n = column.length; i < n; i++)
 			column[i].pack();
@@ -149,4 +147,8 @@ public class FontLocalesPage extends WizardPage {
 		tableViewer.setInput(lst);
 	}
 
+	@Override
+	protected String getContextName() {
+		return ContextHelpIDs.WIZARD_FONT_EXTENSION;
+	}
 }

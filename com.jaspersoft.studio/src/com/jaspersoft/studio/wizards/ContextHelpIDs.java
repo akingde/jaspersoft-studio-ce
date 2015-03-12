@@ -101,4 +101,6 @@ public class ContextHelpIDs {
 	public static final String WIZARD_CONNECT_TO_DOMAIN = PREFIX.concat("domainConnectionWizardDialog");
 	
 	public static final String WIZARD_BACKWARD_COMPILER = PREFIX.concat("backwardCompilation");
+	
+	public static final String WIZARD_FONT_EXTENSION = PREFIX.concat("font_extension");
 }

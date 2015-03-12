@@ -28,7 +28,6 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
-import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -49,8 +48,10 @@ import com.jaspersoft.studio.swt.widgets.table.INewElement;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.swt.widgets.table.NewButton;
 import com.jaspersoft.studio.utils.Misc;
+import com.jaspersoft.studio.wizards.ContextHelpIDs;
+import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
 
-public class FontMappingPage extends WizardPage {
+public class FontMappingPage extends JSSHelpWizardPage {
 	public class TableLabelProvider extends LabelProvider implements ITableLabelProvider {
 
 		public Image getColumnImage(Object element, int columnIndex) {
@@ -253,5 +254,10 @@ public class FontMappingPage extends WizardPage {
 	@Override
 	public boolean canFlipToNextPage() {
 		return isPageComplete();
+	}
+	
+	@Override
+	protected String getContextName() {
+		return ContextHelpIDs.WIZARD_FONT_EXTENSION;
 	}
 }

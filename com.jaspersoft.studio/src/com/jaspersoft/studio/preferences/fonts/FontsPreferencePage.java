@@ -19,6 +19,7 @@ import org.eclipse.ui.PlatformUI;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.util.FieldEditorOverlayPage;
+import com.jaspersoft.studio.wizards.ContextHelpIDs;
 
 /*
  * This class represents a preference page that is contributed to the Preferences dialog. By subclassing
@@ -63,6 +64,6 @@ public class FontsPreferencePage extends FieldEditorOverlayPage {
 
 	@Override
 	public void performHelp() {
-		PlatformUI.getWorkbench().getHelpSystem().displayHelp("com.jaspersoft.studio.doc.preferences_font"); //$NON-NLS-1$
+		PlatformUI.getWorkbench().getHelpSystem().displayHelp(ContextHelpIDs.WIZARD_FONT_EXTENSION); //$NON-NLS-1$
 	}
 }

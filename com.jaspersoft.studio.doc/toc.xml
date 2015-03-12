@@ -15,6 +15,8 @@
     <topic href="html/editors/preview/preview.html" label="Report Run And Preview Editor">
     </topic>
     <anchor id="jsseditors"/>
+    <topic href="html/wizard/fontextension/fontextension.html" label="Font Extension">
+    </topic>
  </topic>
  <topic href="html/view/views.html" label="Views">
     <topic href="html/view/outline/outline.html" label="Outline">

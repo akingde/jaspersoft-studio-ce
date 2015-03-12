@@ -16,7 +16,6 @@ import net.sf.jasperreports.engine.fonts.FontFamily;
 import net.sf.jasperreports.engine.fonts.SimpleFontFace;
 import net.sf.jasperreports.engine.fonts.SimpleFontFamily;
 
-import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
@@ -33,14 +32,15 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.PlatformUI;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+import com.jaspersoft.studio.wizards.ContextHelpIDs;
+import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
 
-public class FontFamilyPage extends WizardPage {
+public class FontFamilyPage extends JSSHelpWizardPage {
 	private static final String BOLDITALIC = "BOLDITALIC"; //$NON-NLS-1$
 	private static final String ITALIC = "ITALIC"; //$NON-NLS-1$
 	private static final String BOLD = "BOLD"; //$NON-NLS-1$
@@ -163,8 +163,6 @@ public class FontFamilyPage extends WizardPage {
 				widgetSelected(e);
 			}
 		});
-
-		PlatformUI.getWorkbench().getHelpSystem().setHelp(getControl(), "Jaspersoft.wizard"); //$NON-NLS-1$
 		fillWidgets();
 	}
 
@@ -211,5 +209,10 @@ public class FontFamilyPage extends WizardPage {
 	@Override
 	public boolean canFlipToNextPage() {
 		return isPageComplete();
+	}
+
+	@Override
+	protected String getContextName() {
+		return ContextHelpIDs.WIZARD_FONT_EXTENSION;
 	}
 }

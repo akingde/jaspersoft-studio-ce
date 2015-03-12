@@ -727,6 +727,10 @@ public class Messages extends NLS {
 	public static String FontListFieldEditor_exportToJar;
 	public static String FontListFieldEditor_fontNameLabel;
 	public static String FontListFieldEditor_newFontSuggestedName;
+	public static String FontLocalesPage_colHeader;
+	public static String FontLocalesPage_labelText;
+	public static String FontLocalesPage_pageDescrtiption;
+	public static String FontLocalesPage_pageTitle;
 	public static String FontsPreferencePage_fontListTitle;
 	public static String FreeLayout_name;
 	public static String FreeLayout_tooltip;
