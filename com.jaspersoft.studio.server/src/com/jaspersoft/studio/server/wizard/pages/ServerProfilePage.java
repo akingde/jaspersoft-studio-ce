@@ -328,6 +328,7 @@ public class ServerProfilePage extends WizardPage implements
 		new Label(cmp, SWT.NONE).setText(Messages.ServerProfilePage_jrversion);
 
 		cversion = new VersionCombo(cmp);
+		((Combo)cversion.getControl()).setItem(0, "Same version with server");
 		cversion.setVersion(JRXmlWriterHelper.LAST_VERSION);
 		GridData gd = new GridData();
 		gd.horizontalSpan = 2;
