@@ -29,16 +29,12 @@ import com.jaspersoft.studio.model.MGraphicElement;
  * The Class LineFigure.
  */
 public class LineFigure extends AHandleBoundsFigure implements IModelFigure {
-
-	protected MGraphicElement model = null;
-	
-	protected ACachedGraphics cachedGraphics = null;
 	
 	/**
 	 * Instantiates a new line figure.
 	 */
 	public LineFigure(MGraphicElement lineModel) {
-		super();
+		super(null);
 		this.model = lineModel;
 	}
 
@@ -119,23 +115,7 @@ public class LineFigure extends AHandleBoundsFigure implements IModelFigure {
 		return offset;
 	}
 	
-	/**
-	 * Return the model associated to this figure, can be null
-	 */
-	public MGraphicElement getModel(){
-		return model;
-	}
-	
 	protected ACachedGraphics getCachedGraphics(Graphics2D originalGraphics){
 		return new StackGraphics2D(originalGraphics);
-	}
-	
-	/**
-	 * Used to make explicit if the figure allow the caching of the drawing
-	 * 
-	 * @return true if the figure allow the caching, false otherwise
-	 */
-	protected boolean allowsFigureDrawCache(){
-		return true;
 	}
 }

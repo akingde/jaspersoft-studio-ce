@@ -186,4 +186,24 @@ public class ComponentFigure extends RectangleFigure {
 		}
 		return false;
 	}
+	
+	/**
+	 *  Search a decorator with a specific type from the element
+	 *  
+	 *  @param dectType the decorator that will be searched. The search
+	 *  of the decorator is done comparing the type from each decorator on the element
+	 *  with the type of the passed one. The type must be exactly the same, subtype will
+	 *  not be considered.
+	 *  @return a decorator exactly of the searched type if it can be found, otherwise null
+	 */
+	public IDecorator getDecorator(Class<? extends IDecorator> dectType){
+		if (decorators != null){
+			for(IDecorator decorator : decorators){
+				if (decorator.getClass().equals(dectType)){
+					return decorator;
+				}
+			}
+		}
+		return null;
+	}
 }

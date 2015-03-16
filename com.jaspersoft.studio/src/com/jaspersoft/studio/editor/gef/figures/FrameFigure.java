@@ -32,27 +32,17 @@ import com.jaspersoft.studio.model.MGraphicElement;
  * @author Chicu Veaceslav
  */
 public class FrameFigure extends AHandleBoundsFigure implements IModelFigure {
-	
-	/**
-	 * The model associated with the figure
-	 */
-	protected MGraphicElement model = null;
-	
-	protected ACachedGraphics cachedGraphics = null;
-	
 	/**
 	 * Instantiates a new text field figure.
 	 */
 	public FrameFigure(MGraphicElement frameModel) {
-		super();
-		this.model = frameModel;
+		super(frameModel);
 		setLayoutManager(new XYLayout());
 	}
 
 	
 	public FrameFigure(){
-		super();
-		this.model = null;
+		super(null);
 		setLayoutManager(new XYLayout());
 	}
 	
@@ -152,23 +142,7 @@ public class FrameFigure extends AHandleBoundsFigure implements IModelFigure {
 		return new Rectangle(x, y, w, h);
 	}
 	
-	/**
-	 * Return the model associated to this figure, can be null
-	 */
-	public MGraphicElement getModel(){
-		return model;
-	}
-	
 	protected ACachedGraphics getCachedGraphics(Graphics2D originalGraphics){
 		return new StackGraphics2D(originalGraphics);
-	}
-	
-	/**
-	 * Used to make explicit if the figure allow the caching of the drawing
-	 * 
-	 * @return true if the figure allow the caching, false otherwise
-	 */
-	protected boolean allowsFigureDrawCache(){
-		return true;
 	}
 }
