@@ -8,6 +8,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.storage;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -92,6 +93,10 @@ public class PreferencesDataAdapterStorage extends ADataAdapterStorage {
 				DataAdapterDescriptor dataAdapterDescriptor = factory.createDataAdapter();
 				DataAdapter dataAdapter = dataAdapterDescriptor.getDataAdapter();
 				// maybe we should get context for this file?
+
+				inputStream.close();
+
+				inputStream = new FileInputStream(storageElement);
 				dataAdapter = (DataAdapter) CastorUtil.getInstance(JasperReportsConfiguration.getDefaultInstance()).read(
 						inputStream);
 				dataAdapterDescriptor.setDataAdapter(dataAdapter);
