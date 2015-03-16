@@ -177,8 +177,8 @@ public class DataAdapterManager {
 		DataAdapterFactory factory = findFactoryByDataAdapterClass(srcDataAdapter.getClass().getName());
 		DataAdapterDescriptor copy = factory.createDataAdapter();
 		copy.setName(src.name);
-		srcDataAdapter = (DataAdapter) CastorUtil.read(new ByteArrayInputStream(src.toXml(jrContext).getBytes()),
-				srcDataAdapter.getClass());
+		srcDataAdapter = (DataAdapter) CastorUtil.getInstance(jrContext).read(
+				new ByteArrayInputStream(src.toXml(jrContext).getBytes()));
 		copy.setDataAdapter(srcDataAdapter);
 		return copy;
 	}

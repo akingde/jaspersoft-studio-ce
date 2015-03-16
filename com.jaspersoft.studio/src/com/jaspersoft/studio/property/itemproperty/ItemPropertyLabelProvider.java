@@ -43,7 +43,7 @@ public class ItemPropertyLabelProvider extends ColumnLabelProvider implements IT
 			if (ip.getValueExpression() != null)
 				return Misc.nvl(ip.getValueExpression().getText());
 			if (descriptor != null) {
-				ItemPropertyDescription<?> ipDesc = descriptor.getDescriptor(ip.getName());
+				ItemPropertyDescription<?> ipDesc = descriptor.getDescription(ip.getName());
 				if (ipDesc != null)
 					return ipDesc.toSimpleString(Misc.nvl(ip.getValue()));
 			}

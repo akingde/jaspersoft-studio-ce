@@ -29,9 +29,9 @@ public class ItemPropertyDescriptor extends NTextPropertyDescriptor implements I
 	private ADescriptor descriptor;
 
 	public ItemPropertyDescriptor(Object id, ADescriptor descriptor) {
-		super(id, descriptor.getDescriptor((String) id).getLabel());
+		super(id, descriptor.getDescription((String) id).getLabel());
 		this.descriptor = descriptor;
-		setDescription(descriptor.getDescriptor((String) id).getDescription());
+		setDescription(descriptor.getDescription((String) id).getDescription());
 		setLabelProvider(new ItemPropertyLabelProvider(descriptor));
 	}
 

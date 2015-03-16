@@ -20,6 +20,8 @@ import org.eclipse.swt.widgets.Control;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
 import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.property.itemproperty.desc.ADescriptor;
+import com.jaspersoft.studio.property.itemproperty.desc.ItemPropertyDescription;
 import com.jaspersoft.studio.property.itemproperty.event.ItemPropertyModifiedEvent;
 import com.jaspersoft.studio.property.itemproperty.event.ItemPropertyModifiedListener;
 import com.jaspersoft.studio.property.section.AbstractSection;
@@ -40,11 +42,13 @@ public class SPItemProperty extends ASPropertyWidget<ItemPropertyDescriptor> imp
 
 	@Override
 	public Control getControlToBorder() {
-		return expr.getTextControl();
+		return expr.getControl();
 	}
 
 	protected void createComponent(Composite parent) {
-		expr = new WItemProperty(parent, SWT.NONE, 1, pDescriptor.getDescriptor());
+		ADescriptor d = pDescriptor.getDescriptor();
+		ItemPropertyDescription<?> ipd =	d.getDescription((String) pDescriptor.getId());
+		expr = new WItemProperty(parent, SWT.NONE, 1, d, ipd);
 		expr.addModifyListener(new ItemPropertyModifiedListener() {
 			@Override
 			public void itemModified(ItemPropertyModifiedEvent event) {
@@ -54,8 +58,7 @@ public class SPItemProperty extends ASPropertyWidget<ItemPropertyDescriptor> imp
 		});
 		if (parent.getLayout() instanceof GridLayout)
 			expr.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		expr.getTextControl().addFocusListener(focusListener);
-		expr.setDescription(pDescriptor.getDescriptor().getDescriptor((String) pDescriptor.getId()));
+		expr.getControl().addFocusListener(focusListener); 
 	}
 
 	public void setData(APropertyNode pnode, Object b) {

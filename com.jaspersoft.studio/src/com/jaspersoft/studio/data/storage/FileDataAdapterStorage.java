@@ -257,14 +257,18 @@ public class FileDataAdapterStorage extends ADataAdapterStorage {
 						if (clazz != null) {
 							InputStream mis = cl.getResourceAsStream(clazz.getName().replace(".", "/") + ".xml"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 							if (mis != null) {
-								Mapping mapping = new Mapping(cl);
-								mapping.loadMapping(new InputSource(mis));
+								try {
+									Mapping mapping = new Mapping(cl);
+									mapping.loadMapping(new InputSource(mis));
 
-								DataAdapter dataAdapter = (DataAdapter) CastorUtil.read(XMLUtils.parseNoValidation(in)
-										.getDocumentElement(), mapping);
-								if (dataAdapter != null) {
-									ddad.setDataAdapter(dataAdapter);
-									dad = ddad;
+									DataAdapter dataAdapter = (DataAdapter) CastorUtil.read(XMLUtils.parseNoValidation(in)
+											.getDocumentElement(), mapping);
+									if (dataAdapter != null) {
+										ddad.setDataAdapter(dataAdapter);
+										dad = ddad;
+									}
+								} finally {
+									FileUtils.closeStream(mis);
 								}
 							}
 						}
@@ -279,8 +283,7 @@ public class FileDataAdapterStorage extends ADataAdapterStorage {
 				} else {
 					DataAdapterDescriptor dataAdapterDescriptor = factory.createDataAdapter();
 					DataAdapter dataAdapter = dataAdapterDescriptor.getDataAdapter();
-					dataAdapter = (DataAdapter) CastorUtil.read(XMLUtils.parseNoValidation(in).getDocumentElement(),
-							dataAdapter.getClass());
+					dataAdapter = (DataAdapter) CastorUtil.getInstance(JasperReportsConfiguration.getDefaultInstance()).read(in);
 					dataAdapterDescriptor.setDataAdapter(dataAdapter);
 					dad = dataAdapterDescriptor;
 				}

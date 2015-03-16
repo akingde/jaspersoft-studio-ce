@@ -68,8 +68,9 @@ public class PreferencesDataAdapterStorage extends ADataAdapterStorage {
 		// Read the configuration from the file storage
 		File[] storageContent = ConfigurationManager.getStorageContent(PREF_KEYS_DATA_ADAPTERS);
 		for (File storageElement : storageContent) {
+			InputStream inputStream = null;
 			try {
-				InputStream inputStream = new FileInputStream(storageElement);
+				inputStream = new FileInputStream(storageElement);
 				Reader reader = new InputStreamReader(inputStream, "UTF-8");
 				InputSource is = new InputSource(reader);
 				is.setEncoding("UTF-8");
@@ -91,13 +92,16 @@ public class PreferencesDataAdapterStorage extends ADataAdapterStorage {
 				DataAdapterDescriptor dataAdapterDescriptor = factory.createDataAdapter();
 				DataAdapter dataAdapter = dataAdapterDescriptor.getDataAdapter();
 				// maybe we should get context for this file?
-				dataAdapter = (DataAdapter) CastorUtil.read(adapterNode, dataAdapter.getClass());
+				dataAdapter = (DataAdapter) CastorUtil.getInstance(JasperReportsConfiguration.getDefaultInstance()).read(
+						inputStream);
 				dataAdapterDescriptor.setDataAdapter(dataAdapter);
 				// Always add the data adapter read from the file regardless of the name
 				super.forceAddDataAdapter(dataAdapterDescriptor);
 				fileAdapterMap.put(dataAdapterDescriptor, storageElement.getName());
 			} catch (Exception ex) {
 				ex.printStackTrace();
+			} finally {
+				FileUtils.closeStream(inputStream);
 			}
 		}
 		// At this point I've loaded on the data adapter on the file system

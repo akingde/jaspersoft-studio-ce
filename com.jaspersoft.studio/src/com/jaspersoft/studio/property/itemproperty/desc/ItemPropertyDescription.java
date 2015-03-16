@@ -11,7 +11,16 @@ package com.jaspersoft.studio.property.itemproperty.desc;
 import net.sf.jasperreports.components.map.StandardItemProperty;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
+
+import com.jaspersoft.studio.utils.Misc;
 
 public class ItemPropertyDescription<T> {
 	private String name;
@@ -97,13 +106,53 @@ public class ItemPropertyDescription<T> {
 		return original;
 	}
 
-	public void handleEdit(Text txt, StandardItemProperty value) {
-		String tvalue = txt.getText();
-		if (tvalue.isEmpty())
-			tvalue = null;
-		if (value.getValueExpression() != null)
-			((JRDesignExpression) value.getValueExpression()).setText(tvalue);
-		else
-			value.setValue(tvalue);
+	public void handleEdit(Control txt, StandardItemProperty value) {
+		if (txt instanceof Text) {
+			String tvalue = ((Text) txt).getText();
+			if (tvalue != null && tvalue.isEmpty())
+				tvalue = null;
+			if (value.getValueExpression() != null)
+				((JRDesignExpression) value.getValueExpression()).setText(tvalue);
+			else
+				value.setValue(tvalue);
+		}
+	}
+
+	public Control createControl(final IWItemProperty wiProp, Composite parent) {
+		final Text textExpression = new Text(parent, SWT.BORDER | SWT.WRAP | SWT.V_SCROLL);
+		textExpression.setLayoutData(new GridData(GridData.FILL_BOTH));
+		textExpression.addModifyListener(new ModifyListener() {
+
+			@Override
+			public void modifyText(ModifyEvent e) {
+				if (wiProp.isRefresh())
+					return;
+				Point p = textExpression.getSelection();
+
+				handleEdit(textExpression, wiProp.getValue());
+				wiProp.setValue(wiProp.getValue());
+				textExpression.setSelection(p);
+			}
+		});
+		return textExpression;
+	}
+
+	public void setValue(Control c, IWItemProperty wip) {
+		Text txtExpr = (Text) c;
+		String txt = wip.getLabelProvider().getText(wip.getValue());
+		txt = toSimpleString(txt);
+		Point oldSelection = txtExpr.getSelection();
+
+		txtExpr.setText(txt);
+
+		oldSelection.x = Math.max(txt.length(), oldSelection.x);
+		oldSelection.y = Math.max(txt.length(), oldSelection.y);
+		txtExpr.setSelection(oldSelection);
+
+		String tooltip = "";
+		if (!Misc.isNullOrEmpty(txt))
+			tooltip += "\n\n" + txt;
+		tooltip += "\n\n" + getDescription();
+		txtExpr.setToolTipText(tooltip.trim());
 	}
 }

@@ -19,6 +19,7 @@ import net.sf.jasperreports.engine.design.JRDesignExpression;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -39,7 +40,9 @@ import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.property.infoList.ElementDescription;
 import com.jaspersoft.studio.property.infoList.SelectableComposite;
+import com.jaspersoft.studio.property.itemproperty.ItemPropertyLabelProvider;
 import com.jaspersoft.studio.property.itemproperty.desc.ADescriptor;
+import com.jaspersoft.studio.property.itemproperty.desc.IWItemProperty;
 import com.jaspersoft.studio.property.itemproperty.desc.ItemPropertyDescription;
 import com.jaspersoft.studio.swt.events.ExpressionModifiedEvent;
 import com.jaspersoft.studio.swt.events.ExpressionModifiedListener;
@@ -52,24 +55,30 @@ import com.jaspersoft.studio.utils.Misc;
  * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
  * 
  */
-public class ItemPropertyDialog extends ATitledDialog implements IExpressionContextSetter {
+public class ItemPropertyDialog extends ATitledDialog implements IExpressionContextSetter, IWItemProperty {
 
 	private Composite dialogArea;
 	private Text propertyName;
 	private Button useExpressionCheckbox;
-	private Text propertyValue;
+	private Control propertyValue;
 	private WTextExpression propertyValueExpression;
 	private ExpressionContext expContext;
 	private StandardItemProperty itemProperty;
 	private SelectableComposite infoPanel;
 	private ADescriptor descriptor;
+	private ItemPropertyDescription<?> ipDesc;
 
 	public ItemPropertyDialog(Shell parentShell, ItemProperty itemProperty, ADescriptor descriptor) {
 		super(parentShell);
 		setTitle(Messages.ItemPropertyDialog_EditItemProperty);
 		setDefaultSize(450, 400);
 		this.itemProperty = (StandardItemProperty) itemProperty;
+		if (this.itemProperty == null)
+			this.itemProperty = new StandardItemProperty("", "", null); //$NON-NLS-1$ //$NON-NLS-2$ 
 		this.descriptor = descriptor;
+		ipDesc = descriptor.getDescription(itemProperty.getName());
+		if (ipDesc == null)
+			ipDesc = new ItemPropertyDescription<String>(itemProperty.getName(), "", false);
 	}
 
 	@Override
@@ -100,18 +109,19 @@ public class ItemPropertyDialog extends ATitledDialog implements IExpressionCont
 		lblPropertyValue.setText(Messages.ItemPropertyDialog_PropertyValue);
 		lblPropertyValue.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 
-		propertyValue = new Text(dialogArea, SWT.WRAP | SWT.BORDER | SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL | SWT.BORDER);
-		GridData gd_propertyValue = new GridData(SWT.FILL, SWT.FILL, true, false);
-		gd_propertyValue.heightHint = 70;
-		propertyValue.setLayoutData(gd_propertyValue);
+		cmp = new Composite(dialogArea, SWT.NONE);
+		stackLayout = new StackLayout();
+		cmp.setLayout(stackLayout);
+		GridData gd = new GridData(GridData.FILL_BOTH);
+		gd.heightHint = 70;
+		cmp.setLayoutData(gd);
 
-		propertyValueExpression = new WTextExpression(dialogArea, SWT.NONE);
-		GridData gd_propertyValueExpression = new GridData(SWT.FILL, SWT.FILL, true, false);
-		gd_propertyValueExpression.heightHint = 50;
-		propertyValueExpression.setLayoutData(gd_propertyValueExpression);
+		propertyValueExpression = new WTextExpression(cmp, SWT.NONE);
 		propertyValueExpression.setExpressionContext(this.expContext);
 		if (descriptor.getItemData() != null && descriptor.getItemData().getDataset() == null)
 			expContext.setVisibilities(EnumSet.noneOf(Visibility.class));
+
+		propertyValue = ipDesc.createControl(this, cmp);
 
 		infoPanel = new SelectableComposite(dialogArea);
 		infoPanel.setItems(getPropertiesInformation());
@@ -123,18 +133,25 @@ public class ItemPropertyDialog extends ATitledDialog implements IExpressionCont
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				String newname = infoPanel.getSelectedElement().getName();
-				ItemPropertyDescription<?> ipDesc = descriptor.getDescriptor(newname);
+				ItemPropertyDescription<?> ipDesc = descriptor.getDescription(newname);
 				if (ipDesc != null) {
 					itemProperty.setName(newname);
 					itemProperty.setValue(ipDesc.getDefaultValueString());
 					itemProperty.setValueExpression(null);
-					ipDesc.handleEdit(propertyValue, itemProperty);
-					initWidgets();
+
+					propertyValue.dispose();
+
+					ipDesc = descriptor.getDescription(itemProperty.getName());
+					if (ipDesc == null)
+						ipDesc = new ItemPropertyDescription<String>(itemProperty.getName(), "", false);
+					propertyValue = ipDesc.createControl(ItemPropertyDialog.this, cmp);
+
+					setValue(itemProperty);
 				}
 			}
 		});
 
-		initWidgets();
+		setValue(itemProperty);
 		addListeners();
 
 		return dialogArea;
@@ -147,76 +164,29 @@ public class ItemPropertyDialog extends ATitledDialog implements IExpressionCont
 		return descriptions;
 	}
 
-	private void initWidgets() {
-		refresh = true;
-		try {
-			if (this.itemProperty == null)
-				this.itemProperty = new StandardItemProperty("", "", null); //$NON-NLS-1$ //$NON-NLS-2$ 
-			if (this.itemProperty.getValue() != null) {
-				if (useExpressionCheckbox.getSelection())
-					useExpressionCheckbox.setSelection(false);
-				propertyName.setText(Misc.nvl(itemProperty.getName()));
-				propertyValue.setText(Misc.nvl(itemProperty.getValue()));
-				if (propertyValueExpression.isVisible())
-					propertyValueExpression.setVisible(false);
-				if (propertyValueExpression.isEnabled())
-					propertyValueExpression.setEnabled(false);
-				propertyValueExpression.setExpression(null);
-				if (!((GridData) propertyValueExpression.getLayoutData()).exclude)
-					((GridData) propertyValueExpression.getLayoutData()).exclude = true;
-			} else {
-				if (!useExpressionCheckbox.getSelection())
-					useExpressionCheckbox.setSelection(true);
-				propertyName.setText(Misc.nvl(itemProperty.getName()));
-				propertyValueExpression.setExpression((JRDesignExpression) itemProperty.getValueExpression());
-				if (propertyValue.isVisible())
-					propertyValue.setVisible(false);
-				if (propertyValue.isEnabled())
-					propertyValue.setEnabled(false);
-				if (!((GridData) propertyValue.getLayoutData()).exclude)
-					((GridData) propertyValue.getLayoutData()).exclude = true;
-			}
-			for (ItemPropertyDescription<?> ipd : descriptor.getItemPropertyDescriptors()) {
-				if (ipd.getName().equals(itemProperty.getName()) && ipd.isMandatory()) {
-					if (propertyName.isEnabled())
-						propertyName.setEnabled(false);
-					break;
-				}
-			}
-		} finally {
-			refresh = false;
-		}
-	}
-
 	private boolean refresh = false;
+	private Composite cmp;
+	private StackLayout stackLayout;
 
 	private void addListeners() {
 		propertyName.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
+				Point p = propertyName.getSelection();
+
 				itemProperty.setName(propertyName.getText());
 				validateDialog();
-			}
-		});
-		propertyValue.addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(ModifyEvent e) {
-				if (refresh)
-					return;
-				refresh = true;
-				try {
-					ItemPropertyDescription<?> ipDesc = descriptor.getDescriptor(propertyName.getText());
-					if (ipDesc != null) {
-						Point p = propertyValue.getSelection();
-						ipDesc.handleEdit(propertyValue, itemProperty);
-						propertyValue.setText(itemProperty.getValue());
-						propertyValue.setSelection(p);
-					} else
-						itemProperty.setValue(propertyValue.getText());
-					validateDialog();
-				} finally {
-					refresh = false;
-				}
+
+				propertyValue.dispose();
+
+				ipDesc = descriptor.getDescription(itemProperty.getName());
+				if (ipDesc == null)
+					ipDesc = new ItemPropertyDescription<String>(itemProperty.getName(), "", false);
+				propertyValue = ipDesc.createControl(ItemPropertyDialog.this, cmp);
+
+				setValue(itemProperty);
+
+				propertyName.setSelection(p);
 			}
 		});
 		propertyValueExpression.addModifyListener(new ExpressionModifiedListener() {
@@ -231,46 +201,13 @@ public class ItemPropertyDialog extends ATitledDialog implements IExpressionCont
 			public void widgetSelected(SelectionEvent e) {
 				if (refresh)
 					return;
-				refresh = true;
-				try {
-					if (useExpressionCheckbox.getSelection()) {
-						// hide normal textbox
-						propertyValue.setText(""); //$NON-NLS-1$
-						itemProperty.setValue(null);
-						if (propertyValue.isVisible())
-							propertyValue.setVisible(false);
-						if (propertyValue.isEnabled())
-							propertyValue.setEnabled(false);
-						((GridData) propertyValue.getLayoutData()).exclude = true;
-
-						// and show expression widget
-						if (!propertyValueExpression.isVisible())
-							propertyValueExpression.setVisible(true);
-						if (!propertyValueExpression.isEnabled())
-							propertyValueExpression.setEnabled(true);
-						((GridData) propertyValueExpression.getLayoutData()).exclude = false;
-					} else {
-						// hide the expression widget
-						if (propertyValueExpression.isVisible())
-							propertyValueExpression.setVisible(false);
-						if (propertyValueExpression.isEnabled())
-							propertyValueExpression.setEnabled(false);
-						propertyValueExpression.setExpression(null);
-						((GridData) propertyValueExpression.getLayoutData()).exclude = true;
-
-						// and show the normal textbox
-						propertyValue.setText(""); //$NON-NLS-1$
-						if (!propertyValue.isVisible())
-							propertyValue.setVisible(true);
-						if (!propertyValue.isEnabled())
-							propertyValue.setEnabled(true);
-						((GridData) propertyValue.getLayoutData()).exclude = false;
-					}
-					validateDialog();
-					dialogArea.layout();
-				} finally {
-					refresh = false;
-				}
+				if (useExpressionCheckbox.getSelection())
+					itemProperty.setValueExpression(new JRDesignExpression());
+				else
+					itemProperty.setValueExpression(null);
+				setValue(itemProperty);
+				validateDialog();
+				dialogArea.layout();
 			}
 		});
 	}
@@ -302,8 +239,57 @@ public class ItemPropertyDialog extends ATitledDialog implements IExpressionCont
 		this.expContext = expContext;
 	}
 
-	public StandardItemProperty getItemProperty() {
+	public StandardItemProperty getValue() {
 		return this.itemProperty;
+	}
+
+	@Override
+	public boolean isRefresh() {
+		return refresh;
+	}
+
+	@Override
+	public void setValue(StandardItemProperty exp) {
+		if (refresh)
+			return;
+		refresh = true;
+		try {
+			propertyName.setText(exp.getName());
+			for (ItemPropertyDescription<?> ipd : descriptor.getItemPropertyDescriptors()) {
+				if (ipd.getName().equals(itemProperty.getName()) && ipd.isMandatory()) {
+					if (propertyName.isEnabled())
+						propertyName.setEnabled(false);
+					break;
+				}
+			}
+			boolean isExpression = exp.getValueExpression() != null;
+			if (useExpressionCheckbox.getSelection() != isExpression)
+				useExpressionCheckbox.setSelection(isExpression);
+
+			if (isExpression) {
+				propertyValueExpression.setExpression((JRDesignExpression) itemProperty.getValueExpression());
+				stackLayout.topControl = propertyValueExpression;
+			} else {
+				ipDesc.setValue(propertyValue, this);
+				stackLayout.topControl = propertyValue;
+				propertyValueExpression.setExpression(null);
+			}
+			cmp.layout();
+		} finally {
+			refresh = false;
+		}
+	}
+
+	@Override
+	public ItemPropertyLabelProvider getLabelProvider() {
+		return lprovider;
+	}
+
+	private ItemPropertyLabelProvider lprovider = new ItemPropertyLabelProvider(descriptor);
+
+	@Override
+	public Control getControl() {
+		return propertyValue;
 	}
 
 }

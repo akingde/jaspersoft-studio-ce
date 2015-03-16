@@ -1,23 +1,34 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.data.wizard;
 
+import java.io.ByteArrayInputStream;
+import java.io.StringWriter;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.TransformerFactoryConfigurationError;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
 import net.sf.jasperreports.data.DataAdapter;
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.util.CastorUtil;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.IImportWizard;
@@ -31,13 +42,13 @@ import com.jaspersoft.studio.data.DataAdapterManager;
 import com.jaspersoft.studio.data.adapter.IReportDescriptor;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.util.PreferencesUtils;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /**
- * Wizard to import one of more data adapters definition from the previous installations of 
- * iReport
+ * Wizard to import one of more data adapters definition from the previous installations of iReport
  * 
  * @author Orlandin Marco
- *
+ * 
  */
 public class ImportJSSAdapterWizard extends Wizard implements IImportWizard {
 
@@ -45,75 +56,107 @@ public class ImportJSSAdapterWizard extends Wizard implements IImportWizard {
 	 * Page that list the ireport installations
 	 */
 	private SelectWorkspacePage page0 = new SelectWorkspacePage();
-	
+
 	/**
 	 * Page that list the available data adapters into a precise configurations
 	 */
 	private ShowJSSAdaptersPage page1 = new ShowJSSAdaptersPage();
-	
+
 	/**
 	 * Page that list the available properties into a precise configuration
 	 */
 	private JSSPropertiesPage page2 = new JSSPropertiesPage();
-	
+
 	@Override
 	public void addPages() {
 		addPage(page0);
 		addPage(page1);
 		addPage(page2);
 	}
-	
+
 	/**
 	 * Return the descriptor of the configuration selected into the first step
 	 * 
 	 * @return a configuration descriptor file
 	 */
-	public IReportDescriptor getSelectedConfiguration(){
+	public IReportDescriptor getSelectedConfiguration() {
 		return page0.getSelection();
 	}
-	
 
 	private void addAdapters() {
-			try {
-				List<?> adapterNodes = page1.getSelectedAdapter();
-				for (int i = 0; i < adapterNodes.size(); ++i) {
-					Node adapterNode = (Node)adapterNodes.get(i);
+		try {
+			getContainer().run(false, true, new IRunnableWithProgress() {
 
-					if (adapterNode.getNodeType() == Node.ELEMENT_NODE) {
-						// 1. Find out the class of this data adapter...
-						String adapterClassName = adapterNode.getAttributes().getNamedItem("class").getNodeValue(); //$NON-NLS-1$
+				@Override
+				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+					try {
+						List<?> adapterNodes = page1.getSelectedAdapter();
+						for (int i = 0; i < adapterNodes.size(); ++i) {
+							Node adapterNode = (Node) adapterNodes.get(i);
 
-						DataAdapterFactory factory = DataAdapterManager.findFactoryByDataAdapterClass(adapterClassName);
+							if (adapterNode.getNodeType() == Node.ELEMENT_NODE) {
+								// 1. Find out the class of this data adapter...
+								String adapterClassName = adapterNode.getAttributes().getNamedItem("class").getNodeValue(); //$NON-NLS-1$
 
-						if (factory == null) {
-							// we should at least log a warning here....
-							JaspersoftStudioPlugin
-									.getInstance()
-									.getLog()
-									.log(
-											new Status(Status.WARNING, JaspersoftStudioPlugin.getUniqueIdentifier(), Status.OK,
-													Messages.DataAdapterManager_nodataadapterfound + adapterClassName, null));
-							continue;
+								DataAdapterFactory factory = DataAdapterManager.findFactoryByDataAdapterClass(adapterClassName);
+
+								if (factory == null) {
+									// we should at least log a warning here....
+									JaspersoftStudioPlugin
+											.getInstance()
+											.getLog()
+											.log(
+													new Status(Status.WARNING, JaspersoftStudioPlugin.getUniqueIdentifier(), Status.OK,
+															Messages.DataAdapterManager_nodataadapterfound + adapterClassName, null));
+									continue;
+								}
+
+								DataAdapterDescriptor dataAdapterDescriptor = factory.createDataAdapter();
+								DataAdapter dataAdapter = dataAdapterDescriptor.getDataAdapter();
+
+								ByteArrayInputStream in = new ByteArrayInputStream(nodeToString(adapterNode).getBytes());
+								try {
+									dataAdapter = (DataAdapter) CastorUtil.getInstance(JasperReportsConfiguration.getDefaultInstance())
+											.read(in);
+									dataAdapterDescriptor.setDataAdapter(dataAdapter);
+									DataAdapterManager.getPreferencesStorage().addDataAdapter(dataAdapterDescriptor);
+								} finally {
+									FileUtils.closeStream(in);
+								}
+							}
 						}
-
-						DataAdapterDescriptor dataAdapterDescriptor = factory.createDataAdapter();
-						DataAdapter dataAdapter = dataAdapterDescriptor.getDataAdapter();
-						dataAdapter = (DataAdapter) CastorUtil.read(adapterNode, dataAdapter.getClass());
-						dataAdapterDescriptor.setDataAdapter(dataAdapter);
-						DataAdapterManager.getPreferencesStorage().addDataAdapter(dataAdapterDescriptor);
+					} catch (Exception e) {
+						e.printStackTrace();
 					}
 				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+
+				Transformer t;
+
+				private String nodeToString(Node node) throws TransformerFactoryConfigurationError, TransformerException {
+					StringWriter sw = new StringWriter();
+					if (t == null) {
+						t = TransformerFactory.newInstance().newTransformer();
+						t.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+						t.setOutputProperty(OutputKeys.INDENT, "yes");
+					}
+					t.transform(new DOMSource(node), new StreamResult(sw));
+					return sw.toString();
+				}
+			});
+		} catch (InvocationTargetException e) {
+			UIUtils.showError(e.getCause());
+		} catch (InterruptedException e) {
+			UIUtils.showError(e.getCause());
+		}
 	}
-	
+
 	@Override
-	public void init(IWorkbench workbench, IStructuredSelection selection) {}
+	public void init(IWorkbench workbench, IStructuredSelection selection) {
+	}
 
 	/**
-	 * Get the XML definition of every data adapter selected into the step one, and 
-	 * from this build the data adapter and add it to the configuration
+	 * Get the XML definition of every data adapter selected into the step one, and from this build the data adapter and
+	 * add it to the configuration
 	 */
 	@Override
 	public boolean performFinish() {
@@ -121,8 +164,8 @@ public class ImportJSSAdapterWizard extends Wizard implements IImportWizard {
 		List<String> proeprties = page2.getProperties();
 		String[] keys = proeprties.toArray(new String[proeprties.size()]);
 		String[] values = new String[proeprties.size()];
-		for(int i=0;i<keys.length; i++){
-			values[i] = page2.getProperyValue(keys[i]); 
+		for (int i = 0; i < keys.length; i++) {
+			values[i] = page2.getProperyValue(keys[i]);
 		}
 		PreferencesUtils.storeJasperReportsProperty(keys, values);
 		return true;

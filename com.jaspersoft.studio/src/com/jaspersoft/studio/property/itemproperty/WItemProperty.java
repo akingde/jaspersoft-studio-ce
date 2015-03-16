@@ -19,13 +19,10 @@ import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
@@ -33,19 +30,19 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
 import com.jaspersoft.studio.property.itemproperty.desc.ADescriptor;
+import com.jaspersoft.studio.property.itemproperty.desc.IWItemProperty;
 import com.jaspersoft.studio.property.itemproperty.desc.ItemPropertyDescription;
 import com.jaspersoft.studio.property.itemproperty.dialog.ItemPropertyElementDialog;
 import com.jaspersoft.studio.property.itemproperty.event.ItemPropertyModifiedEvent;
 import com.jaspersoft.studio.property.itemproperty.event.ItemPropertyModifiedListener;
 import com.jaspersoft.studio.swt.events.ExpressionModifiedListener;
-import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.UIUtil;
 
 /**
@@ -78,7 +75,7 @@ import com.jaspersoft.studio.utils.UIUtil;
  * @author mrabbi
  * 
  */
-public class WItemProperty extends Composite implements IExpressionContextSetter {
+public class WItemProperty extends Composite implements IExpressionContextSetter, IWItemProperty {
 
 	/** No label specified */
 	public static final int LABEL_NONE = 0x0000;
@@ -96,7 +93,7 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 
 	// Widgets
 	private StandardItemProperty value;
-	private Text textExpression;
+	private Control textExpression;
 	private Button btnEditExpression;
 	private Label label;
 	private ADescriptor descriptor;
@@ -112,8 +109,8 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 	 * @param style
 	 *          widget style
 	 */
-	public WItemProperty(Composite parent, int style, ADescriptor descriptor) {
-		this(parent, style, null, LABEL_NONE, -1, descriptor);
+	public WItemProperty(Composite parent, int style, ADescriptor descriptor, ItemPropertyDescription<?> ipd) {
+		this(parent, style, null, LABEL_NONE, -1, descriptor, ipd);
 	}
 
 	/**
@@ -126,8 +123,8 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 	 * @param number
 	 *          of text lines to show
 	 */
-	public WItemProperty(Composite parent, int style, int linesNum, ADescriptor descriptor) {
-		this(parent, style, null, LABEL_NONE, linesNum, descriptor);
+	public WItemProperty(Composite parent, int style, int linesNum, ADescriptor descriptor, ItemPropertyDescription<?> ipd) {
+		this(parent, style, null, LABEL_NONE, linesNum, descriptor, ipd);
 	}
 
 	/**
@@ -147,8 +144,9 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 	 *          flag to specify the label position
 	 * 
 	 */
-	public WItemProperty(Composite parent, int style, String textLabel, int showMode, ADescriptor descriptor) {
-		this(parent, style, textLabel, showMode, -1, descriptor);
+	public WItemProperty(Composite parent, int style, String textLabel, int showMode, ADescriptor descriptor,
+			ItemPropertyDescription<?> ipd) {
+		this(parent, style, textLabel, showMode, -1, descriptor, ipd);
 	}
 
 	/**
@@ -172,9 +170,11 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 	 *          of text lines to show
 	 * 
 	 */
-	public WItemProperty(Composite parent, int style, String textLabel, int showMode, int linesNum, ADescriptor descriptor) {
+	public WItemProperty(Composite parent, int style, String textLabel, int showMode, int linesNum,
+			ADescriptor descriptor, ItemPropertyDescription<?> ipd) {
 		super(parent, style);
 		this.descriptor = descriptor;
+		this.ipDesc = ipd;
 		this.customTextLinesNumber = linesNum;
 		setLayout(new FormLayout());
 
@@ -185,7 +185,7 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 		} else
 			showMode = LABEL_NONE;
 
-		txtCmp = new Composite(this, SWT.BORDER);
+		txtCmp = new Composite(this, SWT.NONE);
 		GridLayout layout = new GridLayout(2, false);
 		layout.marginHeight = 0;
 		layout.marginWidth = 0;
@@ -207,34 +207,7 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 
 		});
 
-		textExpression = new Text(txtCmp, SWT.WRAP | SWT.V_SCROLL);
-		textExpression.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		textExpression.addMouseListener(new MouseAdapter() {
-
-			@Override
-			public void mouseDown(MouseEvent e) {
-				// if (ipDesc != null) {
-				// Point p = textExpression.getSelection();
-				// ipDesc.handleEdit(textExpression, value);
-				// setValue(value);
-				// textExpression.setSelection(p);
-				// }
-			}
-
-		});
-		textExpression.addModifyListener(new ModifyListener() {
-
-			@Override
-			public void modifyText(ModifyEvent e) {
-				if (isRefresh)
-					return;
-				Point p = textExpression.getSelection();
-				if (ipDesc != null)
-					ipDesc.handleEdit(textExpression, value);
-				setValue(value);
-				textExpression.setSelection(p);
-			}
-		});
+		textExpression = ipDesc.createControl(this, txtCmp);
 
 		btnEditExpression = new Button(this, SWT.FLAT);
 		btnEditExpression.setImage(JaspersoftStudioPlugin.getInstance().getImage(BUTTON_ICON_PATH));
@@ -250,11 +223,15 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 
 	}
 
+	public boolean isRefresh() {
+		return isRefresh;
+	}
+
 	/*
 	 * Sets the layout data information for the custom widget controls.
 	 */
 	private void configureWidgetsLayoutData(int showMode) {
-		int heightHint = UIUtil.getCharHeight(textExpression);
+		int heightHint = Math.max(UIUtil.getCharHeight(textExpression), 24);
 		if (showMode == LABEL_ON_LEFT) {
 			// Configuration with label on left
 			FormData fd_label = new FormData();
@@ -330,25 +307,12 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 		try {
 			this.value = exp;
 
-			// PAY ATTENTION: Checks are needed in order to avoid notification
-			// loop due to the modifyEvent raised after a setText call.
-			String txt = lprovider.getText(exp);
-			if (ipDesc != null)
-				txt = ipDesc.toSimpleString(txt);
-			textExpression.setText(txt);
-			String tooltip = "";
-			if (!Misc.isNullOrEmpty(txt))
-				tooltip += "\n\n" + txt;
-			if (ipDesc != null)
-				tooltip += "\n\n" + ipDesc.getDescription();
-			textExpression.setToolTipText(tooltip.trim());
-			if (txt.length() >= oldpos)
-				textExpression.setSelection(oldpos, oldpos);
+			ipDesc.setValue(textExpression, this);
+
 			if (exp.getValueExpression() != null)
 				txtLabel.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/functions_icon.png"));
 			else
 				txtLabel.setImage(null);
-
 			// Notifies the listeners of the new expression
 			fireModifyEvent();
 		} finally {
@@ -372,7 +336,7 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 	 * @return the {@link JRDesignExpression} instance set
 	 */
 	public StandardItemProperty getValue() {
-		return this.value;
+		return value;
 	}
 
 	/**
@@ -390,6 +354,10 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 	private ItemPropertyLabelProvider lprovider = new ItemPropertyLabelProvider(descriptor);
 	private Composite txtCmp;
 	private Label txtLabel;
+
+	public ItemPropertyLabelProvider getLabelProvider() {
+		return lprovider;
+	}
 
 	/**
 	 * Returns the text contained inside the widget text-box that represents the actual {@link JRDesignExpression}
@@ -439,7 +407,7 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 		listeners.remove(ml);
 	}
 
-	public Text getTextControl() {
+	public Control getControl() {
 		return textExpression;
 	}
 
@@ -469,15 +437,11 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 		ItemPropertyElementDialog dialog = new ItemPropertyElementDialog(UIUtils.getShell(), value, descriptor);
 		dialog.setExpressionContext(expContext);
 		if (dialog.open() == Dialog.OK)
-			setValue(dialog.getElementName());
+			setValue(dialog.getValue());
 	}
 
 	private boolean isRefresh = false;
 
 	private ItemPropertyDescription<?> ipDesc;
 
-	public void setDescription(ItemPropertyDescription<?> ipDesc) {
-		this.ipDesc = ipDesc;
-		textExpression.setToolTipText(ipDesc.getDescription());
-	}
 }

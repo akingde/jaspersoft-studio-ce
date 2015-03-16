@@ -36,7 +36,7 @@ public abstract class ADescriptor {
 		return itemProperties;
 	}
 
-	public ItemPropertyDescription<?> getDescriptor(String id) {
+	public ItemPropertyDescription<?> getDescription(String id) {
 		for (ItemPropertyDescription<?> ip : getItemPropertyDescriptors())
 			if (ip.getName().equals(id))
 				return ip;
