@@ -137,14 +137,16 @@ public class FileDataAdapterStorage extends ADataAdapterStorage {
 
 															public void run() {
 																DataAdapterDescriptor das = findDataAdapter(res.getProjectRelativePath().toOSString());
-																FileDataAdapterStorage.super.removeDataAdapter(das);
-																try {
-																	IFile file = (IFile) res;
-																	das = readDataADapter(file.getContents(), file.getProject());
-																	das.setName(file.getProjectRelativePath().toOSString());
-																	FileDataAdapterStorage.super.addDataAdapter(das);
-																} catch (CoreException e) {
-																	UIUtils.showError(e);
+																if (das != null) {
+																	FileDataAdapterStorage.super.removeDataAdapter(das);
+																	try {
+																		IFile file = (IFile) res;
+																		das = readDataADapter(file.getContents(), file.getProject());
+																		das.setName(file.getProjectRelativePath().toOSString());
+																		FileDataAdapterStorage.super.addDataAdapter(das);
+																	} catch (CoreException e) {
+																		UIUtils.showError(e);
+																	}
 																}
 															}
 														});
