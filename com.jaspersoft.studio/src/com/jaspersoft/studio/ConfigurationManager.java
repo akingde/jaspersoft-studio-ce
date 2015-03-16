@@ -99,14 +99,24 @@ public class ConfigurationManager {
 	
 	/**
 	 * Return a list to all the content of a storage. If the storage
-	 * dosen't exist then it is created
+	 * dosen't exist then it is created.
+	 * <p>
+	 * 
+	 * NOTE: hidden files are not considered.
 	 * 
 	 * @param storageName the name of the storage
 	 * @return a not null array of file that map the content of the storage folder
 	 */
 	public static File[] getStorageContent(String storageName){
 		File storage = getStorage(storageName);
-		return storage.listFiles();
+		List<File> result = new ArrayList<File>();
+		File[] listFiles = storage.listFiles();
+		for(File f : listFiles) {
+			if(!f.isHidden()) {
+				result.add(f);
+			}
+		}
+		return result.toArray(new File[result.size()]);
 	}
 	
 	/**
