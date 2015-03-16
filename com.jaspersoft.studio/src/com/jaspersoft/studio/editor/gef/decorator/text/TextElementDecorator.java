@@ -12,7 +12,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.gef.decorator.text;
 
-import com.jaspersoft.studio.editor.gef.decorator.IDecorator;
 import com.jaspersoft.studio.editor.gef.decorator.IElementDecorator;
 import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
@@ -26,12 +25,20 @@ import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
 public abstract class TextElementDecorator implements IElementDecorator {
 
 	/**
-	 * The text decorator
+	 * Return the text decorator for the current figure if it was created before.
+	 * Otherwise first create a new text decorator and assign it to the figure, and
+	 * the it is returned
+	 * 
+	 * @param figure the figure to check
+	 * @return a not null text decorator. It will a previously created old one
+	 * if available, otherwise a new one.
 	 */
-	private static TextDecorator decorator = null;
-	
-	protected TextDecorator getDecorator(){
-		if (decorator == null) decorator = new TextDecorator();
+	protected TextDecorator getDecorator(ComponentFigure figure){
+		TextDecorator decorator = (TextDecorator)figure.getDecorator(TextDecorator.class);
+		if (decorator == null) {
+			decorator = new TextDecorator();
+			figure.addDecoratorOnce(decorator);
+		}
 		return decorator;
 	}
 	
@@ -40,8 +47,7 @@ public abstract class TextElementDecorator implements IElementDecorator {
 	 */
 	@Override
 	public void setupFigure(ComponentFigure fig, FigureEditPart editPart) {
-		IDecorator dec = getDecorator();
-		fig.addDecoratorOnce(dec);
+		getDecorator(fig);
 	}
 
 }

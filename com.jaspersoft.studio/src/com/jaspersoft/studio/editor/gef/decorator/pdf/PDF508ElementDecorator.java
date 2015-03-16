@@ -34,6 +34,7 @@ import com.jaspersoft.studio.editor.action.pdf.PdfActionTableDetail;
 import com.jaspersoft.studio.editor.action.pdf.PdfActionTableHeader;
 import com.jaspersoft.studio.editor.action.pdf.PdfActionTableRow;
 import com.jaspersoft.studio.editor.action.pdf.Position;
+import com.jaspersoft.studio.editor.gef.decorator.text.TextDecorator;
 import com.jaspersoft.studio.editor.gef.decorator.text.TextElementDecorator;
 import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
@@ -49,9 +50,10 @@ public class PDF508ElementDecorator extends TextElementDecorator {
 	@Override
 	public void setupFigure(ComponentFigure fig, FigureEditPart editPart) {
 		super.setupFigure(fig, editPart);
-		getDecorator().removeDecorator(decorator);
+		TextDecorator textDecorator = getDecorator(fig);
+		textDecorator.removeDecorator(decorator);
 		if (editPart.getjConfig().getPropertyBooleanDef(ShowPDFTagsAction.ID, false)) {
-			getDecorator().addDecorator(decorator);
+			textDecorator.addDecorator(decorator);
 		}
 	}
 

@@ -27,6 +27,7 @@ import org.eclipse.ui.actions.RetargetAction;
 import com.jaspersoft.studio.editor.action.json.JSONEscapeMembersAction;
 import com.jaspersoft.studio.editor.action.json.JSONPathDataAction;
 import com.jaspersoft.studio.editor.action.json.JSONSchemaAction;
+import com.jaspersoft.studio.editor.gef.decorator.text.TextDecorator;
 import com.jaspersoft.studio.editor.gef.decorator.text.TextElementDecorator;
 import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
@@ -57,9 +58,10 @@ public class JSONElementDecorator extends TextElementDecorator {
 	@Override
 	public void setupFigure(ComponentFigure fig, FigureEditPart editPart) {
 		super.setupFigure(fig, editPart);
-		getDecorator().removeDecorator(decorator);
+		TextDecorator textDecorator = getDecorator(fig);
+		textDecorator.removeDecorator(decorator);
 		if (editPart.getjConfig().getPropertyBooleanDef(ShowJSONTagsAction.ID, false)) {
-			getDecorator().addDecorator(decorator);
+			textDecorator.addDecorator(decorator);
 		}
 	}
 

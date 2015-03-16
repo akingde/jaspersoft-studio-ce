@@ -30,6 +30,7 @@ import com.jaspersoft.studio.editor.action.csv.CSVAction;
 import com.jaspersoft.studio.editor.action.csv.CSVColDataAction;
 import com.jaspersoft.studio.editor.action.csv.CSVColOrderAction;
 import com.jaspersoft.studio.editor.action.csv.CSVRootAction;
+import com.jaspersoft.studio.editor.gef.decorator.text.TextDecorator;
 import com.jaspersoft.studio.editor.gef.decorator.text.TextElementDecorator;
 import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
@@ -60,9 +61,10 @@ public class CSVElementDecorator extends TextElementDecorator {
 	@Override
 	public void setupFigure(ComponentFigure fig, FigureEditPart editPart) {
 		super.setupFigure(fig, editPart);
-		getDecorator().removeDecorator(decorator);
+		TextDecorator textDecorator = getDecorator(fig);
+		textDecorator.removeDecorator(decorator);
 		if (editPart.getjConfig().getPropertyBooleanDef(ShowCSVTagsAction.ID, false)) {
-			getDecorator().addDecorator(decorator);
+			textDecorator.addDecorator(decorator);
 		}
 	}
 
