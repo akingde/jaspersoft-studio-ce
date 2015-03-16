@@ -8,7 +8,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.storage;
 
-import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -36,6 +35,7 @@ import net.sf.jasperreports.util.CastorUtil;
 import org.eclipse.core.runtime.Status;
 import org.osgi.framework.Bundle;
 import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
 
@@ -77,32 +77,40 @@ public class PreferencesDataAdapterStorage extends ADataAdapterStorage {
 				is.setEncoding("UTF-8");
 				Document document = JRXmlUtils.parse(is);
 				Node adapterNode = document.getDocumentElement();
-				String adapterClassName = adapterNode.getAttributes().getNamedItem("class").getNodeValue();
-				DataAdapterFactory factory = DataAdapterManager.findFactoryByDataAdapterClass(adapterClassName);
-				if (factory == null) {
-					// we should at least log a warning here....
-					JaspersoftStudioPlugin
-							.getInstance()
-							.getLog()
-							.log(
-									new Status(Status.WARNING, JaspersoftStudioPlugin.getUniqueIdentifier(), Status.OK,
-											Messages.DataAdapterManager_nodataadapterfound + adapterClassName, null));
-					continue;
+				if (adapterNode != null) {
+					NamedNodeMap attributes = adapterNode.getAttributes();
+					if (attributes != null) {
+						Node namedItem = attributes.getNamedItem("class");
+						if (namedItem != null) {
+							String adapterClassName = namedItem.getNodeValue();
+							DataAdapterFactory factory = DataAdapterManager.findFactoryByDataAdapterClass(adapterClassName);
+							if (factory == null) {
+								// we should at least log a warning here....
+								JaspersoftStudioPlugin
+										.getInstance()
+										.getLog()
+										.log(
+												new Status(Status.WARNING, JaspersoftStudioPlugin.getUniqueIdentifier(), Status.OK,
+														Messages.DataAdapterManager_nodataadapterfound + adapterClassName, null));
+								continue;
+							}
+
+							DataAdapterDescriptor dataAdapterDescriptor = factory.createDataAdapter();
+							DataAdapter dataAdapter = dataAdapterDescriptor.getDataAdapter();
+							// maybe we should get context for this file?
+
+							inputStream.close();
+
+							inputStream = new FileInputStream(storageElement);
+							dataAdapter = (DataAdapter) CastorUtil.getInstance(JasperReportsConfiguration.getDefaultInstance()).read(
+									inputStream);
+							dataAdapterDescriptor.setDataAdapter(dataAdapter);
+							// Always add the data adapter read from the file regardless of the name
+							super.forceAddDataAdapter(dataAdapterDescriptor);
+							fileAdapterMap.put(dataAdapterDescriptor, storageElement.getName());
+						}
+					}
 				}
-
-				DataAdapterDescriptor dataAdapterDescriptor = factory.createDataAdapter();
-				DataAdapter dataAdapter = dataAdapterDescriptor.getDataAdapter();
-				// maybe we should get context for this file?
-
-				inputStream.close();
-
-				inputStream = new FileInputStream(storageElement);
-				dataAdapter = (DataAdapter) CastorUtil.getInstance(JasperReportsConfiguration.getDefaultInstance()).read(
-						inputStream);
-				dataAdapterDescriptor.setDataAdapter(dataAdapter);
-				// Always add the data adapter read from the file regardless of the name
-				super.forceAddDataAdapter(dataAdapterDescriptor);
-				fileAdapterMap.put(dataAdapterDescriptor, storageElement.getName());
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			} finally {
