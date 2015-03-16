@@ -69,6 +69,9 @@ public class PreferencesDataAdapterStorage extends ADataAdapterStorage {
 		// Read the configuration from the file storage
 		File[] storageContent = ConfigurationManager.getStorageContent(PREF_KEYS_DATA_ADAPTERS);
 		for (File storageElement : storageContent) {
+			if(storageElement.isHidden()) {
+				continue;
+			}
 			InputStream inputStream = null;
 			try {
 				inputStream = new FileInputStream(storageElement);
