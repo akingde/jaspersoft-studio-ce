@@ -140,18 +140,6 @@ public class JaspersoftStudioPlugin extends AbstractJRUIPlugin {
 		extensionsPreloadingJob.setPriority(Job.LONG);
 		extensionsPreloadingJob.schedule();
 
-		// Force the creation of the digester
-		Job digesterJob = new Job(Messages.JaspersoftStudioPlugin_DigesterCreationJob) {
-			@Override
-			protected IStatus run(IProgressMonitor monitor) {
-				// Force the digester cache
-				JasperReportsConfiguration.getJRXMLDigester();
-				return Status.OK_STATUS;
-			}
-		};
-		digesterJob.setPriority(Job.LONG);
-		digesterJob.schedule();
-
 		// JSS console activation (if requested)
 		if (getInstance().getPreferenceStore().getBoolean(GlobalPreferencePage.JSS_ENABLE_INTERNAL_CONSOLE)) {
 			UIJob j = new UIJob(Messages.JaspersoftStudioPlugin_InstallingJSSConsoleJob) {

@@ -30,6 +30,7 @@ import net.sf.jasperreports.engine.design.JRDesignElementGroup;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.BandTypeEnum;
 import net.sf.jasperreports.engine.util.JRXmlUtils;
+import net.sf.jasperreports.engine.xml.JRXmlDigesterFactory;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
 import org.apache.commons.io.FileUtils;
@@ -229,7 +230,7 @@ public class DefaultManager {
 			if (defaultFile.exists()){
 				in = new ByteArrayInputStream(FileUtils.readFileToByteArray(defaultFile));
 				JasperReportsConfiguration jConfig = getDefaultJRConfig();
-				JasperDesign jd = new JRXmlLoader(jConfig, JasperReportsConfiguration.getJRXMLDigester()).loadXML(in);
+				JasperDesign jd = new JRXmlLoader(jConfig, JRXmlDigesterFactory.createDigester(jConfig)).loadXML(in);
 				jConfig.setJasperDesign(jd);
 				defaultReport = ReportFactory.createReport(jConfig);
 				defaultReport.getChildren().get(0).setValue(jd);

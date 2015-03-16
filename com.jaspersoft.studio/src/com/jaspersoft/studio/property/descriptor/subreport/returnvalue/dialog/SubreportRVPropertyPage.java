@@ -22,6 +22,7 @@ import net.sf.jasperreports.engine.JRVariable;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.base.JRBaseReport;
 import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.engine.xml.JRXmlDigesterFactory;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import net.sf.jasperreports.repo.RepositoryUtil;
 
@@ -31,7 +32,6 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.JReportsDTO;
 import com.jaspersoft.studio.property.descriptor.returnvalue.RVPropertyPage;
 import com.jaspersoft.studio.property.descriptor.returnvalue.ReturnValueContainer;
-import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /**
  * Return values configuration page for a subreport element element
@@ -124,7 +124,7 @@ public class SubreportRVPropertyPage extends RVPropertyPage {
 			in = RepositoryUtil.getInstance(dto.getjConfig()).getInputStreamFromLocation(path);
 			if (in != null) {
 				InputSource is = new InputSource(new InputStreamReader(in, "UTF-8"));
-				jd = new JRXmlLoader(dto.getjConfig(), JasperReportsConfiguration.getJRXMLDigester()).loadXML(is);
+				jd = new JRXmlLoader(dto.getjConfig(), JRXmlDigesterFactory.createDigester(dto.getjConfig())).loadXML(is);
 			}
 		} catch (Exception e) {
 			// e.printStackTrace();

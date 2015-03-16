@@ -22,6 +22,7 @@ import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.xml.JRXmlDigesterFactory;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
 import org.eclipse.core.internal.resources.ResourceException;
@@ -270,14 +271,16 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 	 * @param file
 	 */
 	protected void doInitModel(IProgressMonitor monitor, IEditorInput editorInput, InputStream in, IFile file) {
+		ClassLoader oldCL = Thread.currentThread().getContextClassLoader();
 		try {
+			Thread.currentThread().setContextClassLoader(jrContext.getClassLoader());
+			
 			in = JRXMLUtils.getXML(jrContext, editorInput, file.getCharset(true), in, version);
-
-			JasperDesign jd = new JRXmlLoader(jrContext, JasperReportsConfiguration.getJRXMLDigester())
+			JasperDesign jd = new JRXmlLoader(jrContext, JRXmlDigesterFactory.createDigester(jrContext))
 					.loadXML(new InputSource(in));
 			JaspersoftStudioPlugin.getExtensionManager().onLoad(jd, this);
 			jrContext.setJasperDesign(jd);
-
+					
 			UIUtils.getDisplay().syncExec(new Runnable() {
 				@Override
 				public void run() {
@@ -300,6 +303,7 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 			handleJRException(editorInput, e, false);
 		} finally {
 			FileUtils.closeStream(in);
+			Thread.currentThread().setContextClassLoader(oldCL);
 		}
 	}
 
@@ -802,7 +806,7 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 			IDocumentProvider dp = xmlEditor.getDocumentProvider();
 			IDocument doc = dp.getDocument(xmlEditor.getEditorInput());
 			in = new ByteArrayInputStream(doc.get().getBytes(JRXMLUtils.UTF8_ENCODING));
-			JasperDesign jd = new JRXmlLoader(jrContext, JasperReportsConfiguration.getJRXMLDigester()).loadXML(in);
+			JasperDesign jd = new JRXmlLoader(jrContext, JRXmlDigesterFactory.createDigester(jrContext)).loadXML(in);
 			jrContext.setJasperDesign(jd);
 			JaspersoftStudioPlugin.getExtensionManager().onLoad(jd, this);
 			setModel(createEditorModel());

@@ -44,8 +44,6 @@ import net.sf.jasperreports.engine.util.CompositeClassloader;
 import net.sf.jasperreports.engine.util.LocalJasperReportsContext;
 import net.sf.jasperreports.engine.util.MessageProviderFactory;
 import net.sf.jasperreports.engine.util.ResourceBundleMessageProviderFactory;
-import net.sf.jasperreports.engine.xml.JRXmlDigester;
-import net.sf.jasperreports.engine.xml.JRXmlDigesterFactory;
 import net.sf.jasperreports.functions.FunctionsBundle;
 import net.sf.jasperreports.repo.FileRepositoryPersistenceServiceFactory;
 import net.sf.jasperreports.repo.FileRepositoryService;
@@ -98,28 +96,6 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 	public static final String REPORT_FILE = "REPORTFILEWIZARD"; //$NON-NLS-1$
 
 	public static final String REPORT_DESIGN = "REPORTDESIGNWIZARD"; //$NON-NLS-1$
-
-	/**
-	 * The digester used to load an xml can be cached since it is build statically, so we store it
-	 */
-	private static JRXmlDigester jrxmlDigester = null;
-
-	/**
-	 * Return the jrxml digester, it return the cached one if it was builded before, otherwise it create a new one and
-	 * return it
-	 * 
-	 * @return an JRXMLDigester, not null
-	 */
-	public synchronized static JRXmlDigester getJRXMLDigester() {
-		if (jrxmlDigester == null) {
-			try {
-				jrxmlDigester = JRXmlDigesterFactory.createDigester();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		return jrxmlDigester;
-	}
 
 	private final class PreferenceListener implements IPropertyChangeListener {
 
