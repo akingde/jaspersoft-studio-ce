@@ -137,11 +137,11 @@ public class ConvertTextIntoStatic extends ACachedSelectionAction {
 	 */
 	private void cloneBox(JRLineBox fieldBox, JRLineBox staticBox){
 		if (fieldBox == null || staticBox == null) return;
-		fieldBox.setBottomPadding(staticBox.getBottomPadding());
-		fieldBox.setLeftPadding(staticBox.getLeftPadding());
-		fieldBox.setPadding(staticBox.getPadding());
-		fieldBox.setRightPadding(staticBox.getRightPadding());
-		fieldBox.setTopPadding(staticBox.getTopPadding());
+		fieldBox.setBottomPadding(staticBox.getOwnBottomPadding());
+		fieldBox.setLeftPadding(staticBox.getOwnLeftPadding());
+		fieldBox.setPadding(staticBox.getOwnPadding());
+		fieldBox.setRightPadding(staticBox.getOwnRightPadding());
+		fieldBox.setTopPadding(staticBox.getOwnTopPadding());
 		
 		fieldBox.copyTopPen(staticBox.getTopPen());
 		fieldBox.copyBottomPen(staticBox.getBottomPen());
@@ -152,14 +152,14 @@ public class ConvertTextIntoStatic extends ACachedSelectionAction {
 	
 	private void cloneParagraph(JRParagraph fieldBox, JRParagraph staticBox){
 			if (fieldBox == null || staticBox == null) return;
-			fieldBox.setFirstLineIndent(staticBox.getFirstLineIndent());
-			fieldBox.setLeftIndent(staticBox.getLeftIndent());
-			fieldBox.setLineSpacing(staticBox.getLineSpacing());
-			fieldBox.setLineSpacingSize(staticBox.getLineSpacingSize());
-			fieldBox.setRightIndent(staticBox.getRightIndent());
-			fieldBox.setSpacingAfter(staticBox.getSpacingAfter());
-			fieldBox.setSpacingBefore(staticBox.getSpacingBefore());
-			fieldBox.setTabStopWidth(staticBox.getTabStopWidth());
+			fieldBox.setFirstLineIndent(staticBox.getOwnFirstLineIndent());
+			fieldBox.setLeftIndent(staticBox.getOwnLeftIndent());
+			fieldBox.setLineSpacing(staticBox.getOwnLineSpacing());
+			fieldBox.setLineSpacingSize(staticBox.getOwnLineSpacingSize());
+			fieldBox.setRightIndent(staticBox.getOwnRightIndent());
+			fieldBox.setSpacingAfter(staticBox.getOwnSpacingAfter());
+			fieldBox.setSpacingBefore(staticBox.getOwnSpacingBefore());
+			fieldBox.setTabStopWidth(staticBox.getOwnTabStopWidth());
 	}
 	
 
@@ -176,29 +176,30 @@ public class ConvertTextIntoStatic extends ACachedSelectionAction {
 		labelObject.setWidth(textObject.getWidth());
 		labelObject.setX(textObject.getX());
 		labelObject.setY(textObject.getY());
-		labelObject.setFontName(textObject.getFontName());
-		labelObject.setFontSize(textObject.getFontsize());
-		labelObject.setBackcolor(textObject.getBackcolor()); 
-		labelObject.setForecolor(textObject.getForecolor());
+		labelObject.setFontName(textObject.getOwnFontName());
+		labelObject.setFontSize(textObject.getOwnFontsize());
+		labelObject.setBackcolor(textObject.getOwnBackcolor()); 
+		labelObject.setForecolor(textObject.getOwnForecolor());
 		
+		//The element use the same style
 		JRStyle originStyle = textObject.getStyle();
-		labelObject.setStyle(originStyle != null ? (JRStyle)originStyle.clone() : null);
+		labelObject.setStyle(originStyle);
 		
 		labelObject.setStyleNameReference(textObject.getStyleNameReference());
-		labelObject.setBold(textObject.isBold());
-		labelObject.setItalic(textObject.isItalic());
-		labelObject.setUnderline(textObject.isUnderline());
-		labelObject.setStrikeThrough(textObject.isStrikeThrough());
-		labelObject.setHorizontalAlignment(textObject.getHorizontalAlignmentValue());
-		labelObject.setVerticalAlignment(textObject.getVerticalAlignmentValue());
-		labelObject.setMode(textObject.getModeValue());
-		labelObject.setRotation(textObject.getRotationValue());
+		labelObject.setBold(textObject.isOwnBold());
+		labelObject.setItalic(textObject.isOwnItalic());
+		labelObject.setUnderline(textObject.isOwnUnderline());
+		labelObject.setStrikeThrough(textObject.isOwnStrikeThrough());
+		labelObject.setHorizontalTextAlign(textObject.getOwnHorizontalTextAlign());
+		labelObject.setVerticalTextAlign(textObject.getOwnVerticalTextAlign());
+		labelObject.setMode(textObject.getOwnModeValue());
+		labelObject.setRotation(textObject.getOwnRotationValue());
 		labelObject.setStretchType(textObject.getStretchTypeValue());
 		labelObject.setKey(textObject.getKey());
-		labelObject.setMarkup(textObject.getMarkup());
-		labelObject.setPdfEmbedded(textObject.isPdfEmbedded());
-		labelObject.setPdfEncoding(textObject.getPdfEncoding());
-		labelObject.setPdfFontName(textObject.getPdfFontName());
+		labelObject.setMarkup(textObject.getOwnMarkup());
+		labelObject.setPdfEmbedded(textObject.isOwnPdfEmbedded());
+		labelObject.setPdfEncoding(textObject.getOwnPdfEncoding());
+		labelObject.setPdfFontName(textObject.getOwnPdfFontName());
 		labelObject.setPositionType(textObject.getPositionTypeValue());
 		labelObject.setPrintInFirstWholeBand(textObject.isPrintInFirstWholeBand());
 		labelObject.setPrintRepeatedValues(textObject.isPrintRepeatedValues());

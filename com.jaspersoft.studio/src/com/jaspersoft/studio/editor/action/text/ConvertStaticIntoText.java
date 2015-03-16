@@ -152,11 +152,11 @@ public class ConvertStaticIntoText extends ACachedSelectionAction {
 	 */
 	private void cloneBox(JRLineBox fieldBox, JRLineBox staticBox){
 		if (fieldBox == null || staticBox == null) return;
-		fieldBox.setBottomPadding(staticBox.getBottomPadding());
-		fieldBox.setLeftPadding(staticBox.getLeftPadding());
-		fieldBox.setPadding(staticBox.getPadding());
-		fieldBox.setRightPadding(staticBox.getRightPadding());
-		fieldBox.setTopPadding(staticBox.getTopPadding());
+		fieldBox.setBottomPadding(staticBox.getOwnBottomPadding());
+		fieldBox.setLeftPadding(staticBox.getOwnLeftPadding());
+		fieldBox.setPadding(staticBox.getOwnPadding());
+		fieldBox.setRightPadding(staticBox.getOwnRightPadding());
+		fieldBox.setTopPadding(staticBox.getOwnTopPadding());
 		
 		fieldBox.copyTopPen(staticBox.getTopPen());
 		fieldBox.copyBottomPen(staticBox.getBottomPen());
@@ -167,14 +167,14 @@ public class ConvertStaticIntoText extends ACachedSelectionAction {
 	
 	private void cloneParagraph(JRParagraph fieldBox, JRParagraph staticBox){
 			if (fieldBox == null || staticBox == null) return;
-			fieldBox.setFirstLineIndent(staticBox.getFirstLineIndent());
-			fieldBox.setLeftIndent(staticBox.getLeftIndent());
-			fieldBox.setLineSpacing(staticBox.getLineSpacing());
-			fieldBox.setLineSpacingSize(staticBox.getLineSpacingSize());
-			fieldBox.setRightIndent(staticBox.getRightIndent());
-			fieldBox.setSpacingAfter(staticBox.getSpacingAfter());
-			fieldBox.setSpacingBefore(staticBox.getSpacingBefore());
-			fieldBox.setTabStopWidth(staticBox.getTabStopWidth());
+			fieldBox.setFirstLineIndent(staticBox.getOwnFirstLineIndent());
+			fieldBox.setLeftIndent(staticBox.getOwnLeftIndent());
+			fieldBox.setLineSpacing(staticBox.getOwnLineSpacing());
+			fieldBox.setLineSpacingSize(staticBox.getOwnLineSpacingSize());
+			fieldBox.setRightIndent(staticBox.getOwnRightIndent());
+			fieldBox.setSpacingAfter(staticBox.getOwnSpacingAfter());
+			fieldBox.setSpacingBefore(staticBox.getOwnSpacingBefore());
+			fieldBox.setTabStopWidth(staticBox.getOwnTabStopWidth());
 	}
 	
 	/**
@@ -197,29 +197,30 @@ public class ConvertStaticIntoText extends ACachedSelectionAction {
 		textObject.setWidth(labelObject.getWidth());
 		textObject.setX(labelObject.getX());
 		textObject.setY(labelObject.getY());
-		textObject.setFontName(labelObject.getFontName());
-		textObject.setFontSize(labelObject.getFontsize());
-		textObject.setBackcolor(labelObject.getBackcolor()); 
-		textObject.setForecolor(labelObject.getForecolor());
+		textObject.setFontName(labelObject.getOwnFontName());
+		textObject.setFontSize(labelObject.getOwnFontsize());
+		textObject.setBackcolor(labelObject.getOwnBackcolor()); 
+		textObject.setForecolor(labelObject.getOwnForecolor());
 		
 		JRStyle originStyle = labelObject.getStyle();
-		textObject.setStyle(originStyle != null ? (JRStyle)originStyle.clone() : null);
+		textObject.setStyle(originStyle);
 		
+		//We can use the own values where available since the new element already inherit the style
 		textObject.setStyleNameReference(labelObject.getStyleNameReference());
-		textObject.setBold(labelObject.isBold());
-		textObject.setItalic(labelObject.isItalic());
-		textObject.setUnderline(labelObject.isUnderline());
-		textObject.setStrikeThrough(labelObject.isStrikeThrough());
-		textObject.setHorizontalAlignment(labelObject.getHorizontalAlignmentValue());
-		textObject.setVerticalAlignment(labelObject.getVerticalAlignmentValue());
-		textObject.setMode(labelObject.getModeValue());
-		textObject.setRotation(labelObject.getRotationValue());
+		textObject.setBold(labelObject.isOwnBold());
+		textObject.setItalic(labelObject.isOwnItalic());
+		textObject.setUnderline(labelObject.isOwnUnderline());
+		textObject.setStrikeThrough(labelObject.isOwnStrikeThrough());
+		textObject.setHorizontalTextAlign(labelObject.getOwnHorizontalTextAlign());
+		textObject.setVerticalTextAlign(labelObject.getOwnVerticalTextAlign());
+		textObject.setMode(labelObject.getOwnModeValue());
+		textObject.setRotation(labelObject.getOwnRotationValue());
 		textObject.setStretchType(labelObject.getStretchTypeValue());
 		textObject.setKey(labelObject.getKey());
-		textObject.setMarkup(labelObject.getMarkup());
-		textObject.setPdfEmbedded(labelObject.isPdfEmbedded());
-		textObject.setPdfEncoding(labelObject.getPdfEncoding());
-		textObject.setPdfFontName(labelObject.getPdfFontName());
+		textObject.setMarkup(labelObject.getOwnMarkup());
+		textObject.setPdfEmbedded(labelObject.isOwnPdfEmbedded());
+		textObject.setPdfEncoding(labelObject.getOwnPdfEncoding());
+		textObject.setPdfFontName(labelObject.getOwnPdfFontName());
 		textObject.setPositionType(labelObject.getPositionTypeValue());
 		textObject.setPrintInFirstWholeBand(labelObject.isPrintInFirstWholeBand());
 		textObject.setPrintRepeatedValues(labelObject.isPrintRepeatedValues());
