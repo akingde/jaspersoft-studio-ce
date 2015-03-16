@@ -31,6 +31,7 @@ import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignImage;
 import net.sf.jasperreports.engine.design.JRDesignSubreport;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.xml.JRXmlDigesterFactory;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import net.sf.jasperreports.parts.subreport.StandardSubreportPartComponent;
 
@@ -164,8 +165,7 @@ public class JrxmlPublishContributor implements IPublishContributor {
 			in = JRXMLUtils.getJRXMLInputStream(jrConfig, f.getContents(),
 					f.getFileExtension(), f.getCharset(true), version);
 			is = new InputSource(new InputStreamReader(in, "UTF-8"));
-			jd = new JRXmlLoader(jrConfig,
-					JasperReportsConfiguration.getJRXMLDigester()).loadXML(is);
+			jd = new JRXmlLoader(jrConfig,JRXmlDigesterFactory.createDigester(jrConfig)).loadXML(is);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {

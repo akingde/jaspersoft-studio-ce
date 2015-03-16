@@ -19,6 +19,7 @@ import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileExtension;
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.xml.JRXmlDigesterFactory;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
 import org.eclipse.core.resources.IFile;
@@ -119,8 +120,7 @@ public class Publish2ServerWizard extends Wizard implements IExportWizard {
 				if (jDesign == null
 						&& fext.equalsIgnoreCase(FileExtension.JRXML)
 						|| fext.equalsIgnoreCase(FileExtension.JASPER)) {
-					jDesign = new JRXmlLoader(jrConfig,
-							JasperReportsConfiguration.getJRXMLDigester())
+					jDesign = new JRXmlLoader(jrConfig,JRXmlDigesterFactory.createDigester(jrConfig))
 							.loadXML(file.getContents());
 					jrConfig.setJasperDesign(jDesign);
 				}
