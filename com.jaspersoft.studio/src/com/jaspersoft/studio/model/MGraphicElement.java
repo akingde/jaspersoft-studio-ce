@@ -840,9 +840,12 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 	 */
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		HashSet<String> graphicalProperties = getGraphicalProperties();
-		if (graphicalProperties.contains(evt.getPropertyName())) {
-			setChangedProperty(true);
+		//check if it is already marked to be refreshed, in this case skip the check of the maps
+		if (!visualPropertyChanged){
+			HashSet<String> graphicalProperties = getGraphicalProperties();
+			if (graphicalProperties.contains(evt.getPropertyName())) {
+				setChangedProperty(true);
+			}
 		}
 		super.propertyChange(evt);
 	}
