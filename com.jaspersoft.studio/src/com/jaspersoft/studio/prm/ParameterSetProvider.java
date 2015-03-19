@@ -11,6 +11,7 @@ package com.jaspersoft.studio.prm;
 import java.io.ByteArrayInputStream;
 import java.util.Map;
 
+import net.sf.jasperreports.eclipse.util.CastorHelper;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
@@ -58,7 +59,7 @@ public class ParameterSetProvider {
 					e.printStackTrace();
 					return null;
 				}
-				return (ParameterSet) CastorUtil.read(new ByteArrayInputStream(tmp.getBytes()), mapping);
+				return (ParameterSet) CastorHelper.read(new ByteArrayInputStream(tmp.getBytes()), mapping);
 			}
 		}
 		return null;
@@ -66,7 +67,7 @@ public class ParameterSetProvider {
 
 	public static void storeParameterSet(ParameterSet pset, IPreferenceStore pstore) {
 		if (pset != null) {
-			String prmset = new Base64Encoder(CastorUtil.write(pset, ParameterSetProvider.mapping)).processString();
+			String prmset = new Base64Encoder(CastorHelper.write(pset, ParameterSetProvider.mapping)).processString();
 			pstore.setValue(ParameterSet.PARAMETER_SET + "." + pset.getName(), prmset);
 		}
 	}

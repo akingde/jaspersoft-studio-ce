@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Properties;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.CastorHelper;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.util.JRXmlUtils;
 import net.sf.jasperreports.util.CastorUtil;
@@ -102,7 +103,7 @@ public class ImportJSSServersWizard extends Wizard implements IImportWizard {
 					if (actualNode.getNodeName().equals("serverProfile")) {
 						Node child = actualNode.getFirstChild();
 						while (child != null) {
-							ServerProfile sprof = (ServerProfile) CastorUtil.read(child, MServerProfile.MAPPINGFILE);
+							ServerProfile sprof = (ServerProfile) CastorHelper.read(child, MServerProfile.MAPPINGFILE);
 							result.add(sprof);
 							child = child.getNextSibling();
 						}
@@ -152,7 +153,7 @@ public class ImportJSSServersWizard extends Wizard implements IImportWizard {
 					Node serverNode = document.getDocumentElement();
 					if (serverNode.getNodeType() == Node.ELEMENT_NODE) {
 						try {
-							ServerProfile sprof = (ServerProfile) CastorUtil.read(serverNode, MServerProfile.MAPPINGFILE);
+							ServerProfile sprof = (ServerProfile) CastorHelper.read(serverNode, MServerProfile.MAPPINGFILE);
 							result.add(sprof);
 						} catch (Exception ex) {
 							ex.printStackTrace();

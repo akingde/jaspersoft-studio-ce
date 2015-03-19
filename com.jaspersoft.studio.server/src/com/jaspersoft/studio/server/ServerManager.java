@@ -33,10 +33,10 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.CastorHelper;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.util.JRXmlUtils;
-import net.sf.jasperreports.util.CastorUtil;
 
 import org.apache.commons.codec.binary.Base64;
 import org.eclipse.core.resources.IFile;
@@ -211,8 +211,8 @@ public class ServerManager {
 				Node serverNode = document.getDocumentElement();
 				if (serverNode.getNodeType() == Node.ELEMENT_NODE) {
 					try {
-						ServerProfile sprof = (ServerProfile) CastorUtil.read(
-								serverNode, MServerProfile.MAPPINGFILE);
+						ServerProfile sprof = (ServerProfile) CastorHelper
+								.read(serverNode, MServerProfile.MAPPINGFILE);
 						MServerProfile sp = new MServerProfile(root, sprof);
 						new MDummy(sp);
 						serverProfiles.put(sp, storageElement.getName());

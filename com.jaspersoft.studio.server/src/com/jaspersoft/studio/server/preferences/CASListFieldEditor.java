@@ -13,23 +13,17 @@
 package com.jaspersoft.studio.server.preferences;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Properties;
 
 import net.sf.jasperreports.eclipse.ui.ATitledDialog;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.eclipse.util.FilePrefUtil;
-import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.eclipse.util.CastorHelper;
 import net.sf.jasperreports.eclipse.util.SecureStorageUtils;
-import net.sf.jasperreports.engine.JRPropertiesUtil.PropertySuffix;
 import net.sf.jasperreports.util.CastorUtil;
 
 import org.apache.commons.codec.binary.Base64;
 import org.eclipse.equinox.security.storage.StorageException;
-import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
@@ -50,13 +44,11 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.PlatformUI;
 import org.exolab.castor.mapping.Mapping;
-import org.exolab.castor.mapping.MappingException;
 import org.xml.sax.InputSource;
 
 import com.jaspersoft.studio.help.TableHelpListener;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.editor.table.TableFieldEditor;
-import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 import com.jaspersoft.studio.server.secret.JRServerSecretsProvider;
 import com.jaspersoft.studio.swt.widgets.WSecretText;
 import com.jaspersoft.studio.utils.Misc;
@@ -71,7 +63,8 @@ public class CASListFieldEditor extends TableFieldEditor {
 	}
 
 	public CASListFieldEditor(String name, String labelText, Composite parent) {
-		super(name, labelText, new String[] { "Type", "SSO Server" }, new int[] { 50, 300 }, parent);
+		super(name, labelText, new String[] { "Type", "SSO Server" },
+				new int[] { 50, 300 }, parent);
 	}
 
 	@Override
@@ -122,14 +115,16 @@ public class CASListFieldEditor extends TableFieldEditor {
 			label.setText("URL");
 
 			final Text turi = new Text(composite, SWT.BORDER);
-			turi.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.HORIZONTAL_ALIGN_FILL));
+			turi.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL
+					| GridData.HORIZONTAL_ALIGN_FILL));
 			turi.setText(Misc.nvl(value.getUrl()));
 			turi.addModifyListener(new ModifyListener() {
 
 				@Override
 				public void modifyText(ModifyEvent e) {
 					value.setUrl(turi.getText());
-					getButton(IDialogConstants.OK_ID).setEnabled(!Misc.isNullOrEmpty(value.getUrl()));
+					getButton(IDialogConstants.OK_ID).setEnabled(
+							!Misc.isNullOrEmpty(value.getUrl()));
 				}
 			});
 
@@ -137,7 +132,8 @@ public class CASListFieldEditor extends TableFieldEditor {
 			label.setText("Username");
 
 			final Text tname = new Text(composite, SWT.BORDER);
-			tname.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.HORIZONTAL_ALIGN_FILL));
+			tname.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL
+					| GridData.HORIZONTAL_ALIGN_FILL));
 			tname.setText(Misc.nvl(value.getUser()));
 			tname.addModifyListener(new ModifyListener() {
 
@@ -151,8 +147,10 @@ public class CASListFieldEditor extends TableFieldEditor {
 			label.setText("Password");
 
 			tpass = new WSecretText(composite, SWT.BORDER | SWT.PASSWORD);
-			tpass.loadSecret(JRServerSecretsProvider.SECRET_NODE_ID, Misc.nvl(value.getPassword()));
-			tpass.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.HORIZONTAL_ALIGN_FILL));
+			tpass.loadSecret(JRServerSecretsProvider.SECRET_NODE_ID,
+					Misc.nvl(value.getPassword()));
+			tpass.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL
+					| GridData.HORIZONTAL_ALIGN_FILL));
 			tpass.addModifyListener(new ModifyListener() {
 
 				@Override
@@ -165,7 +163,8 @@ public class CASListFieldEditor extends TableFieldEditor {
 			applyDialogFont(composite);
 			UIUtils.getDisplay().asyncExec(new Runnable() {
 				public void run() {
-					getButton(IDialogConstants.OK_ID).setEnabled(!Misc.isNullOrEmpty(value.getUrl()));
+					getButton(IDialogConstants.OK_ID).setEnabled(
+							!Misc.isNullOrEmpty(value.getUrl()));
 				}
 			});
 			return composite;
@@ -176,7 +175,8 @@ public class CASListFieldEditor extends TableFieldEditor {
 
 	@Override
 	protected String[] getNewInputObject() {
-		PEditDialog dialog = new PEditDialog(UIUtils.getShell(), new SSOServer());
+		PEditDialog dialog = new PEditDialog(UIUtils.getShell(),
+				new SSOServer());
 		if (dialog.open() == Window.OK) {
 			SSOServer srv = dialog.getValue();
 			items.add(srv);
@@ -187,7 +187,9 @@ public class CASListFieldEditor extends TableFieldEditor {
 
 	public static Mapping mapping = new Mapping();
 	static {
-		mapping.loadMapping(new InputSource(CASListFieldEditor.class.getResourceAsStream("/com/jaspersoft/studio/server/preferences/SSOServer.xml")));
+		mapping.loadMapping(new InputSource(
+				CASListFieldEditor.class
+						.getResourceAsStream("/com/jaspersoft/studio/server/preferences/SSOServer.xml")));
 	}
 
 	public static Mapping getMapping() {
@@ -197,9 +199,12 @@ public class CASListFieldEditor extends TableFieldEditor {
 	protected void doStore() {
 		String v = "";
 		for (SSOServer srv : items) {
-			v += Base64.encodeBase64String(CastorUtil.write(srv, mapping).getBytes()) + "\n";
+			v += Base64.encodeBase64String(CastorHelper.write(srv, mapping)
+					.getBytes()) + "\n";
 			try {
-				SecureStorageUtils.saveToDefaultSecurePreferences(JRServerSecretsProvider.SECRET_NODE_ID, srv.getPassuuid(), srv.getPassword());
+				SecureStorageUtils.saveToDefaultSecurePreferences(
+						JRServerSecretsProvider.SECRET_NODE_ID,
+						srv.getPassuuid(), srv.getPassword());
 			} catch (StorageException e) {
 				e.printStackTrace();
 			}
@@ -219,10 +224,13 @@ public class CASListFieldEditor extends TableFieldEditor {
 				if (line.isEmpty())
 					continue;
 				try {
-					SSOServer srv = (SSOServer) CastorUtil.read(new ByteArrayInputStream(Base64.decodeBase64(line)), mapping);
+					SSOServer srv = (SSOServer) CastorHelper
+							.read(new ByteArrayInputStream(Base64
+									.decodeBase64(line)), mapping);
 					items.add(srv);
 					TableItem tableItem = new TableItem(getTable(), SWT.NONE);
-					tableItem.setText(new String[] { srv.getType().name(), srv.getUrl() });
+					tableItem.setText(new String[] { srv.getType().name(),
+							srv.getUrl() });
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -247,7 +255,8 @@ public class CASListFieldEditor extends TableFieldEditor {
 	@Override
 	protected void createControl(Composite parent) {
 		super.createControl(parent);
-		PlatformUI.getWorkbench().getHelpSystem().setHelp(parent, ContextHelpIDs.PREFERENCES_PROPERTIES);
+		PlatformUI.getWorkbench().getHelpSystem()
+				.setHelp(parent, ContextHelpIDs.PREFERENCES_PROPERTIES);
 	}
 
 	@Override
@@ -311,7 +320,8 @@ public class CASListFieldEditor extends TableFieldEditor {
 		int size = table.getItemCount();
 		boolean isMultiSelection = table.getSelectionCount() > 1;
 		if (editButton != null)
-			editButton.setEnabled(!isMultiSelection && size >= 1 && index >= 0 && index < size && isEditable(index));
+			editButton.setEnabled(!isMultiSelection && size >= 1 && index >= 0
+					&& index < size && isEditable(index));
 	}
 
 	protected boolean isEditable(int row) {
@@ -321,7 +331,8 @@ public class CASListFieldEditor extends TableFieldEditor {
 	@Override
 	protected void createButtons(Composite box) {
 		addButton = createPushButton(box, Messages.common_add);
-		duplicateButton = createPushButton(box, Messages.PropertyListFieldEditor_duplicateButton);
+		duplicateButton = createPushButton(box,
+				Messages.PropertyListFieldEditor_duplicateButton);
 		removeButton = createPushButton(box, Messages.common_delete);
 		editButton = createPushButton(box, Messages.common_edit);
 	}

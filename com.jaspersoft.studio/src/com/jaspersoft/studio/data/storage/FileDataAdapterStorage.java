@@ -18,6 +18,7 @@ import javax.xml.stream.XMLStreamReader;
 import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.eclipse.classpath.JavaProjectClassLoader;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.CastorHelper;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.util.CastorUtil;
 
@@ -263,7 +264,7 @@ public class FileDataAdapterStorage extends ADataAdapterStorage {
 									Mapping mapping = new Mapping(cl);
 									mapping.loadMapping(new InputSource(mis));
 
-									DataAdapter dataAdapter = (DataAdapter) CastorUtil.read(XMLUtils.parseNoValidation(in)
+									DataAdapter dataAdapter = (DataAdapter) CastorHelper.read(XMLUtils.parseNoValidation(in)
 											.getDocumentElement(), mapping);
 									if (dataAdapter != null) {
 										ddad.setDataAdapter(dataAdapter);

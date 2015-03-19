@@ -973,6 +973,7 @@ public class Messages extends NLS {
 	public static String LocationSection_locationLabel;
 	public static String LocationSection_xCoordinateLabel;
 	public static String LocationSection_yCoordinateLabel;
+	public static String MapSection_0;
 	public static String MatchSizeAction_heightText;
 	public static String MatchSizeAction_heightTooltip;
 	public static String MatchSizeAction_match_size;
@@ -1833,6 +1834,12 @@ public class Messages extends NLS {
 	public static String ThemesPreferencePage_themeExampleName;
 	public static String ThemesPreferencePage_themesLabel;
 	public static String ThemesPreferencePage_themsTitle;
+	public static String TibcoMapSection_0;
+	public static String TibcoMapSection_1;
+	public static String TibcoMapSection_2;
+	public static String TibcoMapSection_3;
+	public static String TibcoMapSection_4;
+	public static String TibcoMapSection_5;
 	public static String TimePattern_description;
 	public static String TimeZoneDialog_0;
 	public static String TimeZoneDialog_1;

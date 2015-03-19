@@ -16,10 +16,10 @@ import java.beans.PropertyChangeEvent;
 import java.io.IOException;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.CastorHelper;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.xml.JRXmlBaseWriter;
-import net.sf.jasperreports.util.CastorUtil;
 
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -175,7 +175,7 @@ public class MServerProfile extends ANode {
 	}
 
 	public String toXML() {
-		return CastorUtil.write(getValue(), MAPPINGFILE);
+		return CastorHelper.write(getValue(), MAPPINGFILE);
 	}
 
 	private transient IConnection wsClient;

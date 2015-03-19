@@ -28,13 +28,12 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
+import net.sf.jasperreports.eclipse.util.CastorHelper;
 import net.sf.jasperreports.eclipse.util.FileUtils;
-import net.sf.jasperreports.util.CastorUtil;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.Header;
-import org.apache.http.HeaderElement;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
@@ -52,8 +51,6 @@ import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.DefaultRedirectStrategy;
 import org.apache.http.impl.client.HttpClients;
-import org.apache.http.impl.client.LaxRedirectStrategy;
-import org.apache.http.message.BasicHeader;
 import org.apache.http.protocol.HttpContext;
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -67,15 +64,19 @@ import com.jaspersoft.studio.server.utils.Pass;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class CASUtil {
-	public static String getToken(ServerProfile sp, IProgressMonitor monitor) throws Exception {
+	public static String getToken(ServerProfile sp, IProgressMonitor monitor)
+			throws Exception {
 		String v = null;
-		v = JasperReportsConfiguration.getDefaultInstance().getPrefStore().getString(CASPreferencePage.CAS);
+		v = JasperReportsConfiguration.getDefaultInstance().getPrefStore()
+				.getString(CASPreferencePage.CAS);
 		for (String line : v.split("\n")) {
 			if (line.isEmpty())
 				continue;
 			SSOServer srv = null;
 			try {
-				srv = (SSOServer) CastorUtil.read(new ByteArrayInputStream(Base64.decodeBase64(line)), CASListFieldEditor.getMapping());
+				srv = (SSOServer) CastorHelper.read(new ByteArrayInputStream(
+						Base64.decodeBase64(line)), CASListFieldEditor
+						.getMapping());
 			} catch (Exception e) {
 				e.printStackTrace();
 				continue;
@@ -86,7 +87,8 @@ public class CASUtil {
 		throw new Exception("Could not find SSO Server in the list.");
 	}
 
-	public static String doGetTocken(ServerProfile sp, SSOServer srv, IProgressMonitor monitor) throws Exception {
+	public static String doGetTocken(ServerProfile sp, SSOServer srv,
+			IProgressMonitor monitor) throws Exception {
 		SSLContext sslContext = SSLContext.getInstance("SSL");
 
 		// set up a TrustManager that trusts everything
@@ -96,31 +98,44 @@ public class CASUtil {
 				return null;
 			}
 
-			public void checkClientTrusted(X509Certificate[] certs, String authType) {
+			public void checkClientTrusted(X509Certificate[] certs,
+					String authType) {
 				System.out.println("checkClientTrusted =============");
 			}
 
-			public void checkServerTrusted(X509Certificate[] certs, String authType) {
+			public void checkServerTrusted(X509Certificate[] certs,
+					String authType) {
 				System.out.println("checkServerTrusted =============");
 			}
 		} }, new SecureRandom());
 
 		// Allow TLSv1 protocol only
-		SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(sslContext, new String[] { "TLSv1" }, null, SSLConnectionSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
+		SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(
+				sslContext, new String[] { "TLSv1" }, null,
+				SSLConnectionSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
 
-		CloseableHttpClient httpclient = HttpClients.custom().setSSLSocketFactory(sslsf).setRedirectStrategy(new DefaultRedirectStrategy() {
-			@Override
-			protected boolean isRedirectable(String arg0) {
-				// TODO Auto-generated method stub
-				return super.isRedirectable(arg0);
-			}
+		CloseableHttpClient httpclient = HttpClients
+				.custom()
+				.setSSLSocketFactory(sslsf)
+				.setRedirectStrategy(new DefaultRedirectStrategy() {
+					@Override
+					protected boolean isRedirectable(String arg0) {
+						// TODO Auto-generated method stub
+						return super.isRedirectable(arg0);
+					}
 
-			@Override
-			public boolean isRedirected(HttpRequest request, HttpResponse response, HttpContext context) throws ProtocolException {
-				// TODO Auto-generated method stub
-				return super.isRedirected(request, response, context);
-			}
-		}).setDefaultCookieStore(new BasicCookieStore()).setUserAgent("Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:31.0) Gecko/20100101 Firefox/31.0").build();
+					@Override
+					public boolean isRedirected(HttpRequest request,
+							HttpResponse response, HttpContext context)
+							throws ProtocolException {
+						// TODO Auto-generated method stub
+						return super.isRedirected(request, response, context);
+					}
+				})
+				.setDefaultCookieStore(new BasicCookieStore())
+				.setUserAgent(
+						"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:31.0) Gecko/20100101 Firefox/31.0")
+				.build();
 
 		Executor exec = Executor.newInstance(httpclient);
 
@@ -204,10 +219,14 @@ public class CASUtil {
 		return null;
 	}
 
-	private static final Pattern formPattern = Pattern.compile("<form(.*?)>", Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
-	private static final Pattern inputPattern = Pattern.compile("<input(.*?)>", Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
-	private static final Pattern ahrefPattern = Pattern.compile("<a(.*?)>", Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
-	private static final Pattern attributePattern = Pattern.compile("(\\w+)=\"(.*?)\"");
+	private static final Pattern formPattern = Pattern.compile("<form(.*?)>",
+			Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+	private static final Pattern inputPattern = Pattern.compile("<input(.*?)>",
+			Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+	private static final Pattern ahrefPattern = Pattern.compile("<a(.*?)>",
+			Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+	private static final Pattern attributePattern = Pattern
+			.compile("(\\w+)=\"(.*?)\"");
 
 	private static Map<String, String> parseAttributes(String attributesStr) {
 		Map<String, String> attributes = new HashMap<String, String>();
@@ -223,38 +242,46 @@ public class CASUtil {
 		return attributes;
 	}
 
-	private static String readData(Executor exec, Request req, IProgressMonitor monitor) throws IOException {
+	private static String readData(Executor exec, Request req,
+			IProgressMonitor monitor) throws IOException {
 		String obj = null;
 		ConnectionManager.register(monitor, req);
 		try {
-			obj = exec.execute(req).handleResponse(new ResponseHandler<String>() {
+			obj = exec.execute(req).handleResponse(
+					new ResponseHandler<String>() {
 
-				public String handleResponse(final HttpResponse response) throws IOException {
-					HttpEntity entity = response.getEntity();
-					InputStream in = null;
-					String res = null;
-					try {
-						StatusLine statusLine = response.getStatusLine();
-						switch (statusLine.getStatusCode()) {
-						case 200:
-							in = getContent(entity);
-							res = IOUtils.toString(in);
-							break;
-						default:
-							throw new HttpResponseException(statusLine.getStatusCode(), statusLine.getReasonPhrase());
+						public String handleResponse(final HttpResponse response)
+								throws IOException {
+							HttpEntity entity = response.getEntity();
+							InputStream in = null;
+							String res = null;
+							try {
+								StatusLine statusLine = response
+										.getStatusLine();
+								switch (statusLine.getStatusCode()) {
+								case 200:
+									in = getContent(entity);
+									res = IOUtils.toString(in);
+									break;
+								default:
+									throw new HttpResponseException(statusLine
+											.getStatusCode(), statusLine
+											.getReasonPhrase());
+								}
+							} finally {
+								FileUtils.closeStream(in);
+							}
+							return res;
 						}
-					} finally {
-						FileUtils.closeStream(in);
-					}
-					return res;
-				}
 
-				protected InputStream getContent(HttpEntity entity) throws ClientProtocolException, IOException {
-					if (entity == null)
-						throw new ClientProtocolException("Response contains no content");
-					return entity.getContent();
-				}
-			});
+						protected InputStream getContent(HttpEntity entity)
+								throws ClientProtocolException, IOException {
+							if (entity == null)
+								throw new ClientProtocolException(
+										"Response contains no content");
+							return entity.getContent();
+						}
+					});
 		} catch (IOException e) {
 			e.printStackTrace();
 			throw e;
@@ -264,45 +291,53 @@ public class CASUtil {
 		return obj;
 	}
 
-	private static List<Header> readCookies(Executor exec, Request req, IProgressMonitor monitor) throws IOException {
+	private static List<Header> readCookies(Executor exec, Request req,
+			IProgressMonitor monitor) throws IOException {
 		List<Header> obj = null;
 		ConnectionManager.register(monitor, req);
 		try {
-			obj = exec.execute(req).handleResponse(new ResponseHandler<List<Header>>() {
+			obj = exec.execute(req).handleResponse(
+					new ResponseHandler<List<Header>>() {
 
-				public List<Header> handleResponse(final HttpResponse response) throws IOException {
-					HttpEntity entity = response.getEntity();
-					InputStream in = null;
-					Header[] headers = null;
-					try {
-						StatusLine statusLine = response.getStatusLine();
-						switch (statusLine.getStatusCode()) {
-						case 302:
-							System.out.println("haha");
-						case 200:
-							in = getContent(entity);
-							headers = response.getAllHeaders();
-							break;
-						default:
-							throw new HttpResponseException(statusLine.getStatusCode(), statusLine.getReasonPhrase());
+						public List<Header> handleResponse(
+								final HttpResponse response) throws IOException {
+							HttpEntity entity = response.getEntity();
+							InputStream in = null;
+							Header[] headers = null;
+							try {
+								StatusLine statusLine = response
+										.getStatusLine();
+								switch (statusLine.getStatusCode()) {
+								case 302:
+									System.out.println("haha");
+								case 200:
+									in = getContent(entity);
+									headers = response.getAllHeaders();
+									break;
+								default:
+									throw new HttpResponseException(statusLine
+											.getStatusCode(), statusLine
+											.getReasonPhrase());
+								}
+							} finally {
+								FileUtils.closeStream(in);
+							}
+							List<Header> res = new ArrayList<Header>();
+							for (Header h : headers) {
+								if (h.getName().equals("Set-Cookie"))
+									res.add(h);
+							}
+							return res;
 						}
-					} finally {
-						FileUtils.closeStream(in);
-					}
-					List<Header> res = new ArrayList<Header>();
-					for (Header h : headers) {
-						if (h.getName().equals("Set-Cookie"))
-							res.add(h);
-					}
-					return res;
-				}
 
-				protected InputStream getContent(HttpEntity entity) throws ClientProtocolException, IOException {
-					if (entity == null)
-						throw new ClientProtocolException("Response contains no content");
-					return entity.getContent();
-				}
-			});
+						protected InputStream getContent(HttpEntity entity)
+								throws ClientProtocolException, IOException {
+							if (entity == null)
+								throw new ClientProtocolException(
+										"Response contains no content");
+							return entity.getContent();
+						}
+					});
 		} catch (IOException e) {
 			e.printStackTrace();
 			throw e;

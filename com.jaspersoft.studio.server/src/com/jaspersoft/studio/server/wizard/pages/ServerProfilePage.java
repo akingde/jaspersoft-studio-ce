@@ -19,7 +19,7 @@ import java.util.List;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.ui.validator.EmptyStringValidator;
 import net.sf.jasperreports.eclipse.ui.validator.NotEmptyIFolderValidator;
-import net.sf.jasperreports.util.CastorUtil;
+import net.sf.jasperreports.eclipse.util.CastorHelper;
 
 import org.apache.commons.codec.binary.Base64;
 import org.eclipse.core.databinding.DataBindingContext;
@@ -279,7 +279,7 @@ public class ServerProfilePage extends WizardPage implements
 			if (line.isEmpty())
 				continue;
 			try {
-				SSOServer srv = (SSOServer) CastorUtil.read(
+				SSOServer srv = (SSOServer) CastorHelper.read(
 						new ByteArrayInputStream(Base64.decodeBase64(line)),
 						CASListFieldEditor.mapping);
 				ssoservers.add(srv);
@@ -328,7 +328,7 @@ public class ServerProfilePage extends WizardPage implements
 		new Label(cmp, SWT.NONE).setText(Messages.ServerProfilePage_jrversion);
 
 		cversion = new VersionCombo(cmp);
-		((Combo)cversion.getControl()).setItem(0, "Same version with server");
+		((Combo) cversion.getControl()).setItem(0, "Same version with server");
 		cversion.setVersion(JRXmlWriterHelper.LAST_VERSION);
 		GridData gd = new GridData();
 		gd.horizontalSpan = 2;
