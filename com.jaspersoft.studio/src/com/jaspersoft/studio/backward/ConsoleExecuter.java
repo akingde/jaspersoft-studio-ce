@@ -17,9 +17,11 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import net.sf.jasperreports.eclipse.classpath.container.JRClasspathContainer;
+import net.sf.jasperreports.eclipse.classpath.container.JRDependenciesClasspathContainer;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 import org.eclipse.core.resources.IFile;
@@ -87,6 +89,17 @@ public class ConsoleExecuter {
 	 * The current active page
 	 */
 	private IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+	
+	/**
+	 * Contains the id of the container that shoulden't be added to the classpath when compiling
+	 */
+	private static final HashSet<String> classpathExclusionSet = new HashSet<String>();
+	
+	static{
+		classpathExclusionSet.clear();
+		classpathExclusionSet.add(JRClasspathContainer.ID.toString());
+		classpathExclusionSet.add(JRDependenciesClasspathContainer.ID.toString());
+	}
 	
 	/**
 	 * Job to execute the compile command The job can be cancelled but the 
@@ -215,7 +228,9 @@ public class ConsoleExecuter {
 				
 				for (IClasspathEntry en : entries) {
 					if (en.getEntryKind() == IClasspathEntry.CPE_CONTAINER){
-						if (!en.getPath().equals(JRClasspathContainer.ID) && !en.getPath().toString().equals(JavaRuntime.JRE_CONTAINER)){
+						String containerPath = en.getPath().toString();
+						//Don't add the eclipse runtime and the classpath extension defined in the exclusion list
+						if (!containerPath.startsWith(JavaRuntime.JRE_CONTAINER) && !classpathExclusionSet.contains(containerPath)){
 							addEntries(JavaCore.getClasspathContainer(en.getPath(), jprj).getClasspathEntries(), classpath, jprj);
 						}
 					}	else if (en.getEntryKind() == IClasspathEntry.CPE_PROJECT){
