@@ -210,7 +210,7 @@ public class ConsoleExecuter {
 				IPath defaultLocationPath = jprj.getOutputLocation();
   			if(defaultLocationPath!=null) {
     			IFolder entryOutputFolder = wsRoot.getFolder(defaultLocationPath);
-    			classpath.add(entryOutputFolder.getLocation().toOSString() + File.separator + "*");
+    			classpath.add(entryOutputFolder.getLocation().toOSString() + File.separator);
   			}
 				
 				for (IClasspathEntry en : entries) {
@@ -218,16 +218,15 @@ public class ConsoleExecuter {
 						if (!en.getPath().equals(JRClasspathContainer.ID) && !en.getPath().toString().equals(JavaRuntime.JRE_CONTAINER)){
 							addEntries(JavaCore.getClasspathContainer(en.getPath(), jprj).getClasspathEntries(), classpath, jprj);
 						}
-					}	else if (en.getEntryKind() == IClasspathEntry.CPE_SOURCE || en.getEntryKind() == IClasspathEntry.CPE_PROJECT){
-						classpath.add(wsRoot.findMember(en.getPath()).getLocation().toOSString() + File.separator + "*"); //$NON-NLS-1$
-						//check if is a source folder and if it has a custom output folder to add them also to the classpath
-						if(en.getContentKind() == IPackageFragmentRoot.K_SOURCE){
+					}	else if (en.getEntryKind() == IClasspathEntry.CPE_PROJECT){
+						classpath.add(wsRoot.findMember(en.getPath()).getLocation().toOSString() + File.separator); 
+					} else if(en.getEntryKind() == IClasspathEntry.CPE_SOURCE && en.getContentKind() == IPackageFragmentRoot.K_SOURCE){
+							//check if is a source folder and if it has a custom output folder to add them also to the classpath
 	      			IPath entryOutputLocation = en.getOutputLocation();
 	      			if(entryOutputLocation!=null) {
 	        			IFolder entryOutputFolder = wsRoot.getFolder(entryOutputLocation);
-	        			classpath.add(entryOutputFolder.getLocation().toOSString() + File.separator + "*");
+	        			classpath.add(entryOutputFolder.getLocation().toOSString() + File.separator);
 	      			}
-						}
 					} else {
 						classpath.add(en.getPath().toOSString());
 					}
@@ -274,18 +273,20 @@ public class ConsoleExecuter {
 	 * @return a not null classpath parameter
 	 */
 	private String getClasspath(IFile fileToCompile){
-		String classPath = jrFolder+File.separator+"*"; //$NON-NLS-1$
+		//classpath entry for the jr compiler
+		String classPath = jrFolder + File.separator + "*"; //$NON-NLS-1$
 		IProject project = getProject(fileToCompile);
 		if (project != null){
 			String separator = ";"; //$NON-NLS-1$
 			if (Util.isMac()) separator = ":"; //$NON-NLS-1$
-			IWorkspace workspace = ResourcesPlugin.getWorkspace();  
+			//Add the project folder to the workspace, actually not used
+			/*IWorkspace workspace = ResourcesPlugin.getWorkspace();  
 			File projectFile = workspace.getRoot().findMember(project.getFullPath()).getLocation().toFile();
 			if (projectFile.exists()){
-				classPath+=separator+projectFile.getAbsolutePath()+File.separator+"*"; //$NON-NLS-1$
-			}
+				classPath+=separator+projectFile.getAbsolutePath() + File.separator + "*"; 
+			}*/
 			for(String entry : getClasspaths(project)){
-				classPath+=separator+entry;
+				classPath+= separator + entry;
 			}
 		}
 		return classPath;
