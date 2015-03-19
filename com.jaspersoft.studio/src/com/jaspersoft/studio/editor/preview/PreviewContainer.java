@@ -429,37 +429,42 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 
 			@Override
 			public void run() {
-				Thread.currentThread().setContextClassLoader(jrContext.getClassLoader());
-				getReportControler().setJrContext(jConfig);
-				setupDataAdapter();
+				ClassLoader oldCL = Thread.currentThread().getContextClassLoader();
+				try {
+					Thread.currentThread().setContextClassLoader(jrContext.getClassLoader());
+					getReportControler().setJrContext(jConfig);
+					setupDataAdapter();
 
-				if (isRunDirty || getJasperPrint() == null)
-					runReport(dataAdapterDesc);
-				propChangeListener = new PropertyChangeListener() {
+					if (isRunDirty || getJasperPrint() == null)
+						runReport(dataAdapterDesc);
+					propChangeListener = new PropertyChangeListener() {
 
-					@Override
-					public void propertyChange(PropertyChangeEvent evt) {
-						String pname = evt.getPropertyName();
-						if (pname.equals(JRDesignDataset.PROPERTY_PARAMETERS)) {
-							if (evt instanceof CollectionElementAddedEvent)
-								((JRDesignParameter) ((CollectionElementAddedEvent) evt).getAddedValue()).getEventSupport()
-										.addPropertyChangeListener(propChangeListener);
-							else if (evt instanceof CollectionElementRemovedEvent)
-								((JRDesignParameter) ((CollectionElementRemovedEvent) evt).getRemovedValue()).getEventSupport()
-										.removePropertyChangeListener(propChangeListener);
+						@Override
+						public void propertyChange(PropertyChangeEvent evt) {
+							String pname = evt.getPropertyName();
+							if (pname.equals(JRDesignDataset.PROPERTY_PARAMETERS)) {
+								if (evt instanceof CollectionElementAddedEvent)
+									((JRDesignParameter) ((CollectionElementAddedEvent) evt).getAddedValue()).getEventSupport()
+											.addPropertyChangeListener(propChangeListener);
+								else if (evt instanceof CollectionElementRemovedEvent)
+									((JRDesignParameter) ((CollectionElementRemovedEvent) evt).getRemovedValue()).getEventSupport()
+											.removePropertyChangeListener(propChangeListener);
+							}
+							if (evt.getSource() instanceof JRParameter)
+								isParameterDirty = true;
+							else if (pname.equals(JRDesignDataset.PROPERTY_PARAMETERS)
+									|| pname.equals(JRDesignDataset.PROPERTY_SCRIPTLETS))
+								isParameterDirty = true;
 						}
-						if (evt.getSource() instanceof JRParameter)
-							isParameterDirty = true;
-						else if (pname.equals(JRDesignDataset.PROPERTY_PARAMETERS)
-								|| pname.equals(JRDesignDataset.PROPERTY_SCRIPTLETS))
-							isParameterDirty = true;
-					}
-				};
-				JRDesignDataset mds = jrContext.getJasperDesign().getMainDesignDataset();
-				mds.getEventSupport().addPropertyChangeListener(propChangeListener);
+					};
+					JRDesignDataset mds = jrContext.getJasperDesign().getMainDesignDataset();
+					mds.getEventSupport().addPropertyChangeListener(propChangeListener);
 
-				for (JRParameter p : mds.getParametersList())
-					((JRDesignParameter) p).getEventSupport().addPropertyChangeListener(propChangeListener);
+					for (JRParameter p : mds.getParametersList())
+						((JRDesignParameter) p).getEventSupport().addPropertyChangeListener(propChangeListener);
+				} finally {
+					Thread.currentThread().setContextClassLoader(oldCL);
+				}
 			}
 		});
 	}
@@ -496,7 +501,7 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 	}
 
 	public ABrowserViewer getJiveViewer() {
-		if(jiveViewer==null){
+		if (jiveViewer == null) {
 			jiveViewer = new ABrowserViewer(rightComposite, jrContext);
 		}
 		return jiveViewer;
