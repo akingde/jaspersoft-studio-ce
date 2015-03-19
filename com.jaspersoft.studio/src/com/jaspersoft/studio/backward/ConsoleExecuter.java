@@ -23,10 +23,13 @@ import net.sf.jasperreports.eclipse.classpath.container.JRClasspathContainer;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -34,6 +37,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.jface.util.Util;
@@ -188,7 +192,8 @@ public class ConsoleExecuter {
 	/**
 	 * Get all the resolved classpath entries for a specific project. The entries 
 	 * with ID JRClasspathContainer.ID and JavaRuntime.JRE_CONTAINER are not resolved
-	 * or included in the result
+	 * or included in the result. At also add the source and output folder provided with the 
+	 * project
 	 * 
 	 * @param project the project where the file to compile is contained, must be not null
 	 * @return a not null list of string that contains the classpath to include in the compilation project
@@ -196,17 +201,33 @@ public class ConsoleExecuter {
 	private List<String> getClasspaths(IProject project) {
 		IJavaProject jprj = JavaCore.create(project);
 		List<String> classpath = new ArrayList<String>();
+		IWorkspaceRoot wsRoot = project.getWorkspace().getRoot();
 		if (jprj != null) {
 			try{
 				IClasspathEntry[] entries = jprj.getRawClasspath();
-				IWorkspace workspace = ResourcesPlugin.getWorkspace();  
+				
+				//Add the default output folder if any
+				IPath defaultLocationPath = jprj.getOutputLocation();
+  			if(defaultLocationPath!=null) {
+    			IFolder entryOutputFolder = wsRoot.getFolder(defaultLocationPath);
+    			classpath.add(entryOutputFolder.getLocation().toOSString() + File.separator + "*");
+  			}
+				
 				for (IClasspathEntry en : entries) {
 					if (en.getEntryKind() == IClasspathEntry.CPE_CONTAINER){
 						if (!en.getPath().equals(JRClasspathContainer.ID) && !en.getPath().toString().equals(JavaRuntime.JRE_CONTAINER)){
 							addEntries(JavaCore.getClasspathContainer(en.getPath(), jprj).getClasspathEntries(), classpath, jprj);
 						}
 					}	else if (en.getEntryKind() == IClasspathEntry.CPE_SOURCE || en.getEntryKind() == IClasspathEntry.CPE_PROJECT){
-						classpath.add(workspace.getRoot().findMember(en.getPath()).getLocation().toOSString()+File.separator+"*"); //$NON-NLS-1$
+						classpath.add(wsRoot.findMember(en.getPath()).getLocation().toOSString() + File.separator + "*"); //$NON-NLS-1$
+						//check if is a source folder and if it has a custom output folder to add them also to the classpath
+						if(en.getContentKind() == IPackageFragmentRoot.K_SOURCE){
+	      			IPath entryOutputLocation = en.getOutputLocation();
+	      			if(entryOutputLocation!=null) {
+	        			IFolder entryOutputFolder = wsRoot.getFolder(entryOutputLocation);
+	        			classpath.add(entryOutputFolder.getLocation().toOSString() + File.separator + "*");
+	      			}
+						}
 					} else {
 						classpath.add(en.getPath().toOSString());
 					}
