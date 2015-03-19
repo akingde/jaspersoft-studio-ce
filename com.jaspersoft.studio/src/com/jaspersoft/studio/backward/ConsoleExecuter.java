@@ -243,7 +243,15 @@ public class ConsoleExecuter {
 	        			classpath.add(entryOutputFolder.getLocation().toOSString() + File.separator);
 	      			}
 					} else {
-						classpath.add(en.getPath().toOSString());
+						//It is a jar check if it is internal to the workspace of external
+						IPath location = wsRoot.getFile(en.getPath()).getLocation();
+						if (location == null){
+							//The location could not be resolved from the root of the workspace, it is external
+							classpath.add(en.getPath().toOSString());
+						} else {
+							//The location has been resolved from the root of the workspace, it is internal
+							classpath.add(location.toOSString());
+						}
 					}
 				}
 			}catch(Exception ex){
