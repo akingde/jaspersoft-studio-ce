@@ -49,7 +49,10 @@ import com.jaspersoft.studio.editor.outline.JDReportOutlineView;
 import com.jaspersoft.studio.editor.report.CachedSelectionProvider;
 import com.jaspersoft.studio.editor.report.CommonSelectionCacheProvider;
 import com.jaspersoft.studio.editor.report.EditorContributor;
+import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.model.MRoot;
+import com.jaspersoft.studio.preferences.DesignerPreferencePage;
 import com.jaspersoft.studio.properties.view.ITabbedPropertySheetPageContributor;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
@@ -60,6 +63,11 @@ public abstract class AGraphicEditor extends J2DGraphicalEditor implements ITabb
 	protected JasperReportsConfiguration jrContext;
 	
 	protected CommonSelectionCacheProvider cachedSelection = new CommonSelectionCacheProvider();
+	
+	/** 
+	 * The property sheet page. 
+	 */
+	private TabbedPropertySheetPage propertySheetPage;
 
 	public AGraphicEditor(JasperReportsConfiguration jrContext) {
 		super();
@@ -144,15 +152,13 @@ public abstract class AGraphicEditor extends J2DGraphicalEditor implements ITabb
 		return super.getAdapter(type);
 	}
 
-	/** The property sheet page. */
-	private IPropertySheetPage propertySheetPage;
 
 	/**
 	 * Gets the property sheet page.
 	 * 
 	 * @return the property sheet page
 	 */
-	public IPropertySheetPage getPropertySheetPage() {
+	public TabbedPropertySheetPage getPropertySheetPage() {
 		propertySheetPage = new TabbedPropertySheetPage(this, true);
 		return propertySheetPage;
 	}
@@ -210,12 +216,6 @@ public abstract class AGraphicEditor extends J2DGraphicalEditor implements ITabb
 		graphicalViewer.setProperty("JRCONTEXT", jrContext);
 	}
 
-	protected abstract ContextMenuProvider createContextMenuProvider(EditPartViewer graphicalViewer);
-
-	protected abstract EditPartFactory createEditParFactory();
-
-	protected JDReportOutlineView outlinePage;
-
 	protected JDReportOutlineView getOutlineView() {
 		if (outlinePage == null) {
 			TreeViewer viewer = new TreeViewer();
@@ -224,7 +224,6 @@ public abstract class AGraphicEditor extends J2DGraphicalEditor implements ITabb
 		return outlinePage;
 	}
 
-	protected abstract JDReportOutlineView createOutline(TreeViewer viewer);
 
 	@Override
 	protected void createActions() {
@@ -261,4 +260,32 @@ public abstract class AGraphicEditor extends J2DGraphicalEditor implements ITabb
 	public void doSave(IProgressMonitor monitor) {
 		getEditDomain().getCommandStack().markSaveLocation();
 	}
+	
+	/**
+	 * Return as default selected page in the properties view the first page or the last
+	 * page (advanced page) considering what is set in the preferences
+	 */
+	@Override
+	public int getDefaultSelectedPageIndex() {
+		if (propertySheetPage != null && getModel() instanceof MRoot){
+			if (getModel().getChildren().size() > 0){
+				JasperReportsConfiguration jConfig = ((ANode)getModel().getChildren().get(0)).getJasperConfiguration();
+				if (jConfig != null){
+					boolean advancedDefault = jConfig.getPropertyBoolean(DesignerPreferencePage.P_DEFAULT_ADVANCED_TAB, Boolean.FALSE);
+					if (advancedDefault){
+						return propertySheetPage.getCurrentTabs().size()-1;
+					}
+				}
+			}
+		}
+		return 0;
+	}
+	
+	protected abstract ContextMenuProvider createContextMenuProvider(EditPartViewer graphicalViewer);
+
+	protected abstract EditPartFactory createEditParFactory();
+
+	protected JDReportOutlineView outlinePage;
+	
+	protected abstract JDReportOutlineView createOutline(TreeViewer viewer);
 }

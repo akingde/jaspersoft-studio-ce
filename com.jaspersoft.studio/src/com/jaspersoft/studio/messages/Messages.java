@@ -494,6 +494,7 @@ public class Messages extends NLS {
 	public static String DeleteGroupReportAction_delete_group;
 	public static String DeleteGroupReportAction_delete_group_tool_tip;
 	public static String DeleteGuideCommand_delete_guide;
+	public static String DesignerPreferencePage_advancedDefault;
 	public static String DesignerPreferencePage_autoresizeBand;
 	public static String DesignerPreferencePage_centerEditorOption;
 	public static String DesignerPreferencePage_centimeterMeasure;

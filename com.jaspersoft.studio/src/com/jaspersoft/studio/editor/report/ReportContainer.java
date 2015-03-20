@@ -63,6 +63,7 @@ import com.jaspersoft.studio.model.MPage;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.style.StyleTemplateFactory;
 import com.jaspersoft.studio.plugin.ExtensionManager;
+import com.jaspersoft.studio.preferences.DesignerPreferencePage;
 import com.jaspersoft.studio.properties.view.ITabbedPropertySheetPageContributor;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.utils.ExpressionUtil;
@@ -377,7 +378,7 @@ public class ReportContainer extends MultiPageToolbarEditorPart implements ITabb
 	}
 
 	/** The property sheet page. */
-	private IPropertySheetPage propertySheetPage;
+	private TabbedPropertySheetPage propertySheetPage;
 
 	private ReportEditor reportEditor;
 
@@ -386,10 +387,8 @@ public class ReportContainer extends MultiPageToolbarEditorPart implements ITabb
 	 * 
 	 * @return the property sheet page
 	 */
-	public IPropertySheetPage getPropertySheetPage() {
-		// if (propertySheetPage == null)
+	public TabbedPropertySheetPage getPropertySheetPage() {
 		propertySheetPage = new TabbedPropertySheetPage(ReportContainer.this, true);
-
 		return propertySheetPage;
 	}
 
@@ -567,5 +566,25 @@ public class ReportContainer extends MultiPageToolbarEditorPart implements ITabb
 	 */
 	public void setBackgroundImageEditable(boolean value) {
 		editBackgroundImage = value;
+	}
+
+	/**
+	 * Return as default selected page in the properties view the first page or the last
+	 * page (advanced page) considering what is set in the preferences
+	 */
+	@Override
+	public int getDefaultSelectedPageIndex() {
+		if (propertySheetPage != null && getModel() instanceof MRoot){
+			if (getModel().getChildren().size() > 0){
+				JasperReportsConfiguration jConfig = ((ANode)getModel().getChildren().get(0)).getJasperConfiguration();
+				if (jConfig != null){
+					boolean advancedDefault = jConfig.getPropertyBoolean(DesignerPreferencePage.P_DEFAULT_ADVANCED_TAB, Boolean.FALSE);
+					if (advancedDefault){
+						return propertySheetPage.getCurrentTabs().size()-1;
+					}
+				}
+			}
+		}
+		return 0;
 	}
 }

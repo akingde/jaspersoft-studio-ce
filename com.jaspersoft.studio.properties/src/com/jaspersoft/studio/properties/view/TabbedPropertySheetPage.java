@@ -441,7 +441,9 @@ public class TabbedPropertySheetPage extends Page implements IPropertySheetPage 
 		String selectedTabIndex = lastSelectedTabForElement.get(getSelectedObject());
 		if (tabbedPropertyViewer.getElements().size()>0){
 			tabbedPropertyComposite.showEmptyPage(false);
-			tabbedPropertyViewer.setSelectionToWidget(selectedTabIndex, 0);
+			int defaultValue = 0;
+			if (selectedTabIndex == null) defaultValue = contributor.getDefaultSelectedPageIndex();
+			tabbedPropertyViewer.setSelectionToWidget(selectedTabIndex, defaultValue);
 			refreshTitleBar();
 		} else {
 			tabbedPropertyComposite.showEmptyPage(true);

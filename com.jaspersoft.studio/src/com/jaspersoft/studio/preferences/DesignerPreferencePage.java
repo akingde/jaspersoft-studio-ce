@@ -62,6 +62,11 @@ public class DesignerPreferencePage extends FieldEditorOverlayPage {
 	 */
 	public static final String DEFAULT_BEHAVIOR = BEHAVIOR_CREATE_LABEL; //$NON-NLS-1$
 
+	/**
+	 * Key for the property to set the advanced tab always as default in the properties view
+	 */
+	public static final String P_DEFAULT_ADVANCED_TAB= "defaultAdvanced"; //$NON-NLS-1$
+	
 	public static final String DEFAULT_ELEMENT_DESIGN_BORDER_COLOR = "0,0,0"; //$NON-NLS-1$
 	public static final String PAGE_ID = "com.jaspersoft.studio.preferences.DesignerPreferencePage.property"; //$NON-NLS-1$
 
@@ -76,7 +81,7 @@ public class DesignerPreferencePage extends FieldEditorOverlayPage {
 	public static final String P_CONTAINER_MARGIN_COLOR = "containerMarginColor"; //$NON-NLS-1$
 	public static final String P_PAGE_MARGIN_COLOR = "pageMarginColor"; //$NON-NLS-1$
 	public static final String P_PAGE_BACKGROUND = "pageBackground"; //$NON-NLS-1$
-	public static final String P_RULER_MEASURE = "rulerMeasure"; //$NON-NLS-1$
+	public static final String P_RULER_MEASURE = "rulerMeasure"; //$NON-NLS-1; //$NON-NLS-1$
 
 	public static final String P_ELEMENT_DESIGN_BORDER_COLOR = "elementDesignBorderColor"; //$NON-NLS-1$
 
@@ -133,6 +138,7 @@ public class DesignerPreferencePage extends FieldEditorOverlayPage {
 		addField(new BooleanFieldEditor(P_CENTER_SELECTION, Messages.DesignerPreferencePage_centerEditorOption, getFieldEditorParent()));
 		addField(new BooleanFieldEditor(P_RESIZE_CONTAINER, Messages.DesignerPreferencePage_autoresizeBand, getFieldEditorParent()));
 		addField(new BooleanFieldEditor(P_SHOW_VARIABLES_DEFAULTS, Messages.DesignerPreferencePage_showDefaultsVariablesParameters, getFieldEditorParent()));
+		addField(new BooleanFieldEditor(P_DEFAULT_ADVANCED_TAB, Messages.DesignerPreferencePage_advancedDefault, getFieldEditorParent()));
 	}
 
 	/**
@@ -164,6 +170,7 @@ public class DesignerPreferencePage extends FieldEditorOverlayPage {
 		store.setDefault(P_PAGE_BACKGROUND, DEFAULT_PAGE_BACKGROUND);
 		store.setDefault(BEHAVIOR_ON_FIELD_DROP, DEFAULT_BEHAVIOR);
 		store.setDefault(P_USE_FIELD_DESCRIPTION, false);
+		store.setDefault(P_DEFAULT_ADVANCED_TAB, false);
 		PreferenceConverter.setDefault(store, P_INTERNAL_EDITORS_FONT, FontUtils.getTextEditorFontData());
 		store.setDefault(P_SAVE_ON_PREVIEW, false);
 		store.setDefault(P_CENTER_SELECTION, true);

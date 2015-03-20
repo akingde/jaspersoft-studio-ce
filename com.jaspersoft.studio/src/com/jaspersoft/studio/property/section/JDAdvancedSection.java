@@ -17,6 +17,8 @@ import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.gef.EditDomain;
 import org.eclipse.gef.EditPart;
@@ -201,8 +203,17 @@ public class JDAdvancedSection extends AdvancedPropertySection implements Proper
 		if (isRefreshing)
 			return;
 		isRefreshing = true;
-		if (page != null)
-			page.refresh();
+		if (page != null){
+			//Must be executed inside a thread since it refresh widgets
+			UIUtils.getDisplay().syncExec(new Runnable() {
+				
+				@Override
+				public void run() {
+					page.refresh();
+				}
+			});
+
+		}
 		isRefreshing = false;
 	}
 

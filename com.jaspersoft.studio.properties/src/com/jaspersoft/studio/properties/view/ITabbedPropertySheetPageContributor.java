@@ -38,4 +38,14 @@ public interface ITabbedPropertySheetPageContributor {
 	 * @return the contributor ID for the tabbed property sheet page.
 	 */
 	public String getContributorId();
+	
+	/**
+	 * Return the index of the page selected by default in the properties view
+	 * when an element is selected for the first time
+	 * 
+	 * @return an integer representing the page selected by default in the properties editor. Must 
+	 * be equals or greater than 0 and less than the number of pages. If you don't care about this
+	 * simply return zero
+	 */
+	public int getDefaultSelectedPageIndex();
 }

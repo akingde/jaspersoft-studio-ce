@@ -369,4 +369,9 @@ public class RepositoryView extends ViewPart implements ITabbedPropertySheetPage
 			rprovs = extensionManager.getRepositoryProviders();
 		return rprovs;
 	}
+
+	@Override
+	public int getDefaultSelectedPageIndex() {
+		return 0;
+	}
 }
