@@ -191,6 +191,9 @@ public class MStaticText extends MTextElement {
 	 */
 	@Override
 	public String getToolTip() {
+		if (getValue() != null) {
+			return getIconDescriptor().getTitle() + ": " + ((JRStaticText) getValue()).getText();
+		}
 		return getIconDescriptor().getToolTip();
 	}
 	

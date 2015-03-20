@@ -503,6 +503,11 @@ public class MTextField extends MTextElement {
 	 */
 	@Override
 	public String getToolTip() {
+		if (getValue() != null) {
+			JRTextField jrTextField = (JRTextField) getValue();
+			if (jrTextField.getExpression() != null)
+				return getIconDescriptor().getTitle() + ": " + jrTextField.getExpression().getText();
+		}
 		return getIconDescriptor().getToolTip();
 	}
 
