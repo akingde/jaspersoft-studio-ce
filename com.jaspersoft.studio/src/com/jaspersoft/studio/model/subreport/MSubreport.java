@@ -316,7 +316,7 @@ public class MSubreport extends MGraphicElement {
 			String tip = ""; //$NON-NLS-1$
 			if (value.getExpression() != null)
 				tip += value.getExpression().getText();
-			if (!tip.trim().isEmpty()) return getIconDescriptor().getTitle() + ": " + Messages.common_noExpressionMessage;
+			if (tip.trim().isEmpty()) return getIconDescriptor().getTitle() + ": " + Messages.common_noExpressionMessage;
 			else return getIconDescriptor().getTitle() + ": " + tip;
 		}
 		return getIconDescriptor().getToolTip();
