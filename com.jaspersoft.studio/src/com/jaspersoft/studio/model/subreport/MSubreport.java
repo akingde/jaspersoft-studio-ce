@@ -311,6 +311,13 @@ public class MSubreport extends MGraphicElement {
 	 */
 	@Override
 	public String getToolTip() {
+		JRDesignSubreport value = getValue();
+		if (value != null) {
+			String tip = "";
+			if (value.getExpression() != null)
+				tip += value.getExpression().getText();
+			return tip;
+		}
 		return getIconDescriptor().getToolTip();
 	}
 	
