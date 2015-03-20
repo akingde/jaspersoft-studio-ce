@@ -132,35 +132,35 @@ public class MSubreport extends MGraphicElement {
 		exprD.setDescription(Messages.MSubreport_expression_description);
 		desc.add(exprD);
 		exprD.setHelpRefBuilder(new HelpReferenceBuilder(
-				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#subreportExpression"));
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#subreportExpression")); //$NON-NLS-1$
 
 		JRExpressionPropertyDescriptor paramExprD = new JRExpressionPropertyDescriptor(
 				JRDesignSubreport.PROPERTY_PARAMETERS_MAP_EXPRESSION, Messages.common_parameters_map_expression);
 		paramExprD.setDescription(Messages.MSubreport_parameters_map_expression_description);
 		desc.add(paramExprD);
 		paramExprD.setHelpRefBuilder(new HelpReferenceBuilder(
-				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#parametersMapExpression"));
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#parametersMapExpression")); //$NON-NLS-1$
 
 		JRExpressionPropertyDescriptor connExprD = new JRExpressionPropertyDescriptor(
 				JRDesignSubreport.PROPERTY_CONNECTION_EXPRESSION, Messages.common_connection_expression);
 		connExprD.setDescription(Messages.MSubreport_connection_expression_description);
 		desc.add(connExprD);
 		connExprD.setHelpRefBuilder(new HelpReferenceBuilder(
-				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#connectionExpression"));
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#connectionExpression")); //$NON-NLS-1$
 
 		JRExpressionPropertyDescriptor dsExprD = new JRExpressionPropertyDescriptor(
 				JRDesignSubreport.PROPERTY_DATASOURCE_EXPRESSION, Messages.MSubreport_datasource_expression);
 		dsExprD.setDescription(Messages.MSubreport_datasource_expression_description);
 		desc.add(dsExprD);
 		dsExprD.setHelpRefBuilder(new HelpReferenceBuilder(
-				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#dataSourceExpression"));
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#dataSourceExpression")); //$NON-NLS-1$
 
 		SubreportPropertiesPropertyDescriptor propertiesD = new SubreportPropertiesPropertyDescriptor(
 				JRDesignSubreport.PROPERTY_PARAMETERS, Messages.common_parameters);
 		propertiesD.setDescription(Messages.MSubreport_parameters_description);
 		desc.add(propertiesD);
 		propertiesD.setHelpRefBuilder(new HelpReferenceBuilder(
-				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#subreportParameter"));
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#subreportParameter")); //$NON-NLS-1$
 		propertiesD.init(this);
 
 		RVPropertyDescriptor returnValuesD = new RVPropertyDescriptor(JRDesignSubreport.PROPERTY_RETURN_VALUES,
@@ -168,7 +168,7 @@ public class MSubreport extends MGraphicElement {
 		returnValuesD.setDescription(Messages.MSubreport_return_values_description);
 		desc.add(returnValuesD);
 		propertiesD.setHelpRefBuilder(new HelpReferenceBuilder(
-				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#returnValue"));
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#returnValue")); //$NON-NLS-1$
 
 		returnValuesD.setCategory(Messages.MSubreport_subreport_properties_category);
 		propertiesD.setCategory(Messages.MSubreport_subreport_properties_category);
@@ -179,7 +179,7 @@ public class MSubreport extends MGraphicElement {
 		useCacheD.setCategory(Messages.MSubreport_subreport_properties_category);
 		runToBottomD.setCategory(Messages.MSubreport_subreport_properties_category);
 
-		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#subreport");
+		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#subreport"); //$NON-NLS-1$
 	}
 
 	private JReportsDTO returnValuesDTO;
@@ -228,11 +228,11 @@ public class MSubreport extends MGraphicElement {
 			jrElement.setParametersMapExpression(ExprUtil.setValues(jrElement.getParametersMapExpression(), value));
 		else if (id.equals(JRDesignSubreport.PROPERTY_CONNECTION_EXPRESSION)) {
 			if (value instanceof String)
-				value = value != null && ((String) value).equals("") ? null : value;
+				value = value != null && ((String) value).equals("") ? null : value; //$NON-NLS-1$
 			jrElement.setConnectionExpression(ExprUtil.setValues(jrElement.getConnectionExpression(), value));
 		} else if (id.equals(JRDesignSubreport.PROPERTY_DATASOURCE_EXPRESSION)) {
 			if (value instanceof String)
-				value = value != null && ((String) value).equals("") ? null : value;
+				value = value != null && ((String) value).equals("") ? null : value; //$NON-NLS-1$
 			jrElement.setDataSourceExpression(ExprUtil.setValues(jrElement.getDataSourceExpression(), value));
 		} else if (id.equals(JRDesignSubreport.PROPERTY_PARAMETERS)) {
 			if (value.getClass().isArray()) {
@@ -313,10 +313,11 @@ public class MSubreport extends MGraphicElement {
 	public String getToolTip() {
 		JRDesignSubreport value = getValue();
 		if (value != null) {
-			String tip = "";
+			String tip = ""; //$NON-NLS-1$
 			if (value.getExpression() != null)
 				tip += value.getExpression().getText();
-			return tip;
+			if (!tip.trim().isEmpty()) return getIconDescriptor().getTitle() + ": " + Messages.common_noExpressionMessage;
+			else return getIconDescriptor().getTitle() + ": " + tip;
 		}
 		return getIconDescriptor().getToolTip();
 	}

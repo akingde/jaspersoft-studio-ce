@@ -499,7 +499,8 @@ public class MImage extends MGraphicElementLineBox {
 			String tip = "";
 			if (value.getExpression() != null)
 				tip += value.getExpression().getText();
-			return tip;
+			if (!tip.trim().isEmpty()) return getIconDescriptor().getTitle() + ": " + Messages.common_noExpressionMessage;
+			else return getIconDescriptor().getTitle() + ": " + tip;
 		}
 		return getIconDescriptor().getToolTip();
 	}

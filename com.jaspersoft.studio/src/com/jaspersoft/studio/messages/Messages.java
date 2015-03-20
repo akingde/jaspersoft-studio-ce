@@ -1936,6 +1936,7 @@ public class Messages extends NLS {
 	public static String common_type;
 	public static String common_yes;
 	public static String common_no;
+	public static String common_noExpressionMessage;
 	public static String commons_bookmarks;
 	
 	public static String ItemPropertyDialog_EditItemProperty;
