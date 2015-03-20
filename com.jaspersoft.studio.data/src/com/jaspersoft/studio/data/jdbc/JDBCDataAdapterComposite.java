@@ -82,8 +82,6 @@ public class JDBCDataAdapterComposite extends ADataAdapterComposite {
 						"com.ibm.db2.jcc.DB2Driver", "jdbc:db2j:net://{0}/{1}"), //$NON-NLS-1$ //$NON-NLS-2$
 				new JDBCDriverDefinition("IBM DB2 (IDS data source)", //$NON-NLS-1$
 						"com.ibm.db2.jcc.DB2Driver", "jdbc:ids://{0}/{1}"), //$NON-NLS-1$ //$NON-NLS-2$
-				new JDBCDriverDefinition("IBM DB2 (TIBCO Jaspersoft)", //$NON-NLS-1$
-						"tibcosoftware.jdbc.db2.DB2Driver", "jdbc:tibcosoftware:db2://{0}:50000;databaseName={1}"), //$NON-NLS-1$ //$NON-NLS-2$
 
 				new JDBCDriverDefinition("inetdae7", "com.inet.tds.TdsDriver", //$NON-NLS-1$ //$NON-NLS-2$
 						"jdbc:inetdae7:{0}:1433/{1}"), //$NON-NLS-1$
@@ -114,8 +112,6 @@ public class JDBCDataAdapterComposite extends ADataAdapterComposite {
 				new JDBCDriverDefinition("MS SQLServer", //$NON-NLS-1$
 						"com.internetcds.jdbc.tds.Driver", //$NON-NLS-1$
 						"jdbc:freetds:sqlserver://{0}/{1}"), //$NON-NLS-1$
-				new JDBCDriverDefinition("MS SQLServer (TIBCO Jaspersoft)", //$NON-NLS-1$
-						"tibcosoftware.jdbc.sqlserver.SQLServerDriver", "jdbc:tibcosoftware:sqlserver://{0}:1433;databaseName={1}"), //$NON-NLS-1$ //$NON-NLS-2$
 
 				new JDBCDriverDefinition("MySQL", "org.gjt.mm.mysql.Driver", //$NON-NLS-1$ //$NON-NLS-2$
 						"jdbc:mysql://{0}/{1}"), //$NON-NLS-1$
@@ -127,9 +123,6 @@ public class JDBCDataAdapterComposite extends ADataAdapterComposite {
 				new JDBCDriverDefinition("Oracle", //$NON-NLS-1$
 						"oracle.jdbc.driver.OracleDriver", //$NON-NLS-1$
 						"jdbc:oracle:thin:@{0}:1521:{1}"), //$NON-NLS-1$
-				new JDBCDriverDefinition("Oracle (TIBCO Jaspersoft)", //$NON-NLS-1$
-						"tibcosoftware.jdbc.oracle.OracleDriver", //$NON-NLS-1$
-						"jdbc:tibcosoftware:oracle://{0}:1521;SID=ORCL"), //$NON-NLS-1$
 				new JDBCDriverDefinition("PostgreSQL", "org.postgresql.Driver", //$NON-NLS-1$ //$NON-NLS-2$
 						"jdbc:postgresql://{0}:5432/{1}"), //$NON-NLS-1$
 
@@ -146,14 +139,30 @@ public class JDBCDataAdapterComposite extends ADataAdapterComposite {
 						"jdbc:vertica://{0}:5433/{1}"), //$NON-NLS-1$
 				new JDBCDriverDefinition("Vertica", "com.vertica.jdbc.Driver", //$NON-NLS-1$ //$NON-NLS-2$
 						"jdbc:vertica://{0}:5433/{1}"), //$NON-NLS-1$ 
-				new JDBCDriverDefinition("Hive (TIBCO Jaspersoft)", //$NON-NLS-1$
-						"tibcosoftware.jdbc.hive.HiveDriver", "jdbc:tibcosoftware:hive://{0}:10001;TransactionMode=ignore"), //$NON-NLS-1$ //$NON-NLS-2$
-
 
 				new JDBCDriverDefinition("Mondrian", "mondrian.olap4j.MondrianOlap4jDriver", //$NON-NLS-1$ //$NON-NLS-2$
 						"jdbc:mondrian:"), //$NON-NLS-1$ 
 				new JDBCDriverDefinition("OLAP4J", "org.olap4j.driver.xmla.XmlaOlap4jDriver", //$NON-NLS-1$ //$NON-NLS-2$
-						"jdbc:xmla:") }; //$NON-NLS-1$ 
+						"jdbc:xmla:"),//$NON-NLS-1$
+
+				// Progress JDBC Drivers for Professional
+				new JDBCDriverDefinition("MS SQLServer (TIBCO Jaspersoft)", //$NON-NLS-1$
+						"tibcosoftware.jdbc.sqlserver.SQLServerDriver", "jdbc:tibcosoftware:sqlserver://{0}:1433;databaseName={1}"), //$NON-NLS-1$ //$NON-NLS-2$
+				new JDBCDriverDefinition("IBM DB2 (TIBCO Jaspersoft)", //$NON-NLS-1$
+						"tibcosoftware.jdbc.db2.DB2Driver", "jdbc:tibcosoftware:db2://{0}:50000;databaseName={1}"), //$NON-NLS-1$ //$NON-NLS-2$
+				new JDBCDriverDefinition("Oracle (TIBCO Jaspersoft)", //$NON-NLS-1$
+						"tibcosoftware.jdbc.oracle.OracleDriver", //$NON-NLS-1$
+						"jdbc:tibcosoftware:oracle://{0}:1521;SID=ORCL"), //$NON-NLS-1$
+				new JDBCDriverDefinition("Hive (TIBCO Jaspersoft)", //$NON-NLS-1$
+						"tibcosoftware.jdbc.hive.HiveDriver", "jdbc:tibcosoftware:hive://{0}:$[dbPort];TransactionMode=ignore"), //$NON-NLS-1$ //$NON-NLS-2$
+				new JDBCDriverDefinition("Impala (TIBCO Jaspersoft)", //$NON-NLS-1$
+						"tibcosoftware.jdbc.impala.ImpalaDriver", "jdbc:tibcosoftware:impala://{0}:$[dbPort];TransactionMode=ignore"), //$NON-NLS-1$ //$NON-NLS-2$
+				new JDBCDriverDefinition("MongoDB (TIBCO Jaspersoft)", //$NON-NLS-1$
+						"tibcosoftware.jdbc.mongodb.MongoDBDriver", "jdbc:tibcosoftware:mongodb://{0}:$[dbPort];SchemaDefinition=[schemaDefinition]"), //$NON-NLS-1$ //$NON-NLS-2$
+				new JDBCDriverDefinition("RedShift (TIBCO Jaspersoft)", //$NON-NLS-1$
+						"tibcosoftware.jdbc.redshift.RedshiftDriver", "jdbc:tibcosoftware:redshift://{0}:$[dbPort];databaseName={1};TransactionMode=ignore;LoginTimeout=30"), //$NON-NLS-1$ //$NON-NLS-2$
+		
+		};  
 		
 		Arrays.sort(jdbcDefinitions,new Comparator<JDBCDriverDefinition>() {
 			@Override
