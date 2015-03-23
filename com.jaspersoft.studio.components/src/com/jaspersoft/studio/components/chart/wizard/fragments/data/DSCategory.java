@@ -212,6 +212,7 @@ public class DSCategory extends ADSComponent {
 		yCompo.setLayout(new GridLayout(3, false));
 
 		labelWidget = new ExpressionWidget(yCompo, Messages.DSCategory_labelLabel);
+		labelWidget.setToolTipText(Messages.DSCategory_labelTooltip);
 		return yCompo;
 	}
 

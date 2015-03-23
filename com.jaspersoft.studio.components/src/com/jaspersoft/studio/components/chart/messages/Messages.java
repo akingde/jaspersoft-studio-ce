@@ -127,6 +127,7 @@ public class Messages extends NLS {
 	public static String DSCategory_defineHyperlinkButtton;
 	public static String DSCategory_hyperlinkButtonDisabled;
 	public static String DSCategory_labelLabel;
+	public static String DSCategory_labelTooltip;
 	public static String DSCategory_seriesLabel;
 	public static String DSCategory_seriesTooltip;
 	public static String DSCategory_valueLabel;
