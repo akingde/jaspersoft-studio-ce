@@ -131,7 +131,8 @@ public class ItemPropertyDescription<T> {
 
 				handleEdit(textExpression, wiProp.getValue());
 				wiProp.setValue(wiProp.getValue());
-				textExpression.setSelection(p);
+				if (!textExpression.isDisposed())
+					textExpression.setSelection(p);
 			}
 		});
 		return textExpression;
