@@ -17,6 +17,7 @@ import net.sf.jasperreports.engine.JRConstants;
 import org.eclipse.jface.viewers.StyledString;
 
 import com.jaspersoft.studio.data.sql.model.AMSQLObject;
+import com.jaspersoft.studio.data.sql.ui.metadata.DBMetadata;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.preferences.fonts.utils.FontUtils;
 import com.jaspersoft.studio.utils.Misc;
@@ -26,7 +27,8 @@ public class MSqlSchema extends AMSQLObject {
 	private String tableCatalog;
 	private boolean isNotInMetadata = false;
 
-	public MSqlSchema(ANode parent, String value, String tableCatalog, boolean isNotInMetadata) {
+	public MSqlSchema(ANode parent, String value, String tableCatalog,
+			boolean isNotInMetadata) {
 		this(parent, value, tableCatalog);
 		this.isNotInMetadata = isNotInMetadata;
 	}
@@ -82,4 +84,13 @@ public class MSqlSchema extends AMSQLObject {
 		return dt;
 	}
 
+	private transient DBMetadata dbMetadata;
+
+	public void setDbMetadata(DBMetadata dbMetadata) {
+		this.dbMetadata = dbMetadata;
+	}
+
+	public DBMetadata getDbMetadata() {
+		return dbMetadata;
+	}
 }

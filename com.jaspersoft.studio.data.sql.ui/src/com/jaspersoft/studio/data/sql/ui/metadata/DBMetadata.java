@@ -68,7 +68,6 @@ import com.jaspersoft.studio.dnd.NodeDragListener;
 import com.jaspersoft.studio.dnd.NodeTransfer;
 import com.jaspersoft.studio.model.IDragable;
 import com.jaspersoft.studio.model.INode;
-import com.jaspersoft.studio.model.MDummy;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.util.ModelUtil;
 import com.jaspersoft.studio.outline.ReportTreeContetProvider;
@@ -288,6 +287,11 @@ public class DBMetadata {
 		running = false;
 	}
 
+	public DatabaseMetaData getMetadata() throws SQLException {
+		connection = getConnection(das, true);
+		return connection.getMetaData();
+	}
+
 	public void loadTable(final MSqlTable mtable) {
 		if (das != null && ModelUtil.isEmpty(mtable)) {
 			try {
@@ -338,6 +342,7 @@ public class DBMetadata {
 								IProgressMonitor.UNKNOWN);
 						try {
 							monitors.add(monitor);
+							mschema.setDbMetadata(DBMetadata.this);
 							readSchema(getConnection(das, false).getMetaData(),
 									mschema, monitor, false);
 						} catch (Throwable e) {
@@ -366,6 +371,7 @@ public class DBMetadata {
 				return;
 			if (schema.isNotInMetadata())
 				return;
+			schema.setDbMetadata(this);
 			MetaDataUtil.readSchemaTables(meta, schema, getTables(), monitor);
 			updateItermediateUI();
 			if (monitor.isCanceled())

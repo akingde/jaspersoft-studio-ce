@@ -90,6 +90,8 @@ public class MetaDataUtil {
 				for (String ttype : tableTypes)
 					new MTables(schema, ttype);
 			} else {
+				if (meta.getConnection().isClosed())
+					meta = schema.getDbMetadata().getMetadata();
 				rs = isSchema ? meta.getSchemas() : meta.getCatalogs();
 				while (rs.next()) {
 					String tableCatalog = isCatalog && !isSchema ? rs
@@ -118,10 +120,14 @@ public class MetaDataUtil {
 			IProgressMonitor monitor) {
 		try {
 			for (INode n : schema.getChildren())
-				if (n instanceof MTables)
+				if (n instanceof MTables) {
+					((MTables) n).setDbMetadata(schema.getDbMetadata());
+					if (meta.getConnection().isClosed())
+						meta = schema.getDbMetadata().getMetadata();
 					MetaDataUtil.readTables(meta, schema.getValue(),
 							schema.getTableCatalog(), (MTables) n, tables,
 							monitor);
+				}
 		} catch (Throwable e) {
 			e.printStackTrace();
 		}
@@ -132,11 +138,14 @@ public class MetaDataUtil {
 			LinkedHashMap<String, MSqlTable> tblMap, IProgressMonitor monitor) {
 		ResultSet rs = null;
 		try {
+			if (meta.getConnection().isClosed())
+				meta = mview.getDbMetadata().getMetadata();
 			rs = meta.getTables(tableCatalog, tableSchema, "%",
 					new String[] { mview.getValue() });
 			while (rs.next()) {
-				MSqlTable mt = new MSqlTable(mview, rs.getString("TABLE_NAME"),
-						rs);
+				String tblName = rs.getString("TABLE_NAME");
+				System.out.println("Reading: " + tableSchema + "." + tblName);
+				MSqlTable mt = new MSqlTable(mview, tblName, rs);
 				new MDummy(mt);
 				tblMap.put(mt.toSQLString(), mt);
 				if (monitor.isCanceled())

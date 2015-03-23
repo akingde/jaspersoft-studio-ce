@@ -17,6 +17,7 @@ import net.sf.jasperreports.engine.JRConstants;
 import org.apache.commons.lang.WordUtils;
 
 import com.jaspersoft.studio.data.sql.model.MDBObjects;
+import com.jaspersoft.studio.data.sql.ui.metadata.DBMetadata;
 
 public class MTables extends MDBObjects {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
@@ -36,5 +37,15 @@ public class MTables extends MDBObjects {
 	@Override
 	public String getDisplayText() {
 		return WordUtils.capitalizeFully(getValue());
+	}
+
+	private transient DBMetadata dbMetadata;
+
+	public void setDbMetadata(DBMetadata dbMetadata) {
+		this.dbMetadata = dbMetadata;
+	}
+
+	public DBMetadata getDbMetadata() {
+		return dbMetadata;
 	}
 }
