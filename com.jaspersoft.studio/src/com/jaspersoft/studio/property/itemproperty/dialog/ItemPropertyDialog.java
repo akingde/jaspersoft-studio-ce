@@ -172,6 +172,8 @@ public class ItemPropertyDialog extends ATitledDialog implements IExpressionCont
 		propertyName.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
+				if(refresh)
+					return;
 				Point p = propertyName.getSelection();
 
 				itemProperty.setName(propertyName.getText());
