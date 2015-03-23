@@ -161,7 +161,7 @@ public class MapElementDialog extends Dialog implements IExpressionContextSetter
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
 		newShell.setText(NLS.bind(Messages.MapElementDialog_DialogTitle,wconfig.getElementTxt()));
-		UIUtils.resizeAndCenterShell(newShell, 300, 180);
+		UIUtils.resizeAndCenterShell(newShell, 450, 270);
 	}
 	
 	@Override
