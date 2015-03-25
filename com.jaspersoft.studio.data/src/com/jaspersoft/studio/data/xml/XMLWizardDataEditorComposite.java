@@ -20,6 +20,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import net.sf.jasperreports.data.xml.XmlDataAdapter;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.DataFileUtils;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -205,7 +206,8 @@ public class XMLWizardDataEditorComposite extends
 	 */
 	protected Document getXMLDocument(final DataAdapterDescriptor da)
 			throws SAXException, IOException, ParserConfigurationException {
-		String fileName = ((XmlDataAdapter) da.getDataAdapter()).getFileName();
+		String fileName = DataFileUtils.getDataFileLocation( 
+				((XmlDataAdapter) da.getDataAdapter()).getDataFile());
 		File in = new File(fileName);
 		return DocumentBuilderFactory.newInstance().newDocumentBuilder()
 				.parse(in);

@@ -15,6 +15,7 @@ package com.jaspersoft.studio.data.querydesigner.json;
 import java.lang.reflect.InvocationTargetException;
 
 import net.sf.jasperreports.data.json.JsonDataAdapter;
+import net.sf.jasperreports.eclipse.util.DataFileUtils;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -187,8 +188,9 @@ public class JsonQueryDesigner extends TreeBasedQueryDesigner {
 										InterruptedException {
 									monitor.beginTask(
 											Messages.JsonQueryDesigner_Task, -1);
-									String fileName = ((JsonDataAdapter) da
-											.getDataAdapter()).getFileName();
+									String fileName = DataFileUtils.getDataFileLocation(									
+											((JsonDataAdapter) da
+											.getDataAdapter()).getDataFile());
 									try {
 										jsonDataManager
 												.loadJsonDataFile(fileName);

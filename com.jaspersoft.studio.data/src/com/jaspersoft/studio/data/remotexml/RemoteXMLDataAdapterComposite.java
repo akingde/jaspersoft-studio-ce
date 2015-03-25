@@ -17,6 +17,7 @@ import java.util.TimeZone;
 
 import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.xml.RemoteXmlDataAdapter;
+import net.sf.jasperreports.eclipse.util.DataFileUtils;
 import net.sf.jasperreports.engine.JasperReportsContext;
 
 import org.eclipse.core.databinding.UpdateValueStrategy;
@@ -301,11 +302,9 @@ public class RemoteXMLDataAdapterComposite extends ADataAdapterComposite {
 	public DataAdapterDescriptor getDataAdapter() {
 		if (dataAdapterDesc == null)
 			dataAdapterDesc = new RemoteXMLDataAdapterDescriptor();
-
 		RemoteXmlDataAdapter remoteXmlDataAdapter = (RemoteXmlDataAdapter) dataAdapterDesc
 				.getDataAdapter();
-
-		remoteXmlDataAdapter.setFileName(textFileUrl.getText());
+		remoteXmlDataAdapter.setDataFile(DataFileUtils.getDataFile(textFileUrl.getText()));
 		remoteXmlDataAdapter.setDatePattern(textDatePattern.getText());
 		remoteXmlDataAdapter.setNumberPattern(textNumberPattern.getText());
 		remoteXmlDataAdapter.setLocale(locale);

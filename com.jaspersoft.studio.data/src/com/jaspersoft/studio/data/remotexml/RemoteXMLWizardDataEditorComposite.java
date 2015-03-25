@@ -19,6 +19,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import net.sf.jasperreports.data.xml.RemoteXmlDataAdapter;
 import net.sf.jasperreports.data.xml.XmlDataAdapter;
+import net.sf.jasperreports.eclipse.util.DataFileUtils;
 
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.widgets.Composite;
@@ -51,7 +52,7 @@ public class RemoteXMLWizardDataEditorComposite extends
 	@Override
 	protected Document getXMLDocument(DataAdapterDescriptor da)
 			throws SAXException, IOException, ParserConfigurationException {
-		String fileName = ((XmlDataAdapter)da.getDataAdapter()).getFileName();
+		String fileName = DataFileUtils.getDataFileLocation(((XmlDataAdapter)da.getDataAdapter()).getDataFile());
 		if(da.getDataAdapter() instanceof RemoteXmlDataAdapter){
 			return DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(fileName);
 		}

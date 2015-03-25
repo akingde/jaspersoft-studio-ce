@@ -19,6 +19,7 @@ import java.util.List;
 
 import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.xml.XmlDataAdapterImpl;
+import net.sf.jasperreports.eclipse.util.DataFileUtils;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRException;
@@ -85,7 +86,7 @@ public class XMLDataAdapterDescriptor extends DataAdapterDescriptor implements I
 	public List<JRDesignField> getFields(DataAdapterService con, JasperReportsConfiguration jConfig, JRDataset jDataset) throws JRException, UnsupportedOperationException {
 		setRecursiveRetrieval(jConfig);
 		ArrayList<JRDesignField> fields = new ArrayList<JRDesignField>();
-		String fileName = getDataAdapter().getFileName();
+		String fileName = DataFileUtils.getDataFileLocation(getDataAdapter().getDataFile());
 		File in = new File(fileName);
 		Document doc = JRXmlUtils.parse(in, XMLUtils.isNamespaceAware(getDataAdapter(), jConfig.getJasperDesign()));
 		fields.addAll(getFieldsFromDocument(doc, jConfig, jDataset));

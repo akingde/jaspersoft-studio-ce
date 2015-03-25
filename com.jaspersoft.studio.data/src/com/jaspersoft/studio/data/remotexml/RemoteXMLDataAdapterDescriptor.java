@@ -20,6 +20,7 @@ import java.util.List;
 import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.xml.RemoteXmlDataAdapterImpl;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.DataFileUtils;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRException;
@@ -74,7 +75,7 @@ public class RemoteXMLDataAdapterDescriptor extends XMLDataAdapterDescriptor imp
 		Throwable t = null;
 		ArrayList<JRDesignField> fields = new ArrayList<JRDesignField>();
 		try {
-			String fileName = getDataAdapter().getFileName();
+			String fileName = DataFileUtils.getDataFileLocation(getDataAdapter().getDataFile());
 			Document doc = JRXmlUtils.parse(new URL(fileName), XMLUtils.isNamespaceAware(getDataAdapter(), jConfig.getJasperDesign()));
 			fields.addAll(getFieldsFromDocument(doc, jConfig, jDataset));
 		} catch (IOException e) {

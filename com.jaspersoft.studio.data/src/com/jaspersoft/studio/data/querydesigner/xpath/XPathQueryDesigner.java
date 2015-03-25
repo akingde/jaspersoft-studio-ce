@@ -21,6 +21,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import net.sf.jasperreports.data.xml.RemoteXmlDataAdapter;
 import net.sf.jasperreports.data.xml.XmlDataAdapter;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.DataFileUtils;
 import net.sf.jasperreports.engine.util.JRXmlUtils;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -373,8 +374,9 @@ public class XPathQueryDesigner extends TreeBasedQueryDesigner {
 											Messages.XPathQueryDesigner_TaskTitle,
 											-1);
 
-									String fileName = ((XmlDataAdapter) da
-											.getDataAdapter()).getFileName();
+									String fileName = DataFileUtils.getDataFileLocation(			
+											((XmlDataAdapter) da
+											.getDataAdapter()).getDataFile());
 									try {
 										Document doc = null;
 										if (da.getDataAdapter() instanceof RemoteXmlDataAdapter) {

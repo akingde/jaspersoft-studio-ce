@@ -16,6 +16,7 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 import net.sf.jasperreports.data.xml.XmlDataAdapterImpl;
+import net.sf.jasperreports.eclipse.util.DataFileUtils;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -49,17 +50,34 @@ public class XMLCreator implements IDataAdapterCreator {
 			Node node = children.item(i);
 			if (node.getNodeName().equals("connectionParameter")){
 				String paramName = node.getAttributes().getNamedItem("name").getTextContent();
-				
-				if (paramName.equals("NumberPattern")) result.setNumberPattern(node.getTextContent());
-				if (paramName.equals("DatePattern")) result.setDatePattern(node.getTextContent());					
-				if (paramName.equals("UseConnection")) result.setUseConnection(node.getTextContent().equals("true"));
-				if (paramName.equals("SelectExpression")) result.setSelectExpression(node.getTextContent());
-				if (paramName.equals("Filename")) result.setFileName(node.getTextContent());
-				
-				if (paramName.equals("Locale_variant"))localeVariant = node.getTextContent();
-				if (paramName.equals("Locale_country"))localeCountry = node.getTextContent();
-				if (paramName.equals("Locale_language"))localeLanguage = node.getTextContent();
-				if (paramName.equals("timeZone")) result.setTimeZone(TimeZone.getTimeZone(node.getTextContent())) ;
+				String textContent = node.getTextContent();
+				if (paramName.equals("NumberPattern")) {
+					result.setNumberPattern(textContent);
+				}
+				if (paramName.equals("DatePattern")) {
+					result.setDatePattern(textContent);					
+				}
+				if (paramName.equals("UseConnection")) {
+					result.setUseConnection(textContent.equals("true"));
+				}
+				if (paramName.equals("SelectExpression")) {
+					result.setSelectExpression(textContent);
+				}
+				if (paramName.equals("Filename")) {
+					result.setDataFile(DataFileUtils.getDataFile(textContent));
+				}
+				if (paramName.equals("Locale_variant")) {
+					localeVariant = textContent;
+				}
+				if (paramName.equals("Locale_country")) {
+					localeCountry = textContent;
+				}
+				if (paramName.equals("Locale_language")) {
+					localeLanguage = textContent;
+				}
+				if (paramName.equals("timeZone")) {
+					result.setTimeZone(TimeZone.getTimeZone(textContent)) ;
+				}
 			}
 		}
 		
