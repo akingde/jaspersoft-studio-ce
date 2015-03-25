@@ -24,10 +24,10 @@ import net.sf.jasperreports.eclipse.util.StringUtils;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRParameter;
-import net.sf.jasperreports.engine.data.JRXlsDataSource;
+import net.sf.jasperreports.engine.data.XlsDataSource;
 import net.sf.jasperreports.engine.design.JRDesignField;
-import net.sf.jasperreports.engine.query.JRXlsQueryExecuter;
-import net.sf.jasperreports.engine.query.JRXlsQueryExecuterFactory;
+import net.sf.jasperreports.engine.query.XlsQueryExecuter;
+import net.sf.jasperreports.engine.query.XlsQueryExecuterFactory;
 
 import com.jaspersoft.studio.data.fields.IFieldsProvider;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
@@ -42,14 +42,14 @@ public class XLSFieldsProvider implements IFieldsProvider {
 		ParameterUtil.setParameters(jConfig, reportDataset, parameters);
 		parameters.put(JRParameter.REPORT_MAX_COUNT, 2);
 
-		JRXlsDataSource ds = null;
+		XlsDataSource ds = null;
 
 		XlsDataAdapter da = (XlsDataAdapter) ((AbstractDataAdapterService) con).getDataAdapter();
 		if (da.isQueryExecuterMode()) {
-			JRXlsQueryExecuter qe = (JRXlsQueryExecuter) new JRXlsQueryExecuterFactory().createQueryExecuter(jConfig, reportDataset, ParameterUtil.convertMap(parameters, reportDataset));
-			ds = (JRXlsDataSource) qe.createDatasource();
+			XlsQueryExecuter qe = (XlsQueryExecuter) new XlsQueryExecuterFactory().createQueryExecuter(jConfig, reportDataset, ParameterUtil.convertMap(parameters, reportDataset));
+			ds = (XlsDataSource) qe.createDatasource();
 		} else {
-			ds = (JRXlsDataSource) parameters.get(JRParameter.REPORT_DATA_SOURCE);
+			ds = (XlsDataSource) parameters.get(JRParameter.REPORT_DATA_SOURCE);
 		}
 		if (ds != null) {
 			ds.setUseFirstRowAsHeader(da.isUseFirstRowAsHeader());
