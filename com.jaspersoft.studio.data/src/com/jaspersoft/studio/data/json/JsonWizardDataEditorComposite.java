@@ -14,6 +14,7 @@ package com.jaspersoft.studio.data.json;
 
 import net.sf.jasperreports.data.json.JsonDataAdapter;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.DataFileUtils;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -99,7 +100,7 @@ public class JsonWizardDataEditorComposite extends ATreeWizardDataEditorComposit
 				@Override
 				public void run() {
 					try {
-						String fileName = ((JsonDataAdapter)da.getDataAdapter()).getFileName();
+						String fileName = DataFileUtils.getDataFileLocation(((JsonDataAdapter)da.getDataAdapter()).getDataFile()); 
 						jsonDataManager.loadJsonDataFile(fileName);
 						treeViewer.setInput(jsonDataManager.getJsonSupportModel());
 						treeViewer.expandToLevel(2);

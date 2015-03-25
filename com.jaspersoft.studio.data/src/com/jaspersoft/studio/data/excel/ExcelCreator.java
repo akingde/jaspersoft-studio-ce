@@ -17,6 +17,7 @@ import java.util.Collections;
 import java.util.List;
 
 import net.sf.jasperreports.data.excel.ExcelDataAdapterImpl;
+import net.sf.jasperreports.eclipse.util.DataFileUtils;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -75,21 +76,27 @@ public class ExcelCreator implements IDataAdapterCreator {
 			Node node = children.item(i);
 			if (node.getNodeName().equals("connectionParameter")){
 				String paramName = node.getAttributes().getNamedItem("name").getTextContent();
-				
+				String textContent = node.getTextContent();
 				if (paramName.startsWith("INDEX_")){
 					int index = Integer.parseInt(paramName.substring(paramName.lastIndexOf("_")+1));
-					colIndexes.add(new Column(index, node.getTextContent()));
+					colIndexes.add(new Column(index, textContent));
 				}		
-				
 				if (paramName.startsWith("COLUMN_")){
 					int index = Integer.parseInt(paramName.substring(paramName.lastIndexOf("_")+1));
-					colNames.add(new Column(index, node.getTextContent()));
+					colNames.add(new Column(index, textContent));
 				}		
-
-				if (paramName.equals("useFirstRowAsHeader")) result.setUseFirstRowAsHeader(node.getTextContent().equals("true"));	
-				if (paramName.equals("customDateFormat")) result.setDatePattern(node.getTextContent());
-				if (paramName.equals("customNumberFormat")) result.setNumberPattern(node.getTextContent());
-				if (paramName.equals("Filename")) result.setFileName(node.getTextContent());
+				if (paramName.equals("useFirstRowAsHeader")) {
+					result.setUseFirstRowAsHeader(textContent.equals("true"));	
+				}
+				if (paramName.equals("customDateFormat")) {
+					result.setDatePattern(textContent);
+				}
+				if (paramName.equals("customNumberFormat")) {
+					result.setNumberPattern(textContent);
+				}
+				if (paramName.equals("Filename")) {
+					result.setDataFile(DataFileUtils.getDataFile(textContent));
+				}
 			}
 		}
 		

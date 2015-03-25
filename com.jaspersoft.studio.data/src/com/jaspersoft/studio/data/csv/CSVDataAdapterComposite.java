@@ -214,6 +214,7 @@ public class CSVDataAdapterComposite extends AFileDataAdapterComposite {
 				return element;
 			}
 
+			@SuppressWarnings("unchecked")
 			@Override
 			protected void setValue(Object element, Object value) {
 				int s = table.getSelectionIndex();

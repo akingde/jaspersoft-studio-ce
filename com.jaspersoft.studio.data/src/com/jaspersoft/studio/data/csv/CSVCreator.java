@@ -17,6 +17,7 @@ import java.util.Collections;
 import java.util.List;
 
 import net.sf.jasperreports.data.csv.CsvDataAdapterImpl;
+import net.sf.jasperreports.eclipse.util.DataFileUtils;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -75,16 +76,29 @@ public class CSVCreator implements IDataAdapterCreator {
 			if (node.getNodeName().equals("connectionParameter")){
 				String paramName = node.getAttributes().getNamedItem("name").getTextContent();
 	
+				String textContent = node.getTextContent();
 				if (paramName.startsWith("COLUMN_")){
 					int index = Integer.parseInt(paramName.substring(paramName.lastIndexOf("_")+1));
-					columnNames.add(new ColumnName(index, node.getTextContent()));
+					columnNames.add(new ColumnName(index, textContent));
 				}			
-				if (paramName.equals("fieldDelimiter")) result.setFieldDelimiter(node.getTextContent());
-				if (paramName.equals("queryExecuterMode")) result.setQueryExecuterMode(node.getTextContent().equals("true"));
-				if (paramName.equals("useFirstRowAsHeader")) result.setUseFirstRowAsHeader(node.getTextContent().equals("true"));
-				if (paramName.equals("customDateFormat")) result.setDatePattern(node.getTextContent());
-				if (paramName.equals("Filename")) result.setFileName(node.getTextContent());
-				if (paramName.equals("recordDelimiter")) result.setRecordDelimiter(node.getTextContent());
+				if (paramName.equals("fieldDelimiter")) {
+					result.setFieldDelimiter(textContent);
+				}
+				if (paramName.equals("queryExecuterMode")) {
+					result.setQueryExecuterMode(textContent.equals("true"));
+				}
+				if (paramName.equals("useFirstRowAsHeader")) {
+					result.setUseFirstRowAsHeader(textContent.equals("true"));
+				}
+				if (paramName.equals("customDateFormat")) {
+					result.setDatePattern(textContent);
+				}
+				if (paramName.equals("Filename")) {
+					result.setDataFile(DataFileUtils.getDataFile(textContent));
+				}
+				if (paramName.equals("recordDelimiter")) {
+					result.setRecordDelimiter(textContent);
+				}
 				
 			}
 		}
