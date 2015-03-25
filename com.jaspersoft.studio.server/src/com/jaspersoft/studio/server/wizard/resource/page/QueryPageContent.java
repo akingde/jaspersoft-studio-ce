@@ -67,10 +67,6 @@ public class QueryPageContent extends APageContent {
 		return createContentComposite;
 	}
 
-	public static Control createContentComposite(Composite parent, DataBindingContext bindingContext, ResourceDescriptor r, MResource res) {
-		return createContentComposite(parent, bindingContext, r, res);
-	}
-
 	public static Control createContentComposite(Composite parent, DataBindingContext bindingContext, ResourceDescriptor r, MResource res, boolean showLangs) {
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout(2, false));
