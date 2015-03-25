@@ -28,9 +28,13 @@ import net.sf.jasperreports.util.SecretsProviderFactory;
  */
 public class DataAdaptersSecretsExtensionsRegistryFactory implements ExtensionsRegistryFactory {
 	private static final ExtensionsRegistry defaultExtensionsRegistry = new ExtensionsRegistry() {
-		public List getExtensions(Class extensionType) {
-			if (SecretsProviderFactory.class.equals(extensionType))
-				return Collections.singletonList(DataAdaptersSecretsProviderFactory.getInstance());
+		@Override
+		public <T> List<T> getExtensions(Class<T> extensionType) {
+			if (SecretsProviderFactory.class.equals(extensionType)) {
+				@SuppressWarnings("unchecked")
+				List<T> extensions = (List<T>) Collections.singletonList(DataAdaptersSecretsProviderFactory.getInstance());
+				return extensions;
+			}
 			return null;
 		}
 	};
