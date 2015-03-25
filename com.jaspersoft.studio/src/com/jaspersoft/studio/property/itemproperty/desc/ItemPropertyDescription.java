@@ -139,21 +139,23 @@ public class ItemPropertyDescription<T> {
 	}
 
 	public void setValue(Control c, IWItemProperty wip) {
-		Text txtExpr = (Text) c;
-		String txt = wip.getLabelProvider().getText(wip.getValue());
-		txt = toSimpleString(txt);
-		Point oldSelection = txtExpr.getSelection();
+		if (c instanceof Text) {
+			Text txtExpr = (Text) c;
+			String txt = wip.getLabelProvider().getText(wip.getValue());
+			txt = toSimpleString(txt);
+			Point oldSelection = txtExpr.getSelection();
 
-		txtExpr.setText(txt);
+			txtExpr.setText(txt);
 
-		oldSelection.x = Math.max(txt.length(), oldSelection.x);
-		oldSelection.y = Math.max(txt.length(), oldSelection.y);
-		txtExpr.setSelection(oldSelection);
+			oldSelection.x = Math.max(txt.length(), oldSelection.x);
+			oldSelection.y = Math.max(txt.length(), oldSelection.y);
+			txtExpr.setSelection(oldSelection);
 
-		String tooltip = "";
-		if (!Misc.isNullOrEmpty(txt))
-			tooltip += "\n\n" + txt;
-		tooltip += "\n\n" + getDescription();
-		txtExpr.setToolTipText(tooltip.trim());
+			String tooltip = "";
+			if (!Misc.isNullOrEmpty(txt))
+				tooltip += "\n\n" + txt;
+			tooltip += "\n\n" + getDescription();
+			txtExpr.setToolTipText(tooltip.trim());
+		}
 	}
 }

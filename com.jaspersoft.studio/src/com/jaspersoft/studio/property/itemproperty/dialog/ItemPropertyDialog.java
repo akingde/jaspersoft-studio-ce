@@ -133,10 +133,10 @@ public class ItemPropertyDialog extends ATitledDialog implements IExpressionCont
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				String newname = infoPanel.getSelectedElement().getName();
-				ItemPropertyDescription<?> ipDesc = descriptor.getDescription(newname);
-				if (ipDesc != null) {
+				ItemPropertyDescription<?> ipDescNew = descriptor.getDescription(newname);
+				if (ipDescNew != null) {
 					itemProperty.setName(newname);
-					itemProperty.setValue(ipDesc.getDefaultValueString());
+					itemProperty.setValue(ipDescNew.getDefaultValueString());
 					itemProperty.setValueExpression(null);
 
 					propertyValue.dispose();

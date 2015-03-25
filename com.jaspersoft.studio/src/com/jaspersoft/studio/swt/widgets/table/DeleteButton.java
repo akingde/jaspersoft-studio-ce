@@ -42,7 +42,7 @@ public class DeleteButton {
 			if (!s.isEmpty()) {
 				List<?> inlist = (List<?>) tableViewer.getInput();
 				for (Object obj : s.toArray()) {
-					if (!canRemove(obj))
+					if (!confirmDelete(obj))
 						continue;
 					int ind = inlist.indexOf(obj);
 					inlist.remove(obj);
@@ -56,6 +56,10 @@ public class DeleteButton {
 					tableViewer.setSelection(new StructuredSelection(selement));
 			}
 		}
+	}
+
+	protected boolean confirmDelete(Object obj) {
+		return canRemove(obj);
 	}
 
 	protected boolean canRemove(Object obj) {
