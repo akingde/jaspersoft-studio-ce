@@ -12,6 +12,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,7 +23,9 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRSimpleTemplate;
 import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.JRTemplateReference;
+import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignImage;
+import net.sf.jasperreports.engine.design.JRDesignParameter;
 import net.sf.jasperreports.engine.design.JRDesignReportTemplate;
 import net.sf.jasperreports.engine.design.JRDesignScriptlet;
 import net.sf.jasperreports.engine.design.JRDesignSubreport;
@@ -36,7 +39,9 @@ import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.ui.JavaUI;
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.ErrorDialog;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorActionBarContributor;
@@ -55,17 +60,22 @@ import org.eclipse.ui.views.properties.IPropertySource2;
 import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.IJROBjectEditor;
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
+import com.jaspersoft.studio.editor.expression.ExpressionContext.Visibility;
+import com.jaspersoft.studio.editor.expression.ExpressionEditorSupportUtil;
 import com.jaspersoft.studio.editor.part.MultiPageToolbarEditorPart;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MPage;
 import com.jaspersoft.studio.model.MRoot;
+import com.jaspersoft.studio.model.parameter.MParameter;
 import com.jaspersoft.studio.model.style.StyleTemplateFactory;
 import com.jaspersoft.studio.plugin.ExtensionManager;
 import com.jaspersoft.studio.preferences.DesignerPreferencePage;
 import com.jaspersoft.studio.properties.view.ITabbedPropertySheetPageContributor;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
+import com.jaspersoft.studio.property.descriptor.expression.dialog.JRExpressionEditor;
 import com.jaspersoft.studio.utils.ExpressionUtil;
 import com.jaspersoft.studio.utils.SelectionHelper;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
@@ -543,6 +553,24 @@ public class ReportContainer extends MultiPageToolbarEditorPart implements ITabb
 							}
 						});
 					}
+				}
+			}
+		}
+		if (obj instanceof JRDesignParameter && node instanceof MParameter) {
+			MParameter param = (MParameter) node;
+			JRDesignExpression defaultValueExpression = (JRDesignExpression) param.getPropertyValue(JRDesignParameter.PROPERTY_DEFAULT_VALUE_EXPRESSION);
+			ExpressionContext expContext = param.getExpressionContext();
+			if(expContext!=null){
+				expContext.setVisibilities(EnumSet.of(Visibility.SHOW_PARAMETERS));
+			}
+			if(!ExpressionEditorSupportUtil.isExpressionEditorDialogOpen()) {
+				JRExpressionEditor wizard = new JRExpressionEditor();
+				wizard.setValue(defaultValueExpression);
+				wizard.setExpressionContext(expContext);
+				WizardDialog dialog = ExpressionEditorSupportUtil.getExpressionEditorWizardDialog(UIUtils.getShell(), wizard);
+				if (dialog.open() == Dialog.OK) {
+					JRDesignExpression value = wizard.getValue();
+					param.setPropertyValue(JRDesignParameter.PROPERTY_DEFAULT_VALUE_EXPRESSION,value);
 				}
 			}
 		}
