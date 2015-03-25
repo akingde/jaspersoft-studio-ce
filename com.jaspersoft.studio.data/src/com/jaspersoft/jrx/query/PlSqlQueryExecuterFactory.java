@@ -15,14 +15,13 @@ package com.jaspersoft.jrx.query;
 import java.util.Arrays;
 import java.util.Map;
 
-import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRPropertiesUtil;
 import net.sf.jasperreports.engine.JRValueParameter;
 import net.sf.jasperreports.engine.JasperReportsContext;
+import net.sf.jasperreports.engine.query.AbstractQueryExecuterFactory;
 import net.sf.jasperreports.engine.query.JRQueryExecuter;
-import net.sf.jasperreports.engine.query.QueryExecuterFactory;
 
 /**
  * Query executer factory for Oracle queries, both inline SQL and stored
@@ -43,7 +42,7 @@ import net.sf.jasperreports.engine.query.QueryExecuterFactory;
  *         JRJdbcQueryExecuterFactory.java
  * @see net.sf.jasperreports.engine.query.JROracleQueryExecuter
  */
-public class PlSqlQueryExecuterFactory implements QueryExecuterFactory {
+public class PlSqlQueryExecuterFactory extends AbstractQueryExecuterFactory {
 	/**
 	 * Property specifying whether field descriptions should be used to
 	 * determine the mapping between the fields and the query return values.
@@ -85,13 +84,6 @@ public class PlSqlQueryExecuterFactory implements QueryExecuterFactory {
 				java.sql.ResultSet.class.getName() };
 
 		Arrays.sort(queryParameterClassNames);
-	}
-
-	public JRQueryExecuter createQueryExecuter(JRDataset dataset,
-			Map<String, ? extends JRValueParameter> parameters)
-			throws JRException {
-		return new PlSqlQueryExecuter(
-				DefaultJasperReportsContext.getInstance(), dataset, parameters);
 	}
 
 	public Object[] getBuiltinParameters() {

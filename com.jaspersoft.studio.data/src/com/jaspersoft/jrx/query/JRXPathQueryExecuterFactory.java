@@ -14,14 +14,13 @@ package com.jaspersoft.jrx.query;
 
 import java.util.Map;
 
-import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRPropertiesUtil;
 import net.sf.jasperreports.engine.JRValueParameter;
 import net.sf.jasperreports.engine.JasperReportsContext;
+import net.sf.jasperreports.engine.query.AbstractQueryExecuterFactory;
 import net.sf.jasperreports.engine.query.JRQueryExecuter;
-import net.sf.jasperreports.engine.query.QueryExecuterFactory;
 
 /**
  * XPath query executer factory.
@@ -33,7 +32,7 @@ import net.sf.jasperreports.engine.query.QueryExecuterFactory;
  * @version $Id: JRXPathQueryExecuterFactory.java 3 2007-04-19 15:19:54Z teodord
  *          $
  */
-public class JRXPathQueryExecuterFactory implements QueryExecuterFactory {
+public class JRXPathQueryExecuterFactory extends AbstractQueryExecuterFactory {
 	public static final String QUERY_LANGUAGE = "xpath2";
 	/**
 	 *
@@ -96,13 +95,6 @@ public class JRXPathQueryExecuterFactory implements QueryExecuterFactory {
 
 	public Object[] getBuiltinParameters() {
 		return XPATH_BUILTIN_PARAMETERS;
-	}
-
-	public JRQueryExecuter createQueryExecuter(JRDataset dataset,
-			Map<String, ? extends JRValueParameter> parameters)
-			throws JRException {
-		return new JRXPathQueryExecuter(
-				DefaultJasperReportsContext.getInstance(), dataset, parameters);
 	}
 
 	public boolean supportsQueryParameterType(String className) {
