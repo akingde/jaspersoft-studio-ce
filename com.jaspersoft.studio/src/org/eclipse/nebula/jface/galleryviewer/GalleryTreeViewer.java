@@ -312,7 +312,8 @@ public class GalleryTreeViewer extends AbstractTreeViewer {
 	 * 
 	 * @see org.eclipse.jface.viewers.AbstractTreeViewer#setSelection(java.util.List)
 	 */
-	protected void setSelection(@SuppressWarnings("rawtypes") List items) {
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	protected void setSelection(List items) {
 		Item[] current = getSelection(getGallery());
 
 		// Don't bother resetting the same selection
