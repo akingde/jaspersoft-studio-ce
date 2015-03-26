@@ -56,6 +56,7 @@ public class ParameterUtil {
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	private static Object getDefaultInstance(JRParameter p, JasperReportsConfiguration jConfig, JRDataset dataset) {
 		if (p.getDefaultValueExpression() != null) {
 			return ExpressionUtil.cachedExpressionEvaluation(p.getDefaultValueExpression(), jConfig,
