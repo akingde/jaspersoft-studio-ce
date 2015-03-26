@@ -37,6 +37,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  * @author Massimo Rabbi
  * 
  */
+@SuppressWarnings("restriction")
 public class JRXMLUtils {
 	
 	public static final String UTF8_ENCODING = "UTF-8";

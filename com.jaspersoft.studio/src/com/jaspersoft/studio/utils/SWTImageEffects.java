@@ -117,13 +117,13 @@ public class SWTImageEffects {
 			if (radius >= newImageData.height || radius >= newImageData.width)
 				radius = Math.min (newImageData.height, newImageData.width) - 1;
 			// initialize cache
-			ArrayList rowCache = new ArrayList();
+			ArrayList<RGB[]> rowCache = new ArrayList<RGB[]>();
 			int cacheSize = radius * 2 + 1 > newImageData.height ? newImageData.height
 					: radius * 2 + 1; // number of rows of imageData we cache
 			int cacheStartIndex = 0; // which row of imageData the cache begins with
 			for (int row = 0; row < cacheSize; row++) {
 				// row data is horizontally blurred before caching
-				rowCache.add (rowCache.size (), blurRow (originalImageData, row, radius));
+				rowCache.add (rowCache.size (), blurRow(originalImageData, row, radius));
 			}
 			// sum red, green, and blue values separately for averaging
 			RGB[] rowRGBSums = new RGB[newImageData.width]; 

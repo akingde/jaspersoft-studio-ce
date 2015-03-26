@@ -61,6 +61,7 @@ import com.jaspersoft.studio.wizards.ContextHelpIDs;
  * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
  *
  */
+@SuppressWarnings("restriction")
 public class FunctionsLibraryInformationPage extends NewTypeWizardPage {
 
 	private Text libraryName;
@@ -357,7 +358,6 @@ public class FunctionsLibraryInformationPage extends NewTypeWizardPage {
 		return categoryDescription.getText();
 	}
 	
-	@SuppressWarnings("restriction")
 	private void setTooltipOnPrivateField(Class<?> targetClazz, String fieldName, String tooltip) {
 		try {
 			Field containerWidget = targetClazz.getDeclaredField(fieldName);
