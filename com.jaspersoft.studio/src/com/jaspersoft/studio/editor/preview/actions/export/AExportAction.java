@@ -26,9 +26,11 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.FileDialog;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.editor.pages.Pages;
 import com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage;
+import com.jaspersoft.studio.statistics.UsageStatisticsIDs;
 import com.jaspersoft.studio.utils.Callback;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -125,6 +127,8 @@ public abstract class AExportAction extends AReportViewerAction {
 
 					@Override
 					public void completed(File value) {
+						//Log the export statistics of the exported format
+						JaspersoftStudioPlugin.getInstance().getUsageManager().audit(AExportAction.this.getClass().getName(), UsageStatisticsIDs.CATEGORY_EXPORT_FORMAT);
 					}
 				});
 			} catch (Throwable e) {
