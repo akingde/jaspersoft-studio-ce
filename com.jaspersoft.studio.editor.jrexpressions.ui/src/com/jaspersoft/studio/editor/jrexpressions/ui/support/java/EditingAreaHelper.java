@@ -15,6 +15,8 @@ package com.jaspersoft.studio.editor.jrexpressions.ui.support.java;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.sf.jasperreports.eclipse.util.BundleCommonUtils;
+
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.xtext.Keyword;
@@ -31,6 +33,7 @@ import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.FullMethodNam
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JasperReportsExpression;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.MethodInvocation;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.MethodsExpression;
+import com.jaspersoft.studio.editor.jrexpressions.ui.JRExpressionsUIPlugin;
 import com.jaspersoft.studio.editor.jrexpressions.ui.support.ObjectCategorySelectionEvent;
 import com.jaspersoft.studio.editor.jrexpressions.ui.support.ObjectCategorySelectionListener;
 import com.jaspersoft.studio.editor.jrexpressions.ui.support.StyledTextXtextAdapter2;
@@ -297,32 +300,36 @@ public class EditingAreaHelper {
 	 * representing the arguments of a method invocation.
 	 */
 	private Arguments getMethodArguments(){
-		if(xtextAdapter.getXtextParseResult()!=null){
-			ICompositeNode actualNode=getActualNode();
-			if(actualNode!=null){
-				INode tmpParentNode=actualNode;
-				boolean foundParentNode=false;
-				while(!foundParentNode && tmpParentNode!=null){
-					if(tmpParentNode.getSemanticElement() instanceof Arguments || tmpParentNode.getSemanticElement() instanceof MethodInvocation){
-						foundParentNode=true;
+		try {
+			if(xtextAdapter.getXtextParseResult()!=null){
+				ICompositeNode actualNode=getActualNode();
+				if(actualNode!=null){
+					INode tmpParentNode=actualNode;
+					boolean foundParentNode=false;
+					while(!foundParentNode && tmpParentNode!=null){
+						if(tmpParentNode.getSemanticElement() instanceof Arguments || tmpParentNode.getSemanticElement() instanceof MethodInvocation){
+							foundParentNode=true;
+						}
+						else{
+							tmpParentNode=tmpParentNode.getParent();
+						}
 					}
-					else{
-						tmpParentNode=tmpParentNode.getParent();
+					if(foundParentNode){
+						Arguments args=null;
+						if(tmpParentNode.getSemanticElement() instanceof MethodInvocation){
+							args=((MethodInvocation)tmpParentNode.getSemanticElement()).getArgs();
+						}
+						else{
+							args=(Arguments)tmpParentNode.getSemanticElement();
+						}
+						return args;
 					}
-				}
-				if(foundParentNode){
-					Arguments args=null;
-					if(tmpParentNode.getSemanticElement() instanceof MethodInvocation){
-						args=((MethodInvocation)tmpParentNode.getSemanticElement()).getArgs();
-					}
-					else{
-						args=(Arguments)tmpParentNode.getSemanticElement();
-					}
-					return args;
 				}
 			}
 		}
-		
+		catch (Exception ex) {
+			BundleCommonUtils.logError(JRExpressionsUIPlugin.PLUGIN_ID, "A problem occurred during the expression parsing.", ex);
+		}
 		return null;
 	}
 	
