@@ -296,11 +296,17 @@ public class ServerManager {
 			if (v.getUrl().equals(url)) {
 				res = sp;
 				if (user != null) {
-					String u = v.getUser()
-							+ (!Misc.isNullOrEmpty(v.getOrganisation()) ? "|"
-									+ v.getOrganisation() : "");
-					if (u.equals(user))
-						return sp;
+					if (v.isUseSSO()) {
+						if (user.equals(v.getSsoUuid()))
+							return sp;
+					} else {
+						String u = v.getUser()
+								+ (!Misc.isNullOrEmpty(v.getOrganisation()) ? "|"
+										+ v.getOrganisation()
+										: "");
+						if (u.equals(user))
+							return sp;
+					}
 				} else
 					return sp;
 			}
