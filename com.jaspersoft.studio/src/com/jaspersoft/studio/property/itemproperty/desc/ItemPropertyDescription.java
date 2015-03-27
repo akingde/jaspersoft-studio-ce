@@ -107,6 +107,8 @@ public class ItemPropertyDescription<T> {
 	}
 
 	public void handleEdit(Control txt, StandardItemProperty value) {
+		if (value == null)
+			return;
 		if (txt instanceof Text) {
 			String tvalue = ((Text) txt).getText();
 			if (tvalue != null && tvalue.isEmpty())

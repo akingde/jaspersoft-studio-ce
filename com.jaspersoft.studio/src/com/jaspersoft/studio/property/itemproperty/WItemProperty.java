@@ -309,7 +309,7 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 
 			ipDesc.setValue(textExpression, this);
 
-			if (exp.getValueExpression() != null)
+			if (exp != null && exp.getValueExpression() != null)
 				txtLabel.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/functions_icon.png"));
 			else
 				txtLabel.setImage(null);
