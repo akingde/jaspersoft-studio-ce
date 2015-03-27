@@ -22,6 +22,7 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.ui.cheatsheets.ICheatSheetAction;
 import org.eclipse.ui.cheatsheets.ICheatSheetManager;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.server.Activator;
@@ -32,6 +33,7 @@ import com.jaspersoft.studio.server.model.server.MServers;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
 import com.jaspersoft.studio.server.wizard.ServerProfileWizard;
 import com.jaspersoft.studio.server.wizard.ServerProfileWizardDialog;
+import com.jaspersoft.studio.statistics.UsageStatisticsIDs;
 import com.jaspersoft.studio.utils.BrandingInfo;
 
 public class CreateServerAction extends Action implements ICheatSheetAction {
@@ -79,6 +81,7 @@ public class CreateServerAction extends Action implements ICheatSheetAction {
 					newprofile.setWsClient(mservprof.getWsClient());
 					ServerManager.addServerProfile(newprofile);
 					EditServerAction.fillServerProfile(newprofile, treeViewer);
+					JaspersoftStudioPlugin.getInstance().getUsageManager().audit(UsageStatisticsIDs.SERVER_CREATION, UsageStatisticsIDs.CATEGORY_SERVER);
 				}
 				break;
 			}

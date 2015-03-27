@@ -42,6 +42,10 @@ public class PropertiesHelper {
 	public void setString(String key, String value, String scope) {
 		service.getRootNode().node(scope).node(qualifier).put(key, value);
 	}
+	
+	public void removeString(String key, String scope) {
+		service.getRootNode().node(scope).node(qualifier).remove(key);
+	}
 
 	public void setBoolean(String key, boolean value, String scope) {
 		service.getRootNode().node(scope).node(qualifier).putBoolean(key, value);

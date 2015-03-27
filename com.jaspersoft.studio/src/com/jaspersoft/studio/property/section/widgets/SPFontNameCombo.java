@@ -30,6 +30,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.preferences.fonts.utils.FontUtils;
 import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /**
  * A combo menu that could be used to represent a font
@@ -37,7 +38,7 @@ import com.jaspersoft.studio.property.section.AbstractSection;
  * @author Orlandin Marco
  * 
  */
-public class SPFontNameCombo extends ASPropertyWidget {
+public class SPFontNameCombo<T extends IPropertyDescriptor> extends ASPropertyWidget<T> {
 
 	/**
 	 * The combo popup
@@ -47,16 +48,17 @@ public class SPFontNameCombo extends ASPropertyWidget {
 	/**
 	 * True if the combo popup was already initialized with the data, false otherwise
 	 */
-	protected boolean dataSetted;
+	protected boolean isRefreshing;
 
+	protected String[] lastFonts = null;
+	
 	/**
 	 * String used in the combobox to print a separator
 	 */
 	private static String separator = "__________________";
 
-	public SPFontNameCombo(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
+	public SPFontNameCombo(Composite parent, AbstractSection section, T pDescriptor) {
 		super(parent, section, pDescriptor);
-		dataSetted = false;
 	}
 
 	/**
@@ -96,30 +98,20 @@ public class SPFontNameCombo extends ASPropertyWidget {
 	@Override
 	public void setData(final APropertyNode pnode, Object b) {
 		if (pnode != null) {
+			isRefreshing = true;
 			combo.setEnabled(pnode.isEditable());
-			if (!dataSetted) {
-				if (pnode.getJasperConfiguration() != null) combo.setItems(pnode.getJasperConfiguration().getFontList());
-				else FontUtils.stringToItems(getFontNames());
-				combo.addModifyListener(new ModifyListener() {
-
-					private int time = 0;
-
-					public void modifyText(ModifyEvent e) {
-						if (e.time - time > 100) {
-							String value = combo.getText();
-							if (!value.equals(separator))
-								propertyChange(section, JRBaseFont.PROPERTY_FONT_NAME, combo.getText());
-							else
-								combo.select(indexOf(combo, (String) pnode.getPropertyActualValue(JRBaseFont.PROPERTY_FONT_NAME)));
-							int stringLength = combo.getText().length();
-							combo.setSelection(new Point(stringLength, stringLength));
-						}
-						time = e.time;
-					}
-				});
-				dataSetted = true;
+			JasperReportsConfiguration jConfig = pnode.getJasperConfiguration();
+			if (jConfig != null) {
+				String[] fontList = jConfig.getFontList();
+				boolean sameList = lastFonts == fontList;
+				if (!sameList){
+					combo.setItems(fontList);
+					lastFonts = fontList;
+				}
 			}
+			else FontUtils.stringToItems(getFontNames());
 			if (b != null) combo.setText(b.toString());
+			isRefreshing = false;
 		}
 	}
 
@@ -131,6 +123,25 @@ public class SPFontNameCombo extends ASPropertyWidget {
 	protected void createComponent(Composite parent) {
 		if (combo == null) {
 			combo = new Combo(parent, SWT.NONE);
+			combo.addModifyListener(new ModifyListener() {
+
+				private int time = 0;
+
+				public void modifyText(ModifyEvent e) {
+					if (!isRefreshing){
+						if (e.time - time > 100) {
+							String value = combo.getText();
+							if (!value.equals(separator))
+								propertyChange(section, JRBaseFont.PROPERTY_FONT_NAME, combo.getText());
+							else
+								combo.select(indexOf(combo, (String) section.getElement().getPropertyActualValue(JRBaseFont.PROPERTY_FONT_NAME)));
+							int stringLength = combo.getText().length();
+							combo.setSelection(new Point(stringLength, stringLength));
+						}
+						time = e.time;
+					}	
+				}
+			});
 		}
 	}
 

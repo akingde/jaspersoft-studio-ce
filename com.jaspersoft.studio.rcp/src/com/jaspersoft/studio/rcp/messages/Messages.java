@@ -61,8 +61,6 @@ public class Messages extends NLS {
 	public static String UpdateHandler_NoUpdatesMessage;
 	public static String UpdateHandler_NoUpdatesTitle;
 	public static String UpdateHandler_TaskName;
-	public static String VersionUpdateDialog_0;
-	public static String VersionUpdateDialog_1;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

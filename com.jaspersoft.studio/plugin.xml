@@ -22,6 +22,7 @@
 <extension-point id="inputcontroltypes" name="inputcontroltypes" schema="schema/inputcontroltypes.exsd"/>
 <extension-point id="previewModeInfo" name="Preview Mode Info" schema="schema/previewModeInfo.exsd"/>
 <extension-point id="exporterFactory" name="Exporter Factory" schema="schema/exporterFactory.exsd"/>
+<extension-point id="firstStartupActions" name="Actions on the first Startup" schema="schema/firstStartupActions.exsd"/>
 
 
    <extension
@@ -2006,5 +2007,12 @@
              properties="checkNature"
              type="java.lang.Object">
        </propertyTester>
+    </extension>
+    <extension
+          point="com.jaspersoft.studio.firstStartupActions">
+       <actionProvider
+             actionClass="com.jaspersoft.studio.statistics.EnableUsageStatisticsQuestion"
+             actionId="com.jaspersoft.studio.ask_usage_statistics">
+       </actionProvider>
     </extension>
 </plugin>

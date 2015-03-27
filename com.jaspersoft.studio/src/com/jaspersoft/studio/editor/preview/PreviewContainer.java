@@ -69,6 +69,7 @@ import com.jaspersoft.studio.editor.preview.view.report.html.ABrowserViewer;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.util.PreferencesUtils;
 import com.jaspersoft.studio.property.dataset.dialog.DataQueryAdapters;
+import com.jaspersoft.studio.statistics.UsageStatisticsIDs;
 import com.jaspersoft.studio.swt.toolbar.ToolItemContribution;
 import com.jaspersoft.studio.swt.widgets.CSashForm;
 import com.jaspersoft.studio.utils.JRXMLUtils;
@@ -328,6 +329,10 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 	@Override
 	public boolean switchRightView(APreview view, Statistics stats, MultiPageContainer container) {
 		reportControler.viewerChanged(view);
+		//Log the preview if not Java
+		if (currentViewer != null && !currentViewer.equals("Java")){
+			JaspersoftStudioPlugin.getInstance().getUsageManager().audit(currentViewer, UsageStatisticsIDs.CATEGORY_PREVIEW_FORMAT);
+		}
 		return super.switchRightView(view, stats, container);
 	}
 
@@ -350,6 +355,10 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 
 			addPreviewModeContributeProperties();
 			reportControler.runReport();
+			//Log the preview if not Java
+			if (currentViewer != null && !currentViewer.equals("Java")){
+				JaspersoftStudioPlugin.getInstance().getUsageManager().audit(currentViewer, UsageStatisticsIDs.CATEGORY_PREVIEW_FORMAT);
+			}
 		}
 	}
 

@@ -36,7 +36,7 @@ public class FontNamePropertyDescriptor extends RWCComboPropertyDescriptor {
 	}
 
 	@Override
-	public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
-		return new SPFontNameCombo(parent, section, this);
+	public ASPropertyWidget<FontNamePropertyDescriptor> createWidget(Composite parent, AbstractSection section) {
+		return new SPFontNameCombo<FontNamePropertyDescriptor>(parent, section, this);
 	}
 }

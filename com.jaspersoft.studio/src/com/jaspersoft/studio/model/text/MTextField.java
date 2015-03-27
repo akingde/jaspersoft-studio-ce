@@ -467,7 +467,6 @@ public class MTextField extends MTextElement {
 				"\"".concat(Messages.MTextField_common_text_field).concat("\""))); //$NON-NLS-1$
 
 		DefaultManager.INSTANCE.applyDefault(this.getClass(), jrDesignTextField);
-
 		return jrDesignTextField;
 	}
 

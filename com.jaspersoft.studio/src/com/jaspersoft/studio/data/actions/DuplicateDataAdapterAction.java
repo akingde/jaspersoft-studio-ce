@@ -26,6 +26,7 @@ import com.jaspersoft.studio.data.MDataAdapters;
 import com.jaspersoft.studio.data.storage.ADataAdapterStorage;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.statistics.UsageStatisticsIDs;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class DuplicateDataAdapterAction extends Action {
@@ -63,8 +64,11 @@ public class DuplicateDataAdapterAction extends Action {
 				MDataAdapter mDataAdapter = (MDataAdapter) obj;
 				mdas = (MDataAdapters) mDataAdapter.getParent();
 				ADataAdapterStorage storage = ((MDataAdapters) mDataAdapter.getParent()).getValue();
-				DataAdapterDescriptor copyDataAdapter = DataAdapterManager.cloneDataAdapter(mDataAdapter.getValue(),
-						JasperReportsConfiguration.getDefaultInstance());
+				DataAdapterDescriptor copyDataAdapter = DataAdapterManager.cloneDataAdapter(mDataAdapter.getValue(),JasperReportsConfiguration.getDefaultInstance());
+				
+				//Log the statistics
+				JaspersoftStudioPlugin.getInstance().getUsageManager().audit(copyDataAdapter.getClass().getName(), UsageStatisticsIDs.CATEGORY_DA);
+				
 				String name = COPY_OF + copyDataAdapter.getName();
 				for (int j = 1; j < 1000; j++) {
 					if (storage.isDataAdapterNameValid(name))

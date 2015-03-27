@@ -31,6 +31,7 @@ import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
+import com.jaspersoft.studio.statistics.UsageStatisticsIDs;
 
 public class DuplicateServerAction extends Action {
 	public static final String ID = "duplicateServerAction"; //$NON-NLS-1$
@@ -70,7 +71,7 @@ public class DuplicateServerAction extends Action {
 					MServerProfile copyDataAdapter = new MServerProfile((ANode) oldMSP.getParent(), copy);
 					ServerManager.addServerProfile(copyDataAdapter);
 					copies.add(copyDataAdapter);
-
+					JaspersoftStudioPlugin.getInstance().getUsageManager().audit(UsageStatisticsIDs.SERVER_CREATION, UsageStatisticsIDs.CATEGORY_SERVER);
 				} catch (CloneNotSupportedException e) {
 					UIUtils.showError(e);
 				}

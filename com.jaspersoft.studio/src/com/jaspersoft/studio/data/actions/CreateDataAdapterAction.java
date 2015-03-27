@@ -27,6 +27,7 @@ import com.jaspersoft.studio.data.storage.ADataAdapterStorage;
 import com.jaspersoft.studio.data.wizard.DataAdapterWizard;
 import com.jaspersoft.studio.data.wizard.DataAdapterWizardDialog;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.statistics.UsageStatisticsIDs;
 
 public class CreateDataAdapterAction extends Action implements ICheatSheetAction {
 	public static final String ID = "createdataAdapteraction"; //$NON-NLS-1$
@@ -74,6 +75,7 @@ public class CreateDataAdapterAction extends Action implements ICheatSheetAction
 		if (dialog.open() == Dialog.OK) {
 			newDataAdapter = wizard.getDataAdapter();
 			DataAdapterManager.getPreferencesStorage().addDataAdapter(newDataAdapter); //$NON-NLS-1$
+			JaspersoftStudioPlugin.getInstance().getUsageManager().audit(newDataAdapter.getClass().getName(), UsageStatisticsIDs.CATEGORY_DA);
 		}
 	}
 

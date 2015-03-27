@@ -10,7 +10,9 @@ package com.jaspersoft.studio.plugin;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -45,6 +47,7 @@ import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.util.HyperlinkDefaultParameter;
 import com.jaspersoft.studio.repository.IRepositoryViewProvider;
+import com.jaspersoft.studio.statistics.IFirstStartupAction;
 import com.jaspersoft.studio.style.view.TemplateViewProvider;
 import com.jaspersoft.studio.swt.widgets.WHyperlink;
 import com.jaspersoft.studio.swt.widgets.WHyperlink.UIElement;
@@ -281,6 +284,48 @@ public class ExtensionManager {
 			}
 		}
 		return exportersFactories;
+	}
+
+	/**
+	 * Return a list of the contributed actions, this action are the one that must be executed the first time
+	 * JSS is started. Between all the contributed actions are returned only the ones that are not overridden
+	 * by another startup action.
+	 * 
+	 * @return a not null list of IFirstStartupAction
+	 */
+	public Collection<IFirstStartupAction> getFirstStartupActions(){
+		IConfigurationElement[] config = Platform.getExtensionRegistry().getConfigurationElementsFor(JaspersoftStudioPlugin.PLUGIN_ID, "firstStartupActions");
+		ArrayList<String> firstStartupActions = new ArrayList<String>();
+		HashMap<String, IFirstStartupAction> actionMap = new HashMap<String, IFirstStartupAction>();
+		HashSet<String> overridenAction = new HashSet<String>();
+		for (IConfigurationElement el : config) {
+			Object defaultSupportClazz;
+			try {
+				defaultSupportClazz = el.createExecutableExtension("actionClass");
+				if (defaultSupportClazz instanceof IFirstStartupAction) {
+					IFirstStartupAction action = (IFirstStartupAction) defaultSupportClazz;
+					String actionID = el.getAttribute("actionId");
+					firstStartupActions.add(actionID);
+					actionMap.put(actionID, action);
+					String overridenActionId = el.getAttribute("overrideActionId");
+					if (overridenActionId != null){
+						overridenAction.add(overridenActionId);
+					}
+				}
+			} catch (CoreException e) {
+				JaspersoftStudioPlugin
+						.getInstance()
+						.getLog()
+						.log(
+								new Status(IStatus.ERROR, JaspersoftStudioPlugin.PLUGIN_ID,
+										"An error occurred while trying to create the new class.", e));
+			}
+		}
+		//Remove the overriden actions
+		for(String actiondId : firstStartupActions){
+			if (overridenAction.contains(actiondId)) actionMap.remove(actiondId);
+		}
+		return actionMap.values();
 	}
 
 	public List<PaletteGroup> getPaletteGroups() {

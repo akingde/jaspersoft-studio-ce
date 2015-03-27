@@ -557,6 +557,8 @@ public class Messages extends NLS {
 	public static String EmptyDataAdapterFactory_description;
 	public static String EmptyDataAdapterFactory_label;
 	public static String EmptyWizardDataEditorComposite_TitleMsg;
+	public static String EnableUsageStatisticsQuestion_actionMessage;
+	public static String EnableUsageStatisticsQuestion_actionTitle;
 	public static String EncloseIntoFrameAction_actionTitle;
 	public static String EqualsHSpaceAction_actionDescription;
 	public static String EqualsHSpaceAction_actionName;
@@ -1740,6 +1742,8 @@ public class Messages extends NLS {
 	public static String SPLegendAlignementEnum_top;
 	public static String StretchToContentAction_name;
 	public static String StretchToContentAction_tooltip;
+	public static String StudioPreferencePage_checkForUpdates;
+	public static String StudioPreferencePage_collectUsageStatistics;
 	public static String StudioPreferencePage_message1;
 	public static String StudioPreferencePage_message2;
 	public static String StudioPreferencePage_showCompDialog;
@@ -1970,6 +1974,8 @@ public class Messages extends NLS {
 	public static String VersionDialog_label2;
 	public static String VersionDialog_title;
 	public static String VersionDialog_warning;
+	public static String VersionUpdateDialog_0;
+	public static String VersionUpdateDialog_1;
 	public static String VerticalRowLayout_name;
 	public static String VerticalRowLayout_tooltip;
 	public static String ViewExecutionInfoAction_tooltip;
@@ -2014,6 +2020,19 @@ public class Messages extends NLS {
 
 	public static String QueryExecutorDataAdapterFactory_description;
 	public static String QueryExecutorDataAdapterFactory_label;
+
+	public static String UsageManager_checkVersionJobName;
+	public static String UsageManager_errorGetTime;
+	public static String UsageManager_errorPathFile;
+	public static String UsageManager_errorReadInfoProperties;
+	public static String UsageManager_errorReadStatProperties;
+	public static String UsageManager_errorSepratorReserved;
+	public static String UsageManager_errorStatUpload;
+	public static String UsageManager_errorUpdateCheck;
+	public static String UsageManager_errorWriteInfoProperties;
+	public static String UsageManager_errorWriteStatProperties;
+	public static String UsageManager_uploadJobName;
+	public static String UsageManager_writeJobName;
 
 	private Messages() {
 	}

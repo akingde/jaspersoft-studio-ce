@@ -31,6 +31,10 @@ public class StudioPreferencePage extends FieldEditorOverlayPage {
 	public static final String JSS_COMPATIBILITY_VERSION = "com.jaspersoft.studio.compatibility.version"; //$NON-NLS-1$
 	public static final String REFERENCE_PREFIX = "net.sf.jasperreports.doc/docs/config.reference.html?cp=0_2#"; //$NON-NLS-1$
 	public static final String JSS_TIMESTAMP_ONSAVE = "com.jaspersoft.studio.timestamp.onsave"; //$NON-NLS-1$
+	
+	public static final String JSS_SEND_USAGE_STATISTICS = "com.jaspersoft.studio.send_usage"; //$NON-NLS-1$
+	
+	public static final String CHECK_FOR_UPDATE = "show_update_dialog"; //$NON-NLS-1$
 
 	public StudioPreferencePage() {
 		super(GRID);
@@ -65,9 +69,10 @@ public class StudioPreferencePage extends FieldEditorOverlayPage {
 		Label separator = new Label(getFieldEditorParent(), SWT.SEPARATOR | SWT.HORIZONTAL);
 		separator.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,false,2,1));
 		
-		addField(new BooleanFieldEditor(JSS_TIMESTAMP_ONSAVE, Messages.StudioPreferencePage_TimestampOnSave,
-				getFieldEditorParent()));
-
+		addField(new BooleanFieldEditor(JSS_TIMESTAMP_ONSAVE, Messages.StudioPreferencePage_TimestampOnSave,	getFieldEditorParent()));
+		
+		addField(new BooleanFieldEditor(JSS_SEND_USAGE_STATISTICS, Messages.StudioPreferencePage_collectUsageStatistics,	getFieldEditorParent()));
+		addField(new BooleanFieldEditor(CHECK_FOR_UPDATE, Messages.StudioPreferencePage_checkForUpdates,	getFieldEditorParent()));
 	}
 
 	/*
@@ -82,6 +87,8 @@ public class StudioPreferencePage extends FieldEditorOverlayPage {
 		store.setDefault(JSS_COMPATIBILITY_SHOW_DIALOG, "false"); //$NON-NLS-1$
 		store.setDefault(JSS_COMPATIBILITY_VERSION, "last"); //$NON-NLS-1$
 		store.setDefault(JSS_TIMESTAMP_ONSAVE, "true"); //$NON-NLS-1$
+		store.setDefault(CHECK_FOR_UPDATE, "true"); //$NON-NLS-1$
+		store.setDefault(JSS_SEND_USAGE_STATISTICS, "false"); //$NON-NLS-1$
 	}
 
 	@Override

@@ -10,7 +10,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
-package com.jaspersoft.studio.rcp.heartbeat;
+package com.jaspersoft.studio.statistics.heartbeat;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -35,7 +35,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 
-import com.jaspersoft.studio.rcp.messages.Messages;
+import com.jaspersoft.studio.messages.Messages;
 
 public class VersionUpdateDialog extends Dialog {
 	private boolean isNotShowAgain = false;

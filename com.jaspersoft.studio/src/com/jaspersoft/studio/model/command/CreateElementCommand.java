@@ -32,6 +32,7 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.ui.views.properties.IPropertySource;
 
 import com.jaspersoft.studio.JSSCompoundCommand;
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.gef.parts.band.BandResizeTracker;
 import com.jaspersoft.studio.editor.layout.ILayout;
 import com.jaspersoft.studio.editor.layout.LayoutCommand;
@@ -46,6 +47,7 @@ import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.model.frame.MFrame;
 import com.jaspersoft.studio.preferences.DesignerPreferencePage;
 import com.jaspersoft.studio.property.SetValueCommand;
+import com.jaspersoft.studio.statistics.UsageStatisticsIDs;
 import com.jaspersoft.studio.utils.SelectionHelper;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -360,6 +362,10 @@ public class CreateElementCommand extends Command {
 			if (firstTime) {
 				SelectionHelper.setSelection(jrElement, false);
 				firstTime = false;
+			}
+			//log the statistics of the creation of an element
+			if (jrElement != null) {
+				JaspersoftStudioPlugin.getInstance().getUsageManager().audit(jrElement.getClass().getName(), UsageStatisticsIDs.CATEGORY_ELEMENT);
 			}
 		}
 	}

@@ -36,6 +36,7 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.plugin.ExtensionManager;
 import com.jaspersoft.studio.preferences.GlobalPreferencePage;
 import com.jaspersoft.studio.property.PostSetValueManager;
+import com.jaspersoft.studio.statistics.UsageManager;
 import com.jaspersoft.studio.utils.BrandingInfo;
 import com.jaspersoft.studio.utils.jasper.DriversManager;
 import com.jaspersoft.studio.utils.jasper.ExtensionLoader;
@@ -51,24 +52,37 @@ import com.jaspersoft.studio.wizards.category.ReportTemplatesWizardPage;
  */
 public class JaspersoftStudioPlugin extends AbstractJRUIPlugin {
 
+	public static final String ICONS_RESOURCES_REFRESH_16_PNG = "icons/resources/refresh-16.png"; //$NON-NLS-1$
+	
 	public static final String PLUGIN_ID = "com.jaspersoft.studio"; //$NON-NLS-1$
+	
 	public static final String COMPONENTS_ID = "com.jaspersoft.studio.components"; //$NON-NLS-1$
 
 	// The shared instance.
-	/** The plugin. */
-	private static JaspersoftStudioPlugin plugin;
+	
+	private static ExtensionManager extensionManager;
 
+	private static ComponentConverterManager converterManager;
+	
+	/** 
+	 * The current instance of the plugin. 
+	 */
+	private static JaspersoftStudioPlugin plugin;
+	
+	/**
+	 * The update manager used to handle the usage statistics for the current instance
+	 */
+	private UsageManager manager = new UsageManager();
+	
 	/**
 	 * Gets the single instance of JaspersoftStudioPlugin.
 	 * 
 	 * @return the plugin instance singleton.
 	 */
 	public static JaspersoftStudioPlugin getInstance() {
-		return plugin; // plugin cannot be null, Eclipse takes care to instance it
-		// at startup.
+		 //Plugin cannot be null, Eclipse takes care to instance it at startup.
+		return plugin;
 	}
-
-	public static final String ICONS_RESOURCES_REFRESH_16_PNG = "icons/resources/refresh-16.png"; //$NON-NLS-1$
 
 	@Override
 	public void start(BundleContext context) throws Exception {
@@ -96,6 +110,15 @@ public class JaspersoftStudioPlugin extends AbstractJRUIPlugin {
 	public JaspersoftStudioPlugin() {
 		plugin = this;
 	}
+	
+	/**
+	 * Return the usage manager defined in the current instance
+	 * 
+	 * @return a not null usage manager
+	 */
+	public UsageManager getUsageManager(){
+		return manager;
+	}
 
 	/**
 	 * This method is called when the plug-in is stopped.
@@ -107,6 +130,9 @@ public class JaspersoftStudioPlugin extends AbstractJRUIPlugin {
 	 */
 	@Override
 	public void stop(BundleContext context) throws Exception {
+		//Must stop the manager of the statistics before to set the plugin instance to null
+		//since the usage manager uses the plugin instance to write on the logger
+		manager.stop();
 		plugin = null;
 		super.stop(context);
 	}
@@ -156,9 +182,10 @@ public class JaspersoftStudioPlugin extends AbstractJRUIPlugin {
 			};
 			j.schedule();
 		}
+		//Start the usage statistics plugin, among the other operations it will
+		//check for new versions
+		manager.start();
 	}
-
-	private static ExtensionManager extensionManager;
 
 	public static ExtensionManager getExtensionManager() {
 		if (extensionManager == null) {
@@ -167,8 +194,6 @@ public class JaspersoftStudioPlugin extends AbstractJRUIPlugin {
 		}
 		return extensionManager;
 	}
-
-	private static ComponentConverterManager converterManager;
 
 	public static ComponentConverterManager getComponentConverterManager() {
 		if (converterManager == null) {
@@ -304,5 +329,4 @@ public class JaspersoftStudioPlugin extends AbstractJRUIPlugin {
 		System.setOut(pstream);
 		System.setErr(pstream);
 	}
-
 }
