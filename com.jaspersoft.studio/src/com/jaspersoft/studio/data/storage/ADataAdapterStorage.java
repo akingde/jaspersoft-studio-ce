@@ -72,6 +72,8 @@ public abstract class ADataAdapterStorage {
 	}
 
 	public boolean removeDataAdapter(DataAdapterDescriptor da) {
+		if (da == null)
+			return false;
 		if (daDescriptors.containsKey(da.getName())) {
 			daDescriptors.remove(da.getName());
 			propChangeSupport.firePropertyChange(PROP_DATAADAPTERS, da, null);
