@@ -48,7 +48,7 @@ public class HttpUtils {
 			Credentials c = getCredentials(d);
 			if (c != null)
 				exec.auth(new HttpHost(d.getHost(), d.getPort()), c);
-			exec.authPreemptiveProxy(new HttpHost(d.getHost(), d.getPort()));
+			exec.authPreemptiveProxy(new HttpHost(d.getHost(), d.getPort(), d.getType().toLowerCase()));
 			break;
 		}
 		executors.put(exec, uri);
@@ -64,7 +64,8 @@ public class HttpUtils {
 				cp.setCredentials(
 						new AuthScope(new HttpHost(d.getHost(), d.getPort())),
 						c);
-			clientConfig.property(ClientProperties.PROXY_URI, d.getHost());
+			clientConfig.property(ClientProperties.PROXY_URI, d.getType()
+					.toLowerCase() + "://" + d.getHost() + ":" + d.getPort());
 			break;
 		}
 		clientConfigs.put(clientConfig, uri);
