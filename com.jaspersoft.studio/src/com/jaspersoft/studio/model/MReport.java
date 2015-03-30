@@ -663,7 +663,10 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 			if (evt.getOldValue() == null && evt.getNewValue() != null) {
 				int newIndex = -1;
 				if (evt instanceof CollectionElementAddedEvent) {
-					newIndex = ((CollectionElementAddedEvent) evt).getAddedIndex() + 5;
+					//Essentially this is the addition o a dataset. Must add 6 to have 
+					//the correct node position since the add index is the size of the list
+					//without the last dataset  added
+					newIndex = ((CollectionElementAddedEvent) evt).getAddedIndex() + 6;
 				}
 				if (evt.getNewValue() instanceof JRDesignDataset) {
 
