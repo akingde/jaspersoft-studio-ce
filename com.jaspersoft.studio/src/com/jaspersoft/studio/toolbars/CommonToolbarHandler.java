@@ -145,7 +145,11 @@ public abstract class CommonToolbarHandler extends ContributionItem {
 	
 	
 	protected List<Object> getSelectionForType(Class<?> type){
-		return ((CachedSelectionProvider)workbenchPart).getSelectionCache().getSelectionModelForType(type);
+		if (workbenchPart instanceof CachedSelectionProvider){
+			return ((CachedSelectionProvider)workbenchPart).getSelectionCache().getSelectionModelForType(type);
+		} else {
+			return new ArrayList<Object>();
+		}
 	}
 	
 	public ISelection getLastRawSelection(){
