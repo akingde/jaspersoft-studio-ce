@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version last-->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Leaf Red" language="java" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="a86e06a3-48b5-4fa8-8a32-a13d371d8bc4">
+<!-- Created with Jaspersoft Studio version 6.1.0.qualifier using JasperReports Library version 6.0.4  -->
+<!-- 2015-03-30T15:36:29 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Leaf Red" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="a86e06a3-48b5-4fa8-8a32-a13d371d8bc4">
 	<property name="template.engine" value="tabular_template"/>
-	<style name="Title" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
+	<style name="Title" fontName="Arial" fontSize="26" isBold="true"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
 	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
 	<style name="Detail" fontName="Arial" fontSize="12"/>
@@ -50,17 +51,16 @@
 	<title>
 		<band height="70" splitType="Stretch">
 			<image>
-				<reportElement uuid="22cd99c0-4c66-4f46-91f6-8c6bf79265b3" x="275" y="0" width="300" height="64"/>
+				<reportElement x="275" y="0" width="300" height="64" uuid="22cd99c0-4c66-4f46-91f6-8c6bf79265b3"/>
 				<imageExpression><![CDATA["leaf_banner_red.png"]]></imageExpression>
 			</image>
 			<staticText>
-				<reportElement uuid="c650873e-f5ba-448b-aadc-56458cf851aa" style="Title" x="0" y="13" width="263" height="33"/>
+				<reportElement style="Title" x="0" y="13" width="263" height="33" uuid="c650873e-f5ba-448b-aadc-56458cf851aa"/>
 				<textElement verticalAlignment="Middle"/>
 				<text><![CDATA[Leaf Red Title]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="f64cc5c9-a3a6-478b-a526-2f2227cf7122" style="SubTitle" x="117" y="46" width="157" height="22"/>
-				<textElement/>
+				<reportElement style="SubTitle" x="117" y="46" width="157" height="22" uuid="f64cc5c9-a3a6-478b-a526-2f2227cf7122"/>
 				<text><![CDATA[Leaf Red SubTitle]]></text>
 			</staticText>
 		</band>
@@ -68,21 +68,21 @@
 	<pageFooter>
 		<band height="20" splitType="Stretch">
 			<textField>
-				<reportElement uuid="8ae1e619-5258-4650-bbaa-d6d09b24aa3b" style="Column header" x="433" y="0" width="80" height="20"/>
+				<reportElement style="Column header" x="433" y="0" width="80" height="20" uuid="8ae1e619-5258-4650-bbaa-d6d09b24aa3b"/>
 				<textElement textAlignment="Right">
 					<font size="10" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
 			</textField>
 			<textField evaluationTime="Report">
-				<reportElement uuid="2048e4ca-cc4c-4707-aa9e-061f836f08e6" style="Column header" x="513" y="0" width="40" height="20"/>
+				<reportElement style="Column header" x="513" y="0" width="40" height="20" uuid="2048e4ca-cc4c-4707-aa9e-061f836f08e6"/>
 				<textElement>
 					<font size="10" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
 			<textField pattern="EEEEE dd MMMMM yyyy">
-				<reportElement uuid="d74f0593-032f-405a-87e1-20e3d818ef4e" style="Column header" x="0" y="0" width="197" height="20"/>
+				<reportElement style="Column header" x="0" y="0" width="197" height="20" uuid="d74f0593-032f-405a-87e1-20e3d818ef4e"/>
 				<textElement>
 					<font size="10" isBold="false"/>
 				</textElement>
@@ -94,7 +94,7 @@
 		<band height="200" splitType="Stretch">
 			<property name="local_mesure_unitheight" value="pixel"/>
 			<componentElement>
-				<reportElement uuid="63366a0e-061b-4712-af09-b8b90b9baf76" x="0" y="0" width="555" height="200"/>
+				<reportElement x="0" y="0" width="555" height="200" uuid="63366a0e-061b-4712-af09-b8b90b9baf76"/>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
 					<datasetRun subDataset="tableDataset" uuid="93380577-c904-4e80-9105-b441188123bb">
 						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
@@ -102,7 +102,7 @@
 					<jr:column width="90" uuid="53e5b0a2-d912-43df-aae9-9343cd965ede">
 						<jr:tableHeader style="Table_TH" height="30">
 							<textField>
-								<reportElement uuid="ec8cf861-59fc-449a-ad55-098bd68397c7" style="SubTitle" x="0" y="0" width="90" height="30" forecolor="#CC0000"/>
+								<reportElement style="SubTitle" x="0" y="0" width="90" height="30" forecolor="#CC0000" uuid="ec8cf861-59fc-449a-ad55-098bd68397c7"/>
 								<textElement>
 									<font isBold="true"/>
 								</textElement>
@@ -112,7 +112,7 @@
 						<jr:tableFooter style="Table_TH" height="30"/>
 						<jr:columnHeader style="Table_CH" height="30">
 							<staticText>
-								<reportElement uuid="9e39e25e-43cd-41c6-8e33-e114f30d8cea" key="" style="SubTitle" x="0" y="0" width="90" height="30" forecolor="#727272"/>
+								<reportElement key="" style="SubTitle" x="0" y="0" width="90" height="30" forecolor="#727272" uuid="9e39e25e-43cd-41c6-8e33-e114f30d8cea"/>
 								<box leftPadding="2"/>
 								<textElement>
 									<font fontName="Arial" size="16" isBold="true"/>
@@ -123,7 +123,7 @@
 						<jr:columnFooter style="Table_CH" height="30"/>
 						<jr:detailCell style="Table_TD" height="30">
 							<textField>
-								<reportElement uuid="06c05819-1f4b-4857-add9-21b867cd92a2" style="Detail" x="0" y="0" width="90" height="30"/>
+								<reportElement style="Detail" x="0" y="0" width="90" height="30" uuid="06c05819-1f4b-4857-add9-21b867cd92a2"/>
 								<box leftPadding="2"/>
 								<textElement>
 									<font fontName="Arial" size="12"/>

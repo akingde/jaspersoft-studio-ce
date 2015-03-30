@@ -824,6 +824,9 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 				IGraphicalPropertiesHandler graphicalElement = (IGraphicalPropertiesHandler) child;
 				if (getValue().isDefault() || graphicalElement.getUsedStyles().contains(getValue().getName())) {
 					graphicalElement.setChangedProperty(true);
+					//Since a style change can change the presence of an error decorator (the fault property can be inherited)
+					//we need to refresh also the elements depending on this style
+					((ANode)child).revalidateChildren();
 				}
 			}
 			setStyleRefresh(new ArrayList<INode>(child.getChildren()));
@@ -889,6 +892,18 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 			}
 		};
 		new Thread(notifier).start();
+	}
+	
+	protected void revalidateDependendNodes(List<INode> childerns){
+		for (INode child : childerns) {
+			if (child instanceof IGraphicalPropertiesHandler) {
+				IGraphicalPropertiesHandler graphicalElement = (IGraphicalPropertiesHandler) child;
+				if (getValue().isDefault() || graphicalElement.getUsedStyles().contains(getValue().getName())) {
+					graphicalElement.setChangedProperty(true);
+				}
+			}
+			setStyleRefresh(new ArrayList<INode>(child.getChildren()));
+		}
 	}
 
 	/**

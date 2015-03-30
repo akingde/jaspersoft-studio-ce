@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version last-->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Flower" language="java" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="5021b7ab-4d36-456c-9e0a-66c9724f9ebb">
+<!-- Created with Jaspersoft Studio version 6.1.0.qualifier using JasperReports Library version 6.0.4  -->
+<!-- 2015-03-30T15:37:37 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Flower" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="5021b7ab-4d36-456c-9e0a-66c9724f9ebb">
 	<property name="template.engine" value="tabular_template"/>
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="687"/>
-	<style name="Title" forecolor="#FFFFFF" fontName="Times New Roman" fontSize="50" isBold="false" pdfFontName="Times-Bold"/>
-	<style name="SubTitle" forecolor="#666666" fontName="Times New Roman" fontSize="18" isBold="false" pdfFontName="Times-Roman"/>
-	<style name="Column header" forecolor="#666666" fontName="Times New Roman" fontSize="14" isBold="true" pdfFontName="Times-Roman"/>
+	<style name="Title" forecolor="#FFFFFF" fontName="Times New Roman" fontSize="50" isBold="false"/>
+	<style name="SubTitle" forecolor="#666666" fontName="Times New Roman" fontSize="18" isBold="false"/>
+	<style name="Column header" forecolor="#666666" fontName="Times New Roman" fontSize="14" isBold="true"/>
 	<style name="Detail" mode="Transparent" fontName="Times New Roman" pdfFontName="Times-Roman"/>
 	<style name="Row" mode="Transparent" fontName="Times New Roman" pdfFontName="Times-Roman">
 		<conditionalStyle>
@@ -65,7 +66,7 @@
 		<band height="802" splitType="Stretch">
 			<pie3DChart>
 				<chart isShowLegend="false" evaluationTime="Report">
-					<reportElement uuid="32fc6709-fcc0-41fd-b198-e72a01f6c84d" x="-20" y="357" width="247" height="131"/>
+					<reportElement x="-20" y="357" width="247" height="131" uuid="32fc6709-fcc0-41fd-b198-e72a01f6c84d"/>
 					<chartTitle/>
 					<chartSubtitle/>
 					<chartLegend/>
@@ -93,20 +94,20 @@ $V{REPORT_COUNT}]]></keyExpression>
 				</pie3DPlot>
 			</pie3DChart>
 			<image>
-				<reportElement uuid="3cbc6484-fab3-46ec-a0be-f32dbea856e9" x="-20" y="90" width="229" height="250">
+				<reportElement x="-20" y="90" width="229" height="250" uuid="3cbc6484-fab3-46ec-a0be-f32dbea856e9">
 					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
 				</reportElement>
 				<imageExpression><![CDATA["flower1.png"]]></imageExpression>
 			</image>
 			<image>
-				<reportElement uuid="53d412b5-bafe-44ad-b557-e843288f9137" x="-20" y="0" width="229" height="250">
+				<reportElement x="-20" y="0" width="229" height="250" uuid="53d412b5-bafe-44ad-b557-e843288f9137">
 					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} > 1]]></printWhenExpression>
 				</reportElement>
 				<imageExpression><![CDATA["flower1.png"]]></imageExpression>
 			</image>
 			<pie3DChart>
 				<chart isShowLegend="false" evaluationTime="Report">
-					<reportElement uuid="194b9da5-a3c1-40bd-ac30-6e323711d352" x="-20" y="488" width="247" height="131"/>
+					<reportElement x="-20" y="488" width="247" height="131" uuid="194b9da5-a3c1-40bd-ac30-6e323711d352"/>
 					<chartTitle/>
 					<chartSubtitle/>
 					<chartLegend/>
@@ -135,7 +136,7 @@ $V{REPORT_COUNT}]]></keyExpression>
 			</pie3DChart>
 			<pie3DChart>
 				<chart isShowLegend="false" evaluationTime="Report">
-					<reportElement uuid="f479a1a4-b13d-4f1a-a6a3-cd78cc8a97ec" x="-20" y="619" width="247" height="131"/>
+					<reportElement x="-20" y="619" width="247" height="131" uuid="f479a1a4-b13d-4f1a-a6a3-cd78cc8a97ec"/>
 					<chartTitle/>
 					<chartSubtitle/>
 					<chartLegend/>
@@ -163,7 +164,7 @@ $V{REPORT_COUNT}]]></keyExpression>
 				</pie3DPlot>
 			</pie3DChart>
 			<staticText>
-				<reportElement uuid="1ee2e25c-6d09-4d01-b7ec-a4ed78ef7a73" mode="Opaque" x="318" y="394" width="239" height="181" backcolor="#FFFFCC">
+				<reportElement mode="Opaque" x="318" y="394" width="239" height="181" backcolor="#FFFFCC" uuid="1ee2e25c-6d09-4d01-b7ec-a4ed78ef7a73">
 					<printWhenExpression><![CDATA[Boolean.FALSE]]></printWhenExpression>
 				</reportElement>
 				<box topPadding="4" leftPadding="4" bottomPadding="4" rightPadding="4">
@@ -184,7 +185,7 @@ This rectangle element is not printed (see the print when expression of this
 element)]]></text>
 			</staticText>
 			<line>
-				<reportElement uuid="790bd3d8-8960-4f16-baab-76c726614054" x="201" y="431" width="117" height="1">
+				<reportElement x="201" y="431" width="117" height="1" uuid="790bd3d8-8960-4f16-baab-76c726614054">
 					<printWhenExpression><![CDATA[Boolean.FALSE]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>
@@ -192,7 +193,7 @@ element)]]></text>
 				</graphicElement>
 			</line>
 			<staticText>
-				<reportElement uuid="043fc140-e25b-44f6-9aa8-97b655ac9425" mode="Opaque" x="275" y="-10" width="240" height="181" backcolor="#FFFFCC">
+				<reportElement mode="Opaque" x="275" y="-10" width="240" height="181" backcolor="#FFFFCC" uuid="043fc140-e25b-44f6-9aa8-97b655ac9425">
 					<printWhenExpression><![CDATA[Boolean.FALSE]]></printWhenExpression>
 				</reportElement>
 				<box topPadding="4" leftPadding="4" bottomPadding="4" rightPadding="4">
@@ -208,7 +209,7 @@ element)]]></text>
 				<text><![CDATA[Flowers: there are two flowers, the first one is printed only starting from the second page, the other one only in the first page.]]></text>
 			</staticText>
 			<line>
-				<reportElement uuid="58b1914a-e2ab-49b6-9bd2-320924e6a9e5" x="72" y="37" width="204" height="1">
+				<reportElement x="72" y="37" width="204" height="1" uuid="58b1914a-e2ab-49b6-9bd2-320924e6a9e5">
 					<printWhenExpression><![CDATA[Boolean.FALSE]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>
@@ -220,16 +221,16 @@ element)]]></text>
 	<title>
 		<band height="94" splitType="Stretch">
 			<staticText>
-				<reportElement uuid="649287ac-fc0c-4d2a-b452-b8614b1d7b48" style="SubTitle" x="336" y="65" width="217" height="29"/>
+				<reportElement style="SubTitle" x="336" y="65" width="217" height="29" uuid="649287ac-fc0c-4d2a-b452-b8614b1d7b48"/>
 				<textElement textAlignment="Right">
 					<font size="22" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Flower SubTitle]]></text>
 			</staticText>
 			<frame>
-				<reportElement uuid="184ed0d3-9801-4c46-ba21-3cc37a3a18f0" mode="Opaque" x="-20" y="0" width="597" height="65" forecolor="#006699" backcolor="#006699"/>
+				<reportElement mode="Opaque" x="-20" y="0" width="597" height="65" forecolor="#006699" backcolor="#006699" uuid="184ed0d3-9801-4c46-ba21-3cc37a3a18f0"/>
 				<staticText>
-					<reportElement uuid="745f25f7-7025-4153-981e-c7b55b127c2d" style="Title" x="231" y="0" width="346" height="65"/>
+					<reportElement style="Title" x="231" y="0" width="346" height="65" uuid="745f25f7-7025-4153-981e-c7b55b127c2d"/>
 					<textElement textAlignment="Right">
 						<font size="54" isBold="false"/>
 					</textElement>
@@ -241,23 +242,23 @@ element)]]></text>
 	<pageFooter>
 		<band height="13" splitType="Stretch">
 			<frame>
-				<reportElement uuid="38532e1d-6af6-4e2c-9e72-b46a93e345aa" mode="Opaque" x="2" y="0" width="555" height="13" forecolor="#D0B48E" backcolor="#006699"/>
+				<reportElement mode="Opaque" x="2" y="0" width="555" height="13" forecolor="#D0B48E" backcolor="#006699" uuid="38532e1d-6af6-4e2c-9e72-b46a93e345aa"/>
 				<textField evaluationTime="Report">
-					<reportElement uuid="0c354c8c-8e51-4e78-961f-18b288231268" style="Column header" x="510" y="0" width="40" height="13" forecolor="#FFFFFF"/>
+					<reportElement style="Column header" x="510" y="0" width="40" height="13" forecolor="#FFFFFF" uuid="0c354c8c-8e51-4e78-961f-18b288231268"/>
 					<textElement verticalAlignment="Middle">
 						<font size="10" isBold="false"/>
 					</textElement>
 					<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement uuid="9fb2c5f1-8ad5-4a4b-be6c-eea548125c43" style="Column header" x="430" y="0" width="80" height="13" forecolor="#FFFFFF"/>
+					<reportElement style="Column header" x="430" y="0" width="80" height="13" forecolor="#FFFFFF" uuid="9fb2c5f1-8ad5-4a4b-be6c-eea548125c43"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
 						<font size="10" isBold="false"/>
 					</textElement>
 					<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
 				</textField>
 				<textField pattern="EEEEE dd MMMMM yyyy">
-					<reportElement uuid="a011f8b7-ada3-40f2-b40a-324c1159d074" style="Column header" x="2" y="0" width="197" height="13" forecolor="#FFFFFF"/>
+					<reportElement style="Column header" x="2" y="0" width="197" height="13" forecolor="#FFFFFF" uuid="a011f8b7-ada3-40f2-b40a-324c1159d074"/>
 					<textElement verticalAlignment="Middle">
 						<font size="10" isBold="false"/>
 					</textElement>
@@ -270,7 +271,7 @@ element)]]></text>
 		<band height="200" splitType="Stretch">
 			<property name="local_mesure_unitheight" value="pixel"/>
 			<componentElement>
-				<reportElement uuid="63366a0e-061b-4712-af09-b8b90b9baf76" x="227" y="0" width="328" height="200"/>
+				<reportElement x="227" y="0" width="328" height="200" uuid="63366a0e-061b-4712-af09-b8b90b9baf76"/>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
 					<datasetRun subDataset="tableDataset" uuid="93380577-c904-4e80-9105-b441188123bb">
 						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
@@ -280,7 +281,7 @@ element)]]></text>
 						<jr:tableFooter style="Table_TH" height="30"/>
 						<jr:columnHeader style="Table_CH" height="30">
 							<staticText>
-								<reportElement uuid="9e39e25e-43cd-41c6-8e33-e114f30d8cea" key="" style="SubTitle" x="0" y="0" width="90" height="30" forecolor="#FFFFFF"/>
+								<reportElement key="" style="SubTitle" x="0" y="0" width="90" height="30" forecolor="#FFFFFF" uuid="9e39e25e-43cd-41c6-8e33-e114f30d8cea"/>
 								<box leftPadding="2"/>
 								<textElement>
 									<font fontName="Arial" size="18" isBold="false"/>
@@ -291,7 +292,7 @@ element)]]></text>
 						<jr:columnFooter style="Table_CH" height="30"/>
 						<jr:detailCell style="Table_TD" height="30">
 							<textField>
-								<reportElement uuid="06c05819-1f4b-4857-add9-21b867cd92a2" style="Detail" x="0" y="0" width="90" height="30"/>
+								<reportElement style="Detail" x="0" y="0" width="90" height="30" uuid="06c05819-1f4b-4857-add9-21b867cd92a2"/>
 								<box leftPadding="2"/>
 								<textElement>
 									<font fontName="Arial" size="14"/>

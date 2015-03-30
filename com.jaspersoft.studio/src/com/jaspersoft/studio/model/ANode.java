@@ -647,7 +647,7 @@ public abstract class ANode implements INode, Serializable, IAdaptable, Cloneabl
 	 * This because in some case the validation of an element depends from the size
 	 * of the parent. Can be overridden to provide a different behavior
 	 */
-	protected void revalidateChildren(){
+	public void revalidateChildren(){
 		redoValidation = true;
 		for(INode node : getChildren()){
 			((ANode)node).revalidateChildren();
