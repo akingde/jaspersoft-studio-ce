@@ -25,6 +25,7 @@ import net.sf.jasperreports.engine.component.ComponentKey;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.type.EvaluationTimeEnum;
 
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
@@ -35,6 +36,7 @@ import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.PixelPropertyDescriptor;
+import com.jaspersoft.studio.utils.EnumHelper;
 
 public class MQRCode extends MBarcode {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
@@ -119,16 +121,16 @@ public class MQRCode extends MBarcode {
 	@Override
 	public Object getPropertyValue(Object id) {
 		JRDesignComponentElement jrElement = (JRDesignComponentElement) getValue();
-		QRCodeComponent jrList = (QRCodeComponent) jrElement.getComponent();
+		QRCodeComponent qrCodeComponent = (QRCodeComponent) jrElement.getComponent();
 
 		if (id.equals(QRCodeComponent.PROPERTY_ERROR_CORRECTION_LEVEL))
-			return errLevelD.getIntValue(jrList.getErrorCorrectionLevel());
+			return errLevelD.getIntValue(qrCodeComponent.getErrorCorrectionLevel());
 		if (id.equals(QRCodeComponent.PROPERTY_MARGIN))
-			return jrList.getMargin();
+			return qrCodeComponent.getMargin();
 		if (id.equals(StandardBarbecueComponent.PROPERTY_CODE_EXPRESSION))
-			return ExprUtil.getExpression(jrList.getCodeExpression());
+			return ExprUtil.getExpression(qrCodeComponent.getCodeExpression());
 		if (id.equals(StandardBarbecueComponent.PROPERTY_EVALUATION_TIME))
-			return evaluationTimeD.getIntValue(jrList.getEvaluationTimeValue());
+			return qrCodeComponent.getEvaluationTimeValue();
 		return super.getPropertyValue(id);
 	}
 
@@ -145,7 +147,8 @@ public class MQRCode extends MBarcode {
 			jrList.setCodeExpression(ExprUtil.setValues(
 					jrList.getCodeExpression(), value, null));
 		else if (id.equals(StandardBarbecueComponent.PROPERTY_EVALUATION_TIME))
-			jrList.setEvaluationTimeValue(evaluationTimeD.getEnumValue(value));
+			jrList.setEvaluationTimeValue(
+					EnumHelper.getEnumByTranslatedName(EvaluationTimeEnum.values(), value));
 		super.setPropertyValue(id, value);
 	}
 

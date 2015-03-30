@@ -16,6 +16,7 @@ import net.sf.jasperreports.engine.type.JREnum;
 import net.sf.jasperreports.engine.type.NamedEnum;
 
 import org.eclipse.core.runtime.Assert;
+import org.eclipse.osgi.util.NLS;
 
 import com.jaspersoft.studio.messages.MessagesByKeys;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
@@ -131,17 +132,60 @@ public class EnumHelper {
 	 * 
 	 * @param enums
 	 *          a list of enumerations to look into
-	 * @param translatedName
-	 *          the translated name to match
+	 * @param objValue
+	 *          the object value to be decoded
 	 * @return the correct enum, <code>null</code> otherwise
 	 */
-	public static JREnum getEnumByTranslatedName(JREnum[] enums, String translatedName) {
-		Assert.isNotNull(translatedName);
-		for (JREnum e : enums) {
-			if (translatedName.equals(MessagesByKeys.getString(e.getName()))) {
-				return e;
+	public static <T extends JREnum> T getEnumByTranslatedName(T[] enums, Object objValue) {
+		Assert.isNotNull(objValue);
+		if(objValue instanceof JREnum) {
+			@SuppressWarnings("unchecked")
+			T foundEnum = (T) objValue;
+			return foundEnum;
+		}
+		else if(objValue instanceof String) {
+			for (T e : enums) {
+				if (objValue.equals(MessagesByKeys.getString(e.getName()))) {
+					return e;
+				}
+			}
+			return null;
+		}
+		else if(objValue instanceof Number) {
+			Integer val = ((Number) objValue).intValue();
+			return enums[val];
+		}
+		else {
+			throw new UnsupportedOperationException(
+					NLS.bind("Cannot convert the object of type {0} to a valid instance of JREnum.",
+							objValue.getClass().getCanonicalName()));
+		}
+	}
+	
+	/**
+	 * Retrieve the position index of the specified enum into an array of readable enum names.
+	 * 
+	 * @param enumNames the array of enun names
+	 * @param jrEnum the enumeration object
+	 * @return the position index
+	 */
+	public static int getEnumIndexByTranslatedName(String[] enumNames, JREnum jrEnum) {
+		String translation = getEnumTranslation(jrEnum);
+		for(int i=0;i<enumNames.length;i++){
+			if(enumNames[i].equals(translation)) {
+				return i;
 			}
 		}
-		return null;
+		return -1;
+	}
+	
+	/**
+	 * Gets the translation of the specified enumeration instance.
+	 * 
+	 * @param jrEnum the enumeration
+	 * @return the human readable translation
+	 */
+	public static String getEnumTranslation(JREnum jrEnum) {
+		return MessagesByKeys.getString(jrEnum.getName());
 	}
 }

@@ -32,6 +32,7 @@ import com.jaspersoft.studio.components.barcode.model.MBarcode;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
+import com.jaspersoft.studio.utils.EnumHelper;
 
 /*
  * The Class MBarcode.
@@ -198,13 +199,12 @@ public class MBarcode4j extends MBarcode {
 	@Override
 	public Object getPropertyValue(Object id) {
 		JRDesignComponentElement jrElement = (JRDesignComponentElement) getValue();
-		BarcodeComponent jrList = (BarcodeComponent) jrElement.getComponent();
+		BarcodeComponent jrBarcodeComponent = (BarcodeComponent) jrElement.getComponent();
 
 		if (id.equals(StandardBarbecueComponent.PROPERTY_EVALUATION_TIME))
-			return evaluationTimeD
-					.getEnumValue(jrList.getEvaluationTimeValue());
+			return jrBarcodeComponent.getEvaluationTimeValue();
 		if (id.equals(StandardBarbecueComponent.PROPERTY_EVALUATION_GROUP))
-			return jrList.getEvaluationGroup();
+			return jrBarcodeComponent.getEvaluationGroup();
 
 		// if (id.equals(BarcodeComponent.PROPERTY_MODULE_WIDTH))
 		// return jrList.getModuleWidth() != null ?
@@ -219,7 +219,7 @@ public class MBarcode4j extends MBarcode {
 		// return TextPosition.getPos4TextPosition(jrList.getTextPosition());
 
 		if (id.equals(StandardBarbecueComponent.PROPERTY_CODE_EXPRESSION))
-			return ExprUtil.getExpression(jrList.getCodeExpression());
+			return ExprUtil.getExpression(jrBarcodeComponent.getCodeExpression());
 		// if (id.equals(BarcodeComponent.PROPERTY_PATTERN_EXPRESSION))
 		// return ExprUtil.getExpression(jrList.getPatternExpression());
 		return super.getPropertyValue(id);
@@ -231,8 +231,8 @@ public class MBarcode4j extends MBarcode {
 		BarcodeComponent jrList = (BarcodeComponent) jrElement.getComponent();
 
 		if (id.equals(StandardBarbecueComponent.PROPERTY_EVALUATION_TIME))
-			jrList.setEvaluationTimeValue((EvaluationTimeEnum) evaluationTimeD
-					.getEnumValue(value));
+			jrList.setEvaluationTimeValue(
+					EnumHelper.getEnumByTranslatedName(EvaluationTimeEnum.values(), value));
 		else if (id.equals(StandardBarbecueComponent.PROPERTY_EVALUATION_GROUP))
 			jrList.setEvaluationGroup((String) value);
 

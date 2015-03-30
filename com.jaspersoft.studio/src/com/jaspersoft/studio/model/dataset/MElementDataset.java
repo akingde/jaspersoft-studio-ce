@@ -38,6 +38,7 @@ import com.jaspersoft.studio.property.descriptor.combo.RComboBoxPropertyDescript
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
+import com.jaspersoft.studio.utils.EnumHelper;
 
 public class MElementDataset extends APropertyNode implements IContainer, IContainerEditPart {
 	private static IIconDescriptor iconDescriptor;
@@ -159,9 +160,9 @@ public class MElementDataset extends APropertyNode implements IContainer, IConta
 		if (jrElement == null)
 			return null;
 		if (id.equals(JRDesignElementDataset.PROPERTY_RESET_TYPE))
-			return resetTypeD.getIntValue(jrElement.getResetTypeValue());
+			return jrElement.getResetTypeValue();
 		if (id.equals(JRDesignElementDataset.PROPERTY_INCREMENT_TYPE))
-			return inctypeD.getIntValue(jrElement.getIncrementTypeValue());
+			return jrElement.getIncrementTypeValue();
 		if (id.equals(JRDesignElementDataset.PROPERTY_INCREMENT_WHEN_EXPRESSION))
 			return ExprUtil.getExpression(jrElement.getIncrementWhenExpression());
 		if (id.equals(JRDesignElementDataset.PROPERTY_RESET_GROUP)) {
@@ -209,9 +210,11 @@ public class MElementDataset extends APropertyNode implements IContainer, IConta
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignElementDataset jrElement = (JRDesignElementDataset) getValue();
 		if (id.equals(JRDesignElementDataset.PROPERTY_INCREMENT_TYPE))
-			jrElement.setIncrementType(inctypeD.getEnumValue(value));
+			jrElement.setIncrementType(
+					EnumHelper.getEnumByTranslatedName(IncrementTypeEnum.values(),value));
 		else if (id.equals(JRDesignElementDataset.PROPERTY_RESET_TYPE))
-			jrElement.setResetType(resetTypeD.getEnumValue(value));
+			jrElement.setResetType(
+					EnumHelper.getEnumByTranslatedName(ResetTypeEnum.values(), value));
 		else if (id.equals(JRDesignElementDataset.PROPERTY_INCREMENT_WHEN_EXPRESSION))
 			jrElement.setIncrementWhenExpression(ExprUtil.setValues(jrElement.getIncrementWhenExpression(), value));
 		else if (id.equals(JRDesignElementDataset.PROPERTY_INCREMENT_GROUP)) {

@@ -34,6 +34,7 @@ import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.classname.NClassTypePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
+import com.jaspersoft.studio.utils.EnumHelper;
 
 /**
  * Model object representing the Custom Visualization component element.
@@ -195,8 +196,7 @@ public class MCustomVisualization extends MGraphicElement implements
 		bItemDataD
 				.setCategory(Messages.MCustomVisualization_CVPropertiesCategory);
 
-		defaultsMap.put(CVDesignComponent.PROPERTY_EVALUATION_TIME,
-				evaluationTimeD.getIntValue(EvaluationTimeEnum.NOW));
+		defaultsMap.put(CVDesignComponent.PROPERTY_EVALUATION_TIME,EvaluationTimeEnum.NOW);
 
 		onErrorTypeD = new NamedEnumPropertyDescriptor<OnErrorTypeEnum>(
 				CVDesignComponent.PROPERTY_ON_ERROR_TYPE,
@@ -222,7 +222,7 @@ public class MCustomVisualization extends MGraphicElement implements
 		JRDesignComponentElement jrElement = (JRDesignComponentElement) getValue();
 		CVDesignComponent cvComp = (CVDesignComponent) jrElement.getComponent();
 		if (CVDesignComponent.PROPERTY_EVALUATION_TIME.equals(id)) {
-			return evaluationTimeD.getIntValue(cvComp.getEvaluationTime());
+			return cvComp.getEvaluationTime();
 		} else if (CVDesignComponent.PROPERTY_EVALUATION_GROUP.equals(id)) {
 			return cvComp.getEvaluationGroup();
 		} else if (CVDesignComponent.PROPERTY_PROCESSING_CLASS.equals(id)) {
@@ -245,7 +245,8 @@ public class MCustomVisualization extends MGraphicElement implements
 		JRDesignComponentElement jrElement = (JRDesignComponentElement) getValue();
 		CVDesignComponent cvComp = (CVDesignComponent) jrElement.getComponent();
 		if (CVDesignComponent.PROPERTY_EVALUATION_TIME.equals(id)) {
-			cvComp.setEvaluationTime(evaluationTimeD.getEnumValue(value));
+			cvComp.setEvaluationTime(
+					EnumHelper.getEnumByTranslatedName(EvaluationTimeEnum.values(), value));
 		} else if (CVDesignComponent.PROPERTY_EVALUATION_GROUP.equals(id)) {
 			cvComp.setEvaluationGroup((String) value);
 		} else if (CVDesignComponent.PROPERTY_PROCESSING_CLASS.equals(id)) {

@@ -99,8 +99,7 @@ public abstract class MBarcode extends MGraphicElement {
 		evaluationGroupNameD.setCategory(Messages.common_properties_category);
 		codeExprD.setCategory(Messages.common_properties_category);
 
-		defaultsMap.put(StandardBarbecueComponent.PROPERTY_EVALUATION_TIME,
-				evaluationTimeD.getIntValue(EvaluationTimeEnum.NOW));
+		defaultsMap.put(StandardBarbecueComponent.PROPERTY_EVALUATION_TIME, EvaluationTimeEnum.NOW);
 	}
 
 	@Override

@@ -53,6 +53,7 @@ import com.jaspersoft.studio.property.descriptors.ImageHAlignPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.ImageVAlignPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.SpinnerPropertyDescriptor;
+import com.jaspersoft.studio.utils.EnumHelper;
 
 /*
  * The Class MImage.
@@ -262,7 +263,7 @@ public class MImage extends MGraphicElementLineBox {
 		defaultsMap.put(JRBaseStyle.PROPERTY_HORIZONTAL_IMAGE_ALIGNMENT, null);
 		defaultsMap.put(JRBaseStyle.PROPERTY_VERTICAL_IMAGE_ALIGNMENT, null);
 		defaultsMap.put(JRBaseImage.PROPERTY_ON_ERROR_TYPE, onErrorTypeD.getIntValue(OnErrorTypeEnum.ERROR));
-		defaultsMap.put(JRDesignImage.PROPERTY_EVALUATION_TIME, evaluationTimeD.getIntValue(EvaluationTimeEnum.NOW));
+		defaultsMap.put(JRDesignImage.PROPERTY_EVALUATION_TIME, EvaluationTimeEnum.NOW);
 		defaultsMap.put(JRDesignImage.PROPERTY_EXPRESSION, "java.lang.String"); //$NON-NLS-1$
 		defaultsMap.put(JRBaseImage.PROPERTY_LAZY, Boolean.FALSE);
 	}
@@ -290,7 +291,7 @@ public class MImage extends MGraphicElementLineBox {
 		if (id.equals(JRBaseImage.PROPERTY_ON_ERROR_TYPE))
 			return onErrorTypeD.getIntValue(jrElement.getOnErrorTypeValue());
 		if (id.equals(JRDesignImage.PROPERTY_EVALUATION_TIME))
-			return evaluationTimeD.getIntValue(jrElement.getEvaluationTimeValue());
+			return jrElement.getEvaluationTimeValue();
 		if (id.equals(JRDesignImage.PROPERTY_EXPRESSION))
 			return ExprUtil.getExpression(jrElement.getExpression());
 
@@ -346,7 +347,7 @@ public class MImage extends MGraphicElementLineBox {
 		if (id.equals(JRBaseImage.PROPERTY_ON_ERROR_TYPE))
 			return onErrorTypeD.getIntValue(jrElement.getOnErrorTypeValue());
 		if (id.equals(JRDesignImage.PROPERTY_EVALUATION_TIME))
-			return evaluationTimeD.getIntValue(jrElement.getEvaluationTimeValue());
+			return jrElement.getEvaluationTimeValue();
 		if (id.equals(JRDesignImage.PROPERTY_EXPRESSION))
 			return ExprUtil.getExpression(jrElement.getExpression());
 
@@ -391,7 +392,8 @@ public class MImage extends MGraphicElementLineBox {
 		else if (id.equals(JRBaseImage.PROPERTY_ON_ERROR_TYPE))
 			jrElement.setOnErrorType(onErrorTypeD.getEnumValue(value));
 		else if (id.equals(JRDesignImage.PROPERTY_EVALUATION_TIME))
-			jrElement.setEvaluationTime(evaluationTimeD.getEnumValue(value));
+			jrElement.setEvaluationTime(
+					EnumHelper.getEnumByTranslatedName(EvaluationTimeEnum.values(), value));
 		else if (id.equals(JRDesignImage.PROPERTY_EVALUATION_GROUP)) {
 			if (value != null && !value.equals("")) { //$NON-NLS-1$
 				JRDesignDataset dataset = (JRDesignDataset) getElementDataset();

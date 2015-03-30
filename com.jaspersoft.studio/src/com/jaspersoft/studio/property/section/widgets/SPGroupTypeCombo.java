@@ -28,7 +28,6 @@ import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.descriptor.combo.RComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.section.AbstractSection;
-import com.jaspersoft.studio.utils.EnumHelper;
 import com.jaspersoft.studio.utils.Misc;
 
 /**
@@ -81,20 +80,15 @@ public abstract class SPGroupTypeCombo extends ASPropertyWidget {
 				if (hasFirstFakeElement && combo.getSelectionIndex() == 0)
 					return;
 				String group = null;
-				Integer et = new Integer(1);
-
-				String str = combo.getItem(combo.getSelectionIndex());
-				if (str.startsWith(GROUPPREFIX)) {
-					group = str.substring(GROUPPREFIX.length());
-					et = EnumHelper.getValue(getGroupEnum(), 1, false);
-				} else {
-					et = EnumHelper.getValue(getByName(str), 1, false);
+				String comboVal = combo.getItem(combo.getSelectionIndex());
+				if (comboVal.startsWith(GROUPPREFIX)) {
+					group = comboVal.substring(GROUPPREFIX.length());
 				}
 				// It is important to set first the group because the group changing dosen't trigger an event
 				// so otherwise setting the type first trigger the event but the group has not been set to the
 				// setData method dosen't find the group and set always the element 0.
 				section.changeProperty(gDescriptor.getId(), Misc.nvl(group));
-				section.changeProperty(pDescriptor.getId(), et);
+				section.changeProperty(pDescriptor.getId(), comboVal);
 			}
 
 			public void widgetDefaultSelected(SelectionEvent e) {
@@ -106,23 +100,22 @@ public abstract class SPGroupTypeCombo extends ASPropertyWidget {
 
 	@Override
 	public void setData(APropertyNode pnode, Object value) {
-		setData((Integer) pnode.getPropertyValue(pDescriptor.getId()),
+		setData((JREnum) pnode.getPropertyValue(pDescriptor.getId()),
 				(String) pnode.getPropertyValue(gDescriptor.getId()), getItems());
 	}
 
-	public void setData(Integer et, String group, String[] items) {
+	public void setData(JREnum jrEnum, String group, String[] items) {
 		hasFirstFakeElement = false;
 		int selection = 0;
-		JREnum sel = EnumHelper.getSetValue(getEnumValues(), et, 1, false);
 		boolean found = false;
-		if (sel != null)
+		if (jrEnum != null)
 			for (int i = 0; i < items.length; i++) {
-				if (items[i].equals(sel.getName())) {
+				if (items[i].equals(jrEnum.getName())) {
 					selection = i;
 					found = true;
 					break;
 				}
-				if (items[i].startsWith(GROUPPREFIX) && sel.equals(getGroupEnum())) {
+				if (items[i].startsWith(GROUPPREFIX) && jrEnum.equals(getGroupEnum())) {
 					if (items[i].substring(GROUPPREFIX.length()).equals(group)) {
 						selection = i;
 						found = true;

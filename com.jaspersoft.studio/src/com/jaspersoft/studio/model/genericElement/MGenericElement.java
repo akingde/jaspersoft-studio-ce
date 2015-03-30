@@ -34,6 +34,7 @@ import com.jaspersoft.studio.property.descriptor.combo.RComboBoxPropertyDescript
 import com.jaspersoft.studio.property.descriptor.genericElement.ParameterPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
+import com.jaspersoft.studio.utils.EnumHelper;
 
 public class MGenericElement extends MGraphicElement {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
@@ -171,8 +172,7 @@ public class MGenericElement extends MGraphicElement {
 		evaluationTimeD.setCategory(Messages.MGenericElement_generic_element_properties_category);
 		evaluationGroupNameD.setCategory(Messages.MGenericElement_generic_element_properties_category);
 
-		defaultsMap.put(JRDesignGenericElement.PROPERTY_EVALUATION_TIME,
-				evaluationTimeD.getIntValue(EvaluationTimeEnum.NOW));
+		defaultsMap.put(JRDesignGenericElement.PROPERTY_EVALUATION_TIME, EvaluationTimeEnum.NOW);
 	}
 
 	public static final String PROPERTY_NAME = "name"; //$NON-NLS-1$
@@ -190,7 +190,7 @@ public class MGenericElement extends MGraphicElement {
 	public Object getPropertyValue(Object id) {
 		JRDesignGenericElement jrElement = (JRDesignGenericElement) getValue();
 		if (id.equals(JRDesignGenericElement.PROPERTY_EVALUATION_TIME))
-			return evaluationTimeD.getIntValue(jrElement.getEvaluationTimeValue());
+			return jrElement.getEvaluationTimeValue();
 		if (id.equals(JRDesignGenericElement.PROPERTY_EVALUATION_GROUP_NAME))
 			return jrElement.getEvaluationGroupName();
 		JRGenericElementType genericType = jrElement.getGenericType();
@@ -210,8 +210,10 @@ public class MGenericElement extends MGraphicElement {
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignGenericElement jrElement = (JRDesignGenericElement) getValue();
 		JRGenericElementType genericType = jrElement.getGenericType();
-		if (id.equals(JRDesignGenericElement.PROPERTY_EVALUATION_TIME))
-			jrElement.setEvaluationTime(evaluationTimeD.getEnumValue(value));
+		if (id.equals(JRDesignGenericElement.PROPERTY_EVALUATION_TIME)) {
+			jrElement.setEvaluationTime(
+					EnumHelper.getEnumByTranslatedName(EvaluationTimeEnum.values(), value));
+		}
 		else if (id.equals(JRDesignGenericElement.PROPERTY_EVALUATION_GROUP_NAME))
 			jrElement.setEvaluationGroupName((String) value);
 		else if (id.equals(JRDesignGenericElement.PROPERTY_PARAMETERS)) {

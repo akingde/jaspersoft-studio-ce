@@ -415,8 +415,7 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 
 		defaultsMap.put(JRBaseChart.PROPERTY_TITLE_POSITION, null);
 		defaultsMap.put(JRBaseChart.PROPERTY_LEGEND_POSITION, null);
-		defaultsMap.put(JRDesignChart.PROPERTY_EVALUATION_TIME,
-				evaluationTimeD.getIntValue(EvaluationTimeEnum.NOW));
+		defaultsMap.put(JRDesignChart.PROPERTY_EVALUATION_TIME, EvaluationTimeEnum.NOW);
 	}
 
 	@Override
@@ -449,8 +448,7 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 			return legendPositionD.getIntValue(jrElement
 					.getLegendPositionValue());
 		if (id.equals(JRDesignChart.PROPERTY_EVALUATION_TIME))
-			return evaluationTimeD.getIntValue(jrElement
-					.getEvaluationTimeValue());
+			return jrElement.getEvaluationTimeValue();
 		if (id.equals(JRBaseChart.PROPERTY_RENDER_TYPE))
 			return jrElement.getRenderType();
 		if (id.equals(JRBaseChart.PROPERTY_THEME))
@@ -591,7 +589,8 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 			jrElement.setLegendPosition((EdgeEnum) legendPositionD
 					.getEnumValue(value));
 		else if (id.equals(JRDesignChart.PROPERTY_EVALUATION_TIME))
-			jrElement.setEvaluationTime(evaluationTimeD.getEnumValue(value));
+			jrElement.setEvaluationTime(
+					EnumHelper.getEnumByTranslatedName(EvaluationTimeEnum.values(), value));
 		else if (id.equals(JRBaseChart.PROPERTY_SHOW_LEGEND))
 			jrElement.setShowLegend((Boolean) value);
 		else if (id.equals(JRBaseChart.PROPERTY_RENDER_TYPE)) {

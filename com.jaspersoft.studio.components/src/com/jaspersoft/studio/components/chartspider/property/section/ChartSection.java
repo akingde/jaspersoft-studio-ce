@@ -12,6 +12,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.chartspider.property.section;
 
+import net.sf.jasperreports.components.spiderchart.SpiderChartComponent;
 import net.sf.jasperreports.components.spiderchart.StandardChartSettings;
 
 import org.eclipse.swt.layout.GridLayout;
@@ -46,8 +47,8 @@ public class ChartSection extends AbstractSection {
 		createWidget4Property(parent,
 				StandardChartSettings.PROPERTY_RENDER_TYPE);
 
-		IPropertyDescriptor pd = getPropertyDesriptor(StandardChartSettings.PROPERTY_EVALUATION_TIME);
-		IPropertyDescriptor gpd = getPropertyDesriptor(StandardChartSettings.PROPERTY_EVALUATION_GROUP);
+		IPropertyDescriptor pd = getPropertyDesriptor(SpiderChartComponent.PROPERTY_EVALUATION_TIME);
+		IPropertyDescriptor gpd = getPropertyDesriptor(SpiderChartComponent.PROPERTY_EVALUATION_GROUP);
 		getWidgetFactory().createCLabel(parent, pd.getDisplayName());
 		widgets.put(pd.getId(), new SPEvaluationTime(parent, this, pd, gpd));
 	}
@@ -57,7 +58,7 @@ public class ChartSection extends AbstractSection {
 		addProvidedProperties(StandardChartSettings.PROPERTY_BACKCOLOR, Messages.MChartPlot_backcolor);
 		addProvidedProperties(StandardChartSettings.PROPERTY_CUSTOMIZER_CLASS, Messages.MChart_customizer_class);
 		addProvidedProperties(StandardChartSettings.PROPERTY_RENDER_TYPE, Messages.MChart_renderer_type);
-		addProvidedProperties(StandardChartSettings.PROPERTY_EVALUATION_TIME, Messages.MChart_evaluation_time);
+		addProvidedProperties(SpiderChartComponent.PROPERTY_EVALUATION_TIME, Messages.MChart_evaluation_time);
 	}
 
 }

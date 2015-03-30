@@ -14,6 +14,8 @@ import java.util.List;
 import net.sf.jasperreports.engine.type.NamedEnum;
 
 import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.jface.viewers.ILabelProvider;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 
@@ -34,6 +36,7 @@ public class NamedEnumPropertyDescriptor<T extends Enum<?> & NamedEnum> extends 
 	private T[] jrEnums;
 	private T nenum;
 	private String[] allItems;
+	private IHelpRefBuilder refBuilder;
 
 	public NamedEnumPropertyDescriptor(Object id, String displayName, T nenum, NullEnum type) {
 		super(Misc.nvl(id, ""), Misc.nvl(displayName), getEnumItems((NamedEnum[]) nenum.getDeclaringClass()
@@ -42,6 +45,7 @@ public class NamedEnumPropertyDescriptor<T extends Enum<?> & NamedEnum> extends 
 		this.type = type;
 		this.allItems = getEnumItems((NamedEnum[]) nenum.getDeclaringClass().getEnumConstants(), type);
 		jrEnums = ((Class<T>) nenum.getDeclaringClass()).getEnumConstants();
+		setLabelProvider(new NamedEnumLabelProvider(allItems));
 	}
 
 	private static String[] getEnumItems(NamedEnum[] items, NullEnum type) {
@@ -55,7 +59,10 @@ public class NamedEnumPropertyDescriptor<T extends Enum<?> & NamedEnum> extends 
 
 	@Override
 	public CellEditor createPropertyEditor(Composite parent) {
-		CellEditor editor = super.createPropertyEditor(parent);
+		CellEditor editor = new NamedEnumCellEditor(parent, allItems, SWT.READ_ONLY);
+		if (getValidator() != null) {
+			editor.setValidator(getValidator());
+		}
 		HelpSystem.bindToHelp(this, editor.getControl());
 		return editor;
 	}
@@ -100,6 +107,10 @@ public class NamedEnumPropertyDescriptor<T extends Enum<?> & NamedEnum> extends 
 	public String[] getEnumItems() {
 		return allItems;
 	}
+	
+	public T[] getEnumElements() {
+		return jrEnums;
+	}
 
 	public NullEnum getType() {
 		return type;
@@ -108,8 +119,6 @@ public class NamedEnumPropertyDescriptor<T extends Enum<?> & NamedEnum> extends 
 	public ASPropertyWidget<NamedEnumPropertyDescriptor<T>> createWidget(Composite parent, AbstractSection section) {
 		return new SPReadComboEnum<NamedEnumPropertyDescriptor<T>>(parent, section, this);
 	}
-
-	private IHelpRefBuilder refBuilder;
 
 	@Override
 	public void setHelpRefBuilder(IHelpRefBuilder refBuilder) {
@@ -121,6 +130,14 @@ public class NamedEnumPropertyDescriptor<T extends Enum<?> & NamedEnum> extends 
 		if (refBuilder != null)
 			return refBuilder.getHelpReference();
 		return null;
+	}
+	
+	@Override
+	public ILabelProvider getLabelProvider() {
+		if (isLabelProviderSet()) {
+			return super.getLabelProvider();
+		}
+		return new NamedEnumLabelProvider(allItems);
 	}
 
 }

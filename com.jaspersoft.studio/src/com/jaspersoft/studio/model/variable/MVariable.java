@@ -183,8 +183,8 @@ public class MVariable extends MVariableSystem implements ICopyable {
 		desc.add(factoryClassName);
 
 		defaultsMap.put(JRDesignVariable.PROPERTY_CALCULATION, calculationD.getIntValue(CalculationEnum.NOTHING));
-		defaultsMap.put(JRDesignVariable.PROPERTY_RESET_TYPE, resetTypeD.getIntValue(ResetTypeEnum.REPORT));
-		defaultsMap.put(JRDesignVariable.PROPERTY_INCREMENT_TYPE, incrementTypeD.getIntValue(IncrementTypeEnum.NONE));
+		defaultsMap.put(JRDesignVariable.PROPERTY_RESET_TYPE, ResetTypeEnum.REPORT);
+		defaultsMap.put(JRDesignVariable.PROPERTY_INCREMENT_TYPE, IncrementTypeEnum.NONE);
 
 		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#variable");
 	}
@@ -230,9 +230,9 @@ public class MVariable extends MVariableSystem implements ICopyable {
 		if (id.equals(JRDesignVariable.PROPERTY_CALCULATION))
 			return calculationD.getIntValue(jrVariable.getCalculationValue());
 		if (id.equals(JRDesignVariable.PROPERTY_RESET_TYPE))
-			return resetTypeD.getIntValue(jrVariable.getResetTypeValue());
+			return jrVariable.getResetTypeValue();
 		if (id.equals(JRDesignVariable.PROPERTY_INCREMENT_TYPE))
-			return incrementTypeD.getIntValue(jrVariable.getIncrementTypeValue());
+			return jrVariable.getIncrementTypeValue();
 		if (id.equals(JRDesignVariable.PROPERTY_INCREMENTER_FACTORY_CLASS_NAME))
 			return jrVariable.getIncrementerFactoryClassName();
 		if (id.equals(JRDesignVariable.PROPERTY_EXPRESSION)) {
@@ -293,11 +293,13 @@ public class MVariable extends MVariableSystem implements ICopyable {
 		} else if (id.equals(JRDesignVariable.PROPERTY_CALCULATION))
 			jrVariable.setCalculation(calculationD.getEnumValue(value));
 		else if (id.equals(JRDesignVariable.PROPERTY_RESET_TYPE)) {
-			jrVariable.setResetType(resetTypeD.getEnumValue(value));
+			jrVariable.setResetType(
+					EnumHelper.getEnumByTranslatedName(ResetTypeEnum.values(), value));
 			if (!jrVariable.getResetTypeValue().equals(ResetTypeEnum.GROUP))
 				jrVariable.setResetGroup(null);
 		} else if (id.equals(JRDesignVariable.PROPERTY_INCREMENT_TYPE)) {
-			jrVariable.setIncrementType(incrementTypeD.getEnumValue(value));
+			jrVariable.setIncrementType(
+					EnumHelper.getEnumByTranslatedName(incrementTypeD.getEnumElements(),value));
 			if (!jrVariable.getIncrementTypeValue().equals(IncrementTypeEnum.GROUP))
 				jrVariable.setIncrementGroup(null);
 		} else if (id.equals(JRDesignVariable.PROPERTY_INCREMENTER_FACTORY_CLASS_NAME)) {

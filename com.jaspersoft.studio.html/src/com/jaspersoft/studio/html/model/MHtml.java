@@ -42,6 +42,7 @@ import com.jaspersoft.studio.property.descriptor.combo.RComboBoxPropertyDescript
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
+import com.jaspersoft.studio.utils.EnumHelper;
 
 public class MHtml extends MGraphicElement {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
@@ -205,8 +206,7 @@ public class MHtml extends MGraphicElement {
 		evaluationGroupNameD.setCategory(Messages.common_properties_category);
 		clipOverflow.setCategory(Messages.common_properties_category);
 
-		defaultsMap.put(HtmlComponent.PROPERTY_EVALUATION_TIME,
-				evaluationTimeD.getIntValue(EvaluationTimeEnum.NOW));
+		defaultsMap.put(HtmlComponent.PROPERTY_EVALUATION_TIME, EvaluationTimeEnum.NOW);
 		defaultsMap.put(HtmlComponent.PROPERTY_SCALE_TYPE,
 				scaleTypeD.getIntValue(ScaleImageEnum.RETAIN_SHAPE));
 		defaultsMap.put(HtmlComponent.PROPERTY_HORIZONTAL_ALIGN,
@@ -258,7 +258,7 @@ public class MHtml extends MGraphicElement {
 		HtmlComponent htmlComp = (HtmlComponent) jrElement.getComponent();
 
 		if (id.equals(HtmlComponent.PROPERTY_EVALUATION_TIME))
-			return evaluationTimeD.getIntValue(htmlComp.getEvaluationTime());
+			return htmlComp.getEvaluationTime();
 		if (id.equals(HtmlComponent.PROPERTY_EVALUATION_GROUP))
 			return htmlComp.getEvaluationGroup();
 		if (id.equals(HtmlComponent.PROPERTY_SCALE_TYPE))
@@ -281,7 +281,8 @@ public class MHtml extends MGraphicElement {
 		HtmlComponent htmlComp = (HtmlComponent) jrElement.getComponent();
 
 		if (id.equals(HtmlComponent.PROPERTY_EVALUATION_TIME))
-			htmlComp.setEvaluationTime(evaluationTimeD.getEnumValue(value));
+			htmlComp.setEvaluationTime(
+					EnumHelper.getEnumByTranslatedName(EvaluationTimeEnum.values(), value));
 		else if (id.equals(HtmlComponent.PROPERTY_EVALUATION_GROUP))
 			htmlComp.setEvaluationGroup((String) value);
 		else if (id.equals(HtmlComponent.PROPERTY_SCALE_TYPE))

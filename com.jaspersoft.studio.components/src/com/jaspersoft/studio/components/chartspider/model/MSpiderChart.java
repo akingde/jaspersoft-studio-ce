@@ -65,6 +65,7 @@ import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.SpinnerPropertyDescriptor;
 import com.jaspersoft.studio.utils.AlfaRGB;
 import com.jaspersoft.studio.utils.Colors;
+import com.jaspersoft.studio.utils.EnumHelper;
 import com.jaspersoft.studio.utils.Misc;
 
 /**
@@ -399,8 +400,7 @@ public class MSpiderChart extends MGraphicElement implements IDatasetContainer {
 
 		defaultsMap.put(StandardChartSettings.PROPERTY_TITLE_POSITION, null);
 		defaultsMap.put(StandardChartSettings.PROPERTY_LEGEND_POSITION, null);
-		defaultsMap.put(StandardChartSettings.PROPERTY_EVALUATION_TIME,
-				evaluationTimeD.getIntValue(EvaluationTimeEnum.NOW));
+		defaultsMap.put(SpiderChartComponent.PROPERTY_EVALUATION_TIME, EvaluationTimeEnum.NOW);
 
 		defaultsMap.put(StandardSpiderPlot.PROPERTY_AXIS_LINE_COLOR, null);
 		defaultsMap.put(StandardSpiderPlot.PROPERTY_AXIS_LINE_WIDTH, null);
@@ -486,7 +486,7 @@ public class MSpiderChart extends MGraphicElement implements IDatasetContainer {
 			return ExprUtil.getExpression(cs.getSubtitleExpression());
 
 		if (id.equals(SpiderChartComponent.PROPERTY_EVALUATION_TIME))
-			return evaluationTimeD.getIntValue(component.getEvaluationTime());
+			return component.getEvaluationTime();
 		if (id.equals(SpiderChartComponent.PROPERTY_EVALUATION_GROUP))
 			return component.getEvaluationGroup();
 
@@ -655,7 +655,8 @@ public class MSpiderChart extends MGraphicElement implements IDatasetContainer {
 				cs.addHyperlinkParameter(param);
 			}
 		} else if (id.equals(SpiderChartComponent.PROPERTY_EVALUATION_TIME))
-			component.setEvaluationTime(evaluationTimeD.getEnumValue(value));
+			component.setEvaluationTime(
+					EnumHelper.getEnumByTranslatedName(EvaluationTimeEnum.values(), value));
 		else if (id.equals(SpiderChartComponent.PROPERTY_EVALUATION_GROUP)) {
 			component.setEvaluationGroup((String) value);
 		} else

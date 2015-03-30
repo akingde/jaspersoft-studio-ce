@@ -55,6 +55,7 @@ import com.jaspersoft.studio.property.descriptor.expression.JRExpressionProperty
 import com.jaspersoft.studio.property.descriptor.pattern.PatternPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.SpinnerPropertyDescriptor;
+import com.jaspersoft.studio.utils.EnumHelper;
 
 /*
  * The Class MTextField.
@@ -242,7 +243,7 @@ public class MTextField extends MTextElement {
 		stretchOverflowD.setCategory(Messages.MTextField_textfield_category);
 		pexprD.setCategory(Messages.MTextField_textfield_category);
 
-		defaultsMap.put(JRDesignTextField.PROPERTY_EVALUATION_TIME, evaluationTimeD.getIntValue(EvaluationTimeEnum.NOW));
+		defaultsMap.put(JRDesignTextField.PROPERTY_EVALUATION_TIME, EvaluationTimeEnum.NOW);
 		defaultsMap.put(JRDesignStyle.PROPERTY_BLANK_WHEN_NULL, Boolean.FALSE);
 		defaultsMap.put(JRBaseTextField.PROPERTY_STRETCH_WITH_OVERFLOW, Boolean.FALSE);
 	}
@@ -266,7 +267,7 @@ public class MTextField extends MTextElement {
 			return ExprUtil.getExpression(jrElement.getPatternExpression());
 
 		if (id.equals(JRDesignTextField.PROPERTY_EVALUATION_TIME))
-			return evaluationTimeD.getIntValue(jrElement.getEvaluationTimeValue());
+			return jrElement.getEvaluationTimeValue();
 		if (id.equals(JRDesignStyle.PROPERTY_BLANK_WHEN_NULL))
 			return jrElement.isOwnBlankWhenNull();
 		if (id.equals(JRBaseTextField.PROPERTY_STRETCH_WITH_OVERFLOW))
@@ -316,8 +317,10 @@ public class MTextField extends MTextElement {
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignTextField jrElement = (JRDesignTextField) getValue();
 
-		if (id.equals(JRDesignTextField.PROPERTY_EVALUATION_TIME))
-			jrElement.setEvaluationTime(evaluationTimeD.getEnumValue(value));
+		if (id.equals(JRDesignTextField.PROPERTY_EVALUATION_TIME)) {
+			jrElement.setEvaluationTime(
+					EnumHelper.getEnumByTranslatedName(EvaluationTimeEnum.values(), value));
+		}
 		else if (id.equals(JRDesignTextField.PROPERTY_EVALUATION_GROUP)) {
 			if (value != null && !value.equals("")) { //$NON-NLS-1$
 				JRDesignDataset dataset = (JRDesignDataset) getElementDataset();

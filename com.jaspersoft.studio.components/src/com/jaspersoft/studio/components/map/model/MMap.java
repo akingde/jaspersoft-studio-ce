@@ -41,7 +41,6 @@ import net.sf.jasperreports.engine.type.OnErrorTypeEnum;
 import net.sf.jasperreports.engine.util.JRCloneUtils;
 
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.map.MapNodeIconDescriptor;
@@ -224,10 +223,10 @@ public class MMap extends MGraphicElement implements IDatasetContainer {
 				.setHelpRefBuilder(new HelpReferenceBuilder(
 						"net.sf.jasperreports.doc/docs/components.schema.reference.html#languageExpression")); //$NON-NLS-1$
 
-		ComboBoxPropertyDescriptor evaluationTimeD = new ComboBoxPropertyDescriptor(
+		NamedEnumPropertyDescriptor<EvaluationTimeEnum> evaluationTimeD = new NamedEnumPropertyDescriptor<EvaluationTimeEnum>(
 				StandardMapComponent.PROPERTY_EVALUATION_TIME,
-				Messages.MMap_evaluation_time, EnumHelper.getEnumNames(
-						EvaluationTimeEnum.values(), NullEnum.NOTNULL));
+				Messages.MMap_evaluation_time, 
+				EvaluationTimeEnum.NOW, NullEnum.NOTNULL);
 		evaluationTimeD
 				.setDescription(Messages.MMap_evaluation_time_description);
 		desc.add(evaluationTimeD);
@@ -386,7 +385,7 @@ public class MMap extends MGraphicElement implements IDatasetContainer {
 		}
 
 		if (id.equals(StandardMapComponent.PROPERTY_EVALUATION_TIME))
-			return EnumHelper.getValue(component.getEvaluationTime(), 1, false);
+			return component.getEvaluationTime();
 		if (id.equals(StandardMapComponent.PROPERTY_EVALUATION_GROUP))
 			return component.getEvaluationGroup();
 
@@ -488,11 +487,13 @@ public class MMap extends MGraphicElement implements IDatasetContainer {
 				((JRDesignElementDataset) markerdata.getDataset())
 						.setDatasetRun(null);
 			}
-		} else if (id.equals(StandardMapComponent.PROPERTY_EVALUATION_TIME))
-			component.setEvaluationTime((EvaluationTimeEnum) EnumHelper
-					.getSetValue(EvaluationTimeEnum.values(), value, 1, false));
-		else if (id.equals(StandardMapComponent.PROPERTY_EVALUATION_GROUP))
+		} else if (id.equals(StandardMapComponent.PROPERTY_EVALUATION_TIME)) {
+			component.setEvaluationTime(
+					EnumHelper.getEnumByTranslatedName(EvaluationTimeEnum.values(), value));
+		}
+		else if (id.equals(StandardMapComponent.PROPERTY_EVALUATION_GROUP)) {
 			component.setEvaluationGroup((String) value);
+		}
 		else if (id.equals(StandardMapComponent.PROPERTY_LONGITUDE_EXPRESSION)) {
 			component.setLongitudeExpression(ExprUtil.setValues(
 					component.getLongitudeExpression(), value, null));

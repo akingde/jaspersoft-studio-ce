@@ -42,6 +42,7 @@ import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.PixelPropertyDescriptor;
+import com.jaspersoft.studio.utils.EnumHelper;
 
 /*
  * The Class MBarcode.
@@ -234,39 +235,38 @@ public class MBarcodeBarbecue extends MBarcode implements IRotatable {
 		heightD.setCategory(Messages.common_properties_category);
 		appIDexprD.setCategory(Messages.common_properties_category);
 
-		defaultsMap.put(StandardBarbecueComponent.PROPERTY_EVALUATION_TIME,
-				evaluationTimeD.getIntValue(EvaluationTimeEnum.NOW));
+		defaultsMap.put(StandardBarbecueComponent.PROPERTY_EVALUATION_TIME, EvaluationTimeEnum.NOW);
 		defaultsMap.put(StandardBarbecueComponent.PROPERTY_ROTATION, null);
 	}
 
 	@Override
 	public Object getPropertyValue(Object id) {
 		JRDesignComponentElement jrElement = (JRDesignComponentElement) getValue();
-		StandardBarbecueComponent jrList = (StandardBarbecueComponent) jrElement
+		StandardBarbecueComponent barbecueComponent = (StandardBarbecueComponent) jrElement
 				.getComponent();
 
 		if (id.equals(StandardBarbecueComponent.PROPERTY_EVALUATION_TIME))
-			return evaluationTimeD.getIntValue(jrList.getEvaluationTimeValue());
+			return barbecueComponent.getEvaluationTimeValue();
 		if (id.equals(StandardBarbecueComponent.PROPERTY_EVALUATION_GROUP))
-			return jrList.getEvaluationGroup();
+			return barbecueComponent.getEvaluationGroup();
 		if (id.equals(StandardBarbecueComponent.PROPERTY_CHECKSUM_REQUIRED))
-			return new Boolean(jrList.isChecksumRequired());
+			return new Boolean(barbecueComponent.isChecksumRequired());
 		if (id.equals(StandardBarbecueComponent.PROPERTY_DRAW_TEXT))
-			return new Boolean(jrList.isDrawText());
+			return new Boolean(barbecueComponent.isDrawText());
 
 		if (id.equals(StandardBarbecueComponent.PROPERTY_TYPE))
-			return jrList.getType();
+			return barbecueComponent.getType();
 
 		if (id.equals(StandardBarbecueComponent.PROPERTY_BAR_HEIGTH))
-			return jrList.getBarHeight();
+			return barbecueComponent.getBarHeight();
 		if (id.equals(StandardBarbecueComponent.PROPERTY_BAR_WIDTH))
-			return jrList.getBarWidth();
+			return barbecueComponent.getBarWidth();
 		if (id.equals(StandardBarbecueComponent.PROPERTY_CODE_EXPRESSION))
-			return ExprUtil.getExpression(jrList.getCodeExpression());
+			return ExprUtil.getExpression(barbecueComponent.getCodeExpression());
 		if (id.equals(StandardBarbecueComponent.PROPERTY_ROTATION))
-			return rotationD.getIntValue(jrList.getOwnRotation());
+			return rotationD.getIntValue(barbecueComponent.getOwnRotation());
 		if (id.equals(StandardBarbecueComponent.PROPERTY_APPLICATION_IDENTIFIER_EXPRESSION))
-			return ExprUtil.getExpression(jrList
+			return ExprUtil.getExpression(barbecueComponent
 					.getApplicationIdentifierExpression());
 		return super.getPropertyValue(id);
 	}
@@ -274,34 +274,35 @@ public class MBarcodeBarbecue extends MBarcode implements IRotatable {
 	@Override
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignComponentElement jrElement = (JRDesignComponentElement) getValue();
-		StandardBarbecueComponent jrList = (StandardBarbecueComponent) jrElement
+		StandardBarbecueComponent barbecueComponent = (StandardBarbecueComponent) jrElement
 				.getComponent();
 
 		if (id.equals(StandardBarbecueComponent.PROPERTY_EVALUATION_TIME))
-			jrList.setEvaluationTimeValue(evaluationTimeD.getEnumValue(value));
+			barbecueComponent.setEvaluationTimeValue(
+					EnumHelper.getEnumByTranslatedName(EvaluationTimeEnum.values(), value));
 		else if (id.equals(StandardBarbecueComponent.PROPERTY_EVALUATION_GROUP))
-			jrList.setEvaluationGroup((String) value);
+			barbecueComponent.setEvaluationGroup((String) value);
 		else if (id
 				.equals(StandardBarbecueComponent.PROPERTY_CHECKSUM_REQUIRED))
-			jrList.setChecksumRequired(((Boolean) value).booleanValue());
+			barbecueComponent.setChecksumRequired(((Boolean) value).booleanValue());
 		else if (id.equals(StandardBarbecueComponent.PROPERTY_DRAW_TEXT))
-			jrList.setDrawText(((Boolean) value).booleanValue());
+			barbecueComponent.setDrawText(((Boolean) value).booleanValue());
 		else if (id.equals(StandardBarbecueComponent.PROPERTY_TYPE))
-			jrList.setType((String) value);
+			barbecueComponent.setType((String) value);
 		else if (id.equals(StandardBarbecueComponent.PROPERTY_ROTATION))
-			jrList.setRotation(rotationD.getEnumValue(value));
+			barbecueComponent.setRotation(rotationD.getEnumValue(value));
 
 		else if (id.equals(StandardBarbecueComponent.PROPERTY_BAR_HEIGTH))
-			jrList.setBarHeight((Integer) value);
+			barbecueComponent.setBarHeight((Integer) value);
 		else if (id.equals(StandardBarbecueComponent.PROPERTY_BAR_WIDTH))
-			jrList.setBarWidth((Integer) value);
+			barbecueComponent.setBarWidth((Integer) value);
 		else if (id.equals(StandardBarbecueComponent.PROPERTY_CODE_EXPRESSION)) {
-			jrList.setCodeExpression(ExprUtil.setValues(
-					jrList.getCodeExpression(), value, null));
+			barbecueComponent.setCodeExpression(ExprUtil.setValues(
+					barbecueComponent.getCodeExpression(), value, null));
 		} else if (id
 				.equals(StandardBarbecueComponent.PROPERTY_APPLICATION_IDENTIFIER_EXPRESSION)) {
-			jrList.setApplicationIdentifierExpression(ExprUtil.setValues(
-					jrList.getApplicationIdentifierExpression(), value, null));
+			barbecueComponent.setApplicationIdentifierExpression(ExprUtil.setValues(
+					barbecueComponent.getApplicationIdentifierExpression(), value, null));
 		} else
 			super.setPropertyValue(id, value);
 	}
