@@ -120,6 +120,7 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 
 		@Override
 		public void propertyChange(PropertyChangeEvent arg0) {
+			initClassloader((IFile) get(FileUtils.KEY_FILE));
 			refreshFonts = true;
 			refreshBundles = true;
 			refreshMessageProviderFactory = true;
@@ -192,13 +193,13 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 	}
 
 	protected void initClassloader(IFile file) {
+		if (javaclassloader != null && classpathlistener != null)
+			javaclassloader.removeClasspathListener(classpathlistener);
 		try {
 			ClassLoader cl = Thread.currentThread().getContextClassLoader();
 			if (file != null) {
 				IProject project = file.getProject();
 				if (project != null && project.getNature(JavaCore.NATURE_ID) != null) {
-					if (javaclassloader != null && classpathlistener != null)
-						javaclassloader.removeClasspathListener(classpathlistener);
 					javaclassloader = JavaProjectClassLoader.instance(JavaCore.create(project), cl);
 					classpathlistener = new ClasspathListener();
 					javaclassloader.addClasspathListener(classpathlistener);
@@ -236,7 +237,7 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 			if (file.isLinked()) {
 				add(list, rset, file.getRawLocation().toFile().getParentFile().getAbsolutePath());
 			}
-			if(!file.getParent().isVirtual()) {
+			if (!file.getParent().isVirtual()) {
 				add(list, rset, file.getParent().getLocation().toFile().getAbsolutePath());
 			}
 			add(list, rset, file.getProject().getLocation().toFile().getAbsolutePath());
@@ -597,8 +598,8 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 			// remove all duplicates
 			Set<ComponentsBundle> components = new LinkedHashSet<ComponentsBundle>(bundles);
 			bundles = new ArrayList<ComponentsBundle>(components);
-			for (ComponentsBundle cb : bundles) 
-				JaspersoftStudioPlugin.getComponentConverterManager().setupComponentConvertor(cb); 
+			for (ComponentsBundle cb : bundles)
+				JaspersoftStudioPlugin.getComponentConverterManager().setupComponentConvertor(cb);
 			refreshBundles = false;
 		}
 		return bundles;

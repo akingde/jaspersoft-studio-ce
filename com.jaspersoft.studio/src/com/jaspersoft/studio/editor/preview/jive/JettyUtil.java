@@ -1,17 +1,15 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.editor.preview.jive;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,6 +17,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import net.sf.jasperreports.eclipse.classpath.JavaProjectClassLoader;
 import net.sf.jasperreports.eclipse.ui.ReportPreviewUtil;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRPropertiesUtil;
@@ -115,7 +114,7 @@ public final class JettyUtil {
 
 		ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
 		context.setContextPath("/" + project.getName());
-		context.setClassLoader(ReportPreviewUtil.createProjectClassLoader(project));
+		setupClassLoader(project, context);
 
 		// context.addServlet(new ServletHolder(DiagnosticServlet.class), "/servlets/diag");
 
@@ -268,6 +267,20 @@ public final class JettyUtil {
 
 		handlers.add(context);
 		return handlers;
+	}
+
+	private static void setupClassLoader(final IProject project, final ServletContextHandler context) {
+		final ClassLoader cl = ReportPreviewUtil.createProjectClassLoader(project);
+		if (cl != null && cl instanceof JavaProjectClassLoader)
+			((JavaProjectClassLoader) cl).addClasspathListener(new PropertyChangeListener() {
+
+				@Override
+				public void propertyChange(PropertyChangeEvent arg0) {
+					((JavaProjectClassLoader) cl).removeClasspathListener(this);
+					setupClassLoader(project, context);
+				}
+			});
+		context.setClassLoader(cl);
 	}
 
 	public static void stopJetty(IProject project) {
