@@ -2,7 +2,7 @@
 <feature
       id="com.jaspersoft.studio.foundation.bundles"
       label="Jaspersoft Studio Required Additional Bundles"
-      version="1.0.2"
+      version="1.0.3"
       provider-name="TIBCO Software Inc.">
 
    <description url="http://community.jaspersoft.com/project/jaspersoft-studio">
@@ -83,7 +83,7 @@
          id="com.jaspersoft.studio.bundles.itext"
          download-size="0"
          install-size="0"
-         version="5.5.0"/>
+         version="2.1.7.s2"/>
 
    <plugin
          id="com.jaspersoft.studio.bundles.jxl"
