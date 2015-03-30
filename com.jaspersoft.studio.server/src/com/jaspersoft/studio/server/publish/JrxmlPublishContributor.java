@@ -70,7 +70,8 @@ public class JrxmlPublishContributor implements IPublishContributor {
 			throws Exception {
 		init(mrunit.getJasperConfiguration(), version);
 		publishJrxml(mrunit, monitor, jasper, fileset, file);
-		if (ResourceDescriptorUtil.isReportMain(file))
+		if (ResourceDescriptorUtil.isReportMain(file)
+				&& mrunit instanceof MReportUnit)
 			publishParameters((MReportUnit) mrunit, monitor, jasper);
 	}
 
@@ -165,7 +166,8 @@ public class JrxmlPublishContributor implements IPublishContributor {
 			in = JRXMLUtils.getJRXMLInputStream(jrConfig, f.getContents(),
 					f.getFileExtension(), f.getCharset(true), version);
 			is = new InputSource(new InputStreamReader(in, "UTF-8"));
-			jd = new JRXmlLoader(jrConfig,JRXmlDigesterFactory.createDigester(jrConfig)).loadXML(is);
+			jd = new JRXmlLoader(jrConfig,
+					JRXmlDigesterFactory.createDigester(jrConfig)).loadXML(is);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
