@@ -249,8 +249,8 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 			tgt = tgt.queryParam("folderUri", rd.getUriString());
 			tgt = tgt.queryParam("recursive", "false");
 			tgt = tgt.queryParam("sortBy", "label");
-			tgt = tgt.queryParam("type",
-					WsTypes.INST().toRestType(rd.getWsType()));
+			// tgt = tgt.queryParam("type",
+			// WsTypes.INST().toRestType(rd.getWsType()));
 			tgt = tgt.queryParam("limit", 0);
 
 			Builder req = tgt.request();
