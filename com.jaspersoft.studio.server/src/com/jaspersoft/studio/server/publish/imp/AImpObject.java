@@ -13,6 +13,8 @@
 package com.jaspersoft.studio.server.publish.imp;
 
 import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 import java.util.Set;
 
@@ -55,11 +57,25 @@ public abstract class AImpObject {
 			if (!f.getName().contains(":"))
 				popt.setExpression("\"repo:"
 						+ IDStringValidator.safeChar(f.getName()) + "\"");
+			if (isRemoteResource(str))
+				popt.setOverwrite(false);
+
 			fileset.add(str);
 
 			return addResource(monitor, mrunit, fileset, f, popt);
 		}
 		return null;
+	}
+
+	protected boolean isRemoteResource(String path) {
+		try {
+			URL url = new URL(path);
+			if (url.getProtocol().equals("file"))
+				return false;
+		} catch (MalformedURLException e) {
+			return false;
+		}
+		return true;
 	}
 
 	protected String getPath(Set<String> fileset, JRDesignExpression exp) {

@@ -364,8 +364,11 @@ public class ResourcesPage extends JSSHelpWizardPage {
 		List<MResource> res = PublishUtil.getResources(pres,
 				new NullProgressMonitor(), jConfig);
 		if (isNew)
-			for (MResource r : res)
+			for (MResource r : res) {
+				if (r instanceof AFileResource)
+					continue;
 				r.getPublishOptions().setOverwrite(true);
+			}
 		tableViewer.setInput(res);
 		tableViewer.refresh();
 	}
