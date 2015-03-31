@@ -13,6 +13,7 @@ import java.net.URL;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
+import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.swt.SWT;
@@ -26,9 +27,15 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.util.FieldEditorOverlayPage;
 
 public class InputControlsPreferencePage extends FieldEditorOverlayPage {
+	public static final String ALL_EMPTY = "allEmpty"; //$NON-NLS-1$
+	public static final String ALWAYS = "always"; //$NON-NLS-1$
+
+	public static final String JSS_IC_SHOW = "com.jaspersoft.studio.ic.SHOWIC"; //$NON-NLS-1$
+
 	public static final String JSS_DATE_FORMAT = "com.jaspersoft.studio.ic.format.date"; //$NON-NLS-1$
 	public static final String JSS_TIME_FORMAT = "com.jaspersoft.studio.ic.format.time"; //$NON-NLS-1$
 	public static final String JSS_TIMESTAMP_FORMAT = "com.jaspersoft.studio.ic.format.timestamp"; //$NON-NLS-1$
@@ -43,8 +50,13 @@ public class InputControlsPreferencePage extends FieldEditorOverlayPage {
 	 * types of preferences. Each field editor knows how to save and restore itself.
 	 */
 	public void createFieldEditors() {
+
+		addField(new ComboFieldEditor(JSS_IC_SHOW, Messages.InputControlsPreferencePage_2, new String[][] {
+				{ Messages.InputControlsPreferencePage_3, ALWAYS }, { Messages.InputControlsPreferencePage_4, ALL_EMPTY } },
+				getFieldEditorParent()));
+
 		Link link = new Link(getFieldEditorParent(), SWT.WRAP);
-		String message = "Input Controls use Java formatting standard, see <a href=\"http://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html\">SimplDateFormat</a> documentation to setup your own format.";
+		String message = Messages.InputControlsPreferencePage_5;
 		link.setText(message);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
@@ -64,14 +76,14 @@ public class InputControlsPreferencePage extends FieldEditorOverlayPage {
 		});
 
 		Label lbl = new Label(getFieldEditorParent(), SWT.NONE);
-		lbl.setText("");
+		lbl.setText(""); //$NON-NLS-1$
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		lbl.setLayoutData(gd);
 
-		addField(new StringFieldEditor(JSS_DATE_FORMAT, "Date Format", getFieldEditorParent()));
-		addField(new StringFieldEditor(JSS_TIME_FORMAT, "Time Format", getFieldEditorParent()));
-		addField(new StringFieldEditor(JSS_TIMESTAMP_FORMAT, "Timestamp Format", getFieldEditorParent()));
+		addField(new StringFieldEditor(JSS_DATE_FORMAT, Messages.InputControlsPreferencePage_7, getFieldEditorParent()));
+		addField(new StringFieldEditor(JSS_TIME_FORMAT, Messages.InputControlsPreferencePage_8, getFieldEditorParent()));
+		addField(new StringFieldEditor(JSS_TIMESTAMP_FORMAT, Messages.InputControlsPreferencePage_9, getFieldEditorParent()));
 	}
 
 	/*
@@ -86,6 +98,8 @@ public class InputControlsPreferencePage extends FieldEditorOverlayPage {
 		store.setDefault(JSS_DATE_FORMAT, null);
 		store.setDefault(JSS_TIME_FORMAT, null);
 		store.setDefault(JSS_TIMESTAMP_FORMAT, null);
+
+		store.setDefault(JSS_TIMESTAMP_FORMAT, ALWAYS);
 	}
 
 	@Override

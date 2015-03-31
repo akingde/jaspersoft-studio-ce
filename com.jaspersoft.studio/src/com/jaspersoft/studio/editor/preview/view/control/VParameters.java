@@ -30,6 +30,7 @@ import com.jaspersoft.studio.editor.preview.input.BooleanNumericInput;
 import com.jaspersoft.studio.editor.preview.input.IDataInput;
 import com.jaspersoft.studio.editor.preview.input.ParameterJasper;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.preferences.execution.InputControlsPreferencePage;
 import com.jaspersoft.studio.utils.ExpressionUtil;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -182,18 +183,25 @@ public class VParameters extends AVParameters {
 	private Job defaultJob;
 
 	public boolean checkFieldsFilled() {
+		String show = jContext.getProperty(InputControlsPreferencePage.JSS_IC_SHOW, InputControlsPreferencePage.ALWAYS);
+		boolean defaultExists = false;
 		int count = 0;
 		if (prompts != null)
 			for (JRParameter p : prompts) {
 				String pname = p.getName();
 				if (p.isForPrompting() && !p.isSystemDefined() && incontrols.containsKey(pname)) {
+					if (p.getDefaultValueExpression() != null)
+						defaultExists = true;
 					count++;
 					if (params.containsKey(pname) && incontrols.get(pname).isDirty())
 						return true;
 				}
 			}
-		if (count > 0)
+		if (count > 0) {
+			if (defaultExists && show.equals(InputControlsPreferencePage.ALL_EMPTY))
+				return true;
 			return false;
+		}
 		return true;
 	}
 

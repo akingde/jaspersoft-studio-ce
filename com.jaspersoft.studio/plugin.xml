@@ -294,7 +294,7 @@
             name="%ReportExecution">
       </page>
       <page
-            category="com.jaspersoft.studio.preferences.StudioPreferencePage"
+            category="com.jaspersoft.studio.preferences.execution.ReportExecutionPreferencePage"
             class="com.jaspersoft.studio.preferences.execution.InputControlsPreferencePage"
             id="com.jaspersoft.studio.preferences.execution.InputControlsPreferencePage.property"
             name="%InputControls">

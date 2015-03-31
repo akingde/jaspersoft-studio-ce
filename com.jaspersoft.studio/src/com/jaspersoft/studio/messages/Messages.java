@@ -854,6 +854,13 @@ public class Messages extends NLS {
 	public static String IncreaseHSpaceAction_actionName;
 	public static String IncreaseVSpaceAction_actionDescription;
 	public static String IncreaseVSpaceAction_actionName;
+	public static String InputControlsPreferencePage_2;
+	public static String InputControlsPreferencePage_3;
+	public static String InputControlsPreferencePage_4;
+	public static String InputControlsPreferencePage_5;
+	public static String InputControlsPreferencePage_7;
+	public static String InputControlsPreferencePage_8;
+	public static String InputControlsPreferencePage_9;
 	public static String InputParameterDialog_dialogDescription;
 	public static String InputParameterDialog_dialogText;
 	public static String InputParameterDialog_dialogTitle;
