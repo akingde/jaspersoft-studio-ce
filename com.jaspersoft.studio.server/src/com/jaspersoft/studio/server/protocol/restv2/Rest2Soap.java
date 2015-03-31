@@ -164,8 +164,11 @@ public class Rest2Soap {
 	private static void getAdhocDataView(ARestV2Connection rc,
 			ClientAdhocDataView cr, ResourceDescriptor rd)
 			throws ParseException {
-		if (cr.getDataSource() != null)
-			rd.getChildren().add(getDataSource(rc, cr.getDataSource()));
+		if (cr.getDataSource() != null) {
+			ResourceDescriptor r = getDataSource(rc, cr.getDataSource());
+			setupReference(rd, r);
+			rd.getChildren().add(r);
+		}
 	}
 
 	private static void getQuery(ARestV2Connection rc, ClientQuery cr,
@@ -173,14 +176,17 @@ public class Rest2Soap {
 		rd.setResourceProperty(ResourceDescriptor.PROP_QUERY_LANGUAGE,
 				cr.getLanguage());
 		rd.setSql(cr.getValue());
-		if (cr.getDataSource() != null)
-			rd.getChildren().add(getDataSource(rc, cr.getDataSource()));
+		if (cr.getDataSource() != null) {
+			ResourceDescriptor r = getDataSource(rc, cr.getDataSource());
+			setupReference(rd, r);
+			rd.getChildren().add(r);
+		}
 	}
 
 	private static void getFile(ARestV2Connection rc, ClientFile cr,
 			ResourceDescriptor rd) throws ParseException {
-//		if (cr.getContent() != null)
-//			rd.setData(cr.getContent().getBytes());
+		// if (cr.getContent() != null)
+		// rd.setData(cr.getContent().getBytes());
 	}
 
 	private static void getLOV(ARestV2Connection rc, ClientListOfValues cr,
@@ -195,26 +201,37 @@ public class Rest2Soap {
 	private static void getMondrianConnection(ARestV2Connection rc,
 			ClientMondrianConnection cr, ResourceDescriptor rd)
 			throws ParseException {
-		if (cr.getDataSource() != null)
-			rd.getChildren().add(getDataSource(rc, cr.getDataSource()));
-		if (cr.getSchema() != null)
-			rd.getChildren().add(
-					getRDContainer(rc, (ClientResource<?>) cr.getSchema()));
+		if (cr.getDataSource() != null) {
+			ResourceDescriptor r = getDataSource(rc, cr.getDataSource());
+			setupReference(rd, r);
+			rd.getChildren().add(r);
+		}
+		if (cr.getSchema() != null) {
+			ResourceDescriptor r = getRDContainer(rc,
+					(ClientResource<?>) cr.getSchema());
+			setupReference(rd, r);
+			rd.getChildren().add(r);
+		}
 	}
 
 	private static void getSecureMondrianConnection(ARestV2Connection rc,
 			ClientSecureMondrianConnection cr, ResourceDescriptor rd)
 			throws ParseException {
-		if (cr.getDataSource() != null)
-			rd.getChildren().add(getDataSource(rc, cr.getDataSource()));
-		if (cr.getSchema() != null)
-			rd.getChildren().add(
-					getRDContainer(rc, (ClientResource<?>) cr.getSchema()));
+		if (cr.getDataSource() != null) {
+			ResourceDescriptor r = getDataSource(rc, cr.getDataSource());
+			rd.getChildren().add(r);
+		}
+		if (cr.getSchema() != null) {
+			ResourceDescriptor r = getRDContainer(rc,
+					(ClientResource<?>) cr.getSchema());
+			rd.getChildren().add(r);
+		}
 		if (cr.getAccessGrants() != null) {
 			for (ClientReferenceableFile crf : cr.getAccessGrants()) {
 				ResourceDescriptor ard = getRDContainer(rc,
 						(ClientResource<?>) crf);
 				ard.setWsType(ResourceDescriptor.TYPE_ACCESS_GRANT_SCHEMA);
+				setupReference(rd, ard);
 				rd.getChildren().add(ard);
 			}
 		}
@@ -225,10 +242,12 @@ public class Rest2Soap {
 			throws ParseException {
 		rd.setResourceProperty(ResourceDescriptor.PROP_XMLA_CATALOG,
 				cr.getCatalog());
-		if (cr.getMondrianConnection() != null)
-			rd.getChildren().add(
-					getRDContainer(rc,
-							(ClientResource<?>) cr.getMondrianConnection()));
+		if (cr.getMondrianConnection() != null) {
+			ResourceDescriptor r = getRDContainer(rc,
+					(ClientResource<?>) cr.getMondrianConnection());
+			setupReference(rd, r);
+			rd.getChildren().add(r);
+		}
 	}
 
 	private static void getXmlaConnection(ARestV2Connection rc,
@@ -257,10 +276,12 @@ public class Rest2Soap {
 			ResourceDescriptor rd) throws ParseException {
 		rd.setSql(cr.getMdxQuery());
 		rd.setResourceProperty(ResourceDescriptor.PROP_QUERY_LANGUAGE, "mdx");
-		if (cr.getOlapConnection() != null)
-			rd.getChildren().add(
-					getRDContainer(rc,
-							(ClientResource<?>) cr.getOlapConnection()));
+		if (cr.getOlapConnection() != null) {
+			ResourceDescriptor r = getRDContainer(rc,
+					(ClientResource<?>) cr.getOlapConnection());
+			setupReference(rd, r);
+			rd.getChildren().add(r);
+		}
 	}
 
 	private static void getCustomDataSource(ARestV2Connection rc,
@@ -324,6 +345,7 @@ public class Rest2Soap {
 				r.setWsType(ResourceDescriptor.TYPE_DATASOURCE);
 				r.setIsNew(true);
 				r.setResourceProperty("PROP_DATASOURCE_SUB_DS_ID", sds.getId());
+				setupReference(rd, r);
 				rd.getChildren().add(r);
 			}
 	}
@@ -367,28 +389,40 @@ public class Rest2Soap {
 
 		rd.getChildren().clear();
 
-		if (cr.getDataSource() != null)
-			rd.getChildren().add(getDataSource(rc, cr.getDataSource()));
-		if (cr.getQuery() != null)
-			rd.getChildren().add(
-					getRDContainer(rc, (ClientQuery) cr.getQuery()));
+		if (cr.getDataSource() != null) {
+			ResourceDescriptor dataSource = getDataSource(rc,
+					cr.getDataSource());
+			setupReference(rd, dataSource);
+			rd.getChildren().add(dataSource);
+		}
+		if (cr.getQuery() != null) {
+			ResourceDescriptor rdContainer = getRDContainer(rc,
+					(ClientQuery) cr.getQuery());
+			setupReference(rd, rdContainer);
+			rd.getChildren().add(rdContainer);
+		}
 		if (cr.getJrxml() != null) {
 			ResourceDescriptor mjrxml = getRDContainer(rc,
 					(ClientResource<?>) cr.getJrxml());
 			mjrxml.setMainReport(true);
+			setupReference(rd, mjrxml);
 			rd.getChildren().add(mjrxml);
 		}
 
 		if (cr.getInputControls() != null)
-			for (ClientReferenceableInputControl cric : cr.getInputControls())
-				rd.getChildren().add(
-						getRDContainer(rc, (ClientResource<?>) cric));
+			for (ClientReferenceableInputControl cric : cr.getInputControls()) {
+				ResourceDescriptor r = getRDContainer(rc,
+						(ClientResource<?>) cric);
+				setupReference(rd, r);
+				rd.getChildren().add(r);
+			}
 		if (cr.getFiles() != null)
 			for (String key : cr.getFiles().keySet()) {
 				ClientReferenceableFile crf = cr.getFiles().get(key);
 				ResourceDescriptor r = getRDContainer(rc,
 						(ClientResource<?>) crf);
 				r.setName(key);
+				setupReference(rd, r);
 				rd.getChildren().add(r);
 			}
 		Collections.sort(rd.getChildren(),
@@ -444,21 +478,37 @@ public class Rest2Soap {
 				});
 	}
 
+	private static void setupReference(ResourceDescriptor parent,
+			ResourceDescriptor rd) {
+		if (rd != null) {
+			if (!rd.getParentFolder().equals(parent.getUriString()+"_files"))
+				rd.setIsReference(true);
+		}
+	}
+
 	private static void getInputControl(ARestV2Connection rc,
 			ClientInputControl cr, ResourceDescriptor rd) throws ParseException {
 		rd.setMandatory(cr.isMandatory());
 		rd.setReadOnly(cr.isReadOnly());
 		rd.setVisible(cr.isVisible());
-		if (cr.getListOfValues() != null)
-			rd.getChildren().add(
-					getRDContainer(rc,
-							(ClientListOfValues) cr.getListOfValues()));
-		if (cr.getQuery() != null)
-			rd.getChildren().add(
-					getRDContainer(rc, (ClientQuery) cr.getQuery()));
-		if (cr.getDataType() != null)
-			rd.getChildren().add(
-					getRDContainer(rc, (ClientDataType) cr.getDataType()));
+		if (cr.getListOfValues() != null) {
+			ResourceDescriptor r = getRDContainer(rc,
+					(ClientListOfValues) cr.getListOfValues());
+			setupReference(rd, r);
+			rd.getChildren().add(r);
+		}
+		if (cr.getQuery() != null) {
+			ResourceDescriptor r = getRDContainer(rc,
+					(ClientQuery) cr.getQuery());
+			setupReference(rd, r);
+			rd.getChildren().add(r);
+		}
+		if (cr.getDataType() != null) {
+			ResourceDescriptor r = getRDContainer(rc,
+					(ClientDataType) cr.getDataType());
+			setupReference(rd, r);
+			rd.getChildren().add(r);
+		}
 
 		rd.setControlType(cr.getType());
 		rd.setQueryValueColumn(cr.getValueColumn());
@@ -489,24 +539,28 @@ public class Rest2Soap {
 			ResourceDescriptor r = new ResourceDescriptor();
 			r.setWsType(ResourceDescriptor.TYPE_DATA_TYPE);
 			r.setDataType(ResourceDescriptor.DT_TYPE_NUMBER);
+			setupReference(rd, r);
 			rd.getChildren().add(r);
 		} else if (rtype.equals("singleValueDate")) {
 			rd.setControlType((byte) 2);
 			ResourceDescriptor r = new ResourceDescriptor();
 			r.setWsType(ResourceDescriptor.TYPE_DATA_TYPE);
 			r.setDataType(ResourceDescriptor.DT_TYPE_DATE);
+			setupReference(rd, r);
 			rd.getChildren().add(r);
 		} else if (rtype.equals("singleValueText")) {
 			rd.setControlType((byte) 2);
 			ResourceDescriptor r = new ResourceDescriptor();
 			r.setWsType(ResourceDescriptor.TYPE_DATA_TYPE);
 			r.setDataType(ResourceDescriptor.DT_TYPE_TEXT);
+			setupReference(rd, r);
 			rd.getChildren().add(r);
 		} else if (rtype.equals("singleValueDatetime")) {
 			rd.setControlType((byte) 2);
 			ResourceDescriptor r = new ResourceDescriptor();
 			r.setWsType(ResourceDescriptor.TYPE_DATA_TYPE);
 			r.setDataType(ResourceDescriptor.DT_TYPE_DATE_TIME);
+			setupReference(rd, r);
 			rd.getChildren().add(r);
 		} else if (rtype.equals("singleSelect"))
 			rd.setControlType((byte) 3);

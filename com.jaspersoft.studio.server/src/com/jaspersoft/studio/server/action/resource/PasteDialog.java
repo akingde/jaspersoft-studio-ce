@@ -57,16 +57,16 @@ public class PasteDialog extends ATitledDialog {
 			}
 		});
 
-		// Button bCreate = new Button(cmp, SWT.PUSH);
-		// bCreate.setText(Messages.PasteDialog_4);
-		// bCreate.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		// bCreate.addSelectionListener(new SelectionAdapter() {
-		// @Override
-		// public void widgetSelected(SelectionEvent e) {
-		// choise = COPY;
-		// close();
-		// }
-		// });
+		Button bCreate = new Button(cmp, SWT.PUSH);
+		bCreate.setText(Messages.PasteDialog_4);
+		bCreate.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		bCreate.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				choise = COPY;
+				close();
+			}
+		});
 
 		final Button bAll = new Button(cmp, SWT.CHECK);
 		bAll.setText(Messages.PasteDialog_5);

@@ -193,6 +193,8 @@ public class PasteResourceAction extends Action {
 
 		for (Object obj : list) {
 			if (obj instanceof MResource && obj instanceof ICopyable) {
+				if (monitor.isCanceled())
+					return;
 				final MResource m = (MResource) obj;
 				if (m.isCopyable2(parent)) {
 					ResourceDescriptor origin = m.getValue();
@@ -205,10 +207,12 @@ public class PasteResourceAction extends Action {
 						rd.setWsType(origin.getWsType());
 						if (parent instanceof MReportUnit)
 							rd.setUriString(rd.getUriString() + "_files");
-						if (ws.get(monitor, rd, null) != null)
+						rd = ws.get(monitor, rd, null);
+						if (rd != null)
 							exists = true;
 					} catch (Exception e) {
 					}
+					boolean copy = false;
 					if (exists && !existsAll) {
 						UIUtils.getDisplay().syncExec(new Runnable() {
 
@@ -225,7 +229,7 @@ public class PasteResourceAction extends Action {
 						case PasteDialog.SKIP:
 							continue;
 						case PasteDialog.COPY:
-							// create new resource
+							copy = true;
 							break;
 						}
 					}
@@ -238,27 +242,58 @@ public class PasteResourceAction extends Action {
 						IConnection mc = m.getWsClient();
 						File file = FileUtils.createTempFile("tmp", "file"); //$NON-NLS-1$ //$NON-NLS-2$
 						try {
-							origin = mc.get(monitor, origin, file);
-							origin.setData(Base64
+							rd = mc.get(monitor, origin, file);
+							rd.setData(Base64
 									.encodeBase64(net.sf.jasperreports.eclipse.util.FileUtils
 											.getBytes(file)));
-							origin.setHasData(origin.getData() != null);
+							rd.setHasData(origin.getData() != null);
 						} catch (Throwable e) {
 							file = null;
 						}
 						if (parent instanceof MFolder) {
-							origin.setUriString(dURI + "/" + origin.getName()); //$NON-NLS-1$
-							ws.addOrModifyResource(monitor, origin, file);
+							rd.setUriString(dURI
+									+ "/" + rd.getName() + (copy ? "_COPY" : "")); //$NON-NLS-1$
+							rd.setLabel(origin.getLabel()
+									+ (copy ? "_COPY" : ""));
+							fixUris(rd, monitor, mc);
+							ws.addOrModifyResource(monitor, rd, file);
 						} else if (parent instanceof MReportUnit)
 							saveToReportUnit(monitor, parent, ws, origin);
 						deleteIfCut(monitor, m);
 					} else if (parent instanceof MFolder) {
-						if (m.isCut()) {
-							ws.move(monitor, origin, dURI);
-							m.setCut(false);
-						} else
-							ws.copy(monitor, origin, dURI);
+						if (copy) {
+							IConnection mc = m.getWsClient();
+							File file = FileUtils.createTempFile("tmp", "file"); //$NON-NLS-1$ //$NON-NLS-2$
+							try {
+								rd = mc.get(monitor, origin, file);
+								rd.setData(Base64
+										.encodeBase64(net.sf.jasperreports.eclipse.util.FileUtils
+												.getBytes(file)));
+								rd.setHasData(origin.getData() != null);
+							} catch (Throwable e) {
+								file = null;
+							}
+
+							rd.setIsNew(true);
+							rd.setUriString(dURI + "/" + rd.getName() + "_COPY"); //$NON-NLS-1$
+							rd.setLabel(rd.getLabel() + "_COPY");
+							fixUris(rd, monitor, mc);
+							if (monitor.isCanceled())
+								return;
+							ws.addOrModifyResource(monitor, rd, null);
+						} else {
+							if (m.isCut()) {
+								ws.move(monitor, origin, dURI);
+								m.setCut(false);
+							} else
+								ws.copy(monitor, origin, dURI);
+						}
 					} else if (parent instanceof MReportUnit) {
+						if (copy) {
+							origin.setName(origin.getName() + "_COPY");
+							origin.setLabel(origin.getName() + "_COPY");
+							origin.setUriString(origin.getUriString() + "_COPY");
+						}
 						if (!(m.getParent() instanceof MFolder)
 								&& m.getParent() instanceof MResource) {
 							if (origin.getParentFolder() != null
@@ -376,6 +411,38 @@ public class PasteResourceAction extends Action {
 			}
 		}
 		return n;
+	}
+
+	private void fixUris(ResourceDescriptor rd, IProgressMonitor monitor,
+			IConnection mc) {
+		for (ResourceDescriptor r : rd.getChildren()) {
+			r.setIsNew(true);
+			if (!r.getIsReference() && r.getParentFolder().contains("_file")) {
+				File file;
+				try {
+					file = FileUtils.createTempFile("tmp", "file");
+					try {
+						r = mc.get(monitor, r, file);
+						r.setData(Base64
+								.encodeBase64(net.sf.jasperreports.eclipse.util.FileUtils
+										.getBytes(file)));
+						r.setHasData(r.getData() != null);
+					} catch (Throwable e) {
+						file = null;
+					}
+
+					r.setUriString(r.getUriString().replaceFirst(
+							r.getParentFolder(), rd.getUriString() + "_file"));
+					r.setParentFolder(rd.getUriString());
+					fixUris(r, monitor, mc);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+			if (monitor.isCanceled())
+				break;
+		}
 	}
 
 	private void refreshNode(INode p, IProgressMonitor monitor)
