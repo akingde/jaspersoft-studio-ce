@@ -15,7 +15,7 @@ package com.jaspersoft.studio.model.image.command.wizard;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignImage;
 
-import org.eclipse.core.internal.resources.File;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.dialogs.Dialog;
@@ -82,7 +82,7 @@ public class WizardImagePage extends WizardPage {
 						.getActiveShell(), false, ResourcesPlugin.getWorkspace().getRoot(), IResource.FILE);
 				fd.setInitialPattern("*.png"); //$NON-NLS-1$
 				if (fd.open() == Dialog.OK) {
-					File obj = (File) fd.getFirstResult();
+					IFile obj = (IFile) fd.getFirstResult();
 					JRDesignExpression jre = new JRDesignExpression();
 					jre.setText("\"" + obj.getLocationURI().getPath() + "\""); //$NON-NLS-1$ //$NON-NLS-2$
 					mimage.setPropertyValue(JRDesignImage.PROPERTY_EXPRESSION, jre);
