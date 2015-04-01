@@ -73,7 +73,7 @@ public class MParameter extends MParameterSystem implements ICopyable {
 
 	public boolean isMainDataset() {
 		if (getParent() instanceof MParameters) {
-			MParameters prms = (MParameters) getParent();
+			MParameters<?> prms = (MParameters<?>) getParent();
 			if (prms.getValue() instanceof JRDesignDataset)
 				if (getJasperDesign().getMainDataset() == prms.getValue())
 					return true;
