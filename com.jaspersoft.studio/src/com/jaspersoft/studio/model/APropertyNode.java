@@ -112,6 +112,18 @@ public abstract class APropertyNode extends ANode implements IPropertySource, IP
 		}
 	}
 
+	/**
+	 * Tries to get a proper expression context for the current node.
+	 * First step is trying to get the expression context through a valid adapter from the node object.
+	 * <p>
+	 * 
+	 * NOTE: subclasses that override this method <em>SHOULD NOT</em> call superclass implementation,
+	 * since it can lead to StackOverflowError exceptions.
+	 *  
+	 * @return a valid expression context, <code>null</code> otherwise
+	 * @see #getAdapter(Class)
+	 * @see ExpressionContext
+	 */
 	public ExpressionContext getExpressionContext() {
 		JRDesignElement designEl = null;
 		if (this.getValue() instanceof JRDesignElement) {

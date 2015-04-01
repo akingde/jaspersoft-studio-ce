@@ -62,7 +62,7 @@ public abstract class MDatasetGroupNode extends APropertyNode {
 				}
 			}
 		}
-		return super.getExpressionContext();
+		return null;
 	}
 	
 	/**
