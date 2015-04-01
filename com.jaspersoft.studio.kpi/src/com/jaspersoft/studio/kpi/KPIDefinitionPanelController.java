@@ -4,6 +4,7 @@ import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -24,6 +25,7 @@ public class KPIDefinitionPanelController extends Wizard {
 		kpiDefinitionPanel.setParentReportUnit(parentReportUnit);
 		kpiDefinitionPanel.setKpiReportUnit(kpiReportUnit);
 		kpiDefinitionPanel.setMServerProfile(serverProfile);
+		kpiDefinitionPanel.loadJasperDesign();
 	}
 	
 	

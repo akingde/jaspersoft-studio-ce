@@ -2,6 +2,7 @@ package com.jaspersoft.studio.kpi;
 
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -97,8 +98,11 @@ public class KPIDeployAction extends Action {
 							
 							ResourceDescriptor kpiReportUnit;
 							
+							JasperDesign kpiJasperDesign = null;
 							try {
 								kpiReportUnit = client.get(monitor, folderResourceDescriptor, null);
+								
+								// If we got the kpiReportUnit, let's get the jrxml and load it as JasperDesign...
 							} catch (Exception ex)
 							{
 								kpiReportUnit = null;
