@@ -87,6 +87,8 @@ public class DeleteBandCommand extends Command {
 		case NO_DATA:
 			jrDesign.setNoData(null);
 			break;
+		default:
+			break;
 		}
 	}
 
@@ -134,6 +136,8 @@ public class DeleteBandCommand extends Command {
 			break;
 		case NO_DATA:
 			jrDesign.setNoData(jrElement);
+			break;
+		default:
 			break;
 		}
 	}
