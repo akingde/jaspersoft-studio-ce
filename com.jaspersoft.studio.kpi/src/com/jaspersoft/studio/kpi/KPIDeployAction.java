@@ -15,13 +15,12 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.wizard.WizardDialog;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
-import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.kpi.dialog.KPIConfiguratorWizard;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.protocol.restv2.RestV2ConnectionJersey;
-import com.jaspersoft.studio.server.wizard.resource.ResourceWizard;
 
 public class KPIDeployAction extends Action {
 	private static final String ID = "KPIDEPLOYACTION"; //$NON-NLS-1$
@@ -120,7 +119,8 @@ public class KPIDeployAction extends Action {
 								@Override
 								public void run() {
 									
-									KPIDefinitionPanelController wizard = new KPIDefinitionPanelController(client, rd, kpiReportUnitFinal, (MServerProfile)node.getRoot());
+									//KPIDefinitionPanelController wizard = new KPIDefinitionPanelController(client, rd, kpiReportUnitFinal, (MServerProfile)node.getRoot());
+									KPIConfiguratorWizard wizard = new KPIConfiguratorWizard(client, rd, kpiReportUnitFinal, (MServerProfile)node.getRoot());
 									WizardDialog dialog = new WizardDialog(UIUtils.getShell(), wizard);
 									dialog.open();
 									//MessageDialog.openInformation(UIUtils.getShell(), "KPI Deploy", "Ready to deploy a kpi to " + rd.getUriString());

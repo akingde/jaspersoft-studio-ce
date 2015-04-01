@@ -2,6 +2,7 @@ package com.jaspersoft.studio.kpi;
 
 import java.io.File;
 import java.io.InputStream;
+import java.net.URL;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
@@ -137,8 +138,8 @@ public class KPIDefinitionPanel extends JSSHelpWizardPage {
 		{
 			try {
 				// Load the standard kpi.jrxml from the resources
-				InputStream fis = JRLoader.getResourceInputStream("com/jaspersoft/studio/kpi/resources/kpi.jrxml");
-				kpiJasperDesign = JRXmlLoader.load(fis);
+				URL resource = Activator.getDefault().getBundle().getResource("/resources/kpi.jrxml");
+				kpiJasperDesign = JRXmlLoader.load(resource.openStream());
 			} catch (Exception e) {
 				// TODO this should never happen.... but if it does, it should be some kind of
 				// fatal error!!
