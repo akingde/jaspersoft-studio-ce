@@ -214,25 +214,64 @@ public abstract class AExportAction extends AReportViewerAction {
 
 	protected abstract JRAbstractExporter<?, ?, ?, ?> getExporter(JasperReportsConfiguration jContext,
 			JRExportProgressMonitor monitor, File file);
+	
+	/**
+	 * Called when the destination file already exist, check what to do using the preferences and 
+	 * it can use a static value chosen by the user before or prompt a question
+	 * 
+	 * @return true if the export operation should continue and the target file overwritten, false
+	 * if the operation should be aborted
+	 */
+	protected boolean continueIfFileExist(){
+		boolean result = true;
+		//Read the preference from the store
+		String exporterValueString = JaspersoftStudioPlugin.getInstance().getPreferenceStore().getString(JRExporterPreferencePage.EXPORTER_OVERWRITE);
+		JRExporterPreferencePage.OVERWRITE_STATE exporterValue = JRExporterPreferencePage.OVERWRITE_STATE.ASK_EVERYTIME;
+		if (exporterValueString != null){
+			exporterValue = JRExporterPreferencePage.OVERWRITE_STATE.valueOf(exporterValueString);
+		}
+		if (exporterValue.equals(JRExporterPreferencePage.OVERWRITE_STATE.ASK_EVERYTIME)){
+			//Prompt the question to the user
+			Boolean[] answers = UIUtils.showConfirmation(Messages.AExportAction_overwriteTitle, Messages.AExportAction_overwriteMessage, Messages.AExportAction_overwriteCheckbox);
+			//the first element of the array is the decision made on the dialog, the second is the value of the checkbox
+			result = answers[0];
+			if (answers[1]){
+				 //need to remember the decision
+				 String selectionToRemember = result ? JRExporterPreferencePage.OVERWRITE_STATE.OVERWRITE_TARGET.toString() : JRExporterPreferencePage.OVERWRITE_STATE.STOP_OPERATION.toString();
+				 JaspersoftStudioPlugin.getInstance().getPreferenceStore().setValue(JRExporterPreferencePage.EXPORTER_OVERWRITE, selectionToRemember);
+			}
+		} else if (exporterValue.equals(JRExporterPreferencePage.OVERWRITE_STATE.STOP_OPERATION)){
+			result = false;
+		}
+		//the case to continue is already cover by the initialization value of result
+		return result;
+	}
 
 	public void doExport(File file, JasperPrint jrPrint, final IProgressMonitor monitor) {
 		try {
 			if (jrPrint != null && jrPrint.getPages() != null) {
 				final Integer size = jrPrint.getPages().size();
 				monitor.beginTask(Messages.AExportAction_exportreport, size);
-				exportWithProgress(file, new JRExportProgressMonitor() {
-					private int current = 0;
-
-					@Override
-					public void afterPageExport() {
-						if (monitor.isCanceled())
-							Thread.currentThread().interrupt();
-						monitor.worked(1);
-						monitor.subTask(MessageFormat
-								.format(Messages.PageNumberContributionItem_page, new Integer(current++), size));
-					}
-
-				});
+				boolean continueOperation = true;
+				if (file.exists()){
+					//If the file already exist read the preference option to handle the situation
+					continueOperation = continueIfFileExist();
+				}
+				if (continueOperation){
+					exportWithProgress(file, new JRExportProgressMonitor() {
+						private int current = 0;
+	
+						@Override
+						public void afterPageExport() {
+							if (monitor.isCanceled())
+								Thread.currentThread().interrupt();
+							monitor.worked(1);
+							monitor.subTask(MessageFormat
+									.format(Messages.PageNumberContributionItem_page, new Integer(current++), size));
+						}
+	
+					});
+				}
 			}
 		} catch (Throwable e) {
 			UIUtils.showError(e);

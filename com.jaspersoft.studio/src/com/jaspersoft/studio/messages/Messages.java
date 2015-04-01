@@ -167,6 +167,9 @@ public class Messages extends NLS {
 	public static String AdditionalJarsPage_wizardDescription;
 	public static String AdditionalJarsPage_wizardTitle;
 	public static String AExportAction_exportreport;
+	public static String AExportAction_overwriteCheckbox;
+	public static String AExportAction_overwriteMessage;
+	public static String AExportAction_overwriteTitle;
 	public static String Align2BorderAction_align_to_bottom;
 	public static String Align2BorderAction_align_to_bottom_tool_tip;
 	public static String Align2BorderAction_align_to_center;
@@ -908,6 +911,10 @@ public class Messages extends NLS {
 	public static String JRExporterPreferencePage_7;
 	public static String JRExporterPreferencePage_8;
 	public static String JRExporterPreferencePage_9;
+	public static String JRExporterPreferencePage_abortOperation;
+	public static String JRExporterPreferencePage_alwaysOverwrite;
+	public static String JRExporterPreferencePage_askTheUser;
+	public static String JRExporterPreferencePage_fileExistingOption;
 	public static String JRExpressionPage_1;
 	public static String JRExpressionPage_description;
 	public static String JRPropertyDialog_propName;

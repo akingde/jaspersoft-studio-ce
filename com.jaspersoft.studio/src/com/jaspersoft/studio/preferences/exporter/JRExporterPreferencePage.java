@@ -38,6 +38,15 @@ import com.jaspersoft.studio.utils.Misc;
  */
 public class JRExporterPreferencePage extends FieldEditorOverlayPage {
 
+	/**
+	 * Enumeration used to choose what to do when the export action
+	 * should do when the target file already exist
+	 * 
+	 * @author Orlandin Marco
+	 *
+	 */
+	public enum OVERWRITE_STATE{OVERWRITE_TARGET, STOP_OPERATION, ASK_EVERYTIME};
+	
 	public static final String COM_JASPERSOFT_STUDIO_EXPORTER_SHOW_XHTML = "com.jaspersoft.studio.exporter.show.xhtml"; //$NON-NLS-1$
 	public static final String COM_JASPERSOFT_STUDIO_EXPORTER_SHOW_EXCELAPI_METADATA = "com.jaspersoft.studio.exporter.show.excelapi.metadata"; //$NON-NLS-1$
 	public static final String COM_JASPERSOFT_STUDIO_EXPORTER_SHOW_EXCELAPI = "com.jaspersoft.studio.exporter.show.excelapi"; //$NON-NLS-1$
@@ -45,6 +54,7 @@ public class JRExporterPreferencePage extends FieldEditorOverlayPage {
 	public static final String EXPPARAM_OFFSET_X = "expparam.offset.x"; //$NON-NLS-1$
 	public static final String EXPPARAM_OFFSET_Y = "expparam.offset.y"; //$NON-NLS-1$
 	public static final String EXPPARAM_INDEX_PAGE = "expparam.index.page"; //$NON-NLS-1$
+	public static final String EXPORTER_OVERWRITE = "exporterOverwrite"; //$NON-NLS-1$
 
 	public JRExporterPreferencePage() {
 		super(GRID);
@@ -86,6 +96,12 @@ public class JRExporterPreferencePage extends FieldEditorOverlayPage {
 
 		addField(new PagesFieldEditor(EXPPARAM_INDEX_PAGE, Messages.JRExporterPreferencePage_18, getFieldEditorParent()));
 
+		JSSComboFieldEditor expOverwrite = new JSSComboFieldEditor(EXPORTER_OVERWRITE, Messages.JRExporterPreferencePage_fileExistingOption, new String[][] {
+						{ Messages.JRExporterPreferencePage_askTheUser, OVERWRITE_STATE.ASK_EVERYTIME.toString() },
+						{ Messages.JRExporterPreferencePage_alwaysOverwrite, OVERWRITE_STATE.OVERWRITE_TARGET.toString()},
+						{ Messages.JRExporterPreferencePage_abortOperation, OVERWRITE_STATE.STOP_OPERATION.toString() } }, getFieldEditorParent());
+		addField(expOverwrite);
+		
 		bf = new BooleanFieldEditor(COM_JASPERSOFT_STUDIO_EXPORTER_SHOW_EXCELAPI, Messages.JRExporterPreferencePage_3,
 				getFieldEditorParent());
 		addField(bf);
@@ -119,6 +135,7 @@ public class JRExporterPreferencePage extends FieldEditorOverlayPage {
 		store.setDefault(COM_JASPERSOFT_STUDIO_EXPORTER_SHOW_XHTML, false);
 
 		store.setDefault(EXPPARAM_INDEX_PAGE, "all"); //$NON-NLS-1$
+		store.setDefault(EXPORTER_OVERWRITE, OVERWRITE_STATE.ASK_EVERYTIME.toString());
 	}
 
 	/*
