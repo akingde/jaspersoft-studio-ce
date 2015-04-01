@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: com.jaspersoft.studio.kpi
+Bundle-SymbolicName: com.jaspersoft.studio.kpi;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: com.jaspersoft.studio.kpi.Activator
+Bundle-Vendor: TIBCO
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.core.resources,
+ com.jaspersoft.studio.server;bundle-version="6.1.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ActivationPolicy: lazy
+Import-Package: com.jaspersoft.studio.server.model
