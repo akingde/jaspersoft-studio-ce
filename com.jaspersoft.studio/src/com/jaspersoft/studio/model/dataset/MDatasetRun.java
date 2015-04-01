@@ -216,6 +216,7 @@ public class MDatasetRun extends APropertyNode {
 				e.printStackTrace();
 			}
 		} else if (id.equals(JRDesignDatasetRun.PROPERTY_RETURN_VALUES)){
+			@SuppressWarnings("unchecked")
 			List<ReturnValue> returnList = (List<ReturnValue>)value;
 			List<ReturnValue> oldValues = new ArrayList<ReturnValue>(jrElement.getReturnValuesList());
 			//The element dosen't allow to swap the list, must remove the old element 
