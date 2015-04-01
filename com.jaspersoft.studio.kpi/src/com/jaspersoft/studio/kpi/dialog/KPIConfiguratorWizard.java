@@ -28,7 +28,6 @@ public class KPIConfiguratorWizard extends Wizard {
 		kpiDefinitionPanel.loadJasperDesign();
 	}
 	
-	
 	@Override
 	public boolean performFinish() {
 		try {

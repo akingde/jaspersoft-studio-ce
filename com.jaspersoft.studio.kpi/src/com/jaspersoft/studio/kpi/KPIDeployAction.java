@@ -13,9 +13,11 @@ import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.wizard.WizardDialog;
+import org.eclipse.swt.widgets.Shell;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.kpi.dialog.KPIConfiguratorWizard;
+import com.jaspersoft.studio.kpi.dialog.KPIWizardDialog;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.model.MReportUnit;
@@ -121,7 +123,7 @@ public class KPIDeployAction extends Action {
 									
 									//KPIDefinitionPanelController wizard = new KPIDefinitionPanelController(client, rd, kpiReportUnitFinal, (MServerProfile)node.getRoot());
 									KPIConfiguratorWizard wizard = new KPIConfiguratorWizard(client, rd, kpiReportUnitFinal, (MServerProfile)node.getRoot());
-									WizardDialog dialog = new WizardDialog(UIUtils.getShell(), wizard);
+									WizardDialog dialog = new KPIWizardDialog(UIUtils.getShell(), wizard);
 									dialog.open();
 									//MessageDialog.openInformation(UIUtils.getShell(), "KPI Deploy", "Ready to deploy a kpi to " + rd.getUriString());
 								}

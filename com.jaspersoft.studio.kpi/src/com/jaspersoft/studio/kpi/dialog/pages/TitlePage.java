@@ -1,4 +1,4 @@
-package com.jaspersoft.studio.kpi.dialog;
+package com.jaspersoft.studio.kpi.dialog.pages;
 
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExpression;
@@ -15,11 +15,11 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
+import com.jaspersoft.studio.kpi.dialog.AbstractKPIConfigurationPage;
+
 public class TitlePage extends AbstractKPIConfigurationPage {
 
 	public static final String PARAMETER_NAME = "title";
-	
-	private Composite comp = null;
 	
 	private String getTextFromExpression(JRExpression exp){
 		if (exp == null) return "";
@@ -54,7 +54,7 @@ public class TitlePage extends AbstractKPIConfigurationPage {
 	
 	@Override
 	protected Composite createComposite(Composite parent){
-		comp = new Composite(parent, SWT.NONE);
+		Composite comp = new Composite(parent, SWT.NONE);
 		comp.setLayout(new GridLayout(2, false));
 		new Label(comp, SWT.NONE).setText("Title");
 		Text titleText = new Text(comp, SWT.BORDER);

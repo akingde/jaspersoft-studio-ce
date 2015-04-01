@@ -28,6 +28,10 @@ import org.eclipse.swt.widgets.TableColumn;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.kpi.Activator;
+import com.jaspersoft.studio.kpi.dialog.pages.DatasetPage;
+import com.jaspersoft.studio.kpi.dialog.pages.RangePage;
+import com.jaspersoft.studio.kpi.dialog.pages.TitlePage;
+import com.jaspersoft.studio.kpi.dialog.pages.ValuePage;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.protocol.IConnection;
 import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorDatasource;
@@ -72,6 +76,7 @@ public class KPIConfiguratorPage extends JSSHelpWizardPage {
 			pagesComposite.layout();
 		}
 	}
+	
 	
 	protected KPIConfiguratorPage() {
 		super("kpi"); // //$NON-NLS-0$
@@ -150,6 +155,10 @@ public class KPIConfiguratorPage extends JSSHelpWizardPage {
 	
 	protected void addCategories(){
 		pages.add(new TitlePage());
+		pages.add(new ValuePage("Value", "value_variable"));
+		pages.add(new ValuePage("Target", "target_variable"));
+		pages.add(new RangePage());
+		pages.add(new DatasetPage(this));
 	}
 
 	@Override
@@ -253,5 +262,9 @@ public class KPIConfiguratorPage extends JSSHelpWizardPage {
 	
 	public String getDatasourceUri(){
 		return datasourceURI;
+	}
+	
+	public void setDatasourceUri(String datasourceUri){
+		this.datasourceURI = datasourceUri;
 	}
 }
