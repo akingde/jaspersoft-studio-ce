@@ -96,6 +96,8 @@ public class CreateBandCommand extends Command {
 			case NO_DATA:
 				jrDesign.setNoData(jrElement);
 				break;
+			default:
+				break;
 			}
 		}
 	}
@@ -144,6 +146,8 @@ public class CreateBandCommand extends Command {
 			break;
 		case NO_DATA:
 			jrDesign.setNoData(null);
+			break;
+		default:
 			break;
 		}
 	}
