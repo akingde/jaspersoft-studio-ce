@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.editor.preview.view.control;
 
@@ -46,7 +42,7 @@ public class VSorting extends APreview {
 		scompo.setExpandHorizontal(true);
 		scompo.setExpandVertical(true);
 		scompo.setAlwaysShowScrollBars(false);
-		scompo.setMinSize(100, 100);
+		scompo.setMinSize(100, 200);
 
 		composite = new Composite(scompo, SWT.NONE);
 		composite.setBackground(parent.getBackground());
@@ -59,10 +55,7 @@ public class VSorting extends APreview {
 
 			@Override
 			public void controlResized(ControlEvent e) {
-				int h = composite.getSize().y;
-				composite.setSize(composite.computeSize(SWT.DEFAULT, h, true));
-				composite.layout();
-				scompo.setMinSize(composite.getSize());
+				refreshControl();
 			}
 
 			@Override
@@ -71,6 +64,12 @@ public class VSorting extends APreview {
 			}
 		});
 		return scompo;
+	}
+
+	@Override
+	public Control getControl() {
+		refreshControl();
+		return super.getControl();
 	}
 
 	public SortFieldSection getSortField() {
@@ -86,6 +85,13 @@ public class VSorting extends APreview {
 		sortField = getSortField();
 		sortField.fillTable(composite, jDesign, prompts, params);
 		composite.pack();
+		scompo.setMinSize(composite.getSize());
+	}
+
+	private void refreshControl() {
+		int h = composite.getSize().y;
+		composite.setSize(composite.computeSize(SWT.DEFAULT, h, true));
+		composite.layout();
 		scompo.setMinSize(composite.getSize());
 	}
 
