@@ -18,7 +18,6 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.jaspersoft.studio.data.MDataAdapter;
 import com.jaspersoft.studio.data.MDataAdapters;
-import com.jaspersoft.studio.data.storage.ADataAdapterStorage;
 import com.jaspersoft.studio.data.wizard.imp.ImportDAWizard;
 import com.jaspersoft.studio.messages.Messages;
 

@@ -52,6 +52,7 @@ public class DataPreviewScriptlet extends JRDefaultScriptlet {
 		return isSorted;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void afterDetailEval() throws JRScriptletException {
 		if (isSorted()) {

@@ -29,13 +29,11 @@ import com.jaspersoft.studio.messages.Messages;
 
 public class VersionDialog extends Dialog {
 
-	private IResource res;
 	private boolean hideNext = false;
 
 	public VersionDialog(Shell parent, String version, IResource res) {
 		super(parent);
 		this.version = version;
-		this.res = res;
 	}
 
 	public boolean isHideNext() {

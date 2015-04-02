@@ -70,11 +70,12 @@ public class ImportDAPage extends JSSHelpWizardPage {
 		viewer.getTree().setLayoutData(new GridData(GridData.FILL_BOTH));
 		viewer.addSelectionChangedListener(new ISelectionChangedListener() {
 
+			@SuppressWarnings("unchecked")
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
 				IStructuredSelection s = (IStructuredSelection) viewer.getSelection();
 				setPageComplete(!s.isEmpty());
-				selection = s.toList();
+				selection = (List<DataAdapterDescriptor>) s.toList();
 			}
 		});
 

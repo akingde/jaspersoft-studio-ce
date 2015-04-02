@@ -13,6 +13,7 @@
 package com.jaspersoft.studio.dnd;
 
 import java.util.Iterator;
+import java.util.List;
 
 import org.eclipse.gef.dnd.TemplateTransfer;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -62,14 +63,15 @@ public class NodeDragListener extends DragSourceAdapter {
 	 */
 	public void dragSetData(DragSourceEvent event) {
 		IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
+		List<?> list = selection.toList();
 		if (NodeTransfer.getInstance().isSupportedType(event.dataType)) {
-			event.data = selection.toList().toArray();
+			event.data = list.toArray();
 		} else if (PluginTransfer.getInstance().isSupportedType(event.dataType)) {
-			ANode[] gadgets = (ANode[]) selection.toList().toArray(new ANode[selection.size()]);
+			ANode[] gadgets = list.toArray(new ANode[selection.size()]);
 			byte[] data = NodeTransfer.getInstance().toByteArray(gadgets);
 			event.data = new PluginTransferData(JaspersoftStudioPlugin.getUniqueIdentifier(), data);
 		} else if (TemplateTransfer.getInstance().isSupportedType(event.dataType)) {
-			event.data = selection.toList().toArray();
+			event.data = list.toArray();
 		}
 	}
 
