@@ -48,11 +48,23 @@ public class HttpUtils {
 			Credentials c = getCredentials(d);
 			if (c != null)
 				exec.auth(new HttpHost(d.getHost(), d.getPort()), c);
-			exec.authPreemptiveProxy(new HttpHost(d.getHost(), d.getPort(), d.getType().toLowerCase()));
+			exec.authPreemptiveProxy(new HttpHost(d.getHost(), d.getPort(), d
+					.getType().toLowerCase()));
 			break;
 		}
 		executors.put(exec, uri);
 		return exec;
+	}
+
+	public static HttpHost getUnauthProxy(Executor exec, URI uri) {
+		for (IProxyData d : proxyService.select(uri)) {
+			Credentials c = getCredentials(d);
+			if (c != null)
+				continue;
+			return new HttpHost(d.getHost(), d.getPort(), d.getType()
+					.toLowerCase());
+		}
+		return null;
 	}
 
 	public static void setupProxy(ClientConfig clientConfig, URI uri) {
