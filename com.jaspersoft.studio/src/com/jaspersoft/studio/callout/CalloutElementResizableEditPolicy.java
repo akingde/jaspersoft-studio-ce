@@ -30,12 +30,13 @@ public class CalloutElementResizableEditPolicy extends ElementResizableEditPolic
 		}
 
 		// resizable in at least one direction
-		List<?> list = new ArrayList();
+		List<?> list = new ArrayList<Object>();
 		createMoveHandle(list);
 		createResizeHandle(list, PositionConstants.SOUTH_EAST);
 		return list;
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	protected void createResizeHandle(List handles, int direction) {
 		if ((getResizeDirections() & direction) == direction) {

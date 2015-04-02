@@ -94,9 +94,10 @@ public class PinEditPart extends AJDEditPart implements PropertyChangeListener, 
 		return connectPart;
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	protected List getModelSourceConnections() {
-		List sourceConnections = new ArrayList();
+		List<MPinConnection> sourceConnections = new ArrayList<MPinConnection>();
 		sourceConnections.add(getModel().getSourceConnections());
 		return sourceConnections;
 	}

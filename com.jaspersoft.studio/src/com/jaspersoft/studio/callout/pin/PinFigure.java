@@ -14,16 +14,14 @@ package com.jaspersoft.studio.callout.pin;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.ui.internal.util.BundleUtility;
-import org.osgi.framework.Bundle;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
@@ -35,9 +33,8 @@ public class PinFigure extends Figure {
 	public PinFigure() {
 		if (bimage == null)
 			try {
-				Bundle bundle = Platform.getBundle(JaspersoftStudioPlugin.PLUGIN_ID);
-				if (BundleUtility.isReady(bundle))
-					bimage = ImageIO.read(BundleUtility.find(bundle, "icons/pin-16.png"));
+				String fileLocation = JaspersoftStudioPlugin.getInstance().getFileLocation("icons/pin-16.png");
+				bimage = ImageIO.read(new File(fileLocation));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

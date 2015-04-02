@@ -33,7 +33,7 @@ public class CalloutSection extends AbstractSection {
 
 		createWidget4Property(parent, MCallout.PROP_FOREGROUND);
 		createWidget4Property(parent, MCallout.PROP_BACKGROUND);
-		ASPropertyWidget w = createWidget4Property(parent, MCallout.PROP_TEXT);
+		ASPropertyWidget<?> w = createWidget4Property(parent, MCallout.PROP_TEXT);
 		GridData gd = new GridData();
 		gd.horizontalSpan = 4;
 		w.getLabel().setLayoutData(gd);

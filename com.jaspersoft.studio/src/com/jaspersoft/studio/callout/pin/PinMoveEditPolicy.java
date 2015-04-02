@@ -25,6 +25,7 @@ public class PinMoveEditPolicy extends ElementResizableEditPolicy {
 		super();
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	protected List createSelectionHandles() {
 		if (getResizeDirections() == PositionConstants.NONE) {
@@ -33,7 +34,7 @@ public class PinMoveEditPolicy extends ElementResizableEditPolicy {
 		}
 
 		// resizable in at least one direction
-		List list = new ArrayList();
+		List<?> list = new ArrayList<Object>();
 		createMoveHandle(list);
 		return list;
 	}
@@ -45,6 +46,7 @@ public class PinMoveEditPolicy extends ElementResizableEditPolicy {
 		return false;
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	protected void createResizeHandle(List handles, int direction) {
 	}
