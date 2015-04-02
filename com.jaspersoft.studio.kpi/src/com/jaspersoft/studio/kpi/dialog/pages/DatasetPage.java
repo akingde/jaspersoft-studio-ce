@@ -21,6 +21,7 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescript
 import com.jaspersoft.studio.kpi.dialog.AbstractKPIConfigurationPage;
 import com.jaspersoft.studio.kpi.dialog.KPIConfiguratorPage;
 import com.jaspersoft.studio.model.MReport;
+import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.dataset.MDataset;
 import com.jaspersoft.studio.model.util.ReportFactory;
 import com.jaspersoft.studio.property.dataset.dialog.DatasetDialog;
@@ -108,11 +109,13 @@ public class DatasetPage extends AbstractKPIConfigurationPage{
 	}
 	
 	private MDataset createDatasetModel(JasperReportsConfiguration jConfig){
-		MReport report = new MReport(null, jConfig);
+		MRoot root = new MRoot(null, jd);
+		MReport report = new MReport(root, jConfig);
 		report.setValue(jd);
 		MDataset model = new MDataset(report, jd.getMainDesignDataset());
 		model.setJasperConfiguration(jConfig);
 		ReportFactory.createDataset(model, jd.getMainDesignDataset(), false);
+		report.addChild(model);
 		return model;
 	}
 }

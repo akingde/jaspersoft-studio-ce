@@ -23,6 +23,7 @@ import org.eclipse.swt.widgets.Label;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.kpi.dialog.AbstractKPIConfigurationPage;
 import com.jaspersoft.studio.model.MReport;
+import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.dataset.MDataset;
 import com.jaspersoft.studio.model.util.ReportFactory;
 import com.jaspersoft.studio.property.dataset.dialog.DatasetDialog;
@@ -108,7 +109,8 @@ public class SeriesPage extends AbstractKPIConfigurationPage{
 	}
 	
 	private MDataset createDatasetModel(JasperReportsConfiguration jConfig, JRDesignDataset dataset){
-		MReport report = new MReport(null, jConfig);
+		MRoot root = new MRoot(null, jd);
+		MReport report = new MReport(root, jConfig);
 		report.setValue(jd);
 		MDataset model = new MDataset(report, dataset);
 		model.setJasperConfiguration(jConfig);
