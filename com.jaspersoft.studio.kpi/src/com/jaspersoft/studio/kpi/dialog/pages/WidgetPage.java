@@ -38,24 +38,7 @@ public class WidgetPage extends AbstractKPIConfigurationPage {
 	private SelectionAdapter buttonSelected = new SelectionAdapter() {
 		
 		public void widgetSelected(SelectionEvent e) {
-			boolean anotherButtonFound = false;
-			for(ToolItem btn : buttonsList){
-				if (btn != e.widget && btn.getSelection()){
-					//btn.removeSelectionListener(this);
-					//btn.setSelection(false);
-					//btn.addSelectionListener(this);
-					anotherButtonFound = true;
-					break;
-				}
-			}
-			if (anotherButtonFound){
-				writeValue( (String)e.widget.getData());
-			} else {
-				ToolItem btn = (ToolItem)e.widget;
-				btn.removeSelectionListener(this);
-				btn.setSelection(true);
-				btn.addSelectionListener(this);
-			}
+			writeValue( (String)e.widget.getData());
 		};
 		
 	};
