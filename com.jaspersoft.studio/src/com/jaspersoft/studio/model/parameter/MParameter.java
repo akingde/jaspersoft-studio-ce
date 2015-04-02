@@ -276,7 +276,7 @@ public class MParameter extends MParameterSystem implements ICopyable {
 	}
 	
 	@Override
-	public Object getAdapter(Class adapter) {
+	public Object getAdapter(@SuppressWarnings("rawtypes") Class adapter) {
 		if (ExpressionContext.class.equals(adapter)) {
 			return getExpressionContext();
 		}

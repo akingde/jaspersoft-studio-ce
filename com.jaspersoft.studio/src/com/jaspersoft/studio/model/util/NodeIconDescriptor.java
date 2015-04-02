@@ -12,7 +12,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.model.util;
 
-import java.net.URL;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -195,26 +194,4 @@ public class NodeIconDescriptor implements IIconDescriptor {
 		return this.ICON_TOOLTIP;
 	}
 
-	// This method returns the correct locale suffix. It will test from the most specific to
-	// the most general: fr_FR > fr > no suffix.
-	//FIXME: consider remove
-	private String getLocale() {
-		String dLocale = Locale.getDefault().toString();
-		String fullLocaleSuffix="_"+dLocale;
-		int index = dLocale.indexOf("_");
-		if(index==-1){
-			index=dLocale.length();
-		}
-		String localeLanguageSuffix="_"+dLocale.substring(0,index);
-
-		String[] possibleLocales = new String[] {fullLocaleSuffix,localeLanguageSuffix};
-		for(String l : possibleLocales) {
-			URL resource = plugin.getBundle().getResource("resources/icons" + l + ".properties");
-			if(resource!=null) {
-				return l;
-			}
-		}
-		
-		return "";
-	}
 }

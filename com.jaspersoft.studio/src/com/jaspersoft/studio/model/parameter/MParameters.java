@@ -50,6 +50,7 @@ public class MParameters<T> extends MCollection {
 		super(parent, value, property);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public T getValue() {
 		return (T) super.getValue();

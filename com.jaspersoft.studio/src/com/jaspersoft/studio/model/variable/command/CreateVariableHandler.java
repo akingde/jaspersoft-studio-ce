@@ -63,35 +63,24 @@ public class CreateVariableHandler extends Action {
 		return null;
 	}
 	
-	private Iterator getFirstChildrendIterator(List children){
+	private Iterator<?> getFirstChildrendIterator(List<?> children){
 		if (children != null) return children.iterator();
 		return null;
 	}
 	
 	private StructuredSelection getLastVariable(EditPart root){
-		List children = root.getChildren();
-	 	Iterator it = getFirstChildrendIterator(children);
+		List<?> children = root.getChildren();
+	 	Iterator<?> it = getFirstChildrendIterator(children);
 	 	while(it != null && it.hasNext()){
 	 		EditPart actualPart = (EditPart)it.next();
 	 		if (actualPart.getModel() instanceof MReport || actualPart.getModel() instanceof MRoot) it = getFirstChildrendIterator(actualPart.getChildren());
 	 		if (actualPart.getModel() instanceof MVariables) {
-	 			List variables = actualPart.getChildren();
+	 			List<?> variables = actualPart.getChildren();
 	 			if (variables != null){
 		 			int last = variables.size() - 1;
 		 			return new StructuredSelection(variables.get(last));
 	 			}
 	 		}
-	 	}
-	 	return null;
-	}
-	
-	private StructuredSelection getVariables(EditPart root){
-		List children = root.getChildren();
-	 	Iterator it = getFirstChildrendIterator(children);
-	 	while(it != null && it.hasNext()){
-	 		EditPart actualPart = (EditPart)it.next();
-	 		if (actualPart.getModel() instanceof MReport || actualPart.getModel() instanceof MRoot) it = getFirstChildrendIterator(actualPart.getChildren());
-	 		if (actualPart.getModel() instanceof MVariables) return new StructuredSelection(actualPart);
 	 	}
 	 	return null;
 	}

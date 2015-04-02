@@ -95,7 +95,6 @@ public class DefaultValuesMap {
 	 * @param type the type of the element for which the properties are requested
 	 * @return the default properties of the requested element
 	 */
-	@SuppressWarnings("deprecation")
 	private static HashMap<String, Object> initializeType(APropertyNode type){
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		result.put(JRDesignStyle.PROPERTY_FONT_NAME, JRProperties.getProperty(JRFont.DEFAULT_FONT_NAME));
@@ -121,7 +120,7 @@ public class DefaultValuesMap {
 			result.put(JRDesignStyle.PROPERTY_BACKCOLOR, null);
 			result.put(JRDesignStyle.PROPERTY_FORECOLOR, null);
 			result.put(JRDesignStyle.PROPERTY_FILL, null);
-			result.put(JRDesignStyle.PROPERTY_MODE, ModeEnum.OPAQUE.getValue());
+			result.put(JRDesignStyle.PROPERTY_MODE, ModeEnum.OPAQUE.getName());
 			result.put(JRDesignStyle.PROPERTY_PDF_FONT_NAME, JRProperties.getProperty(JRFont.DEFAULT_PDF_FONT_NAME));
 			result.put(JRDesignStyle.PROPERTY_PDF_ENCODING, JRProperties.getProperty(JRFont.DEFAULT_PDF_ENCODING));
 			result.put(JRDesignStyle.PROPERTY_PDF_EMBEDDED, JRProperties.getBooleanProperty(JRFont.DEFAULT_PDF_EMBEDDED));
@@ -130,7 +129,7 @@ public class DefaultValuesMap {
 		} else {
 			result.put(JRDesignStyle.PROPERTY_BACKCOLOR, Color.white);
 			result.put(JRDesignStyle.PROPERTY_FORECOLOR, Color.black);
-			ModeEnum transparency = ModeEnum.getByValue(ModeEnum.OPAQUE.getValue());
+			ModeEnum transparency = ModeEnum.OPAQUE;
 			
 			if (type instanceof MGraphicElementLinePen){
 				createBaseLinePen(result, MLineBox.LINE_PEN);
@@ -150,7 +149,7 @@ public class DefaultValuesMap {
 				result.put(JRDesignFont.PROPERTY_PDF_FONT_NAME, JRProperties.getProperty(JRFont.DEFAULT_PDF_FONT_NAME));
 				result.put(JRDesignFont.PROPERTY_PDF_ENCODING, JRProperties.getProperty(JRFont.DEFAULT_PDF_ENCODING));
 				result.put(JRDesignFont.PROPERTY_PDF_EMBEDDED, JRProperties.getBooleanProperty(JRFont.DEFAULT_PDF_EMBEDDED));
-				transparency = ModeEnum.getByValue(ModeEnum.TRANSPARENT.getValue());
+				transparency = ModeEnum.TRANSPARENT;
 			}
 			
 			if (type instanceof MTextField){

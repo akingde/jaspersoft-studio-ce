@@ -557,12 +557,9 @@ public abstract class ANode implements INode, Serializable, IAdaptable, Cloneabl
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.core.runtime.IAdaptable#getAdapter(java.lang.Class)
-	 */
-	public Object getAdapter(Class adapter) {
+
+	@Override
+	public Object getAdapter(@SuppressWarnings("rawtypes") Class adapter) {
 		if (adapter == ANode.class || adapter == INode.class)
 			return this;
 		return null;

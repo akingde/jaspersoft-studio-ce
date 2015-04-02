@@ -168,7 +168,7 @@ public class MGroups extends ANode implements IPastable, IContainerEditPart {
 	}
 	
 	@Override
-	public Object getAdapter(Class adapter) {
+	public Object getAdapter(@SuppressWarnings("rawtypes") Class adapter) {
 		if(getValue() instanceof JRDesignDataset) {
 			return new ExpressionContext((JRDesignDataset) getValue(),getJasperConfiguration());
 		}

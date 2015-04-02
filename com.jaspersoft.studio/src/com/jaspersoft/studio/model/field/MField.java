@@ -297,7 +297,7 @@ public class MField extends APropertyNode implements ICopyable, IDragable {
 	}
 	
 	@Override
-	public Object getAdapter(Class adapter) {
+	public Object getAdapter(@SuppressWarnings("rawtypes") Class adapter) {
 		if (ExpressionContext.class.equals(adapter)) {
 			return getExpressionContext();
 		}

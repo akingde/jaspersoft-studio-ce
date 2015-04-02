@@ -340,7 +340,7 @@ public class MVariable extends MVariableSystem implements ICopyable {
 	}
 
 	@Override
-	public Object getAdapter(Class adapter) {
+	public Object getAdapter(@SuppressWarnings("rawtypes") Class adapter) {
 		if (ExpressionContext.class.equals(adapter)) {
 			return getExpressionContext();
 		}

@@ -19,7 +19,7 @@ import net.sf.jasperreports.engine.design.JRDesignFrame;
 import net.sf.jasperreports.engine.design.JRDesignTextField;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.EvaluationTimeEnum;
-import net.sf.jasperreports.engine.type.HorizontalAlignEnum;
+import net.sf.jasperreports.engine.type.HorizontalTextAlignEnum;
 
 import org.eclipse.draw2d.geometry.Rectangle;
 
@@ -146,7 +146,7 @@ public class CreatePageXofYCommand extends CreateElementCommand {
 		tfPageNumber.setY(location.y);
 		tfPageNumber.setWidth(location.width / 2);
 		tfPageNumber.setHeight(location.height);
-		tfPageNumber.setHorizontalAlignment(HorizontalAlignEnum.RIGHT);
+		tfPageNumber.setHorizontalTextAlign(HorizontalTextAlignEnum.RIGHT);
 		tfPageNumber.setEvaluationTime(EvaluationTimeEnum.NOW);
 		JRDesignExpression expression = new JRDesignExpression();
 		expression.setText(Messages.CreatePageXofYCommand_0);
@@ -164,7 +164,7 @@ public class CreatePageXofYCommand extends CreateElementCommand {
 		tfPageTotal.setY(location.y);
 		tfPageTotal.setWidth(location.width / 2);
 		tfPageTotal.setHeight(location.height);
-		tfPageTotal.setHorizontalAlignment(HorizontalAlignEnum.LEFT);
+		tfPageTotal.setHorizontalTextAlign(HorizontalTextAlignEnum.LEFT);
 		tfPageTotal.setEvaluationTime(EvaluationTimeEnum.REPORT);
 		expression = new JRDesignExpression();
 		expression.setText(Messages.CreatePageXofYCommand_1);

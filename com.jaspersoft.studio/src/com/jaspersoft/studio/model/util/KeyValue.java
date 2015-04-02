@@ -26,6 +26,7 @@ public class KeyValue<T, V> {
 	public boolean equals(Object obj) {
 		boolean b = obj instanceof KeyValue;
 		if (b) {
+			@SuppressWarnings("unchecked")
 			KeyValue<T, V> kobj = (KeyValue<T, V>) obj;
 			return key.equals(kobj.key) && value.equals(kobj.value);
 		}

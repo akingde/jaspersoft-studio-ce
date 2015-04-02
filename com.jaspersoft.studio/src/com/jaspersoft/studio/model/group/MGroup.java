@@ -316,7 +316,7 @@ public class MGroup extends APropertyNode implements ICopyable {
 	}
 
 	@Override
-	public Object getAdapter(Class adapter) {
+	public Object getAdapter(@SuppressWarnings("rawtypes") Class adapter) {
 		if (ExpressionContext.class.equals(adapter)) {
 			if (getParent() != null) {
 				// Ideally parent should be an MGroups node
