@@ -2,6 +2,7 @@ package com.jaspersoft.studio.kpi;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import org.apache.commons.codec.binary.Base64;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -144,6 +145,34 @@ public class KPIUtils {
 			return false;
 		}
 		
+		
+		return true;
+	}
+	
+	
+	
+	/**
+	 * Add to the KPI cache a list of report units
+	 *
+	 * @param client
+	 * @param reportUnitUris - List of report unit uris to add. These are all KPI report units!!!
+	 * @param clearCache - if true, all the existing entries will be removed.
+	 * @return boolean - true if the urls have been successfully stored
+	 */
+	public static boolean updateKPICache(IConnection client, List<String> reportUnitUris, boolean clearCache) {
+		
+		
+		
+		ResourceDescriptor kpiResourceDescriptor = getReportUnitKPI(client, reportUnitUri);
+		
+		if (kpiResourceDescriptor != null)
+		{
+			try {
+				client.delete(null, kpiResourceDescriptor);
+			} catch (Exception e) {
+				return false;
+			}
+		}
 		
 		return true;
 	}

@@ -16,10 +16,12 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.repository.IRepositoryViewProvider;
 import com.jaspersoft.studio.repository.actions.Separator;
 import com.jaspersoft.studio.server.model.MReportUnit;
+import com.jaspersoft.studio.server.model.server.MServerProfile;
 
 public class KPIDeployProvider implements IRepositoryViewProvider {
 	
 	private KPIDeployAction kpiDeployAction;
+	private KPIUpdateCacheAction kpiUpdateCacheAction;
 
 	@Override
 	public Action[] getActions(TreeViewer treeViewer) {
@@ -30,6 +32,9 @@ public class KPIDeployProvider implements IRepositoryViewProvider {
 	private void createActions(TreeViewer treeViewer) {
 		if (kpiDeployAction == null)
 			kpiDeployAction = new KPIDeployAction(treeViewer);
+		
+		if (kpiUpdateCacheAction == null)
+			kpiUpdateCacheAction = new KPIUpdateCacheAction(treeViewer);
 	}
 
 	@Override
@@ -41,10 +46,18 @@ public class KPIDeployProvider implements IRepositoryViewProvider {
 	public List<IAction> fillContextMenu(TreeViewer treeViewer, ANode node) {
 		createActions(treeViewer);
 		List<IAction> lst = new ArrayList<IAction>();
+		System.out.println(node.getClass().getName());
 		if (node instanceof MReportUnit) {
 			if (kpiDeployAction.isEnabled()) {
 				lst.add(new Separator());
 				lst.add(kpiDeployAction);
+			}
+		}
+		else if (node instanceof MServerProfile)
+		{
+			if (kpiUpdateCacheAction.isEnabled()) {
+				lst.add(new Separator());
+				lst.add(kpiUpdateCacheAction);
 			}
 		}
 		return lst;
