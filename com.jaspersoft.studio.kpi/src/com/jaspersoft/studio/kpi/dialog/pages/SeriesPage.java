@@ -41,7 +41,7 @@ public class SeriesPage extends AbstractKPIConfigurationPage{
 	
 	@Override
 	public String getName() {
-		return "Series";
+		return "Value Series";
 	}
 
 	@Override
@@ -49,9 +49,32 @@ public class SeriesPage extends AbstractKPIConfigurationPage{
 		Composite c = new Composite(parent, SWT.NONE);
 		c.setLayout(new GridLayout(2, false));
 		
+		Button queryDialogButton = new Button(c, SWT.PUSH);
+		GridData gd = new GridData();
+		gd.horizontalAlignment = SWT.FILL;
+		gd.horizontalSpan = 2;
+		queryDialogButton.setLayoutData(gd);
+		queryDialogButton.setText("Edit Query");
+		queryDialogButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				JasperReportsConfiguration jConfig = new JasperReportsConfiguration(DefaultJasperReportsContext.getInstance(), null);
+				jConfig.setJasperDesign(jd);
+				MDataset model = createDatasetModel(jConfig, getSeriesDataset());
+				new DatasetDialog(UIUtils.getShell(), model, jConfig, new CommandStack()).open();
+			}
+		});
+		
+		Label paddingLabel = new Label(c, SWT.NONE);
+		gd = new GridData();
+		gd.horizontalAlignment = SWT.FILL;
+		gd.horizontalSpan = 2;
+		gd.heightHint = 10;
+		paddingLabel.setLayoutData(gd);
+		
 		ExpressionContext context = getExpressionContext();
 		
-		new Label(c,SWT.NONE).setText("X Expression");
+		new Label(c,SWT.NONE).setText("X Value");
 		final WTextExpression expr_x = new WTextExpression(c, SWT.NONE, 3);
 		expr_x.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		JRExpression exp = getVariable(SERIES_X_VARIABLE).getExpression();
@@ -65,7 +88,7 @@ public class SeriesPage extends AbstractKPIConfigurationPage{
 			}
 		});
 		
-		new Label(c,SWT.NONE).setText("Y Expression");
+		new Label(c,SWT.NONE).setText("Y Value (Numeric)");
 		final WTextExpression expr_y = new WTextExpression(c, SWT.NONE, 3);
 		expr_y.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		exp = getVariable(SERIES_Y_VARIABLE).getExpression();
@@ -79,21 +102,7 @@ public class SeriesPage extends AbstractKPIConfigurationPage{
 			}
 		});
 		
-		Button queryDialogButton = new Button(c, SWT.PUSH);
-		GridData gd = new GridData();
-		gd.horizontalAlignment = SWT.CENTER;
-		gd.horizontalSpan = 2;
-		queryDialogButton.setLayoutData(gd);
-		queryDialogButton.setText("Edit Query");
-		queryDialogButton.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				JasperReportsConfiguration jConfig = new JasperReportsConfiguration(DefaultJasperReportsContext.getInstance(), null);
-				jConfig.setJasperDesign(jd);
-				MDataset model = createDatasetModel(jConfig, getSeriesDataset());
-				new DatasetDialog(UIUtils.getShell(), model, jConfig, new CommandStack()).open();
-			}
-		});
+
 		
 		return c;
 	}

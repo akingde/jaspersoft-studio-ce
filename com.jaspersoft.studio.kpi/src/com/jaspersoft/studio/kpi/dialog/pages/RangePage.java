@@ -50,6 +50,8 @@ public class RangePage extends AbstractKPIConfigurationPage {
 
 	public static final String RANGE_PARAMETER = "tresholds";
 	
+	public static final String TYPE_PARAMETER = "tresholdtype";
+	
 	private static final String KEY_MIN = "min";
 	
 	private static final String KEY_MAX = "max";
@@ -109,15 +111,61 @@ public class RangePage extends AbstractKPIConfigurationPage {
 	public String getName() {
 		return "Validation Ranges";
 	}
+	
+	private boolean isPercentage(){
+		JRDesignParameter parameter = getParameter(TYPE_PARAMETER);
+		if (parameter.getDefaultValueExpression() != null){
+			String text = parameter.getDefaultValueExpression().getText();
+			return text.equals("\"percentage\"");
+		}
+		return false;
+	}
+	
+	private void setType(boolean isPercentage){
+		JRDesignParameter parameter = getParameter(TYPE_PARAMETER);
+		JRDesignExpression exp = null;
+		if (isPercentage){
+			exp = new JRDesignExpression("\"percentage\"");
+		} else {
+			exp = new JRDesignExpression("\"absolute\"");
+		}
+		parameter.setDefaultValueExpression(exp);
+	}
 
 	@Override
 	protected Composite createComposite(Composite parent) {
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setBackground(parent.getBackground());
-		composite.setLayout(new GridLayout(2, false));
+		GridLayout mainLayout  = new GridLayout(2, false);
+		mainLayout.marginHeight = 0;
+		composite.setLayout(mainLayout);
 
-		buildTable(composite);
+		//Container for the table and checkbox
+		
+		Composite tGroup = new Composite(composite, SWT.NONE);
+		GridLayout tGroupLayout = new GridLayout(1,false);
+		tGroupLayout.marginWidth = 0;
+		tGroupLayout.marginHeight = 0;
+		tGroupLayout.verticalSpacing = 10;
+		tGroup.setLayout(tGroupLayout);
+		tGroup.setLayoutData(new GridData(GridData.FILL_BOTH));
+		
+		//Build the table
+		
+		buildTable(tGroup);
 
+		//Build the checkbox
+		
+		Button percentageButton = new Button(tGroup, SWT.CHECK);
+		percentageButton.setText("Range values are defined as percentage from target");
+		percentageButton.setSelection(isPercentage());
+		percentageButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				setType(((Button)e.widget).getSelection());
+			}
+		});
+		
 		Composite bGroup = new Composite(composite, SWT.NONE);
 		bGroup.setLayout(new GridLayout(1, false));
 		bGroup.setLayoutData(new GridData(GridData.FILL_VERTICAL));
@@ -183,7 +231,7 @@ public class RangePage extends AbstractKPIConfigurationPage {
 			if (index < ranges.size()) builder.append(",");
 		}
 		builder.append("]");
-		JRDesignParameter parameter = getParameter();
+		JRDesignParameter parameter = getParameter(RANGE_PARAMETER);
 		JRDesignExpression expression = new JRDesignExpression(builder.toString());
 		parameter.setDefaultValueExpression(expression);
 	}
@@ -236,8 +284,7 @@ public class RangePage extends AbstractKPIConfigurationPage {
 	}
 	
 	private void fillTable() {
-		
-		JRExpression exp = getParameter().getDefaultValueExpression();
+		JRExpression exp = getParameter(RANGE_PARAMETER).getDefaultValueExpression();
 		ranges.clear();
 		if (exp != null && exp.getText() != null){
 			List<?> readValues = null;
@@ -263,11 +310,11 @@ public class RangePage extends AbstractKPIConfigurationPage {
 			table.select(0);
 	}
 	
-	private JRDesignParameter getParameter(){
-		JRParameter parameter = jd.getParametersMap().get(RANGE_PARAMETER);
+	private JRDesignParameter getParameter(String parameterName){
+		JRParameter parameter = jd.getParametersMap().get(parameterName);
 		if (parameter == null){
 			JRDesignParameter newParameter = new JRDesignParameter();
-			newParameter.setName(RANGE_PARAMETER);
+			newParameter.setName(parameterName);
 			try {
 				jd.addParameter(newParameter);
 			} catch (JRException e) {
@@ -277,5 +324,4 @@ public class RangePage extends AbstractKPIConfigurationPage {
 		}
 		return ((JRDesignParameter)parameter);
 	}
-
 }

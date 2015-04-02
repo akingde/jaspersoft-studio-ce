@@ -33,6 +33,7 @@ import com.jaspersoft.studio.kpi.dialog.pages.RangePage;
 import com.jaspersoft.studio.kpi.dialog.pages.SeriesPage;
 import com.jaspersoft.studio.kpi.dialog.pages.TitlePage;
 import com.jaspersoft.studio.kpi.dialog.pages.ValuePage;
+import com.jaspersoft.studio.kpi.dialog.pages.WidgetPage;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.protocol.IConnection;
 import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorDatasource;
@@ -155,10 +156,10 @@ public class KPIConfiguratorPage extends JSSHelpWizardPage {
 	}
 	
 	protected void addCategories(){
+		pages.add(new WidgetPage());
 		pages.add(new DatasetPage(this));
 		pages.add(new TitlePage());
-		pages.add(new ValuePage("Value", "value"));
-		pages.add(new ValuePage("Target", "target"));
+		pages.add(new ValuePage());
 		pages.add(new RangePage());
 		pages.add(new SeriesPage());
 	}

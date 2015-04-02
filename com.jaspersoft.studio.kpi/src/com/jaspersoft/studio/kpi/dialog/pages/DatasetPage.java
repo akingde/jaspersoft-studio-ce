@@ -90,7 +90,7 @@ public class DatasetPage extends AbstractKPIConfigurationPage{
 		
 		Button queryDialogButton = new Button(c, SWT.PUSH);
 		gd = new GridData();
-		gd.horizontalAlignment = SWT.CENTER;
+		gd.horizontalAlignment = SWT.FILL;
 		gd.horizontalSpan = 2;
 		queryDialogButton.setLayoutData(gd);
 		queryDialogButton.setText("Edit Query");

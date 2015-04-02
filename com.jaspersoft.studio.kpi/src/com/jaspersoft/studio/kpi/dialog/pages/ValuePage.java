@@ -18,6 +18,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
@@ -31,21 +32,20 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class ValuePage extends AbstractKPIConfigurationPage {
 
-	private String variableName;
+	private static final String VALUE_VARIABLE_NAME = "value";
 	
-	private String pageName;
+	private static final String TARGET_VARIABLE_NAME = "target";
 	
-	public ValuePage(String pageName, String variableName){
-		this.variableName = variableName;
-		this.pageName = pageName;
+	public ValuePage(){
+
 	}
 	
 	@Override
 	public String getName() {
-		return pageName;
+		return "Value and Target";
 	}
 	
-	private JRDesignVariable getVariable(){
+	private JRDesignVariable getVariable(String variableName){
 		JRVariable variable = jd.getVariablesMap().get(variableName);
 		if (variable == null){
 			JRDesignVariable newVariable = new JRDesignVariable();
@@ -60,25 +60,38 @@ public class ValuePage extends AbstractKPIConfigurationPage {
 		return ((JRDesignVariable)variable);
 	}
 
-	private void updateVariableExpression(JRExpression expression){
-		getVariable().setExpression(expression);
+	private void updateVariableExpression(JRExpression expression, String variableName){
+		getVariable(variableName).setExpression(expression);
 	}
 	
 	@Override
 	protected Composite createComposite(Composite parent) {
 		Composite container = new Composite(parent, SWT.NONE);
-		container.setLayout(new GridLayout(1,false));
+		GridLayout mainLayout = new GridLayout(1,false);
+		mainLayout.verticalSpacing = 10;
+		container.setLayout(mainLayout);
+		createExpressionGroup(container, "Value", VALUE_VARIABLE_NAME);
+		createExpressionGroup(container, "Target", TARGET_VARIABLE_NAME);
+		return container;
+	}
+	
+	private void createExpressionGroup(Composite parent, String groupName, final String variableName){
+		Group container = new Group(parent, SWT.NONE);
+		container.setText(groupName);
+		container.setLayout(new GridLayout(1, false));
+		container.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		
 		new Label(container,SWT.NONE).setText(Messages.common_expression);
 		final WTextExpression expr = new WTextExpression(container, SWT.NONE, 3);
 		expr.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		JRExpression exp = getVariable().getExpression();
+		JRExpression exp = getVariable(variableName).getExpression();
 		expr.setExpression(exp != null ? (JRDesignExpression)exp : null);
 		expr.setExpressionContext(getExpressionContext());
 		expr.addModifyListener(new ExpressionModifiedListener() {
 			@Override
 			public void expressionModified(ExpressionModifiedEvent event) {
 				JRDesignExpression exp = expr.getExpression();
-				updateVariableExpression(exp != null ? (JRExpression)exp.clone() : null);
+				updateVariableExpression(exp != null ? (JRExpression)exp.clone() : null, variableName);
 			}
 		});
 		
@@ -88,7 +101,7 @@ public class ValuePage extends AbstractKPIConfigurationPage {
 		calculationsCombo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		List<String> items = new ArrayList<String>();
 		int selectionIndex = 0;
-		CalculationEnum variableCalculation = getVariable().getCalculationValue();
+		CalculationEnum variableCalculation = getVariable(variableName).getCalculationValue();
 		for(CalculationEnum calcEnum : calculations){
 			if (calcEnum.equals(variableCalculation)){
 				selectionIndex = items.size();
@@ -105,10 +118,10 @@ public class ValuePage extends AbstractKPIConfigurationPage {
 				Combo combo = (Combo)e.widget;
 				int index = combo.getSelectionIndex();
 				CalculationEnum[] calculations = (CalculationEnum[])combo.getData();
-				getVariable().setCalculation(calculations[index]);
+				getVariable(variableName).setCalculation(calculations[index]);
 			}
 		});
-		return container;
+		
 	}
 	
 	public ExpressionContext getExpressionContext() {
