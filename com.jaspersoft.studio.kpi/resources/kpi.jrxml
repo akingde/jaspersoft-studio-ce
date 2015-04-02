@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.qualifier using JasperReports Library version 6.0.4  -->
-<!-- 2015-04-02T13:03:03 -->
+<!-- 2015-04-02T15:43:44 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="kpi" language="groovy" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="519e026f-22f5-434b-a062-9b9dcba72392">
 	<property name="net.sf.jasperreports.export.json.schema33" value="kpi.schema.json"/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Sample DB"/>
@@ -99,7 +99,8 @@
 			<componentElement>
 				<reportElement positionType="Float" x="3" y="280" width="550" height="30" uuid="7aa59c8b-7695-4c6e-9c5b-609d90750a90"/>
 				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
-					<datasetRun subDataset="ValueSeries" uuid="01d11b5f-43d1-40e9-8187-513db8f93b4d">
+					<datasetRun subDataset="ValueSeries" uuid="61b8cfd0-6568-4d33-85ab-d7f20ae44250">
+						<parametersMapExpression><![CDATA[$P{REPORT_PARAMETERS_MAP}]]></parametersMapExpression>
 						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
 					</datasetRun>
 					<jr:listContents height="30" width="550">
