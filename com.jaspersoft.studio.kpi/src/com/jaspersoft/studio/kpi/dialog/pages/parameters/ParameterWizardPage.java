@@ -117,19 +117,23 @@ public class ParameterWizardPage extends WizardPage {
 			
 			@Override
 			public void modifyText(ModifyEvent e) {
-				if (name.getText().isEmpty()){
-					setPageComplete(false);
-					setErrorMessage("The name can't be empty");
-				} else if (jd.getParametersMap().containsKey(name.getText())){
-					setPageComplete(false);
-					setErrorMessage("There is already another parameter with the same name");
-				} else {
-					setPageComplete(true);
-					setErrorMessage(null);
-				}
+				validate();
 			}
 		});
-	
+		validate();
 		setControl(container);
+	}
+	
+	private void validate(){
+		if (name.getText().isEmpty()){
+			setPageComplete(false);
+			setErrorMessage("The name can't be empty");
+		} else if (jd.getParametersMap().containsKey(name.getText())){
+			setPageComplete(false);
+			setErrorMessage("There is already another parameter with the same name");
+		} else {
+			setPageComplete(true);
+			setErrorMessage(null);
+		}
 	}
 }
