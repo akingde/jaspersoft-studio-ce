@@ -8,11 +8,11 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.itemproperty.desc;
 
+import net.sf.jasperreports.components.map.StandardItemProperty;
+
 import org.eclipse.swt.widgets.Control;
 
 import com.jaspersoft.studio.property.itemproperty.ItemPropertyLabelProvider;
-
-import net.sf.jasperreports.components.map.StandardItemProperty;
 
 public interface IWItemProperty {
 	public boolean isRefresh();

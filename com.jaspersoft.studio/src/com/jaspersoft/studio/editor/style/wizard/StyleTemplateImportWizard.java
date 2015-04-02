@@ -16,13 +16,13 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.List;
 
-import com.jaspersoft.studio.messages.Messages;
-
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRSimpleTemplate;
 import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
 import net.sf.jasperreports.engine.xml.JRXmlTemplateWriter;
+
+import com.jaspersoft.studio.messages.Messages;
 
 /**
  * Wizard to export one or more JRStyle as a separate TemplateStyle file

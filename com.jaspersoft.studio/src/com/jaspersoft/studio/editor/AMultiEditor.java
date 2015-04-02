@@ -32,7 +32,6 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.jdt.core.JavaModelException;
-import org.eclipse.jdt.internal.ui.javaeditor.JarEntryEditorInput;
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IDocumentListener;
@@ -44,6 +43,7 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.ISaveablePart;
+import org.eclipse.ui.IStorageEditorInput;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
@@ -131,7 +131,7 @@ public abstract class AMultiEditor extends MultiPageEditorPart implements IResou
 			try {
 				IFile f = getCurrentFile();
 				if (f != null)
-					f.setContents(new ByteArrayInputStream(xml.getBytes("UTF-8")), IFile.KEEP_HISTORY | IFile.FORCE, monitor);
+					f.setContents(new ByteArrayInputStream(xml.getBytes(FileUtils.UTF8_ENCODING)), IFile.KEEP_HISTORY | IFile.FORCE, monitor);
 			} catch (Throwable e) {
 				UIUtils.showError(e);
 			}
@@ -226,7 +226,7 @@ public abstract class AMultiEditor extends MultiPageEditorPart implements IResou
 				IProgressMonitor monitor = getActiveEditor().getEditorSite().getActionBars().getStatusLineManager()
 						.getProgressMonitor();
 				try {
-					file.create(new ByteArrayInputStream("FILE".getBytes("UTF-8")), true, monitor);
+					file.create(new ByteArrayInputStream("FILE".getBytes(FileUtils.UTF8_ENCODING)), true, monitor);
 					IFileEditorInput modelFile = new FileEditorInput(file);
 					setInputWithNotify(modelFile);
 					xmlEditor.setInput(modelFile);
@@ -294,8 +294,8 @@ public abstract class AMultiEditor extends MultiPageEditorPart implements IResou
 					return;
 				}
 				in = file.getContents();
-			} else if (input instanceof JarEntryEditorInput) {
-				in = ((JarEntryEditorInput) input).getStorage().getContents();
+			} else if (input instanceof IStorageEditorInput) {
+				in = ((IStorageEditorInput) input).getStorage().getContents();
 			} else
 				throw new PartInitException("Invalid Input: Must be IFileEditorInput or FileStoreEditorInput"); //$NON-NLS-1$
 			if (!isRefresh) {

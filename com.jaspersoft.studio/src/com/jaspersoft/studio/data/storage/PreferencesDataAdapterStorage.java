@@ -72,9 +72,9 @@ public class PreferencesDataAdapterStorage extends ADataAdapterStorage {
 			InputStream inputStream = null;
 			try {
 				inputStream = new FileInputStream(storageElement);
-				Reader reader = new InputStreamReader(inputStream, "UTF-8");
+				Reader reader = new InputStreamReader(inputStream, FileUtils.UTF8_ENCODING);
 				InputSource is = new InputSource(reader);
-				is.setEncoding("UTF-8");
+				is.setEncoding(FileUtils.UTF8_ENCODING);
 				Document document = JRXmlUtils.parse(is);
 				Node adapterNode = document.getDocumentElement();
 				if (adapterNode != null) {

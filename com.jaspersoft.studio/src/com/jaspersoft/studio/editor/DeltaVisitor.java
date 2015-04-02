@@ -16,6 +16,7 @@ import org.eclipse.core.resources.IResourceDeltaVisitor;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.viewers.ISelectionProvider;
+import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
@@ -29,10 +30,14 @@ public class DeltaVisitor implements IResourceDeltaVisitor {
 	}
 
 	public boolean visit(IResourceDelta delta) {
-		if (delta == null || delta.getResource() == null || part == null || part.getEditorInput() == null
-				|| (((IFileEditorInput) part.getEditorInput()).getFile()) == null)
+		IEditorInput editorInput = part.getEditorInput();
+		IFile file = null;
+		if(editorInput instanceof IFileEditorInput){
+			file = ((IFileEditorInput) editorInput).getFile();
+		}
+		if (delta == null || delta.getResource() == null || part == null || editorInput == null	|| file == null)
 			return true;
-		if (!delta.getResource().equals((((IFileEditorInput) part.getEditorInput()).getFile())))
+		if (!delta.getResource().equals(file))
 			return true;
 		switch (delta.getKind()) {
 		case IResourceDelta.ADDED:

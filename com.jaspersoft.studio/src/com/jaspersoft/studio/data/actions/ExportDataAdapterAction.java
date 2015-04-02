@@ -12,6 +12,7 @@ import java.io.ByteArrayInputStream;
 import java.lang.reflect.InvocationTargetException;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.FileUtils;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -87,9 +88,9 @@ public class ExportDataAdapterAction extends Action {
 							DataAdapterDescriptor m = ((MDataAdapter) obj).getValue();
 							String xml = DataAdapterManager.toDataAdapterFile(m, JasperReportsConfiguration.getDefaultJRConfig(file));
 							if (file.exists())
-								file.setContents(new ByteArrayInputStream(xml.getBytes("UTF-8")), true, true, monitor); //$NON-NLS-1$
+								file.setContents(new ByteArrayInputStream(xml.getBytes(FileUtils.UTF8_ENCODING)), true, true, monitor); 
 							else
-								file.create(new ByteArrayInputStream(xml.getBytes("UTF-8")), true, monitor); //$NON-NLS-1$
+								file.create(new ByteArrayInputStream(xml.getBytes(FileUtils.UTF8_ENCODING)), true, monitor);
 							// Force the default editor for the data adapter file
 							// so that it can be opened with the same one in the future
 							IDE.setDefaultEditor(file, DataAdapterEditorPart.ID);

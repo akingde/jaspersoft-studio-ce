@@ -174,6 +174,7 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 		if (file != null) {
 			put(FileUtils.KEY_FILE, file);
 			project = file.getProject();
+			put(FileUtils.KEY_IPROJECT, project);
 			if (project != null) {
 				// lookupOrders = new String[] { ResourceScope.SCOPE, ProjectScope.SCOPE, InstanceScope.SCOPE };
 				// contexts = new IScopeContext[] { new ResourceScope(file), new ProjectScope(project), INSTANCE_SCOPE };

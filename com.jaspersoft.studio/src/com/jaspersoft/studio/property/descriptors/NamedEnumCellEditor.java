@@ -13,8 +13,10 @@
 package com.jaspersoft.studio.property.descriptors;
 
 import net.sf.jasperreports.engine.type.JREnum;
+
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.swt.widgets.Composite;
+
 import com.jaspersoft.studio.utils.EnumHelper;
 
 /**

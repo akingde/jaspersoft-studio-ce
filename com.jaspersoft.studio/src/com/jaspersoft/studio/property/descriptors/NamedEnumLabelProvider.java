@@ -13,7 +13,9 @@
 package com.jaspersoft.studio.property.descriptors;
 
 import net.sf.jasperreports.engine.type.JREnum;
+
 import org.eclipse.ui.views.properties.ComboBoxLabelProvider;
+
 import com.jaspersoft.studio.utils.EnumHelper;
 
 /**

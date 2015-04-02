@@ -35,7 +35,7 @@ public class XMLUtils {
 		Document doc = null;
 		ByteArrayInputStream is = null;
 		try {
-			is = new ByteArrayInputStream(xml.getBytes("UTF-8"));
+			is = new ByteArrayInputStream(xml.getBytes(FileUtils.UTF8_ENCODING));
 			doc = getDocumentBuilder().parse(is);
 		} finally {
 			FileUtils.closeStream(is);

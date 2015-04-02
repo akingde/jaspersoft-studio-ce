@@ -123,7 +123,7 @@ public class SubreportRVPropertyPage extends RVPropertyPage {
 		try {
 			in = RepositoryUtil.getInstance(dto.getjConfig()).getInputStreamFromLocation(path);
 			if (in != null) {
-				InputSource is = new InputSource(new InputStreamReader(in, "UTF-8"));
+				InputSource is = new InputSource(new InputStreamReader(in, FileUtils.UTF8_ENCODING));
 				jd = new JRXmlLoader(dto.getjConfig(), JRXmlDigesterFactory.createDigester(dto.getjConfig())).loadXML(is);
 			}
 		} catch (Exception e) {

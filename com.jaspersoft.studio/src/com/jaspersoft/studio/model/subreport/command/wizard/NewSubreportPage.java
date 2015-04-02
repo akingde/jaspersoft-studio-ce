@@ -331,7 +331,7 @@ public class NewSubreportPage extends JSSWizardSelectionPage implements IExpress
 	 * //$NON-NLS-2$ subreport.setPropertyValue(JRDesignSubreport.PROPERTY_EXPRESSION, jre);
 	 * 
 	 * JRDesignSubreport s = (JRDesignSubreport) subreport.getValue(); if (newjd == null) { InputStream in = null; try {
-	 * in = file.getContents(); InputSource is = new InputSource(new InputStreamReader(in, "UTF-8"));
+	 * in = file.getContents(); InputSource is = new InputSource(new InputStreamReader(in, FileUtils.UTF8_ENCODING));
 	 * 
 	 * newjd = new JRXmlLoader(JasperReportsConfiguration.getJRXMLDigester()).loadXML(is); } catch (JRException e) {
 	 * UIUtils.showError(e); } catch (CoreException e) { UIUtils.showError(e); } catch (UnsupportedEncodingException e) {

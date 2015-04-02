@@ -40,8 +40,6 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 @SuppressWarnings("restriction")
 public class JRXMLUtils {
 	
-	public static final String UTF8_ENCODING = "UTF-8";
-
 	/**
 	 * Gets a JRXML input stream from an existing one, that can be either a .jasper file or .jrxml.
 	 * <p>

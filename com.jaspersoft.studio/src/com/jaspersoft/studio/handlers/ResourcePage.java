@@ -382,7 +382,7 @@ public class ResourcePage extends JSSHelpWizardPage {
 			JasperDesign report = bundle.getJasperDesign();
 			report.removeProperty(DataQueryAdapters.DEFAULT_DATAADAPTER);
 			String version = jrContext.getProperty(StudioPreferencePage.JSS_COMPATIBILITY_VERSION, JRXmlWriterHelper.LAST_VERSION);
-			xml = JRXmlWriterHelper.writeReport(jrContext, report, "UTF-8", version); //$NON-NLS-1$
+			xml = JRXmlWriterHelper.writeReport(jrContext, report, net.sf.jasperreports.eclipse.util.FileUtils.UTF8_ENCODING, version); //$NON-NLS-1$
 		} catch (Throwable e) {
 			UIUtils.showError(e);
 		}
@@ -411,7 +411,7 @@ public class ResourcePage extends JSSHelpWizardPage {
 			rebindResources();
 			try {
 				File destination = new File(pathText.getText());
-				FileUtils.writeStringToFile(destination, model2xml(), "UTF-8"); //$NON-NLS-1$
+				FileUtils.writeStringToFile(destination, model2xml(), net.sf.jasperreports.eclipse.util.FileUtils.UTF8_ENCODING); //$NON-NLS-1$
 				String destinationPath = destination.getParent()+System.getProperty("file.separator"); //$NON-NLS-1$
 				for(File resource : resourceList){
 					copyFile(resource, new File(destinationPath.concat(resource.getName())));

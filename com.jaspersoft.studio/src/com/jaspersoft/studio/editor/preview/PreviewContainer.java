@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.eclipse.viewer.action.AReportAction;
 import net.sf.jasperreports.eclipse.viewer.action.ZoomActualSizeAction;
 import net.sf.jasperreports.eclipse.viewer.action.ZoomInAction;
@@ -30,6 +31,7 @@ import net.sf.jasperreports.engine.design.events.CollectionElementRemovedEvent;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.IToolBarManager;
@@ -236,8 +238,16 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 	@Override
 	protected PreviewTopToolBarManager getTopToolBarManager1(Composite container) {
 		if (topToolBarManager1 == null) {
-			IFile file = ((IFileEditorInput) getEditorInput()).getFile();
-			topToolBarManager1 = new PreviewTopToolBarManager(this, container, DataAdapterManager.getDataAdapter(file));
+			IFile file = null;
+			IProject project = null;
+			IEditorInput editorInput = getEditorInput();
+			if(editorInput instanceof IFileEditorInput) {
+				file = ((IFileEditorInput) editorInput).getFile();				
+			}
+			if(jrContext!=null) {
+				project = (IProject) jrContext.get(FileUtils.KEY_IPROJECT);
+			}
+			topToolBarManager1 = new PreviewTopToolBarManager(this, container, DataAdapterManager.getDataAdapter(file,project));
 		}
 		return (PreviewTopToolBarManager) topToolBarManager1;
 	}

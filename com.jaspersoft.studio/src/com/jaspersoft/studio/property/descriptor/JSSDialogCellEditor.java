@@ -12,7 +12,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.descriptor;
 
-import java.text.MessageFormat;	// Not using ICU to support standalone JFace scenario
+import java.text.MessageFormat;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
@@ -35,6 +35,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Layout;
+// Not using ICU to support standalone JFace scenario
 
 /**
  * An abstract cell editor that uses a dialog.

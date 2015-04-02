@@ -8,7 +8,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.preferences.exporter;
 
-import net.sf.jasperreports.export.JsonExporterConfiguration;
 import net.sf.jasperreports.export.JsonMetadataReportConfiguration;
 
 import org.eclipse.jface.preference.BooleanFieldEditor;

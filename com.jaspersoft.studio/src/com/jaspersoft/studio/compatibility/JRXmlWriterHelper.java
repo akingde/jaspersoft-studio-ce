@@ -17,6 +17,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRReport;
 import net.sf.jasperreports.engine.JasperReportsContext;
@@ -90,7 +91,7 @@ public class JRXmlWriterHelper {
 	}
 
 	public static String writeReport(JasperReportsContext jrContext, JRReport report, String version) throws Exception {
-		return writeReport(jrContext, report, fixencoding("UTF-8"), version); //$NON-NLS-1$
+		return writeReport(jrContext, report, fixencoding(FileUtils.UTF8_ENCODING), version); //$NON-NLS-1$
 	}
 
 	public static String writeReport(JasperReportsContext jrContext, JRReport report, String encoding, String version)
@@ -139,7 +140,7 @@ public class JRXmlWriterHelper {
 	}
 
 	public static String fixencoding(String encoding) {
-		return "UTF-8"; //$NON-NLS-1$
+		return FileUtils.UTF8_ENCODING; 
 		// String tmp = EncodingMap.getJava2IANAMapping(encoding);
 		// if (tmp != null)
 		// return tmp;

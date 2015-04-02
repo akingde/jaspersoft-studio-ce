@@ -25,8 +25,8 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
-import com.jaspersoft.studio.backward.JRDefinition;
 import com.jaspersoft.studio.backward.JRBackwardManager;
+import com.jaspersoft.studio.backward.JRDefinition;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.wizards.ContextHelpIDs;
 import com.jaspersoft.studio.wizards.JSSWizardPage;

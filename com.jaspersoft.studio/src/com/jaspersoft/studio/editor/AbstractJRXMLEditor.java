@@ -25,7 +25,6 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlDigesterFactory;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
-import org.eclipse.core.internal.resources.ResourceException;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
@@ -39,8 +38,8 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.jdt.internal.ui.javaeditor.JarEntryEditorInput;
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IDocumentListener;
@@ -53,6 +52,7 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.ISaveablePart;
+import org.eclipse.ui.IStorageEditorInput;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
@@ -227,8 +227,8 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 				}
 
 				in = file.getContents();
-			} else if (editorInput instanceof JarEntryEditorInput) {
-				in = ((JarEntryEditorInput) editorInput).getStorage().getContents();
+			} else if (editorInput instanceof IStorageEditorInput) {
+				in = ((IStorageEditorInput) editorInput).getStorage().getContents();
 			} else
 				throw new PartInitException("Invalid Input: Must be IFileEditorInput or FileStoreEditorInput"); //$NON-NLS-1$
 
@@ -274,8 +274,11 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 		ClassLoader oldCL = Thread.currentThread().getContextClassLoader();
 		try {
 			Thread.currentThread().setContextClassLoader(jrContext.getClassLoader());
-			
-			in = JRXMLUtils.getXML(jrContext, editorInput, file.getCharset(true), in, version);
+			String charset = FileUtils.UTF8_ENCODING;
+			if(file!=null){
+				charset = file.getCharset(true);
+			}
+			in = JRXMLUtils.getXML(jrContext, editorInput, charset, in, version);
 			JasperDesign jd = new JRXmlLoader(jrContext, JRXmlDigesterFactory.createDigester(jrContext))
 					.loadXML(new InputSource(in));
 			JaspersoftStudioPlugin.getExtensionManager().onLoad(jd, this);
@@ -291,7 +294,7 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 					}
 				}
 			});
-		} catch (ResourceException e) {
+		} catch (CoreException e) {
 			if (e.getMessage().startsWith("File not found")) {
 				closeEditorOnErrors();
 			} else {
@@ -456,7 +459,6 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 	 */
 	protected void createSourceEditorPage() throws PartInitException {
 		xmlEditor = new XMLEditor(jrContext);
-
 		int index = addPage(xmlEditor, getEditorInput());
 		setPageText(index, Messages.common_source);
 		IDocument doc = xmlEditor.getDocumentProvider().getDocument(xmlEditor.getEditorInput());
@@ -507,14 +509,17 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 			isRefreshing = true;
 
 			final IFile resource = getCurrentFile();
-			if (resource == null)
+			if (resource == null) {
+				MessageDialog.openError(UIUtils.getShell(), "Report save operation", "It's not possible to save the current report. " +
+						"If you opened from an archive please extract the file and copy it into the workspace.");
 				return;
+			}
 			try {
 				if (!resource.exists())
-					resource.create(new ByteArrayInputStream("FILE".getBytes("UTF-8")), true, monitor);
+					resource.create(new ByteArrayInputStream("FILE".getBytes(FileUtils.UTF8_ENCODING)), true, monitor);
 
-				resource.setCharset("UTF-8", monitor);
-				((IStorageDocumentProvider) xmlEditor.getDocumentProvider()).setEncoding(getEditorInput(), "UTF-8");
+				resource.setCharset(FileUtils.UTF8_ENCODING, monitor);
+				((IStorageDocumentProvider) xmlEditor.getDocumentProvider()).setEncoding(getEditorInput(), FileUtils.UTF8_ENCODING);
 			} catch (CoreException e) {
 				UIUtils.showError(e);
 			} catch (UnsupportedEncodingException e) {
@@ -531,7 +536,7 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 				} catch (Throwable e) {
 					Markers.addMarker(resource, e);
 					doSaveEditors(monitor);// on eclipse 4.2.1 on first first save, for some reasons save is not working .., so we'll do it manually
-					resource.setContents(new ByteArrayInputStream(doc.get().getBytes("UTF-8")), IFile.KEEP_HISTORY | IFile.FORCE,monitor);
+					resource.setContents(new ByteArrayInputStream(doc.get().getBytes(FileUtils.UTF8_ENCODING)), IFile.KEEP_HISTORY | IFile.FORCE,monitor);
 					finishSave(resource);
 					return;
 				}
@@ -556,7 +561,7 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 						//Delete the markers on save, they will be regenerated by the build process (either automatic or manual)
 						Markers.deleteMarkers(resource);
 						// on eclipse 4.2.1 on first first save, for some reasons save is not working .., so we'll do it manually
-						resource.setContents(new ByteArrayInputStream(xml.getBytes("UTF-8")), IFile.KEEP_HISTORY | IFile.FORCE,	monitor);
+						resource.setContents(new ByteArrayInputStream(xml.getBytes(FileUtils.UTF8_ENCODING)), IFile.KEEP_HISTORY | IFile.FORCE,	monitor);
 						finishSave(resource);
 					} catch (Throwable e) {
 						try {
@@ -612,7 +617,7 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 
 					try {
 						if (!file.exists())
-							file.create(new ByteArrayInputStream("FILE".getBytes(JRXMLUtils.UTF8_ENCODING)), true, monitor);
+							file.create(new ByteArrayInputStream("FILE".getBytes(FileUtils.UTF8_ENCODING)), true, monitor);
 						IFileEditorInput modelFile = new FileEditorInput(file);
 						setInputWithNotify(modelFile);
 						xmlEditor.setInput(modelFile);
@@ -808,7 +813,7 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 		try {
 			IDocumentProvider dp = xmlEditor.getDocumentProvider();
 			IDocument doc = dp.getDocument(xmlEditor.getEditorInput());
-			in = new ByteArrayInputStream(doc.get().getBytes(JRXMLUtils.UTF8_ENCODING));
+			in = new ByteArrayInputStream(doc.get().getBytes(FileUtils.UTF8_ENCODING));
 			JasperDesign jd = new JRXmlLoader(jrContext, JRXmlDigesterFactory.createDigester(jrContext)).loadXML(in);
 			jrContext.setJasperDesign(jd);
 			JaspersoftStudioPlugin.getExtensionManager().onLoad(jd, this);
@@ -839,7 +844,7 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 				}
 			}
 
-			xml = JRXmlWriterHelper.writeReport(jrContext, report, JRXMLUtils.UTF8_ENCODING, version);
+			xml = JRXmlWriterHelper.writeReport(jrContext, report, FileUtils.UTF8_ENCODING, version);
 			IDocumentProvider dp = xmlEditor.getDocumentProvider();
 			IDocument doc = dp.getDocument(xmlEditor.getEditorInput());
 			xmlFresh = true;

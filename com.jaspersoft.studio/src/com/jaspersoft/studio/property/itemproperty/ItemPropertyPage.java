@@ -10,7 +10,6 @@ package com.jaspersoft.studio.property.itemproperty;
 
 import net.sf.jasperreports.components.map.StandardItemProperty;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.engine.design.JRDesignExpression;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
@@ -29,8 +28,6 @@ import com.jaspersoft.studio.editor.expression.ExpressionStatus;
 import com.jaspersoft.studio.editor.expression.IExpressionStatusChangeListener;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.swt.widgets.ClassType;
-import com.jaspersoft.studio.utils.Misc;
-import com.jaspersoft.studio.utils.RecentExpressions;
 import com.jaspersoft.studio.wizards.ContextHelpIDs;
 import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
 

@@ -27,6 +27,8 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarOutputStream;
 import java.util.jar.Manifest;
 
+import net.sf.jasperreports.eclipse.util.FileUtils;
+
 /**
  * Class that contains static methods to manipulate files on the file system and create Jars
  * 
@@ -160,7 +162,7 @@ public class JarFileUtils {
 	 */
 	public static void createJar(String destination, File pluginDir, String fileName, String manifestContent){
 		try {
-			Manifest manifest = new Manifest(new ByteArrayInputStream(manifestContent.getBytes("UTF-8")));
+			Manifest manifest = new Manifest(new ByteArrayInputStream(manifestContent.getBytes(FileUtils.UTF8_ENCODING)));
 			JarOutputStream target = new JarOutputStream(new FileOutputStream(destination + File.separatorChar + fileName), manifest);
 			for(File children : pluginDir.listFiles()){
 				try {
@@ -215,7 +217,7 @@ public class JarFileUtils {
 	 */
 	public static void createPluginJar(String destination, File pluginDir, String fileName, String manifestContent){
 		try {
-			Manifest manifest = new Manifest(new ByteArrayInputStream(manifestContent.getBytes("UTF-8")));
+			Manifest manifest = new Manifest(new ByteArrayInputStream(manifestContent.getBytes(FileUtils.UTF8_ENCODING)));
 			JarOutputStream target = new JarOutputStream(new FileOutputStream(destination + File.separatorChar + fileName), manifest);
 			Properties prop = new Properties();
 			InputStream in = new FileInputStream(new File(pluginDir, "build.properties"));

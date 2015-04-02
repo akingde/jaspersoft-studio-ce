@@ -35,8 +35,8 @@ import com.jaspersoft.studio.help.TableHelpListener;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.editor.table.TableFieldEditor;
 import com.jaspersoft.studio.preferences.util.PropertiesHelper;
-import com.jaspersoft.studio.prm.ParameterSetProvider;
 import com.jaspersoft.studio.prm.ParameterSet;
+import com.jaspersoft.studio.prm.ParameterSetProvider;
 import com.jaspersoft.studio.prm.dialog.ParameterSetDialog;
 import com.jaspersoft.studio.wizards.ContextHelpIDs;
 

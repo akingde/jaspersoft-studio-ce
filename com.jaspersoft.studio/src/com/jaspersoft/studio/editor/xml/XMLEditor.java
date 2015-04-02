@@ -14,6 +14,8 @@ package com.jaspersoft.studio.editor.xml;
 
 import java.util.ResourceBundle;
 
+import net.sf.jasperreports.eclipse.util.FileUtils;
+
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.jface.text.ITextListener;
@@ -168,7 +170,7 @@ public class XMLEditor extends TextEditor {
 	@Override
 	protected void installEncodingSupport() {
 		super.installEncodingSupport();
-		fEncodingSupport.setEncoding("UTF-8");
+		fEncodingSupport.setEncoding(FileUtils.UTF8_ENCODING);
 	}
 
 }

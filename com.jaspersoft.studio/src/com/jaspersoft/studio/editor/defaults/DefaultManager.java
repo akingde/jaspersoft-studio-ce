@@ -522,7 +522,7 @@ public class DefaultManager {
 					try {
 						IFile reportFile = getFileFromPath(actualDefault);
 						String xml = model2xml(JRXmlWriterHelper.LAST_VERSION);
-						reportFile.setContents(new ByteArrayInputStream(xml.getBytes("UTF-8")), IFile.KEEP_HISTORY | IFile.FORCE,  new NullProgressMonitor());
+						reportFile.setContents(new ByteArrayInputStream(xml.getBytes(net.sf.jasperreports.eclipse.util.FileUtils.UTF8_ENCODING)), IFile.KEEP_HISTORY | IFile.FORCE,  new NullProgressMonitor());
 					} catch (Throwable e) {
 						UIUtils.showError(e);
 					}
@@ -559,7 +559,7 @@ public class DefaultManager {
 			if (mReport != null) {
 				report = mReport.getJasperDesign();
 			}
-			xml = JRXmlWriterHelper.writeReport(defaultConfig, report, "UTF-8", version);
+			xml = JRXmlWriterHelper.writeReport(defaultConfig, report, net.sf.jasperreports.eclipse.util.FileUtils.UTF8_ENCODING, version);
 		} catch (Throwable e) {
 			UIUtils.showError(e);
 		}

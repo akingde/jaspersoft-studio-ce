@@ -19,6 +19,7 @@ import java.util.UUID;
 
 import net.sf.jasperreports.eclipse.builder.JasperReportCompiler;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JRScriptlet;
@@ -32,6 +33,7 @@ import net.sf.jasperreports.engine.fill.FillListener;
 import net.sf.jasperreports.engine.scriptlets.ScriptletFactory;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -40,6 +42,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.part.MultiPageEditorPart;
@@ -320,8 +323,11 @@ public class ReportControler {
 
 					// setParameters();
 
-					final IFile file = ((IFileEditorInput) pcontainer.getEditorInput()).getFile();
-
+					IEditorInput editorInput = pcontainer.getEditorInput();
+					IFile file = null;
+					if(editorInput instanceof IFileEditorInput) {
+						file = ((IFileEditorInput) editorInput).getFile();
+					}
 					monitor.beginTask("Form initialisation", IProgressMonitor.UNKNOWN);
 
 					jd = jrContext.getJasperDesign();
@@ -411,7 +417,11 @@ public class ReportControler {
 		if (compiler == null) {
 			compiler = new JasperReportCompiler();
 			compiler.setErrorHandler(new JRMarkerErrorHandler(c, file));
-			compiler.setProject(file.getProject());
+			IProject project = (IProject) jrContext.get(FileUtils.KEY_IPROJECT);
+			if(file!=null){
+				project = file.getProject();
+			}
+			compiler.setProject(project);
 			jrContext.getPropertyChangeSupport().addPropertyChangeListener(new PropertyChangeListener() {
 
 				@Override

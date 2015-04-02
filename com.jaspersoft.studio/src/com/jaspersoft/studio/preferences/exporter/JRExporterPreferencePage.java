@@ -12,6 +12,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.preferences.exporter;
 
+import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.export.CommonExportConfiguration;
 import net.sf.jasperreports.export.ReportExportConfiguration;
 import net.sf.jasperreports.export.WriterExporterOutput;
@@ -118,7 +119,7 @@ public class JRExporterPreferencePage extends FieldEditorOverlayPage {
 
 	public static void getDefaults(IPreferenceStore store) {
 		store.setDefault(WriterExporterOutput.PROPERTY_CHARACTER_ENCODING,
-				Misc.nvl(PropertiesHelper.DPROP.getProperty(WriterExporterOutput.PROPERTY_CHARACTER_ENCODING), "UTF-8")); //$NON-NLS-1$
+				Misc.nvl(PropertiesHelper.DPROP.getProperty(WriterExporterOutput.PROPERTY_CHARACTER_ENCODING), FileUtils.UTF8_ENCODING)); //$NON-NLS-1$
 		store.setDefault(ReportExportConfiguration.PROPERTY_IGNORE_PAGE_MARGINS,
 				PropertiesHelper.DPROP.getBooleanProperty(ReportExportConfiguration.PROPERTY_IGNORE_PAGE_MARGINS));
 		store.setDefault(CommonExportConfiguration.PROPERTY_EXPORT_CONFIGURATION_OVERRIDE_REPORT_HINTS,

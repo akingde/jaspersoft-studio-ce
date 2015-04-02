@@ -41,7 +41,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  */
 public class DataAdapterDragSourceListener implements TransferDragSourceListener {
 
-	private static final String ENCODING = "UTF-8"; //$NON-NLS-1$
+	private static final String ENCODING = net.sf.jasperreports.eclipse.util.FileUtils.UTF8_ENCODING; //$NON-NLS-1$
 	private static final String DATA_ADAPTER_FILE_PREFIX = "dataAdapter"; //$NON-NLS-1$
 	private static final String DATA_ADAPTER_FILE_EXT = ".xml"; //$NON-NLS-1$
 	private String[] dataAdapterFilesLocations = new String[0];

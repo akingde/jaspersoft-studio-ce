@@ -36,6 +36,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.util.JRXmlUtils;
 
 import org.osgi.service.prefs.Preferences;
@@ -260,9 +261,9 @@ public class PreferencesTemplateStylesStorage {
 				for(File storageElement : storageContent){
 					try{
 						InputStream inputStream = new FileInputStream(storageElement);
-						Reader reader = new InputStreamReader(inputStream,"UTF-8");
+						Reader reader = new InputStreamReader(inputStream,FileUtils.UTF8_ENCODING);
 						InputSource is = new InputSource(reader);
-						is.setEncoding("UTF-8");
+						is.setEncoding(FileUtils.UTF8_ENCODING);
 						Document document = JRXmlUtils.parse(is);
 						TemplateStyle readStyle = factory.buildFromXML(document.getDocumentElement());
 						readStyle.storePropertiy(STYLE_ID, storageElement.getName());

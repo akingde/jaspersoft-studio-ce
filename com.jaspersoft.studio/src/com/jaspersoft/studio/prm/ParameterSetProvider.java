@@ -16,7 +16,6 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
 import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.util.CastorUtil;
 
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.exolab.castor.mapping.Mapping;
