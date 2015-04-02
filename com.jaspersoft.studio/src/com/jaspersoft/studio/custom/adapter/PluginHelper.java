@@ -316,24 +316,32 @@ public class PluginHelper {
 	public static LoadedClassesContainer loadAndScanJar(File jarFile) throws ClassNotFoundException, ZipException, IOException {
 		URLClassLoader loader = URLClassLoader.newInstance(new URL[] { jarFile.toURI().toURL()}, PluginHelper.class.getClassLoader());
 		LoadedClassesContainer classes = new LoadedClassesContainer();
-		JarFile jar = new JarFile(jarFile);
-		Enumeration<? extends JarEntry> enumeration = jar.entries();
-		// Iterates into the files in the jar file
-		while (enumeration.hasMoreElements()) {
-			ZipEntry zipEntry = enumeration.nextElement();
-			// Is this a class?
-			if (zipEntry.getName().endsWith(".class")) {
-				// Relative path of file into the jar.
-				String className = zipEntry.getName();
-				// Complete class name
-				className = className.replace(".class", "").replace("/", ".");
-				// Load class definition from JVM
-				Class<?> clazz = loader.loadClass(className);
-				try {
-					classes.addClass(clazz);
-				} catch (ClassCastException e) {
-					e.printStackTrace();
+		JarFile jar = null;
+		try {
+			jar = new JarFile(jarFile);
+			Enumeration<? extends JarEntry> enumeration = jar.entries();
+			// Iterates into the files in the jar file
+			while (enumeration.hasMoreElements()) {
+				ZipEntry zipEntry = enumeration.nextElement();
+				// Is this a class?
+				if (zipEntry.getName().endsWith(".class")) {
+					// Relative path of file into the jar.
+					String className = zipEntry.getName();
+					// Complete class name
+					className = className.replace(".class", "").replace("/", ".");
+					// Load class definition from JVM
+					Class<?> clazz = loader.loadClass(className);
+					try {
+						classes.addClass(clazz);
+					} catch (ClassCastException e) {
+						e.printStackTrace();
+					}
 				}
+			}
+		}
+		finally {
+			if(jar!=null) {
+				jar.close();
 			}
 		}
 		return classes;
