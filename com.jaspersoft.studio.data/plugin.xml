@@ -23,7 +23,6 @@
                ClassFactory="com.jaspersoft.studio.data.excel.ExcelDataAdapterFactory">
          </dataAdapter>
          <dataAdapter ClassFactory="com.jaspersoft.studio.data.xml.XMLDataAdapterFactory"/>
-         <dataAdapter ClassFactory="com.jaspersoft.studio.data.remotexml.RemoteXMLDataAdapterFactory"/>
          <dataAdapter
                ClassFactory="com.jaspersoft.studio.data.json.JsonDataAdapterFactory">
          </dataAdapter>
