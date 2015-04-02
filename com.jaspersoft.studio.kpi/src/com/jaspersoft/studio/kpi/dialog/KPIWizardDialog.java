@@ -86,7 +86,7 @@ public class KPIWizardDialog extends WizardDialog {
 
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
-		UIUtils.resizeAndCenterShell(newShell, 700, 600);
+		UIUtils.resizeAndCenterShell(newShell, 700, 620);
 	};
 
 	protected Button createButton(Composite parent, String text) {
