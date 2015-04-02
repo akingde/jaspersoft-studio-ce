@@ -193,9 +193,11 @@ public class JSSCommonsHTTPSender extends BasicHandler {
 				if (webMethod != null)
 					posting = webMethod.equals(HTTPConstants.HEADER_POST);
 			}
-
+			HttpHost proxy = HttpUtils.getUnauthProxy(exec, targetURL.toURI());
 			if (posting) {
 				req = Request.Post(targetURL.toString());
+				if (proxy != null)
+					req.viaProxy(proxy);
 				Message reqMessage = msgContext.getRequestMessage();
 
 				addContextInfo(req, msgContext, targetURL);
@@ -203,6 +205,8 @@ public class JSSCommonsHTTPSender extends BasicHandler {
 				req.body(new StringEntity(reqMessage.getSOAPPartAsString()));
 			} else {
 				req = Request.Get(targetURL.toString());
+				if (proxy != null)
+					req.viaProxy(proxy);
 				addContextInfo(req, msgContext, targetURL);
 			}
 
