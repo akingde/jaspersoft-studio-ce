@@ -25,7 +25,7 @@ public class WidgetPage extends AbstractKPIConfigurationPage {
 
 	private static final List<WidgetDefinition> widgetsList = new ArrayList<WidgetDefinition>();
 	
-	private static final String WIDGET_PARAMETER = "widget";
+	public static final String WIDGET_PARAMETER = "widget";
 	
 	static{
 		widgetsList.add(new WidgetDefinition("default", "/resources/widgets/default.png"));
@@ -74,7 +74,6 @@ public class WidgetPage extends AbstractKPIConfigurationPage {
 			ToolItem newButton = new ToolItem(bar, SWT.RADIO );
 			newButton.setImage(widget.getImage());
 			newButton.setData(widget.getWidgetName());
-			//newButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 			if (widget.getWidgetName().equals(selectedWidget)){
 				newButton.setSelection(true);
 			}

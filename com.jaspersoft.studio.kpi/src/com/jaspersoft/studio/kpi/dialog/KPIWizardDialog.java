@@ -1,9 +1,13 @@
 package com.jaspersoft.studio.kpi.dialog;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
+
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
-import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
@@ -13,8 +17,11 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.jface.dialogs.MessageDialog;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.kpi.messages.Messages;
 import com.jaspersoft.studio.server.protocol.IConnection;
 
 public class KPIWizardDialog extends WizardDialog {
@@ -22,6 +29,56 @@ public class KPIWizardDialog extends WizardDialog {
 	private Button deleteButton = null;
 
 	private KPIConfiguratorWizard wizard;
+	
+	private List<Object> runnedThreads = new ArrayList<Object>();
+	
+	private class RunnableWrapper implements IRunnableWithProgress{
+		
+		private IRunnableWithProgress runnableElement;
+
+		public RunnableWrapper(IRunnableWithProgress runnableElement){
+			this.runnableElement = runnableElement;
+		}
+		
+		@Override
+		public void run(IProgressMonitor monitor) {
+			try{
+				synchronized (runnedThreads) {
+					runnedThreads.add(new Object());
+					threadStarted();
+				}
+				runnableElement.run(monitor);
+				synchronized (runnedThreads) {
+					runnedThreads.remove(0);
+					threadEnded();
+				}
+			} catch(Exception ex){
+				ex.printStackTrace();
+			}
+		}
+	}
+	
+	protected void threadStarted(){
+		if (deleteButton != null && !deleteButton.isDisposed()){
+			UIUtils.getDisplay().syncExec(new Runnable() {
+				@Override
+				public void run() {
+					deleteButton.setEnabled(false);
+				}
+			});
+		}
+	}
+	
+	protected void threadEnded(){
+		if (deleteButton != null && !deleteButton.isDisposed() && runnedThreads.isEmpty()){
+			UIUtils.getDisplay().syncExec(new Runnable() {
+				@Override
+				public void run() {
+					deleteButton.setEnabled(true);
+				}
+			});
+		}
+	}
 	
 	public KPIWizardDialog(Shell parentShell, KPIConfiguratorWizard newWizard) {
 		super(parentShell, newWizard);
@@ -41,10 +98,7 @@ public class KPIWizardDialog extends WizardDialog {
 		button.setFont(JFaceResources.getDialogFont());
 		button.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent event) {
-				
-				// TODO: Ask delete confirmation..
-				boolean res = MessageDialog.openConfirm(UIUtils.getShell(), "KPI removal", "Do you really want to remove the existing KPI for this report unit?");
-				
+				boolean res = MessageDialog.openConfirm(UIUtils.getShell(), Messages.KPIWizardDialog_removeTitle, Messages.KPIWizardDialog_removeMessage);
 				if (res)
 				{
 					try {
@@ -56,14 +110,14 @@ public class KPIWizardDialog extends WizardDialog {
 							IConnection client = configuratorPage.getWSClient();
 							client.delete(new NullProgressMonitor(), configuratorPage.getKpiReportUnit());
 						}
-						MessageDialog.openInformation(UIUtils.getShell(), "KPI removal", "KPI removed.");
+						MessageDialog.openInformation(UIUtils.getShell(), Messages.KPIWizardDialog_removeTitle, Messages.KPIWizardDialog_removeSuccess);
 						
 						
 						cancelPressed();
 						
 					} catch (Exception ex)
 					{
-						MessageDialog.openError(UIUtils.getShell(), "KPI removal error", "I was not able to delete the KPI of the report unit...\n" +  ex.getMessage());
+						MessageDialog.openError(UIUtils.getShell(), Messages.KPIWizardDialog_removeErrorTitle, Messages.KPIWizardDialog_removeErrorMessage +  ex.getMessage());
 						JaspersoftStudioPlugin.getInstance().logError(ex);
 					}
 				}
@@ -75,7 +129,12 @@ public class KPIWizardDialog extends WizardDialog {
 
 	protected void createButtonsForButtonBar(Composite parent) {
 		((GridLayout) parent.getLayout()).makeColumnsEqualWidth = false;
-		deleteButton = createButton(parent, "Delete");
+		deleteButton = createButton(parent, Messages.KPIWizardDialog_deleteButton);
 		super.createButtonsForButtonBar(parent);
+	}
+	
+	@Override
+	public void run(boolean fork, boolean cancelable, IRunnableWithProgress runnable) throws InvocationTargetException, InterruptedException {
+		super.run(fork, cancelable, new RunnableWrapper(runnable));
 	}
 };

@@ -1,15 +1,14 @@
 package com.jaspersoft.studio.kpi.dialog.pages;
 
-import groovy.lang.GroovyShell;
-
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRParameter;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
 
@@ -36,33 +35,29 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 
-import com.ibm.icu.text.MessageFormat;
 import com.jaspersoft.studio.kpi.dialog.AbstractKPIConfigurationPage;
-import com.jaspersoft.studio.kpi.dialog.pages.range.RangeDefinition;
-import com.jaspersoft.studio.kpi.dialog.pages.range.RangeWizard;
+import com.jaspersoft.studio.kpi.dialog.pages.parameters.ParameterDefinition;
+import com.jaspersoft.studio.kpi.dialog.pages.parameters.ParameterWizard;
 import com.jaspersoft.studio.kpi.messages.MessagesByKeys;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 
-public class RangePage extends AbstractKPIConfigurationPage {
-
-	public static final String RANGE_PARAMETER = "tresholds";
+public class ParametersPage extends AbstractKPIConfigurationPage {
 	
-	public static final String TYPE_PARAMETER = "tresholdtype";
+	private final static HashSet<String> defaultParameters = new HashSet<String>();
 	
-	private static final String KEY_MIN = "min";
-	
-	private static final String KEY_MAX = "max";
-	
-	private static final String KEY_NAME = "color";
-	
-	private static final String ENTRY = "[\"min\":{0}, \"max\": {1}, \"color\": \"{2}\"]";
+	static{
+		defaultParameters.add(RangePage.RANGE_PARAMETER);
+		defaultParameters.add(RangePage.TYPE_PARAMETER);
+		defaultParameters.add(WidgetPage.WIDGET_PARAMETER);
+		defaultParameters.add(TitlePage.TITLE_PARAMETER);
+	}
 	
 	private Table table;
 	
 	private TableViewer tableViewer;
 	
-	private List<RangeDefinition> ranges = new ArrayList<RangeDefinition>();
+	private List<ParameterDefinition> parameters = new ArrayList<ParameterDefinition>();
 	
 	private Button deleteButton;
 	
@@ -76,56 +71,29 @@ public class RangePage extends AbstractKPIConfigurationPage {
 		}
 
 		public String getColumnText(Object element, int columnIndex) {
-			RangeDefinition dto = (RangeDefinition) element;
+			ParameterDefinition dto = (ParameterDefinition) element;
 			switch (columnIndex) {
-				case 0: return String.valueOf(dto.getMin()); 
-				case 1: return String.valueOf(dto.getMax()); 
-				case 2: return MessagesByKeys.getString(dto.getName());
+				case 0: return String.valueOf(dto.getName()); 
+				case 1: return String.valueOf(MessagesByKeys.getString(dto.getType())); 
+				case 2: return MessagesByKeys.getString(dto.getExpression());
 			}
 			return ""; //$NON-NLS-1$
 		}
 
 		@Override
 		public org.eclipse.swt.graphics.Color getForeground(Object element,int columnIndex) {
-			/*if (columnIndex == 2){
-				RangeDefinition dto = (RangeDefinition) element;
-				Color awtColor = Color.decode(dto.getColor());
-				return ResourceManager.getColor(awtColor.getRed(), awtColor.getGreen(), awtColor.getBlue());
-			}*/
 			return null;
 		}
 
 		@Override
-		public org.eclipse.swt.graphics.Color getBackground(Object element,
-				int columnIndex) {
-			// TODO Auto-generated method stub
+		public org.eclipse.swt.graphics.Color getBackground(Object element,int columnIndex) {
 			return null;
 		}
 	}
 	
 	@Override
 	public String getName() {
-		return "Validation Ranges";
-	}
-	
-	private boolean isPercentage(){
-		JRDesignParameter parameter = getParameter(TYPE_PARAMETER);
-		if (parameter.getDefaultValueExpression() != null){
-			String text = parameter.getDefaultValueExpression().getText();
-			return text.equals("\"percentage\"");
-		}
-		return false;
-	}
-	
-	private void setType(boolean isPercentage){
-		JRDesignParameter parameter = getParameter(TYPE_PARAMETER);
-		JRDesignExpression exp = null;
-		if (isPercentage){
-			exp = new JRDesignExpression("\"percentage\"");
-		} else {
-			exp = new JRDesignExpression("\"absolute\"");
-		}
-		parameter.setDefaultValueExpression(exp);
+		return "Parameters";
 	}
 
 	@Override
@@ -149,18 +117,8 @@ public class RangePage extends AbstractKPIConfigurationPage {
 		//Build the table
 		
 		buildTable(tGroup);
-
-		//Build the checkbox
 		
-		Button percentageButton = new Button(tGroup, SWT.CHECK);
-		percentageButton.setText("Range values are defined as percentage from target");
-		percentageButton.setSelection(isPercentage());
-		percentageButton.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				setType(((Button)e.widget).getSelection());
-			}
-		});
+		//Build the buttons
 		
 		Composite bGroup = new Composite(composite, SWT.NONE);
 		bGroup.setLayout(new GridLayout(1, false));
@@ -173,10 +131,10 @@ public class RangePage extends AbstractKPIConfigurationPage {
 		addButton.addSelectionListener(new SelectionAdapter(){
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				RangeWizard wizard = new RangeWizard();
+				ParameterWizard wizard = new ParameterWizard(jd);
 				WizardDialog dialog = new WizardDialog(UIUtils.getShell(), wizard);
 				if (dialog.open() == Dialog.OK){
-					ranges.add(wizard.getRange());
+					parameters.add(wizard.getParameter());
 					tableViewer.refresh();
 					updateVariable();
 				}
@@ -201,7 +159,7 @@ public class RangePage extends AbstractKPIConfigurationPage {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				int index = table.getSelectionIndex();
-				ranges.remove(index);
+				parameters.remove(index);
 				tableViewer.refresh();
 				updateVariable();
 			}
@@ -214,28 +172,44 @@ public class RangePage extends AbstractKPIConfigurationPage {
 	
 	private void editAction(){
 		int index = table.getSelectionIndex();
-		RangeWizard wizard = new RangeWizard(ranges.get(index));
+		ParameterWizard wizard = new ParameterWizard(parameters.get(index), jd);
 		WizardDialog dialog = new WizardDialog(UIUtils.getShell(), wizard);
 		if (dialog.open() == Dialog.OK){
-			ranges.set(index, wizard.getRange());
+			parameters.set(index, wizard.getParameter());
 			tableViewer.refresh();
 			updateVariable();
 		}
 	}
 	
 	private void updateVariable(){
-		StringBuilder builder = new StringBuilder();
-		builder.append("[");
-		int index = 0;
-		for(RangeDefinition def : ranges){
-			builder.append(MessageFormat.format(ENTRY, new Object[]{def.getMin(), def.getMax(), def.getName()}));
-			index++;
-			if (index < ranges.size()) builder.append(",");
+		JRDesignDataset seriesDataset = getSeriesDataset();
+		JRDesignDataset mainDataset = (JRDesignDataset)jd.getMainDataset();
+		JRParameter[] jrParameters = mainDataset.getParameters();
+		for(JRParameter jrParameter : jrParameters){
+			String name = jrParameter.getName();
+			if (!jrParameter.isSystemDefined() && !defaultParameters.contains(name)){
+				mainDataset.removeParameter(jrParameter.getName());
+				seriesDataset.removeParameter(jrParameter.getName());
+			}
 		}
-		builder.append("]");
-		JRDesignParameter parameter = getParameter(RANGE_PARAMETER);
-		JRDesignExpression expression = new JRDesignExpression(builder.toString());
-		parameter.setDefaultValueExpression(expression);
+		for(ParameterDefinition def : parameters){
+			JRDesignParameter mainParameter = new JRDesignParameter();
+			mainParameter.setName(def.getName());
+			mainParameter.setValueClassName(ParameterDefinition.getParameterJavaType(def.getType()));
+			if (def.getExpression() != null && !def.getExpression().trim().isEmpty()){
+				JRDesignExpression expression = new JRDesignExpression(def.getExpression());
+				mainParameter.setDefaultValueExpression(expression);
+			}
+			JRDesignParameter seriesParameter = new JRDesignParameter();
+			seriesParameter.setName(def.getName());
+			seriesParameter.setValueClassName(ParameterDefinition.getParameterJavaType(def.getType()));
+			try{
+				seriesDataset.addParameter(mainParameter);
+				mainDataset.addParameter(seriesParameter);
+			} catch(Exception ex){
+				ex.printStackTrace();
+			}
+		}
 	}
 	
 	private void buildTable(Composite composite) {
@@ -272,62 +246,56 @@ public class RangePage extends AbstractKPIConfigurationPage {
 		});
 
 		TableLayout tlayout = new TableLayout();
-		tlayout.addColumnData(new ColumnWeightData(30));
-		tlayout.addColumnData(new ColumnWeightData(30));
-		tlayout.addColumnData(new ColumnWeightData(40));
+		tlayout.addColumnData(new ColumnWeightData(25));
+		tlayout.addColumnData(new ColumnWeightData(15));
+		tlayout.addColumnData(new ColumnWeightData(60));
 		table.setLayout(tlayout);
 
 		TableColumn[] column = new TableColumn[3];
 		column[0] = new TableColumn(table, SWT.NONE);
-		column[0].setText("From");
+		column[0].setText("Name");
 		column[1] = new TableColumn(table, SWT.NONE);
-		column[1].setText("To");
+		column[1].setText("Type");
 		column[2] = new TableColumn(table, SWT.NONE);
-		column[2].setText("Type");
+		column[2].setText("Expression");
 		
 		for (int i = 0, n = column.length; i < n; i++)
 			column[i].pack();
 	}
 	
 	private void fillTable() {
-		JRExpression exp = getParameter(RANGE_PARAMETER).getDefaultValueExpression();
-		ranges.clear();
-		if (exp != null && exp.getText() != null){
-			List<?> readValues = null;
-			try{
-				GroovyShell interpreter = new GroovyShell(); 
-				readValues = (List<?>)interpreter.evaluate(exp.getText());
-			}catch(Exception ex){
-				ex.printStackTrace();
-				readValues = new ArrayList<Object>();
+		JRParameter[] jrParameters = jd.getMainDataset().getParameters();
+		parameters.clear();
+		if (jrParameters != null){
+			for(JRParameter jrParameter : jrParameters){
+				String name = jrParameter.getName();
+				if (!jrParameter.isSystemDefined() && !defaultParameters.contains(name)){
+					String type = ParameterDefinition.getParameterType(jrParameter.getValueClassName());
+					String expression = "";
+					if (jrParameter.getDefaultValueExpression() != null && jrParameter.getDefaultValueExpression().getText() != null){
+						expression = jrParameter.getDefaultValueExpression().getText();
+					}
+					parameters.add(new ParameterDefinition(name, type, expression));
+				}
 			}
-			for(Object obj : readValues){
-				@SuppressWarnings("unchecked")
-				Map<String,Object> map = (Map<String,Object>)obj;
-				Integer min = (Integer)map.get(KEY_MIN);
-				Integer max = (Integer)map.get(KEY_MAX);
-				String name = (String)map.get(KEY_NAME);
-				ranges.add(new RangeDefinition(min, max, name));
-			}
-			
 		}
-		tableViewer.setInput(ranges);
-		if (!ranges.isEmpty())
+		tableViewer.setInput(parameters);
+		if (!parameters.isEmpty())
 			table.select(0);
 	}
 	
-	private JRDesignParameter getParameter(String parameterName){
-		JRParameter parameter = jd.getParametersMap().get(parameterName);
-		if (parameter == null){
-			JRDesignParameter newParameter = new JRDesignParameter();
-			newParameter.setName(parameterName);
+	private JRDesignDataset getSeriesDataset(){
+		JRDataset seriesDataset = jd.getDatasetMap().get(SeriesPage.SERIES_DATASET_NAME);
+		if (seriesDataset == null){
+			JRDesignDataset newDataset = new JRDesignDataset(false);
+			newDataset.setName(SeriesPage.SERIES_DATASET_NAME);
 			try {
-				jd.addParameter(newParameter);
+				jd.addDataset(newDataset);
 			} catch (JRException e) {
 				e.printStackTrace();
-			} 
-			return newParameter;
+			}
+			return newDataset;
 		}
-		return ((JRDesignParameter)parameter);
+		return (JRDesignDataset)seriesDataset;	
 	}
 }

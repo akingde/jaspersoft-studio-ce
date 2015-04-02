@@ -29,6 +29,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.kpi.Activator;
 import com.jaspersoft.studio.kpi.dialog.pages.DatasetPage;
+import com.jaspersoft.studio.kpi.dialog.pages.ParametersPage;
 import com.jaspersoft.studio.kpi.dialog.pages.RangePage;
 import com.jaspersoft.studio.kpi.dialog.pages.SeriesPage;
 import com.jaspersoft.studio.kpi.dialog.pages.TitlePage;
@@ -162,6 +163,7 @@ public class KPIConfiguratorPage extends JSSHelpWizardPage {
 		pages.add(new ValuePage());
 		pages.add(new RangePage());
 		pages.add(new SeriesPage());
+		pages.add(new ParametersPage());
 	}
 
 	@Override

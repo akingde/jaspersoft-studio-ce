@@ -19,7 +19,7 @@ import com.jaspersoft.studio.kpi.dialog.AbstractKPIConfigurationPage;
 
 public class TitlePage extends AbstractKPIConfigurationPage {
 
-	public static final String PARAMETER_NAME = "title";
+	public static final String TITLE_PARAMETER = "title";
 	
 	private String getTextFromExpression(JRExpression exp){
 		if (exp == null) return "";
@@ -32,13 +32,13 @@ public class TitlePage extends AbstractKPIConfigurationPage {
 	private void setParameterExpression(String value){
 		String expressionText = "\"" + value + "\"";
 		JRExpression newExpression = new JRDesignExpression(expressionText);
-		JRParameter parameter = jd.getParametersMap().get(PARAMETER_NAME);
+		JRParameter parameter = jd.getParametersMap().get(TITLE_PARAMETER);
 		if (parameter != null){
 			((JRDesignParameter)parameter).setDefaultValueExpression(newExpression);
 		} else {
 			JRDesignParameter newParameter = new JRDesignParameter();
 			newParameter.setDefaultValueExpression(newExpression);
-			newParameter.setName(PARAMETER_NAME);
+			newParameter.setName(TITLE_PARAMETER);
 			try {
 				jd.addParameter(newParameter);
 			} catch (JRException e) {
@@ -59,7 +59,7 @@ public class TitlePage extends AbstractKPIConfigurationPage {
 		new Label(comp, SWT.NONE).setText("Title");
 		Text titleText = new Text(comp, SWT.BORDER);
 		titleText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		JRParameter parameter = jd.getParametersMap().get(PARAMETER_NAME);
+		JRParameter parameter = jd.getParametersMap().get(TITLE_PARAMETER);
 		if (parameter != null){
 			titleText.setText(getTextFromExpression(parameter.getDefaultValueExpression()));
 		}
