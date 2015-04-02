@@ -61,7 +61,9 @@ public class ValuePage extends AbstractKPIConfigurationPage {
 	}
 
 	private void updateVariableExpression(JRExpression expression, String variableName){
-		getVariable(variableName).setExpression(expression);
+		JRDesignVariable variable = getVariable(variableName);
+		variable.setExpression(expression);
+		variable.setInitialValueExpression((JRExpression)expression.clone());;
 	}
 	
 	@Override
