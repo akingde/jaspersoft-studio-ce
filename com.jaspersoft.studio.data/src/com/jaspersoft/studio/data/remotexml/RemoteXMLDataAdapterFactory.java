@@ -73,7 +73,7 @@ public class RemoteXMLDataAdapterFactory implements DataAdapterFactory {
 
 	@Override
 	public boolean isDeprecated() {
-		return false;
+		return true;
 	}
 
 }

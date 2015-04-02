@@ -24,7 +24,7 @@
          </dataAdapter>
          <dataAdapter ClassFactory="com.jaspersoft.studio.data.xml.XMLDataAdapterFactory"/>
          <dataAdapter
-               ClassFactory="com.jaspersoft.studio.data.json.JsonDataAdapterFactory">
+               ClassFactory="com.jaspersoft.studio.data.remotexml.RemoteXMLDataAdapterFactory">
          </dataAdapter>
          <dataAdapter
                ClassFactory="com.jaspersoft.studio.data.hibernate.HibernateDataAdapterFactory">
