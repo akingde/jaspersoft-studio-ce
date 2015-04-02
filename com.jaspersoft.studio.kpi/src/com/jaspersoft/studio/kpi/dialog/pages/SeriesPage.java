@@ -102,9 +102,6 @@ public class SeriesPage extends AbstractKPIConfigurationPage{
 				getVariable(SERIES_Y_VARIABLE).setExpression(exp != null ? (JRExpression)exp.clone() : null);
 			}
 		});
-		
-
-		
 		return c;
 	}
 	

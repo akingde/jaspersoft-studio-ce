@@ -1,6 +1,5 @@
 package com.jaspersoft.studio.kpi.dialog.pages.range;
 
-import java.awt.Color;
 import java.util.ArrayList;
 
 import org.eclipse.jface.dialogs.Dialog;
@@ -15,10 +14,10 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Spinner;
 
+import com.jaspersoft.studio.kpi.messages.MessagesByKeys;
 import com.jaspersoft.studio.property.combomenu.ComboItem;
 import com.jaspersoft.studio.property.combomenu.ComboItemAction;
 import com.jaspersoft.studio.property.combomenu.ComboMenuViewer;
-import com.jaspersoft.studio.property.descriptor.color.ColorLabelProvider;
 import com.jaspersoft.studio.property.section.widgets.SPRWPopUpCombo;
 
 public class RangeDialog extends Dialog {
@@ -31,8 +30,6 @@ public class RangeDialog extends Dialog {
 	
 	private ComboMenuViewer colorCombo;
 	
-	private ColorLabelProvider colorProvider;
-	
 	private ModifyListener modListener = new ModifyListener() {
 		
 		@Override
@@ -42,19 +39,17 @@ public class RangeDialog extends Dialog {
 	};
 	
 	private void regenerateRange(){
-		modifiedElement = new RangeDefinition(min.getSelection(), max.getSelection(), (String)colorCombo.getSelectionValue(), colorCombo.getSelectedItem().getText());
+		modifiedElement = new RangeDefinition(min.getSelection(), max.getSelection(), (String)colorCombo.getSelectionValue());
 	}
 	
-	public RangeDialog(Shell parentShell, ColorLabelProvider colorProvider, RangeDefinition modifiedElement) {
+	public RangeDialog(Shell parentShell, RangeDefinition modifiedElement) {
 		super(parentShell);
 		this.modifiedElement = modifiedElement;
-		this.colorProvider = colorProvider;
 	}
 	
-	public RangeDialog(Shell parentShell, ColorLabelProvider colorProvider){
+	public RangeDialog(Shell parentShell){
 		super(parentShell);
 		modifiedElement = null;
-		this.colorProvider = colorProvider;
 	}
 	
 	@Override
@@ -83,9 +78,11 @@ public class RangeDialog extends Dialog {
 		
 		new Label(container, SWT.NONE).setText("Type");
 		ArrayList<ComboItem> itemsList = new ArrayList<ComboItem>();
-		itemsList.add(new ComboItem(RangeDefinition.getNameFromColor(Color.GREEN), true,  colorProvider.getImage(Color.GREEN),0, Color.GREEN, RangeDefinition.getHexColor(Color.GREEN)));
-		itemsList.add(new ComboItem(RangeDefinition.getNameFromColor(Color.YELLOW), true, colorProvider.getImage(Color.YELLOW),1, Color.YELLOW, RangeDefinition.getHexColor(Color.YELLOW)));
-		itemsList.add(new ComboItem(RangeDefinition.getNameFromColor(Color.RED), true, colorProvider.getImage(Color.RED),2, Color.RED, RangeDefinition.getHexColor(Color.RED)));
+		int index = 0;
+		for(String names : RangeDefinition.getNames()){
+			itemsList.add(new ComboItem(MessagesByKeys.getString(names), true,  null, index, names, names));
+			index++;
+		}
 		
 		//Creating the combo popup
 		colorCombo = new ComboMenuViewer(container, SWT.NORMAL, SPRWPopUpCombo.getLongest(itemsList));
@@ -96,10 +93,11 @@ public class RangeDialog extends Dialog {
 		if (modifiedElement != null){
 			min.setSelection(modifiedElement.getMin());
 			max.setSelection(modifiedElement.getMax());
-			Color editedColor = Color.decode(modifiedElement.getColor());
-			if (Color.RED.equals(editedColor)) colorCombo.select(2);
-			else if (Color.YELLOW.equals(editedColor)) colorCombo.select(1);
-			else {
+			String name = modifiedElement.getName();
+			int nameIndex = RangeDefinition.getNames().indexOf(name);
+			if (nameIndex != -1){
+				colorCombo.select(nameIndex);
+			} else {
 				colorCombo.select(0);
 				regenerateRange();
 			}
@@ -117,12 +115,6 @@ public class RangeDialog extends Dialog {
 		});
 		
 		return container;
-	}
-	
-	@Override
-	public boolean close() {
-		colorProvider.dispose();
-		return super.close();
 	}
 	
 	public RangeDefinition getDefinition(){

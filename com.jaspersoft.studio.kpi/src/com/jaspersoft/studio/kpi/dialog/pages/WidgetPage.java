@@ -14,7 +14,6 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
@@ -50,10 +49,7 @@ public class WidgetPage extends AbstractKPIConfigurationPage {
 				}
 			}
 			if (anotherButtonFound){
-				JRDesignParameter parameter = getParameter();
-				String exp = "\"" + (String)e.widget.getData() + "\"";
-				JRDesignExpression newExpression = new JRDesignExpression(exp);
-				parameter.setDefaultValueExpression(newExpression);
+				writeValue( (String)e.widget.getData());
 			} else {
 				ToolItem btn = (ToolItem)e.widget;
 				btn.removeSelectionListener(this);
@@ -63,6 +59,13 @@ public class WidgetPage extends AbstractKPIConfigurationPage {
 		};
 		
 	};
+	
+	private void writeValue(String value){
+		JRDesignParameter parameter = getParameter();
+		String exp = "\"" + value + "\"";
+		JRDesignExpression newExpression = new JRDesignExpression(exp);
+		parameter.setDefaultValueExpression(newExpression);
+	}
 	
 	@Override
 	public String getName() {
@@ -80,6 +83,10 @@ public class WidgetPage extends AbstractKPIConfigurationPage {
 		
 		
 		String selectedWidget = getSelectedWidget();
+		if (selectedWidget == null || selectedWidget.isEmpty()) {
+			selectedWidget = "default";
+			writeValue(selectedWidget);
+		}
 		for(WidgetDefinition widget : widgetsList){
 			ToolItem newButton = new ToolItem(bar, SWT.RADIO );
 			newButton.setImage(widget.getImage());

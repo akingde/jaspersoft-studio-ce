@@ -1,31 +1,35 @@
 package com.jaspersoft.studio.kpi.dialog.pages.range;
 
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 
 public class RangeDefinition{
 	
-	private static final HashMap<Color, String> colorNameMap = new HashMap<Color, String>();
+	private static final HashMap<String, Color> colorNameMap = new HashMap<String, Color>();
+	
+	private static final List<String> availableNames = new ArrayList<String>();
 	
 	static{
-		colorNameMap.put(Color.GREEN, "Good");
-		colorNameMap.put(Color.YELLOW, "Normal");
-		colorNameMap.put(Color.RED, "Bad");
+		availableNames.add("good");
+		colorNameMap.put(availableNames.get(availableNames.size()-1), Color.GREEN);
+		availableNames.add("normal");
+		colorNameMap.put(availableNames.get(availableNames.size()-1), Color.BLACK);
+		availableNames.add("bad");
+		colorNameMap.put(availableNames.get(availableNames.size()-1), Color.RED);
 	}
 	
 	private int min;
 	
 	private int max;
 	
-	private String color;
-	
 	private String name;
 	
-	public RangeDefinition(int min, int max, String color, String name){
+	public RangeDefinition(int min, int max, String name){
 		this.min = min;
 		this.max = max;
-		this.color = color;
 		this.name = name;
 	}
 
@@ -36,19 +40,9 @@ public class RangeDefinition{
 	public int getMax() {
 		return max;
 	}
-
-	public String getColor() {
-		return color;
-	}
 	
 	public String getName(){
 		return name;
-	}
-	
-	public static String getNameFromColor(Color color){
-		String name = colorNameMap.get(color);
-		if (name != null) return name;
-		else return "Undefinded";
 	}
 	
 	public static String  getHexColor(Color color){
@@ -57,5 +51,9 @@ public class RangeDefinition{
 			hexColour = "000000".substring(0, 6 - hexColour.length()) + hexColour;
 		}
 		return "#" + hexColour;
+	}
+	
+	public static List<String> getNames(){
+		return availableNames;
 	}
 }

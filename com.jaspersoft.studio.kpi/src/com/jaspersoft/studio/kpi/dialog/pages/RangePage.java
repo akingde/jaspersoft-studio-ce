@@ -2,7 +2,6 @@ package com.jaspersoft.studio.kpi.dialog.pages;
 
 import groovy.lang.GroovyShell;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +15,8 @@ import net.sf.jasperreports.engine.design.JRDesignParameter;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.ColumnWeightData;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ITableColorProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
@@ -24,8 +25,6 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.DisposeEvent;
-import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
@@ -35,15 +34,13 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.wb.swt.ResourceManager;
 
 import com.ibm.icu.text.MessageFormat;
 import com.jaspersoft.studio.kpi.dialog.AbstractKPIConfigurationPage;
 import com.jaspersoft.studio.kpi.dialog.pages.range.RangeDefinition;
 import com.jaspersoft.studio.kpi.dialog.pages.range.RangeDialog;
+import com.jaspersoft.studio.kpi.messages.MessagesByKeys;
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.property.descriptor.NullEnum;
-import com.jaspersoft.studio.property.descriptor.color.ColorLabelProvider;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 
 public class RangePage extends AbstractKPIConfigurationPage {
@@ -56,15 +53,13 @@ public class RangePage extends AbstractKPIConfigurationPage {
 	
 	private static final String KEY_MAX = "max";
 	
-	private static final String KEY_COLOR = "color";
+	private static final String KEY_NAME = "color";
 	
 	private static final String ENTRY = "[\"min\":{0}, \"max\": {1}, \"color\": \"{2}\"]";
 	
 	private Table table;
 	
 	private TableViewer tableViewer;
-
-	private ColorLabelProvider clb = new ColorLabelProvider(NullEnum.NOTNULL);
 	
 	private List<RangeDefinition> ranges = new ArrayList<RangeDefinition>();
 	
@@ -84,18 +79,18 @@ public class RangePage extends AbstractKPIConfigurationPage {
 			switch (columnIndex) {
 				case 0: return String.valueOf(dto.getMin()); 
 				case 1: return String.valueOf(dto.getMax()); 
-				case 2: return RangeDefinition.getNameFromColor(Color.decode(dto.getColor()));
+				case 2: return MessagesByKeys.getString(dto.getName());
 			}
 			return ""; //$NON-NLS-1$
 		}
 
 		@Override
 		public org.eclipse.swt.graphics.Color getForeground(Object element,int columnIndex) {
-			if (columnIndex == 2){
+			/*if (columnIndex == 2){
 				RangeDefinition dto = (RangeDefinition) element;
 				Color awtColor = Color.decode(dto.getColor());
 				return ResourceManager.getColor(awtColor.getRed(), awtColor.getGreen(), awtColor.getBlue());
-			}
+			}*/
 			return null;
 		}
 
@@ -177,7 +172,7 @@ public class RangePage extends AbstractKPIConfigurationPage {
 		addButton.addSelectionListener(new SelectionAdapter(){
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				RangeDialog dialog = new RangeDialog(UIUtils.getShell(), clb);
+				RangeDialog dialog = new RangeDialog(UIUtils.getShell());
 				if (dialog.open() == Dialog.OK){
 					ranges.add(dialog.getDefinition());
 					tableViewer.refresh();
@@ -192,13 +187,7 @@ public class RangePage extends AbstractKPIConfigurationPage {
 		editButton.addSelectionListener(new SelectionAdapter(){
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				int index = table.getSelectionIndex();
-				RangeDialog dialog = new RangeDialog(UIUtils.getShell(), clb, ranges.get(index));
-				if (dialog.open() == Dialog.OK){
-					ranges.set(index, dialog.getDefinition());
-					tableViewer.refresh();
-					updateVariable();
-				}
+				editAction();
 			}
 		});
 		editButton.setEnabled(false);
@@ -221,12 +210,22 @@ public class RangePage extends AbstractKPIConfigurationPage {
 		return composite;
 	}
 	
+	private void editAction(){
+		int index = table.getSelectionIndex();
+		RangeDialog dialog = new RangeDialog(UIUtils.getShell(), ranges.get(index));
+		if (dialog.open() == Dialog.OK){
+			ranges.set(index, dialog.getDefinition());
+			tableViewer.refresh();
+			updateVariable();
+		}
+	}
+	
 	private void updateVariable(){
 		StringBuilder builder = new StringBuilder();
 		builder.append("[");
 		int index = 0;
 		for(RangeDefinition def : ranges){
-			builder.append(MessageFormat.format(ENTRY, new Object[]{def.getMin(), def.getMax(), def.getColor()}));
+			builder.append(MessageFormat.format(ENTRY, new Object[]{def.getMin(), def.getMax(), def.getName()}));
 			index++;
 			if (index < ranges.size()) builder.append(",");
 		}
@@ -238,13 +237,6 @@ public class RangePage extends AbstractKPIConfigurationPage {
 	
 	private void buildTable(Composite composite) {
 		table = new Table(composite, SWT.BORDER | SWT.SINGLE | SWT.FULL_SELECTION);
-		table.addDisposeListener(new DisposeListener() {
-			
-			@Override
-			public void widgetDisposed(DisposeEvent e) {
-				clb.dispose();
-			}
-		});
 		GridData gd = new GridData(GridData.FILL_BOTH);
 		gd.heightHint = 300;
 		gd.widthHint = 700;
@@ -262,6 +254,17 @@ public class RangePage extends AbstractKPIConfigurationPage {
 				int selectionIndex = table.getSelectionIndex();
 				deleteButton.setEnabled(selectionIndex != -1);
 				editButton.setEnabled(selectionIndex != -1);
+			}
+		});
+		
+		tableViewer.addDoubleClickListener(new IDoubleClickListener() {
+			
+			@Override
+			public void doubleClick(DoubleClickEvent event) {
+				int selectionIndex = table.getSelectionIndex();
+				if (selectionIndex!=-1){
+					editAction();
+				}
 			}
 		});
 
@@ -300,8 +303,8 @@ public class RangePage extends AbstractKPIConfigurationPage {
 				Map<String,Object> map = (Map<String,Object>)obj;
 				Integer min = (Integer)map.get(KEY_MIN);
 				Integer max = (Integer)map.get(KEY_MAX);
-				String color = (String)map.get(KEY_COLOR);
-				ranges.add(new RangeDefinition(min, max, color, RangeDefinition.getNameFromColor(Color.decode(color))));
+				String name = (String)map.get(KEY_NAME);
+				ranges.add(new RangeDefinition(min, max, name));
 			}
 			
 		}

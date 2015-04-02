@@ -1,13 +1,11 @@
 package com.jaspersoft.studio.kpi;
 
 import java.io.File;
-import java.io.InputStream;
 import java.net.URL;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
 import org.eclipse.core.resources.IFile;
@@ -31,7 +29,6 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescript
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.protocol.IConnection;
 import com.jaspersoft.studio.server.protocol.restv2.WsTypes;
-import com.jaspersoft.studio.server.utils.ResourceDescriptorUtil;
 import com.jaspersoft.studio.server.wizard.find.FindResourceWizard;
 import com.jaspersoft.studio.server.wizard.find.FindWizardDialog;
 import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorDatasource;
