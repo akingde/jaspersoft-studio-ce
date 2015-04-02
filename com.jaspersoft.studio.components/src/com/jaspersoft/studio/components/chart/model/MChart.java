@@ -590,7 +590,7 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 					.getEnumValue(value));
 		else if (id.equals(JRDesignChart.PROPERTY_EVALUATION_TIME))
 			jrElement.setEvaluationTime(
-					EnumHelper.getEnumByTranslatedName(EvaluationTimeEnum.values(), value));
+					EnumHelper.getEnumByObjectValue(EvaluationTimeEnum.values(), value));
 		else if (id.equals(JRBaseChart.PROPERTY_SHOW_LEGEND))
 			jrElement.setShowLegend((Boolean) value);
 		else if (id.equals(JRBaseChart.PROPERTY_RENDER_TYPE)) {

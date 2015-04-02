@@ -54,7 +54,7 @@ public class CreateParameterCommand extends Command {
 	 * @param index
 	 *          the index
 	 */
-	public CreateParameterCommand(MParameters destNode, MParameter srcNode, int index) {
+	public CreateParameterCommand(MParameters<?> destNode, MParameter srcNode, int index) {
 		super();
 		this.jrDataset = (JRDesignDataset) destNode.getValue();
 		this.index = index;

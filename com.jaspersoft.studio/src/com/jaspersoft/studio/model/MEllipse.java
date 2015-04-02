@@ -41,9 +41,12 @@ import com.jaspersoft.studio.utils.EnumHelper;
  */
 public class MEllipse extends MGraphicElementLinePen {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
-	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
-
+	private static IPropertyDescriptor[] descriptors;
+	private static Map<String, Object> defaultsMap;
+	private static final String[] fillEnumNames = EnumHelper.getEnumNames(FillEnum.values(), NullEnum.INHERITED);
+	
+	
 	/**
 	 * Gets the icon descriptor.
 	 * 
@@ -61,9 +64,6 @@ public class MEllipse extends MGraphicElementLinePen {
 	public MEllipse() {
 		super();
 	}
-
-	private static IPropertyDescriptor[] descriptors;
-	private static Map<String, Object> defaultsMap;
 
 	@Override
 	public Map<String, Object> getDefaultsMap() {
@@ -91,8 +91,8 @@ public class MEllipse extends MGraphicElementLinePen {
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		ComboBoxPropertyDescriptor fillD = new ComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_FILL, Messages.common_fill,
-				EnumHelper.getEnumNames(FillEnum.values(), NullEnum.INHERITED));
+		ComboBoxPropertyDescriptor fillD = new ComboBoxPropertyDescriptor(
+				JRBaseStyle.PROPERTY_FILL, Messages.common_fill, fillEnumNames);
 		fillD.setDescription(Messages.MEllipse_fill_description);
 		desc.add(fillD);
 
@@ -102,26 +102,30 @@ public class MEllipse extends MGraphicElementLinePen {
 	@Override
 	public Object getPropertyValue(Object id) {
 		JRDesignEllipse jrElement = (JRDesignEllipse) getValue();
-		if (id.equals(JRBaseStyle.PROPERTY_FILL))
-			return EnumHelper.getValue(jrElement.getOwnFillValue(), 1, true);
+		if (id.equals(JRBaseStyle.PROPERTY_FILL)) {
+			return EnumHelper.getEnumIndexByTranslatedName(fillEnumNames, jrElement.getOwnFillValue());
+		}
 		return super.getPropertyValue(id);
 	}
 
 	@Override
 	public Object getPropertyActualValue(Object id) {
 		JRDesignEllipse jrElement = (JRDesignEllipse) getValue();
-		if (id.equals(JRBaseStyle.PROPERTY_FILL))
-			return EnumHelper.getValue(jrElement.getFillValue(), 1, true);
+		if (id.equals(JRBaseStyle.PROPERTY_FILL)) {
+			return EnumHelper.getEnumIndexByTranslatedName(fillEnumNames, jrElement.getOwnFillValue());
+		}
 		return super.getPropertyActualValue(id);
 	}
 
 	@Override
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignEllipse jrElement = (JRDesignEllipse) getValue();
-		if (id.equals(JRBaseStyle.PROPERTY_FILL))
-			jrElement.setFill((FillEnum) EnumHelper.getSetValue(FillEnum.values(), value, 1, true));
-		else
+		if (id.equals(JRBaseStyle.PROPERTY_FILL)) {
+			jrElement.setFill(EnumHelper.getEnumByObjectValue(FillEnum.values(), value, true));
+		}
+		else {
 			super.setPropertyValue(id, value);
+		}
 	}
 
 	/**

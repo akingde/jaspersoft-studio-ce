@@ -282,7 +282,7 @@ public class MHtml extends MGraphicElement {
 
 		if (id.equals(HtmlComponent.PROPERTY_EVALUATION_TIME))
 			htmlComp.setEvaluationTime(
-					EnumHelper.getEnumByTranslatedName(EvaluationTimeEnum.values(), value));
+					EnumHelper.getEnumByObjectValue(EvaluationTimeEnum.values(), value));
 		else if (id.equals(HtmlComponent.PROPERTY_EVALUATION_GROUP))
 			htmlComp.setEvaluationGroup((String) value);
 		else if (id.equals(HtmlComponent.PROPERTY_SCALE_TYPE))

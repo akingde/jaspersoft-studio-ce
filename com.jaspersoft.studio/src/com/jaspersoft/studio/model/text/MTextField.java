@@ -319,7 +319,7 @@ public class MTextField extends MTextElement {
 
 		if (id.equals(JRDesignTextField.PROPERTY_EVALUATION_TIME)) {
 			jrElement.setEvaluationTime(
-					EnumHelper.getEnumByTranslatedName(EvaluationTimeEnum.values(), value));
+					EnumHelper.getEnumByObjectValue(EvaluationTimeEnum.values(), value));
 		}
 		else if (id.equals(JRDesignTextField.PROPERTY_EVALUATION_GROUP)) {
 			if (value != null && !value.equals("")) { //$NON-NLS-1$

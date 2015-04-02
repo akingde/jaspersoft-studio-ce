@@ -81,14 +81,21 @@ public abstract class SPGroupTypeCombo extends ASPropertyWidget {
 					return;
 				String group = null;
 				String comboVal = combo.getItem(combo.getSelectionIndex());
+				boolean isGroup = false;
 				if (comboVal.startsWith(GROUPPREFIX)) {
+					isGroup = true;
 					group = comboVal.substring(GROUPPREFIX.length());
 				}
 				// It is important to set first the group because the group changing dosen't trigger an event
 				// so otherwise setting the type first trigger the event but the group has not been set to the
 				// setData method dosen't find the group and set always the element 0.
 				section.changeProperty(gDescriptor.getId(), Misc.nvl(group));
-				section.changeProperty(pDescriptor.getId(), comboVal);
+				if(isGroup) {
+					section.changeProperty(pDescriptor.getId(), getGroupEnum());
+				}
+				else {
+					section.changeProperty(pDescriptor.getId(), comboVal);
+				}
 			}
 
 			public void widgetDefaultSelected(SelectionEvent e) {

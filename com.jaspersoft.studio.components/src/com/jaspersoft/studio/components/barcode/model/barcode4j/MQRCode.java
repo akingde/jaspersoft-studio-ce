@@ -148,7 +148,7 @@ public class MQRCode extends MBarcode {
 					jrList.getCodeExpression(), value, null));
 		else if (id.equals(StandardBarbecueComponent.PROPERTY_EVALUATION_TIME))
 			jrList.setEvaluationTimeValue(
-					EnumHelper.getEnumByTranslatedName(EvaluationTimeEnum.values(), value));
+					EnumHelper.getEnumByObjectValue(EvaluationTimeEnum.values(), value));
 		super.setPropertyValue(id, value);
 	}
 

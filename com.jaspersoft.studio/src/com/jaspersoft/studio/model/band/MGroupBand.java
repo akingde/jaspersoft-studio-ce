@@ -78,12 +78,13 @@ public class MGroupBand extends MGroup implements IPropertySource {
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignGroup jrGroup = (JRDesignGroup) getValue();
 
-		if (id.equals(JasperDesign.PROPERTY_ORIENTATION))
+		if (id.equals(JasperDesign.PROPERTY_ORIENTATION)) {
 			jrGroup
-					.setFooterPosition((FooterPositionEnum) EnumHelper.getSetValue(FooterPositionEnum.values(), value, 1, true));
-
-		else
+					.setFooterPosition(EnumHelper.getEnumByObjectValue(FooterPositionEnum.values(), value, true));
+		}
+		else {
 			super.setPropertyValue(id, value);
+		}
 	}
 
 	@Override

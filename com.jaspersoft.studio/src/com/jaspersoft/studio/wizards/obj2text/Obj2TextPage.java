@@ -54,7 +54,7 @@ public class Obj2TextPage extends WizardPage {
 				int sel = lst.getSelectionIndex();
 				// recall that we are using TRANSLATED names!
 				calculation = 
-						(CalculationEnum) EnumHelper.getEnumByTranslatedName(CalculationEnum.values(), names[sel]);
+						(CalculationEnum) EnumHelper.getEnumByObjectValue(CalculationEnum.values(), names[sel]);
 			}
 
 			public void widgetDefaultSelected(SelectionEvent e) {

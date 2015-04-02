@@ -20,6 +20,7 @@ import net.sf.jasperreports.crosstabs.JRCrosstabBucket;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabBucket;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabRowGroup;
 import net.sf.jasperreports.crosstabs.type.CrosstabTotalPositionEnum;
+import net.sf.jasperreports.engine.analytics.dataset.BucketOrder;
 import net.sf.jasperreports.engine.type.SortOrderEnum;
 
 import org.eclipse.jface.viewers.CellEditor;
@@ -145,13 +146,12 @@ public class CrosstabWizardRowPage extends CrosstabWizardColumnPage {
 					return ((TRowLabelProvider) viewer.getLabelProvider())
 							.getColumnText(element, 1);
 
-				if (F_ORDER.equals(property)) //$NON-NLS-1$
-					return EnumHelper.getValue(
-							prop.getBucket().getOrderValue(), 1, false);
-
-				if (F_TOTALPOSITION.equals(property)) //$NON-NLS-1$
-					return EnumHelper.getValue(prop.getTotalPositionValue(), 0,
-							false);
+				if (F_ORDER.equals(property)) {//$NON-NLS-1$
+					return EnumHelper.getEnumIndexByTranslatedName(bucketOrderNames,prop.getBucket().getOrder());
+				}
+				if (F_TOTALPOSITION.equals(property)) {//$NON-NLS-1$
+					return EnumHelper.getEnumIndexByTranslatedName(crosstabTotalPositionEnumNames, prop.getTotalPositionValue());
+				}
 				if (F_CALCULATION.equals(property)) //$NON-NLS-1$
 					return w.getCalculation().getValue();
 
@@ -168,12 +168,9 @@ public class CrosstabWizardRowPage extends CrosstabWizardColumnPage {
 				JRDesignCrosstabBucket bucket = (JRDesignCrosstabBucket) data
 						.getBucket();
 				if (F_ORDER.equals(property)) { //$NON-NLS-1$
-					bucket.setOrder((SortOrderEnum) EnumHelper.getSetValue(
-							SortOrderEnum.values(), value, 1, false));
+					bucket.setOrder(EnumHelper.getEnumByObjectValue(BucketOrder.values(),value));
 				} else if (F_TOTALPOSITION.equals(property)) { //$NON-NLS-1$
-					data.setTotalPosition((CrosstabTotalPositionEnum) EnumHelper
-							.getSetValue(CrosstabTotalPositionEnum.values(),
-									value, 0, false));
+					data.setTotalPosition(EnumHelper.getEnumByObjectValue(CrosstabTotalPositionEnum.values(), value));
 				} else if (F_CALCULATION.equals(property)) { //$NON-NLS-1$
 					AgregationFunctionEnum function = AgregationFunctionEnum
 							.getByValue((Integer) value);

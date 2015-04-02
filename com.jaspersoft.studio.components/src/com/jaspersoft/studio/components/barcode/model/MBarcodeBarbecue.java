@@ -279,7 +279,7 @@ public class MBarcodeBarbecue extends MBarcode implements IRotatable {
 
 		if (id.equals(StandardBarbecueComponent.PROPERTY_EVALUATION_TIME))
 			barbecueComponent.setEvaluationTimeValue(
-					EnumHelper.getEnumByTranslatedName(EvaluationTimeEnum.values(), value));
+					EnumHelper.getEnumByObjectValue(EvaluationTimeEnum.values(), value));
 		else if (id.equals(StandardBarbecueComponent.PROPERTY_EVALUATION_GROUP))
 			barbecueComponent.setEvaluationGroup((String) value);
 		else if (id

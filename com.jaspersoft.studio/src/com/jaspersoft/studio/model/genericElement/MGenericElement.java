@@ -212,7 +212,7 @@ public class MGenericElement extends MGraphicElement {
 		JRGenericElementType genericType = jrElement.getGenericType();
 		if (id.equals(JRDesignGenericElement.PROPERTY_EVALUATION_TIME)) {
 			jrElement.setEvaluationTime(
-					EnumHelper.getEnumByTranslatedName(EvaluationTimeEnum.values(), value));
+					EnumHelper.getEnumByObjectValue(EvaluationTimeEnum.values(), value));
 		}
 		else if (id.equals(JRDesignGenericElement.PROPERTY_EVALUATION_GROUP_NAME))
 			jrElement.setEvaluationGroupName((String) value);

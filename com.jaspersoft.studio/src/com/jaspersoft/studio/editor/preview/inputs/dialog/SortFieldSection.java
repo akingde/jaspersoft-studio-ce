@@ -64,6 +64,8 @@ public class SortFieldSection {
 	private Table leftTable;
 	private TableViewer rightTView;
 	private TableViewer leftTView;
+	
+	private static final String[] orderEnumNames = EnumHelper.getEnumNames(SortOrderEnum.values(), NullEnum.NOTNULL);
 
 	public SortFieldSection() {
 		super();
@@ -153,8 +155,9 @@ public class SortFieldSection {
 				JRDesignSortField prop = (JRDesignSortField) element;
 				if ("NAME".equals(property)) //$NON-NLS-1$
 					return prop.getName();
-				if ("ORDER".equals(property)) //$NON-NLS-1$
-					return EnumHelper.getValue(prop.getOrderValue(), 1, false);
+				if ("ORDER".equals(property)) { //$NON-NLS-1$
+					return EnumHelper.getEnumIndexByTranslatedName(orderEnumNames, prop.getOrderValue());
+				}
 				return ""; //$NON-NLS-1$
 			}
 
@@ -164,7 +167,7 @@ public class SortFieldSection {
 				if ("NAME".equals(property)) { //$NON-NLS-1$
 					field.setName((String) value);
 				} else if ("ORDER".equals(property)) { //$NON-NLS-1$
-					field.setOrder((SortOrderEnum) EnumHelper.getSetValue(SortOrderEnum.values(), value, 1, false));
+					field.setOrder(EnumHelper.getEnumByObjectValue(SortOrderEnum.values(), value));
 				}
 				viewer.update(element, new String[] { property });
 				viewer.refresh();

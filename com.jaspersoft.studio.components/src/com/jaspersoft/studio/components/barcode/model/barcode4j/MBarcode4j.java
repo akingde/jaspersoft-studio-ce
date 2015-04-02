@@ -232,7 +232,7 @@ public class MBarcode4j extends MBarcode {
 
 		if (id.equals(StandardBarbecueComponent.PROPERTY_EVALUATION_TIME))
 			jrList.setEvaluationTimeValue(
-					EnumHelper.getEnumByTranslatedName(EvaluationTimeEnum.values(), value));
+					EnumHelper.getEnumByObjectValue(EvaluationTimeEnum.values(), value));
 		else if (id.equals(StandardBarbecueComponent.PROPERTY_EVALUATION_GROUP))
 			jrList.setEvaluationGroup((String) value);
 

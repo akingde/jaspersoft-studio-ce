@@ -489,7 +489,7 @@ public class MMap extends MGraphicElement implements IDatasetContainer {
 			}
 		} else if (id.equals(StandardMapComponent.PROPERTY_EVALUATION_TIME)) {
 			component.setEvaluationTime(
-					EnumHelper.getEnumByTranslatedName(EvaluationTimeEnum.values(), value));
+					EnumHelper.getEnumByObjectValue(EvaluationTimeEnum.values(), value));
 		}
 		else if (id.equals(StandardMapComponent.PROPERTY_EVALUATION_GROUP)) {
 			component.setEvaluationGroup((String) value);

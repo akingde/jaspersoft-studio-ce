@@ -246,7 +246,7 @@ public class MCustomVisualization extends MGraphicElement implements
 		CVDesignComponent cvComp = (CVDesignComponent) jrElement.getComponent();
 		if (CVDesignComponent.PROPERTY_EVALUATION_TIME.equals(id)) {
 			cvComp.setEvaluationTime(
-					EnumHelper.getEnumByTranslatedName(EvaluationTimeEnum.values(), value));
+					EnumHelper.getEnumByObjectValue(EvaluationTimeEnum.values(), value));
 		} else if (CVDesignComponent.PROPERTY_EVALUATION_GROUP.equals(id)) {
 			cvComp.setEvaluationGroup((String) value);
 		} else if (CVDesignComponent.PROPERTY_PROCESSING_CLASS.equals(id)) {

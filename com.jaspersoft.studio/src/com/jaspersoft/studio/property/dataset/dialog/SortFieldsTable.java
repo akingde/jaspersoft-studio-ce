@@ -57,6 +57,7 @@ import com.jaspersoft.studio.utils.EnumHelper;
 import com.jaspersoft.studio.utils.UIUtil;
 
 public class SortFieldsTable {
+	private static final String[] orderEnumNames = EnumHelper.getEnumNames(SortOrderEnum.values(), NullEnum.NOTNULL);
 	private TableViewer tviewer;
 	private Table wtable;
 	private Composite composite;
@@ -189,9 +190,9 @@ public class SortFieldsTable {
 					return prop.getName();
 				if ("TYPE".equals(property)) //$NON-NLS-1$
 					return sfdesc.getIntValue(prop.getType());
-				if ("ORDER".equals(property)) //$NON-NLS-1$
-					return EnumHelper.getValue(prop.getOrderValue(), 1, false);
-
+				if ("ORDER".equals(property)) {//$NON-NLS-1$
+					return EnumHelper.getEnumIndexByTranslatedName(orderEnumNames, prop.getOrderValue());
+				}
 				return ""; //$NON-NLS-1$
 			}
 
@@ -203,7 +204,7 @@ public class SortFieldsTable {
 				} else if ("TYPE".equals(property)) { //$NON-NLS-1$
 					field.setType((SortFieldTypeEnum) sfdesc.getEnumValue(value));
 				} else if ("ORDER".equals(property)) { //$NON-NLS-1$
-					field.setOrder((SortOrderEnum) EnumHelper.getSetValue(SortOrderEnum.values(), value, 1, false));
+					field.setOrder(EnumHelper.getEnumByObjectValue(SortOrderEnum.values(), value));
 				}
 				tviewer.update(element, new String[] { property });
 				tviewer.refresh();

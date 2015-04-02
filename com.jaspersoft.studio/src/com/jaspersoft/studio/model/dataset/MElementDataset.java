@@ -211,10 +211,10 @@ public class MElementDataset extends APropertyNode implements IContainer, IConta
 		JRDesignElementDataset jrElement = (JRDesignElementDataset) getValue();
 		if (id.equals(JRDesignElementDataset.PROPERTY_INCREMENT_TYPE))
 			jrElement.setIncrementType(
-					EnumHelper.getEnumByTranslatedName(IncrementTypeEnum.values(),value));
+					EnumHelper.getEnumByObjectValue(IncrementTypeEnum.values(),value));
 		else if (id.equals(JRDesignElementDataset.PROPERTY_RESET_TYPE))
 			jrElement.setResetType(
-					EnumHelper.getEnumByTranslatedName(ResetTypeEnum.values(), value));
+					EnumHelper.getEnumByObjectValue(ResetTypeEnum.values(), value));
 		else if (id.equals(JRDesignElementDataset.PROPERTY_INCREMENT_WHEN_EXPRESSION))
 			jrElement.setIncrementWhenExpression(ExprUtil.setValues(jrElement.getIncrementWhenExpression(), value));
 		else if (id.equals(JRDesignElementDataset.PROPERTY_INCREMENT_GROUP)) {

@@ -252,15 +252,15 @@ public class MSpiderChart extends MGraphicElement implements IDatasetContainer {
 
 		evaluationTimeD = new NamedEnumPropertyDescriptor<EvaluationTimeEnum>(
 				SpiderChartComponent.PROPERTY_EVALUATION_TIME,
-				"", EvaluationTimeEnum.AUTO, //$NON-NLS-1$
+				Messages.MChart_evaluation_time, EvaluationTimeEnum.AUTO, //$NON-NLS-1$
 				NullEnum.NOTNULL);
-		evaluationTimeD.setDescription(""); //$NON-NLS-1$
+		evaluationTimeD.setDescription(Messages.MChart_evaluation_time_description); //$NON-NLS-1$
 		desc.add(evaluationTimeD);
 
 		evaluationGroupNameD = new RComboBoxPropertyDescriptor(
-				SpiderChartComponent.PROPERTY_EVALUATION_GROUP, "", //$NON-NLS-1$
+				SpiderChartComponent.PROPERTY_EVALUATION_GROUP, Messages.MChart_evaluation_group, //$NON-NLS-1$
 				new String[] { "" }); //$NON-NLS-2$ //$NON-NLS-1$
-		evaluationGroupNameD.setDescription(""); //$NON-NLS-1$
+		evaluationGroupNameD.setDescription(Messages.MChart_evaluation_group_description); //$NON-NLS-1$
 		desc.add(evaluationGroupNameD);
 
 		JRExpressionPropertyDescriptor anchorNameExp = new JRExpressionPropertyDescriptor(
@@ -656,7 +656,7 @@ public class MSpiderChart extends MGraphicElement implements IDatasetContainer {
 			}
 		} else if (id.equals(SpiderChartComponent.PROPERTY_EVALUATION_TIME))
 			component.setEvaluationTime(
-					EnumHelper.getEnumByTranslatedName(EvaluationTimeEnum.values(), value));
+					EnumHelper.getEnumByObjectValue(EvaluationTimeEnum.values(), value));
 		else if (id.equals(SpiderChartComponent.PROPERTY_EVALUATION_GROUP)) {
 			component.setEvaluationGroup((String) value);
 		} else

@@ -393,7 +393,7 @@ public class MImage extends MGraphicElementLineBox {
 			jrElement.setOnErrorType(onErrorTypeD.getEnumValue(value));
 		else if (id.equals(JRDesignImage.PROPERTY_EVALUATION_TIME))
 			jrElement.setEvaluationTime(
-					EnumHelper.getEnumByTranslatedName(EvaluationTimeEnum.values(), value));
+					EnumHelper.getEnumByObjectValue(EvaluationTimeEnum.values(), value));
 		else if (id.equals(JRDesignImage.PROPERTY_EVALUATION_GROUP)) {
 			if (value != null && !value.equals("")) { //$NON-NLS-1$
 				JRDesignDataset dataset = (JRDesignDataset) getElementDataset();

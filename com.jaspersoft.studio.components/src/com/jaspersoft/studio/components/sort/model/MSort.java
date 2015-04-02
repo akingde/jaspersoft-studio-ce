@@ -55,6 +55,7 @@ import com.jaspersoft.studio.utils.EnumHelper;
  */
 public class MSort extends MGraphicElement {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+	private static final String[] evalTimeEnumNames = EnumHelper.getEnumNames(EvaluationTimeEnum.values(), NullEnum.NOTNULL);
 
 	public MSort() {
 		super();
@@ -286,8 +287,9 @@ public class MSort extends MGraphicElement {
 		if (id.equals(SortComponent.PROPERTY_COLUMN_TYPE))
 			return sortFieldType.getIntValue(component.getSortFieldType());
 
-		if (id.equals(SortComponent.PROPERTY_EVALUATION_TIME))
-			return EnumHelper.getValue(component.getEvaluationTime(), 1, false);
+		if (id.equals(SortComponent.PROPERTY_EVALUATION_TIME)){
+			return EnumHelper.getEnumIndexByTranslatedName(evalTimeEnumNames, component.getEvaluationTime());
+		}
 		if (id.equals(SortComponent.PROPERTY_EVALUATION_GROUP))
 			return component.getEvaluationGroup();
 		if (id.equals(SortComponent.PROPERTY_HANDLER_HORIZONTAL_ALIGN))
@@ -312,9 +314,10 @@ public class MSort extends MGraphicElement {
 		else if (id.equals(SortComponent.PROPERTY_COLUMN_TYPE))
 			component.setSortFieldType(sortFieldType.getEnumValue(value));
 
-		else if (id.equals(SortComponent.PROPERTY_EVALUATION_TIME))
-			component.setEvaluationTime((EvaluationTimeEnum) EnumHelper
-					.getSetValue(EvaluationTimeEnum.values(), value, 1, false));
+		else if (id.equals(SortComponent.PROPERTY_EVALUATION_TIME)){
+			component.setEvaluationTime(
+					EnumHelper.getEnumByObjectValue(EvaluationTimeEnum.values(), value));
+		}
 		else if (id.equals(SortComponent.PROPERTY_EVALUATION_GROUP)) {
 			component.setEvaluationGroup((String) value);
 		} else if (id.equals(SortComponent.PROPERTY_HANDLER_HORIZONTAL_ALIGN)) {
