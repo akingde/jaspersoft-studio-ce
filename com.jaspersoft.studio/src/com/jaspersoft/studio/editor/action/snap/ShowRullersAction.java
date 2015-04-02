@@ -12,7 +12,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.action.snap;
 
-import org.eclipse.gef.internal.GEFMessages;
 import org.eclipse.gef.ui.actions.GEFActionConstants;
 
 import com.jaspersoft.studio.preferences.RulersGridPreferencePage;
@@ -27,8 +26,8 @@ public class ShowRullersAction extends ACheckResourcePrefAction {
 	 *          the GraphicalViewer whose grid enablement and visibility properties are to be toggled
 	 */
 	public ShowRullersAction(JasperReportsConfiguration jrConfig) {
-		super(GEFMessages.ToggleRulerVisibility_Tooltip, jrConfig);
-		setToolTipText(GEFMessages.ToggleRulerVisibility_Tooltip);
+		super("Show Rulers", jrConfig);
+		setToolTipText("Show Rulers");
 		setId(GEFActionConstants.TOGGLE_RULER_VISIBILITY);
 	}
 

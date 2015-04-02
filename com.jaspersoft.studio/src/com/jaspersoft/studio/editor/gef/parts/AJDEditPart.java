@@ -64,6 +64,7 @@ public abstract class AJDEditPart extends AbstractGraphicalEditPart {
 		// node.getPropertyChangeSupport().removePropertyChangeListener((PropertyChangeListener) this);
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public Object getAdapter(Class key) {
 		if (key == IResource.class || key == IFile.class) {

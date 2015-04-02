@@ -75,7 +75,7 @@ public class SnapToGeometryThreshold extends SnapToGeometry{
 	 * drawn on the edit part that represent the page
 	 */
 	@Override
-	protected void populateRowsAndCols(List parts) {
+	protected void populateRowsAndCols(@SuppressWarnings("rawtypes") List parts) {
 
 		if (clientArea != null){
 			rows = new Entry[(parts.size() * 3)+6];

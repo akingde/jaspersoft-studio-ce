@@ -235,7 +235,7 @@ public class BandEditPart extends APrefFigureEditPart implements PropertyChangeL
 			}
 
 			@Override
-			protected Command createAddCommand(EditPart child, Object constraint) {
+			protected Command createAddCommand(ChangeBoundsRequest request, EditPart child, Object constraint) {
 				Rectangle rect = ((Rectangle) constraint).getCopy();
 				rect = rect.getTranslated(-ReportPageFigure.PAGE_BORDER.left, -ReportPageFigure.PAGE_BORDER.right);
 				if (child.getModel() instanceof MGraphicElement) {
@@ -302,6 +302,7 @@ public class BandEditPart extends APrefFigureEditPart implements PropertyChangeL
 					}
 				} else if (request instanceof ChangeBoundsRequest) {
 					ChangeBoundsRequest cbr = (ChangeBoundsRequest) request;
+					@SuppressWarnings("unchecked")
 					List<EditPart> lst = cbr.getEditParts();
 					for (EditPart ep : lst)
 						if (((ANode) ep.getModel()).getParent() == getModel())

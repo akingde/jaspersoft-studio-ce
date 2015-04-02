@@ -31,6 +31,7 @@ import org.eclipse.gef.SnapToGuides;
 import org.eclipse.gef.SnapToHelper;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.handles.HandleBounds;
+import org.eclipse.gef.requests.ChangeBoundsRequest;
 
 import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.editor.gef.commands.SetPageConstraintCommand;
@@ -98,7 +99,7 @@ public class FrameFigureEditPart extends FigureEditPart implements IContainer {
 			}
 
 			@Override
-			protected Command createAddCommand(EditPart child, Object constraint) {
+			protected Command createAddCommand(ChangeBoundsRequest request, EditPart child, Object constraint) {
 				Rectangle rect = (Rectangle) constraint;
 				if (child.getModel() instanceof MGraphicElement) {
 					MGraphicElement cmodel = (MGraphicElement) child.getModel();
@@ -128,7 +129,7 @@ public class FrameFigureEditPart extends FigureEditPart implements IContainer {
 					return super.createChangeConstraintCommand(child, constraint);
 				}
 			}
-
+			
 			/**
 			 * Show the feedback during drag and drop
 			 */
