@@ -7,6 +7,7 @@ import java.util.List;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.wizard.WizardDialog;
@@ -17,12 +18,10 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.jface.dialogs.MessageDialog;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.kpi.KPIUtils;
 import com.jaspersoft.studio.kpi.messages.Messages;
-import com.jaspersoft.studio.server.protocol.IConnection;
 
 public class KPIWizardDialog extends WizardDialog {
 
@@ -106,9 +105,7 @@ public class KPIWizardDialog extends WizardDialog {
 						
 						if (configuratorPage.getKpiReportUnit() != null)
 						{
-							
-							IConnection client = configuratorPage.getWSClient();
-							client.delete(new NullProgressMonitor(), configuratorPage.getKpiReportUnit());
+							KPIUtils.deleteReportUnitKPI(configuratorPage.getWSClient(), configuratorPage.getKpiReportUnit().getUriString());
 						}
 						MessageDialog.openInformation(UIUtils.getShell(), Messages.KPIWizardDialog_removeTitle, Messages.KPIWizardDialog_removeSuccess);
 						
