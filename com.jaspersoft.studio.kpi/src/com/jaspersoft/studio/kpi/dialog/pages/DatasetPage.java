@@ -22,6 +22,7 @@ import com.jaspersoft.studio.kpi.dialog.AbstractKPIConfigurationPage;
 import com.jaspersoft.studio.kpi.dialog.KPIConfiguratorPage;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.dataset.MDataset;
+import com.jaspersoft.studio.model.util.ReportFactory;
 import com.jaspersoft.studio.property.dataset.dialog.DatasetDialog;
 import com.jaspersoft.studio.server.protocol.restv2.WsTypes;
 import com.jaspersoft.studio.server.wizard.find.FindResourceWizard;
@@ -98,15 +99,20 @@ public class DatasetPage extends AbstractKPIConfigurationPage{
 			public void widgetSelected(SelectionEvent e) {
 				JasperReportsConfiguration jConfig = new JasperReportsConfiguration(DefaultJasperReportsContext.getInstance(), null);
 				jConfig.setJasperDesign(jd);
-				MReport report = new MReport(null, jConfig);
-				report.setValue(jd);
-				MDataset model = new MDataset(report, jd.getMainDesignDataset());
-				model.setJasperConfiguration(jConfig);
+				MDataset model = createDatasetModel(jConfig);
 				new DatasetDialog(UIUtils.getShell(), model, jConfig, new CommandStack()).open();
 			}
 		});
 		
 		return c;
 	}
-
+	
+	private MDataset createDatasetModel(JasperReportsConfiguration jConfig){
+		MReport report = new MReport(null, jConfig);
+		report.setValue(jd);
+		MDataset model = new MDataset(report, jd.getMainDesignDataset());
+		model.setJasperConfiguration(jConfig);
+		ReportFactory.createDataset(model, jd.getMainDesignDataset(), false);
+		return model;
+	}
 }
