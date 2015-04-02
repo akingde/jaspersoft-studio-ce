@@ -89,6 +89,14 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 	private Map<JRField, JRField> mapfields;
 	private Map<JRParameter, JRParameter> mapparam;
 	private CommandStack cmdStack;
+	private JRDesignDataset newdataset;
+	private FieldsTable ftable;
+	private ParametersTable ptable;
+	private SortFieldsTable sftable;
+	private DataQueryAdapters dataquery;
+	private WTextExpression filterExpression;
+	private DataPreviewTable dataPreviewTable;
+	private Composite body;
 
 	public DatasetDialog(Shell shell, MDataset mdataset, JasperReportsConfiguration jConfig, CommandStack cmdStack) {
 		super(shell);
@@ -368,15 +376,6 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 	public JSSCompoundCommand getCommand() {
 		return command;
 	}
-
-	private JRDesignDataset newdataset;
-	private FieldsTable ftable;
-	private ParametersTable ptable;
-	private SortFieldsTable sftable;
-	private DataQueryAdapters dataquery;
-	private WTextExpression filterExpression;
-	private DataPreviewTable dataPreviewTable;
-	private Composite body;
 
 	public void setDataset(JasperDesign jDesign, JRDesignDataset ds) {
 		dataquery.setDataset(jDesign, ds);

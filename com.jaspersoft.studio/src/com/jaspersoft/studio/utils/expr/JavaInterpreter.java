@@ -59,7 +59,6 @@ public class JavaInterpreter extends AInterpreter {
 		interpreter.eval("import java.text.*;");
 		interpreter.eval("import java.io.*;");
 		interpreter.eval("import java.net.*;");
-		interpreter.eval("import java.util.*;");
 		interpreter.eval("import java.sql.*;");
 		interpreter.eval("import net.sf.jasperreports.engine.data.*;");
 		interpreter.eval("import *;");

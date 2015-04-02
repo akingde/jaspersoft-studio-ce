@@ -72,6 +72,11 @@ public class ColorLabelProvider extends LabelProvider {
 			AlfaRGB alfaRGB = (AlfaRGB) element;
 			element = alfaRGB.getRgb();
 			alfa = alfaRGB.getAlfa();
+		} 
+		if (element instanceof Color){
+			Color awtColor = (Color) element;
+			element = new RGB(awtColor.getRed(), awtColor.getGreen(), awtColor.getBlue());
+			alfa = awtColor.getAlpha();
 		}
 		if (element instanceof RGB) {
 			RGB rgb = (RGB) element;
