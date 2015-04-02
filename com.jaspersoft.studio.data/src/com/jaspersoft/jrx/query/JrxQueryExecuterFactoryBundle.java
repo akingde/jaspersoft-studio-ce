@@ -14,6 +14,7 @@ package com.jaspersoft.jrx.query;
 
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.query.JRQueryExecuterFactoryBundle;
+import net.sf.jasperreports.engine.query.JRXPathQueryExecuterFactory;
 import net.sf.jasperreports.engine.query.QueryExecuterFactory;
 import net.sf.jasperreports.engine.util.JRSingletonCache;
 
@@ -36,7 +37,7 @@ public class JrxQueryExecuterFactoryBundle implements
 
 	public String[] getLanguages() {
 		return new String[] { PlSqlQueryExecuterFactory.QUERY_LANGUAGE_PLSQL,
-				JRXPathQueryExecuterFactory.QUERY_LANGUAGE };
+				"xpath2" };
 	}
 
 	public QueryExecuterFactory getQueryExecuterFactory(String language)
@@ -45,8 +46,7 @@ public class JrxQueryExecuterFactoryBundle implements
 				.equalsIgnoreCase(PlSqlQueryExecuterFactory.QUERY_LANGUAGE_PLSQL))
 			return cache.getCachedInstance(PlSqlQueryExecuterFactory.class
 					.getName());
-		if (language
-				.equalsIgnoreCase(JRXPathQueryExecuterFactory.QUERY_LANGUAGE))
+		if (language.equalsIgnoreCase("xpath2"))
 			return cache.getCachedInstance(JRXPathQueryExecuterFactory.class
 					.getName());
 

@@ -1042,6 +1042,12 @@ public class ModelUtils {
 		return lang;
 	}
 
+	private static Set<String> deprecatedLanguages = new HashSet<String>();
+	static {
+		deprecatedLanguages.add("xlsx");
+		deprecatedLanguages.add("xpath2");
+	}
+
 	@SuppressWarnings("deprecation")
 	public static String[] getQueryLanguagesOnly(JasperReportsConfiguration context) {
 		Set<String> langs = new HashSet<String>();
@@ -1054,7 +1060,7 @@ public class ModelUtils {
 				String[] languages = bundle.getLanguages();
 				for (String l : languages) {
 					// check for depricated languages
-					if (l.equalsIgnoreCase("xlsx")) //$NON-NLS-1$
+					if (deprecatedLanguages.contains(l.toLowerCase()))
 						continue;
 					if (!langs.contains(l)) {
 						boolean exists = false;
@@ -1074,7 +1080,7 @@ public class ModelUtils {
 				String[] languages = bundle.getLanguages();
 				for (String l : languages) {
 					// check for depricated languages
-					if (l.equalsIgnoreCase("xlsx")) //$NON-NLS-1$
+					if (deprecatedLanguages.contains(l.toLowerCase()))
 						continue;
 					if (!langs.contains(l)) {
 						boolean exists = false;
