@@ -146,7 +146,10 @@ public class ValuePage extends AbstractKPIConfigurationPage {
 			new Label(container,SWT.NONE).setText(Messages.common_pattern);
 			Composite patternContainer = new Composite(container, SWT.NONE);
 			patternContainer.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-			patternContainer.setLayout(new GridLayout(2,false));
+			GridLayout patternLayout = new GridLayout(2,false);
+			patternLayout.marginWidth = 0;
+			patternLayout.marginHeight = 0;
+			patternContainer.setLayout(patternLayout);
 
 			final Text pattern = new Text(patternContainer, SWT.BORDER);
 			pattern.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
