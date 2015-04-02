@@ -91,10 +91,10 @@ public class ChartWizard extends JSSWizard implements IExpressionContextSetter{
 	}
 
 	@Override
-	public void init(JasperReportsConfiguration jConfig) {
-		super.init(jConfig);
+	public void setConfig(JasperReportsConfiguration config) {
+		super.setConfig(config);
 		if (chart != null)
-			chart.setJasperConfiguration(jConfig);
+			chart.setJasperConfiguration(config);
 	}
 	
 	public void setExpressionContext(ExpressionContext expContext) {
