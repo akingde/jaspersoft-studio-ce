@@ -154,11 +154,11 @@ public class KPIConfiguratorPage extends JSSHelpWizardPage {
 	}
 	
 	protected void addCategories(){
+		pages.add(new DatasetPage(this));
 		pages.add(new TitlePage());
 		pages.add(new ValuePage("Value", "value_variable"));
 		pages.add(new ValuePage("Target", "target_variable"));
 		pages.add(new RangePage());
-		pages.add(new DatasetPage(this));
 	}
 
 	@Override

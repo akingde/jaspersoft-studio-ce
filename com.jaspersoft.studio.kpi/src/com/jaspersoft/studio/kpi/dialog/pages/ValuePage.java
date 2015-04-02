@@ -69,7 +69,7 @@ public class ValuePage extends AbstractKPIConfigurationPage {
 		Composite container = new Composite(parent, SWT.NONE);
 		container.setLayout(new GridLayout(1,false));
 		new Label(container,SWT.NONE).setText(Messages.common_expression);
-		final WTextExpression expr = new WTextExpression(container, SWT.NONE, 1);
+		final WTextExpression expr = new WTextExpression(container, SWT.NONE, 3);
 		expr.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		JRExpression exp = getVariable().getExpression();
 		expr.setExpression(exp != null ? (JRDesignExpression)exp : null);

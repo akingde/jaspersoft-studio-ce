@@ -38,7 +38,7 @@ public class DatasetPage extends AbstractKPIConfigurationPage{
 	
 	@Override
 	public String getName() {
-		return "Dataset";
+		return "KPI Data";
 	}
 
 	@Override

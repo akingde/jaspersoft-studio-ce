@@ -3,7 +3,6 @@ package com.jaspersoft.studio.kpi.dialog;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 import org.eclipse.jface.resource.JFaceResources;
-import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -17,8 +16,11 @@ public class KPIWizardDialog extends WizardDialog {
 
 	private Button deleteButton = null;
 
-	public KPIWizardDialog(Shell parentShell, IWizard newWizard) {
+	private KPIConfiguratorWizard wizard;
+	
+	public KPIWizardDialog(Shell parentShell, KPIConfiguratorWizard newWizard) {
 		super(parentShell, newWizard);
+		this.wizard = newWizard;
 	}
 
 	protected void configureShell(Shell newShell) {
@@ -34,7 +36,7 @@ public class KPIWizardDialog extends WizardDialog {
 		button.setFont(JFaceResources.getDialogFont());
 		button.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent event) {
-				System.out.println("delete pressed");
+				cancelPressed();
 			}
 		});
 		setButtonLayoutData(button);

@@ -107,7 +107,7 @@ public class RangePage extends AbstractKPIConfigurationPage {
 	
 	@Override
 	public String getName() {
-		return "Range";
+		return "Validation Ranges";
 	}
 
 	@Override
@@ -229,7 +229,7 @@ public class RangePage extends AbstractKPIConfigurationPage {
 		column[1] = new TableColumn(table, SWT.NONE);
 		column[1].setText("To");
 		column[2] = new TableColumn(table, SWT.NONE);
-		column[2].setText("Trend");
+		column[2].setText("Type");
 		
 		for (int i = 0, n = column.length; i < n; i++)
 			column[i].pack();
@@ -249,6 +249,7 @@ public class RangePage extends AbstractKPIConfigurationPage {
 				readValues = new ArrayList<Object>();
 			}
 			for(Object obj : readValues){
+				@SuppressWarnings("unchecked")
 				Map<String,Object> map = (Map<String,Object>)obj;
 				Integer min = (Integer)map.get(KEY_MIN);
 				Integer max = (Integer)map.get(KEY_MAX);

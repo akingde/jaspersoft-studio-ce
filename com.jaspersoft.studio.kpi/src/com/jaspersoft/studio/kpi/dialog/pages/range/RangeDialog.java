@@ -81,7 +81,7 @@ public class RangeDialog extends Dialog {
 		max.setMaximum(Integer.MAX_VALUE);
 		max.setMinimum(Integer.MIN_VALUE);
 		
-		new Label(container, SWT.NONE).setText("Trend");
+		new Label(container, SWT.NONE).setText("Type");
 		ArrayList<ComboItem> itemsList = new ArrayList<ComboItem>();
 		itemsList.add(new ComboItem(RangeDefinition.getNameFromColor(Color.GREEN), true,  colorProvider.getImage(Color.GREEN),0, Color.GREEN, RangeDefinition.getHexColor(Color.GREEN)));
 		itemsList.add(new ComboItem(RangeDefinition.getNameFromColor(Color.YELLOW), true, colorProvider.getImage(Color.YELLOW),1, Color.YELLOW, RangeDefinition.getHexColor(Color.YELLOW)));
