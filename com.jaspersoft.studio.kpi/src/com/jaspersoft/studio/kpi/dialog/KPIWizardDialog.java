@@ -105,7 +105,7 @@ public class KPIWizardDialog extends WizardDialog {
 						
 						if (configuratorPage.getKpiReportUnit() != null)
 						{
-							KPIUtils.deleteReportUnitKPI(configuratorPage.getWSClient(), configuratorPage.getKpiReportUnit().getUriString());
+							KPIUtils.deleteReportUnitKPI(configuratorPage.getWSClient(), configuratorPage.getParentReportUnit().getUriString());
 						}
 						MessageDialog.openInformation(UIUtils.getShell(), Messages.KPIWizardDialog_removeTitle, Messages.KPIWizardDialog_removeSuccess);
 						
