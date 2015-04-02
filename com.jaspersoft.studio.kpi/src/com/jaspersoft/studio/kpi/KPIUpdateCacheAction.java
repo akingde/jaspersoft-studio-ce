@@ -1,12 +1,11 @@
 package com.jaspersoft.studio.kpi;
 
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import javax.ws.rs.client.Invocation.Builder;
 import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.Response;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
@@ -15,6 +14,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -72,11 +72,8 @@ public class KPIUpdateCacheAction extends Action {
 							client.connect(monitor, node.getWsClient().getServerProfile());
 							
 							// for each report unit check if it has a KPI sub report...
-							
-							
-							
 							WebTarget tgt = client.getTarget().path("resources");
-							//tgt = tgt.queryParam("folderUri", "/");
+							
 							tgt = tgt.queryParam("recursive", "true");
 							tgt = tgt.queryParam("type", "reportUnit");
 							tgt = tgt.queryParam("limit", 0);
@@ -85,7 +82,7 @@ public class KPIUpdateCacheAction extends Action {
 							
 							ClientResourceListWrapper resources = client.toObj(builder.get(), ClientResourceListWrapper.class, monitor);
 							
-							List<String> kpiReportUnits = new ArrayList<String>();
+							Map<String, String> kpiReportUnits = new LinkedHashMap<String, String>();
 							
 							for (ClientResourceLookup resource : resources.getResourceLookups())
 							{
@@ -101,60 +98,23 @@ public class KPIUpdateCacheAction extends Action {
 									Object obj = client.toObj(req.get(), (Class<?>) null,monitor);
 									if (obj != null && obj instanceof AbstractClientReportUnit)
 									{
-										kpiReportUnits.add(resource.getUri());
-										System.out.println(resource.getUri());
+										kpiReportUnits.put(reportUnitKpiUri, resource.getUri());
 									}
 								} catch (Exception ex)
 								{
 									// KPI not found...
 								}
 							}
-							
-//							response.getEntity();
-//							builder.
-//							client.list(monitor, rd)
-							/*
-							
-							// Check if we already have a KPI...
-							String reportUnitFolderUri = rd.getUriString() + "_files/KPI";
-							
-							ResourceDescriptor folderResourceDescriptor = new ResourceDescriptor();
-							folderResourceDescriptor.setUriString(reportUnitFolderUri);
-							folderResourceDescriptor.setWsType(ResourceDescriptor.TYPE_REPORTUNIT);
-							
-							ResourceDescriptor kpiReportUnit;
-							
-							JasperDesign kpiJasperDesign = null;
-							try {
-								kpiReportUnit = client.get(monitor, folderResourceDescriptor, null);
 								
-								// If we got the kpiReportUnit, let's get the jrxml and load it as JasperDesign...
-							} catch (Exception ex)
-							{
-								kpiReportUnit = null;
-//								if ("resource.not.found".equals( ex.getMessage()) )
-////								{
-////									kpiReportUnit = null;
-////								}
-							}
-							
-							
-							final ResourceDescriptor kpiReportUnitFinal = kpiReportUnit;
+							KPIUtils.updateKPICache(client, kpiReportUnits, true);
 							
 							UIUtils.getDisplay().asyncExec(new Runnable() {
 								
 								@Override
 								public void run() {
-									
-									//KPIDefinitionPanelController wizard = new KPIDefinitionPanelController(client, rd, kpiReportUnitFinal, (MServerProfile)node.getRoot());
-									KPIConfiguratorWizard wizard = new KPIConfiguratorWizard(client, rd, kpiReportUnitFinal, (MServerProfile)node.getRoot());
-									WizardDialog dialog = new KPIWizardDialog(UIUtils.getShell(), wizard);
-									dialog.open();
-									//MessageDialog.openInformation(UIUtils.getShell(), "KPI Deploy", "Ready to deploy a kpi to " + rd.getUriString());
+									MessageDialog.openInformation(UIUtils.getShell(), "KPI Cache Update", "KPI cache successfully updated.");
 								}
 							});
-							
-							*/
 							
 							
 						} catch (Exception e) {

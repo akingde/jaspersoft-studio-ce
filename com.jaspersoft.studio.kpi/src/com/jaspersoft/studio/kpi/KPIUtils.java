@@ -1,15 +1,19 @@
 package com.jaspersoft.studio.kpi;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
 
 import org.apache.commons.codec.binary.Base64;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.server.protocol.IConnection;
-import com.jaspersoft.studio.server.protocol.restv2.RestV2ConnectionJersey;
 
 public class KPIUtils {
 
@@ -56,6 +60,14 @@ public class KPIUtils {
 		{
 			try {
 				client.delete(null, kpiResourceDescriptor);
+				
+				try {
+					removeKPICacheKey(client, kpiResourceDescriptor.getUriString());
+				} catch (Exception ex)
+				{
+					//Cache update fail should not prevent the report of a successfully completed operation.
+				}
+				
 			} catch (Exception e) {
 				return false;
 			}
@@ -139,6 +151,16 @@ public class KPIUtils {
 		
 		try {
 			client.addOrModifyResource(new NullProgressMonitor(), kpiReportUnit, null);
+			
+			try {
+				Map<String, String> map = new HashMap<String, String>();
+				map.put(kpiReportUnit.getUriString(), reportUnitUri);
+				KPIUtils.updateKPICache(client, map, false);
+			} catch (Exception ex)
+			{
+				// Refresh of the cache is not really necessary...
+			}
+			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -150,6 +172,21 @@ public class KPIUtils {
 	}
 	
 	
+	/**
+	 * Remove a single cache entry
+	 *
+	 * @param client
+	 * @param reportUnitUris - List of report unit uris to add. These are all KPI report units!!!
+	 * @param clearCache - if true, all the existing entries will be removed.
+	 * @return boolean - true if the urls have been successfully stored
+	 */
+	public static void removeKPICacheKey(IConnection client, String kpiUriToRemove) throws Exception {
+		
+		Map<String, String> map = new HashMap<String, String>();
+		map.put(kpiUriToRemove, "");
+		updateKPICache(client, map, false, true);
+	}
+	
 	
 	/**
 	 * Add to the KPI cache a list of report units
@@ -159,21 +196,76 @@ public class KPIUtils {
 	 * @param clearCache - if true, all the existing entries will be removed.
 	 * @return boolean - true if the urls have been successfully stored
 	 */
-	public static boolean updateKPICache(IConnection client, List<String> reportUnitUris, boolean clearCache) {
+	public static void updateKPICache(IConnection client, Map<String, String> reportUnitUris, boolean clearCache) throws Exception {
+		updateKPICache(client, reportUnitUris, clearCache, false);
+	}
+	
+	
+	/**
+	 * Handle the add/remove/clear cache entries
+	 *
+	 * @param client
+	 * @param reportUnitUris - List of report unit uris to add. These are all KPI report units!!!
+	 * @param clearCache - if true, all the existing entries will be removed.
+	 * @return boolean - true if the urls have been successfully stored
+	 */
+	private static void updateKPICache(IConnection client, Map<String, String> reportUnitUris, boolean clearCache, boolean removeKey) throws Exception {
 		
+		// Check if the kpicache.properties file exists..
+		ResourceDescriptor kpiCacheFile = new ResourceDescriptor();
+		kpiCacheFile.setUriString("/kpicache.properties");
+		kpiCacheFile.setLabel("kpicache.properties");
+		kpiCacheFile.setName("kpicache.properties");
+		kpiCacheFile.setWsType(ResourceDescriptor.TYPE_RESOURCE_BUNDLE);
 		
+		File file;
+		file = File.createTempFile("kpicache", ".properties");
 		
-		ResourceDescriptor kpiResourceDescriptor = getReportUnitKPI(client, reportUnitUri);
+		Properties properties = new Properties();
 		
-		if (kpiResourceDescriptor != null)
+		if (!clearCache || removeKey)
 		{
 			try {
-				client.delete(null, kpiResourceDescriptor);
-			} catch (Exception e) {
-				return false;
+				
+				kpiCacheFile = client.get(new NullProgressMonitor(), kpiCacheFile, file);
+				if (file.exists() && file.length() > 0)
+				{
+					properties.load(new FileInputStream(file));
+				}
+			} catch (Exception ex)
+			{
+				// resource not found...
+				kpiCacheFile.setIsNew(true);
 			}
 		}
 		
-		return true;
+		if (removeKey)
+		{
+			properties.remove(removeKey);
+		}
+		else
+		{
+			Set<String> keys = reportUnitUris.keySet();
+			
+			
+			for (String uri : keys)
+			{
+				// Just put an empty value. Uris don't have "=" character, so it should be simple to strip
+				// on client side...
+				properties.setProperty(uri, reportUnitUris.get(uri));
+			}
+		}
+		
+		
+		properties.store(new FileOutputStream(file),"");
+		
+		kpiCacheFile.setHasData(true);
+		kpiCacheFile.setData(Base64
+					.encodeBase64(net.sf.jasperreports.eclipse.util.FileUtils
+							.getBytes(file)));
+		
+		// Save the cache back...
+		client.addOrModifyResource(new NullProgressMonitor(), kpiCacheFile, file);
+			
 	}
 }
