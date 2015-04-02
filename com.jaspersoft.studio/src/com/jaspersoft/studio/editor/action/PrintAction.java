@@ -54,7 +54,6 @@ import org.eclipse.draw2d.PrintFigureOperation;
 import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.draw2d.SWTGraphics;
 import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.gef.internal.GEFMessages;
 import org.eclipse.gef.ui.actions.WorkbenchPartAction;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.GC;
@@ -86,8 +85,8 @@ public class PrintAction extends WorkbenchPartAction {
 	 */
 	protected void init() {
 		super.init();
-		setText(GEFMessages.PrintAction_Label);
-		setToolTipText(GEFMessages.PrintAction_Tooltip);
+		setText("&Print");
+		setToolTipText("Print");
 		setId(ActionFactory.PRINT.getId());
 	}
 

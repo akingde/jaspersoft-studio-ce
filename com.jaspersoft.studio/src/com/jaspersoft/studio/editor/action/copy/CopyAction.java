@@ -94,7 +94,7 @@ public class CopyAction extends ACachedSelectionAction {
 
 	@Override
 	protected Command createCommand() {
-		List<Object> selectedObjects = getSelectedObjects();
+		List<?> selectedObjects = getSelectedObjects();
 		if (selectedObjects.isEmpty())
 			return null;
 		CopyCommand cmd = new CopyCommand();

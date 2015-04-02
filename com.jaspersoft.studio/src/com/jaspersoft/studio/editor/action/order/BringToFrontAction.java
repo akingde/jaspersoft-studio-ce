@@ -8,7 +8,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.action.order;
 
-import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.gef.commands.Command;

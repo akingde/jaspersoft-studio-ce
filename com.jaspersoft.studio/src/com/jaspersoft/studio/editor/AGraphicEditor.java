@@ -233,6 +233,7 @@ public abstract class AGraphicEditor extends J2DGraphicalEditor implements ITabb
 
 		action = new CutAction(this);
 		registry.registerAction(action);
+		@SuppressWarnings("unchecked")
 		List<String> selectionActions = getSelectionActions();
 		selectionActions.add(action.getId());
 

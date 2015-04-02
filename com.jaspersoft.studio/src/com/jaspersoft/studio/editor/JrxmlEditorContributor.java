@@ -251,9 +251,12 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 			}
 			ActionRegistry registry = (ActionRegistry) activeEditor.getAdapter(ActionRegistry.class);
 			if (registry != null) {
-				for (String id : globalActionKeys)
+				for (String id : globalActionKeys){
 					bars.setGlobalActionHandler(id, registry.getAction(id));
-				for (Iterator<IAction> it = registry.getActions(); it.hasNext();) {
+				}
+				@SuppressWarnings("unchecked")
+				Iterator<IAction> actions = registry.getActions();
+				for (Iterator<IAction> it = actions; it.hasNext();) {
 					IAction action = it.next();
 					if (action instanceof IGlobalAction)
 						bars.setGlobalActionHandler(action.getId(), action);
@@ -263,9 +266,12 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 		} else if (activeEditor instanceof PreviewJRPrint) {
 			ActionRegistry registry = (ActionRegistry) activeEditor.getAdapter(ActionRegistry.class);
 			if (registry != null) {
-				for (String id : globalActionKeys)
+				for (String id : globalActionKeys) {
 					bars.setGlobalActionHandler(id, registry.getAction(id));
-				for (Iterator<IAction> it = registry.getActions(); it.hasNext();) {
+				}
+				@SuppressWarnings("unchecked")
+				Iterator<IAction> actions = registry.getActions();
+				for (Iterator<IAction> it = actions; it.hasNext();) {
 					IAction action = it.next();
 					if (action instanceof IGlobalAction)
 						bars.setGlobalActionHandler(action.getId(), action);
