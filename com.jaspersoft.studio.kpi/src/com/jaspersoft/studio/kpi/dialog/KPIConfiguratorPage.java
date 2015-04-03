@@ -12,6 +12,7 @@ import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import net.sf.jasperreports.engine.xml.JRXmlWriter;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableLayout;
@@ -23,6 +24,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 
@@ -35,6 +37,7 @@ import com.jaspersoft.studio.kpi.dialog.pages.SeriesPage;
 import com.jaspersoft.studio.kpi.dialog.pages.TitlePage;
 import com.jaspersoft.studio.kpi.dialog.pages.ValuePage;
 import com.jaspersoft.studio.kpi.dialog.pages.WidgetPage;
+import com.jaspersoft.studio.kpi.messages.Messages;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.protocol.IConnection;
 import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorDatasource;
@@ -44,6 +47,8 @@ import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
 public class KPIConfiguratorPage extends JSSHelpWizardPage {
 
 	private List<AbstractKPIConfigurationPage> pages = new ArrayList<AbstractKPIConfigurationPage>();
+	
+	protected Label titleArea;
 	
 	private Composite pagesComposite;
 	
@@ -70,21 +75,23 @@ public class KPIConfiguratorPage extends JSSHelpWizardPage {
 			int selectionIndex = ((Table) e.widget).getSelectionIndex();
 			AbstractKPIConfigurationPage selectedCategory = pages.get(selectionIndex);
 			stackLayout.topControl = selectedCategory.getComposite(pagesComposite, kpiJasperDesign);
-			pagesComposite.layout();
+			titleArea.setText(selectedCategory.getTitle());
+			titleArea.getParent().layout(true, true);
 		}
 
 		public void widgetDefaultSelected(SelectionEvent event) {
 			AbstractKPIConfigurationPage selectedCategory = pages.get(0);
 			stackLayout.topControl = selectedCategory.getComposite(pagesComposite, kpiJasperDesign);
-			pagesComposite.layout();
+			titleArea.setText(selectedCategory.getTitle());
+			titleArea.getParent().layout(true, true);
 		}
 	}
 	
 	
 	protected KPIConfiguratorPage() {
-		super("kpi"); // //$NON-NLS-0$
-		setTitle("KPI Definition");
-		setDescription("Add/Modify a KPI for a Report Unit");
+		super("kpi"); // //$NON-NLS-0$ //$NON-NLS-1$
+		setTitle(Messages.KPIConfiguratorPage_wizardTitle);
+		setDescription(Messages.KPIConfiguratorPage_wizardDescription);
 	}
 	
 	/**
@@ -124,7 +131,7 @@ public class KPIConfiguratorPage extends JSSHelpWizardPage {
 				// Load the jrxml of this KPI...
 				File f = null;
 				try {
-					f = FileUtils.createTempFile("kpi_", ".jrxml");
+					f = FileUtils.createTempFile("kpi_", ".jrxml"); //$NON-NLS-1$ //$NON-NLS-2$
 					getWSClient().get(new NullProgressMonitor(), jrxmlRd, f);
 				
 					kpiJasperDesign = JRXmlLoader.load(f);
@@ -146,7 +153,7 @@ public class KPIConfiguratorPage extends JSSHelpWizardPage {
 		{
 			try {
 				// Load the standard kpi.jrxml from the resources
-				URL resource = Activator.getDefault().getBundle().getResource("/resources/kpi.jrxml");
+				URL resource = Activator.getDefault().getBundle().getResource("/resources/templates/kpi.jrxml"); //$NON-NLS-1$
 				kpiJasperDesign = JRXmlLoader.load(resource.openStream());
 			} catch (Exception e) {
 				// TODO this should never happen.... but if it does, it should be some kind of
@@ -176,7 +183,23 @@ public class KPIConfiguratorPage extends JSSHelpWizardPage {
 		GridData gd = new GridData(GridData.FILL_VERTICAL);
 		gd.widthHint = 150;
 		pagesTable.setLayoutData(gd);
-		pagesComposite = new Composite(c, SWT.NONE);
+		
+		
+		Composite contentContainer = new Composite(c, SWT.NONE);
+		GridLayout contentContainerLayout = new GridLayout(1, false);
+		contentContainerLayout.marginWidth = 0;
+		contentContainerLayout.marginHeight = 0;
+		contentContainer.setLayout(contentContainerLayout);
+		contentContainer.setLayoutData(new GridData(GridData.FILL_BOTH));
+		
+		titleArea = new Label(contentContainer, SWT.WRAP);
+		titleArea.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		//titleArea.setFont(JFaceResources.getBannerFont());
+		Label separator=new Label(contentContainer, SWT.SEPARATOR|SWT.HORIZONTAL);
+		GridData gd_separator = new GridData(SWT.FILL,SWT.TOP,true,false,1,1);
+		separator.setLayoutData(gd_separator);		
+		
+		pagesComposite = new Composite(contentContainer, SWT.NONE);
 		pagesComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
 		stackLayout = new StackLayout();
 		pagesComposite.setLayout(stackLayout);
@@ -249,12 +272,12 @@ public class KPIConfiguratorPage extends JSSHelpWizardPage {
 	}
 	
 	public String getJrxmlFile(){
-		File tempFolder = new File(System.getProperty("java.io.tmpdir"));
+		File tempFolder = new File(System.getProperty("java.io.tmpdir")); //$NON-NLS-1$
 		String name = kpiJasperDesign.getName();
-		File targetFile = new File(tempFolder, name+".jrxml");
+		File targetFile = new File(tempFolder, name+".jrxml"); //$NON-NLS-1$
 		int counter = 0;
 		while(targetFile.exists()){
-			targetFile = new File(tempFolder, name+"_"+counter+".jrxml");
+			targetFile = new File(tempFolder, name+"_"+counter+".jrxml"); //$NON-NLS-1$ //$NON-NLS-2$
 			counter++;
 		}
 		try {

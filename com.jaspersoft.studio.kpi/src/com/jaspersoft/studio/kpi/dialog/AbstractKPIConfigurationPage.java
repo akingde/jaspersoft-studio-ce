@@ -20,6 +20,10 @@ public abstract class AbstractKPIConfigurationPage {
 	
 	public abstract String getName();
 	
+	public String getTitle(){
+		return getName();
+	}
+	
 	protected abstract Composite createComposite(Composite parent);
 
 }

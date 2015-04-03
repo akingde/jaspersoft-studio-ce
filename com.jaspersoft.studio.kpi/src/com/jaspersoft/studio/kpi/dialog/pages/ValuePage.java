@@ -32,7 +32,7 @@ import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.kpi.dialog.AbstractKPIConfigurationPage;
-import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.kpi.messages.Messages;
 import com.jaspersoft.studio.messages.MessagesByKeys;
 import com.jaspersoft.studio.property.descriptor.pattern.dialog.PatternEditor;
 import com.jaspersoft.studio.swt.events.ExpressionModifiedEvent;
@@ -42,21 +42,17 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class ValuePage extends AbstractKPIConfigurationPage {
 
-	public static final String VALUE_VARIABLE_NAME = "value";
+	public static final String VALUE_VARIABLE_NAME = "value"; //$NON-NLS-1$
 	
-	public static final String TARGET_VARIABLE_NAME = "target";
+	public static final String TARGET_VARIABLE_NAME = "target"; //$NON-NLS-1$
 	
-	public static final String VALUE_FORMATTED_PARAMETER = "valuePattern";
+	public static final String VALUE_FORMATTED_PARAMETER = "valuePattern"; //$NON-NLS-1$
 	
-	public static final String TARGET_FORMATTED_PARAMETER = "targetPattern";
-	
-	public ValuePage(){
-
-	}
+	public static final String TARGET_FORMATTED_PARAMETER = "targetPattern"; //$NON-NLS-1$
 	
 	@Override
 	public String getName() {
-		return "Value and Target";
+		return Messages.ValuePage_pageLabel;
 	}
 	
 	private JRDesignVariable getVariable(String variableName){
@@ -86,15 +82,15 @@ public class ValuePage extends AbstractKPIConfigurationPage {
 		GridLayout mainLayout = new GridLayout(1,false);
 		mainLayout.verticalSpacing = 10;
 		container.setLayout(mainLayout);
-		createExpressionGroup(container, "Value", VALUE_VARIABLE_NAME, VALUE_FORMATTED_PARAMETER);
-		createExpressionGroup(container, "Target", TARGET_VARIABLE_NAME, TARGET_FORMATTED_PARAMETER);
+		createExpressionGroup(container, Messages.ValuePage_valueLabel, VALUE_VARIABLE_NAME, VALUE_FORMATTED_PARAMETER);
+		createExpressionGroup(container, Messages.ValuePage_targetLabel, TARGET_VARIABLE_NAME, TARGET_FORMATTED_PARAMETER);
 		return container;
 	}
 	
 	private void createExpressionGroup(Composite parent, String groupName, final String variableName, final String patternField){
 		Group container = new Group(parent, SWT.NONE);
 		container.setText(groupName);
-		container.setLayout(new GridLayout(1, false));
+		container.setLayout(new GridLayout(2, false));
 		container.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
 		new Label(container,SWT.NONE).setText(Messages.common_expression);
@@ -158,7 +154,7 @@ public class ValuePage extends AbstractKPIConfigurationPage {
 		});
 		
 		Button btn = new Button(patternContainer, SWT.PUSH);
-		btn.setText("...");
+		btn.setText("..."); //$NON-NLS-1$
 		btn.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -175,16 +171,16 @@ public class ValuePage extends AbstractKPIConfigurationPage {
 	
 	private void setPattern(String pattern, String patternParameter){
 		JRDesignParameter element = getParameter(patternParameter);
-		JRDesignExpression expression = new JRDesignExpression("\"" + pattern + "\"");
+		JRDesignExpression expression = new JRDesignExpression("\"" + pattern + "\""); //$NON-NLS-1$ //$NON-NLS-2$
 		element.setDefaultValueExpression(expression);
 	}
 	
 	private String getPattern(String patternParameter){
 		JRDesignParameter element = getParameter(patternParameter);
-		String pattern = "";
+		String pattern = ""; //$NON-NLS-1$
 		if (element.getDefaultValueExpression() != null && element.getDefaultValueExpression().getText()!=null){
 			pattern = element.getDefaultValueExpression().getText();
-			if (pattern.startsWith("\"") && pattern.endsWith("\"")){
+			if (pattern.startsWith("\"") && pattern.endsWith("\"")){ //$NON-NLS-1$ //$NON-NLS-2$
 				pattern = pattern.substring(1, pattern.length()-1);
 			}
 		}
@@ -211,5 +207,10 @@ public class ValuePage extends AbstractKPIConfigurationPage {
 		JasperReportsConfiguration jConfig = new JasperReportsConfiguration(DefaultJasperReportsContext.getInstance(), null);
 		jConfig.setJasperDesign(jd);
 		return new ExpressionContext(jd.getMainDesignDataset(), jConfig);
+	}
+	
+	@Override
+	public String getTitle() {
+		return Messages.ValuePage_pageTitle;
 	}
 }

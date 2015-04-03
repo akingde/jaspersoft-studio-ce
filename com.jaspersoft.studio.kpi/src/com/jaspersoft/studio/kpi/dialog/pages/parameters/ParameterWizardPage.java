@@ -1,6 +1,7 @@
 package com.jaspersoft.studio.kpi.dialog.pages.parameters;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.JRExpression;
@@ -13,15 +14,15 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
+import com.jaspersoft.studio.kpi.messages.Messages;
 import com.jaspersoft.studio.kpi.messages.MessagesByKeys;
-import com.jaspersoft.studio.property.combomenu.ComboItem;
-import com.jaspersoft.studio.property.combomenu.ComboMenuViewer;
-import com.jaspersoft.studio.property.section.widgets.SPRWPopUpCombo;
 import com.jaspersoft.studio.swt.widgets.WTextExpression;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -33,27 +34,30 @@ public class ParameterWizardPage extends WizardPage {
 	
 	private Text name;
 	
-	private ComboMenuViewer typeCombo;
+	private Combo typeCombo;
 	
 	private WTextExpression expression;
 	
+	private Button isPromptButton;
+	
 	public ParameterDefinition regenerateParameter(){
-		String expressionText = "";
+		String expressionText = ""; //$NON-NLS-1$
 		JRExpression exp = expression.getExpression();
 		if (exp != null) expressionText = exp.getText();
-		return new ParameterDefinition(name.getText(), (String)typeCombo.getSelectionValue(), expressionText);
+		String type = ParameterDefinition.getParameterTypes().get(typeCombo.getSelectionIndex());
+		return new ParameterDefinition(name.getText(), type, expressionText, isPromptButton.getSelection());
 	}
 	
 	public ParameterWizardPage(ParameterDefinition modifiedElement, JasperDesign jd) {
-		super("parameterPage");
+		super("parameterPage"); //$NON-NLS-1$
 		this.modifiedElement = modifiedElement;
 		this.jd = jd;
 		if (modifiedElement != null){
-			setTitle("Parameter Editing");
-			setMessage("In this page you can edit the selected parameter");
+			setTitle(Messages.ParameterWizardPage_pageTitleEdit);
+			setMessage(Messages.ParameterWizardPage_pageDescriptionEdit);
 		} else {
-			setTitle("Parameter Creation");
-			setMessage("In this page you can create a new parameter");
+			setTitle(Messages.ParameterWizardPage_pageTitleNew);
+			setMessage(Messages.ParameterWizardPage_pageDescriptionNew);
 		}
 	}
 	public ParameterDefinition getDefinition(){
@@ -72,38 +76,45 @@ public class ParameterWizardPage extends WizardPage {
 		container.setLayout(new GridLayout(2,false));
 		container.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
-		new Label(container, SWT.NONE).setText("Name");
+		new Label(container, SWT.NONE).setText(Messages.ParametersPage_nameLabel);
 		name = new Text(container, SWT.BORDER);
 		name.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 	
-		new Label(container, SWT.NONE).setText("Type");
-		ArrayList<ComboItem> itemsList = new ArrayList<ComboItem>();
-		int index = 0;
+		new Label(container, SWT.NONE).setText(Messages.ParametersPage_typeLabel);
+		List<String> comboEntry = new ArrayList<String>();
 		for(String type : ParameterDefinition.getParameterTypes()){
-			itemsList.add(new ComboItem(MessagesByKeys.getString(type), true,  null, index, type, type));
-			index++;
+			comboEntry.add(MessagesByKeys.getString(type));
 		}
 		
-		//Creating the combo popup
-		typeCombo = new ComboMenuViewer(container, SWT.NORMAL, SPRWPopUpCombo.getLongest(itemsList));
-		typeCombo.getControl().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		typeCombo.setItems(itemsList);
-		typeCombo.select(0);
+		isPromptButton = new Button(container, SWT.CHECK);
+		isPromptButton.setText(Messages.ParameterWizardPage_promptLabel);
+		GridData promptData = new GridData(GridData.FILL_HORIZONTAL);
+		promptData.horizontalSpan = 2;
+		isPromptButton.setLayoutData(promptData);
 		
 		Label expLabel = new Label(container, SWT.NONE);
-		expLabel.setText("Expression");
+		expLabel.setText(Messages.ParametersPage_valueLabel);
 		GridData labelData = new GridData();
 		labelData.verticalAlignment = SWT.TOP;
 		expLabel.setLayoutData(labelData);
-		expression = new WTextExpression(container, SWT.NONE, 5);
+		expression = new WTextExpression(container, SWT.NONE, 3);
 		GridData expData = new GridData(GridData.FILL_HORIZONTAL);
-		expData.heightHint = 100;
+		expData.heightHint = 80;
 		expression.setLayoutData(expData);
 		expression.setExpressionContext(getExpressionContext());
+		
+		//Creating the combo 
+		typeCombo = new Combo(container, SWT.READ_ONLY);
+		typeCombo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		typeCombo.setData(ParameterDefinition.getParameterTypes());
+		typeCombo.setItems(comboEntry.toArray(new String[comboEntry.size()]));
+		typeCombo.select(0);
+		
 		
 		if (modifiedElement != null){
 			name.setText(modifiedElement.getName());
 			expression.setExpression(new JRDesignExpression(modifiedElement.getExpression()));
+			isPromptButton.setSelection(modifiedElement.isForPrompt());
 			String name = modifiedElement.getName();
 			int nameIndex = ParameterDefinition.getParameterTypes().indexOf(name);
 			if (nameIndex != -1){
@@ -127,10 +138,10 @@ public class ParameterWizardPage extends WizardPage {
 	private void validate(){
 		if (name.getText().isEmpty()){
 			setPageComplete(false);
-			setErrorMessage("The name can't be empty");
+			setErrorMessage(Messages.ParameterWizardPage_errorEmpty);
 		} else if (jd.getParametersMap().containsKey(name.getText())){
 			setPageComplete(false);
-			setErrorMessage("There is already another parameter with the same name");
+			setErrorMessage(Messages.ParameterWizardPage_errorDuplicate);
 		} else {
 			setPageComplete(true);
 			setErrorMessage(null);

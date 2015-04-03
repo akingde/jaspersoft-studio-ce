@@ -51,9 +51,9 @@ public class KPIDeployAction extends Action implements IMenuCreator{
 	public KPIDeployAction(TreeViewer treeViewer) {
 		super();
 		setId(ID);
-		setText("KPI");
+		setText(Messages.KPIDeployAction_actionMainTitle);
 		//setDescription("Handle the KPI for the current Report Unit");
-		setToolTipText("Handle the KPI for the current Report Unit");
+		setToolTipText(Messages.KPIDeployAction_actionMainTooltip);
 		setImageDescriptor(Activator.getImageDescriptor("icons/key.png")); //$NON-NLS-1$
 		setDisabledImageDescriptor(Activator.getImageDescriptor("icons/key.png")); //$NON-NLS-1$
 		this.treeViewer = treeViewer;
@@ -98,7 +98,7 @@ public class KPIDeployAction extends Action implements IMenuCreator{
 			Object obj = p[i].getLastSegment();
 			if (obj instanceof MReportUnit) {
 				final MReportUnit node = (MReportUnit) obj;
-				Job job = new Job("Reading Report Unit Option") {
+				Job job = new Job(Messages.KPIDeployAction_readJobName) {
 					@Override
 					protected IStatus run(IProgressMonitor monitor) {
 						monitor.beginTask("Reading Report Unit Option", IProgressMonitor.UNKNOWN);
@@ -112,7 +112,7 @@ public class KPIDeployAction extends Action implements IMenuCreator{
 							
 							
 							// Check if we already have a KPI...
-							String reportUnitFolderUri = rd.getUriString() + "_files/KPI";
+							String reportUnitFolderUri = rd.getUriString() + "_files/KPI"; //$NON-NLS-1$
 							
 							ResourceDescriptor folderResourceDescriptor = new ResourceDescriptor();
 							folderResourceDescriptor.setUriString(reportUnitFolderUri);
@@ -168,7 +168,7 @@ public class KPIDeployAction extends Action implements IMenuCreator{
 	private void fillMenu(){
 		//Set kpi action
 		MenuItem setKPI = new MenuItem(menu, SWT.PUSH);
-		setKPI.setText("Create / Edit KPI");
+		setKPI.setText(Messages.KPIDeployAction_createAction);
 		setKPI.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -178,7 +178,7 @@ public class KPIDeployAction extends Action implements IMenuCreator{
 		
 		//Delete KPI action
 		MenuItem deleteAction = new MenuItem(menu, SWT.PUSH);
-		deleteAction.setText("Delete KPI");
+		deleteAction.setText(Messages.KPIDeployAction_deleteAction);
 		deleteAction.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -187,7 +187,7 @@ public class KPIDeployAction extends Action implements IMenuCreator{
 		});
 		
 		MenuItem openInEditorAction = new MenuItem(menu, SWT.PUSH);
-		openInEditorAction.setText("Export the KPI Jrxml");
+		openInEditorAction.setText(Messages.KPIDeployAction_exportAction);
 		openInEditorAction.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -196,7 +196,7 @@ public class KPIDeployAction extends Action implements IMenuCreator{
 		});
 		
 		MenuItem publishAction = new MenuItem(menu, SWT.PUSH);
-		publishAction.setText("Create KPI from a Jrxml");
+		publishAction.setText(Messages.KPIDeployAction_createFromJrxmlAction);
 		publishAction.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -341,7 +341,7 @@ public class KPIDeployAction extends Action implements IMenuCreator{
 										
 										@Override
 										public void run() {
-											MessageDialog.openInformation(UIUtils.getShell(), "Export KPI Jrxml", "This Report Unit does not contain any KPI");
+											MessageDialog.openInformation(UIUtils.getShell(), Messages.KPIDeployAction_exportMessageTitle, Messages.KPIDeployAction_exportErrorMessage);
 										}
 									});
 								}
@@ -356,13 +356,13 @@ public class KPIDeployAction extends Action implements IMenuCreator{
 									// If this name is taken, we try kpi_<resource_name>_<n>.jrxml
 									
 									int i=0;
-									java.text.MessageFormat mf = new MessageFormat("kpi_" + rd.getName() + "{0}.jrxml");
+									java.text.MessageFormat mf = new MessageFormat("kpi_" + rd.getName() + "{0}.jrxml"); //$NON-NLS-1$ //$NON-NLS-2$
 									
-									String name = mf.format(new Object[]{""}); // This will give us simply kpi_<resource_name>.jrxml
+									String name = mf.format(new Object[]{""}); // This will give us simply kpi_<resource_name>.jrxml //$NON-NLS-1$
 									while (folder.getFile( name ).exists())
 									{
 										i++;
-										name = mf.format(new Object[]{"_"+i}); // This will give us kpi_<resource_name>_<n>.jrxml
+										name = mf.format(new Object[]{"_"+i}); // This will give us kpi_<resource_name>_<n>.jrxml //$NON-NLS-1$
 									}
 									
 									final IFile file = folder.getFile(name);
@@ -407,8 +407,8 @@ public class KPIDeployAction extends Action implements IMenuCreator{
 													
 													MessageDialog.openInformation(
 															UIUtils.getShell(), 
-															"Export KPI Jrxml",
-															MessageFormat.format("The KPI jrxml has been saved in your workspace:\n{0}", file.getFullPath()) );
+															Messages.KPIDeployAction_exportMessageTitle,
+															MessageFormat.format(Messages.KPIDeployAction_exportSuccessMessage, file.getFullPath()) );
 												}
 											});
 											
@@ -462,7 +462,7 @@ public class KPIDeployAction extends Action implements IMenuCreator{
 							
 							
 							// Check if we already have a KPI...
-							String reportUnitFolderUri = rd.getUriString() + "_files/KPI";
+							String reportUnitFolderUri = rd.getUriString() + "_files/KPI"; //$NON-NLS-1$
 							
 							ResourceDescriptor folderResourceDescriptor = new ResourceDescriptor();
 							folderResourceDescriptor.setUriString(reportUnitFolderUri);

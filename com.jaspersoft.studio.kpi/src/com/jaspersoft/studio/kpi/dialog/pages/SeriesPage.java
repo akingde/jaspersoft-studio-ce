@@ -22,6 +22,7 @@ import org.eclipse.swt.widgets.Label;
 
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.kpi.dialog.AbstractKPIConfigurationPage;
+import com.jaspersoft.studio.kpi.messages.Messages;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.dataset.MDataset;
@@ -34,15 +35,15 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class SeriesPage extends AbstractKPIConfigurationPage{
 	
-	public static final String SERIES_DATASET_NAME = "ValueSeries";
+	public static final String SERIES_DATASET_NAME = "ValueSeries"; //$NON-NLS-1$
 	
-	public static final String SERIES_X_VARIABLE = "x_value";
+	public static final String SERIES_X_VARIABLE = "x_value"; //$NON-NLS-1$
 	
-	public static final String SERIES_Y_VARIABLE = "y_value";
+	public static final String SERIES_Y_VARIABLE = "y_value"; //$NON-NLS-1$
 	
 	@Override
 	public String getName() {
-		return "Value Series";
+		return Messages.SeriesPage_pageName;
 	}
 
 	@Override
@@ -55,7 +56,7 @@ public class SeriesPage extends AbstractKPIConfigurationPage{
 		gd.horizontalAlignment = SWT.FILL;
 		gd.horizontalSpan = 2;
 		queryDialogButton.setLayoutData(gd);
-		queryDialogButton.setText("Edit Query");
+		queryDialogButton.setText(Messages.SeriesPage_editButton);
 		queryDialogButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -75,7 +76,7 @@ public class SeriesPage extends AbstractKPIConfigurationPage{
 		
 		ExpressionContext context = getExpressionContext();
 		
-		new Label(c,SWT.NONE).setText("X Value");
+		new Label(c,SWT.NONE).setText(Messages.SeriesPage_xLabel);
 		final WTextExpression expr_x = new WTextExpression(c, SWT.NONE, 3);
 		expr_x.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		JRExpression exp = getVariable(SERIES_X_VARIABLE).getExpression();
@@ -89,7 +90,7 @@ public class SeriesPage extends AbstractKPIConfigurationPage{
 			}
 		});
 		
-		new Label(c,SWT.NONE).setText("Y Value (Numeric)");
+		new Label(c,SWT.NONE).setText(Messages.SeriesPage_yLabel);
 		final WTextExpression expr_y = new WTextExpression(c, SWT.NONE, 3);
 		expr_y.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		exp = getVariable(SERIES_Y_VARIABLE).getExpression();
@@ -150,6 +151,11 @@ public class SeriesPage extends AbstractKPIConfigurationPage{
 			return newVariable;
 		}
 		return ((JRDesignVariable)variable);
+	}
+	
+	@Override
+	public String getTitle() {
+		return Messages.SeriesPage_pageTitle;
 	}
 
 }

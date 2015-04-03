@@ -20,6 +20,7 @@ import org.eclipse.swt.widgets.Text;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.kpi.dialog.AbstractKPIConfigurationPage;
 import com.jaspersoft.studio.kpi.dialog.KPIConfiguratorPage;
+import com.jaspersoft.studio.kpi.messages.Messages;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.dataset.MDataset;
@@ -40,25 +41,22 @@ public class DatasetPage extends AbstractKPIConfigurationPage{
 	
 	@Override
 	public String getName() {
-		return "KPI Data";
+		return Messages.DatasetPage_pageName;
 	}
 
 	@Override
 	protected Composite createComposite(Composite parent) {
 		Composite c = new Composite(parent, SWT.NONE);
-		c.setLayout(new GridLayout(2, false));
+		c.setLayout(new GridLayout(3, false));
 		
-		Label dataSourceUriLabel = new Label(c, SWT.NONE);
-		GridData gd = new GridData( GridData.FILL_HORIZONTAL );
-		gd.horizontalSpan = 2;
-		dataSourceUriLabel.setLayoutData(gd);
-		dataSourceUriLabel.setText("Datasource URI (blank if none)");
+		Label dataSourceUriLabel = new Label(c, SWT.NONE);;
+		dataSourceUriLabel.setText(Messages.DatasetPage_datasourceLabel);
 		
 		final Text dataSourceUri = new Text(c, SWT.BORDER);
-		gd = new GridData( GridData.FILL_HORIZONTAL );
+		GridData gd = new GridData( GridData.FILL_HORIZONTAL );
 		dataSourceUri.setLayoutData(gd);
 		String uri = parentPage.getDatasourceUri();
-		dataSourceUri.setText(uri != null ? uri : "");
+		dataSourceUri.setText(uri != null ? uri : ""); //$NON-NLS-1$
 		dataSourceUri.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {	
@@ -67,7 +65,7 @@ public class DatasetPage extends AbstractKPIConfigurationPage{
 		});
 		
 		Button dataSourceUriPickerButton = new Button(c, SWT.PUSH);
-		dataSourceUriPickerButton.setText("Browse...");
+		dataSourceUriPickerButton.setText(Messages.DatasetPage_exploreLabel);
 		dataSourceUriPickerButton.addSelectionListener(new SelectionAdapter() {
 			
 			@Override
@@ -92,9 +90,9 @@ public class DatasetPage extends AbstractKPIConfigurationPage{
 		Button queryDialogButton = new Button(c, SWT.PUSH);
 		gd = new GridData();
 		gd.horizontalAlignment = SWT.FILL;
-		gd.horizontalSpan = 2;
+		gd.horizontalSpan = 3;
 		queryDialogButton.setLayoutData(gd);
-		queryDialogButton.setText("Edit Query");
+		queryDialogButton.setText(Messages.DatasetPage_editQueryButton);
 		queryDialogButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -117,5 +115,10 @@ public class DatasetPage extends AbstractKPIConfigurationPage{
 		ReportFactory.createDataset(model, jd.getMainDesignDataset(), false);
 		report.addChild(model);
 		return model;
+	}
+	
+	@Override
+	public String getTitle() {
+		return Messages.DatasetPage_pageTitle;
 	}
 }

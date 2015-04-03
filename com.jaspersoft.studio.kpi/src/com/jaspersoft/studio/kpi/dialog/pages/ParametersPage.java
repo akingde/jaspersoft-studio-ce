@@ -38,8 +38,8 @@ import org.eclipse.swt.widgets.TableColumn;
 import com.jaspersoft.studio.kpi.dialog.AbstractKPIConfigurationPage;
 import com.jaspersoft.studio.kpi.dialog.pages.parameters.ParameterDefinition;
 import com.jaspersoft.studio.kpi.dialog.pages.parameters.ParameterWizard;
+import com.jaspersoft.studio.kpi.messages.Messages;
 import com.jaspersoft.studio.kpi.messages.MessagesByKeys;
-import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 
 public class ParametersPage extends AbstractKPIConfigurationPage {
@@ -77,7 +77,8 @@ public class ParametersPage extends AbstractKPIConfigurationPage {
 			switch (columnIndex) {
 				case 0: return String.valueOf(dto.getName()); 
 				case 1: return String.valueOf(MessagesByKeys.getString(dto.getType())); 
-				case 2: return MessagesByKeys.getString(dto.getExpression());
+				case 2: return String.valueOf(dto.isForPrompt());
+				case 3: return MessagesByKeys.getString(dto.getExpression());
 			}
 			return ""; //$NON-NLS-1$
 		}
@@ -95,7 +96,7 @@ public class ParametersPage extends AbstractKPIConfigurationPage {
 	
 	@Override
 	public String getName() {
-		return "Parameters";
+		return Messages.ParametersPage_pageName;
 	}
 
 	@Override
@@ -205,6 +206,7 @@ public class ParametersPage extends AbstractKPIConfigurationPage {
 			JRDesignParameter seriesParameter = new JRDesignParameter();
 			seriesParameter.setName(def.getName());
 			seriesParameter.setValueClassName(ParameterDefinition.getParameterJavaType(def.getType()));
+			seriesParameter.setForPrompting(def.isForPrompt());
 			try{
 				seriesDataset.addParameter(mainParameter);
 				mainDataset.addParameter(seriesParameter);
@@ -248,18 +250,21 @@ public class ParametersPage extends AbstractKPIConfigurationPage {
 		});
 
 		TableLayout tlayout = new TableLayout();
-		tlayout.addColumnData(new ColumnWeightData(25));
+		tlayout.addColumnData(new ColumnWeightData(23));
 		tlayout.addColumnData(new ColumnWeightData(15));
-		tlayout.addColumnData(new ColumnWeightData(60));
+		tlayout.addColumnData(new ColumnWeightData(15));
+		tlayout.addColumnData(new ColumnWeightData(47));
 		table.setLayout(tlayout);
 
-		TableColumn[] column = new TableColumn[3];
+		TableColumn[] column = new TableColumn[4];
 		column[0] = new TableColumn(table, SWT.NONE);
-		column[0].setText("Name");
+		column[0].setText(Messages.ParametersPage_nameLabel);
 		column[1] = new TableColumn(table, SWT.NONE);
-		column[1].setText("Type");
+		column[1].setText(Messages.ParametersPage_typeLabel);
 		column[2] = new TableColumn(table, SWT.NONE);
-		column[2].setText("Expression");
+		column[2].setText(Messages.ParametersPage_promptLabel);
+		column[3] = new TableColumn(table, SWT.NONE);
+		column[3].setText(Messages.ParametersPage_valueLabel);
 		
 		for (int i = 0, n = column.length; i < n; i++)
 			column[i].pack();
@@ -273,11 +278,12 @@ public class ParametersPage extends AbstractKPIConfigurationPage {
 				String name = jrParameter.getName();
 				if (!jrParameter.isSystemDefined() && !defaultParameters.contains(name)){
 					String type = ParameterDefinition.getParameterType(jrParameter.getValueClassName());
-					String expression = "";
+					String expression = ""; //$NON-NLS-1$
+					boolean isFroPrompt = jrParameter.isForPrompting();
 					if (jrParameter.getDefaultValueExpression() != null && jrParameter.getDefaultValueExpression().getText() != null){
 						expression = jrParameter.getDefaultValueExpression().getText();
 					}
-					parameters.add(new ParameterDefinition(name, type, expression));
+					parameters.add(new ParameterDefinition(name, type, expression, isFroPrompt));
 				}
 			}
 		}
@@ -299,5 +305,10 @@ public class ParametersPage extends AbstractKPIConfigurationPage {
 			return newDataset;
 		}
 		return (JRDesignDataset)seriesDataset;	
+	}
+	
+	@Override
+	public String getTitle() {
+		return Messages.ParametersPage_pageTitle;
 	}
 }

@@ -14,5 +14,11 @@
             class="com.jaspersoft.studio.kpi.messages.ResourcePublisher">
       </input>
    </extension>
+   <extension
+         point="com.jaspersoft.studio.templateProviderSupport">
+      <templateProvider
+            id="com.jaspersoft.studio.kpi.template"
+            providerClass="com.jaspersoft.studio.kpi.template.KPITemplateProvider"></templateProvider>
+   </extension>
 
 </plugin>

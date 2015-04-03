@@ -40,23 +40,23 @@ import com.ibm.icu.text.MessageFormat;
 import com.jaspersoft.studio.kpi.dialog.AbstractKPIConfigurationPage;
 import com.jaspersoft.studio.kpi.dialog.pages.range.RangeDefinition;
 import com.jaspersoft.studio.kpi.dialog.pages.range.RangeWizard;
+import com.jaspersoft.studio.kpi.messages.Messages;
 import com.jaspersoft.studio.kpi.messages.MessagesByKeys;
-import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 
 public class RangePage extends AbstractKPIConfigurationPage {
 
-	public static final String RANGE_PARAMETER = "tresholds";
+	public static final String RANGE_PARAMETER = "tresholds"; //$NON-NLS-1$
 	
-	public static final String TYPE_PARAMETER = "tresholdtype";
+	public static final String TYPE_PARAMETER = "tresholdtype"; //$NON-NLS-1$
 	
-	private static final String KEY_MIN = "min";
+	private static final String KEY_MIN = "min"; //$NON-NLS-1$
 	
-	private static final String KEY_MAX = "max";
+	private static final String KEY_MAX = "max"; //$NON-NLS-1$
 	
-	private static final String KEY_NAME = "color";
+	private static final String KEY_NAME = "color"; //$NON-NLS-1$
 	
-	private static final String ENTRY = "[\"min\":{0}, \"max\": {1}, \"color\": \"{2}\"]";
+	private static final String ENTRY = "[\"min\":{0}, \"max\": {1}, \"color\": \"{2}\"]"; //$NON-NLS-1$
 	
 	private Table table;
 	
@@ -105,14 +105,14 @@ public class RangePage extends AbstractKPIConfigurationPage {
 	
 	@Override
 	public String getName() {
-		return "Validation Ranges";
+		return Messages.RangePage_pageName;
 	}
 	
 	private boolean isPercentage(){
 		JRDesignParameter parameter = getParameter(TYPE_PARAMETER);
 		if (parameter.getDefaultValueExpression() != null){
 			String text = parameter.getDefaultValueExpression().getText();
-			return text.equals("\"percentage\"");
+			return text.equals("\"percentage\""); //$NON-NLS-1$
 		}
 		return false;
 	}
@@ -121,9 +121,9 @@ public class RangePage extends AbstractKPIConfigurationPage {
 		JRDesignParameter parameter = getParameter(TYPE_PARAMETER);
 		JRDesignExpression exp = null;
 		if (isPercentage){
-			exp = new JRDesignExpression("\"percentage\"");
+			exp = new JRDesignExpression("\"percentage\""); //$NON-NLS-1$
 		} else {
-			exp = new JRDesignExpression("\"absolute\"");
+			exp = new JRDesignExpression("\"absolute\""); //$NON-NLS-1$
 		}
 		parameter.setDefaultValueExpression(exp);
 	}
@@ -153,7 +153,7 @@ public class RangePage extends AbstractKPIConfigurationPage {
 		//Build the checkbox
 		
 		Button percentageButton = new Button(tGroup, SWT.CHECK);
-		percentageButton.setText("Range values are defined as percentage from target");
+		percentageButton.setText(Messages.RangePage_percentageButton);
 		percentageButton.setSelection(isPercentage());
 		percentageButton.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -225,14 +225,14 @@ public class RangePage extends AbstractKPIConfigurationPage {
 	
 	private void updateVariable(){
 		StringBuilder builder = new StringBuilder();
-		builder.append("[");
+		builder.append("["); //$NON-NLS-1$
 		int index = 0;
 		for(RangeDefinition def : ranges){
 			builder.append(MessageFormat.format(ENTRY, new Object[]{def.getMin(), def.getMax(), def.getName()}));
 			index++;
-			if (index < ranges.size()) builder.append(",");
+			if (index < ranges.size()) builder.append(","); //$NON-NLS-1$
 		}
-		builder.append("]");
+		builder.append("]"); //$NON-NLS-1$
 		JRDesignParameter parameter = getParameter(RANGE_PARAMETER);
 		JRDesignExpression expression = new JRDesignExpression(builder.toString());
 		parameter.setDefaultValueExpression(expression);
@@ -279,11 +279,11 @@ public class RangePage extends AbstractKPIConfigurationPage {
 
 		TableColumn[] column = new TableColumn[3];
 		column[0] = new TableColumn(table, SWT.NONE);
-		column[0].setText("From");
+		column[0].setText(Messages.RangePage_fromLabel);
 		column[1] = new TableColumn(table, SWT.NONE);
-		column[1].setText("To");
+		column[1].setText(Messages.RangePage_toLabel);
 		column[2] = new TableColumn(table, SWT.NONE);
-		column[2].setText("Type");
+		column[2].setText(Messages.RangePage_typeLabel);
 		
 		for (int i = 0, n = column.length; i < n; i++)
 			column[i].pack();
@@ -329,5 +329,10 @@ public class RangePage extends AbstractKPIConfigurationPage {
 			return newParameter;
 		}
 		return ((JRDesignParameter)parameter);
+	}
+	
+	@Override
+	public String getTitle() {
+		return Messages.RangePage_pageTitle;
 	}
 }

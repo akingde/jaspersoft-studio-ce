@@ -10,6 +10,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Spinner;
 
+import com.jaspersoft.studio.kpi.messages.Messages;
 import com.jaspersoft.studio.kpi.messages.MessagesByKeys;
 import com.jaspersoft.studio.property.combomenu.ComboItem;
 import com.jaspersoft.studio.property.combomenu.ComboMenuViewer;
@@ -26,14 +27,14 @@ public class RangeWizardPage extends WizardPage {
 	private ComboMenuViewer colorCombo;
 	
 	public RangeWizardPage(RangeDefinition modifiedElement) {
-		super("rangePage");
+		super("rangePage"); //$NON-NLS-1$
 		this.modifiedElement = modifiedElement;
 		if (modifiedElement != null){
-			setTitle("Range Editing");
-			setMessage("In this page you can edit the selected range");
+			setTitle(Messages.RangeWizardPage_pageTitleEdit);
+			setMessage(Messages.RangeWizardPage_pageDescriptionEdit);
 		} else {
-			setTitle("Range Creation");
-			setMessage("In this page you can create a new range");
+			setTitle(Messages.RangeWizardPage_pageTitleNew);
+			setMessage(Messages.RangeWizardPage_pageDescriptionNew);
 		}
 	}	
 	
@@ -47,19 +48,19 @@ public class RangeWizardPage extends WizardPage {
 		container.setLayout(new GridLayout(2,false));
 		container.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
-		new Label(container, SWT.NONE).setText("From");
+		new Label(container, SWT.NONE).setText(Messages.RangePage_fromLabel);
 		min = new Spinner(container, SWT.BORDER);
 		min.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		min.setMaximum(Integer.MAX_VALUE);
 		min.setMinimum(Integer.MIN_VALUE);
 		
-		new Label(container, SWT.NONE).setText("To");
+		new Label(container, SWT.NONE).setText(Messages.RangePage_toLabel);
 		max = new Spinner(container, SWT.BORDER);
 		max.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		max.setMaximum(Integer.MAX_VALUE);
 		max.setMinimum(Integer.MIN_VALUE);
 		
-		new Label(container, SWT.NONE).setText("Type");
+		new Label(container, SWT.NONE).setText(Messages.RangePage_typeLabel);
 		ArrayList<ComboItem> itemsList = new ArrayList<ComboItem>();
 		int index = 0;
 		for(String names : RangeDefinition.getNames()){

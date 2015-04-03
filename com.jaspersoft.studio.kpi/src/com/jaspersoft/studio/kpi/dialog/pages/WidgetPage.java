@@ -20,17 +20,18 @@ import org.eclipse.swt.widgets.ToolItem;
 
 import com.jaspersoft.studio.kpi.dialog.AbstractKPIConfigurationPage;
 import com.jaspersoft.studio.kpi.dialog.pages.widget.WidgetDefinition;
+import com.jaspersoft.studio.kpi.messages.Messages;
 
 public class WidgetPage extends AbstractKPIConfigurationPage {
 
 	private static final List<WidgetDefinition> widgetsList = new ArrayList<WidgetDefinition>();
 	
-	public static final String WIDGET_PARAMETER = "widget";
+	public static final String WIDGET_PARAMETER = "widget"; //$NON-NLS-1$
 	
 	static{
-		widgetsList.add(new WidgetDefinition("default", "/resources/widgets/default.png"));
-		widgetsList.add(new WidgetDefinition("gauge", "/resources/widgets/gauge.png"));
-		widgetsList.add(new WidgetDefinition("number", "/resources/widgets/number.png"));
+		widgetsList.add(new WidgetDefinition("default", "/resources/widgets/default.png")); //$NON-NLS-1$ //$NON-NLS-2$
+		widgetsList.add(new WidgetDefinition("gauge", "/resources/widgets/gauge.png")); //$NON-NLS-1$ //$NON-NLS-2$
+		widgetsList.add(new WidgetDefinition("number", "/resources/widgets/number.png")); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 	
 	private List<ToolItem> buttonsList = new ArrayList<ToolItem>();
@@ -45,14 +46,14 @@ public class WidgetPage extends AbstractKPIConfigurationPage {
 	
 	private void writeValue(String value){
 		JRDesignParameter parameter = getParameter();
-		String exp = "\"" + value + "\"";
+		String exp = "\"" + value + "\""; //$NON-NLS-1$ //$NON-NLS-2$
 		JRDesignExpression newExpression = new JRDesignExpression(exp);
 		parameter.setDefaultValueExpression(newExpression);
 	}
 	
 	@Override
 	public String getName() {
-		return "Style";
+		return Messages.WidgetPage_pageLabel;
 	}
 
 	@Override
@@ -67,7 +68,7 @@ public class WidgetPage extends AbstractKPIConfigurationPage {
 		
 		String selectedWidget = getSelectedWidget();
 		if (selectedWidget == null || selectedWidget.isEmpty()) {
-			selectedWidget = "default";
+			selectedWidget = "default"; //$NON-NLS-1$
 			writeValue(selectedWidget);
 		}
 		for(WidgetDefinition widget : widgetsList){
@@ -87,10 +88,10 @@ public class WidgetPage extends AbstractKPIConfigurationPage {
 	private String getSelectedWidget(){
 		JRDesignParameter parameter = getParameter();
 		JRExpression exp = parameter.getDefaultValueExpression();
-		if (exp == null) return "";
+		if (exp == null) return ""; //$NON-NLS-1$
 		String exp_text = exp.getText();
-		if (exp_text.startsWith("\"")); exp_text = exp_text.substring(1);
-		if (exp_text.endsWith("\"")); exp_text = exp_text.substring(0, exp_text.length()-1);
+		if (exp_text.startsWith("\"")); exp_text = exp_text.substring(1); //$NON-NLS-1$
+		if (exp_text.endsWith("\"")); exp_text = exp_text.substring(0, exp_text.length()-1); //$NON-NLS-1$
 		return exp_text;
 	}
 
@@ -108,4 +109,10 @@ public class WidgetPage extends AbstractKPIConfigurationPage {
 		}
 		return ((JRDesignParameter)parameter);
 	}
+	
+	@Override
+	public String getTitle() {
+		return Messages.WidgetPage_pageTitle;
+	}
 }
+

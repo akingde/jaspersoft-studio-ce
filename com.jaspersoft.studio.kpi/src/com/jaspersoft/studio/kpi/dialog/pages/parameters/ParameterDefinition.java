@@ -28,10 +28,13 @@ public class ParameterDefinition {
 	
 	private String expression;
 	
-	public ParameterDefinition(String name, String type, String expression){
+	private boolean isForPrompt;
+	
+	public ParameterDefinition(String name, String type, String expression, boolean isForPrompt){
 		this.name = name;
 		this.type = type;
 		this.expression = expression;
+		this.isForPrompt = isForPrompt;
 	}
 	
 	public String getName() {
@@ -44,6 +47,10 @@ public class ParameterDefinition {
 
 	public String getExpression() {
 		return expression;
+	}
+
+	public boolean isForPrompt() {
+		return isForPrompt;
 	}
 
 	public static List<String> getParameterTypes(){

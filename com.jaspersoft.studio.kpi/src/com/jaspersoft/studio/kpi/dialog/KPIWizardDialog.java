@@ -126,7 +126,7 @@ public class KPIWizardDialog extends WizardDialog {
 
 	protected void createButtonsForButtonBar(Composite parent) {
 		((GridLayout) parent.getLayout()).makeColumnsEqualWidth = false;
-		deleteButton = createButton(parent, Messages.KPIWizardDialog_deleteButton);
+		deleteButton = createButton(parent, Messages.common_delete);
 		super.createButtonsForButtonBar(parent);
 	}
 	
