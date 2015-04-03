@@ -1,3 +1,15 @@
+/*******************************************************************************
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
+ * http://www.jaspersoft.com.
+ * 
+ * Unless you have purchased  a commercial license agreement from Jaspersoft,
+ * the following license terms  apply:
+ * 
+ * This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ ******************************************************************************/
 package com.jaspersoft.studio.kpi.template;
 
 import java.io.File;
@@ -23,20 +35,28 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.wizards.BuiltInCategories;
 import com.jaspersoft.templates.TemplateBundle;
 
+/**
+ * A template provider for the KPI plugin, search the jrxml templates in the hardcoded folder
+ * and in the contributed ones and build a list of the available kpi template bundle
+ * 
+ * @author Orlandin Marco
+ *
+ */
 public class KPITemplateProvider  implements TemplateProvider {
 
 	/**
-	 * List of loaded templates
+	 * List of the loaded kpi templates
 	 */
 	public static List<TemplateBundle> cache = null;
 	
 	/**
-	 * Key used to distinguish the tabular template from the other templates
+	 * Key used to distinguish the kpi template from the other templates
 	 */
 	public static final String kpiTemplateKey="kpi_template";
 	
 	/**
-	 * Read all the templates jrxml in the folder templates/book, the subdirectories are excluded
+	 * Read all the templates jrxml in the folder /resources/templates of the kpi plugin, 
+	 * the subdirectories are excluded, and assumes that they are kpi template
 	 */
 	@Override
 	public List<TemplateBundle> getTemplateBundles() {
@@ -109,9 +129,14 @@ public class KPITemplateProvider  implements TemplateProvider {
 
 	@Override
 	public String getProviderName() {
-		return "Book Template";
+		return "KPI Template";
 	}
 
+	/**
+	 * At the moment the kpi template bundle dosen't do any validation
+	 * TODO: implement the validation of a kpi teamplate by searching for 
+	 * example the requeste parameters, fileds and so on
+	 */
 	@Override
 	public List<String> validateTemplate(JasperDesign design) {
 		return new ArrayList<String>();

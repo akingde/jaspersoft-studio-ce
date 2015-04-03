@@ -1,3 +1,15 @@
+/*******************************************************************************
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
+ * http://www.jaspersoft.com.
+ * 
+ * Unless you have purchased  a commercial license agreement from Jaspersoft,
+ * the following license terms  apply:
+ * 
+ * This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ ******************************************************************************/
 package com.jaspersoft.studio.kpi.template;
 
 import java.io.ByteArrayInputStream;
@@ -27,17 +39,30 @@ import com.jaspersoft.templates.ReportBundle;
 import com.jaspersoft.templates.TemplateEngine;
 import com.jaspersoft.templates.WizardTemplateBundle;
 
+/**
+ * Bundle for a KPI template, dosen't provide any custom wizard page
+ * 
+ * @author Orlandin Marco
+ *
+ */
 public class KPITemplateBundle extends WizardTemplateBundle {
 
 	public KPITemplateBundle(URL url, boolean isExternal, JasperReportsContext jrContext) throws Exception {
 		super(url, isExternal, jrContext);
 	}
 
+	/**
+	 * This bundle dosen't provide custom wizard pages
+	 */
 	@Override
 	public WizardPage[] getCustomWizardPages() {
 		return new WizardPage[0];
 	}
 
+	/**
+	 * Load the template, pass it to the kpi template engine and save the result 
+	 * as the new report
+	 */
 	@Override
 	public IFile doFinish(ReportNewWizard mainWizard, IProgressMonitor monitor)throws CoreException {
 		IFile reportFile = null;
@@ -81,7 +106,7 @@ public class KPITemplateBundle extends WizardTemplateBundle {
 	}
 
 	/**
-	 * For the book based templates return a Book Template Engine
+	 * For the kpi based templates return a KPI Template Engine
 	 */
 	@Override
 	protected void readProperties()

@@ -45,7 +45,9 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.FileEditorInput;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.statistics.UsageStatisticsIDs;
 import com.jaspersoft.studio.utils.SelectionHelper;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.wizards.category.ReportTemplatesWizardPage;
@@ -188,6 +190,8 @@ public class ReportNewWizard extends JSSWizard implements INewWizard {
 						//If the report file is create correctly then open it
 						if (reportFile != null){
 							monitor.setTaskName(Messages.ReportNewWizard_5);
+							//Log the used template to generate the report
+							JaspersoftStudioPlugin.getInstance().getUsageManager().audit(templateChooserStep.getTemplateBundle().getClass().getName(), UsageStatisticsIDs.CATEGORY_REPORT);
 							UIUtils.getDisplay().asyncExec(new Runnable() {
 								public void run() {
 									IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();

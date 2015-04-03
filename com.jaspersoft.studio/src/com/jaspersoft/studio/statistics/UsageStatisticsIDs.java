@@ -37,4 +37,6 @@ public class UsageStatisticsIDs {
 	public static final String CATEGORY_PREVIEW_FORMAT = "PreviewFormat";
 	
 	public static final String CATEGORY_ELEMENT = "Element";	
+	
+	public static final String CATEGORY_REPORT = "Report";	
 }

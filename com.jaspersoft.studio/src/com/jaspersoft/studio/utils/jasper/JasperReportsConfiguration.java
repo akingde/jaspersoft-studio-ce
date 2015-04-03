@@ -36,6 +36,7 @@ import net.sf.jasperreports.eclipse.util.query.EmptyQueryExecuterFactoryBundle;
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.component.ComponentsBundle;
+import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.fonts.FontFamily;
 import net.sf.jasperreports.engine.fonts.SimpleFontExtensionHelper;
@@ -58,6 +59,7 @@ import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.preferences.fonts.FontsPreferencePage;
 import com.jaspersoft.studio.preferences.fonts.utils.FontUtils;
 import com.jaspersoft.studio.prm.ParameterSet;
@@ -137,6 +139,16 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 			// JaspersoftStudioPlugin.getInstance().logError(
 			// "Cannot complete operations successfully after a classpath change occurred.", e);
 			// }
+			//Clear the old extensions
+			//JDTUtils.clearJRRegistry(classLoader);
+			JasperDesign jd = getJasperDesign();
+			if (jd != null) {
+				List<JRDesignElement> allElements = ModelUtils.getAllGElements(jd);
+				for(JRDesignElement element : allElements){
+					element.getEventSupport().firePropertyChange(MGraphicElement.FORCE_GRAPHICAL_REFRESH, true, false);
+				}
+			}
+			
 		}
 	}
 
@@ -715,5 +727,9 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 		if (instance == null)
 			instance = new JasperReportsConfiguration(DefaultJasperReportsContext.getInstance(), null);
 		return instance;
+	}
+	
+	public void refreshClasspath(){
+		classpathlistener.propertyChange(null);
 	}
 }

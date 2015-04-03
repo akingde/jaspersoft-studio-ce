@@ -74,8 +74,8 @@ public class WidgetPage extends AbstractKPIConfigurationPage {
 		for(WidgetDefinition widget : widgetsList){
 			ToolItem newButton = new ToolItem(bar, SWT.RADIO );
 			newButton.setImage(widget.getImage());
-			newButton.setData(widget.getWidgetName());
-			if (widget.getWidgetName().equals(selectedWidget)){
+			newButton.setData(widget.getWidgetType());
+			if (widget.getWidgetType().equals(selectedWidget)){
 				newButton.setSelection(true);
 			}
 			newButton.addSelectionListener(buttonSelected);

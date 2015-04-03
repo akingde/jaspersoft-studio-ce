@@ -113,7 +113,7 @@ public class BookWizardSectionsDynamicPage extends JSSWizardPage {
 	public IWizardPage getNextPage() {
 		CongratulationsWizardPage congratPage = ((ReportNewWizard)getWizard()).getCongratulationsStep();
 		congratPage.setWizard(getWizard());
-		return (congratPage);
+		return congratPage;
 	}
 	
 	/**

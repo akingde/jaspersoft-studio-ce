@@ -42,9 +42,19 @@ public class DynamicNewFileCreationWizardPage extends NewFileCreationWizardPage 
 	public IWizardPage getNextPage() {
 		// get from the first step the TemplateBundle and read from it the dynamic steps and return the first one
 		ReportTemplatesWizardPage firstStaticStep = ((ReportNewWizard)getWizard()).getTemplateChooserStep();
-		WizardPage firstDynamicStep = firstStaticStep.getTemplateBundle().getCustomWizardPages()[0];
-		firstDynamicStep.setWizard(getWizard());
-		return firstDynamicStep;
+		WizardPage[] pages = firstStaticStep.getTemplateBundle().getCustomWizardPages();
+		//If there are no dynamic pages then go to the congratulation. One of this cases is valid since
+		//the wizard can adavance if there is a dynamic page or if there is a congratulation
+		if (pages.length > 0){
+			WizardPage firstDynamicStep = firstStaticStep.getTemplateBundle().getCustomWizardPages()[0];
+			firstDynamicStep.setWizard(getWizard());
+			return firstDynamicStep;
+		} else {
+			CongratulationsWizardPage congratPage = ((ReportNewWizard)getWizard()).getCongratulationsStep();
+			congratPage.setWizard(getWizard());
+			return congratPage;
+		}
+ 		
 	}
 	
 	/**

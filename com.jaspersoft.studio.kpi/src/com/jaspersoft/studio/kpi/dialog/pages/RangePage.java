@@ -80,7 +80,7 @@ public class RangePage extends AbstractKPIConfigurationPage {
 			switch (columnIndex) {
 				case 0: return String.valueOf(dto.getMin()); 
 				case 1: return String.valueOf(dto.getMax()); 
-				case 2: return MessagesByKeys.getString(dto.getName());
+				case 2: return MessagesByKeys.getString(dto.getType());
 			}
 			return ""; //$NON-NLS-1$
 		}
@@ -228,7 +228,7 @@ public class RangePage extends AbstractKPIConfigurationPage {
 		builder.append("["); //$NON-NLS-1$
 		int index = 0;
 		for(RangeDefinition def : ranges){
-			builder.append(MessageFormat.format(ENTRY, new Object[]{def.getMin(), def.getMax(), def.getName()}));
+			builder.append(MessageFormat.format(ENTRY, new Object[]{def.getMin(), def.getMax(), def.getType()}));
 			index++;
 			if (index < ranges.size()) builder.append(","); //$NON-NLS-1$
 		}

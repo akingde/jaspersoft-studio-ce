@@ -77,11 +77,21 @@ public class ImageGraphics2D extends ACachedGraphics {
 		imageGraphics = (Graphics2D)image.getGraphics();
 	}
 	
+	public ImageGraphics2D(Graphics2D originalGrpahics, int width, int height) {
+		this.targetGraphics = originalGrpahics;
+		image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+		imageGraphics = (Graphics2D)image.getGraphics();
+	}
+	
 	/**
 	 * Paint the content of the buffered image on the target image
 	 */
 	public void paintCache(){
 		targetGraphics.drawImage(image, null, null);
+	}
+	
+	public void paintCache2(){
+		targetGraphics.drawImage(image, -2, 0, null);
 	}
 	
 	/**
