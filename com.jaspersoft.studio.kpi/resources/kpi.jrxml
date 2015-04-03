@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.qualifier using JasperReports Library version 6.0.4  -->
-<!-- 2015-04-02T17:57:33 -->
+<!-- 2015-04-02T18:41:05 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="kpi" language="groovy" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="519e026f-22f5-434b-a062-9b9dcba72392">
 	<property name="net.sf.jasperreports.export.json.schema33" value="kpi.schema.json"/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Sample DB"/>
@@ -41,8 +41,8 @@
 	<queryString language="SQL">
 		<![CDATA[]]>
 	</queryString>
-	<variable name="value" class="java.lang.String"/>
-	<variable name="target" class="java.lang.String"/>
+	<variable name="value" class="java.lang.Object"/>
+	<variable name="target" class="java.lang.Object"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>

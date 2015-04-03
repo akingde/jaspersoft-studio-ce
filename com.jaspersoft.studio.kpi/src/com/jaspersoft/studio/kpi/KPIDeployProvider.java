@@ -44,13 +44,17 @@ public class KPIDeployProvider implements IRepositoryViewProvider {
 
 	@Override
 	public List<IAction> fillContextMenu(TreeViewer treeViewer, ANode node) {
+		
+		
 		createActions(treeViewer);
+		
 		List<IAction> lst = new ArrayList<IAction>();
-		System.out.println(node.getClass().getName());
+
 		if (node instanceof MReportUnit) {
 			if (kpiDeployAction.isEnabled()) {
 				lst.add(new Separator());
 				lst.add(kpiDeployAction);
+				lst.add(new Separator());
 			}
 		}
 		else if (node instanceof MServerProfile)

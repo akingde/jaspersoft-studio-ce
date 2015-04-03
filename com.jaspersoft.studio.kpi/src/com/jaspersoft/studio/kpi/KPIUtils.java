@@ -221,51 +221,61 @@ public class KPIUtils {
 		File file;
 		file = File.createTempFile("kpicache", ".properties");
 		
-		Properties properties = new Properties();
+		try {
 		
-		if (!clearCache || removeKey)
-		{
-			try {
+				Properties properties = new Properties();
 				
-				kpiCacheFile = client.get(new NullProgressMonitor(), kpiCacheFile, file);
-				if (file.exists() && file.length() > 0)
+				if (!clearCache || removeKey)
 				{
-					properties.load(new FileInputStream(file));
+					try {
+						
+						kpiCacheFile = client.get(new NullProgressMonitor(), kpiCacheFile, file);
+						if (file.exists() && file.length() > 0)
+						{
+							properties.load(new FileInputStream(file));
+						}
+					} catch (Exception ex)
+					{
+						// resource not found...
+						kpiCacheFile.setIsNew(true);
+					}
 				}
-			} catch (Exception ex)
+				
+				if (removeKey)
+				{
+					properties.remove(removeKey);
+				}
+				else
+				{
+					Set<String> keys = reportUnitUris.keySet();
+					
+					
+					for (String uri : keys)
+					{
+						// Just put an empty value. Uris don't have "=" character, so it should be simple to strip
+						// on client side...
+						properties.setProperty(uri, reportUnitUris.get(uri));
+					}
+				}
+				
+				
+				properties.store(new FileOutputStream(file),"");
+				
+				kpiCacheFile.setHasData(true);
+				kpiCacheFile.setData(Base64
+							.encodeBase64(net.sf.jasperreports.eclipse.util.FileUtils
+									.getBytes(file)));
+				
+				// Save the cache back...
+				client.addOrModifyResource(new NullProgressMonitor(), kpiCacheFile, file);
+		} finally {
+			
+			// Whatever happens, delete the temporary file with the cache.
+			if (file != null && file.exists())
 			{
-				// resource not found...
-				kpiCacheFile.setIsNew(true);
+				file.delete();
 			}
 		}
-		
-		if (removeKey)
-		{
-			properties.remove(removeKey);
-		}
-		else
-		{
-			Set<String> keys = reportUnitUris.keySet();
-			
-			
-			for (String uri : keys)
-			{
-				// Just put an empty value. Uris don't have "=" character, so it should be simple to strip
-				// on client side...
-				properties.setProperty(uri, reportUnitUris.get(uri));
-			}
-		}
-		
-		
-		properties.store(new FileOutputStream(file),"");
-		
-		kpiCacheFile.setHasData(true);
-		kpiCacheFile.setData(Base64
-					.encodeBase64(net.sf.jasperreports.eclipse.util.FileUtils
-							.getBytes(file)));
-		
-		// Save the cache back...
-		client.addOrModifyResource(new NullProgressMonitor(), kpiCacheFile, file);
 			
 	}
 }

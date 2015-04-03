@@ -25,7 +25,6 @@ public class KPIDefinitionPanelController extends Wizard {
 		kpiDefinitionPanel.setParentReportUnit(parentReportUnit);
 		kpiDefinitionPanel.setKpiReportUnit(kpiReportUnit);
 		kpiDefinitionPanel.setMServerProfile(serverProfile);
-		kpiDefinitionPanel.loadJasperDesign();
 	}
 	
 	
