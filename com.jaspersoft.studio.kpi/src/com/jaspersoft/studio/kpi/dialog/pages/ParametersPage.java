@@ -51,6 +51,8 @@ public class ParametersPage extends AbstractKPIConfigurationPage {
 		defaultParameters.add(RangePage.TYPE_PARAMETER);
 		defaultParameters.add(WidgetPage.WIDGET_PARAMETER);
 		defaultParameters.add(TitlePage.TITLE_PARAMETER);
+		defaultParameters.add(ValuePage.TARGET_FORMATTED_PARAMETER);
+		defaultParameters.add(ValuePage.VALUE_FORMATTED_PARAMETER);
 	}
 	
 	private Table table;

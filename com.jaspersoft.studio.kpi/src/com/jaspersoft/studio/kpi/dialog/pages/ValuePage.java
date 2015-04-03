@@ -42,13 +42,13 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class ValuePage extends AbstractKPIConfigurationPage {
 
-	private static final String VALUE_VARIABLE_NAME = "value";
+	public static final String VALUE_VARIABLE_NAME = "value";
 	
-	private static final String TARGET_VARIABLE_NAME = "target";
+	public static final String TARGET_VARIABLE_NAME = "target";
 	
-	private static final String VALUE_FORMATTED_PARAMETER_NAME = "valuePattern";
+	public static final String VALUE_FORMATTED_PARAMETER = "valuePattern";
 	
-	private static final String TARGET_FORMATTED_PARAMETER_NAME = "targetPattern";
+	public static final String TARGET_FORMATTED_PARAMETER = "targetPattern";
 	
 	public ValuePage(){
 
@@ -86,8 +86,8 @@ public class ValuePage extends AbstractKPIConfigurationPage {
 		GridLayout mainLayout = new GridLayout(1,false);
 		mainLayout.verticalSpacing = 10;
 		container.setLayout(mainLayout);
-		createExpressionGroup(container, "Value", VALUE_VARIABLE_NAME, VALUE_FORMATTED_PARAMETER_NAME);
-		createExpressionGroup(container, "Target", TARGET_VARIABLE_NAME, TARGET_FORMATTED_PARAMETER_NAME);
+		createExpressionGroup(container, "Value", VALUE_VARIABLE_NAME, VALUE_FORMATTED_PARAMETER);
+		createExpressionGroup(container, "Target", TARGET_VARIABLE_NAME, TARGET_FORMATTED_PARAMETER);
 		return container;
 	}
 	
