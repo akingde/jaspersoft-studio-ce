@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.qualifier using JasperReports Library version 6.0.4  -->
-<!-- 2015-04-02T18:41:05 -->
+<!-- 2015-04-03T10:00:10 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="kpi" language="groovy" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="519e026f-22f5-434b-a062-9b9dcba72392">
 	<property name="net.sf.jasperreports.export.json.schema33" value="kpi.schema.json"/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Sample DB"/>
@@ -121,7 +121,7 @@
 			</componentElement>
 			<staticText>
 				<reportElement style="Labels" positionType="Float" x="0" y="348" width="553" height="20" uuid="4d21cb6a-670c-450e-855b-300ec4541708"/>
-				<text><![CDATA[KPI Value (value and formatted value)]]></text>
+				<text><![CDATA[KPI Value (value and (optional) value pattern)]]></text>
 			</staticText>
 			<textField evaluationTime="Report" pattern="">
 				<reportElement key="value" positionType="Float" x="0" y="368" width="553" height="20" uuid="da79a924-d897-49d7-9b34-ab3f3dcb213b">
@@ -131,7 +131,7 @@
 			</textField>
 			<staticText>
 				<reportElement style="Labels" positionType="Float" x="1" y="420" width="553" height="20" uuid="f03bcb6d-5bf9-41e2-a67b-7de7697b7e61"/>
-				<text><![CDATA[KPI Target Value (target and formatted target)]]></text>
+				<text><![CDATA[KPI Target Value (target and (optional) target pattern)]]></text>
 			</staticText>
 			<textField evaluationTime="Report" pattern="">
 				<reportElement key="target" positionType="Float" x="2" y="440" width="553" height="20" uuid="877fb8f7-fdf1-4267-ac92-91b1bba72f38">
@@ -165,18 +165,18 @@
 				</reportElement>
 				<textFieldExpression><![CDATA[$P{tresholdtype}]]></textFieldExpression>
 			</textField>
-			<textField evaluationTime="Report" pattern="0.00">
-				<reportElement key="formattedValue" positionType="Float" x="0" y="390" width="553" height="20" uuid="2baa51b4-72b6-4fd0-b9e9-3d3a0bf28b07">
-					<property name="net.sf.jasperreports.export.json.path" value="formattedValue"/>
+			<staticText>
+				<reportElement key="valuePattern" positionType="Float" x="0" y="390" width="553" height="20" uuid="2e43a8a2-b0cb-4065-bfd8-4842addf9ad7">
+					<property name="net.sf.jasperreports.export.json.path" value="valuePattern"/>
 				</reportElement>
-				<textFieldExpression><![CDATA[$V{value}]]></textFieldExpression>
-			</textField>
-			<textField evaluationTime="Report" pattern="0.00">
-				<reportElement key="formattedTarget" positionType="Float" x="1" y="460" width="553" height="20" uuid="1e5dd0ac-897c-4ad8-88f3-0c383fd33ccf">
-					<property name="net.sf.jasperreports.export.json.path" value="formattedTarget"/>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="targetPattern" positionType="Float" x="1" y="460" width="553" height="20" uuid="b14e0346-5540-446a-8527-1d41097861e7">
+					<property name="net.sf.jasperreports.export.json.path" value="targetPattern"/>
 				</reportElement>
-				<textFieldExpression><![CDATA[$V{target}]]></textFieldExpression>
-			</textField>
+				<text><![CDATA[]]></text>
+			</staticText>
 		</band>
 	</title>
 	<pageHeader>
