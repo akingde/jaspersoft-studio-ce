@@ -34,7 +34,6 @@ import com.jaspersoft.studio.kpi.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.WSClientHelper;
-import com.jaspersoft.studio.server.editor.JRSEditorContributor;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.protocol.restv2.RestV2ConnectionJersey;
@@ -233,11 +232,6 @@ public class KPIDeployAction extends Action implements IMenuCreator{
 		fillMenu();
 		return menu;
 	}
-	
-	
-	
-	
-	
 	
 	/**
 	 * Detele the current KPI (if any)

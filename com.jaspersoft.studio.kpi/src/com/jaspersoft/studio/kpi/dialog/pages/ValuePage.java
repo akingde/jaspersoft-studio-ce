@@ -1,17 +1,16 @@
 package com.jaspersoft.studio.kpi.dialog.pages;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExpression;
+import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JRVariable;
-import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
-import net.sf.jasperreports.engine.design.JRDesignTextField;
+import net.sf.jasperreports.engine.design.JRDesignParameter;
 import net.sf.jasperreports.engine.design.JRDesignVariable;
 import net.sf.jasperreports.engine.type.CalculationEnum;
 
@@ -39,7 +38,6 @@ import com.jaspersoft.studio.property.descriptor.pattern.dialog.PatternEditor;
 import com.jaspersoft.studio.swt.events.ExpressionModifiedEvent;
 import com.jaspersoft.studio.swt.events.ExpressionModifiedListener;
 import com.jaspersoft.studio.swt.widgets.WTextExpression;
-import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class ValuePage extends AbstractKPIConfigurationPage {
@@ -48,11 +46,9 @@ public class ValuePage extends AbstractKPIConfigurationPage {
 	
 	private static final String TARGET_VARIABLE_NAME = "target";
 	
-	private static final String VALUE_FORMATTED_FIELD_KEY = "formattedValue";
+	private static final String VALUE_FORMATTED_PARAMETER_NAME = "valuePattern";
 	
-	private static final String TARGET_FORMATTED_FIELD_KEY = "formattedTarget";
-	
-	private HashMap<String, JRDesignElement> elementByKey = new HashMap<String, JRDesignElement>();
+	private static final String TARGET_FORMATTED_PARAMETER_NAME = "targetPattern";
 	
 	public ValuePage(){
 
@@ -90,8 +86,8 @@ public class ValuePage extends AbstractKPIConfigurationPage {
 		GridLayout mainLayout = new GridLayout(1,false);
 		mainLayout.verticalSpacing = 10;
 		container.setLayout(mainLayout);
-		createExpressionGroup(container, "Value", VALUE_VARIABLE_NAME, VALUE_FORMATTED_FIELD_KEY);
-		createExpressionGroup(container, "Target", TARGET_VARIABLE_NAME, TARGET_FORMATTED_FIELD_KEY);
+		createExpressionGroup(container, "Value", VALUE_VARIABLE_NAME, VALUE_FORMATTED_PARAMETER_NAME);
+		createExpressionGroup(container, "Target", TARGET_VARIABLE_NAME, TARGET_FORMATTED_PARAMETER_NAME);
 		return container;
 	}
 	
@@ -142,78 +138,74 @@ public class ValuePage extends AbstractKPIConfigurationPage {
 			}
 		});
 		
-		if (patternField != null && getElementByKey(patternField) != null){
-			new Label(container,SWT.NONE).setText(Messages.common_pattern);
-			Composite patternContainer = new Composite(container, SWT.NONE);
-			patternContainer.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-			GridLayout patternLayout = new GridLayout(2,false);
-			patternLayout.marginWidth = 0;
-			patternLayout.marginHeight = 0;
-			patternContainer.setLayout(patternLayout);
+		new Label(container,SWT.NONE).setText(Messages.common_pattern);
+		Composite patternContainer = new Composite(container, SWT.NONE);
+		patternContainer.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		GridLayout patternLayout = new GridLayout(2,false);
+		patternLayout.marginWidth = 0;
+		patternLayout.marginHeight = 0;
+		patternContainer.setLayout(patternLayout);
 
-			final Text pattern = new Text(patternContainer, SWT.BORDER);
-			pattern.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-			pattern.setText(getPattern(patternField));
-			pattern.addModifyListener(new ModifyListener() {
-				
-				@Override
-				public void modifyText(ModifyEvent e) {
-					setPattern(((Text)e.widget).getText(), patternField);
-				}
-			});
+		final Text pattern = new Text(patternContainer, SWT.BORDER);
+		pattern.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		pattern.setText(getPattern(patternField));
+		pattern.addModifyListener(new ModifyListener() {
 			
-			Button btn = new Button(patternContainer, SWT.PUSH);
-			btn.setText("...");
-			btn.addSelectionListener(new SelectionAdapter() {
-				@Override
-				public void widgetSelected(SelectionEvent e) {
-					PatternEditor wizard = new PatternEditor();
-					wizard.setValue(pattern.getText());
-					WizardDialog dialog = new WizardDialog(UIUtils.getShell(), wizard);
-					dialog.create();
-					if (dialog.open() == Dialog.OK) {
-						pattern.setText(wizard.getValue());
-					}
-				}
-			});
-		}	
-	}
-	
-	private void setPattern(String pattern, String fieldName){
-		JRDesignElement element = getElementByKey(fieldName);
-		if (element instanceof JRDesignTextField){
-			JRDesignTextField text = (JRDesignTextField)element;
-			text.setPattern(pattern);
-		}
-	}
-	
-	private String getPattern(String fieldName){
-		JRDesignElement element = getElementByKey(fieldName);
-		String pattern = null;
-		if (element instanceof JRDesignTextField){
-			JRDesignTextField text = (JRDesignTextField)element;
-			pattern = text.getPattern();
-		}
-		return pattern != null ? pattern : "";
-	}
-	
-	private JRDesignElement getElementByKey(String key){
-		if (!elementByKey.containsKey(key)){
-			List<JRDesignElement> elements = ModelUtils.getAllElements(jd);
-			boolean found = false;
-			for(JRDesignElement element : elements){
-				if (key.equals(element.getKey())){
-					found = true;
-					elementByKey.put(key, element);
-					break;
+			@Override
+			public void modifyText(ModifyEvent e) {
+				setPattern(((Text)e.widget).getText(), patternField);
+			}
+		});
+		
+		Button btn = new Button(patternContainer, SWT.PUSH);
+		btn.setText("...");
+		btn.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				PatternEditor wizard = new PatternEditor();
+				wizard.setValue(pattern.getText());
+				WizardDialog dialog = new WizardDialog(UIUtils.getShell(), wizard);
+				dialog.create();
+				if (dialog.open() == Dialog.OK) {
+					pattern.setText(wizard.getValue());
 				}
 			}
-			if (!found){
-				elementByKey.put(key, null);
+		});
+	}
+	
+	private void setPattern(String pattern, String patternParameter){
+		JRDesignParameter element = getParameter(patternParameter);
+		JRDesignExpression expression = new JRDesignExpression("\"" + pattern + "\"");
+		element.setDefaultValueExpression(expression);
+	}
+	
+	private String getPattern(String patternParameter){
+		JRDesignParameter element = getParameter(patternParameter);
+		String pattern = "";
+		if (element.getDefaultValueExpression() != null && element.getDefaultValueExpression().getText()!=null){
+			pattern = element.getDefaultValueExpression().getText();
+			if (pattern.startsWith("\"") && pattern.endsWith("\"")){
+				pattern = pattern.substring(1, pattern.length()-1);
 			}
 		}
-		return elementByKey.get(key);
+		return pattern;
 	}
+	
+	private JRDesignParameter getParameter(String parameterName){
+		JRParameter parameter = jd.getParametersMap().get(parameterName);
+		if (parameter == null){
+			JRDesignParameter newParameter = new JRDesignParameter();
+			newParameter.setName(parameterName);
+			try {
+				jd.addParameter(newParameter);
+			} catch (JRException e) {
+				e.printStackTrace();
+			} 
+			return newParameter;
+		}
+		return ((JRDesignParameter)parameter);
+	}
+	
 	
 	public ExpressionContext getExpressionContext() {
 		JasperReportsConfiguration jConfig = new JasperReportsConfiguration(DefaultJasperReportsContext.getInstance(), null);

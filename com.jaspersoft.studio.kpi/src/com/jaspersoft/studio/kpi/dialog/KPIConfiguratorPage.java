@@ -258,7 +258,7 @@ public class KPIConfiguratorPage extends JSSHelpWizardPage {
 			counter++;
 		}
 		try {
-			JRXmlWriter.writeReport(kpiJasperDesign,targetFile.getAbsolutePath(), "UTF-8");
+			JRXmlWriter.writeReport(kpiJasperDesign,targetFile.getAbsolutePath(), FileUtils.UTF8_ENCODING);
 		} catch (JRException e) {
 			e.printStackTrace();
 		}
