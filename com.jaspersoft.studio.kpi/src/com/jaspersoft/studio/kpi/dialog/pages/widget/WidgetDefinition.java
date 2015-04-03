@@ -12,6 +12,9 @@
  ******************************************************************************/
 package com.jaspersoft.studio.kpi.dialog.pages.widget;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
@@ -28,6 +31,20 @@ import com.jaspersoft.studio.kpi.Activator;
  */
 public class WidgetDefinition {
 
+	/**
+	 * A not null list of widget types
+	 */
+	private static final List<WidgetDefinition> widgetsList = new ArrayList<WidgetDefinition>();
+	
+	/**
+	 * Initialize the widget types list
+	 */
+	static{
+		widgetsList.add(new WidgetDefinition("default", "/resources/widgets/default.png")); //$NON-NLS-1$ //$NON-NLS-2$
+		widgetsList.add(new WidgetDefinition("gauge", "/resources/widgets/gauge.png")); //$NON-NLS-1$ //$NON-NLS-2$
+		widgetsList.add(new WidgetDefinition("number", "/resources/widgets/number.png")); //$NON-NLS-1$ //$NON-NLS-2$
+	}
+	
 	/**
 	 * The type of the widget, this string is used as an identifier, so
 	 * it should be unique among the widgtes
@@ -73,4 +90,12 @@ public class WidgetDefinition {
 		return widgetType;
 	}
 	
+	/**
+	 * Return a list of the available widget types for the kpi
+	 * 
+	 * @return A not null list of widget types. At the moment the types are default, gauge, number
+	 */
+	public static List<WidgetDefinition> getWidgetTypes(){
+		return widgetsList;
+	}
 }
