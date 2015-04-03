@@ -59,6 +59,13 @@
                </appInfo>
             </annotation>
          </attribute>
+         <attribute name="ContextMenuWeight" type="string">
+            <annotation>
+               <documentation>
+                  Items of the context menu will be ordered using this weight, in this way you can suggest position inside the context menu.
+               </documentation>
+            </annotation>
+         </attribute>
       </complexType>
    </element>
 

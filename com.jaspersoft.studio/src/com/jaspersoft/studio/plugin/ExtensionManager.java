@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -112,16 +113,25 @@ public class ExtensionManager {
 	public List<IRepositoryViewProvider> getRepositoryProviders() {
 		List<IRepositoryViewProvider> paletteGroup = new ArrayList<IRepositoryViewProvider>();
 		IConfigurationElement[] config = Platform.getExtensionRegistry().getConfigurationElementsFor(
-				JaspersoftStudioPlugin.PLUGIN_ID, "repositoryview"); //$NON-NLS-1$  
+				JaspersoftStudioPlugin.PLUGIN_ID, "repositoryview"); //$NON-NLS-1$
+		TreeMap<String, IRepositoryViewProvider> map = new TreeMap<String, IRepositoryViewProvider>();
+		int i = 0;
 		for (IConfigurationElement e : config) {
 			try {
+				String weight = e.getAttribute("ContextMenuWeight");
+				if (weight == null) {
+					weight = Integer.toString(i);
+					i++;
+				}
 				Object o = e.createExecutableExtension("ClassFactory"); //$NON-NLS-1$
 				if (o instanceof IRepositoryViewProvider)
-					paletteGroup.add((IRepositoryViewProvider) o);
+					map.put(weight, (IRepositoryViewProvider) o);
 			} catch (CoreException ex) {
 				System.out.println(ex.getMessage());
 			}
 		}
+		for (Map.Entry<String, IRepositoryViewProvider> entry : map.entrySet())
+			paletteGroup.add(entry.getValue());
 		return paletteGroup;
 	}
 
@@ -246,21 +256,22 @@ public class ExtensionManager {
 		}
 		return stylesViewList;
 	}
-	
+
 	/**
 	 * A list of the contributed exporter factories
 	 */
 	private ArrayList<AExporterFactory> exportersFactories = null;
-	
+
 	/**
 	 * Return a list of the contributed exporter factories, that can be accessed from the preview. An exporter factory
 	 * define how the generated report is exported to another format
 	 * 
 	 * @return a not null list of AExporterFactory
 	 */
-	public List<AExporterFactory> getExportersFactories(){
-		if (exportersFactories == null){
-			IConfigurationElement[] config = Platform.getExtensionRegistry().getConfigurationElementsFor(JaspersoftStudioPlugin.PLUGIN_ID, "exporterFactory");
+	public List<AExporterFactory> getExportersFactories() {
+		if (exportersFactories == null) {
+			IConfigurationElement[] config = Platform.getExtensionRegistry().getConfigurationElementsFor(
+					JaspersoftStudioPlugin.PLUGIN_ID, "exporterFactory");
 			exportersFactories = new ArrayList<AExporterFactory>();
 			for (IConfigurationElement el : config) {
 				Object defaultSupportClazz;
@@ -287,14 +298,15 @@ public class ExtensionManager {
 	}
 
 	/**
-	 * Return a list of the contributed actions, this action are the one that must be executed the first time
-	 * JSS is started. Between all the contributed actions are returned only the ones that are not overridden
-	 * by another startup action.
+	 * Return a list of the contributed actions, this action are the one that must be executed the first time JSS is
+	 * started. Between all the contributed actions are returned only the ones that are not overridden by another startup
+	 * action.
 	 * 
 	 * @return a not null list of IFirstStartupAction
 	 */
-	public Collection<IFirstStartupAction> getFirstStartupActions(){
-		IConfigurationElement[] config = Platform.getExtensionRegistry().getConfigurationElementsFor(JaspersoftStudioPlugin.PLUGIN_ID, "firstStartupActions");
+	public Collection<IFirstStartupAction> getFirstStartupActions() {
+		IConfigurationElement[] config = Platform.getExtensionRegistry().getConfigurationElementsFor(
+				JaspersoftStudioPlugin.PLUGIN_ID, "firstStartupActions");
 		ArrayList<String> firstStartupActions = new ArrayList<String>();
 		HashMap<String, IFirstStartupAction> actionMap = new HashMap<String, IFirstStartupAction>();
 		HashSet<String> overridenAction = new HashSet<String>();
@@ -308,7 +320,7 @@ public class ExtensionManager {
 					firstStartupActions.add(actionID);
 					actionMap.put(actionID, action);
 					String overridenActionId = el.getAttribute("overrideActionId");
-					if (overridenActionId != null){
+					if (overridenActionId != null) {
 						overridenAction.add(overridenActionId);
 					}
 				}
@@ -321,9 +333,10 @@ public class ExtensionManager {
 										"An error occurred while trying to create the new class.", e));
 			}
 		}
-		//Remove the overriden actions
-		for(String actiondId : firstStartupActions){
-			if (overridenAction.contains(actiondId)) actionMap.remove(actiondId);
+		// Remove the overriden actions
+		for (String actiondId : firstStartupActions) {
+			if (overridenAction.contains(actiondId))
+				actionMap.remove(actiondId);
 		}
 		return actionMap.values();
 	}
@@ -566,10 +579,10 @@ public class ExtensionManager {
 	public List<PreviewModeDetails> getAllPreviewModeDetails() {
 		return getAllPreviewModeDetails(null);
 	}
-	
+
 	/**
 	 * Return the list of all contributed hyperlink types.
-	 * <p> 
+	 * <p>
 	 * 
 	 * A plugin can contribute custom hyperlink through the extension point with id
 	 * <code>com.jaspersoft.studio.hyperlinkTypes</code>.
@@ -577,56 +590,57 @@ public class ExtensionManager {
 	 * @return list of custom hyperlink types
 	 */
 	public List<String> getContributedHyperlinkTypes() {
-		if(customHyperlinkTypes==null) {
+		if (customHyperlinkTypes == null) {
 			IConfigurationElement[] contributedElements = Platform.getExtensionRegistry().getConfigurationElementsFor(
 					"com.jaspersoft.studio.hyperlinkTypes"); //$NON-NLS-1$
-			if (contributedElements.length!=0) {
+			if (contributedElements.length != 0) {
 				customHyperlinkTypes = new ArrayList<String>(contributedElements.length);
-				defaultHyperlinkParametersByCustomType = new HashMap<String, List<HyperlinkDefaultParameter>>(contributedElements.length);
+				defaultHyperlinkParametersByCustomType = new HashMap<String, List<HyperlinkDefaultParameter>>(
+						contributedElements.length);
 				uiElementsIDByCustomType = new HashMap<String, List<WHyperlink.UIElement>>(contributedElements.length);
 				for (IConfigurationElement el : contributedElements) {
 					String type = el.getAttribute("type"); //$NON-NLS-1$
 					customHyperlinkTypes.add(type);
 					// lookup for default parameters
 					IConfigurationElement[] elements = el.getChildren("parameters");
-					if(elements.length==1){
+					if (elements.length == 1) {
 						IConfigurationElement[] params = elements[0].getChildren();
-						List<HyperlinkDefaultParameter> defaultParametersLst = new ArrayList<HyperlinkDefaultParameter>(params.length);
-						for(IConfigurationElement p : params){
+						List<HyperlinkDefaultParameter> defaultParametersLst = new ArrayList<HyperlinkDefaultParameter>(
+								params.length);
+						for (IConfigurationElement p : params) {
 							String parameterName = p.getAttribute("name");
 							String defaultValue = p.getAttribute("defaultValue");
 							defaultParametersLst.add(new HyperlinkDefaultParameter(parameterName, defaultValue));
 						}
 						defaultHyperlinkParametersByCustomType.put(type, defaultParametersLst);
-					}
-					else {
+					} else {
 						defaultHyperlinkParametersByCustomType.put(type, new ArrayList<HyperlinkDefaultParameter>(0));
 					}
 					// lookup for ui elements
 					elements = el.getChildren("uiElements");
-					if(elements.length==1){
+					if (elements.length == 1) {
 						IConfigurationElement[] uiElements = elements[0].getChildren("uiElement");
 						List<WHyperlink.UIElement> uiElementsList = new ArrayList<WHyperlink.UIElement>(uiElements.length);
-						for(IConfigurationElement u : uiElements) {
+						for (IConfigurationElement u : uiElements) {
 							String id = u.getAttribute("id");
 							try {
 								uiElementsList.add(WHyperlink.UIElement.valueOf(id));
 							} catch (NullPointerException e1) {
-								JaspersoftStudioPlugin.getInstance().logWarning(
-										NLS.bind("Custom Hyperlink Type {0} - The attribute id for the uiElement tag can not be null", type));
+								JaspersoftStudioPlugin.getInstance()
+										.logWarning(
+												NLS.bind("Custom Hyperlink Type {0} - The attribute id for the uiElement tag can not be null",
+														type));
 							} catch (IllegalArgumentException e2) {
 								JaspersoftStudioPlugin.getInstance().logWarning(
-										NLS.bind("Custom Hyperlink Type {0} - The value {1} for the attribute id is not valid", type,id));
+										NLS.bind("Custom Hyperlink Type {0} - The value {1} for the attribute id is not valid", type, id));
 							}
 						}
 						uiElementsIDByCustomType.put(type, uiElementsList);
-					}
-					else {
+					} else {
 						uiElementsIDByCustomType.put(type, new ArrayList<WHyperlink.UIElement>(0));
 					}
 				}
-			}
-			else {
+			} else {
 				// No custom type found
 				customHyperlinkTypes = new ArrayList<String>(0);
 				defaultHyperlinkParametersByCustomType = new HashMap<String, List<HyperlinkDefaultParameter>>(0);
@@ -637,37 +651,36 @@ public class ExtensionManager {
 	}
 
 	/**
-	 * Returns a list, maybe empty, of default parameters that can be suggested when choosing
-	 * the specified hyperlink type.
+	 * Returns a list, maybe empty, of default parameters that can be suggested when choosing the specified hyperlink
+	 * type.
 	 * 
 	 * @param hyperlinkType
 	 * @return the list of default parameters, if any, associated to the hyperlink
 	 */
 	public List<HyperlinkDefaultParameter> getDefaultParametersForCustomHyperlink(String hyperlinkType) {
-		if(defaultHyperlinkParametersByCustomType==null) {
+		if (defaultHyperlinkParametersByCustomType == null) {
 			// Init the custom hyperlink types extension point information
 			getContributedHyperlinkTypes();
 		}
 		List<HyperlinkDefaultParameter> list = defaultHyperlinkParametersByCustomType.get(hyperlinkType);
-		return list!=null ? list : new ArrayList<HyperlinkDefaultParameter>(0);
+		return list != null ? list : new ArrayList<HyperlinkDefaultParameter>(0);
 	}
-	
+
 	/**
-	 * Returns a list, maybe empty, of ids that refer to UI elements that 
-	 * are supposed to be used in dialogs, widgets and composites that 
-	 * allow the final user to modify hyperlinks.
+	 * Returns a list, maybe empty, of ids that refer to UI elements that are supposed to be used in dialogs, widgets and
+	 * composites that allow the final user to modify hyperlinks.
 	 * 
 	 * @param hyperlinkType
 	 * @return the list of ui elements, if any, associated to the hyperlink
 	 */
 	public List<UIElement> getUIElementsForCustomHyperlink(String hyperlinkType) {
-		if(uiElementsIDByCustomType==null){
+		if (uiElementsIDByCustomType == null) {
 			// Init the custom hyperlink types extension point information
 			getContributedHyperlinkTypes();
 		}
 		List<UIElement> list = uiElementsIDByCustomType.get(hyperlinkType);
 		// When the list is null then there is no contribution at plugin.xml level
 		// As fallback solution we return all the available UI elements
-		return list!=null ? list : Arrays.asList(UIElement.values());
+		return list != null ? list : Arrays.asList(UIElement.values());
 	}
 }
