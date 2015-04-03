@@ -72,8 +72,14 @@ public class ValuePage extends AbstractKPIConfigurationPage {
 
 	private void updateVariableExpression(JRExpression expression, String variableName){
 		JRDesignVariable variable = getVariable(variableName);
-		variable.setExpression(expression);
-		variable.setInitialValueExpression((JRExpression)expression.clone());;
+		JRExpression valueExpression = null;
+		JRExpression initialValueExpression = null;
+		if (expression != null){
+			valueExpression = (JRExpression)expression.clone();
+			initialValueExpression = (JRExpression)expression.clone();
+		}
+		variable.setExpression(valueExpression);
+		variable.setInitialValueExpression(initialValueExpression);
 	}
 	
 	@Override
@@ -103,7 +109,7 @@ public class ValuePage extends AbstractKPIConfigurationPage {
 			@Override
 			public void expressionModified(ExpressionModifiedEvent event) {
 				JRDesignExpression exp = expr.getExpression();
-				updateVariableExpression(exp != null ? (JRExpression)exp.clone() : null, variableName);
+				updateVariableExpression(exp, variableName);
 			}
 		});
 		
