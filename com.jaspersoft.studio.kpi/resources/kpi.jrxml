@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.qualifier using JasperReports Library version 6.0.4  -->
-<!-- 2015-04-03T10:00:10 -->
+<!-- 2015-04-03T10:04:56 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="kpi" language="groovy" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="519e026f-22f5-434b-a062-9b9dcba72392">
 	<property name="net.sf.jasperreports.export.json.schema33" value="kpi.schema.json"/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Sample DB"/>
@@ -37,6 +37,12 @@
 	<parameter name="widget" class="java.lang.String" isForPrompting="false"/>
 	<parameter name="tresholdtype" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["absolute"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="valuePattern" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="targetPattern" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
 	</parameter>
 	<queryString language="SQL">
 		<![CDATA[]]>
@@ -165,18 +171,16 @@
 				</reportElement>
 				<textFieldExpression><![CDATA[$P{tresholdtype}]]></textFieldExpression>
 			</textField>
-			<staticText>
-				<reportElement key="valuePattern" positionType="Float" x="0" y="390" width="553" height="20" uuid="2e43a8a2-b0cb-4065-bfd8-4842addf9ad7">
-					<property name="net.sf.jasperreports.export.json.path" value="valuePattern"/>
-				</reportElement>
-				<text><![CDATA[]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="targetPattern" positionType="Float" x="1" y="460" width="553" height="20" uuid="b14e0346-5540-446a-8527-1d41097861e7">
+			<textField>
+				<reportElement key="valuePattern" positionType="Float" x="0" y="390" width="553" height="20" uuid="883bca7e-f2ee-4b18-b0cf-64d6286359a1"/>
+				<textFieldExpression><![CDATA[$P{valuePattern}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement key="targetPattern" positionType="Float" x="1" y="460" width="553" height="20" uuid="19a60803-d225-41fa-b3db-b35046b6ffce">
 					<property name="net.sf.jasperreports.export.json.path" value="targetPattern"/>
 				</reportElement>
-				<text><![CDATA[]]></text>
-			</staticText>
+				<textFieldExpression><![CDATA[$P{targetPattern}]]></textFieldExpression>
+			</textField>
 		</band>
 	</title>
 	<pageHeader>
