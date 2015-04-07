@@ -1,3 +1,15 @@
+/*******************************************************************************
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
+ * http://www.jaspersoft.com.
+ * 
+ * Unless you have purchased  a commercial license agreement from Jaspersoft,
+ * the following license terms  apply:
+ * 
+ * This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ ******************************************************************************/
 package com.jaspersoft.studio.kpi.dialog.pages;
 
 import net.sf.jasperreports.engine.JRException;
@@ -18,18 +30,42 @@ import org.eclipse.swt.widgets.Text;
 import com.jaspersoft.studio.kpi.dialog.AbstractKPIConfigurationPage;
 import com.jaspersoft.studio.kpi.messages.Messages;
 
+/**
+ * Page where the KPI name can be configured
+ * 
+ * @author Orlandin Marco
+ *
+ */
 public class TitlePage extends AbstractKPIConfigurationPage {
 
+	/**
+	 * Name of the parameter where the title is stored as default value expression. The
+	 * parameter is searched in the main dataset
+	 */
 	public static final String TITLE_PARAMETER = "title"; //$NON-NLS-1$
-	
+
+	/**
+	 * Return the title stored into an expression or an empty string if the expression is not valid
+	 * 
+	 * @param exp an expression, can be null
+	 * @return a not null string representing the content of the expression 
+	 */
 	private String getTextFromExpression(JRExpression exp){
 		if (exp == null) return ""; //$NON-NLS-1$
 		String text = exp.getText();
+		if (text == null) return ""; //$NON-NLS-1$
 		if (text.startsWith("\"")) text = text.substring(1); //$NON-NLS-1$
 		if (text.endsWith("\"")) text= text.substring(0, text.length()-1); //$NON-NLS-1$
 		return text;
 	}
 	
+	/**
+	 * Store the title in the parameter. If the parameter is not found
+	 * then it is created.  The title is stored as default value expression
+	 * and so it is converted into a string expression
+	 * 
+	 * @param value the title
+	 */
 	private void setParameterExpression(String value){
 		String expressionText = "\"" + value + "\""; //$NON-NLS-1$ //$NON-NLS-2$
 		JRExpression newExpression = new JRDesignExpression(expressionText);
@@ -46,11 +82,6 @@ public class TitlePage extends AbstractKPIConfigurationPage {
 				e.printStackTrace();
 			}
 		}
-	}
-	
-	@Override
-	public String getName() {
-		return Messages.TitlePage_pageName;
 	}
 	
 	@Override
@@ -73,6 +104,11 @@ public class TitlePage extends AbstractKPIConfigurationPage {
 			}
 		});
 		return comp;
+	}
+	
+	@Override
+	public String getName() {
+		return Messages.TitlePage_pageName;
 	}
 	
 	@Override

@@ -7,9 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExpression;
-import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
 
@@ -28,6 +26,7 @@ import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -86,7 +85,7 @@ public class RangePage extends AbstractKPIConfigurationPage {
 		}
 
 		@Override
-		public org.eclipse.swt.graphics.Color getForeground(Object element,int columnIndex) {
+		public Color getForeground(Object element,int columnIndex) {
 			/*if (columnIndex == 2){
 				RangeDefinition dto = (RangeDefinition) element;
 				Color awtColor = Color.decode(dto.getColor());
@@ -96,9 +95,7 @@ public class RangePage extends AbstractKPIConfigurationPage {
 		}
 
 		@Override
-		public org.eclipse.swt.graphics.Color getBackground(Object element,
-				int columnIndex) {
-			// TODO Auto-generated method stub
+		public Color getBackground(Object element, int columnIndex) {
 			return null;
 		}
 	}
@@ -315,22 +312,7 @@ public class RangePage extends AbstractKPIConfigurationPage {
 		if (!ranges.isEmpty())
 			table.select(0);
 	}
-	
-	private JRDesignParameter getParameter(String parameterName){
-		JRParameter parameter = jd.getParametersMap().get(parameterName);
-		if (parameter == null){
-			JRDesignParameter newParameter = new JRDesignParameter();
-			newParameter.setName(parameterName);
-			try {
-				jd.addParameter(newParameter);
-			} catch (JRException e) {
-				e.printStackTrace();
-			} 
-			return newParameter;
-		}
-		return ((JRDesignParameter)parameter);
-	}
-	
+
 	@Override
 	public String getTitle() {
 		return Messages.RangePage_pageTitle;

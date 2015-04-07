@@ -12,9 +12,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.kpi.dialog.pages;
 
-import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExpression;
-import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
 
@@ -63,7 +61,7 @@ public class WidgetPage extends AbstractKPIConfigurationPage {
 	 * @param value the value to set as widget type
 	 */
 	private void writeValue(String value){
-		JRDesignParameter parameter = getParameter();
+		JRDesignParameter parameter = getParameter(WIDGET_PARAMETER);
 		String exp = "\"" + value + "\""; //$NON-NLS-1$ //$NON-NLS-2$
 		JRDesignExpression newExpression = new JRDesignExpression(exp);
 		parameter.setDefaultValueExpression(newExpression);
@@ -78,34 +76,13 @@ public class WidgetPage extends AbstractKPIConfigurationPage {
 	 * @return a not null widget type
 	 */
 	private String getSelectedWidget(){
-		JRDesignParameter parameter = getParameter();
+		JRDesignParameter parameter = getParameter(WIDGET_PARAMETER);
 		JRExpression exp = parameter.getDefaultValueExpression();
 		if (exp == null) return "default"; //$NON-NLS-1$
 		String exp_text = exp.getText();
 		if (exp_text.startsWith("\"")); exp_text = exp_text.substring(1); //$NON-NLS-1$
 		if (exp_text.endsWith("\"")); exp_text = exp_text.substring(0, exp_text.length()-1); //$NON-NLS-1$
 		return exp_text;
-	}
-
-	/**
-	 * Return the parameter where it is stored the widget type. If the
-	 * parameter is not found then it is created
-	 * 
-	 * @return a not null JRDesignParameter
-	 */
-	private JRDesignParameter getParameter(){
-		JRParameter parameter = jd.getParametersMap().get(WIDGET_PARAMETER);
-		if (parameter == null){
-			JRDesignParameter newParameter = new JRDesignParameter();
-			newParameter.setName(WIDGET_PARAMETER);
-			try {
-				jd.addParameter(newParameter);
-			} catch (JRException e) {
-				e.printStackTrace();
-			} 
-			return newParameter;
-		}
-		return ((JRDesignParameter)parameter);
 	}
 	
 	@Override

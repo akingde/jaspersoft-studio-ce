@@ -1,3 +1,15 @@
+/*******************************************************************************
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
+ * http://www.jaspersoft.com.
+ * 
+ * Unless you have purchased  a commercial license agreement from Jaspersoft,
+ * the following license terms  apply:
+ * 
+ * This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ ******************************************************************************/
 package com.jaspersoft.studio.kpi.dialog.pages;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
@@ -5,10 +17,8 @@ import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExpression;
-import net.sf.jasperreports.engine.JRVariable;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
-import net.sf.jasperreports.engine.design.JRDesignVariable;
 
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.swt.SWT;
@@ -33,79 +43,37 @@ import com.jaspersoft.studio.swt.events.ExpressionModifiedListener;
 import com.jaspersoft.studio.swt.widgets.WTextExpression;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
+/**
+ * Page where the series of a KPI can be configured
+ * 
+ * @author Orlandin Marco
+ *
+ */
 public class SeriesPage extends AbstractKPIConfigurationPage{
 	
+	/**
+	 * Dataset that will return the X and Y values of the series
+	 */
 	public static final String SERIES_DATASET_NAME = "ValueSeries"; //$NON-NLS-1$
 	
+	/**
+	 * Variable on the series dataset that store the X value
+	 */
 	public static final String SERIES_X_VARIABLE = "x_value"; //$NON-NLS-1$
 	
+	/**
+	 * Variable on the series dataset that store the Y value
+	 */
 	public static final String SERIES_Y_VARIABLE = "y_value"; //$NON-NLS-1$
 	
-	@Override
-	public String getName() {
-		return Messages.SeriesPage_pageName;
-	}
-
-	@Override
-	protected Composite createComposite(Composite parent) {
-		Composite c = new Composite(parent, SWT.NONE);
-		c.setLayout(new GridLayout(2, false));
-		
-		Button queryDialogButton = new Button(c, SWT.PUSH);
-		GridData gd = new GridData();
-		gd.horizontalAlignment = SWT.FILL;
-		gd.horizontalSpan = 2;
-		queryDialogButton.setLayoutData(gd);
-		queryDialogButton.setText(Messages.SeriesPage_editButton);
-		queryDialogButton.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				JasperReportsConfiguration jConfig = new JasperReportsConfiguration(DefaultJasperReportsContext.getInstance(), null);
-				jConfig.setJasperDesign(jd);
-				MDataset model = createDatasetModel(jConfig, getSeriesDataset());
-				new DatasetDialog(UIUtils.getShell(), model, jConfig, new CommandStack()).open();
-			}
-		});
-		
-		Label paddingLabel = new Label(c, SWT.NONE);
-		gd = new GridData();
-		gd.horizontalAlignment = SWT.FILL;
-		gd.horizontalSpan = 2;
-		gd.heightHint = 10;
-		paddingLabel.setLayoutData(gd);
-		
-		ExpressionContext context = getExpressionContext();
-		
-		new Label(c,SWT.NONE).setText(Messages.SeriesPage_xLabel);
-		final WTextExpression expr_x = new WTextExpression(c, SWT.NONE, 3);
-		expr_x.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		JRExpression exp = getVariable(SERIES_X_VARIABLE).getExpression();
-		expr_x.setExpression(exp != null ? (JRDesignExpression)exp : null);
-		expr_x.setExpressionContext(context);
-		expr_x.addModifyListener(new ExpressionModifiedListener() {
-			@Override
-			public void expressionModified(ExpressionModifiedEvent event) {
-				JRDesignExpression exp = expr_x.getExpression();
-				getVariable(SERIES_X_VARIABLE).setExpression(exp != null ? (JRExpression)exp.clone() : null);
-			}
-		});
-		
-		new Label(c,SWT.NONE).setText(Messages.SeriesPage_yLabel);
-		final WTextExpression expr_y = new WTextExpression(c, SWT.NONE, 3);
-		expr_y.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		exp = getVariable(SERIES_Y_VARIABLE).getExpression();
-		expr_y.setExpression(exp != null ? (JRDesignExpression)exp : null);
-		expr_y.setExpressionContext(context);
-		expr_y.addModifyListener(new ExpressionModifiedListener() {
-			@Override
-			public void expressionModified(ExpressionModifiedEvent event) {
-				JRDesignExpression exp = expr_y.getExpression();
-				getVariable(SERIES_Y_VARIABLE).setExpression(exp != null ? (JRExpression)exp.clone() : null);
-			}
-		});
-		return c;
-	}
-	
+	/**
+	 * Create a model node for a specific JRDesignDataset. It will have also a report and
+	 * root parents. Used to open the dataset and query dialog to edit the dataset
+	 * 
+	 * @param jConfig a JasperReportsConfiguration, must be not null
+	 * @param dataset a dataset, must be not null
+	 * @return a not null model containing the dataset
+	 */
 	private MDataset createDatasetModel(JasperReportsConfiguration jConfig, JRDesignDataset dataset){
 		MRoot root = new MRoot(null, jd);
 		MReport report = new MReport(root, jConfig);
@@ -117,6 +85,12 @@ public class SeriesPage extends AbstractKPIConfigurationPage{
 		return model;
 	}
 	
+	/**
+	 * Return the dataset used to store the series variables. If the dataset
+	 * is not found inside the report then it is created
+	 * 
+	 * @return a not null dataset
+	 */
 	private JRDesignDataset getSeriesDataset(){
 		JRDataset seriesDataset = jd.getDatasetMap().get(SERIES_DATASET_NAME);
 		if (seriesDataset == null){
@@ -131,31 +105,80 @@ public class SeriesPage extends AbstractKPIConfigurationPage{
 		}
 		return (JRDesignDataset)seriesDataset;	
 	}
-	
-	private ExpressionContext getExpressionContext() {
-		JasperReportsConfiguration jConfig = new JasperReportsConfiguration(DefaultJasperReportsContext.getInstance(), null);
-		jConfig.setJasperDesign(jd);
-		return new ExpressionContext(getSeriesDataset(), jConfig);
-	}
-	
-	private JRDesignVariable getVariable(String variableName){
-		JRVariable variable = jd.getVariablesMap().get(variableName);
-		if (variable == null){
-			JRDesignVariable newVariable = new JRDesignVariable();
-			newVariable.setName(variableName);
-			try {
-				jd.addVariable(newVariable);
-			} catch (JRException e) {
-				e.printStackTrace();
-			} 
-			return newVariable;
-		}
-		return ((JRDesignVariable)variable);
+
+	@Override
+	public String getName() {
+		return Messages.SeriesPage_pageName;
 	}
 	
 	@Override
 	public String getTitle() {
 		return Messages.SeriesPage_pageTitle;
 	}
-
+	
+	@Override
+	protected Composite createComposite(Composite parent) {
+		Composite c = new Composite(parent, SWT.NONE);
+		c.setLayout(new GridLayout(2, false));
+		
+		//Get the series dataset and its context
+		final JRDesignDataset seriesDataset = getSeriesDataset();
+		ExpressionContext context = getExpressionContext(seriesDataset);
+		
+		//Create the button to open the dataset and query dialog on the series dataset
+		Button queryDialogButton = new Button(c, SWT.PUSH);
+		GridData gd = new GridData();
+		gd.horizontalAlignment = SWT.FILL;
+		gd.horizontalSpan = 2;
+		queryDialogButton.setLayoutData(gd);
+		queryDialogButton.setText(Messages.SeriesPage_editButton);
+		queryDialogButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				JasperReportsConfiguration jConfig = new JasperReportsConfiguration(DefaultJasperReportsContext.getInstance(), null);
+				jConfig.setJasperDesign(jd);
+				MDataset model = createDatasetModel(jConfig, seriesDataset);
+				new DatasetDialog(UIUtils.getShell(), model, jConfig, new CommandStack()).open();
+			}
+		});
+		
+		//Label used to have some space between the button and the following expression widgets
+		Label paddingLabel = new Label(c, SWT.NONE);
+		gd = new GridData();
+		gd.horizontalAlignment = SWT.FILL;
+		gd.horizontalSpan = 2;
+		gd.heightHint = 10;
+		paddingLabel.setLayoutData(gd);
+		
+		//Widget to define the x expression
+		new Label(c,SWT.NONE).setText(Messages.SeriesPage_xLabel);
+		final WTextExpression expr_x = new WTextExpression(c, SWT.NONE, 3);
+		expr_x.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		JRExpression exp = getVariable(SERIES_X_VARIABLE, seriesDataset).getExpression();
+		expr_x.setExpression(exp != null ? (JRDesignExpression)exp : null);
+		expr_x.setExpressionContext(context);
+		expr_x.addModifyListener(new ExpressionModifiedListener() {
+			@Override
+			public void expressionModified(ExpressionModifiedEvent event) {
+				JRDesignExpression exp = expr_x.getExpression();
+				getVariable(SERIES_X_VARIABLE, seriesDataset).setExpression(exp != null ? (JRExpression)exp.clone() : null);
+			}
+		});
+		
+		//Widget to define the Y expression
+		new Label(c,SWT.NONE).setText(Messages.SeriesPage_yLabel);
+		final WTextExpression expr_y = new WTextExpression(c, SWT.NONE, 3);
+		expr_y.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		exp = getVariable(SERIES_Y_VARIABLE, seriesDataset).getExpression();
+		expr_y.setExpression(exp != null ? (JRDesignExpression)exp : null);
+		expr_y.setExpressionContext(context);
+		expr_y.addModifyListener(new ExpressionModifiedListener() {
+			@Override
+			public void expressionModified(ExpressionModifiedEvent event) {
+				JRDesignExpression exp = expr_y.getExpression();
+				getVariable(SERIES_Y_VARIABLE, seriesDataset).setExpression(exp != null ? (JRExpression)exp.clone() : null);
+			}
+		});
+		return c;
+	}
 }

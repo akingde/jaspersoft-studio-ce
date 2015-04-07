@@ -73,7 +73,6 @@ public class DatasetPage extends AbstractKPIConfigurationPage{
 				super.widgetSelected(e);
 				
 				FindResourceWizard frw = new FindResourceWizard(parentPage.getMServerProfile());
-				//Set<String> types  = DatasourcesAllFilter.getTypes();
 				frw.setFilterTypes(WsTypes.INST().getDatasourcesArray() , null);
 				
 				FindWizardDialog dialog = new FindWizardDialog(UIUtils.getShell(), frw);
