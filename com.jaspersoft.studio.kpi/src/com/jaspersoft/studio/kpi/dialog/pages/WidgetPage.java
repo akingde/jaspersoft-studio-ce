@@ -15,7 +15,9 @@ package com.jaspersoft.studio.kpi.dialog.pages;
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
+import org.eclipse.core.runtime.Assert;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -83,6 +85,16 @@ public class WidgetPage extends AbstractKPIConfigurationPage {
 		if (exp_text.startsWith("\"")); exp_text = exp_text.substring(1); //$NON-NLS-1$
 		if (exp_text.endsWith("\"")); exp_text = exp_text.substring(0, exp_text.length()-1); //$NON-NLS-1$
 		return exp_text;
+	}
+	
+	/**
+	 * Create the page calling the super constructor
+	 * 
+	 * @param jd a not null JasperDesign
+	 */
+	public WidgetPage(JasperDesign jd) {
+		super(jd);
+		Assert.isNotNull(jd);
 	}
 	
 	@Override

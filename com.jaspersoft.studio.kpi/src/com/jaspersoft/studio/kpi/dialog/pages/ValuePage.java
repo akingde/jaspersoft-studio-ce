@@ -20,8 +20,10 @@ import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
 import net.sf.jasperreports.engine.design.JRDesignVariable;
+import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.CalculationEnum;
 
+import org.eclipse.core.runtime.Assert;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
@@ -75,8 +77,6 @@ public class ValuePage extends AbstractKPIConfigurationPage {
 	 */
 	public static final String TARGET_FORMATTED_PARAMETER = "targetPattern"; //$NON-NLS-1$
 	
-	
-
 	/**
 	 * Update the value of both the expression and initial value expression
 	 * of a variable with a specific name. If the variable is not found it is 
@@ -222,6 +222,16 @@ public class ValuePage extends AbstractKPIConfigurationPage {
 				}
 			}
 		});
+	}
+	
+	/**
+	 * Create the page calling the super constructor
+	 * 
+	 * @param jd a not null JasperDesign
+	 */
+	public ValuePage(JasperDesign jd) {
+		super(jd);
+		Assert.isNotNull(jd);
 	}
 	
 	@Override

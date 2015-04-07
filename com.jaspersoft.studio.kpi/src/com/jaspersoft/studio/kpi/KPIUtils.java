@@ -1,3 +1,15 @@
+/*******************************************************************************
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
+ * http://www.jaspersoft.com.
+ * 
+ * Unless you have purchased  a commercial license agreement from Jaspersoft,
+ * the following license terms  apply:
+ * 
+ * This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ ******************************************************************************/
 package com.jaspersoft.studio.kpi;
 
 import java.io.File;
@@ -16,8 +28,6 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescript
 import com.jaspersoft.studio.server.protocol.IConnection;
 
 public class KPIUtils {
-
-	
 
 	/**
 	 * Convenient method to get the KPI ResourceDescriptor (if exists)
@@ -42,7 +52,6 @@ public class KPIUtils {
 		
 		return null;
 	}
-	
 	
 	/**
 	 * Convenient method to delete a KPI inside a report unit
@@ -75,8 +84,6 @@ public class KPIUtils {
 		
 		return true;
 	}
-	
-	
 	
 	/**
 	 * Convenient method to delete a KPI inside a report unit
@@ -171,7 +178,6 @@ public class KPIUtils {
 		return true;
 	}
 	
-	
 	/**
 	 * Remove a single cache entry
 	 *
@@ -186,7 +192,6 @@ public class KPIUtils {
 		map.put(kpiUriToRemove, "");
 		updateKPICache(client, map, false, true);
 	}
-	
 	
 	/**
 	 * Add to the KPI cache a list of report units

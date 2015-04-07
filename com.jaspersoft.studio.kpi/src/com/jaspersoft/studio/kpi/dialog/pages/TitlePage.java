@@ -17,7 +17,9 @@ import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
+import org.eclipse.core.runtime.Assert;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -82,6 +84,16 @@ public class TitlePage extends AbstractKPIConfigurationPage {
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	/**
+	 * Create the page calling the super constructor
+	 * 
+	 * @param jd a not null JasperDesign
+	 */
+	public TitlePage(JasperDesign jd) {
+		super(jd);
+		Assert.isNotNull(jd);
 	}
 	
 	@Override

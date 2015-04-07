@@ -1,7 +1,20 @@
+/*******************************************************************************
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
+ * http://www.jaspersoft.com.
+ * 
+ * Unless you have purchased  a commercial license agreement from Jaspersoft,
+ * the following license terms  apply:
+ * 
+ * This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ ******************************************************************************/
 package com.jaspersoft.studio.kpi.dialog.pages;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.dialogs.Dialog;
@@ -31,17 +44,58 @@ import com.jaspersoft.studio.server.wizard.find.FindResourceWizard;
 import com.jaspersoft.studio.server.wizard.find.FindWizardDialog;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
+/**
+ * Page where can be configured the KPI datasource and main dataset informations
+ * (query, fields....)
+ * 
+ * @author Orlandin Marco
+ *
+ */
 public class DatasetPage extends AbstractKPIConfigurationPage{
 	
+	/**
+	 * the wizard page where this configurator page is contained
+	 */
 	private KPIConfiguratorPage parentPage;
 	
-	public DatasetPage(KPIConfiguratorPage parentPage){
+	/**
+	 * Create the page calling the super constructor and initializing 
+	 * the parent page
+	 * 
+	 * @param jd a not null JasperDesign
+	 * @param parentPage the wizard page where this configurator page is contained
+	 */
+	public DatasetPage(KPIConfiguratorPage parentPage, JasperDesign jd){
+		super(jd);
 		this.parentPage = parentPage;
+	}
+	
+	/**
+	 * Create a model node for the main dataset. It will have also a report and
+	 * root parents. Used to open the dataset and query dialog to edit the dataset
+	 * 
+	 * @param jConfig a JasperReportsConfiguration, must be not null
+	 * @return a not null model containing the main dataset
+	 */
+	private MDataset createDatasetModel(JasperReportsConfiguration jConfig){
+		MRoot root = new MRoot(null, jd);
+		MReport report = new MReport(root, jConfig);
+		report.setValue(jd);
+		MDataset model = new MDataset(report, jd.getMainDesignDataset());
+		model.setJasperConfiguration(jConfig);
+		ReportFactory.createDataset(model, jd.getMainDesignDataset(), false);
+		report.addChild(model);
+		return model;
 	}
 	
 	@Override
 	public String getName() {
 		return Messages.DatasetPage_pageName;
+	}
+	
+	@Override
+	public String getTitle() {
+		return Messages.DatasetPage_pageTitle;
 	}
 
 	@Override
@@ -85,7 +139,7 @@ public class DatasetPage extends AbstractKPIConfigurationPage{
 			}
 		});
 		
-		
+		//Create the button to open the dataset and query dialog
 		Button queryDialogButton = new Button(c, SWT.PUSH);
 		gd = new GridData();
 		gd.horizontalAlignment = SWT.FILL;
@@ -103,21 +157,5 @@ public class DatasetPage extends AbstractKPIConfigurationPage{
 		});
 		
 		return c;
-	}
-	
-	private MDataset createDatasetModel(JasperReportsConfiguration jConfig){
-		MRoot root = new MRoot(null, jd);
-		MReport report = new MReport(root, jConfig);
-		report.setValue(jd);
-		MDataset model = new MDataset(report, jd.getMainDesignDataset());
-		model.setJasperConfiguration(jConfig);
-		ReportFactory.createDataset(model, jd.getMainDesignDataset(), false);
-		report.addChild(model);
-		return model;
-	}
-	
-	@Override
-	public String getTitle() {
-		return Messages.DatasetPage_pageTitle;
 	}
 }

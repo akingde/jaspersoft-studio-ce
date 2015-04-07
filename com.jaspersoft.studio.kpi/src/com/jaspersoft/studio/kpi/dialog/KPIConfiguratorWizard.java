@@ -1,3 +1,15 @@
+/*******************************************************************************
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
+ * http://www.jaspersoft.com.
+ * 
+ * Unless you have purchased  a commercial license agreement from Jaspersoft,
+ * the following license terms  apply:
+ * 
+ * This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ ******************************************************************************/
 package com.jaspersoft.studio.kpi.dialog;
 
 import java.io.File;
@@ -14,9 +26,20 @@ import com.jaspersoft.studio.kpi.KPIUtils;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.protocol.IConnection;
 
+/**
+ * Wizard used to configure the KPI JasperDesign. It consists of a single
+ * page that show inside all the configurator pages to access various sections of the
+ * KPI
+ * 
+ * @author Orlandin Marco
+ *
+ */
 public class KPIConfiguratorWizard extends Wizard {
 
-	KPIConfiguratorPage kpiDefinitionPanel = null;
+	/**
+	 * Page where the KPI is configured
+	 */
+	private KPIConfiguratorPage kpiDefinitionPanel = null;
 	
 	public KPIConfiguratorWizard(IConnection client, ResourceDescriptor parentReportUnit, ResourceDescriptor kpiReportUnit, MServerProfile serverProfile)
 	{
@@ -28,16 +51,16 @@ public class KPIConfiguratorWizard extends Wizard {
 		kpiDefinitionPanel.loadJasperDesign();
 	}
 	
+	/**
+	 * When finish is click it upload the KPI on the server
+	 */
 	@Override
 	public boolean performFinish() {
 		try {
-			
 			final String jrxmlFile = kpiDefinitionPanel.getJrxmlFile();
 			final String datasetUri = kpiDefinitionPanel.getDatasourceUri();
 			final ResourceDescriptor parentReportUnit = kpiDefinitionPanel.getParentReportUnit();
-			final IConnection client = kpiDefinitionPanel.getWSClient();
-			final ResourceDescriptor kpiReportUnit = kpiDefinitionPanel.getKpiReportUnit();
-			
+			final IConnection client = kpiDefinitionPanel.getWSClient();	
 			
 			getContainer().run(true, true, new IRunnableWithProgress() {
 
@@ -80,9 +103,6 @@ public class KPIConfiguratorWizard extends Wizard {
 				
 			});
 		} catch (InvocationTargetException e) {
-			// Default exception... we will show an appropriate message in this case
-			// directly from the job...
-			//UIUtils.showError(e.getCause());
 			return false;
 		} catch (InterruptedException e) {
 			UIUtils.showError(e);

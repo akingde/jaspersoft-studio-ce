@@ -19,7 +19,9 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
+import org.eclipse.core.runtime.Assert;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -104,6 +106,16 @@ public class SeriesPage extends AbstractKPIConfigurationPage{
 			return newDataset;
 		}
 		return (JRDesignDataset)seriesDataset;	
+	}
+	
+	/**
+	 * Create the page calling the super constructor
+	 * 
+	 * @param jd a not null JasperDesign
+	 */
+	public SeriesPage(JasperDesign jd) {
+		super(jd);
+		Assert.isNotNull(jd);
 	}
 
 	@Override

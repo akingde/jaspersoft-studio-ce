@@ -1,3 +1,15 @@
+/*******************************************************************************
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
+ * http://www.jaspersoft.com.
+ * 
+ * Unless you have purchased  a commercial license agreement from Jaspersoft,
+ * the following license terms  apply:
+ * 
+ * This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ ******************************************************************************/
 package com.jaspersoft.studio.kpi.dialog.pages;
 
 import java.util.ArrayList;
@@ -11,13 +23,14 @@ import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
+import org.eclipse.core.runtime.Assert;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.ITableColorProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -42,8 +55,19 @@ import com.jaspersoft.studio.kpi.messages.Messages;
 import com.jaspersoft.studio.kpi.messages.MessagesByKeys;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 
+/**
+ * Configuration page to define the parameters of a KPI. The parameters
+ * are keep in sync between the main dataset and the series dataset. Predefined
+ * and system parameters can not be edited or accessed trough this page
+ * 
+ * @author Orlandin Marco
+ *
+ */
 public class ParametersPage extends AbstractKPIConfigurationPage {
 	
+	/**
+	 * List of the reserved parameters name
+	 */
 	private final static HashSet<String> defaultParameters = new HashSet<String>();
 	
 	static{
@@ -55,139 +79,75 @@ public class ParametersPage extends AbstractKPIConfigurationPage {
 		defaultParameters.add(ValuePage.VALUE_FORMATTED_PARAMETER);
 	}
 	
+	/**
+	 * Table where the defined parameters are shown
+	 */
 	private Table table;
 	
+	/**
+	 * Viewer of the table
+	 */
 	private TableViewer tableViewer;
 	
+	/**
+	 * List of the parameters currently managed
+	 */
 	private List<ParameterDefinition> parameters = new ArrayList<ParameterDefinition>();
 	
+	/**
+	 * Button to delete the selected parameter on the table
+	 */
 	private Button deleteButton;
 	
+	/**
+	 * Button to edit the selected parameter on the table
+	 */
 	private Button editButton;
 	
-	private class TLabelProvider extends LabelProvider implements ITableLabelProvider, ITableColorProvider {
-		
+	/**
+	 * Label provider for the parameters, convert a parameter definition into some
+	 * strings
+	 * 
+	 * @author Orlandin Marco
+	 *
+	 */
+	private class TLabelProvider extends LabelProvider implements ITableLabelProvider {	
 
 		public Image getColumnImage(Object element, int columnIndex) {
 			return null;
 		}
 
 		public String getColumnText(Object element, int columnIndex) {
-			ParameterDefinition dto = (ParameterDefinition) element;
+			ParameterDefinition parameter = (ParameterDefinition) element;
 			switch (columnIndex) {
-				case 0: return String.valueOf(dto.getName()); 
-				case 1: return String.valueOf(MessagesByKeys.getString(dto.getType())); 
-				case 2: return String.valueOf(dto.isForPrompt());
-				case 3: return MessagesByKeys.getString(dto.getExpression());
+				case 0: return String.valueOf(parameter.getName()); 
+				case 1: return String.valueOf(MessagesByKeys.getString(parameter.getType())); 
+				case 2: return String.valueOf(parameter.isForPrompt());
+				case 3: return MessagesByKeys.getString(parameter.getExpression());
 			}
 			return ""; //$NON-NLS-1$
 		}
-
-		@Override
-		public org.eclipse.swt.graphics.Color getForeground(Object element,int columnIndex) {
-			return null;
-		}
-
-		@Override
-		public org.eclipse.swt.graphics.Color getBackground(Object element,int columnIndex) {
-			return null;
-		}
 	}
 	
-	@Override
-	public String getName() {
-		return Messages.ParametersPage_pageName;
-	}
-
-	@Override
-	protected Composite createComposite(Composite parent) {
-		Composite composite = new Composite(parent, SWT.NONE);
-		composite.setBackground(parent.getBackground());
-		GridLayout mainLayout  = new GridLayout(2, false);
-		mainLayout.marginHeight = 0;
-		composite.setLayout(mainLayout);
-
-		//Container for the table and checkbox
-		
-		Composite tGroup = new Composite(composite, SWT.NONE);
-		GridLayout tGroupLayout = new GridLayout(1,false);
-		tGroupLayout.marginWidth = 0;
-		tGroupLayout.marginHeight = 0;
-		tGroupLayout.verticalSpacing = 10;
-		tGroup.setLayout(tGroupLayout);
-		tGroup.setLayoutData(new GridData(GridData.FILL_BOTH));
-		
-		//Build the table
-		
-		buildTable(tGroup);
-		
-		//Build the buttons
-		
-		Composite bGroup = new Composite(composite, SWT.NONE);
-		bGroup.setLayout(new GridLayout(1, false));
-		bGroup.setLayoutData(new GridData(GridData.FILL_VERTICAL));
-		bGroup.setBackground(composite.getBackground());
-		
-		Button addButton = new Button(bGroup, SWT.PUSH);
-		addButton.setText(Messages.common_add);
-		addButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		addButton.addSelectionListener(new SelectionAdapter(){
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				ParameterWizard wizard = new ParameterWizard(jd);
-				WizardDialog dialog = new WizardDialog(UIUtils.getShell(), wizard);
-				if (dialog.open() == Dialog.OK){
-					parameters.add(wizard.getParameter());
-					tableViewer.refresh();
-					updateVariable();
-				}
-			}
-		});
-		
-		editButton = new Button(bGroup, SWT.PUSH);
-		editButton.setText(Messages.common_edit);
-		editButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		editButton.addSelectionListener(new SelectionAdapter(){
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				editAction();
-			}
-		});
-		editButton.setEnabled(false);
-		
-		deleteButton = new Button(bGroup, SWT.PUSH);
-		deleteButton.setText(Messages.common_delete);
-		deleteButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		deleteButton.addSelectionListener(new SelectionAdapter(){
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				int index = table.getSelectionIndex();
-				parameters.remove(index);
-				tableViewer.refresh();
-				updateVariable();
-			}
-		});
-		deleteButton.setEnabled(false);
-		
-		fillTable();
-		return composite;
+	/**
+	 * Create the page calling the super constructor
+	 * 
+	 * @param jd a not null JasperDesign
+	 */
+	public ParametersPage(JasperDesign jd) {
+		super(jd);
+		Assert.isNotNull(jd);
 	}
 	
-	private void editAction(){
-		int index = table.getSelectionIndex();
-		ParameterWizard wizard = new ParameterWizard(parameters.get(index), jd);
-		WizardDialog dialog = new WizardDialog(UIUtils.getShell(), wizard);
-		if (dialog.open() == Dialog.OK){
-			parameters.set(index, wizard.getParameter());
-			tableViewer.refresh();
-			updateVariable();
-		}
-	}
-	
-	private void updateVariable(){
+	/**
+	 * Update the parameters on the main dataset and on the series dataset to synch them
+	 * with the ones stored in the table
+	 */
+	private void updateParameters(){
 		JRDesignDataset seriesDataset = getSeriesDataset();
 		JRDesignDataset mainDataset = (JRDesignDataset)jd.getMainDataset();
 		JRParameter[] jrParameters = mainDataset.getParameters();
+		//Delete the all old parameters, except system and default
 		for(JRParameter jrParameter : jrParameters){
 			String name = jrParameter.getName();
 			if (!jrParameter.isSystemDefined() && !defaultParameters.contains(name)){
@@ -195,6 +155,7 @@ public class ParametersPage extends AbstractKPIConfigurationPage {
 				seriesDataset.removeParameter(jrParameter.getName());
 			}
 		}
+		//Add the new ones
 		for(ParameterDefinition def : parameters){
 			JRDesignParameter mainParameter = new JRDesignParameter();
 			mainParameter.setName(def.getName());
@@ -216,6 +177,11 @@ public class ParametersPage extends AbstractKPIConfigurationPage {
 		}
 	}
 	
+	/**
+	 * Create the table control and its viewer
+	 * 
+	 * @param composite parent of the table
+	 */
 	private void buildTable(Composite composite) {
 		table = new Table(composite, SWT.BORDER | SWT.SINGLE | SWT.FULL_SELECTION);
 		GridData gd = new GridData(GridData.FILL_BOTH);
@@ -270,6 +236,10 @@ public class ParametersPage extends AbstractKPIConfigurationPage {
 			column[i].pack();
 	}
 	
+	/**
+	 * Set the content of the table by reading all the non-default non-system parameters
+	 * inside the main dataset
+	 */
 	private void fillTable() {
 		JRParameter[] jrParameters = jd.getMainDataset().getParameters();
 		parameters.clear();
@@ -292,6 +262,26 @@ public class ParametersPage extends AbstractKPIConfigurationPage {
 			table.select(0);
 	}
 	
+	/**
+	 * Action called to edit a parameter, open the dialog to edit the parameter
+	 * selected in the table
+	 */
+	private void editAction(){
+		int index = table.getSelectionIndex();
+		ParameterWizard wizard = new ParameterWizard(parameters.get(index), jd);
+		WizardDialog dialog = new WizardDialog(UIUtils.getShell(), wizard);
+		if (dialog.open() == Dialog.OK){
+			parameters.set(index, wizard.getParameter());
+			tableViewer.refresh();
+			updateParameters();
+		}
+	}
+	
+	/**
+	 * Return the series dataset. If not available it is created and returned
+	 * 
+	 * @return a not null JRDesignDataset
+	 */
 	private JRDesignDataset getSeriesDataset(){
 		JRDataset seriesDataset = jd.getDatasetMap().get(SeriesPage.SERIES_DATASET_NAME);
 		if (seriesDataset == null){
@@ -310,5 +300,84 @@ public class ParametersPage extends AbstractKPIConfigurationPage {
 	@Override
 	public String getTitle() {
 		return Messages.ParametersPage_pageTitle;
+	}
+	
+	@Override
+	public String getName() {
+		return Messages.ParametersPage_pageName;
+	}
+
+	@Override
+	protected Composite createComposite(Composite parent) {
+		Composite composite = new Composite(parent, SWT.NONE);
+		composite.setBackground(parent.getBackground());
+		GridLayout mainLayout  = new GridLayout(2, false);
+		mainLayout.marginHeight = 0;
+		composite.setLayout(mainLayout);
+
+		//Container for the table
+		
+		Composite tGroup = new Composite(composite, SWT.NONE);
+		GridLayout tGroupLayout = new GridLayout(1,false);
+		tGroupLayout.marginWidth = 0;
+		tGroupLayout.marginHeight = 0;
+		tGroupLayout.verticalSpacing = 10;
+		tGroup.setLayout(tGroupLayout);
+		tGroup.setLayoutData(new GridData(GridData.FILL_BOTH));
+		
+		//Build the table
+		
+		buildTable(tGroup);
+		
+		//Build the buttons
+		
+		Composite bGroup = new Composite(composite, SWT.NONE);
+		bGroup.setLayout(new GridLayout(1, false));
+		bGroup.setLayoutData(new GridData(GridData.FILL_VERTICAL));
+		bGroup.setBackground(composite.getBackground());
+		
+		Button addButton = new Button(bGroup, SWT.PUSH);
+		addButton.setText(Messages.common_add);
+		addButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		addButton.addSelectionListener(new SelectionAdapter(){
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				ParameterWizard wizard = new ParameterWizard(jd);
+				WizardDialog dialog = new WizardDialog(UIUtils.getShell(), wizard);
+				if (dialog.open() == Dialog.OK){
+					parameters.add(wizard.getParameter());
+					tableViewer.refresh();
+					updateParameters();
+				}
+			}
+		});
+		
+		editButton = new Button(bGroup, SWT.PUSH);
+		editButton.setText(Messages.common_edit);
+		editButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		editButton.addSelectionListener(new SelectionAdapter(){
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				editAction();
+			}
+		});
+		editButton.setEnabled(false);
+		
+		deleteButton = new Button(bGroup, SWT.PUSH);
+		deleteButton.setText(Messages.common_delete);
+		deleteButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		deleteButton.addSelectionListener(new SelectionAdapter(){
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				int index = table.getSelectionIndex();
+				parameters.remove(index);
+				tableViewer.refresh();
+				updateParameters();
+			}
+		});
+		deleteButton.setEnabled(false);
+		
+		fillTable();
+		return composite;
 	}
 }

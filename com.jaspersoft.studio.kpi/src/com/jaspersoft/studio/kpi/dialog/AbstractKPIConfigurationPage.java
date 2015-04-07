@@ -1,3 +1,15 @@
+/*******************************************************************************
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
+ * http://www.jaspersoft.com.
+ * 
+ * Unless you have purchased  a commercial license agreement from Jaspersoft,
+ * the following license terms  apply:
+ * 
+ * This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ ******************************************************************************/
 package com.jaspersoft.studio.kpi.dialog;
 
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
@@ -14,26 +26,72 @@ import org.eclipse.swt.widgets.Composite;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
+/**
+ * Abstract configuration page of a KPI
+ * 
+ * @author Orlandin Marco
+ *
+ */
 public abstract class AbstractKPIConfigurationPage {
 
+	/**
+	 * Composite where all the controls of the page are placed
+	 */
 	protected Composite mainComposite;
 	
+	/**
+	 * The JasperDesign of the handled KPI
+	 */
 	protected JasperDesign jd;
 	
-	public Composite getComposite(Composite container, JasperDesign jd){
-		if (mainComposite == null){
-			this.jd = jd;
+	/**
+	 * Create the page
+	 * 
+	 * @param jd The JasperDesign of the handled KPI
+	 */
+	public AbstractKPIConfigurationPage(JasperDesign jd){
+		this.jd = jd;
+	}
+	
+	/**
+	 * Create the content of the current page, only if it wasn't created
+	 * before. Otherwise it return the container of the content
+	 * 
+	 * @param container container where to place the main composite of the page
+	 * if it must be created
+	 * @return a not null composite where all the content of this page is placed
+	 */
+	public Composite getComposite(Composite container){
+		if (mainComposite == null){	
 			mainComposite = createComposite(container);
 		}
 		return mainComposite;
 	}
 	
+	/**
+	 * Return the name of the page shown in the configuration step on the left
+	 * 
+	 * @return a not null string
+	 */
 	public abstract String getName();
 	
+	/**
+	 * Return a visual title of the page
+	 * 
+	 * @return by default it is the same of the name, but it is suggested to override
+	 */
 	public String getTitle(){
 		return getName();
 	}
 	
+	/**
+	 * Create the content controls of the page to edit the KPI JasperDesign.
+	 * On the parent parameter should be created a single composite and it 
+	 * should be used to create inside all the other controls, and then returned
+	 * 
+	 * @param parent the parent where the main composite, and only it, must be created
+	 * @return a not null composite, contaienr of all the other controls of the page
+	 */
 	protected abstract Composite createComposite(Composite parent);
 
 	// UTILITY METHODS

@@ -26,6 +26,8 @@ public class Messages extends NLS {
 	public static String KPIDeployAction_exportMessageTitle;
 	public static String KPIDeployAction_exportSuccessMessage;
 	public static String KPIDeployAction_readJobName;
+	public static String KPIUpdateCacheAction_updateCacheTitle;
+	public static String KPIUpdateCacheAction_updateCacheTooltip;
 	public static String KPIWizardDialog_removeErrorMessage;
 	public static String KPIWizardDialog_removeErrorTitle;
 	public static String KPIWizardDialog_removeMessage;
