@@ -53,14 +53,14 @@ public class ElementResizableEditPolicy extends ResizableEditPolicy {
 	 * uniformed
 	 */
 	@Override
-	protected List createSelectionHandles() {
+	protected List<?> createSelectionHandles() {
 		if (getResizeDirections() == PositionConstants.NONE) {
 			// non resizable, so delegate to super implementation
 			return super.createSelectionHandles();
 		}
 
 		// resizable in at least one direction
-		List list = new ArrayList();
+		List<?> list = new ArrayList<Object>();
 		createMoveHandle(list);
 		createResizeHandle(list, PositionConstants.NORTH);
 		createResizeHandle(list, PositionConstants.EAST);
@@ -119,7 +119,8 @@ public class ElementResizableEditPolicy extends ResizableEditPolicy {
 		feedback.setBounds(rect.resize(-scaleW, -scaleH));
 	}
 
-	protected void createMoveHandle(List handles) {
+	@Override
+	protected void createMoveHandle(@SuppressWarnings("rawtypes") List handles) {
 		if (isDragAllowed()) {
 			// display 'move' handle to allow dragging
 			ResizableHandleKit.addMoveHandle((GraphicalEditPart) getHost(), handles, getDragTracker(), Cursors.SIZEALL);
@@ -129,7 +130,8 @@ public class ElementResizableEditPolicy extends ResizableEditPolicy {
 		}
 	}
 
-	protected void createDragHandle(List handles, int direction) {
+	@Override
+	protected void createDragHandle(@SuppressWarnings("rawtypes") List handles, int direction) {
 		if (isDragAllowed()) {
 			// display 'resize' handles to allow dragging (drag tracker)
 			NonResizableHandleKit.addHandle((GraphicalEditPart) getHost(), handles, direction, getDragTracker(),
@@ -142,7 +144,9 @@ public class ElementResizableEditPolicy extends ResizableEditPolicy {
 		}
 	}
 
-	protected void createResizeHandle(List handles, int direction) {
+	@SuppressWarnings("unchecked")
+	@Override
+	protected void createResizeHandle(@SuppressWarnings("rawtypes") List handles, int direction) {
 		if ((getResizeDirections() & direction) == direction) {
 			ColoredSquareHandles handle = new ColoredSquareHandles((GraphicalEditPart) getHost(), direction);
 			handle.setDragTracker(getResizeTracker(direction));
@@ -209,7 +213,7 @@ public class ElementResizableEditPolicy extends ResizableEditPolicy {
 
 	// =================================== //
 
-	public List getHandles() {
+	public List<?> getHandles() {
 		return handles;
 	}
 }
