@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.qualifier using JasperReports Library version 6.0.4  -->
-<!-- 2015-04-03T10:04:56 -->
+<!-- 2015-04-07T12:27:56 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="kpi" language="groovy" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="519e026f-22f5-434b-a062-9b9dcba72392">
 	<property name="net.sf.jasperreports.export.json.schema33" value="kpi.schema.json"/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Sample DB"/>
@@ -11,10 +11,10 @@
 		<queryString language="SQL">
 			<![CDATA[]]>
 		</queryString>
-		<variable name="x" class="java.lang.String">
+		<variable name="x_value" class="java.lang.String">
 			<variableExpression><![CDATA["0"]]></variableExpression>
 		</variable>
-		<variable name="y" class="java.lang.String">
+		<variable name="y_value" class="java.lang.String">
 			<variableExpression><![CDATA["0"]]></variableExpression>
 		</variable>
 	</subDataset>
@@ -28,7 +28,7 @@
 		<field name="color" class="java.lang.String"/>
 	</subDataset>
 	<parameter name="title" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["All accounts KPI"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA["My KPI"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="tresholds" class="java.util.Collection" isForPrompting="false">
 		<parameterDescription><![CDATA[]]></parameterDescription>
@@ -114,13 +114,13 @@
 							<reportElement x="0" y="0" width="260" height="30" uuid="c934e75b-59c0-4d2b-8104-933efec6c62b">
 								<property name="net.sf.jasperreports.export.json.path" value="valueSeries.y"/>
 							</reportElement>
-							<textFieldExpression><![CDATA[$V{x}]]></textFieldExpression>
+							<textFieldExpression><![CDATA[$V{x_value}]]></textFieldExpression>
 						</textField>
 						<textField>
 							<reportElement x="260" y="0" width="290" height="30" uuid="1a525428-f53c-4e21-a7ce-e1f67faadb2d">
 								<property name="net.sf.jasperreports.export.json.path" value="valueSeries.x"/>
 							</reportElement>
-							<textFieldExpression><![CDATA[$V{y}]]></textFieldExpression>
+							<textFieldExpression><![CDATA[$V{y_value}]]></textFieldExpression>
 						</textField>
 					</jr:listContents>
 				</jr:list>
