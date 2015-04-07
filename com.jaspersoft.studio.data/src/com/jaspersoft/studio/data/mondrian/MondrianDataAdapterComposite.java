@@ -14,6 +14,7 @@ package com.jaspersoft.studio.data.mondrian;
 
 import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.mondrian.MondrianDataAdapter;
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.JasperReportsContext;
 
 import org.eclipse.core.databinding.beans.PojoObservables;
@@ -27,7 +28,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
@@ -62,7 +62,7 @@ public class MondrianDataAdapterComposite extends JDBCDataAdapterComposite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-				FileDialog fd = new FileDialog(Display.getDefault().getActiveShell());
+				FileDialog fd = new FileDialog(UIUtils.getShell());
 				fd.setFilterPath(root.getLocation().toOSString());
 				fd.setFileName(textCatalogURI.getText());
 				fd.setFilterExtensions(new String[] { "*.xml", "*.*" }); //$NON-NLS-1$ //$NON-NLS-2$
