@@ -32,6 +32,8 @@ import java.util.Properties;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
+import net.sf.jasperreports.eclipse.util.FileUtils;
+
 import org.apache.commons.net.ntp.NTPUDPClient;
 import org.apache.commons.net.ntp.TimeInfo;
 import org.eclipse.core.runtime.Assert;
@@ -207,16 +209,18 @@ public class UsageManager {
 	 * Write the statistics properties file on the disk
 	 */
 	private void writeUsageStatisticsOnDisk(){
+		FileOutputStream out = null;
 		synchronized (UsageManager.this) {
 			try{
 				File appDataFolder = getAppDataFolder();
 				File propertiesFile = new File(appDataFolder, PROPERTIES_FILE_NAME);
-				FileOutputStream out = new FileOutputStream(propertiesFile.getAbsolutePath());
+				out = new FileOutputStream(propertiesFile.getAbsolutePath());
 				getStatisticsContainer().store(out, "Usage informations"); //$NON-NLS-1$
-				out.close();
 			} catch(Exception ex){
 				ex.printStackTrace();
 				JaspersoftStudioPlugin.getInstance().logError(Messages.UsageManager_errorWriteStatProperties, ex);
+			} finally {
+				FileUtils.closeStream(out);
 			}
 		}
 	}
@@ -271,14 +275,16 @@ public class UsageManager {
 	private String getAppId(File appDataFolder){
 		File textFile = new File(appDataFolder, PATH_FILE);
 		if (textFile.exists()){
+			BufferedReader reader = null;
 			try {
-				BufferedReader br = new BufferedReader(new FileReader(textFile.getAbsolutePath()));
-				String sCurrentLine = br.readLine();
-				br.close();
+				reader = new BufferedReader(new FileReader(textFile.getAbsolutePath()));
+				String sCurrentLine = reader.readLine();
 				return sCurrentLine;
 			} catch (Exception e) {
 				e.printStackTrace();
 				JaspersoftStudioPlugin.getInstance().logError(Messages.UsageManager_errorPathFile, e);
+			} finally {
+				FileUtils.closeStream(reader);
 			}
 		}
 		return null;
@@ -294,14 +300,15 @@ public class UsageManager {
 	private void writeAppId(File appDataFolder, String installationPath){
 		File textFile = new File(appDataFolder, PATH_FILE);
 		if (textFile.exists()) textFile.delete();
-		BufferedWriter writer;
+		BufferedWriter writer = null;
 		try {
 			writer = new BufferedWriter(new FileWriter(textFile.getAbsolutePath()));
 	    writer.write(installationPath);
-	    writer.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 			JaspersoftStudioPlugin.getInstance().logError(Messages.UsageManager_errorPathFile, e);
+		} finally {
+			FileUtils.closeStream(writer);
 		}
 	}
 	
@@ -405,14 +412,16 @@ public class UsageManager {
 				File appDataFolder = getAppDataFolder();
 				File propertiesFile = new File(appDataFolder, PROPERTIES_FILE_NAME);
 				if (propertiesFile.exists()){
+					FileInputStream input = null;
 					try {
-						FileInputStream input = new FileInputStream(propertiesFile.getAbsolutePath());
+						input = new FileInputStream(propertiesFile.getAbsolutePath());
 						usageStats = new Properties();
 						usageStats.load(input);
-						input.close();
 					} catch (Exception e) {
 						e.printStackTrace();
 						JaspersoftStudioPlugin.getInstance().logError(Messages.UsageManager_errorReadStatProperties, e);
+					} finally {
+						FileUtils.closeStream(input);
 					}
 				} else {
 					usageStats = new Properties();
@@ -435,14 +444,16 @@ public class UsageManager {
 				File appDataFolder = getAppDataFolder();
 				File propertiesFile = new File(appDataFolder, INFO_FILE_NAME);
 				if (propertiesFile.exists()){
+					FileInputStream input = null;
 					try {
-						FileInputStream input = new FileInputStream(propertiesFile.getAbsolutePath());
+						input = new FileInputStream(propertiesFile.getAbsolutePath());
 						installationInfo = new Properties();
 						installationInfo.load(input);
-						input.close();
 					} catch (Exception e) {
 						e.printStackTrace();
 						JaspersoftStudioPlugin.getInstance().logError(Messages.UsageManager_errorReadInfoProperties, e);
+					} finally {
+						FileUtils.closeStream(input);
 					}
 				} else {
 					installationInfo = new Properties();
@@ -466,17 +477,19 @@ public class UsageManager {
 			String value = info.getProperty(propertyName);
 			boolean equals = value == null ? newValue == null : value.equals(newValue);
 			if (!equals){
+				FileOutputStream out = null;
 				try{
 					//Write the property only if there isn't a previous one with the same value
 					info.setProperty(propertyName, newValue);
 					File appDataFolder = getAppDataFolder();
 					File propertiesFile = new File(appDataFolder, INFO_FILE_NAME);
-					FileOutputStream out = new FileOutputStream(propertiesFile.getAbsolutePath());
+					out = new FileOutputStream(propertiesFile.getAbsolutePath());
 					info.store(out, "Installation information - This information are NEVER send to the statistics server, used only locally for configuration purpose"); //$NON-NLS-1$
-					out.close();
 				} catch(Exception ex){
 					ex.printStackTrace();
 					JaspersoftStudioPlugin.getInstance().logError(Messages.UsageManager_errorWriteInfoProperties,ex);
+				} finally {
+					FileUtils.closeStream(out);
 				}
 			}
 		}
@@ -488,6 +501,8 @@ public class UsageManager {
 	 * named data
 	 */
 	protected void sendStatistics() {
+		BufferedReader responseReader = null;
+		DataOutputStream postWriter = null;
 		try{
 			if (!STATISTICS_SERVER_URL.trim().isEmpty()){
 				URL obj = new URL(STATISTICS_SERVER_URL);
@@ -516,21 +531,18 @@ public class UsageManager {
 				// Send post request with the JSON string as the data parameter
 				String urlParameters = "data="+serializedData; //$NON-NLS-1$
 				con.setDoOutput(true);
-				DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-				wr.writeBytes(urlParameters);
-				wr.flush();
-				wr.close();
-		 
+				postWriter = new DataOutputStream(con.getOutputStream());
+				postWriter.writeBytes(urlParameters);
+				postWriter.flush();
 				con.getResponseCode();
 		 
-				BufferedReader in = new BufferedReader( new InputStreamReader(con.getInputStream()));
+				responseReader = new BufferedReader( new InputStreamReader(con.getInputStream()));
 				String inputLine;
 				StringBuffer response = new StringBuffer();
 		 
-				while ((inputLine = in.readLine()) != null) {
+				while ((inputLine = responseReader.readLine()) != null) {
 					response.append(inputLine);
 				}
-				in.close();
 				//Update the upload time
 				setInstallationInfo(TIMESTAMP_INFO, String.valueOf(getCurrentTime()));
 				////print result
@@ -539,6 +551,9 @@ public class UsageManager {
 		} catch (Exception ex){
 			ex.printStackTrace();
 			JaspersoftStudioPlugin.getInstance().logError(Messages.UsageManager_errorStatUpload, ex);
+		} finally {
+			FileUtils.closeStream(postWriter);
+			FileUtils.closeStream(responseReader);
 		}
 	}
 	
@@ -745,12 +760,7 @@ public class UsageManager {
 			ex.printStackTrace();
 			JaspersoftStudioPlugin.getInstance().logError(Messages.UsageManager_errorUpdateCheck, ex);
 		} finally {
-			if (in != null)
-				try {
-					in.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+			FileUtils.closeStream(in);
 		}
 		return result;
 	}
