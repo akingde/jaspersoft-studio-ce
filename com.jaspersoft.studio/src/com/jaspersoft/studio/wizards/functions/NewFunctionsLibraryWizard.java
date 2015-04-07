@@ -136,4 +136,8 @@ public class NewFunctionsLibraryWizard extends Wizard implements INewWizard {
 		return availableCategories;
 	}
 
+	@Override
+	public boolean canFinish() {
+		return page1.isPageComplete();
+	}
 }

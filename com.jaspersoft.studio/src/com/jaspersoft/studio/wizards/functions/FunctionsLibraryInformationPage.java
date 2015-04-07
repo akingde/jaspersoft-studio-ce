@@ -101,11 +101,30 @@ public class FunctionsLibraryInformationPage extends NewTypeWizardPage {
 	@Override
 	public boolean isPageComplete() {
 		return 
-				getErrorMessage()==null && 
-				!libraryName.getText().isEmpty() &&
+				isMandatoryInfoOK() &&
 				!getPackageFragmentRootText().isEmpty() &&
-				!categoryLabel.getText().isEmpty() &&
-				!categoryClass.getText().isEmpty(); 
+				!categoryLabel.getText().isEmpty(); 
+	}
+	
+	/*
+	 * Checks if library name and category class have valid info set.
+	 */
+	private boolean isMandatoryInfoOK() {
+		boolean libraryIsOK = false;
+		if(libraryNameStatus!=null){
+			int severityCode = libraryNameStatus.getSeverity();
+			if(severityCode != IStatus.ERROR && severityCode != IStatus.CANCEL) {
+				libraryIsOK = true && !libraryName.getText().isEmpty();
+			}
+		}
+		boolean categoryIsOK = false;
+		if(categoryClassStatus!=null) {
+			int severityCode = categoryClassStatus.getSeverity();
+			if(severityCode != IStatus.ERROR && severityCode != IStatus.CANCEL) {
+				categoryIsOK = true && !categoryClass.getText().isEmpty();
+			}
+		}
+		return libraryIsOK && categoryIsOK;
 	}
 
 	@Override
@@ -255,7 +274,7 @@ public class FunctionsLibraryInformationPage extends NewTypeWizardPage {
 		super.handleFieldChanged(fieldName);
 		doStatusUpdate();
 	}
-	
+
 	private void doStatusUpdate() {
 		// status of all used components
 		IStatus[] status= new IStatus[] {
