@@ -321,6 +321,10 @@ public class Messages extends NLS {
 	public static String CreateGroupAction_create_group;
 	public static String CreateGroupAction_create_group_tool_tip;
 	public static String CreateGroupCommand_group_name_dialog_text;
+	public static String CreateGuideAction_GuidePositionTooltip;
+	public static String CreateGuideAction_GuidePositionTxt;
+	public static String CreateGuideAction_Label;
+	public static String CreateGuideAction_Tooltip;
 	public static String CreateGuideCommand_create_guide;
 	public static String CreateMainGroupCommand_create_main_group;
 	public static String CreatePageXofYCommand_0;

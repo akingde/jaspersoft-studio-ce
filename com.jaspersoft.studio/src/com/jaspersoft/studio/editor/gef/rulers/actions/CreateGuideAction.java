@@ -18,8 +18,6 @@ import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartViewer;
-import org.eclipse.gef.internal.GEFMessages;
-import org.eclipse.gef.internal.ui.rulers.GuideEditPart;
 import org.eclipse.gef.rulers.RulerProvider;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.window.Window;
@@ -35,8 +33,11 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.jaspersoft.studio.editor.gef.rulers.component.JDRulerEditPart;
 import com.jaspersoft.studio.editor.gef.rulers.component.JDRulerFigure;
+import com.jaspersoft.studio.messages.Messages;
 
 public class CreateGuideAction extends Action {
+	
+	public static final int MIN_DISTANCE_BW_GUIDES = 5;
 
 	private EditPartViewer viewer;
 
@@ -47,9 +48,9 @@ public class CreateGuideAction extends Action {
 	 *          the viewer for the ruler on which the guide is to be created
 	 */
 	public CreateGuideAction(EditPartViewer ruler) {
-		super(GEFMessages.Create_Guide_Label);
+		super(Messages.CreateGuideAction_Label);
 		viewer = ruler;
-		setToolTipText(GEFMessages.Create_Guide_Tooltip);
+		setToolTipText(Messages.CreateGuideAction_Tooltip);
 	}
 
 	/**
@@ -63,8 +64,8 @@ public class CreateGuideAction extends Action {
 		int[] positions = provider.getGuidePositions();
 		Arrays.sort(positions);
 		int index = 0;
-		int newPosition = GuideEditPart.MIN_DISTANCE_BW_GUIDES + 1;
-		int desiredDifference = (GuideEditPart.MIN_DISTANCE_BW_GUIDES * 2) + 1;
+		int newPosition = MIN_DISTANCE_BW_GUIDES + 1;
+		int desiredDifference = (MIN_DISTANCE_BW_GUIDES * 2) + 1;
 		boolean found = positions.length > 0 && positions[0] > desiredDifference;
 		while (index < positions.length - 1 && !found) {
 			if (positions[index + 1] - positions[index] > desiredDifference) {
@@ -98,21 +99,21 @@ public class CreateGuideAction extends Action {
 		@Override
 		protected void configureShell(Shell newShell) {
 			super.configureShell(newShell);
-			newShell.setText("Guide Position");
+			newShell.setText(Messages.CreateGuideAction_GuidePositionTxt);
 		}
 
 		@Override
 		protected void createFormContent(IManagedForm mform) {
-			mform.getForm().setText("Guide Position");
+			mform.getForm().setText(Messages.CreateGuideAction_GuidePositionTxt);
 
 			FormToolkit toolkit = mform.getToolkit();
 
 			mform.getForm().getBody().setLayout(new GridLayout(4, false));
 
-			toolkit.createLabel(mform.getForm().getBody(), "Guide Position"); //$NON-NLS-1$
+			toolkit.createLabel(mform.getForm().getBody(), Messages.CreateGuideAction_GuidePositionTxt); //$NON-NLS-1$
 			final Spinner width = new Spinner(mform.getForm().getBody(), SWT.BORDER);
 			width.setValues(w, 0, Integer.MAX_VALUE, 0, 1, 10);
-			width.setToolTipText("Guide Position");
+			width.setToolTipText(Messages.CreateGuideAction_GuidePositionTooltip);
 			width.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
