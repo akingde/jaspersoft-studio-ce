@@ -19,11 +19,20 @@ public class SSOServer implements Cloneable {
 	private String url = "https://hostname/";
 	private SSOTypes type = SSOTypes.CAS;
 
+	public SSOServer() {
+		super();
+		uuid = UUID.randomUUID().toString();
+	}
+
 	public String getUuid() {
+		if (uuid == null)
+			uuid = UUID.randomUUID().toString();
 		return uuid;
 	}
 
 	public void setUuid(String uuid) {
+		if (uuid == null)
+			uuid = UUID.randomUUID().toString();
 		this.uuid = uuid;
 	}
 

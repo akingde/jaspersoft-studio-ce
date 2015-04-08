@@ -202,9 +202,10 @@ public class CASListFieldEditor extends TableFieldEditor {
 			v += Base64.encodeBase64String(CastorHelper.write(srv, mapping)
 					.getBytes()) + "\n";
 			try {
-				SecureStorageUtils.saveToDefaultSecurePreferences(
-						JRServerSecretsProvider.SECRET_NODE_ID,
-						srv.getPassuuid(), srv.getPassword());
+				if (srv.getPassuuid() != null)
+					SecureStorageUtils.saveToDefaultSecurePreferences(
+							JRServerSecretsProvider.SECRET_NODE_ID,
+							srv.getPassuuid(), srv.getPassword());
 			} catch (StorageException e) {
 				e.printStackTrace();
 			}
