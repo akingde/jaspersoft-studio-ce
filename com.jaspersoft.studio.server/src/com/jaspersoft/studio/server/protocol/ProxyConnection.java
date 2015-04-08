@@ -82,12 +82,12 @@ public class ProxyConnection implements IConnection {
 			String connName = co.getClass().getName().toUpperCase();
 			if (sp.isUseOnlySOAP() && !connName.contains("SOAP"))
 				continue;
+			if (connName.contains("SOAP") && sp.isUseSSO())
+				continue;
 			try {
 				if (c == null && co.connect(monitor, sp))
 					c = co;
 				if (soap == null && connName.contains("SOAP")) {
-					if (sp.isUseSSO())
-						continue;
 					if (c == co)
 						soap = co;
 					else if (co.connect(monitor, sp))
