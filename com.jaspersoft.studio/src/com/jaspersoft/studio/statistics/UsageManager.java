@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.statistics;
 
@@ -55,79 +51,77 @@ import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 import com.jaspersoft.studio.statistics.heartbeat.Heartbeat;
 
 /**
- * Manager used to handle, track and send to the server informations
- * about an installation of jaspersoft studio, like usage statistics
+ * Manager used to handle, track and send to the server informations about an installation of jaspersoft studio, like
+ * usage statistics
  * 
  * @author Orlandin Marco
  *
  */
 public class UsageManager {
-	
+
 	/**
-	 * Property name used in the preferences in the old version of Jaspersoft Studio
-	 * to store a UUID of the application. This is used only for backward compatibility
-	 * since the newer versions store the file inside an application folder
+	 * Property name used in the preferences in the old version of Jaspersoft Studio to store a UUID of the application.
+	 * This is used only for backward compatibility since the newer versions store the file inside an application folder
 	 */
 	private static final String BACKWARD_UUID_PROPERTY = "UUID"; //$NON-NLS-1$
-	
+
 	/**
 	 * URL of the server where the statistics are sent
 	 */
 	private static final String STATISTICS_SERVER_URL = "";//$NON-NLS-1$ //http://192.168.2.101/jss/jssusage.php
-	
+
 	/**
-	 * Time in ms that the process to write the statistics from the memory on the disk
-	 * wait after the update of a value. This is done since some operations can update many
-	 * values, doing this there is a time span to allow sequence of values to be written 
-	 * at one, minimizing the number of writes on the disk
+	 * Time in ms that the process to write the statistics from the memory on the disk wait after the update of a value.
+	 * This is done since some operations can update many values, doing this there is a time span to allow sequence of
+	 * values to be written at one, minimizing the number of writes on the disk
 	 */
 	private static final int MINIMUM_WAIT_TIME = 5000;
-	
+
 	/**
 	 * The URL of the server used to get the current hour and to check the Internet connection
 	 */
 	private static final String TIME_SERVER = "time-a.nist.gov"; //$NON-NLS-1$
-	
+
 	/**
 	 * Name of the file where the usage statistics are saved
 	 */
 	private static final String PROPERTIES_FILE_NAME = "jss.properties"; //$NON-NLS-1$
-	
+
 	/**
 	 * Name of the file where the information on the installation are saved
 	 */
 	private static final String INFO_FILE_NAME = "info.properties"; //$NON-NLS-1$
-	
+
 	/**
-	 * Name of the folder that will contains the information of all the JSS installations on the current
-	 * machine. This folder will be placed in the AppData like folder on the current operative system
+	 * Name of the folder that will contains the information of all the JSS installations on the current machine. This
+	 * folder will be placed in the AppData like folder on the current operative system
 	 */
 	private static final String JSS_APPLICATION_ID = "Jaspersoft Studio"; //$NON-NLS-1$
-	
+
 	/**
-	 * Name of the file where the path of a JSS installation will  be save. The installation path
-	 * bind a JSS instance to a configuration folder
+	 * Name of the file where the path of a JSS installation will be save. The installation path bind a JSS instance to a
+	 * configuration folder
 	 */
 	private static final String PATH_FILE = ".path"; //$NON-NLS-1$
-	
+
 	/**
-	 * Information property key to set a lock when JSS is started and removed it when it is closed.
-	 * Using this is possible to know when JSS was closed abnormally
+	 * Information property key to set a lock when JSS is started and removed it when it is closed. Using this is possible
+	 * to know when JSS was closed abnormally
 	 */
 	private static final String LOCK_INFO = "isLocked"; //$NON-NLS-1$
-	
+
 	/**
-	 * Information property key used to know the last time that the usage statistics was sent to the
-	 * server, it is used to calculate if the amount of time for the next upload is passed
+	 * Information property key used to know the last time that the usage statistics was sent to the server, it is used to
+	 * calculate if the amount of time for the next upload is passed
 	 */
 	private static final String TIMESTAMP_INFO = "lastStatsTimestamp"; //$NON-NLS-1$
-	
+
 	/**
-	 * Information property key used to store the version of JSS before an update. It is
-	 * used to know if since the last startup it was done an update or if it is a new installation 
+	 * Information property key used to store the version of JSS before an update. It is used to know if since the last
+	 * startup it was done an update or if it is a new installation
 	 */
 	private static final String VERSION_INFO = "lastSubmittedVersion"; //$NON-NLS-1$
-	
+
 	/**
 	 * Used inside the statistics properties file keys, to separate a name from it's category
 	 */
@@ -137,66 +131,62 @@ public class UsageManager {
 	 * Folder containing the configurations of all the JSS installed on the system
 	 */
 	private static File jssDataFolder = null;
-	
+
 	/**
 	 * Flag used to know if the usage collection is allowed or not
 	 */
 	private boolean allowUsageCollection = false;
-	
+
 	/**
-	 * Properties file of the usage statistics, it is loaded
-	 * the first time it is requested
+	 * Properties file of the usage statistics, it is loaded the first time it is requested
 	 */
 	private Properties usageStats = null;
-	
+
 	/**
-	 * Properties file of the installation informations, it is loaded
-	 * the first time it is requested
+	 * Properties file of the installation informations, it is loaded the first time it is requested
 	 */
 	private Properties installationInfo = null;
-	
+
 	/**
 	 * Configuration folder of the running JSS installation
 	 */
 	private File appDataFolder = null;
-	
+
 	/**
-	 * Flag used when a statistic is updated, used by the upload job to wait
-	 * a certain amount of time since the last update to save the statistics properties
-	 * file on the disk
+	 * Flag used when a statistic is updated, used by the upload job to wait a certain amount of time since the last
+	 * update to save the statistics properties file on the disk
 	 */
 	private boolean statisticUpdatedRecently = false;
-	
+
 	/**
 	 * Job used to write the statistics properties file on the disk
 	 */
 	private Job writeStatsToDisk = new WriteUsageJob();
-			
+
 	/**
-	 * This job write the statistics properties file when it is
-	 * changed. But it wait at least a specific amount of time
+	 * This job write the statistics properties file when it is changed. But it wait at least a specific amount of time
 	 * since the last update to minimize the number of write on the disk
 	 * 
 	 * @author Orlandin Marco
 	 *
 	 */
 	private class WriteUsageJob extends Job {
-		
+
 		public WriteUsageJob() {
 			super(Messages.UsageManager_writeJobName);
 		}
 
 		@Override
 		protected IStatus run(IProgressMonitor monitor) {
-			while(statisticUpdatedRecently){
-				try{
+			while (statisticUpdatedRecently) {
+				try {
 					Thread.sleep(MINIMUM_WAIT_TIME);
-				} catch (Exception ex){
-					
+				} catch (Exception ex) {
+
 				}
 				statisticUpdatedRecently = false;
 			}
-			//At this point AT LEAST the MINIMUM_WAIT_TIME is passed
+			// At this point AT LEAST the MINIMUM_WAIT_TIME is passed
 			if (!monitor.isCanceled()) {
 				writeUsageStatisticsOnDisk();
 			}
@@ -204,19 +194,19 @@ public class UsageManager {
 			return Status.OK_STATUS;
 		}
 	}
-	
+
 	/**
 	 * Write the statistics properties file on the disk
 	 */
-	private void writeUsageStatisticsOnDisk(){
+	private void writeUsageStatisticsOnDisk() {
 		FileOutputStream out = null;
 		synchronized (UsageManager.this) {
-			try{
+			try {
 				File appDataFolder = getAppDataFolder();
 				File propertiesFile = new File(appDataFolder, PROPERTIES_FILE_NAME);
 				out = new FileOutputStream(propertiesFile.getAbsolutePath());
 				getStatisticsContainer().store(out, "Usage informations"); //$NON-NLS-1$
-			} catch(Exception ex){
+			} catch (Exception ex) {
 				ex.printStackTrace();
 				JaspersoftStudioPlugin.getInstance().logError(Messages.UsageManager_errorWriteStatProperties, ex);
 			} finally {
@@ -224,57 +214,58 @@ public class UsageManager {
 			}
 		}
 	}
-	
+
 	/**
-	 * Listen for changes in the preferences for property that enable the 
-	 * collecting of usage informations
+	 * Listen for changes in the preferences for property that enable the collecting of usage informations
 	 */
 	private IPropertyChangeListener preferencesListener = new IPropertyChangeListener() {
-		
+
 		@Override
 		public void propertyChange(org.eclipse.jface.util.PropertyChangeEvent event) {
-			if (event.getProperty().equals(StudioPreferencePage.JSS_SEND_USAGE_STATISTICS)){
-				allowUsageCollection = JaspersoftStudioPlugin.getInstance().getPreferenceStore().getBoolean(StudioPreferencePage.JSS_SEND_USAGE_STATISTICS);
+			if (event.getProperty().equals(StudioPreferencePage.JSS_SEND_USAGE_STATISTICS)) {
+				allowUsageCollection = JaspersoftStudioPlugin.getInstance().getPreferenceStore()
+						.getBoolean(StudioPreferencePage.JSS_SEND_USAGE_STATISTICS);
 			}
 		}
 	};
-	
+
 	/**
-	 * Get the folder where all the configurations of the current installed JSS are 
-	 * saved. The folder can change between the various operative systems. The location
-	 * is cached after the first time it is read
+	 * Get the folder where all the configurations of the current installed JSS are saved. The folder can change between
+	 * the various operative systems. The location is cached after the first time it is read
 	 * 
 	 * @return a not null folder where the configuration of all the JSS are saved
 	 */
-	private static File getJSSDataFolder(){
-		if (jssDataFolder == null){
+	private static File getJSSDataFolder() {
+		if (jssDataFolder == null) {
 			String workingDirectory;
 			if (Util.isWindows()) {
-			    workingDirectory = System.getenv("AppData"); //$NON-NLS-1$
-			}	else if (Util.isLinux()){
-				 workingDirectory = System.getProperty("user.home"); //$NON-NLS-1$
-			    workingDirectory += ".config"; //$NON-NLS-1$
+				workingDirectory = System.getenv("AppData"); //$NON-NLS-1$
+			} else if (Util.isLinux()) {
+				workingDirectory = System.getProperty("user.home"); //$NON-NLS-1$
+				if (!workingDirectory.endsWith("/"))
+					workingDirectory += "/";
+				workingDirectory += ".config"; //$NON-NLS-1$
 			} else {
-			    workingDirectory = System.getProperty("user.home"); //$NON-NLS-1$
-			    workingDirectory += "/Library/Application Support"; //$NON-NLS-1$
+				workingDirectory = System.getProperty("user.home"); //$NON-NLS-1$
+				workingDirectory += "/Library/Application Support"; //$NON-NLS-1$
 			}
 			jssDataFolder = new File(workingDirectory, JSS_APPLICATION_ID);
 			jssDataFolder.mkdirs();
 		}
 		return jssDataFolder;
 	}
-	
+
 	/**
-	 * Search a .path file inside the passed folder and read the first line. It 
-	 * should be the installation path of a JSS, which is also the id of that installation
+	 * Search a .path file inside the passed folder and read the first line. It should be the installation path of a JSS,
+	 * which is also the id of that installation
 	 * 
-	 * @param appDataFolder the folder, must be a JSS configuration folder
-	 * @return the path of a JSS installation, that is its identifier. Null if the passed
-	 * folder is not valid
+	 * @param appDataFolder
+	 *          the folder, must be a JSS configuration folder
+	 * @return the path of a JSS installation, that is its identifier. Null if the passed folder is not valid
 	 */
-	private String getAppId(File appDataFolder){
+	private String getAppId(File appDataFolder) {
 		File textFile = new File(appDataFolder, PATH_FILE);
-		if (textFile.exists()){
+		if (textFile.exists()) {
 			BufferedReader reader = null;
 			try {
 				reader = new BufferedReader(new FileReader(textFile.getAbsolutePath()));
@@ -289,21 +280,24 @@ public class UsageManager {
 		}
 		return null;
 	}
-	
+
 	/**
-	 * Write a .path file inside the passed folder and put as first line the passed path. It 
-	 * should be the installation path of the current JSS, which is also the id of that installation
+	 * Write a .path file inside the passed folder and put as first line the passed path. It should be the installation
+	 * path of the current JSS, which is also the id of that installation
 	 * 
-	 * @param appDataFolder the folder, must be a JSS configuration folder
-	 * @param installationPath the path of the current JSS installation, that is its identifier
+	 * @param appDataFolder
+	 *          the folder, must be a JSS configuration folder
+	 * @param installationPath
+	 *          the path of the current JSS installation, that is its identifier
 	 */
-	private void writeAppId(File appDataFolder, String installationPath){
+	private void writeAppId(File appDataFolder, String installationPath) {
 		File textFile = new File(appDataFolder, PATH_FILE);
-		if (textFile.exists()) textFile.delete();
+		if (textFile.exists())
+			textFile.delete();
 		BufferedWriter writer = null;
 		try {
 			writer = new BufferedWriter(new FileWriter(textFile.getAbsolutePath()));
-	    writer.write(installationPath);
+			writer.write(installationPath);
 		} catch (IOException e) {
 			e.printStackTrace();
 			JaspersoftStudioPlugin.getInstance().logError(Messages.UsageManager_errorPathFile, e);
@@ -311,46 +305,45 @@ public class UsageManager {
 			FileUtils.closeStream(writer);
 		}
 	}
-	
+
 	/**
-	 * Get the configuration folder of the currently running JSS installation.
-	 * If a folder is not found a new one is created. This folder is cached
-	 * to avoid to search it each time it is requested. If the folder is created
-	 * it is supposed to be the first start of the application, so the contributed
-	 * actions to be executed at the first start are run.
+	 * Get the configuration folder of the currently running JSS installation. If a folder is not found a new one is
+	 * created. This folder is cached to avoid to search it each time it is requested. If the folder is created it is
+	 * supposed to be the first start of the application, so the contributed actions to be executed at the first start are
+	 * run.
 	 * 
-	 * @return a not null folder where the configuration of the currently running
-	 * JSS are saved
+	 * @return a not null folder where the configuration of the currently running JSS are saved
 	 */
-	private File getAppDataFolder(){
-		if (appDataFolder == null){
+	private File getAppDataFolder() {
+		if (appDataFolder == null) {
 			Location configArea = Platform.getInstallLocation();
-			if (configArea != null){
-				String path =  configArea.getURL().toExternalForm();
+			if (configArea != null) {
+				String path = configArea.getURL().toExternalForm();
 				File appFolder = getJSSDataFolder();
-				for(File file : appFolder.listFiles()){
-					String appId = getAppId(file);
-					if (appId != null && appId.equals(path)){
-						appDataFolder = file;
-						break;
+				if (appFolder != null)
+					for (File file : appFolder.listFiles()) {
+						String appId = getAppId(file);
+						if (appId != null && appId.equals(path)) {
+							appDataFolder = file;
+							break;
+						}
 					}
-				}
-				//If the appDataFolder is null a new one is created
-				if (appDataFolder == null){
-					//For backward compatibility try to used the original UUID if available
+				// If the appDataFolder is null a new one is created
+				if (appDataFolder == null) {
+					// For backward compatibility try to used the original UUID if available
 					PropertiesHelper ph = PropertiesHelper.getInstance();
 					String startingUUID = ph.getString(BACKWARD_UUID_PROPERTY, null);
-					if (startingUUID == null){
+					if (startingUUID == null) {
 						startingUUID = UUID.randomUUID().toString();
 					}
 					appDataFolder = new File(appFolder, startingUUID);
-					while(appDataFolder.exists()){
+					while (appDataFolder.exists()) {
 						appDataFolder = new File(appFolder, UUID.randomUUID().toString());
 					}
 					appDataFolder.mkdir();
 					writeAppId(appDataFolder, path);
-					//Folder just created, it is the first startup
-					for(IFirstStartupAction action : JaspersoftStudioPlugin.getExtensionManager().getFirstStartupActions()){
+					// Folder just created, it is the first startup
+					for (IFirstStartupAction action : JaspersoftStudioPlugin.getExtensionManager().getFirstStartupActions()) {
 						action.executeFirstStartupAction(appDataFolder);
 					}
 				}
@@ -358,14 +351,15 @@ public class UsageManager {
 		}
 		return appDataFolder;
 	}
-	
+
 	/**
 	 * Contact an NTP server to get the current time
 	 * 
 	 * @return the number of milliseconds since January 1, 1970, 00:00:00 GMT represented by this date.
-	 * @throws Exception throw an exception if the time can not be fetched
+	 * @throws Exception
+	 *           throw an exception if the time can not be fetched
 	 */
-	protected long getCurrentTime() throws Exception{
+	protected long getCurrentTime() throws Exception {
 		NTPUDPClient timeClient = new NTPUDPClient();
 		InetAddress inetAddress = InetAddress.getByName(TIME_SERVER);
 		TimeInfo timeInfo = timeClient.getTime(inetAddress);
@@ -373,45 +367,44 @@ public class UsageManager {
 		Date time = new Date(returnTime);
 		return time.getTime();
 	}
-	
+
 	/**
-	 * Check if the amount of time since the last statistics upload is passed (7 days)
-	 * and so if it is time to re-send the statistics to the server
+	 * Check if the amount of time since the last statistics upload is passed (7 days) and so if it is time to re-send the
+	 * statistics to the server
 	 * 
-	 * @return true if the amount of time for send the statistics to the server is passed
-	 * false otherwise
+	 * @return true if the amount of time for send the statistics to the server is passed false otherwise
 	 */
-	protected boolean checkUpload(){
-		try{
+	protected boolean checkUpload() {
+		try {
 			long actualMillis = getCurrentTime();
 			String lastUpdate = getInstallationInfoContainer().getProperty(TIMESTAMP_INFO);
-			if (lastUpdate == null){
-				//First time the check is done, write the current time on the file, as starting point
+			if (lastUpdate == null) {
+				// First time the check is done, write the current time on the file, as starting point
 				setInstallationInfo(TIMESTAMP_INFO, String.valueOf(actualMillis));
 			} else {
-		    long millisDiff = actualMillis - Long.parseLong(lastUpdate);
-		    int days = (int) (millisDiff / 86400000);
-		    return days >= 7;
+				long millisDiff = actualMillis - Long.parseLong(lastUpdate);
+				int days = (int) (millisDiff / 86400000);
+				return days >= 7;
 			}
-		} catch (Exception ex){
+		} catch (Exception ex) {
 			JaspersoftStudioPlugin.getInstance().logWarning(Messages.UsageManager_errorGetTime, ex);
 		}
 		return false;
 	}
-	
+
 	/**
-	 * Get the usage statistics properties file. If it was already loaded then it is returned. If not
-	 * it was loaded from the existing file. If the file dosen't exist a new properties file is created (it 
-	 * will be written on the disk as the first statistic of the section is provided)
+	 * Get the usage statistics properties file. If it was already loaded then it is returned. If not it was loaded from
+	 * the existing file. If the file dosen't exist a new properties file is created (it will be written on the disk as
+	 * the first statistic of the section is provided)
 	 * 
 	 * @return a not null properties file for the statistics
 	 */
-	protected Properties getStatisticsContainer(){
+	protected Properties getStatisticsContainer() {
 		synchronized (UsageManager.this) {
-			if (usageStats == null){
+			if (usageStats == null) {
 				File appDataFolder = getAppDataFolder();
 				File propertiesFile = new File(appDataFolder, PROPERTIES_FILE_NAME);
-				if (propertiesFile.exists()){
+				if (propertiesFile.exists()) {
 					FileInputStream input = null;
 					try {
 						input = new FileInputStream(propertiesFile.getAbsolutePath());
@@ -427,23 +420,23 @@ public class UsageManager {
 					usageStats = new Properties();
 				}
 			}
-			return usageStats;	
+			return usageStats;
 		}
 	}
-	
+
 	/**
-	 * Get the installation information properties file. If it was already loaded then it is returned. If not
-	 * it was loaded from the existing file. If the file dosen't exist a new properties file is created (it 
-	 * will be written on the disk as the first information is provided)
+	 * Get the installation information properties file. If it was already loaded then it is returned. If not it was
+	 * loaded from the existing file. If the file dosen't exist a new properties file is created (it will be written on
+	 * the disk as the first information is provided)
 	 * 
 	 * @return a not null properties file for the installation informations
 	 */
-	protected Properties getInstallationInfoContainer(){
+	protected Properties getInstallationInfoContainer() {
 		synchronized (UsageManager.this) {
-			if (installationInfo == null){
+			if (installationInfo == null) {
 				File appDataFolder = getAppDataFolder();
 				File propertiesFile = new File(appDataFolder, INFO_FILE_NAME);
-				if (propertiesFile.exists()){
+				if (propertiesFile.exists()) {
 					FileInputStream input = null;
 					try {
 						input = new FileInputStream(propertiesFile.getAbsolutePath());
@@ -462,93 +455,96 @@ public class UsageManager {
 			return installationInfo;
 		}
 	}
-	
+
 	/**
-	 * Write a property on the installation informations properties file. The property
-	 * is written only if there isn't a property with the same key and value already save.
-	 * After and if the property is written the file is saved in the disk
+	 * Write a property on the installation informations properties file. The property is written only if there isn't a
+	 * property with the same key and value already save. After and if the property is written the file is saved in the
+	 * disk
 	 * 
-	 * @param propertyName the name of the property to write, must be not null
-	 * @param newValue the value of the property to write
+	 * @param propertyName
+	 *          the name of the property to write, must be not null
+	 * @param newValue
+	 *          the value of the property to write
 	 */
-	protected void setInstallationInfo(String propertyName, String newValue){
+	protected void setInstallationInfo(String propertyName, String newValue) {
 		synchronized (UsageManager.this) {
 			Properties info = getInstallationInfoContainer();
 			String value = info.getProperty(propertyName);
 			boolean equals = value == null ? newValue == null : value.equals(newValue);
-			if (!equals){
+			if (!equals) {
 				FileOutputStream out = null;
-				try{
-					//Write the property only if there isn't a previous one with the same value
+				try {
+					// Write the property only if there isn't a previous one with the same value
 					info.setProperty(propertyName, newValue);
 					File appDataFolder = getAppDataFolder();
 					File propertiesFile = new File(appDataFolder, INFO_FILE_NAME);
 					out = new FileOutputStream(propertiesFile.getAbsolutePath());
-					info.store(out, "Installation information - This information are NEVER send to the statistics server, used only locally for configuration purpose"); //$NON-NLS-1$
-				} catch(Exception ex){
+					info.store(
+							out,
+							"Installation information - This information are NEVER send to the statistics server, used only locally for configuration purpose"); //$NON-NLS-1$
+				} catch (Exception ex) {
 					ex.printStackTrace();
-					JaspersoftStudioPlugin.getInstance().logError(Messages.UsageManager_errorWriteInfoProperties,ex);
+					JaspersoftStudioPlugin.getInstance().logError(Messages.UsageManager_errorWriteInfoProperties, ex);
 				} finally {
 					FileUtils.closeStream(out);
 				}
 			}
 		}
 	}
-	
+
 	/**
-	 * Send the statistics to the defined server. They are read from the properties filed
-	 * and converted into a JSON string. Then this string is sent to the server as a post parameter
-	 * named data
+	 * Send the statistics to the defined server. They are read from the properties filed and converted into a JSON
+	 * string. Then this string is sent to the server as a post parameter named data
 	 */
 	protected void sendStatistics() {
 		BufferedReader responseReader = null;
 		DataOutputStream postWriter = null;
-		try{
-			if (!STATISTICS_SERVER_URL.trim().isEmpty()){
+		try {
+			if (!STATISTICS_SERVER_URL.trim().isEmpty()) {
 				URL obj = new URL(STATISTICS_SERVER_URL);
 				HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-		 
-				//add request header
+
+				// add request header
 				con.setRequestMethod("POST"); //$NON-NLS-1$
 				con.setRequestProperty("User-Agent", "Mozilla/5.0"); //$NON-NLS-1$ //$NON-NLS-2$
 				con.setRequestProperty("Accept-Language", "en-US,en;q=0.5"); //$NON-NLS-1$ //$NON-NLS-2$
-		 
-				//Read and convert the statistics into a JSON string
+
+				// Read and convert the statistics into a JSON string
 				Properties prop = getStatisticsContainer();
 				UsagesContainer container = new UsagesContainer(getAppDataFolder().getName());
-				for(Object key : prop.keySet()){
-					try{
+				for (Object key : prop.keySet()) {
+					try {
 						String[] id_category = key.toString().split(Pattern.quote(ID_CATEGORY_SEPARATOR));
 						int usageNumber = Integer.parseInt(prop.getProperty(key.toString(), "0")); //$NON-NLS-1$
 						container.addStat(new UsageStatistic(id_category[0], id_category[1], usageNumber));
-					} catch (Exception ex){
+					} catch (Exception ex) {
 						prop.remove(key);
 					}
 				}
 				ObjectMapper mapper = new ObjectMapper();
 				String serializedData = mapper.writeValueAsString(container);
-		 
+
 				// Send post request with the JSON string as the data parameter
-				String urlParameters = "data="+serializedData; //$NON-NLS-1$
+				String urlParameters = "data=" + serializedData; //$NON-NLS-1$
 				con.setDoOutput(true);
 				postWriter = new DataOutputStream(con.getOutputStream());
 				postWriter.writeBytes(urlParameters);
 				postWriter.flush();
 				con.getResponseCode();
-		 
-				responseReader = new BufferedReader( new InputStreamReader(con.getInputStream()));
+
+				responseReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
 				String inputLine;
 				StringBuffer response = new StringBuffer();
-		 
+
 				while ((inputLine = responseReader.readLine()) != null) {
 					response.append(inputLine);
 				}
-				//Update the upload time
+				// Update the upload time
 				setInstallationInfo(TIMESTAMP_INFO, String.valueOf(getCurrentTime()));
-				////print result
+				// //print result
 				System.out.println(response.toString());
 			}
-		} catch (Exception ex){
+		} catch (Exception ex) {
 			ex.printStackTrace();
 			JaspersoftStudioPlugin.getInstance().logError(Messages.UsageManager_errorStatUpload, ex);
 		} finally {
@@ -556,57 +552,60 @@ public class UsageManager {
 			FileUtils.closeStream(responseReader);
 		}
 	}
-	
+
 	/**
-	 * Check if the running JSS is a RCP or plugin version. This is done looking for the 
-	 * plugins com.jaspersoft.studio.rcp or com.jaspersoft.studio.pro.rcp that are available
-	 * only on the RCP version
+	 * Check if the running JSS is a RCP or plugin version. This is done looking for the plugins com.jaspersoft.studio.rcp
+	 * or com.jaspersoft.studio.pro.rcp that are available only on the RCP version
 	 * 
 	 * @return true if the current running JSS is an RCP version, false otherwise
 	 */
-	protected boolean isRCP(){
+	protected boolean isRCP() {
 		boolean isRCP = Platform.getBundle("com.jaspersoft.studio.rcp") != null; //$NON-NLS-1$
-		if (isRCP) return true;
-		//check if it can be a pro version
+		if (isRCP)
+			return true;
+		// check if it can be a pro version
 		return Platform.getBundle("com.jaspersoft.studio.pro.rcp") != null; //$NON-NLS-1$
 	}
-	
+
 	/**
-	 * Method called to start the UsageManager, it will check if the usage statistics must be uploaded and
-	 * and it check for newer version. all is done inside separated Jobs and if the relative flags on 
-	 * the preferences are enabled. It create also the lock attribute to find used to find if JSS was closed
-	 * normally, but only if the collecting of usage statistics is enabled
+	 * Method called to start the UsageManager, it will check if the usage statistics must be uploaded and and it check
+	 * for newer version. all is done inside separated Jobs and if the relative flags on the preferences are enabled. It
+	 * create also the lock attribute to find used to find if JSS was closed normally, but only if the collecting of usage
+	 * statistics is enabled
 	 */
-	public void start(){
-		//This first call initialize the appdata folder and execute the first run actions
+	public void start() {
+		// This first call initialize the appdata folder and execute the first run actions
 		getAppDataFolder();
-		//Check if the collecting of statistics is enabled
-		allowUsageCollection = JaspersoftStudioPlugin.getInstance().getPreferenceStore().getBoolean(StudioPreferencePage.JSS_SEND_USAGE_STATISTICS);
+		// Check if the collecting of statistics is enabled
+		allowUsageCollection = JaspersoftStudioPlugin.getInstance().getPreferenceStore()
+				.getBoolean(StudioPreferencePage.JSS_SEND_USAGE_STATISTICS);
 		JaspersoftStudioPlugin.getInstance().getPreferenceStore().addPropertyChangeListener(preferencesListener);
-		if (allowUsageCollection){
-				Job uploadUsageStats = new Job(Messages.UsageManager_uploadJobName) {
-					@Override
-					protected IStatus run(IProgressMonitor monitor) {
-						boolean isLocekd = Boolean.parseBoolean(getInstallationInfoContainer().getProperty(LOCK_INFO, Boolean.FALSE.toString()));
-						if (isLocekd){
-							audit(UsageStatisticsIDs.CRASH_ID, UsageStatisticsIDs.CATEGORY_ERROR);
-						} else {
-							try{
-								setInstallationInfo(LOCK_INFO, Boolean.TRUE.toString());
-							} catch (Exception ex){}
+		if (allowUsageCollection) {
+			Job uploadUsageStats = new Job(Messages.UsageManager_uploadJobName) {
+				@Override
+				protected IStatus run(IProgressMonitor monitor) {
+					boolean isLocekd = Boolean.parseBoolean(getInstallationInfoContainer().getProperty(LOCK_INFO,
+							Boolean.FALSE.toString()));
+					if (isLocekd) {
+						audit(UsageStatisticsIDs.CRASH_ID, UsageStatisticsIDs.CATEGORY_ERROR);
+					} else {
+						try {
+							setInstallationInfo(LOCK_INFO, Boolean.TRUE.toString());
+						} catch (Exception ex) {
 						}
-						if (checkUpload()){
-							sendStatistics();
-						}
-						return Status.OK_STATUS;
 					}
-				};
-				uploadUsageStats.setPriority(Job.LONG);
-				uploadUsageStats.schedule();
+					if (checkUpload()) {
+						sendStatistics();
+					}
+					return Status.OK_STATUS;
+				}
+			};
+			uploadUsageStats.setPriority(Job.LONG);
+			uploadUsageStats.schedule();
 		}
-		//Check for update
+		// Check for update
 		String devmode = System.getProperty("devmode"); //$NON-NLS-1$
-		if(devmode==null || !devmode.equals("true")){ //$NON-NLS-1$
+		if (devmode == null || !devmode.equals("true")) { //$NON-NLS-1$
 			Job job = new Job(Messages.UsageManager_checkVersionJobName) {
 				@Override
 				protected IStatus run(IProgressMonitor monitor) {
@@ -619,39 +618,42 @@ public class UsageManager {
 			job.schedule();
 		}
 	}
-	
+
 	/**
-	 * Called when the application is closed. Remove the lock attribute if present
-	 * and write the statistics properties file on the disk if it has some pending
-	 * changes
+	 * Called when the application is closed. Remove the lock attribute if present and write the statistics properties
+	 * file on the disk if it has some pending changes
 	 */
-	public void stop(){
+	public void stop() {
 		setInstallationInfo(LOCK_INFO, Boolean.FALSE.toString());
 		writeStatsToDisk.cancel();
-		if (statisticUpdatedRecently){
+		if (statisticUpdatedRecently) {
 			writeUsageStatisticsOnDisk();
 		}
 	}
-	
+
 	/**
-	 * Log a statistic of a specific action. It will increment the counter for that action. The id of 
-	 * the action is done by concatenating the name of the action and its category
+	 * Log a statistic of a specific action. It will increment the counter for that action. The id of the action is done
+	 * by concatenating the name of the action and its category
 	 * 
-	 * @param used_action_id the name of the action, must not contains the separator char (default |)
-	 * @param cateogory the category of the statistics, must not contains the separator char (default |)
+	 * @param used_action_id
+	 *          the name of the action, must not contains the separator char (default |)
+	 * @param cateogory
+	 *          the category of the statistics, must not contains the separator char (default |)
 	 */
-	public void audit(String used_action_id, String cateogory){
+	public void audit(String used_action_id, String cateogory) {
 		synchronized (UsageManager.this) {
-			if (allowUsageCollection){
-				String errorMessage = MessageFormat.format(Messages.UsageManager_errorSepratorReserved, new Object[]{ID_CATEGORY_SEPARATOR});
-				Assert.isTrue(!used_action_id.contains(ID_CATEGORY_SEPARATOR) && !cateogory.contains(ID_CATEGORY_SEPARATOR), errorMessage); 
+			if (allowUsageCollection) {
+				String errorMessage = MessageFormat.format(Messages.UsageManager_errorSepratorReserved,
+						new Object[] { ID_CATEGORY_SEPARATOR });
+				Assert.isTrue(!used_action_id.contains(ID_CATEGORY_SEPARATOR) && !cateogory.contains(ID_CATEGORY_SEPARATOR),
+						errorMessage);
 				Properties properties = getStatisticsContainer();
-				String id = used_action_id + ID_CATEGORY_SEPARATOR + cateogory; 
+				String id = used_action_id + ID_CATEGORY_SEPARATOR + cateogory;
 				String textUsageNumber = properties.getProperty(id, "0"); //$NON-NLS-1$
 				int usageNumber = 0;
-				try{
+				try {
 					usageNumber = Integer.parseInt(textUsageNumber);
-				} catch(Exception ex){
+				} catch (Exception ex) {
 					usageNumber = 0;
 				}
 				usageNumber++;
@@ -663,20 +665,25 @@ public class UsageManager {
 			}
 		}
 	}
-	
+
 	/**
-	 * Set the statistic of a specific action. It will set the amount of time it was used to a specific value. The id of 
+	 * Set the statistic of a specific action. It will set the amount of time it was used to a specific value. The id of
 	 * the action is done by concatenating the name of the action and its category
 	 * 
-	 * @param used_action_id the name of the action, must not contains the separator char (default |)
-	 * @param cateogory the category of the statistics, must not contains the separator char (default |)
-	 * @param usageNumber set the number of times that the specified action was used
+	 * @param used_action_id
+	 *          the name of the action, must not contains the separator char (default |)
+	 * @param cateogory
+	 *          the category of the statistics, must not contains the separator char (default |)
+	 * @param usageNumber
+	 *          set the number of times that the specified action was used
 	 */
-	public void audit_set(String used_action_id, String cateogory, int usageNumber){
+	public void audit_set(String used_action_id, String cateogory, int usageNumber) {
 		synchronized (this) {
-			if (allowUsageCollection){
-				String errorMessage = MessageFormat.format(Messages.UsageManager_errorSepratorReserved, new Object[]{ID_CATEGORY_SEPARATOR});
-				Assert.isTrue(!used_action_id.contains(ID_CATEGORY_SEPARATOR) && !cateogory.contains(ID_CATEGORY_SEPARATOR), errorMessage); 
+			if (allowUsageCollection) {
+				String errorMessage = MessageFormat.format(Messages.UsageManager_errorSepratorReserved,
+						new Object[] { ID_CATEGORY_SEPARATOR });
+				Assert.isTrue(!used_action_id.contains(ID_CATEGORY_SEPARATOR) && !cateogory.contains(ID_CATEGORY_SEPARATOR),
+						errorMessage);
 				Properties properties = getStatisticsContainer();
 				String id = used_action_id + ID_CATEGORY_SEPARATOR + cateogory; //$NON-NLS-1$
 				properties.setProperty(id, String.valueOf(usageNumber));
@@ -687,39 +694,38 @@ public class UsageManager {
 			}
 		}
 	}
-	
+
 	/**
 	 * Check on the server if there is a newer version of Jaspersoft Studio
 	 * 
-	 * @return a not null VersionCheckResult that contains information on the new 
-	 * version and if there is a new version
+	 * @return a not null VersionCheckResult that contains information on the new version and if there is a new version
 	 */
-	public VersionCheckResult checkVersion(){
-		String currentVersion =  JaspersoftStudioPlugin.getInstance().getBundle().getVersion().toString();
+	public VersionCheckResult checkVersion() {
+		String currentVersion = JaspersoftStudioPlugin.getInstance().getBundle().getVersion().toString();
 		String uuid = getAppDataFolder().getName();
 		String versionKnownByTheStats = getInstallationInfoContainer().getProperty(VERSION_INFO);
 		int newInstallation = 0;
-		//Read if there is an UUID in the preferences used to track the older versions
+		// Read if there is an UUID in the preferences used to track the older versions
 		PropertiesHelper ph = PropertiesHelper.getInstance();
 		String backward_uuid = ph.getString(BACKWARD_UUID_PROPERTY, null);
-		if (backward_uuid == null){
-			//If the backward value is null then i'm already using the new system, check if it 
+		if (backward_uuid == null) {
+			// If the backward value is null then i'm already using the new system, check if it
 			// is a new installation or an update
 			if (versionKnownByTheStats == null) {
-				//Since the last version was not yet initialized it is a new installation
+				// Since the last version was not yet initialized it is a new installation
 				newInstallation = 1;
 			} else if (!versionKnownByTheStats.equals(currentVersion)) {
-				//There is a version stored in the file, that is the last version known by the server, if it is
-				//different from the  real version then there were an update
+				// There is a version stored in the file, that is the last version known by the server, if it is
+				// different from the real version then there were an update
 				newInstallation = 2;
 			}
 		} else {
-			//If the backward value is != null then it isn't for sure a new installation, maybe there were
-			//but since i'm inside the new code then it should be an update. 
+			// If the backward value is != null then it isn't for sure a new installation, maybe there were
+			// but since i'm inside the new code then it should be an update.
 			newInstallation = 2;
 			setInstallationInfo(VERSION_INFO, currentVersion);
 		}
-		
+
 		StringBuilder urlBuilder = new StringBuilder();
 		urlBuilder.append("http://jasperstudio.sf.net/jsslastversion.php?version=");//$NON-NLS-1$
 		urlBuilder.append(currentVersion);
@@ -729,7 +735,7 @@ public class UsageManager {
 		urlBuilder.append(newInstallation);
 		urlBuilder.append("&isRCP=");//$NON-NLS-1$
 		urlBuilder.append(String.valueOf(isRCP()));
-		
+
 		String urlstr = urlBuilder.toString();
 		System.out.println("Invoking URL: " + urlstr); //$NON-NLS-1$
 		BufferedReader in = null;
@@ -742,21 +748,20 @@ public class UsageManager {
 			String optmsg = ""; //$NON-NLS-1$
 			String inputLine;
 			while ((inputLine = in.readLine()) != null) {
-				if (serverVersion == null){	
+				if (serverVersion == null) {
 					serverVersion = inputLine.trim();
-				}
-				else {
+				} else {
 					optmsg += inputLine;
 				}
 			}
-			//Update the installation info only if the informations was given correctly to the server
+			// Update the installation info only if the informations was given correctly to the server
 			setInstallationInfo(VERSION_INFO, currentVersion);
-			//Remove the old backward compatibility value if present to switch to the new system
-			if (backward_uuid != null){
+			// Remove the old backward compatibility value if present to switch to the new system
+			if (backward_uuid != null) {
 				ph.removeString(BACKWARD_UUID_PROPERTY, InstanceScope.SCOPE);
 			}
 			result = new VersionCheckResult(serverVersion, optmsg, currentVersion);
-		} catch(Exception ex){
+		} catch (Exception ex) {
 			ex.printStackTrace();
 			JaspersoftStudioPlugin.getInstance().logError(Messages.UsageManager_errorUpdateCheck, ex);
 		} finally {
