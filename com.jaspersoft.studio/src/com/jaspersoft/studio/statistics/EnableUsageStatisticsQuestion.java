@@ -16,8 +16,6 @@ import java.io.File;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
-import org.eclipse.jface.dialogs.MessageDialog;
-
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.StudioPreferencePage;
@@ -30,17 +28,10 @@ import com.jaspersoft.studio.preferences.StudioPreferencePage;
  *
  */
 public class EnableUsageStatisticsQuestion implements IFirstStartupAction {
-
+	
 	@Override
 	public void executeFirstStartupAction(File configurationDirectory) {
-		//Must be executed inside a graphic thread since it show a dialog
-		UIUtils.getDisplay().syncExec(new Runnable() {
-			@Override
-			public void run() {
-				boolean enableUsageStatistic = MessageDialog.openQuestion(UIUtils.getShell(), Messages.EnableUsageStatisticsQuestion_actionTitle, Messages.EnableUsageStatisticsQuestion_actionMessage);
-				JaspersoftStudioPlugin.getInstance().getPreferenceStore().setValue(StudioPreferencePage.JSS_SEND_USAGE_STATISTICS, enableUsageStatistic);
-			}
-		});
+		boolean enableUsageStatistic = UIUtils.showConfirmation(Messages.EnableUsageStatisticsQuestion_actionTitle, Messages.EnableUsageStatisticsQuestion_actionMessage);
+		JaspersoftStudioPlugin.getInstance().getPreferenceStore().setValue(StudioPreferencePage.JSS_SEND_USAGE_STATISTICS, enableUsageStatistic);
 	}
-
 }

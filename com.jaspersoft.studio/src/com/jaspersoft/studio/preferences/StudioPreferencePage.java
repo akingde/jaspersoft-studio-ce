@@ -24,6 +24,7 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.util.FieldEditorOverlayPage;
+import com.jaspersoft.studio.statistics.BooleanLinkFieldEditor;
 
 public class StudioPreferencePage extends FieldEditorOverlayPage {
 	public static final String PAGE_ID = "com.jaspersoft.studio.preferences.StudioPreferencePage.property"; //$NON-NLS-1$
@@ -35,7 +36,7 @@ public class StudioPreferencePage extends FieldEditorOverlayPage {
 	public static final String JSS_SEND_USAGE_STATISTICS = "com.jaspersoft.studio.send_usage"; //$NON-NLS-1$
 	
 	public static final String CHECK_FOR_UPDATE = "show_update_dialog"; //$NON-NLS-1$
-
+	
 	public StudioPreferencePage() {
 		super(GRID);
 		setPreferenceStore(JaspersoftStudioPlugin.getInstance().getPreferenceStore());
@@ -71,15 +72,11 @@ public class StudioPreferencePage extends FieldEditorOverlayPage {
 		
 		addField(new BooleanFieldEditor(JSS_TIMESTAMP_ONSAVE, Messages.StudioPreferencePage_TimestampOnSave,	getFieldEditorParent()));
 		
-		addField(new BooleanFieldEditor(JSS_SEND_USAGE_STATISTICS, Messages.StudioPreferencePage_collectUsageStatistics,	getFieldEditorParent()));
-		addField(new BooleanFieldEditor(CHECK_FOR_UPDATE, Messages.StudioPreferencePage_checkForUpdates,	getFieldEditorParent()));
+		addField(new BooleanFieldEditor(CHECK_FOR_UPDATE, Messages.StudioPreferencePage_checkForUpdates, getFieldEditorParent()));
+		addField(new BooleanLinkFieldEditor(JSS_SEND_USAGE_STATISTICS, Messages.StudioPreferencePage_collectUsageStatistics, getFieldEditorParent()));
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench)
-	 */
+
 	public void init(IWorkbench workbench) {
 	}
 
