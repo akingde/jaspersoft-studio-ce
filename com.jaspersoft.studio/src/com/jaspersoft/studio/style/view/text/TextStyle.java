@@ -28,7 +28,7 @@ import org.w3c.dom.Node;
 
 import com.jaspersoft.studio.editor.style.TemplateStyle;
 import com.jaspersoft.studio.utils.AlfaRGB;
-import com.jaspersoft.translation.resources.AbstractResourceDefinition;
+import com.jaspersoft.studio.utils.ModelUtils;
 
 /**
  * 
@@ -445,11 +445,11 @@ public class TextStyle extends TemplateStyle {
 			return pen2 == null;
 		if (pen2 == null)
 			return pen1 == null;
-		if (!AbstractResourceDefinition.safeEquals(pen1.getOwnLineColor(), pen2.getOwnLineColor()))
+		if (!ModelUtils.safeEquals(pen1.getOwnLineColor(), pen2.getOwnLineColor()))
 			return false;
-		if (!AbstractResourceDefinition.safeEquals(pen1.getOwnLineStyleValue(), pen2.getOwnLineStyleValue()))
+		if (!ModelUtils.safeEquals(pen1.getOwnLineStyleValue(), pen2.getOwnLineStyleValue()))
 			return false;
-		if (!AbstractResourceDefinition.safeEquals(pen1.getOwnLineWidth(), pen2.getOwnLineWidth()))
+		if (!ModelUtils.safeEquals(pen1.getOwnLineWidth(), pen2.getOwnLineWidth()))
 			return false;
 		return true;
 	}
@@ -460,41 +460,41 @@ public class TextStyle extends TemplateStyle {
 			TextStyle element2 = (TextStyle) obj;
 			if (!element2.isTransparent().equals(isTransparent()))
 				return false;
-			if (!AbstractResourceDefinition.safeEquals(getBackGround(), element2.getBackGround()))
+			if (!ModelUtils.safeEquals(getBackGround(), element2.getBackGround()))
 				return false;
-			if (!AbstractResourceDefinition.safeEquals(getForeGround(), element2.getForeGround()))
+			if (!ModelUtils.safeEquals(getForeGround(), element2.getForeGround()))
 				return false;
-			if (!AbstractResourceDefinition.safeEquals(getHorizontalAlignmen(), element2.getHorizontalAlignmen()))
+			if (!ModelUtils.safeEquals(getHorizontalAlignmen(), element2.getHorizontalAlignmen()))
 				return false;
-			if (!AbstractResourceDefinition.safeEquals(getVerticalAlignmen(), element2.getVerticalAlignmen()))
+			if (!ModelUtils.safeEquals(getVerticalAlignmen(), element2.getVerticalAlignmen()))
 				return false;
-			if (!AbstractResourceDefinition.safeEquals(getRotation(), element2.getRotation()))
+			if (!ModelUtils.safeEquals(getRotation(), element2.getRotation()))
 				return false;
 			JRFont font1 = getFont();
 			JRFont font2 = element2.getFont();
-			if (!AbstractResourceDefinition.safeEquals(font1.isOwnBold(), font2.isOwnBold()))
+			if (!ModelUtils.safeEquals(font1.isOwnBold(), font2.isOwnBold()))
 				return false;
-			if (!AbstractResourceDefinition.safeEquals(font1.isOwnItalic(), font2.isOwnItalic()))
+			if (!ModelUtils.safeEquals(font1.isOwnItalic(), font2.isOwnItalic()))
 				return false;
-			if (!AbstractResourceDefinition.safeEquals(font1.isOwnUnderline(), font2.isOwnUnderline()))
+			if (!ModelUtils.safeEquals(font1.isOwnUnderline(), font2.isOwnUnderline()))
 				return false;
-			if (!AbstractResourceDefinition.safeEquals(font1.isOwnStrikeThrough(), font2.isOwnStrikeThrough()))
+			if (!ModelUtils.safeEquals(font1.isOwnStrikeThrough(), font2.isOwnStrikeThrough()))
 				return false;
-			if (!AbstractResourceDefinition.safeEquals(font1.getOwnFontName(), font2.getOwnFontName()))
+			if (!ModelUtils.safeEquals(font1.getOwnFontName(), font2.getOwnFontName()))
 				return false;
-			if (!AbstractResourceDefinition.safeEquals(font1.getOwnFontsize(), font2.getOwnFontsize()))
+			if (!ModelUtils.safeEquals(font1.getOwnFontsize(), font2.getOwnFontsize()))
 				return false;
 			JRLineBox box1 = getBorders();
 			JRLineBox box2 = element2.getBorders();
-			if (!AbstractResourceDefinition.safeEquals(box1.getOwnPadding(), box2.getOwnPadding()))
+			if (!ModelUtils.safeEquals(box1.getOwnPadding(), box2.getOwnPadding()))
 				return false;
-			if (!AbstractResourceDefinition.safeEquals(box1.getOwnTopPadding(), box2.getOwnTopPadding()))
+			if (!ModelUtils.safeEquals(box1.getOwnTopPadding(), box2.getOwnTopPadding()))
 				return false;
-			if (!AbstractResourceDefinition.safeEquals(box1.getOwnBottomPadding(), box2.getOwnBottomPadding()))
+			if (!ModelUtils.safeEquals(box1.getOwnBottomPadding(), box2.getOwnBottomPadding()))
 				return false;
-			if (!AbstractResourceDefinition.safeEquals(box1.getOwnLeftPadding(), box2.getOwnLeftPadding()))
+			if (!ModelUtils.safeEquals(box1.getOwnLeftPadding(), box2.getOwnLeftPadding()))
 				return false;
-			if (!AbstractResourceDefinition.safeEquals(box1.getOwnRightPadding(), box2.getOwnRightPadding()))
+			if (!ModelUtils.safeEquals(box1.getOwnRightPadding(), box2.getOwnRightPadding()))
 				return false;
 			if (!equalsPen(box1.getPen(), box2.getPen()))
 				return false;

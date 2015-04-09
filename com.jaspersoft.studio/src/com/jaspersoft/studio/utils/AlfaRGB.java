@@ -16,8 +16,6 @@ import java.io.Serializable;
 
 import org.eclipse.swt.graphics.RGB;
 
-import com.jaspersoft.translation.resources.AbstractResourceDefinition;
-
 public class AlfaRGB implements Serializable{
 
 	private static final long serialVersionUID = 1283053372093648788L;
@@ -68,7 +66,7 @@ public class AlfaRGB implements Serializable{
 	public boolean equals(Object arg0) {
 		if (arg0 != null && arg0 instanceof AlfaRGB){
 			AlfaRGB color = (AlfaRGB)arg0;
-			return (color.getAlfa() == alfa && AbstractResourceDefinition.safeEquals(getRgb(),color.getRgb()));
+			return (color.getAlfa() == alfa && ModelUtils.safeEquals(getRgb(),color.getRgb()));
 		}
 		return false;
 	}

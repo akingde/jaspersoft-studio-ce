@@ -44,7 +44,6 @@ import net.sf.jasperreports.engine.JRChild;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRDatasetRun;
 import net.sf.jasperreports.engine.JRElement;
-import net.sf.jasperreports.engine.JRElementDataset;
 import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRField;
@@ -102,7 +101,6 @@ import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.model.dataset.MDataset;
 import com.jaspersoft.studio.model.dataset.MDatasetRun;
-import com.jaspersoft.studio.model.dataset.MElementDataset;
 import com.jaspersoft.studio.model.sortfield.MSortFields;
 import com.jaspersoft.studio.model.util.ModelVisitor;
 import com.jaspersoft.studio.plugin.IComponentFactory;
@@ -125,13 +123,6 @@ public class ModelUtils {
 				return ((MDataset) n).getValue();
 			if (n instanceof MReport)
 				return (JRDesignDataset) ((MReport) n).getValue().getMainDataset();
-			if (n instanceof MElementDataset) {
-				JRElementDataset elementDS = (JRElementDataset) n.getValue();
-				JRDatasetRun datasetRun = elementDS.getDatasetRun();
-				if(datasetRun!=null){
-					return (JRDesignDataset) node.getJasperDesign().getDatasetMap().get(datasetRun.getDatasetName());
-				}
-			}
 			n = n.getParent();
 		}
 		return null;
@@ -1672,6 +1663,41 @@ public class ModelUtils {
 	public static String getReportPropertyValue(JasperDesign jd, String key, String defaultValue) {
 		String value = jd.getProperty(key);
 		return value != null ? value : defaultValue;
+	}
+	
+	/**
+	 * Determines whether two objects are equal, including <code>null</code> values.
+	 * 
+	 * @param o1
+	 * @param o2
+	 * @return whether the two objects are equal
+	 */
+	public static boolean safeEquals(Object o1, Object o2)
+	{
+		return (o1 == null) ? (o2 == null) : (o2 != null && o1.equals(o2));
+	}
+	
+	/**
+	 * Compare two JRPropertiesMap to check if they are equals. They are
+	 * equals when they have the same set of keys associated with the same values
+	 * 
+	 * @param map1 the first map, can be null
+	 * @param map2 the second map, can be null
+	 * @return true if the map are equals, false otherwise
+	 */
+	public static boolean jrPropertiesMapEquals(JRPropertiesMap map1, JRPropertiesMap map2){
+		//if one is null the both must be null
+		if (map1 == null || map2 == null) return (map2 == null && map1 == null);
+		String[] names1 = map1.getPropertyNames();
+		//Must have the same number of keys
+		if (names1.length != map2.getPropertyNames().length) return false;
+		//check entry by entry
+		for(String name : names1){
+			if (!map2.containsProperty(name) || !safeEquals(map1.getProperty(name), map2.getProperty(name))){
+				return false;
+			}
+		}
+		return true;
 	}
 	
 	/**
