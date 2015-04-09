@@ -69,9 +69,9 @@ import com.jaspersoft.studio.dnd.NodeTransfer;
 import com.jaspersoft.studio.model.IDragable;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MRoot;
-import com.jaspersoft.studio.model.util.ModelUtil;
 import com.jaspersoft.studio.outline.ReportTreeContetProvider;
 import com.jaspersoft.studio.outline.ReportTreeLabelProvider;
+import com.jaspersoft.studio.utils.ModelUtils;
 
 public class DBMetadata {
 	private TreeViewer treeViewer;
@@ -293,7 +293,7 @@ public class DBMetadata {
 	}
 
 	public void loadTable(final MSqlTable mtable) {
-		if (das != null && ModelUtil.isEmpty(mtable)) {
+		if (das != null && ModelUtils.isEmpty(mtable)) {
 			try {
 				designer.run(true, true, new IRunnableWithProgress() {
 					@Override
@@ -331,7 +331,7 @@ public class DBMetadata {
 	}
 
 	public void loadSchema(final MSqlSchema mschema) {
-		if (das != null && ModelUtil.isEmpty(mschema)) {
+		if (das != null && ModelUtils.isEmpty(mschema)) {
 			try {
 				designer.run(true, true, new IRunnableWithProgress() {
 					@Override

@@ -35,6 +35,7 @@ import com.jaspersoft.studio.property.descriptor.classname.NClassTypePropertyDes
 import com.jaspersoft.studio.property.descriptor.combo.RComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
+import com.jaspersoft.studio.utils.ModelUtils;
 
 /**
  * Model object representing the Custom Visualization component element.
@@ -245,10 +246,13 @@ public class MCustomVisualization extends MGraphicElement implements
 		JRDesignComponentElement jrElement = (JRDesignComponentElement) getValue();
 		CVDesignComponent cvComp = (CVDesignComponent) jrElement.getComponent();
 		if (CVDesignComponent.PROPERTY_EVALUATION_TIME.equals(id)) {
-			cvComp.setEvaluationTime(
-					EnumHelper.getEnumByObjectValue(EvaluationTimeEnum.values(), value));
+			EvaluationTimeEnum evalTime = EnumHelper.getEnumByObjectValue(EvaluationTimeEnum.values(), value);
+			cvComp.setEvaluationTime(evalTime);
+			if(evalTime != null && !evalTime.equals(EvaluationTimeEnum.GROUP)) {
+				cvComp.setEvaluationGroup(null);
+			}
 		} else if (CVDesignComponent.PROPERTY_EVALUATION_GROUP.equals(id)) {
-			cvComp.setEvaluationGroup((String) value);
+			cvComp.setEvaluationGroup(ModelUtils.getGroupNameForProperty(value));
 		} else if (CVDesignComponent.PROPERTY_PROCESSING_CLASS.equals(id)) {
 			if (value instanceof String && ((String) value).trim().isEmpty())
 				value = null;

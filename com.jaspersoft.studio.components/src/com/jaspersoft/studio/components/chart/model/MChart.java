@@ -588,10 +588,14 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 		else if (id.equals(JRBaseChart.PROPERTY_LEGEND_POSITION))
 			jrElement.setLegendPosition((EdgeEnum) legendPositionD
 					.getEnumValue(value));
-		else if (id.equals(JRDesignChart.PROPERTY_EVALUATION_TIME))
+		else if (id.equals(JRDesignChart.PROPERTY_EVALUATION_TIME)) {
+			EvaluationTimeEnum evalTime = EnumHelper.getEnumByObjectValue(EvaluationTimeEnum.values(), value);
 			jrElement.setEvaluationTime(
-					EnumHelper.getEnumByObjectValue(EvaluationTimeEnum.values(), value));
-		else if (id.equals(JRBaseChart.PROPERTY_SHOW_LEGEND))
+					evalTime);
+			if(evalTime != null && !evalTime.equals(EvaluationTimeEnum.GROUP)) {
+				jrElement.setEvaluationGroup(null);
+			}		
+		} else if (id.equals(JRBaseChart.PROPERTY_SHOW_LEGEND))
 			jrElement.setShowLegend((Boolean) value);
 		else if (id.equals(JRBaseChart.PROPERTY_RENDER_TYPE)) {
 			value = Misc.nullValue((String) value);

@@ -35,6 +35,7 @@ import com.jaspersoft.studio.property.descriptor.genericElement.ParameterPropert
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
+import com.jaspersoft.studio.utils.ModelUtils;
 
 public class MGenericElement extends MGraphicElement {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
@@ -211,11 +212,15 @@ public class MGenericElement extends MGraphicElement {
 		JRDesignGenericElement jrElement = (JRDesignGenericElement) getValue();
 		JRGenericElementType genericType = jrElement.getGenericType();
 		if (id.equals(JRDesignGenericElement.PROPERTY_EVALUATION_TIME)) {
-			jrElement.setEvaluationTime(
-					EnumHelper.getEnumByObjectValue(EvaluationTimeEnum.values(), value));
+			EvaluationTimeEnum evalTime = EnumHelper.getEnumByObjectValue(EvaluationTimeEnum.values(), value);
+			jrElement.setEvaluationTime(evalTime);
+			if(evalTime != null && !evalTime.equals(EvaluationTimeEnum.GROUP)) {
+				jrElement.setEvaluationGroupName(null);
+			}	
 		}
-		else if (id.equals(JRDesignGenericElement.PROPERTY_EVALUATION_GROUP_NAME))
-			jrElement.setEvaluationGroupName((String) value);
+		else if (id.equals(JRDesignGenericElement.PROPERTY_EVALUATION_GROUP_NAME)) {
+			jrElement.setEvaluationGroupName(ModelUtils.getGroupNameForProperty(value));			
+		}
 		else if (id.equals(JRDesignGenericElement.PROPERTY_PARAMETERS)) {
 			JRGenericElementParameter[] oldParameters = jrElement.getParameters();
 			JRGenericElementParameter[] newParameters = (JRGenericElementParameter[]) value;

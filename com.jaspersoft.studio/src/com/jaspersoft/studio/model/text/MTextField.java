@@ -18,7 +18,6 @@ import java.util.Map;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRElement;
-import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.JRHyperlinkParameter;
 import net.sf.jasperreports.engine.JRTextField;
 import net.sf.jasperreports.engine.base.JRBaseTextField;
@@ -56,6 +55,7 @@ import com.jaspersoft.studio.property.descriptor.pattern.PatternPropertyDescript
 import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.SpinnerPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
+import com.jaspersoft.studio.utils.ModelUtils;
 
 /*
  * The Class MTextField.
@@ -318,16 +318,15 @@ public class MTextField extends MTextElement {
 		JRDesignTextField jrElement = (JRDesignTextField) getValue();
 
 		if (id.equals(JRDesignTextField.PROPERTY_EVALUATION_TIME)) {
-			jrElement.setEvaluationTime(
-					EnumHelper.getEnumByObjectValue(EvaluationTimeEnum.values(), value));
+			EvaluationTimeEnum evalTime = EnumHelper.getEnumByObjectValue(EvaluationTimeEnum.values(), value);
+			jrElement.setEvaluationTime(evalTime);
+			if(evalTime != null && !evalTime.equals(EvaluationTimeEnum.GROUP)) {
+				jrElement.setEvaluationGroup(null);
+			}		
 		}
 		else if (id.equals(JRDesignTextField.PROPERTY_EVALUATION_GROUP)) {
-			if (value != null && !value.equals("")) { //$NON-NLS-1$
-				JRDesignDataset dataset = (JRDesignDataset) getElementDataset();
-				JRGroup group = (JRGroup) dataset.getGroupsMap().get(value);
-				jrElement.setEvaluationGroup(group);
-			} else
-				jrElement.setEvaluationGroup(null);
+			jrElement.setEvaluationGroup(
+					ModelUtils.getGroupForProperty(value, (JRDesignDataset) getElementDataset()));
 		} else if (id.equals(JRDesignTextField.PROPERTY_EXPRESSION)) {
 			jrElement.setExpression(ExprUtil.setValues(jrElement.getExpression(), value));
 			JRDesignExpression expression = (JRDesignExpression) jrElement.getExpression();

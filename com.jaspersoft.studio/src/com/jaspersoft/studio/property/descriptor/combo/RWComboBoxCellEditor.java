@@ -106,7 +106,7 @@ public class RWComboBoxCellEditor extends ComboBoxCellEditor {
 		}
 		return null;
 	}
-
+	
 	public CCombo getComboBox() {
 		return comboBox;
 	}
@@ -128,12 +128,13 @@ public class RWComboBoxCellEditor extends ComboBoxCellEditor {
 					return;
 				}
 			}
-			// Nothing element found
+			// No element found
 			String[] newListItems = new String[items.length + 1];
 			System.arraycopy(items, 0, newListItems, 0, items.length);
 			
 			newListItems[items.length] = (String) value;
 			setItems(newListItems);
+			super.doSetValue(items.length);
 		}
 
 	}

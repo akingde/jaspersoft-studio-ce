@@ -47,6 +47,7 @@ import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 import com.jaspersoft.studio.utils.AlfaRGB;
 import com.jaspersoft.studio.utils.Colors;
 import com.jaspersoft.studio.utils.EnumHelper;
+import com.jaspersoft.studio.utils.ModelUtils;
 
 /**
  * 
@@ -315,11 +316,14 @@ public class MSort extends MGraphicElement {
 			component.setSortFieldType(sortFieldType.getEnumValue(value));
 
 		else if (id.equals(SortComponent.PROPERTY_EVALUATION_TIME)){
-			component.setEvaluationTime(
-					EnumHelper.getEnumByObjectValue(EvaluationTimeEnum.values(), value));
+			EvaluationTimeEnum evalTime = EnumHelper.getEnumByObjectValue(EvaluationTimeEnum.values(), value);
+			component.setEvaluationTime(evalTime);
+			if(evalTime != null && !evalTime.equals(EvaluationTimeEnum.GROUP)) {
+				component.setEvaluationGroup(null);
+			}
 		}
 		else if (id.equals(SortComponent.PROPERTY_EVALUATION_GROUP)) {
-			component.setEvaluationGroup((String) value);
+			component.setEvaluationGroup(ModelUtils.getGroupNameForProperty(value));
 		} else if (id.equals(SortComponent.PROPERTY_HANDLER_HORIZONTAL_ALIGN)) {
 			component.setHandlerHorizontalImageAlign(horizAlign
 					.getEnumValue(value));

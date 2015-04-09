@@ -44,6 +44,7 @@ import net.sf.jasperreports.engine.JRChild;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRDatasetRun;
 import net.sf.jasperreports.engine.JRElement;
+import net.sf.jasperreports.engine.JRElementDataset;
 import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRField;
@@ -94,13 +95,16 @@ import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.IDatasetContainer;
 import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.model.MDummy;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.MPage;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.model.dataset.MDataset;
 import com.jaspersoft.studio.model.dataset.MDatasetRun;
+import com.jaspersoft.studio.model.dataset.MElementDataset;
 import com.jaspersoft.studio.model.sortfield.MSortFields;
+import com.jaspersoft.studio.model.util.ModelVisitor;
 import com.jaspersoft.studio.plugin.IComponentFactory;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -121,6 +125,13 @@ public class ModelUtils {
 				return ((MDataset) n).getValue();
 			if (n instanceof MReport)
 				return (JRDesignDataset) ((MReport) n).getValue().getMainDataset();
+			if (n instanceof MElementDataset) {
+				JRElementDataset elementDS = (JRElementDataset) n.getValue();
+				JRDatasetRun datasetRun = elementDS.getDatasetRun();
+				if(datasetRun!=null){
+					return (JRDesignDataset) node.getJasperDesign().getDatasetMap().get(datasetRun.getDatasetName());
+				}
+			}
 			n = n.getParent();
 		}
 		return null;
@@ -1661,5 +1672,88 @@ public class ModelUtils {
 	public static String getReportPropertyValue(JasperDesign jd, String key, String defaultValue) {
 		String value = jd.getProperty(key);
 		return value != null ? value : defaultValue;
+	}
+	
+	/**
+	 * Tries to retrieve a valid group name from the specified parameter.
+	 * If the information can not be extracted null string is returned.
+	 * <p>
+	 * 
+	 * This method should be used when setting/getting the group name details for a
+	 * model element property.
+	 * 
+	 * @param value a generic object possibly containing the group information
+	 * @return the group name if any, <code>null</code> otherwise
+	 */
+	public static String getGroupNameForProperty(Object value) {
+		if(value instanceof JRGroup) {
+			return ((JRGroup) value).getName();
+		}
+		else if(value instanceof String) {
+			if(((String) value).trim().isEmpty()){
+				return null;
+			}
+			else {
+				return (String) value;
+			}
+		}
+		else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Tries to retrieve a valid group instance from the specified parameters.
+	 * The dataset can be used to extract the group, for example based on a value string.
+	 * 
+	 * @param value a generic object possibly containing group details
+	 * @param dataset a dataset instance that can allow to retrieve the group
+	 * @return the group instance if any, <code>null</code> otherwise
+	 */
+	public static JRGroup getGroupForProperty(Object value, JRDesignDataset dataset) {
+		if(value instanceof JRGroup) {
+			return (JRGroup) value;
+		}
+		else if(value instanceof String) {
+			if(((String) value).trim().isEmpty() || dataset == null){
+				return null;
+			}
+			else {
+				return dataset.getGroupsMap().get(value);
+			}
+		}
+		else {
+			return null;
+		}
+	}
+	
+	public static INode getNode(final Object obj, INode parent) {
+		ModelVisitor<INode> mv = new ModelVisitor<INode>(parent) {
+
+			@Override
+			public boolean visit(INode n) {
+				if (n.getValue() == obj)
+					setObject(n);
+				return true;
+			}
+		};
+		return (INode) mv.getObject();
+	}
+
+	public static String list2string(String[][] items) {
+		String str = "";
+		for (int i = 0; i < items.length; i++) {
+			for (int j = 0; j < items[i].length; j++) {
+				str += items[i][j];
+				if (j < items[i].length - 1)
+					str += ";";
+			}
+			str += "\n";
+		}
+		return str;
+	}
+
+	public static boolean isEmpty(ANode n) {
+		return Misc.isNullOrEmpty(n.getChildren()) || n.getChildren().get(0) instanceof MDummy;
 	}
 }

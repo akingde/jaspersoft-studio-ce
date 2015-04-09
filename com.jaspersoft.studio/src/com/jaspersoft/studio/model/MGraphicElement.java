@@ -326,9 +326,10 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 			// Calculate the groups list for the current element
 			if (dataset != null) {
 				JRGroup[] groups = dataset.getGroups();
-				String[] items = new String[groups.length];
+				String[] items = new String[groups.length+1];
+				items[0] = ""; // always add empty for <NULL>
 				for (int j = 0; j < groups.length; j++) {
-					items[j] = groups[j].getName();
+					items[j+1] = groups[j].getName();
 				}
 				setGroupItems(items);
 			}
@@ -350,15 +351,7 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 
 	protected void setGroupItems(String[] items) {
 		if (groupChangesD != null) {
-			// Appen to the array the element to unselect the group
-			String[] itemsEmpty = new String[items.length + 1];
-			itemsEmpty[0] = "";
-			int j = 1;
-			for (String item : items) {
-				itemsEmpty[j] = item;
-				j++;
-			}
-			groupChangesD.setItems(itemsEmpty);
+			groupChangesD.setItems(items);
 		}
 	}
 
@@ -664,6 +657,9 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 				JRDesignDataset jrDataset = (JRDesignDataset) getElementDataset();
 				JRGroup group = jrDataset.getGroupsMap().get(value);
 				jrElement.setPrintWhenGroupChanges(group);
+			}
+			else {
+				jrElement.setPrintWhenGroupChanges(null);
 			}
 		} else if (id.equals(JRDesignElement.PROPERTY_PROPERTY_EXPRESSIONS)) {
 			if (value instanceof PropertyExpressionsDTO) {

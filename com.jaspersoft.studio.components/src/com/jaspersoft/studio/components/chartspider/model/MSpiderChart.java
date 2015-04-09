@@ -67,6 +67,7 @@ import com.jaspersoft.studio.utils.AlfaRGB;
 import com.jaspersoft.studio.utils.Colors;
 import com.jaspersoft.studio.utils.EnumHelper;
 import com.jaspersoft.studio.utils.Misc;
+import com.jaspersoft.studio.utils.ModelUtils;
 
 /**
  * 
@@ -654,11 +655,15 @@ public class MSpiderChart extends MGraphicElement implements IDatasetContainer {
 			for (JRHyperlinkParameter param : newParameters) {
 				cs.addHyperlinkParameter(param);
 			}
-		} else if (id.equals(SpiderChartComponent.PROPERTY_EVALUATION_TIME))
+		} else if (id.equals(SpiderChartComponent.PROPERTY_EVALUATION_TIME)) {
+			EvaluationTimeEnum evalTime = EnumHelper.getEnumByObjectValue(EvaluationTimeEnum.values(), value);
 			component.setEvaluationTime(
-					EnumHelper.getEnumByObjectValue(EvaluationTimeEnum.values(), value));
-		else if (id.equals(SpiderChartComponent.PROPERTY_EVALUATION_GROUP)) {
-			component.setEvaluationGroup((String) value);
+					evalTime);
+			if(evalTime != null && !evalTime.equals(EvaluationTimeEnum.GROUP)) {
+				component.setEvaluationGroup(null);
+			}		
+		} else if (id.equals(SpiderChartComponent.PROPERTY_EVALUATION_GROUP)) {
+			component.setEvaluationGroup(ModelUtils.getGroupNameForProperty(value));
 		} else
 			super.setPropertyValue(id, value);
 	}

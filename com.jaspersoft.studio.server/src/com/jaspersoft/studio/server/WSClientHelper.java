@@ -36,7 +36,6 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescript
 import com.jaspersoft.jasperserver.dto.resources.ClientResource;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
-import com.jaspersoft.studio.model.util.ModelUtil;
 import com.jaspersoft.studio.server.model.AFileResource;
 import com.jaspersoft.studio.server.model.IInputControlsContainer;
 import com.jaspersoft.studio.server.model.MFolder;
@@ -52,6 +51,7 @@ import com.jaspersoft.studio.server.protocol.IConnection;
 import com.jaspersoft.studio.server.protocol.ProxyConnection;
 import com.jaspersoft.studio.server.protocol.ReportExecution;
 import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorDatasource;
+import com.jaspersoft.studio.utils.ModelUtils;
 
 public class WSClientHelper {
 	private static Map<IConnection, ServerProfile> clients = new HashMap<IConnection, ServerProfile>();
@@ -517,7 +517,7 @@ public class WSClientHelper {
 	public static MResource findSelected(IProgressMonitor monitor,
 			ResourceDescriptor rd, MServerProfile msp) throws Exception {
 		IConnection c = msp.getWsClient(monitor);
-		if (ModelUtil.isEmpty(msp))
+		if (ModelUtils.isEmpty(msp))
 			listFolder(msp, c, "/", monitor, 0);
 		return findSelected(msp.getChildren(), monitor, rd.getUriString(), c);
 	}

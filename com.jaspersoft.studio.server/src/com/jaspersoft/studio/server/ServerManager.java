@@ -52,7 +52,6 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MDummy;
 import com.jaspersoft.studio.model.MRoot;
-import com.jaspersoft.studio.model.util.ModelUtil;
 import com.jaspersoft.studio.model.util.ModelVisitor;
 import com.jaspersoft.studio.server.editor.JRSEditorContributor;
 import com.jaspersoft.studio.server.model.MResource;
@@ -61,6 +60,7 @@ import com.jaspersoft.studio.server.model.server.MServers;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
 import com.jaspersoft.studio.server.protocol.IConnection;
 import com.jaspersoft.studio.utils.Misc;
+import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class ServerManager {
@@ -462,7 +462,7 @@ public class ServerManager {
 			final String puri = ((MResource) mres.getParent()).getValue()
 					.getUriString();
 			final String uri = mres.getValue().getUriString();
-			if (ModelUtil.isEmpty(sp))
+			if (ModelUtils.isEmpty(sp))
 				try {
 					WSClientHelper.connectGetData(sp, monitor);
 				} catch (Exception e) {

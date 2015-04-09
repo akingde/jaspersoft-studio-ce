@@ -43,6 +43,7 @@ import com.jaspersoft.studio.property.descriptor.expression.JRExpressionProperty
 import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.PixelPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
+import com.jaspersoft.studio.utils.ModelUtils;
 
 /*
  * The Class MBarcode.
@@ -277,11 +278,15 @@ public class MBarcodeBarbecue extends MBarcode implements IRotatable {
 		StandardBarbecueComponent barbecueComponent = (StandardBarbecueComponent) jrElement
 				.getComponent();
 
-		if (id.equals(StandardBarbecueComponent.PROPERTY_EVALUATION_TIME))
-			barbecueComponent.setEvaluationTimeValue(
-					EnumHelper.getEnumByObjectValue(EvaluationTimeEnum.values(), value));
-		else if (id.equals(StandardBarbecueComponent.PROPERTY_EVALUATION_GROUP))
-			barbecueComponent.setEvaluationGroup((String) value);
+		if (id.equals(StandardBarbecueComponent.PROPERTY_EVALUATION_TIME)) {
+			EvaluationTimeEnum evalTime = EnumHelper.getEnumByObjectValue(EvaluationTimeEnum.values(), value);
+			barbecueComponent.setEvaluationTimeValue(evalTime);
+			if(evalTime != null && !evalTime.equals(EvaluationTimeEnum.GROUP)) {
+				barbecueComponent.setEvaluationGroup(null);
+			}	
+		} else if (id.equals(StandardBarbecueComponent.PROPERTY_EVALUATION_GROUP)) {
+			barbecueComponent.setEvaluationGroup(ModelUtils.getGroupNameForProperty(value));
+		}
 		else if (id
 				.equals(StandardBarbecueComponent.PROPERTY_CHECKSUM_REQUIRED))
 			barbecueComponent.setChecksumRequired(((Boolean) value).booleanValue());

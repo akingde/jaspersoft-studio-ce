@@ -488,11 +488,14 @@ public class MMap extends MGraphicElement implements IDatasetContainer {
 						.setDatasetRun(null);
 			}
 		} else if (id.equals(StandardMapComponent.PROPERTY_EVALUATION_TIME)) {
-			component.setEvaluationTime(
-					EnumHelper.getEnumByObjectValue(EvaluationTimeEnum.values(), value));
+			EvaluationTimeEnum evalTime = EnumHelper.getEnumByObjectValue(EvaluationTimeEnum.values(), value);
+			component.setEvaluationTime(evalTime);
+			if(evalTime != null && !evalTime.equals(EvaluationTimeEnum.GROUP)) {
+				component.setEvaluationGroup(null);
+			}
 		}
 		else if (id.equals(StandardMapComponent.PROPERTY_EVALUATION_GROUP)) {
-			component.setEvaluationGroup((String) value);
+			component.setEvaluationGroup(ModelUtils.getGroupNameForProperty(value));
 		}
 		else if (id.equals(StandardMapComponent.PROPERTY_LONGITUDE_EXPRESSION)) {
 			component.setLongitudeExpression(ExprUtil.setValues(

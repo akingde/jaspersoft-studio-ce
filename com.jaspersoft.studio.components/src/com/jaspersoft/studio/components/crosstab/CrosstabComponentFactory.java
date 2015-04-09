@@ -134,7 +134,6 @@ import com.jaspersoft.studio.model.frame.MFrame;
 import com.jaspersoft.studio.model.parameter.MParameter;
 import com.jaspersoft.studio.model.parameter.MParameterSystem;
 import com.jaspersoft.studio.model.style.MStyle;
-import com.jaspersoft.studio.model.util.ModelUtil;
 import com.jaspersoft.studio.model.util.ReportFactory;
 import com.jaspersoft.studio.model.variable.MVariableSystem;
 import com.jaspersoft.studio.plugin.IComponentFactory;
@@ -495,7 +494,7 @@ public class CrosstabComponentFactory implements IComponentFactory {
 				location = location.setLocation(location.x - r.x, location.y - r.y);
 
 				if (cell != null) {
-					MCell mcell = (MCell) ModelUtil.getNode(cell, mt);
+					MCell mcell = (MCell) ModelUtils.getNode(cell, mt);
 					return new CreateElementCommand(mcell, (MGraphicElement) child, location, newIndex);
 				}
 			}

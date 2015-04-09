@@ -157,12 +157,18 @@ public abstract class SPGroupTypeCombo extends ASPropertyWidget {
 			if (en.equals(getGroupEnum())) {
 				if (gDescriptor instanceof RWComboBoxPropertyDescriptor) {
 					String[] groupItems = ((RWComboBoxPropertyDescriptor) gDescriptor).getItems();
-					for (String gr : groupItems)
-						lsIncs.add(GROUPPREFIX + gr);
+					for (String gr : groupItems) {
+						if(gr!=null && !gr.trim().isEmpty()) {
+							lsIncs.add(GROUPPREFIX + gr);
+						}
+					}
 				} else if (gDescriptor instanceof RComboBoxPropertyDescriptor) {
 					String[] groupItems = ((RComboBoxPropertyDescriptor) gDescriptor).getItems();
-					for (String gr : groupItems)
-						lsIncs.add(GROUPPREFIX + gr);
+					for (String gr : groupItems) {
+						if(gr!=null && !gr.trim().isEmpty()) { 
+							lsIncs.add(GROUPPREFIX + gr);
+						}
+					}
 				}
 			} else {
 				lsIncs.add(en.getName());

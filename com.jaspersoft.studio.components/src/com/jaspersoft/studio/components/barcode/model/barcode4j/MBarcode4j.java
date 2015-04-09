@@ -33,6 +33,7 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.utils.EnumHelper;
+import com.jaspersoft.studio.utils.ModelUtils;
 
 /*
  * The Class MBarcode.
@@ -228,13 +229,18 @@ public class MBarcode4j extends MBarcode {
 	@Override
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignComponentElement jrElement = (JRDesignComponentElement) getValue();
-		BarcodeComponent jrList = (BarcodeComponent) jrElement.getComponent();
+		BarcodeComponent barcodeComponent = (BarcodeComponent) jrElement.getComponent();
 
-		if (id.equals(StandardBarbecueComponent.PROPERTY_EVALUATION_TIME))
-			jrList.setEvaluationTimeValue(
-					EnumHelper.getEnumByObjectValue(EvaluationTimeEnum.values(), value));
-		else if (id.equals(StandardBarbecueComponent.PROPERTY_EVALUATION_GROUP))
-			jrList.setEvaluationGroup((String) value);
+		if (id.equals(StandardBarbecueComponent.PROPERTY_EVALUATION_TIME)) {
+			EvaluationTimeEnum evalTime = EnumHelper.getEnumByObjectValue(EvaluationTimeEnum.values(), value);
+			barcodeComponent.setEvaluationTimeValue(evalTime);
+			if(evalTime != null && !evalTime.equals(EvaluationTimeEnum.GROUP)) {
+				barcodeComponent.setEvaluationGroup(null);
+			}		
+		}
+		else if (id.equals(StandardBarbecueComponent.PROPERTY_EVALUATION_GROUP)){
+			barcodeComponent.setEvaluationGroup(ModelUtils.getGroupNameForProperty(value));
+		}
 
 		// else if (id.equals(BarcodeComponent.PROPERTY_MODULE_WIDTH))
 		// if (value instanceof Integer)
@@ -255,8 +261,8 @@ public class MBarcode4j extends MBarcode {
 		// jrList.setPatternExpression(ExprUtil.setValues(
 		// jrList.getPatternExpression(), value, null));
 		else if (id.equals(StandardBarbecueComponent.PROPERTY_CODE_EXPRESSION)) {
-			jrList.setCodeExpression(ExprUtil.setValues(
-					jrList.getCodeExpression(), value, null));
+			barcodeComponent.setCodeExpression(ExprUtil.setValues(
+					barcodeComponent.getCodeExpression(), value, null));
 		} else
 			super.setPropertyValue(id, value);
 	}

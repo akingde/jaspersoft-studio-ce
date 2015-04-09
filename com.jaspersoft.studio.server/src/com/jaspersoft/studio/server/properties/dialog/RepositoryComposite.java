@@ -33,7 +33,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.model.INode;
-import com.jaspersoft.studio.model.util.ModelUtil;
 import com.jaspersoft.studio.outline.ReportTreeContetProvider;
 import com.jaspersoft.studio.outline.ReportTreeLabelProvider;
 import com.jaspersoft.studio.server.ServerProvider;
@@ -42,6 +41,7 @@ import com.jaspersoft.studio.server.action.resource.RefreshResourcesAction;
 import com.jaspersoft.studio.server.model.MFolder;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
+import com.jaspersoft.studio.utils.ModelUtils;
 
 /**
  * @author Veaceslav Chicu (schicu@users.sourceforge.net)
@@ -159,7 +159,7 @@ public class RepositoryComposite extends Composite {
 				msp = (MServerProfile) root;
 			else if (root instanceof MResource)
 				msp = (MServerProfile) ((MResource) root).getRoot();
-			if (ModelUtil.isEmpty(msp))
+			if (ModelUtils.isEmpty(msp))
 				WSClientHelper.connectGetData(msp, monitor);
 			UIUtils.getDisplay().asyncExec(new Runnable() {
 

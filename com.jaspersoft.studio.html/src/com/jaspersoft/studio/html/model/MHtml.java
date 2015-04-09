@@ -43,6 +43,7 @@ import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
+import com.jaspersoft.studio.utils.ModelUtils;
 
 public class MHtml extends MGraphicElement {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
@@ -280,11 +281,14 @@ public class MHtml extends MGraphicElement {
 		JRDesignComponentElement jrElement = (JRDesignComponentElement) getValue();
 		HtmlComponent htmlComp = (HtmlComponent) jrElement.getComponent();
 
-		if (id.equals(HtmlComponent.PROPERTY_EVALUATION_TIME))
-			htmlComp.setEvaluationTime(
-					EnumHelper.getEnumByObjectValue(EvaluationTimeEnum.values(), value));
-		else if (id.equals(HtmlComponent.PROPERTY_EVALUATION_GROUP))
-			htmlComp.setEvaluationGroup((String) value);
+		if (id.equals(HtmlComponent.PROPERTY_EVALUATION_TIME)) {
+			EvaluationTimeEnum evalTime = EnumHelper.getEnumByObjectValue(EvaluationTimeEnum.values(), value);
+			htmlComp.setEvaluationTime(evalTime);
+			if(evalTime != null && !evalTime.equals(EvaluationTimeEnum.GROUP)) {
+				htmlComp.setEvaluationGroup(null);
+			}
+		} else if (id.equals(HtmlComponent.PROPERTY_EVALUATION_GROUP))
+			htmlComp.setEvaluationGroup(ModelUtils.getGroupNameForProperty(value));
 		else if (id.equals(HtmlComponent.PROPERTY_SCALE_TYPE))
 			htmlComp.setScaleType(scaleTypeD.getEnumValue(value));
 		else if (id.equals(HtmlComponent.PROPERTY_HORIZONTAL_ALIGN))

@@ -137,18 +137,22 @@ public class MQRCode extends MBarcode {
 	@Override
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignComponentElement jrElement = (JRDesignComponentElement) getValue();
-		QRCodeComponent jrList = (QRCodeComponent) jrElement.getComponent();
+		QRCodeComponent qrcodeComponent = (QRCodeComponent) jrElement.getComponent();
 
 		if (id.equals(QRCodeComponent.PROPERTY_ERROR_CORRECTION_LEVEL))
-			jrList.setErrorCorrectionLevel(errLevelD.getEnumValue(value));
+			qrcodeComponent.setErrorCorrectionLevel(errLevelD.getEnumValue(value));
 		else if (id.equals(QRCodeComponent.PROPERTY_MARGIN))
-			jrList.setMargin((Integer) value);
+			qrcodeComponent.setMargin((Integer) value);
 		else if (id.equals(StandardBarbecueComponent.PROPERTY_CODE_EXPRESSION))
-			jrList.setCodeExpression(ExprUtil.setValues(
-					jrList.getCodeExpression(), value, null));
-		else if (id.equals(StandardBarbecueComponent.PROPERTY_EVALUATION_TIME))
-			jrList.setEvaluationTimeValue(
-					EnumHelper.getEnumByObjectValue(EvaluationTimeEnum.values(), value));
+			qrcodeComponent.setCodeExpression(ExprUtil.setValues(
+					qrcodeComponent.getCodeExpression(), value, null));
+		else if (id.equals(StandardBarbecueComponent.PROPERTY_EVALUATION_TIME)) {
+			EvaluationTimeEnum evalTime = EnumHelper.getEnumByObjectValue(EvaluationTimeEnum.values(), value);
+			qrcodeComponent.setEvaluationTimeValue(evalTime);
+			if(evalTime != null && !evalTime.equals(EvaluationTimeEnum.GROUP)) {
+				qrcodeComponent.setEvaluationGroup(null);
+			}				
+		}
 		super.setPropertyValue(id, value);
 	}
 

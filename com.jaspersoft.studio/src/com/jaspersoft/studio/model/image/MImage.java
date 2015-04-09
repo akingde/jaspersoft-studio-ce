@@ -15,7 +15,6 @@ import java.util.Map;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRElement;
-import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.JRHyperlinkParameter;
 import net.sf.jasperreports.engine.base.JRBaseImage;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
@@ -54,6 +53,7 @@ import com.jaspersoft.studio.property.descriptors.ImageVAlignPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.SpinnerPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
+import com.jaspersoft.studio.utils.ModelUtils;
 
 /*
  * The Class MImage.
@@ -391,15 +391,16 @@ public class MImage extends MGraphicElementLineBox {
 			jrElement.setVerticalImageAlign(vAlignD.getEnumValue(value));
 		else if (id.equals(JRBaseImage.PROPERTY_ON_ERROR_TYPE))
 			jrElement.setOnErrorType(onErrorTypeD.getEnumValue(value));
-		else if (id.equals(JRDesignImage.PROPERTY_EVALUATION_TIME))
-			jrElement.setEvaluationTime(
-					EnumHelper.getEnumByObjectValue(EvaluationTimeEnum.values(), value));
+		else if (id.equals(JRDesignImage.PROPERTY_EVALUATION_TIME)) {
+			EvaluationTimeEnum evalTime = EnumHelper.getEnumByObjectValue(EvaluationTimeEnum.values(), value);
+			jrElement.setEvaluationTime(evalTime);
+			if(evalTime != null && !evalTime.equals(EvaluationTimeEnum.GROUP)) {
+				jrElement.setEvaluationGroup(null);
+			}			
+		}
 		else if (id.equals(JRDesignImage.PROPERTY_EVALUATION_GROUP)) {
-			if (value != null && !value.equals("")) { //$NON-NLS-1$
-				JRDesignDataset dataset = (JRDesignDataset) getElementDataset();
-				JRGroup group = (JRGroup) dataset.getGroupsMap().get(value);
-				jrElement.setEvaluationGroup(group);
-			}
+			jrElement.setEvaluationGroup(
+					ModelUtils.getGroupForProperty(value, (JRDesignDataset) getElementDataset()));
 		} else if (id.equals(JRDesignImage.PROPERTY_EXPRESSION))
 			jrElement.setExpression(ExprUtil.setValues(jrElement.getExpression(), value));
 		else if (id.equals(JRBaseImage.PROPERTY_USING_CACHE))
