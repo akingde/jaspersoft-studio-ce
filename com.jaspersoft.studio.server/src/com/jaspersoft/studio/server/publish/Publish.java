@@ -31,6 +31,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.server.ServerManager;
@@ -44,6 +45,7 @@ import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
 import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorDatasource;
+import com.jaspersoft.studio.statistics.UsageStatisticsIDs;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -58,10 +60,19 @@ public class Publish {
 	public IStatus publish(AMJrxmlContainer node, JasperDesign jd,
 			IProgressMonitor monitor) {
 		try {
+			boolean isNewRU = node instanceof MReportUnit
+					&& node.getValue().getIsNew();
 			publishResources(monitor, jd, node);
 			if (monitor.isCanceled())
 				return Status.CANCEL_STATUS;
 			// UIUtils.showInformation(Messages.JrxmlPublishAction_successpublishing);
+
+			if (isNewRU)
+				JaspersoftStudioPlugin
+						.getInstance()
+						.getUsageManager()
+						.audit(UsageStatisticsIDs.SERVER_UPLOAD,
+								UsageStatisticsIDs.CATEGORY_SERVER);
 
 			String str = "Success!\nThe following resources where published on the JasperReports Server:\n";
 			for (String mres : resources)
