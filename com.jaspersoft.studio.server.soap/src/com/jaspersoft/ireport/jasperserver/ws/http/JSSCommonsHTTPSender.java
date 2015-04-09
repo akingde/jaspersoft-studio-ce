@@ -12,6 +12,7 @@
  ******************************************************************************/
 package com.jaspersoft.ireport.jasperserver.ws.http;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -62,6 +63,7 @@ import org.apache.http.client.methods.HttpHead;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.entity.BufferedHttpEntity;
+import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.LaxRedirectStrategy;
@@ -201,8 +203,19 @@ public class JSSCommonsHTTPSender extends BasicHandler {
 				Message reqMessage = msgContext.getRequestMessage();
 
 				addContextInfo(req, msgContext, targetURL);
+				Iterator<?> it = reqMessage.getAttachments();
+				if (it.hasNext()) {
+					ByteArrayOutputStream bos = null;
+					try {
+						bos = new ByteArrayOutputStream();
+						reqMessage.writeTo(bos);
+						req.body(new ByteArrayEntity(bos.toByteArray()));
+					} finally {
+						FileUtils.closeStream(bos);
+					}
+				} else
+					req.body(new StringEntity(reqMessage.getSOAPPartAsString()));
 
-				req.body(new StringEntity(reqMessage.getSOAPPartAsString()));
 			} else {
 				req = Request.Get(targetURL.toString());
 				if (proxy != null)
