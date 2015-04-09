@@ -119,7 +119,7 @@ public class JRXmlWriterHelper {
 			if (jrContext instanceof JasperReportsConfiguration) {
 				if (((JasperReportsConfiguration) jrContext)
 						.getPropertyBoolean(StudioPreferencePage.JSS_TIMESTAMP_ONSAVE, true)) {
-					timestamp = "<!-- " + DateFormatUtils.ISO_DATETIME_FORMAT.format(new Date()) + " -->\r\n"; //$NON-NLS-1$ //$NON-NLS-2$
+					timestamp = "<!-- " + DateFormatUtils.ISO_DATETIME_FORMAT.format(new Date()) + " -->\n"; //$NON-NLS-1$ //$NON-NLS-2$
 				}
 			}
 			// Replace with a more meaningful JR version
@@ -131,7 +131,7 @@ public class JRXmlWriterHelper {
 			String jrVersionTxt = Messages.JRXmlWriterHelper_9 + version + " "; //$NON-NLS-2$
 			xml = xml
 					.replaceFirst(
-							"<jasperReport ", "<!-- Created with Jaspersoft Studio version " + jssPluginVersion + jrVersionTxt + " -->\r\n" + timestamp + "<jasperReport "); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+							"<jasperReport ", "<!-- Created with Jaspersoft Studio version " + jssPluginVersion + jrVersionTxt + " -->\n" + timestamp + "<jasperReport "); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		} finally {
 			if (disposeContext)
 				((JasperReportsConfiguration) jrContext).dispose();
