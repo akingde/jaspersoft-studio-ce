@@ -24,6 +24,8 @@ public class UsageStatisticsIDs {
 	
 	public static final String SERVER_CREATION = "CreatedJasperServerConnection";
 	
+	public static final String SERVER_UPLOAD = "PublishedReport";
+	
 	public static final String CATEGORY_DA = "DataAdapter";
 	
 	public static final String CATEGORY_SERVER = "JasperServer";
