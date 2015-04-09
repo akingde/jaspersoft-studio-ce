@@ -56,9 +56,8 @@ import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.UIUtil;
 
-public class FieldsTable {
-	private TableViewer tviewer;
-	private Table wtable;
+public class FieldsTable extends AbstractModifyTable{
+	private TableViewer tviewer;;
 	private Composite composite;
 	private JRDesignDataset dataset;
 	private Color background;
@@ -120,6 +119,7 @@ public class FieldsTable {
 			protected void afterElementAdded(Object selement) {
 				try {
 					dataset.addField((JRField) selement);
+					fireModifyListeners();
 				} catch (JRException e) {
 					e.printStackTrace();
 				}
@@ -154,8 +154,10 @@ public class FieldsTable {
 		});
 		new DeleteButton() {
 			protected void afterElementDeleted(Object element) {
-				if (element != null)
+				if (element != null){
 					dataset.removeField(((JRDesignField) element).getName());
+					fireModifyListeners();
+				}
 			};
 		}.createDeleteButton(bGroup, tviewer);
 

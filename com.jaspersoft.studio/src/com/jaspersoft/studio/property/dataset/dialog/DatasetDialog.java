@@ -16,8 +16,10 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRField;
 import net.sf.jasperreports.engine.JRParameter;
+import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.JRSortField;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
@@ -97,6 +99,8 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 	private WTextExpression filterExpression;
 	private DataPreviewTable dataPreviewTable;
 	private Composite body;
+	private JSSCompoundCommand command;
+	private Color background;
 
 	public DatasetDialog(Shell shell, MDataset mdataset, JasperReportsConfiguration jConfig, CommandStack cmdStack) {
 		super(shell);
@@ -121,6 +125,11 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 
 	@Override
 	protected boolean canHandleShellCloseEvent() {
+		//Create the commands to check if there are changes and popup the dialog
+		//only if there commands to execute
+		createCommand();
+		//command is never null after createCommand, but if empty its canExecute will return false
+		if (!command.canExecute()) return true;
 		return UIUtils.showConfirmation(Messages.DatasetDialog_0, Messages.DatasetDialog_1);
 	}
 
@@ -370,9 +379,6 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 		bptab.setControl(sectionClient);
 	}
 
-	private JSSCompoundCommand command;
-	private Color background;
-
 	public JSSCompoundCommand getCommand() {
 		return command;
 	}
@@ -405,8 +411,8 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 		String fexprtext = filterExpression.getText();
 		if (fexprtext.trim().equals("")) //$NON-NLS-1$
 			fexprtext = null;
-		command.add(setValueCommand(JRDesignDataset.PROPERTY_FILTER_EXPRESSION, fexprtext, mdataset));
-		command.add(setValueCommand(MDataset.PROPERTY_MAP, newdataset.getPropertiesMap(), mdataset));
+		addSetValueCommand(command, JRDesignDataset.PROPERTY_FILTER_EXPRESSION, fexprtext, mdataset);
+		addSetValueCommand(command, MDataset.PROPERTY_MAP, newdataset.getPropertiesMap(), mdataset);
 
 		List<JRField> oldfields = ds.getFieldsList();
 		List<JRDesignField> newfields = ftable.getFields();
@@ -439,7 +445,7 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 						}
 					}
 					if (mfield != null) {
-						command.add(setValueCommand(JRDesignField.PROPERTY_NAME, newf.getName(), mfield));
+						addSetValueCommand(command, JRDesignField.PROPERTY_NAME, newf.getName(), mfield);
 						addSetValueCommand(command, JRDesignField.PROPERTY_VALUE_CLASS_NAME, newf.getValueClassName(), mfield);
 						addSetValueCommand(command, JRDesignField.PROPERTY_DESCRIPTION, newf.getDescription(), mfield);
 					}
@@ -483,8 +489,7 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 					if (mparam != null) {
 						addSetValueCommand(command, JRDesignParameter.PROPERTY_VALUE_CLASS_NAME, newf.getValueClassName(), mparam);
 						addSetValueCommand(command, JRDesignParameter.PROPERTY_DESCRIPTION, newf.getDescription(), mparam);
-						addSetValueCommand(command, JRDesignParameter.PROPERTY_DEFAULT_VALUE_EXPRESSION,
-								newf.getDefaultValueExpression(), mparam);
+						addSetValueCommand(command, JRDesignParameter.PROPERTY_DEFAULT_VALUE_EXPRESSION,newf.getDefaultValueExpression(), mparam);
 						addSetValueCommand(command, JRDesignParameter.PROPERTY_FOR_PROMPTING, newf.isForPrompting(), mparam);
 					}
 					notexists = false;
@@ -497,11 +502,10 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 						}
 					}
 					if (mparam != null) {
-						command.add(setValueCommand(JRDesignParameter.PROPERTY_NAME, newf.getName(), mparam));
+						addSetValueCommand(command, JRDesignParameter.PROPERTY_NAME, newf.getName(), mparam);
 						addSetValueCommand(command, JRDesignParameter.PROPERTY_VALUE_CLASS_NAME, newf.getValueClassName(), mparam);
 						addSetValueCommand(command, JRDesignParameter.PROPERTY_DESCRIPTION, newf.getDescription(), mparam);
-						addSetValueCommand(command, JRDesignParameter.PROPERTY_DEFAULT_VALUE_EXPRESSION,
-								newf.getDefaultValueExpression(), mparam);
+						addSetValueCommand(command, JRDesignParameter.PROPERTY_DEFAULT_VALUE_EXPRESSION, newf.getDefaultValueExpression(), mparam);
 						addSetValueCommand(command, JRDesignParameter.PROPERTY_FOR_PROMPTING, newf.isForPrompting(), mparam);
 					}
 					notexists = false;
@@ -514,14 +518,44 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 		}
 	}
 
+	/**
+	 * Create a new setvalue command, but only if the old value and the new value are different.
+	 * If created the command is added to the compound command
+	 * 
+	 * @param cc the compound command
+	 * @param property the property the set value command will set
+	 * @param value the new value of the property
+	 * @param target the target of the set
+	 */
 	private void addSetValueCommand(JSSCompoundCommand cc, String property, Object value, IPropertySource target) {
-		if (value != null && !value.equals(target.getPropertyValue(property))) {
+		if (!extendedEquals(value, target.getPropertyValue(property))) {
 			SetValueCommand cmd = new SetValueCommand();
 			cmd.setTarget(target);
 			cmd.setPropertyId(property);
 			cmd.setPropertyValue(value);
 			cc.add(cmd);
 		}
+	}
+	
+	/**
+	 * Used to compare two values. Since some JR Objects used inside here
+	 * dosen't support the equals method, this one apply some special cases for that
+	 * objects
+	 * 
+	 * @param value1 the first value to compare, can be null
+	 * @param value2 the second value to compare, can be null
+	 * @return true if the two objects are equals, false otherwise
+	 */
+	private boolean extendedEquals(Object value1, Object value2){
+		if (value1 instanceof JRExpression && value2 instanceof JRExpression){
+			JRExpression exp1 = (JRExpression)value1;
+			JRExpression exp2 = (JRExpression)value2;
+			return ModelUtils.safeEquals(exp1.getText(), exp2.getText());
+		} else if (value1 instanceof JRPropertiesMap && value2 instanceof JRPropertiesMap){
+			JRPropertiesMap map1 = (JRPropertiesMap)value1;
+			JRPropertiesMap map2 = (JRPropertiesMap)value2;
+			return ModelUtils.jrPropertiesMapEquals(map1, map2);
+		} else return ModelUtils.safeEquals(value1, value2);
 	}
 
 	private Command setValueCommand(String property, Object value, IPropertySource target) {

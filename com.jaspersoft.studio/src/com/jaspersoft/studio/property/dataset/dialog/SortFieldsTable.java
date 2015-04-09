@@ -56,14 +56,13 @@ import com.jaspersoft.studio.swt.widgets.table.NewButton;
 import com.jaspersoft.studio.utils.EnumHelper;
 import com.jaspersoft.studio.utils.UIUtil;
 
-public class SortFieldsTable {
+public class SortFieldsTable extends AbstractModifyTable{
 	private static final String[] orderEnumNames = EnumHelper.getEnumNames(SortOrderEnum.values(), NullEnum.NOTNULL);
 	private TableViewer tviewer;
-	private Table wtable;
 	private Composite composite;
 	private JRDesignDataset dataset;
 	private Color background;
-
+	
 	public SortFieldsTable(Composite parent, JRDesignDataset dataset, Color background) {
 		this.background = background;
 		this.dataset = dataset;
@@ -122,6 +121,7 @@ public class SortFieldsTable {
 				try {
 					dataset.removeSortField((JRSortField) selement);
 					dataset.addSortField((JRSortField) selement);
+					fireModifyListeners();
 				} catch (JRException e) {
 					e.printStackTrace();
 				}
@@ -152,8 +152,10 @@ public class SortFieldsTable {
 		});
 		new DeleteButton() {
 			protected void afterElementDeleted(Object element) {
-				if (element != null)
+				if (element != null){
 					dataset.removeSortField((JRSortField) element);
+					fireModifyListeners();
+				}
 			}
 		}.createDeleteButton(bGroup, tviewer);
 

@@ -55,9 +55,8 @@ import com.jaspersoft.studio.swt.widgets.table.NewButton;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.UIUtil;
 
-public class ParametersTable {
+public class ParametersTable extends AbstractModifyTable {
 	private TableViewer tviewer;
-	private Table wtable;
 	private Composite composite;
 	private JRDesignDataset dataset;
 	private Color background;
@@ -127,6 +126,7 @@ public class ParametersTable {
 				try {
 					dataset.removeParameter((JRParameter) selement);
 					dataset.addParameter((JRDesignParameter) selement);
+					fireModifyListeners();
 				} catch (JRException e) {
 					e.printStackTrace();
 				}
@@ -169,8 +169,10 @@ public class ParametersTable {
 						todel = p;
 						break;
 					}
-				if (todel != null)
+				if (todel != null){
 					dataset.removeParameter(todel);
+					fireModifyListeners();
+				}
 			}
 		};
 		delb.createDeleteButton(bGroup, tviewer);
