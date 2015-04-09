@@ -196,11 +196,11 @@ public class LazyImageConverter extends ElementConverter {
 
 		printImage.setAnchorName(JRExpressionUtil.getExpressionText(image.getAnchorNameExpression()));
 		printImage.setBookmarkLevel(image.getBookmarkLevel());
-		printImage.setHorizontalAlignment(image.getOwnHorizontalAlignmentValue());
+		printImage.setHorizontalImageAlign(image.getOwnHorizontalImageAlign());
 		printImage.setLazy(image.isLazy());
 		printImage.setLinkType(image.getLinkType());
 		printImage.setOnErrorType(OnErrorTypeEnum.ICON);
-		printImage.setVerticalAlignment(image.getOwnVerticalAlignmentValue());
+		printImage.setVerticalImageAlign(image.getOwnVerticalImageAlign());
 		// If it is null load the no image found element
 		if (cacheRenderer == null)
 			cacheRenderer = getRenderableNoImage(reportConverter.getJasperReportsContext(), image, printImage);
