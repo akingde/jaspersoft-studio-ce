@@ -24,6 +24,7 @@ import java.net.InetAddress;
 import java.net.URI;
 import java.net.URL;
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Properties;
 import java.util.UUID;
@@ -66,7 +67,7 @@ import com.jaspersoft.studio.statistics.heartbeat.Heartbeat;
 public class UsageManager {
 
 	/**
-	 * The current used version of Jaspersfot Studio. It is intitialized the first
+	 * The current used version of Jaspersfot Studio. It is initialized the first
 	 * time is requested trough the appropriate method
 	 */
 	private static String CURRENT_VERSION = null;
@@ -80,12 +81,12 @@ public class UsageManager {
 	/**
 	 * URL of the server where the statistics are sent
 	 */
-	private static final String STATISTICS_SERVER_URL = "http://192.168.2.101/jssdrupal/heartbeat/jss/statistics";//$NON-NLS-1$ //http://192.168.2.101/jss/jssusage.php
+	private static final String STATISTICS_SERVER_URL = "";//$NON-NLS-1$ //http://192.168.2.101/jssdrupal/heartbeat/jss/statistics
 	
 	/**
 	 * URL of the server where the heartbeat is sent
 	 */
-	private static final String HEARTBEAT_SERVER_URL = "http://192.168.2.101/jssdrupal/hearbeat/ireport/jsslastversion.php";//$NON-NLS-1$
+	private static final String HEARTBEAT_SERVER_URL = "http://jasperstudio.sf.net/jsslastversion.php";//$NON-NLS-1$
 	/**
 	 * Time in ms that the process to write the statistics from the memory on the disk wait after the update of a value.
 	 * This is done since some operations can update many values, doing this there is a time span to allow sequence of
@@ -211,6 +212,32 @@ public class UsageManager {
 		}
 	}
 
+	/**
+	 * Method used to write in the statistics file. It is thread
+	 * safe to avoid concurrent access exception
+	 * 
+	 * @param key the key to write
+	 * @param value the value to write
+	 */
+	protected void setProperty(String key, String value){
+		synchronized (UsageManager.this) {
+			getStatisticsContainer().setProperty(key, value);
+		}
+	}
+	
+	/**
+	 * Method used to read from the statistics file. It is thread
+	 * safe to avoid concurrent access exception
+	 * 
+	 * @param key the key of the value to read
+	 * @return the valued associated with the key, can be null;
+	 */
+	private String getProperty(String key){
+		synchronized (UsageManager.this) {
+			return getStatisticsContainer().getProperty(key);
+		}
+	}
+	
 	/**
 	 * Write the statistics properties file on the disk
 	 */
@@ -412,6 +439,9 @@ public class UsageManager {
 			} else {
 				long millisDiff = actualMillis - Long.parseLong(lastUpdate);
 				int days = (int) (millisDiff / 86400000);
+				//int minutes = (int) (millisDiff / 60000);
+				//System.out.println("passed "+ minutes + "minutes since the last strartup ");
+				//return minutes > 5;
 				return days >= 7;
 			}
 		} catch (Exception ex) {
@@ -538,22 +568,44 @@ public class UsageManager {
 				con.setRequestProperty("Accept-Language", "en-US,en;q=0.5"); //$NON-NLS-1$ //$NON-NLS-2$
 
 				// Read and convert the statistics into a JSON string
-				Properties prop = getStatisticsContainer();
 				UsagesContainer container = new UsagesContainer(getAppDataFolder().getName());
-				for (Object key : prop.keySet()) {
-					try {
-						String[] id_category = key.toString().split(Pattern.quote(ID_CATEGORY_SEPARATOR));
-						int usageNumber = Integer.parseInt(prop.getProperty(key.toString(), "0")); //$NON-NLS-1$
-						String version = getVersion();
-						//Check if the id contains the version
-						if (id_category.length == 3){
-							version = id_category[3];
+				synchronized (UsageManager.this) {
+					Properties prop = getStatisticsContainer();
+					boolean fileChanged = false;
+					for (Object key : new ArrayList<Object>(prop.keySet())) {
+						try {
+							String[] id_category = key.toString().split(Pattern.quote(ID_CATEGORY_SEPARATOR));
+							String value = prop.getProperty(key.toString(), "0");
+							int usageNumber = Integer.parseInt(value); //$NON-NLS-1$
+							String version = getVersion();
+							//Check if the id contains the version
+							if (id_category.length == 3){
+								version = id_category[2];
+							} else {
+								//Old structure, remove the old entry and insert the new fixed one
+								//this is a really limit case and should almost never happen
+								prop.remove(key);
+								String fixed_key = id_category[0] + ID_CATEGORY_SEPARATOR + id_category[1] + ID_CATEGORY_SEPARATOR + version;
+								prop.setProperty(fixed_key, value);
+								fileChanged = true;
+							}
+							container.addStat(new UsageStatistic(id_category[0], id_category[1], version, usageNumber));
+						} catch (Exception ex) {
+							//if a key is invalid remove it
+							ex.printStackTrace();
+							prop.remove(key);
+							fileChanged = true;
 						}
-						container.addStat(new UsageStatistic(id_category[0], id_category[1], version, usageNumber));
-					} catch (Exception ex) {
-						prop.remove(key);
+					}
+					if (fileChanged){
+						//The statistics file was changed, maybe a fix or an invalid property removed
+						//write it corrected on the disk
+						writeStatsToDisk.cancel();
+						writeStatsToDisk.setPriority(Job.SHORT);
+						writeStatsToDisk.schedule(MINIMUM_WAIT_TIME);
 					}
 				}
+				
 				ObjectMapper mapper = new ObjectMapper();
 				String serializedData = mapper.writeValueAsString(container);
 
@@ -679,9 +731,9 @@ public class UsageManager {
 				//Check the separator is not used in the action
 				String errorMessage = MessageFormat.format(Messages.UsageManager_errorSepratorReserved,new Object[] { ID_CATEGORY_SEPARATOR });
 				Assert.isTrue(!used_action_id.contains(ID_CATEGORY_SEPARATOR) && !cateogory.contains(ID_CATEGORY_SEPARATOR),	errorMessage);
-				Properties properties = getStatisticsContainer();
 				String id = used_action_id + ID_CATEGORY_SEPARATOR + cateogory + ID_CATEGORY_SEPARATOR + getVersion();
-				String textUsageNumber = properties.getProperty(id, "0"); //$NON-NLS-1$
+				String textUsageNumber = getProperty(id);
+				if (textUsageNumber == null) textUsageNumber = "0"; //$NON-NLS-1$
 				int usageNumber = 0;
 				try {
 					usageNumber = Integer.parseInt(textUsageNumber);
@@ -689,7 +741,7 @@ public class UsageManager {
 					usageNumber = 0;
 				}
 				usageNumber++;
-				properties.setProperty(id, String.valueOf(usageNumber));
+				setProperty(id, String.valueOf(usageNumber));
 				statisticUpdatedRecently = true;
 				writeStatsToDisk.cancel();
 				writeStatsToDisk.setPriority(Job.SHORT);
@@ -715,9 +767,8 @@ public class UsageManager {
 				//Check the separator is not used in the action
 				String errorMessage = MessageFormat.format(Messages.UsageManager_errorSepratorReserved,new Object[] { ID_CATEGORY_SEPARATOR });
 				Assert.isTrue(!used_action_id.contains(ID_CATEGORY_SEPARATOR) && !cateogory.contains(ID_CATEGORY_SEPARATOR),errorMessage);
-				Properties properties = getStatisticsContainer();
 				String id = used_action_id + ID_CATEGORY_SEPARATOR + cateogory + ID_CATEGORY_SEPARATOR + getVersion(); 
-				properties.setProperty(id, String.valueOf(usageNumber));
+				setProperty(id, String.valueOf(usageNumber));
 				statisticUpdatedRecently = true;
 				writeStatsToDisk.cancel();
 				writeStatsToDisk.setPriority(Job.SHORT);
