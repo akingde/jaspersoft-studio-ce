@@ -56,6 +56,7 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.StudioPreferencePage;
 import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 import com.jaspersoft.studio.statistics.heartbeat.Heartbeat;
+import com.jaspersoft.studio.utils.ModelUtils;
 
 /**
  * Manager used to handle, track and send to the server informations about an installation of jaspersoft studio, like
@@ -81,7 +82,7 @@ public class UsageManager {
 	/**
 	 * URL of the server where the statistics are sent
 	 */
-	private static final String STATISTICS_SERVER_URL = "";//$NON-NLS-1$ //http://192.168.2.101/jssdrupal/heartbeat/jss/statistics
+	private static final String STATISTICS_SERVER_URL = "";//$NON-NLS-1$ //http://192.168.2.101/sf/statistics.php
 	
 	/**
 	 * URL of the server where the heartbeat is sent
@@ -478,8 +479,8 @@ public class UsageManager {
 					usageStats = new Properties();
 				}
 			}
-			return usageStats;
 		}
+		return usageStats;
 	}
 
 	/**
@@ -555,7 +556,7 @@ public class UsageManager {
 	 * string. Then this string is sent to the server as a post parameter named data
 	 */
 	protected void sendStatistics() {
-		BufferedReader responseReader = null;
+ 		BufferedReader responseReader = null;
 		DataOutputStream postWriter = null;
 		try {
 			if (!STATISTICS_SERVER_URL.trim().isEmpty()) {
@@ -569,9 +570,9 @@ public class UsageManager {
 
 				// Read and convert the statistics into a JSON string
 				UsagesContainer container = new UsagesContainer(getAppDataFolder().getName());
+				boolean fileChanged = false;
 				synchronized (UsageManager.this) {
 					Properties prop = getStatisticsContainer();
-					boolean fileChanged = false;
 					for (Object key : new ArrayList<Object>(prop.keySet())) {
 						try {
 							String[] id_category = key.toString().split(Pattern.quote(ID_CATEGORY_SEPARATOR));
@@ -597,13 +598,13 @@ public class UsageManager {
 							fileChanged = true;
 						}
 					}
-					if (fileChanged){
-						//The statistics file was changed, maybe a fix or an invalid property removed
-						//write it corrected on the disk
-						writeStatsToDisk.cancel();
-						writeStatsToDisk.setPriority(Job.SHORT);
-						writeStatsToDisk.schedule(MINIMUM_WAIT_TIME);
-					}
+				}
+				if (fileChanged){
+					//The statistics file was changed, maybe a fix or an invalid property removed
+					//write it corrected on the disk
+					writeStatsToDisk.cancel();
+					writeStatsToDisk.setPriority(Job.SHORT);
+					writeStatsToDisk.schedule(MINIMUM_WAIT_TIME);
 				}
 				
 				ObjectMapper mapper = new ObjectMapper();
@@ -615,7 +616,7 @@ public class UsageManager {
 				postWriter = new DataOutputStream(con.getOutputStream());
 				postWriter.writeBytes(urlParameters);
 				postWriter.flush();
-				con.getResponseCode();
+				int responseCode = con.getResponseCode();
 
 				responseReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
 				String inputLine;
@@ -624,10 +625,14 @@ public class UsageManager {
 				while ((inputLine = responseReader.readLine()) != null) {
 					response.append(inputLine);
 				}
+				
 				// Update the upload time
-				setInstallationInfo(TIMESTAMP_INFO, String.valueOf(getCurrentTime()));
-				// //print result
-				System.out.println(response.toString());
+				if (responseCode == 200 && ModelUtils.safeEquals(response.toString(), "ok")){
+					setInstallationInfo(TIMESTAMP_INFO, String.valueOf(getCurrentTime()));
+				} else {
+					//print result
+					System.out.println("Response: " + response.toString());
+				}
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
