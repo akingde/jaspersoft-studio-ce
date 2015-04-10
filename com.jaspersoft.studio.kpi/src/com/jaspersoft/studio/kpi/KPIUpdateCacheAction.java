@@ -12,7 +12,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.kpi;
 
-
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -36,6 +35,7 @@ import com.jaspersoft.jasperserver.dto.resources.ClientResourceListWrapper;
 import com.jaspersoft.jasperserver.dto.resources.ClientResourceLookup;
 import com.jaspersoft.studio.kpi.messages.Messages;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
+import com.jaspersoft.studio.server.protocol.Feature;
 import com.jaspersoft.studio.server.protocol.restv2.ARestV2Connection;
 import com.jaspersoft.studio.server.protocol.restv2.RestV2ConnectionJersey;
 
@@ -49,14 +49,25 @@ public class KPIUpdateCacheAction extends Action {
 		setText(Messages.KPIUpdateCacheAction_updateCacheTitle);
 		setToolTipText(Messages.KPIUpdateCacheAction_updateCacheTooltip);
 		setImageDescriptor(Activator.getImageDescriptor("icons/key.png")); //$NON-NLS-1$
-		setDisabledImageDescriptor(Activator.getImageDescriptor("icons/key.png")); //$NON-NLS-1$
+		setDisabledImageDescriptor(Activator
+				.getImageDescriptor("icons/key.png")); //$NON-NLS-1$
 		this.treeViewer = treeViewer;
 	}
 
 	@Override
 	public boolean isEnabled() {
-		// TODO: check the jasperreports server
-		return true;
+		final TreeSelection s = (TreeSelection) treeViewer.getSelection();
+		TreePath[] p = s.getPaths();
+		for (int i = 0; i < p.length; i++) {
+			Object obj = p[i].getLastSegment();
+			if (obj instanceof MServerProfile) {
+				if (((MServerProfile) obj).getWsClient().isSupported(
+						Feature.SEARCHREPOSITORY))
+					return true;
+				break;
+			}
+		}
+		return false;
 	}
 
 	@Override
@@ -66,65 +77,76 @@ public class KPIUpdateCacheAction extends Action {
 		for (int i = 0; i < p.length; i++) {
 			Object obj = p[i].getLastSegment();
 			if (obj instanceof MServerProfile) {
-				
-				
+
 				final MServerProfile node = (MServerProfile) obj;
-				
+
 				Job job = new Job("Updating KPI Cache") { //$NON-NLS-1$
 					@Override
 					protected IStatus run(IProgressMonitor monitor) {
-						monitor.beginTask("Update KPI cache", IProgressMonitor.UNKNOWN); //$NON-NLS-1$
+						monitor.beginTask(
+								"Update KPI cache", IProgressMonitor.UNKNOWN); //$NON-NLS-1$
 						try {
-							
+
 							final RestV2ConnectionJersey client = new RestV2ConnectionJersey();
-							client.connect(monitor, node.getWsClient().getServerProfile());
-							
-							// for each report unit check if it has a KPI sub report...
-							WebTarget tgt = client.getTarget().path("resources"); //$NON-NLS-1$
-							
+							client.connect(monitor, node.getWsClient()
+									.getServerProfile());
+
+							// for each report unit check if it has a KPI sub
+							// report...
+							WebTarget tgt = client.getTarget()
+									.path("resources"); //$NON-NLS-1$
+
 							tgt = tgt.queryParam("recursive", "true"); //$NON-NLS-1$ //$NON-NLS-2$
 							tgt = tgt.queryParam("type", "reportUnit"); //$NON-NLS-1$ //$NON-NLS-2$
 							tgt = tgt.queryParam("limit", 0); //$NON-NLS-1$
-							
+
 							Builder builder = tgt.request();
-							
-							ClientResourceListWrapper resources = client.toObj(builder.get(), ClientResourceListWrapper.class, monitor);
-							
+
+							ClientResourceListWrapper resources = client.toObj(
+									builder.get(),
+									ClientResourceListWrapper.class, monitor);
+
 							Map<String, String> kpiReportUnits = new LinkedHashMap<String, String>();
-							
-							for (ClientResourceLookup resource : resources.getResourceLookups())
-							{
+
+							for (ClientResourceLookup resource : resources
+									.getResourceLookups()) {
 								// Check if this resource has a KPI...
-								String reportUnitKpiUri = resource.getUri() + "_files/KPI"; //$NON-NLS-1$
-								
-								WebTarget tgt2 = client.getTarget().path("resources" + reportUnitKpiUri); //$NON-NLS-1$
+								String reportUnitKpiUri = resource.getUri()
+										+ "_files/KPI"; //$NON-NLS-1$
+
+								WebTarget tgt2 = client.getTarget().path(
+										"resources" + reportUnitKpiUri); //$NON-NLS-1$
 								tgt = tgt2.queryParam("expanded", "false"); //$NON-NLS-1$ //$NON-NLS-2$
-								
-								Builder req = tgt.request("application/repository.reportUnit+" + ARestV2Connection.FORMAT); //$NON-NLS-1$
-								
+
+								Builder req = tgt
+										.request("application/repository.reportUnit+" + ARestV2Connection.FORMAT); //$NON-NLS-1$
+
 								try {
-									Object obj = client.toObj(req.get(), (Class<?>) null,monitor);
-									if (obj != null && obj instanceof AbstractClientReportUnit)
-									{
-										kpiReportUnits.put(reportUnitKpiUri, resource.getUri());
+									Object obj = client.toObj(req.get(),
+											(Class<?>) null, monitor);
+									if (obj != null
+											&& obj instanceof AbstractClientReportUnit) {
+										kpiReportUnits.put(reportUnitKpiUri,
+												resource.getUri());
 									}
-								} catch (Exception ex)
-								{
+								} catch (Exception ex) {
 									// KPI not found...
 								}
 							}
-								
-							KPIUtils.updateKPICache(client, kpiReportUnits, true);
-							
+
+							KPIUtils.updateKPICache(client, kpiReportUnits,
+									true);
+
 							UIUtils.getDisplay().asyncExec(new Runnable() {
-								
+
 								@Override
 								public void run() {
-									MessageDialog.openInformation(UIUtils.getShell(), "KPI Cache Update", "KPI cache successfully updated."); //$NON-NLS-1$ //$NON-NLS-2$
+									MessageDialog.openInformation(
+											UIUtils.getShell(),
+											"KPI Cache Update", "KPI cache successfully updated."); //$NON-NLS-1$ //$NON-NLS-2$
 								}
 							});
-							
-							
+
 						} catch (Exception e) {
 							UIUtils.showError(e);
 						} finally {

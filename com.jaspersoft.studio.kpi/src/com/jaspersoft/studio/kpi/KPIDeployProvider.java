@@ -31,17 +31,17 @@ import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 
 /**
- * Provider for the RepositoryExplorer, contributed trough extension point.
- * It add some menus on the report units to allow the managing of the KPIs
- *
+ * Provider for the RepositoryExplorer, contributed trough extension point. It
+ * add some menus on the report units to allow the managing of the KPIs
+ * 
  */
 public class KPIDeployProvider implements IRepositoryViewProvider {
-	
+
 	/**
 	 * Actions on the report unit to handle a KPI
 	 */
 	private KPIDeployAction kpiDeployAction;
-	
+
 	/**
 	 * Action on the server to update the KPI cache
 	 */
@@ -50,22 +50,21 @@ public class KPIDeployProvider implements IRepositoryViewProvider {
 	/**
 	 * If necessary create the KPI and server actions
 	 * 
-	 * @param treeViewer the treeviewer of the repository explorer
+	 * @param treeViewer
+	 *            the treeviewer of the repository explorer
 	 */
 	private void createActions(TreeViewer treeViewer) {
 		if (kpiDeployAction == null)
 			kpiDeployAction = new KPIDeployAction(treeViewer);
-		
+
 		if (kpiUpdateCacheAction == null)
 			kpiUpdateCacheAction = new KPIUpdateCacheAction(treeViewer);
 	}
 
 	@Override
 	public List<IAction> fillContextMenu(TreeViewer treeViewer, ANode node) {
-		
-		
 		createActions(treeViewer);
-		
+
 		List<IAction> lst = new ArrayList<IAction>();
 
 		if (node instanceof MReportUnit) {
@@ -74,9 +73,7 @@ public class KPIDeployProvider implements IRepositoryViewProvider {
 				lst.add(kpiDeployAction);
 				lst.add(new Separator());
 			}
-		}
-		else if (node instanceof MServerProfile)
-		{
+		} else if (node instanceof MServerProfile) {
 			if (kpiUpdateCacheAction.isEnabled()) {
 				lst.add(new Separator());
 				lst.add(kpiUpdateCacheAction);
@@ -94,26 +91,28 @@ public class KPIDeployProvider implements IRepositoryViewProvider {
 	@Override
 	public Action[] getActions(TreeViewer treeViewer) {
 		createActions(treeViewer);
-		return new Action[] {  };
+		return new Action[] {};
 	}
-	
+
 	@Override
 	public ANode getNode(ANode root) {
 		return null;
 	}
-	
+
 	@Override
 	public void hookKeyEvent(TreeViewer treeViewer, KeyEvent event) {
 
 	}
 
 	@Override
-	public List<TransferDragSourceListener> getTransferDragSourceListeners(TreeViewer treeViewer) {
+	public List<TransferDragSourceListener> getTransferDragSourceListeners(
+			TreeViewer treeViewer) {
 		return null;
 	}
 
 	@Override
-	public List<TransferDropTargetListener> getTransferDropTargetListeners(TreeViewer treeViewer) {
+	public List<TransferDropTargetListener> getTransferDropTargetListeners(
+			TreeViewer treeViewer) {
 		return null;
 	}
 
