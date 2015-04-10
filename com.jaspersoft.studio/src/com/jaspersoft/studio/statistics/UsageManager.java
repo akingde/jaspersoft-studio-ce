@@ -66,9 +66,10 @@ import com.jaspersoft.studio.statistics.heartbeat.Heartbeat;
 public class UsageManager {
 
 	/**
-	 * The current used version of Jaspersfot Studio
+	 * The current used version of Jaspersfot Studio. It is intitialized the first
+	 * time is requested trough the appropriate method
 	 */
-	private static final String CURRENT_VERSION = JaspersoftStudioPlugin.getInstance().getBundle().getVersion().toString();
+	private static String CURRENT_VERSION = null;
 	
 	/**
 	 * Property name used in the preferences in the old version of Jaspersoft Studio to store a UUID of the application.
@@ -79,12 +80,12 @@ public class UsageManager {
 	/**
 	 * URL of the server where the statistics are sent
 	 */
-	private static final String STATISTICS_SERVER_URL = "";//$NON-NLS-1$ //http://192.168.2.101/jss/jssusage.php
+	private static final String STATISTICS_SERVER_URL = "http://192.168.2.101/jssdrupal/heartbeat/jss/statistics";//$NON-NLS-1$ //http://192.168.2.101/jss/jssusage.php
 	
 	/**
 	 * URL of the server where the heartbeat is sent
 	 */
-	private static final String HEARTBEAT_SERVER_URL = "http://jasperstudio.sf.net";
+	private static final String HEARTBEAT_SERVER_URL = "http://192.168.2.101/jssdrupal/hearbeat/ireport/jsslastversion.php";//$NON-NLS-1$
 	/**
 	 * Time in ms that the process to write the statistics from the memory on the disk wait after the update of a value.
 	 * This is done since some operations can update many values, doing this there is a time span to allow sequence of
@@ -268,6 +269,18 @@ public class UsageManager {
 			jssDataFolder.mkdirs();
 		}
 		return jssDataFolder;
+	}
+
+	/**
+	 * Return the current JSS version. The value is cached after the first time is request
+	 * 
+	 * @return a not null string representing the JSS version
+	 */
+	protected String getVersion(){
+		if (CURRENT_VERSION == null){
+			CURRENT_VERSION = JaspersoftStudioPlugin.getInstance().getBundle().getVersion().toString();
+		}
+		return CURRENT_VERSION;
 	}
 
 	/**
@@ -531,7 +544,7 @@ public class UsageManager {
 					try {
 						String[] id_category = key.toString().split(Pattern.quote(ID_CATEGORY_SEPARATOR));
 						int usageNumber = Integer.parseInt(prop.getProperty(key.toString(), "0")); //$NON-NLS-1$
-						String version = CURRENT_VERSION;
+						String version = getVersion();
 						//Check if the id contains the version
 						if (id_category.length == 3){
 							version = id_category[3];
@@ -667,7 +680,7 @@ public class UsageManager {
 				String errorMessage = MessageFormat.format(Messages.UsageManager_errorSepratorReserved,new Object[] { ID_CATEGORY_SEPARATOR });
 				Assert.isTrue(!used_action_id.contains(ID_CATEGORY_SEPARATOR) && !cateogory.contains(ID_CATEGORY_SEPARATOR),	errorMessage);
 				Properties properties = getStatisticsContainer();
-				String id = used_action_id + ID_CATEGORY_SEPARATOR + cateogory + ID_CATEGORY_SEPARATOR + CURRENT_VERSION;
+				String id = used_action_id + ID_CATEGORY_SEPARATOR + cateogory + ID_CATEGORY_SEPARATOR + getVersion();
 				String textUsageNumber = properties.getProperty(id, "0"); //$NON-NLS-1$
 				int usageNumber = 0;
 				try {
@@ -703,7 +716,7 @@ public class UsageManager {
 				String errorMessage = MessageFormat.format(Messages.UsageManager_errorSepratorReserved,new Object[] { ID_CATEGORY_SEPARATOR });
 				Assert.isTrue(!used_action_id.contains(ID_CATEGORY_SEPARATOR) && !cateogory.contains(ID_CATEGORY_SEPARATOR),errorMessage);
 				Properties properties = getStatisticsContainer();
-				String id = used_action_id + ID_CATEGORY_SEPARATOR + cateogory + ID_CATEGORY_SEPARATOR + CURRENT_VERSION; 
+				String id = used_action_id + ID_CATEGORY_SEPARATOR + cateogory + ID_CATEGORY_SEPARATOR + getVersion(); 
 				properties.setProperty(id, String.valueOf(usageNumber));
 				statisticUpdatedRecently = true;
 				writeStatsToDisk.cancel();
@@ -731,7 +744,7 @@ public class UsageManager {
 			if (versionKnownByTheStats == null) {
 				// Since the last version was not yet initialized it is a new installation
 				newInstallation = 1;
-			} else if (!versionKnownByTheStats.equals(CURRENT_VERSION)) {
+			} else if (!versionKnownByTheStats.equals(getVersion())) {
 				// There is a version stored in the file, that is the last version known by the server, if it is
 				// different from the real version then there were an update
 				newInstallation = 2;
@@ -740,13 +753,13 @@ public class UsageManager {
 			// If the backward value is != null then it isn't for sure a new installation, maybe there were
 			// but since i'm inside the new code then it should be an update.
 			newInstallation = 2;
-			setInstallationInfo(VERSION_INFO, CURRENT_VERSION);
+			setInstallationInfo(VERSION_INFO, getVersion());
 		}
 
 		StringBuilder urlBuilder = new StringBuilder();
 		urlBuilder.append(HEARTBEAT_SERVER_URL);
-		urlBuilder.append("/jsslastversion.php?version=");//$NON-NLS-1$
-		urlBuilder.append(CURRENT_VERSION);
+		urlBuilder.append("?version=");//$NON-NLS-1$
+		urlBuilder.append(getVersion());
 		urlBuilder.append("&uuid=");//$NON-NLS-1$
 		urlBuilder.append(uuid);
 		urlBuilder.append("&new=");//$NON-NLS-1$
@@ -777,12 +790,12 @@ public class UsageManager {
 				}
 			}
 			// Update the installation info only if the informations was given correctly to the server
-			setInstallationInfo(VERSION_INFO, CURRENT_VERSION);
+			setInstallationInfo(VERSION_INFO, getVersion());
 			// Remove the old backward compatibility value if present to switch to the new system
 			if (backward_uuid != null) {
 				ph.removeString(BACKWARD_UUID_PROPERTY, InstanceScope.SCOPE);
 			}
-			result = new VersionCheckResult(serverVersion, optmsg, CURRENT_VERSION);
+			result = new VersionCheckResult(serverVersion, optmsg, getVersion());
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			JaspersoftStudioPlugin.getInstance().logError(Messages.UsageManager_errorUpdateCheck, ex);
