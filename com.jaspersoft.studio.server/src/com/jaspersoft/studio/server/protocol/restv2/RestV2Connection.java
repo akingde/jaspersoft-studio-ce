@@ -128,7 +128,8 @@ public class RestV2Connection extends ARestV2Connection {
 		exec = Executor.newInstance().auth(host, sp.getUser(),
 				Pass.getPass(sp.getPass()));
 		exec.authPreemptive(host);
-		HttpUtils.setupProxy(exec, url.toURI());
+		net.sf.jasperreports.eclipse.util.HttpUtils.setupProxy(exec,
+				url.toURI());
 		getServerInfo(monitor);
 
 		return true;

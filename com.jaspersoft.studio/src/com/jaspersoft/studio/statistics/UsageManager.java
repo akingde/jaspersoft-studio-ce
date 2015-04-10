@@ -18,10 +18,11 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.StringReader;
 import java.net.HttpURLConnection;
 import java.net.InetAddress;
+import java.net.URI;
 import java.net.URL;
-import java.net.URLConnection;
 import java.text.MessageFormat;
 import java.util.Date;
 import java.util.Properties;
@@ -29,9 +30,14 @@ import java.util.UUID;
 import java.util.regex.Pattern;
 
 import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.eclipse.util.HttpUtils;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.net.ntp.NTPUDPClient;
 import org.apache.commons.net.ntp.TimeInfo;
+import org.apache.http.HttpHost;
+import org.apache.http.client.fluent.Executor;
+import org.apache.http.client.fluent.Request;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -55,7 +61,7 @@ import com.jaspersoft.studio.statistics.heartbeat.Heartbeat;
  * usage statistics
  * 
  * @author Orlandin Marco
- *
+ * 
  */
 public class UsageManager {
 
@@ -168,7 +174,7 @@ public class UsageManager {
 	 * since the last update to minimize the number of write on the disk
 	 * 
 	 * @author Orlandin Marco
-	 *
+	 * 
 	 */
 	private class WriteUsageJob extends Job {
 
@@ -737,17 +743,21 @@ public class UsageManager {
 		urlBuilder.append(String.valueOf(isRCP()));
 
 		String urlstr = urlBuilder.toString();
-		System.out.println("Invoking URL: " + urlstr); //$NON-NLS-1$
-		BufferedReader in = null;
+		System.out.println("Invoking URL: " + urlstr); //$NON-NLS-1$ 
 		VersionCheckResult result = new VersionCheckResult();
 		try {
-			URL url = new URL(urlstr);
-			URLConnection yc = url.openConnection();
-			in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
+			Executor exec = Executor.newInstance();
+			URI fullURI = new URI(urlstr);
+			HttpUtils.setupProxy(exec, fullURI);
+			HttpHost proxy = HttpUtils.getUnauthProxy(exec, fullURI);
+			Request req = Request.Get(urlstr);
+			if (proxy != null)
+				req.viaProxy(proxy);
+			String response = exec.execute(req).returnContent().asString();
+ 
 			String serverVersion = null;
-			String optmsg = ""; //$NON-NLS-1$
-			String inputLine;
-			while ((inputLine = in.readLine()) != null) {
+			String optmsg = ""; //$NON-NLS-1$ 
+			for (String inputLine : IOUtils.readLines(new StringReader(response))) {
 				if (serverVersion == null) {
 					serverVersion = inputLine.trim();
 				} else {
@@ -764,8 +774,6 @@ public class UsageManager {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			JaspersoftStudioPlugin.getInstance().logError(Messages.UsageManager_errorUpdateCheck, ex);
-		} finally {
-			FileUtils.closeStream(in);
 		}
 		return result;
 	}

@@ -21,8 +21,6 @@ import org.apache.http.HttpException;
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.Credentials;
-import org.apache.http.auth.NTCredentials;
-import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.fluent.Executor;
 import org.apache.http.client.fluent.Form;
@@ -43,35 +41,13 @@ import com.jaspersoft.studio.server.protocol.restv2.RestV2Connection;
 
 public class HttpUtils {
 
-	public static Executor setupProxy(Executor exec, URI uri) {
-		for (IProxyData d : proxyService.select(uri)) {
-			Credentials c = getCredentials(d);
-			if (c != null)
-				exec.auth(new HttpHost(d.getHost(), d.getPort()), c);
-			exec.authPreemptiveProxy(new HttpHost(d.getHost(), d.getPort(), d
-					.getType().toLowerCase()));
-			break;
-		}
-		executors.put(exec, uri);
-		return exec;
-	}
-
-	public static HttpHost getUnauthProxy(Executor exec, URI uri) {
-		for (IProxyData d : proxyService.select(uri)) {
-			Credentials c = getCredentials(d);
-			if (c != null)
-				continue;
-			return new HttpHost(d.getHost(), d.getPort(), d.getType()
-					.toLowerCase());
-		}
-		return null;
-	}
-
 	public static void setupProxy(ClientConfig clientConfig, URI uri) {
 		CredentialsProvider cp = (CredentialsProvider) clientConfig
 				.getProperty(ApacheClientProperties.CREDENTIALS_PROVIDER);
-		for (IProxyData d : proxyService.select(uri)) {
-			Credentials c = getCredentials(d);
+		for (IProxyData d : net.sf.jasperreports.eclipse.util.HttpUtils.proxyService
+				.select(uri)) {
+			Credentials c = net.sf.jasperreports.eclipse.util.HttpUtils
+					.getCredentials(d);
 			if (c != null)
 				cp.setCredentials(
 						new AuthScope(new HttpHost(d.getHost(), d.getPort())),
@@ -139,7 +115,8 @@ public class HttpUtils {
 			@Override
 			public void proxyInfoChanged(IProxyChangeEvent event) {
 				for (Executor exe : executors.keySet())
-					setupProxy(exe, executors.get(exe));
+					net.sf.jasperreports.eclipse.util.HttpUtils.setupProxy(exe,
+							executors.get(exe));
 				for (ClientConfig exe : clientConfigs.keySet())
 					setupProxy(exe, clientConfigs.get(exe));
 			}
@@ -147,26 +124,4 @@ public class HttpUtils {
 		return service;
 	}
 
-	private static IProxyService proxyService = getProxyService();
-
-	protected static Credentials getCredentials(IProxyData data) {
-		String userId = data.getUserId();
-		if (userId != null) {
-			Credentials proxyCred = new UsernamePasswordCredentials(userId,
-					data.getPassword());
-			// if the username is in the form "user\domain"
-			// then use NTCredentials instead.
-			int domainIndex = userId.indexOf("\\");
-			if (domainIndex > 0) {
-				String domain = userId.substring(0, domainIndex);
-				if (userId.length() > domainIndex + 1) {
-					String user = userId.substring(domainIndex + 1);
-					proxyCred = new NTCredentials(user, data.getPassword(),
-							data.getHost(), domain);
-				}
-			}
-			return proxyCred;
-		}
-		return null;
-	}
 }

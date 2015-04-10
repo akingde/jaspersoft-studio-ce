@@ -26,6 +26,7 @@ import javax.xml.soap.MimeHeader;
 import javax.xml.soap.MimeHeaders;
 
 import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.eclipse.util.HttpUtils;
 
 import org.apache.axis.AxisFault;
 import org.apache.axis.Constants;
@@ -70,7 +71,6 @@ import org.apache.http.impl.client.LaxRedirectStrategy;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.protocol.HttpContext;
 
-import com.jaspersoft.studio.server.utils.HttpUtils;
 
 public class JSSCommonsHTTPSender extends BasicHandler {
 	private static final long serialVersionUID = 8881188152022966420L;

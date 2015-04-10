@@ -15,6 +15,7 @@ package com.jaspersoft.studio.server.protocol.restv2;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
@@ -35,6 +36,7 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpHost;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
 import org.apache.http.ProtocolException;
@@ -144,8 +146,12 @@ public class CASUtil {
 			url += "/";
 		URIBuilder ub = new URIBuilder(url + "cas/login");
 
-		Request req = HttpUtils.get(ub.build().toASCIIString(), sp);
-
+		String fullURL = ub.build().toASCIIString();
+		Request req = HttpUtils.get(fullURL, sp);
+		HttpHost proxy = net.sf.jasperreports.eclipse.util.HttpUtils
+				.getUnauthProxy(exec, new URI(fullURL));
+		if (proxy != null)
+			req.viaProxy(proxy);
 		String tgtID = readData(exec, req, monitor);
 		String action = getFormAction(tgtID);
 		action = action.replaceFirst("/", "");
@@ -165,7 +171,9 @@ public class CASUtil {
 			form.add(key, map.get(key));
 		}
 		//
-		req = HttpUtils.post(ub.build().toASCIIString(), form, sp);
+		req = HttpUtils.post(fullURL, form, sp);
+		if (proxy != null)
+			req.viaProxy(proxy);
 		// Header header = null;
 		readData(exec, req, monitor);
 		// for (Header h : headers) {
@@ -182,7 +190,9 @@ public class CASUtil {
 			url += "/";
 		ub.addParameter("service", url + "j_spring_security_check");
 
-		req = HttpUtils.get(ub.build().toASCIIString(), sp);
+		req = HttpUtils.get(fullURL, sp);
+		if (proxy != null)
+			req.viaProxy(proxy);
 		// req.addHeader("Accept",
 		// "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8, value");
 		req.addHeader("Referrer", sp.getUrl());
