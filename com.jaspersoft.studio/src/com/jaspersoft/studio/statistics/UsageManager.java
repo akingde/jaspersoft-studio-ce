@@ -652,7 +652,8 @@ public class UsageManager {
 
 	/**
 	 * Log a statistic of a specific action. It will increment the counter for that action. The id of the action is done
-	 * by concatenating the name of the action and its category
+	 * by concatenating the name of the action, its category and the version of JSS when the action was used. Doing this
+	 * we have how many times an action was used with a specific version
 	 * 
 	 * @param used_action_id
 	 *          the name of the action, must not contains the separator char (default |)

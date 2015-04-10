@@ -41,7 +41,7 @@ public class UsageStatistic {
 	private int usagesNumber;
 	
 	/**
-	 * the version when this actions were aggregated
+	 * define in which version the action was used the specific number of times
 	 */
 	private String version;
 	
@@ -50,7 +50,7 @@ public class UsageStatistic {
 	 * 
 	 * @param id A not null identifier of the action
 	 * @param category A not null category of the action
-	 * @param the version when this actions were aggregated
+	 * @param version define in which version the action was used the specific number of times
 	 * @param usagesNumber a positive number of usages for the action
 	 */
 	@JsonCreator
@@ -95,7 +95,7 @@ public class UsageStatistic {
 	}
 	
 	/**
-	 * The current jaspersoft studio version
+	 * Define in which version the action was used the specific number of times
 	 * 
 	 * @return a not null string
 	 */
