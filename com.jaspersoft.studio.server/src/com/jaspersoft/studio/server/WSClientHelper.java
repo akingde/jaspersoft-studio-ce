@@ -50,6 +50,7 @@ import com.jaspersoft.studio.server.protocol.Feature;
 import com.jaspersoft.studio.server.protocol.IConnection;
 import com.jaspersoft.studio.server.protocol.ProxyConnection;
 import com.jaspersoft.studio.server.protocol.ReportExecution;
+import com.jaspersoft.studio.server.protocol.restv2.RestV2ConnectionJersey;
 import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorDatasource;
 import com.jaspersoft.studio.utils.ModelUtils;
 
@@ -58,6 +59,23 @@ public class WSClientHelper {
 
 	public static ServerProfile getServerProfile(IConnection cli) {
 		return clients.get(cli);
+	}
+
+	public static RestV2ConnectionJersey getREST(IProgressMonitor monitor,
+			ANode n) throws Exception {
+		IConnection c = null;
+		if (n instanceof MServerProfile)
+			c = ((MServerProfile) n).getWsClient(monitor);
+		if (n instanceof MResource) {
+			INode root = n.getRoot();
+			if (root != null && root instanceof MServerProfile)
+				c = ((MServerProfile) root).getWsClient(monitor);
+		}
+		if (c != null && c instanceof ProxyConnection) {
+			ProxyConnection proxy = (ProxyConnection) c;
+			return proxy.getREST(monitor);
+		}
+		return null;
 	}
 
 	public static IConnection connect(MServerProfile msp,

@@ -34,6 +34,7 @@ import com.jaspersoft.jasperserver.dto.resources.AbstractClientReportUnit;
 import com.jaspersoft.jasperserver.dto.resources.ClientResourceListWrapper;
 import com.jaspersoft.jasperserver.dto.resources.ClientResourceLookup;
 import com.jaspersoft.studio.kpi.messages.Messages;
+import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.protocol.Feature;
 import com.jaspersoft.studio.server.protocol.restv2.ARestV2Connection;
@@ -61,6 +62,9 @@ public class KPIUpdateCacheAction extends Action {
 		for (int i = 0; i < p.length; i++) {
 			Object obj = p[i].getLastSegment();
 			if (obj instanceof MServerProfile) {
+				MServerProfile msp = (MServerProfile) obj;
+				if (msp.getWsClient() == null)
+					return true;// we want to show it always
 				if (((MServerProfile) obj).getWsClient().isSupported(
 						Feature.SEARCHREPOSITORY))
 					return true;
@@ -86,10 +90,8 @@ public class KPIUpdateCacheAction extends Action {
 						monitor.beginTask(
 								"Update KPI cache", IProgressMonitor.UNKNOWN); //$NON-NLS-1$
 						try {
-
-							final RestV2ConnectionJersey client = new RestV2ConnectionJersey();
-							client.connect(monitor, node.getWsClient()
-									.getServerProfile());
+							final RestV2ConnectionJersey client = WSClientHelper
+									.getREST(monitor, node);
 
 							// for each report unit check if it has a KPI sub
 							// report...

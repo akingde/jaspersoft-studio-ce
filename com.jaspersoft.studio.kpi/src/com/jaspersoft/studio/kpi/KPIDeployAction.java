@@ -140,7 +140,8 @@ public class KPIDeployAction extends Action implements IMenuCreator {
 							// We need to work here with the Jersay based REST
 							// client...
 
-							final RestV2ConnectionJersey client = new RestV2ConnectionJersey();
+							final RestV2ConnectionJersey client = WSClientHelper
+									.getREST(monitor, node);
 							client.connect(monitor, node.getWsClient()
 									.getServerProfile());
 

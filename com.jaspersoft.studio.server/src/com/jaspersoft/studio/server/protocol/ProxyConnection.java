@@ -71,6 +71,17 @@ public class ProxyConnection implements IConnection {
 		return cons;
 	}
 
+	public RestV2ConnectionJersey getREST(IProgressMonitor monitor)
+			throws Exception {
+		for (IConnection con : cons) {
+			if (con instanceof RestV2ConnectionJersey)
+				return (RestV2ConnectionJersey) con;
+		}
+		RestV2ConnectionJersey rest = new RestV2ConnectionJersey();
+		rest.connect(monitor, getServerProfile());
+		return rest;
+	}
+
 	private IConnection c;
 	private IConnection soap;
 
