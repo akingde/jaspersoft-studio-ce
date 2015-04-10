@@ -61,10 +61,15 @@ import com.jaspersoft.studio.statistics.heartbeat.Heartbeat;
  * usage statistics
  * 
  * @author Orlandin Marco
- * 
+ *
  */
 public class UsageManager {
 
+	/**
+	 * The current used version of Jaspersfot Studio
+	 */
+	private static final String CURRENT_VERSION = JaspersoftStudioPlugin.getInstance().getBundle().getVersion().toString();
+	
 	/**
 	 * Property name used in the preferences in the old version of Jaspersoft Studio to store a UUID of the application.
 	 * This is used only for backward compatibility since the newer versions store the file inside an application folder
@@ -75,7 +80,11 @@ public class UsageManager {
 	 * URL of the server where the statistics are sent
 	 */
 	private static final String STATISTICS_SERVER_URL = "";//$NON-NLS-1$ //http://192.168.2.101/jss/jssusage.php
-
+	
+	/**
+	 * URL of the server where the heartbeat is sent
+	 */
+	private static final String HEARTBEAT_SERVER_URL = "http://jasperstudio.sf.net";
 	/**
 	 * Time in ms that the process to write the statistics from the memory on the disk wait after the update of a value.
 	 * This is done since some operations can update many values, doing this there is a time span to allow sequence of
@@ -174,7 +183,7 @@ public class UsageManager {
 	 * since the last update to minimize the number of write on the disk
 	 * 
 	 * @author Orlandin Marco
-	 * 
+	 *
 	 */
 	private class WriteUsageJob extends Job {
 
@@ -522,7 +531,12 @@ public class UsageManager {
 					try {
 						String[] id_category = key.toString().split(Pattern.quote(ID_CATEGORY_SEPARATOR));
 						int usageNumber = Integer.parseInt(prop.getProperty(key.toString(), "0")); //$NON-NLS-1$
-						container.addStat(new UsageStatistic(id_category[0], id_category[1], usageNumber));
+						String version = CURRENT_VERSION;
+						//Check if the id contains the version
+						if (id_category.length == 3){
+							version = id_category[3];
+						}
+						container.addStat(new UsageStatistic(id_category[0], id_category[1], version, usageNumber));
 					} catch (Exception ex) {
 						prop.remove(key);
 					}
@@ -583,8 +597,7 @@ public class UsageManager {
 		// This first call initialize the appdata folder and execute the first run actions
 		getAppDataFolder();
 		// Check if the collecting of statistics is enabled
-		allowUsageCollection = JaspersoftStudioPlugin.getInstance().getPreferenceStore()
-				.getBoolean(StudioPreferencePage.JSS_SEND_USAGE_STATISTICS);
+		allowUsageCollection = JaspersoftStudioPlugin.getInstance().getPreferenceStore().getBoolean(StudioPreferencePage.JSS_SEND_USAGE_STATISTICS);
 		JaspersoftStudioPlugin.getInstance().getPreferenceStore().addPropertyChangeListener(preferencesListener);
 		if (allowUsageCollection) {
 			Job uploadUsageStats = new Job(Messages.UsageManager_uploadJobName) {
@@ -649,12 +662,11 @@ public class UsageManager {
 	public void audit(String used_action_id, String cateogory) {
 		synchronized (UsageManager.this) {
 			if (allowUsageCollection) {
-				String errorMessage = MessageFormat.format(Messages.UsageManager_errorSepratorReserved,
-						new Object[] { ID_CATEGORY_SEPARATOR });
-				Assert.isTrue(!used_action_id.contains(ID_CATEGORY_SEPARATOR) && !cateogory.contains(ID_CATEGORY_SEPARATOR),
-						errorMessage);
+				//Check the separator is not used in the action
+				String errorMessage = MessageFormat.format(Messages.UsageManager_errorSepratorReserved,new Object[] { ID_CATEGORY_SEPARATOR });
+				Assert.isTrue(!used_action_id.contains(ID_CATEGORY_SEPARATOR) && !cateogory.contains(ID_CATEGORY_SEPARATOR),	errorMessage);
 				Properties properties = getStatisticsContainer();
-				String id = used_action_id + ID_CATEGORY_SEPARATOR + cateogory;
+				String id = used_action_id + ID_CATEGORY_SEPARATOR + cateogory + ID_CATEGORY_SEPARATOR + CURRENT_VERSION;
 				String textUsageNumber = properties.getProperty(id, "0"); //$NON-NLS-1$
 				int usageNumber = 0;
 				try {
@@ -686,12 +698,11 @@ public class UsageManager {
 	public void audit_set(String used_action_id, String cateogory, int usageNumber) {
 		synchronized (this) {
 			if (allowUsageCollection) {
-				String errorMessage = MessageFormat.format(Messages.UsageManager_errorSepratorReserved,
-						new Object[] { ID_CATEGORY_SEPARATOR });
-				Assert.isTrue(!used_action_id.contains(ID_CATEGORY_SEPARATOR) && !cateogory.contains(ID_CATEGORY_SEPARATOR),
-						errorMessage);
+				//Check the separator is not used in the action
+				String errorMessage = MessageFormat.format(Messages.UsageManager_errorSepratorReserved,new Object[] { ID_CATEGORY_SEPARATOR });
+				Assert.isTrue(!used_action_id.contains(ID_CATEGORY_SEPARATOR) && !cateogory.contains(ID_CATEGORY_SEPARATOR),errorMessage);
 				Properties properties = getStatisticsContainer();
-				String id = used_action_id + ID_CATEGORY_SEPARATOR + cateogory; //$NON-NLS-1$
+				String id = used_action_id + ID_CATEGORY_SEPARATOR + cateogory + ID_CATEGORY_SEPARATOR + CURRENT_VERSION; 
 				properties.setProperty(id, String.valueOf(usageNumber));
 				statisticUpdatedRecently = true;
 				writeStatsToDisk.cancel();
@@ -707,7 +718,6 @@ public class UsageManager {
 	 * @return a not null VersionCheckResult that contains information on the new version and if there is a new version
 	 */
 	public VersionCheckResult checkVersion() {
-		String currentVersion = JaspersoftStudioPlugin.getInstance().getBundle().getVersion().toString();
 		String uuid = getAppDataFolder().getName();
 		String versionKnownByTheStats = getInstallationInfoContainer().getProperty(VERSION_INFO);
 		int newInstallation = 0;
@@ -720,7 +730,7 @@ public class UsageManager {
 			if (versionKnownByTheStats == null) {
 				// Since the last version was not yet initialized it is a new installation
 				newInstallation = 1;
-			} else if (!versionKnownByTheStats.equals(currentVersion)) {
+			} else if (!versionKnownByTheStats.equals(CURRENT_VERSION)) {
 				// There is a version stored in the file, that is the last version known by the server, if it is
 				// different from the real version then there were an update
 				newInstallation = 2;
@@ -729,12 +739,13 @@ public class UsageManager {
 			// If the backward value is != null then it isn't for sure a new installation, maybe there were
 			// but since i'm inside the new code then it should be an update.
 			newInstallation = 2;
-			setInstallationInfo(VERSION_INFO, currentVersion);
+			setInstallationInfo(VERSION_INFO, CURRENT_VERSION);
 		}
 
 		StringBuilder urlBuilder = new StringBuilder();
-		urlBuilder.append("http://jasperstudio.sf.net/jsslastversion.php?version=");//$NON-NLS-1$
-		urlBuilder.append(currentVersion);
+		urlBuilder.append(HEARTBEAT_SERVER_URL);
+		urlBuilder.append("/jsslastversion.php?version=");//$NON-NLS-1$
+		urlBuilder.append(CURRENT_VERSION);
 		urlBuilder.append("&uuid=");//$NON-NLS-1$
 		urlBuilder.append(uuid);
 		urlBuilder.append("&new=");//$NON-NLS-1$
@@ -765,12 +776,12 @@ public class UsageManager {
 				}
 			}
 			// Update the installation info only if the informations was given correctly to the server
-			setInstallationInfo(VERSION_INFO, currentVersion);
+			setInstallationInfo(VERSION_INFO, CURRENT_VERSION);
 			// Remove the old backward compatibility value if present to switch to the new system
 			if (backward_uuid != null) {
 				ph.removeString(BACKWARD_UUID_PROPERTY, InstanceScope.SCOPE);
 			}
-			result = new VersionCheckResult(serverVersion, optmsg, currentVersion);
+			result = new VersionCheckResult(serverVersion, optmsg, CURRENT_VERSION);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			JaspersoftStudioPlugin.getInstance().logError(Messages.UsageManager_errorUpdateCheck, ex);

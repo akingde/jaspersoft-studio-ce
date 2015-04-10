@@ -41,20 +41,30 @@ public class UsageStatistic {
 	private int usagesNumber;
 	
 	/**
+	 * the version when this actions were aggregated
+	 */
+	private String version;
+	
+	/**
 	 * Build the container of the statistic
 	 * 
 	 * @param id A not null identifier of the action
 	 * @param category A not null category of the action
+	 * @param the version when this actions were aggregated
 	 * @param usagesNumber a positive number of usages for the action
 	 */
 	@JsonCreator
-	public UsageStatistic(@JsonProperty("id") String id, @JsonProperty("category") String category, @JsonProperty("usagesNumber") int usagesNumber){
+	public UsageStatistic(@JsonProperty("id") String id, 
+												@JsonProperty("category") String category, 
+												@JsonProperty("version") String version, 
+												@JsonProperty("usagesNumber") int usagesNumber){
 		Assert.isNotNull(id);
 		Assert.isNotNull(category);
 		Assert.isTrue(usagesNumber>=0);
 		this.id = id;
 		this.category = category;
 		this.usagesNumber = usagesNumber;
+		this.version = version;
 	}
 	
 	/**
@@ -82,5 +92,14 @@ public class UsageStatistic {
 	 */
 	public int getUsagesNumber(){
 		return usagesNumber;
+	}
+	
+	/**
+	 * The current jaspersoft studio version
+	 * 
+	 * @return a not null string
+	 */
+	public String getVersion(){
+		return version;
 	}
 }
