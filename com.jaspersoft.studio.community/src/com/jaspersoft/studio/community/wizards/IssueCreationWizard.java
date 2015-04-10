@@ -18,13 +18,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.HttpUtils;
 
+import org.apache.http.HttpException;
+import org.apache.http.HttpHost;
+import org.apache.http.HttpRequest;
 import org.apache.http.client.CookieStore;
 import org.apache.http.client.utils.HttpClientUtils;
+import org.apache.http.conn.routing.HttpRoute;
+import org.apache.http.conn.routing.HttpRoutePlanner;
 import org.apache.http.cookie.Cookie;
 import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.protocol.HttpContext;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -56,11 +63,11 @@ import com.jaspersoft.studio.community.zip.ZipEntry;
  * Wizard for the issue creation.
  * 
  * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
- *
+ * 
  */
 @SuppressWarnings("restriction")
 public final class IssueCreationWizard extends Wizard {
-	
+
 	private static IssueCreationWizard instance = null;
 	private NewIssueDetailsPage page1;
 	private IssueAttachmentDetailsPage page2;
@@ -90,33 +97,37 @@ public final class IssueCreationWizard extends Wizard {
 		final IssueRequest issueRequest = page1.getIssueRequest();
 		// Authentication information
 		final CommunityUser authInfo = page3.getCommunityUserInformation();
-		// Let's save credentials if required		
-		if(page3.shouldSaveCredentials()){
-			JSSCommunityActivator.getDefault().storeCommunityUserInformation(authInfo);
+		// Let's save credentials if required
+		if (page3.shouldSaveCredentials()) {
+			JSSCommunityActivator.getDefault().storeCommunityUserInformation(
+					authInfo);
 		}
 		// Tries to save issue
 		try {
 			getContainer().run(true, false, new IRunnableWithProgress() {
 				@Override
-				public void run(IProgressMonitor monitor) throws InvocationTargetException,
-						InterruptedException {
-					monitor.beginTask(Messages.IssueCreationWizard_TaskName, IProgressMonitor.UNKNOWN);
-					isPublished = publishNewIssue(issueRequest,zipEntries,authInfo);
+				public void run(IProgressMonitor monitor)
+						throws InvocationTargetException, InterruptedException {
+					monitor.beginTask(Messages.IssueCreationWizard_TaskName,
+							IProgressMonitor.UNKNOWN);
+					isPublished = publishNewIssue(issueRequest, zipEntries,
+							authInfo);
 					monitor.done();
-					
+
 				}
 			});
 		} catch (Exception e) {
 			UIUtils.showError(e);
 		}
-		
-		if(isPublished){
-			new IssueCreatedDialog(
-					getShell(), Messages.IssueCreationWizard_InfoDialogTitle, null, 
+
+		if (isPublished) {
+			new IssueCreatedDialog(getShell(),
+					Messages.IssueCreationWizard_InfoDialogTitle, null,
 					Messages.IssueCreationWizard_InfoDialogMessage,
-					MessageDialog.INFORMATION,new String[] { IDialogConstants.OK_LABEL }, 0).open();
+					MessageDialog.INFORMATION,
+					new String[] { IDialogConstants.OK_LABEL }, 0).open();
 		}
-		
+
 		return isPublished;
 	}
 
@@ -125,24 +136,28 @@ public final class IssueCreationWizard extends Wizard {
 		CloseableHttpClient httpclient = null;
 		try {
 			CookieStore cookieStore = new BasicCookieStore();
-			httpclient = HttpClientBuilder.create().setDefaultCookieStore(cookieStore).build();
+			httpclient = HttpUtils.setupProxy(HttpClientBuilder.create())
+					.setDefaultCookieStore(cookieStore).build();
 
 			// Gets the authentication cookie
-			Cookie authCookie = 
-					RESTCommunityHelper.getAuthenticationCookie(httpclient, cookieStore, authInfo.getUsername(), authInfo.getPassword());
-			
+			Cookie authCookie = RESTCommunityHelper.getAuthenticationCookie(
+					httpclient, cookieStore, authInfo.getUsername(),
+					authInfo.getPassword());
+
 			// Create the attachment file if any
 			List<String> attachmentsIDs = new ArrayList<String>();
-			if(!zipEntries.isEmpty()){
-				File zipAttachment = CommunityAPIUtils.createZipFile(zipEntries);
-				String fileID = RESTCommunityHelper.uploadFile(httpclient, zipAttachment, authCookie);
+			if (!zipEntries.isEmpty()) {
+				File zipAttachment = CommunityAPIUtils
+						.createZipFile(zipEntries);
+				String fileID = RESTCommunityHelper.uploadFile(httpclient,
+						zipAttachment, authCookie);
 				attachmentsIDs.add(fileID);
 			}
-			
+
 			// Publish the issue to the community tracker
-			issuePath = 
-					RESTCommunityHelper.createNewIssue(httpclient, issueRequest, attachmentsIDs, authCookie);
-						
+			issuePath = RESTCommunityHelper.createNewIssue(httpclient,
+					issueRequest, attachmentsIDs, authCookie);
+
 		} catch (CommunityAPIException e) {
 			UIUtils.showError(e);
 			return false;
@@ -165,28 +180,32 @@ public final class IssueCreationWizard extends Wizard {
 			super(parentShell, dialogTitle, dialogTitleImage, dialogMessage,
 					dialogImageType, dialogButtonLabels, defaultIndex);
 		}
-		
+
 		@Override
 		protected Control createCustomArea(Composite parent) {
 			final StyledText issueLink = new StyledText(parent, SWT.READ_ONLY);
 			issueLink.setText(issuePath);
 			issueLink.setBackground(parent.getBackground());
-			issueLink.setLayoutData(new GridData(SWT.RIGHT,SWT.TOP,true,false,2,1));
-			
+			issueLink.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, true,
+					false, 2, 1));
+
 			StyleRange style = new StyleRange();
 			style.underline = true;
 			style.underlineStyle = SWT.UNDERLINE_LINK;
-			int[] ranges = {0, issuePath.length()};
-			StyleRange[] styles = {style};
+			int[] ranges = { 0, issuePath.length() };
+			StyleRange[] styles = { style };
 			issueLink.setStyleRanges(ranges, styles);
-			
+
 			issueLink.addListener(SWT.MouseDown, new Listener() {
 				@Override
 				public void handleEvent(Event event) {
 					try {
-						int offset = issueLink.getOffsetAtLocation(new Point (event.x, event.y));
-						StyleRange style = issueLink.getStyleRangeAtOffset(offset);
-						if (style != null && style.underline && style.underlineStyle == SWT.UNDERLINE_LINK) {
+						int offset = issueLink.getOffsetAtLocation(new Point(
+								event.x, event.y));
+						StyleRange style = issueLink
+								.getStyleRangeAtOffset(offset);
+						if (style != null && style.underline
+								&& style.underlineStyle == SWT.UNDERLINE_LINK) {
 							Program.launch(issuePath);
 						}
 					} catch (IllegalArgumentException e) {
@@ -194,7 +213,7 @@ public final class IssueCreationWizard extends Wizard {
 					}
 				}
 			});
-			
+
 			return issueLink;
 		}
 
@@ -207,15 +226,14 @@ public final class IssueCreationWizard extends Wizard {
 	 *         instance already exists
 	 */
 	public static synchronized IssueCreationWizard createWizard() {
-		if(instance==null){
+		if (instance == null) {
 			instance = new IssueCreationWizard();
 			return instance;
-		}
-		else {
+		} else {
 			return null;
 		}
 	}
-	
+
 	@Override
 	public void dispose() {
 		super.dispose();

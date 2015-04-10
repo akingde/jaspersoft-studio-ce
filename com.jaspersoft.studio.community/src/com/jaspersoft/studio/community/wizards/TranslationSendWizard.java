@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.HttpUtils;
 
 import org.apache.http.client.CookieStore;
 import org.apache.http.client.utils.HttpClientUtils;
@@ -51,12 +52,13 @@ import com.jaspersoft.studio.community.utils.CommunityAPIException;
 import com.jaspersoft.studio.community.utils.CommunityUser;
 
 /**
- * Wizard to send a translation project into the community site. The user can specify
- * the name and the description for the new thread, and the login data on the community site.
- * The attachment is fixed and its the translation itself inside a zip file.
+ * Wizard to send a translation project into the community site. The user can
+ * specify the name and the description for the new thread, and the login data
+ * on the community site. The attachment is fixed and its the translation itself
+ * inside a zip file.
  * 
  * @author Orlandin Marco & Massimo Rabbi
- *
+ * 
  */
 @SuppressWarnings("restriction")
 public final class TranslationSendWizard extends Wizard {
@@ -85,55 +87,62 @@ public final class TranslationSendWizard extends Wizard {
 		final IssueRequest issueRequest = page1.getIssueRequest();
 		// Authentication information
 		final CommunityUser authInfo = page2.getCommunityUserInformation();
-		// Let's save credentials if required		
-		if(page2.shouldSaveCredentials()){
-			JSSCommunityActivator.getDefault().storeCommunityUserInformation(authInfo);
+		// Let's save credentials if required
+		if (page2.shouldSaveCredentials()) {
+			JSSCommunityActivator.getDefault().storeCommunityUserInformation(
+					authInfo);
 		}
 		// Tries to save issue
 		try {
 			getContainer().run(true, false, new IRunnableWithProgress() {
 				@Override
-				public void run(IProgressMonitor monitor) throws InvocationTargetException,
-						InterruptedException {
-					monitor.beginTask(Messages.IssueCreationWizard_TaskName, IProgressMonitor.UNKNOWN);
-					isPublished = publishNewIssue(issueRequest,authInfo);
+				public void run(IProgressMonitor monitor)
+						throws InvocationTargetException, InterruptedException {
+					monitor.beginTask(Messages.IssueCreationWizard_TaskName,
+							IProgressMonitor.UNKNOWN);
+					isPublished = publishNewIssue(issueRequest, authInfo);
 					monitor.done();
-					
+
 				}
 			});
 		} catch (Exception e) {
 			UIUtils.showError(e);
 		}
-		
-		if(isPublished){
-			new IssueCreatedDialog(
-					getShell(), Messages.IssueCreationWizard_InfoDialogTitle, null, 
+
+		if (isPublished) {
+			new IssueCreatedDialog(getShell(),
+					Messages.IssueCreationWizard_InfoDialogTitle, null,
 					Messages.IssueCreationWizard_InfoDialogMessage,
-					MessageDialog.INFORMATION,new String[] { IDialogConstants.OK_LABEL }, 0).open();
+					MessageDialog.INFORMATION,
+					new String[] { IDialogConstants.OK_LABEL }, 0).open();
 		}
-		
+
 		return isPublished;
 	}
 
-	private boolean publishNewIssue(IssueRequest issueRequest, CommunityUser authInfo) {
+	private boolean publishNewIssue(IssueRequest issueRequest,
+			CommunityUser authInfo) {
 		CloseableHttpClient httpclient = null;
 		try {
 			CookieStore cookieStore = new BasicCookieStore();
-			httpclient = HttpClientBuilder.create().setDefaultCookieStore(cookieStore).build();
-			
+			httpclient = HttpUtils.setupProxy(HttpClientBuilder.create())
+					.setDefaultCookieStore(cookieStore).build();
+
 			// Gets the authentication cookie
-			Cookie authCookie = 
-					RESTCommunityHelper.getAuthenticationCookie(httpclient, cookieStore, authInfo.getUsername(), authInfo.getPassword());
-			
+			Cookie authCookie = RESTCommunityHelper.getAuthenticationCookie(
+					httpclient, cookieStore, authInfo.getUsername(),
+					authInfo.getPassword());
+
 			// Create the attachment file if any
 			List<String> attachmentsIDs = new ArrayList<String>();
-			String fileID = RESTCommunityHelper.uploadFile(httpclient, zipAttachment, authCookie);
+			String fileID = RESTCommunityHelper.uploadFile(httpclient,
+					zipAttachment, authCookie);
 			attachmentsIDs.add(fileID);
-			
+
 			// Publish the issue to the community tracker
-			issuePath = 
-					RESTCommunityHelper.createNewIssue(httpclient, issueRequest, attachmentsIDs, authCookie);
-						
+			issuePath = RESTCommunityHelper.createNewIssue(httpclient,
+					issueRequest, attachmentsIDs, authCookie);
+
 		} catch (CommunityAPIException e) {
 			UIUtils.showError(e);
 			return false;
@@ -156,28 +165,32 @@ public final class TranslationSendWizard extends Wizard {
 			super(parentShell, dialogTitle, dialogTitleImage, dialogMessage,
 					dialogImageType, dialogButtonLabels, defaultIndex);
 		}
-		
+
 		@Override
 		protected Control createCustomArea(Composite parent) {
 			final StyledText issueLink = new StyledText(parent, SWT.READ_ONLY);
 			issueLink.setText(issuePath);
 			issueLink.setBackground(parent.getBackground());
-			issueLink.setLayoutData(new GridData(SWT.RIGHT,SWT.TOP,true,false,2,1));
-			
+			issueLink.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, true,
+					false, 2, 1));
+
 			StyleRange style = new StyleRange();
 			style.underline = true;
 			style.underlineStyle = SWT.UNDERLINE_LINK;
-			int[] ranges = {0, issuePath.length()};
-			StyleRange[] styles = {style};
+			int[] ranges = { 0, issuePath.length() };
+			StyleRange[] styles = { style };
 			issueLink.setStyleRanges(ranges, styles);
-			
+
 			issueLink.addListener(SWT.MouseDown, new Listener() {
 				@Override
 				public void handleEvent(Event event) {
 					try {
-						int offset = issueLink.getOffsetAtLocation(new Point (event.x, event.y));
-						StyleRange style = issueLink.getStyleRangeAtOffset(offset);
-						if (style != null && style.underline && style.underlineStyle == SWT.UNDERLINE_LINK) {
+						int offset = issueLink.getOffsetAtLocation(new Point(
+								event.x, event.y));
+						StyleRange style = issueLink
+								.getStyleRangeAtOffset(offset);
+						if (style != null && style.underline
+								&& style.underlineStyle == SWT.UNDERLINE_LINK) {
 							Program.launch(issuePath);
 						}
 					} catch (IllegalArgumentException e) {
@@ -185,7 +198,7 @@ public final class TranslationSendWizard extends Wizard {
 					}
 				}
 			});
-			
+
 			return issueLink;
 		}
 
