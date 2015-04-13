@@ -24,7 +24,6 @@ import org.eclipse.jface.fieldassist.FieldDecoration;
 import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.CellEditor;
-import org.eclipse.jface.viewers.CheckboxCellEditor;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
@@ -45,14 +44,13 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.wb.swt.ResourceManager;
 
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
-import com.jaspersoft.studio.property.descriptor.NullEnum;
-import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxLabelProvider;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionCellEditor;
 import com.jaspersoft.studio.server.Activator;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.AFileResource;
 import com.jaspersoft.studio.server.model.AMJrxmlContainer;
 import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.publish.OverwriteEnum;
 import com.jaspersoft.studio.server.publish.PublishOptions;
 import com.jaspersoft.studio.server.publish.PublishUtil;
 import com.jaspersoft.studio.server.publish.ResourcePublishMethod;
@@ -151,22 +149,21 @@ public class ResourcesPage extends JSSHelpWizardPage {
 		column.setText(Messages.ResourcesPage_table_overwrite);
 		column.setWidth(80);
 		viewerColumn.setLabelProvider(new TLabelProvider() {
-			private CheckBoxLabelProvider chLabelProvider = new CheckBoxLabelProvider(
-					NullEnum.NOTNULL);
 
 			@Override
 			public String getText(Object element) {
 				MResource fr = (MResource) element;
-				return chLabelProvider.getText(fr.getPublishOptions()
-						.isOverwrite());
+				OverwriteEnum ovw = fr.getPublishOptions().getOverwrite(
+						OverwriteEnum.IGNORE);
+				if (ovw.equals(OverwriteEnum.OVERWRITE))
+					return Messages.ResourcesPage_3;
+				if (ovw.equals(OverwriteEnum.IGNORE))
+					return Messages.ResourcesPage_5;
+				if (ovw.equals(OverwriteEnum.ONLY_EXPRESSION))
+					return Messages.ResourcesPage_6;
+				return ovw.getValue();
 			}
 
-			@Override
-			public Image getImage(Object element) {
-				MResource fr = (MResource) element;
-				return chLabelProvider.getCellEditorImage(fr
-						.getPublishOptions().isOverwrite());
-			}
 		});
 
 		viewerColumn = new TableViewerColumn(tableViewer, SWT.NONE);
@@ -177,9 +174,13 @@ public class ResourcesPage extends JSSHelpWizardPage {
 			@Override
 			public String getText(Object element) {
 				MResource fr = (MResource) element;
-				if (fr.getPublishOptions().getPublishMethod() == ResourcePublishMethod.REWRITEEXPRESSION)
-					return fr.getPublishOptions().getRepoExpression();
-				return Misc.nvl(fr.getPublishOptions().getExpression());
+				PublishOptions popt = fr.getPublishOptions();
+				OverwriteEnum ovw = popt.getOverwrite(OverwriteEnum.IGNORE);
+				if (ovw.equals(OverwriteEnum.IGNORE))
+					return "";
+				if (popt.getPublishMethod() == ResourcePublishMethod.REWRITEEXPRESSION)
+					return popt.getRepoExpression();
+				return Misc.nvl(popt.getExpression());
 			}
 
 			@Override
@@ -216,11 +217,18 @@ public class ResourcesPage extends JSSHelpWizardPage {
 			public String getText(Object element) {
 				if (element instanceof MResource) {
 					MResource mres = (MResource) element;
-					if (mres.getPublishOptions().getPublishMethod() == ResourcePublishMethod.RESOURCE)
+					PublishOptions popt = mres.getPublishOptions();
+					OverwriteEnum ovw = popt.getOverwrite(OverwriteEnum.IGNORE);
+					if (ovw.equals(OverwriteEnum.IGNORE))
+						return "";
+					if (ovw.equals(OverwriteEnum.ONLY_EXPRESSION))
+						return "";
+
+					if (popt.getPublishMethod() == ResourcePublishMethod.RESOURCE)
 						return sres.getText();
-					if (mres.getPublishOptions().getPublishMethod() == ResourcePublishMethod.REFERENCE)
+					if (popt.getPublishMethod() == ResourcePublishMethod.REFERENCE)
 						return sresource.getText();
-					if (mres.getPublishOptions().getPublishMethod() == ResourcePublishMethod.LOCAL)
+					if (popt.getPublishMethod() == ResourcePublishMethod.LOCAL)
 						return slocal.getText();
 				}
 				return ""; //$NON-NLS-1$
@@ -245,7 +253,10 @@ public class ResourcesPage extends JSSHelpWizardPage {
 						.getSelection();
 				if (s != null) {
 					MResource mres = (MResource) s.getFirstElement();
-					if (mres != null && mres.getPublishOptions().isOverwrite()) {
+					if (mres != null
+							&& mres.getPublishOptions()
+									.getOverwrite(OverwriteEnum.OVERWRITE)
+									.equals(OverwriteEnum.OVERWRITE)) {
 						if (sresource.calculateEnabled(mres))
 							menu.add(sresource);
 						if (sres.calculateEnabled(mres))
@@ -268,38 +279,63 @@ public class ResourcesPage extends JSSHelpWizardPage {
 	private ReferenceResourceAction sresource;
 	private ResourceToFolderAction sres;
 	private SelectLocalAction slocal;
+	private ComboBoxCellEditor cOverwrite;
 
 	private void attachCellEditors(final TableViewer viewer, Composite parent) {
 		viewer.setCellModifier(new ICellModifier() {
 			public boolean canModify(Object element, String property) {
+				MResource prop = (MResource) element;
+				PublishOptions po = prop.getPublishOptions();
 				if (property.equals("VALUE")) //$NON-NLS-1$
 					return true;
 				if (property.equals("EXPRESSION") //$NON-NLS-1$
-						&& ((MResource) element).getPublishOptions()
-								.getjExpression() != null)
+						&& po.getjExpression() != null
+						&& !po.getOverwrite().equals(OverwriteEnum.IGNORE))
 					return true;
-				if (property.equals("TYPE")) //$NON-NLS-1$
-					if (element instanceof AFileResource)
-						return true;
+				if (property.equals("TYPE") && po.getOverwrite().equals(OverwriteEnum.OVERWRITE)) //$NON-NLS-1$
+					return true;
 				return false;
 			}
 
 			public Object getValue(Object element, String property) {
 				MResource prop = (MResource) element;
-				if ("VALUE".equals(property)) //$NON-NLS-1$
-					return prop.getPublishOptions().isOverwrite();
+				PublishOptions po = prop.getPublishOptions();
+				if ("VALUE".equals(property)) { //$NON-NLS-1$
+					if (prop instanceof AFileResource) {
+						cOverwrite.setItems(new String[] {
+								Messages.ResourcesPage_3,
+								Messages.ResourcesPage_5,
+								Messages.ResourcesPage_6 });
+					} else {
+						cOverwrite.setItems(new String[] {
+								Messages.ResourcesPage_3,
+								Messages.ResourcesPage_5 });
+					}
+
+					OverwriteEnum ovw = po.getOverwrite();
+					if (ovw.equals(OverwriteEnum.OVERWRITE))
+						return 0;
+					else if (ovw.equals(OverwriteEnum.IGNORE))
+						return 1;
+					else if (ovw.equals(OverwriteEnum.ONLY_EXPRESSION))
+						return 2;
+					return 1;
+				}
 				if ("NAME".equals(property)) //$NON-NLS-1$
 					return prop.getDisplayText();
 				if ("FILESIZE".equals(property)) { //$NON-NLS-1$
 					if (prop instanceof AFileResource)
 						return ((AFileResource) element).getHFFileSize();
 				}
-				if ("EXPRESSION".equals(property)) { //$NON-NLS-1$
+				if (po.getOverwrite(OverwriteEnum.IGNORE).equals(
+						OverwriteEnum.IGNORE))
+					return ""; //$NON-NLS-1$
+				if ("EXPRESSION".equals(property)) { //$NON-NLS-1$ 
 					JRDesignExpression jd = new JRDesignExpression();
 					jd.setText(prop.getPublishOptions().getExpression());
 					return jd;
 				}
-				if ("TYPE".equals(property)) { //$NON-NLS-1$
+				if ("TYPE".equals(property)) { //$NON-NLS-1$ 
 					if (prop instanceof AFileResource) {
 						AFileResource mres = (AFileResource) element;
 						if (mres.getPublishOptions().getPublishMethod() == ResourcePublishMethod.RESOURCE)
@@ -317,13 +353,24 @@ public class ResourcesPage extends JSSHelpWizardPage {
 			public void modify(Object element, String property, Object value) {
 				TableItem tableItem = (TableItem) element;
 				MResource data = (MResource) tableItem.getData();
-				if ("VALUE".equals(property)) //$NON-NLS-1$
-					data.getPublishOptions().setOverwrite((Boolean) value);
-				if ("EXPRESSION".equals(property)) //$NON-NLS-1$
-					data.getPublishOptions().setExpression(
-							value == null ? null : ((JRDesignExpression) value)
-									.getText());
-				if ("TYPE".equals(property)) { //$NON-NLS-1$
+				PublishOptions po = data.getPublishOptions();
+				if ("VALUE".equals(property)) { //$NON-NLS-1$
+					int intValue = ((Integer) value).intValue();
+					switch (intValue) {
+					case 0:
+						po.setOverwrite(OverwriteEnum.OVERWRITE);
+						break;
+					case 1:
+						po.setOverwrite(OverwriteEnum.IGNORE);
+						break;
+					case 2:
+						po.setOverwrite(OverwriteEnum.ONLY_EXPRESSION);
+						break;
+					}
+				} else if ("EXPRESSION".equals(property)) //$NON-NLS-1$
+					po.setExpression(value == null ? null
+							: ((JRDesignExpression) value).getText());
+				else if ("TYPE".equals(property)) { //$NON-NLS-1$
 					if (value instanceof Integer) {
 						int intValue = ((Integer) value).intValue();
 						switch (intValue) {
@@ -349,9 +396,12 @@ public class ResourcesPage extends JSSHelpWizardPage {
 
 		JRExpressionCellEditor expEditor = new JRExpressionCellEditor(parent,
 				new ExpressionContext(jConfig));
+		cOverwrite = new ComboBoxCellEditor(parent, new String[] {
+				Messages.ResourcesPage_3, Messages.ResourcesPage_5,
+				Messages.ResourcesPage_6 });
 		viewer.setCellEditors(new CellEditor[] {
 				new TextCellEditor(parent),
-				new CheckboxCellEditor(parent),
+				cOverwrite,
 				expEditor,
 				new TextCellEditor(parent, SWT.RIGHT),
 				new ComboBoxCellEditor(parent, new String[] { sres.getText(),
@@ -367,7 +417,7 @@ public class ResourcesPage extends JSSHelpWizardPage {
 			for (MResource r : res) {
 				if (r instanceof AFileResource)
 					continue;
-				r.getPublishOptions().setOverwrite(true);
+				r.getPublishOptions().setOverwrite(OverwriteEnum.OVERWRITE);
 			}
 		tableViewer.setInput(res);
 		tableViewer.refresh();

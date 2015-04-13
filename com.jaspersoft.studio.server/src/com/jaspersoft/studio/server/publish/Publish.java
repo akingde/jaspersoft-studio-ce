@@ -182,7 +182,8 @@ public class Publish {
 			rdjrxml.setMainReport(isMain);
 			PublishUtil.setChild(r, rdjrxml);
 			for (MResource res : resources) {
-				if (res.getPublishOptions().isOverwrite()) {
+				if (res.getPublishOptions().getOverwrite(OverwriteEnum.IGNORE)
+						.equals(OverwriteEnum.OVERWRITE)) {
 					ResourceDescriptor rd = res.getValue();
 					if (rd.getData() != null
 							&& !rd.getParentFolder().endsWith("_files")) {
@@ -195,7 +196,8 @@ public class Publish {
 			mrunit.getWsClient().addOrModifyResource(monitor, r, file);
 			this.resources.add(r.getUriString());
 			for (MResource res : resources)
-				if (res.getPublishOptions().isOverwrite()) {
+				if (res.getPublishOptions().getOverwrite(OverwriteEnum.IGNORE)
+						.equals(OverwriteEnum.OVERWRITE)) {
 					PublishUtil.savePreferencesNoOverwrite(ifile, res);
 					this.resources.add(res.getValue().getUriString());
 				}
@@ -203,7 +205,8 @@ public class Publish {
 			jrxml.setValue(saveResource(monitor, jrxml));
 			for (MResource res : resources) {
 				PublishOptions popt = res.getPublishOptions();
-				if (popt.isOverwrite()) {
+				if (popt.getOverwrite(OverwriteEnum.IGNORE).equals(
+						OverwriteEnum.OVERWRITE)) {
 					saveResource(monitor, res);
 					PublishUtil.savePreferencesNoOverwrite(ifile, res);
 				}
@@ -219,10 +222,14 @@ public class Publish {
 			Exception {
 		for (MResource res : files) {
 			PublishOptions popt = res.getPublishOptions();
-			if (popt.isOverwrite()) {
+			if (!popt.getOverwrite(OverwriteEnum.IGNORE).equals(
+					OverwriteEnum.IGNORE)) {
 				if (popt.getValueSetter() != null) {
 					popt.getValueSetter().setup();
 				} else if (popt.getjExpression() != null) {
+					if (popt.getOverwrite(OverwriteEnum.IGNORE).equals(
+							OverwriteEnum.ONLY_EXPRESSION))
+						popt.getjExpression().setText(popt.getExpression());
 					if (popt.getPublishMethod() == ResourcePublishMethod.REWRITEEXPRESSION)
 						popt.getjExpression().setText(popt.getRepoExpression());
 					else if (popt.getPublishMethod() == ResourcePublishMethod.LOCAL)

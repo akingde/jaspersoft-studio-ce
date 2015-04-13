@@ -12,6 +12,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.publish;
 
+import org.eclipse.jface.viewers.deferred.SetModel;
+
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 
@@ -23,7 +25,7 @@ import com.jaspersoft.studio.utils.Misc;
  * 
  */
 public class PublishOptions {
-	private Boolean isOverwrite;
+	private OverwriteEnum isOverwrite;
 	private JRDesignExpression jExpression;
 	private String expression;
 	private JRDesignDataset dataset;
@@ -36,15 +38,15 @@ public class PublishOptions {
 		return dataset;
 	}
 
-	public Boolean getOverwrite() {
+	public OverwriteEnum getOverwrite() {
 		return isOverwrite;
 	}
 
-	public boolean isOverwrite() {
-		return Misc.nvl(isOverwrite, true);
+	public OverwriteEnum getOverwrite(OverwriteEnum ovw) {
+		return Misc.nvl(isOverwrite, ovw);
 	}
 
-	public void setOverwrite(Boolean isOverwrite) {
+	public void setOverwrite(OverwriteEnum isOverwrite) {
 		this.isOverwrite = isOverwrite;
 	}
 
@@ -90,7 +92,9 @@ public class PublishOptions {
 	}
 
 	public String getRepoExpression() {
-		return "\"repo:" + getReferencedResource().getUriString() + "\"";
+		if (getReferencedResource() != null)
+			return "\"repo:" + getReferencedResource().getUriString() + "\"";
+		return null;
 	}
 
 	private ValueSetter<?> valueSetter;

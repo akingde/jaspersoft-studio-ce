@@ -32,6 +32,7 @@ import com.jaspersoft.studio.server.ResourceFactory;
 import com.jaspersoft.studio.server.model.AFileResource;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.publish.OverwriteEnum;
 import com.jaspersoft.studio.server.publish.PublishOptions;
 import com.jaspersoft.studio.server.publish.PublishUtil;
 import com.jaspersoft.studio.utils.ExpressionUtil;
@@ -48,6 +49,8 @@ public abstract class AImpObject {
 			IProgressMonitor monitor, JasperDesign jd, Set<String> fileset,
 			JRDesignExpression exp, IFile file) {
 		String str = getPath(fileset, exp);
+		if (fileset.contains(str))
+			return null;
 		if (str == null)
 			return null;
 		File f = findFile(file, str);
@@ -58,7 +61,9 @@ public abstract class AImpObject {
 				popt.setExpression("\"repo:"
 						+ IDStringValidator.safeChar(f.getName()) + "\"");
 			if (isRemoteResource(str))
-				popt.setOverwrite(false);
+				popt.setOverwrite(OverwriteEnum.IGNORE);
+			else
+				popt.setOverwrite(OverwriteEnum.OVERWRITE);
 
 			fileset.add(str);
 

@@ -13,8 +13,10 @@
 package com.jaspersoft.studio.server.publish;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -23,6 +25,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.QualifiedName;
 
+import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.Activator;
 import com.jaspersoft.studio.server.ServerManager;
@@ -37,14 +40,17 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class FindResources {
 
-	public static boolean find(IProgressMonitor monitor, AMJrxmlContainer mres, JasperDesign jd) throws Exception {
+	public static boolean find(IProgressMonitor monitor, AMJrxmlContainer mres,
+			JasperDesign jd) throws Exception {
 		List<?> r = findResources(monitor, mres, jd);
 		return !Misc.isNullOrEmpty(r);
 	}
 
-	public static List<?> findResources(IProgressMonitor monitor, AMJrxmlContainer mres, JasperDesign jd) throws Exception {
+	public static List<?> findResources(IProgressMonitor monitor,
+			AMJrxmlContainer mres, JasperDesign jd) throws Exception {
 		JasperReportsConfiguration jrConfig = mres.getJasperConfiguration();
-		jrConfig.put(PublishUtil.KEY_PUBLISH2JSS_DATA, new ArrayList<AFileResource>());
+		jrConfig.put(PublishUtil.KEY_PUBLISH2JSS_DATA,
+				new ArrayList<AFileResource>());
 
 		String version = ServerManager.getVersion(mres);
 		HashSet<String> fileset = new HashSet<String>();
@@ -52,38 +58,76 @@ public class FindResources {
 
 		mres.removeChildren();
 
-		new JrxmlPublishContributor().publishJrxml(mres, monitor, jd, fileset, file, version);
+		new JrxmlPublishContributor().publishJrxml(mres, monitor, jd, fileset,
+				file, version);
 
 		Object r = jrConfig.get(PublishUtil.KEY_PUBLISH2JSS_DATA);
-		if (r != null && r instanceof List)
-			return (List<?>) r;
+		if (r != null && r instanceof List) {
+			List<?> resources = (List<?>) r;
+			List<MResource> rs = new ArrayList<MResource>();
+			Map<String, ResourceDescriptor> names = new HashMap<String, ResourceDescriptor>();
+			for (Object obj : resources) {
+				if (obj instanceof MResource) {
+					MResource m = (MResource) obj;
+					ResourceDescriptor rd = m.getValue();
+					if (names.containsKey(rd.getUriString())) {
+						if (names.get(rd.getUriString()) == rd) {
+							continue;
+						} else {
+							// renaming
+							int i = 0;
+							do {
+								i++;
+								rd.setName(rd.getName() + "_" + i);
+								rd.setLabel(rd.getLabel() + "_" + i);
+								rd.setUriString(rd.getUriString() + "_" + i);
+							} while (names.containsKey(rd.getUriString())
+									&& i < 10000);
+						}
+					}
+					names.put(rd.getUriString(), rd);
+					rs.add(m);
+				}
+			}
+			jrConfig.put(PublishUtil.KEY_PUBLISH2JSS_DATA, rs);
+
+			return rs;
+		}
 		return null;
 	}
 
-	public static ANode findReportUnit(MServerProfile mserv, IProgressMonitor monitor, JasperDesign jd, IFile file) {
+	public static ANode findReportUnit(MServerProfile mserv,
+			IProgressMonitor monitor, JasperDesign jd, IFile file) {
 		try {
 			if (mserv != null) {
 				String prunit = jd.getProperty(AExporter.PROP_REPORTUNIT);
 				if (prunit == null)
 					prunit = jd.getProperty(AExporter.PROP_REPORTRESOURCE);
 				if (prunit == null)
-					prunit = file.getPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, AExporter.PROP_REPORTRESOURCE));
+					prunit = file
+							.getPersistentProperty(new QualifiedName(
+									Activator.PLUGIN_ID,
+									AExporter.PROP_REPORTRESOURCE));
 
 				String srvURL = jd.getProperty(AExporter.PROP_SERVERURL);
 				if (srvURL == null)
-					srvURL = file.getPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, AExporter.PROP_SERVERURL));
+					srvURL = file.getPersistentProperty(new QualifiedName(
+							Activator.PLUGIN_ID, AExporter.PROP_SERVERURL));
 				// String srvUSER = jd.getProperty(AExporter.PROP_USER);
 				// if (srvUSER == null)
 				// srvUSER = file.getPersistentProperty(new
 				// QualifiedName(Activator.PLUGIN_ID, AExporter.PROP_USER));
 
-				if (prunit != null && srvURL != null && mserv.getValue().getUrl().equals(srvURL)) {
+				if (prunit != null && srvURL != null
+						&& mserv.getValue().getUrl().equals(srvURL)) {
 					WSClientHelper.connect(mserv, monitor);
 					WSClientHelper.connectGetData(mserv, monitor);
 					// We can try to locate a previous existing Report Unit.
 					// If not possible we will popup the selection tree as
 					// usual.
-					MResource selectedRepoUnit = WSClientHelper.findSelected(mserv.getChildren(), monitor, prunit, mserv.getWsClient(monitor));
+					MResource selectedRepoUnit = WSClientHelper.findSelected(
+							mserv.getChildren(), monitor, prunit,
+							mserv.getWsClient(monitor));
 					if (selectedRepoUnit != null)
 						return selectedRepoUnit;
 				}
