@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.engine.JRPropertiesUtil.PropertySuffix;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -34,7 +33,6 @@ import org.w3c.tools.codec.Base64FormatException;
 import com.jaspersoft.studio.help.TableHelpListener;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.editor.table.TableFieldEditor;
-import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 import com.jaspersoft.studio.prm.ParameterSet;
 import com.jaspersoft.studio.prm.ParameterSetProvider;
 import com.jaspersoft.studio.prm.dialog.ParameterSetDialog;
@@ -106,6 +104,7 @@ public class ParameterSetFieldEditor extends TableFieldEditor {
 	protected void doLoad() {
 		if (getTable() != null) {
 			removed.clear();
+			getTable().removeAll();
 			String str = getPreferenceStore().getString(ParameterSet.PARAMETER_SETS);
 			if (str != null) {
 				try {
@@ -130,21 +129,7 @@ public class ParameterSetFieldEditor extends TableFieldEditor {
 	 * (non-Javadoc) Method declared on FieldEditor.
 	 */
 	protected void doLoadDefault() {
-		if (getTable() != null) {
-			IPreferenceStore pstore = getPreferenceStore();
-			for (String key : removed)
-				pstore.setValue(key, pstore.getDefaultString(key));
-			removed.clear();
-			getTable().removeAll();
-
-			List<PropertySuffix> lst = PropertiesHelper.DPROP.getProperties(""); //$NON-NLS-1$
-			// Collections.sort(lst, new PropertyComparator());
-			for (PropertySuffix ps : lst) {
-
-				TableItem tableItem = new TableItem(getTable(), SWT.NONE);
-				tableItem.setText(new String[] { ps.getKey(), ps.getValue() });
-			}
-		}
+		doLoad();
 	}
 
 	@Override
