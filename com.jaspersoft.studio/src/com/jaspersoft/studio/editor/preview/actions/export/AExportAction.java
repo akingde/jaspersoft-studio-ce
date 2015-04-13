@@ -195,6 +195,9 @@ public abstract class AExportAction extends AReportViewerAction {
 		job.schedule();
 	}
 	
+	/**
+	 * see AExportAction:preview(File, JasperPrint, Callback<File>)
+	 */
 	public void preview(final File file, final Callback<File> callback) throws Exception {
 		preview(file, getReportViewer().getReport(), callback);
 	}
