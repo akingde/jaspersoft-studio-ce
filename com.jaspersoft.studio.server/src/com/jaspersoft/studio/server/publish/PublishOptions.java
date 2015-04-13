@@ -12,8 +12,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.publish;
 
-import org.eclipse.jface.viewers.deferred.SetModel;
-
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 
