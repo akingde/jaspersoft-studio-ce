@@ -199,7 +199,6 @@ public abstract class AExportAction extends AReportViewerAction {
 		preview(file, getReportViewer().getReport(), callback);
 	}
 
-
 	@Override
 	protected boolean calculateEnabled() {
 		return getReportViewer().hasReport();
