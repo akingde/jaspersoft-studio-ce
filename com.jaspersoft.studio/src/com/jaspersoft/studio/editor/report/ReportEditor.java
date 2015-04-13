@@ -248,8 +248,9 @@ public class ReportEditor extends AbstractVisualEditor {
 		RZoomComboContributionItem zoomItem = new RZoomComboContributionItem(getEditorSite().getPage());
 		GraphicalViewer graphicalViewer = getGraphicalViewer();
 		ZoomManager property = (ZoomManager) graphicalViewer.getProperty(ZoomManager.class.toString());
-		if (property != null)
+		if (property != null){
 			zoomItem.setZoomManager(property);
+		}
 		zoomItem.setEnabled(true);
 		toolbarManager.add(zoomItem);
 		toolbarManager.add(new Separator());

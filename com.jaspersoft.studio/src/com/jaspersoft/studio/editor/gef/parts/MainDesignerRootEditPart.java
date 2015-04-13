@@ -17,7 +17,9 @@ import java.util.List;
 
 import org.eclipse.draw2d.FreeformLayer;
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.ScalableFigure;
 import org.eclipse.draw2d.ScalableFreeformLayeredPane;
+import org.eclipse.draw2d.Viewport;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.editparts.GridLayer;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
@@ -43,12 +45,20 @@ public class MainDesignerRootEditPart extends ScalableFreeformRootEditPart {
 	public static final String ELEMENTS_LAYER = "ELEMENTS_LAYER"; //$NON-NLS-1$
 
 	/**
+	 * Custom zoom manager
+	 */
+	protected JSSZoomManager zoomManager;
+	
+	/**
 	 * Instantiates a new main designer root edit part.
 	 */
 	public MainDesignerRootEditPart() {
 		super();
 		// set zoom manager
-		ZoomManager zoomManager = getZoomManager();
+		Viewport port = (Viewport)getFigure();
+		ScalableFigure layers = (ScalableFigure)getScaledLayers();
+		zoomManager = new JSSZoomManager(layers, port, this, JSSZoomManager.ZOOM_TYPE.CENTER_TO_MOUSE);
+		
 		zoomManager.setZoomAnimationStyle(ZoomManager.ANIMATE_ZOOM_IN_OUT);
 		zoomManager.setZoomLevels(new double[] { 0.25, 0.35, 0.45, 0.5, 0.6, 0.7, 0.75, 0.8, 0.85, 0.95, 1.0, 1.1, 1.2,
 				1.25, 1.5, 2.0, 2.5, 3.0, 4.0, 5.0, 10.0 });
@@ -107,5 +117,13 @@ public class MainDesignerRootEditPart extends ScalableFreeformRootEditPart {
 		FeedbackLayer() {
 			setEnabled(false);
 		}
+	}
+	
+	/**
+	 * Return the custom zoom manager
+	 */
+	@Override
+	public ZoomManager getZoomManager() {
+		return zoomManager;
 	}
 }
