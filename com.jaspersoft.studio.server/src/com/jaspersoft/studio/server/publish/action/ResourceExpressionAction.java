@@ -20,6 +20,7 @@ import org.eclipse.jface.viewers.TableViewer;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.server.ServerManager;
+import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.properties.dialog.RepositoryDialog;
@@ -34,7 +35,7 @@ public class ResourceExpressionAction extends Action {
 
 	public ResourceExpressionAction(TableViewer tableViewer) {
 		super();
-		setText("Select Resource");
+		setText(Messages.ResourceExpressionAction_0);
 		this.tableViewer = tableViewer;
 	}
 

@@ -338,13 +338,14 @@ public class Rest2Soap {
 		if (cr.getSubDataSources() != null)
 			for (ClientSubDataSourceReference sds : cr.getSubDataSources()) {
 				ResourceDescriptor r = new ResourceDescriptor();
-				r.setName(rd.getName());
-				r.setLabel(rd.getLabel());
+				r.setName(sds.getId());
+				r.setLabel(sds.getId());
 				r.setIsReference(true);
 				r.setReferenceUri(sds.getUri());
 				r.setWsType(ResourceDescriptor.TYPE_DATASOURCE);
 				r.setIsNew(true);
 				r.setResourceProperty("PROP_DATASOURCE_SUB_DS_ID", sds.getId());
+				r.setUriString(sds.getUri());
 				setupReference(rd, r);
 				rd.getChildren().add(r);
 			}
@@ -480,8 +481,8 @@ public class Rest2Soap {
 
 	private static void setupReference(ResourceDescriptor parent,
 			ResourceDescriptor rd) {
-		if (rd != null) {
-			if (!rd.getParentFolder().equals(parent.getUriString()+"_files"))
+		if (rd != null && rd.getParentFolder() != null) {
+			if (!rd.getParentFolder().equals(parent.getUriString() + "_files"))
 				rd.setIsReference(true);
 		}
 	}

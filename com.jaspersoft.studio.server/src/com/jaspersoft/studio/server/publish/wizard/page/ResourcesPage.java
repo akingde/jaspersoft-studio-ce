@@ -132,7 +132,7 @@ public class ResourcesPage extends JSSHelpWizardPage {
 					FieldDecoration fd = FieldDecorationRegistry.getDefault()
 							.getFieldDecoration(
 									FieldDecorationRegistry.DEC_ERROR);
-					setErrorMessage("Please fix the referenced missing resources.");
+					setErrorMessage(Messages.ResourcesPage_0);
 					ResourcesPage.this.setPageComplete(false);
 					return ResourceManager.decorateImage(id.createImage(),
 							fd.getImage(), ResourceManager.BOTTOM_LEFT);
@@ -171,7 +171,7 @@ public class ResourcesPage extends JSSHelpWizardPage {
 
 		viewerColumn = new TableViewerColumn(tableViewer, SWT.NONE);
 		column = viewerColumn.getColumn();
-		column.setText("Expression");
+		column.setText(Messages.ResourcesPage_1);
 		column.setWidth(100);
 		viewerColumn.setLabelProvider(new TLabelProvider() {
 			@Override
@@ -193,7 +193,7 @@ public class ResourcesPage extends JSSHelpWizardPage {
 
 		viewerColumn = new TableViewerColumn(tableViewer, SWT.NONE);
 		column = viewerColumn.getColumn();
-		column.setText("File Size");
+		column.setText(Messages.ResourcesPage_2);
 		column.setWidth(100);
 		viewerColumn.setLabelProvider(new TLabelProvider() {
 
@@ -201,21 +201,21 @@ public class ResourcesPage extends JSSHelpWizardPage {
 			public String getText(Object element) {
 				if (element instanceof AFileResource)
 					return ((AFileResource) element).getHFFileSize();
-				return "";
+				return ""; //$NON-NLS-1$
 			}
 
 		});
 
 		viewerColumn = new TableViewerColumn(tableViewer, SWT.NONE);
 		column = viewerColumn.getColumn();
-		column.setText("Type");
+		column.setText(Messages.ResourcesPage_4);
 		column.setWidth(100);
 		viewerColumn.setLabelProvider(new TLabelProvider() {
 
 			@Override
 			public String getText(Object element) {
-				if (element instanceof AFileResource) {
-					AFileResource mres = (AFileResource) element;
+				if (element instanceof MResource) {
+					MResource mres = (MResource) element;
 					if (mres.getPublishOptions().getPublishMethod() == ResourcePublishMethod.RESOURCE)
 						return sres.getText();
 					if (mres.getPublishOptions().getPublishMethod() == ResourcePublishMethod.REFERENCE)
@@ -223,7 +223,7 @@ public class ResourcesPage extends JSSHelpWizardPage {
 					if (mres.getPublishOptions().getPublishMethod() == ResourcePublishMethod.LOCAL)
 						return slocal.getText();
 				}
-				return "";
+				return ""; //$NON-NLS-1$
 			}
 
 		});
@@ -274,7 +274,7 @@ public class ResourcesPage extends JSSHelpWizardPage {
 			public boolean canModify(Object element, String property) {
 				if (property.equals("VALUE")) //$NON-NLS-1$
 					return true;
-				if (property.equals("EXPRESSION")
+				if (property.equals("EXPRESSION") //$NON-NLS-1$
 						&& ((MResource) element).getPublishOptions()
 								.getjExpression() != null)
 					return true;
@@ -290,16 +290,16 @@ public class ResourcesPage extends JSSHelpWizardPage {
 					return prop.getPublishOptions().isOverwrite();
 				if ("NAME".equals(property)) //$NON-NLS-1$
 					return prop.getDisplayText();
-				if ("FILESIZE".equals(property)) {
+				if ("FILESIZE".equals(property)) { //$NON-NLS-1$
 					if (prop instanceof AFileResource)
 						return ((AFileResource) element).getHFFileSize();
 				}
-				if ("EXPRESSION".equals(property)) {
+				if ("EXPRESSION".equals(property)) { //$NON-NLS-1$
 					JRDesignExpression jd = new JRDesignExpression();
 					jd.setText(prop.getPublishOptions().getExpression());
 					return jd;
 				}
-				if ("TYPE".equals(property)) {
+				if ("TYPE".equals(property)) { //$NON-NLS-1$
 					if (prop instanceof AFileResource) {
 						AFileResource mres = (AFileResource) element;
 						if (mres.getPublishOptions().getPublishMethod() == ResourcePublishMethod.RESOURCE)
@@ -357,7 +357,7 @@ public class ResourcesPage extends JSSHelpWizardPage {
 				new ComboBoxCellEditor(parent, new String[] { sres.getText(),
 						sresource.getText(), slocal.getText() }) });
 		viewer.setColumnProperties(new String[] {
-				"NAME", "VALUE", "EXPRESSION", "FILESIZE", "TYPE" }); //$NON-NLS-1$ //$NON-NLS-2$
+				"NAME", "VALUE", "EXPRESSION", "FILESIZE", "TYPE" }); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 	}
 
 	public void fillData(boolean isNew) {
@@ -377,33 +377,33 @@ public class ResourcesPage extends JSSHelpWizardPage {
 
 		@Override
 		public String getToolTipText(Object element) {
-			String tt = "";
+			String tt = ""; //$NON-NLS-1$
 			MResource mres = (MResource) element;
-			tt += "ID: " + mres.getValue().getName();
-			tt += "\nLabel: " + mres.getValue().getLabel();
+			tt += "ID: " + mres.getValue().getName(); //$NON-NLS-1$
+			tt += "\nLabel: " + mres.getValue().getLabel(); //$NON-NLS-1$
 
 			if (mres.getPublishOptions().getPublishMethod() == ResourcePublishMethod.LOCAL)
-				tt += "\nURI: " + mres.getValue().getUriString();
+				tt += "\nURI: " + mres.getValue().getUriString(); //$NON-NLS-1$
 			else if (mres.getPublishOptions().getPublishMethod() == ResourcePublishMethod.REFERENCE) {
-				tt += "\nURI: " + mres.getValue().getUriString();
+				tt += "\nURI: " + mres.getValue().getUriString(); //$NON-NLS-1$
 				if (mres.getPublishOptions().getReferencedResource() != null)
-					tt += "\nReference To: "
+					tt += "\nReference To: " //$NON-NLS-1$
 							+ mres.getPublishOptions().getReferencedResource()
 									.getUriString();
 			} else if (mres.getPublishOptions().getPublishMethod() == ResourcePublishMethod.RESOURCE) {
 				if (mres.getPublishOptions().getReferencedResource() != null)
-					tt += "\nURI: "
+					tt += "\nURI: " //$NON-NLS-1$
 							+ mres.getPublishOptions().getReferencedResource()
 									.getUriString();
 			} else if (mres.getPublishOptions().getPublishMethod() == ResourcePublishMethod.REWRITEEXPRESSION)
 				if (mres.getPublishOptions().getReferencedResource() != null)
-					tt += "\nURI: "
+					tt += "\nURI: " //$NON-NLS-1$
 							+ mres.getPublishOptions().getReferencedResource()
 									.getUriString();
 
 			if (element instanceof AFileResource
 					&& ((AFileResource) element).getFile() != null)
-				tt += "\nFile: "
+				tt += "\nFile: " //$NON-NLS-1$
 						+ ((AFileResource) element).getFile().getAbsolutePath();
 			return tt;
 		}

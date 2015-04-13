@@ -99,6 +99,7 @@ public class Messages extends NLS {
 	public static String JRSPreferencesPage_1;
 	public static String JRSRepositoryService_4;
 	public static String JrxmlPageContent_uploadFromRepo;
+	public static String JrxmlPublishAction_0;
 	public static String JrxmlPublishAction_defaultresourcelabel;
 	public static String JrxmlPublishAction_defaultresourcename;
 	public static String JrxmlPublishAction_title;
@@ -229,6 +230,7 @@ public class Messages extends NLS {
 	public static String RDReportUnitPage_within;
 	public static String RDReportUnitPage_withintooltip;
 	public static String RDResourceBundlePage_title;
+	public static String ReferenceResourceAction_0;
 	public static String ReportRunControler_statsstart;
 	public static String RepositoryDNDHelper_NewFileResourceErrMsg;
 	public static String RepositoryDNDHelper_NewResourceDescriptorErrMsg;
@@ -239,6 +241,7 @@ public class Messages extends NLS {
 	public static String RUnitLocationPage_reportunitdesc_label;
 	public static String RUnitLocationPage_reportunitlabel;
 	public static String RUnitLocationPage_title;
+	public static String SelectLocalAction_0;
 	public static String SelectorDatasource_TabTitle;
 	public static String SelectorQuery_0;
 	public static String SelectorQuery_localresource;
@@ -292,14 +295,20 @@ public class Messages extends NLS {
 	public static String ResourceDescriptorPage_description;
 	public static String ResourceDescriptorPage_id;
 	public static String ResourceDescriptorPage_title;
+	public static String ResourceExpressionAction_0;
 	public static String ResourcePageContent_0;
 	public static String ResourcePageContent_3;
 	public static String ResourcePageContent_isReference;
 	public static String ResourcePageContent_UpdateDate;
+	public static String ResourcesPage_0;
+	public static String ResourcesPage_1;
+	public static String ResourcesPage_2;
+	public static String ResourcesPage_4;
 	public static String ResourcesPage_description;
 	public static String ResourcesPage_table_overwrite;
 	public static String ResourcesPage_table_resource;
 	public static String ResourcesPage_title;
+	public static String ResourceToFolderAction_0;
 	public static String ResourceWizard_windowtitle;
 	public static String RDJarPage_title;
 	public static String RDJrxmlPage_title;

@@ -72,7 +72,7 @@ public class JrxmlPublishAction extends AContributorAction {
 				Job job = new Job(Messages.FindReportUnit_jobname) {
 					@Override
 					protected IStatus run(IProgressMonitor monitor) {
-						monitor.beginTask("Publishing the Report",
+						monitor.beginTask(Messages.JrxmlPublishAction_0,
 								IProgressMonitor.UNKNOWN);
 						try {
 							status = doRun(monitor);

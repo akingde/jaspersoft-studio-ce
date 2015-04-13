@@ -12,13 +12,15 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.publish.action;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.swt.widgets.Display;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.server.ServerManager;
+import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.properties.dialog.RepositoryDialog;
@@ -33,7 +35,7 @@ public class ReferenceResourceAction extends Action {
 
 	public ReferenceResourceAction(TableViewer tableViewer) {
 		super();
-		setText("Link To Resource");
+		setText(Messages.ReferenceResourceAction_0);
 		this.tableViewer = tableViewer;
 	}
 
@@ -52,7 +54,7 @@ public class ReferenceResourceAction extends Action {
 				mres.getPublishOptions().setPublishMethod(ResourcePublishMethod.REFERENCE);
 			}
 		} else {
-			RepositoryDialog rd = new RepositoryDialog(Display.getDefault().getActiveShell(), msp) {
+			RepositoryDialog rd = new RepositoryDialog(UIUtils.getShell(), msp) {
 				@Override
 				public boolean isResourceCompatible(MResource r) {
 					return r.getValue().getWsType().equals(mres.getValue().getWsType());
