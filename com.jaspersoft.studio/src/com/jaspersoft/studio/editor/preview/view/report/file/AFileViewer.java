@@ -106,7 +106,7 @@ public abstract class AFileViewer extends APreview implements IJRPrintable, IPre
 						File tmpFile = File.createTempFile("report", getExtension());
 						AExportAction exp = createExporterAction(rptviewer);
 						stats.startCount(ReportControler.ST_EXPORTTIME);
-						exp.doExport(tmpFile, jrprint, monitor);
+						exp.doPreview(tmpFile, jrprint, monitor);
 						stats.endCount(ReportControler.ST_EXPORTTIME);
 						stats.setValue(ReportControler.ST_REPORTSIZE, tmpFile.length());
 						final String content = (FileUtils.readFileAsAString(tmpFile));

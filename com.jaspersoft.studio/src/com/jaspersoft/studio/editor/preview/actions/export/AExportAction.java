@@ -139,7 +139,11 @@ public abstract class AExportAction extends AReportViewerAction {
 			parentMenu.setDefaultAction(this);
 	}
 
-	public void export(final File file, final Callback<File> callback) throws Exception {
+	/**
+	 * Method called to execute the export operation. Typically this is called
+	 * by the run method since it is executing the action
+	 */
+	protected void export(final File file, final Callback<File> callback) throws Exception {
 		final JasperPrint jrPrint = getReportViewer().getReport();
 		if (jrPrint == null || jrPrint.getPages() == null)
 			return;
@@ -161,14 +165,21 @@ public abstract class AExportAction extends AReportViewerAction {
 		job.setUser(true);
 		job.schedule();
 	}
-
-	public void export(final File file, final JasperPrint jrPrint, final Callback<File> callback) throws Exception {
+	
+	/**
+	 * Method called to preview the report, this is a utility method provided
+	 * from the action and can be called outside. Essentially a preview and an export
+	 * operation are really similar since the preview export into a temp file and show it.
+	 * But for this reason it need to do less checks (for file existing for example) and 
+	 * for this reason there are two separate methods to export or preview the report
+	 */
+	public void preview(final File file, final JasperPrint jrPrint, final Callback<File> callback) throws Exception {
 		if (jrPrint == null || jrPrint.getPages() == null)
 			return;
 		Job job = new Job(Messages.AExportAction_exportreport) {
 			@Override
 			protected IStatus run(final IProgressMonitor monitor) {
-				doExport(file, jrPrint, monitor);
+				doPreview(file, jrPrint, monitor);
 				UIUtils.getDisplay().syncExec(new Runnable() {
 
 					@Override
@@ -183,6 +194,11 @@ public abstract class AExportAction extends AReportViewerAction {
 		job.setUser(true);
 		job.schedule();
 	}
+	
+	public void preview(final File file, final Callback<File> callback) throws Exception {
+		preview(file, getReportViewer().getReport(), callback);
+	}
+
 
 	@Override
 	protected boolean calculateEnabled() {
@@ -247,7 +263,16 @@ public abstract class AExportAction extends AReportViewerAction {
 		return result;
 	}
 
-	public void doExport(File file, JasperPrint jrPrint, final IProgressMonitor monitor) {
+	/**
+	 * Called to proceed to the export of the report. It does some additional check
+	 * than doPreview, since the export many times need also to check if or not
+	 * to overwrite an existing file, instead in the preview it used a temp. 
+	 * 
+	 * @param file the destination file
+	 * @param jrPrint the jrprint to export
+	 * @param monitor monitor for the operation
+	 */
+	protected void doExport(File file, JasperPrint jrPrint, final IProgressMonitor monitor) {
 		try {
 			if (jrPrint != null && jrPrint.getPages() != null) {
 				final Integer size = jrPrint.getPages().size();
@@ -272,6 +297,41 @@ public abstract class AExportAction extends AReportViewerAction {
 	
 					});
 				}
+			}
+		} catch (Throwable e) {
+			UIUtils.showError(e);
+		} finally {
+			monitor.done();
+		}
+	}
+	
+	/**
+	 * Called to proceed to the preview of the report. It does some additional check
+	 * than doPreview, since the export many times need also to check if or not
+	 * to overwrite an existing file, instead in the preview it used a temp. 
+	 * 
+	 * @param file the destination temp file
+	 * @param jrPrint the jrprint to export
+	 * @param monitor monitor for the operation
+	 */
+	public void doPreview(File file, JasperPrint jrPrint, final IProgressMonitor monitor) {
+		try {
+			if (jrPrint != null && jrPrint.getPages() != null) {
+				final Integer size = jrPrint.getPages().size();
+				monitor.beginTask(Messages.AExportAction_exportreport, size);
+				exportWithProgress(file, new JRExportProgressMonitor() {
+					private int current = 0;
+
+					@Override
+					public void afterPageExport() {
+						if (monitor.isCanceled())
+							Thread.currentThread().interrupt();
+						monitor.worked(1);
+						monitor.subTask(MessageFormat
+								.format(Messages.PageNumberContributionItem_page, new Integer(current++), size));
+					}
+
+				});
 			}
 		} catch (Throwable e) {
 			UIUtils.showError(e);

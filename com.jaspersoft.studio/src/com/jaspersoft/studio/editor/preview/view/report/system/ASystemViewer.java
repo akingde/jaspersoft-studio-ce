@@ -37,15 +37,15 @@ public abstract class ASystemViewer extends SWTViewer {
 		if (jrprint != null) {
 			try {
 				final String ext = getExtension(jrprint);
-				final File tmpFile = File.createTempFile("report", ext);
 				final AExportAction exp = createExporterAction(rptviewer);
+				final File tmpFile = File.createTempFile("report", ext);
 				stats.startCount(ReportControler.ST_EXPORTTIME);
 				UIUtils.getDisplay().asyncExec(new Runnable() {
 
 					@Override
 					public void run() {
 						try {
-							exp.export(tmpFile, jrprint, new Callback<File>() {
+							exp.preview(tmpFile, jrprint, new Callback<File>() {
 
 								@Override
 								public void completed(File value) {

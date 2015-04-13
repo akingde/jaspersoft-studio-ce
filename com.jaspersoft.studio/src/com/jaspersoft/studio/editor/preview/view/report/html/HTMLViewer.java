@@ -75,7 +75,7 @@ public class HTMLViewer extends ABrowserViewer implements IJRPrintable, IPrefere
 
 			AExportAction exp = createExporter(rptviewer);
 			stats.startCount(ReportControler.ST_EXPORTTIME);
-			exp.export(tmpFile, new Callback<File>() {
+			exp.preview(tmpFile, new Callback<File>() {
 
 				@Override
 				public void completed(File value) {
