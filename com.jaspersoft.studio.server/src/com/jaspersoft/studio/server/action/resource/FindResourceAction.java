@@ -38,7 +38,8 @@ public class FindResourceAction extends Action {
 		setText("Search");
 		setDescription("Search Resources on Jasperreports Server by name.");
 		setToolTipText(getDescription());
-		setImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/find_obj.gif")); //$NON-NLS-1$
+		setImageDescriptor(JaspersoftStudioPlugin.getInstance()
+				.getImageDescriptor("icons/find_obj.gif")); //$NON-NLS-1$
 		this.treeViewer = treeViewer;
 	}
 
@@ -57,15 +58,11 @@ public class FindResourceAction extends Action {
 					msp = (MServerProfile) n;
 			}
 			try {
-				if (msp != null){
-					IConnection c = msp.getWsClient(new Callback<IConnection>() {
-	
-						@Override
-						public void completed(IConnection c) {
-							FindResourceAction.this.setEnabled(c != null && c.isSupported(Feature.SEARCHREPOSITORY));
-						}
-					});
-					if (c != null) en = msp != null && c.isSupported(Feature.SEARCHREPOSITORY);
+				if (msp != null) {
+					IConnection c = msp.getWsClient();
+					if (c != null)
+						en = msp != null
+								&& c.isSupported(Feature.SEARCHREPOSITORY);
 				}
 			} catch (Exception e) {
 				en = false;

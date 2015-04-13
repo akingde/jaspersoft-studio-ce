@@ -48,7 +48,9 @@ public class ExportMetadataAction extends Action {
 		setId(ID);
 		setText(Messages.ExportMetadataAction_0);
 		setToolTipText(Messages.ExportMetadataAction_1);
-		setImageDescriptor(ResourceManager.getPluginImageDescriptor(JaspersoftStudioPlugin.PLUGIN_ID, "/icons/resources/eclipse/etool16/import_wiz.gif")); //$NON-NLS-1$
+		setImageDescriptor(ResourceManager.getPluginImageDescriptor(
+				JaspersoftStudioPlugin.PLUGIN_ID,
+				"/icons/resources/eclipse/etool16/import_wiz.gif")); //$NON-NLS-1$
 		this.treeViewer = treeViewer;
 	}
 
@@ -67,13 +69,7 @@ public class ExportMetadataAction extends Action {
 					msp = (MServerProfile) n;
 			}
 			try {
-				IConnection c = msp.getWsClient(new Callback<IConnection>() {
-
-					@Override
-					public void completed(IConnection c) {
-						ExportMetadataAction.this.setEnabled(c != null && c.isSupported(Feature.EXPORTMETADATA));
-					}
-				});
+				IConnection c = msp.getWsClient();
 				if (c != null)
 					en = msp != null && c.isSupported(Feature.EXPORTMETADATA);
 			} catch (Exception e) {
@@ -86,7 +82,8 @@ public class ExportMetadataAction extends Action {
 
 	@Override
 	public void run() {
-		StructuredSelection selection = (StructuredSelection) treeViewer.getSelection();
+		StructuredSelection selection = (StructuredSelection) treeViewer
+				.getSelection();
 
 		ExportMetadataWizard wizard = new ExportMetadataWizard(selection);
 		WizardDialog dialog = new WizardDialog(UIUtils.getShell(), wizard);

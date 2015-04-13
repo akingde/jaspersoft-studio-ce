@@ -29,7 +29,6 @@ import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.protocol.Feature;
 import com.jaspersoft.studio.server.protocol.IConnection;
 import com.jaspersoft.studio.server.wizard.imp.ImportMetadataWizard;
-import com.jaspersoft.studio.utils.Callback;
 
 /**
  * Action for importing the selected DataSource in the JRS tree as Data Adapter
@@ -47,7 +46,9 @@ public class ImportMetadataAction extends Action {
 		setId(ID);
 		setText(Messages.ImportMetadataAction_0);
 		setToolTipText(Messages.ImportMetadataAction_1);
-		setImageDescriptor(ResourceManager.getPluginImageDescriptor(JaspersoftStudioPlugin.PLUGIN_ID, "/icons/resources/eclipse/etool16/import_wiz.gif")); //$NON-NLS-1$
+		setImageDescriptor(ResourceManager.getPluginImageDescriptor(
+				JaspersoftStudioPlugin.PLUGIN_ID,
+				"/icons/resources/eclipse/etool16/import_wiz.gif")); //$NON-NLS-1$
 		this.treeViewer = treeViewer;
 	}
 
@@ -66,13 +67,7 @@ public class ImportMetadataAction extends Action {
 					msp = (MServerProfile) n;
 			}
 			try {
-				IConnection c = msp.getWsClient(new Callback<IConnection>() {
-
-					@Override
-					public void completed(IConnection c) {
-						ImportMetadataAction.this.setEnabled(c != null && c.isSupported(Feature.IMPORTMETADATA));
-					}
-				});
+				IConnection c = msp.getWsClient();
 				if (c != null)
 					en = msp != null && c.isSupported(Feature.IMPORTMETADATA);
 			} catch (Exception e) {
