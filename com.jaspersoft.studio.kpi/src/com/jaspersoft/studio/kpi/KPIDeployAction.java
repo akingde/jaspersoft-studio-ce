@@ -90,7 +90,7 @@ public class KPIDeployAction extends Action implements IMenuCreator {
 				if (n instanceof MServerProfile)
 					msp = (MServerProfile) n;
 			}
-			if (!msp.getWsClient().isSupported(Feature.SEARCHREPOSITORY))
+			if (msp != null && !msp.getWsClient().isSupported(Feature.SEARCHREPOSITORY))
 				return false;
 		}
 		return isReportUnit();
