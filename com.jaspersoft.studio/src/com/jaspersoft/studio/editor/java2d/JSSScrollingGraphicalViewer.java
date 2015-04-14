@@ -12,6 +12,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.java2d;
 
+import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
 
@@ -75,5 +76,12 @@ public class JSSScrollingGraphicalViewer extends ScrollingGraphicalViewer {
 	 */
 	public void setSelectionOverrider(ISelectionOverrider overrider){
 		selectionOverrider = overrider;
+	}
+	
+	/**
+	 * Visibility modifier to get the figure canvas
+	 */
+	public FigureCanvas getFigureCanvas(){
+		return super.getFigureCanvas();
 	}
 }

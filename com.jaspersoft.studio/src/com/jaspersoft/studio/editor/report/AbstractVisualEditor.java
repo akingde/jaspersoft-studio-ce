@@ -190,7 +190,7 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 	 * Instantiates a new abstract visual editor.
 	 */
 	public AbstractVisualEditor(JasperReportsConfiguration jrContext) {
-		DefaultEditDomain ed = new DefaultEditDomain(this);
+		ScrollEditDomain ed = new ScrollEditDomain(this);
 		setEditDomain(ed);
 		this.jrContext = jrContext;
 	}

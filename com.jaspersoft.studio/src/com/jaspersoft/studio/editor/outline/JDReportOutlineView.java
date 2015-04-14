@@ -28,7 +28,6 @@ import org.eclipse.gef.LayerConstants;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.RootEditPart;
 import org.eclipse.gef.dnd.TemplateTransferDragSourceListener;
-import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.requests.SelectionRequest;
 import org.eclipse.gef.ui.actions.ActionRegistry;
@@ -493,7 +492,7 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 
 		RootEditPart rep = editor.getGraphicalViewer().getRootEditPart();
 		if (rep instanceof MainDesignerRootEditPart) {
-			ScalableFreeformRootEditPart root = (ScalableFreeformRootEditPart) rep;
+			MainDesignerRootEditPart root = (MainDesignerRootEditPart) rep;
 			thumbnail = new JSSScrollableThumbnail((Viewport) root.getFigure(), (MRoot) getViewer().getContents().getModel());
 			thumbnail.setSource(root.getLayer(LayerConstants.PRINTABLE_LAYERS));
 			lws.setContents(thumbnail);
