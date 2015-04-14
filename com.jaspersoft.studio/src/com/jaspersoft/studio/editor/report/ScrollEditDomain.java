@@ -149,7 +149,7 @@ public class ScrollEditDomain extends DefaultEditDomain {
 						} else {
 							setCursor(disp, CURSOR_CENTER);
 						}
-					//	Thread.sleep(25);
+						Thread.sleep(10);
 					}
 				} catch (Exception ex) {
 					ex.printStackTrace();
@@ -250,23 +250,29 @@ public class ScrollEditDomain extends DefaultEditDomain {
 	//UI METHODS TO SET THE CURSOR OR CHANGE THE SCROLL
 	
 	private void setCursor(Display disp, final Cursor cursor) {
-		disp.syncExec(new Runnable() {
-
-			@Override
-			public void run() {
-				if (cursor == null || !cursor.isDisposed()) getViewer().setCursor(cursor);
-			}
-		});
+		//This check avoid to do operation if the application is closed when the thread is running
+		if (!disp.isDisposed()){
+			disp.syncExec(new Runnable() {
+	
+				@Override
+				public void run() {
+					if (cursor == null || !cursor.isDisposed()) getViewer().setCursor(cursor);
+				}
+			});
+		}
 	}
 
 	private void scrollTo(Display disp, final FigureCanvas canvas, final int x, final int y) {
-		disp.syncExec(new Runnable() {
-
-			@Override
-			public void run() {
-				if (!canvas.isDisposed()) canvas.scrollSmoothTo(x, y);
-			}
-		});
+		//This check avoid to do operation if the application is closed when the thread is running
+		if (!disp.isDisposed()){
+			disp.syncExec(new Runnable() {
+	
+				@Override
+				public void run() {
+					if (!canvas.isDisposed()) canvas.scrollSmoothTo(x, y);
+				}
+			});
+		}
 	}
 
 }
