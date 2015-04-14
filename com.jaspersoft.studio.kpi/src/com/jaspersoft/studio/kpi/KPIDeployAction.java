@@ -85,7 +85,7 @@ public class KPIDeployAction extends Action implements IMenuCreator {
 			if (obj instanceof MServerProfile) {
 				msp = (MServerProfile) obj;
 			} else if (obj instanceof MResource) {
-				final MResource node = (MReportUnit) obj;
+				final MResource node = (MResource) obj;
 				INode n = node.getRoot();
 				if (n instanceof MServerProfile)
 					msp = (MServerProfile) n;
