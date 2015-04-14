@@ -12,7 +12,11 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,8 +36,11 @@ import net.sf.jasperreports.eclipse.MScopedPreferenceStore;
 import net.sf.jasperreports.eclipse.classpath.JavaProjectClassLoader;
 import net.sf.jasperreports.eclipse.util.FilePrefUtil;
 import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.eclipse.util.HttpUtils;
 import net.sf.jasperreports.eclipse.util.query.EmptyQueryExecuterFactoryBundle;
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRRuntimeException;
 import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.component.ComponentsBundle;
 import net.sf.jasperreports.engine.design.JRDesignElement;
@@ -42,15 +49,21 @@ import net.sf.jasperreports.engine.fonts.FontFamily;
 import net.sf.jasperreports.engine.fonts.SimpleFontExtensionHelper;
 import net.sf.jasperreports.engine.query.JRQueryExecuterFactoryBundle;
 import net.sf.jasperreports.engine.util.CompositeClassloader;
+import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.engine.util.JRResourcesUtil;
 import net.sf.jasperreports.engine.util.LocalJasperReportsContext;
 import net.sf.jasperreports.engine.util.MessageProviderFactory;
 import net.sf.jasperreports.engine.util.ResourceBundleMessageProviderFactory;
 import net.sf.jasperreports.functions.FunctionsBundle;
+import net.sf.jasperreports.repo.DefaultRepositoryService;
 import net.sf.jasperreports.repo.FileRepositoryPersistenceServiceFactory;
 import net.sf.jasperreports.repo.FileRepositoryService;
 import net.sf.jasperreports.repo.PersistenceServiceFactory;
 import net.sf.jasperreports.repo.RepositoryService;
 
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.fluent.Executor;
+import org.apache.http.client.fluent.Request;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -139,16 +152,16 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 			// JaspersoftStudioPlugin.getInstance().logError(
 			// "Cannot complete operations successfully after a classpath change occurred.", e);
 			// }
-			//Clear the old extensions
-			//JDTUtils.clearJRRegistry(classLoader);
+			// Clear the old extensions
+			// JDTUtils.clearJRRegistry(classLoader);
 			JasperDesign jd = getJasperDesign();
 			if (jd != null) {
 				List<JRDesignElement> allElements = ModelUtils.getAllGElements(jd);
-				for(JRDesignElement element : allElements){
+				for (JRDesignElement element : allElements) {
 					element.getEventSupport().firePropertyChange(MGraphicElement.FORCE_GRAPHICAL_REFRESH, true, false);
 				}
 			}
-			
+
 		}
 	}
 
@@ -728,8 +741,59 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 			instance = new JasperReportsConfiguration(DefaultJasperReportsContext.getInstance(), null);
 		return instance;
 	}
-	
-	public void refreshClasspath(){
+
+	public void refreshClasspath() {
 		classpathlistener.propertyChange(null);
+	}
+
+	protected DefaultRepositoryService getLocalRepositoryService() {
+		if (localRepositoryService == null) {
+			localRepositoryService = new DefaultRepositoryService(this) {
+				@Override
+				public InputStream getInputStream(String uri) {
+					try {
+						URL url = JRResourcesUtil.createURL(uri, urlHandlerFactory);
+						if (url != null) {
+							if (url.getProtocol().toLowerCase().equals("http") || url.getProtocol().toLowerCase().equals("https")) {
+								try {
+									URI uuri = url.toURI();
+									Executor exec = Executor.newInstance();
+									HttpUtils.setupProxy(exec, uuri);
+
+									Request req = Request.Get("http://somehost/");
+									HttpUtils.setupProxy(exec, uuri, req);
+									return exec.execute(req).returnContent().asStream();
+								} catch (URISyntaxException e) {
+									e.printStackTrace();
+								} catch (ClientProtocolException e) {
+									new JRException(JRLoader.EXCEPTION_MESSAGE_KEY_INPUT_STREAM_FROM_URL_OPEN_ERROR,
+											new Object[] { url }, e);
+								} catch (IOException e) {
+									new JRException(JRLoader.EXCEPTION_MESSAGE_KEY_INPUT_STREAM_FROM_URL_OPEN_ERROR,
+											new Object[] { url }, e);
+								}
+
+							}
+							return JRLoader.getInputStream(url);
+						}
+
+						File file = JRResourcesUtil.resolveFile(uri, fileResolver);
+						if (file != null) {
+							return JRLoader.getInputStream(file);
+						}
+
+						url = JRResourcesUtil.findClassLoaderResource(uri, classLoader);
+						if (url != null) {
+							return JRLoader.getInputStream(url);
+						}
+					} catch (JRException e) {
+						throw new JRRuntimeException(e);
+					}
+
+					return null;
+				}
+			};
+		}
+		return localRepositoryService;
 	}
 }
