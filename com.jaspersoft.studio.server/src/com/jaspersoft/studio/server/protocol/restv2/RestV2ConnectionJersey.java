@@ -301,7 +301,7 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 					}
 				}
 			}
-		}
+		} 
 		return rds;
 	}
 

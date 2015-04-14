@@ -188,7 +188,8 @@ public class WSClientHelper {
 
 		Set<String> set = new HashSet<String>();
 		for (ResourceDescriptor r : children) {
-			if (set.contains(r.getUriString()))
+			if (!r.getWsType().equals(ResourceDescriptor.TYPE_INPUT_CONTROL)
+					&& set.contains(r.getUriString()))
 				continue;
 			set.add(r.getUriString());
 			if (rd.getWsType().equals(ResourceDescriptor.TYPE_REPORTUNIT)
@@ -445,7 +446,8 @@ public class WSClientHelper {
 				|| (res.isSupported(Feature.INPUTCONTROLS_ORDERING) && (res instanceof IInputControlsContainer))) {
 			res.removeChildren();
 
-			listFolder(res, -1, res.getWsClient(), monitor, res.getValue(), 0);
+			ResourceDescriptor rd = res.getValue();
+			listFolder(res, -1, res.getWsClient(), monitor, rd, 0);
 			fireResourceChanged(res);
 		}
 	}
