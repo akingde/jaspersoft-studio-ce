@@ -204,4 +204,11 @@
          fragment="true"
          unpack="false"/>
 
+   <plugin
+         id="com.jaspersoft.studio.bundles.zxing"
+         download-size="0"
+         install-size="0"
+         version="2.3.0"
+         unpack="false"/>
+
 </feature>
