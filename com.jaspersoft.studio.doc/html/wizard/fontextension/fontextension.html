@@ -1,0 +1,127 @@
+<html><head><META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Custom Font with the Font Extension</title><meta content="DocBook XSL Stylesheets V1.78.0" name="generator"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="N40003"></a>Custom Font with the Font Extension</h2></div></div><hr></div>
+	
+	<div class="section"><div class="titlepage"></div>
+		<p><b>Overview.&nbsp;</b>
+		JWhen using a textual element inside Jaspersoft Studio, users can select the font used for it. Although this seems simple, 
+		there are a lot of problems when using the fonts. The main problem is that the available fonts are provided by the operating system 
+		and for this reason you can have:
+		</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: opencircle; "><li class="listitem" style="list-style-type: circle">
+				<p>A font that it is available in one operating system isn't available in another. In this case, as fallback solution, the default font is used for the element.</p>
+			</li><li class="listitem" style="list-style-type: circle">
+				<p>A font can be available in different operatiing systems but it could be slightly different from one to another.</p>
+			</li></ul></div><p>
+		In many cases this is simply unacceptable. having a different font from the planned one probably will require more or less space 
+		for the text and this could have an impact, not only on the graphical appearance, but also on the layout of the report itself. 
+		To overcome this problem, the user can use external font files instead of the system provided fonts. In this way, the report will 
+		be independent of the operating system fonts and have the same appearance everywhere. This can be done using a Font Extension.
+		</p>
+		<p><b>The PDF Exporter.&nbsp;</b>
+		
+		The font problem could be even more problematic when using the exporters - in particular, the PDF exporter. The PDF format has its own set of fonts. 
+		And, if a document needs to use other fonts, they must be embedded inside the PDF. In the first versions of JasperReports this problem was solved 
+		by introducing some properties on the textual elements to allow the specification of the PDF font name and encoding, and, if the font will be 
+		embedded or not inside the final PDF.
+		
+		
+		This approach can still be used for backward compatibility, but it is now deprecated and discouraged. In fact, in the latest version of Jaspersoft Studio, 
+		a textual element that uses this property shows a warning icon and message. This is because the Font Extension handles the problem better. So, if a user 
+		wants to use a custom font in a PDF export, then it should done using a Font Extension.
+		
+		</p>
+		<p><b>Download the Font.&nbsp;</b>
+		
+		First, you must have the font you want to use. Jaspersoft Studio allows you to use a wide variety of Font types like TTF, SVG, WOFF and EOT. One of the most used formats 
+		is the TTF and there are plenty of websites that collect fonts with various licenses. For this tutorial we will use <a class="ulink" href="http://www.1001fonts.com/carnivalee-freakshow-font.html" target="_top"><em class="citetitle">This</em>
+		</a> one, named Carnivalee Freakshow Font. Download it and save the TTF file. If you have downloaded it from the linked website you will need to extract .
+		the contents of the zip file.
+		
+		</p>
+		<p><b>Create the Font Extension.&nbsp;</b>
+		Open Jaspersoft Studio, go to <span class="emphasis"><em>Window-&gt;Preferences</em></span>
+		</p><div class="figure"><a name="N4004B"></a><p class="title"><b>Figure&nbsp;1.&nbsp;Open the preferences</b></p><div class="figure-contents">
+			
+			<div class="screenshot">
+				<div class="mediaobject"><img src="1.png" width="800" alt="Open the preferences"></div>
+			</div>
+		</div></div><p><br class="figure-break">
+		From the new dialog, expand the category <span class="emphasis"><em>Jaspersoft Studio</em></span> on the left, select <span class="emphasis"><em>Font</em></span>, and then press <span class="emphasis"><em>Add</em></span>
+		</p><div class="figure"><a name="N4006A"></a><p class="title"><b>Figure&nbsp;2.&nbsp;Add a new font extension</b></p><div class="figure-contents">
+			
+			<div class="screenshot">
+				<div class="mediaobject"><img src="2.png" width="600" alt="Add a new font extension"></div>
+			</div>
+		</div></div><p><br class="figure-break">
+		At this point you must provide a unique name for the Font Extension and the path to its extension. In this tutorial we are using a TTF, 
+		so we will provide it using the True Type field.
+		You can also specify a font variant for the Bold, Italic and Bold Italic styled text. If you don't provide this you will still able to use 
+		the font with one of those styles. The normal font will be manipulated to obtain the styled variant. But you can also provide a different Font for 
+		each of the variants. It is your choice. In this tutorial we will use only one Normal font.
+		
+		You can also specify if this font is replaced when exported in PDF. But we will leave this empty since we want to use this Font also inside the PDF export. 
+		For this reason we select "Embed this font in the PDF document" and a compatible encoding, like CP1252, since there are only European chars 
+		inside the Font. Note that embedding the Font in the PDF export will make the resulting PDF file bigger.
+		
+		</p><div class="figure"><a name="N40087"></a><p class="title"><b>Figure&nbsp;3.&nbsp;Configure the extension</b></p><div class="figure-contents">
+			
+			<div class="screenshot">
+				<div class="mediaobject"><img src="3.png" width="600" alt="Configure the extension"></div>
+			</div>
+		</div></div><p><br class="figure-break">
+		Now click Next. In the following steps you can provide additional information for other exporters and restrict the use of this font only to a subset of Locales. 
+		We don't need this so just click "Finish" to close the dialog and "Ok" to close the preferences dialog.
+		You can now open a report and, between the available Fonts you will find  one named like your Font Extension, "MyCustomExtension" (If you can't see it try to close and reopen the report). 
+		Select it to see it used in the element. You can set the style to Bold, Italic and Bold Italic even if you didn't provide a specific 
+		font when you created the Font Extension.
+		
+		</p><div class="figure"><a name="N400A1"></a><p class="title"><b>Figure&nbsp;4.&nbsp;Test the Extension</b></p><div class="figure-contents">
+			
+			<div class="screenshot">
+				<div class="mediaobject"><img src="4.png" width="800" alt="Test the Extension"></div>
+			</div>
+		</div></div><p><br class="figure-break">
+		</p>
+		<p><b>Export the Font Extension.&nbsp;</b>
+		One of the problem that Font Extensions solves is to have the same font on every operative system so the appearance of the text will be 
+		the same. But using what is explained in this tutorial we should copy the TTF file on each system, and on each system recreate the Font Extension, 
+		with exactly the same name otherwise a report done in one will not find the font in the others. If we were using more TTF files for the text styles 
+		we should copy them also and configure more deeply the Extension. It's not hard, but it could take some time and repeating it many times could 
+		introduce errors, like a typo on the Extension name. To make this easier there is the possibility we can export our Font Extension as a JAR and 
+		use it in any project.
+		First, open the <span class="emphasis"><em>Preference</em></span>s dialog and go to the <span class="emphasis"><em>Fonts</em></span> to see all your Font Extensions. Select the 
+		previously created extension <span class="emphasis"><em>"MyCustomExtension"</em></span> and click <span class="emphasis"><em>"Export"</em></span>.
+		</p><div class="figure"><a name="N400CC"></a><p class="title"><b>Figure&nbsp;5.&nbsp;Export the extension</b></p><div class="figure-contents">
+			
+			<div class="screenshot">
+				<div class="mediaobject"><img src="5.png" width="600" alt="Export the extension"></div>
+			</div>
+		</div></div><p><br class="figure-break">
+		At this point a save dialog will popup, define the name of the target file and save it. This JAR has all that is needed to use the extension 
+		on another system, you need only to share this single file to port your Font Extension to another machine.
+		</p>
+		<p><b>Import the Font Extension.&nbsp;</b>
+		Now you have your Font Extension. To use it, you must add it to the classpath of the project. For example, to add the Font Extension on the default 
+		project, <span class="emphasis"><em>MyReports</em></span>, right click on it on the Project Explorer and select <span class="emphasis"><em>"Properties"</em></span>.
+		</p><div class="figure"><a name="N400F1"></a><p class="title"><b>Figure&nbsp;6.&nbsp;Open the properties</b></p><div class="figure-contents">
+			
+			<div class="screenshot">
+				<div class="mediaobject"><img src="6.png" width="800" alt="Open the properties"></div>
+			</div>
+		</div></div><p><br class="figure-break">
+		
+		On the dialog that will popup, select <span class="emphasis"><em>"Java Build Path"</em></span> on the left, then switch on the tab <span class="emphasis"><em>"Libraries"</em></span> on the right, and click <span class="emphasis"><em>"Add External JARs..."</em></span>.
+		
+		</p><div class="figure"><a name="N40111"></a><p class="title"><b>Figure&nbsp;7.&nbsp;Open the properties</b></p><div class="figure-contents">
+			
+			<div class="screenshot">
+				<div class="mediaobject"><img src="7.png" width="600" alt="Open the properties"></div>
+			</div>
+		</div></div><p><br class="figure-break">
+		
+		At this point, select your Font Extension JAR and hit <span class="emphasis"><em>Ok</em></span>. Now, for each report contained in the MyReports project, you will see the font <span class="emphasis"><em>"MyCustomExtension"</em></span>. 
+		On some Jaspersoft Studio versions, the new font will not be visible on the reports that are currently opened in the editor. 
+		If this is the case, close the report and reopen it.  Remember also that a Font Extension defined oin Jaspersoft Studio preferences is global. 
+		It can be seen by all the reports in the workspace.  One defined using a JAR in the classpath of a project will be visible only by the reports 
+		inside the project.
+		</p>
+	</div>
+</div></body></html>
