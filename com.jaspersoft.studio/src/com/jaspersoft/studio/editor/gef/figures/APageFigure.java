@@ -19,12 +19,12 @@ import org.eclipse.draw2d.Viewport;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.handles.HandleBounds;
 import org.eclipse.wb.swt.SWTResourceManager;
 
 import com.jaspersoft.studio.editor.gef.figures.layers.GridLayer;
+import com.jaspersoft.studio.editor.gef.parts.JSSScalableFreeformRootEditPart;
 import com.jaspersoft.studio.editor.gef.parts.PageEditPart;
 import com.jaspersoft.studio.editor.java2d.JSSScrollingGraphicalViewer;
 
@@ -201,7 +201,7 @@ public abstract class APageFigure extends FreeformLayeredPane implements HandleB
 	 */
 	protected double getZoom(){
 		if (zoomManager == null){
-			zoomManager = ((ScalableFreeformRootEditPart) page.getViewer().getRootEditPart()).getZoomManager();
+			zoomManager = ((JSSScalableFreeformRootEditPart) page.getViewer().getRootEditPart()).getZoomManager();
 		}
 		return zoomManager != null ? zoomManager.getZoom() : 0d;
 	}
