@@ -166,9 +166,8 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 	private PreferenceListener preferenceListener = new PreferenceListener();
 
 	/**
-	 * Listener for the preferences, when the flags to show or hide default
-	 * parameters and variables changes then it refresh all the MParameters and
-	 * Mvariables nodes on the tree
+	 * Listener for the preferences, when the flags to show or hide default parameters and variables changes then it
+	 * refresh all the MParameters and Mvariables nodes on the tree
 	 */
 	private final class PreferenceListener implements IPropertyChangeListener {
 
@@ -180,11 +179,12 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 					@Override
 					public boolean visit(EditPart n) {
 						if (n.getModel() instanceof MParameters || n.getModel() instanceof MVariables) {
-							//We must be sure that the node has the widget already created, a refresh on a node 
-							//without widget throw an NPE
-							if (((TreeEditPart)n).getWidget() != null) n.refresh();
-							//We can't stop the research when an MParameters and an MVariables are found, because
-							//in this way we will miss to hide the default values of subdatasets
+							// We must be sure that the node has the widget already created, a refresh on a node
+							// without widget throw an NPE
+							if (((TreeEditPart) n).getWidget() != null)
+								n.refresh();
+							// We can't stop the research when an MParameters and an MVariables are found, because
+							// in this way we will miss to hide the default values of subdatasets
 							return false;
 						}
 						return true;
@@ -255,7 +255,8 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 		viewer.addDropTargetListener(new ImageResourceDropTargetListener(viewer, ImageURLTransfer.getInstance()));
 
 		IPageSite site = getSite();
-		site.registerContextMenu(provider.getId(), provider, site.getSelectionProvider());
+		// team menu was shown, if we register this on the site
+		// site.registerContextMenu(provider.getId(), provider, site.getSelectionProvider());
 
 		IToolBarManager tbm = site.getActionBars().getToolBarManager();
 		registerToolbarAction(tbm);
@@ -541,11 +542,11 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 			showOutlineAction.setChecked(true);
 			showOverviewAction.setChecked(false);
 			pageBook.showPage(outline);
-			((JSSScrollingGraphicalViewer)editor.getGraphicalViewer()).setPaintOnlyVisibleElements(true);
+			((JSSScrollingGraphicalViewer) editor.getGraphicalViewer()).setPaintOnlyVisibleElements(true);
 			if (thumbnail != null)
 				thumbnail.setVisible(false);
 		} else if (ID_ACTION_OVERVIEW.equals(id)) {
-			((JSSScrollingGraphicalViewer)editor.getGraphicalViewer()).setPaintOnlyVisibleElements(false);
+			((JSSScrollingGraphicalViewer) editor.getGraphicalViewer()).setPaintOnlyVisibleElements(false);
 			if (thumbnail == null)
 				initializeOverview();
 			showOutlineAction.setChecked(false);
