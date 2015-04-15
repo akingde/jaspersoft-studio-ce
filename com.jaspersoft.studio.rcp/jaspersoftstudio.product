@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="Jaspersoft Studio" uid="com.jaspersoft.studio.rcp.product" id="com.jaspersoft.studio.rcp.product" application="com.jaspersoft.studio.rcp.application" version="6.1.0.qualifier" useFeatures="true" includeLaunchers="true">
+<product name="Jaspersoft Studio" uid="com.jaspersoft.studio.rcp.product" id="com.jaspersoft.studio.rcp.product" application="com.jaspersoft.studio.rcp.application" version="6.0.4.final" useFeatures="true" includeLaunchers="true">
 
    <aboutInfo>
       <image path="/com.jaspersoft.studio.rcp/icons/studio_logo_about.png"/>
@@ -31,7 +31,7 @@ Special thanks to all people who support this software.
 -Dfile.encoding=UTF-8
 -Djava.net.preferIPv4Stack=true</vmArgs>
       <vmArgsLin>-Dorg.eclipse.swt.browser.DefaultType=mozilla</vmArgsLin>
-      <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts</vmArgsMac>
+      <vmArgsMac>-XstartOnFirstThread</vmArgsMac>
    </launcherArgs>
 
    <windowImages i16="/com.jaspersoft.studio.rcp/icons/jss_icon_16.png" i32="/com.jaspersoft.studio.rcp/icons/jss_icon_32.png" i48="/com.jaspersoft.studio.rcp/icons/jss_icon_48.png" i64="/com.jaspersoft.studio.rcp/icons/jss_icon_64.png" i128="/com.jaspersoft.studio.rcp/icons/jss_icon_128.png"/>
