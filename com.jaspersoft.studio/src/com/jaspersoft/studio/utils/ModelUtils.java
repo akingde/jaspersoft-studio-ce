@@ -44,6 +44,7 @@ import net.sf.jasperreports.engine.JRChild;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRDatasetRun;
 import net.sf.jasperreports.engine.JRElement;
+import net.sf.jasperreports.engine.JRElementDataset;
 import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRField;
@@ -101,6 +102,7 @@ import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.model.dataset.MDataset;
 import com.jaspersoft.studio.model.dataset.MDatasetRun;
+import com.jaspersoft.studio.model.dataset.MElementDataset;
 import com.jaspersoft.studio.model.sortfield.MSortFields;
 import com.jaspersoft.studio.model.util.ModelVisitor;
 import com.jaspersoft.studio.plugin.IComponentFactory;
@@ -123,6 +125,13 @@ public class ModelUtils {
 				return ((MDataset) n).getValue();
 			if (n instanceof MReport)
 				return (JRDesignDataset) ((MReport) n).getValue().getMainDataset();
+			if (n instanceof MElementDataset) {
+				JRElementDataset elementDS = (JRElementDataset) n.getValue();
+				JRDatasetRun datasetRun = elementDS.getDatasetRun();
+				if(datasetRun!=null){
+					return (JRDesignDataset) node.getJasperDesign().getDatasetMap().get(datasetRun.getDatasetName());
+				}
+			}
 			n = n.getParent();
 		}
 		return null;
@@ -1387,6 +1396,15 @@ public class ModelUtils {
 			ExpressionContext ec = getExpressionContext4Component(node);
 			if (ec != null) {
 				return ec;
+			}
+			
+			// Last resort, we try to gather a proper JRDesignDataset from the node information
+			if(node!=null) {
+				JRDesignDataset dataset = getDataset(node);
+				JasperReportsConfiguration jconfig = node.getJasperConfiguration();
+				if(dataset!=null && jconfig!=null) {
+					return new ExpressionContext(dataset, jconfig);
+				}
 			}
 		}
 

@@ -18,6 +18,7 @@ import java.util.Map;
 import net.sf.jasperreports.charts.design.JRDesignCategorySeries;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRHyperlink;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignHyperlink;
 
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -25,6 +26,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.chart.ChartNodeIconDescriptor;
 import com.jaspersoft.studio.components.chart.messages.Messages;
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.MHyperLink;
@@ -32,6 +34,8 @@ import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.JRPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
+import com.jaspersoft.studio.utils.ModelUtils;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class MCategorySeries extends APropertyNode {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
@@ -141,6 +145,7 @@ public class MCategorySeries extends APropertyNode {
 			if (itemHyperLink == null)
 				itemHyperLink = new JRDesignHyperlink();
 			mHyperLink = new MHyperLink(itemHyperLink);
+			mHyperLink.setParent(this,-1);
 			setChildListener(mHyperLink);
 			return mHyperLink;
 		}
@@ -181,4 +186,20 @@ public class MCategorySeries extends APropertyNode {
 		return getIconDescriptor().getTitle();
 	}
 
+	@Override
+	public ExpressionContext getExpressionContext() {
+		JRDesignDataset dataSet = ModelUtils.getDataset(this);
+		JasperReportsConfiguration conf = getJasperConfiguration();
+		if (dataSet != null && conf != null)
+			return new ExpressionContext(dataSet, conf);
+		return null;
+	}
+	
+	@Override
+	public Object getAdapter(Class adapter) {
+		if (ExpressionContext.class.equals(adapter)) {
+			return getExpressionContext();
+		}
+		return super.getAdapter(adapter);
+	}
 }
