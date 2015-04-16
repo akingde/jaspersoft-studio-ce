@@ -403,7 +403,8 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 			command.add(setValueCommand(JRDesignDataset.PROPERTY_QUERY, new MQuery(jrQuery, mdataset), mdataset));
 		} else {
 			IPropertySource mquery = (IPropertySource) mdataset.getPropertyValue(JRDesignDataset.PROPERTY_QUERY);
-			if (ds.getQuery().getLanguage() == null || !ds.getQuery().getLanguage().equals(lang))
+			String language = ds.getQuery().getLanguage();
+			if (language == null || !language.toLowerCase().equals(lang.toLowerCase()))
 				command.add(setValueCommand(JRDesignQuery.PROPERTY_LANGUAGE, lang, mquery));
 			if (!ds.getQuery().getText().equals(qtext))
 				command.add(setValueCommand(JRDesignQuery.PROPERTY_TEXT, qtext, mquery));
