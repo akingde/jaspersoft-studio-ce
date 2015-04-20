@@ -86,10 +86,7 @@ public class MVariable extends MVariableSystem implements ICopyable {
 		super(parent, jrVariable, newIndex);
 	}
 
-	@Override
-	public JRDesignVariable getValue() {
-		return (JRDesignVariable) super.getValue();
-	}
+	
 
 	private IPropertyDescriptor[] descriptors;
 	private static Map<String, Object> defaultsMap;

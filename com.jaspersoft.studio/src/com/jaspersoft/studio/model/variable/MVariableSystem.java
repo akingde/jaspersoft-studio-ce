@@ -79,6 +79,11 @@ public class MVariableSystem extends APropertyNode implements IDragable {
 	}
 
 	@Override
+	public JRDesignVariable getValue() {
+		return (JRDesignVariable) super.getValue();
+	}
+
+	@Override
 	public Color getForeground() {
 		return ColorConstants.lightGray;
 	}

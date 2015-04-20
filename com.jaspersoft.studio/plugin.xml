@@ -1372,6 +1372,13 @@
             name="%formatTools"
             restorable="true">
       </view>
+      <view
+            category="net.sf.jasperreports"
+            class="com.jaspersoft.studio.debug.TraceView"
+            id="com.jaspersoft.studio.debug.trace"
+            name="Trace Report View"
+            restorable="true">
+      </view>
    </extension>
    <extension
          point="org.eclipse.ui.newWizards">
