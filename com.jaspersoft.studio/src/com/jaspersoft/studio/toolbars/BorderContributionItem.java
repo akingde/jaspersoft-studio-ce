@@ -154,8 +154,7 @@ public class BorderContributionItem extends CommonToolbarHandler {
 		
 		private TemplateBorder getElementAttribute(String position, MLineBox lb){
 			MLinePen lp = (MLinePen) lb.getPropertyValue(position);
-			Integer lineStyleNum = ((Integer)lp.getPropertyValue(JRBasePen.PROPERTY_LINE_STYLE))-1;
-			LineStyleEnum lineStyle = LineStyleEnum.getByValue(lineStyleNum.byteValue());
+			LineStyleEnum lineStyle = (LineStyleEnum)lp.getPropertyValue(JRBasePen.PROPERTY_LINE_STYLE);
 			Float lineWidth = (Float)lp.getPropertyValue(JRBasePen.PROPERTY_LINE_WIDTH);
 			AlfaRGB lineColor = (AlfaRGB)lp.getPropertyValue(JRBasePen.PROPERTY_LINE_COLOR);
 			TemplateBorder result =  new TemplateBorder(lineWidth, lineStyle, lineColor != null ? lineColor.getRgb() : null);
