@@ -1332,6 +1332,15 @@
                   type="com.jaspersoft.studio.background.MBackgrounImage">
             </input>
          </propertySection>
+         <propertySection
+               afterSection="com.jaspersoft.studio.property.section.text.TextSection"
+               class="com.jaspersoft.studio.property.section.text.ParagraphSection"
+               id="com.jaspersoft.studio.property.section.text.StyleParagraphSection"
+               tab="com.jaspersoft.studio.editor.JrxmlEditor.Style">
+            <input
+                  type="com.jaspersoft.studio.model.style.MStyle">
+            </input>
+         </propertySection>
       </propertySections>
    </extension>
    <extension

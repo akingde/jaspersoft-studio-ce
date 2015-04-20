@@ -183,7 +183,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 
 	private static final String LINE_PEN = "LinePen"; //$NON-NLS-1$
 	private static final String LINE_BOX = "LineBox"; //$NON-NLS-1$
-	private static final String PARAGRAPH = "paragraph"; //$NON-NLS-1$
+	public static final String PARAGRAPH = "paragraph"; //$NON-NLS-1$
 
 	@Override
 	protected void postDescriptors(IPropertyDescriptor[] descriptors) {

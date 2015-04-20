@@ -17,13 +17,16 @@ import java.util.HashMap;
 
 import net.sf.jasperreports.engine.JRCommonText;
 import net.sf.jasperreports.engine.JRFont;
+import net.sf.jasperreports.engine.JRParagraph;
 import net.sf.jasperreports.engine.JRPen;
 import net.sf.jasperreports.engine.base.JRBaseLineBox;
+import net.sf.jasperreports.engine.base.JRBaseParagraph;
 import net.sf.jasperreports.engine.base.JRBasePen;
 import net.sf.jasperreports.engine.design.JRDesignFont;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
 import net.sf.jasperreports.engine.type.FillEnum;
 import net.sf.jasperreports.engine.type.HorizontalTextAlignEnum;
+import net.sf.jasperreports.engine.type.LineSpacingEnum;
 import net.sf.jasperreports.engine.type.LineStyleEnum;
 import net.sf.jasperreports.engine.type.ModeEnum;
 import net.sf.jasperreports.engine.type.RotationEnum;
@@ -90,6 +93,27 @@ public class DefaultValuesMap {
 		createBaseLinePen(result, penTopKey);
 	}
 	
+	private static void createBaseParagraph(HashMap<String, Object> result, String baseProperty){
+		String lineSpacingKey = concatenateProperties(baseProperty, JRBaseParagraph.PROPERTY_LINE_SPACING);
+		String lineSpacingSizeKey = concatenateProperties(baseProperty, JRBaseParagraph.PROPERTY_LINE_SPACING_SIZE);
+		String firstLineIdentKey = concatenateProperties(baseProperty, JRBaseParagraph.PROPERTY_FIRST_LINE_INDENT);
+		String leftIdentKey = concatenateProperties(baseProperty, JRBaseParagraph.PROPERTY_LEFT_INDENT);
+		String rightIdentKey = concatenateProperties(baseProperty, JRBaseParagraph.PROPERTY_RIGHT_INDENT);
+		String spacingBeforeKey = concatenateProperties(baseProperty, JRBaseParagraph.PROPERTY_SPACING_BEFORE);
+		String spacingAfterKey = concatenateProperties(baseProperty, JRBaseParagraph.PROPERTY_SPACING_AFTER);
+		String tabStopsWidthKey = concatenateProperties(baseProperty, JRBaseParagraph.PROPERTY_TAB_STOP_WIDTH);
+		
+		result.put(lineSpacingKey, LineSpacingEnum.SINGLE);
+		result.put(lineSpacingSizeKey, JRProperties.getFloatProperty(JRParagraph.DEFAULT_LINE_SPACING_SIZE));
+		result.put(firstLineIdentKey, JRProperties.getIntegerProperty(JRParagraph.DEFAULT_FIRST_LINE_INDENT));
+		result.put(leftIdentKey, JRProperties.getIntegerProperty(JRParagraph.DEFAULT_LEFT_INDENT));
+		result.put(rightIdentKey, JRProperties.getIntegerProperty(JRParagraph.DEFAULT_RIGHT_INDENT));
+		result.put(spacingBeforeKey, JRProperties.getIntegerProperty(JRParagraph.DEFAULT_SPACING_BEFORE));
+		result.put(spacingAfterKey, JRProperties.getIntegerProperty(JRParagraph.DEFAULT_SPACING_AFTER));
+		result.put(tabStopsWidthKey, JRProperties.getIntegerProperty(JRParagraph.DEFAULT_TAB_STOP_WIDTH));
+	}
+	
+	
 	/**
 	 * Create the default property map for a wide range of object
 	 * @param type the type of the element for which the properties are requested
@@ -126,6 +150,7 @@ public class DefaultValuesMap {
 			result.put(JRDesignStyle.PROPERTY_PDF_EMBEDDED, JRProperties.getBooleanProperty(JRFont.DEFAULT_PDF_EMBEDDED));
 			createBaseLinePen(result, MLineBox.LINE_PEN);
 			createBaseLineBox(result, MGraphicElementLineBox.LINE_BOX);
+			createBaseParagraph(result, MStyle.PARAGRAPH);
 		} else {
 			result.put(JRDesignStyle.PROPERTY_BACKCOLOR, Color.white);
 			result.put(JRDesignStyle.PROPERTY_FORECOLOR, Color.black);
@@ -150,6 +175,7 @@ public class DefaultValuesMap {
 				result.put(JRDesignFont.PROPERTY_PDF_ENCODING, JRProperties.getProperty(JRFont.DEFAULT_PDF_ENCODING));
 				result.put(JRDesignFont.PROPERTY_PDF_EMBEDDED, JRProperties.getBooleanProperty(JRFont.DEFAULT_PDF_EMBEDDED));
 				transparency = ModeEnum.TRANSPARENT;
+				createBaseParagraph(result, MTextElement.PARAGRAPH);
 			}
 			
 			if (type instanceof MTextField){
@@ -178,7 +204,7 @@ public class DefaultValuesMap {
 	 * value is an object representing the property value
 	 */
 	public static HashMap<String, Object> getPropertiesByType(APropertyNode element){
-		if (valuesMap == null) valuesMap = new HashMap<Class<?>, HashMap<String,Object>>();;
+		if (valuesMap == null) valuesMap = new HashMap<Class<?>, HashMap<String,Object>>();
 		 //Check the requested properties are cached
 		 HashMap<String, Object> result = valuesMap.get(element.getClass());
 		 if (result == null){

@@ -19,6 +19,7 @@ import org.eclipse.ui.forms.widgets.ExpandableComposite;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.model.style.MStyle;
 import com.jaspersoft.studio.model.text.MParagraph;
 import com.jaspersoft.studio.model.text.MTextElement;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
@@ -75,7 +76,10 @@ public class ParagraphSection extends AbstractRealValueSection {
 	protected APropertyNode getModelFromEditPart(Object item) {
 		APropertyNode md = super.getModelFromEditPart(item);
 		if (md instanceof MTextElement) {
-			MParagraph paragraph = (MParagraph) md.getPropertyValue("paragraph");
+			MParagraph paragraph = (MParagraph) md.getPropertyValue(MTextElement.PARAGRAPH);
+			return paragraph;
+		} else if (md instanceof MStyle){
+			MParagraph paragraph = (MParagraph) md.getPropertyValue(MStyle.PARAGRAPH);
 			return paragraph;
 		}
 		return md;

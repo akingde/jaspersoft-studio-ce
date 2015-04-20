@@ -10,6 +10,7 @@ package com.jaspersoft.studio.model.text;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -225,6 +226,23 @@ public class MParagraph extends APropertyNode {
 				jrElement.addTabStop(null);
 			}
 		}
+	}
+	
+	@Override
+	public HashMap<String, Object> getStylesDescriptors() {
+		HashMap<String, Object> result = new HashMap<String, Object>();
+		if (getValue() == null)
+			return result;
+		JRBaseParagraph jrElement = (JRBaseParagraph) getValue();
+		result.put(JRBaseParagraph.PROPERTY_LINE_SPACING, jrElement.getOwnLineSpacing());
+		result.put(JRBaseParagraph.PROPERTY_LINE_SPACING_SIZE, jrElement.getOwnLineSpacingSize());
+		result.put(JRBaseParagraph.PROPERTY_FIRST_LINE_INDENT, jrElement.getOwnFirstLineIndent());
+		result.put(JRBaseParagraph.PROPERTY_LEFT_INDENT, jrElement.getOwnLeftIndent());
+		result.put(JRBaseParagraph.PROPERTY_RIGHT_INDENT, jrElement.getOwnRightIndent());
+		result.put(JRBaseParagraph.PROPERTY_SPACING_BEFORE, jrElement.getOwnSpacingBefore());
+		result.put(JRBaseParagraph.PROPERTY_SPACING_AFTER, jrElement.getOwnSpacingAfter());
+		result.put(JRBaseParagraph.PROPERTY_TAB_STOP_WIDTH, jrElement.getOwnTabStopWidth());
+		return result;
 	}
 
 	public String getDisplayText() {
