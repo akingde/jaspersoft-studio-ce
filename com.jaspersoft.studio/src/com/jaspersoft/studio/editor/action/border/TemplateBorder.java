@@ -25,6 +25,8 @@ import org.eclipse.swt.graphics.RGB;
 import org.eclipse.wb.swt.ResourceManager;
 import org.eclipse.wb.swt.SWTResourceManager;
 
+import com.jaspersoft.studio.utils.ModelUtils;
+
 /**
  * an instance of this class represent a border preset. It also provide the method to return a sample line of the border
  * 
@@ -89,7 +91,7 @@ public class TemplateBorder {
 	 * @return and RGB of the color, it can't be null
 	 */
 	public RGB getColor() {
-		return color.getRGB();
+		return color != null ? color.getRGB() : null;
 	}
 
 	/**
@@ -109,7 +111,7 @@ public class TemplateBorder {
 	}
 
 	/**
-	 * Ovverride of the equals method. Two border presets are equal if they have a lineWidth that make them not visible
+	 * Override of the equals method. Two border presets are equal if they have a lineWidth that make them not visible
 	 * (null or with width<=0), or if the line is visible they are equals if all the fields (color,width,style) are equals
 	 */
 	@Override
@@ -119,11 +121,12 @@ public class TemplateBorder {
 			if ((getLineWidth() == null && other.getLineWidth() == null)
 					|| (getLineWidth() != null && other.getLineWidth() != null && getLineWidth() <= 0 && other.getLineWidth() <= 0))
 				return true;
-			boolean colorEquals = (color == null && other.getColor() == null)
-					|| (color != null && getColor().equals(other.getColor()));
-			boolean widthEquals = (getLineWidth() == null && other.getLineWidth() == null)
-					|| (getLineWidth() != null && getLineWidth().equals(other.getLineWidth()));
-			return (widthEquals && getStyle() == other.getStyle() && colorEquals);
+			boolean colorEquals = ModelUtils.safeEquals(getColor(), other.getColor());
+			if (!colorEquals) return false; //they are not equals, avoid unnecessary checks
+			boolean widthEquals = ModelUtils.safeEquals(getLineWidth(), other.getLineWidth());
+			if (!widthEquals) return false; //they are not equals, avoid unnecessary checks
+			boolean styleEquals = ModelUtils.safeEquals(getStyle(), other.getStyle());
+			return (styleEquals); // since to be here color and width must be the same the only check to do is on the style
 		}
 		return false;
 	}
