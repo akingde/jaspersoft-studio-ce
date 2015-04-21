@@ -15,6 +15,7 @@ package com.jaspersoft.studio.editor.gef.rulers.component;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.draw2d.AbstractBorder;
@@ -34,11 +35,11 @@ import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.Handle;
 import org.eclipse.gef.RootEditPart;
-import org.eclipse.gef.internal.ui.rulers.GuideEditPart;
 import org.eclipse.gef.internal.ui.rulers.RulerEditPartFactory;
 import org.eclipse.gef.rulers.RulerProvider;
 import org.eclipse.gef.ui.parts.GraphicalViewerKeyHandler;
 import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -472,11 +473,15 @@ public class JDRulerComposite extends Composite {
 		 */
 		public Handle findHandleAt(org.eclipse.draw2d.geometry.Point p) {
 			final GraphicalEditPart gep = (GraphicalEditPart) findObjectAtExcluding(p, new ArrayList<Object>());
-			if (gep == null || !(gep instanceof GuideEditPart))
+			//Deselect all the other parst and select theright clicked one
+			deselectAll();
+			setSelection(new StructuredSelection(gep));
+			setFocus(gep);
+			if (gep == null || !(gep instanceof JDGuideEditPart))
 				return null;
 			return new Handle() {
 				public DragTracker getDragTracker() {
-					return ((GuideEditPart) gep).getDragTracker(null);
+					return ((JDGuideEditPart) gep).getDragTracker(null);
 				}
 
 				public org.eclipse.draw2d.geometry.Point getAccessibleLocation() {
@@ -533,15 +538,17 @@ public class JDRulerComposite extends Composite {
 			 */
 			public boolean keyPressed(KeyEvent event) {
 				if (event.keyCode == SWT.DEL) {
-					// If a guide has focus, delete it
-					if (getFocusEditPart() instanceof GuideEditPart) {
-						JDRulerEditPart parent = (JDRulerEditPart) getFocusEditPart().getParent();
-						getViewer().getEditDomain().getCommandStack()
-								.execute(parent.getRulerProvider().getDeleteGuideCommand(getFocusEditPart().getModel()));
-						event.doit = false;
-						return true;
+					List<?> selection = getViewer().getSelectedEditParts();
+					for(Object part : selection){
+						// If a guide has focus, delete it
+						if (part instanceof JDGuideEditPart) {
+							JDRulerEditPart parent = (JDRulerEditPart) getFocusEditPart().getParent();
+							getViewer().getEditDomain().getCommandStack()
+									.execute(parent.getRulerProvider().getDeleteGuideCommand(getFocusEditPart().getModel()));
+							event.doit = false;
+						}
+						return !event.doit;
 					}
-					return false;
 				} else if (((event.stateMask & SWT.ALT) != 0) && (event.keyCode == SWT.ARROW_UP)) {
 					// ALT + UP_ARROW pressed
 					// If a guide has focus, give focus to the ruler

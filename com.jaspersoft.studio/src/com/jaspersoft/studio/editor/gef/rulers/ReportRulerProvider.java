@@ -26,7 +26,7 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.gef.rulers.command.CreateGuideCommand;
 import com.jaspersoft.studio.editor.gef.rulers.command.DeleteGuideCommand;
 import com.jaspersoft.studio.editor.gef.rulers.command.MoveGuideCommand;
-import com.jaspersoft.studio.preferences.DesignerPreferencePage;
+import com.jaspersoft.studio.preferences.RulersGridPreferencePage;
 /*
  * The Class ReportRulerProvider.
  * 
@@ -81,7 +81,7 @@ public class ReportRulerProvider extends RulerProvider {
 		
 		@Override
 		public void propertyChange(org.eclipse.jface.util.PropertyChangeEvent event) {
-			if (event.getProperty().equals(DesignerPreferencePage.P_RULER_MEASURE)){
+			if (event.getProperty().equals(RulersGridPreferencePage.P_RULER_MEASURE)){
 				int newUnit = getUnit();
 				for (int i = 0; i < listeners.size(); i++) {
 					((RulerChangeListener) listeners.get(i)).notifyUnitsChanged(newUnit);
@@ -169,8 +169,9 @@ public class ReportRulerProvider extends RulerProvider {
 	 * The unit is read directly form the preferences. If the unit is not found the
 	 * default value (pixel) is used
 	 */
+	@Override
 	public int getUnit() {
-		String measure = JaspersoftStudioPlugin.getInstance().getPreferenceStore().getString(DesignerPreferencePage.P_RULER_MEASURE);
+		String measure = JaspersoftStudioPlugin.getInstance().getPreferenceStore().getString(RulersGridPreferencePage.P_RULER_MEASURE);
 		int value = RulerProvider.UNIT_INCHES;
 		try{
 			if (measure != null) {
@@ -180,6 +181,18 @@ public class ReportRulerProvider extends RulerProvider {
 			JaspersoftStudioPlugin.getInstance().logError("Invalid Ruler Measure Unit in Preferences", ex);
 		}
 		return value;
+	}
+	
+	/**
+	 * Set the unit of the ruler in the preferences. The listener will then automatically refresh the ruler.
+	 * The operation is done only if the new unit is different from the old one
+	 */
+	@Override
+	public void setUnit(int newUnit) {
+		if (getUnit() != newUnit){
+			//The listener will perform the changes
+			JaspersoftStudioPlugin.getInstance().getPreferenceStore().setValue(RulersGridPreferencePage.P_RULER_MEASURE, newUnit);
+		}
 	}
 
 	/*

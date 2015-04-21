@@ -21,15 +21,6 @@ import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.rulers.RulerProvider;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.window.Window;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Spinner;
-import org.eclipse.ui.forms.FormDialog;
-import org.eclipse.ui.forms.IManagedForm;
-import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.jaspersoft.studio.editor.gef.rulers.component.JDRulerEditPart;
 import com.jaspersoft.studio.editor.gef.rulers.component.JDRulerFigure;
@@ -37,8 +28,16 @@ import com.jaspersoft.studio.messages.Messages;
 
 public class CreateGuideAction extends Action {
 	
+	/**
+	 * The id of the action
+	 */
+	public static final String ID = "com.jaspersoft.studio.rulers.CreateGuideAction";
+	
 	public static final int MIN_DISTANCE_BW_GUIDES = 5;
 
+	/**
+	 * The viewer of the ruler
+	 */
 	private EditPartViewer viewer;
 
 	/**
@@ -51,11 +50,13 @@ public class CreateGuideAction extends Action {
 		super(Messages.CreateGuideAction_Label);
 		viewer = ruler;
 		setToolTipText(Messages.CreateGuideAction_Tooltip);
+		setId(ID);
 	}
 
 	/**
 	 * @see org.eclipse.jface.action.IAction#run()
 	 */
+	@Override
 	public void run() {
 		JDRulerEditPart rulerEditPart = (JDRulerEditPart) viewer.getRootEditPart().getChildren().get(0);
 		RulerProvider provider = rulerEditPart.getRulerProvider();
@@ -76,55 +77,15 @@ public class CreateGuideAction extends Action {
 		}
 		if (!found && positions.length > 0)
 			newPosition += positions[positions.length - 1];
-		PositionDialog dlg = new PositionDialog(UIUtils.getShell(), newPosition);
-		if (dlg.open() == Window.OK)
-			newPosition = dlg.getPosition();
+		PositionDialog dlg = new PositionDialog(UIUtils.getShell(), newPosition, provider.getUnit());
+		if (dlg.open() == Window.OK){
+			newPosition = dlg.getPixelPosition();
+			JDRulerFigure rf = rulerEditPart.getRulerFigure();
+			newPosition += rf.isHorizontal() ? rf.getHoffset() : rf.getVoffset();
 
-		JDRulerFigure rf = rulerEditPart.getRulerFigure();
-		newPosition += rf.isHorizontal() ? rf.getHoffset() : rf.getVoffset();
-
-		// Create the guide and reveal it
-		viewer.getEditDomain().getCommandStack().execute(provider.getCreateGuideCommand(newPosition));
-		viewer.reveal((EditPart) viewer.getEditPartRegistry().get(provider.getGuideAt(newPosition)));
-	}
-
-	private final class PositionDialog extends FormDialog {
-		private int w;
-
-		private PositionDialog(Shell shell, int w) {
-			super(shell);
-			this.w = w;
+			// Create the guide and reveal it
+			viewer.getEditDomain().getCommandStack().execute(provider.getCreateGuideCommand(newPosition));
+			viewer.reveal((EditPart) viewer.getEditPartRegistry().get(provider.getGuideAt(newPosition)));
 		}
-
-		@Override
-		protected void configureShell(Shell newShell) {
-			super.configureShell(newShell);
-			newShell.setText(Messages.CreateGuideAction_GuidePositionTxt);
-		}
-
-		@Override
-		protected void createFormContent(IManagedForm mform) {
-			mform.getForm().setText(Messages.CreateGuideAction_GuidePositionTxt);
-
-			FormToolkit toolkit = mform.getToolkit();
-
-			mform.getForm().getBody().setLayout(new GridLayout(4, false));
-
-			toolkit.createLabel(mform.getForm().getBody(), Messages.CreateGuideAction_GuidePositionTxt); //$NON-NLS-1$
-			final Spinner width = new Spinner(mform.getForm().getBody(), SWT.BORDER);
-			width.setValues(w, 0, Integer.MAX_VALUE, 0, 1, 10);
-			width.setToolTipText(Messages.CreateGuideAction_GuidePositionTooltip);
-			width.addSelectionListener(new SelectionAdapter() {
-				@Override
-				public void widgetSelected(SelectionEvent e) {
-					w = width.getSelection();
-				}
-			});
-		}
-
-		public int getPosition() {
-			return w;
-		}
-
 	}
 }

@@ -546,6 +546,8 @@ public class Messages extends NLS {
 	public static String EditDataAdapterAction_editDescription;
 	public static String EditDataAdapterAction_editName;
 	public static String EditDataAdapterAction_editTooltip;
+	public static String EditGuideAction_editText;
+	public static String EditGuideAction_editTooltip;
 	public static String ElementContextualMenu_contextualResetPlural;
 	public static String ElementContextualMenu_econtextualResetSingular;
 	public static String ElementLabelProvider_items_selected;
@@ -1800,6 +1802,7 @@ public class Messages extends NLS {
 	public static String SwitchLanguageHandler_errorTitle;
 	public static String SwitchLanguageHandler_restartMessage;
 	public static String SwitchLanguageHandler_restartTitle;
+	public static String SwitchUnitAction_menuTitle;
 	public static String SwitchViewsAction_actionTooltip;
 	public static String TabStopsPage_col1;
 	public static String TabStopsPage_col2;

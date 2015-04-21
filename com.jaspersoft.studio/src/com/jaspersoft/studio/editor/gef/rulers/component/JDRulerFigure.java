@@ -70,12 +70,12 @@ public class JDRulerFigure extends Figure {
 	}
 	
 	/**
-	 * Return the number of dpi specified in the jasper report configuration,
-	 * doesen't take it from the monitor like the standard ruler will does
+	 * Return the number of DPI specified in the default JasperReportConfiguration,
+	 * doesen't take it from the monitor like the standard ruler does
 	 * 
-	 * @return The number of dpi
+	 * @return The number of DPI
 	 */
-	protected org.eclipse.swt.graphics.Point getDpi(){
+	public static org.eclipse.swt.graphics.Point getDpi(){
 		int dpi = Misc.nvl(JasperReportsConfiguration.getDefaultInstance().getPropertyInteger("net.sf.jasperreports.image.dpi"), 72);
 		return new org.eclipse.swt.graphics.Point(dpi, dpi);
 	}
