@@ -16,22 +16,17 @@ import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.HttpUtils;
 
-import org.apache.http.HttpException;
-import org.apache.http.HttpHost;
-import org.apache.http.HttpRequest;
 import org.apache.http.client.CookieStore;
 import org.apache.http.client.utils.HttpClientUtils;
-import org.apache.http.conn.routing.HttpRoute;
-import org.apache.http.conn.routing.HttpRoutePlanner;
 import org.apache.http.cookie.Cookie;
 import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.protocol.HttpContext;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -74,6 +69,7 @@ public final class IssueCreationWizard extends Wizard {
 	private NewIssueAuthenticationPage page3;
 	private boolean isPublished;
 	private String issuePath;
+	private CloseableHttpClient httpclient = null;
 
 	private IssueCreationWizard() {
 		setWindowTitle(Messages.IssueCreationWizard_Title);
@@ -104,22 +100,20 @@ public final class IssueCreationWizard extends Wizard {
 		}
 		// Tries to save issue
 		try {
-			getContainer().run(true, false, new IRunnableWithProgress() {
+			getContainer().run(true, true, new IRunnableWithProgress() {
 				@Override
 				public void run(IProgressMonitor monitor)
 						throws InvocationTargetException, InterruptedException {
 					monitor.beginTask(Messages.IssueCreationWizard_TaskName,
 							IProgressMonitor.UNKNOWN);
-					isPublished = publishNewIssue(issueRequest, zipEntries,
-							authInfo);
+					isPublished = publishNewIssue(issueRequest, zipEntries,	authInfo, monitor);
 					monitor.done();
-
 				}
 			});
 		} catch (Exception e) {
-			UIUtils.showError(e);
+			UIUtils.showError(Messages.IssueCreationWizard_PublishingAbortedMessage, e);
 		}
-
+		
 		if (isPublished) {
 			new IssueCreatedDialog(getShell(),
 					Messages.IssueCreationWizard_InfoDialogTitle, null,
@@ -132,8 +126,27 @@ public final class IssueCreationWizard extends Wizard {
 	}
 
 	private boolean publishNewIssue(IssueRequest issueRequest,
-			List<ZipEntry> zipEntries, CommunityUser authInfo) {
-		CloseableHttpClient httpclient = null;
+			List<ZipEntry> zipEntries, CommunityUser authInfo, final IProgressMonitor monitor) {
+		Thread executionChecker = new Thread(new Runnable() {
+			private boolean forcedClose = false;
+			
+			@Override
+			public void run() {
+				while(!forcedClose) {
+					try {
+						TimeUnit.MILLISECONDS.sleep(500);
+						if(monitor.isCanceled()) {
+							HttpClientUtils.closeQuietly(httpclient);
+							forcedClose = true;
+						}
+					} catch (InterruptedException e) {
+						
+					}
+				}
+			}
+		});
+		executionChecker.start();
+		
 		try {
 			CookieStore cookieStore = new BasicCookieStore();
 			httpclient = HttpUtils.setupProxy(HttpClientBuilder.create())
@@ -163,6 +176,8 @@ public final class IssueCreationWizard extends Wizard {
 			return false;
 		} finally {
 			HttpClientUtils.closeQuietly(httpclient);
+			httpclient = null;
+			executionChecker.interrupt();
 		}
 		return true;
 	}

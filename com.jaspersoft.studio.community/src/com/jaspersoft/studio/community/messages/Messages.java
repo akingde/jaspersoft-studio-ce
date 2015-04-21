@@ -40,6 +40,7 @@ public class Messages extends NLS {
 	public static String IssueAttachmentDetailsPage_ZipContentsGroup;
 	public static String IssueCreationWizard_InfoDialogMessage;
 	public static String IssueCreationWizard_InfoDialogTitle;
+	public static String IssueCreationWizard_PublishingAbortedMessage;
 	public static String IssueCreationWizard_TaskName;
 	public static String IssueCreationWizard_Title;
 	public static String IssueSubmissionHandler_WarningMsg;
