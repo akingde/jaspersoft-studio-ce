@@ -156,14 +156,21 @@ public class TraceGovernor extends JRDefaultScriptlet {
 	@Override
 	public void beforeReportInit() throws JRScriptletException {
 		resetMaps();
-
-		for (JRField f : context.getDataset().getFields())
-			initMaps(TYPE_FIELD, f.getName());
-		for (JRVariable v : context.getDataset().getVariables())
-			initMaps(TYPE_VARIABLE, v.getName());
-		for (JRParameter p : context.getDataset().getParameters())
-			initMaps(TYPE_PARAMETER, p.getName());
-
+		JRField[] fields = context.getDataset().getFields();
+		if(fields!=null) {
+			for (JRField f : fields)
+				initMaps(TYPE_FIELD, f.getName());
+		}
+		JRVariable[] variables = context.getDataset().getVariables();
+		if(variables!=null){
+			for (JRVariable v : variables)
+				initMaps(TYPE_VARIABLE, v.getName());
+		}
+		JRParameter[] parameters = context.getDataset().getParameters();
+		if(parameters!=null) {
+			for (JRParameter p : parameters)
+				initMaps(TYPE_PARAMETER, p.getName());
+		}
 		show(BEFORE_REPORT_INIT, beforeRepInit);
 	}
 
