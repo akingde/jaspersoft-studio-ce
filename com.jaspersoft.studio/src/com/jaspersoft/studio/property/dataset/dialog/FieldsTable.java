@@ -46,7 +46,7 @@ import com.jaspersoft.studio.dnd.NodeTableDropAdapter;
 import com.jaspersoft.studio.dnd.NodeTransfer;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.property.descriptor.classname.ClassTypeCellEditor;
+import com.jaspersoft.studio.property.descriptor.classname.ComboClassTypeCellEditor;
 import com.jaspersoft.studio.swt.widgets.table.DeleteButton;
 import com.jaspersoft.studio.swt.widgets.table.INewElement;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
@@ -282,7 +282,7 @@ public class FieldsTable extends AbstractModifyTable{
 			}
 		});
 
-		viewer.setCellEditors(new CellEditor[] { new TextCellEditor(parent), new ClassTypeCellEditor(parent),
+		viewer.setCellEditors(new CellEditor[] { new TextCellEditor(parent), new ComboClassTypeCellEditor(parent),
 				new TextCellEditor(parent) });
 		viewer.setColumnProperties(new String[] { "NAME", "TYPE", "DESCRIPTION" }); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
