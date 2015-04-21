@@ -12,8 +12,10 @@
  ******************************************************************************/
 package com.jaspersoft.studio.preferences;
 
+import org.eclipse.gef.rulers.RulerProvider;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.ColorFieldEditor;
+import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.IntegerFieldEditor;
 import org.eclipse.swt.SWT;
@@ -41,6 +43,7 @@ public class RulersGridPreferencePage extends FieldEditorOverlayPage {
 	public static final String P_PAGE_RULERGRID_GRIDSPACEX = "pageRulerGrid_GRIDSPACEX"; //$NON-NLS-1$
 	public static final String P_PAGE_RULERGRID_GRIDSPACEY = "pageRulerGrid_GRIDSPACEY"; //$NON-NLS-1$
 	public static final String P_PAGE_GRID_COLOR = "gridColor"; //$NON-NLS-1$
+	public static final String P_RULER_MEASURE = "rulerMeasure"; //$NON-NLS-1; //$NON-NLS-1$
 
 	public RulersGridPreferencePage() {
 		super(GRID);
@@ -63,6 +66,7 @@ public class RulersGridPreferencePage extends FieldEditorOverlayPage {
 
 		addField(new BooleanFieldEditor(P_PAGE_RULERGRID_SHOWRULER, Messages.RulersGridPreferencePage_show_rulers, group));
 		addField(new BooleanFieldEditor(P_PAGE_RULERGRID_SNAPTOGUIDES, Messages.common_snap_to_guides, group));
+		createRulerEntry(group);
 
 		group = new Group(fieldEditorParent, SWT.NONE);
 		group.setText(Messages.RulersGridPreferencePage_grid_options);
@@ -99,8 +103,20 @@ public class RulersGridPreferencePage extends FieldEditorOverlayPage {
 		store.setDefault(P_PAGE_RULERGRID_GRIDSPACEX, new Integer(10));
 		store.setDefault(P_PAGE_RULERGRID_GRIDSPACEY, new Integer(10));
 		store.setDefault(P_PAGE_GRID_COLOR, DEFAULT_GRIDCOLOR); //$NON-NLS-1$
+		store.setDefault(P_RULER_MEASURE, String.valueOf(RulerProvider.UNIT_INCHES));
 	}
 
+	/**
+	 * Create the control to set the ruler measure unit
+	 */
+	private void createRulerEntry(Composite parent){
+		addField(new ComboFieldEditor(P_RULER_MEASURE, Messages.DesignerPreferencePage_rulerMeasureLabel,
+				new String[][] {{Messages.DesignerPreferencePage_pixelMeasure, String.valueOf(RulerProvider.UNIT_PIXELS) },
+						{Messages.DesignerPreferencePage_centimeterMeasure, String.valueOf(RulerProvider.UNIT_CENTIMETERS) },
+						{Messages.DesignerPreferencePage_inchMeasure, String.valueOf(RulerProvider.UNIT_INCHES)}}, parent));
+	}
+	
+	
 	/*
 	 * (non-Javadoc)
 	 * 
