@@ -12,7 +12,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.model.text;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -22,7 +21,6 @@ import net.sf.jasperreports.engine.JRStaticText;
 import net.sf.jasperreports.engine.base.JRBaseStaticText;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignStaticText;
-import net.sf.jasperreports.engine.design.JRDesignStyle;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -60,19 +58,6 @@ public class MStaticText extends MTextElement {
 	 */
 	public MStaticText() {
 		super();
-	}
-
-	@Override
-	public HashMap<String, Object> getStylesDescriptors() {
-		HashMap<String, Object> result = super.getStylesDescriptors();
-		if (getValue() == null)
-			return result;
-		JRStaticText element = (JRStaticText) getValue();
-		result.put(JRDesignStyle.PROPERTY_FONT_NAME, element.getOwnFontName());
-		result.put(JRDesignStyle.PROPERTY_HORIZONTAL_TEXT_ALIGNMENT, element.getOwnHorizontalTextAlign());
-		result.put(JRDesignStyle.PROPERTY_MARKUP, element.getOwnMarkup());
-		result.put(JRDesignStyle.PROPERTY_VERTICAL_TEXT_ALIGNMENT, element.getOwnVerticalTextAlign());
-		return result;
 	}
 
 	/**

@@ -67,7 +67,12 @@ public abstract class MTextElement extends MGraphicElementLineBox implements IRo
 		HashMap<String, Object> result = super.getStylesDescriptors();
 		if (getValue() == null)
 			return result;
+		JRDesignTextElement jrElement = (JRDesignTextElement) getValue();
 		result.put(PARAGRAPH, getPropertyValue(PARAGRAPH));
+		result.put(JRDesignStyle.PROPERTY_VERTICAL_TEXT_ALIGNMENT, jrElement.getOwnVerticalTextAlign());
+		result.put(JRDesignStyle.PROPERTY_HORIZONTAL_TEXT_ALIGNMENT, jrElement.getOwnHorizontalTextAlign());
+		result.put(JRDesignStyle.PROPERTY_ROTATION, jrElement.getOwnRotationValue());;
+		result.put(JRDesignStyle.PROPERTY_MARKUP, jrElement.getOwnMarkup());
 		result.putAll(tFont.getStylesDescriptors());
 		return result;
 	}
