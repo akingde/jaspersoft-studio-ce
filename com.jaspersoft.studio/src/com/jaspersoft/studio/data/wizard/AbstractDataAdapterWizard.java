@@ -15,6 +15,7 @@ package com.jaspersoft.studio.data.wizard;
 import java.lang.reflect.InvocationTargetException;
 
 import net.sf.jasperreports.data.DataAdapter;
+import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.DataAdapterServiceUtil;
 import net.sf.jasperreports.eclipse.classpath.JavaProjectClassLoader;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
@@ -29,7 +30,6 @@ import org.eclipse.jface.dialogs.IPageChangedListener;
 import org.eclipse.jface.dialogs.IPageChangingListener;
 import org.eclipse.jface.dialogs.PageChangedEvent;
 import org.eclipse.jface.dialogs.PageChangingEvent;
-import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -41,6 +41,7 @@ import com.jaspersoft.studio.data.storage.ADataAdapterStorage;
 import com.jaspersoft.studio.data.wizard.pages.DataAdapterEditorPage;
 import com.jaspersoft.studio.data.wizard.pages.DataAdaptersListPage;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.utils.jobs.CheckedRunnableWithProgress;
 import com.jaspersoft.studio.wizards.JSSWizard;
 
 /**
@@ -130,10 +131,12 @@ public abstract class AbstractDataAdapterWizard extends JSSWizard implements Sel
 		if (getContainer().getCurrentPage() == dataAdapterEditorPage) {
 			final DataAdapter da = dataAdapterEditorPage.getDataAdapterEditor().getDataAdapter().getDataAdapter();
 			try {
-				getContainer().run(true, true, new IRunnableWithProgress() {
-
+				getContainer().run(true, true, new CheckedRunnableWithProgress() {
+					
+					private DataAdapterService daService = null;
+					
 					@Override
-					public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+					protected void runOperations(IProgressMonitor monitor) {
 						monitor.beginTask("Testing Data Adapter", SWT.INDETERMINATE);
 						ClassLoader oldCL = Thread.currentThread().getContextClassLoader();
 						try {
@@ -154,7 +157,8 @@ public abstract class AbstractDataAdapterWizard extends JSSWizard implements Sel
 
 							getConfig().setClassLoader(cl);
 
-							DataAdapterServiceUtil.getInstance(getConfig()).getService(da).test();
+							daService = DataAdapterServiceUtil.getInstance(getConfig()).getService(da);
+							daService.test();
 							UIUtils.getDisplay().asyncExec(new Runnable() {
 
 								@Override
@@ -170,7 +174,15 @@ public abstract class AbstractDataAdapterWizard extends JSSWizard implements Sel
 							Thread.currentThread().setContextClassLoader(oldCL);
 						}
 					}
+					
+					@Override
+					protected void abortOperationInvoked() {
+						if(daService!=null) {
+							daService.dispose();
+						}
+					}
 				});
+				
 			} catch (InvocationTargetException e1) {
 				UIUtils.showError(e1.getCause());
 			} catch (InterruptedException e1) {
