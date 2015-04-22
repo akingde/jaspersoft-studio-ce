@@ -13,10 +13,8 @@
 package com.jaspersoft.studio.community.wizards;
 
 import java.io.File;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.HttpUtils;
@@ -30,7 +28,6 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyleRange;
@@ -53,6 +50,7 @@ import com.jaspersoft.studio.community.utils.CommunityAPIException;
 import com.jaspersoft.studio.community.utils.CommunityAPIUtils;
 import com.jaspersoft.studio.community.utils.CommunityUser;
 import com.jaspersoft.studio.community.zip.ZipEntry;
+import com.jaspersoft.studio.utils.jobs.CheckedRunnableWithProgress;
 
 /**
  * Wizard for the issue creation.
@@ -100,16 +98,23 @@ public final class IssueCreationWizard extends Wizard {
 		}
 		// Tries to save issue
 		try {
-			getContainer().run(true, true, new IRunnableWithProgress() {
+			getContainer().run(true, true, new CheckedRunnableWithProgress() {
+				
 				@Override
-				public void run(IProgressMonitor monitor)
-						throws InvocationTargetException, InterruptedException {
+				protected void runOperations(IProgressMonitor monitor) {
 					monitor.beginTask(Messages.IssueCreationWizard_TaskName,
 							IProgressMonitor.UNKNOWN);
 					isPublished = publishNewIssue(issueRequest, zipEntries,	authInfo, monitor);
 					monitor.done();
 				}
+				
+				@Override
+				protected void abortOperationInvoked() {
+					HttpClientUtils.closeQuietly(httpclient);
+					httpclient = null;					
+				}
 			});
+			
 		} catch (Exception e) {
 			UIUtils.showError(Messages.IssueCreationWizard_PublishingAbortedMessage, e);
 		}
@@ -127,26 +132,6 @@ public final class IssueCreationWizard extends Wizard {
 
 	private boolean publishNewIssue(IssueRequest issueRequest,
 			List<ZipEntry> zipEntries, CommunityUser authInfo, final IProgressMonitor monitor) {
-		Thread executionChecker = new Thread(new Runnable() {
-			private boolean forcedClose = false;
-			
-			@Override
-			public void run() {
-				while(!forcedClose) {
-					try {
-						TimeUnit.MILLISECONDS.sleep(500);
-						if(monitor.isCanceled()) {
-							HttpClientUtils.closeQuietly(httpclient);
-							forcedClose = true;
-						}
-					} catch (InterruptedException e) {
-						
-					}
-				}
-			}
-		});
-		executionChecker.start();
-		
 		try {
 			CookieStore cookieStore = new BasicCookieStore();
 			httpclient = HttpUtils.setupProxy(HttpClientBuilder.create())
@@ -177,7 +162,6 @@ public final class IssueCreationWizard extends Wizard {
 		} finally {
 			HttpClientUtils.closeQuietly(httpclient);
 			httpclient = null;
-			executionChecker.interrupt();
 		}
 		return true;
 	}
