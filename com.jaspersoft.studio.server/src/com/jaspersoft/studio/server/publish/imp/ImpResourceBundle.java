@@ -13,6 +13,7 @@
 package com.jaspersoft.studio.server.publish.imp;
 
 import java.io.File;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Set;
 
@@ -40,7 +41,11 @@ public class ImpResourceBundle extends AImpObject {
 		File f = null;
 		URL url = jConfig.getClassLoader().getResource(dpath + ".properties");
 		if (url != null)
-			f = new File(url.toURI());
+			try {
+				f = new File(url.toURI());
+			} catch (URISyntaxException e) {
+				f = findFile(file, dpath + ".properties");
+			}
 		else
 			f = findFile(file, dpath + ".properties");
 		if (f != null && f.exists()) {
