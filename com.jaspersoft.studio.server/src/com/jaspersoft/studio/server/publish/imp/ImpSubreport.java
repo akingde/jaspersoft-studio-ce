@@ -41,7 +41,8 @@ public class ImpSubreport extends AImpObject {
 
 	@Override
 	protected File findFile(IFile file, String str) {
-		File f = super.findFile(file, str.replaceAll(FileExtension.PointJASPER, FileExtension.PointJRXML));
+		File f = super.findFile(file, str.replaceAll(FileExtension.PointJASPER,
+				FileExtension.PointJRXML));
 		if (f == null) {
 			f = super.findFile(file, str);
 			if (f != null) {

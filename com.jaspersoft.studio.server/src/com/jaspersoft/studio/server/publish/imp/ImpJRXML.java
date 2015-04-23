@@ -50,7 +50,8 @@ public class ImpJRXML {
 	}
 
 	// public MJrxml publish(MReportUnit mrunit, IProgressMonitor monitor,
-	// JasperDesign jasper, JasperReportsConfiguration jrConfig) throws Exception
+	// JasperDesign jasper, JasperReportsConfiguration jrConfig) throws
+	// Exception
 	// {
 	// ResourceDescriptor runit = mrunit.getValue();
 	//
@@ -62,14 +63,15 @@ public class ImpJRXML {
 	//
 	// MJrxml mres = (MJrxml) ResourceFactory.getResource(mrunit, rd, -1);
 	//
-	// mres.setPublishOptions(new PublishOptions());
+	// mres.setPublishOptions(createOption(jrConf, str));
 	//
 	// PublishUtil.getResources(mrunit, monitor, jrConfig).add(mres);
 	// return mres;
 	// }
 
 	protected File findFile(IFile file, String str) {
-		File f = FileUtils.findFile(file, str.replaceAll(FileExtension.PointJASPER, FileExtension.PointJRXML));
+		File f = FileUtils.findFile(file, str.replaceAll(
+				FileExtension.PointJASPER, FileExtension.PointJRXML));
 		if (f == null) {
 			f = FileUtils.findFile(file, str);
 			if (f != null) {
@@ -97,12 +99,18 @@ public class ImpJRXML {
 		return f;
 	}
 
-	public AFileResource publish(JasperDesign jd, StandardSubreportPartComponent img, MReportUnit mrunit, IProgressMonitor monitor, Set<String> fileset, IFile file) throws Exception {
+	public AFileResource publish(JasperDesign jd,
+			StandardSubreportPartComponent img, MReportUnit mrunit,
+			IProgressMonitor monitor, Set<String> fileset, IFile file)
+			throws Exception {
 		return findFile(mrunit, monitor, jd, fileset, getExpression(img), file);
 	}
 
-	protected AFileResource findFile(MReportUnit mrunit, IProgressMonitor monitor, JasperDesign jd, Set<String> fileset, JRDesignExpression exp, IFile file) {
-		String str = ExpressionUtil.cachedExpressionEvaluationString(exp, jrConfig);
+	protected AFileResource findFile(MReportUnit mrunit,
+			IProgressMonitor monitor, JasperDesign jd, Set<String> fileset,
+			JRDesignExpression exp, IFile file) {
+		String str = ExpressionUtil.cachedExpressionEvaluationString(exp,
+				jrConfig);
 		if (str.startsWith("repo:"))
 			str = str.replaceFirst("repo:", "");
 		if (str == null || fileset.contains(str))
@@ -110,7 +118,7 @@ public class ImpJRXML {
 
 		File f = findFile(file, str);
 		if (f != null && f.exists()) {
-			PublishOptions popt = new PublishOptions();
+			PublishOptions popt = AImpObject.createOptions(jrConfig, str);
 			popt.setjExpression(exp);
 			if (!f.getName().contains(":"))
 				popt.setExpression("\"repo:" + f.getName() + "\"");
@@ -121,7 +129,8 @@ public class ImpJRXML {
 		return null;
 	}
 
-	protected AFileResource addResource(IProgressMonitor monitor, MReportUnit mrunit, Set<String> fileset, File f, PublishOptions popt) {
+	protected AFileResource addResource(IProgressMonitor monitor,
+			MReportUnit mrunit, Set<String> fileset, File f, PublishOptions popt) {
 		ResourceDescriptor runit = mrunit.getValue();
 		String rname = f.getName();
 		if (rname.startsWith("repo:"))
@@ -144,7 +153,8 @@ public class ImpJRXML {
 			rd.setUriString(rd.getParentFolder() + "/" + rd.getName());
 		}
 
-		AFileResource mres = (AFileResource) ResourceFactory.getResource(mrunit, rd, -1);
+		AFileResource mres = (AFileResource) ResourceFactory.getResource(
+				mrunit, rd, -1);
 		mres.setFile(f);
 		mres.setPublishOptions(popt);
 
@@ -156,7 +166,9 @@ public class ImpJRXML {
 		return MJrxml.createDescriptor(mrunit);
 	}
 
-	protected JRDesignExpression getExpression(StandardSubreportPartComponent img) {
-		return (JRDesignExpression) ((StandardSubreportPartComponent) img).getExpression();
+	protected JRDesignExpression getExpression(
+			StandardSubreportPartComponent img) {
+		return (JRDesignExpression) ((StandardSubreportPartComponent) img)
+				.getExpression();
 	}
 }

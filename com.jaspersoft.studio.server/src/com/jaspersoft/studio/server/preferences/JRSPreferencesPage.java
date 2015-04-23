@@ -18,14 +18,16 @@ import org.eclipse.ui.IWorkbench;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.preferences.util.FieldEditorOverlayPage;
+import com.jaspersoft.studio.server.messages.Messages;
 
 /**
  * @author Veaceslav Chicu (schicu@users.sourceforge.net)
- *
+ * 
  */
 public class JRSPreferencesPage extends FieldEditorOverlayPage {
 
 	public static final String PUBLISH_REPORT_TOJRSONSAVE = "PUBLISH_REPORT_TOJRSONSAVE"; //$NON-NLS-1$
+	public static final String PUBLISH_REPORT_OVERRIDEBYDEFAULT = "com.jaspersoft.studio.server.PUBLISH_REPORT_OVERRIDEBYDEFAULT"; //$NON-NLS-1$
 
 	public JRSPreferencesPage() {
 		super(GRID);
@@ -44,10 +46,15 @@ public class JRSPreferencesPage extends FieldEditorOverlayPage {
 				PUBLISH_REPORT_TOJRSONSAVE,
 				com.jaspersoft.studio.server.messages.Messages.JRSPreferencesPage_1,
 				getFieldEditorParent()));
+		addField(new BooleanFieldEditor(
+				PUBLISH_REPORT_OVERRIDEBYDEFAULT,
+				Messages.JRSPreferencesPage_0,
+				getFieldEditorParent()));
 	}
 
 	public static void getDefaults(IPreferenceStore store) {
 		store.setDefault(PUBLISH_REPORT_TOJRSONSAVE, true); //$NON-NLS-1$
+		store.setDefault(PUBLISH_REPORT_OVERRIDEBYDEFAULT, true); //$NON-NLS-1$
 	}
 
 	/*

@@ -13,8 +13,6 @@
 package com.jaspersoft.studio.server.publish.imp;
 
 import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.List;
 import java.util.Set;
 
@@ -32,6 +30,7 @@ import com.jaspersoft.studio.server.ResourceFactory;
 import com.jaspersoft.studio.server.model.AFileResource;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.preferences.JRSPreferencesPage;
 import com.jaspersoft.studio.server.publish.OverwriteEnum;
 import com.jaspersoft.studio.server.publish.PublishOptions;
 import com.jaspersoft.studio.server.publish.PublishUtil;
@@ -55,15 +54,11 @@ public abstract class AImpObject {
 			return null;
 		File f = findFile(file, str);
 		if (f != null && f.exists()) {
-			PublishOptions popt = new PublishOptions();
+			PublishOptions popt = createOptions(jrConfig, str);
 			popt.setjExpression(exp);
 			if (!f.getName().contains(":"))
 				popt.setExpression("\"repo:"
 						+ IDStringValidator.safeChar(f.getName()) + "\"");
-			if (isRemoteResource(str))
-				popt.setOverwrite(OverwriteEnum.IGNORE);
-			else
-				popt.setOverwrite(OverwriteEnum.OVERWRITE);
 
 			fileset.add(str);
 
@@ -72,15 +67,24 @@ public abstract class AImpObject {
 		return null;
 	}
 
-	protected boolean isRemoteResource(String path) {
-		try {
-			URL url = new URL(path);
-			if (url.getProtocol().equals("file"))
-				return false;
-		} catch (MalformedURLException e) {
+	public static PublishOptions createOptions(
+			JasperReportsConfiguration jrConfig, String path) {
+		PublishOptions popt = new PublishOptions();
+		Boolean b = jrConfig.getPropertyBoolean(
+				JRSPreferencesPage.PUBLISH_REPORT_OVERRIDEBYDEFAULT, true);
+		if (!b || (path != null && isRemoteResource(path)))
+			popt.setOverwrite(OverwriteEnum.IGNORE);
+		else
+			popt.setOverwrite(OverwriteEnum.OVERWRITE);
+		return popt;
+	}
+
+	public static boolean isRemoteResource(String path) {
+		if (path == null)
 			return false;
-		}
-		return true;
+		if (path.startsWith("\\w+?://") && !path.startsWith("file://"))
+			return true;
+		return false;
 	}
 
 	protected String getPath(Set<String> fileset, JRDesignExpression exp) {

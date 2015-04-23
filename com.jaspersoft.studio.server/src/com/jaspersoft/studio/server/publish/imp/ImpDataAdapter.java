@@ -72,7 +72,7 @@ public class ImpDataAdapter extends AImpObject {
 		File f = findFile(file, dpath);
 		if (f != null && f.exists()) {
 			fileset.add(f.getAbsolutePath());
-			PublishOptions popt = new PublishOptions();
+			PublishOptions popt = createOptions(jrConfig, dpath);
 			// popt.setDataset(jd);
 			AFileResource fr = addResource(monitor, mrunit, fileset, f, popt);
 			popt.setValueSetter(popt.new ValueSetter<JRDesignDataset>(
@@ -168,7 +168,7 @@ public class ImpDataAdapter extends AImpObject {
 								MRDataAdapterFile mdaf = new MRDataAdapterFile(
 										mrunit, rd, -1);
 								mdaf.setFile(file);
-								PublishOptions fpopt = new PublishOptions();
+								PublishOptions fpopt = createOptions(jrConfig, fname);
 								mdaf.setPublishOptions(fpopt);
 								fpopt.setValueSetter(popt.new ValueSetter<DataAdapter>(
 										da) {

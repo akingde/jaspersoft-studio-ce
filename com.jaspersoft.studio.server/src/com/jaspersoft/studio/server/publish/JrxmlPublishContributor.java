@@ -248,10 +248,15 @@ public class JrxmlPublishContributor implements IPublishContributor {
 				continue;
 			impBundle.publish(jrConfig, jasper, dapath, mrunit, monitor,
 					fileset, file);
-			for (Locale l : Locale.getAvailableLocales())
+			for (Locale l : Locale.getAvailableLocales()) {
 				impBundle.publish(jrConfig, jasper,
 						dapath + "_" + l.toString(), mrunit, monitor, fileset,
 						file);
+				if (monitor.isCanceled())
+					return;
+			}
+			if (monitor.isCanceled())
+				return;
 		}
 	}
 

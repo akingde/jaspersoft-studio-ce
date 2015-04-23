@@ -49,7 +49,7 @@ public abstract class AImpResource extends AImpObject {
 			return null;
 		File f = findFile(file, str);
 		if (f != null && f.exists()) {
-			final PublishOptions popt = new PublishOptions();
+			final PublishOptions popt = createOptions(jrConfig, str);
 
 			if (exp != null) {
 				popt.setjExpression(exp);

@@ -23,7 +23,7 @@ import com.jaspersoft.studio.utils.Misc;
  * 
  */
 public class PublishOptions {
-	private OverwriteEnum isOverwrite;
+	private OverwriteEnum isOverwrite = OverwriteEnum.OVERWRITE;
 	private JRDesignExpression jExpression;
 	private String expression;
 	private JRDesignDataset dataset;
