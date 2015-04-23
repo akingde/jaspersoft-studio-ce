@@ -25,7 +25,6 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.ui.views.properties.IPropertySource;
 
 import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.components.list.model.MList;
@@ -33,7 +32,6 @@ import com.jaspersoft.studio.editor.layout.ILayout;
 import com.jaspersoft.studio.editor.layout.LayoutManager;
 import com.jaspersoft.studio.model.IContainerLayout;
 import com.jaspersoft.studio.model.MGraphicElement;
-import com.jaspersoft.studio.property.SetValueCommand;
 import com.jaspersoft.studio.utils.SelectionHelper;
 
 /*
@@ -104,24 +102,25 @@ public class CreateElementCommand extends Command {
 		jrElement.setWidth(location.width);
 		jrElement.setHeight(location.height);
 
-		DesignListContents contents = (DesignListContents) listcomponent
-				.getContents();
-		int h = jrElement.getY() + jrElement.getHeight();
-		if (contents.getHeight() < h) {
-			SetValueCommand cmd = new SetValueCommand();
-			cmd.setTarget((IPropertySource) destNode);
-			cmd.setPropertyId(MList.PREFIX + DesignListContents.PROPERTY_HEIGHT);
-			cmd.setPropertyValue(h);
-			addCommand(cmd);
-		}
-		int w = jrElement.getX() + jrElement.getWidth();
-		if (contents.getWidth() < w) {
-			SetValueCommand cmd = new SetValueCommand();
-			cmd.setTarget((IPropertySource) destNode);
-			cmd.setPropertyId(MList.PREFIX + DesignListContents.PROPERTY_WIDTH);
-			cmd.setPropertyValue(w);
-			addCommand(cmd);
-		}
+// 	Commented for bug fixing community bug #3758
+//		DesignListContents contents = (DesignListContents) listcomponent
+//				.getContents();
+//		int h = jrElement.getY() + jrElement.getHeight();
+//		if (contents.getHeight() < h) {
+//			SetValueCommand cmd = new SetValueCommand();
+//			cmd.setTarget((IPropertySource) destNode);
+//			cmd.setPropertyId(MList.PREFIX + DesignListContents.PROPERTY_HEIGHT);
+//			cmd.setPropertyValue(h);
+//			addCommand(cmd);
+//		}
+//		int w = jrElement.getX() + jrElement.getWidth();
+//		if (contents.getWidth() < w) {
+//			SetValueCommand cmd = new SetValueCommand();
+//			cmd.setTarget((IPropertySource) destNode);
+//			cmd.setPropertyId(MList.PREFIX + DesignListContents.PROPERTY_WIDTH);
+//			cmd.setPropertyValue(w);
+//			addCommand(cmd);
+//		}
 	}
 
 	public void setJrGroup(StandardListComponent jrGroup) {
