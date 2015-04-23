@@ -23,11 +23,12 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+import com.jaspersoft.studio.utils.jobs.AbortOperationListener;
 import com.jaspersoft.studio.wizards.JSSWizard;
 
 
 
-public abstract class AWizardDataEditorComposite extends Composite {
+public abstract class AWizardDataEditorComposite extends Composite implements AbortOperationListener {
 
 	private WizardPage page;
 	/**
@@ -106,4 +107,10 @@ public abstract class AWizardDataEditorComposite extends Composite {
    * return a list of JRDesignParameter or null if no fields have been read
    */
   public abstract List<JRDesignParameter> readParameters() throws Exception;
+
+	@Override
+	public void abortOperationOccured() {
+		// default - do nothing
+	}
+  
 }

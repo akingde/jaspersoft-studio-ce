@@ -88,6 +88,8 @@ public class SimpleQueryWizardDataEditorComposite extends AWizardDataEditorCompo
 	 * A simple title to be used to say something like: "Write a query in SQL..."
 	 */
 	private String title = null;
+	
+	private DataAdapterService das;
 
 	public SimpleQueryWizardDataEditorComposite(Composite parent, WizardPage page, String lang) {
 		this(parent, page, null, lang);
@@ -213,8 +215,9 @@ public class SimpleQueryWizardDataEditorComposite extends AWizardDataEditorCompo
 		if (getDataAdapterDescriptor() != null && getDataAdapterDescriptor() instanceof IFieldsProvider) {
 			questionReturnCode = SWT.OK;
 			JasperReportsConfiguration jContext = getJasperReportsConfiguration();
-			DataAdapterService das = DataAdapterServiceUtil.getInstance(jContext).getService(
+			das = DataAdapterServiceUtil.getInstance(jContext).getService(
 					getDataAdapterDescriptor().getDataAdapter());
+			
 			try {
 				JRDesignDataset tmpDataset = getDataset();
 				if (tmpDataset.getQuery().getText() == null || tmpDataset.getQuery().getText().trim().length() == 0) {
@@ -260,10 +263,18 @@ public class SimpleQueryWizardDataEditorComposite extends AWizardDataEditorCompo
 				}
 			} finally {
 				das.dispose();
+				das = null;
 			}
 		}
 		return Misc.nvl(fields, new ArrayList<JRDesignField>());
 
+	}
+	
+	@Override
+	public void abortOperationOccured() {
+		if(das!=null){
+			das.dispose();
+		}
 	}
 
 	/**

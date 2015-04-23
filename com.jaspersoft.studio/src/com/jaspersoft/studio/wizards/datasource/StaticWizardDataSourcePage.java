@@ -51,6 +51,7 @@ import com.jaspersoft.studio.data.ui.SimpleQueryWizardDataEditorComposite;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.datasource.MDatasources;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+import com.jaspersoft.studio.utils.jobs.ProgressMonitorCheckerThread;
 import com.jaspersoft.studio.wizards.ContextHelpIDs;
 import com.jaspersoft.studio.wizards.JSSWizard;
 import com.jaspersoft.studio.wizards.JSSWizardRunnablePage;
@@ -370,6 +371,10 @@ public class StaticWizardDataSourcePage extends JSSWizardRunnablePage {
 					monitor.setTaskName("Getting fields...");
 				}
 			});
+			
+			ProgressMonitorCheckerThread checker = new ProgressMonitorCheckerThread(monitor);
+			checker.addListener(activeEditor);
+			checker.start();
 
 			List<JRDesignField> fields = activeEditor.readFields();
 

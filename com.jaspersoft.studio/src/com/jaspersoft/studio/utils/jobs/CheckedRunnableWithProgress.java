@@ -13,7 +13,6 @@
 package com.jaspersoft.studio.utils.jobs;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.concurrent.TimeUnit;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -31,14 +30,13 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
  * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
  *
  */
-public abstract class CheckedRunnableWithProgress implements IRunnableWithProgress {
+public abstract class CheckedRunnableWithProgress implements IRunnableWithProgress, AbortOperationListener {
 
-	public static final int DEFAULT_CHECK_INTERVAL = 500;
-	private Thread executionChecker = null;
+	private ProgressMonitorCheckerThread executionChecker = null;
 	private int sleepTimeout;
 	
 	public CheckedRunnableWithProgress() {
-		this(DEFAULT_CHECK_INTERVAL);
+		this(ProgressMonitorCheckerThread.DEFAULT_CHECK_INTERVAL);
 	}
 	
 	public CheckedRunnableWithProgress(int sleepTimeout) {
@@ -47,27 +45,8 @@ public abstract class CheckedRunnableWithProgress implements IRunnableWithProgre
 
 	@Override
 	public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-		executionChecker = new Thread(new Runnable() {
-			private volatile boolean execute;
-			
-			@Override
-			public void run() {
-				this.execute = true;
-				while(execute) {
-					try {
-						TimeUnit.MILLISECONDS.sleep(sleepTimeout);
-						if(monitor.isCanceled()) {
-							execute = false;
-							abortOperationInvoked();
-						}
-					}
-					catch (InterruptedException ex) {
-						execute = false;
-					}
-				}
-			}
-			
-		});	
+		executionChecker = new ProgressMonitorCheckerThread(monitor,sleepTimeout);
+		executionChecker.addListener(this);
 		executionChecker.start();
 		
 		try {
@@ -106,6 +85,13 @@ public abstract class CheckedRunnableWithProgress implements IRunnableWithProgre
 	protected void disposeResources() {
 		// do nothing...
 	}
-	
+
+	/**
+	 * Default implementation invoke the {@link #abortOperationInvoked()} method.
+	 */
+	@Override
+	public void abortOperationOccured() {
+		abortOperationInvoked();
+	}
 	
 }
