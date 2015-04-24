@@ -22,10 +22,23 @@ import org.eclipse.core.databinding.observable.list.IObservableList;
 import org.eclipse.swt.widgets.Composite;
 
 public abstract class ADataAdapterComposite extends Composite {
-	protected DataBindingContext bindingContext;
 
 	public final static String PREFIX = "com.jaspersoft.studio.doc.";
+	
+	protected DataAdapterDescriptor dataAdapterDesc;
+	
+	private JasperReportsContext jrContext;
+	
+	protected DataBindingContext bindingContext;
 
+
+	protected IChangeListener listener = new IChangeListener() {
+
+		public void handleChange(ChangeEvent event) {
+			pchangesuport.firePropertyChange("dirty", false, true);
+		}
+	};
+	
 	public ADataAdapterComposite(Composite parent, int style, JasperReportsContext jrContext) {
 		super(parent, style);
 		this.jrContext = jrContext;
@@ -78,14 +91,6 @@ public abstract class ADataAdapterComposite extends Composite {
 		super.dispose();
 	}
 
-	protected IChangeListener listener = new IChangeListener() {
-
-		public void handleChange(ChangeEvent event) {
-			pchangesuport.firePropertyChange("dirty", false, true);
-		}
-	};
-	protected DataAdapterDescriptor dataAdapterDesc;
-
 	public void setDataAdapter(DataAdapterDescriptor dataAdapterDesc) {
 		this.dataAdapterDesc = dataAdapterDesc;
 		DataAdapter dataAdapter = dataAdapterDesc.getDataAdapter();
@@ -99,8 +104,6 @@ public abstract class ADataAdapterComposite extends Composite {
 
 		addDirtyListenersToContext();
 	}
-
-	private JasperReportsContext jrContext;
 
 	public JasperReportsContext getJrContext() {
 		return jrContext;
