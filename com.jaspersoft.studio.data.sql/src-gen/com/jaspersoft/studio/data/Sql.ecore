@@ -4,13 +4,6 @@
   <eClassifiers xsi:type="ecore:EClass" name="Model">
     <eStructuralFeatures xsi:type="ecore:EReference" name="query" eType="#//SelectQuery"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="orderByEntry" eType="#//OrOrderByColumn"
-        containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="lim" eType="#//Limit" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="offset" eType="#//Offset"
-        containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="fetchFirst" eType="#//FetchFirst"
-        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="FetchFirst">
     <eStructuralFeatures xsi:type="ecore:EReference" name="fetchFirst" eType="#//IntegerValue"
@@ -45,6 +38,13 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="groupByEntry" eType="#//OrGroupByColumn"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="havingEntry" eType="#//OrExpr"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="orderByEntry" eType="#//OrOrderByColumn"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="lim" eType="#//Limit" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="offset" eType="#//Offset"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fetchFirst" eType="#//FetchFirst"
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="OrColumn" eSuperTypes="#//PivotForClause">
@@ -266,6 +266,8 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="fcast" eType="#//OpFunctionCast"
         containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fext" eType="#//FunctionExtract"
+        containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="func" eType="#//OpFunction"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="sqlcase" eType="#//SQLCaseOperand"
@@ -284,11 +286,23 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="fan" eType="#//FunctionAnalytical"
         containment="true"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FunctionExtract">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="v" eType="#//EXTRACT_VALUES"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="operand" eType="#//Operands"
+        containment="true"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="FunctionAnalytical">
     <eStructuralFeatures xsi:type="ecore:EReference" name="anClause" eType="#//AnalyticClause"
         containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="AnalyticClause"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AnalyticClause">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="abc" eType="#//QueryPartitionClause"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="obc" eType="#//OrderByClause"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="winc" eType="#//WindowingClause"
+        containment="true"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="WindowingClause"/>
   <eClassifiers xsi:type="ecore:EClass" name="WindowingClauseBetween" eSuperTypes="#//WindowingClause">
     <eStructuralFeatures xsi:type="ecore:EReference" name="wcoP" eType="#//WindowingClauseOperandPreceding"
@@ -313,11 +327,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="col" eType="#//AnalyticExprArg"
         containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="QueryPartitionClause" eSuperTypes="#//AnalyticClause">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="obc" eType="#//OrderByClause"
-        containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="winc" eType="#//WindowingClause"
-        containment="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="QueryPartitionClause">
     <eStructuralFeatures xsi:type="ecore:EReference" name="args" eType="#//AnalyticExprArgs"
         containment="true"/>
   </eClassifiers>
@@ -378,6 +388,28 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="eexp" eType="#//Operands"
         containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="EXTRACT_VALUES">
+    <eLiterals name="ms" literal="MICROSECOND"/>
+    <eLiterals name="s" value="1" literal="SECOND"/>
+    <eLiterals name="m" value="2" literal="MINUTE"/>
+    <eLiterals name="h" value="3" literal="HOUR"/>
+    <eLiterals name="day" value="4" literal="DAY"/>
+    <eLiterals name="week" value="5" literal="WEEK"/>
+    <eLiterals name="month" value="6" literal="MONTH"/>
+    <eLiterals name="quart" value="7" literal="QUARTER"/>
+    <eLiterals name="year" value="8" literal="YEAR"/>
+    <eLiterals name="micros" value="9" literal="SECOND_MICROSECOND"/>
+    <eLiterals name="minMicro" value="10" literal="MINUTE_MICROSECOND"/>
+    <eLiterals name="minSec" value="11" literal="MINUTE_SECOND"/>
+    <eLiterals name="hms" value="12" literal="HOUR_MICROSECOND"/>
+    <eLiterals name="hs" value="13" literal="HOUR_SECOND"/>
+    <eLiterals name="hmin" value="14" literal="HOUR_MINUTE"/>
+    <eLiterals name="dms" value="15" literal="DAY_MICROSECOND"/>
+    <eLiterals name="ds" value="16" literal="DAY_SECOND"/>
+    <eLiterals name="daymin" value="17" literal="DAY_MINUTE"/>
+    <eLiterals name="dayh" value="18" literal="DAY_HOUR"/>
+    <eLiterals name="yearMonth" value="19" literal="YEAR_MONTH"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="XFunction">
     <eLiterals name="xin" literal="IN"/>

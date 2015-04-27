@@ -445,6 +445,13 @@ public class SqlSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
+      case SqlPackage.FUNCTION_EXTRACT:
+      {
+        FunctionExtract functionExtract = (FunctionExtract)theEObject;
+        T result = caseFunctionExtract(functionExtract);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
       case SqlPackage.FUNCTION_ANALYTICAL:
       {
         FunctionAnalytical functionAnalytical = (FunctionAnalytical)theEObject;
@@ -515,7 +522,6 @@ public class SqlSwitch<T> extends Switch<T>
       {
         QueryPartitionClause queryPartitionClause = (QueryPartitionClause)theEObject;
         T result = caseQueryPartitionClause(queryPartitionClause);
-        if (result == null) result = caseAnalyticClause(queryPartitionClause);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -524,7 +530,6 @@ public class SqlSwitch<T> extends Switch<T>
         AnalyticExprArgs analyticExprArgs = (AnalyticExprArgs)theEObject;
         T result = caseAnalyticExprArgs(analyticExprArgs);
         if (result == null) result = caseQueryPartitionClause(analyticExprArgs);
-        if (result == null) result = caseAnalyticClause(analyticExprArgs);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -534,7 +539,6 @@ public class SqlSwitch<T> extends Switch<T>
         T result = caseAnalyticExprArg(analyticExprArg);
         if (result == null) result = caseAnalyticExprArgs(analyticExprArg);
         if (result == null) result = caseQueryPartitionClause(analyticExprArg);
-        if (result == null) result = caseAnalyticClause(analyticExprArg);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -752,7 +756,6 @@ public class SqlSwitch<T> extends Switch<T>
         T result = caseAExpArgs(aExpArgs);
         if (result == null) result = caseAnalyticExprArgs(aExpArgs);
         if (result == null) result = caseQueryPartitionClause(aExpArgs);
-        if (result == null) result = caseAnalyticClause(aExpArgs);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -1572,6 +1575,22 @@ public class SqlSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseOpFunction(OpFunction object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Function Extract</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Function Extract</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseFunctionExtract(FunctionExtract object)
   {
     return null;
   }

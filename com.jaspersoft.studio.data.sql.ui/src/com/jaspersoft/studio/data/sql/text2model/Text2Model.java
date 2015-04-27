@@ -37,11 +37,13 @@ import com.jaspersoft.studio.utils.Misc;
 public class Text2Model {
 	private static boolean isRunning = false;
 
-	public static void text2model(final SQLQueryDesigner designer, XtextDocument doc) {
+	public static void text2model(final SQLQueryDesigner designer,
+			XtextDocument doc) {
 		text2model(designer, doc, false);
 	}
 
-	public static void text2model(final SQLQueryDesigner designer, final XtextDocument doc, final boolean showWarning) {
+	public static void text2model(final SQLQueryDesigner designer,
+			final XtextDocument doc, final boolean showWarning) {
 		try {
 			if (isRunning)
 				return;
@@ -67,27 +69,43 @@ public class Text2Model {
 							if (obj instanceof ModelImpl) {
 								SelectQuery sq = ((ModelImpl) obj).getQuery();
 								if (sq instanceof SelectImpl) {
-									convertSelect(designer, root, (SelectImpl) sq);
-									EList<SelectSubSet> op = ((SelectImpl) sq).getOp();
+									convertSelect(designer, root,
+											(SelectImpl) sq);
+									EList<SelectSubSet> op = ((SelectImpl) sq)
+											.getOp();
 									if (op != null && !op.isEmpty()) {
 										for (SelectSubSet sss : op) {
 											MUnion munion = null;
 											if (sss.getOp() != null) {
-												munion = CreateUnion.createUnion(root);
-												String setop = sss.getOp().toUpperCase();
-												if (setop.equals(AMKeyword.SET_OPERATOR_UNION) && sss.getAll() != null)
+												munion = CreateUnion
+														.createUnion(root);
+												String setop = sss.getOp()
+														.toUpperCase();
+												if (setop
+														.equals(AMKeyword.SET_OPERATOR_UNION)
+														&& sss.getAll() != null)
 													setop += " ALL"; //$NON-NLS-1$
 												munion.setValue(setop);
 											}
-											convertSelect(designer, Misc.nvl(munion, root), (SelectImpl) sss.getQuery());
+											convertSelect(designer,
+													Misc.nvl(munion, root),
+													(SelectImpl) sss.getQuery());
 										}
 									}
 								}
 							}
-							ConvertOrderBy.convertOrderBy(designer, ((ModelImpl) obj).getOrderByEntry());
-							ConvertLimit.convertLimit(designer, ((ModelImpl) obj).getLim());
-							ConvertOffset.convertOffset(designer, ((ModelImpl) obj).getOffset());
-							ConvertFetchFirst.convertFetchFirst(designer, ((ModelImpl) obj).getFetchFirst());
+							ConvertOrderBy.convertOrderBy(designer,
+									((SelectImpl) ((ModelImpl) obj).getQuery())
+											.getOrderByEntry());
+							ConvertLimit.convertLimit(designer,
+									((SelectImpl) ((ModelImpl) obj).getQuery())
+											.getLim());
+							ConvertOffset.convertOffset(designer,
+									((SelectImpl) ((ModelImpl) obj).getQuery())
+											.getOffset());
+							ConvertFetchFirst.convertFetchFirst(designer,
+									((SelectImpl) ((ModelImpl) obj).getQuery())
+											.getFetchFirst());
 						}
 					}
 					isRunning = false;
@@ -99,11 +117,15 @@ public class Text2Model {
 		}
 	}
 
-	public static void convertSelect(SQLQueryDesigner designer, ANode qroot, SelectImpl sel) {
+	public static void convertSelect(SQLQueryDesigner designer, ANode qroot,
+			SelectImpl sel) {
 		ConvertTables.convertTables(designer, qroot, sel.getTbl());
-		ConvertSelectColumns.convertSelectColumns(designer, qroot, sel.getCols());
-		ConvertExpression.convertExpression(designer, qroot, Util.getKeyword(qroot, MWhere.class), sel.getWhereExpression());
+		ConvertSelectColumns.convertSelectColumns(designer, qroot,
+				sel.getCols());
+		ConvertExpression.convertExpression(designer, qroot,
+				Util.getKeyword(qroot, MWhere.class), sel.getWhereExpression());
 		ConvertGroupBy.convertGroupBy(designer, qroot, sel.getGroupByEntry());
-		ConvertExpression.convertExpression(designer, qroot, Util.getKeyword(qroot, MHaving.class), sel.getHavingEntry());
+		ConvertExpression.convertExpression(designer, qroot,
+				Util.getKeyword(qroot, MHaving.class), sel.getHavingEntry());
 	}
 }

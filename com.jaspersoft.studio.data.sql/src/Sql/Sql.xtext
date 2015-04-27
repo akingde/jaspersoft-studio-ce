@@ -4,11 +4,7 @@ import "http://www.eclipse.org/emf/2002/Ecore" as ecore
 generate sql "http://www.com.jaspersoft.studio.data.Sql"
 
 Model:
-	query=SelectQuery
-	('ORDER BY' orderByEntry=OrderByColumns)?
-	('LIMIT' lim=Limit)?
-	('OFFSET' offset=Offset)?
-	('FETCH FIRST' fetchFirst=FetchFirst)?;
+	query=SelectQuery;
 
 FetchFirst:
 	fetchFirst=IntegerValue? row=('ROW' | 'ROWS') 'ONLY';
@@ -20,7 +16,7 @@ Limit returns Limit:
 	{Limit} 'ALL' | (l1=INT (',' l2=IntegerValue)?);
 
 SelectQuery returns SelectQuery:
-	Select (op+=SelectSubSet)*;
+	Select (op+=SelectSubSet)* ;
 
 SelectSubSet:
 	op=('UNION' | 'INTERSECT' | 'MINUS' | 'EXCEPT') all=('ALL')? query=Select;
@@ -28,8 +24,12 @@ SelectSubSet:
 Select:
 	select='SELECT' ('DISTINCT')? ('TOP' (INT | SIGNED_DOUBLE) 'PERCENT'? 'WITH TIES'?)? cols=Columns 'FROM' tbl=Tables
 	('WHERE' whereExpression=FullExpression)?
-	('GROUP BY'
-	groupByEntry=GroupByColumns)? ('HAVING' havingEntry=FullExpression)?;
+	('GROUP BY' groupByEntry=GroupByColumns)? 
+	('HAVING' havingEntry=FullExpression)?
+	('ORDER BY' orderByEntry=OrderByColumns)?
+	('LIMIT' lim=Limit)?
+	('OFFSET' offset=Offset)?
+	('FETCH FIRST' fetchFirst=FetchFirst)?;
 
 Columns returns OrColumn:
 	ColumnOrAlias ({OrColumn.entries+=current} ("," entries+=ColumnOrAlias)+)?;
@@ -172,19 +172,24 @@ Operand returns Operands:
 	{Div.left=current} '/' | {Concat.left=current} '||') right=OperandFragment)*;
 
 OperandFragment returns Operand:
-	column=ColumnOperand | xop=XOperandFragment | subq=SubQueryOperand | fcast=OpFunctionCast | func=OperandFunction |
+	column=ColumnOperand | xop=XOperandFragment | subq=SubQueryOperand | fcast=OpFunctionCast |fext=FunctionExtract | func=OperandFunction |
 	sqlcase=SQLCASE /*|opGroup=OperandGroup */;
 
 	//OperandGroup returns OpGroup:
 //	{OpGroup} '(' op=Operand ')';
+
 OperandFunction returns OpFunction:
-	{OpFunction} fname=FNAME (STAR | args=OpFunctionArg)? ')' (fan=FunctionAnalytical)?;
+	{OpFunction} fname=FNAME (STAR | args=OpFunctionArg)? ')' fan=FunctionAnalytical?;
+
+FunctionExtract:
+	'EXTRACT' '(' v=EXTRACT_VALUES 'FROM' operand=Operand ')';
+
 
 FunctionAnalytical:
 	'OVER' '(' anClause=AnalyticClause ')';
 
 AnalyticClause:
-	QueryPartitionClause (obc=OrderByClause winc=WindowingClause?)?;
+	{AnalyticClause} abc=QueryPartitionClause? (obc=OrderByClause winc=WindowingClause?)?;
 
 WindowingClause:
 	('ROWS' | 'RANGE') (WindowingClauseBetween | WindowingClauseOperandPreceding);
@@ -257,6 +262,12 @@ SQLCaseWhens:
 SqlCaseWhen returns SqlCaseWhen:
 	'WHEN' expr=FullExpression 'THEN' texp=Operand ('ELSE' eexp=Operand)?;
 
+
+enum EXTRACT_VALUES:
+	ms='MICROSECOND' | s='SECOND' | m='MINUTE' | h='HOUR' | day='DAY' | week='WEEK' | month='MONTH' | quart='QUARTER' | year='YEAR' | micros='SECOND_MICROSECOND'
+	| minMicro='MINUTE_MICROSECOND' | minSec='MINUTE_SECOND' | hms='HOUR_MICROSECOND' | hs='HOUR_SECOND' | hmin='HOUR_MINUTE' | dms='DAY_MICROSECOND' | ds='DAY_SECOND'
+	| daymin='DAY_MINUTE' | dayh='DAY_HOUR' | yearMonth='YEAR_MONTH' ;
+	
 enum XFunction:
 	xin='IN' | xnotin='NOTIN' | xeq='EQUAL' | xnoteq='NOTEQUAL' | xls='LESS' | xgt='GREATER'
 	| xlsr='LESS]' | xgtl='[GREATER' | xbwn='BETWEEN' | xbwnc='[BETWEEN]' | xbwnl='[BETWEEN'

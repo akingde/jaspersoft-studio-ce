@@ -7,6 +7,28 @@
     editorPluginID="com.jaspersoft.studio.data.sql.editor" runtimeVersion="2.10">
   <genPackages prefix="Sql" basePackage="com.jaspersoft.studio.data" disposableProviderFactory="true"
       ecorePackage="Sql.ecore#/">
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="Sql.ecore#//EXTRACT_VALUES">
+      <genEnumLiterals ecoreEnumLiteral="Sql.ecore#//EXTRACT_VALUES/ms"/>
+      <genEnumLiterals ecoreEnumLiteral="Sql.ecore#//EXTRACT_VALUES/s"/>
+      <genEnumLiterals ecoreEnumLiteral="Sql.ecore#//EXTRACT_VALUES/m"/>
+      <genEnumLiterals ecoreEnumLiteral="Sql.ecore#//EXTRACT_VALUES/h"/>
+      <genEnumLiterals ecoreEnumLiteral="Sql.ecore#//EXTRACT_VALUES/day"/>
+      <genEnumLiterals ecoreEnumLiteral="Sql.ecore#//EXTRACT_VALUES/week"/>
+      <genEnumLiterals ecoreEnumLiteral="Sql.ecore#//EXTRACT_VALUES/month"/>
+      <genEnumLiterals ecoreEnumLiteral="Sql.ecore#//EXTRACT_VALUES/quart"/>
+      <genEnumLiterals ecoreEnumLiteral="Sql.ecore#//EXTRACT_VALUES/year"/>
+      <genEnumLiterals ecoreEnumLiteral="Sql.ecore#//EXTRACT_VALUES/micros"/>
+      <genEnumLiterals ecoreEnumLiteral="Sql.ecore#//EXTRACT_VALUES/minMicro"/>
+      <genEnumLiterals ecoreEnumLiteral="Sql.ecore#//EXTRACT_VALUES/minSec"/>
+      <genEnumLiterals ecoreEnumLiteral="Sql.ecore#//EXTRACT_VALUES/hms"/>
+      <genEnumLiterals ecoreEnumLiteral="Sql.ecore#//EXTRACT_VALUES/hs"/>
+      <genEnumLiterals ecoreEnumLiteral="Sql.ecore#//EXTRACT_VALUES/hmin"/>
+      <genEnumLiterals ecoreEnumLiteral="Sql.ecore#//EXTRACT_VALUES/dms"/>
+      <genEnumLiterals ecoreEnumLiteral="Sql.ecore#//EXTRACT_VALUES/ds"/>
+      <genEnumLiterals ecoreEnumLiteral="Sql.ecore#//EXTRACT_VALUES/daymin"/>
+      <genEnumLiterals ecoreEnumLiteral="Sql.ecore#//EXTRACT_VALUES/dayh"/>
+      <genEnumLiterals ecoreEnumLiteral="Sql.ecore#//EXTRACT_VALUES/yearMonth"/>
+    </genEnums>
     <genEnums typeSafeEnumCompatible="false" ecoreEnum="Sql.ecore#//XFunction">
       <genEnumLiterals ecoreEnumLiteral="Sql.ecore#//XFunction/xin"/>
       <genEnumLiterals ecoreEnumLiteral="Sql.ecore#//XFunction/xnotin"/>
@@ -23,10 +45,6 @@
     </genEnums>
     <genClasses ecoreClass="Sql.ecore#//Model">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Model/query"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Model/orderByEntry"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Model/lim"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Model/offset"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Model/fetchFirst"/>
     </genClasses>
     <genClasses ecoreClass="Sql.ecore#//FetchFirst">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//FetchFirst/fetchFirst"/>
@@ -53,6 +71,10 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Select/whereExpression"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Select/groupByEntry"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Select/havingEntry"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Select/orderByEntry"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Select/lim"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Select/offset"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Select/fetchFirst"/>
     </genClasses>
     <genClasses ecoreClass="Sql.ecore#//OrColumn">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//OrColumn/entries"/>
@@ -213,6 +235,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Operand/xop"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Operand/subq"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Operand/fcast"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Operand/fext"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Operand/func"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Operand/sqlcase"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Operand/param"/>
@@ -224,10 +247,18 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//OpFunction/args"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//OpFunction/fan"/>
     </genClasses>
+    <genClasses ecoreClass="Sql.ecore#//FunctionExtract">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//FunctionExtract/v"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//FunctionExtract/operand"/>
+    </genClasses>
     <genClasses ecoreClass="Sql.ecore#//FunctionAnalytical">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//FunctionAnalytical/anClause"/>
     </genClasses>
-    <genClasses ecoreClass="Sql.ecore#//AnalyticClause"/>
+    <genClasses ecoreClass="Sql.ecore#//AnalyticClause">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//AnalyticClause/abc"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//AnalyticClause/obc"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//AnalyticClause/winc"/>
+    </genClasses>
     <genClasses ecoreClass="Sql.ecore#//WindowingClause"/>
     <genClasses ecoreClass="Sql.ecore#//WindowingClauseBetween">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//WindowingClauseBetween/wcoP"/>
@@ -247,8 +278,6 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//OrderByClauseArg/col"/>
     </genClasses>
     <genClasses ecoreClass="Sql.ecore#//QueryPartitionClause">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//QueryPartitionClause/obc"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//QueryPartitionClause/winc"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//QueryPartitionClause/args"/>
     </genClasses>
     <genClasses ecoreClass="Sql.ecore#//AnalyticExprArgs"/>

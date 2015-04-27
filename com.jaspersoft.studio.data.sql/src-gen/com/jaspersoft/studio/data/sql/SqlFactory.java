@@ -473,6 +473,15 @@ public interface SqlFactory extends EFactory
   OpFunction createOpFunction();
 
   /**
+   * Returns a new object of class '<em>Function Extract</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Function Extract</em>'.
+   * @generated
+   */
+  FunctionExtract createFunctionExtract();
+
+  /**
    * Returns a new object of class '<em>Function Analytical</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->

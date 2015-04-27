@@ -325,6 +325,11 @@ public class SqlAdapterFactory extends AdapterFactoryImpl
         return createOpFunctionAdapter();
       }
       @Override
+      public Adapter caseFunctionExtract(FunctionExtract object)
+      {
+        return createFunctionExtractAdapter();
+      }
+      @Override
       public Adapter caseFunctionAnalytical(FunctionAnalytical object)
       {
         return createFunctionAnalyticalAdapter();
@@ -1297,6 +1302,21 @@ public class SqlAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createOpFunctionAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.FunctionExtract <em>Function Extract</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.FunctionExtract
+   * @generated
+   */
+  public Adapter createFunctionExtractAdapter()
   {
     return null;
   }

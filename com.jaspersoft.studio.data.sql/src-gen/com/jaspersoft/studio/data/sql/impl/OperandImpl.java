@@ -4,6 +4,7 @@ package com.jaspersoft.studio.data.sql.impl;
 
 import com.jaspersoft.studio.data.sql.ColumnOperand;
 import com.jaspersoft.studio.data.sql.ExpOperand;
+import com.jaspersoft.studio.data.sql.FunctionExtract;
 import com.jaspersoft.studio.data.sql.OpFunction;
 import com.jaspersoft.studio.data.sql.OpFunctionCast;
 import com.jaspersoft.studio.data.sql.Operand;
@@ -33,6 +34,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.OperandImpl#getXop <em>Xop</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.OperandImpl#getSubq <em>Subq</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.OperandImpl#getFcast <em>Fcast</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.impl.OperandImpl#getFext <em>Fext</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.OperandImpl#getFunc <em>Func</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.OperandImpl#getSqlcase <em>Sqlcase</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.OperandImpl#getParam <em>Param</em>}</li>
@@ -84,6 +86,16 @@ public class OperandImpl extends MinimalEObjectImpl.Container implements Operand
    * @ordered
    */
   protected OpFunctionCast fcast;
+
+  /**
+   * The cached value of the '{@link #getFext() <em>Fext</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getFext()
+   * @generated
+   * @ordered
+   */
+  protected FunctionExtract fext;
 
   /**
    * The cached value of the '{@link #getFunc() <em>Func</em>}' containment reference.
@@ -353,6 +365,54 @@ public class OperandImpl extends MinimalEObjectImpl.Container implements Operand
    * <!-- end-user-doc -->
    * @generated
    */
+  public FunctionExtract getFext()
+  {
+    return fext;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public NotificationChain basicSetFext(FunctionExtract newFext, NotificationChain msgs)
+  {
+    FunctionExtract oldFext = fext;
+    fext = newFext;
+    if (eNotificationRequired())
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SqlPackage.OPERAND__FEXT, oldFext, newFext);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setFext(FunctionExtract newFext)
+  {
+    if (newFext != fext)
+    {
+      NotificationChain msgs = null;
+      if (fext != null)
+        msgs = ((InternalEObject)fext).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SqlPackage.OPERAND__FEXT, null, msgs);
+      if (newFext != null)
+        msgs = ((InternalEObject)newFext).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SqlPackage.OPERAND__FEXT, null, msgs);
+      msgs = basicSetFext(newFext, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.OPERAND__FEXT, newFext, newFext));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public OpFunction getFunc()
   {
     return func;
@@ -606,6 +666,8 @@ public class OperandImpl extends MinimalEObjectImpl.Container implements Operand
         return basicSetSubq(null, msgs);
       case SqlPackage.OPERAND__FCAST:
         return basicSetFcast(null, msgs);
+      case SqlPackage.OPERAND__FEXT:
+        return basicSetFext(null, msgs);
       case SqlPackage.OPERAND__FUNC:
         return basicSetFunc(null, msgs);
       case SqlPackage.OPERAND__SQLCASE:
@@ -638,6 +700,8 @@ public class OperandImpl extends MinimalEObjectImpl.Container implements Operand
         return getSubq();
       case SqlPackage.OPERAND__FCAST:
         return getFcast();
+      case SqlPackage.OPERAND__FEXT:
+        return getFext();
       case SqlPackage.OPERAND__FUNC:
         return getFunc();
       case SqlPackage.OPERAND__SQLCASE:
@@ -673,6 +737,9 @@ public class OperandImpl extends MinimalEObjectImpl.Container implements Operand
         return;
       case SqlPackage.OPERAND__FCAST:
         setFcast((OpFunctionCast)newValue);
+        return;
+      case SqlPackage.OPERAND__FEXT:
+        setFext((FunctionExtract)newValue);
         return;
       case SqlPackage.OPERAND__FUNC:
         setFunc((OpFunction)newValue);
@@ -715,6 +782,9 @@ public class OperandImpl extends MinimalEObjectImpl.Container implements Operand
       case SqlPackage.OPERAND__FCAST:
         setFcast((OpFunctionCast)null);
         return;
+      case SqlPackage.OPERAND__FEXT:
+        setFext((FunctionExtract)null);
+        return;
       case SqlPackage.OPERAND__FUNC:
         setFunc((OpFunction)null);
         return;
@@ -752,6 +822,8 @@ public class OperandImpl extends MinimalEObjectImpl.Container implements Operand
         return subq != null;
       case SqlPackage.OPERAND__FCAST:
         return fcast != null;
+      case SqlPackage.OPERAND__FEXT:
+        return fext != null;
       case SqlPackage.OPERAND__FUNC:
         return func != null;
       case SqlPackage.OPERAND__SQLCASE:

@@ -115,6 +115,7 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
       case SqlPackage.OPERANDS: return createOperands();
       case SqlPackage.OPERAND: return createOperand();
       case SqlPackage.OP_FUNCTION: return createOpFunction();
+      case SqlPackage.FUNCTION_EXTRACT: return createFunctionExtract();
       case SqlPackage.FUNCTION_ANALYTICAL: return createFunctionAnalytical();
       case SqlPackage.ANALYTIC_CLAUSE: return createAnalyticClause();
       case SqlPackage.WINDOWING_CLAUSE: return createWindowingClause();
@@ -171,6 +172,8 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
   {
     switch (eDataType.getClassifierID())
     {
+      case SqlPackage.EXTRACT_VALUES:
+        return createEXTRACT_VALUESFromString(eDataType, initialValue);
       case SqlPackage.XFUNCTION:
         return createXFunctionFromString(eDataType, initialValue);
       default:
@@ -188,6 +191,8 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
   {
     switch (eDataType.getClassifierID())
     {
+      case SqlPackage.EXTRACT_VALUES:
+        return convertEXTRACT_VALUESToString(eDataType, instanceValue);
       case SqlPackage.XFUNCTION:
         return convertXFunctionToString(eDataType, instanceValue);
       default:
@@ -750,6 +755,17 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  public FunctionExtract createFunctionExtract()
+  {
+    FunctionExtractImpl functionExtract = new FunctionExtractImpl();
+    return functionExtract;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public FunctionAnalytical createFunctionAnalytical()
   {
     FunctionAnalyticalImpl functionAnalytical = new FunctionAnalyticalImpl();
@@ -1194,6 +1210,28 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
   {
     WhenListImpl whenList = new WhenListImpl();
     return whenList;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EXTRACT_VALUES createEXTRACT_VALUESFromString(EDataType eDataType, String initialValue)
+  {
+    EXTRACT_VALUES result = EXTRACT_VALUES.get(initialValue);
+    if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+    return result;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public String convertEXTRACT_VALUESToString(EDataType eDataType, Object instanceValue)
+  {
+    return instanceValue == null ? null : instanceValue.toString();
   }
 
   /**

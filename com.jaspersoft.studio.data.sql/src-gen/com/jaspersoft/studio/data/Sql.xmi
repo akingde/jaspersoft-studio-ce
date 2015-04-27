@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ASCII"?>
 <xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:xtext="http://www.eclipse.org/2008/Xtext">
-  <xtext:Grammar name="com.jaspersoft.studio.data.Sql" usedGrammars="/1" definesHiddenTokens="true" hiddenTokens="/1/@rules.5 /1/@rules.3 /0/@rules.97">
+  <xtext:Grammar name="com.jaspersoft.studio.data.Sql" usedGrammars="/1" definesHiddenTokens="true" hiddenTokens="/1/@rules.5 /1/@rules.3 /0/@rules.99">
     <metamodelDeclarations xsi:type="xtext:ReferencedMetamodel" alias="ecore">
       <ePackage href="http://www.eclipse.org/emf/2002/Ecore#/"/>
     </metamodelDeclarations>
@@ -11,34 +11,8 @@
       <type metamodel="/0/@metamodelDeclarations.1">
         <classifier xsi:type="ecore:EClass" href="http://www.com.jaspersoft.studio.data.Sql#//Model"/>
       </type>
-      <alternatives xsi:type="xtext:Group">
-        <elements xsi:type="xtext:Assignment" feature="query" operator="=">
-          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.4"/>
-        </elements>
-        <elements xsi:type="xtext:Group" cardinality="?">
-          <elements xsi:type="xtext:Keyword" value="ORDER BY"/>
-          <elements xsi:type="xtext:Assignment" feature="orderByEntry" operator="=">
-            <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.30"/>
-          </elements>
-        </elements>
-        <elements xsi:type="xtext:Group" cardinality="?">
-          <elements xsi:type="xtext:Keyword" value="LIMIT"/>
-          <elements xsi:type="xtext:Assignment" feature="lim" operator="=">
-            <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.3"/>
-          </elements>
-        </elements>
-        <elements xsi:type="xtext:Group" cardinality="?">
-          <elements xsi:type="xtext:Keyword" value="OFFSET"/>
-          <elements xsi:type="xtext:Assignment" feature="offset" operator="=">
-            <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.2"/>
-          </elements>
-        </elements>
-        <elements xsi:type="xtext:Group" cardinality="?">
-          <elements xsi:type="xtext:Keyword" value="FETCH FIRST"/>
-          <elements xsi:type="xtext:Assignment" feature="fetchFirst" operator="=">
-            <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.1"/>
-          </elements>
-        </elements>
+      <alternatives xsi:type="xtext:Assignment" feature="query" operator="=">
+        <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.4"/>
       </alternatives>
     </rules>
     <rules xsi:type="xtext:ParserRule" name="FetchFirst">
@@ -47,7 +21,7 @@
       </type>
       <alternatives xsi:type="xtext:Group">
         <elements xsi:type="xtext:Assignment" cardinality="?" feature="fetchFirst" operator="=">
-          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.84"/>
+          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.86"/>
         </elements>
         <elements xsi:type="xtext:Assignment" feature="row" operator="=">
           <terminal xsi:type="xtext:Alternatives">
@@ -63,7 +37,7 @@
         <classifier xsi:type="ecore:EClass" href="http://www.com.jaspersoft.studio.data.Sql#//Offset"/>
       </type>
       <alternatives xsi:type="xtext:Assignment" feature="offset" operator="=">
-        <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.88"/>
+        <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.90"/>
       </alternatives>
     </rules>
     <rules xsi:type="xtext:ParserRule" name="Limit">
@@ -81,12 +55,12 @@
         </elements>
         <elements xsi:type="xtext:Group">
           <elements xsi:type="xtext:Assignment" feature="l1" operator="=">
-            <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.88"/>
+            <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.90"/>
           </elements>
           <elements xsi:type="xtext:Group" cardinality="?">
             <elements xsi:type="xtext:Keyword" value=","/>
             <elements xsi:type="xtext:Assignment" feature="l2" operator="=">
-              <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.84"/>
+              <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.86"/>
             </elements>
           </elements>
         </elements>
@@ -136,8 +110,8 @@
         <elements xsi:type="xtext:Group" cardinality="?">
           <elements xsi:type="xtext:Keyword" value="TOP"/>
           <elements xsi:type="xtext:Alternatives">
-            <elements xsi:type="xtext:RuleCall" rule="/0/@rules.88"/>
-            <elements xsi:type="xtext:RuleCall" rule="/0/@rules.92"/>
+            <elements xsi:type="xtext:RuleCall" rule="/0/@rules.90"/>
+            <elements xsi:type="xtext:RuleCall" rule="/0/@rules.94"/>
           </elements>
           <elements xsi:type="xtext:Keyword" cardinality="?" value="PERCENT"/>
           <elements xsi:type="xtext:Keyword" cardinality="?" value="WITH TIES"/>
@@ -165,6 +139,30 @@
           <elements xsi:type="xtext:Keyword" value="HAVING"/>
           <elements xsi:type="xtext:Assignment" feature="havingEntry" operator="=">
             <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.34"/>
+          </elements>
+        </elements>
+        <elements xsi:type="xtext:Group" cardinality="?">
+          <elements xsi:type="xtext:Keyword" value="ORDER BY"/>
+          <elements xsi:type="xtext:Assignment" feature="orderByEntry" operator="=">
+            <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.30"/>
+          </elements>
+        </elements>
+        <elements xsi:type="xtext:Group" cardinality="?">
+          <elements xsi:type="xtext:Keyword" value="LIMIT"/>
+          <elements xsi:type="xtext:Assignment" feature="lim" operator="=">
+            <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.3"/>
+          </elements>
+        </elements>
+        <elements xsi:type="xtext:Group" cardinality="?">
+          <elements xsi:type="xtext:Keyword" value="OFFSET"/>
+          <elements xsi:type="xtext:Assignment" feature="offset" operator="=">
+            <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.2"/>
+          </elements>
+        </elements>
+        <elements xsi:type="xtext:Group" cardinality="?">
+          <elements xsi:type="xtext:Keyword" value="FETCH FIRST"/>
+          <elements xsi:type="xtext:Assignment" feature="fetchFirst" operator="=">
+            <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.1"/>
           </elements>
         </elements>
       </alternatives>
@@ -207,7 +205,7 @@
           </elements>
         </elements>
         <elements xsi:type="xtext:Assignment" feature="allCols" operator="=">
-          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.87"/>
+          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.89"/>
         </elements>
         <elements xsi:type="xtext:Assignment" feature="dbAllCols" operator="=">
           <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.28"/>
@@ -275,7 +273,7 @@
       </type>
       <alternatives xsi:type="xtext:Group">
         <elements xsi:type="xtext:Assignment" feature="join" operator="=">
-          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.80"/>
+          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.82"/>
         </elements>
         <elements xsi:type="xtext:Assignment" feature="onTable" operator="=">
           <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.13"/>
@@ -296,7 +294,7 @@
             <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.27"/>
           </elements>
           <elements xsi:type="xtext:Assignment" feature="sq" operator="=">
-            <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.74"/>
+            <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.75"/>
           </elements>
         </elements>
         <elements xsi:type="xtext:Alternatives" cardinality="?">
@@ -340,7 +338,7 @@
         <classifier xsi:type="ecore:EClass" href="http://www.com.jaspersoft.studio.data.Sql#//PivotFunctions"/>
       </type>
       <alternatives xsi:type="xtext:Assignment" feature="abc" operator="=">
-        <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.96"/>
+        <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.98"/>
       </alternatives>
     </rules>
     <rules xsi:type="xtext:ParserRule" name="PivotFunction">
@@ -348,12 +346,12 @@
         <classifier xsi:type="ecore:EClass" href="http://www.com.jaspersoft.studio.data.Sql#//PivotFunction"/>
       </type>
       <alternatives xsi:type="xtext:Group">
-        <elements xsi:type="xtext:RuleCall" rule="/0/@rules.96"/>
+        <elements xsi:type="xtext:RuleCall" rule="/0/@rules.98"/>
         <elements xsi:type="xtext:Keyword" value="("/>
         <elements xsi:type="xtext:RuleCall" rule="/0/@rules.26"/>
         <elements xsi:type="xtext:Keyword" value=")"/>
         <elements xsi:type="xtext:Keyword" cardinality="?" value="AS"/>
-        <elements xsi:type="xtext:RuleCall" rule="/0/@rules.96"/>
+        <elements xsi:type="xtext:RuleCall" rule="/0/@rules.98"/>
       </alternatives>
     </rules>
     <rules xsi:type="xtext:ParserRule" name="PivotInClause">
@@ -365,7 +363,7 @@
         <elements xsi:type="xtext:Keyword" value="("/>
         <elements xsi:type="xtext:Alternatives">
           <elements xsi:type="xtext:Assignment" feature="sq" operator="=">
-            <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.74"/>
+            <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.75"/>
           </elements>
           <elements xsi:type="xtext:Assignment" feature="args" operator="=">
             <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.21"/>
@@ -570,10 +568,10 @@
       </type>
       <alternatives xsi:type="xtext:Group">
         <elements xsi:type="xtext:Assignment" feature="dbname" operator="=">
-          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.81"/>
+          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.83"/>
         </elements>
         <elements xsi:type="xtext:Keyword" value="."/>
-        <elements xsi:type="xtext:RuleCall" rule="/0/@rules.87"/>
+        <elements xsi:type="xtext:RuleCall" rule="/0/@rules.89"/>
       </alternatives>
     </rules>
     <rules xsi:type="xtext:ParserRule" name="DbObjectName">
@@ -581,7 +579,7 @@
         <classifier xsi:type="ecore:EClass" href="http://www.com.jaspersoft.studio.data.Sql#//DbObjectName"/>
       </type>
       <alternatives xsi:type="xtext:Assignment" feature="dbname" operator="=">
-        <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.81"/>
+        <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.83"/>
       </alternatives>
     </rules>
     <rules xsi:type="xtext:ParserRule" name="OrderByColumns">
@@ -615,7 +613,7 @@
             <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.9"/>
           </elements>
           <elements xsi:type="xtext:Assignment" feature="colOrderInt" operator="=">
-            <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.88"/>
+            <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.90"/>
           </elements>
         </elements>
         <elements xsi:type="xtext:Assignment" cardinality="?" feature="direction" operator="=">
@@ -695,7 +693,7 @@
           </elements>
         </elements>
         <elements xsi:type="xtext:Assignment" feature="notPrm" operator="=">
-          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.86"/>
+          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.88"/>
         </elements>
       </alternatives>
     </rules>
@@ -717,7 +715,7 @@
           </terminal>
         </elements>
         <elements xsi:type="xtext:Assignment" feature="notPrm" operator="=">
-          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.86"/>
+          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.88"/>
         </elements>
         <elements xsi:type="xtext:Assignment" feature="in" operator="=">
           <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.47"/>
@@ -763,7 +761,7 @@
         </elements>
         <elements xsi:type="xtext:Keyword" value="{"/>
         <elements xsi:type="xtext:Assignment" feature="xf" operator="=">
-          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.79"/>
+          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.81"/>
         </elements>
         <elements xsi:type="xtext:Keyword" value=","/>
         <elements xsi:type="xtext:Assignment" feature="col" operator="=">
@@ -791,7 +789,7 @@
         </elements>
         <elements xsi:type="xtext:Keyword" value="{"/>
         <elements xsi:type="xtext:Assignment" feature="xf" operator="=">
-          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.79"/>
+          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.81"/>
         </elements>
         <elements xsi:type="xtext:Keyword" value="|"/>
         <elements xsi:type="xtext:Assignment" feature="col" operator="=">
@@ -832,7 +830,7 @@
         <classifier xsi:type="ecore:EClass" href="http://www.com.jaspersoft.studio.data.Sql#//JRParameter"/>
       </type>
       <alternatives xsi:type="xtext:Assignment" feature="jrprm" operator="=">
-        <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.96"/>
+        <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.98"/>
       </alternatives>
     </rules>
     <rules xsi:type="xtext:ParserRule" name="Expression">
@@ -919,16 +917,16 @@
       </type>
       <alternatives xsi:type="xtext:Alternatives">
         <elements xsi:type="xtext:Assignment" feature="op2" operator="=">
-          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.82"/>
+          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.84"/>
         </elements>
         <elements xsi:type="xtext:Assignment" feature="fop2" operator="=">
           <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.53"/>
         </elements>
         <elements xsi:type="xtext:Assignment" feature="fcast" operator="=">
-          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.68"/>
+          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.69"/>
         </elements>
         <elements xsi:type="xtext:Assignment" feature="fparam" operator="=">
-          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.71"/>
+          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.72"/>
         </elements>
       </alternatives>
     </rules>
@@ -970,7 +968,7 @@
         </elements>
         <elements xsi:type="xtext:Alternatives">
           <elements xsi:type="xtext:Assignment" feature="subquery" operator="=">
-            <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.74"/>
+            <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.75"/>
           </elements>
           <elements xsi:type="xtext:Assignment" feature="opList" operator="=">
             <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.49"/>
@@ -996,7 +994,7 @@
         </elements>
         <elements xsi:type="xtext:Alternatives">
           <elements xsi:type="xtext:Assignment" feature="subquery" operator="=">
-            <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.74"/>
+            <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.75"/>
           </elements>
           <elements xsi:type="xtext:Assignment" feature="opList" operator="=">
             <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.49"/>
@@ -1021,7 +1019,7 @@
         <classifier xsi:type="ecore:EClass" href="http://www.com.jaspersoft.studio.data.Sql#//OperandList"/>
       </type>
       <alternatives xsi:type="xtext:Group">
-        <elements xsi:type="xtext:RuleCall" rule="/0/@rules.75"/>
+        <elements xsi:type="xtext:RuleCall" rule="/0/@rules.76"/>
         <elements xsi:type="xtext:Group" cardinality="?">
           <elements xsi:type="xtext:Action" feature="entries" operator="+=">
             <type metamodel="/0/@metamodelDeclarations.1">
@@ -1031,7 +1029,7 @@
           <elements xsi:type="xtext:Group" cardinality="+">
             <elements xsi:type="xtext:Keyword" value=","/>
             <elements xsi:type="xtext:Assignment" feature="entries" operator="+=">
-              <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.75"/>
+              <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.76"/>
             </elements>
           </elements>
         </elements>
@@ -1069,7 +1067,7 @@
                   <classifier xsi:type="ecore:EClass" href="http://www.com.jaspersoft.studio.data.Sql#//Star"/>
                 </type>
               </elements>
-              <elements xsi:type="xtext:RuleCall" rule="/0/@rules.87"/>
+              <elements xsi:type="xtext:RuleCall" rule="/0/@rules.89"/>
             </elements>
             <elements xsi:type="xtext:Group">
               <elements xsi:type="xtext:Action" feature="left" operator="=">
@@ -1100,22 +1098,25 @@
       </type>
       <alternatives xsi:type="xtext:Alternatives">
         <elements xsi:type="xtext:Assignment" feature="column" operator="=">
-          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.73"/>
-        </elements>
-        <elements xsi:type="xtext:Assignment" feature="xop" operator="=">
-          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.70"/>
-        </elements>
-        <elements xsi:type="xtext:Assignment" feature="subq" operator="=">
           <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.74"/>
         </elements>
+        <elements xsi:type="xtext:Assignment" feature="xop" operator="=">
+          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.71"/>
+        </elements>
+        <elements xsi:type="xtext:Assignment" feature="subq" operator="=">
+          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.75"/>
+        </elements>
         <elements xsi:type="xtext:Assignment" feature="fcast" operator="=">
-          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.68"/>
+          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.69"/>
+        </elements>
+        <elements xsi:type="xtext:Assignment" feature="fext" operator="=">
+          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.54"/>
         </elements>
         <elements xsi:type="xtext:Assignment" feature="func" operator="=">
           <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.53"/>
         </elements>
         <elements xsi:type="xtext:Assignment" feature="sqlcase" operator="=">
-          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.76"/>
+          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.77"/>
         </elements>
       </alternatives>
     </rules>
@@ -1130,18 +1131,35 @@
           </type>
         </elements>
         <elements xsi:type="xtext:Assignment" feature="fname" operator="=">
-          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.83"/>
+          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.85"/>
         </elements>
         <elements xsi:type="xtext:Alternatives" cardinality="?">
-          <elements xsi:type="xtext:RuleCall" rule="/0/@rules.87"/>
+          <elements xsi:type="xtext:RuleCall" rule="/0/@rules.89"/>
           <elements xsi:type="xtext:Assignment" feature="args" operator="=">
-            <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.66"/>
+            <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.67"/>
           </elements>
         </elements>
         <elements xsi:type="xtext:Keyword" value=")"/>
         <elements xsi:type="xtext:Assignment" cardinality="?" feature="fan" operator="=">
-          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.54"/>
+          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.55"/>
         </elements>
+      </alternatives>
+    </rules>
+    <rules xsi:type="xtext:ParserRule" name="FunctionExtract">
+      <type metamodel="/0/@metamodelDeclarations.1">
+        <classifier xsi:type="ecore:EClass" href="http://www.com.jaspersoft.studio.data.Sql#//FunctionExtract"/>
+      </type>
+      <alternatives xsi:type="xtext:Group">
+        <elements xsi:type="xtext:Keyword" value="EXTRACT"/>
+        <elements xsi:type="xtext:Keyword" value="("/>
+        <elements xsi:type="xtext:Assignment" feature="v" operator="=">
+          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.80"/>
+        </elements>
+        <elements xsi:type="xtext:Keyword" value="FROM"/>
+        <elements xsi:type="xtext:Assignment" feature="operand" operator="=">
+          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.51"/>
+        </elements>
+        <elements xsi:type="xtext:Keyword" value=")"/>
       </alternatives>
     </rules>
     <rules xsi:type="xtext:ParserRule" name="FunctionAnalytical">
@@ -1152,7 +1170,7 @@
         <elements xsi:type="xtext:Keyword" value="OVER"/>
         <elements xsi:type="xtext:Keyword" value="("/>
         <elements xsi:type="xtext:Assignment" feature="anClause" operator="=">
-          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.55"/>
+          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.56"/>
         </elements>
         <elements xsi:type="xtext:Keyword" value=")"/>
       </alternatives>
@@ -1162,13 +1180,20 @@
         <classifier xsi:type="ecore:EClass" href="http://www.com.jaspersoft.studio.data.Sql#//AnalyticClause"/>
       </type>
       <alternatives xsi:type="xtext:Group">
-        <elements xsi:type="xtext:RuleCall" rule="/0/@rules.63"/>
+        <elements xsi:type="xtext:Action">
+          <type metamodel="/0/@metamodelDeclarations.1">
+            <classifier xsi:type="ecore:EClass" href="http://www.com.jaspersoft.studio.data.Sql#//AnalyticClause"/>
+          </type>
+        </elements>
+        <elements xsi:type="xtext:Assignment" cardinality="?" feature="abc" operator="=">
+          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.64"/>
+        </elements>
         <elements xsi:type="xtext:Group" cardinality="?">
           <elements xsi:type="xtext:Assignment" feature="obc" operator="=">
-            <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.60"/>
+            <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.61"/>
           </elements>
           <elements xsi:type="xtext:Assignment" cardinality="?" feature="winc" operator="=">
-            <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.56"/>
+            <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.57"/>
           </elements>
         </elements>
       </alternatives>
@@ -1183,8 +1208,8 @@
           <elements xsi:type="xtext:Keyword" value="RANGE"/>
         </elements>
         <elements xsi:type="xtext:Alternatives">
-          <elements xsi:type="xtext:RuleCall" rule="/0/@rules.57"/>
-          <elements xsi:type="xtext:RuleCall" rule="/0/@rules.59"/>
+          <elements xsi:type="xtext:RuleCall" rule="/0/@rules.58"/>
+          <elements xsi:type="xtext:RuleCall" rule="/0/@rules.60"/>
         </elements>
       </alternatives>
     </rules>
@@ -1195,11 +1220,11 @@
       <alternatives xsi:type="xtext:Group">
         <elements xsi:type="xtext:Keyword" value="BETWEEN"/>
         <elements xsi:type="xtext:Assignment" feature="wcoP" operator="=">
-          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.59"/>
+          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.60"/>
         </elements>
         <elements xsi:type="xtext:Keyword" value="AND"/>
         <elements xsi:type="xtext:Assignment" feature="wcoF" operator="=">
-          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.58"/>
+          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.59"/>
         </elements>
       </alternatives>
     </rules>
@@ -1218,7 +1243,7 @@
           <elements xsi:type="xtext:Keyword" value="CURRENT ROW"/>
           <elements xsi:type="xtext:Group">
             <elements xsi:type="xtext:Assignment" feature="exp" operator="=">
-              <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.65"/>
+              <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.66"/>
             </elements>
             <elements xsi:type="xtext:Alternatives">
               <elements xsi:type="xtext:Keyword" value="PRECEDING"/>
@@ -1243,7 +1268,7 @@
           <elements xsi:type="xtext:Keyword" value="CURRENT ROW"/>
           <elements xsi:type="xtext:Group">
             <elements xsi:type="xtext:Assignment" feature="expr" operator="=">
-              <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.65"/>
+              <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.66"/>
             </elements>
             <elements xsi:type="xtext:Alternatives">
               <elements xsi:type="xtext:Keyword" value="PRECEDING"/>
@@ -1263,7 +1288,7 @@
           <elements xsi:type="xtext:Keyword" value="ORDER SIBLINGS BY"/>
         </elements>
         <elements xsi:type="xtext:Assignment" feature="args" operator="=">
-          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.61"/>
+          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.62"/>
         </elements>
       </alternatives>
     </rules>
@@ -1272,7 +1297,7 @@
         <classifier xsi:type="ecore:EClass" href="http://www.com.jaspersoft.studio.data.Sql#//OrderByClauseArgs"/>
       </type>
       <alternatives xsi:type="xtext:Group">
-        <elements xsi:type="xtext:RuleCall" rule="/0/@rules.62"/>
+        <elements xsi:type="xtext:RuleCall" rule="/0/@rules.63"/>
         <elements xsi:type="xtext:Group" cardinality="?">
           <elements xsi:type="xtext:Action" feature="entries" operator="+=">
             <type metamodel="/0/@metamodelDeclarations.1">
@@ -1282,7 +1307,7 @@
           <elements xsi:type="xtext:Group" cardinality="+">
             <elements xsi:type="xtext:Keyword" value=","/>
             <elements xsi:type="xtext:Assignment" feature="entries" operator="+=">
-              <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.62"/>
+              <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.63"/>
             </elements>
           </elements>
         </elements>
@@ -1294,7 +1319,7 @@
       </type>
       <alternatives xsi:type="xtext:Group">
         <elements xsi:type="xtext:Assignment" feature="col" operator="=">
-          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.65"/>
+          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.66"/>
         </elements>
         <elements xsi:type="xtext:Alternatives" cardinality="?">
           <elements xsi:type="xtext:Keyword" value="ASC"/>
@@ -1317,11 +1342,11 @@
         <elements xsi:type="xtext:Keyword" value="PARTITION BY"/>
         <elements xsi:type="xtext:Alternatives">
           <elements xsi:type="xtext:Assignment" feature="args" operator="=">
-            <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.64"/>
+            <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.65"/>
           </elements>
           <elements xsi:type="xtext:Group">
             <elements xsi:type="xtext:Keyword" value="("/>
-            <elements xsi:type="xtext:RuleCall" rule="/0/@rules.64"/>
+            <elements xsi:type="xtext:RuleCall" rule="/0/@rules.65"/>
             <elements xsi:type="xtext:Keyword" value=")"/>
           </elements>
         </elements>
@@ -1332,7 +1357,7 @@
         <classifier xsi:type="ecore:EClass" href="http://www.com.jaspersoft.studio.data.Sql#//AnalyticExprArgs"/>
       </type>
       <alternatives xsi:type="xtext:Group">
-        <elements xsi:type="xtext:RuleCall" rule="/0/@rules.65"/>
+        <elements xsi:type="xtext:RuleCall" rule="/0/@rules.66"/>
         <elements xsi:type="xtext:Group" cardinality="?">
           <elements xsi:type="xtext:Action" feature="entries" operator="+=">
             <type metamodel="/0/@metamodelDeclarations.1">
@@ -1342,7 +1367,7 @@
           <elements xsi:type="xtext:Group" cardinality="+">
             <elements xsi:type="xtext:Keyword" value=","/>
             <elements xsi:type="xtext:Assignment" feature="entries" operator="+=">
-              <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.65"/>
+              <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.66"/>
             </elements>
           </elements>
         </elements>
@@ -1366,7 +1391,7 @@
         <classifier xsi:type="ecore:EClass" href="http://www.com.jaspersoft.studio.data.Sql#//OpFunctionArg"/>
       </type>
       <alternatives xsi:type="xtext:Group">
-        <elements xsi:type="xtext:RuleCall" rule="/0/@rules.67"/>
+        <elements xsi:type="xtext:RuleCall" rule="/0/@rules.68"/>
         <elements xsi:type="xtext:Group" cardinality="?">
           <elements xsi:type="xtext:Action" feature="entries" operator="+=">
             <type metamodel="/0/@metamodelDeclarations.1">
@@ -1376,7 +1401,7 @@
           <elements xsi:type="xtext:Group" cardinality="+">
             <elements xsi:type="xtext:Keyword" value=","/>
             <elements xsi:type="xtext:Assignment" feature="entries" operator="+=">
-              <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.67"/>
+              <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.68"/>
             </elements>
           </elements>
         </elements>
@@ -1388,7 +1413,7 @@
       </type>
       <alternatives xsi:type="xtext:Assignment" feature="op" operator="=">
         <terminal xsi:type="xtext:Alternatives">
-          <elements xsi:type="xtext:RuleCall" rule="/0/@rules.69"/>
+          <elements xsi:type="xtext:RuleCall" rule="/0/@rules.70"/>
           <elements xsi:type="xtext:RuleCall" rule="/0/@rules.51"/>
         </terminal>
       </alternatives>
@@ -1404,17 +1429,17 @@
         </elements>
         <elements xsi:type="xtext:Keyword" value="AS"/>
         <elements xsi:type="xtext:Assignment" feature="type" operator="=">
-          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.96"/>
+          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.98"/>
         </elements>
         <elements xsi:type="xtext:Group" cardinality="?">
           <elements xsi:type="xtext:Keyword" value="("/>
           <elements xsi:type="xtext:Assignment" feature="p" operator="=">
-            <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.88"/>
+            <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.90"/>
           </elements>
           <elements xsi:type="xtext:Group" cardinality="?">
             <elements xsi:type="xtext:Keyword" value=","/>
             <elements xsi:type="xtext:Assignment" feature="p2" operator="=">
-              <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.88"/>
+              <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.90"/>
             </elements>
           </elements>
           <elements xsi:type="xtext:Keyword" value=")"/>
@@ -1440,13 +1465,13 @@
       </type>
       <alternatives xsi:type="xtext:Alternatives">
         <elements xsi:type="xtext:Assignment" feature="param" operator="=">
-          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.71"/>
-        </elements>
-        <elements xsi:type="xtext:Assignment" feature="eparam" operator="=">
           <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.72"/>
         </elements>
+        <elements xsi:type="xtext:Assignment" feature="eparam" operator="=">
+          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.73"/>
+        </elements>
         <elements xsi:type="xtext:Assignment" feature="scalar" operator="=">
-          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.75"/>
+          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.76"/>
         </elements>
       </alternatives>
     </rules>
@@ -1455,7 +1480,7 @@
         <classifier xsi:type="ecore:EClass" href="http://www.com.jaspersoft.studio.data.Sql#//POperand"/>
       </type>
       <alternatives xsi:type="xtext:Assignment" feature="prm" operator="=">
-        <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.85"/>
+        <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.87"/>
       </alternatives>
     </rules>
     <rules xsi:type="xtext:ParserRule" name="ExclamationParameterOperand">
@@ -1463,7 +1488,7 @@
         <classifier xsi:type="ecore:EClass" href="http://www.com.jaspersoft.studio.data.Sql#//ExpOperand"/>
       </type>
       <alternatives xsi:type="xtext:Assignment" feature="prm" operator="=">
-        <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.86"/>
+        <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.88"/>
       </alternatives>
     </rules>
     <rules xsi:type="xtext:ParserRule" name="ColumnOperand">
@@ -1502,22 +1527,22 @@
       </type>
       <alternatives xsi:type="xtext:Alternatives">
         <elements xsi:type="xtext:Assignment" feature="soint" operator="=">
-          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.88"/>
-        </elements>
-        <elements xsi:type="xtext:Assignment" feature="sostr" operator="=">
-          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.82"/>
-        </elements>
-        <elements xsi:type="xtext:Assignment" feature="sodbl" operator="=">
-          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.92"/>
-        </elements>
-        <elements xsi:type="xtext:Assignment" feature="sodate" operator="=">
           <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.90"/>
         </elements>
+        <elements xsi:type="xtext:Assignment" feature="sostr" operator="=">
+          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.84"/>
+        </elements>
+        <elements xsi:type="xtext:Assignment" feature="sodbl" operator="=">
+          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.94"/>
+        </elements>
+        <elements xsi:type="xtext:Assignment" feature="sodate" operator="=">
+          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.92"/>
+        </elements>
         <elements xsi:type="xtext:Assignment" feature="sotime" operator="=">
-          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.91"/>
+          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.93"/>
         </elements>
         <elements xsi:type="xtext:Assignment" feature="sodt" operator="=">
-          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.89"/>
+          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.91"/>
         </elements>
       </alternatives>
     </rules>
@@ -1531,7 +1556,7 @@
           <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.34"/>
         </elements>
         <elements xsi:type="xtext:Assignment" feature="when" operator="=">
-          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.77"/>
+          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.78"/>
         </elements>
         <elements xsi:type="xtext:Keyword" value="END"/>
       </alternatives>
@@ -1541,7 +1566,7 @@
         <classifier xsi:type="ecore:EClass" href="http://www.com.jaspersoft.studio.data.Sql#//SQLCaseWhens"/>
       </type>
       <alternatives xsi:type="xtext:Group">
-        <elements xsi:type="xtext:RuleCall" rule="/0/@rules.78"/>
+        <elements xsi:type="xtext:RuleCall" rule="/0/@rules.79"/>
         <elements xsi:type="xtext:Group" cardinality="?">
           <elements xsi:type="xtext:Action" feature="entries" operator="+=">
             <type metamodel="/0/@metamodelDeclarations.1">
@@ -1549,7 +1574,7 @@
             </type>
           </elements>
           <elements xsi:type="xtext:Assignment" cardinality="+" feature="entries" operator="+=">
-            <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.78"/>
+            <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.79"/>
           </elements>
         </elements>
       </alternatives>
@@ -1572,6 +1597,93 @@
           <elements xsi:type="xtext:Assignment" feature="eexp" operator="=">
             <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.51"/>
           </elements>
+        </elements>
+      </alternatives>
+    </rules>
+    <rules xsi:type="xtext:EnumRule" name="EXTRACT_VALUES">
+      <type metamodel="/0/@metamodelDeclarations.1">
+        <classifier xsi:type="ecore:EEnum" href="http://www.com.jaspersoft.studio.data.Sql#//EXTRACT_VALUES"/>
+      </type>
+      <alternatives xsi:type="xtext:Alternatives">
+        <elements xsi:type="xtext:EnumLiteralDeclaration">
+          <enumLiteral href="http://www.com.jaspersoft.studio.data.Sql#//EXTRACT_VALUES/ms"/>
+          <literal value="MICROSECOND"/>
+        </elements>
+        <elements xsi:type="xtext:EnumLiteralDeclaration">
+          <enumLiteral href="http://www.com.jaspersoft.studio.data.Sql#//EXTRACT_VALUES/s"/>
+          <literal value="SECOND"/>
+        </elements>
+        <elements xsi:type="xtext:EnumLiteralDeclaration">
+          <enumLiteral href="http://www.com.jaspersoft.studio.data.Sql#//EXTRACT_VALUES/m"/>
+          <literal value="MINUTE"/>
+        </elements>
+        <elements xsi:type="xtext:EnumLiteralDeclaration">
+          <enumLiteral href="http://www.com.jaspersoft.studio.data.Sql#//EXTRACT_VALUES/h"/>
+          <literal value="HOUR"/>
+        </elements>
+        <elements xsi:type="xtext:EnumLiteralDeclaration">
+          <enumLiteral href="http://www.com.jaspersoft.studio.data.Sql#//EXTRACT_VALUES/day"/>
+          <literal value="DAY"/>
+        </elements>
+        <elements xsi:type="xtext:EnumLiteralDeclaration">
+          <enumLiteral href="http://www.com.jaspersoft.studio.data.Sql#//EXTRACT_VALUES/week"/>
+          <literal value="WEEK"/>
+        </elements>
+        <elements xsi:type="xtext:EnumLiteralDeclaration">
+          <enumLiteral href="http://www.com.jaspersoft.studio.data.Sql#//EXTRACT_VALUES/month"/>
+          <literal value="MONTH"/>
+        </elements>
+        <elements xsi:type="xtext:EnumLiteralDeclaration">
+          <enumLiteral href="http://www.com.jaspersoft.studio.data.Sql#//EXTRACT_VALUES/quart"/>
+          <literal value="QUARTER"/>
+        </elements>
+        <elements xsi:type="xtext:EnumLiteralDeclaration">
+          <enumLiteral href="http://www.com.jaspersoft.studio.data.Sql#//EXTRACT_VALUES/year"/>
+          <literal value="YEAR"/>
+        </elements>
+        <elements xsi:type="xtext:EnumLiteralDeclaration">
+          <enumLiteral href="http://www.com.jaspersoft.studio.data.Sql#//EXTRACT_VALUES/micros"/>
+          <literal value="SECOND_MICROSECOND"/>
+        </elements>
+        <elements xsi:type="xtext:EnumLiteralDeclaration">
+          <enumLiteral href="http://www.com.jaspersoft.studio.data.Sql#//EXTRACT_VALUES/minMicro"/>
+          <literal value="MINUTE_MICROSECOND"/>
+        </elements>
+        <elements xsi:type="xtext:EnumLiteralDeclaration">
+          <enumLiteral href="http://www.com.jaspersoft.studio.data.Sql#//EXTRACT_VALUES/minSec"/>
+          <literal value="MINUTE_SECOND"/>
+        </elements>
+        <elements xsi:type="xtext:EnumLiteralDeclaration">
+          <enumLiteral href="http://www.com.jaspersoft.studio.data.Sql#//EXTRACT_VALUES/hms"/>
+          <literal value="HOUR_MICROSECOND"/>
+        </elements>
+        <elements xsi:type="xtext:EnumLiteralDeclaration">
+          <enumLiteral href="http://www.com.jaspersoft.studio.data.Sql#//EXTRACT_VALUES/hs"/>
+          <literal value="HOUR_SECOND"/>
+        </elements>
+        <elements xsi:type="xtext:EnumLiteralDeclaration">
+          <enumLiteral href="http://www.com.jaspersoft.studio.data.Sql#//EXTRACT_VALUES/hmin"/>
+          <literal value="HOUR_MINUTE"/>
+        </elements>
+        <elements xsi:type="xtext:EnumLiteralDeclaration">
+          <enumLiteral href="http://www.com.jaspersoft.studio.data.Sql#//EXTRACT_VALUES/dms"/>
+          <literal value="DAY_MICROSECOND"/>
+        </elements>
+        <elements xsi:type="xtext:EnumLiteralDeclaration">
+          <enumLiteral href="http://www.com.jaspersoft.studio.data.Sql#//EXTRACT_VALUES/ds"/>
+          <literal value="DAY_SECOND"/>
+        </elements>
+        <elements xsi:type="xtext:EnumLiteralDeclaration">
+          <enumLiteral href="http://www.com.jaspersoft.studio.data.Sql#//EXTRACT_VALUES/daymin"/>
+          <literal value="DAY_MINUTE"/>
+        </elements>
+        <elements xsi:type="xtext:EnumLiteralDeclaration">
+          <enumLiteral href="http://www.com.jaspersoft.studio.data.Sql#//EXTRACT_VALUES/dayh"/>
+          <literal value="DAY_HOUR"/>
+        </elements>
+        <elements xsi:type="xtext:EnumLiteralDeclaration">
+          <enumLiteral href="http://www.com.jaspersoft.studio.data.Sql#//EXTRACT_VALUES/yearMonth"/>
+          <literal value="YEAR_MONTH"/>
         </elements>
       </alternatives>
     </rules>
@@ -1657,23 +1769,23 @@
         <classifier xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
       </type>
       <alternatives xsi:type="xtext:Alternatives">
+        <elements xsi:type="xtext:RuleCall" rule="/0/@rules.98"/>
+        <elements xsi:type="xtext:RuleCall" rule="/0/@rules.97"/>
         <elements xsi:type="xtext:RuleCall" rule="/0/@rules.96"/>
-        <elements xsi:type="xtext:RuleCall" rule="/0/@rules.95"/>
-        <elements xsi:type="xtext:RuleCall" rule="/0/@rules.94"/>
       </alternatives>
     </rules>
     <rules xsi:type="xtext:ParserRule" name="StringOperand">
       <type metamodel="/0/@metamodelDeclarations.0">
         <classifier xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
       </type>
-      <alternatives xsi:type="xtext:RuleCall" rule="/0/@rules.93"/>
+      <alternatives xsi:type="xtext:RuleCall" rule="/0/@rules.95"/>
     </rules>
     <rules xsi:type="xtext:ParserRule" name="FNAME">
       <type metamodel="/0/@metamodelDeclarations.0">
         <classifier xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
       </type>
       <alternatives xsi:type="xtext:Group">
-        <elements xsi:type="xtext:RuleCall" rule="/0/@rules.96"/>
+        <elements xsi:type="xtext:RuleCall" rule="/0/@rules.98"/>
         <elements xsi:type="xtext:Keyword" value="("/>
       </alternatives>
     </rules>
@@ -1682,7 +1794,7 @@
         <classifier xsi:type="ecore:EClass" href="http://www.com.jaspersoft.studio.data.Sql#//IntegerValue"/>
       </type>
       <alternatives xsi:type="xtext:Assignment" feature="integer" operator="=">
-        <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.88"/>
+        <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.90"/>
       </alternatives>
     </rules>
     <rules xsi:type="xtext:TerminalRule" name="JRPARAM">
@@ -1730,9 +1842,9 @@
         <classifier xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
       </type>
       <alternatives xsi:type="xtext:Group">
-        <elements xsi:type="xtext:RuleCall" rule="/0/@rules.90"/>
+        <elements xsi:type="xtext:RuleCall" rule="/0/@rules.92"/>
         <elements xsi:type="xtext:Keyword" value=" "/>
-        <elements xsi:type="xtext:RuleCall" rule="/0/@rules.91"/>
+        <elements xsi:type="xtext:RuleCall" rule="/0/@rules.93"/>
       </alternatives>
     </rules>
     <rules xsi:type="xtext:TerminalRule" name="DATE">
@@ -2059,7 +2171,7 @@
       </alternatives>
     </rules>
   </xtext:Grammar>
-  <xtext:Grammar name="org.eclipse.xtext.common.Terminals" definesHiddenTokens="true" hiddenTokens="/1/@rules.5 /1/@rules.3 /0/@rules.97">
+  <xtext:Grammar name="org.eclipse.xtext.common.Terminals" definesHiddenTokens="true" hiddenTokens="/1/@rules.5 /1/@rules.3 /0/@rules.99">
     <metamodelDeclarations xsi:type="xtext:ReferencedMetamodel" alias="ecore">
       <ePackage href="http://www.eclipse.org/emf/2002/Ecore#/"/>
     </metamodelDeclarations>

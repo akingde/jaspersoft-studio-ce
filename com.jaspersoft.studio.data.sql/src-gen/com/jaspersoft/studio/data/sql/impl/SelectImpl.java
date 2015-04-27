@@ -2,9 +2,13 @@
  */
 package com.jaspersoft.studio.data.sql.impl;
 
+import com.jaspersoft.studio.data.sql.FetchFirst;
+import com.jaspersoft.studio.data.sql.Limit;
+import com.jaspersoft.studio.data.sql.Offset;
 import com.jaspersoft.studio.data.sql.OrColumn;
 import com.jaspersoft.studio.data.sql.OrExpr;
 import com.jaspersoft.studio.data.sql.OrGroupByColumn;
+import com.jaspersoft.studio.data.sql.OrOrderByColumn;
 import com.jaspersoft.studio.data.sql.OrTable;
 import com.jaspersoft.studio.data.sql.Select;
 import com.jaspersoft.studio.data.sql.SelectSubSet;
@@ -39,6 +43,10 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.SelectImpl#getWhereExpression <em>Where Expression</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.SelectImpl#getGroupByEntry <em>Group By Entry</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.SelectImpl#getHavingEntry <em>Having Entry</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.impl.SelectImpl#getOrderByEntry <em>Order By Entry</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.impl.SelectImpl#getLim <em>Lim</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.impl.SelectImpl#getOffset <em>Offset</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.impl.SelectImpl#getFetchFirst <em>Fetch First</em>}</li>
  * </ul>
  * </p>
  *
@@ -125,6 +133,46 @@ public class SelectImpl extends SelectQueryImpl implements Select
    * @ordered
    */
   protected OrExpr havingEntry;
+
+  /**
+   * The cached value of the '{@link #getOrderByEntry() <em>Order By Entry</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getOrderByEntry()
+   * @generated
+   * @ordered
+   */
+  protected OrOrderByColumn orderByEntry;
+
+  /**
+   * The cached value of the '{@link #getLim() <em>Lim</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getLim()
+   * @generated
+   * @ordered
+   */
+  protected Limit lim;
+
+  /**
+   * The cached value of the '{@link #getOffset() <em>Offset</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getOffset()
+   * @generated
+   * @ordered
+   */
+  protected Offset offset;
+
+  /**
+   * The cached value of the '{@link #getFetchFirst() <em>Fetch First</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getFetchFirst()
+   * @generated
+   * @ordered
+   */
+  protected FetchFirst fetchFirst;
 
   /**
    * <!-- begin-user-doc -->
@@ -429,6 +477,198 @@ public class SelectImpl extends SelectQueryImpl implements Select
    * <!-- end-user-doc -->
    * @generated
    */
+  public OrOrderByColumn getOrderByEntry()
+  {
+    return orderByEntry;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public NotificationChain basicSetOrderByEntry(OrOrderByColumn newOrderByEntry, NotificationChain msgs)
+  {
+    OrOrderByColumn oldOrderByEntry = orderByEntry;
+    orderByEntry = newOrderByEntry;
+    if (eNotificationRequired())
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SqlPackage.SELECT__ORDER_BY_ENTRY, oldOrderByEntry, newOrderByEntry);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setOrderByEntry(OrOrderByColumn newOrderByEntry)
+  {
+    if (newOrderByEntry != orderByEntry)
+    {
+      NotificationChain msgs = null;
+      if (orderByEntry != null)
+        msgs = ((InternalEObject)orderByEntry).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SqlPackage.SELECT__ORDER_BY_ENTRY, null, msgs);
+      if (newOrderByEntry != null)
+        msgs = ((InternalEObject)newOrderByEntry).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SqlPackage.SELECT__ORDER_BY_ENTRY, null, msgs);
+      msgs = basicSetOrderByEntry(newOrderByEntry, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.SELECT__ORDER_BY_ENTRY, newOrderByEntry, newOrderByEntry));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public Limit getLim()
+  {
+    return lim;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public NotificationChain basicSetLim(Limit newLim, NotificationChain msgs)
+  {
+    Limit oldLim = lim;
+    lim = newLim;
+    if (eNotificationRequired())
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SqlPackage.SELECT__LIM, oldLim, newLim);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setLim(Limit newLim)
+  {
+    if (newLim != lim)
+    {
+      NotificationChain msgs = null;
+      if (lim != null)
+        msgs = ((InternalEObject)lim).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SqlPackage.SELECT__LIM, null, msgs);
+      if (newLim != null)
+        msgs = ((InternalEObject)newLim).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SqlPackage.SELECT__LIM, null, msgs);
+      msgs = basicSetLim(newLim, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.SELECT__LIM, newLim, newLim));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public Offset getOffset()
+  {
+    return offset;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public NotificationChain basicSetOffset(Offset newOffset, NotificationChain msgs)
+  {
+    Offset oldOffset = offset;
+    offset = newOffset;
+    if (eNotificationRequired())
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SqlPackage.SELECT__OFFSET, oldOffset, newOffset);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setOffset(Offset newOffset)
+  {
+    if (newOffset != offset)
+    {
+      NotificationChain msgs = null;
+      if (offset != null)
+        msgs = ((InternalEObject)offset).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SqlPackage.SELECT__OFFSET, null, msgs);
+      if (newOffset != null)
+        msgs = ((InternalEObject)newOffset).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SqlPackage.SELECT__OFFSET, null, msgs);
+      msgs = basicSetOffset(newOffset, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.SELECT__OFFSET, newOffset, newOffset));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public FetchFirst getFetchFirst()
+  {
+    return fetchFirst;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public NotificationChain basicSetFetchFirst(FetchFirst newFetchFirst, NotificationChain msgs)
+  {
+    FetchFirst oldFetchFirst = fetchFirst;
+    fetchFirst = newFetchFirst;
+    if (eNotificationRequired())
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SqlPackage.SELECT__FETCH_FIRST, oldFetchFirst, newFetchFirst);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setFetchFirst(FetchFirst newFetchFirst)
+  {
+    if (newFetchFirst != fetchFirst)
+    {
+      NotificationChain msgs = null;
+      if (fetchFirst != null)
+        msgs = ((InternalEObject)fetchFirst).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SqlPackage.SELECT__FETCH_FIRST, null, msgs);
+      if (newFetchFirst != null)
+        msgs = ((InternalEObject)newFetchFirst).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SqlPackage.SELECT__FETCH_FIRST, null, msgs);
+      msgs = basicSetFetchFirst(newFetchFirst, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.SELECT__FETCH_FIRST, newFetchFirst, newFetchFirst));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   @Override
   public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
   {
@@ -446,6 +686,14 @@ public class SelectImpl extends SelectQueryImpl implements Select
         return basicSetGroupByEntry(null, msgs);
       case SqlPackage.SELECT__HAVING_ENTRY:
         return basicSetHavingEntry(null, msgs);
+      case SqlPackage.SELECT__ORDER_BY_ENTRY:
+        return basicSetOrderByEntry(null, msgs);
+      case SqlPackage.SELECT__LIM:
+        return basicSetLim(null, msgs);
+      case SqlPackage.SELECT__OFFSET:
+        return basicSetOffset(null, msgs);
+      case SqlPackage.SELECT__FETCH_FIRST:
+        return basicSetFetchFirst(null, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -474,6 +722,14 @@ public class SelectImpl extends SelectQueryImpl implements Select
         return getGroupByEntry();
       case SqlPackage.SELECT__HAVING_ENTRY:
         return getHavingEntry();
+      case SqlPackage.SELECT__ORDER_BY_ENTRY:
+        return getOrderByEntry();
+      case SqlPackage.SELECT__LIM:
+        return getLim();
+      case SqlPackage.SELECT__OFFSET:
+        return getOffset();
+      case SqlPackage.SELECT__FETCH_FIRST:
+        return getFetchFirst();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -511,6 +767,18 @@ public class SelectImpl extends SelectQueryImpl implements Select
       case SqlPackage.SELECT__HAVING_ENTRY:
         setHavingEntry((OrExpr)newValue);
         return;
+      case SqlPackage.SELECT__ORDER_BY_ENTRY:
+        setOrderByEntry((OrOrderByColumn)newValue);
+        return;
+      case SqlPackage.SELECT__LIM:
+        setLim((Limit)newValue);
+        return;
+      case SqlPackage.SELECT__OFFSET:
+        setOffset((Offset)newValue);
+        return;
+      case SqlPackage.SELECT__FETCH_FIRST:
+        setFetchFirst((FetchFirst)newValue);
+        return;
     }
     super.eSet(featureID, newValue);
   }
@@ -546,6 +814,18 @@ public class SelectImpl extends SelectQueryImpl implements Select
       case SqlPackage.SELECT__HAVING_ENTRY:
         setHavingEntry((OrExpr)null);
         return;
+      case SqlPackage.SELECT__ORDER_BY_ENTRY:
+        setOrderByEntry((OrOrderByColumn)null);
+        return;
+      case SqlPackage.SELECT__LIM:
+        setLim((Limit)null);
+        return;
+      case SqlPackage.SELECT__OFFSET:
+        setOffset((Offset)null);
+        return;
+      case SqlPackage.SELECT__FETCH_FIRST:
+        setFetchFirst((FetchFirst)null);
+        return;
     }
     super.eUnset(featureID);
   }
@@ -574,6 +854,14 @@ public class SelectImpl extends SelectQueryImpl implements Select
         return groupByEntry != null;
       case SqlPackage.SELECT__HAVING_ENTRY:
         return havingEntry != null;
+      case SqlPackage.SELECT__ORDER_BY_ENTRY:
+        return orderByEntry != null;
+      case SqlPackage.SELECT__LIM:
+        return lim != null;
+      case SqlPackage.SELECT__OFFSET:
+        return offset != null;
+      case SqlPackage.SELECT__FETCH_FIRST:
+        return fetchFirst != null;
     }
     return super.eIsSet(featureID);
   }

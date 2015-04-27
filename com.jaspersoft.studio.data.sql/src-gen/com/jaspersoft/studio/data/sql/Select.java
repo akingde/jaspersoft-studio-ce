@@ -19,6 +19,10 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link com.jaspersoft.studio.data.sql.Select#getWhereExpression <em>Where Expression</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.Select#getGroupByEntry <em>Group By Entry</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.Select#getHavingEntry <em>Having Entry</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.Select#getOrderByEntry <em>Order By Entry</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.Select#getLim <em>Lim</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.Select#getOffset <em>Offset</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.Select#getFetchFirst <em>Fetch First</em>}</li>
  * </ul>
  * </p>
  *
@@ -199,5 +203,109 @@ public interface Select extends SelectQuery
    * @generated
    */
   void setHavingEntry(OrExpr value);
+
+  /**
+   * Returns the value of the '<em><b>Order By Entry</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Order By Entry</em>' containment reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Order By Entry</em>' containment reference.
+   * @see #setOrderByEntry(OrOrderByColumn)
+   * @see com.jaspersoft.studio.data.sql.SqlPackage#getSelect_OrderByEntry()
+   * @model containment="true"
+   * @generated
+   */
+  OrOrderByColumn getOrderByEntry();
+
+  /**
+   * Sets the value of the '{@link com.jaspersoft.studio.data.sql.Select#getOrderByEntry <em>Order By Entry</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Order By Entry</em>' containment reference.
+   * @see #getOrderByEntry()
+   * @generated
+   */
+  void setOrderByEntry(OrOrderByColumn value);
+
+  /**
+   * Returns the value of the '<em><b>Lim</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Lim</em>' containment reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Lim</em>' containment reference.
+   * @see #setLim(Limit)
+   * @see com.jaspersoft.studio.data.sql.SqlPackage#getSelect_Lim()
+   * @model containment="true"
+   * @generated
+   */
+  Limit getLim();
+
+  /**
+   * Sets the value of the '{@link com.jaspersoft.studio.data.sql.Select#getLim <em>Lim</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Lim</em>' containment reference.
+   * @see #getLim()
+   * @generated
+   */
+  void setLim(Limit value);
+
+  /**
+   * Returns the value of the '<em><b>Offset</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Offset</em>' containment reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Offset</em>' containment reference.
+   * @see #setOffset(Offset)
+   * @see com.jaspersoft.studio.data.sql.SqlPackage#getSelect_Offset()
+   * @model containment="true"
+   * @generated
+   */
+  Offset getOffset();
+
+  /**
+   * Sets the value of the '{@link com.jaspersoft.studio.data.sql.Select#getOffset <em>Offset</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Offset</em>' containment reference.
+   * @see #getOffset()
+   * @generated
+   */
+  void setOffset(Offset value);
+
+  /**
+   * Returns the value of the '<em><b>Fetch First</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Fetch First</em>' containment reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Fetch First</em>' containment reference.
+   * @see #setFetchFirst(FetchFirst)
+   * @see com.jaspersoft.studio.data.sql.SqlPackage#getSelect_FetchFirst()
+   * @model containment="true"
+   * @generated
+   */
+  FetchFirst getFetchFirst();
+
+  /**
+   * Sets the value of the '{@link com.jaspersoft.studio.data.sql.Select#getFetchFirst <em>Fetch First</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Fetch First</em>' containment reference.
+   * @see #getFetchFirst()
+   * @generated
+   */
+  void setFetchFirst(FetchFirst value);
 
 } // Select
