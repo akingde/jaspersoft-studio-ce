@@ -863,6 +863,7 @@ public class Messages extends NLS {
 	public static String IncreaseHSpaceAction_actionName;
 	public static String IncreaseVSpaceAction_actionDescription;
 	public static String IncreaseVSpaceAction_actionName;
+	public static String InputControlsPreferencePage_0;
 	public static String InputControlsPreferencePage_2;
 	public static String InputControlsPreferencePage_3;
 	public static String InputControlsPreferencePage_4;

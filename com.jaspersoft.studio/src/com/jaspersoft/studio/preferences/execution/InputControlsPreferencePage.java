@@ -33,6 +33,7 @@ import com.jaspersoft.studio.preferences.util.FieldEditorOverlayPage;
 public class InputControlsPreferencePage extends FieldEditorOverlayPage {
 	public static final String ALL_EMPTY = "allEmpty"; //$NON-NLS-1$
 	public static final String ALWAYS = "always"; //$NON-NLS-1$
+	public static final String NEVER = "never"; //$NON-NLS-1$
 
 	public static final String JSS_IC_SHOW = "com.jaspersoft.studio.ic.SHOWIC"; //$NON-NLS-1$
 
@@ -52,8 +53,8 @@ public class InputControlsPreferencePage extends FieldEditorOverlayPage {
 	public void createFieldEditors() {
 
 		addField(new ComboFieldEditor(JSS_IC_SHOW, Messages.InputControlsPreferencePage_2, new String[][] {
-				{ Messages.InputControlsPreferencePage_3, ALWAYS }, { Messages.InputControlsPreferencePage_4, ALL_EMPTY } },
-				getFieldEditorParent()));
+				{ Messages.InputControlsPreferencePage_3, ALWAYS }, { Messages.InputControlsPreferencePage_4, ALL_EMPTY },
+				{ Messages.InputControlsPreferencePage_0, NEVER } }, getFieldEditorParent()));
 
 		Link link = new Link(getFieldEditorParent(), SWT.WRAP);
 		String message = Messages.InputControlsPreferencePage_5;

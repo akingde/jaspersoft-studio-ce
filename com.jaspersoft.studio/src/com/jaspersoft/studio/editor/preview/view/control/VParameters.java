@@ -184,6 +184,8 @@ public class VParameters extends AVParameters {
 
 	public boolean checkFieldsFilled() {
 		String show = jContext.getProperty(InputControlsPreferencePage.JSS_IC_SHOW, InputControlsPreferencePage.ALWAYS);
+		if (show.equals(InputControlsPreferencePage.NEVER))
+			return true;
 		boolean defaultExists = false;
 		int count = 0;
 		if (prompts != null)
