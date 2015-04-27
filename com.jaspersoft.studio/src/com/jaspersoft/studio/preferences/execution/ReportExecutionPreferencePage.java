@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.preferences.execution;
 
@@ -26,7 +22,11 @@ import org.eclipse.jface.preference.DirectoryFieldEditor;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IWorkbench;
 
@@ -41,7 +41,6 @@ import com.jaspersoft.studio.preferences.editor.number.SpinnerFieldEditor;
 import com.jaspersoft.studio.preferences.util.FieldEditorOverlayPage;
 
 public class ReportExecutionPreferencePage extends FieldEditorOverlayPage {
-	public static final String NSF_FILES_DELETE_ONEXIT = "net.sf.jasperreports.virtualizer.files.delete.on.exit"; //$NON-NLS-1$
 	public static final String JSS_VIRTUALIZER_USE = "com.jaspersoft.studio.virtualizer.use"; //$NON-NLS-1$
 	public static final String JSS_VIRTUALIZER_TYPE = "com.jaspersoft.studio.virtualizer.type"; //$NON-NLS-1$
 	public static final String JSS_VIRTUALIZER_MAX_SIZE = "com.jaspersoft.studio.virtualizer.maxsize"; //$NON-NLS-1$
@@ -106,11 +105,36 @@ public class ReportExecutionPreferencePage extends FieldEditorOverlayPage {
 				getFieldEditorParent());
 		addField(bfeUSE);
 
-		bfeONEXIT = new BooleanFieldEditor(NSF_FILES_DELETE_ONEXIT, Messages.ReportExecutionPreferencePage_deleteTempLabel,
-				getFieldEditorParent());
+		bfeONEXIT = new BooleanFieldEditor(JRFileVirtualizer.PROPERTY_TEMP_FILES_SET_DELETE_ON_EXIT,
+				Messages.ReportExecutionPreferencePage_deleteTempLabel, getFieldEditorParent());
 		addField(bfeONEXIT);
-		HelpSystem.setHelp(bfeONEXIT.getDescriptionControl(getFieldEditorParent()), StudioPreferencePage.REFERENCE_PREFIX
-				+ bfeONEXIT.getPreferenceName());
+		final Control bcntrl = bfeONEXIT.getDescriptionControl(getFieldEditorParent());
+		HelpSystem.setHelp(bcntrl, StudioPreferencePage.REFERENCE_PREFIX + bfeONEXIT.getPreferenceName());
+		((Button) bcntrl).addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				// List<PropertyListFieldEditor.Pair> in;
+				// try {
+				// in = PropertyListFieldEditor.loadProperties(getPreferenceStore());
+				// PropertyListFieldEditor.Pair delOnExit = null;
+				// for (PropertyListFieldEditor.Pair p : in) {
+				// if (p.getKey().equals(JRFileVirtualizer.PROPERTY_TEMP_FILES_SET_DELETE_ON_EXIT)) {
+				// delOnExit = p;
+				// break;
+				// }
+				// }
+				// if (delOnExit == null) {
+				// delOnExit = new PropertyListFieldEditor.Pair(JRFileVirtualizer.PROPERTY_TEMP_FILES_SET_DELETE_ON_EXIT, "");
+				// in.add(delOnExit);
+				// }
+				// delOnExit.setValue(Boolean.toString(((Button) bcntrl).getSelection()));
+				//
+				// PropertyListFieldEditor.storeProperties(in, getPreferenceStore());
+				// } catch (IOException e1) {
+				// UIUtils.showError(e1);
+				// }
+			}
+		});
 
 		sfePAGEELSIZE = new SpinnerFieldEditor(JSS_VIRTUALIZER_PAGE_ELEMENT_SIZE,
 				Messages.ReportExecutionPreferencePage_pageElementSizeLabel, getFieldEditorParent(), 0);
@@ -154,10 +178,20 @@ public class ReportExecutionPreferencePage extends FieldEditorOverlayPage {
 		sfeMINGROWCOUNT.setMaximum(Integer.MAX_VALUE);
 		addField(sfeMINGROWCOUNT);
 
+		vtype = getVirtualizerType(getPreferenceStore().getString(JSS_VIRTUALIZER_TYPE));
+
 		enableVirtualizers(getPreferenceStore().getBoolean(JSS_VIRTUALIZER_USE));
 		enableLimitRecords(getPreferenceStore().getBoolean(JSS_LIMIT_RECORDS));
-		this.isSwap = getPreferenceStore().getString(JSS_VIRTUALIZER_TYPE).equals(JRSwapFileVirtualizer.class.getName());
-		enableSwapVirtualizer(isSwap);
+
+		enableSwapVirtualizer(vtype.equals(VirtualizerType.SWAP));
+	}
+
+	private VirtualizerType getVirtualizerType(String type) {
+		if (type.equals(JRFileVirtualizer.class.getName()))
+			return VirtualizerType.FILE;
+		if (type.equals(JRSwapFileVirtualizer.class.getName()))
+			return VirtualizerType.SWAP;
+		return VirtualizerType.ZIP;
 	}
 
 	@Override
@@ -167,8 +201,8 @@ public class ReportExecutionPreferencePage extends FieldEditorOverlayPage {
 			if (event.getSource() == bfeUSE)
 				enableVirtualizers((Boolean) event.getNewValue());
 			else if (event.getSource() == cfeType) {
-				isSwap = event.getNewValue().equals(JRSwapFileVirtualizer.class.getName());
-				enableSwapVirtualizer(isSwap);
+				vtype = getVirtualizerType((String) event.getNewValue());
+				enableSwapVirtualizer(vtype.equals(VirtualizerType.SWAP));
 			} else if (event.getSource() == mnumrec)
 				enableLimitRecords((Integer) event.getNewValue() >= 0);
 			else if (event.getSource() == bLimRec)
@@ -176,7 +210,11 @@ public class ReportExecutionPreferencePage extends FieldEditorOverlayPage {
 		}
 	}
 
-	private boolean isSwap = false;
+	enum VirtualizerType {
+		SWAP, FILE, ZIP;
+	}
+
+	private VirtualizerType vtype = VirtualizerType.FILE;
 	private BooleanFieldEditor bLimRec;
 	private SpinnerFieldEditor mnumrec;
 
@@ -185,16 +223,17 @@ public class ReportExecutionPreferencePage extends FieldEditorOverlayPage {
 	}
 
 	private void enableSwapVirtualizer(boolean isSwap) {
+		bfeONEXIT.setEnabled(vtype.equals(VirtualizerType.FILE), getFieldEditorParent());
 		dfeTMP.setEnabled(isSwap, getFieldEditorParent());
 		sfeBLOCKSIZE.setEnabled(isSwap, getFieldEditorParent());
 		sfeMINGROWCOUNT.setEnabled(isSwap, getFieldEditorParent());
 	}
 
 	private void enableVirtualizers(boolean newVal) {
-		bfeONEXIT.setEnabled(newVal, getFieldEditorParent());
+		bfeONEXIT.setEnabled(newVal && vtype.equals(VirtualizerType.FILE), getFieldEditorParent());
 		cfeType.setEnabled(newVal, getFieldEditorParent());
 		msfe.setEnabled(newVal, getFieldEditorParent());
-		enableSwapVirtualizer(newVal && isSwap);
+		enableSwapVirtualizer(newVal && vtype.equals(VirtualizerType.SWAP));
 		sfePAGEELSIZE.setEnabled(newVal, getFieldEditorParent());
 	}
 
@@ -207,7 +246,7 @@ public class ReportExecutionPreferencePage extends FieldEditorOverlayPage {
 	}
 
 	public static void getDefaults(IPreferenceStore store) {
-		store.setDefault(NSF_FILES_DELETE_ONEXIT, "true"); //$NON-NLS-1$
+		store.setDefault(JRFileVirtualizer.PROPERTY_TEMP_FILES_SET_DELETE_ON_EXIT, "true"); //$NON-NLS-1$
 		store.setDefault(JSS_VIRTUALIZER_USE, "false"); //$NON-NLS-1$
 		store.setDefault(JSS_VIRTUALIZER_TYPE, JRFileVirtualizer.class.getName());
 		store.setDefault(JSS_VIRTUALIZER_MAX_SIZE, 100);

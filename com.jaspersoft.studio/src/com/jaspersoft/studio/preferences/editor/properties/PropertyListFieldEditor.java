@@ -24,6 +24,7 @@ import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.FieldEditor;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -66,11 +67,10 @@ import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.wizards.ContextHelpIDs;
 
 /**
- * List field editor to edit the JSS properties. The properties are 
- * shown as key and value inside an editable table
+ * List field editor to edit the JSS properties. The properties are shown as key and value inside an editable table
  * 
  * @author Orlandin Marco
- *
+ * 
  */
 public class PropertyListFieldEditor extends FieldEditor {
 
@@ -78,17 +78,17 @@ public class PropertyListFieldEditor extends FieldEditor {
 	 * The table widget
 	 */
 	protected Table table;
-	
+
 	/**
 	 * The viewer for the table
 	 */
 	protected TableViewer viewer;
-	
+
 	/**
 	 * The input of the viewer
 	 */
 	protected List<Pair> input;
-	
+
 	/**
 	 * The button box containing the Add, Remove, edit and clone buttons
 	 */
@@ -108,7 +108,7 @@ public class PropertyListFieldEditor extends FieldEditor {
 	 * The Remove button.
 	 */
 	protected Button removeButton;
-	
+
 	/**
 	 * The edit button
 	 */
@@ -118,7 +118,7 @@ public class PropertyListFieldEditor extends FieldEditor {
 	 * The selection listener.
 	 */
 	protected SelectionListener selectionListener;
-	
+
 	/**
 	 * The columns width
 	 */
@@ -128,68 +128,65 @@ public class PropertyListFieldEditor extends FieldEditor {
 	 * The columns names
 	 */
 	private final String[] columnNames;
-	
+
 	/**
-	 * Simple container to store a key and a value String. Used
-	 * to provide content to the table
+	 * Simple container to store a key and a value String. Used to provide content to the table
 	 * 
 	 * @author Orlandin Marco
-	 *
+	 * 
 	 */
-	public class Pair{
-		
+	static public class Pair {
+
 		/**
-		 * A string representing a key, shown on the left column of
-		 * the table. 
+		 * A string representing a key, shown on the left column of the table.
 		 */
 		private String key;
-		
+
 		/**
 		 * The value of the key, shown on the right column of the table
 		 */
 		private String value;
-		
+
 		/**
 		 * Create a new container for a key and a value
-		 *
+		 * 
 		 */
-		public Pair(String key, String value){
+		public Pair(String key, String value) {
 			this.key = key;
 			this.value = value;
 		}
-		
-		public String getKey(){
+
+		public String getKey() {
 			return key;
 		}
-		
-		public String getValue(){
+
+		public String getValue() {
 			return value;
 		}
-		
-		public void setKey(String key){
+
+		public void setKey(String key) {
 			this.key = key;
 		}
-		
-		public void setValue(String value){
+
+		public void setValue(String value) {
 			this.value = value;
 		}
-		
+
 		@Override
 		public boolean equals(Object obj) {
-			Pair compared = (Pair)obj;
+			Pair compared = (Pair) obj;
 			return key.equals(compared.getKey()) && value.equals(compared.getValue());
 		}
 	}
-	
+
 	/**
-	 * Label provider for the Pair class. Simply return the key
-	 * of the pair for the left column and the value for the right
-	 * one
+	 * Label provider for the Pair class. Simply return the key of the pair for the left column and the value for the
+	 * right one
 	 * 
 	 * @author Orlandin Marco
-	 *
+	 * 
 	 */
-	private class PairLableProvider extends LabelProvider implements ITableLabelProvider{ 
+	private class PairLableProvider extends LabelProvider implements ITableLabelProvider {
 
 		@Override
 		public Image getColumnImage(Object element, int columnIndex) {
@@ -198,21 +195,21 @@ public class PropertyListFieldEditor extends FieldEditor {
 
 		@Override
 		public String getColumnText(Object element, int columnIndex) {
-			if (columnIndex == 0){
-				return ((Pair)element).getKey();
-			} else if (columnIndex == 1){
-				return ((Pair)element).getValue();
-			}	
+			if (columnIndex == 0) {
+				return ((Pair) element).getKey();
+			} else if (columnIndex == 1) {
+				return ((Pair) element).getValue();
+			}
 			return null;
 		}
-		
+
 	}
-	
+
 	/**
 	 * Dialog to edit or add a new properties
 	 * 
 	 * @author Orlandin Marco
-	 *
+	 * 
 	 */
 	protected class PEditDialog extends Dialog {
 
@@ -220,29 +217,31 @@ public class PropertyListFieldEditor extends FieldEditor {
 		 * The name of the parameter
 		 */
 		private String pname;
-		
+
 		/**
 		 * The value of the parameter
 		 */
 		private String pvalue;
 
 		/**
-		 * Build the dialog with empty value, constructor
-		 * used to create a new property
+		 * Build the dialog with empty value, constructor used to create a new property
 		 * 
-		 * @param parentShell the shell to open the dialog
+		 * @param parentShell
+		 *          the shell to open the dialog
 		 */
 		protected PEditDialog(Shell parentShell) {
 			this(parentShell, null, null);
 		}
 
 		/**
-		 * Open the dialog with prefilled name\value fileds, used
-		 * to edit an existing parameter
+		 * Open the dialog with prefilled name\value fileds, used to edit an existing parameter
 		 * 
-		 * @param parentShell the shell to create the dialog
-		 * @param pname the name of the edited parameter
-		 * @param pvalue the value of the edit parameter
+		 * @param parentShell
+		 *          the shell to create the dialog
+		 * @param pname
+		 *          the name of the edited parameter
+		 * @param pvalue
+		 *          the value of the edit parameter
 		 */
 		protected PEditDialog(Shell parentShell, String pname, String pvalue) {
 			super(parentShell);
@@ -296,7 +295,7 @@ public class PropertyListFieldEditor extends FieldEditor {
 			newShell.setSize(500, 200);
 			newShell.setText(Messages.PropertyListFieldEditor_newPropertyTitle);
 		}
-		
+
 		/**
 		 * Return the current value of the parameter name
 		 * 
@@ -318,26 +317,28 @@ public class PropertyListFieldEditor extends FieldEditor {
 	}
 
 	/**
-	 * Build the field editor with a table with two column, one with the key and the other
-	 * one with the value. The column name, number and width are fixed inside the constructor
+	 * Build the field editor with a table with two column, one with the key and the other one with the value. The column
+	 * name, number and width are fixed inside the constructor
 	 * 
-   * @param name the name of the preference this field editor works on
-   * @param text the label text of the field editor
-	 * @param parent the parent composite
+	 * @param name
+	 *          the name of the preference this field editor works on
+	 * @param text
+	 *          the label text of the field editor
+	 * @param parent
+	 *          the parent composite
 	 */
 	public PropertyListFieldEditor(String name, String text, Composite parent) {
 		init(name, text);
-		this.columnNames = new String[] { Messages.PropertyListFieldEditor_propertyLabel, Messages.PropertyListFieldEditor_valueLabel };
-		this.columnWidths = new int[] {300, 300 };
+		this.columnNames = new String[] { Messages.PropertyListFieldEditor_propertyLabel,
+				Messages.PropertyListFieldEditor_valueLabel };
+		this.columnWidths = new int[] { 300, 300 };
 		createControl(parent);
 	}
 
 	/**
-	 * Open the dialog to input a new parameter and
-	 * return the result when it's closed
+	 * Open the dialog to input a new parameter and return the result when it's closed
 	 * 
-	 * @return the value of the parameter if it is closed with 
-	 * ok, null if it is closed with cancel
+	 * @return the value of the parameter if it is closed with ok, null if it is closed with cancel
 	 */
 	protected Pair getNewInputObject() {
 		PEditDialog dialog = new PEditDialog(UIUtils.getShell());
@@ -351,8 +352,12 @@ public class PropertyListFieldEditor extends FieldEditor {
 	 * Store the values of the parameters inside the configuration
 	 */
 	protected void doStore() {
+		storeProperties(input, getPreferenceStore());
+	}
+
+	public static void storeProperties(List<Pair> in, IPreferenceStore store) {
 		Properties props = new Properties();
-		for (Pair item : input) {
+		for (Pair item : in) {
 			String key = item.key;
 			String value = item.value;
 			props.setProperty(key, value);
@@ -361,7 +366,7 @@ public class PropertyListFieldEditor extends FieldEditor {
 			else if (key.equals("net.sf.jasperreports.default.font.size")) //$NON-NLS-1$
 				JRPropertiesUtil.getInstance(DefaultJasperReportsContext.getInstance()).setProperty(key, value);
 		}
-		getPreferenceStore().setValue(FilePrefUtil.NET_SF_JASPERREPORTS_JRPROPERTIES, FileUtils.getPropertyAsString(props));
+		store.setValue(FilePrefUtil.NET_SF_JASPERREPORTS_JRPROPERTIES, FileUtils.getPropertyAsString(props));
 	}
 
 	/**
@@ -371,17 +376,7 @@ public class PropertyListFieldEditor extends FieldEditor {
 		if (getTable() != null) {
 			Properties props = null;
 			try {
-				props = FileUtils.load(getPreferenceStore().getString(FilePrefUtil.NET_SF_JASPERREPORTS_JRPROPERTIES));
-				List<String> keys = new ArrayList<String>();
-				for (Object key : props.keySet())
-					keys.add((String) key);
-				Collections.sort(keys);
-
-				input = new ArrayList<Pair>();
-				for (String key : keys) {
-					String value = props.getProperty(key);
-					input.add(new Pair((String) key, value));
-				}
+				input = loadProperties(getPreferenceStore());
 				viewer.setInput(input);
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -390,7 +385,22 @@ public class PropertyListFieldEditor extends FieldEditor {
 			TableHelpListener.setTableHelp(getTable());
 		}
 	}
-	
+
+	public static List<Pair> loadProperties(IPreferenceStore store) throws IOException {
+		Properties props = FileUtils.load(store.getString(FilePrefUtil.NET_SF_JASPERREPORTS_JRPROPERTIES));
+		List<String> keys = new ArrayList<String>();
+		for (Object key : props.keySet())
+			keys.add((String) key);
+		Collections.sort(keys);
+
+		List<Pair> input = new ArrayList<Pair>();
+		for (String key : keys) {
+			String value = props.getProperty(key);
+			input.add(new Pair((String) key, value));
+		}
+		return input;
+	}
+
 	/**
 	 * Load the value of the default parameters from the configuration
 	 */
@@ -398,7 +408,8 @@ public class PropertyListFieldEditor extends FieldEditor {
 		if (getTable() != null) {
 			getTable().removeAll();
 			try {
-				Properties props = FileUtils.load(getPreferenceStore().getDefaultString(FilePrefUtil.NET_SF_JASPERREPORTS_JRPROPERTIES));
+				Properties props = FileUtils.load(getPreferenceStore().getDefaultString(
+						FilePrefUtil.NET_SF_JASPERREPORTS_JRPROPERTIES));
 				List<String> keys = new ArrayList<String>();
 				for (Object key : props.keySet())
 					keys.add((String) key);
@@ -445,13 +456,12 @@ public class PropertyListFieldEditor extends FieldEditor {
 	}
 
 	/**
-	 * Action executed when the edit button is pressed, open the dialog to edit the parameter
-	 * and then
+	 * Action executed when the edit button is pressed, open the dialog to edit the parameter and then
 	 */
 	protected void editPressed() {
-		StructuredSelection selection = (StructuredSelection)viewer.getSelection();
-		if (!selection.isEmpty()){
-			Pair element = (Pair)selection.getFirstElement();
+		StructuredSelection selection = (StructuredSelection) viewer.getSelection();
+		if (!selection.isEmpty()) {
+			Pair element = (Pair) selection.getFirstElement();
 			int selIdx = input.indexOf(element);
 			element = input.get(selIdx);
 			String pname = element.getKey();
@@ -478,8 +488,7 @@ public class PropertyListFieldEditor extends FieldEditor {
 	}
 
 	/**
-	 * Enable or disable the table buttons accordingly to 
-	 * the current selection
+	 * Enable or disable the table buttons accordingly to the current selection
 	 */
 	protected void selectionChanged() {
 		int index = table.getSelectionIndex();
@@ -492,14 +501,13 @@ public class PropertyListFieldEditor extends FieldEditor {
 		if (editButton != null)
 			editButton.setEnabled(!isMultiSelection && size >= 1 && index >= 0 && index < size);
 	}
-	
+
 	protected void createButtons(Composite box) {
 		addButton = createPushButton(box, Messages.common_add);
 		duplicateButton = createPushButton(box, Messages.PropertyListFieldEditor_duplicateButton);
 		removeButton = createPushButton(box, Messages.common_delete);
 		editButton = createPushButton(box, Messages.common_edit);
 	}
-	
 
 	/**
 	 * Return the current table
@@ -597,8 +605,8 @@ public class PropertyListFieldEditor extends FieldEditor {
 		gd = new GridData(GridData.FILL_BOTH);
 		gd.horizontalSpan = numColumns - 1;
 		gd.grabExcessHorizontalSpace = true;
-		for(int width : columnWidths){
-			gd.widthHint += width; 
+		for (int width : columnWidths) {
+			gd.widthHint += width;
 		}
 		table.setLayoutData(gd);
 
@@ -642,7 +650,8 @@ public class PropertyListFieldEditor extends FieldEditor {
 	/**
 	 * Returns this field editor's table control.
 	 * 
-	 * @param parent the parent control
+	 * @param parent
+	 *          the parent control
 	 * @return the table control
 	 */
 	public Table getTableControl(Composite parent) {
@@ -677,12 +686,11 @@ public class PropertyListFieldEditor extends FieldEditor {
 		}
 		return table;
 	}
-	
+
 	/**
-	 * Attach the cell editor on doubleclick to the table. The table 
-	 * must be created before to call this method.
+	 * Attach the cell editor on doubleclick to the table. The table must be created before to call this method.
 	 */
-	protected void attachCellEditors(){
+	protected void attachCellEditors() {
 		final TableEditor editor = new TableEditor(table);
 		editor.horizontalAlignment = SWT.LEFT;
 		editor.grabHorizontal = true;
@@ -691,7 +699,7 @@ public class PropertyListFieldEditor extends FieldEditor {
 				Rectangle clientArea = table.getClientArea();
 				Point pt = new Point(event.x, event.y);
 				int index = table.getTopIndex();
-				final Pair selectedItem = (Pair)((StructuredSelection)viewer.getSelection()).getFirstElement();
+				final Pair selectedItem = (Pair) ((StructuredSelection) viewer.getSelection()).getFirstElement();
 				while (index < table.getItemCount()) {
 					boolean visible = false;
 					final TableItem selectedCell = table.getItem(index);
@@ -704,16 +712,20 @@ public class PropertyListFieldEditor extends FieldEditor {
 								public void handleEvent(final Event e) {
 									switch (e.type) {
 									case SWT.FocusOut:
-										if (column == 0) selectedItem.setKey(text.getText());
-										else selectedItem.setValue(text.getText());
+										if (column == 0)
+											selectedItem.setKey(text.getText());
+										else
+											selectedItem.setValue(text.getText());
 										text.dispose();
 										viewer.refresh();
 										break;
 									case SWT.Traverse:
 										switch (e.detail) {
 										case SWT.TRAVERSE_RETURN:
-											if (column == 0) selectedItem.setKey(text.getText());
-											else selectedItem.setValue(text.getText());
+											if (column == 0)
+												selectedItem.setKey(text.getText());
+											else
+												selectedItem.setValue(text.getText());
 											text.dispose();
 											viewer.refresh();
 											// FALL THROUGH
@@ -744,7 +756,7 @@ public class PropertyListFieldEditor extends FieldEditor {
 			}
 		});
 	}
-	
+
 	/**
 	 * Return the number of columns in the table
 	 */
@@ -796,21 +808,21 @@ public class PropertyListFieldEditor extends FieldEditor {
 	 */
 	protected void duplicatePressed() {
 		setPresentsDefaultValue(false);
-		StructuredSelection sel =  (StructuredSelection)viewer.getSelection();
-		for(Object obj : sel.toList()){
-			Pair selectedElement = (Pair)obj;
+		StructuredSelection sel = (StructuredSelection) viewer.getSelection();
+		for (Object obj : sel.toList()) {
+			Pair selectedElement = (Pair) obj;
 			int index = input.indexOf(obj);
 			if (index >= 0) {
-				Pair newElement = new Pair(selectedElement.getKey()+"_copy", selectedElement.getValue());
-				if (index < (input.size()-1)){
-					input.add(index+1, newElement);
+				Pair newElement = new Pair(selectedElement.getKey() + "_copy", selectedElement.getValue());
+				if (index < (input.size() - 1)) {
+					input.add(index + 1, newElement);
 				} else {
 					input.add(newElement);
 				}
 				viewer.refresh();
 			}
 		}
-	
+
 		selectionChanged();
 	}
 
@@ -819,8 +831,8 @@ public class PropertyListFieldEditor extends FieldEditor {
 	 */
 	protected void removePressed() {
 		setPresentsDefaultValue(false);
-		StructuredSelection sel =  (StructuredSelection)viewer.getSelection();
-		for(Object obj : sel.toList()){
+		StructuredSelection sel = (StructuredSelection) viewer.getSelection();
+		for (Object obj : sel.toList()) {
 			input.remove(obj);
 		}
 		viewer.refresh();
@@ -837,15 +849,14 @@ public class PropertyListFieldEditor extends FieldEditor {
 	}
 
 	/**
-	 * enable or disable all the controls where the user
-	 * can interact. If the table wasn't created yet then it
-	 * is also created as child of the passed composite parameter
+	 * enable or disable all the controls where the user can interact. If the table wasn't created yet then it is also
+	 * created as child of the passed composite parameter
 	 * 
-	 *  @param enabled true if the controls must be enabled, false
-	 *  otherwise
-	 *  
-	 *  @param parent the parent of the table if it need to be
-	 *  created
+	 * @param enabled
+	 *          true if the controls must be enabled, false otherwise
+	 * 
+	 * @param parent
+	 *          the parent of the table if it need to be created
 	 */
 	public void setEnabled(boolean enabled, Composite parent) {
 		super.setEnabled(enabled, parent);
