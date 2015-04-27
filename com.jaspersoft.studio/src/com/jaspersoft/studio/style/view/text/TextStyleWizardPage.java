@@ -15,6 +15,7 @@ package com.jaspersoft.studio.style.view.text;
 import java.awt.GraphicsEnvironment;
 import java.util.ArrayList;
 
+import net.sf.jasperreports.eclipse.util.StringUtils;
 import net.sf.jasperreports.engine.JRFont;
 import net.sf.jasperreports.engine.base.JRBaseFont;
 import net.sf.jasperreports.engine.base.JRBaseLineBox;
@@ -50,6 +51,7 @@ import com.jaspersoft.studio.preferences.fonts.utils.FontUtils;
 import com.jaspersoft.studio.property.color.chooser.ColorDialog;
 import com.jaspersoft.studio.property.descriptor.color.ColorLabelProvider;
 import com.jaspersoft.studio.utils.AlfaRGB;
+import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
 
@@ -272,8 +274,7 @@ public class TextStyleWizardPage extends JSSHelpWizardPage {
 		font.setStrikeThrough(strikeTrought.getSelection());
 		font.setFontName(fontName.getText());
 		String fontSizeText = fontSize.getText();
-		float size = Float.valueOf(fontSizeText);
-		font.setFontSize(size);
+		font.setFontSize(StringUtils.safeParseAsFloat(fontSizeText));
 		
 		element.setHorizontalAlignmen(getHorizonltalAlignment());
 		element.setVerticalAlignmen(getVerticalAlignment());
@@ -455,8 +456,8 @@ public class TextStyleWizardPage extends JSSHelpWizardPage {
 		synchronized (this) {
 			settingData = true;
 			JRFont font = element.getFont();
-			fontName.setText(font.getOwnFontName());
-			fontSize.setText(String.valueOf(font.getOwnFontsize()));
+			fontName.setText(Misc.nvl(font.getOwnFontName()));
+			fontSize.setText(Misc.nvl(font.getOwnFontsize(),""));
 			bold.setSelection(font.isOwnBold());
 			italic.setSelection(font.isOwnItalic());
 			underline.setSelection(font.isOwnUnderline());

@@ -468,9 +468,13 @@ public class TextStyleView implements TemplateViewProvider {
 						normalized.setBorders(null);
 						normalized.setHorizontalAlignmen(HorizontalTextAlignEnum.LEFT);
 						normalized.setVerticalAlignmen(VerticalTextAlignEnum.TOP);
-						int fontSize = normalized.getFont().getOwnFontsize().intValue();
+						int fontSize = 8; // dummy default value just for preview
+						Float ownFontsize = normalized.getFont().getOwnFontsize();
+						if(ownFontsize!=null){
+							fontSize = ownFontsize.intValue();
+						}
 						ImageData previewData = PreviewGenerator.generatePreview(normalized, fontSize*text.length()+width, fontSize + height, sampleComposite.getBackground().getRGB());
-						if (normalized.getFont().getOwnFontsize()>height) previewData = cropImage(previewData, 0, 0, height, width);
+						if (ownFontsize!= null && ownFontsize>height) previewData = cropImage(previewData, 0, 0, height, width);
 						sampleArea.setBackgroundImage(resourceCache.getImage(previewData));
 					}
 				});
