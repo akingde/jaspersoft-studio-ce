@@ -108,33 +108,6 @@ public class ReportExecutionPreferencePage extends FieldEditorOverlayPage {
 		bfeONEXIT = new BooleanFieldEditor(JRFileVirtualizer.PROPERTY_TEMP_FILES_SET_DELETE_ON_EXIT,
 				Messages.ReportExecutionPreferencePage_deleteTempLabel, getFieldEditorParent());
 		addField(bfeONEXIT);
-		final Control bcntrl = bfeONEXIT.getDescriptionControl(getFieldEditorParent());
-		HelpSystem.setHelp(bcntrl, StudioPreferencePage.REFERENCE_PREFIX + bfeONEXIT.getPreferenceName());
-		((Button) bcntrl).addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				// List<PropertyListFieldEditor.Pair> in;
-				// try {
-				// in = PropertyListFieldEditor.loadProperties(getPreferenceStore());
-				// PropertyListFieldEditor.Pair delOnExit = null;
-				// for (PropertyListFieldEditor.Pair p : in) {
-				// if (p.getKey().equals(JRFileVirtualizer.PROPERTY_TEMP_FILES_SET_DELETE_ON_EXIT)) {
-				// delOnExit = p;
-				// break;
-				// }
-				// }
-				// if (delOnExit == null) {
-				// delOnExit = new PropertyListFieldEditor.Pair(JRFileVirtualizer.PROPERTY_TEMP_FILES_SET_DELETE_ON_EXIT, "");
-				// in.add(delOnExit);
-				// }
-				// delOnExit.setValue(Boolean.toString(((Button) bcntrl).getSelection()));
-				//
-				// PropertyListFieldEditor.storeProperties(in, getPreferenceStore());
-				// } catch (IOException e1) {
-				// UIUtils.showError(e1);
-				// }
-			}
-		});
 
 		sfePAGEELSIZE = new SpinnerFieldEditor(JSS_VIRTUALIZER_PAGE_ELEMENT_SIZE,
 				Messages.ReportExecutionPreferencePage_pageElementSizeLabel, getFieldEditorParent(), 0);
@@ -224,7 +197,7 @@ public class ReportExecutionPreferencePage extends FieldEditorOverlayPage {
 
 	private void enableSwapVirtualizer(boolean isSwap) {
 		bfeONEXIT.setEnabled(vtype.equals(VirtualizerType.FILE), getFieldEditorParent());
-		dfeTMP.setEnabled(isSwap, getFieldEditorParent());
+		dfeTMP.setEnabled(isSwap || vtype.equals(VirtualizerType.FILE), getFieldEditorParent());
 		sfeBLOCKSIZE.setEnabled(isSwap, getFieldEditorParent());
 		sfeMINGROWCOUNT.setEnabled(isSwap, getFieldEditorParent());
 	}
@@ -254,6 +227,8 @@ public class ReportExecutionPreferencePage extends FieldEditorOverlayPage {
 		store.setDefault(JSS_VIRTUALIZER_BLOCK_SIZE, 100);
 		store.setDefault(JSS_VIRTUALIZER_MIN_GROW_COUNT, 100);
 		store.setDefault(JSS_VIRTUALIZER_PAGE_ELEMENT_SIZE, 1);
+
+		store.setDefault(JRFileVirtualizer.PROPERTY_TEMP_FILES_SET_DELETE_ON_EXIT, "false"); //$NON-NLS-1$
 
 		store.setDefault(JSS_LIMIT_RECORDS, "false");//$NON-NLS-1$
 		store.setDefault(JSS_MAX_RECORDS, -1);//$NON-NLS-1$
