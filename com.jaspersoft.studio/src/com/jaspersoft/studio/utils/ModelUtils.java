@@ -58,6 +58,7 @@ import net.sf.jasperreports.engine.JRPropertiesUtil;
 import net.sf.jasperreports.engine.JRPropertiesUtil.PropertySuffix;
 import net.sf.jasperreports.engine.JRReport;
 import net.sf.jasperreports.engine.JRSection;
+import net.sf.jasperreports.engine.JRSortField;
 import net.sf.jasperreports.engine.JRVariable;
 import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.component.Component;
@@ -80,6 +81,7 @@ import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.engine.util.JRSaver;
 import net.sf.jasperreports.engine.util.MarkupProcessorFactory;
 
+import org.apache.commons.lang.ObjectUtils;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
@@ -1800,4 +1802,112 @@ public class ModelUtils {
 	public static boolean isEmpty(ANode n) {
 		return Misc.isNullOrEmpty(n.getChildren()) || n.getChildren().get(0) instanceof MDummy;
 	}
+	
+	/**
+	 * Compare two field instances deciding they can be considered equals.<br>
+	 * In order this to happen the following properties are considered:
+	 * <ul>
+	 * 	<li>name</li>
+	 * 	<li>description</li>
+	 *  <li>value class</li>
+	 *  <li>value class name</li>
+	 * </ul>
+	 * 
+	 * @param field1 the first field to compare
+	 * @param field2 the second field to compare
+	 * @return <code>true</code> if the fields are considered equals,
+	 * 					<code>false</code> otherwise
+	 */
+	public static boolean areFieldsEquals(JRField field1, JRField field2) {
+		Assert.isNotNull(field1);
+		Assert.isNotNull(field2);
+		if(!ObjectUtils.equals(field1.getName(), field2.getName())){
+			return false;
+		}
+		if(!ObjectUtils.equals(field1.getDescription(), field2.getDescription())){
+			return false;
+		}
+		if(!ObjectUtils.equals(field1.getValueClass(),field2.getValueClass())){
+			return false;
+		}
+		if(!ObjectUtils.equals(field1.getValueClassName(),field2.getValueClassName())){
+			return false;
+		}
+		return true;
+	}
+	
+	/**
+	 * Compare two parameter instances deciding they can be considered equals.<br>
+	 * In order this to happen the following properties are considered:
+	 * <ul>
+	 * 	<li>name</li>
+	 * 	<li>description</li>
+	 *  <li>value class</li>
+	 *  <li>value class name</li>
+	 *  <li>nested type</li>
+	 *  <li>nested type name</li>
+	 *  <li>is for prompting</li>
+	 * </ul>
+	 * 
+	 * @param param1 the first parameter to compare
+	 * @param param2 the second parameter to compare
+	 * @return <code>true</code> if the parameters are considered equals,
+	 * 					<code>false</code> otherwise
+	 */
+	public static boolean areParametersEquals(JRParameter param1, JRParameter param2) {
+		Assert.isNotNull(param1);
+		Assert.isNotNull(param2);
+		if(!ObjectUtils.equals(param1.getName(), param2.getName())){
+			return false;
+		}
+		if(!ObjectUtils.equals(param1.getDescription(), param2.getDescription())){
+			return false;
+		}
+		if(!ObjectUtils.equals(param1.getValueClass(),param2.getValueClass())){
+			return false;
+		}
+		if(!ObjectUtils.equals(param1.getValueClassName(),param2.getValueClassName())){
+			return false;
+		}
+		if(!ObjectUtils.equals(param1.getNestedType(),param2.getNestedType())){
+			return false;
+		}
+		if(!ObjectUtils.equals(param1.getNestedTypeName(),param2.getNestedTypeName())){
+			return false;
+		}
+		if(param1.isForPrompting()!=param2.isForPrompting()){
+			return false;
+		}
+		return true;
+	}
+	
+	/**
+	 * Compare two sort field instances deciding they can be considered equals.<br>
+	 * In order this to happen the following properties are considered:
+	 * <ul>
+	 * 	<li>name</li>
+	 * 	<li>order</li>
+	 * 	<li>type</li>
+	 * </ul>
+	 * 
+	 * @param sfield1 the first sort field
+	 * @param sfield2 the second sort field
+	 * @return <code>true</code> if the sort fields are considered equals,
+	 * 					<code>false</code> otherwise
+	 */
+	public static boolean areSortFieldsEquals(JRSortField sfield1, JRSortField sfield2) {
+		Assert.isNotNull(sfield1);
+		Assert.isNotNull(sfield2);
+		if(!ObjectUtils.equals(sfield1.getName(),sfield2.getName())){
+			return false;
+		}
+		if(!ObjectUtils.equals(sfield1.getOrderValue(),sfield2.getOrderValue())){
+			return false;
+		}
+		if(!ObjectUtils.equals(sfield1.getType(),sfield2.getType())){
+			return false;
+		}
+		return true;
+	}
 }
+	

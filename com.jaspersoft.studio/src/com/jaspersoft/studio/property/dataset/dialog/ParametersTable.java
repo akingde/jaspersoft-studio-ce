@@ -202,7 +202,7 @@ public class ParametersTable extends AbstractModifyTable {
 		tviewer.refresh();
 	}
 
-	public List<JRDesignParameter> getFields() {
+	public List<JRDesignParameter> getParameters() {
 		return (List<JRDesignParameter>) tviewer.getInput();
 	}
 

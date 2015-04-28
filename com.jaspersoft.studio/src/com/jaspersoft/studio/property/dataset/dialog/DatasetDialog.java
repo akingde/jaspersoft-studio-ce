@@ -68,13 +68,14 @@ import com.jaspersoft.studio.model.dataset.MDataset;
 import com.jaspersoft.studio.model.field.MField;
 import com.jaspersoft.studio.model.field.command.CreateFieldCommand;
 import com.jaspersoft.studio.model.field.command.DeleteFieldCommand;
+import com.jaspersoft.studio.model.field.command.ReplaceAllFieldsCommand;
 import com.jaspersoft.studio.model.parameter.MParameter;
 import com.jaspersoft.studio.model.parameter.MParameterSystem;
 import com.jaspersoft.studio.model.parameter.MParameters;
 import com.jaspersoft.studio.model.parameter.command.CreateParameterCommand;
 import com.jaspersoft.studio.model.parameter.command.DeleteParameterCommand;
-import com.jaspersoft.studio.model.sortfield.command.CreateSortFieldCommand;
-import com.jaspersoft.studio.model.sortfield.command.DeleteSortFieldCommand;
+import com.jaspersoft.studio.model.parameter.command.ReplaceAllParametersCommand;
+import com.jaspersoft.studio.model.sortfield.command.ReplaceAllSortFieldsCommand;
 import com.jaspersoft.studio.property.SetValueCommand;
 import com.jaspersoft.studio.swt.events.ExpressionModifiedEvent;
 import com.jaspersoft.studio.swt.events.ExpressionModifiedListener;
@@ -150,8 +151,9 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 	public boolean close() {
 		if (getReturnCode() == OK) {
 			createCommand();
-			if (cmdStack != null)
+			if (cmdStack != null) {
 				cmdStack.execute(command);
+			}
 		}
 		dataquery.dispose();
 		ptable.getPropertyChangeSupport().removePropertyChangeListener(prmListener);
@@ -419,11 +421,12 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 		List<JRDesignField> newfields = ftable.getFields();
 		for (JRField f : oldfields) {
 			Boolean canceled = null;
-			for (JRDesignField newf : newfields)
+			for (JRDesignField newf : newfields) {
 				if (newf.getName().equals(f.getName()) || mapfields.get(f) == newf) {
 					canceled = Boolean.TRUE;
 					break;
 				}
+			}
 			if (canceled == null)
 				command.add(new DeleteFieldCommand(jConfig, ds, (JRDesignField) f, canceled));
 		}
@@ -458,16 +461,37 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 			if (notexists)
 				command.add(new CreateFieldCommand(ds, newf, -1));
 		}
-
-		List<JRSortField> dssfields = ds.getSortFieldsList();
-		List<JRDesignSortField> sfields = sftable.getFields();
-		for (JRSortField f : dssfields)
-			command.add(new DeleteSortFieldCommand(ds, f));
-		for (JRDesignSortField newf : sfields)
-			command.add(new CreateSortFieldCommand(ds, newf, -1));
-
+		
+		// checks ordering for fields
+		if(oldfields.size()==newfields.size()) {
+			for(int i=0;i<newfields.size();i++){
+				if(!ModelUtils.areFieldsEquals(oldfields.get(i),newfields.get(i))){
+					command.add(new ReplaceAllFieldsCommand(newfields, mdataset.getMFields()));
+					break;
+				}
+			}
+		}
+		else {
+			command.add(new ReplaceAllFieldsCommand(newfields, mdataset.getMFields()));	
+		}
+		
+		// handle sort fields
+		List<JRSortField> oldSortFields = ds.getSortFieldsList();
+		List<JRDesignSortField> newSortFields = sftable.getFields();
+		if(oldSortFields.size()==newSortFields.size()){
+			for(int i=0;i<newSortFields.size();i++){
+				if(!ModelUtils.areSortFieldsEquals(oldSortFields.get(i), newSortFields.get(i))){
+					command.add(new ReplaceAllSortFieldsCommand(newSortFields, mdataset.getMSortFields()));
+					break;
+				}
+			}
+		}
+		else {
+			command.add(new ReplaceAllSortFieldsCommand(newSortFields, mdataset.getMSortFields()));
+		}
+		
 		List<JRParameter> oldparams = ds.getParametersList();
-		List<JRParameter> newparams = newdataset.getParametersList();
+		List<JRDesignParameter> newparams = ptable.getParameters();
 		for (JRParameter f : oldparams) {
 			if (f.isSystemDefined())
 				continue;
@@ -516,6 +540,19 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 			}
 			if (notexists)
 				command.add(new CreateParameterCommand(ds, newf, -1));
+		}
+		
+		// handle parameters for a possible reorder
+		if(oldparams.size()==newparams.size()){
+			for(int i=0;i<newparams.size();i++){
+				if(!ModelUtils.areParametersEquals(oldparams.get(i), newparams.get(i))){
+					command.add(new ReplaceAllParametersCommand(newparams, mdataset.getMParameters()));
+					break;
+				}
+			}
+		}
+		else {
+			command.add(new ReplaceAllParametersCommand(newparams, mdataset.getMParameters()));
 		}
 	}
 

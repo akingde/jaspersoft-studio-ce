@@ -35,6 +35,7 @@ import com.jaspersoft.studio.model.field.MField;
 import com.jaspersoft.studio.model.field.MFields;
 import com.jaspersoft.studio.model.parameter.MParameterSystem;
 import com.jaspersoft.studio.model.parameter.MParameters;
+import com.jaspersoft.studio.model.sortfield.MSortFields;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
@@ -408,6 +409,47 @@ public class MDataset extends APropertyNode implements ICopyable {
 						return mfield;
 				}
 				break;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * @return the {@link MFields} instance, container for fields
+	 */
+	public MFields getMFields() {
+		return getFirstChildOfType(MFields.class);
+	}
+	
+	/**
+	 * @return the {@link MParameters} instance, container for parameters
+	 */
+	public MParameters<?> getMParameters() {
+		return getFirstChildOfType(MParameters.class);
+	}
+	
+	/**
+	 * @return the {@link MSortFields} instance, container for sort fields
+	 */
+	public MSortFields getMSortFields() {
+		return getFirstChildOfType(MSortFields.class);
+	}
+	
+	/**
+	 * Returns the first child that has the same class of the specified input parameter
+	 * 
+	 * @param classType
+	 *          the class
+	 * @return the first child found with the specific class type, <code>null</code> otherwise
+	 */
+	@SuppressWarnings("unchecked")
+	public <T> T getFirstChildOfType(Class<T> classType) {
+		List<INode> children = getChildren();
+		if (children == null || children.isEmpty())
+			children = mreport.getChildren();
+		for(INode n : children) {
+			if(classType.isInstance(n)) {
+				return (T) n;
 			}
 		}
 		return null;

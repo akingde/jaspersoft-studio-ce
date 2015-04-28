@@ -1604,6 +1604,15 @@ public class Messages extends NLS {
 	public static String RemoveHSpaceAction_actionName;
 	public static String RemoveVSpaceAction_actionDescription;
 	public static String RemoveVSpaceAction_actionName;
+	public static String ReplaceAllFieldsCommand_ExecuteError;
+	public static String ReplaceAllFieldsCommand_Label;
+	public static String ReplaceAllFieldsCommand_UndoError;
+	public static String ReplaceAllParametersCommand_ExecuteError;
+	public static String ReplaceAllParametersCommand_Label;
+	public static String ReplaceAllParametersCommand_UndoError;
+	public static String ReplaceAllSortFieldsCommand_ExecuteError;
+	public static String ReplaceAllSortFieldsCommand_Label;
+	public static String ReplaceAllSortFieldsCommand_UndoError;
 	public static String ReportControler_CANCELED;
 	public static String ReportControler_compilationerrors;
 	public static String ReportControler_done;
