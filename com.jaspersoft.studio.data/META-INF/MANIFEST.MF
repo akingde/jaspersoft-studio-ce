@@ -31,4 +31,5 @@ Export-Package: com.jaspersoft.studio.data.bean,
  com.jaspersoft.studio.data.querydesigner.json,
  com.jaspersoft.studio.data.querydesigner.sql,
  com.jaspersoft.studio.data.querydesigner.sql.text,
+ com.jaspersoft.studio.data.querydesigner.xpath,
  com.jaspersoft.studio.data.secret
