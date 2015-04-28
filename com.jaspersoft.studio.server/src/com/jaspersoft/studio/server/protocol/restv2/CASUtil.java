@@ -171,7 +171,7 @@ public class CASUtil {
 			form.add(key, map.get(key));
 		}
 		//
-		req = HttpUtils.post(fullURL, form, sp);
+		req = HttpUtils.post(ub.build().toASCIIString(), form, sp);
 		if (proxy != null)
 			req.viaProxy(proxy);
 		// Header header = null;
@@ -190,7 +190,7 @@ public class CASUtil {
 			url += "/";
 		ub.addParameter("service", url + "j_spring_security_check");
 
-		req = HttpUtils.get(fullURL, sp);
+		req = HttpUtils.get(ub.build().toASCIIString(), sp);
 		if (proxy != null)
 			req.viaProxy(proxy);
 		// req.addHeader("Accept",
@@ -268,6 +268,13 @@ public class CASUtil {
 							try {
 								StatusLine statusLine = response
 										.getStatusLine();
+								System.out
+										.println("---------------------------------------------------------------------------");
+								System.out.println(response.toString());
+								for (Header h : response.getAllHeaders()) {
+									System.out.println(h.toString());
+								}
+
 								switch (statusLine.getStatusCode()) {
 								case 200:
 									in = getContent(entity);
@@ -298,6 +305,8 @@ public class CASUtil {
 		} finally {
 			ConnectionManager.unregister(req);
 		}
+
+		System.out.println(obj);
 		return obj;
 	}
 
