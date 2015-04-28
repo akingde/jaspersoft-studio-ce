@@ -90,7 +90,7 @@ public class MServerProfile extends ANode {
 		super.setJasperConfiguration(jConfig);
 		if (getParent() != null)
 			((ANode) getParent().getRoot()).setJasperConfiguration(jConfig);
-		if (getValue() != null)
+		if (getValue() != null && jConfig != null)
 			jConfig.setProperty(JRXmlBaseWriter.PROPERTY_REPORT_VERSION,
 					getValue().getJrVersion());
 	}
@@ -261,7 +261,7 @@ public class MServerProfile extends ANode {
 
 	public IFolder getTmpDir(IProgressMonitor monitor) throws IOException,
 			CoreException {
- 		if (tmpDir == null || !tmpDir.exists()) {
+		if (tmpDir == null || !tmpDir.exists()) {
 			String prjpath = getValue().getProjectPath();
 			if (prjpath != null && !prjpath.trim().isEmpty()) {
 				String path = prjpath.trim();
@@ -275,11 +275,19 @@ public class MServerProfile extends ANode {
 						.getProject(ppath);
 				tmpDir = prj.getFolder(fpath);
 			} else {
-				//Need to enable or disable the linked resources support
-				boolean isAllowdLinkedResource = JDTUtils.isAllowdLinkedResourcesSupport();
-				if (!isAllowdLinkedResource) JDTUtils.setLinkedResourcesSupport(true);
-				tmpDir = FileUtils.getInProjectFolder(FileUtils.createTempDir(getValue().getName().replace(" ", "") + "-").toURI(), monitor); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				if (!isAllowdLinkedResource) JDTUtils.setLinkedResourcesSupport(false);
+				// Need to enable or disable the linked resources support
+				boolean isAllowdLinkedResource = JDTUtils
+						.isAllowdLinkedResourcesSupport();
+				if (!isAllowdLinkedResource)
+					JDTUtils.setLinkedResourcesSupport(true);
+				tmpDir = FileUtils
+						.getInProjectFolder(
+								FileUtils
+										.createTempDir(
+												getValue().getName().replace(
+														" ", "") + "-").toURI(), monitor); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				if (!isAllowdLinkedResource)
+					JDTUtils.setLinkedResourcesSupport(false);
 			}
 			if (!tmpDir.exists())
 				tmpDir.create(true, true, monitor);
