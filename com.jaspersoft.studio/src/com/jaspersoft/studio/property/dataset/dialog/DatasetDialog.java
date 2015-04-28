@@ -390,7 +390,7 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 	public void createCommand() {
 		JRDesignDataset ds = (JRDesignDataset) (mdataset.getParent() == null ? mdataset.getJasperConfiguration()
 				.getJasperDesign().getMainDesignDataset() : mdataset.getValue());
-		command = new JSSCompoundCommand(mdataset);
+		command = new JSSCompoundCommand(mdataset.getMreport());
 
 		String lang = newdataset.getQuery().getLanguage();
 		((JRDesignQuery) newdataset.getQuery()).setText(dataquery.getQuery());
