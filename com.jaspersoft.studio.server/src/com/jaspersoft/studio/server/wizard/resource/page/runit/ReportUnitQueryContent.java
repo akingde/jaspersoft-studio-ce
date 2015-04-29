@@ -37,7 +37,10 @@ public class ReportUnitQueryContent extends APageContent {
 
 	@Override
 	public boolean isPageComplete() {
-		return sQuery.isPageComplete();
+		if(sQuery!=null) {
+			return sQuery.isPageComplete();
+		}
+		return super.isPageComplete();
 	}
 
 	@Override
