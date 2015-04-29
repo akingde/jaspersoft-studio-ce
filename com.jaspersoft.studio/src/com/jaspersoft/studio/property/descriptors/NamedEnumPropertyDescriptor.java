@@ -48,7 +48,7 @@ public class NamedEnumPropertyDescriptor<T extends Enum<?> & NamedEnum> extends 
 		setLabelProvider(new NamedEnumLabelProvider(allItems));
 	}
 
-	private static String[] getEnumItems(NamedEnum[] items, NullEnum type) {
+	public static String[] getEnumItems(NamedEnum[] items, NullEnum type) {
 		List<String> res = new ArrayList<String>();
 		if (type != NullEnum.NOTNULL)
 			res.add(type.getName());

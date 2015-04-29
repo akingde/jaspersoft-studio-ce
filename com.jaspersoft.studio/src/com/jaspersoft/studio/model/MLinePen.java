@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.model;
 
@@ -43,14 +39,14 @@ public class MLinePen extends APropertyNode implements IPropertySource {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	private static List<ComboItem> lineSpacingItems = null;
-	
+
 	public MLinePen(JRPen linePen) {
 		super();
 		setValue(linePen);
 	}
-	
+
 	@Override
-	public HashMap<String,Object> getStylesDescriptors() {
+	public HashMap<String, Object> getStylesDescriptors() {
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		if (getValue() == null)
 			return result;
@@ -60,24 +56,25 @@ public class MLinePen extends APropertyNode implements IPropertySource {
 		result.put(JRBasePen.PROPERTY_LINE_WIDTH, element.getOwnLineWidth());
 		return result;
 	}
-	
-	private List<ComboItem> createLineSpacingItems(){
-		if (lineSpacingItems == null){
+
+	private List<ComboItem> createLineSpacingItems() {
+		if (lineSpacingItems == null) {
 			lineSpacingItems = new ArrayList<ComboItem>();
 			LineStyleEnum[] values = LineStyleEnum.class.getEnumConstants();
-			lineSpacingItems.add(new ComboItem(MessagesByKeys.getString("LineSpacing_nullEnum"), true,  ResourceManager.getImage(this.getClass(),"/icons/resources/inherited.png"), 0, NullEnum.INHERITED, null));
+			lineSpacingItems.add(new ComboItem(MessagesByKeys.getString("LineSpacing_nullEnum"), true, ResourceManager
+					.getImage(this.getClass(), "/icons/resources/inherited.png"), 0, NullEnum.INHERITED, null));
 			Image[] images = new Image[] { ResourceManager.getImage(this.getClass(), "/icons/resources/line-solid.png"),
-																					ResourceManager.getImage(this.getClass(), "/icons/resources/line-dashed.png"),
-																					ResourceManager.getImage(this.getClass(), "/icons/resources/line-dotted.png"),
-																					ResourceManager.getImage(this.getClass(), "/icons/resources/line-double.png"), };
-			for(int i=0; i<values.length; i++){
+					ResourceManager.getImage(this.getClass(), "/icons/resources/line-dashed.png"),
+					ResourceManager.getImage(this.getClass(), "/icons/resources/line-dotted.png"),
+					ResourceManager.getImage(this.getClass(), "/icons/resources/line-double.png"), };
+			for (int i = 0; i < values.length; i++) {
 				LineStyleEnum value = values[i];
-				lineSpacingItems.add(new ComboItem(MessagesByKeys.getString("LineStyle_".concat(value.getName())), true, images[i], i+1, value , value));
+				lineSpacingItems.add(new ComboItem(MessagesByKeys.getString("LineStyle_".concat(value.getName())), true,
+						images[i], i + 1, value, value));
 			}
 		}
 		return lineSpacingItems;
 	}
-	
 
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
@@ -85,18 +82,22 @@ public class MLinePen extends APropertyNode implements IPropertySource {
 		ColorPropertyDescriptor penLineColorD = new ColorPropertyDescriptor(JRBasePen.PROPERTY_LINE_COLOR,
 				Messages.common_line_color, NullEnum.INHERITED);
 		penLineColorD.setDescription(Messages.MLinePen_line_color_description);
-		penLineColorD.setHelpRefBuilder(new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#pen_lineColor"));
+		penLineColorD.setHelpRefBuilder(new HelpReferenceBuilder(
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#pen_lineColor"));
 		desc.add(penLineColorD);
 
 		FloatPropertyDescriptor penLineWidthD = new FloatPropertyDescriptor(JRBasePen.PROPERTY_LINE_WIDTH,
 				Messages.MLinePen_line_width);
 		penLineWidthD.setDescription(Messages.MLinePen_line_width_description);
-		penLineWidthD.setHelpRefBuilder(new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#pen_lineWidth"));
+		penLineWidthD.setHelpRefBuilder(new HelpReferenceBuilder(
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#pen_lineWidth"));
 		desc.add(penLineWidthD);
 
-		penLineStyleD = new JSSPopupPropertyDescriptor(JRBasePen.PROPERTY_LINE_STYLE, Messages.common_line_style,LineStyleEnum.class, NullEnum.INHERITED, createLineSpacingItems());
+		penLineStyleD = new JSSPopupPropertyDescriptor(JRBasePen.PROPERTY_LINE_STYLE, Messages.common_line_style,
+				LineStyleEnum.DASHED, NullEnum.INHERITED, createLineSpacingItems());
 		penLineStyleD.setDescription(Messages.MLinePen_line_style_description);
-		penLineStyleD.setHelpRefBuilder(new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#pen_lineStyle"));
+		penLineStyleD.setHelpRefBuilder(new HelpReferenceBuilder(
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#pen_lineStyle"));
 		desc.add(penLineStyleD);
 
 		defaultsMap.put(JRBasePen.PROPERTY_LINE_STYLE, null);
@@ -138,7 +139,7 @@ public class MLinePen extends APropertyNode implements IPropertySource {
 			if (id.equals(JRBasePen.PROPERTY_LINE_WIDTH))
 				return linePen.getOwnLineWidth();
 			if (id.equals(JRBasePen.PROPERTY_LINE_STYLE))
-				return linePen.getOwnLineStyleValue();
+				return penLineStyleD.getIntValue(linePen.getOwnLineStyleValue());
 		}
 		return null;
 	}
@@ -152,11 +153,11 @@ public class MLinePen extends APropertyNode implements IPropertySource {
 			if (id.equals(JRBasePen.PROPERTY_LINE_WIDTH))
 				return linePen.getLineWidth();
 			if (id.equals(JRBasePen.PROPERTY_LINE_STYLE))
-				return linePen.getLineStyleValue();
+				return penLineStyleD.getIntValue(linePen.getLineStyleValue());
 		}
 		return null;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -173,7 +174,7 @@ public class MLinePen extends APropertyNode implements IPropertySource {
 				else if (value instanceof AlfaRGB)
 					linePen.setLineColor(Colors.getAWT4SWTRGBColor((AlfaRGB) value));
 			} else if (id.equals(JRBasePen.PROPERTY_LINE_STYLE))
-				linePen.setLineStyle((LineStyleEnum) value);
+				linePen.setLineStyle(penLineStyleD.getEnumValue(value));
 		}
 	}
 
