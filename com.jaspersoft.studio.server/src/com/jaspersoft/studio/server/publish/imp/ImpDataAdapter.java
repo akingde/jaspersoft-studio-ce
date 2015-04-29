@@ -23,12 +23,11 @@ import java.util.Set;
 
 import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.DataAdapterParameterContributorFactory;
-import net.sf.jasperreports.data.csv.CsvDataAdapter;
+import net.sf.jasperreports.data.FileDataAdapter;
+import net.sf.jasperreports.data.RepositoryDataLocation;
+import net.sf.jasperreports.data.StandardRepositoryDataLocation;
 import net.sf.jasperreports.data.json.JsonDataAdapter;
-import net.sf.jasperreports.data.xls.XlsDataAdapter;
-import net.sf.jasperreports.data.xlsx.XlsxDataAdapter;
-import net.sf.jasperreports.data.xml.RemoteXmlDataAdapter;
-import net.sf.jasperreports.data.xml.XmlDataAdapter;
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.ui.validator.IDStringValidator;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.JRException;
@@ -120,7 +119,7 @@ public class ImpDataAdapter extends AImpObject {
 		rd.setParentFolder(runit.getParentFolder());
 		rd.setUriString(runit.getParentFolder() + "/" + rd.getName());
 
-		AFileResource mres = new MRDataAdapter(mrunit, rd, -1);
+		final AFileResource mres = new MRDataAdapter(mrunit, rd, -1);
 		mres.setFile(f);
 		mres.setPublishOptions(popt);
 
@@ -131,16 +130,12 @@ public class ImpDataAdapter extends AImpObject {
 			FileInputStream is = null;
 			try {
 				is = new FileInputStream(f);
-				DataAdapterDescriptor dad = FileDataAdapterStorage
+				final DataAdapterDescriptor dad = FileDataAdapterStorage
 						.readDataADapter(is, prj);
 				if (dad != null) {
 					final DataAdapter da = dad.getDataAdapter();
 					String fname = getFileName(da);
-					if (fname != null
-							&& !(fname.startsWith("http://")
-									|| fname.startsWith("https://") || fname
-										.startsWith("ftp://"))) {
-
+					if (fname != null) {
 						InputStream fis = null;
 						OutputStream fos = null;
 						try {
@@ -168,7 +163,8 @@ public class ImpDataAdapter extends AImpObject {
 								MRDataAdapterFile mdaf = new MRDataAdapterFile(
 										mrunit, rd, -1);
 								mdaf.setFile(file);
-								PublishOptions fpopt = createOptions(jrConfig, fname);
+								PublishOptions fpopt = createOptions(jrConfig,
+										fname);
 								mdaf.setPublishOptions(fpopt);
 								fpopt.setValueSetter(popt.new ValueSetter<DataAdapter>(
 										da) {
@@ -176,6 +172,20 @@ public class ImpDataAdapter extends AImpObject {
 									@Override
 									public void setup() {
 										setFileName(da, value);
+										try {
+											File f = FileUtils.createTempFile(
+													"tmp", "");
+											org.apache.commons.io.FileUtils
+													.writeStringToFile(
+															f,
+															DataAdapterManager
+																	.toDataAdapterFile(
+																			dad,
+																			jrConfig));
+											mres.setFile(f);
+										} catch (IOException e) {
+											UIUtils.showError(e);
+										}
 									}
 								});
 								fpopt.getValueSetter().setValue(
@@ -201,7 +211,6 @@ public class ImpDataAdapter extends AImpObject {
 							FileUtils.closeStream(fis);
 							FileUtils.closeStream(fos);
 						}
-
 					}
 				}
 			} catch (FileNotFoundException e) {
@@ -221,39 +230,17 @@ public class ImpDataAdapter extends AImpObject {
 	}
 
 	protected void setFileName(DataAdapter da, String fname) {
-		if (da instanceof JsonDataAdapter)
-			((JsonDataAdapter) da).setFileName(fname);
-		else if (da instanceof CsvDataAdapter)
-			((CsvDataAdapter) da).setFileName(fname);
-		else if (da instanceof XmlDataAdapter)
-			((XmlDataAdapter) da).setFileName(fname);
-		else if (da instanceof XlsDataAdapter)
-			((XlsDataAdapter) da).setFileName(fname);
-		else if (da instanceof XlsxDataAdapter)
-			((XlsxDataAdapter) da).setFileName(fname);
+		if (da instanceof FileDataAdapter
+				&& ((FileDataAdapter) da).getDataFile() instanceof RepositoryDataLocation)
+			((StandardRepositoryDataLocation) ((FileDataAdapter) da)
+					.getDataFile()).setLocation(fname);
 	}
 
 	protected String getFileName(DataAdapter da) {
-		String fname = null;
-		if (da instanceof JsonDataAdapter)
-			fname = ((JsonDataAdapter) da).getFileName();
-		else if (da instanceof CsvDataAdapter)
-			fname = ((CsvDataAdapter) da).getFileName();
-		else if (da instanceof XmlDataAdapter) {
-			if (da instanceof RemoteXmlDataAdapter) {
-				String f = ((XmlDataAdapter) da).getFileName();
-				if (f.toLowerCase().startsWith("https://")
-						|| f.toLowerCase().startsWith("http://")
-						|| f.toLowerCase().startsWith("file:")
-						|| f.toLowerCase().startsWith("ftp://")
-						|| f.toLowerCase().startsWith("sftp://"))
-					return null;
-			}
-			fname = ((XmlDataAdapter) da).getFileName();
-		} else if (da instanceof XlsDataAdapter)
-			fname = ((XlsDataAdapter) da).getFileName();
-		else if (da instanceof XlsxDataAdapter)
-			fname = ((XlsxDataAdapter) da).getFileName();
-		return fname;
+		if (da instanceof FileDataAdapter
+				&& ((FileDataAdapter) da).getDataFile() instanceof RepositoryDataLocation)
+			return ((RepositoryDataLocation) ((FileDataAdapter) da)
+					.getDataFile()).getLocation();
+		return null;
 	}
 }
