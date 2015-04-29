@@ -106,8 +106,11 @@ public class NodeTransfer extends ByteArrayTransfer {
 			out.writeInt(nodes.length);
 
 			/* write markers */
-			for (int i = 0; i < nodes.length; i++)
-				writeNode((ANode) nodes[i], out);
+			for (int i = 0; i < nodes.length; i++){
+				if (nodes[i] instanceof ANode) {
+					writeNode((ANode) nodes[i], out);
+				}
+			}
 			out.close();
 			bytes = byteOut.toByteArray();
 		} catch (IOException e) {
