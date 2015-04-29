@@ -13,6 +13,8 @@ import java.util.List;
 
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
@@ -67,12 +69,21 @@ public class EditButton<T> {
 
 	}
 
-	public void createEditButtons(Composite composite, TableViewer tableViewer, IEditElement<T> editElement) {
+	public void createEditButtons(Composite composite, final TableViewer tableViewer, IEditElement<T> editElement) {
 		editB = new Button(composite, SWT.PUSH);
 		editB.setText(Messages.common_edit);
 		editB.setLayoutData(new GridData(GridData.FILL_HORIZONTAL | GridData.VERTICAL_ALIGN_BEGINNING));
 		listener = new EditListener(tableViewer, editElement);
 		editB.addSelectionListener(listener);
+
+		editB.setEnabled(!tableViewer.getSelection().isEmpty());
+		tableViewer.addSelectionChangedListener(new ISelectionChangedListener() {
+
+			@Override
+			public void selectionChanged(SelectionChangedEvent event) {
+				editB.setEnabled(!tableViewer.getSelection().isEmpty());
+			}
+		});
 	}
 
 	public void editOnDoubleClick() {

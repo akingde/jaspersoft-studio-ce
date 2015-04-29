@@ -96,7 +96,7 @@ public class DeleteButton {
 				}
 			}
 		} else
-			enable = true;
+			enable = false;
 		delB.setEnabled(enable);
 	}
 
