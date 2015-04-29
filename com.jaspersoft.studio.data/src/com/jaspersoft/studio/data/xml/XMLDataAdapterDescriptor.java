@@ -13,13 +13,18 @@
 package com.jaspersoft.studio.data.xml;
 
 import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
 import net.sf.jasperreports.data.DataAdapterService;
+import net.sf.jasperreports.data.DataFile;
+import net.sf.jasperreports.data.RepositoryDataLocation;
+import net.sf.jasperreports.data.http.HttpDataLocation;
 import net.sf.jasperreports.data.xml.XmlDataAdapterImpl;
-import net.sf.jasperreports.eclipse.util.DataFileUtils;
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRException;
@@ -47,7 +52,8 @@ import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.XMLUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
-public class XMLDataAdapterDescriptor extends DataAdapterDescriptor implements IFieldsProvider, IWizardDataEditorProvider {
+public class XMLDataAdapterDescriptor extends DataAdapterDescriptor implements
+		IFieldsProvider, IWizardDataEditorProvider {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	private boolean recursiveFind;
 
@@ -72,7 +78,8 @@ public class XMLDataAdapterDescriptor extends DataAdapterDescriptor implements I
 	public Image getIcon(int size) {
 		// TODO Auto-generated method stub
 		if (size == 16) {
-			return Activator.getDefault().getImage("icons/blue-document-code.png"); //$NON-NLS-1$
+			return Activator.getDefault().getImage(
+					"icons/blue-document-code.png"); //$NON-NLS-1$
 		}
 		return null;
 	}
@@ -83,13 +90,30 @@ public class XMLDataAdapterDescriptor extends DataAdapterDescriptor implements I
 	}
 
 	@Override
-	public List<JRDesignField> getFields(DataAdapterService con, JasperReportsConfiguration jConfig, JRDataset jDataset) throws JRException, UnsupportedOperationException {
+	public List<JRDesignField> getFields(DataAdapterService con,
+			JasperReportsConfiguration jConfig, JRDataset jDataset)
+			throws JRException, UnsupportedOperationException {
 		setRecursiveRetrieval(jConfig);
 		ArrayList<JRDesignField> fields = new ArrayList<JRDesignField>();
-		String fileName = DataFileUtils.getDataFileLocation(getDataAdapter().getDataFile());
-		File in = new File(fileName);
-		Document doc = JRXmlUtils.parse(in, XMLUtils.isNamespaceAware(getDataAdapter(), jConfig.getJasperDesign()));
-		fields.addAll(getFieldsFromDocument(doc, jConfig, jDataset));
+		XmlDataAdapterImpl d = getDataAdapter();
+		DataFile df = d.getDataFile();
+		Document doc = null;
+		if (df instanceof RepositoryDataLocation) {
+			File in = new File(((RepositoryDataLocation) df).getLocation());
+			doc = JRXmlUtils.parse(in,
+					XMLUtils.isNamespaceAware(d, jConfig.getJasperDesign()));
+		} else if (df instanceof HttpDataLocation) {
+			try {
+				doc = JRXmlUtils
+						.parse(new URL(((HttpDataLocation) df).getUrl()),
+								XMLUtils.isNamespaceAware(d,
+										jConfig.getJasperDesign()));
+			} catch (MalformedURLException e) {
+				UIUtils.showError(e);
+			}
+		}
+		if (doc != null)
+			fields.addAll(getFieldsFromDocument(doc, jConfig, jDataset));
 		return fields;
 	}
 
@@ -98,38 +122,43 @@ public class XMLDataAdapterDescriptor extends DataAdapterDescriptor implements I
 	 * query.
 	 * 
 	 * @param doc
-	 *          the W3C XML document
+	 *            the W3C XML document
 	 * @param jConfig
-	 *          the JasperReports configuration instance
+	 *            the JasperReports configuration instance
 	 * @param jDataset
-	 *          the current dataset
+	 *            the current dataset
 	 * @return the list of fields
 	 * @throws JRException
 	 */
-	protected List<JRDesignField> getFieldsFromDocument(Document doc, JasperReportsConfiguration jConfig, JRDataset jDataset) throws JRException {
-		JRXPathExecuterFactory xPathExecuterFactory = JRXPathExecuterUtils.getXPathExecuterFactory(jConfig);
+	protected List<JRDesignField> getFieldsFromDocument(Document doc,
+			JasperReportsConfiguration jConfig, JRDataset jDataset)
+			throws JRException {
+		JRXPathExecuterFactory xPathExecuterFactory = JRXPathExecuterUtils
+				.getXPathExecuterFactory(jConfig);
 		JRXPathExecuter xPathExecuter = xPathExecuterFactory.getXPathExecuter();
-		NodeList nodes = xPathExecuter.selectNodeList(doc, jDataset.getQuery().getText());
+		NodeList nodes = xPathExecuter.selectNodeList(doc, jDataset.getQuery()
+				.getText());
 		LinkedHashMap<String, JRDesignField> fieldsMap = new LinkedHashMap<String, JRDesignField>();
 		for (int nIdx = 0; nIdx < nodes.getLength(); nIdx++) {
 			Node currNode = nodes.item(nIdx);
-			findDirectChildrenAttributes(currNode,fieldsMap,"");
-			if(currNode.getNodeType() == Node.ELEMENT_NODE) {
+			findDirectChildrenAttributes(currNode, fieldsMap, "");
+			if (currNode.getNodeType() == Node.ELEMENT_NODE) {
 				NodeList childNodes = currNode.getChildNodes();
-				findChildFields(childNodes, fieldsMap,"");
+				findChildFields(childNodes, fieldsMap, "");
 			}
 		}
 		return new ArrayList<JRDesignField>(fieldsMap.values());
 	}
-	
+
 	/*
 	 * Finds and adds a possible list of attributes for the specified node.
 	 */
-	private void findDirectChildrenAttributes(Node node,LinkedHashMap<String, JRDesignField> fieldsMap,String prefix) {
+	private void findDirectChildrenAttributes(Node node,
+			LinkedHashMap<String, JRDesignField> fieldsMap, String prefix) {
 		NamedNodeMap attributes = node.getAttributes();
-		for(int i=0;i<attributes.getLength();i++){
+		for (int i = 0; i < attributes.getLength(); i++) {
 			Node item = attributes.item(i);
-			if(item.getNodeType()==Node.ATTRIBUTE_NODE){
+			if (item.getNodeType() == Node.ATTRIBUTE_NODE) {
 				addNewField(item.getNodeName(), fieldsMap, item, prefix);
 			}
 		}
@@ -138,43 +167,53 @@ public class XMLDataAdapterDescriptor extends DataAdapterDescriptor implements I
 	/*
 	 * Finds and adds a possible list of children nodes for the specified node.
 	 */
-	private void findChildFields(NodeList nodes, LinkedHashMap<String, JRDesignField> fieldsMap,String prefix) {
-		if(nodes!=null) {
-			List<String> childrenNames = new ArrayList<String>(); // temp list to avoid duplicates at the same level
+	private void findChildFields(NodeList nodes,
+			LinkedHashMap<String, JRDesignField> fieldsMap, String prefix) {
+		if (nodes != null) {
+			List<String> childrenNames = new ArrayList<String>(); // temp list
+																	// to avoid
+																	// duplicates
+																	// at the
+																	// same
+																	// level
 			for (int i = 0; i < nodes.getLength(); i++) {
 				Node item = nodes.item(i);
 				String nodeName = item.getNodeName();
-				if((item.getNodeType() == Node.ELEMENT_NODE || item.getNodeType() == Node.ATTRIBUTE_NODE) && 
-						!childrenNames.contains(nodeName)) {
-					if(recursiveFind) {
-						findDirectChildrenAttributes(item,fieldsMap,prefix+nodeName+"/");
+				if ((item.getNodeType() == Node.ELEMENT_NODE || item
+						.getNodeType() == Node.ATTRIBUTE_NODE)
+						&& !childrenNames.contains(nodeName)) {
+					if (recursiveFind) {
+						findDirectChildrenAttributes(item, fieldsMap, prefix
+								+ nodeName + "/");
 					}
 					addNewField(nodeName, fieldsMap, item, prefix);
-					if(recursiveFind && item.hasChildNodes()){
-						findChildFields(item.getChildNodes(), fieldsMap,prefix+nodeName+"/");
+					if (recursiveFind && item.hasChildNodes()) {
+						findChildFields(item.getChildNodes(), fieldsMap, prefix
+								+ nodeName + "/");
 					}
 				}
 			}
 		}
 	}
-	
+
 	/*
 	 * 
 	 */
 	private void setRecursiveRetrieval(JasperReportsConfiguration jconfig) {
-		recursiveFind = jconfig
-				.getPropertyBoolean(XMLQueryEditorPreferencePage.P_USE_RECURSIVE_RETRIEVAL, false);
+		recursiveFind = jconfig.getPropertyBoolean(
+				XMLQueryEditorPreferencePage.P_USE_RECURSIVE_RETRIEVAL, false);
 	}
 
 	/*
-	 * Adds a new JRDesignField to the current map.
-	 * A proper name is generated if the node one can not be used.
+	 * Adds a new JRDesignField to the current map. A proper name is generated
+	 * if the node one can not be used.
 	 */
 	private void addNewField(String nodeName,
-			LinkedHashMap<String, JRDesignField> fieldsMap, Node item, String prefix) {
+			LinkedHashMap<String, JRDesignField> fieldsMap, Node item,
+			String prefix) {
 		JRDesignField f = new JRDesignField();
-		f.setName(ModelUtils.getNameForField(
-				new ArrayList<JRDesignField>(fieldsMap.values()), nodeName));
+		f.setName(ModelUtils.getNameForField(new ArrayList<JRDesignField>(
+				fieldsMap.values()), nodeName));
 		f.setValueClass(String.class);
 		if (item.getNodeType() == Node.ATTRIBUTE_NODE) {
 			f.setDescription(prefix + "@" + item.getNodeName()); //$NON-NLS-1$
@@ -185,7 +224,8 @@ public class XMLDataAdapterDescriptor extends DataAdapterDescriptor implements I
 	}
 
 	@Override
-	public AWizardDataEditorComposite createDataEditorComposite(Composite parent, WizardPage page) {
+	public AWizardDataEditorComposite createDataEditorComposite(
+			Composite parent, WizardPage page) {
 		return new XMLWizardDataEditorComposite(parent, page, this);
 	}
 }

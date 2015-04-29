@@ -18,10 +18,12 @@ import java.net.URL;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import net.sf.jasperreports.data.xml.RemoteXmlDataAdapter;
+import net.sf.jasperreports.data.DataFile;
+import net.sf.jasperreports.data.RepositoryDataLocation;
+import net.sf.jasperreports.data.http.HttpDataLocation;
 import net.sf.jasperreports.data.xml.XmlDataAdapter;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.eclipse.util.DataFileUtils;
+import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.util.JRXmlUtils;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -98,7 +100,8 @@ public class XPathQueryDesigner extends TreeBasedQueryDesigner {
 			layout.marginHeight = 0;
 			layout.marginWidth = 0;
 			toolbarComposite.setLayout(layout);
-			toolbarComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
+			toolbarComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL,
+					true, false));
 
 			Button btn = new Button(toolbarComposite, SWT.PUSH);
 			btn.setText(Messages.XPathQueryDesigner_ReadFieldsButton);
@@ -374,19 +377,26 @@ public class XPathQueryDesigner extends TreeBasedQueryDesigner {
 											Messages.XPathQueryDesigner_TaskTitle,
 											-1);
 
-									String fileName = DataFileUtils.getDataFileLocation(			
-											((XmlDataAdapter) da
-											.getDataAdapter()).getDataFile());
+									XmlDataAdapter xda = (XmlDataAdapter) da
+											.getDataAdapter();
+									DataFile df = xda.getDataFile();
 									try {
 										Document doc = null;
-										if (da.getDataAdapter() instanceof RemoteXmlDataAdapter) {
-											doc = JRXmlUtils.parse(
-													new URL(fileName),
-													XMLUtils.isNamespaceAware((RemoteXmlDataAdapter)da.getDataAdapter(), jConfig.getJasperDesign()));
-										} else {
-											File in = new File(fileName);
-											doc = JRXmlUtils.parse(
-													in,XMLUtils.isNamespaceAware((XmlDataAdapter)da.getDataAdapter(),jConfig.getJasperDesign()));
+										JasperDesign jd = jConfig
+												.getJasperDesign();
+										if (df instanceof RepositoryDataLocation) {
+											File in = new File(
+													((RepositoryDataLocation) df)
+															.getLocation());
+											doc = JRXmlUtils.parse(in, XMLUtils
+													.isNamespaceAware(xda, jd));
+										} else if (df instanceof HttpDataLocation) {
+											doc = JRXmlUtils
+													.parse(new URL(
+															((HttpDataLocation) df)
+																	.getUrl()),
+															XMLUtils.isNamespaceAware(
+																	xda, jd));
 										}
 										documentManager.setDocument(doc);
 										documentManager
@@ -408,7 +418,7 @@ public class XPathQueryDesigner extends TreeBasedQueryDesigner {
 									} catch (Exception e) {
 										XPathQueryDesigner.this.container
 												.getQueryStatus().showError(e);
-										Display.getDefault().asyncExec(
+										UIUtils.getDisplay().asyncExec(
 												new Runnable() {
 													@Override
 													public void run() {

@@ -139,7 +139,8 @@ public class HttpParametersDialog extends ATitledDialog {
 		if (dataFile.getPostParameters() == null)
 			dataFile.setPostParameters(new ArrayList<HttpLocationParameter>());
 
-		final TableViewer tv = createParameters(tabFolder, Messages.HttpParametersDialog_5);
+		final TableViewer tv = createParameters(tabFolder,
+				Messages.HttpParametersDialog_5);
 
 		tabFolder.setSelection(0);
 		setupMethod(cmb);
@@ -155,7 +156,7 @@ public class HttpParametersDialog extends ATitledDialog {
 		return cmp;
 	}
 
-	protected class PEditDialog extends Dialog {
+	protected class PEditDialog extends ATitledDialog {
 
 		private String pname;
 		private String pvalue;
@@ -164,6 +165,8 @@ public class HttpParametersDialog extends ATitledDialog {
 			super(parentShell);
 			this.pname = hlp.getName();
 			this.pvalue = hlp.getValue();
+			setTitle(Messages.HttpParametersDialog_9);
+			setDefaultSize(500, 200);
 		}
 
 		@Override
@@ -201,18 +204,6 @@ public class HttpParametersDialog extends ATitledDialog {
 			});
 			applyDialogFont(composite);
 			return composite;
-		}
-
-		@Override
-		protected boolean isResizable() {
-			return true;
-		}
-
-		@Override
-		protected void configureShell(Shell newShell) {
-			super.configureShell(newShell);
-			newShell.setSize(500, 200);
-			newShell.setText(Messages.HttpParametersDialog_9);
 		}
 
 		public String getPName() {
@@ -280,9 +271,10 @@ public class HttpParametersDialog extends ATitledDialog {
 		new NewButton().createNewButtons(bGroup, tviewer, new INewElement() {
 
 			public Object newElement(List<?> input, int pos) {
-				HttpLocationParameter hlp = new HttpLocationParameter(Messages.HttpParametersDialog_12,
+				HttpLocationParameter hlp = new HttpLocationParameter(
+						Messages.HttpParametersDialog_12,
 						Messages.HttpParametersDialog_13);
-				PEditDialog pd = new PEditDialog(getShell(), hlp);
+				PEditDialog pd = new PEditDialog(UIUtils.getShell(), hlp);
 				if (pd.open() == Dialog.OK) {
 					hlp.setName(pd.getPName());
 					hlp.setValue(pd.getPValue());
@@ -301,7 +293,8 @@ public class HttpParametersDialog extends ATitledDialog {
 					public void editElement(List<HttpLocationParameter> input,
 							int pos) {
 						HttpLocationParameter hlp = input.get(pos);
-						PEditDialog pd = new PEditDialog(getShell(), hlp);
+						PEditDialog pd = new PEditDialog(UIUtils.getShell(),
+								hlp);
 						if (pd.open() == Dialog.OK) {
 							hlp.setName(pd.getPName());
 							hlp.setValue(pd.getPValue());
