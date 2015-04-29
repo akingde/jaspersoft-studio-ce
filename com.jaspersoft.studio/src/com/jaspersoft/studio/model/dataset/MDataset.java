@@ -56,11 +56,18 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  * @author Chicu Veaceslav
  */
 public class MDataset extends APropertyNode implements ICopyable {
+	
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+	
 	public static final String PROPERTY_MAP = "PROPERTY_MAP"; //$NON-NLS-1$
-	/** The icon descriptor. */
+	
+	/** 
+	 * The icon descriptor. 
+	 */
 	private static IIconDescriptor iconDescriptor;
 
+	private MReport mreport;
+	
 	/**
 	 * Gets the icon descriptor.
 	 * 
@@ -78,8 +85,6 @@ public class MDataset extends APropertyNode implements ICopyable {
 	public MDataset() {
 		super();
 	}
-
-	private MReport mreport;
 
 	public MDataset(MReport mreport, JRDesignDataset jrDataset) {
 		super();
