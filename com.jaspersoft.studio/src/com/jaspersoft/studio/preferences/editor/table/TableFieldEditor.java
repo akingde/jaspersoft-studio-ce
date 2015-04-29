@@ -562,13 +562,12 @@ public abstract class TableFieldEditor extends FieldEditor {
 				}
 				TableItem tableItem = new TableItem(table, SWT.NONE);
 				tableItem.setText(values);
-
 			}
 		}
 		table.setSelection(table.getItemCount());
 		table.showItem(table.getItem(table.getItemCount() - 1));
 		table.showSelection();
-		table.showColumn(table.getColumn(1));
+		table.showColumn(table.getColumn(0));
 		selectionChanged();
 	}
 

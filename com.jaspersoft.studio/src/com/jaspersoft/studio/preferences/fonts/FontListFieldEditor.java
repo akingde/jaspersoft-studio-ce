@@ -71,6 +71,8 @@ public class FontListFieldEditor extends TableFieldEditor {
 
 	private Button editButton;
 	private Button exportButton;
+	private List<FontFamily> fontFamilies = new ArrayList<FontFamily>();
+	private static String lastLocation;
 
 	public FontListFieldEditor() {
 		super();
@@ -82,16 +84,24 @@ public class FontListFieldEditor extends TableFieldEditor {
 
 	@Override
 	protected String createList(String[][] items) {
-		return SimpleFontExtensionHelper.getFontsXml(fontFamily);
+		return SimpleFontExtensionHelper.getFontsXml(fontFamilies);
 	}
-
-	List<FontFamily> fontFamily = new ArrayList<FontFamily>();
 
 	@Override
 	protected void removePressed() {
 		int index = table.getSelectionIndex();
-		fontFamily.remove(index);
+		fontFamilies.remove(index);
 		super.removePressed();
+	}
+	
+	@Override
+	protected void duplicatePressed() {
+		int index = table.getSelectionIndex();
+		FontFamily originalFontFamily = fontFamilies.get(index);
+		super.duplicatePressed();
+		SimpleFontFamily clone = (SimpleFontFamily) ((SimpleFontFamily)originalFontFamily).clone();
+		clone.setName(table.getItem(table.getItemCount()-1).getText());
+		fontFamilies.add(clone);
 	}
 
 	@Override
@@ -99,19 +109,19 @@ public class FontListFieldEditor extends TableFieldEditor {
 		String[][] res = null;
 		if (string != null && !string.isEmpty()) {
 			try {
-				fontFamily = SimpleFontExtensionHelper.getInstance().loadFontFamilies(
+				fontFamilies = SimpleFontExtensionHelper.getInstance().loadFontFamilies(
 						JasperReportsConfiguration.getDefaultInstance(), new ByteArrayInputStream(string.getBytes()));
 
-				res = new String[fontFamily.size()][1];
-				for (int i = 0; i < fontFamily.size(); i++)
-					res[i][0] = fontFamily.get(i).getName();
+				res = new String[fontFamilies.size()][1];
+				for (int i = 0; i < fontFamilies.size(); i++)
+					res[i][0] = fontFamilies.get(i).getName();
 			} catch (Exception e) {
 				e.printStackTrace();
-				fontFamily = new ArrayList<FontFamily>();
+				fontFamilies = new ArrayList<FontFamily>();
 				res = new String[0][0];
 			}
 		} else {
-			fontFamily = new ArrayList<FontFamily>();
+			fontFamilies = new ArrayList<FontFamily>();
 			res = new String[0][0];
 		}
 		return res;
@@ -124,7 +134,7 @@ public class FontListFieldEditor extends TableFieldEditor {
 		font2.setName(Messages.FontListFieldEditor_newFontSuggestedName);
 		FontFamily font = runDialog(font2);
 		if (font != null) {
-			fontFamily.add(font);
+			fontFamilies.add(font);
 			return new String[] { font.getName() };
 		}
 		return null;
@@ -135,18 +145,16 @@ public class FontListFieldEditor extends TableFieldEditor {
 		int index = table.getSelectionIndex();
 		if (index >= 0) {
 			TableItem titem = table.getItem(index);
-			FontFamily font = fontFamily.get(index);
+			FontFamily font = fontFamilies.get(index);
 			if (font != null) {
 				font = runDialog((SimpleFontFamily) ((SimpleFontFamily) font).clone());
 				if (font != null) {
 					titem.setText(font.getName());
-					fontFamily.set(index, font);
+					fontFamilies.set(index, font);
 				}
 			}
 		}
 	}
-
-	private static String lastLocation;
 
 	public static String setupLastLocation(FileDialog dialog) {
 		if (lastLocation == null)
@@ -167,7 +175,7 @@ public class FontListFieldEditor extends TableFieldEditor {
 		if (selection != null && selection.length > 0) {
 			final List<FontFamily> lst = new ArrayList<FontFamily>(selection.length);
 			for (int s : selection) {
-				FontFamily font = fontFamily.get(s);
+				FontFamily font = fontFamilies.get(s);
 				if (font instanceof JRCloneable)
 					lst.add((FontFamily) ((JRCloneable) font).clone());
 			}
