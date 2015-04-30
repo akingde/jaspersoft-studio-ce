@@ -145,6 +145,7 @@ public class Messages extends NLS {
 	public static String JsonQueryDesigner_ItemSetRecordNode;
 	public static String JsonQueryDesigner_Job;
 	public static String JsonQueryDesigner_JobTask;
+	public static String JsonQueryDesigner_JsonLoaderJobName;
 	public static String JsonQueryDesigner_ReadFieldsBtn;
 	public static String JsonQueryDesigner_Task;
 	public static String JsonTreeCustomStatus_ErrorLoadingMessage;

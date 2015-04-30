@@ -12,15 +12,18 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.querydesigner.json;
 
-import java.lang.reflect.InvocationTargetException;
+import java.io.IOException;
 
 import net.sf.jasperreports.data.json.JsonDataAdapter;
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.DataFileUtils;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.core.runtime.jobs.IJobChangeEvent;
+import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.IContentProvider;
@@ -40,17 +43,17 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.ui.part.PluginTransfer;
-import org.eclipse.ui.progress.WorkbenchJob;
+import org.eclipse.ui.progress.UIJob;
 
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.designer.AQueryDesignerContainer;
 import com.jaspersoft.studio.data.designer.tree.NodeBoldStyledLabelProvider;
 import com.jaspersoft.studio.data.designer.tree.TreeBasedQueryDesigner;
 import com.jaspersoft.studio.data.messages.Messages;
+import com.jaspersoft.studio.data.querydesigner.xpath.XMLTreeCustomStatus;
 import com.jaspersoft.studio.dnd.NodeDragListener;
 import com.jaspersoft.studio.dnd.NodeTransfer;
 import com.jaspersoft.studio.model.datasource.json.JsonSupportNode;
@@ -68,6 +71,7 @@ public class JsonQueryDesigner extends TreeBasedQueryDesigner {
 	private static final int JOB_DELAY = 300;
 	private JsonDataManager jsonDataManager;
 	private DecorateTreeViewerJob decorateJob;
+	private JsonLoaderJob jsonLoaderJob;
 	private NodeBoldStyledLabelProvider<JsonSupportNode> treeLabelProvider;
 	private JsonLineStyler lineStyler;
 	private Composite toolbarComposite;
@@ -77,6 +81,7 @@ public class JsonQueryDesigner extends TreeBasedQueryDesigner {
 		this.jsonDataManager = new JsonDataManager();
 		this.lineStyler = new JsonLineStyler();
 		this.decorateJob = new DecorateTreeViewerJob();
+		this.jsonLoaderJob = new JsonLoaderJob();
 		this.treeLabelProvider = new NodeBoldStyledLabelProvider<JsonSupportNode>();
 	}
 
@@ -175,70 +180,13 @@ public class JsonQueryDesigner extends TreeBasedQueryDesigner {
 	protected void refreshTreeViewerContent(final DataAdapterDescriptor da) {
 		if (!isRefreshing) {
 			this.container.getQueryStatus().showInfo(""); //$NON-NLS-1$
+			treeViewer.setInput(JsonTreeCustomStatus.LOADING_JSON);
 			if (da != null && da.getDataAdapter() instanceof JsonDataAdapter) {
-				treeViewer.setInput(JsonTreeCustomStatus.LOADING_JSON);
-
-				try {
-					JsonQueryDesigner.this.run(true, true,
-							new IRunnableWithProgress() {
-
-								@Override
-								public void run(IProgressMonitor monitor)
-										throws InvocationTargetException,
-										InterruptedException {
-									monitor.beginTask(
-											Messages.JsonQueryDesigner_Task, -1);
-									String fileName = DataFileUtils.getDataFileLocation(									
-											((JsonDataAdapter) da
-											.getDataAdapter()).getDataFile());
-									try {
-										jsonDataManager
-												.loadJsonDataFile(fileName);
-										Display.getDefault().asyncExec(
-												new Runnable() {
-													@Override
-													public void run() {
-														treeViewer
-																.setInput(jsonDataManager
-																		.getJsonSupportModel());
-														treeViewer
-																.expandToLevel(2);
-														decorateTreeUsingQueryText();
-														isRefreshing = false;
-													}
-												});
-									} catch (Exception e) {
-										JsonQueryDesigner.this.container
-												.getQueryStatus().showError(e);
-										Display.getDefault().asyncExec(
-												new Runnable() {
-													@Override
-													public void run() {
-														treeViewer.getTree()
-																.removeAll();
-														treeViewer
-																.setInput(JsonTreeCustomStatus.ERROR_LOADING_JSON);
-														isRefreshing = false;
-													}
-												});
-									} finally {
-										monitor.done();
-									}
-								}
-							});
-				} catch (Exception ex) {
-					JsonQueryDesigner.this.container.getQueryStatus()
-							.showError(ex);
-					Display.getDefault().asyncExec(new Runnable() {
-						@Override
-						public void run() {
-							treeViewer.getTree().removeAll();
-							treeViewer
-									.setInput(JsonTreeCustomStatus.ERROR_LOADING_JSON);
-							isRefreshing = false;
-						}
-					});
-				}
+				String dataFile = DataFileUtils.getDataFileLocation(									
+						((JsonDataAdapter) da
+						.getDataAdapter()).getDataFile());
+				jsonLoaderJob.updateDataFile(dataFile);
+				jsonLoaderJob.schedule();
 			} else {
 				treeViewer.getTree().removeAll();
 				treeViewer.setInput(JsonTreeCustomStatus.FILE_NOT_FOUND);
@@ -385,7 +333,7 @@ public class JsonQueryDesigner extends TreeBasedQueryDesigner {
 	 * Job that is responsible to update the treeviewer presentation depending
 	 * on the nodes selected by the Json query.
 	 */
-	private final class DecorateTreeViewerJob extends WorkbenchJob {
+	private final class DecorateTreeViewerJob extends UIJob {
 
 		public DecorateTreeViewerJob() {
 			super(Messages.JsonQueryDesigner_Job);
@@ -409,12 +357,77 @@ public class JsonQueryDesigner extends TreeBasedQueryDesigner {
 		}
 
 	}
+	
+	/*
+	 * Job responsible to load the JSON resource and properly update 
+	 * the tree content with the read data.
+	 */
+	private final class JsonLoaderJob extends Job {
 
+		private String dataFile = null;
+
+		public JsonLoaderJob() {
+			super(Messages.JsonQueryDesigner_JsonLoaderJobName);
+			addJobChangeListener(new JobChangeAdapter(){
+				@Override
+				public void done(IJobChangeEvent event) {
+					IStatus result = event.getResult();
+					if(Status.OK_STATUS.equals(result)){
+						UIUtils.getDisplay().asyncExec(new Runnable() {
+							@Override
+							public void run() {
+								if(treeViewer!=null && !treeViewer.getTree().isDisposed()){
+									treeViewer.setInput(jsonDataManager
+											.getJsonSupportModel());
+									treeViewer.expandToLevel(2);
+									decorateTreeUsingQueryText();
+								}									
+							}
+						});
+					}
+				}
+			});
+			setPriority(Job.LONG);
+		}
+		
+		public void updateDataFile(String dataFile) {
+			this.dataFile = dataFile;
+		}
+
+		@Override
+		protected IStatus run(IProgressMonitor monitor) {
+			try {
+				if(dataFile!=null) {
+					JsonQueryDesigner.this.jsonDataManager.loadJsonDataFile(dataFile);
+					return Status.OK_STATUS;
+				}
+			} catch (final IOException e) {
+				UIUtils.getDisplay().asyncExec(new Runnable() {
+					@Override
+					public void run() {
+						if(treeViewer!=null && !treeViewer.getTree().isDisposed()){
+							JsonQueryDesigner.this.container.getQueryStatus().showError(e);
+							treeViewer.getTree().removeAll();
+							treeViewer.setInput(XMLTreeCustomStatus.ERROR_LOADING_XML);
+						}
+						isRefreshing = false;									
+					}
+				});
+			}
+			return null;
+		}
+		
+	}
+	
 	@Override
 	public void dispose() {
 		if (decorateJob != null) {
 			decorateJob.cancel();
 			decorateJob = null;
+		}
+		if (jsonLoaderJob != null) {
+			jsonLoaderJob.cancel();
+			jsonLoaderJob = null;
 		}
 		super.dispose();
 	}

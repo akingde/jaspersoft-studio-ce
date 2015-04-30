@@ -323,7 +323,10 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 				defaultAdapter = jDesign.getProperty(DEFAULT_DATAADAPTER);
 			}
 			dscombo.setSelected(defaultAdapter);
-			currentDesigner.setDataAdapter(dscombo.getSelected());
+			// NOTE: temporary commenting this
+			// It appears it prevents double invocation of the
+			// #setDataAdapter in the designers
+			//currentDesigner.setDataAdapter(dscombo.getSelected());
 		}
 	}
 
