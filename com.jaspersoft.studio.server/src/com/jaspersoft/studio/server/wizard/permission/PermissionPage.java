@@ -77,7 +77,8 @@ public class PermissionPage extends WizardPage {
 		c.setLayout(layout);
 		Label lbl = new Label(c, SWT.NONE);
 		lbl.setText(Messages.PermissionPage_7);
-		GridData gd = new GridData(GridData.END | GridData.HORIZONTAL_ALIGN_END | GridData.VERTICAL_ALIGN_CENTER);
+		GridData gd = new GridData(GridData.END | GridData.HORIZONTAL_ALIGN_END
+				| GridData.VERTICAL_ALIGN_CENTER);
 		gd.horizontalIndent = 200;
 		lbl.setLayoutData(gd);
 
@@ -117,7 +118,8 @@ public class PermissionPage extends WizardPage {
 		});
 
 		final int toolbarHeight = tSearch.computeSize(SWT.DEFAULT, SWT.DEFAULT).y;
-		tabFolder.setTabHeight(Math.max(toolbarHeight, tabFolder.getTabHeight()));
+		tabFolder
+				.setTabHeight(Math.max(toolbarHeight, tabFolder.getTabHeight()));
 		tabFolder.setTopRight(c, SWT.FILL);
 
 		createByUser(tabFolder);
@@ -144,10 +146,13 @@ public class PermissionPage extends WizardPage {
 			getContainer().run(false, true, new IRunnableWithProgress() {
 
 				@Override
-				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-					monitor.beginTask(Messages.PermissionPage_4, IProgressMonitor.UNKNOWN);
+				public void run(IProgressMonitor monitor)
+						throws InvocationTargetException, InterruptedException {
+					monitor.beginTask(Messages.PermissionPage_4,
+							IProgressMonitor.UNKNOWN);
 					try {
-						perms = res.getWsClient().getPermissions(res.getValue(), monitor, options);
+						perms = res.getWsClient().getPermissions(
+								res.getValue(), monitor, options);
 
 						showPermissions(perms);
 					} catch (Exception e) {
@@ -172,7 +177,8 @@ public class PermissionPage extends WizardPage {
 		for (RepositoryPermission rp : perms)
 			createPair(cmp, rp);
 		cmp.layout();
-		sc.setMinSize(cmp.computeSize(SWT.DEFAULT, SWT.DEFAULT).x, cmp.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
+		sc.setMinSize(cmp.computeSize(SWT.DEFAULT, SWT.DEFAULT).x,
+				cmp.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
 	}
 
 	private void createByUser(CTabFolder tabFolder) {
@@ -187,7 +193,8 @@ public class PermissionPage extends WizardPage {
 
 		scUser.setContent(cmpUser);
 		// Set the minimum size
-		scUser.setMinSize(cmpUser.computeSize(SWT.DEFAULT, SWT.DEFAULT).x, cmpUser.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
+		scUser.setMinSize(cmpUser.computeSize(SWT.DEFAULT, SWT.DEFAULT).x,
+				cmpUser.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
 
 		// Expand both horizontally and vertically
 		scUser.setExpandHorizontal(true);
@@ -208,7 +215,8 @@ public class PermissionPage extends WizardPage {
 
 		scRole.setContent(cmpRole);
 		// Set the minimum size
-		scRole.setMinSize(cmpRole.computeSize(SWT.DEFAULT, SWT.DEFAULT).x, cmpRole.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
+		scRole.setMinSize(cmpRole.computeSize(SWT.DEFAULT, SWT.DEFAULT).x,
+				cmpRole.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
 
 		// Expand both horizontally and vertically
 		scRole.setExpandHorizontal(true);
@@ -225,18 +233,22 @@ public class PermissionPage extends WizardPage {
 		lbl.setToolTipText(perm.getRecipient());
 
 		final Combo cperm = new Combo(cmp, SWT.READ_ONLY);
-		String[] items = new String[] { Messages.PermissionPage_3, Messages.PermissionPage_8, Messages.PermissionPage_9, Messages.PermissionPage_10, Messages.PermissionPage_11,
-				Messages.PermissionPage_12, Messages.PermissionPage_13, Messages.PermissionPage_14 };
+		String[] items = new String[] { Messages.PermissionPage_3,
+				Messages.PermissionPage_8, Messages.PermissionPage_9,
+				Messages.PermissionPage_10, Messages.PermissionPage_11,
+				Messages.PermissionPage_12, Messages.PermissionPage_13,
+				Messages.PermissionPage_14 };
 		int sel = -1;
 		for (int i = 1; i < masks.length; i++)
 			if (perm.getMask() == masks[i]) {
 				sel = i;
 				break;
 			}
-		if (perm.getUri() == null || !perm.getUri().equals(res.getValue().getUriString()))
+		if (perm.getUri() == null
+				|| !perm.getUri().equals(res.getValue().getUriString()))
 			items[sel] += " *"; //$NON-NLS-1$
 		cperm.setItems(items);
-		cperm.select(sel);
+		cperm.select(Math.max(sel, 0));
 		cperm.addMouseListener(new MouseListener() {
 
 			@Override
@@ -272,10 +284,13 @@ public class PermissionPage extends WizardPage {
 			getContainer().run(false, true, new IRunnableWithProgress() {
 
 				@Override
-				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-					monitor.beginTask(Messages.PermissionPage_15, IProgressMonitor.UNKNOWN);
+				public void run(IProgressMonitor monitor)
+						throws InvocationTargetException, InterruptedException {
+					monitor.beginTask(Messages.PermissionPage_15,
+							IProgressMonitor.UNKNOWN);
 					try {
-						perms = res.getWsClient().setPermissions(res.getValue(), perms, options, monitor);
+						perms = res.getWsClient().setPermissions(
+								res.getValue(), perms, options, monitor);
 					} catch (Exception e) {
 						UIUtils.showError(e);
 					}
@@ -290,11 +305,14 @@ public class PermissionPage extends WizardPage {
 		}
 	}
 
-	protected void updatePermission(final RepositoryPermission perm, final Combo cperm) {
+	protected void updatePermission(final RepositoryPermission perm,
+			final Combo cperm) {
 		if (cperm.getSelectionIndex() == -1)
 			perm.setUri(null);
 		else
 			perm.setUri(res.getValue().getUriString());
-		perm.setMask(masks[cperm.getSelectionIndex()]);
+		int indx = cperm.getSelectionIndex();
+		if (indx >= 0 && indx < masks.length)
+			perm.setMask(masks[indx]);
 	}
 }
