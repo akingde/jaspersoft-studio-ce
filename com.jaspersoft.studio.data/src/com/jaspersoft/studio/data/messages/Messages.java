@@ -250,6 +250,7 @@ public class Messages extends NLS {
 	public static String XPathQueryDesigner_SetDocRootItem;
 	public static String XPathQueryDesigner_SetRecordItem;
 	public static String XPathQueryDesigner_TaskTitle;
+	public static String XPathQueryDesigner_XmlLoaderJobName;
 	public static String XPathWizardDataEditorComposite_RefreshJobTitle;
 	public static String XPathWizardDataEditorComposite_TaskName;
 	static {

@@ -13,7 +13,6 @@
 package com.jaspersoft.studio.data.querydesigner.xpath;
 
 import java.io.File;
-import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -23,13 +22,14 @@ import net.sf.jasperreports.data.RepositoryDataLocation;
 import net.sf.jasperreports.data.http.HttpDataLocation;
 import net.sf.jasperreports.data.xml.XmlDataAdapter;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.util.JRXmlUtils;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.core.runtime.jobs.IJobChangeEvent;
+import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.IContentProvider;
@@ -49,12 +49,11 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.ui.part.PluginTransfer;
-import org.eclipse.ui.progress.WorkbenchJob;
+import org.eclipse.ui.progress.UIJob;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
@@ -81,6 +80,7 @@ public class XPathQueryDesigner extends TreeBasedQueryDesigner {
 	private static final int JOB_DELAY = 300;
 	private XMLDocumentManager documentManager;
 	private DecorateTreeViewerJob decorateJob;
+	private XMLLoaderJob xmlLoaderJob;
 	private NodeBoldStyledLabelProvider<XMLNode> treeLabelProvider;
 	private Composite toolbarComposite;
 
@@ -88,6 +88,7 @@ public class XPathQueryDesigner extends TreeBasedQueryDesigner {
 		super();
 		this.documentManager = new XMLDocumentManager();
 		this.decorateJob = new DecorateTreeViewerJob();
+		this.xmlLoaderJob = new XMLLoaderJob();
 		this.treeLabelProvider = new NodeBoldStyledLabelProvider<XMLNode>();
 	}
 
@@ -362,91 +363,14 @@ public class XPathQueryDesigner extends TreeBasedQueryDesigner {
 		if (!isRefreshing) {
 			isRefreshing = true;
 			this.container.getQueryStatus().showInfo(""); //$NON-NLS-1$
+			treeViewer.setInput(XMLTreeCustomStatus.LOADING_XML);
 			if (da != null && da.getDataAdapter() instanceof XmlDataAdapter) {
-				treeViewer.setInput(XMLTreeCustomStatus.LOADING_XML);
-				try {
-					XPathQueryDesigner.this.run(true, true,
-							new IRunnableWithProgress() {
-
-								@Override
-								public void run(IProgressMonitor monitor)
-										throws InvocationTargetException,
-										InterruptedException {
-
-									monitor.beginTask(
-											Messages.XPathQueryDesigner_TaskTitle,
-											-1);
-
-									XmlDataAdapter xda = (XmlDataAdapter) da
-											.getDataAdapter();
-									DataFile df = xda.getDataFile();
-									try {
-										Document doc = null;
-										JasperDesign jd = jConfig
-												.getJasperDesign();
-										if (df instanceof RepositoryDataLocation) {
-											File in = new File(
-													((RepositoryDataLocation) df)
-															.getLocation());
-											doc = JRXmlUtils.parse(in, XMLUtils
-													.isNamespaceAware(xda, jd));
-										} else if (df instanceof HttpDataLocation) {
-											doc = JRXmlUtils
-													.parse(new URL(
-															((HttpDataLocation) df)
-																	.getUrl()),
-															XMLUtils.isNamespaceAware(
-																	xda, jd));
-										}
-										documentManager.setDocument(doc);
-										documentManager
-												.setJasperConfiguration(XPathQueryDesigner.this.container
-														.getjConfig());
-										Display.getDefault().asyncExec(
-												new Runnable() {
-													@Override
-													public void run() {
-														treeViewer
-																.setInput(documentManager
-																		.getXMLDocumentModel());
-														treeViewer
-																.expandToLevel(2);
-														decorateTreeUsingQueryText();
-														isRefreshing = false;
-													}
-												});
-									} catch (Exception e) {
-										XPathQueryDesigner.this.container
-												.getQueryStatus().showError(e);
-										UIUtils.getDisplay().asyncExec(
-												new Runnable() {
-													@Override
-													public void run() {
-														treeViewer.getTree()
-																.removeAll();
-														treeViewer
-																.setInput(XMLTreeCustomStatus.ERROR_LOADING_XML);
-														isRefreshing = false;
-													}
-												});
-									} finally {
-										monitor.done();
-									}
-								}
-							});
-				} catch (Exception ex) {
-					XPathQueryDesigner.this.container.getQueryStatus()
-							.showError(ex);
-					Display.getDefault().asyncExec(new Runnable() {
-						@Override
-						public void run() {
-							treeViewer.getTree().removeAll();
-							treeViewer
-									.setInput(XMLTreeCustomStatus.ERROR_LOADING_XML);
-							isRefreshing = false;
-						}
-					});
-				}
+				XmlDataAdapter xda = (XmlDataAdapter) da.getDataAdapter();
+				boolean namespaceAware = XMLUtils.isNamespaceAware(xda, jConfig.getJasperDesign());
+				DataFile df = xda.getDataFile();
+				xmlLoaderJob.setDataFile(df);
+				xmlLoaderJob.setNamespaceAware(namespaceAware);
+				xmlLoaderJob.schedule();
 			} else {
 				treeViewer.getTree().removeAll();
 				treeViewer.setInput(XMLTreeCustomStatus.FILE_NOT_FOUND);
@@ -459,7 +383,7 @@ public class XPathQueryDesigner extends TreeBasedQueryDesigner {
 	 * Job that is responsible to update the treeviewer presentation depending
 	 * on the nodes selected by the XPath query.
 	 */
-	private final class DecorateTreeViewerJob extends WorkbenchJob {
+	private final class DecorateTreeViewerJob extends UIJob {
 
 		public DecorateTreeViewerJob() {
 			super(Messages.XPathQueryDesigner_RefreshJobTitle);
@@ -483,12 +407,92 @@ public class XPathQueryDesigner extends TreeBasedQueryDesigner {
 		}
 
 	}
+	
+	/*
+	 * Job responsible to load the XML resource and properly update 
+	 * the tree content with the read data.
+	 */
+	private final class XMLLoaderJob extends Job {
+
+		private DataFile dataFile;
+		private boolean namespaceAware;
+
+		public XMLLoaderJob() {
+			super(Messages.XPathQueryDesigner_XmlLoaderJobName);
+			addJobChangeListener(new JobChangeAdapter(){
+				@Override
+				public void done(IJobChangeEvent event) {
+					IStatus result = event.getResult();
+					if(Status.OK_STATUS.equals(result)){
+						UIUtils.getDisplay().asyncExec(new Runnable() {
+							@Override
+							public void run() {
+								if(treeViewer!=null && !treeViewer.getTree().isDisposed()){
+									treeViewer.setInput(documentManager.getXMLDocumentModel());
+									treeViewer.expandToLevel(2);
+									decorateTreeUsingQueryText();
+								}
+								isRefreshing = false;
+							}
+						});
+					}
+				}
+			});
+		}
+		
+		public void setNamespaceAware(boolean namespaceAware) {
+			this.namespaceAware = namespaceAware;
+		}
+
+		public void setDataFile(DataFile dataFile) {
+			this.dataFile = dataFile;
+		}
+
+		@Override
+		protected IStatus run(IProgressMonitor monitor) {
+			try {
+				if(dataFile!=null) {
+					Document doc = null;
+					if (dataFile instanceof RepositoryDataLocation) {
+						File in = new File(((RepositoryDataLocation) dataFile).getLocation());
+						doc = JRXmlUtils.parse(in, namespaceAware);
+					} else if (dataFile instanceof HttpDataLocation) {
+						doc = JRXmlUtils.parse(
+								new URL(((HttpDataLocation) dataFile).getUrl()),
+								namespaceAware);
+					}
+					documentManager.setDocument(doc);
+					documentManager.setJasperConfiguration(XPathQueryDesigner.this.container.getjConfig());
+					
+					return Status.OK_STATUS;
+				}
+			} catch (final Exception e) {
+				UIUtils.getDisplay().asyncExec(new Runnable() {
+					@Override
+					public void run() {
+						if(treeViewer!=null && !treeViewer.getTree().isDisposed()){
+							XPathQueryDesigner.this.container.getQueryStatus().showError(e);
+							treeViewer.getTree().removeAll();
+							treeViewer.setInput(XMLTreeCustomStatus.ERROR_LOADING_XML);
+						}
+						isRefreshing = false;
+					}
+				});
+			}
+			return null;
+		}
+		
+	}
 
 	@Override
 	public void dispose() {
 		if (decorateJob != null) {
 			decorateJob.cancel();
 			decorateJob = null;
+		}
+		if(xmlLoaderJob!=null){
+			xmlLoaderJob.cancel();
+			xmlLoaderJob = null;
 		}
 		super.dispose();
 	}

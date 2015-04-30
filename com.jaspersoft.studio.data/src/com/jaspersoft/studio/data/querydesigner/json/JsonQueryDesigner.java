@@ -381,7 +381,8 @@ public class JsonQueryDesigner extends TreeBasedQueryDesigner {
 											.getJsonSupportModel());
 									treeViewer.expandToLevel(2);
 									decorateTreeUsingQueryText();
-								}									
+								}
+								isRefreshing = false;
 							}
 						});
 					}
