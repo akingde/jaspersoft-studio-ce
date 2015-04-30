@@ -268,12 +268,12 @@ public class CASUtil {
 							try {
 								StatusLine statusLine = response
 										.getStatusLine();
-								System.out
-										.println("---------------------------------------------------------------------------");
-								System.out.println(response.toString());
-								for (Header h : response.getAllHeaders()) {
-									System.out.println(h.toString());
-								}
+								// System.out
+								// .println("---------------------------------------------------------------------------");
+								// System.out.println(response.toString());
+								// for (Header h : response.getAllHeaders()) {
+								// System.out.println(h.toString());
+								// }
 
 								switch (statusLine.getStatusCode()) {
 								case 200:
