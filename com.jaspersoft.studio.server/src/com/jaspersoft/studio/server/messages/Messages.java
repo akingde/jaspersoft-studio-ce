@@ -233,6 +233,9 @@ public class Messages extends NLS {
 	public static String RDResourceBundlePage_title;
 	public static String ReferenceResourceAction_0;
 	public static String ReportRunControler_statsstart;
+	public static String ReportUnitQueryContent_0;
+	public static String ReportUnitQueryContent_1;
+	public static String ReportUnitQueryContent_2;
 	public static String RepositoryDNDHelper_NewFileResourceErrMsg;
 	public static String RepositoryDNDHelper_NewResourceDescriptorErrMsg;
 	public static String RepositoryDNDHelper_SavingResourceTask;

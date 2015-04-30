@@ -17,6 +17,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.utils.IPageCompleteListener;
 import com.jaspersoft.studio.server.wizard.resource.APageContent;
@@ -45,12 +46,12 @@ public class ReportUnitQueryContent extends APageContent {
 
 	@Override
 	public String getName() {
-		return "Query";
+		return Messages.ReportUnitQueryContent_0;
 	}
 
 	@Override
 	public String getPageName() {
-		return "com.jaspersoft.studio.server.page.runit.query";
+		return Messages.ReportUnitQueryContent_1;
 	}
 
 	@Override
@@ -66,7 +67,7 @@ public class ReportUnitQueryContent extends APageContent {
 				if (sQuery.isPageComplete())
 					page.setErrorMessage(null);
 				else
-					page.setErrorMessage("There is a problem with selected Query which is not valid");
+					page.setErrorMessage(Messages.ReportUnitQueryContent_2);
 			}
 		});
 		rebind();
