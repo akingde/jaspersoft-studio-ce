@@ -44,11 +44,13 @@ import org.eclipse.swt.widgets.Text;
 import com.jaspersoft.jasperserver.dto.permissions.RepositoryPermission;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.protocol.IConnection;
 import com.jaspersoft.studio.utils.Misc;
 
 public class PermissionPage extends WizardPage {
 	private MResource res;
-	private PermissionOptions options = new PermissionOptions();
+	private PermissionOptions optRole = new PermissionOptions();
+	private PermissionOptions optUser = new PermissionOptions();
 	private Composite cmpUser;
 	private Composite cmpRole;
 	private CTabFolder tabFolder;
@@ -60,6 +62,8 @@ public class PermissionPage extends WizardPage {
 		setTitle(Messages.PermissionPage_0);
 		setDescription(Messages.PermissionPage_1);
 		this.res = res;
+		optRole.setRecipientTypeUser(false);
+		optUser.setRecipientTypeUser(true);
 	}
 
 	@Override
@@ -101,6 +105,8 @@ public class PermissionPage extends WizardPage {
 
 			@Override
 			public void modifyText(ModifyEvent e) {
+				List<RepositoryPermission> perms = tabFolder
+						.getSelectionIndex() == 0 ? permsUser : permsRoles;
 				if (perms != null) {
 					String txt = tSearch.getText().toLowerCase();
 					if (Misc.isNullOrEmpty(txt))
@@ -138,10 +144,10 @@ public class PermissionPage extends WizardPage {
 		getPermissions();
 	}
 
-	private List<RepositoryPermission> perms;
+	private List<RepositoryPermission> permsUser;
+	private List<RepositoryPermission> permsRoles;
 
 	private void getPermissions() {
-		options.setRecipientTypeUser(tabFolder.getSelectionIndex() == 0);
 		try {
 			getContainer().run(false, true, new IRunnableWithProgress() {
 
@@ -151,10 +157,18 @@ public class PermissionPage extends WizardPage {
 					monitor.beginTask(Messages.PermissionPage_4,
 							IProgressMonitor.UNKNOWN);
 					try {
-						perms = res.getWsClient().getPermissions(
-								res.getValue(), monitor, options);
-
-						showPermissions(perms);
+						IConnection wsClient = res.getWsClient();
+						if (tabFolder.getSelectionIndex() == 0) {
+							if (permsUser == null)
+								permsUser = wsClient.getPermissions(
+										res.getValue(), monitor, optUser);
+							showPermissions(permsUser);
+						} else {
+							if (permsRoles == null)
+								permsRoles = wsClient.getPermissions(
+										res.getValue(), monitor, optRole);
+							showPermissions(permsRoles);
+						}
 					} catch (Exception e) {
 						UIUtils.showError(e);
 					}
@@ -169,8 +183,9 @@ public class PermissionPage extends WizardPage {
 	}
 
 	protected void showPermissions(List<RepositoryPermission> perms) {
-		Composite cmp = options.isRecipientTypeUser() ? cmpUser : cmpRole;
-		ScrolledComposite sc = options.isRecipientTypeUser() ? scUser : scRole;
+		Composite cmp = tabFolder.getSelectionIndex() == 0 ? cmpUser : cmpRole;
+		ScrolledComposite sc = tabFolder.getSelectionIndex() == 0 ? scUser
+				: scRole;
 
 		for (Control c : cmp.getChildren())
 			c.dispose();
@@ -288,13 +303,22 @@ public class PermissionPage extends WizardPage {
 						throws InvocationTargetException, InterruptedException {
 					monitor.beginTask(Messages.PermissionPage_15,
 							IProgressMonitor.UNKNOWN);
+					boolean b = tabFolder.getSelectionIndex() == 0;
 					try {
-						perms = res.getWsClient().setPermissions(
-								res.getValue(), perms, options, monitor);
+						if (permsUser != null)
+							permsUser = res.getWsClient()
+									.setPermissions(res.getValue(), permsUser,
+											optUser, monitor);
+						if (monitor.isCanceled())
+							return;
+						if (permsRoles != null)
+							permsRoles = res.getWsClient().setPermissions(
+									res.getValue(), permsRoles, optRole,
+									monitor);
 					} catch (Exception e) {
 						UIUtils.showError(e);
 					}
-					showPermissions(perms);
+					showPermissions(b ? permsUser : permsRoles);
 				}
 
 			});
