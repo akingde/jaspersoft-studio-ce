@@ -17,6 +17,7 @@ import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.sf.jasperreports.engine.JRPen;
 import net.sf.jasperreports.engine.base.JRBasePen;
 import net.sf.jasperreports.engine.type.LineStyleEnum;
 
@@ -139,7 +140,7 @@ public class BorderContributionItem extends CommonToolbarHandler {
 		
 		/**
 		 * For an element change all the properties related to the border: color, style and width
-		 * @param cc CommandCompound where all the command to change a single property are putted
+		 * @param cc CommandCompound where all the command to change a single property are put
 		 * @param selectedElement selected preset
 		 * @param lp element to change
 		 */
@@ -154,7 +155,8 @@ public class BorderContributionItem extends CommonToolbarHandler {
 		
 		private TemplateBorder getElementAttribute(String position, MLineBox lb){
 			MLinePen lp = (MLinePen) lb.getPropertyValue(position);
-			LineStyleEnum lineStyle = (LineStyleEnum)lp.getPropertyValue(JRBasePen.PROPERTY_LINE_STYLE);
+			JRPen pen = (JRPen)lp.getValue();
+			LineStyleEnum lineStyle =  (LineStyleEnum)pen.getLineStyleValue();
 			Float lineWidth = (Float)lp.getPropertyValue(JRBasePen.PROPERTY_LINE_WIDTH);
 			AlfaRGB lineColor = (AlfaRGB)lp.getPropertyValue(JRBasePen.PROPERTY_LINE_COLOR);
 			TemplateBorder result =  new TemplateBorder(lineWidth, lineStyle, lineColor != null ? lineColor.getRgb() : null);
