@@ -18,6 +18,8 @@ import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
@@ -63,7 +65,7 @@ public class BarcodeWizardPage extends JSSHelpWizardPage {
 		setDescription(Messages.BarcodeWizardPage_barcode_wizard_description_a
 				+ Messages.BarcodeWizardPage_barcode_wizard_description_b);
 	}
-	
+
 	/**
 	 * Return the context name for the help of this page
 	 */
@@ -151,6 +153,14 @@ public class BarcodeWizardPage extends JSSHelpWizardPage {
 
 		fillTableBarbecue(table);
 
+		table.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseDoubleClick(MouseEvent e) {
+				if (table.getSelectionCount() == 1)
+					;// TODO close the dialog
+			}
+		});
+
 		final Table table2 = new Table(composite, SWT.V_SCROLL | SWT.SINGLE
 				| SWT.FULL_SELECTION | SWT.BORDER);
 		gd = new GridData(GridData.FILL_BOTH);
@@ -169,6 +179,14 @@ public class BarcodeWizardPage extends JSSHelpWizardPage {
 		tlayout = new TableLayout();
 		tlayout.addColumnData(new ColumnWeightData(100, false));
 		table2.setLayout(tlayout);
+
+		table2.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseDoubleClick(MouseEvent e) {
+				if (table2.getSelectionCount() == 1)
+					;// TODO close the dialog
+			}
+		});
 
 		fillTableb4j(table2);
 
@@ -216,8 +234,8 @@ public class BarcodeWizardPage extends JSSHelpWizardPage {
 		for (int i = 0; i < items.length; i++) {
 			TableItem ti = new TableItem(table, SWT.NONE);
 			ti.setText(items[i]);
-			ti.setImage(
-					Activator.getDefault().getImage("/icons/resources/" + items[i] + ".png")); //$NON-NLS-1$ //$NON-NLS-2$
+			ti.setImage(Activator.getDefault().getImage(
+					"/icons/resources/" + items[i] + ".png")); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 
 		table.setRedraw(true);
@@ -234,8 +252,8 @@ public class BarcodeWizardPage extends JSSHelpWizardPage {
 		for (int i = 0; i < items.length; i++) {
 			TableItem ti = new TableItem(table, SWT.NONE);
 			ti.setText(items[i]);
-			ti.setImage(
-					Activator.getDefault().getImage("/icons/resources/" + items[i] + ".png")); //$NON-NLS-1$ //$NON-NLS-2$
+			ti.setImage(Activator.getDefault().getImage(
+					"/icons/resources/" + items[i] + ".png")); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 
 		table.setRedraw(true);

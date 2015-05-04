@@ -56,7 +56,7 @@ public abstract class AComponentDesignConverter extends ElementIconConverter imp
 	protected CacheMap<JRComponentElement, Renderable> cache = new CacheMap<JRComponentElement, Renderable>(3000000);
 	protected CacheMap<JRElement, KeyValue<String, Long>> running = new CacheMap<JRElement, KeyValue<String, Long>>(
 			300000);
-	protected static CacheMap<KeyValue<JasperReportsContext, String>, Renderable> imgCache = new CacheMap<KeyValue<JasperReportsContext, String>, Renderable>(
+	protected static CacheMap<KeyValue<JasperReportsContext, String>, JRComponentElement> imgCache = new CacheMap<KeyValue<JasperReportsContext, String>, JRComponentElement>(
 			300000);
 
 	public JRPrintElement convert(final ReportConverter reportConverter, final JRComponentElement element) {
@@ -120,20 +120,21 @@ public abstract class AComponentDesignConverter extends ElementIconConverter imp
 			final Component cmp, final String ekey, Renderable cacheRenderer) {
 		final JasperReportsConfiguration jrContext = (JasperReportsConfiguration) reportConverter.getJasperReportsContext();
 		final KeyValue<JasperReportsContext, String> key = new KeyValue<JasperReportsContext, String>(jrContext, ekey);
-		Renderable r = imgCache.get(key);
+		JRComponentElement r = imgCache.get(key);
 		if (r != null) {
-			cache.put(element, r);
-			return r;
+			// cache.put(element, r);
+			return cache.get(key);
 		}
-		imgCache.put(key, cacheRenderer);
-
+		imgCache.put(key, element);
+		
 		final KeyValue<String, Long> kv = new KeyValue<String, Long>(null, null);
 		running.put(element, kv);
 		Job job = new Job("load map") {
 			protected IStatus run(IProgressMonitor monitor) {
 				try {
 					final Renderable r = doRenderable(reportConverter, element, cmp, ekey, jrContext, kv);
-					imgCache.put(key, r);
+					imgCache.put(key, element);
+					cache.put(element, r);
 					r.getImageData(jrContext);
 					UIUtils.getDisplay().asyncExec(new Runnable() {
 

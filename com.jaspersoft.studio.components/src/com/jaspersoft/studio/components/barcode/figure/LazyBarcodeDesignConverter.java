@@ -68,7 +68,8 @@ public class LazyBarcodeDesignConverter extends AComponentDesignConverter {
 	@Override
 	protected String getEKey(JRComponentElement element) {
 		QRCodeComponent map = (QRCodeComponent) element.getComponent();
-		String ekey = "" + element.getWidth() + element.getHeight();
+		String ekey = element.getUUID() + "" + element.getWidth()
+				+ element.getHeight();
 		if (map.getCodeExpression() != null)
 			ekey += map.getCodeExpression().getText();
 		if (map.getErrorCorrectionLevel() != null)
