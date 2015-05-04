@@ -47,7 +47,7 @@ import com.jaspersoft.studio.dnd.NodeDragListener;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxLabelProvider;
-import com.jaspersoft.studio.property.descriptor.classname.ComboClassTypeCellEditor;
+import com.jaspersoft.studio.property.descriptor.classname.ClassTypeComboCellEditor;
 import com.jaspersoft.studio.swt.widgets.table.DeleteButton;
 import com.jaspersoft.studio.swt.widgets.table.INewElement;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
@@ -265,7 +265,7 @@ public class ParametersTable extends AbstractModifyTable {
 		});
 
 		viewer.setCellEditors(new CellEditor[] { new TextCellEditor(parent), new CheckboxCellEditor(parent),
-				new ComboClassTypeCellEditor(parent), new TextCellEditor(parent) });
+				new ClassTypeComboCellEditor(parent), new TextCellEditor(parent) });
 		viewer.setColumnProperties(new String[] { "NAME", "ISFORPROMPT", "TYPE", "DESCRIPTION" }); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 	}
 
