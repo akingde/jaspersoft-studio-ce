@@ -141,10 +141,7 @@ public class CASUtil {
 
 		Executor exec = Executor.newInstance(httpclient);
 
-		String url = srv.getUrl();
-		if (!url.endsWith("/"))
-			url += "/";
-		URIBuilder ub = new URIBuilder(url + "cas/login");
+		URIBuilder ub = new URIBuilder(sp.getUrl() + "index.html");
 
 		String fullURL = ub.build().toASCIIString();
 		Request req = HttpUtils.get(fullURL, sp);
@@ -154,7 +151,28 @@ public class CASUtil {
 			req.viaProxy(proxy);
 		String tgtID = readData(exec, req, monitor);
 		String action = getFormAction(tgtID);
+		if (action != null) {
+			action = action.replaceFirst("/", "");
+			int indx = action.indexOf(";jsession");
+			if (indx >= 0)
+				action = action.substring(0, indx);
+		} else
+			action = "cas/login";
+		String url = srv.getUrl();
+		if (!url.endsWith("/"))
+			url += "/";
+		ub = new URIBuilder(url + action);
+		//
+		fullURL = ub.build().toASCIIString();
+		req = HttpUtils.get(fullURL, sp);
+		proxy = net.sf.jasperreports.eclipse.util.HttpUtils.getUnauthProxy(
+				exec, new URI(fullURL));
+		if (proxy != null)
+			req.viaProxy(proxy);
+		tgtID = readData(exec, req, monitor);
+		action = getFormAction(tgtID);
 		action = action.replaceFirst("/", "");
+
 		ub = new URIBuilder(url + action);
 		Map<String, String> map = getInputs(tgtID);
 		Form form = Form.form();
