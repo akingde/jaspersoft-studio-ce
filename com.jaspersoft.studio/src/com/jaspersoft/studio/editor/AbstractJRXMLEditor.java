@@ -647,8 +647,9 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 	@Override
 	protected void handlePropertyChange(final int propertyId) {
 		if (!isRefreshing) {
-			if (propertyId == ISaveablePart.PROP_DIRTY && previewEditor != null && !isRefreshing)
+			if (propertyId == ISaveablePart.PROP_DIRTY && previewEditor != null && !isRefreshing){
 				setPreviewDirty(true);
+			}
 			// Can indirectly refresh the widgets so it must be executed inside the
 			// graphic thread, but to avoid concurrency problems it is a sync exec
 			UIUtils.getDisplay().syncExec(new Runnable() {

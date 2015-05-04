@@ -216,7 +216,8 @@ public class ReportContainer extends MultiPageToolbarEditorPart implements ITabb
 
 		public void propertyChange(PropertyChangeEvent evt) {
 
-			if (evt.getPropertyName().equals(CLOSE_EDITOR_PROPERTY)) {
+			String propertyName = evt.getPropertyName();
+			if (propertyName.equals(CLOSE_EDITOR_PROPERTY)) {
 				AbstractVisualEditor obj = ccMap.get(evt.getOldValue());
 				if (obj != null)
 					removeEditorPage(evt, obj);
@@ -228,7 +229,8 @@ public class ReportContainer extends MultiPageToolbarEditorPart implements ITabb
 					removeEditorPage(evt, obj);
 			}
 			getPropertyChangeSupport().firePropertyChange(evt);
-			if(!evt.getPropertyName().equals(MGraphicElement.FORCE_GRAPHICAL_REFRESH)){
+			if(!propertyName.equals(MGraphicElement.FORCE_GRAPHICAL_REFRESH) &&
+					!propertyName.equals(JSSCompoundCommand.REFRESH_UI_EVENT)){
 				firePropertyChange(ISaveablePart.PROP_DIRTY);
 			}
 		}

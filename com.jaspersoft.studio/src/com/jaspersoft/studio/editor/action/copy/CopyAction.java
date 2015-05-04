@@ -108,4 +108,15 @@ public class CopyAction extends ACachedSelectionAction {
 		}
 		return cmd;
 	}
+	
+	@Override
+	protected void execute(Command command) {
+		if (command == null || !command.canExecute()) {
+			return;
+		}
+		else {
+			// we run it outside the command stack, therefore it will not make the editor dirty
+			command.execute();
+		}
+	}
 }
