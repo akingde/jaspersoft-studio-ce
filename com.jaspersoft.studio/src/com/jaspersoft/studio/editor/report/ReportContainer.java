@@ -67,6 +67,7 @@ import com.jaspersoft.studio.editor.part.MultiPageToolbarEditorPart;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.MPage;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.parameter.MParameter;
@@ -227,7 +228,9 @@ public class ReportContainer extends MultiPageToolbarEditorPart implements ITabb
 					removeEditorPage(evt, obj);
 			}
 			getPropertyChangeSupport().firePropertyChange(evt);
-			firePropertyChange(ISaveablePart.PROP_DIRTY);
+			if(!evt.getPropertyName().equals(MGraphicElement.FORCE_GRAPHICAL_REFRESH)){
+				firePropertyChange(ISaveablePart.PROP_DIRTY);
+			}
 		}
 
 	};
