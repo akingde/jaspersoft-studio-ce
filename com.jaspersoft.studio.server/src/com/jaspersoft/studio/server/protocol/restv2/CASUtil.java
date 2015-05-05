@@ -18,9 +18,7 @@ import java.io.InputStream;
 import java.net.URI;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -34,7 +32,6 @@ import net.sf.jasperreports.eclipse.util.FileUtils;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
-import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpRequest;
@@ -96,18 +93,18 @@ public class CASUtil {
 		// set up a TrustManager that trusts everything
 		sslContext.init(null, new TrustManager[] { new X509TrustManager() {
 			public X509Certificate[] getAcceptedIssuers() {
-				System.out.println("getAcceptedIssuers =============");
+				// System.out.println("getAcceptedIssuers =============");
 				return null;
 			}
 
 			public void checkClientTrusted(X509Certificate[] certs,
 					String authType) {
-				System.out.println("checkClientTrusted =============");
+				// System.out.println("checkClientTrusted =============");
 			}
 
 			public void checkServerTrusted(X509Certificate[] certs,
 					String authType) {
-				System.out.println("checkServerTrusted =============");
+				// System.out.println("checkServerTrusted =============");
 			}
 		} }, new SecureRandom());
 
@@ -202,7 +199,7 @@ public class CASUtil {
 		// }
 		// }
 		// }
-		ub = new URIBuilder(url + "cas/login");
+		ub = new URIBuilder(url + action);
 		url = sp.getUrl();
 		if (!url.endsWith("/"))
 			url += "/";
@@ -305,64 +302,6 @@ public class CASUtil {
 								}
 							} finally {
 								FileUtils.closeStream(in);
-							}
-							return res;
-						}
-
-						protected InputStream getContent(HttpEntity entity)
-								throws ClientProtocolException, IOException {
-							if (entity == null)
-								throw new ClientProtocolException(
-										"Response contains no content");
-							return entity.getContent();
-						}
-					});
-		} catch (IOException e) {
-			e.printStackTrace();
-			throw e;
-		} finally {
-			ConnectionManager.unregister(req);
-		}
-
-		System.out.println(obj);
-		return obj;
-	}
-
-	private static List<Header> readCookies(Executor exec, Request req,
-			IProgressMonitor monitor) throws IOException {
-		List<Header> obj = null;
-		ConnectionManager.register(monitor, req);
-		try {
-			obj = exec.execute(req).handleResponse(
-					new ResponseHandler<List<Header>>() {
-
-						public List<Header> handleResponse(
-								final HttpResponse response) throws IOException {
-							HttpEntity entity = response.getEntity();
-							InputStream in = null;
-							Header[] headers = null;
-							try {
-								StatusLine statusLine = response
-										.getStatusLine();
-								switch (statusLine.getStatusCode()) {
-								case 302:
-									System.out.println("haha");
-								case 200:
-									in = getContent(entity);
-									headers = response.getAllHeaders();
-									break;
-								default:
-									throw new HttpResponseException(statusLine
-											.getStatusCode(), statusLine
-											.getReasonPhrase());
-								}
-							} finally {
-								FileUtils.closeStream(in);
-							}
-							List<Header> res = new ArrayList<Header>();
-							for (Header h : headers) {
-								if (h.getName().equals("Set-Cookie"))
-									res.add(h);
 							}
 							return res;
 						}
