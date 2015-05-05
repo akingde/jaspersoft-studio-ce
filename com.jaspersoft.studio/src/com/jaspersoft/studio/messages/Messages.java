@@ -1319,6 +1319,8 @@ public class Messages extends NLS {
 	public static String MStyleTemplate_source_expression_description;
 	public static String MStyleTemplateReference_location;
 	public static String MStyleTemplateReference_location_description;
+	public static String MSubreport_0;
+	public static String MSubreport_1;
 	public static String MSubreport_connection_expression_description;
 	public static String MSubreport_datasource_expression;
 	public static String MSubreport_datasource_expression_description;

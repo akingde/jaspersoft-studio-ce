@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.model.subreport;
 
@@ -24,6 +20,7 @@ import net.sf.jasperreports.engine.base.JRBaseSubreport;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignSubreport;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.type.OverflowType;
 import net.sf.jasperreports.engine.util.JRCloneUtils;
 
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -43,6 +40,7 @@ import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.returnvalue.RVPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.subreport.parameter.SubreportPropertiesPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 
 /*
  * The Class MSubreport.
@@ -170,6 +168,12 @@ public class MSubreport extends MGraphicElement {
 		propertiesD.setHelpRefBuilder(new HelpReferenceBuilder(
 				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#returnValue")); //$NON-NLS-1$
 
+		overflowTypeD = new NamedEnumPropertyDescriptor<OverflowType>(JRBaseSubreport.PROPERTY_OVERFLOW_TYPE,
+				Messages.MSubreport_0, OverflowType.STRETCH, NullEnum.NOTNULL);
+		overflowTypeD.setDescription(Messages.MSubreport_1);
+		desc.add(overflowTypeD);
+
+		overflowTypeD.setCategory(Messages.MSubreport_subreport_properties_category);
 		returnValuesD.setCategory(Messages.MSubreport_subreport_properties_category);
 		propertiesD.setCategory(Messages.MSubreport_subreport_properties_category);
 		dsExprD.setCategory(Messages.MSubreport_subreport_properties_category);
@@ -182,6 +186,7 @@ public class MSubreport extends MGraphicElement {
 		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#subreport"); //$NON-NLS-1$
 	}
 
+	private NamedEnumPropertyDescriptor<OverflowType> overflowTypeD;
 	private JReportsDTO returnValuesDTO;
 
 	@Override
@@ -211,6 +216,8 @@ public class MSubreport extends MGraphicElement {
 			return returnValuesDTO;
 
 		}
+		if (id.equals(JRBaseSubreport.PROPERTY_OVERFLOW_TYPE))
+			return overflowTypeD.getIntValue(jrElement.getOverflowType());
 
 		return super.getPropertyValue(id);
 	}
@@ -220,6 +227,8 @@ public class MSubreport extends MGraphicElement {
 		JRDesignSubreport jrElement = (JRDesignSubreport) getValue();
 		if (id.equals(JRBaseSubreport.PROPERTY_RUN_TO_BOTTOM))
 			jrElement.setRunToBottom((Boolean) value);
+		else if (id.equals(JRBaseSubreport.PROPERTY_OVERFLOW_TYPE))
+			jrElement.setOverflowType(overflowTypeD.getEnumValue(value));
 		else if (id.equals(JRBaseSubreport.PROPERTY_RUN_TO_BOTTOM))
 			jrElement.setUsingCache((Boolean) value);
 		else if (id.equals(JRDesignSubreport.PROPERTY_EXPRESSION))
@@ -260,14 +269,16 @@ public class MSubreport extends MGraphicElement {
 
 	@Override
 	public int getDefaultHeight() {
-		Object defaultValue = DefaultManager.INSTANCE.getDefaultPropertiesValue(this.getClass(), JRDesignElement.PROPERTY_HEIGHT);
-		return defaultValue != null ? (Integer)defaultValue : 200;
+		Object defaultValue = DefaultManager.INSTANCE.getDefaultPropertiesValue(this.getClass(),
+				JRDesignElement.PROPERTY_HEIGHT);
+		return defaultValue != null ? (Integer) defaultValue : 200;
 	}
 
 	@Override
 	public int getDefaultWidth() {
-		Object defaultValue = DefaultManager.INSTANCE.getDefaultPropertiesValue(this.getClass(), JRDesignElement.PROPERTY_WIDTH);
-		return defaultValue != null ? (Integer)defaultValue : 200;
+		Object defaultValue = DefaultManager.INSTANCE.getDefaultPropertiesValue(this.getClass(),
+				JRDesignElement.PROPERTY_WIDTH);
+		return defaultValue != null ? (Integer) defaultValue : 200;
 	}
 
 	/*
@@ -316,25 +327,27 @@ public class MSubreport extends MGraphicElement {
 			String tip = ""; //$NON-NLS-1$
 			if (value.getExpression() != null)
 				tip += value.getExpression().getText();
-			if (tip.trim().isEmpty()) return getIconDescriptor().getTitle() + ": " + Messages.common_noExpressionMessage;
-			else return getIconDescriptor().getTitle() + ": " + tip;
+			if (tip.trim().isEmpty())
+				return getIconDescriptor().getTitle() + ": " + Messages.common_noExpressionMessage; //$NON-NLS-1$
+			else
+				return getIconDescriptor().getTitle() + ": " + tip; //$NON-NLS-1$
 		}
 		return getIconDescriptor().getToolTip();
 	}
-	
+
 	@Override
-	public void trasnferProperties(JRElement target){
+	public void trasnferProperties(JRElement target) {
 		super.trasnferProperties(target);
-		
+
 		JRDesignSubreport jrSource = (JRDesignSubreport) getValue();
-		if (jrSource != null){
-			JRDesignSubreport jrTarget = (JRDesignSubreport)target;
+		if (jrSource != null) {
+			JRDesignSubreport jrTarget = (JRDesignSubreport) target;
 			jrTarget.setRunToBottom(jrSource.isRunToBottom());
 		}
 	}
-	
+
 	@Override
 	public JRDesignSubreport getValue() {
-		return (JRDesignSubreport)super.getValue();
+		return (JRDesignSubreport) super.getValue();
 	}
 }

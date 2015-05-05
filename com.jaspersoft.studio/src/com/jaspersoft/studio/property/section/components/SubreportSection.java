@@ -30,7 +30,7 @@ public class SubreportSection extends AbstractSection {
 		parent.setLayout(new GridLayout(2, false));
 
 		createWidget4Property(parent, JRBaseSubreport.PROPERTY_RUN_TO_BOTTOM);
-
+		createWidget4Property(parent, JRBaseSubreport.PROPERTY_OVERFLOW_TYPE);
 		createWidget4Property(parent, JRBaseSubreport.PROPERTY_USING_CACHE);
 		createWidget4Property(parent, JRDesignSubreport.PROPERTY_EXPRESSION);
 		createWidget4Property(parent, JRDesignSubreport.PROPERTY_PARAMETERS_MAP_EXPRESSION);
@@ -53,6 +53,7 @@ public class SubreportSection extends AbstractSection {
 		super.initializeProvidedProperties();
 		addProvidedProperties(JRBaseSubreport.PROPERTY_RUN_TO_BOTTOM, Messages.MSubreport_run_to_bottom);
 		addProvidedProperties(JRBaseSubreport.PROPERTY_USING_CACHE, Messages.common_using_cache);
+		addProvidedProperties(JRBaseSubreport.PROPERTY_OVERFLOW_TYPE, Messages.MSubreport_0);
 		addProvidedProperties(JRDesignSubreport.PROPERTY_EXPRESSION, Messages.common_expression);
 		addProvidedProperties(JRDesignSubreport.PROPERTY_PARAMETERS_MAP_EXPRESSION, Messages.common_parameters_map_expression);
 		addProvidedProperties(JRDesignSubreport.PROPERTY_CONNECTION_EXPRESSION, Messages.common_connection_expression);
