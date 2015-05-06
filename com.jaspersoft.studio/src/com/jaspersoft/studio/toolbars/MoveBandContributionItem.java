@@ -12,6 +12,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.toolbars;
 
+import java.util.List;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -25,9 +27,8 @@ import com.jaspersoft.studio.editor.action.MoveDetailDownAction;
 import com.jaspersoft.studio.editor.action.MoveDetailUpAction;
 import com.jaspersoft.studio.editor.action.MoveGroupDownAction;
 import com.jaspersoft.studio.editor.action.MoveGroupUpAction;
+import com.jaspersoft.studio.editor.action.SetWorkbenchAction;
 import com.jaspersoft.studio.model.band.MBand;
-import com.jaspersoft.studio.model.band.MBandGroupFooter;
-import com.jaspersoft.studio.model.band.MBandGroupHeader;
 
 /**
  * Buttons for the toolbar to move band or groups
@@ -38,23 +39,29 @@ import com.jaspersoft.studio.model.band.MBandGroupHeader;
 public class MoveBandContributionItem extends CommonToolbarHandler{
 
 	/**
-	 * Button to move the band or the group up
+	 * Button to move the band up
 	 */
-	private ToolItem moveUp;
+	private ToolItem moveBandUp;
 	
 	/**
-	 * Button to move the band or the group down
+	 * Button to move the band down
 	 */
-	private ToolItem moveDown;
+	private ToolItem moveBandDown;
 	
 	/**
-	 * Button to check if the selected element is a band or a group
+	 * Button to move the group up
 	 */
-	private boolean isGroup = false;
+	private ToolItem moveGroupUp;
+	
+	/**
+	 * Button to move the the group down
+	 */
+	private ToolItem moveGroupDown;
+	
 
-	private MoveDetailDownAction moveDetailDownAction = new MoveDetailDownAction(null);
+	private MoveDetailDownAction moveBandDownAction = new MoveDetailDownAction(null);
 	
-	private MoveDetailUpAction moveDetailUpAction = new MoveDetailUpAction(null);
+	private MoveDetailUpAction moveBandUpAction = new MoveDetailUpAction(null);
 	
 	private MoveGroupDownAction moveGroupDownAction = new MoveGroupDownAction(null);
 	
@@ -67,19 +74,16 @@ public class MoveBandContributionItem extends CommonToolbarHandler{
 		
 	
 		public void widgetSelected(SelectionEvent e) {
-			if (e.widget == moveDown){
-				if (isGroup)  {
-					moveGroupDownAction.setWorkbenchPart(getWorkbenchPart());
+			SetWorkbenchAction action = (SetWorkbenchAction)e.widget.getData();
+			action.setWorkbenchPart(getWorkbenchPart());
+			action.isEnabled();
+			if (action == moveBandDownAction || action == moveBandUpAction){
+				action.run();
+			} else {
+				if (action == moveGroupDownAction) {
 					moveGroupDownAction.execute(getLastRawSelection());
 				} else {
-					moveDetailDownAction.run();
-				}
-			} else {
-				if (isGroup) {
-					moveGroupUpAction.setWorkbenchPart(getWorkbenchPart());
 					moveGroupUpAction.execute(getLastRawSelection());
-				} else {
-					moveDetailUpAction.run();
 				}
 			}
 		}
@@ -90,15 +94,29 @@ public class MoveBandContributionItem extends CommonToolbarHandler{
 		super.createControl(parent);
 		ToolBar buttons = new ToolBar(parent, SWT.FLAT | SWT.WRAP);
 		
-		moveDown = new ToolItem(buttons, SWT.PUSH);
-		moveDown.setImage(ResourceManager.getImage(moveDetailDownAction.getImageDescriptor()));
-		moveDown.setToolTipText(moveDetailDownAction.getToolTipText());
-		moveDown.addSelectionListener(pushButtonPressed);
+		moveBandDown = new ToolItem(buttons, SWT.PUSH);
+		moveBandDown.setImage(ResourceManager.getImage(moveBandDownAction.getImageDescriptor()));
+		moveBandDown.setToolTipText(moveBandDownAction.getToolTipText());
+		moveBandDown.setData(moveBandDownAction);
+		moveBandDown.addSelectionListener(pushButtonPressed);
 		
-		moveUp = new ToolItem(buttons, SWT.PUSH);
-		moveUp.setImage(ResourceManager.getImage(moveDetailUpAction.getImageDescriptor()));
-		moveUp.setToolTipText(moveDetailUpAction.getToolTipText());
-		moveUp.addSelectionListener(pushButtonPressed);
+		moveBandUp = new ToolItem(buttons, SWT.PUSH);
+		moveBandUp.setImage(ResourceManager.getImage(moveBandUpAction.getImageDescriptor()));
+		moveBandUp.setToolTipText(moveBandUpAction.getToolTipText());
+		moveBandUp.setData(moveBandUpAction);
+		moveBandUp.addSelectionListener(pushButtonPressed);
+		
+		moveGroupDown = new ToolItem(buttons, SWT.PUSH);
+		moveGroupDown.setImage(ResourceManager.getImage(moveGroupDownAction.getImageDescriptor()));
+		moveGroupDown.setToolTipText(moveGroupDownAction.getToolTipText());
+		moveGroupDown.setData(moveGroupDownAction);
+		moveGroupDown.addSelectionListener(pushButtonPressed);
+		
+		moveGroupUp = new ToolItem(buttons, SWT.PUSH);
+		moveGroupUp.setImage(ResourceManager.getImage(moveGroupUpAction.getImageDescriptor()));
+		moveGroupUp.setToolTipText(moveGroupUpAction.getToolTipText());
+		moveGroupUp.setData(moveGroupUpAction);
+		moveGroupUp.addSelectionListener(pushButtonPressed);
 		
 		setEnablement();
 		return buttons;
@@ -106,23 +124,21 @@ public class MoveBandContributionItem extends CommonToolbarHandler{
 	
 	private void setEnablement(){
 		if (getWorkbenchPart() != null){
-			if (moveDown != null && !moveDown.isDisposed()){
-				if (isGroup) {
-					moveGroupDownAction.setWorkbenchPart(getWorkbenchPart());
-					moveDown.setEnabled(moveGroupDownAction.calculateEnabled(getLastRawSelection()));
-				} else {
-					moveDetailDownAction.setWorkbenchPart(getWorkbenchPart());
-					moveDown.setEnabled(moveDetailDownAction.calculateEnabled());
-				}
+			if (moveBandDown != null && !moveBandDown.isDisposed()){
+				moveBandDownAction.setWorkbenchPart(getWorkbenchPart());
+				moveBandDown.setEnabled(moveBandDownAction.calculateEnabled());
 			}
-			if (moveUp != null && !moveUp.isDisposed()){
-				if (isGroup) {
-					moveGroupUpAction.setWorkbenchPart(getWorkbenchPart());
-					moveUp.setEnabled(moveGroupUpAction.calculateEnabled(getLastRawSelection()));
-				} else {
-					moveDetailUpAction.setWorkbenchPart(getWorkbenchPart());
-					moveUp.setEnabled(moveDetailUpAction.calculateEnabled());
-				}
+			if (moveGroupDown != null && !moveGroupDown.isDisposed()){
+				moveGroupDownAction.setWorkbenchPart(getWorkbenchPart());
+				moveGroupDown.setEnabled(moveGroupDownAction.calculateEnabled(getLastRawSelection()));
+			}
+			if (moveBandUp != null && !moveBandUp.isDisposed()){
+				moveBandUpAction.setWorkbenchPart(getWorkbenchPart());
+				moveBandUp.setEnabled(moveBandUpAction.calculateEnabled());
+			}
+			if (moveGroupUp != null && !moveGroupUp.isDisposed()){
+				moveGroupUpAction.setWorkbenchPart(getWorkbenchPart());
+				moveGroupUp.setEnabled(moveGroupUpAction.calculateEnabled(getLastRawSelection()));
 			}
 		}
 	}
@@ -130,12 +146,14 @@ public class MoveBandContributionItem extends CommonToolbarHandler{
 	@Override
 	public boolean isVisible() {
 		if (!super.isVisible()) return false;
-		if (getSelectionForType(MBandGroupHeader.class).size() == 1 || getSelectionForType(MBandGroupFooter.class).size() == 1){
-			isGroup = true;
-			setEnablement();
-			return true;
-		} else if (getSelectionForType(MBand.class).size() == 1){
-			isGroup = false;
+		List<Object> bands = getSelectionForType(MBand.class);
+		if (!bands.isEmpty()){
+			MBand first = (MBand)bands.get(0);
+			for(Object rawBand : bands){
+				if (!first.isSameBandType((MBand)rawBand)){
+					return false;
+				}
+			}
 			setEnablement();
 			return true;
 		}
@@ -145,14 +163,21 @@ public class MoveBandContributionItem extends CommonToolbarHandler{
 	@Override
 	public void dispose() {
 		super.dispose();
-		if (moveUp != null){
-			moveUp.dispose();
-			moveUp = null;
+		if (moveBandUp != null){
+			moveBandUp.dispose();
+			moveBandUp = null;
 		}
-		if (moveDown != null){
-			moveDown.dispose();
-			moveDown = null;
+		if (moveBandDown != null){
+			moveBandDown.dispose();
+			moveBandDown = null;
 		}
-		isGroup = false;
+		if (moveGroupUp != null){
+			moveGroupUp.dispose();
+			moveGroupUp = null;
+		}
+		if (moveGroupDown != null){
+			moveGroupDown.dispose();
+			moveGroupDown = null;
+		}
 	}
 }

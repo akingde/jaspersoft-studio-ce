@@ -96,7 +96,7 @@ public class ReorderBandCommandByRelativeIndex extends Command {
 		List<JRBand> bList = jrDesignSection.getBandsList();
 		int currentPosition = bList.indexOf(jrBand);
 		int newPosition = currentPosition + delta;
-		
+
 		if (newPosition >= 0 && newPosition < bList.size() && newPosition != currentPosition){
 			bList.remove(jrBand);
 			bandMoved = true;

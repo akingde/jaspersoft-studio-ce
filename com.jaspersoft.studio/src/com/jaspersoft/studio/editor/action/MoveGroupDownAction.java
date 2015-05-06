@@ -87,10 +87,9 @@ public class MoveGroupDownAction extends SetWorkbenchAction implements IGlobalAc
 	}
 	
 	@Override
-	protected boolean calculateEnabled() {
+	public boolean calculateEnabled() {
 		return calculateEnabled(getSelectedObjects());
 	}
-
 
 	/**
 	 * Return a list of every MBandGroupFooter or MBandGroupHeader selected
@@ -175,7 +174,7 @@ public class MoveGroupDownAction extends SetWorkbenchAction implements IGlobalAc
 		setText(Messages.MoveGroupDownAction_actionName);
 		setToolTipText(Messages.MoveGroupDownAction_actionDescription);
 		setId(MoveGroupDownAction.ID);
-		setImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/arrow-curve-down.png")); //$NON-NLS-1$
+		setImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/arrow-group-down.png")); //$NON-NLS-1$
 		setEnabled(false);
 	}
 

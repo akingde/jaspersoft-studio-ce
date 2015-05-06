@@ -171,7 +171,6 @@ public class MoveGroupUpAction extends SetWorkbenchAction implements IGlobalActi
 		execute(editparts);
 	}
 	
-
 	/**
 	 * Initializes this action's text and images.
 	 */
@@ -180,7 +179,7 @@ public class MoveGroupUpAction extends SetWorkbenchAction implements IGlobalActi
 		setText(Messages.MoveGroupUpAction_actionName);
 		setToolTipText(Messages.MoveGroupUpAction_actionDescription);
 		setId(MoveGroupUpAction.ID);
-		setImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/arrow-curve-up.png")); //$NON-NLS-1$
+		setImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/arrow-group-up.png")); //$NON-NLS-1$
 		setEnabled(false);
 	}
 
