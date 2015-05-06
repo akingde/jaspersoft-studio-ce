@@ -159,7 +159,7 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 	 * also the index map on the mreport removing the old index and inserting the new one
 	 * 
 	 * @param oldValue the old value of the element
-	 * @param newValue value of the elemetn, if this is not called when a set value is done
+	 * @param newValue value of the element, if this is not called when a set value is done
 	 * the can be the same
 	 */
 	protected void refreshIndex(JRDesignBand oldValue, JRDesignBand newValue) {
