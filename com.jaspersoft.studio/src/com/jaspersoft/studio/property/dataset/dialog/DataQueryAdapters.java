@@ -40,6 +40,7 @@ import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
@@ -171,9 +172,13 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 				String lang = langCombo.getText();
 				int index = Misc.indexOf(languages, lang);
 				if (index < 0) {
+					Point oldSelection = langCombo.getSelection();
 					languages[0] = lang;
 					langCombo.setItem(0, lang);
 					langCombo.select(0);
+					//On windows the selection of an enrty select also all the
+					//text inside the combo, so we need to restore the old selection
+					langCombo.setSelection(oldSelection);
 					changeLanguage();
 				}
 			}

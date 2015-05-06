@@ -10,6 +10,7 @@ package com.jaspersoft.studio.model.band;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -62,15 +63,25 @@ import com.jaspersoft.studio.utils.Misc;
  */
 public class MBand extends APropertyNode implements IGraphicElement, IPastable, IPastableGraphic, IContainer,
 		IContainerLayout, IContainerEditPart, IGroupElement {
+	
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+	
 	private static final Integer CONST_HEIGHT = new Integer(50);
-	/** The icon descriptor. */
+	
+	/** 
+	 * The icon descriptor. 
+	 */
 	private static IIconDescriptor iconDescriptor;
 
 	/**
 	 * Number of the band that will be shown for the detail band after their name
 	 */
 	protected int bandIndex = -1;
+	
+	/** 
+	 * The band type. 
+	 */
+	private BandTypeEnum bandType;
 
 	/**
 	 * Gets the icon descriptor.
@@ -82,18 +93,6 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 			iconDescriptor = new NodeIconDescriptor("band"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
-
-	/**
-	 * Gets the band type.
-	 * 
-	 * @return the band type
-	 */
-	public BandTypeEnum getBandType() {
-		return bandType;
-	}
-
-	/** The band type. */
-	private BandTypeEnum bandType;
 
 	/**
 	 * Instantiates a new m band.
@@ -116,9 +115,8 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 	 */
 	public MBand(ANode parent, JRBand jrband, BandTypeEnum bandtype, int newIndex) {
 		super(parent, newIndex);
-		setValue(jrband);
 		this.bandType = bandtype;
-		refreshIndex();
+		setValue(jrband);
 	}
 
 	/**
@@ -136,33 +134,45 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 	 * @param detailIndex
 	 *          number to use as index for the band
 	 */
-	public void setDetailIndex(int detailIndex) {
+	public void setBandIndex(int detailIndex) {
 		bandIndex = detailIndex;
 		INode n = getRoot();
-		if (n instanceof MReport) {
+		if (n instanceof MReport && getValue() != null) {
 			MReport mrep = (MReport) n;
 			mrep.setBandIndex(bandIndex, getValue());
 		}
 	}
-
+	
+	@Override
+	public void setValue(Object value) {
+		JRDesignBand oldValue = getValue();
+		super.setValue(value);
+		refreshIndex(oldValue, getValue());
+	}
+	
 	/**
 	 * Refresh the index of the band with the current number returned by getDesignIndex
 	 */
-	public void refreshIndex() {
+	protected void refreshIndex(JRDesignBand oldValue, JRDesignBand newValue) {
 		INode n = getRoot();
 		if (n instanceof MReport) {
 			MReport mrep = (MReport) n;
-			Integer index = mrep.getBandIndex(getValue());
-			if (index != null) {
-				bandIndex = index;
-				return;
+			//Remove the old index
+			mrep.removeBandIndex(oldValue);
+			if (getValue() != null){
+				//Reuse the old index for the new element if any
+				Integer index = mrep.getBandIndex(getValue());
+				if (index != null) {
+					bandIndex = index;
+				} else {
+					setBandIndex(getFreeIndex());
+				}
 			}
 		}
-		setDetailIndex(getFreeIndex());
 	}
 
 	/**
-	 * Return the first not used and gretest index number of all the other bands
+	 * Return the first not used and greatest index number of all the other bands
 	 * 
 	 * @return -1 if the band is not a detail band otherwise a number >0 not used by any other detail band
 	 */
@@ -170,14 +180,20 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 		// if (!BandTypeEnum.DETAIL.equals(bandType)) return -1;
 		int actualIndex = 1;
 		if (getParent() instanceof MReport) {
-			for (INode node : getParent().getChildren()) {
+			MReport report = (MReport)getParent();
+			HashSet<Integer> reservedIndexes = new HashSet<Integer>();
+			for (INode node : report.getChildren()) {
 				if (node == this)
 					continue;
 				if (node instanceof MBand) {
 					MBand band = (MBand) node;
-					if (isSameBandType(band) && band.getDetailIndex() >= actualIndex)
-						actualIndex = band.getDetailIndex() + 1;
+					if (isSameBandType(band)){
+						reservedIndexes.add(band.getDetailIndex());
+					}
 				}
+			}
+			while(reservedIndexes.contains(actualIndex)){
+				actualIndex++;
 			}
 		}
 		return actualIndex;
@@ -187,6 +203,16 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 		return bandType == band.getBandType();
 	}
 
+	/**
+	 * Gets the band type.
+	 * 
+	 * @return the band type
+	 */
+	public BandTypeEnum getBandType() {
+		return bandType;
+	}
+
+	
 	/**
 	 * Return the index of the band in the detailSection of the jasper design +1 . This only if the band is a detail band,
 	 * otherwise it return -1

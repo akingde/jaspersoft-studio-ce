@@ -281,6 +281,7 @@ public class TreeEditPart extends AbstractTreeEditPart implements PropertyChange
 	public void propertyChange(PropertyChangeEvent evt) {
 		if (evt.getPropertyName().equals(JSSCompoundCommand.REFRESH_UI_EVENT)) {
 			refreshCached();
+			refresh();
 			return;
 		}
 		// FIXME: maybe compare the source of the event with the model of the current part to avoid

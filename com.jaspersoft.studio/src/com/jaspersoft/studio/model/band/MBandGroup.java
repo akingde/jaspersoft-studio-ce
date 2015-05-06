@@ -17,6 +17,7 @@ import java.util.Map;
 
 import net.sf.jasperreports.engine.JRBand;
 import net.sf.jasperreports.engine.JRSection;
+import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
 import net.sf.jasperreports.engine.type.BandTypeEnum;
 
@@ -24,8 +25,6 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.model.INode;
-import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.group.MGroup;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
@@ -74,8 +73,11 @@ public abstract class MBandGroup extends MBand {
 				mGroupBand.setJasperConfiguration(jconfig);
 			}
 		}
-		bandIndex = -1;
-		refreshIndex();
+		//Since the refresh index of this method relay on the 
+		//jrGroup != null, so when it is called by the super constructor chain
+		//it dosen't do anything, so it must be called after the group node is completely
+		//initialized
+		refreshIndex(null, getValue());
 	}
 
 	/**
@@ -97,18 +99,10 @@ public abstract class MBandGroup extends MBand {
 	/**
 	 * Refresh the index of the band with the current number returned by getDesignIndex
 	 */
-	public void refreshIndex() {
-		if (jrGroup == null) return;
-		INode n = getRoot();
-		if (n instanceof MReport) {
-			MReport mrep = (MReport) n;
-			Integer index = mrep.getBandIndex(getValue());
-			if (index != null) {
-				bandIndex = index;
-				return;
-			}
+	protected void refreshIndex(JRDesignBand oldValue, JRDesignBand newValue) {
+		if (jrGroup != null){
+			super.refreshIndex(oldValue, newValue);
 		}
-		setDetailIndex(getFreeIndex());
 	}
 	
 	/**

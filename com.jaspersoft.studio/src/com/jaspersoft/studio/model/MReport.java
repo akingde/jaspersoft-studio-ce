@@ -88,7 +88,7 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 
 	private static final String JR_CREATE_BOOKMARKS = "net.sf.jasperreports.print.create.bookmarks"; //$NON-NLS-1$
 
-	private Map<Object, Integer> bandIndexMap = new HashMap<Object, Integer>();
+	private Map<JRDesignBand, Integer> bandIndexMap = new HashMap<JRDesignBand, Integer>();
 
 	private static NamedEnumPropertyDescriptor<OrientationEnum> orientationD;
 
@@ -814,6 +814,7 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 			firstBand.propertyChange(new PropertyChangeEvent(firstBand, "VALUE", evt.getOldValue(), evt.getNewValue())); //$NON-NLS-1$
 		} else {
 			// delete
+			bandIndexMap.remove(evt.getOldValue());
 			if (firstBand != null && firstBand.equals(lastBand)) {
 				firstBand.setValue(evt.getNewValue());
 				firstBand.removeChildren();
@@ -1050,8 +1051,12 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 		return bandIndexMap.get(band);
 	}
 
-	public void setBandIndex(int index, Object band) {
+	public void setBandIndex(int index, JRDesignBand band) { 
 		bandIndexMap.put(band, index);
+	}
+	
+	public void removeBandIndex(JRDesignBand band){
+		bandIndexMap.remove(band);
 	}
 
 	@Override
