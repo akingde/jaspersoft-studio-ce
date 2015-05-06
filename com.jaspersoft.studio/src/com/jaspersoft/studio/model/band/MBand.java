@@ -143,6 +143,10 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 		}
 	}
 	
+	/**
+	 * When setting the value update the index since it 
+	 * store them in the map
+	 */
 	@Override
 	public void setValue(Object value) {
 		JRDesignBand oldValue = getValue();
@@ -151,7 +155,12 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 	}
 	
 	/**
-	 * Refresh the index of the band with the current number returned by getDesignIndex
+	 * Refresh the index of the band with the current number returned by getFreeIndex.Update
+	 * also the index map on the mreport removing the old index and inserting the new one
+	 * 
+	 * @param oldValue the old value of the element
+	 * @param newValue value of the elemetn, if this is not called when a set value is done
+	 * the can be the same
 	 */
 	protected void refreshIndex(JRDesignBand oldValue, JRDesignBand newValue) {
 		INode n = getRoot();
