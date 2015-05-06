@@ -166,9 +166,11 @@ public class MLinePen extends APropertyNode implements IPropertySource {
 	public void setPropertyValue(Object id, Object value) {
 		JRPen linePen = (JRPen) getValue();
 		if (linePen != null) {
-			if (id.equals(JRBasePen.PROPERTY_LINE_WIDTH))
-				linePen.setLineWidth(((Float) value));
-			else if (id.equals(JRBasePen.PROPERTY_LINE_COLOR)) {
+			if (id.equals(JRBasePen.PROPERTY_LINE_WIDTH)) {
+				Float lineWidth = (Float) value;
+				if (lineWidth.floatValue() >= 0)
+					linePen.setLineWidth(lineWidth);
+			} else if (id.equals(JRBasePen.PROPERTY_LINE_COLOR)) {
 				if (value == null)
 					linePen.setLineColor(null);
 				else if (value instanceof AlfaRGB)
