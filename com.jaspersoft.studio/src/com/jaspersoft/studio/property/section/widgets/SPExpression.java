@@ -15,7 +15,6 @@ package com.jaspersoft.studio.property.section.widgets;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 
-import org.eclipse.jface.fieldassist.AutoCompleteField;
 import org.eclipse.jface.fieldassist.TextContentAdapter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -71,7 +70,7 @@ public class SPExpression extends AHistorySPropertyWidget implements IExpression
 			expr.setLayoutData(gd);
 		}
 		expr.getTextControl().addFocusListener(focusListener);
-		autocomplete = new AutoCompleteField(expr.getTextControl(), new TextContentAdapter(),
+		autocomplete = new CustomAutoCompleteField(expr.getTextControl(), new TextContentAdapter(),
 				InputHistoryCache.get(getHistoryKey()));
 	}
 

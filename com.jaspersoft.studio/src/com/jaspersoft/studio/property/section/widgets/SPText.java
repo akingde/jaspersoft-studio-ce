@@ -8,7 +8,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.section.widgets;
 
-import org.eclipse.jface.fieldassist.AutoCompleteField;
 import org.eclipse.jface.fieldassist.TextContentAdapter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
@@ -29,6 +28,8 @@ import com.jaspersoft.studio.utils.inputhistory.InputHistoryCache;
 
 public class SPText extends AHistorySPropertyWidget {
 	protected Text ftext;
+	protected APropertyNode pnode;
+	protected String savedValue;
 
 	/**
 	 * Flag used to avoid that the handletextchanged is called twice when CR is pressed (because the CR made the control
@@ -55,7 +56,7 @@ public class SPText extends AHistorySPropertyWidget {
 		if (pDescriptor instanceof JSSTextPropertyDescriptor)
 			style = ((JSSTextPropertyDescriptor) pDescriptor).getStyle();
 		ftext = section.getWidgetFactory().createText(parent, "", style);
-		autocomplete = new AutoCompleteField(ftext, new TextContentAdapter(), InputHistoryCache.get(getHistoryKey()));
+		autocomplete = new CustomAutoCompleteField(ftext, new TextContentAdapter(), InputHistoryCache.get(getHistoryKey()));
 		// ftext.addModifyListener(new ModifyListener() {
 		// public void modifyText(ModifyEvent e) {
 		// handleTextChanged(section, pDescriptor.getId(), ftext.getText());
@@ -69,6 +70,14 @@ public class SPText extends AHistorySPropertyWidget {
 					handleTextChanged(section, pDescriptor.getId(), ftext.getText());
 					disableFocusLost = false;
 				}
+				if (e.keyCode == SWT.ESC) {
+						if(!autocomplete.isPopupJustClosed()){
+							autocomplete.setEnabled(false);
+							ftext.setText(savedValue);			
+							autocomplete.setEnabled(true);
+						}
+				}
+				autocomplete.resetPopupJustClosed();
 			}
 
 			@Override
@@ -115,17 +124,18 @@ public class SPText extends AHistorySPropertyWidget {
 		section.changeProperty(property, text);
 	}
 
-	protected APropertyNode pnode;
-
+	@Override
 	public void setData(APropertyNode pnode, Object b) {
 		this.pnode = pnode;
 		ftext.setEnabled(pnode.isEditable());
 		if (b != null) {
+			savedValue = b.toString();
 			int oldpos = ftext.getLocation().x;
 			ftext.setText(b.toString());
 			if (b.toString().length() >= oldpos)
 				ftext.setSelection(oldpos, oldpos);
 		} else {
+			savedValue = "";
 			ftext.setText("");
 		}
 	}

@@ -8,7 +8,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.section.widgets;
 
-import org.eclipse.jface.fieldassist.AutoCompleteField;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
@@ -19,7 +18,7 @@ import com.jaspersoft.studio.utils.inputhistory.InputHistoryCache;
 public abstract class AHistorySPropertyWidget extends ASPropertyWidget<IPropertyDescriptor> {
 
 	public static final String HIST_PREFIX = "asproperty.";
-	protected AutoCompleteField autocomplete;
+	protected CustomAutoCompleteField autocomplete;
 
 	public AHistorySPropertyWidget(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
 		super(parent, section, pDescriptor);

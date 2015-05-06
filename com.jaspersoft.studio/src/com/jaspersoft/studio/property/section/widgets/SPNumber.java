@@ -12,7 +12,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.section.widgets;
 
-import org.eclipse.jface.fieldassist.AutoCompleteField;
 import org.eclipse.jface.fieldassist.TextContentAdapter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -57,7 +56,7 @@ public class SPNumber extends AHistorySPropertyWidget {
 
 	protected void createComponent(Composite parent) {
 		ftext = section.getWidgetFactory().createText(parent, "", SWT.RIGHT);
-		autocomplete = new AutoCompleteField(ftext, new TextContentAdapter(), InputHistoryCache.get(getHistoryKey()));
+		autocomplete = new CustomAutoCompleteField(ftext, new TextContentAdapter(), InputHistoryCache.get(getHistoryKey()));
 		ftext.addModifyListener(new ModifyListener() {
 
 			public void modifyText(ModifyEvent e) {
