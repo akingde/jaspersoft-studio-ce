@@ -229,7 +229,7 @@ public class ConnectToDomainWizardPage extends JSSHelpWizardPage {
 				parentName = nodeElement.getDisplayText();
 			}
 			Label titleLabel = new Label(mainComposite, SWT.NONE);
-			if (parentName != null) titleLabel.setText(MessageFormat.format(Messages.ConnectToDomainWizardPage_additionToDatasetRun, parentName)); 
+			if (parentName != null) titleLabel.setText(MessageFormat.format(Messages.ConnectToDomainWizardPage_additionToDatasetRun, new Object[]{parentName})); 
 			else titleLabel.setText(Messages.ConnectToDomainWizardPage_additionToDatasetRun2);
 			Composite parameterComposite = new Composite(mainComposite, SWT.NONE);
 			parameterComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));

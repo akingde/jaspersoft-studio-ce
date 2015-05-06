@@ -20,6 +20,7 @@ import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.design.JRDesignSortField;
 import net.sf.jasperreports.engine.type.SortFieldTypeEnum;
 
+import org.eclipse.gef.dnd.TemplateTransfer;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ICellModifier;
@@ -171,7 +172,7 @@ public class FieldsTable extends AbstractModifyTable{
 
 	private void addDropSupport() {
 		int ops = DND.DROP_COPY | DND.DROP_MOVE;
-		Transfer[] transfers = new Transfer[] { NodeTransfer.getInstance(), PluginTransfer.getInstance() };
+		Transfer[] transfers = new Transfer[] {  TemplateTransfer.getInstance(), NodeTransfer.getInstance(), PluginTransfer.getInstance() };
 		tviewer.addDragSupport(ops, transfers, new NodeDragListener(tviewer));
 
 		transfers = new Transfer[] { NodeTransfer.getInstance() };
