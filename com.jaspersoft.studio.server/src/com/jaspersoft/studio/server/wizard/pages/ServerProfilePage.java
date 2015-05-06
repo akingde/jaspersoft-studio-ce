@@ -516,6 +516,7 @@ public class ServerProfilePage extends WizardPage implements
 		public String getMime() {
 			return sp.isMime() ? "MIME" : "DIME"; //$NON-NLS-1$ //$NON-NLS-2$
 		}
+
 	}
 
 	@Override
