@@ -21,6 +21,7 @@ import org.eclipse.jface.viewers.TreeViewer;
 
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.messages.Messages;
+import com.jaspersoft.studio.data.sql.prefs.SQLEditorPreferencesPage;
 import com.jaspersoft.studio.model.ANode;
 
 public class DeleteAction<T extends ANode> extends AMultiSelectionAction {
@@ -28,7 +29,8 @@ public class DeleteAction<T extends ANode> extends AMultiSelectionAction {
 	protected Class<T> type;
 	private SQLQueryDesigner designer;
 
-	public DeleteAction(SQLQueryDesigner designer, TreeViewer treeViewer, String name, Class<T> type) {
+	public DeleteAction(SQLQueryDesigner designer, TreeViewer treeViewer,
+			String name, Class<T> type) {
 		super(Messages.DeleteAction_0 + name, treeViewer);
 		this.name = name;
 		this.type = type;
@@ -46,7 +48,12 @@ public class DeleteAction<T extends ANode> extends AMultiSelectionAction {
 			if (type.isAssignableFrom(obj.getClass()))
 				lst.add((T) obj);
 		}
-		if (UIUtils.showConfirmation(Messages.DeleteAction_1 + name, Messages.DeleteAction_2 + name.toLowerCase() + Messages.DeleteAction_3))
+		boolean showConf = designer.getjConfig().getPropertyBoolean(
+				SQLEditorPreferencesPage.P_DEL_SHOWCONFIRMATION, false);
+		if (!showConf
+				|| UIUtils.showConfirmation(Messages.DeleteAction_1 + name,
+						Messages.DeleteAction_2 + name.toLowerCase()
+								+ Messages.DeleteAction_3))
 			doDelete(lst);
 	}
 
@@ -62,7 +69,8 @@ public class DeleteAction<T extends ANode> extends AMultiSelectionAction {
 		}
 		ANode toSelect = mfrom;
 		if (indx - 1 > 0)
-			toSelect = (ANode) mfrom.getChildren().get(Math.min(mfrom.getChildren().size() - 1, indx));
+			toSelect = (ANode) mfrom.getChildren().get(
+					Math.min(mfrom.getChildren().size() - 1, indx));
 		selectInTree(toSelect);
 		designer.refreshQueryText();
 	}

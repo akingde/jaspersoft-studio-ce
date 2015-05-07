@@ -77,6 +77,10 @@ public class Messages extends NLS {
 	public static String SQLEditorPreferencesPage_3;
 	public static String SQLEditorPreferencesPage_4;
 	public static String SQLEditorPreferencesPage_5;
+	public static String SQLEditorPreferencesPage_6;
+	public static String SQLEditorPreferencesPage_7;
+	public static String SQLEditorPreferencesPage_8;
+	public static String SQLEditorPreferencesPage_9;
 	public static String SQLEditorPreferencesPage_comboLabel;
 	public static String SQLEditorPreferencesPage_dialogTitle;
 	public static String Text2Model_warn;

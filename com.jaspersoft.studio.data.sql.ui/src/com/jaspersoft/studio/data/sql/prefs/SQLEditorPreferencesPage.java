@@ -33,6 +33,7 @@ public class SQLEditorPreferencesPage extends FieldEditorOverlayPage {
 	public static final String P_IDENTIFIER_QUOTEONLYEXCEPTIONS = "com.jaspersoft.studio.data.sql.prefs.QUOTE_ONLY_EXCEPTIONS"; //$NON-NLS-1$
 	public static final String P_JOIN_ON_DND = "com.jaspersoft.studio.data.sql.prefs.join_on_dnd"; //$NON-NLS-1$
 	public static final String P_DELSUBQUERY = "com.jaspersoft.studio.data.sql.prefs.delsubquery"; //$NON-NLS-1$
+	public static final String P_DEL_SHOWCONFIRMATION = "com.jaspersoft.studio.data.sql.prefs.delSHOWCONFIRMATION"; //$NON-NLS-1$
 
 	public SQLEditorPreferencesPage() {
 		super(GRID);
@@ -66,15 +67,19 @@ public class SQLEditorPreferencesPage extends FieldEditorOverlayPage {
 						{ Messages.SQLEditorPreferencesPage_5, ASK } },
 				getFieldEditorParent()));
 		addField(new ComboFieldEditor(P_DELSUBQUERY,
-				"Drop subquery on delete if empty?", new String[][] {
+				Messages.SQLEditorPreferencesPage_6, new String[][] {
 						{ Messages.SQLEditorPreferencesPage_3, DROP },
-						{ "Keep", KEEP }, { "Aske what to do", ASK } },
+						{ Messages.SQLEditorPreferencesPage_7, KEEP }, { Messages.SQLEditorPreferencesPage_8, ASK } },
 				getFieldEditorParent()));
+		
+		addField(new BooleanFieldEditor(P_DEL_SHOWCONFIRMATION,
+				Messages.SQLEditorPreferencesPage_9, getFieldEditorParent()));
 	}
 
 	public static void getDefaults(IPreferenceStore store) {
 		store.setDefault(P_IDENTIFIER_QUOTE, ""); //$NON-NLS-1$
 		store.setDefault(P_USE_JDBC_QUOTE, true); //$NON-NLS-1$
+		store.setDefault(P_DEL_SHOWCONFIRMATION, false); //$NON-NLS-1$
 		store.setDefault(P_IDENTIFIER_QUOTEONLYEXCEPTIONS, true); //$NON-NLS-1$
 		store.setDefault(P_JOIN_ON_DND, DROP); //$NON-NLS-1$
 		store.setDefault(P_DELSUBQUERY, ASK); //$NON-NLS-1$
