@@ -51,9 +51,12 @@ public class DeleteAction<T extends ANode> extends AMultiSelectionAction {
 		boolean showConf = designer.getjConfig().getPropertyBoolean(
 				SQLEditorPreferencesPage.P_DEL_SHOWCONFIRMATION, false);
 		if (!showConf
-				|| UIUtils.showConfirmation(Messages.DeleteAction_1 + name,
-						Messages.DeleteAction_2 + name.toLowerCase()
-								+ Messages.DeleteAction_3))
+				|| UIUtils.showConfirmation(
+						Messages.DeleteAction_1 + name,
+						Messages.DeleteAction_2
+								+ name.toLowerCase()
+								+ (lst.size() == 1 ? "?"
+										: Messages.DeleteAction_3)))
 			doDelete(lst);
 	}
 
