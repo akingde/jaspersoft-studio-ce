@@ -26,6 +26,7 @@ import com.jaspersoft.studio.data.sql.Util;
 import com.jaspersoft.studio.data.sql.action.AAction;
 import com.jaspersoft.studio.data.sql.action.table.CreateTable;
 import com.jaspersoft.studio.data.sql.dialogs.FromTableColumnsDialog;
+import com.jaspersoft.studio.data.sql.messages.Messages;
 import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
 import com.jaspersoft.studio.data.sql.model.metadata.MSqlTable;
 import com.jaspersoft.studio.data.sql.model.query.from.MFrom;
@@ -34,6 +35,7 @@ import com.jaspersoft.studio.data.sql.model.query.select.MSelect;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelectColumn;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.utils.Misc;
 
 public class CreateColumn extends AAction {
 
@@ -41,23 +43,34 @@ public class CreateColumn extends AAction {
 	private SQLQueryDesigner designer;
 
 	public CreateColumn(SQLQueryDesigner designer, TreeViewer treeViewer) {
-		super("&Add Column", treeViewer);
+		super(Messages.CreateColumn_0, treeViewer);
 		this.designer = designer;
 	}
 
 	@Override
 	public boolean calculateEnabled(Object[] selection) {
 		super.calculateEnabled(selection);
-		return selection != null && selection.length == 1 && isInSelect(selection[0]);
+		return selection != null && selection.length == 1
+				&& isInSelect(selection[0]);
 	}
 
 	public static boolean isInSelect(Object element) {
-		return element instanceof MSelect || (element instanceof ANode && ((ANode) element).getParent() instanceof MSelect);
+		boolean b = element instanceof MSelect
+				|| (element instanceof ANode && ((ANode) element).getParent() instanceof MSelect);
+		if (b) {
+			MFrom mfrom = Util.getKeyword((ANode) ((ANode) element).getRoot(),
+					MFrom.class);
+			if (mfrom != null)
+				return !Misc.isNullOrEmpty(mfrom.getChildren());
+			return false;
+		}
+		return b;
 	}
 
 	@Override
 	public void run() {
-		FromTableColumnsDialog dialog = new FromTableColumnsDialog(UIUtils.getShell());
+		FromTableColumnsDialog dialog = new FromTableColumnsDialog(
+				UIUtils.getShell());
 		dialog.setSelection((ANode) selection[0]);
 		if (dialog.open() == Window.OK)
 			run(dialog.getColumns());
@@ -69,7 +82,8 @@ public class CreateColumn extends AAction {
 			MFromTable mftable = cols.get(t);
 			if (sel instanceof MSelect)
 				sel = run(t, mftable, (MSelect) sel, 0);
-			else if (sel instanceof ANode && ((ANode) sel).getParent() instanceof MSelect) {
+			else if (sel instanceof ANode
+					&& ((ANode) sel).getParent() instanceof MSelect) {
 				MSelect msel = (MSelect) ((ANode) sel).getParent();
 				int index = msel.getChildren().indexOf(sel) + 1;
 				sel = run(t, mftable, msel, index);
@@ -118,12 +132,15 @@ public class CreateColumn extends AAction {
 		return msCol;
 	}
 
-	protected MSelectColumn run(MSQLColumn sCol, MFromTable mfTable, MSelectColumn mSelCol) {
+	protected MSelectColumn run(MSQLColumn sCol, MFromTable mfTable,
+			MSelectColumn mSelCol) {
 		MSelect mSelect = Util.getKeyword(mfTable, MSelect.class);
-		return run(sCol, mfTable, mSelect, mSelect.getChildren().indexOf(mSelCol) + 1);
+		return run(sCol, mfTable, mSelect,
+				mSelect.getChildren().indexOf(mSelCol) + 1);
 	}
 
-	public MSelectColumn run(MSQLColumn node, MFromTable mfTable, MSelect select, int index) {
+	public MSelectColumn run(MSQLColumn node, MFromTable mfTable,
+			MSelect select, int index) {
 		return new MSelectColumn(select, node, mfTable, index);
 	}
 

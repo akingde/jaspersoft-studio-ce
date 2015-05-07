@@ -19,6 +19,12 @@ public class Messages extends NLS {
 	public static String AddTableCommand_0;
 	public static String AddTableCommand_1;
 	public static String ColumnsDialog_0;
+	public static String CreateColumn_0;
+	public static String CreateGroupByColumn_0;
+	public static String CreateGroupByFromColumn_0;
+	public static String CreateHavingFromColumn_0;
+	public static String CreateOrderByColumn_0;
+	public static String CreateOrderByFromColumn_0;
 	public static String CreateTable_0;
 	public static String DBMetadata_0;
 	public static String DBMetadata_1;

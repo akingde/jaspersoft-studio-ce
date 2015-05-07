@@ -25,6 +25,7 @@ import com.jaspersoft.studio.data.sql.Util;
 import com.jaspersoft.studio.data.sql.action.AAction;
 import com.jaspersoft.studio.data.sql.action.table.CreateTable;
 import com.jaspersoft.studio.data.sql.dialogs.FromTableColumnsDialog;
+import com.jaspersoft.studio.data.sql.messages.Messages;
 import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
 import com.jaspersoft.studio.data.sql.model.metadata.MSqlTable;
 import com.jaspersoft.studio.data.sql.model.query.from.MFrom;
@@ -33,29 +34,41 @@ import com.jaspersoft.studio.data.sql.model.query.groupby.MGroupBy;
 import com.jaspersoft.studio.data.sql.model.query.groupby.MGroupByColumn;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.utils.Misc;
 
 public class CreateGroupByColumn extends AAction {
 	private CreateTable ct;
 	private SQLQueryDesigner designer;
 
 	public CreateGroupByColumn(SQLQueryDesigner designer, TreeViewer treeViewer) {
-		super("&Add Group By Column", treeViewer);
+		super(Messages.CreateGroupByColumn_0, treeViewer);
 		this.designer = designer;
 	}
 
 	@Override
 	public boolean calculateEnabled(Object[] selection) {
 		super.calculateEnabled(selection);
-		return selection != null && selection.length == 1 && isInSelect(selection[0]);
+		return selection != null && selection.length == 1
+				&& isInSelect(selection[0]);
 	}
 
 	public static boolean isInSelect(Object element) {
-		return element instanceof MGroupBy || element instanceof MGroupByColumn;
+		boolean b = element instanceof MGroupBy
+				|| element instanceof MGroupByColumn;
+		if (b) {
+			MFrom mfrom = Util.getKeyword((ANode) ((ANode) element).getRoot(),
+					MFrom.class);
+			if (mfrom != null)
+				return !Misc.isNullOrEmpty(mfrom.getChildren());
+			return false;
+		}
+		return b;
 	}
 
 	@Override
 	public void run() {
-		FromTableColumnsDialog dialog = new FromTableColumnsDialog(Display.getDefault().getActiveShell());
+		FromTableColumnsDialog dialog = new FromTableColumnsDialog(Display
+				.getDefault().getActiveShell());
 		dialog.setSelection((ANode) selection[0]);
 		if (dialog.open() == Window.OK)
 			run(dialog.getColumns());
@@ -105,12 +118,15 @@ public class CreateGroupByColumn extends AAction {
 		selectInTree(sel);
 	}
 
-	protected MGroupByColumn run(MSQLColumn node, MFromTable mfTable, MGroupByColumn mtable) {
+	protected MGroupByColumn run(MSQLColumn node, MFromTable mfTable,
+			MGroupByColumn mtable) {
 		MGroupBy mfrom = (MGroupBy) mtable.getParent();
-		return run(node, mfTable, mfrom, mfrom.getChildren().indexOf(mtable) + 1);
+		return run(node, mfTable, mfrom,
+				mfrom.getChildren().indexOf(mtable) + 1);
 	}
 
-	public MGroupByColumn run(MSQLColumn node, MFromTable mfTable, MGroupBy select, int index) {
+	public MGroupByColumn run(MSQLColumn node, MFromTable mfTable,
+			MGroupBy select, int index) {
 		return new MGroupByColumn(select, node, mfTable, index);
 	}
 

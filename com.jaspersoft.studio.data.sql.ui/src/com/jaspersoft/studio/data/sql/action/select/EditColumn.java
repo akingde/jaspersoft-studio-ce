@@ -12,6 +12,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.sql.action.select;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.window.Window;
@@ -35,11 +37,15 @@ public class EditColumn extends AAction {
 	@Override
 	public boolean calculateEnabled(Object[] selection) {
 		super.calculateEnabled(selection);
-		return selection != null && selection.length == 1 && selection[0] instanceof ANode && isColumn((ANode) selection[0]);
+		return selection != null && selection.length == 1
+				&& selection[0] instanceof ANode
+				&& isColumn((ANode) selection[0]);
 	}
 
 	protected boolean isColumn(ANode element) {
-		return element instanceof MSelectColumn || element instanceof MSelectExpression || element instanceof MSelectSubQuery;
+		return element instanceof MSelectColumn
+				|| element instanceof MSelectExpression
+				|| element instanceof MSelectSubQuery;
 	}
 
 	@Override
@@ -60,7 +66,8 @@ public class EditColumn extends AAction {
 	}
 
 	protected void doRunSubQuery(MSelectSubQuery mcol) {
-		EditSelectSubQueryDialog dialog = new EditSelectSubQueryDialog(Display.getDefault().getActiveShell());
+		EditSelectSubQueryDialog dialog = new EditSelectSubQueryDialog(Display
+				.getDefault().getActiveShell());
 		dialog.setValue(mcol);
 		if (dialog.open() == Window.OK) {
 			mcol.setAlias(dialog.getAlias());
@@ -70,7 +77,8 @@ public class EditColumn extends AAction {
 	}
 
 	protected void doRunExpression(MSelectExpression mcol) {
-		EditSelectExpressionDialog dialog = new EditSelectExpressionDialog(Display.getDefault().getActiveShell());
+		EditSelectExpressionDialog dialog = new EditSelectExpressionDialog(
+				Display.getDefault().getActiveShell());
 		dialog.setValue(mcol);
 		if (dialog.open() == Window.OK) {
 			mcol.setValue(dialog.getExpression());
@@ -81,7 +89,8 @@ public class EditColumn extends AAction {
 	}
 
 	protected void doRunColumn(MSelectColumn mcol) {
-		EditSelectColumnDialog dialog = new EditSelectColumnDialog(Display.getDefault().getActiveShell());
+		EditSelectColumnDialog dialog = new EditSelectColumnDialog(
+				UIUtils.getShell());
 		dialog.setValue(mcol);
 		if (dialog.open() == Dialog.OK) {
 			mcol.setAlias(dialog.getAlias());

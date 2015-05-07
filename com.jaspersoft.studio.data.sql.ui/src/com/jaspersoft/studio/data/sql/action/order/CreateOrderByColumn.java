@@ -25,6 +25,7 @@ import com.jaspersoft.studio.data.sql.Util;
 import com.jaspersoft.studio.data.sql.action.AAction;
 import com.jaspersoft.studio.data.sql.action.table.CreateTable;
 import com.jaspersoft.studio.data.sql.dialogs.FromTableColumnsDialog;
+import com.jaspersoft.studio.data.sql.messages.Messages;
 import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
 import com.jaspersoft.studio.data.sql.model.metadata.MSqlTable;
 import com.jaspersoft.studio.data.sql.model.query.from.MFrom;
@@ -33,29 +34,41 @@ import com.jaspersoft.studio.data.sql.model.query.orderby.MOrderBy;
 import com.jaspersoft.studio.data.sql.model.query.orderby.MOrderByColumn;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.utils.Misc;
 
 public class CreateOrderByColumn extends AAction {
 	private CreateTable ct;
 	private SQLQueryDesigner designer;
 
 	public CreateOrderByColumn(SQLQueryDesigner designer, TreeViewer treeViewer) {
-		super("&Add Order By Column", treeViewer);
+		super(Messages.CreateOrderByColumn_0, treeViewer);
 		this.designer = designer;
 	}
 
 	@Override
 	public boolean calculateEnabled(Object[] selection) {
 		super.calculateEnabled(selection);
-		return selection != null && selection.length == 1 && isInSelect(selection[0]);
+		return selection != null && selection.length == 1
+				&& isInSelect(selection[0]);
 	}
 
 	public static boolean isInSelect(Object element) {
-		return element instanceof MOrderBy || element instanceof MOrderByColumn;
+		boolean b = element instanceof MOrderBy
+				|| element instanceof MOrderByColumn;
+		if (b) {
+			MFrom mfrom = Util.getKeyword((ANode) ((ANode) element).getRoot(),
+					MFrom.class);
+			if (mfrom != null)
+				return !Misc.isNullOrEmpty(mfrom.getChildren());
+			return false;
+		}
+		return b;
 	}
 
 	@Override
 	public void run() {
-		FromTableColumnsDialog dialog = new FromTableColumnsDialog(Display.getDefault().getActiveShell());
+		FromTableColumnsDialog dialog = new FromTableColumnsDialog(Display
+				.getDefault().getActiveShell());
 		dialog.setSelection((ANode) selection[0]);
 		if (dialog.open() == Window.OK)
 			run(dialog.getColumns());
@@ -105,12 +118,15 @@ public class CreateOrderByColumn extends AAction {
 		selectInTree(sel);
 	}
 
-	protected MOrderByColumn run(MSQLColumn node, MFromTable mfTable, MOrderByColumn mtable) {
+	protected MOrderByColumn run(MSQLColumn node, MFromTable mfTable,
+			MOrderByColumn mtable) {
 		MOrderBy mfrom = (MOrderBy) mtable.getParent();
-		return run(node, mfTable, mfrom, mfrom.getChildren().indexOf(mtable) + 1);
+		return run(node, mfTable, mfrom,
+				mfrom.getChildren().indexOf(mtable) + 1);
 	}
 
-	public MOrderByColumn run(MSQLColumn node, MFromTable mfTable, MOrderBy select, int index) {
+	public MOrderByColumn run(MSQLColumn node, MFromTable mfTable,
+			MOrderBy select, int index) {
 		return new MOrderByColumn(select, node, mfTable, index);
 	}
 

@@ -18,6 +18,7 @@ import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.Util;
 import com.jaspersoft.studio.data.sql.action.AMultiSelectionAction;
 import com.jaspersoft.studio.data.sql.action.expression.CreateExpression;
+import com.jaspersoft.studio.data.sql.messages.Messages;
 import com.jaspersoft.studio.data.sql.model.query.MHaving;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelectColumn;
 import com.jaspersoft.studio.data.sql.ui.gef.parts.ColumnEditPart;
@@ -28,7 +29,7 @@ public class CreateHavingFromColumn extends AMultiSelectionAction {
 	private SQLQueryDesigner designer;
 
 	public CreateHavingFromColumn(SQLQueryDesigner designer, TreeViewer treeViewer) {
-		super("Create &Having Condition", treeViewer);
+		super(Messages.CreateHavingFromColumn_0, treeViewer);
 		this.designer = designer;
 	}
 

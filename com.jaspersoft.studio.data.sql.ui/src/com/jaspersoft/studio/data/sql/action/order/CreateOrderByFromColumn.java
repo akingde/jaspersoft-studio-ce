@@ -16,6 +16,7 @@ import org.eclipse.jface.viewers.TreeViewer;
 
 import com.jaspersoft.studio.data.sql.Util;
 import com.jaspersoft.studio.data.sql.action.AMultiSelectionAction;
+import com.jaspersoft.studio.data.sql.messages.Messages;
 import com.jaspersoft.studio.data.sql.model.query.orderby.MOrderBy;
 import com.jaspersoft.studio.data.sql.model.query.orderby.MOrderByColumn;
 import com.jaspersoft.studio.data.sql.model.query.orderby.MOrderByExpression;
@@ -27,7 +28,7 @@ import com.jaspersoft.studio.model.ANode;
 public class CreateOrderByFromColumn extends AMultiSelectionAction {
 
 	public CreateOrderByFromColumn(TreeViewer treeViewer) {
-		super("Add To &Order By", treeViewer);
+		super(Messages.CreateOrderByFromColumn_0, treeViewer);
 	}
 
 	protected boolean isGoodNode(ANode element) {

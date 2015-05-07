@@ -55,10 +55,9 @@ public class ColumnsDialog extends ATitledDialog {
 	@Override
 	public boolean close() {
 		TreeSelection ts = (TreeSelection) treeViewer.getSelection();
-		for (Object obj : ts.toList()) {
+		for (Object obj : ts.toList())
 			if (obj instanceof MSQLColumn)
 				cols.add((MSQLColumn) obj);
-		}
 		return super.close();
 	}
 

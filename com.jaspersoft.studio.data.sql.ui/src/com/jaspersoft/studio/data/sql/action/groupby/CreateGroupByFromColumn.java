@@ -16,6 +16,7 @@ import org.eclipse.jface.viewers.TreeViewer;
 
 import com.jaspersoft.studio.data.sql.Util;
 import com.jaspersoft.studio.data.sql.action.AMultiSelectionAction;
+import com.jaspersoft.studio.data.sql.messages.Messages;
 import com.jaspersoft.studio.data.sql.model.query.groupby.MGroupBy;
 import com.jaspersoft.studio.data.sql.model.query.groupby.MGroupByColumn;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelectColumn;
@@ -25,7 +26,7 @@ import com.jaspersoft.studio.model.ANode;
 public class CreateGroupByFromColumn extends AMultiSelectionAction {
 
 	public CreateGroupByFromColumn(TreeViewer treeViewer) {
-		super("Add To &Group By", treeViewer);
+		super(Messages.CreateGroupByFromColumn_0, treeViewer);
 	}
 
 	protected boolean isGoodNode(ANode element) {
