@@ -236,6 +236,7 @@ public class Messages extends NLS {
 	public static String XMLDataAdapterComposite_NamespacesSupport;
 	public static String XMLDataAdapterFactory_description;
 	public static String XMLDataAdapterFactory_label;
+	public static String XMLQueryEditorPreferencePage_ConsiderEmptyNodesOption;
 	public static String XMLQueryEditorPreferencePage_Description;
 	public static String XMLQueryEditorPreferencePage_RecursiveReadFields;
 	public static String XPathQueryDesigner_AddAsFieldAbsoluteItem;

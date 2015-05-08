@@ -34,6 +34,7 @@ import net.sf.jasperreports.engine.util.xml.JRXPathExecuter;
 import net.sf.jasperreports.engine.util.xml.JRXPathExecuterFactory;
 import net.sf.jasperreports.engine.util.xml.JRXPathExecuterUtils;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
@@ -56,6 +57,7 @@ public class XMLDataAdapterDescriptor extends DataAdapterDescriptor implements
 		IFieldsProvider, IWizardDataEditorProvider {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	private boolean recursiveFind;
+	private Boolean considerEmptyNodes;
 
 	@Override
 	public XmlDataAdapterImpl getDataAdapter() {
@@ -76,7 +78,6 @@ public class XMLDataAdapterDescriptor extends DataAdapterDescriptor implements
 	 */
 	@Override
 	public Image getIcon(int size) {
-		// TODO Auto-generated method stub
 		if (size == 16) {
 			return Activator.getDefault().getImage(
 					"icons/blue-document-code.png"); //$NON-NLS-1$
@@ -94,6 +95,7 @@ public class XMLDataAdapterDescriptor extends DataAdapterDescriptor implements
 			JasperReportsConfiguration jConfig, JRDataset jDataset)
 			throws JRException, UnsupportedOperationException {
 		setRecursiveRetrieval(jConfig);
+		setConsiderEmptyNodes(jConfig);
 		ArrayList<JRDesignField> fields = new ArrayList<JRDesignField>();
 		XmlDataAdapterImpl d = getDataAdapter();
 		DataFile df = d.getDataFile();
@@ -141,6 +143,9 @@ public class XMLDataAdapterDescriptor extends DataAdapterDescriptor implements
 		LinkedHashMap<String, JRDesignField> fieldsMap = new LinkedHashMap<String, JRDesignField>();
 		for (int nIdx = 0; nIdx < nodes.getLength(); nIdx++) {
 			Node currNode = nodes.item(nIdx);
+			if(considerEmptyNodes || StringUtils.isNotBlank(currNode.getTextContent())) {
+				addMainNodeField(fieldsMap, currNode);
+			}
 			findDirectChildrenAttributes(currNode, fieldsMap, "");
 			if (currNode.getNodeType() == Node.ELEMENT_NODE) {
 				NodeList childNodes = currNode.getChildNodes();
@@ -186,7 +191,9 @@ public class XMLDataAdapterDescriptor extends DataAdapterDescriptor implements
 						findDirectChildrenAttributes(item, fieldsMap, prefix
 								+ nodeName + "/");
 					}
-					addNewField(nodeName, fieldsMap, item, prefix);
+					if(considerEmptyNodes || StringUtils.isNotBlank(item.getTextContent())) {
+						addNewField(nodeName, fieldsMap, item, prefix);
+					}
 					if (recursiveFind && item.hasChildNodes()) {
 						findChildFields(item.getChildNodes(), fieldsMap, prefix
 								+ nodeName + "/");
@@ -197,11 +204,21 @@ public class XMLDataAdapterDescriptor extends DataAdapterDescriptor implements
 	}
 
 	/*
-	 * 
+	 * Verifies if the recursive retrieval of fields is expected and sets 
+	 * the proper flag for it.
 	 */
 	private void setRecursiveRetrieval(JasperReportsConfiguration jconfig) {
 		recursiveFind = jconfig.getPropertyBoolean(
 				XMLQueryEditorPreferencePage.P_USE_RECURSIVE_RETRIEVAL, false);
+	}
+
+	/*
+	 * Verifies if the empty nodes should be considered during the retrieval of fields
+	 * and sets the proper flag for it.
+	 */
+	private void setConsiderEmptyNodes(JasperReportsConfiguration jConfig) {
+		considerEmptyNodes = jConfig.getPropertyBoolean(
+				XMLQueryEditorPreferencePage.P_CONSIDER_EMPTY_NODES, false);
 	}
 
 	/*
@@ -212,15 +229,32 @@ public class XMLDataAdapterDescriptor extends DataAdapterDescriptor implements
 			LinkedHashMap<String, JRDesignField> fieldsMap, Node item,
 			String prefix) {
 		JRDesignField f = new JRDesignField();
+		String description = "";
 		f.setName(ModelUtils.getNameForField(new ArrayList<JRDesignField>(
 				fieldsMap.values()), nodeName));
 		f.setValueClass(String.class);
 		if (item.getNodeType() == Node.ATTRIBUTE_NODE) {
-			f.setDescription(prefix + "@" + item.getNodeName()); //$NON-NLS-1$
+			description = prefix + "@" + item.getNodeName();
+			f.setDescription(description); //$NON-NLS-1$
 		} else {
-			f.setDescription(prefix + item.getNodeName());
+			description = prefix + item.getNodeName();
+			f.setDescription(description);
 		}
-		fieldsMap.put(nodeName, f);
+		// Let's consider the description indicating the XPath query
+		// as unique and therefore as map key.
+		fieldsMap.put(description, f);
+	}
+	
+	/*
+	 * Adds a field for the main node.
+	 */
+	private void addMainNodeField(LinkedHashMap<String, JRDesignField> fieldsMap, Node item){
+		JRDesignField f = new JRDesignField();
+		f.setName(ModelUtils.getNameForField(new ArrayList<JRDesignField>(
+				fieldsMap.values()), item.getNodeName()));
+		f.setValueClass(String.class);
+		f.setDescription(".");
+		fieldsMap.put(".", f);
 	}
 
 	@Override
