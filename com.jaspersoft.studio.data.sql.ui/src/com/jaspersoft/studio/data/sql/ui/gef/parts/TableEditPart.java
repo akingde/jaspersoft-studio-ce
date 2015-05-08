@@ -54,6 +54,7 @@ import com.jaspersoft.studio.data.sql.ui.gef.figures.SqlTableFigure;
 import com.jaspersoft.studio.data.sql.ui.gef.policy.TableLayoutEditPolicy;
 import com.jaspersoft.studio.data.sql.ui.gef.policy.TableNodeEditPolicy;
 import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.model.MDummy;
 
 public class TableEditPart extends AbstractGraphicalEditPart {
 	private Map<String, MSelectColumn> set = new HashMap<String, MSelectColumn>();
@@ -139,7 +140,14 @@ public class TableEditPart extends AbstractGraphicalEditPart {
 
 	@Override
 	protected List<?> getModelChildren() {
-		return getModel().getValue().getChildren();
+		MSqlTable tbl = getModel().getValue();
+		List<INode> lst = new ArrayList<INode>();
+		for (INode n : tbl.getChildren()) {
+			if (n instanceof MDummy)
+				continue;
+			lst.add(n);
+		}
+		return lst;
 	}
 
 	public SQLQueryDesigner getDesigner() {
