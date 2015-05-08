@@ -12,11 +12,9 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.querydesigner.json;
 
-import java.io.IOException;
-
+import net.sf.jasperreports.data.DataFile;
 import net.sf.jasperreports.data.json.JsonDataAdapter;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.eclipse.util.DataFileUtils;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -182,10 +180,8 @@ public class JsonQueryDesigner extends TreeBasedQueryDesigner {
 			this.container.getQueryStatus().showInfo(""); //$NON-NLS-1$
 			treeViewer.setInput(JsonTreeCustomStatus.LOADING_JSON);
 			if (da != null && da.getDataAdapter() instanceof JsonDataAdapter) {
-				String dataFile = DataFileUtils.getDataFileLocation(									
-						((JsonDataAdapter) da
-						.getDataAdapter()).getDataFile());
-				jsonLoaderJob.updateDataFile(dataFile);
+				jsonLoaderJob.updateDataFile(
+						((JsonDataAdapter) da.getDataAdapter()).getDataFile());
 				jsonLoaderJob.schedule();
 			} else {
 				treeViewer.getTree().removeAll();
@@ -364,7 +360,7 @@ public class JsonQueryDesigner extends TreeBasedQueryDesigner {
 	 */
 	private final class JsonLoaderJob extends Job {
 
-		private String dataFile = null;
+		private DataFile dataFile = null;
 
 		public JsonLoaderJob() {
 			super(Messages.JsonQueryDesigner_JsonLoaderJobName);
@@ -391,7 +387,7 @@ public class JsonQueryDesigner extends TreeBasedQueryDesigner {
 			setPriority(Job.LONG);
 		}
 		
-		public void updateDataFile(String dataFile) {
+		public void updateDataFile(DataFile dataFile) {
 			this.dataFile = dataFile;
 		}
 
@@ -399,10 +395,10 @@ public class JsonQueryDesigner extends TreeBasedQueryDesigner {
 		protected IStatus run(IProgressMonitor monitor) {
 			try {
 				if(dataFile!=null) {
-					JsonQueryDesigner.this.jsonDataManager.loadJsonDataFile(dataFile);
+					JsonQueryDesigner.this.jsonDataManager.loadJsonDataFile(dataFile,getjConfig());
 					return Status.OK_STATUS;
 				}
-			} catch (final IOException e) {
+			} catch (final Exception e) {
 				UIUtils.getDisplay().asyncExec(new Runnable() {
 					@Override
 					public void run() {

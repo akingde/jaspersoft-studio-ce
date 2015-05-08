@@ -12,17 +12,16 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.querydesigner.json;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.data.DataFile;
+import net.sf.jasperreports.data.DataFileStream;
+import net.sf.jasperreports.data.DataFileUtils;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.design.JRDesignField;
 
@@ -38,6 +37,7 @@ import com.jaspersoft.studio.data.designer.tree.ISelectableNodes;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.datasource.json.JsonSupportNode;
 import com.jaspersoft.studio.utils.ModelUtils;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /**
  * This class works with the specified Json data information.
@@ -52,32 +52,52 @@ public class JsonDataManager implements ISelectableNodes<JsonSupportNode> {
 	private MRoot jsonSupportModel;
 	private Map<JsonSupportNode, JsonNode> jsonNodesMap;
 
-	/**
-	 * Tries to load a Json tree structure using the 
-	 * specified stream as input source.
-	 * 
-	 * @param filename the name of the json file
-	 * @throws IOException
-	 */
-	public void loadJsonDataFile(String filename) throws IOException{
+//	/**
+//	 * Tries to load a Json tree structure using the 
+//	 * specified stream as input source.
+//	 * 
+//	 * @param filename the name of the json file
+//	 * @throws IOException
+//	 */
+//	public void loadJsonDataFile(String filename) throws IOException{
+//		getJsonNodesMap().clear();
+//		InputStream ins = null;
+//		try {
+//			File f = new File(filename);
+//			if(f.exists()) {
+//				ins = new FileInputStream(f);
+//			}
+//			else {
+//				ins=new URL(filename).openStream();	
+//			}
+//			jsonRoot=getJsonMapper().readTree(ins);
+//			buildJsonSupportTree();
+//		} catch (IOException e) {
+//			throw e;
+//		} finally {
+//			IOUtils.closeQuietly(ins);
+//		}
+//	}
+	
+	public void loadJsonDataFile(DataFile dataFile, JasperReportsConfiguration jconfig) throws IOException, JRException{
 		getJsonNodesMap().clear();
-		InputStream ins = null;
+		DataFileStream ins = null;
 		try {
-			File f = new File(filename);
-			if(f.exists()) {
-				ins = new FileInputStream(f);
-			}
-			else {
-				ins=new URL(filename).openStream();	
-			}
+			Map<String, Object> parameters = new HashMap<String, Object>();
+			// FIXME - We need to proper populate the map!!!
+			ins = DataFileUtils.instance(jconfig).getDataStream(dataFile, parameters);
 			jsonRoot=getJsonMapper().readTree(ins);
 			buildJsonSupportTree();
 		} catch (IOException e) {
 			throw e;
-		} finally {
+		} catch (JRException e) {
+			throw e;
+		}finally {
 			IOUtils.closeQuietly(ins);
 		}
 	}
+	
+	
 	
 	/**
 	 * Tries to load a Json tree structure using the 

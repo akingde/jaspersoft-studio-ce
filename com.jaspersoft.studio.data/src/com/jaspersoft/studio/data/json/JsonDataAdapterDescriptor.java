@@ -19,7 +19,6 @@ import java.util.List;
 import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.json.JsonDataAdapter;
 import net.sf.jasperreports.data.json.JsonDataAdapterImpl;
-import net.sf.jasperreports.eclipse.util.DataFileUtils;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRException;
@@ -78,7 +77,7 @@ public class JsonDataAdapterDescriptor extends DataAdapterDescriptor implements 
 		List<JRDesignField> fields = new ArrayList<JRDesignField>();
 		try {
 			JsonDataManager m = new JsonDataManager();
-			m.loadJsonDataFile(DataFileUtils.getDataFileLocation(getDataAdapter().getDataFile()));
+			m.loadJsonDataFile(getDataAdapter().getDataFile(),jConfig);
 			fields.addAll(m.extractFields(jDataset.getQuery().getText()));
 		} catch (JsonProcessingException e) {
 			err = e;
