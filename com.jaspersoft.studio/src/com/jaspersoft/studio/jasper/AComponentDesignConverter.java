@@ -76,7 +76,7 @@ public abstract class AComponentDesignConverter extends ElementIconConverter imp
 
 		// FIXMEMAP there are no scale image, alignment and onError attributes
 		// defined for the map element
-		printImage.setScaleImage(ScaleImageEnum.CLIP);
+		printImage.setScaleImage(ScaleImageEnum.RETAIN_SHAPE);
 		printImage.setHorizontalImageAlign(HorizontalImageAlignEnum.LEFT);
 		printImage.setVerticalImageAlign(VerticalImageAlignEnum.TOP);
 		printImage.setRenderable(cacheRenderer);
@@ -126,7 +126,7 @@ public abstract class AComponentDesignConverter extends ElementIconConverter imp
 			return cache.get(key);
 		}
 		imgCache.put(key, element);
-		
+
 		final KeyValue<String, Long> kv = new KeyValue<String, Long>(null, null);
 		running.put(element, kv);
 		Job job = new Job("load map") {

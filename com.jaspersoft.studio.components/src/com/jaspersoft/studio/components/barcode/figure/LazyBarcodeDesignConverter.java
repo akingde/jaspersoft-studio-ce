@@ -9,9 +9,11 @@
 package com.jaspersoft.studio.components.barcode.figure;
 
 import net.sf.jasperreports.components.barcode4j.BarcodeDesignEvaluator;
+import net.sf.jasperreports.components.barcode4j.BarcodeImageProducer;
 import net.sf.jasperreports.components.barcode4j.QRCodeComponent;
 import net.sf.jasperreports.engine.JRComponentElement;
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.Renderable;
 import net.sf.jasperreports.engine.component.Component;
 import net.sf.jasperreports.engine.convert.ReportConverter;
@@ -85,10 +87,26 @@ public class LazyBarcodeDesignConverter extends AComponentDesignConverter {
 			final String expr, final JasperReportsConfiguration jrContext,
 			final KeyValue<String, Long> kv) throws JRException {
 		try {
-			BarcodeDesignEvaluator evaluator = new BarcodeDesignEvaluator(
-					reportConverter.getJasperReportsContext(), element,
-					reportConverter.getDefaultStyleProvider());
-			return evaluator.evaluateImage();
+			JasperReportsContext jcontext = reportConverter
+					.getJasperReportsContext();
+			String old = jcontext
+					.getProperty(BarcodeImageProducer.PROPERTY_IMAGE_PRODUCER);
+			jcontext.setProperty(BarcodeImageProducer.PROPERTY_IMAGE_PRODUCER,
+					"image");
+			Renderable r = null;
+			try {
+				BarcodeDesignEvaluator evaluator = new BarcodeDesignEvaluator(
+						jcontext, element,
+						reportConverter.getDefaultStyleProvider());
+				r = evaluator.evaluateImage();
+			} finally {
+				if (old == null)
+					jcontext.removeProperty(BarcodeImageProducer.PROPERTY_IMAGE_PRODUCER);
+				else
+					jcontext.setProperty(
+							BarcodeImageProducer.PROPERTY_IMAGE_PRODUCER, old);
+			}
+			return r;
 		} catch (Exception e) {
 			return null;
 		}
