@@ -16,6 +16,7 @@ import org.eclipse.jface.viewers.TreeViewer;
 
 import com.jaspersoft.studio.data.sql.Util;
 import com.jaspersoft.studio.data.sql.action.AAction;
+import com.jaspersoft.studio.data.sql.messages.Messages;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelect;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelectSubQuery;
 import com.jaspersoft.studio.model.ANode;
@@ -23,7 +24,7 @@ import com.jaspersoft.studio.model.ANode;
 public class CreateSubSelect extends AAction {
 
 	public CreateSubSelect(TreeViewer treeViewer) {
-		super("Add &Sub Query", treeViewer);
+		super(Messages.CreateSubSelect_0, treeViewer);
 	}
 
 	@Override

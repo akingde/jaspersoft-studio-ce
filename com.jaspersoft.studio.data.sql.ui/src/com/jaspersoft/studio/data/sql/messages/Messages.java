@@ -16,6 +16,12 @@ import org.eclipse.osgi.util.NLS;
 
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "com.jaspersoft.studio.data.sql.messages.messages"; //$NON-NLS-1$
+	public static String ActionFactory_0;
+	public static String ActionFactory_2;
+	public static String ActionFactory_4;
+	public static String ActionFactory_5;
+	public static String ActionFactory_6;
+	public static String ActionFactory_7;
 	public static String AddTableCommand_0;
 	public static String AddTableCommand_1;
 	public static String ColumnsDialog_0;
@@ -25,6 +31,8 @@ public class Messages extends NLS {
 	public static String CreateHavingFromColumn_0;
 	public static String CreateOrderByColumn_0;
 	public static String CreateOrderByFromColumn_0;
+	public static String CreateSubQueryTable_0;
+	public static String CreateSubSelect_0;
 	public static String CreateTable_0;
 	public static String DBMetadata_0;
 	public static String DBMetadata_1;

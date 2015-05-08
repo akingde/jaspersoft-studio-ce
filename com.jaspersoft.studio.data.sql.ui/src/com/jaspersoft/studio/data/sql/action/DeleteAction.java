@@ -45,7 +45,7 @@ public class DeleteAction<T extends ANode> extends AMultiSelectionAction {
 	public void run() {
 		final List<T> lst = new ArrayList<T>();
 		for (Object obj : selection) {
-			if (type.isAssignableFrom(obj.getClass()))
+			if (isObjectToDelete(obj))
 				lst.add((T) obj);
 		}
 		boolean showConf = designer.getjConfig().getPropertyBoolean(
@@ -58,6 +58,10 @@ public class DeleteAction<T extends ANode> extends AMultiSelectionAction {
 								+ (lst.size() == 1 ? "?"
 										: Messages.DeleteAction_3)))
 			doDelete(lst);
+	}
+
+	protected boolean isObjectToDelete(Object obj) {
+		return type.isAssignableFrom(obj.getClass());
 	}
 
 	protected void doDelete(final List<T> lst) {
@@ -74,7 +78,8 @@ public class DeleteAction<T extends ANode> extends AMultiSelectionAction {
 		if (indx - 1 > 0)
 			toSelect = (ANode) mfrom.getChildren().get(
 					Math.min(mfrom.getChildren().size() - 1, indx));
-		selectInTree(toSelect);
+		if (toSelect != null)
+			selectInTree(toSelect);
 		designer.refreshQueryText();
 	}
 

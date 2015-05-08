@@ -17,6 +17,7 @@ import org.eclipse.jface.viewers.TreeViewer;
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.Util;
 import com.jaspersoft.studio.data.sql.action.AAction;
+import com.jaspersoft.studio.data.sql.messages.Messages;
 import com.jaspersoft.studio.data.sql.model.query.from.MFrom;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
 import com.jaspersoft.studio.data.sql.model.query.subquery.MQueryTable;
@@ -25,7 +26,7 @@ import com.jaspersoft.studio.model.ANode;
 public class CreateSubQueryTable extends AAction {
 
 	public CreateSubQueryTable(SQLQueryDesigner designer, TreeViewer treeViewer) {
-		super("Add &Sub Query", treeViewer);
+		super(Messages.CreateSubQueryTable_0, treeViewer);
 	}
 
 	@Override
@@ -52,7 +53,7 @@ public class CreateSubQueryTable extends AAction {
 
 		MQueryTable mtable = new MQueryTable(null);
 		MFromTable msq = new MFromTable(mfrom, mtable, index);
-		msq.setAlias("sq");
+		msq.setAlias("sq"); //$NON-NLS-1$
 		mtable.setSubquery(Util.createSelect(msq));
 
 		selectInTree(msq);
