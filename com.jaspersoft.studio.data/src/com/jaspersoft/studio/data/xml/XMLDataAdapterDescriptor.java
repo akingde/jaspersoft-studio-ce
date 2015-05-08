@@ -12,17 +12,16 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.xml;
 
-import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.DataFile;
-import net.sf.jasperreports.data.RepositoryDataLocation;
-import net.sf.jasperreports.data.http.HttpDataLocation;
+import net.sf.jasperreports.data.DataFileStream;
+import net.sf.jasperreports.data.DataFileUtils;
 import net.sf.jasperreports.data.xml.XmlDataAdapterImpl;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.JRConstants;
@@ -34,6 +33,7 @@ import net.sf.jasperreports.engine.util.xml.JRXPathExecuter;
 import net.sf.jasperreports.engine.util.xml.JRXPathExecuterFactory;
 import net.sf.jasperreports.engine.util.xml.JRXPathExecuterUtils;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.graphics.Image;
@@ -100,19 +100,17 @@ public class XMLDataAdapterDescriptor extends DataAdapterDescriptor implements
 		XmlDataAdapterImpl d = getDataAdapter();
 		DataFile df = d.getDataFile();
 		Document doc = null;
-		if (df instanceof RepositoryDataLocation) {
-			File in = new File(((RepositoryDataLocation) df).getLocation());
-			doc = JRXmlUtils.parse(in,
-					XMLUtils.isNamespaceAware(d, jConfig.getJasperDesign()));
-		} else if (df instanceof HttpDataLocation) {
-			try {
-				doc = JRXmlUtils
-						.parse(new URL(((HttpDataLocation) df).getUrl()),
-								XMLUtils.isNamespaceAware(d,
-										jConfig.getJasperDesign()));
-			} catch (MalformedURLException e) {
-				UIUtils.showError(e);
-			}
+		DataFileStream ins = null;
+		try {
+			Map<String, Object> parameters = new HashMap<String, Object>();
+			// FIXME - We need to proper populate the map!!!
+			ins = DataFileUtils.instance(jConfig).getDataStream(df, parameters);
+			doc = JRXmlUtils.parse(ins,XMLUtils.isNamespaceAware(d, jConfig.getJasperDesign()));
+		} catch (Exception e) {
+			UIUtils.showError(e);
+		}
+		finally {
+			IOUtils.closeQuietly(ins);
 		}
 		if (doc != null)
 			fields.addAll(getFieldsFromDocument(doc, jConfig, jDataset));

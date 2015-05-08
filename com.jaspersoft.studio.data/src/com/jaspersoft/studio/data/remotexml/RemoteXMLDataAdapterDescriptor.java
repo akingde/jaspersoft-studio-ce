@@ -12,21 +12,23 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.remotexml;
 
-import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.sf.jasperreports.data.DataAdapterService;
+import net.sf.jasperreports.data.DataFileStream;
+import net.sf.jasperreports.data.DataFileUtils;
 import net.sf.jasperreports.data.xml.RemoteXmlDataAdapterImpl;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.eclipse.util.DataFileUtils;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.util.JRXmlUtils;
 
+import org.apache.commons.io.IOUtils;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
@@ -74,14 +76,19 @@ public class RemoteXMLDataAdapterDescriptor extends XMLDataAdapterDescriptor imp
 	public List<JRDesignField> getFields(DataAdapterService con, JasperReportsConfiguration jConfig, JRDataset jDataset) throws JRException, UnsupportedOperationException {
 		Throwable t = null;
 		ArrayList<JRDesignField> fields = new ArrayList<JRDesignField>();
+		DataFileStream ins = null;
 		try {
-			String fileName = DataFileUtils.getDataFileLocation(getDataAdapter().getDataFile());
-			Document doc = JRXmlUtils.parse(new URL(fileName), XMLUtils.isNamespaceAware(getDataAdapter(), jConfig.getJasperDesign()));
+			Map<String, Object> parameters = new HashMap<String, Object>();
+			// FIXME - We need to proper populate the map!!!
+			ins = DataFileUtils.instance(jConfig).getDataStream(
+					getDataAdapter().getDataFile(), parameters);
+			Document doc = JRXmlUtils.parse(ins,XMLUtils.isNamespaceAware(getDataAdapter(), jConfig.getJasperDesign()));
 			fields.addAll(getFieldsFromDocument(doc, jConfig, jDataset));
-		} catch (IOException e) {
+		} catch (Exception e) {
 			t = e;
+		} finally {
+			IOUtils.closeQuietly(ins);
 		}
-
 		if (t != null) {
 			UIUtils.showError(t);
 		}

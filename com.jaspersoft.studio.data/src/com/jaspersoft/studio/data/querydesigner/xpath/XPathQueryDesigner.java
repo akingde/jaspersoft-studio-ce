@@ -12,18 +12,19 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.querydesigner.xpath;
 
-import java.io.File;
-import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import net.sf.jasperreports.data.DataFile;
-import net.sf.jasperreports.data.RepositoryDataLocation;
-import net.sf.jasperreports.data.http.HttpDataLocation;
+import net.sf.jasperreports.data.DataFileStream;
+import net.sf.jasperreports.data.DataFileUtils;
 import net.sf.jasperreports.data.xml.XmlDataAdapter;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.util.JRXmlUtils;
 
+import org.apache.commons.io.IOUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -450,17 +451,14 @@ public class XPathQueryDesigner extends TreeBasedQueryDesigner {
 
 		@Override
 		protected IStatus run(IProgressMonitor monitor) {
+			DataFileStream ins = null;
 			try {
 				if(dataFile!=null) {
 					Document doc = null;
-					if (dataFile instanceof RepositoryDataLocation) {
-						File in = new File(((RepositoryDataLocation) dataFile).getLocation());
-						doc = JRXmlUtils.parse(in, namespaceAware);
-					} else if (dataFile instanceof HttpDataLocation) {
-						doc = JRXmlUtils.parse(
-								new URL(((HttpDataLocation) dataFile).getUrl()),
-								namespaceAware);
-					}
+					Map<String, Object> parameters = new HashMap<String, Object>();
+					// FIXME - We need to proper populate the map!!!
+					ins = DataFileUtils.instance(jConfig).getDataStream(dataFile, parameters);
+						doc = JRXmlUtils.parse(ins,namespaceAware);
 					documentManager.setDocument(doc);
 					documentManager.setJasperConfiguration(XPathQueryDesigner.this.container.getjConfig());
 					
@@ -478,6 +476,9 @@ public class XPathQueryDesigner extends TreeBasedQueryDesigner {
 						isRefreshing = false;
 					}
 				});
+			}
+			finally {
+				IOUtils.closeQuietly(ins);
 			}
 			return null;
 		}

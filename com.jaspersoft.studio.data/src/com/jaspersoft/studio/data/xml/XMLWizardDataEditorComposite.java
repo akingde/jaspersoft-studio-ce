@@ -12,16 +12,21 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.xml;
 
-import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import net.sf.jasperreports.data.DataFile;
+import net.sf.jasperreports.data.DataFileStream;
+import net.sf.jasperreports.data.DataFileUtils;
 import net.sf.jasperreports.data.xml.XmlDataAdapter;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.eclipse.util.DataFileUtils;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.util.JRXmlUtils;
 
+import org.apache.commons.io.IOUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -44,6 +49,7 @@ import com.jaspersoft.studio.data.querydesigner.xpath.XMLDocumentManager;
 import com.jaspersoft.studio.data.querydesigner.xpath.XMLTreeCustomStatus;
 import com.jaspersoft.studio.data.querydesigner.xpath.XPathTreeViewerContentProvider;
 import com.jaspersoft.studio.model.datasource.xml.XMLNode;
+import com.jaspersoft.studio.utils.XMLUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /**
@@ -203,13 +209,25 @@ public class XMLWizardDataEditorComposite extends
 	 * @throws SAXException
 	 * @throws IOException
 	 * @throws ParserConfigurationException
+	 * @throws JRException 
 	 */
 	protected Document getXMLDocument(final DataAdapterDescriptor da)
-			throws SAXException, IOException, ParserConfigurationException {
-		String fileName = DataFileUtils.getDataFileLocation( 
-				((XmlDataAdapter) da.getDataAdapter()).getDataFile());
-		File in = new File(fileName);
-		return DocumentBuilderFactory.newInstance().newDocumentBuilder()
-				.parse(in);
+			throws SAXException, IOException, ParserConfigurationException, JRException {
+		Document doc = null;
+		DataFileStream ins = null;
+		try {
+			DataFile df = ((XmlDataAdapter)da.getDataAdapter()).getDataFile();
+			Map<String, Object> parameters = new HashMap<String, Object>();
+			// FIXME - We need to proper populate the map!!!
+			ins = DataFileUtils.instance(
+					getJasperReportsConfiguration()).getDataStream(df, parameters);
+			doc = JRXmlUtils.parse(ins,	XMLUtils.isNamespaceAware(
+					(XmlDataAdapter) da.getDataAdapter(), 
+					getJasperReportsConfiguration().getJasperDesign()));
+		}
+		finally {
+			IOUtils.closeQuietly(ins);
+		}
+		return doc;
 	}
 }
