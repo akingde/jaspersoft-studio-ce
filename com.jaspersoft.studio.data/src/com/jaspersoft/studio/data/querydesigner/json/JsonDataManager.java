@@ -52,33 +52,14 @@ public class JsonDataManager implements ISelectableNodes<JsonSupportNode> {
 	private MRoot jsonSupportModel;
 	private Map<JsonSupportNode, JsonNode> jsonNodesMap;
 
-//	/**
-//	 * Tries to load a Json tree structure using the 
-//	 * specified stream as input source.
-//	 * 
-//	 * @param filename the name of the json file
-//	 * @throws IOException
-//	 */
-//	public void loadJsonDataFile(String filename) throws IOException{
-//		getJsonNodesMap().clear();
-//		InputStream ins = null;
-//		try {
-//			File f = new File(filename);
-//			if(f.exists()) {
-//				ins = new FileInputStream(f);
-//			}
-//			else {
-//				ins=new URL(filename).openStream();	
-//			}
-//			jsonRoot=getJsonMapper().readTree(ins);
-//			buildJsonSupportTree();
-//		} catch (IOException e) {
-//			throw e;
-//		} finally {
-//			IOUtils.closeQuietly(ins);
-//		}
-//	}
-	
+	/**
+	 * Tries to load a JSON tree structure using the specified data file and context.
+	 * 
+	 * @param dataFile the resource information to get the JSON
+	 * @param jconfig the context
+	 * @throws IOException
+	 * @throws JRException
+	 */
 	public void loadJsonDataFile(DataFile dataFile, JasperReportsConfiguration jconfig) throws IOException, JRException{
 		getJsonNodesMap().clear();
 		DataFileStream ins = null;
