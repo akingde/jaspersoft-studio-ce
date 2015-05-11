@@ -18,6 +18,7 @@ import net.sf.jasperreports.components.map.StandardItemProperty;
 import org.eclipse.swt.graphics.Image;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.utils.Misc;
 
 /**
@@ -47,7 +48,7 @@ public abstract class ADescriptor {
 	}
 
 	public String getDisplayName() {
-		return "Item";
+		return Messages.ADescriptor_0;
 	}
 
 	protected abstract void initItemPropertyDescriptors();
@@ -59,7 +60,7 @@ public abstract class ADescriptor {
 
 	public Image getIcon(Object element) {
 		if (element instanceof ItemData)
-			return JaspersoftStudioPlugin.getInstance().getImage("icons/resources/datasets-16.png");
+			return JaspersoftStudioPlugin.getInstance().getImage("icons/resources/datasets-16.png"); //$NON-NLS-1$
 		return null;
 	}
 
@@ -86,12 +87,12 @@ public abstract class ADescriptor {
 	public void validateItem(ItemProperty itemProperty) throws Exception {
 		if (itemProperty != null) {
 			if (Misc.isNullOrEmpty(itemProperty.getName()))
-				throw new Exception("Name of the property could not be empty.");
+				throw new Exception(Messages.ADescriptor_2);
 			for (ItemProperty ip : item.getProperties()) {
 				if (oldItemProperty == ip)
 					continue;
 				if (ip.getName().equals(itemProperty.getName()))
-					throw new Exception("Name of the property is unique. Your name already exists.");
+					throw new Exception(Messages.ADescriptor_3);
 			}
 		}
 	}
