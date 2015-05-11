@@ -330,6 +330,7 @@ public class SQLQueryOutline {
 			protected void doDropColumn(Object target, Set<MSQLColumn> colsset) {
 				if (!colsset.isEmpty()) {
 					CreateColumn ct = afactory.getAction(CreateColumn.class);
+					ct.setCheckTables(false);
 					if (ct.calculateEnabled(new Object[] { target }))
 						ct.run(colsset);
 					CreateGroupByColumn cg = afactory

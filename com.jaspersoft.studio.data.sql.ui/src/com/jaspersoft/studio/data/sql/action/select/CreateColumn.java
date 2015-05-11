@@ -54,10 +54,16 @@ public class CreateColumn extends AAction {
 				&& isInSelect(selection[0]);
 	}
 
-	public static boolean isInSelect(Object element) {
+	private boolean checkTables = true;
+
+	public void setCheckTables(boolean checkTables) {
+		this.checkTables = checkTables;
+	}
+
+	public boolean isInSelect(Object element) {
 		boolean b = element instanceof MSelect
 				|| (element instanceof ANode && ((ANode) element).getParent() instanceof MSelect);
-		if (b) {
+		if (b && checkTables) {
 			MFrom mfrom = Util.getKeyword((ANode) ((ANode) element).getRoot(),
 					MFrom.class);
 			if (mfrom != null)
