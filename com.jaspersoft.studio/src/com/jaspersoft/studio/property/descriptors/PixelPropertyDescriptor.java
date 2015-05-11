@@ -14,6 +14,7 @@ package com.jaspersoft.studio.property.descriptors;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.jface.viewers.ICellEditorValidator;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.TextPropertyDescriptor;
@@ -21,7 +22,6 @@ import org.eclipse.ui.views.properties.TextPropertyDescriptor;
 import com.jaspersoft.studio.help.HelpSystem;
 import com.jaspersoft.studio.help.IHelp;
 import com.jaspersoft.studio.help.IHelpRefBuilder;
-import com.jaspersoft.studio.jface.IntegerCellEditorValidator;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 import com.jaspersoft.studio.property.section.widgets.IPropertyDescriptorWidget;
@@ -87,14 +87,16 @@ public class PixelPropertyDescriptor extends TextPropertyDescriptor implements I
 				}
 			}
 		};
-		editor.setValidator(IntegerCellEditorValidator.instance());
-		setValidator(IntegerCellEditorValidator.instance());
+		if (getValidator() == null){
+			setValidator(new JSSPixelEditorValidator(getId().toString()));
+		}
+		editor.setValidator(getValidator());
 
 		HelpSystem.bindToHelp(this, editor.getControl());
 		return editor;
 	}
 
-	public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
+	public ASPropertyWidget<PixelPropertyDescriptor> createWidget(Composite parent, AbstractSection section) {
 		SPPixel spNumber = new SPPixel(parent, section, this);
 		return spNumber;
 	}
@@ -111,5 +113,16 @@ public class PixelPropertyDescriptor extends TextPropertyDescriptor implements I
 		if (refBuilder != null)
 			return refBuilder.getHelpReference();
 		return null;
+	}
+	
+	@Override
+	public JSSPixelEditorValidator getValidator() {
+		return (JSSPixelEditorValidator)super.getValidator();
+	}
+	
+	@Override
+	public void setValidator(ICellEditorValidator validator) {
+		Assert.isTrue(validator instanceof JSSPixelEditorValidator);
+		super.setValidator(validator);
 	}
 }

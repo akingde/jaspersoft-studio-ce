@@ -93,7 +93,7 @@ public class UnGroupColumnsAction extends SelectionAction {
 				Collections.sort(fixOrderCommandList);
 				//This commands are executed on the undo, so the list must be reversed
 				Collections.reverse(fixOrderCommandList);
-				c.addAll(fixOrderCommandList);
+				c.addAll((List)fixOrderCommandList);
 				
 				//Create the commands to move the columns
 				int baseIndex = mparent.getChildren().indexOf(fmc);

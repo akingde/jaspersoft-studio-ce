@@ -17,6 +17,7 @@ import java.util.HashSet;
 import java.util.List;
 
 import net.sf.jasperreports.eclipse.JasperReportsPlugin;
+import net.sf.jasperreports.engine.design.JRDesignElement;
 
 import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.Viewport;
@@ -24,17 +25,20 @@ import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.AutoexposeHelper;
 import org.eclipse.gef.EditPart;
+import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
+import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 import org.eclipse.gef.tools.DragEditPartsTracker;
 import org.eclipse.swt.SWT;
 
 import com.jaspersoft.studio.JSSCompoundCommand;
-import com.jaspersoft.studio.editor.gef.parts.AJDEditPart;
+import com.jaspersoft.studio.editor.gef.parts.JSSScalableFreeformRootEditPart;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IContainer;
 import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.frame.MFrame;
 
 /**
@@ -50,14 +54,17 @@ public class SearchParentDragTracker extends DragEditPartsTracker {
 	/** defines the range where autoscroll is active inside a viewer */
 	private static final int DEFAULT_EXPOSE_THRESHOLD = 50;
 
-
 	/**
 	 * This variable contains all the hierarchy of the elements dragged, to avoid that an element is placed inside
 	 * one of his descendant. To avoid excessive calculations this variable is initialized ad the drag start and 
 	 * clear at the drag end
 	 */
 	private HashSet<INode> selectionHierarchy = null; 
-		
+	
+	/**
+	 * Zoom manager of the current viewer
+	 */
+	private ZoomManager zoomManager;
 	
 	/**
 	 * An implementation of {@link org.eclipse.gef.AutoexposeHelper} that performs autoscrolling of a
@@ -178,19 +185,22 @@ public class SearchParentDragTracker extends DragEditPartsTracker {
 			port.translateToAbsolute(rect);
 			Point loc = port.getViewLocation();
 			Point targetloc = port.getViewLocation();
-			Rectangle dragSize = ((AJDEditPart) getSourceEditPart()).getFigure().getBounds();
+			//Rectangle dragSize = ((AJDEditPart) getSourceEditPart()).getFigure().getBounds();
 			//The autoscroll bounds are calculated on the size of the element dragged
-			int elementSizeOffset = (dragSize.x + dragSize.y)*2;
+			//int elementSizeOffset = Math.abs((dragSize.x + dragSize.y)*2);
 			if (needToWait())
 				return true;
-			if (where.x >= rect.width - threshold && loc.x< elementSizeOffset)
+			//System.out.println("where: "+where);
+			if (where.x >= rect.width - threshold)
 				targetloc.x += threshold * 2;
-			if (where.y >= rect.height - threshold && loc.y<elementSizeOffset)
+			if (where.y >= rect.height - threshold)
 				targetloc.y += threshold * 2;
-			if (where.x < threshold && loc.x> -elementSizeOffset)
+			if (where.x < threshold)
 				targetloc.x -= threshold * 2;
-			if (where.y < threshold && loc.y + elementSizeOffset >0)
+			//System.out.println(where.y + "<"+ threshold +"&&"+ (loc.y + elementSizeOffset) +">0");
+			if (where.y < threshold)
 				targetloc.y -= threshold * 2;
+			
 			if (!loc.equals(targetloc)) {
 				port.setViewLocation(targetloc);
 				updateTargetUnderMouse();
@@ -462,4 +472,67 @@ public class SearchParentDragTracker extends DragEditPartsTracker {
 		}
 	}
 
+	/**
+	 * Return the current level of zoom
+	 */
+	protected double getZoom(){
+		if (zoomManager == null){
+			zoomManager = ((JSSScalableFreeformRootEditPart) getCurrentViewer().getRootEditPart()).getZoomManager();
+		}
+		return zoomManager != null ? zoomManager.getZoom() : 1d;
+	}
+	
+	/**
+	 * When the request is created it check the bounds to avoid the drag 
+	 * of the item too far from the current page
+	 */
+	@Override
+	protected Request getTargetRequest() {
+		ChangeBoundsRequest request = (ChangeBoundsRequest)super.getTargetRequest();
+		if (request.getEditParts() != null && request.getEditParts().size() > 0){
+			ANode node = null;
+			for(Object part : request.getEditParts()){
+				node = (ANode)((EditPart)part).getModel();
+				break;
+			}
+			org.eclipse.swt.graphics.Point maximumSize = node.getAvailableSize();
+			double zoom = 1/getZoom();
+			double moveDelta_x = request.getMoveDelta().x*zoom;
+			double moveDelta_y = request.getMoveDelta().y*zoom;
+			if (moveDelta_x != 0 || moveDelta_y != 0){
+				for(Object part : request.getEditParts()){
+					MGraphicElement gElement = (MGraphicElement)((EditPart)part).getModel();
+					JRDesignElement jrElement = (JRDesignElement)gElement.getValue();
+					
+					double newX = jrElement.getX()+moveDelta_x;
+					if (newX >= 0){
+						if (Math.abs(jrElement.getWidth())+newX>maximumSize.x){
+							double delta = (maximumSize.x - jrElement.getWidth() - jrElement.getX())/zoom;
+							request.getMoveDelta().setX((int)Math.round(delta));
+						}
+					} else {
+						if (Math.abs(newX)>maximumSize.x){
+							double delta = (-maximumSize.x-jrElement.getX())/zoom;
+							request.getMoveDelta().setX((int)Math.round(delta));
+						}
+					}
+					
+					double newY = jrElement.getY() + moveDelta_y;
+					if (newY > 0){
+						if (Math.abs(jrElement.getHeight())+newY>maximumSize.y){
+							double delta = (maximumSize.y - jrElement.getHeight() - jrElement.getY())/zoom;
+							request.getMoveDelta().setY((int)Math.round(delta));
+						}
+					} else {
+						if (Math.abs(newY)>maximumSize.y){
+							double delta = (-maximumSize.y-jrElement.getY())/zoom;
+							request.getMoveDelta().setY((int)Math.round(delta));
+						}
+					}
+				}
+			}
+		}
+
+		return request;
+	}
 };

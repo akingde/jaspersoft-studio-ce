@@ -22,6 +22,7 @@ import org.eclipse.gef.rulers.RulerProvider;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.window.Window;
 
+import com.jaspersoft.studio.editor.gef.rulers.ReportRuler;
 import com.jaspersoft.studio.editor.gef.rulers.component.JDRulerEditPart;
 import com.jaspersoft.studio.editor.gef.rulers.component.JDRulerFigure;
 import com.jaspersoft.studio.messages.Messages;
@@ -60,7 +61,7 @@ public class CreateGuideAction extends Action {
 	public void run() {
 		JDRulerEditPart rulerEditPart = (JDRulerEditPart) viewer.getRootEditPart().getChildren().get(0);
 		RulerProvider provider = rulerEditPart.getRulerProvider();
-
+		ReportRuler ruler = (ReportRuler)provider.getRuler();
 		// Determine where the guide should be created
 		int[] positions = provider.getGuidePositions();
 		Arrays.sort(positions);
@@ -77,7 +78,7 @@ public class CreateGuideAction extends Action {
 		}
 		if (!found && positions.length > 0)
 			newPosition += positions[positions.length - 1];
-		PositionDialog dlg = new PositionDialog(UIUtils.getShell(), newPosition, provider.getUnit());
+		PositionDialog dlg = new PositionDialog(UIUtils.getShell(), newPosition, provider.getUnit(), ruler.isHorizontal());
 		if (dlg.open() == Window.OK){
 			newPosition = dlg.getPixelPosition();
 			JDRulerFigure rf = rulerEditPart.getRulerFigure();

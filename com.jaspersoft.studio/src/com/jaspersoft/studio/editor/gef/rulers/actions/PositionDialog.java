@@ -22,6 +22,7 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
@@ -30,9 +31,14 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.IEditorPart;
 
+import com.jaspersoft.studio.editor.AbstractJRXMLEditor;
 import com.jaspersoft.studio.editor.gef.rulers.component.JDRulerFigure;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.utils.SelectionHelper;
 
 /**
  * Dialog to define or edit the position of ruler guide
@@ -67,6 +73,9 @@ public final class PositionDialog extends Dialog {
 		 */
 		private String lastValidValue;
 		
+		private int maximumPixels;
+		
+		
 		/**
 		 * List of the available measure units
 		 */
@@ -87,10 +96,11 @@ public final class PositionDialog extends Dialog {
 		 * @param measureUnit the current measure unit, it must be one of RulerProvider.UNIT_PIXELS, 
 		 * RulerProvider.UNIT_CENTIMETERS or RulerProvider.UNIT_INCHES
 		 */
-		public PositionDialog(Shell shell, int suggestedPixels, int measureUnit) {
+		public PositionDialog(Shell shell, int suggestedPixels, int measureUnit, boolean isHorizontal) {
 			super(shell);
 			this.measureUnit = measureUnit;
 			this.suggestedPixels = suggestedPixels;
+			maximumPixels = calculateMaximum(isHorizontal);
 		}
 
 		@Override
@@ -111,6 +121,7 @@ public final class PositionDialog extends Dialog {
 			textData.widthHint = 100;
 			valueText.setLayoutData(textData);
 			valueText.setText(convertPixelIntoValue(suggestedPixels));
+			lastValidValue = valueText.getText();
 			valueText.setToolTipText(Messages.CreateGuideAction_GuidePositionTooltip);
 			//Modify listener, if the input text is valid then convert it to the current value
 			//otherwise restore the old text
@@ -118,8 +129,16 @@ public final class PositionDialog extends Dialog {
 				@Override
 				public void modifyText(ModifyEvent e) {
 					try{
-						float value = Float.parseFloat(valueText.getText());
+						float value = Float.parseFloat(valueText.getText().replace(",", "."));
 						suggestedPixels = convertValueIntoPixels(value);
+						if (Math.abs(suggestedPixels)>maximumPixels && maximumPixels != -1){
+							suggestedPixels = maximumPixels;
+							valueText.removeModifyListener(this);
+							Point selection = valueText.getSelection();
+							valueText.setText(convertPixelIntoValue(suggestedPixels));
+							valueText.setSelection(selection);
+							valueText.addModifyListener(this);
+						}
 						lastValidValue = valueText.getText();
 					} catch (Exception ex){
 						valueText.setText(lastValidValue);
@@ -141,7 +160,8 @@ public final class PositionDialog extends Dialog {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
 					measureUnit = RULER_MEASURES[measureCombo.getSelectionIndex()];
-					valueText.setText(convertPixelIntoValue(suggestedPixels));
+					lastValidValue = convertPixelIntoValue(suggestedPixels);
+					valueText.setText(lastValidValue);
 				}
 			});
 			
@@ -193,6 +213,23 @@ public final class PositionDialog extends Dialog {
 			DecimalFormat df = new DecimalFormat("##.####"); //$NON-NLS-1$
 			df.setRoundingMode(RoundingMode.DOWN);
 			return df.format(value);
+		}
+		
+		/**
+		 * Calculate the maximum position for the marker
+		 */
+		protected int calculateMaximum(boolean isHorizontal){
+			IEditorPart editor = SelectionHelper.getActiveJRXMLEditor();
+			int maximum = -1;
+			if (editor != null){
+				AbstractJRXMLEditor jrxmlEditor = (AbstractJRXMLEditor)editor;
+				INode model = jrxmlEditor.getModel();
+				if (model != null && model instanceof ANode){
+					Point canvasSize = ((ANode)model).getAvailableSize();
+					maximum = isHorizontal ? canvasSize.x : canvasSize.y;
+				}
+			}
+			return maximum;
 		}
 
 	}

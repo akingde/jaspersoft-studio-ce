@@ -21,6 +21,7 @@ import org.eclipse.gef.rulers.RulerProvider;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.window.Window;
 
+import com.jaspersoft.studio.editor.gef.rulers.ReportRuler;
 import com.jaspersoft.studio.editor.gef.rulers.component.JDGuideEditPart;
 import com.jaspersoft.studio.editor.gef.rulers.component.JDRulerEditPart;
 import com.jaspersoft.studio.editor.gef.rulers.component.JDRulerFigure;
@@ -63,14 +64,15 @@ public class EditGuideAction extends Action {
 	public void run() {
 		JDRulerEditPart rulerEditPart = (JDRulerEditPart) viewer.getRootEditPart().getChildren().get(0);
 		RulerProvider provider = rulerEditPart.getRulerProvider();
-
+		ReportRuler ruler = (ReportRuler)provider.getRuler();
+		
 		List<?> parts = viewer.getSelectedEditParts();
 		if (!parts.isEmpty() && parts.get(0) instanceof JDGuideEditPart){
 			JDGuideEditPart editedPart = (JDGuideEditPart)parts.get(0);
 			int oldPosition = provider.getGuidePosition(editedPart.getModel());
 			JDRulerFigure rf = rulerEditPart.getRulerFigure();
 			int offest = rf.isHorizontal() ? rf.getHoffset() : rf.getVoffset();
-			PositionDialog dlg = new PositionDialog(UIUtils.getShell(), oldPosition - offest, provider.getUnit());
+			PositionDialog dlg = new PositionDialog(UIUtils.getShell(), oldPosition - offest, provider.getUnit(), ruler.isHorizontal());
 			if (dlg.open() == Window.OK){
 				int newPosition = dlg.getPixelPosition() + offest;
 				// Create the guide and reveal it

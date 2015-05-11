@@ -75,9 +75,16 @@ public class SetConstraintCommand extends Command {
 
 	/** The c band. */
 	private JRDesignBand cBand;
+	
 	protected JRElementGroup jrGroup;
+	
 	private Dimension d;
+	
 	private JRPropertiesHolder[] pholder;
+	
+	private LayoutCommand lCmd;
+	
+	private int oldBandHeight = -1;
 
 	/**
 	 * Sets the context.
@@ -129,16 +136,18 @@ public class SetConstraintCommand extends Command {
 			if (cBand != null){
 				int maxHeight = BandResizeTracker.getMaxBandHeight(cBand, jrDesign);
 				int elementHeight = jrElement.getHeight() + jrElement.getY();
-				if (maxHeight > 1 && elementHeight > cBand.getHeight()){
-					//If the band could increase its size and the element is higher than the bend
+				boolean isBandResizeEnabled = jrConfig.getPropertyBoolean(DesignerPreferencePage.P_RESIZE_CONTAINER, Boolean.TRUE);
+				if (maxHeight > 1 && elementHeight > cBand.getHeight() && isBandResizeEnabled){
+					//If the band could increase its size and the element is higher than the band
 					//reside the element or the band to fit the element. If the band could not increase
 					//leave the element as it is
-					if (elementHeight>maxHeight){
-						jrElement.setHeight(maxHeight-jrElement.getY()-1);
+					oldBandHeight = cBand.getHeight();
+					int elHeight = jrElement.getY() + jrElement.getHeight();
+					//The band can not increase above its maximum
+					elHeight = Math.min(maxHeight, elHeight);
+					if (elHeight > cBand.getHeight()) {
+							cBand.setHeight(elHeight);
 					}
-					
-					
-					if (jrConfig.getPropertyBoolean(DesignerPreferencePage.P_RESIZE_CONTAINER, Boolean.TRUE)) adjustBand();
 				}
 			}
 
@@ -159,17 +168,6 @@ public class SetConstraintCommand extends Command {
 				}
 				lCmd.execute();
 			}
-		}
-	}
-
-	private LayoutCommand lCmd;
-	private int oldBandHeight = -1;
-
-	private void adjustBand() {
-		oldBandHeight = cBand.getHeight();
-		int elHeight = jrElement.getY() + jrElement.getHeight();
-		if (elHeight > cBand.getHeight()) {
-				cBand.setHeight(elHeight);
 		}
 	}
 

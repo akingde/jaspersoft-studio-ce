@@ -108,9 +108,9 @@ public class GroupColumnsAction extends ACreateAction {
 		Collections.sort(fixOrderCommandList);
 		//This commands are executed on the undo, so the list must be reversed
 		Collections.reverse(fixOrderCommandList);
-		c.addAll(fixOrderCommandList);
+		c.addAll((List)fixOrderCommandList);
 		
-		//Add tge commands to move the columns
+		//Add the commands to move the columns
 		c.add(createGroup(index, mparent, mcolgr));
 		for (MColumn src : columns){
 			c.add(new MoveColumnCommand(src, mcolgr, false));

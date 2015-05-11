@@ -12,14 +12,22 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.gef.parts.editPolicy;
 
+import net.sf.jasperreports.engine.design.JRDesignElement;
+
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
+import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
+import org.eclipse.gef.editparts.ZoomManager;
+import org.eclipse.gef.requests.ChangeBoundsRequest;
 import org.eclipse.gef.tools.ResizeTracker;
+import org.eclipse.swt.graphics.Point;
 
 import com.jaspersoft.studio.JSSCompoundCommand;
+import com.jaspersoft.studio.editor.gef.parts.JSSScalableFreeformRootEditPart;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.MGraphicElement;
 
 /**
  * Extends the default resize tracker allowing converting
@@ -31,6 +39,11 @@ import com.jaspersoft.studio.model.ANode;
  *
  */
 public class JSSCompoundResizeTracker extends ResizeTracker {
+
+	/**
+	 * The zoom manager
+	 */
+	private ZoomManager zoomManager;
 
 	public JSSCompoundResizeTracker(GraphicalEditPart owner, int direction) {
 		super(owner, direction);
@@ -74,7 +87,55 @@ public class JSSCompoundResizeTracker extends ResizeTracker {
 			}
 		}
 		return command;
-		
-		
+	}
+	
+	/**
+	 * Return the current level of zoom
+	 */
+	protected double getZoom(){
+		if (zoomManager == null){
+			zoomManager = ((JSSScalableFreeformRootEditPart) getCurrentViewer().getRootEditPart()).getZoomManager();
+		}
+		return zoomManager != null ? zoomManager.getZoom() : 1d;
+	}
+	
+	/**
+	 * When the request is created it check the bounds to avoid the drag 
+	 * of the item too far from the current page
+	 */
+	@Override
+	protected Request getSourceRequest() {
+		ChangeBoundsRequest request = (ChangeBoundsRequest)super.getSourceRequest();
+		if (request.getEditParts() != null && request.getEditParts().size() > 0){
+			ANode node = null;
+			for(Object part : request.getEditParts()){
+				node = (ANode)((EditPart)part).getModel();
+				break;
+			}
+			Point maximumSize = node.getAvailableSize();
+			double zoom = 1/getZoom();
+			double sizeDelta_width = request.getSizeDelta().width*zoom;
+			double sizeDelta_height = request.getSizeDelta().height*zoom;
+			if (sizeDelta_width != 0 || sizeDelta_height != 0){
+				for(Object part : request.getEditParts()){
+					MGraphicElement gElement = (MGraphicElement)((EditPart)part).getModel();
+					JRDesignElement jrElement = (JRDesignElement)gElement.getValue();
+					
+					double newWidth = jrElement.getWidth() + sizeDelta_width;
+					if (Math.abs(jrElement.getX()+newWidth)>maximumSize.x){
+						double delta = (maximumSize.x - jrElement.getWidth() - jrElement.getX())/zoom;
+						request.getSizeDelta().setWidth((int)Math.round(delta));
+					}
+					
+					double newHeight = jrElement.getHeight() + sizeDelta_height;
+					if (Math.abs(jrElement.getY() + newHeight)>maximumSize.y){
+						double delta = (maximumSize.y - jrElement.getHeight() - jrElement.getY())/zoom;
+						request.getSizeDelta().setHeight((int)Math.round(delta));
+					}
+				}
+			}
+		}
+
+		return request;
 	}
 }

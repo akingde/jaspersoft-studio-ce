@@ -68,6 +68,8 @@ import com.jaspersoft.studio.property.descriptor.propexpr.JPropertyExpressionsDe
 import com.jaspersoft.studio.property.descriptor.propexpr.PropertyExpressionDTO;
 import com.jaspersoft.studio.property.descriptor.propexpr.PropertyExpressionsDTO;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.AbstractJSSCellEditorValidator;
+import com.jaspersoft.studio.property.descriptors.JSSPixelEditorValidator;
 import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.PixelPropertyDescriptor;
 import com.jaspersoft.studio.utils.AlfaRGB;
@@ -78,10 +80,18 @@ import com.jaspersoft.studio.utils.ModelUtils;
 /*
  * The Class MGeneric.
  */
-public class MGraphicElement extends APropertyNode implements IGraphicElement, ICopyable, IGuidebleElement, IDragable,
-		IGraphicalPropertiesHandler {
+public class MGraphicElement extends APropertyNode implements IGraphicElement, ICopyable, IGuidebleElement, IDragable,IGraphicalPropertiesHandler {
+	
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+	
 	private ReportRulerGuide verticalGuide, horizontalGuide;
+	
+	/**
+	 * Validators for the element size and position. they avoid to provide 
+	 * a negative value for the size of an element and a position too far 
+	 * from the editor
+	 */
+	private List<AbstractJSSCellEditorValidator> positionValidators = new ArrayList<AbstractJSSCellEditorValidator>();
 
 	/**
 	 * Special propery id to force the refresh of the graphic element
@@ -334,6 +344,9 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 				setGroupItems(items);
 			}
 		}
+		for(AbstractJSSCellEditorValidator validator : positionValidators){
+			validator.setTargetNode(this);
+		}
 	}
 
 	/**
@@ -393,27 +406,42 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		desc.add(keyD);
 
 		// bounds
-		PixelPropertyDescriptor heightD = new PixelPropertyDescriptor(JRDesignElement.PROPERTY_HEIGHT,
-				Messages.common_height);
+		JSSPixelEditorValidator heightValidator = new JSSPixelEditorValidator(JRDesignElement.PROPERTY_HEIGHT);
+		heightValidator.setTargetNode(this);
+		PixelPropertyDescriptor heightD = new PixelPropertyDescriptor(JRDesignElement.PROPERTY_HEIGHT,Messages.common_height);
 		heightD.setCategory(Messages.common_size);
 		heightD.setDescription(Messages.MGraphicElement_height_description);
+		heightD.setValidator(heightValidator);
 		desc.add(heightD);
+		positionValidators.add(heightValidator);
 
-		PixelPropertyDescriptor widthD = new PixelPropertyDescriptor(JRBaseElement.PROPERTY_WIDTH,
-				Messages.MGraphicElement_width);
+		JSSPixelEditorValidator widthValidator = new JSSPixelEditorValidator(JRDesignElement.PROPERTY_WIDTH);
+		widthValidator.setTargetNode(this);
+		PixelPropertyDescriptor widthD = new PixelPropertyDescriptor(JRBaseElement.PROPERTY_WIDTH,Messages.MGraphicElement_width);
 		widthD.setCategory(Messages.common_size);
 		widthD.setDescription(Messages.MGraphicElement_width_description);
+		widthD.setValidator(widthValidator);
 		desc.add(widthD);
+		positionValidators.add(widthValidator);
 
+		JSSPixelEditorValidator xValidator = new JSSPixelEditorValidator(JRBaseElement.PROPERTY_X);
+		xValidator.setTargetNode(this);
 		PixelPropertyDescriptor xD = new PixelPropertyDescriptor(JRBaseElement.PROPERTY_X, Messages.common_left);
 		xD.setCategory(Messages.MGraphicElement_location_category);
 		xD.setDescription(Messages.MGraphicElement_left_description);
+		xD.setValidator(xValidator);
 		desc.add(xD);
+		positionValidators.add(xValidator);
 
+		JSSPixelEditorValidator yValidator = new JSSPixelEditorValidator(JRDesignElement.PROPERTY_Y);
+		yValidator.setTargetNode(this);
 		PixelPropertyDescriptor yD = new PixelPropertyDescriptor(JRDesignElement.PROPERTY_Y, Messages.common_top);
 		yD.setCategory(Messages.MGraphicElement_location_category);
 		yD.setDescription(Messages.MGraphicElement_top_description);
+		yD.setValidator(yValidator);
 		desc.add(yD);
+		positionValidators.add(yValidator);
+		
 		// colors
 		ColorPropertyDescriptor backcolorD = new ColorPropertyDescriptor(JRBaseStyle.PROPERTY_BACKCOLOR,
 				Messages.common_backcolor, NullEnum.INHERITED);

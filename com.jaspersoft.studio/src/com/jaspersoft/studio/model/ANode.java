@@ -30,6 +30,7 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.Point;
 
 import com.jaspersoft.studio.callout.CalloutEditPart;
 import com.jaspersoft.studio.callout.pin.PinEditPart;
@@ -665,5 +666,18 @@ public abstract class ANode implements INode, Serializable, IAdaptable, Cloneabl
 			redoValidation = false;
 		}
 		return validationErrors;
+	}
+	
+	/**
+	 * Return the size available for the placement of elements, it depends from the page
+	 * size
+	 * 
+	 * @return the space available outside the page. By default it is fourtime the page size
+	 */
+	public Point getAvailableSize(){
+		JasperDesign jd = getJasperDesign();
+		int w = jd.getPageWidth() + 20;
+		int h = jd.getPageHeight() + 20;
+		return new Point(w*4, h*4);
 	}
 }

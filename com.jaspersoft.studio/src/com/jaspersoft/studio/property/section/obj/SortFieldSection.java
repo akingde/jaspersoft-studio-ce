@@ -54,7 +54,8 @@ public class SortFieldSection extends AbstractSection {
 		return result;
 	}
 
-	protected Command getChangePropertyCommand(Object property, Object newValue, APropertyNode n) {
+	@Override
+	public Command getChangePropertyCommand(Object property, Object newValue, APropertyNode n) {
 		if (property.equals(JRDesignSortField.PROPERTY_TYPE)) {
 			// reopen the wizard to select an unique name
 			return new ChangeSortFieldTypeCommand((MSortFields) n.getParent(), (MSortField) n);

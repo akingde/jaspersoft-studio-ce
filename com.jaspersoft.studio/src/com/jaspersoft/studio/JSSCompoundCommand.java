@@ -295,8 +295,7 @@ public class JSSCompoundCommand extends CompoundCommand {
 	 * @param command command to add
 	 */
 	public void addFirst(Command command){
-		@SuppressWarnings("unchecked")
-		List<Object> commands = getCommands();
+		List<Command> commands = getCommands();
 		commands.add(0, command);
 	}
 	
@@ -305,9 +304,17 @@ public class JSSCompoundCommand extends CompoundCommand {
 	 * 
 	 * @param commands not null list of commands to add
 	 */
-	@SuppressWarnings("unchecked")
-	public void addAll(List<?> commands){
+	public void addAll(List<Command> commands){
 		getCommands().addAll(commands);
+	}
+	
+	/**
+	 * Return a list of the internal commands
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Command> getCommands() {
+		return (List<Command>)super.getCommands();
 	}
 }
 

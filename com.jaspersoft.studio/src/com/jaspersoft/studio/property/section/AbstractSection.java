@@ -322,6 +322,43 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 		}
 		return false;
 	}
+	
+	/**
+	 * Run in the stack of the current domain the passed command
+	 */
+	public boolean runCommand(JSSCompoundCommand cc){
+		if (!isRefreshing() && getEditDomain() != null) {
+			CommandStack cs = getEditDomain().getCommandStack();
+			if (!cc.getCommands().isEmpty()) {
+				cs.execute(cc);
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean changePropertyOn(Object property, Object newValue, List<APropertyNode> nodes, List<Command> commands) {
+		if (!isRefreshing() && nodes != null && !nodes.isEmpty() && getEditDomain() != null) {
+			CommandStack cs = getEditDomain().getCommandStack();
+			JSSCompoundCommand cc = new JSSCompoundCommand("Set " + property, null);
+			for (APropertyNode n : nodes) {
+				cc.setReferenceNodeIfNull(n);
+				if (isChanged(property, newValue, n)) {
+					Command c = getChangePropertyCommand(property, newValue, n);
+					if (c != null)
+						cc.add(c);
+				}
+			}
+			if (!cc.getCommands().isEmpty()) {
+				if (commands != null)
+					for (Command c : commands)
+						cc.add(c);
+				cs.execute(cc);
+				return true;
+			}
+		}
+		return false;
+	}
 
 	public void changePropertyOn(Object property, Object newValue, APropertyNode n) {
 		changePropertyOn(property, newValue, n, null);
@@ -355,7 +392,7 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 
 	}
 
-	protected Command getChangePropertyCommand(Object property, Object newValue, APropertyNode n) {
+	public Command getChangePropertyCommand(Object property, Object newValue, APropertyNode n) {
 		if (isChanged(property, newValue, n)) {
 			SetValueCommand setCommand = new SetValueCommand(n.getDisplayText());
 			setCommand.setTarget(n);
