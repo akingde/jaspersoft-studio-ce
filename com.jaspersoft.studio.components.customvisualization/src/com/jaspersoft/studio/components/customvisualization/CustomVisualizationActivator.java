@@ -79,10 +79,11 @@ public class CustomVisualizationActivator extends AbstractJRUIPlugin {
 				pathToRequireJs = pathToRequireJs.substring(1);
 			}
 			// On windows, Phantomjs does not seem to like to the "file:/" , so we avoid to add it on this specific platform.
-			if (!Util.isWindows())
-			{
-				pathToRequireJs = "file:/" + pathToRequireJs;
-			}
+			// With PhantomJS 2.0, also in windows is necessary to use the file:/ syntax!
+			//if (!Util.isWindows())
+			//{
+			pathToRequireJs = "file:/" + pathToRequireJs;
+			//}
 			
 			// We store the property only in the JasperReports property store, so the property can be actually changed by the user.
 			// The plugin will not override existing keys.
