@@ -30,7 +30,9 @@ import org.eclipse.draw2d.LayoutManager;
 import org.eclipse.draw2d.LineBorder;
 import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditPolicy;
+import org.eclipse.gef.Request;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.gef.figures.ImageFigure;
@@ -172,6 +174,25 @@ public class StyleEditPart extends FigureEditPart {
 	@Override
 	protected void createEditPolicies() {
 		installEditPolicy(EditPolicy.COMPONENT_ROLE, new ElementEditPolicy());
+	}
+	
+	/**
+	 * The StyleEditPart are not draggable
+	 */
+	@Override
+	public DragTracker getDragTracker(Request request) {
+		return new org.eclipse.gef.tools.DragEditPartsTracker(this){
+			
+			@Override
+			protected void showSourceFeedback() {
+			}
+			
+			
+			@Override
+			protected void showTargetFeedback() {
+				super.showTargetFeedback();
+			}
+		};
 	}
 
 }
