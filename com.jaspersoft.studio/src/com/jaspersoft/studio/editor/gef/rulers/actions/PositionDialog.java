@@ -73,6 +73,9 @@ public final class PositionDialog extends Dialog {
 		 */
 		private String lastValidValue;
 		
+		/**
+		 * The maximum number of pixels allowed in the current editor
+		 */
 		private int maximumPixels;
 		
 		
@@ -85,8 +88,8 @@ public final class PositionDialog extends Dialog {
 		 * List of the name of the measure units, it match 1:1 the RULER_MEASURES list
 		 */
 		private static final String[] RULER_NAMES = new String[]{Messages.DesignerPreferencePage_pixelMeasure,
-																														 Messages.DesignerPreferencePage_centimeterMeasure,
-																														 Messages.DesignerPreferencePage_inchMeasure};
+																 															Messages.DesignerPreferencePage_centimeterMeasure	,
+																 															Messages.DesignerPreferencePage_inchMeasure};
 
 		/**
 		 * Create the dialog 
@@ -95,6 +98,7 @@ public final class PositionDialog extends Dialog {
 		 * @param suggestedPixels the initial value in pixels
 		 * @param measureUnit the current measure unit, it must be one of RulerProvider.UNIT_PIXELS, 
 		 * RulerProvider.UNIT_CENTIMETERS or RulerProvider.UNIT_INCHES
+		 * @param isHorizontal true if the ruler is horizontal, false if it is vertical
 		 */
 		public PositionDialog(Shell shell, int suggestedPixels, int measureUnit, boolean isHorizontal) {
 			super(shell);
