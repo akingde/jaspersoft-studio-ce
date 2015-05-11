@@ -82,7 +82,7 @@ public class DataAdapterWizardDialog extends WizardDialog {
 	 */
 	private boolean isTestVisible() {
 		boolean isTestVisible = false;
-		if (getWizard() instanceof DataAdapterWizard && getCurrentPage() instanceof DataAdapterEditorPage) {
+		if (getWizard() instanceof AbstractDataAdapterWizard && getCurrentPage() instanceof DataAdapterEditorPage) {
 			DataAdapterDescriptor dataAdapterDesc = ((DataAdapterEditorPage) getCurrentPage()).getDataAdapter();
 			isTestVisible = (dataAdapterDesc != null) ? dataAdapterDesc.doSupportTest() : false;
 		}
