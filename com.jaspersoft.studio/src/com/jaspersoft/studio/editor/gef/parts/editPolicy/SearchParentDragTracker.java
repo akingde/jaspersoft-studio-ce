@@ -25,6 +25,7 @@ import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.AutoexposeHelper;
 import org.eclipse.gef.EditPart;
+import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
@@ -477,7 +478,12 @@ public class SearchParentDragTracker extends DragEditPartsTracker {
 	 */
 	protected double getZoom(){
 		if (zoomManager == null){
-			zoomManager = ((JSSScalableFreeformRootEditPart) getCurrentViewer().getRootEditPart()).getZoomManager();
+			EditPartViewer viewer = getCurrentViewer();
+			zoomManager = (ZoomManager)viewer.getProperty(ZoomManager.class.toString());
+			if (zoomManager == null){
+				//fallback
+				zoomManager = ((JSSScalableFreeformRootEditPart) viewer.getRootEditPart()).getZoomManager();
+			}
 		}
 		return zoomManager != null ? zoomManager.getZoom() : 1d;
 	}

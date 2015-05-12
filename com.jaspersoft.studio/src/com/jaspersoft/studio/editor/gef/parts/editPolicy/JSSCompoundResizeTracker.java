@@ -15,6 +15,7 @@ package com.jaspersoft.studio.editor.gef.parts.editPolicy;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 
 import org.eclipse.gef.EditPart;
+import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
@@ -94,7 +95,12 @@ public class JSSCompoundResizeTracker extends ResizeTracker {
 	 */
 	protected double getZoom(){
 		if (zoomManager == null){
-			zoomManager = ((JSSScalableFreeformRootEditPart) getCurrentViewer().getRootEditPart()).getZoomManager();
+			EditPartViewer viewer = getCurrentViewer();
+			zoomManager = (ZoomManager)viewer.getProperty(ZoomManager.class.toString());
+			if (zoomManager == null){
+				//fallback
+				zoomManager = ((JSSScalableFreeformRootEditPart) viewer.getRootEditPart()).getZoomManager();
+			}
 		}
 		return zoomManager != null ? zoomManager.getZoom() : 1d;
 	}

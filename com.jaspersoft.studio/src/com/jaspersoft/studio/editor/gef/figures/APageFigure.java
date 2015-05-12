@@ -19,6 +19,7 @@ import org.eclipse.draw2d.Viewport;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.handles.HandleBounds;
 import org.eclipse.wb.swt.SWTResourceManager;
@@ -201,10 +202,16 @@ public abstract class APageFigure extends FreeformLayeredPane implements HandleB
 	 */
 	protected double getZoom(){
 		if (zoomManager == null){
-			zoomManager = ((JSSScalableFreeformRootEditPart) page.getViewer().getRootEditPart()).getZoomManager();
+			EditPartViewer viewer = page.getViewer();
+			zoomManager = (ZoomManager)viewer.getProperty(ZoomManager.class.toString());
+			if (zoomManager == null){
+				//fallback
+				zoomManager = ((JSSScalableFreeformRootEditPart) viewer.getRootEditPart()).getZoomManager();
+			}
 		}
-		return zoomManager != null ? zoomManager.getZoom() : 0d;
+		return zoomManager != null ? zoomManager.getZoom() : 1d;
 	}
+	
 	
 	/**
 	 * Check if a figure intersect the current visible area
