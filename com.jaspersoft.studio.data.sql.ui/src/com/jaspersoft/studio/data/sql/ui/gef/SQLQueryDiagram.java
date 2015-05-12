@@ -185,10 +185,13 @@ public class SQLQueryDiagram {
 						menu.remove(c);
 					}
 				}
-				menu.add(new LayoutAction(designer));
-				menu.add(new org.eclipse.jface.action.Separator());
-				menu.add(new ZoomInAction(zoomManager));
-				menu.add(new ZoomOutAction(zoomManager));
+				LayoutAction action = new LayoutAction(designer);
+				if (action.isEnabled()) {
+					menu.add(action);
+					menu.add(new org.eclipse.jface.action.Separator());
+					menu.add(new ZoomInAction(zoomManager));
+					menu.add(new ZoomOutAction(zoomManager));
+				}
 			}
 		});
 		viewer.addDropTargetListener(new QueryDesignerDropTargetListener(

@@ -15,6 +15,7 @@ package com.jaspersoft.studio.data.sql.action;
 import org.eclipse.jface.action.Action;
 
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
+import com.jaspersoft.studio.data.sql.messages.Messages;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.util.ModelVisitor;
@@ -23,8 +24,29 @@ public class LayoutAction extends Action {
 	private SQLQueryDesigner designer;
 
 	public LayoutAction(SQLQueryDesigner designer) {
-		super("&Layout Tables");
+		super(Messages.LayoutAction_0);
 		this.designer = designer;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		boolean b = super.isEnabled();
+		if (b) {
+			Boolean exists = new ModelVisitor<Boolean>(designer.getRoot()) {
+
+				@Override
+				public boolean visit(INode n) {
+					if (n instanceof MFromTable) {
+						setObject(Boolean.TRUE);
+						stop();
+					}
+					return true;
+				}
+
+			}.getObject();
+			return exists != null && exists;
+		}
+		return b;
 	}
 
 	@Override
