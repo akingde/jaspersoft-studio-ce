@@ -32,6 +32,7 @@ import com.jaspersoft.studio.data.sql.model.query.orderby.MOrderBy;
 import com.jaspersoft.studio.data.sql.model.query.orderby.MOrderByColumn;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelect;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelectColumn;
+import com.jaspersoft.studio.data.sql.model.query.subquery.MQueryTable;
 import com.jaspersoft.studio.data.sql.prefs.SQLEditorPreferencesPage;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
@@ -110,8 +111,10 @@ public class DeleteCommand extends Command {
 	}
 
 	protected void doDeleteMore(ANode parent, MFromTable todel) {
-		if (parent instanceof MFrom && parent.getParent() != null
-				&& parent.getParent() instanceof ISubQuery
+		if (parent instanceof MFrom
+				&& parent.getParent() != null
+				&& (parent.getParent() instanceof ISubQuery || parent
+						.getParent().getValue() instanceof MQueryTable)
 				&& parent.getChildren().size() <= 1
 				&& parent.getChildren().get(0) == todel) {
 			dropColumns(parent.getParent(), todel);

@@ -35,12 +35,14 @@ import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.utils.Misc;
 
 public class ConvertTables {
-	public static void convertTables(SQLQueryDesigner designer, ANode qroot, OrTable tbls) {
+	public static void convertTables(SQLQueryDesigner designer, ANode qroot,
+			OrTable tbls) {
 		try {
 			if (tbls == null)
 				return;
 			if (tbls instanceof FromTable)
-				doTables(designer, Util.getKeyword(qroot, MFrom.class), (FromTable) tbls);
+				doTables(designer, Util.getKeyword(qroot, MFrom.class),
+						(FromTable) tbls);
 			else if (tbls instanceof OrTableImpl) {
 				MFrom mfrom = Util.getKeyword(qroot, MFrom.class);
 				for (FromTable ftbl : tbls.getEntries())
@@ -51,9 +53,10 @@ public class ConvertTables {
 		}
 	}
 
-	private static void doTables(SQLQueryDesigner designer, MFrom mfrom, FromTable ftbl) {
+	private static void doTables(SQLQueryDesigner designer, MFrom mfrom,
+			FromTable ftbl) {
 		TableOrAlias t = ftbl.getTable();
-		if (t != null && t.getTfull() != null) {
+		if (t != null) {
 			MFromTable mft = getFromTable(t, mfrom, designer);
 			if (t.getTblAlias() != null)
 				mft.setAlias(t.getTblAlias().getDbname());
@@ -68,20 +71,23 @@ public class ConvertTables {
 					mftj.setJoin(ftj.getJoin());
 					mftj.setAliasKeyword(Misc.nvl(onTbl.getAlias(), " "));
 
-					ConvertExpression.convertExpression(designer, mfrom.getParent(), mftj, ftj.getJoinExpr());
+					ConvertExpression.convertExpression(designer,
+							mfrom.getParent(), mftj, ftj.getJoinExpr());
 				}
 			}
 		}
 	}
 
-	private static MFromTableJoin getFromTableJoin(TableOrAlias t, MFromTable mfrom, SQLQueryDesigner designer) {
+	private static MFromTableJoin getFromTableJoin(TableOrAlias t,
+			MFromTable mfrom, SQLQueryDesigner designer) {
 		MFromTableJoin mft = null;
 		if (t.getSq() != null) {
 			MQueryTable mqt = new MQueryTable(null);
 			mft = new MFromTableJoin(mfrom, mqt);
 			mqt.setSubquery(Util.createSelect(mft));
-			Text2Model.convertSelect(designer, mft, (SelectImpl) t.getSq().getSel());
-		} else {
+			Text2Model.convertSelect(designer, mft, (SelectImpl) t.getSq()
+					.getSel());
+		} else if (t.getTfull() != null) {
 			MRoot dbroot = designer.getDbMetadata().getRoot();
 			MSqlTable msqlt = getTable(dbroot, t.getTfull(), designer);
 			mft = new MFromTableJoin(mfrom, msqlt);
@@ -89,14 +95,16 @@ public class ConvertTables {
 		return mft;
 	}
 
-	private static MFromTable getFromTable(TableOrAlias t, MFrom mfrom, SQLQueryDesigner designer) {
+	private static MFromTable getFromTable(TableOrAlias t, MFrom mfrom,
+			SQLQueryDesigner designer) {
 		MFromTable mft = null;
 		if (t.getSq() != null) {
 			MQueryTable mqt = new MQueryTable(null);
 			mft = new MFromTable(mfrom, mqt);
 			mqt.setSubquery(Util.createSelect(mft));
-			Text2Model.convertSelect(designer, mft, (SelectImpl) t.getSq().getSel());
-		} else {
+			Text2Model.convertSelect(designer, mft, (SelectImpl) t.getSq()
+					.getSel());
+		} else if (t.getTfull() != null) {
 			MRoot dbroot = designer.getDbMetadata().getRoot();
 			MSqlTable msqlt = getTable(dbroot, t.getTfull(), designer);
 			mft = new MFromTable(mfrom, msqlt);
@@ -104,16 +112,19 @@ public class ConvertTables {
 		return mft;
 	}
 
-	private static MSqlTable getTable(MRoot dbroot, TableFull tf, SQLQueryDesigner designer) {
+	private static MSqlTable getTable(MRoot dbroot, TableFull tf,
+			SQLQueryDesigner designer) {
 		EList<EObject> eContents = tf.eContents();
 		String table = ConvertUtil.getDbObjectName(eContents, 1);
 		String schema = ConvertUtil.getDbObjectName(eContents, 2);
 		if (tf instanceof DbObjectNameImpl)
 			table = ((DbObjectNameImpl) tf).getDbname();
 		// String catalog = getDbObjectName(eContents, 3);
-		MSqlTable msqlt = ConvertUtil.findTable(dbroot, schema, table, designer);
+		MSqlTable msqlt = ConvertUtil
+				.findTable(dbroot, schema, table, designer);
 		if (msqlt == null)
-			msqlt = ConvertUtil.getTableUnknown(dbroot, schema, table, designer);
+			msqlt = ConvertUtil
+					.getTableUnknown(dbroot, schema, table, designer);
 		return msqlt;
 	}
 
