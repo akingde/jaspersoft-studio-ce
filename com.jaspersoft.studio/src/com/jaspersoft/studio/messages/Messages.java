@@ -247,6 +247,7 @@ public class Messages extends NLS {
 	public static String CategoriesPage_typeLabel;
 	public static String CenterInParentAction_actionDescription;
 	public static String CenterInParentAction_actionName;
+	public static String CheckedRunnableWithProgress_GenericAbortMessage;
 	public static String ClasspathComponent_1;
 	public static String ClassTypeCellEditor_dialog_message;
 	public static String ClassTypeCellEditor_open_type;

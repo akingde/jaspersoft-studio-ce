@@ -130,6 +130,7 @@ public abstract class AbstractDataAdapterWizard extends JSSWizard implements Sel
 	public void widgetSelected(SelectionEvent e) {
 		if (getContainer().getCurrentPage() == dataAdapterEditorPage) {
 			final DataAdapter da = dataAdapterEditorPage.getDataAdapterEditor().getDataAdapter().getDataAdapter();
+			getWizardDialog().setTestButtonEnabled(false);
 			try {
 				getContainer().run(true, true, new CheckedRunnableWithProgress() {
 					
@@ -176,17 +177,20 @@ public abstract class AbstractDataAdapterWizard extends JSSWizard implements Sel
 					}
 					
 					@Override
-					protected void abortOperationInvoked() {
+					protected void abortOperationInvoked() throws InterruptedException {
 						if(daService!=null) {
 							daService.dispose();
+							daService = null;
 						}
+						super.abortOperationInvoked();
 					}
 				});
-				
 			} catch (InvocationTargetException e1) {
 				UIUtils.showError(e1.getCause());
 			} catch (InterruptedException e1) {
 				UIUtils.showError(e1);
+			} finally {
+				getWizardDialog().setTestButtonEnabled(true);
 			}
 		}
 	}
