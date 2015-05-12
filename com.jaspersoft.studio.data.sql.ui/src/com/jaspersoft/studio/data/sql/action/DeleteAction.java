@@ -72,7 +72,9 @@ public class DeleteAction<T extends ANode> extends AMultiSelectionAction {
 				mfrom = (ANode) ftbl.getParent();
 			indx = mfrom.getChildren().indexOf(ftbl);
 			mfrom.removeChild(ftbl);
-			doDeleteMore(mfrom, ftbl);
+
+			doDeleteMore(mfrom, type.isAssignableFrom(ftbl.getClass()) ? ftbl
+					: null);
 		}
 		ANode toSelect = mfrom;
 		if (indx - 1 > 0)

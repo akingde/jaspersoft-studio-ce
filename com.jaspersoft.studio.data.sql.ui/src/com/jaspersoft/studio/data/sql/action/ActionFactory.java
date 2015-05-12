@@ -106,6 +106,12 @@ public class ActionFactory {
 				}
 				return b;
 			}
+
+			@Override
+			protected void doDeleteMore(ANode parent, MQueryTable todel) {
+				if (parent.getValue() instanceof MQueryTable)
+					parent.setParent(null, -1);
+			}
 		});
 		actions.add(null);
 
