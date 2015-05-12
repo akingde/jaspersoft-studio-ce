@@ -169,7 +169,7 @@ public class MLinePen extends APropertyNode implements IPropertySource {
 			if (id.equals(JRBasePen.PROPERTY_LINE_WIDTH)) {
 				Float lineWidth = (Float) value;
 				if (lineWidth.floatValue() >= 0)
-					linePen.setLineWidth(lineWidth);
+					linePen.setLineWidth(Math.abs(lineWidth));
 			} else if (id.equals(JRBasePen.PROPERTY_LINE_COLOR)) {
 				if (value == null)
 					linePen.setLineColor(null);
