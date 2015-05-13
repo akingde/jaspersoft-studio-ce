@@ -35,6 +35,7 @@ import net.sf.jasperreports.engine.util.xml.JRXPathExecuterUtils;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.xerces.util.DOMUtil;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
@@ -141,7 +142,7 @@ public class XMLDataAdapterDescriptor extends DataAdapterDescriptor implements
 		LinkedHashMap<String, JRDesignField> fieldsMap = new LinkedHashMap<String, JRDesignField>();
 		for (int nIdx = 0; nIdx < nodes.getLength(); nIdx++) {
 			Node currNode = nodes.item(nIdx);
-			if(considerEmptyNodes || StringUtils.isNotBlank(currNode.getTextContent())) {
+			if(considerEmptyNodes || StringUtils.isNotBlank(DOMUtil.getChildText(currNode))) {
 				addMainNodeField(fieldsMap, currNode);
 			}
 			findDirectChildrenAttributes(currNode, fieldsMap, "");
@@ -189,7 +190,7 @@ public class XMLDataAdapterDescriptor extends DataAdapterDescriptor implements
 						findDirectChildrenAttributes(item, fieldsMap, prefix
 								+ nodeName + "/");
 					}
-					if(considerEmptyNodes || StringUtils.isNotBlank(item.getTextContent())) {
+					if(considerEmptyNodes || StringUtils.isNotBlank(DOMUtil.getChildText(item))) {
 						addNewField(nodeName, fieldsMap, item, prefix);
 					}
 					if (recursiveFind && item.hasChildNodes()) {
