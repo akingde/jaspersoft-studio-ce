@@ -136,7 +136,12 @@ public class MRectangle extends MGraphicElementLinePen {
 		if (id.equals(JRBaseStyle.PROPERTY_FILL))
 			jrElement.setFill(fillD.getEnumValue(value));
 		else if (id.equals(JRBaseStyle.PROPERTY_RADIUS)) {
-			jrElement.setRadius(value != null ? ((Integer) value).intValue() : 0);
+			Integer intv = (Integer) value;
+			if (intv != null)
+				intv = Math.abs(intv.intValue());
+			else
+				intv = 0;
+			jrElement.setRadius(intv);
 
 		} else
 			super.setPropertyValue(id, value);
