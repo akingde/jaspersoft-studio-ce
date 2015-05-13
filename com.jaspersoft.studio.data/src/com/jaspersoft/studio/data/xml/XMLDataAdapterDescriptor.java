@@ -160,10 +160,12 @@ public class XMLDataAdapterDescriptor extends DataAdapterDescriptor implements
 	private void findDirectChildrenAttributes(Node node,
 			LinkedHashMap<String, JRDesignField> fieldsMap, String prefix) {
 		NamedNodeMap attributes = node.getAttributes();
-		for (int i = 0; i < attributes.getLength(); i++) {
-			Node item = attributes.item(i);
-			if (item.getNodeType() == Node.ATTRIBUTE_NODE) {
-				addNewField(item.getNodeName(), fieldsMap, item, prefix);
+		if(attributes!=null){
+			for (int i = 0; i < attributes.getLength(); i++) {
+				Node item = attributes.item(i);
+				if (item.getNodeType() == Node.ATTRIBUTE_NODE) {
+					addNewField(item.getNodeName(), fieldsMap, item, prefix);
+				}
 			}
 		}
 	}
