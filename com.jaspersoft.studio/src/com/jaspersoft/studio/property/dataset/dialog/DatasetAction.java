@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.property.dataset.dialog;
 
@@ -38,6 +34,7 @@ import com.jaspersoft.studio.utils.SelectionHelper;
 
 public class DatasetAction extends SelectionAction {
 	public static final String ID = "datasetAction"; //$NON-NLS-1$
+	private IWorkbenchPart part;
 
 	/**
 	 * Constructor
@@ -48,6 +45,7 @@ public class DatasetAction extends SelectionAction {
 	public DatasetAction(IWorkbenchPart part) {
 		super(part);
 		setLazyEnablementCalculation(false);
+		this.part = part;
 	}
 
 	/**
@@ -72,14 +70,23 @@ public class DatasetAction extends SelectionAction {
 		if (dialogExists)
 			return;
 		dialogExists = true;
+		IEditorPart editor = part.getSite().getPage().getActiveEditor();
+		boolean old = true;
 		try {
 			MDataset mdataset = getMDatasetToShow();
-			if (mdataset != null)
+			if (mdataset != null) {
+				if (editor instanceof AbstractJRXMLEditor) {
+					old = ((AbstractJRXMLEditor) editor).isPartActivated();
+					((AbstractJRXMLEditor) editor).setPartActivated(false);
+				}
 				new DatasetDialog(UIUtils.getShell(), mdataset, mdataset.getJasperConfiguration(), getCommandStack()).open();
+			}
 		} catch (Exception e) {
 			UIUtils.showError(Messages.DatasetAction_ErrorMsg, e);
 		} finally {
 			dialogExists = false;
+			if (editor instanceof AbstractJRXMLEditor)
+				((AbstractJRXMLEditor) editor).setPartActivated(old);
 		}
 	}
 
@@ -88,12 +95,12 @@ public class DatasetAction extends SelectionAction {
 	 */
 	protected MDataset getMDatasetToShow() {
 		final AbstractVisualEditor part = (AbstractVisualEditor) getWorkbenchPart();
-		//Reinitialize the outline if disposed
+		// Reinitialize the outline if disposed
 		part.getAdapter(IContentOutlinePage.class);
-		//Get the selection from the outline view, since they are synchronized it the same of the editor
-		ISelection selection = 	part.getOutlineSelection();
-		//If it is empty (for example outline closed) fallback
-		if (selection.isEmpty()){
+		// Get the selection from the outline view, since they are synchronized it the same of the editor
+		ISelection selection = part.getOutlineSelection();
+		// If it is empty (for example outline closed) fallback
+		if (selection.isEmpty()) {
 			selection = getSelection();
 		}
 

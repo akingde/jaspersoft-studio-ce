@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.utils;
 
@@ -81,18 +77,18 @@ public class SelectionHelper {
 		ANode node = ((MReport) root.getChildren().get(0)).getNode(jrElement);
 		return node;
 	}
-	
+
 	/**
 	 * Extract from the current jrxml editor the background edit part and return it
 	 * 
-	 * @return a background edit part from the current editor if it was found, or null 
-	 * if the editor or the part are not found
+	 * @return a background edit part from the current editor if it was found, or null if the editor or the part are not
+	 *         found
 	 */
-	public static EditPart getBackgroundEditPart(){
+	public static EditPart getBackgroundEditPart() {
 		JrxmlEditor jrxmlEditor = (JrxmlEditor) getActiveJRXMLEditor();
-		if (jrxmlEditor != null){
+		if (jrxmlEditor != null) {
 			MRoot root = (MRoot) jrxmlEditor.getModel();
-			for(INode node : ((MReport) root.getChildren().get(0)).getChildren()){
+			for (INode node : ((MReport) root.getChildren().get(0)).getChildren()) {
 				if (node instanceof MBackgrounImage) {
 					return ((MBackgrounImage) node).getFigureEditPart();
 				}
@@ -170,43 +166,40 @@ public class SelectionHelper {
 		}
 
 	}
-	
+
 	/**
-	 * Select the background edit part, if available, otherwise it 
-	 * dosen't nothing. The background must be visible otherwise it dosen't
-	 * do nothing
+	 * Select the background edit part, if available, otherwise it dosen't nothing. The background must be visible
+	 * otherwise it dosen't do nothing
 	 */
 	public static void setBackgroundSelected() {
 		EditPart ep = getBackgroundEditPart();
-		if (ep != null && ((GraphicalEditPart)ep).getFigure().isVisible()) {
+		if (ep != null && ((GraphicalEditPart) ep).getFigure().isVisible()) {
 			// The selection is set only if the refresh is enabled
 			ep.getViewer().deselectAll();
 			ep.getViewer().select(ep);
 		}
 	}
-	
+
 	/**
-	 * Deselect the background edit part, if available, otherwise it 
-	 * dosen't nothing.
+	 * Deselect the background edit part, if available, otherwise it dosen't nothing.
 	 */
-	public static void deselectBackground(){
+	public static void deselectBackground() {
 		EditPart ep = getBackgroundEditPart();
-		if (ep != null){
+		if (ep != null) {
 			ep.getViewer().deselect(ep);
 		}
 	}
-	
+
 	/**
 	 * Check if the background in the current editor is in edit mode
 	 * 
-	 * @return true if the background in the current editor is editable,
-	 * false otherwise. If the background or the editor are not found it
-	 * return false
+	 * @return true if the background in the current editor is editable, false otherwise. If the background or the editor
+	 *         are not found it return false
 	 */
-	public static boolean isBackgroundEditable(){
+	public static boolean isBackgroundEditable() {
 		IEditorPart currentEditor = getActiveJRXMLEditor();
-		if (currentEditor instanceof JrxmlEditor){
-			JrxmlEditor jrxmlEditor = (JrxmlEditor)currentEditor;
+		if (currentEditor instanceof JrxmlEditor) {
+			JrxmlEditor jrxmlEditor = (JrxmlEditor) currentEditor;
 			return jrxmlEditor.getReportContainer().isBackgroundImageEditable();
 		}
 		return false;
@@ -283,7 +276,7 @@ public class SelectionHelper {
 				FileResolver fileResolver = getFileResolver(file);
 
 				File fileToBeOpened = fileResolver.resolveFile(path);
-				
+
 				if (file != null && fileToBeOpened != null && fileToBeOpened.exists() && fileToBeOpened.isFile()) {
 					IFileStore fileStore = EFS.getLocalFileSystem().getStore(fileToBeOpened.toURI());
 
@@ -298,7 +291,7 @@ public class SelectionHelper {
 		}
 		return false;
 	}
-	
+
 	public static FileResolver getFileResolver() {
 		IEditorPart ep = getActiveJRXMLEditor();
 		if (ep != null && ep.getEditorInput() instanceof IFileEditorInput) {
@@ -316,7 +309,8 @@ public class SelectionHelper {
 			fileResolver = new URLFileResolver(Arrays.asList(new File[] { new File("."), //$NON-NLS-1$
 			}));
 		else
-			fileResolver = new URLFileResolver(Arrays.asList(new File[] { new File(file.getParent().getLocationURI()), new File(file.getProject().getLocationURI()) }));
+			fileResolver = new URLFileResolver(Arrays.asList(new File[] { new File(file.getParent().getLocationURI()),
+					new File(file.getProject().getLocationURI()) }));
 		fileResolver.setResolveAbsolutePath(true);
 		return fileResolver;
 	}
@@ -367,12 +361,12 @@ public class SelectionHelper {
 
 	public static boolean isMainEditorOpened() {
 		IEditorPart activeJRXMLEditor = getActiveJRXMLEditor();
-		if(activeJRXMLEditor instanceof JrxmlEditor) {
-			return ((JrxmlEditor)activeJRXMLEditor).getReportContainer().getActivePage() == 0;
+		if (activeJRXMLEditor instanceof JrxmlEditor) {
+			return ((JrxmlEditor) activeJRXMLEditor).getReportContainer().getActivePage() == 0;
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Checks if the current selection of the active workbench window is virtual resource.
 	 * 
@@ -381,34 +375,35 @@ public class SelectionHelper {
 	 */
 	public static boolean isCurrentSelectionVirtualResource() {
 		ISelection selection = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().getSelection();
-		if(selection instanceof IStructuredSelection) {
+		if (selection instanceof IStructuredSelection) {
 			Object firstElement = ((IStructuredSelection) selection).getFirstElement();
-			if(firstElement instanceof IResource && ((IResource) firstElement).isVirtual()){
+			if (firstElement instanceof IResource && ((IResource) firstElement).isVirtual()) {
 				return true;
 			}
 		}
 		return false;
 	}
-	
+
 	/**
-	 * Return a list of all the editors currently opened. The editor must had been in foreground
-	 * at least once during the session to consider it opened
+	 * Return a list of all the editors currently opened. The editor must had been in foreground at least once during the
+	 * session to consider it opened
 	 * 
 	 * @return a not null list of jrxml editor
 	 */
-	public static List<JrxmlEditor> getOpenedEditors(){
+	public static List<JrxmlEditor> getOpenedEditors() {
 		List<JrxmlEditor> editors = new ArrayList<JrxmlEditor>();
-		IWorkbenchWindow activeWorkbenchWindow = JaspersoftStudioPlugin.getInstance().getWorkbench().getActiveWorkbenchWindow();
+		IWorkbenchWindow activeWorkbenchWindow = JaspersoftStudioPlugin.getInstance().getWorkbench()
+				.getActiveWorkbenchWindow();
 		if (activeWorkbenchWindow != null && activeWorkbenchWindow.getActivePage() != null) {
 			IEditorReference[] editorRefs = activeWorkbenchWindow.getActivePage().getEditorReferences();
-			for(IEditorReference editorRef : editorRefs){
+			for (IEditorReference editorRef : editorRefs) {
 				IEditorPart editor = editorRef.getEditor(false);
-				if (editor instanceof JrxmlEditor){
-					editors.add((JrxmlEditor)editor);
+				if (editor instanceof JrxmlEditor) {
+					editors.add((JrxmlEditor) editor);
 				}
 			}
 		}
 		return editors;
 	}
-	
+
 }

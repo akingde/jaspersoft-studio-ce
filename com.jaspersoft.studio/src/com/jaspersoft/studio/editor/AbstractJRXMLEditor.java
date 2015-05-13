@@ -51,9 +51,11 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.IPartListener2;
 import org.eclipse.ui.ISaveablePart;
 import org.eclipse.ui.IStorageEditorInput;
 import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchPartReference;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
@@ -386,6 +388,56 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 				closeEditorOnErrors();
 				JaspersoftStudioPlugin.getInstance().logError(e);
 			}
+		IPartListener2 pl = new IPartListener2() {
+
+			@Override
+			public void partActivated(IWorkbenchPartReference partRef) {
+				if (partRef.getPart(false) == getSite().getPart())
+					partActivated = true;
+			}
+
+			@Override
+			public void partBroughtToTop(IWorkbenchPartReference partRef) {
+			}
+
+			@Override
+			public void partClosed(IWorkbenchPartReference partRef) {
+			}
+
+			@Override
+			public void partDeactivated(IWorkbenchPartReference partRef) {
+				if (partRef.getPart(false) == getSite().getPart())
+					partActivated = false;
+			}
+
+			@Override
+			public void partOpened(IWorkbenchPartReference partRef) {
+			}
+
+			@Override
+			public void partHidden(IWorkbenchPartReference partRef) {
+			}
+
+			@Override
+			public void partVisible(IWorkbenchPartReference partRef) {
+			}
+
+			@Override
+			public void partInputChanged(IWorkbenchPartReference partRef) {
+			}
+
+		};
+		getSite().getPage().addPartListener(pl);
+	}
+
+	private boolean partActivated = true;
+
+	public boolean isPartActivated() {
+		return partActivated;
+	}
+
+	public void setPartActivated(boolean partActivated) {
+		this.partActivated = partActivated;
 	}
 
 	/**
@@ -647,7 +699,7 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 	@Override
 	protected void handlePropertyChange(final int propertyId) {
 		if (!isRefreshing) {
-			if (propertyId == ISaveablePart.PROP_DIRTY && previewEditor != null && !isRefreshing){
+			if (propertyId == ISaveablePart.PROP_DIRTY && previewEditor != null && !isRefreshing) {
 				setPreviewDirty(true);
 			}
 			// Can indirectly refresh the widgets so it must be executed inside the

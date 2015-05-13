@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.editor;
 
@@ -32,10 +28,10 @@ import com.jaspersoft.studio.utils.SelectionHelper;
 public class JRXMLEditorZoomListener implements Listener {
 
 	/**
-	 * Since the action is triggered more times (once for every control) the trigger time is used to repeat many times
-	 * and actions that was actually requested once. So from the action with the same trigger time only one is executed.
-	 * (it would me more correct consider a time interval, but essentially the trigger is so fast that they have the
-	 * same trigger time).
+	 * Since the action is triggered more times (once for every control) the trigger time is used to repeat many times and
+	 * actions that was actually requested once. So from the action with the same trigger time only one is executed. (it
+	 * would me more correct consider a time interval, but essentially the trigger is so fast that they have the same
+	 * trigger time).
 	 */
 	private int lastTime = -1;
 
@@ -47,18 +43,20 @@ public class JRXMLEditorZoomListener implements Listener {
 	 */
 	@Override
 	public void handleEvent(Event event) {
-		
 		if (event.time != lastTime && JasperReportsPlugin.isPressed(Keyboard.getCtrlKey())) {
 			IEditorPart currentEditor = SelectionHelper.getActiveJRXMLEditor();
 			if (currentEditor != null && currentEditor instanceof AbstractJRXMLEditor) {
 				AbstractJRXMLEditor jrxmlEditor = (AbstractJRXMLEditor) currentEditor;
+				if (!jrxmlEditor.isPartActivated())
+					return;
 				if (jrxmlEditor.getActivePage() == AbstractJRXMLEditor.PAGE_PREVIEW) {
 					lastTime = event.time;
 				} else {
 					IEditorPart pageDesigner = jrxmlEditor.getEditor(AbstractJRXMLEditor.PAGE_DESIGNER);
-					if (jrxmlEditor.getActivePage() == AbstractJRXMLEditor.PAGE_DESIGNER && (event.character == '0' || event.keyCode == 48)) {
-						if(pageDesigner instanceof ReportContainer) {
-							IEditorPart editor = ((ReportContainer)pageDesigner).getActiveEditor();
+					if (jrxmlEditor.getActivePage() == AbstractJRXMLEditor.PAGE_DESIGNER
+							&& (event.character == '0' || event.keyCode == 48)) {
+						if (pageDesigner instanceof ReportContainer) {
+							IEditorPart editor = ((ReportContainer) pageDesigner).getActiveEditor();
 							if (editor instanceof AbstractVisualEditor) {
 								IAction action = ((AbstractVisualEditor) editor).getActionRegistry().getAction(ZoomActualAction.ID);
 								if (action != null)
@@ -67,11 +65,11 @@ public class JRXMLEditorZoomListener implements Listener {
 						}
 					} else if (jrxmlEditor.getActivePage() == AbstractJRXMLEditor.PAGE_DESIGNER
 							&& (event.keyCode == '=' || event.keyCode == SWT.KEYPAD_ADD)) {
-						if(pageDesigner instanceof ReportContainer) {
+						if (pageDesigner instanceof ReportContainer) {
 							IEditorPart editor = ((ReportContainer) pageDesigner).getActiveEditor();
 							if (editor instanceof AbstractVisualEditor) {
-								IAction action = ((AbstractVisualEditor) editor).getActionRegistry()
-										.getAction(GEFActionConstants.ZOOM_IN);
+								IAction action = ((AbstractVisualEditor) editor).getActionRegistry().getAction(
+										GEFActionConstants.ZOOM_IN);
 								if (action != null)
 									action.run();
 							}

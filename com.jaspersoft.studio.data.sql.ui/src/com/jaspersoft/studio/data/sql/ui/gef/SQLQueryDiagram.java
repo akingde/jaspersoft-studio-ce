@@ -99,6 +99,9 @@ public class SQLQueryDiagram {
 		this.designer = designer;
 	}
 
+	private ZoomInAction zoomIn;
+	private ZoomOutAction zoomOut;
+
 	public Control createDiagram(Composite parent) {
 		viewer = new ScrollingGraphicalViewer();
 		viewer.createControl(parent);
@@ -108,6 +111,8 @@ public class SQLQueryDiagram {
 
 		final ZoomManager zoomManager = (ZoomManager) viewer
 				.getProperty(ZoomManager.class.toString());
+		zoomIn = new ZoomInAction(zoomManager);
+		zoomOut = new ZoomOutAction(zoomManager);
 		viewer.setKeyHandler(new GraphicalViewerKeyHandler(viewer) {
 			@Override
 			public boolean keyPressed(KeyEvent event) {
@@ -118,13 +123,13 @@ public class SQLQueryDiagram {
 					case SWT.KEYPAD_ADD:
 					case '+':
 					case '=':
-						if (zoomManager.canZoomOut())
-							zoomManager.zoomOut();
+						if (zoomManager.canZoomIn())
+							zoomIn.run();
 						break;
 					case '-':
 					case SWT.KEYPAD_SUBTRACT:
-						if (zoomManager.canZoomIn())
-							zoomManager.zoomIn();
+						if (zoomManager.canZoomOut())
+							zoomOut.run();
 						break;
 					case '0':
 						zoomManager.setZoom(1);
@@ -189,8 +194,8 @@ public class SQLQueryDiagram {
 				if (action.isEnabled()) {
 					menu.add(action);
 					menu.add(new org.eclipse.jface.action.Separator());
-					menu.add(new ZoomInAction(zoomManager));
-					menu.add(new ZoomOutAction(zoomManager));
+					menu.add(zoomIn);
+					menu.add(zoomOut);
 				}
 			}
 		});
