@@ -273,7 +273,7 @@ public class MFont extends APropertyNode {
 				jrElement.setFontName((String) value);
 		} else if (id.equals(JRBaseFont.PROPERTY_FONT_SIZE))
 			try {
-				jrElement.setFontSize(value != null ? new Float((String) value) : null);
+				jrElement.setFontSize(value != null ? Float.parseFloat((String) value) : null);
 			} catch (NumberFormatException e) {
 			}
 		else if (id.equals(JRBaseFont.PROPERTY_PDF_FONT_NAME))

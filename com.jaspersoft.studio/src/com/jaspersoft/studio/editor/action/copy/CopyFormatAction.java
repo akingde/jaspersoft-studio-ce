@@ -651,16 +651,16 @@ public class CopyFormatAction extends ACachedSelectionAction {
 		return null;
 	}
 
-	private Float getFontsize(JRFont font) {
+	private String getFontsize(JRFont font) {
 		Float ownFontSize = font.getOwnFontsize();
 		if (ownFontSize != null) {
-			return ownFontSize.floatValue();
+			return String.valueOf(ownFontSize);
 		}
 		JRStyle baseStyle = getBaseStyle(font);
 		if (baseStyle != null) {
 			Float fontSize = baseStyle.getFontsize();
 			if (fontSize != null) {
-				return fontSize.floatValue();
+				return String.valueOf(fontSize);
 			}
 		}
 		return null;
