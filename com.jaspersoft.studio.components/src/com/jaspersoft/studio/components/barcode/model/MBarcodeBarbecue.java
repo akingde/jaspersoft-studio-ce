@@ -236,7 +236,8 @@ public class MBarcodeBarbecue extends MBarcode implements IRotatable {
 		heightD.setCategory(Messages.common_properties_category);
 		appIDexprD.setCategory(Messages.common_properties_category);
 
-		defaultsMap.put(StandardBarbecueComponent.PROPERTY_EVALUATION_TIME, EvaluationTimeEnum.NOW);
+		defaultsMap.put(StandardBarbecueComponent.PROPERTY_EVALUATION_TIME,
+				EvaluationTimeEnum.NOW);
 		defaultsMap.put(StandardBarbecueComponent.PROPERTY_ROTATION, null);
 	}
 
@@ -263,7 +264,8 @@ public class MBarcodeBarbecue extends MBarcode implements IRotatable {
 		if (id.equals(StandardBarbecueComponent.PROPERTY_BAR_WIDTH))
 			return barbecueComponent.getBarWidth();
 		if (id.equals(StandardBarbecueComponent.PROPERTY_CODE_EXPRESSION))
-			return ExprUtil.getExpression(barbecueComponent.getCodeExpression());
+			return ExprUtil
+					.getExpression(barbecueComponent.getCodeExpression());
 		if (id.equals(StandardBarbecueComponent.PROPERTY_ROTATION))
 			return rotationD.getIntValue(barbecueComponent.getOwnRotation());
 		if (id.equals(StandardBarbecueComponent.PROPERTY_APPLICATION_IDENTIFIER_EXPRESSION))
@@ -279,17 +281,20 @@ public class MBarcodeBarbecue extends MBarcode implements IRotatable {
 				.getComponent();
 
 		if (id.equals(StandardBarbecueComponent.PROPERTY_EVALUATION_TIME)) {
-			EvaluationTimeEnum evalTime = EnumHelper.getEnumByObjectValue(EvaluationTimeEnum.values(), value);
+			EvaluationTimeEnum evalTime = EnumHelper.getEnumByObjectValue(
+					EvaluationTimeEnum.values(), value);
 			barbecueComponent.setEvaluationTimeValue(evalTime);
-			if(evalTime != null && !evalTime.equals(EvaluationTimeEnum.GROUP)) {
+			if (evalTime != null && !evalTime.equals(EvaluationTimeEnum.GROUP)) {
 				barbecueComponent.setEvaluationGroup(null);
-			}	
-		} else if (id.equals(StandardBarbecueComponent.PROPERTY_EVALUATION_GROUP)) {
-			barbecueComponent.setEvaluationGroup(ModelUtils.getGroupNameForProperty(value));
-		}
-		else if (id
+			}
+		} else if (id
+				.equals(StandardBarbecueComponent.PROPERTY_EVALUATION_GROUP)) {
+			barbecueComponent.setEvaluationGroup(ModelUtils
+					.getGroupNameForProperty(value));
+		} else if (id
 				.equals(StandardBarbecueComponent.PROPERTY_CHECKSUM_REQUIRED))
-			barbecueComponent.setChecksumRequired(((Boolean) value).booleanValue());
+			barbecueComponent.setChecksumRequired(((Boolean) value)
+					.booleanValue());
 		else if (id.equals(StandardBarbecueComponent.PROPERTY_DRAW_TEXT))
 			barbecueComponent.setDrawText(((Boolean) value).booleanValue());
 		else if (id.equals(StandardBarbecueComponent.PROPERTY_TYPE))
@@ -297,17 +302,25 @@ public class MBarcodeBarbecue extends MBarcode implements IRotatable {
 		else if (id.equals(StandardBarbecueComponent.PROPERTY_ROTATION))
 			barbecueComponent.setRotation(rotationD.getEnumValue(value));
 
-		else if (id.equals(StandardBarbecueComponent.PROPERTY_BAR_HEIGTH))
-			barbecueComponent.setBarHeight((Integer) value);
-		else if (id.equals(StandardBarbecueComponent.PROPERTY_BAR_WIDTH))
-			barbecueComponent.setBarWidth((Integer) value);
-		else if (id.equals(StandardBarbecueComponent.PROPERTY_CODE_EXPRESSION)) {
+		else if (id.equals(StandardBarbecueComponent.PROPERTY_BAR_HEIGTH)) {
+			Integer intv = (Integer) value;
+			if (intv != null && intv.intValue() >= 0)
+				barbecueComponent.setBarHeight(intv);
+		} else if (id.equals(StandardBarbecueComponent.PROPERTY_BAR_WIDTH)) {
+			Integer intv = (Integer) value;
+			if (intv != null && intv.intValue() >= 0)
+				barbecueComponent.setBarWidth((Integer) value);
+		} else if (id
+				.equals(StandardBarbecueComponent.PROPERTY_CODE_EXPRESSION)) {
 			barbecueComponent.setCodeExpression(ExprUtil.setValues(
 					barbecueComponent.getCodeExpression(), value, null));
 		} else if (id
 				.equals(StandardBarbecueComponent.PROPERTY_APPLICATION_IDENTIFIER_EXPRESSION)) {
-			barbecueComponent.setApplicationIdentifierExpression(ExprUtil.setValues(
-					barbecueComponent.getApplicationIdentifierExpression(), value, null));
+			barbecueComponent
+					.setApplicationIdentifierExpression(ExprUtil.setValues(
+							barbecueComponent
+									.getApplicationIdentifierExpression(),
+							value, null));
 		} else
 			super.setPropertyValue(id, value);
 	}
