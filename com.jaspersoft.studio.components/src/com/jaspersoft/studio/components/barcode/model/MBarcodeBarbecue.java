@@ -304,12 +304,14 @@ public class MBarcodeBarbecue extends MBarcode implements IRotatable {
 
 		else if (id.equals(StandardBarbecueComponent.PROPERTY_BAR_HEIGTH)) {
 			Integer intv = (Integer) value;
-			if (intv != null && intv.intValue() >= 0)
-				barbecueComponent.setBarHeight(intv);
+			if (intv != null)
+				intv = Math.abs(intv.intValue());
+			barbecueComponent.setBarHeight(intv);
 		} else if (id.equals(StandardBarbecueComponent.PROPERTY_BAR_WIDTH)) {
 			Integer intv = (Integer) value;
-			if (intv != null && intv.intValue() >= 0)
-				barbecueComponent.setBarWidth((Integer) value);
+			if (intv != null)
+				intv = Math.abs(intv.intValue());
+			barbecueComponent.setBarWidth((Integer) value);
 		} else if (id
 				.equals(StandardBarbecueComponent.PROPERTY_CODE_EXPRESSION)) {
 			barbecueComponent.setCodeExpression(ExprUtil.setValues(
