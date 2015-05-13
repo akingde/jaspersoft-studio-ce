@@ -24,7 +24,6 @@ import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
@@ -57,6 +56,7 @@ import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.util.ModelVisitor;
 import com.jaspersoft.studio.swt.widgets.CSashForm;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+import com.jaspersoft.studio.utils.jobs.CheckedRunnableWithProgress;
 
 public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 	public static final String SQLQUERYDESIGNER = "SQLQUERYDESIGNER"; //$NON-NLS-1$
@@ -66,6 +66,13 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 	private SQLQueryOutline outline;
 	private SQLQueryDiagram diagram;
 	private MSQLRoot root;
+	private boolean isModelRefresh = false;
+	private boolean refreshMetadata = false;
+	private IProgressMonitor runningmonitor;
+	private CTabFolder tabFolder;
+	private Set<MSQLRoot> roots = new HashSet<MSQLRoot>();
+	private DataAdapterDescriptor da;
+	private PreferenceListener preferenceListener = new PreferenceListener();
 
 	public SQLQueryDesigner() {
 		super();
@@ -171,8 +178,6 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 		source.setupFont(jConfig);
 	}
 
-	private boolean isModelRefresh = false;
-
 	@Override
 	protected void updateQueryText(String txt) {
 		if (refreshMetadata)
@@ -187,8 +192,6 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 		if (source != null)
 			Text2Model.text2model(this, source.getXTextDocument());
 	}
-
-	private boolean refreshMetadata = false;
 
 	public void setRefreshMetadata(boolean refreshMetadata) {
 		this.refreshMetadata = refreshMetadata;
@@ -254,8 +257,6 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 		return null;
 	}
 
-	private DataAdapterDescriptor da;
-
 	@Override
 	public void setDataAdapter(final DataAdapterDescriptor da) {
 		if (this.da == da)
@@ -273,27 +274,16 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 		});
 	}
 
-	private Thread runningthread;
-	private IProgressMonitor runningmonitor;
-	private CTabFolder tabFolder;
-
 	public void updateMetadata() {
 		if (da instanceof JDBCDataAdapterDescriptor)
 			try {
 				getRoot().setValue(getjDataset());
-				container.run(true, true, new IRunnableWithProgress() {
-
-					public void run(IProgressMonitor monitor)
-							throws InvocationTargetException,
-							InterruptedException {
-						if (runningthread != null) {
-							runningmonitor.setCanceled(true);
-							if (runningthread != null)
-								runningthread.join();
-						}
-						runningmonitor = monitor;
-						runningthread = Thread.currentThread();
-						try {
+				container.run(true, true, new CheckedRunnableWithProgress() {
+					
+					@Override
+					protected void runOperations(IProgressMonitor monitor) {
+						try{
+							runningmonitor = monitor;
 							monitor.beginTask(
 									Messages.SQLQueryDesigner_readmetadata,
 									IProgressMonitor.UNKNOWN);
@@ -302,21 +292,21 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 									.getInstance(jConfig).getService(
 											da.getDataAdapter());
 							dbMetadata.updateMetadata(da, das, monitor);
-						} finally {
+						}
+						finally {
 							monitor.done();
-							runningthread = null;
-							runningmonitor = null;
+							runningmonitor=null;
 						}
 					}
 				});
 			} catch (InvocationTargetException ex) {
 				container.getQueryStatus().showError(ex.getTargetException());
-				runningthread = null;
 				runningmonitor = null;
+				dbMetadata.forceRunningStatus(false);
 			} catch (InterruptedException ex) {
 				container.getQueryStatus().showError(ex);
-				runningthread = null;
 				runningmonitor = null;
+				dbMetadata.forceRunningStatus(false);
 			}
 	}
 
@@ -355,8 +345,6 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 		super.setQuery(jDesign, jDataset, jConfig);
 		doRefreshRoots(false);
 	}
-
-	private Set<MSQLRoot> roots = new HashSet<MSQLRoot>();
 
 	public MSQLRoot createRoot(MSQLRoot oldRoot) {
 		if (oldRoot != null) {
@@ -408,7 +396,6 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 			}
 		}
 	};
-	private PreferenceListener preferenceListener = new PreferenceListener();
 
 	private final class PreferenceListener implements IPropertyChangeListener {
 

@@ -77,6 +77,12 @@ public class DBMetadata {
 	private TreeViewer treeViewer;
 	private MSQLRoot root;
 	private SQLQueryDesigner designer;
+	private boolean running = false;
+	private Label msg;
+	private StackLayout stackLayout;
+	private Composite mcmp;
+	private Composite composite;
+	private DataAdapterService das;
 
 	public DBMetadata(SQLQueryDesigner designer) {
 		this.designer = designer;
@@ -220,13 +226,6 @@ public class DBMetadata {
 		return composite;
 	}
 
-	private boolean running = false;
-	private Label msg;
-	private StackLayout stackLayout;
-	private Composite mcmp;
-	private Composite composite;
-	private DataAdapterService das;
-
 	public void closeConnection() {
 		SchemaUtil.close(connection);
 	}
@@ -246,9 +245,24 @@ public class DBMetadata {
 					return;
 				msg.setText(Messages.DBMetadata_2 + da.getName()
 						+ Messages.DBMetadata_3);
+				safelyAttachContextMenu(mcmp);
 				stackLayout.topControl = mcmp;
 				mcmp.layout(true);
 				composite.layout(true);
+			}
+
+			private void safelyAttachContextMenu(Composite mcmp) {
+				if(mcmp.getMenu()==null){
+					MenuManager menuMgr = new MenuManager();
+					Menu menu = menuMgr.createContextMenu(mcmp);
+					menuMgr.add(new Action(Messages.DBMetadata_Retry) {
+						@Override
+						public void run() {
+							doRefreshMetadata();
+						}
+					});
+					mcmp.setMenu(menu);
+				}
 			}
 		});
 		root.removeChildren();
@@ -416,28 +430,28 @@ public class DBMetadata {
 			identifierQuote = connection.getMetaData()
 					.getIdentifierQuoteString();
 			designer.doRefreshRoots(false);
-			System.out.println("JDBC Quotes: "
+			System.out.println("JDBC Quotes: " //$NON-NLS-1$
 					+ connection.getMetaData().getIdentifierQuoteString());
-			System.out.println("getExtraNameCharacters: "
+			System.out.println("getExtraNameCharacters: " //$NON-NLS-1$
 					+ connection.getMetaData().getExtraNameCharacters());
-			System.out.println("storesLowerCaseIdentifiers: "
+			System.out.println("storesLowerCaseIdentifiers: " //$NON-NLS-1$
 					+ connection.getMetaData().storesLowerCaseIdentifiers());
-			System.out.println("storesLowerCaseQuotedIdentifiers: "
+			System.out.println("storesLowerCaseQuotedIdentifiers: " //$NON-NLS-1$
 					+ connection.getMetaData()
 							.storesLowerCaseQuotedIdentifiers());
-			System.out.println("storesMixedCaseIdentifiers: "
+			System.out.println("storesMixedCaseIdentifiers: " //$NON-NLS-1$
 					+ connection.getMetaData().storesMixedCaseIdentifiers());
-			System.out.println("storesMixedCaseQuotedIdentifiers: "
+			System.out.println("storesMixedCaseQuotedIdentifiers: " //$NON-NLS-1$
 					+ connection.getMetaData()
 							.storesMixedCaseQuotedIdentifiers());
-			System.out.println("storesUpperCaseIdentifiers: "
+			System.out.println("storesUpperCaseIdentifiers: " //$NON-NLS-1$
 					+ connection.getMetaData().storesUpperCaseIdentifiers());
-			System.out.println("storesUpperCaseQuotedIdentifiers: "
+			System.out.println("storesUpperCaseQuotedIdentifiers: " //$NON-NLS-1$
 					+ connection.getMetaData()
 							.storesUpperCaseQuotedIdentifiers());
-			System.out.println("supportsMixedCaseIdentifiers: "
+			System.out.println("supportsMixedCaseIdentifiers: " //$NON-NLS-1$
 					+ connection.getMetaData().supportsMixedCaseIdentifiers());
-			System.out.println("supportsMixedCaseQuotedIdentifiers: "
+			System.out.println("supportsMixedCaseQuotedIdentifiers: " //$NON-NLS-1$
 					+ connection.getMetaData()
 							.supportsMixedCaseQuotedIdentifiers());
 		} catch (SQLException e) {
@@ -446,7 +460,7 @@ public class DBMetadata {
 		return connection;
 	}
 
-	private String identifierQuote = "";
+	private String identifierQuote = ""; //$NON-NLS-1$
 
 	public String getIdentifierQuote() {
 		return identifierQuote;
@@ -553,6 +567,10 @@ public class DBMetadata {
 			tableTypes.add(rs.getString("TABLE_TYPE")); //$NON-NLS-1$
 		rs.close();
 		return tableTypes;
+	}
+
+	public void forceRunningStatus(boolean running) {
+		this.running = running;
 	}
 
 }
