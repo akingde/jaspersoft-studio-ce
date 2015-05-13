@@ -53,6 +53,7 @@ import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.properties.JPropertiesPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.NotNullPixelPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.PixelPropertyDescriptor;
 import com.jaspersoft.studio.utils.Misc;
 
@@ -362,7 +363,7 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 	 */
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		PixelPropertyDescriptor heightD = new PixelPropertyDescriptor(JRDesignBand.PROPERTY_HEIGHT, Messages.common_height);
+		PixelPropertyDescriptor heightD = new NotNullPixelPropertyDescriptor(JRDesignBand.PROPERTY_HEIGHT, Messages.common_height);
 		heightD.setDescription(Messages.MBand_height_description);
 		desc.add(heightD);
 

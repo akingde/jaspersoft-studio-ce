@@ -62,16 +62,28 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  * 
  */
 public class SPPixel extends ASPropertyWidget<PixelPropertyDescriptor> {
-
+	
+	/**
+	 * Style bit to have the measure unit not persistent and doesn't allow null
+	 */
+	public static final int NONE = 0;
+	
+	/**
+	 * Style bit to have the measure unit persistent. if the the local measure unit will 
+	 * be store into the jrxml and saved, otherwise the visualization will be
+	 * reseted to the default measure unit everytime the element properties are shown.
+	 */
+	public static final int PERSISTENT = 2;
+	
+	/**
+	 * Style bit to allow the null value
+	 */
+	public static final int ALLOW_NULL = 4;
+	
 	/**
 	 * Hash map the bind a measure unit, by its key, to a series of method to convert and handle that measure
 	 */
 	private static HashMap<String, MeasureUnit> unitsMap = null;
-
-	/**
-	 * Property name used to save the measure unit in the jrxml
-	 */
-	protected static String LOCAL_MESURE_UNIT = "local_mesure_unit";
 
 	/**
 	 * Ordered list of measure units supported
@@ -104,9 +116,15 @@ public class SPPixel extends ASPropertyWidget<PixelPropertyDescriptor> {
 	private String localValue;
 
 	/**
-	 * Set if use or not a local measure unit for every element
+	 * The style of the control
 	 */
-	private boolean isLocalPersistent = true;
+	private int style;
+	
+	/**
+	 * The current JasperReportsConfiguration
+	 */
+	private JasperReportsConfiguration jConfig;
+	
 
 	/**
 	 * Used to store the last text set into the Textfield, needed to prevent that the lost focus event do multiple update
@@ -296,24 +314,23 @@ public class SPPixel extends ASPropertyWidget<PixelPropertyDescriptor> {
 		}
 	}
 
-	private JasperReportsConfiguration jConfig;
 
+	/**
+	 * Create the widget with the persistent flag enabled and that allow null values
+	 */
 	public SPPixel(Composite parent, AbstractSection section, PixelPropertyDescriptor pDescriptor) {
-		this(parent, section, pDescriptor, true);
+		this(parent, section, pDescriptor, PERSISTENT | ALLOW_NULL);
 	}
 
 	/**
-	 * 
-	 * @param parent
-	 * @param section
-	 * @param pDescriptor
-	 * @param persistentLocal
-	 *          if the the local measure unit will be store into the jrxml and saved, otherwise the visualization will be
-	 *          reseted to the default measure unit everytime the element properties are shown.
+	 * Create the widget with the specified style
+	 *  
+	 * @param style must be one between SPPixel.NONE, SPPixel.ALLOW_NULL or SPPixel.PERSISTENT
+	 *          
 	 */
-	public SPPixel(Composite parent, AbstractSection section, PixelPropertyDescriptor pDescriptor, boolean persistentLocal) {
+	public SPPixel(Composite parent, AbstractSection section, PixelPropertyDescriptor pDescriptor, int style) {
 		super(parent, section, pDescriptor);
-		this.isLocalPersistent = persistentLocal;
+		this.style = style;
 		localValue = getLocalValue();
 		jConfig = section.getElement().getJasperConfiguration();
 	}
@@ -447,78 +464,99 @@ public class SPPixel extends ASPropertyWidget<PixelPropertyDescriptor> {
 	}
 
 	/**
+	 * Change the property by setting null as value
+	 */
+	protected void setNullValue(){
+		section.changeProperty(pDescriptor.getId(), null);
+		insertField.setBackground(null);
+	}
+	
+	/**
+	 * Change the property setting a not null value inside it
+	 */
+	protected void setNotNullValue(){
+		String text = insertField.getText().trim().toLowerCase();
+		String key = getMeasureUnit(text);
+		MeasureUnit defaultUnit = getDefaultMeasure();
+		String value;
+		MeasureUnit unit;
+		if (key == null) {
+			unit = defaultUnit;
+			value = text;
+		} else {
+			unit = unitsMap.get(Unit.getKeyFromAlias(key));
+			value = text.substring(0, text.indexOf(key));
+		}
+		if (unit != null) {
+			setLocalValue(unit.getKeyName());
+			String convertedValue = unit.doConversionFromThis(defaultUnit, value);
+			insertField.setText(convertedValue.concat(defaultUnit.getKeyName()));
+			try {
+				Integer newValue = Integer.parseInt(getText());
+				JSSCompoundCommand commands = new JSSCompoundCommand(section.getElement());
+			
+				//Generate the command to update the measure unit
+				for (APropertyNode pnode : section.getElements()) {
+					if (pnode.getValue() != null && pnode.getValue() instanceof JRPropertiesHolder) {
+						JRPropertiesMap pmap = (JRPropertiesMap) pnode.getPropertyValue(MGraphicElement.PROPERTY_MAP);
+						if (pmap != null && setLocalValue(pmap, unit.getUnitName())) {
+							SetValueCommand cmd = new SetValueCommand();
+							cmd.setTarget(pnode);
+							cmd.setPropertyId(MGraphicElement.PROPERTY_MAP);
+							cmd.setPropertyValue(pmap);
+							commands.add(cmd);
+						}
+					}
+				}
+				
+				//check if the resize must be done
+				JSSPixelEditorValidator validator = pDescriptor.getValidator();
+				if (validator != null){
+					Object mainElementValue = null;
+					for (APropertyNode pnode : section.getElements()) {
+						Object checkedValue = validator.checkValid(pnode, newValue, pDescriptor.getId());
+						if (pnode == section.getElement()){
+							mainElementValue = checkedValue;
+						}
+						Command changeCommand = section.getChangePropertyCommand(pDescriptor.getId(), checkedValue, pnode);
+						if (changeCommand != null) commands.add(changeCommand);
+					}
+					
+					if (section.runCommand(commands)){
+						setData(section.getElement(), mainElementValue);
+					}
+					
+				} else {
+					if (!section.changeProperty(pDescriptor.getId(), newValue, commands.getCommands())) {
+						setData(section.getElement(), newValue);
+					}
+				}
+		
+				insertField.setBackground(null);
+			} catch (NumberFormatException ex) {
+				insertField.setBackground(ColorConstants.red);
+			}
+		} else {
+			insertField.setBackground(ColorConstants.red);
+		}
+	}
+	
+	/**
 	 * Read the value in the textfield and update it in the model, but before the value is converted to pixel, and in the
 	 * textbox is displayed as default type
 	 */
 	private void updateValue() {
-		if (insertField.getText().contains("%"))
-			percentageResize();
-		else {
-			String text = insertField.getText().trim().toLowerCase();
-			String key = getMeasureUnit(text);
-			MeasureUnit defaultUnit = getDefaultMeasure();
-			String value;
-			MeasureUnit unit;
-			if (key == null) {
-				unit = defaultUnit;
-				value = text;
-			} else {
-				unit = unitsMap.get(Unit.getKeyFromAlias(key));
-				value = text.substring(0, text.indexOf(key));
-			}
-			if (unit != null) {
-				setLocalValue(unit.getKeyName());
-				String convertedValue = unit.doConversionFromThis(defaultUnit, value);
-				insertField.setText(convertedValue.concat(defaultUnit.getKeyName()));
-				try {
-					Integer newValue = Integer.parseInt(getText());
-					// let's look at our units
-					String dunit = MReport.getMeasureUnit(jConfig, jConfig.getJasperDesign());
-					JSSCompoundCommand commands = new JSSCompoundCommand(section.getElement());
-				
-					//Generate the command to update the measure unit
-					for (APropertyNode pnode : section.getElements()) {
-						if (pnode.getValue() != null && pnode.getValue() instanceof JRPropertiesHolder) {
-							JRPropertiesMap pmap = (JRPropertiesMap) pnode.getPropertyValue(MGraphicElement.PROPERTY_MAP);
-							if (pmap != null && PHolderUtil.setProperty(false, pmap, (String) pDescriptor.getId(), unit.getUnitName(), dunit)) {
-								SetValueCommand cmd = new SetValueCommand();
-								cmd.setTarget(pnode);
-								cmd.setPropertyId(MGraphicElement.PROPERTY_MAP);
-								cmd.setPropertyValue(pmap);
-								commands.add(cmd);
-							}
-						}
-					}
-					
-					//check if the resize must be done
-					JSSPixelEditorValidator validator = pDescriptor.getValidator();
-					if (validator != null){
-						Object mainElementValue = null;
-						for (APropertyNode pnode : section.getElements()) {
-							Object checkedValue = validator.checkValid(pnode, newValue, pDescriptor.getId());
-							if (pnode == section.getElement()){
-								mainElementValue = checkedValue;
-							}
-							Command changeCommand = section.getChangePropertyCommand(pDescriptor.getId(), checkedValue, pnode);
-							if (changeCommand != null) commands.add(changeCommand);
-						}
-						
-						if (section.runCommand(commands)){
-							setData(section.getElement(), mainElementValue);
-						}
-						
-					} else {
-						if (!section.changeProperty(pDescriptor.getId(), newValue, commands.getCommands())) {
-							setData(section.getElement(), newValue);
-						}
-					}
-			
-					insertField.setBackground(null);
-				} catch (NumberFormatException ex) {
-					insertField.setBackground(ColorConstants.red);
-				}
+		if (insertField.getText().trim().isEmpty()){
+			if (isNullAllowed()){
+				setNullValue();
 			} else {
 				insertField.setBackground(ColorConstants.red);
+			}
+		}  else {
+			if (insertField.getText().contains("%"))
+				percentageResize();
+			else {
+				setNotNullValue();
 			}
 		}
 	}
@@ -654,6 +692,7 @@ public class SPPixel extends ASPropertyWidget<PixelPropertyDescriptor> {
 		}
 	}
 
+	
 	/**
 	 * Read from the jrelement the local value of the measure unit
 	 * 
@@ -661,20 +700,45 @@ public class SPPixel extends ASPropertyWidget<PixelPropertyDescriptor> {
 	 */
 	private String getLocalValue() {
 		Object node = section.getElement().getValue();
-		if ((node instanceof JRPropertiesHolder) && isLocalPersistent) {
-			return ((JRPropertiesHolder) node).getPropertiesMap().getProperty(
-					LOCAL_MESURE_UNIT.concat(pDescriptor.getId().toString()));
-		} else
+		if ((node instanceof JRPropertiesHolder) && isLocalPersistent()) {
+			return PHolderUtil.getUnit((JRPropertiesHolder) node, pDescriptor.getId().toString(), null);
+		} else {
 			return null;
+		}
 	}
 
-	private void setLocalValue(String newLocal) {
-		localValue = newLocal;
+	/**
+	 * Update the current local measure unit for the element
+	 * Set the measure value into the jr element if the node is available and
+	 * if the style flag to make the measure persistent is enabled
+	 * 
+	 * @param newLocal the new measure unit
+	 * @return true if the properties map of the element has been changed, flase otherwise
+	 */
+	private boolean setLocalValue(String newLocal) {
 		Object node = section.getElement().getValue();
-		if ((node instanceof JRPropertiesHolder) && isLocalPersistent) {
-			((JRPropertiesHolder) node).getPropertiesMap().setProperty(
-					LOCAL_MESURE_UNIT.concat(pDescriptor.getId().toString()), newLocal);
+		if ((node instanceof JRPropertiesHolder)) {
+			JRPropertiesMap nodeMap = ((JRPropertiesHolder) node).getPropertiesMap();
+			return  setLocalValue(nodeMap, newLocal); 
 		}
+		return false;
+	}
+	
+	/**
+	 * Update the current local measure unit for the element
+	 * Set the measure value passed map  if the style flag to make the measure persistent is enabled
+	 * 
+	 * @param newLocal the new measure unit
+	 * @return true if the properties map of the element has been changed, false otherwise
+	 */
+	private boolean setLocalValue(JRPropertiesMap nodeMap, String newLocal) {
+		localValue = newLocal;
+		// let's look at our units
+		if (isLocalPersistent()){
+			String dunit = MReport.getMeasureUnit(jConfig, jConfig.getJasperDesign());
+			PHolderUtil.setProperty(false, nodeMap, pDescriptor.getId().toString(), newLocal, dunit);
+		}
+		return false;
 	}
 
 	@Override
@@ -705,7 +769,7 @@ public class SPPixel extends ASPropertyWidget<PixelPropertyDescriptor> {
 	}
 
 	/**
-	 * Receive a number and set it in the textfiled
+	 * Receive a number and set it in the textfield
 	 * 
 	 * @param f
 	 *          the number
@@ -723,12 +787,29 @@ public class SPPixel extends ASPropertyWidget<PixelPropertyDescriptor> {
 	@Override
 	public void setData(APropertyNode pnode, Object value) {
 		defaultValue = MReport.getMeasureUnit(jConfig, jConfig.getJasperDesign());
-		if (pnode.getValue() instanceof JRPropertiesHolder)
-			defaultValue = PHolderUtil.getUnit((JRPropertiesHolder) pnode.getValue(), pDescriptor.getId().toString(),
-					defaultValue);
-
+		if (pnode.getValue() instanceof JRPropertiesHolder){
+			localValue = PHolderUtil.getUnit((JRPropertiesHolder) pnode.getValue(), pDescriptor.getId().toString(),defaultValue);
+		}
 		Number n = (Number) value;
 		setDataNumber(n);
+	}
+	
+	/**
+	 * Check if the measure unit should be saved into the jr element
+	 * 
+	 * @return true if the unit should be saved, false otherwise
+	 */
+	public boolean isLocalPersistent(){
+		return ((style & PERSISTENT) == PERSISTENT);
+	}
+	
+	/**
+	 * Check if the null value is allowed 
+	 * 
+	 * @return true if null is allowed, false otherwise
+	 */
+	public boolean isNullAllowed(){
+		return ((style & ALLOW_NULL) == ALLOW_NULL);
 	}
 
 	@Override
