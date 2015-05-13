@@ -14,6 +14,7 @@ package com.jaspersoft.studio.editor.gef.parts.editPolicy;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 
 import net.sf.jasperreports.eclipse.JasperReportsPlugin;
@@ -47,6 +48,12 @@ import com.jaspersoft.studio.model.frame.MFrame;
  * other edit part, and can not be resized to overlap them. This drag tracker change this behavior taking as the target
  * edit part an IContainer, that could be the actual target or the container of the actual target
  * 
+ * It allow the hotkey SHIFT to drag the selection only vertically or horizontally
+ * 
+ * It allow the hotkey A to force the dragged selection to never change parent
+ * 
+ * The hotkeys can be combined
+ * 
  * @author Orlandin Marco
  * 
  */
@@ -54,6 +61,13 @@ public class SearchParentDragTracker extends DragEditPartsTracker {
 
 	/** defines the range where autoscroll is active inside a viewer */
 	private static final int DEFAULT_EXPOSE_THRESHOLD = 50;
+	
+	/**
+	 * This is the modifier key (A button) that is used to modify the drag and drop
+	 * operation behavior. When this key is pressed during a drag and drop the children will
+	 * never change parent
+	 */
+	protected static final int MOVE_CHILD_KEY = 97;
 
 	/**
 	 * This variable contains all the hierarchy of the elements dragged, to avoid that an element is placed inside
@@ -258,7 +272,7 @@ public class SearchParentDragTracker extends DragEditPartsTracker {
 	}
 
 	/**
-	 * Take an edit part and search it's container. Check also the actual selected elements to avoid
+	 * Take an edit part and search its container. Check also the actual selected elements to avoid
 	 * that the selected parent is the moved element. In this case the grandparent is searched (this is 
 	 * a particular case where a frame is dragged on one of its children, so the destination will be the 
 	 * dragged frame itself, becoming source and target of the selection)
@@ -266,7 +280,7 @@ public class SearchParentDragTracker extends DragEditPartsTracker {
 	 * @param child
 	 * @return the container of the child, could be null
 	 */
-	private EditPart searchParent(EditPart child) {
+	private EditPart searchContainer(EditPart child) {
 		if (child != null) {
 			ANode parentModel = ((ANode) child.getModel()).getParent();
 			if (parentModel == null)
@@ -279,6 +293,26 @@ public class SearchParentDragTracker extends DragEditPartsTracker {
 						return null;
 				}
 			}
+			// This use the model for the search because every EditPart in the report has the same father.
+			for (Object actualChild : child.getParent().getChildren()) {
+				EditPart actualChildPart = (EditPart) actualChild;
+				if (parentModel == actualChildPart.getModel()) return actualChildPart;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Take an edit part and search its parent
+	 * 
+	 * @param child the child
+	 * @return the container of the child, could be null
+	 */
+	private EditPart getParent(EditPart child) {
+		if (child != null) {
+			ANode parentModel = ((ANode) child.getModel()).getParent();
+			if (parentModel == null)
+				return null;
 			// This use the model for the search because every EditPart in the report has the same father.
 			for (Object actualChild : child.getParent().getChildren()) {
 				EditPart actualChildPart = (EditPart) actualChild;
@@ -349,13 +383,14 @@ public class SearchParentDragTracker extends DragEditPartsTracker {
 	 * exclude from this elements the one that are children or descendant of a frames actually selected.
 	 * This avoid that the move operations are done on the frame and also on his descendants, that may 
 	 * create error like the change of parent or a wrong position for the children of the frame 
+	 * It also consider the MgraphicalElements since they are the only handled by this tracker
 	 */
 	@SuppressWarnings("rawtypes")
 	protected List createOperationSet() {
 		ArrayList<EditPart> selectedElements = new  ArrayList<EditPart>();
 		//Need to copy the list because the one from getCurrentViewer().getSelectedEditParts() is not editable
 		for (Object part : getCurrentViewer().getSelectedEditParts()){
-			selectedElements.add((EditPart)part);
+			if (((EditPart)part).getModel() instanceof MGraphicElement) selectedElements.add((EditPart)part);
 		}
 		//The result of the following for is an array where all the element not null are valid for the selection
 		for(EditPart element : selectedElements){
@@ -400,7 +435,7 @@ public class SearchParentDragTracker extends DragEditPartsTracker {
 	/**
 	 * When the command from a drag operation is returned it is checked if it a compoundcommand
 	 * but not JSSCompoundCommand. If this condition it is true then it is converted into
-	 * a JSSCompoundCommand to improove the performance during the execution
+	 * a JSSCompoundCommand to improve the performance during the execution
 	 */
 	@Override	
 	protected Command getCurrentCommand() {
@@ -418,7 +453,53 @@ public class SearchParentDragTracker extends DragEditPartsTracker {
 		}
 		return command;
 	}
-
+	
+	/**
+	 * Create the command for the drag and drop operation. If the 
+	 * drag modifier key is pressed then the operation is considered a drag
+	 * where every element dosen't change parent so the move commands are generated
+	 * by the parent of each moved element.
+	 */
+	protected Command getCommand() {
+		boolean modifierPressed = JasperReportsPlugin.isPressed(MOVE_CHILD_KEY);
+		if (modifierPressed){
+			CompoundCommand command = new CompoundCommand();
+			command.setDebugLabel("Drag Object Tracker");//$NON-NLS-1$
+	
+			Iterator<?> iter = getOperationSet().iterator();
+			ChangeBoundsRequest request = (ChangeBoundsRequest)getTargetRequest();
+			request.setType(REQ_MOVE_CHILDREN);
+			while (iter.hasNext()) {
+				EditPart editPart = (EditPart) iter.next();
+				request.setEditParts(editPart);
+				EditPart parent = getParent(editPart);
+				if (parent != null){
+					command.add(parent.getCommand(request));
+				}
+			}
+			return command.unwrap();
+		} else {
+			return super.getCommand();
+		}
+	}
+	
+	/**
+	 * Avoid to show the target feedback when the drag modifier button
+	 * is pressed, since in this state the parent never change
+	 */
+	@Override
+	protected void showTargetFeedback() {
+		boolean modifierPressed = JasperReportsPlugin.isPressed(MOVE_CHILD_KEY);
+		if (!modifierPressed){
+			super.showTargetFeedback();
+		}
+	}
+	
+	@Override
+	protected void showSourceFeedback() {
+		// TODO Auto-generated method stub
+		super.showSourceFeedback();
+	}
 	
 	/**
 	 * When the drag is done the exclusion set is cleared
@@ -427,7 +508,7 @@ public class SearchParentDragTracker extends DragEditPartsTracker {
 	protected void performDrag() {
 		super.performDrag();
 		selectionHierarchy = null;
-		//At the end of the drag operation the mouse direction resetted
+		//At the end of the drag operation the mouse direction reset
 		firstMovment = MOUSE_DIRECTION.UNDEFINED;
 	}
 	
@@ -442,7 +523,7 @@ public class SearchParentDragTracker extends DragEditPartsTracker {
 				(selectionHierarchy != null && selectionHierarchy.contains(target.getModel())))
 			//If the target of the operation is not a Container or it is into an exclusion set, then the most
 			//near valid parent of the target is searched
-			parent = searchParent(target);
+			parent = searchContainer(target);
 		return parent != null ? parent : target;
 	}
 		

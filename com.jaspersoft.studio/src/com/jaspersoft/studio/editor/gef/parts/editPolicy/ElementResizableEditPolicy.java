@@ -26,6 +26,7 @@ import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.draw2d.geometry.PrecisionRectangle;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.GraphicalEditPart;
+import org.eclipse.gef.Request;
 import org.eclipse.gef.SharedCursors;
 import org.eclipse.gef.editpolicies.ResizableEditPolicy;
 import org.eclipse.gef.handles.NonResizableHandleKit;
@@ -176,6 +177,18 @@ public class ElementResizableEditPolicy extends ResizableEditPolicy {
 		addFeedback(r);
 		return r;
 	}
+	
+	/**
+	 * Remove the feedback also if the request is a move children
+	 */
+	public void eraseSourceFeedback(Request request) {
+		if (REQ_MOVE_CHILDREN.equals(request.getType())) {
+			eraseChangeBoundsFeedback((ChangeBoundsRequest) request);
+		} else {
+			super.eraseSourceFeedback(request);
+		}
+	}
+
 
 	// ==== BACK COMPATIBILITY METHODS ==== //
 

@@ -49,6 +49,7 @@ import com.jaspersoft.studio.callout.CalloutEditPart;
 import com.jaspersoft.studio.callout.command.CalloutSetConstraintCommand;
 import com.jaspersoft.studio.callout.pin.PinEditPart;
 import com.jaspersoft.studio.callout.pin.command.PinSetConstraintCommand;
+import com.jaspersoft.studio.editor.gef.commands.SetPositionCommand;
 import com.jaspersoft.studio.editor.gef.figures.BandFigure;
 import com.jaspersoft.studio.editor.gef.figures.ReportPageFigure;
 import com.jaspersoft.studio.editor.gef.parts.APrefFigureEditPart;
@@ -226,6 +227,9 @@ public class BandEditPart extends APrefFigureEditPart implements PropertyChangeL
 
 		});
 		installEditPolicy(EditPolicy.LAYOUT_ROLE, new PageLayoutEditPolicy() {
+			
+
+			private RectangleFigure targetFeedback;
 
 			@Override
 			protected Command getCreateCommand(ANode parent, Object obj, Rectangle constraint, int index) {
@@ -264,8 +268,22 @@ public class BandEditPart extends APrefFigureEditPart implements PropertyChangeL
 				}
 				return null;
 			}
-
-			private RectangleFigure targetFeedback;
+			
+			/**
+			 * Move an element inside the band, in this case the parent never change
+			 */
+			@Override
+			protected Command createChangeConstraintCommand(ChangeBoundsRequest request, EditPart child, Object constraint) {
+				Rectangle rect = ((Rectangle) constraint).getCopy();
+				rect = rect.getTranslated(-ReportPageFigure.PAGE_BORDER.left, -ReportPageFigure.PAGE_BORDER.right);
+				if (child.getModel() instanceof MGraphicElement) {
+					MGraphicElement cmodel = (MGraphicElement) child.getModel();
+					SetPositionCommand command = new SetPositionCommand();
+					command.setContext(cmodel,  adaptConstraint(rect));
+					return command;
+				}
+				return null;
+			}
 
 			/**
 			 * Show the feedback during drag and drop
