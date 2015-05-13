@@ -40,7 +40,8 @@ public class SchemaUtil {
 			String dbproduct = c.getMetaData().getDatabaseProductName();
 			System.out.println(dbproduct);
 			if (dbproduct.equalsIgnoreCase("Oracle"))
-				return runSchemaQuery(c, "select sys_context('USERENV', 'CURRENT_SCHEMA') from dual");
+				return runSchemaQuery(c,
+						"select sys_context('USERENV', 'CURRENT_SCHEMA') from dual");
 			// else if (dbproduct.equalsIgnoreCase("SQL Anywhere"))
 			// return runSchemaQuery(c, "select db_name()");
 			else if (dbproduct.equalsIgnoreCase("PostgreSQL")) {
@@ -52,6 +53,16 @@ public class SchemaUtil {
 				}
 				rs.close();
 				stmt.close();
+			} else if (dbproduct.equalsIgnoreCase("Apache Hive")) {
+				List<String> schemas = new ArrayList<String>();
+				ResultSet rs = c.getMetaData().getSchemas();
+				try {
+					while (rs.next())
+						schemas.add(rs.getString("TABLE_SCHEM"));
+					res = schemas.toArray(new String[schemas.size()]);
+				} finally {
+					SchemaUtil.close(rs);
+				}
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -60,7 +71,8 @@ public class SchemaUtil {
 		return res;
 	}
 
-	protected static String[] runSchemaQuery(Connection c, String query) throws SQLException {
+	protected static String[] runSchemaQuery(Connection c, String query)
+			throws SQLException {
 		List<String> paths = new ArrayList<String>();
 		Statement stmt = c.createStatement();
 		ResultSet rs = stmt.executeQuery(query);
