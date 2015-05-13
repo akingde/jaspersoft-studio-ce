@@ -27,11 +27,14 @@ import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.EvaluationTimeEnum;
 
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.components.barcode.BarcodeNodeIconDescriptor;
 import com.jaspersoft.studio.components.barcode.model.MBarcode;
 import com.jaspersoft.studio.editor.defaults.DefaultManager;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
@@ -49,6 +52,49 @@ public class MQRCode extends MBarcode {
 			int newIndex) {
 		super(parent, newIndex);
 		setValue(jrBarcode);
+	}
+
+	private static IIconDescriptor iconDescriptor;
+
+	/**
+	 * Gets the icon descriptor.
+	 * 
+	 * @return the icon descriptor
+	 */
+	public static IIconDescriptor getIconDescriptor() {
+		if (iconDescriptor == null)
+			iconDescriptor = new BarcodeNodeIconDescriptor("barcode"); //$NON-NLS-1$
+		return iconDescriptor;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.jaspersoft.studio.model.MGeneric#getDisplayText()
+	 */
+	@Override
+	public String getDisplayText() {
+		return getIconDescriptor().getTitle();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.jaspersoft.studio.model.MGeneric#getImagePath()
+	 */
+	@Override
+	public ImageDescriptor getImagePath() {
+		return getIconDescriptor().getIcon16();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.jaspersoft.studio.model.MGeneric#getToolTip()
+	 */
+	@Override
+	public String getToolTip() {
+		return getIconDescriptor().getToolTip();
 	}
 
 	@Override
@@ -121,10 +167,12 @@ public class MQRCode extends MBarcode {
 	@Override
 	public Object getPropertyValue(Object id) {
 		JRDesignComponentElement jrElement = (JRDesignComponentElement) getValue();
-		QRCodeComponent qrCodeComponent = (QRCodeComponent) jrElement.getComponent();
+		QRCodeComponent qrCodeComponent = (QRCodeComponent) jrElement
+				.getComponent();
 
 		if (id.equals(QRCodeComponent.PROPERTY_ERROR_CORRECTION_LEVEL))
-			return errLevelD.getIntValue(qrCodeComponent.getErrorCorrectionLevel());
+			return errLevelD.getIntValue(qrCodeComponent
+					.getErrorCorrectionLevel());
 		if (id.equals(QRCodeComponent.PROPERTY_MARGIN))
 			return qrCodeComponent.getMargin();
 		if (id.equals(StandardBarbecueComponent.PROPERTY_CODE_EXPRESSION))
@@ -137,21 +185,24 @@ public class MQRCode extends MBarcode {
 	@Override
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignComponentElement jrElement = (JRDesignComponentElement) getValue();
-		QRCodeComponent qrcodeComponent = (QRCodeComponent) jrElement.getComponent();
+		QRCodeComponent qrcodeComponent = (QRCodeComponent) jrElement
+				.getComponent();
 
 		if (id.equals(QRCodeComponent.PROPERTY_ERROR_CORRECTION_LEVEL))
-			qrcodeComponent.setErrorCorrectionLevel(errLevelD.getEnumValue(value));
+			qrcodeComponent.setErrorCorrectionLevel(errLevelD
+					.getEnumValue(value));
 		else if (id.equals(QRCodeComponent.PROPERTY_MARGIN))
 			qrcodeComponent.setMargin((Integer) value);
 		else if (id.equals(StandardBarbecueComponent.PROPERTY_CODE_EXPRESSION))
 			qrcodeComponent.setCodeExpression(ExprUtil.setValues(
 					qrcodeComponent.getCodeExpression(), value, null));
 		else if (id.equals(StandardBarbecueComponent.PROPERTY_EVALUATION_TIME)) {
-			EvaluationTimeEnum evalTime = EnumHelper.getEnumByObjectValue(EvaluationTimeEnum.values(), value);
+			EvaluationTimeEnum evalTime = EnumHelper.getEnumByObjectValue(
+					EvaluationTimeEnum.values(), value);
 			qrcodeComponent.setEvaluationTimeValue(evalTime);
-			if(evalTime != null && !evalTime.equals(EvaluationTimeEnum.GROUP)) {
+			if (evalTime != null && !evalTime.equals(EvaluationTimeEnum.GROUP)) {
 				qrcodeComponent.setEvaluationGroup(null);
-			}				
+			}
 		}
 		super.setPropertyValue(id, value);
 	}
