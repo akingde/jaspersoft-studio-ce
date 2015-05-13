@@ -179,8 +179,8 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 					//On windows the selection of an enrty select also all the
 					//text inside the combo, so we need to restore the old selection
 					langCombo.setSelection(oldSelection);
-					changeLanguage();
 				}
+				changeLanguage();
 			}
 		});
 
