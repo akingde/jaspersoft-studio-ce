@@ -14,6 +14,7 @@ package com.jaspersoft.studio.components.barcode.command;
 
 import net.sf.jasperreports.components.barbecue.StandardBarbecueComponent;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
+import net.sf.jasperreports.engine.design.JRDesignExpression;
 
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.TableLayout;
@@ -49,6 +50,7 @@ import com.jaspersoft.studio.components.barcode.model.barcode4j.MRoyalMail;
 import com.jaspersoft.studio.components.barcode.model.barcode4j.MUPCA;
 import com.jaspersoft.studio.components.barcode.model.barcode4j.MUPCE;
 import com.jaspersoft.studio.components.barcode.model.barcode4j.MUSPSIntelligent;
+import com.jaspersoft.studio.utils.ExpressionUtil;
 import com.jaspersoft.studio.wizards.ContextHelpIDs;
 import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
 
@@ -114,6 +116,27 @@ public class BarcodeWizardPage extends JSSHelpWizardPage {
 			StandardBarbecueComponent sbc = (StandardBarbecueComponent) de
 					.getComponent();
 			sbc.setType(bbcCode);
+			JRDesignExpression expr = (JRDesignExpression) sbc
+					.getCodeExpression();
+			if (bbcCode.equals("Bookland")) {
+				expr.setText("\"0123456789\"");
+				sbc.setCodeExpression(expr);
+			}
+			if (bbcCode.equals("EAN13")) {
+				expr.setText("\"012345678900\"");
+				sbc.setCodeExpression(expr);
+			}
+			if (bbcCode.equals("RandomWeightUPCA")) {
+				expr.setText("\"01234567890\"");
+				sbc.setCodeExpression(expr);
+			}
+			if (bbcCode.equals("UPCA")) {
+				expr.setText("\"01234567890\"");
+				sbc.setCodeExpression(expr);
+			}
+			if (bbcCode.equals("UCC128")) { 
+				sbc.setApplicationIdentifierExpression(new JRDesignExpression("\"00\""));
+			}
 			barcode = new MBarcodeBarbecue(null, de, -1);
 		}
 		super.dispose();
