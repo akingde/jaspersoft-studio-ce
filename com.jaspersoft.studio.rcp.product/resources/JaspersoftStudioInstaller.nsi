@@ -9,7 +9,7 @@
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}-${PRODUCT_VERSION}.exe"
 !define PRODUCT_UNINST_ROOT_KEY "HKLM"
 !define PRODUCT_STARTMENU_REGVAL "NSIS:StartMenuDir"
-!define ICONS_GROUP "TIBCO Jaspersoft"
+!define ICONS_GROUP "TIBCO"
 !define UNINSTALL_SURVEY_URL "http://www.jaspersoft.com/surveys/iReportUninstall"
 
 !include LogicLib.nsh
