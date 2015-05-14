@@ -34,9 +34,8 @@
 ; Instfiles page
 !insertmacro MUI_PAGE_INSTFILES
 
-!define MUI_WELCOMEFINISHPAGE_BITMAP "installer\installer_left.bmp"
-
 ; Finish page
+!define MUI_WELCOMEFINISHPAGE_BITMAP "installer\installer_left.bmp"
 !define MUI_FINISHPAGE_RUN "$INSTDIR\${SHORT_PRODUCT_NAME}.exe"
 !insertmacro MUI_PAGE_FINISH
 
@@ -67,7 +66,6 @@ Section "${PRODUCT_NAME}" SEC01
   CreateShortCut "$SMPROGRAMS\${ICONS_GROUP}\${PRODUCT_NAME}-${PRODUCT_VERSION}.lnk" "$INSTDIR\${SHORT_PRODUCT_NAME}.exe"
   CreateShortCut "$DESKTOP\${PRODUCT_NAME}-${PRODUCT_VERSION}.lnk" "$INSTDIR\${SHORT_PRODUCT_NAME}.exe"
 SectionEnd
-
 
 Section -AdditionalIcons
   SetShellVarContext all
@@ -108,16 +106,16 @@ Section Uninstall
 
   SetShellVarContext all
 
-  StrCmp $ICONS_GROUP "" NO_SHORTCUTS
+  StrCmp ${ICONS_GROUP} "" NO_SHORTCUTS
   RMDir /r /REBOOTOK $INSTDIR
 
-  Delete "$SMPROGRAMS\$ICONS_GROUP\Uninstall.lnk"
-  Delete "$SMPROGRAMS\$ICONS_GROUP\${PRODUCT_NAME} site.url"
+  Delete "$SMPROGRAMS\${ICONS_GROUP}\Uninstall.lnk"
+  Delete "$SMPROGRAMS\${ICONS_GROUP}\${PRODUCT_NAME} site.url"
   Delete "$DESKTOP\${PRODUCT_NAME}-${PRODUCT_VERSION}.lnk"
-  Delete "$SMPROGRAMS\$ICONS_GROUP\${PRODUCT_NAME}-${PRODUCT_VERSION}.lnk"
+  Delete "$SMPROGRAMS\${ICONS_GROUP}\${PRODUCT_NAME}-${PRODUCT_VERSION}.lnk"
   !insertmacro APP_UNASSOCIATE "jrxml" "JaspersoftStudio.Jrxml"
 
-  RMDir "$SMPROGRAMS\$ICONS_GROUP"
+  RMDir "$SMPROGRAMS\${ICONS_GROUP}"
   RMDir "$SMPROGRAMS\TIBCO"
 
   NO_SHORTCUTS:

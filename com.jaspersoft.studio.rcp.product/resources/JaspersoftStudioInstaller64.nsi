@@ -62,16 +62,16 @@ Section "${PRODUCT_NAME}" SEC01
   File /r /x src "${INSTALLER_FILES_DIR}\*.*"
 
 ; Shortcuts
-  CreateDirectory "$SMPROGRAMS\$ICONS_GROUP"
-  CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\${PRODUCT_NAME}-${PRODUCT_VERSION}.lnk" "$INSTDIR\${SHORT_PRODUCT_NAME}.exe"
+  CreateDirectory "$SMPROGRAMS\${ICONS_GROUP}"
+  CreateShortCut "$SMPROGRAMS\${ICONS_GROUP}\${PRODUCT_NAME}-${PRODUCT_VERSION}.lnk" "$INSTDIR\${SHORT_PRODUCT_NAME}.exe"
   CreateShortCut "$DESKTOP\${PRODUCT_NAME}-${PRODUCT_VERSION}.lnk" "$INSTDIR\${SHORT_PRODUCT_NAME}.exe"
 SectionEnd
 
 Section -AdditionalIcons
   SetShellVarContext all
   SetOutPath $INSTDIR
-  WriteIniStr "$SMPROGRAMS\$ICONS_GROUP\${PRODUCT_NAME} site.url" "InternetShortcut" "URL" "${PRODUCT_WEB_SITE}"
-  CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Uninstall.lnk" "$INSTDIR\uninst.exe"
+  WriteIniStr "$SMPROGRAMS\${ICONS_GROUP}\${PRODUCT_NAME} site.url" "InternetShortcut" "URL" "${PRODUCT_WEB_SITE}"
+  CreateShortCut "$SMPROGRAMS\${ICONS_GROUP}\Uninstall.lnk" "$INSTDIR\uninst.exe"
 SectionEnd
 
 Section -Post
@@ -106,16 +106,16 @@ Section Uninstall
 
   SetShellVarContext all
 
-  StrCmp $ICONS_GROUP "" NO_SHORTCUTS
+  StrCmp ${ICONS_GROUP} "" NO_SHORTCUTS
   RMDir /r /REBOOTOK $INSTDIR
 
-  Delete "$SMPROGRAMS\$ICONS_GROUP\Uninstall.lnk"
-  Delete "$SMPROGRAMS\$ICONS_GROUP\${PRODUCT_NAME} site.url"
+  Delete "$SMPROGRAMS\${ICONS_GROUP}\Uninstall.lnk"
+  Delete "$SMPROGRAMS\${ICONS_GROUP}\${PRODUCT_NAME} site.url"
   Delete "$DESKTOP\${PRODUCT_NAME}-${PRODUCT_VERSION}.lnk"
-  Delete "$SMPROGRAMS\$ICONS_GROUP\${PRODUCT_NAME}-${PRODUCT_VERSION}.lnk"
+  Delete "$SMPROGRAMS\${ICONS_GROUP}\${PRODUCT_NAME}-${PRODUCT_VERSION}.lnk"
   !insertmacro APP_UNASSOCIATE "jrxml" "JaspersoftStudio.Jrxml"
 
-  RMDir "$SMPROGRAMS\$ICONS_GROUP"
+  RMDir "$SMPROGRAMS\${ICONS_GROUP}"
   RMDir "$SMPROGRAMS\TIBCO"
 
   NO_SHORTCUTS:
