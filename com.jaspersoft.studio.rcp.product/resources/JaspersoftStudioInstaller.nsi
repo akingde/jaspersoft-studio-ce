@@ -4,7 +4,6 @@
 !define PRODUCT_NAME "TIBCO Jaspersoft Studio"
 !define SHORT_PRODUCT_NAME "Jaspersoft Studio"
 !define PRODUCT_PUBLISHER "TIBCO Software Inc."
-!define PRODUCT_WEB_SITE "http://community.jaspersoft.com/project/jaspersoft-studio"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\${PRODUCT_NAME}-${PRODUCT_VERSION}.exe"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}-${PRODUCT_VERSION}.exe"
 !define PRODUCT_UNINST_ROOT_KEY "HKLM"
