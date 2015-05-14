@@ -43,15 +43,17 @@ import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.JSSCompoundCommand;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.property.SetValueCommand;
-import com.jaspersoft.studio.property.descriptors.JSSPixelEditorValidator;
+import com.jaspersoft.studio.property.descriptors.AbstractJSSCellEditorValidator;
 import com.jaspersoft.studio.property.descriptors.PixelPropertyDescriptor;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.report.util.PHolderUtil;
 import com.jaspersoft.studio.property.section.report.util.Unit;
+import com.jaspersoft.studio.property.section.report.util.Unit.PixelConversionException;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /**
@@ -74,11 +76,6 @@ public class SPPixel extends ASPropertyWidget<PixelPropertyDescriptor> {
 	 * reseted to the default measure unit everytime the element properties are shown.
 	 */
 	public static final int PERSISTENT = 2;
-	
-	/**
-	 * Style bit to allow the null value
-	 */
-	public static final int ALLOW_NULL = 4;
 	
 	/**
 	 * Hash map the bind a measure unit, by its key, to a series of method to convert and handle that measure
@@ -212,7 +209,7 @@ public class SPPixel extends ASPropertyWidget<PixelPropertyDescriptor> {
 			if (insertField.getCaretPosition() == text.length() && measureUnit != null)
 				return measureUnit;
 			else
-				return "";
+				return ""; //$NON-NLS-1$
 		}
 
 		public void setControlContents(Control control, String text, int cursorPosition) {
@@ -305,11 +302,18 @@ public class SPPixel extends ASPropertyWidget<PixelPropertyDescriptor> {
 		 *          The MeasureUnit of the target type
 		 * @param value
 		 *          the value to convert
-		 * @return the converted value
+		 * @return the converted value as a string, that is a textual representation
+		 * of a double
 		 */
-		public String doConversionFromThis(MeasureUnit targetUnit, String value) {
-			if (this.getKeyName().equals(targetUnit.getKeyName()))
+		public String doConversionFromThis(MeasureUnit targetUnit, String value) throws PixelConversionException{
+			if (value == null || value.isEmpty()) return null;
+			/* Even if from a logical point of view is the target measure unit the same of the source we can simply return
+			 the input technically it is better to do the conversion since the passed value as string can be too big to fit
+			 an int once it is parsed. Instead the conversion check if the value fit an int and eventually throw an exception
+			if (this.getKeyName().equals(targetUnit.getKeyName())){
+				//no conversion requested
 				return value;
+			}*/
 			return String.valueOf((new Unit(Double.parseDouble(value), keyName, jConfig)).getValue(targetUnit.getKeyName()));
 		}
 	}
@@ -319,13 +323,13 @@ public class SPPixel extends ASPropertyWidget<PixelPropertyDescriptor> {
 	 * Create the widget with the persistent flag enabled and that allow null values
 	 */
 	public SPPixel(Composite parent, AbstractSection section, PixelPropertyDescriptor pDescriptor) {
-		this(parent, section, pDescriptor, PERSISTENT | ALLOW_NULL);
+		this(parent, section, pDescriptor, PERSISTENT);
 	}
 
 	/**
 	 * Create the widget with the specified style
 	 *  
-	 * @param style must be one between SPPixel.NONE, SPPixel.ALLOW_NULL or SPPixel.PERSISTENT
+	 * @param style must be one between SPPixel.NONE or SPPixel.PERSISTENT
 	 *          
 	 */
 	public SPPixel(Composite parent, AbstractSection section, PixelPropertyDescriptor pDescriptor, int style) {
@@ -342,22 +346,22 @@ public class SPPixel extends ASPropertyWidget<PixelPropertyDescriptor> {
 		unitsMap = new HashMap<String, MeasureUnit>();
 		units = new MeasureUnit[5];
 		// Adding the measure unit for pixel
-		units[0] = new MeasureUnit(Unit.PX, "px", 0);
+		units[0] = new MeasureUnit(Unit.PX, "px", 0); //$NON-NLS-1$
 		unitsMap.put(Unit.PX, units[0]);
 		// Adding the measure unit for inch
-		units[1] = new MeasureUnit(Unit.INCH, "inch", 2);
+		units[1] = new MeasureUnit(Unit.INCH, "inch", 2); //$NON-NLS-1$
 		unitsMap.put(Unit.INCH, units[1]);
 		// Adding the meausre unit for centimeter
-		units[2] = new MeasureUnit(Unit.CM, "cm", 2);
+		units[2] = new MeasureUnit(Unit.CM, "cm", 2); //$NON-NLS-1$
 		unitsMap.put(Unit.CM, units[2]);
 		// Adding the measure unit for millimeters
-		units[3] = new MeasureUnit(Unit.MM, "mm", 2);
+		units[3] = new MeasureUnit(Unit.MM, "mm", 2); //$NON-NLS-1$
 		unitsMap.put(Unit.MM, units[3]);
 		// Adding the measure unit for meters
-		units[4] = new MeasureUnit(Unit.METER, "m", 2);
+		units[4] = new MeasureUnit(Unit.METER, "m", 2); //$NON-NLS-1$
 		unitsMap.put(Unit.METER, units[4]);
 
-		autocompleteValues = new String[] { "centimeters", "millimeters", "inches", "meters", "pixels" };// Unit.getAliasList();
+		autocompleteValues = new String[] { "centimeters", "millimeters", "inches", "meters", "pixels" };// Unit.getAliasList(); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 	}
 
 	/**
@@ -365,14 +369,19 @@ public class SPPixel extends ASPropertyWidget<PixelPropertyDescriptor> {
 	 * 
 	 * @param value
 	 *          content of the text field
-	 * @return measure unit, it's the last alphabetical string in the textfield
+	 * @return measure unit, it's the last alphabetical string in the textfield or null
+	 * if there is no alphabetical value
 	 */
 	private String getMeasureUnit(String value) {
-		String[] results = value.split("[^a-z]");
+		String[] results = value.split("[^a-z]"); //$NON-NLS-1$
 		// If the array is void then no measure unit are specified
 		if (results.length == 0)
 			return null;
-		return results[results.length - 1];
+		String measure = results[results.length - 1].trim();
+		if (measure.isEmpty()){
+			return null;
+		}
+		return measure;
 	}
 
 	/**
@@ -427,12 +436,12 @@ public class SPPixel extends ASPropertyWidget<PixelPropertyDescriptor> {
 	 */
 	private void percentageResize() {
 		String text = insertField.getText().trim().toLowerCase();
-		int percPosition = text.indexOf("%");
+		int percPosition = text.indexOf("%"); //$NON-NLS-1$
 		if (percPosition > 0) {
 			try {
 				Double value = Double.parseDouble(text.substring(0, percPosition));
 				CommandStack cs = section.getEditDomain().getCommandStack();
-				JSSCompoundCommand cc = new JSSCompoundCommand("Set " + pDescriptor.getId(), null);
+				JSSCompoundCommand cc = new JSSCompoundCommand("Set " + pDescriptor.getId(), null); //$NON-NLS-1$
 				for (APropertyNode pnode : section.getElements()) {
 					try {
 						cc.setReferenceNodeIfNull(pnode);
@@ -469,19 +478,21 @@ public class SPPixel extends ASPropertyWidget<PixelPropertyDescriptor> {
 	protected void setNullValue(){
 		section.changeProperty(pDescriptor.getId(), null);
 		insertField.setBackground(null);
+		insertField.setToolTipText(pDescriptor.getDescription());
 	}
 	
 	/**
-	 * Change the property setting a not null value inside it
+	 * Read the value in the textfield and update it in the model, but before the value is converted to pixel, and in the
+	 * textbox is displayed as default type. If a validator is provided then the value is first validated
 	 */
-	protected void setNotNullValue(){
+	private void absoluteResize() {
 		String text = insertField.getText().trim().toLowerCase();
 		String key = getMeasureUnit(text);
-		MeasureUnit defaultUnit = getDefaultMeasure();
 		String value;
 		MeasureUnit unit;
 		if (key == null) {
-			unit = defaultUnit;
+			//A unit is not specified, so use the element or default one
+			unit = getDefaultMeasure(); 
 			value = text;
 		} else {
 			unit = unitsMap.get(Unit.getKeyFromAlias(key));
@@ -489,13 +500,11 @@ public class SPPixel extends ASPropertyWidget<PixelPropertyDescriptor> {
 		}
 		if (unit != null) {
 			setLocalValue(unit.getKeyName());
-			String convertedValue = unit.doConversionFromThis(defaultUnit, value);
-			insertField.setText(convertedValue.concat(defaultUnit.getKeyName()));
 			try {
-				Integer newValue = Integer.parseInt(getText());
 				JSSCompoundCommand commands = new JSSCompoundCommand(section.getElement());
-			
-				//Generate the command to update the measure unit
+				//Convert the value into pixel, internally JR work always with pixels
+				String convertedValue = unit.doConversionFromThis(unitsMap.get(Unit.PX), value);
+				//Generate the command to update the measure unit in the preferences
 				for (APropertyNode pnode : section.getElements()) {
 					if (pnode.getValue() != null && pnode.getValue() instanceof JRPropertiesHolder) {
 						JRPropertiesMap pmap = (JRPropertiesMap) pnode.getPropertyValue(MGraphicElement.PROPERTY_MAP);
@@ -510,54 +519,105 @@ public class SPPixel extends ASPropertyWidget<PixelPropertyDescriptor> {
 				}
 				
 				//check if the resize must be done
-				JSSPixelEditorValidator validator = pDescriptor.getValidator();
+				AbstractJSSCellEditorValidator validator = pDescriptor.getValidator();
 				if (validator != null){
-					Object mainElementValue = null;
+					//A validator is provided, so validate the property
+					Integer newValue = getIntegerValue(convertedValue);
+					String errorMessage = null;
 					for (APropertyNode pnode : section.getElements()) {
-						Object checkedValue = validator.checkValid(pnode, newValue, pDescriptor.getId());
-						if (pnode == section.getElement()){
-							mainElementValue = checkedValue;
+						validator.setTargetNode(pnode);
+						errorMessage = validator.isValid(newValue);
+						if (errorMessage != null){
+							//there is an error message , break the cycle
+							break;
 						}
-						Command changeCommand = section.getChangePropertyCommand(pDescriptor.getId(), checkedValue, pnode);
-						if (changeCommand != null) commands.add(changeCommand);
+						Command changeCommand = section.getChangePropertyCommand(pDescriptor.getId(), newValue, pnode);
+						if (changeCommand != null) {
+							commands.add(changeCommand);
+						}
 					}
-					
-					if (section.runCommand(commands)){
-						setData(section.getElement(), mainElementValue);
+					//Restore the main element inside the validator
+					validator.setTargetNode(section.getElement());
+					if (errorMessage != null){
+						//The values are not valid, show the error message
+						setErrorStatus(errorMessage);
+					} else {
+						//The values are valid, apply them
+						section.runCommand(commands);
+						//Operation completed, clear the error status and update the text area
+						clearErrorStatus();
 					}
-					
 				} else {
-					if (!section.changeProperty(pDescriptor.getId(), newValue, commands.getCommands())) {
-						setData(section.getElement(), newValue);
-					}
+					//No validator provided
+					Integer newValue = getIntegerValue(convertedValue);
+					//Execute the command
+					section.changeProperty(pDescriptor.getId(), newValue, commands.getCommands());
+					//Operation completed, clear the error status and update the text area
+					clearErrorStatus();
 				}
-		
-				insertField.setBackground(null);
 			} catch (NumberFormatException ex) {
-				insertField.setBackground(ColorConstants.red);
+				//The value can not be converted into a number
+				setErrorStatus(Messages.common_this_is_not_an_integer_number);
+			} catch (PixelConversionException ex){
+				//The value can be converted into a number but not into an integer
+				setErrorStatus(ex.getMessage());
 			}
 		} else {
-			insertField.setBackground(ColorConstants.red);
+			//Measure unit not found
+			setErrorStatus(Messages.SPPixel_errorMeasureUnit);
 		}
 	}
 	
 	/**
-	 * Read the value in the textfield and update it in the model, but before the value is converted to pixel, and in the
-	 * textbox is displayed as default type
+	 * Update the text area content with the current value from the element, this is done
+	 * since the set of a value with a measure different from pixels can bring some rounding
+	 * on the final value, so the real value is back converted to the desired measure unit and
+	 * show in the text area.
+	 * It also clear the error status by removing the red background and restoring the tooltip
+	 */
+	protected void clearErrorStatus(){
+		Object currentValue = section.getElement().getPropertyActualValue(pDescriptor.getId());
+		setData(section.getElement(), currentValue);
+		insertField.setBackground(null);
+		insertField.setToolTipText(pDescriptor.getDescription());
+	}
+	
+	/**
+	 * Set the insert field into an error status, so with a red background
+	 * and a tooltip that describe the error
+	 * 
+	 * @param message the error message, it will be used as tooltip, can be null
+	 * for no error message
+	 */
+	protected void setErrorStatus(String message){
+		insertField.setBackground(ColorConstants.red);
+		insertField.setToolTipText(message);
+	}
+	
+	/**
+	 * Return the textual double value as an integer. If the text area
+	 * is empty return null, if the value is not a valid integer it raise a
+	 * NumberFormatException. If the string can be convertend into a double then
+	 * it is rounded to get an integer
+	 * 
+	 * @param valueText the value as a string, must be the representation of a double
+	 * @return the value as integer or null
+	 */
+	private Integer getIntegerValue(String valueText){
+		if (valueText != null && !valueText.trim().isEmpty()) {
+			return (int)Math.round(Double.parseDouble(valueText));
+		} 
+		return null;
+	}
+	
+	/**
+	 * Update the value on the elements with the inserted one
 	 */
 	private void updateValue() {
-		if (insertField.getText().trim().isEmpty()){
-			if (isNullAllowed()){
-				setNullValue();
-			} else {
-				insertField.setBackground(ColorConstants.red);
-			}
-		}  else {
-			if (insertField.getText().contains("%"))
-				percentageResize();
-			else {
-				setNotNullValue();
-			}
+		if (insertField.getText().contains("%"))
+			percentageResize();
+		else {
+			absoluteResize();
 		}
 	}
 
@@ -589,7 +649,7 @@ public class SPPixel extends ASPropertyWidget<PixelPropertyDescriptor> {
 		double dValue = uunit.getValue(defaultMeasure.getKeyName());
 		insertField.setBackground(null);
 		insertField.setText(truncateDouble(dValue, defaultMeasure.getPrecision()).concat(
-				" ".concat(defaultMeasure.getUnitName())));
+				" ".concat(defaultMeasure.getUnitName()))); //$NON-NLS-1$
 		lastSetValue = insertField.getText();
 	}
 
@@ -606,6 +666,7 @@ public class SPPixel extends ASPropertyWidget<PixelPropertyDescriptor> {
 		MeasureUnit unit = unitsMap.get(Unit.getKeyFromAlias(key));
 		if (unit != null) {
 			String value = text.substring(0, text.indexOf(key));
+			if (value.trim().isEmpty()) return null; 
 			setUUnit(value, unit.getKeyName());
 			Double dValue = uunit.getValue(Unit.PX);
 			return String.valueOf(dValue.longValue());
@@ -749,7 +810,7 @@ public class SPPixel extends ASPropertyWidget<PixelPropertyDescriptor> {
 		int style = SWT.NONE;
 		if (pDescriptor instanceof PixelPropertyDescriptor && ((PixelPropertyDescriptor) pDescriptor).isReadOnly())
 			style = style | SWT.READ_ONLY;
-		insertField = section.getWidgetFactory().createText(parent, "", style);
+		insertField = section.getWidgetFactory().createText(parent, "", style); //$NON-NLS-1$
 		insertField.addKeyListener(new KeyListener() {
 			@Override
 			public void keyReleased(KeyEvent e) {
@@ -781,7 +842,7 @@ public class SPPixel extends ASPropertyWidget<PixelPropertyDescriptor> {
 			if (insertField.getText().length() >= oldpos)
 				insertField.setSelection(oldpos, oldpos);
 		} else
-			insertField.setText("");
+			insertField.setText(""); //$NON-NLS-1$
 	}
 
 	@Override
@@ -801,15 +862,6 @@ public class SPPixel extends ASPropertyWidget<PixelPropertyDescriptor> {
 	 */
 	public boolean isLocalPersistent(){
 		return ((style & PERSISTENT) == PERSISTENT);
-	}
-	
-	/**
-	 * Check if the null value is allowed 
-	 * 
-	 * @return true if null is allowed, false otherwise
-	 */
-	public boolean isNullAllowed(){
-		return ((style & ALLOW_NULL) == ALLOW_NULL);
 	}
 
 	@Override

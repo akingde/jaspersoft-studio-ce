@@ -31,6 +31,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.barcode.BarcodeNodeIconDescriptor;
 import com.jaspersoft.studio.components.barcode.messages.Messages;
+import com.jaspersoft.studio.components.barcode.property.JSSPixelBarcodeSizeValidator;
 import com.jaspersoft.studio.editor.defaults.DefaultManager;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IRotatable;
@@ -179,12 +180,14 @@ public class MBarcodeBarbecue extends MBarcode implements IRotatable {
 		PixelPropertyDescriptor widthD = new PixelPropertyDescriptor(
 				StandardBarbecueComponent.PROPERTY_BAR_WIDTH,
 				Messages.MBarcodeBarbecue_bar_width);
+		widthD.setValidator(new JSSPixelBarcodeSizeValidator());
 		widthD.setDescription(Messages.MBarcodeBarbecue_bar_width_description);
 		desc.add(widthD);
 
 		PixelPropertyDescriptor heightD = new PixelPropertyDescriptor(
 				StandardBarbecueComponent.PROPERTY_BAR_HEIGTH,
 				Messages.MBarcodeBarbecue_bar_height);
+		heightD.setValidator(new JSSPixelBarcodeSizeValidator());
 		heightD.setDescription(Messages.MBarcodeBarbecue_bar_height_description);
 		desc.add(heightD);
 

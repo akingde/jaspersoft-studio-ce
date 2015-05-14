@@ -37,6 +37,7 @@ public class Messages extends NLS {
 	public static String DataMatrixShape_force_none;
 	public static String DataMatrixShape_force_rectangle;
 	public static String DataMatrixShape_force_square;
+	public static String JSSPixelBarcodeSizeValidator_negativeBarcodeSize;
 	public static String MBarcode_code_expression;
 	public static String MBarcode_code_expression_description;
 	public static String MBarcode_evaluation_group;

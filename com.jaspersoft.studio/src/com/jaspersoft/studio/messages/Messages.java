@@ -953,6 +953,9 @@ public class Messages extends NLS {
 	public static String JSONPathDataAction_2;
 	public static String JSONSchemaAction_0;
 	public static String JSSGraphicalViewerKeyHandler_ErrorNoArrowKey;
+	public static String JSSPixelEditorValidator_errorExceed;
+	public static String JSSPixelEditorValidator_errorNegative;
+	public static String JSSPixelEditorValidator_errorNull;
 	public static String JSSTemplateTransferDropTargetListener_createLabelMessage1;
 	public static String JSSTemplateTransferDropTargetListener_createLabelMessage2;
 	public static String JSSTemplateTransferDropTargetListener_createLabelTitle;
@@ -1776,6 +1779,7 @@ public class Messages extends NLS {
 	public static String SPLegendAlignementEnum_left;
 	public static String SPLegendAlignementEnum_right;
 	public static String SPLegendAlignementEnum_top;
+	public static String SPPixel_errorMeasureUnit;
 	public static String StretchToContentAction_name;
 	public static String StretchToContentAction_tooltip;
 	public static String StudioPreferencePage_checkForUpdates;
@@ -2058,6 +2062,8 @@ public class Messages extends NLS {
 	public static String QueryExecutorDataAdapterFactory_description;
 	public static String QueryExecutorDataAdapterFactory_label;
 
+	public static String Unit_errorTooBig;
+	public static String Unit_errorTooSmall;
 	public static String UsageManager_checkVersionJobName;
 	public static String UsageManager_errorGetTime;
 	public static String UsageManager_errorPathFile;

@@ -69,9 +69,8 @@ import com.jaspersoft.studio.property.descriptor.propexpr.PropertyExpressionDTO;
 import com.jaspersoft.studio.property.descriptor.propexpr.PropertyExpressionsDTO;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.AbstractJSSCellEditorValidator;
-import com.jaspersoft.studio.property.descriptors.JSSPixelEditorValidator;
+import com.jaspersoft.studio.property.descriptors.JSSPixelLocationValidator;
 import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptors.NotNullPixelPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.PixelPropertyDescriptor;
 import com.jaspersoft.studio.utils.AlfaRGB;
 import com.jaspersoft.studio.utils.Colors;
@@ -407,36 +406,36 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		desc.add(keyD);
 
 		// bounds
-		JSSPixelEditorValidator heightValidator = new JSSPixelEditorValidator(JRDesignElement.PROPERTY_HEIGHT);
+		JSSPixelLocationValidator heightValidator = new JSSPixelLocationValidator(JRDesignElement.PROPERTY_HEIGHT);
 		heightValidator.setTargetNode(this);
-		PixelPropertyDescriptor heightD = new NotNullPixelPropertyDescriptor(JRDesignElement.PROPERTY_HEIGHT,Messages.common_height);
+		PixelPropertyDescriptor heightD = new PixelPropertyDescriptor(JRDesignElement.PROPERTY_HEIGHT,Messages.common_height);
 		heightD.setCategory(Messages.common_size);
 		heightD.setDescription(Messages.MGraphicElement_height_description);
 		heightD.setValidator(heightValidator);
 		desc.add(heightD);
 		positionValidators.add(heightValidator);
 
-		JSSPixelEditorValidator widthValidator = new JSSPixelEditorValidator(JRDesignElement.PROPERTY_WIDTH);
+		JSSPixelLocationValidator widthValidator = new JSSPixelLocationValidator(JRDesignElement.PROPERTY_WIDTH);
 		widthValidator.setTargetNode(this);
-		PixelPropertyDescriptor widthD = new NotNullPixelPropertyDescriptor(JRBaseElement.PROPERTY_WIDTH,Messages.MGraphicElement_width);
+		PixelPropertyDescriptor widthD = new PixelPropertyDescriptor(JRBaseElement.PROPERTY_WIDTH,Messages.MGraphicElement_width);
 		widthD.setCategory(Messages.common_size);
 		widthD.setDescription(Messages.MGraphicElement_width_description);
 		widthD.setValidator(widthValidator);
 		desc.add(widthD);
 		positionValidators.add(widthValidator);
 
-		JSSPixelEditorValidator xValidator = new JSSPixelEditorValidator(JRBaseElement.PROPERTY_X);
+		JSSPixelLocationValidator xValidator = new JSSPixelLocationValidator(JRBaseElement.PROPERTY_X);
 		xValidator.setTargetNode(this);
-		PixelPropertyDescriptor xD = new NotNullPixelPropertyDescriptor(JRBaseElement.PROPERTY_X, Messages.common_left);
+		PixelPropertyDescriptor xD = new PixelPropertyDescriptor(JRBaseElement.PROPERTY_X, Messages.common_left);
 		xD.setCategory(Messages.MGraphicElement_location_category);
 		xD.setDescription(Messages.MGraphicElement_left_description);
 		xD.setValidator(xValidator);
 		desc.add(xD);
 		positionValidators.add(xValidator);
 
-		JSSPixelEditorValidator yValidator = new JSSPixelEditorValidator(JRDesignElement.PROPERTY_Y);
+		JSSPixelLocationValidator yValidator = new JSSPixelLocationValidator(JRDesignElement.PROPERTY_Y);
 		yValidator.setTargetNode(this);
-		PixelPropertyDescriptor yD = new NotNullPixelPropertyDescriptor(JRDesignElement.PROPERTY_Y, Messages.common_top);
+		PixelPropertyDescriptor yD = new PixelPropertyDescriptor(JRDesignElement.PROPERTY_Y, Messages.common_top);
 		yD.setCategory(Messages.MGraphicElement_location_category);
 		yD.setDescription(Messages.MGraphicElement_top_description);
 		yD.setValidator(yValidator);

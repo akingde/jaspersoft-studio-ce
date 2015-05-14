@@ -14,28 +14,87 @@ package com.jaspersoft.studio.property.section.report.util;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class Unit {
-	private int dpi = 72;
+	
+	/**
+	 * Exception raised when the construction value is converted into pixels,
+	 * if the number of pixels is too big\small to fit an integer.
+	 * Since all the pixels value are stored into an integer the integer
+	 * max and min work as upper and lower bound
+	 * 
+	 * @author Orlandin Marco
+	 *
+	 */
+	public class PixelConversionException extends RuntimeException{
+		
+		private static final long serialVersionUID = -9221259595310027388L;
 
-	public static final String MM = "mm";
-	public static final String CM = "cm";
-	public static final String METER = "m";
-	public static final String INCH = "inch";
-	public static final String PX = "pixel";
+		/**
+		 * It is the nearest value to the requested one, typically this will
+		 * be the upper or lower bound of an integer number
+		 */
+		private int nearestValue;
+		
+		/**
+		 * Create the exception
+		 * 
+		 * @param message message of the exception
+		 * @param nearestValue It is the nearest value to the requested one, typically this will
+		 * be the upper or lower bound of an integer number
+		 */
+		public PixelConversionException(String message, int nearestValue){
+			super(message);
+			this.nearestValue = nearestValue;
+		}
+		
+		/**
+		 * Return  the nearest value to the requested one, typically this will
+		 * be the upper or lower bound of an integer number
+		 * 
+		 * @return a valid integer
+		 */
+		public int getNearestValue(){
+			return nearestValue;
+		}
+	}
+	
+	/**
+	 * Upper bound for the pixels
+	 */
+	protected static final BigDecimal MAXIMUM_PIXELS = new BigDecimal(Integer.MAX_VALUE);
+	
+	/**
+	 * Lower bound for the pixels
+	 */
+	protected static final BigDecimal MINIMUM_PIXELS = new BigDecimal(Integer.MIN_VALUE);
+
+	//DEFAULT MEASURE UNIT
+	
+	public static final String MM = "mm"; //$NON-NLS-1$
+	
+	public static final String CM = "cm"; //$NON-NLS-1$
+	
+	public static final String METER = "m"; //$NON-NLS-1$
+	
+	public static final String INCH = "inch"; //$NON-NLS-1$
+	
+	public static final String PX = "pixel"; //$NON-NLS-1$
 
 	private static final Map<String, BigDecimal> units = new LinkedHashMap<String, BigDecimal>();
 	static {
 		units.put(PX, new BigDecimal(1));
-		units.put(MM, new BigDecimal("25.4"));
-		units.put(CM, new BigDecimal("2.54"));
-		units.put(METER, new BigDecimal("0.0254"));
+		units.put(MM, new BigDecimal("25.4")); //$NON-NLS-1$
+		units.put(CM, new BigDecimal("2.54")); //$NON-NLS-1$
+		units.put(METER, new BigDecimal("0.0254")); //$NON-NLS-1$
 		units.put(INCH, new BigDecimal(1));
 	}
 
@@ -44,44 +103,58 @@ public class Unit {
 	 */
 	private static final Map<String, String> alias = new LinkedHashMap<String, String>();
 	static {
-		alias.put("pixel", PX);
-		alias.put("pixels", PX);
-		alias.put("px", PX);
+		alias.put("pixel", PX); //$NON-NLS-1$
+		alias.put("pixels", PX); //$NON-NLS-1$
+		alias.put("px", PX); //$NON-NLS-1$
 		alias.put(PX, PX);
 
-		alias.put("cm", CM);
-		alias.put("centimeter", CM);
-		alias.put("centimeters", CM);
+		alias.put("cm", CM); //$NON-NLS-1$
+		alias.put("centimeter", CM); //$NON-NLS-1$
+		alias.put("centimeters", CM); //$NON-NLS-1$
 		alias.put(CM, CM);
 
-		alias.put("mm", MM);
-		alias.put("millimeter", MM);
-		alias.put("millimeters", MM);
+		alias.put("mm", MM); //$NON-NLS-1$
+		alias.put("millimeter", MM); //$NON-NLS-1$
+		alias.put("millimeters", MM); //$NON-NLS-1$
 		alias.put(MM, MM);
 
-		alias.put("inches", INCH);
-		alias.put("inch", INCH);
-		alias.put("''", INCH);
-		alias.put("\"", INCH);
+		alias.put("inches", INCH); //$NON-NLS-1$
+		alias.put("inch", INCH); //$NON-NLS-1$
+		alias.put("''", INCH); //$NON-NLS-1$
+		alias.put("\"", INCH); //$NON-NLS-1$
 		alias.put(INCH, INCH);
 
-		alias.put("meter", METER);
-		alias.put("meters", METER);
-		alias.put("m", METER);
+		alias.put("meter", METER); //$NON-NLS-1$
+		alias.put("meters", METER); //$NON-NLS-1$
+		alias.put("m", METER); //$NON-NLS-1$
 		alias.put(METER, METER);
 	}
-
-	// value in pixel
+	
+	/**
+	 * The DPI value
+	 */
+	private int dpi = 72;
+	
+	/**
+	 * The value in pixel
+	 */
 	private int value = 0;
+	
+	/**
+	 * The original measure unit of the value
+	 */
 	private String unit = PX;
-
-	public Unit(double value, String unit, JasperReportsConfiguration jConfig) {
+	
+	/**
+	 * An array of all the available measure units keys
+	 */
+	private static String[] unitsArrays;
+	
+	public Unit(double value, String unit, JasperReportsConfiguration jConfig) throws PixelConversionException{
 		super();
 		setValue(value, unit);
-		dpi = Misc.nvl(jConfig.getPropertyInteger("net.sf.jasperreports.image.dpi"), dpi);
+		dpi = Misc.nvl(jConfig.getPropertyInteger("net.sf.jasperreports.image.dpi"), dpi); //$NON-NLS-1$
 	}
-
-	private static String[] unitsArrays;
 
 	public boolean setUnit(String unit) {
 		if (this.unit.equals(unit))
@@ -93,10 +166,35 @@ public class Unit {
 		return false;
 	}
 
-	private int toValue(double value, BigDecimal c) {
-		int pixel = new BigDecimal(value * dpi).divide(c, 0, RoundingMode.FLOOR).intValue();
-		// System.out.println("TO -> [" + unit + "] Value: " + value + " C: " + c + " pixel:" + pixel);
-		return pixel;
+	/**
+	 * Convert a value into an integer pixels
+	 * 
+	 * @param value the value to convert
+	 * @param c the conversion scale 
+	 * @return the passed value converted int pixels using the conversion scale
+	 * @throws PixelConversionException raised when the number of pixels doesn't fit an integer
+	 */
+	private int toValue(double value, BigDecimal c) throws PixelConversionException {
+		//convert the value into pixels
+		BigDecimal pixel = new BigDecimal(value * dpi).divide(c, 0, RoundingMode.FLOOR);
+		//Check if the pixels amount fit an integer
+		if (pixel.compareTo(MAXIMUM_PIXELS) == 1) {
+			throw getErrorException(true, pixel.toPlainString()); 
+		} else if (pixel.compareTo(MINIMUM_PIXELS) == -1) {
+			throw getErrorException(false, pixel.toPlainString()); 
+		} 
+		//At this point it can be converted into a valid int, so return it
+		return pixel.intValue();
+	}
+	
+	protected PixelConversionException getErrorException(boolean isMaximum, String inputValue){
+		if (isMaximum) {
+			String message = MessageFormat.format(Messages.Unit_errorTooBig, new Object[]{inputValue, MAXIMUM_PIXELS.toPlainString()});
+			return new PixelConversionException(message, Integer.MAX_VALUE);
+		} else {
+			String message = MessageFormat.format(Messages.Unit_errorTooSmall, new Object[]{inputValue, MINIMUM_PIXELS.toPlainString()});
+			return new PixelConversionException(message, Integer.MIN_VALUE);
+		} 
 	}
 
 	public double pixel2unit(int val) {
@@ -114,10 +212,18 @@ public class Unit {
 		return uval;
 	}
 
-	public void setValue(double value, String unit) {
-		if (unit.equals(PX))
+	public void setValue(double value, String unit) throws PixelConversionException{
+		if (unit.equals(PX)){
+			//The unit is already in pixel, check only if the pixels amount fit an integer
+			if (value > (double)Integer.MAX_VALUE){
+				throw getErrorException(true, String.format("%.0f", value)); 
+			} else if (value < (double)Integer.MIN_VALUE){
+				throw getErrorException(false, String.format("%.0f", value)); 
+			}
+			//At this point it can be converted into a valid int, so convert it
 			this.value = (int) value;
-		else {
+		} else {
+			//Convert the unit into pixels
 			BigDecimal c = units.get(unit);
 			if (c != null) {
 				this.value = toValue(value, c);
