@@ -138,8 +138,12 @@ public class MLinePen extends APropertyNode implements IPropertySource {
 				return Colors.getSWTRGB4AWTGBColor(linePen.getOwnLineColor());
 			if (id.equals(JRBasePen.PROPERTY_LINE_WIDTH))
 				return linePen.getOwnLineWidth();
-			if (id.equals(JRBasePen.PROPERTY_LINE_STYLE))
+			if (id.equals(JRBasePen.PROPERTY_LINE_STYLE)){
+				if (penLineStyleD == null){
+					getPropertyDescriptors();
+				}
 				return penLineStyleD.getIntValue(linePen.getOwnLineStyleValue());
+			}
 		}
 		return null;
 	}
@@ -152,8 +156,12 @@ public class MLinePen extends APropertyNode implements IPropertySource {
 				return Colors.getSWTRGB4AWTGBColor(linePen.getLineColor());
 			if (id.equals(JRBasePen.PROPERTY_LINE_WIDTH))
 				return linePen.getLineWidth();
-			if (id.equals(JRBasePen.PROPERTY_LINE_STYLE))
+			if (id.equals(JRBasePen.PROPERTY_LINE_STYLE)){
+				if (penLineStyleD == null){
+					getPropertyDescriptors();
+				}
 				return penLineStyleD.getIntValue(linePen.getLineStyleValue());
+			}
 		}
 		return null;
 	}
@@ -168,8 +176,11 @@ public class MLinePen extends APropertyNode implements IPropertySource {
 		if (linePen != null) {
 			if (id.equals(JRBasePen.PROPERTY_LINE_WIDTH)) {
 				Float lineWidth = (Float) value;
-				if (lineWidth.floatValue() >= 0)
+				if (lineWidth != null && lineWidth.floatValue()>=0){
 					linePen.setLineWidth(Math.abs(lineWidth));
+				} else {
+					linePen.setLineWidth(null);
+				}
 			} else if (id.equals(JRBasePen.PROPERTY_LINE_COLOR)) {
 				if (value == null)
 					linePen.setLineColor(null);

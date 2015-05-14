@@ -743,8 +743,11 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 				jrElement.setMode(ModeEnum.TRANSPARENT);
 			else
 				jrElement.setMode(ModeEnum.OPAQUE);
-		else if (id.equals(JRDesignElement.PROPERTY_POSITION_TYPE))
+		else if (id.equals(JRDesignElement.PROPERTY_POSITION_TYPE)){
+			if (positionTypeD == null)
+				getPropertyDescriptors();
 			jrElement.setPositionType(positionTypeD.getEnumValue(value));
+		}
 		else if (id.equals(JRDesignElement.PROPERTY_STRETCH_TYPE))
 			jrElement.setStretchType(stretchTypeD.getEnumValue(value));
 

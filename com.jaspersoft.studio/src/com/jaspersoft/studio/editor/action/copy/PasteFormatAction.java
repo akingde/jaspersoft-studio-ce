@@ -48,10 +48,14 @@ public class PasteFormatAction extends ACachedSelectionAction {
 		setEnabled(false);
 	}
 
-
 	@Override
 	public void run() {
-		execute(createCommand());
+		try{
+			execute(createCommand());
+		} catch(Exception ex){
+			ex.printStackTrace();
+			JaspersoftStudioPlugin.getInstance().logError(ex);
+		}
 	}
 	
 	@Override
