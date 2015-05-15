@@ -17,9 +17,13 @@ import net.sf.jasperreports.engine.JasperReportsContext;
 
 import org.eclipse.core.databinding.beans.PojoObservables;
 import org.eclipse.jface.databinding.swt.SWTObservables;
+import org.eclipse.jface.viewers.ComboViewer;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
@@ -31,6 +35,7 @@ import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.hive.messages.Messages;
 import com.jaspersoft.studio.data.secret.DataAdaptersSecretsProvider;
 import com.jaspersoft.studio.swt.widgets.WSecretText;
+import com.jaspersoft.studio.utils.Pair;
 
 /**
  * 
@@ -38,9 +43,12 @@ import com.jaspersoft.studio.swt.widgets.WSecretText;
  * 
  */
 public class HiveDataAdapterComposite extends ADataAdapterComposite {
-	private Text urlField;
+	private static final URLDetails CLOUDERA_HIVE_DETAILS = new URLDetails("Hive", "jdbc:hive://localhost:10000/default");
+	private static final URLDetails CLOUDERA_IMPALA_DETAILS = new URLDetails("Impala", "jdbc:hive2://localhost:21050/default;auth=noSasl");
 	private Text usernameField;
 	private WSecretText passwordField;
+	private ComboViewer urlComboViewer;
+	private Combo urlCombo;
 
 	private HiveDataAdapterDescriptor dataAdapterDescriptor;
 
@@ -53,8 +61,26 @@ public class HiveDataAdapterComposite extends ADataAdapterComposite {
 		setLayout(new GridLayout(2, false));
 
 		createLabel(Messages.HiveDataAdapterComposite_labelurl);
-		urlField = new Text(this, SWT.BORDER);
-		urlField.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		urlComboViewer = new ComboViewer(this, SWT.NONE);
+		urlCombo = urlComboViewer.getCombo();
+		urlCombo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		urlComboViewer.add(CLOUDERA_HIVE_DETAILS);
+		urlComboViewer.add(CLOUDERA_IMPALA_DETAILS);
+		urlComboViewer.addSelectionChangedListener(new ISelectionChangedListener() {
+			@Override
+			public void selectionChanged(SelectionChangedEvent event) {
+				int selectionIndex = urlCombo.getSelectionIndex();
+				if(selectionIndex==0){
+					urlCombo.setText(CLOUDERA_HIVE_DETAILS.getValue());
+				}
+				else if(selectionIndex==1){
+					urlCombo.setText(CLOUDERA_IMPALA_DETAILS.getValue());
+				}
+				else {
+					// nothing
+				}
+			}
+		});
 		
 		createLabel(Messages.HiveDataAdapterComposite_labelUsername);
 		usernameField = new Text(this, SWT.BORDER);
@@ -89,7 +115,7 @@ public class HiveDataAdapterComposite extends ADataAdapterComposite {
 
 	@Override
 	protected void bindWidgets(DataAdapter dataAdapter) {
-		bindingContext.bindValue(SWTObservables.observeText(urlField, SWT.Modify), PojoObservables.observeValue(dataAdapter, "url")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeText(urlCombo), PojoObservables.observeValue(dataAdapter, "url")); //$NON-NLS-1$
 		bindingContext.bindValue(SWTObservables.observeText(usernameField, SWT.Modify), PojoObservables.observeValue(dataAdapter, "username")); //$NON-NLS-1$
 		bindingContext.bindValue(SWTObservables.observeText(passwordField, SWT.Modify), PojoObservables.observeValue(dataAdapter, "password")); //$NON-NLS-1$
 	}
@@ -108,5 +134,17 @@ public class HiveDataAdapterComposite extends ADataAdapterComposite {
 	@Override
 	public String getHelpContextId() {
 		return PREFIX.concat("adapter_hive"); //$NON-NLS-1$
+	}
+	
+	private static class URLDetails extends Pair<String, String> {
+
+		public URLDetails(String key, String value) {
+			super(key, value);
+		}
+		
+		@Override
+		public String toString() {
+			return getKey() + "( " + getValue() + ")";
+		}
 	}
 }
