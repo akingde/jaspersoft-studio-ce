@@ -22,6 +22,7 @@ import com.jaspersoft.studio.callout.CalloutFigure;
 import com.jaspersoft.studio.callout.MCallout;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MEllipse;
+import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.MLine;
 import com.jaspersoft.studio.model.MRectangle;
 import com.jaspersoft.studio.model.frame.MFrame;
@@ -39,6 +40,8 @@ import com.jaspersoft.studio.plugin.ExtensionManager;
  */
 public class FigureFactory {
 
+
+	
 	/**
 	 * Creates a new Figure object.
 	 * 
@@ -73,7 +76,11 @@ public class FigureFactory {
 			return new ComponentFigure();
 		if (node instanceof MCallout)
 			return new CalloutFigure();
-		else {
+		else if (node instanceof MGraphicElement){
+			org.eclipse.draw2d.RectangleFigure rfig = new GenericGraphicalFigure((MGraphicElement)node);
+			rfig.setLayoutManager(new XYLayout());
+			return rfig;
+		}		else {
 			org.eclipse.draw2d.RectangleFigure rfig = new org.eclipse.draw2d.RectangleFigure();
 			rfig.setLayoutManager(new XYLayout());
 			return rfig;
