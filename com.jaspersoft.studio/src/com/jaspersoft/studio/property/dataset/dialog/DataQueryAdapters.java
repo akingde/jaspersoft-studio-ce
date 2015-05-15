@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.property.dataset.dialog;
 
@@ -176,8 +172,8 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 					languages[0] = lang;
 					langCombo.setItem(0, lang);
 					langCombo.select(0);
-					//On windows the selection of an enrty select also all the
-					//text inside the combo, so we need to restore the old selection
+					// On windows the selection of an enrty select also all the
+					// text inside the combo, so we need to restore the old selection
 					langCombo.setSelection(oldSelection);
 				}
 				changeLanguage();
@@ -310,14 +306,18 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 			newdataset.setQuery((JRDesignQuery) query);
 		}
 		isRefresh = true;
-		int langindex = Misc.indexOf(languages, query.getLanguage());
-		if (langindex >= 0)
-			langCombo.select(langindex);
-		else {
-			langCombo.setItem(0, Misc.nvl(query.getLanguage()));
-			langCombo.select(0);
+		try {
+			int langindex = Misc.indexOf(languages, query.getLanguage());
+			if (langindex >= 0)
+				langCombo.select(langindex);
+			else {
+				langCombo.setItem(0, Misc.nvl(query.getLanguage()));
+				langCombo.select(0);
+			}
+		} finally {
+			isRefresh = false;
 		}
-		isRefresh = false;
+
 		changeLanguage();
 
 		if (jDesign != null) {
@@ -331,7 +331,7 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 			// NOTE: temporary commenting this
 			// It appears it prevents double invocation of the
 			// #setDataAdapter in the designers
-			//currentDesigner.setDataAdapter(dscombo.getSelected());
+			// currentDesigner.setDataAdapter(dscombo.getSelected());
 		}
 	}
 

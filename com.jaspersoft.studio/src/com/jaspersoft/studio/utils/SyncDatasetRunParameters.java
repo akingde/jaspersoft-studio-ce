@@ -156,7 +156,8 @@ public class SyncDatasetRunParameters {
 	}
 
 	private static boolean isNeedParameters(JRDataset subDS) {
-		if (subDS.getQuery() != null && subDS.getQuery().getLanguage().equalsIgnoreCase("plsql"))
+		if (subDS.getQuery() != null && subDS.getQuery().getLanguage() != null
+				&& subDS.getQuery().getLanguage().equalsIgnoreCase("plsql"))
 			return false;
 		return subDS.getPropertiesMap().containsProperty(
 				DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION);
