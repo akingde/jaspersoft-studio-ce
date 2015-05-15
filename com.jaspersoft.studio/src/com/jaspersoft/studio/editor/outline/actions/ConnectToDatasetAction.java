@@ -12,20 +12,18 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.outline.actions;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.gef.EditPart;
-import org.eclipse.gef.ui.actions.SelectionAction;
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchPart;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
-import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.editor.action.ACachedSelectionAction;
 import com.jaspersoft.studio.model.dataset.MDataset;
-import com.jaspersoft.studio.property.dataset.wizard.ConnectToDomainWizard;
+import com.jaspersoft.studio.property.dataset.wizard.ConnectToDatasetWizard;
+import com.jaspersoft.studio.property.dataset.wizard.ConnectToDatasetWizardPage;
 
 /**
  * Action to open the wizard to export create the domain parameters for 
@@ -34,10 +32,10 @@ import com.jaspersoft.studio.property.dataset.wizard.ConnectToDomainWizard;
  * @author Orlandin Marco
  *
  */
-public class ConnectToDomainAction extends SelectionAction {
+public class ConnectToDatasetAction extends ACachedSelectionAction {
 
 	/** The Constant ID. */
-	public static final String ID = "connect_to_domain"; //$NON-NLS-1$
+	public static final String ID = "connect_to_dataset"; //$NON-NLS-1$
 
 	/**
 	 * Constructs a <code>CreateAction</code> using the specified part.
@@ -45,7 +43,7 @@ public class ConnectToDomainAction extends SelectionAction {
 	 * @param part
 	 *          The part for this action
 	 */
-	public ConnectToDomainAction(IWorkbenchPart part) {
+	public ConnectToDatasetAction(IWorkbenchPart part) {
 		super(part);
 	}
 
@@ -55,9 +53,9 @@ public class ConnectToDomainAction extends SelectionAction {
 	@Override
 	protected void init() {
 		super.init();
-		setText(Messages.ConnectToDomainWizardPage_dialogTitle);
-		setToolTipText(Messages.ConnectToDomainAction_actionTooltip);
-		setId(ConnectToDomainAction.ID);
+		setText("Connect to Main Dataset");
+		setToolTipText("Create the parameters to connect the current dataset to the main dataset");
+		setId(ConnectToDatasetAction.ID);
 		setImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/connectdomain.png")); //$NON-NLS-1$
 		setEnabled(false);
 	}
@@ -68,35 +66,22 @@ public class ConnectToDomainAction extends SelectionAction {
 	 */
 	@Override
 	protected boolean calculateEnabled() {
-		List<MDataset> selectedDatasets = getSelectedDatasets();
-		return !selectedDatasets.isEmpty() && selectedDatasets.size()==1;
-	}
-
-	@Override
-	public void run() {
-		ConnectToDomainWizard importWizard = new ConnectToDomainWizard(getSelectedDatasets().get(0));
-		WizardDialog dialog = new WizardDialog(Display.getDefault().getActiveShell(), importWizard);
-		dialog.open();
+		List<?> selectedDatasets = editor.getSelectionCache().getSelectionModelForType(MDataset.class);
+		return (selectedDatasets.size() == 1);
 	}
 	
-	/**
-	 * Return the list of all the selected MDataset. 
-	 * 
-	 * @return a not null list of MDataset
-	 */
-	private List<MDataset> getSelectedDatasets(){
-		List<?> objects = getSelectedObjects();
-		if (objects == null || objects.isEmpty())
-			return new ArrayList<MDataset>();
-		List<MDataset> result = new ArrayList<MDataset>();
-		for (Object obj : objects){
-			if (obj instanceof EditPart) {
-				ANode n = (ANode) ((EditPart) obj).getModel();
-				if (n instanceof MDataset) {
-					result.add((MDataset)n);
-				}
-			}
+	@Override
+	public void run() {
+		List<?> selectedDatasets = editor.getSelectionCache().getSelectionModelForType(MDataset.class);
+		MDataset dataset = (MDataset)selectedDatasets.get(0);
+		
+		ConnectToDatasetWizardPage page = new ConnectToDatasetWizardPage(dataset);
+		ConnectToDatasetWizard importWizard = new ConnectToDatasetWizard(page);
+		WizardDialog dialog = new WizardDialog(Display.getDefault().getActiveShell(), importWizard);
+		if (dialog.open() == Dialog.OK){
+			command = page.getCommand();
+			execute(command);
 		}
-		return result;
 	}
+	
 }

@@ -107,7 +107,7 @@ public class SyncDatasetRunParameters {
 		}
 	}
 
-	public static void syncDataset(MDataset mDsRun, String oldLang, String newLang) throws JRException {
+	public static void syncDataset(MDataset mDsRun, String oldLang, String newLang, boolean forceAddOnDatasetRuns) throws JRException {
 		MReport mrep = (MReport) mDsRun.getMreport();
 		if (mrep == null)
 			return;
@@ -144,7 +144,7 @@ public class SyncDatasetRunParameters {
 							cleanDatasetRun(bprms, dr);
 					}
 				}
-				if (mLang == null || (newLang != null && newLang.equals(mLang))) {
+				if (forceAddOnDatasetRuns || mLang == null || (newLang != null && newLang.equals(mLang))) {
 					for (JRDesignDatasetRun dr : getDatasetRun(mrep, subDS)) {
 						Object[] bprms = getBuiltInParameters(jConf, newLang);
 						if (bprms != null)
@@ -246,7 +246,7 @@ public class SyncDatasetRunParameters {
 		for (int i = 0; i < bprms.length; i += 2) {
 			String pname = (String) bprms[i];
 			JRDatasetParameter p = getParameter(dr, pname);
-			if (p.getExpression() != null && p.getExpression().getText() != null
+			if (p != null && p.getExpression() != null && p.getExpression().getText() != null
 					&& p.getExpression().getText().equals("$P{" + pname + "}"))
 				dr.removeParameter(p);
 		}

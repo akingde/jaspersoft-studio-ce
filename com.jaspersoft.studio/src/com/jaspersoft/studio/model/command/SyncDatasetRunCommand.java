@@ -21,9 +21,12 @@ import com.jaspersoft.studio.model.dataset.MDataset;
 import com.jaspersoft.studio.utils.SyncDatasetRunParameters;
 
 public class SyncDatasetRunCommand extends Command {
-	private MDataset dataset;
-	private String oldLang;
-	private String newLang;
+	
+	protected MDataset dataset;
+	
+	protected String oldLang;
+	
+	protected String newLang;
 
 	public SyncDatasetRunCommand(MDataset target, MQuery newValue, MQuery oldValue) {
 		super();
@@ -39,12 +42,19 @@ public class SyncDatasetRunCommand extends Command {
 		this.newLang = newValue;
 	}
 
+	public SyncDatasetRunCommand(MDataset target, String newValue, String oldValue) {
+		super();
+		dataset = target;
+		this.oldLang = oldValue;
+		this.newLang = newValue;
+	}
+	
 	@Override
 	public void execute() {
 		try {
 			for (IQueryLanguageChanged exec : SyncDatasetRunParameters.changed)
 				exec.syncDataset(dataset.getJasperDesign(), dataset.getValue(), oldLang, newLang);
-			SyncDatasetRunParameters.syncDataset(dataset, oldLang, newLang);
+			SyncDatasetRunParameters.syncDataset(dataset, oldLang, newLang, false);
 		} catch (JRException e) {
 			e.printStackTrace();
 		}
@@ -55,7 +65,7 @@ public class SyncDatasetRunCommand extends Command {
 		try {
 			for (IQueryLanguageChanged exec : SyncDatasetRunParameters.changed)
 				exec.syncDataset(dataset.getJasperDesign(), dataset.getValue(), newLang, oldLang);
-			SyncDatasetRunParameters.syncDataset(dataset, newLang, oldLang);
+			SyncDatasetRunParameters.syncDataset(dataset, newLang, oldLang, false);
 		} catch (JRException e) {
 			e.printStackTrace();
 		}

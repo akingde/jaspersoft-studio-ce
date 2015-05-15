@@ -12,8 +12,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.dataset.wizard;
 
-import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.model.dataset.MDataset;
 import com.jaspersoft.studio.wizards.JSSWizard;
 
 /**
@@ -22,34 +20,28 @@ import com.jaspersoft.studio.wizards.JSSWizard;
  * @author Orlandin Marco
  *
  */
-public class ConnectToDomainWizard extends JSSWizard {
+public class ConnectToDatasetWizard extends JSSWizard {
 
 	/**
 	 * First page of the wizard
 	 */
-	private ConnectToDomainWizardPage step1;
-	
-	/**
-	 * Dataset where the operation is performed
-	 */
-	private MDataset connectedDataset;
+	private ConnectToDatasetWizardPage step1;
 
 	/**
 	 * Create the wizard
 	 * 
 	 * @param connectedDataset the selected dataset
 	 */
-	public ConnectToDomainWizard(MDataset connectedDataset) {
+	public ConnectToDatasetWizard(ConnectToDatasetWizardPage connectionPage) {
 		super();
-		setWindowTitle(Messages.ConnectToDomainWizardPage_dialogTitle);
+		setWindowTitle("Connect to Main Dataset");
 		setNeedsProgressMonitor(true);
-		this.connectedDataset = connectedDataset;
+		step1 = connectionPage;
 	}
 
 
 	@Override
 	public void addPages() {
-		step1 = new ConnectToDomainWizardPage(connectedDataset);
 		addPage(step1);
 	}
 
@@ -62,11 +54,11 @@ public class ConnectToDomainWizard extends JSSWizard {
 		return step1.canFinish();
 	}
 
-	@Override
+	/*@Override
 	public boolean performFinish() {
 		step1.doAction();
 		return super.performFinish();
-	}
+	}*/
 
 
 }
