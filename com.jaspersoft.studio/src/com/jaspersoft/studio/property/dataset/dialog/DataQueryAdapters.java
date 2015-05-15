@@ -152,6 +152,9 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 		langCombo = new Combo(sectionClient, SWT.SINGLE | SWT.BORDER);
 		languages = ModelUtils.getQueryLanguages(jConfig);
 		langCombo.setItems(languages);
+		GridData gd = new GridData();
+		gd.widthHint = 200;
+		langCombo.setLayoutData(gd);
 		langCombo.addSelectionListener(new SelectionListener() {
 
 			public void widgetSelected(SelectionEvent e) {
@@ -187,7 +190,7 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 		tbCompo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		langComposite = new Composite(sectionClient, SWT.NONE);
-		GridData gd = new GridData(GridData.FILL_BOTH);
+		gd = new GridData(GridData.FILL_BOTH);
 		gd.horizontalSpan = 3;
 		langComposite.setLayoutData(gd);
 		langLayout = new StackLayout();
@@ -214,6 +217,7 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 				lang = "SQL";
 				langCombo.setText("SQL");
 			}
+			langCombo.setToolTipText(lang);
 			((JRDesignQuery) newdataset.getQuery()).setLanguage(lang);
 			final IQueryDesigner designer = qdfactory.getDesigner(lang);
 			langLayout.topControl = designer.getControl();
