@@ -9,7 +9,6 @@
 package com.jaspersoft.studio.components.barcode.figure;
 
 import net.sf.jasperreports.components.barcode4j.BarcodeDesignEvaluator;
-import net.sf.jasperreports.components.barcode4j.BarcodeImageProducer;
 import net.sf.jasperreports.components.barcode4j.QRCodeComponent;
 import net.sf.jasperreports.engine.JRComponentElement;
 import net.sf.jasperreports.engine.JRException;
@@ -89,24 +88,10 @@ public class LazyBarcodeDesignConverter extends AComponentDesignConverter {
 		try {
 			JasperReportsContext jcontext = reportConverter
 					.getJasperReportsContext();
-			String old = jcontext
-					.getProperty(BarcodeImageProducer.PROPERTY_IMAGE_PRODUCER);
-			jcontext.setProperty(BarcodeImageProducer.PROPERTY_IMAGE_PRODUCER,
-					"image");
-			Renderable r = null;
-			try {
-				BarcodeDesignEvaluator evaluator = new BarcodeDesignEvaluator(
-						jcontext, element,
-						reportConverter.getDefaultStyleProvider());
-				r = evaluator.evaluateImage();
-			} finally {
-				if (old == null)
-					jcontext.removeProperty(BarcodeImageProducer.PROPERTY_IMAGE_PRODUCER);
-				else
-					jcontext.setProperty(
-							BarcodeImageProducer.PROPERTY_IMAGE_PRODUCER, old);
-			}
-			return r;
+			BarcodeDesignEvaluator evaluator = new BarcodeDesignEvaluator(
+					jcontext, element,
+					reportConverter.getDefaultStyleProvider());
+			return evaluator.evaluateImage();
 		} catch (Exception e) {
 			return null;
 		}
