@@ -1827,9 +1827,6 @@ public class ModelUtils {
 		if(!ObjectUtils.equals(field1.getDescription(), field2.getDescription())){
 			return false;
 		}
-		if(!ObjectUtils.equals(field1.getValueClass(),field2.getValueClass())){
-			return false;
-		}
 		if(!ObjectUtils.equals(field1.getValueClassName(),field2.getValueClassName())){
 			return false;
 		}
@@ -1861,9 +1858,6 @@ public class ModelUtils {
 			return false;
 		}
 		if(!ObjectUtils.equals(param1.getDescription(), param2.getDescription())){
-			return false;
-		}
-		if(!ObjectUtils.equals(param1.getValueClass(),param2.getValueClass())){
 			return false;
 		}
 		if(!ObjectUtils.equals(param1.getValueClassName(),param2.getValueClassName())){
