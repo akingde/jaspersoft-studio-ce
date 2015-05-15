@@ -210,6 +210,10 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 		if (!isRefresh) {
 			qStatus.showInfo("");
 			String lang = langCombo.getText();
+			if (Misc.isNullOrEmpty(lang)) {
+				lang = "SQL";
+				langCombo.setText("SQL");
+			}
 			((JRDesignQuery) newdataset.getQuery()).setLanguage(lang);
 			final IQueryDesigner designer = qdfactory.getDesigner(lang);
 			langLayout.topControl = designer.getControl();
