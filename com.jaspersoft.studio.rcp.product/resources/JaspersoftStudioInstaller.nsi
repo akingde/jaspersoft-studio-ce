@@ -8,7 +8,8 @@
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}-${PRODUCT_VERSION}.exe"
 !define PRODUCT_UNINST_ROOT_KEY "HKLM"
 !define PRODUCT_STARTMENU_REGVAL "NSIS:StartMenuDir"
-!define ICONS_GROUP "TIBCO"
+!define PRODUCT_ARCH "32bit"
+!define ICONS_GROUP "TIBCO\${SHORT_PRODUCT_NAME} ${PRODUCT_VERSION} ${PRODUCT_ARCH}"
 
 !include LogicLib.nsh
 !include fileassoc.nsh
@@ -21,9 +22,6 @@
 !define MUI_ABORTWARNING
 !define MUI_ICON "installer\jss_installer.ico"
 !define MUI_UNICON "installer\jss_installer.ico"
-
-; Welcome page
-;!insertmacro MUI_PAGE_WELCOME
 
 ; License page
 !insertmacro MUI_PAGE_LICENSE "EPLv1-LICENSE.txt"
@@ -106,7 +104,7 @@ Section Uninstall
 
   SetShellVarContext all
 
-  StrCmp ${ICONS_GROUP} "" NO_SHORTCUTS
+  StrCmp "${ICONS_GROUP}" "" NO_SHORTCUTS
   RMDir /r /REBOOTOK $INSTDIR
 
   Delete "$SMPROGRAMS\${ICONS_GROUP}\Uninstall.lnk"
