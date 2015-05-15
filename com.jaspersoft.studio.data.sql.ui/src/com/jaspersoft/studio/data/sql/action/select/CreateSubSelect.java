@@ -30,11 +30,15 @@ public class CreateSubSelect extends AAction {
 	@Override
 	public boolean calculateEnabled(Object[] selection) {
 		super.calculateEnabled(selection);
-		return selection != null && selection.length == 1 && isInSelect(selection[0]);
+		return selection != null && selection.length == 1
+				&& isInSelect(selection[0]);
 	}
 
 	public static boolean isInSelect(Object element) {
-		return element instanceof MSelect || (element instanceof ANode && ((ANode) element).getParent() instanceof MSelect);
+		if (element instanceof MSelectSubQuery)
+			return false;
+		return element instanceof MSelect
+				|| (element instanceof ANode && ((ANode) element).getParent() instanceof MSelect);
 	}
 
 	@Override
@@ -44,7 +48,8 @@ public class CreateSubSelect extends AAction {
 		int index = 0;
 		if (sel instanceof MSelect)
 			mselect = (MSelect) sel;
-		else if (sel instanceof ANode && ((ANode) sel).getParent() instanceof MSelect) {
+		else if (sel instanceof ANode
+				&& ((ANode) sel).getParent() instanceof MSelect) {
 			mselect = (MSelect) ((ANode) sel).getParent();
 			index = mselect.getChildren().indexOf(sel) + 1;
 		}

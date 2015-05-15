@@ -27,6 +27,8 @@ import com.jaspersoft.studio.data.sql.messages.Messages;
 import com.jaspersoft.studio.data.sql.model.metadata.MSqlTable;
 import com.jaspersoft.studio.data.sql.model.query.from.MFrom;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
+import com.jaspersoft.studio.data.sql.model.query.select.MSelectSubQuery;
+import com.jaspersoft.studio.data.sql.model.query.subquery.MQueryTable;
 
 public class CreateTable extends AAction {
 	private SQLQueryDesigner designer;
@@ -39,10 +41,14 @@ public class CreateTable extends AAction {
 	@Override
 	public boolean calculateEnabled(Object[] selection) {
 		super.calculateEnabled(selection);
-		return selection == null || (selection != null && selection.length == 1 && isInFrom(selection[0]));
+		return selection == null
+				|| (selection != null && selection.length == 1 && isInFrom(selection[0]));
 	}
 
 	public static boolean isInFrom(Object element) {
+		if (element instanceof MFromTable
+				&& ((MFromTable) element).getValue() instanceof MQueryTable)
+			return false;
 		return element instanceof MFrom || element instanceof MFromTable;
 	}
 
@@ -78,7 +84,9 @@ public class CreateTable extends AAction {
 
 			@Override
 			public void run() {
-				designer.getDbMetadata().loadTable(Util.getTable(designer.getDbMetadata().getRoot(), node, designer));
+				designer.getDbMetadata().loadTable(
+						Util.getTable(designer.getDbMetadata().getRoot(), node,
+								designer));
 			}
 		});
 		return new MFromTable(mfrom, node, index);

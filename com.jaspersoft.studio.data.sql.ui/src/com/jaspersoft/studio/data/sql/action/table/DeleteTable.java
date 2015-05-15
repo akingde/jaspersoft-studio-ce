@@ -26,6 +26,7 @@ import com.jaspersoft.studio.data.sql.model.query.orderby.MOrderBy;
 import com.jaspersoft.studio.data.sql.model.query.orderby.MOrderByColumn;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelect;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelectColumn;
+import com.jaspersoft.studio.data.sql.model.query.subquery.MQueryTable;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 
@@ -38,6 +39,9 @@ public class DeleteTable extends DeleteAction<MFromTable> {
 
 	@Override
 	protected boolean isGoodNode(ANode element) {
+		if (element instanceof MFromTable
+				&& ((MFromTable) element).getValue() instanceof MQueryTable)
+			return false;
 		return element instanceof MFromTable;
 	}
 
@@ -49,7 +53,8 @@ public class DeleteTable extends DeleteAction<MFromTable> {
 					List<ANode> toRemove = new ArrayList<ANode>();
 					for (INode gb : n.getChildren()) {
 						MSelectColumn gbc = (MSelectColumn) gb;
-						if (gbc.getMFromTable() != null && gbc.getMFromTable().equals(todel))
+						if (gbc.getMFromTable() != null
+								&& gbc.getMFromTable().equals(todel))
 							toRemove.add(gbc);
 					}
 					((MSelect) n).removeChildren(toRemove);
@@ -57,7 +62,8 @@ public class DeleteTable extends DeleteAction<MFromTable> {
 					List<ANode> toRemove = new ArrayList<ANode>();
 					for (INode gb : n.getChildren()) {
 						MGroupByColumn gbc = (MGroupByColumn) gb;
-						if (gbc.getMFromTable() != null && gbc.getMFromTable().equals(todel))
+						if (gbc.getMFromTable() != null
+								&& gbc.getMFromTable().equals(todel))
 							toRemove.add(gbc);
 					}
 					((MGroupBy) n).removeChildren(toRemove);
@@ -66,7 +72,8 @@ public class DeleteTable extends DeleteAction<MFromTable> {
 					for (INode gb : n.getChildren()) {
 						if (gb instanceof MOrderByColumn) {
 							MOrderByColumn gbc = (MOrderByColumn) gb;
-							if (gbc.getMFromTable() != null && gbc.getMFromTable().equals(todel))
+							if (gbc.getMFromTable() != null
+									&& gbc.getMFromTable().equals(todel))
 								toRemove.add(gbc);
 						}
 					}

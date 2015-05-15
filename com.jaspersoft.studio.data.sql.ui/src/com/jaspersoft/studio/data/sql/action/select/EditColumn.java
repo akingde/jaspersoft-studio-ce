@@ -43,6 +43,8 @@ public class EditColumn extends AAction {
 	}
 
 	protected boolean isColumn(ANode element) {
+		if (element instanceof MSelectSubQuery)
+			return false;
 		return element instanceof MSelectColumn
 				|| element instanceof MSelectExpression
 				|| element instanceof MSelectSubQuery;

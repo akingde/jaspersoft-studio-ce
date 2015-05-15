@@ -33,6 +33,7 @@ import com.jaspersoft.studio.data.sql.model.query.from.MFrom;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelect;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelectColumn;
+import com.jaspersoft.studio.data.sql.model.query.select.MSelectSubQuery;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.utils.Misc;
@@ -61,6 +62,8 @@ public class CreateColumn extends AAction {
 	}
 
 	public boolean isInSelect(Object element) {
+		if (element instanceof MSelectSubQuery)
+			return false;
 		boolean b = element instanceof MSelect
 				|| (element instanceof ANode && ((ANode) element).getParent() instanceof MSelect);
 		if (b && checkTables) {

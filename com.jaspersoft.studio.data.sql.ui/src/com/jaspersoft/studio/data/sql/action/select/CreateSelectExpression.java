@@ -20,6 +20,7 @@ import com.jaspersoft.studio.data.sql.action.AAction;
 import com.jaspersoft.studio.data.sql.dialogs.EditSelectExpressionDialog;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelect;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelectExpression;
+import com.jaspersoft.studio.data.sql.model.query.select.MSelectSubQuery;
 import com.jaspersoft.studio.model.ANode;
 
 public class CreateSelectExpression extends AAction {
@@ -31,16 +32,21 @@ public class CreateSelectExpression extends AAction {
 	@Override
 	public boolean calculateEnabled(Object[] selection) {
 		super.calculateEnabled(selection);
-		return selection != null && selection.length == 1 && isInSelect(selection[0]);
+		return selection != null && selection.length == 1
+				&& isInSelect(selection[0]);
 	}
 
 	public static boolean isInSelect(Object element) {
-		return element instanceof MSelect || (element instanceof ANode && ((ANode) element).getParent() instanceof MSelect);
+		if (element instanceof MSelectSubQuery)
+			return false;
+		return element instanceof MSelect
+				|| (element instanceof ANode && ((ANode) element).getParent() instanceof MSelect);
 	}
 
 	@Override
 	public void run() {
-		EditSelectExpressionDialog dialog = new EditSelectExpressionDialog(Display.getDefault().getActiveShell());
+		EditSelectExpressionDialog dialog = new EditSelectExpressionDialog(
+				Display.getDefault().getActiveShell());
 		MSelectExpression mexpr = new MSelectExpression(null, " ");
 		dialog.setValue(mexpr);
 		if (dialog.open() == Window.OK) {
@@ -49,7 +55,8 @@ public class CreateSelectExpression extends AAction {
 			int index = 0;
 			if (sel instanceof MSelect)
 				mselect = (MSelect) sel;
-			else if (sel instanceof ANode && ((ANode) sel).getParent() instanceof MSelect) {
+			else if (sel instanceof ANode
+					&& ((ANode) sel).getParent() instanceof MSelect) {
 				mselect = (MSelect) ((ANode) sel).getParent();
 				index = mselect.getChildren().indexOf((MSelectExpression) sel) + 1;
 			}

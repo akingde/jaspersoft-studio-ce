@@ -20,6 +20,7 @@ import org.eclipse.jface.viewers.TreeViewer;
 import com.jaspersoft.studio.data.sql.action.AAction;
 import com.jaspersoft.studio.data.sql.dialogs.EditFromTableDialog;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
+import com.jaspersoft.studio.data.sql.model.query.subquery.MQueryTable;
 import com.jaspersoft.studio.model.ANode;
 
 public class EditTable extends AAction {
@@ -31,10 +32,15 @@ public class EditTable extends AAction {
 	@Override
 	public boolean calculateEnabled(Object[] selection) {
 		super.calculateEnabled(selection);
-		return selection != null && selection.length == 1 && selection[0] instanceof ANode && isColumn((ANode) selection[0]);
+		return selection != null && selection.length == 1
+				&& selection[0] instanceof ANode
+				&& isColumn((ANode) selection[0]);
 	}
 
 	protected boolean isColumn(ANode element) {
+		if (element instanceof MFromTable
+				&& ((MFromTable) element).getValue() instanceof MQueryTable)
+			return false;
 		return element instanceof MFromTable;
 	}
 

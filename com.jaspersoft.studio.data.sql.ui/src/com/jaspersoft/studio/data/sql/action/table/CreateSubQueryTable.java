@@ -32,11 +32,17 @@ public class CreateSubQueryTable extends AAction {
 	@Override
 	public boolean calculateEnabled(Object[] selection) {
 		super.calculateEnabled(selection);
-		return selection == null || (selection != null && selection.length == 1 && isInFrom(selection[0]));
+		return selection == null
+				|| (selection != null && selection.length == 1 && isInFrom(selection[0]));
 	}
 
 	public static boolean isInFrom(Object element) {
-		return element instanceof MFrom || (element instanceof MFromTable && ((MFromTable) element).getParent() instanceof MFrom);
+		if (element instanceof MFromTable
+				&& ((MFromTable) element).getValue() instanceof MQueryTable)
+			return false;
+		return element instanceof MFrom
+				|| (element instanceof MFromTable && ((MFromTable) element)
+						.getParent() instanceof MFrom);
 	}
 
 	@Override
@@ -46,7 +52,8 @@ public class CreateSubQueryTable extends AAction {
 		int index = 0;
 		if (sel instanceof MFrom)
 			mfrom = (MFrom) sel;
-		else if (sel instanceof ANode && ((ANode) sel).getParent() instanceof MFrom) {
+		else if (sel instanceof ANode
+				&& ((ANode) sel).getParent() instanceof MFrom) {
 			mfrom = (MFrom) ((ANode) sel).getParent();
 			index = mfrom.getChildren().indexOf((MFromTable) sel) + 1;
 		}
