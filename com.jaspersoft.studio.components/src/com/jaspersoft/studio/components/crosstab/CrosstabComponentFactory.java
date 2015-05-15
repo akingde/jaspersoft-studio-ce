@@ -584,11 +584,6 @@ public class CrosstabComponentFactory implements IComponentFactory {
 
 	public List<Action> getActions(WorkbenchPart part) {
 		List<Action> lst = new ArrayList<Action>();
-		// lst.add(new CreateMeasureAction(part));
-		// lst.add(new CreateColumnGroupAction(part));
-		// lst.add(new CreateRowGroupAction(part));
-		// lst.add(new CreateCrosstabHeaderAction(part));
-		// lst.add(new CreateCrosstabWhenNoDataAction(part));
 		lst.add(new EditCrosstabStyleAction(part));
 		lst.add(new RemoveCrosstabStylesAction(part));
 		return lst;
