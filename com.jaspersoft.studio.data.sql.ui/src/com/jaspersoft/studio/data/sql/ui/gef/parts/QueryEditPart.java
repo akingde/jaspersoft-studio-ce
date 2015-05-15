@@ -44,7 +44,8 @@ public class QueryEditPart extends AbstractGraphicalEditPart {
 
 	@Override
 	protected void createEditPolicies() {
-		installEditPolicy(EditPolicy.CONTAINER_ROLE, new FromContainerEditPolicy());
+		installEditPolicy(EditPolicy.CONTAINER_ROLE,
+				new FromContainerEditPolicy());
 		installEditPolicy(EditPolicy.LAYOUT_ROLE, null);
 	}
 
@@ -58,7 +59,7 @@ public class QueryEditPart extends AbstractGraphicalEditPart {
 			else if (n instanceof MUnion)
 				for (INode sn : n.getChildren())
 					if (sn instanceof MFrom && !n.getChildren().isEmpty())
-						list.add((MFrom) n);
+						; // list.add((MFrom) sn);
 		}
 		return list;
 	}
