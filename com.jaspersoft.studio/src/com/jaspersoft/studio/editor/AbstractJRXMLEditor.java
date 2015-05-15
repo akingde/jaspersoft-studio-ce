@@ -898,11 +898,13 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 			MReport mReport = getMReport();
 			if (mReport != null) {
 				report = mReport.getJasperDesign();
-				Object obj = mReport.getParameter(DataQueryAdapters.DEFAULT_DATAADAPTER);
-				if (obj != null && obj instanceof DataAdapterDescriptor) {
-					String dataAdapterDesc = previewEditor.getDataAdapterDesc().getName();
-					report.removeProperty(DataQueryAdapters.DEFAULT_DATAADAPTER);
-					report.setProperty(DataQueryAdapters.DEFAULT_DATAADAPTER, dataAdapterDesc);
+				if (report.getProperty(DataQueryAdapters.DEFAULT_DATAADAPTER) == null) {
+					Object obj = mReport.getParameter(DataQueryAdapters.DEFAULT_DATAADAPTER);
+					if (obj != null && obj instanceof DataAdapterDescriptor) {
+						String dataAdapterDesc = previewEditor.getDataAdapterDesc().getName();
+						report.removeProperty(DataQueryAdapters.DEFAULT_DATAADAPTER);
+						report.setProperty(DataQueryAdapters.DEFAULT_DATAADAPTER, dataAdapterDesc);
+					}
 				}
 			}
 
