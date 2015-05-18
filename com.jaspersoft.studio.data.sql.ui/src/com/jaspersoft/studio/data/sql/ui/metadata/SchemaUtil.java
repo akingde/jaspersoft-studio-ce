@@ -53,7 +53,7 @@ public class SchemaUtil {
 				}
 				rs.close();
 				stmt.close();
-			} else if (dbproduct.equalsIgnoreCase("Apache Hive")) {
+			} else if (dbproduct.equalsIgnoreCase("Apache Hive") || dbproduct.equalsIgnoreCase("Impala")) {
 				List<String> schemas = new ArrayList<String>();
 				ResultSet rs = c.getMetaData().getSchemas();
 				try {

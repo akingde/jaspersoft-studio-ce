@@ -252,7 +252,7 @@ public class DBMetadata {
 			}
 
 			private void safelyAttachContextMenu(Composite mcmp) {
-				if(mcmp.getMenu()==null){
+				if (mcmp.getMenu() == null) {
 					MenuManager menuMgr = new MenuManager();
 					Menu menu = menuMgr.createContextMenu(mcmp);
 					menuMgr.add(new Action(Messages.DBMetadata_Retry) {
@@ -277,10 +277,7 @@ public class DBMetadata {
 						root, meta, schema);
 				updateUI(root);
 				for (MSqlSchema mcs : mcurrent) {
-					if (meta.getConnection().isClosed()) {
-						connection = getConnection(das, true);
-						meta = connection.getMetaData();
-					}
+					meta = checkClosed(meta);
 					readSchema(meta, mcs, monitor, true);
 				}
 			} catch (Throwable e) {
@@ -299,6 +296,20 @@ public class DBMetadata {
 		closeConnection();
 		monitors.remove(monitor);
 		running = false;
+	}
+
+	public DatabaseMetaData checkClosed(DatabaseMetaData meta)
+			throws SQLException {
+		try {
+			if (meta.getConnection().isClosed()) {
+				connection = getConnection(das, true);
+				return connection.getMetaData();
+			}
+		} catch (SQLException e) {
+			connection = getConnection(das, true);
+			return connection.getMetaData();
+		}
+		return meta;
 	}
 
 	public DatabaseMetaData getMetadata() throws SQLException {
@@ -386,7 +397,9 @@ public class DBMetadata {
 			if (schema.isNotInMetadata())
 				return;
 			schema.setDbMetadata(this);
-			MetaDataUtil.readSchemaTables(meta, schema, getTables(), monitor);
+			checkClosed(meta);
+			MetaDataUtil.readSchemaTables(this, meta, schema, getTables(),
+					monitor);
 			updateItermediateUI();
 			if (monitor.isCanceled())
 				return;

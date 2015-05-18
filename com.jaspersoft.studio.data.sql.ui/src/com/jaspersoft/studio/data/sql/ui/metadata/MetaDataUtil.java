@@ -115,16 +115,15 @@ public class MetaDataUtil {
 		}
 	}
 
-	public synchronized static void readSchemaTables(DatabaseMetaData meta,
-			MSqlSchema schema, LinkedHashMap<String, MSqlTable> tables,
-			IProgressMonitor monitor) {
+	public synchronized static void readSchemaTables(DBMetadata dbmeta,
+			DatabaseMetaData meta, MSqlSchema schema,
+			LinkedHashMap<String, MSqlTable> tables, IProgressMonitor monitor) {
 		try {
 			for (INode n : schema.getChildren())
 				if (n instanceof MTables) {
 					((MTables) n).setDbMetadata(schema.getDbMetadata());
-					if (meta.getConnection().isClosed())
-						meta = schema.getDbMetadata().getMetadata();
-					MetaDataUtil.readTables(meta, schema.getValue(),
+					meta = dbmeta.checkClosed(meta);
+					MetaDataUtil.readTables(dbmeta, meta, schema.getValue(),
 							schema.getTableCatalog(), (MTables) n, tables,
 							monitor);
 				}
@@ -133,13 +132,12 @@ public class MetaDataUtil {
 		}
 	}
 
-	public static void readTables(DatabaseMetaData meta, String tableSchema,
-			String tableCatalog, MTables mview,
+	public static void readTables(DBMetadata dbmeta, DatabaseMetaData meta,
+			String tableSchema, String tableCatalog, MTables mview,
 			LinkedHashMap<String, MSqlTable> tblMap, IProgressMonitor monitor) {
 		ResultSet rs = null;
 		try {
-			if (meta.getConnection().isClosed())
-				meta = mview.getDbMetadata().getMetadata();
+			meta = dbmeta.checkClosed(meta);
 			rs = meta.getTables(tableCatalog, tableSchema, "%",
 					new String[] { mview.getValue() });
 			while (rs.next()) {
