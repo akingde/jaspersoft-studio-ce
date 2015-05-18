@@ -241,13 +241,14 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 			IFile file = null;
 			IProject project = null;
 			IEditorInput editorInput = getEditorInput();
-			if(editorInput instanceof IFileEditorInput) {
-				file = ((IFileEditorInput) editorInput).getFile();				
+			if (editorInput instanceof IFileEditorInput) {
+				file = ((IFileEditorInput) editorInput).getFile();
 			}
-			if(jrContext!=null) {
+			if (jrContext != null) {
 				project = (IProject) jrContext.get(FileUtils.KEY_IPROJECT);
 			}
-			topToolBarManager1 = new PreviewTopToolBarManager(this, container, DataAdapterManager.getDataAdapter(file,project));
+			topToolBarManager1 = new PreviewTopToolBarManager(this, container, DataAdapterManager.getDataAdapter(file,
+					project));
 		}
 		return (PreviewTopToolBarManager) topToolBarManager1;
 	}
@@ -339,9 +340,10 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 	@Override
 	public boolean switchRightView(APreview view, Statistics stats, MultiPageContainer container) {
 		reportControler.viewerChanged(view);
-		//Log the preview if not Java
-		if (currentViewer != null && !currentViewer.equals("Java")){
-			JaspersoftStudioPlugin.getInstance().getUsageManager().audit(currentViewer, UsageStatisticsIDs.CATEGORY_PREVIEW_FORMAT);
+		// Log the preview if not Java
+		if (currentViewer != null && !currentViewer.equals("Java")) {
+			JaspersoftStudioPlugin.getInstance().getUsageManager()
+					.audit(currentViewer, UsageStatisticsIDs.CATEGORY_PREVIEW_FORMAT);
 		}
 		return super.switchRightView(view, stats, container);
 	}
@@ -365,9 +367,10 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 
 			addPreviewModeContributeProperties();
 			reportControler.runReport();
-			//Log the preview if not Java
-			if (currentViewer != null && !currentViewer.equals("Java")){
-				JaspersoftStudioPlugin.getInstance().getUsageManager().audit(currentViewer, UsageStatisticsIDs.CATEGORY_PREVIEW_FORMAT);
+			// Log the preview if not Java
+			if (currentViewer != null && !currentViewer.equals("Java")) {
+				JaspersoftStudioPlugin.getInstance().getUsageManager()
+						.audit(currentViewer, UsageStatisticsIDs.CATEGORY_PREVIEW_FORMAT);
 			}
 		}
 	}
@@ -493,8 +496,10 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 		PreviewTopToolBarManager pt = (PreviewTopToolBarManager) topToolBarManager1;
 		if (pt != null && jd != null) {
 			String strda = jd.getProperty(DataQueryAdapters.DEFAULT_DATAADAPTER);
-			if (strda != null)
+			if (strda != null) {
 				pt.setDataAdapters(strda);
+				dataAdapterDesc = ((PreviewTopToolBarManager) topToolBarManager1).getDataSourceWidget().getSelected();
+			}
 		}
 	}
 
