@@ -12,6 +12,9 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.sql.action.table;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.eclipse.jface.viewers.TreeViewer;
 
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
@@ -22,6 +25,8 @@ import com.jaspersoft.studio.data.sql.model.query.from.MFrom;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
 import com.jaspersoft.studio.data.sql.model.query.subquery.MQueryTable;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.model.util.ModelVisitor;
 
 public class CreateSubQueryTable extends AAction {
 
@@ -60,11 +65,28 @@ public class CreateSubQueryTable extends AAction {
 
 		MQueryTable mtable = new MQueryTable(null);
 		MFromTable msq = new MFromTable(mfrom, mtable, index);
-		msq.setAlias("sq"); //$NON-NLS-1$
+		setAlias(msq, mfrom);
 		mtable.setSubquery(Util.createSelect(msq));
 
 		selectInTree(msq);
 		treeViewer.expandToLevel(msq, 1);
 	}
 
+	private void setAlias(MFromTable msq, MFrom mfrom) {
+		String alias = "sq";//$NON-NLS-1$
+		final Set<String> aliases = new HashSet<String>();
+		new ModelVisitor<String>(mfrom.getRoot()) {
+			@Override
+			public boolean visit(INode n) {
+				if (n instanceof MFromTable)
+					aliases.add(((MFromTable) n).getAlias());
+				return true;
+			}
+		};
+		String tmp = alias;
+		int i = 1;
+		while (aliases.contains(tmp))
+			tmp = alias + "_" + i++;
+		msq.setAlias(tmp);
+	}
 }

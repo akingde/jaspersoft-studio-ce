@@ -19,14 +19,14 @@ import org.eclipse.jface.viewers.TreeViewer;
 
 import com.jaspersoft.studio.data.sql.action.AAction;
 import com.jaspersoft.studio.data.sql.dialogs.EditFromTableDialog;
+import com.jaspersoft.studio.data.sql.messages.Messages;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
-import com.jaspersoft.studio.data.sql.model.query.subquery.MQueryTable;
 import com.jaspersoft.studio.model.ANode;
 
 public class EditTable extends AAction {
 
 	public EditTable(TreeViewer treeViewer) {
-		super("&Edit Table", treeViewer);
+		super(Messages.EditTable_0, treeViewer);
 	}
 
 	@Override
@@ -38,9 +38,6 @@ public class EditTable extends AAction {
 	}
 
 	protected boolean isColumn(ANode element) {
-		if (element instanceof MFromTable
-				&& ((MFromTable) element).getValue() instanceof MQueryTable)
-			return false;
 		return element instanceof MFromTable;
 	}
 

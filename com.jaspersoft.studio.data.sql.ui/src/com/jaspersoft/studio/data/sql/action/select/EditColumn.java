@@ -23,6 +23,7 @@ import com.jaspersoft.studio.data.sql.action.AAction;
 import com.jaspersoft.studio.data.sql.dialogs.EditSelectColumnDialog;
 import com.jaspersoft.studio.data.sql.dialogs.EditSelectExpressionDialog;
 import com.jaspersoft.studio.data.sql.dialogs.EditSelectSubQueryDialog;
+import com.jaspersoft.studio.data.sql.messages.Messages;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelectColumn;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelectExpression;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelectSubQuery;
@@ -31,7 +32,7 @@ import com.jaspersoft.studio.model.ANode;
 public class EditColumn extends AAction {
 
 	public EditColumn(TreeViewer treeViewer) {
-		super("&Edit Column", treeViewer);
+		super(Messages.EditColumn_0, treeViewer);
 	}
 
 	@Override
@@ -43,8 +44,6 @@ public class EditColumn extends AAction {
 	}
 
 	protected boolean isColumn(ANode element) {
-		if (element instanceof MSelectSubQuery)
-			return false;
 		return element instanceof MSelectColumn
 				|| element instanceof MSelectExpression
 				|| element instanceof MSelectSubQuery;

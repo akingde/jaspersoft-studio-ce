@@ -48,6 +48,7 @@ public class Messages extends NLS {
 	public static String DeleteAction_3;
 	public static String DeleteCommand_2;
 	public static String DeleteCommand_3;
+	public static String EditColumn_0;
 	public static String EditExpression_0;
 	public static String EditExpressionDialog_0;
 	public static String EditExpressionDialog_1;
@@ -59,6 +60,7 @@ public class Messages extends NLS {
 	public static String EditExpressionDialog_7;
 	public static String EditExpressionDialog_8;
 	public static String EditExpressionDialog_9;
+	public static String EditTable_0;
 	public static String EditTableJoin_0;
 	public static String Factory_10;
 	public static String Factory_11;
