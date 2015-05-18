@@ -259,7 +259,6 @@ public class PasteResourceAction extends Action {
 							ws.addOrModifyResource(monitor, rd, file);
 						} else if (parent instanceof MReportUnit)
 							saveToReportUnit(monitor, parent, ws, origin);
-						deleteIfCut(monitor, m);
 					} else if (parent instanceof MFolder) {
 						if (copy) {
 							IConnection mc = m.getWsClient();
@@ -302,9 +301,9 @@ public class PasteResourceAction extends Action {
 								origin.setIsReference(true);
 						}
 						saveToReportUnit(monitor, parent, ws, origin);
-						deleteIfCut(monitor, m);
 					}
 				}
+				deleteIfCut(monitor, m);
 			}
 			monitor.worked(1);
 			if (monitor.isCanceled())
