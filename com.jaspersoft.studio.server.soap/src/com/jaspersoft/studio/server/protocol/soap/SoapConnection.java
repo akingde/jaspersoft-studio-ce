@@ -207,11 +207,20 @@ public class SoapConnection implements IConnection {
 				if (r.isMainReport()
 						|| (r.getWsType().equals(ResourceDescriptor.TYPE_JRXML) && r
 								.getName().equals("main_jrxml"))) {
-					r.setMainReport(true);
 					if (r.getHasData() && r.getData() != null) {
 						inputFile = writeToTemp(r.getData());
 						r.setData(null);
+					} else if (inputFile == null && !rd.getIsNew()
+							&& !r.getIsReference()) {
+						inputFile = FileUtils.createTempFile("res", "jrxml");
+						int ind = children.indexOf(r);
+						r = get(monitor, r, inputFile);
+						r.setHasData(true);
+						r.setData(FileUtils.readFileAsAString(inputFile)
+								.getBytes());
+						children.set(ind, r);
 					}
+					r.setMainReport(true);
 					break;
 				}
 			}
@@ -246,6 +255,8 @@ public class SoapConnection implements IConnection {
 						client.modifyReportUnitResource(rd.getUriString(), r,
 								null);
 				} else {
+					if (r.isMainReport())
+						continue;
 					File f = null;
 					if (r.getHasData() && r.getData() != null) {
 						f = writeToTemp(r.getData());
