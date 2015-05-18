@@ -186,7 +186,7 @@ public class MSubreport extends MGraphicElement {
 		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#subreport"); //$NON-NLS-1$
 	}
 
-	private NamedEnumPropertyDescriptor<OverflowType> overflowTypeD;
+	private static NamedEnumPropertyDescriptor<OverflowType> overflowTypeD;
 	private JReportsDTO returnValuesDTO;
 
 	@Override
