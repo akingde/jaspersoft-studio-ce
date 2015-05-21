@@ -24,7 +24,6 @@ import com.jaspersoft.studio.editor.action.ACachedSelectionAction;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.dataset.MDataset;
 import com.jaspersoft.studio.property.dataset.wizard.ConnectToDatasetWizard;
-import com.jaspersoft.studio.property.dataset.wizard.ConnectToDatasetWizardPage;
 
 /**
  * Action to open the wizard to create the dataset parameters for 
@@ -76,11 +75,10 @@ public class ConnectToDatasetAction extends ACachedSelectionAction {
 		List<?> selectedDatasets = editor.getSelectionCache().getSelectionModelForType(MDataset.class);
 		MDataset dataset = (MDataset)selectedDatasets.get(0);
 		
-		ConnectToDatasetWizardPage page = new ConnectToDatasetWizardPage(dataset);
-		ConnectToDatasetWizard importWizard = new ConnectToDatasetWizard(page);
-		WizardDialog dialog = new WizardDialog(Display.getDefault().getActiveShell(), importWizard);
+		ConnectToDatasetWizard connectWizard = new ConnectToDatasetWizard(dataset);
+		WizardDialog dialog = new WizardDialog(Display.getDefault().getActiveShell(), connectWizard);
 		if (dialog.open() == Dialog.OK){
-			command = page.getCommand();
+			command = connectWizard.getCommand();
 			execute(command);
 		}
 	}
