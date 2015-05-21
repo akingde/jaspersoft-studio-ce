@@ -1,0 +1,111 @@
+<html><head><META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Compile with older JasperReports versions from Jaspersoft Studio</title><meta content="DocBook XSL Stylesheets V1.78.0" name="generator"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="N40003"></a>Compile with older JasperReports versions from Jaspersoft Studio</h2></div></div><hr></div>
+
+<div class="section"><div class="titlepage"></div>
+	  <p><b>Overview.&nbsp;</b>
+      
+      	Jaspersoft Studio always uses and embedded version of JasperReports (tipically the one with the same version number of Studio) to build the report. 
+      	Sometimes the user want to compile with an older version without used an older version of Jaspersoft Studio. This mostly because JasperReports dosen't 
+      	provide an interface (graphical or from command line) to compile the report, so using it directly need some Java skills. For this reason was introduced inside 
+      	Jaspersoft Studio a backward compatible compiler that can be used to compile a report with many JasperReports version and everything, from the download of the 
+      	desired version of JasperReports to the use of it to compile, can be done trough a simple graphical interface.
+	  
+	  </p>
+	  <p><b>Download the desired version of JasperReports.&nbsp;</b>
+	  
+		The first step to compile with an older version is download the files of that version. Jaspersoft Studio offer a simple interface to do this and to move the downloaded 
+		files in the right directory. First of all open the report you want to compile and expand the compile menu from the compile button on the editor. From the menu select 
+		"Manage JasperRepoers Version"
+	  
+	  </p><div class="figure"><a name="N4001D"></a><p class="title"><b>Figure&nbsp;1.&nbsp;Extended Compilation Menu</b></p><div class="figure-contents">
+		
+		<div class="screenshot">
+			<div class="mediaobject"><img src="1.png" width="800" alt="Extended Compilation Menu"></div>
+		</div>
+	  </div></div><p><br class="figure-break">
+	  
+		A wizard will appear, showing all the JasperReports versions you can download and the ones you have already available. The version already on your disk will have a check mark on them, 
+		if this is the first time you use this feature then you shouldn't have any mark since there are no older version of JasperReports included in Studio by default. In this step when you 
+		check a version you don't have it will be downloaded from internet, so you will need an internet connection. The download can take some time depending on your connection speed, during
+		 the download will be shown the amount of data downloaded, cosnider that a JasperReports version has an average size of  about 100MB. Always in this step when you uncheck something 
+		 previously checked then it means you want to remove a JasperReports version from your system, so if you want to be able to use that version to compile you will need to redownload it. 
+		 You can select or deselect any number of versions and the operation on them will be done sequentially.
+ 	  
+ 	  
+		For example select the version 4.7.0 and hit "Next".
+	  
+  	  </p><div class="figure"><a name="N40037"></a><p class="title"><b>Figure&nbsp;2.&nbsp;Select the version to download</b></p><div class="figure-contents">
+		
+		<div class="screenshot">
+			<div class="mediaobject"><img src="2.png" width="600" alt="Select the version to download"></div>
+		</div>
+	  </div></div><p><br class="figure-break">
+	   
+		Now the download will start and you will not able to proceed with the wizard until it is finished. However you can abort the operation anytime, but in this case the files versions that was 
+		not completely downloaded will not be usable for the compilation.
+	  
+	  </p><div class="figure"><a name="N4004E"></a><p class="title"><b>Figure&nbsp;3.&nbsp;Wait the end of the process</b></p><div class="figure-contents">
+		
+		<div class="screenshot">
+			<div class="mediaobject"><img src="3.png" width="600" alt="Wait the end of the process"></div>
+		</div>
+	  </div></div><p><br class="figure-break">
+	  </p>
+	  <p><b>Compile with the downloaded version of JasperReports.&nbsp;</b>
+      
+      	At this point you can compile your file, still expand the compile menu from the compile button and you will see a new option to compile the current file with all the downloaded versions. 
+      	Select "Compile with JasperReports 4.7.0"
+      
+      </p><div class="figure"><a name="N4006A"></a><p class="title"><b>Figure&nbsp;4.&nbsp;Start the compilation</b></p><div class="figure-contents">
+		
+		<div class="screenshot">
+			<div class="mediaobject"><img src="4.png" width="800" alt="Start the compilation"></div>
+		</div>
+	  </div></div><p><br class="figure-break">
+	  
+	  	The output of the compilation process is shown on a console view, it is also shown the command used to compile the report so the users can review advanced informations like the classpath.
+	  
+	  
+	  	At this point you will find in the same location of the source file the jasper file generated with JasperReports 4.7.0. However maybe you don't want that a file generated with this 
+	  	version is placed inside the workspace among other japser files generated with different versions or also because you don't want it replaced by the automatic building. For this reason 
+	  	you can configure the output path. Form the compile menu go in the submenu "Backward Compatible Binary Destination". From here you can add a new absolute path on the filesystyem, 
+	  	select "Add destination path" to open the browse dialog and select the folder you want to use as output.
+	  
+	  </p><div class="figure"><a name="N40084"></a><p class="title"><b>Figure&nbsp;5.&nbsp;Add custom path</b></p><div class="figure-contents">
+		
+		<div class="screenshot">
+			<div class="mediaobject"><img src="5.png" width="800" alt="Add custom path"></div>
+		</div>
+	  </div></div><p><br class="figure-break">
+	  
+	  	The added folder will be used from now as default location, now every backward compilation will place the resulting file on the selected folder. You can access anytime to this menu and 
+	  	select one of the existing destination or add a new one. The menu will remember the last eight custom location allowing to switch between them easily, without need to select each time the 
+	  	target folder from the browser.
+	  
+	  
+	  	Remember that the output folder is used only by the backward compatible JasperReports compiler, if you press directly the compile button will be used always the last version of JasperReports 
+	  	and the result of the compilation will be placed among the source, since it is a standard building.
+	  
+      </p>
+      <p><b>Delete the unnecessary JasperReports versions.&nbsp;</b>
+      
+      	You can delete in any moment the old JasperReports versions you want to use. From the compile menu reopen the wizard trought "Manage JasperReports versions" like show in the first image. 
+      	Now you will see already marked the version that are currently on your system. Unmark the ones you want to delete and press "Next" and they will be delete. Obviously since they are no more 
+      	on your system you will not able to compile a report with that versions anymore, if you want to use on of it you must download it like you have done the first time.
+      
+      </p>
+      <p><b>Advanced information.&nbsp;</b>
+      
+      	Compiling the file in this way is something external to the core of Jaspersoft Studio application. Jaspersoft Studio will internally use alway the last version of JasperReports and there is now way 
+      	to switch it. For this reason the preview dialog will aways shown a report compiled with the last version and also all the other functions like the export and so on. This backward compatible 
+      	compilation is provided with the purpose to allow to easly compilate the jrxml and use it outside Jaspersoft Studio, because many users want to use the last version of Jaspersoft Studio but 
+      	still want a jasper file compiled with an older version of JasperReports because it is the one required from some third parties programs. Also for this reason the output of the compilation 
+      	is shown in a separate console instead of the Report State view as usually.
+      
+      
+      	About the classpath used to compile the file, this procedure will try to use in the compilation proccess the same classpath that is defined on the project that contains the source file. 
+      	The used classpath can be seen by the user when the backward compilation process is satarted. In the console will be paint the command used to compile the source file and in it there 
+      	is written the used classpat, after the option "-cp".
+      
+      </p>
+      </div>
+</div></body></html>

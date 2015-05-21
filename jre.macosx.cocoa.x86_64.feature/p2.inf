@@ -1,0 +1,4 @@
+instructions.configure=\
+org.eclipse.equinox.p2.touchpoint.eclipse.setJvm(jvm:../../../features/jre.macosx.cocoa.x86_64.feature_1.7.0.u80/jre/Contents/Home/lib/jli/libjli.dylib);
+instructions.unconfigure=\
+org.eclipse.equinox.p2.touchpoint.eclipse.setJvm(jvm:null);

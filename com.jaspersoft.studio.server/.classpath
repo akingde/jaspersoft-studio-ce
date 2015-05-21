@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry exported="true" kind="lib" path="lib/jersey213/jersey-guava-2.13.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jackson/jackson-dataformat-xml-2.4.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jackson/jackson-datatype-guava-2.4.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jackson/jackson-datatype-joda-2.4.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jackson/jackson-datatype-json-org-2.4.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jackson/jackson-datatype-jsr353-2.4.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jackson/jackson-jaxrs-base-2.4.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jackson/jackson-jaxrs-json-provider-2.4.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jackson/jackson-jaxrs-xml-provider-2.4.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jackson/jackson-module-jaxb-annotations-2.4.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jackson/jackson-module-jsonSchema-2.4.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jackson/stax2-api-3.1.4.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jackson/woodstox-core-asl-4.4.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jaxrs-ri/ext/aopalliance-repackaged-2.3.0-b10.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jaxrs-ri/ext/asm-debug-all-5.0.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jaxrs-ri/ext/hk2-api-2.3.0-b10.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jaxrs-ri/ext/hk2-locator-2.3.0-b10.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jaxrs-ri/ext/hk2-utils-2.3.0-b10.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jaxrs-ri/ext/javassist-3.18.1-GA.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jaxrs-ri/ext/javax.annotation-api-1.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jaxrs-ri/ext/javax.inject-2.3.0-b10.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jaxrs-ri/ext/jaxb-api-2.2.7.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jaxrs-ri/ext/org.osgi.core-4.2.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jaxrs-ri/ext/osgi-resource-locator-1.0.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jaxrs-ri/ext/persistence-api-1.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jaxrs-ri/ext/validation-api-1.1.0.Final.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jaxrs-ri/api/javax.ws.rs-api-2.0.1.jar" sourcepath="/home/slavic/Downloads/javax.ws.rs-api-2.0.1-sources.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
+	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry exported="true" kind="lib" path="lib/js-common.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/js-extra-classes.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jersey/asm-all-repackaged-2.2.0-b24.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jersey/cglib-2.2.0-b23.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jersey/core-2.2.0-b24.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jersey/javax.json-1.0.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jersey/javax.json-api-1.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jersey/json-20131018.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jersey/jsonp-jaxrs-1.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jersey/jsr250-api-1.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jersey/net.java.html.json-0.6.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/js_axis-1.4patched.jar" sourcepath="/home/slavic/Downloads/axis-1.4-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jersey213/html-json-2.13.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jersey213/jersey-apache-connector-2.13.jar" sourcepath="/home/slavic/Downloads/jersey-apache-connector-2.13-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jersey213/jersey-client-2.13.jar" sourcepath="/home/slavic/Downloads/jersey-client-2.13-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jersey213/jersey-common-2.13.jar" sourcepath="/home/slavic/Downloads/jersey-common-2.13-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jersey213/jersey-media-json-2.0-m05-1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jersey213/jersey-media-json-jackson-2.13.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jersey213/jersey-media-json-processing-2.13.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
