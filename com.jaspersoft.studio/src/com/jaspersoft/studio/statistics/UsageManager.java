@@ -82,12 +82,12 @@ public class UsageManager {
 	/**
 	 * URL of the server where the statistics are sent
 	 */
-	private static final String STATISTICS_SERVER_URL = "";//$NON-NLS-1$ //http://192.168.2.101/sf/statistics.php
+	private static final String STATISTICS_SERVER_URL = "http://heartbeat.jaspersoft.com/heartbeat/jss/statistics";//$NON-NLS-1$ //http://192.168.2.101/sf/statistics.php
 	
 	/**
 	 * URL of the server where the heartbeat is sent
 	 */
-	private static final String HEARTBEAT_SERVER_URL = "http://heartbeat.jaspersoft.com/heartbeat/jss/statistics";//$NON-NLS-1$
+	private static final String HEARTBEAT_SERVER_URL = "http://jasperstudio.sf.net/jsslastversion.php";//$NON-NLS-1$
 	/**
 	 * Time in ms that the process to write the statistics from the memory on the disk wait after the update of a value.
 	 * This is done since some operations can update many values, doing this there is a time span to allow sequence of
@@ -631,7 +631,7 @@ public class UsageManager {
 					setInstallationInfo(TIMESTAMP_INFO, String.valueOf(getCurrentTime()));
 				} else {
 					//print result
-					System.out.println("Response: " + response.toString());
+					System.out.println("Response error: " + response.toString());
 				}
 			}
 		} catch (Exception ex) {
