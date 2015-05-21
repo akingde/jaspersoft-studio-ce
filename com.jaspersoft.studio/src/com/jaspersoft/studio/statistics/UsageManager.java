@@ -87,7 +87,7 @@ public class UsageManager {
 	/**
 	 * URL of the server where the heartbeat is sent
 	 */
-	private static final String HEARTBEAT_SERVER_URL = "http://jasperstudio.sf.net/jsslastversion.php";//$NON-NLS-1$
+	private static final String HEARTBEAT_SERVER_URL = "http://heartbeat.jaspersoft.com/heartbeat/jss/statistics";//$NON-NLS-1$
 	/**
 	 * Time in ms that the process to write the statistics from the memory on the disk wait after the update of a value.
 	 * This is done since some operations can update many values, doing this there is a time span to allow sequence of
