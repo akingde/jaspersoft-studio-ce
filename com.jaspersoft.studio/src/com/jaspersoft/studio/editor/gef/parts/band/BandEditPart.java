@@ -435,8 +435,10 @@ public class BandEditPart extends APrefFigureEditPart implements PropertyChangeL
 	 * @see java.beans.PropertyChangeListener#propertyChange(java.beans.PropertyChangeEvent)
 	 */
 	public void propertyChange(PropertyChangeEvent evt) {
-		if (getParent() != null)
+		//Not necessary, the refresh of each node is done by the page
+		/*if (getParent() != null){
 			getParent().refresh();
+		}*/
 	}
 
 	public Object getConstraintFor(ChangeBoundsRequest request, GraphicalEditPart child) {

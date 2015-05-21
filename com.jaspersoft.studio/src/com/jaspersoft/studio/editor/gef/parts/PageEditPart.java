@@ -42,6 +42,7 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.wb.swt.SWTResourceManager;
 
+import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.callout.CalloutEditPart;
 import com.jaspersoft.studio.callout.MCallout;
@@ -414,8 +415,12 @@ public class PageEditPart extends AJDEditPart implements PropertyChangeListener 
 	 * @see java.beans.PropertyChangeListener#propertyChange(java.beans.PropertyChangeEvent)
 	 */
 	public void propertyChange(PropertyChangeEvent arg0) {
-		refreshChildren();
-		refreshVisuals();
+		//Don't refresh is the refresh is disable and the event is not a forced refresh
+		if (JSSCompoundCommand.REFRESH_UI_EVENT.equals(arg0.getPropertyName()) || 
+				!JSSCompoundCommand.isRefreshEventsIgnored((ANode)getModel())){
+			refreshChildren();
+			refreshVisuals();
+		}
 	}
 
 }

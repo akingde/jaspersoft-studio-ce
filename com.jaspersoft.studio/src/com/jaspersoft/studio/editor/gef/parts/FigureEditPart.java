@@ -22,7 +22,6 @@ import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.Shape;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.SnapToGrid;
 import org.eclipse.jface.resource.StringConverter;
@@ -45,7 +44,6 @@ import com.jaspersoft.studio.editor.gef.rulers.ReportRuler;
 import com.jaspersoft.studio.jasper.JSSDrawVisitor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IGraphicElement;
-import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.preferences.DesignerPreferencePage;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -86,12 +84,16 @@ public class FigureEditPart extends AJDEditPart implements PropertyChangeListene
 		super.activate();
 		preferenceListener = new PreferenceListener();
 		JaspersoftStudioPlugin.getInstance().addPreferenceListener(preferenceListener);
+		if (getModel() != null)
+			((ANode) getModel()).getPropertyChangeSupport().addPropertyChangeListener(this);
 	}
 
 	@Override
 	public void deactivate() {
 		if (preferenceListener != null)
 			JaspersoftStudioPlugin.getInstance().removePreferenceListener(preferenceListener);
+		if (getModel() != null)
+			((ANode) getModel()).getPropertyChangeSupport().removePropertyChangeListener(this);
 		super.deactivate();
 	}
 
@@ -215,9 +217,10 @@ public class FigureEditPart extends AJDEditPart implements PropertyChangeListene
 	 * @see java.beans.PropertyChangeListener#propertyChange(java.beans.PropertyChangeEvent)
 	 */
 	public void propertyChange(PropertyChangeEvent evt) {
-		refresh();
-		refreshC(getModel());
-		refreshVisuals();
+		//not necessary, the refresh of every node is done by the page when a proprty changes
+		//refresh();
+		//refreshC(getModel());
+		//refreshVisuals();
 	}
 
 	/**
@@ -226,7 +229,7 @@ public class FigureEditPart extends AJDEditPart implements PropertyChangeListene
 	 * @param n
 	 *          the n
 	 */
-	private void refreshC(ANode n) {
+	/*private void refreshC(ANode n) {
 		if (n.getChildren() != null)
 			for (INode node : n.getChildren()) {
 				EditPart ep = (EditPart) getViewer().getEditPartRegistry().get(node);
@@ -234,7 +237,7 @@ public class FigureEditPart extends AJDEditPart implements PropertyChangeListene
 					((FigureEditPart) ep).refreshVisuals();
 				refreshC((ANode) node);
 			}
-	}
+	}*/
 
 	public void updateRulers() {
 		ANode model = getModel().getParent();
