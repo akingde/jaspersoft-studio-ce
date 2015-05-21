@@ -291,6 +291,8 @@ public class Messages extends NLS {
 	public static String CongratulationsWizardPage_label3;
 	public static String CongratulationsWizardPage_title;
 	public static String CongratulationsWizardPage_titleMessage;
+	public static String ConnectToDatasetAction_actionName;
+	public static String ConnectToDatasetAction_actionTooltip;
 	public static String ConnectToDatasetWizardPage_additionToDatasetRun;
 	public static String ConnectToDatasetWizardPage_additionToDatasetRun2;
 	public static String ConnectToDatasetWizardPage_additionToMaindataset;
@@ -480,6 +482,8 @@ public class Messages extends NLS {
 	public static String DatasetRunPameterDialog_ParamNotFoundErrTitle;
 	public static String DatasetRunPameterDialog_Title;
 	public static String DatasetRunPameterDialog_ValueExprLbl;
+	public static String DatasetRunRVPropertyEditor_missingDescription;
+	public static String DatasetRunRVPropertyEditor_missingTitle;
 	public static String DatasetRunRVPropertyPage_pageDescription;
 	public static String DatasetRunRVPropertyPage_pageTitle;
 	public static String DatasetSection_nameNotValidTitle;

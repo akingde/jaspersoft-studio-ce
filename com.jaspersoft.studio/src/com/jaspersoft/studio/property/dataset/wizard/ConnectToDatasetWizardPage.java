@@ -57,15 +57,21 @@ import com.jaspersoft.studio.wizards.ContextHelpIDs;
 import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
 
 /**
- * Wizard page to create the domain parameters for the selected dataset, the main dataset
+ * Wizard page to create the language parameters for the selected dataset, the main dataset
  * and all the dataset run associated with the selected dataset. The parameters are created
- * only where needed
+ * only where needed. This can also be used to switch the language of a subdataset and connect
+ * it to the main dataset troguh the parameters. It will also update all the dataset run associated
+ * with the subdataset
  * 
  * @author Orlandin Marco
  *
  */
 public class ConnectToDatasetWizardPage extends JSSHelpWizardPage {
 	
+	/**
+	 * Add the requested parameters and remove the not requested ones from 
+	 * the subdataset and main dataset
+	 */
 	protected IQueryLanguageChanged syncExecuter =  new IQueryLanguageChanged() {
 		
 		@Override
@@ -114,6 +120,9 @@ public class ConnectToDatasetWizardPage extends JSSHelpWizardPage {
 
 	};
 
+	/**
+	 * Cache map for a language name and its execution factory
+	 */
 	protected static final HashMap<String, QueryExecuterFactory> factories = new HashMap<String, QueryExecuterFactory>();
 	
 	/**
@@ -141,19 +150,34 @@ public class ConnectToDatasetWizardPage extends JSSHelpWizardPage {
 	 */
 	protected List<String> removedParamOnDataset;
 	
+	/**
+	 * Combo where you can select the language of the selected sub dataset
+	 */
+	protected Combo dataAdapterLanguage;
 	
-	protected Combo dataAdapterTypes;
-	
+	/**
+	 * Main composite where the list of the change on the parameters in written
+	 */
 	protected Composite mainComposite;
 	
+	/**
+	 * Scrolled composite for the main composite
+	 */
 	protected ScrolledComposite scrollComposite;
 	
-	protected String languageDefaultSelection;
-	
+	/**
+	 * List of all the available languages for the subdataset
+	 */
 	private String[] availableLanguages;
 	
+	/**
+	 * List of all the query executer bundles for the the current jasperconfiguration
+	 */
 	private List<JRQueryExecuterFactoryBundle> bundles;
 	
+	/**
+	 * Command used to synchronized the dataset parameters
+	 */
 	private SyncDatasetRunCommand command;
 	
 	/**
@@ -165,14 +189,15 @@ public class ConnectToDatasetWizardPage extends JSSHelpWizardPage {
 	
 	/**
 	 * Contains every dataset run for the selected dataset (reference of the dataset run uses as key) and 
-	 * as value has an info container. The info container basically contains a list of the parameters needed
-	 * by the dataset run and the element that contains the dataset run
+	 * as value has an info container. The info container basically contains a list of the parameters are not needed
+	 * by the dataset run and that can be removed
 	 */
 	private HashMap<MDatasetRun, InfoContainer> removedParamOnRun;
 	
+	/**
+	 * Map that associate to each parameter (identified by its name) a java type
+	 */
 	private final HashMap<String, String> typeMap = new HashMap<String, String>();
-	
-	
 	
 	/**
 	 * Create the page 
@@ -200,8 +225,8 @@ public class ConnectToDatasetWizardPage extends JSSHelpWizardPage {
 		comboContainer.setLayout(new GridLayout(2,false));
 		comboContainer.setData(new GridData(GridData.FILL_HORIZONTAL));
 		new Label(comboContainer, SWT.NONE).setText(Messages.ConnectToDatasetWizardPage_languageLabel);
-		dataAdapterTypes = new Combo(comboContainer, SWT.READ_ONLY);
-		dataAdapterTypes.setItems(availableLanguages);
+		dataAdapterLanguage = new Combo(comboContainer, SWT.READ_ONLY);
+		dataAdapterLanguage.setItems(availableLanguages);
 		
 		
 		//Create the appropriate controls for this parameters
@@ -225,9 +250,9 @@ public class ConnectToDatasetWizardPage extends JSSHelpWizardPage {
 				}
 			}
 		}
-		dataAdapterTypes.select(index); 
+		dataAdapterLanguage.select(index); 
 		
-		dataAdapterTypes.addSelectionListener(new SelectionAdapter(){
+		dataAdapterLanguage.addSelectionListener(new SelectionAdapter(){
 			public void widgetSelected(SelectionEvent e) {
 				updateContent();
 				getContainer().updateButtons();
@@ -257,7 +282,7 @@ public class ConnectToDatasetWizardPage extends JSSHelpWizardPage {
 		removedParamOnDataset = getRemovedParameterOnDataset(removedParameters, neededParameters);
 		
 		if (missingParamOnMain.isEmpty() && missingParamOnDataset.isEmpty() && missingParamOnRun.isEmpty() && 
-					removedParamOnRun.isEmpty() && removedParamOnDataset.isEmpty() && dataAdapterTypes.getText().equals(getOldLanguage())){
+					removedParamOnRun.isEmpty() && removedParamOnDataset.isEmpty() && dataAdapterLanguage.getText().equals(getOldLanguage())){
 			new Label(mainComposite, SWT.NONE).setText(Messages.ConnectToDatasetWizardPage_noChangesLabel);
 		} else {
 			createNotEmptyContent(mainComposite);
@@ -268,6 +293,11 @@ public class ConnectToDatasetWizardPage extends JSSHelpWizardPage {
 		command = regenerateCommand();
 	}
 	
+	/**
+	 * Generate the command to synchronize the parameters
+	 * 
+	 * @return a not null command
+	 */
 	private SyncDatasetRunCommand regenerateCommand(){
 		JRDesignDataset dataset = connectedDataset.getValue();
 		String queryLanguage = null;
@@ -275,7 +305,7 @@ public class ConnectToDatasetWizardPage extends JSSHelpWizardPage {
 			queryLanguage = dataset.getQuery().getLanguage();
 		}
 		
-		return new SyncDatasetRunCommand(connectedDataset, dataAdapterTypes.getText(), queryLanguage){
+		return new SyncDatasetRunCommand(connectedDataset, dataAdapterLanguage.getText(), queryLanguage){
 			public void execute() {
 				try{
 					((JRDesignQuery)dataset.getValue().getQuery()).setLanguage(newLang);
@@ -301,7 +331,13 @@ public class ConnectToDatasetWizardPage extends JSSHelpWizardPage {
 		};
 	}
 	
-	
+	/**
+	 * Return a query executer factory for a specific language, the result is cached
+	 * until the dialog is closed
+	 * 
+	 * @param language the language
+	 * @return a factory for the language or null if it can't be found
+	 */
 	private QueryExecuterFactory getFactory(String language){
 			if (language == null) return null;
 			if (factories.containsKey(language)) return factories.get(language);
@@ -326,7 +362,7 @@ public class ConnectToDatasetWizardPage extends JSSHelpWizardPage {
 	 */
 	private void createNotEmptyContent(Composite mainComposite){
 		//The parameters added for every section (main dataset, selected dataset and dataset runs) are at least one of them
-		String newLanguage = dataAdapterTypes.getText();
+		String newLanguage = dataAdapterLanguage.getText();
 		String oldLanguage = getOldLanguage();
 		
 		if (!ModelUtils.safeEquals(oldLanguage, newLanguage)){
@@ -369,7 +405,7 @@ public class ConnectToDatasetWizardPage extends JSSHelpWizardPage {
 			}
 		}
 		
-		
+		//Show the parameters that will be added or removed on the dataset runs
 		for(IDatasetContainer datasetRuns : runReferences){
 			for(MDatasetRun datasetRun : datasetRuns.getDatasetRunList()){
 				
@@ -447,9 +483,9 @@ public class ConnectToDatasetWizardPage extends JSSHelpWizardPage {
 	}
 	
 	/**
-	 * Return the list (not null) of parameters that need to be added to the selected dataset
+	 * Return the list (not null) of parameters that need to be removed frim the selected dataset
 	 * 
-	 * @return a not null list of string, representing the missing parameters name
+	 * @return a not null list of string, representing the not needed parameters name
 	 */
 	private List<String> getRemovedParameterOnDataset(List<String> removedParameters, List<String> neededParameters){
 		List<String> result = new ArrayList<String>();
@@ -461,7 +497,7 @@ public class ConnectToDatasetWizardPage extends JSSHelpWizardPage {
 	}
 	
 	/**
-	 * Return the list (not null) of parameters that need to be added to the passed dataset run
+	 * Return the list (not null) of parameters that need to be  to the passed dataset run
 	 * 
 	 * @param the dataset run to check
 	 * @return a not null list of string, representing the missing parameters name
@@ -480,10 +516,12 @@ public class ConnectToDatasetWizardPage extends JSSHelpWizardPage {
 	}
 	
 	/**
-	 * Return the list (not null) of parameters that need to be added to the passed dataset run
+	 * Return the list (not null) of parameters that can be removed from the dataset run
 	 * 
 	 * @param the dataset run to check
-	 * @return a not null list of string, representing the missing parameters name
+	 * @param removedParameters parameters that depends from the old language and can be removed
+	 * @param neededParameters parameters that depends from the new language and will be added
+	 * @return a not null list of string, representing the not needed parameters names
 	 */
 	private List<String> getRemovedParameterOnDatasetRun(MDatasetRun datasetRun, List<String> removedParameters, List<String> neededParameters){
 		List<String> result = new ArrayList<String>();
@@ -529,8 +567,11 @@ public class ConnectToDatasetWizardPage extends JSSHelpWizardPage {
 	
 	/**
 	 * Return an hashmap that contains every dataset run for the selected dataset (reference of the dataset run uses as key) and 
-	 * as value has an info container. The info container basically contains a list of the parameters needed
-	 * by the dataset run and the element that contains the dataset run
+	 * as value has an info container. The info container basically contains a list of the parameters not needed
+	 * by the dataset run and the element that contains the dataset run, and this parameters can be removed
+	 * 
+	 * @param removedParameters parameters that depends from the old language and can be removed
+	 * @param neededParameters parameters that depends from the new language and will be added
 	 */
 	private HashMap<MDatasetRun, InfoContainer> getRemovedDatasetsRun(List<String> removedParameters, List<String> neededParameters){
 		HashMap<MDatasetRun, InfoContainer> result = new HashMap<MDatasetRun, InfoContainer>();	
@@ -547,13 +588,22 @@ public class ConnectToDatasetWizardPage extends JSSHelpWizardPage {
 		return result;
 	}
 	
+	/**
+	 * Return the type for a specific parameter. It uses the parameter
+	 * name to look in the type map. If the type can not be found it
+	 * will use object as default
+	 * 
+	 * @param parameterName the parameter name
+	 * @return a not null java class type
+	 */
 	protected String getParameterType(String parameterName){
 		String type = typeMap.get(parameterName);
 		return type != null ? type : "java.lang.Object"; //$NON-NLS-1$
 	}
 	
 	/**
-	 * Add the missing parameters where they are needed
+	 * Add the missing parameters where they are needed. Not used, substituted 
+	 * by the synchronization command
 	 */
 	/*public void doAction(){
 		JasperDesign design = connectedDataset.getJasperDesign();
@@ -597,6 +647,12 @@ public class ConnectToDatasetWizardPage extends JSSHelpWizardPage {
 		}
 	}*/
 	
+	/**
+	 * Return the current language defined inside the dataset
+	 * 
+	 * @return the sub dataset language or the empty string if no language
+	 * is defined
+	 */
 	private String getOldLanguage(){
 		JRDesignDataset dataset = connectedDataset.getValue();
 		if (dataset != null && dataset.getQuery() != null){
@@ -613,7 +669,7 @@ public class ConnectToDatasetWizardPage extends JSSHelpWizardPage {
 	 */
 	protected List<String> getNeededParameters(){
 		typeMap.clear();
-		String language = dataAdapterTypes.getText();
+		String language = dataAdapterLanguage.getText();
 		QueryExecuterFactory factory = getFactory(language);
 		List<String> parameters = new ArrayList<String>();
 		if (factory != null){
@@ -630,6 +686,12 @@ public class ConnectToDatasetWizardPage extends JSSHelpWizardPage {
 		return parameters;
 	}
 	
+	/**
+	 * Return the  list of removed parameters, that are the parameters
+	 * requested by the old language
+	 * 
+	 * @return list of the parameters required from the old language, not null
+	 */
 	protected List<String> getRemovedParameters(){
 		JRDesignDataset dataset = connectedDataset.getValue();
 		List<String> parameters = new ArrayList<String>();
@@ -650,12 +712,12 @@ public class ConnectToDatasetWizardPage extends JSSHelpWizardPage {
 	}
 	
 	/**
-	 * True if there are parameters to add, false otherwise
+	 * True if there are parameters to add or remove, false otherwise
 	 */
 	public boolean canFinish(){
 		if (runReferences == null || missingParamOnMain == null || missingParamOnDataset == null || removedParamOnDataset == null) return false;
 		if (missingParamOnDataset.isEmpty() && missingParamOnMain.isEmpty() && missingParamOnRun.isEmpty() &&
-					removedParamOnDataset.isEmpty() && removedParamOnRun.isEmpty() && ModelUtils.safeEquals(getOldLanguage(), dataAdapterTypes.getText())) return false;
+					removedParamOnDataset.isEmpty() && removedParamOnRun.isEmpty() && ModelUtils.safeEquals(getOldLanguage(), dataAdapterLanguage.getText())) return false;
 		return true;
 	}
 	
@@ -667,6 +729,11 @@ public class ConnectToDatasetWizardPage extends JSSHelpWizardPage {
 		return ContextHelpIDs.WIZARD_CONNECT_TO_DOMAIN;
 	}
 	
+	/**
+	 * Return the current command to synchronize the parameters
+	 * 
+	 * @return a command
+	 */
 	public SyncDatasetRunCommand getCommand(){
 		return command;
 	}

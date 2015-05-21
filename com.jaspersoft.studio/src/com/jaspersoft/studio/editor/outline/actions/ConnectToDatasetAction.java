@@ -21,12 +21,13 @@ import org.eclipse.ui.IWorkbenchPart;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.action.ACachedSelectionAction;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.dataset.MDataset;
 import com.jaspersoft.studio.property.dataset.wizard.ConnectToDatasetWizard;
 import com.jaspersoft.studio.property.dataset.wizard.ConnectToDatasetWizardPage;
 
 /**
- * Action to open the wizard to export create the domain parameters for 
+ * Action to open the wizard to create the dataset parameters for 
  * a dataset and its dataset runs
  * 
  * @author Orlandin Marco
@@ -53,8 +54,8 @@ public class ConnectToDatasetAction extends ACachedSelectionAction {
 	@Override
 	protected void init() {
 		super.init();
-		setText("Connect to Main Dataset");
-		setToolTipText("Create the parameters to connect the current dataset to the main dataset");
+		setText(Messages.ConnectToDatasetAction_actionName);
+		setToolTipText(Messages.ConnectToDatasetAction_actionTooltip);
 		setId(ConnectToDatasetAction.ID);
 		setImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/connectdomain.png")); //$NON-NLS-1$
 		setEnabled(false);
