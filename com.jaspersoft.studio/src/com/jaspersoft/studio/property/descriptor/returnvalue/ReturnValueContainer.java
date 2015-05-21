@@ -83,7 +83,11 @@ public class ReturnValueContainer {
 	}
 
 	public void setIncrementerFactoryClassName(String incrementerFactoryClassName) {
-		this.incrementerFactoryClassName = incrementerFactoryClassName;
+		if (incrementerFactoryClassName != null && incrementerFactoryClassName.trim().isEmpty()){
+			this.incrementerFactoryClassName = null;
+ 		} else {
+ 			this.incrementerFactoryClassName = incrementerFactoryClassName;
+ 		}
 	}
 	
 	// END OF GETTERS AND SETTER

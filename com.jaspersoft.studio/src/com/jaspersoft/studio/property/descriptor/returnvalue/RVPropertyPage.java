@@ -12,8 +12,10 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRVariable;
 import net.sf.jasperreports.engine.design.JRDesignVariable;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.ColumnWeightData;
@@ -96,7 +98,17 @@ public abstract class RVPropertyPage extends JSSHelpWizardPage {
 	 * The list of toVariables currently used
 	 */
 	protected String[] toVariables;
+	
+	/**
+	 * The list of fromVariables currently used
+	 */
+	private String[] fromVariables;
 
+	/**
+	 * The design where the dataset of the current report
+	 */
+	protected JasperDesign design;
+	
 	/**
 	 * A list of modify listener that are called when the values in the table changes
 	 */
@@ -133,8 +145,9 @@ public abstract class RVPropertyPage extends JSSHelpWizardPage {
 	 * @param pageName
 	 *          name of the page
 	 */
-	protected RVPropertyPage(String pageName) {
+	protected RVPropertyPage(String pageName, JasperDesign design) {
 		super(pageName);
+		this.design = design;
 	}
 
 	/**
@@ -155,15 +168,7 @@ public abstract class RVPropertyPage extends JSSHelpWizardPage {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				ReturnValueContainer container = new ReturnValueContainer();
-				InputReturnValueDialog inputDialog = new InputReturnValueDialog(getShell(), container, getToVariablesNames());
-				if (inputDialog.open() == Dialog.OK) {
-					values.add(container);
-					tableViewer.refresh();
-					toVariables = null;
-					updateButtonsStatus();
-					callModifyListeners();
-				}
+				openAddDialog();
 			}
 		});
 
@@ -179,7 +184,7 @@ public abstract class RVPropertyPage extends JSSHelpWizardPage {
 				StructuredSelection selection = (StructuredSelection) tableViewer.getSelection();
 				if (selection.size() > 0) {
 					ReturnValueContainer selectedValue = (ReturnValueContainer) selection.getFirstElement();
-					editElement(selectedValue);
+					openEditDialog(selectedValue);
 				}
 			}
 		});
@@ -237,6 +242,32 @@ public abstract class RVPropertyPage extends JSSHelpWizardPage {
 
 		updateButtonsStatus();
 	}
+	
+	protected void openAddDialog(){
+		ReturnValueContainer container = new ReturnValueContainer();
+		InputReturnValueDialog inputDialog = new InputReturnValueDialog(getShell(), container, getToVariablesNames());
+		if (inputDialog.open() == Dialog.OK) {
+			addElemenet(container);
+		}
+	}
+	
+	protected void addElemenet(ReturnValueContainer container){
+		values.add(container);
+		tableViewer.refresh();
+		toVariables = null;
+		fromVariables = null;
+		updateButtonsStatus();
+		callModifyListeners();
+	}
+	
+	protected void openEditDialog(ReturnValueContainer edited){
+		ReturnValueContainer result = edited.clone();
+		String[] toVariables = getVariablesPlusElement(getToVariablesNames(), edited.getToVariable());
+		InputReturnValueDialog inputDialog = new InputReturnValueDialog(getShell(), result, toVariables);
+		if (inputDialog.open() == Dialog.OK) {
+			editElement(edited, result);
+		}
+	}
 
 	/**
 	 * Open the dialog to edit an existing element and replace it when the dialog is closed with the ok button
@@ -244,24 +275,20 @@ public abstract class RVPropertyPage extends JSSHelpWizardPage {
 	 * @param edited
 	 *          the element to edit
 	 */
-	private void editElement(ReturnValueContainer edited) {
-		ReturnValueContainer result = edited.clone();
-		InputReturnValueDialog inputDialog = new InputReturnValueDialog(getShell(), result,
-				addToVariablesPlusElement(edited.getToVariable()));
-		if (inputDialog.open() == Dialog.OK) {
-			int index = values.indexOf(edited);
-			values.set(index, result);
-			tableViewer.refresh();
-			toVariables = null;
-			updateButtonsStatus();
-			callModifyListeners();
-		}
+	protected void editElement(ReturnValueContainer edited, ReturnValueContainer newValue) {
+		int index = values.indexOf(edited);
+		values.set(index, newValue);
+		tableViewer.refresh();
+		toVariables = null;
+		fromVariables = null;
+		updateButtonsStatus();
+		callModifyListeners();
 	}
 
 	/**
 	 * Update the status of the buttons enabling or disabling them if there are input errors
 	 */
-	private void updateButtonsStatus() {
+	protected void updateButtonsStatus() {
 		if (addButton != null) {
 			if (getToVariablesNames().length == 0) {
 				addButton.setEnabled(false);
@@ -331,7 +358,7 @@ public abstract class RVPropertyPage extends JSSHelpWizardPage {
 				int selectedIndex = table.getSelectionIndex();
 				if (selectedIndex != -1) {
 					ReturnValueContainer selectedElement = values.get(selectedIndex);
-					editElement(selectedElement);
+					openEditDialog(selectedElement);
 				}
 			}
 		});
@@ -345,7 +372,7 @@ public abstract class RVPropertyPage extends JSSHelpWizardPage {
 	 * 
 	 * @return not null hashset of variables already used as a to variable
 	 */
-	private HashSet<String> getAlreadyUsedVariables() {
+	private HashSet<String> getAlreadyUsedToVariables() {
 		HashSet<String> result = new HashSet<String>();
 		for (ReturnValueContainer value : values) {
 			result.add(value.getToVariable());
@@ -354,16 +381,29 @@ public abstract class RVPropertyPage extends JSSHelpWizardPage {
 	}
 
 	/**
+	 * Return an hashset of the variable names that are already used as from variables
+	 * 
+	 * @return not null hashset of variables already used as a from variable
+	 */
+	private HashSet<String> getAlreadyUsedFromVariables() {
+		HashSet<String> result = new HashSet<String>();
+		for (ReturnValueContainer value : values) {
+			result.add(value.getFromVariable());
+		}
+		return result;
+	}
+	
+	/**
 	 * Get an array of all the variables that can be used as to variable. These are variables defined for the element on
 	 * its dataset that aren't already used as to variable
 	 * 
 	 * @return a not null array of variable names that can be used as to variables
 	 */
-	private String[] getToVariablesNames() {
+	protected String[] getToVariablesNames() {
 		if (toVariables == null) {
 			List<String> res = new ArrayList<String>();
-			HashSet<String> usedVariables = getAlreadyUsedVariables();
-			JRVariable[] vlist = getVariables();
+			HashSet<String> usedVariables = getAlreadyUsedToVariables();
+			JRVariable[] vlist = getMainDatasetVariables();
 			for (JRVariable o : vlist) {
 				JRDesignVariable jdVar = (JRDesignVariable) o;
 				if (!jdVar.isSystemDefined() && !usedVariables.contains(jdVar.getName()))
@@ -373,21 +413,41 @@ public abstract class RVPropertyPage extends JSSHelpWizardPage {
 		}
 		return toVariables;
 	}
+	
+	/**
+	 * Get an array of all the variables that can be used as to variable. These are variables defined for the element on
+	 * its dataset that aren't already used as to variable
+	 * 
+	 * @return a not null array of variable names that can be used as to variables
+	 */
+	protected String[] getFromVariablesNames() {
+		if (fromVariables == null) {
+			List<String> res = new ArrayList<String>();
+			HashSet<String> usedVariables = getAlreadyUsedFromVariables();
+			JRVariable[] vlist = getDatasetVariables();
+			for (JRVariable o : vlist) {
+				JRDesignVariable jdVar = (JRDesignVariable) o;
+				if (!jdVar.isSystemDefined() && !usedVariables.contains(jdVar.getName()))
+					res.add(jdVar.getName());
+			}
+			return res.toArray(new String[res.size()]);
+		}
+		return fromVariables;
+	}
 
 	/**
-	 * Do the same of get to getToVariableNames() but add the parameter to the top of the variable names. Used when edit a
+	 * add the parameter to the top of the variable names. Used when edit a
 	 * return parameter to provide in the list of the to variables also the one already used by the edited element
 	 * 
 	 * @param elementToAdd
 	 *          element to add to the available variables array
 	 * @return not null array of variable names that can be used as to variables plus a static value added to the top
 	 */
-	private String[] addToVariablesPlusElement(String elementToAdd) {
-		String[] toVariables = getToVariablesNames();
-		String[] result = new String[toVariables.length + 1];
+	protected String[] getVariablesPlusElement(String[] variables, String elementToAdd) {
+		String[] result = new String[variables.length + 1];
 		result[0] = elementToAdd;
 		for (int i = 1; i < result.length; i++) {
-			result[i] = toVariables[i - 1];
+			result[i] = variables[i - 1];
 		}
 		return result;
 	}
@@ -512,5 +572,19 @@ public abstract class RVPropertyPage extends JSSHelpWizardPage {
 	 * 
 	 * @return a not null list of variable
 	 */
-	public abstract JRVariable[] getVariables();
+	public abstract JRVariable[] getDatasetVariables();
+
+	/**
+	 * Return the list of variables provided by the main dataset
+	 * 
+	 * @return a not null list of variable
+	 */
+	protected JRVariable[] getMainDatasetVariables() {
+		if (design == null)
+			return new JRVariable[0];
+		JRDataset dataset = design.getMainDataset();
+		if (dataset != null)
+			return dataset.getVariables();
+		return new JRVariable[0];
+	}
 }

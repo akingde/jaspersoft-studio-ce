@@ -48,7 +48,7 @@ public class SubreportRVPropertyPage extends RVPropertyPage {
 	private JReportsDTO dto;
 	
 	protected SubreportRVPropertyPage() {
-		super("subreportproperties");
+		super("subreportproperties", null);
 		setTitle(Messages.RVPropertyPage_subreport_return_values);
 		setDescription(Messages.RVPropertyPage_description);
 	}
@@ -72,6 +72,7 @@ public class SubreportRVPropertyPage extends RVPropertyPage {
 	 */
 	public void setDto(JReportsDTO dto) {
 		this.dto = dto;
+		design = dto.getjConfig().getJasperDesign();
 		values = ReturnValueContainer.convertFromSubreportReturn(dto.getValue());
 		toVariables = null;
 	}
@@ -80,7 +81,8 @@ public class SubreportRVPropertyPage extends RVPropertyPage {
 	 * Return the list of jrvariables defined for the subreport, they are
 	 * readed from the main dataset
 	 */
-	public JRVariable[] getVariables() {
+	@Override
+	public JRVariable[] getDatasetVariables() {
 		List<JRVariable> vlist = dto.getjConfig().getJasperDesign().getVariablesList();
 		return vlist.toArray(new JRVariable[vlist.size()]);
 	}

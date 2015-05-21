@@ -17,6 +17,7 @@ import net.sf.jasperreports.engine.type.CalculationEnum;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.Assert;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
@@ -58,6 +59,7 @@ import com.jaspersoft.studio.utils.SelectionHelper;
  * @author Orlandin Marco
  *
  */
+@SuppressWarnings("restriction")
 public class InputReturnValueDialog extends Dialog {
 
 	/**
@@ -68,38 +70,38 @@ public class InputReturnValueDialog extends Dialog {
 	/**
 	 * Text where the user can insert a valid increment class factory
 	 */
-	private Text incrementText;
+	protected Text incrementText;
 	
 	/**
 	 * Combo where the calculation function can be selected
 	 */
-	private Combo calculation;
+	protected Combo calculation;
 	
 	/**
 	 * Text area to select the from variable
 	 */
-	private Text fromVariable;
+	protected Text fromVariable;
 	
 	/**
 	 * Combo to select the to variable from on of the available values
 	 */
-	private Combo toVariable;
+	protected Combo toVariable;
 	
 	/**
 	 * Container where the values selected from the widget ar stored
 	 */
-	private ReturnValueContainer rvContainer;
+	protected ReturnValueContainer rvContainer;
 	
 	/**
 	 * Possible values for the combo toVariable
 	 */
-	private String[] toVariables;
+	protected String[] toVariables;
 	
 	/**
 	 * Widget called when a widget is modified to update
 	 * the container
 	 */
-	private ModifyListener widgetModified = new ModifyListener() {
+	protected ModifyListener widgetModified = new ModifyListener() {
 		
 		@Override
 		public void modifyText(ModifyEvent e) {
@@ -112,11 +114,12 @@ public class InputReturnValueDialog extends Dialog {
 	 * 
 	 * @param parentShell the shell
 	 * @param rvContainer a not null container, the widget will be initialized with the content
-	 * of this container, useful for edit operations 
+	 * of this container, useful for edit operations and the output will be stored also inside this value
 	 * @param toVariables Possible values for the combo toVariable
 	 */
-	protected InputReturnValueDialog(Shell parentShell, ReturnValueContainer rvContainer, String[] toVariables) {
+	public InputReturnValueDialog(Shell parentShell, ReturnValueContainer rvContainer, String[] toVariables) {
 		super(parentShell);
+		Assert.isNotNull(rvContainer);
 		this.rvContainer = rvContainer;
 		this.toVariables = toVariables;
 	}
@@ -129,24 +132,64 @@ public class InputReturnValueDialog extends Dialog {
 		}
 	}
 	
+	/**
+	 * Create the control for the from variable as a text area
+	 * 
+	 * @param container the parent container, it will have a gridlayout with two 
+	 * columns
+	 */
+	protected void createFromVariable(Composite container){
+		Label fromVariableLabel = new Label(container, SWT.NONE);
+		fromVariableLabel.setText(Messages.RVPropertyPage_subreport_variable);
+		
+		fromVariable = new Text(container, SWT.BORDER);
+		fromVariable.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+	}
+
+	/**
+	 * Create the control for the to variable as not editable combo
+	 * 
+	 * @param container the parent container, it will have a gridlayout with two 
+	 * columns
+	 */
+	protected void createToVariable(Composite container){
+		Label toVariableLabel = new Label(container, SWT.NONE);
+		toVariableLabel.setText(Messages.RVPropertyPage_to_variable);
+		
+		toVariable = new Combo(container, SWT.READ_ONLY);
+		toVariable.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		toVariable.setItems(toVariables);
+	}
+	
+	/**
+	 * Initialize the from and to control with the passed container and attach
+	 * the modify listeners to them
+	 */
+	protected void initializeVariables(){
+		if (rvContainer.getToVariable() != null) {
+			int index = ArrayUtils.indexOf(toVariables, rvContainer.getToVariable());
+			if (index == ArrayUtils.INDEX_NOT_FOUND) index = 0;
+			toVariable.select(index);
+		} else {
+			toVariable.select(0);
+		}
+		
+		if (rvContainer.getFromVariable() != null) {
+			fromVariable.setText(rvContainer.getFromVariable());
+		}
+		
+		toVariable.addModifyListener(widgetModified);
+		fromVariable.addModifyListener(widgetModified);
+	}
+	
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		Composite container = new Composite(parent, SWT.NONE);
 		container.setLayout(new GridLayout(2,false));
 		container.setLayoutData(new GridData(GridData.FILL_BOTH));
 		
-		Label subreportVariableLabel = new Label(container, SWT.NONE);
-		subreportVariableLabel.setText(Messages.RVPropertyPage_subreport_variable);
-		
-		fromVariable = new Text(container, SWT.BORDER);
-		fromVariable.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		
-		Label variableLabel = new Label(container, SWT.NONE);
-		variableLabel.setText(Messages.RVPropertyPage_to_variable);
-		
-		toVariable = new Combo(container, SWT.READ_ONLY);
-		toVariable.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		toVariable.setItems(toVariables);
+		createFromVariable(container);
+		createToVariable(container);
 		
 		Label calculationLabel = new Label(container, SWT.NONE);
 		calculationLabel.setText(Messages.RVPropertyPage_calculation_type);
@@ -194,36 +237,27 @@ public class InputReturnValueDialog extends Dialog {
 		
 		//INITIALIZE THE WIDGET WITH THE CONTENT OF THE CONTAINER IF IT IS VALID
 		
-		if (rvContainer.getToVariable() != null) {
-			int index = ArrayUtils.indexOf(toVariables, rvContainer.getToVariable());
-			if (index == ArrayUtils.INDEX_NOT_FOUND) index = 0;
-			toVariable.select(index);
-		} else {
-			toVariable.select(0);
-		}
-		
 		if (rvContainer.getCalculation() != null) {
 			int index = ArrayUtils.indexOf(CalculationEnum.values(), rvContainer.getCalculation());
 			if (index == ArrayUtils.INDEX_NOT_FOUND) index = 0;
 			calculation.select(index);
 		} 
-		
-		if (rvContainer.getFromVariable() != null) fromVariable.setText(rvContainer.getFromVariable());
+
 		if (rvContainer.getIncrementerFactoryClassName() != null) incrementText.setText(rvContainer.getIncrementerFactoryClassName());
 		
 		//ADD THE MODIFY LISTENER AT THE END TO AVOID THAT IT'S CALLED DURING THE INITIALIZATION
 		
-		toVariable.addModifyListener(widgetModified);
-		fromVariable.addModifyListener(widgetModified);
+		initializeVariables();
 		incrementText.addModifyListener(widgetModified);
 		calculation.addModifyListener(widgetModified);
+		updateContainer();
 		return container;
 	}
 	
 	/**
 	 * Save the value from the widget inside the container
 	 */
-	private void updateContainer(){
+	protected void updateContainer(){
 		rvContainer.setCalculation(CalculationEnum.values()[calculation.getSelectionIndex()]);
 		rvContainer.setToVariable(toVariable.getText());
 		rvContainer.setFromVariable(fromVariable.getText());
@@ -248,8 +282,11 @@ public class InputReturnValueDialog extends Dialog {
 	 * Check if the content of the widget is valid and enable\disable the ok button.
 	 * Essentially the only validity check is a name not empty for the from variable
 	 */
-	private void validate(){
-		getButton(IDialogConstants.OK_ID).setEnabled(fromVariable.getText() != null && !fromVariable.getText().trim().isEmpty());
+	protected void validate(){
+		Button okButton = getButton(IDialogConstants.OK_ID);
+		if (okButton != null){
+			okButton.setEnabled(fromVariable.getText() != null && !fromVariable.getText().trim().isEmpty());
+		}
 	}
 	
 	/**
@@ -257,7 +294,6 @@ public class InputReturnValueDialog extends Dialog {
 	 * 
 	 * @return a not null java search scope to fine an implementations of JRIncrementFactory
 	 */
-	@SuppressWarnings("restriction")
 	private IJavaSearchScope getIncrementContext(){
 		IJavaSearchScope searchScope = SearchEngine.createWorkspaceScope();
 		IProject prj = ((IFileEditorInput) SelectionHelper.getActiveJRXMLEditor().getEditorInput()).getFile().getProject();
