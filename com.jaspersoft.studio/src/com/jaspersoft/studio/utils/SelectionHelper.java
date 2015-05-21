@@ -65,8 +65,12 @@ public class SelectionHelper {
 
 	public static EditPart getEditPart(JRDesignElement jrElement) {
 		ANode node = getNode(jrElement);
-		if (node != null && node.getFigureEditPart() != null) {
-			return node.getFigureEditPart();
+		
+		if (node != null) {
+			EditPart figure = node.getFigureEditPart();
+			if (figure != null){
+				return figure;
+			}
 		}
 		return null;
 	}
