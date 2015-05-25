@@ -175,9 +175,14 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 					languages[0] = lang;
 					langCombo.setItem(0, lang);
 					langCombo.select(0);
-					// On windows the selection of an enrty select also all the
+					// On windows the selection of an entry select also all the
 					// text inside the combo, so we need to restore the old selection
 					langCombo.setSelection(oldSelection);
+				} else if (index > 0 && !languages[0].isEmpty()){
+					//if the input language is a known language and there was before an
+					//entry for a not recognized language then remove it
+					languages[0] = "";
+					langCombo.setItem(0, "");
 				}
 				changeLanguage();
 			}
