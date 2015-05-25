@@ -12,6 +12,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.background;
 
+import java.beans.PropertyChangeEvent;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
@@ -173,24 +174,36 @@ public class MBackgrounImage extends APropertyNode implements IGraphicElement {
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		// bounds
+		JSSBackgroundPixelLocationValidator heightValidator = new JSSBackgroundPixelLocationValidator(PROPERTY_HEIGHT);
+		heightValidator.setTargetNode(this);
 		PixelPropertyDescriptor heightD = new PixelPropertyDescriptor(PROPERTY_HEIGHT, Messages.common_height);
 		heightD.setCategory(Messages.common_size);
 		heightD.setDescription(Messages.MGraphicElement_height_description);
+		heightD.setValidator(heightValidator);
 		desc.add(heightD);
 
+		JSSBackgroundPixelLocationValidator widthValidator = new JSSBackgroundPixelLocationValidator(PROPERTY_WIDTH);
+		widthValidator.setTargetNode(this);
 		PixelPropertyDescriptor widthD = new PixelPropertyDescriptor(PROPERTY_WIDTH, Messages.MGraphicElement_width);
 		widthD.setCategory(Messages.common_size);
 		widthD.setDescription(Messages.MGraphicElement_width_description);
+		widthD.setValidator(widthValidator);
 		desc.add(widthD);
 
+		JSSBackgroundPixelLocationValidator xValidator = new JSSBackgroundPixelLocationValidator(PROPERTY_X);
+		xValidator.setTargetNode(this);
 		PixelPropertyDescriptor xD = new PixelPropertyDescriptor(PROPERTY_X, Messages.common_left);
 		xD.setCategory(Messages.MGraphicElement_location_category);
 		xD.setDescription(Messages.MGraphicElement_left_description);
+		xD.setValidator(xValidator);
 		desc.add(xD);
 
+		JSSBackgroundPixelLocationValidator yValidator = new JSSBackgroundPixelLocationValidator(PROPERTY_Y);
+		yValidator.setTargetNode(this);
 		PixelPropertyDescriptor yD = new PixelPropertyDescriptor(PROPERTY_Y, Messages.common_top);
 		yD.setCategory(Messages.MGraphicElement_location_category);
 		yD.setDescription(Messages.MGraphicElement_top_description);
+		yD.setValidator(yValidator);
 		desc.add(yD);
 		
 		TransparencyPropertyDescriptor transparency = new TransparencyPropertyDescriptor(PROPERTY_ALPHA, Messages.MBackgrounImage_labelTransparency);
@@ -222,20 +235,28 @@ public class MBackgrounImage extends APropertyNode implements IGraphicElement {
 			return jrObj.getProperty(PROPERTY_PATH);
 		} else if (id.equals(PROPERTY_X)) {
 			Object value = jrObj.getProperty(PROPERTY_X);
-			if (value == null) return null;
-			else return Integer.parseInt((String)value);
+			if (value == null) {
+				return 10;
+			} else return Integer.parseInt((String)value);
 		} else if (id.equals(PROPERTY_Y)){
 			Object value =  jrObj.getProperty(PROPERTY_Y);
-			if (value == null) return null;
-			else return Integer.parseInt((String)value);
+			if (value == null) {
+				return 10;
+			} else return Integer.parseInt((String)value);
 		} else if (id.equals(PROPERTY_HEIGHT)){
 			Object value =  jrObj.getProperty(PROPERTY_HEIGHT);
-			if (value == null) return null;
-			else return Integer.parseInt((String)value);
+			if (value == null) {
+				ImageData image = getImageData();
+				if (image != null) return image.height;
+				return 100;
+			} else return Integer.parseInt((String)value);
 		} else if (id.equals(PROPERTY_WIDTH)){
 			Object value =  jrObj.getProperty(PROPERTY_WIDTH);
-			if (value == null) return null;
-			else return Integer.parseInt((String)value);
+			if (value == null) {
+				ImageData image = getImageData();
+				if (image != null) return image.width;
+				return 100;
+			} else return Integer.parseInt((String)value);
 		} else if (id.equals(PROPERTY_KEEP_RATIO)){
 			Object value =  jrObj.getProperty(PROPERTY_KEEP_RATIO);
 			if (value == null) return null;
@@ -315,11 +336,7 @@ public class MBackgrounImage extends APropertyNode implements IGraphicElement {
 	 */
 	@Override
 	public int getDefaultWidth() {
-		Integer width = (Integer)getPropertyValue(PROPERTY_WIDTH);
-		if (width != null) return width;
-		ImageData image = getImageData();
-		if (image != null) return image.width;
-		return 100;
+		return (Integer)getPropertyValue(PROPERTY_WIDTH);
 	}
 
 	/**
@@ -331,11 +348,7 @@ public class MBackgrounImage extends APropertyNode implements IGraphicElement {
 	 */
 	@Override
 	public int getDefaultHeight() {
-		Integer height = (Integer)getPropertyValue(PROPERTY_HEIGHT);
-		if (height != null) return height;
-		ImageData image = getImageData();
-		if (image != null) return image.height;
-		return 100;
+		return (Integer)getPropertyValue(PROPERTY_HEIGHT);
 	}
 	
 	/**
@@ -345,9 +358,7 @@ public class MBackgrounImage extends APropertyNode implements IGraphicElement {
 	 * @return a not null and valid x value
 	 */
 	public int getDefaultX(){
-		Integer x = (Integer)getPropertyValue(PROPERTY_X);
-		if (x != null) return x;
-		return 10;
+		return (Integer)getPropertyValue(PROPERTY_X);
 	}
 	
 	/**
@@ -357,9 +368,7 @@ public class MBackgrounImage extends APropertyNode implements IGraphicElement {
 	 * @return a not null and valid y value
 	 */
 	public int getDefaultY(){
-		Integer y = (Integer)getPropertyValue(PROPERTY_Y);
-		if (y != null) return y;
-		return 10;
+		return (Integer)getPropertyValue(PROPERTY_Y);
 	}
 	
 	/**
@@ -416,5 +425,20 @@ public class MBackgrounImage extends APropertyNode implements IGraphicElement {
 			pmap.getEventSupport().addPropertyChangeListener(this);
 		}
 		super.setValue(value);
+	}
+	
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		//If the properties is for the image refresh it and propagate the event
+		if (evt.getPropertyName().equals(JRPropertiesMap.PROPERTY_VALUE)){
+			//The properties map was changed so i need to refresh the part.
+			//The event doesn't contains the property of the map changed so i'm not sure
+			//that the change regards the background image, so it must be always refreshed
+			EditPart figureEditPart = getFigureEditPart();
+			if (figureEditPart != null){
+				figureEditPart.refresh();
+			}
+			firePropertyChange(evt);
+		}
 	}
 }
