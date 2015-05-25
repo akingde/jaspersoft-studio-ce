@@ -48,9 +48,12 @@ import com.jaspersoft.studio.model.frame.MFrame;
  * other edit part, and can not be resized to overlap them. This drag tracker change this behavior taking as the target
  * edit part an IContainer, that could be the actual target or the container of the actual target
  * 
+ * By default if the selected elements had different parents the drag operation doesn't change their parent. Otherwise if
+ * the parent is the same then the selected elements will be moved to the destination
+ * 
  * It allow the hotkey SHIFT to drag the selection only vertically or horizontally
  * 
- * It allow the hotkey A to force the dragged selection to never change parent
+ * It allow the hotkey A to force the dragged to use the target parent even if the source selection comes from different parents
  * 
  * The hotkeys can be combined
  * 
@@ -58,7 +61,7 @@ import com.jaspersoft.studio.model.frame.MFrame;
  * 
  */
 public class SearchParentDragTracker extends DragEditPartsTracker {
-
+	
 	/** defines the range where autoscroll is active inside a viewer */
 	private static final int DEFAULT_EXPOSE_THRESHOLD = 50;
 	
@@ -80,6 +83,11 @@ public class SearchParentDragTracker extends DragEditPartsTracker {
 	 * Zoom manager of the current viewer
 	 */
 	private ZoomManager zoomManager;
+	
+	/**
+	 * Flag used to know if the current drag operation contain elements with a different parent
+	 */
+	private boolean multiParentDrag = false;
 	
 	/**
 	 * An implementation of {@link org.eclipse.gef.AutoexposeHelper} that performs autoscrolling of a
@@ -325,16 +333,24 @@ public class SearchParentDragTracker extends DragEditPartsTracker {
 	
 	/**
 	 * Build an set of invalid target for the drop. The invalid target are all the elements 
-	 * in the dragged selection plus their descendants
+	 * in the dragged selection plus their descendants. It also initialize the flag that identify
+	 * if this is a multi parent drag or not
 	 * 
 	 * @return an hash set with the models of the invalid target elements for a drop operation
 	 */
 	private HashSet<INode> getSelectionDesendent(){
 		HashSet<INode> result = new HashSet<INode>();
+		INode lastParent = null;
 		for (Object part : getCurrentViewer().getSelectedEditParts()){
 			if (part instanceof EditPart){
 				EditPart ep = (EditPart)part;
 				INode model = (INode) ep.getModel();
+				INode currentParent = model.getParent();
+				if (lastParent == null){
+					lastParent = currentParent;
+				} else if (currentParent != lastParent){
+					multiParentDrag = true;
+				}
 				result.add(model);
 				if (model instanceof IContainer) getSelectionDesendentRecursive(model.getChildren(), result);
 			}
@@ -457,48 +473,54 @@ public class SearchParentDragTracker extends DragEditPartsTracker {
 	/**
 	 * Create the command for the drag and drop operation. If the 
 	 * drag modifier key is pressed then the operation is considered a drag
-	 * where every element dosen't change parent so the move commands are generated
-	 * by the parent of each moved element.
+	 * where every element change parent so the move commands are generated
+	 * by the standard command. Otherwise if there is a multidrag in progress
+	 * the command are generated in a way to dosen't change the parent of the element
 	 */
 	protected Command getCommand() {
-		boolean modifierPressed = JasperReportsPlugin.isPressed(MOVE_CHILD_KEY);
-		if (modifierPressed){
-			CompoundCommand command = new CompoundCommand();
-			command.setDebugLabel("Drag Object Tracker");//$NON-NLS-1$
-	
-			Iterator<?> iter = getOperationSet().iterator();
-			ChangeBoundsRequest request = (ChangeBoundsRequest)getTargetRequest();
-			request.setType(REQ_MOVE_CHILDREN);
-			while (iter.hasNext()) {
-				EditPart editPart = (EditPart) iter.next();
-				request.setEditParts(editPart);
-				EditPart parent = getParent(editPart);
-				if (parent != null){
-					command.add(parent.getCommand(request));
-				}
-			}
-			return command.unwrap();
+		boolean useOldBheavior = JasperReportsPlugin.isPressed(MOVE_CHILD_KEY);
+		if (useOldBheavior){
+			return super.getCommand();
+		} else if (multiParentDrag){
+			return getKeepParentCommand();
 		} else {
 			return super.getCommand();
 		}
 	}
 	
 	/**
-	 * Avoid to show the target feedback when the drag modifier button
-	 * is pressed, since in this state the parent never change
+	 * Create a command where the elements are always moved in the bounds of their parent, so
+	 * it is always a move children operation. This means that the selected elements doesn't change 
+	 * parent.
+	 */
+	private Command getKeepParentCommand(){
+		CompoundCommand command = new CompoundCommand();
+		command.setDebugLabel("Drag Object Tracker");//$NON-NLS-1$
+
+		Iterator<?> iter = getOperationSet().iterator();
+		ChangeBoundsRequest request = (ChangeBoundsRequest)getTargetRequest();
+		request.setType(REQ_MOVE_CHILDREN);
+		while (iter.hasNext()) {
+			EditPart editPart = (EditPart) iter.next();
+			request.setEditParts(editPart);
+			EditPart parent = getParent(editPart);
+			if (parent != null){
+				command.add(parent.getCommand(request));
+			}
+		}
+		return command.unwrap();
+	}
+	
+	/**
+	 * Avoid to show the target feedback when the elements are
+	 * not going to change the parent
 	 */
 	@Override
 	protected void showTargetFeedback() {
-		boolean modifierPressed = JasperReportsPlugin.isPressed(MOVE_CHILD_KEY);
-		if (!modifierPressed){
+		boolean useOldBheavior = JasperReportsPlugin.isPressed(MOVE_CHILD_KEY);
+		if (useOldBheavior || !multiParentDrag){
 			super.showTargetFeedback();
 		}
-	}
-	
-	@Override
-	protected void showSourceFeedback() {
-		// TODO Auto-generated method stub
-		super.showSourceFeedback();
 	}
 	
 	/**
@@ -510,6 +532,8 @@ public class SearchParentDragTracker extends DragEditPartsTracker {
 		selectionHierarchy = null;
 		//At the end of the drag operation the mouse direction reset
 		firstMovment = MOUSE_DIRECTION.UNDEFINED;
+		//reset the multiparent flag
+		multiParentDrag = false;
 	}
 	
 	/**
