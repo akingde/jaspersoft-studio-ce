@@ -105,7 +105,7 @@ public class SPRWFloatCombo extends ASPropertyWidget {
 					return;
 				String text = combo.getText().trim();
 				//If the string ends with the separator probably the user must still insert char, so don't set it 
-				if (!(text.endsWith(",") || text.endsWith("."))){
+				if (!(text.endsWith(",") || text.endsWith(".") || text.isEmpty())){
 					try{
 						Float realValue = Float.valueOf(text.replace(",", "."));
 						section.changeProperty(pDescriptor.getId(), realValue.toString());
