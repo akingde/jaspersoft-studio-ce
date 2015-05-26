@@ -1038,7 +1038,10 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 
 	public static String getMeasureUnit(JasperReportsConfiguration jConfig, JasperDesign jd) {
 		String defunit = jConfig.getProperty(DesignerPreferencePage.P_PAGE_DEFAULT_UNITS);
-		defunit = PHolderUtil.getUnit(jd, "", defunit); //$NON-NLS-1$
+		//In some cases the jasperdesign could not be available, with the jrtx file for example
+		if (jd != null){
+			defunit = PHolderUtil.getUnit(jd, "", defunit); //$NON-NLS-1$
+		} 
 		return defunit;
 	}
 
