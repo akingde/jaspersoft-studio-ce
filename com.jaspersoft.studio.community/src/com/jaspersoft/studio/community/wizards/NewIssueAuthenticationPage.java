@@ -13,6 +13,7 @@
 package com.jaspersoft.studio.community.wizards;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.viewer.BrowserUtils;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
@@ -22,7 +23,6 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.program.Program;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
@@ -81,7 +81,7 @@ public class NewIssueAuthenticationPage extends JSSHelpWizardPage {
 		communityLink.addSelectionListener(new SelectionAdapter() {
 			@Override	
 			public void widgetSelected(SelectionEvent e) {
-				Program.launch(CommunityConstants.NEW_COMMUNITY_TRACKER_ACCOUNT_URL);
+				BrowserUtils.openExternalBrowser(CommunityConstants.NEW_COMMUNITY_TRACKER_ACCOUNT_URL);
 			}
 		});
 		

@@ -8,6 +8,7 @@ package com.jaspersoft.studio.components.customvisualization.model.command;
 import java.io.IOException;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.viewer.BrowserUtils;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.draw2d.geometry.Rectangle;
@@ -21,7 +22,6 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.program.Program;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -132,7 +132,7 @@ public class CreateCustomVisualizationCommand extends CreateElementCommand {
 						int offset = issueLink.getOffsetAtLocation(new Point (event.x, event.y));
 						StyleRange style = issueLink.getStyleRangeAtOffset(offset);
 						if (style != null && style.underline && style.underlineStyle == SWT.UNDERLINE_LINK) {
-							Program.launch(url);
+							BrowserUtils.openExternalBrowser(url);
 						}
 					} catch (IllegalArgumentException e) {
 						// no character under event.x, event.y

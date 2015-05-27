@@ -19,6 +19,7 @@ import java.util.List;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.HttpUtils;
+import net.sf.jasperreports.eclipse.viewer.BrowserUtils;
 
 import org.apache.http.client.CookieStore;
 import org.apache.http.client.utils.HttpClientUtils;
@@ -37,7 +38,6 @@ import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.program.Program;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
@@ -191,7 +191,7 @@ public final class TranslationSendWizard extends Wizard {
 								.getStyleRangeAtOffset(offset);
 						if (style != null && style.underline
 								&& style.underlineStyle == SWT.UNDERLINE_LINK) {
-							Program.launch(issuePath);
+							BrowserUtils.openExternalBrowser(issuePath);
 						}
 					} catch (IllegalArgumentException e) {
 						// no character under event.x, event.y
