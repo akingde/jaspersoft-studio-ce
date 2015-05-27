@@ -83,142 +83,105 @@ public class DatasetRunRVPropertyPage extends RVPropertyPage {
 			return dataset.getVariables();
 		return new JRVariable[0];
 	}
-	
-	
+
 	@Override
-	protected void openAddDialog(){
+	protected void openAddDialog() {
 		ReturnValueContainer container = new ReturnValueContainer();
 		HashSet<String> invalidTo = new HashSet<String>();
 		HashSet<String> invalidFrom = new HashSet<String>();
-		for(ReturnValueContainer definedValues : getValue()){
+		for (ReturnValueContainer definedValues : getValue()) {
 			invalidTo.add(definedValues.getToVariable());
 			invalidFrom.add(definedValues.getFromVariable());
 		}
-		EditableInputReturnValueDialog inputDialog = new EditableInputReturnValueDialog(getShell(), container, getToVariablesNames(), 
-																																											getFromVariablesNames(), invalidTo, invalidFrom);
+		EditableInputReturnValueDialog inputDialog = new EditableInputReturnValueDialog(getShell(), container,
+				getToVariablesNames(), getFromVariablesNames(), invalidTo, invalidFrom);
 		if (inputDialog.open() == Dialog.OK) {
 			addElemenet(container);
 		}
 	}
 
 	@Override
-	protected void openEditDialog(ReturnValueContainer edited){
+	protected void openEditDialog(ReturnValueContainer edited) {
 		ReturnValueContainer result = edited.clone();
 		String[] toVariables = getVariablesPlusElement(getToVariablesNames(), edited.getToVariable());
 		String[] fromVariables = getVariablesPlusElement(getFromVariablesNames(), edited.getFromVariable());
 		HashSet<String> invalidTo = new HashSet<String>();
 		HashSet<String> invalidFrom = new HashSet<String>();
-		for(ReturnValueContainer definedValues : getValue()){
-			if (edited != definedValues){
+		for (ReturnValueContainer definedValues : getValue()) {
+			if (edited != definedValues) {
 				invalidTo.add(definedValues.getToVariable());
 				invalidFrom.add(definedValues.getFromVariable());
 			}
 		}
-		EditableInputReturnValueDialog inputDialog = new EditableInputReturnValueDialog(getShell(), result, toVariables, 
-																																											fromVariables, invalidTo, invalidFrom);
+		EditableInputReturnValueDialog inputDialog = new EditableInputReturnValueDialog(getShell(), result, toVariables,
+				fromVariables, invalidTo, invalidFrom);
 		if (inputDialog.open() == Dialog.OK) {
 			editElement(edited, result);
 		}
 	}
-	
-	/*@Override
-	protected void addElemenet(ReturnValueContainer container) {
-		super.addElemenet(container);
-		
-		//Check the from variable
-		String fromVariable = container.getFromVariable();
-		String[] fromVariables = getFromVariablesNames();
-		if (!ArrayUtils.contains(fromVariables, fromVariable) && datasetRun != null){
-			//Need to add the variable to the subdataset
-			String datasetName = datasetRun.getDatasetName();
-			JRDesignDataset dataset = (JRDesignDataset)design.getDatasetMap().get(datasetName);
-			JRDesignVariable newVariable = new JRDesignVariable();
-			newVariable.setName(fromVariable);
-			try {
-				dataset.addVariable(newVariable);
-			} catch (JRException e) {
-				e.printStackTrace();
-			}
-		}
-		
-		//Check the to variable
-		String toVariable = container.getToVariable();
-		String[] toVariables = getToVariablesNames();
-		if (!ArrayUtils.contains(toVariables, toVariable) && design != null){
-			//Need to add the variable to the main dataset
-			JRDesignDataset dataset = (JRDesignDataset)design.getMainDataset();
-			JRDesignVariable newVariable = new JRDesignVariable();
-			newVariable.setName(toVariable);
-			try {
-				dataset.addVariable(newVariable);
-			} catch (JRException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-	
-	@Override
-	protected void editElement(ReturnValueContainer edited, ReturnValueContainer newValue) {
-		super.editElement(edited, newValue);
-		
-		//Check the from variable
-		String fromVariable = newValue.getFromVariable();
-		String[] fromVariables = getVariablesPlusElement(getFromVariablesNames(), edited.getFromVariable());
-		if (!ArrayUtils.contains(fromVariables, fromVariable) && datasetRun != null){
-			//Need to add the variable to the subdataset
-			String datasetName = datasetRun.getDatasetName();
-			JRDesignDataset dataset = (JRDesignDataset)design.getDatasetMap().get(datasetName);
-			JRDesignVariable newVariable = new JRDesignVariable();
-			newVariable.setName(fromVariable);
-			try {
-				dataset.addVariable(newVariable);
-			} catch (JRException e) {
-				e.printStackTrace();
-			}
-		}
-		
-		//Check the to variable
-		String toVariable = newValue.getToVariable();
-		String[] toVariables = getVariablesPlusElement(getToVariablesNames(), edited.getToVariable());
-		if (!ArrayUtils.contains(toVariables, toVariable) && design != null){
-			//Need to add the variable to the main dataset
-			JRDesignDataset dataset = (JRDesignDataset)design.getMainDataset();
-			JRDesignVariable newVariable = new JRDesignVariable();
-			newVariable.setName(toVariable);
-			try {
-				dataset.addVariable(newVariable);
-			} catch (JRException e) {
-				e.printStackTrace();
-			}
-		}
-	}*/
-	
+
+	/*
+	 * @Override protected void addElemenet(ReturnValueContainer container) { super.addElemenet(container);
+	 * 
+	 * //Check the from variable String fromVariable = container.getFromVariable(); String[] fromVariables =
+	 * getFromVariablesNames(); if (!ArrayUtils.contains(fromVariables, fromVariable) && datasetRun != null){ //Need to
+	 * add the variable to the subdataset String datasetName = datasetRun.getDatasetName(); JRDesignDataset dataset =
+	 * (JRDesignDataset)design.getDatasetMap().get(datasetName); JRDesignVariable newVariable = new JRDesignVariable();
+	 * newVariable.setName(fromVariable); try { dataset.addVariable(newVariable); } catch (JRException e) {
+	 * e.printStackTrace(); } }
+	 * 
+	 * //Check the to variable String toVariable = container.getToVariable(); String[] toVariables =
+	 * getToVariablesNames(); if (!ArrayUtils.contains(toVariables, toVariable) && design != null){ //Need to add the
+	 * variable to the main dataset JRDesignDataset dataset = (JRDesignDataset)design.getMainDataset(); JRDesignVariable
+	 * newVariable = new JRDesignVariable(); newVariable.setName(toVariable); try { dataset.addVariable(newVariable); }
+	 * catch (JRException e) { e.printStackTrace(); } } }
+	 * 
+	 * @Override protected void editElement(ReturnValueContainer edited, ReturnValueContainer newValue) {
+	 * super.editElement(edited, newValue);
+	 * 
+	 * //Check the from variable String fromVariable = newValue.getFromVariable(); String[] fromVariables =
+	 * getVariablesPlusElement(getFromVariablesNames(), edited.getFromVariable()); if (!ArrayUtils.contains(fromVariables,
+	 * fromVariable) && datasetRun != null){ //Need to add the variable to the subdataset String datasetName =
+	 * datasetRun.getDatasetName(); JRDesignDataset dataset = (JRDesignDataset)design.getDatasetMap().get(datasetName);
+	 * JRDesignVariable newVariable = new JRDesignVariable(); newVariable.setName(fromVariable); try {
+	 * dataset.addVariable(newVariable); } catch (JRException e) { e.printStackTrace(); } }
+	 * 
+	 * //Check the to variable String toVariable = newValue.getToVariable(); String[] toVariables =
+	 * getVariablesPlusElement(getToVariablesNames(), edited.getToVariable()); if (!ArrayUtils.contains(toVariables,
+	 * toVariable) && design != null){ //Need to add the variable to the main dataset JRDesignDataset dataset =
+	 * (JRDesignDataset)design.getMainDataset(); JRDesignVariable newVariable = new JRDesignVariable();
+	 * newVariable.setName(toVariable); try { dataset.addVariable(newVariable); } catch (JRException e) {
+	 * e.printStackTrace(); } } }
+	 */
+
 	/**
 	 * Update the status of the buttons enabling or disabling them if there are input errors
 	 */
 	protected void updateButtonsStatus() {
-		JRDesignDataset mainDataset = (JRDesignDataset)design.getMainDataset();
-		String datasetName = datasetRun.getDatasetName();
-		JRDesignDataset subDataset = (JRDesignDataset)design.getDatasetMap().get(datasetName);
-				
-		for(ReturnValueContainer container : getValue()){
-			//Check the from variable
-			String fromVariable = container.getFromVariable();
-			if (!subDataset.getVariablesMap().containsKey(fromVariable)){
-				setMessage("Some From variables are missing on the subdataset and will be possible to create them at the end of the wizard");
-				return;
-			}
-				
-			//Check the to variable
-			String toVariable = container.getToVariable();
-			if (!mainDataset.getVariablesMap().containsKey(toVariable)){
-				setMessage("Some To variables are missing on the main dataset and will be possible to create them at the end of the wizard");
-				return;
+		if (design != null) {
+			JRDesignDataset mainDataset = (JRDesignDataset) design.getMainDataset();
+			String datasetName = datasetRun.getDatasetName();
+			JRDesignDataset subDataset = (JRDesignDataset) design.getDatasetMap().get(datasetName);
+
+			for (ReturnValueContainer container : getValue()) {
+				// Check the from variable
+				String fromVariable = container.getFromVariable();
+				if (!subDataset.getVariablesMap().containsKey(fromVariable)) {
+					setMessage("Some From variables are missing on the subdataset and will be possible to create them at the end of the wizard");
+					return;
+				}
+
+				// Check the to variable
+				String toVariable = container.getToVariable();
+				if (!mainDataset.getVariablesMap().containsKey(toVariable)) {
+					setMessage("Some To variables are missing on the main dataset and will be possible to create them at the end of the wizard");
+					return;
+				}
 			}
 		}
 		setMessage(null);
 	}
-	
+
 	/**
 	 * Change the dataset run handled by this page. When this method is called the table showing the return values it is
 	 * reinitialized with the information from the new dataset run
