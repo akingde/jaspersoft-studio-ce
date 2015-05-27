@@ -139,7 +139,7 @@ public class ProxyConnection implements IConnection {
 			throws Exception {
 		String v = c.getServerInfo(monitor).getVersion();
 		if (c != soap && v.compareTo("5.5") > 0 && v.compareTo("5.6") < 0
-				&& rd.getWsType().equals(ResourceDescriptor.TYPE_REFERENCE))
+				&& rd.getWsType() !=null && rd.getWsType().equals(ResourceDescriptor.TYPE_REFERENCE))
 			return true;
 		return false;
 	}
