@@ -319,13 +319,16 @@ public class Util {
 		return getTable(rmeta, null, mtable.getSchema().getValue(), mtable.getValue());
 	}
 
-	public static MSqlTable getTable(MRoot rmeta, final String cat, final String schema, final String table) {
+	public static MSqlTable getTable(MRoot rmeta, final String cat,   String schema, final String table) {
+		if(schema == null && cat != null)
+			schema = cat;
+		final String schemaName = schema;
 		ModelVisitor<MSqlTable> v = new ModelVisitor<MSqlTable>(rmeta) {
 
 			@Override
 			public boolean visit(INode n) {
 				if (n instanceof MSqlSchema)
-					return Misc.nvl(((MSqlSchema) n).getValue()).equals(Misc.nvl(schema));
+					return Misc.nvl(((MSqlSchema) n).getValue()).equals(Misc.nvl(schemaName));
 				if (n instanceof MSqlTable) {
 					if (n.getValue().equals(table)) {
 						setObject((MSqlTable) n);
