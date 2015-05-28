@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.utils;
 
@@ -153,11 +149,10 @@ public class Colors {
 		}
 		return getHexEncodedAWTColor(getAWT4SWTRGBColor(AlfaRGB.getFullyOpaque(rgbColor)));
 	}
-	
+
 	/**
 	 * Gets the encoded value of a {@link AlfaRGB} instance.<br>
-	 * The output is the hexadecimal conversion (i.e: #00FFFF).
-	 * The alpha channel is not considered.
+	 * The output is the hexadecimal conversion (i.e: #00FFFF). The alpha channel is not considered.
 	 * 
 	 * @param alfaRgbColor
 	 *          the color to encode
@@ -169,6 +164,7 @@ public class Colors {
 		}
 		return getHexEncodedAWTColor(getAWT4SWTRGBColor(alfaRgbColor));
 	}
+
 	/**
 	 * Gets an SWT image representing a preview of the specified AWT color. The output image has size according to the
 	 * specified width and height in pixels.
@@ -286,7 +282,7 @@ public class Colors {
 	 */
 	public static RGB decodeHexStringAsSWTRGB(String hexColorString) {
 		RGB rgb = null;
-		if (hexColorString.startsWith("#") && hexColorString.length() == 7) {
+		if (hexColorString != null && hexColorString.startsWith("#") && hexColorString.length() == 7) {
 			int red = Integer.parseInt(hexColorString.substring(1, 3), 16);
 			int green = Integer.parseInt(hexColorString.substring(3, 5), 16);
 			int blue = Integer.parseInt(hexColorString.substring(5, 7), 16);

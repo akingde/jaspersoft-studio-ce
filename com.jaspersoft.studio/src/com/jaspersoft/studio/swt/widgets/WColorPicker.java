@@ -17,8 +17,8 @@ import java.util.List;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
@@ -108,7 +108,7 @@ public class WColorPicker extends Composite {
 		buttonColorChoser = new ToolItem(toolBar, SWT.FLAT);
 		buttonColorChoser.setImage(JaspersoftStudioPlugin.getInstance().getImage(BUTTON_ICON_LOCATION));
 		buttonColorChoser.setDisabledImage(JaspersoftStudioPlugin.getInstance().getImage(BUTTON_DISABLED_ICON_LOCATION));
-		buttonColorChoser.addSelectionListener(new SelectionListener() {
+		buttonColorChoser.addSelectionListener(new SelectionAdapter() {
 
 			public void widgetSelected(SelectionEvent e) {
 				ColorDialog cd = new ColorDialog(getShell());
@@ -119,10 +119,7 @@ public class WColorPicker extends Composite {
 					setColor(newColor);
 				}
 			}
-
-			public void widgetDefaultSelected(SelectionEvent e) {
-
-			}
+ 
 		});
 	}
 

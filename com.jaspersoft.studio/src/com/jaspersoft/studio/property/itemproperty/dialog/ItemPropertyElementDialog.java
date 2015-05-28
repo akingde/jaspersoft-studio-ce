@@ -101,7 +101,7 @@ public class ItemPropertyElementDialog extends ATitledDialog implements IExpress
 				if (refresh)
 					return;
 				if (useExpressionCheckbox.getSelection())
-					pname.setValueExpression(new JRDesignExpression());
+					pname.setValueExpression(new JRDesignExpression(pname.getValue()));
 				else
 					pname.setValueExpression(null);
 				setValue(pname);
