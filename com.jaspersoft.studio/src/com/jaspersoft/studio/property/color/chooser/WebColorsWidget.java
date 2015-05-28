@@ -125,7 +125,10 @@ public class WebColorsWidget extends Composite implements IColorProvider{
 		this.setLayout(new GridLayout(2,false));
 		selectedColor = AlfaRGB.getFullyOpaque(webColors.get(0));
 		colorComposite = new Composite(this, SWT.NONE);
-		colorComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
+		GridData rectangleData = new GridData(GridData.FILL_BOTH);
+		rectangleData.minimumWidth = 350;
+		rectangleData.minimumHeight = 250;
+		colorComposite.setLayoutData(rectangleData);
 		colorComposite.addControlListener(new ControlAdapter() {
 			@Override
 			public void controlResized(ControlEvent e) {

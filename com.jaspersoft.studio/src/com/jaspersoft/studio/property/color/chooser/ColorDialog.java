@@ -40,6 +40,28 @@ import com.jaspersoft.studio.utils.AlfaRGB;
  */
 public class ColorDialog extends Dialog{
 
+	// STYLEBITS
+	
+	/**
+	 * This stylebit allow to show all the color selection tabs: advanced, webcolors and history
+	 */
+	public static int SHOW_ALL = 2;
+	
+	/**
+	 * This stylebit allow to show only the advanced color selection tab
+	 */
+	public static int SHOW_ADVANCED = 4;
+	
+	/**
+	 * This stylebit allow to show only the web color selection tab
+	 */
+	public static int SHOW_WEB = 6;
+	
+	/**
+	 * This stylebit allow to show only the history color selection tab
+	 */
+	public static int SHOW_HISTORY= 8;
+	
 	/**
 	 * String title of the dialog of the chooser
 	 */
@@ -56,7 +78,7 @@ public class ColorDialog extends Dialog{
 	private WebColorsWidget webColors  = null;
 	
 	/**
-	 * Control provider the select the previusly colors
+	 * Control provider the select the previously colors
 	 */
 	private LastUsedColorsWidget lastColors = null;
 	
@@ -87,14 +109,31 @@ public class ColorDialog extends Dialog{
 	private AlfaRGB oldColor = null;
 	
 	/**
-	 * Construct an instance of the class
+	 * Stylebit for the widget
+	 */
+	private int style;
+	
+	/**
+	 * Construct an instance of the class. All the available tabs for the color are shown
 	 * 
 	 * @param parent shell for the new dialog
 	 */
 	public ColorDialog(Shell parent){
 		super(parent);
+		this.style = 0 | SHOW_ALL;
 	}
 
+	/**
+	 * Construct an instance of the class. The tab shown where the color 
+	 * can be selected depends from the stylebit
+	 * 
+	 * @param parent shell for the new dialog
+	 * @param style, must be one between SHOW_ALL, SHOW_ADVANCED, SHOW_WEB, SHOW_HISTORY
+	 */
+	public ColorDialog(Shell parent, int style){
+		super(parent);
+		this.style = this.style | style;
+	}
 	
 	/**
 	 * Configure the shell to set the defined title if it is not null
@@ -188,6 +227,32 @@ public class ColorDialog extends Dialog{
 		}
 	}
 	
+	/**
+	 * Check if the stylebit is set to show the advanced color selection tab
+	 * 
+	 * @return true if the advanced color selection tab should be shown, false otherwise
+	 */
+	protected boolean isShowAdvanced(){
+		return  (SHOW_ALL == style || SHOW_ADVANCED == style);
+	}
+	
+	/**
+	 * Check if the stylebit is set to show the web color selection tab
+	 * 
+	 * @return true if the web color selection tab should be shown, false otherwise
+	 */
+	protected boolean isShowWeb(){
+		return  (SHOW_ALL == style || SHOW_WEB == style);
+	}
+	
+	/**
+	 * Check if the stylebit is set to show the history color selection tab
+	 * 
+	 * @return true if the advanced color history tab should be shown, false otherwise
+	 */
+	protected boolean isShowHistory(){
+		return  (SHOW_ALL == style || SHOW_HISTORY == style);
+	}
 	
 	/**
 	 * Create the controls of the dialog
@@ -196,27 +261,32 @@ public class ColorDialog extends Dialog{
 	protected Control createDialogArea(Composite parent) {
 		 Composite dialogArea = (Composite) super.createDialogArea(parent);
 		 folder = new TabFolder(dialogArea, SWT.NONE);
-		 advancedColors = new AdvancedColorWidget(folder, SWT.NONE, oldColor, hasAlpha);
-		 advancedColors.setLayoutData(new GridData(GridData.FILL_BOTH));
-		 TabItem tab1 = new TabItem(folder, SWT.NONE);
-		 tab1.setText(Messages.ColorDialog_advancedColorsLabel);
-		 tab1.setControl(advancedColors);
-		 colorsWidgets.add(advancedColors);
+		
+		 //Add the tabs depending on the stylebit
+		 if (isShowAdvanced()){
+			 advancedColors = new AdvancedColorWidget(folder, SWT.NONE, oldColor, hasAlpha);
+			 advancedColors.setLayoutData(new GridData(GridData.FILL_BOTH));
+			 TabItem tab1 = new TabItem(folder, SWT.NONE);
+			 tab1.setText(Messages.ColorDialog_advancedColorsLabel);
+			 tab1.setControl(advancedColors);
+			 colorsWidgets.add(advancedColors);
+		 }
 		 
-		 TabItem tab2 = new TabItem(folder, SWT.NONE);
-		 tab2.setText(Messages.ColorDialog_webColorsLabel);
-		 webColors = new WebColorsWidget(folder, SWT.NONE, oldColor);
-		 tab2.setControl(webColors);
-		 colorsWidgets.add(webColors);
+		 if (isShowWeb()){
+			 TabItem tab2 = new TabItem(folder, SWT.NONE);
+			 tab2.setText(Messages.ColorDialog_webColorsLabel);
+			 webColors = new WebColorsWidget(folder, SWT.NONE, oldColor);
+			 tab2.setControl(webColors);
+			 colorsWidgets.add(webColors);
+		 }
 		 
-		 if (LastUsedColorsWidget.hasColors()){
+		 if (isShowHistory() && LastUsedColorsWidget.hasColors()){
 			 lastColors = new LastUsedColorsWidget(folder, SWT.NONE, oldColor);
 			 TabItem tab3 = new TabItem(folder, SWT.NONE);
 			 tab3.setText(Messages.ColorDialog_lastUserdColorLabel);
 			 tab3.setControl(lastColors);
 			 colorsWidgets.add(lastColors);
 		 }
-		 
 		 
 		 folder.addSelectionListener(new SelectionAdapter() {
 			 @Override
