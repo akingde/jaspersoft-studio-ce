@@ -21,7 +21,6 @@ import com.jaspersoft.studio.components.chart.property.widget.SPChartItemLabel;
 import com.jaspersoft.studio.help.IHelp;
 import com.jaspersoft.studio.help.IHelpRefBuilder;
 import com.jaspersoft.studio.property.section.AbstractSection;
-import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 import com.jaspersoft.studio.property.section.widgets.IPropertyDescriptorWidget;
 
 public class PlotPropertyDescriptor extends PropertyDescriptor implements
@@ -43,7 +42,7 @@ public class PlotPropertyDescriptor extends PropertyDescriptor implements
 		};
 	}
 
-	public ASPropertyWidget createWidget(Composite parent,
+	public SPChartItemLabel createWidget(Composite parent,
 			AbstractSection section) {
 		return new SPChartItemLabel(parent, section, this);
 	}
