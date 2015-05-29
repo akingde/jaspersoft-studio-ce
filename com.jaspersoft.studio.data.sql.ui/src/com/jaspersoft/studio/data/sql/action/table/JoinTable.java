@@ -57,7 +57,7 @@ public class JoinTable extends AAction {
 				mfrom = Util.getKeyword(element.getParent(), MFrom.class);
 			else
 				mfrom = Util.getKeyword(element, MFrom.class);
-			b = b && mfrom.getChildren().size() > 1;
+			b = b && mfrom != null && mfrom.getChildren().size() > 1;
 		}
 		return b;
 	}

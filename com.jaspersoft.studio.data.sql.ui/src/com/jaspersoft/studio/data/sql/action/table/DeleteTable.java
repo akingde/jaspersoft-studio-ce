@@ -52,10 +52,12 @@ public class DeleteTable extends DeleteAction<MFromTable> {
 				if (n instanceof MSelect) {
 					List<ANode> toRemove = new ArrayList<ANode>();
 					for (INode gb : n.getChildren()) {
-						MSelectColumn gbc = (MSelectColumn) gb;
-						if (gbc.getMFromTable() != null
-								&& gbc.getMFromTable().equals(todel))
-							toRemove.add(gbc);
+						if (gb instanceof MSelectColumn) {
+							MSelectColumn gbc = (MSelectColumn) gb;
+							if (gbc.getMFromTable() != null
+									&& gbc.getMFromTable().equals(todel))
+								toRemove.add(gbc);
+						}
 					}
 					((MSelect) n).removeChildren(toRemove);
 				} else if (n instanceof MGroupBy) {
