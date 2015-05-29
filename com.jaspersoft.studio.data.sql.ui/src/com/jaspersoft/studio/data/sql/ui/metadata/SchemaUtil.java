@@ -14,6 +14,7 @@ package com.jaspersoft.studio.data.sql.ui.metadata;
 
 import java.lang.reflect.Method;
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -53,7 +54,8 @@ public class SchemaUtil {
 				}
 				rs.close();
 				stmt.close();
-			} else if (dbproduct.equalsIgnoreCase("Apache Hive") || dbproduct.equalsIgnoreCase("Impala")) {
+			} else if (dbproduct.equalsIgnoreCase("Apache Hive")
+					|| dbproduct.equalsIgnoreCase("Impala")) {
 				List<String> schemas = new ArrayList<String>();
 				ResultSet rs = c.getMetaData().getSchemas();
 				try {
@@ -69,6 +71,15 @@ public class SchemaUtil {
 			e.printStackTrace();
 		}
 		return res;
+	}
+
+	public static String getMetadataAllSymbol(DatabaseMetaData dbmeta)
+			throws SQLException {
+		String dbproduct = dbmeta.getDatabaseProductName();
+		if (dbproduct.equalsIgnoreCase("Apache Hive")
+				|| dbproduct.equalsIgnoreCase("Impala"))
+			return null;
+		return "%";
 	}
 
 	protected static String[] runSchemaQuery(Connection c, String query)

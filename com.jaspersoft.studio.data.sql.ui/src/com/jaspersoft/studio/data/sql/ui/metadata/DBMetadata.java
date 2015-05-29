@@ -440,33 +440,29 @@ public class DBMetadata {
 		if (readCurrentSchema)
 			schema = SchemaUtil.getSchemaPath(connection);
 		try {
-			identifierQuote = connection.getMetaData()
-					.getIdentifierQuoteString();
+			DatabaseMetaData metaData = connection.getMetaData();
+			identifierQuote = metaData.getIdentifierQuoteString();
 			designer.doRefreshRoots(false);
 			System.out.println("JDBC Quotes: " //$NON-NLS-1$
-					+ connection.getMetaData().getIdentifierQuoteString());
+					+ metaData.getIdentifierQuoteString());
 			System.out.println("getExtraNameCharacters: " //$NON-NLS-1$
-					+ connection.getMetaData().getExtraNameCharacters());
+					+ metaData.getExtraNameCharacters());
 			System.out.println("storesLowerCaseIdentifiers: " //$NON-NLS-1$
-					+ connection.getMetaData().storesLowerCaseIdentifiers());
+					+ metaData.storesLowerCaseIdentifiers());
 			System.out.println("storesLowerCaseQuotedIdentifiers: " //$NON-NLS-1$
-					+ connection.getMetaData()
-							.storesLowerCaseQuotedIdentifiers());
+					+ metaData.storesLowerCaseQuotedIdentifiers());
 			System.out.println("storesMixedCaseIdentifiers: " //$NON-NLS-1$
-					+ connection.getMetaData().storesMixedCaseIdentifiers());
+					+ metaData.storesMixedCaseIdentifiers());
 			System.out.println("storesMixedCaseQuotedIdentifiers: " //$NON-NLS-1$
-					+ connection.getMetaData()
-							.storesMixedCaseQuotedIdentifiers());
+					+ metaData.storesMixedCaseQuotedIdentifiers());
 			System.out.println("storesUpperCaseIdentifiers: " //$NON-NLS-1$
-					+ connection.getMetaData().storesUpperCaseIdentifiers());
+					+ metaData.storesUpperCaseIdentifiers());
 			System.out.println("storesUpperCaseQuotedIdentifiers: " //$NON-NLS-1$
-					+ connection.getMetaData()
-							.storesUpperCaseQuotedIdentifiers());
+					+ metaData.storesUpperCaseQuotedIdentifiers());
 			System.out.println("supportsMixedCaseIdentifiers: " //$NON-NLS-1$
-					+ connection.getMetaData().supportsMixedCaseIdentifiers());
+					+ metaData.supportsMixedCaseIdentifiers());
 			System.out.println("supportsMixedCaseQuotedIdentifiers: " //$NON-NLS-1$
-					+ connection.getMetaData()
-							.supportsMixedCaseQuotedIdentifiers());
+					+ metaData.supportsMixedCaseQuotedIdentifiers());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

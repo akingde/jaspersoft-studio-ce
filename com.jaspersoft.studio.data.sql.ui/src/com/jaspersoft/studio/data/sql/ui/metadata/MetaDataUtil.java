@@ -88,7 +88,7 @@ public class MetaDataUtil {
 				schema.setNotInMetadata(false);
 
 				for (String ttype : tableTypes)
-					new MTables(schema, ttype);
+					new MDummy(new MTables(schema, ttype));
 			} else {
 				if (meta.getConnection().isClosed())
 					meta = schema.getDbMetadata().getMetadata();
@@ -104,7 +104,7 @@ public class MetaDataUtil {
 						schema.setNotInMetadata(false);
 
 						for (String ttype : tableTypes)
-							new MTables(schema, ttype);
+							new MDummy(new MTables(schema, ttype));
 					}
 				}
 			}
@@ -135,6 +135,7 @@ public class MetaDataUtil {
 	public static void readTables(DBMetadata dbmeta, DatabaseMetaData meta,
 			String tableSchema, String tableCatalog, MTables mview,
 			LinkedHashMap<String, MSqlTable> tblMap, IProgressMonitor monitor) {
+		mview.removeChildren();
 		ResultSet rs = null;
 		try {
 			meta = dbmeta.checkClosed(meta);
@@ -162,7 +163,8 @@ public class MetaDataUtil {
 		MTables tables = (MTables) mtable.getParent();
 		mtable.removeChildren();
 		ResultSet rs = meta.getColumns(tables.getTableCatalog(),
-				tables.getTableSchema(), mtable.getValue(), "%");
+				tables.getTableSchema(), mtable.getValue(),
+				SchemaUtil.getMetadataAllSymbol(meta));
 		try {
 			while (rs.next())
 				new MSQLColumn(mtable, rs.getString("COLUMN_NAME"), rs);
