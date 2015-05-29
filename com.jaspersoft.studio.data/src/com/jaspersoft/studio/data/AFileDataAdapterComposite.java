@@ -58,18 +58,20 @@ public abstract class AFileDataAdapterComposite extends ADataAdapterComposite {
 	protected void createFileNameWidgets(Composite parent) {
 		Label lblNewLabel = new Label(parent, SWT.NONE);
 		lblNewLabel.setText(Messages.XLSXDataAdapterComposite_0);
+		lblNewLabel.setToolTipText(Messages.AFileDataAdapterComposite_0);
 
 		textFileName = new Text(parent, SWT.BORDER);
 		GridData gd = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
 		gd.horizontalIndent = 8;
 		textFileName.setLayoutData(gd);
+		textFileName.setToolTipText(Messages.AFileDataAdapterComposite_0);
 
 		btnBrowse = new Button(parent, SWT.PUSH);
 		GridData gd_btnBrowse = new GridData(SWT.CENTER, SWT.CENTER, false,
 				false, 1, 1);
 		gd_btnBrowse.widthHint = 100;
 		btnBrowse.setLayoutData(gd_btnBrowse);
-		btnBrowse.setText("File");
+		btnBrowse.setText(Messages.AFileDataAdapterComposite_2);
 		/*
 		 * UI ELEMENTS LISTENERS
 		 */
@@ -78,7 +80,7 @@ public abstract class AFileDataAdapterComposite extends ADataAdapterComposite {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				if (textFileName.getText().matches("^(?i)(https?)://.*$")) {
+				if (textFileName.getText().matches("^(?i)(https?)://.*$")) { //$NON-NLS-1$
 					FileDataAdapter fda = getFileDataAdapter();
 					DataFile dataFile = fda.getDataFile();
 					HttpParametersDialog d = new HttpParametersDialog(
@@ -143,8 +145,8 @@ public abstract class AFileDataAdapterComposite extends ADataAdapterComposite {
 
 		public void setDataFile(String str) {
 			DataFile dataFile = da.getDataFile();
-			if (str.matches("^(?i)(https?)://.*$")) {
-				btnBrowse.setText("Options");
+			if (str.matches("^(?i)(https?)://.*$")) { //$NON-NLS-1$
+				btnBrowse.setText(Messages.AFileDataAdapterComposite_5);
 				DataFile dl = da.getDataFile();
 				if (dataFile == null
 						|| !(dataFile instanceof StandardHttpDataLocation)) {
@@ -153,7 +155,7 @@ public abstract class AFileDataAdapterComposite extends ADataAdapterComposite {
 				}
 				((StandardHttpDataLocation) dl).setUrl(str);
 			} else {
-				btnBrowse.setText("File");
+				btnBrowse.setText(Messages.AFileDataAdapterComposite_2);
 				DataFile dl = da.getDataFile();
 				if (dataFile == null
 						|| !(dataFile instanceof StandardRepositoryDataLocation)) {
@@ -168,14 +170,14 @@ public abstract class AFileDataAdapterComposite extends ADataAdapterComposite {
 		public String getDataFile() {
 			DataFile df = da.getDataFile();
 			if (df instanceof StandardRepositoryDataLocation) {
-				btnBrowse.setText("File");
+				btnBrowse.setText(Messages.AFileDataAdapterComposite_2);
 				return ((StandardRepositoryDataLocation) df).getLocation();
 			}
 			if (df instanceof StandardHttpDataLocation) {
-				btnBrowse.setText("Options");
+				btnBrowse.setText(Messages.AFileDataAdapterComposite_5);
 				return ((StandardHttpDataLocation) df).getUrl();
 			}
-			return "";
+			return ""; //$NON-NLS-1$
 		}
 	}
 

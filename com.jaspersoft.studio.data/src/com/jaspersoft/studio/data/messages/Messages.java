@@ -16,6 +16,9 @@ import org.eclipse.osgi.util.NLS;
 
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "com.jaspersoft.studio.data.messages.messages"; //$NON-NLS-1$
+	public static String AFileDataAdapterComposite_0;
+	public static String AFileDataAdapterComposite_2;
+	public static String AFileDataAdapterComposite_5;
 	public static String AuthenticationDialog_passwordLbl;
 	public static String AuthenticationDialog_title;
 	public static String AuthenticationDialog_usernameLbl;
