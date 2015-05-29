@@ -103,7 +103,7 @@ public class FileDataAdapterStorage extends ADataAdapterStorage {
 							IWorkspace wspace = ResourcesPlugin.getWorkspace();
 							IResourceChangeListener rcl = new IResourceChangeListener() {
 								public void resourceChanged(IResourceChangeEvent event) {
-									IResourceDelta delta = event.getDelta();
+									final IResourceDelta delta = event.getDelta();
 									if (delta == null)
 										return;
 									IResourceDelta docDelta = delta.findMember(project.getFullPath());
@@ -114,6 +114,22 @@ public class FileDataAdapterStorage extends ADataAdapterStorage {
 											| IResourceDelta.ADDED | IResourceDelta.MOVED_TO | IResourceDelta.CHANGED
 											| IResourceDelta.COPIED_FROM | IResourceDelta.REPLACED | IResourceDelta.SYNC | IResourceDelta.MOVED_FROM)) == 0))))
 										return;
+									// we get event of file creation but file is empty, so we have to wait 1sec to give the possibility to
+									// write into it
+									new WorkspaceJob(Messages.FileDataAdapterStorage_1) {
+										public IStatus runInWorkspace(IProgressMonitor monitor) throws CoreException {
+											monitor.beginTask(Messages.FileDataAdapterStorage_2 + project.getName(), 10);
+											processEvent(delta);
+											if (monitor.isCanceled())
+												return Status.CANCEL_STATUS;
+											monitor.internalWorked(10);
+
+											return Status.OK_STATUS;
+										}
+									}.schedule(5000);
+								}
+
+								protected void processEvent(IResourceDelta delta) {
 									try {
 										delta.accept(new IResourceDeltaVisitor() {
 
