@@ -59,7 +59,7 @@ public class ReorderGroupCommand extends Command {
 	@Override
 	public void execute() {
 		try {
-			oldIndex = jrDataset.getFieldsList().indexOf(jrGroup);
+			oldIndex = jrDataset.getGroupsList().indexOf(jrGroup);
 			jrDataset.removeGroup(jrGroup);
 			if (newIndex < 0 || newIndex > jrDataset.getGroupsList().size())
 				jrDataset.addGroup(jrGroup);

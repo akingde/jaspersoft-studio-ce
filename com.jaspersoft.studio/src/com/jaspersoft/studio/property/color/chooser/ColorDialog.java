@@ -120,7 +120,7 @@ public class ColorDialog extends Dialog{
 	 */
 	public ColorDialog(Shell parent){
 		super(parent);
-		this.style = 0 | SHOW_ALL;
+		this.style = SHOW_ALL;
 	}
 
 	/**
@@ -132,7 +132,7 @@ public class ColorDialog extends Dialog{
 	 */
 	public ColorDialog(Shell parent, int style){
 		super(parent);
-		this.style = this.style | style;
+		this.style = style;
 	}
 	
 	/**
