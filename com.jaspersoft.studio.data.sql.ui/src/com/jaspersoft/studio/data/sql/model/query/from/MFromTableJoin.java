@@ -102,8 +102,10 @@ public class MFromTableJoin extends MFromTable {
 
 	public String toSQLString() {
 		String sql = "";
-		if (getValue() instanceof IQueryString)
-			sql = ((IQueryString) getValue()).toSQLString();
+		if (getValue() instanceof IQueryString){
+//			sql = ((IQueryString) getValue()).toSQLString();
+			return "\n\t" + join +" (";
+		}
 		sql += addAlias();
 		return "\n\t" + join + " " + sql + " ON ";
 	}
