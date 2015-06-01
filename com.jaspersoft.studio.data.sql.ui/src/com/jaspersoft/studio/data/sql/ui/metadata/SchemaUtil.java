@@ -55,7 +55,8 @@ public class SchemaUtil {
 				rs.close();
 				stmt.close();
 			} else if (dbproduct.equalsIgnoreCase("Apache Hive")
-					|| dbproduct.equalsIgnoreCase("Impala")) {
+					|| dbproduct.equalsIgnoreCase("Impala")
+					|| dbproduct.equalsIgnoreCase("ApacheHive")) {
 				List<String> schemas = new ArrayList<String>();
 				ResultSet rs = c.getMetaData().getSchemas();
 				try {
@@ -77,7 +78,8 @@ public class SchemaUtil {
 			throws SQLException {
 		String dbproduct = dbmeta.getDatabaseProductName();
 		if (dbproduct.equalsIgnoreCase("Apache Hive")
-				|| dbproduct.equalsIgnoreCase("Impala"))
+				|| dbproduct.equalsIgnoreCase("Impala")
+				|| dbproduct.equalsIgnoreCase("ApacheHive"))
 			return null;
 		return "%";
 	}
