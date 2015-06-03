@@ -110,9 +110,9 @@ public class SoapConnection implements IConnection {
 		if (serverInfo == null) {
 			serverInfo = new ServerInfo();
 			serverInfo.setVersion(v);
-			serverInfo
-					.setTimeFormatPattern(((SimpleDateFormat) getTimeFormat())
-							.toPattern());
+			// serverInfo
+			// .setTimeFormatPattern(((SimpleDateFormat) getTimeFormat())
+			// .toPattern());
 			serverInfo
 					.setDateFormatPattern(((SimpleDateFormat) getDateFormat())
 							.toPattern());

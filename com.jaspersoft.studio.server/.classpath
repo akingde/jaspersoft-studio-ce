@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
+	<classpathentry exported="true" kind="lib" path="lib/jasperserver-dto-6.1.0-SNAPSHOT.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jersey213/jersey-guava-2.13.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jackson/jackson-dataformat-xml-2.4.3.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jackson/jackson-datatype-guava-2.4.3.jar"/>

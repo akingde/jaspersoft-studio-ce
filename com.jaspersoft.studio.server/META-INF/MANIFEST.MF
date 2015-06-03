@@ -17,7 +17,8 @@ Require-Bundle: com.jaspersoft.studio;bundle-version="6.1.1";visibility:=reexpor
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6,
  JavaSE-1.7
 Bundle-ActivationPolicy: lazy
-Bundle-ClassPath: lib/js_axis-1.4patched.jar,
+Bundle-ClassPath: lib/jasperserver-dto-6.1.0-SNAPSHOT.jar,
+ lib/js_axis-1.4patched.jar,
  lib/js-common.jar,
  lib/js-extra-classes.jar,
  lib/jersey/asm-all-repackaged-2.2.0-b24.jar,
@@ -62,8 +63,8 @@ Bundle-ClassPath: lib/js_axis-1.4patched.jar,
  lib/jackson/jackson-module-jsonSchema-2.4.3.jar,
  lib/jackson/stax2-api-3.1.4.jar,
  lib/jackson/woodstox-core-asl-4.4.0.jar,
- .,
- lib/jersey213/jersey-guava-2.13.jar
+ lib/jersey213/jersey-guava-2.13.jar,
+ .
 Eclipse-RegisterBuddy: com.jaspersoft.studio
 Eclipse-BuddyPolicy: registered
 Export-Package: com.jaspersoft.ireport.jasperserver.ws,

@@ -60,7 +60,8 @@ import com.jaspersoft.studio.server.wizard.resource.APageContent;
 
 public class ReferencePageContent extends APageContent {
 
-	public ReferencePageContent(ANode parent, MResource resource, DataBindingContext bindingContext) {
+	public ReferencePageContent(ANode parent, MResource resource,
+			DataBindingContext bindingContext) {
 		super(parent, resource, bindingContext);
 	}
 
@@ -84,22 +85,30 @@ public class ReferencePageContent extends APageContent {
 		layout.horizontalSpacing = 0;
 		composite.setLayout(layout);
 
-		com.jaspersoft.studio.utils.UIUtil.createLabel(composite, Messages.RDReferencePage_referencedesc + " ");
+		com.jaspersoft.studio.utils.UIUtil.createLabel(composite,
+				Messages.RDReferencePage_referencedesc + " ");
 
 		trefuri = new Text(composite, SWT.BORDER | SWT.READ_ONLY);
-		trefuri.setLayoutData(new GridData(GridData.FILL_HORIZONTAL | GridData.VERTICAL_ALIGN_CENTER));
+		trefuri.setLayoutData(new GridData(GridData.FILL_HORIZONTAL
+				| GridData.VERTICAL_ALIGN_CENTER));
 		trefuri.setEnabled(false);
 
 		Button bbrowse = new Button(composite, SWT.ARROW | SWT.DOWN);
 		bbrowse.addSelectionListener(new SelectionAdapter() {
 
 			public void widgetSelected(SelectionEvent e) {
-				MServerProfile msp = ServerManager.getMServerProfileCopy((MServerProfile) pnode.getRoot());
+				MServerProfile msp = ServerManager
+						.getMServerProfileCopy((MServerProfile) pnode.getRoot());
 				ResourceDescriptor resrd = res.getValue();
 				if (res.isSupported(Feature.SEARCHREPOSITORY)) {
 					List<String> restTypes = WsTypes.INST().getRestTypes();
-					ResourceDescriptor rd = FindResourceJob.doFindResource(msp, restTypes.toArray(new String[restTypes.size()]), new String[] { ResourceMediaType.FOLDER_CLIENT_TYPE,
-							ResourceMediaType.REPORT_UNIT_CLIENT_TYPE, ResourceMediaType.DOMAIN_TOPIC_TYPE });
+					ResourceDescriptor rd = FindResourceJob.doFindResource(
+							msp,
+							restTypes.toArray(new String[restTypes.size()]),
+							new String[] {
+									ResourceMediaType.FOLDER_CLIENT_TYPE,
+									ResourceMediaType.REPORT_UNIT_CLIENT_TYPE,
+									ResourceMediaType.DOMAIN_TOPIC_CLIENT_TYPE });
 					if (rd != null) {
 						resrd.setReferenceUri(rd.getUriString());
 						resrd.setIsReference(true);
@@ -110,7 +119,8 @@ public class ReferencePageContent extends APageContent {
 						bindingContext.updateTargets();
 					}
 				} else {
-					RepositoryDialog rd = new RepositoryDialog(UIUtils.getShell(), msp) {
+					RepositoryDialog rd = new RepositoryDialog(UIUtils
+							.getShell(), msp) {
 
 						@Override
 						public boolean isResourceCompatible(MResource r) {
@@ -139,34 +149,40 @@ public class ReferencePageContent extends APageContent {
 		gd.horizontalSpan = 3;
 		cmp.setLayoutData(gd);
 
-		com.jaspersoft.studio.utils.UIUtil.createLabel(cmp, Messages.RDReferencePage_parentfolder);
+		com.jaspersoft.studio.utils.UIUtil.createLabel(cmp,
+				Messages.RDReferencePage_parentfolder);
 		tparent = new Text(cmp, SWT.BORDER | SWT.READ_ONLY);
 		tparent.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		tparent.setEnabled(false);
 
-		com.jaspersoft.studio.utils.UIUtil.createLabel(cmp, Messages.RDReferencePage_type);
+		com.jaspersoft.studio.utils.UIUtil.createLabel(cmp,
+				Messages.RDReferencePage_type);
 		ttype = new Text(cmp, SWT.BORDER | SWT.READ_ONLY);
 		ttype.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		ttype.setEnabled(false);
 
-		com.jaspersoft.studio.utils.UIUtil.createLabel(cmp, Messages.RDReferencePage_creationdate);
+		com.jaspersoft.studio.utils.UIUtil.createLabel(cmp,
+				Messages.RDReferencePage_creationdate);
 		tcdate = new Text(cmp, SWT.BORDER | SWT.READ_ONLY);
 		tcdate.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		tcdate.setEnabled(false);
 
 		com.jaspersoft.studio.utils.UIUtil.createSeparator(cmp, 2);
 
-		com.jaspersoft.studio.utils.UIUtil.createLabel(cmp, Messages.RDReferencePage_refid);
+		com.jaspersoft.studio.utils.UIUtil.createLabel(cmp,
+				Messages.RDReferencePage_refid);
 		tid = new Text(cmp, SWT.BORDER | SWT.READ_ONLY);
 		tid.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		tid.setEnabled(false);
 
-		com.jaspersoft.studio.utils.UIUtil.createLabel(cmp, Messages.RDReferencePage_refname);
+		com.jaspersoft.studio.utils.UIUtil.createLabel(cmp,
+				Messages.RDReferencePage_refname);
 		tname = new Text(cmp, SWT.BORDER | SWT.READ_ONLY);
 		tname.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		tname.setEnabled(false);
 
-		com.jaspersoft.studio.utils.UIUtil.createLabel(cmp, Messages.RDReferencePage_refdesc);
+		com.jaspersoft.studio.utils.UIUtil.createLabel(cmp,
+				Messages.RDReferencePage_refdesc);
 		tdesc = new Text(cmp, SWT.BORDER | SWT.MULTI | SWT.WRAP | SWT.READ_ONLY);
 		gd = new GridData(GridData.FILL_BOTH);
 		gd.minimumHeight = 100;
@@ -186,17 +202,22 @@ public class ReferencePageContent extends APageContent {
 			bindingContext.removeBinding(b);
 			b.dispose();
 		}
-		bindingContext.bindValue(SWTObservables.observeText(trefuri, SWT.NONE), PojoObservables.observeValue(res.getValue(), "referenceUri")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeText(trefuri, SWT.NONE),
+				PojoObservables.observeValue(res.getValue(), "referenceUri")); //$NON-NLS-1$
 		if (ref != null) {
-			bindingContext.bindValue(SWTObservables.observeText(tparent, SWT.NONE), PojoObservables.observeValue(ref, "parentFolder")); //$NON-NLS-1$
+			bindingContext.bindValue(
+					SWTObservables.observeText(tparent, SWT.NONE),
+					PojoObservables.observeValue(ref, "parentFolder")); //$NON-NLS-1$
 
 			IConnection c = res.getWsClient();
-			final Format f = (c != null ? c.getTimestampFormat() : DateFormat.getTimeInstance());
+			final Format f = (c != null ? c.getTimestampFormat() : DateFormat
+					.getTimeInstance());
 			IConverter t2mConv = new Converter(String.class, Date.class) {
 
 				public Object convert(Object fromObject) {
 					try {
-						if (fromObject != null && fromObject instanceof String && !((String) fromObject).isEmpty())
+						if (fromObject != null && fromObject instanceof String
+								&& !((String) fromObject).isEmpty())
 							return f.parseObject((String) fromObject);
 					} catch (ParseException e) {
 						e.printStackTrace();
@@ -211,17 +232,34 @@ public class ReferencePageContent extends APageContent {
 				}
 			};
 
-			bindingContext.bindValue(SWTObservables.observeText(tcdate, SWT.NONE), PojoObservables.observeValue(ref, "creationDate"), new UpdateValueStrategy().setConverter(t2mConv),
+			bindingContext.bindValue(
+					SWTObservables.observeText(tcdate, SWT.NONE),
+					PojoObservables.observeValue(ref, "creationDate"),
+					new UpdateValueStrategy().setConverter(t2mConv),
 					new UpdateValueStrategy().setConverter(m2tConv));
 
-			bindingContext.bindValue(SWTObservables.observeText(ttype, SWT.NONE), PojoObservables.observeValue(ref, "wsType")); //$NON-NLS-1$
+			bindingContext.bindValue(
+					SWTObservables.observeText(ttype, SWT.NONE),
+					PojoObservables.observeValue(ref, "wsType")); //$NON-NLS-1$
 
-			bindingContext.bindValue(SWTObservables.observeText(tid, SWT.Modify), PojoObservables.observeValue(ref, "name"), //$NON-NLS-1$
-					new UpdateValueStrategy().setAfterConvertValidator(new EmptyStringValidator()), null);
+			bindingContext
+					.bindValue(
+							SWTObservables.observeText(tid, SWT.Modify),
+							PojoObservables.observeValue(ref, "name"), //$NON-NLS-1$
+							new UpdateValueStrategy()
+									.setAfterConvertValidator(new EmptyStringValidator()),
+							null);
 
-			bindingContext.bindValue(SWTObservables.observeText(tname, SWT.Modify), PojoObservables.observeValue(ref, "label"), //$NON-NLS-1$
-					new UpdateValueStrategy().setAfterConvertValidator(new EmptyStringValidator()), null);
-			bindingContext.bindValue(SWTObservables.observeText(tdesc, SWT.Modify), PojoObservables.observeValue(ref, "description")); //$NON-NLS-1$
+			bindingContext
+					.bindValue(
+							SWTObservables.observeText(tname, SWT.Modify),
+							PojoObservables.observeValue(ref, "label"), //$NON-NLS-1$
+							new UpdateValueStrategy()
+									.setAfterConvertValidator(new EmptyStringValidator()),
+							null);
+			bindingContext.bindValue(
+					SWTObservables.observeText(tdesc, SWT.Modify),
+					PojoObservables.observeValue(ref, "description")); //$NON-NLS-1$
 		}
 		bindingContext.updateTargets();
 	}
@@ -242,7 +280,8 @@ public class ReferencePageContent extends APageContent {
 
 	private void loadReference(ResourceDescriptor resrd) {
 		try {
-			ref = WSClientHelper.getReference(new NullProgressMonitor(), pnode, resrd);
+			ref = WSClientHelper.getReference(new NullProgressMonitor(), pnode,
+					resrd);
 			if (ref != null) {
 				rebind();
 				bindingContext.updateTargets();

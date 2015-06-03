@@ -193,9 +193,9 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 		serverInfo = toObj(connector.get(req, monitor), ServerInfo.class,
 				monitor);
 		if (serverInfo != null) {
-			serverInfo
-					.setTimeFormatPattern(((SimpleDateFormat) getTimeFormat())
-							.toPattern());
+			// serverInfo
+			// .setTimeFormatPattern(((SimpleDateFormat) getTimeFormat())
+			// .toPattern());
 			dateFormat = new SimpleDateFormat(serverInfo.getDateFormatPattern());
 			timestampFormat = new SimpleDateFormat(
 					serverInfo.getDatetimeFormatPattern());
@@ -301,7 +301,7 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 					}
 				}
 			}
-		} 
+		}
 		return rds;
 	}
 
@@ -317,7 +317,11 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 			uri = "/" + uri;
 
 		WebTarget tgt = target.path("resources" + uri);
-		tgt = tgt.queryParam("expanded", "true");
+		Boolean b = rd.getResourcePropertyValueAsBoolean("expand");
+		if (b != null && !b)
+			tgt = tgt.queryParam("expanded", "false");
+		else
+			tgt = tgt.queryParam("expanded", "true");
 
 		String rtype = WsTypes.INST().toRestType(rd.getWsType());
 		Builder req = null;

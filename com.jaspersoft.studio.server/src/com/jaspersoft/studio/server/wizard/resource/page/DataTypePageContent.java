@@ -200,7 +200,7 @@ public class DataTypePageContent extends APageContent {
 								con.getTimestampFormat().parseObject(stringValue);
 								break;
 							case 4:
-								format = con.getServerInfo().getTimeFormatPattern();
+								format = "h:mm:ss";//con.getServerInfo().getTimeFormatPattern();
 								con.getTimeFormat().parseObject(stringValue);
 								break;
 							}
