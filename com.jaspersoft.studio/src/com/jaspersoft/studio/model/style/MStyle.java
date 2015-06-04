@@ -488,9 +488,11 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 	 */
 	public JRStyle getActualStyle() {
 		JRBaseStyle jrElement = (JRBaseStyle) getValue();
-		// Check if the used style is valid otherwise set it to null
+		// Check if the used style is valid otherwise return null, but don't change the value.
+		//it is bad to change values without the user asking for it
 		if (jrElement.getStyle() != null && !getJasperDesign().getStylesMap().containsKey(jrElement.getStyle().getName())) {
-			setPropertyValue(JRDesignStyle.PROPERTY_PARENT_STYLE, null);
+			return null;
+			//setPropertyValue(JRDesignStyle.PROPERTY_PARENT_STYLE, null);
 		}
 		if (jrElement.getStyle() != null) {
 			return jrElement.getStyle();

@@ -17,12 +17,14 @@ import java.util.Set;
 
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.JRConditionalStyle;
+import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRReportTemplate;
 import net.sf.jasperreports.engine.JRSimpleTemplate;
 import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.JRTemplateReference;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
 import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignReportTemplate;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -40,6 +42,7 @@ import org.eclipse.ui.part.FileEditorInput;
 import com.jaspersoft.studio.ExternalStylesManager;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.util.ReportFactory;
 import com.jaspersoft.studio.utils.CacheMap;
 import com.jaspersoft.studio.utils.ExpressionUtil;
@@ -95,8 +98,7 @@ public class StyleTemplateFactory {
 		}
 	}
 
-	public static void createTemplate(ANode parent, Set<String> set, boolean editable, IFile file, File fileToBeOpened,
-			JRSimpleTemplate jrst) {
+	public static void createTemplate(ANode parent, Set<String> set, boolean editable, IFile file, File fileToBeOpened,JRSimpleTemplate jrst) {
 		for (JRTemplateReference s : jrst.getIncludedTemplates()) {
 			MStyleTemplateReference p = new MStyleTemplateReference(parent, s, -1);
 			p.setEditable(editable);
@@ -111,13 +113,93 @@ public class StyleTemplateFactory {
 			else
 				createTemplateReference(p, s.getLocation(), -1, set, editable, file);
 		}
-
 		for (JRStyle s : jrst.getStyles()) {
 			APropertyNode n = (APropertyNode) ReportFactory.createNode(parent, s, -2);
 			n.setEditable(editable);
 		}
 	}
+	
+	/**
+	 * Create the nodes for a styles template container, created in its own editor 
+	 */
+	public static void createTemplateRoot(ANode parent, Set<String> set, IFile file,JRSimpleTemplate jrst) {
+		JasperDesign jd = parent.getJasperDesign();
+		File fileToBeOpened = file.getLocation().toFile();
+		for (JRTemplateReference s : jrst.getIncludedTemplates()) {
+			MStyleTemplateReference p = new MStyleTemplateReference(parent, s, -1);
+			p.setEditable(true);
+			if (set.contains(fileToBeOpened.getAbsolutePath()))
+				continue;
+			set.add(fileToBeOpened.getAbsolutePath());
 
+			IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+			IFile[] fs = root.findFilesForLocationURI(fileToBeOpened.toURI());
+			if (fs != null && fs.length > 0)
+				createTemplateReference(p, s.getLocation(), -1, set, false, fs[0]);
+			else
+				createTemplateReference(p, s.getLocation(), -1, set, false, file);
+		}
+		//Add the normal styles to the JasperDesign
+		for (JRStyle s : jrst.getStyles()) {
+			APropertyNode n = (APropertyNode) ReportFactory.createNode(parent, s, -2);
+			n.setEditable(true);
+			if (jd != null){
+				try {
+					jd.addStyle(s);
+				} catch (JRException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		//Add the external styles to the JasperDesign
+		for(INode node : parent.getChildren()){
+			if (node instanceof MStyleTemplateReference && jd != null){
+				MStyleTemplateReference externalNode = (MStyleTemplateReference)node;
+				JRTemplateReference externalValue = (JRTemplateReference)externalNode.getValue();
+				JRDesignReportTemplate jrTemplate = MStyleTemplate.createJRTemplate();
+				JRDesignExpression jre = new JRDesignExpression();
+				jre.setText("\"" + getStylePath(externalValue, fileToBeOpened, file) + "\"");//$NON-NLS-1$ //$NON-NLS-2$
+				((JRDesignReportTemplate) jrTemplate).setSourceExpression(jre);
+				jd.addTemplate(jrTemplate);
+			}
+		}
+	}
+	
+	/**
+	 * This method try to return a relative path for the style from the current opened report. If it isn't
+	 * Possible to find a relative path then the absolute one is returned
+	 * 
+	 * @param s the container with the style location path
+	 * @param fileToBeOpened the file currently opened in the jrtx editor
+	 * @param file the file currently opened in the jrtx editor, in java.io.File format
+	 * @return an absolute or relative path to the style resource
+	 */
+	protected static String getStylePath(JRTemplateReference s, File fileToBeOpened, IFile file){
+		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+		IFile[] fs = root.findFilesForLocationURI(fileToBeOpened.toURI());
+		if (fs != null && fs.length > 0){
+			File absoluteFile = getFile(s.getLocation(), fs[0]);
+			return absoluteFile != null ? absoluteFile.getAbsolutePath() : s.getLocation();
+		} else{
+			File absoluteFile = getFile(s.getLocation(), file);
+			return absoluteFile != null ? absoluteFile.getAbsolutePath() : s.getLocation();
+		}
+	}
+
+	/**
+	 * This method try to return a relative path for the style from the current opened report. If it isn't
+	 * Possible to find a relative path then the absolute one is returned
+	 * 
+	 * @param p the container with the style location path
+	 * @param jConfig the configuration of the jrtx file opened in the editor
+	 * @return an absolute or relative path to the style resource
+	 */
+	public static String getStylePath(JRTemplateReference p, JasperReportsConfiguration jConfig){
+		IFile resource = (IFile)jConfig.get(FileUtils.KEY_FILE);
+		File file = resource.getLocation().toFile();
+		return getStylePath(p, file, resource);
+	}
+	
 	public static void openEditor(Object obj, IEditorInput editorInput, ANode node) {
 		if (obj instanceof JRStyle || obj instanceof JRConditionalStyle) {
 			if (node.getParent() instanceof MStyles)

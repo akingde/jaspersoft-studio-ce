@@ -37,7 +37,6 @@ public class StyleNameValidator extends AbstractJSSCellEditorValidator {
 		JasperDesign d = getTarget().getJasperDesign();
 		if (d !=null ){
 			JRStyle style = d.getStylesMap().get(value);
-			if (style != null) System.out.println(style.getName());
 			if (style != null && getTarget().getValue() != style){
 				String message = MessageFormat.format(Messages.VariableNameValidator_variableDuplicatedName, new Object[] { value });
 				return message;

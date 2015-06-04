@@ -21,7 +21,6 @@ import net.sf.jasperreports.engine.design.JRDesignReportTemplate;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlTemplateLoader;
 
-import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -30,14 +29,13 @@ import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.FilteredResourcesSelectionDialog;
 
 import com.jaspersoft.studio.model.style.MStyleTemplate;
 import com.jaspersoft.studio.model.style.MStyles;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.wizards.ContextHelpIDs;
+import com.jaspersoft.studio.wizards.FilteredHelpDialog;
 /*
  * link nodes & together.
  * 
@@ -93,30 +91,13 @@ public class CreateStyleTemplateCommand extends Command {
 				jrDesign.addTemplate(index, jrTemplate);
 		}
 	}
-
-	private class FilteredHelpDialog extends FilteredResourcesSelectionDialog{
-
-		public FilteredHelpDialog(Shell shell, boolean multi, IContainer container, int typesMask) {
-			super(shell, multi, container, typesMask);
-		}
-
-		/**
-		 * Set the help data that should be seen in this step
-		 */
-		@Override
-		protected void configureShell(Shell shell){
-			super.configureShell(shell);
-			PlatformUI.getWorkbench().getHelpSystem().setHelp(shell, ContextHelpIDs.WIZARD_STYLE_TEMPLATE_LOAD);
-		}
-		
-	}
 	
 	/**
 	 * This method try to return a relative path for the style from the current opened report. If it isn't
 	 * Possible to find a relative path then the absolute one is returned
 	 * 
 	 * @param styleFile the style file resource
-	 * @return and absolute or relative path to the style resource
+	 * @return an absolute or relative path to the style resource
 	 */
 	private String getStylePath(IFile styleFile){
 		IFile reportFile = (IFile) jConfig.get(FileUtils.KEY_FILE);
@@ -127,9 +108,13 @@ public class CreateStyleTemplateCommand extends Command {
 	 return styleFile.getRawLocation().makeAbsolute().toOSString();
 	}
 	
+	/**
+	 * Create the container for the selected jrtx file, by selecting it from a chooser dialog.
+	 * If the selected file is not valid an error is shown
+	 */
 	private void createObject() {
 		if (jrTemplate == null) {
-			FilteredResourcesSelectionDialog fd = new FilteredHelpDialog(Display.getCurrent().getActiveShell(),false, ResourcesPlugin.getWorkspace().getRoot(), IResource.FILE);
+			FilteredResourcesSelectionDialog fd = new FilteredHelpDialog(Display.getCurrent().getActiveShell(),false, ResourcesPlugin.getWorkspace().getRoot(), IResource.FILE, ContextHelpIDs.WIZARD_STYLE_TEMPLATE_LOAD);
 			fd.setInitialPattern("*.jrtx");//$NON-NLS-1$
 			if (fd.open() == Dialog.OK) {
 				IFile file = (IFile) fd.getFirstResult();

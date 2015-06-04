@@ -331,4 +331,22 @@ public class ExpressionUtil {
 	public static final JRDesignExpression getEmptyStringExpression() {
 		return new JRDesignExpression("\"\"");
 	}
+	
+	/**
+	 * Compare two expressions and check if the text inside them is the same
+	 * or if they are both null
+	 * 
+	 * @param exp1 the first expression, can be null
+	 * @param exp2 the second expression, can be null
+	 * @return true if the content of the expressions is the same, false otherwise
+	 */
+	public static boolean ExpressionEquals(JRExpression exp1, JRExpression exp2){
+		if (exp1 == null) return exp2 == null;
+		else if (exp2 == null) return false;
+		else {
+			String text1 = exp1.getText();
+			String text2 = exp2.getText();
+			return ModelUtils.safeEquals(text1, text2);
+		}
+	}
 }

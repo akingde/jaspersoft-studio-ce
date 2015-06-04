@@ -57,14 +57,15 @@ public class JRtxEditor extends AMultiEditor implements CachedSelectionProvider{
 	}
 
 	protected void xml2model(InputStream in) {
-		JRTemplate jd = JRXmlTemplateLoader.load(in);
-		ANode m = new MRoot(null, new JasperDesign());
+		JRTemplate template = JRXmlTemplateLoader.load(in);
+		JasperDesign jd = new JasperDesign();
+		ANode m = new MRoot(null, jd);
 		IFile file = ((IFileEditorInput) getEditorInput()).getFile();
 		MStylesTemplate ms = new MStylesTemplate(m, file);
-		ms.setValue(jd);
+		ms.setValue(template);
 		ms.setJasperConfiguration(jrContext);
-		StyleTemplateFactory.createTemplate(ms, new HashSet<String>(), true, file, file.getLocation().toFile(),
-				(JRSimpleTemplate) jd);
+		jrContext.setJasperDesign(jd);
+		StyleTemplateFactory.createTemplateRoot(ms, new HashSet<String>(), file,(JRSimpleTemplate) template);
 		setModel(m);
 	}
 
