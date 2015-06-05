@@ -12,8 +12,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.xlsx;
 
-import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -30,7 +28,6 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.core.databinding.beans.PojoObservables;
 import org.eclipse.jface.databinding.swt.SWTObservables;
-import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.EditingSupport;
@@ -41,7 +38,6 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
@@ -55,31 +51,26 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.data.AFileDataAdapterComposite;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
+import com.jaspersoft.studio.data.DateNumberFormatWidget;
 import com.jaspersoft.studio.data.fields.IFieldsProvider;
 import com.jaspersoft.studio.data.messages.Messages;
-import com.jaspersoft.studio.property.descriptor.pattern.dialog.PatternEditor;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class XLSXDataAdapterComposite extends AFileDataAdapterComposite {
 
-	private Text textDatePattern;
-	private Text textNumberPattern;
 	private TableViewer tableViewer;
 	private Table table;
 	private TableViewerColumn tableViewerColumnName;
 	private TableViewerColumn tableViewerColumnIndex;
 	private Button btnAdd;
 	private Button btnDelete;
-	private Button btnCheckUseDatePattern;
-	private Button btnCreateDatePattern;
-	private Button btnCheckUseNumberPattern;
-	private Button btnCreateNumberPattern;
 	private Button btnCheckSkipFirstLine;
 	private Button btnCheckQEMode;
+
+	private DateNumberFormatWidget dnf;
 
 	// The data model
 	private java.util.List<String[]> rows;
@@ -207,38 +198,10 @@ public class XLSXDataAdapterComposite extends AFileDataAdapterComposite {
 		GridLayout gl_grpOther = new GridLayout(3, false);
 		grpOther.setLayout(gl_grpOther);
 
-		btnCheckUseDatePattern = new Button(grpOther, SWT.CHECK);
-		btnCheckUseDatePattern.setBounds(0, 0, 93, 16);
-		btnCheckUseDatePattern.setText(Messages.XLSXDataAdapterComposite_10);
-
-		textDatePattern = new Text(grpOther, SWT.BORDER);
-		textDatePattern.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
-				false, 1, 1));
-		textDatePattern.setEnabled(false);
-
-		btnCreateDatePattern = new Button(grpOther, SWT.NONE);
-		GridData gd_btnCreateDatePattern = new GridData(SWT.CENTER, SWT.CENTER,
-				false, false, 1, 1);
-		gd_btnCreateDatePattern.widthHint = 100;
-		btnCreateDatePattern.setLayoutData(gd_btnCreateDatePattern);
-		btnCreateDatePattern.setText(Messages.XLSXDataAdapterComposite_11);
-		btnCreateDatePattern.setEnabled(false);
-
-		btnCheckUseNumberPattern = new Button(grpOther, SWT.CHECK);
-		btnCheckUseNumberPattern.setText(Messages.XLSXDataAdapterComposite_12);
-
-		textNumberPattern = new Text(grpOther, SWT.BORDER);
-		textNumberPattern.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
-				true, false, 1, 1));
-		textNumberPattern.setEnabled(false);
-
-		btnCreateNumberPattern = new Button(grpOther, SWT.NONE);
-		GridData gd_btnCreateNumberPattern = new GridData(SWT.CENTER,
-				SWT.CENTER, false, false, 1, 1);
-		gd_btnCreateNumberPattern.widthHint = 100;
-		btnCreateNumberPattern.setLayoutData(gd_btnCreateNumberPattern);
-		btnCreateNumberPattern.setText(Messages.XLSXDataAdapterComposite_13);
-		btnCreateNumberPattern.setEnabled(false);
+		dnf = new DateNumberFormatWidget(grpOther);
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 3;
+		dnf.setLayoutData(gd);
 
 		btnCheckSkipFirstLine = new Button(grpOther, SWT.CHECK);
 		btnCheckSkipFirstLine.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER,
@@ -317,70 +280,6 @@ public class XLSXDataAdapterComposite extends AFileDataAdapterComposite {
 						}
 					}
 				});
-
-		btnCheckUseDatePattern.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				boolean bool = ((Button) e.widget).getSelection();
-				if (!bool) {
-					textDatePattern.setText(new SimpleDateFormat().toPattern());
-				}
-				textDatePattern.setEnabled(bool);
-				btnCreateDatePattern.setEnabled(bool);
-			}
-		});
-
-		btnCreateDatePattern.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				PatternEditor wizard = new PatternEditor();
-				wizard.setNumberPatterns(false);
-				wizard.setValue(textDatePattern.getText());
-				WizardDialog dialog = new WizardDialog(getShell(), wizard);
-				dialog.create();
-
-				if (dialog.open() == Dialog.OK) {
-					String val = wizard.getValue();
-					textDatePattern.setText(val);
-				}
-			}
-		});
-
-		btnCheckUseNumberPattern.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				boolean bool = ((Button) e.widget).getSelection();
-				if (!bool) {
-					textNumberPattern.setText(new DecimalFormat().toPattern());
-				}
-				textNumberPattern.setEnabled(bool);
-				btnCreateNumberPattern.setEnabled(bool);
-			}
-		});
-
-		btnCreateNumberPattern.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				PatternEditor wizard = new PatternEditor();
-				wizard.setDatePatterns(false);
-				wizard.setValue(textNumberPattern.getText());
-				WizardDialog dialog = new WizardDialog(getShell(), wizard);
-				dialog.create();
-
-				if (dialog.open() == Dialog.OK) {
-					String val = wizard.getValue();
-					textNumberPattern.setText(val);
-				}
-			}
-		});
 	}
 
 	@Override
@@ -395,12 +294,9 @@ public class XLSXDataAdapterComposite extends AFileDataAdapterComposite {
 		bindingContext.bindValue(SWTObservables
 				.observeSelection(btnCheckSkipFirstLine), PojoObservables
 				.observeValue(dataAdapter, "useFirstRowAsHeader")); //$NON-NLS-1$
-		bindingContext.bindValue(
-				SWTObservables.observeText(textDatePattern, SWT.Modify),
-				PojoObservables.observeValue(dataAdapter, "datePattern")); //$NON-NLS-1$
-		bindingContext.bindValue(
-				SWTObservables.observeText(textNumberPattern, SWT.Modify),
-				PojoObservables.observeValue(dataAdapter, "numberPattern")); //$NON-NLS-1$
+
+		dnf.bindWidgets(xlsDataAdapter, bindingContext,
+				xlsDataAdapter.getLocale(), xlsDataAdapter.getTimeZone());
 
 		List<String> listColumnNames = xlsDataAdapter.getColumnNames();
 		List<Integer> listColumnIndexes = xlsDataAdapter.getColumnIndexes();
@@ -416,26 +312,6 @@ public class XLSXDataAdapterComposite extends AFileDataAdapterComposite {
 			setTableSelection(-1);
 			btnDelete.setEnabled(true);
 		}
-
-		String customDatePattern = xlsDataAdapter.getDatePattern();
-		if (customDatePattern != null && customDatePattern.length() > 0) {
-			btnCheckUseDatePattern.setSelection(true);
-			textDatePattern.setText(customDatePattern);
-			textDatePattern.setEnabled(true);
-			btnCreateDatePattern.setEnabled(true);
-		} else {
-			textDatePattern.setText(new SimpleDateFormat().toPattern());
-		}
-
-		String customNumberPattern = xlsDataAdapter.getNumberPattern();
-		if (customNumberPattern != null && customNumberPattern.length() > 0) {
-			btnCheckUseNumberPattern.setSelection(true);
-			textNumberPattern.setText(customNumberPattern);
-			textNumberPattern.setEnabled(true);
-			btnCreateNumberPattern.setEnabled(true);
-		} else {
-			textNumberPattern.setText(new DecimalFormat().toPattern());
-		}
 	}
 
 	/**
@@ -446,10 +322,10 @@ public class XLSXDataAdapterComposite extends AFileDataAdapterComposite {
 	public DataAdapterDescriptor getDataAdapter() {
 		if (dataAdapterDesc == null)
 			dataAdapterDesc = new XLSXDataAdapterDescriptor();
-		XlsxDataAdapter xlsxDataAdapter = (XlsxDataAdapter) dataAdapterDesc
+		XlsxDataAdapter dataAdapter = (XlsxDataAdapter) dataAdapterDesc
 				.getDataAdapter();
 
-		xlsxDataAdapter.setQueryExecuterMode(btnCheckQEMode.getSelection());
+		dataAdapter.setQueryExecuterMode(btnCheckQEMode.getSelection());
 
 		List<String> listColumnNames = new ArrayList<String>();
 		List<Integer> listColumnIndexes = new ArrayList<Integer>();
@@ -458,13 +334,16 @@ public class XLSXDataAdapterComposite extends AFileDataAdapterComposite {
 			listColumnIndexes.add(Integer.valueOf(row[1]));
 		}
 
-		xlsxDataAdapter.setColumnNames(listColumnNames);
-		xlsxDataAdapter.setColumnIndexes(listColumnIndexes);
+		dataAdapter.setColumnNames(listColumnNames);
+		dataAdapter.setColumnIndexes(listColumnIndexes);
 
-		xlsxDataAdapter.setDatePattern(textDatePattern.getText());
-		xlsxDataAdapter.setNumberPattern(textNumberPattern.getText());
-		xlsxDataAdapter.setUseFirstRowAsHeader(btnCheckSkipFirstLine
-				.getSelection());
+		dataAdapter.setDatePattern(dnf.getTextDatePattern());
+		dataAdapter.setNumberPattern(dnf.getTextNumberPattern());
+		dataAdapter.setLocale(dnf.getLocale());
+		dataAdapter.setTimeZone(dnf.getTimeZone());
+
+		dataAdapter
+				.setUseFirstRowAsHeader(btnCheckSkipFirstLine.getSelection());
 
 		return dataAdapterDesc;
 	}

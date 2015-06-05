@@ -29,7 +29,6 @@ import net.sf.jasperreports.engine.data.JRCsvDataSource;
 
 import org.eclipse.core.databinding.beans.PojoObservables;
 import org.eclipse.jface.databinding.swt.SWTObservables;
-import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.EditingSupport;
@@ -40,7 +39,6 @@ import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.TextCellEditor;
-import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
@@ -62,8 +60,8 @@ import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.data.AFileDataAdapterComposite;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
+import com.jaspersoft.studio.data.DateNumberFormatWidget;
 import com.jaspersoft.studio.data.messages.Messages;
-import com.jaspersoft.studio.property.descriptor.pattern.dialog.PatternEditor;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.swt.widgets.table.ListOrderButtons;
 import com.jaspersoft.studio.utils.Misc;
@@ -75,12 +73,6 @@ public class CSVDataAdapterComposite extends AFileDataAdapterComposite {
 	private Table table;
 	private Button btnDelete;
 	private Button btnCheckSkipFirstLine;
-	private Button btnCreateDatePattern;
-	private Button btnCreateNumberPattern;
-	private Button btnCheckUseDatePattern;
-	private Button btnCheckUseNumberPattern;
-	private Text textDatePattern;
-	private Text textNumberPattern;
 	private Group grpFieldSeparator;
 	private Button btnRadioFieldComma;
 	private Button btnRadioFieldTab;
@@ -98,6 +90,8 @@ public class CSVDataAdapterComposite extends AFileDataAdapterComposite {
 	private Button btnRadioRowSemicolon;
 	private Button btnRadioRowOther;
 	private Text textRowOther;
+
+	private DateNumberFormatWidget dnf;
 
 	// The data model
 	private java.util.List<String> rows;
@@ -283,40 +277,10 @@ public class CSVDataAdapterComposite extends AFileDataAdapterComposite {
 		grpOther.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1,
 				1));
 
-		btnCheckUseDatePattern = new Button(grpOther, SWT.CHECK);
-		btnCheckUseDatePattern.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
-				false, false, 1, 1));
-		btnCheckUseDatePattern.setText(Messages.CSVDataAdapterComposite_10);
-
-		textDatePattern = new Text(grpOther, SWT.BORDER);
-		textDatePattern.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
-				false, 1, 1));
-		textDatePattern.setEnabled(false);
-
-		btnCreateDatePattern = new Button(grpOther, SWT.NONE);
-		GridData gd_btnCreateDatePattern = new GridData(SWT.FILL, SWT.CENTER,
-				false, false, 1, 1);
-		gd_btnCreateDatePattern.widthHint = 100;
-		btnCreateDatePattern.setLayoutData(gd_btnCreateDatePattern);
-		btnCreateDatePattern.setText(Messages.CSVDataAdapterComposite_11);
-		btnCreateDatePattern.setEnabled(false);
-
-		btnCheckUseNumberPattern = new Button(grpOther, SWT.CHECK);
-		btnCheckUseNumberPattern.setLayoutData(new GridData(SWT.FILL,
-				SWT.CENTER, false, false, 1, 1));
-		btnCheckUseNumberPattern.setText(Messages.CSVDataAdapterComposite_12);
-
-		textNumberPattern = new Text(grpOther, SWT.BORDER);
-		textNumberPattern.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
-				true, false, 1, 1));
-		textNumberPattern.setEnabled(false);
-
-		btnCreateNumberPattern = new Button(grpOther, SWT.NONE);
-		gd = new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1);
-		gd.widthHint = 100;
-		btnCreateNumberPattern.setLayoutData(gd);
-		btnCreateNumberPattern.setText(Messages.CSVDataAdapterComposite_13);
-		btnCreateNumberPattern.setEnabled(false);
+		dnf = new DateNumberFormatWidget(grpOther);
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 3;
+		dnf.setLayoutData(gd);
 
 		btnCheckSkipFirstLine = new Button(grpOther, SWT.CHECK);
 		btnCheckSkipFirstLine.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
@@ -565,73 +529,6 @@ public class CSVDataAdapterComposite extends AFileDataAdapterComposite {
 					}
 				});
 
-		btnCheckUseDatePattern.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				boolean bool = ((Button) e.widget).getSelection();
-				if (!bool) {
-					textDatePattern
-							.setText(Messages.CSVDataAdapterComposite_39);
-				}
-				textDatePattern.setEnabled(bool);
-				btnCreateDatePattern.setEnabled(bool);
-			}
-		});
-
-		btnCreateDatePattern.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				PatternEditor wizard = new PatternEditor();
-				wizard.setNumberPatterns(false);
-				wizard.setValue(textDatePattern.getText());
-				WizardDialog dialog = new WizardDialog(getShell(), wizard);
-				dialog.create();
-
-				if (dialog.open() == Dialog.OK) {
-					String val = wizard.getValue();
-					textDatePattern.setText(val);
-				}
-			}
-		});
-
-		btnCheckUseNumberPattern.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				boolean bool = ((Button) e.widget).getSelection();
-				if (!bool) {
-					textNumberPattern
-							.setText(Messages.CSVDataAdapterComposite_39);
-				}
-				textNumberPattern.setEnabled(bool);
-				btnCreateNumberPattern.setEnabled(bool);
-			}
-		});
-
-		btnCreateNumberPattern.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				PatternEditor wizard = new PatternEditor();
-				wizard.setDatePatterns(false);
-				wizard.setNumberPatterns(true);
-				wizard.setValue(textNumberPattern.getText());
-				WizardDialog dialog = new WizardDialog(getShell(), wizard);
-				dialog.create();
-
-				if (dialog.open() == Dialog.OK) {
-					String val = wizard.getValue();
-					textNumberPattern.setText(val);
-				}
-			}
-		});
-
 		Button[] buttons = new Button[] { btnRadioFieldComma,
 				btnRadioFieldNewLineUnix, btnRadioFieldSemicolon,
 				btnRadioFieldSpace, btnRadioFieldTab, btnRadioFieldOther,
@@ -658,12 +555,7 @@ public class CSVDataAdapterComposite extends AFileDataAdapterComposite {
 		bindingContext.bindValue(SWTObservables
 				.observeSelection(btnCheckSkipFirstLine), PojoObservables
 				.observeValue(dataAdapter, "useFirstRowAsHeader")); //$NON-NLS-1$
-		bindingContext.bindValue(
-				SWTObservables.observeText(textDatePattern, SWT.Modify),
-				PojoObservables.observeValue(dataAdapter, "datePattern")); //$NON-NLS-1$
-		bindingContext.bindValue(
-				SWTObservables.observeText(textNumberPattern, SWT.Modify),
-				PojoObservables.observeValue(dataAdapter, "numberPattern")); //$NON-NLS-1$
+
 		bindingContext.bindValue(SWTObservables.observeText(cEncoding),
 				PojoObservables.observeValue(dataAdapter, "encoding")); //$NON-NLS-1$
 
@@ -678,25 +570,9 @@ public class CSVDataAdapterComposite extends AFileDataAdapterComposite {
 			btnDelete.setEnabled(true);
 		}
 
-		String datePattern = csvDataAdapter.getDatePattern();
-		if (datePattern != null && datePattern.length() > 0) {
-			btnCheckUseDatePattern.setSelection(true);
-			textDatePattern.setText(datePattern);
-			textDatePattern.setEnabled(true);
-			btnCreateDatePattern.setEnabled(true);
-		} else {
-			textDatePattern.setText(Messages.CSVDataAdapterComposite_39);
-		}
+		dnf.bindWidgets(csvDataAdapter, bindingContext,
+				csvDataAdapter.getLocale(), csvDataAdapter.getTimeZone());
 
-		String numberPattern = csvDataAdapter.getNumberPattern();
-		if (numberPattern != null && numberPattern.length() > 0) {
-			btnCheckUseNumberPattern.setSelection(true);
-			textNumberPattern.setText(numberPattern);
-			textNumberPattern.setEnabled(true);
-			btnCreateNumberPattern.setEnabled(true);
-		} else {
-			textNumberPattern.setText(Messages.CSVDataAdapterComposite_39);
-		}
 		Proxy proxy = new Proxy(csvDataAdapter);
 		bindingContext.bindValue(
 				SWTObservables.observeSelection(btnRadioFieldComma),
@@ -906,16 +782,10 @@ public class CSVDataAdapterComposite extends AFileDataAdapterComposite {
 
 		csvDataAdapter.setColumnNames(rows);
 
-		if (btnCheckUseDatePattern.getSelection())
-			csvDataAdapter.setDatePattern(textDatePattern.getText());
-		else
-			csvDataAdapter.setDatePattern(null);
-		if (btnCheckUseNumberPattern.getSelection())
-			csvDataAdapter.setNumberPattern(textNumberPattern.getText());
-		else
-			csvDataAdapter.setNumberPattern(null);
-		csvDataAdapter.setUseFirstRowAsHeader(btnCheckSkipFirstLine
-				.getSelection());
+		csvDataAdapter.setDatePattern(dnf.getTextDatePattern());
+		csvDataAdapter.setNumberPattern(dnf.getTextNumberPattern());
+		csvDataAdapter.setLocale(dnf.getLocale());
+		csvDataAdapter.setTimeZone(dnf.getTimeZone());
 
 		if (btnRadioFieldComma.getSelection())
 			csvDataAdapter.setFieldDelimiter(","); //$NON-NLS-1$

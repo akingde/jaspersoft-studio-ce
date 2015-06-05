@@ -84,6 +84,7 @@ public abstract class AMapElement extends APropertyNode {
 	public void setPropertyValue(Object id, Object value) {
 		Object oldVal = props.get((String) id);
 		props.put((String) id, value);
+		System.out.println(id + " ; " + value);
 		if (!noEvents) {
 			firePropertyChange(id, value, oldVal);
 		}
