@@ -329,6 +329,12 @@
             id="com.jaspersoft.studio.preferences.ParameterSetPreferencePage"
             name="%ParameterSet">
       </page>
+      <page
+            category="com.jaspersoft.studio.preferences.DesignerPreferencePage"
+            class="com.jaspersoft.studio.preferences.PalettePreferencePage"
+            id="com.jaspersoft.studio.preferences.PalettePreferencePage"
+            name="%Palette">
+      </page>
    </extension>
    <extension
          id=""
@@ -557,6 +563,17 @@
          <enabledWhen>
             <reference
                   definitionId="com.jaspersoft.studio.project">
+            </reference>
+         </enabledWhen>
+      </page>
+      <page
+            category="com.jaspersoft.studio.preferences.DesignerPreferencePage.property"
+            class="com.jaspersoft.studio.preferences.PalettePreferencePage"
+            id="com.jaspersoft.studio.preferences.PalettePreferencePage.property"
+            name="%Palette">
+         <enabledWhen>
+            <reference
+                  definitionId="com.jaspersoft.studio.projectorjrxml">
             </reference>
          </enabledWhen>
       </page>

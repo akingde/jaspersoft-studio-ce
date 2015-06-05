@@ -68,6 +68,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		StudioPreferencePage.getDefaults(store);
 		ReportExecutionPreferencePage.getDefaults(store);
 		ToolItemsPreferencePage.getDefaults(store);
+		PalettePreferencePage.getDefaults(store);
 
 		ThemesPreferencePage.getDefaults(store);
 	}

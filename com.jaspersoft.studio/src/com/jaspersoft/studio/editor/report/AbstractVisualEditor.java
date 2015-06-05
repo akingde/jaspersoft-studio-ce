@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.editor.report;
 
@@ -169,18 +165,18 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  * 
  * @author Chicu Veaceslav
  */
-public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutPalette implements IAdaptable, IGraphicalEditor, CachedSelectionProvider {
-	
+public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutPalette implements IAdaptable,
+		IGraphicalEditor, CachedSelectionProvider {
+
 	private Image partImage = JaspersoftStudioPlugin.getInstance().getImage(MReport.getIconDescriptor().getIcon16());
-	
+
 	private FlyoutPreferences palettePreferences;
-	
+
 	protected JasperReportsConfiguration jrContext;
 
 	public JasperReportsConfiguration getJrContext() {
 		return jrContext;
 	}
-
 
 	public Image getPartImage() {
 		return partImage;
@@ -190,9 +186,9 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 	 * Instantiates a new abstract visual editor.
 	 */
 	public AbstractVisualEditor(JasperReportsConfiguration jrContext) {
-		ScrollEditDomain ed = new ScrollEditDomain(this);
-		setEditDomain(ed);
 		this.jrContext = jrContext;
+		ScrollEditDomain ed = new ScrollEditDomain(this);
+		setEditDomain(ed); 
 	}
 
 	@Override
@@ -222,15 +218,16 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		// getGraphicalViewer().setRootEditPart(new MainDesignerRootEditPart());
 		// if (model != null)
 		getGraphicalViewer().setContents(model);
-		if (outlinePage != null){
-			//The outline for the current editor maybe not available because it was closed 
-			//and reopened into another editor. So when we try to set its contents it is 
-			//better to check if it was disposed outside and in that case recrated it.
-			if (outlinePage.isDisposed()){
-				//If the outline is recreated by calling the getOutlineView 
-				//then the setContends it is already done so we need to do it only in the else case
+		if (outlinePage != null) {
+			// The outline for the current editor maybe not available because it was closed
+			// and reopened into another editor. So when we try to set its contents it is
+			// better to check if it was disposed outside and in that case recrated it.
+			if (outlinePage.isDisposed()) {
+				// If the outline is recreated by calling the getOutlineView
+				// then the setContends it is already done so we need to do it only in the else case
 				getOutlineView();
-			} else outlinePage.setContents(model);
+			} else
+				outlinePage.setContents(model);
 		}
 	}
 
@@ -242,9 +239,9 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 	public INode getModel() {
 		return model;
 	}
-	
-	public ISelection getOutlineSelection(){
-		if (outlinePage != null && !outlinePage.isDisposed()){
+
+	public ISelection getOutlineSelection() {
+		if (outlinePage != null && !outlinePage.isDisposed()) {
 			return outlinePage.getSelection();
 		}
 		return StructuredSelection.EMPTY;
@@ -284,7 +281,7 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 	 */
 	@Override
 	protected PaletteRoot getPaletteRoot() {
-		return JDPaletteFactory.createPalette(getIgnorePalleteElements());
+		return JDPaletteFactory.createPalette(getIgnorePalleteElements(), jrContext);
 	}
 
 	protected abstract List<String> getIgnorePalleteElements();
@@ -386,7 +383,7 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 
 		getActionRegistry().registerAction(new ZoomInAction(zoomManager));
 		getActionRegistry().registerAction(new ZoomOutAction(zoomManager));
-		getActionRegistry().registerAction(new  ZoomActualAction(zoomManager));
+		getActionRegistry().registerAction(new ZoomActualAction(zoomManager));
 		graphicalViewer.setProperty(MouseWheelHandler.KeyGenerator.getKey(SWT.MOD1), MouseWheelZoomHandler.SINGLETON);
 
 		// set context menu
@@ -399,19 +396,16 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		JaspersoftStudioPlugin.getDecoratorManager().registerActions(getActionRegistry(), getSelectionActions(),
 				getGraphicalViewer(), this);
 		JaspersoftStudioPlugin.getEditorSettingsManager().registerActions(getActionRegistry(), jrContext);
-		
 
 	}
 
 	/**
-	 * Force the refresh of the actions enablement and visibility
-	 * state
+	 * Force the refresh of the actions enablement and visibility state
 	 */
-	public void forceUpdateActions(){
+	public void forceUpdateActions() {
 		updateActions(getSelectionActions());
 	}
-	
-	
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -603,12 +597,12 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 			}
 		};
 	}
-	
+
 	/**
 	 * Return the selection cache extracting it from the current jr context
 	 */
-	public CommonSelectionCacheProvider getSelectionCache(){
-		return  (CommonSelectionCacheProvider)jrContext.get(ReportContainer.SELECTION_CACHE_KEY);
+	public CommonSelectionCacheProvider getSelectionCache() {
+		return (CommonSelectionCacheProvider) jrContext.get(ReportContainer.SELECTION_CACHE_KEY);
 	}
 
 	/**
@@ -636,7 +630,7 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		action = new CreateParameterAction(this);
 		registry.registerAction(action);
 		selectionActions.add(CreateParameterAction.ID);
-		
+
 		action = new CreateParameterSetAction(this);
 		registry.registerAction(action);
 		selectionActions.add(CreateParameterSetAction.ID);
@@ -694,16 +688,14 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		CustomDeleteAction deleteAction = new CustomDeleteAction(this);
 		registry.registerAction(deleteAction);
 
-		
-		action = new HideElementsAction(this,true);
+		action = new HideElementsAction(this, true);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
-		
-		action = new HideElementsAction(this,false);
+
+		action = new HideElementsAction(this, false);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
-		
-		
+
 		action = new CopyAction(this);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
@@ -711,7 +703,7 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		action = new PasteAction(this);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
-		
+
 		action = new CopyFormatAction(this);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
@@ -723,7 +715,7 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		action = new SetDefaultsAction(this);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
-		
+
 		action = new MatchWidthAction(this);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
@@ -974,7 +966,7 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		action = new MoveDetailDownAction(this);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
-		
+
 		action = new EncloseIntoFrameAction(this);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
@@ -987,63 +979,62 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		action = new OpenEditorAction(this);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
-		
-		//Action to handle the background
-		
+
+		// Action to handle the background
+
 		action = new BackgroundFitAction(this);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
-		
+
 		action = new BackgroundKeepRatioAction(this);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
-		
+
 		action = new BackgroundEndTransformationAction(this);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
-		
-		
+
 		action = new BackgroundTransparencyAction(this, BackgroundTransparencyAction.TRANSPARENCY_5);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
-		
+
 		action = new BackgroundTransparencyAction(this, BackgroundTransparencyAction.TRANSPARENCY_10);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
-		
+
 		action = new BackgroundTransparencyAction(this, BackgroundTransparencyAction.TRANSPARENCY_15);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
-		
+
 		action = new BackgroundTransparencyAction(this, BackgroundTransparencyAction.TRANSPARENCY_20);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
-		
+
 		action = new BackgroundTransparencyAction(this, BackgroundTransparencyAction.TRANSPARENCY_25);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
-		
+
 		action = new BackgroundTransparencyAction(this, BackgroundTransparencyAction.TRANSPARENCY_30);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
-		
+
 		action = new BackgroundTransparencyAction(this, BackgroundTransparencyAction.TRANSPARENCY_40);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
-		
+
 		action = new BackgroundTransparencyAction(this, BackgroundTransparencyAction.TRANSPARENCY_50);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
-		
+
 		action = new BackgroundTransparencyAction(this, BackgroundTransparencyAction.TRANSPARENCY_75);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
-		
+
 		action = new BackgroundTransparencyAction(this, BackgroundTransparencyAction.TRANSPARENCY_100);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
-		
-		//End of the background actions
+
+		// End of the background actions
 	}
 
 	protected void createEditorActions(ActionRegistry registry) {
@@ -1082,14 +1073,14 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		// Global "View" menu items
 		toolbarManager.add(new ViewSettingsDropDownAction(getActionRegistry()));
 	}
-	
+
 	/**
 	 * Return the main element managed by this editor, page and root are excluded
 	 */
-	public INode getManagedElement(){
+	public INode getManagedElement() {
 		INode node = model;
-		while(node != null && !node.getChildren().isEmpty() && (node instanceof MRoot || node instanceof MPage)){
-			node = node.getChildren().get(node.getChildren().size()-1);
+		while (node != null && !node.getChildren().isEmpty() && (node instanceof MRoot || node instanceof MPage)) {
+			node = node.getChildren().get(node.getChildren().size() - 1);
 		}
 		return node;
 	}

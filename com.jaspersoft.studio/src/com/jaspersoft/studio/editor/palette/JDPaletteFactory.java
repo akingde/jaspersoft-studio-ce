@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.editor.palette;
 
@@ -48,6 +44,8 @@ import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.plugin.ExtensionManager;
 import com.jaspersoft.studio.plugin.IPaletteContributor;
 import com.jaspersoft.studio.plugin.PaletteGroup;
+import com.jaspersoft.studio.preferences.PalettePreferencePage;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /*
  * A factory for creating JDPalette objects.
@@ -59,7 +57,9 @@ public class JDPaletteFactory {
 	 * 
 	 * @return the palette root
 	 */
-	public static PaletteRoot createPalette(List<String> ignore) {
+	public static PaletteRoot createPalette(List<String> ignore, JasperReportsConfiguration jrConfig) {
+		if (ignore == null)
+			ignore = new ArrayList<String>();
 		PaletteRoot paletteRoot = new PaletteRoot();
 
 		createToolBar(paletteRoot);
@@ -97,6 +97,14 @@ public class JDPaletteFactory {
 				pgc.setName(Messages.JDPaletteFactory_unknown_group);
 				pgc.setImage(""); //$NON-NLS-1$
 				map.put(pgc.getId(), pgc);
+			}
+
+			for (PaletteEntry pe : mapEntry.get(key)) {
+				String id = PalettePreferencePage.getId(pe);
+				if (ignore.contains(pe.getId()))
+					continue;
+				if (jrConfig.getPropertyBoolean(id, false) && pe instanceof CombinedTemplateCreationEntry)
+					ignore.add(((CombinedTemplateCreationEntry) pe).getTemplate().toString());
 			}
 		}
 
@@ -151,8 +159,9 @@ public class JDPaletteFactory {
 	 * @return the palette entry
 	 */
 	public static PaletteEntry createJDEntry(IIconDescriptor iconDescriptor, Class<?> aclass) {
-		CombinedTemplateCreationEntry paletteEntry = new CombinedTemplateCreationEntry(iconDescriptor.getTitle(), iconDescriptor.getDescription(), aclass,
-				new JDPaletteCreationFactory(aclass), iconDescriptor.getIcon16(), iconDescriptor.getIcon32());
+		CombinedTemplateCreationEntry paletteEntry = new CombinedTemplateCreationEntry(iconDescriptor.getTitle(),
+				iconDescriptor.getDescription(), aclass, new JDPaletteCreationFactory(aclass), iconDescriptor.getIcon16(),
+				iconDescriptor.getIcon32());
 		// Override default CreationTool class with ours
 		paletteEntry.setToolClass(JDCreationTool.class);
 		return paletteEntry;
@@ -223,7 +232,8 @@ public class JDPaletteFactory {
 		List<PaletteEntry> plist = map.get(id);
 		if (plist != null)
 			for (PaletteEntry entry : plist) {
-				if (ignore != null && ignore.contains(entry.getType()))
+				if (ignore != null && entry instanceof CombinedTemplateCreationEntry
+						&& ignore.contains(((CombinedTemplateCreationEntry) entry).getTemplate().toString()))
 					continue;
 				drawer.add(entry);
 			}

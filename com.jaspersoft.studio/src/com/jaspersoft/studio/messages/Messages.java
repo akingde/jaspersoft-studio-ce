@@ -1452,6 +1452,7 @@ public class Messages extends NLS {
 	public static String PagesFieldEditor_precisePages;
 	public static String PagesFieldEditor_to;
 	public static String PageWidthUndoableOperation_change_page_width;
+	public static String PalettePreferencePage_0;
 	public static String ParameterDialog_0;
 	public static String ParameterDialog_5;
 	public static String ParameterDialog_6;
