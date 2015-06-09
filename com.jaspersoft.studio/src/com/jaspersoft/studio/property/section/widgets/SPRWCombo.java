@@ -30,10 +30,10 @@ import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescrip
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.utils.Misc;
 
-public class SPRWCombo extends ASPropertyWidget {
+public class SPRWCombo<T extends IPropertyDescriptor> extends ASPropertyWidget<T> {
 	protected Combo combo;
 
-	public SPRWCombo(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
+	public SPRWCombo(Composite parent, AbstractSection section, T pDescriptor) {
 		super(parent, section, pDescriptor);
 	}
 

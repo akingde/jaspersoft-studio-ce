@@ -40,8 +40,8 @@ public class RWFloatComboBoxPropertyDescriptor extends RWComboBoxPropertyDescrip
 	}
 
 
-	public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
-		return new SPRWFloatCombo(parent, section, this);
+	public ASPropertyWidget<RWComboBoxPropertyDescriptor> createWidget(Composite parent, AbstractSection section) {
+		return new SPRWFloatCombo<RWComboBoxPropertyDescriptor>(parent, section, this);
 	}
 
 }

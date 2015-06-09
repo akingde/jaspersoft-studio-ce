@@ -50,7 +50,7 @@ import com.jaspersoft.studio.property.section.AbstractSection;
  * @author Chicu Veaceslav & Orlandin Marco
  * 
  */
-public class SPFont extends ASPropertyWidget {
+public class SPFont extends ASPropertyWidget<IPropertyDescriptor> {
 	private final class PreferenceListener implements IPropertyChangeListener {
 
 		public void propertyChange(org.eclipse.jface.util.PropertyChangeEvent event) {
@@ -143,14 +143,14 @@ public class SPFont extends ASPropertyWidget {
 	 * @author Orlandin Marco
 	 * 
 	 */
-	private class SPChartButtom extends SPButton {
+	private class SPChartButtom<T extends IPropertyDescriptor> extends SPButton<T> {
 
 		/**
 		 * The type of font represented (title, legend, subtitle)
 		 */
 		private String fontNameProperty;
 
-		public SPChartButtom(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor,
+		public SPChartButtom(Composite parent, AbstractSection section, T pDescriptor,
 				APropertyNode fontValue, String fontNameProperty) {
 			super(parent, section, pDescriptor, fontValue);
 			this.fontNameProperty = fontNameProperty;
@@ -256,7 +256,7 @@ public class SPFont extends ASPropertyWidget {
 		/*
 		 * Button to increment\decrment the font size
 		 */
-		new SPChartButtom(group, section, pd1, mfont, pDescriptor.getId().toString());
+		new SPChartButtom<IPropertyDescriptor>(group, section, pd1, mfont, pDescriptor.getId().toString());
 
 		ToolBar toolBar = new ToolBar(group, SWT.FLAT | SWT.WRAP | SWT.LEFT);
 		GridData gd = new GridData();

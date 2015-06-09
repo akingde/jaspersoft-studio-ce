@@ -56,7 +56,7 @@ import com.jaspersoft.studio.utils.ModelUtils;
  * @author Chicu Veaceslav & Orlandin Marco
  *
  */
-public class SPFontPanelChartPopUp extends ASPropertyWidget {
+public class SPFontPanelChartPopUp extends ASPropertyWidget<IPropertyDescriptor> {
 	private final class PreferenceListener implements IPropertyChangeListener {
 
 		public void propertyChange(org.eclipse.jface.util.PropertyChangeEvent event) {
@@ -175,14 +175,14 @@ public class SPFontPanelChartPopUp extends ASPropertyWidget {
 	 * @author Orlandin Marco
 	 *
 	 */
-	private class SPChartButtom extends SPButton{
+	private class SPChartButtom<T extends IPropertyDescriptor> extends SPButton<T>{
 		
 		/**
 		 * The type of font represented (title, legend, subtitle)
 		 */
 		private String fontNameProperty;
 		
-		public SPChartButtom(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor, APropertyNode fontValue, String fontNameProperty){
+		public SPChartButtom(Composite parent, AbstractSection section, T pDescriptor, APropertyNode fontValue, String fontNameProperty){
 			super(parent,section,pDescriptor, fontValue);
 			this.fontNameProperty = fontNameProperty;
 		}
@@ -253,7 +253,7 @@ public class SPFontPanelChartPopUp extends ASPropertyWidget {
 		/*
 		 *Button to increment\decrment the font size 
 		 */
-		new SPChartButtom(group, section, pd1,  mfont, pDescriptor.getId().toString());
+		new SPChartButtom<IPropertyDescriptor>(group, section, pd1,  mfont, pDescriptor.getId().toString());
 
 		ToolBar toolBar = new ToolBar(group, SWT.FLAT | SWT.WRAP | SWT.LEFT);
 		GridData gd = new GridData();

@@ -38,7 +38,7 @@ import com.jaspersoft.studio.property.section.AbstractSection;
  * @author Orlandin Marco
  * 
  */
-public class SPQueryButton extends ASPropertyWidget {
+public class SPQueryButton<T extends IPropertyDescriptor> extends ASPropertyWidget<T> {
 
 	/**
 	 * The button control
@@ -63,7 +63,7 @@ public class SPQueryButton extends ASPropertyWidget {
 	 * @param buttonText
 	 *          text on the button
 	 */
-	public SPQueryButton(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor, String buttonText) {
+	public SPQueryButton(Composite parent, AbstractSection section, T pDescriptor, String buttonText) {
 		super(parent, section, pDescriptor);
 		createButton(parent, buttonText);
 	}

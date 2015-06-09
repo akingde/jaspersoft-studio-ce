@@ -36,7 +36,7 @@ import com.jaspersoft.studio.property.section.AbstractSection;
  * @author Orlandin Marco
  *
  */
-public class SPButton extends ASPropertyWidget {
+public class SPButton<T extends IPropertyDescriptor> extends ASPropertyWidget<T> {
 
 	/**
 	 * The buttons toolbar
@@ -80,7 +80,7 @@ public class SPButton extends ASPropertyWidget {
 	 * @param pDescriptor descriptor of the attribute
 	 * @param fontValue The element with the font attribute
 	 */
-	public SPButton(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor, APropertyNode fontValue){
+	public SPButton(Composite parent, AbstractSection section, T pDescriptor, APropertyNode fontValue){
 		super(parent, section, pDescriptor);
 		messageIncrement = MessageFormat.format(Messages.SPButon_Size_Increment, new Object[]{factor.toString()});
 		imageValueIncrement = JaspersoftStudioPlugin.getInstance().getImage("/icons/resources/edit-size-up.png"); 

@@ -24,10 +24,10 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
-public class SP3Boolean extends ASPropertyWidget {
+public class SP3Boolean<T extends IPropertyDescriptor> extends ASPropertyWidget<T> {
 	private Combo cmb3Bool;
 
-	public SP3Boolean(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
+	public SP3Boolean(Composite parent, AbstractSection section, T pDescriptor) {
 		super(parent, section, pDescriptor);
 	}
 

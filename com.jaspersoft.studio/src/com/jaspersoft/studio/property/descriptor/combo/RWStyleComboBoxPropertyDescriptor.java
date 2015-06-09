@@ -55,8 +55,8 @@ public class RWStyleComboBoxPropertyDescriptor extends RWComboBoxPropertyDescrip
 	/**
 	 * Create a modified version of the combo widget
 	 */
-	public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
-		combo = new SPRWCombo(parent, section, this){
+	public ASPropertyWidget<RWComboBoxPropertyDescriptor> createWidget(Composite parent, AbstractSection section) {
+		combo = new SPRWCombo<RWComboBoxPropertyDescriptor>(parent, section, this){
 			
 			/**
 			 * Calculate the available styles for the selected element and save it in the descriptor

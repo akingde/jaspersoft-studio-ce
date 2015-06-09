@@ -17,9 +17,9 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.property.section.AbstractSection;
 
-public class SPBooleanNoText extends SPBoolean {
+public class SPBooleanNoText<T extends IPropertyDescriptor> extends SPBoolean<T> {
 	
-	public SPBooleanNoText(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
+	public SPBooleanNoText(Composite parent, AbstractSection section, T pDescriptor) {
 		super(parent, section, pDescriptor);
 	}
 	

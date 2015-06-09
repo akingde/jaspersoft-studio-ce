@@ -38,7 +38,7 @@ import com.jaspersoft.studio.utils.Misc;
  * @author Orlandin Marco
  * 
  */
-public abstract class SPGroupTypeCombo extends ASPropertyWidget {
+public abstract class SPGroupTypeCombo<T extends IPropertyDescriptor> extends ASPropertyWidget<T> {
 
 	/**
 	 * Prefix string for the group elements
@@ -60,7 +60,7 @@ public abstract class SPGroupTypeCombo extends ASPropertyWidget {
 	 */
 	protected IPropertyDescriptor gDescriptor;
 
-	public SPGroupTypeCombo(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor,
+	public SPGroupTypeCombo(Composite parent, AbstractSection section, T pDescriptor,
 			IPropertyDescriptor gDescriptor) {
 		super(parent, section, pDescriptor);
 		this.gDescriptor = gDescriptor;

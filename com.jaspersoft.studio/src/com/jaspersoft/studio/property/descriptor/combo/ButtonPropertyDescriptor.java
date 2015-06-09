@@ -56,8 +56,8 @@ public class ButtonPropertyDescriptor extends PropertyDescriptor implements IPro
 	 * Create the widget and return it
 	 */
 	@Override
-	public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
-		return new SPButton(parent, section, this, elementFont);
+	public ASPropertyWidget<ButtonPropertyDescriptor> createWidget(Composite parent, AbstractSection section) {
+		return new SPButton<ButtonPropertyDescriptor>(parent, section, this, elementFont);
 	}
 
 	private IHelpRefBuilder refBuilder;

@@ -62,7 +62,7 @@ public class RComboBoxPropertyDescriptor extends ComboBoxPropertyDescriptor impl
 		return labels;
 	}
 
-	public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
+	public ASPropertyWidget<RComboBoxPropertyDescriptor> createWidget(Composite parent, AbstractSection section) {
 		return new SPRCombo(parent, section, this);
 	}
 

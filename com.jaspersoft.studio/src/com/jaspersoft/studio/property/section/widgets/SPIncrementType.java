@@ -20,9 +20,9 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.property.section.AbstractSection;
 
-public class SPIncrementType extends SPGroupTypeCombo {
+public class SPIncrementType<T extends IPropertyDescriptor> extends SPGroupTypeCombo<T> {
 
-	public SPIncrementType(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor,
+	public SPIncrementType(Composite parent, AbstractSection section, T pDescriptor,
 			IPropertyDescriptor gDescriptor) {
 		super(parent, section, pDescriptor,gDescriptor);
 	}

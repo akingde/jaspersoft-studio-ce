@@ -44,7 +44,7 @@ import com.jaspersoft.studio.property.descriptor.combo.RWCComboPropertyDescripto
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.utils.Misc;
 
-public class SPRWCCombo extends ASPropertyWidget {
+public class SPRWCCombo<T extends IPropertyDescriptor> extends ASPropertyWidget<T> {
 	
 	protected CCombo combo;
 	
@@ -71,7 +71,7 @@ public class SPRWCCombo extends ASPropertyWidget {
 
 	}
 
-	public SPRWCCombo(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
+	public SPRWCCombo(Composite parent, AbstractSection section, T pDescriptor) {
 		super(parent, section, pDescriptor);
 	}
 

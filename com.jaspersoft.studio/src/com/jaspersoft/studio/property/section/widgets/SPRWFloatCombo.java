@@ -39,7 +39,7 @@ import com.jaspersoft.studio.utils.Misc;
  * @author Orlandin Marco
  *
  */
-public class SPRWFloatCombo extends ASPropertyWidget {
+public class SPRWFloatCombo<T extends IPropertyDescriptor> extends ASPropertyWidget<T> {
 	
 	/**
 	 * The combo widget
@@ -61,7 +61,7 @@ public class SPRWFloatCombo extends ASPropertyWidget {
 	 */
 	private Color comboBackgroundDefault;
 
-	public SPRWFloatCombo(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
+	public SPRWFloatCombo(Composite parent, AbstractSection section, T pDescriptor) {
 		super(parent, section, pDescriptor);
 	}
 

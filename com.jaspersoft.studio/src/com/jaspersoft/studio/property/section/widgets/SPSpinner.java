@@ -30,14 +30,14 @@ import com.jaspersoft.studio.property.section.AbstractSection;
  * @author Orlandin Marco
  *
  */
-public class SPSpinner extends ASPropertyWidget {
+public class SPSpinner<T extends IPropertyDescriptor> extends ASPropertyWidget<T> {
 
 	/**
 	 * The spinner control
 	 */
 	private Spinner controlSpinner;
 	
-	public SPSpinner(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
+	public SPSpinner(Composite parent, AbstractSection section, T pDescriptor) {
 		super(parent, section, pDescriptor);
 	}
 	

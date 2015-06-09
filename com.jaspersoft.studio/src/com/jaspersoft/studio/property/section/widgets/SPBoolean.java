@@ -23,12 +23,12 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
-public class SPBoolean extends ASPropertyWidget {
+public class SPBoolean<T extends IPropertyDescriptor> extends ASPropertyWidget<T> {
 	
 	protected Button cmb3Bool;
 
 	
-	public SPBoolean(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
+	public SPBoolean(Composite parent, AbstractSection section, T pDescriptor) {
 		super(parent, section, pDescriptor);
 	}
 

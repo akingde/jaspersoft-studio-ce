@@ -40,7 +40,7 @@ import com.jaspersoft.studio.utils.ModelUtils;
  * @author Orlandin Marco
  * 
  */
-public class SPFontNamePopUp extends ASPropertyWidget {
+public class SPFontNamePopUp<T extends IPropertyDescriptor> extends ASPropertyWidget<T> {
 
 	/**
 	 * The combo popup
@@ -52,7 +52,7 @@ public class SPFontNamePopUp extends ASPropertyWidget {
 	 */
 	protected boolean dataSetted;
 
-	public SPFontNamePopUp(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
+	public SPFontNamePopUp(Composite parent, AbstractSection section, T pDescriptor) {
 		super(parent, section, pDescriptor);
 		dataSetted = false;
 	}

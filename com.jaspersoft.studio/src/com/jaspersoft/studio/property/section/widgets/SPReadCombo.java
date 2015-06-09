@@ -25,12 +25,12 @@ import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.descriptors.JSSComboPropertyDescriptor;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
-public class SPReadCombo extends ASPropertyWidget {
+public class SPReadCombo<T extends IPropertyDescriptor> extends ASPropertyWidget<T> {
 	protected Combo combo;
 
 	private boolean refreshing = false;
 	
-	public SPReadCombo(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
+	public SPReadCombo(Composite parent, AbstractSection section, T pDescriptor) {
 		super(parent, section, pDescriptor);
 	}
 

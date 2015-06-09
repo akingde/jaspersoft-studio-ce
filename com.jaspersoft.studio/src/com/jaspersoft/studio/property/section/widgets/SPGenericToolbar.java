@@ -40,7 +40,7 @@ import com.jaspersoft.studio.property.section.AbstractSection;
  * @author Orlandin Marco
  *
  */
-public class SPGenericToolbar extends ASPropertyWidget {
+public class SPGenericToolbar<T extends IPropertyDescriptor> extends ASPropertyWidget<T> {
 	
 	/**
 	 * Style for the control, use this as argument on the
@@ -133,7 +133,7 @@ public class SPGenericToolbar extends ASPropertyWidget {
 	 * @param pDescriptor the descriptor of the property
 	 * @param style a style between toolbar and buttons
 	 */
-	public SPGenericToolbar(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor, Style style) {
+	public SPGenericToolbar(Composite parent, AbstractSection section, T pDescriptor, Style style) {
 		super(parent, section, pDescriptor);
 		this.style = style;
 	}

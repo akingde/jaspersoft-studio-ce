@@ -36,7 +36,7 @@ import com.jaspersoft.studio.property.section.AbstractSection;
  * @author Orlandin Marco
  * 
  */
-public class SPSubreportReturnValuesButton extends ASPropertyWidget {
+public class SPSubreportReturnValuesButton<T extends IPropertyDescriptor> extends ASPropertyWidget<T> {
 
 	/**
 	 * The button control
@@ -56,7 +56,7 @@ public class SPSubreportReturnValuesButton extends ASPropertyWidget {
 	 * @param buttonText
 	 *          text on the button
 	 */
-	public SPSubreportReturnValuesButton(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor,
+	public SPSubreportReturnValuesButton(Composite parent, AbstractSection section, T pDescriptor,
 			String buttonText) {
 		super(parent, section, pDescriptor);
 		createButton(parent, buttonText);

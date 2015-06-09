@@ -34,7 +34,7 @@ public class RWComboBoxPropertyDescriptor extends ComboBoxPropertyDescriptor imp
 	
 	protected boolean caseSensitive;
 	
-	protected SPRWCombo combo;
+	protected SPRWCombo<RWComboBoxPropertyDescriptor> combo;
 
 	private NullEnum canBeNull;
 	
@@ -89,8 +89,8 @@ public class RWComboBoxPropertyDescriptor extends ComboBoxPropertyDescriptor imp
 		return caseSensitive;
 	}
 	
-	public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
-		combo = new SPRWCombo(parent, section, this);
+	public ASPropertyWidget<RWComboBoxPropertyDescriptor> createWidget(Composite parent, AbstractSection section) {
+		combo = new SPRWCombo<RWComboBoxPropertyDescriptor>(parent, section, this);
 		return combo;
 	}
 
