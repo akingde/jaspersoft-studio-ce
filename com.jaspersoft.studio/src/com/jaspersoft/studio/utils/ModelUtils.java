@@ -1903,5 +1903,51 @@ public class ModelUtils {
 		}
 		return true;
 	}
+	
+	//Utility methods used to check if a string can be converted to a numeric or a boolean type
+	
+	public static boolean isInteger(String value){
+		try{
+			Integer.parseInt(value);
+			return true;
+		} catch (NumberFormatException ex){
+		}
+		return false;
+	}
+	
+	public static boolean isLong(String value){
+		try{
+			Long.parseLong(value);
+			return true;
+		} catch (NumberFormatException ex){
+		}
+		return false;
+	}
+	
+	public static boolean isFloat(String value){
+		try{
+			Float.parseFloat(value);
+			return true;
+		} catch (NumberFormatException ex){
+		}
+		return false;
+	}
+	
+	public static boolean isDouble(String value){
+		try{
+			Double.parseDouble(value);
+			return true;
+		} catch (NumberFormatException ex){
+		}
+		return false;
+	}
+	
+	public static boolean isBoolean(String value){
+		if (value != null){
+			String lowerCase = value.trim().toLowerCase();
+			return Boolean.FALSE.toString().equals(lowerCase) || Boolean.TRUE.toString().equals(lowerCase);
+		}
+		return false;
+	}
 }
 	
