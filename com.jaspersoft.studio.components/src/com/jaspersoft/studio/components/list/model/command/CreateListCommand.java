@@ -124,7 +124,11 @@ public class CreateListCommand extends CreateElementCommand {
 	@Override
 	protected void createObject() {
 		if (jrElement == null) {
-			ListWizard wizard = new ListWizard();
+			//Pass to the wizard the default width and height if available, otherwise
+			//uses the default ones
+			int suggestedWidth = location != null ? location.width : -1;
+			int suggestedHeight = location != null ? location.height : -1;
+			ListWizard wizard = new ListWizard(suggestedWidth, suggestedHeight);
 			wizard.setConfig(jConfig);
 			
 			WizardDialog dialog = new WizardDialog(Display.getDefault()

@@ -48,11 +48,34 @@ public class ListWizard extends JSSWizard {
 	private WizardConnectionPage step2;
 	private StaticWizardFieldsPage step3;
 	
+	/**
+	 * Suggested width of the list element
+	 */
+	private int suggestedWidth = -1;
+	
+	/**
+	 * Suggested height of the list element
+	 */
+	private int suggestedHeight = -1;
+	
 	
 	public ListWizard() {
 		super();
 		setWindowTitle(Messages.common_list);
 		setNeedsProgressMonitor(true);
+	}
+	
+	/**
+	 * Crate the list with a suggested width and height. This values
+	 * are used also to calculate the size of the elements placed inside the list.
+	 * 
+	 * @param suggestedWidth the suggested width for the list, or -1 for the default value
+	 * @param suggestedHeight the suggested height for the list, or -1 for the default value
+	 */
+	public ListWizard(int suggestedWidth, int suggestedHeight) {
+		this();
+		this.suggestedHeight = suggestedHeight;
+		this.suggestedWidth = suggestedWidth;
 	}
 
 	@Override
@@ -109,6 +132,9 @@ public class ListWizard extends JSSWizard {
 		MList list = new MList();
 		
 		JRDesignComponentElement jrElement = list.createJRElement(getConfig().getJasperDesign());
+		//Set the element size
+		if (suggestedWidth > 0) jrElement.setWidth(suggestedWidth);
+		if (suggestedHeight > 0) jrElement.setHeight(suggestedHeight);
 		StandardListComponent jrList = (StandardListComponent) jrElement.getComponent();
 		
 		// Get a copy of the dataset run created by the step2
@@ -141,18 +167,18 @@ public class ListWizard extends JSSWizard {
 		
 		int x = 0;
 		MTextField mtext = new MTextField();
+		//Width of each element inside the list
+		int elementWidth = lst.size() > 0 ? Math.round(jrElement.getWidth()/lst.size()) : jrElement.getWidth();
 		if (lst != null)
 			for (Object f : lst) {
 				JRDesignTextField element = mtext.createJRElement(jd);
 				element.setX(x);
+				element.setWidth(elementWidth);
+				element.setHeight(jrElement.getHeight());
 				String field = ((JRField) f).getName();
-				element.setExpression(new JRDesignExpression("$F{" + field //$NON-NLS-1$
-						+ "}")); //$NON-NLS-1$
+				element.setExpression(new JRDesignExpression("$F{" + field + "}")); //$NON-NLS-1$ //$NON-NLS-2$
 				((DesignListContents) jrList.getContents()).addElement(element);
 				x += element.getWidth();
-				jrElement.setHeight(Math.max(jrElement.getHeight(),
-						element.getHeight()));
-				jrElement.setWidth(Math.max(x, jrElement.getWidth()));
 			}
 	
 		return list;
