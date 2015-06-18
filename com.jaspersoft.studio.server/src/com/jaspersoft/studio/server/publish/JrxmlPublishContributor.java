@@ -148,8 +148,8 @@ public class JrxmlPublishContributor implements IPublishContributor {
 		IFile fs = FileUtils.getInProjectFile(fres.getFile().toURI(), monitor);
 		if (fs != null) {
 			JasperDesign jrd = readJR(fs);
+			fres.setJd(jrd);
 			if (jrd != null) {
-				fres.setJd(jrd);
 				publishJrxml(fres, monitor, jrd, fileset, fs);
 				File f = FileUtils.createTempFile("jrsres", ".jrxml");
 				FileUtils.writeFile(f,

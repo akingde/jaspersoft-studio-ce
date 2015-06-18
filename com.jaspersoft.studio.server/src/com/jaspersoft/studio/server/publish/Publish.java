@@ -23,6 +23,7 @@ import net.sf.jasperreports.eclipse.util.FileExtension;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.http.client.HttpResponseException;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
@@ -220,6 +221,7 @@ public class Publish {
 	protected void updSelectedResources(IProgressMonitor monitor,
 			List<MResource> files, String version) throws IOException,
 			Exception {
+		List<MJrxml> toSave = new ArrayList<MJrxml>();
 		for (MResource res : files) {
 			PublishOptions popt = res.getPublishOptions();
 			if (!popt.getOverwrite(OverwriteEnum.IGNORE).equals(
@@ -277,14 +279,15 @@ public class Publish {
 								+ rd.getName());
 					} else if (popt.getPublishMethod() == ResourcePublishMethod.REWRITEEXPRESSION) {
 						;
-					} else if (res instanceof MJrxml) {
-						MJrxml mJrxml = (MJrxml) res;
-						FileUtils.writeFile(
-								mJrxml.getFile(),
-								JRXmlWriterHelper.writeReport(jrConfig,
-										mJrxml.getJd(), version));
-					}
+					} else if (res instanceof MJrxml)
+						toSave.add((MJrxml) res);
 			}
+		}
+		for (MJrxml mjrxml : toSave) {
+			String rp = JRXmlWriterHelper.writeReport(jrConfig, mjrxml.getJd(),
+					version);
+			mjrxml.getValue().setData(Base64.encodeBase64(rp.getBytes()));
+			FileUtils.writeFile(mjrxml.getFile(), rp);
 		}
 	}
 
