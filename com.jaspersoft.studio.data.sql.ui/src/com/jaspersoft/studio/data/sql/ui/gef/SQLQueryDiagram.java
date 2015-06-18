@@ -83,6 +83,7 @@ import com.jaspersoft.studio.data.sql.ui.gef.parts.QueryEditPart;
 import com.jaspersoft.studio.data.sql.ui.gef.parts.SQLDesignerEditPartFactory;
 import com.jaspersoft.studio.data.sql.ui.gef.parts.TableEditPart;
 import com.jaspersoft.studio.dnd.NodeTransfer;
+import com.jaspersoft.studio.model.AMapElement;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.DialogEnabledCommand;
 import com.jaspersoft.studio.model.INode;
@@ -135,17 +136,23 @@ public class SQLQueryDiagram {
 						zoomManager.setZoom(1);
 						break;
 					case 'z':
-						if (viewer.getEditDomain().getCommandStack().canUndo())
+						if (viewer.getEditDomain().getCommandStack().canUndo()) {
 							viewer.getEditDomain().getCommandStack().undo();
+							refreshViewer(false, false);
+						}
 						break;
 					case 'y':
-						if (viewer.getEditDomain().getCommandStack().canRedo())
+						if (viewer.getEditDomain().getCommandStack().canRedo()) {
 							viewer.getEditDomain().getCommandStack().redo();
+							refreshViewer(false, false);
+						}
 						break;
 					}
 				else if (((event.stateMask & SWT.ALT) != 0 && event.keyCode == 'z')) {
-					if (viewer.getEditDomain().getCommandStack().canRedo())
+					if (viewer.getEditDomain().getCommandStack().canRedo()) {
 						viewer.getEditDomain().getCommandStack().redo();
+						refreshViewer(false, false);
+					}
 				}
 				return super.keyPressed(event);
 			}
@@ -160,13 +167,14 @@ public class SQLQueryDiagram {
 				Object[] selection = null;
 				IStructuredSelection s = (IStructuredSelection) viewer
 						.getSelection();
+
 				if (s != null) {
 					List<Object> models = new ArrayList<Object>();
 					for (Object obj : s.toList()) {
 						if (obj instanceof EditPart) {
-							if (obj instanceof ColumnEditPart) {
+							if (obj instanceof ColumnEditPart)
 								models.add(obj);
-							} else
+							else
 								obj = ((EditPart) obj).getModel();
 						}
 						if (obj instanceof ANode)
@@ -202,7 +210,7 @@ public class SQLQueryDiagram {
 		viewer.addDropTargetListener(new QueryDesignerDropTargetListener(
 				viewer, NodeTransfer.getInstance()));
 
-		refreshViewer(false);
+		refreshViewer(false, true);
 
 		return viewer.getControl();
 	}
@@ -213,9 +221,9 @@ public class SQLQueryDiagram {
 
 	public static final String SQL_EDITOR_TABLES = "com.jaspersoft.studio.data.sql.tables"; //$NON-NLS-1$
 
-	protected void refreshViewer(boolean refreshSource) {
+	protected void refreshViewer(boolean refreshSource, boolean reread) {
 		JRDesignDataset ds = designer.getjDataset();
-		if (ds != null) {
+		if (reread && ds != null) {
 			String tbls = ds.getPropertiesMap().getProperty(SQL_EDITOR_TABLES);
 			if (!Misc.isNullOrEmpty(tbls)) {
 				final List<KeyValue<KeyValue<String, String>, Point>> map = new ArrayList<KeyValue<KeyValue<String, String>, Point>>();
@@ -238,24 +246,36 @@ public class SQLQueryDiagram {
 								// ignore
 							}
 					}
-					final List<MFromTable> processed = new ArrayList<MFromTable>();
+					final List<AMapElement> processed = new ArrayList<AMapElement>();
 					new ModelVisitor<Object>(designer.getRoot()) {
 
 						@Override
 						public boolean visit(INode n) {
+							KeyValue<KeyValue<String, String>, Point> key = null;
 							if (n instanceof MFromTable) {
 								MFromTable ft = (MFromTable) n;
 								String t = ft.getValue().toSQLString()
 										+ ft.getAliasKeyString();
-								KeyValue<KeyValue<String, String>, Point> key = null;
 								for (KeyValue<KeyValue<String, String>, Point> kv : map) {
-									if (kv.key.key.equals(t)
-											&& kv.key.value.equals(ft.getId()))
+									if (!kv.key.key.equals("\t\tFROM")
+											&& kv.key.key.equals(t)
+											&& kv.key.value.equals(ft.getId())) {
 										key = setupTable(processed, ft, kv);
+										break;
+									}
 								}
-								if (key != null)
-									map.remove(key);
+							} else if (n instanceof MFrom) {
+								MFrom ft = (MFrom) n;
+								for (KeyValue<KeyValue<String, String>, Point> kv : map) {
+									if (kv.key.key.equals("\t\tFROM")
+											&& kv.key.value.equals(ft.getId())) {
+										key = setupTable(processed, ft, kv);
+										break;
+									}
+								}
 							}
+							if (key != null)
+								map.remove(key);
 							return true;
 						}
 					};
@@ -264,19 +284,22 @@ public class SQLQueryDiagram {
 
 							@Override
 							public boolean visit(INode n) {
+								KeyValue<KeyValue<String, String>, Point> key = null;
 								if (n instanceof MFromTable
 										&& !processed.contains(n)) {
 									MFromTable ft = (MFromTable) n;
 									String t = ft.getValue().toSQLString()
 											+ ft.getAliasKeyString();
-									KeyValue<KeyValue<String, String>, Point> key = null;
 									for (KeyValue<KeyValue<String, String>, Point> kv : map) {
-										if (kv.key.key.equals(t))
+										if (!kv.key.key.equals("\t\tFROM")
+												&& kv.key.key.equals(t)) {
 											key = setupTable(processed, ft, kv);
+											break;
+										}
 									}
-									if (key != null)
-										map.remove(key);
 								}
+								if (key != null)
+									map.remove(key);
 								return true;
 							}
 						};
@@ -323,8 +346,8 @@ public class SQLQueryDiagram {
 		}
 	}
 
-	public void scheduleRefresh(boolean refreshSource) {
-		refreshViewer(refreshSource);
+	public void scheduleRefresh(boolean refreshSource, boolean reread) {
+		refreshViewer(refreshSource, reread);
 	}
 
 	public void dispose() {
@@ -379,11 +402,11 @@ public class SQLQueryDiagram {
 		}
 		viewer.getEditDomain().getCommandStack().execute(cc);
 		designer.refreshQueryText();
-		refreshViewer(true);
+		refreshViewer(true, false);
 	}
 
 	private KeyValue<KeyValue<String, String>, Point> setupTable(
-			final List<MFromTable> processed, MFromTable ft,
+			final List<AMapElement> processed, AMapElement ft,
 			KeyValue<KeyValue<String, String>, Point> kv) {
 		KeyValue<KeyValue<String, String>, Point> key;
 		ft.setNoEvents(true);
@@ -506,7 +529,7 @@ public class SQLQueryDiagram {
 								.execute(command);
 					else
 						getCurrentEvent().detail = DND.DROP_NONE;
-					refreshViewer(true);
+					refreshViewer(true, false);
 				}
 			}
 			if (!colsset.isEmpty()) {
@@ -514,7 +537,7 @@ public class SQLQueryDiagram {
 						.getAction(CreateColumn.class);
 				if (ct.calculateEnabled(new Object[] { mfrom })) {
 					ct.run(colsset);
-					refreshViewer(true);
+					refreshViewer(true, false);
 				}
 			}
 		}

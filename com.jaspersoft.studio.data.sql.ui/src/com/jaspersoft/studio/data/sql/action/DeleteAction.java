@@ -22,7 +22,9 @@ import org.eclipse.jface.viewers.TreeViewer;
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.messages.Messages;
 import com.jaspersoft.studio.data.sql.prefs.SQLEditorPreferencesPage;
+import com.jaspersoft.studio.data.sql.ui.gef.command.DeleteObjectCommand;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.utils.Misc;
 
 public class DeleteAction<T extends ANode> extends AMultiSelectionAction {
 	protected String name;
@@ -43,21 +45,25 @@ public class DeleteAction<T extends ANode> extends AMultiSelectionAction {
 
 	@Override
 	public void run() {
-		final List<T> lst = new ArrayList<T>();
-		for (Object obj : selection) {
+		List<T> lst = new ArrayList<T>();
+		for (Object obj : selection)
 			if (isObjectToDelete(obj))
 				lst.add((T) obj);
-		}
+		if (showConfirmation(designer, name, lst))
+			doDelete(lst);
+	}
+
+	public static boolean showConfirmation(SQLQueryDesigner designer,
+			String name, List<?> lst) {
 		boolean showConf = designer.getjConfig().getPropertyBoolean(
 				SQLEditorPreferencesPage.P_DEL_SHOWCONFIRMATION, false);
-		if (!showConf
+		return !showConf
 				|| UIUtils.showConfirmation(
 						Messages.DeleteAction_1 + name,
 						Messages.DeleteAction_2
 								+ name.toLowerCase()
 								+ (lst.size() == 1 ? "?"
-										: Messages.DeleteAction_3)))
-			doDelete(lst);
+										: Messages.DeleteAction_3));
 	}
 
 	protected boolean isObjectToDelete(Object obj) {
@@ -67,15 +73,22 @@ public class DeleteAction<T extends ANode> extends AMultiSelectionAction {
 	protected void doDelete(final List<T> lst) {
 		ANode mfrom = null;
 		int indx = 0;
+		List<ANode> toRemove = new ArrayList<ANode>();
 		for (T ftbl : lst) {
 			if (mfrom == null)
 				mfrom = (ANode) ftbl.getParent();
 			indx = mfrom.getChildren().indexOf(ftbl);
-			mfrom.removeChild(ftbl);
+			toRemove.add(ftbl);
 
-			doDeleteMore(mfrom, type.isAssignableFrom(ftbl.getClass()) ? ftbl
-					: null);
+			List<ANode> delMore = doDeleteMore(mfrom,
+					type.isAssignableFrom(ftbl.getClass()) ? ftbl : null);
+			if (!Misc.isNullOrEmpty(delMore))
+				toRemove.addAll(delMore);
 		}
+		DeleteObjectCommand c = new DeleteObjectCommand(toRemove);
+		designer.getDiagram().getViewer().getEditDomain().getCommandStack()
+				.execute(c);
+
 		ANode toSelect = mfrom;
 		if (indx - 1 > 0)
 			toSelect = (ANode) mfrom.getChildren().get(
@@ -85,6 +98,7 @@ public class DeleteAction<T extends ANode> extends AMultiSelectionAction {
 		designer.refreshQueryText();
 	}
 
-	protected void doDeleteMore(ANode parent, T todel) {
+	protected List<ANode> doDeleteMore(ANode parent, T todel) {
+		return null;
 	}
 }

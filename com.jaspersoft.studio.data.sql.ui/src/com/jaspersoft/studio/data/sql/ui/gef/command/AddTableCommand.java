@@ -23,7 +23,6 @@ import java.util.Set;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.gef.commands.Command;
 import org.eclipse.swt.dnd.DND;
 
 import com.jaspersoft.studio.data.sql.messages.Messages;
@@ -42,12 +41,11 @@ import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.util.ModelVisitor;
 import com.jaspersoft.studio.utils.Misc;
 
-public class AddTableCommand extends Command {
+public class AddTableCommand extends ACommand {
 	private Rectangle location;
 	private MFrom mFrom;
 	private Collection<MSqlTable> child;
 	private List<MFromTable> fromTable;
-	private Map<MFromTable, ANode> parentMap;
 	private String joinOnDND = SQLEditorPreferencesPage.DROP;
 	private int dndDetail = 0;
 
@@ -68,12 +66,15 @@ public class AddTableCommand extends Command {
 
 	@Override
 	public void execute() {
+		super.execute();
+
 		if (fromTable == null) {
 			fromTable = new ArrayList<MFromTable>();
 			final Map<ForeignKey, MFromTable> keys = new HashMap<ForeignKey, MFromTable>();
 			for (MSqlTable mtlb : child) {
 				// create from table object for our table
 				MFromTable ft = new MFromTable(mFrom, mtlb);
+				undoRemove.add(ft);
 				if (location != null && child.size() == 1) {
 					ft.setNoEvents(true);
 					ft.setPropertyValue(MFromTable.PROP_X, location.x);
@@ -179,10 +180,9 @@ public class AddTableCommand extends Command {
 						}
 				}
 			}
-		} else {
+		} else
 			for (MFromTable mft : fromTable)
-				mft.setParent(mFrom, -1);
-		}
+				reparent(mft, mFrom);
 		mFrom.firePropertyChange("wrongvalue", true, false);
 	}
 
@@ -218,32 +218,31 @@ public class AddTableCommand extends Command {
 		List<AOperand> operands = mexpr.getOperands();
 		operands.add(new FieldOperand(sCol, sTbl, mexpr));
 		operands.add(new FieldOperand(mCol, mtbl, mexpr));
+		undoRemove.add(mexpr);
 	}
 
 	private MFromTableJoin convertToSubTable(MFromTable nsrc, MFromTable parent) {
-		nsrc.setParent(null, -1);
+		reparent(nsrc, null);
+
 		fromTable.remove(nsrc);
 
 		if (parent instanceof MFromTableJoin)
 			parent = (MFromTable) parent.getParent();
 
 		MFromTableJoin join = new MFromTableJoin(parent, nsrc.getValue());
-		nsrc.copyProperties(join);
+		undoRemove.add(join);
+
+		undoProperties.put(nsrc, nsrc.copyPropertiesUndo(join));
 		if (!Misc.isNullOrEmpty(nsrc.getChildren()))
 			for (INode n : new ArrayList<INode>(nsrc.getChildren()))
-				((ANode) n).setParent(parent, -1);
+				reparent((ANode) n, parent);
 		fromTable.add(join);
 		return join;
 	}
 
 	@Override
-	public void undo() {
-		if (parentMap == null)
-			parentMap = new HashMap<MFromTable, ANode>();
-		for (MFromTable p : parentMap.keySet()) {
-			parentMap.put(p, p.getParent());
-			p.setParent(null, -1);
-		}
+	protected void firePropertyChange() {
 		mFrom.firePropertyChange("wrongvalue", true, false);
 	}
+
 }

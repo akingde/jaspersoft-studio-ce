@@ -108,9 +108,13 @@ public class ActionFactory {
 			}
 
 			@Override
-			protected void doDeleteMore(ANode parent, MQueryTable todel) {
-				if (parent.getValue() instanceof MQueryTable)
-					parent.setParent(null, -1);
+			protected List<ANode> doDeleteMore(ANode parent, MQueryTable todel) {
+				if (parent.getValue() instanceof MQueryTable) {
+					List<ANode> toDel = new ArrayList<ANode>();
+					toDel.add(parent);
+					return toDel;
+				}
+				return null;
 			}
 		});
 		actions.add(null);
@@ -122,7 +126,7 @@ public class ActionFactory {
 		actions.add(new EditTableJoin(designer, treeViewer));
 		actions.add(new EditTable(treeViewer));
 		actions.add(null);
-		actions.add(new DeleteTableJoin(treeViewer));
+		actions.add(new DeleteTableJoin(designer, treeViewer));
 		actions.add(new DeleteTable(designer, treeViewer));
 		actions.add(null);
 

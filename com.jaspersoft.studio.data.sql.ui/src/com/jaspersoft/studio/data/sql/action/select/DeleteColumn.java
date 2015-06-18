@@ -12,10 +12,14 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.sql.action.select;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.jface.viewers.TreeViewer;
 
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.action.DeleteAction;
+import com.jaspersoft.studio.data.sql.messages.Messages;
 import com.jaspersoft.studio.data.sql.model.query.groupby.MGroupBy;
 import com.jaspersoft.studio.data.sql.model.query.groupby.MGroupByColumn;
 import com.jaspersoft.studio.data.sql.model.query.orderby.MOrderBy;
@@ -29,7 +33,7 @@ import com.jaspersoft.studio.model.INode;
 public class DeleteColumn extends DeleteAction<ANode> {
 
 	public DeleteColumn(SQLQueryDesigner designer, TreeViewer treeViewer) {
-		super(designer, treeViewer, "Column", ANode.class);
+		super(designer, treeViewer, Messages.DeleteColumn_0, ANode.class);
 	}
 
 	@Override
@@ -38,7 +42,8 @@ public class DeleteColumn extends DeleteAction<ANode> {
 	}
 
 	@Override
-	protected void doDeleteMore(ANode parent, ANode todel) {
+	protected List<ANode> doDeleteMore(ANode parent, ANode todel) {
+		List<ANode> torm = new ArrayList<ANode>();
 		for (INode n : parent.getRoot().getChildren()) {
 			if (n instanceof MGroupBy) {
 				for (INode gb : n.getChildren()) {
@@ -60,5 +65,6 @@ public class DeleteColumn extends DeleteAction<ANode> {
 				}
 			}
 		}
+		return torm;
 	}
 }

@@ -21,6 +21,7 @@ import com.jaspersoft.studio.data.sql.action.AAction;
 import com.jaspersoft.studio.data.sql.dialogs.EditFromTableDialog;
 import com.jaspersoft.studio.data.sql.messages.Messages;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
+import com.jaspersoft.studio.data.sql.model.query.subquery.MQueryTable;
 import com.jaspersoft.studio.model.ANode;
 
 public class EditTable extends AAction {
@@ -38,6 +39,11 @@ public class EditTable extends AAction {
 	}
 
 	protected boolean isColumn(ANode element) {
+		if (element instanceof MFromTable
+				&& element.getValue() instanceof MQueryTable)
+			setText(Messages.EditTable_1);
+		else
+			setText(Messages.EditTable_0);
 		return element instanceof MFromTable;
 	}
 

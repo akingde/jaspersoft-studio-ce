@@ -23,6 +23,7 @@ import com.jaspersoft.studio.data.sql.dialogs.JoinFromTableDialog;
 import com.jaspersoft.studio.data.sql.messages.Messages;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTableJoin;
+import com.jaspersoft.studio.data.sql.model.query.subquery.MQueryTable;
 import com.jaspersoft.studio.model.ANode;
 
 public class EditTableJoin extends AAction {
@@ -36,10 +37,17 @@ public class EditTableJoin extends AAction {
 	@Override
 	public boolean calculateEnabled(Object[] selection) {
 		super.calculateEnabled(selection);
-		return selection != null && selection.length == 1 && selection[0] instanceof ANode && isColumn((ANode) selection[0]);
+		return selection != null && selection.length == 1
+				&& selection[0] instanceof ANode
+				&& isColumn((ANode) selection[0]);
 	}
 
 	protected boolean isColumn(ANode element) {
+		if (element instanceof MFromTable
+				&& element.getValue() instanceof MQueryTable)
+			setText(Messages.EditTableJoin_1);
+		else
+			setText(Messages.EditTableJoin_0);
 		return element instanceof MFromTableJoin;
 	}
 
@@ -52,7 +60,8 @@ public class EditTableJoin extends AAction {
 				break;
 			}
 		}
-		JoinFromTableDialog dialog = new JoinFromTableDialog(UIUtils.getShell(), designer);
+		JoinFromTableDialog dialog = new JoinFromTableDialog(
+				UIUtils.getShell(), designer);
 		MFromTableJoin clone = (MFromTableJoin) mcol.clone();
 		ANode parent = mcol.getParent();
 		int indx = parent.getChildren().indexOf(mcol);

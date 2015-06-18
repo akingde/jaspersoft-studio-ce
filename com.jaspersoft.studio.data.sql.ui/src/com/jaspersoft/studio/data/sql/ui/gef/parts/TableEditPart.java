@@ -20,6 +20,7 @@ import java.util.Map;
 import org.eclipse.draw2d.ConnectionAnchor;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
+import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.ConnectionEditPart;
@@ -78,7 +79,27 @@ public class TableEditPart extends AbstractGraphicalEditPart {
 
 	@Override
 	protected IFigure createFigure() {
-		return new SqlTableFigure("");
+		return new SqlTableFigure("") {
+			@Override
+			public IFigure getToolTip() {
+				IFigure t = super.getToolTip();
+				if (t instanceof Label) {
+					Label l = (Label) t;
+					l.setText(getModel().getDisplayText());
+//					Rectangle b = getBounds().getCopy();
+//					l.setText(l.getText() + "\n" + b);
+//					this.translateToAbsolute(b);
+//					l.setText(l.getText() + "\n" + b);
+//					this.translateToRelative(b);
+//					l.setText(l.getText() + "\n" + b);
+//					l.setText(l.getText() + "\nX"
+//							+ getModel().getPropertyValue(MFromTable.PROP_X));
+//					l.setText(l.getText() + "\nY"
+//							+ getModel().getPropertyValue(MFromTable.PROP_Y));
+				}
+				return t;
+			}
+		};
 	}
 
 	public Map<String, MSelectColumn> getColumnMap() {
@@ -96,22 +117,28 @@ public class TableEditPart extends AbstractGraphicalEditPart {
 	}
 
 	@Override
+	public FromEditPart getParent() {
+		return (FromEditPart) super.getParent();
+	}
+
+	@Override
 	protected void refreshVisuals() {
 		SqlTableFigure f = getFigure();
-
 		MFromTable fromTable = getModel();
 		refreshModel();
-		AbstractGraphicalEditPart parent = (AbstractGraphicalEditPart) getParent();
-		Point location = f.getLocation();
-		if (fromTable.getPropertyActualValue(MFromTable.PROP_X) != null)
-			location.x = (Integer) fromTable
-					.getPropertyValue(MFromTable.PROP_X);
-		if (fromTable.getPropertyActualValue(MFromTable.PROP_Y) != null)
-			location.y = (Integer) fromTable
-					.getPropertyValue(MFromTable.PROP_Y);
-		parent.setLayoutConstraint(this, f, new Rectangle(location.x,
-				location.y, -1, -1));
 		f.setToolTip(new Label(fromTable.getDisplayText()));
+
+		FromEditPart parent = (FromEditPart) getParent();
+		Point p = parent.readPoint(fromTable);
+		if (p == null)
+			return;
+		Point pmin = parent.getMinPoint();
+		if (pmin == null)
+			return;
+		Insets in = FromEditPart.INSETS;
+		p.translate(pmin.getNegated().getTranslated(-in.left, -in.top));
+		Rectangle r = new Rectangle(p.x, p.y, -1, -1);
+		parent.setLayoutConstraint(this, f, r);
 	}
 
 	public void refreshModel() {

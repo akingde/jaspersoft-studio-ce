@@ -36,10 +36,12 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
+import com.jaspersoft.studio.data.sql.QueryWriter;
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.action.AAction;
 import com.jaspersoft.studio.data.sql.action.ActionFactory;
@@ -54,10 +56,12 @@ import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
 import com.jaspersoft.studio.data.sql.model.query.AMKeyword;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTableJoin;
+import com.jaspersoft.studio.data.sql.model.query.subquery.MQueryTable;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.outline.ReportTreeContetProvider;
 import com.jaspersoft.studio.outline.ReportTreeLabelProvider;
+import com.jaspersoft.studio.utils.UIUtil;
 
 public class JoinFromTableDialog extends ATitledDialog {
 	private MFromTable srcTable;
@@ -72,7 +76,8 @@ public class JoinFromTableDialog extends ATitledDialog {
 		this(parentShell, designer, false);
 	}
 
-	public JoinFromTableDialog(Shell parentShell, SQLQueryDesigner designer, boolean create) {
+	public JoinFromTableDialog(Shell parentShell, SQLQueryDesigner designer,
+			boolean create) {
 		super(parentShell);
 		setTitle(Messages.JoinFromTableDialog_0);
 		setDescription(Messages.JoinFromTableDialog_1);
@@ -159,16 +164,25 @@ public class JoinFromTableDialog extends ATitledDialog {
 		Combo keyword = new Combo(cmp, SWT.READ_ONLY);
 		keyword.setItems(AMKeyword.JOIN_KEYWORDS);
 
-		Text lbl = new Text(cmp, SWT.BORDER | SWT.READ_ONLY);
-		lbl.setText(srcTable.getValue().toSQLString());
-		lbl.setToolTipText(lbl.getText());
-		gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.widthHint = 200;
-		lbl.setLayoutData(gd);
+		if (srcTable.getValue() instanceof MQueryTable) {
+			Label lbl = new Label(cmp, SWT.BORDER | SWT.READ_ONLY);
+			UIUtil.setBold(lbl);
+			lbl.setText(Messages.EditFromTableDialog_3);
+			lbl.setToolTipText(QueryWriter.writeSubQuery(srcTable));
+		} else {
+			Text lbl = new Text(cmp, SWT.BORDER | SWT.READ_ONLY);
+			lbl.setText(srcTable.getValue().toSQLString());
+			lbl.setToolTipText(lbl.getText());
+			gd = new GridData(GridData.FILL_HORIZONTAL);
+			gd.widthHint = 200;
+			lbl.setLayoutData(gd);
+		}
 
 		DataBindingContext bindingContext = new DataBindingContext();
-		bindingContext.bindValue(SWTObservables.observeSelection(keyword), PojoObservables.observeValue(this, "join")); //$NON-NLS-1$ 
-		bindingContext.bindValue(SWTObservables.observeSelection(ftable), PojoObservables.observeValue(this, "fromTable")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeSelection(keyword),
+				PojoObservables.observeValue(this, "join")); //$NON-NLS-1$ 
+		bindingContext.bindValue(SWTObservables.observeSelection(ftable),
+				PojoObservables.observeValue(this, "fromTable")); //$NON-NLS-1$
 
 		if (!create) {
 			treeViewer = new TreeViewer(cmp, SWT.MULTI | SWT.BORDER);
@@ -182,7 +196,8 @@ public class JoinFromTableDialog extends ATitledDialog {
 
 				@Override
 				public void doubleClick(DoubleClickEvent event) {
-					TreeSelection ts = (TreeSelection) treeViewer.getSelection();
+					TreeSelection ts = (TreeSelection) treeViewer
+							.getSelection();
 					Object el = ts.getFirstElement();
 					if (el instanceof MSQLColumn)
 						okPressed();
@@ -215,7 +230,9 @@ public class JoinFromTableDialog extends ATitledDialog {
 						if (act == null)
 							mgr.add(new org.eclipse.jface.action.Separator());
 						else if (act.calculateEnabled(selection)) {
-							if (isFromTable && !(act instanceof CreateExpressionGroup || act instanceof CreateExpression || act instanceof CreateXExpression))
+							if (isFromTable
+									&& !(act instanceof CreateExpressionGroup
+											|| act instanceof CreateExpression || act instanceof CreateXExpression))
 								continue;
 							mgr.add(act);
 						}
@@ -242,7 +259,8 @@ public class JoinFromTableDialog extends ATitledDialog {
 				@Override
 				public void keyPressed(KeyEvent event) {
 					if (event.character == SWT.DEL && event.stateMask == 0) {
-						TreeSelection s = (TreeSelection) treeViewer.getSelection();
+						TreeSelection s = (TreeSelection) treeViewer
+								.getSelection();
 						if (s == null)
 							return;
 						List<Object> selection = new ArrayList<Object>();
@@ -252,7 +270,8 @@ public class JoinFromTableDialog extends ATitledDialog {
 							selection.add(obj);
 						}
 
-						List<DeleteAction<?>> dactions = afactory.getDeleteActions(selection.toArray());
+						List<DeleteAction<?>> dactions = afactory
+								.getDeleteActions(selection.toArray());
 						for (DeleteAction<?> da : dactions) {
 							da.run();
 							break;

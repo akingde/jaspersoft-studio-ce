@@ -12,10 +12,15 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.sql.ui.gef.parts;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.sf.jasperreports.eclipse.JasperReportsPlugin;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
+import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
@@ -25,13 +30,17 @@ import com.jaspersoft.studio.data.sql.Util;
 import com.jaspersoft.studio.data.sql.action.ActionFactory;
 import com.jaspersoft.studio.data.sql.action.select.CreateColumn;
 import com.jaspersoft.studio.data.sql.action.select.DeleteColumn;
+import com.jaspersoft.studio.data.sql.messages.Messages;
 import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelect;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelectColumn;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelectExpression;
 import com.jaspersoft.studio.data.sql.ui.gef.SQLQueryDiagram;
+import com.jaspersoft.studio.data.sql.ui.gef.command.CreateColumnCommand;
+import com.jaspersoft.studio.data.sql.ui.gef.command.DeleteObjectCommand;
 import com.jaspersoft.studio.data.sql.ui.gef.figures.ColumnFigure;
+import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 
 public class ColumnEditPart extends AbstractGraphicalEditPart {
@@ -48,7 +57,8 @@ public class ColumnEditPart extends AbstractGraphicalEditPart {
 		ImageDescriptor imgd = getModel().getImagePath();
 		if (imgd != null)
 			image = JasperReportsPlugin.getDefault().getImage(imgd);
-		final SQLQueryDesigner designer = (SQLQueryDesigner) getViewer().getProperty(SQLQueryDiagram.SQLQUERYDIAGRAM);
+		final SQLQueryDesigner designer = (SQLQueryDesigner) getViewer()
+				.getProperty(SQLQueryDiagram.SQLQUERYDIAGRAM);
 		afactory = designer.getOutline().getAfactory();
 		final MFromTable tblModel = ColumnEditPart.this.getParent().getModel();
 		mselect = Util.getKeyword(tblModel, MSelect.class);
@@ -58,10 +68,16 @@ public class ColumnEditPart extends AbstractGraphicalEditPart {
 				super.handleSelectionChanged();
 				if (isRefreshing)
 					return;
+				CompoundCommand c = new CompoundCommand();
 				CreateColumn ct = afactory.getAction(CreateColumn.class);
 				if (isSelected()) {
-					if (ct.calculateEnabled(new Object[] { mselect }))
-						ct.run(ColumnEditPart.this.getModel(), tblModel);
+					if (ct.calculateEnabled(new Object[] { mselect })) {
+						MSelect mSelect = Util.getKeyword(tblModel,
+								MSelect.class);
+						c.add(new CreateColumnCommand(ColumnEditPart.this
+								.getModel(), mSelect, -1, tblModel));
+						// ct.run(ColumnEditPart.this.getModel(), tblModel);
+					}
 				} else {
 					if (ColumnEditPart.this.getParent().isAllstar(mselect)) {
 						// get all columns from tables
@@ -70,26 +86,37 @@ public class ColumnEditPart extends AbstractGraphicalEditPart {
 						isRefreshing = true;
 						MSelectExpression todel = null;
 						for (INode n : mselect.getChildren()) {
-							if (n instanceof MSelectExpression && n.getValue().equals("*")) {
+							if (n instanceof MSelectExpression
+									&& n.getValue().equals("*")) {
 								todel = (MSelectExpression) n;
 								break;
 							}
 						}
-						if (todel != null)
-							mselect.removeChild(todel);
-						MFromTable mFromTable = ColumnEditPart.this.getParent().getModel();
+						if (todel != null) {
+							List<ANode> tl = new ArrayList<ANode>();
+							tl.add(todel);
+							c.add(new DeleteObjectCommand(tl));
+							// mselect.removeChild(todel);
+						}
+						MFromTable mFromTable = ColumnEditPart.this.getParent()
+								.getModel();
 						for (INode n : mFromTable.getValue().getChildren()) {
 							if (n instanceof MSQLColumn) {
 								boolean exists = false;
 								for (INode sc : mselect.getChildren()) {
-									if (sc instanceof MSelectColumn && ((MSelectColumn) sc).getValue().equals(n)) {
+									if (sc instanceof MSelectColumn
+											&& ((MSelectColumn) sc).getValue()
+													.equals(n)) {
 										exists = true;
 										break;
 									}
 								}
 								if (exists)
 									continue;
-								ct.run((MSQLColumn) n, mFromTable, mselect, -1);
+								c.add(new CreateColumnCommand((MSQLColumn) n,
+										mselect, -1, mFromTable));
+								// ct.run((MSQLColumn) n, mFromTable, mselect,
+								// -1);
 							}
 						}
 						// setSelected(false);
@@ -99,11 +126,33 @@ public class ColumnEditPart extends AbstractGraphicalEditPart {
 						isRefreshing = tmp;
 						// return;
 					}
-					DeleteColumn dc = afactory.getAction(DeleteColumn.class);
-					if (dc.calculateEnabled(new Object[] { mSelCol }))
-						dc.run();
+					// DeleteColumn dc = afactory.getAction(DeleteColumn.class);
+					// if (dc.calculateEnabled(new Object[] { mSelCol }))
+					// dc.run();
+					List<ANode> todel = new ArrayList<ANode>();
+					todel.add(mSelCol);
+					if (!DeleteColumn.showConfirmation(designer,
+							Messages.DeleteColumn_0, todel))
+						return;
+
+					if (mSelCol == null) {
+						Command cmddel = null;
+						for (Command cmd : (List<Command>) c.getCommands()) {
+							if (cmd instanceof CreateColumnCommand) {
+								if (((CreateColumnCommand) cmd).getColumn()
+										.getValue().equals(colname)) {
+									cmddel = cmd;
+									break;
+								}
+							}
+						}
+						c.getCommands().remove(cmddel);
+					} else
+						c.add(new DeleteObjectCommand(todel));
 				}
-				refreshVisuals();
+				designer.getDiagram().getViewer().getEditDomain()
+						.getCommandStack().execute(c);
+				designer.getDiagram().scheduleRefresh(true, false);
 			}
 		};
 		cbfig.setToolTip(new Label(getModel().getToolTip()));

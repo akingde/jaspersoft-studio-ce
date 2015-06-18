@@ -15,11 +15,12 @@ package com.jaspersoft.studio.data.sql.ui.gef.command;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.gef.commands.Command;
+import org.eclipse.jface.viewers.TreePath;
+import org.eclipse.jface.viewers.TreeSelection;
+import org.eclipse.jface.viewers.TreeViewer;
 
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.action.ActionFactory;
-import com.jaspersoft.studio.data.sql.action.table.DeleteTableJoin;
 import com.jaspersoft.studio.data.sql.action.table.JoinTable;
 import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
 import com.jaspersoft.studio.data.sql.model.query.expression.MExpression;
@@ -31,7 +32,7 @@ import com.jaspersoft.studio.data.sql.model.query.subquery.MQueryTable;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 
-public class JoinCommand extends Command {
+public class JoinCommand extends ACommand {
 	private SQLQueryDesigner designer;
 	private MSQLColumn src, dest;
 	private MFromTable srcTbl, destTbl;
@@ -54,6 +55,7 @@ public class JoinCommand extends Command {
 
 	@Override
 	public void execute() {
+		super.execute();
 		ActionFactory afactory = designer.getOutline().getAfactory();
 		MFromTable mfSrcTbl = srcTbl;
 		if (srcTbl.getParent() instanceof MFrom
@@ -81,19 +83,13 @@ public class JoinCommand extends Command {
 			src = dest;
 			destTbl = tmp;
 			dest = tmpColumn;
-			// Object tobj = destTbl.getPropertyActualValue(MFromTable.PROP_X);
-			// destTbl.setPropertyValue(MFromTable.PROP_X,
-			// srcTbl.getPropertyActualValue(MFromTable.PROP_X));
-			// srcTbl.setPropertyValue(MFromTable.PROP_X, tobj);
-			// tobj = destTbl.getPropertyActualValue(MFromTable.PROP_Y);
-			// destTbl.setPropertyValue(MFromTable.PROP_Y,
-			// srcTbl.getPropertyActualValue(MFromTable.PROP_Y));
-			// srcTbl.setPropertyValue(MFromTable.PROP_Y, tobj);
 		}
 		if (srcTbl instanceof MFromTableJoin) {
-			DeleteTableJoin dtj = afactory.getAction(DeleteTableJoin.class);
-			dtj.calculateEnabled(new Object[] { srcTbl });
-			srcTbl = dtj.runSilent();
+			DeleteTableJoinCommand cmd = new DeleteTableJoinCommand(
+					new Object[] { srcTbl });
+			undoCmd.add(cmd);
+			cmd.execute();
+			srcTbl = cmd.getResultFromTable();
 		}
 
 		MFromTable fromTbl = destTbl;
@@ -104,14 +100,17 @@ public class JoinCommand extends Command {
 		for (INode n : fromTbl.getChildren()) {
 			if (n == destTbl) {
 				MExpression mexpr = new MExpression(srcTbl, src, -1);
+				undoRemove.add(mexpr);
 				mexpr.getOperands().add(new FieldOperand(src, srcTbl, mexpr));
 				mexpr.getOperands().add(new FieldOperand(dest, destTbl, mexpr));
 				return;
 			}
 		}
 
-		JoinTable jt = afactory.getAction(JoinTable.class);
-		jt.doRun(src, srcTbl, dest, destTbl, fromTbl);
+		JoinTableCommand c = new JoinTableCommand(src, srcTbl, dest, destTbl,
+				fromTbl);
+		undoCmd.add(c);
+		c.execute();
 
 		if (srcTbl instanceof MFromTable && !srcTbl.getChildren().isEmpty()) {
 			List<MFromTableJoin> lst = new ArrayList<MFromTableJoin>();
@@ -122,9 +121,13 @@ public class JoinCommand extends Command {
 					lst.add((MFromTableJoin) n);
 			}
 			for (MFromTable mft : lst)
-				mft.setParent(destTbl, -1);
+				reparent(mft, destTbl);
 		}
-		jt.selectInTree(destTbl);
+		TreeViewer tv = designer.getOutline().getTreeViewer();
+		tv.refresh(true);
+		tv.setSelection(new TreeSelection(
+				new TreePath(new Object[] { destTbl })));
+		tv.reveal(destTbl);
 	}
 
 	public static MFromTable getParentFromTable(MFromTableJoin dest) {
@@ -135,5 +138,9 @@ public class JoinCommand extends Command {
 			res = res.getParent();
 		}
 		return dest;
+	}
+
+	@Override
+	protected void firePropertyChange() {
 	}
 }

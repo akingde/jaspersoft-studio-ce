@@ -20,6 +20,7 @@ import java.util.Set;
 
 import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.DataAdapterServiceUtil;
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
@@ -35,7 +36,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 import org.w3c.tools.codec.Base64Encoder;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
@@ -44,6 +44,7 @@ import com.jaspersoft.studio.data.jdbc.JDBCDataAdapterDescriptor;
 import com.jaspersoft.studio.data.querydesigner.sql.SimpleSQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.messages.Messages;
 import com.jaspersoft.studio.data.sql.model.MSQLRoot;
+import com.jaspersoft.studio.data.sql.model.query.from.MFrom;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
 import com.jaspersoft.studio.data.sql.model.query.orderby.MOrderBy;
 import com.jaspersoft.studio.data.sql.prefs.SQLEditorPreferencesPage;
@@ -115,7 +116,7 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 					outline.scheduleRefresh();
 					break;
 				case 2:
-					diagram.scheduleRefresh(false);
+					diagram.scheduleRefresh(false, true);
 					break;
 				}
 				source.setDirty(false);
@@ -209,7 +210,7 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 		if (tabFolder.getSelectionIndex() == 1)
 			outline.scheduleRefresh();
 		if (tabFolder.getSelectionIndex() == 2)
-			diagram.scheduleRefresh(false);
+			diagram.scheduleRefresh(false, false);
 	}
 
 	public void refreshQueryText() {
@@ -230,7 +231,7 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 			if (!isQueryModelEmpty())
 				updateQueryText(QueryWriter.writeQuery(root));
 			if (tabFolder.getSelectionIndex() == 2)
-				diagram.scheduleRefresh(false);
+				diagram.scheduleRefresh(false, false);
 			isModelRefresh = false;
 		}
 	}
@@ -263,7 +264,7 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 			return;
 		this.da = da;
 		super.setDataAdapter(da);
-		Display.getDefault().asyncExec(new Runnable() {
+		UIUtils.getDisplay().asyncExec(new Runnable() {
 
 			@Override
 			public void run() {
@@ -279,10 +280,10 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 			try {
 				getRoot().setValue(getjDataset());
 				container.run(true, true, new CheckedRunnableWithProgress() {
-					
+
 					@Override
 					protected void runOperations(IProgressMonitor monitor) {
-						try{
+						try {
 							runningmonitor = monitor;
 							monitor.beginTask(
 									Messages.SQLQueryDesigner_readmetadata,
@@ -292,10 +293,9 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 									.getInstance(jConfig).getService(
 											da.getDataAdapter());
 							dbMetadata.updateMetadata(da, das, monitor);
-						}
-						finally {
+						} finally {
 							monitor.done();
-							runningmonitor=null;
+							runningmonitor = null;
 						}
 					}
 				});
@@ -374,26 +374,29 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 				public boolean visit(INode n) {
 					if (n instanceof MFromTable) {
 						MFromTable ft = (MFromTable) n;
-						Object x = ((MFromTable) n)
-								.getPropertyActualValue(MFromTable.PROP_X);
-						Object y = ((MFromTable) n)
-								.getPropertyActualValue(MFromTable.PROP_Y);
+						Object x = ft.getPropertyActualValue(MFromTable.PROP_X);
+						Object y = ft.getPropertyActualValue(MFromTable.PROP_Y);
 						if (x != null && y != null)
 							tables.add(ft.getValue().toSQLString()
 									+ ft.getAliasKeyString() + "," + x + ","
 									+ y + "," + ft.getId() + ";");
+					} else if (n instanceof MFrom) {
+						MFrom ft = (MFrom) n;
+						Object x = ft.getPropertyActualValue(MFromTable.PROP_X);
+						Object y = ft.getPropertyActualValue(MFromTable.PROP_Y);
+						if (x != null && y != null)
+							tables.add("\t\tFROM," + x + "," + y + ","
+									+ ft.getId() + ";");
 					}
 					return true;
 				}
 			};
-			if (!tables.isEmpty()) {
-				String input = "";
-				for (String t : tables)
-					input += t;
+			String input = "";
+			for (String t : tables)
+				input += t;
 
-				getjDataset().setProperty(SQLQueryDiagram.SQL_EDITOR_TABLES,
-						new Base64Encoder(input).processString());
-			}
+			getjDataset().setProperty(SQLQueryDiagram.SQL_EDITOR_TABLES,
+					new Base64Encoder(input).processString());
 		}
 	};
 

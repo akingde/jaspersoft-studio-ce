@@ -83,8 +83,11 @@ public abstract class AMapElement extends APropertyNode {
 	@Override
 	public void setPropertyValue(Object id, Object value) {
 		Object oldVal = props.get((String) id);
-		props.put((String) id, value);
-		System.out.println(id + " ; " + value);
+		if (value == null)
+			props.remove((String) id);
+		else
+			props.put((String) id, value);
+		// System.out.println(id + " ; " + value);
 		if (!noEvents) {
 			firePropertyChange(id, value, oldVal);
 		}
@@ -100,10 +103,29 @@ public abstract class AMapElement extends APropertyNode {
 		return props.keySet();
 	}
 
+	public void copyProperties(Map<String, Object> ps) {
+		setNoEvents(true);
+		props.clear();
+		for (String key : ps.keySet())
+			setPropertyValue(key, ps.get(key));
+		setNoEvents(false);
+	}
+
 	public void copyProperties(AMapElement dest) {
 		dest.setNoEvents(true);
 		for (String key : props.keySet())
 			dest.setPropertyValue(key, getPropertyValue(key));
 		dest.setNoEvents(false);
+	}
+
+	public Map<String, Object> copyPropertiesUndo(AMapElement dest) {
+		Map<String, Object> old = new HashMap<String, Object>();
+		dest.setNoEvents(true);
+		for (String key : props.keySet()) {
+			old.put(key, dest.getPropertyValue(key));
+			dest.setPropertyValue(key, getPropertyValue(key));
+		}
+		dest.setNoEvents(false);
+		return old;
 	}
 }

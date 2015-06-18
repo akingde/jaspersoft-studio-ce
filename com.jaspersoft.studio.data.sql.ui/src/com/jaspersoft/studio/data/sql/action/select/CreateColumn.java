@@ -34,6 +34,7 @@ import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelect;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelectColumn;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelectSubQuery;
+import com.jaspersoft.studio.data.sql.ui.gef.command.CreateColumnCommand;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.utils.Misc;
@@ -150,7 +151,11 @@ public class CreateColumn extends AAction {
 
 	public MSelectColumn run(MSQLColumn node, MFromTable mfTable,
 			MSelect select, int index) {
-		return new MSelectColumn(select, node, mfTable, index);
+		CreateColumnCommand c = new CreateColumnCommand(node, select, index,
+				mfTable);
+		designer.getDiagram().getViewer().getEditDomain().getCommandStack()
+				.execute(c);
+		return c.getResultColumn();
 	}
 
 }

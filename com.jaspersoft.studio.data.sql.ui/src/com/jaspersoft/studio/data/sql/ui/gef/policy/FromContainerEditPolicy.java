@@ -31,6 +31,7 @@ import com.jaspersoft.studio.data.sql.model.MSQLRoot;
 import com.jaspersoft.studio.data.sql.model.metadata.MSqlTable;
 import com.jaspersoft.studio.data.sql.model.query.from.MFrom;
 import com.jaspersoft.studio.data.sql.ui.gef.command.AddTableCommand;
+import com.jaspersoft.studio.data.sql.ui.gef.parts.FromEditPart;
 import com.jaspersoft.studio.data.sql.ui.gef.parts.QueryEditPart;
 import com.jaspersoft.studio.data.sql.ui.gef.parts.TableEditPart;
 
@@ -49,30 +50,39 @@ public class FromContainerEditPolicy extends ContainerEditPolicy {
 	protected Command getCreateCommand(CreateRequest request) {
 		Object newObject = request.getNewObject();
 		MFrom parent = null;
-		if (getHost() instanceof QueryEditPart) {
-			MSQLRoot mroot = ((QueryEditPart) getHost()).getModel();
+		EditPart host = getHost();
+		if (host instanceof QueryEditPart) {
+			MSQLRoot mroot = ((QueryEditPart) host).getModel();
 			parent = Util.getKeyword(mroot, MFrom.class);
 		}
-		if (getHost().getModel() instanceof MFrom)
-			parent = (MFrom) getHost().getModel();
+		if (host.getModel() instanceof MFrom)
+			parent = (MFrom) host.getModel();
 		if (parent != null)
 			if (newObject instanceof Collection<?>) {
 				Rectangle r = new Rectangle(10, 10, 100, 100);
 				if (request.getLocation() != null) {
 					r.setLocation(request.getLocation().getCopy());
-					GraphicalEditPart ep = (GraphicalEditPart) getHost();
-					if (getHost() instanceof QueryEditPart) {
+					GraphicalEditPart ep = (GraphicalEditPart) host;
+					if (host instanceof QueryEditPart) {
 						r.translate(-20, -20);
 					} else {
 						Rectangle ca = ep.getFigure().getClientArea();
 						r.translate(-ca.x, -ca.y);
+						if (host instanceof FromEditPart) {
+							FromEditPart fep = (FromEditPart) host;
+							Rectangle b = fep.getFigure().getBounds();
+							r.translate(b.x, b.y);
+						}
 					}
 				}
 				if (request.getSize() != null) {
 					r.width = request.getSize().width;
 					r.height = request.getSize().height;
 				}
-				return new AddTableCommand(parent, (Collection<MSqlTable>) newObject, r);
+				System.out.println(r);
+
+				return new AddTableCommand(parent,
+						(Collection<MSqlTable>) newObject, r);
 			}
 		return null;
 	}

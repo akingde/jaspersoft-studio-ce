@@ -31,6 +31,7 @@ import com.jaspersoft.studio.data.sql.model.query.from.MFromTableJoin;
 import com.jaspersoft.studio.data.sql.model.query.from.TableJoin;
 import com.jaspersoft.studio.data.sql.model.query.operand.FieldOperand;
 import com.jaspersoft.studio.data.sql.model.query.subquery.MQueryTable;
+import com.jaspersoft.studio.data.sql.ui.gef.command.JoinTableCommand;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 
@@ -45,15 +46,18 @@ public class JoinTable extends AAction {
 	@Override
 	public boolean calculateEnabled(Object[] selection) {
 		super.calculateEnabled(selection);
-		return selection != null && selection.length == 1 && selection[0] instanceof ANode && isColumn((ANode) selection[0]);
+		return selection != null && selection.length == 1
+				&& selection[0] instanceof ANode
+				&& isColumn((ANode) selection[0]);
 	}
 
 	protected boolean isColumn(ANode element) {
 		boolean b = element instanceof MFromTable;// && !(element instanceof
-																							// MFromTableJoin);
+													// MFromTableJoin);
 		if (b) {
 			MFrom mfrom = null;
-			if (element instanceof MFromTable && element.getValue() instanceof MQueryTable)
+			if (element instanceof MFromTable
+					&& element.getValue() instanceof MQueryTable)
 				mfrom = Util.getKeyword(element.getParent(), MFrom.class);
 			else
 				mfrom = Util.getKeyword(element, MFrom.class);
@@ -71,7 +75,8 @@ public class JoinTable extends AAction {
 				break;
 			}
 		}
-		JoinFromTableDialog dialog = new JoinFromTableDialog(UIUtils.getShell(), designer, true);
+		JoinFromTableDialog dialog = new JoinFromTableDialog(
+				UIUtils.getShell(), designer, true);
 		dialog.setValue(mfromTable);
 		if (dialog.open() == Dialog.OK) {
 			MFromTable destTbl = getFromTable(mfromTable, dialog);
@@ -84,63 +89,22 @@ public class JoinTable extends AAction {
 				mfromTable = tmp;
 			}
 
-			doRun(null, mfromTable, null, destTbl, destTbl);
+			JoinTableCommand c = new JoinTableCommand(null, mfromTable, null,
+					destTbl, destTbl);
+			designer.getDiagram().getViewer().getEditDomain().getCommandStack()
+					.execute(c);
+
+			selectInTree(c.getMexpr());
+
 		}
 	}
 
-	public void doRun(MSQLColumn src, MFromTable srcTbl, MSQLColumn dest, MFromTable destTbl, MFromTable fromTbl) {
-		if (src == null)
-			src = getColumn(srcTbl.getValue());
-		if (dest == null)
-			dest = getColumn(destTbl.getValue());
-		srcTbl.setParent(null, -1);
-
-		boolean onlyExpression = false;
-		for (INode n : fromTbl.getChildren()) {
-			if (n == destTbl) {
-				onlyExpression = true;
-				break;
-			}
-		}
-		MFromTableJoin mtbljoin = null;
-		if (!onlyExpression) {
-			mtbljoin = new MFromTableJoin(fromTbl, srcTbl.getValue());
-			mtbljoin.setNoEvents(true);
-			mtbljoin.setPropertyValue(MFromTable.PROP_X, srcTbl.getPropertyActualValue(MFromTable.PROP_X));
-			mtbljoin.setPropertyValue(MFromTable.PROP_Y, srcTbl.getPropertyActualValue(MFromTable.PROP_Y));
-			mtbljoin.setNoEvents(false);
-			mtbljoin.setAlias(srcTbl.getAlias());
-			mtbljoin.setAliasKeyword(srcTbl.getAliasKeyword());
-
-			fromTbl.removeTableJoin(mtbljoin.getTableJoin());
-
-			mtbljoin.setTableJoin(new TableJoin(mtbljoin, (MFromTable) destTbl));
-			Util.copySubQuery(srcTbl, mtbljoin);
-		} else
-			mtbljoin = (MFromTableJoin) destTbl;
-
-		MExpression mexpr = new MExpression(mtbljoin, src, -1);
-		mexpr.getOperands().add(new FieldOperand(src, mtbljoin, mexpr));
-		mexpr.getOperands().add(new FieldOperand(dest, destTbl, mexpr));
-		selectInTree(mexpr);
-
-		Util.cleanTableVersions(mtbljoin, srcTbl);
-	}
-
-	private MSQLColumn getColumn(MSqlTable tbl) {
-		if (!tbl.getChildren().isEmpty()) {
-			for (INode n : tbl.getChildren())
-				if (((MSQLColumn) n).getPrimaryKey() != null)
-					return (MSQLColumn) n;
-			return (MSQLColumn) tbl.getChildren().get(0);
-		}
-		return null;
-	}
-
-	public static MFromTable getFromTable(MFromTable mcol, JoinFromTableDialog dialog) {
+	public static MFromTable getFromTable(MFromTable mcol,
+			JoinFromTableDialog dialog) {
 		String ft = dialog.getFromTable().replace(",", "").trim(); //$NON-NLS-1$ //$NON-NLS-2$
 		MFromTable mFromTable = null;
-		for (MFromTable mft : Util.getFromTables(Util.getKeyword(mcol, MFrom.class))) {
+		for (MFromTable mft : Util.getFromTables(Util.getKeyword(mcol,
+				MFrom.class))) {
 			if (mft == mcol)
 				continue;
 			String alias = ""; //$NON-NLS-1$

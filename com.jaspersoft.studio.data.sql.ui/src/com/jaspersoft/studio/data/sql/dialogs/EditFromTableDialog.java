@@ -30,16 +30,21 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
+import com.jaspersoft.studio.data.sql.QueryWriter;
+import com.jaspersoft.studio.data.sql.messages.Messages;
 import com.jaspersoft.studio.data.sql.model.query.AMKeyword;
 import com.jaspersoft.studio.data.sql.model.query.from.MFrom;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
+import com.jaspersoft.studio.data.sql.model.query.subquery.MQueryTable;
 import com.jaspersoft.studio.data.sql.text2model.ConvertUtil;
 import com.jaspersoft.studio.data.sql.validator.TableAliasStringValidator;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.util.ModelVisitor;
+import com.jaspersoft.studio.utils.UIUtil;
 
 public class EditFromTableDialog extends ATitledDialog {
 	private MFromTable mFromTable;
@@ -50,13 +55,18 @@ public class EditFromTableDialog extends ATitledDialog {
 
 	public EditFromTableDialog(Shell parentShell) {
 		super(parentShell);
-		setTitle("Table Dialog");
+		setTitle(Messages.EditFromTableDialog_0);
 	}
 
 	public void setValue(MFromTable value) {
 		this.mFromTable = value;
 		setAlias(value.getAlias());
 		setAliasKeyword(value.getAliasKeyword());
+
+		if (value.getValue() instanceof MQueryTable)
+			setTitle(Messages.EditFromTableDialog_2);
+		else
+			setTitle(Messages.EditFromTableDialog_0);
 	}
 
 	public void setAliasKeyword(String aliasKeyword) {
@@ -80,18 +90,26 @@ public class EditFromTableDialog extends ATitledDialog {
 		Composite cmp = (Composite) super.createDialogArea(parent);
 		cmp.setLayout(new GridLayout(3, false));
 
-		Text lbl = new Text(cmp, SWT.BORDER | SWT.READ_ONLY);
-		lbl.setText(ConvertUtil.cleanDbNameFull(mFromTable.getValue().toSQLString()));
-		lbl.setToolTipText(lbl.getText());
-		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.widthHint = 200;
-		lbl.setLayoutData(gd);
+		if (mFromTable.getValue() instanceof MQueryTable) {
+			Label lbl = new Label(cmp, SWT.BORDER | SWT.READ_ONLY);
+			UIUtil.setBold(lbl);
+			lbl.setText(Messages.EditFromTableDialog_3);
+			lbl.setToolTipText(QueryWriter.writeSubQuery(mFromTable));
+		} else {
+			Text lbl = new Text(cmp, SWT.BORDER | SWT.READ_ONLY);
+			lbl.setText(ConvertUtil.cleanDbNameFull(mFromTable.getValue()
+					.toSQLString()));
+			lbl.setToolTipText(lbl.getText());
+			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+			gd.widthHint = 200;
+			lbl.setLayoutData(gd);
+		}
 
 		keyword = new Combo(cmp, SWT.READ_ONLY);
 		keyword.setItems(AMKeyword.ALIAS_KEYWORDS);
 
 		talias = new Text(cmp, SWT.BORDER);
-		gd = new GridData(GridData.FILL_HORIZONTAL);
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.widthHint = 200;
 		gd.horizontalIndent = 8;
 		talias.setLayoutData(gd);
@@ -104,35 +122,49 @@ public class EditFromTableDialog extends ATitledDialog {
 		Control createButtonBar = super.createButtonBar(parent);
 
 		DataBindingContext bindingContext = new DataBindingContext();
-		Binding b = bindingContext.bindValue(SWTObservables.observeText(talias, SWT.Modify), PojoObservables.observeValue(this, "alias"), //$NON-NLS-1$
-				new UpdateValueStrategy().setAfterConvertValidator(new TableAliasStringValidator() {
-					@Override
-					public IStatus validate(final Object value) {
-						IStatus status = super.validate(value);
-						if (status.equals(Status.OK_STATUS) && value != null && !((String) value).isEmpty()) {
-							ModelVisitor<Boolean> mv = new ModelVisitor<Boolean>(mFromTable.getRoot()) {
-								@Override
-								public boolean visit(INode n) {
-									if (n instanceof MFrom || n instanceof MFromTable) {
-										if (n instanceof MFromTable && n != mFromTable) {
-											String al = ((MFromTable) n).getAlias();
-											if (al != null && al.equals(value)) {
-												setObject(Boolean.TRUE);
-												return false;
-											}
+		Binding b = bindingContext
+				.bindValue(
+						SWTObservables.observeText(talias, SWT.Modify),
+						PojoObservables.observeValue(this, "alias"), //$NON-NLS-1$
+						new UpdateValueStrategy()
+								.setAfterConvertValidator(new TableAliasStringValidator() {
+									@Override
+									public IStatus validate(final Object value) {
+										IStatus status = super.validate(value);
+										if (status.equals(Status.OK_STATUS)
+												&& value != null
+												&& !((String) value).isEmpty()) {
+											ModelVisitor<Boolean> mv = new ModelVisitor<Boolean>(
+													mFromTable.getRoot()) {
+												@Override
+												public boolean visit(INode n) {
+													if (n instanceof MFrom
+															|| n instanceof MFromTable) {
+														if (n instanceof MFromTable
+																&& n != mFromTable) {
+															String al = ((MFromTable) n)
+																	.getAlias();
+															if (al != null
+																	&& al.equals(value)) {
+																setObject(Boolean.TRUE);
+																return false;
+															}
+														}
+														return true;
+													}
+													return false;
+												}
+											};
+											if (mv.getObject() != null
+													&& mv.getObject() == true)
+												return ValidationStatus
+														.error(Messages.EditFromTableDialog_1);
 										}
-										return true;
+										return status;
 									}
-									return false;
-								}
-							};
-							if (mv.getObject() != null && mv.getObject() == true)
-								return ValidationStatus.error("This alias already exists in the FROM tables list. Please type another one.");
-						}
-						return status;
-					}
-				}), null);
-		bindingContext.bindValue(SWTObservables.observeSelection(keyword), PojoObservables.observeValue(this, "aliasKeyword"));
+								}), null);
+		bindingContext.bindValue(SWTObservables.observeSelection(keyword),
+				PojoObservables.observeValue(this, "aliasKeyword")); //$NON-NLS-1$
 
 		ValidatorUtil.controlDecorator(b, getButton(IDialogConstants.OK_ID));
 		return createButtonBar;

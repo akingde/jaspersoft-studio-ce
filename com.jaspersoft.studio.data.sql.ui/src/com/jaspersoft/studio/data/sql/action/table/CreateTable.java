@@ -27,8 +27,8 @@ import com.jaspersoft.studio.data.sql.messages.Messages;
 import com.jaspersoft.studio.data.sql.model.metadata.MSqlTable;
 import com.jaspersoft.studio.data.sql.model.query.from.MFrom;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
-import com.jaspersoft.studio.data.sql.model.query.select.MSelectSubQuery;
 import com.jaspersoft.studio.data.sql.model.query.subquery.MQueryTable;
+import com.jaspersoft.studio.data.sql.ui.gef.command.CreateTableCommand;
 
 public class CreateTable extends AAction {
 	private SQLQueryDesigner designer;
@@ -89,6 +89,9 @@ public class CreateTable extends AAction {
 								designer));
 			}
 		});
-		return new MFromTable(mfrom, node, index);
+		CreateTableCommand c = new CreateTableCommand(node, mfrom, index);
+		designer.getDiagram().getViewer().getEditDomain().getCommandStack()
+				.execute(c);
+		return c.getResultTable();
 	}
 }
