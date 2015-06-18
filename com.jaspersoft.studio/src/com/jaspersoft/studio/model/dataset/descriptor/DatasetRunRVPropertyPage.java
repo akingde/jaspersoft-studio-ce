@@ -166,7 +166,7 @@ public class DatasetRunRVPropertyPage extends RVPropertyPage {
 			for (ReturnValueContainer container : getValue()) {
 				// Check the from variable
 				String fromVariable = container.getFromVariable();
-				if (!subDataset.getVariablesMap().containsKey(fromVariable)) {
+				if (subDataset != null && !subDataset.getVariablesMap().containsKey(fromVariable)) {
 					setMessage("Some From variables are missing on the subdataset and will be possible to create them at the end of the wizard");
 					return;
 				}
