@@ -363,7 +363,10 @@ public abstract class ASelector {
 		ResourceDescriptor r = getResourceDescriptor(resRD);
 		if (r == null && resRD != null) {
 			for (ResourceDescriptor rd : resRD.getChildren()) {
-				if (rd.getWsType().equals(ResourceDescriptor.TYPE_REFERENCE)) {
+				if (rd != null
+						&& rd.getWsType() != null
+						&& rd.getWsType().equals(
+								ResourceDescriptor.TYPE_REFERENCE)) {
 					r = rd;
 					pos = 0;
 				}
