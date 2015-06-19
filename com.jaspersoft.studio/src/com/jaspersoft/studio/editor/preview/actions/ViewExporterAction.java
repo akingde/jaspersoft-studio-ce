@@ -14,10 +14,11 @@ package com.jaspersoft.studio.editor.preview.actions;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.preview.MultiPageContainer;
+import com.jaspersoft.studio.editor.preview.view.control.ReportControler;
 
 public class ViewExporterAction extends ASwitchAction {
 	public ViewExporterAction(MultiPageContainer container) {
-		super(container, "Exporter Parameters");
+		super(container, ReportControler.FORM_EXPORTER);
 		setImageDescriptor(
 				JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/equalizer--arrow.png")); //$NON-NLS-1$
 		setToolTipText("Set exporter parameters");
