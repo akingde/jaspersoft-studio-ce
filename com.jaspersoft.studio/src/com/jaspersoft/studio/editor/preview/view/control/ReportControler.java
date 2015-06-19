@@ -91,12 +91,12 @@ public class ReportControler {
 
 	public static final String ST_REPORTEXECUTIONTIME = "REPORTEXECUTIONTIME"; //$NON-NLS-1$
 
-	public static final String FORM_SORTING = Messages.ReportControler_sortoptiontitle;
-	public static final String FORM_BOOKMARKS = Messages.commons_bookmarks;
-	public static final String FORM_EXPORTER = Messages.ReportControler_exportertitle;
+	public static final String FORM_SORTING = "report_configuration_sorting"; //$NON-NLS-1$
+	public static final String FORM_BOOKMARKS = "report_configuration_bookmarks"; //$NON-NLS-1$
+	public static final String FORM_EXPORTER = "report_configuration_exporterParameters"; //$NON-NLS-1$
 
-	public static final String FORM_REPORT_PARAMETERS = Messages.ReportControler_reportparameterstitle;
-	public static final String FORM_PARAMETERS = Messages.ReportControler_inputparameterstitle;
+	public static final String FORM_REPORT_PARAMETERS = "report_configuration_reportParameters"; //$NON-NLS-1$
+	public static final String FORM_PARAMETERS = "report_configuration_inputParameters"; //$NON-NLS-1$
 
 	public static List<IDataInput> inputs = new ArrayList<IDataInput>();
 	static {

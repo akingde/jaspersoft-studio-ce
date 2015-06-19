@@ -1635,18 +1635,14 @@ public class Messages extends NLS {
 	public static String ReportControler_compilationerrors;
 	public static String ReportControler_done;
 	public static String ReportControler_error;
-	public static String ReportControler_exportertitle;
 	public static String ReportControler_generating;
 	public static String ReportControler_generatingerror;
-	public static String ReportControler_inputparameterstitle;
 	public static String ReportControler_msg_compiling;
 	public static String ReportControler_msg_fillparameters;
 	public static String ReportControler_msg_fillreports;
 	public static String ReportControler_msg_reportfinished;
 	public static String ReportControler_msg_setdataadapter;
 	public static String ReportControler_msg_setvirtualizer;
-	public static String ReportControler_reportparameterstitle;
-	public static String ReportControler_sortoptiontitle;
 	public static String ReportControler_stats_start;
 	public static String ReportExecutionPreferencePage_blockSizeLabel;
 	public static String ReportExecutionPreferencePage_deleteTempLabel;
@@ -1991,7 +1987,6 @@ public class Messages extends NLS {
 	public static String common_yes;
 	public static String common_no;
 	public static String common_noExpressionMessage;
-	public static String commons_bookmarks;
 	
 	public static String ItemPropertyDialog_EditItemProperty;
 	public static String ItemPropertyDialog_PropertyName;

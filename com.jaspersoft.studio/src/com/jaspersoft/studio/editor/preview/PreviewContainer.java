@@ -69,6 +69,7 @@ import com.jaspersoft.studio.editor.preview.view.APreview;
 import com.jaspersoft.studio.editor.preview.view.control.ReportControler;
 import com.jaspersoft.studio.editor.preview.view.report.html.ABrowserViewer;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.messages.MessagesByKeys;
 import com.jaspersoft.studio.preferences.util.PreferencesUtils;
 import com.jaspersoft.studio.property.dataset.dialog.DataQueryAdapters;
 import com.jaspersoft.studio.statistics.UsageStatisticsIDs;
@@ -181,7 +182,7 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 					super.switchView(stats, view);
 					for (String key : pmap.keySet()) {
 						if (pmap.get(key) == view) {
-							leftToolbar.setLabelText(key);
+							leftToolbar.setLabelText(MessagesByKeys.getString(key));
 							break;
 						}
 					}

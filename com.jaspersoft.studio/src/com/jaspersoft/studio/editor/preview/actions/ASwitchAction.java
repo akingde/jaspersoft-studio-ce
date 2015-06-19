@@ -18,18 +18,18 @@ import com.jaspersoft.studio.editor.preview.MultiPageContainer;
 
 public abstract class ASwitchAction extends Action {
 	private MultiPageContainer container;
-	protected String view;
+	protected String viewKey;
 
 	public ASwitchAction(MultiPageContainer container, String view) {
 		super();
 		this.container = container;
-		this.view = view;
+		this.viewKey = view;
 	}
 
 	@Override
 	public void run() {
-		if (view != null) {
-			container.switchView(view);
+		if (viewKey != null) {
+			container.switchView(viewKey);
 		}
 	}
 }

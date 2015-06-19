@@ -47,6 +47,7 @@ import com.jaspersoft.studio.editor.report.CachedSelectionProvider;
 import com.jaspersoft.studio.editor.report.CommonSelectionCacheProvider;
 import com.jaspersoft.studio.editor.util.StringInput;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.messages.MessagesByKeys;
 import com.jaspersoft.studio.server.editor.action.RunStopAction;
 import com.jaspersoft.studio.swt.toolbar.ToolItemContribution;
 import com.jaspersoft.studio.swt.widgets.CSashForm;
@@ -220,7 +221,7 @@ public class ReportUnitEditor extends PreviewJRPrint implements IRunReport, IPar
 					super.switchView(stats, view);
 					for (String key : pmap.keySet()) {
 						if (pmap.get(key) == view) {
-							leftToolbar.setLabelText(key);
+							leftToolbar.setLabelText(MessagesByKeys.getString(key));
 							break;
 						}
 					}
