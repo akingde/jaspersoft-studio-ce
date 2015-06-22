@@ -229,17 +229,32 @@ public class SoapConnection implements IConnection {
 		}
 		rd = client.addOrModifyResource(rd, inputFile);
 		List<ResourceDescriptor> oldChildren = list(monitor, rd);
-		for (ResourceDescriptor r : oldChildren)
+		List<ResourceDescriptor> toDel = new ArrayList<ResourceDescriptor>();
+		for (ResourceDescriptor r : oldChildren) {
+			boolean exists = false;
 			for (ResourceDescriptor newr : children) {
 				if (newr.getUriString() == null || r.getUriString() == null)
 					continue;
 				if (r.getWsType().equals(newr.getWsType())
-						&& r.getUriString().equals(newr.getUriString()))
+						&& r.getUriString().equals(newr.getUriString())) {
 					newr.setIsNew(false);
+					exists = true;
+					break;
+				}
 			}
-
+			if (!exists)
+				toDel.add(r);
+		}
+		if (!toDel.isEmpty()) {
+			for (ResourceDescriptor r : toDel) {
+				rd = delete(monitor, r, rd);
+				if (monitor.isCanceled())
+					return rd;
+			}
+		}
 		if (rd.getWsType().equals(ResourceDescriptor.TYPE_REPORTUNIT)) {
 			rd = get(monitor, rd, null);
+
 			for (ResourceDescriptor r : children) {
 				if (SelectorDatasource.isDatasource(r))
 					continue;

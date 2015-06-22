@@ -81,7 +81,7 @@ public class DeleteResourceAction extends Action {
 			pm.run(true, true, new IRunnableWithProgress() {
 				public void run(IProgressMonitor monitor)
 						throws InvocationTargetException, InterruptedException {
-					monitor.beginTask("Deleting", p.length);
+					monitor.beginTask(Messages.DeleteResourceAction_0, p.length);
 					try {
 						Set<MReportUnit> set = new HashSet<MReportUnit>();
 						Set<MReportUnit> deleted = new HashSet<MReportUnit>();
@@ -106,9 +106,7 @@ public class DeleteResourceAction extends Action {
 											.getValue().getChildren();
 									String uri = mres.getValue().getUriString();
 									for (ResourceDescriptor rd : children) {
-										if (rd.getUriString() != null
-												&& rd.getUriString()
-														.equals(uri)) {
+										if (rd.getUriString() != null && rd.getUriString().equals(uri)) {
 											toDel = rd;
 											break;
 										}
