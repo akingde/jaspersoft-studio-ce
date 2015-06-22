@@ -106,7 +106,9 @@ public class DeleteResourceAction extends Action {
 											.getValue().getChildren();
 									String uri = mres.getValue().getUriString();
 									for (ResourceDescriptor rd : children) {
-										if (rd.getUriString().equals(uri)) {
+										if (rd.getUriString() != null
+												&& rd.getUriString()
+														.equals(uri)) {
 											toDel = rd;
 											break;
 										}
