@@ -67,7 +67,7 @@ public class DatasourceSelectionPage extends JSSHelpWizardPage implements
 		TabFolder tabfolder = new TabFolder(parent, SWT.NONE);
 
 		TabItem tb = new TabItem(tabfolder, SWT.NONE);
-		tb.setText("Datasource");
+		tb.setText(Messages.DatasourceSelectionPage_0);
 
 		datasourceCmp = new DatasourceSelectionComposite(tabfolder, SWT.NONE,
 				false,
@@ -76,7 +76,7 @@ public class DatasourceSelectionPage extends JSSHelpWizardPage implements
 		tb.setControl(datasourceCmp);
 
 		tb = new TabItem(tabfolder, SWT.NONE);
-		tb.setText("Query");
+		tb.setText(Messages.DatasourceSelectionPage_1);
 
 		Composite cmp = new Composite(tabfolder, SWT.NONE);
 		cmp.setLayout(new GridLayout(2, false));
@@ -91,7 +91,7 @@ public class DatasourceSelectionPage extends JSSHelpWizardPage implements
 				if (sQuery.isPageComplete())
 					setErrorMessage(null);
 				else
-					setErrorMessage("There is a problem with selected Query which is not valid");
+					setErrorMessage(Messages.DatasourceSelectionPage_2);
 			}
 		});
 		tb.setControl(cmp);
@@ -140,7 +140,7 @@ public class DatasourceSelectionPage extends JSSHelpWizardPage implements
 		if (datasourceCmp.isDatasourceSelectionValid())
 			setErrorMessage(null);
 		else
-			setErrorMessage("There is a problem with selected Datasource which is not valid");
+			setErrorMessage(Messages.DatasourceSelectionPage_3);
 		refresh = false;
 	}
 }

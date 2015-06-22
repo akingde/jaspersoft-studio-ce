@@ -38,9 +38,14 @@ public class Messages extends NLS {
 	public static String CreateServerAction_desc;
 	public static String CreateServerAction_name;
 	public static String CreateServerAction_title;
+	public static String DatasourceSelectionComposite_0;
 	public static String DatasourceSelectionComposite_FromRepository;
 	public static String DatasourceSelectionComposite_LocalDatasource;
 	public static String DatasourceSelectionComposite_NoDatasource;
+	public static String DatasourceSelectionPage_0;
+	public static String DatasourceSelectionPage_1;
+	public static String DatasourceSelectionPage_2;
+	public static String DatasourceSelectionPage_3;
 	public static String DatasourceSelectionPage_Description;
 	public static String DatasourceSelectionPage_Title;
 	public static String DataTypePageContent_0;
@@ -236,6 +241,9 @@ public class Messages extends NLS {
 	public static String ReportUnitQueryContent_0;
 	public static String ReportUnitQueryContent_1;
 	public static String ReportUnitQueryContent_2;
+	public static String RepositoryDialog_0;
+	public static String RepositoryDialog_1;
+	public static String RepositoryDialog_2;
 	public static String RepositoryDNDHelper_NewFileResourceErrMsg;
 	public static String RepositoryDNDHelper_NewResourceDescriptorErrMsg;
 	public static String RepositoryDNDHelper_SavingResourceTask;

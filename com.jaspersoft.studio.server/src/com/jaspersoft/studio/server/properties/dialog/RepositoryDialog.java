@@ -12,7 +12,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.properties.dialog;
 
-import org.eclipse.jface.dialogs.Dialog;
+import net.sf.jasperreports.eclipse.ui.ATitledDialog;
+
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -24,26 +25,28 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MResource;
 
-public abstract class RepositoryDialog extends Dialog {
+public abstract class RepositoryDialog extends ATitledDialog {
 	private INode root;
 
 	public RepositoryDialog(Shell parentShell, INode root) {
 		super(parentShell);
 		this.root = root;
+		setTitle(Messages.RepositoryDialog_0);
 	}
 
-	@Override
-	protected void setShellStyle(int newShellStyle) {
-		super.setShellStyle(newShellStyle | SWT.SHELL_TRIM);
-	}
-
-	@Override
-	protected void configureShell(Shell newShell) {
-		super.configureShell(newShell);
-		newShell.setText("JasperServer Repository Browser");
-	}
+	// @Override
+	// protected void setShellStyle(int newShellStyle) {
+	// super.setShellStyle(newShellStyle | SWT.SHELL_TRIM);
+	// }
+	//
+	// @Override
+	// protected void configureShell(Shell newShell) {
+	// super.configureShell(newShell);
+	// newShell.setText("JasperServer Repository Browser");
+	// }
 
 	private MResource resource;
 	private Text tname;
@@ -97,6 +100,8 @@ public abstract class RepositoryDialog extends Dialog {
 				super.setResource(res);
 				tname.setText(res.getValue().getUriString());
 				ttype.setText(res.getValue().getWsType());
+
+				RepositoryDialog.this.resource = res;
 			}
 
 			/*
@@ -115,16 +120,16 @@ public abstract class RepositoryDialog extends Dialog {
 		};
 		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
 		gd.horizontalSpan = 2;
-		gd.minimumHeight = 300;
-		gd.minimumWidth = 400;
+		gd.heightHint = 300;
+		gd.widthHint = 400;
 		rcom.setLayoutData(gd);
 
-		new Label(composite, SWT.NONE).setText("Resource Name");
+		new Label(composite, SWT.NONE).setText(Messages.RepositoryDialog_1);
 
 		tname = new Text(composite, SWT.BORDER | SWT.READ_ONLY);
 		tname.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		new Label(composite, SWT.NONE).setText("Resource Type");
+		new Label(composite, SWT.NONE).setText(Messages.RepositoryDialog_2);
 
 		ttype = new Text(composite, SWT.BORDER | SWT.READ_ONLY);
 		ttype.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));

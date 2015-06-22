@@ -123,7 +123,7 @@ public class DatasourceSelectionComposite extends Composite {
 			public void modifyText(ModifyEvent e) {
 				if (!refresh) {
 					final String uri = textDSFromRepo.getText().trim();
-					Job job = new Job("Validating") {
+					Job job = new Job(Messages.DatasourceSelectionComposite_0) {
 						private ResourceDescriptor newrd;
 
 						@Override
@@ -166,7 +166,7 @@ public class DatasourceSelectionComposite extends Composite {
 		InputHistoryCache.bindText(textDSFromRepo, this.getClass().getName());
 
 		btnSelectDSFromRepo = new Button(this, SWT.PUSH);
-		btnSelectDSFromRepo.setText("...");
+		btnSelectDSFromRepo.setText("..."); //$NON-NLS-1$
 		btnSelectDSFromRepo.setEnabled(false);
 		btnSelectDSFromRepo.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -194,7 +194,7 @@ public class DatasourceSelectionComposite extends Composite {
 
 		btnSelectLocalDS = new Button(this, SWT.PUSH);
 		btnSelectLocalDS.setEnabled(false);
-		btnSelectLocalDS.setText("...");
+		btnSelectLocalDS.setText("..."); //$NON-NLS-1$
 		btnSelectLocalDS.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -312,8 +312,8 @@ public class DatasourceSelectionComposite extends Composite {
 						.equals(WsTypes.INST().toRestType(
 								ResourceDescriptor.TYPE_DOMAIN_TOPICS))) {
 			ref = MRDatasource.createDescriptor(null);
-			ref.setName("SemanticLayerDataSource");
-			ref.setLabel("SemanticLayerDataSource");
+			ref.setName("SemanticLayerDataSource"); //$NON-NLS-1$
+			ref.setLabel("SemanticLayerDataSource"); //$NON-NLS-1$
 			ref.setWsType(ResourceDescriptor.TYPE_DATASOURCE_DOMAIN1);
 		}
 		if (ref == null) {
@@ -327,7 +327,7 @@ public class DatasourceSelectionComposite extends Composite {
 
 			ref.setIsReference(false);
 			ref.setParentFolder(runit.getParentFolder()
-					+ "/" + runit.getName() + "_files"); //$NON-NLS-1$
+					+ "/" + runit.getName() + "_files"); //$NON-NLS-1$ //$NON-NLS-2$
 			// ref.setWsType(ResourceDescriptor.TYPE_DATASOURCE);
 			ref.setUriString(ref.getParentFolder() + "/" + ref.getName());//$NON-NLS-1$
 
