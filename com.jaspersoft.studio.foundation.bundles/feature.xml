@@ -2,7 +2,7 @@
 <feature
       id="com.jaspersoft.studio.foundation.bundles"
       label="Jaspersoft Studio Required Additional Bundles"
-      version="1.0.3"
+      version="1.0.4"
       provider-name="TIBCO Software Inc.">
 
    <description url="http://community.jaspersoft.com/project/jaspersoft-studio">
@@ -17,32 +17,20 @@
       %license
    </license>
 
+   <includes
+         id="org.eclipse.nebula.widgets.cdatetime.feature"
+         version="0.0.0"/>
+
    <requires>
-      <import plugin="org.eclipse.swt" version="3.7.2" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.osgi"/>
-      <import plugin="javax.servlet"/>
-      <import plugin="org.apache.xalan"/>
-      <import plugin="org.apache.ant"/>
-      <import plugin="org.apache.commons.cli"/>
-      <import plugin="com.jaspersoft.studio.bundles.bouncycastle"/>
       <import plugin="org.junit" version="4.10.0" match="greaterOrEqual"/>
       <import plugin="org.apache.commons.codec" version="1.6.0" match="greaterOrEqual"/>
       <import plugin="org.apache.commons.logging" version="1.1.1" match="greaterOrEqual"/>
-      <import plugin="org.apache.servicemix.bundles.xmlbeans"/>
-      <import plugin="org.dom4j"/>
-      <import plugin="javax.servlet.jsp"/>
-      <import plugin="com.fasterxml.jackson.core.jackson-annotations"/>
-      <import plugin="com.fasterxml.jackson.core.jackson-core"/>
-      <import plugin="org.apache.servicemix.bundles.jcommon"/>
       <import plugin="org.w3c.dom.svg" version="1.1.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui"/>
+      <import plugin="org.eclipse.core.runtime"/>
+      <import plugin="org.apache.commons.httpclient" version="3.1.0" match="greaterOrEqual"/>
+      <import plugin="org.apache.commons.io" version="2.0.1" match="greaterOrEqual"/>
    </requires>
-
-   <plugin
-         id="org.mihalis.opal"
-         download-size="0"
-         install-size="0"
-         version="1.0.1"
-         unpack="false"/>
 
    <plugin
          id="org.krysalis.barcode4j"
@@ -172,7 +160,7 @@
          id="org.apache.servicemix.bundles.rhino"
          download-size="0"
          install-size="0"
-         version="1.0.0.7R3_1"
+         version="1.7.6.1"
          unpack="false"/>
 
    <plugin
@@ -209,6 +197,13 @@
          download-size="0"
          install-size="0"
          version="2.3.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.buzzcoders.yasw.widgets.map"
+         download-size="0"
+         install-size="0"
+         version="1.0.0.v20140304-0957"
          unpack="false"/>
 
 </feature>
