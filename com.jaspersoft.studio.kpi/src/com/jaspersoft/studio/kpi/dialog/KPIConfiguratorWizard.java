@@ -22,9 +22,11 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.wizard.Wizard;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.kpi.KPIUtils;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.protocol.IConnection;
+import com.jaspersoft.studio.statistics.UsageStatisticsIDs;
 
 /**
  * Wizard used to configure the KPI JasperDesign. It consists of a single
@@ -71,6 +73,9 @@ public class KPIConfiguratorWizard extends Wizard {
 							IProgressMonitor.UNKNOWN);
 					try {
 						
+						//Check if it is a new KPI or an editing
+						boolean newKPI = KPIUtils.getReportUnitKPI(client,  parentReportUnit.getUriString()) == null;
+						
 						// 1. If exists, remove the old KPI...
 						
 						if (!KPIUtils.deleteReportUnitKPI(client, parentReportUnit.getUriString()))
@@ -94,6 +99,9 @@ public class KPIConfiguratorWizard extends Wizard {
 							throw new InvocationTargetException(new Exception());
 						}
 						
+						if (newKPI){
+							JaspersoftStudioPlugin.getInstance().getUsageManager().audit(UsageStatisticsIDs.SERVER_KPI_CREATION, UsageStatisticsIDs.CATEGORY_SERVER);
+						}
 						
 					} finally {
 						monitor.done();
