@@ -307,6 +307,14 @@ public class UsageManager {
 	protected String getVersion(){
 		if (CURRENT_VERSION == null){
 			CURRENT_VERSION = JaspersoftStudioPlugin.getInstance().getBundle().getVersion().toString();
+			//check if it is a development version
+			if (CURRENT_VERSION.endsWith(".qualifier")){
+				CURRENT_VERSION = CURRENT_VERSION.substring(0, CURRENT_VERSION.lastIndexOf(".qualifier")) + "-dev";
+			}
+			//check if it is a pro
+			if (isPro()){
+				CURRENT_VERSION += "-pro";
+			}
 		}
 		return CURRENT_VERSION;
 	}
@@ -655,6 +663,15 @@ public class UsageManager {
 			return true;
 		// check if it can be a pro version
 		return Platform.getBundle("com.jaspersoft.studio.pro.rcp") != null; //$NON-NLS-1$
+	}
+	
+	/**
+	 * Check if the running JSS is a community or pro version. This is done looking for the plugin com.jaspersoft.studio.pro.doc
+	 * 
+	 * @return true if the current running JSS is a pro version, false otherwise
+	 */
+	protected boolean isPro() {
+		return Platform.getBundle("com.jaspersoft.studio.pro.doc") != null; //$NON-NLS-1$
 	}
 
 	/**
