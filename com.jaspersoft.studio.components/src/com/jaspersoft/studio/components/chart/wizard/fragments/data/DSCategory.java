@@ -106,7 +106,15 @@ public class DSCategory extends ADSComponent {
 		valueWidget.bindObject(serie, "ValueExpression"); //$NON-NLS-1$
 		categWidget.bindObject(serie, "CategoryExpression"); //$NON-NLS-1$
 		labelWidget.bindObject(serie, "LabelExpression"); //$NON-NLS-1$
-		hyperlinkBtn.setText(MessageFormat.format(Messages.DSCategory_defineHyperlinkButtton,seriesCombo.getText()));
+		String seriesText = seriesCombo.getText();
+		if (seriesText.length() > 30){
+			hyperlinkBtn.setToolTipText(MessageFormat.format(Messages.DSCategory_defineHyperlinkButtton,seriesText));
+			seriesText = seriesText.substring(0, 27) + "..."; //$NON-NLS-1$
+	
+		} else {
+			hyperlinkBtn.setToolTipText(null);
+		}
+		hyperlinkBtn.setText(MessageFormat.format(Messages.DSCategory_defineHyperlinkButtton,seriesText));
 	}
 
 	protected Control createChartTop(Composite composite) {
