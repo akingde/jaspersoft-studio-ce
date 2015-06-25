@@ -85,8 +85,7 @@ public class KPIConfiguratorWizard extends Wizard {
 						}
 						
 						
-						// 2. Deploy the new KPI...
-						// Verifichiamo che il file sia buono...
+						// 2. Check that the file exist
 						if ( !(new File(jrxmlFile)).exists() )
 						{
 							UIUtils.showInformation("The file does not exist");
@@ -97,9 +96,8 @@ public class KPIConfiguratorWizard extends Wizard {
 						{
 							UIUtils.showInformation(":-( I'm not able to publish this KPI...an error has occurred while publishing it.");
 							throw new InvocationTargetException(new Exception());
-						}
-						
-						if (newKPI){
+						} else if (newKPI) {
+							//if the kpi was deployed correctly and was a new kpi then log the deployment
 							JaspersoftStudioPlugin.getInstance().getUsageManager().audit(UsageStatisticsIDs.SERVER_KPI_CREATION, UsageStatisticsIDs.CATEGORY_SERVER);
 						}
 						
