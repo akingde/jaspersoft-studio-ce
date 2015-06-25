@@ -34,7 +34,7 @@ import com.jaspersoft.studio.hibernate3.messages.Messages;
 
 public class Hibernate3ClasspathContainer implements IClasspathContainer {
 
-	public static final IPath ID = new Path("com.jaspersoft.studio.data.hibernate.HIBERNATE_3_2_0_GA_CONTAINER"); //$NON-NLS-1$
+	public static final IPath ID = new Path("com.jaspersoft.studio.data.hibernate.HIBERNATE_3_3_2_GA_CONTAINER"); //$NON-NLS-1$
 	// path to the container
 	private IPath path;
 	
