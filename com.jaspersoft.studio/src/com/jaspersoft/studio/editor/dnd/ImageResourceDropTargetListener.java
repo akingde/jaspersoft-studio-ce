@@ -41,7 +41,7 @@ import com.jaspersoft.studio.utils.ImageUtils;
 public class ImageResourceDropTargetListener extends AbstractTransferDropTargetListener {
 	
 	private SimpleImageCreationFactory factory = new SimpleImageCreationFactory();
-
+	
 	public ImageResourceDropTargetListener(EditPartViewer viewer, Transfer xfer) {
 		super(viewer, xfer);
 	}
@@ -75,8 +75,8 @@ public class ImageResourceDropTargetListener extends AbstractTransferDropTargetL
 			if(event.data instanceof IResource[]){
 				// Dropping an image resource from inside workspace
 				IResource imgResource = ((IResource[])event.data)[0];
-				return ImageUtils.hasValidFileImageExtension(
-						imgResource.getProjectRelativePath().getFileExtension());
+				String extension = imgResource.getProjectRelativePath().getFileExtension();
+				return ImageUtils.hasValidFileImageExtension(extension) || extension.equalsIgnoreCase("svg");
 			}
 		}
 		else if(FileTransfer.getInstance().isSupportedType(event.currentDataType)){
@@ -87,7 +87,7 @@ public class ImageResourceDropTargetListener extends AbstractTransferDropTargetL
 					int lastIndexOfDot = filepath.lastIndexOf(".");
 					if(lastIndexOfDot!=-1){
 						String extension = filepath.substring(lastIndexOfDot+1);
-						return ImageUtils.hasValidFileImageExtension(extension);				
+						return ImageUtils.hasValidFileImageExtension(extension) || extension.equalsIgnoreCase("svg");				
 					}
 				}
 			}
@@ -125,21 +125,45 @@ public class ImageResourceDropTargetListener extends AbstractTransferDropTargetL
 		if (ResourceTransfer.getInstance().isSupportedType(getCurrentEvent().currentDataType)){
 			// Dropping an image resource from inside workspace
 			IResource imgResource = ((IResource[])getCurrentEvent().data)[0];
-			command.setImageExpression(
-					new JRDesignExpression("\""+imgResource.getProjectRelativePath()+"\""));
+			String extension = imgResource.getProjectRelativePath().getFileExtension();
+			String expression = "";
+			if (extension.equalsIgnoreCase("svg")){
+				expression = "net.sf.jasperreports.renderers.BatikRenderer.getInstanceFromLocation($P{JASPER_REPORTS_CONTEXT}, \"" + imgResource.getProjectRelativePath() + "\")";
+			} else {
+				expression = "\""+imgResource.getProjectRelativePath()+"\"";
+			}
+			command.setImageExpression(new JRDesignExpression(expression));
 		}
 		else if(FileTransfer.getInstance().isSupportedType(getCurrentEvent().currentDataType)){
 			// Dropping an image resource from outside workspace
 			String filepath = ((String[])getCurrentEvent().data)[0];
 			if(filepath!=null){
-				command.setImageExpression(new JRDesignExpression("\""+filepath+"\""));
+				String expression = "\""+filepath+"\"";
+				int lastIndexOfDot = filepath.lastIndexOf(".");
+				if(lastIndexOfDot!=-1){
+					String extension = filepath.substring(lastIndexOfDot+1);
+					if (extension.equalsIgnoreCase("svg")){
+						expression = "net.sf.jasperreports.renderers.BatikRenderer.getInstanceFromLocation($P{JASPER_REPORTS_CONTEXT}, \"" + filepath + "\")";
+					}
+					
+				}
+				command.setImageExpression(new JRDesignExpression(expression));
 			}
 		}
 		else if(ImageURLTransfer.getInstance().isSupportedType(getCurrentEvent().currentDataType)){
 			// Dropping an image dropped from a contributed view (i.e: repository view)
 			String filepath = (String)getCurrentEvent().data;
 			if(filepath!=null){
-				command.setImageExpression(new JRDesignExpression("\""+filepath+"\""));
+				String expression = "\""+filepath+"\"";
+				int lastIndexOfDot = filepath.lastIndexOf(".");
+				if(lastIndexOfDot!=-1){
+					String extension = filepath.substring(lastIndexOfDot+1);
+					if (extension.equalsIgnoreCase("svg")){
+						expression = "net.sf.jasperreports.renderers.BatikRenderer.getInstanceFromLocation($P{JASPER_REPORTS_CONTEXT}, \"" + filepath + "\")";
+					}
+					
+				}
+				command.setImageExpression(new JRDesignExpression(expression));
 			}
 		}
 	}
