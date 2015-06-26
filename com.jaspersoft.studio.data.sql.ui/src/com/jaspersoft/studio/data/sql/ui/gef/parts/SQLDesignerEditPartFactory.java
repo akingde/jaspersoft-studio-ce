@@ -19,6 +19,7 @@ import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
 import com.jaspersoft.studio.data.sql.model.query.from.MFrom;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
 import com.jaspersoft.studio.data.sql.model.query.from.TableJoin;
+import com.jaspersoft.studio.data.sql.model.query.from.TableJoinDetail;
 import com.jaspersoft.studio.model.MRoot;
 
 /*
@@ -39,6 +40,8 @@ public class SQLDesignerEditPartFactory implements EditPartFactory {
 			editPart = new TableEditPart();
 		else if (model instanceof TableJoin)
 			editPart = new RelationshipPart();
+		else if (model instanceof TableJoinDetail)
+			editPart = new RelationshipDetailPart();
 		else if (model instanceof MSQLColumn)
 			editPart = new ColumnEditPart();
 		if (editPart != null)

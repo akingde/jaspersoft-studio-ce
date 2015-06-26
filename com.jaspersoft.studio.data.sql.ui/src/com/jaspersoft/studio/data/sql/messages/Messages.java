@@ -98,10 +98,13 @@ public class Messages extends NLS {
 	public static String SQLQueryDesigner_readmetadata;
 	public static String SQLQueryDesigner_text;
 	public static String SQLQueryDiagram_1;
+	public static String SQLQueryDiagram_2;
+	public static String SQLQueryDiagram_3;
 	public static String SQLQueryDiagram_5;
 	public static String SQLQueryDiagram_6;
 	public static String SQLQueryDiagram_7;
 	public static String SQLQueryDiagram_8;
+	public static String SQLQueryDiagram_9;
 	public static String SQLEditorPreferencesPage_0;
 	public static String SQLEditorPreferencesPage_1;
 	public static String SQLEditorPreferencesPage_2;

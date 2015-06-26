@@ -376,10 +376,18 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 						MFromTable ft = (MFromTable) n;
 						Object x = ft.getPropertyActualValue(MFromTable.PROP_X);
 						Object y = ft.getPropertyActualValue(MFromTable.PROP_Y);
-						if (x != null && y != null)
-							tables.add(ft.getValue().toSQLString()
+						if (x != null && y != null) {
+							String str = ft.getValue().toSQLString()
 									+ ft.getAliasKeyString() + "," + x + ","
-									+ y + "," + ft.getId() + ";");
+									+ y + "," + ft.getId();
+							String sm = (String) ft
+									.getPropertyValue(MFromTable.SHOW_MODE_PROPERTY);
+							if (sm != null)
+								str += "," + sm;
+
+							str += ";";
+							tables.add(str);
+						}
 					} else if (n instanceof MFrom) {
 						MFrom ft = (MFrom) n;
 						Object x = ft.getPropertyActualValue(MFromTable.PROP_X);

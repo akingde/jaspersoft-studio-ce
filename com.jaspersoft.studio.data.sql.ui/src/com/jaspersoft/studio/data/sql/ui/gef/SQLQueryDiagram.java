@@ -24,7 +24,6 @@ import java.util.Set;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 
-import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.DefaultEditDomain;
 import org.eclipse.gef.EditPart;
@@ -65,6 +64,7 @@ import org.w3c.tools.codec.Base64FormatException;
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.Util;
 import com.jaspersoft.studio.data.sql.action.LayoutAction;
+import com.jaspersoft.studio.data.sql.action.TableModeShowAction;
 import com.jaspersoft.studio.data.sql.action.select.CreateColumn;
 import com.jaspersoft.studio.data.sql.action.table.CreateTable;
 import com.jaspersoft.studio.data.sql.action.table.DeleteTable;
@@ -75,6 +75,7 @@ import com.jaspersoft.studio.data.sql.model.query.from.MFrom;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTableJoin;
 import com.jaspersoft.studio.data.sql.model.query.from.TableJoin;
+import com.jaspersoft.studio.data.sql.model.query.from.TableJoinDetail;
 import com.jaspersoft.studio.data.sql.prefs.SQLEditorPreferencesPage;
 import com.jaspersoft.studio.data.sql.ui.gef.command.AddTableCommand;
 import com.jaspersoft.studio.data.sql.ui.gef.parts.ColumnEditPart;
@@ -87,7 +88,6 @@ import com.jaspersoft.studio.model.AMapElement;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.DialogEnabledCommand;
 import com.jaspersoft.studio.model.INode;
-import com.jaspersoft.studio.model.util.KeyValue;
 import com.jaspersoft.studio.model.util.ModelVisitor;
 import com.jaspersoft.studio.utils.Misc;
 
@@ -181,6 +181,8 @@ public class SQLQueryDiagram {
 							models.add((ANode) obj);
 						if (obj instanceof TableJoin)
 							models.add(((TableJoin) obj).getJoinTable());
+						if (obj instanceof TableJoinDetail)
+							models.add(obj);
 					}
 					if (!models.isEmpty())
 						selection = models.toArray();
@@ -205,6 +207,21 @@ public class SQLQueryDiagram {
 					menu.add(zoomIn);
 					menu.add(zoomOut);
 				}
+				menu.add(new org.eclipse.jface.action.Separator());
+
+				TableModeShowAction ms = new TableModeShowAction(designer,
+						"keys", Messages.SQLQueryDiagram_2); //$NON-NLS-1$
+				if (ms.calculateEnabled(selection))
+					menu.add(ms);
+				ms = new TableModeShowAction(designer, null,
+						Messages.SQLQueryDiagram_3);
+				if (ms.calculateEnabled(selection))
+					menu.add(ms);
+				ms = new TableModeShowAction(designer, "short", //$NON-NLS-1$
+						Messages.SQLQueryDiagram_9);
+				if (ms.calculateEnabled(selection))
+					menu.add(ms);
+
 			}
 		});
 		viewer.addDropTargetListener(new QueryDesignerDropTargetListener(
@@ -221,27 +238,36 @@ public class SQLQueryDiagram {
 
 	public static final String SQL_EDITOR_TABLES = "com.jaspersoft.studio.data.sql.tables"; //$NON-NLS-1$
 
+	class Table {
+		public String tbl;
+		public String id;
+		public int x;
+		public int y;
+		public String sm;
+	}
+
 	protected void refreshViewer(boolean refreshSource, boolean reread) {
 		JRDesignDataset ds = designer.getjDataset();
 		if (reread && ds != null) {
 			String tbls = ds.getPropertiesMap().getProperty(SQL_EDITOR_TABLES);
 			if (!Misc.isNullOrEmpty(tbls)) {
-				final List<KeyValue<KeyValue<String, String>, Point>> map = new ArrayList<KeyValue<KeyValue<String, String>, Point>>();
+				final List<Table> map = new ArrayList<Table>();
 				try {
 					String[] tables = new Base64Decoder(tbls).processString()
-							.split(";");
+							.split(";"); //$NON-NLS-1$
 					for (String t : tables) {
-						String[] tprm = t.split(",");
-						String tbl = tprm.length > 0 ? tprm[0] : null;
+						String[] tprm = t.split(","); //$NON-NLS-1$
+						Table tbl = new Table();
+						tbl.tbl = tprm.length > 0 ? tprm[0] : null;
 						String xs = tprm.length > 1 ? tprm[1] : null;
 						String ys = tprm.length > 2 ? tprm[2] : null;
-						String id = tprm.length > 3 ? tprm[3] : null;
+						tbl.id = tprm.length > 3 ? tprm[3] : null;
+						tbl.sm = tprm.length > 4 ? tprm[4] : null;
 						if (tbl != null && xs != null && ys != null)
 							try {
-								map.add(new KeyValue<KeyValue<String, String>, Point>(
-										new KeyValue<String, String>(tbl, id),
-										new Point(Integer.parseInt(xs), Integer
-												.parseInt(ys))));
+								tbl.x = Integer.parseInt(xs);
+								tbl.y = Integer.parseInt(ys);
+								map.add(tbl);
 							} catch (NumberFormatException nfe) {
 								// ignore
 							}
@@ -251,24 +277,24 @@ public class SQLQueryDiagram {
 
 						@Override
 						public boolean visit(INode n) {
-							KeyValue<KeyValue<String, String>, Point> key = null;
+							Table key = null;
 							if (n instanceof MFromTable) {
 								MFromTable ft = (MFromTable) n;
 								String t = ft.getValue().toSQLString()
 										+ ft.getAliasKeyString();
-								for (KeyValue<KeyValue<String, String>, Point> kv : map) {
-									if (!kv.key.key.equals("\t\tFROM")
-											&& kv.key.key.equals(t)
-											&& kv.key.value.equals(ft.getId())) {
+								for (Table kv : map) {
+									if (!kv.tbl.equals("\t\tFROM") //$NON-NLS-1$
+											&& kv.tbl.equals(t)
+											&& kv.id.equals(ft.getId())) {
 										key = setupTable(processed, ft, kv);
 										break;
 									}
 								}
 							} else if (n instanceof MFrom) {
 								MFrom ft = (MFrom) n;
-								for (KeyValue<KeyValue<String, String>, Point> kv : map) {
-									if (kv.key.key.equals("\t\tFROM")
-											&& kv.key.value.equals(ft.getId())) {
+								for (Table kv : map) {
+									if (kv.tbl.equals("\t\tFROM") //$NON-NLS-1$
+											&& kv.id.equals(ft.getId())) {
 										key = setupTable(processed, ft, kv);
 										break;
 									}
@@ -284,15 +310,15 @@ public class SQLQueryDiagram {
 
 							@Override
 							public boolean visit(INode n) {
-								KeyValue<KeyValue<String, String>, Point> key = null;
+								Table key = null;
 								if (n instanceof MFromTable
 										&& !processed.contains(n)) {
 									MFromTable ft = (MFromTable) n;
 									String t = ft.getValue().toSQLString()
 											+ ft.getAliasKeyString();
-									for (KeyValue<KeyValue<String, String>, Point> kv : map) {
-										if (!kv.key.key.equals("\t\tFROM")
-												&& kv.key.key.equals(t)) {
+									for (Table kv : map) {
+										if (!kv.tbl.equals("\t\tFROM") //$NON-NLS-1$
+												&& kv.tbl.equals(t)) {
 											key = setupTable(processed, ft, kv);
 											break;
 										}
@@ -405,13 +431,13 @@ public class SQLQueryDiagram {
 		refreshViewer(true, false);
 	}
 
-	private KeyValue<KeyValue<String, String>, Point> setupTable(
-			final List<AMapElement> processed, AMapElement ft,
-			KeyValue<KeyValue<String, String>, Point> kv) {
-		KeyValue<KeyValue<String, String>, Point> key;
+	private Table setupTable(final List<AMapElement> processed, AMapElement ft,
+			Table kv) {
+		Table key;
 		ft.setNoEvents(true);
-		ft.setPropertyValue(MFromTable.PROP_X, kv.value.x);
-		ft.setPropertyValue(MFromTable.PROP_Y, kv.value.y);
+		ft.setPropertyValue(MFromTable.PROP_X, kv.x);
+		ft.setPropertyValue(MFromTable.PROP_Y, kv.y);
+		ft.setPropertyValue(MFromTable.SHOW_MODE_PROPERTY, kv.sm);
 		ft.setNoEvents(false);
 		key = kv;
 		processed.add(ft);

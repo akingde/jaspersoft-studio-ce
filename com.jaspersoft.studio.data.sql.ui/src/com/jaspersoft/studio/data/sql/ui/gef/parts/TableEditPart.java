@@ -34,13 +34,15 @@ import org.eclipse.gef.editpolicies.ComponentEditPolicy;
 import org.eclipse.gef.editpolicies.SelectionEditPolicy;
 import org.eclipse.gef.requests.GroupRequest;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.Util;
 import com.jaspersoft.studio.data.sql.action.table.EditTable;
+import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
 import com.jaspersoft.studio.data.sql.model.metadata.MSqlTable;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
-import com.jaspersoft.studio.data.sql.model.query.from.MFromTableJoin;
 import com.jaspersoft.studio.data.sql.model.query.from.TableJoin;
+import com.jaspersoft.studio.data.sql.model.query.from.TableJoinDetail;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelect;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelectColumn;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelectExpression;
@@ -56,6 +58,7 @@ import com.jaspersoft.studio.data.sql.ui.gef.policy.TableLayoutEditPolicy;
 import com.jaspersoft.studio.data.sql.ui.gef.policy.TableNodeEditPolicy;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MDummy;
+import com.jaspersoft.studio.model.util.ModelVisitor;
 
 public class TableEditPart extends AbstractGraphicalEditPart {
 	private Map<String, MSelectColumn> set = new HashMap<String, MSelectColumn>();
@@ -86,16 +89,16 @@ public class TableEditPart extends AbstractGraphicalEditPart {
 				if (t instanceof Label) {
 					Label l = (Label) t;
 					l.setText(getModel().getDisplayText());
-//					Rectangle b = getBounds().getCopy();
-//					l.setText(l.getText() + "\n" + b);
-//					this.translateToAbsolute(b);
-//					l.setText(l.getText() + "\n" + b);
-//					this.translateToRelative(b);
-//					l.setText(l.getText() + "\n" + b);
-//					l.setText(l.getText() + "\nX"
-//							+ getModel().getPropertyValue(MFromTable.PROP_X));
-//					l.setText(l.getText() + "\nY"
-//							+ getModel().getPropertyValue(MFromTable.PROP_Y));
+					// Rectangle b = getBounds().getCopy();
+					// l.setText(l.getText() + "\n" + b);
+					// this.translateToAbsolute(b);
+					// l.setText(l.getText() + "\n" + b);
+					// this.translateToRelative(b);
+					// l.setText(l.getText() + "\n" + b);
+					// l.setText(l.getText() + "\nX"
+					// + getModel().getPropertyValue(MFromTable.PROP_X));
+					// l.setText(l.getText() + "\nY"
+					// + getModel().getPropertyValue(MFromTable.PROP_Y));
 				}
 				return t;
 			}
@@ -127,6 +130,18 @@ public class TableEditPart extends AbstractGraphicalEditPart {
 		MFromTable fromTable = getModel();
 		refreshModel();
 		f.setToolTip(new Label(fromTable.getDisplayText()));
+		String sm = (String) fromTable
+				.getPropertyValue(MFromTable.SHOW_MODE_PROPERTY);
+		if (sm == null)
+			;// f.setLabelIcont(null);
+		else if (sm.equals("short"))
+			f.setLabelIcon(JaspersoftStudioPlugin.getInstance().getImage(
+					"icons/resources/null.png"));
+		else if (sm.equals("keys"))
+			f.setLabelIcon(JaspersoftStudioPlugin.getInstance().getImage(
+					"icons/resources/null.png"));
+		else
+			f.setLabelIcon(null);
 
 		FromEditPart parent = (FromEditPart) getParent();
 		Point p = parent.readPoint(fromTable);
@@ -167,12 +182,24 @@ public class TableEditPart extends AbstractGraphicalEditPart {
 
 	@Override
 	protected List<?> getModelChildren() {
-		MSqlTable tbl = getModel().getValue();
+		MFromTable m = getModel();
+		String sm = (String) m.getPropertyValue(MFromTable.SHOW_MODE_PROPERTY);
+
+		MSqlTable tbl = m.getValue();
 		List<INode> lst = new ArrayList<INode>();
+		if (sm != null && sm.equals("short"))
+			return lst;
 		for (INode n : tbl.getChildren()) {
 			if (n instanceof MDummy)
 				continue;
-			lst.add(n);
+			if (n instanceof MSQLColumn) {
+				if (sm != null && sm.equals("keys")
+						&& ((MSQLColumn) n).getPrimaryKey() == null
+						&& ((MSQLColumn) n).getForeignKeys() == null)
+					continue;
+
+				lst.add(n);
+			}
 		}
 		return lst;
 	}
@@ -225,35 +252,75 @@ public class TableEditPart extends AbstractGraphicalEditPart {
 				});
 	}
 
-	@Override
-	protected List<?> getModelSourceConnections() {
-		if (getModel().getTableJoins() != null
-				&& !getModel().getTableJoins().isEmpty()) {
-			List<TableJoin> joins = new ArrayList<TableJoin>();
-			for (TableJoin tj : getModel().getTableJoins()) {
-				if (isSubQuery(tj))
-					continue;
-				joins.add(tj);
-			}
-			return joins;
-		}
-		return super.getModelSourceConnections();
-	}
-
 	protected boolean isSubQuery(TableJoin tj) {
 		return tj.getFromTable().getValue() instanceof MQueryTable
 				|| tj.getJoinTable().getValue() instanceof MQueryTable;
 	}
 
 	@Override
+	protected List<?> getModelSourceConnections() {
+		final List<TableJoinDetail> tjs = new ArrayList<TableJoinDetail>();
+		final MFromTable m = getModel();
+		List<TableJoinDetail> joins = m.getTableJoinDetails();
+		if (joins != null)
+			for (TableJoinDetail tjd : joins)
+				checkIsConnection(tjs, m, tjd, tjd.getSrcTable());
+		if (!tjs.isEmpty())
+			return tjs;
+
+		// if (getModel().getTableJoins() != null
+		// && !getModel().getTableJoins().isEmpty()) {
+		// List<TableJoin> joins = new ArrayList<TableJoin>();
+		// for (TableJoin tj : getModel().getTableJoins()) {
+		// if (isSubQuery(tj))
+		// continue;
+		// joins.add(tj);
+		// }
+		//
+		// return joins;
+		// }
+		return super.getModelSourceConnections();
+	}
+
+	protected void checkIsConnection(final List<TableJoinDetail> tjs,
+			final MFromTable m, final TableJoinDetail tjd, MFromTable mft) {
+		if (mft.getValue() instanceof MQueryTable) {
+			new ModelVisitor<Object>(mft) {
+
+				@Override
+				public boolean visit(INode n) {
+					if (n instanceof MFromTable
+							&& n.getValue() instanceof MQueryTable)
+						visit(n);
+					else if (n instanceof MFromTable)
+						if (n.equals(m)) {
+							tjs.add(tjd);
+							stop();
+						}
+					return true;
+				}
+			};
+		} else if (mft.equals(m))
+			tjs.add(tjd);
+	}
+
+	@Override
 	protected List<?> getModelTargetConnections() {
-		if (getModel() instanceof MFromTableJoin) {
-			List<TableJoin> joins = new ArrayList<TableJoin>();
-			TableJoin tj = ((MFromTableJoin) getModel()).getTableJoin();
-			if (!isSubQuery(tj))
-				joins.add(tj);
-			return joins;
-		}
+		List<TableJoinDetail> tjs = new ArrayList<TableJoinDetail>();
+		MFromTable m = getModel();
+		List<TableJoinDetail> joins = m.getTableJoinDetails();
+		if (joins != null)
+			for (TableJoinDetail tjd : joins)
+				checkIsConnection(tjs, m, tjd, tjd.getDestTable());
+		if (!tjs.isEmpty())
+			return tjs;
+		// if (getModel() instanceof MFromTableJoin) {
+		// List<TableJoin> joins = new ArrayList<TableJoin>();
+		// TableJoin tj = ((MFromTableJoin) getModel()).getTableJoin();
+		// if (!isSubQuery(tj))
+		// joins.add(tj);
+		// return joins;
+		// }
 		return super.getModelTargetConnections();
 	}
 

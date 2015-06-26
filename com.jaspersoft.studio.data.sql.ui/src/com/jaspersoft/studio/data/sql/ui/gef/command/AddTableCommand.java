@@ -84,11 +84,14 @@ public class AddTableCommand extends ACommand {
 				fromTable.add(ft);
 				// check if this new table contains foreign keys
 				for (INode n : mtlb.getChildren()) {
-					List<ForeignKey> lfk = ((MSQLColumn) n).getForeignKeys();
-					if (lfk != null)
-						for (ForeignKey fk : lfk)
-							if (fk.getTable().equals(mtlb))
-								keys.put(fk, ft);
+					if (n instanceof MSQLColumn) {
+						List<ForeignKey> lfk = ((MSQLColumn) n)
+								.getForeignKeys();
+						if (lfk != null)
+							for (ForeignKey fk : lfk)
+								if (fk.getTable().equals(mtlb))
+									keys.put(fk, ft);
+					}
 				}
 			}
 			// let's look if we have fk to our table from existing tables
@@ -171,6 +174,7 @@ public class AddTableCommand extends ACommand {
 										if (keys.get(fk1) == dest)
 											keys.put(fk1, join);
 									}
+									dest = join;
 								}
 								joinExpression(join, dest, c, src,
 										fk.getSrcColumns()[0]);

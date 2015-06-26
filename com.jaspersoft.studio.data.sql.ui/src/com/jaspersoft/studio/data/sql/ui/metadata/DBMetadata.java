@@ -278,7 +278,7 @@ public class DBMetadata {
 				updateUI(root);
 				for (MSqlSchema mcs : mcurrent) {
 					meta = checkClosed(meta);
-					readSchema(meta, mcs, monitor, true);
+					readSchema(DBMetadata.this, meta, mcs, monitor, true);
 				}
 			} catch (Throwable e) {
 				updateUI(root);
@@ -367,8 +367,8 @@ public class DBMetadata {
 								IProgressMonitor.UNKNOWN);
 						try {
 							monitors.add(monitor);
-							mschema.setDbMetadata(DBMetadata.this);
-							readSchema(getConnection(das, false).getMetaData(),
+							readSchema(DBMetadata.this,
+									getConnection(das, false).getMetaData(),
 									mschema, monitor, false);
 						} catch (Throwable e) {
 							designer.showError(e);
@@ -387,10 +387,10 @@ public class DBMetadata {
 		}
 	}
 
-	protected void readSchema(DatabaseMetaData meta, MSqlSchema schema,
-			IProgressMonitor monitor, boolean firstSelection) {
+	protected void readSchema(DBMetadata dbmeta, DatabaseMetaData meta,
+			MSqlSchema schema, IProgressMonitor monitor, boolean firstSelection) {
 		try {
-			MetaDataUtil.readSchema(meta, schema, monitor, tableTypes);
+			MetaDataUtil.readSchema(dbmeta, meta, schema, monitor, tableTypes);
 			updateItermediateUI(false);
 			if (monitor.isCanceled())
 				return;

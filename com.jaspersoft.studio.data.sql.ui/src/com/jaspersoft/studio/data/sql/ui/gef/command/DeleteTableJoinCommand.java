@@ -40,13 +40,14 @@ public class DeleteTableJoinCommand extends ACommand {
 		super.execute();
 		mtbl = null;
 		MFromTableJoin mftj = doGetJoinedTable();
-		if (mftj != null) {
+		if (mftj != null && mftj.getParent() != null
+				&& mftj.getParent().getParent() != null) {
 			MFromTable mtbl = new MFromTable(mftj.getParent().getParent(),
 					mftj.getValue());
 			undoRemove.add(mtbl);
 			mtbl.setAlias(mftj.getAlias());
 			mtbl.setAliasKeyword(mftj.getAliasKeyword());
-
+			mftj.copyProperties(mtbl);
 			reparent(mftj, null);
 
 			copySubQuery(mftj, mtbl);
@@ -74,19 +75,10 @@ public class DeleteTableJoinCommand extends ACommand {
 	}
 
 	protected MFromTableJoin doGetJoinedTable() {
-		MFromTableJoin mcol = null;
-		for (Object obj : selection) {
-			if (obj instanceof MFromTableJoin) {
-				mcol = (MFromTableJoin) obj;
-				break;
-			}
-		}
-		return mcol;
-	}
-
-	@Override
-	protected void firePropertyChange() {
-
+		for (Object obj : selection)
+			if (obj instanceof MFromTableJoin)
+				return (MFromTableJoin) obj;
+		return null;
 	}
 
 }

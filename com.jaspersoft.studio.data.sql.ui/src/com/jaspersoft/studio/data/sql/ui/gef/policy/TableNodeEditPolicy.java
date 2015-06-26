@@ -35,7 +35,8 @@ public class TableNodeEditPolicy extends GraphicalNodeEditPolicy {
 	/**
 	 * @see GraphicalNodeEditPolicy#getConnectionCompleteCommand(CreateConnectionRequest)
 	 */
-	protected Command getConnectionCompleteCommand(CreateConnectionRequest request) {
+	protected Command getConnectionCompleteCommand(
+			CreateConnectionRequest request) {
 		return null;
 	}
 
@@ -43,7 +44,10 @@ public class TableNodeEditPolicy extends GraphicalNodeEditPolicy {
 	 * @see GraphicalNodeEditPolicy#getReconnectSourceCommand(ReconnectRequest)
 	 */
 	protected Command getReconnectSourceCommand(ReconnectRequest request) {
-		TableJoin tj = ((RelationshipPart) request.getConnectionEditPart()).getModel();
+		if (!(request.getConnectionEditPart() instanceof RelationshipPart))
+			return null;
+		TableJoin tj = ((RelationshipPart) request.getConnectionEditPart())
+				.getModel();
 		TableEditPart tep = (TableEditPart) getHost();
 		SQLQueryDesigner designer = ((TableEditPart) getHost()).getDesigner();
 		if (tep.getModel() == tj.getJoinTable())
@@ -55,7 +59,10 @@ public class TableNodeEditPolicy extends GraphicalNodeEditPolicy {
 	 * @see GraphicalNodeEditPolicy#getReconnectTargetCommand(ReconnectRequest)
 	 */
 	protected Command getReconnectTargetCommand(ReconnectRequest request) {
-		TableJoin tj = ((RelationshipPart) request.getConnectionEditPart()).getModel();
+		if (!(request.getConnectionEditPart() instanceof RelationshipPart))
+			return null;
+		TableJoin tj = ((RelationshipPart) request.getConnectionEditPart())
+				.getModel();
 		TableEditPart tep = (TableEditPart) getHost();
 		if (tep.getModel() == tj.getFromTable())
 			return null;

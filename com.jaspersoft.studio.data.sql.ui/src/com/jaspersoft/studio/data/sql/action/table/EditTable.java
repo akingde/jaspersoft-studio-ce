@@ -17,17 +17,21 @@ import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.TreeViewer;
 
+import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.action.AAction;
 import com.jaspersoft.studio.data.sql.dialogs.EditFromTableDialog;
 import com.jaspersoft.studio.data.sql.messages.Messages;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
 import com.jaspersoft.studio.data.sql.model.query.subquery.MQueryTable;
+import com.jaspersoft.studio.data.sql.ui.gef.command.EditTableCommand;
 import com.jaspersoft.studio.model.ANode;
 
 public class EditTable extends AAction {
+	private SQLQueryDesigner designer;
 
-	public EditTable(TreeViewer treeViewer) {
+	public EditTable(SQLQueryDesigner designer, TreeViewer treeViewer) {
 		super(Messages.EditTable_0, treeViewer);
+		this.designer = designer;
 	}
 
 	@Override
@@ -56,11 +60,13 @@ public class EditTable extends AAction {
 				break;
 			}
 		}
-		EditFromTableDialog dialog = new EditFromTableDialog(UIUtils.getShell());
-		dialog.setValue(mcol);
-		if (dialog.open() == Dialog.OK) {
-			mcol.setAlias(dialog.getAlias());
-			mcol.setAliasKeyword(dialog.getAliasKeyword());
+		EditFromTableDialog d = new EditFromTableDialog(UIUtils.getShell());
+		d.setValue(mcol);
+		if (d.open() == Dialog.OK) {
+			EditTableCommand c = new EditTableCommand(mcol, d.getAlias(),
+					d.getAliasKeyword());
+			designer.getDiagram().getViewer().getEditDomain().getCommandStack()
+					.execute(c);
 			selectInTree(mcol);
 		}
 	}

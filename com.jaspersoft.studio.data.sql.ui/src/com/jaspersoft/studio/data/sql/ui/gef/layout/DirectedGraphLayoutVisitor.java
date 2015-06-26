@@ -29,9 +29,8 @@ import org.eclipse.draw2d.graph.DirectedGraph;
 import org.eclipse.draw2d.graph.Edge;
 import org.eclipse.draw2d.graph.Node;
 import org.eclipse.draw2d.graph.NodeList;
+import org.eclipse.gef.editparts.AbstractConnectionEditPart;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
-
-import com.jaspersoft.studio.data.sql.ui.gef.parts.RelationshipPart;
 
 public class DirectedGraphLayoutVisitor {
 	private static final Insets PADDING = new Insets(15, 15, 15, 15);
@@ -70,7 +69,7 @@ public class DirectedGraphLayoutVisitor {
 		for (Object obj : diagram.getChildren()) {
 			AbstractGraphicalEditPart part = (AbstractGraphicalEditPart) obj;
 			for (Object item : part.getSourceConnections()) {
-				RelationshipPart rpart = (RelationshipPart) item;
+				AbstractConnectionEditPart rpart = (AbstractConnectionEditPart) item;
 				Node source = (Node) partToNodesMap.get(rpart.getSource());
 				Node target = (Node) partToNodesMap.get(rpart.getTarget());
 				if (source != null && target != null) {
@@ -94,13 +93,13 @@ public class DirectedGraphLayoutVisitor {
 			f.setBounds(new Rectangle(r.x + n.x, r.y + n.y, psize.width,
 					psize.height));
 
-			List<RelationshipPart> sc = tp.getSourceConnections();
-			for (RelationshipPart rp : sc)
+			List<AbstractConnectionEditPart> sc = tp.getSourceConnections();
+			for (AbstractConnectionEditPart rp : sc)
 				applyResults(rp);
 		}
 	}
 
-	protected void applyResults(RelationshipPart relationshipPart) {
+	protected void applyResults(AbstractConnectionEditPart relationshipPart) {
 		Edge e = (Edge) partToNodesMap.get(relationshipPart);
 		if (e == null)
 			return;

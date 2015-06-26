@@ -124,7 +124,7 @@ public class ActionFactory {
 		actions.add(new CreateSubQueryTable(designer, treeViewer));
 		actions.add(null);
 		actions.add(new EditTableJoin(designer, treeViewer));
-		actions.add(new EditTable(treeViewer));
+		actions.add(new EditTable(designer, treeViewer));
 		actions.add(null);
 		actions.add(new DeleteTableJoin(designer, treeViewer));
 		actions.add(new DeleteTable(designer, treeViewer));

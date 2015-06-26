@@ -20,6 +20,7 @@ import net.sf.jasperreports.engine.JRConstants;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 
+import com.jaspersoft.studio.data.sql.model.MSQLRoot;
 import com.jaspersoft.studio.data.sql.model.metadata.MSqlTable;
 import com.jaspersoft.studio.data.sql.model.query.AMQueryAliased;
 import com.jaspersoft.studio.data.sql.model.query.subquery.MQueryTable;
@@ -27,6 +28,7 @@ import com.jaspersoft.studio.data.sql.text2model.ConvertUtil;
 import com.jaspersoft.studio.model.ANode;
 
 public class MFromTable extends AMQueryAliased<MSqlTable> {
+	public static final String SHOW_MODE_PROPERTY = "showMode";
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	public MFromTable(ANode parent, MSqlTable value) {
@@ -98,4 +100,10 @@ public class MFromTable extends AMQueryAliased<MSqlTable> {
 	public static final String PROP_X = "x";
 	public static final String PROP_Y = "y";
 
+	public List<TableJoinDetail> getTableJoinDetails() {
+		MSQLRoot r = getRoot();
+		if (r != null)
+			return r.getJoins();
+		return null;
+	}
 }

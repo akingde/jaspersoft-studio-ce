@@ -17,9 +17,11 @@ import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.LineBorder;
+import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.wb.swt.SWTResourceManager;
 
 public class SqlTableFigure extends Figure {
@@ -29,6 +31,7 @@ public class SqlTableFigure extends Figure {
 
 		private NameLabel(String s) {
 			super(s);
+			setIconAlignment(PositionConstants.RIGHT);
 		}
 
 		@Override
@@ -64,6 +67,10 @@ public class SqlTableFigure extends Figure {
 
 	public void setName(String name) {
 		lblName.setText(name);
+	}
+
+	public void setLabelIcon(Image ico) {
+		lblName.setIcon(ico);
 	}
 
 	public void showSelectedBorder() {

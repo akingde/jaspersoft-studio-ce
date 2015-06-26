@@ -22,18 +22,12 @@ import com.jaspersoft.studio.data.sql.Util;
 import com.jaspersoft.studio.data.sql.action.AAction;
 import com.jaspersoft.studio.data.sql.dialogs.JoinFromTableDialog;
 import com.jaspersoft.studio.data.sql.messages.Messages;
-import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
-import com.jaspersoft.studio.data.sql.model.metadata.MSqlTable;
-import com.jaspersoft.studio.data.sql.model.query.expression.MExpression;
 import com.jaspersoft.studio.data.sql.model.query.from.MFrom;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTableJoin;
-import com.jaspersoft.studio.data.sql.model.query.from.TableJoin;
-import com.jaspersoft.studio.data.sql.model.query.operand.FieldOperand;
 import com.jaspersoft.studio.data.sql.model.query.subquery.MQueryTable;
 import com.jaspersoft.studio.data.sql.ui.gef.command.JoinTableCommand;
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.model.INode;
 
 public class JoinTable extends AAction {
 	private SQLQueryDesigner designer;

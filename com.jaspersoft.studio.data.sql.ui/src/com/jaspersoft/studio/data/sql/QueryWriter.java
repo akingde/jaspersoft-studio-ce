@@ -39,6 +39,7 @@ public class QueryWriter {
 					sb.append("(");
 				} else if (n instanceof IQueryString) {
 					if (n instanceof MFromTable
+							&& !(n instanceof MFromTableJoin)
 							&& n.getValue() instanceof MQueryTable
 							&& !((MFromTable) n).isFirst())
 						sb.append(",\n\t");

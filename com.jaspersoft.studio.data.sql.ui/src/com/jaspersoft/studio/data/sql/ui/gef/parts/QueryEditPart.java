@@ -140,6 +140,7 @@ public class QueryEditPart extends AbstractGraphicalEditPart {
 					if (sn instanceof MFrom && !n.getChildren().isEmpty())
 						;// list.add((MFrom) sn);
 		}
+		root.rebuildJoins();
 		return list;
 	}
 

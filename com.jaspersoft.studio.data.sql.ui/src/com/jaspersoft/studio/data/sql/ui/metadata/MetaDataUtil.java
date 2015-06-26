@@ -77,8 +77,9 @@ public class MetaDataUtil {
 		return mcurrent;
 	}
 
-	public synchronized static void readSchema(DatabaseMetaData meta,
-			MSqlSchema schema, IProgressMonitor monitor, List<String> tableTypes) {
+	public synchronized static void readSchema(DBMetadata dbmeta,
+			DatabaseMetaData meta, MSqlSchema schema, IProgressMonitor monitor,
+			List<String> tableTypes) {
 		ResultSet rs = null;
 		try {
 			boolean isSchema = meta.supportsSchemasInTableDefinitions();
@@ -90,8 +91,7 @@ public class MetaDataUtil {
 				for (String ttype : tableTypes)
 					new MDummy(new MTables(schema, ttype));
 			} else {
-				if (meta.getConnection().isClosed())
-					meta = schema.getDbMetadata().getMetadata();
+				meta = dbmeta.checkClosed(meta);
 				rs = isSchema ? meta.getSchemas() : meta.getCatalogs();
 				while (rs.next()) {
 					String tableCatalog = isCatalog && !isSchema ? rs
@@ -122,7 +122,6 @@ public class MetaDataUtil {
 			for (INode n : schema.getChildren())
 				if (n instanceof MTables) {
 					((MTables) n).setDbMetadata(schema.getDbMetadata());
-					meta = dbmeta.checkClosed(meta);
 					MetaDataUtil.readTables(dbmeta, meta, schema.getValue(),
 							schema.getTableCatalog(), (MTables) n, tables,
 							monitor);

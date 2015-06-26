@@ -31,6 +31,7 @@ import com.jaspersoft.studio.data.sql.model.query.from.MFrom;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelect;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelectExpression;
+import com.jaspersoft.studio.data.sql.model.query.subquery.MQueryTable;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MDummy;
@@ -147,10 +148,19 @@ public class ConvertUtil {
 		}.getObject();
 		if (key == null) {
 			for (MFromTable mft : Util.getFromTables(msel)) {
+				if (mft.getValue() instanceof MQueryTable) {
+					key = findColumn(
+							((MQueryTable) mft.getValue()).getSubquery(),
+							schema, tbl, clmn, designer);
+					if (key != null) {
+						key.value = mft;
+						return key;
+					}
+				}
 				if (mft.getValue().isNotInMetadata()
 						&& mft.getValue().getValue().equalsIgnoreCase(table))
-					return new KeyValue<MSQLColumn, MFromTable>(new MSQLColumn(
-							mft.getValue(), column, null), mft);
+					return new KeyValue<MSQLColumn, MFromTable>(addColumn(
+							mft.getValue(), column), mft);
 			}
 		}
 		if (key == null) {
@@ -177,7 +187,7 @@ public class ConvertUtil {
 							continue;
 						if (v.getValue().equalsIgnoreCase(tblName))
 							return new KeyValue<MSQLColumn, MFromTable>(
-									new MSQLColumn(v, column, null), mft);
+									addColumn(v, column), mft);
 					}
 					getTableUnknown(msel.getRoot(), schema, tblName, designer);
 				}
@@ -185,13 +195,20 @@ public class ConvertUtil {
 				if (star.getValue().equals("*"))
 					for (MFromTable mft : Util.getFromTables(msel)) {
 						MSqlTable v = mft.getValue();
-						return new KeyValue<MSQLColumn, MFromTable>(
-								new MSQLColumn(v, column, null), mft);
+						return new KeyValue<MSQLColumn, MFromTable>(addColumn(
+								v, column), mft);
 					}
 				getTableUnknown(msel.getRoot(), schema, "", designer);
 			}
 		}
 		return key;
+	}
+
+	public static MSQLColumn addColumn(ANode parent, String value) {
+		for (INode n : parent.getChildren())
+			if (n instanceof MSQLColumn && n.getValue().equals(value))
+				return (MSQLColumn) n;
+		return new MSQLColumn(parent, value, null);
 	}
 
 	public static MSqlTable getTableUnknown(MRoot dbroot, String schema,
