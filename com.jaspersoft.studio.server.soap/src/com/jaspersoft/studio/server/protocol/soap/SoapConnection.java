@@ -242,15 +242,14 @@ public class SoapConnection implements IConnection {
 					break;
 				}
 			}
-			if (!exists)
+			if (!exists && r.getWsType() != null
+					&& !SelectorDatasource.isDatasource(r))
 				toDel.add(r);
 		}
-		if (!toDel.isEmpty()) {
-			for (ResourceDescriptor r : toDel) {
-				rd = delete(monitor, r, rd);
-				if (monitor.isCanceled())
-					return rd;
-			}
+		for (ResourceDescriptor r : toDel) {
+			rd = delete(monitor, r, rd);
+			if (monitor.isCanceled())
+				return rd;
 		}
 		if (rd.getWsType().equals(ResourceDescriptor.TYPE_REPORTUNIT)) {
 			rd = get(monitor, rd, null);
@@ -440,7 +439,7 @@ public class SoapConnection implements IConnection {
 			if (wsType.equals(ResourceDescriptor.TYPE_INPUT_CONTROL)) {
 				inputcontrols.add(sub_rd);
 				icNames.add(sub_rd.getName());
-			} else if (wsType.equals(ResourceDescriptor.TYPE_DATASOURCE)
+			} else if (SelectorDatasource.isDatasource(sub_rd)
 					&& sub_rd.getIsReference())
 				dsUri = sub_rd.getReferenceUri();
 			else if (SelectorDatasource.isDatasource(sub_rd))
@@ -531,8 +530,7 @@ public class SoapConnection implements IConnection {
 			IProgressMonitor monitor) throws Exception {
 		String dsUri = null;
 		for (ResourceDescriptor sub_rd : runit.getChildren()) {
-			String wsType = sub_rd.getWsType();
-			if (wsType.equals(ResourceDescriptor.TYPE_DATASOURCE)
+			if (SelectorDatasource.isDatasource(sub_rd)
 					&& sub_rd.getIsReference())
 				dsUri = sub_rd.getReferenceUri();
 			else if (SelectorDatasource.isDatasource(sub_rd))
