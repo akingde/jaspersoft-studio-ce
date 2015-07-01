@@ -5077,7 +5077,7 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	} 
 
 	//terminal ID:
-	//	("a".."z" | "A".."Z" | "À".."ÿ" | "Ā".."ſ" | "ƀ".."ɏ" | "А".."я" | "_" | "-" | "ぁ".."ゟ" | "゠".."ヿ" | "ㇰ".."ㇿ" |
+	//	("a".."z" | "A".."Z" | "À".."ÿ" | "Ā".."ſ" | "ƀ".."ɏ" | "А".."я" | "_" | "-" | "$" | "ぁ".."ゟ" | "゠".."ヿ" | "ㇰ".."ㇿ" |
 	//	"一".."鿿" | "歴".."す" | "ア".."ン" | "豈".."﫿" | "㐀".."䶿" | "＿" | "0".."9")*;
 	public TerminalRule getIDRule() {
 		return (tID != null) ? tID : (tID = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "ID"));
