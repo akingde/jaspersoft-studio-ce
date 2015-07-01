@@ -337,15 +337,27 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 		super.createRight(parent);
 		return rightComposite;
 	}
+	
+	/**
+	 * Log the report language and preview type (different from java) when the report is executed
+	 */
+	protected void auditPreview(){
+		// Log the preview if not Java
+		if (currentViewer != null && !currentViewer.equals("Java")) {
+			JaspersoftStudioPlugin.getInstance().getUsageManager().audit(currentViewer, UsageStatisticsIDs.CATEGORY_PREVIEW_FORMAT);
+			//Log the language used by the report
+			if (jrContext != null && jrContext.getJasperDesign() != null){
+				String reportLanguage = jrContext.getJasperDesign().getLanguage();
+				if (reportLanguage != null){
+					JaspersoftStudioPlugin.getInstance().getUsageManager().audit("ReportLanguage"+reportLanguage, UsageStatisticsIDs.CATEGORY_REPORT);
+				}
+			}
+		}
+	}
 
 	@Override
 	public boolean switchRightView(APreview view, Statistics stats, MultiPageContainer container) {
 		reportControler.viewerChanged(view);
-		// Log the preview if not Java
-		if (currentViewer != null && !currentViewer.equals("Java")) {
-			JaspersoftStudioPlugin.getInstance().getUsageManager()
-					.audit(currentViewer, UsageStatisticsIDs.CATEGORY_PREVIEW_FORMAT);
-		}
 		return super.switchRightView(view, stats, container);
 	}
 
@@ -368,11 +380,7 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 
 			addPreviewModeContributeProperties();
 			reportControler.runReport();
-			// Log the preview if not Java
-			if (currentViewer != null && !currentViewer.equals("Java")) {
-				JaspersoftStudioPlugin.getInstance().getUsageManager()
-						.audit(currentViewer, UsageStatisticsIDs.CATEGORY_PREVIEW_FORMAT);
-			}
+			auditPreview();
 		}
 	}
 
