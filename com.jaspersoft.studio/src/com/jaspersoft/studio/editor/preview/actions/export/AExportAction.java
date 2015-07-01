@@ -129,6 +129,12 @@ public abstract class AExportAction extends AReportViewerAction {
 					public void completed(File value) {
 						//Log the export statistics of the exported format
 						JaspersoftStudioPlugin.getInstance().getUsageManager().audit(AExportAction.this.getClass().getName(), UsageStatisticsIDs.CATEGORY_EXPORT_FORMAT);
+						if (jContext != null && jContext.getJasperDesign() != null){
+							String reportLanguage = jContext.getJasperDesign().getLanguage();
+							if (reportLanguage != null){
+								JaspersoftStudioPlugin.getInstance().getUsageManager().audit("ReportLanguage"+reportLanguage, UsageStatisticsIDs.CATEGORY_REPORT);
+							}
+						}
 					}
 				});
 			} catch (Throwable e) {
