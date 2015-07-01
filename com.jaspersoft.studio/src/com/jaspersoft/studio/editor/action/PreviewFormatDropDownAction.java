@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.editor.action;
 
@@ -27,7 +23,9 @@ import com.jaspersoft.studio.editor.AMultiEditor;
 import com.jaspersoft.studio.editor.AbstractJRXMLEditor;
 import com.jaspersoft.studio.editor.preview.PreviewContainer;
 import com.jaspersoft.studio.editor.preview.view.AViewsFactory;
+import com.jaspersoft.studio.editor.preview.view.ViewsFactory;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /**
@@ -149,6 +147,20 @@ public class PreviewFormatDropDownAction extends Action implements IMenuCreator 
 		viewFactory = preview.getViewFactory();
 		for (String key : viewFactory.getKeys()) {
 			if (viewFactory.isSeparator(key)) {
+				if (key.equals(ViewsFactory.EXCEL_API)
+						&& !jConfig
+								.getPropertyBoolean(JRExporterPreferencePage.COM_JASPERSOFT_STUDIO_EXPORTER_SHOW_EXCELAPI, false))
+					continue;
+				if (key.equals(ViewsFactory.X_HTML)
+						&& !jConfig.getPropertyBoolean(JRExporterPreferencePage.COM_JASPERSOFT_STUDIO_EXPORTER_SHOW_XHTML, false))
+					continue;
+				if (key.equals(ViewsFactory.HTML_NO_INTERACTIVITY)
+						&& !jConfig.getPropertyBoolean(JRExporterPreferencePage.COM_JASPERSOFT_STUDIO_EXPORTER_SHOW_HTML, false))
+					continue;
+				if (key.equals(ViewsFactory.XLS_METADATA)
+						&& !jConfig.getPropertyBoolean(
+								JRExporterPreferencePage.COM_JASPERSOFT_STUDIO_EXPORTER_SHOW_EXCELAPI_METADATA, false))
+					continue;
 				new MenuItem(menu, SWT.SEPARATOR);
 			} else {
 				creteItem(key, editor);

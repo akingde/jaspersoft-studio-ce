@@ -915,6 +915,7 @@ public class Messages extends NLS {
 	public static String JRBackwardManager_downloadSize;
 	public static String JRBackwardManager_downloadStart;
 	public static String JRBackwardManager_extracting;
+	public static String JRExporterPreferencePage_0;
 	public static String JRExporterPreferencePage_10;
 	public static String JRExporterPreferencePage_11;
 	public static String JRExporterPreferencePage_12;

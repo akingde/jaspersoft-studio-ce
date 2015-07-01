@@ -43,6 +43,11 @@ import com.jaspersoft.studio.editor.preview.view.report.system.XlsxViewer;
 import com.jaspersoft.studio.messages.Messages;
 
 public class ViewsFactory extends AViewsFactory {
+	public static final String X_HTML = "xHTML";
+	public static final String EXCEL_API = "ExcelAPI";
+	public static final String XLS_METADATA = "XLS Metadata";
+	public static final String HTML = "HTML";
+	public static final String HTML_NO_INTERACTIVITY = "HTML (No Interactivity)";
 	public static final String VIEWER_JAVA = "Java"; //$NON-NLS-1$
 	private static LinkedHashMap<String, Class<? extends APreview>> pcmap = new LinkedHashMap<String, Class<? extends APreview>>();
 	static {
@@ -50,9 +55,9 @@ public class ViewsFactory extends AViewsFactory {
 
 		pcmap.put("SEPARATOR1", null); //$NON-NLS-1$
 
-		pcmap.put("Layered HTML", LayeredHTMLViewer.class); //$NON-NLS-1$
-		pcmap.put("HTML", HTMLViewer.class); //$NON-NLS-1$
-		pcmap.put("xHTML", XHTMLViewer.class); //$NON-NLS-1$
+		pcmap.put(HTML, LayeredHTMLViewer.class); //$NON-NLS-1$
+		pcmap.put(HTML_NO_INTERACTIVITY, HTMLViewer.class); //$NON-NLS-1$
+		pcmap.put(X_HTML, XHTMLViewer.class); //$NON-NLS-1$
 		pcmap.put("SEPARATOR1", null); //$NON-NLS-1$
 		pcmap.put("SEPARATOR1", null); //$NON-NLS-1$
 		pcmap.put("PDF", PdfViewer.class); //$NON-NLS-1$
@@ -69,9 +74,9 @@ public class ViewsFactory extends AViewsFactory {
 		pcmap.put("SEPARATOR3", null); //$NON-NLS-1$
 
 		pcmap.put("XLS", XlsViewer.class); //$NON-NLS-1$
-		pcmap.put("XLS Metadata", XlsMetadataViewer.class); //$NON-NLS-1$
+		pcmap.put(XLS_METADATA, XlsMetadataViewer.class); //$NON-NLS-1$
 		pcmap.put("XLSx", XlsxViewer.class); //$NON-NLS-1$
-		pcmap.put("ExcelAPI", ExcelAPIViewer.class); //$NON-NLS-1$
+		pcmap.put(EXCEL_API, ExcelAPIViewer.class); //$NON-NLS-1$
 		pcmap.put("CSV", CSVViewer.class); //$NON-NLS-1$
 		pcmap.put("CSV Metadata", CSVMetadataViewer.class); //$NON-NLS-1$
 		pcmap.put("JSON Metadata", JSONMetadataViewer.class); //$NON-NLS-1$
