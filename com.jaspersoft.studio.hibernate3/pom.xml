@@ -12,5 +12,5 @@
 	<groupId>com.jaspersoft.studio.community-edition</groupId>
 	<artifactId>com.jaspersoft.studio.hibernate3</artifactId>
 	<packaging>eclipse-plugin</packaging>
-	<version>3.2.0.GA</version>
+	<version>3.3.2.GA</version>
 </project> 
