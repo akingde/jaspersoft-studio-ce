@@ -21,6 +21,7 @@ import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.JRPropertiesHolder;
 import net.sf.jasperreports.engine.base.JRBaseElement;
 import net.sf.jasperreports.engine.design.JRDesignBand;
+import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignElementGroup;
 import net.sf.jasperreports.engine.design.JRDesignFrame;
@@ -365,7 +366,17 @@ public class CreateElementCommand extends Command {
 			}
 			//log the statistics of the creation of an element
 			if (jrElement != null) {
-				JaspersoftStudioPlugin.getInstance().getUsageManager().audit(jrElement.getClass().getName(), UsageStatisticsIDs.CATEGORY_ELEMENT);
+				if (jrElement instanceof JRDesignComponentElement){
+					JRDesignComponentElement componentElement = (JRDesignComponentElement)jrElement;
+					if (componentElement.getComponent() != null){
+						JaspersoftStudioPlugin.getInstance().getUsageManager().audit(componentElement.getClass().getName(), UsageStatisticsIDs.CATEGORY_ELEMENT);
+					} else {
+						JaspersoftStudioPlugin.getInstance().getUsageManager().audit(jrElement.getClass().getName()+"[null_component]", UsageStatisticsIDs.CATEGORY_ELEMENT);
+					}
+				} else{
+					JaspersoftStudioPlugin.getInstance().getUsageManager().audit(jrElement.getClass().getName(), UsageStatisticsIDs.CATEGORY_ELEMENT);
+				}
+				
 			}
 		}
 	}
