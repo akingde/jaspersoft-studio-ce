@@ -17,7 +17,9 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.components.barbecue.StandardBarbecueComponent;
-import net.sf.jasperreports.components.barcode4j.BarcodeComponent;
+import net.sf.jasperreports.components.barcode4j.Barcode4jComponent;
+import net.sf.jasperreports.components.barcode4j.OrientationEnum;
+import net.sf.jasperreports.components.barcode4j.TextPositionEnum;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
@@ -28,10 +30,16 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.barcode.BarcodeNodeIconDescriptor;
+import com.jaspersoft.studio.components.barcode.messages.Messages;
 import com.jaspersoft.studio.components.barcode.model.MBarcode;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
+import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
+import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.DoublePropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.PixelPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
 import com.jaspersoft.studio.utils.ModelUtils;
 
@@ -115,6 +123,8 @@ public class MBarcode4j extends MBarcode {
 
 	private static IPropertyDescriptor[] descriptors;
 	private static Map<String, Object> defaultsMap;
+	private NamedEnumPropertyDescriptor<OrientationEnum> orientationD;
+	private NamedEnumPropertyDescriptor<TextPositionEnum> textPositionD;
 
 	@Override
 	public Map<String, Object> getDefaultsMap() {
@@ -144,129 +154,135 @@ public class MBarcode4j extends MBarcode {
 			Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		// JSSComboPropertyDescriptor orientationD = new
-		// JSSComboPropertyDescriptor(
-		// BarcodeComponent.PROPERTY_ORIENTATION,
-		// Messages.MBarcode4j_orientation, Orientation.getItems());
-		// orientationD
-		// .setDescription(Messages.MBarcode4j_orientation_description);
-		// desc.add(orientationD);
-		//
-		// JRExpressionPropertyDescriptor patternExprD = new
-		// JRExpressionPropertyDescriptor(
-		// BarcodeComponent.PROPERTY_PATTERN_EXPRESSION,
-		// Messages.MBarcode4j_pattern_expression);
-		// patternExprD
-		// .setDescription(Messages.MBarcode4j_pattern_expression_description);
-		// desc.add(patternExprD);
-		//
-		// JSSComboPropertyDescriptor textPositionD = new
-		// JSSComboPropertyDescriptor(
-		// BarcodeComponent.PROPERTY_TEXT_POSITION,
-		// Messages.MBarcode4j_text_position, TextPosition.getItems());
-		// textPositionD
-		// .setDescription(Messages.MBarcode4j_text_position_description);
-		// desc.add(textPositionD);
-		//
-		// DoublePropertyDescriptor quiteZoneD = new DoublePropertyDescriptor(
-		// BarcodeComponent.PROPERTY_QUIET_ZONE,
-		// Messages.MBarcode4j_quiet_zone);
-		// quiteZoneD.setDescription(Messages.MBarcode4j_quiet_zone_description);
-		// desc.add(quiteZoneD);
-		//
-		// PixelPropertyDescriptor moduleWidthD = new PixelPropertyDescriptor(
-		// BarcodeComponent.PROPERTY_MODULE_WIDTH,
-		// Messages.MBarcode4j_module_width);
-		// moduleWidthD
-		// .setDescription(Messages.MBarcode4j_module_width_description);
-		// desc.add(moduleWidthD);
-		//
-		// DoublePropertyDescriptor vertQuietZoneD = new
-		// DoublePropertyDescriptor(
-		// BarcodeComponent.PROPERTY_VERTICAL_QUIET_ZONE,
-		// Messages.MBarcode4j_vertical_quiet_zone);
-		// vertQuietZoneD
-		// .setDescription(Messages.MBarcode4j_vertical_quiet_zone_description);
-		// desc.add(vertQuietZoneD);
+		orientationD = new NamedEnumPropertyDescriptor<OrientationEnum>(
+				Barcode4jComponent.PROPERTY_ORIENTATION,
+				Messages.MBarcode4j_orientation, OrientationEnum.UP,
+				NullEnum.NOTNULL);
+		orientationD
+				.setDescription(Messages.MBarcode4j_orientation_description);
+		desc.add(orientationD);
 
-		// vertQuietZoneD.setCategory(Messages.common_properties_category);
-		// moduleWidthD.setCategory(Messages.common_properties_category);
-		// quiteZoneD.setCategory(Messages.common_properties_category);
-		// orientationD.setCategory(Messages.common_properties_category);
-		// patternExprD.setCategory(Messages.common_properties_category);
-		// textPositionD.setCategory(Messages.common_properties_category);
+		JRExpressionPropertyDescriptor patternExprD = new JRExpressionPropertyDescriptor(
+				Barcode4jComponent.PROPERTY_PATTERN_EXPRESSION,
+				Messages.MBarcode4j_pattern_expression);
+		patternExprD
+				.setDescription(Messages.MBarcode4j_pattern_expression_description);
+		desc.add(patternExprD);
+
+		textPositionD = new NamedEnumPropertyDescriptor<TextPositionEnum>(
+				Barcode4jComponent.PROPERTY_TEXT_POSITION,
+				Messages.MBarcode4j_text_position, TextPositionEnum.NONE,
+				NullEnum.NOTNULL);
+		textPositionD
+				.setDescription(Messages.MBarcode4j_text_position_description);
+		desc.add(textPositionD);
+
+		DoublePropertyDescriptor quiteZoneD = new DoublePropertyDescriptor(
+				Barcode4jComponent.PROPERTY_QUIET_ZONE,
+				Messages.MBarcode4j_quiet_zone);
+		quiteZoneD.setDescription(Messages.MBarcode4j_quiet_zone_description);
+		desc.add(quiteZoneD);
+
+		PixelPropertyDescriptor moduleWidthD = new PixelPropertyDescriptor(
+				Barcode4jComponent.PROPERTY_MODULE_WIDTH,
+				Messages.MBarcode4j_module_width);
+		moduleWidthD
+				.setDescription(Messages.MBarcode4j_module_width_description);
+		desc.add(moduleWidthD);
+
+		DoublePropertyDescriptor vertQuietZoneD = new DoublePropertyDescriptor(
+				Barcode4jComponent.PROPERTY_VERTICAL_QUIET_ZONE,
+				Messages.MBarcode4j_vertical_quiet_zone);
+		vertQuietZoneD
+				.setDescription(Messages.MBarcode4j_vertical_quiet_zone_description);
+		desc.add(vertQuietZoneD);
+
+		vertQuietZoneD.setCategory(Messages.common_properties_category);
+		moduleWidthD.setCategory(Messages.common_properties_category);
+		quiteZoneD.setCategory(Messages.common_properties_category);
+		orientationD.setCategory(Messages.common_properties_category);
+		patternExprD.setCategory(Messages.common_properties_category);
+		textPositionD.setCategory(Messages.common_properties_category);
 	}
 
 	@Override
 	public Object getPropertyValue(Object id) {
 		JRDesignComponentElement jrElement = (JRDesignComponentElement) getValue();
-		BarcodeComponent jrBarcodeComponent = (BarcodeComponent) jrElement.getComponent();
+		Barcode4jComponent jrBarcodeComponent = (Barcode4jComponent) jrElement
+				.getComponent();
 
 		if (id.equals(StandardBarbecueComponent.PROPERTY_EVALUATION_TIME))
 			return jrBarcodeComponent.getEvaluationTimeValue();
 		if (id.equals(StandardBarbecueComponent.PROPERTY_EVALUATION_GROUP))
 			return jrBarcodeComponent.getEvaluationGroup();
 
-		// if (id.equals(BarcodeComponent.PROPERTY_MODULE_WIDTH))
-		// return jrList.getModuleWidth() != null ?
-		// jrList.getModuleWidth().intValue() : null;
-		// if (id.equals(BarcodeComponent.PROPERTY_QUIET_ZONE))
-		// return jrList.getQuietZone();
-		// if (id.equals(BarcodeComponent.PROPERTY_VERTICAL_QUIET_ZONE))
-		// return jrList.getVerticalQuietZone();
-		// if (id.equals(BarcodeComponent.PROPERTY_ORIENTATION))
-		// return Orientation.getPos4Orientation(jrList.getOrientation());
-		// if (id.equals(BarcodeComponent.PROPERTY_TEXT_POSITION))
-		// return TextPosition.getPos4TextPosition(jrList.getTextPosition());
+		if (id.equals(Barcode4jComponent.PROPERTY_MODULE_WIDTH))
+			return jrBarcodeComponent.getModuleWidth() != null ? jrBarcodeComponent
+					.getModuleWidth().intValue() : null;
+		if (id.equals(Barcode4jComponent.PROPERTY_QUIET_ZONE))
+			return jrBarcodeComponent.getQuietZone();
+		if (id.equals(Barcode4jComponent.PROPERTY_VERTICAL_QUIET_ZONE))
+			return jrBarcodeComponent.getVerticalQuietZone();
+		if (id.equals(Barcode4jComponent.PROPERTY_ORIENTATION))
+			return orientationD.getIntValue(jrBarcodeComponent
+					.getOrientationValue());
+		if (id.equals(Barcode4jComponent.PROPERTY_TEXT_POSITION))
+			return textPositionD.getIntValue(jrBarcodeComponent
+					.getTextPositionValue());
 
 		if (id.equals(StandardBarbecueComponent.PROPERTY_CODE_EXPRESSION))
-			return ExprUtil.getExpression(jrBarcodeComponent.getCodeExpression());
-		// if (id.equals(BarcodeComponent.PROPERTY_PATTERN_EXPRESSION))
-		// return ExprUtil.getExpression(jrList.getPatternExpression());
+			return ExprUtil.getExpression(jrBarcodeComponent
+					.getCodeExpression());
+		if (id.equals(Barcode4jComponent.PROPERTY_PATTERN_EXPRESSION))
+			return ExprUtil.getExpression(jrBarcodeComponent
+					.getPatternExpression());
 		return super.getPropertyValue(id);
 	}
 
 	@Override
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignComponentElement jrElement = (JRDesignComponentElement) getValue();
-		BarcodeComponent barcodeComponent = (BarcodeComponent) jrElement.getComponent();
+		Barcode4jComponent barcodeComponent = (Barcode4jComponent) jrElement
+				.getComponent();
 
 		if (id.equals(StandardBarbecueComponent.PROPERTY_EVALUATION_TIME)) {
-			EvaluationTimeEnum evalTime = EnumHelper.getEnumByObjectValue(EvaluationTimeEnum.values(), value);
+			EvaluationTimeEnum evalTime = EnumHelper.getEnumByObjectValue(
+					EvaluationTimeEnum.values(), value);
 			barcodeComponent.setEvaluationTimeValue(evalTime);
-			if(evalTime != null && !evalTime.equals(EvaluationTimeEnum.GROUP)) {
+			if (evalTime != null && !evalTime.equals(EvaluationTimeEnum.GROUP)) {
 				barcodeComponent.setEvaluationGroup(null);
-			}		
-		}
-		else if (id.equals(StandardBarbecueComponent.PROPERTY_EVALUATION_GROUP)){
-			barcodeComponent.setEvaluationGroup(ModelUtils.getGroupNameForProperty(value));
+			}
+		} else if (id
+				.equals(StandardBarbecueComponent.PROPERTY_EVALUATION_GROUP)) {
+			barcodeComponent.setEvaluationGroup(ModelUtils
+					.getGroupNameForProperty(value));
 		}
 
-		// else if (id.equals(BarcodeComponent.PROPERTY_MODULE_WIDTH))
-		// if (value instanceof Integer)
-		// jrList.setModuleWidth(((Integer)value).doubleValue());
-		// else jrList.setModuleWidth((Double) value);
-		// else if (id.equals(BarcodeComponent.PROPERTY_QUIET_ZONE))
-		// jrList.setQuietZone((Double) value);
-		// else if (id.equals(BarcodeComponent.PROPERTY_VERTICAL_QUIET_ZONE))
-		// jrList.setVerticalQuietZone((Double) value);
-		// else if (id.equals(BarcodeComponent.PROPERTY_ORIENTATION))
-		// jrList.setOrientation(Orientation
-		// .getOrientation4Pos((Integer) value));
-		// else if (id.equals(BarcodeComponent.PROPERTY_TEXT_POSITION))
-		// jrList.setTextPosition(TextPosition
-		// .getTextPosition4Pos((Integer) value));
-		//
-		// else if (id.equals(BarcodeComponent.PROPERTY_PATTERN_EXPRESSION)) {
-		// jrList.setPatternExpression(ExprUtil.setValues(
-		// jrList.getPatternExpression(), value, null));
-		else if (id.equals(StandardBarbecueComponent.PROPERTY_CODE_EXPRESSION)) {
+		else if (id.equals(Barcode4jComponent.PROPERTY_MODULE_WIDTH))
+			if (value instanceof Integer)
+				barcodeComponent
+						.setModuleWidth(((Integer) value).doubleValue());
+			else
+				barcodeComponent.setModuleWidth((Double) value);
+		else if (id.equals(Barcode4jComponent.PROPERTY_QUIET_ZONE))
+			barcodeComponent.setQuietZone((Double) value);
+		else if (id.equals(Barcode4jComponent.PROPERTY_VERTICAL_QUIET_ZONE))
+			barcodeComponent.setVerticalQuietZone((Double) value);
+		else if (id.equals(Barcode4jComponent.PROPERTY_ORIENTATION))
+			barcodeComponent.setOrientation(orientationD.getEnumValue(value));
+		else if (id.equals(Barcode4jComponent.PROPERTY_TEXT_POSITION))
+			barcodeComponent.setTextPosition(textPositionD.getEnumValue(value));
+
+		else if (id.equals(Barcode4jComponent.PROPERTY_PATTERN_EXPRESSION))
+			barcodeComponent.setPatternExpression(ExprUtil.setValues(
+					barcodeComponent.getPatternExpression(), value, null));
+		else if (id.equals(StandardBarbecueComponent.PROPERTY_CODE_EXPRESSION))
 			barcodeComponent.setCodeExpression(ExprUtil.setValues(
 					barcodeComponent.getCodeExpression(), value, null));
-		} else
+		else
 			super.setPropertyValue(id, value);
 	}
-	
+
 	@Override
 	public HashSet<String> generateGraphicalProperties() {
 		HashSet<String> properties = super.generateGraphicalProperties();
@@ -279,18 +295,18 @@ public class MBarcode4j extends MBarcode {
 		super.trasnferProperties(target);
 
 		JRDesignComponentElement jrSourceElement = (JRDesignComponentElement) getValue();
-		BarcodeComponent jrSourceBarcode = (BarcodeComponent) jrSourceElement
+		Barcode4jComponent jrSourceBarcode = (Barcode4jComponent) jrSourceElement
 				.getComponent();
 
 		JRDesignComponentElement jrTargetElement = (JRDesignComponentElement) target;
-		BarcodeComponent jrTargetBarcode = (BarcodeComponent) jrTargetElement
+		Barcode4jComponent jrTargetBarcode = (Barcode4jComponent) jrTargetElement
 				.getComponent();
 
-		// jrTargetBarcode.setModuleWidth(jrSourceBarcode.getModuleWidth());
-		// jrTargetBarcode.setQuietZone(jrSourceBarcode.getQuietZone());
-		// jrTargetBarcode.setVerticalQuietZone(jrSourceBarcode
-		// .getVerticalQuietZone());
-		// jrTargetBarcode.setOrientation(jrSourceBarcode.getOrientation());
-		// jrTargetBarcode.setTextPosition(jrSourceBarcode.getTextPosition());
+		jrTargetBarcode.setModuleWidth(jrSourceBarcode.getModuleWidth());
+		jrTargetBarcode.setQuietZone(jrSourceBarcode.getQuietZone());
+		jrTargetBarcode.setVerticalQuietZone(jrSourceBarcode
+				.getVerticalQuietZone());
+		jrTargetBarcode.setOrientation(jrSourceBarcode.getOrientationValue());
+		jrTargetBarcode.setTextPosition(jrSourceBarcode.getTextPositionValue());
 	}
 }
