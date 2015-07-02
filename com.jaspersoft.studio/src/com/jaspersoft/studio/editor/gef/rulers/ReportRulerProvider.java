@@ -174,9 +174,8 @@ public class ReportRulerProvider extends RulerProvider {
 		String measure = JaspersoftStudioPlugin.getInstance().getPreferenceStore().getString(RulersGridPreferencePage.P_RULER_MEASURE);
 		int value = RulerProvider.UNIT_INCHES;
 		try{
-			if (measure != null) {
+			if (measure != null && !measure.trim().isEmpty()) 
 				value = Integer.parseInt(measure);
-			}
 		} catch(Exception ex){
 			JaspersoftStudioPlugin.getInstance().logError("Invalid Ruler Measure Unit in Preferences", ex);
 		}
