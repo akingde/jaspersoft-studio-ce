@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio;
 
@@ -23,8 +19,10 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.util.JRXmlUtils;
 
+import org.apache.commons.lang.SystemUtils;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.util.Util;
@@ -38,25 +36,24 @@ import org.xml.sax.InputSource;
 import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 
 /**
- * Provide the methods to retrieve the installation path of the application, the 
- * path is cached after the first request.
- * It Offers also the method to interact with the files storage that can be 
- * used to save the configuration of the application
+ * Provide the methods to retrieve the installation path of the application, the path is cached after the first request.
+ * It Offers also the method to interact with the files storage that can be used to save the configuration of the
+ * application
  * 
  * @author Orlandin Marco
- *
+ * 
  */
 public class ConfigurationManager {
-	
+
 	/**
 	 * Where the path is cached
 	 */
 	private static String cachedPath = null;
-	
+
 	/**
 	 * Get the path and cache it values
 	 */
-	private static void intializePath(){
+	private static void intializePath() {
 		String path = null;
 		Location configArea = Platform.getInstallLocation();
 		String product = Platform.getProduct().getProperty("appName"); //$NON-NLS-1$ 
@@ -64,150 +61,272 @@ public class ConfigurationManager {
 			if (Util.isMac()) {
 				path = configArea.getURL().toExternalForm() + "/" + product + ".app/Contents/MacOS/";
 				path = path + product + ".ini";
-			}
-			else path = configArea.getURL().toExternalForm() + product + ".ini"; //$NON-NLS-1$
+			} else
+				path = configArea.getURL().toExternalForm() + product + ".ini"; //$NON-NLS-1$
 		}
 		cachedPath = path;
 	}
-	
+
 	/**
 	 * 
-	 * Return the path of the configuration file and cache it. Typically
-	 * this file is inside the install location of the application
+	 * Return the path of the configuration file and cache it. Typically this file is inside the install location of the
+	 * application
 	 * 
 	 * @return String represented a Path in URL format to the configuration file
 	 */
-	public static String getInstallationPath(){
-		if (cachedPath == null) intializePath();
+	public static String getInstallationPath() {
+		if (cachedPath == null)
+			intializePath();
 		return cachedPath;
 	}
-	
+
+	private static final String PROP_VM = "eclipse.vm"; //$NON-NLS-1$
+
+	private static final String PROP_VMARGS = "eclipse.vmargs"; //$NON-NLS-1$
+
+	private static final String PROP_COMMANDS = "eclipse.commands"; //$NON-NLS-1$
+
+	private static final String CMD_NL = "-nl"; //$NON-NLS-1$
+
+	private static final String CMD_VMARGS = "-vmargs"; //$NON-NLS-1$
+
 	/**
-	 * Return a storage with a specific name, if the storage doesn't exist then
-	 * it is created. A storage is a specific folder in the filesystem.
+	 * Generate a starting parameter by reading the old parameters and changing the nl value or adding it if not present.
+	 * It's equivalent to launch the application with an -nl followed by the regional code arguments
 	 * 
-	 * @param storageName the name of the storage\folder
+	 * @param nl
+	 *          the regional code
+	 * @return the full arguments line used to restart the application
+	 */
+	public static String buildCommandLineNl(String nl) {
+		String property = System.getProperty(PROP_VM);
+
+		StringBuffer result = new StringBuffer();
+		if (property != null)
+			result.append(property);
+		result.append(SystemUtils.LINE_SEPARATOR);
+
+		// append the vmargs and commands. Assume that these already end in \n
+		String vmargs = System.getProperty(PROP_VMARGS);
+		if (vmargs != null)
+			result.append(vmargs);
+
+		// append the rest of the args, replacing or adding -data as required
+		property = System.getProperty(PROP_COMMANDS);
+		if (property != null) {// find the index of the arg to replace its value
+			int cmd_nl_pos = property.lastIndexOf(CMD_NL);
+			if (cmd_nl_pos != -1) {
+				cmd_nl_pos += CMD_NL.length() + 1;
+				result.append(property.substring(0, cmd_nl_pos));
+				result.append(nl);
+				result.append(property.substring(property.indexOf('\n', cmd_nl_pos)));
+			} else {
+				result.append(SystemUtils.LINE_SEPARATOR);
+				result.append(property);
+				result.append(SystemUtils.LINE_SEPARATOR);
+				result.append(CMD_NL);
+				result.append(SystemUtils.LINE_SEPARATOR);
+				result.append(nl);
+			}
+		}
+
+		// put the vmargs back at the very end (the eclipse.commands property
+		// already contains the -vm arg)
+		if (vmargs != null) {
+			result.append(CMD_VMARGS);
+			result.append(SystemUtils.LINE_SEPARATOR);
+			result.append(vmargs);
+			result.append(SystemUtils.LINE_SEPARATOR);
+		}
+		return result.toString();
+	}
+
+	/**
+	 * Generate a starting parameter by reading the old parameters and changing the nl value or adding it if not present.
+	 * It's equivalent to launch the application with an -nl followed by the regional code arguments
+	 * 
+	 * @param nl
+	 *          the regional code
+	 * @return the full arguments line used to restart the application
+	 */
+	public static String buildCommandLineVMarg(String vmarg, String value) {
+		String property = System.getProperty(PROP_VM);
+
+		StringBuffer result = new StringBuffer();
+		if (property != null)
+			result.append(property);
+		result.append(SystemUtils.LINE_SEPARATOR);
+
+		// append the rest of the args, replacing or adding -data as required
+		property = System.getProperty(PROP_COMMANDS);
+		if (property != null) {
+			result.append(SystemUtils.LINE_SEPARATOR);
+			result.append(property);
+			result.append(SystemUtils.LINE_SEPARATOR);
+		}
+		boolean added = false;
+		// append the vmargs and commands. Assume that these already end in \n
+		String vmargs = System.getProperty(PROP_VMARGS);
+		if (vmargs == null && value == null)
+			return result.toString();
+		result.append("-vmargs").append(SystemUtils.LINE_SEPARATOR);
+		if (vmargs != null)
+			for (String arg : vmargs.split(" ")) {
+				if (arg.startsWith(vmarg + "=")) {
+					if (value == null)
+						continue;
+					arg = vmarg + "=" + value;
+					added = true;
+				}
+				result.append(arg + " ");
+			}
+		if (!added && value != null)
+			result.append(vmarg + "=" + value + " ");
+		return result.toString();
+	}
+
+	/**
+	 * Return a storage with a specific name, if the storage doesn't exist then it is created. A storage is a specific
+	 * folder in the filesystem.
+	 * 
+	 * @param storageName
+	 *          the name of the storage\folder
 	 * @return a file to the requested storage
 	 */
-	public static File getStorage(String storageName){
-	  IPath configurationPath = JaspersoftStudioPlugin.getInstance().getStateLocation();
-	  File configurationFolder = configurationPath.toFile();
-	  File storage = new File(configurationFolder, storageName);
-	  if (!storage.exists()) storage.mkdir();
-	  return storage;
+	public static File getStorage(String storageName) {
+		IPath configurationPath = JaspersoftStudioPlugin.getInstance().getStateLocation();
+		File configurationFolder = configurationPath.toFile();
+		File storage = new File(configurationFolder, storageName);
+		if (!storage.exists())
+			storage.mkdir();
+		return storage;
 	}
-	
+
 	/**
-	 * Return a list to all the content of a storage. If the storage
-	 * dosen't exist then it is created.
+	 * Return a list to all the content of a storage. If the storage dosen't exist then it is created.
 	 * <p>
 	 * 
 	 * NOTE: hidden files are not considered.
 	 * 
-	 * @param storageName the name of the storage
+	 * @param storageName
+	 *          the name of the storage
 	 * @return a not null array of file that map the content of the storage folder
 	 */
-	public static File[] getStorageContent(String storageName){
+	public static File[] getStorageContent(String storageName) {
 		File storage = getStorage(storageName);
 		List<File> result = new ArrayList<File>();
 		File[] listFiles = storage.listFiles();
-		for(File f : listFiles) {
-			if(!f.isHidden()) {
+		for (File f : listFiles) {
+			if (!f.isHidden()) {
 				result.add(f);
 			}
 		}
 		return result.toArray(new File[result.size()]);
 	}
-	
+
 	/**
-	 * Remove a resource contained into a specified storage. If
-	 * the storage doesnt' exist it is created. 
+	 * Remove a resource contained into a specified storage. If the storage doesnt' exist it is created.
 	 * 
-	 * @param storageName the name of the storage 
-	 * @param resourceName the name of the resource to delete
+	 * @param storageName
+	 *          the name of the storage
+	 * @param resourceName
+	 *          the name of the resource to delete
 	 * @return the result of the delete operation
 	 */
-	public static boolean removeStoregeResource(String storageName, String resourceName){
+	public static boolean removeStoregeResource(String storageName, String resourceName) {
 		File storage = getStorage(storageName);
 		File resource = new File(storage, resourceName);
-		if (resource.exists()) return resource.delete();
-		else return false;
+		if (resource.exists())
+			return resource.delete();
+		else
+			return false;
 	}
-	
+
 	/**
-	 * Return a resource from the storage. If the storage dosen't exist then
-	 * it is created
+	 * Return a resource from the storage. If the storage dosen't exist then it is created
 	 * 
-	 * @param storageName the name of the storage 
-	 * @param resourceName the name of the resource
+	 * @param storageName
+	 *          the name of the storage
+	 * @param resourceName
+	 *          the name of the resource
 	 * @return the requested resource or null if it can't be found
 	 */
-	public static File getStorageResource(String storageName, String resourceName){
+	public static File getStorageResource(String storageName, String resourceName) {
 		return getStorageResource(getStorage(storageName), resourceName);
 	}
-	
+
 	/**
-	 * Return a resource from the storage. Since the storage is accessed with 
-	 * a direct file handle to it then it must be already existing
+	 * Return a resource from the storage. Since the storage is accessed with a direct file handle to it then it must be
+	 * already existing
 	 * 
-	 * @param storageName and handle to the storage
-	 * @param resourceName the name of the resource
+	 * @param storageName
+	 *          and handle to the storage
+	 * @param resourceName
+	 *          the name of the resource
 	 * @return the requested resource or null if it can't be found
 	 */
-	public static File getStorageResource(File resourceStorage, String resourceName){
+	public static File getStorageResource(File resourceStorage, String resourceName) {
 		File resource = new File(resourceStorage, resourceName);
-		if (resource.exists()) return resource;
+		if (resource.exists())
+			return resource;
 		return null;
 	}
-	
+
 	/**
-	 * Utility method used to convert the old setting storage based on the preferences
-	 * on the setting storage based on file, this is done silently to migrate the old
-	 * settings to the new storage system
+	 * Utility method used to convert the old setting storage based on the preferences on the setting storage based on
+	 * file, this is done silently to migrate the old settings to the new storage system
 	 * 
-	 * @param preferenceKey the key of properties that contains the configuration that must be converted
-	 * @param storageName the storage where the new configuration is placed
-	 * @param nameProvider the provider for the name of the new storage files.
+	 * @param preferenceKey
+	 *          the key of properties that contains the configuration that must be converted
+	 * @param storageName
+	 *          the storage where the new configuration is placed
+	 * @param nameProvider
+	 *          the provider for the name of the new storage files.
 	 */
-	public static void convertPropertyToStorage(String preferenceKey, String storageName, IConversionFilenameProvider nameProvider){
+	public static void convertPropertyToStorage(String preferenceKey, String storageName,
+			IConversionFilenameProvider nameProvider) {
 		Preferences prefs = PropertiesHelper.INSTANCE_SCOPE.getNode(JaspersoftStudioPlugin.getUniqueIdentifier());
 		String xml = prefs.get(preferenceKey, null);
+		if (xml == null)
+			return;
 		List<File> createtElements = new ArrayList<File>();
-		if (xml != null) {
-			try {
-				Document document = JRXmlUtils.parse(new InputSource(new StringReader(xml)));
-				NodeList configurationNodes = document.getDocumentElement().getChildNodes();
-				File storage = getStorage(storageName);
-				TransformerFactory transformerFactory = TransformerFactory.newInstance();
-				Transformer transformer = transformerFactory.newTransformer();
-				for (int i = 0; i < configurationNodes.getLength(); ++i) {
-					Node configurationNode = configurationNodes.item(i);
-					if (configurationNode.getNodeType() == Node.ELEMENT_NODE) {
-						DOMSource source = new DOMSource(configurationNode);
-						String name = nameProvider.getFileName(configurationNode);
-						if (name != null){
-							File xmlTargetFile = new File(storage,name);
-							if (!xmlTargetFile.exists()){
-								createtElements.add(xmlTargetFile);
-								FileOutputStream stream = new FileOutputStream(xmlTargetFile);
+		StringReader sr = new StringReader(xml);
+		try {
+			Document document = JRXmlUtils.parse(new InputSource(sr));
+			NodeList configurationNodes = document.getDocumentElement().getChildNodes();
+			File storage = getStorage(storageName);
+			TransformerFactory transformerFactory = TransformerFactory.newInstance();
+			Transformer transformer = transformerFactory.newTransformer();
+			for (int i = 0; i < configurationNodes.getLength(); ++i) {
+				Node configurationNode = configurationNodes.item(i);
+				if (configurationNode.getNodeType() == Node.ELEMENT_NODE) {
+					DOMSource source = new DOMSource(configurationNode);
+					String name = nameProvider.getFileName(configurationNode);
+					if (name != null) {
+						File xmlTargetFile = new File(storage, name);
+						if (!xmlTargetFile.exists()) {
+							createtElements.add(xmlTargetFile);
+							FileOutputStream stream = new FileOutputStream(xmlTargetFile);
+							try {
 								StreamResult result = new StreamResult(stream);
 								transformer.transform(source, result);
-								stream.close();
-							} else {
-								throw new Exception("File "+xmlTargetFile.getAbsolutePath()+" already exist");
+							} finally {
+								FileUtils.closeStream(stream);
 							}
-						}
+						} else
+							throw new Exception("File " + xmlTargetFile.getAbsolutePath() + " already exist");
 					}
 				}
-				prefs.remove(preferenceKey);
-			} catch (Exception e) {
-				JaspersoftStudioPlugin.getInstance().logError("Error converting the element",e);
-				//Do the revert of the created files
-				for(File createdElement : createtElements){
-					if (createdElement.exists()) createdElement.delete();
-				}
-				throw new RuntimeException(e);
 			}
+			prefs.remove(preferenceKey);
+		} catch (Exception e) {
+			FileUtils.closeStream(sr);
+			JaspersoftStudioPlugin.getInstance().logError("Error converting the element", e);
+			// Do the revert of the created files
+			for (File createdElement : createtElements)
+				if (createdElement.exists())
+					createdElement.delete();
+			throw new RuntimeException(e);
 		}
 	}
 }
