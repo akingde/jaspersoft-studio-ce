@@ -91,7 +91,7 @@ public class EditFromTableDialog extends ATitledDialog {
 		cmp.setLayout(new GridLayout(3, false));
 
 		if (mFromTable.getValue() instanceof MQueryTable) {
-			Label lbl = new Label(cmp, SWT.BORDER | SWT.READ_ONLY);
+			Label lbl = new Label(cmp, SWT.READ_ONLY);
 			UIUtil.setBold(lbl);
 			lbl.setText(Messages.EditFromTableDialog_3);
 			lbl.setToolTipText(QueryWriter.writeSubQuery(mFromTable));
