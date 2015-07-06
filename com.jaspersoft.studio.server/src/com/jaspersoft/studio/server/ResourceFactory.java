@@ -203,8 +203,8 @@ public class ResourceFactory {
 				else if (resource instanceof MRQuery)
 					page = APageContent.getPages(resource,
 							new ResourcePageContent(parent, resource),
-							new QueryPageContent(parent, resource),
-							new ReportUnitDatasourceContent(parent, resource));
+							new ReportUnitDatasourceContent(parent, resource),
+							new QueryPageContent(parent, resource));
 				else if (resource instanceof MListOfValues)
 					page = APageContent.getPages(resource,
 							new ResourcePageContent(parent, resource),
