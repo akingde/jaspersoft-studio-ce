@@ -49,6 +49,7 @@ import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.Util;
 import org.eclipse.osgi.service.datalocation.Location;
+import org.osgi.framework.Bundle;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
@@ -317,6 +318,16 @@ public class UsageManager {
 			}
 		}
 		return CURRENT_VERSION;
+	}
+	
+	/**
+	 * Return the current eclipse version
+	 * 
+	 * @return the eclipse version
+	 */
+	protected String getEclipseVersion(){
+		Bundle bundle = Platform.getBundle("org.eclipse.platform");
+		return bundle != null ? bundle.getVersion().toString() : "Unknown";
 	}
 
 	/**
@@ -838,7 +849,13 @@ public class UsageManager {
 		urlBuilder.append("&new=");//$NON-NLS-1$
 		urlBuilder.append(newInstallation);
 		urlBuilder.append("&isRCP=");//$NON-NLS-1$
-		urlBuilder.append(String.valueOf(isRCP()));
+		boolean isRCP = isRCP();
+		urlBuilder.append(String.valueOf(isRCP));
+		//if it is the plugin version send also the eclipse version
+		if (!isRCP){
+			urlBuilder.append("&eclipse_version=");
+			urlBuilder.append(getEclipseVersion());
+		}
 
 		String urlstr = urlBuilder.toString();
 		System.out.println("Invoking URL: " + urlstr); //$NON-NLS-1$ 
