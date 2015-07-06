@@ -80,7 +80,8 @@ public class Util {
 					list.add((MSqlTable) t.getValue());
 					if (!t.getChildren().isEmpty()) {
 						for (INode jt : t.getChildren())
-							list.add((MSqlTable) jt.getValue());
+							if (jt.getValue() instanceof MSqlTable)
+								list.add((MSqlTable) jt.getValue());
 					}
 				}
 				break;

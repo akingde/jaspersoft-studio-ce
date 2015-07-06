@@ -434,23 +434,28 @@ public class FromEditPart extends AbstractGraphicalEditPart {
 		} else {
 			figure.setLayoutManager(grLayout);
 			UIUtils.getDisplay().asyncExec(new Runnable() {
+				private void addToMap(Object aep,
+						Map<AMapElement, Rectangle> map) {
+					if (aep instanceof TableEditPart) {
+						TableEditPart t = (TableEditPart) aep;
+						Rectangle b = t.getFigure().getBounds();
+						map.put(t.getModel(), b);
+					} else if (aep instanceof FromEditPart) {
+						FromEditPart f = (FromEditPart) aep;
+						if (f.getModel().getChildren().isEmpty()) {
+							Rectangle b = f.getFigure().getBounds();
+							map.put(f.getModel(), b);
+						} else
+							for (Object obj : f.getChildren())
+								addToMap(obj, map);
+					}
+				}
 
 				@Override
 				public void run() {
 					Map<AMapElement, Rectangle> map = new HashMap<AMapElement, Rectangle>();
-					for (Object p : getChildren()) {
-						if (p instanceof FromEditPart) {
-							FromEditPart aep = (FromEditPart) p;
-							if (aep.getModel().getChildren().isEmpty()) {
-								Rectangle b = aep.getFigure().getBounds();
-								map.put(aep.getModel(), b);
-							}
-						} else if (p instanceof TableEditPart) {
-							TableEditPart aep = (TableEditPart) p;
-							Rectangle b = aep.getFigure().getBounds();
-							map.put(aep.getModel(), b);
-						}
-					}
+					for (Object p : getChildren())
+						addToMap(p, map);
 					SetSilentValuesCommand c = new SetSilentValuesCommand(true);
 					for (AMapElement key : map.keySet()) {
 						if (key instanceof MFrom
