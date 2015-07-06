@@ -38,6 +38,10 @@ public class DeleteColumn extends DeleteAction<ANode> {
 
 	@Override
 	protected boolean isGoodNode(ANode element) {
+		if(element instanceof MSelectColumn)
+			setText(Messages.DeleteColumn_0);
+		else if(element instanceof MSelectExpression)
+			setText(Messages.DeleteColumn_1);
 		return element instanceof MSelectColumn || element instanceof MSelectExpression;
 	}
 

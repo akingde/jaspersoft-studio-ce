@@ -46,8 +46,10 @@ public class EditColumn extends AAction {
 	protected boolean isColumn(ANode element) {
 		if (element instanceof MSelectSubQuery)
 			setText(Messages.EditColumn_1);
-		else
+		else if (element instanceof MSelectSubQuery)
 			setText(Messages.EditColumn_0);
+		else if (element instanceof MSelectExpression)
+			setText(Messages.EditColumn_2);
 		return element instanceof MSelectColumn
 				|| element instanceof MSelectExpression
 				|| element instanceof MSelectSubQuery;
