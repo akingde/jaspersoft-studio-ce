@@ -58,7 +58,7 @@ public class CreateSelectExpression extends AAction {
 			else if (sel instanceof ANode
 					&& ((ANode) sel).getParent() instanceof MSelect) {
 				mselect = (MSelect) ((ANode) sel).getParent();
-				index = mselect.getChildren().indexOf((MSelectExpression) sel) + 1;
+				index = mselect.getChildren().indexOf(sel) + 1;
 			}
 			mexpr.setParent(mselect, index);
 			mexpr.setValue(dialog.getExpression());
