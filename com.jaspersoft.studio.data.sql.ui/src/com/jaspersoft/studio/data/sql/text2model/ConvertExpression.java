@@ -15,6 +15,9 @@ package com.jaspersoft.studio.data.sql.text2model;
 import java.math.BigDecimal;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import net.sf.jasperreports.engine.design.JRDesignDataset;
@@ -280,17 +283,36 @@ public class ConvertExpression {
 			str = str.substring(1, str.length() - 1);
 			return new ScalarOperand<String>(me, str);
 		}
-		if (sop.getSodate() != null)
-			return new ScalarOperand<java.sql.Date>(me, new java.sql.Date(sop
-					.getSodate().getTime()));
+		if (sop.getSodate() != null) {
+			Date d;
+			try {
+				d = new SimpleDateFormat("YYYY-MM-dd").parse(sop.getSodate());
+				return new ScalarOperand<java.sql.Date>(me, new java.sql.Date(
+						d.getTime()));
+			} catch (ParseException e) {
+				return new ScalarOperand<String>(me, sop.getSodate());
+			}
+		}
 		if (sop.getSodbl() != null)
 			return new ScalarOperand<BigDecimal>(me, sop.getSodbl());
-		if (sop.getSodt() != null)
-			return new ScalarOperand<Timestamp>(me, new Timestamp(sop.getSodt()
-					.getTime()));
-		if (sop.getSotime() != null)
-			return new ScalarOperand<Time>(me, new Time(sop.getSotime()
-					.getTime()));
+		if (sop.getSodt() != null) {
+			Date d;
+			try {
+				d = new SimpleDateFormat("YYYY-mm-dd HH:mm:ss.SSSSSS").parse(sop.getSodt());
+			} catch (ParseException e) {
+				return new ScalarOperand<String>(me, sop.getSodt());
+			}
+			return new ScalarOperand<Timestamp>(me, new Timestamp(d.getTime()));
+		}
+		if (sop.getSotime() != null) {
+			Date d;
+			try {
+				d = new SimpleDateFormat("HH:mm:ss.SSSSSS").parse(sop.getSotime());
+			} catch (ParseException e) {
+				return new ScalarOperand<String>(me, sop.getSotime());
+			}
+			return new ScalarOperand<Time>(me, new Time(d.getTime()));
+		}
 		return new ScalarOperand<Integer>(me, sop.getSoint());
 	}
 

@@ -299,20 +299,23 @@ terminal JRNPARAM:
 terminal STAR:
 	"*";
 
+terminal UNSIGNED returns ecore::EInt:
+	('0'..'9')+;
+
 terminal INT returns ecore::EInt:
-	'-'? ('0'..'9')+;
-
-terminal TIMESTAMP returns ecore::EDate:
-	DATE ' ' TIME;
-
-terminal DATE returns ecore::EDate:
-	"'" '0'..'9' '0'..'9' '0'..'9' '0'..'9' '-' ('0'..'1') '0'..'9' '-' '0'..'3' '0'..'9' "'";
-
-terminal TIME returns ecore::EDate:
-	"'" '0'..'9' '0'..'9' ':' '0'..'9' '0'..'9' ':' '0'..'1' '0'..'9' '.' '0'..'9' '0'..'9' '0'..'9' "'";
+	'-'? UNSIGNED;
 
 terminal SIGNED_DOUBLE returns ecore::EBigDecimal:
-	'-'? ('0'..'9')+ ('.' ('0'..'9')+)?;
+	'-'? UNSIGNED ('.' UNSIGNED)?;
+
+terminal TIMESTAMP:
+	DATE ' ' TIME;
+
+terminal DATE:
+	"'" '0'..'9' '0'..'9' '0'..'9' '0'..'9' '-' '0'..'1' '0'..'9' '-' '0'..'3' '0'..'9' "'";
+
+terminal TIME:
+	"'" '0'..'9' '0'..'9' ':' '0'..'9' '0'..'9' ':' '0'..'9' '0'..'9' '.' '0'..'9' '0'..'9' '0'..'9' "'";
 
 terminal STRING_:
 	"'" ('\\' ('b' | 't' | 'n' | 'f' | 'r' | 'u' | '"' | "'" | '\\') | !('\\' | "'"))* "'";

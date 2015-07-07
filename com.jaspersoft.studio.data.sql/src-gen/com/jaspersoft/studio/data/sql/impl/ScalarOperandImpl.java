@@ -7,8 +7,6 @@ import com.jaspersoft.studio.data.sql.SqlPackage;
 
 import java.math.BigDecimal;
 
-import java.util.Date;
-
 import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.ecore.EClass;
@@ -103,7 +101,7 @@ public class ScalarOperandImpl extends OperandListImpl implements ScalarOperand
    * @generated
    * @ordered
    */
-  protected static final Date SODATE_EDEFAULT = null;
+  protected static final String SODATE_EDEFAULT = null;
 
   /**
    * The cached value of the '{@link #getSodate() <em>Sodate</em>}' attribute.
@@ -113,7 +111,7 @@ public class ScalarOperandImpl extends OperandListImpl implements ScalarOperand
    * @generated
    * @ordered
    */
-  protected Date sodate = SODATE_EDEFAULT;
+  protected String sodate = SODATE_EDEFAULT;
 
   /**
    * The default value of the '{@link #getSotime() <em>Sotime</em>}' attribute.
@@ -123,7 +121,7 @@ public class ScalarOperandImpl extends OperandListImpl implements ScalarOperand
    * @generated
    * @ordered
    */
-  protected static final Date SOTIME_EDEFAULT = null;
+  protected static final String SOTIME_EDEFAULT = null;
 
   /**
    * The cached value of the '{@link #getSotime() <em>Sotime</em>}' attribute.
@@ -133,7 +131,7 @@ public class ScalarOperandImpl extends OperandListImpl implements ScalarOperand
    * @generated
    * @ordered
    */
-  protected Date sotime = SOTIME_EDEFAULT;
+  protected String sotime = SOTIME_EDEFAULT;
 
   /**
    * The default value of the '{@link #getSodt() <em>Sodt</em>}' attribute.
@@ -143,7 +141,7 @@ public class ScalarOperandImpl extends OperandListImpl implements ScalarOperand
    * @generated
    * @ordered
    */
-  protected static final Date SODT_EDEFAULT = null;
+  protected static final String SODT_EDEFAULT = null;
 
   /**
    * The cached value of the '{@link #getSodt() <em>Sodt</em>}' attribute.
@@ -153,7 +151,7 @@ public class ScalarOperandImpl extends OperandListImpl implements ScalarOperand
    * @generated
    * @ordered
    */
-  protected Date sodt = SODT_EDEFAULT;
+  protected String sodt = SODT_EDEFAULT;
 
   /**
    * <!-- begin-user-doc -->
@@ -250,7 +248,7 @@ public class ScalarOperandImpl extends OperandListImpl implements ScalarOperand
    * <!-- end-user-doc -->
    * @generated
    */
-  public Date getSodate()
+  public String getSodate()
   {
     return sodate;
   }
@@ -260,9 +258,9 @@ public class ScalarOperandImpl extends OperandListImpl implements ScalarOperand
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setSodate(Date newSodate)
+  public void setSodate(String newSodate)
   {
-    Date oldSodate = sodate;
+    String oldSodate = sodate;
     sodate = newSodate;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.SCALAR_OPERAND__SODATE, oldSodate, sodate));
@@ -273,7 +271,7 @@ public class ScalarOperandImpl extends OperandListImpl implements ScalarOperand
    * <!-- end-user-doc -->
    * @generated
    */
-  public Date getSotime()
+  public String getSotime()
   {
     return sotime;
   }
@@ -283,9 +281,9 @@ public class ScalarOperandImpl extends OperandListImpl implements ScalarOperand
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setSotime(Date newSotime)
+  public void setSotime(String newSotime)
   {
-    Date oldSotime = sotime;
+    String oldSotime = sotime;
     sotime = newSotime;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.SCALAR_OPERAND__SOTIME, oldSotime, sotime));
@@ -296,7 +294,7 @@ public class ScalarOperandImpl extends OperandListImpl implements ScalarOperand
    * <!-- end-user-doc -->
    * @generated
    */
-  public Date getSodt()
+  public String getSodt()
   {
     return sodt;
   }
@@ -306,9 +304,9 @@ public class ScalarOperandImpl extends OperandListImpl implements ScalarOperand
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setSodt(Date newSodt)
+  public void setSodt(String newSodt)
   {
-    Date oldSodt = sodt;
+    String oldSodt = sodt;
     sodt = newSodt;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.SCALAR_OPERAND__SODT, oldSodt, sodt));
@@ -360,13 +358,13 @@ public class ScalarOperandImpl extends OperandListImpl implements ScalarOperand
         setSodbl((BigDecimal)newValue);
         return;
       case SqlPackage.SCALAR_OPERAND__SODATE:
-        setSodate((Date)newValue);
+        setSodate((String)newValue);
         return;
       case SqlPackage.SCALAR_OPERAND__SOTIME:
-        setSotime((Date)newValue);
+        setSotime((String)newValue);
         return;
       case SqlPackage.SCALAR_OPERAND__SODT:
-        setSodt((Date)newValue);
+        setSodt((String)newValue);
         return;
     }
     super.eSet(featureID, newValue);

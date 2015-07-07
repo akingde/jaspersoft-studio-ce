@@ -4,8 +4,6 @@ package com.jaspersoft.studio.data.sql;
 
 import java.math.BigDecimal;
 
-import java.util.Date;
-
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Scalar Operand</b></em>'.
@@ -116,12 +114,12 @@ public interface ScalarOperand extends OperandList
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Sodate</em>' attribute.
-   * @see #setSodate(Date)
+   * @see #setSodate(String)
    * @see com.jaspersoft.studio.data.sql.SqlPackage#getScalarOperand_Sodate()
    * @model
    * @generated
    */
-  Date getSodate();
+  String getSodate();
 
   /**
    * Sets the value of the '{@link com.jaspersoft.studio.data.sql.ScalarOperand#getSodate <em>Sodate</em>}' attribute.
@@ -131,7 +129,7 @@ public interface ScalarOperand extends OperandList
    * @see #getSodate()
    * @generated
    */
-  void setSodate(Date value);
+  void setSodate(String value);
 
   /**
    * Returns the value of the '<em><b>Sotime</b></em>' attribute.
@@ -142,12 +140,12 @@ public interface ScalarOperand extends OperandList
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Sotime</em>' attribute.
-   * @see #setSotime(Date)
+   * @see #setSotime(String)
    * @see com.jaspersoft.studio.data.sql.SqlPackage#getScalarOperand_Sotime()
    * @model
    * @generated
    */
-  Date getSotime();
+  String getSotime();
 
   /**
    * Sets the value of the '{@link com.jaspersoft.studio.data.sql.ScalarOperand#getSotime <em>Sotime</em>}' attribute.
@@ -157,7 +155,7 @@ public interface ScalarOperand extends OperandList
    * @see #getSotime()
    * @generated
    */
-  void setSotime(Date value);
+  void setSotime(String value);
 
   /**
    * Returns the value of the '<em><b>Sodt</b></em>' attribute.
@@ -168,12 +166,12 @@ public interface ScalarOperand extends OperandList
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Sodt</em>' attribute.
-   * @see #setSodt(Date)
+   * @see #setSodt(String)
    * @see com.jaspersoft.studio.data.sql.SqlPackage#getScalarOperand_Sodt()
    * @model
    * @generated
    */
-  Date getSodt();
+  String getSodt();
 
   /**
    * Sets the value of the '{@link com.jaspersoft.studio.data.sql.ScalarOperand#getSodt <em>Sodt</em>}' attribute.
@@ -183,6 +181,6 @@ public interface ScalarOperand extends OperandList
    * @see #getSodt()
    * @generated
    */
-  void setSodt(Date value);
+  void setSodt(String value);
 
 } // ScalarOperand

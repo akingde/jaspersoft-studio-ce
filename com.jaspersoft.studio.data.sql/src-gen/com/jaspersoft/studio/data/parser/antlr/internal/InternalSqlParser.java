@@ -22,12 +22,12 @@ import java.util.ArrayList;
 @SuppressWarnings("all")
 public class InternalSqlParser extends AbstractInternalAntlrParser {
     public static final String[] tokenNames = new String[] {
-        "<invalid>", "<EOR>", "<DOWN>", "<UP>", "KEYWORD_125", "KEYWORD_126", "KEYWORD_123", "KEYWORD_124", "KEYWORD_122", "KEYWORD_121", "KEYWORD_120", "KEYWORD_118", "KEYWORD_119", "KEYWORD_117", "KEYWORD_110", "KEYWORD_111", "KEYWORD_112", "KEYWORD_113", "KEYWORD_114", "KEYWORD_115", "KEYWORD_116", "KEYWORD_106", "KEYWORD_107", "KEYWORD_108", "KEYWORD_109", "KEYWORD_101", "KEYWORD_102", "KEYWORD_103", "KEYWORD_104", "KEYWORD_105", "KEYWORD_92", "KEYWORD_93", "KEYWORD_94", "KEYWORD_95", "KEYWORD_96", "KEYWORD_97", "KEYWORD_98", "KEYWORD_99", "KEYWORD_100", "KEYWORD_82", "KEYWORD_83", "KEYWORD_84", "KEYWORD_85", "KEYWORD_86", "KEYWORD_87", "KEYWORD_88", "KEYWORD_89", "KEYWORD_90", "KEYWORD_91", "KEYWORD_74", "KEYWORD_75", "KEYWORD_76", "KEYWORD_77", "KEYWORD_78", "KEYWORD_79", "KEYWORD_80", "KEYWORD_81", "KEYWORD_57", "KEYWORD_58", "KEYWORD_59", "KEYWORD_60", "KEYWORD_61", "KEYWORD_62", "KEYWORD_63", "KEYWORD_64", "KEYWORD_65", "KEYWORD_66", "KEYWORD_67", "KEYWORD_68", "KEYWORD_69", "KEYWORD_70", "KEYWORD_71", "KEYWORD_72", "KEYWORD_73", "KEYWORD_36", "KEYWORD_37", "KEYWORD_38", "KEYWORD_39", "KEYWORD_40", "KEYWORD_41", "KEYWORD_42", "KEYWORD_43", "KEYWORD_44", "KEYWORD_45", "KEYWORD_46", "KEYWORD_47", "KEYWORD_48", "KEYWORD_49", "KEYWORD_50", "KEYWORD_51", "KEYWORD_52", "KEYWORD_53", "KEYWORD_54", "KEYWORD_55", "KEYWORD_56", "KEYWORD_25", "KEYWORD_26", "KEYWORD_27", "KEYWORD_28", "KEYWORD_29", "KEYWORD_30", "KEYWORD_31", "KEYWORD_32", "KEYWORD_33", "KEYWORD_34", "KEYWORD_35", "KEYWORD_14", "KEYWORD_15", "KEYWORD_16", "KEYWORD_17", "KEYWORD_18", "KEYWORD_19", "KEYWORD_20", "KEYWORD_21", "KEYWORD_22", "KEYWORD_23", "KEYWORD_24", "KEYWORD_1", "KEYWORD_2", "KEYWORD_3", "KEYWORD_4", "KEYWORD_5", "KEYWORD_6", "KEYWORD_7", "KEYWORD_8", "KEYWORD_9", "KEYWORD_10", "KEYWORD_11", "KEYWORD_12", "KEYWORD_13", "RULE_JRPARAM", "RULE_JRNPARAM", "RULE_STAR", "RULE_INT", "RULE_DATE", "RULE_TIME", "RULE_TIMESTAMP", "RULE_SIGNED_DOUBLE", "RULE_STRING_", "RULE_STRING", "RULE_DBNAME", "RULE_ID", "RULE_SL_COMMENT", "RULE_ML_COMMENT", "RULE_WS", "RULE_ANY_OTHER"
+        "<invalid>", "<EOR>", "<DOWN>", "<UP>", "KEYWORD_125", "KEYWORD_126", "KEYWORD_123", "KEYWORD_124", "KEYWORD_122", "KEYWORD_121", "KEYWORD_120", "KEYWORD_118", "KEYWORD_119", "KEYWORD_117", "KEYWORD_110", "KEYWORD_111", "KEYWORD_112", "KEYWORD_113", "KEYWORD_114", "KEYWORD_115", "KEYWORD_116", "KEYWORD_106", "KEYWORD_107", "KEYWORD_108", "KEYWORD_109", "KEYWORD_101", "KEYWORD_102", "KEYWORD_103", "KEYWORD_104", "KEYWORD_105", "KEYWORD_92", "KEYWORD_93", "KEYWORD_94", "KEYWORD_95", "KEYWORD_96", "KEYWORD_97", "KEYWORD_98", "KEYWORD_99", "KEYWORD_100", "KEYWORD_82", "KEYWORD_83", "KEYWORD_84", "KEYWORD_85", "KEYWORD_86", "KEYWORD_87", "KEYWORD_88", "KEYWORD_89", "KEYWORD_90", "KEYWORD_91", "KEYWORD_74", "KEYWORD_75", "KEYWORD_76", "KEYWORD_77", "KEYWORD_78", "KEYWORD_79", "KEYWORD_80", "KEYWORD_81", "KEYWORD_57", "KEYWORD_58", "KEYWORD_59", "KEYWORD_60", "KEYWORD_61", "KEYWORD_62", "KEYWORD_63", "KEYWORD_64", "KEYWORD_65", "KEYWORD_66", "KEYWORD_67", "KEYWORD_68", "KEYWORD_69", "KEYWORD_70", "KEYWORD_71", "KEYWORD_72", "KEYWORD_73", "KEYWORD_36", "KEYWORD_37", "KEYWORD_38", "KEYWORD_39", "KEYWORD_40", "KEYWORD_41", "KEYWORD_42", "KEYWORD_43", "KEYWORD_44", "KEYWORD_45", "KEYWORD_46", "KEYWORD_47", "KEYWORD_48", "KEYWORD_49", "KEYWORD_50", "KEYWORD_51", "KEYWORD_52", "KEYWORD_53", "KEYWORD_54", "KEYWORD_55", "KEYWORD_56", "KEYWORD_25", "KEYWORD_26", "KEYWORD_27", "KEYWORD_28", "KEYWORD_29", "KEYWORD_30", "KEYWORD_31", "KEYWORD_32", "KEYWORD_33", "KEYWORD_34", "KEYWORD_35", "KEYWORD_14", "KEYWORD_15", "KEYWORD_16", "KEYWORD_17", "KEYWORD_18", "KEYWORD_19", "KEYWORD_20", "KEYWORD_21", "KEYWORD_22", "KEYWORD_23", "KEYWORD_24", "KEYWORD_1", "KEYWORD_2", "KEYWORD_3", "KEYWORD_4", "KEYWORD_5", "KEYWORD_6", "KEYWORD_7", "KEYWORD_8", "KEYWORD_9", "KEYWORD_10", "KEYWORD_11", "KEYWORD_12", "KEYWORD_13", "RULE_JRPARAM", "RULE_JRNPARAM", "RULE_STAR", "RULE_UNSIGNED", "RULE_INT", "RULE_SIGNED_DOUBLE", "RULE_DATE", "RULE_TIME", "RULE_TIMESTAMP", "RULE_STRING_", "RULE_STRING", "RULE_DBNAME", "RULE_ID", "RULE_SL_COMMENT", "RULE_ML_COMMENT", "RULE_WS", "RULE_ANY_OTHER"
     };
-    public static final int RULE_ID=141;
+    public static final int RULE_ID=142;
     public static final int RULE_JRNPARAM=131;
-    public static final int RULE_DATE=134;
-    public static final int RULE_ANY_OTHER=145;
+    public static final int RULE_DATE=136;
+    public static final int RULE_ANY_OTHER=146;
     public static final int KEYWORD_56=94;
     public static final int KEYWORD_55=93;
     public static final int KEYWORD_54=92;
@@ -42,7 +42,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
     public static final int KEYWORD_65=65;
     public static final int KEYWORD_64=64;
     public static final int KEYWORD_67=67;
-    public static final int RULE_SIGNED_DOUBLE=137;
+    public static final int RULE_SIGNED_DOUBLE=135;
     public static final int KEYWORD_66=66;
     public static final int KEYWORD_61=61;
     public static final int KEYWORD_60=60;
@@ -70,9 +70,9 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
     public static final int KEYWORD_37=75;
     public static final int KEYWORD_36=74;
     public static final int KEYWORD_35=105;
-    public static final int RULE_ML_COMMENT=143;
+    public static final int RULE_ML_COMMENT=144;
     public static final int KEYWORD_39=77;
-    public static final int RULE_STRING=139;
+    public static final int RULE_STRING=140;
     public static final int KEYWORD_122=8;
     public static final int KEYWORD_121=9;
     public static final int KEYWORD_120=10;
@@ -95,6 +95,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
     public static final int KEYWORD_49=87;
     public static final int KEYWORD_48=86;
     public static final int KEYWORD_97=35;
+    public static final int RULE_UNSIGNED=133;
     public static final int KEYWORD_98=36;
     public static final int KEYWORD_99=37;
     public static final int KEYWORD_93=31;
@@ -110,7 +111,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
     public static final int KEYWORD_15=107;
     public static final int KEYWORD_16=108;
     public static final int KEYWORD_13=129;
-    public static final int RULE_STRING_=138;
+    public static final int RULE_STRING_=139;
     public static final int KEYWORD_14=106;
     public static final int KEYWORD_11=127;
     public static final int KEYWORD_12=128;
@@ -125,13 +126,13 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
     public static final int KEYWORD_8=124;
     public static final int KEYWORD_9=125;
     public static final int KEYWORD_28=98;
-    public static final int RULE_TIME=135;
+    public static final int RULE_TIME=137;
     public static final int KEYWORD_29=99;
-    public static final int RULE_INT=133;
-    public static final int RULE_TIMESTAMP=136;
+    public static final int RULE_INT=134;
+    public static final int RULE_TIMESTAMP=138;
     public static final int KEYWORD_24=116;
     public static final int KEYWORD_25=95;
-    public static final int RULE_DBNAME=140;
+    public static final int RULE_DBNAME=141;
     public static final int KEYWORD_26=96;
     public static final int KEYWORD_27=97;
     public static final int KEYWORD_20=112;
@@ -153,7 +154,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
     public static final int KEYWORD_70=70;
     public static final int KEYWORD_3=119;
     public static final int KEYWORD_2=118;
-    public static final int RULE_SL_COMMENT=142;
+    public static final int RULE_SL_COMMENT=143;
     public static final int RULE_STAR=132;
     public static final int KEYWORD_84=41;
     public static final int KEYWORD_85=42;
@@ -166,7 +167,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
     public static final int KEYWORD_87=44;
     public static final int KEYWORD_81=56;
     public static final int KEYWORD_80=55;
-    public static final int RULE_WS=144;
+    public static final int RULE_WS=145;
 
     // delegates
     // delegators
@@ -2197,10 +2198,10 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             case RULE_JRPARAM:
             case RULE_JRNPARAM:
             case RULE_INT:
+            case RULE_SIGNED_DOUBLE:
             case RULE_DATE:
             case RULE_TIME:
             case RULE_TIMESTAMP:
-            case RULE_SIGNED_DOUBLE:
             case RULE_STRING_:
                 {
                 alt24=1;
@@ -7154,10 +7155,10 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             case KEYWORD_36:
             case RULE_JRPARAM:
             case RULE_INT:
+            case RULE_SIGNED_DOUBLE:
             case RULE_DATE:
             case RULE_TIME:
             case RULE_TIMESTAMP:
-            case RULE_SIGNED_DOUBLE:
             case RULE_STRING_:
             case RULE_STRING:
             case RULE_DBNAME:
@@ -11265,10 +11266,10 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             case RULE_JRPARAM:
             case RULE_JRNPARAM:
             case RULE_INT:
+            case RULE_SIGNED_DOUBLE:
             case RULE_DATE:
             case RULE_TIME:
             case RULE_TIMESTAMP:
-            case RULE_SIGNED_DOUBLE:
             case RULE_STRING_:
                 {
                 alt87=2;
@@ -12713,10 +12714,10 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             case RULE_JRPARAM:
             case RULE_JRNPARAM:
             case RULE_INT:
+            case RULE_SIGNED_DOUBLE:
             case RULE_DATE:
             case RULE_TIME:
             case RULE_TIMESTAMP:
-            case RULE_SIGNED_DOUBLE:
             case RULE_STRING_:
             case RULE_STRING:
             case RULE_DBNAME:
@@ -12947,10 +12948,10 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             case RULE_JRPARAM:
             case RULE_JRNPARAM:
             case RULE_INT:
+            case RULE_SIGNED_DOUBLE:
             case RULE_DATE:
             case RULE_TIME:
             case RULE_TIMESTAMP:
-            case RULE_SIGNED_DOUBLE:
             case RULE_STRING_:
             case RULE_STRING:
             case RULE_DBNAME:
@@ -14910,10 +14911,10 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                 }
                 break;
             case RULE_INT:
+            case RULE_SIGNED_DOUBLE:
             case RULE_DATE:
             case RULE_TIME:
             case RULE_TIMESTAMP:
-            case RULE_SIGNED_DOUBLE:
             case RULE_STRING_:
                 {
                 alt115=3;
@@ -17904,7 +17905,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
     public static final BitSet FOLLOW_EOF_in_entryRuleLimit423 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_KEYWORD_26_in_ruleLimit471 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_RULE_INT_in_ruleLimit495 = new BitSet(new long[]{0x0000000000000002L,0x0100000000000000L});
-    public static final BitSet FOLLOW_KEYWORD_4_in_ruleLimit514 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000000020L});
+    public static final BitSet FOLLOW_KEYWORD_4_in_ruleLimit514 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000000040L});
     public static final BitSet FOLLOW_ruleIntegerValue_in_ruleLimit534 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleSelectQuery_in_entryRuleSelectQuery572 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleSelectQuery582 = new BitSet(new long[]{0x0000000000000002L});
@@ -17920,51 +17921,51 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
     public static final BitSet FOLLOW_ruleSelect_in_ruleSelectSubSet891 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleSelect_in_entryRuleSelect926 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleSelect936 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_KEYWORD_81_in_ruleSelect980 = new BitSet(new long[]{0x0200020100000000L,0x0020010000000400L,0x0000000000003FFCL});
-    public static final BitSet FOLLOW_KEYWORD_94_in_ruleSelect1005 = new BitSet(new long[]{0x0200020100000000L,0x0020010000000400L,0x0000000000003FFCL});
-    public static final BitSet FOLLOW_KEYWORD_34_in_ruleSelect1020 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000000220L});
-    public static final BitSet FOLLOW_RULE_INT_in_ruleSelect1031 = new BitSet(new long[]{0x0200420110000000L,0x0020010000000400L,0x0000000000003FFCL});
-    public static final BitSet FOLLOW_RULE_SIGNED_DOUBLE_in_ruleSelect1047 = new BitSet(new long[]{0x0200420110000000L,0x0020010000000400L,0x0000000000003FFCL});
-    public static final BitSet FOLLOW_KEYWORD_89_in_ruleSelect1061 = new BitSet(new long[]{0x0200020110000000L,0x0020010000000400L,0x0000000000003FFCL});
-    public static final BitSet FOLLOW_KEYWORD_104_in_ruleSelect1076 = new BitSet(new long[]{0x0200020100000000L,0x0020010000000400L,0x0000000000003FFCL});
+    public static final BitSet FOLLOW_KEYWORD_81_in_ruleSelect980 = new BitSet(new long[]{0x0200020100000000L,0x0020010000000400L,0x0000000000007FDCL});
+    public static final BitSet FOLLOW_KEYWORD_94_in_ruleSelect1005 = new BitSet(new long[]{0x0200020100000000L,0x0020010000000400L,0x0000000000007FDCL});
+    public static final BitSet FOLLOW_KEYWORD_34_in_ruleSelect1020 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x00000000000000C0L});
+    public static final BitSet FOLLOW_RULE_INT_in_ruleSelect1031 = new BitSet(new long[]{0x0200420110000000L,0x0020010000000400L,0x0000000000007FDCL});
+    public static final BitSet FOLLOW_RULE_SIGNED_DOUBLE_in_ruleSelect1047 = new BitSet(new long[]{0x0200420110000000L,0x0020010000000400L,0x0000000000007FDCL});
+    public static final BitSet FOLLOW_KEYWORD_89_in_ruleSelect1061 = new BitSet(new long[]{0x0200020110000000L,0x0020010000000400L,0x0000000000007FDCL});
+    public static final BitSet FOLLOW_KEYWORD_104_in_ruleSelect1076 = new BitSet(new long[]{0x0200020100000000L,0x0020010000000400L,0x0000000000007FDCL});
     public static final BitSet FOLLOW_ruleColumns_in_ruleSelect1100 = new BitSet(new long[]{0x0000000000000000L,0x0000000000002000L});
-    public static final BitSet FOLLOW_KEYWORD_39_in_ruleSelect1113 = new BitSet(new long[]{0x0000000000000000L,0x0020000000000000L,0x0000000000003800L});
+    public static final BitSet FOLLOW_KEYWORD_39_in_ruleSelect1113 = new BitSet(new long[]{0x0000000000000000L,0x0020000000000000L,0x0000000000007000L});
     public static final BitSet FOLLOW_ruleTables_in_ruleSelect1133 = new BitSet(new long[]{0x8048001200008002L,0x0000000000000200L});
-    public static final BitSet FOLLOW_KEYWORD_73_in_ruleSelect1147 = new BitSet(new long[]{0x0224020000800000L,0x0021080000600400L,0x0000000000003FECL});
+    public static final BitSet FOLLOW_KEYWORD_73_in_ruleSelect1147 = new BitSet(new long[]{0x0224020000800000L,0x0021080000600400L,0x0000000000007FCCL});
     public static final BitSet FOLLOW_ruleFullExpression_in_ruleSelect1167 = new BitSet(new long[]{0x8048001200008002L});
-    public static final BitSet FOLLOW_KEYWORD_95_in_ruleSelect1183 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000003800L});
+    public static final BitSet FOLLOW_KEYWORD_95_in_ruleSelect1183 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000007000L});
     public static final BitSet FOLLOW_ruleGroupByColumns_in_ruleSelect1203 = new BitSet(new long[]{0x8048001000008002L});
-    public static final BitSet FOLLOW_KEYWORD_76_in_ruleSelect1219 = new BitSet(new long[]{0x0224020000800000L,0x0021080000600400L,0x0000000000003FECL});
+    public static final BitSet FOLLOW_KEYWORD_76_in_ruleSelect1219 = new BitSet(new long[]{0x0224020000800000L,0x0021080000600400L,0x0000000000007FCCL});
     public static final BitSet FOLLOW_ruleFullExpression_in_ruleSelect1239 = new BitSet(new long[]{0x8040001000008002L});
-    public static final BitSet FOLLOW_KEYWORD_98_in_ruleSelect1255 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000003820L});
+    public static final BitSet FOLLOW_KEYWORD_98_in_ruleSelect1255 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000007040L});
     public static final BitSet FOLLOW_ruleOrderByColumns_in_ruleSelect1275 = new BitSet(new long[]{0x8040000000008002L});
-    public static final BitSet FOLLOW_KEYWORD_63_in_ruleSelect1291 = new BitSet(new long[]{0x0000000000000000L,0x0000000100000000L,0x0000000000000020L});
+    public static final BitSet FOLLOW_KEYWORD_63_in_ruleSelect1291 = new BitSet(new long[]{0x0000000000000000L,0x0000000100000000L,0x0000000000000040L});
     public static final BitSet FOLLOW_ruleLimit_in_ruleSelect1311 = new BitSet(new long[]{0x0040000000008002L});
-    public static final BitSet FOLLOW_KEYWORD_79_in_ruleSelect1327 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000000020L});
+    public static final BitSet FOLLOW_KEYWORD_79_in_ruleSelect1327 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000000040L});
     public static final BitSet FOLLOW_ruleOffset_in_ruleSelect1347 = new BitSet(new long[]{0x0000000000008002L});
-    public static final BitSet FOLLOW_KEYWORD_111_in_ruleSelect1363 = new BitSet(new long[]{0x0000000000000000L,0x0000008002000000L,0x0000000000000020L});
+    public static final BitSet FOLLOW_KEYWORD_111_in_ruleSelect1363 = new BitSet(new long[]{0x0000000000000000L,0x0000008002000000L,0x0000000000000040L});
     public static final BitSet FOLLOW_ruleFetchFirst_in_ruleSelect1383 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleColumns_in_entryRuleColumns1420 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleColumns1430 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleColumnOrAlias_in_ruleColumns1477 = new BitSet(new long[]{0x0000000000000002L,0x0100000000000000L});
-    public static final BitSet FOLLOW_KEYWORD_4_in_ruleColumns1500 = new BitSet(new long[]{0x0200020100000000L,0x0020010000000400L,0x0000000000003FFCL});
+    public static final BitSet FOLLOW_KEYWORD_4_in_ruleColumns1500 = new BitSet(new long[]{0x0200020100000000L,0x0020010000000400L,0x0000000000007FDCL});
     public static final BitSet FOLLOW_ruleColumnOrAlias_in_ruleColumns1520 = new BitSet(new long[]{0x0000000000000002L,0x0100000000000000L});
     public static final BitSet FOLLOW_ruleColumnOrAlias_in_entryRuleColumnOrAlias1559 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleColumnOrAlias1569 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleOperandGroup_in_ruleColumnOrAlias1616 = new BitSet(new long[]{0x0000000000000002L,0x0000800000000000L,0x0000000000003800L});
-    public static final BitSet FOLLOW_KEYWORD_19_in_ruleColumnOrAlias1635 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000000L,0x0000000000003800L});
+    public static final BitSet FOLLOW_ruleOperandGroup_in_ruleColumnOrAlias1616 = new BitSet(new long[]{0x0000000000000002L,0x0000800000000000L,0x0000000000007000L});
+    public static final BitSet FOLLOW_KEYWORD_19_in_ruleColumnOrAlias1635 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000000L,0x0000000000007000L});
     public static final BitSet FOLLOW_ruleDbObjectName_in_ruleColumnOrAlias1668 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_RULE_STAR_in_ruleColumnOrAlias1693 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleDbObjectNameAll_in_ruleColumnOrAlias1725 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleColumnFull_in_entryRuleColumnFull1760 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleColumnFull1770 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleDbObjectName_in_ruleColumnFull1817 = new BitSet(new long[]{0x0000000000000002L,0x0400000000000000L});
-    public static final BitSet FOLLOW_KEYWORD_6_in_ruleColumnFull1840 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000003800L});
+    public static final BitSet FOLLOW_KEYWORD_6_in_ruleColumnFull1840 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000007000L});
     public static final BitSet FOLLOW_ruleDbObjectName_in_ruleColumnFull1860 = new BitSet(new long[]{0x0000000000000002L,0x0400000000000000L});
     public static final BitSet FOLLOW_ruleTables_in_entryRuleTables1899 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleTables1909 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleFromTable_in_ruleTables1956 = new BitSet(new long[]{0x0000000000000002L,0x0100000000000000L});
-    public static final BitSet FOLLOW_KEYWORD_4_in_ruleTables1979 = new BitSet(new long[]{0x0000000000000000L,0x0020000000000000L,0x0000000000003800L});
+    public static final BitSet FOLLOW_KEYWORD_4_in_ruleTables1979 = new BitSet(new long[]{0x0000000000000000L,0x0020000000000000L,0x0000000000007000L});
     public static final BitSet FOLLOW_ruleFromTable_in_ruleTables1999 = new BitSet(new long[]{0x0000000000000002L,0x0100000000000000L});
     public static final BitSet FOLLOW_ruleFromTable_in_entryRuleFromTable2038 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleFromTable2048 = new BitSet(new long[]{0x0000000000000002L});
@@ -17972,23 +17973,23 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
     public static final BitSet FOLLOW_ruleFromTableJoin_in_ruleFromTable2115 = new BitSet(new long[]{0x2400200000001002L,0x0000000000054080L});
     public static final BitSet FOLLOW_ruleFromTableJoin_in_entryRuleFromTableJoin2151 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleFromTableJoin2161 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleJoinType_in_ruleFromTableJoin2207 = new BitSet(new long[]{0x0000000000000000L,0x0020000000000000L,0x0000000000003800L});
+    public static final BitSet FOLLOW_ruleJoinType_in_ruleFromTableJoin2207 = new BitSet(new long[]{0x0000000000000000L,0x0020000000000000L,0x0000000000007000L});
     public static final BitSet FOLLOW_ruleTableOrAlias_in_ruleFromTableJoin2228 = new BitSet(new long[]{0x0000000000000000L,0x0002000000000000L});
-    public static final BitSet FOLLOW_KEYWORD_21_in_ruleFromTableJoin2241 = new BitSet(new long[]{0x0224020000800000L,0x0021080000600400L,0x0000000000003FECL});
+    public static final BitSet FOLLOW_KEYWORD_21_in_ruleFromTableJoin2241 = new BitSet(new long[]{0x0224020000800000L,0x0021080000600400L,0x0000000000007FCCL});
     public static final BitSet FOLLOW_ruleFullExpression_in_ruleFromTableJoin2261 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleTableOrAlias_in_entryRuleTableOrAlias2296 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleTableOrAlias2306 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleTableFull_in_ruleTableOrAlias2353 = new BitSet(new long[]{0x0001000000000002L,0x0000800000000020L,0x0000000000003800L});
-    public static final BitSet FOLLOW_ruleSubQueryOperand_in_ruleTableOrAlias2380 = new BitSet(new long[]{0x0001000000000002L,0x0000800000000020L,0x0000000000003800L});
-    public static final BitSet FOLLOW_rulePivotTable_in_ruleTableOrAlias2403 = new BitSet(new long[]{0x0000000000000002L,0x0000800000000000L,0x0000000000003800L});
-    public static final BitSet FOLLOW_ruleUnpivotTable_in_ruleTableOrAlias2430 = new BitSet(new long[]{0x0000000000000002L,0x0000800000000000L,0x0000000000003800L});
-    public static final BitSet FOLLOW_KEYWORD_19_in_ruleTableOrAlias2451 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000000L,0x0000000000003800L});
+    public static final BitSet FOLLOW_ruleTableFull_in_ruleTableOrAlias2353 = new BitSet(new long[]{0x0001000000000002L,0x0000800000000020L,0x0000000000007000L});
+    public static final BitSet FOLLOW_ruleSubQueryOperand_in_ruleTableOrAlias2380 = new BitSet(new long[]{0x0001000000000002L,0x0000800000000020L,0x0000000000007000L});
+    public static final BitSet FOLLOW_rulePivotTable_in_ruleTableOrAlias2403 = new BitSet(new long[]{0x0000000000000002L,0x0000800000000000L,0x0000000000007000L});
+    public static final BitSet FOLLOW_ruleUnpivotTable_in_ruleTableOrAlias2430 = new BitSet(new long[]{0x0000000000000002L,0x0000800000000000L,0x0000000000007000L});
+    public static final BitSet FOLLOW_KEYWORD_19_in_ruleTableOrAlias2451 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000000L,0x0000000000007000L});
     public static final BitSet FOLLOW_ruleDbObjectName_in_ruleTableOrAlias2484 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rulePivotTable_in_entryRulePivotTable2520 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRulePivotTable2530 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_KEYWORD_69_in_rulePivotTable2568 = new BitSet(new long[]{0x0000000000000000L,0x0020020000000000L});
     public static final BitSet FOLLOW_KEYWORD_35_in_rulePivotTable2581 = new BitSet(new long[]{0x0000000000000000L,0x0020000000000000L});
-    public static final BitSet FOLLOW_KEYWORD_1_in_rulePivotTable2595 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000002000L});
+    public static final BitSet FOLLOW_KEYWORD_1_in_rulePivotTable2595 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000004000L});
     public static final BitSet FOLLOW_rulePivotFunctions_in_rulePivotTable2615 = new BitSet(new long[]{0x0000000000000000L,0x0000004000000000L});
     public static final BitSet FOLLOW_rulePivotForClause_in_rulePivotTable2636 = new BitSet(new long[]{0x0000000000000000L,0x0001000000000000L});
     public static final BitSet FOLLOW_rulePivotInClause_in_rulePivotTable2657 = new BitSet(new long[]{0x0000000000000000L,0x0040000000000000L});
@@ -17999,7 +18000,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
     public static final BitSet FOLLOW_rulePivotInClause_in_entryRulePivotInClause2796 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRulePivotInClause2806 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_KEYWORD_20_in_rulePivotInClause2844 = new BitSet(new long[]{0x0000000000000000L,0x0020000000000000L});
-    public static final BitSet FOLLOW_KEYWORD_1_in_rulePivotInClause2856 = new BitSet(new long[]{0x0000000000000000L,0x0020000400000000L,0x0000000000003800L});
+    public static final BitSet FOLLOW_KEYWORD_1_in_rulePivotInClause2856 = new BitSet(new long[]{0x0000000000000000L,0x0020000400000000L,0x0000000000007000L});
     public static final BitSet FOLLOW_ruleSubQueryOperand_in_rulePivotInClause2877 = new BitSet(new long[]{0x0000000000000000L,0x0040000000000000L});
     public static final BitSet FOLLOW_ruleUnpivotInClauseArgs_in_rulePivotInClause2904 = new BitSet(new long[]{0x0000000000000000L,0x0040000000000000L});
     public static final BitSet FOLLOW_rulePivotInClauseAny_in_rulePivotInClause2931 = new BitSet(new long[]{0x0000000000000000L,0x0040000000000000L});
@@ -18015,7 +18016,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
     public static final BitSet FOLLOW_KEYWORD_86_in_ruleUnpivotTable3159 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000008L});
     public static final BitSet FOLLOW_KEYWORD_83_in_ruleUnpivotTable3177 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000008L});
     public static final BitSet FOLLOW_KEYWORD_67_in_ruleUnpivotTable3190 = new BitSet(new long[]{0x0000000000000000L,0x0020000000000000L});
-    public static final BitSet FOLLOW_KEYWORD_1_in_ruleUnpivotTable3204 = new BitSet(new long[]{0x0000000000000000L,0x0020000000000000L,0x0000000000003800L});
+    public static final BitSet FOLLOW_KEYWORD_1_in_ruleUnpivotTable3204 = new BitSet(new long[]{0x0000000000000000L,0x0020000000000000L,0x0000000000007000L});
     public static final BitSet FOLLOW_rulePivotColumns_in_ruleUnpivotTable3224 = new BitSet(new long[]{0x0000000000000000L,0x0000004000000000L});
     public static final BitSet FOLLOW_rulePivotForClause_in_ruleUnpivotTable3245 = new BitSet(new long[]{0x0000000000000000L,0x0001000000000000L});
     public static final BitSet FOLLOW_ruleUnpivotInClause_in_ruleUnpivotTable3266 = new BitSet(new long[]{0x0000000000000000L,0x0040000000000000L});
@@ -18023,46 +18024,46 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
     public static final BitSet FOLLOW_ruleUnpivotInClause_in_entryRuleUnpivotInClause3313 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleUnpivotInClause3323 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_KEYWORD_20_in_ruleUnpivotInClause3376 = new BitSet(new long[]{0x0000000000000000L,0x0020000000000000L});
-    public static final BitSet FOLLOW_KEYWORD_1_in_ruleUnpivotInClause3400 = new BitSet(new long[]{0x0000000000000000L,0x0020000000000000L,0x0000000000003800L});
+    public static final BitSet FOLLOW_KEYWORD_1_in_ruleUnpivotInClause3400 = new BitSet(new long[]{0x0000000000000000L,0x0020000000000000L,0x0000000000007000L});
     public static final BitSet FOLLOW_ruleUnpivotInClauseArgs_in_ruleUnpivotInClause3420 = new BitSet(new long[]{0x0000000000000000L,0x0040000000000000L});
     public static final BitSet FOLLOW_KEYWORD_2_in_ruleUnpivotInClause3433 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleUnpivotInClauseArgs_in_entryRuleUnpivotInClauseArgs3467 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleUnpivotInClauseArgs3477 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleUnpivotInClauseArg_in_ruleUnpivotInClauseArgs3524 = new BitSet(new long[]{0x0000000000000002L,0x0100000000000000L});
-    public static final BitSet FOLLOW_KEYWORD_4_in_ruleUnpivotInClauseArgs3547 = new BitSet(new long[]{0x0000000000000000L,0x0020000000000000L,0x0000000000003800L});
+    public static final BitSet FOLLOW_KEYWORD_4_in_ruleUnpivotInClauseArgs3547 = new BitSet(new long[]{0x0000000000000000L,0x0020000000000000L,0x0000000000007000L});
     public static final BitSet FOLLOW_ruleUnpivotInClauseArg_in_ruleUnpivotInClauseArgs3567 = new BitSet(new long[]{0x0000000000000002L,0x0100000000000000L});
     public static final BitSet FOLLOW_ruleUnpivotInClauseArg_in_entryRuleUnpivotInClauseArg3606 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleUnpivotInClauseArg3616 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rulePivotColumns_in_ruleUnpivotInClauseArg3662 = new BitSet(new long[]{0x0000000000000002L,0x0000800000000000L});
-    public static final BitSet FOLLOW_KEYWORD_19_in_ruleUnpivotInClauseArg3676 = new BitSet(new long[]{0x0000000000000000L,0x0020000000000000L,0x0000000000003800L});
+    public static final BitSet FOLLOW_KEYWORD_19_in_ruleUnpivotInClauseArg3676 = new BitSet(new long[]{0x0000000000000000L,0x0020000000000000L,0x0000000000007000L});
     public static final BitSet FOLLOW_rulePivotColumns_in_ruleUnpivotInClauseArg3696 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rulePivotForClause_in_entryRulePivotForClause3733 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRulePivotForClause3743 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_KEYWORD_32_in_rulePivotForClause3781 = new BitSet(new long[]{0x0000000000000000L,0x0020000000000000L,0x0000000000003800L});
+    public static final BitSet FOLLOW_KEYWORD_32_in_rulePivotForClause3781 = new BitSet(new long[]{0x0000000000000000L,0x0020000000000000L,0x0000000000007000L});
     public static final BitSet FOLLOW_ruleColumnFull_in_rulePivotForClause3803 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_KEYWORD_1_in_rulePivotForClause3822 = new BitSet(new long[]{0x0200020100000000L,0x0020010000000400L,0x0000000000003FFCL});
+    public static final BitSet FOLLOW_KEYWORD_1_in_rulePivotForClause3822 = new BitSet(new long[]{0x0200020100000000L,0x0020010000000400L,0x0000000000007FDCL});
     public static final BitSet FOLLOW_ruleColumns_in_rulePivotForClause3843 = new BitSet(new long[]{0x0000000000000000L,0x0040000000000000L});
     public static final BitSet FOLLOW_KEYWORD_2_in_rulePivotForClause3855 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rulePivotColumns_in_entryRulePivotColumns3891 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRulePivotColumns3901 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rulePivotCol_in_rulePivotColumns3948 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_KEYWORD_1_in_rulePivotColumns3967 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000003800L});
+    public static final BitSet FOLLOW_KEYWORD_1_in_rulePivotColumns3967 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000007000L});
     public static final BitSet FOLLOW_rulePivotCols_in_rulePivotColumns3988 = new BitSet(new long[]{0x0000000000000000L,0x0040000000000000L});
     public static final BitSet FOLLOW_KEYWORD_2_in_rulePivotColumns4000 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rulePivotCols_in_entryRulePivotCols4035 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRulePivotCols4045 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rulePivotCol_in_rulePivotCols4092 = new BitSet(new long[]{0x0000000000000002L,0x0100000000000000L});
-    public static final BitSet FOLLOW_KEYWORD_4_in_rulePivotCols4115 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000003800L});
+    public static final BitSet FOLLOW_KEYWORD_4_in_rulePivotCols4115 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000007000L});
     public static final BitSet FOLLOW_rulePivotCol_in_rulePivotCols4135 = new BitSet(new long[]{0x0000000000000002L,0x0100000000000000L});
     public static final BitSet FOLLOW_rulePivotCol_in_entryRulePivotCol4174 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRulePivotCol4184 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleDbObjectName_in_rulePivotCol4231 = new BitSet(new long[]{0x0000000000000002L,0x0400000000000000L});
-    public static final BitSet FOLLOW_KEYWORD_6_in_rulePivotCol4254 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000003800L});
+    public static final BitSet FOLLOW_KEYWORD_6_in_rulePivotCol4254 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000007000L});
     public static final BitSet FOLLOW_ruleDbObjectName_in_rulePivotCol4274 = new BitSet(new long[]{0x0000000000000002L,0x0400000000000000L});
     public static final BitSet FOLLOW_ruleTableFull_in_entryRuleTableFull4313 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleTableFull4323 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleDbObjectName_in_ruleTableFull4370 = new BitSet(new long[]{0x0000000000000002L,0x0400000000000000L});
-    public static final BitSet FOLLOW_KEYWORD_6_in_ruleTableFull4393 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000003800L});
+    public static final BitSet FOLLOW_KEYWORD_6_in_ruleTableFull4393 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000007000L});
     public static final BitSet FOLLOW_ruleDbObjectName_in_ruleTableFull4413 = new BitSet(new long[]{0x0000000000000002L,0x0400000000000000L});
     public static final BitSet FOLLOW_ruleDbObjectNameAll_in_entryRuleDbObjectNameAll4452 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleDbObjectNameAll4462 = new BitSet(new long[]{0x0000000000000002L});
@@ -18075,7 +18076,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
     public static final BitSet FOLLOW_ruleOrderByColumns_in_entryRuleOrderByColumns4654 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleOrderByColumns4664 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleOrderByColumnFull_in_ruleOrderByColumns4711 = new BitSet(new long[]{0x0000000000000002L,0x0100000000000000L});
-    public static final BitSet FOLLOW_KEYWORD_4_in_ruleOrderByColumns4734 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000003820L});
+    public static final BitSet FOLLOW_KEYWORD_4_in_ruleOrderByColumns4734 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000007040L});
     public static final BitSet FOLLOW_ruleOrderByColumnFull_in_ruleOrderByColumns4754 = new BitSet(new long[]{0x0000000000000002L,0x0100000000000000L});
     public static final BitSet FOLLOW_ruleOrderByColumnFull_in_entryRuleOrderByColumnFull4793 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleOrderByColumnFull4803 = new BitSet(new long[]{0x0000000000000002L});
@@ -18086,7 +18087,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
     public static final BitSet FOLLOW_ruleGroupByColumns_in_entryRuleGroupByColumns4978 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleGroupByColumns4988 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleGroupByColumnFull_in_ruleGroupByColumns5035 = new BitSet(new long[]{0x0000000000000002L,0x0100000000000000L});
-    public static final BitSet FOLLOW_KEYWORD_4_in_ruleGroupByColumns5058 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000003800L});
+    public static final BitSet FOLLOW_KEYWORD_4_in_ruleGroupByColumns5058 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000007000L});
     public static final BitSet FOLLOW_ruleGroupByColumnFull_in_ruleGroupByColumns5078 = new BitSet(new long[]{0x0000000000000002L,0x0100000000000000L});
     public static final BitSet FOLLOW_ruleGroupByColumnFull_in_entryRuleGroupByColumnFull5117 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleGroupByColumnFull5127 = new BitSet(new long[]{0x0000000000000002L});
@@ -18098,8 +18099,8 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
     public static final BitSet FOLLOW_ruleExpressionFragmentSecond_in_ruleFullExpression5322 = new BitSet(new long[]{0x0000000000000002L,0x0004000200000000L,0x0000000000000008L});
     public static final BitSet FOLLOW_ruleExpressionFragmentSecond_in_entryRuleExpressionFragmentSecond5360 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleExpressionFragmentSecond5370 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_KEYWORD_27_in_ruleExpressionFragmentSecond5417 = new BitSet(new long[]{0x0224020000800000L,0x0021080000600400L,0x0000000000003FECL});
-    public static final BitSet FOLLOW_KEYWORD_22_in_ruleExpressionFragmentSecond5445 = new BitSet(new long[]{0x0224020000800000L,0x0021080000600400L,0x0000000000003FECL});
+    public static final BitSet FOLLOW_KEYWORD_27_in_ruleExpressionFragmentSecond5417 = new BitSet(new long[]{0x0224020000800000L,0x0021080000600400L,0x0000000000007FCCL});
+    public static final BitSet FOLLOW_KEYWORD_22_in_ruleExpressionFragmentSecond5445 = new BitSet(new long[]{0x0224020000800000L,0x0021080000600400L,0x0000000000007FCCL});
     public static final BitSet FOLLOW_ruleExpressionFragment_in_ruleExpressionFragmentSecond5480 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_RULE_JRNPARAM_in_ruleExpressionFragmentSecond5504 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleExpressionFragment_in_entryRuleExpressionFragment5544 = new BitSet(new long[]{0x0000000000000000L});
@@ -18115,7 +18116,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
     public static final BitSet FOLLOW_EOF_in_entryRuleExpressionGroup5805 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_KEYWORD_48_in_ruleExpressionGroup5860 = new BitSet(new long[]{0x0000000000000000L,0x0020000000000000L});
     public static final BitSet FOLLOW_KEYWORD_47_in_ruleExpressionGroup5888 = new BitSet(new long[]{0x0000000000000000L,0x0020000000000000L});
-    public static final BitSet FOLLOW_KEYWORD_1_in_ruleExpressionGroup5916 = new BitSet(new long[]{0x0224020000800000L,0x0021080000600400L,0x0000000000003FECL});
+    public static final BitSet FOLLOW_KEYWORD_1_in_ruleExpressionGroup5916 = new BitSet(new long[]{0x0224020000800000L,0x0021080000600400L,0x0000000000007FCCL});
     public static final BitSet FOLLOW_ruleFullExpression_in_ruleExpressionGroup5936 = new BitSet(new long[]{0x0000000000000000L,0x0040000000000000L});
     public static final BitSet FOLLOW_KEYWORD_2_in_ruleExpressionGroup5949 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleXExpression_in_entryRuleXExpression5983 = new BitSet(new long[]{0x0000000000000000L});
@@ -18123,9 +18124,9 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
     public static final BitSet FOLLOW_KEYWORD_15_in_ruleXExpression6031 = new BitSet(new long[]{0x0000000000000000L,0x8000000000000000L});
     public static final BitSet FOLLOW_KEYWORD_11_in_ruleXExpression6052 = new BitSet(new long[]{0x480004E860000000L,0x0001000000080004L});
     public static final BitSet FOLLOW_ruleXFunction_in_ruleXExpression6072 = new BitSet(new long[]{0x0000000000000000L,0x0100000000000000L});
-    public static final BitSet FOLLOW_KEYWORD_4_in_ruleXExpression6085 = new BitSet(new long[]{0x0200020000000000L,0x0020000000000400L,0x0000000000003FECL});
+    public static final BitSet FOLLOW_KEYWORD_4_in_ruleXExpression6085 = new BitSet(new long[]{0x0200020000000000L,0x0020000000000400L,0x0000000000007FCCL});
     public static final BitSet FOLLOW_ruleOperandGroup_in_ruleXExpression6105 = new BitSet(new long[]{0x0000000000000000L,0x0100000000000000L,0x0000000000000002L});
-    public static final BitSet FOLLOW_KEYWORD_4_in_ruleXExpression6119 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000002000L});
+    public static final BitSet FOLLOW_KEYWORD_4_in_ruleXExpression6119 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000004000L});
     public static final BitSet FOLLOW_ruleXExpressionParams_in_ruleXExpression6139 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000000002L});
     public static final BitSet FOLLOW_KEYWORD_13_in_ruleXExpression6154 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleXExpression__in_entryRuleXExpression_6188 = new BitSet(new long[]{0x0000000000000000L});
@@ -18133,22 +18134,22 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
     public static final BitSet FOLLOW_KEYWORD_15_in_ruleXExpression_6236 = new BitSet(new long[]{0x0000000000000000L,0x8000000000000000L});
     public static final BitSet FOLLOW_KEYWORD_11_in_ruleXExpression_6257 = new BitSet(new long[]{0x480004E860000000L,0x0001000000080004L});
     public static final BitSet FOLLOW_ruleXFunction_in_ruleXExpression_6277 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000000001L});
-    public static final BitSet FOLLOW_KEYWORD_12_in_ruleXExpression_6290 = new BitSet(new long[]{0x0200020000000000L,0x0020000000000400L,0x0000000000003FECL});
+    public static final BitSet FOLLOW_KEYWORD_12_in_ruleXExpression_6290 = new BitSet(new long[]{0x0200020000000000L,0x0020000000000400L,0x0000000000007FCCL});
     public static final BitSet FOLLOW_ruleOperandGroup_in_ruleXExpression_6310 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000000003L});
-    public static final BitSet FOLLOW_KEYWORD_12_in_ruleXExpression_6324 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000002000L});
+    public static final BitSet FOLLOW_KEYWORD_12_in_ruleXExpression_6324 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000004000L});
     public static final BitSet FOLLOW_ruleXExpressionParams_in_ruleXExpression_6344 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000000002L});
     public static final BitSet FOLLOW_KEYWORD_13_in_ruleXExpression_6359 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleXExpressionParams_in_entryRuleXExpressionParams6393 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleXExpressionParams6403 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleJRParameter_in_ruleXExpressionParams6450 = new BitSet(new long[]{0x0000000000000002L,0x0100000000000000L});
-    public static final BitSet FOLLOW_KEYWORD_4_in_ruleXExpressionParams6473 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000002000L});
+    public static final BitSet FOLLOW_KEYWORD_4_in_ruleXExpressionParams6473 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000004000L});
     public static final BitSet FOLLOW_ruleJRParameter_in_ruleXExpressionParams6493 = new BitSet(new long[]{0x0000000000000002L,0x0100000000000000L});
     public static final BitSet FOLLOW_ruleJRParameter_in_entryRuleJRParameter6532 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleJRParameter6542 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_RULE_ID_in_ruleJRParameter6583 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleExpression_in_entryRuleExpression6622 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleExpression6632 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleOperand_in_ruleExpression6678 = new BitSet(new long[]{0x0224128400940000L,0x70297C0000700400L,0x0000000000003FECL});
+    public static final BitSet FOLLOW_ruleOperand_in_ruleExpression6678 = new BitSet(new long[]{0x0224128400940000L,0x70297C0000700400L,0x0000000000007FCCL});
     public static final BitSet FOLLOW_KEYWORD_87_in_ruleExpression6700 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_KEYWORD_114_in_ruleExpression6728 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleInOperator_in_ruleExpression6769 = new BitSet(new long[]{0x0000000000000002L});
@@ -18158,22 +18159,22 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
     public static final BitSet FOLLOW_ruleComparison_in_ruleExpression6877 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleComparison_in_entryRuleComparison6913 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleComparison6923 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_KEYWORD_10_in_ruleComparison6969 = new BitSet(new long[]{0x0200020000000000L,0x0020000504000400L,0x0000000000003FECL});
-    public static final BitSet FOLLOW_KEYWORD_18_in_ruleComparison6997 = new BitSet(new long[]{0x0200020000000000L,0x0020000504000400L,0x0000000000003FECL});
-    public static final BitSet FOLLOW_KEYWORD_8_in_ruleComparison7025 = new BitSet(new long[]{0x0200020000000000L,0x0020000504000400L,0x0000000000003FECL});
-    public static final BitSet FOLLOW_KEYWORD_16_in_ruleComparison7053 = new BitSet(new long[]{0x0200020000000000L,0x0020000504000400L,0x0000000000003FECL});
-    public static final BitSet FOLLOW_KEYWORD_9_in_ruleComparison7081 = new BitSet(new long[]{0x0200020000000000L,0x0020000504000400L,0x0000000000003FECL});
-    public static final BitSet FOLLOW_KEYWORD_17_in_ruleComparison7109 = new BitSet(new long[]{0x0200020000000000L,0x0020000504000400L,0x0000000000003FECL});
-    public static final BitSet FOLLOW_KEYWORD_14_in_ruleComparison7137 = new BitSet(new long[]{0x0200020000000000L,0x0020000504000400L,0x0000000000003FECL});
-    public static final BitSet FOLLOW_KEYWORD_23_in_ruleComparison7165 = new BitSet(new long[]{0x0200020000000000L,0x0020000504000400L,0x0000000000003FECL});
-    public static final BitSet FOLLOW_KEYWORD_28_in_ruleComparison7200 = new BitSet(new long[]{0x0200020000000000L,0x0020000000000400L,0x0000000000003FECL});
-    public static final BitSet FOLLOW_KEYWORD_26_in_ruleComparison7228 = new BitSet(new long[]{0x0200020000000000L,0x0020000000000400L,0x0000000000003FECL});
-    public static final BitSet FOLLOW_KEYWORD_52_in_ruleComparison7256 = new BitSet(new long[]{0x0200020000000000L,0x0020000000000400L,0x0000000000003FECL});
+    public static final BitSet FOLLOW_KEYWORD_10_in_ruleComparison6969 = new BitSet(new long[]{0x0200020000000000L,0x0020000504000400L,0x0000000000007FCCL});
+    public static final BitSet FOLLOW_KEYWORD_18_in_ruleComparison6997 = new BitSet(new long[]{0x0200020000000000L,0x0020000504000400L,0x0000000000007FCCL});
+    public static final BitSet FOLLOW_KEYWORD_8_in_ruleComparison7025 = new BitSet(new long[]{0x0200020000000000L,0x0020000504000400L,0x0000000000007FCCL});
+    public static final BitSet FOLLOW_KEYWORD_16_in_ruleComparison7053 = new BitSet(new long[]{0x0200020000000000L,0x0020000504000400L,0x0000000000007FCCL});
+    public static final BitSet FOLLOW_KEYWORD_9_in_ruleComparison7081 = new BitSet(new long[]{0x0200020000000000L,0x0020000504000400L,0x0000000000007FCCL});
+    public static final BitSet FOLLOW_KEYWORD_17_in_ruleComparison7109 = new BitSet(new long[]{0x0200020000000000L,0x0020000504000400L,0x0000000000007FCCL});
+    public static final BitSet FOLLOW_KEYWORD_14_in_ruleComparison7137 = new BitSet(new long[]{0x0200020000000000L,0x0020000504000400L,0x0000000000007FCCL});
+    public static final BitSet FOLLOW_KEYWORD_23_in_ruleComparison7165 = new BitSet(new long[]{0x0200020000000000L,0x0020000504000400L,0x0000000000007FCCL});
+    public static final BitSet FOLLOW_KEYWORD_28_in_ruleComparison7200 = new BitSet(new long[]{0x0200020000000000L,0x0020000000000400L,0x0000000000007FCCL});
+    public static final BitSet FOLLOW_KEYWORD_26_in_ruleComparison7228 = new BitSet(new long[]{0x0200020000000000L,0x0020000000000400L,0x0000000000007FCCL});
+    public static final BitSet FOLLOW_KEYWORD_52_in_ruleComparison7256 = new BitSet(new long[]{0x0200020000000000L,0x0020000000000400L,0x0000000000007FCCL});
     public static final BitSet FOLLOW_ruleOperand_in_ruleComparison7292 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleLike_in_entryRuleLike7327 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleLike7337 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_KEYWORD_46_in_ruleLike7383 = new BitSet(new long[]{0x0200000000000000L,0x0000000000000000L,0x0000000000002404L});
-    public static final BitSet FOLLOW_KEYWORD_96_in_ruleLike7411 = new BitSet(new long[]{0x0200000000000000L,0x0000000000000000L,0x0000000000002404L});
+    public static final BitSet FOLLOW_KEYWORD_46_in_ruleLike7383 = new BitSet(new long[]{0x0200000000000000L,0x0000000000000000L,0x0000000000004804L});
+    public static final BitSet FOLLOW_KEYWORD_96_in_ruleLike7411 = new BitSet(new long[]{0x0200000000000000L,0x0000000000000000L,0x0000000000004804L});
     public static final BitSet FOLLOW_ruleLikeOperand_in_ruleLike7446 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleLikeOperand_in_entryRuleLikeOperand7481 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleLikeOperand7491 = new BitSet(new long[]{0x0000000000000002L});
@@ -18183,10 +18184,10 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
     public static final BitSet FOLLOW_ruleParameterOperand_in_ruleLikeOperand7618 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleBetween_in_entryRuleBetween7653 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleBetween7663 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_KEYWORD_82_in_ruleBetween7709 = new BitSet(new long[]{0x0200020000000000L,0x0020000000000400L,0x0000000000003FECL});
-    public static final BitSet FOLLOW_KEYWORD_116_in_ruleBetween7737 = new BitSet(new long[]{0x0200020000000000L,0x0020000000000400L,0x0000000000003FECL});
+    public static final BitSet FOLLOW_KEYWORD_82_in_ruleBetween7709 = new BitSet(new long[]{0x0200020000000000L,0x0020000000000400L,0x0000000000007FCCL});
+    public static final BitSet FOLLOW_KEYWORD_116_in_ruleBetween7737 = new BitSet(new long[]{0x0200020000000000L,0x0020000000000400L,0x0000000000007FCCL});
     public static final BitSet FOLLOW_ruleOperandGroup_in_ruleBetween7772 = new BitSet(new long[]{0x0000000000000000L,0x0000000200000000L});
-    public static final BitSet FOLLOW_KEYWORD_27_in_ruleBetween7785 = new BitSet(new long[]{0x0200020000000000L,0x0020000000000400L,0x0000000000003FECL});
+    public static final BitSet FOLLOW_KEYWORD_27_in_ruleBetween7785 = new BitSet(new long[]{0x0200020000000000L,0x0020000000000400L,0x0000000000007FCCL});
     public static final BitSet FOLLOW_ruleOperandGroup_in_ruleBetween7805 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleInOperator_in_entryRuleInOperator7840 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleInOperator7850 = new BitSet(new long[]{0x0000000000000002L});
@@ -18202,28 +18203,28 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
     public static final BitSet FOLLOW_ruleOperandListGroup_in_ruleExistsOperator8188 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleOperandListGroup_in_entryRuleOperandListGroup8224 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleOperandListGroup8234 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_KEYWORD_1_in_ruleOperandListGroup8272 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x00000000000007ECL});
+    public static final BitSet FOLLOW_KEYWORD_1_in_ruleOperandListGroup8272 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000000FCCL});
     public static final BitSet FOLLOW_ruleOperandList_in_ruleOperandListGroup8292 = new BitSet(new long[]{0x0000000000000000L,0x0040000000000000L});
     public static final BitSet FOLLOW_KEYWORD_2_in_ruleOperandListGroup8305 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleOperandList_in_entryRuleOperandList8339 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleOperandList8349 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleScalarOperand_in_ruleOperandList8396 = new BitSet(new long[]{0x0000000000000002L,0x0100000000000000L});
-    public static final BitSet FOLLOW_KEYWORD_4_in_ruleOperandList8419 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x00000000000007ECL});
+    public static final BitSet FOLLOW_KEYWORD_4_in_ruleOperandList8419 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000000FCCL});
     public static final BitSet FOLLOW_ruleScalarOperand_in_ruleOperandList8439 = new BitSet(new long[]{0x0000000000000002L,0x0100000000000000L});
     public static final BitSet FOLLOW_ruleOperandGroup_in_entryRuleOperandGroup8478 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleOperandGroup8488 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleOperand_in_ruleOperandGroup8535 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_KEYWORD_1_in_ruleOperandGroup8554 = new BitSet(new long[]{0x0200020000000000L,0x0020000000000400L,0x0000000000003FECL});
+    public static final BitSet FOLLOW_KEYWORD_1_in_ruleOperandGroup8554 = new BitSet(new long[]{0x0200020000000000L,0x0020000000000400L,0x0000000000007FCCL});
     public static final BitSet FOLLOW_ruleOperand_in_ruleOperandGroup8575 = new BitSet(new long[]{0x0000000000000000L,0x0040000000000000L});
     public static final BitSet FOLLOW_KEYWORD_2_in_ruleOperandGroup8587 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleOperand_in_entryRuleOperand8622 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleOperand8632 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleOperandFragment_in_ruleOperand8678 = new BitSet(new long[]{0x0000000000000002L,0x0A90000000000000L,0x0000000000000010L});
-    public static final BitSet FOLLOW_KEYWORD_3_in_ruleOperand8703 = new BitSet(new long[]{0x0200020000000000L,0x0020000000000400L,0x0000000000003FECL});
-    public static final BitSet FOLLOW_KEYWORD_5_in_ruleOperand8732 = new BitSet(new long[]{0x0200020000000000L,0x0020000000000400L,0x0000000000003FECL});
-    public static final BitSet FOLLOW_KEYWORD_24_in_ruleOperand8761 = new BitSet(new long[]{0x0200020000000000L,0x0020000000000400L,0x0000000000003FECL});
-    public static final BitSet FOLLOW_RULE_STAR_in_ruleOperand8788 = new BitSet(new long[]{0x0200020000000000L,0x0020000000000400L,0x0000000000003FECL});
-    public static final BitSet FOLLOW_KEYWORD_7_in_ruleOperand8817 = new BitSet(new long[]{0x0200020000000000L,0x0020000000000400L,0x0000000000003FECL});
+    public static final BitSet FOLLOW_KEYWORD_3_in_ruleOperand8703 = new BitSet(new long[]{0x0200020000000000L,0x0020000000000400L,0x0000000000007FCCL});
+    public static final BitSet FOLLOW_KEYWORD_5_in_ruleOperand8732 = new BitSet(new long[]{0x0200020000000000L,0x0020000000000400L,0x0000000000007FCCL});
+    public static final BitSet FOLLOW_KEYWORD_24_in_ruleOperand8761 = new BitSet(new long[]{0x0200020000000000L,0x0020000000000400L,0x0000000000007FCCL});
+    public static final BitSet FOLLOW_RULE_STAR_in_ruleOperand8788 = new BitSet(new long[]{0x0200020000000000L,0x0020000000000400L,0x0000000000007FCCL});
+    public static final BitSet FOLLOW_KEYWORD_7_in_ruleOperand8817 = new BitSet(new long[]{0x0200020000000000L,0x0020000000000400L,0x0000000000007FCCL});
     public static final BitSet FOLLOW_ruleOperandFragment_in_ruleOperand8839 = new BitSet(new long[]{0x0000000000000002L,0x0A90000000000000L,0x0000000000000010L});
     public static final BitSet FOLLOW_ruleOperandFragment_in_entryRuleOperandFragment8876 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleOperandFragment8886 = new BitSet(new long[]{0x0000000000000002L});
@@ -18236,7 +18237,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
     public static final BitSet FOLLOW_ruleSQLCASE_in_ruleOperandFragment9094 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleOperandFunction_in_entryRuleOperandFunction9129 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleOperandFunction9139 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleFNAME_in_ruleOperandFunction9194 = new BitSet(new long[]{0x0200020100000000L,0x0060000100000400L,0x0000000000003FFCL});
+    public static final BitSet FOLLOW_ruleFNAME_in_ruleOperandFunction9194 = new BitSet(new long[]{0x0200020100000000L,0x0060000100000400L,0x0000000000007FDCL});
     public static final BitSet FOLLOW_RULE_STAR_in_ruleOperandFunction9206 = new BitSet(new long[]{0x0000000000000000L,0x0040000000000000L});
     public static final BitSet FOLLOW_ruleOpFunctionArg_in_ruleOperandFunction9232 = new BitSet(new long[]{0x0000000000000000L,0x0040000000000000L});
     public static final BitSet FOLLOW_KEYWORD_2_in_ruleOperandFunction9247 = new BitSet(new long[]{0x0000000000000002L,0x0000000001000000L});
@@ -18246,7 +18247,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
     public static final BitSet FOLLOW_KEYWORD_84_in_ruleFunctionExtract9351 = new BitSet(new long[]{0x0000000000000000L,0x0020000000000000L});
     public static final BitSet FOLLOW_KEYWORD_1_in_ruleFunctionExtract9363 = new BitSet(new long[]{0x00908000816B0EC0L,0x0000001050008002L});
     public static final BitSet FOLLOW_ruleEXTRACT_VALUES_in_ruleFunctionExtract9383 = new BitSet(new long[]{0x0000000000000000L,0x0000000000002000L});
-    public static final BitSet FOLLOW_KEYWORD_39_in_ruleFunctionExtract9396 = new BitSet(new long[]{0x0200020000000000L,0x0020000000000400L,0x0000000000003FECL});
+    public static final BitSet FOLLOW_KEYWORD_39_in_ruleFunctionExtract9396 = new BitSet(new long[]{0x0200020000000000L,0x0020000000000400L,0x0000000000007FCCL});
     public static final BitSet FOLLOW_ruleOperandGroup_in_ruleFunctionExtract9416 = new BitSet(new long[]{0x0000000000000000L,0x0040000000000000L});
     public static final BitSet FOLLOW_KEYWORD_2_in_ruleFunctionExtract9429 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleFunctionAnalytical_in_entryRuleFunctionAnalytical9463 = new BitSet(new long[]{0x0000000000000000L});
@@ -18262,15 +18263,15 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
     public static final BitSet FOLLOW_ruleWindowingClause_in_ruleAnalyticClause9699 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleWindowingClause_in_entryRuleWindowingClause9737 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleWindowingClause9747 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_KEYWORD_51_in_ruleWindowingClause9786 = new BitSet(new long[]{0x0200028000004020L,0x0020000000000400L,0x0000000000003FECL});
-    public static final BitSet FOLLOW_KEYWORD_70_in_ruleWindowingClause9804 = new BitSet(new long[]{0x0200028000004020L,0x0020000000000400L,0x0000000000003FECL});
+    public static final BitSet FOLLOW_KEYWORD_51_in_ruleWindowingClause9786 = new BitSet(new long[]{0x0200028000004020L,0x0020000000000400L,0x0000000000007FCCL});
+    public static final BitSet FOLLOW_KEYWORD_70_in_ruleWindowingClause9804 = new BitSet(new long[]{0x0200028000004020L,0x0020000000000400L,0x0000000000007FCCL});
     public static final BitSet FOLLOW_ruleWindowingClauseBetween_in_ruleWindowingClause9827 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleWindowingClauseOperandPreceding_in_ruleWindowingClause9854 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleWindowingClauseBetween_in_entryRuleWindowingClauseBetween9889 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleWindowingClauseBetween9899 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_KEYWORD_82_in_ruleWindowingClauseBetween9937 = new BitSet(new long[]{0x0200028000004020L,0x0020000000000400L,0x0000000000003FECL});
+    public static final BitSet FOLLOW_KEYWORD_82_in_ruleWindowingClauseBetween9937 = new BitSet(new long[]{0x0200028000004020L,0x0020000000000400L,0x0000000000007FCCL});
     public static final BitSet FOLLOW_ruleWindowingClauseOperandPreceding_in_ruleWindowingClauseBetween9957 = new BitSet(new long[]{0x0000000000000000L,0x0000000200000000L});
-    public static final BitSet FOLLOW_KEYWORD_27_in_ruleWindowingClauseBetween9970 = new BitSet(new long[]{0x0200028000004030L,0x0020000000000400L,0x0000000000003FECL});
+    public static final BitSet FOLLOW_KEYWORD_27_in_ruleWindowingClauseBetween9970 = new BitSet(new long[]{0x0200028000004030L,0x0020000000000400L,0x0000000000007FCCL});
     public static final BitSet FOLLOW_ruleWindowingClauseOperandFollowing_in_ruleWindowingClauseBetween9990 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleWindowingClauseOperandFollowing_in_entryRuleWindowingClauseOperandFollowing10025 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleWindowingClauseOperandFollowing10035 = new BitSet(new long[]{0x0000000000000002L});
@@ -18288,13 +18289,13 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
     public static final BitSet FOLLOW_KEYWORD_101_in_ruleWindowingClauseOperandPreceding10332 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleOrderByClause_in_entryRuleOrderByClause10369 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleOrderByClause10379 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_KEYWORD_98_in_ruleOrderByClause10418 = new BitSet(new long[]{0x0200028000004020L,0x0020000000000400L,0x0000000000003FECL});
-    public static final BitSet FOLLOW_KEYWORD_122_in_ruleOrderByClause10436 = new BitSet(new long[]{0x0200028000004020L,0x0020000000000400L,0x0000000000003FECL});
+    public static final BitSet FOLLOW_KEYWORD_98_in_ruleOrderByClause10418 = new BitSet(new long[]{0x0200028000004020L,0x0020000000000400L,0x0000000000007FCCL});
+    public static final BitSet FOLLOW_KEYWORD_122_in_ruleOrderByClause10436 = new BitSet(new long[]{0x0200028000004020L,0x0020000000000400L,0x0000000000007FCCL});
     public static final BitSet FOLLOW_ruleOrderByClauseArgs_in_ruleOrderByClause10457 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleOrderByClauseArgs_in_entryRuleOrderByClauseArgs10492 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleOrderByClauseArgs10502 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleOrderByClauseArg_in_ruleOrderByClauseArgs10549 = new BitSet(new long[]{0x0000000000000002L,0x0100000000000000L});
-    public static final BitSet FOLLOW_KEYWORD_4_in_ruleOrderByClauseArgs10572 = new BitSet(new long[]{0x0200028000004020L,0x0020000000000400L,0x0000000000003FECL});
+    public static final BitSet FOLLOW_KEYWORD_4_in_ruleOrderByClauseArgs10572 = new BitSet(new long[]{0x0200028000004020L,0x0020000000000400L,0x0000000000007FCCL});
     public static final BitSet FOLLOW_ruleOrderByClauseArg_in_ruleOrderByClauseArgs10592 = new BitSet(new long[]{0x0000000000000002L,0x0100000000000000L});
     public static final BitSet FOLLOW_ruleOrderByClauseArg_in_entryRuleOrderByClauseArg10631 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleOrderByClauseArg10641 = new BitSet(new long[]{0x0000000000000002L});
@@ -18306,24 +18307,24 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
     public static final BitSet FOLLOW_KEYWORD_43_in_ruleOrderByClauseArg10765 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleQueryPartitionClause_in_entryRuleQueryPartitionClause10802 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleQueryPartitionClause10812 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_KEYWORD_117_in_ruleQueryPartitionClause10850 = new BitSet(new long[]{0x0200028000004020L,0x0020000000000400L,0x0000000000003FECL});
+    public static final BitSet FOLLOW_KEYWORD_117_in_ruleQueryPartitionClause10850 = new BitSet(new long[]{0x0200028000004020L,0x0020000000000400L,0x0000000000007FCCL});
     public static final BitSet FOLLOW_ruleAnalyticExprArgs_in_ruleQueryPartitionClause10871 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_KEYWORD_1_in_ruleQueryPartitionClause10891 = new BitSet(new long[]{0x0200028000004020L,0x0020000000000400L,0x0000000000003FECL});
+    public static final BitSet FOLLOW_KEYWORD_1_in_ruleQueryPartitionClause10891 = new BitSet(new long[]{0x0200028000004020L,0x0020000000000400L,0x0000000000007FCCL});
     public static final BitSet FOLLOW_ruleAnalyticExprArgs_in_ruleQueryPartitionClause10912 = new BitSet(new long[]{0x0000000000000000L,0x0040000000000000L});
     public static final BitSet FOLLOW_KEYWORD_2_in_ruleQueryPartitionClause10924 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleAnalyticExprArgs_in_entryRuleAnalyticExprArgs10960 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleAnalyticExprArgs10970 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleAnalyticExprArg_in_ruleAnalyticExprArgs11017 = new BitSet(new long[]{0x0000000000000002L,0x0100000000000000L});
-    public static final BitSet FOLLOW_KEYWORD_4_in_ruleAnalyticExprArgs11040 = new BitSet(new long[]{0x0200028000004020L,0x0020000000000400L,0x0000000000003FECL});
+    public static final BitSet FOLLOW_KEYWORD_4_in_ruleAnalyticExprArgs11040 = new BitSet(new long[]{0x0200028000004020L,0x0020000000000400L,0x0000000000007FCCL});
     public static final BitSet FOLLOW_ruleAnalyticExprArg_in_ruleAnalyticExprArgs11060 = new BitSet(new long[]{0x0000000000000002L,0x0100000000000000L});
     public static final BitSet FOLLOW_ruleAnalyticExprArg_in_entryRuleAnalyticExprArg11099 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleAnalyticExprArg11109 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleOperand_in_ruleAnalyticExprArg11155 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000000L,0x0000000000003800L});
+    public static final BitSet FOLLOW_ruleOperand_in_ruleAnalyticExprArg11155 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000000L,0x0000000000007000L});
     public static final BitSet FOLLOW_ruleDbObjectName_in_ruleAnalyticExprArg11176 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleOpFunctionArg_in_entryRuleOpFunctionArg11212 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleOpFunctionArg11222 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleOpFunctionArgOperand_in_ruleOpFunctionArg11269 = new BitSet(new long[]{0x0000000000000002L,0x0100000000000000L});
-    public static final BitSet FOLLOW_KEYWORD_4_in_ruleOpFunctionArg11292 = new BitSet(new long[]{0x0200020100000000L,0x0020000100000400L,0x0000000000003FECL});
+    public static final BitSet FOLLOW_KEYWORD_4_in_ruleOpFunctionArg11292 = new BitSet(new long[]{0x0200020100000000L,0x0020000100000400L,0x0000000000007FCCL});
     public static final BitSet FOLLOW_ruleOpFunctionArgOperand_in_ruleOpFunctionArg11312 = new BitSet(new long[]{0x0000000000000002L,0x0100000000000000L});
     public static final BitSet FOLLOW_ruleOpFunctionArgOperand_in_entryRuleOpFunctionArgOperand11351 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleOpFunctionArgOperand11361 = new BitSet(new long[]{0x0000000000000002L});
@@ -18331,20 +18332,20 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
     public static final BitSet FOLLOW_ruleOperand_in_ruleOpFunctionArgOperand11427 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleOpFunctionCast_in_entryRuleOpFunctionCast11464 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleOpFunctionCast11474 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_KEYWORD_57_in_ruleOpFunctionCast11512 = new BitSet(new long[]{0x0200020000000000L,0x0020000000000400L,0x0000000000003FECL});
+    public static final BitSet FOLLOW_KEYWORD_57_in_ruleOpFunctionCast11512 = new BitSet(new long[]{0x0200020000000000L,0x0020000000000400L,0x0000000000007FCCL});
     public static final BitSet FOLLOW_ruleOperandGroup_in_ruleOpFunctionCast11532 = new BitSet(new long[]{0x0000000000000000L,0x0000800000000000L});
-    public static final BitSet FOLLOW_KEYWORD_19_in_ruleOpFunctionCast11545 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000002000L});
+    public static final BitSet FOLLOW_KEYWORD_19_in_ruleOpFunctionCast11545 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000004000L});
     public static final BitSet FOLLOW_RULE_ID_in_ruleOpFunctionCast11561 = new BitSet(new long[]{0x0000000000000000L,0x0060000000000000L});
-    public static final BitSet FOLLOW_KEYWORD_1_in_ruleOpFunctionCast11580 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000000020L});
+    public static final BitSet FOLLOW_KEYWORD_1_in_ruleOpFunctionCast11580 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000000040L});
     public static final BitSet FOLLOW_RULE_INT_in_ruleOpFunctionCast11596 = new BitSet(new long[]{0x0000000000000000L,0x0140000000000000L});
-    public static final BitSet FOLLOW_KEYWORD_4_in_ruleOpFunctionCast11615 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000000020L});
+    public static final BitSet FOLLOW_KEYWORD_4_in_ruleOpFunctionCast11615 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000000040L});
     public static final BitSet FOLLOW_RULE_INT_in_ruleOpFunctionCast11631 = new BitSet(new long[]{0x0000000000000000L,0x0040000000000000L});
     public static final BitSet FOLLOW_KEYWORD_2_in_ruleOpFunctionCast11651 = new BitSet(new long[]{0x0000000000000000L,0x0040000000000000L});
     public static final BitSet FOLLOW_KEYWORD_2_in_ruleOpFunctionCast11665 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleOpFunctionArgAgregate_in_entryRuleOpFunctionArgAgregate11699 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleOpFunctionArgAgregate11709 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_KEYWORD_26_in_ruleOpFunctionArgAgregate11748 = new BitSet(new long[]{0x0200020000000000L,0x0020000000000400L,0x0000000000003FECL});
-    public static final BitSet FOLLOW_KEYWORD_94_in_ruleOpFunctionArgAgregate11766 = new BitSet(new long[]{0x0200020000000000L,0x0020000000000400L,0x0000000000003FECL});
+    public static final BitSet FOLLOW_KEYWORD_26_in_ruleOpFunctionArgAgregate11748 = new BitSet(new long[]{0x0200020000000000L,0x0020000000000400L,0x0000000000007FCCL});
+    public static final BitSet FOLLOW_KEYWORD_94_in_ruleOpFunctionArgAgregate11766 = new BitSet(new long[]{0x0200020000000000L,0x0020000000000400L,0x0000000000007FCCL});
     public static final BitSet FOLLOW_ruleOperand_in_ruleOpFunctionArgAgregate11788 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleXOperandFragment_in_entryRuleXOperandFragment11822 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleXOperandFragment11832 = new BitSet(new long[]{0x0000000000000002L});
@@ -18376,21 +18377,21 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
     public static final BitSet FOLLOW_RULE_TIMESTAMP_in_ruleScalarOperand12584 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleSQLCASE_in_entryRuleSQLCASE12624 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleSQLCASE12634 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_KEYWORD_36_in_ruleSQLCASE12672 = new BitSet(new long[]{0x0224020000800000L,0x0021080020600400L,0x0000000000003FECL});
-    public static final BitSet FOLLOW_ruleFullExpression_in_ruleSQLCASE12692 = new BitSet(new long[]{0x0224020000800000L,0x0021080020600400L,0x0000000000003FECL});
+    public static final BitSet FOLLOW_KEYWORD_36_in_ruleSQLCASE12672 = new BitSet(new long[]{0x0224020000800000L,0x0021080020600400L,0x0000000000007FCCL});
+    public static final BitSet FOLLOW_ruleFullExpression_in_ruleSQLCASE12692 = new BitSet(new long[]{0x0224020000800000L,0x0021080020600400L,0x0000000000007FCCL});
     public static final BitSet FOLLOW_ruleSQLCaseWhens_in_ruleSQLCASE12714 = new BitSet(new long[]{0x0000000000000000L,0x0000002000000000L});
     public static final BitSet FOLLOW_KEYWORD_31_in_ruleSQLCASE12727 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleSQLCaseWhens_in_entryRuleSQLCaseWhens12761 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleSQLCaseWhens12771 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleSqlCaseWhen_in_ruleSQLCaseWhens12818 = new BitSet(new long[]{0x0224020000800002L,0x0021080020600400L,0x0000000000003FECL});
-    public static final BitSet FOLLOW_ruleSqlCaseWhen_in_ruleSQLCaseWhens12848 = new BitSet(new long[]{0x0224020000800002L,0x0021080020600400L,0x0000000000003FECL});
+    public static final BitSet FOLLOW_ruleSqlCaseWhen_in_ruleSQLCaseWhens12818 = new BitSet(new long[]{0x0224020000800002L,0x0021080020600400L,0x0000000000007FCCL});
+    public static final BitSet FOLLOW_ruleSqlCaseWhen_in_ruleSQLCaseWhens12848 = new BitSet(new long[]{0x0224020000800002L,0x0021080020600400L,0x0000000000007FCCL});
     public static final BitSet FOLLOW_ruleSqlCaseWhen_in_entryRuleSqlCaseWhen12886 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleSqlCaseWhen12896 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_KEYWORD_55_in_ruleSqlCaseWhen12934 = new BitSet(new long[]{0x0224020000800000L,0x0021080000600400L,0x0000000000003FECL});
+    public static final BitSet FOLLOW_KEYWORD_55_in_ruleSqlCaseWhen12934 = new BitSet(new long[]{0x0224020000800000L,0x0021080000600400L,0x0000000000007FCCL});
     public static final BitSet FOLLOW_ruleFullExpression_in_ruleSqlCaseWhen12954 = new BitSet(new long[]{0x0000000000000000L,0x0000000008000000L});
-    public static final BitSet FOLLOW_KEYWORD_53_in_ruleSqlCaseWhen12967 = new BitSet(new long[]{0x0200020000000000L,0x0020000000000400L,0x0000000000003FECL});
+    public static final BitSet FOLLOW_KEYWORD_53_in_ruleSqlCaseWhen12967 = new BitSet(new long[]{0x0200020000000000L,0x0020000000000400L,0x0000000000007FCCL});
     public static final BitSet FOLLOW_ruleOperandGroup_in_ruleSqlCaseWhen12987 = new BitSet(new long[]{0x0000000000000002L,0x0000000000001000L});
-    public static final BitSet FOLLOW_KEYWORD_38_in_ruleSqlCaseWhen13001 = new BitSet(new long[]{0x0200020000000000L,0x0020000000000400L,0x0000000000003FECL});
+    public static final BitSet FOLLOW_KEYWORD_38_in_ruleSqlCaseWhen13001 = new BitSet(new long[]{0x0200020000000000L,0x0020000000000400L,0x0000000000007FCCL});
     public static final BitSet FOLLOW_ruleOperand_in_ruleSqlCaseWhen13021 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleJoinType_in_entryRuleJoinType13059 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleJoinType13070 = new BitSet(new long[]{0x0000000000000002L});

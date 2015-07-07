@@ -4106,11 +4106,12 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	private TerminalRule tJRPARAM;
 	private TerminalRule tJRNPARAM;
 	private TerminalRule tSTAR;
+	private TerminalRule tUNSIGNED;
 	private TerminalRule tINT;
+	private TerminalRule tSIGNED_DOUBLE;
 	private TerminalRule tTIMESTAMP;
 	private TerminalRule tDATE;
 	private TerminalRule tTIME;
-	private TerminalRule tSIGNED_DOUBLE;
 	private TerminalRule tSTRING_;
 	private TerminalRule tSTRING;
 	private TerminalRule tDBNAME;
@@ -5066,34 +5067,40 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		return (tSTAR != null) ? tSTAR : (tSTAR = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "STAR"));
 	} 
 
+	//terminal UNSIGNED returns ecore::EInt:
+	//	"0".."9"+;
+	public TerminalRule getUNSIGNEDRule() {
+		return (tUNSIGNED != null) ? tUNSIGNED : (tUNSIGNED = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "UNSIGNED"));
+	} 
+
 	//terminal INT returns ecore::EInt:
-	//	"-"? "0".."9"+;
+	//	"-"? UNSIGNED;
 	public TerminalRule getINTRule() {
 		return (tINT != null) ? tINT : (tINT = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "INT"));
 	} 
 
-	//terminal TIMESTAMP returns ecore::EDate:
+	//terminal SIGNED_DOUBLE returns ecore::EBigDecimal:
+	//	"-"? UNSIGNED ("." UNSIGNED)?;
+	public TerminalRule getSIGNED_DOUBLERule() {
+		return (tSIGNED_DOUBLE != null) ? tSIGNED_DOUBLE : (tSIGNED_DOUBLE = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "SIGNED_DOUBLE"));
+	} 
+
+	//terminal TIMESTAMP:
 	//	DATE " " TIME;
 	public TerminalRule getTIMESTAMPRule() {
 		return (tTIMESTAMP != null) ? tTIMESTAMP : (tTIMESTAMP = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "TIMESTAMP"));
 	} 
 
-	//terminal DATE returns ecore::EDate:
+	//terminal DATE:
 	//	"\'" "0".."9" "0".."9" "0".."9" "0".."9" "-" "0".."1" "0".."9" "-" "0".."3" "0".."9" "\'";
 	public TerminalRule getDATERule() {
 		return (tDATE != null) ? tDATE : (tDATE = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "DATE"));
 	} 
 
-	//terminal TIME returns ecore::EDate:
-	//	"\'" "0".."9" "0".."9" ":" "0".."9" "0".."9" ":" "0".."1" "0".."9" "." "0".."9" "0".."9" "0".."9" "\'";
+	//terminal TIME:
+	//	"\'" "0".."9" "0".."9" ":" "0".."9" "0".."9" ":" "0".."9" "0".."9" "." "0".."9" "0".."9" "0".."9" "\'";
 	public TerminalRule getTIMERule() {
 		return (tTIME != null) ? tTIME : (tTIME = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "TIME"));
-	} 
-
-	//terminal SIGNED_DOUBLE returns ecore::EBigDecimal:
-	//	"-"? "0".."9"+ ("." "0".."9"+)?;
-	public TerminalRule getSIGNED_DOUBLERule() {
-		return (tSIGNED_DOUBLE != null) ? tSIGNED_DOUBLE : (tSIGNED_DOUBLE = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "SIGNED_DOUBLE"));
 	} 
 
 	//terminal STRING_:
