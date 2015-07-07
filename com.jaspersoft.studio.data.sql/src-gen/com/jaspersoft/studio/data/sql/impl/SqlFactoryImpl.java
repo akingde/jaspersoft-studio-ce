@@ -150,9 +150,9 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
       case SqlPackage.OP_LIST: return createOpList();
       case SqlPackage.PLUS: return createPlus();
       case SqlPackage.MINUS: return createMinus();
-      case SqlPackage.STAR: return createStar();
-      case SqlPackage.DIV: return createDiv();
       case SqlPackage.CONCAT: return createConcat();
+      case SqlPackage.MULTIPLY: return createMultiply();
+      case SqlPackage.DIVISION: return createDivision();
       case SqlPackage.OBC_ARGS: return createOBCArgs();
       case SqlPackage.AEXP_ARGS: return createAExpArgs();
       case SqlPackage.OP_FLIST: return createOpFList();
@@ -1140,32 +1140,32 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public Star createStar()
-  {
-    StarImpl star = new StarImpl();
-    return star;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public Div createDiv()
-  {
-    DivImpl div = new DivImpl();
-    return div;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
   public Concat createConcat()
   {
     ConcatImpl concat = new ConcatImpl();
     return concat;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public Multiply createMultiply()
+  {
+    MultiplyImpl multiply = new MultiplyImpl();
+    return multiply;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public Division createDivision()
+  {
+    DivisionImpl division = new DivisionImpl();
+    return division;
   }
 
   /**

@@ -459,9 +459,9 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Plus" eSuperTypes="#//Operands"/>
   <eClassifiers xsi:type="ecore:EClass" name="Minus" eSuperTypes="#//Operands"/>
-  <eClassifiers xsi:type="ecore:EClass" name="Star" eSuperTypes="#//Operands"/>
-  <eClassifiers xsi:type="ecore:EClass" name="Div" eSuperTypes="#//Operands"/>
   <eClassifiers xsi:type="ecore:EClass" name="Concat" eSuperTypes="#//Operands"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Multiply" eSuperTypes="#//Operands"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Division" eSuperTypes="#//Operands"/>
   <eClassifiers xsi:type="ecore:EClass" name="OBCArgs" eSuperTypes="#//OrderByClauseArgs">
     <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"
         eType="#//OrderByClauseArg" containment="true"/>

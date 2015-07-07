@@ -15,7 +15,7 @@ import com.jaspersoft.studio.data.sql.Comparison;
 import com.jaspersoft.studio.data.sql.Concat;
 import com.jaspersoft.studio.data.sql.DbObjectName;
 import com.jaspersoft.studio.data.sql.DbObjectNameAll;
-import com.jaspersoft.studio.data.sql.Div;
+import com.jaspersoft.studio.data.sql.Division;
 import com.jaspersoft.studio.data.sql.ExistsOper;
 import com.jaspersoft.studio.data.sql.ExpOperand;
 import com.jaspersoft.studio.data.sql.ExprGroup;
@@ -34,6 +34,7 @@ import com.jaspersoft.studio.data.sql.LikeOperand;
 import com.jaspersoft.studio.data.sql.Limit;
 import com.jaspersoft.studio.data.sql.Minus;
 import com.jaspersoft.studio.data.sql.Model;
+import com.jaspersoft.studio.data.sql.Multiply;
 import com.jaspersoft.studio.data.sql.OBCArgs;
 import com.jaspersoft.studio.data.sql.Offset;
 import com.jaspersoft.studio.data.sql.OpFList;
@@ -77,7 +78,6 @@ import com.jaspersoft.studio.data.sql.SelectSubSet;
 import com.jaspersoft.studio.data.sql.SqlCaseWhen;
 import com.jaspersoft.studio.data.sql.SqlFactory;
 import com.jaspersoft.studio.data.sql.SqlPackage;
-import com.jaspersoft.studio.data.sql.Star;
 import com.jaspersoft.studio.data.sql.SubQueryOperand;
 import com.jaspersoft.studio.data.sql.TableFull;
 import com.jaspersoft.studio.data.sql.TableOrAlias;
@@ -714,21 +714,21 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass starEClass = null;
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  private EClass divEClass = null;
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
   private EClass concatEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass multiplyEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass divisionEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -3290,29 +3290,29 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getStar()
-  {
-    return starEClass;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EClass getDiv()
-  {
-    return divEClass;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
   public EClass getConcat()
   {
     return concatEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getMultiply()
+  {
+    return multiplyEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getDivision()
+  {
+    return divisionEClass;
   }
 
   /**
@@ -3775,11 +3775,11 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
 
     minusEClass = createEClass(MINUS);
 
-    starEClass = createEClass(STAR);
-
-    divEClass = createEClass(DIV);
-
     concatEClass = createEClass(CONCAT);
+
+    multiplyEClass = createEClass(MULTIPLY);
+
+    divisionEClass = createEClass(DIVISION);
 
     obcArgsEClass = createEClass(OBC_ARGS);
     createEReference(obcArgsEClass, OBC_ARGS__ENTRIES);
@@ -3862,9 +3862,9 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
     opListEClass.getESuperTypes().add(this.getOperandList());
     plusEClass.getESuperTypes().add(this.getOperands());
     minusEClass.getESuperTypes().add(this.getOperands());
-    starEClass.getESuperTypes().add(this.getOperands());
-    divEClass.getESuperTypes().add(this.getOperands());
     concatEClass.getESuperTypes().add(this.getOperands());
+    multiplyEClass.getESuperTypes().add(this.getOperands());
+    divisionEClass.getESuperTypes().add(this.getOperands());
     obcArgsEClass.getESuperTypes().add(this.getOrderByClauseArgs());
     aExpArgsEClass.getESuperTypes().add(this.getAnalyticExprArgs());
     opFListEClass.getESuperTypes().add(this.getOpFunctionArg());
@@ -4201,11 +4201,11 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
 
     initEClass(minusEClass, Minus.class, "Minus", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
-    initEClass(starEClass, Star.class, "Star", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-
-    initEClass(divEClass, Div.class, "Div", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-
     initEClass(concatEClass, Concat.class, "Concat", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+    initEClass(multiplyEClass, Multiply.class, "Multiply", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+    initEClass(divisionEClass, Division.class, "Division", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
     initEClass(obcArgsEClass, OBCArgs.class, "OBCArgs", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getOBCArgs_Entries(), this.getOrderByClauseArg(), null, "entries", null, 0, -1, OBCArgs.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

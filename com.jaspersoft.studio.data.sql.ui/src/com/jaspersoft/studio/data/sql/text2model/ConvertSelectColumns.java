@@ -12,6 +12,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.sql.text2model;
 
+import org.apache.xpath.operations.Div;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 
@@ -19,9 +20,9 @@ import com.jaspersoft.studio.data.sql.ColumnFull;
 import com.jaspersoft.studio.data.sql.ColumnOperand;
 import com.jaspersoft.studio.data.sql.ColumnOrAlias;
 import com.jaspersoft.studio.data.sql.Concat;
-import com.jaspersoft.studio.data.sql.Div;
 import com.jaspersoft.studio.data.sql.ExpOperand;
 import com.jaspersoft.studio.data.sql.Minus;
+import com.jaspersoft.studio.data.sql.Multiply;
 import com.jaspersoft.studio.data.sql.OpFunction;
 import com.jaspersoft.studio.data.sql.OpFunctionArg;
 import com.jaspersoft.studio.data.sql.OpFunctionCast;
@@ -34,7 +35,6 @@ import com.jaspersoft.studio.data.sql.SQLCaseOperand;
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.ScalarOperand;
 import com.jaspersoft.studio.data.sql.SqlCaseWhen;
-import com.jaspersoft.studio.data.sql.Star;
 import com.jaspersoft.studio.data.sql.Util;
 import com.jaspersoft.studio.data.sql.impl.DbObjectNameImpl;
 import com.jaspersoft.studio.data.sql.impl.OperandImpl;
@@ -113,7 +113,7 @@ public class ConvertSelectColumns {
 			str += " + ";
 		else if (ops instanceof Minus)
 			str += " - ";
-		else if (ops instanceof Star)
+		else if (ops instanceof Multiply)
 			str += " * ";
 		else if (ops instanceof Div)
 			str += " / ";

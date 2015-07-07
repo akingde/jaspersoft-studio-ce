@@ -354,9 +354,9 @@
     </genClasses>
     <genClasses ecoreClass="Sql.ecore#//Plus"/>
     <genClasses ecoreClass="Sql.ecore#//Minus"/>
-    <genClasses ecoreClass="Sql.ecore#//Star"/>
-    <genClasses ecoreClass="Sql.ecore#//Div"/>
     <genClasses ecoreClass="Sql.ecore#//Concat"/>
+    <genClasses ecoreClass="Sql.ecore#//Multiply"/>
+    <genClasses ecoreClass="Sql.ecore#//Division"/>
     <genClasses ecoreClass="Sql.ecore#//OBCArgs">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//OBCArgs/entries"/>
     </genClasses>

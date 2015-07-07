@@ -715,30 +715,30 @@ public class SqlSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case SqlPackage.STAR:
-      {
-        Star star = (Star)theEObject;
-        T result = caseStar(star);
-        if (result == null) result = caseOperands(star);
-        if (result == null) result = caseOpFunctionArgAgregate(star);
-        if (result == null) result = defaultCase(theEObject);
-        return result;
-      }
-      case SqlPackage.DIV:
-      {
-        Div div = (Div)theEObject;
-        T result = caseDiv(div);
-        if (result == null) result = caseOperands(div);
-        if (result == null) result = caseOpFunctionArgAgregate(div);
-        if (result == null) result = defaultCase(theEObject);
-        return result;
-      }
       case SqlPackage.CONCAT:
       {
         Concat concat = (Concat)theEObject;
         T result = caseConcat(concat);
         if (result == null) result = caseOperands(concat);
         if (result == null) result = caseOpFunctionArgAgregate(concat);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.MULTIPLY:
+      {
+        Multiply multiply = (Multiply)theEObject;
+        T result = caseMultiply(multiply);
+        if (result == null) result = caseOperands(multiply);
+        if (result == null) result = caseOpFunctionArgAgregate(multiply);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.DIVISION:
+      {
+        Division division = (Division)theEObject;
+        T result = caseDivision(division);
+        if (result == null) result = caseOperands(division);
+        if (result == null) result = caseOpFunctionArgAgregate(division);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -2140,38 +2140,6 @@ public class SqlSwitch<T> extends Switch<T>
   }
 
   /**
-   * Returns the result of interpreting the object as an instance of '<em>Star</em>'.
-   * <!-- begin-user-doc -->
-   * This implementation returns null;
-   * returning a non-null result will terminate the switch.
-   * <!-- end-user-doc -->
-   * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Star</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-   * @generated
-   */
-  public T caseStar(Star object)
-  {
-    return null;
-  }
-
-  /**
-   * Returns the result of interpreting the object as an instance of '<em>Div</em>'.
-   * <!-- begin-user-doc -->
-   * This implementation returns null;
-   * returning a non-null result will terminate the switch.
-   * <!-- end-user-doc -->
-   * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Div</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-   * @generated
-   */
-  public T caseDiv(Div object)
-  {
-    return null;
-  }
-
-  /**
    * Returns the result of interpreting the object as an instance of '<em>Concat</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
@@ -2183,6 +2151,38 @@ public class SqlSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseConcat(Concat object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Multiply</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Multiply</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseMultiply(Multiply object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Division</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Division</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseDivision(Division object)
   {
     return null;
   }

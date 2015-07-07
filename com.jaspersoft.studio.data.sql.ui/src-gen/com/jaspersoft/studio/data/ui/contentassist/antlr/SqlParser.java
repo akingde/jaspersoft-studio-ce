@@ -67,6 +67,7 @@ public class SqlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getInOperatorAccess().getAlternatives_2(), "rule__InOperator__Alternatives_2");
 					put(grammarAccess.getExistsOperatorAccess().getOpAlternatives_1_0(), "rule__ExistsOperator__OpAlternatives_1_0");
 					put(grammarAccess.getExistsOperatorAccess().getAlternatives_2(), "rule__ExistsOperator__Alternatives_2");
+					put(grammarAccess.getOperandGroupAccess().getAlternatives(), "rule__OperandGroup__Alternatives");
 					put(grammarAccess.getOperandAccess().getAlternatives_1_0(), "rule__Operand__Alternatives_1_0");
 					put(grammarAccess.getOperandFragmentAccess().getAlternatives(), "rule__OperandFragment__Alternatives");
 					put(grammarAccess.getOperandFunctionAccess().getAlternatives_2(), "rule__OperandFunction__Alternatives_2");
@@ -171,6 +172,7 @@ public class SqlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getOperandListAccess().getGroup(), "rule__OperandList__Group__0");
 					put(grammarAccess.getOperandListAccess().getGroup_1(), "rule__OperandList__Group_1__0");
 					put(grammarAccess.getOperandListAccess().getGroup_1_1(), "rule__OperandList__Group_1_1__0");
+					put(grammarAccess.getOperandGroupAccess().getGroup_1(), "rule__OperandGroup__Group_1__0");
 					put(grammarAccess.getOperandAccess().getGroup(), "rule__Operand__Group__0");
 					put(grammarAccess.getOperandAccess().getGroup_1(), "rule__Operand__Group_1__0");
 					put(grammarAccess.getOperandAccess().getGroup_1_0_0(), "rule__Operand__Group_1_0_0__0");

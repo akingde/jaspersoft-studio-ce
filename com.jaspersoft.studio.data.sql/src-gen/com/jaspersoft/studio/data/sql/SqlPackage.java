@@ -3239,98 +3239,6 @@ public interface SqlPackage extends EPackage
   int MINUS_FEATURE_COUNT = OPERANDS_FEATURE_COUNT + 0;
 
   /**
-   * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.StarImpl <em>Star</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see com.jaspersoft.studio.data.sql.impl.StarImpl
-   * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getStar()
-   * @generated
-   */
-  int STAR = 85;
-
-  /**
-   * The feature id for the '<em><b>Op1</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int STAR__OP1 = OPERANDS__OP1;
-
-  /**
-   * The feature id for the '<em><b>Left</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int STAR__LEFT = OPERANDS__LEFT;
-
-  /**
-   * The feature id for the '<em><b>Right</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int STAR__RIGHT = OPERANDS__RIGHT;
-
-  /**
-   * The number of structural features of the '<em>Star</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int STAR_FEATURE_COUNT = OPERANDS_FEATURE_COUNT + 0;
-
-  /**
-   * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.DivImpl <em>Div</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see com.jaspersoft.studio.data.sql.impl.DivImpl
-   * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getDiv()
-   * @generated
-   */
-  int DIV = 86;
-
-  /**
-   * The feature id for the '<em><b>Op1</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int DIV__OP1 = OPERANDS__OP1;
-
-  /**
-   * The feature id for the '<em><b>Left</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int DIV__LEFT = OPERANDS__LEFT;
-
-  /**
-   * The feature id for the '<em><b>Right</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int DIV__RIGHT = OPERANDS__RIGHT;
-
-  /**
-   * The number of structural features of the '<em>Div</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int DIV_FEATURE_COUNT = OPERANDS_FEATURE_COUNT + 0;
-
-  /**
    * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.ConcatImpl <em>Concat</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -3338,7 +3246,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getConcat()
    * @generated
    */
-  int CONCAT = 87;
+  int CONCAT = 85;
 
   /**
    * The feature id for the '<em><b>Op1</b></em>' containment reference.
@@ -3375,6 +3283,98 @@ public interface SqlPackage extends EPackage
    * @ordered
    */
   int CONCAT_FEATURE_COUNT = OPERANDS_FEATURE_COUNT + 0;
+
+  /**
+   * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.MultiplyImpl <em>Multiply</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see com.jaspersoft.studio.data.sql.impl.MultiplyImpl
+   * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getMultiply()
+   * @generated
+   */
+  int MULTIPLY = 86;
+
+  /**
+   * The feature id for the '<em><b>Op1</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MULTIPLY__OP1 = OPERANDS__OP1;
+
+  /**
+   * The feature id for the '<em><b>Left</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MULTIPLY__LEFT = OPERANDS__LEFT;
+
+  /**
+   * The feature id for the '<em><b>Right</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MULTIPLY__RIGHT = OPERANDS__RIGHT;
+
+  /**
+   * The number of structural features of the '<em>Multiply</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MULTIPLY_FEATURE_COUNT = OPERANDS_FEATURE_COUNT + 0;
+
+  /**
+   * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.DivisionImpl <em>Division</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see com.jaspersoft.studio.data.sql.impl.DivisionImpl
+   * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getDivision()
+   * @generated
+   */
+  int DIVISION = 87;
+
+  /**
+   * The feature id for the '<em><b>Op1</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int DIVISION__OP1 = OPERANDS__OP1;
+
+  /**
+   * The feature id for the '<em><b>Left</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int DIVISION__LEFT = OPERANDS__LEFT;
+
+  /**
+   * The feature id for the '<em><b>Right</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int DIVISION__RIGHT = OPERANDS__RIGHT;
+
+  /**
+   * The number of structural features of the '<em>Division</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int DIVISION_FEATURE_COUNT = OPERANDS_FEATURE_COUNT + 0;
 
   /**
    * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.OBCArgsImpl <em>OBC Args</em>}' class.
@@ -6129,26 +6129,6 @@ public interface SqlPackage extends EPackage
   EClass getMinus();
 
   /**
-   * Returns the meta object for class '{@link com.jaspersoft.studio.data.sql.Star <em>Star</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>Star</em>'.
-   * @see com.jaspersoft.studio.data.sql.Star
-   * @generated
-   */
-  EClass getStar();
-
-  /**
-   * Returns the meta object for class '{@link com.jaspersoft.studio.data.sql.Div <em>Div</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>Div</em>'.
-   * @see com.jaspersoft.studio.data.sql.Div
-   * @generated
-   */
-  EClass getDiv();
-
-  /**
    * Returns the meta object for class '{@link com.jaspersoft.studio.data.sql.Concat <em>Concat</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -6157,6 +6137,26 @@ public interface SqlPackage extends EPackage
    * @generated
    */
   EClass getConcat();
+
+  /**
+   * Returns the meta object for class '{@link com.jaspersoft.studio.data.sql.Multiply <em>Multiply</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Multiply</em>'.
+   * @see com.jaspersoft.studio.data.sql.Multiply
+   * @generated
+   */
+  EClass getMultiply();
+
+  /**
+   * Returns the meta object for class '{@link com.jaspersoft.studio.data.sql.Division <em>Division</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Division</em>'.
+   * @see com.jaspersoft.studio.data.sql.Division
+   * @generated
+   */
+  EClass getDivision();
 
   /**
    * Returns the meta object for class '{@link com.jaspersoft.studio.data.sql.OBCArgs <em>OBC Args</em>}'.
@@ -8416,26 +8416,6 @@ public interface SqlPackage extends EPackage
     EClass MINUS = eINSTANCE.getMinus();
 
     /**
-     * The meta object literal for the '{@link com.jaspersoft.studio.data.sql.impl.StarImpl <em>Star</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see com.jaspersoft.studio.data.sql.impl.StarImpl
-     * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getStar()
-     * @generated
-     */
-    EClass STAR = eINSTANCE.getStar();
-
-    /**
-     * The meta object literal for the '{@link com.jaspersoft.studio.data.sql.impl.DivImpl <em>Div</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see com.jaspersoft.studio.data.sql.impl.DivImpl
-     * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getDiv()
-     * @generated
-     */
-    EClass DIV = eINSTANCE.getDiv();
-
-    /**
      * The meta object literal for the '{@link com.jaspersoft.studio.data.sql.impl.ConcatImpl <em>Concat</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -8444,6 +8424,26 @@ public interface SqlPackage extends EPackage
      * @generated
      */
     EClass CONCAT = eINSTANCE.getConcat();
+
+    /**
+     * The meta object literal for the '{@link com.jaspersoft.studio.data.sql.impl.MultiplyImpl <em>Multiply</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see com.jaspersoft.studio.data.sql.impl.MultiplyImpl
+     * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getMultiply()
+     * @generated
+     */
+    EClass MULTIPLY = eINSTANCE.getMultiply();
+
+    /**
+     * The meta object literal for the '{@link com.jaspersoft.studio.data.sql.impl.DivisionImpl <em>Division</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see com.jaspersoft.studio.data.sql.impl.DivisionImpl
+     * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getDivision()
+     * @generated
+     */
+    EClass DIVISION = eINSTANCE.getDivision();
 
     /**
      * The meta object literal for the '{@link com.jaspersoft.studio.data.sql.impl.OBCArgsImpl <em>OBC Args</em>}' class.

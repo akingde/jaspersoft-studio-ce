@@ -788,24 +788,6 @@ public interface SqlFactory extends EFactory
   Minus createMinus();
 
   /**
-   * Returns a new object of class '<em>Star</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>Star</em>'.
-   * @generated
-   */
-  Star createStar();
-
-  /**
-   * Returns a new object of class '<em>Div</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>Div</em>'.
-   * @generated
-   */
-  Div createDiv();
-
-  /**
    * Returns a new object of class '<em>Concat</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -813,6 +795,24 @@ public interface SqlFactory extends EFactory
    * @generated
    */
   Concat createConcat();
+
+  /**
+   * Returns a new object of class '<em>Multiply</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Multiply</em>'.
+   * @generated
+   */
+  Multiply createMultiply();
+
+  /**
+   * Returns a new object of class '<em>Division</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Division</em>'.
+   * @generated
+   */
+  Division createDivision();
 
   /**
    * Returns a new object of class '<em>OBC Args</em>'.

@@ -791,9 +791,9 @@ ruleColumnOrAlias returns [EObject current=null]
 (((
 (
 		{ 
-	        newCompositeNode(grammarAccess.getColumnOrAliasAccess().getCeOperandParserRuleCall_0_0_0()); 
+	        newCompositeNode(grammarAccess.getColumnOrAliasAccess().getCeOperandGroupParserRuleCall_0_0_0()); 
 	    }
-		lv_ce_0_0=ruleOperand		{
+		lv_ce_0_0=ruleOperandGroup		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getColumnOrAliasRule());
 	        }
@@ -801,7 +801,7 @@ ruleColumnOrAlias returns [EObject current=null]
        			$current, 
        			"ce",
         		lv_ce_0_0, 
-        		"Operand");
+        		"OperandGroup");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -2909,9 +2909,9 @@ ruleXExpression returns [EObject current=null]
 (
 (
 		{ 
-	        newCompositeNode(grammarAccess.getXExpressionAccess().getColOperandParserRuleCall_5_0()); 
+	        newCompositeNode(grammarAccess.getXExpressionAccess().getColOperandGroupParserRuleCall_5_0()); 
 	    }
-		lv_col_5_0=ruleOperand		{
+		lv_col_5_0=ruleOperandGroup		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getXExpressionRule());
 	        }
@@ -2919,7 +2919,7 @@ ruleXExpression returns [EObject current=null]
        			$current, 
        			"col",
         		lv_col_5_0, 
-        		"Operand");
+        		"OperandGroup");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -3015,9 +3015,9 @@ ruleXExpression_ returns [EObject current=null]
 (
 (
 		{ 
-	        newCompositeNode(grammarAccess.getXExpression_Access().getColOperandParserRuleCall_5_0()); 
+	        newCompositeNode(grammarAccess.getXExpression_Access().getColOperandGroupParserRuleCall_5_0()); 
 	    }
-		lv_col_5_0=ruleOperand		{
+		lv_col_5_0=ruleOperandGroup		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getXExpression_Rule());
 	        }
@@ -3025,7 +3025,7 @@ ruleXExpression_ returns [EObject current=null]
        			$current, 
        			"col",
         		lv_col_5_0, 
-        		"Operand");
+        		"OperandGroup");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -3739,9 +3739,9 @@ ruleBetween returns [EObject current=null]
 )(
 (
 		{ 
-	        newCompositeNode(grammarAccess.getBetweenAccess().getOp2OperandParserRuleCall_1_0()); 
+	        newCompositeNode(grammarAccess.getBetweenAccess().getOp2OperandGroupParserRuleCall_1_0()); 
 	    }
-		lv_op2_1_0=ruleOperand		{
+		lv_op2_1_0=ruleOperandGroup		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getBetweenRule());
 	        }
@@ -3749,7 +3749,7 @@ ruleBetween returns [EObject current=null]
        			$current, 
        			"op2",
         		lv_op2_1_0, 
-        		"Operand");
+        		"OperandGroup");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -3762,9 +3762,9 @@ ruleBetween returns [EObject current=null]
 (
 (
 		{ 
-	        newCompositeNode(grammarAccess.getBetweenAccess().getOp3OperandParserRuleCall_3_0()); 
+	        newCompositeNode(grammarAccess.getBetweenAccess().getOp3OperandGroupParserRuleCall_3_0()); 
 	    }
-		lv_op3_3_0=ruleOperand		{
+		lv_op3_3_0=ruleOperandGroup		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getBetweenRule());
 	        }
@@ -3772,7 +3772,7 @@ ruleBetween returns [EObject current=null]
        			$current, 
        			"op3",
         		lv_op3_3_0, 
-        		"Operand");
+        		"OperandGroup");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -4084,6 +4084,56 @@ ruleOperandList returns [EObject current=null]
 
 
 
+// Entry rule entryRuleOperandGroup
+entryRuleOperandGroup returns [EObject current=null]
+	:
+	{ newCompositeNode(grammarAccess.getOperandGroupRule()); }
+	 iv_ruleOperandGroup=ruleOperandGroup 
+	 { $current=$iv_ruleOperandGroup.current; } 
+	 EOF 
+;
+
+// Rule OperandGroup
+ruleOperandGroup returns [EObject current=null] 
+    @init { enterRule(); 
+    }
+    @after { leaveRule(); }:
+(
+    { 
+        newCompositeNode(grammarAccess.getOperandGroupAccess().getOperandParserRuleCall_0()); 
+    }
+    this_Operand_0=ruleOperand
+    {
+        $current = $this_Operand_0.current;
+        afterParserOrEnumRuleCall();
+    }
+
+    |(
+	otherlv_1=KEYWORD_1
+    {
+    	newLeafNode(otherlv_1, grammarAccess.getOperandGroupAccess().getLeftParenthesisKeyword_1_0());
+    }
+
+    { 
+        newCompositeNode(grammarAccess.getOperandGroupAccess().getOperandParserRuleCall_1_1()); 
+    }
+    this_Operand_2=ruleOperand
+    {
+        $current = $this_Operand_2.current;
+        afterParserOrEnumRuleCall();
+    }
+
+	otherlv_3=KEYWORD_2
+    {
+    	newLeafNode(otherlv_3, grammarAccess.getOperandGroupAccess().getRightParenthesisKeyword_1_2());
+    }
+))
+;
+
+
+
+
+
 // Entry rule entryRuleOperand
 entryRuleOperand returns [EObject current=null]
 	:
@@ -4143,36 +4193,36 @@ ruleOperand returns [EObject current=null]
     |((
     {
         $current = forceCreateModelElementAndSet(
-            grammarAccess.getOperandAccess().getStarLeftAction_1_0_2_0(),
+            grammarAccess.getOperandAccess().getConcatLeftAction_1_0_2_0(),
             $current);
     }
-)this_STAR_6=RULE_STAR
+)
+	otherlv_6=KEYWORD_24
+    {
+    	newLeafNode(otherlv_6, grammarAccess.getOperandAccess().getVerticalLineVerticalLineKeyword_1_0_2_1());
+    }
+)
+    |((
+    {
+        $current = forceCreateModelElementAndSet(
+            grammarAccess.getOperandAccess().getMultiplyLeftAction_1_0_3_0(),
+            $current);
+    }
+)this_STAR_8=RULE_STAR
     { 
-    newLeafNode(this_STAR_6, grammarAccess.getOperandAccess().getSTARTerminalRuleCall_1_0_2_1()); 
+    newLeafNode(this_STAR_8, grammarAccess.getOperandAccess().getSTARTerminalRuleCall_1_0_3_1()); 
     }
 )
     |((
     {
         $current = forceCreateModelElementAndSet(
-            grammarAccess.getOperandAccess().getDivLeftAction_1_0_3_0(),
+            grammarAccess.getOperandAccess().getDivisionLeftAction_1_0_4_0(),
             $current);
     }
 )
-	otherlv_8=KEYWORD_7
+	otherlv_10=KEYWORD_7
     {
-    	newLeafNode(otherlv_8, grammarAccess.getOperandAccess().getSolidusKeyword_1_0_3_1());
-    }
-)
-    |((
-    {
-        $current = forceCreateModelElementAndSet(
-            grammarAccess.getOperandAccess().getConcatLeftAction_1_0_4_0(),
-            $current);
-    }
-)
-	otherlv_10=KEYWORD_24
-    {
-    	newLeafNode(otherlv_10, grammarAccess.getOperandAccess().getVerticalLineVerticalLineKeyword_1_0_4_1());
+    	newLeafNode(otherlv_10, grammarAccess.getOperandAccess().getSolidusKeyword_1_0_4_1());
     }
 ))(
 (
@@ -4493,9 +4543,9 @@ ruleFunctionExtract returns [EObject current=null]
 (
 (
 		{ 
-	        newCompositeNode(grammarAccess.getFunctionExtractAccess().getOperandOperandParserRuleCall_4_0()); 
+	        newCompositeNode(grammarAccess.getFunctionExtractAccess().getOperandOperandGroupParserRuleCall_4_0()); 
 	    }
-		lv_operand_4_0=ruleOperand		{
+		lv_operand_4_0=ruleOperandGroup		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getFunctionExtractRule());
 	        }
@@ -4503,7 +4553,7 @@ ruleFunctionExtract returns [EObject current=null]
        			$current, 
        			"operand",
         		lv_operand_4_0, 
-        		"Operand");
+        		"OperandGroup");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -5402,9 +5452,9 @@ ruleOpFunctionCast returns [EObject current=null]
 (
 (
 		{ 
-	        newCompositeNode(grammarAccess.getOpFunctionCastAccess().getOpOperandParserRuleCall_1_0()); 
+	        newCompositeNode(grammarAccess.getOpFunctionCastAccess().getOpOperandGroupParserRuleCall_1_0()); 
 	    }
-		lv_op_1_0=ruleOperand		{
+		lv_op_1_0=ruleOperandGroup		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getOpFunctionCastRule());
 	        }
@@ -5412,7 +5462,7 @@ ruleOpFunctionCast returns [EObject current=null]
        			$current, 
        			"op",
         		lv_op_1_0, 
-        		"Operand");
+        		"OperandGroup");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -6109,9 +6159,9 @@ ruleSqlCaseWhen returns [EObject current=null]
 (
 (
 		{ 
-	        newCompositeNode(grammarAccess.getSqlCaseWhenAccess().getTexpOperandParserRuleCall_3_0()); 
+	        newCompositeNode(grammarAccess.getSqlCaseWhenAccess().getTexpOperandGroupParserRuleCall_3_0()); 
 	    }
-		lv_texp_3_0=ruleOperand		{
+		lv_texp_3_0=ruleOperandGroup		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getSqlCaseWhenRule());
 	        }
@@ -6119,7 +6169,7 @@ ruleSqlCaseWhen returns [EObject current=null]
        			$current, 
        			"texp",
         		lv_texp_3_0, 
-        		"Operand");
+        		"OperandGroup");
 	        afterParserOrEnumRuleCall();
 	    }
 
