@@ -10,35 +10,36 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
-package com.jaspersoft.studio.data.sql.model.query.orderby;
+package com.jaspersoft.studio.data.sql.model.query.groupby;
 
 import net.sf.jasperreports.engine.JRConstants;
 
 import org.eclipse.jface.viewers.StyledString;
 
+import com.jaspersoft.studio.data.sql.model.query.AMQueryObject;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelectExpression;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.preferences.fonts.utils.FontUtils;
 
-public class MOrderByExpression extends AMOrderByMember<String> {
+public class MGroupByExpression extends AMQueryObject<String> {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	private MSelectExpression msExpression;
 
-	public MOrderByExpression(ANode parent, MSelectExpression msExpression) {
+	public MGroupByExpression(ANode parent, MSelectExpression msExpression) {
 		this(parent, msExpression, -1);
 	}
 
-	public MOrderByExpression(ANode parent, MSelectExpression msExpression,
+	public MGroupByExpression(ANode parent, MSelectExpression msExpression,
 			int index) {
 		this(parent, msExpression.getValue(), index);
 		this.msExpression = msExpression;
 	}
 
-	public MOrderByExpression(ANode parent, String value) {
+	public MGroupByExpression(ANode parent, String value) {
 		this(parent, value, -1);
 	}
 
-	public MOrderByExpression(ANode parent, String value, int index) {
+	public MGroupByExpression(ANode parent, String value, int index) {
 		super(parent, value, null, index);
 	}
 
@@ -66,7 +67,7 @@ public class MOrderByExpression extends AMOrderByMember<String> {
 			}
 		} else
 			ss.append(super.getStyledDisplayText());
-		return ss.append(addDirection(), FontUtils.KEYWORDS_STYLER);
+		return ss;
 	}
 
 	@Override
@@ -85,7 +86,7 @@ public class MOrderByExpression extends AMOrderByMember<String> {
 			}
 		} else
 			ss.append(super.getStyledDisplayText());
-		return ss.append(addDirection()).toString();
+		return ss.toString();
 	}
 
 	@Override

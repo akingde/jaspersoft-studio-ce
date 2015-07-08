@@ -157,6 +157,7 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="gbFunction" eType="#//OpFunction"
         containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="grByInt" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="OrExpr">
     <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"
@@ -281,6 +282,7 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="OpFunction">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="fname" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="star" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="args" eType="#//OpFunctionArg"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="fan" eType="#//FunctionAnalytical"

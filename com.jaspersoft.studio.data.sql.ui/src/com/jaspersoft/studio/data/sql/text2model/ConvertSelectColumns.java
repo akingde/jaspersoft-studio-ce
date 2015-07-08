@@ -224,7 +224,9 @@ public class ConvertSelectColumns {
 			ANode qroot, ANode parent, OpFunction f, MSelect msel) {
 		String sargs = " ";
 		OpFunctionArg args = f.getArgs();
-		if (args != null) {
+		if (f.getStar() != null)
+			sargs = "*";
+		else if (args != null) {
 			String sep = "";
 			for (EObject eobj : args.eContents()) {
 				sargs += sep;

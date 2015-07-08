@@ -2298,9 +2298,9 @@ ruleOrderByColumnFull returns [EObject current=null]
 )
     |(
 (
-		lv_colOrderInt_1_0=RULE_INT
+		lv_colOrderInt_1_0=RULE_UNSIGNED
 		{
-			newLeafNode(lv_colOrderInt_1_0, grammarAccess.getOrderByColumnFullAccess().getColOrderIntINTTerminalRuleCall_0_1_0()); 
+			newLeafNode(lv_colOrderInt_1_0, grammarAccess.getOrderByColumnFullAccess().getColOrderIntUNSIGNEDTerminalRuleCall_0_1_0()); 
 		}
 		{
 	        if ($current==null) {
@@ -2310,7 +2310,7 @@ ruleOrderByColumnFull returns [EObject current=null]
        			$current, 
        			"colOrderInt",
         		lv_colOrderInt_1_0, 
-        		"INT");
+        		"UNSIGNED");
 	    }
 
 )
@@ -2460,6 +2460,25 @@ ruleGroupByColumnFull returns [EObject current=null]
         		lv_gbFunction_1_0, 
         		"OperandFunction");
 	        afterParserOrEnumRuleCall();
+	    }
+
+)
+)
+    |(
+(
+		lv_grByInt_2_0=RULE_UNSIGNED
+		{
+			newLeafNode(lv_grByInt_2_0, grammarAccess.getGroupByColumnFullAccess().getGrByIntUNSIGNEDTerminalRuleCall_2_0()); 
+		}
+		{
+	        if ($current==null) {
+	            $current = createModelElement(grammarAccess.getGroupByColumnFullRule());
+	        }
+       		setWithLastConsumed(
+       			$current, 
+       			"grByInt",
+        		lv_grByInt_2_0, 
+        		"UNSIGNED");
 	    }
 
 )
@@ -4440,11 +4459,25 @@ ruleOperandFunction returns [EObject current=null]
 	    }
 
 )
-)(this_STAR_2=RULE_STAR
-    { 
-    newLeafNode(this_STAR_2, grammarAccess.getOperandFunctionAccess().getSTARTerminalRuleCall_2_0()); 
-    }
+)((
+(
+		lv_star_2_0=RULE_STAR
+		{
+			newLeafNode(lv_star_2_0, grammarAccess.getOperandFunctionAccess().getStarSTARTerminalRuleCall_2_0_0()); 
+		}
+		{
+	        if ($current==null) {
+	            $current = createModelElement(grammarAccess.getOperandFunctionRule());
+	        }
+       		setWithLastConsumed(
+       			$current, 
+       			"star",
+        		lv_star_2_0, 
+        		"STAR");
+	    }
 
+)
+)
     |(
 (
 		{ 

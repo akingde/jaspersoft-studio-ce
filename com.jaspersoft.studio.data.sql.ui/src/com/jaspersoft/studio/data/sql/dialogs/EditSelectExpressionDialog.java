@@ -31,6 +31,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
+import com.jaspersoft.studio.data.sql.messages.Messages;
 import com.jaspersoft.studio.data.sql.model.query.AMKeyword;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelectExpression;
 import com.jaspersoft.studio.data.sql.validator.ColumnAliasStringValidator;
@@ -46,7 +47,7 @@ public class EditSelectExpressionDialog extends ATitledDialog {
 
 	public EditSelectExpressionDialog(Shell parentShell) {
 		super(parentShell);
-		setTitle("Column Expression Dialog");
+		setTitle(Messages.EditSelectExpressionDialog_0);
 	}
 
 	public void setValue(MSelectExpression value) {

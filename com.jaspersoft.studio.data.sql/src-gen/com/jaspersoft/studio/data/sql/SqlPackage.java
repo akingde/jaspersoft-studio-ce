@@ -1243,13 +1243,22 @@ public interface SqlPackage extends EPackage
   int GROUP_BY_COLUMN_FULL__GB_FUNCTION = OR_GROUP_BY_COLUMN_FEATURE_COUNT + 1;
 
   /**
+   * The feature id for the '<em><b>Gr By Int</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GROUP_BY_COLUMN_FULL__GR_BY_INT = OR_GROUP_BY_COLUMN_FEATURE_COUNT + 2;
+
+  /**
    * The number of structural features of the '<em>Group By Column Full</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int GROUP_BY_COLUMN_FULL_FEATURE_COUNT = OR_GROUP_BY_COLUMN_FEATURE_COUNT + 2;
+  int GROUP_BY_COLUMN_FULL_FEATURE_COUNT = OR_GROUP_BY_COLUMN_FEATURE_COUNT + 3;
 
   /**
    * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.OrExprImpl <em>Or Expr</em>}' class.
@@ -2089,13 +2098,22 @@ public interface SqlPackage extends EPackage
   int OP_FUNCTION__FNAME = 0;
 
   /**
+   * The feature id for the '<em><b>Star</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int OP_FUNCTION__STAR = 1;
+
+  /**
    * The feature id for the '<em><b>Args</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int OP_FUNCTION__ARGS = 1;
+  int OP_FUNCTION__ARGS = 2;
 
   /**
    * The feature id for the '<em><b>Fan</b></em>' containment reference.
@@ -2104,7 +2122,7 @@ public interface SqlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int OP_FUNCTION__FAN = 2;
+  int OP_FUNCTION__FAN = 3;
 
   /**
    * The number of structural features of the '<em>Op Function</em>' class.
@@ -2113,7 +2131,7 @@ public interface SqlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int OP_FUNCTION_FEATURE_COUNT = 3;
+  int OP_FUNCTION_FEATURE_COUNT = 4;
 
   /**
    * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.FunctionExtractImpl <em>Function Extract</em>}' class.
@@ -4498,6 +4516,17 @@ public interface SqlPackage extends EPackage
   EReference getGroupByColumnFull_GbFunction();
 
   /**
+   * Returns the meta object for the attribute '{@link com.jaspersoft.studio.data.sql.GroupByColumnFull#getGrByInt <em>Gr By Int</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Gr By Int</em>'.
+   * @see com.jaspersoft.studio.data.sql.GroupByColumnFull#getGrByInt()
+   * @see #getGroupByColumnFull()
+   * @generated
+   */
+  EAttribute getGroupByColumnFull_GrByInt();
+
+  /**
    * Returns the meta object for class '{@link com.jaspersoft.studio.data.sql.OrExpr <em>Or Expr</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -5260,6 +5289,17 @@ public interface SqlPackage extends EPackage
    * @generated
    */
   EAttribute getOpFunction_Fname();
+
+  /**
+   * Returns the meta object for the attribute '{@link com.jaspersoft.studio.data.sql.OpFunction#getStar <em>Star</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Star</em>'.
+   * @see com.jaspersoft.studio.data.sql.OpFunction#getStar()
+   * @see #getOpFunction()
+   * @generated
+   */
+  EAttribute getOpFunction_Star();
 
   /**
    * Returns the meta object for the containment reference '{@link com.jaspersoft.studio.data.sql.OpFunction#getArgs <em>Args</em>}'.
@@ -7088,6 +7128,14 @@ public interface SqlPackage extends EPackage
     EReference GROUP_BY_COLUMN_FULL__GB_FUNCTION = eINSTANCE.getGroupByColumnFull_GbFunction();
 
     /**
+     * The meta object literal for the '<em><b>Gr By Int</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute GROUP_BY_COLUMN_FULL__GR_BY_INT = eINSTANCE.getGroupByColumnFull_GrByInt();
+
+    /**
      * The meta object literal for the '{@link com.jaspersoft.studio.data.sql.impl.OrExprImpl <em>Or Expr</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -7688,6 +7736,14 @@ public interface SqlPackage extends EPackage
      * @generated
      */
     EAttribute OP_FUNCTION__FNAME = eINSTANCE.getOpFunction_Fname();
+
+    /**
+     * The meta object literal for the '<em><b>Star</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute OP_FUNCTION__STAR = eINSTANCE.getOpFunction_Star();
 
     /**
      * The meta object literal for the '<em><b>Args</b></em>' containment reference feature.

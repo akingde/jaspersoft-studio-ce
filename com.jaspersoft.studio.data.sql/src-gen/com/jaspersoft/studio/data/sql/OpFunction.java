@@ -13,6 +13,7 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * <ul>
  *   <li>{@link com.jaspersoft.studio.data.sql.OpFunction#getFname <em>Fname</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.OpFunction#getStar <em>Star</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.OpFunction#getArgs <em>Args</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.OpFunction#getFan <em>Fan</em>}</li>
  * </ul>
@@ -49,6 +50,32 @@ public interface OpFunction extends EObject
    * @generated
    */
   void setFname(String value);
+
+  /**
+   * Returns the value of the '<em><b>Star</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Star</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Star</em>' attribute.
+   * @see #setStar(String)
+   * @see com.jaspersoft.studio.data.sql.SqlPackage#getOpFunction_Star()
+   * @model
+   * @generated
+   */
+  String getStar();
+
+  /**
+   * Sets the value of the '{@link com.jaspersoft.studio.data.sql.OpFunction#getStar <em>Star</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Star</em>' attribute.
+   * @see #getStar()
+   * @generated
+   */
+  void setStar(String value);
 
   /**
    * Returns the value of the '<em><b>Args</b></em>' containment reference.

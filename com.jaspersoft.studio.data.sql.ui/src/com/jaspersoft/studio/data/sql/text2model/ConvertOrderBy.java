@@ -30,11 +30,14 @@ import com.jaspersoft.studio.data.sql.model.query.select.MSelect;
 import com.jaspersoft.studio.model.util.KeyValue;
 
 public class ConvertOrderBy {
-	public static void convertOrderBy(SQLQueryDesigner designer, OrOrderByColumn cols) {
+	public static void convertOrderBy(SQLQueryDesigner designer,
+			OrOrderByColumn cols) {
 		if (cols == null)
 			return;
 		if (cols instanceof OrderByColumnFull)
-			doColumn(designer, Util.getKeyword(designer.getRoot(), MSelect.class), (OrderByColumnFull) cols);
+			doColumn(designer,
+					Util.getKeyword(designer.getRoot(), MSelect.class),
+					(OrderByColumnFull) cols);
 		else if (cols instanceof OrOrderByColumn) {
 			MSelect msel = Util.getKeyword(designer.getRoot(), MSelect.class);
 			for (OrderByColumnFull fcol : cols.getEntries())
@@ -42,7 +45,8 @@ public class ConvertOrderBy {
 		}
 	}
 
-	private static void doColumn(SQLQueryDesigner designer, MSelect msel, OrderByColumnFull tf) {
+	private static void doColumn(SQLQueryDesigner designer, MSelect msel,
+			OrderByColumnFull tf) {
 		if (tf.getColOrder() != null) {
 			EList<EObject> eContents = tf.getColOrder().eContents();
 			String column = null;
@@ -55,18 +59,29 @@ public class ConvertOrderBy {
 			String table = ConvertUtil.getDbObjectName(eContents, 2);
 			String schema = ConvertUtil.getDbObjectName(eContents, 3);
 			// String catalog = getDbObjectName(eContents, 3);
-			MOrderByColumn mocol = findColumn(msel, schema, table, column, designer);
+			MOrderByColumn mocol = findColumn(msel, schema, table, column,
+					designer);
 			if (mocol != null) {
 				String direction = tf.getDirection();
 				if (direction != null)
-					mocol.setDesc(direction.trim().equalsIgnoreCase(AMKeyword.DESCENDING_KEYWORD.trim()));
+					mocol.setDesc(direction.trim().equalsIgnoreCase(
+							AMKeyword.DESCENDING_KEYWORD.trim()));
+			} else {
+				MOrderByExpression m = new MOrderByExpression(Util.getKeyword(
+						msel.getParent(), MOrderBy.class), column);
+				String direction = tf.getDirection();
+				if (direction != null)
+					m.setDesc(direction.trim().equalsIgnoreCase(
+							AMKeyword.DESCENDING_KEYWORD.trim()));
 			}
 		} else if (tf.getColOrderInt() > 0)
-			new MOrderByExpression(Util.getKeyword(msel.getParent(), MOrderBy.class), Integer.toString(tf.getColOrderInt()));
+			new MOrderByExpression(Util.getKeyword(msel.getParent(),
+					MOrderBy.class), Integer.toString(tf.getColOrderInt()));
 	}
 
 	//
-	// public static String getDbObjectName(EList<ColumnFull> eContents, int i) {
+	// public static String getDbObjectName(EList<ColumnFull> eContents, int i)
+	// {
 	// int size = eContents.size();
 	// if (size >= i) {
 	// EObject eobj = eContents.get(size - i);
@@ -76,10 +91,14 @@ public class ConvertOrderBy {
 	// return null;
 	// }
 
-	private static MOrderByColumn findColumn(final MSelect msel, final String schema, final String table, final String column, SQLQueryDesigner designer) {
-		KeyValue<MSQLColumn, MFromTable> kv = ConvertUtil.findColumn(msel, schema, table, column, designer);
+	private static MOrderByColumn findColumn(final MSelect msel,
+			final String schema, final String table, final String column,
+			SQLQueryDesigner designer) {
+		KeyValue<MSQLColumn, MFromTable> kv = ConvertUtil.findColumn(msel,
+				schema, table, column, designer);
 		if (kv != null)
-			return new MOrderByColumn(Util.getKeyword(msel.getParent(), MOrderBy.class), kv.key, kv.value);
+			return new MOrderByColumn(Util.getKeyword(msel.getParent(),
+					MOrderBy.class), kv.key, kv.value);
 		return null;
 	}
 }

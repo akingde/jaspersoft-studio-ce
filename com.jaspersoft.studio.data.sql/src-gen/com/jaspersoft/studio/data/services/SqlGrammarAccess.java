@@ -1375,20 +1375,20 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Assignment cColOrderAssignment_0_0 = (Assignment)cAlternatives_0.eContents().get(0);
 		private final RuleCall cColOrderColumnFullParserRuleCall_0_0_0 = (RuleCall)cColOrderAssignment_0_0.eContents().get(0);
 		private final Assignment cColOrderIntAssignment_0_1 = (Assignment)cAlternatives_0.eContents().get(1);
-		private final RuleCall cColOrderIntINTTerminalRuleCall_0_1_0 = (RuleCall)cColOrderIntAssignment_0_1.eContents().get(0);
+		private final RuleCall cColOrderIntUNSIGNEDTerminalRuleCall_0_1_0 = (RuleCall)cColOrderIntAssignment_0_1.eContents().get(0);
 		private final Assignment cDirectionAssignment_1 = (Assignment)cGroup.eContents().get(1);
 		private final Alternatives cDirectionAlternatives_1_0 = (Alternatives)cDirectionAssignment_1.eContents().get(0);
 		private final Keyword cDirectionASCKeyword_1_0_0 = (Keyword)cDirectionAlternatives_1_0.eContents().get(0);
 		private final Keyword cDirectionDESCKeyword_1_0_1 = (Keyword)cDirectionAlternatives_1_0.eContents().get(1);
 		
 		//OrderByColumnFull:
-		//	(colOrder=ColumnFull | colOrderInt=INT) direction=("ASC" | "DESC")?;
+		//	(colOrder=ColumnFull | colOrderInt=UNSIGNED) direction=("ASC" | "DESC")?;
 		public ParserRule getRule() { return rule; }
 
-		//(colOrder=ColumnFull | colOrderInt=INT) direction=("ASC" | "DESC")?
+		//(colOrder=ColumnFull | colOrderInt=UNSIGNED) direction=("ASC" | "DESC")?
 		public Group getGroup() { return cGroup; }
 
-		//colOrder=ColumnFull | colOrderInt=INT
+		//colOrder=ColumnFull | colOrderInt=UNSIGNED
 		public Alternatives getAlternatives_0() { return cAlternatives_0; }
 
 		//colOrder=ColumnFull
@@ -1397,11 +1397,11 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		//ColumnFull
 		public RuleCall getColOrderColumnFullParserRuleCall_0_0_0() { return cColOrderColumnFullParserRuleCall_0_0_0; }
 
-		//colOrderInt=INT
+		//colOrderInt=UNSIGNED
 		public Assignment getColOrderIntAssignment_0_1() { return cColOrderIntAssignment_0_1; }
 
-		//INT
-		public RuleCall getColOrderIntINTTerminalRuleCall_0_1_0() { return cColOrderIntINTTerminalRuleCall_0_1_0; }
+		//UNSIGNED
+		public RuleCall getColOrderIntUNSIGNEDTerminalRuleCall_0_1_0() { return cColOrderIntUNSIGNEDTerminalRuleCall_0_1_0; }
 
 		//direction=("ASC" | "DESC")?
 		public Assignment getDirectionAssignment_1() { return cDirectionAssignment_1; }
@@ -1463,12 +1463,14 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cColGrByColumnFullParserRuleCall_0_0 = (RuleCall)cColGrByAssignment_0.eContents().get(0);
 		private final Assignment cGbFunctionAssignment_1 = (Assignment)cAlternatives.eContents().get(1);
 		private final RuleCall cGbFunctionOperandFunctionParserRuleCall_1_0 = (RuleCall)cGbFunctionAssignment_1.eContents().get(0);
+		private final Assignment cGrByIntAssignment_2 = (Assignment)cAlternatives.eContents().get(2);
+		private final RuleCall cGrByIntUNSIGNEDTerminalRuleCall_2_0 = (RuleCall)cGrByIntAssignment_2.eContents().get(0);
 		
 		//GroupByColumnFull:
-		//	colGrBy=ColumnFull | gbFunction=OperandFunction;
+		//	colGrBy=ColumnFull | gbFunction=OperandFunction | grByInt=UNSIGNED;
 		public ParserRule getRule() { return rule; }
 
-		//colGrBy=ColumnFull | gbFunction=OperandFunction
+		//colGrBy=ColumnFull | gbFunction=OperandFunction | grByInt=UNSIGNED
 		public Alternatives getAlternatives() { return cAlternatives; }
 
 		//colGrBy=ColumnFull
@@ -1482,6 +1484,12 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 
 		//OperandFunction
 		public RuleCall getGbFunctionOperandFunctionParserRuleCall_1_0() { return cGbFunctionOperandFunctionParserRuleCall_1_0; }
+
+		//grByInt=UNSIGNED
+		public Assignment getGrByIntAssignment_2() { return cGrByIntAssignment_2; }
+
+		//UNSIGNED
+		public RuleCall getGrByIntUNSIGNEDTerminalRuleCall_2_0() { return cGrByIntUNSIGNEDTerminalRuleCall_2_0; }
 	}
 
 	public class FullExpressionElements extends AbstractParserRuleElementFinder {
@@ -2538,7 +2546,8 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Assignment cFnameAssignment_1 = (Assignment)cGroup.eContents().get(1);
 		private final RuleCall cFnameFNAMEParserRuleCall_1_0 = (RuleCall)cFnameAssignment_1.eContents().get(0);
 		private final Alternatives cAlternatives_2 = (Alternatives)cGroup.eContents().get(2);
-		private final RuleCall cSTARTerminalRuleCall_2_0 = (RuleCall)cAlternatives_2.eContents().get(0);
+		private final Assignment cStarAssignment_2_0 = (Assignment)cAlternatives_2.eContents().get(0);
+		private final RuleCall cStarSTARTerminalRuleCall_2_0_0 = (RuleCall)cStarAssignment_2_0.eContents().get(0);
 		private final Assignment cArgsAssignment_2_1 = (Assignment)cAlternatives_2.eContents().get(1);
 		private final RuleCall cArgsOpFunctionArgParserRuleCall_2_1_0 = (RuleCall)cArgsAssignment_2_1.eContents().get(0);
 		private final Keyword cRightParenthesisKeyword_3 = (Keyword)cGroup.eContents().get(3);
@@ -2546,10 +2555,10 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cFanFunctionAnalyticalParserRuleCall_4_0 = (RuleCall)cFanAssignment_4.eContents().get(0);
 		
 		//OperandFunction returns OpFunction:
-		//	{OpFunction} fname=FNAME (STAR | args=OpFunctionArg)? ")" fan=FunctionAnalytical?;
+		//	{OpFunction} fname=FNAME (star=STAR | args=OpFunctionArg)? ")" fan=FunctionAnalytical?;
 		public ParserRule getRule() { return rule; }
 
-		//{OpFunction} fname=FNAME (STAR | args=OpFunctionArg)? ")" fan=FunctionAnalytical?
+		//{OpFunction} fname=FNAME (star=STAR | args=OpFunctionArg)? ")" fan=FunctionAnalytical?
 		public Group getGroup() { return cGroup; }
 
 		//{OpFunction}
@@ -2561,11 +2570,14 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		//FNAME
 		public RuleCall getFnameFNAMEParserRuleCall_1_0() { return cFnameFNAMEParserRuleCall_1_0; }
 
-		//(STAR | args=OpFunctionArg)?
+		//(star=STAR | args=OpFunctionArg)?
 		public Alternatives getAlternatives_2() { return cAlternatives_2; }
 
+		//star=STAR
+		public Assignment getStarAssignment_2_0() { return cStarAssignment_2_0; }
+
 		//STAR
-		public RuleCall getSTARTerminalRuleCall_2_0() { return cSTARTerminalRuleCall_2_0; }
+		public RuleCall getStarSTARTerminalRuleCall_2_0_0() { return cStarSTARTerminalRuleCall_2_0_0; }
 
 		//args=OpFunctionArg
 		public Assignment getArgsAssignment_2_1() { return cArgsAssignment_2_1; }
@@ -4471,7 +4483,7 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//OrderByColumnFull:
-	//	(colOrder=ColumnFull | colOrderInt=INT) direction=("ASC" | "DESC")?;
+	//	(colOrder=ColumnFull | colOrderInt=UNSIGNED) direction=("ASC" | "DESC")?;
 	public OrderByColumnFullElements getOrderByColumnFullAccess() {
 		return (pOrderByColumnFull != null) ? pOrderByColumnFull : (pOrderByColumnFull = new OrderByColumnFullElements());
 	}
@@ -4491,7 +4503,7 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//GroupByColumnFull:
-	//	colGrBy=ColumnFull | gbFunction=OperandFunction;
+	//	colGrBy=ColumnFull | gbFunction=OperandFunction | grByInt=UNSIGNED;
 	public GroupByColumnFullElements getGroupByColumnFullAccess() {
 		return (pGroupByColumnFull != null) ? pGroupByColumnFull : (pGroupByColumnFull = new GroupByColumnFullElements());
 	}
@@ -4705,7 +4717,7 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//OperandFunction returns OpFunction:
-	//	{OpFunction} fname=FNAME (STAR | args=OpFunctionArg)? ")" fan=FunctionAnalytical?;
+	//	{OpFunction} fname=FNAME (star=STAR | args=OpFunctionArg)? ")" fan=FunctionAnalytical?;
 	public OperandFunctionElements getOperandFunctionAccess() {
 		return (pOperandFunction != null) ? pOperandFunction : (pOperandFunction = new OperandFunctionElements());
 	}

@@ -157,6 +157,7 @@
     <genClasses ecoreClass="Sql.ecore#//GroupByColumnFull">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//GroupByColumnFull/colGrBy"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//GroupByColumnFull/gbFunction"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//GroupByColumnFull/grByInt"/>
     </genClasses>
     <genClasses ecoreClass="Sql.ecore#//OrExpr">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//OrExpr/entries"/>
@@ -244,6 +245,7 @@
     </genClasses>
     <genClasses ecoreClass="Sql.ecore#//OpFunction">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//OpFunction/fname"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//OpFunction/star"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//OpFunction/args"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//OpFunction/fan"/>
     </genClasses>

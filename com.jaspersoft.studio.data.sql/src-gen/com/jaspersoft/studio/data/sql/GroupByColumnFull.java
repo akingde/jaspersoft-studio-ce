@@ -13,6 +13,7 @@ package com.jaspersoft.studio.data.sql;
  * <ul>
  *   <li>{@link com.jaspersoft.studio.data.sql.GroupByColumnFull#getColGrBy <em>Col Gr By</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.GroupByColumnFull#getGbFunction <em>Gb Function</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.GroupByColumnFull#getGrByInt <em>Gr By Int</em>}</li>
  * </ul>
  * </p>
  *
@@ -73,5 +74,31 @@ public interface GroupByColumnFull extends OrGroupByColumn
    * @generated
    */
   void setGbFunction(OpFunction value);
+
+  /**
+   * Returns the value of the '<em><b>Gr By Int</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Gr By Int</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Gr By Int</em>' attribute.
+   * @see #setGrByInt(int)
+   * @see com.jaspersoft.studio.data.sql.SqlPackage#getGroupByColumnFull_GrByInt()
+   * @model
+   * @generated
+   */
+  int getGrByInt();
+
+  /**
+   * Sets the value of the '{@link com.jaspersoft.studio.data.sql.GroupByColumnFull#getGrByInt <em>Gr By Int</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Gr By Int</em>' attribute.
+   * @see #getGrByInt()
+   * @generated
+   */
+  void setGrByInt(int value);
 
 } // GroupByColumnFull

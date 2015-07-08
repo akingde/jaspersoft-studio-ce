@@ -24,16 +24,19 @@ import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
 import com.jaspersoft.studio.data.sql.model.query.groupby.MGroupBy;
 import com.jaspersoft.studio.data.sql.model.query.groupby.MGroupByColumn;
+import com.jaspersoft.studio.data.sql.model.query.groupby.MGroupByExpression;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelect;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.util.KeyValue;
 
 public class ConvertGroupBy {
-	public static void convertGroupBy(SQLQueryDesigner designer, ANode qroot, OrGroupByColumn cols) {
+	public static void convertGroupBy(SQLQueryDesigner designer, ANode qroot,
+			OrGroupByColumn cols) {
 		if (cols == null)
 			return;
 		if (cols instanceof GroupByColumnFull)
-			doColumn(designer, Util.getKeyword(qroot, MSelect.class), (GroupByColumnFull) cols);
+			doColumn(designer, Util.getKeyword(qroot, MSelect.class),
+					(GroupByColumnFull) cols);
 		else if (cols instanceof OrGroupByColumn) {
 			MSelect msel = Util.getKeyword(qroot, MSelect.class);
 			for (GroupByColumnFull fcol : cols.getEntries())
@@ -41,20 +44,31 @@ public class ConvertGroupBy {
 		}
 	}
 
-	private static void doColumn(SQLQueryDesigner designer, MSelect msel, GroupByColumnFull tf) {
+	private static void doColumn(SQLQueryDesigner designer, MSelect msel,
+			GroupByColumnFull tf) {
 		try {
-			EList<EObject> eContents = tf.eContents();
-			String column = null;
-			if (tf instanceof DbObjectNameImpl)
-				column = ((DbObjectNameImpl) tf).getDbname();
-			else
-				column = ConvertUtil.getDbObjectName(eContents, 1);
-			String table = ConvertUtil.getDbObjectName(eContents, 2);
-			String schema = ConvertUtil.getDbObjectName(eContents, 3);
-			// String catalog = getDbObjectName(eContents, 3);
-			KeyValue<MSQLColumn, MFromTable> kv = ConvertUtil.findColumn(msel, schema, table, column, designer);
-			if (kv != null)
-				new MGroupByColumn(Util.getKeyword(msel.getParent(), MGroupBy.class), kv.key, kv.value);
+			MGroupBy parent = Util.getKeyword(msel.getParent(), MGroupBy.class);
+			if (tf.getGbFunction() != null) {
+				String f = ConvertSelectColumns.getFunctionString(designer,
+						msel.getRoot(), parent, tf.getGbFunction(), msel);
+				new MGroupByExpression(parent, f);
+			} else if (tf.getColGrBy() != null) {
+				EList<EObject> eContents = tf.eContents();
+				String column = null;
+				if (tf instanceof DbObjectNameImpl)
+					column = ((DbObjectNameImpl) tf).getDbname();
+				else
+					column = ConvertUtil.getDbObjectName(eContents, 1);
+				String table = ConvertUtil.getDbObjectName(eContents, 2);
+				String schema = ConvertUtil.getDbObjectName(eContents, 3);
+				// String catalog = getDbObjectName(eContents, 3);
+				KeyValue<MSQLColumn, MFromTable> kv = ConvertUtil.findColumn(
+						msel, schema, table, column, designer);
+				if (kv != null)
+					new MGroupByColumn(parent, kv.key, kv.value);
+			} else
+				new MGroupByExpression(parent,
+						Integer.toString(tf.getGrByInt()));
 		} catch (Throwable e) {
 			e.printStackTrace();
 		}

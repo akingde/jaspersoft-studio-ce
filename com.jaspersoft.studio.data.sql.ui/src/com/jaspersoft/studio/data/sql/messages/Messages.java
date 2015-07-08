@@ -32,6 +32,8 @@ public class Messages extends NLS {
 	public static String CreateHavingFromColumn_0;
 	public static String CreateOrderByColumn_0;
 	public static String CreateOrderByFromColumn_0;
+	public static String CreateSelectExpression_0;
+	public static String CreateSelectExpression_1;
 	public static String CreateSubQueryTable_0;
 	public static String CreateSubSelect_0;
 	public static String CreateTable_0;
@@ -72,6 +74,7 @@ public class Messages extends NLS {
 	public static String EditFromTableDialog_1;
 	public static String EditFromTableDialog_2;
 	public static String EditFromTableDialog_3;
+	public static String EditSelectExpressionDialog_0;
 	public static String EditSelectSubQueryDialog_0;
 	public static String EditSelectSubQueryDialog_1;
 	public static String EditTable_0;

@@ -24,6 +24,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * The following features are implemented:
  * <ul>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.OpFunctionImpl#getFname <em>Fname</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.impl.OpFunctionImpl#getStar <em>Star</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.OpFunctionImpl#getArgs <em>Args</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.OpFunctionImpl#getFan <em>Fan</em>}</li>
  * </ul>
@@ -52,6 +53,26 @@ public class OpFunctionImpl extends MinimalEObjectImpl.Container implements OpFu
    * @ordered
    */
   protected String fname = FNAME_EDEFAULT;
+
+  /**
+   * The default value of the '{@link #getStar() <em>Star</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getStar()
+   * @generated
+   * @ordered
+   */
+  protected static final String STAR_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getStar() <em>Star</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getStar()
+   * @generated
+   * @ordered
+   */
+  protected String star = STAR_EDEFAULT;
 
   /**
    * The cached value of the '{@link #getArgs() <em>Args</em>}' containment reference.
@@ -115,6 +136,29 @@ public class OpFunctionImpl extends MinimalEObjectImpl.Container implements OpFu
     fname = newFname;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.OP_FUNCTION__FNAME, oldFname, fname));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public String getStar()
+  {
+    return star;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setStar(String newStar)
+  {
+    String oldStar = star;
+    star = newStar;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.OP_FUNCTION__STAR, oldStar, star));
   }
 
   /**
@@ -243,6 +287,8 @@ public class OpFunctionImpl extends MinimalEObjectImpl.Container implements OpFu
     {
       case SqlPackage.OP_FUNCTION__FNAME:
         return getFname();
+      case SqlPackage.OP_FUNCTION__STAR:
+        return getStar();
       case SqlPackage.OP_FUNCTION__ARGS:
         return getArgs();
       case SqlPackage.OP_FUNCTION__FAN:
@@ -263,6 +309,9 @@ public class OpFunctionImpl extends MinimalEObjectImpl.Container implements OpFu
     {
       case SqlPackage.OP_FUNCTION__FNAME:
         setFname((String)newValue);
+        return;
+      case SqlPackage.OP_FUNCTION__STAR:
+        setStar((String)newValue);
         return;
       case SqlPackage.OP_FUNCTION__ARGS:
         setArgs((OpFunctionArg)newValue);
@@ -287,6 +336,9 @@ public class OpFunctionImpl extends MinimalEObjectImpl.Container implements OpFu
       case SqlPackage.OP_FUNCTION__FNAME:
         setFname(FNAME_EDEFAULT);
         return;
+      case SqlPackage.OP_FUNCTION__STAR:
+        setStar(STAR_EDEFAULT);
+        return;
       case SqlPackage.OP_FUNCTION__ARGS:
         setArgs((OpFunctionArg)null);
         return;
@@ -309,6 +361,8 @@ public class OpFunctionImpl extends MinimalEObjectImpl.Container implements OpFu
     {
       case SqlPackage.OP_FUNCTION__FNAME:
         return FNAME_EDEFAULT == null ? fname != null : !FNAME_EDEFAULT.equals(fname);
+      case SqlPackage.OP_FUNCTION__STAR:
+        return STAR_EDEFAULT == null ? star != null : !STAR_EDEFAULT.equals(star);
       case SqlPackage.OP_FUNCTION__ARGS:
         return args != null;
       case SqlPackage.OP_FUNCTION__FAN:
@@ -330,6 +384,8 @@ public class OpFunctionImpl extends MinimalEObjectImpl.Container implements OpFu
     StringBuffer result = new StringBuffer(super.toString());
     result.append(" (fname: ");
     result.append(fname);
+    result.append(", star: ");
+    result.append(star);
     result.append(')');
     return result.toString();
   }

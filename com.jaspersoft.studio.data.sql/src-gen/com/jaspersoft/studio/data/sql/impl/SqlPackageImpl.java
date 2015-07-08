@@ -1760,6 +1760,16 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EAttribute getGroupByColumnFull_GrByInt()
+  {
+    return (EAttribute)groupByColumnFullEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EClass getOrExpr()
   {
     return orExprEClass;
@@ -2470,9 +2480,19 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EAttribute getOpFunction_Star()
+  {
+    return (EAttribute)opFunctionEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EReference getOpFunction_Args()
   {
-    return (EReference)opFunctionEClass.getEStructuralFeatures().get(1);
+    return (EReference)opFunctionEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -2482,7 +2502,7 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    */
   public EReference getOpFunction_Fan()
   {
-    return (EReference)opFunctionEClass.getEStructuralFeatures().get(2);
+    return (EReference)opFunctionEClass.getEStructuralFeatures().get(3);
   }
 
   /**
@@ -3569,6 +3589,7 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
     groupByColumnFullEClass = createEClass(GROUP_BY_COLUMN_FULL);
     createEReference(groupByColumnFullEClass, GROUP_BY_COLUMN_FULL__COL_GR_BY);
     createEReference(groupByColumnFullEClass, GROUP_BY_COLUMN_FULL__GB_FUNCTION);
+    createEAttribute(groupByColumnFullEClass, GROUP_BY_COLUMN_FULL__GR_BY_INT);
 
     orExprEClass = createEClass(OR_EXPR);
     createEReference(orExprEClass, OR_EXPR__ENTRIES);
@@ -3657,6 +3678,7 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
 
     opFunctionEClass = createEClass(OP_FUNCTION);
     createEAttribute(opFunctionEClass, OP_FUNCTION__FNAME);
+    createEAttribute(opFunctionEClass, OP_FUNCTION__STAR);
     createEReference(opFunctionEClass, OP_FUNCTION__ARGS);
     createEReference(opFunctionEClass, OP_FUNCTION__FAN);
 
@@ -3995,6 +4017,7 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
     initEClass(groupByColumnFullEClass, GroupByColumnFull.class, "GroupByColumnFull", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getGroupByColumnFull_ColGrBy(), this.getColumnFull(), null, "colGrBy", null, 0, 1, GroupByColumnFull.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getGroupByColumnFull_GbFunction(), this.getOpFunction(), null, "gbFunction", null, 0, 1, GroupByColumnFull.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getGroupByColumnFull_GrByInt(), ecorePackage.getEInt(), "grByInt", null, 0, 1, GroupByColumnFull.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(orExprEClass, OrExpr.class, "OrExpr", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getOrExpr_Entries(), this.getFullExpression(), null, "entries", null, 0, -1, OrExpr.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -4083,6 +4106,7 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
 
     initEClass(opFunctionEClass, OpFunction.class, "OpFunction", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getOpFunction_Fname(), ecorePackage.getEString(), "fname", null, 0, 1, OpFunction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getOpFunction_Star(), ecorePackage.getEString(), "star", null, 0, 1, OpFunction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getOpFunction_Args(), this.getOpFunctionArg(), null, "args", null, 0, 1, OpFunction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getOpFunction_Fan(), this.getFunctionAnalytical(), null, "fan", null, 0, 1, OpFunction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 

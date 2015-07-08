@@ -6458,11 +6458,11 @@ protected class OrderByColumns_EntriesAssignment_1_1_1 extends AssignmentToken  
 /************ begin Rule OrderByColumnFull ****************
  *
  * OrderByColumnFull:
- * 	(colOrder=ColumnFull | colOrderInt=INT) direction=("ASC" | "DESC")?;
+ * 	(colOrder=ColumnFull | colOrderInt=UNSIGNED) direction=("ASC" | "DESC")?;
  *
  **/
 
-// (colOrder=ColumnFull | colOrderInt=INT) direction=("ASC" | "DESC")?
+// (colOrder=ColumnFull | colOrderInt=UNSIGNED) direction=("ASC" | "DESC")?
 protected class OrderByColumnFull_Group extends GroupToken {
 	
 	public OrderByColumnFull_Group(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
@@ -6492,7 +6492,7 @@ protected class OrderByColumnFull_Group extends GroupToken {
 
 }
 
-// colOrder=ColumnFull | colOrderInt=INT
+// colOrder=ColumnFull | colOrderInt=UNSIGNED
 protected class OrderByColumnFull_Alternatives_0 extends AlternativesToken {
 
 	public OrderByColumnFull_Alternatives_0(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
@@ -6560,7 +6560,7 @@ protected class OrderByColumnFull_ColOrderAssignment_0_0 extends AssignmentToken
 	}	
 }
 
-// colOrderInt=INT
+// colOrderInt=UNSIGNED
 protected class OrderByColumnFull_ColOrderIntAssignment_0_1 extends AssignmentToken  {
 	
 	public OrderByColumnFull_ColOrderIntAssignment_0_1(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
@@ -6583,9 +6583,9 @@ protected class OrderByColumnFull_ColOrderIntAssignment_0_1 extends AssignmentTo
 	public IEObjectConsumer tryConsume() {
 		if((value = eObjectConsumer.getConsumable("colOrderInt",true)) == null) return null;
 		IEObjectConsumer obj = eObjectConsumer.cloneAndConsume("colOrderInt");
-		if(valueSerializer.isValid(obj.getEObject(), grammarAccess.getOrderByColumnFullAccess().getColOrderIntINTTerminalRuleCall_0_1_0(), value, null)) {
+		if(valueSerializer.isValid(obj.getEObject(), grammarAccess.getOrderByColumnFullAccess().getColOrderIntUNSIGNEDTerminalRuleCall_0_1_0(), value, null)) {
 			type = AssignmentType.TERMINAL_RULE_CALL;
-			element = grammarAccess.getOrderByColumnFullAccess().getColOrderIntINTTerminalRuleCall_0_1_0();
+			element = grammarAccess.getOrderByColumnFullAccess().getColOrderIntUNSIGNEDTerminalRuleCall_0_1_0();
 			return obj;
 		}
 		return null;
@@ -6869,11 +6869,11 @@ protected class GroupByColumns_EntriesAssignment_1_1_1 extends AssignmentToken  
 /************ begin Rule GroupByColumnFull ****************
  *
  * GroupByColumnFull:
- * 	colGrBy=ColumnFull | gbFunction=OperandFunction;
+ * 	colGrBy=ColumnFull | gbFunction=OperandFunction | grByInt=UNSIGNED;
  *
  **/
 
-// colGrBy=ColumnFull | gbFunction=OperandFunction
+// colGrBy=ColumnFull | gbFunction=OperandFunction | grByInt=UNSIGNED
 protected class GroupByColumnFull_Alternatives extends AlternativesToken {
 
 	public GroupByColumnFull_Alternatives(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
@@ -6890,6 +6890,7 @@ protected class GroupByColumnFull_Alternatives extends AlternativesToken {
 		switch(index) {
 			case 0: return new GroupByColumnFull_ColGrByAssignment_0(lastRuleCallOrigin, this, 0, inst);
 			case 1: return new GroupByColumnFull_GbFunctionAssignment_1(lastRuleCallOrigin, this, 1, inst);
+			case 2: return new GroupByColumnFull_GrByIntAssignment_2(lastRuleCallOrigin, this, 2, inst);
 			default: return null;
 		}	
 	}
@@ -6991,6 +6992,39 @@ protected class GroupByColumnFull_GbFunctionAssignment_1 extends AssignmentToken
 			default: return lastRuleCallOrigin.createFollowerAfterReturn(next, actIndex , index, consumed);
 		}	
 	}	
+}
+
+// grByInt=UNSIGNED
+protected class GroupByColumnFull_GrByIntAssignment_2 extends AssignmentToken  {
+	
+	public GroupByColumnFull_GrByIntAssignment_2(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
+	}
+	
+	@Override
+	public Assignment getGrammarElement() {
+		return grammarAccess.getGroupByColumnFullAccess().getGrByIntAssignment_2();
+	}
+
+    @Override
+	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
+		switch(index) {
+			default: return lastRuleCallOrigin.createFollowerAfterReturn(this, index, index, inst);
+		}	
+	}
+
+    @Override	
+	public IEObjectConsumer tryConsume() {
+		if((value = eObjectConsumer.getConsumable("grByInt",true)) == null) return null;
+		IEObjectConsumer obj = eObjectConsumer.cloneAndConsume("grByInt");
+		if(valueSerializer.isValid(obj.getEObject(), grammarAccess.getGroupByColumnFullAccess().getGrByIntUNSIGNEDTerminalRuleCall_2_0(), value, null)) {
+			type = AssignmentType.TERMINAL_RULE_CALL;
+			element = grammarAccess.getGroupByColumnFullAccess().getGrByIntUNSIGNEDTerminalRuleCall_2_0();
+			return obj;
+		}
+		return null;
+	}
+
 }
 
 
@@ -11871,11 +11905,11 @@ protected class OperandFragment_SqlcaseAssignment_6 extends AssignmentToken  {
 /************ begin Rule OperandFunction ****************
  *
  * OperandFunction returns OpFunction:
- * 	{OpFunction} fname=FNAME (STAR | args=OpFunctionArg)? ")" fan=FunctionAnalytical?;
+ * 	{OpFunction} fname=FNAME (star=STAR | args=OpFunctionArg)? ")" fan=FunctionAnalytical?;
  *
  **/
 
-// {OpFunction} fname=FNAME (STAR | args=OpFunctionArg)? ")" fan=FunctionAnalytical?
+// {OpFunction} fname=FNAME (star=STAR | args=OpFunctionArg)? ")" fan=FunctionAnalytical?
 protected class OperandFunction_Group extends GroupToken {
 	
 	public OperandFunction_Group(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
@@ -11965,7 +11999,7 @@ protected class OperandFunction_FnameAssignment_1 extends AssignmentToken  {
 
 }
 
-// (STAR | args=OpFunctionArg)?
+// (star=STAR | args=OpFunctionArg)?
 protected class OperandFunction_Alternatives_2 extends AlternativesToken {
 
 	public OperandFunction_Alternatives_2(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
@@ -11980,9 +12014,44 @@ protected class OperandFunction_Alternatives_2 extends AlternativesToken {
     @Override
 	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
 		switch(index) {
-			case 0: return new OperandFunction_ArgsAssignment_2_1(lastRuleCallOrigin, this, 0, inst);
+			case 0: return new OperandFunction_StarAssignment_2_0(lastRuleCallOrigin, this, 0, inst);
+			case 1: return new OperandFunction_ArgsAssignment_2_1(lastRuleCallOrigin, this, 1, inst);
 			default: return null;
 		}	
+	}
+
+}
+
+// star=STAR
+protected class OperandFunction_StarAssignment_2_0 extends AssignmentToken  {
+	
+	public OperandFunction_StarAssignment_2_0(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
+	}
+	
+	@Override
+	public Assignment getGrammarElement() {
+		return grammarAccess.getOperandFunctionAccess().getStarAssignment_2_0();
+	}
+
+    @Override
+	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
+		switch(index) {
+			case 0: return new OperandFunction_FnameAssignment_1(lastRuleCallOrigin, this, 0, inst);
+			default: return null;
+		}	
+	}
+
+    @Override	
+	public IEObjectConsumer tryConsume() {
+		if((value = eObjectConsumer.getConsumable("star",true)) == null) return null;
+		IEObjectConsumer obj = eObjectConsumer.cloneAndConsume("star");
+		if(valueSerializer.isValid(obj.getEObject(), grammarAccess.getOperandFunctionAccess().getStarSTARTerminalRuleCall_2_0_0(), value, null)) {
+			type = AssignmentType.TERMINAL_RULE_CALL;
+			element = grammarAccess.getOperandFunctionAccess().getStarSTARTerminalRuleCall_2_0_0();
+			return obj;
+		}
+		return null;
 	}
 
 }

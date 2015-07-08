@@ -24,6 +24,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * <ul>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.GroupByColumnFullImpl#getColGrBy <em>Col Gr By</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.GroupByColumnFullImpl#getGbFunction <em>Gb Function</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.impl.GroupByColumnFullImpl#getGrByInt <em>Gr By Int</em>}</li>
  * </ul>
  * </p>
  *
@@ -50,6 +51,26 @@ public class GroupByColumnFullImpl extends OrGroupByColumnImpl implements GroupB
    * @ordered
    */
   protected OpFunction gbFunction;
+
+  /**
+   * The default value of the '{@link #getGrByInt() <em>Gr By Int</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getGrByInt()
+   * @generated
+   * @ordered
+   */
+  protected static final int GR_BY_INT_EDEFAULT = 0;
+
+  /**
+   * The cached value of the '{@link #getGrByInt() <em>Gr By Int</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getGrByInt()
+   * @generated
+   * @ordered
+   */
+  protected int grByInt = GR_BY_INT_EDEFAULT;
 
   /**
    * <!-- begin-user-doc -->
@@ -173,6 +194,29 @@ public class GroupByColumnFullImpl extends OrGroupByColumnImpl implements GroupB
    * <!-- end-user-doc -->
    * @generated
    */
+  public int getGrByInt()
+  {
+    return grByInt;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setGrByInt(int newGrByInt)
+  {
+    int oldGrByInt = grByInt;
+    grByInt = newGrByInt;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.GROUP_BY_COLUMN_FULL__GR_BY_INT, oldGrByInt, grByInt));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   @Override
   public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
   {
@@ -200,6 +244,8 @@ public class GroupByColumnFullImpl extends OrGroupByColumnImpl implements GroupB
         return getColGrBy();
       case SqlPackage.GROUP_BY_COLUMN_FULL__GB_FUNCTION:
         return getGbFunction();
+      case SqlPackage.GROUP_BY_COLUMN_FULL__GR_BY_INT:
+        return getGrByInt();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -219,6 +265,9 @@ public class GroupByColumnFullImpl extends OrGroupByColumnImpl implements GroupB
         return;
       case SqlPackage.GROUP_BY_COLUMN_FULL__GB_FUNCTION:
         setGbFunction((OpFunction)newValue);
+        return;
+      case SqlPackage.GROUP_BY_COLUMN_FULL__GR_BY_INT:
+        setGrByInt((Integer)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -240,6 +289,9 @@ public class GroupByColumnFullImpl extends OrGroupByColumnImpl implements GroupB
       case SqlPackage.GROUP_BY_COLUMN_FULL__GB_FUNCTION:
         setGbFunction((OpFunction)null);
         return;
+      case SqlPackage.GROUP_BY_COLUMN_FULL__GR_BY_INT:
+        setGrByInt(GR_BY_INT_EDEFAULT);
+        return;
     }
     super.eUnset(featureID);
   }
@@ -258,8 +310,27 @@ public class GroupByColumnFullImpl extends OrGroupByColumnImpl implements GroupB
         return colGrBy != null;
       case SqlPackage.GROUP_BY_COLUMN_FULL__GB_FUNCTION:
         return gbFunction != null;
+      case SqlPackage.GROUP_BY_COLUMN_FULL__GR_BY_INT:
+        return grByInt != GR_BY_INT_EDEFAULT;
     }
     return super.eIsSet(featureID);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public String toString()
+  {
+    if (eIsProxy()) return super.toString();
+
+    StringBuffer result = new StringBuffer(super.toString());
+    result.append(" (grByInt: ");
+    result.append(grByInt);
+    result.append(')');
+    return result.toString();
   }
 
 } //GroupByColumnFullImpl

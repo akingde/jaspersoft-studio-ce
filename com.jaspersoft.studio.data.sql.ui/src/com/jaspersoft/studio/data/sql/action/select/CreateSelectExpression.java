@@ -12,12 +12,14 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.sql.action.select;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.window.Window;
-import org.eclipse.swt.widgets.Display;
 
 import com.jaspersoft.studio.data.sql.action.AAction;
 import com.jaspersoft.studio.data.sql.dialogs.EditSelectExpressionDialog;
+import com.jaspersoft.studio.data.sql.messages.Messages;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelect;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelectExpression;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelectSubQuery;
@@ -26,7 +28,7 @@ import com.jaspersoft.studio.model.ANode;
 public class CreateSelectExpression extends AAction {
 
 	public CreateSelectExpression(TreeViewer treeViewer) {
-		super("Add E&xpression", treeViewer);
+		super(Messages.CreateSelectExpression_0, treeViewer);
 	}
 
 	@Override
@@ -46,8 +48,8 @@ public class CreateSelectExpression extends AAction {
 	@Override
 	public void run() {
 		EditSelectExpressionDialog dialog = new EditSelectExpressionDialog(
-				Display.getDefault().getActiveShell());
-		MSelectExpression mexpr = new MSelectExpression(null, " ");
+				UIUtils.getShell());
+		MSelectExpression mexpr = new MSelectExpression(null, Messages.CreateSelectExpression_1);
 		dialog.setValue(mexpr);
 		if (dialog.open() == Window.OK) {
 			Object sel = selection[0];
