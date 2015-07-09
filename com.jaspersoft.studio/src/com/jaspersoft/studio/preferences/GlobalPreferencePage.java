@@ -106,19 +106,19 @@ public class GlobalPreferencePage extends FieldEditorPreferencePage implements I
 				fini = new File(new URI(getInstallationPath()));
 				System.out.println("Fini: " + fini.toString());
 				defaultLogProperties = new File(fini.getParent(), "log.properties");
-				if (!defaultLogProperties.exists()) {
-					defaultLogProperties.getParentFile().mkdirs();
-					defaultLogProperties.createNewFile();
+				if (!getDefultLogProperties().exists()) {
+					getDefultLogProperties().getParentFile().mkdirs();
+					getDefultLogProperties().createNewFile();
 					File tmp = getTemplate();
 					if (tmp != null)
 						try {
-							FileUtils.copyFile(tmp, defaultLogProperties);
+							FileUtils.copyFile(tmp, getDefultLogProperties());
 						} catch (IOException e) {
 							e.printStackTrace();
 							return;
 						}
 				}
-				System.out.println("DP: " + defaultLogProperties.toString() + " " + defaultLogProperties.exists());
+				System.out.println("DP: " + getDefultLogProperties().toString() + " " + getDefultLogProperties().exists());
 			} catch (IOException e) {
 				e.printStackTrace();
 			} catch (URISyntaxException e) {
@@ -190,7 +190,7 @@ public class GlobalPreferencePage extends FieldEditorPreferencePage implements I
 				if (getBooleanValue()) {
 					String fname = logFile.getStringValue();
 					if (Misc.isNullOrEmpty(fname)) {
-						fname = defaultLogProperties.toString();
+						fname = getDefultLogProperties().toString();
 						File tmp = getTemplate();
 						if (tmp != null)
 							try {
@@ -243,7 +243,7 @@ public class GlobalPreferencePage extends FieldEditorPreferencePage implements I
 		if (enableLoggers.getBooleanValue()) {
 			String lfile = getPreferenceStore().getString(LOG_FILE);
 			if (Misc.isNullOrEmpty(lfile)) {
-				lfile = defaultLogProperties.toString();
+				lfile = getDefultLogProperties().toString();
 				getPreferenceStore().putValue(LOG_FILE, lfile);
 			}
 			if (!Misc.isNullOrEmpty(lfile)) {
@@ -251,7 +251,7 @@ public class GlobalPreferencePage extends FieldEditorPreferencePage implements I
 					File file = new File(lfile);
 					if (file.exists())
 						tLogPreview.setText(FileUtils.readFileToString(file));
-					else if (lfile.equals(defaultLogProperties.toString())) {
+					else if (lfile.equals(getDefultLogProperties().toString())) {
 						File tmp = getTemplate();
 						if (tmp != null)
 							tLogPreview.setText(FileUtils.readFileToString(tmp));
@@ -264,6 +264,12 @@ public class GlobalPreferencePage extends FieldEditorPreferencePage implements I
 			}
 		} else
 			tLogPreview.setText("");
+	}
+
+	private static File getDefultLogProperties() {
+		if (defaultLogProperties == null)
+			initVars();
+		return defaultLogProperties;
 	}
 
 	private static File template;
