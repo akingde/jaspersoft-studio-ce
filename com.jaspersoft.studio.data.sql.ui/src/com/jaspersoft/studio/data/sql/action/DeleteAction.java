@@ -29,7 +29,7 @@ import com.jaspersoft.studio.utils.Misc;
 public class DeleteAction<T extends ANode> extends AMultiSelectionAction {
 	protected String name;
 	protected Class<T> type;
-	private SQLQueryDesigner designer;
+	protected SQLQueryDesigner designer;
 
 	public DeleteAction(SQLQueryDesigner designer, TreeViewer treeViewer,
 			String name, Class<T> type) {

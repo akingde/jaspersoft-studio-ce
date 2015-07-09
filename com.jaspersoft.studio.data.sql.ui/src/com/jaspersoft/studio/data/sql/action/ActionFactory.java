@@ -89,8 +89,9 @@ public class ActionFactory {
 				boolean gn = super.isGoodNode(element);
 				if (!gn
 						&& element.getValue() instanceof MQueryTable
-						|| (element.getParent() != null && isGoodNode(element
-								.getParent())))
+						|| (!designer.isDiagram()
+								&& element.getParent() != null && isGoodNode(element
+									.getParent())))
 					return true;
 				return gn;
 			}

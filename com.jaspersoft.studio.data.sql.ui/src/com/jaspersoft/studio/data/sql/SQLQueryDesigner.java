@@ -127,6 +127,10 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 		return sf;
 	}
 
+	public boolean isDiagram() {
+		return tabFolder.getSelectionIndex() == 2;
+	}
+
 	// private boolean warned = false;
 
 	// private void showWarning() {
