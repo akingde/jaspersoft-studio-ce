@@ -1863,9 +1863,6 @@ public class ModelUtils {
 		if(!ObjectUtils.equals(param1.getValueClassName(),param2.getValueClassName())){
 			return false;
 		}
-		if(!ObjectUtils.equals(param1.getNestedType(),param2.getNestedType())){
-			return false;
-		}
 		if(!ObjectUtils.equals(param1.getNestedTypeName(),param2.getNestedTypeName())){
 			return false;
 		}
