@@ -192,6 +192,7 @@ public class BigNumericInput extends ADataInput {
 		if (value != null && value instanceof Number) {
 			NumberFormat nformat = NumberFormat.getInstance(Locale.US);
 			nformat.setGroupingUsed(false);
+			nformat.setMaximumFractionDigits(Integer.MAX_VALUE);
 			num.setText(nformat.format(value));
 		} else
 			num.setText("");
