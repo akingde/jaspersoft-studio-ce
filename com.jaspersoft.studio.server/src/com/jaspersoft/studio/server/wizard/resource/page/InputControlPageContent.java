@@ -127,8 +127,11 @@ public class InputControlPageContent extends APageContent implements
 		});
 
 		rebind();
+		reset = true;
 		return composite;
 	}
+
+	private boolean reset = false;
 
 	@Override
 	protected void rebind() {
@@ -175,7 +178,7 @@ public class InputControlPageContent extends APageContent implements
 			setPageComplete(newSelector.isPageComplete());
 		}
 		if (newSelector != cSelector) {
-			if (newSelector != null) {
+			if (newSelector != null && reset) {
 				cleanResource();
 				newSelector.resetResource();
 			}
