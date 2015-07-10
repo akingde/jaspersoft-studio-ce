@@ -19,6 +19,7 @@ import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import org.apache.commons.io.FileUtils;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.URIUtil;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.FileFieldEditor;
@@ -103,7 +104,7 @@ public class GlobalPreferencePage extends FieldEditorPreferencePage implements I
 		System.out.println("INITVARS");
 		if (fini == null) {
 			try {
-				fini = new File(new URI(getInstallationPath()));
+				fini = new File(URIUtil.fromString(getInstallationPath()));
 				System.out.println("Fini: " + fini.toString());
 				defaultLogProperties = new File(fini.getParent(), "log.properties");
 				initDefaultLogProperties();
