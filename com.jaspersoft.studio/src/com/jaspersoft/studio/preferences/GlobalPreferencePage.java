@@ -10,7 +10,6 @@ package com.jaspersoft.studio.preferences;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 
@@ -19,7 +18,6 @@ import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import org.apache.commons.io.FileUtils;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.URIUtil;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.FileFieldEditor;
@@ -101,16 +99,13 @@ public class GlobalPreferencePage extends FieldEditorPreferencePage implements I
 	}
 
 	private static void initVars() {
-		System.out.println("INITVARS");
 		if (fini == null) {
 			try {
-				fini = new File(URIUtil.fromString(getInstallationPath()));
+				fini = new File(getInstallationPath());
 				System.out.println("Fini: " + fini.toString());
 				defaultLogProperties = new File(fini.getParent(), "log.properties");
 				initDefaultLogProperties();
 			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (URISyntaxException e) {
 				e.printStackTrace();
 			}
 		}
@@ -129,7 +124,6 @@ public class GlobalPreferencePage extends FieldEditorPreferencePage implements I
 					return;
 				}
 		}
-		System.out.println("DP: " + defaultLogProperties.toString() + " " + defaultLogProperties.exists());
 	}
 
 	@Override
@@ -209,9 +203,10 @@ public class GlobalPreferencePage extends FieldEditorPreferencePage implements I
 				} else
 					cfg = ConfigurationManager.buildCommandLineVMarg("-Djava.util.logging.config.file", null);
 				try {
+					// create a backup first
 					if (fini.exists())
 						FileUtils.copyFile(fini, new File(fini.toString() + ".bak"));
-					// create a backup first
+
 					if (!fini.exists()) {
 						fini.getParentFile().mkdirs();
 						fini.createNewFile();
@@ -245,30 +240,38 @@ public class GlobalPreferencePage extends FieldEditorPreferencePage implements I
 	}
 
 	public void showLogFile() {
-		if (enableLoggers.getBooleanValue()) {
-			String lfile = getPreferenceStore().getString(LOG_FILE);
-			if (Misc.isNullOrEmpty(lfile)) {
-				lfile = getDefaultLogProperties().toString();
-				getPreferenceStore().putValue(LOG_FILE, lfile);
-			}
-			if (!Misc.isNullOrEmpty(lfile)) {
-				try {
-					File file = new File(lfile);
-					if (file.exists())
-						tLogPreview.setText(FileUtils.readFileToString(file));
-					else if (lfile.equals(getDefaultLogProperties().toString())) {
-						File tmp = getTemplate();
-						if (tmp != null)
-							tLogPreview.setText(FileUtils.readFileToString(tmp));
-					} else
-						tLogPreview.setText("File Not Found");
-				} catch (IOException e) {
-					tLogPreview.setText(e.getLocalizedMessage() + "\n" + e.toString());
-					e.printStackTrace();
+		if (refresh)
+			return;
+		refresh = true;
+		try {
+			if (enableLoggers.getBooleanValue()) {
+				String lfile = getPreferenceStore().getString(LOG_FILE);
+				if (Misc.isNullOrEmpty(lfile)) {
+					lfile = getDefaultLogProperties().toString();
+					getPreferenceStore().putValue(LOG_FILE, lfile);
 				}
-			}
-		} else
-			tLogPreview.setText("");
+				logFile.load();
+				if (!Misc.isNullOrEmpty(lfile)) {
+					try {
+						File file = new File(lfile);
+						if (file.exists())
+							tLogPreview.setText(FileUtils.readFileToString(file));
+						else if (lfile.equals(getDefaultLogProperties().toString())) {
+							File tmp = getTemplate();
+							if (tmp != null)
+								tLogPreview.setText(FileUtils.readFileToString(tmp));
+						} else
+							tLogPreview.setText("File Not Found");
+					} catch (IOException e) {
+						tLogPreview.setText(e.getLocalizedMessage() + "\n" + e.toString());
+						e.printStackTrace();
+					}
+				}
+			} else
+				tLogPreview.setText("");
+		} finally {
+			refresh = false;
+		}
 	}
 
 	private static File getDefaultLogProperties() {
@@ -309,6 +312,8 @@ public class GlobalPreferencePage extends FieldEditorPreferencePage implements I
 		logFile.setEnabled(enable, getFieldEditorParent());
 		tLogPreview.setEnabled(enable);
 	}
+
+	private boolean refresh = false;
 
 	@Override
 	public void propertyChange(PropertyChangeEvent event) {
