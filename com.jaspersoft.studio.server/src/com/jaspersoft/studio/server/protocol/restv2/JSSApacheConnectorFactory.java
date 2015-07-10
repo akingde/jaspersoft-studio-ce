@@ -45,9 +45,8 @@ public class JSSApacheConnectorFactory extends ApacheConnectorProvider {
 	}
 
 	public Response delete(Builder builder, IProgressMonitor monitor)
-			throws Exception {
-		builder.header("X-HTTP-Method-Override", "DELETE");
-		return doWait(builder.async().post(), monitor);
+			throws Exception { 
+		return doWait(builder.async().delete(), monitor);
 	}
 
 	public Response post(Builder builder, Entity<?> entity,
