@@ -9,7 +9,6 @@ import java.io.IOException;
 
 import net.sf.jasperreports.eclipse.AbstractJRUIPlugin;
 
-import org.eclipse.jface.util.Util;
 import org.osgi.framework.BundleContext;
 
 import com.jaspersoft.jasperreports.customvisualization.CVConstants;
@@ -85,17 +84,9 @@ public class CustomVisualizationActivator extends AbstractJRUIPlugin {
 			pathToRequireJs = "file:/" + pathToRequireJs;
 			//}
 			
-			// We store the property only in the JasperReports property store, so the property can be actually changed by the user.
-			// The plugin will not override existing keys.
-			
-			if (PreferencesUtils.getJasperReportsProperty(CVConstants.CV_REQUIREJS_PROPERTY) == null)
-			{
-				PreferencesUtils.storeJasperReportsProperty(CVConstants.CV_REQUIREJS_PROPERTY, pathToRequireJs);
-			}
-			
-			if (PreferencesUtils.getJasperReportsProperty(SCRIPTS_PATH) == null)
-			{
-				PreferencesUtils.storeJasperReportsProperty(SCRIPTS_PATH, "com/jaspersoft/jasperreports/customvisualization/resources/require/.*");
-			}
+			// Force the properties values in order to avoid problems with different Studio versions
+			// See Bugzilla #42275.
+			PreferencesUtils.storeJasperReportsProperty(CVConstants.CV_REQUIREJS_PROPERTY, pathToRequireJs);
+			PreferencesUtils.storeJasperReportsProperty(SCRIPTS_PATH, "com/jaspersoft/jasperreports/customvisualization/resources/require/.*"); //$NON-NLS-1$
 	}
 }

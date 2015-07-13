@@ -47,7 +47,6 @@ public class PropertiesPreferencePage extends FieldEditorOverlayPage {
 	 * types of preferences. Each field editor knows how to save and restore itself.
 	 */
 	public void createFieldEditors() {
-
 		addField(new SearchPropertyListFieldEditor(
 				"properties_list", Messages.PropertiesPreferencePage_jrPropertiesTitle, getFieldEditorParent())); //$NON-NLS-1$
 	}

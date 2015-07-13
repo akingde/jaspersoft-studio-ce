@@ -35,9 +35,11 @@ import com.jaspersoft.studio.jasper.ComponentConverterManager;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.plugin.ExtensionManager;
 import com.jaspersoft.studio.preferences.GlobalPreferencePage;
+import com.jaspersoft.studio.preferences.util.PreferencesUtils;
 import com.jaspersoft.studio.property.PostSetValueManager;
 import com.jaspersoft.studio.statistics.UsageManager;
 import com.jaspersoft.studio.utils.BrandingInfo;
+import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.DriversManager;
 import com.jaspersoft.studio.utils.jasper.ExtensionLoader;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
@@ -102,6 +104,13 @@ public class JaspersoftStudioPlugin extends AbstractJRUIPlugin {
 		JRPropertiesUtil.getInstance(DefaultJasperReportsContext.getInstance()).setProperty(key, c.getProperty(key));
 		key = "net.sf.jasperreports.default.font.size"; //$NON-NLS-1$
 		JRPropertiesUtil.getInstance(DefaultJasperReportsContext.getInstance()).setProperty(key, c.getProperty(key));
+		
+		// Fix some JasperReports properties installation related.
+		// See Bugzilla #42275.
+		String defJRProperty = DefaultJasperReportsContext.getInstance().getProperty("net.sf.jasperreports.compiler.classpath"); //$NON-NLS-1$
+		PreferencesUtils.storeJasperReportsProperty("net.sf.jasperreports.compiler.classpath", Misc.nvl(defJRProperty)); //$NON-NLS-1$
+		defJRProperty =  DefaultJasperReportsContext.getInstance().getProperty("net.sf.jasperreports.compiler.temp.dir"); //$NON-NLS-1$
+		PreferencesUtils.storeJasperReportsProperty("net.sf.jasperreports.compiler.temp.dir", Misc.nvl(defJRProperty)); //$NON-NLS-1$
 	}
 
 	/**
