@@ -23,6 +23,10 @@ import org.eclipse.jface.resource.ImageDescriptor;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.callout.MCallout;
+import com.jaspersoft.studio.editor.tools.MCustomTool;
+import com.jaspersoft.studio.editor.tools.ToolManager;
+import com.jaspersoft.studio.editor.tools.ToolModfiedListener;
+import com.jaspersoft.studio.editor.tools.ToolTemplateCreationEntry;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.MBreak;
 import com.jaspersoft.studio.model.MEllipse;
@@ -61,7 +65,7 @@ public class JDPaletteFactory {
 		if (ignore == null)
 			ignore = new ArrayList<String>();
 		PaletteRoot paletteRoot = new PaletteRoot();
-
+		
 		createToolBar(paletteRoot);
 
 		ExtensionManager m = JaspersoftStudioPlugin.getExtensionManager();
@@ -166,6 +170,19 @@ public class JDPaletteFactory {
 		paletteEntry.setToolClass(JDCreationTool.class);
 		return paletteEntry;
 	}
+	
+	/**
+	 * Create an entry for a custom tool and add it to the palette
+	 * 
+	 * @param tool the custom tool
+	 * @param container the viewer of the palette where this tool will be added
+	 */
+	protected static void createToolEntry(MCustomTool tool, PaletteDrawer container) {
+		ToolTemplateCreationEntry paletteEntry = new ToolTemplateCreationEntry(tool.getName(),
+			tool.getDescription(), tool,  new JDPaletteCreationFactory(tool), tool.getIconSmall(), tool.getIconBig(), container);
+		// Override default CreationTool class with ours
+		paletteEntry.setToolClass(JDCreationTool.class);
+	}
 
 	public static PaletteDrawer createElements(PaletteRoot paletteRoot, List<String> ignore, PaletteGroup p,
 			Map<String, List<PaletteEntry>> map) {
@@ -208,16 +225,46 @@ public class JDPaletteFactory {
 	 */
 	public static void createFields(PaletteRoot paletteRoot, List<String> ignore, PaletteGroup p,
 			Map<String, List<PaletteEntry>> map) {
-		PaletteDrawer drawer = createGroup(paletteRoot, ignore, p.getName(), p.getImage());
-
+		final PaletteDrawer drawer = createGroup(paletteRoot, ignore, p.getName(), p.getImage());
 		drawer.add(createJDEntry(MPageNumber.getIconDescriptor(), MPageNumber.class));
 		drawer.add(createJDEntry(MTotalPages.getIconDescriptor(), MTotalPages.class));
 		drawer.add(createJDEntry(MDate.getIconDescriptor(), MDate.class));
 		drawer.add(createJDEntry(MTime.getIconDescriptor(), MTime.class));
 		drawer.add(createJDEntry(MPercentage.getIconDescriptor(), MPercentage.class));
 		drawer.add(createJDEntry(MPageXofY.getIconDescriptor(), MPageXofY.class));
-
+		
+		//Load inside the palette the custom tools
+		for(MCustomTool cutstomTool : ToolManager.INSTANCE.getAvailableTools()){
+			createToolEntry(cutstomTool,drawer);
+		}
 		getEntries4Key(drawer, ignore, p.getId(), map);
+		
+		/**
+		 * Add the modify listener to the tools manager to get notified when the toolset
+		 * changes
+		 */
+		ToolManager.INSTANCE.addModifyListener(new ToolModfiedListener() {
+			
+			/**
+			 * Update the palette when a tool is added or removed
+			 */
+			@Override
+			public void toolChanged(MCustomTool tool, OPERATION_TYPE operation) {
+				if (operation == OPERATION_TYPE.ADD){
+					createToolEntry(tool, drawer);
+				} else if (operation == OPERATION_TYPE.DELETE){
+					for(Object entry : drawer.getChildren()){
+						if (entry instanceof ToolTemplateCreationEntry){
+							ToolTemplateCreationEntry factory = (ToolTemplateCreationEntry)entry;
+							if (factory.getTemplate() == tool){
+								drawer.remove(factory);
+								break;
+							}
+						}
+					}
+				}
+			}
+		});
 	}
 
 	public static PaletteDrawer createGroup(PaletteRoot paletteRoot, List<String> ignore, String name,

@@ -115,6 +115,11 @@ public class DefaultManager {
 	private HashMap<Class<?>, MGraphicElement> selectedDefaultsMap;
 	
 	/**
+	 * Flag used to disable the application of a default, even if it is set
+	 */
+	private boolean disableDefaults = false;
+	
+	/**
 	 * Resource listener used to see when a resource is deleted and update the template 
 	 * list if the resource was a template set
 	 */
@@ -313,7 +318,7 @@ public class DefaultManager {
 	 * @return true if there is a default selected, false otherwise
 	 */
 	public boolean hasDefault(){
-		return actualDefault != null && defaultReport != null;
+		return !disableDefaults && actualDefault != null && defaultReport != null;
 	}
 	
 	/**
@@ -608,4 +613,22 @@ public class DefaultManager {
 		}
 	}
 	
+	/**
+	 * Check if the default were disabled 
+	 * 
+	 * @return true if the defaults are disabled, false otherwise
+	 */
+	public boolean isDisabled(){
+		return disableDefaults;
+	}
+	
+	/**
+	 * Enable or disable the using of defaults, without unload
+	 * the eventually loaded defaults
+	 * 
+	 * @param value true if the defaults are enabled, false otherwise
+	 */
+	public void setDisabled(boolean value){
+		disableDefaults = value;
+	}
 }

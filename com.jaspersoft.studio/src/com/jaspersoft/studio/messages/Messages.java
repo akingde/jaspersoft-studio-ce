@@ -359,6 +359,8 @@ public class Messages extends NLS {
 	public static String CreateStyleCommand_style_name_dialog_text;
 	public static String CreateStyleTemplateAction_create_style_template;
 	public static String CreateStyleTemplateAction_create_style_template_tool_tip;
+	public static String CreateToolAction_actionName;
+	public static String CreateToolAction_successMessage;
 	public static String CreateVariableAction_create_variable;
 	public static String CreateVariableAction_create_variable_tool_tip;
 	public static String CSVColDataAction_0;
@@ -514,6 +516,9 @@ public class Messages extends NLS {
 	public static String DeleteGroupReportAction_delete_group_tool_tip;
 	public static String DeleteGuideCommand_delete_guide;
 	public static String DeleteResourceAction_0;
+	public static String DeleteToolAction_actionName;
+	public static String DeleteToolAction_messageDescription;
+	public static String DeleteToolAction_messageTitle;
 	public static String DesignerPreferencePage_advancedDefault;
 	public static String DesignerPreferencePage_autoresizeBand;
 	public static String DesignerPreferencePage_centerEditorOption;
@@ -1901,6 +1906,15 @@ public class Messages extends NLS {
 	public static String TitleSection_Expression_Label;
 	public static String TitleSection_Position_Label;
 	public static String TitleSection_Title_Label;
+	public static String ToolDefinitionWizardPage_description;
+	public static String ToolDefinitionWizardPage_descriptionLabel;
+	public static String ToolDefinitionWizardPage_errorDescriptionEmpty;
+	public static String ToolDefinitionWizardPage_errorIcon;
+	public static String ToolDefinitionWizardPage_errorNameEmpry;
+	public static String ToolDefinitionWizardPage_errorNameUsed;
+	public static String ToolDefinitionWizardPage_iconLabel;
+	public static String ToolDefinitionWizardPage_title;
+	public static String ToolDefinitionWizardPage_titleLabel;
 	public static String ToolItemsPreferencePage_0;
 	public static String WHyperlink_AddBtn;
 	public static String WHyperlink_AddParameterDialogLbl1;

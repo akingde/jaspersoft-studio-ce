@@ -37,7 +37,6 @@ import org.eclipse.jface.dialogs.MessageDialogWithToggle;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DropTargetEvent;
-import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
@@ -88,13 +87,6 @@ public class JSSTemplateTransferDropTargetListener extends TemplateTransferDropT
 		return new JDPaletteCreationFactory(template);
 	}
 	
-	@Override
-	public Transfer getTransfer() {
-		// TODO Auto-generated method stub
-		return super.getTransfer();
-	}
-	
-
 	/**
 	 * Get a compound command and a list of commands and add to the compound command every command in the list
 	 * 

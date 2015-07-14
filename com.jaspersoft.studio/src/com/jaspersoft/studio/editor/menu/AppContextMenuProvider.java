@@ -77,6 +77,7 @@ import com.jaspersoft.studio.editor.outline.actions.ExportStyleAsTemplateAction;
 import com.jaspersoft.studio.editor.outline.actions.RefreshTemplateStyleExpression;
 import com.jaspersoft.studio.editor.outline.actions.ResetStyleAction;
 import com.jaspersoft.studio.editor.report.ReportContainer;
+import com.jaspersoft.studio.editor.tools.CreateToolAction;
 import com.jaspersoft.studio.formatting.actions.CenterInParentAction;
 import com.jaspersoft.studio.formatting.actions.DecreaseHSpaceAction;
 import com.jaspersoft.studio.formatting.actions.DecreaseVSpaceAction;
@@ -229,6 +230,10 @@ public class AppContextMenuProvider extends AContextMenuProvider {
 			menu.appendToGroup(GEFActionConstants.GROUP_COPY, action);
 		
 		action = getActionRegistry().getAction(EncloseIntoFrameAction.ID);
+		if (action.isEnabled())
+			menu.appendToGroup(GEFActionConstants.GROUP_COPY, action);
+		
+		action = getActionRegistry().getAction(CreateToolAction.ID);
 		if (action.isEnabled())
 			menu.appendToGroup(GEFActionConstants.GROUP_COPY, action);
 		

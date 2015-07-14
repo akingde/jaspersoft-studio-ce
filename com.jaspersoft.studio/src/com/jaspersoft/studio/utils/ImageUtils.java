@@ -19,6 +19,7 @@ import org.eclipse.core.runtime.Assert;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.wb.swt.ResourceManager;
@@ -82,6 +83,56 @@ public class ImageUtils {
 			gc.dispose();
 		}
 		return scaled;
+	}
+	
+	/**
+	 * Resize an image keeping its ratio. The resized edge is the bigger one, and the other
+	 * is resized as well to keep the proportion
+	 * 
+	 * @param size the size of the bigger edge of the image, must be a positive value
+	 * @param source the source image, must be not null and not disposed. The image
+	 * is not disposed by this method
+	 * @return the result image data where the width or height (depends which was
+	 * the bigger one) is of the specified size
+	 */
+	public static ImageData resizeKeepingRatio(int size, Image source){
+		// Sanity checks
+		Assert.isNotNull(source, "The image to resize can not be null.");
+		Assert.isTrue(!source.isDisposed(), "The image to resize is disposed.");
+		Assert.isTrue(size > 0, "Please specify a valid size value for the new image.");
+		int width = source.getImageData().width;
+		int height = source.getImageData().height;
+		boolean needResize = false;
+		if (width > height){
+			if (width != size){
+				height = (int)Math.round((double)(size * height)/(double)width);
+				width = size;
+				needResize = true;
+			}
+		} else {
+			if (height != size){
+				width = (int)Math.round((double)(size * width)/(double)height);
+				height = size;
+				needResize = true;
+			}
+		}
+		if (needResize){
+			// Perform resize operation using anti-alias and interpolation settings
+			Image scaled = new Image(Display.getDefault(), width, height);
+			GC gc = new GC(scaled);
+			try {
+				gc.setAntialias(SWT.ON);
+				gc.setInterpolation(SWT.HIGH);
+				gc.drawImage(source, 0, 0, source.getBounds().width, source.getBounds().height, 0, 0, width,height);
+			} finally {
+				gc.dispose();
+			}
+			ImageData result = scaled.getImageData();
+			scaled.dispose();
+			return result;
+		} else {
+			return source.getImageData();
+		}
 	}
 
 	/**
