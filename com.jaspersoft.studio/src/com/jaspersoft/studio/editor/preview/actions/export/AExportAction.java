@@ -251,7 +251,7 @@ public abstract class AExportAction extends AReportViewerAction {
 		//Read the preference from the store
 		String exporterValueString = JaspersoftStudioPlugin.getInstance().getPreferenceStore().getString(JRExporterPreferencePage.EXPORTER_OVERWRITE);
 		JRExporterPreferencePage.OVERWRITE_STATE exporterValue = JRExporterPreferencePage.OVERWRITE_STATE.ASK_EVERYTIME;
-		if (exporterValueString != null){
+		if (exporterValueString != null && !exporterValueString.isEmpty()){
 			exporterValue = JRExporterPreferencePage.OVERWRITE_STATE.valueOf(exporterValueString);
 		}
 		if (exporterValue.equals(JRExporterPreferencePage.OVERWRITE_STATE.ASK_EVERYTIME)){
