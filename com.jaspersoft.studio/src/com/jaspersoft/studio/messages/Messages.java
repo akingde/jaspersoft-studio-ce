@@ -566,6 +566,7 @@ public class Messages extends NLS {
 	public static String EditDataAdapterAction_editTooltip;
 	public static String EditGuideAction_editText;
 	public static String EditGuideAction_editTooltip;
+	public static String EditToolAction_name;
 	public static String ElementContextualMenu_contextualResetPlural;
 	public static String ElementContextualMenu_econtextualResetSingular;
 	public static String ElementLabelProvider_items_selected;

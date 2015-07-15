@@ -9,6 +9,7 @@
 package com.jaspersoft.studio.editor.palette;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -153,6 +154,52 @@ public class JDPaletteFactory {
 		return paletteRoot;
 	}
 
+	
+	/**
+	 * Create simple palette, with only a subset of the available elements
+	 * 
+	 * @return the palette root
+	 */
+	public static PaletteRoot createSimplePalette(List<String> ignore, JasperReportsConfiguration jrConfig) {
+		if (ignore == null)
+			ignore = new ArrayList<String>();
+		PaletteRoot paletteRoot = new PaletteRoot();
+		
+		createToolBar(paletteRoot);
+
+		Map<String, PaletteGroup> map = new TreeMap<String, PaletteGroup>();
+		PaletteGroup pgc = new PaletteGroup();
+		pgc.setId(IPaletteContributor.KEY_COMMON_ELEMENTS);
+		pgc.setName(Messages.common_elements);
+		pgc.setImage("icons/resources/elementgroup-16.png"); //$NON-NLS-1$
+		map.put(pgc.getId(), pgc);
+
+		pgc = new PaletteGroup();
+		pgc.setId(IPaletteContributor.KEY_COMMON_TOOLS);
+		pgc.setName(Messages.common_tools);
+		pgc.setImage("icons/resources/fields-16.png"); //$NON-NLS-1$
+		map.put(pgc.getId(), pgc);
+	
+		PaletteDrawer drawer = createGroup(paletteRoot, ignore, pgc.getName(), pgc.getImage());
+
+		drawer.add(createJDEntry(MCallout.getIconDescriptor(), MCallout.class));
+
+		drawer.add(createJDEntry(MTextField.getIconDescriptor(), MTextField.class));
+		drawer.add(createJDEntry(MStaticText.getIconDescriptor(), MStaticText.class));
+		drawer.add(createJDEntry(MImage.getIconDescriptor(), MImage.class));
+		drawer.add(createJDEntry(MBreak.getIconDescriptor(), MBreak.class));
+		drawer.add(createJDEntry(MRectangle.getIconDescriptor(), MRectangle.class));
+		drawer.add(createJDEntry(MEllipse.getIconDescriptor(), MEllipse.class));
+		drawer.add(createJDEntry(MLine.getIconDescriptor(), MLine.class));
+		drawer.add(createJDEntry(MGenericElement.getIconDescriptor(), MGenericElement.class));
+		drawer.add(createJDEntry(MFrame.getIconDescriptor(), MFrame.class));
+
+		createFields(paletteRoot, ignore, pgc, new HashMap<String, List<PaletteEntry>>());
+
+		return paletteRoot;
+	}
+
+	
 	/**
 	 * Creates a new JDPalette object.
 	 * 
@@ -237,7 +284,7 @@ public class JDPaletteFactory {
 		for(MCustomTool cutstomTool : ToolManager.INSTANCE.getAvailableTools()){
 			createToolEntry(cutstomTool,drawer);
 		}
-		getEntries4Key(drawer, ignore, p.getId(), map);
+	
 		
 		/**
 		 * Add the modify listener to the tools manager to get notified when the toolset
@@ -265,6 +312,7 @@ public class JDPaletteFactory {
 				}
 			}
 		});
+		getEntries4Key(drawer, ignore, p.getId(), map);
 	}
 
 	public static PaletteDrawer createGroup(PaletteRoot paletteRoot, List<String> ignore, String name,

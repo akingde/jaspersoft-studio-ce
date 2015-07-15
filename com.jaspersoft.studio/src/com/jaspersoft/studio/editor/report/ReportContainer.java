@@ -166,7 +166,7 @@ public class ReportContainer extends MultiPageToolbarEditorPart implements ITabb
 	@Override
 	protected void createPages() {
 		try {
-			reportEditor = new ReportEditor(jrContext);
+			reportEditor = createReportEditor(jrContext);
 			int index = addPage(reportEditor, getEditorInput());
 			setPageText(index, Messages.common_main_report);
 			setPageImage(index, reportEditor.getPartImage());
@@ -176,6 +176,16 @@ public class ReportContainer extends MultiPageToolbarEditorPart implements ITabb
 					e.getStatus());
 		}
 		getEditorSite().getActionBarContributor();
+	}
+	
+	/**
+	 * Create the editor used to edit visually the report
+	 * 
+	 * @param the current jasper reports configuration
+	 * @return a not null report editor
+	 */
+	protected ReportEditor createReportEditor(JasperReportsConfiguration context){
+		return new ReportEditor(context);
 	}
 
 	/*

@@ -313,8 +313,8 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 		@Override
 		public void partActivated(IWorkbenchPartReference partRef) {
 			IEditorPart activeEditor = partRef.getPage().getActiveEditor();
-			if (activeEditor instanceof JrxmlEditor) {
-				activeEditor = ((JrxmlEditor) activeEditor).getActiveEditor();
+			if (activeEditor instanceof AbstractJRXMLEditor) {
+				activeEditor = ((AbstractJRXMLEditor) activeEditor).getActiveEditor();
 			}
 			setActivePage(activeEditor);
 		}

@@ -138,43 +138,47 @@ public class PreviewFormatDropDownAction extends Action implements IMenuCreator 
 	 * @param parent
 	 */
 	private void createOutputMenu(Menu parent) {
-		MenuItem root = new MenuItem(parent, SWT.CASCADE);
-		menu = new Menu(parent);
-		root.setMenu(menu);
-		root.setText(Messages.ViewSettingsDropDownAction_previewFormatMenu);
 		AbstractJRXMLEditor editor = getEditor();
 		PreviewContainer preview = (PreviewContainer) editor.getEditor(AbstractJRXMLEditor.PAGE_PREVIEW);
-		viewFactory = preview.getViewFactory();
-		for (String key : viewFactory.getKeys()) {
-			if (viewFactory.isSeparator(key)) {
-				if (key.equals(ViewsFactory.EXCEL_API)
-						&& !jConfig
-								.getPropertyBoolean(JRExporterPreferencePage.COM_JASPERSOFT_STUDIO_EXPORTER_SHOW_EXCELAPI, false))
-					continue;
-				if (key.equals(ViewsFactory.X_HTML)
-						&& !jConfig.getPropertyBoolean(JRExporterPreferencePage.COM_JASPERSOFT_STUDIO_EXPORTER_SHOW_XHTML, false))
-					continue;
-				if (key.equals(ViewsFactory.HTML_NO_INTERACTIVITY)
-						&& !jConfig.getPropertyBoolean(JRExporterPreferencePage.COM_JASPERSOFT_STUDIO_EXPORTER_SHOW_HTML, false))
-					continue;
-				if (key.equals(ViewsFactory.XLS_METADATA)
-						&& !jConfig.getPropertyBoolean(
-								JRExporterPreferencePage.COM_JASPERSOFT_STUDIO_EXPORTER_SHOW_EXCELAPI_METADATA, false))
-					continue;
-				new MenuItem(menu, SWT.SEPARATOR);
-			} else {
-				creteItem(key, editor);
-			}
-		}
-
-		menu.addMenuListener(new MenuAdapter() {
-			@Override
-			public void menuShown(MenuEvent e) {
-				String actualPreview = getEditor().getDefaultViewerKey();
-				for (MenuItem item : menu.getItems()) {
-					item.setSelection(item.getText().equals(actualPreview));
+		//Don't show if the current editor has not a preview area
+		if (preview != null){
+			MenuItem root = new MenuItem(parent, SWT.CASCADE);
+			menu = new Menu(parent);
+			root.setMenu(menu);
+			root.setText(Messages.ViewSettingsDropDownAction_previewFormatMenu);
+			
+			viewFactory = preview.getViewFactory();
+			for (String key : viewFactory.getKeys()) {
+				if (viewFactory.isSeparator(key)) {
+					if (key.equals(ViewsFactory.EXCEL_API)
+							&& !jConfig
+									.getPropertyBoolean(JRExporterPreferencePage.COM_JASPERSOFT_STUDIO_EXPORTER_SHOW_EXCELAPI, false))
+						continue;
+					if (key.equals(ViewsFactory.X_HTML)
+							&& !jConfig.getPropertyBoolean(JRExporterPreferencePage.COM_JASPERSOFT_STUDIO_EXPORTER_SHOW_XHTML, false))
+						continue;
+					if (key.equals(ViewsFactory.HTML_NO_INTERACTIVITY)
+							&& !jConfig.getPropertyBoolean(JRExporterPreferencePage.COM_JASPERSOFT_STUDIO_EXPORTER_SHOW_HTML, false))
+						continue;
+					if (key.equals(ViewsFactory.XLS_METADATA)
+							&& !jConfig.getPropertyBoolean(
+									JRExporterPreferencePage.COM_JASPERSOFT_STUDIO_EXPORTER_SHOW_EXCELAPI_METADATA, false))
+						continue;
+					new MenuItem(menu, SWT.SEPARATOR);
+				} else {
+					creteItem(key, editor);
 				}
 			}
-		});
+	
+			menu.addMenuListener(new MenuAdapter() {
+				@Override
+				public void menuShown(MenuEvent e) {
+					String actualPreview = getEditor().getDefaultViewerKey();
+					for (MenuItem item : menu.getItems()) {
+						item.setSelection(item.getText().equals(actualPreview));
+					}
+				}
+			});
+		}
 	}
 }

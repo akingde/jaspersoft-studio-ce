@@ -109,6 +109,15 @@
                contentTypeId="com.jaspersoft.studio.data.dataAdapter">
          </contentTypeBinding>
       </editor>
+      <editor
+            class="com.jaspersoft.studio.editor.SimpleJRXMLEditor"
+            contributorClass="com.jaspersoft.studio.editor.JrxmlEditorContributor"
+            default="true"
+            extensions="jrtool"
+            icon="icons/jrxml_icon.png"
+            id="com.jaspersoft.studio.editor.SimpleJRXMLEditor"
+            name="JasperReports Tool Designer">
+      </editor>
    </extension>
    <extension
          point="org.eclipse.ui.perspectives">

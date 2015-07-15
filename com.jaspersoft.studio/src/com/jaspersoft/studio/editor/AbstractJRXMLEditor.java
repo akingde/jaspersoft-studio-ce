@@ -135,7 +135,7 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 	protected int activePage = 0;
 
 	/** Temporary reference to the current selection */
-	private ISelection tmpselection;
+	protected ISelection tmpselection;
 
 	/** The JasperReports version used to write this JRXML */
 	protected String version = JRXmlWriterHelper.LAST_VERSION;
@@ -145,6 +145,8 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 
 	/** Preview editor used in page 2. */
 	protected PreviewEditor previewEditor;
+	
+	protected boolean partActivated = true;
 
 	/**
 	 * Listener called when the source editor is modified
@@ -429,8 +431,6 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 		};
 		getSite().getPage().addPartListener(pl);
 	}
-
-	private boolean partActivated = true;
 
 	public boolean isPartActivated() {
 		return partActivated;

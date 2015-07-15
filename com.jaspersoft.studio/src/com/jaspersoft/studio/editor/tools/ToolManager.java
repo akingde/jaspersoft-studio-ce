@@ -43,6 +43,11 @@ import net.sf.jasperreports.engine.xml.JRXmlDigesterFactory;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
 import org.apache.commons.io.FileUtils;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResourceChangeEvent;
+import org.eclipse.core.resources.IResourceChangeListener;
+import org.eclipse.core.resources.IResourceDelta;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.commands.Command;
@@ -125,6 +130,11 @@ public class ToolManager {
 	private static final String XML_TAG_NAME = "tool"; //$NON-NLS-1$
 	
 	/**
+	 * The default extension of a jrtool
+	 */
+	public static final String TOOL_EXTENSION = ".jrtool";
+	
+	/**
 	 * List of the available tools
 	 */
 	private List<MCustomTool> availableTools = new ArrayList<MCustomTool>();
@@ -142,11 +152,33 @@ public class ToolManager {
 	 */
 	private List<ToolModfiedListener> listeners = new ArrayList<ToolModfiedListener>();
 	
+	
+	/**
+	 * Resource listener used to see when a tool is changed, and when this happen
+	 * remove it from the cache to have it reloaded updated
+	 */
+	private IResourceChangeListener resourceDeletedListener = new IResourceChangeListener() {
+		
+		@Override
+		public void resourceChanged(IResourceChangeEvent event) {
+			List<IFile> resourcesDeleted = new ArrayList<IFile>();
+			if (event.getType() == IResourceChangeEvent.POST_CHANGE && 
+						!cachedToolsMap.isEmpty()){
+				iterateResourceDelta(event.getDelta(), resourcesDeleted);
+				for(IFile resource : resourcesDeleted){
+					String resourceString = resource.getRawLocation().toOSString();
+					cachedToolsMap.remove(resourceString);
+				}
+			}
+		}
+	};
+	
 	/**
 	 * Constructor, since it's private the class can be only accessed by the INSTANCE method
 	 */
 	private ToolManager(){
 		loadTools();
+		ResourcesPlugin.getWorkspace().addResourceChangeListener(resourceDeletedListener);
 	};
 	
 	/**
@@ -243,7 +275,7 @@ public class ToolManager {
 		File storage = ConfigurationManager.getStorage(TOOL_KEY);	
 		try{
 			//Write the report on disk
-			String reportName = name + ".jrtool"; //$NON-NLS-1$
+			String reportName = name + TOOL_EXTENSION;
 			File reportFile = new File(storage, reportName);
 			String contents = JRXmlWriterHelper.writeReport(JasperReportsConfiguration.getDefaultInstance(), jd, JRXmlWriterHelper.LAST_VERSION);
 			BufferedWriter writer = new BufferedWriter(new FileWriter(reportFile));
@@ -559,6 +591,24 @@ public class ToolManager {
 	protected void firePropertyChange(MCustomTool newElement, OPERATION_TYPE operation){
 		for(ToolModfiedListener listener : listeners){
 			listener.toolChanged(newElement, operation);
+		}
+	}
+	
+	/**
+	 * Recursive method called when some resource changes, it search for edited tools inside
+	 * the delta hierarchy
+	 * 
+	 * @param delta actual level of the delta hierarchy
+	 * @param editedResources the list of edited resources actually found
+	 */
+	private void iterateResourceDelta(IResourceDelta delta, List<IFile> editedResources){
+		if (delta.getKind() == IResourceDelta.CHANGED && 
+					delta.getResource().getName().equalsIgnoreCase(TOOL_EXTENSION) &&
+						delta.getResource() instanceof IFile){
+			editedResources.add((IFile)delta.getResource());
+		}
+		for(IResourceDelta affectedResource : delta.getAffectedChildren()){
+			iterateResourceDelta(affectedResource, editedResources);
 		}
 	}
 }

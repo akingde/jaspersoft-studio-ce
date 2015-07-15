@@ -52,6 +52,7 @@ import org.eclipse.ui.part.FileEditorInput;
 import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.background.MBackgrounImage;
+import com.jaspersoft.studio.editor.AbstractJRXMLEditor;
 import com.jaspersoft.studio.editor.IMultiEditor;
 import com.jaspersoft.studio.editor.JrxmlEditor;
 import com.jaspersoft.studio.editor.util.StringInput;
@@ -76,7 +77,7 @@ public class SelectionHelper {
 	}
 
 	public static ANode getNode(JRDesignElement jrElement) {
-		JrxmlEditor jrxmlEditor = (JrxmlEditor) getActiveJRXMLEditor();
+		AbstractJRXMLEditor jrxmlEditor = (AbstractJRXMLEditor) getActiveJRXMLEditor();
 		MRoot root = (MRoot) jrxmlEditor.getModel();
 		ANode node = ((MReport) root.getChildren().get(0)).getNode(jrElement);
 		return node;

@@ -19,6 +19,7 @@ import org.eclipse.gef.ui.palette.PaletteViewer;
 import org.eclipse.jface.action.IMenuManager;
 
 import com.jaspersoft.studio.editor.tools.DeleteToolAction;
+import com.jaspersoft.studio.editor.tools.EditToolAction;
 import com.jaspersoft.studio.editor.tools.ToolTemplateCreationEntry;
 
 /**
@@ -48,6 +49,7 @@ public class JSSPaletteContextMenuProvider extends PaletteContextMenuProvider {
 		EditPart selectedPart = (EditPart) getPaletteViewer().getSelectedEditParts().get(0);
 		if (selectedPart.getModel() instanceof ToolTemplateCreationEntry){
 			menu.appendToGroup(GEFActionConstants.GROUP_REST, new DeleteToolAction((ToolTemplateCreationEntry)selectedPart.getModel()));
+			menu.appendToGroup(GEFActionConstants.GROUP_REST, new EditToolAction((ToolTemplateCreationEntry)selectedPart.getModel()));
 		}
 	}
 }

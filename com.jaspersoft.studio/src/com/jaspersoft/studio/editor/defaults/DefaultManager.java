@@ -123,7 +123,7 @@ public class DefaultManager {
 	 * Resource listener used to see when a resource is deleted and update the template 
 	 * list if the resource was a template set
 	 */
-	IResourceChangeListener resourceDeletedListener = new IResourceChangeListener() {
+	private IResourceChangeListener resourceDeletedListener = new IResourceChangeListener() {
 		
 		@Override
 		public void resourceChanged(IResourceChangeEvent event) {
