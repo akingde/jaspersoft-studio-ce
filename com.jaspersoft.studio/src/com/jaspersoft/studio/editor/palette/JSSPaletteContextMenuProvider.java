@@ -13,10 +13,10 @@
 package com.jaspersoft.studio.editor.palette;
 
 import org.eclipse.gef.EditPart;
-import org.eclipse.gef.ui.actions.GEFActionConstants;
 import org.eclipse.gef.ui.palette.PaletteContextMenuProvider;
 import org.eclipse.gef.ui.palette.PaletteViewer;
 import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.Separator;
 
 import com.jaspersoft.studio.editor.tools.DeleteToolAction;
 import com.jaspersoft.studio.editor.tools.EditToolAction;
@@ -32,6 +32,11 @@ import com.jaspersoft.studio.editor.tools.ToolTemplateCreationEntry;
 public class JSSPaletteContextMenuProvider extends PaletteContextMenuProvider {
 
 	/**
+	 * Context menu group for actions of the custom tools
+	 */
+	public static final String GROUP_TOOL = "com.jaspersoft.studio.editor.palette.group.tool"; //$NON-NLS-1$	
+	
+	/**
 	 * Create the context menu provider for the palette
 	 * 
 	 * @param palette a not null palette
@@ -45,11 +50,14 @@ public class JSSPaletteContextMenuProvider extends PaletteContextMenuProvider {
 	 * the menu will be added the action to delete the selected custom tool
 	 */
 	public void buildContextMenu(IMenuManager menu) {
-		super.buildContextMenu(menu);
-		EditPart selectedPart = (EditPart) getPaletteViewer().getSelectedEditParts().get(0);
-		if (selectedPart.getModel() instanceof ToolTemplateCreationEntry){
-			menu.appendToGroup(GEFActionConstants.GROUP_REST, new DeleteToolAction((ToolTemplateCreationEntry)selectedPart.getModel()));
-			menu.appendToGroup(GEFActionConstants.GROUP_REST, new EditToolAction((ToolTemplateCreationEntry)selectedPart.getModel()));
+		if (getPaletteViewer().getSelectedEditParts().size() == 1){	
+			EditPart selectedPart = (EditPart) getPaletteViewer().getSelectedEditParts().get(0);
+			if (selectedPart.getModel() instanceof ToolTemplateCreationEntry){
+				menu.add(new Separator(GROUP_TOOL));
+				menu.appendToGroup(GROUP_TOOL, new DeleteToolAction((ToolTemplateCreationEntry)selectedPart.getModel()));
+				menu.appendToGroup(GROUP_TOOL, new EditToolAction((ToolTemplateCreationEntry)selectedPart.getModel()));
+			}
 		}
+		super.buildContextMenu(menu);
 	}
 }

@@ -829,18 +829,21 @@ public class StylesListSection extends AbstractSection {
 			leftStringColor = SWTResourceManager.getColor(42, 96, 213);
 		}
 		JRStyle defaultValue = getElement().getJasperDesign().getDefaultStyle();
-		List<INode> list = getStylesRoot(getElement()).getChildren();
-		List<INode> externalList = new ArrayList<INode>();
-		for (INode style : list) {
-			if (style instanceof MStyle) {
-				MStyle element = (MStyle) style;
-				styleMaps.put(getStyleKey(element), new StyleContainer(element));
-				if (element.getValue() == defaultValue) defaultStyle = element;
-			} else if (style instanceof MStyleTemplate) {
-				externalList.add(style);
+		ANode stylesRoot = getStylesRoot(getElement());
+		if (stylesRoot != null){
+			List<INode> list = stylesRoot.getChildren();
+			List<INode> externalList = new ArrayList<INode>();
+			for (INode style : list) {
+				if (style instanceof MStyle) {
+					MStyle element = (MStyle) style;
+					styleMaps.put(getStyleKey(element), new StyleContainer(element));
+					if (element.getValue() == defaultValue) defaultStyle = element;
+				} else if (style instanceof MStyleTemplate) {
+					externalList.add(style);
+				}
 			}
+			recursiveReadStyles(externalList, null,defaultValue);
 		}
-		recursiveReadStyles(externalList, null,defaultValue);
 	}
 	
 	/**
@@ -879,9 +882,12 @@ public class StylesListSection extends AbstractSection {
 			getElement().getRoot().getPropertyChangeSupport().removePropertyChangeListener(this);
 			getElement().getRoot().getPropertyChangeSupport().addPropertyChangeListener(this);
 			// Set the handler for every style also because in this way an update of the style is immediately reflected
-			for (INode style : getStylesRoot(getElement()).getChildren()) {
-				style.getPropertyChangeSupport().removePropertyChangeListener(this);
-				style.getPropertyChangeSupport().addPropertyChangeListener(this);
+			ANode stylesRoot = getStylesRoot(getElement());
+			if (stylesRoot != null){
+				for (INode style : stylesRoot.getChildren()) {
+					style.getPropertyChangeSupport().removePropertyChangeListener(this);
+					style.getPropertyChangeSupport().addPropertyChangeListener(this);
+				}
 			}
 		}
 		shown = true;

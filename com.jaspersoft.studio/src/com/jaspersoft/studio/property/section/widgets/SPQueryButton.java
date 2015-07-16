@@ -12,6 +12,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.section.widgets;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignQuery;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -24,6 +25,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.editor.SimpleJRXMLEditor;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.MQuery;
 import com.jaspersoft.studio.model.MReport;
@@ -31,6 +34,7 @@ import com.jaspersoft.studio.model.dataset.MDataset;
 import com.jaspersoft.studio.property.dataset.dialog.DatasetDialog;
 import com.jaspersoft.studio.property.descriptor.pattern.dialog.PatternEditor;
 import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.utils.SelectionHelper;
 
 /**
  * A button that when clicked open the edit query dialog
@@ -86,11 +90,15 @@ public class SPQueryButton<T extends IPropertyDescriptor> extends ASPropertyWidg
 		editQueryButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				PatternEditor wizard = new PatternEditor();
-				Object queryText = mquery.getPropertyValue(JRDesignQuery.PROPERTY_TEXT);
-				wizard.setValue(queryText != null ? queryText.toString() : "");
-				new DatasetDialog(editQueryButton.getShell(), mdataset, mquery.getJasperConfiguration(), section
-						.getEditDomain().getCommandStack()).open();
+				if (SelectionHelper.getActiveJRXMLEditor() instanceof SimpleJRXMLEditor){
+					UIUtils.showInformation(Messages.SPQueryButton_editorNotSuppoertedMessage);
+				} else {
+					PatternEditor wizard = new PatternEditor();
+					Object queryText = mquery.getPropertyValue(JRDesignQuery.PROPERTY_TEXT);
+					wizard.setValue(queryText != null ? queryText.toString() : ""); //$NON-NLS-1$
+					new DatasetDialog(editQueryButton.getShell(), mdataset, mquery.getJasperConfiguration(), section
+							.getEditDomain().getCommandStack()).open();
+				}
 			}
 		});
 	}

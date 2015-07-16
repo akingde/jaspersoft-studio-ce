@@ -1793,6 +1793,7 @@ public class Messages extends NLS {
 	public static String SPLegendAlignementEnum_right;
 	public static String SPLegendAlignementEnum_top;
 	public static String SPPixel_errorMeasureUnit;
+	public static String SPQueryButton_editorNotSuppoertedMessage;
 	public static String StretchToContentAction_name;
 	public static String StretchToContentAction_tooltip;
 	public static String StudioPreferencePage_checkForUpdates;

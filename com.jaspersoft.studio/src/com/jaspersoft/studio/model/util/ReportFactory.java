@@ -143,6 +143,22 @@ public class ReportFactory {
 		return node;
 	}
 	
+	/**
+	 * Create a minimal report structure (only root and detail and title bands) for
+	 * the simple jrxml editor
+	 */
+	public static INode createToolReport(JasperReportsConfiguration jConfig) {
+		JasperDesign jd = jConfig.getJasperDesign();
+		ANode node = new MRoot(null, jd);
+		ANode report = new MReport(node, jConfig);
+		//Create the background element
+		new MBackgrounImage(report);
+		createTitleDetailBands(jd, report);
+		MCallout.createCallouts(report);
+
+		return node;
+	}
+	
 //	private static void createReportParts(JasperDesign jd, ANode report) {
 //		// Create Part(s) inside Group Header section(s)
 //		if (jd.getGroupsList() != null) {
@@ -195,6 +211,27 @@ public class ReportFactory {
 //		}
 //	}
 
+	/**
+	 * Create the nodes only for the title and the first detail band
+	 */
+	private static void createTitleDetailBands(JasperDesign jd, ANode report) {
+		MBand title = new MBand(report, jd.getTitle(), BandTypeEnum.TITLE, -1);
+		if (jd.getTitle() != null){
+			createElementsForBand(title, jd.getTitle().getChildren());
+		}
+		
+		if (jd.getDetailSection() != null) {
+			JRBand[] bandsList = jd.getDetailSection().getBands();
+			if (bandsList != null){
+				if (bandsList.length > 0 && bandsList[0] != null){
+					MBand detBand = new MBand(report, bandsList[0], BandTypeEnum.DETAIL, -1);
+					createElementsForBand(detBand, bandsList[0].getChildren());
+				} else {
+					new MBand(report, null, BandTypeEnum.DETAIL, -1);
+				}
+			}
+		}
+	}
 
 	private static void createReportBands(JasperDesign jd, ANode report) {
 		MBand title = new MBand(report, jd.getTitle(), BandTypeEnum.TITLE, -1);

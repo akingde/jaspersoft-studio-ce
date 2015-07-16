@@ -473,9 +473,12 @@ public class SimpleJRXMLEditor extends AbstractJRXMLEditor implements  IJROBject
 		return reportContainer;
 	}
 
+	/**
+	 * Create a simpler report model for the tool
+	 */
 	@Override
 	protected INode createEditorModel() {
-		return ReportFactory.createReport(jrContext);
+		return ReportFactory.createToolReport(jrContext);
 	}
 
 	/**

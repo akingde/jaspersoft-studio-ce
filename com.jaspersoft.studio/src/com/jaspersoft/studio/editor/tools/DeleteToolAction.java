@@ -16,6 +16,13 @@ import java.text.MessageFormat;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
+import org.eclipse.core.filesystem.EFS;
+import org.eclipse.core.filesystem.IFileStore;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.action.Action;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
@@ -47,6 +54,19 @@ public class DeleteToolAction extends Action {
 		boolean confirmDelete = UIUtils.showConfirmation(Messages.DeleteToolAction_messageTitle,question);
 		if (confirmDelete){
 			ToolManager.INSTANCE.deleteTool(tool);
+			//If it is in the workspace delete the link to the file also
+			try {
+				IFileStore fileStore = EFS.getLocalFileSystem().getStore(new Path(tool.getPath()));
+				if (!fileStore.fetchInfo().isDirectory()) {
+					IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+					IFile[] files = root.findFilesForLocationURI(fileStore.toURI());
+					if (files != null && files.length > 0){
+						 files[0].delete(true, new NullProgressMonitor());
+					}
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	
