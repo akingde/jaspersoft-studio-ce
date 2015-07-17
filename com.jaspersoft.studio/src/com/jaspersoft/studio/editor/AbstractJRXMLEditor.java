@@ -145,7 +145,7 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 
 	/** Preview editor used in page 2. */
 	protected PreviewEditor previewEditor;
-	
+
 	protected boolean partActivated = true;
 
 	/**
@@ -777,6 +777,7 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 				if (activePage == PAGE_SOURCEEDITOR && !xmlFresh)
 					try {
 						xml2model();
+						setPreviewDirty(true);
 					} catch (Exception e) {
 						handleJRException(getEditorInput(), e, false);
 					}

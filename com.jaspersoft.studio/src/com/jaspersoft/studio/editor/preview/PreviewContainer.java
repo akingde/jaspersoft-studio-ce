@@ -551,6 +551,6 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 	public void setDirty(boolean dirty) {
 		this.isDirty = dirty;
 		if (dirty)
-			isRunDirty = true;
+			setRunDirty(true);
 	}
 }
