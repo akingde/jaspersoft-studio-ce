@@ -77,7 +77,8 @@ public class DownloadJRWizard extends JSSWizard {
 						try{
 							JRBackwardManager.INSTANCE.getJRFolder(def.getKey().getVersion(), monitor);
 						} catch(Exception ex){
-							String errorMessage = MessageFormat.format(Messages.DownloadJRWizard_errorMessage, new Object[]{def.getKey().getVersion()});
+							String url = JRBackwardManager.INSTANCE.getDefinition(def.getKey().getVersion()).getResourceURL();
+							String errorMessage = MessageFormat.format(Messages.DownloadJRWizard_errorMessage, new Object[]{def.getKey().getVersion(), url});
 							JaspersoftStudioPlugin.getInstance().logError(errorMessage, ex);
 							page1.setError(true);
 						}

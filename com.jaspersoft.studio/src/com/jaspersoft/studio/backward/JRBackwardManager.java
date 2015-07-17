@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.util.JRXmlUtils;
 
@@ -164,6 +165,16 @@ public class JRBackwardManager {
 	}
 	
 	/**
+	 * Return the definition of a specific version
+	 * 
+	 * @param version the JRVersion
+	 * @return the definition for a specific JRVersion or null if that definition can't be found
+	 */
+	public JRDefinition getDefinition(String version){
+		return definitions.get(version);
+	}
+	
+	/**
 	 * Get the folder on the filesystem containing the file of a specific definition. If
 	 * the folder is not present in the storage then it is downloaded otherwise the one
 	 * from the storage is returned. When a folder is downloaded an the JR files are
@@ -286,18 +297,23 @@ public class JRBackwardManager {
 	 * @param zipFile file to unzip
 	 * @param outputFolder folder where the unzipped files must be placed
 	 * @param monitor monitor for the operation, can be cancelled
+	 * @throws IOException 
 	 */
-	private void unZip(File zipFile, File outputFolder, IProgressMonitor monitor) {
+	private void unZip(File zipFile, File outputFolder, IProgressMonitor monitor) throws IOException {
 		byte[] buffer = new byte[1024];
+		ZipInputStream zis = null;
 		try {
 			if (!outputFolder.exists()) {
 				outputFolder.mkdir();
 			}
 			// get the zip file content
-			ZipInputStream zis = new ZipInputStream(new FileInputStream(zipFile));
+			zis = new ZipInputStream(new FileInputStream(zipFile));
 			// get the zipped file list entry
 			ZipEntry ze = zis.getNextEntry();
 			monitor.setTaskName(Messages.JRBackwardManager_extracting);
+			if (ze == null) {
+				throw new IOException("Invalid Zip");
+			}
 			while (ze != null && !monitor.isCanceled()) {
 				if (!ze.isDirectory()){
 					String fileName = ze.getName();
@@ -318,7 +334,10 @@ public class JRBackwardManager {
 			zis.closeEntry();
 			zis.close();
 		} catch (IOException ex) {
-			ex.printStackTrace();
+			org.apache.commons.io.FileUtils.deleteDirectory(outputFolder);
+			throw ex;
+		} finally {
+			FileUtils.closeStream(zis);
 		}
 	}
 	
