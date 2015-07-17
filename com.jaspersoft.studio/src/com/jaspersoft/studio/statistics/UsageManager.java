@@ -67,6 +67,11 @@ import com.jaspersoft.studio.utils.ModelUtils;
  *
  */
 public class UsageManager {
+	
+	/**
+	 * The string used when the current version can not be identified
+	 */
+	protected static final String UNKWNOW_VERSION = "Unknown"; //$NON-NLS-1$;
 
 	/**
 	 * The current used version of Jaspersfot Studio. It is initialized the first
@@ -321,13 +326,27 @@ public class UsageManager {
 	}
 	
 	/**
-	 * Return the current eclipse version
+	 * Return the current eclipse version and product name
 	 * 
 	 * @return the eclipse version
 	 */
 	protected String getEclipseVersion(){
-		Bundle bundle = Platform.getBundle("org.eclipse.platform");
-		return bundle != null ? bundle.getVersion().toString() : "Unknown";
+		try{
+			String pluginId = Platform.getProduct().getId();
+			Bundle bundle = Platform.getBundle("org.eclipse.platform");
+			String version = "";
+			if (bundle != null){
+				version = bundle.getVersion().toString();
+			}
+			if (version != null && !version.isEmpty()){
+				return pluginId + "[" + version + "]";
+			} else {
+				return pluginId + "[Unknown Version]";
+			}
+		} catch (Exception ex){
+			JaspersoftStudioPlugin.getInstance().logError(ex);
+		}
+		return UNKWNOW_VERSION;
 	}
 
 	/**
