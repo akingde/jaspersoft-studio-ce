@@ -24,6 +24,7 @@ import java.io.InputStream;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -287,8 +288,11 @@ public class ToolManager {
 	 * @param dataset the dataset of the element that is currently added part of the tool
 	 * @param detailBand the detail band where the components of the tool are placed
 	 * @param resourcesDir the directory where the resources of the tool will be placed
+	 * @param foundResources the set of resources found during the various interation, used to avoid to 
+	 * add twice or more the same resource
 	 */
-	private void checkResources(JRChild newElement, JasperReportsConfiguration jConfig, JRDesignDataset dataset, JRBand detailBand, File resourcesDir){
+	private void checkResources(JRChild newElement, JasperReportsConfiguration jConfig, JRDesignDataset dataset, 
+																JRBand detailBand, File resourcesDir, HashSet<String> foundResources){
 		if (newElement instanceof JRDesignImage){
 			JRExpression exp = ((JRDesignImage)newElement).getExpression();
 			String expression = ExpressionUtil.cachedExpressionEvaluationString(exp, jConfig, dataset);
@@ -303,11 +307,13 @@ public class ToolManager {
 					}
 					newImage.setExpression(new JRDesignExpression("\""+dest.getAbsolutePath()+"\""));
 					String requiredResources = detailBand.getPropertiesMap().getProperty(REQUIRED_RESOURCES);
-					if (requiredResources == null){
-						detailBand.getPropertiesMap().setProperty(REQUIRED_RESOURCES, dest.getName());
-					} else {
-						requiredResources += ";" + dest.getName();
-						detailBand.getPropertiesMap().setProperty(REQUIRED_RESOURCES, requiredResources);
+					if (!foundResources.contains(dest.getName())){
+						if (requiredResources == null){
+							detailBand.getPropertiesMap().setProperty(REQUIRED_RESOURCES, dest.getName());
+						} else {
+							requiredResources += ";" + dest.getName();
+							detailBand.getPropertiesMap().setProperty(REQUIRED_RESOURCES, requiredResources);
+						}
 					}
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -317,7 +323,7 @@ public class ToolManager {
 		}
 		if (newElement instanceof JRElementGroup){
 			for(JRChild childElement : ((JRElementGroup)newElement).getChildren()){
-				checkResources(childElement, jConfig, dataset, detailBand, resourcesDir);
+				checkResources(childElement, jConfig, dataset, detailBand, resourcesDir, foundResources);
 			}
 		}
 	}
@@ -391,7 +397,7 @@ public class ToolManager {
 			
 			//Copy the resources
 			JRDesignDataset jrd = ModelUtils.getFirstDatasetInHierarchy(mOriginalElement);
-			checkResources(newElement, mOriginalElement.getJasperConfiguration(), jrd, band, resourcesDir);
+			checkResources(newElement, mOriginalElement.getJasperConfiguration(), jrd, band, resourcesDir, new HashSet<String>());
 			
 			band.addElement(newElement);
 		}
@@ -561,12 +567,11 @@ public class ToolManager {
 			}
 		}
 		//Look for the resources
-		/*HashSet<String> requiredResources = new HashSet<String>();
-		String resources = toolContainer.getPropertiesMap().getProperty(REQUIRED_RESOURCES);
+		/*String resources = toolContainer.getPropertiesMap().getProperty(REQUIRED_RESOURCES);
 		if (resources != null){
 			String[] resArray = resources.split(";");
 			for(String res : resArray){
-				requiredResources.add(res);
+
 			}
 		}
 		if (!requiredResources.isEmpty()){
@@ -602,8 +607,9 @@ public class ToolManager {
 				for (int i = 0; i < adapterNodes.getLength(); ++i) {
 					try{
 						Node adapterNode = adapterNodes.item(i);
-						if (adapterNode.getNodeType() == Node.ELEMENT_NODE && adapterNode.getAttributes().getNamedItem(PROPERTY_NAME)!=null) {					
-							availableTools.add(createToolFromNode(adapterNode));			
+						if (adapterNode.getNodeType() == Node.ELEMENT_NODE && adapterNode.getAttributes().getNamedItem(PROPERTY_NAME)!=null) {
+							MCustomTool loadedTool = createToolFromNode(adapterNode);
+							if (loadedTool != null) availableTools.add(loadedTool);			
 						}
 					}catch(Exception ex){
 						ex.printStackTrace();
@@ -628,27 +634,31 @@ public class ToolManager {
 		String path = adapterNode.getAttributes().getNamedItem(PROPERTY_PATH).getNodeValue();
 		File toolFile = ConfigurationManager.getStorageResource(TOOL_KEY, path);
 		
-		//Get the icons
-		String absoluteIconPathSmall = null;
-		String absoluteIconPathBig = null;
-		Node iconNode =  adapterNode.getAttributes().getNamedItem(PROPERTY_ICON_SMALL);
-		String iconPath = iconNode != null ? iconNode.getNodeValue() : null;
-		if (iconPath != null){
-			File resource = new File(ConfigurationManager.getStorage(TOOL_KEY), iconPath);
-			absoluteIconPathSmall = resource.getAbsolutePath();
+		if (toolFile != null){
+			//Get the icons
+			String absoluteIconPathSmall = null;
+			String absoluteIconPathBig = null;
+			Node iconNode =  adapterNode.getAttributes().getNamedItem(PROPERTY_ICON_SMALL);
+			String iconPath = iconNode != null ? iconNode.getNodeValue() : null;
+			if (iconPath != null){
+				File resource = new File(ConfigurationManager.getStorage(TOOL_KEY), iconPath);
+				absoluteIconPathSmall = resource.getAbsolutePath();
+			}
+			iconNode =  adapterNode.getAttributes().getNamedItem(PROPERTY_ICON_BIG);
+			iconPath = iconNode != null ? iconNode.getNodeValue() : null;
+			if (iconPath != null){
+				File resource = new File(ConfigurationManager.getStorage(TOOL_KEY), iconPath);
+				absoluteIconPathBig = resource.getAbsolutePath();
+			}
+			
+			//get the description
+			Node descriptionNode =  adapterNode.getAttributes().getNamedItem(PROPERTY_DESCRIPTION);
+			String description = descriptionNode != null && descriptionNode.getNodeValue() != null ? descriptionNode.getNodeValue() : "A user defined custom tool";  //$NON-NLS-1$
+			
+			return new MCustomTool(name, description, toolFile.getAbsolutePath(), absoluteIconPathSmall, absoluteIconPathBig);			
+		} else {
+			return null;
 		}
-		iconNode =  adapterNode.getAttributes().getNamedItem(PROPERTY_ICON_BIG);
-		iconPath = iconNode != null ? iconNode.getNodeValue() : null;
-		if (iconPath != null){
-			File resource = new File(ConfigurationManager.getStorage(TOOL_KEY), iconPath);
-			absoluteIconPathBig = resource.getAbsolutePath();
-		}
-		
-		//get the description
-		Node descriptionNode =  adapterNode.getAttributes().getNamedItem(PROPERTY_DESCRIPTION);
-		String description = descriptionNode != null && descriptionNode.getNodeValue() != null ? descriptionNode.getNodeValue() : "A user defined custom tool";  //$NON-NLS-1$
-		
-		return new MCustomTool(name, description, toolFile.getAbsolutePath(), absoluteIconPathSmall, absoluteIconPathBig);			
 	}
 	
 	/**
