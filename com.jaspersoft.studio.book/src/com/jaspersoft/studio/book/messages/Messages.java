@@ -4,6 +4,9 @@ import org.eclipse.osgi.util.NLS;
 
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "com.jaspersoft.studio.book.messages.messages"; //$NON-NLS-1$
+	public static String AddPageWizardPage_errorExpression;
+	public static String AddPageWizardPage_pageDescription;
+	public static String AddPageWizardPage_pageTitle;
 	public static String BookPagesEditPart_errorDescription;
 	public static String BookPagesEditPart_errorTitle;
 	public static String BookWizardSectionsDynamicPage_backCoverButton;

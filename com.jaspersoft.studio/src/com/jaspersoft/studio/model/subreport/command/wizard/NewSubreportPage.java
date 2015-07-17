@@ -62,11 +62,11 @@ import com.jaspersoft.studio.wizards.ReportNewWizard;
 
 public class NewSubreportPage extends JSSWizardSelectionPage implements IExpressionContextSetter {
 
-	private Button radioButtonUseReport;
-	private WTextExpression subreportExpressionEditor;
-	private Button useReportB;
-	private Button radioButtonNewReport;
-	private ExpressionContext expContext;
+	protected Button radioButtonUseReport;
+	protected WTextExpression subreportExpressionEditor;
+	protected Button useReportB;
+	protected Button radioButtonNewReport;
+	protected ExpressionContext expContext;
 
 	public static final int NEW_REPORT = 0;
 	public static final int EXISTING_REPORT = 1;
@@ -188,24 +188,9 @@ public class NewSubreportPage extends JSSWizardSelectionPage implements IExpress
 			}
 		});
 
-		Button empty = new Button(composite, SWT.RADIO);
-		Label label = new Label(subreportExpressionEditor, SWT.NONE);
-		label.setLayoutData(new FormData());
-		FormData fd_empty = new FormData();
-		fd_empty.top = new FormAttachment(subreportExpressionEditor, 52);
-		fd_empty.left = new FormAttachment(radioButtonNewReport, 0, SWT.LEFT);
-		empty.setLayoutData(fd_empty);
-		empty.setText(Messages.NewSubreportPage_empty_text);
-		empty.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				setSelectedNode(null);
-				setUseReportEnabled();
-				setPageComplete(true);
-				handleDataChanged();
-			}
-		});
-
+		//Create the empty button
+		createEmptyButton(composite);
+		
 		handleDataChanged();
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(getControl(), "Jaspersoft.wizard");//$NON-NLS-1$
 
@@ -242,6 +227,31 @@ public class NewSubreportPage extends JSSWizardSelectionPage implements IExpress
 			}
 		});
 	}
+	
+	/**
+	 * Create the entry for the empty report elemenet
+	 * 
+	 * @param composite the pareent of the control
+	 */
+	protected void createEmptyButton(Composite composite){
+		Button empty = new Button(composite, SWT.RADIO);
+		Label label = new Label(subreportExpressionEditor, SWT.NONE);
+		label.setLayoutData(new FormData());
+		FormData fd_empty = new FormData();
+		fd_empty.top = new FormAttachment(subreportExpressionEditor, 52);
+		fd_empty.left = new FormAttachment(radioButtonNewReport, 0, SWT.LEFT);
+		empty.setLayoutData(fd_empty);
+		empty.setText(Messages.NewSubreportPage_empty_text);
+		empty.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				setSelectedNode(null);
+				setUseReportEnabled();
+				setPageComplete(true);
+				handleDataChanged();
+			}
+		});
+	}
 
 	private void setUseReportEnabled() {
 		boolean enabled = radioButtonUseReport.getSelection();
@@ -269,7 +279,7 @@ public class NewSubreportPage extends JSSWizardSelectionPage implements IExpress
 		if (contextfile != null && file.getProject().equals(contextfile.getProject())) {
 			filepath = file.getProjectRelativePath().toPortableString().replaceAll(file.getProject().getName() + "/", ""); //$NON-NLS-1$ //$NON-NLS-2$
 		} else {
-			filepath = file.getRawLocationURI().toASCIIString();
+			filepath = new File(file.getRawLocationURI()).getAbsolutePath();
 		}
 
 		selectedSubreportExpression = new JRDesignExpression();
@@ -409,7 +419,7 @@ public class NewSubreportPage extends JSSWizardSelectionPage implements IExpress
 					fname = fname.substring(0, fname.lastIndexOf(".")) + ".jrxml"; //$NON-NLS-1$ //$NON-NLS-2$
 
 				} else if (fname.endsWith(".jrxml")) { //$NON-NLS-1$
-					fname = fname.substring(0, fname.lastIndexOf(".")) + "..jasper"; //$NON-NLS-1$ //$NON-NLS-2$
+					fname = fname.substring(0, fname.lastIndexOf(".")) + ".jasper"; //$NON-NLS-1$ //$NON-NLS-2$
 				}
 
 				f = new File(f.getParent(), fname);

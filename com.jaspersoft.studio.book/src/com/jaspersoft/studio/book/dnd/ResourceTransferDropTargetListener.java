@@ -41,6 +41,7 @@ import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.dnd.TransferData;
 import org.eclipse.ui.part.ResourceTransfer;
 
+import com.jaspersoft.studio.book.JRBookActivator;
 import com.jaspersoft.studio.book.model.MReportPart;
 import com.jaspersoft.studio.book.model.MReportPartContainer;
 import com.jaspersoft.studio.book.model.commands.CreatePartAfterCommand;
@@ -173,6 +174,7 @@ public class ResourceTransferDropTargetListener extends AbstractTransferDropTarg
 					subPart.addParameter(param);
 				} catch (JRException e) {
 					e.printStackTrace();
+					JRBookActivator.getDefault().logError(e);
 				}
 			}
 			if (datasourceExp != null){
@@ -183,6 +185,7 @@ public class ResourceTransferDropTargetListener extends AbstractTransferDropTarg
 					subPart.addParameter(param);
 				} catch (JRException e) {
 					e.printStackTrace();
+					JRBookActivator.getDefault().logError(e);
 				}
 			}
 		}

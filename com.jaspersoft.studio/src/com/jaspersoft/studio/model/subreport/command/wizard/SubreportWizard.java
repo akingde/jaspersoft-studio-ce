@@ -58,7 +58,7 @@ public class SubreportWizard extends JSSWizard {
 		subreport.setValue(subreport.createJRElement(getConfig().getJasperDesign()));
 		subreport.setPropertyValue(JRDesignSubreport.PROPERTY_CONNECTION_EXPRESSION, "$P{REPORT_CONNECTION}");
 
-		step0 = new NewSubreportPage();
+		step0 = getSubreportPage();
 		step0.setSubreport(subreport);
 		addPage(step0);
 
@@ -77,6 +77,16 @@ public class SubreportWizard extends JSSWizard {
 		step0.setExpressionContext(ec);
 		step2.setExpressionContext(ec);
 		step3.setExpressionContext(ec);		
+	}
+	
+	/**
+	 * Return the first page of the wizard, where an existing report can
+	 * be selected or create a new one
+	 * 
+	 * @return a not null NewSubreportPage
+	 */
+	protected NewSubreportPage getSubreportPage(){
+		return new NewSubreportPage();
 	}
 
 	/**
