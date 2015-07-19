@@ -59,12 +59,10 @@ public class TableJoinDetail {
 	}
 
 	public MFromTableJoin getMFromTableJoin() {
-		MFromTableJoin tJoin = null;
 		if (destTbl instanceof MFromTableJoin)
-			tJoin = (MFromTableJoin) destTbl;
-		else if (srcTbl instanceof MFromTableJoin)
-			tJoin = (MFromTableJoin) srcTbl;
-
-		return tJoin;
+			return (MFromTableJoin) destTbl;
+		if (srcTbl instanceof MFromTableJoin)
+			return (MFromTableJoin) srcTbl;
+		return null;
 	}
 }

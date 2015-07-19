@@ -101,14 +101,13 @@ public class MSQLRoot extends MRoot {
 					MFromTable src = null;
 					MFromTable dest = null;
 					if (mexp.getOperands().size() == 2) {
-						for (AOperand op : mexp.getOperands()) {
+						for (AOperand op : mexp.getOperands())
 							if (op instanceof FieldOperand) {
 								if (src == null)
 									src = ((FieldOperand) op).getFromTable();
 								else if (dest == null)
 									dest = ((FieldOperand) op).getFromTable();
 							}
-						}
 						if (src != null && dest != null)
 							joins.add(new TableJoinDetail(src, dest, mexp));
 					}

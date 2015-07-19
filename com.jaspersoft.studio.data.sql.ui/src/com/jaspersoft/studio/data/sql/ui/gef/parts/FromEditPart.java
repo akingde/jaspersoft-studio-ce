@@ -241,24 +241,22 @@ public class FromEditPart extends AbstractGraphicalEditPart {
 
 			@Override
 			public boolean visit(INode n) {
+				if (list.contains(n))
+					return false;
 				if (n instanceof MUnion || n instanceof ISubQuery)
 					return false;
 				if (n instanceof MFromTable) {
 					if (n.getValue() instanceof MQueryTable) {
-						List<MFrom> lst = getFrom((ANode) n.getValue(), mfrom);
+						List<MFrom> lst = getFrom((ANode) n, mfrom);
 						if (!lst.isEmpty())
 							list.addAll(lst);
-						return false;
+						// return false;
 					} else
 						list.add((ANode) n);
 				}
 				return true;
 			}
 		};
-		// look for subquery return MFrom ...
-		List<MFrom> lst = getFrom((ANode) mfrom.getParent(), mfrom);
-		if (!lst.isEmpty())
-			list.addAll(lst);
 		return list;
 	}
 
@@ -297,7 +295,7 @@ public class FromEditPart extends AbstractGraphicalEditPart {
 					setupLayoutManager();
 					p = new Point(20, 20);
 
-					Point pmin = ((FromEditPart) parent).getMinPoint();
+					Point pmin = ((FromEditPart) parent).getMinPoint(children);
 					if (pmin != null) {
 						p.translate(pmin);
 
@@ -310,12 +308,14 @@ public class FromEditPart extends AbstractGraphicalEditPart {
 								.execute(c);
 					}
 				}
-				setupPoint(p, (FromEditPart) parent);
+				setupPoint(p, (FromEditPart) parent,
+						((FromEditPart) parent).getModelChildren());
 			}
 		} else {
 			setupLayoutManager();
 			if (parent instanceof FromEditPart)
-				setupPoint(p, (FromEditPart) parent);
+				setupPoint(p, (FromEditPart) parent,
+						((FromEditPart) parent).getModelChildren());
 		}
 
 		if (p != null) {
@@ -325,10 +325,10 @@ public class FromEditPart extends AbstractGraphicalEditPart {
 		refreshVisuals();
 	}
 
-	private void setupPoint(Point p, FromEditPart fep) {
+	private void setupPoint(Point p, FromEditPart fep, List<?> children) {
 		if (p == null)
 			return;
-		Point pmin = fep.getMinPoint();
+		Point pmin = fep.getMinPoint(children);
 		if (pmin != null) {
 			int count = getFromLevel();
 			p.translate(pmin.getNegated());
@@ -343,7 +343,7 @@ public class FromEditPart extends AbstractGraphicalEditPart {
 			count++;
 			eparent = eparent.getParent();
 		}
-		return count;
+		return count - 2;
 	}
 
 	private Point pmin;
@@ -363,7 +363,7 @@ public class FromEditPart extends AbstractGraphicalEditPart {
 				if (item instanceof APropertyNode) {
 					Point p = null;
 					if (item instanceof MFrom)
-						p = getMinPoint(((APropertyNode) item).getChildren());
+						p = getMinPoint(((MFrom) item).getChildren());
 					else
 						p = readPoint((APropertyNode) item);
 					if (p == null)

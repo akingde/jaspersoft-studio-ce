@@ -113,6 +113,9 @@ public class Messages extends NLS {
 	public static String SQLQueryDiagram_9;
 	public static String SQLEditorPreferencesPage_0;
 	public static String SQLEditorPreferencesPage_1;
+	public static String SQLEditorPreferencesPage_10;
+	public static String SQLEditorPreferencesPage_11;
+	public static String SQLEditorPreferencesPage_12;
 	public static String SQLEditorPreferencesPage_2;
 	public static String SQLEditorPreferencesPage_3;
 	public static String SQLEditorPreferencesPage_4;

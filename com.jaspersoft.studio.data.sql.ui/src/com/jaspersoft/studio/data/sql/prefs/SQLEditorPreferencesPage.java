@@ -27,6 +27,9 @@ public class SQLEditorPreferencesPage extends FieldEditorOverlayPage {
 	public static final String CTRL_DROP = "ctrl-drop"; //$NON-NLS-1$
 
 	public static final String KEEP = "keep"; //$NON-NLS-1$
+	
+	public static final String FINE = "fine"; //$NON-NLS-1$
+	public static final String COARSE = "coarse"; //$NON-NLS-1$
 
 	public static final String P_USE_JDBC_QUOTE = "com.jaspersoft.studio.data.sql.prefs.USEJDBCQUOTE"; //$NON-NLS-1$
 	public static final String P_IDENTIFIER_QUOTE = "com.jaspersoft.studio.data.sql.prefs.IDENTIFIER_QUOTE"; //$NON-NLS-1$
@@ -34,6 +37,7 @@ public class SQLEditorPreferencesPage extends FieldEditorOverlayPage {
 	public static final String P_JOIN_ON_DND = "com.jaspersoft.studio.data.sql.prefs.join_on_dnd"; //$NON-NLS-1$
 	public static final String P_DELSUBQUERY = "com.jaspersoft.studio.data.sql.prefs.delsubquery"; //$NON-NLS-1$
 	public static final String P_DEL_SHOWCONFIRMATION = "com.jaspersoft.studio.data.sql.prefs.delSHOWCONFIRMATION"; //$NON-NLS-1$
+	public static final String P_DIAGRAM_TYPE = "com.jaspersoft.studio.data.sql.prefs.diagram.type"; //$NON-NLS-1$
 
 	public SQLEditorPreferencesPage() {
 		super(GRID);
@@ -74,6 +78,12 @@ public class SQLEditorPreferencesPage extends FieldEditorOverlayPage {
 		
 		addField(new BooleanFieldEditor(P_DEL_SHOWCONFIRMATION,
 				Messages.SQLEditorPreferencesPage_9, getFieldEditorParent()));
+		
+		addField(new ComboFieldEditor(P_DIAGRAM_TYPE,
+				Messages.SQLEditorPreferencesPage_10, new String[][] {
+						{ Messages.SQLEditorPreferencesPage_11, FINE },
+						{ Messages.SQLEditorPreferencesPage_12, COARSE }  },
+				getFieldEditorParent()));
 	}
 
 	public static void getDefaults(IPreferenceStore store) {
@@ -83,6 +93,7 @@ public class SQLEditorPreferencesPage extends FieldEditorOverlayPage {
 		store.setDefault(P_IDENTIFIER_QUOTEONLYEXCEPTIONS, true); //$NON-NLS-1$
 		store.setDefault(P_JOIN_ON_DND, DROP); //$NON-NLS-1$
 		store.setDefault(P_DELSUBQUERY, ASK); //$NON-NLS-1$
+		store.setDefault(P_DIAGRAM_TYPE, FINE); //$NON-NLS-1$
 	}
 
 	public static final String PAGE_ID = "com.jaspersoft.studio.data.sql.prefs.SQLEditorPreferencesPage.property"; //$NON-NLS-1$

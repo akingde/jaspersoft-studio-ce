@@ -13,13 +13,9 @@
 package com.jaspersoft.studio.data.sql.ui.gef.parts;
 
 import org.eclipse.draw2d.BendpointConnectionRouter;
-import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
-import org.eclipse.draw2d.PolygonDecoration;
 import org.eclipse.draw2d.PolylineConnection;
-import org.eclipse.draw2d.RotatableDecoration;
-import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
@@ -91,51 +87,21 @@ public class RelationshipPart extends AbstractConnectionEditPart {
 		PolylineConnection f = (PolylineConnection) getFigure();
 		f.setToolTip(new Label(tt.toString()));
 		if (joinTable.getJoin().equals(AMKeyword.INNER_JOIN)) {
-			f.setTargetDecoration(getInnerDecoration());
-			f.setSourceDecoration(getInnerDecoration());
+			f.setTargetDecoration(RelationshipDetailPart.getInnerDecoration());
+			f.setSourceDecoration(RelationshipDetailPart.getInnerDecoration());
 		} else if (joinTable.getJoin().equals(AMKeyword.LEFT_OUTER_JOIN)) {
-			f.setTargetDecoration(getOuterDecoration());
-			f.setSourceDecoration(getInnerDecoration());
+			f.setTargetDecoration(RelationshipDetailPart.getOuterDecoration());
+			f.setSourceDecoration(RelationshipDetailPart.getInnerDecoration());
 		} else if (joinTable.getJoin().equals(AMKeyword.RIGHT_OUTER_JOIN)) {
-			f.setTargetDecoration(getInnerDecoration());
-			f.setSourceDecoration(getOuterDecoration());
+			f.setTargetDecoration(RelationshipDetailPart.getInnerDecoration());
+			f.setSourceDecoration(RelationshipDetailPart.getOuterDecoration());
 		} else if (joinTable.getJoin().equals(AMKeyword.FULL_OUTER_JOIN)) {
-			f.setTargetDecoration(getOuterDecoration());
-			f.setSourceDecoration(getOuterDecoration());
+			f.setTargetDecoration(RelationshipDetailPart.getOuterDecoration());
+			f.setSourceDecoration(RelationshipDetailPart.getOuterDecoration());
 		} else if (joinTable.getJoin().equals(AMKeyword.CROSS_JOIN)) {
-			f.setTargetDecoration(getCrossDecoration());
-			f.setSourceDecoration(getCrossDecoration());
+			f.setTargetDecoration(RelationshipDetailPart.getCrossDecoration());
+			f.setSourceDecoration(RelationshipDetailPart.getCrossDecoration());
 		}
 	}
 
-	private RotatableDecoration getInnerDecoration() {
-		PolygonDecoration srcpd = new PolygonDecoration();
-		srcpd.setTemplate(JOINDECORATOR);
-		srcpd.setBackgroundColor(ColorConstants.black);
-		return srcpd;
-	}
-
-	private RotatableDecoration getOuterDecoration() {
-		PolygonDecoration srcpd = new PolygonDecoration();
-		srcpd.setTemplate(JOINDECORATOR);
-		srcpd.setBackgroundColor(ColorConstants.white);
-		return srcpd;
-	}
-
-	private RotatableDecoration getCrossDecoration() {
-		PolygonDecoration srcpd = new PolygonDecoration();
-		srcpd.setTemplate(JOINDECORATOR);
-		srcpd.setBackgroundColor(ColorConstants.lightGray);
-		return srcpd;
-	}
-
-	public static final PointList JOINDECORATOR = new PointList();
-
-	static {
-		JOINDECORATOR.addPoint(0, 0);
-		JOINDECORATOR.addPoint(-1, 2);
-		JOINDECORATOR.addPoint(-2, 0);
-		JOINDECORATOR.addPoint(-1, -2);
-		JOINDECORATOR.addPoint(0, 0);
-	}
 }

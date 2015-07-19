@@ -41,6 +41,7 @@ import com.jaspersoft.studio.data.sql.action.table.EditTable;
 import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
 import com.jaspersoft.studio.data.sql.model.metadata.MSqlTable;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
+import com.jaspersoft.studio.data.sql.model.query.from.MFromTableJoin;
 import com.jaspersoft.studio.data.sql.model.query.from.TableJoin;
 import com.jaspersoft.studio.data.sql.model.query.from.TableJoinDetail;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelect;
@@ -152,8 +153,7 @@ public class TableEditPart extends AbstractGraphicalEditPart {
 			return;
 		Insets in = FromEditPart.INSETS;
 		p.translate(pmin.getNegated().getTranslated(-in.left, -in.top));
-		Rectangle r = new Rectangle(p.x, p.y, -1, -1);
-		parent.setLayoutConstraint(this, f, r);
+		parent.setLayoutConstraint(this, f, new Rectangle(p.x, p.y, -1, -1));
 	}
 
 	public void refreshModel() {
@@ -259,26 +259,31 @@ public class TableEditPart extends AbstractGraphicalEditPart {
 
 	@Override
 	protected List<?> getModelSourceConnections() {
-		final List<TableJoinDetail> tjs = new ArrayList<TableJoinDetail>();
-		final MFromTable m = getModel();
-		List<TableJoinDetail> joins = m.getTableJoinDetails();
-		if (joins != null)
-			for (TableJoinDetail tjd : joins)
-				checkIsConnection(tjs, m, tjd, tjd.getSrcTable());
-		if (!tjs.isEmpty())
-			return tjs;
+		String dtype = getDesigner().getjConfig().getProperty(
+				SQLEditorPreferencesPage.P_DIAGRAM_TYPE);
+		if (dtype != null && dtype.equals(SQLEditorPreferencesPage.COARSE)) {
+			if (getModel().getTableJoins() != null
+					&& !getModel().getTableJoins().isEmpty()) {
+				List<TableJoin> joins = new ArrayList<TableJoin>();
+				for (TableJoin tj : getModel().getTableJoins()) {
+					if (isSubQuery(tj))
+						continue;
+					joins.add(tj);
+				}
 
-		// if (getModel().getTableJoins() != null
-		// && !getModel().getTableJoins().isEmpty()) {
-		// List<TableJoin> joins = new ArrayList<TableJoin>();
-		// for (TableJoin tj : getModel().getTableJoins()) {
-		// if (isSubQuery(tj))
-		// continue;
-		// joins.add(tj);
-		// }
-		//
-		// return joins;
-		// }
+				return joins;
+			}
+		} else {
+			final List<TableJoinDetail> tjs = new ArrayList<TableJoinDetail>();
+			final MFromTable m = getModel();
+			List<TableJoinDetail> joins = m.getTableJoinDetails();
+			if (joins != null)
+				for (TableJoinDetail tjd : joins)
+					checkIsConnection(tjs, m, tjd, tjd.getSrcTable());
+			if (!tjs.isEmpty())
+				return tjs;
+		}
+
 		return super.getModelSourceConnections();
 	}
 
@@ -306,21 +311,26 @@ public class TableEditPart extends AbstractGraphicalEditPart {
 
 	@Override
 	protected List<?> getModelTargetConnections() {
-		List<TableJoinDetail> tjs = new ArrayList<TableJoinDetail>();
-		MFromTable m = getModel();
-		List<TableJoinDetail> joins = m.getTableJoinDetails();
-		if (joins != null)
-			for (TableJoinDetail tjd : joins)
-				checkIsConnection(tjs, m, tjd, tjd.getDestTable());
-		if (!tjs.isEmpty())
-			return tjs;
-		// if (getModel() instanceof MFromTableJoin) {
-		// List<TableJoin> joins = new ArrayList<TableJoin>();
-		// TableJoin tj = ((MFromTableJoin) getModel()).getTableJoin();
-		// if (!isSubQuery(tj))
-		// joins.add(tj);
-		// return joins;
-		// }
+		String dtype = getDesigner().getjConfig().getProperty(
+				SQLEditorPreferencesPage.P_DIAGRAM_TYPE);
+		if (dtype != null && dtype.equals(SQLEditorPreferencesPage.COARSE)) {
+			if (getModel() instanceof MFromTableJoin) {
+				List<TableJoin> joins = new ArrayList<TableJoin>();
+				TableJoin tj = ((MFromTableJoin) getModel()).getTableJoin();
+				if (!isSubQuery(tj))
+					joins.add(tj);
+				return joins;
+			}
+		} else {
+			List<TableJoinDetail> tjs = new ArrayList<TableJoinDetail>();
+			MFromTable m = getModel();
+			List<TableJoinDetail> joins = m.getTableJoinDetails();
+			if (joins != null)
+				for (TableJoinDetail tjd : joins)
+					checkIsConnection(tjs, m, tjd, tjd.getDestTable());
+			if (!tjs.isEmpty())
+				return tjs;
+		}
 		return super.getModelTargetConnections();
 	}
 

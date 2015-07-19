@@ -19,11 +19,9 @@ import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.Ellipse;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
-import org.eclipse.draw2d.PolygonDecoration;
 import org.eclipse.draw2d.PolylineConnection;
 import org.eclipse.draw2d.RotatableDecoration;
 import org.eclipse.draw2d.geometry.Point;
-import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
@@ -89,29 +87,10 @@ public class RelationshipDetailPart extends AbstractConnectionEditPart {
 	@Override
 	protected void refreshVisuals() {
 		super.refreshVisuals();
-		final StringBuffer tt = new StringBuffer();
 		TableJoinDetail m = getModel();
 		MFromTableJoin tJoin = m.getMFromTableJoin();
-		if (tJoin.getValue() instanceof MQueryTable) {
-			tt.append(tJoin.toSQLString() + QueryWriter.writeQuery(tJoin));
-		} else {
-			tt.append(tJoin.getToolTip());
-			new ModelVisitor<Object>(tJoin) {
-
-				@Override
-				public boolean visit(INode n) {
-					if (n instanceof MExpression
-							|| n instanceof MExpressionGroup) {
-						tt.append(((IQueryString) n).toSQLString());
-						return true;
-					}
-					return false;
-				}
-			};
-		}
-
 		PolylineConnection f = (PolylineConnection) getFigure();
-		f.setToolTip(new Label(tt.toString()));
+		setupToolTip(tJoin, f);
 		if (tJoin.getJoin().equals(AMKeyword.INNER_JOIN)) {
 			f.setTargetDecoration(getInnerDecoration());
 			f.setSourceDecoration(getInnerDecoration());
@@ -130,7 +109,6 @@ public class RelationshipDetailPart extends AbstractConnectionEditPart {
 		}
 
 		List<AOperand> ops = m.getExpr().getOperands();
-
 		IFigure fcol = getColumnFigure(getSource(), ops);
 		if (fcol != null)
 			f.setSourceAnchor(new LateralAnchor(fcol));
@@ -139,63 +117,66 @@ public class RelationshipDetailPart extends AbstractConnectionEditPart {
 			f.setTargetAnchor(new LateralAnchor(fcol));
 	}
 
+	private void setupToolTip(MFromTableJoin tJoin, PolylineConnection f) {
+		final StringBuffer tt = new StringBuffer();
+		if (tJoin.getValue() instanceof MQueryTable)
+			tt.append(tJoin.toSQLString() + QueryWriter.writeQuery(tJoin));
+		else {
+			tt.append(tJoin.getToolTip());
+			new ModelVisitor<Object>(tJoin) {
+
+				@Override
+				public boolean visit(INode n) {
+					if (n instanceof MExpression
+							|| n instanceof MExpressionGroup) {
+						tt.append(((IQueryString) n).toSQLString());
+						return true;
+					}
+					return false;
+				}
+			};
+		}
+		f.setToolTip(new Label(tt.toString().trim()));
+	}
+
 	private IFigure getColumnFigure(EditPart ep, List<AOperand> ops) {
 		if (ep instanceof TableEditPart) {
 			TableEditPart tep = (TableEditPart) ep;
-			for (Object p : tep.getChildren()) {
+			for (Object p : tep.getChildren())
 				if (p instanceof ColumnEditPart) {
 					ColumnEditPart fo = (ColumnEditPart) p;
-					for (AOperand o : ops) {
+					for (AOperand o : ops)
 						if (o instanceof FieldOperand
 								&& ((FieldOperand) o).getMColumn().equals(
 										fo.getModel())) {
 							return fo.getFigure();
 						}
-					}
 				}
-			}
 		}
 		return null;
 	}
 
-	private RotatableDecoration getInnerDecoration() {
-
-		// PolygonDecoration srcpd = new PolygonDecoration();
-		// srcpd.setTemplate(JOINDECORATOR);
+	public static RotatableDecoration getInnerDecoration() {
 		CircleDecoration srcpd = new CircleDecoration();
 		srcpd.setBackgroundColor(ColorConstants.black);
 		return srcpd;
 	}
 
-	private RotatableDecoration getOuterDecoration() {
-		// PolygonDecoration srcpd = new PolygonDecoration();
-		// srcpd.setTemplate(JOINDECORATOR);
+	public static RotatableDecoration getOuterDecoration() {
 		CircleDecoration srcpd = new CircleDecoration();
 		srcpd.setBackgroundColor(ColorConstants.white);
 		return srcpd;
 	}
 
-	private RotatableDecoration getCrossDecoration() {
-		// PolygonDecoration srcpd = new PolygonDecoration();
-		// srcpd.setTemplate(JOINDECORATOR);
+	public static RotatableDecoration getCrossDecoration() {
 		CircleDecoration srcpd = new CircleDecoration();
 		srcpd.setBackgroundColor(ColorConstants.lightGray);
 		return srcpd;
 	}
 
-	public static final PointList JOINDECORATOR = new PointList();
-
-	static {
-		JOINDECORATOR.addPoint(0, 0);
-		JOINDECORATOR.addPoint(-1, 2);
-		JOINDECORATOR.addPoint(-2, 0);
-		JOINDECORATOR.addPoint(-1, -2);
-		JOINDECORATOR.addPoint(0, 0);
-	}
-
-	public class CircleDecoration extends Ellipse implements
+	public static class CircleDecoration extends Ellipse implements
 			RotatableDecoration {
-		private static final int RADIUS = 5;
+		private static final int RADIUS = 3;
 		private Point location = new Point();
 
 		public CircleDecoration() {
@@ -205,8 +186,9 @@ public class RelationshipDetailPart extends AbstractConnectionEditPart {
 		@Override
 		public void setLocation(Point p) {
 			location = p;
+			int d = RADIUS * 2;
 			Rectangle bounds = new Rectangle(location.x - RADIUS, location.y
-					- RADIUS, RADIUS * 2, RADIUS * 2);
+					- RADIUS, d, d);
 			setBounds(bounds);
 		}
 

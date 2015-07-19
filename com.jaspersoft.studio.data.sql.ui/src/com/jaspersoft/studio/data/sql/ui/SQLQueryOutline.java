@@ -282,6 +282,14 @@ public class SQLQueryOutline {
 					parent = (ANode) target;
 				else if (target.getClass().isAssignableFrom(n.getClass()))
 					parent = ((ANode) target).getParent();
+				else if (target instanceof ANode
+						&& n instanceof ANode
+						&& n != null
+						&& ((ANode) target).getParent() != null
+						&& ((ANode) target).getParent().equals(
+								((ANode) n).getParent()))
+					parent = ((ANode) target).getParent();
+
 				if (n.getParent().equals(parent)) {
 					int ind = parent.getChildren().indexOf(n);
 					if (ind >= 0 && ind < parent.getChildren().size()) {
