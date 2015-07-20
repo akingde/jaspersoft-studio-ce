@@ -31,6 +31,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.barcode.BarcodeNodeIconDescriptor;
+import com.jaspersoft.studio.components.barcode.messages.Messages;
 import com.jaspersoft.studio.components.barcode.model.MBarcode;
 import com.jaspersoft.studio.editor.defaults.DefaultManager;
 import com.jaspersoft.studio.model.ANode;
@@ -106,7 +107,7 @@ public class MQRCode extends MBarcode {
 		component.setCodeExpression(exp);
 		el.setComponent(component);
 		el.setComponentKey(new ComponentKey(
-				"http://jasperreports.sourceforge.net/jasperreports/components", "jr", "QRCode")); //$NON-NLS-1$
+				"http://jasperreports.sourceforge.net/jasperreports/components", "jr", "QRCode")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 		DefaultManager.INSTANCE.applyDefault(this.getClass(), el);
 
@@ -147,16 +148,16 @@ public class MQRCode extends MBarcode {
 
 		errLevelD = new NamedEnumPropertyDescriptor<ErrorCorrectionLevelEnum>(
 				QRCodeComponent.PROPERTY_ERROR_CORRECTION_LEVEL,
-				"Error Correction Level", ErrorCorrectionLevelEnum.H,
+				Messages.MQRCode_2, ErrorCorrectionLevelEnum.H,
 				NullEnum.NOTNULL);
-		errLevelD.setDescription("Error correction level.");
-		errLevelD.setCategory("QR Code");
+		errLevelD.setDescription(Messages.MQRCode_3);
+		errLevelD.setCategory(Messages.MQRCode_4);
 		desc.add(errLevelD);
 
 		PixelPropertyDescriptor margind = new PixelPropertyDescriptor(
-				QRCodeComponent.PROPERTY_MARGIN, "Margin");
-		margind.setDescription("Margin");
-		margind.setCategory("QR Code");
+				QRCodeComponent.PROPERTY_MARGIN, Messages.MQRCode_5);
+		margind.setDescription(Messages.MQRCode_6);
+		margind.setCategory("QR Code"); //$NON-NLS-1$
 		desc.add(margind);
 
 		defaultsMap.put(QRCodeComponent.PROPERTY_ERROR_CORRECTION_LEVEL,

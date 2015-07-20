@@ -55,6 +55,9 @@ public class Messages extends NLS {
 	public static String DataTypePageContent_7;
 	public static String DataTypePageContent_8;
 	public static String DeleteServerAction_desc;
+	public static String DownloadFileAction_1;
+	public static String DownloadFileAction_2;
+	public static String DownloadFileAction_3;
 	public static String DuplicateServerAction_desc;
 	public static String DuplicateServerAction_title;
 	public static String EditResourcePage_1;
@@ -68,6 +71,8 @@ public class Messages extends NLS {
 	public static String ExportMetadataAction_1;
 	public static String ExportMetadataWizard_0;
 	public static String FindReportUnit_jobname;
+	public static String FindResourceAction_0;
+	public static String FindResourceAction_1;
 	public static String FindResourceJob_0;
 	public static String FindResourcePage_1;
 	public static String FindResourcePage_10;
@@ -291,6 +296,8 @@ public class Messages extends NLS {
 	public static String ServerProfileWizard_2;
 	public static String ServerProfileWizard_3;
 	public static String ServerProfileWizardDialog_testButton;
+	public static String ShowPermissionsAction_1;
+	public static String ShowPermissionsAction_2;
 	public static String ShowPublishDialogAction_1;
 	public static String ShowPublishDialogAction_2;
 	public static String ShowPublishDialogAction_3;

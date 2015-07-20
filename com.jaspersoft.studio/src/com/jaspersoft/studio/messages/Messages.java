@@ -964,6 +964,8 @@ public class Messages extends NLS {
 	public static String JSONElementDecorator_0;
 	public static String JSONElementDecorator_2;
 	public static String JSONEscapeMembersAction_0;
+	public static String JSONMetadataExporterPreferencePage_0;
+	public static String JSONMetadataExporterPreferencePage_1;
 	public static String JSONPathDataAction_0;
 	public static String JSONPathDataAction_1;
 	public static String JSONPathDataAction_2;
@@ -1471,6 +1473,7 @@ public class Messages extends NLS {
 	public static String ParametersDialog_report_parameters;
 	public static String ParametersDialog_user_parameters;
 	public static String ParameterSetFieldEditor_0;
+	public static String ParameterSetPreferencePage_0;
 	public static String ParameterSetWizard_0;
 	public static String ParameterSetWizardPage_1;
 	public static String ParameterSetWizardPage_2;
@@ -1624,6 +1627,7 @@ public class Messages extends NLS {
 	public static String PropertyListFieldEditor_newPropertyValue;
 	public static String PropertyListFieldEditor_propertyLabel;
 	public static String PropertyListFieldEditor_valueLabel;
+	public static String RefreshResourcesAction_0;
 	public static String RefreshTemplateStyleExpression_title;
 	public static String RefreshTemplateStyleExpression_tooltip;
 	public static String RemoveHSpaceAction_actionDescription;
@@ -1746,6 +1750,8 @@ public class Messages extends NLS {
 	public static String ShowParametersAction_show_input_parameters;
 	public static String ShowPropertyViewAction_show_properties;
 	public static String ShowPropertyViewAction_show_properties_tool_tip;
+	public static String ShowRullersAction_0;
+	public static String ShowRullersAction_1;
 	public static String ShowXLSTagsAction_label;
 	public static String ShowXLSTagsAction_toolTip;
 	public static String SimpleQueryWizardDataEditorComposite_noQueryProvidedText;

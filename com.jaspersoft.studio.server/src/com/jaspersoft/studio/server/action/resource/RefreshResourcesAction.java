@@ -39,10 +39,10 @@ public class RefreshResourcesAction extends Action {
 	public RefreshResourcesAction(TreeViewer treeViewer) {
 		super();
 		setId(ActionFactory.REFRESH.getId());
-		setText("&Refresh");
+		setText(Messages.RefreshResourcesAction_0);
 		setToolTipText(Messages.common_delete);
-		setImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/eclipseicons/reload.gif"));
-		setDisabledImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/eclipseicons/reload.gif"));
+		setImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/eclipseicons/reload.gif")); //$NON-NLS-1$
+		setDisabledImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/eclipseicons/reload.gif")); //$NON-NLS-1$
 		this.treeViewer = treeViewer;
 	}
 

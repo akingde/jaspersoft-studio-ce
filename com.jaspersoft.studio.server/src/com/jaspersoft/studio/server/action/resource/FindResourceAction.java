@@ -19,6 +19,7 @@ import org.eclipse.jface.viewers.TreeViewer;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.server.ServerProvider;
+import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.protocol.Feature;
@@ -35,8 +36,8 @@ public class FindResourceAction extends Action {
 		super();
 		this.sp = sp;
 		setId(ID);
-		setText("Search");
-		setDescription("Search Resources on Jasperreports Server by name.");
+		setText(Messages.FindResourceAction_0);
+		setDescription(Messages.FindResourceAction_1);
 		setToolTipText(getDescription());
 		setImageDescriptor(JaspersoftStudioPlugin.getInstance()
 				.getImageDescriptor("icons/find_obj.gif")); //$NON-NLS-1$

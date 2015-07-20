@@ -18,9 +18,9 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
-import org.eclipse.jface.wizard.WizardDialog;
 
 import com.jaspersoft.studio.server.action.server.EditServerAction;
+import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.wizard.permission.PermissionDialog;
@@ -31,9 +31,9 @@ public class ShowPermissionsAction extends Action {
 
 	public ShowPermissionsAction(TreeViewer treeViewer) {
 		super();
-		setId("showpermission");
-		setText("&Permissions ...");
-		setToolTipText("Show Resource Permissions");
+		setId("showpermission"); //$NON-NLS-1$
+		setText(Messages.ShowPermissionsAction_1);
+		setToolTipText(Messages.ShowPermissionsAction_2);
 		this.treeViewer = treeViewer;
 	}
 

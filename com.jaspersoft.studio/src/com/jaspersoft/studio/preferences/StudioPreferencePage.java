@@ -12,6 +12,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.preferences;
 
+import net.sf.jasperreports.engine.xml.JRXmlWriter;
+
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -23,6 +25,7 @@ import org.eclipse.ui.IWorkbench;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.preferences.editor.text.TextFieldEditor;
 import com.jaspersoft.studio.preferences.util.FieldEditorOverlayPage;
 import com.jaspersoft.studio.statistics.BooleanLinkFieldEditor;
 
@@ -71,6 +74,10 @@ public class StudioPreferencePage extends FieldEditorOverlayPage {
 		separator.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,false,2,1));
 		
 		addField(new BooleanFieldEditor(JSS_TIMESTAMP_ONSAVE, Messages.StudioPreferencePage_TimestampOnSave,	getFieldEditorParent()));
+//		TextFieldEditor tfilter = new TextFieldEditor(JRXmlWriter.PROPERTY_FILTER, "Skip properties",	true, getFieldEditorParent());
+//		addField(tfilter);
+//		tfilter.getTextControl(getFieldEditorParent()).setToolTipText("All the properties that match this regular expression will be not saved into jrxml.");
+		
 		
 		addField(new BooleanFieldEditor(CHECK_FOR_UPDATE, Messages.StudioPreferencePage_checkForUpdates, getFieldEditorParent()));
 		addField(new BooleanLinkFieldEditor(JSS_SEND_USAGE_STATISTICS, Messages.StudioPreferencePage_collectUsageStatistics, getFieldEditorParent()));

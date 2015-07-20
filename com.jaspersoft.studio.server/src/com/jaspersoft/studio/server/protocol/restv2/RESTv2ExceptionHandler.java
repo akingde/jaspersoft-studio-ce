@@ -55,6 +55,8 @@ public class RESTv2ExceptionHandler {
 		case 400:
 			if (res.getHeaderString("Content-Type").equals("application/xml"))
 				handleErrorDescriptor(res, monitor, status);
+			else if (res.getHeaderString("Content-Type").equals("application/json"))
+				handleErrorDescriptor(res, monitor, status);
 		case 401:
 			throw new HttpResponseException(status, res.getStatusInfo()
 					.getReasonPhrase());

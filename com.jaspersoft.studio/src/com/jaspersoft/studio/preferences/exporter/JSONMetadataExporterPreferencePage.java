@@ -16,6 +16,7 @@ import org.eclipse.ui.IWorkbench;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.help.HelpSystem;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.StudioPreferencePage;
 import com.jaspersoft.studio.preferences.util.FieldEditorOverlayPage;
 import com.jaspersoft.studio.preferences.util.PropertiesHelper;
@@ -30,7 +31,7 @@ public class JSONMetadataExporterPreferencePage extends FieldEditorOverlayPage {
 	public JSONMetadataExporterPreferencePage() {
 		super(GRID);
 		setPreferenceStore(JaspersoftStudioPlugin.getInstance().getPreferenceStore());
-		setDescription("JSON Metadata Exporter");
+		setDescription(Messages.JSONMetadataExporterPreferencePage_0);
 	}
 
 	/**
@@ -38,7 +39,7 @@ public class JSONMetadataExporterPreferencePage extends FieldEditorOverlayPage {
 	 */
 	public void createFieldEditors() {
 		BooleanFieldEditor bf = new BooleanFieldEditor(JsonMetadataReportConfiguration.JSON_EXPORTER_ESCAPE_MEMBERS,
-				"Export Configuration Override Report Hints", getFieldEditorParent());
+				Messages.JSONMetadataExporterPreferencePage_1, getFieldEditorParent());
 		addField(bf);
 		HelpSystem.setHelp(bf.getDescriptionControl(getFieldEditorParent()),
 				StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
