@@ -15,7 +15,7 @@ import net.sf.jasperreports.export.CsvMetadataReportConfiguration;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.ui.IWorkbenchPart;
 
-import com.jaspersoft.studio.editor.gef.decorator.csv.ColumnsOrderDialog;
+import com.jaspersoft.studio.editor.gef.decorator.csv.ColumnNamesSettingDialog;
 import com.jaspersoft.studio.editor.gef.decorator.csv.NameDataChooserDialog;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.MGraphicElement;
@@ -23,16 +23,16 @@ import com.jaspersoft.studio.property.SetValueCommand;
 import com.jaspersoft.studio.utils.Misc;
 
 /**
- * This CSV action is used to display all the columns defined and to provide a dialog to change its order
+ * This CSV action is used to display all the columns defined and to provide a dialog to modify their names
  * 
  * @author Orlandin Marco
  * 
  */
-public class CSVColOrderAction extends CSVAction {
+public class CSVColSettingAction extends CSVAction {
 
 	private String columnNames;
 
-	public CSVColOrderAction(IWorkbenchPart part, String actionName) {
+	public CSVColSettingAction(IWorkbenchPart part, String actionName) {
 		super(part, CSVAction.COL_NAMES, actionName);
 	}
 
@@ -51,10 +51,10 @@ public class CSVColOrderAction extends CSVAction {
 	 */
 	@Override
 	public void run() {
-		ColumnsOrderDialog dialog = new ColumnsOrderDialog(UIUtils.getShell(), getRoot().getJasperDesign());
+		ColumnNamesSettingDialog dialog = new ColumnNamesSettingDialog(UIUtils.getShell(), getRoot().getJasperDesign());
 		int dialogResult = dialog.open();
 		if (dialogResult == NameDataChooserDialog.OK) {
-			columnNames = dialog.getOrders();
+			columnNames = dialog.getColumnNames();
 			execute(createCommand());
 		}
 	}

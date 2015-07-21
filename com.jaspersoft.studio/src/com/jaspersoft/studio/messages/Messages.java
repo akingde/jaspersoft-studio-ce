@@ -269,9 +269,9 @@ public class Messages extends NLS {
 	public static String ColorSchemaGenerator_schema_pale;
 	public static String ColorSchemaGenerator_schema_pastel;
 	public static String ColorStyledText_LineColor_ToolTip;
-	public static String ColumnsOrderDialog_1;
-	public static String ColumnsOrderDialog_2;
-	public static String ColumnsOrderDialog_ColumOrderDialog;
+	public static String ColumnNamesSettingDialog_1;
+	public static String ColumnNamesSettingDialog_2;
+	public static String ColumnNamesSettingDialog_Title;
 	public static String CompileAction_actionName;
 	public static String CompileAction_actionTooltip;
 	public static String CompileAction_addPath;
@@ -365,7 +365,7 @@ public class Messages extends NLS {
 	public static String CreateVariableAction_create_variable_tool_tip;
 	public static String CSVColDataAction_0;
 	public static String CSVColDataAction_1;
-	public static String CSVElementDecorator_changeColumnsOrder;
+	public static String CSVElementDecorator_SpecifyColumnNames;
 	public static String CSVElementDecorator_CreateColumn;
 	public static String CSVElementDecorator_CSVMenuLabel;
 	public static String CSVElementDecorator_printColumnsHeder;

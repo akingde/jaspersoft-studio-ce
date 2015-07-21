@@ -42,12 +42,15 @@ import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ModelUtils;
 
 /**
- * A dialog to display all the csv column defined and to change their order
+ * A dialog that allows to specify the column names that should be
+ * used for CSV metadata exporting.
+ * 
+ * PLEASE NOTE: we can not play with their order. See Community Bug #5136.
  * 
  * @author Orlandin Marco
  * 
  */
-public class ColumnsOrderDialog extends Dialog {
+public class ColumnNamesSettingDialog extends Dialog {
 
 	/**
 	 * A textual representation of the column names
@@ -62,7 +65,7 @@ public class ColumnsOrderDialog extends Dialog {
 	 * @param columnNames
 	 *          list of the column names, comma separated
 	 */
-	public ColumnsOrderDialog(Shell parentShell, JasperDesign jd) {
+	public ColumnNamesSettingDialog(Shell parentShell, JasperDesign jd) {
 		super(parentShell);
 		this.jd = jd;
 		String[] cols = new String[0];
@@ -153,7 +156,7 @@ public class ColumnsOrderDialog extends Dialog {
 					if (dialog.open() == Dialog.OK)
 						return dialog.getName();
 				} else
-					UIUtils.showWarning(Messages.ColumnsOrderDialog_1);
+					UIUtils.showWarning(Messages.ColumnNamesSettingDialog_1);
 				return null;
 			}
 		});
@@ -168,7 +171,7 @@ public class ColumnsOrderDialog extends Dialog {
 	private void createColumns(TableViewer viewer) {
 		TableViewerColumn colFirstName = new TableViewerColumn(viewer, SWT.NONE);
 		colFirstName.getColumn().setWidth(200);
-		colFirstName.getColumn().setText(Messages.ColumnsOrderDialog_2);
+		colFirstName.getColumn().setText(Messages.ColumnNamesSettingDialog_2);
 		colFirstName.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
@@ -178,11 +181,11 @@ public class ColumnsOrderDialog extends Dialog {
 	}
 
 	/**
-	 * return the chosen column order
+	 * return the specified column names
 	 * 
-	 * @return In this string there are the ordered sequence of column name, comma separated
+	 * @return In this string there are the sequence of column names, comma separated
 	 */
-	public String getOrders() {
+	public String getColumnNames() {
 		String r = ""; //$NON-NLS-1$
 		String sep = ""; //$NON-NLS-1$
 		for (String item : columnNames) {
@@ -197,6 +200,6 @@ public class ColumnsOrderDialog extends Dialog {
 	 * @return the title for the dialog
 	 */
 	protected String getDialogTitle() {
-		return Messages.ColumnsOrderDialog_ColumOrderDialog;
+		return Messages.ColumnNamesSettingDialog_Title;
 	}
 }

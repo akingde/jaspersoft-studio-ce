@@ -28,7 +28,7 @@ import org.eclipse.ui.actions.RetargetAction;
 
 import com.jaspersoft.studio.editor.action.csv.CSVAction;
 import com.jaspersoft.studio.editor.action.csv.CSVColDataAction;
-import com.jaspersoft.studio.editor.action.csv.CSVColOrderAction;
+import com.jaspersoft.studio.editor.action.csv.CSVColSettingAction;
 import com.jaspersoft.studio.editor.action.csv.CSVRootAction;
 import com.jaspersoft.studio.editor.gef.decorator.text.TextDecorator;
 import com.jaspersoft.studio.editor.gef.decorator.text.TextElementDecorator;
@@ -80,7 +80,7 @@ public class CSVElementDecorator extends TextElementDecorator {
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
 		
-		action = new CSVColOrderAction(part, Messages.CSVElementDecorator_changeColumnsOrder);
+		action = new CSVColSettingAction(part, Messages.CSVElementDecorator_SpecifyColumnNames);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
 		
