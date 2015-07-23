@@ -46,7 +46,7 @@ public class FrameSection extends AbstractRealValueSection {
 	@Override
 	protected void initializeProvidedProperties() {
 		super.initializeProvidedProperties();
-		addProvidedProperties(MFrame.PROPERTY_SHOW_OUT_OF_BOUND, Messages.LocationSection_xCoordinateLabel);
-		addProvidedProperties(JRDesignFrame.PROPERTY_BORDER_SPLIT_TYPE, Messages.MFrame_showOutOfBounds);
+		addProvidedProperties(MFrame.PROPERTY_SHOW_OUT_OF_BOUND, Messages.MFrame_showOutOfBounds);
+		addProvidedProperties(JRDesignFrame.PROPERTY_BORDER_SPLIT_TYPE, Messages.MFrame_splitType);
 	}
 }
