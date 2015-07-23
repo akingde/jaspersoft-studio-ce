@@ -23,6 +23,7 @@ import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.editor.defaults.DefaultManager;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.messages.MessagesByKeys;
@@ -38,6 +39,7 @@ import com.jaspersoft.studio.model.IPastableGraphic;
 import com.jaspersoft.studio.model.MGraphicElementLineBox;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
+import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.utils.Misc;
 
@@ -49,6 +51,11 @@ public class MFrame extends MGraphicElementLineBox implements IPastable, IPastab
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
+	
+	/**
+	 * Property used on JSS level to show or hide the elements placed outside the frame
+	 */
+	public static final String PROPERTY_SHOW_OUT_OF_BOUND = "ShowOutOfBoundContent"; //$NON-NLS-1$
 
 	/**
 	 * Gets the icon descriptor.
@@ -107,13 +114,17 @@ public class MFrame extends MGraphicElementLineBox implements IPastable, IPastab
 		super.createPropertyDescriptors(desc, defaultsMap);
 
 		RComboBoxPropertyDescriptor positionTypeD = new RComboBoxPropertyDescriptor(
-				JRDesignFrame.PROPERTY_BORDER_SPLIT_TYPE, "Border Split Type", new String[] { "",
+				JRDesignFrame.PROPERTY_BORDER_SPLIT_TYPE, Messages.MFrame_splitType, new String[] { "", //$NON-NLS-2$
 						MessagesByKeys.getString(BorderSplitType.NO_BORDERS.getName()),
 						MessagesByKeys.getString(BorderSplitType.DRAW_BORDERS.getName()) });
 		positionTypeD.setDescription(Messages.MGraphicElement_position_type_description);
 		desc.add(positionTypeD);
 		positionTypeD.setCategory(Messages.MGraphicElement_location_category);
-
+		
+		CheckBoxPropertyDescriptor showOutOfBoundsContent = new CheckBoxPropertyDescriptor(PROPERTY_SHOW_OUT_OF_BOUND, Messages.MFrame_showOutOfBounds);
+		showOutOfBoundsContent.setDescription(Messages.MFrame_showOutOfBoundsDescription);
+		desc.add(showOutOfBoundsContent);
+		showOutOfBoundsContent.setCategory(Messages.MGraphicElement_location_category);
 	}
 
 	@Override
@@ -121,8 +132,12 @@ public class MFrame extends MGraphicElementLineBox implements IPastable, IPastab
 		JRDesignFrame jrElement = getValue();
 		if (id.equals(JRDesignFrame.PROPERTY_BORDER_SPLIT_TYPE)) {
 			if (jrElement.getBorderSplitType() == null)
-				return "";
+				return ""; //$NON-NLS-1$
 			return MessagesByKeys.getString(jrElement.getBorderSplitType().getName());
+		} else if (id.equals(PROPERTY_SHOW_OUT_OF_BOUND)){
+			String value = jrElement.getPropertiesMap().getProperty(PROPERTY_SHOW_OUT_OF_BOUND);
+			if (value == null) return true;
+			else return Boolean.valueOf(value);
 		}
 		return super.getPropertyValue(id);
 	}
@@ -140,6 +155,9 @@ public class MFrame extends MGraphicElementLineBox implements IPastable, IPastab
 					jrElement.setBorderSplitType(BorderSplitType.DRAW_BORDERS);
 			}
 
+		} else if (id.equals(PROPERTY_SHOW_OUT_OF_BOUND)){
+			jrElement.getPropertiesMap().setProperty(PROPERTY_SHOW_OUT_OF_BOUND, Boolean.toString((Boolean)value));
+			getPropertyChangeSupport().firePropertyChange(JSSCompoundCommand.REFRESH_UI_EVENT, null, null);
 		}
 		super.setPropertyValue(id, value);
 	}

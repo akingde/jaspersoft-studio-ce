@@ -85,9 +85,11 @@ public class SearchParentDragTracker extends DragEditPartsTracker {
 	private ZoomManager zoomManager;
 	
 	/**
-	 * Flag used to know if the current drag operation contain elements with a different parent
+	 * Flag used to know if the current drag operation contain elements with a different parent or 
+	 * the parent of an element is a frame. When this flag is enabled the parent of the moved elements
+	 * never change
 	 */
-	private boolean multiParentDrag = false;
+	private boolean keepParentDrag = false;
 	
 	/**
 	 * An implementation of {@link org.eclipse.gef.AutoexposeHelper} that performs autoscrolling of a
@@ -334,7 +336,8 @@ public class SearchParentDragTracker extends DragEditPartsTracker {
 	/**
 	 * Build an set of invalid target for the drop. The invalid target are all the elements 
 	 * in the dragged selection plus their descendants. It also initialize the flag that identify
-	 * if this is a multi parent drag or not
+	 * if this is a multi parent drag or not. This flag is used also if the parent of one of the dragged
+	 * elements is a frame, since with it the same behavior of the multi drag is applied 
 	 * 
 	 * @return an hash set with the models of the invalid target elements for a drop operation
 	 */
@@ -346,10 +349,15 @@ public class SearchParentDragTracker extends DragEditPartsTracker {
 				EditPart ep = (EditPart)part;
 				INode model = (INode) ep.getModel();
 				INode currentParent = model.getParent();
-				if (lastParent == null){
-					lastParent = currentParent;
-				} else if (currentParent != lastParent){
-					multiParentDrag = true;
+				if (!keepParentDrag){
+					//Optimization: ignore the check if i've already found a behavior changer
+					if (currentParent instanceof MFrame){
+						keepParentDrag = true;
+					} else if (lastParent == null){
+						lastParent = currentParent;
+					} else if (currentParent != lastParent){
+						keepParentDrag = true;
+					}
 				}
 				result.add(model);
 				if (model instanceof IContainer) getSelectionDesendentRecursive(model.getChildren(), result);
@@ -481,7 +489,7 @@ public class SearchParentDragTracker extends DragEditPartsTracker {
 		boolean useOldBheavior = JasperReportsPlugin.isPressed(MOVE_CHILD_KEY);
 		if (useOldBheavior){
 			return super.getCommand();
-		} else if (multiParentDrag){
+		} else if (keepParentDrag){
 			return getKeepParentCommand();
 		} else {
 			return super.getCommand();
@@ -518,7 +526,7 @@ public class SearchParentDragTracker extends DragEditPartsTracker {
 	@Override
 	protected void showTargetFeedback() {
 		boolean useOldBheavior = JasperReportsPlugin.isPressed(MOVE_CHILD_KEY);
-		if (useOldBheavior || !multiParentDrag){
+		if (useOldBheavior || !keepParentDrag){
 			super.showTargetFeedback();
 		}
 	}
@@ -533,7 +541,7 @@ public class SearchParentDragTracker extends DragEditPartsTracker {
 		//At the end of the drag operation the mouse direction reset
 		firstMovment = MOUSE_DIRECTION.UNDEFINED;
 		//reset the multiparent flag
-		multiParentDrag = false;
+		keepParentDrag = false;
 	}
 	
 	/**

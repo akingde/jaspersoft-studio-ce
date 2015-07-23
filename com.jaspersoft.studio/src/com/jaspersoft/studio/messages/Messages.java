@@ -1102,6 +1102,9 @@ public class Messages extends NLS {
 	public static String MFont_pdfCategory;
 	public static String MFont_strike_trough_description;
 	public static String MFont_underline_description;
+	public static String MFrame_showOutOfBounds;
+	public static String MFrame_showOutOfBoundsDescription;
+	public static String MFrame_splitType;
 	public static String MGenericElement_evaluation_group_name;
 	public static String MGenericElement_evaluation_group_name_description;
 	public static String MGenericElement_evaluation_time_description;

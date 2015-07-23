@@ -52,6 +52,7 @@ import com.jaspersoft.studio.editor.gef.rulers.ReportRulerGuide;
 import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.band.MBand;
+import com.jaspersoft.studio.model.frame.MFrame;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.property.SetValueCommand;
@@ -953,7 +954,9 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 	}
 
 	/**
-	 * Evaluate if the current element is between the bounds of the father
+	 * Evaluate if the current element is between the bounds of the father. This 
+	 * is not done if the parent is a frame, since a frame has no constraints on the 
+	 * position of the children
 	 * 
 	 * @return a list with an informative message if the position is not valid, null
 	 * if it is valid
@@ -961,7 +964,8 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 	@Override
 	protected List<String> doValidation() {
 		boolean isValidPosition = true;
-		if (getParent() instanceof APropertyNode) {
+		ANode parent = getParent();
+		if (parent instanceof APropertyNode && !(parent instanceof MFrame)) {
 			JRDesignElement item = getValue();
 			int x = item.getX();
 			int y = item.getY();
@@ -971,17 +975,17 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 			int fh = Integer.MAX_VALUE;
 			int fw = Integer.MAX_VALUE;
 
-			if (getParent() instanceof MGraphicElement) {
+			if (parent instanceof MGraphicElement) {
 				MGraphicElement fatherModel = (MGraphicElement) getParent();
 				JRDesignElement fitem = fatherModel.getValue();
 
 				fh = fitem.getHeight();
 				fw = fitem.getWidth();
-			} else if (getParent() instanceof MBand) {
+			} else if (parent instanceof MBand) {
 				JRDesignBand band = ((MBand) getParent()).getValue();
 				fh = band.getHeight();
 				fw = getJasperDesign().getPageWidth();
-			} else if (getParent() instanceof MPage) {
+			} else if (parent instanceof MPage) {
 				// I'm into a separate editor, here the relative dimensions inside the band dosen't count
 				x = 0;
 				y = 0;
@@ -989,7 +993,7 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 				JasperDesign jd = (JasperDesign) ge.getValue();
 				fh = jd.getPageHeight();
 				fw = jd.getPageWidth();
-			} else if (getParent() instanceof IGraphicElement) {
+			} else if (parent instanceof IGraphicElement) {
 				IGraphicElement ge = (IGraphicElement) getParent();
 				Rectangle r = ge.getBounds();
 				if (r != null) {
@@ -1012,5 +1016,48 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		} else {
 			return null;
 		}
+	}
+	
+	/**
+	 * Check if the current element is inside a frame, and if that frame 
+	 * has the attribute to hide the out of bound contents check if this
+	 * element is inside or outside that bounds
+	 * 
+	 * @return true if the element should be visible, false otherwise
+	 */
+	protected boolean checkVisibleFrame(){
+		ANode parent = getParent();
+		boolean visible = true;
+		JRDesignElement currentEelement = getValue();
+		int relative_X = currentEelement.getX();
+		int relative_Y = currentEelement.getY();
+		while(parent != null && visible){
+			if (parent instanceof MFrame){
+				boolean allowOutside = (Boolean)((MFrame)parent).getPropertyValue(MFrame.PROPERTY_SHOW_OUT_OF_BOUND);
+				if (!allowOutside){
+					JRDesignElement frame = (JRDesignElement)parent.getValue();
+					Rectangle rect = new Rectangle(0, 0, frame.getWidth(), frame.getHeight());
+					if (!rect.contains(relative_X, relative_Y)){
+						visible = false; 
+					}
+				}
+			}
+			if (parent.getValue() instanceof JRDesignElement){
+				JRDesignElement jrParent = (JRDesignElement)parent.getValue();
+				relative_Y += jrParent.getY();
+				relative_X += jrParent.getX();
+			}
+			parent = parent.getParent();
+		}
+		return visible;
+	}
+	
+	/**
+	 * Check also if the element is inside a frame that hide 
+	 * the content out of his bounds
+	 */
+	@Override
+	public boolean isVisible() {
+		return super.isVisible() && checkVisibleFrame();
 	}
 }
