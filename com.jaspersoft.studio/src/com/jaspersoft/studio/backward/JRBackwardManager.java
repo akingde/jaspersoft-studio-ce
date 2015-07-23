@@ -12,9 +12,11 @@
  ******************************************************************************/
 package com.jaspersoft.studio.backward;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
@@ -23,10 +25,18 @@ import java.net.URL;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.JRException;
@@ -36,6 +46,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.osgi.service.prefs.BackingStoreException;
 import org.osgi.service.prefs.Preferences;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
@@ -53,6 +64,27 @@ import com.jaspersoft.studio.preferences.util.PropertiesHelper;
  *
  */
 public class JRBackwardManager {
+	
+	/**
+	 * name of the xml file containing the definitions of the available JR versions, a definition of 
+	 * each version is composed of the version number and the URL to the zip file containing that version
+	 */
+	private static final String DOWNLOAD_LINKS_FILE = "index.xml"; //$NON-NLS-1$
+	
+	/**
+	 * Tagname used in the xml for a JR definition entry
+	 */
+	private static final String JR_TAG_NAME = "jr_definition";
+	
+	/**
+	 * Name of the XML attribute for the version of JR
+	 */
+	private static final String LINK_ATTRIBUTE_NAME = "link";
+	
+	/**
+	 * Name of the XML attribute for the url where a JR can be found
+	 */
+	private static final String VERSION_ATTRIBUTE_NAME = "version";
 	
 	/**
 	 * Instance of the class, since it is a singleton
@@ -115,33 +147,7 @@ public class JRBackwardManager {
 	 * Build the class and add to the list the supported JR version with the URL to dowload them
 	 */
 	protected JRBackwardManager(){
-		definitions = new HashMap<String, JRDefinition>();
-		orderedDefinitions = new ArrayList<JRDefinition>();
 		loadPreferences();
-		addDefinition(new JRDefinition("http://downloads.sourceforge.net/project/jasperreports/jasperreports/JasperReports%206.0.2/jasperreports-6.0.2-project.zip?r=&ts=1425379686&use_mirror=switch", "6.0.2")); //$NON-NLS-1$ //$NON-NLS-2$
-		addDefinition(new JRDefinition("http://downloads.sourceforge.net/project/jasperreports/jasperreports/JasperReports%206.0.0/jasperreports-6.0.0-project.zip?r=&ts=1425379810&use_mirror=softlayer-ams", "6.0.0")); //$NON-NLS-1$ //$NON-NLS-2$
-		
-		addDefinition(new JRDefinition("http://downloads.sourceforge.net/project/jasperreports/jasperreports/JasperReports%205.5.2/jasperreports-5.5.2-project.zip?r=&ts=1425053832&use_mirror=cznic", "5.5.2")); //$NON-NLS-1$ //$NON-NLS-2$
-		addDefinition(new JRDefinition("http://downloads.sourceforge.net/project/jasperreports/jasperreports/JasperReports%205.5.1/jasperreports-5.5.1-project.zip?r=&ts=1425379891&use_mirror=cznic", "5.5.1")); //$NON-NLS-1$ //$NON-NLS-2$
-		addDefinition(new JRDefinition("http://downloads.sourceforge.net/project/jasperreports/jasperreports/JasperReports%205.5.0/jasperreports-5.5.0-project.zip?r=&ts=1425379937&use_mirror=cznic", "5.5.0")); //$NON-NLS-1$ //$NON-NLS-2$
-		addDefinition(new JRDefinition("http://downloads.sourceforge.net/project/jasperreports/jasperreports/JasperReports%205.2.0/jasperreports-5.2.0-project.zip?r=&ts=1425379975&use_mirror=heanet", "5.2.0")); //$NON-NLS-1$ //$NON-NLS-2$
-		addDefinition(new JRDefinition("http://downloads.sourceforge.net/project/jasperreports/jasperreports/JasperReports%205.1.2/jasperreports-5.1.2-project.zip?r=&ts=1425380005&use_mirror=heanet", "5.1.2")); //$NON-NLS-1$ //$NON-NLS-2$
-		addDefinition(new JRDefinition("http://downloads.sourceforge.net/project/jasperreports/jasperreports/JasperReports%205.1.0/jasperreports-5.1.0-project.zip?r=&ts=1425380040&use_mirror=heanet", "5.1.0")); //$NON-NLS-1$ //$NON-NLS-2$
-		addDefinition(new JRDefinition("http://downloads.sourceforge.net/project/jasperreports/jasperreports/JasperReports%205.0.4/jasperreports-5.0.4-project.zip?r=&ts=1425380065&use_mirror=heanet", "5.0.4")); //$NON-NLS-1$ //$NON-NLS-2$
-		addDefinition(new JRDefinition("http://downloads.sourceforge.net/project/jasperreports/jasperreports/JasperReports%205.0.1/jasperreports-5.0.1-project.zip?r=&ts=1425380101&use_mirror=kent", "5.0.1")); //$NON-NLS-1$ //$NON-NLS-2$
-		
-		addDefinition(new JRDefinition("http://downloads.sourceforge.net/project/jasperreports/jasperreports/JasperReports%204.8.0/jasperreports-4.8.0-project.zip?r=&ts=1425380144&use_mirror=vorboss", "4.8.0")); //$NON-NLS-1$ //$NON-NLS-2$
-		addDefinition(new JRDefinition("http://downloads.sourceforge.net/project/jasperreports/jasperreports/JasperReports%204.7.0/jasperreports-4.7.0-project.zip?r=&ts=1425380186&use_mirror=garr", "4.7.0")); //$NON-NLS-1$ //$NON-NLS-2$
-		addDefinition(new JRDefinition("http://downloads.sourceforge.net/project/jasperreports/jasperreports/JasperReports%204.6.0/jasperreports-4.6.0-project.zip?r=&ts=1425380207&use_mirror=softlayer-ams", "4.6.0")); //$NON-NLS-1$ //$NON-NLS-2$
-	  addDefinition(new JRDefinition("http://downloads.sourceforge.net/project/jasperreports/jasperreports/JasperReports%204.5.0/jasperreports-4.5.0-project.zip?r=&ts=1425380237&use_mirror=heanet", "4.5.0")); //$NON-NLS-1$ //$NON-NLS-2$
-		addDefinition(new JRDefinition("http://downloads.sourceforge.net/project/jasperreports/jasperreports/JasperReports%204.1.3/jasperreports-4.1.3-project.zip?r=&ts=1425380274&use_mirror=freefr", "4.1.3")); //$NON-NLS-1$ //$NON-NLS-2$
-		addDefinition(new JRDefinition("http://downloads.sourceforge.net/project/jasperreports/jasperreports/JasperReports%204.1.1/jasperreports-4.1.1-project.zip?r=&ts=1425380302&use_mirror=kent", "4.1.1")); //$NON-NLS-1$ //$NON-NLS-2$
-		addDefinition(new JRDefinition("http://downloads.sourceforge.net/project/jasperreports/jasperreports/JasperReports%204.0.2/jasperreports-4.0.2-project.zip?r=&ts=1425380343&use_mirror=softlayer-ams", "4.0.2")); //$NON-NLS-1$ //$NON-NLS-2$
-		addDefinition(new JRDefinition("http://downloads.sourceforge.net/project/jasperreports/jasperreports/JasperReports%204.0.0/jasperreports-4.0.0-project.zip?r=&ts=1425380372&use_mirror=netcologne", "4.0.0")); //$NON-NLS-1$ //$NON-NLS-2$
-		
-		addDefinition(new JRDefinition("http://downloads.sourceforge.net/project/jasperreports/archive/jasperreports/JasperReports%203.7.5/jasperreports-3.7.5-project.zip?r=&ts=1425380429&use_mirror=kent", "3.7.5")); //$NON-NLS-1$ //$NON-NLS-2$
-		addDefinition(new JRDefinition("http://downloads.sourceforge.net/project/jasperreports/archive/jasperreports/JasperReports%203.7.4/jasperreports-3.7.4-project.zip?r=&ts=1425380510&use_mirror=freefr", "3.7.4")); //$NON-NLS-1$ //$NON-NLS-2$
-		addDefinition(new JRDefinition("http://downloads.sourceforge.net/project/jasperreports/archive/jasperreports/JasperReports%203.7.2/jasperreports-3.7.2-project.zip?r=&ts=1425380524&use_mirror=freefr", "3.7.2")); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 	
 	/**
@@ -156,12 +162,171 @@ public class JRBackwardManager {
 	}
 	
 	/**
-	 * Return all the added definition in the order the were inserted
+	 * Return all the added definition in the order the were inserted. The definitions
+	 * are loaded from an index file if available, located in the same storage of the 
+	 * downloaded installations. If the file could not be located some default definitions
+	 * are used
 	 * 
 	 * @return a not null list
 	 */
 	public Collection<JRDefinition> getDefinitions(){
+		if (orderedDefinitions == null){
+			loadLinks();
+		}
 		return orderedDefinitions;
+	}
+	
+	/**
+	 * Return a map of all the definitions, where the key is the version. The definitions
+	 * are loaded from an index file if available, located in the same storage of the 
+	 * downloaded installations. If the file could not be located some default definitions
+	 * are used
+	 * 
+	 * @return a not null list
+	 */
+	protected HashMap<String, JRDefinition> getDefinitionsMap(){
+		if (definitions == null){
+			loadLinks();
+		}
+		return definitions;
+	}
+	
+	/**
+	 * Load the definitions from the xml index file, if the file could not be found
+	 * or if something goes wrong with is loading then the default definitions are loaded.
+	 * If the file was not found it is created using the default definitions
+	 */
+	protected void loadLinks(){
+		//Load the index file
+		File indexFile = new File(storage, DOWNLOAD_LINKS_FILE);
+		if (indexFile.exists()){
+			try{
+				definitions = new HashMap<String, JRDefinition>();
+				orderedDefinitions = new ArrayList<JRDefinition>();
+				String xmlContent = readFile(indexFile);
+				Document document = JRXmlUtils.parse(new InputSource(new StringReader(xmlContent)));
+				NodeList adapterNodes = document.getElementsByTagName(JR_TAG_NAME);
+				for (int i = 0; i < adapterNodes.getLength(); ++i) {
+					try{
+						Node adapterNode = adapterNodes.item(i);
+						if (adapterNode.getNodeType() == Node.ELEMENT_NODE && adapterNode.getAttributes().getNamedItem(LINK_ATTRIBUTE_NAME)!=null) {
+							String link = adapterNode.getAttributes().getNamedItem(LINK_ATTRIBUTE_NAME).getNodeValue();
+							String version = adapterNode.getAttributes().getNamedItem(VERSION_ATTRIBUTE_NAME).getNodeValue();
+							addDefinition(new JRDefinition(link, version));
+						}
+					}catch(Exception ex){
+						ex.printStackTrace();
+						JaspersoftStudioPlugin.getInstance().logError(ex);
+					}
+				}
+			} catch (Exception ex){
+				ex.printStackTrace();
+				JaspersoftStudioPlugin.getInstance().logError(ex);
+				loadDefaults();
+			}
+		} else {
+			 //No index file defined, must create it
+			 loadDefaults();
+			 writeLinks();
+		}
+	}
+	
+	/**
+	 * Write the current definitions in the XML index file
+	 */
+	protected void writeLinks(){
+		//Load the index file
+		FileOutputStream oStream = null;
+		if (orderedDefinitions != null){
+			try{
+				File indexFile = new File(storage, DOWNLOAD_LINKS_FILE);
+				DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+				DocumentBuilder builder = factory.newDocumentBuilder();
+				Document document = builder.newDocument();
+				Element root = document.createElement("jr_definitions"); //$NON-NLS-1$
+				document.appendChild(root);
+				indexFile.delete();
+	
+				for(JRDefinition definition : orderedDefinitions){
+					Element newLink = document.createElement(JR_TAG_NAME);
+					newLink.setAttribute(LINK_ATTRIBUTE_NAME, definition.getResourceURL());
+					newLink.setAttribute(VERSION_ATTRIBUTE_NAME, definition.getVersion());
+					root.appendChild(newLink);
+				}
+				
+				indexFile.delete();
+				//Write the file only if there s at least an entry
+				indexFile.createNewFile();
+				TransformerFactory transformerFactory = TransformerFactory.newInstance();
+				Transformer transformer = transformerFactory.newTransformer();
+				DOMSource source = new DOMSource(document);
+				oStream = new FileOutputStream(indexFile); 
+				StreamResult result = new StreamResult(oStream);
+				indexFile.createNewFile();
+				transformer.transform(source, result);	
+			} catch (Exception ex){
+				ex.printStackTrace();
+				JaspersoftStudioPlugin.getInstance().logError(ex);
+			} finally {
+				FileUtils.closeStream(oStream);
+			}
+		}
+	}
+	
+	/**
+	 * Fallback method, load the default definitions
+	 */
+	protected void loadDefaults(){
+		definitions = new HashMap<String, JRDefinition>();
+		orderedDefinitions = new ArrayList<JRDefinition>();
+		addDefinition(new JRDefinition("http://downloads.sourceforge.net/project/jasperreports/jasperreports/JasperReports%206.0.2/jasperreports-6.0.2-project.zip?r=&ts=1425379686&use_mirror=switch", "6.0.2")); //$NON-NLS-1$ //$NON-NLS-2$
+		addDefinition(new JRDefinition("http://downloads.sourceforge.net/project/jasperreports/jasperreports/JasperReports%206.0.0/jasperreports-6.0.0-project.zip?r=&ts=1425379810&use_mirror=softlayer-ams", "6.0.0")); //$NON-NLS-1$ //$NON-NLS-2$
+		
+		addDefinition(new JRDefinition("http://downloads.sourceforge.net/project/jasperreports/jasperreports/JasperReports%205.5.2/jasperreports-5.5.2-project.zip?r=&ts=1425053832&use_mirror=cznic", "5.5.2")); //$NON-NLS-1$ //$NON-NLS-2$
+		addDefinition(new JRDefinition("http://downloads.sourceforge.net/project/jasperreports/jasperreports/JasperReports%205.5.1/jasperreports-5.5.1-project.zip?r=&ts=1425379891&use_mirror=cznic", "5.5.1")); //$NON-NLS-1$ //$NON-NLS-2$
+		addDefinition(new JRDefinition("http://downloads.sourceforge.net/project/jasperreports/jasperreports/JasperReports%205.5.0/jasperreports-5.5.0-project.zip?r=&ts=1425379937&use_mirror=cznic", "5.5.0")); //$NON-NLS-1$ //$NON-NLS-2$
+		addDefinition(new JRDefinition("http://downloads.sourceforge.net/project/jasperreports/jasperreports/JasperReports%205.2.0/jasperreports-5.2.0-project.zip?r=&ts=1425379975&use_mirror=heanet", "5.2.0")); //$NON-NLS-1$ //$NON-NLS-2$
+		addDefinition(new JRDefinition("http://downloads.sourceforge.net/project/jasperreports/jasperreports/JasperReports%205.1.2/jasperreports-5.1.2-project.zip?r=&ts=1425380005&use_mirror=heanet", "5.1.2")); //$NON-NLS-1$ //$NON-NLS-2$
+		addDefinition(new JRDefinition("http://downloads.sourceforge.net/project/jasperreports/jasperreports/JasperReports%205.1.0/jasperreports-5.1.0-project.zip?r=&ts=1425380040&use_mirror=heanet", "5.1.0")); //$NON-NLS-1$ //$NON-NLS-2$
+		addDefinition(new JRDefinition("http://downloads.sourceforge.net/project/jasperreports/jasperreports/JasperReports%205.0.4/jasperreports-5.0.4-project.zip?r=&ts=1425380065&use_mirror=heanet", "5.0.4")); //$NON-NLS-1$ //$NON-NLS-2$
+		addDefinition(new JRDefinition("http://downloads.sourceforge.net/project/jasperreports/jasperreports/JasperReports%205.0.1/jasperreports-5.0.1-project.zip?r=&ts=1425380101&use_mirror=kent", "5.0.1")); //$NON-NLS-1$ //$NON-NLS-2$
+		
+		addDefinition(new JRDefinition("http://downloads.sourceforge.net/project/jasperreports/archive/jasperreports/JasperReports%204.8.0/jasperreports-4.8.0-project.zip?r=&ts=1437661332&use_mirror=heanet", "4.8.0")); //$NON-NLS-1$ //$NON-NLS-2$
+		addDefinition(new JRDefinition("http://downloads.sourceforge.net/project/jasperreports/archive/jasperreports/JasperReports%204.7.0/jasperreports-4.7.0-project.zip?r=&ts=1437661318&use_mirror=kent", "4.7.0")); //$NON-NLS-1$ //$NON-NLS-2$
+		addDefinition(new JRDefinition("http://downloads.sourceforge.net/project/jasperreports/archive/jasperreports/JasperReports%204.6.0/jasperreports-4.6.0-project.zip?r=&ts=1437661299&use_mirror=cznic", "4.6.0")); //$NON-NLS-1$ //$NON-NLS-2$
+	  addDefinition(new JRDefinition("http://downloads.sourceforge.net/project/jasperreports/archive/jasperreports/JasperReports%204.5.0/jasperreports-4.5.0-project.zip?r=&ts=1437661276&use_mirror=vorboss", "4.5.0")); //$NON-NLS-1$ //$NON-NLS-2$
+		addDefinition(new JRDefinition("http://downloads.sourceforge.net/project/jasperreports/archive/jasperreports/JasperReports%204.1.3/jasperreports-4.1.3-project.zip?r=&ts=1437661257&use_mirror=skylink", "4.1.3")); //$NON-NLS-1$ //$NON-NLS-2$
+		addDefinition(new JRDefinition("http://downloads.sourceforge.net/project/jasperreports/archive/jasperreports/JasperReports%204.1.1/jasperreports-4.1.1-project.zip?r=&ts=1437661237&use_mirror=cznic", "4.1.1")); //$NON-NLS-1$ //$NON-NLS-2$
+		addDefinition(new JRDefinition("http://downloads.sourceforge.net/project/jasperreports/archive/jasperreports/JasperReports%204.0.2/jasperreports-4.0.2-project.tar.gz?r=&ts=1437661212&use_mirror=iweb", "4.0.2")); //$NON-NLS-1$ //$NON-NLS-2$
+		addDefinition(new JRDefinition("http://downloads.sourceforge.net/project/jasperreports/archive/jasperreports/JasperReports%204.0.0/jasperreports-4.0.0-project.zip?r=&ts=1437661159&use_mirror=freefr", "4.0.0")); //$NON-NLS-1$ //$NON-NLS-2$
+		
+		addDefinition(new JRDefinition("http://downloads.sourceforge.net/project/jasperreports/archive/jasperreports/JasperReports%203.7.5/jasperreports-3.7.5-project.zip?r=&ts=1437661136&use_mirror=skylink", "3.7.5")); //$NON-NLS-1$ //$NON-NLS-2$
+		addDefinition(new JRDefinition("http://downloads.sourceforge.net/project/jasperreports/archive/jasperreports/JasperReports%203.7.4/jasperreports-3.7.4-project.zip?r=&ts=1437661108&use_mirror=vorboss", "3.7.4")); //$NON-NLS-1$ //$NON-NLS-2$
+		addDefinition(new JRDefinition("http://downloads.sourceforge.net/project/jasperreports/archive/jasperreports/JasperReports%203.7.2/jasperreports-3.7.2-project.zip?r=&ts=1437661059&use_mirror=vorboss", "3.7.2")); //$NON-NLS-1$ //$NON-NLS-2$
+	}
+	
+	/**
+	 * Read the xml source file and convert it into a string
+	 * 
+	 * @param path the path of the file
+	 * @return the XML file
+	 */
+	private String readFile(File file){
+		BufferedReader br;
+		try {
+			br = new BufferedReader(new FileReader(file));
+			String line;
+			StringBuilder sb = new StringBuilder();
+	
+			while((line=br.readLine())!= null){
+			    sb.append(line.trim());
+			}
+			br.close();
+			return sb.toString();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	/**
@@ -171,7 +336,7 @@ public class JRBackwardManager {
 	 * @return the definition for a specific JRVersion or null if that definition can't be found
 	 */
 	public JRDefinition getDefinition(String version){
-		return definitions.get(version);
+		return getDefinitionsMap().get(version);
 	}
 	
 	/**
@@ -190,7 +355,7 @@ public class JRBackwardManager {
 	public File getJRFolder(String version, IProgressMonitor monitor) throws Exception{
 		File jrFolder = new File(storage, version);
 		if (!checkJRInstallation(jrFolder)){
-			File resource = fetchJR(definitions.get(version), monitor);
+			File resource = fetchJR(getDefinitionsMap().get(version), monitor);
 			if (resource != null && !monitor.isCanceled()){
 				unZip(resource, jrFolder, monitor);
 				fetchResource("com/jaspersoft/studio/backward/resources/JRToolKit.jar", jrFolder, "JRToolKit.jar"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -387,10 +552,14 @@ public class JRBackwardManager {
 	public List<JRDefinition> getInstallerJRs(){
 		List<JRDefinition> result = new ArrayList<JRDefinition>();
 		for(File resource : storage.listFiles()){
-			String version = resource.getName();
-			JRDefinition def = definitions.get(version);
-			if (def != null) result.add(def);
+			//check only for directory to exclude the index file
+			if (resource.isDirectory()){
+				String version = resource.getName();
+				JRDefinition def = getDefinitionsMap().get(version);
+				if (def != null) result.add(def);
+			}
 		}
+		Collections.sort(result);
 		return result;
 	}
 	
