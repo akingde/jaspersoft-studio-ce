@@ -408,7 +408,7 @@ public class UsageManager {
 	 * 
 	 * @return a not null folder where the configuration of the currently running JSS are saved
 	 */
-	private File getAppDataFolder() {
+	public File getAppDataFolder() {
 		if (appDataFolder == null) {
 			Location configArea = Platform.getInstallLocation();
 			if (configArea != null) {
