@@ -361,6 +361,24 @@ public class CompileAction extends SelectionAction implements IMenuCreator {
 	}
 
 	/**
+	 * Create the submenu for the handling of the links pointing to the
+	 * JRDefinitions
+	 * 
+	 * @param parentMenu menu where the entry is placed
+	 */
+	private void createLinkSubmenu(Menu parentMenu){
+		MenuItem manageLinks = new MenuItem(parentMenu, SWT.CASCADE);
+		manageLinks.setText(Messages.CompileAction_handleLinks);
+		manageLinks.addSelectionListener(new SelectionAdapter() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				JRBackwardManager.INSTANCE.openLinksDialog();
+			}
+		});
+	}
+	
+	/**
 	 * Return the menu used to handle the backward compatibility
 	 */
 	@Override
@@ -397,6 +415,9 @@ public class CompileAction extends SelectionAction implements IMenuCreator {
 				dialog.open();
 			}
 		});
+		
+		//Add action to manage the download links
+		createLinkSubmenu(menu);
 		return menu;
 	}
 

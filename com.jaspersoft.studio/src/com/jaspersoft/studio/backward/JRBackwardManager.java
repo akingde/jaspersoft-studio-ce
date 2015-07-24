@@ -38,11 +38,14 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.util.JRXmlUtils;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.osgi.service.prefs.BackingStoreException;
 import org.osgi.service.prefs.Preferences;
 import org.w3c.dom.Document;
@@ -696,6 +699,23 @@ public class JRBackwardManager {
 			} catch (JRException e) {
 				e.printStackTrace();
 			}
+		}
+	}
+	
+	/**
+	 * Open the dialog to edit the download links. If the dialog is closed with finish
+	 * then the defined list of links is stored and saved on the index file
+	 */
+	public void openLinksDialog(){
+		ManageLinksWizard wizard = new ManageLinksWizard();
+		WizardDialog linksDialog = new WizardDialog(UIUtils.getShell(), wizard);
+		if (linksDialog.open() == Dialog.OK){
+			orderedDefinitions = wizard.getElements();
+			definitions.clear();
+			for(JRDefinition def : orderedDefinitions){
+				definitions.put(def.getVersion(), def);
+			}
+			writeLinks();
 		}
 	}
 }

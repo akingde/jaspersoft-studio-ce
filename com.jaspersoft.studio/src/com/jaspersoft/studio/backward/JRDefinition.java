@@ -80,4 +80,12 @@ public class JRDefinition implements Comparable<JRDefinition>{
     }
     return 0;
 	}
+	
+	/**	 
+	 * Clone the current JRDefinition
+	 */
+	@Override
+	protected Object clone() {
+		return new JRDefinition(resourceURL, version);
+	}
 }

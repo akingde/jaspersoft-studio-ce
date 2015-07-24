@@ -281,6 +281,7 @@ public class Messages extends NLS {
 	public static String CompileAction_consoleMessage1;
 	public static String CompileAction_consoleMessage2;
 	public static String CompileAction_consoleMessage3;
+	public static String CompileAction_handleLinks;
 	public static String CompileAction_jobName;
 	public static String CompileAction_manage;
 	public static String CompileAction_noJRInstalled;
@@ -991,6 +992,14 @@ public class Messages extends NLS {
 	public static String common_legend;
 	public static String LegendSection_Position_Label;
 	public static String LinePenSection_lineSectionName;
+	public static String LinkWizardPage_errorAlreadyInUse;
+	public static String LinkWizardPage_errorEmpty;
+	public static String LinkWizardPage_pageDescription;
+	public static String LinkWizardPage_pageTitle;
+	public static String LinkWizardPage_urlLabel;
+	public static String LinkWizardPage_urlTooltip;
+	public static String LinkWizardPage_versionLabel;
+	public static String LinkWizardPage_versionTooltip;
 	public static String ListInstallationPage_browse;
 	public static String ListInstallationPage_customLocation;
 	public static String ListInstallationPage_description;
@@ -1022,6 +1031,8 @@ public class Messages extends NLS {
 	public static String LocationSection_locationLabel;
 	public static String LocationSection_xCoordinateLabel;
 	public static String LocationSection_yCoordinateLabel;
+	public static String ManageLinksWizardPage_pageDescription;
+	public static String ManageLinksWizardPage_pageTitle;
 	public static String MapSection_0;
 	public static String MatchSizeAction_heightText;
 	public static String MatchSizeAction_heightTooltip;
