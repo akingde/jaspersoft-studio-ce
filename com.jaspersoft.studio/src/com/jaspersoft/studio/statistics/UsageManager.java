@@ -334,12 +334,12 @@ public class UsageManager {
 		try{
 			String pluginId = Platform.getProduct().getId();
 			Bundle bundle = Platform.getBundle("org.eclipse.platform");
-			String version = "";
+			String eclipseVersion = "";
 			if (bundle != null){
-				version = bundle.getVersion().toString();
+				eclipseVersion = bundle.getVersion().toString();
 			}
-			if (version != null && !version.isEmpty()){
-				return pluginId + "[" + version + "]";
+			if (eclipseVersion != null && !eclipseVersion.isEmpty()){
+				return pluginId + "[" + eclipseVersion + "]";
 			} else {
 				return pluginId + "[Unknown Version]";
 			}
@@ -874,6 +874,13 @@ public class UsageManager {
 		if (!isRCP){
 			urlBuilder.append("&eclipse_version=");
 			urlBuilder.append(getEclipseVersion());
+		}
+		
+		//get the java version
+		String javaVersion = System.getProperty("java.runtime.version");
+		if (javaVersion != null){
+			urlBuilder.append("&java_version=");
+			urlBuilder.append(javaVersion);
 		}
 
 		String urlstr = urlBuilder.toString();
