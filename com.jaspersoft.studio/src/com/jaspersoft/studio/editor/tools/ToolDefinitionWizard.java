@@ -72,11 +72,19 @@ public class ToolDefinitionWizard extends Wizard {
 		FileInputStream stream = null;
 		try{
 			//Load the images and create the small and big variants
-			stream = new FileInputStream(new File(iconPath));
-			Image loadedImage = new Image(null, new FileInputStream(new File(iconPath)));
-			ImageData resized16 = ImageUtils.resizeKeepingRatio(16, loadedImage);
-			ImageData resized32 = ImageUtils.resizeKeepingRatio(32, loadedImage);
-			loadedImage.dispose();
+			ImageData resized16 = null;
+			ImageData resized32 = null;
+			if (iconPath != null){
+				File iconFile = new File(iconPath);
+				if (iconFile.exists()){
+					//Use the icon only if the file exist, otherwise will use null that will display a default icon
+					stream = new FileInputStream(new File(iconPath));
+					Image loadedImage = new Image(null, new FileInputStream(new File(iconPath)));
+					resized16 = ImageUtils.resizeKeepingRatio(16, loadedImage);
+					resized32 = ImageUtils.resizeKeepingRatio(32, loadedImage);
+					loadedImage.dispose();	
+				}
+			}
 			//Add the tool to the set
 			ToolManager.INSTANCE.addTool(name, description, resized16, resized32, toolElements);
 		} catch (Exception ex){

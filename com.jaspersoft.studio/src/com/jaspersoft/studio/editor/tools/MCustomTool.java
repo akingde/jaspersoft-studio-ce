@@ -84,8 +84,8 @@ public class MCustomTool extends MGraphicElement {
 		this.description = description;
 		this.iconPathSmall = iconPathSmall;
 		this.iconPathBig = iconPathBig;
-		iconSmall = JaspersoftStudioPlugin.getInstance().getImageDescriptor("/icons/resources/cell-16.png");
-		iconBig = JaspersoftStudioPlugin.getInstance().getImageDescriptor("/icons/resources/cell-32.png");
+		iconSmall = JaspersoftStudioPlugin.getInstance().getImageDescriptor("/icons/resources/custom_tool-16.png");
+		iconBig = JaspersoftStudioPlugin.getInstance().getImageDescriptor("/icons/resources/custom_tool-32.png");
 		if (iconPathSmall != null){
 			File toolIcon = new File(iconPathSmall);
 			if (toolIcon.exists()){

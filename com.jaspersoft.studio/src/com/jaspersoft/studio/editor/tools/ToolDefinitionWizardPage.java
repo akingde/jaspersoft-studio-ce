@@ -187,8 +187,6 @@ public class ToolDefinitionWizardPage extends JSSHelpWizardPage {
 			setErrorMessage(Messages.ToolDefinitionWizardPage_errorNameEmpry);	
 		} else if (description.isEmpty()){
 			setErrorMessage(Messages.ToolDefinitionWizardPage_errorDescriptionEmpty);	
-		} else if (lastLoadedImage == null){
-			setErrorMessage(Messages.ToolDefinitionWizardPage_errorIcon);
 		} else if (ToolManager.INSTANCE.isNameAlreadyUsed(name)){
 			setErrorMessage(Messages.ToolDefinitionWizardPage_errorNameUsed);
 		} else {
