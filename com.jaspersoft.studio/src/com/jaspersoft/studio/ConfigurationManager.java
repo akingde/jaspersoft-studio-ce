@@ -8,17 +8,26 @@
  ******************************************************************************/
 package com.jaspersoft.studio;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.StringReader;
+import java.net.URL;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.util.JRXmlUtils;
 
@@ -33,7 +42,9 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.util.PropertiesHelper;
+import com.jaspersoft.studio.statistics.IFirstStartupAction;
 
 /**
  * Provide the methods to retrieve the installation path of the application, the path is cached after the first request.
@@ -45,6 +56,8 @@ import com.jaspersoft.studio.preferences.util.PropertiesHelper;
  */
 public class ConfigurationManager {
 
+	//Method to get the eclipse folder
+	
 	/**
 	 * Where the path is cached
 	 */
@@ -59,132 +72,272 @@ public class ConfigurationManager {
 		String product = Platform.getProduct().getProperty("appName"); //$NON-NLS-1$ 
 		if (configArea != null) {
 			if (Util.isMac()) {
-				path = configArea.getURL().toExternalForm() + "/" + product + ".app/Contents/MacOS/";
-				path = path + product + ".ini";
+				path = configArea.getURL().toExternalForm() + "/" + product + ".app/Contents/MacOS/"; //$NON-NLS-1$ //$NON-NLS-2$
+				path = path + product + ".ini"; //$NON-NLS-1$
 			} else
 				path = configArea.getURL().toExternalForm() + product + ".ini"; //$NON-NLS-1$
 		}
 		cachedPath = path;
 	}
-
+	
 	/**
 	 * 
-	 * Return the path of the configuration file and cache it. Typically this file is inside the install location of the
+	 * Return the path of the application configuration INI file and cache it. 
+	 * Typically this file is inside the install location of the
 	 * application
 	 * 
 	 * @return String represented a Path in URL format to the configuration file
 	 */
-	public static String getInstallationPath() {
+	public static String getApplicationConfigurationPath() {
 		if (cachedPath == null)
 			intializePath();
 		return cachedPath;
 	}
 
-	private static final String PROP_VM = "eclipse.vm"; //$NON-NLS-1$
-
-	private static final String PROP_VMARGS = "eclipse.vmargs"; //$NON-NLS-1$
-
-	private static final String PROP_COMMANDS = "eclipse.commands"; //$NON-NLS-1$
-
-	private static final String CMD_NL = "-nl"; //$NON-NLS-1$
-
-	private static final String CMD_VMARGS = "-vmargs"; //$NON-NLS-1$
-
 	/**
-	 * Generate a starting parameter by reading the old parameters and changing the nl value or adding it if not present.
-	 * It's equivalent to launch the application with an -nl followed by the regional code arguments
 	 * 
-	 * @param nl
-	 *          the regional code
-	 * @return the full arguments line used to restart the application
+	 * Return the file of the application configuration INI file and cache it. 
+	 * Typically this file is inside the install location of the
+	 * application
+	 * 
+	 * @return a java.io.File pointing at the file resource of the configuration INI of 
+	 * the current application or null if something goes wrong
 	 */
-	public static String buildCommandLineNl(String nl) {
-		String property = System.getProperty(PROP_VM);
-
-		StringBuffer result = new StringBuffer();
-		if (property != null)
-			result.append(property);
-		result.append(SystemUtils.LINE_SEPARATOR);
-
-		// append the vmargs and commands. Assume that these already end in \n
-		String vmargs = System.getProperty(PROP_VMARGS);
-		if (vmargs != null)
-			result.append(vmargs);
-
-		// append the rest of the args, replacing or adding -data as required
-		property = System.getProperty(PROP_COMMANDS);
-		if (property != null) {// find the index of the arg to replace its value
-			int cmd_nl_pos = property.lastIndexOf(CMD_NL);
-			if (cmd_nl_pos != -1) {
-				cmd_nl_pos += CMD_NL.length() + 1;
-				result.append(property.substring(0, cmd_nl_pos));
-				result.append(nl);
-				result.append(property.substring(property.indexOf('\n', cmd_nl_pos)));
+	public static File getApplicationConfigurationFile(){
+		String configurationPath = getApplicationConfigurationPath();
+		try{
+			File configurationFile = new File(new URL(configurationPath).getFile());
+			return configurationFile;
+		} catch (Exception ex){
+			ex.printStackTrace();
+		}
+		return null;
+	}
+	
+	/**
+	 * Return the current installation folder where the application configuration file is placed
+	 * 
+	 * @return String represented a Path in URL format to the location of the configuration file, or
+	 * null if it can't be found
+	 */
+	public static String getApplicationFolder() {
+		if (cachedPath == null)
+			intializePath();
+		return cachedPath != null ? new File(cachedPath).getParent() : null;
+	}
+	
+	/**
+	 * Check if the configuration file of the application exist and if it 
+	 * can written or read
+	 * 
+	 * @return true if the file is accessible for r\w operation, false otherwise
+	 */
+	public static boolean isConfigurationAccessible(){
+		File configurationFile = getApplicationConfigurationFile();
+		if (configurationFile != null){
+			if (configurationFile.exists() && configurationFile.isFile()){
+				return configurationFile.canRead() && configurationFile.canWrite();
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * Check if the configuration file of the application exist and if it 
+	 * can written or read
+	 * 
+	 * @return true if the file is accessible for r\w operation, false otherwise
+	 */
+	public static boolean isConfigurationAccessibleWithMessage(){
+		boolean accessible = isConfigurationAccessible();
+		if (!accessible){
+			String configurationPath = getApplicationConfigurationFile().getAbsolutePath();
+			UIUtils.showWarning(Messages.ConfigurationManager_notAccessibleTitle, 
+													MessageFormat.format(Messages.ConfigurationManager_notAccessibleMessage, new Object[]{configurationPath}));
+		}
+		return accessible;
+	}
+	
+	//Methods to get the installation dependent storage
+	
+	/**
+	 * Folder containing the configurations of all the JSS installed on the system
+	 */
+	private static File jssDataFolder = null;
+	
+	/**
+	 * Configuration folder of the running JSS installation
+	 */
+	private static File appDataFolder = null;
+	
+	/**
+	 * Name of the folder that will contains the information of all the JSS installations on the current machine. This
+	 * folder will be placed in the "AppData like" folder on the current operative system
+	 */
+	private static final String JSS_APPLICATION_ID = "Jaspersoft Studio"; //$NON-NLS-1$
+	
+	/**
+	 * Name of the file where the path of a JSS installation will be save. The installation path bind a JSS instance to a
+	 * configuration folder
+	 */
+	private static final String PATH_FILE = ".path"; //$NON-NLS-1$
+	
+	/**
+	 * Get the folder where all the configurations of the current installed JSS are saved. The folder can change between
+	 * the various operative systems. The location is cached after the first time it is read
+	 * 
+	 * @return a not null folder where the configuration of all the JSS are saved
+	 */
+	private static File getJSSDataFolder() {
+		if (jssDataFolder == null) {
+			String workingDirectory;
+			if (Util.isWindows()) {
+				workingDirectory = System.getenv("AppData"); //$NON-NLS-1$
+			} else if (Util.isLinux()) {
+				workingDirectory = System.getProperty("user.home"); //$NON-NLS-1$
+				if (!workingDirectory.endsWith("/")) //$NON-NLS-1$
+					workingDirectory += "/"; //$NON-NLS-1$
+				workingDirectory += ".config"; //$NON-NLS-1$
 			} else {
-				result.append(SystemUtils.LINE_SEPARATOR);
-				result.append(property);
-				result.append(SystemUtils.LINE_SEPARATOR);
-				result.append(CMD_NL);
-				result.append(SystemUtils.LINE_SEPARATOR);
-				result.append(nl);
+				workingDirectory = System.getProperty("user.home"); //$NON-NLS-1$
+				workingDirectory += "/Library/Application Support"; //$NON-NLS-1$
+			}
+			jssDataFolder = new File(workingDirectory, JSS_APPLICATION_ID);
+			jssDataFolder.mkdirs();
+		}
+		return jssDataFolder;
+	}
+	
+	/**
+	 * Get the configuration folder of the currently running JSS installation. If a folder is not found a new one is
+	 * created. This folder is cached to avoid to search it each time it is requested. If the folder is created it is
+	 * supposed to be the first start of the application, so the contributed actions to be executed at the first start are
+	 * run.
+	 * 
+	 * @param the name of the folder inside the installation dependent directory of JSS. If a directory with that name doesn't exist
+	 * then it is created
+	 * @return a not null folder where the configuration of the currently running JSS are saved
+	 */
+	private static File getAppDataFolder(){
+		if (appDataFolder == null) {
+			Location configArea = Platform.getInstallLocation();
+			if (configArea != null) {
+				String path = configArea.getURL().toExternalForm();
+				File appFolder = getJSSDataFolder();
+				if (appFolder != null)
+					for (File file : appFolder.listFiles()) {
+						String appId = getAppId(file);
+						if (appId != null && appId.equals(path)) {
+							appDataFolder = file;
+							break;
+						}
+					}
+				// If the appDataFolder is null a new one is created
+				if (appDataFolder == null) {
+					// For backward compatibility try to used the original UUID if available
+					PropertiesHelper ph = PropertiesHelper.getInstance();
+					String startingUUID = ph.getString("UUID", null); //$NON-NLS-1$
+					if (startingUUID == null) {
+						//In the old version JSS stored an unique UUID in the preferences, now this is not 
+						//used anymore but if there is that uuid stored try to reuse it for the folder name
+						//otherwise a random one is generated
+						startingUUID = UUID.randomUUID().toString();
+					}
+					appDataFolder = new File(appFolder, startingUUID);
+					while (appDataFolder.exists()) {
+						appDataFolder = new File(appFolder, UUID.randomUUID().toString());
+					}
+					appDataFolder.mkdir();
+					writeAppId(appDataFolder, path);
+					// Folder just created, it is the first startup
+					for (IFirstStartupAction action : JaspersoftStudioPlugin.getExtensionManager().getFirstStartupActions()) {
+						action.executeFirstStartupAction(appDataFolder);
+					}
+				}
 			}
 		}
-
-		// put the vmargs back at the very end (the eclipse.commands property
-		// already contains the -vm arg)
-		if (vmargs != null) {
-			result.append(CMD_VMARGS);
-			result.append(SystemUtils.LINE_SEPARATOR);
-			result.append(vmargs);
-			result.append(SystemUtils.LINE_SEPARATOR);
-		}
-		return result.toString();
+		return appDataFolder;
+	}
+	
+	/**
+	 * Search inside the the application dependent storage for a folder
+	 * with a specific name and return it. This folder can be used to 
+	 * store informations related to a specific installation (like statistics
+	 * for example). If the folder doesn't exist it is created
+	 * 
+	 * @param folderName a not null folder name
+	 * @return a not null and existing folder with the specified name defined
+	 * inside the installation dependent storage
+	 */
+	public static File getAppDataFolder(String folderName) {
+		File dataFolder = new File(getAppDataFolder(), folderName);
+		dataFolder.mkdir();
+		return dataFolder;
+	}
+	
+	/**
+	 * Get the unique UUID associated with the current eclipse installation
+	 * 
+	 * @return a not null string representing the unique UUID of this JSS
+	 * installation
+	 */
+	public static String getInstallationUUID(){
+		return getAppDataFolder().getName();
 	}
 
 	/**
-	 * Generate a starting parameter by reading the old parameters and changing the nl value or adding it if not present.
-	 * It's equivalent to launch the application with an -nl followed by the regional code arguments
+	 * Search a .path file inside the passed folder and read the first line. It should be the installation path of a JSS,
+	 * which is also the id of that installation
 	 * 
-	 * @param nl
-	 *          the regional code
-	 * @return the full arguments line used to restart the application
+	 * @param appDataFolder
+	 *          the folder, must be a JSS configuration folder
+	 * @return the path of a JSS installation, that is its identifier. Null if the passed folder is not valid
 	 */
-	public static String buildCommandLineVMarg(String vmarg, String value) {
-		String property = System.getProperty(PROP_VM);
-
-		StringBuffer result = new StringBuffer();
-		if (property != null)
-			result.append(property);
-		result.append(SystemUtils.LINE_SEPARATOR);
-
-		// append the rest of the args, replacing or adding -data as required
-		property = System.getProperty(PROP_COMMANDS);
-		if (property != null) {
-			result.append(SystemUtils.LINE_SEPARATOR);
-			result.append(property);
-			result.append(SystemUtils.LINE_SEPARATOR);
-		}
-		boolean added = false;
-		// append the vmargs and commands. Assume that these already end in \n
-		String vmargs = System.getProperty(PROP_VMARGS);
-		if (vmargs == null && value == null)
-			return result.toString();
-		result.append("-vmargs").append(SystemUtils.LINE_SEPARATOR);
-		if (vmargs != null)
-			for (String arg : vmargs.split(" ")) {
-				if (arg.startsWith(vmarg + "=")) {
-					if (value == null)
-						continue;
-					arg = vmarg + "=" + value;
-					added = true;
-				}
-				result.append(arg + " ");
+	private static String getAppId(File appDataFolder) {
+		File textFile = new File(appDataFolder, PATH_FILE);
+		if (textFile.exists()) {
+			BufferedReader reader = null;
+			try {
+				reader = new BufferedReader(new FileReader(textFile.getAbsolutePath()));
+				String sCurrentLine = reader.readLine();
+				return sCurrentLine;
+			} catch (Exception e) {
+				e.printStackTrace();
+				JaspersoftStudioPlugin.getInstance().logError(Messages.UsageManager_errorPathFile, e);
+			} finally {
+				FileUtils.closeStream(reader);
 			}
-		if (!added && value != null)
-			result.append(vmarg + "=" + value + " ");
-		return result.toString();
+		}
+		return null;
 	}
 
+	/**
+	 * Write a .path file inside the passed folder and put as first line the passed path. It should be the installation
+	 * path of the current JSS, which is also the id of that installation
+	 * 
+	 * @param appDataFolder
+	 *          the folder, must be a JSS configuration folder
+	 * @param installationPath
+	 *          the path of the current JSS installation, that is its identifier
+	 */
+	private static void writeAppId(File appDataFolder, String installationPath) {
+		File textFile = new File(appDataFolder, PATH_FILE);
+		if (textFile.exists())
+			textFile.delete();
+		BufferedWriter writer = null;
+		try {
+			writer = new BufferedWriter(new FileWriter(textFile.getAbsolutePath()));
+			writer.write(installationPath);
+		} catch (IOException e) {
+			e.printStackTrace();
+			JaspersoftStudioPlugin.getInstance().logError(Messages.UsageManager_errorPathFile, e);
+		} finally {
+			FileUtils.closeStream(writer);
+		}
+	}
+
+	//Methods to get the workspace dependent storage
+	
 	/**
 	 * Return a storage with a specific name, if the storage doesn't exist then it is created. A storage is a specific
 	 * folder in the filesystem.
@@ -329,4 +482,113 @@ public class ConfigurationManager {
 			throw new RuntimeException(e);
 		}
 	}
+	
+	
+	//Methods to get the configuration file with the language changed
+	
+	private static final String PROP_VM = "eclipse.vm"; //$NON-NLS-1$
+
+	private static final String PROP_VMARGS = "eclipse.vmargs"; //$NON-NLS-1$
+
+	private static final String PROP_COMMANDS = "eclipse.commands"; //$NON-NLS-1$
+
+	private static final String CMD_NL = "-nl"; //$NON-NLS-1$
+
+	private static final String CMD_VMARGS = "-vmargs"; //$NON-NLS-1$
+
+	/**
+	 * Generate a starting parameter by reading the old parameters and changing the nl value or adding it if not present.
+	 * It's equivalent to launch the application with an -nl followed by the regional code arguments
+	 * 
+	 * @param nl
+	 *          the regional code
+	 * @return the full arguments line used to restart the application
+	 */
+	public static String buildCommandLineNl(String nl) {
+		String property = System.getProperty(PROP_VM);
+
+		StringBuffer result = new StringBuffer();
+		if (property != null)
+			result.append(property);
+		result.append(SystemUtils.LINE_SEPARATOR);
+
+		// append the vmargs and commands. Assume that these already end in \n
+		String vmargs = System.getProperty(PROP_VMARGS);
+		if (vmargs != null)
+			result.append(vmargs);
+
+		// append the rest of the args, replacing or adding -data as required
+		property = System.getProperty(PROP_COMMANDS);
+		if (property != null) {// find the index of the arg to replace its value
+			int cmd_nl_pos = property.lastIndexOf(CMD_NL);
+			if (cmd_nl_pos != -1) {
+				cmd_nl_pos += CMD_NL.length() + 1;
+				result.append(property.substring(0, cmd_nl_pos));
+				result.append(nl);
+				result.append(property.substring(property.indexOf('\n', cmd_nl_pos)));
+			} else {
+				result.append(SystemUtils.LINE_SEPARATOR);
+				result.append(property);
+				result.append(SystemUtils.LINE_SEPARATOR);
+				result.append(CMD_NL);
+				result.append(SystemUtils.LINE_SEPARATOR);
+				result.append(nl);
+			}
+		}
+
+		// put the vmargs back at the very end (the eclipse.commands property
+		// already contains the -vm arg)
+		if (vmargs != null) {
+			result.append(CMD_VMARGS);
+			result.append(SystemUtils.LINE_SEPARATOR);
+			result.append(vmargs);
+			result.append(SystemUtils.LINE_SEPARATOR);
+		}
+		return result.toString();
+	}
+
+	/**
+	 * Generate a starting parameter by reading the old parameters and changing the nl value or adding it if not present.
+	 * It's equivalent to launch the application with an -nl followed by the regional code arguments
+	 * 
+	 * @param nl
+	 *          the regional code
+	 * @return the full arguments line used to restart the application
+	 */
+	public static String buildCommandLineVMarg(String vmarg, String value) {
+		String property = System.getProperty(PROP_VM);
+
+		StringBuffer result = new StringBuffer();
+		if (property != null)
+			result.append(property);
+		result.append(SystemUtils.LINE_SEPARATOR);
+
+		// append the rest of the args, replacing or adding -data as required
+		property = System.getProperty(PROP_COMMANDS);
+		if (property != null) {
+			result.append(SystemUtils.LINE_SEPARATOR);
+			result.append(property);
+			result.append(SystemUtils.LINE_SEPARATOR);
+		}
+		boolean added = false;
+		// append the vmargs and commands. Assume that these already end in \n
+		String vmargs = System.getProperty(PROP_VMARGS);
+		if (vmargs == null && value == null)
+			return result.toString();
+		result.append("-vmargs").append(SystemUtils.LINE_SEPARATOR); //$NON-NLS-1$
+		if (vmargs != null)
+			for (String arg : vmargs.split(" ")) { //$NON-NLS-1$
+				if (arg.startsWith(vmarg + "=")) { //$NON-NLS-1$
+					if (value == null)
+						continue;
+					arg = vmarg + "=" + value; //$NON-NLS-1$
+					added = true;
+				}
+				result.append(arg + " "); //$NON-NLS-1$
+			}
+		if (!added && value != null)
+			result.append(vmarg + "=" + value + " "); //$NON-NLS-1$ //$NON-NLS-2$
+		return result.toString();
+	}
+
 }

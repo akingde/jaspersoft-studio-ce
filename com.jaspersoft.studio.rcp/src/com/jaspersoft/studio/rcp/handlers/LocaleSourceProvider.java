@@ -60,7 +60,7 @@ public class LocaleSourceProvider extends AbstractSourceProvider {
 	 */
 	private static String getActualLocale() {
 		URL location = null;
-		String path = ConfigurationManager.getInstallationPath();
+		String path = ConfigurationManager.getApplicationConfigurationPath();
 		String locale = null;
 		try {
 			location = new URL(path);

@@ -132,83 +132,85 @@ public class SwitchLanguageHandler extends AbstractHandler implements
 	 */
 	private static boolean changeLocale(String locale) {
 		URL location = null;
-		String path = ConfigurationManager.getInstallationPath();
-		try {
-			location = new URL(path);
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		}
 		boolean fileChanged = false;
-		try {
-			String fileName = location.getFile();
-			BufferedReader in = new BufferedReader(new FileReader(fileName));
-			BufferedWriter out = null;
+		if (ConfigurationManager.isConfigurationAccessibleWithMessage()){
+			String path = ConfigurationManager.getApplicationConfigurationPath();
 			try {
-				String line = in.readLine();
-				List<String> configLines = new ArrayList<String>();
-				int localePosition = -1;
-				int lineNumber = 0;
-				while (line != null) {
-					if (line.equals("-nl"))localePosition = lineNumber + 1; //$NON-NLS-1$
-					else if (localePosition == -1
-							&& (line.equals("-vmargs") || line.equals("-clean") || line.equals("-vm"))) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-						configLines.add("-nl"); //$NON-NLS-1$
-						configLines.add(""); //$NON-NLS-1$
-						localePosition = lineNumber + 1;
-					}
-					configLines.add(line);
-					lineNumber++;
-					line = in.readLine();
-				}
-				if (localePosition != -1) {
-					if (configLines.get(localePosition).equals(locale)) {
-						FileUtils.closeStream(in);
-						// The file has already the right regional code, there
-						// is no need to restart eclipse
-						return false;
-					} else
-						configLines.set(localePosition, locale);
-				} else {
-					configLines.add("-nl"); //$NON-NLS-1$
-					configLines.add(locale);
-				}
-				// Keep the old file as backup
-				File file = new File(fileName);
-				fileName += ".bak"; //$NON-NLS-1$
-				File backupFile = new File(fileName);
-				if (backupFile.exists())
-					backupFile.delete();
-				file.renameTo(backupFile);
-				out = new BufferedWriter(new FileWriter(location.getFile()));
-				int writtenLines = 1;
-				for (String outLine : configLines) {
-					out.write(outLine);
-					if (writtenLines < configLines.size())
-						out.newLine();
-					writtenLines++;
-				}
-				out.flush();
-			} finally {
-				FileUtils.closeStream(in);
-				if (out != null) {
-					try {
-						out.close();
-						fileChanged = true;
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
+				location = new URL(path);
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
 			}
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			// Configuration file not found, show an error message
-			MessageDialog.openWarning(UIUtils.getShell(),
-					Messages.SwitchLanguageHandler_errorTitle,
-					MessageFormat.format(
-							Messages.SwitchLanguageHandler_errorMessage,
-							new Object[] { path }));
-		} catch (IOException e) {
-			e.printStackTrace();
+			try {
+				String fileName = location.getFile();
+				BufferedReader in = new BufferedReader(new FileReader(fileName));
+				BufferedWriter out = null;
+				try {
+					String line = in.readLine();
+					List<String> configLines = new ArrayList<String>();
+					int localePosition = -1;
+					int lineNumber = 0;
+					while (line != null) {
+						if (line.equals("-nl"))localePosition = lineNumber + 1; //$NON-NLS-1$
+						else if (localePosition == -1
+								&& (line.equals("-vmargs") || line.equals("-clean") || line.equals("-vm"))) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+							configLines.add("-nl"); //$NON-NLS-1$
+							configLines.add(""); //$NON-NLS-1$
+							localePosition = lineNumber + 1;
+						}
+						configLines.add(line);
+						lineNumber++;
+						line = in.readLine();
+					}
+					if (localePosition != -1) {
+						if (configLines.get(localePosition).equals(locale)) {
+							FileUtils.closeStream(in);
+							// The file has already the right regional code, there
+							// is no need to restart eclipse
+							return false;
+						} else
+							configLines.set(localePosition, locale);
+					} else {
+						configLines.add("-nl"); //$NON-NLS-1$
+						configLines.add(locale);
+					}
+					// Keep the old file as backup
+					File file = new File(fileName);
+					fileName += ".bak"; //$NON-NLS-1$
+					File backupFile = new File(fileName);
+					if (backupFile.exists())
+						backupFile.delete();
+					file.renameTo(backupFile);
+					out = new BufferedWriter(new FileWriter(location.getFile()));
+					int writtenLines = 1;
+					for (String outLine : configLines) {
+						out.write(outLine);
+						if (writtenLines < configLines.size())
+							out.newLine();
+						writtenLines++;
+					}
+					out.flush();
+				} finally {
+					FileUtils.closeStream(in);
+					if (out != null) {
+						try {
+							out.close();
+							fileChanged = true;
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+					}
+				}
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+				// Configuration file not found, show an error message
+				MessageDialog.openWarning(UIUtils.getShell(),
+						Messages.SwitchLanguageHandler_errorTitle,
+						MessageFormat.format(
+								Messages.SwitchLanguageHandler_errorMessage,
+								new Object[] { path }));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		return fileChanged;
 	}

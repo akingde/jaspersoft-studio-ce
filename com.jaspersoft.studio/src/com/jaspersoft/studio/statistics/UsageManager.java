@@ -9,14 +9,10 @@
 package com.jaspersoft.studio.statistics;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.net.HttpURLConnection;
@@ -27,7 +23,6 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Properties;
-import java.util.UUID;
 import java.util.regex.Pattern;
 
 import net.sf.jasperreports.eclipse.util.FileUtils;
@@ -47,11 +42,10 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.util.IPropertyChangeListener;
-import org.eclipse.jface.util.Util;
-import org.eclipse.osgi.service.datalocation.Location;
 import org.osgi.framework.Bundle;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jaspersoft.studio.ConfigurationManager;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.StudioPreferencePage;
@@ -78,12 +72,6 @@ public class UsageManager {
 	 * time is requested trough the appropriate method
 	 */
 	private static String CURRENT_VERSION = null;
-	
-	/**
-	 * Property name used in the preferences in the old version of Jaspersoft Studio to store a UUID of the application.
-	 * This is used only for backward compatibility since the newer versions store the file inside an application folder
-	 */
-	private static final String BACKWARD_UUID_PROPERTY = "UUID"; //$NON-NLS-1$
 
 	/**
 	 * URL of the server where the statistics are sent
@@ -94,6 +82,14 @@ public class UsageManager {
 	 * URL of the server where the heartbeat is sent
 	 */
 	private static final String HEARTBEAT_SERVER_URL = "http://jasperstudio.sf.net/jsslastversion.php";//$NON-NLS-1$
+	
+	/**
+	 * Property name used in the preferences in the old version of Jaspersoft Studio to store a UUID of the application.
+	 * This is used only for backward compatibility since the newer versions store the file inside an application folder
+	 */
+	private static final String BACKWARD_UUID_PROPERTY = "UUID"; //$NON-NLS-1$
+	
+	
 	/**
 	 * Time in ms that the process to write the statistics from the memory on the disk wait after the update of a value.
 	 * This is done since some operations can update many values, doing this there is a time span to allow sequence of
@@ -115,18 +111,6 @@ public class UsageManager {
 	 * Name of the file where the information on the installation are saved
 	 */
 	private static final String INFO_FILE_NAME = "info.properties"; //$NON-NLS-1$
-
-	/**
-	 * Name of the folder that will contains the information of all the JSS installations on the current machine. This
-	 * folder will be placed in the AppData like folder on the current operative system
-	 */
-	private static final String JSS_APPLICATION_ID = "Jaspersoft Studio"; //$NON-NLS-1$
-
-	/**
-	 * Name of the file where the path of a JSS installation will be save. The installation path bind a JSS instance to a
-	 * configuration folder
-	 */
-	private static final String PATH_FILE = ".path"; //$NON-NLS-1$
 
 	/**
 	 * Information property key to set a lock when JSS is started and removed it when it is closed. Using this is possible
@@ -152,11 +136,6 @@ public class UsageManager {
 	private static final String ID_CATEGORY_SEPARATOR = "|"; //$NON-NLS-1$
 
 	/**
-	 * Folder containing the configurations of all the JSS installed on the system
-	 */
-	private static File jssDataFolder = null;
-
-	/**
 	 * Flag used to know if the usage collection is allowed or not
 	 */
 	private boolean allowUsageCollection = false;
@@ -172,11 +151,6 @@ public class UsageManager {
 	private Properties installationInfo = null;
 
 	/**
-	 * Configuration folder of the running JSS installation
-	 */
-	private File appDataFolder = null;
-
-	/**
 	 * Flag used when a statistic is updated, used by the upload job to wait a certain amount of time since the last
 	 * update to save the statistics properties file on the disk
 	 */
@@ -186,6 +160,12 @@ public class UsageManager {
 	 * Job used to write the statistics properties file on the disk
 	 */
 	private Job writeStatsToDisk = new WriteUsageJob();
+	
+	/**
+	 * The folder where all the statistics file are stored, this folder is different for each
+	 * JSS installation
+	 */
+	private File statisticsFolder = ConfigurationManager.getAppDataFolder("Statistics");
 
 	/**
 	 * This job write the statistics properties file when it is changed. But it wait at least a specific amount of time
@@ -252,8 +232,7 @@ public class UsageManager {
 		FileOutputStream out = null;
 		synchronized (UsageManager.this) {
 			try {
-				File appDataFolder = getAppDataFolder();
-				File propertiesFile = new File(appDataFolder, PROPERTIES_FILE_NAME);
+				File propertiesFile = new File(statisticsFolder, PROPERTIES_FILE_NAME);
 				out = new FileOutputStream(propertiesFile.getAbsolutePath());
 				getStatisticsContainer().store(out, "Usage informations"); //$NON-NLS-1$
 			} catch (Exception ex) {
@@ -278,32 +257,6 @@ public class UsageManager {
 			}
 		}
 	};
-
-	/**
-	 * Get the folder where all the configurations of the current installed JSS are saved. The folder can change between
-	 * the various operative systems. The location is cached after the first time it is read
-	 * 
-	 * @return a not null folder where the configuration of all the JSS are saved
-	 */
-	private static File getJSSDataFolder() {
-		if (jssDataFolder == null) {
-			String workingDirectory;
-			if (Util.isWindows()) {
-				workingDirectory = System.getenv("AppData"); //$NON-NLS-1$
-			} else if (Util.isLinux()) {
-				workingDirectory = System.getProperty("user.home"); //$NON-NLS-1$
-				if (!workingDirectory.endsWith("/"))
-					workingDirectory += "/";
-				workingDirectory += ".config"; //$NON-NLS-1$
-			} else {
-				workingDirectory = System.getProperty("user.home"); //$NON-NLS-1$
-				workingDirectory += "/Library/Application Support"; //$NON-NLS-1$
-			}
-			jssDataFolder = new File(workingDirectory, JSS_APPLICATION_ID);
-			jssDataFolder.mkdirs();
-		}
-		return jssDataFolder;
-	}
 
 	/**
 	 * Return the current JSS version. The value is cached after the first time is request
@@ -349,102 +302,6 @@ public class UsageManager {
 		return UNKWNOW_VERSION;
 	}
 
-	/**
-	 * Search a .path file inside the passed folder and read the first line. It should be the installation path of a JSS,
-	 * which is also the id of that installation
-	 * 
-	 * @param appDataFolder
-	 *          the folder, must be a JSS configuration folder
-	 * @return the path of a JSS installation, that is its identifier. Null if the passed folder is not valid
-	 */
-	private String getAppId(File appDataFolder) {
-		File textFile = new File(appDataFolder, PATH_FILE);
-		if (textFile.exists()) {
-			BufferedReader reader = null;
-			try {
-				reader = new BufferedReader(new FileReader(textFile.getAbsolutePath()));
-				String sCurrentLine = reader.readLine();
-				return sCurrentLine;
-			} catch (Exception e) {
-				e.printStackTrace();
-				JaspersoftStudioPlugin.getInstance().logError(Messages.UsageManager_errorPathFile, e);
-			} finally {
-				FileUtils.closeStream(reader);
-			}
-		}
-		return null;
-	}
-
-	/**
-	 * Write a .path file inside the passed folder and put as first line the passed path. It should be the installation
-	 * path of the current JSS, which is also the id of that installation
-	 * 
-	 * @param appDataFolder
-	 *          the folder, must be a JSS configuration folder
-	 * @param installationPath
-	 *          the path of the current JSS installation, that is its identifier
-	 */
-	private void writeAppId(File appDataFolder, String installationPath) {
-		File textFile = new File(appDataFolder, PATH_FILE);
-		if (textFile.exists())
-			textFile.delete();
-		BufferedWriter writer = null;
-		try {
-			writer = new BufferedWriter(new FileWriter(textFile.getAbsolutePath()));
-			writer.write(installationPath);
-		} catch (IOException e) {
-			e.printStackTrace();
-			JaspersoftStudioPlugin.getInstance().logError(Messages.UsageManager_errorPathFile, e);
-		} finally {
-			FileUtils.closeStream(writer);
-		}
-	}
-
-	/**
-	 * Get the configuration folder of the currently running JSS installation. If a folder is not found a new one is
-	 * created. This folder is cached to avoid to search it each time it is requested. If the folder is created it is
-	 * supposed to be the first start of the application, so the contributed actions to be executed at the first start are
-	 * run.
-	 * 
-	 * @return a not null folder where the configuration of the currently running JSS are saved
-	 */
-	public File getAppDataFolder() {
-		if (appDataFolder == null) {
-			Location configArea = Platform.getInstallLocation();
-			if (configArea != null) {
-				String path = configArea.getURL().toExternalForm();
-				File appFolder = getJSSDataFolder();
-				if (appFolder != null)
-					for (File file : appFolder.listFiles()) {
-						String appId = getAppId(file);
-						if (appId != null && appId.equals(path)) {
-							appDataFolder = file;
-							break;
-						}
-					}
-				// If the appDataFolder is null a new one is created
-				if (appDataFolder == null) {
-					// For backward compatibility try to used the original UUID if available
-					PropertiesHelper ph = PropertiesHelper.getInstance();
-					String startingUUID = ph.getString(BACKWARD_UUID_PROPERTY, null);
-					if (startingUUID == null) {
-						startingUUID = UUID.randomUUID().toString();
-					}
-					appDataFolder = new File(appFolder, startingUUID);
-					while (appDataFolder.exists()) {
-						appDataFolder = new File(appFolder, UUID.randomUUID().toString());
-					}
-					appDataFolder.mkdir();
-					writeAppId(appDataFolder, path);
-					// Folder just created, it is the first startup
-					for (IFirstStartupAction action : JaspersoftStudioPlugin.getExtensionManager().getFirstStartupActions()) {
-						action.executeFirstStartupAction(appDataFolder);
-					}
-				}
-			}
-		}
-		return appDataFolder;
-	}
 
 	/**
 	 * Contact an NTP server to get the current time
@@ -499,8 +356,7 @@ public class UsageManager {
 	protected Properties getStatisticsContainer() {
 		synchronized (UsageManager.this) {
 			if (usageStats == null) {
-				File appDataFolder = getAppDataFolder();
-				File propertiesFile = new File(appDataFolder, PROPERTIES_FILE_NAME);
+				File propertiesFile = new File(statisticsFolder, PROPERTIES_FILE_NAME);
 				if (propertiesFile.exists()) {
 					FileInputStream input = null;
 					try {
@@ -531,8 +387,7 @@ public class UsageManager {
 	protected Properties getInstallationInfoContainer() {
 		synchronized (UsageManager.this) {
 			if (installationInfo == null) {
-				File appDataFolder = getAppDataFolder();
-				File propertiesFile = new File(appDataFolder, INFO_FILE_NAME);
+				File propertiesFile = new File(statisticsFolder, INFO_FILE_NAME);
 				if (propertiesFile.exists()) {
 					FileInputStream input = null;
 					try {
@@ -573,8 +428,7 @@ public class UsageManager {
 				try {
 					// Write the property only if there isn't a previous one with the same value
 					info.setProperty(propertyName, newValue);
-					File appDataFolder = getAppDataFolder();
-					File propertiesFile = new File(appDataFolder, INFO_FILE_NAME);
+					File propertiesFile = new File(statisticsFolder, INFO_FILE_NAME);
 					out = new FileOutputStream(propertiesFile.getAbsolutePath());
 					info.store(
 							out,
@@ -607,7 +461,7 @@ public class UsageManager {
 				con.setRequestProperty("Accept-Language", "en-US,en;q=0.5"); //$NON-NLS-1$ //$NON-NLS-2$
 
 				// Read and convert the statistics into a JSON string
-				UsagesContainer container = new UsagesContainer(getAppDataFolder().getName());
+				UsagesContainer container = new UsagesContainer(ConfigurationManager.getInstallationUUID());
 				boolean fileChanged = false;
 				synchronized (UsageManager.this) {
 					Properties prop = getStatisticsContainer();
@@ -704,6 +558,34 @@ public class UsageManager {
 		return Platform.getBundle("com.jaspersoft.studio.pro.doc") != null; //$NON-NLS-1$
 	}
 
+	protected void moveStatisticsToFolder(){
+		File applicationFolder = statisticsFolder.getParentFile();
+		File infoFile = new File(applicationFolder, INFO_FILE_NAME);
+		if (infoFile.exists()){
+			//Need to move the file into the new folder
+			try{
+				org.apache.commons.io.FileUtils.moveFileToDirectory(infoFile, statisticsFolder, true);
+			}	catch (Exception ex) {
+					ex.printStackTrace();
+					JaspersoftStudioPlugin.getInstance().logError(ex);
+			} finally {
+				infoFile.delete();
+			}
+		}
+		File statisticsFile = new File(applicationFolder, PROPERTIES_FILE_NAME);
+		if (statisticsFile.exists()){
+			//Need to move the file into the new folder
+			try{
+				org.apache.commons.io.FileUtils.moveFileToDirectory(statisticsFile, statisticsFolder, true);
+			}	catch (Exception ex) {
+					ex.printStackTrace();
+					JaspersoftStudioPlugin.getInstance().logError(ex);
+			} finally {
+				statisticsFile.delete();
+			}
+		}
+	}
+	
 	/**
 	 * Method called to start the UsageManager, it will check if the usage statistics must be uploaded and and it check
 	 * for newer version. all is done inside separated Jobs and if the relative flags on the preferences are enabled. It
@@ -711,8 +593,8 @@ public class UsageManager {
 	 * statistics is enabled
 	 */
 	public void start() {
-		// This first call initialize the appdata folder and execute the first run actions
-		getAppDataFolder();
+		//Move the statistics on the new storage structure
+		moveStatisticsToFolder();
 		// Check if the collecting of statistics is enabled
 		allowUsageCollection = JaspersoftStudioPlugin.getInstance().getPreferenceStore().getBoolean(StudioPreferencePage.JSS_SEND_USAGE_STATISTICS);
 		JaspersoftStudioPlugin.getInstance().getPreferenceStore().addPropertyChangeListener(preferencesListener);
@@ -835,7 +717,7 @@ public class UsageManager {
 	 * @return a not null VersionCheckResult that contains information on the new version and if there is a new version
 	 */
 	public VersionCheckResult checkVersion() {
-		String uuid = getAppDataFolder().getName();
+		String uuid = ConfigurationManager.getInstallationUUID();
 		String versionKnownByTheStats = getInstallationInfoContainer().getProperty(VERSION_INFO);
 		int newInstallation = 0;
 		// Read if there is an UUID in the preferences used to track the older versions

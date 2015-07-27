@@ -287,6 +287,8 @@ public class Messages extends NLS {
 	public static String CompileAction_noJRInstalled;
 	public static String CompileHandler_compilingReport;
 	public static String CompileHandler_compilingStart;
+	public static String ConfigurationManager_notAccessibleMessage;
+	public static String ConfigurationManager_notAccessibleTitle;
 	public static String CongratulationsWizardPage_label1;
 	public static String CongratulationsWizardPage_label2;
 	public static String CongratulationsWizardPage_label3;
