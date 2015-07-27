@@ -14,6 +14,10 @@ package com.jaspersoft.studio.book.editors.figures;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.OrderedLayout;
 import org.eclipse.draw2d.PositionConstants;
@@ -21,6 +25,7 @@ import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.ui.progress.UIJob;
 import org.eclipse.wb.swt.ResourceManager;
 
 import com.jaspersoft.studio.book.ReportThumbnailsManager;
@@ -141,11 +146,10 @@ public class BookPagesFigure extends RectangleFigure {
 	
 	protected void loadPreviewImage()
 	{
-		Thread t = new Thread(new Runnable() {
-
+		imageFigure.setBusy(true);
+		UIJob j = new UIJob("Loading preview image") {
 			@Override
-			public void run() {
-				imageFigure.setBusy(true);
+			public IStatus runInUIThread(IProgressMonitor monitor) {
 				try {
 					String reportFileName = ReportThumbnailsManager.getLocation(model);
 					if (reportFileName != null){
@@ -156,14 +160,15 @@ public class BookPagesFigure extends RectangleFigure {
 					}
 				} catch(Exception ex){
 					ex.printStackTrace();
+					return null;
 				} finally {
 					imageFigure.setBusy(false);
 				}
+				return Status.OK_STATUS;
 			}
-		});
-		// Run the thread that will load the thumbnail in background!
-		t.start();
-
+		};
+		j.setPriority(Job.DECORATE);
+		j.schedule();
 	}
 	
 	
