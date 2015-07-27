@@ -89,7 +89,6 @@ public class UsageManager {
 	 */
 	private static final String BACKWARD_UUID_PROPERTY = "UUID"; //$NON-NLS-1$
 	
-	
 	/**
 	 * Time in ms that the process to write the statistics from the memory on the disk wait after the update of a value.
 	 * This is done since some operations can update many values, doing this there is a time span to allow sequence of
