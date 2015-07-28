@@ -61,7 +61,7 @@ import com.jaspersoft.studio.utils.ModelUtils;
  *
  */
 public class UsageManager {
-	
+
 	/**
 	 * The string used when the current version can not be identified
 	 */
@@ -72,7 +72,7 @@ public class UsageManager {
 	 * time is requested trough the appropriate method
 	 */
 	private static String CURRENT_VERSION = null;
-
+	
 	/**
 	 * URL of the server where the statistics are sent
 	 */
@@ -99,7 +99,7 @@ public class UsageManager {
 	/**
 	 * The URL of the server used to get the current hour and to check the Internet connection
 	 */
-	private static final String TIME_SERVER = "time-a.nist.gov"; //$NON-NLS-1$
+	private static final String TIME_SERVER = "pool.ntp.org"; //$NON-NLS-1$
 
 	/**
 	 * Name of the file where the usage statistics are saved
@@ -159,7 +159,7 @@ public class UsageManager {
 	 * Job used to write the statistics properties file on the disk
 	 */
 	private Job writeStatsToDisk = new WriteUsageJob();
-	
+
 	/**
 	 * The folder where all the statistics file are stored, this folder is different for each
 	 * JSS installation
@@ -285,7 +285,7 @@ public class UsageManager {
 	protected String getEclipseVersion(){
 		try{
 			String pluginId = Platform.getProduct().getId();
-			Bundle bundle = Platform.getBundle("org.eclipse.platform");
+		Bundle bundle = Platform.getBundle("org.eclipse.platform");
 			String eclipseVersion = "";
 			if (bundle != null){
 				eclipseVersion = bundle.getVersion().toString();
@@ -756,7 +756,7 @@ public class UsageManager {
 			urlBuilder.append("&eclipse_version=");
 			urlBuilder.append(getEclipseVersion());
 		}
-		
+
 		//get the java version
 		String javaVersion = System.getProperty("java.runtime.version");
 		if (javaVersion != null){
