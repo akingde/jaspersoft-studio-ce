@@ -20,7 +20,6 @@ import net.sf.jasperreports.engine.JRHyperlink;
 import net.sf.jasperreports.engine.JRHyperlinkParameter;
 import net.sf.jasperreports.engine.design.JRDesignHyperlink;
 import net.sf.jasperreports.engine.type.HyperlinkTargetEnum;
-import net.sf.jasperreports.engine.type.HyperlinkTypeEnum;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
@@ -32,6 +31,7 @@ import com.jaspersoft.studio.property.descriptor.combo.RComboBoxPropertyDescript
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.hyperlink.parameter.HyperlinkParameterPropertyDescriptor;
+import com.jaspersoft.studio.swt.widgets.WHyperlink;
 import com.jaspersoft.studio.utils.EnumHelper;
 
 public class MHyperLink extends APropertyNode {
@@ -91,7 +91,7 @@ public class MHyperLink extends APropertyNode {
 		linkTargetD.setHelpRefBuilder(new HelpReferenceBuilder(prefix + "sectionHyperlink_hyperlinkTarget"));
 
 		RComboBoxPropertyDescriptor linkTypeD = new RComboBoxPropertyDescriptor(JRDesignHyperlink.PROPERTY_LINK_TYPE,
-				Messages.MHyperLink_link_type, EnumHelper.getEnumNames(HyperlinkTypeEnum.values(), NullEnum.NULL));
+				Messages.MHyperLink_link_type, WHyperlink.LINK_TYPE_ITEMS, false);
 		linkTypeD.setDescription(Messages.MHyperLink_link_type_description);
 		desc.add(linkTypeD);
 		linkTypeD.setHelpRefBuilder(new HelpReferenceBuilder(prefix + "sectionHyperlink_hyperlinkType"));

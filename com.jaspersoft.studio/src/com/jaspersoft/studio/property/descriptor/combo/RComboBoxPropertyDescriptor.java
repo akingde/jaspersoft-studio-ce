@@ -30,15 +30,23 @@ import com.jaspersoft.studio.property.section.widgets.SPRCombo;
 public class RComboBoxPropertyDescriptor extends ComboBoxPropertyDescriptor implements IPropertyDescriptorWidget, IHelp {
 	private String[] labels;
 	private ComboBoxCellEditor cellEditor;
+	private boolean isReadOnly = true;
 
 	public RComboBoxPropertyDescriptor(Object id, String displayName, String[] labelsArray) {
 		super(id, displayName, labelsArray);
 		labels = labelsArray;
+		this.isReadOnly = true;
+	}
+	
+	public RComboBoxPropertyDescriptor(Object id, String displayName, String[] labelsArray, boolean isReadOnly) {
+		super(id, displayName, labelsArray);
+		labels = labelsArray;
+		this.isReadOnly = isReadOnly;
 	}
 
 	@Override
 	public CellEditor createPropertyEditor(Composite parent) {
-		cellEditor = new RWComboBoxCellEditor(parent, labels, SWT.READ_ONLY);
+		cellEditor = new RWComboBoxCellEditor(parent, labels, (isReadOnly ? SWT.READ_ONLY : SWT.NONE));
 		if (getValidator() != null)
 			cellEditor.setValidator(getValidator());
 		HelpSystem.bindToHelp(this, cellEditor.getControl());
