@@ -193,6 +193,16 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 			refreshQueryModel();
 	}
 
+	public void refreshModel() {
+		if (outline != null) {
+			outline.getTreeViewer().setInput(root);
+			outline.getTreeViewer().refresh();
+			outline.getTreeViewer().setSelection(null);
+		}
+		if (tabFolder.getSelectionIndex() == 2)
+			diagram.scheduleRefresh(false, false);
+	}
+
 	public void refreshQueryModel() {
 		if (source != null)
 			Text2Model.text2model(this, source.getXTextDocument());

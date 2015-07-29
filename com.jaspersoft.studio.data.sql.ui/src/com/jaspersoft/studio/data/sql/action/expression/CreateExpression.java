@@ -15,6 +15,7 @@ package com.jaspersoft.studio.data.sql.action.expression;
 import java.util.Collection;
 import java.util.List;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
 
@@ -57,11 +58,15 @@ public class CreateExpression extends AAction {
 	@Override
 	public boolean calculateEnabled(Object[] selection) {
 		super.calculateEnabled(selection);
-		return selection != null && selection.length == 1 && isInSelect(selection[0]);
+		return selection != null && selection.length == 1
+				&& isInSelect(selection[0]);
 	}
 
 	public static boolean isInSelect(Object element) {
-		return element instanceof MWhere || element instanceof MHaving || element instanceof AMExpression || element instanceof MFromTableJoin || element instanceof MExpressionGroup;
+		return element instanceof MWhere || element instanceof MHaving
+				|| element instanceof AMExpression
+				|| element instanceof MFromTableJoin
+				|| element instanceof MExpressionGroup;
 	}
 
 	@Override
@@ -132,13 +137,16 @@ public class CreateExpression extends AAction {
 
 	public void run(ANode node, MSelectColumn selcol) {
 		MExpression mexpr = run(selcol.getValue(), node, -1);
-		mexpr.getOperands().add(new FieldOperand(selcol.getValue(), selcol.getMFromTable(), mexpr));
+		mexpr.getOperands().add(
+				new FieldOperand(selcol.getValue(), selcol.getMFromTable(),
+						mexpr));
 		mexpr.getOperands().add(Factory.getDefaultOperand(mexpr));
 		showDialog(mexpr);
 	}
 
 	protected void showDialog(MExpression mexpr) {
-		EditExpressionDialog dialog = new EditExpressionDialog(Display.getDefault().getActiveShell());
+		EditExpressionDialog dialog = new EditExpressionDialog(
+				UIUtils.getShell());
 		dialog.setValue(mexpr);
 		if (dialog.open() == Dialog.OK) {
 			mexpr.setOperator(Operator.getOperator((dialog.getOperator())));

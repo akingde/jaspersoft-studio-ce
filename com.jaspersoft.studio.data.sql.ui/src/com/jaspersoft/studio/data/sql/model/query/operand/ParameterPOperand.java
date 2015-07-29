@@ -21,7 +21,9 @@ import com.jaspersoft.studio.data.sql.model.query.expression.AMExpression;
 public class ParameterPOperand extends AOperand {
 	public ParameterPOperand(AMExpression<?> mexpr) {
 		super(mexpr);
-		JRDesignDataset ds = (JRDesignDataset) mexpr.getRoot().getValue();
+		JRDesignDataset ds = null;
+		if (mexpr.getRoot() != null)
+			ds = (JRDesignDataset) mexpr.getRoot().getValue();
 		setJrParameter(jrParameter, ds);
 	}
 
@@ -40,7 +42,8 @@ public class ParameterPOperand extends AOperand {
 
 	public void setJrParameter(String prm) {
 		if (jrDataset != null)
-			this.jrParameter = (JRDesignParameter) jrDataset.getParametersMap().get(prm);
+			this.jrParameter = (JRDesignParameter) jrDataset.getParametersMap()
+					.get(prm);
 		if (this.jrParameter == null) {
 			this.jrParameter = new JRDesignParameter();
 			this.jrParameter.setName(prm);
@@ -55,7 +58,8 @@ public class ParameterPOperand extends AOperand {
 		return jrDataset;
 	}
 
-	public void setJrParameter(JRDesignParameter jrParameter, JRDesignDataset jrDataset) {
+	public void setJrParameter(JRDesignParameter jrParameter,
+			JRDesignDataset jrDataset) {
 		this.jrParameter = jrParameter;
 		this.jrDataset = jrDataset;
 	}

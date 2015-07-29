@@ -108,6 +108,7 @@ public class Text2Model {
 											.getFetchFirst());
 						}
 					}
+					designer.refreshModel();
 					isRunning = false;
 					return ""; //$NON-NLS-1$
 				}
