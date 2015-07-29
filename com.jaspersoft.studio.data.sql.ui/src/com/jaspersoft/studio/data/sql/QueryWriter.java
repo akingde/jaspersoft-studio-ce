@@ -61,7 +61,7 @@ public class QueryWriter {
 				}
 			}
 		};
-		return sb.toString();
+		return sb.toString().trim();
 	}
 
 	public static String writeSubQuery(ANode root) {
