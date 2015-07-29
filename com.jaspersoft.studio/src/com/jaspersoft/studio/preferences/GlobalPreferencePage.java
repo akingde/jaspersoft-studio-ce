@@ -13,19 +13,14 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-
 import org.apache.commons.io.FileUtils;
 import org.eclipse.core.runtime.FileLocator;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.FileFieldEditor;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.IntegerFieldEditor;
 import org.eclipse.jface.util.PropertyChangeEvent;
-import org.eclipse.jface.util.Util;
-import org.eclipse.osgi.service.datalocation.Location;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -64,46 +59,13 @@ public class GlobalPreferencePage extends FieldEditorPreferencePage implements I
 		initVars();
 	}
 
-	/**
-	 * Where the path is cached
-	 */
-	private static String cachedPath = null;
-
-	/**
-	 * Get the path and cache it values
-	 */
-	private static void intializePath() {
-		String path = null;
-		Location configArea = Platform.getInstallLocation();
-		if (configArea != null) {
-			String product = Platform.getProduct().getProperty("appName"); //$NON-NLS-1$ 
-			path = configArea.getURL().toExternalForm();
-			if (Util.isMac())
-				path += product + ".app/Contents/MacOS/";
-			path += product + ".ini"; //$NON-NLS-1$
-		}
-		cachedPath = path;
-	}
-
-	/**
-	 * 
-	 * Return the path of the configuration file and cache it. Typically this file is inside the install location of the
-	 * application
-	 * 
-	 * @return String represented a Path in URL format to the configuration file
-	 */
-	public static String getInstallationPath() {
-		if (cachedPath == null)
-			intializePath();
-		return cachedPath;
-	}
-
 	private static void initVars() {
 		if (fini == null) {
 			try {
-				fini = new File(getInstallationPath());
+				fini = ConfigurationManager.getApplicationConfigurationFile();
 				System.out.println("Fini: " + fini.toString());
-				defaultLogProperties = new File(fini.getParent(), "log.properties");
+				File appDir = ConfigurationManager.getAppDataFolder("Configuration");
+				defaultLogProperties = new File(appDir, "log.properties");
 				initDefaultLogProperties();
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -200,21 +162,10 @@ public class GlobalPreferencePage extends FieldEditorPreferencePage implements I
 							}
 					}
 					cfg = ConfigurationManager.buildCommandLineVMarg("-Djava.util.logging.config.file", fname);
-				} else
+				} else {
 					cfg = ConfigurationManager.buildCommandLineVMarg("-Djava.util.logging.config.file", null);
-				try {
-					// create a backup first
-					if (fini.exists())
-						FileUtils.copyFile(fini, new File(fini.toString() + ".bak"));
-
-					if (!fini.exists()) {
-						fini.getParentFile().mkdirs();
-						fini.createNewFile();
-					}
-					FileUtils.writeStringToFile(fini, cfg);
-				} catch (IOException e) {
-					UIUtils.showError(e);
 				}
+				ConfigurationManager.writeConfigurationFile(cfg);
 			}
 		};
 		enableLoggers.getDescriptionControl(getFieldEditorParent()).setToolTipText("Enable logging to file.");

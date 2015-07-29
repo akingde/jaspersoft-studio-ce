@@ -484,7 +484,7 @@ public class ConfigurationManager {
 	}
 	
 	
-	//Methods to get the configuration file with the language changed
+	//Methods to get the configuration file and change it
 	
 	private static final String PROP_VM = "eclipse.vm"; //$NON-NLS-1$
 
@@ -517,7 +517,7 @@ public class ConfigurationManager {
 		if (vmargs != null)
 			result.append(vmargs);
 
-		// append the rest of the args, replacing or adding -data as required
+		// append the rest of the args, replacing or adding -nl as required
 		property = System.getProperty(PROP_COMMANDS);
 		if (property != null) {// find the index of the arg to replace its value
 			int cmd_nl_pos = property.lastIndexOf(CMD_NL);
@@ -548,11 +548,11 @@ public class ConfigurationManager {
 	}
 
 	/**
-	 * Generate a starting parameter by reading the old parameters and changing the nl value or adding it if not present.
-	 * It's equivalent to launch the application with an -nl followed by the regional code arguments
+	 * Generate a starting parameter by reading the old parameters and add or change (if already present) a new parameter
+	 * on the vmargs section
 	 * 
-	 * @param nl
-	 *          the regional code
+	 * @param vmarg the name of the argument
+	 * @param value the value of the argument
 	 * @return the full arguments line used to restart the application
 	 */
 	public static String buildCommandLineVMarg(String vmarg, String value) {
@@ -563,19 +563,20 @@ public class ConfigurationManager {
 			result.append(property);
 		result.append(SystemUtils.LINE_SEPARATOR);
 
-		// append the rest of the args, replacing or adding -data as required
+		// append the rest of the args
 		property = System.getProperty(PROP_COMMANDS);
 		if (property != null) {
 			result.append(SystemUtils.LINE_SEPARATOR);
 			result.append(property);
 			result.append(SystemUtils.LINE_SEPARATOR);
 		}
+		
+		// append the vmargs and commands, replacing or adding the new argument as required
 		boolean added = false;
-		// append the vmargs and commands. Assume that these already end in \n
 		String vmargs = System.getProperty(PROP_VMARGS);
 		if (vmargs == null && value == null)
 			return result.toString();
-		result.append("-vmargs").append(SystemUtils.LINE_SEPARATOR); //$NON-NLS-1$
+		result.append(CMD_VMARGS).append(SystemUtils.LINE_SEPARATOR); 
 		if (vmargs != null)
 			for (String arg : vmargs.split(" ")) { //$NON-NLS-1$
 				if (arg.startsWith(vmarg + "=")) { //$NON-NLS-1$
@@ -591,4 +592,31 @@ public class ConfigurationManager {
 		return result.toString();
 	}
 
+	/**
+	 * Write a configuration of eclipse to the configuration file. Before to 
+	 * do this it create a backup
+	 * 
+	 * @param configurationContent the new configuration 
+	 * @return true if the configuration was written correctly, false otherwise
+	 */
+	public static boolean writeConfigurationFile(String configurationContent){
+		if (isConfigurationAccessibleWithMessage()){
+			try {
+				// create a backup first
+				File fini = getApplicationConfigurationFile();
+				if (fini.exists())
+					org.apache.commons.io.FileUtils.copyFile(fini, new File(fini.toString() + ".bak"));
+	
+				if (!fini.exists()) {
+					fini.getParentFile().mkdirs();
+					fini.createNewFile();
+				}
+				org.apache.commons.io.FileUtils.writeStringToFile(fini, configurationContent);
+				return true;
+			} catch (IOException e) {
+				UIUtils.showError(e);
+			}
+		}
+		return false;
+	}
 }

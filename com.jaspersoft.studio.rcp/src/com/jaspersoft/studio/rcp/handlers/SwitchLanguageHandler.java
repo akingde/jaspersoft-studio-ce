@@ -15,12 +15,7 @@ package com.jaspersoft.studio.rcp.handlers;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +38,7 @@ import org.eclipse.ui.menus.UIElement;
 import org.eclipse.ui.services.ISourceProviderService;
 
 import com.jaspersoft.studio.ConfigurationManager;
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
 
 /**
@@ -118,6 +114,28 @@ public class SwitchLanguageHandler extends AbstractHandler implements
 		element.setChecked(LocaleSourceProvider.getLocale().equals(
 				parameters.get("com.jaspersoft.studio.switchlanguage.locale")));
 	}
+	
+	/**
+	 * Convert a list of strings to a single string, each string except the 
+	 * last has a new line after it 
+	 * 
+	 * @param list the list of string
+	 * @return a single string with all the string in the list concatenated
+	 */
+	private static String listToString(List<String> list){
+		StringBuilder result = new StringBuilder();
+		if (!list.isEmpty()){
+			String lastLine = list.get(list.size()-1);
+			String separator = System.getProperty("line.separator");
+			for (String outLine : list) {
+				result.append(outLine);
+				if (outLine != lastLine){
+					result.append(separator);
+				}
+			}
+		}
+		return result.toString();
+	}
 
 	/**
 	 * Read the configuration file of the application and rewrite it with a new
@@ -131,85 +149,58 @@ public class SwitchLanguageHandler extends AbstractHandler implements
 	 * @return
 	 */
 	private static boolean changeLocale(String locale) {
-		URL location = null;
 		boolean fileChanged = false;
 		if (ConfigurationManager.isConfigurationAccessibleWithMessage()){
-			String path = ConfigurationManager.getApplicationConfigurationPath();
+			File configurationFile = ConfigurationManager.getApplicationConfigurationFile();
+			BufferedReader in = null; 
+			BufferedWriter out = null;
 			try {
-				location = new URL(path);
-			} catch (MalformedURLException e) {
-				e.printStackTrace();
-			}
-			try {
-				String fileName = location.getFile();
-				BufferedReader in = new BufferedReader(new FileReader(fileName));
-				BufferedWriter out = null;
-				try {
-					String line = in.readLine();
-					List<String> configLines = new ArrayList<String>();
-					int localePosition = -1;
-					int lineNumber = 0;
-					while (line != null) {
-						if (line.equals("-nl"))localePosition = lineNumber + 1; //$NON-NLS-1$
-						else if (localePosition == -1
-								&& (line.equals("-vmargs") || line.equals("-clean") || line.equals("-vm"))) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-							configLines.add("-nl"); //$NON-NLS-1$
-							configLines.add(""); //$NON-NLS-1$
-							localePosition = lineNumber + 1;
-						}
-						configLines.add(line);
-						lineNumber++;
-						line = in.readLine();
-					}
-					if (localePosition != -1) {
-						if (configLines.get(localePosition).equals(locale)) {
-							FileUtils.closeStream(in);
-							// The file has already the right regional code, there
-							// is no need to restart eclipse
-							return false;
-						} else
-							configLines.set(localePosition, locale);
-					} else {
+				in = new BufferedReader(new FileReader(configurationFile));
+				String line = in.readLine();
+				List<String> configLines = new ArrayList<String>();
+				int localePosition = -1;
+				int lineNumber = 0;
+				while (line != null) {
+					if (line.equals("-nl"))localePosition = lineNumber + 1; //$NON-NLS-1$
+					else if (localePosition == -1
+							&& (line.equals("-vmargs") || line.equals("-clean") || line.equals("-vm"))) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 						configLines.add("-nl"); //$NON-NLS-1$
-						configLines.add(locale);
+						configLines.add(""); //$NON-NLS-1$
+						localePosition = lineNumber + 1;
 					}
-					// Keep the old file as backup
-					File file = new File(fileName);
-					fileName += ".bak"; //$NON-NLS-1$
-					File backupFile = new File(fileName);
-					if (backupFile.exists())
-						backupFile.delete();
-					file.renameTo(backupFile);
-					out = new BufferedWriter(new FileWriter(location.getFile()));
-					int writtenLines = 1;
-					for (String outLine : configLines) {
-						out.write(outLine);
-						if (writtenLines < configLines.size())
-							out.newLine();
-						writtenLines++;
-					}
-					out.flush();
-				} finally {
-					FileUtils.closeStream(in);
-					if (out != null) {
-						try {
-							out.close();
-							fileChanged = true;
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
-					}
+					configLines.add(line);
+					lineNumber++;
+					line = in.readLine();
 				}
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
+				if (localePosition != -1) {
+					if (configLines.get(localePosition).equals(locale)) {
+						FileUtils.closeStream(in);
+						FileUtils.closeStream(out);
+						// The file has already the right regional code, there
+						// is no need to restart eclipse
+						return false;
+					} else{
+						//Change the locale value
+						configLines.set(localePosition, locale);
+					}
+				} else {
+					configLines.add("-nl"); //$NON-NLS-1$
+					configLines.add(locale);
+				}
+				fileChanged = ConfigurationManager.writeConfigurationFile(listToString(configLines));
+			} catch (Exception ex){
+				ex.printStackTrace();
+				JaspersoftStudioPlugin.getInstance().logError(ex);
 				// Configuration file not found, show an error message
 				MessageDialog.openWarning(UIUtils.getShell(),
 						Messages.SwitchLanguageHandler_errorTitle,
 						MessageFormat.format(
 								Messages.SwitchLanguageHandler_errorMessage,
-								new Object[] { path }));
-			} catch (IOException e) {
-				e.printStackTrace();
+								new Object[] { configurationFile.getAbsolutePath() }));
+			} finally {
+				FileUtils.closeStream(in);
+				FileUtils.closeStream(out);
+				
 			}
 		}
 		return fileChanged;
