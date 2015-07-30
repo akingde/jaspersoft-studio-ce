@@ -1035,6 +1035,12 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 			parameters = new HashMap<String, Object>();
 		parameters.put(key, value);
 	}
+	
+	public void removeParameter(String key) {
+		if (parameters == null)
+			parameters = new HashMap<String, Object>();
+		parameters.remove(key);
+	}
 
 	public static String getMeasureUnit(JasperReportsConfiguration jConfig, JasperDesign jd) {
 		String defunit = jConfig.getProperty(DesignerPreferencePage.P_PAGE_DEFAULT_UNITS);

@@ -56,6 +56,9 @@ import com.jaspersoft.studio.utils.XMLUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class FileDataAdapterStorage extends ADataAdapterStorage {
+	
+	private IProject project;
+	
 	private final class ResourceVisitor implements IResourceProxyVisitor {
 		public boolean visit(IResourceProxy proxy) throws CoreException {
 			if (proxy.isTeamPrivateMember())
@@ -73,8 +76,6 @@ public class FileDataAdapterStorage extends ADataAdapterStorage {
 			return true;
 		}
 	}
-
-	private IProject project;
 
 	public FileDataAdapterStorage(IProject project) {
 		this.project = project;
@@ -153,6 +154,7 @@ public class FileDataAdapterStorage extends ADataAdapterStorage {
 														UIUtils.getDisplay().asyncExec(new Runnable() {
 
 															public void run() {
+																
 																DataAdapterDescriptor das = findDataAdapter(res.getProjectRelativePath().toOSString());
 																if (das != null) {
 																	FileDataAdapterStorage.super.removeDataAdapter(das);
@@ -323,5 +325,4 @@ public class FileDataAdapterStorage extends ADataAdapterStorage {
 	public String getStorageName() {
 		return project.getName();
 	}
-
 }

@@ -23,10 +23,13 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public abstract class AQueryDesignerContainer {
 	public static final int CONTAINER_WITH_INFO_TABLES = 0x02;
+	
 	public static final int CONTAINER_WITH_NO_TABLES = 0x01;
 
 	protected AQueryStatus qStatus;
 
+	protected JasperReportsConfiguration jConfig;
+	
 	protected abstract void createStatusBar(Composite comp);
 
 	public AQueryStatus getQueryStatus() {
@@ -61,8 +64,6 @@ public abstract class AQueryDesignerContainer {
 	}
 
 	public abstract int getContainerType();
-
-	protected JasperReportsConfiguration jConfig;
 
 	public JasperReportsConfiguration getjConfig() {
 		return jConfig;

@@ -15,6 +15,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import net.sf.jasperreports.engine.design.JRDesignDataset;
+
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterFactory;
@@ -38,7 +40,7 @@ public abstract class ADataAdapterStorage {
 		propChangeSupport.removePropertyChangeListener(listener);
 	}
 
-	public Collection<DataAdapterDescriptor> getDataAdapterDescriptors() {
+	public Collection<DataAdapterDescriptor> getDataAdapterDescriptors(JRDesignDataset dataset) {
 		if (daDescriptors == null) {
 			daDescriptors = new LinkedHashMap<String, DataAdapterDescriptor>();
 			findAll();
@@ -46,6 +48,10 @@ public abstract class ADataAdapterStorage {
 		return daDescriptors.values();
 	}
 
+	public Collection<DataAdapterDescriptor> getDataAdapterDescriptors() {
+		return getDataAdapterDescriptors(null);
+	}
+	
 	protected String generateDataAdapterName(DataAdapterDescriptor adapter) {
 		String adapterName = adapter.getName();
 		int counter = 1;

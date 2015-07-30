@@ -27,8 +27,10 @@ import org.eclipse.core.resources.ResourcesPlugin;
 
 import com.jaspersoft.studio.data.storage.ADataAdapterStorage;
 import com.jaspersoft.studio.data.storage.FileDataAdapterStorage;
+import com.jaspersoft.studio.data.storage.JRDefaultDataAdapterStorage;
 import com.jaspersoft.studio.data.storage.PreferencesDataAdapterStorage;
 import com.jaspersoft.studio.utils.Misc;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /*
  * The main plugin class to be used in the desktop.
@@ -38,6 +40,8 @@ import com.jaspersoft.studio.utils.Misc;
 public class DataAdapterManager {
 
 	private static Map<String, DataAdapterFactory> dataAdapterFactories = new HashMap<String, DataAdapterFactory>();
+	
+	private static Map<Object, ADataAdapterStorage> storages = new HashMap<Object, ADataAdapterStorage>();
 
 	/*******************************
 	 ** Data Adapter Factories Part **
@@ -105,22 +109,24 @@ public class DataAdapterManager {
 		return dataAdapterFactories.get(adapterClassName);
 	}
 
-	private static Map<Object, ADataAdapterStorage> storages = new HashMap<Object, ADataAdapterStorage>();
-
-	public static ADataAdapterStorage[] getDataAdapter(IFile file, IProject project) {
-		ADataAdapterStorage[] st = new ADataAdapterStorage[(file == null && project==null) ? 1 : 2];
-		st[0] = getPreferencesStorage();
+	
+	public static ADataAdapterStorage[] getDataAdapter(IFile file, IProject project, JasperReportsConfiguration jConfig) {
+		List<ADataAdapterStorage> st = new ArrayList<ADataAdapterStorage>();
+		st.add(getPreferencesStorage());
 		if (file != null) {
 			project = file.getProject();
 		}
 		if (project!=null) {
-			st[1] = getProjectStorage(project);
+			st.add(getProjectStorage(project));
 		}
-		return st;
+		if (jConfig != null && jConfig.getJasperDesign() != null){
+			st.add(getJRDefaultStorage(jConfig));
+		}
+		return st.toArray(new ADataAdapterStorage[st.size()]);
 	}
 	
-	public static ADataAdapterStorage[] getDataAdapter(IFile file) {
-		return getDataAdapter(file, null);
+	public static ADataAdapterStorage[] getDataAdapter(IFile file, JasperReportsConfiguration jConfig) {
+		return getDataAdapter(file, null, jConfig);
 	}
 
 	public static ADataAdapterStorage getProjectStorage(IProject key) {
@@ -131,6 +137,19 @@ public class DataAdapterManager {
 			storages.put(key, s);
 		}
 		return s;
+	}
+	
+	/**
+	 * Get the storage for the handling of the default data adapters
+	 */
+	public static JRDefaultDataAdapterStorage getJRDefaultStorage(JasperReportsConfiguration key) {
+		ADataAdapterStorage s = storages.get(key);
+		if (s == null) {
+			s = new JRDefaultDataAdapterStorage(key);
+			s.getDataAdapterDescriptors();
+			storages.put(key, s);
+		}
+		return (JRDefaultDataAdapterStorage)s;
 	}
 
 	public static ADataAdapterStorage getPreferencesStorage() {

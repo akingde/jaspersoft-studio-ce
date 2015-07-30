@@ -119,7 +119,7 @@ public class PreferencesDataAdapterStorage extends ADataAdapterStorage {
 		}
 		// At this point I've loaded on the data adapter on the file system
 		// Add a list of default data adapters only if none is found.
-		if (getDataAdapterDescriptors().size() == 0) {
+		if (daDescriptors.size() == 0) {
 			Bundle bundle = JaspersoftStudioPlugin.getInstance().getBundle();
 			Enumeration<URL> urls = bundle.findEntries("defaults/dataadapter/prefs/", "*.xml", true);
 			while (urls.hasMoreElements()) {

@@ -33,6 +33,7 @@ import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterManager;
 import com.jaspersoft.studio.data.storage.ADataAdapterStorage;
 import com.jaspersoft.studio.data.storage.FileDataAdapterStorage;
+import com.jaspersoft.studio.data.storage.JRDefaultDataAdapterStorage;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.property.dataset.dialog.DataQueryAdapters;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
@@ -82,18 +83,14 @@ public class SelectDataAdapterAction extends Action implements IMenuCreator {
 	private void initAvailableValues(){
 		if (values == null){
 			IFile file = (IFile) jConfig.get(FileUtils.KEY_FILE);
-			ADataAdapterStorage[] dastorages = DataAdapterManager.getDataAdapter(file);
+			ADataAdapterStorage[] dastorages = DataAdapterManager.getDataAdapter(file, jConfig);
 			ArrayList<String> namesList = new ArrayList<String>();
 			ArrayList<DataAdapterDescriptor> valuesList = new ArrayList<DataAdapterDescriptor>();
 			for (int i = 0; i < dastorages.length; i++) {
 				final ADataAdapterStorage s = dastorages[i];
 				for (DataAdapterDescriptor d : s.getDataAdapterDescriptors()) {
 					valuesList.add(d);
-					if (s instanceof FileDataAdapterStorage)
-						namesList.add(d.getName() + " - [" + s.getUrl(d) + "]"); //$NON-NLS-1$ //$NON-NLS-2$
-					else
-						namesList.add(d.getName());
-
+					namesList.add(s.getLabel(d));
 				}
 			}
 			values = valuesList.toArray(new DataAdapterDescriptor[valuesList.size()]);
@@ -140,7 +137,14 @@ public class SelectDataAdapterAction extends Action implements IMenuCreator {
 	 * @param desc adapter to set
 	 */
 	public void setSelectedAdapter(DataAdapterDescriptor desc){
-		jConfig.getJasperDesign().setProperty(DataQueryAdapters.DEFAULT_DATAADAPTER, desc.getName());
+		JRDefaultDataAdapterStorage defaultStorage = DataAdapterManager.getJRDefaultStorage(jConfig);
+		//Check the default data adapter on the main dataset
+		DataAdapterDescriptor defaultAdapter = defaultStorage.getDefaultJRDataAdapter(null);
+		if (defaultAdapter != null && defaultAdapter == desc){
+			jConfig.getJasperDesign().removeProperty(DataQueryAdapters.DEFAULT_DATAADAPTER);
+		} else {
+			jConfig.getJasperDesign().setProperty(DataQueryAdapters.DEFAULT_DATAADAPTER, desc.getName());
+		}
 	}
 
 	
@@ -192,13 +196,19 @@ public class SelectDataAdapterAction extends Action implements IMenuCreator {
 			@Override
 			public void menuShown(MenuEvent e) {
 				String selectedtem = jConfig.getJasperDesign().getProperty(DataQueryAdapters.DEFAULT_DATAADAPTER);
-				//if (selectedtem == null){
-				//	subMenu.getItems()[0].setSelection(true);
-				//} else {
+				if (selectedtem == null){
+					//check for the default property
+					JRDefaultDataAdapterStorage defaultStorage = DataAdapterManager.getJRDefaultStorage(jConfig);
+					//Check the default data adapter on the main dataset
+					DataAdapterDescriptor defaultAdapter = defaultStorage.getDefaultJRDataAdapter(null);
+					for(MenuItem item : menu.getItems()){
+						item.setSelection(item.getData() == defaultAdapter);
+					}
+				} else {
 					for(MenuItem item : menu.getItems()){
 						item.setSelection(item.getData() != null && item.getData() instanceof DataAdapterDescriptor && ((DataAdapterDescriptor)item.getData()).getName().equals(selectedtem));
 					}
-				//}
+				}
 			}
 		});
 		return menu;

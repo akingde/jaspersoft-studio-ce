@@ -66,10 +66,13 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 	public static final String DEFAULT_DATAADAPTER = "com.jaspersoft.studio.data.defaultdataadapter";
 
 	private JRDesignDataset newdataset;
+	
 	private JasperDesign jDesign;
 
 	private Color background;
+	
 	private IFile file;
+	
 
 	public DataQueryAdapters(Composite parent, JasperReportsConfiguration jConfig, JRDesignDataset newdataset,
 			Color background, IRunnableContext runner) {
@@ -116,7 +119,7 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 	public void setFile(JasperReportsConfiguration jConfig) {
 		this.file = (IFile) jConfig.get(FileUtils.KEY_FILE);
 		this.jDesign = jConfig.getJasperDesign();
-		dscombo.setDataAdapterStorages(DataAdapterManager.getDataAdapter(file));
+		dscombo.setDataAdapterStorages(DataAdapterManager.getDataAdapter(file, jConfig));
 		setDataset(jDesign, newdataset);
 	}
 
@@ -261,8 +264,11 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 		IDataAdapterRunnable adapterRunReport = new IDataAdapterRunnable() {
 
 			public void runReport(DataAdapterDescriptor da) {
-				if (da != null)
+				if (da != null){
 					newdataset.setProperty(DEFAULT_DATAADAPTER, da.getName());
+				} else {
+					newdataset.getPropertiesMap().removeProperty(DEFAULT_DATAADAPTER);
+				}
 				currentDesigner.setDataAdapter(da);
 				qStatus.showInfo("");
 			}
@@ -270,8 +276,13 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 			public boolean isNotRunning() {
 				return true;
 			}
+
+			@Override
+			public JasperReportsConfiguration getConfiguration() {
+				return jConfig;
+			}
 		};
-		dscombo = new DataAdapterAction(adapterRunReport, DataAdapterManager.getDataAdapter(file));
+		dscombo = new DataAdapterAction(adapterRunReport, DataAdapterManager.getDataAdapter(file, jConfig), newdataset);
 
 		manager.add(dscombo);
 

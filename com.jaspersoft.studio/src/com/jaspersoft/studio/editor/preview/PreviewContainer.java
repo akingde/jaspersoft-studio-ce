@@ -96,6 +96,8 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 	 */
 	private AReportAction zoomActualAction = null;
 
+	private DataAdapterDescriptor dataAdapterDesc;
+	
 	public PreviewContainer() {
 		super(true);
 	}
@@ -248,8 +250,7 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 			if (jrContext != null) {
 				project = (IProject) jrContext.get(FileUtils.KEY_IPROJECT);
 			}
-			topToolBarManager1 = new PreviewTopToolBarManager(this, container, DataAdapterManager.getDataAdapter(file,
-					project));
+			topToolBarManager1 = new PreviewTopToolBarManager(this, container, DataAdapterManager.getDataAdapter(file, project, jrContext));
 		}
 		return (PreviewTopToolBarManager) topToolBarManager1;
 	}
@@ -466,8 +467,9 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 					getReportControler().setJrContext(jConfig);
 					setupDataAdapter();
 
-					if (isRunDirty || getJasperPrint() == null)
+					if (isRunDirty || getJasperPrint() == null){
 						runReport(dataAdapterDesc);
+					}
 					propChangeListener = new PropertyChangeListener() {
 
 						@Override
@@ -512,8 +514,6 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 		}
 	}
 
-	private DataAdapterDescriptor dataAdapterDesc;
-
 	public DataAdapterDescriptor getDataAdapterDesc() {
 		return dataAdapterDesc;
 	}
@@ -552,5 +552,15 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 		this.isDirty = dirty;
 		if (dirty)
 			setRunDirty(true);
+	}
+
+	/**
+	 * Return the JasperReportsConfiguration of the loaded report
+	 * 
+	 * @return a JasperReportsConfiguration
+	 */
+	@Override
+	public JasperReportsConfiguration getConfiguration() {
+		return jrContext;
 	}
 }

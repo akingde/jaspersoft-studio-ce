@@ -211,15 +211,11 @@ public class JrxmlPublishContributor implements IPublishContributor {
 		boolean syncDA = mrunit.getWsClient().getServerProfile().isSyncDA();
 		for (JRDataset d : ds) {
 			JRPropertiesMap pmap = d.getPropertiesMap();
-			String dapath = pmap
-					.getProperty(DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION);
+			String dapath = pmap.getProperty(DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION);
 			if (syncDA && Misc.isNullOrEmpty(dapath)) {
-				String name = pmap
-						.getProperty(DataQueryAdapters.DEFAULT_DATAADAPTER);
+				String name = pmap.getProperty(DataQueryAdapters.DEFAULT_DATAADAPTER);
 				if (!Misc.isNullOrEmpty(name)) {
-					ADataAdapterStorage storage = DataAdapterManager
-							.getProjectStorage(((IFile) jrConfig
-									.get(FileUtils.KEY_FILE)).getProject());
+					ADataAdapterStorage storage = DataAdapterManager.getJRDefaultStorage(jrConfig);
 					for (DataAdapterDescriptor dad : storage
 							.getDataAdapterDescriptors()) {
 						if (dad.getDataAdapter().getName().equals(name)) {
