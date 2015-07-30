@@ -13,14 +13,19 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+
 import org.apache.commons.io.FileUtils;
 import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.FileFieldEditor;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.IntegerFieldEditor;
 import org.eclipse.jface.util.PropertyChangeEvent;
+import org.eclipse.jface.util.Util;
+import org.eclipse.osgi.service.datalocation.Location;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -64,8 +69,7 @@ public class GlobalPreferencePage extends FieldEditorPreferencePage implements I
 			try {
 				fini = ConfigurationManager.getApplicationConfigurationFile();
 				System.out.println("Fini: " + fini.toString());
-				File appDir = ConfigurationManager.getAppDataFolder("Configuration");
-				defaultLogProperties = new File(appDir, "log.properties");
+				defaultLogProperties = new File(ConfigurationManager.getAppDataFolder("config"), "log.properties");
 				initDefaultLogProperties();
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -99,7 +103,7 @@ public class GlobalPreferencePage extends FieldEditorPreferencePage implements I
 	protected void createFieldEditors() {
 		Label lbl = new Label(getFieldEditorParent(), SWT.NONE);
 		lbl.setText(Messages.GlobalPreferencePage_jettyServerTitle);
-		lbl.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1));
+		lbl.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
 
 		IntegerFieldEditor port = new IntegerFieldEditor(JSS_JETTY_PORT, Messages.GlobalPreferencePage_port,
 				getFieldEditorParent());
@@ -107,33 +111,33 @@ public class GlobalPreferencePage extends FieldEditorPreferencePage implements I
 		addField(port);
 
 		Label separator = new Label(getFieldEditorParent(), SWT.SEPARATOR | SWT.HORIZONTAL);
-		separator.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1));
+		separator.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
 
 		Label browserTitle = new Label(getFieldEditorParent(), SWT.NONE);
 		browserTitle.setText(Messages.GlobalPreferencePage_EmbeddedBrowserSection);
-		browserTitle.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1));
+		browserTitle.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
 
 		BooleanFieldEditor useAlwaysExternalBrowser = new BooleanFieldEditor(JSS_USE_ALWAYS_EXTERNAL_BROWSER,
 				Messages.GlobalPreferencePage_UseExternalBrowserCheckbox, getFieldEditorParent());
 		addField(useAlwaysExternalBrowser);
 
 		Label separator2 = new Label(getFieldEditorParent(), SWT.SEPARATOR | SWT.HORIZONTAL);
-		separator2.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1));
+		separator2.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
 
 		Label securityTitle = new Label(getFieldEditorParent(), SWT.NONE);
 		securityTitle.setText(Messages.GlobalPreferencePage_title);
-		securityTitle.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1));
+		securityTitle.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
 
 		BooleanFieldEditor useSecStorage = new BooleanFieldEditor(JSS_USE_SECURE_STORAGE,
 				Messages.GlobalPreferencePage_flagDescription, getFieldEditorParent());
 		addField(useSecStorage);
 
 		Label separator3 = new Label(getFieldEditorParent(), SWT.SEPARATOR | SWT.HORIZONTAL);
-		separator3.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1));
+		separator3.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
 
 		Label debuggingTitle = new Label(getFieldEditorParent(), SWT.NONE);
 		debuggingTitle.setText(Messages.GlobalPreferencePage_LoggingPrefs);
-		debuggingTitle.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1));
+		debuggingTitle.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
 
 		BooleanFieldEditor enableJSSConsole = new BooleanFieldEditor(JSS_ENABLE_INTERNAL_CONSOLE,
 				Messages.GlobalPreferencePage_JSSConsoleFieldLabel, getFieldEditorParent());
@@ -162,9 +166,8 @@ public class GlobalPreferencePage extends FieldEditorPreferencePage implements I
 							}
 					}
 					cfg = ConfigurationManager.buildCommandLineVMarg("-Djava.util.logging.config.file", fname);
-				} else {
+				} else
 					cfg = ConfigurationManager.buildCommandLineVMarg("-Djava.util.logging.config.file", null);
-				}
 				ConfigurationManager.writeConfigurationFile(cfg);
 			}
 		};
