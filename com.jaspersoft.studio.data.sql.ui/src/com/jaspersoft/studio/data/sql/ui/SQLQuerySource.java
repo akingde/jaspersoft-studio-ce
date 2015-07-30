@@ -19,7 +19,9 @@ import net.sf.jasperreports.engine.JRParameter;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.gef.dnd.TemplateTransfer;
+import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.DocumentEvent;
+import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IDocumentListener;
 import org.eclipse.jface.text.MarginPainter;
 import org.eclipse.jface.text.source.CompositeRuler;
@@ -57,7 +59,8 @@ import com.jaspersoft.studio.dnd.NodeTransfer;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class SQLQuerySource {
-	private static final Color SRC_MARGINS_COLOR = SWTResourceManager.getColor(220, 220, 220);
+	private static final Color SRC_MARGINS_COLOR = SWTResourceManager.getColor(
+			220, 220, 220);
 	private SQLQueryDesigner designer;
 
 	public SQLQuerySource(SQLQueryDesigner designer) {
@@ -65,7 +68,8 @@ public class SQLQuerySource {
 	}
 
 	private Injector getInjector() {
-		return Activator.getInstance().getInjector(Activator.COM_JASPERSOFT_STUDIO_DATA_SQL);
+		return Activator.getInstance().getInjector(
+				Activator.COM_JASPERSOFT_STUDIO_DATA_SQL);
 	}
 
 	private XtextSourceViewer viewer;
@@ -81,12 +85,16 @@ public class SQLQuerySource {
 			public XtextResource createResource() {
 				Injector injector = getInjector();
 
-				XtextResourceSet rs = injector.getInstance(XtextResourceSet.class);
+				XtextResourceSet rs = injector
+						.getInstance(XtextResourceSet.class);
 				rs.setClasspathURIContext(getClass());
 
-				IResourceFactory resourceFactory = injector.getInstance(IResourceFactory.class);
-				org.eclipse.emf.common.util.URI uri = org.eclipse.emf.common.util.URI.createURI("website/My2.website");
-				XtextResource resource = (XtextResource) resourceFactory.createResource(uri);
+				IResourceFactory resourceFactory = injector
+						.getInstance(IResourceFactory.class);
+				org.eclipse.emf.common.util.URI uri = org.eclipse.emf.common.util.URI
+						.createURI("website/My2.website");
+				XtextResource resource = (XtextResource) resourceFactory
+						.createResource(uri);
 				rs.getResources().add(resource);
 
 				EcoreUtil.resolveAll(resource);
@@ -99,9 +107,12 @@ public class SQLQuerySource {
 		};
 
 		Injector injector = getInjector();
-		EmbeddedEditorFactory factory = injector.getInstance(EmbeddedEditorFactory.class);
-		embeddedEditor = factory.newEditor(resourceProvider).showErrorAndWarningAnnotations().withParent(cmp);// .showErrorAndWarningAnnotations()
-		EmbeddedEditorModelAccess partialEditorModelAccess = embeddedEditor.createPartialEditor();
+		EmbeddedEditorFactory factory = injector
+				.getInstance(EmbeddedEditorFactory.class);
+		embeddedEditor = factory.newEditor(resourceProvider)
+				.showErrorAndWarningAnnotations().withParent(cmp);// .showErrorAndWarningAnnotations()
+		EmbeddedEditorModelAccess partialEditorModelAccess = embeddedEditor
+				.createPartialEditor();
 
 		viewer = embeddedEditor.getViewer();
 
@@ -111,7 +122,8 @@ public class SQLQuerySource {
 		try {
 			Method m = SourceViewer.class.getDeclaredMethod("getVerticalRuler");
 			m.setAccessible(true);
-			IVerticalRuler ivr = (IVerticalRuler) m.invoke(embeddedEditor.getViewer());
+			IVerticalRuler ivr = (IVerticalRuler) m.invoke(embeddedEditor
+					.getViewer());
 			if (ivr instanceof CompositeRuler) {
 				CompositeRuler cr = (CompositeRuler) ivr;
 				cr.getControl().setBackground(SRC_MARGINS_COLOR);
@@ -148,9 +160,12 @@ public class SQLQuerySource {
 			}
 		});
 
-		DropTarget target = new DropTarget(viewer.getTextWidget(), DND.DROP_MOVE | DND.DROP_COPY);
-		target.setTransfer(new Transfer[] { NodeTransfer.getInstance(), TemplateTransfer.getInstance(), PluginTransfer.getInstance() });
-		target.addDropListener(new StyledTextDropTargetEffect(viewer.getTextWidget()) {
+		DropTarget target = new DropTarget(viewer.getTextWidget(),
+				DND.DROP_MOVE | DND.DROP_COPY);
+		target.setTransfer(new Transfer[] { NodeTransfer.getInstance(),
+				TemplateTransfer.getInstance(), PluginTransfer.getInstance() });
+		target.addDropListener(new StyledTextDropTargetEffect(viewer
+				.getTextWidget()) {
 			@Override
 			public void drop(DropTargetEvent event) {
 				Object obj = event.data;
@@ -159,16 +174,22 @@ public class SQLQuerySource {
 					if (arr.length > 0)
 						obj = arr[0];
 				}
+				String txt = null;
 				if (obj instanceof AMSQLObject) {
 					performCustomDropOperations((AMSQLObject) obj);
-					StringBuffer oldText = new StringBuffer(getQuery());
-					oldText.insert(viewer.getTextWidget().getCaretOffset(), " " + ((AMSQLObject) obj).toSQLString() + " ");
-					viewer.getDocument().set(oldText.toString());
-				} else if (obj instanceof JRParameter) {
-					StringBuffer oldText = new StringBuffer(getQuery());
-
-					oldText.insert(viewer.getTextWidget().getCaretOffset(), " $P{" + ((JRParameter) obj).getName() + "} ");
-					viewer.getDocument().set(oldText.toString());
+					txt = " " + ((AMSQLObject) obj).toSQLString() + " ";
+				} else if (obj instanceof JRParameter)
+					txt = " $P{" + ((JRParameter) obj).getName() + "} ";
+				if (txt != null) {
+					IDocument doc = viewer.getDocument();
+					int cOffset = viewer.getTextWidget().getCaretOffset();
+					try {
+						doc.replace(cOffset, 0, txt);
+					} catch (BadLocationException e) {
+						StringBuffer oldText = new StringBuffer(getQuery());
+						oldText.insert(cOffset, txt);
+						doc.set(oldText.toString());
+					}
 				}
 			}
 
@@ -177,9 +198,11 @@ public class SQLQuerySource {
 			 * specific type of AMSQLObject.
 			 */
 			private void performCustomDropOperations(AMSQLObject obj) {
-				// TODO for Slavic - Bugzilla #34318: TEMPORARY FIX THAT YOU SHOULD
+				// TODO for Slavic - Bugzilla #34318: TEMPORARY FIX THAT YOU
+				// SHOULD
 				// REVIEW
-				// Forcing the loading of the tables information so the user can use
+				// Forcing the loading of the tables information so the user can
+				// use
 				// smoothly
 				// the graphical editor (Diagram Tab) without NPE.
 				if (obj instanceof MSqlTable) {
@@ -187,7 +210,8 @@ public class SQLQuerySource {
 				}
 			}
 		});
-		viewer.getTextWidget().setData(SQLQueryDesigner.SQLQUERYDESIGNER, designer);
+		viewer.getTextWidget().setData(SQLQueryDesigner.SQLQUERYDESIGNER,
+				designer);
 		return cmp;
 	}
 
@@ -217,7 +241,8 @@ public class SQLQuerySource {
 	// // actioncontributor.contributeActions(this);
 	// }
 
-	// protected void configureToggleCommentAction(ToggleSLCommentAction action) {
+	// protected void configureToggleCommentAction(ToggleSLCommentAction action)
+	// {
 	// ISourceViewer sourceViewer = embeddedEditor.getViewer();
 	// SourceViewerConfiguration configuration =
 	// embeddedEditor.getConfiguration();
