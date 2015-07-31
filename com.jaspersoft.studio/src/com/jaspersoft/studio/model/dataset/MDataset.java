@@ -12,6 +12,7 @@ import java.beans.PropertyChangeEvent;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.data.DataAdapterParameterContributorFactory;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.JRQuery;
@@ -38,6 +39,8 @@ import com.jaspersoft.studio.model.parameter.MParameters;
 import com.jaspersoft.studio.model.sortfield.MSortFields;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
+import com.jaspersoft.studio.property.descriptor.ButtonsPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.DefaultDatasetButton;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.classname.NClassTypePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
@@ -213,14 +216,14 @@ public class MDataset extends APropertyNode implements ICopyable {
 		propertiesD.setDescription(Messages.MDataset_properties_description);
 		desc.add(propertiesD);
 		propertiesD.setHelpRefBuilder(new HelpReferenceBuilder(
-				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#property"));
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#property")); //$NON-NLS-1$
 
 		NClassTypePropertyDescriptor classD = new NClassTypePropertyDescriptor(JRDesignDataset.PROPERTY_SCRIPTLET_CLASS,
 				Messages.MDataset_scriplet_class);
 		classD.setDescription(Messages.MDataset_class_description);
 		desc.add(classD);
 		classD.setHelpRefBuilder(new HelpReferenceBuilder(
-				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#scriptlet"));
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#scriptlet")); //$NON-NLS-1$
 
 		ResourceBundlePropertyDescriptor resBundleD = new ResourceBundlePropertyDescriptor(
 				JRDesignDataset.PROPERTY_RESOURCE_BUNDLE, Messages.MDataset_resource_bundle);
@@ -232,27 +235,31 @@ public class MDataset extends APropertyNode implements ICopyable {
 		queryD.setDescription(Messages.MDataset_query_description);
 		desc.add(queryD);
 		queryD.setHelpRefBuilder(new HelpReferenceBuilder(
-				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#queryString"));
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#queryString")); //$NON-NLS-1$
 
 		whenResMissTypeD = new NamedEnumPropertyDescriptor<WhenResourceMissingTypeEnum>(
 				JRDesignDataset.PROPERTY_WHEN_RESOURCE_MISSING_TYPE, Messages.MDataset_when_resource_missing_type,
 				WhenResourceMissingTypeEnum.EMPTY, NullEnum.NOTNULL);
 		whenResMissTypeD.setDescription(Messages.MDataset_when_resource_missing_type_description);
 		desc.add(whenResMissTypeD);
+		
+		ButtonsPropertyDescriptor daButton = new ButtonsPropertyDescriptor(DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION, DefaultDatasetButton.class);
+		daButton.setDescription(Messages.MDataset_defaultDATooltip);
+		desc.add(daButton);
 
 		JRExpressionPropertyDescriptor filterExpression = new JRExpressionPropertyDescriptor(
 				JRDesignDataset.PROPERTY_FILTER_EXPRESSION, Messages.MDataset_filter_expression);
 		filterExpression.setDescription(Messages.MDataset_filter_expression_description);
 		desc.add(filterExpression);
 		filterExpression.setHelpRefBuilder(new HelpReferenceBuilder(
-				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#filterExpression"));
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#filterExpression")); //$NON-NLS-1$
 
 		defaultsMap.put(JRDesignDataset.PROPERTY_RESOURCE_BUNDLE, null);
 		defaultsMap.put(JRDesignDataset.PROPERTY_WHEN_RESOURCE_MISSING_TYPE,
 				whenResMissTypeD.getIntValue(WhenResourceMissingTypeEnum.NULL));
 		defaultsMap.put(JRDesignDataset.PROPERTY_FILTER_EXPRESSION, null);
 
-		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#subDataset");
+		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#subDataset"); //$NON-NLS-1$
 	}
 
 	private MQuery mQuery;

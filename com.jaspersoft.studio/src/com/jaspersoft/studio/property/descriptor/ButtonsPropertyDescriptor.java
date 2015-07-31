@@ -10,7 +10,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
-package com.jaspersoft.studio.book.descriptors;
+package com.jaspersoft.studio.property.descriptor;
 
 import java.lang.reflect.Constructor;
 
@@ -39,7 +39,7 @@ public class ButtonsPropertyDescriptor extends PropertyDescriptor implements IPr
 	/**
 	 * The class of the button
 	 */
-	private Class<? extends ASPropertyWidget> button;
+	private Class<? extends ASPropertyWidget<IPropertyDescriptor>> button;
 	
 	private IHelpRefBuilder refBuilder;
 
@@ -49,7 +49,7 @@ public class ButtonsPropertyDescriptor extends PropertyDescriptor implements IPr
 	 * @param id id of the property
 	 * @param button the class of the button, must extend ASPropertyWidget
 	 */
-	public ButtonsPropertyDescriptor(Object id, Class<? extends ASPropertyWidget> button) {
+	public ButtonsPropertyDescriptor(Object id, Class<? extends ASPropertyWidget<IPropertyDescriptor>> button) {
 		super(id, "");
 		this.button = button;
 		//This filter avoid to show this element on the advanced properties views
@@ -61,11 +61,11 @@ public class ButtonsPropertyDescriptor extends PropertyDescriptor implements IPr
 	 * not valid
 	 */
 	@Override
-	public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
+	public ASPropertyWidget<IPropertyDescriptor> createWidget(Composite parent, AbstractSection section) {
 		Object[] convertedArgs = new Object[]{parent, section, this};
 		Class<?>[] arguments = new Class<?>[]{Composite.class, AbstractSection.class, IPropertyDescriptor.class};
 		try {
-			Constructor<? extends ASPropertyWidget> constructor = button.getConstructor(arguments);
+			Constructor<? extends ASPropertyWidget<IPropertyDescriptor>> constructor = button.getConstructor(arguments);
 			return constructor.newInstance(convertedArgs);
 		} catch (Exception e) {
 			e.printStackTrace();

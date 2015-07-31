@@ -491,6 +491,7 @@ public class Messages extends NLS {
 	public static String DatasetRunRVPropertyEditor_missingTitle;
 	public static String DatasetRunRVPropertyPage_pageDescription;
 	public static String DatasetRunRVPropertyPage_pageTitle;
+	public static String DatasetSection_defaultAdapter;
 	public static String DatasetSection_nameNotValidTitle;
 	public static String DatasourceComboItem_select_a_datasource;
 	public static String DatePattern_description;
@@ -1068,6 +1069,7 @@ public class Messages extends NLS {
 	public static String MConditionalStyle_conditional_expression_description;
 	public static String MConditionalStyle_properties_category;
 	public static String MDataset_class_description;
+	public static String MDataset_defaultDATooltip;
 	public static String MDataset_Edit_Query_Button_Text;
 	public static String MDataset_filter_expression;
 	public static String MDataset_filter_expression_description;
@@ -1746,6 +1748,15 @@ public class Messages extends NLS {
 	public static String SchemaDialog_6;
 	public static String ScientificPattern_description;
 	public static String SelectDataAdapterAction_actionTitle;
+	public static String SelectDefaultDatasetDialog_absoluteLabel;
+	public static String SelectDefaultDatasetDialog_absoluteOption;
+	public static String SelectDefaultDatasetDialog_dialogTitle;
+	public static String SelectDefaultDatasetDialog_modeLabel;
+	public static String SelectDefaultDatasetDialog_noDAOption;
+	public static String SelectDefaultDatasetDialog_urlLabel;
+	public static String SelectDefaultDatasetDialog_urlOption;
+	public static String SelectDefaultDatasetDialog_workspaceLabel;
+	public static String SelectDefaultDatasetDialog_workspaceOption;
 	public static String SelectWorkspacePage_description;
 	public static String SelectWorkspacePage_openTitle;
 	public static String SelectWorkspacePage_title;
@@ -2090,6 +2101,7 @@ public class Messages extends NLS {
 	public static String NextPageAction_actionTooltip;
 	public static String QueryDesigner_readFieldsButton;
 	public static String DefaultDataAdapterEditorComposite_alredyExistingMessage;
+	public static String DefaultDatasetButton_setDefaultDAButton;
 
 	public static String DefaultNewWizard_defaultsHint;
 	public static String DefaultNewWizard_title;

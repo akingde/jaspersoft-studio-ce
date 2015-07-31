@@ -34,6 +34,7 @@ import com.jaspersoft.studio.book.model.MReportPart;
 import com.jaspersoft.studio.book.wizards.PartPropertyEditor;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.property.descriptor.ButtonsPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.parameter.dialog.GenericJSSParameter;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
@@ -44,7 +45,7 @@ import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
  * @author Orlandin Marco
  * 
  */
-public class SPPartParametersButton extends ASPropertyWidget {
+public class SPPartParametersButton extends ASPropertyWidget<IPropertyDescriptor> {
 
 	/**
 	 * The button control
@@ -59,7 +60,7 @@ public class SPPartParametersButton extends ASPropertyWidget {
 	 * @param pDescriptor the descriptor handle by the button
 	 * @param buttonText text on the button
 	 */
-	public SPPartParametersButton(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
+	public SPPartParametersButton(Composite parent, AbstractSection section, ButtonsPropertyDescriptor pDescriptor) {
 		super(parent, section, pDescriptor);
 		createButton(parent, Messages.SPPartParametersButton_parametersButton);
 	}

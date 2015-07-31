@@ -19,7 +19,6 @@ import java.net.URI;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.repo.RepositoryUtil;
 
-import org.apache.commons.validator.UrlValidator;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
@@ -130,7 +129,7 @@ public class DataAdapterLocationResolver {
 	 */
 	protected InputStream getJRDataAdapterStream(String location){
 		InputStream stream = null;
-		if (location != null){
+		if (location != null && !location.isEmpty()){
 			try{
 				stream = RepositoryUtil.getInstance(jConfig).getInputStreamFromLocation(location);
 			} catch (Exception ex){
@@ -182,26 +181,33 @@ public class DataAdapterLocationResolver {
 				return location;
 			} 
 			
-			//Check if it is relative to the folder
 			IPath path = new Path(location);
-			IFile folderFile = report.getParent().getFile(path);
-			if (folderFile.exists()){
-				String absolutePath = new File(folderFile.getLocationURI()).getAbsolutePath();
-				absoluteLocation = absolutePath;
-				return absolutePath;
-			} 
+			//Check if it is relative to the folder
+			try{ 
+				IFile folderFile = report.getParent().getFile(path);
+				if (folderFile.exists()){
+					String absolutePath = new File(folderFile.getLocationURI()).getAbsolutePath();
+					absoluteLocation = absolutePath;
+					return absolutePath;
+				} 
+			} catch (Exception ex){
+				
+			}
 			
 			//check if it is relative to the project
-			folderFile = report.getProject().getFile(path);
-			if (folderFile.exists()){
-				String absolutePath = new File(folderFile.getLocationURI()).getAbsolutePath();
-				absoluteLocation = absolutePath;
-				return absolutePath;
-			} 
+			try{ 
+				IFile folderFile = report.getProject().getFile(path);
+				if (folderFile.exists()){
+					String absolutePath = new File(folderFile.getLocationURI()).getAbsolutePath();
+					absoluteLocation = absolutePath;
+					return absolutePath;
+				} 
+			} catch (Exception ex){
+				
+			}
 			
 			//check if it is a URL file
-			UrlValidator validator = new UrlValidator();
-			if (validator.isValid(location)){
+			if (FileUtils.isValidURL(location)){
 				try{
 					file = new File(new URI(location));
 					if (file.exists()){
@@ -219,7 +225,9 @@ public class DataAdapterLocationResolver {
 	
 	/**
 	 * If we can get an absolute location on the filesystem for 
-	 * the resource, check if it was modified since the last loading
+	 * the resource, check if it was modified since the last loading.
+	 * If the resource is not on the filesystem this return always false
+	 * since reloading it can have an huge impact on the performances
 	 * 
 	 * @return true if the resource is changed and need to be reloaded
 	 * false otherwise
@@ -235,15 +243,14 @@ public class DataAdapterLocationResolver {
 				return true;
 			}
 		}
-		return true;
+		return false;
 	}
 	
 	/**
 	 * Get an url to the data adapter resource. 
 	 */
 	public String getAdapterURL(){
-		UrlValidator validator = new UrlValidator();
-		if (validator.isValid(location)){
+		if (FileUtils.isValidURL(location)){
 			return location;
 		}
 		try{

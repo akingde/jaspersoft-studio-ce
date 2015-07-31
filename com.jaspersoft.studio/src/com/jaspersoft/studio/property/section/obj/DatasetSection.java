@@ -14,6 +14,7 @@ package com.jaspersoft.studio.property.section.obj;
 
 import java.text.MessageFormat;
 
+import net.sf.jasperreports.data.DataAdapterParameterContributorFactory;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -61,9 +62,14 @@ public class DatasetSection extends AbstractSection {
 		createWidget4Property(parent, JRDesignDataset.PROPERTY_RESOURCE_BUNDLE).getControl().setLayoutData(gd);
 
 		gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 2;
 		gd.horizontalAlignment = SWT.CENTER;
+		gd.horizontalSpan = 2;
 		createWidget4Property(parent, JRDesignDataset.PROPERTY_QUERY, false).getControl().setLayoutData(gd);
+		
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalAlignment = SWT.CENTER;
+		gd.horizontalSpan = 2;
+		createWidget4Property(parent, DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION, false).getControl().setLayoutData(gd);
 	}
 	
 	@Override
@@ -75,6 +81,7 @@ public class DatasetSection extends AbstractSection {
 		addProvidedProperties(JRDesignDataset.PROPERTY_SCRIPTLET_CLASS, Messages.MDataset_scriplet_class);
 		addProvidedProperties(JRDesignDataset.PROPERTY_RESOURCE_BUNDLE, Messages.MDataset_resource_bundle);
 		addProvidedProperties(JRDesignDataset.PROPERTY_QUERY, Messages.common_query);
+		addProvidedProperties(DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION, Messages.DatasetSection_defaultAdapter);
 	}
 
 	@Override
