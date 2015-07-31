@@ -1818,6 +1818,7 @@ public class Messages extends NLS {
 	public static String SPQueryButton_editorNotSuppoertedMessage;
 	public static String StretchToContentAction_name;
 	public static String StretchToContentAction_tooltip;
+	public static String StudioPreferencePage_1;
 	public static String StudioPreferencePage_checkForUpdates;
 	public static String StudioPreferencePage_collectUsageStatistics;
 	public static String StudioPreferencePage_message1;
