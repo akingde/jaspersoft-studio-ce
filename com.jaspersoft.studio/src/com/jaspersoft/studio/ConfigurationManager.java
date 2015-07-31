@@ -144,7 +144,8 @@ public class ConfigurationManager {
 	
 	/**
 	 * Check if the configuration file of the application exist and if it 
-	 * can written or read
+	 * can written or read. Also if the file is not accessible a warning message is 
+	 * shown
 	 * 
 	 * @return true if the file is accessible for r\w operation, false otherwise
 	 */
