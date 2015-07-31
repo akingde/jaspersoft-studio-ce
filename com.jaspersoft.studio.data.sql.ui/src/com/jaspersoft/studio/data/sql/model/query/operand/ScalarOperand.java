@@ -49,8 +49,11 @@ public class ScalarOperand<T> extends AOperand {
 	@Override
 	public String toSQLString() {
 		if (value != null) {
-			if (Number.class.isAssignableFrom(type))
+			if (Number.class.isAssignableFrom(type)) {
+				if (value instanceof String)
+					return (String) value;
 				return NumberFormat.getInstance().format((Number) value);
+			}
 			if (Time.class.isAssignableFrom(type))
 				return "'"
 						+ new SimpleDateFormat("HH:mm:ss.ssss")

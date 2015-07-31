@@ -199,4 +199,29 @@ public class BigNumericInput extends ADataInput {
 		setDecoratorNullable(param);
 	}
 
+	public static Number getNumber(String number, String type) {
+	
+		try {
+			Class<?> clazz = Class.forName(type);
+			if (clazz.isAssignableFrom(Integer.class))
+				return new Integer(number);
+			if (clazz.isAssignableFrom(Short.class))
+				return new Short(number);
+			if (clazz.isAssignableFrom(Byte.class))
+				return new Byte(number);
+			if (clazz.isAssignableFrom(Long.class))
+				return new Long(number);
+	
+			if (clazz.isAssignableFrom(BigDecimal.class))
+				return new BigDecimal(number);
+			if (clazz.isAssignableFrom(Double.class))
+				return new Double(number);
+			if (clazz.isAssignableFrom(Float.class))
+				return new Float(number);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 }

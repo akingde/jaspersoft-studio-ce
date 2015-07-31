@@ -12,8 +12,14 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.sql.widgets.scalar;
 
+import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.DataBindingContext;
+import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.beans.PojoObservables;
+import org.eclipse.core.databinding.validation.IValidator;
+import org.eclipse.core.databinding.validation.ValidationStatus;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.jface.databinding.fieldassist.ControlDecorationSupport;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -49,7 +55,26 @@ public class NumberWidget extends AScalarWidget {
 
 		DataBindingContext bindingContext = new DataBindingContext();
 
-		bindingContext.bindValue(SWTObservables.observeText(txt, SWT.Modify), PojoObservables.observeValue(getValue(), "value"));
+		IValidator numberValidator = new IValidator() {
 
+			@Override
+			public IStatus validate(Object value) {
+				String s = String.valueOf(value);
+				boolean matches = s
+						.matches("^(-?0[.]\\d+)$|^(-?[1-9]+\\d*([.]\\d+)?)$|^0$");
+				if (matches) {
+					return ValidationStatus.ok();
+				}
+				return ValidationStatus.error("Only Number permitted");
+			}
+		};
+		UpdateValueStrategy targetToModel = new UpdateValueStrategy();
+		targetToModel.setBeforeSetValidator(numberValidator);
+		Binding bindValue = bindingContext.bindValue(
+				SWTObservables.observeText(txt, SWT.Modify),
+				PojoObservables.observeValue(getValue(), "value"),
+				targetToModel, null);
+
+		ControlDecorationSupport.create(bindValue, SWT.TOP | SWT.LEFT);
 	}
 }
