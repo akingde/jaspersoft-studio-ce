@@ -32,7 +32,7 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptor.combo.ButtonPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.combo.FontSizeButtonPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.FontNamePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RWFloatComboBoxPropertyDescriptor;
@@ -95,7 +95,7 @@ public class MFont extends APropertyNode {
 		fontSizeD.setValidator(new IntegerCellEditorValidator());
 		desc.add(fontSizeD);
 
-		ButtonPropertyDescriptor fontIncrement = new ButtonPropertyDescriptor(FONT_INCREMENT, this);
+		FontSizeButtonPropertyDescriptor fontIncrement = new FontSizeButtonPropertyDescriptor(FONT_INCREMENT, this);
 		desc.add(fontIncrement);
 
 		RWComboBoxPropertyDescriptor pdfFontNameD = new RWComboBoxPropertyDescriptor(JRBaseFont.PROPERTY_PDF_FONT_NAME,

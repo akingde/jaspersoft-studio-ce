@@ -61,7 +61,7 @@ import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.box.BoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.color.ColorPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptor.combo.ButtonPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.combo.FontSizeButtonPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.FontNamePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RWFloatComboBoxPropertyDescriptor;
@@ -386,7 +386,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		fontSizeD.setValidator(new IntegerCellEditorValidator());
 		desc.add(fontSizeD);
 
-		ButtonPropertyDescriptor fontIncrement = new ButtonPropertyDescriptor(MFont.FONT_INCREMENT, this);
+		FontSizeButtonPropertyDescriptor fontIncrement = new FontSizeButtonPropertyDescriptor(MFont.FONT_INCREMENT, this);
 		desc.add(fontIncrement);
 
 		PatternPropertyDescriptor patternD = new PatternPropertyDescriptor(JRBaseStyle.PROPERTY_PATTERN,

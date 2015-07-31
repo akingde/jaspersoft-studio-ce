@@ -30,7 +30,7 @@ import com.jaspersoft.studio.property.section.widgets.SPButton;
  * @author Orlandin Marco
  * 
  */
-public class ButtonPropertyDescriptor extends PropertyDescriptor implements IPropertyDescriptorWidget, IHelp {
+public class FontSizeButtonPropertyDescriptor extends PropertyDescriptor implements IPropertyDescriptorWidget, IHelp {
 
 	/**
 	 * The edited node
@@ -45,7 +45,7 @@ public class ButtonPropertyDescriptor extends PropertyDescriptor implements IPro
 	 * @param fontModel
 	 *          model that contain the font attribute to increment\decrement
 	 */
-	public ButtonPropertyDescriptor(Object id, APropertyNode fontModel) {
+	public FontSizeButtonPropertyDescriptor(Object id, APropertyNode fontModel) {
 		super(id, "");
 		elementFont = fontModel;
 		//This filter avoid to show this element on the advanced properties views
@@ -56,8 +56,8 @@ public class ButtonPropertyDescriptor extends PropertyDescriptor implements IPro
 	 * Create the widget and return it
 	 */
 	@Override
-	public ASPropertyWidget<ButtonPropertyDescriptor> createWidget(Composite parent, AbstractSection section) {
-		return new SPButton<ButtonPropertyDescriptor>(parent, section, this, elementFont);
+	public ASPropertyWidget<FontSizeButtonPropertyDescriptor> createWidget(Composite parent, AbstractSection section) {
+		return new SPButton<FontSizeButtonPropertyDescriptor>(parent, section, this, elementFont);
 	}
 
 	private IHelpRefBuilder refBuilder;
