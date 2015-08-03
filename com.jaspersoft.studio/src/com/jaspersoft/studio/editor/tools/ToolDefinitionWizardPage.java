@@ -133,9 +133,12 @@ public class ToolDefinitionWizardPage extends JSSHelpWizardPage {
 		new Label(container, SWT.NONE).setText(Messages.ToolDefinitionWizardPage_titleLabel);
 		nameText = new Text(container, SWT.BORDER);
 		nameText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		nameText.setText(getFirstAvailableName());
+		
 		new Label(container, SWT.NONE).setText(Messages.ToolDefinitionWizardPage_descriptionLabel);
 		descriptionText = new Text(container, SWT.BORDER);
 		descriptionText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		descriptionText.setText(Messages.ToolDefinitionWizardPage_defaultDescription);
 		new Label(container, SWT.NONE).setText(Messages.ToolDefinitionWizardPage_iconLabel);
 		
 		//Create the controls for the image
@@ -158,7 +161,7 @@ public class ToolDefinitionWizardPage extends JSSHelpWizardPage {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 			   FileDialog fd = new FileDialog(UIUtils.getShell(), SWT.OPEN);
-	        fd.setText("Save");
+	        fd.setText(Messages.common_open);
 	        String[] filterExt = { "*.jpg", "*.png", ".gif" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	        fd.setFilterExtensions(filterExt);
 	        String selected = fd.open();
@@ -172,6 +175,9 @@ public class ToolDefinitionWizardPage extends JSSHelpWizardPage {
 		nameText.addModifyListener(widgetsModfied);
 		descriptionText.addModifyListener(widgetsModfied);
 		iconPathText.addModifyListener(widgetsModfied);
+		
+		//force the update of the text field
+		widgetsModfied.modifyText(null);
 		
 		setControl(container);
 	}
@@ -194,6 +200,22 @@ public class ToolDefinitionWizardPage extends JSSHelpWizardPage {
 			setDescription(Messages.ToolDefinitionWizardPage_description);
 		}
 		return getErrorMessage() == null;
+	}
+	
+	/**
+	 * Search the first available name for a tool
+	 * 
+	 * @return a not null and unique name for a tool
+	 */
+	private String getFirstAvailableName(){
+		String baseName= Messages.ToolDefinitionWizardPage_defaultName;
+		String name = baseName;
+		int counter = 1;
+		while(ToolManager.INSTANCE.isNameAlreadyUsed(name)){
+			name = baseName + " " + counter;  //$NON-NLS-1$
+			counter ++;
+		}
+		return name;
 	}
 	
 	/**

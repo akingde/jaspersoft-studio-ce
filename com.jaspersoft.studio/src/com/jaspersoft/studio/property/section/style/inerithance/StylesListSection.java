@@ -268,7 +268,7 @@ public class StylesListSection extends AbstractSection {
 		Object style = getElementStyle(element);
 		StyleContainer styleContainer = styleMaps.get(style);
 		while(styleContainer != null){
-			MStyle styleModel = styleContainer.getStyle();
+ 			MStyle styleModel = styleContainer.getStyle();
 			if (!result.contains(styleModel)) result.addLast(styleModel);
 			else {
 				//The style has itself set as parent style, break the cycle
@@ -836,7 +836,11 @@ public class StylesListSection extends AbstractSection {
 			for (INode style : list) {
 				if (style instanceof MStyle) {
 					MStyle element = (MStyle) style;
-					styleMaps.put(getStyleKey(element), new StyleContainer(element));
+					Object styleKey = getStyleKey(element);
+					styleMaps.put(styleKey, new StyleContainer(element));
+					if (styleKey instanceof JRDesignStyle){
+						System.out.println(((JRDesignStyle)styleKey).getName());
+					}
 					if (element.getValue() == defaultValue) defaultStyle = element;
 				} else if (style instanceof MStyleTemplate) {
 					externalList.add(style);

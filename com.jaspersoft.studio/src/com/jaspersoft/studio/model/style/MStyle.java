@@ -819,19 +819,20 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 	 * 
 	 * @param childerns
 	 *          the children of the actual level
+	 * @param force force the refresh in all the nodes, ignoring if they are using or not the style
 	 */
-	private void setStyleRefresh(List<INode> childerns) {
+	private void setStyleRefresh(List<INode> childerns, boolean force) {
 		for (INode child : childerns) {
 			if (child instanceof IGraphicalPropertiesHandler) {
 				IGraphicalPropertiesHandler graphicalElement = (IGraphicalPropertiesHandler) child;
-				if (getValue().isDefault() || graphicalElement.getUsedStyles().contains(getValue().getName())) {
+				if (force || getValue().isDefault() || graphicalElement.getUsedStyles().contains(getValue().getName())) {
 					graphicalElement.setChangedProperty(true);
 					//Since a style change can change the presence of an error decorator (the fault property can be inherited)
 					//we need to refresh also the elements depending on this style
 					((ANode)child).revalidateChildren();
 				}
 			}
-			setStyleRefresh(new ArrayList<INode>(child.getChildren()));
+			setStyleRefresh(new ArrayList<INode>(child.getChildren()), force);
 		}
 
 	}
@@ -874,21 +875,21 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 				}
 			}
 		}
-		fireUpdateForElements();
 		evt = new PropertyChangeEvent(getValue(), evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
+		fireUpdateForElements(evt.getPropertyName().equals(JRDesignStyle.PROPERTY_DEFAULT));
 		super.propertyChange(evt);
 	}
 
 	/**
 	 * Search in background the elements that are using this styles and mark them for the refresh
 	 */
-	public void fireUpdateForElements() {
+	public void fireUpdateForElements(final boolean force) {
 		Runnable notifier = new Runnable() {
 			public void run() {
 				// Avoid the refresh if the style is not in the hierarchy
 				final INode root = getRoot();
 				if (root != null) {
-					setStyleRefresh(new ArrayList<INode>(root.getChildren()));
+					setStyleRefresh(new ArrayList<INode>(root.getChildren()), force);
 					JSSCompoundCommand.forceRefreshVisuals(JSSCompoundCommand.getMainNode((ANode) root));
 				}
 			}
@@ -896,18 +897,6 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		new Thread(notifier).start();
 	}
 	
-	protected void revalidateDependendNodes(List<INode> childerns){
-		for (INode child : childerns) {
-			if (child instanceof IGraphicalPropertiesHandler) {
-				IGraphicalPropertiesHandler graphicalElement = (IGraphicalPropertiesHandler) child;
-				if (getValue().isDefault() || graphicalElement.getUsedStyles().contains(getValue().getName())) {
-					graphicalElement.setChangedProperty(true);
-				}
-			}
-			setStyleRefresh(new ArrayList<INode>(child.getChildren()));
-		}
-	}
-
 	/**
 	 * Return the style element
 	 */
