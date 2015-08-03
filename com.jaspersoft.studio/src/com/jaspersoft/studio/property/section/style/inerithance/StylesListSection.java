@@ -838,9 +838,6 @@ public class StylesListSection extends AbstractSection {
 					MStyle element = (MStyle) style;
 					Object styleKey = getStyleKey(element);
 					styleMaps.put(styleKey, new StyleContainer(element));
-					if (styleKey instanceof JRDesignStyle){
-						System.out.println(((JRDesignStyle)styleKey).getName());
-					}
 					if (element.getValue() == defaultValue) defaultStyle = element;
 				} else if (style instanceof MStyleTemplate) {
 					externalList.add(style);
