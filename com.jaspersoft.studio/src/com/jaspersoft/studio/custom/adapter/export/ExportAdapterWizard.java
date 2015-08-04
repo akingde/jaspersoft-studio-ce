@@ -178,7 +178,10 @@ public class ExportAdapterWizard extends PluginExportWizard {
   			IProject project = fPage.getProjectForModel(plugin);
   			if (project != null){
     			File sourceFile = new File(workspaceDirectory, project.getFullPath().toOSString());
-    			File manifestFile = new File(sourceFile, "META-INF\\MANIFEST.MF"); //$NON-NLS-1$
+    			
+    			//Load the manifest file
+    			File manifestFile = new File(sourceFile, "META-INF"); //$NON-NLS-1$
+    			manifestFile = new File(manifestFile, "MANIFEST.MF"); //$NON-NLS-1$
     		  String manifestContent = JarFileUtils.deserializeString(manifestFile);
     		  
     		  String version = "_"+plugin.getBundleDescription().getVersion().toString().replace("qualifier", generateQualifier()); //$NON-NLS-1$ //$NON-NLS-2$
