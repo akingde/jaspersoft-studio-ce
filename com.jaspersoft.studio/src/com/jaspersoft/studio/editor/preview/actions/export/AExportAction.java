@@ -132,7 +132,7 @@ public abstract class AExportAction extends AReportViewerAction {
 						if (jContext != null && jContext.getJasperDesign() != null){
 							String reportLanguage = jContext.getJasperDesign().getLanguage();
 							if (reportLanguage != null){
-								JaspersoftStudioPlugin.getInstance().getUsageManager().audit("ReportLanguage"+reportLanguage, UsageStatisticsIDs.CATEGORY_REPORT);
+								JaspersoftStudioPlugin.getInstance().getUsageManager().audit(reportLanguage, UsageStatisticsIDs.CATEGORY_LANGUAGE);
 							}
 						}
 					}

@@ -43,4 +43,6 @@ public class UsageStatisticsIDs {
 	public static final String CATEGORY_ELEMENT = "Element";	
 	
 	public static final String CATEGORY_REPORT = "Report";	
+	
+	public static final String CATEGORY_LANGUAGE = "Language";	
 }
