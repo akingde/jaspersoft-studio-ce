@@ -51,7 +51,8 @@ public class EditExpressionDialog extends ATitledDialog {
 	public EditExpressionDialog(Shell parentShell) {
 		super(parentShell);
 		setTitle(Messages.EditExpressionDialog_0);
-		setDescription(Messages.EditExpressionDialog_1 + Messages.EditExpressionDialog_2
+		setDescription(Messages.EditExpressionDialog_1
+				+ Messages.EditExpressionDialog_2
 				+ Messages.EditExpressionDialog_3);
 	}
 
@@ -109,7 +110,9 @@ public class EditExpressionDialog extends ATitledDialog {
 
 			new Label(c, SWT.NONE).setText(Messages.EditExpressionDialog_5);
 
-			bindingContext.bindValue(SWTObservables.observeSelection(prevoperator), PojoObservables.observeValue(this, "prevcond")); //$NON-NLS-1$
+			bindingContext.bindValue(
+					SWTObservables.observeSelection(prevoperator),
+					PojoObservables.observeValue(this, "prevcond")); //$NON-NLS-1$
 		} else {
 			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 			gd.horizontalSpan = 5;
@@ -117,7 +120,9 @@ public class EditExpressionDialog extends ATitledDialog {
 		}
 
 		Control w = Factory.createWidget(cmp, operands, 0, value);
-		GridData gd = new GridData(GridData.FILL_HORIZONTAL | GridData.VERTICAL_ALIGN_BEGINNING | GridData.HORIZONTAL_ALIGN_END);
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL
+				| GridData.VERTICAL_ALIGN_BEGINNING
+				| GridData.HORIZONTAL_ALIGN_END);
 		gd.widthHint = 250;
 		w.setLayoutData(gd);
 
@@ -138,13 +143,14 @@ public class EditExpressionDialog extends ATitledDialog {
 		rcmp.setLayout(stackLayout);
 		gd = new GridData(GridData.FILL_BOTH);
 		gd.heightHint = 150;
-		gd.widthHint = 300;
+		gd.widthHint = 400;
 		gd.verticalSpan = 2;
 		gd.horizontalSpan = 3;
 		rcmp.setLayoutData(gd);
 
 		showRight();
-		bindingContext.bindValue(SWTObservables.observeSelection(operator), PojoObservables.observeValue(this, "operator")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeSelection(operator),
+				PojoObservables.observeValue(this, "operator")); //$NON-NLS-1$
 		return cmp;
 	}
 
@@ -167,10 +173,12 @@ public class EditExpressionDialog extends ATitledDialog {
 				cmp.setLayout(layout);
 
 				Control w = Factory.createWidget(cmp, operands, 1, value);
-				GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-				gd.widthHint = 200;
+				GridData gd = new GridData(GridData.FILL_HORIZONTAL
+						| GridData.HORIZONTAL_ALIGN_CENTER);
+				gd.widthHint = 250;
 				w.setLayoutData(gd);
-			} else if (op.getNrOperands() == 3 && (op == Operator.BETWEEN || op == Operator.NOTBETWEEN)) {
+			} else if (op.getNrOperands() == 3
+					&& (op == Operator.BETWEEN || op == Operator.NOTBETWEEN)) {
 				cmp = new Composite(rcmp, SWT.NONE);
 				GridLayout layout = new GridLayout(3, false);
 				layout.marginHeight = 0;
@@ -178,15 +186,18 @@ public class EditExpressionDialog extends ATitledDialog {
 				cmp.setLayout(layout);
 
 				Control w = Factory.createWidget(cmp, operands, 1, value);
-				GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-				gd.widthHint = 200;
+				GridData gd = new GridData(GridData.FILL_HORIZONTAL
+						| GridData.HORIZONTAL_ALIGN_CENTER);
+				gd.widthHint = 250;
 				w.setLayoutData(gd);
 
-				new Label(cmp, SWT.NONE).setText(Messages.EditExpressionDialog_6);
+				new Label(cmp, SWT.NONE)
+						.setText(Messages.EditExpressionDialog_6);
 
 				w = Factory.createWidget(cmp, operands, 2, value);
-				gd = new GridData(GridData.FILL_HORIZONTAL);
-				gd.widthHint = 200;
+				gd = new GridData(GridData.FILL_HORIZONTAL
+						| GridData.HORIZONTAL_ALIGN_CENTER);
+				gd.widthHint = 250;
 				w.setLayoutData(gd);
 			} else {
 				cmp = new Composite(rcmp, SWT.NONE);
@@ -203,10 +214,11 @@ public class EditExpressionDialog extends ATitledDialog {
 	}
 
 	protected void createInList(Composite cmp) {
-		final List inlist = new List(cmp, SWT.MULTI | SWT.READ_ONLY | SWT.BORDER);
+		final List inlist = new List(cmp, SWT.MULTI | SWT.READ_ONLY
+				| SWT.BORDER);
 		GridData gd = new GridData(GridData.FILL_BOTH);
 		gd.verticalSpan = 3;
-		gd.widthHint = 200;
+		gd.widthHint = 250;
 		inlist.setLayoutData(gd);
 
 		Button op3 = new Button(cmp, SWT.PUSH);
@@ -233,7 +245,8 @@ public class EditExpressionDialog extends ATitledDialog {
 
 		op3 = new Button(cmp, SWT.PUSH);
 		op3.setText(Messages.EditExpressionDialog_9);
-		gd = new GridData(GridData.FILL_HORIZONTAL | GridData.VERTICAL_ALIGN_BEGINNING);
+		gd = new GridData(GridData.FILL_HORIZONTAL
+				| GridData.VERTICAL_ALIGN_BEGINNING);
 		op3.setLayoutData(gd);
 		op3.addSelectionListener(new SelectionAdapter() {
 			@Override
