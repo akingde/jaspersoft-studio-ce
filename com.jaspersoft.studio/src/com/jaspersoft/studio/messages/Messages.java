@@ -2075,6 +2075,8 @@ public class Messages extends NLS {
 	public static String VersionDialog_warning;
 	public static String VersionUpdateDialog_0;
 	public static String VersionUpdateDialog_1;
+	public static String VersionUpdateDialog_2;
+	public static String VersionUpdateDialog_3;
 	public static String VerticalRowLayout_name;
 	public static String VerticalRowLayout_tooltip;
 	public static String ViewExecutionInfoAction_tooltip;

@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.statistics.heartbeat;
 
@@ -16,9 +12,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.MessageFormat;
 
+import net.sf.jasperreports.eclipse.ui.ATitledDialog;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
-import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -37,7 +33,7 @@ import org.eclipse.ui.PlatformUI;
 
 import com.jaspersoft.studio.messages.Messages;
 
-public class VersionUpdateDialog extends Dialog {
+public class VersionUpdateDialog extends ATitledDialog {
 	private boolean isNotShowAgain = false;
 	private String newVersion;
 	private String optMessage;
@@ -49,18 +45,8 @@ public class VersionUpdateDialog extends Dialog {
 	 */
 	public VersionUpdateDialog(Shell parentShell) {
 		super(parentShell);
-	}
-
-	@Override
-	protected void configureShell(Shell newShell) {
-		super.configureShell(newShell);
-		newShell.setText("Version Update");
-		newShell.setSize(600, 250);
-	}
-
-	@Override
-	protected boolean isResizable() {
-		return true;
+		setTitle(Messages.VersionUpdateDialog_2);
+		setDefaultSize(600, 250);
 	}
 
 	public void setNewVersion(String msg) {
@@ -86,15 +72,13 @@ public class VersionUpdateDialog extends Dialog {
 		container.setLayout(new GridLayout());
 
 		Link link = new Link(container, SWT.WRAP);
-		link.setText(new MessageFormat(Messages.VersionUpdateDialog_0)
-				.format(new Object[] { newVersion }));
+		link.setText(new MessageFormat(Messages.VersionUpdateDialog_0).format(new Object[] { newVersion }));
 		link.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				System.out.println("You have selected: " + e.text);
+				System.out.println(Messages.VersionUpdateDialog_3 + e.text);
 				try {
-					PlatformUI.getWorkbench().getBrowserSupport()
-							.getExternalBrowser().openURL(new URL(e.text));
+					PlatformUI.getWorkbench().getBrowserSupport().getExternalBrowser().openURL(new URL(e.text));
 				} catch (PartInitException ex) {
 					UIUtils.showError(ex);
 				} catch (MalformedURLException ex) {
@@ -134,8 +118,7 @@ public class VersionUpdateDialog extends Dialog {
 	 */
 	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
-		createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,
-				true);
+		createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, true);
 	}
 
 }

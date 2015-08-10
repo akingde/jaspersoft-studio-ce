@@ -32,6 +32,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.net.ntp.NTPUDPClient;
 import org.apache.commons.net.ntp.TimeInfo;
 import org.apache.http.HttpHost;
+import org.apache.http.HttpResponse;
 import org.apache.http.client.fluent.Executor;
 import org.apache.http.client.fluent.Request;
 import org.eclipse.core.runtime.Assert;
@@ -58,7 +59,7 @@ import com.jaspersoft.studio.utils.ModelUtils;
  * usage statistics
  * 
  * @author Orlandin Marco
- *
+ * 
  */
 public class UsageManager {
 
@@ -68,27 +69,27 @@ public class UsageManager {
 	protected static final String UNKWNOW_VERSION = "Unknown"; //$NON-NLS-1$;
 
 	/**
-	 * The current used version of Jaspersfot Studio. It is initialized the first
-	 * time is requested trough the appropriate method
+	 * The current used version of Jaspersfot Studio. It is initialized the first time is requested trough the appropriate
+	 * method
 	 */
 	private static String CURRENT_VERSION = null;
-	
+
 	/**
 	 * URL of the server where the statistics are sent
 	 */
 	private static final String STATISTICS_SERVER_URL = "http://heartbeat.jaspersoft.com/heartbeat/jss/statistics";//$NON-NLS-1$ //http://192.168.2.101/sf/statistics.php
-	
+
 	/**
 	 * URL of the server where the heartbeat is sent
 	 */
 	private static final String HEARTBEAT_SERVER_URL = "http://jasperstudio.sf.net/jsslastversion.php";//$NON-NLS-1$
-	
+
 	/**
 	 * Property name used in the preferences in the old version of Jaspersoft Studio to store a UUID of the application.
 	 * This is used only for backward compatibility since the newer versions store the file inside an application folder
 	 */
 	private static final String BACKWARD_UUID_PROPERTY = "UUID"; //$NON-NLS-1$
-	
+
 	/**
 	 * Time in ms that the process to write the statistics from the memory on the disk wait after the update of a value.
 	 * This is done since some operations can update many values, doing this there is a time span to allow sequence of
@@ -161,8 +162,7 @@ public class UsageManager {
 	private Job writeStatsToDisk = new WriteUsageJob();
 
 	/**
-	 * The folder where all the statistics file are stored, this folder is different for each
-	 * JSS installation
+	 * The folder where all the statistics file are stored, this folder is different for each JSS installation
 	 */
 	private File statisticsFolder = ConfigurationManager.getAppDataFolder("Statistics");
 
@@ -171,7 +171,7 @@ public class UsageManager {
 	 * since the last update to minimize the number of write on the disk
 	 * 
 	 * @author Orlandin Marco
-	 *
+	 * 
 	 */
 	private class WriteUsageJob extends Job {
 
@@ -199,31 +199,32 @@ public class UsageManager {
 	}
 
 	/**
-	 * Method used to write in the statistics file. It is thread
-	 * safe to avoid concurrent access exception
+	 * Method used to write in the statistics file. It is thread safe to avoid concurrent access exception
 	 * 
-	 * @param key the key to write
-	 * @param value the value to write
+	 * @param key
+	 *          the key to write
+	 * @param value
+	 *          the value to write
 	 */
-	protected void setProperty(String key, String value){
+	protected void setProperty(String key, String value) {
 		synchronized (UsageManager.this) {
 			getStatisticsContainer().setProperty(key, value);
 		}
 	}
-	
+
 	/**
-	 * Method used to read from the statistics file. It is thread
-	 * safe to avoid concurrent access exception
+	 * Method used to read from the statistics file. It is thread safe to avoid concurrent access exception
 	 * 
-	 * @param key the key of the value to read
+	 * @param key
+	 *          the key of the value to read
 	 * @return the valued associated with the key, can be null;
 	 */
-	private String getProperty(String key){
+	private String getProperty(String key) {
 		synchronized (UsageManager.this) {
 			return getStatisticsContainer().getProperty(key);
 		}
 	}
-	
+
 	/**
 	 * Write the statistics properties file on the disk
 	 */
@@ -262,45 +263,44 @@ public class UsageManager {
 	 * 
 	 * @return a not null string representing the JSS version
 	 */
-	protected String getVersion(){
-		if (CURRENT_VERSION == null){
+	protected String getVersion() {
+		if (CURRENT_VERSION == null) {
 			CURRENT_VERSION = JaspersoftStudioPlugin.getInstance().getBundle().getVersion().toString();
-			//check if it is a development version
-			if (CURRENT_VERSION.endsWith(".qualifier")){
+			// check if it is a development version
+			if (CURRENT_VERSION.endsWith(".qualifier")) {
 				CURRENT_VERSION = CURRENT_VERSION.substring(0, CURRENT_VERSION.lastIndexOf(".qualifier")) + "-dev";
 			}
-			//check if it is a pro
-			if (isPro()){
+			// check if it is a pro
+			if (isPro()) {
 				CURRENT_VERSION += "-pro";
 			}
 		}
 		return CURRENT_VERSION;
 	}
-	
+
 	/**
 	 * Return the current eclipse version and product name
 	 * 
 	 * @return the eclipse version
 	 */
-	protected String getEclipseVersion(){
-		try{
+	protected String getEclipseVersion() {
+		try {
 			String pluginId = Platform.getProduct().getId();
-		Bundle bundle = Platform.getBundle("org.eclipse.platform");
+			Bundle bundle = Platform.getBundle("org.eclipse.platform");
 			String eclipseVersion = "";
-			if (bundle != null){
+			if (bundle != null) {
 				eclipseVersion = bundle.getVersion().toString();
 			}
-			if (eclipseVersion != null && !eclipseVersion.isEmpty()){
+			if (eclipseVersion != null && !eclipseVersion.isEmpty()) {
 				return pluginId + "[" + eclipseVersion + "]";
 			} else {
 				return pluginId + "[Unknown Version]";
 			}
-		} catch (Exception ex){
+		} catch (Exception ex) {
 			JaspersoftStudioPlugin.getInstance().logError(ex);
 		}
 		return UNKWNOW_VERSION;
 	}
-
 
 	/**
 	 * Contact an NTP server to get the current time
@@ -334,9 +334,9 @@ public class UsageManager {
 			} else {
 				long millisDiff = actualMillis - Long.parseLong(lastUpdate);
 				int days = (int) (millisDiff / 86400000);
-				//int minutes = (int) (millisDiff / 60000);
-				//System.out.println("passed "+ minutes + "minutes since the last strartup ");
-				//return minutes > 5;
+				// int minutes = (int) (millisDiff / 60000);
+				// System.out.println("passed "+ minutes + "minutes since the last strartup ");
+				// return minutes > 5;
 				return days >= 7;
 			}
 		} catch (Exception ex) {
@@ -447,7 +447,7 @@ public class UsageManager {
 	 * string. Then this string is sent to the server as a post parameter named data
 	 */
 	protected void sendStatistics() {
- 		BufferedReader responseReader = null;
+		BufferedReader responseReader = null;
 		DataOutputStream postWriter = null;
 		try {
 			if (!STATISTICS_SERVER_URL.trim().isEmpty()) {
@@ -470,34 +470,35 @@ public class UsageManager {
 							String value = prop.getProperty(key.toString(), "0");
 							int usageNumber = Integer.parseInt(value); //$NON-NLS-1$
 							String version = getVersion();
-							//Check if the id contains the version
-							if (id_category.length == 3){
+							// Check if the id contains the version
+							if (id_category.length == 3) {
 								version = id_category[2];
 							} else {
-								//Old structure, remove the old entry and insert the new fixed one
-								//this is a really limit case and should almost never happen
+								// Old structure, remove the old entry and insert the new fixed one
+								// this is a really limit case and should almost never happen
 								prop.remove(key);
-								String fixed_key = id_category[0] + ID_CATEGORY_SEPARATOR + id_category[1] + ID_CATEGORY_SEPARATOR + version;
+								String fixed_key = id_category[0] + ID_CATEGORY_SEPARATOR + id_category[1] + ID_CATEGORY_SEPARATOR
+										+ version;
 								prop.setProperty(fixed_key, value);
 								fileChanged = true;
 							}
 							container.addStat(new UsageStatistic(id_category[0], id_category[1], version, usageNumber));
 						} catch (Exception ex) {
-							//if a key is invalid remove it
+							// if a key is invalid remove it
 							ex.printStackTrace();
 							prop.remove(key);
 							fileChanged = true;
 						}
 					}
 				}
-				if (fileChanged){
-					//The statistics file was changed, maybe a fix or an invalid property removed
-					//write it corrected on the disk
+				if (fileChanged) {
+					// The statistics file was changed, maybe a fix or an invalid property removed
+					// write it corrected on the disk
 					writeStatsToDisk.cancel();
 					writeStatsToDisk.setPriority(Job.SHORT);
 					writeStatsToDisk.schedule(MINIMUM_WAIT_TIME);
 				}
-				
+
 				ObjectMapper mapper = new ObjectMapper();
 				String serializedData = mapper.writeValueAsString(container);
 
@@ -516,12 +517,12 @@ public class UsageManager {
 				while ((inputLine = responseReader.readLine()) != null) {
 					response.append(inputLine);
 				}
-				
+
 				// Update the upload time
-				if (responseCode == 200 && ModelUtils.safeEquals(response.toString(), "ok")){
+				if (responseCode == 200 && ModelUtils.safeEquals(response.toString(), "ok")) {
 					setInstallationInfo(TIMESTAMP_INFO, String.valueOf(getCurrentTime()));
 				} else {
-					//print result
+					// print result
 					System.out.println("Response error: " + response.toString());
 				}
 			}
@@ -547,9 +548,10 @@ public class UsageManager {
 		// check if it can be a pro version
 		return Platform.getBundle("com.jaspersoft.studio.pro.rcp") != null; //$NON-NLS-1$
 	}
-	
+
 	/**
-	 * Check if the running JSS is a community or pro version. This is done looking for the plugin com.jaspersoft.studio.pro.doc
+	 * Check if the running JSS is a community or pro version. This is done looking for the plugin
+	 * com.jaspersoft.studio.pro.doc
 	 * 
 	 * @return true if the current running JSS is a pro version, false otherwise
 	 */
@@ -557,34 +559,34 @@ public class UsageManager {
 		return Platform.getBundle("com.jaspersoft.studio.pro.doc") != null; //$NON-NLS-1$
 	}
 
-	protected void moveStatisticsToFolder(){
+	protected void moveStatisticsToFolder() {
 		File applicationFolder = statisticsFolder.getParentFile();
 		File infoFile = new File(applicationFolder, INFO_FILE_NAME);
-		if (infoFile.exists()){
-			//Need to move the file into the new folder
-			try{
+		if (infoFile.exists()) {
+			// Need to move the file into the new folder
+			try {
 				org.apache.commons.io.FileUtils.moveFileToDirectory(infoFile, statisticsFolder, true);
-			}	catch (Exception ex) {
-					ex.printStackTrace();
-					JaspersoftStudioPlugin.getInstance().logError(ex);
+			} catch (Exception ex) {
+				ex.printStackTrace();
+				JaspersoftStudioPlugin.getInstance().logError(ex);
 			} finally {
 				infoFile.delete();
 			}
 		}
 		File statisticsFile = new File(applicationFolder, PROPERTIES_FILE_NAME);
-		if (statisticsFile.exists()){
-			//Need to move the file into the new folder
-			try{
+		if (statisticsFile.exists()) {
+			// Need to move the file into the new folder
+			try {
 				org.apache.commons.io.FileUtils.moveFileToDirectory(statisticsFile, statisticsFolder, true);
-			}	catch (Exception ex) {
-					ex.printStackTrace();
-					JaspersoftStudioPlugin.getInstance().logError(ex);
+			} catch (Exception ex) {
+				ex.printStackTrace();
+				JaspersoftStudioPlugin.getInstance().logError(ex);
 			} finally {
 				statisticsFile.delete();
 			}
 		}
 	}
-	
+
 	/**
 	 * Method called to start the UsageManager, it will check if the usage statistics must be uploaded and and it check
 	 * for newer version. all is done inside separated Jobs and if the relative flags on the preferences are enabled. It
@@ -592,10 +594,11 @@ public class UsageManager {
 	 * statistics is enabled
 	 */
 	public void start() {
-		//Move the statistics on the new storage structure
+		// Move the statistics on the new storage structure
 		moveStatisticsToFolder();
 		// Check if the collecting of statistics is enabled
-		allowUsageCollection = JaspersoftStudioPlugin.getInstance().getPreferenceStore().getBoolean(StudioPreferencePage.JSS_SEND_USAGE_STATISTICS);
+		allowUsageCollection = JaspersoftStudioPlugin.getInstance().getPreferenceStore()
+				.getBoolean(StudioPreferencePage.JSS_SEND_USAGE_STATISTICS);
 		JaspersoftStudioPlugin.getInstance().getPreferenceStore().addPropertyChangeListener(preferencesListener);
 		if (allowUsageCollection) {
 			Job uploadUsageStats = new Job(Messages.UsageManager_uploadJobName) {
@@ -661,12 +664,15 @@ public class UsageManager {
 	public void audit(String used_action_id, String cateogory) {
 		synchronized (UsageManager.this) {
 			if (allowUsageCollection) {
-				//Check the separator is not used in the action
-				String errorMessage = MessageFormat.format(Messages.UsageManager_errorSepratorReserved,new Object[] { ID_CATEGORY_SEPARATOR });
-				Assert.isTrue(!used_action_id.contains(ID_CATEGORY_SEPARATOR) && !cateogory.contains(ID_CATEGORY_SEPARATOR),	errorMessage);
+				// Check the separator is not used in the action
+				String errorMessage = MessageFormat.format(Messages.UsageManager_errorSepratorReserved,
+						new Object[] { ID_CATEGORY_SEPARATOR });
+				Assert.isTrue(!used_action_id.contains(ID_CATEGORY_SEPARATOR) && !cateogory.contains(ID_CATEGORY_SEPARATOR),
+						errorMessage);
 				String id = used_action_id + ID_CATEGORY_SEPARATOR + cateogory + ID_CATEGORY_SEPARATOR + getVersion();
 				String textUsageNumber = getProperty(id);
-				if (textUsageNumber == null) textUsageNumber = "0"; //$NON-NLS-1$
+				if (textUsageNumber == null)
+					textUsageNumber = "0"; //$NON-NLS-1$
 				int usageNumber = 0;
 				try {
 					usageNumber = Integer.parseInt(textUsageNumber);
@@ -697,10 +703,12 @@ public class UsageManager {
 	public void audit_set(String used_action_id, String cateogory, int usageNumber) {
 		synchronized (this) {
 			if (allowUsageCollection) {
-				//Check the separator is not used in the action
-				String errorMessage = MessageFormat.format(Messages.UsageManager_errorSepratorReserved,new Object[] { ID_CATEGORY_SEPARATOR });
-				Assert.isTrue(!used_action_id.contains(ID_CATEGORY_SEPARATOR) && !cateogory.contains(ID_CATEGORY_SEPARATOR),errorMessage);
-				String id = used_action_id + ID_CATEGORY_SEPARATOR + cateogory + ID_CATEGORY_SEPARATOR + getVersion(); 
+				// Check the separator is not used in the action
+				String errorMessage = MessageFormat.format(Messages.UsageManager_errorSepratorReserved,
+						new Object[] { ID_CATEGORY_SEPARATOR });
+				Assert.isTrue(!used_action_id.contains(ID_CATEGORY_SEPARATOR) && !cateogory.contains(ID_CATEGORY_SEPARATOR),
+						errorMessage);
+				String id = used_action_id + ID_CATEGORY_SEPARATOR + cateogory + ID_CATEGORY_SEPARATOR + getVersion();
 				setProperty(id, String.valueOf(usageNumber));
 				statisticUpdatedRecently = true;
 				writeStatsToDisk.cancel();
@@ -751,22 +759,21 @@ public class UsageManager {
 		urlBuilder.append("&isRCP=");//$NON-NLS-1$
 		boolean isRCP = isRCP();
 		urlBuilder.append(String.valueOf(isRCP));
-		//if it is the plugin version send also the eclipse version
-		if (!isRCP){
+		// if it is the plugin version send also the eclipse version
+		if (!isRCP) {
 			urlBuilder.append("&eclipse_version=");
 			urlBuilder.append(getEclipseVersion());
 		}
 
-		//get the java version
+		// get the java version
 		String javaVersion = System.getProperty("java.runtime.version");
-		if (javaVersion != null){
+		if (javaVersion != null) {
 			urlBuilder.append("&java_version=");
 			urlBuilder.append(javaVersion);
 		}
 
 		String urlstr = urlBuilder.toString();
-		System.out.println("Invoking URL: " + urlstr); //$NON-NLS-1$ 
-		VersionCheckResult result = new VersionCheckResult();
+		System.out.println("Invoking URL: " + urlstr); //$NON-NLS-1$  
 		try {
 			Executor exec = Executor.newInstance();
 			URI fullURI = new URI(urlstr);
@@ -775,28 +782,31 @@ public class UsageManager {
 			Request req = Request.Get(urlstr);
 			if (proxy != null)
 				req.viaProxy(proxy);
-			String response = exec.execute(req).returnContent().asString();
- 
-			String serverVersion = null;
-			String optmsg = ""; //$NON-NLS-1$ 
-			for (String inputLine : IOUtils.readLines(new StringReader(response))) {
-				if (serverVersion == null) {
-					serverVersion = inputLine.trim();
-				} else {
-					optmsg += inputLine;
+			HttpResponse resp = exec.execute(req).returnResponse();
+			if (resp.getStatusLine().getStatusCode() == 200) {
+				String response = IOUtils.toString(resp.getEntity().getContent());
+
+				String serverVersion = null;
+				String optmsg = ""; //$NON-NLS-1$ 
+				for (String inputLine : IOUtils.readLines(new StringReader(response))) {
+					if (serverVersion == null) {
+						serverVersion = inputLine.trim();
+					} else {
+						optmsg += inputLine;
+					}
 				}
+				// Update the installation info only if the informations was given correctly to the server
+				setInstallationInfo(VERSION_INFO, getVersion());
+				// Remove the old backward compatibility value if present to switch to the new system
+				if (backward_uuid != null) {
+					ph.removeString(BACKWARD_UUID_PROPERTY, InstanceScope.SCOPE);
+				}
+				return new VersionCheckResult(serverVersion, optmsg, getVersion());
 			}
-			// Update the installation info only if the informations was given correctly to the server
-			setInstallationInfo(VERSION_INFO, getVersion());
-			// Remove the old backward compatibility value if present to switch to the new system
-			if (backward_uuid != null) {
-				ph.removeString(BACKWARD_UUID_PROPERTY, InstanceScope.SCOPE);
-			}
-			result = new VersionCheckResult(serverVersion, optmsg, getVersion());
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			JaspersoftStudioPlugin.getInstance().logError(Messages.UsageManager_errorUpdateCheck, ex);
 		}
-		return result;
+		return new VersionCheckResult();
 	}
 }
