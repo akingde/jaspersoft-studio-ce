@@ -90,7 +90,7 @@ public class DeleteAction<T extends ANode> extends AMultiSelectionAction {
 				.execute(c);
 
 		ANode toSelect = mfrom;
-		if (indx - 1 > 0)
+		if (indx - 1 > 0 && !mfrom.getChildren().isEmpty())
 			toSelect = (ANode) mfrom.getChildren().get(
 					Math.min(mfrom.getChildren().size() - 1, indx));
 		if (toSelect != null)
