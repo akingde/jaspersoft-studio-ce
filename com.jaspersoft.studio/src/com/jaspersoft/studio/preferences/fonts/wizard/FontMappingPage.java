@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.preferences.fonts.wizard;
 
@@ -42,6 +38,7 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxCellEditor;
 import com.jaspersoft.studio.swt.widgets.table.DeleteButton;
 import com.jaspersoft.studio.swt.widgets.table.INewElement;
@@ -67,10 +64,10 @@ public class FontMappingPage extends JSSHelpWizardPage {
 				case 1:
 					return el.get(1);
 				default:
-					return (element != null ? element.toString() : "");
+					return (element != null ? element.toString() : ""); //$NON-NLS-1$
 				}
 			}
-			return Misc.nvl(element, "");
+			return Misc.nvl(element, ""); //$NON-NLS-1$
 		}
 
 		public void dispose() {
@@ -81,8 +78,8 @@ public class FontMappingPage extends JSSHelpWizardPage {
 
 	public FontMappingPage(FontFamily fontFamily) {
 		super("fontmappingpage"); //$NON-NLS-1$
-		setTitle("Font Mapping");
-		setDescription("Font mapping page");
+		setTitle(Messages.FontMappingPage_2);
+		setDescription(Messages.FontMappingPage_3);
 		this.fontFamily = (SimpleFontFamily) fontFamily;
 	}
 
@@ -104,16 +101,13 @@ public class FontMappingPage extends JSSHelpWizardPage {
 		setControl(composite);
 
 		Label lbl = new Label(composite, SWT.WRAP);
-		lbl.setText("Some exporters (for instance the HTML) require a replacement for this font family name, "
-				+ "since this font may not be available on the target environement. This is the porpose of the "
-				+ "mapping properties. For example in HTML the font name may be set to: 'My font family', "
-				+ "'Times New Roman', 'Times', 'Serif'");
+		lbl.setText(Messages.FontMappingPage_4);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 3;
 		gd.widthHint = 300;
 		lbl.setLayoutData(gd);
 
-		new Label(composite, SWT.NONE).setText("Default Mapping");
+		new Label(composite, SWT.NONE).setText(Messages.FontMappingPage_5);
 		defaultfont = new Text(composite, SWT.BORDER);
 		defaultfont.addModifyListener(new ModifyListener() {
 
@@ -140,8 +134,8 @@ public class FontMappingPage extends JSSHelpWizardPage {
 
 			public Object newElement(List<?> input, int pos) {
 				List<String> lst = new ArrayList<String>(2);
-				lst.add("html");
-				lst.add("< Font Name >");
+				lst.add("html"); //$NON-NLS-1$
+				lst.add(Messages.FontMappingPage_7);
 				return lst;
 			}
 
@@ -173,10 +167,10 @@ public class FontMappingPage extends JSSHelpWizardPage {
 
 		TableColumn[] column = new TableColumn[2];
 		column[0] = new TableColumn(table, SWT.NONE);
-		column[0].setText("Export Type");
+		column[0].setText(Messages.FontMappingPage_8);
 
 		column[1] = new TableColumn(table, SWT.NONE);
-		column[1].setText("Mapped Font Name");
+		column[1].setText(Messages.FontMappingPage_9);
 
 		for (int i = 0, n = column.length; i < n; i++)
 			column[i].pack();
@@ -227,7 +221,7 @@ public class FontMappingPage extends JSSHelpWizardPage {
 		});
 
 		viewer.setCellEditors(new CellEditor[] {
-				new RWComboBoxCellEditor(parent, new String[] { "", "html", "xhtml", "rtf" }), new TextCellEditor(parent) });
+				new RWComboBoxCellEditor(parent, new String[] { "", "html", "xhtml", "rtf" }), new TextCellEditor(parent) }); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		viewer.setColumnProperties(new String[] { "EXPORTER", "MAPPING" }); //$NON-NLS-1$ //$NON-NLS-2$ 
 	}
 
@@ -255,7 +249,7 @@ public class FontMappingPage extends JSSHelpWizardPage {
 	public boolean canFlipToNextPage() {
 		return isPageComplete();
 	}
-	
+
 	@Override
 	protected String getContextName() {
 		return ContextHelpIDs.WIZARD_FONT_EXTENSION;

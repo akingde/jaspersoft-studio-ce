@@ -766,6 +766,13 @@ public class Messages extends NLS {
 	public static String FontLocalesPage_labelText;
 	public static String FontLocalesPage_pageDescrtiption;
 	public static String FontLocalesPage_pageTitle;
+	public static String FontMappingPage_2;
+	public static String FontMappingPage_3;
+	public static String FontMappingPage_4;
+	public static String FontMappingPage_5;
+	public static String FontMappingPage_7;
+	public static String FontMappingPage_8;
+	public static String FontMappingPage_9;
 	public static String FontsPreferencePage_fontListTitle;
 	public static String FreeLayout_name;
 	public static String FreeLayout_tooltip;

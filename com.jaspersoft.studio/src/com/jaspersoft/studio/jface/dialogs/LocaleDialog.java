@@ -277,7 +277,7 @@ public class LocaleDialog extends Dialog {
 	 */
 	@Override
 	protected Point getInitialSize() {
-		return new Point(450, 300);
+		return new Point(650, 300);
 	}
 	
 	@Override
