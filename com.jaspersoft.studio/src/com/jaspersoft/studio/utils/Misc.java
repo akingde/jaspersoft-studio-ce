@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.utils;
 
@@ -16,9 +12,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import net.sf.jasperreports.engine.JRExpression;
 
@@ -205,6 +203,80 @@ public class Misc {
 		return sortedMap;
 	}
 
+	private static final Set<String> SQLKEYWORDS = new HashSet<String>();
+	static {
+		SQLKEYWORDS.add("SELECT");
+		SQLKEYWORDS.add("MICROSECOND");
+		SQLKEYWORDS.add("SECOND");
+		SQLKEYWORDS.add("MINUTE");
+		SQLKEYWORDS.add("HOUR");
+		SQLKEYWORDS.add("DAY");
+		SQLKEYWORDS.add("WEEK");
+		SQLKEYWORDS.add("MONTH");
+		SQLKEYWORDS.add("QUARTER");
+		SQLKEYWORDS.add("YEAR");
+		SQLKEYWORDS.add("SECOND_MICROSECOND");
+		SQLKEYWORDS.add("MINUTE_MICROSECOND");
+		SQLKEYWORDS.add("MINUTE_SECOND");
+		SQLKEYWORDS.add("HOUR_MICROSECOND");
+		SQLKEYWORDS.add("HOUR_SECOND");
+		SQLKEYWORDS.add("HOUR_MINUTE");
+		SQLKEYWORDS.add("DAY_MICROSECOND");
+		SQLKEYWORDS.add("DAY_SECOND");
+		SQLKEYWORDS.add("DAY_MINUTE");
+		SQLKEYWORDS.add("DAY_HOUR");
+		SQLKEYWORDS.add("YEAR_MONTH");
+		SQLKEYWORDS.add("IN");
+		SQLKEYWORDS.add("NOT");
+		SQLKEYWORDS.add("NATURAL");
+		SQLKEYWORDS.add("INNER");
+		SQLKEYWORDS.add("LEFT");
+		SQLKEYWORDS.add("RIGHT");
+		SQLKEYWORDS.add("FULL");
+		SQLKEYWORDS.add("OUTER");
+		SQLKEYWORDS.add("CROSS");
+		SQLKEYWORDS.add("JOIN");
+		SQLKEYWORDS.add("STRAIGHT_JOIN");
+		SQLKEYWORDS.add("WHEN");
+		SQLKEYWORDS.add("THEN");
+		SQLKEYWORDS.add("ELSE");
+		SQLKEYWORDS.add("CASE");
+		SQLKEYWORDS.add("END");
+		SQLKEYWORDS.add("ALL");
+		SQLKEYWORDS.add("DISTINCT");
+		SQLKEYWORDS.add("UNION");
+		SQLKEYWORDS.add("INTERSECT");
+		SQLKEYWORDS.add("MINUS");
+		SQLKEYWORDS.add("EXCEPT");
+		SQLKEYWORDS.add("ROW");
+		SQLKEYWORDS.add("ROWS");
+		SQLKEYWORDS.add("ONLY");
+		SQLKEYWORDS.add("TOP");
+		SQLKEYWORDS.add("INT");
+		SQLKEYWORDS.add("FROM");
+		SQLKEYWORDS.add("WHERE");
+		SQLKEYWORDS.add("GROUP");
+		SQLKEYWORDS.add("ORDER");
+		SQLKEYWORDS.add("BY");
+		SQLKEYWORDS.add("LIMIT");
+		SQLKEYWORDS.add("HAVING");
+		SQLKEYWORDS.add("OFFSET");
+		SQLKEYWORDS.add("AS");
+		SQLKEYWORDS.add("ON");
+		SQLKEYWORDS.add("IN");
+		SQLKEYWORDS.add("ASC");
+		SQLKEYWORDS.add("DESC");
+		SQLKEYWORDS.add("AND");
+		SQLKEYWORDS.add("OR");
+		SQLKEYWORDS.add("NOT");
+		SQLKEYWORDS.add("NULL");
+		SQLKEYWORDS.add("LIKE");
+		SQLKEYWORDS.add("BETWEEN");
+		SQLKEYWORDS.add("ANY");
+		SQLKEYWORDS.add("SOME");
+		SQLKEYWORDS.add("EXISTS");
+	}
+
 	public static String quote(String value, String q, boolean onlyException) {
 		if (onlyException) {
 			boolean useQuote = false;
@@ -214,6 +286,9 @@ public class Misc {
 					break;
 				}
 			}
+			// let's check for reserved keywords
+			if (!useQuote && SQLKEYWORDS.contains(value.toUpperCase()))
+				useQuote = true;
 			if (!useQuote)
 				return value;
 		}

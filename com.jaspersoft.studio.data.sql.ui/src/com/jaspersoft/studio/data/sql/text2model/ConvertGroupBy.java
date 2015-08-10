@@ -21,13 +21,18 @@ import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.Util;
 import com.jaspersoft.studio.data.sql.impl.DbObjectNameImpl;
 import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
+import com.jaspersoft.studio.data.sql.model.query.AMQueryAliased;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
 import com.jaspersoft.studio.data.sql.model.query.groupby.MGroupBy;
 import com.jaspersoft.studio.data.sql.model.query.groupby.MGroupByColumn;
 import com.jaspersoft.studio.data.sql.model.query.groupby.MGroupByExpression;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelect;
+import com.jaspersoft.studio.data.sql.model.query.select.MSelectColumn;
+import com.jaspersoft.studio.data.sql.model.query.select.MSelectExpression;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.util.KeyValue;
+import com.jaspersoft.studio.utils.Misc;
 
 public class ConvertGroupBy {
 	public static void convertGroupBy(SQLQueryDesigner designer, ANode qroot,
@@ -66,6 +71,24 @@ public class ConvertGroupBy {
 						msel, schema, table, column, designer);
 				if (kv != null)
 					new MGroupByColumn(parent, kv.key, kv.value);
+				else {
+					for (INode sn : msel.getChildren()) {
+						if (sn instanceof AMQueryAliased) {
+							String alias = ((AMQueryAliased) sn).getAlias();
+							if (!Misc.isNullOrEmpty(alias)
+									&& alias.equalsIgnoreCase(column)) {
+								if (sn instanceof MSelectColumn)
+									new MGroupByColumn(parent,
+											((MSelectColumn) sn).getValue(),
+											((MSelectColumn) sn)
+													.getMFromTable());
+								else if (sn instanceof MSelectExpression)
+									new MGroupByExpression(parent,
+											(MSelectExpression) sn);
+							}
+						}
+					}
+				}
 			} else
 				new MGroupByExpression(parent,
 						Integer.toString(tf.getGrByInt()));
@@ -73,5 +96,4 @@ public class ConvertGroupBy {
 			e.printStackTrace();
 		}
 	}
-
 }

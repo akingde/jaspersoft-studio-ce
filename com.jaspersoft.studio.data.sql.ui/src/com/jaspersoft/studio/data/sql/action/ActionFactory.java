@@ -55,6 +55,7 @@ import com.jaspersoft.studio.data.sql.model.query.expression.MExpression;
 import com.jaspersoft.studio.data.sql.model.query.expression.MExpressionGroup;
 import com.jaspersoft.studio.data.sql.model.query.expression.MExpressionX;
 import com.jaspersoft.studio.data.sql.model.query.groupby.MGroupByColumn;
+import com.jaspersoft.studio.data.sql.model.query.groupby.MGroupByExpression;
 import com.jaspersoft.studio.data.sql.model.query.orderby.MOrderByColumn;
 import com.jaspersoft.studio.data.sql.model.query.orderby.MOrderByExpression;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelectSubQuery;
@@ -135,6 +136,8 @@ public class ActionFactory {
 		actions.add(null);
 		actions.add(new DeleteAction<MGroupByColumn>(designer, treeViewer,
 				Messages.ActionFactory_2, MGroupByColumn.class));
+		actions.add(new DeleteAction<MGroupByExpression>(designer, treeViewer,
+				Messages.ActionFactory_1, MGroupByExpression.class));
 		actions.add(null);
 
 		actions.add(new CreateOrderByColumn(designer, treeViewer));
