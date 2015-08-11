@@ -26,7 +26,8 @@ public class CurrencyPattern extends NumericPattern {
 		"#,##0.##\u00A4;#,##0.##- \u00A4",
 		"#,##0.##\u00A4;(#,##0.##) \u00A4",
 		"\u00A4#,##0.###;\u00A4(-#,##0.###)",
-		"\u00A4#,##0.###;\u00A4(#,##0.###-)"
+		"\u00A4#,##0.###;\u00A4(#,##0.###-)",
+		"¤#,##0.00#;¤(#,##0.00#-)"
 	};
 	
 	public CurrencyPattern(Composite parent, String value) {
