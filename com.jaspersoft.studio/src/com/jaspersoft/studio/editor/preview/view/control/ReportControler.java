@@ -140,8 +140,13 @@ public class ReportControler {
 	}
 
 	public void resetParametersToDefault() {
-		prmInput.setupDefaultValues();
-		prmRepInput.setupDefaultValues();
+		ExpressionUtil.initBuiltInParameters(jrContext, jasperReport);
+		prmInput.update();
+		prmRepInput.update();
+		//
+		//
+		// prmInput.setupDefaultValues();
+		// prmRepInput.setupDefaultValues();
 	}
 
 	private void setParameters() {
@@ -325,7 +330,7 @@ public class ReportControler {
 
 					IEditorInput editorInput = pcontainer.getEditorInput();
 					IFile file = null;
-					if(editorInput instanceof IFileEditorInput) {
+					if (editorInput instanceof IFileEditorInput) {
 						file = ((IFileEditorInput) editorInput).getFile();
 					}
 					monitor.beginTask("Form initialisation", IProgressMonitor.UNKNOWN);
@@ -418,7 +423,7 @@ public class ReportControler {
 			compiler = new JasperReportCompiler();
 			compiler.setErrorHandler(new JRMarkerErrorHandler(c, file));
 			IProject project = (IProject) jrContext.get(FileUtils.KEY_IPROJECT);
-			if(file!=null){
+			if (file != null) {
 				project = file.getProject();
 			}
 			compiler.setProject(project);

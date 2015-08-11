@@ -87,7 +87,9 @@ public class VParameters extends AVParameters {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				monitor.beginTask(Messages.VParameters_resetparameters, IProgressMonitor.UNKNOWN);
+				ClassLoader oldCL = Thread.currentThread().getContextClassLoader();
 				try {
+					Thread.currentThread().setContextClassLoader(jContext.getClassLoader());
 					JRDesignDataset mDataset = (JRDesignDataset) jContext.getJasperDesign().getMainDataset();
 					Set<String> keys = new HashSet<String>();
 					for (String pname : new HashSet<String>(incontrols.keySet())) {
@@ -109,6 +111,7 @@ public class VParameters extends AVParameters {
 					updateControlInput(keys);
 				} finally {
 					monitor.done();
+					Thread.currentThread().setContextClassLoader(oldCL);
 				}
 				return Status.OK_STATUS;
 			}
@@ -122,7 +125,9 @@ public class VParameters extends AVParameters {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				monitor.beginTask(Messages.VParameters_resetparameters, IProgressMonitor.UNKNOWN);
+				ClassLoader oldCL = Thread.currentThread().getContextClassLoader();
 				try {
+					Thread.currentThread().setContextClassLoader(jContext.getClassLoader());
 					JRDesignDataset mDataset = (JRDesignDataset) jContext.getJasperDesign().getMainDataset();
 					Set<String> keys = new HashSet<String>();
 					for (String pname : new HashSet<String>(incontrols.keySet())) {
@@ -142,6 +147,7 @@ public class VParameters extends AVParameters {
 					updateControlInput(keys);
 				} finally {
 					monitor.done();
+					Thread.currentThread().setContextClassLoader(oldCL);
 				}
 				return Status.OK_STATUS;
 			}
