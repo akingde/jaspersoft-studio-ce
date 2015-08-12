@@ -28,12 +28,14 @@ import org.eclipse.jface.wizard.Wizard;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.server.ResourceFactory;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MReference;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.wizard.resource.page.AddResourcePage;
 import com.jaspersoft.studio.server.wizard.resource.page.ResourceDescriptorPage;
 
@@ -116,7 +118,7 @@ public class AddResourceWizard extends Wizard {
 			if (r != null) {
 				int size = getPageCount();
 				try {
-					Field f = Wizard.class.getDeclaredField("pages");
+					Field f = Wizard.class.getDeclaredField("pages"); //$NON-NLS-1$
 					f.setAccessible(true); // FIXME, REALLY UGLY :( BUT IT'S
 					// FASTER
 					List<IWizardPage> wpages = (List<IWizardPage>) f.get(this);
@@ -170,20 +172,45 @@ public class AddResourceWizard extends Wizard {
 		return page0.getResource();
 	}
 
+	private boolean canFinish = true;;
+
 	@Override
 	public boolean performFinish() {
+		canFinish = true;
 		if (nested)
 			return true;
 		try {
 			getContainer().run(false, true, new IRunnableWithProgress() {
 
 				@Override
-				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-					monitor.beginTask("Saving", IProgressMonitor.UNKNOWN);
+				public void run(IProgressMonitor monitor)
+						throws InvocationTargetException, InterruptedException {
+
+					monitor.beginTask(Messages.AddResourceWizard_1,
+							IProgressMonitor.UNKNOWN);
 					File tmpfile = null;
 					try {
 						MResource resource = getResource();
-						if (parent instanceof MReportUnit && (resource instanceof MReference || resource.getValue().getIsReference())) {
+						ResourceDescriptor res = resource.getValue();
+						if (res.getIsNew()) {
+							res.setUriString(res.getParentFolder() + "/" //$NON-NLS-1$
+									+ res.getName());
+							INode r = parent.getRoot();
+							if (r != null
+									&& r instanceof MServerProfile
+									&& WSClientHelper.findSelected(monitor,
+											resource.getValue(),
+											(MServerProfile) r) != null
+									&& !UIUtils.showConfirmation(
+											Messages.AddResourceWizard_3,
+											Messages.AddResourceWizard_4)) {
+								canFinish = false;
+								return;
+							}
+						}
+						if (parent instanceof MReportUnit
+								&& (resource instanceof MReference || resource
+										.getValue().getIsReference())) {
 							MReportUnit mrunit = (MReportUnit) parent;
 							WSClientHelper.refreshResource(mrunit, monitor);
 
@@ -211,7 +238,7 @@ public class AddResourceWizard extends Wizard {
 			UIUtils.showError(e);
 			return false;
 		}
-		return true;
+		return canFinish;
 	}
 
 	@Override

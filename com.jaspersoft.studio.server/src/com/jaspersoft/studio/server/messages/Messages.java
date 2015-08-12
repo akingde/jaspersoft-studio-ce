@@ -22,6 +22,9 @@ public class Messages extends NLS {
 	public static String AddResourcePage_3;
 	public static String AddResourcePage_Description;
 	public static String AddResourcePage_Title;
+	public static String AddResourceWizard_1;
+	public static String AddResourceWizard_3;
+	public static String AddResourceWizard_4;
 	public static String AddResourceWizard_windowtitle;
 	public static String AFileResourcePage_downloadfilebutton;
 	public static String AFileResourcePage_selectresourcefile;
