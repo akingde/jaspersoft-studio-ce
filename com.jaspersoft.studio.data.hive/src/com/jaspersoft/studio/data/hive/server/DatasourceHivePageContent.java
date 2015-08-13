@@ -25,7 +25,7 @@ import org.eclipse.swt.widgets.Text;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceProperty;
 import com.jaspersoft.studio.data.hive.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.model.datasource.MRDatasourceCustom;
 import com.jaspersoft.studio.server.utils.ResourceDescriptorUtil;
 import com.jaspersoft.studio.server.wizard.resource.APageContent;
@@ -35,11 +35,11 @@ public class DatasourceHivePageContent extends APageContent {
 
 	private Text tname;
 
-	public DatasourceHivePageContent(ANode parent, MResource resource, DataBindingContext bindingContext) {
+	public DatasourceHivePageContent(ANode parent, AMResource resource, DataBindingContext bindingContext) {
 		super(parent, resource, bindingContext);
 	}
 
-	public DatasourceHivePageContent(ANode parent, MResource resource) {
+	public DatasourceHivePageContent(ANode parent, AMResource resource) {
 		super(parent, resource);
 	}
 

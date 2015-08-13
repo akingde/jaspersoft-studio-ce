@@ -21,7 +21,7 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescript
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceProperty;
 import com.jaspersoft.jasperserver.dto.resources.ClientResource;
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.plugin.IResourceFactory;
 import com.jaspersoft.studio.server.protocol.restv2.ARestV2Connection;
 import com.jaspersoft.studio.server.protocol.restv2.WsTypes;
@@ -31,7 +31,7 @@ import com.jaspersoft.studio.server.wizard.resource.page.ResourcePageContent;
 
 public class MongoResourceFactory implements IResourceFactory {
 
-	public MResource getResource(ANode parent, ResourceDescriptor resource, int index) {
+	public AMResource getResource(ANode parent, ResourceDescriptor resource, int index) {
 		if (resource.getWsType().equals(ResourceDescriptor.TYPE_DATASOURCE_CUSTOM)) {
 			ResourceProperty rp = ResourceDescriptorUtil.getProperty(ResourceDescriptor.PROP_DATASOURCE_CUSTOM_SERVICE_CLASS, resource.getProperties());
 			if (rp != null && rp.getValue().equals(MRDatasourceMongoDB.CUSTOM_CLASS))
@@ -40,7 +40,7 @@ public class MongoResourceFactory implements IResourceFactory {
 		return null;
 	}
 
-	public IWizardPage[] getResourcePage(ANode parent, MResource resource) {
+	public IWizardPage[] getResourcePage(ANode parent, AMResource resource) {
 		if (resource instanceof MRDatasourceMongoDB)
 			return APageContent.getPages(resource, new ResourcePageContent(parent, resource), new DatasourceMongoDBPageContent(parent, resource));
 		return null;

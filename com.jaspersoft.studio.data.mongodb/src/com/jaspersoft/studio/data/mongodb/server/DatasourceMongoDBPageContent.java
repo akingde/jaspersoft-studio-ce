@@ -25,7 +25,7 @@ import org.eclipse.swt.widgets.Text;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceProperty;
 import com.jaspersoft.studio.data.mongodb.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.model.datasource.MRDatasourceCustom;
 import com.jaspersoft.studio.server.utils.ResourceDescriptorUtil;
 import com.jaspersoft.studio.server.wizard.resource.APageContent;
@@ -38,11 +38,11 @@ public class DatasourceMongoDBPageContent extends APageContent {
 	private Text tusername;
 	private Text tpass;
 
-	public DatasourceMongoDBPageContent(ANode parent, MResource resource, DataBindingContext bindingContext) {
+	public DatasourceMongoDBPageContent(ANode parent, AMResource resource, DataBindingContext bindingContext) {
 		super(parent, resource, bindingContext);
 	}
 
-	public DatasourceMongoDBPageContent(ANode parent, MResource resource) {
+	public DatasourceMongoDBPageContent(ANode parent, AMResource resource) {
 		super(parent, resource);
 	}
 

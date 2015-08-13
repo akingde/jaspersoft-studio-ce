@@ -25,7 +25,7 @@ import org.eclipse.swt.widgets.Text;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceProperty;
 import com.jaspersoft.studio.data.cassandra.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.model.datasource.MRDatasourceCustom;
 import com.jaspersoft.studio.server.protocol.Version;
 import com.jaspersoft.studio.server.utils.ResourceDescriptorUtil;
@@ -41,11 +41,11 @@ public class DatasourceCassandraPageContent extends APageContent {
 	private Text username;
 	private Text pass;
 
-	public DatasourceCassandraPageContent(ANode parent, MResource resource, DataBindingContext bindingContext) {
+	public DatasourceCassandraPageContent(ANode parent, AMResource resource, DataBindingContext bindingContext) {
 		super(parent, resource, bindingContext);
 	}
 
-	public DatasourceCassandraPageContent(ANode parent, MResource resource) {
+	public DatasourceCassandraPageContent(ANode parent, AMResource resource) {
 		super(parent, resource);
 	}
 
