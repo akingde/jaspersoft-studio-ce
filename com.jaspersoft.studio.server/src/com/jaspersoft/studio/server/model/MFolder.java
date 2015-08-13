@@ -13,6 +13,7 @@
 package com.jaspersoft.studio.server.model;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 import net.sf.jasperreports.engine.JRConstants;
 
@@ -57,7 +58,7 @@ public class MFolder extends AMResource {
 
 	@Override
 	public String getJRSUrl() throws UnsupportedEncodingException {
-		// TODO Auto-generated method stub
-		return null;
+		return "flow.html?_flowId=searchFlow&folderUri="
+				+ URLEncoder.encode(getValue().getUriString(), "ISO-8859-1");
 	}
 }

@@ -51,7 +51,7 @@ public class MAdHocDataView extends AMResource implements
 
 	@Override
 	public String getJRSUrl() throws UnsupportedEncodingException {
-		return "flow.html?_flowId=adhocFlow&selectedResource="
+		return "flow.html?_flowId=adhocFlow&resource="
 				+ URLEncoder.encode(getValue().getUriString(), "ISO-8859-1")
 				+ "&ParentFolderUri="
 				+ URLEncoder.encode(getValue().getParentFolder(), "ISO-8859-1");
