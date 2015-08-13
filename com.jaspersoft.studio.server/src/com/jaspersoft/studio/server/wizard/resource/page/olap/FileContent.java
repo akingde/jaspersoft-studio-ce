@@ -18,20 +18,20 @@ import org.eclipse.swt.widgets.Control;
 
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.model.MContentResource;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.wizard.resource.APageContent;
 import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorFile;
 
 public class FileContent extends APageContent {
 	private SelectorFile scompo;
 
-	public FileContent(ANode parent, MResource resource, DataBindingContext bindingContext) {
+	public FileContent(ANode parent, AMResource resource, DataBindingContext bindingContext) {
 		super(parent, resource, bindingContext);
 	}
 
 	private String title;
 
-	public FileContent(ANode parent, MResource resource, String title) {
+	public FileContent(ANode parent, AMResource resource, String title) {
 		super(parent, resource);
 		this.title = title;
 	}

@@ -9,7 +9,7 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 
 public class SelectorQueryWithNon extends SelectorQuery {
 	private Button brNon;
@@ -59,7 +59,7 @@ public class SelectorQueryWithNon extends SelectorQuery {
 		return true;
 	}
 
-	public void setResource(ANode parent, MResource res) {
+	public void setResource(ANode parent, AMResource res) {
 		this.res = res;
 		this.resRD = res.getValue();
 		this.parent = parent;

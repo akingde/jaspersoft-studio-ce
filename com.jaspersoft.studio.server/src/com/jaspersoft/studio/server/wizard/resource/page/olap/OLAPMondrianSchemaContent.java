@@ -17,7 +17,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.model.datasource.MRMondrianSchema;
 import com.jaspersoft.studio.server.wizard.resource.APageContent;
 import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorOlapMondrianSchema;
@@ -25,11 +25,11 @@ import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorOlapMo
 public class OLAPMondrianSchemaContent extends APageContent {
 	private SelectorOlapMondrianSchema scompo;
 
-	public OLAPMondrianSchemaContent(ANode parent, MResource resource, DataBindingContext bindingContext) {
+	public OLAPMondrianSchemaContent(ANode parent, AMResource resource, DataBindingContext bindingContext) {
 		super(parent, resource, bindingContext);
 	}
 
-	public OLAPMondrianSchemaContent(ANode parent, MResource resource) {
+	public OLAPMondrianSchemaContent(ANode parent, AMResource resource) {
 		super(parent, resource);
 	}
 

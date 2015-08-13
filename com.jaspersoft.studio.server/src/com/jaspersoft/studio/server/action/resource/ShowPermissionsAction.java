@@ -21,7 +21,7 @@ import org.eclipse.jface.viewers.TreeViewer;
 
 import com.jaspersoft.studio.server.action.server.EditServerAction;
 import com.jaspersoft.studio.server.messages.Messages;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.wizard.permission.PermissionDialog;
 import com.jaspersoft.studio.server.wizard.permission.PermissionWizard;
@@ -43,8 +43,8 @@ public class ShowPermissionsAction extends Action {
 		TreePath[] p = s.getPaths();
 		for (int i = 0; i < p.length; i++) {
 			final Object obj = p[i].getLastSegment();
-			if (obj instanceof MResource) {
-				PermissionWizard wizard = new PermissionWizard((MResource) obj);
+			if (obj instanceof AMResource) {
+				PermissionWizard wizard = new PermissionWizard((AMResource) obj);
 				PermissionDialog dialog = new PermissionDialog(UIUtils.getShell(), wizard);
 				dialog.addApplyListener(wizard);
 				dialog.open();

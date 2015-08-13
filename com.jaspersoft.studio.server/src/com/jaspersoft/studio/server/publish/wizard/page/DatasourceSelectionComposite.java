@@ -41,7 +41,7 @@ import com.jaspersoft.studio.server.ResourceFactory;
 import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.messages.Messages;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.model.datasource.MRDatasource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.properties.dialog.RepositoryDialog;
@@ -65,7 +65,7 @@ import com.jaspersoft.studio.utils.inputhistory.InputHistoryCache;
  */
 public class DatasourceSelectionComposite extends Composite {
 	private boolean mandatory = false;
-	private MResource res;
+	private AMResource res;
 	private ANode parent;
 
 	// Widgets stuff
@@ -226,7 +226,7 @@ public class DatasourceSelectionComposite extends Composite {
 	 * @param resource
 	 *            the resource for which we are configuring the datasource
 	 */
-	public void configurePage(ANode parent, MResource resource) {
+	public void configurePage(ANode parent, AMResource resource) {
 		isConfiguringPage = true;
 		this.parent = parent;
 		this.res = resource;
@@ -333,7 +333,7 @@ public class DatasourceSelectionComposite extends Composite {
 
 			SelectorDatasource.replaceDatasource(res, ref);
 		} else {
-			MResource r = ResourceFactory.getResource(null,
+			AMResource r = ResourceFactory.getResource(null,
 					ASelector.cloneResource(ref), -1);
 			ResourceWizard wizard = new ResourceWizard(parent, r, true, true);
 			WizardDialog dialog = new WizardDialog(UIUtils.getShell(), wizard);
@@ -381,7 +381,7 @@ public class DatasourceSelectionComposite extends Composite {
 		} else {
 			RepositoryDialog rd = new RepositoryDialog(UIUtils.getShell(), msp) {
 				@Override
-				public boolean isResourceCompatible(MResource r) {
+				public boolean isResourceCompatible(AMResource r) {
 					String type = r.getValue().getWsType();
 					if (excludeTypes != null)
 						for (String t : excludeTypes)
@@ -391,7 +391,7 @@ public class DatasourceSelectionComposite extends Composite {
 				}
 			};
 			if (rd.open() == Dialog.OK) {
-				MResource rs = rd.getResource();
+				AMResource rs = rd.getResource();
 				if (rs != null)
 					setResource(res, rs.getValue(), true);
 			}
@@ -399,7 +399,7 @@ public class DatasourceSelectionComposite extends Composite {
 		notifyDatasourceSelectionChanged();
 	}
 
-	private void setResource(MResource res, ResourceDescriptor rd,
+	private void setResource(AMResource res, ResourceDescriptor rd,
 			boolean modifyText) {
 		ResourceDescriptor runit = res.getValue();
 		try {
@@ -426,7 +426,7 @@ public class DatasourceSelectionComposite extends Composite {
 	 * Remove a previous existing datasource from the MResource instance
 	 * specified.
 	 */
-	private void removeDatasource(final MResource res) {
+	private void removeDatasource(final AMResource res) {
 		ResourceDescriptor rdel = SelectorDatasource.getDatasource(res
 				.getValue());
 		if (rdel != null)

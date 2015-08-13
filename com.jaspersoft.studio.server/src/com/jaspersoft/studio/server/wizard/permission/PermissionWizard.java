@@ -17,13 +17,13 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 
 import com.jaspersoft.studio.server.messages.Messages;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 
 public class PermissionWizard extends Wizard implements SelectionListener {
-	private MResource res;
+	private AMResource res;
 	private PermissionPage page0;
 
-	public PermissionWizard(MResource res) {
+	public PermissionWizard(AMResource res) {
 		super();
 		setWindowTitle(Messages.PermissionWizard_0 + res.getValue().getUriString());
 		setNeedsProgressMonitor(true);

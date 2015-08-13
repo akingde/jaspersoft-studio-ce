@@ -49,7 +49,7 @@ import com.jaspersoft.studio.server.Activator;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.AFileResource;
 import com.jaspersoft.studio.server.model.AMJrxmlContainer;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.publish.OverwriteEnum;
 import com.jaspersoft.studio.server.publish.PublishOptions;
 import com.jaspersoft.studio.server.publish.PublishUtil;
@@ -114,7 +114,7 @@ public class ResourcesPage extends JSSHelpWizardPage {
 		viewerColumn.setLabelProvider(new TLabelProvider() {
 			@Override
 			public String getText(Object element) {
-				MResource fr = (MResource) element;
+				AMResource fr = (AMResource) element;
 				return fr.getDisplayText();
 			}
 
@@ -122,7 +122,7 @@ public class ResourcesPage extends JSSHelpWizardPage {
 			public Image getImage(Object element) {
 				setErrorMessage(null);
 				ResourcesPage.this.setPageComplete(true);
-				MResource fr = (MResource) element;
+				AMResource fr = (AMResource) element;
 				ImageDescriptor id = fr.getThisIconDescriptor().getIcon16();
 				PublishOptions popt = fr.getPublishOptions();
 				if (popt.getPublishMethod() != ResourcePublishMethod.LOCAL
@@ -138,7 +138,7 @@ public class ResourcesPage extends JSSHelpWizardPage {
 				if (popt.getPublishMethod() == ResourcePublishMethod.REFERENCE)
 					return Activator.getDefault().getImage(
 							ResourceManager.decorateImage(id,
-									MResource.LINK_DECORATOR,
+									AMResource.LINK_DECORATOR,
 									ResourceManager.BOTTOM_LEFT));
 				return Activator.getDefault().getImage(id);
 			}
@@ -152,7 +152,7 @@ public class ResourcesPage extends JSSHelpWizardPage {
 
 			@Override
 			public String getText(Object element) {
-				MResource fr = (MResource) element;
+				AMResource fr = (AMResource) element;
 				OverwriteEnum ovw = fr.getPublishOptions().getOverwrite(
 						OverwriteEnum.IGNORE);
 				if (ovw.equals(OverwriteEnum.OVERWRITE))
@@ -173,7 +173,7 @@ public class ResourcesPage extends JSSHelpWizardPage {
 		viewerColumn.setLabelProvider(new TLabelProvider() {
 			@Override
 			public String getText(Object element) {
-				MResource fr = (MResource) element;
+				AMResource fr = (AMResource) element;
 				PublishOptions popt = fr.getPublishOptions();
 				OverwriteEnum ovw = popt.getOverwrite(OverwriteEnum.IGNORE);
 				if (ovw.equals(OverwriteEnum.IGNORE))
@@ -215,8 +215,8 @@ public class ResourcesPage extends JSSHelpWizardPage {
 
 			@Override
 			public String getText(Object element) {
-				if (element instanceof MResource) {
-					MResource mres = (MResource) element;
+				if (element instanceof AMResource) {
+					AMResource mres = (AMResource) element;
 					PublishOptions popt = mres.getPublishOptions();
 					OverwriteEnum ovw = popt.getOverwrite(OverwriteEnum.IGNORE);
 					if (ovw.equals(OverwriteEnum.IGNORE))
@@ -252,7 +252,7 @@ public class ResourcesPage extends JSSHelpWizardPage {
 				StructuredSelection s = (StructuredSelection) tableViewer
 						.getSelection();
 				if (s != null) {
-					MResource mres = (MResource) s.getFirstElement();
+					AMResource mres = (AMResource) s.getFirstElement();
 					if (mres != null
 							&& mres.getPublishOptions()
 									.getOverwrite(OverwriteEnum.OVERWRITE)
@@ -284,7 +284,7 @@ public class ResourcesPage extends JSSHelpWizardPage {
 	private void attachCellEditors(final TableViewer viewer, Composite parent) {
 		viewer.setCellModifier(new ICellModifier() {
 			public boolean canModify(Object element, String property) {
-				MResource prop = (MResource) element;
+				AMResource prop = (AMResource) element;
 				PublishOptions po = prop.getPublishOptions();
 				if (property.equals("VALUE")) //$NON-NLS-1$
 					return true;
@@ -298,7 +298,7 @@ public class ResourcesPage extends JSSHelpWizardPage {
 			}
 
 			public Object getValue(Object element, String property) {
-				MResource prop = (MResource) element;
+				AMResource prop = (AMResource) element;
 				PublishOptions po = prop.getPublishOptions();
 				if ("VALUE".equals(property)) { //$NON-NLS-1$
 					if (prop instanceof AFileResource) {
@@ -352,7 +352,7 @@ public class ResourcesPage extends JSSHelpWizardPage {
 
 			public void modify(Object element, String property, Object value) {
 				TableItem tableItem = (TableItem) element;
-				MResource data = (MResource) tableItem.getData();
+				AMResource data = (AMResource) tableItem.getData();
 				PublishOptions po = data.getPublishOptions();
 				if ("VALUE".equals(property)) { //$NON-NLS-1$
 					int intValue = ((Integer) value).intValue();
@@ -411,10 +411,10 @@ public class ResourcesPage extends JSSHelpWizardPage {
 	}
 
 	public void fillData(boolean isNew) {
-		List<MResource> res = PublishUtil.getResources(pres,
+		List<AMResource> res = PublishUtil.getResources(pres,
 				new NullProgressMonitor(), jConfig);
 		if (isNew)
-			for (MResource r : res) {
+			for (AMResource r : res) {
 				if (r instanceof AFileResource)
 					continue;
 				r.getPublishOptions().setOverwrite(OverwriteEnum.OVERWRITE);
@@ -428,7 +428,7 @@ public class ResourcesPage extends JSSHelpWizardPage {
 		@Override
 		public String getToolTipText(Object element) {
 			String tt = ""; //$NON-NLS-1$
-			MResource mres = (MResource) element;
+			AMResource mres = (AMResource) element;
 			tt += "ID: " + mres.getValue().getName(); //$NON-NLS-1$
 			tt += "\nLabel: " + mres.getValue().getLabel(); //$NON-NLS-1$
 

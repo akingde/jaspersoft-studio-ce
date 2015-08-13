@@ -40,7 +40,7 @@ public class MContentResource extends AFileResource {
 	}
 
 	public static ResourceDescriptor createDescriptor(ANode parent) {
-		ResourceDescriptor rd = MResource.createDescriptor(parent);
+		ResourceDescriptor rd = AMResource.createDescriptor(parent);
 		rd.setWsType(ResourceDescriptor.TYPE_CONTENT_RESOURCE);
 		return rd;
 	}

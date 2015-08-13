@@ -36,7 +36,7 @@ import org.eclipse.swt.widgets.TableItem;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ListItem;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.messages.Messages;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.wizard.resource.APageContent;
 import com.jaspersoft.studio.swt.widgets.table.DeleteButton;
 import com.jaspersoft.studio.swt.widgets.table.INewElement;
@@ -50,11 +50,11 @@ public class LovPageContent extends APageContent {
 	private static final String VALUE = "VALUE";
 	private static final String KEY = "KEY";
 
-	public LovPageContent(ANode parent, MResource resource, DataBindingContext bindingContext) {
+	public LovPageContent(ANode parent, AMResource resource, DataBindingContext bindingContext) {
 		super(parent, resource, bindingContext);
 	}
 
-	public LovPageContent(ANode parent, MResource resource) {
+	public LovPageContent(ANode parent, AMResource resource) {
 		super(parent, resource);
 	}
 

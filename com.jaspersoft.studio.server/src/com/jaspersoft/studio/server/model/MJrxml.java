@@ -41,7 +41,7 @@ public class MJrxml extends AMJrxmlContainer {
 	}
 
 	public static ResourceDescriptor createDescriptor(ANode parent) {
-		ResourceDescriptor rd = MResource.createDescriptor(parent);
+		ResourceDescriptor rd = AMResource.createDescriptor(parent);
 		rd.setWsType(ResourceDescriptor.TYPE_JRXML);
 		return rd;
 	}

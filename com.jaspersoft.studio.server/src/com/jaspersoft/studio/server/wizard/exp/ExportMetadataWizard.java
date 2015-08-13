@@ -23,7 +23,7 @@ import org.eclipse.jface.wizard.Wizard;
 
 import com.jaspersoft.jasperserver.jaxrs.client.dto.importexport.StateDto;
 import com.jaspersoft.studio.server.messages.Messages;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.protocol.IConnection;
 import com.jaspersoft.studio.server.protocol.restv2.ARestV2Connection;
@@ -59,15 +59,15 @@ public class ExportMetadataWizard extends Wizard {
 						if (firstElement != null) {
 							if (firstElement instanceof MServerProfile)
 								conn = ((MServerProfile) firstElement).getWsClient();
-							else if (firstElement instanceof MResource)
-								conn = ((MResource) firstElement).getWsClient();
+							else if (firstElement instanceof AMResource)
+								conn = ((AMResource) firstElement).getWsClient();
 							if (conn != null) {
 								ExportOptions opt = page0.getValue();
 								for (Object obj : selection.toList()) {
 									if (obj instanceof MServerProfile)
 										opt.getPaths().add("/"); //$NON-NLS-1$
-									else if (obj instanceof MResource) {
-										String uri = ((MResource) obj).getValue().getUriString();
+									else if (obj instanceof AMResource) {
+										String uri = ((AMResource) obj).getValue().getUriString();
 										opt.getPaths().add(uri);
 									}
 								}

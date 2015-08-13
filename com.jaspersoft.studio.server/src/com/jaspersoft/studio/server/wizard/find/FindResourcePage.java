@@ -67,7 +67,7 @@ import com.jaspersoft.studio.server.ResourceFactory;
 import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.messages.Messages;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.properties.dialog.RepositoryComposite;
 import com.jaspersoft.studio.server.protocol.restv2.WsTypes;
@@ -288,7 +288,7 @@ public class FindResourcePage extends WizardPage {
 			}
 
 			@Override
-			public boolean isResourceCompatible(MResource r) {
+			public boolean isResourceCompatible(AMResource r) {
 				if (Misc.isNullOrEmpty(finderUI.getTypes()))
 					return true;
 				String type = WsTypes.INST().toRestType(
@@ -308,7 +308,7 @@ public class FindResourcePage extends WizardPage {
 			 * #setResource(com.jaspersoft.studio.server.model.MResource)
 			 */
 			@Override
-			public void setResource(MResource res) {
+			public void setResource(AMResource res) {
 				super.setResource(res);
 				value = res.getValue();
 			}

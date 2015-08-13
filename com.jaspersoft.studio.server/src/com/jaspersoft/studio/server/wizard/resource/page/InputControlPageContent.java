@@ -37,7 +37,7 @@ import org.eclipse.swt.widgets.Text;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.messages.Messages;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.utils.IPageCompleteListener;
 import com.jaspersoft.studio.server.wizard.resource.APageContent;
 import com.jaspersoft.studio.server.wizard.resource.page.selector.ASelector;
@@ -49,12 +49,12 @@ import com.jaspersoft.studio.utils.UIUtil;
 public class InputControlPageContent extends APageContent implements
 		IPageCompleteListener {
 
-	public InputControlPageContent(ANode parent, MResource resource,
+	public InputControlPageContent(ANode parent, AMResource resource,
 			DataBindingContext bindingContext) {
 		super(parent, resource, bindingContext);
 	}
 
-	public InputControlPageContent(ANode parent, MResource resource) {
+	public InputControlPageContent(ANode parent, AMResource resource) {
 		super(parent, resource);
 	}
 

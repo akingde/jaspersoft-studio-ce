@@ -24,7 +24,7 @@ import org.eclipse.ui.PlatformUI;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.wizard.resource.AddResourceWizard;
 
 public class AddResourceAction extends Action {
@@ -47,8 +47,8 @@ public class AddResourceAction extends Action {
 		Object firstElement = ((TreeSelection) treeViewer.getSelection()).getFirstElement();
 		boolean b = firstElement != null;
 		if (b) {
-			if (firstElement instanceof MResource) {
-				MResource mres = (MResource) firstElement;
+			if (firstElement instanceof AMResource) {
+				AMResource mres = (AMResource) firstElement;
 				int pmask = mres.getValue().getPermissionMask(mres.getWsClient());
 				b = b && (pmask == 1 || (pmask & 4) == 4);
 			}

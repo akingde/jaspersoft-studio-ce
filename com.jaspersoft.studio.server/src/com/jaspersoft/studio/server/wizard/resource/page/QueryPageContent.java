@@ -26,18 +26,18 @@ import org.eclipse.swt.widgets.Text;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.messages.Messages;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.wizard.resource.APageContent;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.UIUtil;
 
 public class QueryPageContent extends APageContent {
 
-	public QueryPageContent(ANode parent, MResource resource, DataBindingContext bindingContext) {
+	public QueryPageContent(ANode parent, AMResource resource, DataBindingContext bindingContext) {
 		super(parent, resource, bindingContext);
 	}
 
-	public QueryPageContent(ANode parent, MResource resource) {
+	public QueryPageContent(ANode parent, AMResource resource) {
 		super(parent, resource);
 	}
 
@@ -46,7 +46,7 @@ public class QueryPageContent extends APageContent {
 	private static Combo clang;
 	private static QProxy proxy;
 
-	public QueryPageContent(ANode parent, MResource resource, boolean showLangs) {
+	public QueryPageContent(ANode parent, AMResource resource, boolean showLangs) {
 		super(parent, resource);
 		this.showLangs = showLangs;
 	}
@@ -67,7 +67,7 @@ public class QueryPageContent extends APageContent {
 		return createContentComposite;
 	}
 
-	public static Control createContentComposite(Composite parent, DataBindingContext bindingContext, ResourceDescriptor r, MResource res, boolean showLangs) {
+	public static Control createContentComposite(Composite parent, DataBindingContext bindingContext, ResourceDescriptor r, AMResource res, boolean showLangs) {
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout(2, false));
 

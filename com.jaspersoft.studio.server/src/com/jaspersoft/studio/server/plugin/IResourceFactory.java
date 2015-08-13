@@ -20,14 +20,14 @@ import org.eclipse.jface.wizard.IWizardPage;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.jasperserver.dto.resources.ClientResource;
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.protocol.restv2.ARestV2Connection;
 import com.jaspersoft.studio.server.protocol.restv2.WsTypes;
 
 public interface IResourceFactory {
-	public MResource getResource(ANode parent, ResourceDescriptor resource, int index);
+	public AMResource getResource(ANode parent, ResourceDescriptor resource, int index);
 
-	public IWizardPage[] getResourcePage(ANode parent, MResource resource);
+	public IWizardPage[] getResourcePage(ANode parent, AMResource resource);
 
 	public ANode createNewResource(ANode root, ANode parent);
 

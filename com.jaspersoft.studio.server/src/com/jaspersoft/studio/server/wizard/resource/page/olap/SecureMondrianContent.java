@@ -27,17 +27,17 @@ import org.eclipse.swt.widgets.Text;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceProperty;
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.utils.ResourceDescriptorUtil;
 import com.jaspersoft.studio.utils.UIUtil;
 
 public class SecureMondrianContent extends OLAPMondrianSchemaContent {
 
-	public SecureMondrianContent(ANode parent, MResource resource, DataBindingContext bindingContext) {
+	public SecureMondrianContent(ANode parent, AMResource resource, DataBindingContext bindingContext) {
 		super(parent, resource, bindingContext);
 	}
 
-	public SecureMondrianContent(ANode parent, MResource resource) {
+	public SecureMondrianContent(ANode parent, AMResource resource) {
 		super(parent, resource);
 	}
 

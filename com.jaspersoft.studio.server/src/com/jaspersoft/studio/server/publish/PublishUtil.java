@@ -34,7 +34,7 @@ import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.AMJrxmlContainer;
 import com.jaspersoft.studio.server.model.MInputControl;
 import com.jaspersoft.studio.server.model.MReportUnit;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
 import com.jaspersoft.studio.server.utils.RDUtil;
@@ -44,10 +44,10 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 public class PublishUtil {
 	public static final String KEY_PUBLISH2JSS_DATA = "PUBLISH2JSS_DATA"; //$NON-NLS-1$
 
-	public static List<MResource> getResources(MResource parent,
+	public static List<AMResource> getResources(AMResource parent,
 			IProgressMonitor monitor, JasperReportsConfiguration jrConfig) {
-		List<MResource> resources = jrConfig.get(KEY_PUBLISH2JSS_DATA,
-				new ArrayList<MResource>());
+		List<AMResource> resources = jrConfig.get(KEY_PUBLISH2JSS_DATA,
+				new ArrayList<AMResource>());
 		jrConfig.put(KEY_PUBLISH2JSS_DATA, resources);
 		loadPreferences(parent, monitor,
 				(IFile) jrConfig.get(FileUtils.KEY_FILE), resources);
@@ -141,7 +141,7 @@ public class PublishUtil {
 			rd.setLabel(name);
 	}
 
-	public static void savePreferences(IFile ifile, List<MResource> files)
+	public static void savePreferences(IFile ifile, List<AMResource> files)
 			throws CoreException {
 		Map<QualifiedName, String> pmap = ifile.getPersistentProperties();
 		for (QualifiedName key : pmap.keySet()) {
@@ -149,7 +149,7 @@ public class PublishUtil {
 				continue;
 			ifile.setPersistentProperty(key, null);
 		}
-		for (MResource f : files) {
+		for (AMResource f : files) {
 			PublishOptions popt = f.getPublishOptions();
 			String prefix = f.getValue().getName();
 
@@ -175,7 +175,7 @@ public class PublishUtil {
 		}
 	}
 
-	public static void savePreferencesNoOverwrite(IFile ifile, MResource f)
+	public static void savePreferencesNoOverwrite(IFile ifile, AMResource f)
 			throws CoreException {
 		if (f instanceof MInputControl) {
 			String prefix = f.getValue().getName();
@@ -184,18 +184,18 @@ public class PublishUtil {
 		}
 	}
 
-	public static void loadPreferences(MResource parent,
-			IProgressMonitor monitor, IFile ifile, List<MResource> files) {
+	public static void loadPreferences(AMResource parent,
+			IProgressMonitor monitor, IFile ifile, List<AMResource> files) {
 		if (parent == null || parent.getValue() == null
 				|| parent.getValue().getIsNew())
 			return;
-		for (MResource f : files) {
+		for (AMResource f : files) {
 			loadPreferences(monitor, ifile, f);
 		}
 	}
 
 	public static void loadPreferences(IProgressMonitor monitor, IFile ifile,
-			MResource f) {
+			AMResource f) {
 		PublishOptions popt = f.getPublishOptions();
 		String prefix = f.getValue().getName();
 		try {
@@ -242,7 +242,7 @@ public class PublishUtil {
 		return paths;
 	}
 
-	public static void savePath(IFile ifile, MResource mres)
+	public static void savePath(IFile ifile, AMResource mres)
 			throws CoreException {
 		ServerProfile sp = mres.getWsClient().getServerProfile();
 		String jrs = sp.getUrl();

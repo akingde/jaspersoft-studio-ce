@@ -42,7 +42,7 @@ import com.jaspersoft.studio.server.ResourceFactory;
 import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.messages.Messages;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.properties.dialog.RepositoryDialog;
 import com.jaspersoft.studio.server.protocol.Feature;
@@ -59,12 +59,12 @@ public abstract class ASelector {
 	protected Text jsLocDS;
 	protected Button bLoc;
 	protected Button bRef;
-	protected MResource res;
+	protected AMResource res;
 	protected ResourceDescriptor resRD;
 	protected ANode parent;
 
 	public Control createControls(Composite cmp, final ANode parent,
-			final MResource res) {
+			final AMResource res) {
 		this.res = res;
 		this.parent = parent;
 		if (res != null)
@@ -114,7 +114,7 @@ public abstract class ASelector {
 						protected IStatus run(IProgressMonitor monitor) {
 							IStatus status = Status.OK_STATUS;
 							try {
-								ResourceDescriptor rd = createLocal((MResource) null);
+								ResourceDescriptor rd = createLocal((AMResource) null);
 								rd.setUriString(uri);
 								newrd = WSClientHelper.getResource(monitor,
 										res.getWsClient(), rd, null);
@@ -167,12 +167,12 @@ public abstract class ASelector {
 							msp) {
 
 						@Override
-						public boolean isResourceCompatible(MResource r) {
+						public boolean isResourceCompatible(AMResource r) {
 							return isResCompatible(r);
 						}
 					};
 					if (rd.open() == Dialog.OK) {
-						MResource rs = rd.getResource();
+						AMResource rs = rd.getResource();
 						if (rs != null)
 							setRemoteResource(rs.getValue(), parent, true);
 						valid = true;
@@ -224,7 +224,7 @@ public abstract class ASelector {
 
 	protected abstract String[] getExcludeTypes();
 
-	protected abstract boolean isResCompatible(MResource r);
+	protected abstract boolean isResCompatible(AMResource r);
 
 	protected void createLocal(Composite prnt) {
 		brLocal = new Button(prnt, SWT.RADIO);
@@ -252,7 +252,7 @@ public abstract class ASelector {
 				if (isReference(ref))
 					ref = null;
 				// boolean newref = false;
-				MResource r = null;
+				AMResource r = null;
 				if (ref != null) {
 					ref = cloneResource(ref);
 					r = ResourceFactory.getResource(null, ref, -1);
@@ -279,7 +279,7 @@ public abstract class ASelector {
 		});
 	}
 
-	protected MResource getLocalResource(MResource res,
+	protected AMResource getLocalResource(AMResource res,
 			ResourceDescriptor runit, ANode pnode) {
 		ResourceDescriptor ref = createLocal(res);
 		ref.setIsNew(true);
@@ -289,13 +289,13 @@ public abstract class ASelector {
 		setupResource(ref);
 		ref.setDirty(true);
 
-		MResource r = ResourceFactory.getResource(null, ref, -1);
+		AMResource r = ResourceFactory.getResource(null, ref, -1);
 		if (!showLocalWizard(r, pnode))
 			return null;
 		return r;
 	}
 
-	protected boolean showLocalWizard(MResource r, ANode pnode) {
+	protected boolean showLocalWizard(AMResource r, ANode pnode) {
 		ResourceWizard wizard = new ResourceWizard(pnode, r, true, true);
 		WizardDialog dialog = new WizardDialog(UIUtils.getShell(), wizard);
 		dialog.create();
@@ -312,7 +312,7 @@ public abstract class ASelector {
 						ResourceDescriptor.TYPE_REFERENCE));
 	}
 
-	protected abstract ResourceDescriptor createLocal(MResource res);
+	protected abstract ResourceDescriptor createLocal(AMResource res);
 
 	protected void init() {
 		setEnabled(isReference(getResourceDescriptor(resRD)) ? 0 : 1);

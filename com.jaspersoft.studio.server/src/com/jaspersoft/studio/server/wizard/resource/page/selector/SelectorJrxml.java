@@ -41,7 +41,7 @@ import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.model.AFileResource;
 import com.jaspersoft.studio.server.model.MJrxml;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.properties.dialog.RepositoryDialog;
 import com.jaspersoft.studio.server.protocol.Feature;
@@ -55,9 +55,9 @@ public class SelectorJrxml {
 	private Text jsLocDS;
 	private Button bLoc;
 	private Button bRef;
-	private MResource res;
+	private AMResource res;
 
-	public void createControls(Composite cmp, final ANode parent, final MResource res) {
+	public void createControls(Composite cmp, final ANode parent, final AMResource res) {
 		this.res = res;
 
 		Composite composite = new Composite(cmp, SWT.NONE);
@@ -106,12 +106,12 @@ public class SelectorJrxml {
 				} else {
 					RepositoryDialog rd = new RepositoryDialog(UIUtils.getShell(), msp) {
 						@Override
-						public boolean isResourceCompatible(MResource r) {
+						public boolean isResourceCompatible(AMResource r) {
 							return r instanceof MJrxml;
 						}
 					};
 					if (rd.open() == Dialog.OK) {
-						MResource rs = rd.getResource();
+						AMResource rs = rd.getResource();
 						if (rs != null)
 							setRemoteResource(res, rs.getValue(), parent);
 					}
@@ -181,7 +181,7 @@ public class SelectorJrxml {
 			setEnabled(1, true);
 	}
 
-	private void setRemoteResource(MResource res, ResourceDescriptor rd, ANode parent) {
+	private void setRemoteResource(AMResource res, ResourceDescriptor rd, ANode parent) {
 		ResourceDescriptor runit = res.getValue();
 		try {
 			rd = WSClientHelper.getResource(new NullProgressMonitor(), parent, rd);
@@ -207,7 +207,7 @@ public class SelectorJrxml {
 		this.listener = listener;
 	}
 
-	public static void replaceMainReport(final MResource res, ResourceDescriptor rd) {
+	public static void replaceMainReport(final AMResource res, ResourceDescriptor rd) {
 		ResourceDescriptor rdel = getMainReport(res.getValue());
 		if (rdel != null) {
 			int index = res.getValue().getChildren().indexOf(rdel);

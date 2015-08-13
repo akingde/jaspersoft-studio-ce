@@ -27,7 +27,7 @@ import org.eclipse.swt.widgets.Text;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceProperty;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.messages.Messages;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.model.datasource.MROlapXmlaConnection;
 import com.jaspersoft.studio.server.utils.ResourceDescriptorUtil;
 import com.jaspersoft.studio.server.wizard.resource.APageContent;
@@ -41,11 +41,11 @@ public class OLAPXmlaPageContent extends APageContent {
 	private Text tcatalog;
 	private Text turi;
 
-	public OLAPXmlaPageContent(ANode parent, MResource resource, DataBindingContext bindingContext) {
+	public OLAPXmlaPageContent(ANode parent, AMResource resource, DataBindingContext bindingContext) {
 		super(parent, resource, bindingContext);
 	}
 
-	public OLAPXmlaPageContent(ANode parent, MResource resource) {
+	public OLAPXmlaPageContent(ANode parent, AMResource resource) {
 		super(parent, resource);
 	}
 

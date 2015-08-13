@@ -49,7 +49,7 @@ import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MFolder;
 import com.jaspersoft.studio.server.model.MReportUnit;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.properties.dialog.RepositoryDialog;
 import com.jaspersoft.studio.server.protocol.Feature;
@@ -60,12 +60,12 @@ import com.jaspersoft.studio.server.wizard.resource.APageContent;
 
 public class ReferencePageContent extends APageContent {
 
-	public ReferencePageContent(ANode parent, MResource resource,
+	public ReferencePageContent(ANode parent, AMResource resource,
 			DataBindingContext bindingContext) {
 		super(parent, resource, bindingContext);
 	}
 
-	public ReferencePageContent(ANode parent, MResource resource) {
+	public ReferencePageContent(ANode parent, AMResource resource) {
 		super(parent, resource);
 	}
 
@@ -123,14 +123,14 @@ public class ReferencePageContent extends APageContent {
 							.getShell(), msp) {
 
 						@Override
-						public boolean isResourceCompatible(MResource r) {
+						public boolean isResourceCompatible(AMResource r) {
 							return !(r instanceof MFolder || r instanceof MReportUnit);
 							// ResourceFactory.isFileResourceType(r.getValue());
 						}
 
 					};
 					if (rd.open() == Dialog.OK) {
-						MResource rs = rd.getResource();
+						AMResource rs = rd.getResource();
 						if (rs != null) {
 							resrd.setReferenceUri(rs.getValue().getUriString());
 							resrd.setUriString(rs.getValue().getUriString());

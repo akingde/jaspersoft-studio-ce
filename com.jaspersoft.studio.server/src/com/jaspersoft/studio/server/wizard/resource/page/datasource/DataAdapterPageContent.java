@@ -16,16 +16,16 @@ import org.eclipse.core.databinding.DataBindingContext;
 
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.messages.Messages;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.wizard.resource.page.AFileResourcePageContent;
 
 public class DataAdapterPageContent extends AFileResourcePageContent {
 
-	public DataAdapterPageContent(ANode parent, MResource resource, DataBindingContext bindingContext) {
+	public DataAdapterPageContent(ANode parent, AMResource resource, DataBindingContext bindingContext) {
 		super(parent, resource, bindingContext);
 	}
 
-	public DataAdapterPageContent(ANode parent, MResource resource) {
+	public DataAdapterPageContent(ANode parent, AMResource resource) {
 		super(parent, resource);
 	}
 

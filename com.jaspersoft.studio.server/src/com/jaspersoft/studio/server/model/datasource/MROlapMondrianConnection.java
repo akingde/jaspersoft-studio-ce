@@ -12,15 +12,18 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.model.datasource;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 import net.sf.jasperreports.engine.JRConstants;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.server.ServerIconDescriptor;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 
-public class MROlapMondrianConnection extends MResource {
+public class MROlapMondrianConnection extends AMResource {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	public MROlapMondrianConnection(ANode parent, ResourceDescriptor rd,
@@ -43,8 +46,16 @@ public class MROlapMondrianConnection extends MResource {
 	}
 
 	public static ResourceDescriptor createDescriptor(ANode parent) {
-		ResourceDescriptor rd = MResource.createDescriptor(parent);
+		ResourceDescriptor rd = AMResource.createDescriptor(parent);
 		rd.setWsType(ResourceDescriptor.TYPE_OLAP_MONDRIAN_CONNECTION);
 		return rd;
+	}
+
+	@Override
+	public String getJRSUrl() throws UnsupportedEncodingException {
+		return "flow.html?_flowId=olapClientConnectionFlow&isEdit=true&selectedResource="
+				+ URLEncoder.encode(getValue().getUriString(), "ISO-8859-1")
+				+ "&ParentFolderUri="
+				+ URLEncoder.encode(getValue().getParentFolder(), "ISO-8859-1");
 	}
 }

@@ -20,21 +20,21 @@ import org.eclipse.jface.wizard.WizardDialog;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.jasperserver.dto.resources.ResourceMediaType;
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.model.datasource.MROlapMondrianConnection;
 import com.jaspersoft.studio.server.wizard.resource.AddResourceWizard;
 
 public class SelectorOlapConnection extends ASelector {
 
 	@Override
-	protected MResource getLocalResource(MResource res, ResourceDescriptor runit, ANode pnode) {
+	protected AMResource getLocalResource(AMResource res, ResourceDescriptor runit, ANode pnode) {
 		AddResourceWizard wizard = new AddResourceWizard(res, true);
 		wizard.setOlapOnly(true);
 		WizardDialog dialog = new WizardDialog(UIUtils.getShell(), wizard);
 		dialog.create();
 		if (dialog.open() != Dialog.OK)
 			return null;
-		MResource r = wizard.getResource();
+		AMResource r = wizard.getResource();
 		ResourceDescriptor ref = r.getValue();
 		ref.setIsNew(true);
 		ref.setIsReference(false);
@@ -44,12 +44,12 @@ public class SelectorOlapConnection extends ASelector {
 	}
 
 	@Override
-	protected ResourceDescriptor createLocal(MResource res) {
+	protected ResourceDescriptor createLocal(AMResource res) {
 		return null;
 	}
 
 	@Override
-	protected boolean isResCompatible(MResource r) {
+	protected boolean isResCompatible(AMResource r) {
 		return r instanceof MROlapMondrianConnection;
 	}
 

@@ -31,7 +31,7 @@ import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.messages.Messages;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.wizard.resource.APageContent;
 import com.jaspersoft.studio.utils.UIUtil;
 
@@ -40,11 +40,11 @@ public class DatasourceBeanPageContent extends APageContent {
 	private Text tmethod;
 	private Text tname;
 
-	public DatasourceBeanPageContent(ANode parent, MResource resource, DataBindingContext bindingContext) {
+	public DatasourceBeanPageContent(ANode parent, AMResource resource, DataBindingContext bindingContext) {
 		super(parent, resource, bindingContext);
 	}
 
-	public DatasourceBeanPageContent(ANode parent, MResource resource) {
+	public DatasourceBeanPageContent(ANode parent, AMResource resource) {
 		super(parent, resource);
 	}
 

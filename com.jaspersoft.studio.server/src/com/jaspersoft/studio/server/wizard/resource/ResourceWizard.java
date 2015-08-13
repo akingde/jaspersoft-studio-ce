@@ -27,7 +27,7 @@ import com.jaspersoft.studio.server.ResourceFactory;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.IInputControlsContainer;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 
 public class ResourceWizard extends Wizard {
 	private boolean skipFirstPage = false;
@@ -37,17 +37,17 @@ public class ResourceWizard extends Wizard {
 		this.nested = nested;
 	}
 
-	public ResourceWizard(ANode parent, MResource resource, boolean skipFirstPage, boolean nested) {
+	public ResourceWizard(ANode parent, AMResource resource, boolean skipFirstPage, boolean nested) {
 		this(parent, resource, skipFirstPage);
 		setNested(nested);
 	}
 
-	public ResourceWizard(ANode parent, MResource resource, boolean skipFirstPage) {
+	public ResourceWizard(ANode parent, AMResource resource, boolean skipFirstPage) {
 		this(parent, resource);
 		this.skipFirstPage = skipFirstPage;
 	}
 
-	public ResourceWizard(ANode parent, MResource resource) {
+	public ResourceWizard(ANode parent, AMResource resource) {
 		super();
 		setWindowTitle(Messages.ResourceWizard_windowtitle);
 		setNeedsProgressMonitor(true);
@@ -76,7 +76,7 @@ public class ResourceWizard extends Wizard {
 
 	private ANode parent;
 
-	private MResource resource;
+	private AMResource resource;
 
 	@Override
 	public boolean performFinish() {
@@ -121,7 +121,7 @@ public class ResourceWizard extends Wizard {
 					monitor.beginTask("Canceling", IProgressMonitor.UNKNOWN);
 					try {
 						if (resource.getParent() instanceof IInputControlsContainer)
-							WSClientHelper.refreshContainer((MResource) resource.getParent(), monitor);
+							WSClientHelper.refreshContainer((AMResource) resource.getParent(), monitor);
 						else
 							WSClientHelper.refreshResource(resource, monitor);
 					} catch (Exception e) {

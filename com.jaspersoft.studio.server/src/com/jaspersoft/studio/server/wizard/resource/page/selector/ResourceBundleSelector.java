@@ -2,7 +2,7 @@ package com.jaspersoft.studio.server.wizard.resource.page.selector;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.jasperserver.dto.resources.ResourceMediaType;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.model.MResourceBundle;
 import com.jaspersoft.studio.server.wizard.resource.page.selector.ASelector;
 
@@ -19,12 +19,12 @@ public class ResourceBundleSelector extends ASelector {
 	}
 
 	@Override
-	protected boolean isResCompatible(MResource r) {
+	protected boolean isResCompatible(AMResource r) {
 		return r instanceof MResourceBundle;
 	}
 
 	@Override
-	protected ResourceDescriptor createLocal(MResource res) {
+	protected ResourceDescriptor createLocal(AMResource res) {
 		ResourceDescriptor rd = MResourceBundle.createDescriptor(res);
 		rd.setName(MResourceBundle.getIconDescriptor().getTitle());
 		rd.setLabel(rd.getName());

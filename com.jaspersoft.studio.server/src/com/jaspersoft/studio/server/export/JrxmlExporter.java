@@ -30,7 +30,7 @@ import com.jaspersoft.studio.server.Activator;
 import com.jaspersoft.studio.server.model.AFileResource;
 import com.jaspersoft.studio.server.model.MJar;
 import com.jaspersoft.studio.server.model.MReportUnit;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
@@ -45,7 +45,7 @@ public class JrxmlExporter extends AExporter {
 	}
 
 	@Override
-	public IFile exportToIFile(MResource res, ResourceDescriptor rd,
+	public IFile exportToIFile(AMResource res, ResourceDescriptor rd,
 			String fkeyname, IProgressMonitor monitor) throws Exception {
 		IFile f = super.exportToIFile(res, rd, fkeyname, monitor);
 		if (f != null) {
@@ -98,7 +98,7 @@ public class JrxmlExporter extends AExporter {
 		}
 	}
 
-	protected void setPropReportUnit(MResource res, JasperDesign jd) {
+	protected void setPropReportUnit(AMResource res, JasperDesign jd) {
 		if (!res.getValue().isMainReport())
 			jd.setProperty(AExporter.PROP_REPORTRESOURCE, res.getValue()
 					.getUriString());
@@ -111,7 +111,7 @@ public class JrxmlExporter extends AExporter {
 			jd.getPropertiesMap().removeProperty(AExporter.PROP_REPORTUNIT);
 	}
 
-	private void getResources(MResource res, JasperDesign jd) throws Exception {
+	private void getResources(AMResource res, JasperDesign jd) throws Exception {
 		if (res.getParent() instanceof MReportUnit) {
 			for (INode n : res.getParent().getChildren()) {
 				if (n instanceof MJar) {
@@ -131,7 +131,7 @@ public class JrxmlExporter extends AExporter {
 		// }
 	}
 
-	protected void cacheResource(MResource res, JRExpression imgexp)
+	protected void cacheResource(AMResource res, JRExpression imgexp)
 			throws Exception {
 	}
 }

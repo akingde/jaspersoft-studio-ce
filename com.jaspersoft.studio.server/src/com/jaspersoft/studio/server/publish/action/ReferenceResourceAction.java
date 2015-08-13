@@ -21,7 +21,7 @@ import org.eclipse.jface.viewers.TableViewer;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.messages.Messages;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.properties.dialog.RepositoryDialog;
 import com.jaspersoft.studio.server.protocol.Feature;
@@ -30,7 +30,7 @@ import com.jaspersoft.studio.server.publish.ResourcePublishMethod;
 import com.jaspersoft.studio.server.wizard.find.FindResourceJob;
 
 public class ReferenceResourceAction extends Action {
-	private MResource mres;
+	private AMResource mres;
 	private TableViewer tableViewer;
 
 	public ReferenceResourceAction(TableViewer tableViewer) {
@@ -39,7 +39,7 @@ public class ReferenceResourceAction extends Action {
 		this.tableViewer = tableViewer;
 	}
 
-	public boolean calculateEnabled(MResource mres) {
+	public boolean calculateEnabled(AMResource mres) {
 		this.mres = mres;
 		return mres.getPublishOptions().getPublishMethod() != ResourcePublishMethod.REFERENCE;
 	}
@@ -56,12 +56,12 @@ public class ReferenceResourceAction extends Action {
 		} else {
 			RepositoryDialog rd = new RepositoryDialog(UIUtils.getShell(), msp) {
 				@Override
-				public boolean isResourceCompatible(MResource r) {
+				public boolean isResourceCompatible(AMResource r) {
 					return r.getValue().getWsType().equals(mres.getValue().getWsType());
 				}
 			};
 			if (rd.open() == Dialog.OK) {
-				MResource rs = rd.getResource();
+				AMResource rs = rd.getResource();
 				mres.getPublishOptions().setReferencedResource(rs.getValue());
 				mres.getPublishOptions().setPublishMethod(ResourcePublishMethod.REFERENCE);
 			}

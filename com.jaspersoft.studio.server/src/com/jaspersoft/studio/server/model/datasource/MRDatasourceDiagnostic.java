@@ -23,7 +23,7 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.server.ServerIconDescriptor;
 
-public class MRDatasourceDiagnostic extends MRDatasourceCustom {
+public class MRDatasourceDiagnostic extends MRDatasourceCustom  {
 
 	public static final String CUSTOM_CLASS = "com.jaspersoft.jasperserver.api.logging.diagnostic.datasource.DiagnosticCustomDataSourceService";
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;

@@ -16,11 +16,11 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.TableViewer;
 
 import com.jaspersoft.studio.server.messages.Messages;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.publish.ResourcePublishMethod;
 
 public class SelectLocalAction extends Action {
-	private MResource mres;
+	private AMResource mres;
 	private TableViewer tableViewer;
 
 	public SelectLocalAction(TableViewer tableViewer) {
@@ -29,7 +29,7 @@ public class SelectLocalAction extends Action {
 		this.tableViewer = tableViewer;
 	}
 
-	public boolean calculateEnabled(MResource mres) {
+	public boolean calculateEnabled(AMResource mres) {
 		this.mres = mres;
 		return mres.getPublishOptions().getPublishMethod() != ResourcePublishMethod.LOCAL;
 	}

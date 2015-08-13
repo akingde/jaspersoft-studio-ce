@@ -28,13 +28,13 @@ import com.jaspersoft.studio.server.ResourceFactory;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.model.IInputControlsContainer;
 import com.jaspersoft.studio.server.model.MFolder;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.wizard.resource.ResourceWizard;
 
 public class PropertiesAction extends Action {
 	private static final String ID = "RESOURCEPROPERTIES";
 	private TreeViewer treeViewer;
-	private MResource mres;
+	private AMResource mres;
 
 	public PropertiesAction(TreeViewer treeViewer) {
 		super();
@@ -51,9 +51,9 @@ public class PropertiesAction extends Action {
 		TreePath[] p = s.getPaths();
 		for (int i = 0; i < p.length; i++) {
 			final Object obj = p[i].getLastSegment();
-			if (obj instanceof MResource) {
+			if (obj instanceof AMResource) {
 				try {
-					mres = (MResource) obj;
+					mres = (AMResource) obj;
 					if (!(mres instanceof MFolder)) {
 						NullProgressMonitor monitor = new NullProgressMonitor();
 						ResourceDescriptor rd = WSClientHelper.getResource(monitor, mres, mres.getValue());

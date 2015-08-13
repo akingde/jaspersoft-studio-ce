@@ -29,7 +29,7 @@ import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.server.ServerProvider;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.messages.Messages;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 
 public class FindResourceJob {
@@ -50,8 +50,8 @@ public class FindResourceJob {
 		MServerProfile msp = null;
 		if (el instanceof MServerProfile)
 			msp = (MServerProfile) el;
-		else if (el instanceof MResource) {
-			INode n = ((MResource) el).getRoot();
+		else if (el instanceof AMResource) {
+			INode n = ((AMResource) el).getRoot();
 			if (n != null && n instanceof MServerProfile)
 				msp = (MServerProfile) n;
 		}
@@ -74,7 +74,7 @@ public class FindResourceJob {
 			protected IStatus run(IProgressMonitor monitor) {
 				IStatus status = Status.OK_STATUS;
 				try {
-					final MResource mr = WSClientHelper.findSelected(monitor, rd, msp);
+					final AMResource mr = WSClientHelper.findSelected(monitor, rd, msp);
 					if (mr != null) {
 						UIUtils.getDisplay().asyncExec(new Runnable() {
 

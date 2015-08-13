@@ -22,7 +22,7 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescript
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MAdHocDataView;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.protocol.Feature;
 import com.jaspersoft.studio.server.protocol.IConnection;
 import com.jaspersoft.studio.server.protocol.Version;
@@ -36,18 +36,18 @@ public class ReportUnitDatasourceContent extends APageContent implements
 	private boolean mandatory = false;
 	private DatasourceSelectionComposite datasourceSelectionCmp;
 
-	public ReportUnitDatasourceContent(ANode parent, MResource resource,
+	public ReportUnitDatasourceContent(ANode parent, AMResource resource,
 			DataBindingContext bindingContext) {
 		super(parent, resource, bindingContext);
 	}
 
-	public ReportUnitDatasourceContent(ANode parent, MResource resource,
+	public ReportUnitDatasourceContent(ANode parent, AMResource resource,
 			boolean mandatory) {
 		this(parent, resource);
 		this.mandatory = mandatory;
 	}
 
-	public ReportUnitDatasourceContent(ANode parent, MResource resource) {
+	public ReportUnitDatasourceContent(ANode parent, AMResource resource) {
 		super(parent, resource);
 	}
 
@@ -66,7 +66,7 @@ public class ReportUnitDatasourceContent extends APageContent implements
 		return "com.jaspersoft.studio.doc.editReportUnitDSContent";
 	}
 
-	public static String[] getExcludedTypes(MResource r) {
+	public static String[] getExcludedTypes(AMResource r) {
 		if (r != null && r.getWsClient() != null) {
 			if (Version.isXMLACoonnectionSupported(r.getWsClient()))
 				return new String[] { ResourceDescriptor.TYPE_OLAP_XMLA_CONNECTION };

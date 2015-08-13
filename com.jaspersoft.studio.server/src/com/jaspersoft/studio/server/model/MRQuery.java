@@ -12,6 +12,9 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.model;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 import net.sf.jasperreports.engine.JRConstants;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
@@ -19,7 +22,7 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.server.ServerIconDescriptor;
 
-public class MRQuery extends MResource {
+public class MRQuery extends AMResource {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	public MRQuery(ANode parent, ResourceDescriptor rd, int index) {
@@ -40,9 +43,17 @@ public class MRQuery extends MResource {
 	}
 
 	public static ResourceDescriptor createDescriptor(ANode parent) {
-		ResourceDescriptor rd = MResource.createDescriptor(parent);
+		ResourceDescriptor rd = AMResource.createDescriptor(parent);
 		rd.setWsType(ResourceDescriptor.TYPE_QUERY);
 		rd.setResourceProperty(ResourceDescriptor.PROP_QUERY_LANGUAGE, "sql");
 		return rd;
+	}
+
+	@Override
+	public String getJRSUrl() throws UnsupportedEncodingException {
+		return "flow.html?_flowId=queryFlow&isEdit=true&currentQuery="
+				+ URLEncoder.encode(getValue().getUriString(), "ISO-8859-1")
+				+ "&ParentFolderUri="
+				+ URLEncoder.encode(getValue().getParentFolder(), "ISO-8859-1");
 	}
 }

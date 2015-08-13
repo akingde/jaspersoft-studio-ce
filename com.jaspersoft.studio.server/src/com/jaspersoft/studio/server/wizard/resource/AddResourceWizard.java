@@ -34,7 +34,7 @@ import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MReference;
 import com.jaspersoft.studio.server.model.MReportUnit;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.wizard.resource.page.AddResourcePage;
 import com.jaspersoft.studio.server.wizard.resource.page.ResourceDescriptorPage;
@@ -109,12 +109,12 @@ public class AddResourceWizard extends Wizard {
 	}
 
 	private ResourceFactory rfactory = new ResourceFactory();
-	private Map<Class<? extends MResource>, IWizardPage[]> pagemap = new HashMap<Class<? extends MResource>, IWizardPage[]>();
+	private Map<Class<? extends AMResource>, IWizardPage[]> pagemap = new HashMap<Class<? extends AMResource>, IWizardPage[]>();
 
 	@Override
 	public IWizardPage getNextPage(IWizardPage page) {
 		if (page == page0) {
-			MResource r = page0.getResource();
+			AMResource r = page0.getResource();
 			if (r != null) {
 				int size = getPageCount();
 				try {
@@ -168,7 +168,7 @@ public class AddResourceWizard extends Wizard {
 
 	private ANode parent;
 
-	public MResource getResource() {
+	public AMResource getResource() {
 		return page0.getResource();
 	}
 
@@ -190,7 +190,7 @@ public class AddResourceWizard extends Wizard {
 							IProgressMonitor.UNKNOWN);
 					File tmpfile = null;
 					try {
-						MResource resource = getResource();
+						AMResource resource = getResource();
 						ResourceDescriptor res = resource.getValue();
 						if (res.getIsNew()) {
 							res.setUriString(res.getParentFolder() + "/" //$NON-NLS-1$

@@ -134,6 +134,8 @@ public class Messages extends NLS {
 	public static String OLAPXmlaPageContent_pass;
 	public static String OLAPXmlaPageContent_username;
 	public static String OLAPXmlaPageContent_uti;
+	public static String OpenInBrowserAction_1;
+	public static String OpenInBrowserAction_2;
 	public static String OpenInEditorAction_0;
 	public static String OpenInEditorAction_desc;
 	public static String OpenInEditorAction_title;

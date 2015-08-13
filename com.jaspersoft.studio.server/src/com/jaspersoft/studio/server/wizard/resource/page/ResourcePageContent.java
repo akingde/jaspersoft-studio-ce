@@ -43,7 +43,7 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescript
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MAdHocDataView;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.protocol.Feature;
 import com.jaspersoft.studio.server.protocol.IConnection;
 import com.jaspersoft.studio.server.protocol.restv2.DiffFields;
@@ -66,11 +66,11 @@ public class ResourcePageContent extends APageContent {
 	private Button bisRef;
 	private Button bPerm;
 
-	public ResourcePageContent(ANode parent, MResource resource, DataBindingContext bindingContext) {
+	public ResourcePageContent(ANode parent, AMResource resource, DataBindingContext bindingContext) {
 		super(parent, resource, bindingContext);
 	}
 
-	public ResourcePageContent(ANode parent, MResource resource) {
+	public ResourcePageContent(ANode parent, AMResource resource) {
 		super(parent, resource);
 	}
 

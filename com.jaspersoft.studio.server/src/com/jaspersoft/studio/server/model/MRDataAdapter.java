@@ -49,7 +49,7 @@ public class MRDataAdapter extends AFileResource {
 
 	public static ResourceDescriptor createDescriptor(ANode parent) {
 		// Data adapter are XML file...
-		ResourceDescriptor rd = MResource.createDescriptor(parent);
+		ResourceDescriptor rd = AMResource.createDescriptor(parent);
 		rd.setWsType(ResourceDescriptor.TYPE_XML_FILE);
 		return rd;
 	}

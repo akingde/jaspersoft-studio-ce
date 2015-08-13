@@ -46,7 +46,7 @@ import com.ibm.icu.text.NumberFormat;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.messages.Messages;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.protocol.Feature;
 import com.jaspersoft.studio.server.protocol.IConnection;
 import com.jaspersoft.studio.server.protocol.restv2.DiffFields;
@@ -57,11 +57,11 @@ import com.jaspersoft.studio.utils.UIUtil;
 
 public class DataTypePageContent extends APageContent {
 
-	public DataTypePageContent(ANode parent, MResource resource, DataBindingContext bindingContext) {
+	public DataTypePageContent(ANode parent, AMResource resource, DataBindingContext bindingContext) {
 		super(parent, resource, bindingContext);
 	}
 
-	public DataTypePageContent(ANode parent, MResource resource) {
+	public DataTypePageContent(ANode parent, AMResource resource) {
 		super(parent, resource);
 	}
 

@@ -12,6 +12,9 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.model;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 import net.sf.jasperreports.engine.JRConstants;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
@@ -20,7 +23,8 @@ import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.server.ServerIconDescriptor;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 
-public class MReportUnit extends AMJrxmlContainer implements IInputControlsContainer {
+public class MReportUnit extends AMJrxmlContainer implements
+		IInputControlsContainer {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	public MReportUnit(ANode parent, ResourceDescriptor rd, int index) {
@@ -52,7 +56,7 @@ public class MReportUnit extends AMJrxmlContainer implements IInputControlsConta
 	}
 
 	public static ResourceDescriptor createDescriptor(ANode parent) {
-		ResourceDescriptor rd = MResource.createDescriptor(parent);
+		ResourceDescriptor rd = AMResource.createDescriptor(parent);
 		rd.setWsType(ResourceDescriptor.TYPE_REPORTUNIT);
 		return rd;
 	}
@@ -60,5 +64,13 @@ public class MReportUnit extends AMJrxmlContainer implements IInputControlsConta
 	@Override
 	public String getDefaultFileExtension() {
 		return "";
+	}
+
+	@Override
+	public String getJRSUrl() throws UnsupportedEncodingException {
+		return "flow.html?_flowId=reportUnitFlow&selectedResource="
+				+ URLEncoder.encode(getValue().getUriString(), "ISO-8859-1")
+				+ "&ParentFolderUri="
+				+ URLEncoder.encode(getValue().getParentFolder(), "ISO-8859-1");
 	}
 }

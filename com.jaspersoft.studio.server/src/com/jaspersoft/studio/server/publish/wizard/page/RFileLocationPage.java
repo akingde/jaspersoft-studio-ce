@@ -58,7 +58,7 @@ import com.jaspersoft.studio.server.model.AFileResource;
 import com.jaspersoft.studio.server.model.MContentResource;
 import com.jaspersoft.studio.server.model.MFolder;
 import com.jaspersoft.studio.server.model.MReportUnit;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.model.server.MServers;
 import com.jaspersoft.studio.server.publish.PublishUtil;
@@ -445,7 +445,7 @@ public class RFileLocationPage extends JSSHelpWizardPage {
 						return true;
 					ResourceDescriptor rd = new ResourceDescriptor();
 					rd.setUriString(uri);
-					final MResource mres = WSClientHelper.findSelected(monitor, rd, msp);
+					final AMResource mres = WSClientHelper.findSelected(monitor, rd, msp);
 					if (mres == null)
 						return false;
 					UIUtils.getDisplay().asyncExec(new Runnable() {

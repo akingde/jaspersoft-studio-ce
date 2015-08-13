@@ -26,7 +26,7 @@ import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.server.messages.Messages;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 
 public abstract class RepositoryDialog extends ATitledDialog {
 	private INode root;
@@ -48,11 +48,11 @@ public abstract class RepositoryDialog extends ATitledDialog {
 	// newShell.setText("JasperServer Repository Browser");
 	// }
 
-	private MResource resource;
+	private AMResource resource;
 	private Text tname;
 	private Text ttype;
 
-	public MResource getResource() {
+	public AMResource getResource() {
 		return resource;
 	}
 
@@ -96,7 +96,7 @@ public abstract class RepositoryDialog extends ATitledDialog {
 			 * #setResource(com.jaspersoft.studio.server.model.MResource)
 			 */
 			@Override
-			public void setResource(MResource res) {
+			public void setResource(AMResource res) {
 				super.setResource(res);
 				tname.setText(res.getValue().getUriString());
 				ttype.setText(res.getValue().getWsType());
@@ -114,7 +114,7 @@ public abstract class RepositoryDialog extends ATitledDialog {
 			 * )
 			 */
 			@Override
-			public boolean isResourceCompatible(MResource r) {
+			public boolean isResourceCompatible(AMResource r) {
 				return RepositoryDialog.this.isResourceCompatible(r);
 			}
 		};
@@ -137,7 +137,7 @@ public abstract class RepositoryDialog extends ATitledDialog {
 		return composite;
 	}
 
-	public abstract boolean isResourceCompatible(MResource r);
+	public abstract boolean isResourceCompatible(AMResource r);
 
 	@Override
 	protected void createButtonsForButtonBar(Composite parent) {

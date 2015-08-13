@@ -17,12 +17,12 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.server.model.MReference;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.protocol.IConnection;
 
 public class ReferenceResolver {
-	public static ResourceDescriptor resolveReference(MResource res, ResourceDescriptor reference, IProgressMonitor monitor) throws Exception {
+	public static ResourceDescriptor resolveReference(AMResource res, ResourceDescriptor reference, IProgressMonitor monitor) throws Exception {
 		INode n = res.getRoot();
 		if (n != null && n instanceof MServerProfile) {
 			MServerProfile sp = (MServerProfile) res.getRoot();

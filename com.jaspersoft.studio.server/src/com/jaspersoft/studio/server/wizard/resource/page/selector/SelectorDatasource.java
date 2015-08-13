@@ -20,7 +20,7 @@ import org.eclipse.swt.widgets.TabItem;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.messages.Messages;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.model.datasource.filter.DatasourcesAllFilter;
 import com.jaspersoft.studio.server.model.datasource.filter.IDatasourceFilter;
 import com.jaspersoft.studio.server.publish.wizard.page.DatasourceSelectionComposite;
@@ -45,7 +45,7 @@ public class SelectorDatasource {
 	 * @param res
 	 *          the resource which datasource information must be modified
 	 */
-	public DatasourceSelectionComposite createDatasource(TabFolder tabFolder, final ANode parent, final MResource res, boolean mandatory) {
+	public DatasourceSelectionComposite createDatasource(TabFolder tabFolder, final ANode parent, final AMResource res, boolean mandatory) {
 		TabItem item = new TabItem(tabFolder, SWT.NONE);
 		item.setText(Messages.SelectorDatasource_TabTitle);
 
@@ -55,7 +55,7 @@ public class SelectorDatasource {
 		return dsSelectionCmp;
 	}
 
-	public DatasourceSelectionComposite createDatasource(Composite parent, final ANode pnode, final MResource res, boolean mandatory, String[] excludeTypes) {
+	public DatasourceSelectionComposite createDatasource(Composite parent, final ANode pnode, final AMResource res, boolean mandatory, String[] excludeTypes) {
 		DatasourceSelectionComposite dsSelectionCmp = new DatasourceSelectionComposite(parent, SWT.NONE, mandatory, excludeTypes);
 		dsSelectionCmp.configurePage(pnode, res);
 		return dsSelectionCmp;
@@ -71,7 +71,7 @@ public class SelectorDatasource {
 	 *          the resource descriptor representing the new datasource
 	 *          information
 	 */
-	public static void replaceDatasource(final MResource res, ResourceDescriptor rd) {
+	public static void replaceDatasource(final AMResource res, ResourceDescriptor rd) {
 		ResourceDescriptor rdel = getDatasource(res.getValue());
 		if (rdel != null) {
 			int index = res.getValue().getChildren().indexOf(rdel);

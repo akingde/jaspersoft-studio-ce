@@ -21,7 +21,7 @@ import org.eclipse.swt.widgets.TreeItem;
 
 import com.jaspersoft.studio.server.model.MFolder;
 import com.jaspersoft.studio.server.model.MReportUnit;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.utils.Misc;
 
 /**
@@ -67,9 +67,9 @@ public class RepositoryFileResourceDropTargetListener implements TransferDropTar
 		for(String item : items){
 			String fileExt = Misc.nvl(FilenameUtils.getExtension(item).toLowerCase());
 			if(RepositoryDNDHelper.isDropOperationAllowed(fileExt) && 
-					event.item!=null && event.item.getData() instanceof MResource && 
+					event.item!=null && event.item.getData() instanceof AMResource && 
 					event.data instanceof String[]){
-				MResource targetParentResource = (MResource) event.item.getData();
+				AMResource targetParentResource = (AMResource) event.item.getData();
 				RepositoryDNDHelper.performDropOperation(targetParentResource, item);
 			} 
 		}

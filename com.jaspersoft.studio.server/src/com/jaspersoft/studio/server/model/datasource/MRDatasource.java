@@ -18,9 +18,9 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescript
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.server.ServerIconDescriptor;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 
-public class MRDatasource extends MResource {
+public class MRDatasource extends AMRDatasource {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	public MRDatasource(ANode parent, ResourceDescriptor rd, int index) {
@@ -40,8 +40,8 @@ public class MRDatasource extends MResource {
 		return getIconDescriptor();
 	}
 
-	public static ResourceDescriptor createDescriptor(MResource parent) {
-		ResourceDescriptor rd = MResource.createDescriptor(parent);
+	public static ResourceDescriptor createDescriptor(AMResource parent) {
+		ResourceDescriptor rd = AMResource.createDescriptor(parent);
 		rd.setWsType(ResourceDescriptor.TYPE_DATASOURCE);
 		return rd;
 	}

@@ -66,7 +66,7 @@ import com.jaspersoft.studio.server.model.IInputControlsContainer;
 import com.jaspersoft.studio.server.model.MFolder;
 import com.jaspersoft.studio.server.model.MJrxml;
 import com.jaspersoft.studio.server.model.MReportUnit;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.protocol.Feature;
 import com.jaspersoft.studio.server.publish.FindResources;
@@ -185,8 +185,8 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 		treeViewer.setContentProvider(new ReportTreeContetProvider() {
 			@Override
 			public Object[] getChildren(Object parentElement) {
-				if (parentElement instanceof MResource) {
-					MResource mres = (MResource) parentElement;
+				if (parentElement instanceof AMResource) {
+					AMResource mres = (AMResource) parentElement;
 					if (mres instanceof MReportUnit || (mres.isSupported(Feature.INPUTCONTROLS_ORDERING) && (mres instanceof IInputControlsContainer))) {
 						if (mres.getChildren() != null && mres.getChildren().size() > 0) {
 							List<INode> children = new ArrayList<INode>();
@@ -198,7 +198,7 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 									UIUtils.showError(e);
 								}
 							for (INode n : mres.getChildren())
-								if (n instanceof MResource && !SelectorDatasource.isDatasource(((MResource) n).getValue()))
+								if (n instanceof AMResource && !SelectorDatasource.isDatasource(((AMResource) n).getValue()))
 									children.add(n);
 							return children.toArray();
 						}
@@ -506,8 +506,8 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 			ruLabel.setText(Misc.nvl(reportUnit.getValue().getLabel()));
 			ruID.setText(Misc.nvl(reportUnit.getValue().getName()));
 			ruDescription.setText(Misc.nvl(reportUnit.getValue().getDescription()));
-		} else if (obj instanceof MResource) {
-			ANode mparent = ((MResource) obj).getParent();
+		} else if (obj instanceof AMResource) {
+			ANode mparent = ((AMResource) obj).getParent();
 			treeViewer.setSelection(new StructuredSelection(mparent), true);
 			handleSelectionChanged(mparent);
 		} else
@@ -592,7 +592,7 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 									n.removeChildren();
 									ANode tmpn = null;
 									for (ResourceDescriptor c : children) {
-										MResource mr = ResourceFactory.getResource(n, c, -1);
+										AMResource mr = ResourceFactory.getResource(n, c, -1);
 										if (c == rd)
 											tmpn = mr;
 									}

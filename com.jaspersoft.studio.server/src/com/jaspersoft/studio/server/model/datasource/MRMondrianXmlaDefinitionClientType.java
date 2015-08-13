@@ -12,18 +12,21 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.model.datasource;
 
+import java.io.UnsupportedEncodingException;
+
 import net.sf.jasperreports.engine.JRConstants;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.server.ServerIconDescriptor;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 
-public class MRMondrianXmlaDefinitionClientType extends MResource {
+public class MRMondrianXmlaDefinitionClientType extends AMResource {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
-	public MRMondrianXmlaDefinitionClientType(ANode parent, ResourceDescriptor rd, int index) {
+	public MRMondrianXmlaDefinitionClientType(ANode parent,
+			ResourceDescriptor rd, int index) {
 		super(parent, rd, index);
 	}
 
@@ -31,7 +34,8 @@ public class MRMondrianXmlaDefinitionClientType extends MResource {
 
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new ServerIconDescriptor("mondrian-xmladefinitionclienttype"); //$NON-NLS-1$
+			iconDescriptor = new ServerIconDescriptor(
+					"mondrian-xmladefinitionclienttype"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 
@@ -41,8 +45,13 @@ public class MRMondrianXmlaDefinitionClientType extends MResource {
 	}
 
 	public static ResourceDescriptor createDescriptor(ANode parent) {
-		ResourceDescriptor rd = MResource.createDescriptor(parent);
+		ResourceDescriptor rd = AMResource.createDescriptor(parent);
 		rd.setWsType(ResourceDescriptor.TYPE_MONDRIAN_XMLA_DEFINITION_CLIENT_TYPE);
 		return rd;
+	}
+
+	@Override
+	public String getJRSUrl() throws UnsupportedEncodingException {
+		return null;
 	}
 }

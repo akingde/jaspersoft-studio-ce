@@ -31,7 +31,7 @@ import com.jaspersoft.studio.server.Activator;
 import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.AMJrxmlContainer;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.publish.FindResources;
 import com.jaspersoft.studio.server.publish.Publish;
@@ -130,8 +130,8 @@ public class JrxmlPublishAction extends AContributorAction {
 									monitor, (AMJrxmlContainer) n, jd);
 							if (resources != null) {
 								for (Object obj : resources) {
-									if (obj instanceof MResource) {
-										MResource mres = (MResource) obj;
+									if (obj instanceof AMResource) {
+										AMResource mres = (AMResource) obj;
 										PublishUtil.loadPreferences(monitor,
 												file, mres);
 										if (mres.getPublishOptions()

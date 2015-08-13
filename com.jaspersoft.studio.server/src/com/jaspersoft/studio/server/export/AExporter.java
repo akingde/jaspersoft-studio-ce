@@ -34,7 +34,7 @@ import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.server.Activator;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.model.AFileResource;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
 
@@ -51,13 +51,13 @@ public class AExporter {
 		this.path = path;
 	}
 
-	public IFile exportToIFile(MResource res, ResourceDescriptor rd, String fkeyname, IProgressMonitor monitor) throws Exception {
+	public IFile exportToIFile(AMResource res, ResourceDescriptor rd, String fkeyname, IProgressMonitor monitor) throws Exception {
 		IFile f = getTempFile(res, rd, fkeyname, getExtension(res), monitor);
 		setServerLocation(res, f);
 		return f;
 	}
 
-	public static void setServerLocation(MResource res, IFile f) throws CoreException {
+	public static void setServerLocation(AMResource res, IFile f) throws CoreException {
 		if (f != null) {
 			MServerProfile sp = (MServerProfile) res.getRoot();
 			if (sp != null) {
@@ -69,13 +69,13 @@ public class AExporter {
 		}
 	}
 
-	protected String getExtension(MResource res) {
+	protected String getExtension(AMResource res) {
 		if (res instanceof AFileResource)
 			return "." + ((AFileResource) res).getDefaultFileExtension();
 		return "";
 	}
 
-	protected IFile getTempFile(MResource res, ResourceDescriptor rd, String fkeyname, String dextention, IProgressMonitor monitor) throws Exception {
+	protected IFile getTempFile(AMResource res, ResourceDescriptor rd, String fkeyname, String dextention, IProgressMonitor monitor) throws Exception {
 		IFile f = fileurimap.get(fkeyname);
 		if (path != null) {
 			f = ResourcesPlugin.getWorkspace().getRoot().getFile(path);
@@ -115,7 +115,7 @@ public class AExporter {
 		return downloadFile(res, rd, f, monitor);
 	}
 
-	private IFile downloadFile(MResource res, ResourceDescriptor rd, IFile f, IProgressMonitor monitor) {
+	private IFile downloadFile(AMResource res, ResourceDescriptor rd, IFile f, IProgressMonitor monitor) {
 		try {
 			WSClientHelper.getResource(monitor, res, rd, new File(f.getRawLocationURI()));
 			f.refreshLocal(1, monitor);

@@ -23,7 +23,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.protocol.Feature;
 import com.jaspersoft.studio.server.protocol.restv2.DiffFields;
 import com.jaspersoft.studio.swt.widgets.WTimeZone;
@@ -32,7 +32,7 @@ import com.jaspersoft.studio.utils.UIUtil;
 
 public class TimeZoneProperty {
 
-	public static void addTimeZone(MResource res, Composite composite) {
+	public static void addTimeZone(AMResource res, Composite composite) {
 		final ResourceDescriptor rd = res.getValue();
 		if (res.isSupported(Feature.TIMEZONE)) {
 			UIUtil.createLabel(composite, "Time Zone");

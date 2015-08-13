@@ -17,7 +17,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.model.datasource.MROlapMondrianConnection;
 import com.jaspersoft.studio.server.wizard.resource.APageContent;
 import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorMondrianConnection;
@@ -25,11 +25,11 @@ import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorMondri
 public class MondrianConnectionContent extends APageContent {
 	protected SelectorMondrianConnection scompo;
 
-	public MondrianConnectionContent(ANode parent, MResource resource, DataBindingContext bindingContext) {
+	public MondrianConnectionContent(ANode parent, AMResource resource, DataBindingContext bindingContext) {
 		super(parent, resource, bindingContext);
 	}
 
-	public MondrianConnectionContent(ANode parent, MResource resource) {
+	public MondrianConnectionContent(ANode parent, AMResource resource) {
 		super(parent, resource);
 	}
 

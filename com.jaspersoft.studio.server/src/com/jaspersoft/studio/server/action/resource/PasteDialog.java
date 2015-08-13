@@ -12,14 +12,14 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 
 import com.jaspersoft.studio.server.messages.Messages;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 
 public class PasteDialog extends ATitledDialog {
 	public static final int REPLACE = 0;
 	public static final int SKIP = 1;
 	public static final int COPY = 2;
 
-	protected PasteDialog(Shell parentShell, MResource res) {
+	protected PasteDialog(Shell parentShell, AMResource res) {
 		super(parentShell);
 		setTitle(Messages.PasteDialog_0 + res.getValue().getUriString());
 		setDescription(Messages.PasteDialog_1);

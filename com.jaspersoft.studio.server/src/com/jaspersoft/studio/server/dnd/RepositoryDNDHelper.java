@@ -38,7 +38,7 @@ import com.jaspersoft.studio.server.model.MRDataAdapter;
 import com.jaspersoft.studio.server.model.MRFont;
 import com.jaspersoft.studio.server.model.MRImage;
 import com.jaspersoft.studio.server.model.MRStyleTemplate;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.model.MResourceBundle;
 import com.jaspersoft.studio.server.model.MXmlFile;
 import com.jaspersoft.studio.server.utils.ResourceDescriptorUtil;
@@ -92,7 +92,7 @@ public final class RepositoryDNDHelper {
 		return ALLOWED_EXTENSIONS.contains(extension.toLowerCase());
 	}
 
-	public static void performDropOperation(final MResource targetParentResource, final String fullFilename) {
+	public static void performDropOperation(final AMResource targetParentResource, final String fullFilename) {
 		final File file = new File(fullFilename);
 		final String suggestedId = FilenameUtils.removeExtension(file.getName());
 		final String suggestedName = FilenameUtils.removeExtension(file.getName());
@@ -137,7 +137,7 @@ public final class RepositoryDNDHelper {
 	/*
 	 * Creates a FileResource instance for the specific resource kind.
 	 */
-	private static AFileResource createNewFileResource(MResource targetParentResource, ResourceDescriptor rd, String fileExt) {
+	private static AFileResource createNewFileResource(AMResource targetParentResource, ResourceDescriptor rd, String fileExt) {
 		// Image file
 		if (ImageUtils.hasValidFileImageExtension(fileExt)) {
 			return new MRImage(targetParentResource, rd, -1);
@@ -176,7 +176,7 @@ public final class RepositoryDNDHelper {
 	/*
 	 * Creates a ResourceDescriptor instance for the specific resource kind.
 	 */
-	private static ResourceDescriptor getResourceDescriptor(MResource targetParentResource, String fileExt) {
+	private static ResourceDescriptor getResourceDescriptor(AMResource targetParentResource, String fileExt) {
 		// Image file
 		if (ImageUtils.hasValidFileImageExtension(fileExt)) {
 			return MRImage.createDescriptor(targetParentResource);

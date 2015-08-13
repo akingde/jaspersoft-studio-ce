@@ -35,15 +35,15 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.AFileResource;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 
 public class ImagePageContent extends AFileResourcePageContent {
 
-	public ImagePageContent(ANode parent, MResource resource, DataBindingContext bindingContext) {
+	public ImagePageContent(ANode parent, AMResource resource, DataBindingContext bindingContext) {
 		super(parent, resource, bindingContext);
 	}
 
-	public ImagePageContent(ANode parent, MResource resource) {
+	public ImagePageContent(ANode parent, AMResource resource) {
 		super(parent, resource);
 	}
 

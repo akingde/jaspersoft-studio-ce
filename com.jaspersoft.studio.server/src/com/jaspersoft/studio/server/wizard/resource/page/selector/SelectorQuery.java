@@ -16,13 +16,13 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescript
 import com.jaspersoft.jasperserver.dto.resources.ResourceMediaType;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MRQuery;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.utils.Misc;
 
 public class SelectorQuery extends ASelector {
 
 	@Override
-	protected ResourceDescriptor createLocal(MResource res) {
+	protected ResourceDescriptor createLocal(AMResource res) {
 		ResourceDescriptor rd = MRQuery.createDescriptor(res);
 		rd.setName(Messages.SelectorQuery_0);
 		rd.setLabel(rd.getName());
@@ -30,7 +30,7 @@ public class SelectorQuery extends ASelector {
 	}
 
 	@Override
-	protected boolean isResCompatible(MResource r) {
+	protected boolean isResCompatible(AMResource r) {
 		return r instanceof MRQuery;
 	}
 

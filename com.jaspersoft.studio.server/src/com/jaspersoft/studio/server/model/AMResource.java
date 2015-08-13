@@ -12,6 +12,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.model;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Map;
 
@@ -45,11 +46,12 @@ import com.jaspersoft.studio.utils.Misc;
  * @author schicu
  *
  */
-public class MResource extends APropertyNode implements ICopyable {
-	public static final ImageDescriptor LINK_DECORATOR = Activator.getDefault().getImageDescriptor("/icons/link_decorator.png");
+public abstract class AMResource extends APropertyNode implements ICopyable {
+	public static final ImageDescriptor LINK_DECORATOR = Activator.getDefault()
+			.getImageDescriptor("/icons/link_decorator.png");
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
-	public MResource(ANode parent, ResourceDescriptor rd, int index) {
+	public AMResource(ANode parent, ResourceDescriptor rd, int index) {
 		super(parent, index);
 		setValue(rd);
 	}
@@ -100,7 +102,8 @@ public class MResource extends APropertyNode implements ICopyable {
 			if (getValue().isMainReport())
 				tip += "\nIs Main Report";
 			tip += "\ndescription: " + Misc.nvl(getValue().getDescription());
-			tip += "\nPermission: " + getValue().getPermissionMask(getWsClient());
+			tip += "\nPermission: "
+					+ getValue().getPermissionMask(getWsClient());
 			return tip;
 		}
 		return getThisIconDescriptor().getToolTip();
@@ -118,7 +121,8 @@ public class MResource extends APropertyNode implements ICopyable {
 			if (mrunit.getValue() != null && getValue() != null) {
 				String par = mrunit.getValue().getUriString() + "_files";
 				if (!par.equals(getValue().getParentFolder()))
-					return ResourceManager.decorateImage(icon16, LINK_DECORATOR, ResourceManager.BOTTOM_LEFT);
+					return ResourceManager.decorateImage(icon16,
+							LINK_DECORATOR, ResourceManager.BOTTOM_LEFT);
 			}
 		}
 		return icon16;
@@ -138,14 +142,17 @@ public class MResource extends APropertyNode implements ICopyable {
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1,
+			Map<String, Object> defaultsMap1) {
 		descriptors = descriptors1;
 		defaultsMap = defaultsMap1;
 	}
 
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		NTextPropertyDescriptor textD = new NTextPropertyDescriptor("SOMEPROPERTIES", Messages.common_datasource_name);
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc,
+			Map<String, Object> defaultsMap) {
+		NTextPropertyDescriptor textD = new NTextPropertyDescriptor(
+				"SOMEPROPERTIES", Messages.common_datasource_name);
 		desc.add(textD);
 	}
 
@@ -164,11 +171,13 @@ public class MResource extends APropertyNode implements ICopyable {
 		rd.setName("NewResource");
 		// rd.setLabel(rd.getName());
 		if (parent != null) {
-			if (parent instanceof MResource)
+			if (parent instanceof AMResource)
 				if (parent instanceof MFolder)
-					rd.setParentFolder(((MResource) parent).getValue().getUriString());
+					rd.setParentFolder(((AMResource) parent).getValue()
+							.getUriString());
 				else
-					rd.setParentFolder(((MResource) parent).getValue().getUriString() + "_files");
+					rd.setParentFolder(((AMResource) parent).getValue()
+							.getUriString() + "_files");
 			else
 				rd.setParentFolder("/");
 		}
@@ -201,7 +210,8 @@ public class MResource extends APropertyNode implements ICopyable {
 			obj = mroot;
 		if (obj instanceof MServerProfile) {
 			try {
-				return ((MServerProfile) obj).getWsClient(new NullProgressMonitor());
+				return ((MServerProfile) obj)
+						.getWsClient(new NullProgressMonitor());
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -218,7 +228,9 @@ public class MResource extends APropertyNode implements ICopyable {
 
 	public MReportUnit getReportUnit() {
 		INode node = this;
-		while (node != null && node.getParent() != null && !(node instanceof MServerProfile) && !(node instanceof MRoot) && !(node instanceof MReportUnit)) {
+		while (node != null && node.getParent() != null
+				&& !(node instanceof MServerProfile)
+				&& !(node instanceof MRoot) && !(node instanceof MReportUnit)) {
 			node = node.getParent();
 		}
 		if (node instanceof MReportUnit)
@@ -227,7 +239,8 @@ public class MResource extends APropertyNode implements ICopyable {
 	}
 
 	public boolean isCopyable2(Object parent) {
-		if (parent instanceof MFolder || parent instanceof MReportUnit || parent instanceof MServerProfile)
+		if (parent instanceof MFolder || parent instanceof MReportUnit
+				|| parent instanceof MServerProfile)
 			return true;
 		return false;
 	}
@@ -243,4 +256,6 @@ public class MResource extends APropertyNode implements ICopyable {
 	public void setPublishOptions(PublishOptions publishOptions) {
 		this.publishOptions = publishOptions;
 	}
+
+	public abstract String getJRSUrl() throws UnsupportedEncodingException;
 }

@@ -16,16 +16,16 @@ import org.eclipse.core.databinding.DataBindingContext;
 
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.messages.Messages;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.wizard.resource.page.selector.ATextFileResourcePageContent;
 
 public class StyleTemplatePageContent extends ATextFileResourcePageContent {
 
-	public StyleTemplatePageContent(ANode parent, MResource resource, DataBindingContext bindingContext) {
+	public StyleTemplatePageContent(ANode parent, AMResource resource, DataBindingContext bindingContext) {
 		super(parent, resource, bindingContext);
 	}
 
-	public StyleTemplatePageContent(ANode parent, MResource resource) {
+	public StyleTemplatePageContent(ANode parent, AMResource resource) {
 		super(parent, resource);
 	}
 

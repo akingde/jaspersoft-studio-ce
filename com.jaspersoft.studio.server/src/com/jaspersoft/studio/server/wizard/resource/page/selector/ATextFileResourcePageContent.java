@@ -27,15 +27,15 @@ import org.eclipse.swt.widgets.Text;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.model.AFileResource;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.wizard.resource.page.AFileResourcePageContent;
 
 public abstract class ATextFileResourcePageContent extends AFileResourcePageContent {
-	public ATextFileResourcePageContent(ANode parent, MResource resource, DataBindingContext bindingContext) {
+	public ATextFileResourcePageContent(ANode parent, AMResource resource, DataBindingContext bindingContext) {
 		super(parent, resource, bindingContext);
 	}
 
-	public ATextFileResourcePageContent(ANode parent, MResource resource) {
+	public ATextFileResourcePageContent(ANode parent, AMResource resource) {
 		super(parent, resource);
 	}
 

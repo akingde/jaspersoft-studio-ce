@@ -36,7 +36,7 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.model.MFolder;
 import com.jaspersoft.studio.server.model.MReportUnit;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 
 public class DeleteResourceAction extends Action {
@@ -61,9 +61,9 @@ public class DeleteResourceAction extends Action {
 	public boolean isEnabled() {
 		Object firstElement = ((TreeSelection) treeViewer.getSelection())
 				.getFirstElement();
-		boolean b = firstElement != null && (firstElement instanceof MResource);
+		boolean b = firstElement != null && (firstElement instanceof AMResource);
 		if (b) {
-			MResource mres = (MResource) firstElement;
+			AMResource mres = (AMResource) firstElement;
 			int pmask = mres.getValue().getPermissionMask(mres.getWsClient());
 			b = b && (pmask == 1 || (pmask & 16) == 16);
 		}
@@ -87,11 +87,11 @@ public class DeleteResourceAction extends Action {
 						Set<MReportUnit> deleted = new HashSet<MReportUnit>();
 						for (int i = 0; i < p.length; i++) {
 							final Object obj = p[i].getLastSegment();
-							if (obj instanceof MResource) {
-								MResource mres = (MResource) obj;
+							if (obj instanceof AMResource) {
+								AMResource mres = (AMResource) obj;
 								if (mres.getParent() instanceof MServerProfile
 										|| mres.getParent() instanceof MFolder) {
-									deleteResource(monitor, (MResource) obj);
+									deleteResource(monitor, (AMResource) obj);
 									if (mres instanceof MReportUnit)
 										deleted.add((MReportUnit) mres);
 								} else if (mres.getParent() instanceof MReportUnit) {
@@ -139,7 +139,7 @@ public class DeleteResourceAction extends Action {
 				}
 
 				private void deleteResource(IProgressMonitor monitor,
-						final MResource mres) {
+						final AMResource mres) {
 					try {
 						monitor.subTask(mres.getDisplayText());
 						WSClientHelper.deleteResource(monitor, mres);

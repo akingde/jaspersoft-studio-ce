@@ -18,7 +18,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.protocol.IConnection;
 import com.jaspersoft.studio.server.utils.IPageCompleteListener;
@@ -27,14 +27,14 @@ import com.jaspersoft.studio.wizards.AWizardPage;
 public abstract class APageContent implements IPageCompleteListener {
 	protected AWizardPage page;
 	protected ANode pnode;
-	protected MResource res;
+	protected AMResource res;
 	protected DataBindingContext bindingContext;
 
-	public APageContent(ANode parent, MResource resource) {
+	public APageContent(ANode parent, AMResource resource) {
 		this(parent, resource, new DataBindingContext());
 	}
 
-	public APageContent(ANode parent, MResource resource,
+	public APageContent(ANode parent, AMResource resource,
 			DataBindingContext bindingContext) {
 		this.res = resource;
 		this.pnode = parent;
@@ -44,8 +44,8 @@ public abstract class APageContent implements IPageCompleteListener {
 	protected IConnection getWsClient() {
 		IConnection con = res.getWsClient();
 		if (con == null) {
-			if (pnode instanceof MResource)
-				con = ((MResource) pnode).getWsClient();
+			if (pnode instanceof AMResource)
+				con = ((AMResource) pnode).getWsClient();
 			else if (pnode instanceof MServerProfile)
 				con = ((MServerProfile) pnode).getWsClient();
 		}
@@ -69,7 +69,7 @@ public abstract class APageContent implements IPageCompleteListener {
 
 	public abstract Control createContent(Composite parent);
 
-	public static IWizardPage[] getPages(MResource res,
+	public static IWizardPage[] getPages(AMResource res,
 			APageContent... rcontent) {
 		if (res.getValue() != null && res.getValue().getIsNew()) {
 			IWizardPage[] pages = new IWizardPage[rcontent.length];

@@ -25,7 +25,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 
 public class CopyResourceAction extends Action {
 	private TreeViewer treeViewer;
@@ -44,9 +44,9 @@ public class CopyResourceAction extends Action {
 	@Override
 	public boolean isEnabled() {
 		Object firstElement = ((TreeSelection) treeViewer.getSelection()).getFirstElement();
-		boolean b = firstElement != null && (firstElement instanceof MResource);
+		boolean b = firstElement != null && (firstElement instanceof AMResource);
 		if (b) {
-			MResource mres = (MResource) firstElement;
+			AMResource mres = (AMResource) firstElement;
 			int pmask = mres.getValue().getPermissionMask(mres.getWsClient());
 			b = b && (pmask == 1 || (pmask & 2) == 2);
 		}
@@ -57,11 +57,11 @@ public class CopyResourceAction extends Action {
 	public void run() {
 		TreeSelection s = (TreeSelection) treeViewer.getSelection();
 		TreePath[] p = s.getPaths();
-		List<MResource> rlist = new ArrayList<MResource>();
+		List<AMResource> rlist = new ArrayList<AMResource>();
 		for (int i = 0; i < p.length; i++) {
 			final Object obj = p[i].getLastSegment();
-			if (obj instanceof MResource) {
-				rlist.add((MResource) obj);
+			if (obj instanceof AMResource) {
+				rlist.add((AMResource) obj);
 			}
 		}
 		if (!rlist.isEmpty())

@@ -54,7 +54,7 @@ import com.jaspersoft.studio.model.MDummy;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.util.ModelVisitor;
 import com.jaspersoft.studio.server.editor.JRSEditorContributor;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.model.server.MServers;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
@@ -345,11 +345,11 @@ public class ServerManager {
 		return j;
 	}
 
-	public static String getKey(MResource res) {
+	public static String getKey(AMResource res) {
 		return getKey(res, res.getValue().getUriString(), null);
 	}
 
-	public static String getKey(MResource res, String uri, String option) {
+	public static String getKey(AMResource res, String uri, String option) {
 		INode n = res.getRoot();
 		if (n != null && n instanceof MServerProfile) {
 			MServerProfile sp = (MServerProfile) n;
@@ -441,14 +441,14 @@ public class ServerManager {
 	}
 
 	public static void selectIfExists(final IProgressMonitor monitor,
-			MResource mres) {
+			AMResource mres) {
 		MServerProfile sp = (MServerProfile) mres.getRoot();
 		sp = getServerByUrl(sp.getValue().getUrl());
 		selectIfExists(monitor, sp, mres);
 	}
 
 	public static void selectIfExists(final IProgressMonitor monitor,
-			MServerProfile sp, MResource mres) {
+			MServerProfile sp, AMResource mres) {
 		if (mres.getParent() instanceof MServerProfile) {
 			try {
 				WSClientHelper.connectGetData(sp, monitor);
@@ -459,7 +459,7 @@ public class ServerManager {
 				e.printStackTrace();
 			}
 		} else {
-			final String puri = ((MResource) mres.getParent()).getValue()
+			final String puri = ((AMResource) mres.getParent()).getValue()
 					.getUriString();
 			final String uri = mres.getValue().getUriString();
 			if (ModelUtils.isEmpty(sp))
@@ -469,18 +469,18 @@ public class ServerManager {
 					e.printStackTrace();
 					return;
 				}
-			new ModelVisitor<MResource>(sp) {
+			new ModelVisitor<AMResource>(sp) {
 
 				@Override
 				public boolean visit(INode n) {
-					if (n instanceof MResource) {
-						MResource r = (MResource) n;
+					if (n instanceof AMResource) {
+						AMResource r = (AMResource) n;
 						if (r.getValue().getUriString().equals(puri)) {
 							for (INode cn : r.getChildren())
-								if (cn instanceof MResource
-										&& ((MResource) cn).getValue()
+								if (cn instanceof AMResource
+										&& ((AMResource) cn).getValue()
 												.getUriString().equals(uri))
-									doRefresh((MResource) cn, monitor);
+									doRefresh((AMResource) cn, monitor);
 							doRefresh(r, monitor);
 						}
 					}
@@ -489,7 +489,7 @@ public class ServerManager {
 					return true;
 				}
 
-				private void doRefresh(MResource r, IProgressMonitor monitor) {
+				private void doRefresh(AMResource r, IProgressMonitor monitor) {
 					try {
 						WSClientHelper.refreshResource(r, monitor);
 					} catch (Exception e) {

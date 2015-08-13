@@ -12,15 +12,18 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.model.datasource;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 import net.sf.jasperreports.engine.JRConstants;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.server.ServerIconDescriptor;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 
-public class MROlapXmlaConnection extends MResource {
+public class MROlapXmlaConnection extends AMResource {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	public static final String PROP_XMLA_URI = "PROP_XMLA_URI";
@@ -47,15 +50,26 @@ public class MROlapXmlaConnection extends MResource {
 	}
 
 	public static ResourceDescriptor createDescriptor(ANode parent) {
-		ResourceDescriptor rd = MResource.createDescriptor(parent);
+		ResourceDescriptor rd = AMResource.createDescriptor(parent);
 		rd.setWsType(ResourceDescriptor.TYPE_OLAP_XMLA_CONNECTION);
 
 		rd.setResourceProperty(MROlapXmlaConnection.PROP_XMLA_URI, "uri");
-		rd.setResourceProperty(MROlapXmlaConnection.PROP_XMLA_CATALOG, "catalog");
-		rd.setResourceProperty(MROlapXmlaConnection.PROP_XMLA_DATASOURCE, "datasource");
-		rd.setResourceProperty(MROlapXmlaConnection.PROP_XMLA_USERNAME, "username");
+		rd.setResourceProperty(MROlapXmlaConnection.PROP_XMLA_CATALOG,
+				"catalog");
+		rd.setResourceProperty(MROlapXmlaConnection.PROP_XMLA_DATASOURCE,
+				"datasource");
+		rd.setResourceProperty(MROlapXmlaConnection.PROP_XMLA_USERNAME,
+				"username");
 		rd.setResourceProperty(MROlapXmlaConnection.PROP_XMLA_PASSWORD, "");
 
 		return rd;
+	}
+
+	@Override
+	public String getJRSUrl() throws UnsupportedEncodingException {
+		return "flow.html?_flowId=olapClientConnectionFlow&isEdit=true&selectedResource="
+				+ URLEncoder.encode(getValue().getUriString(), "ISO-8859-1")
+				+ "&ParentFolderUri="
+				+ URLEncoder.encode(getValue().getParentFolder(), "ISO-8859-1");
 	}
 }

@@ -17,18 +17,18 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.wizard.resource.APageContent;
 import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorOlapConnection;
 
 public class OlapConnectionContent extends APageContent {
 	protected SelectorOlapConnection scompo;
 
-	public OlapConnectionContent(ANode parent, MResource resource, DataBindingContext bindingContext) {
+	public OlapConnectionContent(ANode parent, AMResource resource, DataBindingContext bindingContext) {
 		super(parent, resource, bindingContext);
 	}
 
-	public OlapConnectionContent(ANode parent, MResource resource) {
+	public OlapConnectionContent(ANode parent, AMResource resource) {
 		super(parent, resource);
 	}
 

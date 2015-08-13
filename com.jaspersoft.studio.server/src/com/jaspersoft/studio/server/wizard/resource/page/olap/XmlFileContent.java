@@ -18,7 +18,7 @@ import org.eclipse.swt.widgets.Control;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.model.MXmlFile;
 import com.jaspersoft.studio.server.wizard.resource.APageContent;
 import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorXml;
@@ -26,13 +26,13 @@ import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorXml;
 public class XmlFileContent extends APageContent {
 	private SelectorXml scompo;
 
-	public XmlFileContent(ANode parent, MResource resource, DataBindingContext bindingContext) {
+	public XmlFileContent(ANode parent, AMResource resource, DataBindingContext bindingContext) {
 		super(parent, resource, bindingContext);
 	}
 
 	private String title;
 
-	public XmlFileContent(ANode parent, MResource resource, String title) {
+	public XmlFileContent(ANode parent, AMResource resource, String title) {
 		super(parent, resource);
 		this.title = title;
 	}

@@ -15,15 +15,15 @@ package com.jaspersoft.studio.server.wizard.resource.page;
 import org.eclipse.core.databinding.DataBindingContext;
 
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 
 public class FilePageContent extends AFileResourcePageContent {
 
-	public FilePageContent(ANode parent, MResource resource, DataBindingContext bindingContext) {
+	public FilePageContent(ANode parent, AMResource resource, DataBindingContext bindingContext) {
 		super(parent, resource, bindingContext);
 	}
 
-	public FilePageContent(ANode parent, MResource resource) {
+	public FilePageContent(ANode parent, AMResource resource) {
 		super(parent, resource);
 	}
 

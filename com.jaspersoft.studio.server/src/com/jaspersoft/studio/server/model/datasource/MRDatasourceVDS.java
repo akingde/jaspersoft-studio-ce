@@ -18,9 +18,9 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescript
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.server.ServerIconDescriptor;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 
-public class MRDatasourceVDS extends MResource {
+public class MRDatasourceVDS extends AMRDatasource {
 	public static final String TYPE_DATASOURCE_VDS = "virtual";
 
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
@@ -43,7 +43,7 @@ public class MRDatasourceVDS extends MResource {
 	}
 
 	public static ResourceDescriptor createDescriptor(ANode parent) {
-		ResourceDescriptor rd = MResource.createDescriptor(parent);
+		ResourceDescriptor rd = AMResource.createDescriptor(parent);
 		rd.setWsType(TYPE_DATASOURCE_VDS);
 		return rd;
 	}

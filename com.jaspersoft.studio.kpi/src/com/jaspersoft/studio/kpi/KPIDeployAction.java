@@ -47,7 +47,7 @@ import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.model.MReportUnit;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.protocol.Feature;
 import com.jaspersoft.studio.server.protocol.restv2.RestV2ConnectionJersey;
@@ -84,8 +84,8 @@ public class KPIDeployAction extends Action implements IMenuCreator {
 			MServerProfile msp = null;
 			if (obj instanceof MServerProfile) {
 				msp = (MServerProfile) obj;
-			} else if (obj instanceof MResource) {
-				final MResource node = (MResource) obj;
+			} else if (obj instanceof AMResource) {
+				final AMResource node = (AMResource) obj;
 				INode n = node.getRoot();
 				if (n instanceof MServerProfile)
 					msp = (MServerProfile) n;

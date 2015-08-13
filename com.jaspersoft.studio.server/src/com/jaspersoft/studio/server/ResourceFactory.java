@@ -44,7 +44,7 @@ import com.jaspersoft.studio.server.model.MRQuery;
 import com.jaspersoft.studio.server.model.MRStyleTemplate;
 import com.jaspersoft.studio.server.model.MReference;
 import com.jaspersoft.studio.server.model.MReportUnit;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.model.MResourceBundle;
 import com.jaspersoft.studio.server.model.MUnknown;
 import com.jaspersoft.studio.server.model.MXmlFile;
@@ -102,11 +102,11 @@ import com.jaspersoft.studio.utils.Misc;
 
 public class ResourceFactory {
 
-	private Map<Class<? extends MResource>, IWizardPage[]> pagemap = new HashMap<Class<? extends MResource>, IWizardPage[]>();
+	private Map<Class<? extends AMResource>, IWizardPage[]> pagemap = new HashMap<Class<? extends AMResource>, IWizardPage[]>();
 
-	public IWizardPage[] getResourcePage(ANode parent, MResource resource) {
+	public IWizardPage[] getResourcePage(ANode parent, AMResource resource) {
 		if (resource.getWsClient() == null) {
-			if (parent instanceof MResource)
+			if (parent instanceof AMResource)
 				resource.setMRoot((ANode) parent.getRoot());
 			else if (parent instanceof MServerProfile)
 				resource.setMRoot(parent);
@@ -280,10 +280,10 @@ public class ResourceFactory {
 		return page;
 	}
 
-	public static MResource getResource(ANode parent,
+	public static AMResource getResource(ANode parent,
 			ResourceDescriptor resource, int index) {
 		ExtensionManager extManager = Activator.getExtManager();
-		MResource m = extManager.getResource(parent, resource, index);
+		AMResource m = extManager.getResource(parent, resource, index);
 		if (m != null)
 			return m;
 		String wstype = resource.getWsType();
@@ -435,7 +435,7 @@ public class ResourceFactory {
 	protected static void initType(String rtype) {
 		ResourceDescriptor rd = new ResourceDescriptor();
 		rd.setWsType(WsTypes.INST().toSoapType(rtype));
-		MResource r = getResource(null, rd, -1);
+		AMResource r = getResource(null, rd, -1);
 		tIcons.put(rtype, r.getThisIconDescriptor().getIcon16());
 		tName.put(rtype, r.getThisIconDescriptor().getTitle());
 		System.out.println(rtype + ":" + r.getThisIconDescriptor().getTitle());

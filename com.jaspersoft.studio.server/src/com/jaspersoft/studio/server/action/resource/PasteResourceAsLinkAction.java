@@ -24,7 +24,7 @@ import com.jaspersoft.studio.model.ICopyable;
 import com.jaspersoft.studio.server.ResourceFactory;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MReportUnit;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.protocol.IConnection;
 
 public class PasteResourceAsLinkAction extends PasteResourceAction {
@@ -46,10 +46,10 @@ public class PasteResourceAsLinkAction extends PasteResourceAction {
 			if (res && contents != null && contents instanceof List<?>) {
 				List<?> list = (List<?>) contents;
 				for (Object obj : list)
-					if (obj instanceof MResource && obj instanceof ICopyable) {
+					if (obj instanceof AMResource && obj instanceof ICopyable) {
 						ICopyable c = (ICopyable) obj;
 						if (c.isCopyable2(n)) {
-							if (((MResource) obj).isCut())
+							if (((AMResource) obj).isCut())
 								res = false;
 							else
 								res = true;

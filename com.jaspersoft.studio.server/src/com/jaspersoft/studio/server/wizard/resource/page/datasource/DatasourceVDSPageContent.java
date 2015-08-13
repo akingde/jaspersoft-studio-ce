@@ -56,7 +56,7 @@ import com.jaspersoft.studio.property.dataset.TLabelProvider;
 import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.messages.Messages;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.model.datasource.filter.DatasourceVDSFilter;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.utils.ResourceDescriptorUtil;
@@ -68,11 +68,11 @@ import com.jaspersoft.studio.swt.widgets.table.MoveT2TButtons;
 
 public class DatasourceVDSPageContent extends APageContent {
 
-	public DatasourceVDSPageContent(ANode parent, MResource resource, DataBindingContext bindingContext) {
+	public DatasourceVDSPageContent(ANode parent, AMResource resource, DataBindingContext bindingContext) {
 		super(parent, resource, bindingContext);
 	}
 
-	public DatasourceVDSPageContent(ANode parent, MResource resource) {
+	public DatasourceVDSPageContent(ANode parent, AMResource resource) {
 		super(parent, resource);
 	}
 
@@ -155,7 +155,7 @@ public class DatasourceVDSPageContent extends APageContent {
 						MServerProfile left = (MServerProfile) leftTView.getInput();
 						List<Proxy> right = (List<Proxy>) rightTView.getInput();
 						for (Object obj : s.toArray()) {
-							MResource mres = (MResource) obj;
+							AMResource mres = (AMResource) obj;
 							ResourceDescriptor rd = mres.getValue();
 							if (!SelectorDatasource.isDatasource(rd))
 								continue;

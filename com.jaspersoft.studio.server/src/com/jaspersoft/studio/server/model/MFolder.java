@@ -12,6 +12,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.model;
 
+import java.io.UnsupportedEncodingException;
+
 import net.sf.jasperreports.engine.JRConstants;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
@@ -20,7 +22,7 @@ import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.server.ServerIconDescriptor;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 
-public class MFolder extends MResource {
+public class MFolder extends AMResource {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	public MFolder(ANode parent, ResourceDescriptor rd, int index) {
@@ -48,8 +50,14 @@ public class MFolder extends MResource {
 	}
 
 	public static ResourceDescriptor createDescriptor(ANode parent) {
-		ResourceDescriptor rd = MResource.createDescriptor(parent);
+		ResourceDescriptor rd = AMResource.createDescriptor(parent);
 		rd.setWsType(ResourceDescriptor.TYPE_FOLDER);
 		return rd;
+	}
+
+	@Override
+	public String getJRSUrl() throws UnsupportedEncodingException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

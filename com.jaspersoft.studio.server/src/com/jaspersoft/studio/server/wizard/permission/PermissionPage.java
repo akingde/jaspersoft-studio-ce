@@ -43,12 +43,12 @@ import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.jasperserver.dto.permissions.RepositoryPermission;
 import com.jaspersoft.studio.server.messages.Messages;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.protocol.IConnection;
 import com.jaspersoft.studio.utils.Misc;
 
 public class PermissionPage extends WizardPage {
-	private MResource res;
+	private AMResource res;
 	private PermissionOptions optRole = new PermissionOptions();
 	private PermissionOptions optUser = new PermissionOptions();
 	private Composite cmpUser;
@@ -57,7 +57,7 @@ public class PermissionPage extends WizardPage {
 	private ScrolledComposite scRole;
 	private ScrolledComposite scUser;
 
-	protected PermissionPage(MResource res) {
+	protected PermissionPage(AMResource res) {
 		super("permissionresource"); //$NON-NLS-1$
 		setTitle(Messages.PermissionPage_0);
 		setDescription(Messages.PermissionPage_1);

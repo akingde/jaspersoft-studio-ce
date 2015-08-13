@@ -45,7 +45,7 @@ import com.jaspersoft.studio.server.ResourceFactory;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.model.MFolder;
 import com.jaspersoft.studio.server.model.MReportUnit;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.protocol.IConnection;
 
@@ -78,10 +78,10 @@ public class PasteResourceAction extends Action {
 			ANode parent = getSelected();
 			res = false;
 			for (Object obj : list)
-				if (obj instanceof MResource && obj instanceof ICopyable) {
+				if (obj instanceof AMResource && obj instanceof ICopyable) {
 					ICopyable c = (ICopyable) obj;
 					if (c.isCopyable2(parent)) {
-						iscut = ((MResource) obj).isCut();
+						iscut = ((AMResource) obj).isCut();
 						res = true;
 						break;
 					}
@@ -92,8 +92,8 @@ public class PasteResourceAction extends Action {
 					.getFirstElement();
 			res = firstElement != null;
 			if (res) {
-				if (firstElement instanceof MResource) {
-					MResource mres = (MResource) firstElement;
+				if (firstElement instanceof AMResource) {
+					AMResource mres = (AMResource) firstElement;
 					int pmask = mres.getValue().getPermissionMask(
 							mres.getWsClient());
 					res = res && (pmask == 1 || (pmask & 4) == 4);
@@ -108,7 +108,7 @@ public class PasteResourceAction extends Action {
 		TreePath[] p = s.getPaths();
 		for (int i = 0; i < p.length; i++) {
 			Object obj = p[i].getLastSegment();
-			if (obj instanceof MResource || obj instanceof MServerProfile)
+			if (obj instanceof AMResource || obj instanceof MServerProfile)
 				return (ANode) obj;
 		}
 		return null;
@@ -127,17 +127,17 @@ public class PasteResourceAction extends Action {
 						throws InvocationTargetException, InterruptedException {
 					try {
 						INode root = parent.getRoot();
-						final String puri = parent instanceof MResource ? ((MResource) parent)
+						final String puri = parent instanceof AMResource ? ((AMResource) parent)
 								.getValue().getUriString() : ""; //$NON-NLS-1$
 						doWork(monitor, parent, list);
 						ANode p = parent;
-						if (parent instanceof MResource)
+						if (parent instanceof AMResource)
 							p = new ModelVisitor<ANode>(root) {
 
 								@Override
 								public boolean visit(INode n) {
-									if (n instanceof MResource) {
-										MResource mres = (MResource) n;
+									if (n instanceof AMResource) {
+										AMResource mres = (AMResource) n;
 										if (mres.getValue() != null
 												&& mres.getValue()
 														.getUriString()
@@ -182,20 +182,20 @@ public class PasteResourceAction extends Action {
 	private void doWork(IProgressMonitor monitor, ANode parent, List<?> list)
 			throws Exception {
 		MServerProfile sp = (MServerProfile) parent.getRoot();
-		String dURI = ((MResource) parent).getValue().getUriString();
+		String dURI = ((AMResource) parent).getValue().getUriString();
 		IConnection ws = sp.getWsClient(monitor);
 		Set<ANode> toRefresh = new HashSet<ANode>();
 
 		monitor.beginTask(Messages.PasteResourceAction_1 + dURI, list.size());
 		if (parent instanceof MReportUnit)
-			parent.setValue(ws.get(monitor, ((MResource) parent).getValue(),
+			parent.setValue(ws.get(monitor, ((AMResource) parent).getValue(),
 					null));
 
 		for (Object obj : list) {
-			if (obj instanceof MResource && obj instanceof ICopyable) {
+			if (obj instanceof AMResource && obj instanceof ICopyable) {
 				if (monitor.isCanceled())
 					return;
-				final MResource m = (MResource) obj;
+				final AMResource m = (AMResource) obj;
 				if (m.isCopyable2(parent)) {
 					ResourceDescriptor origin = m.getValue();
 					monitor.subTask("Verifying if resources exists in the destination");
@@ -294,7 +294,7 @@ public class PasteResourceAction extends Action {
 							origin.setUriString(origin.getUriString() + "_COPY");
 						}
 						if (!(m.getParent() instanceof MFolder)
-								&& m.getParent() instanceof MResource) {
+								&& m.getParent() instanceof AMResource) {
 							if (origin.getParentFolder() != null
 									&& !origin.getParentFolder().endsWith(
 											"_files")) //$NON-NLS-1$
@@ -317,7 +317,7 @@ public class PasteResourceAction extends Action {
 			refreshNode(n, monitor);
 	}
 
-	protected void deleteIfCut(IProgressMonitor monitor, MResource m)
+	protected void deleteIfCut(IProgressMonitor monitor, AMResource m)
 			throws Exception {
 		if (m.isCut()) {
 			m.setCut(false);
@@ -365,11 +365,11 @@ public class PasteResourceAction extends Action {
 		prd.getChildren().add(rd);
 	}
 
-	private boolean isSameServer(ANode parent, MResource m) {
+	private boolean isSameServer(ANode parent, AMResource m) {
 		IConnection mc = m.getWsClient();
 		IConnection pc = null;
-		if (parent instanceof MResource)
-			pc = ((MResource) parent).getWsClient();
+		if (parent instanceof AMResource)
+			pc = ((AMResource) parent).getWsClient();
 		else if (parent instanceof MServerProfile)
 			pc = ((MServerProfile) parent).getWsClient();
 		if (pc != null && mc != null)
@@ -446,8 +446,8 @@ public class PasteResourceAction extends Action {
 
 	private void refreshNode(INode p, IProgressMonitor monitor)
 			throws Exception {
-		if (p instanceof MResource)
-			WSClientHelper.refreshResource((MResource) p, monitor);
+		if (p instanceof AMResource)
+			WSClientHelper.refreshResource((AMResource) p, monitor);
 		else if (p instanceof MServerProfile) {
 			WSClientHelper.listFolder(((MServerProfile) p),
 					((MServerProfile) p).getWsClient(monitor),

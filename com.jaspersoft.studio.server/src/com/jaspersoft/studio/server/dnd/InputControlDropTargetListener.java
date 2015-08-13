@@ -36,7 +36,7 @@ import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.model.IInputControlsContainer;
 import com.jaspersoft.studio.server.model.MInputControl;
 import com.jaspersoft.studio.server.model.MReportUnit;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 
 /**
  * A target drop listener that creates a generic file resource element when
@@ -88,11 +88,11 @@ public class InputControlDropTargetListener extends NodeTreeDropAdapter implemen
 	}
 
 	protected IStatus doRun(ANode target, List<MInputControl> toMove, IProgressMonitor monitor) {
-		MResource container = null;
+		AMResource container = null;
 		if (target instanceof IInputControlsContainer)
-			container = (MResource) target;
+			container = (AMResource) target;
 		else if (target.getParent() instanceof IInputControlsContainer)
-			container = (MResource) ((ANode) target).getParent();
+			container = (AMResource) ((ANode) target).getParent();
 
 		int indx = container.getChildren().indexOf(target);
 
@@ -129,7 +129,7 @@ public class InputControlDropTargetListener extends NodeTreeDropAdapter implemen
 		return Status.OK_STATUS;
 	}
 
-	protected List<ResourceDescriptor> doBuildICResourceDescriptorList(MResource mrunit) {
+	protected List<ResourceDescriptor> doBuildICResourceDescriptorList(AMResource mrunit) {
 		List<ResourceDescriptor> ics = new ArrayList<ResourceDescriptor>();
 		for (INode n : mrunit.getChildren())
 			if (n instanceof MInputControl)

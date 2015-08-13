@@ -15,12 +15,12 @@ package com.jaspersoft.studio.server.wizard.resource.page.selector;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.jasperserver.dto.resources.ResourceMediaType;
 import com.jaspersoft.studio.server.model.MRAccessGrantSchema;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 
 public class SelectorAccessGrantSchema extends ASelector {
 
 	@Override
-	protected ResourceDescriptor createLocal(MResource res) {
+	protected ResourceDescriptor createLocal(AMResource res) {
 		ResourceDescriptor rd = MRAccessGrantSchema.createDescriptor(res);
 		rd.setName(MRAccessGrantSchema.getIconDescriptor().getTitle());
 		rd.setLabel(rd.getName());
@@ -28,7 +28,7 @@ public class SelectorAccessGrantSchema extends ASelector {
 	}
 
 	@Override
-	protected boolean isResCompatible(MResource r) {
+	protected boolean isResCompatible(AMResource r) {
 		return r instanceof MRAccessGrantSchema;
 	}
 

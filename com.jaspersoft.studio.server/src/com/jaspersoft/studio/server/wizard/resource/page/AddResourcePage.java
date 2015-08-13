@@ -54,7 +54,7 @@ import com.jaspersoft.studio.server.model.MRQuery;
 import com.jaspersoft.studio.server.model.MRStyleTemplate;
 import com.jaspersoft.studio.server.model.MReference;
 import com.jaspersoft.studio.server.model.MReportUnit;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.model.MResourceBundle;
 import com.jaspersoft.studio.server.model.MXmlFile;
 import com.jaspersoft.studio.server.model.datasource.MRDatasourceAWS;
@@ -77,7 +77,7 @@ import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorDataso
 import com.jaspersoft.studio.utils.Callback;
 
 public class AddResourcePage extends WizardPage {
-	private MResource resource;
+	private AMResource resource;
 	private ANode parent;
 
 	public AddResourcePage(ANode parent) {
@@ -86,13 +86,13 @@ public class AddResourcePage extends WizardPage {
 		String title = ANode.getIconDescriptor().getTitle();
 		if (parent instanceof MServerProfile)
 			title = MServerProfile.getIconDescriptor().getTitle();
-		else if (parent instanceof MResource)
-			title = ((MResource) parent).getThisIconDescriptor().getTitle();
+		else if (parent instanceof AMResource)
+			title = ((AMResource) parent).getThisIconDescriptor().getTitle();
 		setDescription(MessageFormat.format(Messages.AddResourcePage_Description, title, parent.getDisplayText()));
 		this.parent = parent;
 	}
 
-	public MResource getResource() {
+	public AMResource getResource() {
 		return resource;
 	}
 
@@ -112,8 +112,8 @@ public class AddResourcePage extends WizardPage {
 			public void selectionChanged(SelectionChangedEvent event) {
 				TreeSelection ts = (TreeSelection) event.getSelection();
 				Object obj = ts.getFirstElement();
-				if (obj != null && obj instanceof MResource) {
-					resource = (MResource) obj;
+				if (obj != null && obj instanceof AMResource) {
+					resource = (AMResource) obj;
 				} else
 					resource = null;
 
@@ -166,8 +166,8 @@ public class AddResourcePage extends WizardPage {
 
 	private ANode getInput() {
 		MServerProfile root = new MServerProfile(null, null);
-		if (parent instanceof MResource)
-			root.setWsClient(((MResource) parent).getWsClient());
+		if (parent instanceof AMResource)
+			root.setWsClient(((AMResource) parent).getWsClient());
 		if (parent instanceof MServerProfile)
 			root.setWsClient(((MServerProfile) parent).getWsClient((Callback<IConnection>) null));
 		if (dsonly) {
@@ -235,7 +235,7 @@ public class AddResourcePage extends WizardPage {
 				new MReference(root, MReference.createDescriptor(parent), -1);
 				boolean dsexists = false;
 				for (INode n : parent.getChildren()) {
-					if (n instanceof MResource && SelectorDatasource.isDatasource(((MResource) n).getValue())) {
+					if (n instanceof AMResource && SelectorDatasource.isDatasource(((AMResource) n).getValue())) {
 						dsexists = true;
 						break;
 					}
@@ -252,8 +252,8 @@ public class AddResourcePage extends WizardPage {
 
 			@Override
 			public boolean visit(INode n) {
-				if (n instanceof MResource)
-					((MResource) n).setEditMode(true);
+				if (n instanceof AMResource)
+					((AMResource) n).setEditMode(true);
 				return true;
 			}
 		};
@@ -264,8 +264,8 @@ public class AddResourcePage extends WizardPage {
 	private void setResource(INode rt) {
 		if (rt.getChildren() != null && !rt.getChildren().isEmpty()) {
 			INode iNode = rt.getChildren().get(0);
-			if (iNode instanceof MResource)
-				resource = (MResource) iNode;
+			if (iNode instanceof AMResource)
+				resource = (AMResource) iNode;
 			else
 				setResource(iNode);
 		}
@@ -290,7 +290,7 @@ public class AddResourcePage extends WizardPage {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		if (n instanceof MResource)
+		if (n instanceof AMResource)
 			return getServerInfo((ANode) n.getRoot());
 		return null;
 	}
@@ -302,7 +302,7 @@ public class AddResourcePage extends WizardPage {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		if (n instanceof MResource)
+		if (n instanceof AMResource)
 			return isSoap((ANode) n.getRoot());
 		return true;
 	}

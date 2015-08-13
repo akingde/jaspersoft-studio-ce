@@ -25,7 +25,7 @@ import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.editor.ReportUnitEditor;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MReportUnit;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.utils.SelectionHelper;
 
 public class RunReportUnitAction extends Action {
@@ -78,8 +78,8 @@ public class RunReportUnitAction extends Action {
 		TreePath[] p = s.getPaths();
 		for (int i = 0; i < p.length; i++) {
 			Object obj = p[i].getLastSegment();
-			if (obj instanceof MResource) {
-				INode node = ((MResource) obj).getReportUnit();
+			if (obj instanceof AMResource) {
+				INode node = ((AMResource) obj).getReportUnit();
 				if (node != null) {
 					final String key = ServerManager.getKey((MReportUnit) node);
 					if (key != null)

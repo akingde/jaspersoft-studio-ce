@@ -24,7 +24,7 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MReportUnit;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.utils.IPageCompleteListener;
 import com.jaspersoft.studio.server.wizard.resource.page.runit.ReportUnitDatasourceContent;
 import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorDatasource;
@@ -99,7 +99,7 @@ public class DatasourceSelectionPage extends JSSHelpWizardPage implements
 		setControl(tabfolder);
 	}
 
-	public void configurePage(ANode parent, MResource resource) {
+	public void configurePage(ANode parent, AMResource resource) {
 		if (refresh)
 			return;
 		if (resource instanceof MReportUnit) {

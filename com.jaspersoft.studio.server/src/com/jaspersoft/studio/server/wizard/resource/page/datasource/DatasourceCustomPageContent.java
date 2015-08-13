@@ -41,7 +41,7 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescript
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceProperty;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.messages.Messages;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.protocol.Feature;
 import com.jaspersoft.studio.server.wizard.resource.APageContent;
 import com.jaspersoft.studio.swt.widgets.table.DeleteButton;
@@ -71,11 +71,11 @@ public class DatasourceCustomPageContent extends APageContent {
 		}
 	}
 
-	public DatasourceCustomPageContent(ANode parent, MResource resource, DataBindingContext bindingContext) {
+	public DatasourceCustomPageContent(ANode parent, AMResource resource, DataBindingContext bindingContext) {
 		super(parent, resource, bindingContext);
 	}
 
-	public DatasourceCustomPageContent(ANode parent, MResource resource) {
+	public DatasourceCustomPageContent(ANode parent, AMResource resource) {
 		super(parent, resource);
 	}
 

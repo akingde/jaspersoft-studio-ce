@@ -30,7 +30,7 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.action.server.EditServerAction;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 
 public class RefreshResourcesAction extends Action {
@@ -52,13 +52,13 @@ public class RefreshResourcesAction extends Action {
 		TreePath[] p = s.getPaths();
 		for (int i = 0; i < p.length; i++) {
 			final Object obj = p[i].getLastSegment();
-			if (obj instanceof MResource) {
+			if (obj instanceof AMResource) {
 				ProgressMonitorDialog pm = new ProgressMonitorDialog(UIUtils.getShell());
 				try {
 					pm.run(true, true, new IRunnableWithProgress() {
 						public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 							try {
-								MResource res = (MResource) obj;
+								AMResource res = (AMResource) obj;
 								WSClientHelper.refreshResource(res, monitor);
 								Display.getDefault().asyncExec(new Runnable() {
 

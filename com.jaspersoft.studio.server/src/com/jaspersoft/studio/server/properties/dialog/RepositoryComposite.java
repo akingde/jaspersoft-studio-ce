@@ -39,7 +39,7 @@ import com.jaspersoft.studio.server.ServerProvider;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.action.resource.RefreshResourcesAction;
 import com.jaspersoft.studio.server.model.MFolder;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.utils.ModelUtils;
 
@@ -76,12 +76,12 @@ public class RepositoryComposite extends Composite {
 			public void selectionChanged(SelectionChangedEvent event) {
 				TreeSelection ts = (TreeSelection) event.getSelection();
 				Object obj = ts.getFirstElement();
-				if (obj instanceof MResource) {
-					MResource mres = (MResource) obj;
+				if (obj instanceof AMResource) {
+					AMResource mres = (AMResource) obj;
 					boolean resCompatible = isResourceCompatible(mres);
 					setOkButtonEnabled(resCompatible);
 					if (resCompatible)
-						setResource((MResource) obj);
+						setResource((AMResource) obj);
 				}
 			}
 		});
@@ -92,8 +92,8 @@ public class RepositoryComposite extends Composite {
 			public void doubleClick(DoubleClickEvent event) {
 				TreeSelection ts = (TreeSelection) treeViewer.getSelection();
 				Object el = ts.getFirstElement();
-				if (el instanceof MResource) {
-					MResource mres = (MResource) el;
+				if (el instanceof AMResource) {
+					AMResource mres = (AMResource) el;
 					boolean resCompatible = isResourceCompatible(mres);
 					if (resCompatible) {
 						okPressed();
@@ -157,8 +157,8 @@ public class RepositoryComposite extends Composite {
 			MServerProfile msp = null;
 			if (root instanceof MServerProfile)
 				msp = (MServerProfile) root;
-			else if (root instanceof MResource)
-				msp = (MServerProfile) ((MResource) root).getRoot();
+			else if (root instanceof AMResource)
+				msp = (MServerProfile) ((AMResource) root).getRoot();
 			if (ModelUtils.isEmpty(msp))
 				WSClientHelper.connectGetData(msp, monitor);
 			UIUtils.getDisplay().asyncExec(new Runnable() {
@@ -177,15 +177,15 @@ public class RepositoryComposite extends Composite {
 		return Status.OK_STATUS;
 	}
 
-	public boolean isResourceCompatible(MResource r) {
+	public boolean isResourceCompatible(AMResource r) {
 		return true;
 	}
 
 	private INode root;
-	protected MResource resource;
+	protected AMResource resource;
 	private TreeViewer treeViewer;
 
-	public void setResource(MResource res) {
+	public void setResource(AMResource res) {
 		this.resource = res;
 	}
 

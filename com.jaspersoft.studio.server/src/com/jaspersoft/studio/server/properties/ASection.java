@@ -34,7 +34,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import com.jaspersoft.studio.properties.view.AbstractPropertySection;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.server.WSClientHelper;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.properties.action.EditCancelAction;
 import com.jaspersoft.studio.server.properties.action.EditOkAction;
 import com.jaspersoft.studio.server.properties.action.EditPropertyAction;
@@ -107,8 +107,8 @@ public abstract class ASection extends AbstractPropertySection {
 		super.setInput(part, selection);
 		Assert.isTrue(selection instanceof IStructuredSelection);
 		Object input = ((IStructuredSelection) selection).getFirstElement();
-		Assert.isTrue(input instanceof MResource);
-		this.res = (MResource) input;
+		Assert.isTrue(input instanceof AMResource);
+		this.res = (AMResource) input;
 		rebind();
 		setEditMode(res.isEditMode());
 	}
@@ -130,7 +130,7 @@ public abstract class ASection extends AbstractPropertySection {
 		bindingContext.updateTargets();
 	}
 
-	protected MResource res;
+	protected AMResource res;
 	protected DataBindingContext bindingContext;
 
 	@Override

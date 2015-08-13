@@ -29,7 +29,7 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescript
 import com.jaspersoft.studio.server.ResourceFactory;
 import com.jaspersoft.studio.server.model.AFileResource;
 import com.jaspersoft.studio.server.model.MReportUnit;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.preferences.JRSPreferencesPage;
 import com.jaspersoft.studio.server.publish.OverwriteEnum;
 import com.jaspersoft.studio.server.publish.PublishOptions;
@@ -125,7 +125,7 @@ public abstract class AImpObject {
 			rd.setUriString(rd.getParentFolder() + "/" + rd.getName());
 		}
 
-		MResource res = ResourceFactory.getResource(mrunit, rd, -1);
+		AMResource res = ResourceFactory.getResource(mrunit, rd, -1);
 		if (res instanceof AFileResource) {
 			AFileResource mres = (AFileResource) res;
 			mres.setFile(f);

@@ -34,7 +34,7 @@ import org.eclipse.swt.widgets.Text;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.messages.Messages;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.wizard.resource.APageContent;
 import com.jaspersoft.studio.utils.UIUtil;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
@@ -46,12 +46,12 @@ public class DatasourceJDBCPageContent extends APageContent {
 	private Text tuser;
 	private Text tpass;
 
-	public DatasourceJDBCPageContent(ANode parent, MResource resource,
+	public DatasourceJDBCPageContent(ANode parent, AMResource resource,
 			DataBindingContext bindingContext) {
 		super(parent, resource, bindingContext);
 	}
 
-	public DatasourceJDBCPageContent(ANode parent, MResource resource) {
+	public DatasourceJDBCPageContent(ANode parent, AMResource resource) {
 		super(parent, resource);
 	}
 

@@ -18,7 +18,7 @@ import org.eclipse.swt.widgets.Control;
 
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.messages.Messages;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.utils.IPageCompleteListener;
 import com.jaspersoft.studio.server.wizard.resource.APageContent;
 import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorQueryWithNon;
@@ -27,12 +27,12 @@ public class ReportUnitQueryContent extends APageContent {
 
 	private SelectorQueryWithNon sQuery;
 
-	public ReportUnitQueryContent(ANode parent, MResource resource,
+	public ReportUnitQueryContent(ANode parent, AMResource resource,
 			DataBindingContext bindingContext) {
 		super(parent, resource, bindingContext);
 	}
 
-	public ReportUnitQueryContent(ANode parent, MResource resource) {
+	public ReportUnitQueryContent(ANode parent, AMResource resource) {
 		super(parent, resource);
 	}
 

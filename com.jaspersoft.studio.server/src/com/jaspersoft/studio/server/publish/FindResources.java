@@ -33,7 +33,7 @@ import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.export.AExporter;
 import com.jaspersoft.studio.server.model.AFileResource;
 import com.jaspersoft.studio.server.model.AMJrxmlContainer;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
@@ -64,11 +64,11 @@ public class FindResources {
 		Object r = jrConfig.get(PublishUtil.KEY_PUBLISH2JSS_DATA);
 		if (r != null && r instanceof List) {
 			List<?> resources = (List<?>) r;
-			List<MResource> rs = new ArrayList<MResource>();
+			List<AMResource> rs = new ArrayList<AMResource>();
 			Map<String, ResourceDescriptor> names = new HashMap<String, ResourceDescriptor>();
 			for (Object obj : resources) {
-				if (obj instanceof MResource) {
-					MResource m = (MResource) obj;
+				if (obj instanceof AMResource) {
+					AMResource m = (AMResource) obj;
 					ResourceDescriptor rd = m.getValue();
 					if (names.containsKey(rd.getUriString())) {
 						if (names.get(rd.getUriString()) == rd) {
@@ -125,7 +125,7 @@ public class FindResources {
 					// We can try to locate a previous existing Report Unit.
 					// If not possible we will popup the selection tree as
 					// usual.
-					MResource selectedRepoUnit = WSClientHelper.findSelected(
+					AMResource selectedRepoUnit = WSClientHelper.findSelected(
 							mserv.getChildren(), monitor, prunit,
 							mserv.getWsClient(monitor));
 					if (selectedRepoUnit != null)

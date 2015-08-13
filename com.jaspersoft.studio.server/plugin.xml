@@ -37,7 +37,7 @@
                id="com.jaspersoft.studio.server.ResourceDescriptor.Basic.name"
                tab="com.jaspersoft.studio.server.ResourceDescriptor.Basic">
             <input
-                  type="com.jaspersoft.studio.server.model.MResource">
+                  type="com.jaspersoft.studio.server.model.AMResource">
             </input>
          </propertySection>
          <propertySection

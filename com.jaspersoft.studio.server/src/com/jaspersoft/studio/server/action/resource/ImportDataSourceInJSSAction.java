@@ -42,7 +42,7 @@ import com.jaspersoft.studio.data.jndi.JndiDataAdapterDescriptor;
 import com.jaspersoft.studio.data.storage.ADataAdapterStorage;
 import com.jaspersoft.studio.server.Activator;
 import com.jaspersoft.studio.server.messages.Messages;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.model.datasource.MRDatasourceBean;
 import com.jaspersoft.studio.server.model.datasource.MRDatasourceJDBC;
 import com.jaspersoft.studio.server.model.datasource.MRDatasourceJNDI;
@@ -82,8 +82,8 @@ public class ImportDataSourceInJSSAction extends Action {
 			protected IStatus run(IProgressMonitor monitor) {
 				monitor.beginTask("", IProgressMonitor.UNKNOWN);
 				try {
-					if (firstElement instanceof MResource) {
-						MResource mres = (MResource) firstElement;
+					if (firstElement instanceof AMResource) {
+						AMResource mres = (AMResource) firstElement;
 						mres.setValue(mres.getWsClient().get(monitor, mres.getValue(), null));
 						final DataAdapterDescriptor dad = importDataSourceAsDataAdapter(mres);
 						UIUtils.getDisplay().syncExec(new Runnable() {
@@ -116,7 +116,7 @@ public class ImportDataSourceInJSSAction extends Action {
 	/*
 	 * Performs the import operation.
 	 */
-	private DataAdapterDescriptor importDataSourceAsDataAdapter(MResource datasource) {
+	private DataAdapterDescriptor importDataSourceAsDataAdapter(AMResource datasource) {
 		if (datasource instanceof MRDatasourceJDBC) {
 			MRDatasourceJDBC jdbcDS = (MRDatasourceJDBC) datasource;
 			JDBCDataAdapterDescriptor jdbcDA = new JDBCDataAdapterDescriptor();

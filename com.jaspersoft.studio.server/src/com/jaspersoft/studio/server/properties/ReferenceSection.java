@@ -32,7 +32,7 @@ import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.model.MFolder;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.properties.dialog.RepositoryDialog;
 import com.jaspersoft.studio.server.protocol.Feature;
@@ -74,13 +74,13 @@ public class ReferenceSection extends ASection {
 					RepositoryDialog rd = new RepositoryDialog(UIUtils.getShell(), msp) {
 
 						@Override
-						public boolean isResourceCompatible(MResource r) {
+						public boolean isResourceCompatible(AMResource r) {
 							return !(r instanceof MFolder);
 						}
 
 					};
 					if (rd.open() == Dialog.OK) {
-						MResource rs = rd.getResource();
+						AMResource rs = rd.getResource();
 						if (rs != null) {
 							res.getValue().setReferenceUri(rs.getValue().getUriString());
 							bindingContext.updateTargets();

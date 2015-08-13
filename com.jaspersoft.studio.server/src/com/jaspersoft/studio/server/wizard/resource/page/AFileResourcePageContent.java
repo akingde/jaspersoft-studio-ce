@@ -59,7 +59,7 @@ import com.jaspersoft.studio.server.Activator;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.AFileResource;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.wizard.resource.APageContent;
 import com.jaspersoft.studio.utils.Misc;
@@ -73,12 +73,12 @@ public abstract class AFileResourcePageContent extends APageContent {
 			true,
 			Activator.getDefault().getImage("icons/up-down-arrows.png"), 0, 0, 0); //$NON-NLS-2$
 
-	public AFileResourcePageContent(ANode parent, MResource resource,
+	public AFileResourcePageContent(ANode parent, AMResource resource,
 			DataBindingContext bindingContext) {
 		super(parent, resource, bindingContext);
 	}
 
-	public AFileResourcePageContent(ANode parent, MResource resource) {
+	public AFileResourcePageContent(ANode parent, AMResource resource) {
 		super(parent, resource);
 	}
 

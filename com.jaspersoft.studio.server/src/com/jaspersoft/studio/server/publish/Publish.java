@@ -42,7 +42,7 @@ import com.jaspersoft.studio.server.model.AMJrxmlContainer;
 import com.jaspersoft.studio.server.model.MFolder;
 import com.jaspersoft.studio.server.model.MJrxml;
 import com.jaspersoft.studio.server.model.MReportUnit;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
 import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorDatasource;
@@ -124,9 +124,9 @@ public class Publish {
 				&& !rdjrxml.getParentFolder().endsWith("_files"))
 			rdjrxml.setIsReference(true);
 
-		List<MResource> resources = ((JasperReportsConfiguration) jrConfig)
+		List<AMResource> resources = ((JasperReportsConfiguration) jrConfig)
 				.get(PublishUtil.KEY_PUBLISH2JSS_DATA,
-						new ArrayList<MResource>());
+						new ArrayList<AMResource>());
 		updSelectedResources(monitor, resources, version);
 		FileUtils.writeFile(file,
 				JRXmlWriterHelper.writeReport(jrConfig, jd, version));
@@ -182,7 +182,7 @@ public class Publish {
 			}
 			rdjrxml.setMainReport(isMain);
 			PublishUtil.setChild(r, rdjrxml);
-			for (MResource res : resources) {
+			for (AMResource res : resources) {
 				if (res.getPublishOptions().getOverwrite(OverwriteEnum.IGNORE)
 						.equals(OverwriteEnum.OVERWRITE)) {
 					ResourceDescriptor rd = res.getValue();
@@ -196,7 +196,7 @@ public class Publish {
 			}
 			mrunit.getWsClient().addOrModifyResource(monitor, r, file);
 			this.resources.add(r.getUriString());
-			for (MResource res : resources)
+			for (AMResource res : resources)
 				if (res.getPublishOptions().getOverwrite(OverwriteEnum.IGNORE)
 						.equals(OverwriteEnum.OVERWRITE)) {
 					PublishUtil.savePreferencesNoOverwrite(ifile, res);
@@ -204,7 +204,7 @@ public class Publish {
 				}
 		} else {
 			jrxml.setValue(saveResource(monitor, jrxml));
-			for (MResource res : resources) {
+			for (AMResource res : resources) {
 				PublishOptions popt = res.getPublishOptions();
 				if (popt.getOverwrite(OverwriteEnum.IGNORE).equals(
 						OverwriteEnum.OVERWRITE)) {
@@ -219,10 +219,10 @@ public class Publish {
 	}
 
 	protected void updSelectedResources(IProgressMonitor monitor,
-			List<MResource> files, String version) throws IOException,
+			List<AMResource> files, String version) throws IOException,
 			Exception {
 		List<MJrxml> toSave = new ArrayList<MJrxml>();
-		for (MResource res : files) {
+		for (AMResource res : files) {
 			PublishOptions popt = res.getPublishOptions();
 			if (!popt.getOverwrite(OverwriteEnum.IGNORE).equals(
 					OverwriteEnum.IGNORE)) {
@@ -292,7 +292,7 @@ public class Publish {
 	}
 
 	private ResourceDescriptor saveResource(IProgressMonitor monitor,
-			MResource mres) throws Exception {
+			AMResource mres) throws Exception {
 		String uri = mres.getValue().getUriString();
 		ResourceDescriptor rd = WSClientHelper.save(monitor, mres);
 		if (rd != null)

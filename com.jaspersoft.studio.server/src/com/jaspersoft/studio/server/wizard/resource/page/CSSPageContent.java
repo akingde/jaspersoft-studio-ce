@@ -15,16 +15,16 @@ package com.jaspersoft.studio.server.wizard.resource.page;
 import org.eclipse.core.databinding.DataBindingContext;
 
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.wizard.resource.page.selector.ATextFileResourcePageContent;
 
 public class CSSPageContent extends ATextFileResourcePageContent {
 
-	public CSSPageContent(ANode parent, MResource resource, DataBindingContext bindingContext) {
+	public CSSPageContent(ANode parent, AMResource resource, DataBindingContext bindingContext) {
 		super(parent, resource, bindingContext);
 	}
 
-	public CSSPageContent(ANode parent, MResource resource) {
+	public CSSPageContent(ANode parent, AMResource resource) {
 		super(parent, resource);
 	}
 

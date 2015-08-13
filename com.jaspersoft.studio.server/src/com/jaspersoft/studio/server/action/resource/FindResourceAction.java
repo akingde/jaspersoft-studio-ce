@@ -20,7 +20,7 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.server.ServerProvider;
 import com.jaspersoft.studio.server.messages.Messages;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.protocol.Feature;
 import com.jaspersoft.studio.server.protocol.IConnection;
@@ -53,8 +53,8 @@ public class FindResourceAction extends Action {
 			MServerProfile msp = null;
 			if (firstElement instanceof MServerProfile)
 				msp = (MServerProfile) firstElement;
-			else if (firstElement instanceof MResource) {
-				INode n = ((MResource) firstElement).getRoot();
+			else if (firstElement instanceof AMResource) {
+				INode n = ((AMResource) firstElement).getRoot();
 				if (n instanceof MServerProfile)
 					msp = (MServerProfile) n;
 			}

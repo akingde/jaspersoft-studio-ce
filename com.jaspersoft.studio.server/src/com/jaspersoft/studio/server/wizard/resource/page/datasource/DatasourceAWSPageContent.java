@@ -31,7 +31,7 @@ import org.eclipse.swt.widgets.Text;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceProperty;
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.model.datasource.MRDatasourceAWS;
 import com.jaspersoft.studio.server.utils.ResourceDescriptorUtil;
 import com.jaspersoft.studio.utils.UIUtil;
@@ -50,11 +50,11 @@ public class DatasourceAWSPageContent extends DatasourceJDBCPageContent {
 	private Button ec2Cred;
 	private Button awsCred;
 
-	public DatasourceAWSPageContent(ANode parent, MResource resource, DataBindingContext bindingContext) {
+	public DatasourceAWSPageContent(ANode parent, AMResource resource, DataBindingContext bindingContext) {
 		super(parent, resource, bindingContext);
 	}
 
-	public DatasourceAWSPageContent(ANode parent, MResource resource) {
+	public DatasourceAWSPageContent(ANode parent, AMResource resource) {
 		super(parent, resource);
 	}
 

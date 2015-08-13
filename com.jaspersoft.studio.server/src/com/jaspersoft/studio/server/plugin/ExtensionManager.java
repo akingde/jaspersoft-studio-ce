@@ -35,7 +35,7 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.editor.input.IInputControls;
 import com.jaspersoft.studio.server.model.AMJrxmlContainer;
 import com.jaspersoft.studio.server.model.MReportUnit;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.protocol.IConnection;
 import com.jaspersoft.studio.server.protocol.restv2.ARestV2Connection;
 import com.jaspersoft.studio.server.protocol.restv2.WsTypes;
@@ -135,17 +135,17 @@ public class ExtensionManager {
 			r.publishParameters(mrunit, monitor, jasper);
 	}
 
-	public MResource getResource(ANode parent, ResourceDescriptor resource,
+	public AMResource getResource(ANode parent, ResourceDescriptor resource,
 			int index) {
 		for (IResourceFactory r : resources) {
-			MResource mr = r.getResource(parent, resource, index);
+			AMResource mr = r.getResource(parent, resource, index);
 			if (mr != null)
 				return mr;
 		}
 		return null;
 	}
 
-	public IWizardPage[] getResourcePage(ANode parent, MResource resource) {
+	public IWizardPage[] getResourcePage(ANode parent, AMResource resource) {
 		for (IResourceFactory r : resources) {
 			IWizardPage[] mr = r.getResourcePage(parent, resource);
 			if (mr != null)

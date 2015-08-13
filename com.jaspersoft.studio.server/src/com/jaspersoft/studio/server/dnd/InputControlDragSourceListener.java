@@ -24,7 +24,7 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.model.IInputControlsContainer;
 import com.jaspersoft.studio.server.model.MInputControl;
 import com.jaspersoft.studio.server.model.MReportUnit;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.protocol.Feature;
 
 /**
@@ -55,8 +55,8 @@ public class InputControlDragSourceListener extends NodeDragListener implements 
 	public static boolean isDragable(ANode parent) {
 		if (parent instanceof MReportUnit)
 			return true;
-		if (parent instanceof MResource) {
-			MResource res = (MResource) parent;
+		if (parent instanceof AMResource) {
+			AMResource res = (AMResource) parent;
 			if (res.isSupported(Feature.INPUTCONTROLS_ORDERING) && (res instanceof IInputControlsContainer))
 				return true;
 		}

@@ -19,9 +19,9 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceProperty
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.server.ServerIconDescriptor;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AMResource;
 
-public class MRDatasourceAWS extends MResource {
+public class MRDatasourceAWS extends AMRDatasource {
 
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	public static final String TYPE_AWS = "aws";
@@ -52,16 +52,20 @@ public class MRDatasourceAWS extends MResource {
 	}
 
 	public static ResourceDescriptor createDescriptor(ANode parent) {
-		ResourceDescriptor rd = MResource.createDescriptor(parent);
+		ResourceDescriptor rd = AMResource.createDescriptor(parent);
 		rd.setWsType(MRDatasourceAWS.TYPE_AWS);
 
-		ResourceProperty rp = new ResourceProperty(MRDatasourceAWS.PROP_DATASOURCE_AWS_REGION, "");
+		ResourceProperty rp = new ResourceProperty(
+				MRDatasourceAWS.PROP_DATASOURCE_AWS_REGION, "");
 		rd.getProperties().add(rp);
-		rp = new ResourceProperty(MRDatasourceAWS.PROP_DATASOURCE_AWS_DB_NAME, "");
+		rp = new ResourceProperty(MRDatasourceAWS.PROP_DATASOURCE_AWS_DB_NAME,
+				"");
 		rd.getProperties().add(rp);
-		rp = new ResourceProperty(MRDatasourceAWS.PROP_DATASOURCE_AWS_DB_SERVICE, "");
+		rp = new ResourceProperty(
+				MRDatasourceAWS.PROP_DATASOURCE_AWS_DB_SERVICE, "");
 		rd.getProperties().add(rp);
-		rp = new ResourceProperty(MRDatasourceAWS.PROP_DATASOURCE_AWS_DB_INSTANCE_IDENTIFIER, "");
+		rp = new ResourceProperty(
+				MRDatasourceAWS.PROP_DATASOURCE_AWS_DB_INSTANCE_IDENTIFIER, "");
 		rd.getProperties().add(rp);
 		return rd;
 	}
