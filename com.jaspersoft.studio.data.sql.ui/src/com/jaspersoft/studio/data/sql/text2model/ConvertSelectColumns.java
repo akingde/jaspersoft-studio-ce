@@ -294,7 +294,9 @@ public class ConvertSelectColumns {
 			return sc.getSostr();
 		if (sc.getSotime() != null)
 			return sc.getSotime().toString();
-		return Integer.toString(sc.getSoint());
+		if (sc.getSodbl() != null)
+			return sc.getSodbl().toString();
+		return "";
 	}
 
 	private static void setupAlias(AMQueryAliased<?> mscol, ColumnOrAlias fcol) {

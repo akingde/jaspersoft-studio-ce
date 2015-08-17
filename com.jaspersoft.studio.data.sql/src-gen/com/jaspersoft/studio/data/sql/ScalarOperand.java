@@ -12,12 +12,13 @@ import java.math.BigDecimal;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link com.jaspersoft.studio.data.sql.ScalarOperand#getSoint <em>Soint</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.ScalarOperand#getSostr <em>Sostr</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.ScalarOperand#getSodbl <em>Sodbl</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.ScalarOperand#getSodate <em>Sodate</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.ScalarOperand#getSotime <em>Sotime</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.ScalarOperand#getSodt <em>Sodt</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.ScalarOperand#getSoUInt <em>So UInt</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.ScalarOperand#getSoint <em>Soint</em>}</li>
  * </ul>
  * </p>
  *
@@ -27,32 +28,6 @@ import java.math.BigDecimal;
  */
 public interface ScalarOperand extends OperandList
 {
-  /**
-   * Returns the value of the '<em><b>Soint</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Soint</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
-   * <!-- end-user-doc -->
-   * @return the value of the '<em>Soint</em>' attribute.
-   * @see #setSoint(int)
-   * @see com.jaspersoft.studio.data.sql.SqlPackage#getScalarOperand_Soint()
-   * @model
-   * @generated
-   */
-  int getSoint();
-
-  /**
-   * Sets the value of the '{@link com.jaspersoft.studio.data.sql.ScalarOperand#getSoint <em>Soint</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Soint</em>' attribute.
-   * @see #getSoint()
-   * @generated
-   */
-  void setSoint(int value);
-
   /**
    * Returns the value of the '<em><b>Sostr</b></em>' attribute.
    * <!-- begin-user-doc -->
@@ -182,5 +157,57 @@ public interface ScalarOperand extends OperandList
    * @generated
    */
   void setSodt(String value);
+
+  /**
+   * Returns the value of the '<em><b>So UInt</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>So UInt</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>So UInt</em>' attribute.
+   * @see #setSoUInt(int)
+   * @see com.jaspersoft.studio.data.sql.SqlPackage#getScalarOperand_SoUInt()
+   * @model
+   * @generated
+   */
+  int getSoUInt();
+
+  /**
+   * Sets the value of the '{@link com.jaspersoft.studio.data.sql.ScalarOperand#getSoUInt <em>So UInt</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>So UInt</em>' attribute.
+   * @see #getSoUInt()
+   * @generated
+   */
+  void setSoUInt(int value);
+
+  /**
+   * Returns the value of the '<em><b>Soint</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Soint</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Soint</em>' attribute.
+   * @see #setSoint(int)
+   * @see com.jaspersoft.studio.data.sql.SqlPackage#getScalarOperand_Soint()
+   * @model
+   * @generated
+   */
+  int getSoint();
+
+  /**
+   * Sets the value of the '{@link com.jaspersoft.studio.data.sql.ScalarOperand#getSoint <em>Soint</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Soint</em>' attribute.
+   * @see #getSoint()
+   * @generated
+   */
+  void setSoint(int value);
 
 } // ScalarOperand

@@ -298,7 +298,8 @@ public class ConvertExpression {
 		if (sop.getSodt() != null) {
 			Date d;
 			try {
-				d = new SimpleDateFormat("YYYY-mm-dd HH:mm:ss.SSSSSS").parse(sop.getSodt());
+				d = new SimpleDateFormat("YYYY-mm-dd HH:mm:ss.SSSSSS")
+						.parse(sop.getSodt());
 			} catch (ParseException e) {
 				return new ScalarOperand<String>(me, sop.getSodt());
 			}
@@ -307,13 +308,14 @@ public class ConvertExpression {
 		if (sop.getSotime() != null) {
 			Date d;
 			try {
-				d = new SimpleDateFormat("HH:mm:ss.SSSSSS").parse(sop.getSotime());
+				d = new SimpleDateFormat("HH:mm:ss.SSSSSS").parse(sop
+						.getSotime());
 			} catch (ParseException e) {
 				return new ScalarOperand<String>(me, sop.getSotime());
 			}
 			return new ScalarOperand<Time>(me, new Time(d.getTime()));
 		}
-		return new ScalarOperand<Integer>(me, sop.getSoint());
+		return new ScalarOperand<BigDecimal>(me, sop.getSodbl());
 	}
 
 	private static FieldOperand doColumn(SQLQueryDesigner designer,

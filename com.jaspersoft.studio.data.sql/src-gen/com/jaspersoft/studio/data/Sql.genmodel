@@ -312,12 +312,13 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//SubQueryOperand/sel"/>
     </genClasses>
     <genClasses ecoreClass="Sql.ecore#//ScalarOperand">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//ScalarOperand/soint"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//ScalarOperand/sostr"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//ScalarOperand/sodbl"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//ScalarOperand/sodate"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//ScalarOperand/sotime"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//ScalarOperand/sodt"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//ScalarOperand/soUInt"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//ScalarOperand/soint"/>
     </genClasses>
     <genClasses ecoreClass="Sql.ecore#//SQLCaseOperand">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//SQLCaseOperand/expr"/>

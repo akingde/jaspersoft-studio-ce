@@ -5682,9 +5682,9 @@ ruleXOperandFragment returns [EObject current=null]
     |(
 (
 		{ 
-	        newCompositeNode(grammarAccess.getXOperandFragmentAccess().getScalarScalarOperandParserRuleCall_2_0()); 
+	        newCompositeNode(grammarAccess.getXOperandFragmentAccess().getScalarScalarNumberOperandParserRuleCall_2_0()); 
 	    }
-		lv_scalar_2_0=ruleScalarOperand		{
+		lv_scalar_2_0=ruleScalarNumberOperand		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getXOperandFragmentRule());
 	        }
@@ -5692,7 +5692,7 @@ ruleXOperandFragment returns [EObject current=null]
        			$current, 
        			"scalar",
         		lv_scalar_2_0, 
-        		"ScalarOperand");
+        		"ScalarNumberOperand");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -5908,36 +5908,17 @@ ruleScalarOperand returns [EObject current=null]
     @after { leaveRule(); }:
 ((
 (
-		lv_soint_0_0=RULE_INT
-		{
-			newLeafNode(lv_soint_0_0, grammarAccess.getScalarOperandAccess().getSointINTTerminalRuleCall_0_0()); 
-		}
-		{
-	        if ($current==null) {
-	            $current = createModelElement(grammarAccess.getScalarOperandRule());
-	        }
-       		setWithLastConsumed(
-       			$current, 
-       			"soint",
-        		lv_soint_0_0, 
-        		"INT");
-	    }
-
-)
-)
-    |(
-(
 		{ 
-	        newCompositeNode(grammarAccess.getScalarOperandAccess().getSostrStringOperandParserRuleCall_1_0()); 
+	        newCompositeNode(grammarAccess.getScalarOperandAccess().getSostrStringOperandParserRuleCall_0_0()); 
 	    }
-		lv_sostr_1_0=ruleStringOperand		{
+		lv_sostr_0_0=ruleStringOperand		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getScalarOperandRule());
 	        }
        		set(
        			$current, 
        			"sostr",
-        		lv_sostr_1_0, 
+        		lv_sostr_0_0, 
         		"StringOperand");
 	        afterParserOrEnumRuleCall();
 	    }
@@ -5946,13 +5927,147 @@ ruleScalarOperand returns [EObject current=null]
 )
     |(
 (
-		lv_sodbl_2_0=RULE_SIGNED_DOUBLE
+		lv_sodbl_1_0=RULE_SIGNED_DOUBLE
 		{
-			newLeafNode(lv_sodbl_2_0, grammarAccess.getScalarOperandAccess().getSodblSIGNED_DOUBLETerminalRuleCall_2_0()); 
+			newLeafNode(lv_sodbl_1_0, grammarAccess.getScalarOperandAccess().getSodblSIGNED_DOUBLETerminalRuleCall_1_0()); 
 		}
 		{
 	        if ($current==null) {
 	            $current = createModelElement(grammarAccess.getScalarOperandRule());
+	        }
+       		setWithLastConsumed(
+       			$current, 
+       			"sodbl",
+        		lv_sodbl_1_0, 
+        		"SIGNED_DOUBLE");
+	    }
+
+)
+)
+    |(
+(
+		lv_sodate_2_0=RULE_DATE
+		{
+			newLeafNode(lv_sodate_2_0, grammarAccess.getScalarOperandAccess().getSodateDATETerminalRuleCall_2_0()); 
+		}
+		{
+	        if ($current==null) {
+	            $current = createModelElement(grammarAccess.getScalarOperandRule());
+	        }
+       		setWithLastConsumed(
+       			$current, 
+       			"sodate",
+        		lv_sodate_2_0, 
+        		"DATE");
+	    }
+
+)
+)
+    |(
+(
+		lv_sotime_3_0=RULE_TIME
+		{
+			newLeafNode(lv_sotime_3_0, grammarAccess.getScalarOperandAccess().getSotimeTIMETerminalRuleCall_3_0()); 
+		}
+		{
+	        if ($current==null) {
+	            $current = createModelElement(grammarAccess.getScalarOperandRule());
+	        }
+       		setWithLastConsumed(
+       			$current, 
+       			"sotime",
+        		lv_sotime_3_0, 
+        		"TIME");
+	    }
+
+)
+)
+    |(
+(
+		lv_sodt_4_0=RULE_TIMESTAMP
+		{
+			newLeafNode(lv_sodt_4_0, grammarAccess.getScalarOperandAccess().getSodtTIMESTAMPTerminalRuleCall_4_0()); 
+		}
+		{
+	        if ($current==null) {
+	            $current = createModelElement(grammarAccess.getScalarOperandRule());
+	        }
+       		setWithLastConsumed(
+       			$current, 
+       			"sodt",
+        		lv_sodt_4_0, 
+        		"TIMESTAMP");
+	    }
+
+)
+))
+;
+
+
+
+
+
+// Entry rule entryRuleScalarNumberOperand
+entryRuleScalarNumberOperand returns [EObject current=null]
+	:
+	{ newCompositeNode(grammarAccess.getScalarNumberOperandRule()); }
+	 iv_ruleScalarNumberOperand=ruleScalarNumberOperand 
+	 { $current=$iv_ruleScalarNumberOperand.current; } 
+	 EOF 
+;
+
+// Rule ScalarNumberOperand
+ruleScalarNumberOperand returns [EObject current=null] 
+    @init { enterRule(); 
+    }
+    @after { leaveRule(); }:
+((
+(
+		lv_soUInt_0_0=RULE_UNSIGNED
+		{
+			newLeafNode(lv_soUInt_0_0, grammarAccess.getScalarNumberOperandAccess().getSoUIntUNSIGNEDTerminalRuleCall_0_0()); 
+		}
+		{
+	        if ($current==null) {
+	            $current = createModelElement(grammarAccess.getScalarNumberOperandRule());
+	        }
+       		setWithLastConsumed(
+       			$current, 
+       			"soUInt",
+        		lv_soUInt_0_0, 
+        		"UNSIGNED");
+	    }
+
+)
+)
+    |(
+(
+		lv_soint_1_0=RULE_INT
+		{
+			newLeafNode(lv_soint_1_0, grammarAccess.getScalarNumberOperandAccess().getSointINTTerminalRuleCall_1_0()); 
+		}
+		{
+	        if ($current==null) {
+	            $current = createModelElement(grammarAccess.getScalarNumberOperandRule());
+	        }
+       		setWithLastConsumed(
+       			$current, 
+       			"soint",
+        		lv_soint_1_0, 
+        		"INT");
+	    }
+
+)
+)
+    |(
+(
+		lv_sodbl_2_0=RULE_SIGNED_DOUBLE
+		{
+			newLeafNode(lv_sodbl_2_0, grammarAccess.getScalarNumberOperandAccess().getSodblSIGNED_DOUBLETerminalRuleCall_2_0()); 
+		}
+		{
+	        if ($current==null) {
+	            $current = createModelElement(grammarAccess.getScalarNumberOperandRule());
 	        }
        		setWithLastConsumed(
        			$current, 
@@ -5965,57 +6080,19 @@ ruleScalarOperand returns [EObject current=null]
 )
     |(
 (
-		lv_sodate_3_0=RULE_DATE
-		{
-			newLeafNode(lv_sodate_3_0, grammarAccess.getScalarOperandAccess().getSodateDATETerminalRuleCall_3_0()); 
-		}
-		{
-	        if ($current==null) {
-	            $current = createModelElement(grammarAccess.getScalarOperandRule());
-	        }
-       		setWithLastConsumed(
-       			$current, 
-       			"sodate",
-        		lv_sodate_3_0, 
-        		"DATE");
+		{ 
+	        newCompositeNode(grammarAccess.getScalarNumberOperandAccess().getSostrStringOperandParserRuleCall_3_0()); 
 	    }
-
-)
-)
-    |(
-(
-		lv_sotime_4_0=RULE_TIME
-		{
-			newLeafNode(lv_sotime_4_0, grammarAccess.getScalarOperandAccess().getSotimeTIMETerminalRuleCall_4_0()); 
-		}
-		{
+		lv_sostr_3_0=ruleStringOperand		{
 	        if ($current==null) {
-	            $current = createModelElement(grammarAccess.getScalarOperandRule());
+	            $current = createModelElementForParent(grammarAccess.getScalarNumberOperandRule());
 	        }
-       		setWithLastConsumed(
+       		set(
        			$current, 
-       			"sotime",
-        		lv_sotime_4_0, 
-        		"TIME");
-	    }
-
-)
-)
-    |(
-(
-		lv_sodt_5_0=RULE_TIMESTAMP
-		{
-			newLeafNode(lv_sodt_5_0, grammarAccess.getScalarOperandAccess().getSodtTIMESTAMPTerminalRuleCall_5_0()); 
-		}
-		{
-	        if ($current==null) {
-	            $current = createModelElement(grammarAccess.getScalarOperandRule());
-	        }
-       		setWithLastConsumed(
-       			$current, 
-       			"sodt",
-        		lv_sodt_5_0, 
-        		"TIMESTAMP");
+       			"sostr",
+        		lv_sostr_3_0, 
+        		"StringOperand");
+	        afterParserOrEnumRuleCall();
 	    }
 
 )
@@ -6215,9 +6292,9 @@ ruleSqlCaseWhen returns [EObject current=null]
 (
 (
 		{ 
-	        newCompositeNode(grammarAccess.getSqlCaseWhenAccess().getEexpOperandParserRuleCall_4_1_0()); 
+	        newCompositeNode(grammarAccess.getSqlCaseWhenAccess().getEexpOperandGroupParserRuleCall_4_1_0()); 
 	    }
-		lv_eexp_5_0=ruleOperand		{
+		lv_eexp_5_0=ruleOperandGroup		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getSqlCaseWhenRule());
 	        }
@@ -6225,7 +6302,7 @@ ruleSqlCaseWhen returns [EObject current=null]
        			$current, 
        			"eexp",
         		lv_eexp_5_0, 
-        		"Operand");
+        		"OperandGroup");
 	        afterParserOrEnumRuleCall();
 	    }
 

@@ -20,12 +20,13 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link com.jaspersoft.studio.data.sql.impl.ScalarOperandImpl#getSoint <em>Soint</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.ScalarOperandImpl#getSostr <em>Sostr</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.ScalarOperandImpl#getSodbl <em>Sodbl</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.ScalarOperandImpl#getSodate <em>Sodate</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.ScalarOperandImpl#getSotime <em>Sotime</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.ScalarOperandImpl#getSodt <em>Sodt</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.impl.ScalarOperandImpl#getSoUInt <em>So UInt</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.impl.ScalarOperandImpl#getSoint <em>Soint</em>}</li>
  * </ul>
  * </p>
  *
@@ -33,26 +34,6 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  */
 public class ScalarOperandImpl extends OperandListImpl implements ScalarOperand
 {
-  /**
-   * The default value of the '{@link #getSoint() <em>Soint</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getSoint()
-   * @generated
-   * @ordered
-   */
-  protected static final int SOINT_EDEFAULT = 0;
-
-  /**
-   * The cached value of the '{@link #getSoint() <em>Soint</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getSoint()
-   * @generated
-   * @ordered
-   */
-  protected int soint = SOINT_EDEFAULT;
-
   /**
    * The default value of the '{@link #getSostr() <em>Sostr</em>}' attribute.
    * <!-- begin-user-doc -->
@@ -154,6 +135,46 @@ public class ScalarOperandImpl extends OperandListImpl implements ScalarOperand
   protected String sodt = SODT_EDEFAULT;
 
   /**
+   * The default value of the '{@link #getSoUInt() <em>So UInt</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getSoUInt()
+   * @generated
+   * @ordered
+   */
+  protected static final int SO_UINT_EDEFAULT = 0;
+
+  /**
+   * The cached value of the '{@link #getSoUInt() <em>So UInt</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getSoUInt()
+   * @generated
+   * @ordered
+   */
+  protected int soUInt = SO_UINT_EDEFAULT;
+
+  /**
+   * The default value of the '{@link #getSoint() <em>Soint</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getSoint()
+   * @generated
+   * @ordered
+   */
+  protected static final int SOINT_EDEFAULT = 0;
+
+  /**
+   * The cached value of the '{@link #getSoint() <em>Soint</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getSoint()
+   * @generated
+   * @ordered
+   */
+  protected int soint = SOINT_EDEFAULT;
+
+  /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -172,29 +193,6 @@ public class ScalarOperandImpl extends OperandListImpl implements ScalarOperand
   protected EClass eStaticClass()
   {
     return SqlPackage.Literals.SCALAR_OPERAND;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public int getSoint()
-  {
-    return soint;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public void setSoint(int newSoint)
-  {
-    int oldSoint = soint;
-    soint = newSoint;
-    if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.SCALAR_OPERAND__SOINT, oldSoint, soint));
   }
 
   /**
@@ -317,13 +315,57 @@ public class ScalarOperandImpl extends OperandListImpl implements ScalarOperand
    * <!-- end-user-doc -->
    * @generated
    */
+  public int getSoUInt()
+  {
+    return soUInt;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setSoUInt(int newSoUInt)
+  {
+    int oldSoUInt = soUInt;
+    soUInt = newSoUInt;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.SCALAR_OPERAND__SO_UINT, oldSoUInt, soUInt));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public int getSoint()
+  {
+    return soint;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setSoint(int newSoint)
+  {
+    int oldSoint = soint;
+    soint = newSoint;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.SCALAR_OPERAND__SOINT, oldSoint, soint));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   @Override
   public Object eGet(int featureID, boolean resolve, boolean coreType)
   {
     switch (featureID)
     {
-      case SqlPackage.SCALAR_OPERAND__SOINT:
-        return getSoint();
       case SqlPackage.SCALAR_OPERAND__SOSTR:
         return getSostr();
       case SqlPackage.SCALAR_OPERAND__SODBL:
@@ -334,6 +376,10 @@ public class ScalarOperandImpl extends OperandListImpl implements ScalarOperand
         return getSotime();
       case SqlPackage.SCALAR_OPERAND__SODT:
         return getSodt();
+      case SqlPackage.SCALAR_OPERAND__SO_UINT:
+        return getSoUInt();
+      case SqlPackage.SCALAR_OPERAND__SOINT:
+        return getSoint();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -348,9 +394,6 @@ public class ScalarOperandImpl extends OperandListImpl implements ScalarOperand
   {
     switch (featureID)
     {
-      case SqlPackage.SCALAR_OPERAND__SOINT:
-        setSoint((Integer)newValue);
-        return;
       case SqlPackage.SCALAR_OPERAND__SOSTR:
         setSostr((String)newValue);
         return;
@@ -366,6 +409,12 @@ public class ScalarOperandImpl extends OperandListImpl implements ScalarOperand
       case SqlPackage.SCALAR_OPERAND__SODT:
         setSodt((String)newValue);
         return;
+      case SqlPackage.SCALAR_OPERAND__SO_UINT:
+        setSoUInt((Integer)newValue);
+        return;
+      case SqlPackage.SCALAR_OPERAND__SOINT:
+        setSoint((Integer)newValue);
+        return;
     }
     super.eSet(featureID, newValue);
   }
@@ -380,9 +429,6 @@ public class ScalarOperandImpl extends OperandListImpl implements ScalarOperand
   {
     switch (featureID)
     {
-      case SqlPackage.SCALAR_OPERAND__SOINT:
-        setSoint(SOINT_EDEFAULT);
-        return;
       case SqlPackage.SCALAR_OPERAND__SOSTR:
         setSostr(SOSTR_EDEFAULT);
         return;
@@ -398,6 +444,12 @@ public class ScalarOperandImpl extends OperandListImpl implements ScalarOperand
       case SqlPackage.SCALAR_OPERAND__SODT:
         setSodt(SODT_EDEFAULT);
         return;
+      case SqlPackage.SCALAR_OPERAND__SO_UINT:
+        setSoUInt(SO_UINT_EDEFAULT);
+        return;
+      case SqlPackage.SCALAR_OPERAND__SOINT:
+        setSoint(SOINT_EDEFAULT);
+        return;
     }
     super.eUnset(featureID);
   }
@@ -412,8 +464,6 @@ public class ScalarOperandImpl extends OperandListImpl implements ScalarOperand
   {
     switch (featureID)
     {
-      case SqlPackage.SCALAR_OPERAND__SOINT:
-        return soint != SOINT_EDEFAULT;
       case SqlPackage.SCALAR_OPERAND__SOSTR:
         return SOSTR_EDEFAULT == null ? sostr != null : !SOSTR_EDEFAULT.equals(sostr);
       case SqlPackage.SCALAR_OPERAND__SODBL:
@@ -424,6 +474,10 @@ public class ScalarOperandImpl extends OperandListImpl implements ScalarOperand
         return SOTIME_EDEFAULT == null ? sotime != null : !SOTIME_EDEFAULT.equals(sotime);
       case SqlPackage.SCALAR_OPERAND__SODT:
         return SODT_EDEFAULT == null ? sodt != null : !SODT_EDEFAULT.equals(sodt);
+      case SqlPackage.SCALAR_OPERAND__SO_UINT:
+        return soUInt != SO_UINT_EDEFAULT;
+      case SqlPackage.SCALAR_OPERAND__SOINT:
+        return soint != SOINT_EDEFAULT;
     }
     return super.eIsSet(featureID);
   }
@@ -439,9 +493,7 @@ public class ScalarOperandImpl extends OperandListImpl implements ScalarOperand
     if (eIsProxy()) return super.toString();
 
     StringBuffer result = new StringBuffer(super.toString());
-    result.append(" (soint: ");
-    result.append(soint);
-    result.append(", sostr: ");
+    result.append(" (sostr: ");
     result.append(sostr);
     result.append(", sodbl: ");
     result.append(sodbl);
@@ -451,6 +503,10 @@ public class ScalarOperandImpl extends OperandListImpl implements ScalarOperand
     result.append(sotime);
     result.append(", sodt: ");
     result.append(sodt);
+    result.append(", soUInt: ");
+    result.append(soUInt);
+    result.append(", soint: ");
+    result.append(soint);
     result.append(')');
     return result.toString();
   }

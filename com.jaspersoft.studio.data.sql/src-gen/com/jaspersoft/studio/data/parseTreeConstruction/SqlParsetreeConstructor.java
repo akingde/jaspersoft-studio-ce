@@ -108,10 +108,11 @@ protected class ThisRootNode extends RootToken {
 			case 74: return new ColumnOperand_Group(this, this, 74, inst);
 			case 75: return new SubQueryOperand_Group(this, this, 75, inst);
 			case 76: return new ScalarOperand_Alternatives(this, this, 76, inst);
-			case 77: return new SQLCASE_Group(this, this, 77, inst);
-			case 78: return new SQLCaseWhens_Group(this, this, 78, inst);
-			case 79: return new SqlCaseWhen_Group(this, this, 79, inst);
-			case 80: return new IntegerValue_IntegerAssignment(this, this, 80, inst);
+			case 77: return new ScalarNumberOperand_Alternatives(this, this, 77, inst);
+			case 78: return new SQLCASE_Group(this, this, 78, inst);
+			case 79: return new SQLCaseWhens_Group(this, this, 79, inst);
+			case 80: return new SqlCaseWhen_Group(this, this, 80, inst);
+			case 81: return new IntegerValue_IntegerAssignment(this, this, 81, inst);
 			default: return null;
 		}	
 	}	
@@ -15418,11 +15419,11 @@ protected class OpFunctionArgAgregate_OperandParserRuleCall_1 extends RuleCallTo
 /************ begin Rule XOperandFragment ****************
  *
  * XOperandFragment returns Operand:
- * 	param=ParameterOperand | eparam=ExclamationParameterOperand | scalar=ScalarOperand;
+ * 	param=ParameterOperand | eparam=ExclamationParameterOperand | scalar=ScalarNumberOperand;
  *
  **/
 
-// param=ParameterOperand | eparam=ExclamationParameterOperand | scalar=ScalarOperand
+// param=ParameterOperand | eparam=ExclamationParameterOperand | scalar=ScalarNumberOperand
 protected class XOperandFragment_Alternatives extends AlternativesToken {
 
 	public XOperandFragment_Alternatives(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
@@ -15543,7 +15544,7 @@ protected class XOperandFragment_EparamAssignment_1 extends AssignmentToken  {
 	}	
 }
 
-// scalar=ScalarOperand
+// scalar=ScalarNumberOperand
 protected class XOperandFragment_ScalarAssignment_2 extends AssignmentToken  {
 	
 	public XOperandFragment_ScalarAssignment_2(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
@@ -15558,7 +15559,7 @@ protected class XOperandFragment_ScalarAssignment_2 extends AssignmentToken  {
     @Override
 	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
 		switch(index) {
-			case 0: return new ScalarOperand_Alternatives(this, this, 0, inst);
+			case 0: return new ScalarNumberOperand_Alternatives(this, this, 0, inst);
 			default: return null;
 		}	
 	}
@@ -15569,9 +15570,9 @@ protected class XOperandFragment_ScalarAssignment_2 extends AssignmentToken  {
 		IEObjectConsumer obj = eObjectConsumer.cloneAndConsume("scalar");
 		if(value instanceof EObject) { // org::eclipse::xtext::impl::RuleCallImpl
 			IEObjectConsumer param = createEObjectConsumer((EObject)value);
-			if(param.isInstanceOf(grammarAccess.getScalarOperandRule().getType().getClassifier())) {
+			if(param.isInstanceOf(grammarAccess.getScalarNumberOperandRule().getType().getClassifier())) {
 				type = AssignmentType.PARSER_RULE_CALL;
-				element = grammarAccess.getXOperandFragmentAccess().getScalarScalarOperandParserRuleCall_2_0(); 
+				element = grammarAccess.getXOperandFragmentAccess().getScalarScalarNumberOperandParserRuleCall_2_0(); 
 				consumed = obj;
 				return param;
 			}
@@ -15961,11 +15962,11 @@ protected class SubQueryOperand_RightParenthesisKeyword_3 extends KeywordToken  
 /************ begin Rule ScalarOperand ****************
  *
  * ScalarOperand:
- * 	soint=INT | sostr=StringOperand | sodbl=SIGNED_DOUBLE | sodate=DATE | sotime=TIME | sodt=TIMESTAMP;
+ * 	sostr=StringOperand | sodbl=SIGNED_DOUBLE | sodate=DATE | sotime=TIME | sodt=TIMESTAMP;
  *
  **/
 
-// soint=INT | sostr=StringOperand | sodbl=SIGNED_DOUBLE | sodate=DATE | sotime=TIME | sodt=TIMESTAMP
+// sostr=StringOperand | sodbl=SIGNED_DOUBLE | sodate=DATE | sotime=TIME | sodt=TIMESTAMP
 protected class ScalarOperand_Alternatives extends AlternativesToken {
 
 	public ScalarOperand_Alternatives(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
@@ -15980,12 +15981,11 @@ protected class ScalarOperand_Alternatives extends AlternativesToken {
     @Override
 	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
 		switch(index) {
-			case 0: return new ScalarOperand_SointAssignment_0(lastRuleCallOrigin, this, 0, inst);
-			case 1: return new ScalarOperand_SostrAssignment_1(lastRuleCallOrigin, this, 1, inst);
-			case 2: return new ScalarOperand_SodblAssignment_2(lastRuleCallOrigin, this, 2, inst);
-			case 3: return new ScalarOperand_SodateAssignment_3(lastRuleCallOrigin, this, 3, inst);
-			case 4: return new ScalarOperand_SotimeAssignment_4(lastRuleCallOrigin, this, 4, inst);
-			case 5: return new ScalarOperand_SodtAssignment_5(lastRuleCallOrigin, this, 5, inst);
+			case 0: return new ScalarOperand_SostrAssignment_0(lastRuleCallOrigin, this, 0, inst);
+			case 1: return new ScalarOperand_SodblAssignment_1(lastRuleCallOrigin, this, 1, inst);
+			case 2: return new ScalarOperand_SodateAssignment_2(lastRuleCallOrigin, this, 2, inst);
+			case 3: return new ScalarOperand_SotimeAssignment_3(lastRuleCallOrigin, this, 3, inst);
+			case 4: return new ScalarOperand_SodtAssignment_4(lastRuleCallOrigin, this, 4, inst);
 			default: return null;
 		}	
 	}
@@ -15999,49 +15999,16 @@ protected class ScalarOperand_Alternatives extends AlternativesToken {
 
 }
 
-// soint=INT
-protected class ScalarOperand_SointAssignment_0 extends AssignmentToken  {
-	
-	public ScalarOperand_SointAssignment_0(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
-		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
-	}
-	
-	@Override
-	public Assignment getGrammarElement() {
-		return grammarAccess.getScalarOperandAccess().getSointAssignment_0();
-	}
-
-    @Override
-	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
-		switch(index) {
-			default: return lastRuleCallOrigin.createFollowerAfterReturn(this, index, index, inst);
-		}	
-	}
-
-    @Override	
-	public IEObjectConsumer tryConsume() {
-		if((value = eObjectConsumer.getConsumable("soint",true)) == null) return null;
-		IEObjectConsumer obj = eObjectConsumer.cloneAndConsume("soint");
-		if(valueSerializer.isValid(obj.getEObject(), grammarAccess.getScalarOperandAccess().getSointINTTerminalRuleCall_0_0(), value, null)) {
-			type = AssignmentType.TERMINAL_RULE_CALL;
-			element = grammarAccess.getScalarOperandAccess().getSointINTTerminalRuleCall_0_0();
-			return obj;
-		}
-		return null;
-	}
-
-}
-
 // sostr=StringOperand
-protected class ScalarOperand_SostrAssignment_1 extends AssignmentToken  {
+protected class ScalarOperand_SostrAssignment_0 extends AssignmentToken  {
 	
-	public ScalarOperand_SostrAssignment_1(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+	public ScalarOperand_SostrAssignment_0(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
 		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
 	}
 	
 	@Override
 	public Assignment getGrammarElement() {
-		return grammarAccess.getScalarOperandAccess().getSostrAssignment_1();
+		return grammarAccess.getScalarOperandAccess().getSostrAssignment_0();
 	}
 
     @Override
@@ -16055,9 +16022,9 @@ protected class ScalarOperand_SostrAssignment_1 extends AssignmentToken  {
 	public IEObjectConsumer tryConsume() {
 		if((value = eObjectConsumer.getConsumable("sostr",true)) == null) return null;
 		IEObjectConsumer obj = eObjectConsumer.cloneAndConsume("sostr");
-		if(valueSerializer.isValid(obj.getEObject(), grammarAccess.getScalarOperandAccess().getSostrStringOperandParserRuleCall_1_0(), value, null)) {
+		if(valueSerializer.isValid(obj.getEObject(), grammarAccess.getScalarOperandAccess().getSostrStringOperandParserRuleCall_0_0(), value, null)) {
 			type = AssignmentType.DATATYPE_RULE_CALL;
-			element = grammarAccess.getScalarOperandAccess().getSostrStringOperandParserRuleCall_1_0();
+			element = grammarAccess.getScalarOperandAccess().getSostrStringOperandParserRuleCall_0_0();
 			return obj;
 		}
 		return null;
@@ -16066,15 +16033,15 @@ protected class ScalarOperand_SostrAssignment_1 extends AssignmentToken  {
 }
 
 // sodbl=SIGNED_DOUBLE
-protected class ScalarOperand_SodblAssignment_2 extends AssignmentToken  {
+protected class ScalarOperand_SodblAssignment_1 extends AssignmentToken  {
 	
-	public ScalarOperand_SodblAssignment_2(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+	public ScalarOperand_SodblAssignment_1(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
 		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
 	}
 	
 	@Override
 	public Assignment getGrammarElement() {
-		return grammarAccess.getScalarOperandAccess().getSodblAssignment_2();
+		return grammarAccess.getScalarOperandAccess().getSodblAssignment_1();
 	}
 
     @Override
@@ -16088,9 +16055,9 @@ protected class ScalarOperand_SodblAssignment_2 extends AssignmentToken  {
 	public IEObjectConsumer tryConsume() {
 		if((value = eObjectConsumer.getConsumable("sodbl",true)) == null) return null;
 		IEObjectConsumer obj = eObjectConsumer.cloneAndConsume("sodbl");
-		if(valueSerializer.isValid(obj.getEObject(), grammarAccess.getScalarOperandAccess().getSodblSIGNED_DOUBLETerminalRuleCall_2_0(), value, null)) {
+		if(valueSerializer.isValid(obj.getEObject(), grammarAccess.getScalarOperandAccess().getSodblSIGNED_DOUBLETerminalRuleCall_1_0(), value, null)) {
 			type = AssignmentType.TERMINAL_RULE_CALL;
-			element = grammarAccess.getScalarOperandAccess().getSodblSIGNED_DOUBLETerminalRuleCall_2_0();
+			element = grammarAccess.getScalarOperandAccess().getSodblSIGNED_DOUBLETerminalRuleCall_1_0();
 			return obj;
 		}
 		return null;
@@ -16099,15 +16066,15 @@ protected class ScalarOperand_SodblAssignment_2 extends AssignmentToken  {
 }
 
 // sodate=DATE
-protected class ScalarOperand_SodateAssignment_3 extends AssignmentToken  {
+protected class ScalarOperand_SodateAssignment_2 extends AssignmentToken  {
 	
-	public ScalarOperand_SodateAssignment_3(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+	public ScalarOperand_SodateAssignment_2(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
 		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
 	}
 	
 	@Override
 	public Assignment getGrammarElement() {
-		return grammarAccess.getScalarOperandAccess().getSodateAssignment_3();
+		return grammarAccess.getScalarOperandAccess().getSodateAssignment_2();
 	}
 
     @Override
@@ -16121,9 +16088,9 @@ protected class ScalarOperand_SodateAssignment_3 extends AssignmentToken  {
 	public IEObjectConsumer tryConsume() {
 		if((value = eObjectConsumer.getConsumable("sodate",true)) == null) return null;
 		IEObjectConsumer obj = eObjectConsumer.cloneAndConsume("sodate");
-		if(valueSerializer.isValid(obj.getEObject(), grammarAccess.getScalarOperandAccess().getSodateDATETerminalRuleCall_3_0(), value, null)) {
+		if(valueSerializer.isValid(obj.getEObject(), grammarAccess.getScalarOperandAccess().getSodateDATETerminalRuleCall_2_0(), value, null)) {
 			type = AssignmentType.TERMINAL_RULE_CALL;
-			element = grammarAccess.getScalarOperandAccess().getSodateDATETerminalRuleCall_3_0();
+			element = grammarAccess.getScalarOperandAccess().getSodateDATETerminalRuleCall_2_0();
 			return obj;
 		}
 		return null;
@@ -16132,15 +16099,15 @@ protected class ScalarOperand_SodateAssignment_3 extends AssignmentToken  {
 }
 
 // sotime=TIME
-protected class ScalarOperand_SotimeAssignment_4 extends AssignmentToken  {
+protected class ScalarOperand_SotimeAssignment_3 extends AssignmentToken  {
 	
-	public ScalarOperand_SotimeAssignment_4(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+	public ScalarOperand_SotimeAssignment_3(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
 		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
 	}
 	
 	@Override
 	public Assignment getGrammarElement() {
-		return grammarAccess.getScalarOperandAccess().getSotimeAssignment_4();
+		return grammarAccess.getScalarOperandAccess().getSotimeAssignment_3();
 	}
 
     @Override
@@ -16154,9 +16121,9 @@ protected class ScalarOperand_SotimeAssignment_4 extends AssignmentToken  {
 	public IEObjectConsumer tryConsume() {
 		if((value = eObjectConsumer.getConsumable("sotime",true)) == null) return null;
 		IEObjectConsumer obj = eObjectConsumer.cloneAndConsume("sotime");
-		if(valueSerializer.isValid(obj.getEObject(), grammarAccess.getScalarOperandAccess().getSotimeTIMETerminalRuleCall_4_0(), value, null)) {
+		if(valueSerializer.isValid(obj.getEObject(), grammarAccess.getScalarOperandAccess().getSotimeTIMETerminalRuleCall_3_0(), value, null)) {
 			type = AssignmentType.TERMINAL_RULE_CALL;
-			element = grammarAccess.getScalarOperandAccess().getSotimeTIMETerminalRuleCall_4_0();
+			element = grammarAccess.getScalarOperandAccess().getSotimeTIMETerminalRuleCall_3_0();
 			return obj;
 		}
 		return null;
@@ -16165,15 +16132,15 @@ protected class ScalarOperand_SotimeAssignment_4 extends AssignmentToken  {
 }
 
 // sodt=TIMESTAMP
-protected class ScalarOperand_SodtAssignment_5 extends AssignmentToken  {
+protected class ScalarOperand_SodtAssignment_4 extends AssignmentToken  {
 	
-	public ScalarOperand_SodtAssignment_5(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+	public ScalarOperand_SodtAssignment_4(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
 		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
 	}
 	
 	@Override
 	public Assignment getGrammarElement() {
-		return grammarAccess.getScalarOperandAccess().getSodtAssignment_5();
+		return grammarAccess.getScalarOperandAccess().getSodtAssignment_4();
 	}
 
     @Override
@@ -16187,9 +16154,9 @@ protected class ScalarOperand_SodtAssignment_5 extends AssignmentToken  {
 	public IEObjectConsumer tryConsume() {
 		if((value = eObjectConsumer.getConsumable("sodt",true)) == null) return null;
 		IEObjectConsumer obj = eObjectConsumer.cloneAndConsume("sodt");
-		if(valueSerializer.isValid(obj.getEObject(), grammarAccess.getScalarOperandAccess().getSodtTIMESTAMPTerminalRuleCall_5_0(), value, null)) {
+		if(valueSerializer.isValid(obj.getEObject(), grammarAccess.getScalarOperandAccess().getSodtTIMESTAMPTerminalRuleCall_4_0(), value, null)) {
 			type = AssignmentType.TERMINAL_RULE_CALL;
-			element = grammarAccess.getScalarOperandAccess().getSodtTIMESTAMPTerminalRuleCall_5_0();
+			element = grammarAccess.getScalarOperandAccess().getSodtTIMESTAMPTerminalRuleCall_4_0();
 			return obj;
 		}
 		return null;
@@ -16199,6 +16166,181 @@ protected class ScalarOperand_SodtAssignment_5 extends AssignmentToken  {
 
 
 /************ end Rule ScalarOperand ****************/
+
+
+/************ begin Rule ScalarNumberOperand ****************
+ *
+ * ScalarNumberOperand returns ScalarOperand:
+ * 	soUInt=UNSIGNED | soint=INT | sodbl=SIGNED_DOUBLE | sostr=StringOperand;
+ *
+ **/
+
+// soUInt=UNSIGNED | soint=INT | sodbl=SIGNED_DOUBLE | sostr=StringOperand
+protected class ScalarNumberOperand_Alternatives extends AlternativesToken {
+
+	public ScalarNumberOperand_Alternatives(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
+	}
+	
+	@Override
+	public Alternatives getGrammarElement() {
+		return grammarAccess.getScalarNumberOperandAccess().getAlternatives();
+	}
+
+    @Override
+	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
+		switch(index) {
+			case 0: return new ScalarNumberOperand_SoUIntAssignment_0(lastRuleCallOrigin, this, 0, inst);
+			case 1: return new ScalarNumberOperand_SointAssignment_1(lastRuleCallOrigin, this, 1, inst);
+			case 2: return new ScalarNumberOperand_SodblAssignment_2(lastRuleCallOrigin, this, 2, inst);
+			case 3: return new ScalarNumberOperand_SostrAssignment_3(lastRuleCallOrigin, this, 3, inst);
+			default: return null;
+		}	
+	}
+
+    @Override
+	public IEObjectConsumer tryConsume() {
+		if(getEObject().eClass() != grammarAccess.getScalarNumberOperandRule().getType().getClassifier())
+			return null;
+		return eObjectConsumer;
+	}
+
+}
+
+// soUInt=UNSIGNED
+protected class ScalarNumberOperand_SoUIntAssignment_0 extends AssignmentToken  {
+	
+	public ScalarNumberOperand_SoUIntAssignment_0(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
+	}
+	
+	@Override
+	public Assignment getGrammarElement() {
+		return grammarAccess.getScalarNumberOperandAccess().getSoUIntAssignment_0();
+	}
+
+    @Override
+	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
+		switch(index) {
+			default: return lastRuleCallOrigin.createFollowerAfterReturn(this, index, index, inst);
+		}	
+	}
+
+    @Override	
+	public IEObjectConsumer tryConsume() {
+		if((value = eObjectConsumer.getConsumable("soUInt",true)) == null) return null;
+		IEObjectConsumer obj = eObjectConsumer.cloneAndConsume("soUInt");
+		if(valueSerializer.isValid(obj.getEObject(), grammarAccess.getScalarNumberOperandAccess().getSoUIntUNSIGNEDTerminalRuleCall_0_0(), value, null)) {
+			type = AssignmentType.TERMINAL_RULE_CALL;
+			element = grammarAccess.getScalarNumberOperandAccess().getSoUIntUNSIGNEDTerminalRuleCall_0_0();
+			return obj;
+		}
+		return null;
+	}
+
+}
+
+// soint=INT
+protected class ScalarNumberOperand_SointAssignment_1 extends AssignmentToken  {
+	
+	public ScalarNumberOperand_SointAssignment_1(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
+	}
+	
+	@Override
+	public Assignment getGrammarElement() {
+		return grammarAccess.getScalarNumberOperandAccess().getSointAssignment_1();
+	}
+
+    @Override
+	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
+		switch(index) {
+			default: return lastRuleCallOrigin.createFollowerAfterReturn(this, index, index, inst);
+		}	
+	}
+
+    @Override	
+	public IEObjectConsumer tryConsume() {
+		if((value = eObjectConsumer.getConsumable("soint",true)) == null) return null;
+		IEObjectConsumer obj = eObjectConsumer.cloneAndConsume("soint");
+		if(valueSerializer.isValid(obj.getEObject(), grammarAccess.getScalarNumberOperandAccess().getSointINTTerminalRuleCall_1_0(), value, null)) {
+			type = AssignmentType.TERMINAL_RULE_CALL;
+			element = grammarAccess.getScalarNumberOperandAccess().getSointINTTerminalRuleCall_1_0();
+			return obj;
+		}
+		return null;
+	}
+
+}
+
+// sodbl=SIGNED_DOUBLE
+protected class ScalarNumberOperand_SodblAssignment_2 extends AssignmentToken  {
+	
+	public ScalarNumberOperand_SodblAssignment_2(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
+	}
+	
+	@Override
+	public Assignment getGrammarElement() {
+		return grammarAccess.getScalarNumberOperandAccess().getSodblAssignment_2();
+	}
+
+    @Override
+	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
+		switch(index) {
+			default: return lastRuleCallOrigin.createFollowerAfterReturn(this, index, index, inst);
+		}	
+	}
+
+    @Override	
+	public IEObjectConsumer tryConsume() {
+		if((value = eObjectConsumer.getConsumable("sodbl",true)) == null) return null;
+		IEObjectConsumer obj = eObjectConsumer.cloneAndConsume("sodbl");
+		if(valueSerializer.isValid(obj.getEObject(), grammarAccess.getScalarNumberOperandAccess().getSodblSIGNED_DOUBLETerminalRuleCall_2_0(), value, null)) {
+			type = AssignmentType.TERMINAL_RULE_CALL;
+			element = grammarAccess.getScalarNumberOperandAccess().getSodblSIGNED_DOUBLETerminalRuleCall_2_0();
+			return obj;
+		}
+		return null;
+	}
+
+}
+
+// sostr=StringOperand
+protected class ScalarNumberOperand_SostrAssignment_3 extends AssignmentToken  {
+	
+	public ScalarNumberOperand_SostrAssignment_3(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
+	}
+	
+	@Override
+	public Assignment getGrammarElement() {
+		return grammarAccess.getScalarNumberOperandAccess().getSostrAssignment_3();
+	}
+
+    @Override
+	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
+		switch(index) {
+			default: return lastRuleCallOrigin.createFollowerAfterReturn(this, index, index, inst);
+		}	
+	}
+
+    @Override	
+	public IEObjectConsumer tryConsume() {
+		if((value = eObjectConsumer.getConsumable("sostr",true)) == null) return null;
+		IEObjectConsumer obj = eObjectConsumer.cloneAndConsume("sostr");
+		if(valueSerializer.isValid(obj.getEObject(), grammarAccess.getScalarNumberOperandAccess().getSostrStringOperandParserRuleCall_3_0(), value, null)) {
+			type = AssignmentType.DATATYPE_RULE_CALL;
+			element = grammarAccess.getScalarNumberOperandAccess().getSostrStringOperandParserRuleCall_3_0();
+			return obj;
+		}
+		return null;
+	}
+
+}
+
+
+/************ end Rule ScalarNumberOperand ****************/
 
 
 /************ begin Rule SQLCASE ****************
@@ -16564,11 +16706,11 @@ protected class SQLCaseWhens_EntriesAssignment_1_1 extends AssignmentToken  {
 /************ begin Rule SqlCaseWhen ****************
  *
  * SqlCaseWhen:
- * 	"WHEN" expr=FullExpression "THEN" texp=OperandGroup ("ELSE" eexp=Operand)?;
+ * 	"WHEN" expr=FullExpression "THEN" texp=OperandGroup ("ELSE" eexp=OperandGroup)?;
  *
  **/
 
-// "WHEN" expr=FullExpression "THEN" texp=OperandGroup ("ELSE" eexp=Operand)?
+// "WHEN" expr=FullExpression "THEN" texp=OperandGroup ("ELSE" eexp=OperandGroup)?
 protected class SqlCaseWhen_Group extends GroupToken {
 	
 	public SqlCaseWhen_Group(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
@@ -16733,7 +16875,7 @@ protected class SqlCaseWhen_TexpAssignment_3 extends AssignmentToken  {
 	}	
 }
 
-// ("ELSE" eexp=Operand)?
+// ("ELSE" eexp=OperandGroup)?
 protected class SqlCaseWhen_Group_4 extends GroupToken {
 	
 	public SqlCaseWhen_Group_4(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
@@ -16777,7 +16919,7 @@ protected class SqlCaseWhen_ELSEKeyword_4_0 extends KeywordToken  {
 
 }
 
-// eexp=Operand
+// eexp=OperandGroup
 protected class SqlCaseWhen_EexpAssignment_4_1 extends AssignmentToken  {
 	
 	public SqlCaseWhen_EexpAssignment_4_1(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
@@ -16792,7 +16934,7 @@ protected class SqlCaseWhen_EexpAssignment_4_1 extends AssignmentToken  {
     @Override
 	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
 		switch(index) {
-			case 0: return new Operand_Group(this, this, 0, inst);
+			case 0: return new OperandGroup_Alternatives(this, this, 0, inst);
 			default: return null;
 		}	
 	}
@@ -16803,9 +16945,9 @@ protected class SqlCaseWhen_EexpAssignment_4_1 extends AssignmentToken  {
 		IEObjectConsumer obj = eObjectConsumer.cloneAndConsume("eexp");
 		if(value instanceof EObject) { // org::eclipse::xtext::impl::RuleCallImpl
 			IEObjectConsumer param = createEObjectConsumer((EObject)value);
-			if(param.isInstanceOf(grammarAccess.getOperandRule().getType().getClassifier())) {
+			if(param.isInstanceOf(grammarAccess.getOperandGroupRule().getType().getClassifier())) {
 				type = AssignmentType.PARSER_RULE_CALL;
-				element = grammarAccess.getSqlCaseWhenAccess().getEexpOperandParserRuleCall_4_1_0(); 
+				element = grammarAccess.getSqlCaseWhenAccess().getEexpOperandGroupParserRuleCall_4_1_0(); 
 				consumed = obj;
 				return param;
 			}

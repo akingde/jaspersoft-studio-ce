@@ -112,7 +112,7 @@ GroupByColumns returns OrGroupByColumn:
 	GroupByColumnFull ({OrGroupByColumn.entries+=current} ("," entries+=GroupByColumnFull)+)?;
 
 GroupByColumnFull:
-	colGrBy=ColumnFull | gbFunction=OperandFunction |  grByInt=UNSIGNED;
+	colGrBy=ColumnFull | gbFunction=OperandFunction | grByInt=UNSIGNED;
 
 FullExpression returns OrExpr:
 	ExpressionFragment ({OrExpr.entries+=current} (entries+=ExpressionFragmentSecond)+)?;
@@ -171,14 +171,12 @@ OperandGroup returns Operands:
 	Operand | '(' Operand ')';
 
 Operand returns Operands:
-	(op1=OperandFragment (({Plus.left=current} '+' | {Minus.left=current} '-' | {Concat.left=current} '||' |
-	{Multiply.left=current} STAR | {Division.left=current} '/') right=OperandFragment)*);
+	op1=OperandFragment (({Plus.left=current} '+' | {Minus.left=current} '-' | {Concat.left=current} '||' |
+	{Multiply.left=current} STAR | {Division.left=current} '/') right=OperandFragment)*;
 
 OperandFragment returns Operand:
-	column=ColumnOperand | xop=XOperandFragment | subq=SubQueryOperand | fcast=OpFunctionCast
-	| fext=FunctionExtract |
-	func=OperandFunction |
-	sqlcase=SQLCASE;
+	column=ColumnOperand | xop=XOperandFragment | subq=SubQueryOperand | fcast=OpFunctionCast | fext=FunctionExtract |
+	func=OperandFunction | sqlcase=SQLCASE;
 
 OperandFunction returns OpFunction:
 	{OpFunction} fname=FNAME (star=STAR | args=OpFunctionArg)? ')' fan=FunctionAnalytical?;
@@ -237,7 +235,7 @@ OpFunctionArgAgregate:
 	('ALL' | 'DISTINCT') Operand;
 
 XOperandFragment returns Operand:
-	param=ParameterOperand | eparam=ExclamationParameterOperand | scalar=ScalarOperand;
+	param=ParameterOperand | eparam=ExclamationParameterOperand | scalar=ScalarNumberOperand;
 
 ParameterOperand returns POperand:
 	prm=JRPARAM;
@@ -252,7 +250,10 @@ SubQueryOperand returns SubQueryOperand:
 	{SubQueryOperand} '(' sel=SelectQuery ')';
 
 ScalarOperand returns ScalarOperand:
-	soint=INT | sostr=StringOperand | sodbl=SIGNED_DOUBLE | sodate=DATE | sotime=TIME | sodt=TIMESTAMP;
+	sostr=StringOperand | sodbl=SIGNED_DOUBLE | sodate=DATE | sotime=TIME | sodt=TIMESTAMP;
+
+ScalarNumberOperand returns ScalarOperand:
+	soUInt = UNSIGNED | soint=INT | sodbl=SIGNED_DOUBLE | sostr=StringOperand;
 
 SQLCASE returns SQLCaseOperand:
 	'CASE' (expr=FullExpression)? when=SQLCaseWhens 'END';
@@ -261,7 +262,7 @@ SQLCaseWhens:
 	SqlCaseWhen ({WhenList.entries+=current} (entries+=SqlCaseWhen)+)?;
 
 SqlCaseWhen returns SqlCaseWhen:
-	'WHEN' expr=FullExpression 'THEN' texp=OperandGroup ('ELSE' eexp=Operand)?;
+	'WHEN' expr=FullExpression 'THEN' texp=OperandGroup ('ELSE' eexp=OperandGroup)?;
 
 enum EXTRACT_VALUES:
 	ms='MICROSECOND' | s='SECOND' | m='MINUTE' | h='HOUR' | day='DAY' | week='WEEK' | month='MONTH' | quart='QUARTER' |
@@ -328,6 +329,9 @@ terminal DBNAME:
 	'[' ('\\' ('b' | 't' | 'n' | 'f' | 'r' | 'u' | '"' | "'" | '\\') | !('\\' | ']'))* ']';
 
 terminal ID:
+	('a'..'z' | 'A'..'Z' | 'À'..'ÿ' | 'Ā'..'ſ' | 'ƀ'..'ɏ' | 'А'..'я' | '_' | '$' | 'ぁ'..'ゟ' | '゠'..'ヿ' | 'ㇰ'..'ㇿ' |
+	'一'..'鿿' |
+	'歴'..'す' | 'ア'..'ン' | '豈'..'﫿' | '㐀'..'䶿' | '＿')
 	('a'..'z' | 'A'..'Z' | 'À'..'ÿ' | 'Ā'..'ſ' | 'ƀ'..'ɏ' | 'А'..'я' | '_' | '-' | '$' | 'ぁ'..'ゟ' | '゠'..'ヿ' | 'ㇰ'..'ㇿ' |
 	'一'..'鿿' |
 	'歴'..'す' | 'ア'..'ン' | '豈'..'﫿' | '㐀'..'䶿' | '＿' |

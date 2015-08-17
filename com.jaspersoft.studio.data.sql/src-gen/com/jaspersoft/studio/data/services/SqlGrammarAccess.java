@@ -3306,13 +3306,13 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Assignment cEparamAssignment_1 = (Assignment)cAlternatives.eContents().get(1);
 		private final RuleCall cEparamExclamationParameterOperandParserRuleCall_1_0 = (RuleCall)cEparamAssignment_1.eContents().get(0);
 		private final Assignment cScalarAssignment_2 = (Assignment)cAlternatives.eContents().get(2);
-		private final RuleCall cScalarScalarOperandParserRuleCall_2_0 = (RuleCall)cScalarAssignment_2.eContents().get(0);
+		private final RuleCall cScalarScalarNumberOperandParserRuleCall_2_0 = (RuleCall)cScalarAssignment_2.eContents().get(0);
 		
 		//XOperandFragment returns Operand:
-		//	param=ParameterOperand | eparam=ExclamationParameterOperand | scalar=ScalarOperand;
+		//	param=ParameterOperand | eparam=ExclamationParameterOperand | scalar=ScalarNumberOperand;
 		public ParserRule getRule() { return rule; }
 
-		//param=ParameterOperand | eparam=ExclamationParameterOperand | scalar=ScalarOperand
+		//param=ParameterOperand | eparam=ExclamationParameterOperand | scalar=ScalarNumberOperand
 		public Alternatives getAlternatives() { return cAlternatives; }
 
 		//param=ParameterOperand
@@ -3327,11 +3327,11 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		//ExclamationParameterOperand
 		public RuleCall getEparamExclamationParameterOperandParserRuleCall_1_0() { return cEparamExclamationParameterOperandParserRuleCall_1_0; }
 
-		//scalar=ScalarOperand
+		//scalar=ScalarNumberOperand
 		public Assignment getScalarAssignment_2() { return cScalarAssignment_2; }
 
-		//ScalarOperand
-		public RuleCall getScalarScalarOperandParserRuleCall_2_0() { return cScalarScalarOperandParserRuleCall_2_0; }
+		//ScalarNumberOperand
+		public RuleCall getScalarScalarNumberOperandParserRuleCall_2_0() { return cScalarScalarNumberOperandParserRuleCall_2_0; }
 	}
 
 	public class ParameterOperandElements extends AbstractParserRuleElementFinder {
@@ -3429,37 +3429,85 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	public class ScalarOperandElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "ScalarOperand");
 		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
-		private final Assignment cSointAssignment_0 = (Assignment)cAlternatives.eContents().get(0);
-		private final RuleCall cSointINTTerminalRuleCall_0_0 = (RuleCall)cSointAssignment_0.eContents().get(0);
-		private final Assignment cSostrAssignment_1 = (Assignment)cAlternatives.eContents().get(1);
-		private final RuleCall cSostrStringOperandParserRuleCall_1_0 = (RuleCall)cSostrAssignment_1.eContents().get(0);
-		private final Assignment cSodblAssignment_2 = (Assignment)cAlternatives.eContents().get(2);
-		private final RuleCall cSodblSIGNED_DOUBLETerminalRuleCall_2_0 = (RuleCall)cSodblAssignment_2.eContents().get(0);
-		private final Assignment cSodateAssignment_3 = (Assignment)cAlternatives.eContents().get(3);
-		private final RuleCall cSodateDATETerminalRuleCall_3_0 = (RuleCall)cSodateAssignment_3.eContents().get(0);
-		private final Assignment cSotimeAssignment_4 = (Assignment)cAlternatives.eContents().get(4);
-		private final RuleCall cSotimeTIMETerminalRuleCall_4_0 = (RuleCall)cSotimeAssignment_4.eContents().get(0);
-		private final Assignment cSodtAssignment_5 = (Assignment)cAlternatives.eContents().get(5);
-		private final RuleCall cSodtTIMESTAMPTerminalRuleCall_5_0 = (RuleCall)cSodtAssignment_5.eContents().get(0);
+		private final Assignment cSostrAssignment_0 = (Assignment)cAlternatives.eContents().get(0);
+		private final RuleCall cSostrStringOperandParserRuleCall_0_0 = (RuleCall)cSostrAssignment_0.eContents().get(0);
+		private final Assignment cSodblAssignment_1 = (Assignment)cAlternatives.eContents().get(1);
+		private final RuleCall cSodblSIGNED_DOUBLETerminalRuleCall_1_0 = (RuleCall)cSodblAssignment_1.eContents().get(0);
+		private final Assignment cSodateAssignment_2 = (Assignment)cAlternatives.eContents().get(2);
+		private final RuleCall cSodateDATETerminalRuleCall_2_0 = (RuleCall)cSodateAssignment_2.eContents().get(0);
+		private final Assignment cSotimeAssignment_3 = (Assignment)cAlternatives.eContents().get(3);
+		private final RuleCall cSotimeTIMETerminalRuleCall_3_0 = (RuleCall)cSotimeAssignment_3.eContents().get(0);
+		private final Assignment cSodtAssignment_4 = (Assignment)cAlternatives.eContents().get(4);
+		private final RuleCall cSodtTIMESTAMPTerminalRuleCall_4_0 = (RuleCall)cSodtAssignment_4.eContents().get(0);
 		
 		//ScalarOperand:
-		//	soint=INT | sostr=StringOperand | sodbl=SIGNED_DOUBLE | sodate=DATE | sotime=TIME | sodt=TIMESTAMP;
+		//	sostr=StringOperand | sodbl=SIGNED_DOUBLE | sodate=DATE | sotime=TIME | sodt=TIMESTAMP;
 		public ParserRule getRule() { return rule; }
 
-		//soint=INT | sostr=StringOperand | sodbl=SIGNED_DOUBLE | sodate=DATE | sotime=TIME | sodt=TIMESTAMP
+		//sostr=StringOperand | sodbl=SIGNED_DOUBLE | sodate=DATE | sotime=TIME | sodt=TIMESTAMP
 		public Alternatives getAlternatives() { return cAlternatives; }
 
-		//soint=INT
-		public Assignment getSointAssignment_0() { return cSointAssignment_0; }
-
-		//INT
-		public RuleCall getSointINTTerminalRuleCall_0_0() { return cSointINTTerminalRuleCall_0_0; }
-
 		//sostr=StringOperand
-		public Assignment getSostrAssignment_1() { return cSostrAssignment_1; }
+		public Assignment getSostrAssignment_0() { return cSostrAssignment_0; }
 
 		//StringOperand
-		public RuleCall getSostrStringOperandParserRuleCall_1_0() { return cSostrStringOperandParserRuleCall_1_0; }
+		public RuleCall getSostrStringOperandParserRuleCall_0_0() { return cSostrStringOperandParserRuleCall_0_0; }
+
+		//sodbl=SIGNED_DOUBLE
+		public Assignment getSodblAssignment_1() { return cSodblAssignment_1; }
+
+		//SIGNED_DOUBLE
+		public RuleCall getSodblSIGNED_DOUBLETerminalRuleCall_1_0() { return cSodblSIGNED_DOUBLETerminalRuleCall_1_0; }
+
+		//sodate=DATE
+		public Assignment getSodateAssignment_2() { return cSodateAssignment_2; }
+
+		//DATE
+		public RuleCall getSodateDATETerminalRuleCall_2_0() { return cSodateDATETerminalRuleCall_2_0; }
+
+		//sotime=TIME
+		public Assignment getSotimeAssignment_3() { return cSotimeAssignment_3; }
+
+		//TIME
+		public RuleCall getSotimeTIMETerminalRuleCall_3_0() { return cSotimeTIMETerminalRuleCall_3_0; }
+
+		//sodt=TIMESTAMP
+		public Assignment getSodtAssignment_4() { return cSodtAssignment_4; }
+
+		//TIMESTAMP
+		public RuleCall getSodtTIMESTAMPTerminalRuleCall_4_0() { return cSodtTIMESTAMPTerminalRuleCall_4_0; }
+	}
+
+	public class ScalarNumberOperandElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "ScalarNumberOperand");
+		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
+		private final Assignment cSoUIntAssignment_0 = (Assignment)cAlternatives.eContents().get(0);
+		private final RuleCall cSoUIntUNSIGNEDTerminalRuleCall_0_0 = (RuleCall)cSoUIntAssignment_0.eContents().get(0);
+		private final Assignment cSointAssignment_1 = (Assignment)cAlternatives.eContents().get(1);
+		private final RuleCall cSointINTTerminalRuleCall_1_0 = (RuleCall)cSointAssignment_1.eContents().get(0);
+		private final Assignment cSodblAssignment_2 = (Assignment)cAlternatives.eContents().get(2);
+		private final RuleCall cSodblSIGNED_DOUBLETerminalRuleCall_2_0 = (RuleCall)cSodblAssignment_2.eContents().get(0);
+		private final Assignment cSostrAssignment_3 = (Assignment)cAlternatives.eContents().get(3);
+		private final RuleCall cSostrStringOperandParserRuleCall_3_0 = (RuleCall)cSostrAssignment_3.eContents().get(0);
+		
+		//ScalarNumberOperand returns ScalarOperand:
+		//	soUInt=UNSIGNED | soint=INT | sodbl=SIGNED_DOUBLE | sostr=StringOperand;
+		public ParserRule getRule() { return rule; }
+
+		//soUInt=UNSIGNED | soint=INT | sodbl=SIGNED_DOUBLE | sostr=StringOperand
+		public Alternatives getAlternatives() { return cAlternatives; }
+
+		//soUInt=UNSIGNED
+		public Assignment getSoUIntAssignment_0() { return cSoUIntAssignment_0; }
+
+		//UNSIGNED
+		public RuleCall getSoUIntUNSIGNEDTerminalRuleCall_0_0() { return cSoUIntUNSIGNEDTerminalRuleCall_0_0; }
+
+		//soint=INT
+		public Assignment getSointAssignment_1() { return cSointAssignment_1; }
+
+		//INT
+		public RuleCall getSointINTTerminalRuleCall_1_0() { return cSointINTTerminalRuleCall_1_0; }
 
 		//sodbl=SIGNED_DOUBLE
 		public Assignment getSodblAssignment_2() { return cSodblAssignment_2; }
@@ -3467,23 +3515,11 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		//SIGNED_DOUBLE
 		public RuleCall getSodblSIGNED_DOUBLETerminalRuleCall_2_0() { return cSodblSIGNED_DOUBLETerminalRuleCall_2_0; }
 
-		//sodate=DATE
-		public Assignment getSodateAssignment_3() { return cSodateAssignment_3; }
+		//sostr=StringOperand
+		public Assignment getSostrAssignment_3() { return cSostrAssignment_3; }
 
-		//DATE
-		public RuleCall getSodateDATETerminalRuleCall_3_0() { return cSodateDATETerminalRuleCall_3_0; }
-
-		//sotime=TIME
-		public Assignment getSotimeAssignment_4() { return cSotimeAssignment_4; }
-
-		//TIME
-		public RuleCall getSotimeTIMETerminalRuleCall_4_0() { return cSotimeTIMETerminalRuleCall_4_0; }
-
-		//sodt=TIMESTAMP
-		public Assignment getSodtAssignment_5() { return cSodtAssignment_5; }
-
-		//TIMESTAMP
-		public RuleCall getSodtTIMESTAMPTerminalRuleCall_5_0() { return cSodtTIMESTAMPTerminalRuleCall_5_0; }
+		//StringOperand
+		public RuleCall getSostrStringOperandParserRuleCall_3_0() { return cSostrStringOperandParserRuleCall_3_0; }
 	}
 
 	public class SQLCASEElements extends AbstractParserRuleElementFinder {
@@ -3566,13 +3602,13 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Group cGroup_4 = (Group)cGroup.eContents().get(4);
 		private final Keyword cELSEKeyword_4_0 = (Keyword)cGroup_4.eContents().get(0);
 		private final Assignment cEexpAssignment_4_1 = (Assignment)cGroup_4.eContents().get(1);
-		private final RuleCall cEexpOperandParserRuleCall_4_1_0 = (RuleCall)cEexpAssignment_4_1.eContents().get(0);
+		private final RuleCall cEexpOperandGroupParserRuleCall_4_1_0 = (RuleCall)cEexpAssignment_4_1.eContents().get(0);
 		
 		//SqlCaseWhen:
-		//	"WHEN" expr=FullExpression "THEN" texp=OperandGroup ("ELSE" eexp=Operand)?;
+		//	"WHEN" expr=FullExpression "THEN" texp=OperandGroup ("ELSE" eexp=OperandGroup)?;
 		public ParserRule getRule() { return rule; }
 
-		//"WHEN" expr=FullExpression "THEN" texp=OperandGroup ("ELSE" eexp=Operand)?
+		//"WHEN" expr=FullExpression "THEN" texp=OperandGroup ("ELSE" eexp=OperandGroup)?
 		public Group getGroup() { return cGroup; }
 
 		//"WHEN"
@@ -3593,17 +3629,17 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		//OperandGroup
 		public RuleCall getTexpOperandGroupParserRuleCall_3_0() { return cTexpOperandGroupParserRuleCall_3_0; }
 
-		//("ELSE" eexp=Operand)?
+		//("ELSE" eexp=OperandGroup)?
 		public Group getGroup_4() { return cGroup_4; }
 
 		//"ELSE"
 		public Keyword getELSEKeyword_4_0() { return cELSEKeyword_4_0; }
 
-		//eexp=Operand
+		//eexp=OperandGroup
 		public Assignment getEexpAssignment_4_1() { return cEexpAssignment_4_1; }
 
-		//Operand
-		public RuleCall getEexpOperandParserRuleCall_4_1_0() { return cEexpOperandParserRuleCall_4_1_0; }
+		//OperandGroup
+		public RuleCall getEexpOperandGroupParserRuleCall_4_1_0() { return cEexpOperandGroupParserRuleCall_4_1_0; }
 	}
 
 	public class JoinTypeElements extends AbstractParserRuleElementFinder {
@@ -4105,6 +4141,7 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	private ColumnOperandElements pColumnOperand;
 	private SubQueryOperandElements pSubQueryOperand;
 	private ScalarOperandElements pScalarOperand;
+	private ScalarNumberOperandElements pScalarNumberOperand;
 	private SQLCASEElements pSQLCASE;
 	private SQLCaseWhensElements pSQLCaseWhens;
 	private SqlCaseWhenElements pSqlCaseWhen;
@@ -4898,7 +4935,7 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//XOperandFragment returns Operand:
-	//	param=ParameterOperand | eparam=ExclamationParameterOperand | scalar=ScalarOperand;
+	//	param=ParameterOperand | eparam=ExclamationParameterOperand | scalar=ScalarNumberOperand;
 	public XOperandFragmentElements getXOperandFragmentAccess() {
 		return (pXOperandFragment != null) ? pXOperandFragment : (pXOperandFragment = new XOperandFragmentElements());
 	}
@@ -4948,13 +4985,23 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//ScalarOperand:
-	//	soint=INT | sostr=StringOperand | sodbl=SIGNED_DOUBLE | sodate=DATE | sotime=TIME | sodt=TIMESTAMP;
+	//	sostr=StringOperand | sodbl=SIGNED_DOUBLE | sodate=DATE | sotime=TIME | sodt=TIMESTAMP;
 	public ScalarOperandElements getScalarOperandAccess() {
 		return (pScalarOperand != null) ? pScalarOperand : (pScalarOperand = new ScalarOperandElements());
 	}
 	
 	public ParserRule getScalarOperandRule() {
 		return getScalarOperandAccess().getRule();
+	}
+
+	//ScalarNumberOperand returns ScalarOperand:
+	//	soUInt=UNSIGNED | soint=INT | sodbl=SIGNED_DOUBLE | sostr=StringOperand;
+	public ScalarNumberOperandElements getScalarNumberOperandAccess() {
+		return (pScalarNumberOperand != null) ? pScalarNumberOperand : (pScalarNumberOperand = new ScalarNumberOperandElements());
+	}
+	
+	public ParserRule getScalarNumberOperandRule() {
+		return getScalarNumberOperandAccess().getRule();
 	}
 
 	//SQLCASE returns SQLCaseOperand:
@@ -4978,7 +5025,7 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//SqlCaseWhen:
-	//	"WHEN" expr=FullExpression "THEN" texp=OperandGroup ("ELSE" eexp=Operand)?;
+	//	"WHEN" expr=FullExpression "THEN" texp=OperandGroup ("ELSE" eexp=OperandGroup)?;
 	public SqlCaseWhenElements getSqlCaseWhenAccess() {
 		return (pSqlCaseWhen != null) ? pSqlCaseWhen : (pSqlCaseWhen = new SqlCaseWhenElements());
 	}
@@ -5135,8 +5182,10 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	} 
 
 	//terminal ID:
-	//	("a".."z" | "A".."Z" | "À".."ÿ" | "Ā".."ſ" | "ƀ".."ɏ" | "А".."я" | "_" | "-" | "$" | "ぁ".."ゟ" | "゠".."ヿ" | "ㇰ".."ㇿ" |
-	//	"一".."鿿" | "歴".."す" | "ア".."ン" | "豈".."﫿" | "㐀".."䶿" | "＿" | "0".."9")*;
+	//	("a".."z" | "A".."Z" | "À".."ÿ" | "Ā".."ſ" | "ƀ".."ɏ" | "А".."я" | "_" | "$" | "ぁ".."ゟ" | "゠".."ヿ" | "ㇰ".."ㇿ" |
+	//	"一".."鿿" | "歴".."す" | "ア".."ン" | "豈".."﫿" | "㐀".."䶿" | "＿") ("a".."z" | "A".."Z" | "À".."ÿ" | "Ā".."ſ" | "ƀ".."ɏ" |
+	//	"А".."я" | "_" | "-" | "$" | "ぁ".."ゟ" | "゠".."ヿ" | "ㇰ".."ㇿ" | "一".."鿿" | "歴".."す" | "ア".."ン" | "豈".."﫿" | "㐀".."䶿" |
+	//	"＿" | "0".."9")*;
 	public TerminalRule getIDRule() {
 		return (tID != null) ? tID : (tID = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "ID"));
 	} 

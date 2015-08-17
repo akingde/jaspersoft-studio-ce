@@ -2767,22 +2767,13 @@ public interface SqlPackage extends EPackage
   int SCALAR_OPERAND = 71;
 
   /**
-   * The feature id for the '<em><b>Soint</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int SCALAR_OPERAND__SOINT = OPERAND_LIST_FEATURE_COUNT + 0;
-
-  /**
    * The feature id for the '<em><b>Sostr</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int SCALAR_OPERAND__SOSTR = OPERAND_LIST_FEATURE_COUNT + 1;
+  int SCALAR_OPERAND__SOSTR = OPERAND_LIST_FEATURE_COUNT + 0;
 
   /**
    * The feature id for the '<em><b>Sodbl</b></em>' attribute.
@@ -2791,7 +2782,7 @@ public interface SqlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int SCALAR_OPERAND__SODBL = OPERAND_LIST_FEATURE_COUNT + 2;
+  int SCALAR_OPERAND__SODBL = OPERAND_LIST_FEATURE_COUNT + 1;
 
   /**
    * The feature id for the '<em><b>Sodate</b></em>' attribute.
@@ -2800,7 +2791,7 @@ public interface SqlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int SCALAR_OPERAND__SODATE = OPERAND_LIST_FEATURE_COUNT + 3;
+  int SCALAR_OPERAND__SODATE = OPERAND_LIST_FEATURE_COUNT + 2;
 
   /**
    * The feature id for the '<em><b>Sotime</b></em>' attribute.
@@ -2809,7 +2800,7 @@ public interface SqlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int SCALAR_OPERAND__SOTIME = OPERAND_LIST_FEATURE_COUNT + 4;
+  int SCALAR_OPERAND__SOTIME = OPERAND_LIST_FEATURE_COUNT + 3;
 
   /**
    * The feature id for the '<em><b>Sodt</b></em>' attribute.
@@ -2818,7 +2809,25 @@ public interface SqlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int SCALAR_OPERAND__SODT = OPERAND_LIST_FEATURE_COUNT + 5;
+  int SCALAR_OPERAND__SODT = OPERAND_LIST_FEATURE_COUNT + 4;
+
+  /**
+   * The feature id for the '<em><b>So UInt</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int SCALAR_OPERAND__SO_UINT = OPERAND_LIST_FEATURE_COUNT + 5;
+
+  /**
+   * The feature id for the '<em><b>Soint</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int SCALAR_OPERAND__SOINT = OPERAND_LIST_FEATURE_COUNT + 6;
 
   /**
    * The number of structural features of the '<em>Scalar Operand</em>' class.
@@ -2827,7 +2836,7 @@ public interface SqlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int SCALAR_OPERAND_FEATURE_COUNT = OPERAND_LIST_FEATURE_COUNT + 6;
+  int SCALAR_OPERAND_FEATURE_COUNT = OPERAND_LIST_FEATURE_COUNT + 7;
 
   /**
    * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.SQLCaseOperandImpl <em>SQL Case Operand</em>}' class.
@@ -5819,17 +5828,6 @@ public interface SqlPackage extends EPackage
   EClass getScalarOperand();
 
   /**
-   * Returns the meta object for the attribute '{@link com.jaspersoft.studio.data.sql.ScalarOperand#getSoint <em>Soint</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Soint</em>'.
-   * @see com.jaspersoft.studio.data.sql.ScalarOperand#getSoint()
-   * @see #getScalarOperand()
-   * @generated
-   */
-  EAttribute getScalarOperand_Soint();
-
-  /**
    * Returns the meta object for the attribute '{@link com.jaspersoft.studio.data.sql.ScalarOperand#getSostr <em>Sostr</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -5883,6 +5881,28 @@ public interface SqlPackage extends EPackage
    * @generated
    */
   EAttribute getScalarOperand_Sodt();
+
+  /**
+   * Returns the meta object for the attribute '{@link com.jaspersoft.studio.data.sql.ScalarOperand#getSoUInt <em>So UInt</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>So UInt</em>'.
+   * @see com.jaspersoft.studio.data.sql.ScalarOperand#getSoUInt()
+   * @see #getScalarOperand()
+   * @generated
+   */
+  EAttribute getScalarOperand_SoUInt();
+
+  /**
+   * Returns the meta object for the attribute '{@link com.jaspersoft.studio.data.sql.ScalarOperand#getSoint <em>Soint</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Soint</em>'.
+   * @see com.jaspersoft.studio.data.sql.ScalarOperand#getSoint()
+   * @see #getScalarOperand()
+   * @generated
+   */
+  EAttribute getScalarOperand_Soint();
 
   /**
    * Returns the meta object for class '{@link com.jaspersoft.studio.data.sql.SQLCaseOperand <em>SQL Case Operand</em>}'.
@@ -8182,14 +8202,6 @@ public interface SqlPackage extends EPackage
     EClass SCALAR_OPERAND = eINSTANCE.getScalarOperand();
 
     /**
-     * The meta object literal for the '<em><b>Soint</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute SCALAR_OPERAND__SOINT = eINSTANCE.getScalarOperand_Soint();
-
-    /**
      * The meta object literal for the '<em><b>Sostr</b></em>' attribute feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -8228,6 +8240,22 @@ public interface SqlPackage extends EPackage
      * @generated
      */
     EAttribute SCALAR_OPERAND__SODT = eINSTANCE.getScalarOperand_Sodt();
+
+    /**
+     * The meta object literal for the '<em><b>So UInt</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute SCALAR_OPERAND__SO_UINT = eINSTANCE.getScalarOperand_SoUInt();
+
+    /**
+     * The meta object literal for the '<em><b>Soint</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute SCALAR_OPERAND__SOINT = eINSTANCE.getScalarOperand_Soint();
 
     /**
      * The meta object literal for the '{@link com.jaspersoft.studio.data.sql.impl.SQLCaseOperandImpl <em>SQL Case Operand</em>}' class.

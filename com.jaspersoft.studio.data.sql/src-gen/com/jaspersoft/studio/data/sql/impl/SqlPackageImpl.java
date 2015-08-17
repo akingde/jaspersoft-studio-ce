@@ -2980,7 +2980,7 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getScalarOperand_Soint()
+  public EAttribute getScalarOperand_Sostr()
   {
     return (EAttribute)scalarOperandEClass.getEStructuralFeatures().get(0);
   }
@@ -2990,7 +2990,7 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getScalarOperand_Sostr()
+  public EAttribute getScalarOperand_Sodbl()
   {
     return (EAttribute)scalarOperandEClass.getEStructuralFeatures().get(1);
   }
@@ -3000,7 +3000,7 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getScalarOperand_Sodbl()
+  public EAttribute getScalarOperand_Sodate()
   {
     return (EAttribute)scalarOperandEClass.getEStructuralFeatures().get(2);
   }
@@ -3010,7 +3010,7 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getScalarOperand_Sodate()
+  public EAttribute getScalarOperand_Sotime()
   {
     return (EAttribute)scalarOperandEClass.getEStructuralFeatures().get(3);
   }
@@ -3020,7 +3020,7 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getScalarOperand_Sotime()
+  public EAttribute getScalarOperand_Sodt()
   {
     return (EAttribute)scalarOperandEClass.getEStructuralFeatures().get(4);
   }
@@ -3030,9 +3030,19 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getScalarOperand_Sodt()
+  public EAttribute getScalarOperand_SoUInt()
   {
     return (EAttribute)scalarOperandEClass.getEStructuralFeatures().get(5);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getScalarOperand_Soint()
+  {
+    return (EAttribute)scalarOperandEClass.getEStructuralFeatures().get(6);
   }
 
   /**
@@ -3750,12 +3760,13 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
     createEReference(subQueryOperandEClass, SUB_QUERY_OPERAND__SEL);
 
     scalarOperandEClass = createEClass(SCALAR_OPERAND);
-    createEAttribute(scalarOperandEClass, SCALAR_OPERAND__SOINT);
     createEAttribute(scalarOperandEClass, SCALAR_OPERAND__SOSTR);
     createEAttribute(scalarOperandEClass, SCALAR_OPERAND__SODBL);
     createEAttribute(scalarOperandEClass, SCALAR_OPERAND__SODATE);
     createEAttribute(scalarOperandEClass, SCALAR_OPERAND__SOTIME);
     createEAttribute(scalarOperandEClass, SCALAR_OPERAND__SODT);
+    createEAttribute(scalarOperandEClass, SCALAR_OPERAND__SO_UINT);
+    createEAttribute(scalarOperandEClass, SCALAR_OPERAND__SOINT);
 
     sqlCaseOperandEClass = createEClass(SQL_CASE_OPERAND);
     createEReference(sqlCaseOperandEClass, SQL_CASE_OPERAND__EXPR);
@@ -4178,12 +4189,13 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
     initEReference(getSubQueryOperand_Sel(), this.getSelectQuery(), null, "sel", null, 0, 1, SubQueryOperand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(scalarOperandEClass, ScalarOperand.class, "ScalarOperand", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getScalarOperand_Soint(), ecorePackage.getEInt(), "soint", null, 0, 1, ScalarOperand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getScalarOperand_Sostr(), ecorePackage.getEString(), "sostr", null, 0, 1, ScalarOperand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getScalarOperand_Sodbl(), ecorePackage.getEBigDecimal(), "sodbl", null, 0, 1, ScalarOperand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getScalarOperand_Sodate(), ecorePackage.getEString(), "sodate", null, 0, 1, ScalarOperand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getScalarOperand_Sotime(), ecorePackage.getEString(), "sotime", null, 0, 1, ScalarOperand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getScalarOperand_Sodt(), ecorePackage.getEString(), "sodt", null, 0, 1, ScalarOperand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getScalarOperand_SoUInt(), ecorePackage.getEInt(), "soUInt", null, 0, 1, ScalarOperand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getScalarOperand_Soint(), ecorePackage.getEInt(), "soint", null, 0, 1, ScalarOperand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(sqlCaseOperandEClass, SQLCaseOperand.class, "SQLCaseOperand", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getSQLCaseOperand_Expr(), this.getOrExpr(), null, "expr", null, 0, 1, SQLCaseOperand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
