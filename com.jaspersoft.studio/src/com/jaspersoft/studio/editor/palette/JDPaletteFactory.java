@@ -18,8 +18,6 @@ import org.eclipse.gef.palette.CombinedTemplateCreationEntry;
 import org.eclipse.gef.palette.PaletteDrawer;
 import org.eclipse.gef.palette.PaletteEntry;
 import org.eclipse.gef.palette.PaletteRoot;
-import org.eclipse.gef.palette.PaletteToolbar;
-import org.eclipse.gef.palette.SelectionToolEntry;
 import org.eclipse.jface.resource.ImageDescriptor;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
@@ -66,8 +64,6 @@ public class JDPaletteFactory {
 		if (ignore == null)
 			ignore = new ArrayList<String>();
 		PaletteRoot paletteRoot = new PaletteRoot();
-		
-		createToolBar(paletteRoot);
 
 		ExtensionManager m = JaspersoftStudioPlugin.getExtensionManager();
 		List<PaletteGroup> pgroups = m.getPaletteGroups();
@@ -164,8 +160,6 @@ public class JDPaletteFactory {
 		if (ignore == null)
 			ignore = new ArrayList<String>();
 		PaletteRoot paletteRoot = new PaletteRoot();
-		
-		createToolBar(paletteRoot);
 
 		Map<String, PaletteGroup> map = new TreeMap<String, PaletteGroup>();
 		PaletteGroup pgc = new PaletteGroup();
@@ -332,18 +326,5 @@ public class JDPaletteFactory {
 					continue;
 				drawer.add(entry);
 			}
-	}
-
-	/**
-	 * Creates a new JDPalette object.
-	 * 
-	 * @param paletteRoot
-	 *          the palette root
-	 */
-	public static void createToolBar(PaletteRoot paletteRoot) {
-		PaletteToolbar paletteToolbar = new PaletteToolbar("toolbar"); //$NON-NLS-1$
-		paletteToolbar.add(new SelectionToolEntry());
-		paletteToolbar.add(new JDMarqueeToolEntry());
-		paletteRoot.add(paletteToolbar);
 	}
 }
