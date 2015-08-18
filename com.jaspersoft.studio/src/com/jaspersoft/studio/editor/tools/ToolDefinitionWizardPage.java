@@ -54,7 +54,7 @@ public class ToolDefinitionWizardPage extends JSSHelpWizardPage {
 	/**
 	 * The description of the new tool
 	 */
-	private String description = ""; //$NON-NLS-1$
+	private String toolDescription = ""; //$NON-NLS-1$
 	
 	/**
 	 * The path to the icon of the new tool
@@ -64,17 +64,17 @@ public class ToolDefinitionWizardPage extends JSSHelpWizardPage {
 	/**
 	 * Text area where the name of the tool is provided
 	 */
-	private Text nameText;
+	protected Text nameText;
 	
 	/**
 	 * Text area where the description of the tool is provided
 	 */
-	private Text descriptionText;
+	protected Text descriptionText;
 	
 	/**
 	 * Text area where the icon path of the tool is provided
 	 */
-	private Text iconPathText;
+	protected Text iconPathText;
 	
 	/**
 	 * Text area where the currently loaded icon is shown
@@ -91,12 +91,12 @@ public class ToolDefinitionWizardPage extends JSSHelpWizardPage {
 	 * Modify listener called when one of the textual control changes, update
 	 * the field and eventually if the icon path is changed then it reload the image
 	 */
-	private ModifyListener widgetsModfied = new ModifyListener() {
+	protected ModifyListener widgetsModfied = new ModifyListener() {
 		
 		@Override
 		public void modifyText(ModifyEvent e) {
 			name = nameText.getText();
-			description = descriptionText.getText();
+			toolDescription = descriptionText.getText();
 			if (!iconPath.equals(iconPathText.getText())){
 				iconPath = iconPathText.getText();
 				try{ 
@@ -124,6 +124,38 @@ public class ToolDefinitionWizardPage extends JSSHelpWizardPage {
 		setDescription(Messages.ToolDefinitionWizardPage_description);
 	}
 
+	protected void createIconArea(Composite container){
+			//Create the controls for the image
+			Composite imageContainer = new Composite(container, SWT.NONE);
+			imageContainer.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+			GridLayout imageContainerLayout = new GridLayout(3, false);
+			imageContainerLayout.marginHeight = 0;
+			imageContainerLayout.marginWidth = 0;
+			imageContainer.setLayout(imageContainerLayout);
+			iconPathText = new Text(imageContainer, SWT.BORDER);
+			iconPathText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+			iconPreview = new Label(imageContainer, SWT.NONE);
+			GridData previewData = new GridData();
+			previewData.exclude = true;
+			iconPreview.setLayoutData(previewData);
+			
+			Button selectImageButton = new Button(imageContainer, SWT.PUSH);
+			selectImageButton.setText(Messages.common_browse);
+			selectImageButton.addSelectionListener(new SelectionAdapter(){
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+				   	FileDialog fd = new FileDialog(UIUtils.getShell(), SWT.OPEN);
+		        fd.setText(Messages.common_open);
+		        String[] filterExt = { "*.jpg", "*.png", ".gif" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		        fd.setFilterExtensions(filterExt);
+		        String selected = fd.open();
+		        if (selected != null){
+		        	iconPathText.setText(selected);
+		        }
+				}
+			});
+	}
+	
 	@Override
 	public void createControl(Composite parent) {
 		Composite container = new Composite(parent, SWT.NONE);
@@ -141,35 +173,7 @@ public class ToolDefinitionWizardPage extends JSSHelpWizardPage {
 		descriptionText.setText(Messages.ToolDefinitionWizardPage_defaultDescription);
 		new Label(container, SWT.NONE).setText(Messages.ToolDefinitionWizardPage_iconLabel);
 		
-		//Create the controls for the image
-		Composite imageContainer = new Composite(container, SWT.NONE);
-		imageContainer.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		GridLayout imageContainerLayout = new GridLayout(3, false);
-		imageContainerLayout.marginHeight = 0;
-		imageContainerLayout.marginWidth = 0;
-		imageContainer.setLayout(imageContainerLayout);
-		iconPathText = new Text(imageContainer, SWT.BORDER);
-		iconPathText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		iconPreview = new Label(imageContainer, SWT.NONE);
-		GridData previewData = new GridData();
-		previewData.exclude = true;
-		iconPreview.setLayoutData(previewData);
-		
-		Button selectImageButton = new Button(imageContainer, SWT.PUSH);
-		selectImageButton.setText(Messages.common_browse);
-		selectImageButton.addSelectionListener(new SelectionAdapter(){
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-			   FileDialog fd = new FileDialog(UIUtils.getShell(), SWT.OPEN);
-	        fd.setText(Messages.common_open);
-	        String[] filterExt = { "*.jpg", "*.png", ".gif" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-	        fd.setFilterExtensions(filterExt);
-	        String selected = fd.open();
-	        if (selected != null){
-	        	iconPathText.setText(selected);
-	        }
-			}
-		});
+		createIconArea(container);
 		
 		//Add the listeners
 		nameText.addModifyListener(widgetsModfied);
@@ -189,11 +193,11 @@ public class ToolDefinitionWizardPage extends JSSHelpWizardPage {
 	 */
 	@Override
 	public boolean isPageComplete() {
-		if (name.isEmpty()){
+		if (name.trim().isEmpty()){
 			setErrorMessage(Messages.ToolDefinitionWizardPage_errorNameEmpry);	
-		} else if (description.isEmpty()){
-			setErrorMessage(Messages.ToolDefinitionWizardPage_errorDescriptionEmpty);	
-		} else if (ToolManager.INSTANCE.isNameAlreadyUsed(name)){
+		} else if (!FileUtils.isFilenameValid(name)){
+			setErrorMessage(Messages.ToolDefinitionWizardPage_invalidFileName);
+		} else if (ToolManager.INSTANCE.isNameAlreadyUsed(name.trim())){
 			setErrorMessage(Messages.ToolDefinitionWizardPage_errorNameUsed);
 		} else {
 			setErrorMessage(null);
@@ -278,8 +282,8 @@ public class ToolDefinitionWizardPage extends JSSHelpWizardPage {
 	 * 
 	 * @return a not null and not empty string
 	 */
-	public String getDescription() {
-		return description;
+	public String getToolDescription() {
+		return toolDescription;
 	}
 
 	/**

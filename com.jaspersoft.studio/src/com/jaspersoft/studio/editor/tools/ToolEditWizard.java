@@ -14,7 +14,6 @@ package com.jaspersoft.studio.editor.tools;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.util.List;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
@@ -27,42 +26,44 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.utils.ImageUtils;
 
 /**
- * Wizard used to create a new tool and provide the metadata about it
+ * Wizard used to edit the metadata of an existing tool
  * 
  * @author Orlandin Marco
  *
  */
-public class ToolDefinitionWizard extends Wizard {
+public class ToolEditWizard extends Wizard {
 
+	/**
+	 * The tool to edit
+	 */
+	private MCustomTool toolToEdit;
+	
 	/**
 	 * The page where the informations will be provided
 	 */
-	private ToolDefinitionWizardPage page0;
-	
-	/**
-	 * The selected elements that will compose the tool
-	 */
-	private List<Object> toolElements;
+	private ToolEditWizardPage page0;
 	
 	/**
 	 * Create the wizard
 	 * 
-	 * @param toolElements The selected elements that will compose the tool, must 
-	 * be a not null list of MGraphicalElement
+	 * @param the tool to edit, must be not null
 	 */
-	public ToolDefinitionWizard(List<Object> toolElements) {
-		this.toolElements = toolElements;
+	public ToolEditWizard(MCustomTool toolToEdit) {
+		this.toolToEdit = toolToEdit;
 	}
 	
 	@Override
 	public void addPages() {
-		page0 = new ToolDefinitionWizardPage();
+		String imagePath = toolToEdit.getIconPathBig();
+		if (imagePath == null) {
+			imagePath = toolToEdit.getIconPathSmall();
+		}
+		page0 = new ToolEditWizardPage(toolToEdit.getName(), toolToEdit.getDescription(), imagePath);
 		addPage(page0);
 	}
 	
 	/**
-	 * Create the required resources from the provided metadata and use them to 
-	 * request the add of the tool
+	 * Update the metadata of the selected tool
 	 */
 	@Override
 	public boolean performFinish() {
@@ -90,7 +91,7 @@ public class ToolDefinitionWizard extends Wizard {
 				}
 			}
 			//Add the tool to the set
-			ToolManager.INSTANCE.addTool(name, description, resized16, resized32, toolElements);
+			ToolManager.INSTANCE.editTool(toolToEdit.getName(), name, description, resized16, resized32);
 		} catch (Exception ex){
 			ex.printStackTrace();
 			JaspersoftStudioPlugin.getInstance().logError(ex);

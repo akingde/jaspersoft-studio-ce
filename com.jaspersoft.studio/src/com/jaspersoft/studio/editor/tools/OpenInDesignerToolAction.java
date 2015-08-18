@@ -12,39 +12,49 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.tools;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-
+import org.eclipse.core.filesystem.EFS;
+import org.eclipse.core.filesystem.IFileStore;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.action.Action;
-import org.eclipse.jface.wizard.WizardDialog;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.ide.IDE;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
 
 /**
- * Action to delete a custom tool from the palette
+ * Action to open a custom tool element in the designer to edit it
  * 
  * @author Orlandin Marco
  *
  */
-public class EditToolAction extends Action {
+public class OpenInDesignerToolAction extends Action {
 
 	/**
 	 * The palette entry to edit
 	 */
 	private ToolTemplateCreationEntry elementToEdit;
 
-	public EditToolAction(ToolTemplateCreationEntry elementToEdit) {
+	public OpenInDesignerToolAction(ToolTemplateCreationEntry elementToEdit) {
 		super();
-		setText(Messages.EditToolAction_name);
-		setImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/edit-style.png")); //$NON-NLS-1$
+		setText(Messages.OpenInDesignerToolAction_actionName);
+		setImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/tool_open_in_editor.png")); //$NON-NLS-1$
 		this.elementToEdit = elementToEdit;
 	}
 
 	public void run() {
 		MCustomTool tool = elementToEdit.getTemplate();
-		ToolEditWizard wizard = new ToolEditWizard(tool);
-		WizardDialog dialog = new WizardDialog(UIUtils.getShell(), wizard);
-		dialog.open();
+		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+		try {
+			IFileStore fileStore = EFS.getLocalFileSystem().getStore(new Path(tool.getPath()));
+			if (!fileStore.fetchInfo().isDirectory() && fileStore.fetchInfo().exists()) {
+        IDE.openEditorOnFileStore(page, fileStore);
+			}
+		} catch (PartInitException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@Override

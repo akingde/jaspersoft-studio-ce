@@ -22,6 +22,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -44,8 +45,6 @@ import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignImage;
-import net.sf.jasperreports.engine.design.JRDesignSection;
-import net.sf.jasperreports.engine.design.JRDesignStaticText;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.util.JRXmlUtils;
 import net.sf.jasperreports.engine.xml.JRXmlDigesterFactory;
@@ -77,6 +76,7 @@ import com.jaspersoft.studio.editor.defaults.CustomStyleResolver;
 import com.jaspersoft.studio.editor.defaults.DefaultManager;
 import com.jaspersoft.studio.editor.outline.OutlineTreeEditPartFactory;
 import com.jaspersoft.studio.editor.tools.ToolModfiedListener.OPERATION_TYPE;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.utils.ExpressionUtil;
@@ -98,6 +98,8 @@ public class ToolManager {
 	 * The Tool Manager is global and it is accessible only trough this class
 	 */
 	public static final ToolManager INSTANCE = new ToolManager();
+	
+	private static final String NOTE_TEMPLATE = "callouts.1.fg=0,0,0\ncallouts.1.text={0}\ncallouts.1.bounds={1},0,280,15\ncallouts.1.bg=255,255,0\n"; //$NON-NLS-1$
 	
 	/**
 	 * Storage name for the defined tools
@@ -149,7 +151,7 @@ public class ToolManager {
 	/**
 	 * The default extension of a jrtool
 	 */
-	public static final String TOOL_EXTENSION = ".jrtool";
+	public static final String TOOL_EXTENSION = ".jrtool"; //$NON-NLS-1$
 	
 	/**
 	 * List of the available tools
@@ -286,13 +288,13 @@ public class ToolManager {
 	 * @param newElement the element that is actually inspecting
 	 * @param jConfig a not null jasper reports configuration of the source report
 	 * @param dataset the dataset of the element that is currently added part of the tool
-	 * @param detailBand the detail band where the components of the tool are placed
+	 * @param band the band where the components of the tool are placed
 	 * @param resourcesDir the directory where the resources of the tool will be placed
-	 * @param foundResources the set of resources found during the various interation, used to avoid to 
+	 * @param foundResources the set of resources found during the various iteration, used to avoid to 
 	 * add twice or more the same resource
 	 */
 	private void checkResources(JRChild newElement, JasperReportsConfiguration jConfig, JRDesignDataset dataset, 
-																JRBand detailBand, File resourcesDir, HashSet<String> foundResources){
+																JRBand band, File resourcesDir, HashSet<String> foundResources){
 		if (newElement instanceof JRDesignImage){
 			JRExpression exp = ((JRDesignImage)newElement).getExpression();
 			String expression = ExpressionUtil.cachedExpressionEvaluationString(exp, jConfig, dataset);
@@ -305,14 +307,14 @@ public class ToolManager {
 					if (!dest.exists()){
 						FileUtils.copyFile(source, dest);
 					}
-					newImage.setExpression(new JRDesignExpression("\""+dest.getAbsolutePath()+"\""));
-					String requiredResources = detailBand.getPropertiesMap().getProperty(REQUIRED_RESOURCES);
+					newImage.setExpression(new JRDesignExpression("\""+dest.getAbsolutePath()+"\"")); //$NON-NLS-1$ //$NON-NLS-2$
+					String requiredResources = band.getPropertiesMap().getProperty(REQUIRED_RESOURCES);
 					if (!foundResources.contains(dest.getName())){
 						if (requiredResources == null){
-							detailBand.getPropertiesMap().setProperty(REQUIRED_RESOURCES, dest.getName());
+							band.getPropertiesMap().setProperty(REQUIRED_RESOURCES, dest.getName());
 						} else {
-							requiredResources += ";" + dest.getName();
-							detailBand.getPropertiesMap().setProperty(REQUIRED_RESOURCES, requiredResources);
+							requiredResources += ";" + dest.getName(); //$NON-NLS-1$
+							band.getPropertiesMap().setProperty(REQUIRED_RESOURCES, requiredResources);
 						}
 					}
 				} catch (IOException e) {
@@ -323,7 +325,7 @@ public class ToolManager {
 		}
 		if (newElement instanceof JRElementGroup){
 			for(JRChild childElement : ((JRElementGroup)newElement).getChildren()){
-				checkResources(childElement, jConfig, dataset, detailBand, resourcesDir, foundResources);
+				checkResources(childElement, jConfig, dataset, band, resourcesDir, foundResources);
 			}
 		}
 	}
@@ -337,7 +339,7 @@ public class ToolManager {
 	 * be used to create the new tool
 	 * @param resourcesDir the directory where the resources of the tool will be placed, like for example images
 	 * @return a not null jasperdesign with the elements that define the tool in 
-	 * the first band of the detail section
+	 * the title band
 	 */
 	private JasperDesign createDesign(String name, List<Object> toolElements, File resourcesDir){
 		Integer leftOffset = null;
@@ -354,14 +356,7 @@ public class ToolManager {
 			} 
 		}
 		JasperDesign jd = new JasperDesign();
-		JRDesignBand titleBand = new JRDesignBand();
-		jd.setTitle(titleBand);
-		JRDesignStaticText informationText = new JRDesignStaticText();
-		informationText.setText("Place in the detail section the element that define your custom tool and set their properties");
-		informationText.setHeight(40);
-		titleBand.addElement(informationText);
-		titleBand.setHeight(40);
-		
+	
 		jd.setName(name);
 		jd.setColumnFooter(null);
 		jd.setColumnHeader(null);
@@ -374,7 +369,6 @@ public class ToolManager {
 		jd.setTopMargin(0);
 		jd.setBottomMargin(0);
 		JRDesignBand band = new JRDesignBand();
-		JRDesignSection detailSection = (JRDesignSection)jd.getDetailSection();
 		int maxHeight = 0;
 		int maxWidth = 0;
 		for(Object element : toolElements){
@@ -401,10 +395,12 @@ public class ToolManager {
 			
 			band.addElement(newElement);
 		}
-		detailSection.addBand(band);
+		jd.setTitle(band);
 		band.setHeight(maxHeight);
-		informationText.setWidth(maxWidth);
 		jd.setPageWidth(maxWidth);
+		String noteValue = MessageFormat.format(NOTE_TEMPLATE, new Object[]{Messages.ToolManager_noteText, maxWidth+5});
+		jd.setProperty("ireport.callouts", noteValue); //$NON-NLS-1$
+		
 		return jd;
 	}
 	
@@ -434,6 +430,89 @@ public class ToolManager {
 		}
 	}
 	
+	
+	public void editTool(String oldName, String newName, String newDescription, ImageData iconSmall, ImageData iconBig){
+		File storage = ConfigurationManager.getStorage(TOOL_KEY);	
+		try{
+			File oldIconSmall = new File(storage, oldName+"-small.png"); //$NON-NLS-1$
+			oldIconSmall.delete();
+			File oldIconBig = new File(storage, oldName+"-big.png"); //$NON-NLS-1$
+			oldIconBig.delete();
+			
+			//Write the report on disk
+			String oldReportName = oldName + TOOL_EXTENSION;
+			String newReportName = newName + TOOL_EXTENSION;
+			File oldReportFile = new File(storage, oldReportName);
+			if (oldReportFile.exists()){
+				oldReportFile.renameTo(new File(storage, newReportName));
+			}
+			
+		  //write the 16x16 icon
+		  String imageSmallName = newName+"-small.png"; //$NON-NLS-1$
+		  if (iconSmall != null){
+		  	writeImage(new File(storage, imageSmallName), iconSmall);
+		  }
+		  
+		  //write the 32x32 icon
+		  String imageBigName = newName+"-big.png"; //$NON-NLS-1$
+		  if (iconBig != null){
+		  	writeImage(new File(storage, imageBigName), iconBig);
+		  }
+		  
+			//Load the index file
+			File indexFile = new File(storage, TOOL_PROPERTIES_NAME);
+			if (indexFile.exists()){
+				String xmlContent = readFile(indexFile);
+				Document document = JRXmlUtils.parse(new InputSource(new StringReader(xmlContent)));
+				NodeList adapterNodes = document.getElementsByTagName(XML_TAG_NAME);
+				for (int i = 0; i < adapterNodes.getLength(); ++i) {
+					try{
+						Node adapterNode = adapterNodes.item(i);
+						if (adapterNode.getNodeType() == Node.ELEMENT_NODE && adapterNode.getAttributes().getNamedItem(PROPERTY_NAME)!=null) {
+							String name = adapterNode.getAttributes().getNamedItem(PROPERTY_NAME).getNodeValue(); 
+							if (name.equals(oldName)){
+								adapterNode.getAttributes().getNamedItem(PROPERTY_NAME).setNodeValue(newName);
+								adapterNode.getAttributes().getNamedItem(PROPERTY_DESCRIPTION).setNodeValue(newDescription);
+								adapterNode.getAttributes().getNamedItem(PROPERTY_PATH).setNodeValue(newReportName);
+								Element element = (Element)adapterNode;
+								if (iconSmall != null) {
+									element.setAttribute(PROPERTY_ICON_SMALL, imageSmallName);
+								} else {
+									element.removeAttribute(PROPERTY_ICON_SMALL);
+								}
+								if (iconBig != null) {
+									element.setAttribute(PROPERTY_ICON_BIG, imageBigName);
+								} else {
+									element.removeAttribute(PROPERTY_ICON_BIG);
+								}
+								break;
+							}
+						}
+					}catch(Exception ex){
+						ex.printStackTrace();
+						JaspersoftStudioPlugin.getInstance().logError(ex);
+					}
+				}
+				indexFile.delete();
+				if (adapterNodes.getLength() > 0){
+					//Write the file only if there s at least an entry
+					indexFile.createNewFile();
+					TransformerFactory transformerFactory = TransformerFactory.newInstance();
+					Transformer transformer = transformerFactory.newTransformer();
+					DOMSource source = new DOMSource(document);
+					StreamResult result = new StreamResult(new FileOutputStream(indexFile));
+					indexFile.createNewFile();
+					transformer.transform(source, result);
+				}
+				loadTools();
+				firePropertyChange(null, OPERATION_TYPE.EDIT);
+			}
+		}catch(Exception ex){
+			ex.printStackTrace();
+			JaspersoftStudioPlugin.getInstance().logError(ex);
+		}
+	}
+	
 	/**
 	 * Add a new tool to the set and notify the listeners that the set of tools is changed
 	 * 
@@ -442,10 +521,10 @@ public class ToolManager {
 	 * @param iconSmall the small icon for the tool, typically 16x16
 	 * @param iconBig the big icon for the tool, typically 32x32
 	 * @param jd the jasperdesign containing the element of the tool. The element must be contained
-	 * in the first band of the detail section
+	 * in the title band
 	 */
 	public boolean addTool(String name, String description, ImageData iconSmall, ImageData iconBig, JasperDesign jd){
-		Assert.isTrue(!isNameAlreadyUsed(name), "The name must be unique");
+		Assert.isTrue(!isNameAlreadyUsed(name), "The name must be unique"); //$NON-NLS-1$
 		File storage = ConfigurationManager.getStorage(TOOL_KEY);	
 		try{
 			//Write the report on disk
@@ -731,7 +810,7 @@ public class ToolManager {
 	}
 	
 	/**
-	 * Load the report of a tool file and return the first band of the detail section,
+	 * Load the report of a tool file and return the title band,
 	 * containing the component of the tool
 	 * 
 	 * @param defaultFile a not null report file containing the tool definition
@@ -744,7 +823,7 @@ public class ToolManager {
 			JasperReportsConfiguration jConfig = getDefaultJRConfig();
 			JasperDesign jd = new JRXmlLoader(jConfig, JRXmlDigesterFactory.createDigester(jConfig)).loadXML(in);
 			jConfig.setJasperDesign(jd);
-			result = jd.getDetailSection().getBands()[0];
+			result = jd.getTitle();
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -754,7 +833,7 @@ public class ToolManager {
 	}
 	
 	/**
-	 * Return the first band of the detail section of the tool definition
+	 * Return the title band of the tool definition
 	 * identified by the provided path. If the band was already requested
 	 * before and it is cached then it is returned from cache, otherwise it 
 	 * is loaded, returned and cached

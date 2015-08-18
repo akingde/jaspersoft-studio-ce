@@ -303,6 +303,17 @@ public class JDPaletteFactory {
 							}
 						}
 					}
+				} else if (operation == OPERATION_TYPE.EDIT){
+					@SuppressWarnings("unchecked")
+					List<?> chilrend = new ArrayList<Object>(drawer.getChildren());
+					for(Object entry : chilrend){
+						if (entry instanceof ToolTemplateCreationEntry){
+							drawer.remove((PaletteEntry)entry);
+						}
+					}
+					for(MCustomTool cutstomTool : ToolManager.INSTANCE.getAvailableTools()){
+						createToolEntry(cutstomTool,drawer);
+					}
 				}
 			}
 		});
