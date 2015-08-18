@@ -39,6 +39,9 @@ public class CutCommand extends CopyCommand {
 	
 	@Override
 	public void undo() {
+		for (ICopyable n : list){
+			((ANode) n).setCut(false);
+		}
 		if (oldContents != null){
 			Clipboard.getDefault().setContents(oldContents);
 		}
