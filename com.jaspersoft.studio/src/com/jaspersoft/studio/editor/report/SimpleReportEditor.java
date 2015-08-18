@@ -15,11 +15,13 @@ package com.jaspersoft.studio.editor.report;
 import java.util.List;
 
 import org.eclipse.draw2d.ColorConstants;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.palette.PaletteRoot;
 import org.eclipse.gef.rulers.RulerProvider;
 import org.eclipse.gef.ui.actions.ActionRegistry;
+import org.eclipse.gef.ui.actions.DeleteAction;
 import org.eclipse.gef.ui.actions.GEFActionConstants;
 import org.eclipse.gef.ui.parts.TreeViewer;
 import org.eclipse.jface.action.Action;
@@ -27,6 +29,7 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.IWorkbenchPart;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.gef.parts.JSSGraphicalViewerKeyHandler;
@@ -48,6 +51,7 @@ import com.jaspersoft.studio.editor.outline.actions.DeleteGroupReportAction;
 import com.jaspersoft.studio.editor.palette.JDPaletteFactory;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.IContainer;
+import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.plugin.ExtensionManager;
 import com.jaspersoft.studio.preferences.RulersGridPreferencePage;
 import com.jaspersoft.studio.property.section.report.action.PageFormatAction;
@@ -180,6 +184,29 @@ public class SimpleReportEditor extends ReportEditor {
 		action = new PageRemoveMarginsAction(this);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
+		
+		//Create the custom delete action that will replace the default one
+		//and disable the delete for the bands
+		DeleteAction deleteAction = new DeleteAction((IWorkbenchPart)this){
+			
+			private boolean isBandSelected(){
+				List<?> objects = getSelectedObjects();
+				if (objects.isEmpty())
+					return false;
+				if (!(objects.get(0) instanceof EditPart))
+					return false;
+				for (int i = 0; i < objects.size(); i++) {
+					EditPart object = (EditPart) objects.get(i);
+					if (object.getModel() instanceof MBand) return true;
+				} 
+				return false;
+			}
+			
+			public boolean isEnabled() {
+				return !isBandSelected();
+			};
+		};
+		registry.registerAction(deleteAction);
 	}
 
 	@Override
