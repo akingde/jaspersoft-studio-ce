@@ -20,9 +20,13 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 
+import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.editor.action.ACachedSelectionAction;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.ICopyable;
+import com.jaspersoft.studio.model.MGraphicElement;
+import com.jaspersoft.studio.model.command.DeleteElementCommand;
 
 public class CutAction extends ACachedSelectionAction {
 
@@ -53,11 +57,17 @@ public class CutAction extends ACachedSelectionAction {
 		List<Object> copiableObjects = editor.getSelectionCache().getSelectionModelForType(ICopyable.class);
 		if (copiableObjects.isEmpty())
 			return null;
+		JSSCompoundCommand command = new JSSCompoundCommand(null);
 		CutCommand cmd = new CutCommand();
+		command.add(cmd);
 		for (Object it : copiableObjects) {
 			cmd.addElement((ICopyable) it);
+			ANode node = (ANode)it;
+			command.setReferenceNodeIfNull(node.getRoot());
+			DeleteElementCommand deleteCommand = new DeleteElementCommand((MGraphicElement)node);
+			command.add(deleteCommand);
 		}
-		return cmd;
+		return command;
 	}
 
 }

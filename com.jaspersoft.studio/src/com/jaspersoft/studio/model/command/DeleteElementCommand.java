@@ -57,7 +57,7 @@ public class DeleteElementCommand extends Command {
 	 * @param srcNode
 	 *          the src node
 	 */
-	public DeleteElementCommand(ANode destNode, MGraphicElement srcNode) {
+	public DeleteElementCommand(MGraphicElement srcNode) {
 		super();
 		jrElement = (JRDesignElement) srcNode.getValue();
 		jrGroup = jrElement.getElementGroup();

@@ -228,7 +228,7 @@ public class ListComponentFactory implements IComponentFactory {
 		if (parent instanceof MPage)
 			parent = child.getParent();
 		if (child instanceof MGraphicElement && parent instanceof MList && child.getValue() != null)
-			return new DeleteElementCommand((MList) parent, (MGraphicElement) child);
+			return new DeleteElementCommand((MGraphicElement) child);
 		if (child instanceof MElementGroup && parent instanceof MList && child.getValue() != null)
 			return new DeleteElementGroupCommand((MList) parent, (MElementGroup) child);
 		return null;

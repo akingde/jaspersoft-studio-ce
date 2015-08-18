@@ -198,7 +198,7 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 
 		if (child instanceof MGraphicElement && !(parent instanceof MPage)) {
 			if (child.getValue() != null)
-				return new DeleteElementCommand(parent, (MGraphicElement) child);
+				return new DeleteElementCommand((MGraphicElement) child);
 		} else if (child instanceof MElementGroup) {
 			return new DeleteElementGroupCommand(parent, (MElementGroup) child);
 		} else if (child instanceof MConditionalStyle) {

@@ -258,7 +258,7 @@ public class ConvertStaticIntoText extends ACachedSelectionAction {
 
 			command.setReferenceNodeIfNull(staticText);
 			
-			DeleteElementCommand deleteCommand = new DeleteElementCommand(null, staticText);
+			DeleteElementCommand deleteCommand = new DeleteElementCommand(staticText);
 			
 			LazyCreateTextFieldCommand createCommand = new LazyCreateTextFieldCommand(staticText);
 			
