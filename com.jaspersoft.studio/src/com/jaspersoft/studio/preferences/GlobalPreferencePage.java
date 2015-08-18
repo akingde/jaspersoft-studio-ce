@@ -10,6 +10,7 @@ package com.jaspersoft.studio.preferences;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
@@ -30,7 +31,6 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
-import org.osgi.framework.Bundle;
 
 import com.jaspersoft.studio.ConfigurationManager;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
@@ -244,8 +244,17 @@ public class GlobalPreferencePage extends FieldEditorPreferencePage implements I
 
 	private static File getTemplate() {
 		if (template == null) {
-			Bundle bundle = JaspersoftStudioPlugin.getInstance().getBundle();
-			template = bundle.getDataFile("resources/log.properties");
+			try {
+				String path = JaspersoftStudioPlugin.getInstance().getFileLocation("resources/log.properties");
+				if (!Misc.isNullOrEmpty(path)) {
+					template = FileUtils.toFile(new URL(path));
+
+					// Bundle bundle = JaspersoftStudioPlugin.getInstance().getBundle();
+					// template = bundle.getDataFile("resources/log.properties");
+				}
+			} catch (IOException e) {
+				UIUtils.showError(e);
+			}
 		}
 		return template;
 
