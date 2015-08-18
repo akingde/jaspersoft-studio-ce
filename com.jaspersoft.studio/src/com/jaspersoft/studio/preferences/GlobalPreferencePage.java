@@ -10,11 +10,10 @@ package com.jaspersoft.studio.preferences;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
+
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 import org.apache.commons.io.FileUtils;
-import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.FileFieldEditor;
@@ -81,7 +80,7 @@ public class GlobalPreferencePage extends FieldEditorPreferencePage implements I
 				try {
 					FileUtils.copyFile(tmp, getDefaultLogProperties());
 				} catch (IOException e) {
-					e.printStackTrace();
+					UIUtils.showError(e);
 					return;
 				}
 		}
@@ -161,8 +160,10 @@ public class GlobalPreferencePage extends FieldEditorPreferencePage implements I
 							}
 					}
 					cfg = ConfigurationManager.buildCommandLineVMarg("-Djava.util.logging.config.file", fname);
-				} else
+				} else {
+					getPreferenceStore().putValue(LOG_FILE, getPreferenceStore().getDefaultString(LOG_FILE));
 					cfg = ConfigurationManager.buildCommandLineVMarg("-Djava.util.logging.config.file", null);
+				}
 				ConfigurationManager.writeConfigurationFile(cfg);
 			}
 		};
@@ -244,14 +245,7 @@ public class GlobalPreferencePage extends FieldEditorPreferencePage implements I
 	private static File getTemplate() {
 		if (template == null) {
 			Bundle bundle = JaspersoftStudioPlugin.getInstance().getBundle();
-			URL fileURL = bundle.getEntry("resources/log.properties");
-			try {
-				template = new File(FileLocator.resolve(fileURL).toURI());
-			} catch (URISyntaxException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			template = bundle.getDataFile("resources/log.properties");
 		}
 		return template;
 
@@ -260,6 +254,12 @@ public class GlobalPreferencePage extends FieldEditorPreferencePage implements I
 	public void enableLogging(boolean enable) {
 		logFile.setEnabled(enable, getFieldEditorParent());
 		tLogPreview.setEnabled(enable);
+		if (!enable) {
+			IPreferenceStore pstore = getPreferenceStore();
+			String d = pstore.getDefaultString(LOG_FILE);
+			pstore.putValue(LOG_FILE, d);
+			logFile.setStringValue(d);
+		}
 	}
 
 	private boolean refresh = false;
