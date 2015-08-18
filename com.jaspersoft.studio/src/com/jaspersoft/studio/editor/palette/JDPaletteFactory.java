@@ -161,20 +161,17 @@ public class JDPaletteFactory {
 			ignore = new ArrayList<String>();
 		PaletteRoot paletteRoot = new PaletteRoot();
 
-		Map<String, PaletteGroup> map = new TreeMap<String, PaletteGroup>();
-		PaletteGroup pgc = new PaletteGroup();
-		pgc.setId(IPaletteContributor.KEY_COMMON_ELEMENTS);
-		pgc.setName(Messages.common_elements);
-		pgc.setImage("icons/resources/elementgroup-16.png"); //$NON-NLS-1$
-		map.put(pgc.getId(), pgc);
+		PaletteGroup baseGroup = new PaletteGroup();
+		baseGroup.setId(IPaletteContributor.KEY_COMMON_ELEMENTS);
+		baseGroup.setName(Messages.common_elements);
+		baseGroup.setImage("icons/resources/elementgroup-16.png"); //$NON-NLS-1$
 
-		pgc = new PaletteGroup();
-		pgc.setId(IPaletteContributor.KEY_COMMON_TOOLS);
-		pgc.setName(Messages.common_tools);
-		pgc.setImage("icons/resources/fields-16.png"); //$NON-NLS-1$
-		map.put(pgc.getId(), pgc);
-	
-		PaletteDrawer drawer = createGroup(paletteRoot, ignore, pgc.getName(), pgc.getImage());
+		PaletteGroup toolGroup = new PaletteGroup();
+		toolGroup.setId(IPaletteContributor.KEY_COMMON_TOOLS);
+		toolGroup.setName(Messages.common_tools);
+		toolGroup.setImage("icons/resources/fields-16.png"); //$NON-NLS-1$
+
+		PaletteDrawer drawer = createGroup(paletteRoot, ignore, baseGroup.getName(), baseGroup.getImage());
 
 		drawer.add(createJDEntry(MCallout.getIconDescriptor(), MCallout.class));
 
@@ -188,7 +185,7 @@ public class JDPaletteFactory {
 		drawer.add(createJDEntry(MGenericElement.getIconDescriptor(), MGenericElement.class));
 		drawer.add(createJDEntry(MFrame.getIconDescriptor(), MFrame.class));
 
-		createFields(paletteRoot, ignore, pgc, new HashMap<String, List<PaletteEntry>>());
+		createFields(paletteRoot, ignore, toolGroup, new HashMap<String, List<PaletteEntry>>());
 
 		return paletteRoot;
 	}
