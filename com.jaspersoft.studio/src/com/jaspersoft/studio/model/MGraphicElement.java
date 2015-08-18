@@ -81,7 +81,7 @@ import com.jaspersoft.studio.utils.ModelUtils;
 /*
  * The Class MGeneric.
  */
-public class MGraphicElement extends APropertyNode implements IGraphicElement, ICopyable, IGuidebleElement, IDragable,IGraphicalPropertiesHandler {
+public class MGraphicElement extends APropertyNode implements IGraphicElement, ICopyable, IGuidebleElement, IDragable, IDesignDragable,IGraphicalPropertiesHandler {
 	
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	
@@ -306,6 +306,12 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 			node = node.getParent();
 		}
 		return new Rectangle(0, 0, jr.getWidth(), jr.getHeight());
+	}
+	
+	@Override
+	public Rectangle getJRBounds() {
+		JRElement jr = (JRElement) getValue();
+		return new Rectangle(jr.getX(), jr.getY(), jr.getWidth(), jr.getHeight());
 	}
 
 	private IPropertyDescriptor[] descriptors;

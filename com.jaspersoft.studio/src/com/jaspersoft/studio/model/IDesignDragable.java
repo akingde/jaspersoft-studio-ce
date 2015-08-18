@@ -12,10 +12,16 @@
  ******************************************************************************/
 package com.jaspersoft.studio.model;
 
+import org.eclipse.draw2d.geometry.Rectangle;
+
 /**
- * Identify an element that can be drag and dropped inside the outline
+ * Identify an element that can be drag and dropped inside the deisgn editor
+ * 
+ * @author Orlandin Marco
  *
  */
-public interface IDragable {
+public interface IDesignDragable {
 
+	public Rectangle getJRBounds();
+	
 }

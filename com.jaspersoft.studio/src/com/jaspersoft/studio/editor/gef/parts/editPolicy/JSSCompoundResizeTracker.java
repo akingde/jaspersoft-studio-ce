@@ -12,8 +12,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.gef.parts.editPolicy;
 
-import net.sf.jasperreports.engine.design.JRDesignElement;
-
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.GraphicalEditPart;
@@ -28,7 +27,7 @@ import org.eclipse.swt.graphics.Point;
 import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.editor.gef.parts.JSSScalableFreeformRootEditPart;
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.model.MGraphicElement;
+import com.jaspersoft.studio.model.IDesignDragable;
 
 /**
  * Extends the default resize tracker allowing converting
@@ -124,19 +123,22 @@ public class JSSCompoundResizeTracker extends ResizeTracker {
 			double sizeDelta_height = request.getSizeDelta().height*zoom;
 			if (sizeDelta_width != 0 || sizeDelta_height != 0){
 				for(Object part : request.getEditParts()){
-					MGraphicElement gElement = (MGraphicElement)((EditPart)part).getModel();
-					JRDesignElement jrElement = (JRDesignElement)gElement.getValue();
-					
-					double newWidth = jrElement.getWidth() + sizeDelta_width;
-					if (Math.abs(jrElement.getX()+newWidth)>maximumSize.x){
-						double delta = (maximumSize.x - jrElement.getWidth() - jrElement.getX())/zoom;
-						request.getSizeDelta().setWidth((int)Math.round(delta));
-					}
-					
-					double newHeight = jrElement.getHeight() + sizeDelta_height;
-					if (Math.abs(jrElement.getY() + newHeight)>maximumSize.y){
-						double delta = (maximumSize.y - jrElement.getHeight() - jrElement.getY())/zoom;
-						request.getSizeDelta().setHeight((int)Math.round(delta));
+					EditPart editPart = (EditPart)part;
+					Object model = editPart.getModel();
+					if (model instanceof IDesignDragable){
+						IDesignDragable element = (IDesignDragable)model;
+						Rectangle bounds = element.getJRBounds();
+						double newWidth = bounds.width + sizeDelta_width;
+						if (Math.abs(bounds.x+newWidth)>maximumSize.x){
+							double delta = (maximumSize.x - bounds.width - bounds.x)/zoom;
+							request.getSizeDelta().setWidth((int)Math.round(delta));
+						}
+						
+						double newHeight = bounds.height + sizeDelta_height;
+						if (Math.abs(bounds.y + newHeight)>maximumSize.y){
+							double delta = (maximumSize.y - bounds.height - bounds.y)/zoom;
+							request.getSizeDelta().setHeight((int)Math.round(delta));
+						}
 					}
 				}
 			}

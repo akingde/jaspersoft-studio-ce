@@ -18,7 +18,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import net.sf.jasperreports.eclipse.JasperReportsPlugin;
-import net.sf.jasperreports.engine.design.JRDesignElement;
 
 import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.Viewport;
@@ -39,8 +38,8 @@ import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.editor.gef.parts.JSSScalableFreeformRootEditPart;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IContainer;
+import com.jaspersoft.studio.model.IDesignDragable;
 import com.jaspersoft.studio.model.INode;
-import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.frame.MFrame;
 
 /**
@@ -414,7 +413,7 @@ public class SearchParentDragTracker extends DragEditPartsTracker {
 		ArrayList<EditPart> selectedElements = new  ArrayList<EditPart>();
 		//Need to copy the list because the one from getCurrentViewer().getSelectedEditParts() is not editable
 		for (Object part : getCurrentViewer().getSelectedEditParts()){
-			if (((EditPart)part).getModel() instanceof MGraphicElement) selectedElements.add((EditPart)part);
+			if (((EditPart)part).getModel() instanceof IDesignDragable) selectedElements.add((EditPart)part);
 		}
 		//The result of the following for is an array where all the element not null are valid for the selection
 		for(EditPart element : selectedElements){
@@ -620,31 +619,31 @@ public class SearchParentDragTracker extends DragEditPartsTracker {
 			double moveDelta_y = request.getMoveDelta().y*zoom;
 			if (moveDelta_x != 0 || moveDelta_y != 0){
 				for(Object part : request.getEditParts()){
-					MGraphicElement gElement = (MGraphicElement)((EditPart)part).getModel();
-					JRDesignElement jrElement = (JRDesignElement)gElement.getValue();
+					IDesignDragable gElement = (IDesignDragable)((EditPart)part).getModel();
+					Rectangle bounds = gElement.getJRBounds();
 					
-					double newX = jrElement.getX()+moveDelta_x;
+					double newX = bounds.x+moveDelta_x;
 					if (newX >= 0){
-						if (Math.abs(jrElement.getWidth())+newX>maximumSize.x){
-							double delta = (maximumSize.x - jrElement.getWidth() - jrElement.getX())/zoom;
+						if (Math.abs(bounds.width)+newX>maximumSize.x){
+							double delta = (maximumSize.x - bounds.width - bounds.x)/zoom;
 							request.getMoveDelta().setX((int)Math.round(delta));
 						}
 					} else {
 						if (Math.abs(newX)>maximumSize.x){
-							double delta = (-maximumSize.x-jrElement.getX())/zoom;
+							double delta = (-maximumSize.x - bounds.x)/zoom;
 							request.getMoveDelta().setX((int)Math.round(delta));
 						}
 					}
 					
-					double newY = jrElement.getY() + moveDelta_y;
+					double newY = bounds.y + moveDelta_y;
 					if (newY > 0){
-						if (Math.abs(jrElement.getHeight())+newY>maximumSize.y){
-							double delta = (maximumSize.y - jrElement.getHeight() - jrElement.getY())/zoom;
+						if (Math.abs(bounds.height)+newY>maximumSize.y){
+							double delta = (maximumSize.y - bounds.height - bounds.y)/zoom;
 							request.getMoveDelta().setY((int)Math.round(delta));
 						}
 					} else {
 						if (Math.abs(newY)>maximumSize.y){
-							double delta = (-maximumSize.y-jrElement.getY())/zoom;
+							double delta = (-maximumSize.y - bounds.y)/zoom;
 							request.getMoveDelta().setY((int)Math.round(delta));
 						}
 					}

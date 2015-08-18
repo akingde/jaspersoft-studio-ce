@@ -45,6 +45,7 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.IContainerLayout;
+import com.jaspersoft.studio.model.IDesignDragable;
 import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
@@ -60,7 +61,7 @@ import com.jaspersoft.studio.utils.Misc;
  * @author sanda zaharia
  * 
  */
-public class MCallout extends APropertyNode implements IGraphicElement {
+public class MCallout extends APropertyNode implements IGraphicElement, IDesignDragable {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	
 	public static final int DEFAULT_HEIGHT = 200;
@@ -426,6 +427,11 @@ public class MCallout extends APropertyNode implements IGraphicElement {
 	@Override
 	public JRDesignElement createJRElement(JasperDesign jasperDesign) {
 		return null;
+	}
+
+	@Override
+	public Rectangle getJRBounds() {
+		return getBounds();
 	}
 
 }
