@@ -23,6 +23,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.action.ACachedSelectionAction;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IDatasetContainer;
 import com.jaspersoft.studio.model.MGraphicElement;
 
@@ -50,6 +51,16 @@ public class CreateToolAction extends ACachedSelectionAction {
 		setEnabled(false);
 	}
 
+	private boolean hasDataset(List<?> elements){
+		for(Object obj : elements){
+			if (obj instanceof IDatasetContainer) return true;
+			ANode node = (ANode)obj;
+			boolean checkContent = hasDataset(node.getChildren());
+			if (checkContent) return true;
+		}
+		return false;
+	}
+	
 	/**
 	 * The action is available if there are at least one graphical element selected but no
 	 * elements that uses datasets, since the custom tools support only base elements
@@ -58,10 +69,7 @@ public class CreateToolAction extends ACachedSelectionAction {
 	protected boolean calculateEnabled() {
 		List<Object> mGraphElements = editor.getSelectionCache().getSelectionModelForType(MGraphicElement.class);
 		if (mGraphElements.isEmpty()) return false;
-		for(Object obj : mGraphElements){
-			if (obj instanceof IDatasetContainer) return false;
-		}
-		return true;
+		return !hasDataset(mGraphElements);
 	}
 	
 	@Override

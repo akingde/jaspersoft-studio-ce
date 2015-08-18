@@ -71,7 +71,7 @@ public class ToolEditWizard extends Wizard {
 		String iconPath = page0.getIconPath();
 		String description = page0.getToolDescription();
 		if (description == null || description.trim().isEmpty()){
-			description = name;
+			description = "";
 		}
 		
 		FileInputStream stream = null;
@@ -91,7 +91,7 @@ public class ToolEditWizard extends Wizard {
 				}
 			}
 			//Add the tool to the set
-			ToolManager.INSTANCE.editTool(toolToEdit.getName(), name, description, resized16, resized32);
+			ToolManager.INSTANCE.editTool(toolToEdit, name, description, resized16, resized32);
 		} catch (Exception ex){
 			ex.printStackTrace();
 			JaspersoftStudioPlugin.getInstance().logError(ex);

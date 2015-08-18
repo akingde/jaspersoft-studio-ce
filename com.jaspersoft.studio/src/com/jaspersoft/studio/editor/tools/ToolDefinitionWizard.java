@@ -70,7 +70,7 @@ public class ToolDefinitionWizard extends Wizard {
 		String iconPath = page0.getIconPath();
 		String description = page0.getToolDescription();
 		if (description == null || description.trim().isEmpty()){
-			description = name;
+			description = "";
 		}
 		
 		FileInputStream stream = null;

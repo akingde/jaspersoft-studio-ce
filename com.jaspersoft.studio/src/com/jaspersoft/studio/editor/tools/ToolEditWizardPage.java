@@ -45,19 +45,21 @@ public class ToolEditWizardPage extends ToolDefinitionWizardPage {
 	public ToolEditWizardPage(String initialName, String initialDescription, String initialImagePath){
 		this.initialDescription = initialDescription;
 		this.initialName = initialName;
-		
-		File image = new File(initialImagePath);
-		//If exist export the image to the temp directory
-		if (image.exists()){
-			File tmpDir = new File(System.getProperty("java.io.tmpdir")); 
-			File destFile = new File(tmpDir, image.getName());
-			try{
-				FileUtils.copyFile(image, destFile);
-			} catch (Exception ex){
-				ex.printStackTrace();
+
+		if (initialImagePath != null){
+			File image = new File(initialImagePath);
+			//If exist export the image to the temp directory
+			if (image.exists()){
+				File tmpDir = new File(System.getProperty("java.io.tmpdir")); 
+				File destFile = new File(tmpDir, image.getName());
+				try{
+					FileUtils.copyFile(image, destFile);
+				} catch (Exception ex){
+					ex.printStackTrace();
+				}
+				destFile.deleteOnExit();
+				this.initialImagePath = destFile.getAbsolutePath();
 			}
-			destFile.deleteOnExit();
-			this.initialImagePath = destFile.getAbsolutePath();
 		}
 	}
 	

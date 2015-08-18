@@ -99,7 +99,10 @@ public class ToolManager {
 	 */
 	public static final ToolManager INSTANCE = new ToolManager();
 	
-	private static final String NOTE_TEMPLATE = "callouts.1.fg=0,0,0\ncallouts.1.text={0}\ncallouts.1.bounds={1},0,280,15\ncallouts.1.bg=255,255,0\n"; //$NON-NLS-1$
+	/**
+	 * Template for the note that explain how to use the a composite element
+	 */
+	private static final String NOTE_TEMPLATE = "callouts.1.fg=0,0,0\ncallouts.1.text={0}\ncallouts.1.bounds={1},0,650,40\ncallouts.1.bg=255,255,0\n"; //$NON-NLS-1$
 	
 	/**
 	 * Storage name for the defined tools
@@ -298,28 +301,30 @@ public class ToolManager {
 		if (newElement instanceof JRDesignImage){
 			JRExpression exp = ((JRDesignImage)newElement).getExpression();
 			String expression = ExpressionUtil.cachedExpressionEvaluationString(exp, jConfig, dataset);
-			File source = new File(expression);
-			if (source.exists()){
-				resourcesDir.mkdir();
-				File dest = new File(resourcesDir, source.getName());
-				JRDesignImage newImage = (JRDesignImage)newElement;
-			  try {
-					if (!dest.exists()){
-						FileUtils.copyFile(source, dest);
-					}
-					newImage.setExpression(new JRDesignExpression("\""+dest.getAbsolutePath()+"\"")); //$NON-NLS-1$ //$NON-NLS-2$
-					String requiredResources = band.getPropertiesMap().getProperty(REQUIRED_RESOURCES);
-					if (!foundResources.contains(dest.getName())){
-						if (requiredResources == null){
-							band.getPropertiesMap().setProperty(REQUIRED_RESOURCES, dest.getName());
-						} else {
-							requiredResources += ";" + dest.getName(); //$NON-NLS-1$
-							band.getPropertiesMap().setProperty(REQUIRED_RESOURCES, requiredResources);
+			if (expression != null){
+				File source = new File(expression);
+				if (source.exists()){
+					resourcesDir.mkdir();
+					File dest = new File(resourcesDir, source.getName());
+					JRDesignImage newImage = (JRDesignImage)newElement;
+				  try {
+						if (!dest.exists()){
+							FileUtils.copyFile(source, dest);
 						}
+						newImage.setExpression(new JRDesignExpression("\""+dest.getAbsolutePath()+"\"")); //$NON-NLS-1$ //$NON-NLS-2$
+						String requiredResources = band.getPropertiesMap().getProperty(REQUIRED_RESOURCES);
+						if (!foundResources.contains(dest.getName())){
+							if (requiredResources == null){
+								band.getPropertiesMap().setProperty(REQUIRED_RESOURCES, dest.getName());
+							} else {
+								requiredResources += ";" + dest.getName(); //$NON-NLS-1$
+								band.getPropertiesMap().setProperty(REQUIRED_RESOURCES, requiredResources);
+							}
+						}
+					} catch (IOException e) {
+						e.printStackTrace();
+						JaspersoftStudioPlugin.getInstance().logError(e);
 					}
-				} catch (IOException e) {
-					e.printStackTrace();
-					JaspersoftStudioPlugin.getInstance().logError(e);
 				}
 			}
 		}
@@ -431,9 +436,10 @@ public class ToolManager {
 	}
 	
 	
-	public void editTool(String oldName, String newName, String newDescription, ImageData iconSmall, ImageData iconBig){
+	public void editTool(MCustomTool oldTool, String newName, String newDescription, ImageData iconSmall, ImageData iconBig){
 		File storage = ConfigurationManager.getStorage(TOOL_KEY);	
 		try{
+			String oldName = oldTool.getName();
 			File oldIconSmall = new File(storage, oldName+"-small.png"); //$NON-NLS-1$
 			oldIconSmall.delete();
 			File oldIconBig = new File(storage, oldName+"-big.png"); //$NON-NLS-1$
@@ -504,6 +510,9 @@ public class ToolManager {
 					indexFile.createNewFile();
 					transformer.transform(source, result);
 				}
+				
+				//Remove the old tool from the cache
+				cachedToolsMap.remove(oldTool.getPath());
 				loadTools();
 				firePropertyChange(null, OPERATION_TYPE.EDIT);
 			}

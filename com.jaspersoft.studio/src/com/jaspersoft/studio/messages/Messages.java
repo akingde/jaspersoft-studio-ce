@@ -1950,7 +1950,6 @@ public class Messages extends NLS {
 	public static String TitleSection_Expression_Label;
 	public static String TitleSection_Position_Label;
 	public static String TitleSection_Title_Label;
-	public static String ToolDefinitionWizardPage_defaultDescription;
 	public static String ToolDefinitionWizardPage_defaultName;
 	public static String ToolDefinitionWizardPage_description;
 	public static String ToolDefinitionWizardPage_descriptionLabel;

@@ -170,7 +170,6 @@ public class ToolDefinitionWizardPage extends JSSHelpWizardPage {
 		new Label(container, SWT.NONE).setText(Messages.ToolDefinitionWizardPage_descriptionLabel);
 		descriptionText = new Text(container, SWT.BORDER);
 		descriptionText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		descriptionText.setText(Messages.ToolDefinitionWizardPage_defaultDescription);
 		new Label(container, SWT.NONE).setText(Messages.ToolDefinitionWizardPage_iconLabel);
 		
 		createIconArea(container);
