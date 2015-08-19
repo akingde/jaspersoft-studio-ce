@@ -41,6 +41,7 @@ import com.jaspersoft.studio.editor.outline.JDReportOutlineView;
 import com.jaspersoft.studio.editor.outline.actions.CreateBandAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateConditionalStyleAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateDatasetAction;
+import com.jaspersoft.studio.editor.outline.actions.CreateDetailBandAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateFieldAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateGroupAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateParameterAction;
@@ -177,6 +178,9 @@ public class ReportEditor extends AbstractVisualEditor {
 	
 					id = CreateBandAction.ID;
 					bars.setGlobalActionHandler(id, registry.getAction(id));
+					
+					id = CreateDetailBandAction.ID;
+					bars.setGlobalActionHandler(id, registry.getAction(id));
 	
 					id = PageFormatAction.ID;
 					bars.setGlobalActionHandler(id, registry.getAction(id));
@@ -205,6 +209,10 @@ public class ReportEditor extends AbstractVisualEditor {
 		registry.registerAction(action);
 		selectionActions.add(CreateBandAction.ID);
 
+		action = new CreateDetailBandAction(this);
+		registry.registerAction(action);
+		selectionActions.add(CreateDetailBandAction.ID);
+		
 		ExtensionManager m = JaspersoftStudioPlugin.getExtensionManager();
 		List<Action> lst = m.getActions(this);
 		for (Action act : lst) {

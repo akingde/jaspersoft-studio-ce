@@ -41,7 +41,6 @@ import com.jaspersoft.studio.editor.gef.ui.actions.RZoomComboContributionItem;
 import com.jaspersoft.studio.editor.gef.ui.actions.ViewSettingsDropDownAction;
 import com.jaspersoft.studio.editor.java2d.JSSScrollingGraphicalViewer;
 import com.jaspersoft.studio.editor.outline.JDReportOutlineView;
-import com.jaspersoft.studio.editor.outline.actions.CreateBandAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateFieldAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateParameterAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateParameterSetAction;
@@ -152,9 +151,6 @@ public class SimpleReportEditor extends ReportEditor {
 					
 					id = CreateParameterSetAction.ID;
 					bars.setGlobalActionHandler(id, registry.getAction(id));
-
-					id = CreateBandAction.ID;
-					bars.setGlobalActionHandler(id, registry.getAction(id));
 				}
 			};
 		}
@@ -165,10 +161,8 @@ public class SimpleReportEditor extends ReportEditor {
 	protected void createEditorActions(ActionRegistry registry) {
 		List<String> selectionActions = getSelectionActions();
 
-		IAction action = new CreateBandAction(this);
-		registry.registerAction(action);
-		selectionActions.add(CreateBandAction.ID);
-
+		IAction action = null;
+		
 		ExtensionManager m = JaspersoftStudioPlugin.getExtensionManager();
 		List<Action> lst = m.getActions(this);
 		for (Action act : lst) {

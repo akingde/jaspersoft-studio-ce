@@ -59,7 +59,6 @@ import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.model.band.MBandGroupFooter;
 import com.jaspersoft.studio.model.band.MBandGroupHeader;
 import com.jaspersoft.studio.model.band.command.CreateBandCommand;
-import com.jaspersoft.studio.model.band.command.CreateBandDetailCommand;
 import com.jaspersoft.studio.model.band.command.CreateBandGroupFooterCommand;
 import com.jaspersoft.studio.model.band.command.CreateBandGroupHeaderCommand;
 import com.jaspersoft.studio.model.band.command.DeleteBandCommand;
@@ -557,8 +556,6 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 				return new CreateBandGroupHeaderCommand((MBandGroupHeader) parent);
 			if (parent instanceof MBandGroupFooter)
 				return new CreateBandGroupFooterCommand((MBandGroupFooter) parent);
-			if (parent instanceof MBand && ((MBand) parent).getBandType().equals(BandTypeEnum.DETAIL))
-				return new CreateBandDetailCommand((MBand) parent, (MBand) child);
 			if (parent instanceof MBand && parent.getValue() == null)
 				return new CreateBandCommand((MBand) parent, (MBand) child);
 		}

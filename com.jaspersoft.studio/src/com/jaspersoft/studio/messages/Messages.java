@@ -325,6 +325,8 @@ public class Messages extends NLS {
 	public static String CreateDataAdapterAction_actionToolTip;
 	public static String CreateDatasetAction_create_dataset;
 	public static String CreateDatasetAction_create_dataset_tool_tip;
+	public static String CreateDetailBandAction_actionName;
+	public static String CreateDetailBandAction_actionTooltip;
 	public static String CreateE4ObjectCommand_ErrorCreatingObject;
 	public static String CreateE4ObjectCommand_subdataseterror;
 	public static String CreateFieldAction_create_field;
