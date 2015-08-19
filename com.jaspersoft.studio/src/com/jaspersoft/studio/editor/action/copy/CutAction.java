@@ -62,10 +62,12 @@ public class CutAction extends ACachedSelectionAction {
 		command.add(cmd);
 		for (Object it : copiableObjects) {
 			cmd.addElement((ICopyable) it);
-			ANode node = (ANode)it;
-			command.setReferenceNodeIfNull(node.getRoot());
-			DeleteElementCommand deleteCommand = new DeleteElementCommand((MGraphicElement)node);
-			command.add(deleteCommand);
+			if (it instanceof MGraphicElement){
+				MGraphicElement node = (MGraphicElement)it;
+				command.setReferenceNodeIfNull(node.getRoot());
+				DeleteElementCommand deleteCommand = new DeleteElementCommand(node);
+				command.add(deleteCommand);
+			}
 		}
 		return command;
 	}
