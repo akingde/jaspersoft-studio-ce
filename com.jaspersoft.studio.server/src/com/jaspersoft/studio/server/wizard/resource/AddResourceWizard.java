@@ -30,6 +30,7 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescript
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.server.ResourceFactory;
+import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MReference;
@@ -196,16 +197,17 @@ public class AddResourceWizard extends Wizard {
 							res.setUriString(res.getParentFolder() + "/" //$NON-NLS-1$
 									+ res.getName());
 							INode r = parent.getRoot();
-							if (r != null
-									&& r instanceof MServerProfile
-									&& WSClientHelper.findSelected(monitor,
-											resource.getValue(),
-											(MServerProfile) r) != null
-									&& !UIUtils.showConfirmation(
-											Messages.AddResourceWizard_3,
-											Messages.AddResourceWizard_4)) {
-								canFinish = false;
-								return;
+							if (r != null && r instanceof MServerProfile) {
+								MServerProfile msp = (MServerProfile) r;
+								msp = ServerManager.getMServerProfileCopy(msp);
+								if (WSClientHelper.findSelected(monitor,
+										resource.getValue(), msp) != null
+										&& !UIUtils.showConfirmation(
+												Messages.AddResourceWizard_3,
+												Messages.AddResourceWizard_4)) {
+									canFinish = false;
+									return;
+								}
 							}
 						}
 						if (parent instanceof MReportUnit
