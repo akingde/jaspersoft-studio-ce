@@ -153,8 +153,12 @@ public class WHyperlink extends Composite implements IExpressionContextSetter {
 				}
 				
 				if(!init){
-					hyperlink.setHyperlinkTarget(selectedTarget);
 					hyperlink.setLinkTarget(comboHyperlinkTarget.getText());
+					if(selectedTarget!=HyperlinkTargetEnum.CUSTOM){
+						// No setting operation, otherwise it will produce an Exception
+						// with the following message: "Custom hyperlink targets cannot be specified using the byte constant".
+						hyperlink.setHyperlinkTarget(selectedTarget);
+					}
 				}
 			}
 		});
