@@ -70,6 +70,10 @@ public abstract class ACachedSelectionAction extends SetWorkbenchAction {
 
 	@Override
 	public void run() {
+		//If the command was not created yet refresh it
+		if (!fresh)
+			command = createCommand();
+		fresh = true;
 		if (fresh && command != null){
 			execute(command);
 		}
