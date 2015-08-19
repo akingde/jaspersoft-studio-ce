@@ -245,7 +245,7 @@ public class GlobalPreferencePage extends FieldEditorPreferencePage implements I
 	private static File getTemplate() {
 		if (template == null) {
 			try {
-				String path = JaspersoftStudioPlugin.getInstance().getFileLocation("resources/log.properties");
+				String path = JaspersoftStudioPlugin.getInstance().getFileLocation("/resources/log.properties");
 				if (!Misc.isNullOrEmpty(path)) {
 					template = FileUtils.toFile(new URL(path));
 
