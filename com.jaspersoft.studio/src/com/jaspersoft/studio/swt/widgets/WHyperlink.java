@@ -147,18 +147,8 @@ public class WHyperlink extends Composite implements IExpressionContextSetter {
 		comboHyperlinkTarget.setItems(LINK_TARGET_ITEMS);
 		comboHyperlinkTarget.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
-				HyperlinkTargetEnum selectedTarget=HyperlinkTargetEnum.getByName(comboHyperlinkTarget.getText());
-				if(selectedTarget==null){
-					selectedTarget=HyperlinkTargetEnum.CUSTOM;
-				}
-				
 				if(!init){
 					hyperlink.setLinkTarget(comboHyperlinkTarget.getText());
-					if(selectedTarget!=HyperlinkTargetEnum.CUSTOM){
-						// No setting operation, otherwise it will produce an Exception
-						// with the following message: "Custom hyperlink targets cannot be specified using the byte constant".
-						hyperlink.setHyperlinkTarget(selectedTarget);
-					}
 				}
 			}
 		});
@@ -173,26 +163,14 @@ public class WHyperlink extends Composite implements IExpressionContextSetter {
 		comboHyperlinkType.setLayoutData(gd_comboHyperlinkType);
 		comboHyperlinkType.setItems(LINK_TYPE_ITEMS);
 		comboHyperlinkType.addModifyListener(new ModifyListener() {
-			private HyperlinkTypeEnum previousSelected=HyperlinkTypeEnum.NULL;
-			
 			public void modifyText(ModifyEvent e) {
 				HyperlinkTypeEnum selectedType=HyperlinkTypeEnum.getByName(comboHyperlinkType.getText());
 				if(selectedType==null){
 					selectedType=HyperlinkTypeEnum.CUSTOM;
 				}
-
-//				if(selectedType!=previousSelected){
-					refreshSubTabs(selectedType);
-//				}
-				previousSelected=selectedType;
-				
+				refreshSubTabs(selectedType);
 				if(!init){
 					hyperlink.setLinkType(comboHyperlinkType.getText());
-					if(selectedType!=HyperlinkTypeEnum.CUSTOM){
-						// No setting operation, otherwise it will produce an Exception
-						// with the following message: "Custom hyperlink types cannot be specified using the byte constant".
-						hyperlink.setHyperlinkType(selectedType);
-					}
 				}
 			}
 
