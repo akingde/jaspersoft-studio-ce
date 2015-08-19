@@ -11,6 +11,7 @@ package com.jaspersoft.studio.preferences;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.logging.LogManager;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
@@ -167,7 +168,18 @@ public class GlobalPreferencePage extends FieldEditorPreferencePage implements I
 							"org.apache.commons.logging.impl.Jdk14Logger");
 
 					cfg = ConfigurationManager.buildCommandLineVMarg(kv);
+					try {
+						File f = new File(fname);
+						FileUtils.writeStringToFile(f, tLogPreview.getText());
+						LogManager.getLogManager().readConfiguration(FileUtils.openInputStream(f));
+					} catch (SecurityException e) {
+						UIUtils.showError(e);
+					} catch (IOException e) {
+						UIUtils.showError(e);
+					}
 				} else {
+					LogManager.getLogManager().reset();
+
 					getPreferenceStore().putValue(LOG_FILE, getPreferenceStore().getDefaultString(LOG_FILE));
 					KeyValue<String, String>[] kv = new KeyValue[3];
 					kv[0] = new KeyValue<String, String>("-Djava.util.logging.config.file", null);
