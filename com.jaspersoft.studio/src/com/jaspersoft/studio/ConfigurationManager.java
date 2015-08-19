@@ -43,6 +43,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.model.util.KeyValue;
 import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 import com.jaspersoft.studio.statistics.IFirstStartupAction;
 
@@ -56,8 +57,8 @@ import com.jaspersoft.studio.statistics.IFirstStartupAction;
  */
 public class ConfigurationManager {
 
-	//Method to get the eclipse folder
-	
+	// Method to get the eclipse folder
+
 	/**
 	 * Where the path is cached
 	 */
@@ -79,12 +80,11 @@ public class ConfigurationManager {
 		}
 		cachedPath = path;
 	}
-	
+
 	/**
 	 * 
-	 * Return the path of the application configuration INI file and cache it. 
-	 * Typically this file is inside the install location of the
-	 * application
+	 * Return the path of the application configuration INI file and cache it. Typically this file is inside the install
+	 * location of the application
 	 * 
 	 * @return String represented a Path in URL format to the configuration file
 	 */
@@ -96,93 +96,90 @@ public class ConfigurationManager {
 
 	/**
 	 * 
-	 * Return the file of the application configuration INI file and cache it. 
-	 * Typically this file is inside the install location of the
-	 * application
+	 * Return the file of the application configuration INI file and cache it. Typically this file is inside the install
+	 * location of the application
 	 * 
-	 * @return a java.io.File pointing at the file resource of the configuration INI of 
-	 * the current application or null if something goes wrong
+	 * @return a java.io.File pointing at the file resource of the configuration INI of the current application or null if
+	 *         something goes wrong
 	 */
-	public static File getApplicationConfigurationFile(){
+	public static File getApplicationConfigurationFile() {
 		String configurationPath = getApplicationConfigurationPath();
-		try{
+		try {
 			File configurationFile = new File(new URL(configurationPath).getFile());
 			return configurationFile;
-		} catch (Exception ex){
+		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Return the current installation folder where the application configuration file is placed
 	 * 
-	 * @return String represented a Path in URL format to the location of the configuration file, or
-	 * null if it can't be found
+	 * @return String represented a Path in URL format to the location of the configuration file, or null if it can't be
+	 *         found
 	 */
 	public static String getApplicationFolder() {
 		if (cachedPath == null)
 			intializePath();
 		return cachedPath != null ? new File(cachedPath).getParent() : null;
 	}
-	
+
 	/**
-	 * Check if the configuration file of the application exist and if it 
-	 * can written or read
+	 * Check if the configuration file of the application exist and if it can written or read
 	 * 
 	 * @return true if the file is accessible for r\w operation, false otherwise
 	 */
-	public static boolean isConfigurationAccessible(){
+	public static boolean isConfigurationAccessible() {
 		File configurationFile = getApplicationConfigurationFile();
-		if (configurationFile != null){
-			if (configurationFile.exists() && configurationFile.isFile()){
+		if (configurationFile != null) {
+			if (configurationFile.exists() && configurationFile.isFile()) {
 				return configurationFile.canRead() && configurationFile.canWrite();
 			}
 		}
 		return false;
 	}
-	
+
 	/**
-	 * Check if the configuration file of the application exist and if it 
-	 * can written or read. Also if the file is not accessible a warning message is 
-	 * shown
+	 * Check if the configuration file of the application exist and if it can written or read. Also if the file is not
+	 * accessible a warning message is shown
 	 * 
 	 * @return true if the file is accessible for r\w operation, false otherwise
 	 */
-	public static boolean isConfigurationAccessibleWithMessage(){
+	public static boolean isConfigurationAccessibleWithMessage() {
 		boolean accessible = isConfigurationAccessible();
-		if (!accessible){
+		if (!accessible) {
 			String configurationPath = getApplicationConfigurationFile().getAbsolutePath();
-			UIUtils.showWarning(Messages.ConfigurationManager_notAccessibleTitle, 
-													MessageFormat.format(Messages.ConfigurationManager_notAccessibleMessage, new Object[]{configurationPath}));
+			UIUtils.showWarning(Messages.ConfigurationManager_notAccessibleTitle,
+					MessageFormat.format(Messages.ConfigurationManager_notAccessibleMessage, new Object[] { configurationPath }));
 		}
 		return accessible;
 	}
-	
-	//Methods to get the installation dependent storage
-	
+
+	// Methods to get the installation dependent storage
+
 	/**
 	 * Folder containing the configurations of all the JSS installed on the system
 	 */
 	private static File jssDataFolder = null;
-	
+
 	/**
 	 * Configuration folder of the running JSS installation
 	 */
 	private static File appDataFolder = null;
-	
+
 	/**
 	 * Name of the folder that will contains the information of all the JSS installations on the current machine. This
 	 * folder will be placed in the "AppData like" folder on the current operative system
 	 */
 	private static final String JSS_APPLICATION_ID = "Jaspersoft Studio"; //$NON-NLS-1$
-	
+
 	/**
 	 * Name of the file where the path of a JSS installation will be save. The installation path bind a JSS instance to a
 	 * configuration folder
 	 */
 	private static final String PATH_FILE = ".path"; //$NON-NLS-1$
-	
+
 	/**
 	 * Get the folder where all the configurations of the current installed JSS are saved. The folder can change between
 	 * the various operative systems. The location is cached after the first time it is read
@@ -208,18 +205,19 @@ public class ConfigurationManager {
 		}
 		return jssDataFolder;
 	}
-	
+
 	/**
 	 * Get the configuration folder of the currently running JSS installation. If a folder is not found a new one is
 	 * created. This folder is cached to avoid to search it each time it is requested. If the folder is created it is
 	 * supposed to be the first start of the application, so the contributed actions to be executed at the first start are
 	 * run.
 	 * 
-	 * @param the name of the folder inside the installation dependent directory of JSS. If a directory with that name doesn't exist
-	 * then it is created
+	 * @param the
+	 *          name of the folder inside the installation dependent directory of JSS. If a directory with that name
+	 *          doesn't exist then it is created
 	 * @return a not null folder where the configuration of the currently running JSS are saved
 	 */
-	private static File getAppDataFolder(){
+	private static File getAppDataFolder() {
 		if (appDataFolder == null) {
 			Location configArea = Platform.getInstallLocation();
 			if (configArea != null) {
@@ -239,9 +237,9 @@ public class ConfigurationManager {
 					PropertiesHelper ph = PropertiesHelper.getInstance();
 					String startingUUID = ph.getString("UUID", null); //$NON-NLS-1$
 					if (startingUUID == null) {
-						//In the old version JSS stored an unique UUID in the preferences, now this is not 
-						//used anymore but if there is that uuid stored try to reuse it for the folder name
-						//otherwise a random one is generated
+						// In the old version JSS stored an unique UUID in the preferences, now this is not
+						// used anymore but if there is that uuid stored try to reuse it for the folder name
+						// otherwise a random one is generated
 						startingUUID = UUID.randomUUID().toString();
 					}
 					appDataFolder = new File(appFolder, startingUUID);
@@ -259,30 +257,28 @@ public class ConfigurationManager {
 		}
 		return appDataFolder;
 	}
-	
+
 	/**
-	 * Search inside the the application dependent storage for a folder
-	 * with a specific name and return it. This folder can be used to 
-	 * store informations related to a specific installation (like statistics
-	 * for example). If the folder doesn't exist it is created
+	 * Search inside the the application dependent storage for a folder with a specific name and return it. This folder
+	 * can be used to store informations related to a specific installation (like statistics for example). If the folder
+	 * doesn't exist it is created
 	 * 
-	 * @param folderName a not null folder name
-	 * @return a not null and existing folder with the specified name defined
-	 * inside the installation dependent storage
+	 * @param folderName
+	 *          a not null folder name
+	 * @return a not null and existing folder with the specified name defined inside the installation dependent storage
 	 */
 	public static File getAppDataFolder(String folderName) {
 		File dataFolder = new File(getAppDataFolder(), folderName);
 		dataFolder.mkdir();
 		return dataFolder;
 	}
-	
+
 	/**
 	 * Get the unique UUID associated with the current eclipse installation
 	 * 
-	 * @return a not null string representing the unique UUID of this JSS
-	 * installation
+	 * @return a not null string representing the unique UUID of this JSS installation
 	 */
-	public static String getInstallationUUID(){
+	public static String getInstallationUUID() {
 		return getAppDataFolder().getName();
 	}
 
@@ -337,8 +333,8 @@ public class ConfigurationManager {
 		}
 	}
 
-	//Methods to get the workspace dependent storage
-	
+	// Methods to get the workspace dependent storage
+
 	/**
 	 * Return a storage with a specific name, if the storage doesn't exist then it is created. A storage is a specific
 	 * folder in the filesystem.
@@ -483,10 +479,9 @@ public class ConfigurationManager {
 			throw new RuntimeException(e);
 		}
 	}
-	
-	
-	//Methods to get the configuration file and change it
-	
+
+	// Methods to get the configuration file and change it
+
 	private static final String PROP_VM = "eclipse.vm"; //$NON-NLS-1$
 
 	private static final String PROP_VMARGS = "eclipse.vmargs"; //$NON-NLS-1$
@@ -552,11 +547,27 @@ public class ConfigurationManager {
 	 * Generate a starting parameter by reading the old parameters and add or change (if already present) a new parameter
 	 * on the vmargs section
 	 * 
-	 * @param vmarg the name of the argument
-	 * @param value the value of the argument
+	 * @param vmarg
+	 *          the name of the argument
+	 * @param value
+	 *          the value of the argument
 	 * @return the full arguments line used to restart the application
 	 */
 	public static String buildCommandLineVMarg(String vmarg, String value) {
+		return buildCommandLineVMarg(new KeyValue[] { new KeyValue<String, String>(vmarg, value) });
+	}
+
+	/**
+	 * Generate a starting parameter by reading the old parameters and add or change (if already present) a new parameter
+	 * on the vmargs section
+	 * 
+	 * @param vmarg
+	 *          the name of the argument
+	 * @param value
+	 *          the value of the argument
+	 * @return the full arguments line used to restart the application
+	 */
+	public static String buildCommandLineVMarg(KeyValue<String, String>[] vmarg) {
 		String property = System.getProperty(PROP_VM);
 
 		StringBuffer result = new StringBuffer();
@@ -571,43 +582,45 @@ public class ConfigurationManager {
 			result.append(property);
 			result.append(SystemUtils.LINE_SEPARATOR);
 		}
-		
+
 		// append the vmargs and commands, replacing or adding the new argument as required
-		boolean added = false;
 		String vmargs = System.getProperty(PROP_VMARGS);
-		if (vmargs == null && value == null)
+		if (vmargs == null && vmarg == null)
 			return result.toString();
-		result.append(CMD_VMARGS).append(SystemUtils.LINE_SEPARATOR); 
+		result.append(CMD_VMARGS).append(SystemUtils.LINE_SEPARATOR);
 		if (vmargs != null)
 			for (String arg : vmargs.split(" ")) { //$NON-NLS-1$
-				if (arg.startsWith(vmarg + "=")) { //$NON-NLS-1$
-					if (value == null)
-						continue;
-					arg = vmarg + "=" + value; //$NON-NLS-1$
-					added = true;
+				for (int i = 0; i < vmarg.length; i++) {
+					if (vmarg[i] != null && arg.startsWith(vmarg[i].key + "=")) { //$NON-NLS-1$
+						vmarg[i] = null;
+						if (vmarg[i].value == null)
+							continue;
+						arg = vmarg[i].key + "=" + vmarg[i].value + SystemUtils.LINE_SEPARATOR; //$NON-NLS-1$ 
+					}
 				}
 				result.append(arg + " "); //$NON-NLS-1$
 			}
-		if (!added && value != null)
-			result.append(vmarg + "=" + value + " "); //$NON-NLS-1$ //$NON-NLS-2$
+		for (int i = 0; i < vmarg.length; i++)
+			if (vmarg[i] != null)
+				result.append(vmarg[i].key + "=" + vmarg[i].value + SystemUtils.LINE_SEPARATOR); //$NON-NLS-1$ //$NON-NLS-2$ 
 		return result.toString();
 	}
 
 	/**
-	 * Write a configuration of eclipse to the configuration file. Before to 
-	 * do this it create a backup
+	 * Write a configuration of eclipse to the configuration file. Before to do this it create a backup
 	 * 
-	 * @param configurationContent the new configuration 
+	 * @param configurationContent
+	 *          the new configuration
 	 * @return true if the configuration was written correctly, false otherwise
 	 */
-	public static boolean writeConfigurationFile(String configurationContent){
-		if (isConfigurationAccessibleWithMessage()){
+	public static boolean writeConfigurationFile(String configurationContent) {
+		if (isConfigurationAccessibleWithMessage()) {
 			try {
 				// create a backup first
 				File fini = getApplicationConfigurationFile();
 				if (fini.exists())
 					org.apache.commons.io.FileUtils.copyFile(fini, new File(fini.toString() + ".bak"));
-	
+
 				if (!fini.exists()) {
 					fini.getParentFile().mkdirs();
 					fini.createNewFile();

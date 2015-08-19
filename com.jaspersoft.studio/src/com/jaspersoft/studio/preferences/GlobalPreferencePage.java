@@ -35,6 +35,7 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 import com.jaspersoft.studio.ConfigurationManager;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.model.util.KeyValue;
 import com.jaspersoft.studio.utils.Misc;
 
 public class GlobalPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
@@ -159,15 +160,21 @@ public class GlobalPreferencePage extends FieldEditorPreferencePage implements I
 								return;
 							}
 					}
-					cfg = ConfigurationManager.buildCommandLineVMarg("-Djava.util.logging.config.file", fname);
-					cfg += ConfigurationManager.buildCommandLineVMarg("-Dorg.apache.commons.logging.diagnostics.dest", fname);
-					cfg += ConfigurationManager.buildCommandLineVMarg("-Dorg.apache.commons.logging.Log",
+					KeyValue<String, String>[] kv = new KeyValue[3];
+					kv[0] = new KeyValue<String, String>("-Djava.util.logging.config.file", fname);
+					kv[1] = new KeyValue<String, String>("-Dorg.apache.commons.logging.diagnostics.dest", fname);
+					kv[2] = new KeyValue<String, String>("-Dorg.apache.commons.logging.Log",
 							"org.apache.commons.logging.impl.Jdk14Logger");
+
+					cfg = ConfigurationManager.buildCommandLineVMarg(kv);
 				} else {
 					getPreferenceStore().putValue(LOG_FILE, getPreferenceStore().getDefaultString(LOG_FILE));
-					cfg = ConfigurationManager.buildCommandLineVMarg("-Djava.util.logging.config.file", null);
-					cfg += ConfigurationManager.buildCommandLineVMarg("-Dorg.apache.commons.logging.diagnostics.dest", null);
-					cfg += ConfigurationManager.buildCommandLineVMarg("-Dorg.apache.commons.logging.Log", null);
+					KeyValue<String, String>[] kv = new KeyValue[3];
+					kv[0] = new KeyValue<String, String>("-Djava.util.logging.config.file", null);
+					kv[1] = new KeyValue<String, String>("-Dorg.apache.commons.logging.diagnostics.dest", null);
+					kv[2] = new KeyValue<String, String>("-Dorg.apache.commons.logging.Log", null);
+
+					cfg = ConfigurationManager.buildCommandLineVMarg(kv);
 				}
 				ConfigurationManager.writeConfigurationFile(cfg);
 			}
