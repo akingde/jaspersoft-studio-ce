@@ -190,11 +190,16 @@ public class JSSCompoundCommand extends CompoundCommand {
 	 * the disable refresh flag, so calling this the editor area is always updated
 	 */
 	protected void refreshVisuals(){
-			 ANode report = getNode();
+		try{
+			ANode report = getNode();
 			 if (report != null){
 				 PropertyChangeEvent event = new PropertyChangeEvent(report.getJasperDesign(), REFRESH_UI_EVENT, null, null);
 				 report.getPropertyChangeSupport().firePropertyChange(event);
 			 }
+		} catch (Exception ex){
+			ex.printStackTrace();
+			JaspersoftStudioPlugin.getInstance().logError(ex);
+		}
 	}
 	
 	/**
