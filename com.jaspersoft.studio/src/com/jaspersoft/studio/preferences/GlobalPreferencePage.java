@@ -176,7 +176,8 @@ public class GlobalPreferencePage extends FieldEditorPreferencePage implements I
 
 			@Override
 			public void modifyText(ModifyEvent e) {
-				showLogFile();
+				if (!refresh)
+					showLogFile();
 			}
 		});
 
