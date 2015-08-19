@@ -160,9 +160,14 @@ public class GlobalPreferencePage extends FieldEditorPreferencePage implements I
 							}
 					}
 					cfg = ConfigurationManager.buildCommandLineVMarg("-Djava.util.logging.config.file", fname);
+					cfg = ConfigurationManager.buildCommandLineVMarg("-Dorg.apache.commons.logging.diagnostics.dest", fname);
+					cfg = ConfigurationManager.buildCommandLineVMarg("-Dorg.apache.commons.logging.Log",
+							"org.apache.commons.logging.impl.Jdk14Logger");
 				} else {
 					getPreferenceStore().putValue(LOG_FILE, getPreferenceStore().getDefaultString(LOG_FILE));
 					cfg = ConfigurationManager.buildCommandLineVMarg("-Djava.util.logging.config.file", null);
+					cfg = ConfigurationManager.buildCommandLineVMarg("-Dorg.apache.commons.logging.diagnostics.dest", null);
+					cfg = ConfigurationManager.buildCommandLineVMarg("-Dorg.apache.commons.logging.Log", null);
 				}
 				ConfigurationManager.writeConfigurationFile(cfg);
 			}
@@ -248,7 +253,7 @@ public class GlobalPreferencePage extends FieldEditorPreferencePage implements I
 			try {
 				String path = JaspersoftStudioPlugin.getInstance().getFileLocation("/resources/log.properties");
 				if (!Misc.isNullOrEmpty(path)) {
-					template = FileUtils.toFile(new URL("file://"+path));
+					template = FileUtils.toFile(new URL("file://" + path));
 
 					// Bundle bundle = JaspersoftStudioPlugin.getInstance().getBundle();
 					// template = bundle.getDataFile("resources/log.properties");
