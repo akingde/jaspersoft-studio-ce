@@ -163,7 +163,7 @@ public class GlobalPreferencePage extends FieldEditorPreferencePage implements I
 					}
 					KeyValue<String, String>[] kv = new KeyValue[3];
 					kv[0] = new KeyValue<String, String>("-Djava.util.logging.config.file", fname);
-					kv[1] = new KeyValue<String, String>("-Dorg.apache.commons.logging.diagnostics.dest", fname);
+					kv[1] = new KeyValue<String, String>("-Dorg.apache.commons.logging.diagnostics.dest", "/tmp/studio-common.log");
 					kv[2] = new KeyValue<String, String>("-Dorg.apache.commons.logging.Log",
 							"org.apache.commons.logging.impl.Jdk14Logger");
 
