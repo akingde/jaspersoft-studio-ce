@@ -34,6 +34,9 @@ import net.sf.jasperreports.engine.JRValueParameter;
 import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.query.JRJdbcQueryExecuter;
 import net.sf.jasperreports.engine.query.JRJdbcQueryExecuterFactory;
+import net.sf.jasperreports.engine.query.JRQueryExecuter;
+import net.sf.jasperreports.engine.query.QueryExecuterFactory;
+import net.sf.jasperreports.engine.util.JRQueryExecuterUtils;
 
 import com.jaspersoft.studio.data.fields.IFieldsProvider;
 import com.jaspersoft.studio.utils.Misc;
@@ -68,48 +71,54 @@ public class JDBCFieldsProvider implements IFieldsProvider {
 			tmpMap.put(JRParameter.REPORT_PARAMETERS_MAP,
 					new SimpleValueParameter(
 							new HashMap<String, JRValueParameter>()));
-			JRJdbcQueryExecuter qe = new JRJdbcQueryExecuter(jConfig, jDataset,
-					tmpMap);
+
+			QueryExecuterFactory queryExecuterFactory = JRQueryExecuterUtils
+					.getInstance(jConfig).getExecuterFactory(
+							jDataset.getQuery().getLanguage());
+			JRQueryExecuter qe = queryExecuterFactory.createQueryExecuter(
+					jConfig, jDataset, tmpMap);
 			qe.createDatasource();
+			if (qe instanceof JRJdbcQueryExecuter) {
+				ResultSet rs = ((JRJdbcQueryExecuter) qe).getResultSet();
+				if (rs != null) {
+					ResultSetMetaData metaData = rs.getMetaData();
+					int cc = metaData.getColumnCount();
+					Set<String> colset = new HashSet<String>();
+					columns = new ArrayList<JRDesignField>(cc);
+					for (int i = 1; i <= cc; i++) {
+						String name = metaData.getColumnLabel(i);
+						// System.out.println("name: " +
+						// metaData.getColumnName(i) +
+						// " Label: " + name);
+						if (colset.contains(name))
+							name = JRResultSetDataSource.INDEXED_COLUMN_PREFIX
+									+ i;
+						colset.add(name);
+						JRDesignField field = new JRDesignField();
+						field.setName(StringUtils.xmlEncode(name, null));
 
-			ResultSet rs = qe.getResultSet();
-			if (rs != null) {
-				ResultSetMetaData metaData = rs.getMetaData();
-				int cc = metaData.getColumnCount();
-				Set<String> colset = new HashSet<String>();
-				columns = new ArrayList<JRDesignField>(cc);
-				for (int i = 1; i <= cc; i++) {
-					String name = metaData.getColumnLabel(i);
-					// System.out.println("name: " + metaData.getColumnName(i) +
-					// " Label: " + name);
-					if (colset.contains(name))
-						name = JRResultSetDataSource.INDEXED_COLUMN_PREFIX + i;
-					colset.add(name);
-					JRDesignField field = new JRDesignField();
-					field.setName(StringUtils.xmlEncode(name, null));
-
-					field.setValueClassName(getJdbcTypeClass(metaData, i));
-					try {
-						String catalog = metaData.getCatalogName(i);
-						String schema = metaData.getSchemaName(i);
-						String table = metaData.getTableName(i);
-						if (!(Misc.isNullOrEmpty(catalog)
-								&& Misc.isNullOrEmpty(schema) && Misc
-									.isNullOrEmpty(table))) {
-							ResultSet rsmc = c.getMetaData().getColumns(
-									catalog, schema, table, name);
-							while (rsmc.next()) {
-								field.setDescription(StringUtils.xmlEncode(
-										rsmc.getString("REMARKS"), null));
-								break;
+						field.setValueClassName(getJdbcTypeClass(metaData, i));
+						try {
+							String catalog = metaData.getCatalogName(i);
+							String schema = metaData.getSchemaName(i);
+							String table = metaData.getTableName(i);
+							if (!(Misc.isNullOrEmpty(catalog)
+									&& Misc.isNullOrEmpty(schema) && Misc
+										.isNullOrEmpty(table))) {
+								ResultSet rsmc = c.getMetaData().getColumns(
+										catalog, schema, table, name);
+								while (rsmc.next()) {
+									field.setDescription(StringUtils.xmlEncode(
+											rsmc.getString("REMARKS"), null));
+									break;
+								}
 							}
+						} catch (SQLException se) {
+							se.printStackTrace();
 						}
-					} catch (SQLException se) {
-						se.printStackTrace();
+						columns.add(field);
 					}
-					columns.add(field);
 				}
-
 			}
 		} catch (SQLException e) {
 			throw new JRException(e);
