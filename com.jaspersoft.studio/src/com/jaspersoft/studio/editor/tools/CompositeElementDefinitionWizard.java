@@ -14,6 +14,7 @@ package com.jaspersoft.studio.editor.tools;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.List;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
@@ -26,50 +27,49 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.utils.ImageUtils;
 
 /**
- * Wizard used to edit the metadata of an existing tool
+ * Wizard used to create a new composite element and provide the metadata about it
  * 
  * @author Orlandin Marco
  *
  */
-public class ToolEditWizard extends Wizard {
+public class CompositeElementDefinitionWizard extends Wizard {
 
-	/**
-	 * The tool to edit
-	 */
-	private MCustomTool toolToEdit;
-	
 	/**
 	 * The page where the informations will be provided
 	 */
-	private ToolEditWizardPage page0;
+	private CompositeElementDefinitionWizardPage page0;
+	
+	/**
+	 * The selected elements that will compose the composite element
+	 */
+	private List<Object> elementContents;
 	
 	/**
 	 * Create the wizard
 	 * 
-	 * @param the tool to edit, must be not null
+	 * @param elementContents The selected elements that will compose the composite element, must 
+	 * be a not null list of MGraphicalElement
 	 */
-	public ToolEditWizard(MCustomTool toolToEdit) {
-		this.toolToEdit = toolToEdit;
+	public CompositeElementDefinitionWizard(List<Object> elementContents) {
+		this.elementContents = elementContents;
 	}
 	
 	@Override
 	public void addPages() {
-		String imagePath = toolToEdit.getIconPathBig();
-		if (imagePath == null) {
-			imagePath = toolToEdit.getIconPathSmall();
-		}
-		page0 = new ToolEditWizardPage(toolToEdit.getName(), toolToEdit.getDescription(), imagePath);
+		page0 = new CompositeElementDefinitionWizardPage();
 		addPage(page0);
 	}
 	
 	/**
-	 * Update the metadata of the selected tool
+	 * Create the required resources from the provided metadata and use them to 
+	 * request the add of the composite element
 	 */
 	@Override
 	public boolean performFinish() {
 		String name = page0.getName();
 		String iconPath = page0.getIconPath();
-		String description = page0.getToolDescription();
+		String description = page0.getElementDescription();
+		String groupID = page0.getGroupID();
 		if (description == null || description.trim().isEmpty()){
 			description = "";
 		}
@@ -90,8 +90,8 @@ public class ToolEditWizard extends Wizard {
 					loadedImage.dispose();	
 				}
 			}
-			//Add the tool to the set
-			ToolManager.INSTANCE.editTool(toolToEdit, name, description, resized16, resized32);
+			//Add the composite element to the set
+			CompositeElementManager.INSTANCE.addCompositeElement(name, description, groupID, resized16, resized32, elementContents);
 		} catch (Exception ex){
 			ex.printStackTrace();
 			JaspersoftStudioPlugin.getInstance().logError(ex);

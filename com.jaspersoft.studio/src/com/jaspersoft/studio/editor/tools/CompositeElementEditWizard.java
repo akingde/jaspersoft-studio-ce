@@ -14,7 +14,6 @@ package com.jaspersoft.studio.editor.tools;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.util.List;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
@@ -27,48 +26,51 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.utils.ImageUtils;
 
 /**
- * Wizard used to create a new tool and provide the metadata about it
+ * Wizard used to edit the metadata of an existing composite element
  * 
  * @author Orlandin Marco
  *
  */
-public class ToolDefinitionWizard extends Wizard {
+public class CompositeElementEditWizard extends Wizard {
 
+	/**
+	 * The composite element to edit
+	 */
+	private MCompositeElement elementToEdit;
+	
 	/**
 	 * The page where the informations will be provided
 	 */
-	private ToolDefinitionWizardPage page0;
-	
-	/**
-	 * The selected elements that will compose the tool
-	 */
-	private List<Object> toolElements;
+	private CompositeElementEditWizardPage page0;
 	
 	/**
 	 * Create the wizard
 	 * 
-	 * @param toolElements The selected elements that will compose the tool, must 
-	 * be a not null list of MGraphicalElement
+	 * @param the composite element to edit, must be not null
 	 */
-	public ToolDefinitionWizard(List<Object> toolElements) {
-		this.toolElements = toolElements;
+	public CompositeElementEditWizard(MCompositeElement elementToEdit) {
+		this.elementToEdit = elementToEdit;
 	}
 	
 	@Override
 	public void addPages() {
-		page0 = new ToolDefinitionWizardPage();
+		String imagePath = elementToEdit.getIconPathBig();
+		if (imagePath == null) {
+			imagePath = elementToEdit.getIconPathSmall();
+		}
+		page0 = new CompositeElementEditWizardPage(elementToEdit.getName(), elementToEdit.getDescription(), elementToEdit.getGroupId(), imagePath);
 		addPage(page0);
 	}
 	
 	/**
-	 * Create the required resources from the provided metadata and use them to 
-	 * request the add of the tool
+	 * Update the metadata of the selected composite element
 	 */
 	@Override
 	public boolean performFinish() {
 		String name = page0.getName();
 		String iconPath = page0.getIconPath();
-		String description = page0.getToolDescription();
+		String groupID = page0.getGroupID();
+		String description = page0.getElementDescription();
 		if (description == null || description.trim().isEmpty()){
 			description = "";
 		}
@@ -89,8 +91,8 @@ public class ToolDefinitionWizard extends Wizard {
 					loadedImage.dispose();	
 				}
 			}
-			//Add the tool to the set
-			ToolManager.INSTANCE.addTool(name, description, resized16, resized32, toolElements);
+			//Add the composite element to the set
+			CompositeElementManager.INSTANCE.editCompositeElement(elementToEdit, name, description, groupID, resized16, resized32);
 		} catch (Exception ex){
 			ex.printStackTrace();
 			JaspersoftStudioPlugin.getInstance().logError(ex);

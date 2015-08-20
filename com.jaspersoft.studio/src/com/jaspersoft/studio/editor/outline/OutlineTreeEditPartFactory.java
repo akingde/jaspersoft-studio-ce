@@ -42,8 +42,8 @@ import com.jaspersoft.studio.editor.outline.part.ContainerTreeEditPart;
 import com.jaspersoft.studio.editor.outline.part.NotDragableContainerTreeEditPart;
 import com.jaspersoft.studio.editor.outline.part.NotDragableTreeEditPart;
 import com.jaspersoft.studio.editor.outline.part.TreeEditPart;
-import com.jaspersoft.studio.editor.tools.MCustomTool;
-import com.jaspersoft.studio.editor.tools.ToolManager;
+import com.jaspersoft.studio.editor.tools.MCompositeElement;
+import com.jaspersoft.studio.editor.tools.CompositeElementManager;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.IContainer;
@@ -461,8 +461,8 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 			}
 		}
 		//If it is a custom tool require the command to the toolmanger
-		if (child instanceof MCustomTool){
-			return ToolManager.INSTANCE.getCommand(parent, (MCustomTool)child, location, newIndex);
+		if (child instanceof MCompositeElement){
+			return CompositeElementManager.INSTANCE.getCommand(parent, (MCompositeElement)child, location, newIndex);
 		} else if (child instanceof MPageXofY) {
 			if (parent instanceof MElementGroup)
 				return new CreatePageXofYCommand((MElementGroup) parent, (MPageXofY) child, location, newIndex);

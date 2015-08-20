@@ -18,33 +18,40 @@ import org.apache.commons.io.FileUtils;
 import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.plugin.PaletteGroup;
 
 /**
- * Page used to edit the metadata of a tool
+ * Page used to edit the metadata of a composite element
  * 
  * @author Orlandin Marco
  *
  */
-public class ToolEditWizardPage extends ToolDefinitionWizardPage {
+public class CompositeElementEditWizardPage extends CompositeElementDefinitionWizardPage {
 
 	/**
-	 * The current name of the tool
+	 * The current name of the composite element
 	 */
 	private String initialName;
 	
 	/**
-	 * The current description of the tool
+	 * The current description of the composite element
 	 */
 	private String initialDescription;
 	
 	/**
-	 * The current image of the tool
+	 * The current palette group id of the composite element
+	 */
+	private String initialGroupId;
+	
+	/**
+	 * The current image of the composite element
 	 */
 	private String initialImagePath = "";
 	
-	public ToolEditWizardPage(String initialName, String initialDescription, String initialImagePath){
+	public CompositeElementEditWizardPage(String initialName, String initialDescription, String initialGroupId, String initialImagePath){
 		this.initialDescription = initialDescription;
 		this.initialName = initialName;
+		this.initialGroupId = initialGroupId;
 
 		if (initialImagePath != null){
 			File image = new File(initialImagePath);
@@ -69,7 +76,17 @@ public class ToolEditWizardPage extends ToolDefinitionWizardPage {
 		nameText.setText(initialName);
 		descriptionText.setText(initialDescription);
 		iconPathText.setText(initialImagePath);
-		widgetsModfied.modifyText(null);
+		
+		int index = 0;
+		for(PaletteGroup group : groups){
+			if (group.getId().equals(initialGroupId)){
+				break;
+			}
+			index++;
+		}
+		palettePosition.select(index);
+		
+		updateWidgets();
 	}
 	
 	/**
@@ -84,7 +101,7 @@ public class ToolEditWizardPage extends ToolDefinitionWizardPage {
 			setErrorMessage(Messages.ToolDefinitionWizardPage_errorNameEmpry);	
 		} else if (!net.sf.jasperreports.eclipse.util.FileUtils.isFilenameValid(name)){
 			setErrorMessage(Messages.ToolDefinitionWizardPage_invalidFileName);
-		} else if (!initialName.equals(name) && ToolManager.INSTANCE.isNameAlreadyUsed(name.trim())){
+		} else if (!initialName.equals(name) && CompositeElementManager.INSTANCE.isNameAlreadyUsed(name.trim())){
 			setErrorMessage(Messages.ToolDefinitionWizardPage_errorNameUsed);
 		} else {
 			setErrorMessage(null);

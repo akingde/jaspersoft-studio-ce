@@ -15,6 +15,8 @@ package com.jaspersoft.studio.editor.tools;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
@@ -29,52 +31,72 @@ import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.editor.palette.JDPaletteFactory;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.plugin.ExtensionManager;
+import com.jaspersoft.studio.plugin.PaletteGroup;
 import com.jaspersoft.studio.utils.ImageUtils;
 import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
 
 /**
- * Wizard page to provide the metadata of a custom tool
+ * Wizard page to provide the metadata of a composite element
  * 
  * @author Orlandin Marco
  *
  */
-public class ToolDefinitionWizardPage extends JSSHelpWizardPage {
+public class CompositeElementDefinitionWizardPage extends JSSHelpWizardPage {
 
 	/**
-	 * The unique name of the new tool
+	 * The unique name of the new composite element
 	 */
 	private String name = ""; //$NON-NLS-1$
 	
 	/**
-	 * The description of the new tool
+	 * The description of the new composite element
 	 */
-	private String toolDescription = ""; //$NON-NLS-1$
+	private String elementDescription = ""; //$NON-NLS-1$
 	
 	/**
-	 * The path to the icon of the new tool
+	 * The path to the icon of the new composite element
 	 */
 	private String iconPath = ""; //$NON-NLS-1$
 	
 	/**
-	 * Text area where the name of the tool is provided
+	 * The palette group ID where the composite element will be placed
+	 */
+	private String groupID = "";
+	
+	/**
+	 * Text area where the name of the composite element is provided
 	 */
 	protected Text nameText;
 	
 	/**
-	 * Text area where the description of the tool is provided
+	 * Text area where the description of the composite element is provided
 	 */
 	protected Text descriptionText;
 	
 	/**
-	 * Text area where the icon path of the tool is provided
+	 * Combo where the user can select the palette where the composite element will be placed
+	 */
+	protected Combo palettePosition;
+	
+	/**
+	 * Text area where the icon path of the composite element is provided
 	 */
 	protected Text iconPathText;
+	
+	/**
+	 * The available palette group where this element can be placed
+	 */
+	protected List<PaletteGroup> groups = getAvailableGroups();
 	
 	/**
 	 * Text area where the currently loaded icon is shown
@@ -82,7 +104,7 @@ public class ToolDefinitionWizardPage extends JSSHelpWizardPage {
 	private Label iconPreview;
 	
 	/**
-	 * The last loaded image as icon for the tool. It is keep a reference
+	 * The last loaded image as icon for the composite element. It is keep a reference
 	 * to dispose it when it is no more necessary
 	 */
 	private Image lastLoadedImage = null;
@@ -95,35 +117,52 @@ public class ToolDefinitionWizardPage extends JSSHelpWizardPage {
 		
 		@Override
 		public void modifyText(ModifyEvent e) {
-			name = nameText.getText();
-			toolDescription = descriptionText.getText();
-			if (!iconPath.equals(iconPathText.getText())){
-				iconPath = iconPathText.getText();
-				try{ 
-					loadIconSample();
-				} catch (Exception ex){
-					//if something goes wrong hide the preview area
-					iconPreview.setImage(null);
-					GridData iconLabelData = new GridData();
-					iconLabelData.exclude = true;
-					iconPreview.setLayoutData(iconLabelData);
-					iconPreview.getParent().layout(true, true);
-				}
-			}
-			getWizard().getContainer().updateButtons();
-			
+			updateWidgets();
 		}
 	};
 	
 	/**
 	 * Create the wizard page
 	 */
-	protected ToolDefinitionWizardPage() {
-		super("tooldefinitionwizard"); //$NON-NLS-1$
+	protected CompositeElementDefinitionWizardPage() {
+		super("elementdefinitionwizard"); //$NON-NLS-1$
 		setTitle(Messages.ToolDefinitionWizardPage_title);
 		setDescription(Messages.ToolDefinitionWizardPage_description);
 	}
 
+	/**
+	 * Read the values from the widgets and store them in the appropriate
+	 * fields.
+	 */
+	protected void updateWidgets(){
+		name = nameText.getText();
+		elementDescription = descriptionText.getText();
+		
+		PaletteGroup selectedGroup = groups.get(palettePosition.getSelectionIndex());
+		groupID = selectedGroup.getId();
+		
+		if (!iconPath.equals(iconPathText.getText())){
+			iconPath = iconPathText.getText();
+			try{ 
+				loadIconSample();
+			} catch (Exception ex){
+				//if something goes wrong hide the preview area
+				iconPreview.setImage(null);
+				GridData iconLabelData = new GridData();
+				iconLabelData.exclude = true;
+				iconPreview.setLayoutData(iconLabelData);
+				iconPreview.getParent().layout(true, true);
+			}
+		}
+		getWizard().getContainer().updateButtons();
+	}
+	
+	/**
+	 * Create the area used to handle the icon image
+	 * 
+	 * @param container the container where control are created, it is a grid layout
+	 * with 2 columns
+	 */
 	protected void createIconArea(Composite container){
 			//Create the controls for the image
 			Composite imageContainer = new Composite(container, SWT.NONE);
@@ -156,6 +195,20 @@ public class ToolDefinitionWizardPage extends JSSHelpWizardPage {
 			});
 	}
 	
+	/**
+	 * Get the group of the palette where this element can be place
+	 * 
+	 * @return a not null and not empty list of available palette group
+	 */
+	protected List<PaletteGroup> getAvailableGroups(){
+		List<PaletteGroup> result = new ArrayList<PaletteGroup>();
+		result.add(JDPaletteFactory.getBaseElementsGroup());
+		result.add(JDPaletteFactory.getOtherElementsGroup());
+		ExtensionManager m = JaspersoftStudioPlugin.getExtensionManager();
+		result.addAll(m.getPaletteGroups());
+		return result;
+	}
+	
 	@Override
 	public void createControl(Composite parent) {
 		Composite container = new Composite(parent, SWT.NONE);
@@ -174,13 +227,32 @@ public class ToolDefinitionWizardPage extends JSSHelpWizardPage {
 		
 		createIconArea(container);
 		
+		//create the palette area
+		new Label(container, SWT.NONE).setText("Position in Palette");
+		palettePosition = new Combo(container, SWT.READ_ONLY);
+		palettePosition.setData(groups);
+		List<String> entries = new ArrayList<String>();
+		for(PaletteGroup group : groups){
+			entries.add(group.getName());
+		}
+		palettePosition.setItems(entries.toArray(new String[entries.size()]));
+		groupID = groups.get(0).getId();
+		palettePosition.select(0);
+		
 		//Add the listeners
 		nameText.addModifyListener(widgetsModfied);
 		descriptionText.addModifyListener(widgetsModfied);
 		iconPathText.addModifyListener(widgetsModfied);
+		palettePosition.addSelectionListener(new SelectionAdapter() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				updateWidgets();
+			}
+		});
 		
 		//force the update of the text field
-		widgetsModfied.modifyText(null);
+		updateWidgets();
 		
 		setControl(container);
 	}
@@ -196,7 +268,7 @@ public class ToolDefinitionWizardPage extends JSSHelpWizardPage {
 			setErrorMessage(Messages.ToolDefinitionWizardPage_errorNameEmpry);	
 		} else if (!FileUtils.isFilenameValid(name)){
 			setErrorMessage(Messages.ToolDefinitionWizardPage_invalidFileName);
-		} else if (ToolManager.INSTANCE.isNameAlreadyUsed(name.trim())){
+		} else if (CompositeElementManager.INSTANCE.isNameAlreadyUsed(name.trim())){
 			setErrorMessage(Messages.ToolDefinitionWizardPage_errorNameUsed);
 		} else {
 			setErrorMessage(null);
@@ -206,15 +278,15 @@ public class ToolDefinitionWizardPage extends JSSHelpWizardPage {
 	}
 	
 	/**
-	 * Search the first available name for a tool
+	 * Search the first available name for a composite element
 	 * 
-	 * @return a not null and unique name for a tool
+	 * @return a not null and unique name for a composite element
 	 */
 	private String getFirstAvailableName(){
 		String baseName= Messages.ToolDefinitionWizardPage_defaultName;
 		String name = baseName;
 		int counter = 1;
-		while(ToolManager.INSTANCE.isNameAlreadyUsed(name)){
+		while(CompositeElementManager.INSTANCE.isNameAlreadyUsed(name)){
 			name = baseName + " " + counter;  //$NON-NLS-1$
 			counter ++;
 		}
@@ -268,7 +340,7 @@ public class ToolDefinitionWizardPage extends JSSHelpWizardPage {
 	}
 
 	/**
-	 * Return the name of the tool
+	 * Return the name of the composite element
 	 * 
 	 * @return a not null and not empty string
 	 */
@@ -277,16 +349,16 @@ public class ToolDefinitionWizardPage extends JSSHelpWizardPage {
 	}
 
 	/**
-	 * Return the description of the tool
+	 * Return the description of the composite element
 	 * 
 	 * @return a not null and not empty string
 	 */
-	public String getToolDescription() {
-		return toolDescription;
+	public String getElementDescription() {
+		return elementDescription;
 	}
 
 	/**
-	 * Return the absolute icon path of the tool
+	 * Return the absolute icon path of the composite element
 	 * 
 	 * @return a not null and valid absolute path
 	 */
@@ -294,4 +366,12 @@ public class ToolDefinitionWizardPage extends JSSHelpWizardPage {
 		return iconPath;
 	}
 
+	/**
+	 * Return the id of the palette group where the tool should be placed
+	 * 
+	 * @return a not null string
+	 */
+	public String getGroupID(){
+		return groupID;
+	}
 }

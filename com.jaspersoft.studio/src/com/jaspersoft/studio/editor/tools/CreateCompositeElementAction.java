@@ -28,16 +28,16 @@ import com.jaspersoft.studio.model.IDatasetContainer;
 import com.jaspersoft.studio.model.MGraphicElement;
 
 /**
- * Action to create a new custom tool starting from the selected elements
+ * Action to create a new composite element starting from the selected elements
  * 
  * @author Orlandin Marco
  * 
  */
-public class CreateToolAction extends ACachedSelectionAction {
+public class CreateCompositeElementAction extends ACachedSelectionAction {
   
-  public static final String ID = "CreateToolAction"; //$NON-NLS-1$
+  public static final String ID = "CreateCompositeElementAction"; //$NON-NLS-1$
 	
-	public CreateToolAction(IWorkbenchPart part) {
+	public CreateCompositeElementAction(IWorkbenchPart part) {
 		super(part);
 		setLazyEnablementCalculation(true);
 	}
@@ -63,7 +63,7 @@ public class CreateToolAction extends ACachedSelectionAction {
 	
 	/**
 	 * The action is available if there are at least one graphical element selected but no
-	 * elements that uses datasets, since the custom tools support only base elements
+	 * elements that uses datasets, since the composite elements support only base elements
 	 */
 	@Override
 	protected boolean calculateEnabled() {
@@ -75,7 +75,7 @@ public class CreateToolAction extends ACachedSelectionAction {
 	@Override
 	public void run() {
 		List<Object> mGraphElements = editor.getSelectionCache().getSelectionModelForType(MGraphicElement.class);
-		WizardDialog dialog = new WizardDialog(UIUtils.getShell(), new ToolDefinitionWizard(mGraphElements));
+		WizardDialog dialog = new WizardDialog(UIUtils.getShell(), new CompositeElementDefinitionWizard(mGraphElements));
 		if (dialog.open() == Dialog.OK){
 			UIUtils.showInformation(Messages.CreateToolAction_successMessage);
 		}

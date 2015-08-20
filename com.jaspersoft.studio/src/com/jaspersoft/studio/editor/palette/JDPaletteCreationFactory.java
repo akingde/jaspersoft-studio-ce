@@ -14,7 +14,7 @@ package com.jaspersoft.studio.editor.palette;
 
 import org.eclipse.gef.requests.CreationFactory;
 
-import com.jaspersoft.studio.editor.tools.MCustomTool;
+import com.jaspersoft.studio.editor.tools.MCompositeElement;
 
 /*
  * A factory for creating JDPaletteCreation objects.
@@ -47,7 +47,7 @@ public class JDPaletteCreationFactory implements CreationFactory {
 		try {
 			if (template instanceof Class) {
 				return ((Class<?>) template).newInstance();
-			} else if (template instanceof MCustomTool){
+			} else if (template instanceof MCompositeElement){
 				return template;
 			}
 		} catch (InstantiationException e) {

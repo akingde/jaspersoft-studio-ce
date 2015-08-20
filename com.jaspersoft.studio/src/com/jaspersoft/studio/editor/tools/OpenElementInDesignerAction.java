@@ -25,19 +25,19 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
 
 /**
- * Action to open a custom tool element in the designer to edit it
+ * Action to open a composite element in the designer to edit it
  * 
  * @author Orlandin Marco
  *
  */
-public class OpenInDesignerToolAction extends Action {
+public class OpenElementInDesignerAction extends Action {
 
 	/**
 	 * The palette entry to edit
 	 */
-	private ToolTemplateCreationEntry elementToEdit;
+	private CompositeElementTemplateCreationEntry elementToEdit;
 
-	public OpenInDesignerToolAction(ToolTemplateCreationEntry elementToEdit) {
+	public OpenElementInDesignerAction(CompositeElementTemplateCreationEntry elementToEdit) {
 		super();
 		setText(Messages.OpenInDesignerToolAction_actionName);
 		setImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/tool_open_in_editor.png")); //$NON-NLS-1$
@@ -45,10 +45,10 @@ public class OpenInDesignerToolAction extends Action {
 	}
 
 	public void run() {
-		MCustomTool tool = elementToEdit.getTemplate();
+		MCompositeElement element = elementToEdit.getTemplate();
 		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 		try {
-			IFileStore fileStore = EFS.getLocalFileSystem().getStore(new Path(tool.getPath()));
+			IFileStore fileStore = EFS.getLocalFileSystem().getStore(new Path(element.getPath()));
 			if (!fileStore.fetchInfo().isDirectory() && fileStore.fetchInfo().exists()) {
         IDE.openEditorOnFileStore(page, fileStore);
 			}

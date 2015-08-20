@@ -18,10 +18,10 @@ import org.eclipse.gef.ui.palette.PaletteViewer;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.Separator;
 
-import com.jaspersoft.studio.editor.tools.DeleteToolAction;
-import com.jaspersoft.studio.editor.tools.EditToolAction;
-import com.jaspersoft.studio.editor.tools.OpenInDesignerToolAction;
-import com.jaspersoft.studio.editor.tools.ToolTemplateCreationEntry;
+import com.jaspersoft.studio.editor.tools.DeleteCompositeElementAction;
+import com.jaspersoft.studio.editor.tools.EditCompositeElementAction;
+import com.jaspersoft.studio.editor.tools.OpenElementInDesignerAction;
+import com.jaspersoft.studio.editor.tools.CompositeElementTemplateCreationEntry;
 
 /**
  * Context menu provider for the palette that show a different context menu if a custom
@@ -33,7 +33,7 @@ import com.jaspersoft.studio.editor.tools.ToolTemplateCreationEntry;
 public class JSSPaletteContextMenuProvider extends PaletteContextMenuProvider {
 
 	/**
-	 * Context menu group for actions of the custom tools
+	 * Context menu group for actions of the composite element
 	 */
 	public static final String GROUP_TOOL = "com.jaspersoft.studio.editor.palette.group.tool"; //$NON-NLS-1$	
 	
@@ -47,17 +47,17 @@ public class JSSPaletteContextMenuProvider extends PaletteContextMenuProvider {
 	}
 
 	/**
-	 * Create the menu for the palette, if the selected element is a ToolTemplateCreationEntry to
-	 * the menu will be added the action to delete the selected custom tool
+	 * Create the menu for the palette, if the selected element is a CompositeElementTemplateCreationEntry to
+	 * the menu will be added the action to delete the selected composite element
 	 */
 	public void buildContextMenu(IMenuManager menu) {
 		if (getPaletteViewer().getSelectedEditParts().size() == 1){	
 			EditPart selectedPart = (EditPart) getPaletteViewer().getSelectedEditParts().get(0);
-			if (selectedPart.getModel() instanceof ToolTemplateCreationEntry){
+			if (selectedPart.getModel() instanceof CompositeElementTemplateCreationEntry){
 				menu.add(new Separator(GROUP_TOOL));
-				menu.appendToGroup(GROUP_TOOL, new EditToolAction((ToolTemplateCreationEntry)selectedPart.getModel()));
-				menu.appendToGroup(GROUP_TOOL, new OpenInDesignerToolAction((ToolTemplateCreationEntry)selectedPart.getModel()));
-				menu.appendToGroup(GROUP_TOOL, new DeleteToolAction((ToolTemplateCreationEntry)selectedPart.getModel()));
+				menu.appendToGroup(GROUP_TOOL, new EditCompositeElementAction((CompositeElementTemplateCreationEntry)selectedPart.getModel()));
+				menu.appendToGroup(GROUP_TOOL, new OpenElementInDesignerAction((CompositeElementTemplateCreationEntry)selectedPart.getModel()));
+				menu.appendToGroup(GROUP_TOOL, new DeleteCompositeElementAction((CompositeElementTemplateCreationEntry)selectedPart.getModel()));
 			}
 		}
 		super.buildContextMenu(menu);

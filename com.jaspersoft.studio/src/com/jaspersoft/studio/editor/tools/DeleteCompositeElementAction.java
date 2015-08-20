@@ -29,19 +29,19 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
 
 /**
- * Action to delete a custom tool from the palette
+ * Action to delete a composite element from the palette
  * 
  * @author Orlandin Marco
  *
  */
-public class DeleteToolAction extends Action {
+public class DeleteCompositeElementAction extends Action {
 
 	/**
 	 * The palette entry to delete
 	 */
-	private ToolTemplateCreationEntry elementToDelete;
+	private CompositeElementTemplateCreationEntry elementToDelete;
 
-	public DeleteToolAction(ToolTemplateCreationEntry elementToDelete) {
+	public DeleteCompositeElementAction(CompositeElementTemplateCreationEntry elementToDelete) {
 		super();
 		setText(Messages.DeleteToolAction_actionName);
 		setImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/delete_style.gif")); //$NON-NLS-1$
@@ -49,14 +49,14 @@ public class DeleteToolAction extends Action {
 	}
 
 	public void run() {
-		MCustomTool tool = elementToDelete.getTemplate();
-		String question = MessageFormat.format(Messages.DeleteToolAction_messageDescription, new Object[]{tool.getName()});
+		MCompositeElement element = elementToDelete.getTemplate();
+		String question = MessageFormat.format(Messages.DeleteToolAction_messageDescription, new Object[]{element.getName()});
 		boolean confirmDelete = UIUtils.showConfirmation(Messages.DeleteToolAction_messageTitle,question);
 		if (confirmDelete){
-			ToolManager.INSTANCE.deleteTool(tool);
+			CompositeElementManager.INSTANCE.deleteCompositeElement(element);
 			//If it is in the workspace delete the link to the file also
 			try {
-				IFileStore fileStore = EFS.getLocalFileSystem().getStore(new Path(tool.getPath()));
+				IFileStore fileStore = EFS.getLocalFileSystem().getStore(new Path(element.getPath()));
 				if (!fileStore.fetchInfo().isDirectory()) {
 					IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 					IFile[] files = root.findFilesForLocationURI(fileStore.toURI());

@@ -75,29 +75,30 @@ import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
 import com.jaspersoft.studio.editor.defaults.CustomStyleResolver;
 import com.jaspersoft.studio.editor.defaults.DefaultManager;
 import com.jaspersoft.studio.editor.outline.OutlineTreeEditPartFactory;
-import com.jaspersoft.studio.editor.tools.ToolModfiedListener.OPERATION_TYPE;
+import com.jaspersoft.studio.editor.tools.ICompositeElementModifyListener.OPERATION_TYPE;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MGraphicElement;
+import com.jaspersoft.studio.plugin.IPaletteContributor;
 import com.jaspersoft.studio.utils.ExpressionUtil;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /**
- * The tool manager allow to load and save custom tools. Essentially the custom tools
- * are set of design elements with some properties already set inside. A custom tool
+ * The composite elements manager allow to load and save composite elements. Essentially the composite elements
+ * are set of design elements with some properties already set inside. A custom composite element
  * is so a report file, but to avoid to mess up with the file association it use a different
  * extension
  * 
  * @author Orlandin Marco
  *
  */
-public class ToolManager {
+public class CompositeElementManager {
 
 	/**
-	 * The Tool Manager is global and it is accessible only trough this class
+	 * The Composite Elements Manager is global and it is accessible only trough this class
 	 */
-	public static final ToolManager INSTANCE = new ToolManager();
+	public static final CompositeElementManager INSTANCE = new CompositeElementManager();
 	
 	/**
 	 * Template for the note that explain how to use the a composite element
@@ -105,78 +106,82 @@ public class ToolManager {
 	private static final String NOTE_TEMPLATE = "callouts.1.fg=0,0,0\ncallouts.1.text={0}\ncallouts.1.bounds={1},0,650,40\ncallouts.1.bg=255,255,0\n"; //$NON-NLS-1$
 	
 	/**
-	 * Storage name for the defined tools
+	 * Storage name for the defined composite elements
 	 */
-	private static final String TOOL_KEY = "customTools"; //$NON-NLS-1$
+	private static final String ELEMENTS_STORAGE_KEY = "compositeElements"; //$NON-NLS-1$
 	
 	/**
-	 * name of the xml file containing the definitions of all the tool saved, a definition of 
-	 * each tool is composed by name, description, path of the report containing the tool itself
+	 * name of the xml file containing the definitions of all the composite elements saved, a definition of 
+	 * each element is composed by name, description, path of the report containing its controlsf
 	 * and the path to the icons to use the palette
 	 */
-	private static final String TOOL_PROPERTIES_NAME = "index.xml"; //$NON-NLS-1$
+	private static final String INDEX_FILE_NAME = "index.xml"; //$NON-NLS-1$
 	
 	/**
-	 * Attribute name for each tool entry in the xml file
+	 * Attribute name for each composite element entry in the xml file
 	 */
 	private static final String PROPERTY_NAME = "name"; //$NON-NLS-1$
 	
 	/**
-	 * Attribute path of the icon (smaller one) for each tool entry in the xml file
+	 * Attribute path of the icon (smaller one) for each composite element entry in the xml file
 	 */
 	private static final String PROPERTY_ICON_SMALL = "icon_small"; //$NON-NLS-1$
 	
 	/**
-	 * Attribute path of the icon (bigger one) for each tool entry in the xml file
+	 * Attribute path of the icon (bigger one) for each composite element entry in the xml file
 	 */
 	private static final String PROPERTY_ICON_BIG = "icon_big"; //$NON-NLS-1$
 	
 	/**
-	 * Attribute description for each tool entry in the xml file
+	 * Attribute description for each composite element entry in the xml file
 	 */
 	private static final String PROPERTY_DESCRIPTION = "description"; //$NON-NLS-1$
 	
 	/**
-	 * Key for the property that list all the resources need by the tool
+	 * Attribute palette group for each composite element entry in the xml file
+	 */
+	private static final String PROPERTY_GROUP = "group_id"; //$NON-NLS-1$
+	
+	/**
+	 * Key for the property that list all the resources need by the composite element
 	 */
 	private static final String REQUIRED_RESOURCES = "requiredResources"; //$NON-NLS-1$
 	
 	/**
-	 * Attribute path of the report for each tool entry in the xml file
+	 * Attribute path of the report for each composite element entry in the xml file
 	 */
 	private static final String PROPERTY_PATH = "path"; //$NON-NLS-1$
 	
 	/**
-	 * Name of the tag for each tool entry in the xml file
+	 * Name of the tag for each composite element entry in the xml file
 	 */
-	private static final String XML_TAG_NAME = "tool"; //$NON-NLS-1$
+	private static final String XML_TAG_NAME = "compositeElement"; //$NON-NLS-1$
 	
 	/**
-	 * The default extension of a jrtool
+	 * The default extension of the file where the content of the composite element is saved
 	 */
-	public static final String TOOL_EXTENSION = ".jrtool"; //$NON-NLS-1$
+	public static final String COMPOSITE_ELEMENT_EXTENSION = ".jrtool"; //$NON-NLS-1$
 	
 	/**
-	 * List of the available tools
+	 * List of the available composite elements
 	 */
-	private List<MCustomTool> availableTools = new ArrayList<MCustomTool>();
+	private List<MCompositeElement> availableElements = new ArrayList<MCompositeElement>();
 	
 	/**
-	 * Map to keep cached the tool definition once its jrxml is loaded. The key is 
-	 * the path of the tool definition, the value is a band that contains all the 
-	 * element defined by the tool
+	 * Map to keep cached a composite element definition once its jrtool is loaded. The key is 
+	 * the path of the element definition, the value is a band that contains all its components
 	 */
-	private HashMap<String, JRBand> cachedToolsMap = new HashMap<String, JRBand>();
-	
-	
-	/**
-	 * List of listeners used to notify when the tools set changes
-	 */
-	private List<ToolModfiedListener> listeners = new ArrayList<ToolModfiedListener>();
+	private HashMap<String, JRBand> cachedElementssMap = new HashMap<String, JRBand>();
 	
 	
 	/**
-	 * Resource listener used to see when a tool is changed, and when this happen
+	 * List of listeners used to notify when the composite elements set changes
+	 */
+	private List<ICompositeElementModifyListener> listeners = new ArrayList<ICompositeElementModifyListener>();
+	
+	
+	/**
+	 * Resource listener used to see when a composite element is changed, and when this happen
 	 * remove it from the cache to have it reloaded updated
 	 */
 	private IResourceChangeListener resourceDeletedListener = new IResourceChangeListener() {
@@ -185,11 +190,11 @@ public class ToolManager {
 		public void resourceChanged(IResourceChangeEvent event) {
 			List<IFile> resourcesDeleted = new ArrayList<IFile>();
 			if (event.getType() == IResourceChangeEvent.POST_CHANGE && 
-						!cachedToolsMap.isEmpty()){
+						!cachedElementssMap.isEmpty()){
 				iterateResourceDelta(event.getDelta(), resourcesDeleted);
 				for(IFile resource : resourcesDeleted){
 					String resourceString = resource.getRawLocation().toOSString();
-					cachedToolsMap.remove(resourceString);
+					cachedElementssMap.remove(resourceString);
 				}
 			}
 		}
@@ -198,46 +203,46 @@ public class ToolManager {
 	/**
 	 * Constructor, since it's private the class can be only accessed by the INSTANCE method
 	 */
-	private ToolManager(){
-		loadTools();
+	private CompositeElementManager(){
+		loadElements();
 		ResourcesPlugin.getWorkspace().addResourceChangeListener(resourceDeletedListener);
 	};
 	
 	/**
-	 * Return a list of all the available tools
+	 * Return a list of all the available compoisite elements
 	 * 
-	 * @return a not null list of tools
+	 * @return a not null list of composite elements 
 	 */
-	public List<MCustomTool> getAvailableTools(){
-		return availableTools;
+	public List<MCompositeElement> getAvailableElements(){
+		return availableElements;
 	}
 
 	/**
-	 * Check if a name for a tool is already used by another tool
+	 * Check if a name for a composite element is already used by another one
 	 * 
 	 * @param name a not null name
 	 * @return true if the name is already in use, false otherwise
 	 */
 	public boolean isNameAlreadyUsed(String name){
-		for(MCustomTool tool : availableTools){
-			if (tool.getName().equals(name)) return true;
+		for(MCompositeElement element : availableElements){
+			if (element.getName().equals(name)) return true;
 		}
 		return false;
 	}
 	
 	/**
-	 * Delete a tool. This both remove all the physical of the tool resources from 
+	 * Delete a composite element. This both remove all the physical of the composite element resources from 
 	 * the disk and its entry on the index file. It also notify the listeners that the
-	 * set of tools is changed
+	 * set of elements is changed
 	 * 
-	 * @param toolToRemove a not null model of the tool to remove
+	 * @param elementToRemove a not null model of the composite element to remove
 	 */
-	public void deleteTool(MCustomTool toolToRemove){
-		cachedToolsMap.remove(toolToRemove.getPath());
-		availableTools.remove(toolToRemove);
+	public void deleteCompositeElement(MCompositeElement elementToRemove){
+		cachedElementssMap.remove(elementToRemove.getPath());
+		availableElements.remove(elementToRemove);
 
 		//Update the index file
-		File indexFile = ConfigurationManager.getStorageResource(TOOL_KEY, TOOL_PROPERTIES_NAME);
+		File indexFile = ConfigurationManager.getStorageResource(ELEMENTS_STORAGE_KEY, INDEX_FILE_NAME);
 		if (indexFile.exists()){
 			try{
 				String xmlContent = readFile(indexFile);
@@ -248,7 +253,7 @@ public class ToolManager {
 						Node adapterNode = adapterNodes.item(i);
 						if (adapterNode.getNodeType() == Node.ELEMENT_NODE && adapterNode.getAttributes().getNamedItem(PROPERTY_NAME)!=null) {
 							String name = adapterNode.getAttributes().getNamedItem(PROPERTY_NAME).getNodeValue(); 
-							if (name.equals(toolToRemove.getName())){
+							if (name.equals(elementToRemove.getName())){
 								document.getDocumentElement().removeChild(adapterNode);
 								break;
 							}
@@ -269,30 +274,30 @@ public class ToolManager {
 					indexFile.createNewFile();
 					transformer.transform(source, result);
 				}
-				deleteToolResources(toolToRemove);
+				deleteElementResources(elementToRemove);
 			}catch(Exception ex){
 				ex.printStackTrace();
 				JaspersoftStudioPlugin.getInstance().logError(ex);
 			}
 		} else {
 			//Index file not available, delete the resources if they are found
-			deleteToolResources(toolToRemove);
+			deleteElementResources(elementToRemove);
 		}
 		//Notify the change to the listeners
-		firePropertyChange(toolToRemove, OPERATION_TYPE.DELETE);
+		firePropertyChange(elementToRemove, null, OPERATION_TYPE.DELETE);
 	}
 	
 	/**
-	 * Check recursively all the resources need by the elements inside the tool. At the moment
+	 * Check recursively all the resources need by the elements inside the composite element. At the moment
 	 * the only searched resources are the images. When a resource is found then it is copied inside
-	 * the storage folder for this tool and in the element inside the tool the path is updated to point
-	 * the correct location
+	 * the storage folder for this composite element and in the element inside the composite element the 
+	 * path is updated to point the correct location
 	 * 
 	 * @param newElement the element that is actually inspecting
 	 * @param jConfig a not null jasper reports configuration of the source report
-	 * @param dataset the dataset of the element that is currently added part of the tool
-	 * @param band the band where the components of the tool are placed
-	 * @param resourcesDir the directory where the resources of the tool will be placed
+	 * @param dataset the dataset of the element that is currently added part of the composite element
+	 * @param band the band where the components of the composite element are placed
+	 * @param resourcesDir the directory where the resources of the composite element will be placed
 	 * @param foundResources the set of resources found during the various iteration, used to avoid to 
 	 * add twice or more the same resource
 	 */
@@ -336,20 +341,21 @@ public class ToolManager {
 	}
 	
 	/**
-	 * Create a JasperDesign for the tool starting from the list of the elements
+	 * Create a JasperDesign for the composite element starting from the list of the elements
 	 * that define it 
 	 * 
-	 * @param name the name of the tool
-	 * @param toolElements a not null list of MGraphicalElement, that are the elements that will
-	 * be used to create the new tool
-	 * @param resourcesDir the directory where the resources of the tool will be placed, like for example images
-	 * @return a not null jasperdesign with the elements that define the tool in 
+	 * @param name the name of the composite element
+	 * @param elementContents a not null list of MGraphicalElement, that are the elements that will
+	 * be used to create the new composite element
+	 * @param resourcesDir the directory where the resources of the composite element will be placed, 
+	 * like for example images
+	 * @return a not null jasperdesign with the elements that define the composite element in 
 	 * the title band
 	 */
-	private JasperDesign createDesign(String name, List<Object> toolElements, File resourcesDir){
+	private JasperDesign createDesign(String name, List<Object> elementContents, File resourcesDir){
 		Integer leftOffset = null;
 		Integer topOffset = null;
-		for(Object element : toolElements){
+		for(Object element : elementContents){
 			MGraphicElement gElement = (MGraphicElement)element;
 			int elementX = gElement.getValue().getX();
 			int elementY = gElement.getValue().getY();
@@ -376,7 +382,7 @@ public class ToolManager {
 		JRDesignBand band = new JRDesignBand();
 		int maxHeight = 0;
 		int maxWidth = 0;
-		for(Object element : toolElements){
+		for(Object element : elementContents){
 			MGraphicElement mOriginalElement = (MGraphicElement) element;
 			JRDesignElement originalElement = mOriginalElement.getValue();
 			JRDesignElement newElement = (JRDesignElement)originalElement.clone();
@@ -410,22 +416,23 @@ public class ToolManager {
 	}
 	
 	/**
-	 * Add a tool and search for resources needed by it, like images and copy that resources also inside the 
-	 * storage 
+	 * Add a composite element and search for resources needed by it, like images and copy that 
+	 * resources also inside the storage 
 	 * 
-	 * @param name the name of the tool, must be unique
-	 * @param description the description of the tool
-	 * @param iconSmall the small icon for the tool, typically 16x16
-	 * @param iconBig the big icon for the tool, typically 32x32
-	 * @param toolElements a not null list of MGraphicalElement, that are the elements that will
-	 * be used to create the new tool
+	 * @param name the name of the composite element, must be unique
+	 * @param description the description of the composite element
+	 * @param groupID the id of the palette group where this element should be placed
+	 * @param iconSmall the small icon for the composite element, typically 16x16
+	 * @param iconBig the big icon for the composite element, typically 32x32
+	 * @param elementContents a not null list of MGraphicalElement, that are the elements that will
+	 * be used to create the new composite element
 	 */
-	public void addTool(String name, String description, ImageData iconSmall, ImageData iconBig, List<Object> toolElements){
-		File storage = ConfigurationManager.getStorage(TOOL_KEY);	
+	public void addCompositeElement(String name, String description, String groupID, ImageData iconSmall, ImageData iconBig, List<Object> elementContents){
+		File storage = ConfigurationManager.getStorage(ELEMENTS_STORAGE_KEY);	
 		File resourcesDir = new File(storage, name);
-		JasperDesign jd = createDesign(name, toolElements, resourcesDir);
+		JasperDesign jd = createDesign(name, elementContents, resourcesDir);
 		//If the addition went good it search also for the resources
-		if (!addTool(name, description, iconSmall, iconBig, jd)){
+		if (!addCompositeElement(name, description, groupID, iconSmall, iconBig, jd)){
 			try {
 				FileUtils.deleteDirectory(resourcesDir);
 			} catch (IOException e) {
@@ -435,38 +442,71 @@ public class ToolManager {
 		}
 	}
 	
+	/**
+	 * Return the name used for the icon image 32x32. The name contains a timestamp
+	 * since the palette system cache the images, but in the composite elements the icon can be edited, so
+	 * each time need to have a different name to avoid to reuse the one in the cache
+	 * 
+	 * @param compositeElementName the name of the composite element
+	 * @return an unique name for the big icon of that composite element
+	 */
+	private String getImageBigName(String compositeElementName){
+		return compositeElementName + "-big" + System.currentTimeMillis() + ".png"; //$NON-NLS-1$ //$NON-NLS-2$
+	}
 	
-	public void editTool(MCustomTool oldTool, String newName, String newDescription, ImageData iconSmall, ImageData iconBig){
-		File storage = ConfigurationManager.getStorage(TOOL_KEY);	
+	/**
+	 * Return the name used for the icon image 16x16. The name contains a timestamp
+	 * since the palette system cache the images, but in the composite elements the icon can be edited, so
+	 * each time need to have a different name to avoid to reuse the one in the cache
+	 * 
+	 * @param compositeElementName the name of the composite element
+	 * @return an unique name for the small icon of that composite element
+	 */
+	private String getImageSmallName(String compositeElementName){
+		return compositeElementName + "-small" + System.currentTimeMillis() + ".png"; //$NON-NLS-1$ //$NON-NLS-2$
+	}
+	
+	/**
+	 * Edit a composite element, changing its metadata
+	 * 
+	 * @param oldElement the element to edit
+	 * @param newName the name of the composite element, must be unique
+	 * @param newDescription the description of the composite element
+	 * @param newGroup the id of the palette group where this element should be placed
+	 * @param iconSmall the small icon for the composite element, typically 16x16
+	 * @param iconBig the big icon for the composite element, typically 32x32
+	 */
+	public void editCompositeElement(MCompositeElement oldElement, String newName, String newDescription, String newGroup, ImageData iconSmall, ImageData iconBig){
+		File storage = ConfigurationManager.getStorage(ELEMENTS_STORAGE_KEY);	
 		try{
-			String oldName = oldTool.getName();
-			File oldIconSmall = new File(storage, oldName+"-small.png"); //$NON-NLS-1$
+			String oldName = oldElement.getName();
+			File oldIconSmall = new File(oldElement.getIconPathSmall()); //$NON-NLS-1$
 			oldIconSmall.delete();
-			File oldIconBig = new File(storage, oldName+"-big.png"); //$NON-NLS-1$
+			File oldIconBig = new File(oldElement.getIconPathBig()); //$NON-NLS-1$
 			oldIconBig.delete();
 			
 			//Write the report on disk
-			String oldReportName = oldName + TOOL_EXTENSION;
-			String newReportName = newName + TOOL_EXTENSION;
+			String oldReportName = oldName + COMPOSITE_ELEMENT_EXTENSION;
+			String newReportName = newName + COMPOSITE_ELEMENT_EXTENSION;
 			File oldReportFile = new File(storage, oldReportName);
 			if (oldReportFile.exists()){
 				oldReportFile.renameTo(new File(storage, newReportName));
 			}
 			
 		  //write the 16x16 icon
-		  String imageSmallName = newName+"-small.png"; //$NON-NLS-1$
+		  String imageSmallName = getImageSmallName(newName);
 		  if (iconSmall != null){
 		  	writeImage(new File(storage, imageSmallName), iconSmall);
 		  }
 		  
 		  //write the 32x32 icon
-		  String imageBigName = newName+"-big.png"; //$NON-NLS-1$
+		  String imageBigName = getImageBigName(newName);
 		  if (iconBig != null){
 		  	writeImage(new File(storage, imageBigName), iconBig);
 		  }
 		  
 			//Load the index file
-			File indexFile = new File(storage, TOOL_PROPERTIES_NAME);
+			File indexFile = new File(storage, INDEX_FILE_NAME);
 			if (indexFile.exists()){
 				String xmlContent = readFile(indexFile);
 				Document document = JRXmlUtils.parse(new InputSource(new StringReader(xmlContent)));
@@ -477,10 +517,11 @@ public class ToolManager {
 						if (adapterNode.getNodeType() == Node.ELEMENT_NODE && adapterNode.getAttributes().getNamedItem(PROPERTY_NAME)!=null) {
 							String name = adapterNode.getAttributes().getNamedItem(PROPERTY_NAME).getNodeValue(); 
 							if (name.equals(oldName)){
-								adapterNode.getAttributes().getNamedItem(PROPERTY_NAME).setNodeValue(newName);
-								adapterNode.getAttributes().getNamedItem(PROPERTY_DESCRIPTION).setNodeValue(newDescription);
-								adapterNode.getAttributes().getNamedItem(PROPERTY_PATH).setNodeValue(newReportName);
 								Element element = (Element)adapterNode;
+								element.setAttribute(PROPERTY_NAME, newName);
+								element.setAttribute(PROPERTY_DESCRIPTION, newDescription);
+								element.setAttribute(PROPERTY_GROUP, newGroup);
+								element.setAttribute(PROPERTY_PATH, newReportName);
 								if (iconSmall != null) {
 									element.setAttribute(PROPERTY_ICON_SMALL, imageSmallName);
 								} else {
@@ -511,10 +552,10 @@ public class ToolManager {
 					transformer.transform(source, result);
 				}
 				
-				//Remove the old tool from the cache
-				cachedToolsMap.remove(oldTool.getPath());
-				loadTools();
-				firePropertyChange(null, OPERATION_TYPE.EDIT);
+				//Remove the old composite element from the cache
+				cachedElementssMap.remove(oldElement.getPath());
+				loadElements();
+				firePropertyChange(oldElement, getElemenetByName(newName), OPERATION_TYPE.EDIT);
 			}
 		}catch(Exception ex){
 			ex.printStackTrace();
@@ -523,21 +564,37 @@ public class ToolManager {
 	}
 	
 	/**
-	 * Add a new tool to the set and notify the listeners that the set of tools is changed
+	 * Search in the loaded composite element one with a specific name and
+	 * return it
 	 * 
-	 * @param name the name of the tool, must be unique
-	 * @param description the description of the tool
-	 * @param iconSmall the small icon for the tool, typically 16x16
-	 * @param iconBig the big icon for the tool, typically 32x32
-	 * @param jd the jasperdesign containing the element of the tool. The element must be contained
+	 * @param name the name of the element
+	 * @return the element with the searched name or null if it can't be found
+	 */
+	public MCompositeElement getElemenetByName(String name){
+		for(MCompositeElement element : availableElements){
+			if (element.getName().equals(name)){
+				return element;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Add a new composite element to the set and notify the listeners that the set of composite elements is changed
+	 * 
+	 * @param name the name of the composite element, must be unique
+	 * @param description the description of the composite element
+	 * @param iconSmall the small icon for the composite element, typically 16x16
+	 * @param iconBig the big icon for the composite element, typically 32x32
+	 * @param jd the jasperdesign containing the element of the composite element. The element must be contained
 	 * in the title band
 	 */
-	public boolean addTool(String name, String description, ImageData iconSmall, ImageData iconBig, JasperDesign jd){
+	public boolean addCompositeElement(String name, String description, String groupID, ImageData iconSmall, ImageData iconBig, JasperDesign jd){
 		Assert.isTrue(!isNameAlreadyUsed(name), "The name must be unique"); //$NON-NLS-1$
-		File storage = ConfigurationManager.getStorage(TOOL_KEY);	
+		File storage = ConfigurationManager.getStorage(ELEMENTS_STORAGE_KEY);	
 		try{
 			//Write the report on disk
-			String reportName = name + TOOL_EXTENSION;
+			String reportName = name + COMPOSITE_ELEMENT_EXTENSION;
 			File reportFile = new File(storage, reportName);
 			String contents = JRXmlWriterHelper.writeReport(JasperReportsConfiguration.getDefaultInstance(), jd, JRXmlWriterHelper.LAST_VERSION);
 			BufferedWriter writer = new BufferedWriter(new FileWriter(reportFile));
@@ -545,19 +602,19 @@ public class ToolManager {
 		  writer.close();
 			
 		  //write the 16x16 icon
-		  String imageSmallName = name+"-small.png"; //$NON-NLS-1$
+		  String imageSmallName = getImageSmallName(name);
 		  if (iconSmall != null){
 		  	writeImage(new File(storage, imageSmallName), iconSmall);
 		  }
 		  
 		  //write the 32x32 icon
-		  String imageBigName = name+"-big.png"; //$NON-NLS-1$
+		  String imageBigName = getImageBigName(name);
 		  if (iconBig != null){
 		  	writeImage(new File(storage, imageBigName), iconBig);
 		  }
 		  
 			//Load the index file
-			File indexFile = new File(storage, TOOL_PROPERTIES_NAME);
+			File indexFile = new File(storage, INDEX_FILE_NAME);
 			Document document = null;
 			Element root = null;
 			if (indexFile.exists()){
@@ -569,7 +626,7 @@ public class ToolManager {
 				 DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 				 DocumentBuilder builder = factory.newDocumentBuilder();
 				 document = builder.newDocument();
-				 root = document.createElement("tools"); //$NON-NLS-1$
+				 root = document.createElement("elements"); //$NON-NLS-1$
 				 document.appendChild(root);
 			}
 			
@@ -580,6 +637,7 @@ public class ToolManager {
 				newNode.setAttribute(PROPERTY_NAME, name);
 				newNode.setAttribute(PROPERTY_PATH, reportName);
 				newNode.setAttribute(PROPERTY_DESCRIPTION, description);
+				newNode.setAttribute(PROPERTY_GROUP, groupID);
 				if (iconSmall != null) {
 					newNode.setAttribute(PROPERTY_ICON_SMALL, imageSmallName);
 				}
@@ -597,9 +655,9 @@ public class ToolManager {
 				StreamResult result = new StreamResult(oStream);
 				indexFile.createNewFile();
 				transformer.transform(source, result);
-				MCustomTool newElement = createToolFromNode(newNode);
-				availableTools.add(newElement);			
-				firePropertyChange(newElement, OPERATION_TYPE.ADD);
+				MCompositeElement newElement = createElementFromNode(newNode);
+				availableElements.add(newElement);			
+				firePropertyChange(null, newElement, OPERATION_TYPE.ADD);
 			}catch(Exception ex){
 				ex.printStackTrace();
 				JaspersoftStudioPlugin.getInstance().logError(ex);
@@ -615,21 +673,21 @@ public class ToolManager {
 	}
 	
 	/**
-	 * Get the command used to create the requested tool inside the report
+	 * Get the command used to create the requested composite element inside the report
 	 * 
-	 * @param parent the parent of the tool
-	 * @param tool the tool to create
-	 * @param location the location where the tool should be created
-	 * @param newIndex the index of the tool
-	 * @return the command to create the tool inside the parent in the requested location
+	 * @param parent the parent of the composite element
+	 * @param element the composite element to create
+	 * @param location the location where the composite element should be created
+	 * @param newIndex the index of the composite element
+	 * @return the command to create the composite element inside the parent in the requested location
 	 */
-	public Command getCommand(ANode parent, MCustomTool tool, Rectangle location, int newIndex){
+	public Command getCommand(ANode parent, MCompositeElement element, Rectangle location, int newIndex){
 		JSSCompoundCommand cmd = new JSSCompoundCommand(parent){
 			
 			@Override
 			public void execute() {
 				//Before to execute the commands disable the use of defaults, since
-				//the custom tools are not affected by defaults
+				//the custom composite elements are not affected by defaults
 				boolean defaultValue = DefaultManager.INSTANCE.isDisabled();
 				//DefaultManager.INSTANCE.setDisabled(true);
 				super.execute();
@@ -637,8 +695,8 @@ public class ToolManager {
 			}
 			
 		};
-		JRBand toolContainer = getElementContainer(tool.getPath());
-		for(JRChild child : toolContainer.getChildren()){
+		JRBand elementContent = getElementContainer(element.getPath());
+		for(JRChild child : elementContent.getChildren()){
 			JRDesignElement designElement = (JRDesignElement)child;
 			if (child instanceof JRDesignElement){
 				MGraphicElement model = new MGraphicElement();
@@ -671,21 +729,21 @@ public class ToolManager {
 	}
 	
 	/**
-	 * Add a listener that is notified when the toolset changes
+	 * Add a listener that is notified when the composite elements set changes
 	 * 
 	 * @param listener a not null listener
 	 */
-	public void addModifyListener(ToolModfiedListener listener){
+	public void addModifyListener(ICompositeElementModifyListener listener){
 		if (!listeners.contains(listener)) listeners.add(listener);
 	}
 	
 	/**
-	 * Load the list of the tools the preferences storage. Called when the class
+	 * Load the list of the composite element in the folder storage. Called when the class
 	 * is loaded
 	 */
-	private void loadTools(){
-		availableTools.clear();
-		File indexFile = ConfigurationManager.getStorageResource(TOOL_KEY, TOOL_PROPERTIES_NAME);
+	private void loadElements(){
+		availableElements.clear();
+		File indexFile = ConfigurationManager.getStorageResource(ELEMENTS_STORAGE_KEY, INDEX_FILE_NAME);
 		if (indexFile != null && indexFile.exists()){
 			try{
 				String xmlContent = readFile(indexFile);
@@ -696,8 +754,8 @@ public class ToolManager {
 					try{
 						Node adapterNode = adapterNodes.item(i);
 						if (adapterNode.getNodeType() == Node.ELEMENT_NODE && adapterNode.getAttributes().getNamedItem(PROPERTY_NAME)!=null) {
-							MCustomTool loadedTool = createToolFromNode(adapterNode);
-							if (loadedTool != null) availableTools.add(loadedTool);			
+							MCompositeElement loadedElement = createElementFromNode(adapterNode);
+							if (loadedElement != null) availableElements.add(loadedElement);			
 						}
 					}catch(Exception ex){
 						ex.printStackTrace();
@@ -712,38 +770,42 @@ public class ToolManager {
 	}
 	
 	/**
-	 * From a node of the xml index file it build an MCustomTool
+	 * From a node of the xml index file it build an MCopositeElement
 	 * 
 	 * @param adapterNode a not null node
-	 * @return an MCustomTool build with the informations inside the node
+	 * @return an MCompositeElement build with the informations inside the node
 	 */
-	private MCustomTool createToolFromNode(Node adapterNode){
+	private MCompositeElement createElementFromNode(Node adapterNode){
 		String name = adapterNode.getAttributes().getNamedItem(PROPERTY_NAME).getNodeValue(); 
 		String path = adapterNode.getAttributes().getNamedItem(PROPERTY_PATH).getNodeValue();
-		File toolFile = ConfigurationManager.getStorageResource(TOOL_KEY, path);
+		File contentFile = ConfigurationManager.getStorageResource(ELEMENTS_STORAGE_KEY, path);
 		
-		if (toolFile != null){
+		if (contentFile != null){
 			//Get the icons
 			String absoluteIconPathSmall = null;
 			String absoluteIconPathBig = null;
 			Node iconNode =  adapterNode.getAttributes().getNamedItem(PROPERTY_ICON_SMALL);
 			String iconPath = iconNode != null ? iconNode.getNodeValue() : null;
 			if (iconPath != null){
-				File resource = new File(ConfigurationManager.getStorage(TOOL_KEY), iconPath);
+				File resource = new File(ConfigurationManager.getStorage(ELEMENTS_STORAGE_KEY), iconPath);
 				absoluteIconPathSmall = resource.getAbsolutePath();
 			}
 			iconNode =  adapterNode.getAttributes().getNamedItem(PROPERTY_ICON_BIG);
 			iconPath = iconNode != null ? iconNode.getNodeValue() : null;
 			if (iconPath != null){
-				File resource = new File(ConfigurationManager.getStorage(TOOL_KEY), iconPath);
+				File resource = new File(ConfigurationManager.getStorage(ELEMENTS_STORAGE_KEY), iconPath);
 				absoluteIconPathBig = resource.getAbsolutePath();
 			}
 			
 			//get the description
 			Node descriptionNode =  adapterNode.getAttributes().getNamedItem(PROPERTY_DESCRIPTION);
-			String description = descriptionNode != null && descriptionNode.getNodeValue() != null ? descriptionNode.getNodeValue() : "A user defined custom tool";  //$NON-NLS-1$
+			String description = descriptionNode != null && descriptionNode.getNodeValue() != null ? descriptionNode.getNodeValue() : "A user defined composite element";  //$NON-NLS-1$
 			
-			return new MCustomTool(name, description, toolFile.getAbsolutePath(), absoluteIconPathSmall, absoluteIconPathBig);			
+			//get the group id
+			Node groupIDNode = adapterNode.getAttributes().getNamedItem(PROPERTY_GROUP);
+			String groupID = groupIDNode != null ? groupIDNode.getNodeValue() : IPaletteContributor.KEY_COMMON_TOOLS;
+			
+			return new MCompositeElement(name, description, groupID, contentFile.getAbsolutePath(), absoluteIconPathSmall, absoluteIconPathBig);			
 		} else {
 			return null;
 		}
@@ -762,31 +824,31 @@ public class ToolManager {
 	}
 	
 	/**
-	 * Delete all the physical resources of a tool, so it's images and 
+	 * Delete all the physical resources of a composite element, so it's images and 
 	 * its report file
 	 * 
-	 * @param toolToRemove a not null tool to remove
+	 * @param elementToRemove a not null composite element to remove
 	 */
-	private void deleteToolResources(MCustomTool toolToRemove){
+	private void deleteElementResources(MCompositeElement elementToRemove){
 		//Delete the physical resources	
-		File toolData = new File(toolToRemove.getPath());
-		toolData.delete();
+		File contentFile = new File(elementToRemove.getPath());
+		contentFile.delete();
 		
-		if (toolToRemove.getIconPathSmall() != null){
-			File iconSmall = new File(toolToRemove.getIconPathSmall());
+		if (elementToRemove.getIconPathSmall() != null){
+			File iconSmall = new File(elementToRemove.getIconPathSmall());
 			iconSmall.delete();
 		}
 		
-		if (toolToRemove.getIconPathBig() != null){
-			File iconBig = new File(toolToRemove.getIconPathBig());
+		if (elementToRemove.getIconPathBig() != null){
+			File iconBig = new File(elementToRemove.getIconPathBig());
 			iconBig.delete();
 		}
 		
 		//Delete laso the other resources
-		File toolResourcesDir = new File(toolData.getParentFile(), toolToRemove.getName());
-		if (toolResourcesDir.exists()){
+		File elementResourceDir = new File(contentFile.getParentFile(), elementToRemove.getName());
+		if (elementResourceDir.exists()){
 			try {
-				FileUtils.deleteDirectory(toolResourcesDir);
+				FileUtils.deleteDirectory(elementResourceDir);
 			} catch (IOException e) {
 				e.printStackTrace();
 				JaspersoftStudioPlugin.getInstance().logError(e);
@@ -819,12 +881,12 @@ public class ToolManager {
 	}
 	
 	/**
-	 * Load the report of a tool file and return the title band,
-	 * containing the component of the tool
+	 * Load the report of a composite element file and return the title band,
+	 * containing the component of the composite element
 	 * 
-	 * @param defaultFile a not null report file containing the tool definition
+	 * @param defaultFile a not null report file containing the composite element definition
 	 */
-	private JRBand loadToolModel(File defaultFile) {
+	private JRBand loadElementModel(File defaultFile) {
 		InputStream in = null;
 		JRBand result = null;
 		try {
@@ -842,24 +904,24 @@ public class ToolManager {
 	}
 	
 	/**
-	 * Return the title band of the tool definition
+	 * Return the title band of the composite element definition
 	 * identified by the provided path. If the band was already requested
 	 * before and it is cached then it is returned from cache, otherwise it 
 	 * is loaded, returned and cached
 	 * 
-	 * @param path the path of the tool definition file, must be not null
-	 * @return the band containing the controls of the tool or null if there is 
+	 * @param path the path of the composite element definition file, must be not null
+	 * @return the band containing the controls of the composite element or null if there is 
 	 * an error loading them
 	 */
 	private JRBand getElementContainer(String path){
-		if (cachedToolsMap.containsKey(path)){
-			return cachedToolsMap.get(path);
+		if (cachedElementssMap.containsKey(path)){
+			return cachedElementssMap.get(path);
 		} else {
-			File toolFile = new File(path);
-			if (toolFile.exists()){
-				JRBand band = loadToolModel(toolFile);
+			File contentFile = new File(path);
+			if (contentFile.exists()){
+				JRBand band = loadElementModel(contentFile);
 				if (band != null){
-					cachedToolsMap.put(path, band);
+					cachedElementssMap.put(path, band);
 					return band;
 				}
 			}
@@ -876,19 +938,19 @@ public class ToolManager {
 	}
 	
 	/**
-	 * Notify all the listeners that the set of tools is changed
+	 * Notify all the listeners that the set of composite elements is changed
 	 * 
-	 * @param newElement the element that has changed inside the toolset
+	 * @param newElement the element that has changed inside the composite elements set
 	 * @param operation the operation on that element
 	 */
-	protected void firePropertyChange(MCustomTool newElement, OPERATION_TYPE operation){
-		for(ToolModfiedListener listener : listeners){
-			listener.toolChanged(newElement, operation);
+	protected void firePropertyChange(MCompositeElement oldElement, MCompositeElement newElement, OPERATION_TYPE operation){
+		for(ICompositeElementModifyListener listener : listeners){
+			listener.elementChanged(oldElement, newElement, operation);
 		}
 	}
 	
 	/**
-	 * Recursive method called when some resource changes, it search for edited tools inside
+	 * Recursive method called when some resource changes, it search for edited composite elements inside
 	 * the delta hierarchy
 	 * 
 	 * @param delta actual level of the delta hierarchy
@@ -896,7 +958,7 @@ public class ToolManager {
 	 */
 	private void iterateResourceDelta(IResourceDelta delta, List<IFile> editedResources){
 		if (delta.getKind() == IResourceDelta.CHANGED && 
-					delta.getResource().getName().toLowerCase().endsWith(TOOL_EXTENSION) &&
+					delta.getResource().getName().toLowerCase().endsWith(COMPOSITE_ELEMENT_EXTENSION) &&
 						delta.getResource() instanceof IFile){
 			editedResources.add((IFile)delta.getResource());
 		}

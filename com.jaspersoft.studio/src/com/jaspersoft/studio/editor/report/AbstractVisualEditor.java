@@ -38,7 +38,6 @@ import org.eclipse.gef.ui.actions.ZoomInAction;
 import org.eclipse.gef.ui.actions.ZoomOutAction;
 import org.eclipse.gef.ui.palette.FlyoutPaletteComposite;
 import org.eclipse.gef.ui.palette.FlyoutPaletteComposite.FlyoutPreferences;
-import org.eclipse.gef.ui.palette.PaletteContextMenuProvider;
 import org.eclipse.gef.ui.palette.PaletteViewer;
 import org.eclipse.gef.ui.palette.PaletteViewerProvider;
 import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
@@ -138,7 +137,7 @@ import com.jaspersoft.studio.editor.outline.page.MultiOutlineView;
 import com.jaspersoft.studio.editor.palette.JDPaletteFactory;
 import com.jaspersoft.studio.editor.palette.JSSPaletteContextMenuProvider;
 import com.jaspersoft.studio.editor.part.MultiPageToolbarEditorPart;
-import com.jaspersoft.studio.editor.tools.CreateToolAction;
+import com.jaspersoft.studio.editor.tools.CreateCompositeElementAction;
 import com.jaspersoft.studio.formatting.actions.CenterInParentAction;
 import com.jaspersoft.studio.formatting.actions.DecreaseHSpaceAction;
 import com.jaspersoft.studio.formatting.actions.DecreaseVSpaceAction;
@@ -974,7 +973,7 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
 		
-		action = new CreateToolAction(this);
+		action = new CreateCompositeElementAction(this);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
 

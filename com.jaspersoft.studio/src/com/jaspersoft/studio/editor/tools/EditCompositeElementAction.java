@@ -26,14 +26,14 @@ import com.jaspersoft.studio.messages.Messages;
  * @author Orlandin Marco
  *
  */
-public class EditToolAction extends Action {
+public class EditCompositeElementAction extends Action {
 
 	/**
 	 * The palette entry to edit
 	 */
-	private ToolTemplateCreationEntry elementToEdit;
+	private CompositeElementTemplateCreationEntry elementToEdit;
 
-	public EditToolAction(ToolTemplateCreationEntry elementToEdit) {
+	public EditCompositeElementAction(CompositeElementTemplateCreationEntry elementToEdit) {
 		super();
 		setText(Messages.EditToolAction_name);
 		setImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/edit-style.png")); //$NON-NLS-1$
@@ -41,8 +41,8 @@ public class EditToolAction extends Action {
 	}
 
 	public void run() {
-		MCustomTool tool = elementToEdit.getTemplate();
-		ToolEditWizard wizard = new ToolEditWizard(tool);
+		MCompositeElement element = elementToEdit.getTemplate();
+		CompositeElementEditWizard wizard = new CompositeElementEditWizard(element);
 		WizardDialog dialog = new WizardDialog(UIUtils.getShell(), wizard);
 		dialog.open();
 	}

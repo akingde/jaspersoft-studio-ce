@@ -22,84 +22,90 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.model.MGraphicElement;
 
 /**
- * Model element of a custom tool
+ * Model element of a composite element
  * 
  * @author Orlandin Marco
  *
  */
-public class MCustomTool extends MGraphicElement {
+public class MCompositeElement extends MGraphicElement {
 
 	private static final long serialVersionUID = -1234707361853922316L;
 
 	/**
-	 * The absolute path to the file containing the tool definition
+	 * The absolute path to the file containing the definition of the composite element
 	 */
 	private String path;
 	
 	/**
-	 * The name of the tool
+	 * The name of the composite element
 	 */
 	private String name;
 	
 	/**
-	 * The small icon of the tool
+	 * The small icon of the composite element
 	 */
 	private ImageDescriptor iconSmall;
 	
 	/**
-	 * The big icon of the tool
+	 * The big icon of the composite element
 	 */
 	private ImageDescriptor iconBig;
 	
 	/**
-	 * The description of the tool
+	 * The description of the composite element 
 	 */
 	private String description;
 	
 	/**
-	 * The absolute path to the small icon of the tool
+	 * The absolute path to the small icon of the composite element 
 	 */
 	private String iconPathSmall;
 	
 	/**
-	 * The absolute path to the big icon of the tool
+	 * The absolute path to the big icon of the composite element 
 	 */
 	private String iconPathBig;
 	
 	/**
-	 * Create the definition of the tool
-	 * 
-	 * @param name the name of the tool, must be not null
-	 * @param description the description of the tool, must be not null
-	 * @param path the path to the definition of the tool, must be not null
-	 * @param iconPathSmall the path to the small icon of the tool, if null or not existing a default one is used
-	 * @param iconPathBig the path to the big icon of the tool, if null or not existing a default one is used
+	 * The group in the palette where this composite element  is placed
 	 */
-	public MCustomTool(String name, String description, String path, String iconPathSmall, String iconPathBig){
+	private String groupID;
+	
+	/**
+	 * Create the definition of the composite element 
+	 * 
+	 * @param name the name of the composite element , must be not null
+	 * @param description the description of the composite element , must be not null
+	 * @param path the path to the definition of the composite element , must be not null
+	 * @param iconPathSmall the path to the small icon of the composite element , if null or not existing a default one is used
+	 * @param iconPathBig the path to the big icon of the composite element , if null or not existing a default one is used
+	 */
+	public MCompositeElement(String name, String description, String groupID, String path, String iconPathSmall, String iconPathBig){
 		Assert.isNotNull(name);
 		Assert.isNotNull(description);
 		Assert.isNotNull(path);
 		this.path = path;
 		this.name = name;
 		this.description = description;
+		this.groupID = groupID;
 		this.iconPathSmall = iconPathSmall;
 		this.iconPathBig = iconPathBig;
 		iconSmall = JaspersoftStudioPlugin.getInstance().getImageDescriptor("/icons/resources/custom_tool-16.png");
 		iconBig = JaspersoftStudioPlugin.getInstance().getImageDescriptor("/icons/resources/custom_tool-32.png");
 		if (iconPathSmall != null){
-			File toolIcon = new File(iconPathSmall);
-			if (toolIcon.exists()){
-				iconSmall = ResourceManager.getImageDescriptor(toolIcon.getAbsolutePath());
+			File elementIcon = new File(iconPathSmall);
+			if (elementIcon.exists()){
+				iconSmall = ResourceManager.getImageDescriptor(elementIcon.getAbsolutePath());
 			}
-			toolIcon = new File(iconPathBig);
-			if (toolIcon.exists()){
-				iconBig = ResourceManager.getImageDescriptor(toolIcon.getAbsolutePath());
+			elementIcon = new File(iconPathBig);
+			if (elementIcon.exists()){
+				iconBig = ResourceManager.getImageDescriptor(elementIcon.getAbsolutePath());
 			}
 		}
 	}
 	
 	/**
-	 * Return the small icon of the tool 
+	 * Return the small icon of the composite element 
 	 * 
 	 * @return a not null image data
 	 */
@@ -108,7 +114,7 @@ public class MCustomTool extends MGraphicElement {
 	}
 	
 	/**
-	 * Return the big icon of the tool 
+	 * Return the big icon of the composite element  
 	 * 
 	 * @return a not null image data
 	 */
@@ -117,7 +123,7 @@ public class MCustomTool extends MGraphicElement {
 	}
 
 	/**
-	 * Return the name of the tool
+	 * Return the name of the composite element 
 	 * 
 	 * @return a not null string
 	 */
@@ -126,7 +132,7 @@ public class MCustomTool extends MGraphicElement {
 	}
 	
 	/**
-	 * Return the description of the tool
+	 * Return the description of the composite element 
 	 * 
 	 * @return a not null string
 	 */
@@ -135,7 +141,17 @@ public class MCustomTool extends MGraphicElement {
 	}
 	
 	/**
-	 * Return the absolute path to the definition file of the tool
+	 * Return the group id of a palette group where this element
+	 * should be placed
+	 * 
+	 * @return a not null string
+	 */
+	public String getGroupId(){
+		return groupID;
+	}
+	
+	/**
+	 * Return the absolute path to the definition file of the composite element 
 	 * 
 	 * @return a not null string
 	 */
@@ -144,18 +160,18 @@ public class MCustomTool extends MGraphicElement {
 	}
 	
 	/**
-	 * Return the absolute path to the definition file of the tool
+	 * Return the absolute path to the definition file of the composite element 
 	 * 
-	 * @return an absolute path, can be null if the tool is using the default image
+	 * @return an absolute path, can be null if the composite element  is using the default image
 	 */
 	public String getIconPathSmall(){
 		return iconPathSmall;
 	}
 	
 	/**
-	 * Return the absolute path to the definition file of the tool
+	 * Return the absolute path to the definition file of the composite element 
 	 * 
-	 * @return an absolute path, can be null if the tool is using the default image
+	 * @return an absolute path, can be null if the composite element  is using the default image
 	 */
 	public String getIconPathBig(){
 		return iconPathBig;

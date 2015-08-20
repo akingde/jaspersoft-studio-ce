@@ -9,7 +9,6 @@
 package com.jaspersoft.studio.editor.palette;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -22,10 +21,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.callout.MCallout;
-import com.jaspersoft.studio.editor.tools.MCustomTool;
-import com.jaspersoft.studio.editor.tools.ToolManager;
-import com.jaspersoft.studio.editor.tools.ToolModfiedListener;
-import com.jaspersoft.studio.editor.tools.ToolTemplateCreationEntry;
+import com.jaspersoft.studio.editor.tools.CompositeElementManager;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.MBreak;
 import com.jaspersoft.studio.model.MEllipse;
@@ -55,6 +51,23 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  */
 public class JDPaletteFactory {
 
+	
+	public static PaletteGroup getBaseElementsGroup(){
+		PaletteGroup pgc = new PaletteGroup();
+		pgc.setId(IPaletteContributor.KEY_COMMON_ELEMENTS);
+		pgc.setName(Messages.common_elements);
+		pgc.setImage("icons/resources/elementgroup-16.png"); //$NON-NLS-1$
+		return pgc;
+	}
+	
+	public static PaletteGroup getOtherElementsGroup(){
+		PaletteGroup pgc = new PaletteGroup();
+		pgc.setId(IPaletteContributor.KEY_COMMON_TOOLS);
+		pgc.setName(Messages.common_tools);
+		pgc.setImage("icons/resources/fields-16.png"); //$NON-NLS-1$
+		return pgc;
+	}
+	
 	/**
 	 * Creates a new JDPalette object.
 	 * 
@@ -67,33 +80,22 @@ public class JDPaletteFactory {
 
 		ExtensionManager m = JaspersoftStudioPlugin.getExtensionManager();
 		List<PaletteGroup> pgroups = m.getPaletteGroups();
-
 		Map<String, PaletteGroup> map = new TreeMap<String, PaletteGroup>();
-		PaletteGroup pgc = new PaletteGroup();
-		pgc.setId(IPaletteContributor.KEY_COMMON_ELEMENTS);
-		pgc.setName(Messages.common_elements);
-		pgc.setImage("icons/resources/elementgroup-16.png"); //$NON-NLS-1$
-		map.put(pgc.getId(), pgc);
+		
+		PaletteGroup baseElementsGroup = getBaseElementsGroup();
+		map.put(baseElementsGroup.getId(), baseElementsGroup);
 
-		// pgc = new PaletteGroup();
-		// pgc.setId(IPaletteContributor.KEY_COMMON_CONTAINER);
-		// pgc.setName(Messages.JDPaletteFactory_complex_components);
-		//		pgc.setImage("icons/resources/elementgroup-16.png"); //$NON-NLS-1$
-		// pgc.setAfterGroup(IPaletteContributor.KEY_COMMON_ELEMENTS);
-		// map.put(pgc.getId(), pgc);
-
-		pgc = new PaletteGroup();
-		pgc.setId(IPaletteContributor.KEY_COMMON_TOOLS);
-		pgc.setName(Messages.common_tools);
-		pgc.setImage("icons/resources/fields-16.png"); //$NON-NLS-1$
-		map.put(pgc.getId(), pgc);
+		PaletteGroup otherElementsGroup = getOtherElementsGroup();
+		map.put(otherElementsGroup.getId(), otherElementsGroup);
+		
 		for (PaletteGroup p : pgroups) {
 			map.put(p.getId(), p);
 		}
+		
 		Map<String, List<PaletteEntry>> mapEntry = m.getPaletteEntries();
 		for (String key : mapEntry.keySet()) {
 			if (!key.isEmpty() && map.get(key) == null) {
-				pgc = new PaletteGroup();
+				PaletteGroup pgc = new PaletteGroup();
 				pgc.setId(key);
 				pgc.setName(Messages.JDPaletteFactory_unknown_group);
 				pgc.setImage(""); //$NON-NLS-1$
@@ -132,21 +134,31 @@ public class JDPaletteFactory {
 			}
 		}
 
+		CompositeElementHandler handler = new CompositeElementHandler(paletteRoot);
 		for (PaletteGroup p : ordpgrps) {
 			if (p.getId().equals(IPaletteContributor.KEY_COMMON_ELEMENTS)) {
 				PaletteDrawer drawer = createElements(paletteRoot, ignore, p, mapEntry);
 				getEntries4Key(drawer, ignore, "", mapEntry); //$NON-NLS-1$ 
-				continue;
+				handler.addPaletteGroup(p.getId(), drawer);
 			} else if (p.getId().equals(IPaletteContributor.KEY_COMMON_CONTAINER)) {
-				createContainers(paletteRoot, ignore, p, mapEntry);
-				continue;
+				PaletteDrawer drawer = createGroup(paletteRoot, ignore, p.getName(), p.getImage());
+				createContainers(drawer, ignore, p, mapEntry);
+				handler.addPaletteGroup(p.getId(), drawer);
 			} else if (p.getId().equals(IPaletteContributor.KEY_COMMON_TOOLS)) {
-				createFields(paletteRoot, ignore, p, mapEntry);
-				continue;
+				PaletteDrawer drawer = createGroup(paletteRoot, ignore, p.getName(), p.getImage());
+				createOtherElements(drawer, ignore, p, mapEntry);
+				handler.addPaletteGroup(p.getId(), drawer);
+			} else {
+				PaletteDrawer drawer = createGroup(paletteRoot, ignore, p.getName(), p.getImage());
+				getEntries4Key(drawer, ignore, p.getId(), mapEntry);
+				handler.addPaletteGroup(p.getId(), drawer);
 			}
-			PaletteDrawer drawer = createGroup(paletteRoot, ignore, p.getName(), p.getImage());
-			getEntries4Key(drawer, ignore, p.getId(), mapEntry);
 		}
+		//create the current composite elements entry
+		handler.createAllCompositeElements();
+		//Add the modify listener to the tools manager to get notified when the composite elements
+		//changes
+		CompositeElementManager.INSTANCE.addModifyListener(handler);
 		return paletteRoot;
 	}
 
@@ -161,20 +173,12 @@ public class JDPaletteFactory {
 			ignore = new ArrayList<String>();
 		PaletteRoot paletteRoot = new PaletteRoot();
 
-		PaletteGroup baseGroup = new PaletteGroup();
-		baseGroup.setId(IPaletteContributor.KEY_COMMON_ELEMENTS);
-		baseGroup.setName(Messages.common_elements);
-		baseGroup.setImage("icons/resources/elementgroup-16.png"); //$NON-NLS-1$
-
-		PaletteGroup toolGroup = new PaletteGroup();
-		toolGroup.setId(IPaletteContributor.KEY_COMMON_TOOLS);
-		toolGroup.setName(Messages.common_tools);
-		toolGroup.setImage("icons/resources/fields-16.png"); //$NON-NLS-1$
-
+		CompositeElementHandler handler = new CompositeElementHandler(paletteRoot);
+		
+		PaletteGroup baseGroup = getBaseElementsGroup();
+		
 		PaletteDrawer drawer = createGroup(paletteRoot, ignore, baseGroup.getName(), baseGroup.getImage());
-
 		drawer.add(createJDEntry(MCallout.getIconDescriptor(), MCallout.class));
-
 		drawer.add(createJDEntry(MTextField.getIconDescriptor(), MTextField.class));
 		drawer.add(createJDEntry(MStaticText.getIconDescriptor(), MStaticText.class));
 		drawer.add(createJDEntry(MImage.getIconDescriptor(), MImage.class));
@@ -184,9 +188,24 @@ public class JDPaletteFactory {
 		drawer.add(createJDEntry(MLine.getIconDescriptor(), MLine.class));
 		drawer.add(createJDEntry(MGenericElement.getIconDescriptor(), MGenericElement.class));
 		drawer.add(createJDEntry(MFrame.getIconDescriptor(), MFrame.class));
+		handler.addPaletteGroup(baseGroup.getId(), drawer);
 
-		createFields(paletteRoot, ignore, toolGroup, new HashMap<String, List<PaletteEntry>>());
+		PaletteGroup otherGroup = getOtherElementsGroup();
+		drawer = createGroup(paletteRoot, ignore, otherGroup.getName(), otherGroup.getImage());
+		drawer.add(createJDEntry(MPageNumber.getIconDescriptor(), MPageNumber.class));
+		drawer.add(createJDEntry(MTotalPages.getIconDescriptor(), MTotalPages.class));
+		drawer.add(createJDEntry(MDate.getIconDescriptor(), MDate.class));
+		drawer.add(createJDEntry(MTime.getIconDescriptor(), MTime.class));
+		drawer.add(createJDEntry(MPercentage.getIconDescriptor(), MPercentage.class));
+		drawer.add(createJDEntry(MPageXofY.getIconDescriptor(), MPageXofY.class));
+		handler.addPaletteGroup(otherGroup.getId(), drawer);
 
+		//create the current composite elements entry
+		handler.createAllCompositeElements();
+		//Add the modify listener to the tools manager to get notified when the composite elements
+		//changes
+		CompositeElementManager.INSTANCE.addModifyListener(handler);
+		
 		return paletteRoot;
 	}
 
@@ -209,18 +228,7 @@ public class JDPaletteFactory {
 		return paletteEntry;
 	}
 	
-	/**
-	 * Create an entry for a custom tool and add it to the palette
-	 * 
-	 * @param tool the custom tool
-	 * @param container the viewer of the palette where this tool will be added
-	 */
-	protected static void createToolEntry(MCustomTool tool, PaletteDrawer container) {
-		ToolTemplateCreationEntry paletteEntry = new ToolTemplateCreationEntry(tool.getName(),
-			tool.getDescription(), tool,  new JDPaletteCreationFactory(tool), tool.getIconSmall(), tool.getIconBig(), container);
-		// Override default CreationTool class with ours
-		paletteEntry.setToolClass(JDCreationTool.class);
-	}
+
 
 	public static PaletteDrawer createElements(PaletteRoot paletteRoot, List<String> ignore, PaletteGroup p,
 			Map<String, List<PaletteEntry>> map) {
@@ -244,9 +252,8 @@ public class JDPaletteFactory {
 		return drawer;
 	}
 
-	public static PaletteDrawer createContainers(PaletteRoot paletteRoot, List<String> ignore, PaletteGroup p,
+	public static PaletteDrawer createContainers(PaletteDrawer drawer, List<String> ignore, PaletteGroup p,
 			Map<String, List<PaletteEntry>> map) {
-		PaletteDrawer drawer = createGroup(paletteRoot, ignore, p.getName(), p.getImage());
 
 		drawer.add(createJDEntry(MFrame.getIconDescriptor(), MFrame.class));
 		drawer.add(createJDEntry(MSubreport.getIconDescriptor(), MSubreport.class));
@@ -261,59 +268,14 @@ public class JDPaletteFactory {
 	 * @param paletteRoot
 	 *          the palette root
 	 */
-	public static void createFields(PaletteRoot paletteRoot, List<String> ignore, PaletteGroup p,
+	public static void createOtherElements(PaletteDrawer drawer, List<String> ignore, PaletteGroup p,
 			Map<String, List<PaletteEntry>> map) {
-		final PaletteDrawer drawer = createGroup(paletteRoot, ignore, p.getName(), p.getImage());
 		drawer.add(createJDEntry(MPageNumber.getIconDescriptor(), MPageNumber.class));
 		drawer.add(createJDEntry(MTotalPages.getIconDescriptor(), MTotalPages.class));
 		drawer.add(createJDEntry(MDate.getIconDescriptor(), MDate.class));
 		drawer.add(createJDEntry(MTime.getIconDescriptor(), MTime.class));
 		drawer.add(createJDEntry(MPercentage.getIconDescriptor(), MPercentage.class));
 		drawer.add(createJDEntry(MPageXofY.getIconDescriptor(), MPageXofY.class));
-		
-		//Load inside the palette the custom tools
-		for(MCustomTool cutstomTool : ToolManager.INSTANCE.getAvailableTools()){
-			createToolEntry(cutstomTool,drawer);
-		}
-	
-		
-		/**
-		 * Add the modify listener to the tools manager to get notified when the toolset
-		 * changes
-		 */
-		ToolManager.INSTANCE.addModifyListener(new ToolModfiedListener() {
-			
-			/**
-			 * Update the palette when a tool is added or removed
-			 */
-			@Override
-			public void toolChanged(MCustomTool tool, OPERATION_TYPE operation) {
-				if (operation == OPERATION_TYPE.ADD){
-					createToolEntry(tool, drawer);
-				} else if (operation == OPERATION_TYPE.DELETE){
-					for(Object entry : drawer.getChildren()){
-						if (entry instanceof ToolTemplateCreationEntry){
-							ToolTemplateCreationEntry factory = (ToolTemplateCreationEntry)entry;
-							if (factory.getTemplate() == tool){
-								drawer.remove(factory);
-								break;
-							}
-						}
-					}
-				} else if (operation == OPERATION_TYPE.EDIT){
-					@SuppressWarnings("unchecked")
-					List<?> chilrend = new ArrayList<Object>(drawer.getChildren());
-					for(Object entry : chilrend){
-						if (entry instanceof ToolTemplateCreationEntry){
-							drawer.remove((PaletteEntry)entry);
-						}
-					}
-					for(MCustomTool cutstomTool : ToolManager.INSTANCE.getAvailableTools()){
-						createToolEntry(cutstomTool,drawer);
-					}
-				}
-			}
-		});
 		getEntries4Key(drawer, ignore, p.getId(), map);
 	}
 
