@@ -262,7 +262,7 @@ exit 0;</echo>
 				appname="Jaspersoft Studio Community"
 				depends="openjdk-6-jre">
 			<version upstream="${jss.version}" debian="" />
-			<maintainer name="Jaspersoft Studio Team" email="giulio@jaspersoft.com"/>
+			<maintainer name="Jaspersoft Studio Team" email="gtoffoli@tibco.com"/>
 			<description synopsis="An open-source Eclipse-based report designer for JasperReports and JasperReports Server.">
 	TIBCO Jaspersoft Studio is a new, free, open source report designer for JasperReports. 
 	TIBCO Jaspersoft Studio is a port of iReport on top of the Eclipse platform and its core is JasperReports.
