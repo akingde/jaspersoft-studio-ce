@@ -90,20 +90,20 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 
 	private Map<JRDesignBand, Integer> bandIndexMap = new HashMap<JRDesignBand, Integer>();
 
-	private static NamedEnumPropertyDescriptor<OrientationEnum> orientationD;
+	protected NamedEnumPropertyDescriptor<OrientationEnum> orientationD;
 
-	private static NamedEnumPropertyDescriptor<PrintOrderEnum> printOrderD;
+	protected NamedEnumPropertyDescriptor<PrintOrderEnum> printOrderD;
 
-	private static NamedEnumPropertyDescriptor<WhenNoDataTypeEnum> whenNoDataD;
+	protected NamedEnumPropertyDescriptor<WhenNoDataTypeEnum> whenNoDataD;
 
 	/**
 	 * The icon descriptor.
 	 */
 	private static IIconDescriptor iconDescriptor;
 
-	private static IPropertyDescriptor[] descriptors;
+	private IPropertyDescriptor[] descriptors;
 
-	private static Map<String, Object> defaultsMap;
+	private Map<String, Object> defaultsMap;
 
 	private Map<String, Object> parameters;
 

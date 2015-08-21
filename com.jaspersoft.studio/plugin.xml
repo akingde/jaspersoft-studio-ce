@@ -1151,6 +1151,7 @@
                id="com.jaspersoft.studio.editor.JrxmlEditor.report.MainDatasetSection"
                tab="com.jaspersoft.studio.propertyTab.report">
             <input
+                  excludeSubtypes="true"
                   type="com.jaspersoft.studio.model.MReport">
             </input>
          </propertySection>

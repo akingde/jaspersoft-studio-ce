@@ -66,6 +66,7 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MBreak;
+import com.jaspersoft.studio.model.MCompositeElementReport;
 import com.jaspersoft.studio.model.MElementGroup;
 import com.jaspersoft.studio.model.MEllipse;
 import com.jaspersoft.studio.model.MLine;
@@ -150,7 +151,7 @@ public class ReportFactory {
 	public static INode createToolReport(JasperReportsConfiguration jConfig) {
 		JasperDesign jd = jConfig.getJasperDesign();
 		ANode node = new MRoot(null, jd);
-		ANode report = new MReport(node, jConfig);
+		ANode report = new MCompositeElementReport(node, jConfig);
 		//Create the background element
 		new MBackgrounImage(report);
 		createTitleBand(jd, report);
