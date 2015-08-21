@@ -11,7 +11,9 @@ package com.jaspersoft.studio.preferences;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Properties;
 import java.util.logging.LogManager;
+import java.util.logging.Logger;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
@@ -23,9 +25,12 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.IntegerFieldEditor;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CTabFolder;
+import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
@@ -40,8 +45,9 @@ import com.jaspersoft.studio.model.util.KeyValue;
 import com.jaspersoft.studio.utils.Misc;
 
 public class GlobalPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
-	public static final String LOG_FILE = "com.jaspersoft.studio.log.file";
-	public static final String LOG_ENABLE = "com.jaspersoft.studio.log.enable";
+	public static final String LOG_FILE = "com.jaspersoft.studio.log.file"; //$NON-NLS-1$
+	public static final String LOG4j_FILE = "com.jaspersoft.studio.log.log4jfile"; //$NON-NLS-1$
+	public static final String LOG_ENABLE = "com.jaspersoft.studio.log.enable"; //$NON-NLS-1$
 	public static final String JSS_JETTY_PORT = "com.jaspersoft.studio.jetty.port"; //$NON-NLS-1$
 	public static final String JSS_USE_SECURE_STORAGE = "com.jaspersoft.studio.secure.storage"; //$NON-NLS-1$
 	public static final String JSS_ENABLE_INTERNAL_CONSOLE = "com.jaspersoft.studio.jss.console"; //$NON-NLS-1$
@@ -51,6 +57,7 @@ public class GlobalPreferencePage extends FieldEditorPreferencePage implements I
 
 	private static File fini;
 	private static File defaultLogProperties;
+	private static File defaultLog4jProperties;
 
 	private Text tLogPreview;
 
@@ -64,8 +71,9 @@ public class GlobalPreferencePage extends FieldEditorPreferencePage implements I
 		if (fini == null) {
 			try {
 				fini = ConfigurationManager.getApplicationConfigurationFile();
-				System.out.println("Fini: " + fini.toString());
-				defaultLogProperties = new File(ConfigurationManager.getAppDataFolder("config"), "log.properties");
+				System.out.println("Fini: " + fini.toString()); //$NON-NLS-1$
+				defaultLogProperties = new File(ConfigurationManager.getAppDataFolder("config"), "log.properties"); //$NON-NLS-1$ //$NON-NLS-2$
+				defaultLog4jProperties = new File(ConfigurationManager.getAppDataFolder("config"), "log4j-config.properties"); //$NON-NLS-1$ //$NON-NLS-2$
 				initDefaultLogProperties();
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -81,6 +89,18 @@ public class GlobalPreferencePage extends FieldEditorPreferencePage implements I
 			if (tmp != null)
 				try {
 					FileUtils.copyFile(tmp, getDefaultLogProperties());
+				} catch (IOException e) {
+					UIUtils.showError(e);
+					return;
+				}
+		}
+		if (!defaultLog4jProperties.exists()) {
+			defaultLog4jProperties.getParentFile().mkdirs();
+			defaultLog4jProperties.createNewFile();
+			File tmp = getLog4JTemplate();
+			if (tmp != null)
+				try {
+					FileUtils.copyFile(tmp, getDefaultLog4jProperties());
 				} catch (IOException e) {
 					UIUtils.showError(e);
 					return;
@@ -141,7 +161,7 @@ public class GlobalPreferencePage extends FieldEditorPreferencePage implements I
 				Messages.GlobalPreferencePage_JSSConsoleFieldTooltip);
 		addField(enableJSSConsole);
 
-		enableLoggers = new BooleanFieldEditor(LOG_ENABLE, "Enable Loggers", getFieldEditorParent()) {
+		enableLoggers = new BooleanFieldEditor(LOG_ENABLE, Messages.GlobalPreferencePage_5, getFieldEditorParent()) {
 			/*
 			 * (non-Javadoc) Method declared on FieldEditor.
 			 */
@@ -161,11 +181,26 @@ public class GlobalPreferencePage extends FieldEditorPreferencePage implements I
 								return;
 							}
 					}
-					KeyValue<String, String>[] kv = new KeyValue[3];
-					kv[0] = new KeyValue<String, String>("-Djava.util.logging.config.file", fname);
-					kv[1] = new KeyValue<String, String>("-Dorg.apache.commons.logging.diagnostics.dest", "/tmp/studio-common.log");
-					kv[2] = new KeyValue<String, String>("-Dorg.apache.commons.logging.Log",
-							"org.apache.commons.logging.impl.Jdk14Logger");
+					String fLog4jName = log4jFile.getStringValue();
+					if (Misc.isNullOrEmpty(fLog4jName)) {
+						fLog4jName = getDefaultLog4jProperties().toString();
+						File tmp = getLog4JTemplate();
+						if (tmp != null)
+							try {
+								FileUtils.copyFile(tmp, new File(fLog4jName));
+							} catch (IOException e) {
+								e.printStackTrace();
+								return;
+							}
+					}
+					String javaLogPath = getJavaLogPath();
+					KeyValue<String, String>[] kv = new KeyValue[javaLogPath != null ? 4 : 3];
+					kv[0] = new KeyValue<String, String>("-Djava.util.logging.config.file", fname); //$NON-NLS-1$
+					kv[1] = new KeyValue<String, String>("-Dlog4j.configuration", fLog4jName); //$NON-NLS-1$
+					kv[2] = new KeyValue<String, String>("-Dorg.apache.commons.logging.Log", //$NON-NLS-1$
+							"org.apache.commons.logging.impl.Jdk14Logger"); //$NON-NLS-1$
+					if (javaLogPath != null)
+						kv[3] = new KeyValue<String, String>("-Dorg.apache.commons.logging.diagnostics.dest", javaLogPath); //$NON-NLS-1$
 
 					cfg = ConfigurationManager.buildCommandLineVMarg(kv);
 					try {
@@ -181,22 +216,50 @@ public class GlobalPreferencePage extends FieldEditorPreferencePage implements I
 					LogManager.getLogManager().reset();
 
 					getPreferenceStore().putValue(LOG_FILE, getPreferenceStore().getDefaultString(LOG_FILE));
-					KeyValue<String, String>[] kv = new KeyValue[3];
-					kv[0] = new KeyValue<String, String>("-Djava.util.logging.config.file", null);
-					kv[1] = new KeyValue<String, String>("-Dorg.apache.commons.logging.diagnostics.dest", null);
-					kv[2] = new KeyValue<String, String>("-Dorg.apache.commons.logging.Log", null);
+					getPreferenceStore().putValue(LOG4j_FILE, getPreferenceStore().getDefaultString(LOG4j_FILE));
+					KeyValue<String, String>[] kv = new KeyValue[4];
+					kv[0] = new KeyValue<String, String>("-Djava.util.logging.config.file", null); //$NON-NLS-1$
+					kv[1] = new KeyValue<String, String>("-Dorg.apache.commons.logging.diagnostics.dest", null); //$NON-NLS-1$
+					kv[2] = new KeyValue<String, String>("-Dorg.apache.commons.logging.Log", null); //$NON-NLS-1$
+					kv[3] = new KeyValue<String, String>("-Dlog4j.configuration", null); //$NON-NLS-1$
 
 					cfg = ConfigurationManager.buildCommandLineVMarg(kv);
 				}
+				if (!getBooleanValue())
+					Logger.getAnonymousLogger().info("LOGGER ENDED"); //$NON-NLS-1$
 				ConfigurationManager.writeConfigurationFile(cfg);
+				if (getBooleanValue())
+					Logger.getAnonymousLogger().info("LOGGER STARTED"); //$NON-NLS-1$
 			}
 		};
-		enableLoggers.getDescriptionControl(getFieldEditorParent()).setToolTipText("Enable logging to file.");
+		enableLoggers.getDescriptionControl(getFieldEditorParent()).setToolTipText(Messages.GlobalPreferencePage_15);
 		addField(enableLoggers);
 
-		logFile = new FileFieldEditor(LOG_FILE, "Log File", getFieldEditorParent());
+		tabFolder = new CTabFolder(getFieldEditorParent(), SWT.FLAT | SWT.TOP);
+		GridData gd = new GridData(GridData.FILL_BOTH);
+		gd.horizontalSpan = 3;
+		gd.widthHint = 600;
+		tabFolder.setLayoutData(gd);
+
+		createJavaLogging(tabFolder);
+		createLog4jLogging(tabFolder);
+		tabFolder.setSelection(0);
+
+		showLogFile();
+		showLog4jFile();
+		enableLogging(getPreferenceStore().getBoolean(LOG_ENABLE));
+	}
+
+	private void createJavaLogging(CTabFolder tabFolder) {
+		CTabItem bptab = new CTabItem(tabFolder, SWT.NONE);
+		bptab.setText(Messages.GlobalPreferencePage_16);
+
+		cmpJavaLog = new Composite(tabFolder, SWT.NONE);
+		cmpJavaLog.setLayout(new GridLayout(3, false));
+
+		logFile = new FileFieldEditor(LOG_FILE, Messages.GlobalPreferencePage_17, cmpJavaLog);
 		addField(logFile);
-		logFile.getTextControl(getFieldEditorParent()).addModifyListener(new ModifyListener() {
+		logFile.getTextControl(cmpJavaLog).addModifyListener(new ModifyListener() {
 
 			@Override
 			public void modifyText(ModifyEvent e) {
@@ -205,13 +268,50 @@ public class GlobalPreferencePage extends FieldEditorPreferencePage implements I
 			}
 		});
 
-		tLogPreview = new Text(getFieldEditorParent(), SWT.BORDER | SWT.MULTI | SWT.WRAP);
+		tLogPreview = new Text(cmpJavaLog, SWT.BORDER | SWT.MULTI | SWT.WRAP);
 		GridData gd = new GridData(GridData.FILL_BOTH);
 		gd.horizontalSpan = 3;
 		tLogPreview.setLayoutData(gd);
 
-		showLogFile();
-		enableLogging(getPreferenceStore().getBoolean(LOG_ENABLE));
+		bptab.setControl(cmpJavaLog);
+	}
+
+	private String getJavaLogPath() {
+		try {
+			Properties props = net.sf.jasperreports.eclipse.util.FileUtils.load(tLogPreview.getText());
+			Object obj = props.get("java.util.logging.FileHandler.pattern"); //$NON-NLS-1$
+			if (obj instanceof String)
+				return (String) obj;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	private void createLog4jLogging(CTabFolder tabFolder) {
+		CTabItem bptab = new CTabItem(tabFolder, SWT.NONE);
+		bptab.setText(Messages.GlobalPreferencePage_19);
+
+		cmpLog4j = new Composite(tabFolder, SWT.NONE);
+		cmpLog4j.setLayout(new GridLayout(3, false));
+
+		log4jFile = new FileFieldEditor(LOG4j_FILE, Messages.GlobalPreferencePage_0, cmpLog4j);
+		addField(log4jFile);
+		log4jFile.getTextControl(cmpLog4j).addModifyListener(new ModifyListener() {
+
+			@Override
+			public void modifyText(ModifyEvent e) {
+				if (!refresh)
+					showLog4jFile();
+			}
+		});
+
+		tLog4jPreview = new Text(cmpLog4j, SWT.BORDER | SWT.MULTI | SWT.WRAP);
+		GridData gd = new GridData(GridData.FILL_BOTH);
+		gd.horizontalSpan = 3;
+		tLog4jPreview.setLayoutData(gd);
+
+		bptab.setControl(cmpLog4j);
 	}
 
 	public void showLogFile() {
@@ -236,14 +336,49 @@ public class GlobalPreferencePage extends FieldEditorPreferencePage implements I
 							if (tmp != null)
 								tLogPreview.setText(FileUtils.readFileToString(tmp));
 						} else
-							tLogPreview.setText("File Not Found");
+							tLogPreview.setText(Messages.GlobalPreferencePage_20);
 					} catch (IOException e) {
-						tLogPreview.setText(e.getLocalizedMessage() + "\n" + e.toString());
+						tLogPreview.setText(e.getLocalizedMessage() + "\n" + e.toString()); //$NON-NLS-1$
 						e.printStackTrace();
 					}
 				}
 			} else
-				tLogPreview.setText("");
+				tLogPreview.setText(""); //$NON-NLS-1$
+		} finally {
+			refresh = false;
+		}
+	}
+
+	public void showLog4jFile() {
+		if (refresh)
+			return;
+		refresh = true;
+		try {
+			if (enableLoggers.getBooleanValue()) {
+				String lfile = getPreferenceStore().getString(LOG4j_FILE);
+				if (Misc.isNullOrEmpty(lfile)) {
+					lfile = getDefaultLog4jProperties().toString();
+					getPreferenceStore().putValue(LOG4j_FILE, lfile);
+				}
+				log4jFile.load();
+				if (!Misc.isNullOrEmpty(lfile)) {
+					try {
+						File file = new File(lfile);
+						if (file.exists())
+							tLog4jPreview.setText(FileUtils.readFileToString(file));
+						else if (lfile.equals(getDefaultLog4jProperties().toString())) {
+							File tmp = getTemplate();
+							if (tmp != null)
+								tLog4jPreview.setText(FileUtils.readFileToString(tmp));
+						} else
+							tLog4jPreview.setText(Messages.GlobalPreferencePage_20);
+					} catch (IOException e) {
+						tLog4jPreview.setText(e.getLocalizedMessage() + "\n" + e.toString()); //$NON-NLS-1$
+						e.printStackTrace();
+					}
+				}
+			} else
+				tLog4jPreview.setText(""); //$NON-NLS-1$
 		} finally {
 			refresh = false;
 		}
@@ -253,8 +388,8 @@ public class GlobalPreferencePage extends FieldEditorPreferencePage implements I
 		if (defaultLogProperties == null)
 			initVars();
 		if (defaultLogProperties == null) {
-			String homeDir = System.getProperty("user.home");
-			defaultLogProperties = new File(homeDir, "log.properties");
+			String homeDir = System.getProperty("user.home"); //$NON-NLS-1$
+			defaultLogProperties = new File(homeDir, "log.properties"); //$NON-NLS-1$
 			if (!defaultLogProperties.exists())
 				try {
 					initDefaultLogProperties();
@@ -265,14 +400,30 @@ public class GlobalPreferencePage extends FieldEditorPreferencePage implements I
 		return defaultLogProperties;
 	}
 
+	private static File getDefaultLog4jProperties() {
+		if (defaultLog4jProperties == null)
+			initVars();
+		if (defaultLog4jProperties == null) {
+			String homeDir = System.getProperty("user.home"); //$NON-NLS-1$
+			defaultLog4jProperties = new File(homeDir, "log4j-config.properties"); //$NON-NLS-1$
+			if (!defaultLog4jProperties.exists())
+				try {
+					initDefaultLogProperties();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+		}
+		return defaultLog4jProperties;
+	}
+
 	private static File template;
 
 	private static File getTemplate() {
 		if (template == null) {
 			try {
-				String path = JaspersoftStudioPlugin.getInstance().getFileLocation("/resources/log.properties");
+				String path = JaspersoftStudioPlugin.getInstance().getFileLocation("/resources/log.properties"); //$NON-NLS-1$
 				if (!Misc.isNullOrEmpty(path)) {
-					template = FileUtils.toFile(new URL("file://" + path));
+					template = FileUtils.toFile(new URL("file://" + path)); //$NON-NLS-1$
 
 					// Bundle bundle = JaspersoftStudioPlugin.getInstance().getBundle();
 					// template = bundle.getDataFile("resources/log.properties");
@@ -282,21 +433,51 @@ public class GlobalPreferencePage extends FieldEditorPreferencePage implements I
 			}
 		}
 		return template;
+	}
 
+	private static File log4jTemplate;
+
+	private static File getLog4JTemplate() {
+		if (log4jTemplate == null) {
+			try {
+				String path = JaspersoftStudioPlugin.getInstance().getFileLocation("/resources/log4j-config.properties"); //$NON-NLS-1$
+				if (!Misc.isNullOrEmpty(path)) {
+					log4jTemplate = FileUtils.toFile(new URL("file://" + path)); //$NON-NLS-1$
+
+					// Bundle bundle = JaspersoftStudioPlugin.getInstance().getBundle();
+					// template = bundle.getDataFile("resources/log.properties");
+				}
+			} catch (IOException e) {
+				UIUtils.showError(e);
+			}
+		}
+		return log4jTemplate;
 	}
 
 	public void enableLogging(boolean enable) {
-		logFile.setEnabled(enable, getFieldEditorParent());
+		tabFolder.setEnabled(enable);
+		logFile.setEnabled(enable, cmpJavaLog);
+		log4jFile.setEnabled(enable, cmpLog4j);
 		tLogPreview.setEnabled(enable);
+		tLog4jPreview.setEnabled(enable);
 		if (!enable) {
 			IPreferenceStore pstore = getPreferenceStore();
 			String d = pstore.getDefaultString(LOG_FILE);
 			pstore.putValue(LOG_FILE, d);
 			logFile.setStringValue(d);
+
+			d = pstore.getDefaultString(LOG4j_FILE);
+			pstore.putValue(LOG4j_FILE, d);
+			log4jFile.setStringValue(d);
 		}
 	}
 
 	private boolean refresh = false;
+	private Composite cmpJavaLog;
+	private FileFieldEditor log4jFile;
+	private Text tLog4jPreview;
+	private Composite cmpLog4j;
+	private CTabFolder tabFolder;
 
 	@Override
 	public void propertyChange(PropertyChangeEvent event) {
@@ -305,8 +486,11 @@ public class GlobalPreferencePage extends FieldEditorPreferencePage implements I
 			if (event.getSource() == enableLoggers) {
 				enableLogging((Boolean) event.getNewValue());
 				showLogFile();
+				showLog4jFile();
 			} else if (event.getSource() == logFile)
 				showLogFile();
+			else if (event.getSource() == log4jFile)
+				showLog4jFile();
 		}
 	}
 

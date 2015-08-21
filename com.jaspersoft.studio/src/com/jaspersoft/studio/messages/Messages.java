@@ -788,6 +788,13 @@ public class Messages extends NLS {
 	public static String GenerateFragmentWizard_congratsText5;
 	public static String GenericParameterLabelProvider_parametersCountLabel;
 	public static String GenericTemplateBundle_invalidVersionMessage;
+	public static String GlobalPreferencePage_0;
+	public static String GlobalPreferencePage_15;
+	public static String GlobalPreferencePage_16;
+	public static String GlobalPreferencePage_17;
+	public static String GlobalPreferencePage_19;
+	public static String GlobalPreferencePage_20;
+	public static String GlobalPreferencePage_5;
 	public static String GlobalPreferencePage_EmbeddedBrowserSection;
 	public static String GlobalPreferencePage_flagDescription;
 	public static String GlobalPreferencePage_jettyServerTitle;
