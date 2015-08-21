@@ -43,6 +43,7 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.plugin.ExtensionManager;
 import com.jaspersoft.studio.plugin.PaletteGroup;
 import com.jaspersoft.studio.utils.ImageUtils;
+import com.jaspersoft.studio.wizards.ContextHelpIDs;
 import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
 
 /**
@@ -336,7 +337,7 @@ public class CompositeElementDefinitionWizardPage extends JSSHelpWizardPage {
 
 	@Override
 	protected String getContextName() {
-		return null;
+		return ContextHelpIDs.WIZARD_COMPOSITE_ELEMENTS;
 	}
 
 	/**
