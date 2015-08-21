@@ -51,6 +51,8 @@ public class SectionDescriptor extends AbstractSectionDescriptor {
 	private static final String ATT_SECTION_ENABLES_FOR = "enablesFor"; //$NON-NLS-1$	
 
 	private static final String ATT_INPUT_TYPE = "type"; //$NON-NLS-1$
+	
+	private static final String ATT_EXCLUDE_SUBTYPES = "excludeSubtypes"; //$NON-NLS-1$
 
 	private static final String ELEMENT_INPUT = "input"; //$NON-NLS-1$
 
@@ -60,7 +62,7 @@ public class SectionDescriptor extends AbstractSectionDescriptor {
 
 	private String afterSection;
 
-	private ArrayList<String> inputTypes;
+	private ArrayList<InputType> inputTypes;
 
 	private IFilter filter;
 
@@ -199,14 +201,17 @@ public class SectionDescriptor extends AbstractSectionDescriptor {
 	 * 
 	 * @see org.eclipse.ui.views.properties.tabbed.ISectionDescriptor#getInputTypes()
 	 */
-	public List<String> getInputTypes() {
+	public List<InputType> getInputTypes() {
 		if (inputTypes == null) {
-			inputTypes = new ArrayList<String>();
+			inputTypes = new ArrayList<InputType>();
 			IConfigurationElement[] elements = getConfigurationElement()
 					.getChildren(ELEMENT_INPUT);
 			for (int i = 0; i < elements.length; i++) {
 				IConfigurationElement element = elements[i];
-				inputTypes.add(element.getAttribute(ATT_INPUT_TYPE));
+				String type = element.getAttribute(ATT_INPUT_TYPE);
+				String attExcludeSubtype = element.getAttribute(ATT_EXCLUDE_SUBTYPES);
+				boolean excludeSubtype = attExcludeSubtype != null ? Boolean.parseBoolean(attExcludeSubtype) : false;
+				inputTypes.add(new InputType(type, excludeSubtype));
 			}
 		}
 

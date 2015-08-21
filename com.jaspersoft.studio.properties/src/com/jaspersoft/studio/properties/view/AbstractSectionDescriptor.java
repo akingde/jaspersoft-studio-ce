@@ -19,6 +19,7 @@ import org.eclipse.jface.viewers.IFilter;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IWorkbenchPart;
 
+import com.jaspersoft.studio.properties.internal.InputType;
 import com.jaspersoft.studio.properties.internal.TabbedPropertyRegistryClassSectionFilter;
 
 /**
@@ -85,7 +86,7 @@ public abstract class AbstractSectionDescriptor implements ISectionDescriptor {
 		return null;
 	}
 
-	public List<String> getInputTypes() {
-		return new ArrayList<String>();
+	public List<InputType> getInputTypes() {
+		return new ArrayList<InputType>();
 	}
 }

@@ -129,13 +129,20 @@ public class TabbedPropertyRegistryClassSectionFilter {
 	private boolean appliesToEffectiveType(ISectionDescriptor descriptor,
 			Class<?> inputClass) {
 
-		List<String> classTypes = getClassTypes(inputClass);
-
-		List<String> sectionInputTypes = descriptor.getInputTypes();
-		for (String type : sectionInputTypes) {
-			if (classTypes.contains(type)) {
-				// found a match
-				return true;
+		List<String> classTypes = null;
+		List<InputType> sectionInputTypes = descriptor.getInputTypes();
+		for (InputType type : sectionInputTypes) {
+			if (type.isExcludeSubtype()){
+				return inputClass.getName().equals(type.getType());
+			} else {
+				//Initialize the class types only when needed
+				if (classTypes == null){
+					classTypes = getClassTypes(inputClass);
+				}
+				if (classTypes.contains(type.getType())) {
+					// found a match
+					return true;
+				}
 			}
 		}
 

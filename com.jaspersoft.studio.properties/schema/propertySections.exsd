@@ -1,16 +1,21 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!-- Schema file written by PDE -->
-<schema targetNamespace="org.eclipse.ui.views.properties.tabbed">
+<schema targetNamespace="com.jaspersoft.studio.properties" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
-      <appInfo>
+      <appinfo>
          <meta.schema plugin="com.jaspersoft.studio.properties" id="propertySections" name="Property Sections"/>
-      </appInfo>
+      </appinfo>
       <documentation>
          Describes a list of sections to be displayed within tabs that will be contributed to the tabbed property sheet page.
       </documentation>
    </annotation>
 
    <element name="extension">
+      <annotation>
+         <appinfo>
+            <meta.element />
+         </appinfo>
+      </annotation>
       <complexType>
          <sequence>
             <element ref="propertySections"/>
@@ -78,9 +83,9 @@
                <documentation>
                   The class that implements the section, i.e. extends &lt;tt&gt;org.eclipse.ui.views.properties.tabbed.AbstractPropertySection&lt;/tt&gt;
                </documentation>
-               <appInfo>
+               <appinfo>
                   <meta.attribute kind="java" basedOn="com.jaspersoft.studio.properties.view.AbstractPropertySection"/>
-               </appInfo>
+               </appinfo>
             </annotation>
          </attribute>
          <attribute name="afterSection" type="string">
@@ -96,9 +101,9 @@
                   The class that implements a section filter, i.e. implements &lt;tt&gt;org.eclipse.jface.viewers.IFilter&lt;/tt&gt;.
 A filter is used to override the type mapper and input for the selection. When a filter is specified, type mapper and input are ignored.
                </documentation>
-               <appInfo>
+               <appinfo>
                   <meta.attribute kind="java" basedOn="org.eclipse.jface.viewers.IFilter"/>
-               </appInfo>
+               </appinfo>
             </annotation>
          </attribute>
          <attribute name="enablesFor" type="string">
@@ -127,27 +132,26 @@ A filter is used to override the type mapper and input for the selection. When a
                <documentation>
                   The selected class or interface that will enable the display on the section in the tab.
                </documentation>
-               <appInfo>
+               <appinfo>
                   <meta.attribute kind="java"/>
-               </appInfo>
+               </appinfo>
+            </annotation>
+         </attribute>
+         <attribute name="excludeSubtypes" type="boolean">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
             </annotation>
          </attribute>
       </complexType>
    </element>
 
-   <annotation>
-      <appInfo>
-         <meta.section type="since"/>
-      </appInfo>
-      <documentation>
-         
-      </documentation>
-   </annotation>
 
    <annotation>
-      <appInfo>
+      <appinfo>
          <meta.section type="examples"/>
-      </appInfo>
+      </appinfo>
       <documentation>
          &lt;pre&gt;
    &lt;extension
@@ -167,28 +171,12 @@ A filter is used to override the type mapper and input for the selection. When a
       </documentation>
    </annotation>
 
-   <annotation>
-      <appInfo>
-         <meta.section type="apiInfo"/>
-      </appInfo>
-      <documentation>
-         
-      </documentation>
-   </annotation>
+
 
    <annotation>
-      <appInfo>
-         <meta.section type="implementation"/>
-      </appInfo>
-      <documentation>
-         
-      </documentation>
-   </annotation>
-
-   <annotation>
-      <appInfo>
+      <appinfo>
          <meta.section type="copyright"/>
-      </appInfo>
+      </appinfo>
       <documentation>
          Copyright (c) 2005, 2006 IBM Corporation and others.&lt;br&gt;
 All rights reserved. This program and the accompanying materials are made 

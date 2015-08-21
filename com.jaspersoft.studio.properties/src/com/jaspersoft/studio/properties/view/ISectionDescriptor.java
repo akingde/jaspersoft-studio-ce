@@ -18,6 +18,8 @@ import org.eclipse.jface.viewers.IFilter;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IWorkbenchPart;
 
+import com.jaspersoft.studio.properties.internal.InputType;
+
 /**
  * Represents a section descriptor on the tabbed property sections extensions.
  * <p>
@@ -63,7 +65,7 @@ public interface ISectionDescriptor {
 	 * 
 	 * @return the valid input types for this section.
 	 */
-	public List<String> getInputTypes();
+	public List<InputType> getInputTypes();
 
 	/**
 	 * Get the class that implements this section.
