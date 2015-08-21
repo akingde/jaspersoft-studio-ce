@@ -501,4 +501,10 @@ public class SimpleJRXMLEditor extends AbstractJRXMLEditor implements  IJROBject
 		return JaspersoftStudioPlugin.getExtensionManager().getTitleToolTip(jrContext, super.getTitleToolTip());
 	}
 
+	/**
+	 * @return the design editor
+	 */
+	public ReportContainer getReportContainer() {
+		return reportContainer;
+	}
 }

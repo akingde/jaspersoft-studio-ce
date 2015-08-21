@@ -21,6 +21,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.JrxmlEditor;
+import com.jaspersoft.studio.editor.SimpleJRXMLEditor;
 import com.jaspersoft.studio.editor.report.ReportEditor;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
@@ -155,6 +156,12 @@ public class HideElementsAction extends ACachedSelectionAction {
 		IEditorPart editor = SelectionHelper.getActiveJRXMLEditor();
 		if (editor instanceof JrxmlEditor){
 			JrxmlEditor jrxmlEditor = (JrxmlEditor)editor;
+			IEditorPart part = jrxmlEditor.getReportContainer().getActiveEditor();
+			if (part instanceof ReportEditor){
+				((ReportEditor)part).forceUpdateActions();
+			}
+		} else if (editor instanceof SimpleJRXMLEditor){
+			SimpleJRXMLEditor jrxmlEditor = (SimpleJRXMLEditor)editor;
 			IEditorPart part = jrxmlEditor.getReportContainer().getActiveEditor();
 			if (part instanceof ReportEditor){
 				((ReportEditor)part).forceUpdateActions();
