@@ -169,7 +169,6 @@
 			<fileset dir="${dirlocation.mac.x86_64}"/>
 		</zip>
 
-		<property name="temp.mac.dir" value="/tmp/jssbuild-ce"/>
 		<delete dir="${temp.mac.dir}"/>
 		<mkdir dir="${temp.mac.dir}"/>
 		<copy file="${jssRcpProductFolderPath}/resources/jss-package-template.tgz" todir="${temp.mac.dir}"/>
