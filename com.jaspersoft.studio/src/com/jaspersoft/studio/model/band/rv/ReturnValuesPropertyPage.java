@@ -176,7 +176,14 @@ public class ReturnValuesPropertyPage extends JSSHelpWizardPage {
 	}
 
 	private void createButtons(Composite bGroup) {
-		new NewButton().createNewButtons(bGroup, tableViewer, new INewElement() {
+		NewButton nb = new NewButton() {
+			@Override
+			protected void afterElementAdded(Object selement) {
+				super.afterElementAdded(selement);
+				setEnabled(!getAlreadyUsedToVariables().isEmpty());
+			}
+		};
+		nb.createNewButtons(bGroup, tableViewer, new INewElement() {
 
 			@Override
 			public Object newElement(List<?> input, int pos) {
@@ -186,7 +193,10 @@ public class ReturnValuesPropertyPage extends JSSHelpWizardPage {
 					return d.getValue();
 				return null;
 			}
+
 		});
+		nb.setEnabled(!getAlreadyUsedToVariables().isEmpty());
+
 		EditButton<ExpressionReturnValue> editButton = new EditButton<ExpressionReturnValue>();
 		editButton.createEditButtons(bGroup, tableViewer, new IEditElement<ExpressionReturnValue>() {
 
