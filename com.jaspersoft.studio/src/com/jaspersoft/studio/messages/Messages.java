@@ -1744,6 +1744,7 @@ public class Messages extends NLS {
 	public static String ResourcePage_pageTitle;
 	public static String ReturnValuesPropertyPage_1;
 	public static String ReturnValuesPropertyPage_2;
+	public static String ReturnValuesPropertyPage_8;
 	public static String RulersGridPreferencePage_common_gridcolor;
 	public static String RulersGridPreferencePage_description;
 	public static String RulersGridPreferencePage_grid_options;

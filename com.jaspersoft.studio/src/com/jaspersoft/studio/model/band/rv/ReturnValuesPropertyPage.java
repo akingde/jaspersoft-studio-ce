@@ -11,6 +11,7 @@ package com.jaspersoft.studio.model.band.rv;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.ExpressionReturnValue;
@@ -64,13 +65,13 @@ public class ReturnValuesPropertyPage extends JSSHelpWizardPage {
 			switch (columnIndex) {
 			case 0:
 				if (val.getExpression() == null)
-					return "";
+					return ""; //$NON-NLS-1$
 				return val.getExpression().getText();
 			case 1:
 				return Misc.nvl(val.getToVariable());
 			case 2:
 				if (val.getCalculation() == null)
-					return "";
+					return ""; //$NON-NLS-1$
 				return val.getCalculation().getName();
 			case 3:
 				return Misc.nvl(val.getIncrementerFactoryClassName());
@@ -167,12 +168,13 @@ public class ReturnValuesPropertyPage extends JSSHelpWizardPage {
 
 	protected void fillTable() {
 		tableViewer.setInput(dto.getValue());
+		isValid();
 	}
 
 	private void attachCellEditors(final TableViewer viewer, Composite parent) {
 
 		viewer
-				.setColumnProperties(new String[] { "EXPRESSION", "TOVARIABLE", "CALCULATIONTYPE", "INCREMENTERFACTORYCLASS" });
+				.setColumnProperties(new String[] { "EXPRESSION", "TOVARIABLE", "CALCULATIONTYPE", "INCREMENTERFACTORYCLASS" }); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 	}
 
 	private void createButtons(Composite bGroup) {
@@ -180,7 +182,7 @@ public class ReturnValuesPropertyPage extends JSSHelpWizardPage {
 			@Override
 			protected void afterElementAdded(Object selement) {
 				super.afterElementAdded(selement);
-				setEnabled(!getAlreadyUsedToVariables().isEmpty());
+				isValid();
 			}
 		};
 		nb.createNewButtons(bGroup, tableViewer, new INewElement() {
@@ -195,9 +197,15 @@ public class ReturnValuesPropertyPage extends JSSHelpWizardPage {
 			}
 
 		});
-		nb.setEnabled(!getAlreadyUsedToVariables().isEmpty());
+		nb.setEnabled(!getAlreadyNonUsedToVariables().isEmpty());
 
-		EditButton<ExpressionReturnValue> editButton = new EditButton<ExpressionReturnValue>();
+		EditButton<ExpressionReturnValue> editButton = new EditButton<ExpressionReturnValue>() {
+			@Override
+			protected void afterElementModified(Object element, List<ExpressionReturnValue> inlist, int ind) {
+				super.afterElementModified(element, inlist, ind);
+				isValid();
+			}
+		};
 		editButton.createEditButtons(bGroup, tableViewer, new IEditElement<ExpressionReturnValue>() {
 
 			@Override
@@ -210,19 +218,46 @@ public class ReturnValuesPropertyPage extends JSSHelpWizardPage {
 			}
 		});
 		editButton.editOnDoubleClick();
-		new DeleteButton().createDeleteButton(bGroup, tableViewer);
+		new DeleteButton() {
+			protected void afterElementDeleted(Object element) {
+				isValid();
+			}
+		}.createDeleteButton(bGroup, tableViewer);
 
 		ListOrderButtons upDownButtons = new ListOrderButtons();
 		upDownButtons.createOrderButtons(bGroup, tableViewer);
 	}
 
-	/**
-	 * Return an hashset of the variable names that are already used as to variables
-	 * 
-	 * @return not null hashset of variables already used as a to variable
-	 */
-	private HashSet<String> getAlreadyUsedToVariables() {
+	private void isValid() {
+		Set<String> names = new HashSet<String>();
+		for (ExpressionReturnValue erv : dto.getValue()) {
+			if (names.contains(erv.getToVariable())) {
+				setErrorMessage(Messages.ReturnValuesPropertyPage_8);
+				setPageComplete(false);
+				return;
+			}
+			names.add(erv.getToVariable());
+		}
+		setErrorMessage(null);
+		setPageComplete(true);
+	}
+
+	private HashSet<String> getAlreadyNonUsedToVariables() {
 		HashSet<String> result = new HashSet<String>();
+		JRVariable[] vlist = dto.getjConfig().getJasperDesign().getMainDataset().getVariables();
+		for (JRVariable v : vlist) {
+			if (v.isSystemDefined())
+				continue;
+			boolean exists = false;
+			for (ExpressionReturnValue value : dto.getValue())
+				if (value.getToVariable().equals(v.getName())) {
+					exists = true;
+					break;
+				}
+			if (!exists)
+				result.add(v.getName());
+		}
+
 		for (ExpressionReturnValue value : dto.getValue())
 			result.add(value.getToVariable());
 		return result;
@@ -233,11 +268,10 @@ public class ReturnValuesPropertyPage extends JSSHelpWizardPage {
 	protected String[] getToVariablesNames() {
 		if (toVariables == null) {
 			List<String> res = new ArrayList<String>();
-			HashSet<String> usedVariables = getAlreadyUsedToVariables();
 			JRVariable[] vlist = dto.getjConfig().getJasperDesign().getMainDataset().getVariables();
 			for (JRVariable o : vlist) {
 				JRDesignVariable jdVar = (JRDesignVariable) o;
-				if (!jdVar.isSystemDefined() && !usedVariables.contains(jdVar.getName()))
+				if (!jdVar.isSystemDefined())
 					res.add(jdVar.getName());
 			}
 			return res.toArray(new String[res.size()]);

@@ -8,6 +8,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.model.band;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.jasperreports.engine.ExpressionReturnValue;
@@ -37,6 +38,8 @@ public class JRBandDTO {
 	}
 
 	public List<ExpressionReturnValue> getValue() {
+		if (value == null)
+			value = new ArrayList<ExpressionReturnValue>();
 		return value;
 	}
 

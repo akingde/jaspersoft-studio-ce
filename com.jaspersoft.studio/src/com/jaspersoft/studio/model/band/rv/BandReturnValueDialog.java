@@ -8,6 +8,9 @@
  ******************************************************************************/
 package com.jaspersoft.studio.model.band.rv;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
 import net.sf.jasperreports.eclipse.ui.ATitledDialog;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.design.DesignExpressionReturnValue;
@@ -52,6 +55,7 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.property.dataset.ExpressionWidget;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.utils.EnumHelper;
+import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /**
@@ -69,6 +73,13 @@ public class BandReturnValueDialog extends ATitledDialog implements IExpressionC
 	protected Combo toVariable;
 
 	protected String[] toVariables;
+	private PropertyChangeListener listener = new PropertyChangeListener() {
+
+		@Override
+		public void propertyChange(PropertyChangeEvent arg0) {
+			validate();
+		}
+	};
 
 	/**
 	 * Create the dialog
@@ -84,6 +95,13 @@ public class BandReturnValueDialog extends ATitledDialog implements IExpressionC
 		this.value = value;
 		this.toVariables = toVariables;
 		setExpressionContext(new ExpressionContext(jConfig.getJasperDesign().getMainDesignDataset(), jConfig));
+		value.getEventSupport().addPropertyChangeListener(listener);
+	}
+
+	@Override
+	public boolean close() {
+		value.getEventSupport().removePropertyChangeListener(listener);
+		return super.close();
 	}
 
 	private ExpressionContext expContext;
@@ -206,8 +224,10 @@ public class BandReturnValueDialog extends ATitledDialog implements IExpressionC
 			if (index == ArrayUtils.INDEX_NOT_FOUND)
 				index = 0;
 			toVariable.select(index);
-		} else
+		} else {
 			toVariable.select(0);
+			value.setToVariable(toVariable.getText());
+		}
 
 		if (value.getCalculation() != null) {
 			int index = ArrayUtils.indexOf(CalculationEnum.values(), value.getCalculation());
@@ -241,9 +261,9 @@ public class BandReturnValueDialog extends ATitledDialog implements IExpressionC
 	 */
 	protected void validate() {
 		Button okButton = getButton(IDialogConstants.OK_ID);
-		if (okButton != null) {
-			// okButton.setEnabled(fromVariable.getText() != null && !fromVariable.getText().trim().isEmpty());
-		}
+		if (okButton != null)
+			okButton.setEnabled(!Misc.isNullOrEmpty(toVariable.getText()) && value.getExpression() != null
+					&& !Misc.isNullOrEmpty(value.getExpression().getText()));
 	}
 
 	/**
