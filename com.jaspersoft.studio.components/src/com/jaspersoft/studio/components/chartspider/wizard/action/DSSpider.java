@@ -189,7 +189,7 @@ public class DSSpider extends ADSComponent {
 						hyperLinkElement = new MHyperLink(new JRDesignHyperlink());
 					}
 					String dialogTitle = MessageFormat.format(Messages.HyperlinkDialog_hyperlinkDialogTitle, seriesCombo.getText());
-					HyperlinkPage dlg = new HyperlinkPage(hyperlinkBtn.getShell(), hyperLinkElement, dialogTitle);
+					HyperlinkPage dlg = new HyperlinkPage(hyperlinkBtn.getShell(), hyperLinkElement, dialogTitle, serie.getItemHyperlink() != null);
 					int operationResult = dlg.open();
 					if (operationResult == Window.OK) {
 						serie.setItemHyperlink((JRHyperlink)dlg.getElement().getValue());

@@ -135,7 +135,7 @@ public class DSHighLow extends ADSComponent {
 				} else {
 					hyperLinkElement = new MHyperLink(new JRDesignHyperlink());
 				}
-				HyperlinkPage dlg = new HyperlinkPage(hyperlinkBtn.getShell(), hyperLinkElement, Messages.DSHighLow_hypertextDialogTitle);
+				HyperlinkPage dlg = new HyperlinkPage(hyperlinkBtn.getShell(), hyperLinkElement, Messages.DSHighLow_hypertextDialogTitle, dataset.getItemHyperlink() != null);
 				int operationResult = dlg.open();
 				if (operationResult == Window.OK) {
 					dataset.setItemHyperlink((JRHyperlink)dlg.getElement().getValue());

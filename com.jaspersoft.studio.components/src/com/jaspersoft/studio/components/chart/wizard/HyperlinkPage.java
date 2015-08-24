@@ -44,15 +44,18 @@ public class HyperlinkPage extends FormDialog {
 	 */
 	private String dialogTitle;
 	
+	private boolean hasHyperlink = true;
+	
 	/** 
 	 * @param shell
 	 * @param hyperLinkNode Hyperlink node to edit, must be an MHyperlink
 	 * @param dialogTitle title of the dialog
 	 */
-	public HyperlinkPage(Shell shell, APropertyNode hyperLinkNode, String dialogTitle) {
+	public HyperlinkPage(Shell shell, APropertyNode hyperLinkNode, String dialogTitle, boolean hasHyperlink) {
 		super(shell);
 		controlPanel = new HyperLinkPanel(hyperLinkNode);
 		this.dialogTitle = dialogTitle;
+		this.hasHyperlink = hasHyperlink;
 	}
 	
 	/**
@@ -62,14 +65,16 @@ public class HyperlinkPage extends FormDialog {
 	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
 		super.createButtonsForButtonBar(parent);
-		Button deleteButton = createButton(parent, IDialogConstants.ABORT_ID, Messages.HyperlinkDialog_deleteHyperlinkAction, false);
-		deleteButton.addSelectionListener(new SelectionAdapter(){
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				setReturnCode(IDialogConstants.ABORT_ID);
-				close();
-			}
-		});
+		if (hasHyperlink){
+			Button deleteButton = createButton(parent, IDialogConstants.ABORT_ID, Messages.HyperlinkDialog_deleteHyperlinkAction, false);
+			deleteButton.addSelectionListener(new SelectionAdapter(){
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					setReturnCode(IDialogConstants.ABORT_ID);
+					close();
+				}
+			});
+		}
 	}
 
 	@Override
