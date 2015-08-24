@@ -66,6 +66,8 @@
    </topic>
    <topic href="html/wizard/measureunits/measureunits.html" label="Measure Units">
    </topic>
+   <topic href="html/wizard/compositeelements/tutorial.html" label="Composite Elements">
+   </topic>
 		</topic>
 		<topic label="Variables and Expressions">
 			<topic href="html/wizard/reportvariables/createvariable.html" label="The variables in Jaspersoft Studio" />

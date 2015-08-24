@@ -400,4 +400,12 @@
       <description>When using a textual element inside Jaspersoft Studio, users can select the font used for it. Although this seems simple, there are a lot of problems when using the fonts. The main problem is that the available fonts are provided by the operating system and the same font could be different from a system to another, or also missing. There are problems also with PDF exporter since it has its own fonts.</description>
       <topic href="html/wizard/fontextension/fontextension.html" label="Tutorial"/>
    </context>
+   <context id="compositeElement" title="Composite Element Settings">
+      <description>In this dialog you can configure your composite elements providing
+	1. A Mandatory and unique name.
+	2. An optional desciption.
+	3. An optional icon (if no icon is provided a default one is used).
+	4. The palette section where this element will be placed.</description>
+ <topic href="html/wizard/compositeelements/tutorial.html" label="Composite Elements Tutorial"/>
+   </context>
 </contexts>
