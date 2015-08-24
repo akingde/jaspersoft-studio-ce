@@ -14,6 +14,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.engine.ExpressionReturnValue;
 import net.sf.jasperreports.engine.JRBand;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRElementGroup;
@@ -21,9 +22,11 @@ import net.sf.jasperreports.engine.JRPropertiesHolder;
 import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.design.JRDesignSubreport;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.BandTypeEnum;
 import net.sf.jasperreports.engine.type.SplitTypeEnum;
+import net.sf.jasperreports.engine.util.JRCloneUtils;
 
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.geometry.Rectangle;
@@ -46,6 +49,7 @@ import com.jaspersoft.studio.model.IPastable;
 import com.jaspersoft.studio.model.IPastableGraphic;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.MReport;
+import com.jaspersoft.studio.model.band.rv.RVPropertyDescriptor;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
@@ -64,13 +68,13 @@ import com.jaspersoft.studio.utils.Misc;
  */
 public class MBand extends APropertyNode implements IGraphicElement, IPastable, IPastableGraphic, IContainer,
 		IContainerLayout, IContainerEditPart, IGroupElement {
-	
+
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
-	
+
 	private static final Integer CONST_HEIGHT = new Integer(50);
-	
-	/** 
-	 * The icon descriptor. 
+
+	/**
+	 * The icon descriptor.
 	 */
 	private static IIconDescriptor iconDescriptor;
 
@@ -78,9 +82,9 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 	 * Number of the band that will be shown for the detail band after their name
 	 */
 	protected int bandIndex = -1;
-	
-	/** 
-	 * The band type. 
+
+	/**
+	 * The band type.
 	 */
 	private BandTypeEnum bandType;
 
@@ -143,10 +147,9 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 			mrep.setBandIndex(bandIndex, getValue());
 		}
 	}
-	
+
 	/**
-	 * When setting the value update the index since it 
-	 * store them in the map
+	 * When setting the value update the index since it store them in the map
 	 */
 	@Override
 	public void setValue(Object value) {
@@ -154,23 +157,24 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 		super.setValue(value);
 		refreshIndex(oldValue, getValue());
 	}
-	
+
 	/**
-	 * Refresh the index of the band with the current number returned by getFreeIndex.Update
-	 * also the index map on the mreport removing the old index and inserting the new one
+	 * Refresh the index of the band with the current number returned by getFreeIndex.Update also the index map on the
+	 * mreport removing the old index and inserting the new one
 	 * 
-	 * @param oldValue the old value of the element
-	 * @param newValue value of the element, if this is not called when a set value is done
-	 * the can be the same
+	 * @param oldValue
+	 *          the old value of the element
+	 * @param newValue
+	 *          value of the element, if this is not called when a set value is done the can be the same
 	 */
 	protected void refreshIndex(JRDesignBand oldValue, JRDesignBand newValue) {
 		INode n = getRoot();
 		if (n instanceof MReport) {
 			MReport mrep = (MReport) n;
-			//Remove the old index
+			// Remove the old index
 			mrep.removeBandIndex(oldValue);
-			if (getValue() != null){
-				//Reuse the old index for the new element if any
+			if (getValue() != null) {
+				// Reuse the old index for the new element if any
 				Integer index = mrep.getBandIndex(getValue());
 				if (index != null) {
 					bandIndex = index;
@@ -190,19 +194,19 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 		// if (!BandTypeEnum.DETAIL.equals(bandType)) return -1;
 		int actualIndex = 1;
 		if (getParent() instanceof MReport) {
-			MReport report = (MReport)getParent();
+			MReport report = (MReport) getParent();
 			HashSet<Integer> reservedIndexes = new HashSet<Integer>();
 			for (INode node : report.getChildren()) {
 				if (node == this)
 					continue;
 				if (node instanceof MBand) {
 					MBand band = (MBand) node;
-					if (isSameBandType(band)){
+					if (isSameBandType(band)) {
 						reservedIndexes.add(band.getDetailIndex());
 					}
 				}
 			}
-			while(reservedIndexes.contains(actualIndex)){
+			while (reservedIndexes.contains(actualIndex)) {
 				actualIndex++;
 			}
 		}
@@ -222,7 +226,6 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 		return bandType;
 	}
 
-	
 	/**
 	 * Return the index of the band in the detailSection of the jasper design +1 . This only if the band is a detail band,
 	 * otherwise it return -1
@@ -388,12 +391,21 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 		propertiesMapD.setDescription(Messages.common_properties);
 		desc.add(propertiesMapD);
 
+		RVPropertyDescriptor returnValuesD = new RVPropertyDescriptor(JRDesignBand.PROPERTY_RETURN_VALUES,
+				Messages.common_return_values);
+		returnValuesD.setDescription(Messages.MSubreport_return_values_description);
+		desc.add(returnValuesD);
+		returnValuesD.setHelpRefBuilder(new HelpReferenceBuilder(
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#returnValue")); //$NON-NLS-1$
+
 		defaultsMap.put(JRDesignBand.PROPERTY_HEIGHT, CONST_HEIGHT);
 		defaultsMap.put(JRDesignBand.PROPERTY_SPLIT_TYPE, null);
 		defaultsMap.put(JRDesignBand.PROPERTY_PRINT_WHEN_EXPRESSION, null);
 
 		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#band"); //$NON-NLS-1$
 	}
+
+	private JRBandDTO returnValuesDTO;
 
 	/*
 	 * (non-Javadoc)
@@ -413,6 +425,16 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 			if (id.equals(MGraphicElement.PROPERTY_MAP)) {
 				// to avoid duplication I remove it first
 				return jrband.getPropertiesMap().cloneProperties();
+			}
+			if (id.equals(JRDesignSubreport.PROPERTY_RETURN_VALUES)) {
+				if (returnValuesDTO == null) {
+					returnValuesDTO = new JRBandDTO();
+					returnValuesDTO.setjConfig(getJasperConfiguration());
+					returnValuesDTO.setBand(jrband);
+				}
+				returnValuesDTO.setValue(JRCloneUtils.cloneList(jrband.getReturnValuesList()));
+				return returnValuesDTO;
+
 			}
 		}
 		return null;
@@ -442,6 +464,13 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 				for (int i = 0; i < names.length; i++)
 					jrband.getPropertiesMap().setProperty(names[i], v.getProperty(names[i]));
 				this.getPropertyChangeSupport().firePropertyChange(MGraphicElement.PROPERTY_MAP, false, true);
+			} else if (id.equals(JRDesignSubreport.PROPERTY_RETURN_VALUES)) {
+				returnValuesDTO = (JRBandDTO) value;
+				List<ExpressionReturnValue> list = (List<ExpressionReturnValue>) returnValuesDTO.getValue();
+				for (ExpressionReturnValue srv : jrband.getReturnValues())
+					jrband.removeReturnValue(srv);
+				for (ExpressionReturnValue j : list)
+					jrband.addReturnValue(j);
 			}
 		}
 	}

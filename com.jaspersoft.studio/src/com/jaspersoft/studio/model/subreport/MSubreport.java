@@ -165,7 +165,7 @@ public class MSubreport extends MGraphicElement {
 				Messages.common_return_values);
 		returnValuesD.setDescription(Messages.MSubreport_return_values_description);
 		desc.add(returnValuesD);
-		propertiesD.setHelpRefBuilder(new HelpReferenceBuilder(
+		returnValuesD.setHelpRefBuilder(new HelpReferenceBuilder(
 				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#returnValue")); //$NON-NLS-1$
 
 		overflowTypeD = new NamedEnumPropertyDescriptor<OverflowType>(JRBaseSubreport.PROPERTY_OVERFLOW_TYPE,

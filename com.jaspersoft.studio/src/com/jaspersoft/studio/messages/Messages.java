@@ -211,6 +211,7 @@ public class Messages extends NLS {
 	public static String BandConstraintCommand_band_resized;
 	public static String BandFigure_hiddenFiguretext;
 	public static String BandGroupWizard_group_band;
+	public static String BandReturnValueDialog_0;
 	public static String BandSection_title;
 	public static String BookmarkSection_bookmarkSectionTitle;
 	public static String BooleanCellEditorValidator_value_is_not_instance_of_boolean;
@@ -1741,6 +1742,8 @@ public class Messages extends NLS {
 	public static String ResourcePage_exportedResourceLabel;
 	public static String ResourcePage_pageDescription;
 	public static String ResourcePage_pageTitle;
+	public static String ReturnValuesPropertyPage_1;
+	public static String ReturnValuesPropertyPage_2;
 	public static String RulersGridPreferencePage_common_gridcolor;
 	public static String RulersGridPreferencePage_description;
 	public static String RulersGridPreferencePage_grid_options;
