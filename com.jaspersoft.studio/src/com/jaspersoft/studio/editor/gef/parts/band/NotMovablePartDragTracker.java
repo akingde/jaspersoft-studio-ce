@@ -17,9 +17,12 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.List;
 
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.Graphics;
@@ -44,7 +47,9 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.widgets.Display;
 
 import com.jaspersoft.studio.editor.java2d.J2DGraphics;
+import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MGraphicElement;
+import com.jaspersoft.studio.utils.Pair;
 import com.jaspersoft.studio.utils.compatibility.FigureUtilities;
 
 /**
@@ -243,6 +248,67 @@ public class NotMovablePartDragTracker extends SelectEditPartTracker {
 		}
 		super.applyProperty(key, value);
 	}
+	
+	/**
+	 * Return the path of a node as a list of index to follow from the
+	 * root to reach that node. In the end this is similar to a version number
+	 * An for this reason it can be compared with the path of other nodes to
+	 * order them from the upper in the hierarchy to the lower one
+	 * 
+	 * @param part part to check
+	 * @return the string representing the node path.
+	 */
+	private String getNodeIndex(EditPart part){
+		ANode model = (ANode)part.getModel();
+		ANode parent = model.getParent();
+		StringBuilder path = new StringBuilder();
+		while(parent != null && parent.getParent() != null){
+			int index = (parent.getChildren().indexOf(model)+1);
+			model = parent;
+			parent = model.getParent();
+			path.insert(0, index);
+			if (parent != null && parent.getParent() != null){
+				path.insert(0, ".");
+			}
+		}
+		return path.toString();
+	}
+	
+	/**
+	 * Compares two node path strings. 
+	 * 
+	 * @note It does not work if "1.10" is supposed to be equal to "1.10.0".
+	 * 
+	 * @param str1 a string of ordinal numbers separated by decimal points. 
+	 * @param str2 a string of ordinal numbers separated by decimal points.
+	 * @return The result is a negative integer if str1 is _numerically_ less than str2. 
+	 *         The result is a positive integer if str1 is _numerically_ greater than str2. 
+	 *         The result is zero if the strings are _numerically_ equal.
+	 */
+	private Integer comparePath(String str1, String str2)
+	{
+	    String[] vals1 = str1.split("\\.");
+	    String[] vals2 = str2.split("\\.");
+	    int i = 0;
+	    // set index to first non-equal ordinal or length of shortest version string
+	    while (i < vals1.length && i < vals2.length && vals1[i].equals(vals2[i])) 
+	    {
+	      i++;
+	    }
+	    // compare first non-equal ordinal number
+	    if (i < vals1.length && i < vals2.length) 
+	    {
+	        int diff = Integer.valueOf(vals1[i]).compareTo(Integer.valueOf(vals2[i]));
+	        return Integer.signum(diff);
+	    }
+	    // the strings are equal or one string is a substring of the other
+	    // e.g. "1.2.3" = "1.2.3" or "1.2.3" < "1.2.3.4"
+	    else
+	    {
+	        return Integer.signum(vals1.length - vals2.length);
+	    }
+	}
+
 
 	/**
 	 * Called from {@link #performMarqueeSelect()} to determine those {@link EditPart}s that are affected by the current
@@ -264,7 +330,22 @@ public class NotMovablePartDragTracker extends SelectEditPartTracker {
 		Collection<EditPart> marqueeSelectedEditParts = new HashSet<EditPart>();
 		marqueeSelectedEditParts.addAll(calculatePrimaryMarqueeSelectedEditParts());
 		marqueeSelectedEditParts.addAll(calculateSecondaryMarqueeSelectedEditParts(marqueeSelectedEditParts));
-		return marqueeSelectedEditParts;
+		List<Pair<String, EditPart>> orderedParts = new ArrayList<Pair<String,EditPart>>();
+		for(EditPart part : marqueeSelectedEditParts){
+			orderedParts.add(new Pair<String, EditPart>(getNodeIndex(part), part));
+		}
+		Collections.sort(orderedParts, new Comparator<Pair<String, EditPart>>() {
+
+			@Override
+			public int compare(Pair<String, EditPart> o1, Pair<String, EditPart> o2) {
+				return comparePath(o1.getKey(), o2.getKey());
+			}
+		});
+		List<EditPart> result = new ArrayList<EditPart>();
+		for(Pair<String,EditPart> part : orderedParts){
+			result.add(part.getValue());
+		}
+		return result;
 	}
 	
 
