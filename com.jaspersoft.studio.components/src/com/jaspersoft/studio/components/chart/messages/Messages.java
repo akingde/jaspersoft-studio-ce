@@ -134,6 +134,7 @@ public class Messages extends NLS {
 	public static String DSCategory_valueTooltip;
 	public static String DSHighLow_closeExpression;
 	public static String DSHighLow_dateExpression;
+	public static String DSHighLow_deleteHyperlinkConfirmation;
 	public static String DSHighLow_highExpression;
 	public static String DSHighLow_hypertextButton;
 	public static String DSHighLow_hypertextDialogTitle;
@@ -171,6 +172,8 @@ public class Messages extends NLS {
 	public static String HyperlinkDialog_deleteHyperlinkAction;
 	public static String HyperlinkDialog_hyperlinkDialogName;
 	public static String HyperlinkDialog_hyperlinkDialogTitle;
+	public static String HyperlinkPage_deleteDescription;
+	public static String HyperlinkPage_deleteTitle;
 	public static String LegendSection_0;
 	public static String LegendSection_1;
 	public static String LegendSection_2;

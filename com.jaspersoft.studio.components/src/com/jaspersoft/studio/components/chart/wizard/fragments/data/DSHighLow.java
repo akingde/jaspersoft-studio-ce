@@ -135,7 +135,21 @@ public class DSHighLow extends ADSComponent {
 				} else {
 					hyperLinkElement = new MHyperLink(new JRDesignHyperlink());
 				}
-				HyperlinkPage dlg = new HyperlinkPage(hyperlinkBtn.getShell(), hyperLinkElement, Messages.DSHighLow_hypertextDialogTitle, dataset.getItemHyperlink() != null);
+				
+				//The highlow chart has the hyperlink on the dataset and not on the series, so it 
+				//need to show a custom message
+				HyperlinkPage dlg = new HyperlinkPage(hyperlinkBtn.getShell(), hyperLinkElement, null, dataset.getItemHyperlink() != null){
+					
+					@Override
+					protected String getDialogTitle() {
+						return  Messages.DSHighLow_hypertextDialogTitle;
+					};
+				
+					@Override
+					protected String getDeleteMessage() {
+						return Messages.DSHighLow_deleteHyperlinkConfirmation;
+					};
+				};
 				int operationResult = dlg.open();
 				if (operationResult == Window.OK) {
 					dataset.setItemHyperlink((JRHyperlink)dlg.getElement().getValue());

@@ -12,6 +12,10 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.chart.wizard;
 
+import java.text.MessageFormat;
+
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -40,27 +44,36 @@ public class HyperlinkPage extends FormDialog {
 	private HyperLinkPanel controlPanel;
 	
 	/**
-	 * Title of the dialog
+	 * Flag used to know if the current series has an hyperling, in this 
+	 * way it is possible to show or hide the delete button, when it is or
+	 * not necessary
 	 */
-	private String dialogTitle;
-	
 	private boolean hasHyperlink = true;
+	
+	/**
+	 * The name of the edited series
+	 */
+	private String seriesName;
 	
 	/** 
 	 * @param shell
 	 * @param hyperLinkNode Hyperlink node to edit, must be an MHyperlink
-	 * @param dialogTitle title of the dialog
+	 * @param seriesName The name of the edited series
+	 * @param hasHyperlink Flag used to know if the current series has an hyperling, in this 
+	 * way it is possible to show or hide the delete button, when it is or
+	 * not necessary
 	 */
-	public HyperlinkPage(Shell shell, APropertyNode hyperLinkNode, String dialogTitle, boolean hasHyperlink) {
+	public HyperlinkPage(Shell shell, APropertyNode hyperLinkNode, String seriesName, boolean hasHyperlink) {
 		super(shell);
 		controlPanel = new HyperLinkPanel(hyperLinkNode);
-		this.dialogTitle = dialogTitle;
+		this.seriesName = seriesName;
 		this.hasHyperlink = hasHyperlink;
 	}
-	
+
 	/**
 	 * Create an additional delete button after ok and cancel, that can be used to request
-	 * the deletion of the hyperlink
+	 * the deletion of the hyperlink. The delete button is created only if the current series has an
+	 *  hpyerlink to delete. Before to delete the hyperlink ask to the user a confirmation
 	 */
 	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
@@ -70,8 +83,10 @@ public class HyperlinkPage extends FormDialog {
 			deleteButton.addSelectionListener(new SelectionAdapter(){
 				@Override
 				public void widgetSelected(SelectionEvent e) {
-					setReturnCode(IDialogConstants.ABORT_ID);
-					close();
+					 if (UIUtils.showConfirmation(Messages.HyperlinkPage_deleteTitle, getDeleteMessage())){
+						 setReturnCode(IDialogConstants.ABORT_ID);
+						close();
+					 }
 				}
 			});
 		}
@@ -89,11 +104,11 @@ public class HyperlinkPage extends FormDialog {
 	@Override
 	protected void createFormContent(IManagedForm mform) {
 		super.createFormContent(mform);
-		mform.getForm().setText(dialogTitle);
+		mform.getForm().setText(getDialogTitle());
 		mform.getForm().getBody().setLayout(new GridLayout(1,false));
 		controlPanel.createControls(mform.getForm().getBody());
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(mform.getForm().getBody(),
-															"com.jaspersoft.studio.doc.createHyperlinkSection");
+															"com.jaspersoft.studio.doc.createHyperlinkSection"); //$NON-NLS-1$
 	}
 	
 	/**
@@ -114,4 +129,22 @@ public class HyperlinkPage extends FormDialog {
 		return controlPanel.getElement();
 	}
 
+	/**
+	 * Return the message for a confirmation request done
+	 * when the user press the delete button
+	 *
+	 * @return a not null string
+	 */
+	protected String getDeleteMessage(){
+		return MessageFormat.format(Messages.HyperlinkPage_deleteDescription, new Object[]{seriesName});
+	}
+	
+	/**
+	 * Return the dialog title
+	 * 
+	 * @return a not null string
+	 */
+	protected String getDialogTitle(){
+		return MessageFormat.format(Messages.HyperlinkDialog_hyperlinkDialogTitle, seriesName);
+	}
 }
