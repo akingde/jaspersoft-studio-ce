@@ -1772,11 +1772,16 @@ public class Messages extends NLS {
 	public static String SelectDataAdapterAction_actionTitle;
 	public static String SelectDefaultDatasetDialog_absoluteLabel;
 	public static String SelectDefaultDatasetDialog_absoluteOption;
+	public static String SelectDefaultDatasetDialog_dialogDescription;
 	public static String SelectDefaultDatasetDialog_dialogTitle;
+	public static String SelectDefaultDatasetDialog_errorAbsoluteEmpty;
+	public static String SelectDefaultDatasetDialog_errorURLEmpty;
+	public static String SelectDefaultDatasetDialog_errorURLInvalid;
 	public static String SelectDefaultDatasetDialog_modeLabel;
 	public static String SelectDefaultDatasetDialog_noDAOption;
 	public static String SelectDefaultDatasetDialog_urlLabel;
 	public static String SelectDefaultDatasetDialog_urlOption;
+	public static String SelectDefaultDatasetDialog_warningAbsoluteNotFound;
 	public static String SelectDefaultDatasetDialog_workspaceLabel;
 	public static String SelectDefaultDatasetDialog_workspaceOption;
 	public static String SelectWorkspacePage_description;

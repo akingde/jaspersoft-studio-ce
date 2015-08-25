@@ -216,7 +216,7 @@ public class DataAdapterLocationResolver {
 						return absolutePath;
 					}
 				} catch (Exception ex){
-					ex.printStackTrace();
+					
 				}
 			}
 		} 

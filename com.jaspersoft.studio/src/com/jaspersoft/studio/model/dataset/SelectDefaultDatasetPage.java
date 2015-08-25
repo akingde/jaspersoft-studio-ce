@@ -21,14 +21,12 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -38,20 +36,21 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.dialogs.FilteredResourcesSelectionDialog;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+import com.jaspersoft.studio.wizards.ContextHelpIDs;
+import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
 
 /**
- * Dialog proposed when a Data Adapter to use as default needs to be selected.
+ * Controls shown when a Data Adapter to use as default needs to be selected.
  * 
  * @author Orlandin Marco
  * 
  */
-public class SelectDefaultDatasetDialog extends Dialog {
+public class SelectDefaultDatasetPage extends JSSHelpWizardPage {
 	
 	// All widgets stuff
 	private Text txtResourcePath;
@@ -76,16 +75,16 @@ public class SelectDefaultDatasetDialog extends Dialog {
 	 * 
 	 * @param parentShell
 	 */
-	public SelectDefaultDatasetDialog(Shell parentShell) {
-		super(parentShell);
+	public SelectDefaultDatasetPage(JasperReportsConfiguration jConfig, String intialPath) {
+		super("defaultDAPage"); //$NON-NLS-1$
+		setTitle(getDialogTitle());
+		setDescription(Messages.SelectDefaultDatasetDialog_dialogDescription);
+		this.jConfig = jConfig;
+		if (intialPath != null){
+			path = intialPath;
+		}
 	}
-
-	@Override
-	protected void configureShell(Shell newShell) {
-		super.configureShell(newShell);
-		newShell.setText(getDialogTitle());
-	}
-
+	
 	/**
 	 * @return the title for the dialog
 	 */
@@ -120,9 +119,8 @@ public class SelectDefaultDatasetDialog extends Dialog {
 	 * @param parent
 	 */
 	@Override
-	protected Control createDialogArea(Composite parent) {
-		Composite area = (Composite) super.createDialogArea(parent);
-		Composite container = new Composite(area, SWT.NONE);
+	public void createControl(Composite parent) {
+		Composite container = new Composite(parent, SWT.NONE);
 		container.setLayout(new GridLayout(1, true));
 		container.setLayoutData(new GridData(GridData.FILL_BOTH));
 
@@ -139,6 +137,7 @@ public class SelectDefaultDatasetDialog extends Dialog {
 			public void widgetSelected(SelectionEvent e) {
 				changeSelectionMode(cmpWorkspaceResourceSelection);
 				path = txtResourcePath.getText();
+				getWizard().getContainer().updateButtons();
 			}
 		});
 		btnWorkspaceResource.setText(modesAndHeaderTitles[1]);
@@ -149,6 +148,7 @@ public class SelectDefaultDatasetDialog extends Dialog {
 			public void widgetSelected(SelectionEvent e) {
 				changeSelectionMode(cmpFilesystemResourceSelection);
 				path = txtFilesystemPath.getText();
+				getWizard().getContainer().updateButtons();
 			}
 		});
 		btnAbsolutePath.setText(modesAndHeaderTitles[2]);
@@ -159,6 +159,7 @@ public class SelectDefaultDatasetDialog extends Dialog {
 			public void widgetSelected(SelectionEvent e) {
 				changeSelectionMode(cmpURL);
 				path = txtURL.getText();
+				getWizard().getContainer().updateButtons();
 			}
 		});
 		btnUrlRemote.setText(modesAndHeaderTitles[3]);
@@ -169,6 +170,7 @@ public class SelectDefaultDatasetDialog extends Dialog {
 			public void widgetSelected(SelectionEvent e) {
 				changeSelectionMode(cmpNoDataAdapter);
 				path = null;
+				getWizard().getContainer().updateButtons();
 			}
 		});
 		btnNoDataSource.setText(modesAndHeaderTitles[4]);
@@ -197,7 +199,8 @@ public class SelectDefaultDatasetDialog extends Dialog {
 				}
 			}
 		}
-		return area;
+		getWizard().getContainer().updateButtons();
+		setControl(container);
 	}
 
 	/**
@@ -292,17 +295,16 @@ public class SelectDefaultDatasetDialog extends Dialog {
 	}
 	
 	private void textModified() {
-		if (SelectDefaultDatasetDialog.this.getDialogArea() != null && !SelectDefaultDatasetDialog.this.getDialogArea().isDisposed()) {
-			if (btnAbsolutePath.getSelection()) {
-				// filesystem path...
-				String daPath = txtFilesystemPath.getText();
-				// Change the standard separator with an universal one
-				path = daPath.replace(File.pathSeparatorChar, '/');
-			} else if (btnUrlRemote.getSelection()) {
-				// URL
-				path = txtURL.getText();
-			}
+		if (btnAbsolutePath.getSelection()) {
+			// filesystem path...
+			String daPath = txtFilesystemPath.getText().trim();
+			// Change the standard separator with an universal one
+			path = daPath.replace(File.pathSeparatorChar, '/');
+		} else if (btnUrlRemote.getSelection()) {
+			// URL
+			path = txtURL.getText().trim();
 		}
+		getWizard().getContainer().updateButtons();
 	}
 	
 	/**
@@ -361,46 +363,46 @@ public class SelectDefaultDatasetDialog extends Dialog {
 		}
 	}
 
-	/**
-	 * Create contents of the button bar.
-	 * 
-	 * @param parent
-	 */
-	@Override
-	protected void createButtonsForButtonBar(Composite parent) {
-		createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, true);
-		createButton(parent, IDialogConstants.CANCEL_ID, IDialogConstants.CANCEL_LABEL, false);
-	}
-
-	/**
-	 * Return the initial size of the dialog.
-	 */
-	@Override
-	protected Point getInitialSize() {
-		return new Point(640, 320);
-	}
-
-	/**
-	 * Configure required information for the correct dialog functioning.
-	 * 
-	 * @param jConfig
-	 */
-	public void configureDialog(JasperReportsConfiguration jConfig, String intialPath) {
-		this.jConfig = jConfig;
-		if (intialPath != null){
-			path = intialPath;
-		}
-	}
-
-	@Override
-	public int open() {
-		if (jConfig == null) {
-			throw new RuntimeException(Messages.ImageSelectionDialog_Error);
-		}
-		return super.open();
-	}
-	
 	public String getDataAdapterPath(){
 		return path;
+	}
+
+	/**
+	 * Check if the page is complete, the page is complete if the provided absolute
+	 * path is not empty or if the provided url is not empty and valid. If the absolute
+	 * path is not empty but doesn't point to a file then a warning message is shown
+	 */
+	@Override
+	public boolean isPageComplete() {
+		if (btnAbsolutePath.getSelection()){
+			if (path.isEmpty()){
+				setErrorMessage(Messages.SelectDefaultDatasetDialog_errorAbsoluteEmpty);
+			} else {
+				setErrorMessage(null);
+				File file = new File(path);
+				if (!file.exists() || file.isDirectory()){
+					setMessage(Messages.SelectDefaultDatasetDialog_warningAbsoluteNotFound, WARNING);
+				} else {
+					setMessage(Messages.SelectDefaultDatasetDialog_dialogDescription);
+				}
+			}
+		} else if (btnUrlRemote.getSelection()){
+			if (path.isEmpty()){
+				setErrorMessage(Messages.SelectDefaultDatasetDialog_errorURLEmpty);
+			} else if(!FileUtils.isValidURL(path)){
+				setErrorMessage(Messages.SelectDefaultDatasetDialog_errorURLInvalid);
+			} else {
+				setErrorMessage(null);
+				setMessage(Messages.SelectDefaultDatasetDialog_dialogDescription);
+			}
+		} else {
+			setMessage(Messages.SelectDefaultDatasetDialog_dialogDescription);
+		}
+		return getErrorMessage() == null;
+	}
+
+	@Override
+	protected String getContextName() {
+		return ContextHelpIDs.WIZARD_DEFAULT_DATA_ADAPTER;
 	}
 }

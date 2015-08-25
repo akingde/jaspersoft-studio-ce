@@ -105,4 +105,6 @@ public class ContextHelpIDs {
 	public static final String WIZARD_FONT_EXTENSION = PREFIX.concat("font_extension");
 	
 	public static final String WIZARD_COMPOSITE_ELEMENTS = PREFIX.concat("compositeElement");
+	
+	public static final String WIZARD_DEFAULT_DATA_ADAPTER = PREFIX.concat("defaultDA");
 }

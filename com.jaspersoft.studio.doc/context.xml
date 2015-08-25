@@ -408,4 +408,7 @@
 	4. The palette section where this element will be placed.</description>
  <topic href="html/wizard/compositeelements/tutorial.html" label="Composite Elements Tutorial"/>
    </context>
+   <context id="defaultDA">
+      <description>The default data adapter is used automatically by JasperReports when no other data adapter is specified. Using this property means that the informations to locate the data adapter for the Main Dataset or the Subdataset are enterely inside the report and it can be executed without specifing them</description>
+   </context>
 </contexts>

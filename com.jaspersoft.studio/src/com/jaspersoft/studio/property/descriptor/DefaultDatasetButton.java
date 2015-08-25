@@ -12,12 +12,9 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.descriptor;
 
-import net.sf.jasperreports.data.DataAdapterParameterContributorFactory;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.engine.JRDataset;
 
-import org.eclipse.gef.commands.CommandStack;
-import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -29,11 +26,9 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.dataset.MDataset;
-import com.jaspersoft.studio.model.dataset.SelectDefaultDatasetDialog;
-import com.jaspersoft.studio.property.SetPropertyValueCommand;
+import com.jaspersoft.studio.model.dataset.SelectDefaultDatasetWizard;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
-import com.jaspersoft.studio.utils.ModelUtils;
 
 /**
  * A button that when clicked open the return values dialog
@@ -79,27 +74,16 @@ public class DefaultDatasetButton extends ASPropertyWidget<ButtonsPropertyDescri
 		button.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				SelectDefaultDatasetDialog dialog = new SelectDefaultDatasetDialog(UIUtils.getShell());
-				JRDataset dataset = null;
 				if (section.getElement() instanceof MReport){
 					MReport report = (MReport)section.getElement();
-					dataset = report.getJasperDesign().getMainDataset(); 
+					SelectDefaultDatasetWizard defaultDAwizard = new SelectDefaultDatasetWizard(report, section);
+					WizardDialog defaultDAdialog = new WizardDialog(UIUtils.getShell(), defaultDAwizard);
+					defaultDAdialog.open();
 				} else if (section.getElement() instanceof MDataset){
-					dataset = ((MDataset)section.getElement()).getValue();
-				}
-				if (dataset != null){
-					String location = dataset.getPropertiesMap().getProperty(DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION);
-					dialog.configureDialog(section.getElement().getJasperConfiguration(), location);
-					if (dialog.open() == Dialog.OK){
-						String result = dialog.getDataAdapterPath();
-						if (!ModelUtils.safeEquals(location, result)){
-							SetPropertyValueCommand newCommand = new SetPropertyValueCommand(dataset.getPropertiesMap(), 
-																																							 DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION, 
-																																							 result);
-							CommandStack cs = section.getEditDomain().getCommandStack();;
-							cs.execute(newCommand);
-						}
-					}
+					MDataset dataset = (MDataset)section.getElement();
+					SelectDefaultDatasetWizard defaultDAwizard = new SelectDefaultDatasetWizard(dataset, section);
+					WizardDialog defaultDAdialog = new WizardDialog(UIUtils.getShell(), defaultDAwizard);
+					defaultDAdialog.open();
 				}
 			}
 		});
