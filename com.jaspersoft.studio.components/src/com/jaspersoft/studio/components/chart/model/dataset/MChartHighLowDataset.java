@@ -12,6 +12,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.chart.model.dataset;
 
+import java.beans.PropertyChangeEvent;
 import java.util.List;
 import java.util.Map;
 
@@ -179,7 +180,7 @@ public class MChartHighLowDataset extends MChartDataset {
 
 	@Override
 	public Object getPropertyValue(Object id) {
-		JRDesignHighLowDataset jrElement = (JRDesignHighLowDataset) getValue();
+		JRDesignHighLowDataset jrElement = getValue();
 
 		if (id.equals(JRDesignHighLowDataset.PROPERTY_ITEM_HYPERLINK)) {
 			if (mHyperLink == null) {
@@ -211,7 +212,7 @@ public class MChartHighLowDataset extends MChartDataset {
 
 	@Override
 	public void setPropertyValue(Object id, Object value) {
-		JRDesignHighLowDataset jrElement = (JRDesignHighLowDataset) getValue();
+		JRDesignHighLowDataset jrElement = getValue();
 
 		if (id.equals(JRDesignHighLowDataset.PROPERTY_CLOSE_EXPRESSION))
 			jrElement.setCloseExpression(ExprUtil.setValues(
@@ -238,4 +239,18 @@ public class MChartHighLowDataset extends MChartDataset {
 			super.setPropertyValue(id, value);
 	}
 
+	@Override
+	public JRDesignHighLowDataset getValue() {
+		return (JRDesignHighLowDataset) super.getValue();
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (evt.getSource() instanceof JRDesignHyperlink) {
+			JRHyperlink hl = (JRHyperlink) evt.getSource();
+			if (getValue().getItemHyperlink() == null)
+				getValue().setItemHyperlink(hl);
+		}
+		super.propertyChange(evt);
+	}
 }

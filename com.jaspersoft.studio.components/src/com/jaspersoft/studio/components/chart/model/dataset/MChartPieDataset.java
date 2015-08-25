@@ -178,7 +178,7 @@ public class MChartPieDataset extends MChartDataset {
 
 	@Override
 	public Object getPropertyValue(Object id) {
-		JRDesignPieDataset jrElement = (JRDesignPieDataset) getValue();
+		JRDesignPieDataset jrElement = getValue();
 
 		if (id.equals(JRDesignPieDataset.PROPERTY_MIN_PERCENTAGE))
 			return jrElement.getMinPercentage();
@@ -226,13 +226,14 @@ public class MChartPieDataset extends MChartDataset {
 
 	@Override
 	public void setPropertyValue(Object id, Object value) {
-		JRDesignPieDataset jrElement = (JRDesignPieDataset) getValue();
+		JRDesignPieDataset jrElement = getValue();
 
 		if (id.equals(JRDesignPieDataset.PROPERTY_MIN_PERCENTAGE))
 			jrElement.setMinPercentage((Float) value);
-		else if (id.equals(JRDesignPieDataset.PROPERTY_MAX_COUNT)){
-			Integer intValue = (Integer)value;
-			if (intValue == 0) intValue = null;
+		else if (id.equals(JRDesignPieDataset.PROPERTY_MAX_COUNT)) {
+			Integer intValue = (Integer) value;
+			if (intValue == 0)
+				intValue = null;
 			jrElement.setMaxCount(intValue);
 		}
 		// else if (id.equals(JRDesignPieDataset.PROPERTY_KEY_EXPRESSION))
@@ -252,6 +253,11 @@ public class MChartPieDataset extends MChartDataset {
 		// jrElement.getValueExpression(), value));
 		else
 			super.setPropertyValue(id, value);
+	}
+
+	@Override
+	public JRDesignPieDataset getValue() {
+		return (JRDesignPieDataset) super.getValue();
 	}
 
 	@Override
@@ -282,6 +288,11 @@ public class MChartPieDataset extends MChartDataset {
 					}
 				}
 			}
+		}
+		if (evt.getSource() instanceof JRDesignHyperlink) {
+			JRHyperlink hl = (JRHyperlink) evt.getSource();
+			if (getValue().getOtherSectionHyperlink() == null)
+				getValue().setOtherSectionHyperlink(hl);
 		}
 		super.propertyChange(evt);
 	}

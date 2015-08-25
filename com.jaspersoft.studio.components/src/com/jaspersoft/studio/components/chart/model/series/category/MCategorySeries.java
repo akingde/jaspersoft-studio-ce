@@ -12,6 +12,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.chart.model.series.category;
 
+import java.beans.PropertyChangeEvent;
 import java.util.List;
 import java.util.Map;
 
@@ -61,6 +62,11 @@ public class MCategorySeries extends APropertyNode {
 			int newIndex) {
 		super(parent, -1);
 		setValue(value);
+	}
+
+	@Override
+	public JRDesignCategorySeries getValue() {
+		return (JRDesignCategorySeries) super.getValue();
 	}
 
 	private static IPropertyDescriptor[] descriptors;
@@ -145,7 +151,6 @@ public class MCategorySeries extends APropertyNode {
 			if (itemHyperLink == null)
 				itemHyperLink = new JRDesignHyperlink();
 			mHyperLink = new MHyperLink(itemHyperLink);
-			mHyperLink.setParent(this,-1);
 			setChildListener(mHyperLink);
 			return mHyperLink;
 		}
@@ -178,6 +183,16 @@ public class MCategorySeries extends APropertyNode {
 					jrElement.getValueExpression(), value));
 	}
 
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (evt.getSource() instanceof JRDesignHyperlink) {
+			JRHyperlink hl = (JRHyperlink) evt.getSource();
+			if (getValue().getItemHyperlink() == null)
+				getValue().setItemHyperlink(hl);
+		}
+		super.propertyChange(evt);
+	}
+
 	public ImageDescriptor getImagePath() {
 		return getIconDescriptor().getIcon16();
 	}
@@ -194,7 +209,7 @@ public class MCategorySeries extends APropertyNode {
 			return new ExpressionContext(dataSet, conf);
 		return null;
 	}
-	
+
 	@Override
 	public Object getAdapter(Class adapter) {
 		if (ExpressionContext.class.equals(adapter)) {

@@ -12,6 +12,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.chart.model.series.timeperiod;
 
+import java.beans.PropertyChangeEvent;
 import java.util.List;
 import java.util.Map;
 
@@ -189,6 +190,21 @@ public class MTimePeriodSeries extends APropertyNode {
 		else if (id.equals(JRDesignTimePeriodSeries.PROPERTY_VALUE_EXPRESSION))
 			jrElement.setValueExpression(ExprUtil.setValues(
 					jrElement.getValueExpression(), value));
+	}
+
+	@Override
+	public JRDesignTimePeriodSeries getValue() {
+		return (JRDesignTimePeriodSeries) super.getValue();
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (evt.getSource() instanceof JRDesignHyperlink) {
+			JRHyperlink hl = (JRHyperlink) evt.getSource();
+			if (getValue().getItemHyperlink() == null)
+				getValue().setItemHyperlink(hl);
+		}
+		super.propertyChange(evt);
 	}
 
 	public ImageDescriptor getImagePath() {

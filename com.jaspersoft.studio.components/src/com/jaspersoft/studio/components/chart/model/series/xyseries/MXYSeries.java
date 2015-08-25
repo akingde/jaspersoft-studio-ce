@@ -12,6 +12,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.chart.model.series.xyseries;
 
+import java.beans.PropertyChangeEvent;
 import java.util.List;
 import java.util.Map;
 
@@ -124,7 +125,8 @@ public class MXYSeries extends APropertyNode {
 		desc.add(itemHyperLinkD);
 
 		CheckBoxPropertyDescriptor printRVAlueD = new CheckBoxPropertyDescriptor(
-				JRDesignXySeries.PROPERTY_AUTO_SORT, Messages.MXYSeries_autoSortTitle);
+				JRDesignXySeries.PROPERTY_AUTO_SORT,
+				Messages.MXYSeries_autoSortTitle);
 		printRVAlueD.setDescription(Messages.MXYSeries_autoSortDescription);
 		desc.add(printRVAlueD);
 
@@ -180,6 +182,21 @@ public class MXYSeries extends APropertyNode {
 		else if (id.equals(JRDesignXySeries.PROPERTY_SERIES_EXPRESSION))
 			jrElement.setSeriesExpression(ExprUtil.setValues(
 					jrElement.getSeriesExpression(), value));
+	}
+
+	@Override
+	public JRDesignXySeries getValue() {
+		return (JRDesignXySeries) super.getValue();
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (evt.getSource() instanceof JRDesignHyperlink) {
+			JRHyperlink hl = (JRHyperlink) evt.getSource();
+			if (getValue().getItemHyperlink() == null)
+				getValue().setItemHyperlink(hl);
+		}
+		super.propertyChange(evt);
 	}
 
 	public ImageDescriptor getImagePath() {

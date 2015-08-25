@@ -12,6 +12,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.chart.model.series.gantt;
 
+import java.beans.PropertyChangeEvent;
 import java.util.List;
 import java.util.Map;
 
@@ -156,7 +157,7 @@ public class MGanttSeries extends APropertyNode {
 	private MHyperLink mHyperLink;
 
 	public Object getPropertyValue(Object id) {
-		JRDesignGanttSeries jrElement = (JRDesignGanttSeries) getValue();
+		JRDesignGanttSeries jrElement = getValue();
 
 		if (id.equals(JRDesignGanttSeries.PROPERTY_ITEM_HYPERLINK)) {
 			JRHyperlink itemHyperLink = jrElement.getItemHyperlink();
@@ -185,7 +186,7 @@ public class MGanttSeries extends APropertyNode {
 	}
 
 	public void setPropertyValue(Object id, Object value) {
-		JRDesignGanttSeries jrElement = (JRDesignGanttSeries) getValue();
+		JRDesignGanttSeries jrElement = getValue();
 
 		if (id.equals(JRDesignGanttSeries.PROPERTY_END_DATE_EXPRESSION))
 			jrElement.setEndDateExpression(ExprUtil.setValues(
@@ -208,6 +209,21 @@ public class MGanttSeries extends APropertyNode {
 		else if (id.equals(JRDesignGanttSeries.PROPERTY_TASK_EXPRESSION))
 			jrElement.setTaskExpression(ExprUtil.setValues(
 					jrElement.getTaskExpression(), value));
+	}
+
+	@Override
+	public JRDesignGanttSeries getValue() {
+		return (JRDesignGanttSeries) super.getValue();
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (evt.getSource() instanceof JRDesignHyperlink) {
+			JRHyperlink hl = (JRHyperlink) evt.getSource();
+			if (getValue().getItemHyperlink() == null)
+				getValue().setItemHyperlink(hl);
+		}
+		super.propertyChange(evt);
 	}
 
 	public ImageDescriptor getImagePath() {

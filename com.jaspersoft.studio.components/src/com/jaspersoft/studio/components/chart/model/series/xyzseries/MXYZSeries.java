@@ -12,6 +12,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.chart.model.series.xyzseries;
 
+import java.beans.PropertyChangeEvent;
 import java.util.List;
 import java.util.Map;
 
@@ -170,6 +171,21 @@ public class MXYZSeries extends APropertyNode {
 		else if (id.equals(JRDesignXyzSeries.PROPERTY_SERIES_EXPRESSION))
 			jrElement.setSeriesExpression(ExprUtil.setValues(
 					jrElement.getSeriesExpression(), value));
+	}
+
+	@Override
+	public JRDesignXyzSeries getValue() {
+		return (JRDesignXyzSeries) super.getValue();
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (evt.getSource() instanceof JRDesignHyperlink) {
+			JRHyperlink hl = (JRHyperlink) evt.getSource();
+			if (getValue().getItemHyperlink() == null)
+				getValue().setItemHyperlink(hl);
+		}
+		super.propertyChange(evt);
 	}
 
 	public ImageDescriptor getImagePath() {

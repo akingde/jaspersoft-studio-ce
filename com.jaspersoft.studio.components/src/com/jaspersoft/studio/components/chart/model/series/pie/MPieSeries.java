@@ -12,6 +12,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.chart.model.series.pie;
 
+import java.beans.PropertyChangeEvent;
 import java.util.List;
 import java.util.Map;
 
@@ -123,7 +124,7 @@ public class MPieSeries extends APropertyNode {
 	private MHyperLink mHyperLink;
 
 	public Object getPropertyValue(Object id) {
-		JRDesignPieSeries jrElement = (JRDesignPieSeries) getValue();
+		JRDesignPieSeries jrElement = getValue();
 
 		if (id.equals(JRDesignPieSeries.PROPERTY_SECTION_HYPERLINK)) {
 			JRHyperlink itemHyperLink = jrElement.getSectionHyperlink();
@@ -143,7 +144,7 @@ public class MPieSeries extends APropertyNode {
 	}
 
 	public void setPropertyValue(Object id, Object value) {
-		JRDesignPieSeries jrElement = (JRDesignPieSeries) getValue();
+		JRDesignPieSeries jrElement = getValue();
 
 		if (id.equals(JRDesignPieSeries.PROPERTY_KEY_EXPRESSION))
 			jrElement.setKeyExpression(ExprUtil.setValues(
@@ -154,6 +155,21 @@ public class MPieSeries extends APropertyNode {
 		else if (id.equals(JRDesignPieSeries.PROPERTY_VALUE_EXPRESSION))
 			jrElement.setValueExpression(ExprUtil.setValues(
 					jrElement.getValueExpression(), value));
+	}
+
+	@Override
+	public JRDesignPieSeries getValue() {
+		return (JRDesignPieSeries) super.getValue();
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (evt.getSource() instanceof JRDesignHyperlink) {
+			JRHyperlink hl = (JRHyperlink) evt.getSource();
+			if (getValue().getSectionHyperlink() == null)
+				getValue().setSectionHyperlink(hl);
+		}
+		super.propertyChange(evt);
 	}
 
 	public ImageDescriptor getImagePath() {
