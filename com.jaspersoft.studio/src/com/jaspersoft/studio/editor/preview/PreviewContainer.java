@@ -58,6 +58,8 @@ import org.eclipse.ui.PlatformUI;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterManager;
+import com.jaspersoft.studio.data.storage.JRDefaultDataAdapterStorage;
+import com.jaspersoft.studio.data.widget.DataAdapterAction;
 import com.jaspersoft.studio.data.widget.IDataAdapterRunnable;
 import com.jaspersoft.studio.editor.preview.actions.RunStopAction;
 import com.jaspersoft.studio.editor.preview.actions.SwitchViewsAction;
@@ -376,7 +378,8 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 				// TODO should we save the reference in the JRXML ?
 				dataAdapterDesc = myDataAdapter;
 			} else {
-				dataAdapterDesc = ((PreviewTopToolBarManager) topToolBarManager1).getDataSourceWidget().getSelected();
+				DataAdapterAction daWidget = ((PreviewTopToolBarManager) topToolBarManager1).getDataSourceWidget();
+				dataAdapterDesc = daWidget.isDefaultDASelected() ? null :  daWidget.getSelected();
 			}
 
 			addPreviewModeContributeProperties();
@@ -507,9 +510,17 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 		PreviewTopToolBarManager pt = (PreviewTopToolBarManager) topToolBarManager1;
 		if (pt != null && jd != null) {
 			String strda = jd.getProperty(DataQueryAdapters.DEFAULT_DATAADAPTER);
+			DataAdapterAction daWidget = ((PreviewTopToolBarManager) topToolBarManager1).getDataSourceWidget();
 			if (strda != null) {
 				pt.setDataAdapters(strda);
-				dataAdapterDesc = ((PreviewTopToolBarManager) topToolBarManager1).getDataSourceWidget().getSelected();
+				dataAdapterDesc = daWidget.isDefaultDASelected() ? null :  daWidget.getSelected();
+			} else {
+				//If there is not a default JSS Da but it is defined a JR default da then select it on the preview
+				JRDefaultDataAdapterStorage defaultStorage = DataAdapterManager.getJRDefaultStorage(getConfiguration());
+				DataAdapterDescriptor defaultDA = defaultStorage.getDefaultJRDataAdapter(jd.getMainDesignDataset());
+				if (defaultDA != null){
+					pt.setDataAdapters(defaultDA.getName());
+				}
 			}
 		}
 	}

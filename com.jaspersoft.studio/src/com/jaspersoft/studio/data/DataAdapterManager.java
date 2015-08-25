@@ -141,6 +141,8 @@ public class DataAdapterManager {
 	
 	/**
 	 * Get the storage for the handling of the default data adapters
+	 * 
+	 * @return a not null default storage for the specified configuration
 	 */
 	public static JRDefaultDataAdapterStorage getJRDefaultStorage(JasperReportsConfiguration key) {
 		ADataAdapterStorage s = storages.get(key);

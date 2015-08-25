@@ -223,20 +223,22 @@ public class DataAdapterAction extends Action implements IMenuCreator, PropertyC
 	}
 	
 	/**
-	 * Get the selected data adapter, if the selected is the default one 
-	 * then return null
+	 * Check  if the selected is the default one 
 	 * 
-	 * @return the selected data adapter or null if the selected is the default
-	 * one
+	 * @return true if the selected is the default one (and the default one is set), false otherwise
 	 */
-	public DataAdapterDescriptor getSelected() {
+	public boolean isDefaultDASelected(){
 		JRDefaultDataAdapterStorage defaultStorage = DataAdapterManager.getJRDefaultStorage(editor.getConfiguration());
 		DataAdapterDescriptor defaultDA = defaultStorage.getDefaultJRDataAdapter(currentDataset);
-		if (defaultDA == selectedDA){
-			return null;
-		} else {
-			return selectedDA;
-		}
+		return (defaultDA != null && defaultDA == selectedDA);
 	}
-
+	
+	/**
+	 * Get the selected data adapter
+	 * 
+	 * @return the selected data adapter
+	 */
+	public DataAdapterDescriptor getSelected() {
+		return selectedDA;
+	}
 }
