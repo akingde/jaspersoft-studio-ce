@@ -15,7 +15,6 @@ package com.jaspersoft.studio.property.descriptor;
 import java.lang.reflect.Constructor;
 
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySheetEntry;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
 
@@ -39,7 +38,7 @@ public class ButtonsPropertyDescriptor extends PropertyDescriptor implements IPr
 	/**
 	 * The class of the button
 	 */
-	private Class<? extends ASPropertyWidget<IPropertyDescriptor>> button;
+	private Class<? extends ASPropertyWidget<ButtonsPropertyDescriptor>> button;
 	
 	private IHelpRefBuilder refBuilder;
 
@@ -49,7 +48,7 @@ public class ButtonsPropertyDescriptor extends PropertyDescriptor implements IPr
 	 * @param id id of the property
 	 * @param button the class of the button, must extend ASPropertyWidget
 	 */
-	public ButtonsPropertyDescriptor(Object id, Class<? extends ASPropertyWidget<IPropertyDescriptor>> button) {
+	public ButtonsPropertyDescriptor(Object id, Class<? extends ASPropertyWidget<ButtonsPropertyDescriptor>> button) {
 		super(id, "");
 		this.button = button;
 		//This filter avoid to show this element on the advanced properties views
@@ -61,11 +60,11 @@ public class ButtonsPropertyDescriptor extends PropertyDescriptor implements IPr
 	 * not valid
 	 */
 	@Override
-	public ASPropertyWidget<IPropertyDescriptor> createWidget(Composite parent, AbstractSection section) {
+	public ASPropertyWidget<ButtonsPropertyDescriptor> createWidget(Composite parent, AbstractSection section) {
 		Object[] convertedArgs = new Object[]{parent, section, this};
-		Class<?>[] arguments = new Class<?>[]{Composite.class, AbstractSection.class, IPropertyDescriptor.class};
+		Class<?>[] arguments = new Class<?>[]{Composite.class, AbstractSection.class, ButtonsPropertyDescriptor.class};
 		try {
-			Constructor<? extends ASPropertyWidget<IPropertyDescriptor>> constructor = button.getConstructor(arguments);
+			Constructor<? extends ASPropertyWidget<ButtonsPropertyDescriptor>> constructor = button.getConstructor(arguments);
 			return constructor.newInstance(convertedArgs);
 		} catch (Exception e) {
 			e.printStackTrace();

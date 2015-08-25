@@ -24,7 +24,6 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
@@ -42,7 +41,7 @@ import com.jaspersoft.studio.utils.ModelUtils;
  * @author Orlandin Marco
  * 
  */
-public class DefaultDatasetButton extends ASPropertyWidget<IPropertyDescriptor> {
+public class DefaultDatasetButton extends ASPropertyWidget<ButtonsPropertyDescriptor> {
 
 	/**
 	 * The button control
@@ -57,7 +56,7 @@ public class DefaultDatasetButton extends ASPropertyWidget<IPropertyDescriptor> 
 	 * @param buttonText
 	 *          text on the button
 	 */
-	public DefaultDatasetButton(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
+	public DefaultDatasetButton(Composite parent, AbstractSection section, ButtonsPropertyDescriptor pDescriptor) {
 		super(parent, section, pDescriptor);
 		createButton(parent, Messages.DefaultDatasetButton_setDefaultDAButton);
 	}

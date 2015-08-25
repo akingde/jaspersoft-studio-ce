@@ -22,12 +22,12 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.book.messages.Messages;
 import com.jaspersoft.studio.book.model.MReportPart;
 import com.jaspersoft.studio.book.wizards.PartRVPropertyEditor;
 import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.property.descriptor.ButtonsPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.returnvalue.RVPropertyPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
@@ -38,7 +38,7 @@ import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
  * @author Orlandin Marco
  * 
  */
-public class SPPartReturnValuesButton extends ASPropertyWidget<IPropertyDescriptor> {
+public class SPPartReturnValuesButton extends ASPropertyWidget<ButtonsPropertyDescriptor> {
 
 	/**
 	 * The button control
@@ -53,7 +53,7 @@ public class SPPartReturnValuesButton extends ASPropertyWidget<IPropertyDescript
 	 * @param buttonText
 	 *          text on the button
 	 */
-	public SPPartReturnValuesButton(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
+	public SPPartReturnValuesButton(Composite parent, AbstractSection section, ButtonsPropertyDescriptor pDescriptor) {
 		super(parent, section, pDescriptor);
 		createButton(parent, Messages.SPPartReturnValuesButton_returnValuesButton);
 	}

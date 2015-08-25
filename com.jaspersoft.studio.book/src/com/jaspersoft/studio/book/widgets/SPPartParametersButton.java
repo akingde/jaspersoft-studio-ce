@@ -27,7 +27,6 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.book.messages.Messages;
 import com.jaspersoft.studio.book.model.MReportPart;
@@ -45,7 +44,7 @@ import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
  * @author Orlandin Marco
  * 
  */
-public class SPPartParametersButton extends ASPropertyWidget<IPropertyDescriptor> {
+public class SPPartParametersButton extends ASPropertyWidget<ButtonsPropertyDescriptor> {
 
 	/**
 	 * The button control
