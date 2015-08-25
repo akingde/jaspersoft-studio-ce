@@ -656,7 +656,7 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 		if (DefaultManager.INSTANCE.isCurrentDefault(resourceAbsolutePath)) {
 			DefaultManager.INSTANCE.reloadCurrentDefault();
 		}
-		Display.getDefault().asyncExec(new Runnable() {
+		UIUtils.getDisplay().asyncExec(new Runnable() {
 			public void run() {
 				isRefreshing = false;
 				firePropertyChange(ISaveablePart.PROP_DIRTY);
@@ -677,8 +677,17 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 							.getProgressMonitor();
 
 					try {
-						if (!file.exists())
-							file.create(new ByteArrayInputStream("FILE".getBytes(FileUtils.UTF8_ENCODING)), true, monitor);
+						if (getActiveEditor() == xmlEditor) {
+							IDocumentProvider dp = xmlEditor.getDocumentProvider();
+							IDocument doc = dp.getDocument(xmlEditor.getEditorInput());
+							ByteArrayInputStream in = new ByteArrayInputStream(doc.get().getBytes(FileUtils.UTF8_ENCODING));
+							if (!file.exists())
+								file.create(in, true, monitor);
+							else
+								file.setContents(in, true, true, monitor);
+						} else if (!file.exists())
+							file.create(new ByteArrayInputStream("".getBytes(FileUtils.UTF8_ENCODING)), true, monitor);
+
 						IFileEditorInput modelFile = new FileEditorInput(file);
 						setInputWithNotify(modelFile);
 						xmlEditor.setInput(modelFile);
@@ -1093,7 +1102,7 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 						jasperDesign.setProperty(DataQueryAdapters.DEFAULT_DATAADAPTER, myDataAdapterDesc.getName());
 						setDirty(true);
 					}
-				}  else {	
+				} else {
 					jasperDesign.removeProperty(DataQueryAdapters.DEFAULT_DATAADAPTER);
 					getMReport().removeParameter(DataQueryAdapters.DEFAULT_DATAADAPTER);
 				}
