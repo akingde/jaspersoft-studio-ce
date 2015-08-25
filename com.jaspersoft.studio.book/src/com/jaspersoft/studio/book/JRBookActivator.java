@@ -72,6 +72,7 @@ public class JRBookActivator extends AbstractJRUIPlugin {
 				return Status.OK_STATUS;
 			}
 		};
-		lookForBookReports.schedule();
+		lookForBookReports.setPriority(Job.DECORATE);
+		lookForBookReports.schedule(5000);
 	}
 }
