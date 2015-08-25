@@ -238,6 +238,11 @@ public class ReturnValuesPropertyPage extends JSSHelpWizardPage {
 			}
 			names.add(erv.getToVariable());
 		}
+		if(dto.getjConfig().getJasperDesign().getMainDataset().getVariables().length ==0){
+			setErrorMessage(Messages.ReturnValuesPropertyPage_0);
+			setPageComplete(false);
+			return;
+		}
 		setErrorMessage(null);
 		setPageComplete(true);
 	}

@@ -14,7 +14,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -129,8 +128,8 @@ public class ListOrderButtons {
 
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
-				ISelection sel = event.getSelection();
-				setEnabled(sel != null && !sel.isEmpty());
+				StructuredSelection sel = (StructuredSelection) event.getSelection();
+				setEnabled(sel != null && sel.size() > 1);
 			}
 		});
 	}
