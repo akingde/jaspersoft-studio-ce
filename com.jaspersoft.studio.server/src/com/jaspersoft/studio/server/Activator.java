@@ -14,6 +14,10 @@ package com.jaspersoft.studio.server;
 
 import net.sf.jasperreports.eclipse.AbstractJRUIPlugin;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.osgi.framework.BundleContext;
 
 import com.jaspersoft.studio.server.plugin.ExtensionManager;
@@ -62,7 +66,22 @@ public class Activator extends AbstractJRUIPlugin {
 	@Override
 	protected void postStartOperations() {
 		super.postStartOperations();
-		JRSBuiltInParameterProvider.init();
+		Job initParametersJob = new Job("Init JRS built-in parameters") {
+			
+			@Override
+			protected IStatus run(IProgressMonitor monitor) {
+				try {
+					JRSBuiltInParameterProvider.init();	
+				}
+				catch(Exception ex) {
+					logError(ex);
+					return Status.CANCEL_STATUS;
+				}
+				return Status.OK_STATUS;
+			}
+		};
+		initParametersJob.setPriority(Job.LONG);
+		initParametersJob.schedule(5000);
 	}
 
 	/**
