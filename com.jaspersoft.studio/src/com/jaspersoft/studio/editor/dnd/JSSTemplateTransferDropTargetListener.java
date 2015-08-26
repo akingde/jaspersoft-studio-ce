@@ -312,32 +312,37 @@ public class JSSTemplateTransferDropTargetListener extends TemplateTransferDropT
 		if (movingDetails != null) {
 			getViewer().getEditDomain().getCommandStack().execute(movingDetails);
 		} else if (getTargetEditPart() != null) {
-			Command command = getCommand();
+			final Command command = getCommand();
 
 			createLabelForField(command);
-
-			if (command instanceof DialogEnabledCommand && command.canExecute()) {
-				// If we have a special command that supports dialog (i.e: image creation)
-				// we'll show the popup dialog and continue with creation only if
-				// the user has confirmed.
-				if (((DialogEnabledCommand) command).openDialog() == Dialog.CANCEL) {
-					getCurrentEvent().detail = DND.DROP_NONE;
-					return;
+			final Object model = getCreateRequest().getNewObject();;
+			UIUtils.getDisplay().asyncExec(new Runnable() {
+				
+				@Override
+				public void run() {
+					if (command instanceof DialogEnabledCommand && command.canExecute()) {
+						// If we have a special command that supports dialog (i.e: image creation)
+						// we'll show the popup dialog and continue with creation only if
+						// the user has confirmed.
+						if (((DialogEnabledCommand) command).openDialog() == Dialog.CANCEL) {
+							return;
+						}
+					}
+					if (command != null && command.canExecute()) {
+						if (command instanceof CompoundCommand) {
+							executeCompoundCommand((CompoundCommand) command);
+						} else {
+							getViewer().getEditDomain().getCommandStack().execute(command);
+						}
+					}
+					selectAddedObject(model);
 				}
-			}
-			if (command != null && command.canExecute())
-				if (command instanceof CompoundCommand) {
-					executeCompoundCOmmand((CompoundCommand) command);
-				} else
-					getViewer().getEditDomain().getCommandStack().execute(command);
-			else
-				getCurrentEvent().detail = DND.DROP_NONE;
-		} else
-			getCurrentEvent().detail = DND.DROP_NONE;
-		selectAddedObject();
+			});
+		}
+		getCurrentEvent().detail = DND.DROP_NONE;
 	}
 
-	private void executeCompoundCOmmand(CompoundCommand cmd) {
+	private void executeCompoundCommand(CompoundCommand cmd) {
 		JSSCompoundCommand compound = new JSSCompoundCommand(cmd, null) {
 			@Override
 			public void execute() {
@@ -377,8 +382,7 @@ public class JSSTemplateTransferDropTargetListener extends TemplateTransferDropT
 		getViewer().getEditDomain().getCommandStack().execute(compound);
 	}
 
-	private void selectAddedObject() {
-		Object model = getCreateRequest().getNewObject();
+	private void selectAddedObject(Object model) {	
 		if (model == null)
 			return;
 		EditPartViewer viewer = getViewer();
