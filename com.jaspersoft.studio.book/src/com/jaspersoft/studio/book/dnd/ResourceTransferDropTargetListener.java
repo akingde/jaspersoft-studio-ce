@@ -19,6 +19,7 @@ import java.util.List;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExpression;
+import net.sf.jasperreports.engine.JRSubreportParameter;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignPart;
 import net.sf.jasperreports.engine.design.JRDesignSubreportParameter;
@@ -96,7 +97,7 @@ public class ResourceTransferDropTargetListener extends AbstractTransferDropTarg
 		DropTargetEvent event = getCurrentEvent();
 		for(TransferData eventData : event.dataTypes){
 			if (ResourceTransfer.getInstance().isSupportedType(eventData)){
-				return parseExternalResources((IResource[])event.data, null, null);
+				return parseExternalResources((IResource[])event.data, null, null, null);
 			}
 		}
 		return super.getCommand();
@@ -108,13 +109,14 @@ public class ResourceTransferDropTargetListener extends AbstractTransferDropTarg
 	 * 
 	 * @param connectionExp the connection expression or null to avoid to set it
 	 * @param datasourceExp the datasource expression or null to avoid to set it
+	 * @param jrSubreportParameters the parameters for the subreport part
 	 * @return the command to create the element and optionally set the expressions
 	 */
-	protected Command getDropCommand(JRExpression connectionExp, JRExpression datasourceExp) {
+	protected Command getDropCommand(JRExpression connectionExp, JRExpression datasourceExp, JRSubreportParameter[] jrSubreportParameters) {
 		DropTargetEvent event = getCurrentEvent();
 		for(TransferData eventData : event.dataTypes){
 			if (ResourceTransfer.getInstance().isSupportedType(eventData)){
-				return parseExternalResources((IResource[])event.data, connectionExp, datasourceExp);
+				return parseExternalResources((IResource[])event.data, connectionExp, datasourceExp, jrSubreportParameters);
 			}
 		}
 		return super.getCommand();
@@ -138,7 +140,7 @@ public class ResourceTransferDropTargetListener extends AbstractTransferDropTarg
 			WizardDialog dialog = new WizardDialog(UIUtils.getShell(), wizard);
 			dialog.create();
 			if (dialog.open() == Dialog.OK) {
-				Command command = getDropCommand(wizard.getConnectionExpression(), wizard.getDatasourceExpression());
+				Command command = getDropCommand(wizard.getConnectionExpression(), wizard.getDatasourceExpression(), wizard.getParameters());
 				if (command != null && command.canExecute()){
 					getViewer().getEditDomain().getCommandStack().execute(command);	
 				}
@@ -162,8 +164,9 @@ public class ResourceTransferDropTargetListener extends AbstractTransferDropTarg
 	 * type StandardSubreportPartComponent
 	 * @param connectionExp the connection expression or null to avoid to set it
 	 * @param datasourceExp the datasource expression or null to avoid to set it
+	 * @param jrSubreportParameters the parameters for the subreport part
 	 */
-	private void setDataParameters(JRDesignPart newPart, JRExpression connectionExp, JRExpression datasourceExp){
+	private void setDataParameters(JRDesignPart newPart, JRExpression connectionExp, JRExpression datasourceExp, JRSubreportParameter[] jrSubreportParameters){
 		if (newPart.getComponent() instanceof StandardSubreportPartComponent){
 			StandardSubreportPartComponent subPart = (StandardSubreportPartComponent)newPart.getComponent();
 			if (connectionExp != null) {
@@ -173,7 +176,6 @@ public class ResourceTransferDropTargetListener extends AbstractTransferDropTarg
 				try {
 					subPart.addParameter(param);
 				} catch (JRException e) {
-					e.printStackTrace();
 					JRBookActivator.getDefault().logError(e);
 				}
 			}
@@ -184,8 +186,16 @@ public class ResourceTransferDropTargetListener extends AbstractTransferDropTarg
 				try {
 					subPart.addParameter(param);
 				} catch (JRException e) {
-					e.printStackTrace();
 					JRBookActivator.getDefault().logError(e);
+				}
+			}
+			if (jrSubreportParameters != null) {
+				for(JRSubreportParameter param : jrSubreportParameters) {
+					try {
+						subPart.addParameter(param);
+					} catch (JRException e) {
+						JRBookActivator.getDefault().logError(e);
+					}
 				}
 			}
 		}
@@ -223,8 +233,9 @@ public class ResourceTransferDropTargetListener extends AbstractTransferDropTarg
 	 * @param input the resources to add
 	 * @param connectionExp the connection expression or null to avoid to set it
 	 * @param datasourceExp the datasource expression or null to avoid to set it
+	 * @param jrSubreportParameters the parameters for the subreport part
 	 */
-	private Command parseExternalResources(IResource[] input, JRExpression connectionExp, JRExpression datasourceExp){
+	private Command parseExternalResources(IResource[] input, JRExpression connectionExp, JRExpression datasourceExp, JRSubreportParameter[] jrSubreportParameters){
 		if (partTracker == null || partTracker.getContainer() == null) return null;
 		List<String> readElements = new ArrayList<String>(); 
 		//Search the jrxml files
@@ -246,7 +257,7 @@ public class ResourceTransferDropTargetListener extends AbstractTransferDropTarg
 			File fileElement = new File(readElement);
 			JRDesignExpression partExptession = new JRDesignExpression("\""+fileElement.getName()+"\"");
 			JRDesignPart newPart = MReportPart.createJRElement(partExptession);
-			setDataParameters(newPart, connectionExp, datasourceExp);
+			setDataParameters(newPart, connectionExp, datasourceExp, jrSubreportParameters);
 			CreatePartAfterCommand createCommand = new CreatePartAfterCommand(modelContainer, newPart, afterPart);
 			cc.add(createCommand);
 		}
