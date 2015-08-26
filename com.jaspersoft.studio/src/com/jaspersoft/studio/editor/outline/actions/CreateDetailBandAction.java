@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.editor.outline.actions;
 
@@ -30,7 +26,7 @@ import com.jaspersoft.studio.model.band.command.CreateBandDetailCommand;
  * Action used to add a new detail band to the report
  * 
  * @author Orlandin Marco
- *
+ * 
  */
 public class CreateDetailBandAction extends ACachedSelectionAction {
 
@@ -40,7 +36,8 @@ public class CreateDetailBandAction extends ACachedSelectionAction {
 	/**
 	 * Construct the action
 	 * 
-	 * @param part the current editor
+	 * @param part
+	 *          the current editor
 	 */
 	public CreateDetailBandAction(IWorkbenchPart part) {
 		super(part);
@@ -48,13 +45,12 @@ public class CreateDetailBandAction extends ACachedSelectionAction {
 	}
 
 	/**
-	 * The action is enabled only if there is a single band selected and that band
-	 * is a detail
+	 * The action is enabled only if there is a single band selected and that band is a detail
 	 */
 	@Override
 	protected boolean calculateEnabled() {
 		List<Object> elements = editor.getSelectionCache().getSelectionModelForType(MBand.class);
-		return (elements.size() == 1 && ((MBand)elements.get(0)).getBandType() == BandTypeEnum.DETAIL);
+		return (elements.size() == 1 && ((MBand) elements.get(0)).getBandType() == BandTypeEnum.DETAIL);
 	}
 
 	/**
@@ -63,9 +59,15 @@ public class CreateDetailBandAction extends ACachedSelectionAction {
 	@Override
 	public Command createCommand() {
 		List<Object> elements = editor.getSelectionCache().getSelectionModelForType(MBand.class);
-		return new CreateBandDetailCommand((MBand)elements.get(0), new MBand());
+		return new CreateBandDetailCommand((MBand) elements.get(0), new MBand());
 	}
-	
+
+	@Override
+	public void run() {
+		fresh = false;
+		super.run();
+	}
+
 	/**
 	 * Initializes this action's text and images.
 	 */

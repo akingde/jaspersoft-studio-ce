@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.model.band.command;
 
@@ -18,19 +14,20 @@ import net.sf.jasperreports.engine.design.JRDesignSection;
 import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.model.band.MBand;
-/*/*
- * link nodes & together.
+
+/*
+ * /* link nodes & together.
  * 
  * @author Chicu Veaceslav
  */
 public class CreateBandDetailCommand extends Command {
-	
+
 	/** The jr band. */
 	private JRDesignBand jrBand;
-	
+
 	/** The jr design section. */
 	private JRDesignSection jrDesignSection;
-	
+
 	/** The index. */
 	private int index = -1;
 
@@ -45,18 +42,19 @@ public class CreateBandDetailCommand extends Command {
 	public CreateBandDetailCommand(MBand destNode, MBand srcNode) {
 		super();
 		this.jrDesignSection = (JRDesignSection) destNode.getJasperDesign().getDetailSection();
+		index = jrDesignSection.getBandsList().indexOf(destNode.getValue()) + 1;
 		if (srcNode != null && srcNode.getValue() != null)
 			this.jrBand = (JRDesignBand) srcNode.getValue();
 	}
-	
-	
+
 	public CreateBandDetailCommand(MBand destNode, MBand srcNode, int index) {
-		this(destNode,srcNode);
+		this(destNode, srcNode);
 		this.index = index;
 	}
 
-
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.gef.commands.Command#execute()
 	 */
 	@Override
@@ -72,7 +70,9 @@ public class CreateBandDetailCommand extends Command {
 		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.gef.commands.Command#canUndo()
 	 */
 	@Override
@@ -80,7 +80,9 @@ public class CreateBandDetailCommand extends Command {
 		return true;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.gef.commands.Command#undo()
 	 */
 	@Override
