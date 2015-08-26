@@ -23,6 +23,7 @@ import com.jaspersoft.studio.editor.action.ACachedSelectionAction;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.model.band.command.CreateBandDetailCommand;
 
@@ -67,7 +68,7 @@ public class CreateDetailBandAction extends ACachedSelectionAction {
 			INode p = null;
 			do {
 				p = ((ANode) obj).getParent();
-			} while (p != null && !(p instanceof MBand));
+			} while (p != null && !(p instanceof MBand) && !(p instanceof MRoot));
 			if (p instanceof MBand && ((MBand) p).getBandType() == BandTypeEnum.DETAIL)
 				return (MBand) p;
 		}
