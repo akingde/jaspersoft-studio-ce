@@ -65,9 +65,9 @@ public class CreateDetailBandAction extends ACachedSelectionAction {
 		if (obj instanceof EditPart)
 			obj = ((EditPart) obj).getModel();
 		if (obj instanceof ANode) {
-			INode p = null;
+			INode p = (ANode) obj;
 			do {
-				p = ((ANode) obj).getParent();
+				p = ((ANode) p).getParent();
 			} while (p != null && !(p instanceof MBand) && !(p instanceof MRoot));
 			if (p instanceof MBand && ((MBand) p).getBandType() == BandTypeEnum.DETAIL)
 				return (MBand) p;
