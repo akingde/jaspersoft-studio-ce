@@ -618,8 +618,14 @@ public class ConfigurationManager {
 			try {
 				// create a backup first
 				File fini = getApplicationConfigurationFile();
-				if (fini.exists())
+				if (fini.exists()) {
+					try {
 					org.apache.commons.io.FileUtils.copyFile(fini, new File(fini.toString() + ".bak"));
+					}
+					catch(IOException e) {
+						JaspersoftStudioPlugin.getInstance().logError("Unable to create bak file for the .ini file",e);
+					}
+				}
 
 				if (!fini.exists()) {
 					fini.getParentFile().mkdirs();
