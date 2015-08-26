@@ -82,6 +82,8 @@ Section -Post
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "URLInfoAbout" "${PRODUCT_WEB_SITE}"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "Publisher" "${PRODUCT_PUBLISHER}"
   !insertmacro APP_ASSOCIATE "jrxml" "JaspersoftStudio.Jrxml" "Jrxml source file" "$INSTDIR\jaspersoftstudio.ico,0" "Open with ${PRODUCT_NAME}" "$INSTDIR\${SHORT_PRODUCT_NAME}.exe --launcher.openFile $\"%1$\""
+  AccessControl::GrantOnFile "$INSTDIR\${SHORT_PRODUCT_NAME}.ini" "(S-1-5-32-545)" "GenericRead + GenericExecute + GenericWrite"
+  AccessControl::GrantOnFile "$INSTDIR\dropins" "(S-1-5-32-545)" "GenericRead + GenericExecute + GenericWrite"
 SectionEnd
 
 Function un.onUninstSuccess
