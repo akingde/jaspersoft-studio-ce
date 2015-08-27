@@ -13,11 +13,12 @@
 package com.jaspersoft.studio.server.publish;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Set;
 
 import net.sf.jasperreports.data.DataAdapterParameterContributorFactory;
@@ -34,7 +35,10 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlDigesterFactory;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import net.sf.jasperreports.parts.subreport.StandardSubreportPartComponent;
+import net.sf.jasperreports.repo.FileRepositoryService;
+import net.sf.jasperreports.repo.RepositoryService;
 
+import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.xml.sax.InputSource;
@@ -61,6 +65,7 @@ import com.jaspersoft.studio.server.utils.ResourceDescriptorUtil;
 import com.jaspersoft.studio.utils.JRXMLUtils;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ModelUtils;
+import com.jaspersoft.studio.utils.jasper.JSSFileRepositoryService;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class JrxmlPublishContributor implements IPublishContributor {
@@ -211,11 +216,14 @@ public class JrxmlPublishContributor implements IPublishContributor {
 		boolean syncDA = mrunit.getWsClient().getServerProfile().isSyncDA();
 		for (JRDataset d : ds) {
 			JRPropertiesMap pmap = d.getPropertiesMap();
-			String dapath = pmap.getProperty(DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION);
+			String dapath = pmap
+					.getProperty(DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION);
 			if (syncDA && Misc.isNullOrEmpty(dapath)) {
-				String name = pmap.getProperty(DataQueryAdapters.DEFAULT_DATAADAPTER);
+				String name = pmap
+						.getProperty(DataQueryAdapters.DEFAULT_DATAADAPTER);
 				if (!Misc.isNullOrEmpty(name)) {
-					ADataAdapterStorage storage = DataAdapterManager.getJRDefaultStorage(jrConfig);
+					ADataAdapterStorage storage = DataAdapterManager
+							.getJRDefaultStorage(jrConfig);
 					for (DataAdapterDescriptor dad : storage
 							.getDataAdapterDescriptors()) {
 						if (dad.getDataAdapter().getName().equals(name)) {
@@ -243,19 +251,58 @@ public class JrxmlPublishContributor implements IPublishContributor {
 			ds.addAll(datasetsList);
 		for (JRDataset d : ds) {
 			String dapath = d.getResourceBundle();
-			if (dapath == null || dapath.isEmpty())
+			if (Misc.isNullOrEmpty(dapath))
 				continue;
 			impBundle.publish(jrConfig, jasper, dapath, mrunit, monitor,
 					fileset, file);
-			for (Locale l : Locale.getAvailableLocales()) {
-				impBundle.publish(jrConfig, jasper,
-						dapath + "_" + l.toString(), mrunit, monitor, fileset,
-						file);
+
+			JSSFileRepositoryService repService = jrConfig
+					.getFileRepositoryService();
+			List<String> roots = new ArrayList<String>();
+			List<RepositoryService> rservices = repService
+					.getRepositoryServices();
+			for (RepositoryService rs : rservices) {
+				if (rs instanceof FileRepositoryService) {
+					FileRepositoryService frs = (FileRepositoryService) rs;
+					roots.add(frs.getRoot());
+				}
+			}
+			List<File> files = new ArrayList<File>();
+			Set<String> fileNames = new HashSet<String>();
+			for (String r : roots)
+				look4Files(r, dapath, fileNames, files);
+			for (File f : files) {
+				String p = f.getName();
+				p = p.substring(0, p.length() - ".properties".length());
+				impBundle.publish(jrConfig, jasper, p, mrunit, monitor,
+						fileset, file);
 				if (monitor.isCanceled())
 					return;
 			}
+			// in this case with getAvailableLocale, JR will look also in
+			// classpath and other places, but it could be slow
+
+			// for (Locale l : Locale.getAvailableLocales()) {
+			// impBundle.publish(jrConfig, jasper,
+			// dapath + "_" + l.toString(), mrunit, monitor, fileset,
+			// file);
+			// if (monitor.isCanceled())
+			// return;
+			// }
 			if (monitor.isCanceled())
 				return;
+		}
+	}
+
+	private void look4Files(String root, String dapath, Set<String> fileNames,
+			List<File> files) {
+		File dir = new File(root);
+		FileFilter fileFilter = new WildcardFileFilter(dapath + "_*.properties");
+		for (File f : dir.listFiles(fileFilter)) {
+			if (fileNames.contains(f.getName()))
+				continue;
+			fileNames.add(f.getName());
+			files.add(f);
 		}
 	}
 
