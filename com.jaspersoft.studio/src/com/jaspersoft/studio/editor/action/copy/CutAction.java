@@ -12,6 +12,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.action.copy;
 
+import java.util.HashSet;
 import java.util.List;
 
 import org.eclipse.gef.commands.Command;
@@ -24,15 +25,16 @@ import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.editor.action.ACachedSelectionAction;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ICopyable;
+import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.command.DeleteElementCommand;
 
 /**
  * Cut the selected node. The cut consist of three parts:
  * 
- * 1 - The node is set as cutted
- * 2 - The node is added to the clipoboard
- * 3 - The node is removed from its actual parent
+ * 1 - The node is set as cut
+ * 2 - The node is added to the clipboard
+ * 3 - The node is removed from its actual parent (excluded the nested ones)
  * 
  * @author Orlandin Marco 
  * 
@@ -61,6 +63,43 @@ public class CutAction extends ACachedSelectionAction {
 		execute(createCommand());
 	}
 
+	/**
+	 * Add to an HashSet all the children of the passed node and 
+	 * all their descendants recursively
+	 * 
+	 * @param node the current node
+	 * @param children HashSet where the nodes are added
+	 */
+	private void addChildren(INode node, HashSet<INode> children){
+		for(INode child : node.getChildren()){
+			addChildren(child, children);
+			children.add(child);
+		}
+	}
+	
+	/**
+	 * Get an HashSet of all the nested nod in the current 
+	 * selection 
+	 * 
+	 * @return a not null HashSet
+	 */
+	private HashSet<INode> getNotNestedNodes(List<Object> copiedObjects){
+		HashSet<INode> nodesInHierarchy = new HashSet<INode>();
+		for(Object node : copiedObjects){
+			if (node instanceof INode){
+				addChildren((INode)node, nodesInHierarchy);
+			}
+		}
+		return nodesInHierarchy;
+	}
+	
+	@Override
+	protected boolean calculateEnabled() {
+		List<Object> copiableObjects = editor.getSelectionCache().getSelectionModelForType(ICopyable.class);
+		return !copiableObjects.isEmpty();
+	}
+	
+	
 	@Override
 	protected Command createCommand() {
 		List<Object> copiableObjects = editor.getSelectionCache().getSelectionModelForType(ICopyable.class);
@@ -69,13 +108,17 @@ public class CutAction extends ACachedSelectionAction {
 		JSSCompoundCommand command = new JSSCompoundCommand(null);
 		CutCommand cmd = new CutCommand();
 		command.add(cmd);
+		HashSet<INode> nestedNodes = getNotNestedNodes(copiableObjects);
 		for (Object it : copiableObjects) {
 			cmd.addElement((ICopyable) it);
 			if (it instanceof MGraphicElement){
 				MGraphicElement node = (MGraphicElement)it;
 				command.setReferenceNodeIfNull(node.getRoot());
-				DeleteElementCommand deleteCommand = new DeleteElementCommand(node);
-				command.add(deleteCommand);
+				//Avoid to delete the nested nodes
+				if (!nestedNodes.contains(node)){
+					DeleteElementCommand deleteCommand = new DeleteElementCommand(node);
+					command.add(deleteCommand);
+				}
 			}
 		}
 		return command;

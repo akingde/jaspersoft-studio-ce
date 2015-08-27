@@ -12,8 +12,10 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.action.copy;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
@@ -24,6 +26,7 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.ICopyable;
+import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.IPastable;
 import com.jaspersoft.studio.model.MPage;
 import com.jaspersoft.studio.model.MReport;
@@ -56,6 +59,9 @@ public class PastableElements extends AbstractPastableObject {
 	 */
 	private HashMap<ICopyable, ANode> parentsMap;
 	
+	/**
+	 * Define if the paste is done because a cut or a copy
+	 */
 	private ACTION_TYPE actionType;
 	
 	/**
@@ -106,6 +112,43 @@ public class PastableElements extends AbstractPastableObject {
 	}
 	
 	/**
+	 * Add to an HashSet all the children of the passed node and 
+	 * all their descendants recursively
+	 * 
+	 * @param node the current node
+	 * @param children HashSet where the nodes are added
+	 */
+	private void addChildren(INode node, HashSet<INode> children){
+		for(INode child : node.getChildren()){
+			addChildren(child, children);
+			children.add(child);
+		}
+	}
+	
+	/**
+	 * Get the list of node to paste. This nodes are the list 
+	 * in the clipboard minus all the nested nodes of an already
+	 * copied item
+	 * 
+	 * @return a not null list of element to paste
+	 */
+	private List<ICopyable> getNotNestedNodes(){
+		HashSet<INode> nodesInHierarchy = new HashSet<INode>();
+		for(ICopyable node :list){
+			if (node instanceof INode){
+				addChildren((INode)node, nodesInHierarchy);
+			}
+		}
+		List<ICopyable> result = new ArrayList<ICopyable>();
+		for(ICopyable node :list){
+			if (!nodesInHierarchy.contains(node)){
+				result.add(node);
+			}
+		}
+		return result;
+	}
+	
+	/**
 	 * Create the command to pasted the copied elements, check if the pasted
 	 * elements must maintains the same parent of the original or not before,
 	 * and in case create a different command
@@ -113,7 +156,7 @@ public class PastableElements extends AbstractPastableObject {
 	protected Command createCommand(Collection<?> selectedObjects) {
 		if (doSpecialPaste(selectedObjects)){
 			JSSCompoundCommand copyElementsCommand = new JSSCompoundCommand(null);
-			for(ICopyable node :list){
+			for(ICopyable node : getNotNestedNodes()){
 				ANode parent = parentsMap.get(node);
 				copyElementsCommand.setReferenceNodeIfNull(parent);
 				if (parent != null && node instanceof ANode){
@@ -165,13 +208,13 @@ public class PastableElements extends AbstractPastableObject {
 			if (modelObj instanceof ANode) {
 				IPastable past = getParent2Paste((ANode) modelObj);
 				if (past != null) {
-					return new PasteCommand(past);
+					return new PasteCommand(past, getNotNestedNodes());
 				}
 			}
 		} else if (selection instanceof ANode) {
 			IPastable past = getParent2Paste((ANode) selection);
 			if (past != null) {
-				return new PasteCommand(past);
+				return new PasteCommand(past, getNotNestedNodes());
 			}
 		}
 		return null;

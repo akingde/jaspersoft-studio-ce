@@ -48,30 +48,32 @@ public class PasteCommand extends Command {
 	protected Map<ANode, Command> list;
 	protected IPastable parent;
 	protected int createdNodes;
+	protected Collection<ICopyable> copiedNodes;
 	
 	/**
 	 * List of the graphical nodes created by the paste command
 	 */
 	private List<INode> createdElements;
 
-	public PasteCommand(IPastable parent) {
+	public PasteCommand(IPastable parent, Collection<ICopyable> copiedNodes) {
 		super();
 		this.parent = parent;
 		createdNodes = 0;
+		this.copiedNodes = copiedNodes;
 	}
 
 	@Override
 	public boolean canExecute() {
+		if (copiedNodes == null || copiedNodes.isEmpty()) {
+			return false;
+		}
 		if (list == null) {
 			Object obj = Clipboard.getDefault().getContents();
 			if (obj == null)
 				return false;
 			list = new LinkedHashMap<ANode, Command>();
 			if (obj instanceof AbstractPastableObject) {
-				Collection<ICopyable> bList = ((AbstractPastableObject)obj).getCopiedElements();
-				if (bList.isEmpty())
-					return false;
-				for (ICopyable copyableNode : bList) {
+				for (ICopyable copyableNode : copiedNodes) {
 					if (copyableNode instanceof ANode){
 						ANode node = (ANode) copyableNode;
 						if (isPastableNode(node)) list.put(node, null);
