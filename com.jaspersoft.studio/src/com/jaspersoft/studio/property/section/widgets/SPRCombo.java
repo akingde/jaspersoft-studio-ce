@@ -66,7 +66,16 @@ public class SPRCombo extends ASPropertyWidget<RComboBoxPropertyDescriptor> {
 		section.changeProperty(pDescriptor.getId(), value);
 	}
 
+	private APropertyNode pnode;
+	private Object b;
+
+	public void refresh() {
+		setData(pnode, b);
+	}
+
 	public void setData(APropertyNode pnode, Object b) {
+		this.pnode = pnode;
+		this.b = b;
 		refreshing = true;
 		combo.setItems(pDescriptor.getItems());
 		String str = (String) b;

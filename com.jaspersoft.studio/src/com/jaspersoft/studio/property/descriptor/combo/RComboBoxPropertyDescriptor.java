@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.property.descriptor.combo;
 
@@ -37,7 +33,7 @@ public class RComboBoxPropertyDescriptor extends ComboBoxPropertyDescriptor impl
 		labels = labelsArray;
 		this.isReadOnly = true;
 	}
-	
+
 	public RComboBoxPropertyDescriptor(Object id, String displayName, String[] labelsArray, boolean isReadOnly) {
 		super(id, displayName, labelsArray);
 		labels = labelsArray;
@@ -64,14 +60,19 @@ public class RComboBoxPropertyDescriptor extends ComboBoxPropertyDescriptor impl
 		labels = items;
 		if (cellEditor != null && cellEditor.getControl() != null && !cellEditor.getControl().isDisposed())
 			cellEditor.setItems(items);
+		if (sprCombo != null && !sprCombo.getControl().isDisposed())
+			sprCombo.refresh();
 	}
 
 	public String[] getItems() {
 		return labels;
 	}
 
+	private SPRCombo sprCombo;
+
 	public ASPropertyWidget<RComboBoxPropertyDescriptor> createWidget(Composite parent, AbstractSection section) {
-		return new SPRCombo(parent, section, this);
+		sprCombo = new SPRCombo(parent, section, this);
+		return sprCombo;
 	}
 
 	private IHelpRefBuilder refBuilder;
