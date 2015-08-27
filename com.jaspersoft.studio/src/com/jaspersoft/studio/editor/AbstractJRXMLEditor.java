@@ -539,7 +539,7 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 
 		xmlEditor.getDocumentProvider().addElementStateListener(new StateListener());
 		
-		/* JSS has the function to disable the automatic run when entering in the
+		/*  JSS has the function to disable the automatic run when entering in the
 		 *  Preview editor with the shift key pressed. Typically this used the method
 	 	 *  JasperReportsPlugin.isPressed(SWT.SHIFT) to know if shift was pressed. This
 		 *  however can't work anymore since the tab changing made the app loose the focus
