@@ -13,11 +13,14 @@
 package com.jaspersoft.studio.editor.action.copy;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.ui.actions.Clipboard;
 
+import com.jaspersoft.studio.editor.action.copy.PastableElements.ACTION_TYPE;
+import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.ICopyable;
 
 /**
@@ -47,13 +50,31 @@ public class CopyCommand extends Command {
 	}
 
 	/**
+	 * Create a map of the parents of each copied node. This is done
+	 * because with the cut action the nodes are removed and could be impossible
+	 * to recover the current parent, so the parent is saved when the node 
+	 * is copied
+	 * 
+	 * @return a not null map with the parents of every copied node 
+	 */
+	protected HashMap<ICopyable, ANode> getParentsMap(){
+		HashMap<ICopyable, ANode> parentsMap = new HashMap<ICopyable, ANode>();
+		for(ICopyable node : list){
+			if (node instanceof ANode){
+				parentsMap.put(node, ((ANode)node).getParent());
+			}
+		}
+		return parentsMap;
+	}
+	
+	/**
 	 * Create the container for the paste of editor elements and
 	 * put it inside the clipboard
 	 */
 	@Override
 	public void execute() {
 		if (canExecute()){
-			PastableElements container = new PastableElements(list);
+			PastableElements container = new PastableElements(list, getParentsMap(), ACTION_TYPE.COPY);
 			Clipboard.getDefault().setContents(container);
 		}
 	}
@@ -62,5 +83,4 @@ public class CopyCommand extends Command {
 	public boolean canExecute() {
 		return list != null && !list.isEmpty();
 	}
-
 }

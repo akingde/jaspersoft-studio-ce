@@ -13,6 +13,7 @@
 package com.jaspersoft.studio.editor.action.copy;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -31,7 +32,13 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.IPastable;
+import com.jaspersoft.studio.model.MPage;
+import com.jaspersoft.studio.model.MReport;
+import com.jaspersoft.studio.model.band.MBand;
 
+/**
+ * Paste the elements in the clipboard
+ */
 public class PasteAction extends ACachedSelectionAction {
 
 	public PasteAction(IWorkbenchPart part) {
@@ -42,7 +49,6 @@ public class PasteAction extends ACachedSelectionAction {
 	@Override
 	protected void init() {
 		super.init();
-
 		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
 		setText(Messages.common_paste);
 		setId(ActionFactory.PASTE.getId());
@@ -52,29 +58,63 @@ public class PasteAction extends ACachedSelectionAction {
 		setEnabled(false);
 	}
 
+	/**
+	 * If possible it avoid to generate the command to calculate the enablement
+	 * state of the action, to speedup 
+	 */
 	@Override
 	protected boolean calculateEnabled() {
-		if (!fresh){
-			command = null;
-			Object obj = Clipboard.getDefault().getContents();
-			if (obj instanceof AbstractPastableObject){
-				command = ((AbstractPastableObject)obj).getPasteCommand(getSelectedObjects());
+		Object obj = Clipboard.getDefault().getContents();
+		if (obj instanceof PastableElements) {
+			Collection<?> selectedObjects = getSelectedObjects();
+			for(Object element : selectedObjects){
+				if (element instanceof EditPart) {
+					Object modelObj = ((EditPart) element).getModel();
+					if  (modelObj instanceof MReport || modelObj instanceof MPage){
+						return true;
+					} else if (modelObj instanceof ANode){
+						if (getParent2Paste((ANode)modelObj) != null){
+							return true;
+						}
+					}
+				}
 			}
-			fresh = true;
+		} else if (obj instanceof AbstractPastableObject){
+			command = ((AbstractPastableObject)obj).getPasteCommand(getSelectedObjects());
+			return command != null && command.canExecute();
 		}
-		return command != null && command.canExecute();
+		return false;
+	}
+	
+	/**
+	 * Check if content can be pasted on the passed node, if it is not like this
+	 * start to go up in the hierarchy. If it comes to a band model with null value return null
+	 * 
+	 * @param n node from where the search of a node where the elemens can be pasted start
+	 * @return the node where the elements can be pasted or null if the elements can't be at all
+	 */
+	private IPastable getParent2Paste(ANode n) {
+		while (n != null) {
+			if (n instanceof IPastable) {
+				if (n instanceof MBand && n.getValue() == null)
+					return null;
+				return (IPastable) n;
+			}
+			n = (ANode) n.getParent();
+		}
+		return null;
 	}
 
 	@Override
 	public void run() {
+		Object obj = Clipboard.getDefault().getContents();
+		command = ((AbstractPastableObject)obj).getPasteCommand(getSelectedObjects());
 		execute(command);
-
 		// Select the pasted edit part
 		GraphicalViewer viewer = (GraphicalViewer) getWorkbenchPart().getAdapter(GraphicalViewer.class);
 		if (viewer != null && command instanceof PasteCommand) {
 			PasteCommand standardPasteCommand = (PasteCommand)command;
-			viewer.setSelection(new StructuredSelection(getSelectableEditParts(viewer, standardPasteCommand.getPasteParent(),
-																																					standardPasteCommand.getCreatedNodesNumber())));
+			viewer.setSelection(new StructuredSelection(getSelectableEditParts(viewer, standardPasteCommand.getPasteParent(),																																		standardPasteCommand.getCreatedNodesNumber())));
 		}
 	}
 
@@ -91,9 +131,9 @@ public class PasteAction extends ACachedSelectionAction {
 	@SuppressWarnings("rawtypes")
 	private List<EditPart> getSelectableEditParts(GraphicalViewer viewer, IPastable pasteParent, int createdElements) {
 		List<EditPart> selectableChildren = new ArrayList<EditPart>();
-		if (!(pasteParent instanceof ANode))
+		if (!(pasteParent instanceof ANode)){
 			return selectableChildren;
-
+		}
 		ANode parentModel = (ANode) pasteParent;
 		HashSet<INode> pastedModels = new HashSet<INode>();
 		int elementsToInsert = createdElements;

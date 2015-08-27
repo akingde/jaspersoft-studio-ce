@@ -23,11 +23,20 @@ import org.eclipse.ui.actions.ActionFactory;
 import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.editor.action.ACachedSelectionAction;
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.ICopyable;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.command.DeleteElementCommand;
 
+/**
+ * Cut the selected node. The cut consist of three parts:
+ * 
+ * 1 - The node is set as cutted
+ * 2 - The node is added to the clipoboard
+ * 3 - The node is removed from its actual parent
+ * 
+ * @author Orlandin Marco 
+ * 
+ */
 public class CutAction extends ACachedSelectionAction {
 
 	public CutAction(IWorkbenchPart part) {
