@@ -89,6 +89,8 @@ public class ProxyConnection implements IConnection {
 	public boolean connect(IProgressMonitor monitor, ServerProfile sp)
 			throws Exception {
 		Exception exc = null;
+		c = null;
+		soap = null;
 		for (IConnection co : cons) {
 			String connName = co.getClass().getName().toUpperCase();
 			if (sp.isUseOnlySOAP() && !connName.contains("SOAP"))
@@ -139,7 +141,8 @@ public class ProxyConnection implements IConnection {
 			throws Exception {
 		String v = c.getServerInfo(monitor).getVersion();
 		if (c != soap && v.compareTo("5.5") > 0 && v.compareTo("5.6") < 0
-				&& rd.getWsType() !=null && rd.getWsType().equals(ResourceDescriptor.TYPE_REFERENCE))
+				&& rd.getWsType() != null
+				&& rd.getWsType().equals(ResourceDescriptor.TYPE_REFERENCE))
 			return true;
 		return false;
 	}
