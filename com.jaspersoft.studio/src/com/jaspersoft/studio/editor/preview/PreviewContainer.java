@@ -100,6 +100,12 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 
 	private DataAdapterDescriptor dataAdapterDesc;
 	
+	/**
+	 * Flag used to enable or disable the run of the report when
+	 * the JasperDesign is set
+	 */
+	private boolean runWhenInitilizing = true;
+	
 	public PreviewContainer() {
 		super(true);
 	}
@@ -470,7 +476,7 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 					getReportControler().setJrContext(jConfig);
 					setupDataAdapter();
 
-					if (isRunDirty || getJasperPrint() == null){
+					if ((isRunDirty || getJasperPrint() == null) && runWhenInitilizing){
 						runReport(dataAdapterDesc);
 					}
 					propChangeListener = new PropertyChangeListener() {
@@ -573,5 +579,16 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 	@Override
 	public JasperReportsConfiguration getConfiguration() {
 		return jrContext;
+	}
+	
+	/**
+	 * Flag used to enable or disable the run of the report when
+	 * the JasperDesign is set trough setJasperDesign(final JasperReportsConfiguration jConfig)
+	 * 
+	 * @param value true if the report should be run when the JasperDesign is set, 
+	 * false otherwise
+	 */
+	public void setRunWhenInitilizing(boolean value){
+		runWhenInitilizing = value;
 	}
 }

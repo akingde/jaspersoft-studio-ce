@@ -45,6 +45,9 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IDocumentListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CTabFolder;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.ui.IEditorInput;
@@ -535,6 +538,23 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 		setPageText(index, Messages.JrxmlEditor_preview);
 
 		xmlEditor.getDocumentProvider().addElementStateListener(new StateListener());
+		
+		/* JSS has the function to disable the automatic run when entering in the
+		 *  Preview editor with the shift key pressed. Typically this used the method
+	 	 *  JasperReportsPlugin.isPressed(SWT.SHIFT) to know if shift was pressed. This
+		 *  however can't work anymore since the tab changing made the app loose the focus
+		 *  and this cancel the keyboard keys press map. To avoid to loose this every time
+		 *  a tab is changed it is check if the shift key was pressed and the method on
+		 *  the preview editor to enable or disable the run is called
+		 */
+		((CTabFolder)getContainer()).addMouseListener(new MouseAdapter() {
+			
+			@Override
+			public void mouseDown(MouseEvent e) {
+				previewEditor.setRunWhenInitilizing(!((e.stateMask & SWT.SHIFT) != 0));
+			}
+			
+		});
 	}
 
 	/**
@@ -1092,22 +1112,19 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 
 		@Override
 		public void runReport(com.jaspersoft.studio.data.DataAdapterDescriptor myDataAdapterDesc) {
-			boolean shiftPressed = JasperReportsPlugin.isPressed(SWT.SHIFT);
-			if (!shiftPressed) {
-				JasperDesign jasperDesign = getJasperDesign();
-				if (myDataAdapterDesc != null) {
-					String oldp = jasperDesign.getProperty(DataQueryAdapters.DEFAULT_DATAADAPTER);
-					if (oldp == null || (oldp != null && !oldp.equals(myDataAdapterDesc.getName()))) {
-						getMReport().putParameter(DataQueryAdapters.DEFAULT_DATAADAPTER, myDataAdapterDesc);
-						jasperDesign.setProperty(DataQueryAdapters.DEFAULT_DATAADAPTER, myDataAdapterDesc.getName());
-						setDirty(true);
-					}
-				} else {
-					jasperDesign.removeProperty(DataQueryAdapters.DEFAULT_DATAADAPTER);
-					getMReport().removeParameter(DataQueryAdapters.DEFAULT_DATAADAPTER);
+			JasperDesign jasperDesign = getJasperDesign();
+			if (myDataAdapterDesc != null) {
+				String oldp = jasperDesign.getProperty(DataQueryAdapters.DEFAULT_DATAADAPTER);
+				if (oldp == null || (oldp != null && !oldp.equals(myDataAdapterDesc.getName()))) {
+					getMReport().putParameter(DataQueryAdapters.DEFAULT_DATAADAPTER, myDataAdapterDesc);
+					jasperDesign.setProperty(DataQueryAdapters.DEFAULT_DATAADAPTER, myDataAdapterDesc.getName());
+					setDirty(true);
 				}
-				super.runReport(myDataAdapterDesc);
+			} else {
+				jasperDesign.removeProperty(DataQueryAdapters.DEFAULT_DATAADAPTER);
+				getMReport().removeParameter(DataQueryAdapters.DEFAULT_DATAADAPTER);
 			}
+			super.runReport(myDataAdapterDesc);
 		}
 
 		/**
@@ -1139,5 +1156,4 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 	protected abstract void createDesignEditorPage() throws PartInitException;
 
 	protected abstract EditorPart getDesignEditor();
-
 }
