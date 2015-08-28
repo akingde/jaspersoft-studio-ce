@@ -82,6 +82,12 @@ Section -Post
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "URLInfoAbout" "${PRODUCT_WEB_SITE}"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "Publisher" "${PRODUCT_PUBLISHER}"
   !insertmacro APP_ASSOCIATE "jrxml" "JaspersoftStudio.Jrxml" "Jrxml source file" "$INSTDIR\jaspersoftstudio.ico,0" "Open with ${PRODUCT_NAME}" "$INSTDIR\${SHORT_PRODUCT_NAME}.exe --launcher.openFile $\"%1$\""
+  !insertmacro APP_ASSOCIATE "jrctx" "JaspersoftStudio.Jrctx" "Jrctx source file" "$INSTDIR\jaspersoftstudio.ico,0" "Open with ${PRODUCT_NAME}" "$INSTDIR\${SHORT_PRODUCT_NAME}.exe --launcher.openFile $\"%1$\""
+  !insertmacro APP_ASSOCIATE "jrtx" "JaspersoftStudio.Jrtx" "Jrtx source file" "$INSTDIR\jaspersoftstudio.ico,0" "Open with ${PRODUCT_NAME}" "$INSTDIR\${SHORT_PRODUCT_NAME}.exe --launcher.openFile $\"%1$\""
+  !insertmacro APP_ASSOCIATE "jasper" "JaspersoftStudio.Jasper" "Jasper source file" "$INSTDIR\jaspersoftstudio.ico,0" "Open with ${PRODUCT_NAME}" "$INSTDIR\${SHORT_PRODUCT_NAME}.exe --launcher.openFile $\"%1$\""
+  !insertmacro APP_ASSOCIATE "jrprint" "JaspersoftStudio.Jrprint" "Jrprint source file" "$INSTDIR\jaspersoftstudio.ico,0" "Open with ${PRODUCT_NAME}" "$INSTDIR\${SHORT_PRODUCT_NAME}.exe --launcher.openFile $\"%1$\""
+  !insertmacro APP_ASSOCIATE "jrpxml" "JaspersoftStudio.Jrpxml" "Jrpxml source file" "$INSTDIR\jaspersoftstudio.ico,0" "Open with ${PRODUCT_NAME}" "$INSTDIR\${SHORT_PRODUCT_NAME}.exe --launcher.openFile $\"%1$\""
+  !insertmacro APP_ASSOCIATE "jssce" "JaspersoftStudio.Jssce" "Jssce source file" "$INSTDIR\jaspersoftstudio.ico,0" "Open with ${PRODUCT_NAME}" "$INSTDIR\${SHORT_PRODUCT_NAME}.exe --launcher.openFile $\"%1$\""
   AccessControl::GrantOnFile "$INSTDIR\${SHORT_PRODUCT_NAME}.ini" "(S-1-5-32-545)" "GenericRead + GenericExecute + GenericWrite"
   AccessControl::GrantOnFile "$INSTDIR\dropins" "(S-1-5-32-545)" "GenericRead + GenericExecute + GenericWrite"
 SectionEnd
@@ -114,7 +120,13 @@ Section Uninstall
   Delete "$DESKTOP\${PRODUCT_NAME}-${PRODUCT_VERSION}.lnk"
   Delete "$SMPROGRAMS\${ICONS_GROUP}\${PRODUCT_NAME}-${PRODUCT_VERSION}.lnk"
   !insertmacro APP_UNASSOCIATE "jrxml" "JaspersoftStudio.Jrxml"
-
+  !insertmacro APP_UNASSOCIATE "jrctx" "JaspersoftStudio.Jrctx"
+  !insertmacro APP_UNASSOCIATE "jrtx" "JaspersoftStudio.Jrtx"
+  !insertmacro APP_UNASSOCIATE "jasper" "JaspersoftStudio.Jasper"
+  !insertmacro APP_UNASSOCIATE "jrprint" "JaspersoftStudio.Jrprint"
+  !insertmacro APP_UNASSOCIATE "jrpxml" "JaspersoftStudio.Jrpxml"
+  !insertmacro APP_UNASSOCIATE "jssce" "JaspersoftStudio.Jssce"
+  
   RMDir "$SMPROGRAMS\${ICONS_GROUP}"
   RMDir "$SMPROGRAMS\TIBCO"
 
