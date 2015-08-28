@@ -15,6 +15,7 @@ package com.jaspersoft.studio.server.publish.wizard.page;
 import java.util.List;
 
 import net.sf.jasperreports.engine.design.JRDesignExpression;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.action.IMenuListener;
@@ -43,13 +44,17 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.wb.swt.ResourceManager;
 
+import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
+import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionCellEditor;
 import com.jaspersoft.studio.server.Activator;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.AFileResource;
 import com.jaspersoft.studio.server.model.AMJrxmlContainer;
 import com.jaspersoft.studio.server.model.AMResource;
+import com.jaspersoft.studio.server.model.MInputControl;
+import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.publish.OverwriteEnum;
 import com.jaspersoft.studio.server.publish.PublishOptions;
 import com.jaspersoft.studio.server.publish.PublishUtil;
@@ -419,6 +424,26 @@ public class ResourcesPage extends JSSHelpWizardPage {
 					continue;
 				r.getPublishOptions().setOverwrite(OverwriteEnum.OVERWRITE);
 			}
+		else {
+			if (pres instanceof MReportUnit && !pres.getValue().getIsNew()) {
+				for (ResourceDescriptor n : pres.getValue().getChildren()) {
+					if (n.getWsType() != null
+							&& n.getWsType().equals(
+									ResourceDescriptor.TYPE_INPUT_CONTROL)) {
+						String icname = n.getName();
+						for (AMResource r : res) {
+							if (r instanceof MInputControl
+									&& r.getValue().getName().equals(icname)) {
+								r.getPublishOptions().setOverwrite(
+										OverwriteEnum.IGNORE);
+								break;
+							}
+						}
+					}
+				}
+				// let's look and make a diff
+			}
+		}
 		tableViewer.setInput(res);
 		tableViewer.refresh();
 	}

@@ -47,8 +47,8 @@ public class FileSelectionPage extends JSSHelpWizardPage {
 
 	public FileSelectionPage(JasperReportsConfiguration jConfig) {
 		super(PAGE_NAME);
-		setTitle("File Selection");
-		setDescription("Select a file.");
+		setTitle(com.jaspersoft.studio.server.messages.Messages.FileSelectionPage_0);
+		setDescription(com.jaspersoft.studio.server.messages.Messages.FileSelectionPage_1);
 	}
 
 	/**

@@ -38,6 +38,7 @@ public class Messages extends NLS {
 	public static String AResourcePage_parentfolder;
 	public static String AResourcePage_title;
 	public static String AResourcePage_type;
+	public static String common_browse;
 	public static String CreateServerAction_desc;
 	public static String CreateServerAction_name;
 	public static String CreateServerAction_title;
@@ -73,6 +74,8 @@ public class Messages extends NLS {
 	public static String ExportMetadataAction_0;
 	public static String ExportMetadataAction_1;
 	public static String ExportMetadataWizard_0;
+	public static String FileSelectionPage_0;
+	public static String FileSelectionPage_1;
 	public static String FindReportUnit_jobname;
 	public static String FindResourceAction_0;
 	public static String FindResourceAction_1;
@@ -316,6 +319,7 @@ public class Messages extends NLS {
 	public static String ValidationUtils_NameEmptyErr;
 	public static String ValidationUtils_NameInvalidCharsErr;
 	public static String ValidationUtils_NameTooLongErr;
+	public static String ResourceCellEditor_open_resource;
 	public static String ResourceDescriptorPage_description;
 	public static String ResourceDescriptorPage_id;
 	public static String ResourceDescriptorPage_title;
@@ -341,6 +345,8 @@ public class Messages extends NLS {
 	public static String RDJrxmlPage_title;
 	public static String RDStyleTemplatePage_title;
 	public static String RDXmlFile_title;
+	public static String RFileLocationPage_0;
+	public static String RFileLocationPage_5;
 	public static String RunReportUnitAction_1;
 	public static String RunReportUnitAction_2;
 	public static String RunReportUnitAction_3;

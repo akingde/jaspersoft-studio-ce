@@ -84,7 +84,7 @@ public class RFileLocationPage extends JSSHelpWizardPage {
 	public RFileLocationPage(JasperReportsConfiguration jConfig) {
 		super("serverfilepublish"); //$NON-NLS-1$
 		setTitle(Messages.RUnitLocationPage_title);
-		setDescription("Select JasperReports Server and location where file will be published");
+		setDescription(Messages.RFileLocationPage_0);
 		this.jConfig = jConfig;
 	}
 
@@ -196,7 +196,7 @@ public class RFileLocationPage extends JSSHelpWizardPage {
 					if (canSuggestID) {
 						ruID.setText(rtext);
 						ru.setName(IDStringValidator.safeChar(rtext));
-						ru.setUriString(ru.getParentFolder() + "/" + ru.getName());
+						ru.setUriString(ru.getParentFolder() + "/" + ru.getName()); //$NON-NLS-1$
 					}
 				}
 				isRefresh = false;
@@ -221,7 +221,7 @@ public class RFileLocationPage extends JSSHelpWizardPage {
 				if (validationError == null) {
 					ResourceDescriptor ru = getNewRunit().getValue();
 					ru.setName(rtext);
-					ru.setUriString(ru.getParentFolder() + "/" + ru.getName());
+					ru.setUriString(ru.getParentFolder() + "/" + ru.getName()); //$NON-NLS-1$
 				}
 				if (!isFillingInput && validationError == null) {
 					canSuggestID = false;
@@ -356,13 +356,13 @@ public class RFileLocationPage extends JSSHelpWizardPage {
 			MReportUnit pfolder = (MReportUnit) obj;
 			fileRes.setParent(pfolder, -1);
 			ResourceDescriptor rd = fileRes.getValue();
-			rd.setUriString(pfolder.getValue().getUriString() + "/" + rd.getName());
+			rd.setUriString(pfolder.getValue().getUriString() + "/" + rd.getName()); //$NON-NLS-1$
 		} else if (obj instanceof MFolder) {
 			fileRes = getNewRunit();
 			MFolder pfolder = (MFolder) obj;
 			fileRes.setParent(pfolder, -1);
 			ResourceDescriptor rd = fileRes.getValue();
-			rd.setUriString(pfolder.getValue().getUriString() + "/" + rd.getName());
+			rd.setUriString(pfolder.getValue().getUriString() + "/" + rd.getName()); //$NON-NLS-1$
 		} else if (obj instanceof AFileResource)
 			fileRes = (AFileResource) obj;
 		else
@@ -401,14 +401,14 @@ public class RFileLocationPage extends JSSHelpWizardPage {
 
 				@Override
 				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-					monitor.beginTask("Looking for resource", IProgressMonitor.UNKNOWN);
+					monitor.beginTask(Messages.RFileLocationPage_5, IProgressMonitor.UNKNOWN);
 					try {
 						List<String[]> paths = PublishUtil.loadPath(monitor, file);
 						String suri = null;
 						String spath = null;
 						String suser = null;
 						for (String[] p : paths) {
-							if (p[0].startsWith("JRSUSER."))
+							if (p[0].startsWith("JRSUSER.")) //$NON-NLS-1$
 								suser = p[1];
 							else {
 								suri = p[0];
@@ -420,7 +420,7 @@ public class RFileLocationPage extends JSSHelpWizardPage {
 							for (INode n : servers.getChildren()) {
 								if (n instanceof MServerProfile && ((MServerProfile) n).getValue().getUrl().equals(suri)) {
 									if (suser != null) {
-										String[] usr = suser.split("\\|");
+										String[] usr = suser.split("\\|"); //$NON-NLS-1$
 										if (!((MServerProfile) n).getValue().getUser().equals(usr[0]))
 											continue;
 										if (usr.length > 1 && !((MServerProfile) n).getValue().getOrganisation().equals(usr[1]))
