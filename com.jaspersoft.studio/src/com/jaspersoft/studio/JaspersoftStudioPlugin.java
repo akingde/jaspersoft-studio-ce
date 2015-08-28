@@ -74,7 +74,7 @@ public class JaspersoftStudioPlugin extends AbstractJRUIPlugin {
 	/**
 	 * The update manager used to handle the usage statistics for the current instance
 	 */
-	private UsageManager manager = new UsageManager();
+	private UsageManager manager;
 	
 	/**
 	 * Gets the single instance of JaspersoftStudioPlugin.
@@ -111,6 +111,9 @@ public class JaspersoftStudioPlugin extends AbstractJRUIPlugin {
 		PreferencesUtils.storeJasperReportsProperty("net.sf.jasperreports.compiler.classpath", Misc.nvl(defJRProperty)); //$NON-NLS-1$
 		defJRProperty =  DefaultJasperReportsContext.getInstance().getProperty("net.sf.jasperreports.compiler.temp.dir"); //$NON-NLS-1$
 		PreferencesUtils.storeJasperReportsProperty("net.sf.jasperreports.compiler.temp.dir", Misc.nvl(defJRProperty)); //$NON-NLS-1$
+
+		// Create statistics manager
+		manager = new UsageManager();
 	}
 
 	/**
