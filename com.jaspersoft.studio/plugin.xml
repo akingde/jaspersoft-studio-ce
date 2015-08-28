@@ -113,7 +113,7 @@
             class="com.jaspersoft.studio.editor.SimpleJRXMLEditor"
             contributorClass="com.jaspersoft.studio.editor.JrxmlEditorContributor"
             default="true"
-            extensions="jrtool"
+            extensions="jssce"
             icon="icons/jrxml_icon.png"
             id="com.jaspersoft.studio.editor.SimpleJRXMLEditor"
             name="JasperReports Tool Designer">

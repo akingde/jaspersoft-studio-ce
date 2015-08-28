@@ -160,7 +160,7 @@ public class CompositeElementManager {
 	/**
 	 * The default extension of the file where the content of the composite element is saved
 	 */
-	public static final String COMPOSITE_ELEMENT_EXTENSION = ".jrtool"; //$NON-NLS-1$
+	public static final String COMPOSITE_ELEMENT_EXTENSION = ".jssce"; //$NON-NLS-1$
 	
 	/**
 	 * List of the available composite elements
@@ -168,7 +168,7 @@ public class CompositeElementManager {
 	private List<MCompositeElement> availableElements = new ArrayList<MCompositeElement>();
 	
 	/**
-	 * Map to keep cached a composite element definition once its jrtool is loaded. The key is 
+	 * Map to keep cached a composite element definition once its jssce file is loaded. The key is 
 	 * the path of the element definition, the value is a band that contains all its components
 	 */
 	private HashMap<String, JRBand> cachedElementssMap = new HashMap<String, JRBand>();
