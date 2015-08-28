@@ -480,11 +480,18 @@ public class CompositeElementManager {
 		File storage = ConfigurationManager.getStorage(ELEMENTS_STORAGE_KEY);	
 		try{
 			String oldName = oldElement.getName();
-			File oldIconSmall = new File(oldElement.getIconPathSmall()); //$NON-NLS-1$
-			oldIconSmall.delete();
-			File oldIconBig = new File(oldElement.getIconPathBig()); //$NON-NLS-1$
-			oldIconBig.delete();
 			
+			//delete the old images if present
+			if (oldElement.getIconPathSmall() != null){
+				File oldIconSmall = new File(oldElement.getIconPathSmall()); //$NON-NLS-1$
+				oldIconSmall.delete();
+			}
+			
+			if (oldElement.getIconPathBig() != null){
+				File oldIconBig = new File(oldElement.getIconPathBig()); //$NON-NLS-1$
+				oldIconBig.delete();
+			}
+				
 			//Write the report on disk
 			String oldReportName = oldName + COMPOSITE_ELEMENT_EXTENSION;
 			String newReportName = newName + COMPOSITE_ELEMENT_EXTENSION;

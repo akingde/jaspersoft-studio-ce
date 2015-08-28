@@ -173,7 +173,9 @@ public class CompositeElementDefinitionWizardPage extends JSSHelpWizardPage {
 			imageContainerLayout.marginWidth = 0;
 			imageContainer.setLayout(imageContainerLayout);
 			iconPathText = new Text(imageContainer, SWT.BORDER);
-			iconPathText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+			GridData iconPathData = new GridData(GridData.FILL_HORIZONTAL);
+			iconPathData.widthHint = 200;
+			iconPathText.setLayoutData(iconPathData);
 			iconPreview = new Label(imageContainer, SWT.NONE);
 			GridData previewData = new GridData();
 			previewData.exclude = true;
@@ -237,8 +239,8 @@ public class CompositeElementDefinitionWizardPage extends JSSHelpWizardPage {
 			entries.add(group.getName());
 		}
 		palettePosition.setItems(entries.toArray(new String[entries.size()]));
-		groupID = groups.get(0).getId();
-		palettePosition.select(0);
+		groupID = groups.get(1).getId();
+		palettePosition.select(1);
 		
 		//Add the listeners
 		nameText.addModifyListener(widgetsModfied);
