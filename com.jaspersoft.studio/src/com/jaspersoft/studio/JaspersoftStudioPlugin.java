@@ -89,6 +89,49 @@ public class JaspersoftStudioPlugin extends AbstractJRUIPlugin {
 	@Override
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
+	}
+
+	/**
+	 * The constructor.
+	 */
+	public JaspersoftStudioPlugin() {
+		plugin = this;
+	}
+	
+	/**
+	 * Return the usage manager defined in the current instance
+	 * 
+	 * @return a not null usage manager
+	 */
+	public synchronized UsageManager getUsageManager(){
+		if(manager==null) {
+			manager = new UsageManager();
+		}
+		return manager;
+	}
+
+	/**
+	 * This method is called when the plug-in is stopped.
+	 * 
+	 * @param context
+	 *          the context
+	 * @throws Exception
+	 *           the exception
+	 */
+	@Override
+	public void stop(BundleContext context) throws Exception {
+		//Must stop the manager of the statistics before to set the plugin instance to null
+		//since the usage manager uses the plugin instance to write on the logger
+		if(manager!=null){
+			manager.stop();
+		}
+		plugin = null;
+		super.stop(context);
+	}
+
+	@Override
+	protected void postStartOperations() {
+		super.postStartOperations();
 
 		// Sets the branding information
 		BrandingInfo info = new BrandingInfo();
@@ -111,47 +154,6 @@ public class JaspersoftStudioPlugin extends AbstractJRUIPlugin {
 		PreferencesUtils.storeJasperReportsProperty("net.sf.jasperreports.compiler.classpath", Misc.nvl(defJRProperty)); //$NON-NLS-1$
 		defJRProperty =  DefaultJasperReportsContext.getInstance().getProperty("net.sf.jasperreports.compiler.temp.dir"); //$NON-NLS-1$
 		PreferencesUtils.storeJasperReportsProperty("net.sf.jasperreports.compiler.temp.dir", Misc.nvl(defJRProperty)); //$NON-NLS-1$
-
-		// Create statistics manager
-		manager = new UsageManager();
-	}
-
-	/**
-	 * The constructor.
-	 */
-	public JaspersoftStudioPlugin() {
-		plugin = this;
-	}
-	
-	/**
-	 * Return the usage manager defined in the current instance
-	 * 
-	 * @return a not null usage manager
-	 */
-	public UsageManager getUsageManager(){
-		return manager;
-	}
-
-	/**
-	 * This method is called when the plug-in is stopped.
-	 * 
-	 * @param context
-	 *          the context
-	 * @throws Exception
-	 *           the exception
-	 */
-	@Override
-	public void stop(BundleContext context) throws Exception {
-		//Must stop the manager of the statistics before to set the plugin instance to null
-		//since the usage manager uses the plugin instance to write on the logger
-		manager.stop();
-		plugin = null;
-		super.stop(context);
-	}
-
-	@Override
-	protected void postStartOperations() {
-		super.postStartOperations();
 
 		// Initialize the extension manager
 		getExtensionManager();
@@ -196,7 +198,7 @@ public class JaspersoftStudioPlugin extends AbstractJRUIPlugin {
 		}
 		//Start the usage statistics plugin, among the other operations it will
 		//check for new versions
-		manager.start();
+		getUsageManager().start();
 	}
 
 	public static ExtensionManager getExtensionManager() {
