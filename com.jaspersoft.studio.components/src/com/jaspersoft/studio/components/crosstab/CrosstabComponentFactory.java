@@ -76,6 +76,7 @@ import com.jaspersoft.studio.components.crosstab.model.columngroup.command.Creat
 import com.jaspersoft.studio.components.crosstab.model.columngroup.command.DeleteColumnGroupCommand;
 import com.jaspersoft.studio.components.crosstab.model.columngroup.command.ReorderColumnGroupCommand;
 import com.jaspersoft.studio.components.crosstab.model.crosstab.command.CreateCrosstabCommand;
+import com.jaspersoft.studio.components.crosstab.model.crosstab.command.DeleteCrosstabCommand;
 import com.jaspersoft.studio.components.crosstab.model.header.MCrosstabHeader;
 import com.jaspersoft.studio.components.crosstab.model.header.MCrosstabHeaderCell;
 import com.jaspersoft.studio.components.crosstab.model.header.action.CreateCrosstabHeaderAction;
@@ -504,7 +505,7 @@ public class CrosstabComponentFactory implements IComponentFactory {
 
 	public Command getDeleteCommand(ANode parent, ANode child) {
 		if (child instanceof MCrosstab)
-			return null;
+			return new DeleteCrosstabCommand((MCrosstab)child);
 		if (parent instanceof MPage)
 			parent = child.getParent();
 		if (child instanceof MParameter) {

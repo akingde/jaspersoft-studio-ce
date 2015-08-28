@@ -38,7 +38,7 @@ import com.jaspersoft.studio.model.MGraphicElement;
  * @author Chicu Veaceslav
  */
 public class DeleteElementCommand extends Command {
-	private JasperDesign jDesign;
+	protected JasperDesign jDesign;
 	/** The jr group. */
 	private JRElementGroup jrGroup;
 

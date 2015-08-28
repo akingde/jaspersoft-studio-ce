@@ -104,6 +104,7 @@ import com.jaspersoft.studio.components.table.model.columngroup.command.CreateCo
 import com.jaspersoft.studio.components.table.model.columngroup.command.CreateColumnGroupFromGroupCommand;
 import com.jaspersoft.studio.components.table.model.columngroup.command.ReorderColumnGroupCommand;
 import com.jaspersoft.studio.components.table.model.table.command.CreateTableCommand;
+import com.jaspersoft.studio.components.table.model.table.command.DeleteTableCommand;
 import com.jaspersoft.studio.components.table.part.TableCellEditPart;
 import com.jaspersoft.studio.components.table.part.TableEditPart;
 import com.jaspersoft.studio.components.table.part.TablePageEditPart;
@@ -655,7 +656,7 @@ public class TableComponentFactory implements IComponentFactory {
 
 	public Command getDeleteCommand(ANode parent, ANode child) {
 		if (child instanceof MTable)
-			return null;
+			return new DeleteTableCommand((MTable)child);
 		if (parent instanceof MPage)
 			parent = child.getParent();
 		if (child instanceof MGraphicElement && parent instanceof MCell
