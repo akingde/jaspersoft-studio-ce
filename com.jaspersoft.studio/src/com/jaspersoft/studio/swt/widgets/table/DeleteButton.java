@@ -15,6 +15,8 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyAdapter;
+import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -70,13 +72,20 @@ public class DeleteButton {
 		delB = new Button(composite, SWT.PUSH);
 		delB.setText(Messages.common_delete);
 		delB.setLayoutData(new GridData(GridData.FILL_HORIZONTAL | GridData.VERTICAL_ALIGN_BEGINNING));
-		delB.addSelectionListener(new DeleteListener(tableViewer));
+		final DeleteListener listener = new DeleteListener(tableViewer);
+		delB.addSelectionListener(listener);
 		setEnabledState(tableViewer);
 		tableViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
 				setEnabledState(tableViewer);
+			}
+		});
+		tableViewer.getTable().addKeyListener(new KeyAdapter() {
+			public void keyReleased(KeyEvent e) {
+				if (delB.isEnabled() && e.keyCode == SWT.DEL)
+					listener.widgetSelected(null);
 			}
 		});
 	}
