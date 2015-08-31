@@ -42,6 +42,7 @@ import com.jaspersoft.studio.editor.palette.JDPaletteFactory;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.plugin.ExtensionManager;
 import com.jaspersoft.studio.plugin.PaletteGroup;
+import com.jaspersoft.studio.preferences.util.PreferencesUtils;
 import com.jaspersoft.studio.utils.ImageUtils;
 import com.jaspersoft.studio.wizards.ContextHelpIDs;
 import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
@@ -54,6 +55,8 @@ import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
  */
 public class CompositeElementDefinitionWizardPage extends JSSHelpWizardPage {
 
+	protected static final String DEFAULT_PALETTE = "defaultCustomElementsPalette";
+	
 	/**
 	 * The unique name of the new composite element
 	 */
@@ -141,6 +144,7 @@ public class CompositeElementDefinitionWizardPage extends JSSHelpWizardPage {
 		
 		PaletteGroup selectedGroup = groups.get(palettePosition.getSelectionIndex());
 		groupID = selectedGroup.getId();
+		PreferencesUtils.getJaspersoftStudioPrefStore().setValue(DEFAULT_PALETTE, groupID);
 		
 		if (!iconPath.equals(iconPathText.getText())){
 			iconPath = iconPathText.getText();
@@ -173,9 +177,7 @@ public class CompositeElementDefinitionWizardPage extends JSSHelpWizardPage {
 			imageContainerLayout.marginWidth = 0;
 			imageContainer.setLayout(imageContainerLayout);
 			iconPathText = new Text(imageContainer, SWT.BORDER);
-			GridData iconPathData = new GridData(GridData.FILL_HORIZONTAL);
-			iconPathData.widthHint = 200;
-			iconPathText.setLayoutData(iconPathData);
+			iconPathText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 			iconPreview = new Label(imageContainer, SWT.NONE);
 			GridData previewData = new GridData();
 			previewData.exclude = true;
@@ -239,8 +241,22 @@ public class CompositeElementDefinitionWizardPage extends JSSHelpWizardPage {
 			entries.add(group.getName());
 		}
 		palettePosition.setItems(entries.toArray(new String[entries.size()]));
-		groupID = groups.get(1).getId();
-		palettePosition.select(1);
+		
+		//Search the default selection for the palette area
+		String defaultPalette = PreferencesUtils.getJaspersoftStudioPrefStore().getString(DEFAULT_PALETTE);
+		int initialIndex = 1;
+		if (defaultPalette != null){
+			for(int i = 0; i<groups.size(); i++){
+				PaletteGroup group = groups.get(i);
+				if (group.getId().equals(defaultPalette)){
+					initialIndex = i;
+					break;
+				}
+			}
+		}
+		
+		groupID = groups.get(initialIndex).getId();
+		palettePosition.select(initialIndex);
 		
 		//Add the listeners
 		nameText.addModifyListener(widgetsModfied);
