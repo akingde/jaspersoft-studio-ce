@@ -15,13 +15,9 @@ package com.jaspersoft.studio.model.dataset;
 import net.sf.jasperreports.data.DataAdapterParameterContributorFactory;
 import net.sf.jasperreports.engine.JRDataset;
 
-import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.wizard.Wizard;
 
 import com.jaspersoft.studio.model.MReport;
-import com.jaspersoft.studio.property.SetPropertyValueCommand;
-import com.jaspersoft.studio.property.section.AbstractSection;
-import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /**
@@ -49,10 +45,8 @@ public class SelectDefaultDatasetWizard extends Wizard {
 	 */
 	private SelectDefaultDatasetPage page0;
 	
-	/**
-	 * The section where the command is executed
-	 */
-	private AbstractSection section;
+	
+	private String newValue = null;
 	
 	/**
 	 * Create the wizard 
@@ -61,10 +55,9 @@ public class SelectDefaultDatasetWizard extends Wizard {
 	 * must be not null
 	 * @param section The section where the command to set the property is executed, must be not null
 	 */
-	public SelectDefaultDatasetWizard(MReport node, AbstractSection section){
+	public SelectDefaultDatasetWizard(MReport node){
 		dataset = node.getJasperDesign().getMainDataset(); 
 		jConfig = node.getJasperConfiguration();
-		this.section = section;
 	}
 	
 	/**
@@ -74,15 +67,15 @@ public class SelectDefaultDatasetWizard extends Wizard {
 	 * must be not null
 	 * @param section The section where the command to set the property is executed, must be not null
 	 */
-	public SelectDefaultDatasetWizard(MDataset node, AbstractSection section){
+	public SelectDefaultDatasetWizard(MDataset node){
 		dataset = node.getValue();
 		jConfig = node.getJasperConfiguration();
-		this.section = section;
 	}
 	
 	@Override
 	public void addPages() {
 		String location = dataset.getPropertiesMap().getProperty(DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION);
+		newValue = location;
 		page0 = new SelectDefaultDatasetPage(jConfig, location);
 		addPage(page0);
 	}
@@ -92,15 +85,11 @@ public class SelectDefaultDatasetWizard extends Wizard {
 	 */
 	@Override
 	public boolean performFinish() {
-		String result = page0.getDataAdapterPath();
-		String location = dataset.getPropertiesMap().getProperty(DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION);
-		if (!ModelUtils.safeEquals(location, result)){
-			SetPropertyValueCommand newCommand = new SetPropertyValueCommand(dataset.getPropertiesMap(), 
-																																			 DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION, 
-																																			 result);
-			CommandStack cs = section.getEditDomain().getCommandStack();;
-			cs.execute(newCommand);
-		}
+		newValue = page0.getDataAdapterPath();
 		return true;
+	}
+	
+	public String getValue(){
+		return newValue;
 	}
 }

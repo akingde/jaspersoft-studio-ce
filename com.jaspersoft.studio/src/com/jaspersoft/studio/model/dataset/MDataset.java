@@ -39,14 +39,13 @@ import com.jaspersoft.studio.model.parameter.MParameters;
 import com.jaspersoft.studio.model.sortfield.MSortFields;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
-import com.jaspersoft.studio.property.descriptor.ButtonsPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptor.DefaultDatasetButton;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.classname.NClassTypePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.jrQuery.JRQueryButtonPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.properties.JPropertiesPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.resource.DefaultDatasetPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.resource.ResourceBundlePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSValidatedTextPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
@@ -242,11 +241,11 @@ public class MDataset extends APropertyNode implements ICopyable {
 				WhenResourceMissingTypeEnum.EMPTY, NullEnum.NOTNULL);
 		whenResMissTypeD.setDescription(Messages.MDataset_when_resource_missing_type_description);
 		desc.add(whenResMissTypeD);
-		
-		ButtonsPropertyDescriptor daButton = new ButtonsPropertyDescriptor(DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION, DefaultDatasetButton.class);
-		daButton.setDescription(Messages.MDataset_defaultDATooltip);
-		desc.add(daButton);
 
+		DefaultDatasetPropertyDescriptor defaultDatasetDescriptor = new DefaultDatasetPropertyDescriptor(DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION, "Default Data Adapter");
+		defaultDatasetDescriptor.setDescription(Messages.MDataset_defaultDATooltip);
+		desc.add(defaultDatasetDescriptor);
+		
 		JRExpressionPropertyDescriptor filterExpression = new JRExpressionPropertyDescriptor(
 				JRDesignDataset.PROPERTY_FILTER_EXPRESSION, Messages.MDataset_filter_expression);
 		filterExpression.setDescription(Messages.MDataset_filter_expression_description);
@@ -295,11 +294,16 @@ public class MDataset extends APropertyNode implements ICopyable {
 			JRPropertiesMap pmap = jrDataset.getPropertiesMap().cloneProperties();
 			return pmap;
 		}
-		if (id.equals(JRDesignDataset.PROPERTY_WHEN_RESOURCE_MISSING_TYPE))
+		if (id.equals(JRDesignDataset.PROPERTY_WHEN_RESOURCE_MISSING_TYPE)){
 			return whenResMissTypeD.getIntValue(jrDataset.getWhenResourceMissingTypeValue());
-		if (id.equals(JRDesignDataset.PROPERTY_RESOURCE_BUNDLE))
+		}
+		if (id.equals(JRDesignDataset.PROPERTY_RESOURCE_BUNDLE)){
 			return jrDataset.getResourceBundle();
-
+		}
+		if (id.equals(DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION)){
+			String location = jrDataset.getPropertiesMap().getProperty(DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION);
+			return location;
+		}
 		return null;
 	}
 
@@ -351,9 +355,9 @@ public class MDataset extends APropertyNode implements ICopyable {
 			for (int i = 0; i < names.length; i++)
 				jrDataset.setProperty(names[i], v.getProperty(names[i]));
 			this.getPropertyChangeSupport().firePropertyChange(PROPERTY_MAP, false, true);
-		} else if (id.equals(JRDesignDataset.PROPERTY_WHEN_RESOURCE_MISSING_TYPE))
+		} else if (id.equals(JRDesignDataset.PROPERTY_WHEN_RESOURCE_MISSING_TYPE)){
 			jrDataset.setWhenResourceMissingType(whenResMissTypeD.getEnumValue(value));
-		else if (id.equals(JRDesignDataset.PROPERTY_QUERY)) {
+		} else if (id.equals(JRDesignDataset.PROPERTY_QUERY)) {
 			if (value instanceof MQuery) {
 				unsetChildListener(mQuery);
 				mQuery = (MQuery) value;
@@ -361,6 +365,13 @@ public class MDataset extends APropertyNode implements ICopyable {
 				JRDesignQuery jrQuery = (JRDesignQuery) mQuery.getValue();
 				jrDataset.setQuery(jrQuery);
 			}
+		} else if (id.equals(DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION)){
+			if (value == null || value.toString().trim().isEmpty()){
+				jrDataset.getPropertiesMap().removeProperty(DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION);
+			} else {
+				jrDataset.getPropertiesMap().setProperty(DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION, value.toString());
+			}
+			propertyChange(new PropertyChangeEvent(this, DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION, null, value));
 		}
 	}
 

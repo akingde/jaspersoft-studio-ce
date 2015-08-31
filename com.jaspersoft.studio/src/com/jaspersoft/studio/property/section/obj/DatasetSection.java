@@ -60,16 +60,14 @@ public class DatasetSection extends AbstractSection {
 
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		createWidget4Property(parent, JRDesignDataset.PROPERTY_RESOURCE_BUNDLE).getControl().setLayoutData(gd);
+		
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		createWidget4Property(parent, DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION).getControl().setLayoutData(gd);
 
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalAlignment = SWT.CENTER;
 		gd.horizontalSpan = 2;
 		createWidget4Property(parent, JRDesignDataset.PROPERTY_QUERY, false).getControl().setLayoutData(gd);
-		
-		gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalAlignment = SWT.CENTER;
-		gd.horizontalSpan = 2;
-		createWidget4Property(parent, DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION, false).getControl().setLayoutData(gd);
 	}
 	
 	@Override

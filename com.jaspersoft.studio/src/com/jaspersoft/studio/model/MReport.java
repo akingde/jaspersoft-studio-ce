@@ -18,6 +18,7 @@ import java.util.ListIterator;
 import java.util.Map;
 import java.util.StringTokenizer;
 
+import net.sf.jasperreports.data.DataAdapterParameterContributorFactory;
 import net.sf.jasperreports.engine.JRBand;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRDataset;
@@ -475,6 +476,11 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 				return false;
 			else
 				return Boolean.parseBoolean(value);
+		} 
+		if (id.equals(DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION)){
+			JRDataset dataset = jrDesign.getMainDataset();
+			String location = dataset.getPropertiesMap().getProperty(DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION);
+			return location;
 		}
 		return null;
 	}
@@ -567,6 +573,14 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 			jrDesign.getPropertiesMap().setProperty(JR_CREATE_BOOKMARKS, Boolean.toString((Boolean) value));
 			// Necessary event to made the properties view update correctly, removing the old map from the entry widget
 			this.getPropertyChangeSupport().firePropertyChange(MGraphicElement.PROPERTY_MAP, false, true);
+		} else if (id.equals(DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION)){
+			JRDataset dataset = jrDesign.getMainDataset();
+			if (value == null || value.toString().trim().isEmpty()){
+				dataset.getPropertiesMap().removeProperty(DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION);
+			} else {
+				dataset.getPropertiesMap().setProperty(DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION, value.toString());
+			}
+			propertyChange(new PropertyChangeEvent(this, DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION, null, value));
 		}
 	}
 

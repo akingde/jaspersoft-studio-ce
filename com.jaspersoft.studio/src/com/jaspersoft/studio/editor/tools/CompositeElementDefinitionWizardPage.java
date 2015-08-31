@@ -241,7 +241,7 @@ public class CompositeElementDefinitionWizardPage extends JSSHelpWizardPage {
 			entries.add(group.getName());
 		}
 		palettePosition.setItems(entries.toArray(new String[entries.size()]));
-		
+		new File("fdsdfswd").getAbsolutePath();
 		//Search the default selection for the palette area
 		String defaultPalette = PreferencesUtils.getJaspersoftStudioPrefStore().getString(DEFAULT_PALETTE);
 		int initialIndex = 1;

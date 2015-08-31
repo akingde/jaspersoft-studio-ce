@@ -22,7 +22,6 @@ import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -31,7 +30,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Group;
@@ -53,20 +51,17 @@ import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
 public class SelectDefaultDatasetPage extends JSSHelpWizardPage {
 	
 	// All widgets stuff
-	private Text txtResourcePath;
-	private Text txtFilesystemPath;
-	private Text txtURL;
+	private Text pathText;
+	private Button browseWorkspace;
+	private Button browseFilesystem;
 	private Button btnWorkspaceResource;
 	private Button btnAbsolutePath;
-	private Button btnNoDataSource;
+	//private Button btnNoDataSource;
 	private Button btnUrlRemote;
-	private StackLayout grpOptionsLayout;
-	private Composite cmpWorkspaceResourceSelection;
-	private Composite cmpFilesystemResourceSelection;
-	private Composite cmpNoDataAdapter;
-	private Composite cmpURL;
+	private Button btnCustom;
 	private Group grpOptions;
 	private String path = null;
+	private Label descriptionLabel;
 
 	private JasperReportsConfiguration jConfig;
 
@@ -110,7 +105,8 @@ public class SelectDefaultDatasetPage extends JSSHelpWizardPage {
 		return new String[] { Messages.SelectDefaultDatasetDialog_modeLabel, Messages.SelectDefaultDatasetDialog_workspaceOption,
 				Messages.SelectDefaultDatasetDialog_absoluteOption,
 				Messages.SelectDefaultDatasetDialog_urlOption,
-				Messages.SelectDefaultDatasetDialog_noDAOption};
+				Messages.SelectDefaultDatasetDialog_noDAOption,
+				"Custom Value"};
 	}
 
 	/**
@@ -135,8 +131,8 @@ public class SelectDefaultDatasetPage extends JSSHelpWizardPage {
 		btnWorkspaceResource.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				changeSelectionMode(cmpWorkspaceResourceSelection);
-				path = txtResourcePath.getText();
+				changeSelectionMode();
+				path = pathText.getText();
 				getWizard().getContainer().updateButtons();
 			}
 		});
@@ -146,8 +142,8 @@ public class SelectDefaultDatasetPage extends JSSHelpWizardPage {
 		btnAbsolutePath.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				changeSelectionMode(cmpFilesystemResourceSelection);
-				path = txtFilesystemPath.getText();
+				changeSelectionMode();
+				path = pathText.getText();
 				getWizard().getContainer().updateButtons();
 			}
 		});
@@ -157,14 +153,14 @@ public class SelectDefaultDatasetPage extends JSSHelpWizardPage {
 		btnUrlRemote.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				changeSelectionMode(cmpURL);
-				path = txtURL.getText();
+				changeSelectionMode();
+				path = pathText.getText();
 				getWizard().getContainer().updateButtons();
 			}
 		});
 		btnUrlRemote.setText(modesAndHeaderTitles[3]);
 
-		btnNoDataSource = new Button(grpSelectionMode, SWT.RADIO);
+		/*btnNoDataSource = new Button(grpSelectionMode, SWT.RADIO);
 		btnNoDataSource.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -173,29 +169,45 @@ public class SelectDefaultDatasetPage extends JSSHelpWizardPage {
 				getWizard().getContainer().updateButtons();
 			}
 		});
-		btnNoDataSource.setText(modesAndHeaderTitles[4]);
+		btnNoDataSource.setText(modesAndHeaderTitles[4]);*/
 
+		btnCustom = new Button(grpSelectionMode, SWT.RADIO);
+		btnCustom.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				changeSelectionMode();
+				path = pathText.getText();
+				getWizard().getContainer().updateButtons();
+			}
+		});
+		btnCustom.setText(modesAndHeaderTitles[5]);
+
+		
 		createOptionsPanel(container);
 		
 		//Initialize the path with the current value
 		if (path == null){
-			btnNoDataSource.setSelection(true);
-			changeSelectionMode(cmpNoDataAdapter);
+			btnCustom.setSelection(true);
+			changeSelectionMode();
 		} else {
+			pathText.setText(path);
 			File checkAbsolute = new File(path);
 			if (checkAbsolute.exists()){
 				btnAbsolutePath.setSelection(true);
-				txtFilesystemPath.setText(path);
-				changeSelectionMode(cmpFilesystemResourceSelection);
+				changeSelectionMode();
 			} else {
 				if (FileUtils.isValidURL(path)){
 					btnUrlRemote.setSelection(true);
-					txtURL.setText(path);
-					changeSelectionMode(cmpURL);
+					changeSelectionMode();
 				} else {
-					btnWorkspaceResource.setSelection(true);
-					txtResourcePath.setText(path);
-					changeSelectionMode(cmpWorkspaceResourceSelection);
+					IResource resource = ResourcesPlugin.getWorkspace().getRoot().findMember(path);
+					if (resource instanceof IFile && ((IFile)resource).exists()){
+						btnWorkspaceResource.setSelection(true);
+						changeSelectionMode();
+					} else {
+						btnCustom.setSelection(true);
+						changeSelectionMode();
+					}
 				}
 			}
 		}
@@ -208,119 +220,126 @@ public class SelectDefaultDatasetPage extends JSSHelpWizardPage {
 	 */
 	private void createOptionsPanel(Composite container) {
 		grpOptions = new Group(container, SWT.NONE);
-		grpOptions.setText(Messages.ImageSelectionDialog_OptionsGroupTitle);
-		grpOptionsLayout = new StackLayout();
-		grpOptions.setLayout(grpOptionsLayout);
+		grpOptions.setText("Value");
+		grpOptions.setLayout(new GridLayout(1,false));
 		grpOptions.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 2, 1));
-		createWSSelectionContainer();
-		createFSSelectionContainer();
-		createURLOptionsContainer();
-		createNoDataSourceContainer();
-	}
-
-	/**
-	 * Creates the composite container for the workspace Data Adapter selection.
-	 */
-	private void createWSSelectionContainer() {
-		cmpWorkspaceResourceSelection = new Composite(grpOptions, SWT.NONE);
-		cmpWorkspaceResourceSelection.setLayout(new GridLayout(2, false));
-
-		Label lblSelectDataAdapterFromWS = new Label(cmpWorkspaceResourceSelection, SWT.NONE);
-		lblSelectDataAdapterFromWS.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1));
-		lblSelectDataAdapterFromWS.setText(Messages.SelectDefaultDatasetDialog_workspaceLabel);
-
-		txtResourcePath = new Text(cmpWorkspaceResourceSelection, SWT.BORDER);
-		txtResourcePath.setEnabled(false);
-		txtResourcePath.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-
-		Button btnSelectWsRes = new Button(cmpWorkspaceResourceSelection, SWT.NONE);
-		btnSelectWsRes.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				selectDataAdapterFromWorkspace();
-			}
-		});
-		btnSelectWsRes.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-		btnSelectWsRes.setText(Messages.common_browse);
-	}
-
-	/**
-	 * Creates the composite container for the filesystem Data Adapter selection.
-	 */
-	private void createFSSelectionContainer() {
-		cmpFilesystemResourceSelection = new Composite(grpOptions, SWT.NONE);
-		cmpFilesystemResourceSelection.setLayout(new GridLayout(2, false));
-
-		Label lblSelectDataAdapterFromFilesystem = new Label(cmpFilesystemResourceSelection, SWT.NONE);
-		lblSelectDataAdapterFromFilesystem.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 2, 1));
-		lblSelectDataAdapterFromFilesystem.setText(Messages.SelectDefaultDatasetDialog_absoluteLabel);
-
-		txtFilesystemPath = new Text(cmpFilesystemResourceSelection, SWT.BORDER);
-		txtFilesystemPath.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		txtFilesystemPath.addModifyListener(new ModifyListener() {
+		
+		descriptionLabel = new Label(grpOptions, SWT.NONE);
+		descriptionLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		
+		Composite controlContainer = new Composite(grpOptions, SWT.NONE);
+		controlContainer.setLayout(new GridLayout(3,false));
+		controlContainer.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		
+		pathText = new Text(controlContainer, SWT.BORDER);
+		pathText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		pathText.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
 				textModified();
 			}
-		});
-
-		Button btnSelectFilesystemRes = new Button(cmpFilesystemResourceSelection, SWT.NONE);
-		btnSelectFilesystemRes.setText(Messages.common_browse);
-		btnSelectFilesystemRes.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				selectDataAdapterFromFilesystem();
-			}
-		});
-	}
-	
-	/**
-	 * Create the composite container for the URL Data Adapter selection.
-	 */
-	private void createURLOptionsContainer() {
-		cmpURL = new Composite(grpOptions, SWT.NONE);
-		cmpURL.setLayout(new GridLayout(1, false));
-
-		Label lblNewLabel = new Label(cmpURL, SWT.NONE);
-		lblNewLabel.setText(Messages.SelectDefaultDatasetDialog_urlLabel);
-
-		txtURL = new Text(cmpURL, SWT.BORDER);
-		txtURL.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		txtURL.addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(ModifyEvent e) {
-				textModified();
-			}
-		});
-	}
-	
-	private void textModified() {
-		if (btnAbsolutePath.getSelection()) {
-			// filesystem path...
-			String daPath = txtFilesystemPath.getText().trim();
-			// Change the standard separator with an universal one
-			path = daPath.replace(File.pathSeparatorChar, '/');
-		} else if (btnUrlRemote.getSelection()) {
-			// URL
-			path = txtURL.getText().trim();
-		}
-		getWizard().getContainer().updateButtons();
-	}
-	
-	/**
-	 * Creates the empty composite for no Data Adapter selection.
-	 */
-	private void createNoDataSourceContainer() {
-		cmpNoDataAdapter = new Composite(grpOptions, SWT.NONE);
+		}); 
+		
+		createWSSelectionContainer(controlContainer);
+		createFSSelectionContainer(controlContainer);
 	}
 
 	/**
 	 * When a new data adapter selection mode is selected, shows the dedicated options panel
 	 */
-	private void changeSelectionMode(Control newTopControl) {
-		// Change the top control for the options panel
-		grpOptionsLayout.topControl = newTopControl;
-		grpOptions.layout();
+	private void changeSelectionMode() {
+		if (btnAbsolutePath.getSelection()){
+			((GridData)browseFilesystem.getLayoutData()).exclude = false;
+			browseFilesystem.setVisible(true);
+			
+			((GridData)browseWorkspace.getLayoutData()).exclude = true;
+			browseWorkspace.setVisible(false);
+		} else if (btnWorkspaceResource.getSelection()){
+			((GridData)browseFilesystem.getLayoutData()).exclude = true;
+			browseFilesystem.setVisible(false);
+			
+			((GridData)browseWorkspace.getLayoutData()).exclude = false;
+			browseWorkspace.setVisible(true);
+		} else {
+			((GridData)browseFilesystem.getLayoutData()).exclude = true;
+			browseFilesystem.setVisible(false);
+			
+			((GridData)browseWorkspace.getLayoutData()).exclude = true;
+			browseWorkspace.setVisible(false);
+		}
+		
+		if (btnAbsolutePath.getSelection()){
+			descriptionLabel.setText(Messages.SelectDefaultDatasetDialog_absoluteLabel);
+		} else if (btnWorkspaceResource.getSelection()){
+			descriptionLabel.setText(Messages.SelectDefaultDatasetDialog_workspaceLabel);
+		} else if (btnUrlRemote.getSelection()){
+			descriptionLabel.setText(Messages.SelectDefaultDatasetDialog_urlLabel);
+		} else if (btnCustom.getSelection()){
+			descriptionLabel.setText("Insert the value that point to the Data Adapter");
+		}
+		grpOptions.layout(true, true);
+		getWizard().getContainer().updateButtons();
+	}
+	
+	
+	/**
+	 * Creates the composite container for the workspace Data Adapter selection.
+	 */
+	private void createWSSelectionContainer(Composite container) {
+
+		browseWorkspace = new Button(container, SWT.NONE);
+		browseWorkspace.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				selectDataAdapterFromWorkspace();
+			}
+		});
+		
+		GridData data = new GridData();
+		data.exclude = true;
+		browseWorkspace.setLayoutData(data);
+		browseWorkspace.setText(Messages.common_browse);
+		browseWorkspace.setVisible(false);
+	}
+
+	/**
+	 * Creates the composite container for the filesystem Data Adapter selection.
+	 */
+	private void createFSSelectionContainer(Composite container) {
+		browseFilesystem = new Button(container, SWT.NONE);
+		browseFilesystem.setText(Messages.common_browse);
+		browseFilesystem.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				selectDataAdapterFromFilesystem();
+			}
+		});
+		
+		GridData data = new GridData();
+		data.exclude = true;
+		browseFilesystem.setLayoutData(data);
+		browseFilesystem.setVisible(false);
+	}
+
+
+	
+	/**
+	 * Creates the empty composite for no Data Adapter selection.
+	 */
+	/*private void createNoDataSourceContainer() {
+		cmpNoDataAdapter = new Composite(grpOptions, SWT.NONE);
+	}*/
+	
+	private void textModified() {
+		if (btnAbsolutePath.getSelection()) {
+			// filesystem path...
+			String daPath = pathText.getText().trim();
+			// Change the standard separator with an universal one
+			path = daPath.replace(File.pathSeparatorChar, '/');
+		} else {
+			path = pathText.getText().trim();
+		} 
+		getWizard().getContainer().updateButtons();
 	}
 
 	/**
@@ -340,12 +359,9 @@ public class SelectDefaultDatasetPage extends JSSHelpWizardPage {
 				filepath = file.getRawLocationURI().toASCIIString();
 			}
 			filepath = filepath.toString().replace(File.pathSeparatorChar, '/');
-			txtResourcePath.setText(filepath);
+			pathText.setText(filepath);
 			// Change the standard separator with an universal one
 			path = filepath;
-		} else {
-			// no data adapter selected
-			txtResourcePath.setText(""); //$NON-NLS-1$
 		}
 	}
 
@@ -359,7 +375,7 @@ public class SelectDefaultDatasetPage extends JSSHelpWizardPage {
 		fd.setFilterExtensions(new String[] { "*.xml", "*.*" }); //$NON-NLS-1$ //$NON-NLS-2$
 		String selection = fd.open();
 		if (selection != null) {
-			txtFilesystemPath.setText(selection);
+			pathText.setText(selection);
 		}
 	}
 
@@ -376,7 +392,8 @@ public class SelectDefaultDatasetPage extends JSSHelpWizardPage {
 	public boolean isPageComplete() {
 		if (btnAbsolutePath.getSelection()){
 			if (path.isEmpty()){
-				setErrorMessage(Messages.SelectDefaultDatasetDialog_errorAbsoluteEmpty);
+				//setErrorMessage(Messages.SelectDefaultDatasetDialog_errorAbsoluteEmpty);
+				setMessage(Messages.SelectDefaultDatasetDialog_errorAbsoluteEmpty, WARNING);
 			} else {
 				setErrorMessage(null);
 				File file = new File(path);
@@ -388,16 +405,27 @@ public class SelectDefaultDatasetPage extends JSSHelpWizardPage {
 			}
 		} else if (btnUrlRemote.getSelection()){
 			if (path.isEmpty()){
-				setErrorMessage(Messages.SelectDefaultDatasetDialog_errorURLEmpty);
+				//setErrorMessage(Messages.SelectDefaultDatasetDialog_errorURLEmpty);
+				setMessage(Messages.SelectDefaultDatasetDialog_errorURLEmpty, WARNING);
 			} else if(!FileUtils.isValidURL(path)){
-				setErrorMessage(Messages.SelectDefaultDatasetDialog_errorURLInvalid);
+				setErrorMessage(null);
+				setMessage(Messages.SelectDefaultDatasetDialog_errorURLInvalid, WARNING);
 			} else {
 				setErrorMessage(null);
 				setMessage(Messages.SelectDefaultDatasetDialog_dialogDescription);
 			}
+		} else if (btnWorkspaceResource.getSelection()){
+			if (path.isEmpty()){
+				//setErrorMessage(Messages.SelectDefaultDatasetDialog_errorAbsoluteEmpty);
+				setMessage(Messages.SelectDefaultDatasetDialog_errorAbsoluteEmpty, WARNING);
+			}  else {
+				setErrorMessage(null);
+				setMessage(Messages.SelectDefaultDatasetDialog_dialogDescription);
+			}
 		} else {
+			setErrorMessage(null);
 			setMessage(Messages.SelectDefaultDatasetDialog_dialogDescription);
-		}
+		} 
 		return getErrorMessage() == null;
 	}
 

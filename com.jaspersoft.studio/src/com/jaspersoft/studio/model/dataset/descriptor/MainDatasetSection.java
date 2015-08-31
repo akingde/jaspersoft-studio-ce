@@ -65,14 +65,12 @@ public class MainDatasetSection extends AbstractSection {
 		createWidget4Property(group, JRDesignDataset.PROPERTY_RESOURCE_BUNDLE).getControl().setLayoutData(gd);
 
 		gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalAlignment = SWT.CENTER;
-		gd.horizontalSpan = 2;
-		createWidget4Property(group, JRDesignDataset.PROPERTY_QUERY, false).getControl().setLayoutData(gd);
+		createWidget4Property(group, DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION).getControl().setLayoutData(gd);
 		
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalAlignment = SWT.CENTER;
 		gd.horizontalSpan = 2;
-		createWidget4Property(group, DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION, false).getControl().setLayoutData(gd);
+		createWidget4Property(group, JRDesignDataset.PROPERTY_QUERY, false).getControl().setLayoutData(gd);
 	}
 	
 	@Override
