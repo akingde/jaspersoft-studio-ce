@@ -483,19 +483,20 @@ public class StylesListSection extends AbstractSection {
 	 * @param value value of the attribute
 	 * @param parent main widget container
 	 * @param actualElement element that contain the attribute
+	 * @param addListener true if the listener to delete the attribute on mouse click should be added, false otherwise
 	 * @param parentType the type of the container of the printed attribute, essentially say to who this attribute belong. It
 	 * can be the selected element or a style of the element 
 	 */
-	private void printObject(String fullPropertyNameName, Object value, Composite parent, APropertyNode actualElement, AttributeParent parentType) {
+	private void printObject(String fullPropertyNameName, Object value, Composite parent, APropertyNode actualElement, AttributeParent parentType, boolean addListener) {
 		if (value instanceof MLinePen) {
 			MLinePen lineValue = (MLinePen) value;
-			printStyleAttribute(parent, lineValue, fullPropertyNameName, parentType); 
+			printStyleAttribute(parent, lineValue, fullPropertyNameName, parentType, addListener); 
 		} else if (value instanceof MParagraph) {
 			MParagraph paragraphValue = (MParagraph) value;
-			printStyleAttribute(parent,	paragraphValue, fullPropertyNameName, parentType); 
+			printStyleAttribute(parent,	paragraphValue, fullPropertyNameName, parentType, addListener); 
 		} else if (value instanceof MLineBox) {
 			MLineBox boxValue = (MLineBox) value;
-			printStyleAttribute(parent, boxValue, fullPropertyNameName, parentType); 
+			printStyleAttribute(parent, boxValue, fullPropertyNameName, parentType, addListener); 
 		} else {
 			boolean printLine = ovverridenAttributes.contains(fullPropertyNameName);
 			IPropertyDescriptor descriptor = getNestedDescriptor(fullPropertyNameName, actualElement);
@@ -503,25 +504,25 @@ public class StylesListSection extends AbstractSection {
 			if (value instanceof Color) {
 				RGB valImage = ((Color) value).getRGB();
 				Control label = paintColor(parent, valImage, name, printLine, descriptor.getDescription()); 
-				addListeners(label, actualElement, fullPropertyNameName, parentType);
+				if (addListener) addListeners(label, actualElement, fullPropertyNameName, parentType);
 				ovverridenAttributes.add(fullPropertyNameName);
 			} else if (value instanceof java.awt.Color) {
 				java.awt.Color valImage = (java.awt.Color) value;
 				Control label = paintColor(parent, getSWTColorFromAWT(valImage), name, printLine, descriptor.getDescription()); 
-				addListeners(label, actualElement, fullPropertyNameName, parentType);
+				if (addListener) addListeners(label, actualElement, fullPropertyNameName, parentType);
 				ovverridenAttributes.add(fullPropertyNameName);
 			} else if (value instanceof JREnum) {
 				JREnum enumValue = (JREnum) value;
 				Control label = printLabels(parent, name, enumValue.getName(), printLine, descriptor.getDescription());
-				addListeners(label, actualElement, fullPropertyNameName, parentType);
+				if (addListener) addListeners(label, actualElement, fullPropertyNameName, parentType);
 				ovverridenAttributes.add(fullPropertyNameName);
 			} else if (value instanceof Boolean) {
 				Control label = paintCheckBox(parent, name, (Boolean) value, printLine, descriptor.getDescription()); 
-				addListeners(label, actualElement, fullPropertyNameName, parentType);
+				if (addListener) addListeners(label, actualElement, fullPropertyNameName, parentType);
 				ovverridenAttributes.add(fullPropertyNameName);
 			} else {
 				Control label = printLabels(parent, name, value.toString(), printLine, descriptor.getDescription()); 
-				addListeners(label, actualElement, fullPropertyNameName, parentType);
+				if (addListener) addListeners(label, actualElement, fullPropertyNameName, parentType);
 				ovverridenAttributes.add(fullPropertyNameName);
 			}
 		}
@@ -634,7 +635,7 @@ public class StylesListSection extends AbstractSection {
 			String attributeKey = entry.getKey();
 			Object attributeValue = entry.getValue();
 			if (attributeValue != null) {
-				printObject(attributeKey, attributeValue, parent, element, AttributeParent.ELEMENT); //$NON-NLS-1$
+				printObject(attributeKey, attributeValue, parent, element, AttributeParent.ELEMENT, true); //$NON-NLS-1$
 			}
 		}
 	}
@@ -642,16 +643,13 @@ public class StylesListSection extends AbstractSection {
 	/**
 	 * Print the attributes that belong to a styles
 	 * 
-	 * @param parent
-	 *          composite of the main widget
-	 * @param element
-	 *          The selected element
-	 * @param keyPrefix
-	 *          the full path of the attribute 
-	 * @param parentType
-	 *          identify if the attribute belong to a style or to an element
+	 * @param parent composite of the main widget
+	 * @param element The selected element
+	 * @param keyPrefix the full path of the attribute 
+	 * @param parentType identify if the attribute belong to a style or to an element
+	 * @param addListener true if the listener to delete the attribute on mouse click should be added, false otherwise
 	 */
-	private void printStyleAttribute(Composite parent, APropertyNode element, String keyPrefix, AttributeParent parentType) {
+	private void printStyleAttribute(Composite parent, APropertyNode element, String keyPrefix, AttributeParent parentType, boolean addListener) {
 		HashMap<String, Object> properties = element.getStylesDescriptors();		
 		for(Entry<String, Object> entry : properties.entrySet()){
 			String attributeKey = entry.getKey();
@@ -660,7 +658,7 @@ public class StylesListSection extends AbstractSection {
 				if (keyPrefix != null) {
 					attributeKey = keyPrefix.concat(".").concat(attributeKey);
 				}
-				printObject(attributeKey, attributeValue, parent, element, parentType);
+				printObject(attributeKey, attributeValue, parent, element, parentType, addListener);
 			}
 		}
 	}
@@ -700,9 +698,10 @@ public class StylesListSection extends AbstractSection {
 							EditableFigureEditPart.openEditor(styleReference.getTemplateValue(), ((DefaultEditDomain) getEditDomain()).getEditorPart(), styleReference.getTemplate());
 						}
 					});
-				} else {
-					//Print the label with the possibility to remove reset the style
-					printTitleWithButton(parent, titleValue, new StyleContextualMenu(this, styleReference.getStyle()));
+				} else { 
+					//Currently the style is hierarchy is not editable from the view of the element
+					//Print the label without the possibility to remove reset the style
+					printTitle(parent, titleValue);
 				}
 			}
 		}
@@ -721,7 +720,7 @@ public class StylesListSection extends AbstractSection {
 			MStyle style = itr.next();
 			String titleLabelText = MessageFormat.format(Messages.StylesSectionList_Inherited_From_Style, new Object[]{style.getPropertyValue(JRDesignStyle.PROPERTY_NAME)});
 			printStyleTitle(titleLabelText, style, parent);
-			printStyleAttribute(parent, style, null, AttributeParent.STYLE); //$NON-NLS-1$
+			printStyleAttribute(parent, style, null, AttributeParent.STYLE, false); //$NON-NLS-1$
 			if (style == defaultStyle) hasDefaultStyleInGerarchy = true;
 		}
 		//FIXME: JR has a bug where it dosen't use the default styles if the element has at least one style
@@ -730,7 +729,7 @@ public class StylesListSection extends AbstractSection {
 		if (styles.isEmpty() && !hasDefaultStyleInGerarchy && defaultStyle != null && defaultStyle != getElement()){
 			String titleLabelText = MessageFormat.format(Messages.StylesListSection_Inherited_From_Default_Style, new Object[]{defaultStyle.getPropertyValue(JRDesignStyle.PROPERTY_NAME)});
 			printStyleTitle(titleLabelText, defaultStyle, parent);
-			printStyleAttribute(parent, defaultStyle, null, AttributeParent.STYLE); //$NON-NLS-1$ 
+			printStyleAttribute(parent, defaultStyle, null, AttributeParent.STYLE, false); //$NON-NLS-1$ 
 		}
 	}
 
@@ -825,6 +824,7 @@ public class StylesListSection extends AbstractSection {
 	private void initStyleMaps() {
 		styleMaps = new HashMap<Object, StyleContainer>();
 		ovverridenAttributes = new HashSet<String>();
+		defaultStyle = null;
 		if (leftStringColor == null) {
 			leftStringColor = SWTResourceManager.getColor(42, 96, 213);
 		}
