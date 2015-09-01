@@ -269,6 +269,29 @@ public class CustomStyleResolver {
 		return null;
 	}
 	
+	private static LineStyleEnum getLineStyleValue(JRPen pen)
+	{
+		if (pen instanceof JRBoxPen){
+			return getLineStyleValue((JRBoxPen)pen);
+		} else {
+			LineStyleEnum ownLineStyle = pen.getOwnLineStyleValue();
+			if (ownLineStyle != null)
+			{
+				return ownLineStyle;
+			}
+			JRStyle baseStyle = JRStyleResolver.getBaseStyle(pen.getStyleContainer());
+			if (baseStyle != null)
+			{
+				LineStyleEnum lineStyle = baseStyle.getLinePen().getLineStyleValue();
+				if (lineStyle != null)
+				{
+					return lineStyle;
+				}
+			}
+		}
+		return null;
+	}
+	
 	//-- END OF THE CUSTOM RESOLVER --//
 	
 	protected static Color getColorClone(Color source){
@@ -279,7 +302,7 @@ public class CustomStyleResolver {
 	private static void inheritLinePenProeprties(JRPen jrPenTarget, JRPen jrStylePen){
 		if (jrPenTarget != null && jrStylePen != null){
 			if (jrPenTarget.getOwnLineColor() == null) jrPenTarget.setLineColor(JRStyleResolver.getLineColor(jrStylePen, null));
-			if (jrPenTarget.getOwnLineStyleValue() == null)	jrPenTarget.setLineStyle(getLineStyleValue((JRBoxPen)jrStylePen));
+			if (jrPenTarget.getOwnLineStyleValue() == null)	jrPenTarget.setLineStyle(getLineStyleValue(jrStylePen));
 			if (jrPenTarget.getOwnLineWidth() == null) jrPenTarget.setLineWidth(JRStyleResolver.getLineWidth(jrStylePen, null));
 		}
 	}
