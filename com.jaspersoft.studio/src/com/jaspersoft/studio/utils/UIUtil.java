@@ -12,6 +12,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.utils;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.jface.fieldassist.ControlDecoration;
@@ -364,5 +366,52 @@ public class UIUtil {
 		return keyCode == SWT.ARROW_DOWN || keyCode == SWT.ARROW_LEFT || keyCode == SWT.ARROW_RIGHT
 				|| keyCode == SWT.ARROW_UP;
 	}
+	
+	/**
+	 * Utility enumeration that maintains a collection of the know
+	 * extensions for files that can be open with a direct double click
+	 * from a file system navigator (i.e: in Windows).
+	 */
+	public static enum EditorExtension {
+		JRXML(".jrxml"), JRCTX(".jrctx"), JRTX(".jrtx"),
+		JASPER(".jasper"), JRPRINT(".jrprint"), JRPXML(".jrpxml"),
+		JSSCE(".jssce");
+		
+		private String extension;
+		private EditorExtension(String extension) {
+			this.extension = extension;
+		}
+
+		public String getExtension(){
+			return this.extension;
+		}
+		
+		public static boolean isKnowExtension(String extension) {
+			for(EditorExtension ex : values()) {
+				if(ex.getExtension().equals(extension)){
+					return true;
+				}
+			}
+			return false;
+		}
+		
+		public static List<String> getKnowExtensions() {
+			List<String> result = new ArrayList<String>();
+			for(EditorExtension ex : values()){
+				result.add(ex.getExtension());
+			}
+			return result;
+		}
+		
+		public static boolean hasValidExtension(String filepath) {
+			for(String ext : getKnowExtensions()){
+				if(filepath.endsWith(ext)){
+					return true;
+				}
+			}
+			return false;
+		}
+	}
+
 
 }

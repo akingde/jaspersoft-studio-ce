@@ -26,6 +26,8 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 
+import com.jaspersoft.studio.utils.UIUtil;
+
 /**
  * @author gtoffoli
  * 
@@ -53,7 +55,7 @@ public class OpenDocumentEventProcessor implements Listener {
 		for (String path : filePaths)
 		{
 			System.out.println("Processing " + path);
-			if (path.toLowerCase().endsWith(".jrxml"))
+			if (UIUtil.EditorExtension.hasValidExtension(path.toLowerCase()))
 			{
 				
 				java.io.File file = new java.io.File(path);
