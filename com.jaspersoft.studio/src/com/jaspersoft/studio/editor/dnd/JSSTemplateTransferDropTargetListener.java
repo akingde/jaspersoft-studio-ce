@@ -52,6 +52,7 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.DialogEnabledCommand;
 import com.jaspersoft.studio.model.IContainer;
+import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.model.band.command.ReorderBandCommandBySibling;
@@ -168,11 +169,11 @@ public class JSSTemplateTransferDropTargetListener extends AbstractTransferDropT
 		Object template = TemplateTransfer.getInstance().getTemplate();
 		if (template instanceof Collection) {
 			for (Object obj : (Collection<?>) template) {
-				if (obj instanceof ANode && ((ANode) obj).getParent() != null)
+				if (obj instanceof MGraphicElement && ((ANode) obj).getParent() != null)
 					return false;
 				break;
 			}
-		} else if (template instanceof ANode && ((ANode) template).getParent() != null)
+		} else if (template instanceof MGraphicElement && ((ANode) template).getParent() != null)
 			return false;
 		return true;
 	}
