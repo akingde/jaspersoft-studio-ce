@@ -188,7 +188,7 @@ public class SelectDefaultDatasetPage extends JSSHelpWizardPage {
 		createOptionsPanel(container);
 		
 		//Initialize the path with the current value
-		if (path == null){
+		if (path == null || path.trim().isEmpty()){
 			btnWorkspaceResource.setSelection(true);
 			changeSelectionMode();
 		} else {
