@@ -20,6 +20,8 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -106,7 +108,7 @@ public class SelectDefaultDatasetPage extends JSSHelpWizardPage {
 				Messages.SelectDefaultDatasetDialog_absoluteOption,
 				Messages.SelectDefaultDatasetDialog_urlOption,
 				Messages.SelectDefaultDatasetDialog_noDAOption,
-				"Custom Value"};
+				"Custom Value (a raw string that identify the position)"};
 	}
 
 	/**
@@ -187,7 +189,7 @@ public class SelectDefaultDatasetPage extends JSSHelpWizardPage {
 		
 		//Initialize the path with the current value
 		if (path == null){
-			btnCustom.setSelection(true);
+			btnWorkspaceResource.setSelection(true);
 			changeSelectionMode();
 		} else {
 			pathText.setText(path);
@@ -220,7 +222,7 @@ public class SelectDefaultDatasetPage extends JSSHelpWizardPage {
 	 */
 	private void createOptionsPanel(Composite container) {
 		grpOptions = new Group(container, SWT.NONE);
-		grpOptions.setText("Value");
+		grpOptions.setText("Path");
 		grpOptions.setLayout(new GridLayout(1,false));
 		grpOptions.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 2, 1));
 		
@@ -275,7 +277,7 @@ public class SelectDefaultDatasetPage extends JSSHelpWizardPage {
 		} else if (btnUrlRemote.getSelection()){
 			descriptionLabel.setText(Messages.SelectDefaultDatasetDialog_urlLabel);
 		} else if (btnCustom.getSelection()){
-			descriptionLabel.setText("Insert the value that point to the Data Adapter");
+			descriptionLabel.setText("Insert the path that point to the Data Adapter");
 		}
 		grpOptions.layout(true, true);
 		getWizard().getContainer().updateButtons();
@@ -353,16 +355,48 @@ public class SelectDefaultDatasetPage extends JSSHelpWizardPage {
 			IFile file = (IFile) fd.getFirstResult();
 			IFile contextfile = (IFile) jConfig.get(FileUtils.KEY_FILE);
 			String filepath = null;
-			if (contextfile != null && file.getProject().equals(contextfile.getProject())) {
-				filepath = file.getProjectRelativePath().toPortableString().replaceAll(file.getProject().getName() + "/", ""); //$NON-NLS-1$ //$NON-NLS-2$
+			if (contextfile != null){
+				filepath = FileUtils.getFileRelativePath(contextfile, file);
 			} else {
-				filepath = file.getRawLocationURI().toASCIIString();
+				filepath = file.getLocation().toPortableString().replaceAll(file.getProject().getName() + "/", ""); //$NON-NLS-1$ //$NON-NLS-2$
 			}
+			
 			filepath = filepath.toString().replace(File.pathSeparatorChar, '/');
 			pathText.setText(filepath);
 			// Change the standard separator with an universal one
 			path = filepath;
 		}
+	}
+	
+	/**
+	 * Check if the provided relative path from the report file point
+	 * to an existing resource
+	 * 
+	 * @param location the relative path
+	 * @return true if the path point to an existing resource, false otherwise
+	 */
+	private boolean isInWorkspace(String location){
+		IPath path = new Path(location);
+		IFile report = (IFile) jConfig.get(FileUtils.KEY_FILE);
+		//Check if it is relative to the folder
+		try{ 
+			IFile folderFile = report.getParent().getFile(path);
+			if (folderFile.exists()){
+				return true;
+			} 
+		} catch (Exception ex){
+			
+		}
+		//check if it is relative to the project
+		try{ 
+			IFile folderFile = report.getProject().getFile(path);
+			if (folderFile.exists()){
+				return true;
+			} 
+		} catch (Exception ex){
+			
+		}
+		return false;
 	}
 
 	/**
@@ -370,8 +404,12 @@ public class SelectDefaultDatasetPage extends JSSHelpWizardPage {
 	 */
 	private void selectDataAdapterFromFilesystem() {
 		FileDialog fd = new FileDialog(Display.getDefault().getActiveShell());
-		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-		fd.setFilterPath(root.getLocation().toOSString());
+		if (path == null || !new File(path).exists()){
+			IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+			fd.setFilterPath(root.getLocation().toOSString());
+		} else {
+			fd.setFilterPath(path);
+		}
 		fd.setFilterExtensions(new String[] { "*.xml", "*.*" }); //$NON-NLS-1$ //$NON-NLS-2$
 		String selection = fd.open();
 		if (selection != null) {
@@ -391,11 +429,9 @@ public class SelectDefaultDatasetPage extends JSSHelpWizardPage {
 	@Override
 	public boolean isPageComplete() {
 		if (btnAbsolutePath.getSelection()){
-			if (path.isEmpty()){
-				//setErrorMessage(Messages.SelectDefaultDatasetDialog_errorAbsoluteEmpty);
+			if (path == null || path.isEmpty()){
 				setMessage(Messages.SelectDefaultDatasetDialog_errorAbsoluteEmpty, WARNING);
 			} else {
-				setErrorMessage(null);
 				File file = new File(path);
 				if (!file.exists() || file.isDirectory()){
 					setMessage(Messages.SelectDefaultDatasetDialog_warningAbsoluteNotFound, WARNING);
@@ -404,29 +440,25 @@ public class SelectDefaultDatasetPage extends JSSHelpWizardPage {
 				}
 			}
 		} else if (btnUrlRemote.getSelection()){
-			if (path.isEmpty()){
-				//setErrorMessage(Messages.SelectDefaultDatasetDialog_errorURLEmpty);
+			if (path == null || path.isEmpty()){
 				setMessage(Messages.SelectDefaultDatasetDialog_errorURLEmpty, WARNING);
 			} else if(!FileUtils.isValidURL(path)){
-				setErrorMessage(null);
 				setMessage(Messages.SelectDefaultDatasetDialog_errorURLInvalid, WARNING);
 			} else {
-				setErrorMessage(null);
 				setMessage(Messages.SelectDefaultDatasetDialog_dialogDescription);
 			}
 		} else if (btnWorkspaceResource.getSelection()){
-			if (path.isEmpty()){
-				//setErrorMessage(Messages.SelectDefaultDatasetDialog_errorAbsoluteEmpty);
+			if (path == null || path.isEmpty()){
 				setMessage(Messages.SelectDefaultDatasetDialog_errorAbsoluteEmpty, WARNING);
-			}  else {
-				setErrorMessage(null);
+			}  else if (!isInWorkspace(path)){
+				setMessage(Messages.SelectDefaultDatasetDialog_warningAbsoluteNotFound, WARNING);
+			} else {
 				setMessage(Messages.SelectDefaultDatasetDialog_dialogDescription);
 			}
 		} else {
-			setErrorMessage(null);
 			setMessage(Messages.SelectDefaultDatasetDialog_dialogDescription);
 		} 
-		return getErrorMessage() == null;
+		return true;
 	}
 
 	@Override

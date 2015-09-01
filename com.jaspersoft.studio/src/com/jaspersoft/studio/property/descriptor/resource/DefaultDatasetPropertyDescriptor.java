@@ -23,7 +23,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.help.HelpSystem;
-import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.dataset.MDataset;
 import com.jaspersoft.studio.model.dataset.SelectDefaultDatasetWizard;
@@ -34,19 +33,18 @@ import com.jaspersoft.studio.property.section.widgets.SPResourceType;
 
 /**
  * 
- * Widget descriptor with a button to select a properties resource file and a text area where the path of the selected
- * resource is shown. From the selected filename is calculated the bundle base name. Other than this if the parent
- * folder of the file is not in the classpath it is proposed to the user to add it automatically
+ * Widget descriptor with a button to select to provide the path of a Default Data adapter for 
+ * JasperReports. It is possible to provide the path by typing it directly or using an advanced select
+ * dialog
  * 
- * @author Orlandin Marco & Slavic
+ * @author Orlandin Marco
  * 
  */
 public class DefaultDatasetPropertyDescriptor extends NTextPropertyDescriptor {
 
 	/**
-	 * This class extends the original widget to select a resource to be used only with resource bundle. For example the
-	 * selection of the file is limited to the files with .properties extension and contained in the actually opened
-	 * project or in one of its dependences
+	 * This class extends the original widget to select a Data Adapter file, when the button is pressed
+	 * the dialgo is opened
 	 * 
 	 * @author Orlandin Marco
 	 * 
@@ -57,13 +55,15 @@ public class DefaultDatasetPropertyDescriptor extends NTextPropertyDescriptor {
 			super(parent, section, pDescriptor);
 		}
 
-
 		@Override
 		protected SelectionAdapter buttonPressed() {
 			return new SelectionAdapter() {
 
 				@Override
 				public void widgetSelected(SelectionEvent e) {
+					//the open of the dialog doesn't trigger immediately the lost focus event, so
+					//force before to store the current value
+					handleTextChanged(section,pDescriptor.getId(), ftext.getText().trim());
 					if (section.getElement() instanceof MReport){
 						MReport report = (MReport)section.getElement();
 						SelectDefaultDatasetWizard defaultDAwizard = new SelectDefaultDatasetWizard(report);
@@ -81,12 +81,6 @@ public class DefaultDatasetPropertyDescriptor extends NTextPropertyDescriptor {
 					}
 				}
 			};
-		}
-		
-		@Override
-		public void setData(APropertyNode pnode, Object b) {
-			// TODO Auto-generated method stub
-			super.setData(pnode, b);
 		}
 	};
 
