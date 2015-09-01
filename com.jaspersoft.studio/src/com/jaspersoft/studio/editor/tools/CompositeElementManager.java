@@ -389,6 +389,9 @@ public class CompositeElementManager {
 		
 			//Merge the styles attributes
 			CustomStyleResolver.copyInheritedAttributes(mOriginalElement, newElement);
+			newElement.setStyle(null);
+			newElement.setStyleNameReference(null);
+			
 			newElement.setX(originalElement.getX()-leftOffset);
 			newElement.setY(originalElement.getY()-topOffset);
 			

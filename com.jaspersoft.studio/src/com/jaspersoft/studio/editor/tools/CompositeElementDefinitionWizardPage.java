@@ -285,7 +285,7 @@ public class CompositeElementDefinitionWizardPage extends JSSHelpWizardPage {
 	public boolean isPageComplete() {
 		if (name.trim().isEmpty()){
 			setErrorMessage(Messages.ToolDefinitionWizardPage_errorNameEmpry);	
-		} else if (!FileUtils.isFilenameValid(name)){
+		} else if (!FileUtils.isValidFilename(name)){
 			setErrorMessage(Messages.ToolDefinitionWizardPage_invalidFileName);
 		} else if (CompositeElementManager.INSTANCE.isNameAlreadyUsed(name.trim())){
 			setErrorMessage(Messages.ToolDefinitionWizardPage_errorNameUsed);

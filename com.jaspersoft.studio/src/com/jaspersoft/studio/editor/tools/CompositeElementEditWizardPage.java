@@ -99,7 +99,7 @@ public class CompositeElementEditWizardPage extends CompositeElementDefinitionWi
 		String name = getName().trim();
 		if (name.isEmpty()){
 			setErrorMessage(Messages.ToolDefinitionWizardPage_errorNameEmpry);	
-		} else if (!net.sf.jasperreports.eclipse.util.FileUtils.isFilenameValid(name)){
+		} else if (!net.sf.jasperreports.eclipse.util.FileUtils.isValidFilename(name)){
 			setErrorMessage(Messages.ToolDefinitionWizardPage_invalidFileName);
 		} else if (!initialName.equals(name) && CompositeElementManager.INSTANCE.isNameAlreadyUsed(name.trim())){
 			setErrorMessage(Messages.ToolDefinitionWizardPage_errorNameUsed);
