@@ -108,7 +108,7 @@ public class SelectDefaultDatasetPage extends JSSHelpWizardPage {
 				Messages.SelectDefaultDatasetDialog_absoluteOption,
 				Messages.SelectDefaultDatasetDialog_urlOption,
 				Messages.SelectDefaultDatasetDialog_noDAOption,
-				"Custom Value (a raw string that identify the position)"};
+				Messages.SelectDefaultDatasetPage_customDAAction};
 	}
 
 	/**
@@ -222,7 +222,7 @@ public class SelectDefaultDatasetPage extends JSSHelpWizardPage {
 	 */
 	private void createOptionsPanel(Composite container) {
 		grpOptions = new Group(container, SWT.NONE);
-		grpOptions.setText("Path");
+		grpOptions.setText(Messages.SelectDefaultDatasetPage_pathLabel);
 		grpOptions.setLayout(new GridLayout(1,false));
 		grpOptions.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 2, 1));
 		
@@ -277,7 +277,7 @@ public class SelectDefaultDatasetPage extends JSSHelpWizardPage {
 		} else if (btnUrlRemote.getSelection()){
 			descriptionLabel.setText(Messages.SelectDefaultDatasetDialog_urlLabel);
 		} else if (btnCustom.getSelection()){
-			descriptionLabel.setText("Insert the path that point to the Data Adapter");
+			descriptionLabel.setText(Messages.SelectDefaultDatasetPage_customDADescription);
 		}
 		grpOptions.layout(true, true);
 		getWizard().getContainer().updateButtons();

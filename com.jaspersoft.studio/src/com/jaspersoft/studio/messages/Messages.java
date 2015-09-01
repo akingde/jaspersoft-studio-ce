@@ -1784,6 +1784,9 @@ public class Messages extends NLS {
 	public static String SelectDefaultDatasetDialog_warningAbsoluteNotFound;
 	public static String SelectDefaultDatasetDialog_workspaceLabel;
 	public static String SelectDefaultDatasetDialog_workspaceOption;
+	public static String SelectDefaultDatasetPage_customDAAction;
+	public static String SelectDefaultDatasetPage_customDADescription;
+	public static String SelectDefaultDatasetPage_pathLabel;
 	public static String SelectWorkspacePage_description;
 	public static String SelectWorkspacePage_openTitle;
 	public static String SelectWorkspacePage_title;
