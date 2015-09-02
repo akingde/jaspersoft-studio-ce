@@ -112,7 +112,7 @@ public class ListOrderButtons {
 
 	}
 
-	public void createOrderButtons(Composite composite, TableViewer tableViewer) {
+	public void createOrderButtons(Composite composite, final TableViewer tableViewer) {
 		upField = new Button(composite, SWT.PUSH);
 		upField.setText(Messages.common_up);
 		upField.setLayoutData(new GridData(GridData.FILL_HORIZONTAL | GridData.VERTICAL_ALIGN_BEGINNING));
@@ -129,7 +129,7 @@ public class ListOrderButtons {
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
 				StructuredSelection sel = (StructuredSelection) event.getSelection();
-				setEnabled(sel != null && sel.size() > 1);
+				setEnabled(sel != null && sel.size() > 0 && tableViewer.getTable().getItemCount() > 1);
 			}
 		});
 	}
