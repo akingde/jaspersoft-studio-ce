@@ -601,7 +601,7 @@ public class ConfigurationManager {
 				result.append(arg + " "); //$NON-NLS-1$
 			}
 		for (int i = 0; i < vmarg.length; i++)
-			if (vmarg[i] != null)
+			if (vmarg[i] != null && vmarg[i].value != null)
 				result.append(vmarg[i].key + "=" + vmarg[i].value + SystemUtils.LINE_SEPARATOR); //$NON-NLS-1$ //$NON-NLS-2$ 
 		return result.toString();
 	}
@@ -620,10 +620,9 @@ public class ConfigurationManager {
 				File fini = getApplicationConfigurationFile();
 				if (fini.exists()) {
 					try {
-					org.apache.commons.io.FileUtils.copyFile(fini, new File(fini.toString() + ".bak"));
-					}
-					catch(IOException e) {
-						JaspersoftStudioPlugin.getInstance().logError("Unable to create bak file for the .ini file",e);
+						org.apache.commons.io.FileUtils.copyFile(fini, new File(fini.toString() + ".bak"));
+					} catch (IOException e) {
+						JaspersoftStudioPlugin.getInstance().logError("Unable to create bak file for the .ini file", e);
 					}
 				}
 
