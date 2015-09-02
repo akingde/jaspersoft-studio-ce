@@ -167,7 +167,6 @@ public class GlobalPreferencePage extends FieldEditorPreferencePage implements I
 			 */
 			protected void doStore() {
 				super.doStore();
-				String cfg = null;
 				if (getBooleanValue()) {
 					String fname = logFile.getStringValue();
 					if (Misc.isNullOrEmpty(fname)) {
@@ -202,7 +201,7 @@ public class GlobalPreferencePage extends FieldEditorPreferencePage implements I
 					if (javaLogPath != null)
 						kv[3] = new KeyValue<String, String>("-Dorg.apache.commons.logging.diagnostics.dest", javaLogPath); //$NON-NLS-1$
 
-					cfg = ConfigurationManager.buildCommandLineVMarg(kv);
+					ConfigurationManager.changeVMArgs(kv);
 					try {
 						File f = new File(fname);
 						FileUtils.writeStringToFile(f, tLogPreview.getText());
@@ -223,11 +222,10 @@ public class GlobalPreferencePage extends FieldEditorPreferencePage implements I
 					kv[2] = new KeyValue<String, String>("-Dorg.apache.commons.logging.Log", null); //$NON-NLS-1$
 					kv[3] = new KeyValue<String, String>("-Dlog4j.configuration", null); //$NON-NLS-1$
 
-					cfg = ConfigurationManager.buildCommandLineVMarg(kv);
+					ConfigurationManager.changeVMArgs(kv);
 				}
 				if (!getBooleanValue())
 					Logger.getAnonymousLogger().info("LOGGER ENDED"); //$NON-NLS-1$
-				ConfigurationManager.writeConfigurationFile(cfg);
 				if (getBooleanValue())
 					Logger.getAnonymousLogger().info("LOGGER STARTED"); //$NON-NLS-1$
 			}

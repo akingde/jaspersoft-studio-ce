@@ -19,6 +19,7 @@ import java.io.StringReader;
 import java.net.URL;
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -31,9 +32,9 @@ import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.util.JRXmlUtils;
 
-import org.apache.commons.lang.SystemUtils;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.util.Util;
 import org.eclipse.osgi.service.datalocation.Location;
 import org.osgi.service.prefs.Preferences;
@@ -481,129 +482,189 @@ public class ConfigurationManager {
 	}
 
 	// Methods to get the configuration file and change it
-
-	private static final String PROP_VM = "eclipse.vm"; //$NON-NLS-1$
-
-	private static final String PROP_VMARGS = "eclipse.vmargs"; //$NON-NLS-1$
-
-	private static final String PROP_COMMANDS = "eclipse.commands"; //$NON-NLS-1$
-
+	
+	private static final String CMD_VMARGS = "-vmargs"; //$NON-NLS-1$
+	
 	private static final String CMD_NL = "-nl"; //$NON-NLS-1$
 
-	private static final String CMD_VMARGS = "-vmargs"; //$NON-NLS-1$
-
 	/**
-	 * Generate a starting parameter by reading the old parameters and changing the nl value or adding it if not present.
-	 * It's equivalent to launch the application with an -nl followed by the regional code arguments
+	 * Convert a list of strings to a single string, each string except the 
+	 * last has a new line after it 
 	 * 
-	 * @param nl
-	 *          the regional code
-	 * @return the full arguments line used to restart the application
+	 * @param list the list of string
+	 * @return a single string with all the string in the list concatenated
 	 */
-	public static String buildCommandLineNl(String nl) {
-		String property = System.getProperty(PROP_VM);
-
-		StringBuffer result = new StringBuffer();
-		if (property != null)
-			result.append(property);
-		result.append(SystemUtils.LINE_SEPARATOR);
-
-		// append the vmargs and commands. Assume that these already end in \n
-		String vmargs = System.getProperty(PROP_VMARGS);
-		if (vmargs != null)
-			result.append(vmargs);
-
-		// append the rest of the args, replacing or adding -nl as required
-		property = System.getProperty(PROP_COMMANDS);
-		if (property != null) {// find the index of the arg to replace its value
-			int cmd_nl_pos = property.lastIndexOf(CMD_NL);
-			if (cmd_nl_pos != -1) {
-				cmd_nl_pos += CMD_NL.length() + 1;
-				result.append(property.substring(0, cmd_nl_pos));
-				result.append(nl);
-				result.append(property.substring(property.indexOf('\n', cmd_nl_pos)));
-			} else {
-				result.append(SystemUtils.LINE_SEPARATOR);
-				result.append(property);
-				result.append(SystemUtils.LINE_SEPARATOR);
-				result.append(CMD_NL);
-				result.append(SystemUtils.LINE_SEPARATOR);
-				result.append(nl);
+	private static String listToString(List<String> list){
+		StringBuilder result = new StringBuilder();
+		if (!list.isEmpty()){
+			String separator = System.getProperty("line.separator");
+			String lastLine = null;
+			//sarch the las line with a value
+			for(int i = list.size() -1 ; i>=0; i--){
+				String currentLine = list.get(i);
+				if (currentLine != null){
+					lastLine = currentLine;
+					break;
+				}
 			}
-		}
-
-		// put the vmargs back at the very end (the eclipse.commands property
-		// already contains the -vm arg)
-		if (vmargs != null) {
-			result.append(CMD_VMARGS);
-			result.append(SystemUtils.LINE_SEPARATOR);
-			result.append(vmargs);
-			result.append(SystemUtils.LINE_SEPARATOR);
-		}
-		return result.toString();
-	}
-
-	/**
-	 * Generate a starting parameter by reading the old parameters and add or change (if already present) a new parameter
-	 * on the vmargs section
-	 * 
-	 * @param vmarg
-	 *          the name of the argument
-	 * @param value
-	 *          the value of the argument
-	 * @return the full arguments line used to restart the application
-	 */
-	public static String buildCommandLineVMarg(String vmarg, String value) {
-		return buildCommandLineVMarg(new KeyValue[] { new KeyValue<String, String>(vmarg, value) });
-	}
-
-	/**
-	 * Generate a starting parameter by reading the old parameters and add or change (if already present) a new parameter
-	 * on the vmargs section
-	 * 
-	 * @param vmarg
-	 *          the name of the argument
-	 * @param value
-	 *          the value of the argument
-	 * @return the full arguments line used to restart the application
-	 */
-	public static String buildCommandLineVMarg(KeyValue<String, String>[] vmarg) {
-		String property = System.getProperty(PROP_VM);
-
-		StringBuffer result = new StringBuffer();
-		if (property != null)
-			result.append(property);
-		result.append(SystemUtils.LINE_SEPARATOR);
-
-		// append the rest of the args
-		property = System.getProperty(PROP_COMMANDS);
-		if (property != null) {
-			result.append(SystemUtils.LINE_SEPARATOR);
-			result.append(property);
-			result.append(SystemUtils.LINE_SEPARATOR);
-		}
-
-		// append the vmargs and commands, replacing or adding the new argument as required
-		String vmargs = System.getProperty(PROP_VMARGS);
-		if (vmargs == null && vmarg == null)
-			return result.toString();
-		result.append(CMD_VMARGS).append(SystemUtils.LINE_SEPARATOR);
-		if (vmargs != null)
-			for (String arg : vmargs.split(" ")) { //$NON-NLS-1$
-				for (int i = 0; i < vmarg.length; i++) {
-					if (vmarg[i] != null && arg.startsWith(vmarg[i].key + "=")) { //$NON-NLS-1$
-						vmarg[i] = null;
-						if (vmarg[i].value == null)
-							continue;
-						arg = vmarg[i].key + "=" + vmarg[i].value + SystemUtils.LINE_SEPARATOR; //$NON-NLS-1$ 
+			for (String outLine : list) {
+				if (outLine != null) {
+					result.append(outLine);
+					if (outLine != lastLine){
+						result.append(separator);
 					}
 				}
-				result.append(arg + " "); //$NON-NLS-1$
 			}
-		for (int i = 0; i < vmarg.length; i++)
-			if (vmarg[i] != null && vmarg[i].value != null)
-				result.append(vmarg[i].key + "=" + vmarg[i].value + SystemUtils.LINE_SEPARATOR); //$NON-NLS-1$ //$NON-NLS-2$ 
+		}
 		return result.toString();
+	}
+
+	/**
+	 * Read the configuration file of the application and rewrite it with a new
+	 * regional code if the code is changed then it is also requested a platform
+	 * restart. The regional code will be set at the place of the old code if
+	 * found, otherwise before the first parameter found between -clean, -vm,
+	 * -vmargs. If none of this parameters are found then it is set at the end
+	 * of the file
+	 * 
+	 * @param locale the new locale
+	 * @return true if the change to the configuration file went good, false otherwise
+	 */
+	public static boolean changeLocale(String locale) {
+		boolean fileChanged = false;
+		if (ConfigurationManager.isConfigurationAccessibleWithMessage()){
+			File configurationFile = ConfigurationManager.getApplicationConfigurationFile();
+			BufferedReader in = null; 
+			BufferedWriter out = null;
+			try {
+				in = new BufferedReader(new FileReader(configurationFile));
+				String line = in.readLine();
+				List<String> configLines = new ArrayList<String>();
+				int localePosition = -1;
+				int lineNumber = 0;
+				while (line != null) {
+					if (line.equals("-nl"))localePosition = lineNumber + 1; //$NON-NLS-1$
+					else if (localePosition == -1
+							&& (line.equals(CMD_VMARGS) || line.equals("-clean") || line.equals("-vm"))) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+						configLines.add(CMD_NL); //$NON-NLS-1$
+						configLines.add(""); //$NON-NLS-1$
+						localePosition = lineNumber + 1;
+					}
+					configLines.add(line);
+					lineNumber++;
+					line = in.readLine();
+				}
+				if (localePosition != -1) {
+					if (configLines.get(localePosition).equals(locale)) {
+						FileUtils.closeStream(in);
+						FileUtils.closeStream(out);
+						// The file has already the right regional code, there
+						// is no need to restart eclipse
+						return false;
+					} else{
+						//Change the locale value
+						configLines.set(localePosition, locale);
+					}
+				} else {
+					configLines.add("-nl"); //$NON-NLS-1$
+					configLines.add(locale);
+				}
+				fileChanged = writeConfigurationFile(listToString(configLines));
+			} catch (Exception ex){
+				ex.printStackTrace();
+				JaspersoftStudioPlugin.getInstance().logError(ex);
+				// Configuration file not found, show an error message
+				MessageDialog.openWarning(UIUtils.getShell(),
+						Messages.SwitchLanguageHandler_errorTitle,
+						MessageFormat.format(
+								Messages.SwitchLanguageHandler_errorMessage,
+								new Object[] { configurationFile.getAbsolutePath() }));
+			} finally {
+				FileUtils.closeStream(in);
+				FileUtils.closeStream(out);
+				
+			}
+		}
+		return fileChanged;
+	}
+	
+	/**
+	 * Read the configuration file of the application and rewrite it with new
+	 * vmargs. This arguments will override the value of the currently existing one,
+	 * otherwise it will be added.
+	 * 
+	 * @param the pair of name\value of the vmargs. If a value of a vmarg is null
+	 * it is removed form the file if present
+	 * @return true if the file was rewritten correctly, false otherwise
+	 */
+	public static boolean changeVMArgs(KeyValue<String, String>[] vmargs) {
+		boolean fileChanged = false;
+		if (ConfigurationManager.isConfigurationAccessibleWithMessage()){
+			File configurationFile = ConfigurationManager.getApplicationConfigurationFile();
+			BufferedReader in = null; 
+			BufferedWriter out = null;
+			try {
+				in = new BufferedReader(new FileReader(configurationFile));
+				String line = in.readLine();
+				List<String> configLines = new ArrayList<String>();
+				int vmArgsPosition = -1;
+				int lineNumber = 0;
+				HashMap<String, Integer> argsMap = new HashMap<String, Integer>();
+				while (line != null) {
+					if (vmArgsPosition == -1 && line.equals(CMD_VMARGS)){
+						vmArgsPosition = lineNumber;
+					}
+					configLines.add(line);
+					if (vmArgsPosition != -1 && line.contains("=")){
+						String[] nameValue = line.split("=");
+						argsMap.put(nameValue[0], lineNumber);
+					}
+					lineNumber++;
+					line = in.readLine();
+				}
+				if (vmArgsPosition != -1) {
+					for(KeyValue<String, String> vmarg : vmargs){
+						Integer existingIndex = argsMap.get(vmarg.key);
+						if (existingIndex != null){
+							//There is already an argument with the same name in the file
+							if (vmarg.value == null){
+								//need to remove it
+								configLines.set(existingIndex, null);
+							} else{
+								//Need to update the value
+								configLines.set(existingIndex, vmarg.key + "=" + vmarg.value);
+							}
+						} else {
+							//There is not an argument with the same name in the file
+							if (vmarg.value != null){
+								//Add it at the end
+								configLines.add(vmarg.key + "=" + vmarg.value);
+							}
+						}
+					}
+				} else {
+					configLines.add(CMD_VMARGS); //$NON-NLS-1$
+					for(KeyValue<String, String> vmarg : vmargs){
+						configLines.add(vmarg.key + "=" + vmarg.value);
+					}
+				}
+				fileChanged = ConfigurationManager.writeConfigurationFile(listToString(configLines));
+			} catch (Exception ex){
+				ex.printStackTrace();
+				JaspersoftStudioPlugin.getInstance().logError(ex);
+				// Configuration file not found, show an error message
+				MessageDialog.openWarning(UIUtils.getShell(),
+						Messages.SwitchLanguageHandler_errorTitle,
+						MessageFormat.format(
+								Messages.SwitchLanguageHandler_errorMessage,
+								new Object[] { configurationFile.getAbsolutePath() }));
+			} finally {
+				FileUtils.closeStream(in);
+				FileUtils.closeStream(out);
+				
+			}
+		}
+		return fileChanged;
 	}
 
 	/**
