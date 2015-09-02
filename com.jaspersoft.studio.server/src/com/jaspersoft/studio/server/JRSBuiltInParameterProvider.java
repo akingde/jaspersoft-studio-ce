@@ -91,7 +91,7 @@ public class JRSBuiltInParameterProvider {
 			p.setName("LoggedInUserRoles");
 			p.setDescription("Current set of roles of logged in user. Useful for $X parameter");
 			p.setValueClassName("java.util.Collection");
-			p.setNestedTypeName("java.util.String");
+			p.setNestedTypeName("java.lang.String");
 			p.setDefaultValueExpression(new JRDesignExpression("new ArrayList()"));
 			p.setForPrompting(false);
 
@@ -101,7 +101,7 @@ public class JRSBuiltInParameterProvider {
 			p.setName("LoggedInUserAttributes");
 			p.setDescription("Not usable in query input control, but is used as parameter to report. Empty map if no attributes");
 			p.setValueClassName("java.util.Map");
-			p.setNestedTypeName("java.util.String");
+			p.setNestedTypeName("java.lang.String");
 			p.setDefaultValueExpression(new JRDesignExpression("new HashMap()"));
 			p.setForPrompting(false);
 
@@ -111,7 +111,7 @@ public class JRSBuiltInParameterProvider {
 			p.setName("LoggedInUserAttributeNames");
 			p.setDescription("User profile attribute names. Useful for $X parameters. Empty collection if no attributes");
 			p.setValueClassName("java.util.Collection");
-			p.setNestedTypeName("java.util.String");
+			p.setNestedTypeName("java.lang.String");
 			p.setDefaultValueExpression(new JRDesignExpression("new ArrayList()"));
 			p.setForPrompting(false);
 
