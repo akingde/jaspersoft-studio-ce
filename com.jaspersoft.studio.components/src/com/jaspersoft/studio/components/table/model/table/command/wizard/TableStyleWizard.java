@@ -42,7 +42,7 @@ public class TableStyleWizard extends JSSWizard {
 		super();
 		setWindowTitle(Messages.common_table_wizard);
 		setNeedsProgressMonitor(true);
-		layoutPage = new TableWizardLayoutPage(showTitle);
+		layoutPage = new TableWizardLayoutPage(showTitle, false);
 		if (templateToOpen != null) layoutPage.setTemplateToOpen(templateToOpen);
 	}
 	
