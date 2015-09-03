@@ -389,7 +389,7 @@ public class TableComponentFactory implements IComponentFactory {
 
 	public static ANode createColumnCell(ANode parent, BaseColumn bc, int i,
 			Cell grHeader, int index) {
-		String name = Messages.common_column + i;
+		String name = i > 0 ? Messages.common_column + i : null;
 		if (grHeader != null) {
 			MCell mc = new MCell(parent, (StandardBaseColumn) bc,
 					(DesignCell) grHeader, name, index);
@@ -656,7 +656,7 @@ public class TableComponentFactory implements IComponentFactory {
 
 	public Command getDeleteCommand(ANode parent, ANode child) {
 		if (child instanceof MTable)
-			return new DeleteTableCommand((MTable)child);
+			return new DeleteTableCommand((MTable) child);
 		if (parent instanceof MPage)
 			parent = child.getParent();
 		if (child instanceof MGraphicElement && parent instanceof MCell
@@ -768,9 +768,9 @@ public class TableComponentFactory implements IComponentFactory {
 		lst.add(DeleteColumnAction.ID);
 		lst.add(DeleteRowAction.ID);
 		lst.add(DeleteColumnCellAction.ID);
-		lst.add(EditTableStyleAction.ID); 
+		lst.add(EditTableStyleAction.ID);
 		lst.add(RemoveTableStylesAction.ID);
-		
+
 		lst.add(SelectAllCellsAction.ID);
 		lst.add(SelectAllElementsAction.ID);
 		return lst;
@@ -819,8 +819,9 @@ public class TableComponentFactory implements IComponentFactory {
 	public AbstractVisualEditor getEditor(Object node,
 			JasperReportsConfiguration jrContext) {
 		if (node != null && node instanceof JRDesignComponentElement) {
-			Component component = ((JRDesignComponentElement) node).getComponent();
-			if (component != null && component instanceof StandardTable){
+			Component component = ((JRDesignComponentElement) node)
+					.getComponent();
+			if (component != null && component instanceof StandardTable) {
 				TableEditor editor = new TableEditor(jrContext);
 				return editor;
 			}

@@ -83,7 +83,7 @@ public abstract class AMCollection extends MCollection {
 					StandardBaseColumn bc = (StandardBaseColumn) evt
 							.getNewValue();
 
-					createColumn(this, bc, 122, newIndex);
+					createColumn(this, bc, -1, newIndex);
 
 				} else if (evt.getOldValue() != null
 						&& evt.getNewValue() == null) {

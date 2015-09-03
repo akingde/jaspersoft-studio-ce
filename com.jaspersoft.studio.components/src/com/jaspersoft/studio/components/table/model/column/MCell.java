@@ -291,11 +291,11 @@ public class MCell extends MColumn implements IGraphicElement,
 	}
 
 	public int getDefaultWidth() {
-		return 20;
+		return 40;
 	}
 
 	public int getDefaultHeight() {
-		return 20;
+		return 40;
 	}
 
 	@Override

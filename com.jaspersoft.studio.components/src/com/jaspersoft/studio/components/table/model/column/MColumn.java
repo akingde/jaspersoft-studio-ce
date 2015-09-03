@@ -72,7 +72,8 @@ public class MColumn extends APropertyNode implements IPastable, IContainer,
 	private static IIconDescriptor iconDescriptor;
 
 	public static String PROPERTY_NAME = "NAME";
-	
+	public static String COLUMN_NAME = "com.jaspersoft.studio.components.table.model.column.name";
+
 	/**
 	 * Gets the icon descriptor.
 	 * 
@@ -114,7 +115,7 @@ public class MColumn extends APropertyNode implements IPastable, IContainer,
 		this.name = name;
 		List<ANode> n = getAMCollection();
 		if (n != null && !n.isEmpty()) {
-			ANode aNode =  n.get(n.size() - 1);
+			ANode aNode = n.get(n.size() - 1);
 			type = TableColumnSize.getType(aNode.getClass());
 			if (aNode instanceof MTableGroupHeader) {
 				jrGroup = ((MTableGroupHeader) aNode).getJrDesignGroup();
@@ -194,17 +195,21 @@ public class MColumn extends APropertyNode implements IPastable, IContainer,
 	 * @see com.jaspersoft.studio.model.INode#getDisplayText()
 	 */
 	public String getDisplayText() {
-		return name;
+		return getName();
 	}
 
 	public String getName() {
+		if (name == null)
+			return getValue().getPropertiesMap().getProperty(COLUMN_NAME);
 		return name;
 	}
 
 	public void setName(String name) {
 		String oldValue = this.name;
 		this.name = name;
-		getPropertyChangeSupport().firePropertyChange(PROPERTY_NAME, oldValue, name); //$NON-NLS-1$
+		getValue().getPropertiesMap().setProperty(COLUMN_NAME, name);
+		getPropertyChangeSupport().firePropertyChange(PROPERTY_NAME, oldValue,
+				name); //$NON-NLS-1$
 	}
 
 	/*
@@ -311,10 +316,12 @@ public class MColumn extends APropertyNode implements IPastable, IContainer,
 		if (propertiesMap != null)
 			propertiesMap = propertiesMap.cloneProperties();
 		if (id.equals(JRDesignElement.PROPERTY_PROPERTY_EXPRESSIONS)) {
-			JRPropertyExpression[] propertyExpressions = jrElement.getPropertyExpressions();
+			JRPropertyExpression[] propertyExpressions = jrElement
+					.getPropertyExpressions();
 			if (propertyExpressions != null)
 				propertyExpressions = propertyExpressions.clone();
-			return new PropertyExpressionsDTO(propertyExpressions,propertiesMap, this);
+			return new PropertyExpressionsDTO(propertyExpressions,
+					propertiesMap, this);
 		}
 		if (id.equals(MGraphicElement.PROPERTY_MAP))
 			return propertiesMap;
@@ -394,33 +401,37 @@ public class MColumn extends APropertyNode implements IPastable, IContainer,
 		} else if (id.equals(JRDesignElement.PROPERTY_PROPERTY_EXPRESSIONS)) {
 			if (value instanceof PropertyExpressionsDTO) {
 				PropertyExpressionsDTO dto = (PropertyExpressionsDTO) value;
-				JRPropertyExpression[] expr = jrElement.getPropertyExpressions();
-				//Remove the old expression properties if any
-				if (expr != null){
+				JRPropertyExpression[] expr = jrElement
+						.getPropertyExpressions();
+				// Remove the old expression properties if any
+				if (expr != null) {
 					for (JRPropertyExpression ex : expr)
 						jrElement.removePropertyExpression(ex);
 				}
-				//Add the new expression properties
-				for (PropertyExpressionDTO p : dto.getProperties()){
-						if (p.isExpression())  {
-							JRDesignPropertyExpression newExp = new JRDesignPropertyExpression();
-							newExp.setName(p.getName());
-							newExp.setValueExpression(p.getValueAsExpression());
-							jrElement.addPropertyExpression(newExp);
-						}
+				// Add the new expression properties
+				for (PropertyExpressionDTO p : dto.getProperties()) {
+					if (p.isExpression()) {
+						JRDesignPropertyExpression newExp = new JRDesignPropertyExpression();
+						newExp.setName(p.getName());
+						newExp.setValueExpression(p.getValueAsExpression());
+						jrElement.addPropertyExpression(newExp);
+					}
 				}
 				// now change properties, first remove the old ones if any
-				String[] names = jrElement.getPropertiesMap().getPropertyNames();
-				for (int i = 0; i < names.length; i++){
+				String[] names = jrElement.getPropertiesMap()
+						.getPropertyNames();
+				for (int i = 0; i < names.length; i++) {
 					jrElement.getPropertiesMap().removeProperty(names[i]);
 				}
 				// now add the new properties
-				for (PropertyExpressionDTO p : dto.getProperties()){
-					if (!p.isExpression())  {
-						jrElement.getPropertiesMap().setProperty(p.getName(), p.getValue());
+				for (PropertyExpressionDTO p : dto.getProperties()) {
+					if (!p.isExpression()) {
+						jrElement.getPropertiesMap().setProperty(p.getName(),
+								p.getValue());
 					}
 				}
-				this.getPropertyChangeSupport().firePropertyChange(MGraphicElement.PROPERTY_MAP, false, true);
+				this.getPropertyChangeSupport().firePropertyChange(
+						MGraphicElement.PROPERTY_MAP, false, true);
 			}
 		}
 	}
@@ -475,8 +486,9 @@ public class MColumn extends APropertyNode implements IPastable, IContainer,
 					section.createColumn(parent, bc, 122, newIndex);
 
 					MTable mtable = (MTable) section.getParent();
-					if (mtable == null){
-						((JRPropertyChangeSupport)evt.getSource()).removePropertyChangeListener(child);
+					if (mtable == null) {
+						((JRPropertyChangeSupport) evt.getSource())
+								.removePropertyChangeListener(child);
 					} else {
 						mtable.getTableManager().refresh();
 						TableColumnNumerator.renumerateColumnNames(mtable);
