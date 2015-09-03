@@ -90,9 +90,11 @@ public class PastableElements extends AbstractPastableObject {
 			Object firstElement = selectedObjects.iterator().next();
 			if (firstElement instanceof EditPart) {
 				Object modelObj = ((EditPart) firstElement).getModel();
-				return (modelObj instanceof MReport || modelObj instanceof MPage);
+				boolean result =(modelObj instanceof MReport || modelObj instanceof MPage);
+				if (result) return true;
 			}
-		} else if (actionType == ACTION_TYPE.COPY && selectedObjects.size() == list.size()){
+		} 
+		if (actionType == ACTION_TYPE.COPY && selectedObjects.size() == list.size()){
 			for (Object selection : selectedObjects) {
 				if (selection instanceof EditPart) {
 					Object model = ((EditPart)selection).getModel();
