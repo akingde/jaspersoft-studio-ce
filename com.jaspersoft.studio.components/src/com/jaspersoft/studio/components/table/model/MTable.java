@@ -22,6 +22,7 @@ import java.util.Map;
 import net.sf.jasperreports.components.table.BaseColumn;
 import net.sf.jasperreports.components.table.DesignCell;
 import net.sf.jasperreports.components.table.StandardBaseColumn;
+import net.sf.jasperreports.components.table.StandardColumn;
 import net.sf.jasperreports.components.table.StandardTable;
 import net.sf.jasperreports.components.table.WhenNoDataTypeTableEnum;
 import net.sf.jasperreports.engine.JRConstants;
@@ -387,11 +388,27 @@ public class MTable extends MGraphicElement implements IContainer,
 						&& evt instanceof CollectionElementAddedEvent
 						|| evt instanceof CollectionElementRemovedEvent
 						|| evt.getOldValue() instanceof DesignCell || evt
-							.getNewValue() instanceof DesignCell))
+							.getNewValue() instanceof DesignCell)){
 			getTableManager().update();
-		else if (getTableManager() != null)
+		} else if (getTableManager() != null){
 			getTableManager().update();
-		super.propertyChange(evt);
+		}
+	
+		if (!(evt.getPropertyName().equals(StandardColumn.PROPERTY_TABLE_FOOTER) ||
+				evt.getPropertyName().equals(StandardColumn.PROPERTY_TABLE_HEADER) ||
+				evt.getPropertyName().equals(StandardColumn.PROPERTY_COLUMN_HEADER) ||
+				evt.getPropertyName().equals(StandardColumn.PROPERTY_COLUMN_FOOTER) ||
+				evt.getPropertyName().equals(StandardColumn.PROPERTY_GROUP_HEADERS) ||
+				evt.getPropertyName().equals(StandardColumn.PROPERTY_GROUP_FOOTERS))){
+			super.propertyChange(evt);
+		} else {
+			if (hasChangedProperty()){
+				HashSet<String> graphicalProperties = getGraphicalProperties();
+				if (graphicalProperties.contains(evt.getPropertyName())) {
+					setChangedProperty(true);
+				}
+			}
+		}
 	}
 
 	@Override
