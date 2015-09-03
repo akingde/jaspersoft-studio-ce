@@ -49,6 +49,8 @@ import com.jaspersoft.studio.components.table.TableNodeIconDescriptor;
 import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.components.table.model.column.MColumn;
 import com.jaspersoft.studio.editor.defaults.DefaultManager;
+import com.jaspersoft.studio.editor.layout.ILayout;
+import com.jaspersoft.studio.editor.layout.VerticalRowLayout;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IContainer;
 import com.jaspersoft.studio.model.IContainerEditPart;
@@ -311,6 +313,8 @@ public class MTable extends MGraphicElement implements IContainer,
 		component.setDatasetRun(datasetRun);
 
 		DefaultManager.INSTANCE.applyDefault(this.getClass(), jrElement);
+		jrElement.getPropertiesMap().setProperty(ILayout.KEY,
+				VerticalRowLayout.class.getName());
 
 		return jrElement;
 	}

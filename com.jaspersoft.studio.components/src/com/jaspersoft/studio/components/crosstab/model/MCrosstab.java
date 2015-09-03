@@ -55,6 +55,8 @@ import com.jaspersoft.studio.components.crosstab.model.title.MTitleCell;
 import com.jaspersoft.studio.components.section.name.NameSection;
 import com.jaspersoft.studio.editor.defaults.DefaultManager;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
+import com.jaspersoft.studio.editor.layout.ILayout;
+import com.jaspersoft.studio.editor.layout.VerticalRowLayout;
 import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IContainer;
@@ -342,7 +344,8 @@ public class MCrosstab extends MGraphicElementLineBox implements IContainer,
 		jrDesignElement.setDataset(dataset);
 
 		DefaultManager.INSTANCE.applyDefault(this.getClass(), jrDesignElement);
-
+		jrDesignElement.getPropertiesMap().setProperty(ILayout.KEY,
+				VerticalRowLayout.class.getName());
 		return jrDesignElement;
 	}
 
