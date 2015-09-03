@@ -21,6 +21,7 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.descriptor.combo.RComboBoxPropertyDescriptor;
@@ -74,6 +75,13 @@ public class SPRCombo extends ASPropertyWidget<RComboBoxPropertyDescriptor> {
 	}
 
 	public void setData(APropertyNode pnode, Object b) {
+		if (pnode != null && pnode.getDescriptors() != null)
+			// I see sometimes pdescriptor is not the same, because in some cases we have pdescriptor static or not,
+			// better is to setup the right one, if we want to get items from there
+			for (IPropertyDescriptor pd : pnode.getDescriptors()) {
+				if (pDescriptor.getId().equals(pd.getId()) && pd instanceof RComboBoxPropertyDescriptor)
+					pDescriptor = (RComboBoxPropertyDescriptor) pd;
+			}
 		this.pnode = pnode;
 		this.b = b;
 		refreshing = true;

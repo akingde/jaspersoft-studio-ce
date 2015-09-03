@@ -547,7 +547,7 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 	}
 
 	private RWComboBoxPropertyDescriptor styleD;
-	private RComboBoxPropertyDescriptor groupChangesD;
+	private static RComboBoxPropertyDescriptor groupChangesD;
 	private static NamedEnumPropertyDescriptor<PositionTypeEnum> positionTypeD;
 	// private static JSSEnumPropertyDescriptor opaqueD;
 	private static NamedEnumPropertyDescriptor<StretchTypeEnum> stretchTypeD;
