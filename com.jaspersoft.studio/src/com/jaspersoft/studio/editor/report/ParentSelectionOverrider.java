@@ -19,6 +19,7 @@ import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.swt.SWT;
 
 import com.jaspersoft.studio.editor.java2d.ISelectionOverrider;
+import com.jaspersoft.studio.editor.java2d.JSSScrollingGraphicalViewer;
 import com.jaspersoft.studio.model.ANode;
 
 /**
@@ -64,7 +65,11 @@ public class ParentSelectionOverrider implements ISelectionOverrider {
 						EditPart part = currentNode.getFigureEditPart();
 						if (part != null){
 							part.getViewer().deselectAll();
-							part.getViewer().select(part);
+							if (part.getViewer() instanceof JSSScrollingGraphicalViewer){
+								((JSSScrollingGraphicalViewer)part.getViewer()).forceSelect(part);
+							} else {
+								part.getViewer().select(part);
+							}
 							return true;
 						}
 					}

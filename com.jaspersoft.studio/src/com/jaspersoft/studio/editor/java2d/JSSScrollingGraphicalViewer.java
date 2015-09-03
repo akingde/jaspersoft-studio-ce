@@ -12,6 +12,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.java2d;
 
+import java.util.List;
+
 import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
@@ -61,12 +63,41 @@ public class JSSScrollingGraphicalViewer extends ScrollingGraphicalViewer {
 	 * Append the provided editpart to the current selection, but only if there is not 
 	 * an overrider that override the current selection to select something else
 	 */
+	@Override
 	public void appendSelection(EditPart editpart) {
 		boolean wasOverride = false;
 		if (selectionOverrider != null){
 			wasOverride = selectionOverrider.overriddenSelection(editpart, this);
 		}
 		if (!wasOverride) super.appendSelection(editpart);
+	}
+	
+	/**
+	 * Deselect all the elements
+	 */
+	protected void primDeselectAll() {
+		EditPart part;
+		List<?> list = primGetSelectedEditParts();
+		for (int i = 0; i < list.size(); i++) {
+			part = (EditPart) list.get(i);
+			part.setSelected(EditPart.SELECTED_NONE);
+		}
+		list.clear();
+	}
+	
+	/**
+	 * Select an element without call the selection overrider, so force
+	 * the selection of the passed element
+	 * 
+	 * @param editpart the element to select
+	 */
+	public void forceSelect(EditPart editpart) {
+		// If selection isn't changing, do nothing.
+		if ((getSelectedEditParts().size() == 1)
+				&& (getSelectedEditParts().get(0) == editpart))
+			return;
+		primDeselectAll();
+		super.appendSelection(editpart);
 	}
 
 	/**
