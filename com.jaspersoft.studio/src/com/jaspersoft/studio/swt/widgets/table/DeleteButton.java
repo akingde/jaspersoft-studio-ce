@@ -84,7 +84,7 @@ public class DeleteButton {
 		});
 		tableViewer.getTable().addKeyListener(new KeyAdapter() {
 			public void keyReleased(KeyEvent e) {
-				if (delB.isEnabled() && e.keyCode == SWT.DEL)
+				if (delB.isEnabled() && (e.keyCode == SWT.DEL || e.keyCode == SWT.BS))
 					listener.widgetSelected(null);
 			}
 		});

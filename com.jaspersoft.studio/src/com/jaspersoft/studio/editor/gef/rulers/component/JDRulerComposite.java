@@ -537,7 +537,7 @@ public class JDRulerComposite extends Composite {
 			 * @see org.eclipse.gef.KeyHandler#keyPressed(org.eclipse.swt.events.KeyEvent)
 			 */
 			public boolean keyPressed(KeyEvent event) {
-				if (event.keyCode == SWT.DEL) {
+				if (event.keyCode == SWT.DEL || e.keyCode == SWT.BS) {
 					List<?> selection = getViewer().getSelectedEditParts();
 					for(Object part : selection){
 						// If a guide has focus, delete it

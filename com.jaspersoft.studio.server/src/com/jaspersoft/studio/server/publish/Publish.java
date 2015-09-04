@@ -38,6 +38,7 @@ import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.export.AExporter;
+import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.AMJrxmlContainer;
 import com.jaspersoft.studio.server.model.MFolder;
 import com.jaspersoft.studio.server.model.MJrxml;
@@ -75,9 +76,9 @@ public class Publish {
 						.audit(UsageStatisticsIDs.SERVER_UPLOAD,
 								UsageStatisticsIDs.CATEGORY_SERVER);
 
-			String str = "Success!\nThe following resources where published on the JasperReports Server:\n";
+			String str = Messages.Publish_0;
 			for (String mres : resources)
-				str += mres + "\n";
+				str += mres + "\n"; //$NON-NLS-1$
 			UIUtils.showInformation(str);
 
 			// refresh
@@ -121,7 +122,7 @@ public class Publish {
 		String version = ServerManager.getVersion(Misc.nvl(mrunit, jrxml));
 		ResourceDescriptor rdjrxml = jrxml.getValue();
 		if (rdjrxml.getParentFolder() != null
-				&& !rdjrxml.getParentFolder().endsWith("_files"))
+				&& !rdjrxml.getParentFolder().endsWith("_files")) //$NON-NLS-1$
 			rdjrxml.setIsReference(true);
 
 		List<AMResource> resources = ((JasperReportsConfiguration) jrConfig)
@@ -187,7 +188,7 @@ public class Publish {
 						.equals(OverwriteEnum.OVERWRITE)) {
 					ResourceDescriptor rd = res.getValue();
 					if (rd.getData() != null
-							&& !rd.getParentFolder().endsWith("_files")) {
+							&& !rd.getParentFolder().endsWith("_files")) { //$NON-NLS-1$
 						mrunit.getWsClient().addOrModifyResource(monitor, rd,
 								null);
 					} else
@@ -251,7 +252,7 @@ public class Publish {
 					popt.getDataset()
 							.setProperty(
 									DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION,
-									"repo:" + dauri);
+									"repo:" + dauri); //$NON-NLS-1$
 				}
 				if (popt.getPublishMethod() != null)
 					if (popt.getPublishMethod() == ResourcePublishMethod.REFERENCE) {
@@ -275,7 +276,7 @@ public class Publish {
 						ResourceDescriptor rd = res.getValue();
 						rd.setParentFolder(popt.getReferencedResource()
 								.getUriString());
-						rd.setUriString(rd.getParentFolder() + "/"
+						rd.setUriString(rd.getParentFolder() + "/" //$NON-NLS-1$
 								+ rd.getName());
 					} else if (popt.getPublishMethod() == ResourcePublishMethod.REWRITEEXPRESSION) {
 						;
@@ -314,8 +315,8 @@ public class Publish {
 					rpt.setProperty(
 							AExporter.PROP_USER,
 							v.getUser()
-									+ (v.getOrganisation() != null ? "|"
-											+ v.getOrganisation() : ""));
+									+ (v.getOrganisation() != null ? "|" //$NON-NLS-1$
+											+ v.getOrganisation() : "")); //$NON-NLS-1$
 				}
 				ResourceDescriptor rd = node.getValue();
 				if (rd.getWsType().equals(ResourceDescriptor.TYPE_REPORTUNIT))

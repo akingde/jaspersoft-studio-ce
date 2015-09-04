@@ -117,7 +117,7 @@ public class SQLQueryDiagram {
 		viewer.setKeyHandler(new GraphicalViewerKeyHandler(viewer) {
 			@Override
 			public boolean keyPressed(KeyEvent event) {
-				if (event.keyCode == SWT.DEL)
+				if (event.keyCode == SWT.DEL || event.keyCode == SWT.BS)
 					doDeleteTable();
 				else if ((event.stateMask & Keyboard.getCtrlKey()) != 0)
 					switch (event.keyCode) {
