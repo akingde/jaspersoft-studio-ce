@@ -17,4 +17,5 @@ Bundle-ClassPath: lib/ejb3-persistence.jar,
  .
 Eclipse-RegisterBuddy: com.jaspersoft.studio
 Eclipse-BuddyPolicy: registered
-Require-Bundle: com.jaspersoft.studio
+Require-Bundle: com.jaspersoft.studio,
+ org.slf4j.api;bundle-version="1.6.4"
