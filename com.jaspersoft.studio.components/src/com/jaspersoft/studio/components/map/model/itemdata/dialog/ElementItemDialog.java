@@ -60,10 +60,11 @@ import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /**
- * Dialog that allows editing the information associated to a {@link MapDataElementItemDTO} element. 
+ * Dialog that allows editing the information associated to a
+ * {@link MapDataElementItemDTO} element.
  * 
  * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
- *
+ * 
  */
 public class ElementItemDialog extends Dialog {
 
@@ -84,79 +85,89 @@ public class ElementItemDialog extends Dialog {
 	private ExpressionContext defaultExpressionContext;
 	private ElementsListWidgetConfiguration wconfig;
 
-	public ElementItemDialog(
-			Shell parentShell, MapDataElementItemDTO itemDTO, ElementsListWidgetConfiguration wconfig, 
-			Map<String,String> elementDatasetsMap, JasperReportsConfiguration jconfig) {
+	public ElementItemDialog(Shell parentShell, MapDataElementItemDTO itemDTO,
+			ElementsListWidgetConfiguration wconfig,
+			Map<String, String> elementDatasetsMap,
+			JasperReportsConfiguration jconfig) {
 		super(parentShell);
 		this.itemDTO = itemDTO;
 		this.item = (StandardItem) this.itemDTO.getItem();
 		this.wconfig = wconfig;
 		this.mandatoryPropertyNames = new ArrayList<String>();
 		this.elementDatasetsMap = elementDatasetsMap;
-		this.allDatasetNames = this.elementDatasetsMap.keySet().toArray(new String[]{});
+		this.allDatasetNames = this.elementDatasetsMap.keySet().toArray(
+				new String[] {});
 		this.jconfig = jconfig;
 	}
-	
+
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		Composite dialogArea = (Composite) super.createDialogArea(parent);
-		dialogArea.setLayout(new GridLayout(1,false));
-		
-		Group itemKindGrp = new Group(dialogArea,SWT.NONE);
-		itemKindGrp.setText(NLS.bind(Messages.ElementItemDialog_ItemKind,wconfig.getElementTxt()));
-		itemKindGrp.setLayout(new GridLayout(1,false));
-		itemKindGrp.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
-		
-		staticRBtn = new Button(itemKindGrp,SWT.RADIO);
+		dialogArea.setLayout(new GridLayout(1, false));
+
+		Group itemKindGrp = new Group(dialogArea, SWT.NONE);
+		itemKindGrp.setText(NLS.bind(Messages.ElementItemDialog_ItemKind,
+				wconfig.getElementTxt()));
+		itemKindGrp.setLayout(new GridLayout(1, false));
+		itemKindGrp
+				.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
+
+		staticRBtn = new Button(itemKindGrp, SWT.RADIO);
 		staticRBtn.setText(Messages.ElementItemDialog_Static);
 		staticRBtn.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
-		
-		datasetRBtn = new Button(itemKindGrp,SWT.RADIO);
+
+		datasetRBtn = new Button(itemKindGrp, SWT.RADIO);
 		datasetRBtn.setText(Messages.ElementItemDialog_DatasetBased);
-		datasetRBtn.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
-		
+		datasetRBtn
+				.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
+
 		datasetCombo = new Combo(itemKindGrp, SWT.READ_ONLY);
 		GridData datasetComboGD = new GridData(SWT.LEFT, SWT.FILL, false, false);
 		datasetComboGD.widthHint = 200;
 		datasetComboGD.horizontalIndent = 15;
 		datasetCombo.setLayoutData(datasetComboGD);
-		
+
 		Group propertiesGrp = new Group(dialogArea, SWT.NONE);
 		propertiesGrp.setText(Messages.ElementItemDialog_Properties);
-		propertiesGrp.setLayout(new GridLayout(2,false));
-		propertiesGrp.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true));
-		
+		propertiesGrp.setLayout(new GridLayout(2, false));
+		propertiesGrp
+				.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+
 		propertiesTV = createPropertiesTable(propertiesGrp);
-		propertiesTV.getTable().setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true,1,3));
-		
+		propertiesTV.getTable().setLayoutData(
+				new GridData(SWT.FILL, SWT.FILL, true, true, 1, 3));
+
 		btnAddProperty = new Button(propertiesGrp, SWT.PUSH);
 		btnAddProperty.setText(Messages.ElementItemDialog_Add);
-		btnAddProperty.setLayoutData(new GridData(SWT.FILL,SWT.TOP,false,false));
+		btnAddProperty.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false,
+				false));
 
 		btnModifyProperty = new Button(propertiesGrp, SWT.PUSH);
 		btnModifyProperty.setText(Messages.ElementItemDialog_Modify);
-		btnModifyProperty.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false));
+		btnModifyProperty.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false,
+				false));
 
-		
 		btnRemoveProperty = new Button(propertiesGrp, SWT.PUSH);
 		btnRemoveProperty.setText(Messages.ElementItemDialog_Remove);
-		btnRemoveProperty.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false));
-		
+		btnRemoveProperty.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false,
+				false));
+
 		initWidgets();
 		attachListeners();
 		enableDefaultButtons();
-				
+
 		return dialogArea;
 	}
-	
+
 	private void initWidgets() {
 		boolean staticItem = itemDTO.isStatic();
 		staticRBtn.setSelection(staticItem);
 		datasetRBtn.setSelection(!staticItem);
 		datasetCombo.setEnabled(!staticItem);
 		datasetCombo.setItems(allDatasetNames);
-		if(!staticItem){
-			int index = Arrays.asList(allDatasetNames).indexOf(itemDTO.getDatasetName());
+		if (!staticItem) {
+			int index = Arrays.asList(allDatasetNames).indexOf(
+					itemDTO.getDatasetName());
 			datasetCombo.select(index);
 		}
 		propertiesTV.setInput(item.getProperties());
@@ -169,33 +180,34 @@ public class ElementItemDialog extends Dialog {
 				addPropertyBtnPressed();
 			}
 		});
-	
+
 		btnModifyProperty.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				modifyPropertyBtnPressed();				
+				modifyPropertyBtnPressed();
 			}
 		});
-		
+
 		btnRemoveProperty.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				removePropertyBtnPressed();
 			}
 		});
-		
+
 		propertiesTV.addDoubleClickListener(new IDoubleClickListener() {
 			@Override
 			public void doubleClick(DoubleClickEvent event) {
 				modifyPropertyBtnPressed();
 			}
 		});
-		propertiesTV.addSelectionChangedListener(new ISelectionChangedListener() {
-			@Override
-			public void selectionChanged(SelectionChangedEvent event) {
-				enableDefaultButtons();
-			}
-		});
+		propertiesTV
+				.addSelectionChangedListener(new ISelectionChangedListener() {
+					@Override
+					public void selectionChanged(SelectionChangedEvent event) {
+						enableDefaultButtons();
+					}
+				});
 		staticRBtn.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -205,7 +217,7 @@ public class ElementItemDialog extends Dialog {
 				computeExpressionContext();
 			}
 		});
-		datasetRBtn.addSelectionListener(new SelectionAdapter(){
+		datasetRBtn.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				datasetCombo.setEnabled(true);
@@ -220,38 +232,43 @@ public class ElementItemDialog extends Dialog {
 			}
 		});
 	}
-	
+
 	private TableViewer createPropertiesTable(Composite parent) {
-		Composite cmpItemPropertiesTableViewer=new Composite(parent, SWT.NONE);
-		cmpItemPropertiesTableViewer.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true,1,3));
+		Composite cmpItemPropertiesTableViewer = new Composite(parent, SWT.NONE);
+		cmpItemPropertiesTableViewer.setLayoutData(new GridData(SWT.FILL,
+				SWT.FILL, true, true, 1, 3));
 		TableColumnLayout tl_itemPropertiesTableViewer = new TableColumnLayout();
 		cmpItemPropertiesTableViewer.setLayout(tl_itemPropertiesTableViewer);
-		
-		TableViewer tv = new TableViewer(cmpItemPropertiesTableViewer,SWT.BORDER | SWT.V_SCROLL | SWT.SINGLE | SWT.FULL_SELECTION);
+
+		TableViewer tv = new TableViewer(cmpItemPropertiesTableViewer,
+				SWT.BORDER | SWT.V_SCROLL | SWT.SINGLE | SWT.FULL_SELECTION);
 		tv.getTable().setHeaderVisible(true);
 		tv.getTable().setLinesVisible(true);
-		
+
 		TableViewerColumn tvcName = new TableViewerColumn(tv, SWT.NONE);
 		tvcName.getColumn().setText(Messages.ElementItemDialog_NameColumn);
 		tvcName.setLabelProvider(getItemPropertyNameLabelProvider());
-		tl_itemPropertiesTableViewer.setColumnData(tvcName.getColumn(), new ColumnWeightData(1, ColumnWeightData.MINIMUM_WIDTH, true));
+		tl_itemPropertiesTableViewer.setColumnData(tvcName.getColumn(),
+				new ColumnWeightData(1, ColumnWeightData.MINIMUM_WIDTH, true));
 
 		TableViewerColumn tvcValue = new TableViewerColumn(tv, SWT.NONE);
 		tvcValue.getColumn().setText(Messages.ElementItemDialog_ValueColumn);
 		tvcValue.setLabelProvider(getItemPropertyValueLabelProvider());
-		tl_itemPropertiesTableViewer.setColumnData(tvcValue.getColumn(), new ColumnWeightData(1, ColumnWeightData.MINIMUM_WIDTH, true));
-		
+		tl_itemPropertiesTableViewer.setColumnData(tvcValue.getColumn(),
+				new ColumnWeightData(1, ColumnWeightData.MINIMUM_WIDTH, true));
+
 		tv.setContentProvider(new ArrayContentProvider());
 
 		return tv;
 	}
 
 	private CellLabelProvider getItemPropertyValueLabelProvider() {
-		return new ColumnLabelProvider(){
+		return new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
-				if(element instanceof ItemProperty) {
-					String value = ElementDataHelper.getItemPropertyValueAsString((ItemProperty) element);
+				if (element instanceof ItemProperty) {
+					String value = ElementDataHelper
+							.getItemPropertyValueAsString((ItemProperty) element);
 					return Misc.nvl(value);
 				}
 				return super.getText(element);
@@ -260,10 +277,10 @@ public class ElementItemDialog extends Dialog {
 	}
 
 	private CellLabelProvider getItemPropertyNameLabelProvider() {
-		return new ColumnLabelProvider(){
+		return new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
-				if(element instanceof ItemProperty) {
+				if (element instanceof ItemProperty) {
 					return ((ItemProperty) element).getName();
 				}
 				return super.getText(element);
@@ -274,15 +291,16 @@ public class ElementItemDialog extends Dialog {
 	@Override
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
-		newShell.setText(NLS.bind(Messages.ElementItemDialog_DialogTitle,wconfig.getElementTxt()));
+		newShell.setText(NLS.bind(Messages.ElementItemDialog_DialogTitle,
+				wconfig.getElementTxt()));
 		UIUtils.resizeAndCenterShell(newShell, 500, 550);
 	}
-	
+
 	@Override
 	protected void setShellStyle(int newShellStyle) {
 		super.setShellStyle(newShellStyle | SWT.RESIZE);
 	}
-	
+
 	@Override
 	public boolean close() {
 		return super.close();
@@ -291,45 +309,51 @@ public class ElementItemDialog extends Dialog {
 	public void setMandatoryPropertyNames(List<String> names) {
 		this.mandatoryPropertyNames = names;
 	}
-	
+
 	private void addPropertyBtnPressed() {
-		ItemPropertyDialog dialog = new ItemPropertyDialog(UIUtils.getShell(), null,wconfig.getElementPropertiesResourceLocation());
+		ItemPropertyDialog dialog = new ItemPropertyDialog(UIUtils.getShell(),
+				null, wconfig.getElementPropertiesResourceLocation());
 		dialog.setExpressionContext(expContext);
-		if(dialog.open()==Window.OK){
-			((StandardItem)item).addItemProperty(dialog.getItemProperty());
+		if (dialog.open() == Window.OK) {
+			((StandardItem) item).addItemProperty(dialog.getItemProperty());
 			refreshTable();
 		}
 	}
-	
+
 	private void modifyPropertyBtnPressed() {
 		ItemProperty property = getCurrentSelectedProperty();
-		if(property!=null) {
+		if (property != null) {
 			ItemProperty clonedP = (ItemProperty) property.clone();
-			ItemPropertyDialog dialog = new ItemPropertyDialog(UIUtils.getShell(),clonedP,wconfig.getElementPropertiesResourceLocation());
+			ItemPropertyDialog dialog = new ItemPropertyDialog(
+					UIUtils.getShell(), clonedP,
+					wconfig.getElementPropertiesResourceLocation());
 			dialog.setExpressionContext(expContext);
-			if(dialog.open() == Window.OK){
-				((StandardItem)item).removeItemProperty(property);
-				((StandardItem)item).addItemProperty(dialog.getItemProperty());
+			if (dialog.open() == Window.OK) {
+				((StandardItem) item).removeItemProperty(property);
+				((StandardItem) item).addItemProperty(dialog.getItemProperty());
 				refreshTable();
 			}
 		}
 	}
-	
+
 	private void removePropertyBtnPressed() {
 		ItemProperty property = getCurrentSelectedProperty();
-		if(property!=null) {
-			if(isMandatoryProperty(property.getName())){
-				MessageDialog.openError(
-						UIUtils.getShell(), Messages.ElementItemDialog_ErrorDialogTitle, 
-						NLS.bind(Messages.ElementItemDialog_ErrorDialogMandatoryNameMsg,property.getName()));
-			}
-			else {
-				((StandardItem)item).removeItemProperty(property);
+		if (property != null) {
+			if (isMandatoryProperty(property.getName())) {
+				MessageDialog
+						.openError(
+								UIUtils.getShell(),
+								Messages.ElementItemDialog_ErrorDialogTitle,
+								NLS.bind(
+										Messages.ElementItemDialog_ErrorDialogMandatoryNameMsg,
+										property.getName()));
+			} else {
+				((StandardItem) item).removeItemProperty(property);
 				refreshTable();
 			}
 		}
 	}
-	
+
 	private void refreshTable() {
 		this.propertiesTV.setInput(item.getProperties());
 		enableDefaultButtons();
@@ -338,22 +362,24 @@ public class ElementItemDialog extends Dialog {
 	private void enableDefaultButtons() {
 		ItemProperty selP = getCurrentSelectedProperty();
 		btnAddProperty.setEnabled(true);
-		btnModifyProperty.setEnabled(selP!=null);
-		btnRemoveProperty.setEnabled(selP!=null && !isMandatoryProperty(selP.getName()));
+		btnModifyProperty.setEnabled(selP != null);
+		btnRemoveProperty.setEnabled(selP != null
+				&& !isMandatoryProperty(selP.getName()));
 	}
-	
+
 	private boolean isMandatoryProperty(String pname) {
-		for(String n : mandatoryPropertyNames) {
-			if(pname.equals(n)){
+		for (String n : mandatoryPropertyNames) {
+			if (pname.equals(n)) {
 				return true;
 			}
 		}
 		return false;
 	}
-	
+
 	private ItemProperty getCurrentSelectedProperty() {
-		Object selEl = ((IStructuredSelection) propertiesTV.getSelection()).getFirstElement();
-		if(selEl instanceof ItemProperty) {
+		Object selEl = ((IStructuredSelection) propertiesTV.getSelection())
+				.getFirstElement();
+		if (selEl instanceof ItemProperty) {
 			return (ItemProperty) selEl;
 		}
 		return null;
@@ -370,25 +396,30 @@ public class ElementItemDialog extends Dialog {
 	}
 
 	private void computeExpressionContext() {
-		if(staticRBtn.getSelection()) {
+		if (staticRBtn.getSelection()) {
 			expContext = defaultExpressionContext;
-		}
-		else {
+		} else {
 			String dsSelected = datasetCombo.getText();
 			// update the expression context
-			JRDesignDataset designDS = 
-					ModelUtils.getDesignDatasetByName(jconfig.getJasperDesign(), elementDatasetsMap.get(dsSelected));
-			expContext = new ExpressionContext(designDS,jconfig);
+			String dn = elementDatasetsMap.get(dsSelected);
+			JRDesignDataset designDS = null;
+			if (dn == null)
+				jconfig.getJasperDesign().getMainDesignDataset();
+			else
+				designDS = ModelUtils.getDesignDatasetByName(
+						jconfig.getJasperDesign(), dn);
+			expContext = new ExpressionContext(designDS, jconfig);
 		}
 	}
-	
+
 	@Override
 	protected void okPressed() {
-		if(datasetRBtn.getSelection() && datasetCombo.getText().isEmpty()) {
-			MessageDialog.openError(UIUtils.getShell(), Messages.ElementItemDialog_ErrorDialogTitle, Messages.ElementItemDialog_ErrorDialogNoDatasetMsg);
-		}
-		else {
-			super.okPressed();	
+		if (datasetRBtn.getSelection() && datasetCombo.getText().isEmpty()) {
+			MessageDialog.openError(UIUtils.getShell(),
+					Messages.ElementItemDialog_ErrorDialogTitle,
+					Messages.ElementItemDialog_ErrorDialogNoDatasetMsg);
+		} else {
+			super.okPressed();
 		}
 	}
 }
