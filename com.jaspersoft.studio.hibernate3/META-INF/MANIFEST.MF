@@ -2,24 +2,18 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name
 Bundle-SymbolicName: com.jaspersoft.studio.hibernate3;singleton:=true
-Bundle-Version: 3.3.2.GA
+Bundle-Version: 3.3.2.GA_01
 Bundle-Activator: com.jaspersoft.studio.hibernate3.Hibernate3Activator
 Bundle-Vendor: %Bundle-Vendor
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6,
  JavaSE-1.7
 Bundle-ActivationPolicy: lazy
-Bundle-ClassPath: lib/antlr-2.7.6.jar,
- lib/commons-collections-3.1.jar,
- lib/commons-logging-1.1.1.jar,
- lib/dom4j-1.6.1.jar,
- lib/ejb3-persistence.jar,
+Bundle-ClassPath: lib/ejb3-persistence.jar,
  lib/hibernate-annotations.jar,
  lib/hibernate-commons-annotations.jar,
  lib/hibernate3.jar,
  lib/javassist-3.9.0.GA.jar,
  lib/jta-1.1.jar,
- lib/slf4j-log4j12-1.5.8.jar,
- lib/slf4j-api-1.5.8.jar,
  .
 Eclipse-RegisterBuddy: com.jaspersoft.studio
 Eclipse-BuddyPolicy: registered
