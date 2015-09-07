@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.1.0.qualifier using JasperReports Library version 6.0.4  -->
+<!-- 2015-04-07T12:27:56 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="kpi" language="groovy" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="519e026f-22f5-434b-a062-9b9dcba72392">
+	<property name="net.sf.jasperreports.export.json.schema33" value="kpi.schema.json"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Sample DB"/>
+	<style name="Style1" isDefault="true" fontSize="14"/>
+	<style name="Labels" style="Style1" mode="Opaque" backcolor="#EBEBEB"/>
+	<subDataset name="ValueSeries" uuid="845aff63-46e8-4645-814a-ad9f0e83fbf0">
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Sample DB"/>
+		<queryString language="SQL">
+			<![CDATA[]]>
+		</queryString>
+		<variable name="x_value" class="java.lang.String">
+			<variableExpression><![CDATA["0"]]></variableExpression>
+		</variable>
+		<variable name="y_value" class="java.lang.String">
+			<variableExpression><![CDATA["0"]]></variableExpression>
+		</variable>
+	</subDataset>
+	<subDataset name="Tresholds" uuid="b45c550e-8858-40e1-ba6e-84fb29311d6c">
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+		<queryString language="SQL">
+			<![CDATA[]]>
+		</queryString>
+		<field name="min" class="java.lang.Number"/>
+		<field name="max" class="java.lang.Number"/>
+		<field name="color" class="java.lang.String"/>
+	</subDataset>
+	<parameter name="title" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["My KPI"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="tresholds" class="java.util.Collection" isForPrompting="false">
+		<parameterDescription><![CDATA[]]></parameterDescription>
+		<defaultValueExpression><![CDATA[[]]]></defaultValueExpression>
+	</parameter>
+	<parameter name="widget" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="tresholdtype" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["absolute"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="valuePattern" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="targetPattern" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<queryString language="SQL">
+		<![CDATA[]]>
+	</queryString>
+	<variable name="value" class="java.lang.Object"/>
+	<variable name="target" class="java.lang.Object"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="541" splitType="Stretch">
+			<staticText>
+				<reportElement style="Labels" positionType="Float" x="0" y="0" width="554" height="20" uuid="f8244fab-896b-4ee8-84c5-93d81ba7388d"/>
+				<text><![CDATA[KPI Title (uses the default value of title parameter)]]></text>
+			</staticText>
+			<textField evaluationTime="Report">
+				<reportElement positionType="Float" x="0" y="20" width="552" height="20" uuid="c2739004-88cf-41a7-8b15-fa0c977212a3">
+					<property name="net.sf.jasperreports.export.json.path" value="title"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$P{title}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="Labels" positionType="Float" x="0" y="170" width="552" height="20" uuid="6f94869d-06c4-4c57-8030-ee04d8146d4c"/>
+				<text><![CDATA[Tresholds (thresholds.min, thresholds.max, thresholds.color)]]></text>
+			</staticText>
+			<componentElement>
+				<reportElement positionType="Float" x="1" y="190" width="552" height="30" uuid="44e51b8e-d0e2-4e62-acac-00e5a95c4974">
+					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.HorizontalRowLayout"/>
+				</reportElement>
+				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
+					<datasetRun subDataset="Tresholds" uuid="4bcfb592-42e2-4b9a-a619-ecbbb2e716a9">
+						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRMapCollectionDataSource($P{tresholds})]]></dataSourceExpression>
+					</datasetRun>
+					<jr:listContents height="30" width="552">
+						<textField>
+							<reportElement x="0" y="0" width="184" height="30" uuid="b571a5d2-10c6-4de4-81ec-b87aa3caf5f8">
+								<property name="net.sf.jasperreports.export.json.path" value="thresholds.min"/>
+							</reportElement>
+							<textFieldExpression><![CDATA[$F{min}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement x="184" y="0" width="184" height="30" uuid="95f12d1d-d845-478c-8fff-a3e5b376e3cd">
+								<property name="net.sf.jasperreports.export.json.path" value="thresholds.max"/>
+							</reportElement>
+							<textFieldExpression><![CDATA[$F{max}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement x="368" y="0" width="184" height="30" uuid="fb971bb8-77bc-4129-b6e5-7d311ef074f3">
+								<property name="net.sf.jasperreports.export.json.path" value="thresholds.color"/>
+							</reportElement>
+							<textFieldExpression><![CDATA[$F{color}]]></textFieldExpression>
+						</textField>
+					</jr:listContents>
+				</jr:list>
+			</componentElement>
+			<staticText>
+				<reportElement style="Labels" positionType="Float" x="1" y="250" width="553" height="30" uuid="5552b101-9f37-4b1a-953a-9cf7248a56f2"/>
+				<text><![CDATA[Value Series (valueSeries.x, valueSeries.y)]]></text>
+			</staticText>
+			<componentElement>
+				<reportElement positionType="Float" x="3" y="280" width="550" height="30" uuid="7aa59c8b-7695-4c6e-9c5b-609d90750a90"/>
+				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
+					<datasetRun subDataset="ValueSeries" uuid="61b8cfd0-6568-4d33-85ab-d7f20ae44250">
+						<parametersMapExpression><![CDATA[$P{REPORT_PARAMETERS_MAP}]]></parametersMapExpression>
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:listContents height="30" width="550">
+						<textField>
+							<reportElement x="0" y="0" width="260" height="30" uuid="c934e75b-59c0-4d2b-8104-933efec6c62b">
+								<property name="net.sf.jasperreports.export.json.path" value="valueSeries.y"/>
+							</reportElement>
+							<textFieldExpression><![CDATA[$V{x_value}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement x="260" y="0" width="290" height="30" uuid="1a525428-f53c-4e21-a7ce-e1f67faadb2d">
+								<property name="net.sf.jasperreports.export.json.path" value="valueSeries.x"/>
+							</reportElement>
+							<textFieldExpression><![CDATA[$V{y_value}]]></textFieldExpression>
+						</textField>
+					</jr:listContents>
+				</jr:list>
+			</componentElement>
+			<staticText>
+				<reportElement style="Labels" positionType="Float" x="0" y="348" width="553" height="20" uuid="4d21cb6a-670c-450e-855b-300ec4541708"/>
+				<text><![CDATA[KPI Value (value and (optional) value pattern)]]></text>
+			</staticText>
+			<textField evaluationTime="Report" pattern="">
+				<reportElement key="value" positionType="Float" x="0" y="368" width="553" height="20" uuid="da79a924-d897-49d7-9b34-ab3f3dcb213b">
+					<property name="net.sf.jasperreports.export.json.path" value="value"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$V{value}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="Labels" positionType="Float" x="1" y="420" width="553" height="20" uuid="f03bcb6d-5bf9-41e2-a67b-7de7697b7e61"/>
+				<text><![CDATA[KPI Target Value (target and (optional) target pattern)]]></text>
+			</staticText>
+			<textField evaluationTime="Report" pattern="">
+				<reportElement key="target" positionType="Float" x="2" y="440" width="553" height="20" uuid="877fb8f7-fdf1-4267-ac92-91b1bba72f38">
+					<property name="net.sf.jasperreports.export.json.path" value="target"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$V{target}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement positionType="Float" x="0" y="80" width="552" height="20" uuid="3698ab49-7c9c-44c1-9c5d-5d99b717b1d4">
+					<property name="net.sf.jasperreports.export.json.path" value="widget"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$P{widget}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="Labels" positionType="Float" x="0" y="60" width="554" height="20" uuid="adbd3010-e940-48ec-ac5c-c2a83b5b9fb6"/>
+				<text><![CDATA[Widget Type]]></text>
+			</staticText>
+			<textField evaluationTime="Report" pattern="">
+				<reportElement key="value" positionType="Float" x="0" y="510" width="553" height="20" uuid="8ee2ec70-f2fe-41cd-b41c-ce126f8c3138">
+					<property name="net.sf.jasperreports.export.json.path" value="lastUpdate"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="Labels" positionType="Float" x="1" y="120" width="554" height="20" uuid="f4e41559-18f0-4cd0-8e4e-d5787a5a8eb9"/>
+				<text><![CDATA[Treshold type (percentage = percentage from target, absolute = absolute value)]]></text>
+			</staticText>
+			<textField evaluationTime="Report">
+				<reportElement positionType="Float" x="0" y="141" width="552" height="20" uuid="ddf954cc-6c7e-47e5-bb0a-12805fe99beb">
+					<property name="net.sf.jasperreports.export.json.path" value="tresholdtype"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$P{tresholdtype}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement key="valuePattern" positionType="Float" x="0" y="390" width="553" height="20" uuid="883bca7e-f2ee-4b18-b0cf-64d6286359a1"/>
+				<textFieldExpression><![CDATA[$P{valuePattern}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement key="targetPattern" positionType="Float" x="1" y="460" width="553" height="20" uuid="19a60803-d225-41fa-b3db-b35046b6ffce">
+					<property name="net.sf.jasperreports.export.json.path" value="targetPattern"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$P{targetPattern}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

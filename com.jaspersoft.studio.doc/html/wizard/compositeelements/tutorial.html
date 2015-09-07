@@ -1,0 +1,73 @@
+<html><head><META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>The Composite Elements</title><meta content="DocBook XSL Stylesheets V1.78.0" name="generator"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="N40003"></a>The Composite Elements</h2></div></div><hr></div>
+	
+	<div class="section"><div class="titlepage"></div>
+		<p><b>Overview.&nbsp;</b>
+		
+			The composite elements are a new kind of user created element introduced in Jaspersof Studio with the version 6.1.1. They allow to create a new element in the palette starting from one or more basic elements, and reuse them whenever you want in any report. For example it is possible to create a composite element using a static text and a text field with some attributes already predefined (like the fonts or the colors). You will have this new element in the palette and when you drag it in the report it will create the same Static Text and Text Field with the same set of properties of the originals.
+		
+		
+			This composite elements are stored inside a special folder of your workspace, so when you switch your version of Jaspersoft Studio you will found always your previously created elements as soon as you use the same Workspace.
+		
+		</p>
+		<p><b>Create a Composite Element.&nbsp;</b>
+		
+		Create a Composite Element it is really simple. In any report create the elements you want to add to the Composite Element and customize their properties as you want, when you have finished select this elements, right click on them and form the contextual menu select "Save as Composite Element..". NOTE: A composite element can be created only from a set of Basic Elements, basic means elements that are not depending from a dataset.
+		
+		</p><div class="figure"><a name="N40020"></a><p class="title"><b>Figure&nbsp;1.&nbsp;Save as Composite Element option</b></p><div class="figure-contents">
+			
+			<div class="screenshot">
+				<div class="mediaobject"><img src="1.png" width="800" alt="Save as Composite Element option"></div>
+			</div>
+		</div></div><p><br class="figure-break">
+		
+		When you click this option a Dialog will appear, in this dialog you will be able to specify:
+		</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem">
+				<p>The name of your Composite Element, this information is mandatory since it will be used inside the palette and must be an unique name</p>
+			</li><li class="listitem">
+				<p>An optional description for the element</p>
+			</li><li class="listitem">
+				<p>An optional icon used in the palette for the Composite Element, if this field is leave blank then a default image is used.</p>
+			</li><li class="listitem">
+				<p>The palette section where this element will be placed</p>
+			</li></ol></div><p>
+		
+		</p><div class="figure"><a name="N40053"></a><p class="title"><b>Figure&nbsp;2.&nbsp;Composite Element Settings</b></p><div class="figure-contents">
+			
+			<div class="screenshot">
+				<div class="mediaobject"><img src="2.png" width="800" alt="Composite Element Settings"></div>
+			</div>
+		</div></div><p><br class="figure-break">
+		
+			After you have set all the informations press Finish.  The element will now be created in the selected palette 
+		
+		
+			NOTE: if you create the element inside a palette that in the next run is missing. This can happen maybe because you have created it with a Jaspersoft Studio Pro, placing them inside the Pro Compontents section of the palette, but you are reusing them into a Community version. The Community version has not the Pro Compontents section, in this case and in every case where the palette of a Composite Element is missing, it will be displayed in the Composite Elements section of the palette.
+		
+		</p>
+		<p><b>Use a Composite Element.&nbsp;</b>
+			
+			To use your element you have simply to drag and drop it inside a report, it will and all its contents will be created in the same way it was defined originally.
+			
+		</p>
+		<p><b>Modify a Composite Element.&nbsp;</b>
+			
+			When you right click on a Composite Element you have 3 options:
+			
+			</p><div class="figure"><a name="N4007D"></a><p class="title"><b>Figure&nbsp;3.&nbsp;Modifying Options</b></p><div class="figure-contents">
+			
+			<div class="screenshot">
+				<div class="mediaobject"><img src="3.png" width="800" alt="Modifying Options"></div>
+			</div>
+		</div></div><p><br class="figure-break">
+		
+		</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem">
+				<p>Edit: This option reopen the dialog used to Create the element and every informations (name, description, icon and palette location) can be changed. </p>
+			</li><li class="listitem">
+				<p>Open in Designer: This option can be used to modify the content of the composite element, in other words you can modify the single elements inside it. When this option is selected a special editor will be opened where where you can see all the contents of the element and you can modify it as you wish. This editor will look really similar to the report editor but with some simplifications: there will be only a band where the content is placed, there will be no dataset a no possibility to create one and the palette will allow to use only a set of basic elements. In this editor you can add new elements, remove the existing ones or change their properties. When you have finished simply save your work and the associated Composite Element will be reloaded automatically</p>
+			</li><li class="listitem">
+				<p>Delete: After a coinform requeste this action will simply delete the Composite Element and all its resources</p>
+			</li></ol></div><p>
+		
+		</p>
+	</div>
+</div></body></html>

@@ -1,0 +1,9 @@
+Opal has a bug where it look always is the current class to retrieve the class
+loader and load the images. This cause problems in the overrides because the getClass
+return a JSS Class, with it's own classloader, that normally can't find the opal resources
+since they are inside the opal jar. However to fix this for now we have imported the opal resources
+inside the studio plugin (the opal widgets are use only here), with the same name\paths, so also 
+the classloader of the JSS class can find this resources. But it is an opal bug that assumes there
+are no subclasses of the widgets, when they will fix it this folder can be removed.
+
+Note by Orlandin Marco
