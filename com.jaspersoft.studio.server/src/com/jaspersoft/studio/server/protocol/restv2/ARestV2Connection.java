@@ -19,6 +19,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -68,7 +69,7 @@ public abstract class ARestV2Connection implements IConnection {
 
 	protected DateFormat dateFormat = DateFormat.getDateInstance();
 	protected DateFormat timestampFormat = DateFormat.getDateTimeInstance();
-	protected DateFormat timeFormat = new SimpleDateFormat("h:mm:ss");
+	protected DateFormat timeFormat = new SimpleDateFormat("h:mm:ss", Locale.US);
 	protected NumberFormat numberFormat = NumberFormat.getInstance();
 
 	public Date toDate(String sdate) throws ParseException {
