@@ -53,8 +53,8 @@ public class CreateGroupByColumn extends AAction {
 	}
 
 	public static boolean isInSelect(Object element) {
-		boolean b = element instanceof MGroupBy;
-		// || element instanceof MGroupByColumn;
+		boolean b = element instanceof MGroupBy
+				|| element instanceof MGroupByColumn;
 		if (b) {
 			MFrom mfrom = Util.getKeyword((ANode) ((ANode) element).getRoot(),
 					MFrom.class);
