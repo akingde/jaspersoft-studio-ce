@@ -50,7 +50,7 @@ public class Text2Model {
 			isRunning = true;
 			designer.refreshViewer();
 			ConvertUtil.cleanDBMetadata(designer.getDbMetadata().getRoot());
-			System.out.println("convert the model"); //$NON-NLS-1$
+//			System.out.println("convert the model"); //$NON-NLS-1$
 			doc.readOnly(new IUnitOfWork<String, XtextResource>() {
 				public String exec(XtextResource resource) {
 					if (!resource.getErrors().isEmpty()) {

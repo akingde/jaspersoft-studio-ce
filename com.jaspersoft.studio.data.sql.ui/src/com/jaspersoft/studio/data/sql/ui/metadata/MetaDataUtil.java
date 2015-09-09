@@ -142,7 +142,7 @@ public class MetaDataUtil {
 					new String[] { mview.getValue() });
 			while (rs.next()) {
 				String tblName = rs.getString("TABLE_NAME");
-				System.out.println("Reading: " + tableSchema + "." + tblName);
+//				System.out.println("Reading: " + tableSchema + "." + tblName);
 				MSqlTable mt = new MSqlTable(mview, tblName, rs);
 				new MDummy(mt);
 				tblMap.put(mt.toSQLString(), mt);

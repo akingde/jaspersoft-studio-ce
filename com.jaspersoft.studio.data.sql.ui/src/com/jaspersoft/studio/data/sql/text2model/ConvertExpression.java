@@ -295,6 +295,10 @@ public class ConvertExpression {
 		}
 		if (sop.getSodbl() != null)
 			return new ScalarOperand<BigDecimal>(me, sop.getSodbl());
+		if (sop.getSoUInt() != 0)
+			return new ScalarOperand<Integer>(me, sop.getSoUInt());
+		if (sop.getSoint() != 0)
+			return new ScalarOperand<Integer>(me, sop.getSoint());
 		if (sop.getSodt() != null) {
 			Date d;
 			try {
