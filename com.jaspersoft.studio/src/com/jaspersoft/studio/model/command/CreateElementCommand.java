@@ -369,7 +369,7 @@ public class CreateElementCommand extends Command {
 				if (jrElement instanceof JRDesignComponentElement){
 					JRDesignComponentElement componentElement = (JRDesignComponentElement)jrElement;
 					if (componentElement.getComponent() != null){
-						JaspersoftStudioPlugin.getInstance().getUsageManager().audit(componentElement.getClass().getName(), UsageStatisticsIDs.CATEGORY_ELEMENT);
+						JaspersoftStudioPlugin.getInstance().getUsageManager().audit(componentElement.getComponent().getClass().getName(), UsageStatisticsIDs.CATEGORY_ELEMENT);
 					} else {
 						JaspersoftStudioPlugin.getInstance().getUsageManager().audit(jrElement.getClass().getName()+"[null_component]", UsageStatisticsIDs.CATEGORY_ELEMENT);
 					}
