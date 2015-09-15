@@ -19,6 +19,7 @@ public class Messages extends NLS {
 	public static String ActionFactory_0;
 	public static String ActionFactory_1;
 	public static String ActionFactory_2;
+	public static String ActionFactory_3;
 	public static String ActionFactory_4;
 	public static String ActionFactory_5;
 	public static String ActionFactory_6;
@@ -32,6 +33,7 @@ public class Messages extends NLS {
 	public static String CreateHavingFromColumn_0;
 	public static String CreateOrderByColumn_0;
 	public static String CreateOrderByFromColumn_0;
+	public static String CreatePNotExpression_0;
 	public static String CreateSelectExpression_0;
 	public static String CreateSelectExpression_1;
 	public static String CreateSubQueryTable_0;

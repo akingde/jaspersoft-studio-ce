@@ -19,6 +19,7 @@ import java.util.Map;
 
 import net.sf.jasperreports.components.table.Cell;
 import net.sf.jasperreports.components.table.DesignCell;
+import net.sf.jasperreports.components.table.GroupCell;
 import net.sf.jasperreports.components.table.StandardBaseColumn;
 import net.sf.jasperreports.components.table.StandardColumn;
 import net.sf.jasperreports.engine.JRBoxContainer;
@@ -284,7 +285,8 @@ public class MCell extends MColumn implements IGraphicElement,
 							v.getProperty(names[i]));
 				this.getPropertyChangeSupport().firePropertyChange(
 						MGraphicElement.PROPERTY_MAP, false, true);
-				return; // Attention! MColumn has his own property map, here we work with cell
+				return; // Attention! MColumn has his own property map, here we
+						// work with cell
 			}
 		}
 		super.setPropertyValue(id, value);
@@ -367,7 +369,7 @@ public class MCell extends MColumn implements IGraphicElement,
 			}
 		}
 		HashSet<String> graphicalProperties = getGraphicalProperties();
-		if (graphicalProperties.contains(evt.getPropertyName())){
+		if (graphicalProperties.contains(evt.getPropertyName())) {
 			setChangedProperty(true);
 		}
 		super.propertyChange(evt);
@@ -411,38 +413,40 @@ public class MCell extends MColumn implements IGraphicElement,
 		return new JRPropertiesHolder[] { cell, getValue(),
 				getMTable().getValue() };
 	}
-	
+
 	/**
-	 * Flag changed when some property that has graphical impact on the element is changed.
-	 * This is used to redraw the elemnt only when something graphical is changed isndie it,
-	 * all the other times can just be copied
+	 * Flag changed when some property that has graphical impact on the element
+	 * is changed. This is used to redraw the elemnt only when something
+	 * graphical is changed isndie it, all the other times can just be copied
 	 */
 	private boolean visualPropertyChanged = true;
 
 	/**
-	 * True if some graphical property is changed for the element, false otherwise
+	 * True if some graphical property is changed for the element, false
+	 * otherwise
 	 */
 	@Override
-	public boolean hasChangedProperty(){
+	public boolean hasChangedProperty() {
 		synchronized (this) {
 			return visualPropertyChanged;
 		}
 	}
-	
+
 	/**
 	 * Set the actual state of the property change flag
 	 */
 	@Override
-	public void setChangedProperty(boolean value){
+	public void setChangedProperty(boolean value) {
 		synchronized (this) {
-			if (value){
+			if (value) {
 				ANode parent = getParent();
-				while(parent != null){
-					if (parent instanceof IGraphicalPropertiesHandler){
-						IGraphicalPropertiesHandler handler = (IGraphicalPropertiesHandler)parent;
+				while (parent != null) {
+					if (parent instanceof IGraphicalPropertiesHandler) {
+						IGraphicalPropertiesHandler handler = (IGraphicalPropertiesHandler) parent;
 						handler.setChangedProperty(true);
-						//We can exit the cycle since the setChangedProperty on the parent will propagate the
-						//refresh on the upper levels
+						// We can exit the cycle since the setChangedProperty on
+						// the parent will propagate the
+						// refresh on the upper levels
 						break;
 					} else {
 						parent = parent.getParent();
@@ -454,13 +458,13 @@ public class MCell extends MColumn implements IGraphicElement,
 	}
 
 	private static HashSet<String> cachedGraphicalProperties = null;
-	
+
 	/**
 	 * Return the graphical properties for an MGraphicalElement
 	 */
 	@Override
 	public HashSet<String> getGraphicalProperties() {
-		if (cachedGraphicalProperties == null){
+		if (cachedGraphicalProperties == null) {
 			cachedGraphicalProperties = new HashSet<String>();
 			cachedGraphicalProperties.add(DesignCell.PROPERTY_STYLE);
 			cachedGraphicalProperties.add(DesignCell.PROPERTY_ROW_SPAN);
@@ -468,11 +472,12 @@ public class MCell extends MColumn implements IGraphicElement,
 		}
 		return cachedGraphicalProperties;
 	}
-	
-	private void addStyle(HashSet<String> stylesMap, JRStyle style){
-		if (style != null) stylesMap.add(style.getName());
+
+	private void addStyle(HashSet<String> stylesMap, JRStyle style) {
+		if (style != null)
+			stylesMap.add(style.getName());
 	}
-	
+
 	/**
 	 * Return all the styles of the column
 	 */
@@ -480,14 +485,26 @@ public class MCell extends MColumn implements IGraphicElement,
 	public HashSet<String> getUsedStyles() {
 		StandardBaseColumn standardCol = getValue();
 		HashSet<String> result = new HashSet<String>();
-		if (standardCol.getColumnFooter() != null) addStyle(result, standardCol.getColumnFooter().getStyle());
-		if (standardCol.getColumnHeader() != null) addStyle(result, standardCol.getColumnFooter().getStyle());
-		if (standardCol.getTableHeader() != null) addStyle(result, standardCol.getTableHeader().getStyle());
-		if (standardCol.getTableFooter() != null) addStyle(result, standardCol.getTableFooter().getStyle());
-		if (standardCol instanceof StandardColumn){
-			DesignCell detCell = (DesignCell) ((StandardColumn)standardCol).getDetailCell();
-			if (detCell != null)  addStyle(result, detCell.getStyle());
+		if (standardCol.getColumnFooter() != null)
+			addStyle(result, standardCol.getColumnFooter().getStyle());
+		if (standardCol.getColumnHeader() != null)
+			addStyle(result, standardCol.getColumnHeader().getStyle());
+		if (standardCol.getTableHeader() != null)
+			addStyle(result, standardCol.getTableHeader().getStyle());
+		if (standardCol.getTableFooter() != null)
+			addStyle(result, standardCol.getTableFooter().getStyle());
+		if (standardCol instanceof StandardColumn) {
+			DesignCell detCell = (DesignCell) ((StandardColumn) standardCol)
+					.getDetailCell();
+			if (detCell != null)
+				addStyle(result, detCell.getStyle());
 		}
+		for (GroupCell gc : standardCol.getGroupHeaders())
+			if (gc.getCell() != null)
+				addStyle(result, gc.getCell().getStyle());
+		for (GroupCell gc : standardCol.getGroupFooters())
+			if (gc.getCell() != null)
+				addStyle(result, gc.getCell().getStyle());
 		return result;
 	}
 }

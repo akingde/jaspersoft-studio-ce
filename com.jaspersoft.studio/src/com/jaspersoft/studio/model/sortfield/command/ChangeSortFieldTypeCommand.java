@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.model.sortfield.command;
 
@@ -38,10 +34,11 @@ public class ChangeSortFieldTypeCommand extends Command {
 	private JRDesignDataset jrDataSet;
 
 	private JRDesignSortField jrField;
-	
+
 	private String oldName;
-	
+
 	private SortFieldTypeEnum oldType;
+	private SortFieldTypeEnum newValue;
 
 	/**
 	 * Instantiates a new creates the field command.
@@ -53,17 +50,17 @@ public class ChangeSortFieldTypeCommand extends Command {
 	 * @param index
 	 *          the index
 	 */
-	public ChangeSortFieldTypeCommand(MSortFields destNode, MSortField srcNode) {
+	public ChangeSortFieldTypeCommand(MSortFields destNode, MSortField srcNode, SortFieldTypeEnum newValue) {
 		super();
 		this.jrDataSet = (JRDesignDataset) destNode.getValue();
-		this.jrField = (JRDesignSortField)srcNode.getValue();
+		this.jrField = (JRDesignSortField) srcNode.getValue();
+		this.newValue = (SortFieldTypeEnum)newValue;
 	}
 
-	private String getSortFieldKey(JRSortField sortField)
-	{
+	private String getSortFieldKey(JRSortField sortField) {
 		return sortField.getName() + "|" + sortField.getType().getName();
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -75,11 +72,11 @@ public class ChangeSortFieldTypeCommand extends Command {
 			oldName = jrField.getName();
 			oldType = jrField.getType();
 			jrDataSet.getSortFieldsMap().remove(getSortFieldKey(jrField));
-			
+
 			SortFieldWizard wizard = new SortFieldWizard();
 			JRDesignSortField dummyField = new JRDesignSortField();
 			wizard.init(jrDataSet, dummyField);
-			if (jrField.getType() == SortFieldTypeEnum.FIELD) {
+			if (newValue != SortFieldTypeEnum.FIELD) {
 				dummyField.setType(SortFieldTypeEnum.VARIABLE);
 				wizard.setShownElementsType(SHOW_TYPE.VARIABLES);
 			} else {
@@ -116,7 +113,7 @@ public class ChangeSortFieldTypeCommand extends Command {
 	 */
 	@Override
 	public void undo() {
-		if (oldName != null && oldType != null){
+		if (oldName != null && oldType != null) {
 			jrDataSet.getSortFieldsMap().remove(getSortFieldKey(jrField));
 			jrField.setName(oldName);
 			jrField.setType(oldType);

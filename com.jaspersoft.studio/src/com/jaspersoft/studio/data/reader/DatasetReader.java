@@ -24,12 +24,14 @@ import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.JRField;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JRSortField;
+import net.sf.jasperreports.engine.JRVariable;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
 import net.sf.jasperreports.engine.design.JRDesignQuery;
+import net.sf.jasperreports.engine.design.JRDesignVariable;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
@@ -147,6 +149,15 @@ public class DatasetReader {
 					dataJD.addField(f);
 				}
 			}
+			// 5.a Add the variables
+			// Clear "dirty" variables
+			dataJD.getVariablesList().clear();
+			dataJD.getVariablesMap().clear();
+			//
+			JRVariable[] variables = designDataset.getVariables();
+			for (JRVariable f : variables)
+				dataJD.addVariable((JRDesignVariable) f);
+
 			// 6. add sort fields
 			dataJD.getSortFieldsList().clear();
 			dataJD.getMainDesignDataset().getSortFieldsMap().clear();
@@ -179,7 +190,7 @@ public class DatasetReader {
 				hm.put(JRDesignParameter.REPORT_MAX_COUNT, maxRecords);
 			} else {
 				hm.remove(JRDesignParameter.REPORT_MAX_COUNT);
-			} 
+			}
 			// 8. Contribute parameters from the data adapter
 			if (dataAdapterDesc != null)
 				jConfig.put(DataAdapterParameterContributorFactory.PARAMETER_DATA_ADAPTER, dataAdapterDesc.getDataAdapter());

@@ -53,6 +53,7 @@ import com.jaspersoft.studio.data.sql.model.query.AMKeyword;
 import com.jaspersoft.studio.data.sql.model.query.MUnion;
 import com.jaspersoft.studio.data.sql.model.query.expression.MExpression;
 import com.jaspersoft.studio.data.sql.model.query.expression.MExpressionGroup;
+import com.jaspersoft.studio.data.sql.model.query.expression.MExpressionPNot;
 import com.jaspersoft.studio.data.sql.model.query.expression.MExpressionX;
 import com.jaspersoft.studio.data.sql.model.query.groupby.MGroupByColumn;
 import com.jaspersoft.studio.data.sql.model.query.groupby.MGroupByExpression;
@@ -178,6 +179,8 @@ public class ActionFactory {
 				Messages.ActionFactory_5, MExpression.class));
 		actions.add(new DeleteAction<MExpressionX>(designer, treeViewer,
 				Messages.ActionFactory_6, MExpressionX.class));
+		actions.add(new DeleteAction<MExpressionPNot>(designer, treeViewer,
+				Messages.ActionFactory_3, MExpressionPNot.class));
 		actions.add(new DeleteAction<MExpressionGroup>(designer, treeViewer,
 				Messages.ActionFactory_7, MExpressionGroup.class));
 	}

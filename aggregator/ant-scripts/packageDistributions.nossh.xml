@@ -271,8 +271,7 @@ exit 0;</echo>
 				postinst="${dist}/debian/postinst" 
 				architecture="${architecture}"
 				homepage="http://community.jaspersoft.com/project/jaspersoft-studio"
-				appname="Jaspersoft Studio Community"
-				depends="openjdk-6-jre">
+				appname="Jaspersoft Studio Community">
 			<version upstream="${jss.version}" debian="" />
 			<maintainer name="Jaspersoft Studio Team" email="gtoffoli@tibco.com"/>
 			<description synopsis="An open-source Eclipse-based report designer for JasperReports and JasperReports Server.">

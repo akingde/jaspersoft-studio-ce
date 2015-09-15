@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.property.descriptor.propexpr;
 
@@ -18,6 +14,8 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.help.HelpSystem;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
+import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.property.section.widgets.SPPropertyExpressionButton;
 
 public class JPropertyExpressionsDescriptor extends NTextPropertyDescriptor {
 
@@ -36,5 +34,10 @@ public class JPropertyExpressionsDescriptor extends NTextPropertyDescriptor {
 		if (isLabelProviderSet())
 			return super.getLabelProvider();
 		return new JPropertyExpressionsLabelProvider();
+	}
+
+	@Override
+	public SPPropertyExpressionButton createWidget(Composite parent, AbstractSection section) {
+		return new SPPropertyExpressionButton(parent, section, this, getDisplayName());
 	}
 }

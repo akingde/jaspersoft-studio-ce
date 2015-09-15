@@ -24,6 +24,7 @@ import org.eclipse.jface.viewers.TreeViewer;
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.action.AAction;
 import com.jaspersoft.studio.data.sql.dialogs.EditPNotExpressionDialog;
+import com.jaspersoft.studio.data.sql.messages.Messages;
 import com.jaspersoft.studio.data.sql.model.MSQLRoot;
 import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
 import com.jaspersoft.studio.data.sql.model.query.MHaving;
@@ -38,7 +39,7 @@ import com.jaspersoft.studio.model.INode;
 public class CreatePNotExpression extends AAction {
 
 	public CreatePNotExpression(SQLQueryDesigner designer, TreeViewer treeViewer) {
-		super("Add $P!{} Ex&pression", treeViewer);
+		super(Messages.CreatePNotExpression_0, treeViewer);
 	}
 
 	@Override

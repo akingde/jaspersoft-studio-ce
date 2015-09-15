@@ -86,7 +86,7 @@ public class MGroupByExpression extends AMQueryObject<String> {
 			}
 		} else
 			ss.append(super.getStyledDisplayText());
-		return ss.toString();
+		return isFirst() ? ss.toString() : ",\n\t" + ss.toString();
 	}
 
 	@Override
