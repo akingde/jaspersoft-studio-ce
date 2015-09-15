@@ -24,6 +24,7 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceProperty
 import com.jaspersoft.jasperserver.dto.reports.inputcontrols.ReportInputControl;
 import com.jaspersoft.jasperserver.dto.resources.AbstractClientReportUnit;
 import com.jaspersoft.jasperserver.dto.resources.AbstractClientReportUnit.ControlsLayoutType;
+import com.jaspersoft.jasperserver.dto.resources.ClientDataType.TypeOfDataType;
 import com.jaspersoft.jasperserver.dto.resources.ClientAdhocDataView;
 import com.jaspersoft.jasperserver.dto.resources.ClientAwsDataSource;
 import com.jaspersoft.jasperserver.dto.resources.ClientBeanDataSource;
@@ -353,7 +354,18 @@ public class Rest2Soap {
 
 	private static void getDataType(ARestV2Connection rc, ClientDataType cr,
 			ResourceDescriptor rd) throws ParseException {
-		rd.setDataType((byte) (cr.getType().ordinal() + 1));
+		if (cr.getType().equals(TypeOfDataType.text))
+			rd.setDataType(ResourceDescriptor.DT_TYPE_TEXT);
+		else if (cr.getType().equals(TypeOfDataType.number))
+			rd.setDataType(ResourceDescriptor.DT_TYPE_NUMBER);
+		else if (cr.getType().equals(TypeOfDataType.date))
+			rd.setDataType(ResourceDescriptor.DT_TYPE_DATE);
+		else if (cr.getType().equals(TypeOfDataType.datetime))
+			rd.setDataType(ResourceDescriptor.DT_TYPE_DATE_TIME);
+		else if (cr.getType().equals(TypeOfDataType.time))
+			rd.setDataType((byte) 5);
+
+		// rd.setDataType((byte) (cr.getType().ordinal() + 1));
 		rd.setPattern(cr.getPattern());
 		rd.setMaxValue(cr.getMaxValue());
 		rd.setStrictMax(cr.isStrictMax());

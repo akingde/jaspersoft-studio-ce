@@ -62,20 +62,25 @@ import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorDataso
 import com.jaspersoft.studio.utils.Misc;
 
 public class Soap2Rest {
-	public static Object getResourceContainer(ARestV2Connection rc, ResourceDescriptor rd) throws ParseException {
-		if (rd.getParentFolder() != null && !rd.getParentFolder().endsWith("_files"))
+	public static Object getResourceContainer(ARestV2Connection rc,
+			ResourceDescriptor rd) throws ParseException {
+		if (rd.getParentFolder() != null
+				&& !rd.getParentFolder().endsWith("_files"))
 			rd.setIsReference(true);
 		if (rd.getIsReference())
-			return new ClientReference(Misc.nvl(rd.getReferenceUri(), rd.getUriString()));
-//		if (!rd.getIsNew() && !rd.hasDirtyChildren())
-//			return new ClientReference(Misc.nvl(rd.getReferenceUri(), rd.getUriString()));
+			return new ClientReference(Misc.nvl(rd.getReferenceUri(),
+					rd.getUriString()));
+		// if (!rd.getIsNew() && !rd.hasDirtyChildren())
+		// return new ClientReference(Misc.nvl(rd.getReferenceUri(),
+		// rd.getUriString()));
 		ClientResource<?> res = getResource(rc, rd);
 		if (rd.getIsNew())
 			res.setVersion(-1);
 		return res;
 	}
 
-	public static ClientResource<?> getResource(ARestV2Connection rc, ResourceDescriptor rd) throws ParseException {
+	public static ClientResource<?> getResource(ARestV2Connection rc,
+			ResourceDescriptor rd) throws ParseException {
 		ClientResource<?> cr = WsTypes.INST().createResource(rd);
 		cr.setCreationDate(rc.timestamp2str(rd.getCreationDate()));
 		cr.setLabel(rd.getLabel());
@@ -97,11 +102,13 @@ public class Soap2Rest {
 			getBeanDataSource(rc, (ClientBeanDataSource) cr, rd);
 		else if (rd.getWsType().equals(ResourceDescriptor.TYPE_DATASOURCE_JNDI))
 			getJndiDataSource(rc, (ClientJndiJdbcDataSource) cr, rd);
-		else if (rd.getWsType().equals(ResourceDescriptor.TYPE_DATASOURCE_CUSTOM))
+		else if (rd.getWsType().equals(
+				ResourceDescriptor.TYPE_DATASOURCE_CUSTOM))
 			getCustomDataSource(rc, (ClientCustomDataSource) cr, rd);
 		else if (rd.getWsType().equals(ResourceDescriptor.TYPE_DATASOURCE_AWS))
 			getAWSDataSource(rc, (ClientAwsDataSource) cr, rd);
-		else if (rd.getWsType().equals(ResourceDescriptor.TYPE_DATASOURCE_VIRTUAL))
+		else if (rd.getWsType().equals(
+				ResourceDescriptor.TYPE_DATASOURCE_VIRTUAL))
 			getVirtualDataSource(rc, (ClientVirtualDataSource) cr, rd);
 
 		else if (rd.getWsType().equals(ResourceDescriptor.TYPE_QUERY))
@@ -111,15 +118,20 @@ public class Soap2Rest {
 		else if (rd.getWsType().equals(ResourceDescriptor.TYPE_LOV))
 			getLOV(rc, (ClientListOfValues) cr, rd);
 
-		else if (rd.getWsType().equals(ResourceDescriptor.TYPE_OLAP_XMLA_CONNECTION))
+		else if (rd.getWsType().equals(
+				ResourceDescriptor.TYPE_OLAP_XMLA_CONNECTION))
 			getXmlaConnection(rc, (ClientXmlaConnection) cr, rd);
 		else if (rd.getWsType().equals(ResourceDescriptor.TYPE_OLAPUNIT))
 			getOlapUnit(rc, (ClientOlapUnit) cr, rd);
-		else if (rd.getWsType().equals(ResourceDescriptor.TYPE_OLAP_MONDRIAN_CONNECTION))
+		else if (rd.getWsType().equals(
+				ResourceDescriptor.TYPE_OLAP_MONDRIAN_CONNECTION))
 			getMondrianConnection(rc, (ClientMondrianConnection) cr, rd);
-		else if (rd.getWsType().equals(ResourceDescriptor.TYPE_SECURE_MONDRIAN_CONNECTION))
-			getSecureMondrianConnection(rc, (ClientSecureMondrianConnection) cr, rd);
-		else if (rd.getWsType().equals(ResourceDescriptor.TYPE_MONDRIAN_XMLA_DEFINITION_CLIENT_TYPE))
+		else if (rd.getWsType().equals(
+				ResourceDescriptor.TYPE_SECURE_MONDRIAN_CONNECTION))
+			getSecureMondrianConnection(rc,
+					(ClientSecureMondrianConnection) cr, rd);
+		else if (rd.getWsType().equals(
+				ResourceDescriptor.TYPE_MONDRIAN_XMLA_DEFINITION_CLIENT_TYPE))
 			getMondrianXmlaDefinition(rc, (ClientMondrianXmlaDefinition) cr, rd);
 
 		else if (rd.getWsType().equals(ResourceDescriptor.TYPE_REPORTUNIT))
@@ -133,72 +145,108 @@ public class Soap2Rest {
 		return cr;
 	}
 
-	private static void getAdhocDataView(ARestV2Connection rc, ClientAdhocDataView cr, ResourceDescriptor rd) throws ParseException {
+	private static void getAdhocDataView(ARestV2Connection rc,
+			ClientAdhocDataView cr, ResourceDescriptor rd)
+			throws ParseException {
 		List<ResourceDescriptor> children = rd.getChildren();
 		for (ResourceDescriptor r : children)
 			if (SelectorDatasource.isDatasource(r))
-				cr.setDataSource((ClientReferenceableDataSource) getResourceContainer(rc, r));
+				cr.setDataSource((ClientReferenceableDataSource) getResourceContainer(
+						rc, r));
 	}
 
-	private static void getLOV(ARestV2Connection rc, ClientListOfValues cr, ResourceDescriptor rd) {
+	private static void getLOV(ARestV2Connection rc, ClientListOfValues cr,
+			ResourceDescriptor rd) {
 		List<ClientListOfValuesItem> lovs = new ArrayList<ClientListOfValuesItem>();
 		if (rd.getListOfValues() != null)
 			for (ListItem l : (List<ListItem>) rd.getListOfValues())
-				lovs.add(new ClientListOfValuesItem(l.getLabel(), (String) l.getValue()));
+				lovs.add(new ClientListOfValuesItem(l.getLabel(), (String) l
+						.getValue()));
 		cr.setItems(lovs);
 	}
 
-	private static void getMondrianConnection(ARestV2Connection rc, ClientMondrianConnection cr, ResourceDescriptor rd) throws ParseException {
+	private static void getMondrianConnection(ARestV2Connection rc,
+			ClientMondrianConnection cr, ResourceDescriptor rd)
+			throws ParseException {
 		for (ResourceDescriptor r : (List<ResourceDescriptor>) rd.getChildren()) {
 			if (SelectorDatasource.isDatasource(r))
-				cr.setDataSource((ClientReferenceableDataSource) getResourceContainer(rc, r));
-			else if (r.getWsType().equals(ResourceDescriptor.TYPE_MONDRIAN_SCHEMA))
-				cr.setSchema((ClientReferenceableFile) getResourceContainer(rc, r));
+				cr.setDataSource((ClientReferenceableDataSource) getResourceContainer(
+						rc, r));
+			else if (r.getWsType().equals(
+					ResourceDescriptor.TYPE_MONDRIAN_SCHEMA))
+				cr.setSchema((ClientReferenceableFile) getResourceContainer(rc,
+						r));
 		}
 	}
 
-	private static void getSecureMondrianConnection(ARestV2Connection rc, ClientSecureMondrianConnection cr, ResourceDescriptor rd) throws ParseException {
+	private static void getSecureMondrianConnection(ARestV2Connection rc,
+			ClientSecureMondrianConnection cr, ResourceDescriptor rd)
+			throws ParseException {
 		for (ResourceDescriptor r : (List<ResourceDescriptor>) rd.getChildren()) {
 			if (SelectorDatasource.isDatasource(r))
-				cr.setDataSource((ClientReferenceableDataSource) getResourceContainer(rc, r));
-			else if (r.getWsType().equals(ResourceDescriptor.TYPE_MONDRIAN_SCHEMA))
-				cr.setSchema((ClientReferenceableFile) getResourceContainer(rc, r));
-			else if (r.getWsType().equals(ResourceDescriptor.TYPE_ACCESS_GRANT_SCHEMA)) {
+				cr.setDataSource((ClientReferenceableDataSource) getResourceContainer(
+						rc, r));
+			else if (r.getWsType().equals(
+					ResourceDescriptor.TYPE_MONDRIAN_SCHEMA))
+				cr.setSchema((ClientReferenceableFile) getResourceContainer(rc,
+						r));
+			else if (r.getWsType().equals(
+					ResourceDescriptor.TYPE_ACCESS_GRANT_SCHEMA)) {
 				if (cr.getAccessGrants() == null)
 					cr.setAccessGrants(new ArrayList<ClientReferenceableFile>());
-				cr.getAccessGrants().add((ClientReferenceableFile) getResourceContainer(rc, r));
+				cr.getAccessGrants().add(
+						(ClientReferenceableFile) getResourceContainer(rc, r));
 			}
 		}
 	}
 
-	private static void getMondrianXmlaDefinition(ARestV2Connection rc, ClientMondrianXmlaDefinition cr, ResourceDescriptor rd) throws ParseException {
-		ResourceProperty rp = rd.getResourceProperty(ResourceDescriptor.PROP_XMLA_CATALOG);
+	private static void getMondrianXmlaDefinition(ARestV2Connection rc,
+			ClientMondrianXmlaDefinition cr, ResourceDescriptor rd)
+			throws ParseException {
+		ResourceProperty rp = rd
+				.getResourceProperty(ResourceDescriptor.PROP_XMLA_CATALOG);
 		if (rp != null)
 			cr.setCatalog(rp.getValue());
 		for (ResourceDescriptor r : (List<ResourceDescriptor>) rd.getChildren()) {
-			if (r.getWsType().equals(ResourceDescriptor.TYPE_OLAP_MONDRIAN_CONNECTION) || r.getWsType().equals(ResourceDescriptor.TYPE_SECURE_MONDRIAN_CONNECTION))
-				cr.setMondrianConnection((ClientReferenceableMondrianConnection) getResourceContainer(rc, r));
+			if (r.getWsType().equals(
+					ResourceDescriptor.TYPE_OLAP_MONDRIAN_CONNECTION)
+					|| r.getWsType().equals(
+							ResourceDescriptor.TYPE_SECURE_MONDRIAN_CONNECTION))
+				cr.setMondrianConnection((ClientReferenceableMondrianConnection) getResourceContainer(
+						rc, r));
 		}
 	}
 
-	private static void getXmlaConnection(ARestV2Connection rc, ClientXmlaConnection cr, ResourceDescriptor rd) {
+	private static void getXmlaConnection(ARestV2Connection rc,
+			ClientXmlaConnection cr, ResourceDescriptor rd) {
 		cr.setUrl(rd.getResourcePropertyValue(ResourceDescriptor.PROP_XMLA_URI));
-		cr.setDataSource(rd.getResourcePropertyValue(ResourceDescriptor.PROP_XMLA_DATASOURCE));
-		cr.setCatalog(rd.getResourcePropertyValue(ResourceDescriptor.PROP_XMLA_CATALOG));
-		cr.setUsername(rd.getResourcePropertyValue(ResourceDescriptor.PROP_XMLA_USERNAME));
-		cr.setPassword(Misc.nullValue(rd.getResourcePropertyValue(ResourceDescriptor.PROP_XMLA_PASSWORD)));
+		cr.setDataSource(rd
+				.getResourcePropertyValue(ResourceDescriptor.PROP_XMLA_DATASOURCE));
+		cr.setCatalog(rd
+				.getResourcePropertyValue(ResourceDescriptor.PROP_XMLA_CATALOG));
+		cr.setUsername(rd
+				.getResourcePropertyValue(ResourceDescriptor.PROP_XMLA_USERNAME));
+		cr.setPassword(Misc.nullValue(rd
+				.getResourcePropertyValue(ResourceDescriptor.PROP_XMLA_PASSWORD)));
 	}
 
-	private static void getOlapUnit(ARestV2Connection rc, ClientOlapUnit cr, ResourceDescriptor rd) throws ParseException {
+	private static void getOlapUnit(ARestV2Connection rc, ClientOlapUnit cr,
+			ResourceDescriptor rd) throws ParseException {
 		cr.setMdxQuery(rd.getSql());
 		for (ResourceDescriptor r : (List<ResourceDescriptor>) rd.getChildren()) {
-			if (r.getWsType().equals(ResourceDescriptor.TYPE_OLAP_XMLA_CONNECTION) || r.getWsType().equals(ResourceDescriptor.TYPE_OLAP_MONDRIAN_CONNECTION)
-					|| r.getWsType().equals(ResourceDescriptor.TYPE_SECURE_MONDRIAN_CONNECTION))
-				cr.setOlapConnection((ClientReferenciableOlapConnection) getResourceContainer(rc, r));
+			if (r.getWsType().equals(
+					ResourceDescriptor.TYPE_OLAP_XMLA_CONNECTION)
+					|| r.getWsType().equals(
+							ResourceDescriptor.TYPE_OLAP_MONDRIAN_CONNECTION)
+					|| r.getWsType().equals(
+							ResourceDescriptor.TYPE_SECURE_MONDRIAN_CONNECTION))
+				cr.setOlapConnection((ClientReferenciableOlapConnection) getResourceContainer(
+						rc, r));
 		}
 	}
 
-	private static void getVirtualDataSource(ARestV2Connection rc, ClientVirtualDataSource cr, ResourceDescriptor rd) {
+	private static void getVirtualDataSource(ARestV2Connection rc,
+			ClientVirtualDataSource cr, ResourceDescriptor rd) {
 		List<ClientSubDataSourceReference> ds = new ArrayList<ClientSubDataSourceReference>();
 		for (ResourceDescriptor r : (List<ResourceDescriptor>) rd.getChildren()) {
 			ClientSubDataSourceReference d = new ClientSubDataSourceReference();
@@ -209,20 +257,24 @@ public class Soap2Rest {
 		cr.setSubDataSources(ds);
 	}
 
-	private static void getAWSDataSource(ARestV2Connection rc, ClientAwsDataSource cr, ResourceDescriptor rd) {
+	private static void getAWSDataSource(ARestV2Connection rc,
+			ClientAwsDataSource cr, ResourceDescriptor rd) {
 		cr.setAccessKey(DiffFields.getSoapValue(rd, DiffFields.ACCESSKEY));
 		cr.setSecretKey(DiffFields.getSoapValue(rd, DiffFields.SECRETKEY));
 		cr.setRoleArn(DiffFields.getSoapValue(rd, DiffFields.ROLEARN));
 		cr.setRegion(DiffFields.getSoapValue(rd, DiffFields.REGION));
 		cr.setDbName(DiffFields.getSoapValue(rd, DiffFields.DBNAME));
-		cr.setDbInstanceIdentifier(DiffFields.getSoapValue(rd, DiffFields.DBINSTANCEIDENTIFIER));
+		cr.setDbInstanceIdentifier(DiffFields.getSoapValue(rd,
+				DiffFields.DBINSTANCEIDENTIFIER));
 		cr.setDbService(DiffFields.getSoapValue(rd, DiffFields.DBSERVICE));
 		cr.setTimezone(DiffFields.getSoapValue(rd, DiffFields.TIMEZONE));
 	}
 
-	private static void getCustomDataSource(ARestV2Connection rc, ClientCustomDataSource cr, ResourceDescriptor rd) {
+	private static void getCustomDataSource(ARestV2Connection rc,
+			ClientCustomDataSource cr, ResourceDescriptor rd) {
 		cr.setServiceClass(rd.getServiceClass());
-		cr.setDataSourceName(DiffFields.getSoapValue(rd, DiffFields.DATASOURCENAME));
+		cr.setDataSourceName(DiffFields.getSoapValue(rd,
+				DiffFields.DATASOURCENAME));
 		Map<String, String> map = rd.getPropertyMap();
 		List<ClientProperty> props = new ArrayList<ClientProperty>();
 		for (String key : map.keySet()) {
@@ -233,17 +285,20 @@ public class Soap2Rest {
 		cr.setProperties(props);
 	}
 
-	private static void getJndiDataSource(ARestV2Connection rc, ClientJndiJdbcDataSource cr, ResourceDescriptor rd) {
+	private static void getJndiDataSource(ARestV2Connection rc,
+			ClientJndiJdbcDataSource cr, ResourceDescriptor rd) {
 		cr.setJndiName(rd.getJndiName());
 		cr.setTimezone(DiffFields.getSoapValue(rd, DiffFields.TIMEZONE));
 	}
 
-	private static void getBeanDataSource(ARestV2Connection rc, ClientBeanDataSource cr, ResourceDescriptor rd) {
+	private static void getBeanDataSource(ARestV2Connection rc,
+			ClientBeanDataSource cr, ResourceDescriptor rd) {
 		cr.setBeanName(rd.getBeanName());
 		cr.setBeanMethod(rd.getBeanMethod());
 	}
 
-	private static void getJdbcDataSource(ARestV2Connection rc, ClientJdbcDataSource cr, ResourceDescriptor rd) {
+	private static void getJdbcDataSource(ARestV2Connection rc,
+			ClientJdbcDataSource cr, ResourceDescriptor rd) {
 		cr.setDriverClass(rd.getDriverClass());
 		cr.setPassword(Misc.nullValue(rd.getPassword()));
 		cr.setUsername(rd.getUsername());
@@ -251,18 +306,19 @@ public class Soap2Rest {
 		cr.setTimezone(DiffFields.getSoapValue(rd, DiffFields.TIMEZONE));
 	}
 
-	private static void getDataType(ARestV2Connection rc, ClientDataType cr, ResourceDescriptor rd) {
+	private static void getDataType(ARestV2Connection rc, ClientDataType cr,
+			ResourceDescriptor rd) {
 		switch (rd.getDataType()) {
-		case 1:
+		case ResourceDescriptor.DT_TYPE_TEXT:
 			cr.setType(TypeOfDataType.text);
 			break;
-		case 2:
+		case ResourceDescriptor.DT_TYPE_NUMBER:
 			cr.setType(TypeOfDataType.number);
 			break;
-		case 3:
+		case ResourceDescriptor.DT_TYPE_DATE:
 			cr.setType(TypeOfDataType.date);
 			break;
-		case 4:
+		case ResourceDescriptor.DT_TYPE_DATE_TIME:
 			cr.setType(TypeOfDataType.datetime);
 			break;
 		case 5:
@@ -280,27 +336,32 @@ public class Soap2Rest {
 			cr.setMaxLength(ml);
 	}
 
-	private static void getQuery(ARestV2Connection rc, ClientQuery cr, ResourceDescriptor rd) throws ParseException {
+	private static void getQuery(ARestV2Connection rc, ClientQuery cr,
+			ResourceDescriptor rd) throws ParseException {
 		cr.setValue(rd.getSql());
-		cr.setLanguage(rd.getResourcePropertyValue(ResourceDescriptor.PROP_QUERY_LANGUAGE));
+		cr.setLanguage(rd
+				.getResourcePropertyValue(ResourceDescriptor.PROP_QUERY_LANGUAGE));
 		List<ResourceDescriptor> children = rd.getChildren();
 		for (ResourceDescriptor r : children)
 			if (SelectorDatasource.isDatasource(r))
-				cr.setDataSource((ClientReferenceableDataSource) getResourceContainer(rc, r));
+				cr.setDataSource((ClientReferenceableDataSource) getResourceContainer(
+						rc, r));
 	}
 
-	private static void getFile(ARestV2Connection rc, ClientFile cr, ResourceDescriptor rd) {
+	private static void getFile(ARestV2Connection rc, ClientFile cr,
+			ResourceDescriptor rd) {
 		cr.setType(WsTypes.INST().toRestFileType(rd.getWsType()));
 		if (rd.getData() != null) {
 			String content = new String(rd.getData());// new
-																								// String(Base64.decodeBase64(content))
+														// String(Base64.decodeBase64(content))
 			if (content.isEmpty())
 				content = "    "; // if empty, jrs throw an exception
 			cr.setContent(content);
 		}
 	}
 
-	private static void getInputControl(ARestV2Connection rc, ClientInputControl cr, ResourceDescriptor rd) throws ParseException {
+	private static void getInputControl(ARestV2Connection rc,
+			ClientInputControl cr, ResourceDescriptor rd) throws ParseException {
 		cr.setMandatory(rd.isMandatory());
 		cr.setReadOnly(rd.isReadOnly());
 		cr.setVisible(rd.isVisible());
@@ -309,22 +370,34 @@ public class Soap2Rest {
 		List<ResourceDescriptor> children = rd.getChildren();
 		for (ResourceDescriptor r : children) {
 			if (r.getWsType().equals(ResourceDescriptor.TYPE_LOV))
-				cr.setListOfValues((ClientReferenceableListOfValues) getResourceContainer(rc, r));
+				cr.setListOfValues((ClientReferenceableListOfValues) getResourceContainer(
+						rc, r));
 			else if (r.getWsType().equals(ResourceDescriptor.TYPE_QUERY)) {
-				cr.setQuery((ClientReferenceableQuery) getResourceContainer(rc, r));
+				cr.setQuery((ClientReferenceableQuery) getResourceContainer(rc,
+						r));
 				cr.setValueColumn(rd.getQueryValueColumn());
 				if (rd.getQueryVisibleColumns() != null)
-					cr.setVisibleColumns(Arrays.asList(rd.getQueryVisibleColumns()));
+					cr.setVisibleColumns(Arrays.asList(rd
+							.getQueryVisibleColumns()));
 			} else if (r.getWsType().equals(ResourceDescriptor.TYPE_DATA_TYPE))
-				cr.setDataType((ClientReferenceableDataType) getResourceContainer(rc, r));
+				cr.setDataType((ClientReferenceableDataType) getResourceContainer(
+						rc, r));
 		}
 	}
 
-	public static void getReportUnit(ARestV2Connection rc, AbstractClientReportUnit<?> cr, ResourceDescriptor rd) throws ParseException {
-		cr.setAlwaysPromptControls(Misc.nvl(rd.getResourcePropertyValueAsBoolean(ResourceDescriptor.PROP_RU_ALWAYS_PROPMT_CONTROLS), Boolean.FALSE));
-		cr.setInputControlRenderingView(rd.getResourcePropertyValue(ResourceDescriptor.PROP_RU_INPUTCONTROL_RENDERING_VIEW));
-		cr.setReportRenderingView(rd.getResourcePropertyValue(ResourceDescriptor.PROP_RU_REPORT_RENDERING_VIEW));
-		int rurv = Misc.nvl(rd.getResourcePropertyValueAsInteger(ResourceDescriptor.PROP_RU_CONTROLS_LAYOUT), (int) ResourceDescriptor.RU_CONTROLS_LAYOUT_POPUP_SCREEN);
+	public static void getReportUnit(ARestV2Connection rc,
+			AbstractClientReportUnit<?> cr, ResourceDescriptor rd)
+			throws ParseException {
+		cr.setAlwaysPromptControls(Misc.nvl(
+				rd.getResourcePropertyValueAsBoolean(ResourceDescriptor.PROP_RU_ALWAYS_PROPMT_CONTROLS),
+				Boolean.FALSE));
+		cr.setInputControlRenderingView(rd
+				.getResourcePropertyValue(ResourceDescriptor.PROP_RU_INPUTCONTROL_RENDERING_VIEW));
+		cr.setReportRenderingView(rd
+				.getResourcePropertyValue(ResourceDescriptor.PROP_RU_REPORT_RENDERING_VIEW));
+		int rurv = Misc
+				.nvl(rd.getResourcePropertyValueAsInteger(ResourceDescriptor.PROP_RU_CONTROLS_LAYOUT),
+						(int) ResourceDescriptor.RU_CONTROLS_LAYOUT_POPUP_SCREEN);
 		switch (rurv) {
 		case (int) ResourceDescriptor.RU_CONTROLS_LAYOUT_POPUP_SCREEN:
 			cr.setControlsLayout(ControlsLayoutType.popupScreen);
@@ -354,20 +427,30 @@ public class Soap2Rest {
 			if (r == null)
 				continue;
 			if (SelectorDatasource.isDatasource(r))
-				cr.setDataSource((ClientReferenceableDataSource) getResourceContainer(rc, r));
+				cr.setDataSource((ClientReferenceableDataSource) getResourceContainer(
+						rc, r));
 			else {
 				String t = r.getWsType();
 				if (t.equals(ResourceDescriptor.TYPE_QUERY))
-					cr.setQuery((ClientReferenceableQuery) getResourceContainer(rc, r));
-				else if ((t.equals(ResourceDescriptor.TYPE_JRXML) || t.equals(ResourceDescriptor.TYPE_REFERENCE)) && r.isMainReport()) {
+					cr.setQuery((ClientReferenceableQuery) getResourceContainer(
+							rc, r));
+				else if ((t.equals(ResourceDescriptor.TYPE_JRXML) || t
+						.equals(ResourceDescriptor.TYPE_REFERENCE))
+						&& r.isMainReport()) {
 					// r.setName("main_jrxml");
 					// r.setLabel("Main Jrxml");
-					// r.setUriString(rd.getUriString() + "_files/" + r.getName());
-					cr.setJrxml((ClientReferenceableFile) getResourceContainer(rc, r));
+					// r.setUriString(rd.getUriString() + "_files/" +
+					// r.getName());
+					cr.setJrxml((ClientReferenceableFile) getResourceContainer(
+							rc, r));
 				} else if (t.equals(ResourceDescriptor.TYPE_INPUT_CONTROL))
-					ics.add((ClientReferenceableInputControl) getResourceContainer(rc, r));
-				else if (ResourceFactory.isFileResourceType(r) || t.equals(ResourceDescriptor.TYPE_REFERENCE)) {
-					icf.put(r.getName(), (ClientReferenceableFile) getResourceContainer(rc, r));
+					ics.add((ClientReferenceableInputControl) getResourceContainer(
+							rc, r));
+				else if (ResourceFactory.isFileResourceType(r)
+						|| t.equals(ResourceDescriptor.TYPE_REFERENCE)) {
+					icf.put(r.getName(),
+							(ClientReferenceableFile) getResourceContainer(rc,
+									r));
 				}
 			}
 		}
