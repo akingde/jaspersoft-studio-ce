@@ -670,14 +670,20 @@ public abstract class ANode implements INode, Serializable, IAdaptable, Cloneabl
 	
 	/**
 	 * Return the size available for the placement of elements, it depends from the page
-	 * size
+	 * size. There is a minimum size that is 1000x1000, if the value is lower that this one
+	 * then 1000 is used
 	 * 
-	 * @return the space available outside the page. By default it is fourtime the page size
+	 * @return the space available outside the page. By default it is fourtime the page size, and
+	 * a minimum of 1000x1000
 	 */
 	public Point getAvailableSize(){
 		JasperDesign jd = getJasperDesign();
 		int w = jd.getPageWidth() + 20;
 		int h = jd.getPageHeight() + 20;
-		return new Point(w*4, h*4);
+		w = w * 4;
+		if (w < 1000) w = 1000;
+		h = h * 4;
+		if (h < 1000) h = 1000;
+		return new Point(w, h);
 	}
 }
