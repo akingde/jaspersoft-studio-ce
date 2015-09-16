@@ -31,6 +31,7 @@ import com.jaspersoft.studio.model.IPastable;
 import com.jaspersoft.studio.model.MPage;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.band.MBand;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /**
  * Implementation of the paste definition for the editor graphical
@@ -65,6 +66,11 @@ public class PastableElements extends AbstractPastableObject {
 	private ACTION_TYPE actionType;
 	
 	/**
+	 * The JasperReportConfiguration of the copied elements
+	 */
+	private JasperReportsConfiguration jConfig;
+	
+	/**
 	 * Create an instance of the class
 	 * 
 	 * @param list not null list of the elements that are object of the copy
@@ -75,17 +81,40 @@ public class PastableElements extends AbstractPastableObject {
 		super(list);
 		this.parentsMap = parentsMap;
 		this.actionType = actionType;
+		//Initialize the JasperReportsConfiguration
+		for(ICopyable node : list){
+			if (node instanceof ANode){
+				jConfig = ((ANode)node).getJasperConfiguration();
+			}
+		}
 	}
 	
 	/**
 	 * Check if the copied set need do be pasted on the same parents each elements
-	 * had when it was copied or on the selected containers
+	 * had when it was copied or on the selected containers. The element maintains the 
+	 * same container if they are pasted on the same report and if the node where they are
+	 * pasted is an MReport or an MPage or if the current selected elements are the same elements
+	 * that were coped
 	 * 
 	 * @param selectedObjects the current selection set
 	 * @return true if the elements pasted must maintain the same parent of the originals, 
 	 * false if they must be copied all in the selected parents
 	 */
 	public boolean doSpecialPaste(Collection<?> selectedObjects){
+		//Check if the elements where target of the copy and the copied one are
+		//in the same report, by checking the JasperReportConfiguration
+		for (Object selection : selectedObjects) {
+			if (selection instanceof EditPart) {
+				Object model = ((EditPart)selection).getModel();
+				if (model instanceof ANode){
+					JasperReportsConfiguration nodeConfig = ((ANode)model).getJasperConfiguration();
+					if (nodeConfig != null && nodeConfig != jConfig){
+						return false;
+					}
+					break;
+				}
+			}
+		}
 		if (selectedObjects.size() == 1){
 			Object firstElement = selectedObjects.iterator().next();
 			if (firstElement instanceof EditPart) {
@@ -154,6 +183,8 @@ public class PastableElements extends AbstractPastableObject {
 	 * Create the command to pasted the copied elements, check if the pasted
 	 * elements must maintains the same parent of the original or not before,
 	 * and in case create a different command
+	 * 
+	 * @param selectedObjects the list of object selected for the paste
 	 */
 	protected Command createCommand(Collection<?> selectedObjects) {
 		if (doSpecialPaste(selectedObjects)){
