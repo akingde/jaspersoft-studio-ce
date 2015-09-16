@@ -21,7 +21,7 @@ import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.palette.PaletteRoot;
 import org.eclipse.gef.rulers.RulerProvider;
 import org.eclipse.gef.ui.actions.ActionRegistry;
-import org.eclipse.gef.ui.actions.DeleteAction;
+import org.eclipse.gef.ui.actions.Clipboard;
 import org.eclipse.gef.ui.actions.GEFActionConstants;
 import org.eclipse.gef.ui.parts.TreeViewer;
 import org.eclipse.jface.action.Action;
@@ -32,6 +32,9 @@ import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchPart;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.editor.action.CustomDeleteAction;
+import com.jaspersoft.studio.editor.action.copy.AbstractPastableObject;
+import com.jaspersoft.studio.editor.action.copy.PasteAction;
 import com.jaspersoft.studio.editor.gef.parts.JSSGraphicalViewerKeyHandler;
 import com.jaspersoft.studio.editor.gef.parts.JasperDesignEditPartFactory;
 import com.jaspersoft.studio.editor.gef.parts.MainDesignerRootEditPart;
@@ -50,6 +53,10 @@ import com.jaspersoft.studio.editor.outline.actions.DeleteGroupReportAction;
 import com.jaspersoft.studio.editor.palette.JDPaletteFactory;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.IContainer;
+import com.jaspersoft.studio.model.ICopyable;
+import com.jaspersoft.studio.model.IDatasetContainer;
+import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.plugin.ExtensionManager;
 import com.jaspersoft.studio.preferences.RulersGridPreferencePage;
@@ -180,10 +187,10 @@ public class SimpleReportEditor extends ReportEditor {
 		selectionActions.add(action.getId());
 		
 		//Create the custom delete action that will replace the default one
-		//and disable the delete for the bands
-		DeleteAction deleteAction = new DeleteAction((IWorkbenchPart)this){
+		//and disable the delete for the bands and the root report node
+		CustomDeleteAction deleteAction = new CustomDeleteAction((IWorkbenchPart)this){
 			
-			private boolean isBandSelected(){
+			private boolean isBandOrReportSelected(){
 				List<?> objects = getSelectedObjects();
 				if (objects.isEmpty())
 					return false;
@@ -191,13 +198,13 @@ public class SimpleReportEditor extends ReportEditor {
 					return false;
 				for (int i = 0; i < objects.size(); i++) {
 					EditPart object = (EditPart) objects.get(i);
-					if (object.getModel() instanceof MBand) return true;
+					if (object.getModel() instanceof MBand || object.getModel() instanceof MReport) return true;
 				} 
 				return false;
 			}
 			
 			public boolean isEnabled() {
-				return !isBandSelected();
+				return !isBandOrReportSelected();
 			};
 		};
 		registry.registerAction(deleteAction);
@@ -225,5 +232,40 @@ public class SimpleReportEditor extends ReportEditor {
 		}
 		// Global "View" menu items
 		toolbarManager.add(new ViewSettingsDropDownAction(getActionRegistry()));
+	}
+	
+	@Override
+	protected void createActions() {
+		super.createActions();
+		ActionRegistry registry = getActionRegistry();
+		PasteAction action = new PasteAction(this){
+			
+			protected boolean checkDataset(INode currentNode){
+				if (currentNode instanceof IDatasetContainer){
+					return true;
+				} else {
+					for(INode child : currentNode.getChildren()){
+						if (checkDataset(child)) return true;
+					}
+				}
+				return false;
+			}
+			
+			protected boolean calculateEnabled() {
+				Object obj = Clipboard.getDefault().getContents();
+				if (obj instanceof AbstractPastableObject) {
+					AbstractPastableObject pastableContainer = (AbstractPastableObject)obj;
+					for(ICopyable node : pastableContainer.getCopiedElements()){
+						if (node instanceof INode){
+							boolean hasDataset = checkDataset((INode)node);
+							if (hasDataset) return false;
+						}
+					}
+				}
+				return super.calculateEnabled();
+			}
+			
+		};
+		registry.registerAction(action);
 	}
 }
