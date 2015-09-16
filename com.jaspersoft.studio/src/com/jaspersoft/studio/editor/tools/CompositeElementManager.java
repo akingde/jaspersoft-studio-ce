@@ -82,6 +82,7 @@ import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.plugin.IPaletteContributor;
 import com.jaspersoft.studio.utils.ExpressionUtil;
 import com.jaspersoft.studio.utils.ModelUtils;
+import com.jaspersoft.studio.utils.Pair;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /**
@@ -171,7 +172,7 @@ public class CompositeElementManager {
 	 * Map to keep cached a composite element definition once its jssce file is loaded. The key is 
 	 * the path of the element definition, the value is a band that contains all its components
 	 */
-	private HashMap<String, JRBand> cachedElementssMap = new HashMap<String, JRBand>();
+	private HashMap<String, Pair<JRBand, JasperDesign>> cachedElementssMap = new HashMap<String, Pair<JRBand, JasperDesign>>();
 	
 	
 	/**
@@ -705,13 +706,20 @@ public class CompositeElementManager {
 			}
 			
 		};
-		JRBand elementContent = getElementContainer(element.getPath());
+		Pair<JRBand, JasperDesign> compositeElement = getElementContainer(element.getPath());
+		JRBand elementContent = compositeElement.getKey();
 		for(JRChild child : elementContent.getChildren()){
 			JRDesignElement designElement = (JRDesignElement)child;
 			if (child instanceof JRDesignElement){
 				MGraphicElement model = new MGraphicElement();
 				model.setValue(designElement.clone());
-				Rectangle relativeLocation = new Rectangle(location);
+				Rectangle relativeLocation = null; 
+				//The location is null when dragging in the outline
+				if (location == null) {
+					relativeLocation = new Rectangle(0, 0, 0, 0);
+				} else {
+					relativeLocation = new Rectangle(location);
+				}
 				relativeLocation.x += designElement.getX();
 				relativeLocation.y += designElement.getY();
 				relativeLocation.width = designElement.getWidth();
@@ -896,15 +904,16 @@ public class CompositeElementManager {
 	 * 
 	 * @param defaultFile a not null report file containing the composite element definition
 	 */
-	private JRBand loadElementModel(File defaultFile) {
+	private Pair<JRBand, JasperDesign> loadElementModel(File defaultFile) {
 		InputStream in = null;
-		JRBand result = null;
+		Pair<JRBand, JasperDesign> result = null;
 		try {
 			in = new ByteArrayInputStream(FileUtils.readFileToByteArray(defaultFile));
 			JasperReportsConfiguration jConfig = getDefaultJRConfig();
-			JasperDesign jd = new JRXmlLoader(jConfig, JRXmlDigesterFactory.createDigester(jConfig)).loadXML(in);
-			jConfig.setJasperDesign(jd);
-			result = jd.getTitle();
+			JasperDesign design = new JRXmlLoader(jConfig, JRXmlDigesterFactory.createDigester(jConfig)).loadXML(in);
+			jConfig.setJasperDesign(design);
+			JRBand band = design.getTitle();
+			result = new Pair<JRBand, JasperDesign>(band, design);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -923,16 +932,16 @@ public class CompositeElementManager {
 	 * @return the band containing the controls of the composite element or null if there is 
 	 * an error loading them
 	 */
-	private JRBand getElementContainer(String path){
+	private Pair<JRBand, JasperDesign> getElementContainer(String path){
 		if (cachedElementssMap.containsKey(path)){
 			return cachedElementssMap.get(path);
 		} else {
 			File contentFile = new File(path);
 			if (contentFile.exists()){
-				JRBand band = loadElementModel(contentFile);
-				if (band != null){
-					cachedElementssMap.put(path, band);
-					return band;
+				Pair<JRBand, JasperDesign> result = loadElementModel(contentFile);
+				if (result != null){
+					cachedElementssMap.put(path, result);
+					return result;
 				}
 			}
 		}
