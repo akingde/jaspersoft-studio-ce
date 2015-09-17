@@ -17,10 +17,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import net.sf.jasperreports.eclipse.util.BeanUtils;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignField;
 
-import org.apache.commons.beanutils.PropertyUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -104,7 +104,7 @@ public class BeanMappingTool implements IMappingTool {
 					Class<?> clazz = jConfig.getClassLoader().loadClass(
 							classType.getClassType());
 
-					methodsarray = PropertyUtils.getPropertyDescriptors(clazz);
+					methodsarray = BeanUtils.getAllPropertyDescriptors(clazz);
 
 					String[] strm = new String[methodsarray.length];
 					for (int i = 0; i < methodsarray.length; i++) {
