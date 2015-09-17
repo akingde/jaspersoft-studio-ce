@@ -111,7 +111,7 @@ public class MaximizeContainerAction extends SelectionAction {
 					cc.add(cmd);
 				}
 			}
-			return cc;
+			return cc.isEmpty() ? null : cc;
 		}
 		return null;
 	}
