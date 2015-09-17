@@ -992,6 +992,17 @@ public class Messages extends NLS {
 	public static String JSONPathDataAction_2;
 	public static String JSONSchemaAction_0;
 	public static String JSSGraphicalViewerKeyHandler_ErrorNoArrowKey;
+	public static String JSSGridBagLayout_columnLabel;
+	public static String JSSGridBagLayout_columnSpanLabel;
+	public static String JSSGridBagLayout_columnWeightLabel;
+	public static String JSSGridBagLayout_emptyValue;
+	public static String JSSGridBagLayout_layoutName;
+	public static String JSSGridBagLayout_notNegativeValue;
+	public static String JSSGridBagLayout_relativeString;
+	public static String JSSGridBagLayout_rowLabel;
+	public static String JSSGridBagLayout_rowSpanLabel;
+	public static String JSSGridBagLayout_rowWeightLabel;
+	public static String JSSGridBagLayout_validNumberValue;
 	public static String JSSPixelEditorValidator_errorExceed;
 	public static String JSSPixelEditorValidator_errorNegative;
 	public static String JSSPixelEditorValidator_errorNull;

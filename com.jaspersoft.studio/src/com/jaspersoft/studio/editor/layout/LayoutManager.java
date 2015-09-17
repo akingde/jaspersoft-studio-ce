@@ -12,6 +12,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.layout;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -29,8 +30,10 @@ import org.eclipse.jface.action.MenuManager;
 import org.eclipse.ui.IWorkbenchPart;
 
 import com.jaspersoft.studio.editor.action.layout.LayoutAction;
+import com.jaspersoft.studio.editor.layout.grid.JSSGridBagLayout;
 
 public class LayoutManager {
+	
 	public static ILayout getLayout(JRPropertiesHolder[] elements, JasperDesign jDesign, String uuid) {
 		for (JRPropertiesHolder pholder : elements) {
 			if (pholder == null || pholder.getPropertiesMap() == null)
@@ -57,9 +60,12 @@ public class LayoutManager {
 		return new FreeLayout();
 	}
 
-	private static final Class<?>[] layouts = new Class<?>[] { HorizontalRowLayout.class, VerticalRowLayout.class };
+	private static final Class<?>[] layouts = new Class<?>[] { HorizontalRowLayout.class, VerticalRowLayout.class, JSSGridBagLayout.class };
+	
 	private static ILayout[] LAYOUTNAMES;
 
+	private static Map<String, ILayout> layoutsMap;
+	
 	public static void addActions(ActionRegistry registry, IWorkbenchPart part, List<String> selectionActions) {
 		for (Class<?> id : layouts) {
 			IAction action = new LayoutAction(part, id);
@@ -77,9 +83,19 @@ public class LayoutManager {
 	}
 
 	public static ILayout[] getAllLayouts() {
-		if (LAYOUTNAMES == null)
-			LAYOUTNAMES = new ILayout[] { new FreeLayout(), new HorizontalRowLayout(), new VerticalRowLayout() };
+		if (LAYOUTNAMES == null){
+			LAYOUTNAMES = new ILayout[] { new FreeLayout(), new HorizontalRowLayout(), new VerticalRowLayout(), new JSSGridBagLayout() };
+			layoutsMap = new HashMap<String, ILayout>();
+			for(ILayout layout : LAYOUTNAMES){
+				layoutsMap.put(layout.getClass().getName(), layout);
+			}
+		}
 		return LAYOUTNAMES;
+	}
+	
+	public static ILayout getLayout(String className){
+		getAllLayouts();
+		return layoutsMap.get(className);
 	}
 
 	public static Map<JRElement, Rectangle> layout(Map<JRElement, Rectangle> map, JRElement el) {
@@ -90,7 +106,8 @@ public class LayoutManager {
 				d = new Dimension(jce.getWidth(), jce.getHeight());
 			}
 			ILayout layout = LayoutManager.getLayout(new JRPropertiesHolder[] { el }, null, null);
-			layout.layout(((JRElementGroup) el).getElements(), d);
+			JRElementGroup group = (JRElementGroup)el;
+			layout.layout(group.getElements(), d);
 		}
 		return map;
 	}

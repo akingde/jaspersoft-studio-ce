@@ -1291,6 +1291,9 @@
             <input
                   type="com.jaspersoft.studio.model.IContainerLayout">
             </input>
+            <input
+                  type="com.jaspersoft.studio.model.MGraphicElement">
+            </input>
          </propertySection>
          <propertySection
                class="com.jaspersoft.studio.property.section.obj.GroupSection"

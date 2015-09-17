@@ -22,7 +22,7 @@ import org.eclipse.draw2d.geometry.Rectangle;
 
 import com.jaspersoft.studio.messages.Messages;
 
-public class FreeLayout implements ILayout {
+public class FreeLayout extends AbstractLayout {
 
 	@Override
 	public Map<JRElement, Rectangle> layout(JRElement[] elements, Dimension c) {
@@ -43,5 +43,4 @@ public class FreeLayout implements ILayout {
 	public String getIcon() {
 		return "icons/layout.png"; //$NON-NLS-1$
 	}
-
 }

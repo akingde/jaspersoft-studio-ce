@@ -28,7 +28,7 @@ public class LayoutCommand extends Command {
 	private ILayout layout;
 	private JRElementGroup container;
 	private Dimension size;
-
+	
 	public LayoutCommand(JRElementGroup container, ILayout layout, Dimension size) {
 		super();
 		this.size = size;

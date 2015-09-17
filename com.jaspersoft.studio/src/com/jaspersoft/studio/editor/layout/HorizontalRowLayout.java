@@ -23,7 +23,8 @@ import org.eclipse.draw2d.geometry.Rectangle;
 
 import com.jaspersoft.studio.messages.Messages;
 
-public class HorizontalRowLayout implements ILayout {
+public class HorizontalRowLayout extends AbstractLayout {
+	
 	public Map<JRElement, Rectangle> layout(JRElement[] elements, Dimension c) {
 		Map<JRElement, Rectangle> map = new HashMap<JRElement, Rectangle>();
 		int x = 0;
