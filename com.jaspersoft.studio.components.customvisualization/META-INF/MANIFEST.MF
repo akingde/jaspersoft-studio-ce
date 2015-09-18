@@ -2,12 +2,12 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name
 Bundle-SymbolicName: com.jaspersoft.studio.components.customvisualization;singleton:=true
-Bundle-Version: 6.1.2.qualifier
+Bundle-Version: 6.2.0.qualifier
 Bundle-Activator: com.jaspersoft.studio.components.customvisualization.CustomVisualizationActivator
 Bundle-Vendor: %Bundle-Vendor
 Bundle-Localization: plugin
-Require-Bundle: com.jaspersoft.studio;bundle-version="6.1.2",
- com.jaspersoft.studio.server;bundle-version="6.1.2"
+Require-Bundle: com.jaspersoft.studio;bundle-version="6.2.0",
+ com.jaspersoft.studio.server;bundle-version="6.2.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6,
  JavaSE-1.7
 Bundle-ActivationPolicy: lazy
