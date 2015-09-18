@@ -12,103 +12,97 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.map.property;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import net.sf.jasperreports.components.map.ItemData;
+import net.sf.jasperreports.components.map.StandardItem;
 import net.sf.jasperreports.components.map.StandardItemData;
+import net.sf.jasperreports.components.map.StandardItemProperty;
+import net.sf.jasperreports.components.map.StandardMapComponent;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.engine.design.JRDesignElementDataset;
+import net.sf.jasperreports.engine.design.JRDesignExpression;
 
-import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.ui.forms.widgets.ExpandableComposite;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.forms.events.HyperlinkAdapter;
+import org.eclipse.ui.forms.events.HyperlinkEvent;
+import org.eclipse.ui.forms.widgets.FormText;
 
+import com.buzzcoders.yasw.widgets.map.core.LatLng;
+import com.buzzcoders.yasw.widgets.map.core.MapType;
+import com.buzzcoders.yasw.widgets.map.ui.MarkersPickupDialog;
 import com.jaspersoft.studio.components.map.messages.Messages;
+import com.jaspersoft.studio.components.map.model.MMap;
+import com.jaspersoft.studio.components.map.model.marker.dialog.MarkerPage;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
 public class MapDatasetSection extends AbstractSection {
-	
-	private ExpandableComposite section;
-	
+
 	@Override
-	public void createControls(final Composite parent, TabbedPropertySheetPage tabbedPropertySheetPage) {
+	public void createControls(final Composite parent,
+			TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
 
-		parent.setLayout(new GridLayout(2, false));
+		FormText mapPickSuggestion = new FormText(parent, SWT.NONE);
+		mapPickSuggestion.setText(Messages.MarkerPage_0, true, false);
+		mapPickSuggestion.setLayoutData(new GridData(
+				GridData.HORIZONTAL_ALIGN_CENTER));
+		mapPickSuggestion.setWhitespaceNormalized(true);
+		mapPickSuggestion.addHyperlinkListener(new HyperlinkAdapter() {
+			private MarkerPage.BasicMapInfo mapInfo;
 
-		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 2;
-		createWidget4Property(parent, StandardItemData.PROPERTY_ITEMS, false).getControl().setLayoutData(gd);
-		
-		final Button useMarkerDataset = new Button(parent, SWT.CHECK);
-		useMarkerDataset.setText(Messages.MapDatasetSection_UseMarkersDatasetBtn);
-		GridData gdBtn = new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1);
-		gdBtn.horizontalIndent = 2;
-		useMarkerDataset.setLayoutData(gdBtn);
-		boolean enableAndShowDSPanel = isDatasetSet();
-		useMarkerDataset.setSelection(enableAndShowDSPanel);
-		
-		final Composite container = new Composite(parent,SWT.NONE);
-		container.setLayout(new GridLayout());
-		GridData gdContainer = new GridData(SWT.FILL,SWT.FILL,true,true,2,1);
-		gdContainer.horizontalIndent = 5;
-		container.setLayoutData(gdContainer);
-		container.setEnabled(enableAndShowDSPanel);
-		container.setVisible(enableAndShowDSPanel);
-		
-		final Composite group = getWidgetFactory().createSection(container, com.jaspersoft.studio.messages.Messages.MElementDataset_dataset_run, true, 2, 2); //$NON-NLS-1$
-		section = (ExpandableComposite)group.getParent();
-		createWidget4Property(group, JRDesignElementDataset.PROPERTY_DATASET_RUN);
-		
-		useMarkerDataset.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e) {
-				if(useMarkerDataset.getSelection()) {
-					toggleDSRunPanel(container, true);
-					getElement().setPropertyValue(StandardItemData.PROPERTY_DATASET, new JRDesignElementDataset());
-				}
-				else {
-					boolean answer = MessageDialog.openQuestion(
-							UIUtils.getShell(), Messages.MapDatasetSection_DeleteConfirmationTitle, 
-							Messages.MapDatasetSection_DeleteConfirmationMsg);
-					if(!answer){
-						useMarkerDataset.setSelection(true);
-						return;
+			public void linkActivated(HyperlinkEvent e) {
+				MMap mmap = (MMap) getElement();
+				MarkersPickupDialog staticMarkersDialog = new MarkersPickupDialog(
+						UIUtils.getShell()) {
+					@Override
+					protected void configureShell(Shell newShell) {
+						super.configureShell(newShell);
+						UIUtils.resizeAndCenterShell(newShell, 800, 600);
 					}
-					toggleDSRunPanel(container, false);
-					getElement().setPropertyValue(StandardItemData.PROPERTY_DATASET, null);
+				};
+				if (mapInfo == null)
+					mapInfo = MarkerPage.getBasicMapInformation(mmap);
+				if (mapInfo.getLatitude() != null
+						&& mapInfo.getLongitude() != null)
+					staticMarkersDialog.setInitialPosition(new LatLng(mapInfo
+							.getLatitude(), mapInfo.getLongitude(), true));
+				if (mapInfo.getMapType() != null)
+					staticMarkersDialog.setType(MapType.fromStringID(mapInfo
+							.getMapType().getName()));
+				if (mapInfo.getZoom() != 0)
+					staticMarkersDialog.setZoom(mapInfo.getZoom());
+				if (staticMarkersDialog.open() == Window.OK) {
+					List<LatLng> markersList = staticMarkersDialog
+							.getMarkersList();
+					List<ItemData> markers = new ArrayList<ItemData>();
+					StandardItemData sid = new StandardItemData();
+					markers.add(sid);
+					for (LatLng m : markersList) {
+						StandardItem newMarker = new StandardItem();
+						newMarker
+								.addItemProperty(new StandardItemProperty(
+										"latitude", null, new JRDesignExpression(m.getLat().floatValue() + "f"))); //$NON-NLS-1$ //$NON-NLS-2$
+						newMarker
+								.addItemProperty(new StandardItemProperty(
+										"longitude", null, new JRDesignExpression(m.getLng().floatValue() + "f"))); //$NON-NLS-1$ //$NON-NLS-2$
+						sid.addItem(newMarker);
+						// mmap.getValue().getMarkers().add(newMarker);
+					}
+					changeProperty(
+							StandardMapComponent.PROPERTY_MARKER_DATA_LIST,
+							markers);
 				}
-				parent.layout(new Control[]{container});
 			}
 		});
-	}
-	
-	@Override
-	public void expandForProperty(Object propertyId) {
-		if (section != null && !section.isExpanded() && propertyId.equals(JRDesignElementDataset.PROPERTY_DATASET_RUN)) section.setExpanded(true);
-	}
-	
-	@Override
-	protected void initializeProvidedProperties() {
-		super.initializeProvidedProperties();
-		addProvidedProperties(StandardItemData.PROPERTY_ITEMS, Messages.MMap_markersTitle);
-		addProvidedProperties(JRDesignElementDataset.PROPERTY_DATASET_RUN, Messages.MMap_markerDatasetTitle);
-	}
-	
-	
-	
-	private boolean isDatasetSet() {
-		return getElement().getPropertyValue(StandardItemData.PROPERTY_DATASET)!=null;
-	}
-	
-	private void toggleDSRunPanel(Composite panel, boolean show) {
-		((GridData)panel.getLayoutData()).exclude = !show;
-		panel.setEnabled(show);
-		panel.setVisible(show);
+
+		createWidget4Property(parent,
+				StandardMapComponent.PROPERTY_MARKER_DATA_LIST, false);
 	}
 }

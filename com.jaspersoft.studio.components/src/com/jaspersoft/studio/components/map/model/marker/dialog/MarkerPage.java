@@ -133,7 +133,7 @@ public class MarkerPage extends WizardPage {
 					}
 				};
 				if (mapInfo == null) {
-					mapInfo = getBasicMapInformation();
+					mapInfo = getBasicMapInformation((MMap) value.getPnode());
 				}
 				if (mapInfo.getLatitude() != null
 						&& mapInfo.getLongitude() != null) {
@@ -206,10 +206,6 @@ public class MarkerPage extends WizardPage {
 
 		table.setFocus();
 
-		if (value.getPnode() instanceof MMap) {
-			expContext = ((MMap) value.getPnode())
-					.getMarkersExpressionContext();
-		}
 	}
 
 	private void buildTable(Composite composite) {
@@ -272,8 +268,7 @@ public class MarkerPage extends WizardPage {
 	/*
 	 * Gets the basic information: map center, zoom and type.
 	 */
-	private BasicMapInfo getBasicMapInformation() {
-		MMap mapRef = (MMap) value.getPnode();
+	public static BasicMapInfo getBasicMapInformation(MMap mapRef) {
 		BasicMapInfo info = new BasicMapInfo();
 		JRDesignDataset dataset = ModelUtils.getDataset(mapRef);
 		if (dataset == null) {
@@ -318,7 +313,7 @@ public class MarkerPage extends WizardPage {
 		return info;
 	}
 
-	class BasicMapInfo {
+	public static class BasicMapInfo {
 
 		private Double latitude;
 		private Double longitude;
