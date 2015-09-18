@@ -405,7 +405,7 @@ public class GridBagConstraints implements Cloneable{
             return c;
         } catch (CloneNotSupportedException e) {
             // this shouldn't happen, since we are Cloneable
-            throw new InternalError(e);
+            throw new Error(e);
         }
     }
 
