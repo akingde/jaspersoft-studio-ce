@@ -1544,6 +1544,30 @@ public class Messages extends NLS {
 	public static String PathAndDataDialog_7;
 	public static String PathAndDataDialog_8;
 	public static String PathAndDataDialog_9;
+	public static String PathDescriptor_10;
+	public static String PathDescriptor_11;
+	public static String PathDescriptor_12;
+	public static String PathDescriptor_13;
+	public static String PathDescriptor_14;
+	public static String PathDescriptor_15;
+	public static String PathDescriptor_16;
+	public static String PathDescriptor_17;
+	public static String PathDescriptor_18;
+	public static String PathDescriptor_19;
+	public static String PathDescriptor_20;
+	public static String PathDescriptor_21;
+	public static String PathDescriptor_22;
+	public static String PathDescriptor_23;
+	public static String PathDescriptor_24;
+	public static String PathDescriptor_25;
+	public static String PathDescriptor_26;
+	public static String PathDescriptor_27;
+	public static String PathDescriptor_28;
+	public static String PathDescriptor_29;
+	public static String PathDescriptor_30;
+	public static String PathDescriptor_7;
+	public static String PathDescriptor_8;
+	public static String PathDescriptor_9;
 	public static String PatternPage_currency;
 	public static String PatternPage_date;
 	public static String PatternPage_description;
@@ -1878,6 +1902,12 @@ public class Messages extends NLS {
 	public static String StudioPreferencePage_showCompDialog;
 	public static String StudioPreferencePage_TimestampOnSave;
 	public static String StudioPreferencePage_versionLabel;
+	public static String StyleDescriptor_0;
+	public static String StyleDescriptor_1;
+	public static String StyleDescriptor_2;
+	public static String StyleDescriptor_3;
+	public static String StyleDescriptor_4;
+	public static String StyleDescriptor_5;
 	public static String StyleEditPart_styleTemplatePrefix;
 	public static String StylesListSection_Inherited_From_Default_Style;
 	public static String StylesListSection_NotEditable_Message;
@@ -1970,7 +2000,7 @@ public class Messages extends NLS {
 	public static String ThemesPreferencePage_themesLabel;
 	public static String ThemesPreferencePage_themsTitle;
 	public static String TibcoMapSection_0;
-	public static String TibcoMapSection_1;
+	public static String MapSection_1;
 	public static String TibcoMapSection_2;
 	public static String TibcoMapSection_3;
 	public static String TibcoMapSection_4;
@@ -2179,6 +2209,33 @@ public class Messages extends NLS {
 	public static String UsageManager_errorWriteStatProperties;
 	public static String UsageManager_uploadJobName;
 	public static String UsageManager_writeJobName;
+	
+	public static String ItemDataDialog_0;
+	public static String ElementDatasetDialog_0;
+	public static String ItemDialog_0;
+	public static String ItemDialog_1;
+	public static String ItemDialog_2;
+	public static String ItemDialog_3;
+	public static String ItemDialog_4;
+	public static String ItemDialog_6;
+	public static String ItemDialog_7;
+	public static String ItemLabelProvider_0;
+	public static String ItemLabelProvider_1;
+	public static String ItemLabelProvider_11;
+	public static String ItemLabelProvider_13;
+	public static String ItemLabelProvider_15;
+	public static String ItemLabelProvider_16;
+	public static String ItemLabelProvider_18;
+	public static String ItemLabelProvider_2;
+	public static String ItemLabelProvider_3;
+	public static String ItemLabelProvider_7;
+	public static String ItemListCellEditor_0;
+	public static String ItemListCellEditor_1;
+	public static String SPItemdDataList_0;
+	public static String SPItemDataList_1;
+	public static String SPItemDataList_2;
+	public static String SPItemDataList_3;
+	public static String SPItemDataList_5;
 
 	private Messages() {
 	}

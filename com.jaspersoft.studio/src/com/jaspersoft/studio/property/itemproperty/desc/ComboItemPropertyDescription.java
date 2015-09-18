@@ -43,6 +43,15 @@ public class ComboItemPropertyDescription<T> extends ItemPropertyDescription<T> 
 		this.values = values;
 	}
 
+	public ComboItemPropertyDescription(String name, String label, String description, boolean mandatory,
+			String[] values, boolean readOnly) {
+		super(name, label, description, mandatory);
+		this.values = values;
+		this.readOnly = readOnly;
+	}
+
+	private boolean readOnly = false;
+
 	public void handleEdit(Control txt, StandardItemProperty value) {
 		super.handleEdit(txt, value);
 		if (txt instanceof Combo) {
@@ -65,7 +74,7 @@ public class ComboItemPropertyDescription<T> extends ItemPropertyDescription<T> 
 
 		super.createControl(wiProp, cmp);
 
-		final Combo textExpression = new Combo(cmp, SWT.READ_ONLY);
+		final Combo textExpression = new Combo(cmp, readOnly ? SWT.READ_ONLY : SWT.NONE);
 		textExpression.setItems(values);
 		textExpression.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -107,13 +116,15 @@ public class ComboItemPropertyDescription<T> extends ItemPropertyDescription<T> 
 			layout.topControl = combo;
 			String txt = wip.getLabelProvider().getText(wip.getValue());
 			String v = wip.getValue().getValue();
-
-			for (int i = 0; i < values.length; i++) {
-				if (values[i].equals(v)) {
-					combo.select(i);
-					break;
+			if (readOnly)
+				for (int i = 0; i < values.length; i++) {
+					if (values[i].equals(v)) {
+						combo.select(i);
+						break;
+					}
 				}
-			}
+			else
+				combo.setText(Misc.nvl(v));
 
 			String tooltip = "";
 			if (!Misc.isNullOrEmpty(txt))

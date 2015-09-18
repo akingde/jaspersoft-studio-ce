@@ -18,7 +18,7 @@ import net.sf.jasperreports.components.map.StandardItemProperty;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.property.infoList.ElementDescription;
-import com.jaspersoft.studio.property.itemproperty.ItemPropertyDescriptor;
+import com.jaspersoft.studio.property.itemproperty.desc.ItemPropertyDescriptor;
 
 public class ItemPropertyUtil {
 	public static ItemProperty getProperty(List<ItemProperty> items, String name) {

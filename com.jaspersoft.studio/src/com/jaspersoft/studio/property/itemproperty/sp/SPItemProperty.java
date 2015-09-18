@@ -6,7 +6,7 @@
  * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
-package com.jaspersoft.studio.property.itemproperty;
+package com.jaspersoft.studio.property.itemproperty.sp;
 
 import net.sf.jasperreports.components.map.StandardItemProperty;
 import net.sf.jasperreports.engine.design.JRDesignElement;
@@ -20,8 +20,10 @@ import org.eclipse.swt.widgets.Control;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
 import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.property.itemproperty.WItemProperty;
 import com.jaspersoft.studio.property.itemproperty.desc.ADescriptor;
 import com.jaspersoft.studio.property.itemproperty.desc.ItemPropertyDescription;
+import com.jaspersoft.studio.property.itemproperty.desc.ItemPropertyDescriptor;
 import com.jaspersoft.studio.property.itemproperty.event.ItemPropertyModifiedEvent;
 import com.jaspersoft.studio.property.itemproperty.event.ItemPropertyModifiedListener;
 import com.jaspersoft.studio.property.section.AbstractSection;

@@ -6,7 +6,7 @@
  * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
-package com.jaspersoft.studio.property.itemproperty;
+package com.jaspersoft.studio.property.itemproperty.desc;
 
 import java.util.List;
 
@@ -17,7 +17,9 @@ import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 import com.jaspersoft.studio.property.infoList.ElementDescription;
-import com.jaspersoft.studio.property.itemproperty.desc.ADescriptor;
+import com.jaspersoft.studio.property.itemproperty.celleditor.ItemPropertyCellEditor;
+import com.jaspersoft.studio.property.itemproperty.label.ItemPropertyLabelProvider;
+import com.jaspersoft.studio.property.itemproperty.sp.SPItemProperty;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 import com.jaspersoft.studio.property.section.widgets.IPropertyDescriptorWidget;

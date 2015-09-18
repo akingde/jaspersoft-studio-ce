@@ -6,7 +6,7 @@
  * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
-package com.jaspersoft.studio.property.itemproperty;
+package com.jaspersoft.studio.property.itemproperty.celleditor;
 
 import net.sf.jasperreports.components.map.StandardItemProperty;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
@@ -19,6 +19,7 @@ import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.property.descriptor.JSSDialogCellEditor;
 import com.jaspersoft.studio.property.itemproperty.desc.ADescriptor;
 import com.jaspersoft.studio.property.itemproperty.dialog.ItemPropertyElementDialog;
+import com.jaspersoft.studio.property.itemproperty.label.ItemPropertyLabelProvider;
 
 public class ItemPropertyCellEditor extends JSSDialogCellEditor {
 	private String id;

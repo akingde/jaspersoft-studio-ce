@@ -12,7 +12,7 @@ import net.sf.jasperreports.components.map.StandardItemProperty;
 
 import org.eclipse.swt.widgets.Control;
 
-import com.jaspersoft.studio.property.itemproperty.ItemPropertyLabelProvider;
+import com.jaspersoft.studio.property.itemproperty.label.ItemPropertyLabelProvider;
 
 public interface IWItemProperty {
 	public boolean isRefresh();
