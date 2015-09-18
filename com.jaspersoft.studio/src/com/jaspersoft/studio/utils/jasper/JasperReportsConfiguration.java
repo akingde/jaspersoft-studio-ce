@@ -796,4 +796,11 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 		}
 		return localRepositoryService;
 	}
+	
+	/**
+	 * @return the associated report file if any, <code>null</code> otherwise
+	 */
+	public IFile getAssociatedReportFile() {
+		return (IFile) get(FileUtils.KEY_FILE);
+	}
 }
