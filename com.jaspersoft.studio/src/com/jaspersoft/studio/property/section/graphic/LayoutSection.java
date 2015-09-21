@@ -246,9 +246,11 @@ public class LayoutSection extends AbstractSection {
 	@Override
 	public void aboutToBeShown() {
 		super.aboutToBeShown();
-		getElement().getRoot().getPropertyChangeSupport().removePropertyChangeListener(elementPropertyChange);
-		getElement().getRoot().getPropertyChangeSupport().addPropertyChangeListener(elementPropertyChange);
-		showSection();
+		if (getElement() != null && getElement().getRoot() != null){
+			getElement().getRoot().getPropertyChangeSupport().removePropertyChangeListener(elementPropertyChange);
+			getElement().getRoot().getPropertyChangeSupport().addPropertyChangeListener(elementPropertyChange);
+			showSection();
+		}
 	}
 	
 	@Override
