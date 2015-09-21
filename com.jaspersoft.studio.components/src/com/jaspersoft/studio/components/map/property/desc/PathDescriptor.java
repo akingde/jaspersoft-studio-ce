@@ -80,98 +80,83 @@ public class PathDescriptor extends ADescriptor {
 		itemProperties = new ItemPropertyDescription[] {
 				new ItemPropertyDescription<String>(
 						MapComponent.ITEM_PROPERTY_name,
-						Messages.PathDescriptor_1,
-						Messages.PathDescriptor_2,
+						Messages.PathDescriptor_1, Messages.PathDescriptor_2,
 						false, MapComponent.DEFAULT_PATH_NAME),
 
 				new ItemPropertyDescription<Float>(
 						MapComponent.ITEM_PROPERTY_latitude,
-						Messages.MarkerPage_LatitudeColumn, true, new Float(
-								"37.7833")), //$NON-NLS-1$
+						Messages.MarkerPage_LatitudeColumn, "", true,
+						new Float("37.7833")), //$NON-NLS-1$
 				new ItemPropertyDescription<Float>(
 						MapComponent.ITEM_PROPERTY_longitude,
-						Messages.MarkerPage_LongitudeColumn, true, new Float(
-								"-122.4167")), //$NON-NLS-1$
+						Messages.MarkerPage_LongitudeColumn, "", true,
+						new Float("-122.4167")), //$NON-NLS-1$
 				new ItemPropertyDescription<String>(
 						MapComponent.ITEM_PROPERTY_address,
-						Messages.PathDescriptor_3,
-						Messages.PathDescriptor_4,
+						Messages.PathDescriptor_3, Messages.PathDescriptor_4,
 						false),
 
 				new ItemPropertyDescription<String>(
 						MapComponent.ITEM_PROPERTY_style,
-						Messages.PathDescriptor_5,
-						Messages.PathDescriptor_6,
+						Messages.PathDescriptor_5, Messages.PathDescriptor_6,
 						false),
 
 				new ColorPropertyDescription<String>(
 						MapComponent.ITEM_PROPERTY_STYLE_strokeColor,
-						Messages.PathDescriptor_7,
-						Messages.PathDescriptor_8,
+						Messages.PathDescriptor_7, Messages.PathDescriptor_8,
 						false),
 
 				new ItemPropertyDescription<Float>(
 						MapComponent.ITEM_PROPERTY_STYLE_strokeOpacity,
-						Messages.PathDescriptor_9,
-						Messages.PathDescriptor_10,
+						Messages.PathDescriptor_9, Messages.PathDescriptor_10,
 						false),
 				new ItemPropertyDescription<Integer>(
 						MapComponent.ITEM_PROPERTY_STYLE_strokeWeight,
-						Messages.PathDescriptor_11,
-						Messages.PathDescriptor_12,
+						Messages.PathDescriptor_11, Messages.PathDescriptor_12,
 						false),
 
 				new ColorPropertyDescription<String>(
 						MapComponent.ITEM_PROPERTY_STYLE_fillColor,
-						Messages.PathDescriptor_13,
-						Messages.PathDescriptor_14,
+						Messages.PathDescriptor_13, Messages.PathDescriptor_14,
 						false),
 
 				new ItemPropertyDescription<Float>(
 						MapComponent.ITEM_PROPERTY_STYLE_fillOpacity,
-						Messages.PathDescriptor_15,
-						Messages.PathDescriptor_16,
+						Messages.PathDescriptor_15, Messages.PathDescriptor_16,
 						false),
 				new ComboItemPropertyDescription<Boolean>(
 						MapComponent.ITEM_PROPERTY_STYLE_isPolygon,
-						Messages.PathDescriptor_17,
-						Messages.PathDescriptor_18,
+						Messages.PathDescriptor_17, Messages.PathDescriptor_18,
 						false, Boolean.FALSE, new String[] {
 								"", "true", "false" }), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				new ComboItemPropertyDescription<Boolean>(
 						MapComponent.ITEM_PROPERTY_clickable,
-						Messages.PathDescriptor_19,
-						Messages.PathDescriptor_20,
+						Messages.PathDescriptor_19, Messages.PathDescriptor_20,
 						false, Boolean.TRUE,
 						new String[] { "", "true", "false" }), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				new ComboItemPropertyDescription<Boolean>(
 						MapComponent.ITEM_PROPERTY_STYLE_editable,
-						Messages.PathDescriptor_21,
-						Messages.PathDescriptor_22,
+						Messages.PathDescriptor_21, Messages.PathDescriptor_22,
 						false, Boolean.FALSE,
 						new String[] { "", "true", "true" }), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				new ComboItemPropertyDescription<Boolean>(
 						MapComponent.ITEM_PROPERTY_draggable,
-						Messages.PathDescriptor_23,
-						Messages.PathDescriptor_24,
+						Messages.PathDescriptor_23, Messages.PathDescriptor_24,
 						false, Boolean.FALSE, new String[] {
 								"", "true", "false" }), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				new ComboItemPropertyDescription<Boolean>(
 						MapComponent.ITEM_PROPERTY_STYLE_geodesic,
-						Messages.PathDescriptor_25,
-						Messages.PathDescriptor_26,
+						Messages.PathDescriptor_25, Messages.PathDescriptor_26,
 						false, Boolean.FALSE, new String[] {
 								"", "true", "false" }), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				new ComboItemPropertyDescription<Boolean>(
 						MapComponent.ITEM_PROPERTY_visible,
-						Messages.PathDescriptor_27,
-						Messages.PathDescriptor_28,
+						Messages.PathDescriptor_27, Messages.PathDescriptor_28,
 						false, Boolean.FALSE, new String[] {
 								"", "true", "false" }), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				new ItemPropertyDescription<Integer>(
 						MapComponent.ITEM_PROPERTY_MARKER_zIndex,
-						Messages.PathDescriptor_29,
-						Messages.PathDescriptor_30,
+						Messages.PathDescriptor_29, Messages.PathDescriptor_30,
 						false),
 
 		};

@@ -64,172 +64,156 @@ public class MarkersDescriptor extends ADescriptor {
 	protected void initItemPropertyDescriptors() {
 		itemProperties = new ItemPropertyDescription[] {
 				new ItemPropertyDescription<String>(
-						MapComponent.ITEM_PROPERTY_MARKER_title, Messages.MarkersDescriptor_1,
-						false, "Marker"), //$NON-NLS-1$
+						MapComponent.ITEM_PROPERTY_MARKER_title,
+						Messages.MarkersDescriptor_1, false, "Marker"), //$NON-NLS-1$
 
 				new ItemPropertyDescription<Float>(
 						MapComponent.ITEM_PROPERTY_latitude,
-						Messages.MarkerPage_LatitudeColumn, false, new Float(
-								"37.7833")), //$NON-NLS-1$
+						Messages.MarkerPage_LatitudeColumn, "", false,
+						new Float("37.7833")), //$NON-NLS-1$
 				new ItemPropertyDescription<Float>(
 						MapComponent.ITEM_PROPERTY_longitude,
-						Messages.MarkerPage_LongitudeColumn, false, new Float(
-								"-122.4167")), //$NON-NLS-1$
+						Messages.MarkerPage_LongitudeColumn, "", false,
+						new Float("-122.4167")), //$NON-NLS-1$
 				new ItemPropertyDescription<String>(
 						MapComponent.ITEM_PROPERTY_address,
 						Messages.MarkersDescriptor_3,
-						Messages.MarkersDescriptor_4,
-						false),
+						Messages.MarkersDescriptor_4, false),
 
 				new ItemPropertyDescription<String>(
 						MapComponent.ITEM_PROPERTY_MARKER_url,
 						Messages.MarkersDescriptor_5,
-						Messages.MarkersDescriptor_6,
-						false),
+						Messages.MarkersDescriptor_6, false),
 				new ComboItemPropertyDescription<String>(
-						MapComponent.ITEM_PROPERTY_MARKER_target, Messages.MarkersDescriptor_7,
-						Messages.MarkersDescriptor_8,
-						false, new String[] { "_blank", "_parent", "_self", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+						MapComponent.ITEM_PROPERTY_MARKER_target,
+						Messages.MarkersDescriptor_7,
+						Messages.MarkersDescriptor_8, false, new String[] {
+								"_blank", "_parent", "_self", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 								"_top", "" }, false), //$NON-NLS-1$ //$NON-NLS-2$
 
 				new ItemPropertyDescription<String>(
-						MapComponent.ITEM_PROPERTY_MARKER_icon, Messages.MarkersDescriptor_14,
+						MapComponent.ITEM_PROPERTY_MARKER_icon,
+						Messages.MarkersDescriptor_14,
 						Messages.MarkersDescriptor_15, false),
 				new ItemPropertyDescription<String>(
 						MapComponent.ITEM_PROPERTY_MARKER_ICON_url,
 						Messages.MarkersDescriptor_16,
-						Messages.MarkersDescriptor_17,
-						false),
+						Messages.MarkersDescriptor_17, false),
 				new ItemPropertyDescription<Integer>(
 						MapComponent.ITEM_PROPERTY_MARKER_ICON_width,
 						Messages.MarkersDescriptor_18,
-						Messages.MarkersDescriptor_19,
-						false),
+						Messages.MarkersDescriptor_19, false),
 				new ItemPropertyDescription<Integer>(
 						MapComponent.ITEM_PROPERTY_MARKER_ICON_height,
 						Messages.MarkersDescriptor_20,
-						Messages.MarkersDescriptor_21,
-						false),
+						Messages.MarkersDescriptor_21, false),
 				new ItemPropertyDescription<Integer>(
 						MapComponent.ITEM_PROPERTY_MARKER_ICON_ORIGIN_x,
 						Messages.MarkersDescriptor_22,
-						Messages.MarkersDescriptor_23,
-						false),
+						Messages.MarkersDescriptor_23, false),
 				new ItemPropertyDescription<Integer>(
 						MapComponent.ITEM_PROPERTY_MARKER_ICON_ORIGIN_y,
 						Messages.MarkersDescriptor_24,
-						Messages.MarkersDescriptor_25,
-						false),
+						Messages.MarkersDescriptor_25, false),
 				new ItemPropertyDescription<Integer>(
 						MapComponent.ITEM_PROPERTY_MARKER_ICON_ANCHOR_x,
 						Messages.MarkersDescriptor_26,
-						Messages.MarkersDescriptor_27,
-						false),
+						Messages.MarkersDescriptor_27, false),
 				new ItemPropertyDescription<Integer>(
 						MapComponent.ITEM_PROPERTY_MARKER_ICON_ANCHOR_y,
 						Messages.MarkersDescriptor_28,
-						Messages.MarkersDescriptor_29,
-						false),
+						Messages.MarkersDescriptor_29, false),
 
 				new ItemPropertyDescription<String>(
-						MapComponent.ITEM_PROPERTY_MARKER_shadow, Messages.MarkersDescriptor_30,
+						MapComponent.ITEM_PROPERTY_MARKER_shadow,
+						Messages.MarkersDescriptor_30,
 						Messages.MarkersDescriptor_31, false),
 				new ItemPropertyDescription<String>(
 						MapComponent.ITEM_PROPERTY_MARKER_SHADOW_url,
 						Messages.MarkersDescriptor_32,
-						Messages.MarkersDescriptor_33,
-						false),
+						Messages.MarkersDescriptor_33, false),
 				new ItemPropertyDescription<Integer>(
 						MapComponent.ITEM_PROPERTY_MARKER_SHADOW_width,
 						Messages.MarkersDescriptor_34,
-						Messages.MarkersDescriptor_35,
-						false),
+						Messages.MarkersDescriptor_35, false),
 				new ItemPropertyDescription<Integer>(
 						MapComponent.ITEM_PROPERTY_MARKER_SHADOW_height,
 						Messages.MarkersDescriptor_36,
-						Messages.MarkersDescriptor_37,
-						false),
+						Messages.MarkersDescriptor_37, false),
 				new ItemPropertyDescription<Integer>(
 						MapComponent.ITEM_PROPERTY_MARKER_SHADOW_ORIGIN_x,
 						Messages.MarkersDescriptor_38,
-						Messages.MarkersDescriptor_39,
-						false),
+						Messages.MarkersDescriptor_39, false),
 				new ItemPropertyDescription<Integer>(
 						MapComponent.ITEM_PROPERTY_MARKER_SHADOW_ORIGIN_y,
 						Messages.MarkersDescriptor_40,
-						Messages.MarkersDescriptor_41,
-						false),
+						Messages.MarkersDescriptor_41, false),
 				new ItemPropertyDescription<Integer>(
 						MapComponent.ITEM_PROPERTY_MARKER_SHADOW_ANCHOR_x,
 						Messages.MarkersDescriptor_42,
-						Messages.MarkersDescriptor_43,
-						false),
+						Messages.MarkersDescriptor_43, false),
 				new ItemPropertyDescription<Integer>(
 						MapComponent.ITEM_PROPERTY_MARKER_SHADOW_ANCHOR_y,
 						Messages.MarkersDescriptor_44,
-						Messages.MarkersDescriptor_45,
-						false),
+						Messages.MarkersDescriptor_45, false),
 
 				new ItemPropertyDescription<String>(
 						MapComponent.ITEM_PROPERTY_MARKER_INFOWINDOW_content,
 						Messages.MarkersDescriptor_46,
-						Messages.MarkersDescriptor_47,
-						false),
+						Messages.MarkersDescriptor_47, false),
 				new ItemPropertyDescription<Integer>(
 						MapComponent.ITEM_PROPERTY_MARKER_INFOWINDOW_pixelOffset,
 						Messages.MarkersDescriptor_48,
-						Messages.MarkersDescriptor_49,
-						false),
+						Messages.MarkersDescriptor_49, false),
 				new ItemPropertyDescription<Integer>(
 						MapComponent.ITEM_PROPERTY_MARKER_INFOWINDOW_maxWidth,
 						Messages.MarkersDescriptor_50,
-						Messages.MarkersDescriptor_51,
-						false),
+						Messages.MarkersDescriptor_51, false),
 
 				new ColorPropertyDescription<String>(
 						MapComponent.ITEM_PROPERTY_MARKER_color,
 						Messages.MarkersDescriptor_52,
-						Messages.MarkersDescriptor_53,
-						false),
+						Messages.MarkersDescriptor_53, false),
 
 				new ItemPropertyDescription<String>(
 						MapComponent.ITEM_PROPERTY_MARKER_label,
 						Messages.MarkerPage_LabelColumn,
-						Messages.MarkersDescriptor_54,
-						false),
+						Messages.MarkersDescriptor_54, false),
 				new ItemPropertyDescription<String>(
-						MapComponent.ITEM_PROPERTY_MARKER_cursor, Messages.MarkersDescriptor_55,
-						false),
+						MapComponent.ITEM_PROPERTY_MARKER_cursor,
+						Messages.MarkersDescriptor_55, "", false),
 				new ItemPropertyDescription<Integer>(
-						MapComponent.ITEM_PROPERTY_MARKER_zIndex, Messages.MarkersDescriptor_56,
-						false),
+						MapComponent.ITEM_PROPERTY_MARKER_zIndex,
+						Messages.MarkersDescriptor_56, "", false),
 				new ComboItemPropertyDescription<Boolean>(
-						MapComponent.ITEM_PROPERTY_clickable, Messages.MarkersDescriptor_57,
-						false, Boolean.FALSE, new String[] {
-								"", "true", "false" }), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+						MapComponent.ITEM_PROPERTY_clickable,
+						Messages.MarkersDescriptor_57, "", false,
+						Boolean.FALSE, new String[] { "", "true", "false" }), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				new ComboItemPropertyDescription<Boolean>(
-						MapComponent.ITEM_PROPERTY_draggable, Messages.MarkersDescriptor_58,
-						false, Boolean.FALSE, new String[] {
-								"", "true", "false" }), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+						MapComponent.ITEM_PROPERTY_draggable,
+						Messages.MarkersDescriptor_58, "", false,
+						Boolean.FALSE, new String[] { "", "true", "false" }), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				new ComboItemPropertyDescription<Boolean>(
-						MapComponent.ITEM_PROPERTY_MARKER_flat, Messages.MarkersDescriptor_59, false,
+						MapComponent.ITEM_PROPERTY_MARKER_flat,
+						Messages.MarkersDescriptor_59, "", false,
 						Boolean.FALSE, new String[] { "", "true", "false" }), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				new ComboItemPropertyDescription<Boolean>(
 						MapComponent.ITEM_PROPERTY_MARKER_optimized,
-						Messages.MarkersDescriptor_60, false, Boolean.FALSE, new String[] {
-								"", "true", "false" }), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+						Messages.MarkersDescriptor_60, "", false,
+						Boolean.FALSE, new String[] { "", "true", "false" }), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				new ComboItemPropertyDescription<Boolean>(
 						MapComponent.ITEM_PROPERTY_MARKER_raiseOnDrag,
-						Messages.MarkersDescriptor_61, false, Boolean.FALSE, new String[] {
-								"", "true", "false" }), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+						Messages.MarkersDescriptor_61, "", false,
+						Boolean.FALSE, new String[] { "", "true", "false" }), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				new ComboItemPropertyDescription<Boolean>(
-						MapComponent.ITEM_PROPERTY_visible, Messages.MarkersDescriptor_62, false,
+						MapComponent.ITEM_PROPERTY_visible,
+						Messages.MarkersDescriptor_62, "", false,
 						Boolean.FALSE, new String[] { "", "true", "false" }), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				new ComboItemPropertyDescription<String>(
 						MapComponent.ITEM_PROPERTY_MARKER_size,
 						Messages.MarkersDescriptor_63,
-						Messages.MarkersDescriptor_64,
-						false, new String[] { "", "mid", "tiny", "small" }) //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+						Messages.MarkersDescriptor_64, false, new String[] {
+								"", "mid", "tiny", "small" }) //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 
 		};
 	}

@@ -105,24 +105,10 @@ public class MarkersPropertyDescriptor extends AItemDataListPropertyDescriptor {
 						createItemProperty(cmp,
 								MapComponent.ITEM_PROPERTY_MARKER_target);
 
-						Composite c = createSection(
-								cmp,
-								com.jaspersoft.studio.components.map.messages.Messages.MarkersPropertyDescriptor_0);
-
-						createItemProperty(
-								c,
-								MapComponent.ITEM_PROPERTY_MARKER_INFOWINDOW_content);
-						createItemProperty(
-								c,
-								MapComponent.ITEM_PROPERTY_MARKER_INFOWINDOW_pixelOffset);
-						createItemProperty(
-								c,
-								MapComponent.ITEM_PROPERTY_MARKER_INFOWINDOW_maxWidth);
-
 						createItemProperty(cmp,
 								MapComponent.ITEM_PROPERTY_MARKER_icon);
 
-						c = createSection(
+						Composite c = createSection(
 								cmp,
 								com.jaspersoft.studio.components.map.messages.Messages.MarkersPropertyDescriptor_1);
 
@@ -166,6 +152,23 @@ public class MarkersPropertyDescriptor extends AItemDataListPropertyDescriptor {
 						createItemProperty(
 								c,
 								MapComponent.ITEM_PROPERTY_MARKER_SHADOW_ANCHOR_y);
+
+						c = createSection(
+								cmp,
+								com.jaspersoft.studio.components.map.messages.Messages.MarkersPropertyDescriptor_0);
+
+						createItemProperty(
+								c,
+								MapComponent.ITEM_PROPERTY_MARKER_INFOWINDOW_content);
+						createItemProperty(
+								c,
+								MapComponent.ITEM_PROPERTY_MARKER_INFOWINDOW_pixelOffset);
+						createItemProperty(
+								c,
+								MapComponent.ITEM_PROPERTY_MARKER_INFOWINDOW_maxWidth);
+
+						createItemProperty(cmp,
+								MapComponent.ITEM_PROPERTY_MARKER_icon);
 
 						createSeparator(cmp);
 
