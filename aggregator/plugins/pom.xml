@@ -76,6 +76,7 @@
 		<module>../../com.jaspersoft.studio.rcp</module>
 		<module>../../com.jaspersoft.studio.server</module>
 		<module>../../com.jaspersoft.studio.server.soap</module>
+		<module>../../com.jaspersoft.studio.widgets.map</module>
 		<module>../../com.jaspersoft.studio.xtext.jface</module>
 	</modules>
 </project> 

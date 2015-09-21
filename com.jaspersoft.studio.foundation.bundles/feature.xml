@@ -30,12 +30,6 @@
       <import plugin="org.apache.commons.codec" version="1.6.0" match="greaterOrEqual"/>
       <import plugin="org.apache.commons.logging" version="1.1.1" match="greaterOrEqual"/>
       <import plugin="org.w3c.dom.svg" version="1.1.0" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.ui"/>
-      <import plugin="org.eclipse.core.runtime"/>
-      <import plugin="org.apache.commons.httpclient" version="3.1.0" match="greaterOrEqual"/>
-      <import plugin="org.apache.commons.io" version="2.0.1" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.osgi"/>
-      <import plugin="com.jaspersoft.studio.bundles.bouncycastle"/>
    </requires>
 
    <plugin
@@ -203,13 +197,6 @@
          download-size="0"
          install-size="0"
          version="2.3.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.buzzcoders.yasw.widgets.map"
-         download-size="0"
-         install-size="0"
-         version="1.0.1.v20150916-0930"
          unpack="false"/>
 
 </feature>

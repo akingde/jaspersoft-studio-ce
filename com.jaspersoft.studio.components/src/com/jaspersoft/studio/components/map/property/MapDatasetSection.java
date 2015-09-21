@@ -32,14 +32,14 @@ import org.eclipse.ui.forms.events.HyperlinkAdapter;
 import org.eclipse.ui.forms.events.HyperlinkEvent;
 import org.eclipse.ui.forms.widgets.FormText;
 
-import com.buzzcoders.yasw.widgets.map.core.LatLng;
-import com.buzzcoders.yasw.widgets.map.core.MapType;
-import com.buzzcoders.yasw.widgets.map.ui.MarkersPickupDialog;
 import com.jaspersoft.studio.components.map.messages.Messages;
 import com.jaspersoft.studio.components.map.model.MMap;
 import com.jaspersoft.studio.components.map.model.marker.dialog.MarkerPage;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.widgets.map.core.LatLng;
+import com.jaspersoft.studio.widgets.map.core.MapType;
+import com.jaspersoft.studio.widgets.map.ui.MarkersPickupDialog;
 
 public class MapDatasetSection extends AbstractSection {
 

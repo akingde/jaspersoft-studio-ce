@@ -45,9 +45,6 @@ import org.eclipse.ui.forms.events.HyperlinkAdapter;
 import org.eclipse.ui.forms.events.HyperlinkEvent;
 import org.eclipse.ui.forms.widgets.FormText;
 
-import com.buzzcoders.yasw.widgets.map.core.LatLng;
-import com.buzzcoders.yasw.widgets.map.core.MapType;
-import com.buzzcoders.yasw.widgets.map.ui.MarkersPickupDialog;
 import com.jaspersoft.studio.components.map.messages.Messages;
 import com.jaspersoft.studio.components.map.model.MMap;
 import com.jaspersoft.studio.components.map.model.marker.MarkersDTO;
@@ -62,6 +59,9 @@ import com.jaspersoft.studio.swt.widgets.table.NewButton;
 import com.jaspersoft.studio.utils.ExpressionInterpreter;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ModelUtils;
+import com.jaspersoft.studio.widgets.map.core.LatLng;
+import com.jaspersoft.studio.widgets.map.core.MapType;
+import com.jaspersoft.studio.widgets.map.ui.MarkersPickupDialog;
 
 public class MarkerPage extends WizardPage {
 	private final class EditElement implements IEditElement<Item> {
