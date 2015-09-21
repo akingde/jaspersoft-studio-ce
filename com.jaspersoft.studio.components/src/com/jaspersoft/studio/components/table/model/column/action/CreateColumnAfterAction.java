@@ -52,10 +52,10 @@ public class CreateColumnAfterAction extends CreateColumnAction {
 		setText(Messages.CreateColumnAfterAction_title);
 		setToolTipText(Messages.CreateColumnAfterAction_desc);
 		setId(CreateColumnAfterAction.ID);
-		setImageDescriptor(
-				Activator.getDefault().getImageDescriptor("icons/table-insert-column-after.png")); //$NON-NLS-1$
-		setDisabledImageDescriptor(
-				Activator.getDefault().getImageDescriptor("icons/table-insert-column-after.png")); //$NON-NLS-1$
+		setImageDescriptor(Activator.getDefault().getImageDescriptor(
+				"icons/table-insert-column-after.png")); //$NON-NLS-1$
+		setDisabledImageDescriptor(Activator.getDefault().getImageDescriptor(
+				"icons/table-insert-column-after.png")); //$NON-NLS-1$
 		setEnabled(false);
 	}
 
@@ -66,9 +66,11 @@ public class CreateColumnAfterAction extends CreateColumnAction {
 		if (obj instanceof EditPart) {
 			ANode n = (ANode) ((EditPart) obj).getModel();
 			if (n instanceof MColumn) {
-				List<INode> children = n.getParent().getChildren();
-				int index = children.indexOf(n);
-				map.put(CreateRequestUtil.NEWINDEX, index + 1);
+				if (n.getParent() != null) {
+					List<INode> children = n.getParent().getChildren();
+					int index = children.indexOf(n);
+					map.put(CreateRequestUtil.NEWINDEX, index + 1);
+				}
 			} else
 				return false;
 		}

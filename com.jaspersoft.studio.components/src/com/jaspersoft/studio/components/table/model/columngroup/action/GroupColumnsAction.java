@@ -41,10 +41,9 @@ import com.jaspersoft.studio.model.ANode;
 public class GroupColumnsAction extends ACreateAction {
 
 	/**
-	 *  The Constant ID. 
+	 * The Constant ID.
 	 */
 	public static final String ID = "create_table_column_group"; //$NON-NLS-1$
-	
 
 	/**
 	 * Constructs a <code>CreateAction</code> using the specified part.
@@ -66,10 +65,10 @@ public class GroupColumnsAction extends ACreateAction {
 		setText(Messages.CreateColumnAction_create_column_group);
 		setToolTipText(Messages.CreateColumnAction_create_column_group_tool_tip);
 		setId(GroupColumnsAction.ID);
-		setImageDescriptor(
-				Activator.getDefault().getImageDescriptor("icons/table-join-row.png"));
-		setDisabledImageDescriptor(
-				Activator.getDefault().getImageDescriptor("icons/table-join-row.png"));
+		setImageDescriptor(Activator.getDefault().getImageDescriptor(
+				"icons/table-join-row.png"));
+		setDisabledImageDescriptor(Activator.getDefault().getImageDescriptor(
+				"icons/table-join-row.png"));
 		setEnabled(false);
 	}
 
@@ -91,28 +90,31 @@ public class GroupColumnsAction extends ACreateAction {
 
 		MColumn fmc = columns.get(0);
 		ANode mparent = fmc.getParent();
-		JSSCompoundCommand c = new JSSCompoundCommand(Messages.CreateColumnAction_create_column_group, mparent);
+		if (mparent == null)
+			return null;
+		JSSCompoundCommand c = new JSSCompoundCommand(
+				Messages.CreateColumnAction_create_column_group, mparent);
 		MColumnGroup mcolgr = new MColumnGroup();
 		int index = mparent.getChildren().indexOf(fmc);
 		CreateColumnGroupCommand cmd = createGroup(index, mparent, mcolgr);
 		mcolgr.setValue(cmd.createColumn(fmc.getJasperDesign(), fmc.getMTable()
 				.getStandardTable()));
-		
+
 		c.add(new RefreshColumnNamesCommand(mparent, false, true));
 
-		//Create the commands to fix the order on the undo
+		// Create the commands to fix the order on the undo
 		List<CheckColumnsOrder> fixOrderCommandList = new ArrayList<CheckColumnsOrder>();
-		for (MColumn src : columns){
+		for (MColumn src : columns) {
 			fixOrderCommandList.add(new CheckColumnsOrder(src));
 		}
 		Collections.sort(fixOrderCommandList);
-		//This commands are executed on the undo, so the list must be reversed
+		// This commands are executed on the undo, so the list must be reversed
 		Collections.reverse(fixOrderCommandList);
-		c.addAll((List)fixOrderCommandList);
-		
-		//Add the commands to move the columns
+		c.addAll((List) fixOrderCommandList);
+
+		// Add the commands to move the columns
 		c.add(createGroup(index, mparent, mcolgr));
-		for (MColumn src : columns){
+		for (MColumn src : columns) {
 			c.add(new MoveColumnCommand(src, mcolgr, false));
 		}
 
