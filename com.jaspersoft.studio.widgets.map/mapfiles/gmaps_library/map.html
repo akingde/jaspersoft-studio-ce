@@ -1,0 +1,103 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Google Map</title>
+<link rel="stylesheet" type="text/css" href="css/gmaps_lib.css">
+<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+<script type="text/javascript" src="gmaps_lib.js"></script>
+<script type="text/javascript">
+	var myMap = null;
+	
+	function mapSetup() {
+	    // try to initialize the bidirectional Java/Javascript communication
+	    if (typeof javaCall_TestJavaCallSupport != 'undefined') IS_JAVA_SUPPORTED = true;
+	
+	    // map options
+	    var mapOptions = {};
+	    mapOptions.zoom = 14;
+	    mapOptions.center = new google.maps.LatLng(45.439722, 12.331944); // Venice
+	    mapOptions.mapTypeId = google.maps.MapTypeId.HYBRID;
+	    myMap = new GMapsMap(document.getElementById('map_container'), mapOptions);
+
+	    // run possible configuration
+	    if (typeof javaCall_InitialConfiguration != 'undefined') javaCall_InitialConfiguration();
+	
+	    // update initial information
+	    if (typeof javaCall_UpdateZoomLevel != 'undefined') javaCall_UpdateZoomLevel(myMap.getZoom());
+	    if (typeof javaCall_UpdateMapCenter != 'undefined') javaCall_UpdateMapCenter(myMap.getCenter().lat(), myMap.getCenter().lng());
+	    if (typeof javaCall_UpdateMapType != 'undefined') javaCall_UpdateMapType(myMap.getMapType());
+	    
+	    //	context menu for the map
+	    if (MENU_KIND != _MENU_NONE) {
+		    var mapMenuItems = [];
+		    mapMenuItems.push(new GMapsMenuItemHead());
+		    if(MENU_KIND == _MENU_COMPLETE) {
+			    mapMenuItems.push(new GMapsMenuItemSeparator());
+			    mapMenuItems.push(new GMapsMenuItem('Add marker', 'add_new_marker', 'gmaps_context_menu_item menu_item_addmarker'));
+			    mapMenuItems.push(new GMapsMenuItem('Delete all markers', 'delete_all_markers', 'gmaps_context_menu_item menu_item_delete'));
+			}
+		    mapMenuItems.push(new GMapsMenuItemSeparator());
+		    mapMenuItems.push(new GMapsMenuItem('Zoom in', 'zoom_in_click', 'gmaps_context_menu_item menu_item_zoomin'));
+		    mapMenuItems.push(new GMapsMenuItem('Zoom out', 'zoom_out_click', 'gmaps_context_menu_item menu_item_zoomout'));
+		    mapMenuItems.push(new GMapsMenuItemSeparator());
+		    mapMenuItems.push(new GMapsMenuItem('Center map here', 'center_map_click', 'gmaps_context_menu_item menu_item_centermap'));
+		    var mapContextMenu = new GMapsContextMenu(myMap, mapMenuItems);
+		    // map context menu behavior
+		    google.maps.event.addListener(mapContextMenu, 'menu_item_selected', function (latLng, eventName) {
+		        switch (eventName) {
+		        case 'zoom_in_click':
+		            myMap.increaseZoom();
+		            break;
+		        case 'zoom_out_click':
+		            myMap.decreaseZoom();
+		            break;
+		        case 'add_new_marker':
+		            myMap.addMarker(latLng);
+		            break;
+		        case 'delete_all_markers':
+		            myMap.clearAllMarkers();
+		            break;
+		        case 'center_map_click':
+		            myMap.panTo(latLng);
+		            break;
+		        }
+		    });
+		
+			if(MENU_KIND == _MENU_COMPLETE) {
+			    // context menu for the marker
+			    var markerMenuItems = [];
+			    markerMenuItems.push(new GMapsMenuItemHead());
+			    markerMenuItems.push(new GMapsMenuItemSeparator());
+			    markerMenuItems.push(new GMapsMenuItem('Delete marker', 'del_marker', 'gmaps_context_menu_item menu_item_delete'));
+			    var markerContextMenu = new GMapsContextMenu(myMap, markerMenuItems);
+			    markerContextMenu.hide = function () {
+			        GMapsContextMenu.prototype.hide.call(this);
+			        myMap.selectedMarker = null;
+			    }
+			    // marker context menu behavior
+			    google.maps.event.addListener(markerContextMenu, 'menu_item_selected', function (latLng, eventName) {
+			        switch (eventName) {
+			        case 'del_marker':
+			            myMap.removeSelectedMarker();
+			            break;
+			        }
+			    });
+		    }		    
+		    
+		    // enable the context menu(s) showing on right click
+	        google.maps.event.addListener(myMap.map, 'rightclick', function (mouseEvent) {
+	            if (myMap.selectedMarker!==null) {
+	                markerContextMenu.show(mouseEvent.latLng);
+	            } else {
+	                mapContextMenu.show(mouseEvent.latLng);
+	            }
+	        });
+        }
+	}
+</script>
+</head>
+<body onload="mapSetup()">
+	<div id="map_container"></div>
+</body>
+</html>
