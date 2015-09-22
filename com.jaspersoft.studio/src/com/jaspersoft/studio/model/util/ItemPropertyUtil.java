@@ -19,6 +19,8 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.property.infoList.ElementDescription;
 import com.jaspersoft.studio.property.itemproperty.desc.ItemPropertyDescriptor;
+import com.jaspersoft.studio.utils.ExpressionInterpreter;
+import com.jaspersoft.studio.utils.Misc;
 
 public class ItemPropertyUtil {
 	public static ItemProperty getProperty(List<ItemProperty> items, String name) {
@@ -51,5 +53,57 @@ public class ItemPropertyUtil {
 		for (IPropertyDescriptor pd : descriptors)
 			if (pd instanceof ItemPropertyDescriptor)
 				((ItemPropertyDescriptor) pd).setElementDescriptions(elementDescriptions);
+	}
+
+	public static Object getItemPropertyValue(StandardItemProperty ip,
+			ExpressionInterpreter expIntr) {
+		if (ip == null)
+			return null;
+		if (ip.getValueExpression() != null)
+			return expIntr.interpretExpression(Misc.nvl(ip.getValueExpression()
+					.getText()));
+		if (ip.getValue() != null)
+			return ip.getValue();
+		return null;
+	}
+
+	public static String getItemPropertyString(StandardItemProperty ip,
+			ExpressionInterpreter expIntr) {
+		Object obj = getItemPropertyValue(ip, expIntr);
+		if (obj == null)
+			return null;
+		if (obj instanceof String)
+			return (String) obj;
+		return null;
+	}
+
+	public static Double getItemPropertyDouble(StandardItemProperty ip,
+			ExpressionInterpreter expIntr) {
+		Object obj = getItemPropertyValue(ip, expIntr);
+		if (obj == null)
+			return null;
+		if (obj instanceof String && !Misc.isNullOrEmpty((String) obj))
+			try {
+				obj = Double.parseDouble((String) obj);
+			} catch (NumberFormatException e) {
+			}
+		if (obj instanceof Number)
+			return Double.valueOf(((Number) obj).doubleValue());
+		return null;
+	}
+
+	public static Integer getItemPropertyInteger(StandardItemProperty ip,
+			ExpressionInterpreter expIntr) {
+		Object obj = getItemPropertyValue(ip, expIntr);
+		if (obj == null)
+			return null;
+		if (obj instanceof String && !Misc.isNullOrEmpty((String) obj))
+			try {
+				obj = Integer.parseInt((String) obj);
+			} catch (NumberFormatException e) {
+			}
+		if (obj instanceof Number)
+			return Integer.valueOf(((Number) obj).intValue());
+		return null;
 	}
 }

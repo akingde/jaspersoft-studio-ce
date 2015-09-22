@@ -15,6 +15,7 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
@@ -30,12 +31,15 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.widgets.map.MapActivator;
+import com.jaspersoft.studio.widgets.map.MapWidgetConstants;
+import com.jaspersoft.studio.widgets.map.browserfunctions.GMapEnabledFunction;
 import com.jaspersoft.studio.widgets.map.core.LatLng;
 import com.jaspersoft.studio.widgets.map.core.MapType;
 import com.jaspersoft.studio.widgets.map.core.Marker;
 import com.jaspersoft.studio.widgets.map.messages.Messages;
 import com.jaspersoft.studio.widgets.map.support.BaseJavaMapSupport;
 import com.jaspersoft.studio.widgets.map.support.GMapUtils;
+import com.jaspersoft.studio.widgets.map.support.JavaMapSupport;
 
 /**
  * This dialog allows to configure the basic details of a map: its center, the
@@ -45,41 +49,53 @@ import com.jaspersoft.studio.widgets.map.support.GMapUtils;
  * 
  */
 public class BasicInfoMapDialog extends Dialog {
-	
+
 	// basic map details
 	private LatLng mapCenter;
 	private int zoomLevel;
 	private MapType mapType;
 	private MapTile mapTile;
-	
+	private String address;
+	private Text addressBar;
+
 	/**
 	 * Create the dialog.
+	 * 
 	 * @param parentShell
 	 */
 	public BasicInfoMapDialog(Shell parentShell) {
 		super(parentShell);
 	}
 
+	@Override
+	protected void configureShell(Shell newShell) {
+		super.configureShell(newShell);
+		newShell.setText(title == null ? "" : title);
+	}
+
 	/**
 	 * Create contents of the dialog.
+	 * 
 	 * @param parent
 	 */
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		Composite container = (Composite) super.createDialogArea(parent);
-		
+
 		Composite mainCmp = new Composite(container, SWT.NONE);
-		GridLayout cmpGL = new GridLayout(3,false);
+		GridLayout cmpGL = new GridLayout(3, false);
 		cmpGL.verticalSpacing = 10;
 		mainCmp.setLayout(cmpGL);
 		mainCmp.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		
-		Label addressLbl = new Label(mainCmp,SWT.NONE);
-		addressLbl.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
+
+		Label addressLbl = new Label(mainCmp, SWT.NONE);
+		addressLbl.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false,
+				false));
 		addressLbl.setText(Messages.BasicInfoMapDialog_AddressLookup);
-		
-		final Text addressBar = new Text(mainCmp, SWT.BORDER);
-		addressBar.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+
+		addressBar = new Text(mainCmp, SWT.BORDER);
+		addressBar
+				.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		addressBar.addTraverseListener(new TraverseListener() {
 			@Override
 			public void keyTraversed(TraverseEvent e) {
@@ -90,9 +106,11 @@ public class BasicInfoMapDialog extends Dialog {
 				}
 			}
 		});
-		
+		addressBar.setText(address == null ? "" : address);
+
 		CLabel findBtn = new CLabel(mainCmp, SWT.NONE);
-		findBtn.setImage(MapActivator.getDefault().getImageRegistry().get(MapActivator.FIND_BTN_IMG));
+		findBtn.setImage(MapActivator.getDefault().getImageRegistry()
+				.get(MapActivator.FIND_BTN_IMG));
 		findBtn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDown(MouseEvent e) {
@@ -100,46 +118,92 @@ public class BasicInfoMapDialog extends Dialog {
 			}
 		});
 		findBtn.setCursor(UIUtils.getDisplay().getSystemCursor(SWT.CURSOR_HAND));
-		
+
 		mapTile = new MapTile(mainCmp, SWT.BORDER);
-		mapTile.configureJavaSupport(new BaseJavaMapSupport(mapTile.getMapControl()){
-	    	@Override
-	    	public void setZoomLevel(int newZoomLevel) {
-	    		BasicInfoMapDialog.this.setZoomLevel(newZoomLevel);
-	    	}
-	    	
-	    	@Override
-	    	public void setMapCenter(LatLng position) {
-	    		BasicInfoMapDialog.this.setMapCenter(position);
-	    	}
-	    	
-	    	@Override
-	    	public void setMapType(MapType mapType) {
-	    		BasicInfoMapDialog.this.setMapType(mapType);
-	    	}
-	    });
-		mapTile.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true,3,1));
+		mapTile.configureJavaSupport(new BaseJavaMapSupport(mapTile
+				.getMapControl()) {
+			@Override
+			public void setZoomLevel(int newZoomLevel) {
+				BasicInfoMapDialog.this.setZoomLevel(newZoomLevel);
+			}
+
+			@Override
+			public void setMapCenter(LatLng position) {
+				BasicInfoMapDialog.this.setMapCenter(position);
+			}
+
+			@Override
+			public void setMapType(MapType mapType) {
+				BasicInfoMapDialog.this.setMapType(mapType);
+			}
+		});
+
+		mapTile.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1));
 		mapTile.activateMapTile();
-	    
+		mapTile.getFunctions()
+				.add(new InitialConfigurationFunction(
+						mapTile.getMapControl(),
+						MapWidgetConstants.BROWSER_FUNCTION_INITIAL_CONFIGURATION,
+						mapTile.getJavaMapSupport()));
+
 		return container;
 	}
-	
+
+	class InitialConfigurationFunction extends GMapEnabledFunction {
+
+		public InitialConfigurationFunction(Browser browser, String name,
+				JavaMapSupport mapSupport) {
+			super(browser, name, mapSupport);
+		}
+
+		@Override
+		public Object function(Object[] arguments) {
+			mapTile.getJavascriptMapSupport().setZoomLevel(getZoomLevel());
+
+			if ((mapCenter == null || mapCenter.getLat() == null || mapCenter
+					.getLat() == null)) {
+				if (address != null && !address.isEmpty()) {
+					LatLng coords = GMapUtils.getAddressCoordinates(address);
+					if (coords != null) {
+						mapTile.getJavascriptMapSupport().setMapCenter(coords);
+						mapTile.getJavascriptMapSupport().setPanTo(coords);
+					}
+				}
+			} else {
+				mapTile.getJavascriptMapSupport().setMapCenter(mapCenter);
+				mapTile.getJavascriptMapSupport().setPanTo(mapCenter);
+			}
+			return null;
+		}
+
+	}
+
 	private void locateAddress(String addressText) {
 		LatLng coords = GMapUtils.getAddressCoordinates(addressText);
-		if(coords!=null) {
-			mapTile.getJavascriptMapSupport().evaluateJavascript("myMap.panTo(new google.maps.LatLng("+coords.getLat()+","+coords.getLng()+"));");
-			mapTile.getJavascriptMapSupport().clearMarkers();
-			mapTile.getJavascriptMapSupport().addNewMarker(new Marker(coords));
-			mapTile.getJavascriptMapSupport().evaluateJavascript("myMap.mapMarkers[0].setDraggable(false);");
-		}
-		else {
-			MessageDialog.openError(UIUtils.getShell(), 
-					Messages.BasicInfoMapDialog_LocationErrorTitle, Messages.BasicInfoMapDialog_LocationErrorMsg);
+		if (coords != null) {
+			centerMap(coords);
+			address = addressText;
+		} else {
+			MessageDialog.openError(UIUtils.getShell(),
+					Messages.BasicInfoMapDialog_LocationErrorTitle,
+					Messages.BasicInfoMapDialog_LocationErrorMsg);
 		}
 	}
 
+	private void centerMap(LatLng coords) {
+		setMapCenter(coords);
+		mapTile.getJavascriptMapSupport().evaluateJavascript(
+				"myMap.panTo(new google.maps.LatLng(" + coords.getLat() + ","
+						+ coords.getLng() + "));");
+		mapTile.getJavascriptMapSupport().clearMarkers();
+		mapTile.getJavascriptMapSupport().addNewMarker(new Marker(coords));
+		mapTile.getJavascriptMapSupport().evaluateJavascript(
+				"myMap.mapMarkers[0].setDraggable(false);");
+	}
+
 	/**
-	 * Create contents of the button bar.	
+	 * Create contents of the button bar.
+	 * 
 	 * @param parent
 	 */
 	@Override
@@ -157,10 +221,20 @@ public class BasicInfoMapDialog extends Dialog {
 	protected Point getInitialSize() {
 		return new Point(800, 600);
 	}
-	
+
 	@Override
 	protected boolean isResizable() {
 		return true;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+		if (addressBar != null)
+			addressBar.setText(address);
 	}
 
 	public LatLng getMapCenter() {
@@ -170,6 +244,18 @@ public class BasicInfoMapDialog extends Dialog {
 	public void setMapCenter(LatLng mapCenter) {
 		this.mapCenter = mapCenter;
 		updateTitle();
+	}
+
+	public String getMapTypeId() {
+		if (mapType.equals(MapType.HYBRID))
+			return "google.maps.MapTypeId.HYBRID";
+		if (mapType.equals(MapType.ROADMAP))
+			return "google.maps.MapTypeId.ROADMAP";
+		if (mapType.equals(MapType.SATELLITE))
+			return "google.maps.MapTypeId.SATELLITE";
+		if (mapType.equals(MapType.TERRAIN))
+			return "google.maps.MapTypeId.TERRAIN";
+		return "google.maps.MapTypeId.ROADMAP";
 	}
 
 	public MapType getMapType() {
@@ -190,15 +276,17 @@ public class BasicInfoMapDialog extends Dialog {
 		updateTitle();
 	}
 
-	private void updateTitle(){
-		if(mapCenter!=null && zoomLevel!=0 && mapType!=null) {
-			getShell().setText(
-					NLS.bind(Messages.BasicInfoMapDialog_Title,
-							new Object[]{
-							String.format("%.6f", mapCenter.getLat()), //$NON-NLS-1$
-							String.format("%.6f", mapCenter.getLng()), //$NON-NLS-1$
-							String.valueOf(zoomLevel),
-							this.mapType}));
+	private String title;
+
+	private void updateTitle() {
+		if (mapCenter != null && zoomLevel != 0 && mapType != null) {
+			title = NLS.bind(Messages.BasicInfoMapDialog_Title, new Object[] {
+					String.format("%.6f", mapCenter.getLat()), //$NON-NLS-1$
+					String.format("%.6f", mapCenter.getLng()), //$NON-NLS-1$
+					String.valueOf(zoomLevel), this.mapType });
+			Shell shell = getShell();
+			if (shell != null)
+				shell.setText(title);
 		}
 	}
 }

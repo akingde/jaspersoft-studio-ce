@@ -21,6 +21,7 @@ import net.sf.jasperreports.components.map.StandardItemData;
 import net.sf.jasperreports.components.map.StandardItemProperty;
 import net.sf.jasperreports.components.map.StandardMapComponent;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.BasicMapInfoData;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 
 import org.eclipse.jface.window.Window;
@@ -34,7 +35,6 @@ import org.eclipse.ui.forms.widgets.FormText;
 
 import com.jaspersoft.studio.components.map.messages.Messages;
 import com.jaspersoft.studio.components.map.model.MMap;
-import com.jaspersoft.studio.components.map.model.marker.dialog.MarkerPage;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.widgets.map.core.LatLng;
@@ -54,7 +54,7 @@ public class MapDatasetSection extends AbstractSection {
 				GridData.HORIZONTAL_ALIGN_CENTER));
 		mapPickSuggestion.setWhitespaceNormalized(true);
 		mapPickSuggestion.addHyperlinkListener(new HyperlinkAdapter() {
-			private MarkerPage.BasicMapInfo mapInfo;
+			private BasicMapInfoData mapInfo;
 
 			@Override
 			public void linkActivated(HyperlinkEvent e) {
@@ -68,7 +68,7 @@ public class MapDatasetSection extends AbstractSection {
 					}
 				};
 				if (mapInfo == null)
-					mapInfo = MarkerPage.getBasicMapInformation(mmap);
+					mapInfo = mmap.getBasicMapInformation();
 				if (mapInfo.getLatitude() != null
 						&& mapInfo.getLongitude() != null)
 					staticMarkersDialog.setInitialPosition(new LatLng(mapInfo

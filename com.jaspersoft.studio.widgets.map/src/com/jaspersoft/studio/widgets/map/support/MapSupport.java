@@ -46,6 +46,9 @@ public interface MapSupport {
 	 */
 	void setMapCenter(LatLng position);
 
+	
+	void setPanTo(LatLng position);
+	
 	/**
 	 * @return the current map zoom level
 	 */

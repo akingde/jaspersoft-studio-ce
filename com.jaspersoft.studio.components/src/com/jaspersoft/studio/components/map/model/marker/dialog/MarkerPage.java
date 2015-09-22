@@ -17,13 +17,10 @@ import java.util.List;
 
 import net.sf.jasperreports.components.map.Item;
 import net.sf.jasperreports.components.map.ItemProperty;
-import net.sf.jasperreports.components.map.MapComponent;
 import net.sf.jasperreports.components.map.StandardItem;
 import net.sf.jasperreports.components.map.StandardItemProperty;
-import net.sf.jasperreports.components.map.StandardMapComponent;
-import net.sf.jasperreports.components.map.type.MapTypeEnum;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.engine.design.JRDesignDataset;
+import net.sf.jasperreports.eclipse.util.BasicMapInfoData;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 
 import org.eclipse.jface.viewers.ColumnWeightData;
@@ -56,9 +53,6 @@ import com.jaspersoft.studio.swt.widgets.table.INewElement;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.swt.widgets.table.ListOrderButtons;
 import com.jaspersoft.studio.swt.widgets.table.NewButton;
-import com.jaspersoft.studio.utils.ExpressionInterpreter;
-import com.jaspersoft.studio.utils.Misc;
-import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.widgets.map.core.LatLng;
 import com.jaspersoft.studio.widgets.map.core.MapType;
 import com.jaspersoft.studio.widgets.map.ui.MarkersPickupDialog;
@@ -83,7 +77,7 @@ public class MarkerPage extends WizardPage {
 	private Table table;
 	private TableViewer tableViewer;
 	private EditButton<Item> editButton;
-	private BasicMapInfo mapInfo;
+	private BasicMapInfoData mapInfo;
 	private ExpressionContext expContext;
 
 	public MarkersDTO getValue() {
@@ -133,7 +127,8 @@ public class MarkerPage extends WizardPage {
 					}
 				};
 				if (mapInfo == null) {
-					mapInfo = getBasicMapInformation((MMap) value.getPnode());
+					mapInfo = ((MMap) value.getPnode())
+							.getBasicMapInformation();
 				}
 				if (mapInfo.getLatitude() != null
 						&& mapInfo.getLongitude() != null) {
@@ -265,91 +260,4 @@ public class MarkerPage extends WizardPage {
 		tableViewer.setInput(props);
 	}
 
-	/*
-	 * Gets the basic information: map center, zoom and type.
-	 */
-	public static BasicMapInfo getBasicMapInformation(MMap mapRef) {
-		BasicMapInfo info = new BasicMapInfo();
-		JRDesignDataset dataset = ModelUtils.getDataset(mapRef);
-		if (dataset == null) {
-			dataset = (JRDesignDataset) mapRef.getJasperDesign()
-					.getMainDataset();
-		}
-		ExpressionInterpreter expIntr = new ExpressionInterpreter(dataset,
-				mapRef.getJasperDesign(), mapRef.getJasperConfiguration());
-		// Center
-		JRDesignExpression latitudeExpr = (JRDesignExpression) mapRef
-				.getPropertyValue(StandardMapComponent.PROPERTY_LATITUDE_EXPRESSION);
-		JRDesignExpression longitudeExpr = (JRDesignExpression) mapRef
-				.getPropertyValue(StandardMapComponent.PROPERTY_LONGITUDE_EXPRESSION);
-		if (latitudeExpr != null && longitudeExpr != null) {
-			Object latObj = expIntr.interpretExpression(Misc.nvl(latitudeExpr
-					.getText()));
-			Object lngObj = expIntr.interpretExpression(Misc.nvl(longitudeExpr
-					.getText()));
-			if (latObj instanceof Number && lngObj instanceof Number) {
-				info.setLatitude(((Number) latObj).doubleValue());
-				info.setLongitude(((Number) lngObj).doubleValue());
-			}
-		}
-		// Zoom
-		JRDesignExpression zoomExpr = (JRDesignExpression) mapRef
-				.getPropertyValue(StandardMapComponent.PROPERTY_ZOOM_EXPRESSION);
-		if (zoomExpr != null) {
-			Object zoomObj = expIntr.interpretExpression(zoomExpr.getText());
-			if (zoomObj instanceof Number) {
-				info.setZoom(((Number) zoomObj).intValue());
-			} else {
-				info.setZoom(MapComponent.DEFAULT_ZOOM);
-			}
-		}
-		// Map Type
-		Integer type = (Integer) mapRef
-				.getPropertyValue(StandardMapComponent.PROPERTY_MAP_TYPE);
-		if (type != null) {
-			MapTypeEnum typeVal = mapRef.getMapTypeD().getEnumValue(type);
-			info.setMapType(typeVal);
-		}
-		return info;
-	}
-
-	public static class BasicMapInfo {
-
-		private Double latitude;
-		private Double longitude;
-		private MapTypeEnum mapType;
-		private int zoom;
-
-		public Double getLatitude() {
-			return latitude;
-		}
-
-		public Double getLongitude() {
-			return longitude;
-		}
-
-		public MapTypeEnum getMapType() {
-			return mapType;
-		}
-
-		public int getZoom() {
-			return zoom;
-		}
-
-		public void setLatitude(Double latitude) {
-			this.latitude = latitude;
-		}
-
-		public void setLongitude(Double longitude) {
-			this.longitude = longitude;
-		}
-
-		public void setMapType(MapTypeEnum mapType) {
-			this.mapType = mapType;
-		}
-
-		public void setZoom(int zoom) {
-			this.zoom = zoom;
-		}
-	}
 }

@@ -17,7 +17,7 @@
 	    var mapOptions = {};
 	    mapOptions.zoom = 14;
 	    mapOptions.center = new google.maps.LatLng(45.439722, 12.331944); // Venice
-	    mapOptions.mapTypeId = google.maps.MapTypeId.HYBRID;
+	    mapOptions.mapTypeId = google.maps.MapTypeId.ROADMAP;
 	    myMap = new GMapsMap(document.getElementById('map_container'), mapOptions);
 
 	    // run possible configuration
@@ -98,6 +98,6 @@
 </script>
 </head>
 <body onload="mapSetup()">
-	<div id="map_container"></div>
+	<div id="map_container">Loading the map ...</div>
 </body>
 </html>

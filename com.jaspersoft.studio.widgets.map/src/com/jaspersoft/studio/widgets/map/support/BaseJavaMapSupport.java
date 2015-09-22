@@ -31,6 +31,7 @@ public class BaseJavaMapSupport implements JavaMapSupport {
 
 	private List<Marker> markers;
 	private LatLng mapCenter;
+	private LatLng panTo;
 	private int zoomLevel;
 	private MapType mapType;
 	private Browser browser;
@@ -47,6 +48,15 @@ public class BaseJavaMapSupport implements JavaMapSupport {
 	@Override
 	public void setMapCenter(LatLng position) {
 		this.mapCenter = position;
+	}
+
+	@Override
+	public void setPanTo(LatLng position) {
+		this.panTo = position;
+	}
+
+	public LatLng getPanTo() {
+		return panTo;
 	}
 
 	@Override

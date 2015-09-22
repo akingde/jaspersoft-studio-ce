@@ -25,11 +25,13 @@ import net.sf.jasperreports.components.map.StandardMapComponent;
 import net.sf.jasperreports.components.map.type.MapImageTypeEnum;
 import net.sf.jasperreports.components.map.type.MapScaleEnum;
 import net.sf.jasperreports.components.map.type.MapTypeEnum;
+import net.sf.jasperreports.eclipse.util.BasicMapInfoData;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRDatasetRun;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.component.ComponentKey;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.design.events.JRChangeEventsSupport;
@@ -60,6 +62,8 @@ import com.jaspersoft.studio.property.descriptor.expression.JRExpressionProperty
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
+import com.jaspersoft.studio.utils.ExpressionInterpreter;
+import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ModelUtils;
 
 /**
@@ -224,9 +228,9 @@ public class MMap extends MGraphicElement implements IDatasetContainer {
 						"net.sf.jasperreports.doc/docs/components.schema.reference.html#longitudeExpression")); //$NON-NLS-1$
 
 		JRExpressionPropertyDescriptor addressExprD = new JRExpressionPropertyDescriptor(
-				StandardMapComponent.PROPERTY_ADDRESS_EXPRESSION, Messages.MMap_0);
-		addressExprD
-				.setDescription(Messages.MMap_1);
+				StandardMapComponent.PROPERTY_ADDRESS_EXPRESSION,
+				Messages.MMap_0);
+		addressExprD.setDescription(Messages.MMap_1);
 		desc.add(addressExprD);
 		addressExprD
 				.setHelpRefBuilder(new HelpReferenceBuilder(
@@ -410,7 +414,7 @@ public class MMap extends MGraphicElement implements IDatasetContainer {
 			component.setLatitudeExpression(ExprUtil.setValues(
 					component.getLatitudeExpression(), value, null));
 		} else if (id.equals(StandardMapComponent.PROPERTY_ADDRESS_EXPRESSION)) {
-			component.setLatitudeExpression(ExprUtil.setValues(
+			component.setAddressExpression(ExprUtil.setValues(
 					component.getAddressExpression(), value, null));
 		} else if (id.equals(StandardMapComponent.PROPERTY_LANGUAGE_EXPRESSION)) {
 			component.setLanguageExpression(ExprUtil.setValues(
@@ -561,7 +565,7 @@ public class MMap extends MGraphicElement implements IDatasetContainer {
 		component.setLatitudeExpression(exp1);
 		component.setLongitudeExpression(exp2);
 		JRDesignExpression exp3 = new JRDesignExpression();
-		exp3.setText(String.valueOf(MapComponent.DEFAULT_ZOOM));
+		exp3.setText("8");
 		component.setZoomExpression(exp3);
 		designMap.setComponent(component);
 		designMap
@@ -613,5 +617,52 @@ public class MMap extends MGraphicElement implements IDatasetContainer {
 		jrTargetMap.setImageType(jrSourceMap.getImageType());
 		jrTargetMap.setOnErrorType(jrSourceMap.getOnErrorType());
 
+	}
+
+	/*
+	 * Gets the basic information: map center, zoom and type.
+	 */
+	public BasicMapInfoData getBasicMapInformation() {
+		BasicMapInfoData info = new BasicMapInfoData();
+		JRDesignDataset dataset = ModelUtils.getDataset(this);
+		JasperDesign jd = getJasperDesign();
+		if (dataset == null)
+			dataset = (JRDesignDataset) jd.getMainDataset();
+		ExpressionInterpreter expIntr = new ExpressionInterpreter(dataset, jd,
+				getJasperConfiguration());
+		// Center
+		JRDesignExpression latitudeExpr = (JRDesignExpression) getPropertyValue(StandardMapComponent.PROPERTY_LATITUDE_EXPRESSION);
+		JRDesignExpression longitudeExpr = (JRDesignExpression) getPropertyValue(StandardMapComponent.PROPERTY_LONGITUDE_EXPRESSION);
+		if (latitudeExpr != null && longitudeExpr != null) {
+			Object latObj = expIntr.interpretExpression(Misc.nvl(latitudeExpr
+					.getText()));
+			Object lngObj = expIntr.interpretExpression(Misc.nvl(longitudeExpr
+					.getText()));
+			if (latObj instanceof Number && lngObj instanceof Number) {
+				info.setLatitude(((Number) latObj).doubleValue());
+				info.setLongitude(((Number) lngObj).doubleValue());
+			}
+		}
+		// Address
+		JRDesignExpression adrExpr = (JRDesignExpression) getPropertyValue(StandardMapComponent.PROPERTY_ADDRESS_EXPRESSION);
+		if (adrExpr != null) {
+			Object adrObj = expIntr.interpretExpression(adrExpr.getText());
+			if (adrObj instanceof String)
+				info.setAddress((String) adrObj);
+		}
+		// Zoom
+		JRDesignExpression zoomExpr = (JRDesignExpression) getPropertyValue(StandardMapComponent.PROPERTY_ZOOM_EXPRESSION);
+		if (zoomExpr != null) {
+			Object zoomObj = expIntr.interpretExpression(zoomExpr.getText());
+			if (zoomObj instanceof Number)
+				info.setZoom(((Number) zoomObj).intValue());
+		}
+		// Map Type
+		Integer type = (Integer) getPropertyValue(StandardMapComponent.PROPERTY_MAP_TYPE);
+		if (type != null) {
+			MapTypeEnum typeVal = getMapTypeD().getEnumValue(type);
+			info.setMapType(typeVal);
+		}
+		return info;
 	}
 }

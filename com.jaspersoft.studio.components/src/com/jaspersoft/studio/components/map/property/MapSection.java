@@ -14,6 +14,7 @@ package com.jaspersoft.studio.components.map.property;
 
 import net.sf.jasperreports.components.map.StandardMapComponent;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.BasicMapInfoData;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 
 import org.eclipse.jface.dialogs.Dialog;
@@ -29,10 +30,10 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.map.messages.Messages;
 import com.jaspersoft.studio.components.map.model.MMap;
-import com.jaspersoft.studio.components.map.model.marker.dialog.MarkerPage;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.SPEvaluationTime;
+import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.widgets.map.core.LatLng;
 import com.jaspersoft.studio.widgets.map.core.MapType;
 import com.jaspersoft.studio.widgets.map.ui.BasicInfoMapDialog;
@@ -60,7 +61,7 @@ public class MapSection extends AbstractSection {
 		mapPickSuggestion.setLayoutData(gd);
 		mapPickSuggestion.setWhitespaceNormalized(true);
 		mapPickSuggestion.addHyperlinkListener(new HyperlinkAdapter() {
-			private MarkerPage.BasicMapInfo mapInfo;
+			private BasicMapInfoData mapInfo;
 
 			@Override
 			public void linkActivated(HyperlinkEvent e) {
@@ -73,12 +74,13 @@ public class MapSection extends AbstractSection {
 						UIUtils.resizeAndCenterShell(newShell, 800, 600);
 					}
 				};
-				if (mapInfo == null)
-					mapInfo = MarkerPage.getBasicMapInformation(mmap);
+				mapInfo = mmap.getBasicMapInformation();
 				if (mapInfo.getLatitude() != null
 						&& mapInfo.getLongitude() != null)
 					pickmapDialog.setMapCenter(new LatLng(
 							mapInfo.getLatitude(), mapInfo.getLongitude(), true));
+				if (mapInfo.getAddress() != null)
+					pickmapDialog.setAddress(mapInfo.getAddress());
 				if (mapInfo.getMapType() != null)
 					pickmapDialog.setMapType(MapType.fromStringID(mapInfo
 							.getMapType().getName()));
@@ -86,18 +88,26 @@ public class MapSection extends AbstractSection {
 					pickmapDialog.setZoomLevel(mapInfo.getZoom());
 				if (pickmapDialog.open() == Dialog.OK) {
 					LatLng center = pickmapDialog.getMapCenter();
-					int zoom = pickmapDialog.getZoomLevel();
-					getElement().setPropertyValue(
+					changeProperty(
 							StandardMapComponent.PROPERTY_LATITUDE_EXPRESSION,
-							new JRDesignExpression(center.getLat() + "f")); //$NON-NLS-1$
-					getElement().setPropertyValue(
+							new JRDesignExpression(center.getLat() + "f"));
+					changeProperty(
 							StandardMapComponent.PROPERTY_LONGITUDE_EXPRESSION,
-							new JRDesignExpression(center.getLng() + "f")); //$NON-NLS-1$
-					getElement().setPropertyValue(
+							new JRDesignExpression(center.getLng() + "f"));
+					changeProperty(
 							StandardMapComponent.PROPERTY_ZOOM_EXPRESSION,
-							new JRDesignExpression(String.valueOf(zoom)));
-					getElement().setPropertyValue(
-							StandardMapComponent.PROPERTY_MAP_TYPE,
+							new JRDesignExpression(String.valueOf(pickmapDialog
+									.getZoomLevel())));
+					String adr = pickmapDialog.getAddress();
+					if (Misc.isNullOrEmpty(adr))
+						changeProperty(
+								StandardMapComponent.PROPERTY_ADDRESS_EXPRESSION,
+								null);
+					else
+						changeProperty(
+								StandardMapComponent.PROPERTY_ADDRESS_EXPRESSION,
+								new JRDesignExpression("\"" + adr + "\""));
+					changeProperty(StandardMapComponent.PROPERTY_MAP_TYPE,
 							pickmapDialog.getMapType().ordinal());
 				}
 			}
@@ -135,6 +145,8 @@ public class MapSection extends AbstractSection {
 		addProvidedProperties(
 				StandardMapComponent.PROPERTY_LONGITUDE_EXPRESSION,
 				Messages.MMap_longitude);
+		addProvidedProperties(StandardMapComponent.PROPERTY_ADDRESS_EXPRESSION,
+				Messages.MMap_0);
 		addProvidedProperties(StandardMapComponent.PROPERTY_ZOOM_EXPRESSION,
 				Messages.MMap_zoom);
 		addProvidedProperties(

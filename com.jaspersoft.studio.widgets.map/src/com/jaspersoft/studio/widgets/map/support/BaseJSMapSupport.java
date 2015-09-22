@@ -53,6 +53,12 @@ public class BaseJSMapSupport implements JSMapSupport {
 				+ position.getLat() + "," + position.getLng() + ")";
 		getBrowserControl().evaluate(mapId+".setCenter("+positionVar+");");
 	}
+	@Override
+	public void setPanTo(LatLng position) {
+		String positionVar = "new google.maps.LatLng("
+				+ position.getLat() + "," + position.getLng() + ")";
+		getBrowserControl().evaluate(mapId+".panTo("+positionVar+");");
+	}
 
 	@Override
 	public int getZoomLevel() {
