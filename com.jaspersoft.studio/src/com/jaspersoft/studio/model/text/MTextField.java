@@ -11,6 +11,7 @@ package com.jaspersoft.studio.model.text;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -246,6 +247,7 @@ public class MTextField extends MTextElement {
 		defaultsMap.put(JRDesignTextField.PROPERTY_EVALUATION_TIME, EvaluationTimeEnum.NOW);
 		defaultsMap.put(JRDesignStyle.PROPERTY_BLANK_WHEN_NULL, Boolean.FALSE);
 		defaultsMap.put(JRBaseTextField.PROPERTY_STRETCH_WITH_OVERFLOW, Boolean.FALSE);
+		defaultsMap.put(JRDesignStyle.PROPERTY_PATTERN, null);
 	}
 
 	@Override
@@ -531,4 +533,14 @@ public class MTextField extends MTextElement {
 		jrTarget.setPattern(getStringClone(jrSource.getOwnPattern()));
 		jrTarget.setStretchWithOverflow(jrSource.isStretchWithOverflow());
 	}
+	
+	@Override
+	public HashMap<String, Object> getStylesDescriptors() {
+		HashMap<String, Object> result = super.getStylesDescriptors();
+		if (getValue() == null)
+			return result;
+		JRDesignTextField jrElement = (JRDesignTextField) getValue();
+		result.put(JRDesignStyle.PROPERTY_PATTERN, jrElement.getOwnPattern());
+		return result;
+	}	
 }
