@@ -12,7 +12,7 @@
 	<groupId>com.jaspersoft.studio.community-edition</groupId>
 	<artifactId>jre.linux.gtk.x86.feature</artifactId>
 	<packaging>eclipse-feature</packaging>
-	<version>1.7.0.u80</version>
+	<version>1.8.0.u60</version>
 
 	<build>
 		<plugins>
