@@ -11,14 +11,21 @@ package com.jaspersoft.studio;
 import java.io.PrintStream;
 
 import net.sf.jasperreports.eclipse.AbstractJRUIPlugin;
+import net.sf.jasperreports.eclipse.builder.JasperReportsNature;
+import net.sf.jasperreports.eclipse.builder.jdt.JDTUtils;
+import net.sf.jasperreports.eclipse.wizard.project.ProjectUtil;
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.JRPropertiesUtil;
 
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.ui.console.ConsolePlugin;
 import org.eclipse.ui.console.IConsole;
@@ -200,6 +207,22 @@ public class JaspersoftStudioPlugin extends AbstractJRUIPlugin {
 		//Start the usage statistics plugin, among the other operations it will
 		//check for new versions
 		getUsageManager().start();
+		
+		// Sanity checks for Java Compiling settings: 
+		// possible issues when bundling a JDK 1.8 in 3.8.2 platform 
+		if(isRCP()){
+			JDTUtils.forceWorkspaceCompilerSettings(JavaCore.VERSION_1_6);
+			try {
+				IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();			
+				for(IProject prj : projects) {
+					if(ProjectUtil.isOpen(prj) && prj.hasNature(JasperReportsNature.NATURE_ID)) {
+						JDTUtils.forceJRProjectCompilerSettings(JavaCore.create(prj), JavaCore.VERSION_1_6);
+					}
+				}
+			} catch (CoreException e) {
+				logError(e);
+			}
+		}
 	}
 
 	public static ExtensionManager getExtensionManager() {
