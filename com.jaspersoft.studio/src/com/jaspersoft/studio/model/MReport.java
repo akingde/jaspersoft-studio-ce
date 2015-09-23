@@ -24,7 +24,6 @@ import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.JROrigin;
-import net.sf.jasperreports.engine.JRPropertiesHolder;
 import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
@@ -80,7 +79,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  * 
  * @author Chicu Veaceslav
  */
-public class MReport extends MLockableRefresh implements IGraphicElement, IContainerEditPart, IContainerLayout,
+public class MReport extends MLockableRefresh implements IGraphicElement, IContainerEditPart,
 		IPastable {
 
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
@@ -1063,11 +1062,6 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 			defunit = PHolderUtil.getUnit(jd, "", defunit); //$NON-NLS-1$
 		} 
 		return defunit;
-	}
-
-	@Override
-	public JRPropertiesHolder[] getPropertyHolder() {
-		return new JRPropertiesHolder[] { getValue() };
 	}
 
 	public Integer getBandIndex(Object band) {

@@ -36,7 +36,6 @@ import com.jaspersoft.studio.editor.layout.ILayout;
 import com.jaspersoft.studio.editor.layout.LayoutCommand;
 import com.jaspersoft.studio.editor.layout.LayoutManager;
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.IContainerLayout;
 import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.model.IGraphicElementContainer;
@@ -48,8 +47,9 @@ import com.jaspersoft.studio.utils.SelectionHelper;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /**
- * Set the size or position of an element. If the parent of the element
- * has a layout different from the free one, set its layout to free layout
+ * Set the size or position of an element. The command
+ * can be executed only if the operation is allowed by
+ * the layout of the parent
  */
 public class SetConstraintCommand extends Command {
 	
@@ -58,7 +58,14 @@ public class SetConstraintCommand extends Command {
 	 */
 	private ANode parent;
 	
-	/** The new bounds. */
+	/**
+	 * The node to modify
+	 */
+	private ANode child;
+	
+	/** 
+	 * The new bounds. 
+	 */
 	private Rectangle newBounds;
 
 	/** The old bounds. */
@@ -94,8 +101,7 @@ public class SetConstraintCommand extends Command {
 	private LayoutCommand lCmd;
 	
 	private int oldBandHeight = -1;
-	
-	private String oldParentLayout = null;
+
 
 	/**
 	 * Sets the context.
@@ -111,8 +117,10 @@ public class SetConstraintCommand extends Command {
 		jrConfig = child.getJasperConfiguration();
 		jrDesign = jrConfig.getJasperDesign();
 		this.parent = child.getParent();
+		this.child = child;
 		if (child.getValue() instanceof JRDesignElement) {
 			jrElement = (JRDesignElement) child.getValue();
+			oldBounds = new Rectangle(jrElement.getX(), jrElement.getY(), jrElement.getWidth(), jrElement.getHeight());
 			newBounds = constraint;
 			parentBounds = ((IGraphicElement) child).getBounds();
 			if (child instanceof IGroupElement)
@@ -144,69 +152,106 @@ public class SetConstraintCommand extends Command {
 	}
 	
 	/**
-	 * Remove the layout from the parent
+	 * Return if the operation is allowed by the layout of the current parent
+	 * 
+	 * @param oldBounds the old bounds of the element
+	 * @param newBounds the new bounds of the element
+	 * @return true if the operation is allowed, false otherwise
 	 */
-	private void removeParenLayout(){
+	private boolean isOperationAllowed(Rectangle oldBounds, Rectangle newBounds){
+		JRPropertiesHolder parentPHolder = getPropertyHolder(parent);
+		if (parentPHolder != null){
+			JRPropertiesMap newMap = parentPHolder.getPropertiesMap();
+			 String parentLayout = newMap.getProperty(ILayout.KEY);
+			if (parentLayout != null){
+				ILayout layout = LayoutManager.getLayout(parentLayout);
+				return layout.allowChildBoundChange(child, oldBounds, newBounds);
+			}
+		}
+		return true;
+	}
+	
+	/*
+	private boolean removeParenLayout(Rectangle oldBounds, Rectangle newBounds){
 		JRPropertiesHolder parentPHolder = getPropertyHolder(parent);
 		oldParentLayout = null;
 		if (parentPHolder != null){
 			JRPropertiesMap newMap = (JRPropertiesMap)parentPHolder.getPropertiesMap().clone();
 			oldParentLayout = newMap.getProperty(ILayout.KEY);
 			if (oldParentLayout != null){
-				newMap.setProperty(ILayout.KEY, null);
-				//the property must be set on the model to trigger the refresh of the sections
-				((APropertyNode)parent).setPropertyValue(MGraphicElement.PROPERTY_MAP, newMap);
+				ILayout layout = LayoutManager.getLayout(oldParentLayout);
+				if (!layout.allowChildBoundChange(child, oldBounds, newBounds)){
+					newMap.setProperty(ILayout.KEY, null);
+					//the property must be set on the model to trigger the refresh of the sections
+					((APropertyNode)parent).setPropertyValue(MGraphicElement.PROPERTY_MAP, newMap);
+					return true;
+				}
 			}
 		}
+		return false;
 	}
 	
-	/**
-	 * Restore the layout on the parent and request its relayout. It is 
-	 * used on the undo
-	 */
 	private void restoreParentLayout(){
 		JRPropertiesHolder parentPHolder = getPropertyHolder(parent);
 		if (parentPHolder != null){
 			JRPropertiesMap newMap = (JRPropertiesMap)parentPHolder.getPropertiesMap().clone();
 			String currentLayout = newMap.getProperty(ILayout.KEY);
-			if (currentLayout != oldParentLayout){
+			if (!ModelUtils.safeEquals(currentLayout, oldParentLayout)){
 				newMap.setProperty(ILayout.KEY, oldParentLayout);
 				//the property must be set on the model to trigger the refresh of the sections
 				((APropertyNode)parent).setPropertyValue(MGraphicElement.PROPERTY_MAP, newMap);
 				//create the command to relayout the parent	
 				parentPHolder.getPropertiesMap().setProperty(ILayout.KEY, oldParentLayout);
-				if (oldParentLayout != null){
+				if (oldParentLayout != null && !ModelUtils.safeEquals(oldParentLayout, FreeLayout.class.getName())){
 					ILayout parentLayout = LayoutManager.getLayout(oldParentLayout);		
-					Object jrElement = parent.getValue();
-					JRElementGroup parentGroup = null;
-					if (parent instanceof IGroupElement){
-						parentGroup = ((IGroupElement) parent).getJRElementGroup();
-					} else if (parent.getValue() instanceof JRElementGroup){
-						parentGroup = (JRElementGroup) parent.getValue();
-					}
-					Dimension parentSize = new Dimension();
-					if (parent instanceof IGraphicElementContainer){
-						parentSize = ((IGraphicElementContainer) parent).getSize();
-					}
-					if (jrElement instanceof JRCommonElement) {
-						JRCommonElement jce = (JRCommonElement) jrElement;
-						parentSize.setSize(new Dimension(jce.getWidth(), jce.getHeight()));
-					} else if (jrElement instanceof JRDesignBand) {
-						JasperDesign jDesign = parent.getJasperDesign();
-						int w = jDesign.getPageWidth() - jDesign.getLeftMargin() - jDesign.getRightMargin();
-						parentSize.setSize(new Dimension(w, ((JRDesignBand) jrElement).getHeight()));
-					}
-					JRPropertiesHolder pholder = getPropertyHolder(parent);
-					if (pholder != null && parentGroup != null) {
-						String str = pholder.getPropertiesMap().getProperty(ILayout.KEY);
-						if (str == null){
-							str = FreeLayout.class.getName();
-						}
-						new LayoutCommand(parentGroup, parentLayout, parentSize);
-					}
+					layoutParent(parentLayout);
 				}
 			}
 		}
+	}*/
+	
+	/**
+	 * Layout the parent with the specified layout
+	 * 
+	 * @param parentLayout a not null layout
+	 */
+	protected void layoutParent(ILayout parentLayout) {
+		Object jrElement = parent.getValue();
+		JRElementGroup parentGroup = null;
+		if (parent instanceof IGroupElement){
+			parentGroup = ((IGroupElement) parent).getJRElementGroup();
+		} else if (parent.getValue() instanceof JRElementGroup){
+			parentGroup = (JRElementGroup) parent.getValue();
+		}
+		Dimension parentSize = new Dimension();
+		if (parent instanceof IGraphicElementContainer){
+			parentSize = ((IGraphicElementContainer) parent).getSize();
+		}
+		if (jrElement instanceof JRCommonElement) {
+			JRCommonElement jce = (JRCommonElement) jrElement;
+			parentSize.setSize(new Dimension(jce.getWidth(), jce.getHeight()));
+		} else if (jrElement instanceof JRDesignBand) {
+			JasperDesign jDesign = parent.getJasperDesign();
+			int w = jDesign.getPageWidth() - jDesign.getLeftMargin() - jDesign.getRightMargin();
+			parentSize.setSize(new Dimension(w, ((JRDesignBand) jrElement).getHeight()));
+		}
+		JRPropertiesHolder pholder = getPropertyHolder(parent);
+		if (pholder != null && parentGroup != null) {
+			String str = pholder.getPropertiesMap().getProperty(ILayout.KEY);
+			if (str == null){
+				str = FreeLayout.class.getName();
+			}
+			new LayoutCommand(parentGroup, parentLayout, parentSize).execute();;
+		}
+	}
+	
+	/**
+	 * The command can be executed if the bounds change
+	 * is allowed by the layout of the parent
+	 */
+	@Override
+	public boolean canExecute() {
+		return isOperationAllowed(oldBounds, newBounds);
 	}
 
 	/*
@@ -217,18 +262,20 @@ public class SetConstraintCommand extends Command {
 	@Override
 	public void execute() {
 		if (jrElement != null) {
-			removeParenLayout();
-			oldBounds = new Rectangle(jrElement.getX(), jrElement.getY(), jrElement.getWidth(), jrElement.getHeight());
 			// check position,
 			// if top-left corner outside the bottom bar bands, move to bottom band
 			// if bottom-left corner outside the top bar, move to top band
 			int y = jrElement.getY() + newBounds.y - parentBounds.y;
 			if (cBand == null && pBand == null)
 				y = setBand(y);
-			jrElement.setX(jrElement.getX() + newBounds.x - parentBounds.x);
-			jrElement.setY(y);
-			jrElement.setWidth(newBounds.width);
-			jrElement.setHeight(newBounds.height);
+			
+			//remove the parent layout if necessary
+			Rectangle newValues = new Rectangle(jrElement.getX() + newBounds.x - parentBounds.x, y, newBounds.width, newBounds.height);
+			
+			jrElement.setX(newValues.x);
+			jrElement.setY(newValues.y);
+			jrElement.setWidth(newValues.width);
+			jrElement.setHeight(newValues.height);
 			if (cBand != null){
 				int maxHeight = BandResizeTracker.getMaxBandHeight(cBand, jrDesign);
 				int elementHeight = jrElement.getHeight() + jrElement.getY();
@@ -246,7 +293,7 @@ public class SetConstraintCommand extends Command {
 					}
 				}
 			}
-
+			//layout the children of the element if any
 			if (jrElement instanceof JRPropertiesHolder && jrGroup != null) {
 				String uuid = null;
 				if (jrElement instanceof JRBaseElement)
@@ -263,6 +310,16 @@ public class SetConstraintCommand extends Command {
 					lCmd = new LayoutCommand(jrGroup, layout, d);
 				}
 				lCmd.execute();
+			}
+			//layout the parent
+			JRPropertiesHolder parentPHolder = getPropertyHolder(parent);
+			if (parentPHolder != null){
+				JRPropertiesMap newMap = (JRPropertiesMap)parentPHolder.getPropertiesMap().clone();
+				String currentLayout = newMap.getProperty(ILayout.KEY);
+				if (currentLayout != null && !ModelUtils.safeEquals(currentLayout, FreeLayout.class.getName())){
+					ILayout parentLayout = LayoutManager.getLayout(currentLayout);		
+					layoutParent(parentLayout);
+				}
 			}
 		}
 	}
@@ -388,9 +445,7 @@ public class SetConstraintCommand extends Command {
 	 * @see org.eclipse.gef.commands.Command#undo()
 	 */
 	@Override
-	public void undo() {
-		if (lCmd != null)
-			lCmd.undo();
+	public void undo() {	
 		if (jrElement != null) {
 			if (pBand != null && cBand != null){
 				pBand.removeElement(jrElement);
@@ -407,7 +462,20 @@ public class SetConstraintCommand extends Command {
 			if (oldBandHeight >= 0)
 				cBand.setHeight(oldBandHeight);
 			
-			restoreParentLayout();
+			//Relayout the element content
+			if (lCmd != null)
+				lCmd.undo();
+		
+			//Relayout the parent
+			JRPropertiesHolder parentPHolder = getPropertyHolder(parent);
+			if (parentPHolder != null){
+				JRPropertiesMap newMap = (JRPropertiesMap)parentPHolder.getPropertiesMap().clone();
+				String currentLayout = newMap.getProperty(ILayout.KEY);
+				if (currentLayout != null && !ModelUtils.safeEquals(currentLayout, FreeLayout.class.getName())){
+					ILayout parentLayout = LayoutManager.getLayout(currentLayout);		
+					layoutParent(parentLayout);
+				}
+			}
 		}
 	}
 

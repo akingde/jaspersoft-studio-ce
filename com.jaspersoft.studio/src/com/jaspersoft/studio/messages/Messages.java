@@ -996,6 +996,7 @@ public class Messages extends NLS {
 	public static String JSSGridBagLayout_columnSpanLabel;
 	public static String JSSGridBagLayout_columnWeightLabel;
 	public static String JSSGridBagLayout_emptyValue;
+	public static String JSSGridBagLayout_labelFixedSize;
 	public static String JSSGridBagLayout_layoutName;
 	public static String JSSGridBagLayout_notNegativeValue;
 	public static String JSSGridBagLayout_relativeString;

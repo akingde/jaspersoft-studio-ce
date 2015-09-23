@@ -145,16 +145,28 @@ public class GridBagLayoutUtil {
 			constraint.gridx = prop != null ? Integer.parseInt(prop.toString()) : GridBagConstraints.RELATIVE;
 			prop = comp.getPropertiesMap().getProperty(JSSGridBagLayout.PROPERTY_Y);
 			constraint.gridy = prop != null ? Integer.parseInt(prop.toString()) : GridBagConstraints.RELATIVE;
-			prop = comp.getPropertiesMap().getProperty(JSSGridBagLayout.PROPERTY_WEIGHTX);
-			constraint.weightx = prop != null ? Double.parseDouble(prop.toString()) : 1.0;
-			prop = comp.getPropertiesMap().getProperty(JSSGridBagLayout.PROPERTY_WEIGHTY);
-			constraint.weighty = prop != null ? Double.parseDouble(prop.toString()) : 1.0;
 			prop = comp.getPropertiesMap().getProperty(JSSGridBagLayout.PROPERTY_ROWSPAN);
 			constraint.gridheight = prop != null ? Integer.parseInt(prop.toString()) : 1;
 			prop = comp.getPropertiesMap().getProperty(JSSGridBagLayout.PROPERTY_COLSPAN);
 			constraint.gridwidth = prop != null ? Integer.parseInt(prop.toString()) : 1;
 			
-			constraint.fill = GridBagConstraints.BOTH;
+			prop = comp.getPropertiesMap().getProperty(JSSGridBagLayout.PROPERTY_IS_FIXED);
+			boolean value = prop != null ? Boolean.parseBoolean(prop.toString()) : false;		
+			if (value){
+				constraint.isFixedSeize = true;
+				constraint.fill = GridBagConstraints.NONE;
+				constraint.weightx = 0;
+				constraint.weighty = 0;
+				constraint.anchor = GridBagConstraints.NORTHWEST;
+			} else {
+				constraint.isFixedSeize = false;
+				constraint.fill = GridBagConstraints.BOTH;
+				prop = comp.getPropertiesMap().getProperty(JSSGridBagLayout.PROPERTY_WEIGHTX);
+				constraint.weightx = prop != null ? Double.parseDouble(prop.toString()) : 1.0;
+				prop = comp.getPropertiesMap().getProperty(JSSGridBagLayout.PROPERTY_WEIGHTY);
+				constraint.weighty = prop != null ? Double.parseDouble(prop.toString()) : 1.0;
+			}
+
     	comptable.put(comp, constraint);
     }
 
@@ -314,32 +326,6 @@ public class GridBagLayoutUtil {
     }
 
     /**
-     * Returns the alignment along the x axis.  This specifies how
-     * the component would like to be aligned relative to other
-     * components.  The value should be a number between 0 and 1
-     * where 0 represents alignment along the origin, 1 is aligned
-     * the furthest away from the origin, 0.5 is centered, etc.
-     * <p>
-     * @return the value <code>0.5f</code> to indicate centered
-     */
-    public float getLayoutAlignmentX() {
-        return 0.5f;
-    }
-
-    /**
-     * Returns the alignment along the y axis.  This specifies how
-     * the component would like to be aligned relative to other
-     * components.  The value should be a number between 0 and 1
-     * where 0 represents alignment along the origin, 1 is aligned
-     * the furthest away from the origin, 0.5 is centered, etc.
-     * <p>
-     * @return the value <code>0.5f</code> to indicate centered
-     */
-    public float getLayoutAlignmentY() {
-        return 0.5f;
-    }
-
-    /**
      * Lays out the specified set of elements using the grid bag layout.
      * The elements are not moved but it is returned a map where for each element is contained
      * the position and size of the element itslef.
@@ -364,32 +350,6 @@ public class GridBagLayoutUtil {
     public Map<JRElement, org.eclipse.draw2d.geometry.Rectangle> layoutContainer(org.eclipse.draw2d.geometry.Dimension parentSize, JRElement[] children) {
     	Dimension dim = new Dimension(parentSize.width, parentSize.height);
     	return ArrangeGrid(dim, children);
-    }
-
-
-    /**
-     * Fills in an instance of <code>GridBagLayoutInfo</code> for the
-     * current set of managed children. This requires three passes through the
-     * set of children:
-     *
-     * <ol>
-     * <li>Figure out the dimensions of the layout grid.
-     * <li>Determine which cells the components occupy.
-     * <li>Distribute the weights and min sizes among the rows/columns.
-     * </ol>
-     *
-     * This also caches the minsizes for all the children when they are
-     * first encountered (so subsequent loops don't need to ask again).
-     * <p>
-     * This method should only be used internally by
-     * <code>GridBagLayout</code>.
-     *
-     * @param parentSize the size of the parent
-     * @param children the children to layout
-     * @return the <code>GridBagLayoutInfo</code> for the set of children
-     */
-    protected GridBagLayoutInfo getLayoutInfo(Dimension parentSize, JRElement[] child) {
-        return GetLayoutInfo(parentSize,child);
     }
 
     /**
@@ -446,25 +406,29 @@ public class GridBagLayoutUtil {
     } 
 
     /**
-     * This method is obsolete and supplied for backwards
-     * compatibility only; new code should call {@link
-     * #getLayoutInfo(java.awt.Container, int) getLayoutInfo} instead.
-     * This method is the same as <code>getLayoutInfo</code>;
-     * refer to <code>getLayoutInfo</code> for details on parameters
-     * and return value.
-     * 
+     * Fills in an instance of <code>GridBagLayoutInfo</code> for the
+     * current set of managed children. This requires three passes through the
+     * set of children:
+     *
+     * <ol>
+     * <li>Figure out the dimensions of the layout grid.
+     * <li>Determine which cells the components occupy.
+     * <li>Distribute the weights and min sizes among the rows/columns.
+     * </ol>
+     *
+     * This also caches the minsizes for all the children when they are
+     * first encountered (so subsequent loops don't need to ask again).
+     * <p>
+     * This method should only be used internally by
+     * <code>GridBagLayout</code>.
+     *
      * @param parentSize the size of the parent
      * @param children the children to layout
+     * @return the <code>GridBagLayoutInfo</code> for the set of children
      */
-    protected GridBagLayoutInfo GetLayoutInfo(Dimension parentSize, JRElement[] child){
+    protected GridBagLayoutInfo getLayoutInfo(Dimension parentSize, JRElement[] child){
       GridBagLayoutInfo r;
       GridBagConstraints constraints;
-      // Code below will address index curX+curWidth in the case of yMaxArray, weightY
-      // ( respectively curY+curHeight for xMaxArray, weightX ) where
-      //  curX in 0 to preInitMaximumArraySizes.y
-      // Thus, the maximum index that could
-      // be calculated in the following code is curX+curX.
-      // EmpericMultier equals 2 because of this.
 
       int layoutWidth, layoutHeight;
       int []xMaxArray;
@@ -553,9 +517,6 @@ public class GridBagLayoutUtil {
                   curY = 0;
           }
 
-          /* Adjust the grid width and height
-           *  fix for 5005945: unneccessary loops removed
-           */
           px = curX + curWidth;
           if (layoutWidth < px) {
               layoutWidth = px;
@@ -573,8 +534,13 @@ public class GridBagLayoutUtil {
               xMaxArray[i] = px;
           }
 
-          constraints.minWidth = 0;
-          constraints.minHeight = 0;
+          if (constraints.isFixedSeize){
+          	constraints.minWidth = comp.getWidth();
+          	constraints.minHeight = comp.getHeight();
+          } else {
+	          constraints.minWidth = 0;
+	          constraints.minHeight = 0;
+          }
           /* Zero width and height must mean that this is the last item (or
            * else something is wrong). */
           if (constraints.gridheight == 0 && constraints.gridwidth == 0)
@@ -904,7 +870,6 @@ public class GridBagLayoutUtil {
         int compindex;
         GridBagConstraints constraints;
         Rectangle r = new Rectangle();
-        int i, diffw, diffh;
         double weight;
         GridBagLayoutInfo info;
         HashMap<JRElement, org.eclipse.draw2d.geometry.Rectangle> result = new HashMap<JRElement, org.eclipse.draw2d.geometry.Rectangle>();
@@ -937,13 +902,13 @@ public class GridBagLayoutUtil {
          * according to the weights.
          */
 
-        diffw = parentSize.width - r.width;
+        int diffw = parentSize.width - r.width;
         if (diffw != 0) {
             weight = 0.0;
-            for (i = 0; i < info.width; i++)
+            for (int i = 0; i < info.width; i++)
                 weight += info.weightX[i];
             if (weight > 0.0) {
-                for (i = 0; i < info.width; i++) {
+                for (int i = 0; i < info.width; i++) {
                     int dx = (int)(( ((double)diffw) * info.weightX[i]) / weight);
                     info.minWidth[i] += dx;
                     r.width += dx;
@@ -960,13 +925,13 @@ public class GridBagLayoutUtil {
             diffw = 0;
         }
 
-        diffh = parentSize.height - r.height;
+        int diffh = parentSize.height - r.height;
         if (diffh != 0) {
             weight = 0.0;
-            for (i = 0; i < info.height; i++)
+            for (int i = 0; i < info.height; i++)
                 weight += info.weightY[i];
             if (weight > 0.0) {
-                for (i = 0; i < info.height; i++) {
+                for (int i = 0; i < info.height; i++) {
                     int dy = (int)(( ((double)diffh) * info.weightY[i]) / weight);
                     info.minHeight[i] += dy;
                     r.height += dy;
@@ -983,36 +948,43 @@ public class GridBagLayoutUtil {
             diffh = 0;
         }
 
+        //info.startx = diffw/2;
+        //info.starty = diffh/2;
+
+        /*
+         * Since the element with not fixed size fill the space and
+         * the element with fixed size start always from left upper corner
+         * then the starting point is always 0,0
+         */
+        info.startx = 0;
+        info.starty = 0;
+        
         /*
          * Now do the actual layout of the slaves using the layout information
          * that has been collected.
          */
-
-        info.startx = diffw/2;
-        info.starty = diffh/2;
-
         for (compindex = 0 ; compindex < components.length ; compindex++) {
             JRElement comp = components[compindex];
 
             constraints = lookupConstraints(comp);
 
             r.x = info.startx;
-            for(i = 0; i < constraints.tempX; i++)
+            for(int i = 0; i < constraints.tempX; i++)
                 r.x += info.minWidth[i];
             
             r.y = info.starty;
-            for(i = 0; i < constraints.tempY; i++)
+            for(int i = 0; i < constraints.tempY; i++)
                 r.y += info.minHeight[i];
 
             r.width = 0;
-            for(i = constraints.tempX;
+            for(int i = constraints.tempX;
                 i < (constraints.tempX + constraints.tempWidth);
                 i++) {
                 r.width += info.minWidth[i];
             }
 
             r.height = 0;
-            for(i = constraints.tempY;
+            for(int i = constraints.tempY;
                 i < (constraints.tempY + constraints.tempHeight);
                 i++) {
                 r.height += info.minHeight[i];

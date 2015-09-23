@@ -95,6 +95,14 @@ public interface ILayout {
 	 * @return true if the element should have additional control in the layout section (created trough createControls implementation),
 	 * false otherwise
 	 */
-	public boolean showAdditionalControls(JRPropertiesHolder elementProperties, JRPropertiesHolder parentProperties) ;
+	public boolean showAdditionalControls(JRPropertiesHolder elementProperties, JRPropertiesHolder parentProperties);
 	
+	/**
+	 * Check if an operation that edit the bounds of an element is allowed using while the parent is using this layout
+	 * 
+	 * @param resizedNode the node moved or resized
+	 * @param oldBound the old bounds of the element
+	 * @param newBounds the new bounds of the child element
+	 */
+	public boolean allowChildBoundChange(ANode resizedNode, Rectangle oldBounds, Rectangle newBounds);
 }

@@ -14,6 +14,7 @@ package com.jaspersoft.studio.editor.layout;
 
 import net.sf.jasperreports.engine.JRPropertiesHolder;
 
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.model.ANode;
@@ -37,5 +38,10 @@ public abstract class AbstractLayout implements ILayout {
 	@Override
 	public boolean showAdditionalControls(JRPropertiesHolder elementProperties, JRPropertiesHolder parentProperties) {
 		return false;
+	}
+
+	@Override
+	public boolean allowChildBoundChange(ANode resizedNode, Rectangle oldBounds, Rectangle newBounds) {
+		return true;
 	}
 }

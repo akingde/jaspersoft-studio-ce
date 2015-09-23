@@ -90,6 +90,28 @@ public class JSSCompoundResizeTracker extends ResizeTracker {
 	}
 	
 	/**
+	 * Don't show the feedback if the command can`t be executed
+	 */
+	@Override
+	protected void showTargetFeedback() {
+		Command command = getCurrentCommand();
+		if (command != null && command.canExecute()){
+			super.showTargetFeedback();
+		}
+	}
+	
+	/**
+	 * Don't show the feedback if the command can`t be executed
+	 */
+	@Override
+	protected void showSourceFeedback() {
+		Command command = getCurrentCommand();
+		if (command != null && command.canExecute()){
+			super.showSourceFeedback();
+		}
+	}
+	
+	/**
 	 * Return the current level of zoom
 	 */
 	protected double getZoom(){
@@ -143,7 +165,6 @@ public class JSSCompoundResizeTracker extends ResizeTracker {
 				}
 			}
 		}
-
 		return request;
 	}
 }

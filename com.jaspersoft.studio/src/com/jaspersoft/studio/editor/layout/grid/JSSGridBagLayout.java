@@ -59,7 +59,6 @@ import com.jaspersoft.studio.editor.layout.SetLayoutProperty;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
-import com.jaspersoft.studio.model.IContainerLayout;
 import com.jaspersoft.studio.model.IGraphicElementContainer;
 import com.jaspersoft.studio.model.IGroupElement;
 import com.jaspersoft.studio.model.MGraphicElement;
@@ -80,32 +79,37 @@ public class JSSGridBagLayout extends AbstractLayout {
 	/**
 	 * The key used to store the column position
 	 */
-	protected static final String PROPERTY_X = "com.jaspersoft.layout.grid.x"; //$NON-NLS-1$
+	public static final String PROPERTY_X = "com.jaspersoft.layout.grid.x"; //$NON-NLS-1$
 	
 	/**
 	 * The key used to store the row position
 	 */
-	protected static final String PROPERTY_Y = "com.jaspersoft.layout.grid.y"; //$NON-NLS-1$
+	public static final String PROPERTY_Y = "com.jaspersoft.layout.grid.y"; //$NON-NLS-1$
 	
 	/**
 	 * The key used to store the column span
 	 */
-	protected static final String PROPERTY_COLSPAN = "com.jaspersoft.layout.grid.colspan"; //$NON-NLS-1$
+	public static final String PROPERTY_COLSPAN = "com.jaspersoft.layout.grid.colspan"; //$NON-NLS-1$
 	
 	/**
 	 * The key used to store the row span
 	 */
-	protected static final String PROPERTY_ROWSPAN = "com.jaspersoft.layout.grid.rowspan"; //$NON-NLS-1$
+	public static final String PROPERTY_ROWSPAN = "com.jaspersoft.layout.grid.rowspan"; //$NON-NLS-1$
 	
 	/**
 	 * The key used to store the row weight
 	 */
-	protected static final String PROPERTY_WEIGHTX = "com.jaspersoft.layout.grid.weight.x"; //$NON-NLS-1$
+	public static final String PROPERTY_WEIGHTX = "com.jaspersoft.layout.grid.weight.x"; //$NON-NLS-1$
 	
 	/**
 	 * The key used to store the column weight
 	 */
-	protected static final String PROPERTY_WEIGHTY = "com.jaspersoft.layout.grid.weight.y"; //$NON-NLS-1$
+	public static final String PROPERTY_WEIGHTY = "com.jaspersoft.layout.grid.weight.y"; //$NON-NLS-1$
+	
+	/**
+	 * The key used to store the property for the fixed size of the element
+	 */
+	public static final String PROPERTY_IS_FIXED = "com.jaspersoft.layout.grid.weight.fixed"; //$NON-NLS-1$
 	
 	/**
 	 * The listener used to store the changes and update the control status
@@ -153,12 +157,12 @@ public class JSSGridBagLayout extends AbstractLayout {
 	/**
 	 * The text where the user can insert the row weight
 	 */
-	private Text rowWeight;
+	private Text columnWeight;
 	
 	/**
 	 * The text where the user can insert the column weight
 	 */
-	private Text columnWeight;
+	private Text rowWeight;
 	
 	/**
 	 * The text where the user can insert the row row
@@ -179,6 +183,11 @@ public class JSSGridBagLayout extends AbstractLayout {
 	 * The current section
 	 */
 	private AbstractSection section;
+	
+	/**
+	 * Combo used to select if an element has a fixed size or no
+	 */
+	private Combo fixedSizeCombo;
 	
 	/**
 	 * Guard used to avoid the modify listener to be fired when setting the value of the fields
@@ -202,15 +211,16 @@ public class JSSGridBagLayout extends AbstractLayout {
 			CommandStack cs = section.getEditDomain().getCommandStack();	
 			SetLayoutProperty setCommand = new SetLayoutProperty();	
 			for(APropertyNode node : section.getElements()){
-				JRPropertiesHolder currentElement = getPropertyHolder(node);
+				JRPropertiesHolder currentElement = LayoutManager.getPropertyHolder(node);
 				if (currentElement != null && hasValueChanged(node)){
 					JRPropertiesMap clone = (JRPropertiesMap)currentElement.getPropertiesMap().clone();
 					clone.setProperty(JSSGridBagLayout.PROPERTY_X, String.valueOf(getComboValue(columnPosition)));
 					clone.setProperty(JSSGridBagLayout.PROPERTY_Y, String.valueOf(getComboValue(rowPosition)));
-					clone.setProperty(JSSGridBagLayout.PROPERTY_WEIGHTX, rowWeight.getText());
-					clone.setProperty(JSSGridBagLayout.PROPERTY_WEIGHTY, columnWeight.getText());
+					clone.setProperty(JSSGridBagLayout.PROPERTY_WEIGHTX, columnWeight.getText());
+					clone.setProperty(JSSGridBagLayout.PROPERTY_WEIGHTY, rowWeight.getText());
 					clone.setProperty(JSSGridBagLayout.PROPERTY_ROWSPAN, rowSpan.getText());
 					clone.setProperty(JSSGridBagLayout.PROPERTY_COLSPAN, columnSpan.getText());
+					clone.setProperty(JSSGridBagLayout.PROPERTY_IS_FIXED, String.valueOf(isFixedSize()));
 					SetValueCommand setMapCommand = new SetValueCommand("Layout Settings"); //$NON-NLS-1$
 					setMapCommand.setTarget(node);
 					setMapCommand.setPropertyId(MGraphicElement.PROPERTY_MAP);
@@ -238,8 +248,8 @@ public class JSSGridBagLayout extends AbstractLayout {
 	 */
 	private boolean hasValueChanged(ANode element){
 		//check if the widgets values are valid
-		if (rowWeight.getToolTipText() != null || 
-					columnWeight.getToolTipText() != null ||
+		if (columnWeight.getToolTipText() != null || 
+					rowWeight.getToolTipText() != null ||
 						rowSpan.getToolTipText() != null ||
 								columnSpan.getToolTipText() != null ||
 									columnPosition.getToolTipText() != null ||
@@ -248,7 +258,7 @@ public class JSSGridBagLayout extends AbstractLayout {
 		}
 		
 		//the property are valid, check if they are different also
-		JRPropertiesHolder currentElement = getPropertyHolder(element);
+		JRPropertiesHolder currentElement = LayoutManager.getPropertyHolder(element);
 		if (currentElement != null){
 			Object prop = currentElement.getPropertiesMap().getProperty(JSSGridBagLayout.PROPERTY_X);
 			prop = prop != null ? prop.toString() : String.valueOf(GridBagConstraints.RELATIVE);
@@ -260,11 +270,11 @@ public class JSSGridBagLayout extends AbstractLayout {
 			
 			prop = currentElement.getPropertiesMap().getProperty(JSSGridBagLayout.PROPERTY_WEIGHTX);
 			prop = prop != null ? prop.toString() : String.valueOf(1.0);
-			if (!prop.equals(rowWeight.getText())) return true;
+			if (!prop.equals(columnWeight.getText())) return true;
 			
 			prop = currentElement.getPropertiesMap().getProperty(JSSGridBagLayout.PROPERTY_WEIGHTY);
 			prop = prop != null ? prop.toString() : String.valueOf(1.0);
-			if (!prop.equals(columnWeight.getText())) return true;
+			if (!prop.equals(rowWeight.getText())) return true;
 			
 			prop = currentElement.getPropertiesMap().getProperty(JSSGridBagLayout.PROPERTY_ROWSPAN);
 			prop = prop != null ? prop.toString() : String.valueOf(1);
@@ -273,6 +283,11 @@ public class JSSGridBagLayout extends AbstractLayout {
 			prop = currentElement.getPropertiesMap().getProperty(JSSGridBagLayout.PROPERTY_COLSPAN);
 			prop = prop != null ? prop.toString() : String.valueOf(1);
 			if (!prop.equals(columnSpan.getText())) return true;
+			
+			prop = currentElement.getPropertiesMap().getProperty(JSSGridBagLayout.PROPERTY_IS_FIXED);
+			boolean value = prop != null ? Boolean.parseBoolean(prop.toString()) : false;
+			int selectionIndex = value ? 1 : 0;
+			if (fixedSizeCombo.getSelectionIndex() != selectionIndex) return true;
 		}
 		return false;
 	}
@@ -308,7 +323,7 @@ public class JSSGridBagLayout extends AbstractLayout {
 		}
 		
 		//get the properties of the parent
-		JRPropertiesHolder pholder = getPropertyHolder(parent);
+		JRPropertiesHolder pholder = LayoutManager.getPropertyHolder(parent);
 		if (pholder != null && jrGroup != null) {
 			String str = pholder.getPropertiesMap().getProperty(ILayout.KEY);
 			if (str == null){
@@ -316,23 +331,6 @@ public class JSSGridBagLayout extends AbstractLayout {
 			}
 			ILayout parentLayout = LayoutManager.getLayout(str);		
 			return new LayoutCommand(jrGroup, parentLayout, d);
-		}
-		return null;
-	}
-	
-	/**
-	 * Get the properties holder of the current node if it can be found
-	 * 
-	 * @param node the node
-	 * @return the properties holder related to the node or null if it can't be found
-	 */
-	protected JRPropertiesHolder getPropertyHolder(ANode node){
-		if (node != null && node.getValue() instanceof JRPropertiesHolder) {
-			return (JRPropertiesHolder)node.getValue();
-		} 
-		if (node instanceof IContainerLayout){
-			JRPropertiesHolder[] holders = ((IContainerLayout) node).getPropertyHolder();
-			if (holders.length > 0) return holders[0];
 		}
 		return null;
 	}
@@ -495,6 +493,26 @@ public class JSSGridBagLayout extends AbstractLayout {
 	}
 	
 	/**
+	 * Enable or disable the weight widgets if the size
+	 * is marked as fiexd or not
+	 */
+	protected void refreshWeightWidgets(){
+		columnWeight.setEnabled(!isFixedSize());
+		rowWeight.setEnabled(!isFixedSize());
+	}
+	
+	/**
+	 * Return if in the fixed size combo is selected 
+	 * the entry for the fixed size or not
+	 * 
+	 * @return true if the size of the element is set as fixed
+	 * false otherwise
+	 */
+	protected boolean isFixedSize(){
+		return fixedSizeCombo.getSelectionIndex() == 1;
+	}
+	
+	/**
 	 * Validate a generic control and set or remove the error from it
 	 * 
 	 * @param widget the control
@@ -600,26 +618,41 @@ public class JSSGridBagLayout extends AbstractLayout {
 		columnSpan.addModifyListener(listener);
 		columnSpan.addFocusListener(listener);
 		
-		new Label(container, SWT.NONE).setText(Messages.JSSGridBagLayout_rowWeightLabel);
-		rowWeight = new Text(container, SWT.BORDER);
-		rowWeight.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		rowWeight.addKeyListener(listener);
-		rowWeight.addModifyListener(listener);
-		rowWeight.addFocusListener(listener);
+		new Label(container, SWT.NONE).setText(Messages.JSSGridBagLayout_labelFixedSize);
+		fixedSizeCombo = new Combo(container, SWT.READ_ONLY);
+		fixedSizeCombo.setItems(new String[]{Messages.SP3Boolean_False_Value, Messages.SP3Boolean_True_Value});
+		GridData fixedComboData = new GridData();
+		fixedComboData.horizontalSpan = 3;
+		fixedSizeCombo.setLayoutData(fixedComboData);
+		fixedSizeCombo.select(0);
+		fixedSizeCombo.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				refreshWeightWidgets();
+				updateElement();
+			}
+		});
 		
-		new Label(container, SWT.NONE).setText(Messages.JSSGridBagLayout_columnWeightLabel);
+		new Label(container, SWT.NONE).setText(Messages.JSSGridBagLayout_rowWeightLabel);
 		columnWeight = new Text(container, SWT.BORDER);
 		columnWeight.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		columnWeight.addKeyListener(listener);
 		columnWeight.addModifyListener(listener);
 		columnWeight.addFocusListener(listener);
+		
+		new Label(container, SWT.NONE).setText(Messages.JSSGridBagLayout_columnWeightLabel);
+		rowWeight = new Text(container, SWT.BORDER);
+		rowWeight.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		rowWeight.addKeyListener(listener);
+		rowWeight.addModifyListener(listener);
+		rowWeight.addFocusListener(listener);
 	}
 	
 	@Override
 	public void setData(ANode selectedElement, AbstractSection section) {
 		this.selectedElement = selectedElement;
 		this.section = section;
-		JRPropertiesHolder currentElement = getPropertyHolder(selectedElement);
+		JRPropertiesHolder currentElement = LayoutManager.getPropertyHolder(selectedElement);
 		if (currentElement != null){
 			modifyGuard = true;
 		
@@ -627,6 +660,7 @@ public class JSSGridBagLayout extends AbstractLayout {
 			prop = prop != null ? prop.toString() : String.valueOf(GridBagConstraints.RELATIVE);
 			if (prop.equals(String.valueOf(GridBagConstraints.RELATIVE))){
 				columnPosition.select(0);
+				columnPosition.setText(columnPosition.getItem(0));
 			} else {
 				columnPosition.setText(prop.toString());
 			}
@@ -635,21 +669,27 @@ public class JSSGridBagLayout extends AbstractLayout {
 			prop = prop != null ? prop.toString() : String.valueOf(GridBagConstraints.RELATIVE);
 			if (prop.equals(String.valueOf(GridBagConstraints.RELATIVE))){
 				rowPosition.select(0);
+				rowPosition.setText(rowPosition.getItem(0));
 			} else {
 				rowPosition.setText(prop.toString());
 			}
 			
 			prop = currentElement.getPropertiesMap().getProperty(JSSGridBagLayout.PROPERTY_WEIGHTX);
-			rowWeight.setText(prop != null ? prop.toString() : String.valueOf(1.0));
+			columnWeight.setText(prop != null ? prop.toString() : String.valueOf(1.0));
 			
 			prop = currentElement.getPropertiesMap().getProperty(JSSGridBagLayout.PROPERTY_WEIGHTY);
-			columnWeight.setText(prop != null ? prop.toString() : String.valueOf(1.0));
+			rowWeight.setText(prop != null ? prop.toString() : String.valueOf(1.0));
 			
 			prop = currentElement.getPropertiesMap().getProperty(JSSGridBagLayout.PROPERTY_ROWSPAN);
 			rowSpan.setText(prop != null ? prop.toString() : String.valueOf(1));
 			
 			prop = currentElement.getPropertiesMap().getProperty(JSSGridBagLayout.PROPERTY_COLSPAN);
 			columnSpan.setText(prop != null ? prop.toString() : String.valueOf(1));
+			
+			prop = currentElement.getPropertiesMap().getProperty(JSSGridBagLayout.PROPERTY_IS_FIXED);
+			boolean value = prop != null ? Boolean.parseBoolean(prop.toString()) : false;
+			fixedSizeCombo.select(value ? 1 : 0);
+			refreshWeightWidgets();
 			
 			modifyGuard = false;
 		}
@@ -661,4 +701,16 @@ public class JSSGridBagLayout extends AbstractLayout {
 	public boolean showAdditionalControls(JRPropertiesHolder elementProperties, JRPropertiesHolder parentProperties) {
 		return true;
 	}
+	
+	@Override
+	public boolean allowChildBoundChange(ANode resizedNode, Rectangle oldBounds, Rectangle newBounds) {
+		JRPropertiesHolder currentElement = LayoutManager.getPropertyHolder(resizedNode);
+		if (currentElement != null){
+			Object value = currentElement.getPropertiesMap().getProperty(PROPERTY_IS_FIXED);
+			boolean isFixed = value != null ? Boolean.parseBoolean(value.toString()) : false;
+			return isFixed;
+		}
+		return false;
+	}
+	
 }

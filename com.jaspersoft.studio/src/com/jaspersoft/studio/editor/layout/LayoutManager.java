@@ -20,6 +20,7 @@ import net.sf.jasperreports.engine.JRCommonElement;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.JRPropertiesHolder;
+import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.draw2d.geometry.Dimension;
@@ -31,6 +32,10 @@ import org.eclipse.ui.IWorkbenchPart;
 
 import com.jaspersoft.studio.editor.action.layout.LayoutAction;
 import com.jaspersoft.studio.editor.layout.grid.JSSGridBagLayout;
+import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.IContainerLayout;
+import com.jaspersoft.studio.model.IGraphicElementContainer;
+import com.jaspersoft.studio.model.IGroupElement;
 
 public class LayoutManager {
 	
@@ -110,5 +115,67 @@ public class LayoutManager {
 			layout.layout(group.getElements(), d);
 		}
 		return map;
+	}
+	
+	/**
+	 * Get the properties holder of the current node if it can be found
+	 * 
+	 * @param node the node
+	 * @return the properties holder related to the node or null if it can't be found
+	 */
+	public static JRPropertiesHolder getPropertyHolder(ANode node){
+		if (node != null && node.getValue() instanceof JRPropertiesHolder) {
+			return (JRPropertiesHolder)node.getValue();
+		} 
+		if (node instanceof IContainerLayout){
+			JRPropertiesHolder[] holders = ((IContainerLayout) node).getPropertyHolder();
+			if (holders.length > 0) return holders[0];
+		}
+		return null;
+	}
+	
+	/**
+	 * Create a layout command to layout the container passed as parameter
+	 * 
+	 * @param containerToLayout the container to layout, if null the result will be null
+	 * @return a layout command to do the layout of the passed container, can be null if the 
+	 * contaienr can not be layouted (maybe it null or not a valid container)
+	 */
+	public static LayoutCommand creteRelayoutCommand(ANode containerToLayout){
+		if (containerToLayout == null) return null;
+		Object jrElement = containerToLayout.getValue();
+		
+		//Search the parent group
+		JRElementGroup jrGroup = null;
+		if (containerToLayout instanceof IGroupElement)
+			jrGroup = ((IGroupElement) containerToLayout).getJRElementGroup();
+		else if (containerToLayout.getValue() instanceof JRElementGroup)
+			jrGroup = (JRElementGroup) containerToLayout.getValue();
+		
+		//search the size of the parent
+		Dimension d = new Dimension();
+		if (containerToLayout instanceof IGraphicElementContainer){
+			d = ((IGraphicElementContainer) containerToLayout).getSize();
+		}
+		if (jrElement instanceof JRCommonElement) {
+			JRCommonElement jce = (JRCommonElement) jrElement;
+			d.setSize(new Dimension(jce.getWidth(), jce.getHeight()));
+		} else if (jrElement instanceof JRDesignBand) {
+			JasperDesign jDesign = containerToLayout.getJasperDesign();
+			int w = jDesign.getPageWidth() - jDesign.getLeftMargin() - jDesign.getRightMargin();
+			d.setSize(new Dimension(w, ((JRDesignBand) jrElement).getHeight()));
+		}
+		
+		//get the properties of the parent
+		JRPropertiesHolder pholder = getPropertyHolder(containerToLayout);
+		if (pholder != null && jrGroup != null) {
+			String str = pholder.getPropertiesMap().getProperty(ILayout.KEY);
+			if (str == null){
+				str = FreeLayout.class.getName();
+			}
+			ILayout parentLayout = LayoutManager.getLayout(str);		
+			return new LayoutCommand(jrGroup, parentLayout, d);
+		}
+		return null;
 	}
 }

@@ -524,9 +524,24 @@ public class SearchParentDragTracker extends DragEditPartsTracker {
 	 */
 	@Override
 	protected void showTargetFeedback() {
-		boolean useOldBheavior = JasperReportsPlugin.isPressed(MOVE_CHILD_KEY);
-		if (useOldBheavior || !keepParentDrag){
-			super.showTargetFeedback();
+		Command command = getCurrentCommand();
+		if (command != null && command.canExecute()){
+			boolean useOldBheavior = JasperReportsPlugin.isPressed(MOVE_CHILD_KEY);
+			if (useOldBheavior || !keepParentDrag){
+				super.showTargetFeedback();
+			}
+		}
+	}
+	
+	
+	/**
+	 * Don't show the feedback if the command can`t be executed
+	 */
+	@Override
+	protected void showSourceFeedback() {
+		Command command = getCurrentCommand();
+		if (command != null && command.canExecute()){
+			super.showSourceFeedback();
 		}
 	}
 	

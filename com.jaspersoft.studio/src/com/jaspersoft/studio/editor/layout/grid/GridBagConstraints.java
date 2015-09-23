@@ -334,6 +334,11 @@ public class GridBagConstraints implements Cloneable{
      * <code>ipadx</code>, where the default will be 0.
      */
     int minHeight;
+    
+    /**
+     * Flag used to know if the size of the element should be keep fixed
+     */
+    boolean isFixedSeize;
 
     /**
      * Creates a <code>GridBagConstraint</code> object with
@@ -353,6 +358,7 @@ public class GridBagConstraints implements Cloneable{
         insets = new Insets(0, 0, 0, 0);
         ipadx = 0;
         ipady = 0;
+        isFixedSeize = false;
     }
 
     /**
@@ -374,13 +380,13 @@ public class GridBagConstraints implements Cloneable{
      * @param insets    The initial insets value.
      * @param ipadx     The initial ipadx value.
      * @param ipady     The initial ipady value.
-     *
+     * @param isFixedSize Flag used to know if the size of the element should be keep fixed
      */
     public GridBagConstraints(int gridx, int gridy,
                               int gridwidth, int gridheight,
                               double weightx, double weighty,
                               int anchor, int fill,
-                              Insets insets, int ipadx, int ipady) {
+                              Insets insets, int ipadx, int ipady, boolean isFixedSize) {
         this.gridx = gridx;
         this.gridy = gridy;
         this.gridwidth = gridwidth;
@@ -392,6 +398,7 @@ public class GridBagConstraints implements Cloneable{
         this.anchor  = anchor;
         this.weightx = weightx;
         this.weighty = weighty;
+        this.isFixedSeize = isFixedSize;
     }
 
     /**
@@ -405,11 +412,15 @@ public class GridBagConstraints implements Cloneable{
             return c;
         } catch (CloneNotSupportedException e) {
             // this shouldn't happen, since we are Cloneable
-            throw new Error(e);
+            throw new RuntimeException(e);
         }
     }
 
+    /**
+     * Return if an element can be resized vertically, the fill must be 
+     * different from none and the size not fixed
+     */
     boolean isVerticallyResizable() {
-        return (fill == BOTH || fill == VERTICAL);
+        return ((fill == BOTH || fill == VERTICAL) && !isFixedSeize);
     }
 }
