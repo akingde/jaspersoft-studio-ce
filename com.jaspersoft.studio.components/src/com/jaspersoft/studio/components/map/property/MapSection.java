@@ -61,33 +61,32 @@ public class MapSection extends AbstractSection {
 		mapPickSuggestion.setLayoutData(gd);
 		mapPickSuggestion.setWhitespaceNormalized(true);
 		mapPickSuggestion.addHyperlinkListener(new HyperlinkAdapter() {
-			private BasicMapInfoData mapInfo;
 
 			@Override
 			public void linkActivated(HyperlinkEvent e) {
 				MMap mmap = (MMap) getElement();
-				BasicInfoMapDialog pickmapDialog = new BasicInfoMapDialog(
-						UIUtils.getShell()) {
+				BasicInfoMapDialog d = new BasicInfoMapDialog(UIUtils
+						.getShell()) {
 					@Override
 					protected void configureShell(Shell newShell) {
 						super.configureShell(newShell);
 						UIUtils.resizeAndCenterShell(newShell, 800, 600);
 					}
 				};
-				mapInfo = mmap.getBasicMapInformation();
+				BasicMapInfoData mapInfo = mmap.getBasicMapInformation();
 				if (mapInfo.getLatitude() != null
 						&& mapInfo.getLongitude() != null)
-					pickmapDialog.setMapCenter(new LatLng(
-							mapInfo.getLatitude(), mapInfo.getLongitude(), true));
+					d.setMapCenter(new LatLng(mapInfo.getLatitude(), mapInfo
+							.getLongitude(), true));
 				if (mapInfo.getAddress() != null)
-					pickmapDialog.setAddress(mapInfo.getAddress());
+					d.setAddress(mapInfo.getAddress());
 				if (mapInfo.getMapType() != null)
-					pickmapDialog.setMapType(MapType.fromStringID(mapInfo
-							.getMapType().getName()));
+					d.setMapType(MapType.fromStringID(mapInfo.getMapType()
+							.getName()));
 				if (mapInfo.getZoom() != 0)
-					pickmapDialog.setZoomLevel(mapInfo.getZoom());
-				if (pickmapDialog.open() == Dialog.OK) {
-					LatLng center = pickmapDialog.getMapCenter();
+					d.setZoomLevel(mapInfo.getZoom());
+				if (d.open() == Dialog.OK) {
+					LatLng center = d.getMapCenter();
 					changeProperty(
 							StandardMapComponent.PROPERTY_LATITUDE_EXPRESSION,
 							new JRDesignExpression(center.getLat() + "f"));
@@ -96,9 +95,9 @@ public class MapSection extends AbstractSection {
 							new JRDesignExpression(center.getLng() + "f"));
 					changeProperty(
 							StandardMapComponent.PROPERTY_ZOOM_EXPRESSION,
-							new JRDesignExpression(String.valueOf(pickmapDialog
+							new JRDesignExpression(String.valueOf(d
 									.getZoomLevel())));
-					String adr = pickmapDialog.getAddress();
+					String adr = d.getAddress();
 					if (Misc.isNullOrEmpty(adr))
 						changeProperty(
 								StandardMapComponent.PROPERTY_ADDRESS_EXPRESSION,
@@ -107,8 +106,8 @@ public class MapSection extends AbstractSection {
 						changeProperty(
 								StandardMapComponent.PROPERTY_ADDRESS_EXPRESSION,
 								new JRDesignExpression("\"" + adr + "\""));
-					changeProperty(StandardMapComponent.PROPERTY_MAP_TYPE,
-							pickmapDialog.getMapType().ordinal());
+					changeProperty(StandardMapComponent.PROPERTY_MAP_TYPE, d
+							.getMapType().ordinal());
 				}
 			}
 		});

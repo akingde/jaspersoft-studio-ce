@@ -579,6 +579,16 @@ public class MMap extends MGraphicElement implements IDatasetContainer {
 	}
 
 	@Override
+	public int getDefaultHeight() {
+		return 150;
+	}
+
+	@Override
+	public int getDefaultWidth() {
+		return 400;
+	}
+
+	@Override
 	public List<MDatasetRun> getDatasetRunList() {
 		Set<JRDatasetRun> dsr = new HashSet<JRDatasetRun>();
 		for (ItemData id : getMapComponent().getMarkerDataList()) {

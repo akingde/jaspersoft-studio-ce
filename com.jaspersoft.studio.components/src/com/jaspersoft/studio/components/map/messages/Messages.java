@@ -50,6 +50,7 @@ public class Messages extends NLS {
 	public static String MapElementDialog_ErrorDialogTitle;
 	public static String MapElementDialog_PropertyValue;
 	public static String MapElementDialog_UseExpression;
+	public static String MapPathAndStyleSection_0;
 	public static String MapPathsDescriptor_Paths;
 	public static String MapPathsWidgetConfiguration_MapPaths;
 	public static String MapPathsWidgetConfiguration_Path;

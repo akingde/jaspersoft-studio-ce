@@ -65,7 +65,7 @@ public class MarkersDescriptor extends ADescriptor {
 		itemProperties = new ItemPropertyDescription[] {
 				new ItemPropertyDescription<String>(
 						MapComponent.ITEM_PROPERTY_MARKER_title,
-						Messages.MarkersDescriptor_1, false, "Marker"), //$NON-NLS-1$
+						Messages.MarkersDescriptor_1, "", false, "Marker"), //$NON-NLS-1$
 
 				new ItemPropertyDescription<Float>(
 						MapComponent.ITEM_PROPERTY_latitude,

@@ -54,7 +54,6 @@ import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.swt.widgets.table.ListOrderButtons;
 import com.jaspersoft.studio.swt.widgets.table.NewButton;
 import com.jaspersoft.studio.widgets.map.core.LatLng;
-import com.jaspersoft.studio.widgets.map.core.MapType;
 import com.jaspersoft.studio.widgets.map.ui.MarkersPickupDialog;
 
 public class MarkerPage extends WizardPage {
@@ -130,18 +129,18 @@ public class MarkerPage extends WizardPage {
 					mapInfo = ((MMap) value.getPnode())
 							.getBasicMapInformation();
 				}
-				if (mapInfo.getLatitude() != null
-						&& mapInfo.getLongitude() != null) {
-					staticMarkersDialog.setInitialPosition(new LatLng(mapInfo
-							.getLatitude(), mapInfo.getLongitude(), true));
-				}
-				if (mapInfo.getMapType() != null) {
-					staticMarkersDialog.setType(MapType.fromStringID(mapInfo
-							.getMapType().getName()));
-				}
-				if (mapInfo.getZoom() != 0) {
-					staticMarkersDialog.setZoom(mapInfo.getZoom());
-				}
+				// if (mapInfo.getLatitude() != null
+				// && mapInfo.getLongitude() != null) {
+				// staticMarkersDialog.setInitialPosition(new LatLng(mapInfo
+				// .getLatitude(), mapInfo.getLongitude(), true));
+				// }
+				// if (mapInfo.getMapType() != null) {
+				// staticMarkersDialog.setType(MapType.fromStringID(mapInfo
+				// .getMapType().getName()));
+				// }
+				// if (mapInfo.getZoom() != 0) {
+				// staticMarkersDialog.setZoom(mapInfo.getZoom());
+				// }
 				if (staticMarkersDialog.open() == Window.OK) {
 					List<LatLng> markersList = staticMarkersDialog
 							.getMarkersList();

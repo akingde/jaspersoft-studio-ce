@@ -45,7 +45,7 @@ import com.jaspersoft.studio.widgets.map.support.BaseJavaMapSupport;
  * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
  * 
  */
-public class MarkersPickupDialog extends BasicInfoMapDialog {
+public class PathPickupDialog extends BasicInfoMapDialog {
 
 	private java.util.List<LatLng> markers;
 	private List markersWidget;
@@ -55,7 +55,7 @@ public class MarkersPickupDialog extends BasicInfoMapDialog {
 	 * 
 	 * @param parentShell
 	 */
-	public MarkersPickupDialog(Shell parentShell) {
+	public PathPickupDialog(Shell parentShell) {
 		super(parentShell);
 		this.markers = new ArrayList<LatLng>();
 	}
@@ -76,7 +76,7 @@ public class MarkersPickupDialog extends BasicInfoMapDialog {
 		panelCmp.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
 		Label markersLbl = new Label(panelCmp, SWT.NONE);
-		markersLbl.setText(Messages.MarkersPickupDialog_MarkersLbl);
+		markersLbl.setText("Points");
 		markersLbl.setLayoutData(new GridData(SWT.TOP, SWT.LEFT, true, false));
 
 		markersWidget = new List(panelCmp, SWT.BORDER | SWT.V_SCROLL
@@ -86,7 +86,7 @@ public class MarkersPickupDialog extends BasicInfoMapDialog {
 		Button delMarkersBtn = new Button(panelCmp, SWT.PUSH);
 		delMarkersBtn.setLayoutData(new GridData(SWT.RIGHT, SWT.BOTTOM, false,
 				false));
-		delMarkersBtn.setText(Messages.MarkersPickupDialog_DeleteMarkersBtn);
+		delMarkersBtn.setText("Delete Points");
 		delMarkersBtn.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				map.getJavascriptMapSupport().clearMarkers();
@@ -123,17 +123,17 @@ public class MarkersPickupDialog extends BasicInfoMapDialog {
 		map.configureJavaSupport(new PanelJavaMapSupport(map.getMapControl()) {
 			@Override
 			public void setZoomLevel(int newZoomLevel) {
-				MarkersPickupDialog.this.setZoomLevel(newZoomLevel);
+				PathPickupDialog.this.setZoomLevel(newZoomLevel);
 			}
 
 			@Override
 			public void setMapCenter(LatLng position) {
-				MarkersPickupDialog.this.setMapCenter(position);
+				PathPickupDialog.this.setMapCenter(position);
 			}
 
 			@Override
 			public void setMapType(MapType mapType) {
-				MarkersPickupDialog.this.setMapType(mapType);
+				PathPickupDialog.this.setMapType(mapType);
 			}
 		});
 		map.getFunctions().add(

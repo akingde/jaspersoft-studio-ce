@@ -80,11 +80,6 @@ public class MarkersPropertyDescriptor extends AItemDataListPropertyDescriptor {
 						sc.setAlwaysShowScrollBars(true);
 						bptab.setControl(sc);
 
-						createItemProperty(cmp,
-								MapComponent.ITEM_PROPERTY_MARKER_title);
-
-						createSeparator(cmp);
-
 						Label lbl = new Label(cmp, SWT.NONE);
 						GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 						gd.horizontalSpan = 2;
@@ -100,6 +95,8 @@ public class MarkersPropertyDescriptor extends AItemDataListPropertyDescriptor {
 
 						createSeparator(cmp);
 
+						createItemProperty(cmp,
+								MapComponent.ITEM_PROPERTY_MARKER_title);
 						createItemProperty(cmp,
 								MapComponent.ITEM_PROPERTY_MARKER_url);
 						createItemProperty(cmp,
@@ -166,9 +163,6 @@ public class MarkersPropertyDescriptor extends AItemDataListPropertyDescriptor {
 						createItemProperty(
 								c,
 								MapComponent.ITEM_PROPERTY_MARKER_INFOWINDOW_maxWidth);
-
-						createItemProperty(cmp,
-								MapComponent.ITEM_PROPERTY_MARKER_icon);
 
 						createSeparator(cmp);
 
