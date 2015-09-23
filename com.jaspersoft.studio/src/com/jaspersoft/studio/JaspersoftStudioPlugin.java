@@ -16,6 +16,7 @@ import net.sf.jasperreports.engine.JRPropertiesUtil;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.osgi.util.NLS;
@@ -342,5 +343,19 @@ public class JaspersoftStudioPlugin extends AbstractJRUIPlugin {
 		PrintStream pstream = new PrintStream(consoleStream);
 		System.setOut(pstream);
 		System.setErr(pstream);
+	}
+	
+	/**
+	 * Check if the running JSS is a RCP or plugin version. This is done looking for the plugins com.jaspersoft.studio.rcp
+	 * or com.jaspersoft.studio.pro.rcp that are available only on the RCP version
+	 * 
+	 * @return true if the current running JSS is an RCP version, false otherwise
+	 */
+	public static boolean isRCP() {
+		boolean isRCP = Platform.getBundle("com.jaspersoft.studio.rcp") != null; //$NON-NLS-1$
+		if (isRCP)
+			return true;
+		// check if it can be a pro version
+		return Platform.getBundle("com.jaspersoft.studio.pro.rcp") != null; //$NON-NLS-1$
 	}
 }

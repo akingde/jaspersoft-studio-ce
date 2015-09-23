@@ -536,20 +536,6 @@ public class UsageManager {
 	}
 
 	/**
-	 * Check if the running JSS is a RCP or plugin version. This is done looking for the plugins com.jaspersoft.studio.rcp
-	 * or com.jaspersoft.studio.pro.rcp that are available only on the RCP version
-	 * 
-	 * @return true if the current running JSS is an RCP version, false otherwise
-	 */
-	protected boolean isRCP() {
-		boolean isRCP = Platform.getBundle("com.jaspersoft.studio.rcp") != null; //$NON-NLS-1$
-		if (isRCP)
-			return true;
-		// check if it can be a pro version
-		return Platform.getBundle("com.jaspersoft.studio.pro.rcp") != null; //$NON-NLS-1$
-	}
-
-	/**
 	 * Check if the running JSS is a community or pro version. This is done looking for the plugin
 	 * com.jaspersoft.studio.pro.doc
 	 * 
@@ -757,7 +743,7 @@ public class UsageManager {
 		urlBuilder.append("&new=");//$NON-NLS-1$
 		urlBuilder.append(newInstallation);
 		urlBuilder.append("&isRCP=");//$NON-NLS-1$
-		boolean isRCP = isRCP();
+		boolean isRCP = JaspersoftStudioPlugin.isRCP();
 		urlBuilder.append(String.valueOf(isRCP));
 		// if it is the plugin version send also the eclipse version
 		if (!isRCP) {
