@@ -171,6 +171,21 @@ public class ExpressionUtil {
 		}
 	}
 
+	public static ExpressionInterpreter getCachedInterpreter(JRDesignDataset ds, JasperDesign jd,
+			JasperReportsConfiguration jConfig) {
+		ExpressionInterpreter interpreter = datasetsIntepreters.get(ds);
+		if (interpreter == null) {
+			if (jd != null) {
+				interpreter = new ExpressionInterpreter(ds, jd, jConfig);
+				datasetsIntepreters.put(ds, interpreter);
+				// The dataset was added to the cache, check if it has the listener and add them where are needed
+				setDatasetListners(ds);
+				setDesignListener(jd, jConfig);
+			}
+		}
+		return interpreter;
+	}
+
 	/**
 	 * This method evaluate the expression and convert the result into a string, can return null
 	 * 
@@ -331,18 +346,21 @@ public class ExpressionUtil {
 	public static final JRDesignExpression getEmptyStringExpression() {
 		return new JRDesignExpression("\"\"");
 	}
-	
+
 	/**
-	 * Compare two expressions and check if the text inside them is the same
-	 * or if they are both null
+	 * Compare two expressions and check if the text inside them is the same or if they are both null
 	 * 
-	 * @param exp1 the first expression, can be null
-	 * @param exp2 the second expression, can be null
+	 * @param exp1
+	 *          the first expression, can be null
+	 * @param exp2
+	 *          the second expression, can be null
 	 * @return true if the content of the expressions is the same, false otherwise
 	 */
-	public static boolean ExpressionEquals(JRExpression exp1, JRExpression exp2){
-		if (exp1 == null) return exp2 == null;
-		else if (exp2 == null) return false;
+	public static boolean ExpressionEquals(JRExpression exp1, JRExpression exp2) {
+		if (exp1 == null)
+			return exp2 == null;
+		else if (exp2 == null)
+			return false;
 		else {
 			String text1 = exp1.getText();
 			String text2 = exp2.getText();

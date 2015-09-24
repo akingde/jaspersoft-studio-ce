@@ -26,7 +26,9 @@ import net.sf.jasperreports.components.map.StandardItemProperty;
 import net.sf.jasperreports.components.map.StandardMapComponent;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.BasicMapInfoData;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
@@ -43,9 +45,12 @@ import com.jaspersoft.studio.components.map.model.MMap;
 import com.jaspersoft.studio.model.util.ItemPropertyUtil;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.utils.ExpressionInterpreter;
+import com.jaspersoft.studio.utils.ExpressionUtil;
+import com.jaspersoft.studio.utils.ModelUtils;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.widgets.map.core.LatLng;
 import com.jaspersoft.studio.widgets.map.core.MapType;
-import com.jaspersoft.studio.widgets.map.ui.MarkersPickupDialog;
 import com.jaspersoft.studio.widgets.map.ui.PathPickupDialog;
 
 /**
@@ -74,6 +79,9 @@ public class MapPathAndStyleSection extends AbstractSection {
 			@Override
 			public void linkActivated(HyperlinkEvent e) {
 				MMap mmap = (MMap) getElement();
+				JasperDesign jd = mmap.getJasperDesign();
+				JasperReportsConfiguration jConf = mmap
+						.getJasperConfiguration();
 				PathPickupDialog d = new PathPickupDialog(UIUtils.getShell()) {
 					@Override
 					protected void configureShell(Shell newShell) {
@@ -102,6 +110,18 @@ public class MapPathAndStyleSection extends AbstractSection {
 					for (ItemData id : oldMarkers) {
 						id = (ItemData) id.clone();
 						newMarkers.add(id);
+
+						JRDesignDataset dataset = null;
+						if (id != null && id.getDataset() != null)
+							dataset = ModelUtils.getDesignDatasetForDatasetRun(
+									jd, id.getDataset().getDatasetRun());
+						if (dataset == null)
+							dataset = ModelUtils.getDataset(mmap);
+						if (dataset == null)
+							dataset = (JRDesignDataset) jd.getMainDataset();
+
+						ExpressionInterpreter expIntr = ExpressionUtil
+								.getCachedInterpreter(dataset, jd, jConf);
 						for (Item it : id.getItems()) {
 							StandardItemProperty ip = (StandardItemProperty) ItemPropertyUtil.getProperty(
 									it.getProperties(),
@@ -109,7 +129,7 @@ public class MapPathAndStyleSection extends AbstractSection {
 							if (ip == null)
 								continue;
 							Double lat = ItemPropertyUtil
-									.getItemPropertyDouble(ip, null);
+									.getItemPropertyDouble(ip, expIntr);
 							if (lat == null)
 								continue;
 
@@ -119,7 +139,7 @@ public class MapPathAndStyleSection extends AbstractSection {
 							if (ip == null)
 								continue;
 							Double lon = ItemPropertyUtil
-									.getItemPropertyDouble(ip, null);
+									.getItemPropertyDouble(ip, expIntr);
 							if (lon == null)
 								continue;
 							LatLng m = new LatLng(lat, lon);

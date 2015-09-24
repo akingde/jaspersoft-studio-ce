@@ -141,21 +141,21 @@ public class MarkerPage extends WizardPage {
 				// if (mapInfo.getZoom() != 0) {
 				// staticMarkersDialog.setZoom(mapInfo.getZoom());
 				// }
-				if (staticMarkersDialog.open() == Window.OK) {
-					List<LatLng> markersList = staticMarkersDialog
-							.getMarkersList();
-					for (LatLng m : markersList) {
-						StandardItem newMarker = new StandardItem();
-						newMarker
-								.addItemProperty(new StandardItemProperty(
-										"latitude", null, new JRDesignExpression(m.getLat().floatValue() + "f"))); //$NON-NLS-1$ //$NON-NLS-2$
-						newMarker
-								.addItemProperty(new StandardItemProperty(
-										"longitude", null, new JRDesignExpression(m.getLng().floatValue() + "f"))); //$NON-NLS-1$ //$NON-NLS-2$
-						value.getMarkers().add(newMarker);
-					}
-					tableViewer.setInput(value.getMarkers());
-				}
+//				if (staticMarkersDialog.open() == Window.OK) {
+//					List<LatLng> markersList = staticMarkersDialog
+//							.getMarkersList();
+//					for (LatLng m : markersList) {
+//						StandardItem newMarker = new StandardItem();
+//						newMarker
+//								.addItemProperty(new StandardItemProperty(
+//										"latitude", null, new JRDesignExpression(m.getLat().floatValue() + "f"))); //$NON-NLS-1$ //$NON-NLS-2$
+//						newMarker
+//								.addItemProperty(new StandardItemProperty(
+//										"longitude", null, new JRDesignExpression(m.getLng().floatValue() + "f"))); //$NON-NLS-1$ //$NON-NLS-2$
+//						value.getMarkers().add(newMarker);
+//					}
+//					tableViewer.setInput(value.getMarkers());
+//				}
 			}
 		});
 

@@ -47,7 +47,7 @@ import com.jaspersoft.studio.widgets.map.support.BaseJavaMapSupport;
  */
 public class MarkersPickupDialog extends BasicInfoMapDialog {
 
-	private java.util.List<LatLng> markers;
+	private java.util.List<Marker> markers;
 	private List markersWidget;
 
 	/**
@@ -57,7 +57,7 @@ public class MarkersPickupDialog extends BasicInfoMapDialog {
 	 */
 	public MarkersPickupDialog(Shell parentShell) {
 		super(parentShell);
-		this.markers = new ArrayList<LatLng>();
+		this.markers = new ArrayList<Marker>();
 	}
 
 	@Override
@@ -165,7 +165,7 @@ public class MarkersPickupDialog extends BasicInfoMapDialog {
 	 * 
 	 * @return list of markers
 	 */
-	public java.util.List<LatLng> getMarkersList() {
+	public java.util.List<Marker> getMarkersList() {
 		return markers;
 	}
 
@@ -180,10 +180,12 @@ public class MarkersPickupDialog extends BasicInfoMapDialog {
 			super.initConfigurationFunction(arguments);
 			if (markers.isEmpty())
 				return null;
-			for (LatLng m : markers) {
-				map.getJavascriptMapSupport().addNewMarker(new Marker(m));
-				markersWidget.add(String.format("%.6f", m.getLat()) + " : "
-						+ String.format("%.6f", m.getLng()));
+			for (Marker m : markers) {
+				map.getJavascriptMapSupport().addNewMarker(m);
+				markersWidget.add(String.format("%.6f", m.getPosition()
+						.getLat())
+						+ " : "
+						+ String.format("%.6f", m.getPosition().getLng()));
 			}
 		} finally {
 			initMarkers = false;
@@ -267,7 +269,7 @@ public class MarkersPickupDialog extends BasicInfoMapDialog {
 			LatLng position = newMarker.getPosition();
 			markersWidget.add(String.format("%.6f", position.getLat()) + " : "
 					+ String.format("%.6f", position.getLng()));
-			markers.add(position);
+			markers.add(newMarker);
 		}
 
 	}

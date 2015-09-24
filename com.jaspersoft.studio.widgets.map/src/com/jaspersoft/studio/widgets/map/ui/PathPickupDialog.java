@@ -35,20 +35,20 @@ import com.jaspersoft.studio.widgets.map.browserfunctions.UpdateMarkerPosition;
 import com.jaspersoft.studio.widgets.map.core.LatLng;
 import com.jaspersoft.studio.widgets.map.core.MapType;
 import com.jaspersoft.studio.widgets.map.core.Marker;
-import com.jaspersoft.studio.widgets.map.messages.Messages;
 import com.jaspersoft.studio.widgets.map.support.BaseJavaMapSupport;
 
 /**
- * This dialog allows to place a list of markers in the map. Markers can be
- * moved/removed and their position is update accordingly.
+ * This dialog allows to place a list of points in the map. Points can be
+ * moved/removed and their position is update accordingly. A polyline (path) is
+ * drawed from this points
  * 
- * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
+ * @author Veaceslav Chicu (schicu@users.sourceforge.net)
  * 
  */
 public class PathPickupDialog extends BasicInfoMapDialog {
 
-	private java.util.List<LatLng> markers;
-	private List markersWidget;
+	private java.util.List<LatLng> points;
+	private List pointsWidget;
 
 	/**
 	 * Create the dialog.
@@ -57,7 +57,7 @@ public class PathPickupDialog extends BasicInfoMapDialog {
 	 */
 	public PathPickupDialog(Shell parentShell) {
 		super(parentShell);
-		this.markers = new ArrayList<LatLng>();
+		this.points = new ArrayList<LatLng>();
 	}
 
 	@Override
@@ -79,9 +79,9 @@ public class PathPickupDialog extends BasicInfoMapDialog {
 		markersLbl.setText("Points");
 		markersLbl.setLayoutData(new GridData(SWT.TOP, SWT.LEFT, true, false));
 
-		markersWidget = new List(panelCmp, SWT.BORDER | SWT.V_SCROLL
+		pointsWidget = new List(panelCmp, SWT.BORDER | SWT.V_SCROLL
 				| SWT.H_SCROLL);
-		markersWidget
+		pointsWidget
 				.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		Button delMarkersBtn = new Button(panelCmp, SWT.PUSH);
 		delMarkersBtn.setLayoutData(new GridData(SWT.RIGHT, SWT.BOTTOM, false,
@@ -92,18 +92,18 @@ public class PathPickupDialog extends BasicInfoMapDialog {
 				map.getJavascriptMapSupport().clearMarkers();
 			}
 		});
-		markersWidget.addSelectionListener(new SelectionAdapter() {
+		pointsWidget.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				int markerIdx = markersWidget.getSelectionIndex();
+				int markerIdx = pointsWidget.getSelectionIndex();
 				map.getJavascriptMapSupport().highlightMarker(markerIdx);
 			}
 		});
-		markersWidget.addKeyListener(new KeyAdapter() {
+		pointsWidget.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if (e.keyCode == SWT.DEL) {
-					int markerIdx = markersWidget.getSelectionIndex();
+					int markerIdx = pointsWidget.getSelectionIndex();
 					RemoveMarker.removeMarker(markerIdx,
 							map.getJavaMapSupport());
 					map.getJavascriptMapSupport().evaluateJavascript(
@@ -166,7 +166,7 @@ public class PathPickupDialog extends BasicInfoMapDialog {
 	 * @return list of markers
 	 */
 	public java.util.List<LatLng> getMarkersList() {
-		return markers;
+		return points;
 	}
 
 	private boolean initMarkers = false;
@@ -178,18 +178,37 @@ public class PathPickupDialog extends BasicInfoMapDialog {
 			map.getJavascriptMapSupport().evaluateJavascript(
 					"MENU_KIND=_MENU_COMPLETE");
 			super.initConfigurationFunction(arguments);
-			if (markers.isEmpty())
-				return null;
-			for (LatLng m : markers) {
-				map.getJavascriptMapSupport().addNewMarker(new Marker(m));
-				markersWidget.add(String.format("%.6f", m.getLat()) + " : "
-						+ String.format("%.6f", m.getLng()));
-			}
+			drawPolyline();
 		} finally {
 			initMarkers = false;
 		}
 		return null;
 
+	}
+
+	private void drawPolyline() {
+		if (points.isEmpty())
+			return;
+		String snippet = "var pathCoordinates = [\n";
+		for (int i = 0; i < points.size(); i++) {
+			LatLng p = points.get(i);
+			snippet += "{lat:" + p.getLat() + ", lng: " + p.getLng() + "}";
+			if (i < points.size() - 1)
+				snippet += ",";
+			snippet += "\n";
+			pointsWidget.add(String.format("%.6f", p.getLat()) + " : "
+					+ String.format("%.6f", p.getLng()));
+		}
+		snippet += "];\nvar mypath = new google.maps.Polyline({\n";
+		snippet += "path: pathCoordinates,\n";
+		snippet += "geodesic: true,\n";
+		snippet += "strokeColor: '#FF0000',\n";
+		snippet += "strokeOpacity: 1.0,\n";
+		snippet += "strokeWeight: 2\n";
+		snippet += " });\n";
+		snippet += "mypath.setMap(myMap.map)";
+		System.out.println(snippet);
+		map.getJavascriptMapSupport().evaluateJavascript(snippet);
 	}
 
 	@Override
@@ -214,8 +233,9 @@ public class PathPickupDialog extends BasicInfoMapDialog {
 			if (initMarkers)
 				return;
 			super.removeMarker(markerIndex);
-			markersWidget.remove(markerIndex);
-			markers.remove(markerIndex);
+			pointsWidget.remove(markerIndex);
+			points.remove(markerIndex);
+			drawPolyline();
 		}
 
 		@Override
@@ -223,7 +243,7 @@ public class PathPickupDialog extends BasicInfoMapDialog {
 			if (initMarkers)
 				return;
 			super.highlightMarker(markerIdx);
-			markersWidget.setSelection(markerIdx);
+			pointsWidget.setSelection(markerIdx);
 		}
 
 		@Override
@@ -231,9 +251,10 @@ public class PathPickupDialog extends BasicInfoMapDialog {
 			if (initMarkers)
 				return;
 			super.updateMarkerPosition(markerIdx, newPosition);
-			markersWidget.setItem(markerIdx,
+			pointsWidget.setItem(markerIdx,
 					String.format("%.6f", newPosition.getLat()) + " : "
 							+ String.format("%.6f", newPosition.getLng()));
+			drawPolyline();
 		}
 
 		@Override
@@ -241,8 +262,9 @@ public class PathPickupDialog extends BasicInfoMapDialog {
 			if (initMarkers)
 				return;
 			super.clearMarkers();
-			markersWidget.removeAll();
-			markers.clear();
+			pointsWidget.removeAll();
+			points.clear();
+			drawPolyline();
 		}
 
 		@Override
@@ -252,8 +274,9 @@ public class PathPickupDialog extends BasicInfoMapDialog {
 			int mIdx = getMarkers().indexOf(oldMarker);
 			if (mIdx > 0) {
 				getMarkers().remove(mIdx);
-				markersWidget.remove(mIdx);
-				markers.remove(mIdx);
+				pointsWidget.remove(mIdx);
+				points.remove(mIdx);
+				drawPolyline();
 			} else {
 				// FIXME do nothing or raise error (at least log)?!
 			}
@@ -265,9 +288,10 @@ public class PathPickupDialog extends BasicInfoMapDialog {
 				return;
 			super.addNewMarker(newMarker);
 			LatLng position = newMarker.getPosition();
-			markersWidget.add(String.format("%.6f", position.getLat()) + " : "
+			pointsWidget.add(String.format("%.6f", position.getLat()) + " : "
 					+ String.format("%.6f", position.getLng()));
-			markers.add(position);
+			points.add(position);
+			drawPolyline();
 		}
 
 	}

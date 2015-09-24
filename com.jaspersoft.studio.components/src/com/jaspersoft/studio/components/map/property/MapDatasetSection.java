@@ -26,7 +26,9 @@ import net.sf.jasperreports.components.map.StandardItemProperty;
 import net.sf.jasperreports.components.map.StandardMapComponent;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.BasicMapInfoData;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
@@ -42,8 +44,13 @@ import com.jaspersoft.studio.components.map.model.MMap;
 import com.jaspersoft.studio.model.util.ItemPropertyUtil;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.utils.ExpressionInterpreter;
+import com.jaspersoft.studio.utils.ExpressionUtil;
+import com.jaspersoft.studio.utils.ModelUtils;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.widgets.map.core.LatLng;
 import com.jaspersoft.studio.widgets.map.core.MapType;
+import com.jaspersoft.studio.widgets.map.core.Marker;
 import com.jaspersoft.studio.widgets.map.ui.MarkersPickupDialog;
 
 public class MapDatasetSection extends AbstractSection {
@@ -63,6 +70,9 @@ public class MapDatasetSection extends AbstractSection {
 			@Override
 			public void linkActivated(HyperlinkEvent e) {
 				MMap mmap = (MMap) getElement();
+				JasperDesign jd = mmap.getJasperDesign();
+				JasperReportsConfiguration jConf = mmap
+						.getJasperConfiguration();
 				MarkersPickupDialog d = new MarkersPickupDialog(UIUtils
 						.getShell()) {
 					@Override
@@ -84,7 +94,7 @@ public class MapDatasetSection extends AbstractSection {
 				if (mapInfo.getZoom() != 0)
 					d.setZoomLevel(mapInfo.getZoom());
 
-				Map<LatLng, StandardItem> map = new HashMap<LatLng, StandardItem>();
+				Map<Marker, StandardItem> map = new HashMap<Marker, StandardItem>();
 				List<ItemData> oldMarkers = (List<ItemData>) mmap
 						.getPropertyValue(StandardMapComponent.PROPERTY_MARKER_DATA_LIST);
 				List<ItemData> newMarkers = new ArrayList<ItemData>();
@@ -92,6 +102,19 @@ public class MapDatasetSection extends AbstractSection {
 					for (ItemData id : oldMarkers) {
 						id = (ItemData) id.clone();
 						newMarkers.add(id);
+
+						JRDesignDataset dataset = null;
+						if (id != null && id.getDataset() != null)
+							dataset = ModelUtils.getDesignDatasetForDatasetRun(
+									jd, id.getDataset().getDatasetRun());
+						if (dataset == null)
+							dataset = ModelUtils.getDataset(mmap);
+						if (dataset == null)
+							dataset = (JRDesignDataset) jd.getMainDataset();
+
+						ExpressionInterpreter expIntr = ExpressionUtil
+								.getCachedInterpreter(dataset, jd, jConf);
+
 						for (Item it : id.getItems()) {
 							StandardItemProperty ip = (StandardItemProperty) ItemPropertyUtil.getProperty(
 									it.getProperties(),
@@ -99,7 +122,7 @@ public class MapDatasetSection extends AbstractSection {
 							if (ip == null)
 								continue;
 							Double lat = ItemPropertyUtil
-									.getItemPropertyDouble(ip, null);
+									.getItemPropertyDouble(ip, expIntr);
 							if (lat == null)
 								continue;
 
@@ -109,19 +132,78 @@ public class MapDatasetSection extends AbstractSection {
 							if (ip == null)
 								continue;
 							Double lon = ItemPropertyUtil
-									.getItemPropertyDouble(ip, null);
+									.getItemPropertyDouble(ip, expIntr);
 							if (lon == null)
 								continue;
-							LatLng m = new LatLng(lat, lon);
+							Marker m = new Marker(new LatLng(lat, lon));
+							ip = (StandardItemProperty) ItemPropertyUtil.getProperty(
+									it.getProperties(),
+									MapComponent.ITEM_PROPERTY_MARKER_flat);
+							if (ip != null)
+								m.setFlat(ItemPropertyUtil
+										.getItemPropertyBoolean(ip, expIntr));
+							ip = (StandardItemProperty) ItemPropertyUtil.getProperty(
+									it.getProperties(),
+									MapComponent.ITEM_PROPERTY_clickable);
+							if (ip != null)
+								m.setClickable(ItemPropertyUtil
+										.getItemPropertyBoolean(ip, expIntr));
+							ip = (StandardItemProperty) ItemPropertyUtil.getProperty(
+									it.getProperties(),
+									MapComponent.ITEM_PROPERTY_draggable);
+							if (ip != null)
+								m.setDraggable(ItemPropertyUtil
+										.getItemPropertyBoolean(ip, expIntr));
+							ip = (StandardItemProperty) ItemPropertyUtil
+									.getProperty(it.getProperties(),
+											MapComponent.ITEM_PROPERTY_visible);
+							if (ip != null)
+								m.setVisible(ItemPropertyUtil
+										.getItemPropertyBoolean(ip, expIntr));
+							ip = (StandardItemProperty) ItemPropertyUtil.getProperty(
+									it.getProperties(),
+									MapComponent.ITEM_PROPERTY_MARKER_optimized);
+							if (ip != null)
+								m.getOptions().setOptimized(
+										ItemPropertyUtil
+												.getItemPropertyBoolean(ip,
+														expIntr));
+							ip = (StandardItemProperty) ItemPropertyUtil.getProperty(
+									it.getProperties(),
+									MapComponent.ITEM_PROPERTY_MARKER_raiseOnDrag);
+							if (ip != null)
+								m.getOptions().setRaiseOnDrag(
+										ItemPropertyUtil
+												.getItemPropertyBoolean(ip,
+														expIntr));
+							ip = (StandardItemProperty) ItemPropertyUtil.getProperty(
+									it.getProperties(),
+									MapComponent.ITEM_PROPERTY_MARKER_cursor);
+							if (ip != null)
+								m.setCursor(ItemPropertyUtil
+										.getItemPropertyString(ip, expIntr));
+							ip = (StandardItemProperty) ItemPropertyUtil.getProperty(
+									it.getProperties(),
+									MapComponent.ITEM_PROPERTY_MARKER_title);
+							if (ip != null)
+								m.setTitle(ItemPropertyUtil
+										.getItemPropertyString(ip, expIntr));
+							ip = (StandardItemProperty) ItemPropertyUtil.getProperty(
+									it.getProperties(),
+									MapComponent.ITEM_PROPERTY_MARKER_zIndex);
+							if (ip != null)
+								m.setZIndex(ItemPropertyUtil
+										.getItemPropertyInteger(ip, expIntr));
+
 							map.put(m, (StandardItem) it);
 							d.getMarkersList().add(m);
 						}
 					}
 				}
 				if (d.open() == Window.OK) {
-					List<LatLng> markersList = d.getMarkersList();
+					List<Marker> markersList = d.getMarkersList();
 					StandardItemData sid = null;
-					for (LatLng m : markersList) {
+					for (Marker m : markersList) {
 						StandardItem si = map.get(m);
 						if (si != null) {
 							StandardItemProperty ip = (StandardItemProperty) ItemPropertyUtil.getProperty(
@@ -129,17 +211,17 @@ public class MapDatasetSection extends AbstractSection {
 									MapComponent.ITEM_PROPERTY_latitude);
 							if (ip.getValueExpression() != null)
 								ip.setValueExpression(new JRDesignExpression(m
-										.getLat().toString()));
+										.getPosition().getLat().toString()));
 							else
-								ip.setValue(m.getLat().toString());
+								ip.setValue(m.getPosition().getLat().toString());
 							ip = (StandardItemProperty) ItemPropertyUtil.getProperty(
 									si.getProperties(),
 									MapComponent.ITEM_PROPERTY_longitude);
 							if (ip.getValueExpression() != null)
 								ip.setValueExpression(new JRDesignExpression(m
-										.getLng().toString()));
+										.getPosition().getLng().toString()));
 							else
-								ip.setValue(m.getLng().toString());
+								ip.setValue(m.getPosition().getLng().toString());
 						} else {
 							// will add it to the last itemdata, so we append
 							// markers
@@ -154,10 +236,14 @@ public class MapDatasetSection extends AbstractSection {
 							si = new StandardItem();
 							si.addItemProperty(new StandardItemProperty(
 									MapComponent.ITEM_PROPERTY_latitude, m
-											.getLat().floatValue() + "f", null)); //$NON-NLS-1$ //$NON-NLS-2$
+											.getPosition().getLat()
+											.floatValue()
+											+ "f", null)); //$NON-NLS-1$ //$NON-NLS-2$
 							si.addItemProperty(new StandardItemProperty(
 									MapComponent.ITEM_PROPERTY_longitude, m
-											.getLng().floatValue() + "f", null)); //$NON-NLS-1$ //$NON-NLS-2$
+											.getPosition().getLng()
+											.floatValue()
+											+ "f", null)); //$NON-NLS-1$ //$NON-NLS-2$
 							sid.addItem(si);
 						}
 					}

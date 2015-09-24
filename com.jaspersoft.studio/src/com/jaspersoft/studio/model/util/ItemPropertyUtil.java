@@ -55,20 +55,31 @@ public class ItemPropertyUtil {
 				((ItemPropertyDescriptor) pd).setElementDescriptions(elementDescriptions);
 	}
 
-	public static Object getItemPropertyValue(StandardItemProperty ip,
-			ExpressionInterpreter expIntr) {
+	public static Object getItemPropertyValue(StandardItemProperty ip, ExpressionInterpreter expIntr) {
 		if (ip == null)
 			return null;
 		if (ip.getValueExpression() != null)
-			return expIntr.interpretExpression(Misc.nvl(ip.getValueExpression()
-					.getText()));
+			return expIntr.interpretExpression(Misc.nvl(ip.getValueExpression().getText()));
 		if (ip.getValue() != null)
 			return ip.getValue();
 		return null;
 	}
 
-	public static String getItemPropertyString(StandardItemProperty ip,
-			ExpressionInterpreter expIntr) {
+	public static Boolean getItemPropertyBoolean(StandardItemProperty ip, ExpressionInterpreter expIntr) {
+		Object obj = getItemPropertyValue(ip, expIntr);
+		if (obj == null)
+			return null;
+		if (obj instanceof String && !Misc.isNullOrEmpty((String) obj))
+			try {
+				obj = Boolean.parseBoolean((String) obj);
+			} catch (NumberFormatException e) {
+			}
+		else if (obj instanceof Boolean)
+			return (Boolean) obj;
+		return null;
+	}
+
+	public static String getItemPropertyString(StandardItemProperty ip, ExpressionInterpreter expIntr) {
 		Object obj = getItemPropertyValue(ip, expIntr);
 		if (obj == null)
 			return null;
@@ -77,8 +88,7 @@ public class ItemPropertyUtil {
 		return null;
 	}
 
-	public static Double getItemPropertyDouble(StandardItemProperty ip,
-			ExpressionInterpreter expIntr) {
+	public static Double getItemPropertyDouble(StandardItemProperty ip, ExpressionInterpreter expIntr) {
 		Object obj = getItemPropertyValue(ip, expIntr);
 		if (obj == null)
 			return null;
@@ -92,8 +102,7 @@ public class ItemPropertyUtil {
 		return null;
 	}
 
-	public static Integer getItemPropertyInteger(StandardItemProperty ip,
-			ExpressionInterpreter expIntr) {
+	public static Integer getItemPropertyInteger(StandardItemProperty ip, ExpressionInterpreter expIntr) {
 		Object obj = getItemPropertyValue(ip, expIntr);
 		if (obj == null)
 			return null;
