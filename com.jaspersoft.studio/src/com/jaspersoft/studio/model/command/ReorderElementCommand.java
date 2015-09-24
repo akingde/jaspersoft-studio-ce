@@ -19,6 +19,7 @@ import net.sf.jasperreports.engine.design.JRDesignFrame;
 
 import org.eclipse.gef.commands.Command;
 
+import com.jaspersoft.studio.editor.layout.LayoutManager;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MGraphicElement;
@@ -35,6 +36,16 @@ public class ReorderElementCommand extends Command {
 	
 	/** The jr group. */
 	private JRElementGroup jrGroup;
+	
+	/**
+	 * The parent of the moved element
+	 */
+	private ANode parent;
+	
+	/**
+	 * The command used to relayout the children when they are moved
+	 */
+	private Command layoutCommand = null;
 
 	/**
 	 * Instantiates a new reorder element command.
@@ -51,6 +62,7 @@ public class ReorderElementCommand extends Command {
 		this.newIndex = Math.max(0, newIndex);
 		this.jrElement = (JRDesignElement) child.getValue();
 		this.jrGroup = jrElement.getElementGroup();
+		this.parent = parent;
 	}
 
 	/* (non-Javadoc)
@@ -73,6 +85,10 @@ public class ReorderElementCommand extends Command {
 			else
 				((JRDesignFrame) jrGroup).addElement(newIndex, jrElement);
 		}
+		layoutCommand = LayoutManager.creteRelayoutCommand(parent);
+		if (layoutCommand != null){
+			layoutCommand.execute();
+		}
 	}
 
 	/* (non-Javadoc)
@@ -92,6 +108,9 @@ public class ReorderElementCommand extends Command {
 				((JRDesignFrame) jrGroup).addElement(jrElement);
 			else
 				((JRDesignFrame) jrGroup).addElement(oldIndex, jrElement);
+		}
+		if (layoutCommand != null){
+			layoutCommand.undo();
 		}
 	}
 
