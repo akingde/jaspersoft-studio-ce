@@ -19,11 +19,8 @@ import net.sf.jasperreports.engine.JRPropertiesHolder;
 
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.property.section.AbstractSection;
 
 /**
  * Interface to implement to provide a layout strategy inside JSS
@@ -67,23 +64,13 @@ public interface ILayout {
 	public abstract Map<JRElement, Rectangle> layout(JRElement[] elements, Dimension c);
 	
 	/**
-	 * If the layout provide graphical controls to configure the layout properties of an element,
-	 * this is called to set the properties of the element inside the control. The implementation of 
-	 * this will be called when a children of an element that is using this implementation as layout is
-	 * selected
+	 * Return the object used to configure visually the layout properties.
+	 * This object shouldn't be cached but a new one should be build when it is requested.
 	 * 
-	 * @param selectedElement the currently selected element, it is not null
-	 * @param section the currently selected section, it is not null
+	 * @return the layout ui provider, can be null if showAdditionalControls return false, otherwise
+	 * it should return something
 	 */
-	public void setData(ANode selectedElement, AbstractSection section);
-	
-	/**
-	 * Create the controls provided to configure the child element of the container that is using
-	 * as layout the implementation of this class
-	 * 
-	 * @param parent composite where to create the controls, it has a {@link GridLayout} with a single column
-	 */
-	public void createControls(Composite parent);
+	public ILayoutUIProvider getControlsProvider();
 	
 	/**
 	 * The implementation of this will be called when a children of an element that is using this implementation as layout is

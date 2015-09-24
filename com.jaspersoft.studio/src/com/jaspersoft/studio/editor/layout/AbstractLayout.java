@@ -15,10 +15,8 @@ package com.jaspersoft.studio.editor.layout;
 import net.sf.jasperreports.engine.JRPropertiesHolder;
 
 import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.property.section.AbstractSection;
 
 /**
  * Empty class that provide some default implementation to the interface ILayout.
@@ -28,11 +26,8 @@ import com.jaspersoft.studio.property.section.AbstractSection;
 public abstract class AbstractLayout implements ILayout {
 	
 	@Override
-	public void setData(ANode selectedElement, AbstractSection section) {	
-	}
-	
-	@Override
-	public void createControls(Composite parent) {
+	public ILayoutUIProvider getControlsProvider() {
+		return null;
 	}
 	
 	@Override

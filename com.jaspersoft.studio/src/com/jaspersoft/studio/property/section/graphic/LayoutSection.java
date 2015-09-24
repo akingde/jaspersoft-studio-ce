@@ -27,6 +27,7 @@ import org.eclipse.ui.forms.widgets.Section;
 
 import com.jaspersoft.studio.editor.layout.ILayout;
 import com.jaspersoft.studio.editor.layout.FreeLayout;
+import com.jaspersoft.studio.editor.layout.ILayoutUIProvider;
 import com.jaspersoft.studio.editor.layout.LayoutManager;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
@@ -167,14 +168,17 @@ public class LayoutSection extends AbstractSection {
 						//check if its controls where already created, if not create them
 						Composite container = new Composite(layoutConfigurationPanel, SWT.NONE);
 						container.setLayout(getNoSpaceLayout(1));
-						parentLayout.createControls(container);
+						ILayoutUIProvider controlsProvider = parentLayout.getControlsProvider();
+						controlsProvider.createControls(container);
+						container.setData(controlsProvider);
 						configurationMap.put(parentLayout, container);
 					}
 					//the control are for sure created here, move them in the foreground and set their data
 					Composite currentContainer = configurationMap.get(parentLayout);
 					((StackLayout)layoutConfigurationPanel.getLayout()).topControl = currentContainer;
 					setLayoutAreaVisible(true);
-					parentLayout.setData(getElement(), this);
+					ILayoutUIProvider controlsProvider = (ILayoutUIProvider)currentContainer.getData();
+					controlsProvider.setData(getElement(), this);
 					return true;
 				} else {
 					//the layout of the parent doesn't require additional controls, hide the visible one if any
@@ -188,7 +192,7 @@ public class LayoutSection extends AbstractSection {
 	
 	/**
 	 * Show or hide the layout section if there is at least a controls to show (or the combo
-	 * area or addtional controls provided by the parent)
+	 * area or additional controls provided by the parent)
 	 */
 	protected void showSection() {
 		if (section != null){
@@ -237,7 +241,6 @@ public class LayoutSection extends AbstractSection {
 		GridData layoutData = new GridData(GridData.FILL_BOTH);
 		layoutData.exclude = !value;
 		layoutConfigurationPanel.setLayoutData(layoutData);
-		layoutConfigurationPanel.getParent().layout(true, true);
 	}
 	
 	/**
