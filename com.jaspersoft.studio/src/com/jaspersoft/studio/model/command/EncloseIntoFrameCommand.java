@@ -17,6 +17,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignElementGroup;
 import net.sf.jasperreports.engine.design.JRDesignFrame;
@@ -24,10 +25,15 @@ import net.sf.jasperreports.engine.design.JRDesignFrame;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.commands.Command;
 
+import com.jaspersoft.studio.editor.layout.LayoutCommand;
+import com.jaspersoft.studio.editor.layout.LayoutManager;
+import com.jaspersoft.studio.editor.layout.grid.JSSGridBagLayout;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.IGroupElement;
+import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.frame.MFrame;
+import com.jaspersoft.studio.utils.SelectionHelper;
 
 /**
  * 
@@ -127,7 +133,6 @@ public class EncloseIntoFrameCommand extends Command {
 		previousPositions.clear();
 		containerFrame = new JRDesignFrame();
 		Rectangle frameSize = getFrameSize();
-		addChild(parent, containerFrame);
 		//The nodes must be ordered by their position, this because if the command is undone we 
 		//can move the nodes in the same order to have their original position restored. This because
 		//inserting a node into a list dosen't influence the positions of the ones above it.
@@ -140,6 +145,15 @@ public class EncloseIntoFrameCommand extends Command {
 				return index1 - index2;
 			}
 		});
+		//If only a node is selected the position is preserved
+		if (nodeList.size() == 1){
+			MGraphicElement element = (MGraphicElement)nodeList.get(0);
+			int index = getChildIndex(parent, element.getValue());
+			addChild(parent, containerFrame, index);
+		} else {
+			addChild(parent, containerFrame);
+		}
+		
 		//Store the position informations of the ordered node
 		for(APropertyNode node : nodeList){
 			ANode nodeParent = node.getParent();
@@ -158,6 +172,31 @@ public class EncloseIntoFrameCommand extends Command {
 		containerFrame.setY(frameSize.y);
 		containerFrame.setWidth(frameSize.width);
 		containerFrame.setHeight(frameSize.height);
+		
+		//If only a node is selected copy the property of the grid layout, if any
+		if (nodeList.size() == 1){
+			MGraphicElement element = (MGraphicElement)nodeList.get(0);
+			JRPropertiesMap map = (JRPropertiesMap)element.getPropertyValue(MGraphicElement.PROPERTY_MAP);
+			if (map != null){
+				JRPropertiesMap frameMap = containerFrame.getPropertiesMap();
+				if (map.containsProperty(JSSGridBagLayout.PROPERTY_COLSPAN)) frameMap.setProperty(JSSGridBagLayout.PROPERTY_COLSPAN, map.getProperty(JSSGridBagLayout.PROPERTY_COLSPAN));
+				if (map.containsProperty(JSSGridBagLayout.PROPERTY_ROWSPAN)) frameMap.setProperty(JSSGridBagLayout.PROPERTY_ROWSPAN, map.getProperty(JSSGridBagLayout.PROPERTY_ROWSPAN));
+				if (map.containsProperty(JSSGridBagLayout.PROPERTY_WEIGHTX)) frameMap.setProperty(JSSGridBagLayout.PROPERTY_WEIGHTX, map.getProperty(JSSGridBagLayout.PROPERTY_WEIGHTX));
+				if (map.containsProperty(JSSGridBagLayout.PROPERTY_WEIGHTY)) frameMap.setProperty(JSSGridBagLayout.PROPERTY_WEIGHTY, map.getProperty(JSSGridBagLayout.PROPERTY_WEIGHTY));
+				if (map.containsProperty(JSSGridBagLayout.PROPERTY_X)) frameMap.setProperty(JSSGridBagLayout.PROPERTY_X, map.getProperty(JSSGridBagLayout.PROPERTY_X));
+				if (map.containsProperty(JSSGridBagLayout.PROPERTY_Y)) frameMap.setProperty(JSSGridBagLayout.PROPERTY_Y, map.getProperty(JSSGridBagLayout.PROPERTY_Y));
+				if (map.containsProperty(JSSGridBagLayout.PROPERTY_IS_FIXED)) frameMap.setProperty(JSSGridBagLayout.PROPERTY_IS_FIXED, map.getProperty(JSSGridBagLayout.PROPERTY_IS_FIXED));
+			}
+		}
+		
+		//Layout the parent
+		LayoutCommand command = LayoutManager.creteRelayoutCommand(parent);
+		if (command!= null){
+			command.execute();
+		}
+		
+		//select the new frame
+		SelectionHelper.setSelection(containerFrame, false);
 	}
 	
 	@Override
@@ -165,7 +204,13 @@ public class EncloseIntoFrameCommand extends Command {
 		//The nodes are already in the right order, need only to move them
 		containerFrame = new JRDesignFrame();
 		Rectangle frameSize = getFrameSize();
-		addChild(parent, containerFrame);
+		if (nodeList.size() == 1){
+			MGraphicElement element = (MGraphicElement)nodeList.get(0);
+			int index = getChildIndex(parent, element.getValue());
+			addChild(parent, containerFrame, index);
+		} else {
+			addChild(parent, containerFrame);
+		}
 		for(APropertyNode node : nodeList){
 			JRDesignElement movedElement = (JRDesignElement)node.getValue();
 			movedElement.setX(movedElement.getX()-frameSize.x);
@@ -177,6 +222,11 @@ public class EncloseIntoFrameCommand extends Command {
 		containerFrame.setY(frameSize.y);
 		containerFrame.setWidth(frameSize.width);
 		containerFrame.setHeight(frameSize.height);
+		LayoutCommand command = LayoutManager.creteRelayoutCommand(parent);
+		if (command!= null){
+			command.execute();
+		}
+		SelectionHelper.setSelection(containerFrame, false);
 	}
 	
 	@Override
@@ -189,6 +239,10 @@ public class EncloseIntoFrameCommand extends Command {
 		}
 		removeChild(parent, containerFrame);
 		containerFrame = null;
+		LayoutCommand command = LayoutManager.creteRelayoutCommand(parent);
+		if (command!= null){
+			command.execute();
+		}
 	}
 	
 	/**
@@ -228,6 +282,21 @@ public class EncloseIntoFrameCommand extends Command {
 		}
 	}
 	
+	/**
+	 * Return the index of a child inside its parent
+	 * 
+	 * @param parent the node of the parent
+	 * @param child the child
+	 * @return the index of child between the parent's children, or -1 if it can't be found
+	 */
+	private int getChildIndex(ANode parent, JRDesignElement child){
+		if (parent instanceof MFrame){
+			return ((JRDesignFrame)parent.getValue()).getChildren().indexOf(child);
+		} else if (parent instanceof IGroupElement){
+			return ((JRDesignElementGroup)((IGroupElement)parent).getJRElementGroup()).getChildren().indexOf(child);
+		}
+		return -1;
+	}
 	
 	/**
 	 * Add a child to a jr object into a specific index. The parent must be
