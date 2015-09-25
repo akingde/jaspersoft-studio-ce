@@ -288,6 +288,12 @@ public class Messages extends NLS {
 	public static String CompileAction_noJRInstalled;
 	public static String CompileHandler_compilingReport;
 	public static String CompileHandler_compilingStart;
+	public static String CompositeElementImportWizardPage_errorNameUsed;
+	public static String CompositeElementImportWizardPage_pageDescription;
+	public static String CompositeElementImportWizardPage_pageTitle;
+	public static String CompositeElementsExportWizardPage_pageDescription;
+	public static String CompositeElementsExportWizardPage_pageTitle;
+	public static String CompositeElementsExportWizardPage_selectOneElementError;
 	public static String ConfigurationManager_notAccessibleMessage;
 	public static String ConfigurationManager_notAccessibleTitle;
 	public static String CongratulationsWizardPage_label1;
@@ -703,6 +709,9 @@ public class Messages extends NLS {
 	public static String ExportAsXmlWithImagesAction_filtername1;
 	public static String ExportAsXmlWithImagesAction_title;
 	public static String ExportAsXmlWithImagesAction_tooltip;
+	public static String ExportCompositeElementAction_fileExistDescription;
+	public static String ExportCompositeElementAction_actionName;
+	public static String ExportCompositeElementAction_fileExistTitle;
 	public static String ExportDataAdapterAction_exportDescription;
 	public static String ExportDataAdapterAction_exportName;
 	public static String ExportDataAdapterAction_exportTooltip;
@@ -877,6 +886,7 @@ public class Messages extends NLS {
 	public static String ImageCreationDialog_Title;
 	public static String ImageInput_nullimage;
 	public static String ImageInput_selectimage;
+	public static String ImportCompositeElementAction_actionName;
 	public static String ImportDAPage_1;
 	public static String ImportDAPage_2;
 	public static String ImportDAPage_3;

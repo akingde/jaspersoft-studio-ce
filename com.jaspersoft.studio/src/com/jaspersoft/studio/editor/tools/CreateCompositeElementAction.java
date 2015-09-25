@@ -22,6 +22,7 @@ import org.eclipse.ui.IWorkbenchPart;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.action.ACachedSelectionAction;
+import com.jaspersoft.studio.editor.tools.wizards.CompositeElementDefinitionWizard;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IDatasetContainer;

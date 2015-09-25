@@ -10,10 +10,11 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
-package com.jaspersoft.studio.editor.tools;
+package com.jaspersoft.studio.editor.tools.wizards;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.List;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
@@ -23,54 +24,53 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.editor.tools.CompositeElementManager;
 import com.jaspersoft.studio.utils.ImageUtils;
 
 /**
- * Wizard used to edit the metadata of an existing composite element
+ * Wizard used to create a new composite element and provide the metadata about it
  * 
  * @author Orlandin Marco
  *
  */
-public class CompositeElementEditWizard extends Wizard {
+public class CompositeElementDefinitionWizard extends Wizard {
 
-	/**
-	 * The composite element to edit
-	 */
-	private MCompositeElement elementToEdit;
-	
 	/**
 	 * The page where the informations will be provided
 	 */
-	private CompositeElementEditWizardPage page0;
+	private CompositeElementDefinitionWizardPage page0;
+	
+	/**
+	 * The selected elements that will compose the composite element
+	 */
+	private List<Object> elementContents;
 	
 	/**
 	 * Create the wizard
 	 * 
-	 * @param the composite element to edit, must be not null
+	 * @param elementContents The selected elements that will compose the composite element, must 
+	 * be a not null list of MGraphicalElement
 	 */
-	public CompositeElementEditWizard(MCompositeElement elementToEdit) {
-		this.elementToEdit = elementToEdit;
+	public CompositeElementDefinitionWizard(List<Object> elementContents) {
+		this.elementContents = elementContents;
 	}
 	
 	@Override
 	public void addPages() {
-		String imagePath = elementToEdit.getIconPathBig();
-		if (imagePath == null) {
-			imagePath = elementToEdit.getIconPathSmall();
-		}
-		page0 = new CompositeElementEditWizardPage(elementToEdit.getName(), elementToEdit.getDescription(), elementToEdit.getGroupId(), imagePath);
+		page0 = new CompositeElementDefinitionWizardPage();
 		addPage(page0);
 	}
 	
 	/**
-	 * Update the metadata of the selected composite element
+	 * Create the required resources from the provided metadata and use them to 
+	 * request the add of the composite element
 	 */
 	@Override
 	public boolean performFinish() {
 		String name = page0.getName();
 		String iconPath = page0.getIconPath();
-		String groupID = page0.getGroupID();
 		String description = page0.getElementDescription();
+		String groupID = page0.getGroupID();
 		if (description == null || description.trim().isEmpty()){
 			description = "";
 		}
@@ -92,7 +92,7 @@ public class CompositeElementEditWizard extends Wizard {
 				}
 			}
 			//Add the composite element to the set
-			CompositeElementManager.INSTANCE.editCompositeElement(elementToEdit, name, description, groupID, resized16, resized32);
+			CompositeElementManager.INSTANCE.addCompositeElement(name, description, groupID, resized16, resized32, elementContents);
 		} catch (Exception ex){
 			ex.printStackTrace();
 			JaspersoftStudioPlugin.getInstance().logError(ex);
@@ -102,5 +102,7 @@ public class CompositeElementEditWizard extends Wizard {
 		}
 		return true;
 	}
+	
+	
 
 }

@@ -10,7 +10,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
-package com.jaspersoft.studio.editor.tools;
+package com.jaspersoft.studio.editor.tools.wizards;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -39,6 +39,8 @@ import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.palette.JDPaletteFactory;
+import com.jaspersoft.studio.editor.tools.CompositeElementManager;
+import com.jaspersoft.studio.editor.tools.MCompositeElement;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.plugin.ExtensionManager;
 import com.jaspersoft.studio.plugin.PaletteGroup;
@@ -112,7 +114,7 @@ public class CompositeElementDefinitionWizardPage extends JSSHelpWizardPage {
 	 * to dispose it when it is no more necessary
 	 */
 	private Image lastLoadedImage = null;
-	
+
 	/**
 	 * Modify listener called when one of the textual control changes, update
 	 * the field and eventually if the icon path is changed then it reload the image
@@ -160,6 +162,14 @@ public class CompositeElementDefinitionWizardPage extends JSSHelpWizardPage {
 			}
 		}
 		getWizard().getContainer().updateButtons();
+	}
+	
+	@Override
+	public void setVisible(boolean visible) {
+		super.setVisible(visible);
+		if (visible){
+			updateWidgets();
+		}
 	}
 	
 	/**
@@ -258,6 +268,13 @@ public class CompositeElementDefinitionWizardPage extends JSSHelpWizardPage {
 		groupID = groups.get(initialIndex).getId();
 		palettePosition.select(initialIndex);
 		
+		setControl(container);
+	}
+	
+	/**
+	 * Add the modify and the selection listeners to the controls
+	 */
+	protected void addListeners(){
 		//Add the listeners
 		nameText.addModifyListener(widgetsModfied);
 		descriptionText.addModifyListener(widgetsModfied);
@@ -269,11 +286,6 @@ public class CompositeElementDefinitionWizardPage extends JSSHelpWizardPage {
 				updateWidgets();
 			}
 		});
-		
-		//force the update of the text field
-		updateWidgets();
-		
-		setControl(container);
 	}
 	
 	/**
@@ -392,5 +404,21 @@ public class CompositeElementDefinitionWizardPage extends JSSHelpWizardPage {
 	 */
 	public String getGroupID(){
 		return groupID;
+	}
+	
+	/**
+	 * Search in the  composite element model an image path, first search for the big image,
+	 * if it can`t be found the look for the small. If one of these is found the path is returned
+	 * otherwise it return null
+	 * 
+	 * @param element the element, must be not null
+	 * @return the path to the icon of the element if any of them can be found, otherwise null
+	 */
+	public static String getFirstAvailableImagePath(MCompositeElement element){
+		String imagePath = element.getIconPathBig();
+		if (imagePath == null) {
+			imagePath = element.getIconPathSmall();
+		}
+		return imagePath;
 	}
 }

@@ -16,8 +16,10 @@ import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.wizard.WizardDialog;
+import org.eclipse.swt.SWT;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.editor.tools.wizards.CompositeElementEditWizard;
 import com.jaspersoft.studio.messages.Messages;
 
 /**
@@ -44,7 +46,8 @@ public class EditCompositeElementAction extends Action {
 		MCompositeElement element = elementToEdit.getTemplate();
 		CompositeElementEditWizard wizard = new CompositeElementEditWizard(element);
 		WizardDialog dialog = new WizardDialog(UIUtils.getShell(), wizard);
-		dialog.open();
+		dialog.setPageSize(200, SWT.DEFAULT);
+		dialog.open();		
 	}
 	
 	@Override

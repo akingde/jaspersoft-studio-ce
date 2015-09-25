@@ -10,13 +10,14 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
-package com.jaspersoft.studio.editor.tools;
+package com.jaspersoft.studio.editor.tools.wizards;
 
 import java.io.File;
 
 import org.apache.commons.io.FileUtils;
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.editor.tools.CompositeElementManager;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.plugin.PaletteGroup;
 
@@ -85,8 +86,24 @@ public class CompositeElementEditWizardPage extends CompositeElementDefinitionWi
 			index++;
 		}
 		palettePosition.select(index);
-		
-		updateWidgets();
+		addAfterInitializationListener();
+	}
+	
+	/**
+	 * Add the listener on the widgets once they are
+	 * initialized
+	 */
+	protected void addAfterInitializationListener(){
+		super.addListeners();
+	}
+	
+	/**
+	 * Override the original addListeners with an empty one
+	 * to add the listener only once the widget are initialized 
+	 * with the initial value
+	 */
+	@Override
+	protected void addListeners() {
 	}
 	
 	/**
@@ -101,7 +118,7 @@ public class CompositeElementEditWizardPage extends CompositeElementDefinitionWi
 			setErrorMessage(Messages.ToolDefinitionWizardPage_errorNameEmpry);	
 		} else if (!net.sf.jasperreports.eclipse.util.FileUtils.isValidFilename(name)){
 			setErrorMessage(Messages.ToolDefinitionWizardPage_invalidFileName);
-		} else if (!initialName.equals(name) && CompositeElementManager.INSTANCE.isNameAlreadyUsed(name.trim())){
+		} else if (!initialName.equals(name) &&	CompositeElementManager.INSTANCE.isNameAlreadyUsed(name.trim())){
 			setErrorMessage(Messages.ToolDefinitionWizardPage_errorNameUsed);
 		} else {
 			setErrorMessage(null);

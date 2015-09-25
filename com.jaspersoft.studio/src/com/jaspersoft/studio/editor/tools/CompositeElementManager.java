@@ -232,6 +232,140 @@ public class CompositeElementManager {
 	}
 	
 	/**
+	 * Export a list of composite element by copying and moving its resources into the 
+	 * target folder, also a partial index file is generated in the same folder for the 
+	 * moved elements
+	 * 
+	 * @param elementsToExport a not null list of the composite elements that will be exported
+	 * @param targetFolder the folder where all the exported files will be placed 
+	 */
+	public void exportCompositeElement(List<MCompositeElement> elementsToExport, File targetFolder){
+		//create the new index file
+		File indexFile = new File(targetFolder, INDEX_FILE_NAME);
+		Document document = null;
+		Element root = null;
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		//Add the new entry on the index
+		FileOutputStream oStream = null;
+		try{
+			DocumentBuilder builder = factory.newDocumentBuilder();
+			document = builder.newDocument();
+			root = document.createElement("elements"); //$NON-NLS-1$
+			document.appendChild(root);
+			
+			for(MCompositeElement elementToExport : elementsToExport){
+				File elementDefinition = new File(elementToExport.getPath());
+				if (elementDefinition.exists()){
+					FileUtils.copyFile(elementDefinition, new File(targetFolder, elementDefinition.getName()));
+				
+					boolean hasSmallIcon = false;
+					String iconSmallPath = elementToExport.getIconPathSmall();
+					if (iconSmallPath != null){
+						File iconSmallFile = new File(iconSmallPath);
+						if (iconSmallFile.exists()){
+							FileUtils.copyFile(iconSmallFile, new File(targetFolder, iconSmallFile.getName()));
+							hasSmallIcon = true;
+						}
+					}
+					
+					boolean hasBigIcon = false;
+					String iconBigPath = elementToExport.getIconPathBig();
+					if (iconBigPath != null){
+						File iconBigFile = new File(iconBigPath);
+						if (iconBigFile.exists()){
+							FileUtils.copyFile(iconBigFile, new File(targetFolder, iconBigFile.getName()));
+							hasBigIcon = true;
+						}
+					}
+					
+					//copy the resources
+					File elementResourceDir = new File(elementDefinition.getParentFile(), elementToExport.getName());
+					if (elementResourceDir.exists()){
+						try {
+							FileUtils.copyDirectory(elementResourceDir, new File(targetFolder, elementResourceDir.getName()));
+						} catch (IOException e) {
+							e.printStackTrace();
+							JaspersoftStudioPlugin.getInstance().logError(e);
+						}
+					}
+
+					try{
+						Element newNode = document.createElement(XML_TAG_NAME);
+						newNode.setAttribute(PROPERTY_NAME, elementToExport.getName());
+						newNode.setAttribute(PROPERTY_PATH, elementDefinition.getName());
+						newNode.setAttribute(PROPERTY_DESCRIPTION, elementToExport.getDescription());
+						newNode.setAttribute(PROPERTY_GROUP, elementToExport.getGroupId());
+						if (hasSmallIcon) {
+							newNode.setAttribute(PROPERTY_ICON_SMALL, new File(iconSmallPath).getName());
+						}
+						if (hasBigIcon) {
+							newNode.setAttribute(PROPERTY_ICON_BIG, new File(iconBigPath).getName());
+						}
+						root.appendChild(newNode);
+					} catch (Exception ex){
+						ex.printStackTrace();
+						JaspersoftStudioPlugin.getInstance().logError(ex);
+					}
+				}
+			}
+			//just to be sure if an index is already present delete it 
+			indexFile.delete();
+			//Write the file only if there s at least an entry
+			indexFile.createNewFile();
+			TransformerFactory transformerFactory = TransformerFactory.newInstance();
+			Transformer transformer = transformerFactory.newTransformer();
+			DOMSource source = new DOMSource(document);
+			oStream = new FileOutputStream(indexFile); 
+			StreamResult result = new StreamResult(oStream);
+			indexFile.createNewFile();
+			transformer.transform(source, result);
+		}catch(Exception ex){
+			ex.printStackTrace();
+			JaspersoftStudioPlugin.getInstance().logError(ex);
+		} finally {
+			net.sf.jasperreports.eclipse.util.FileUtils.closeStream(oStream);
+		}
+	}
+	
+	/**
+	 * Load the list of composite elements stored into a specific folder, used when
+	 * the elements are imported from an external location
+	 * 
+	 * @param contentFolder the folder where the elements to import are contained
+	 * @return a not null list of elements found
+	 */
+	public static List<MCompositeElement> loadCompositeElements(File contentFolder){
+		File indexFile = new File(contentFolder, INDEX_FILE_NAME);
+		List<MCompositeElement> elementsFound = new ArrayList<MCompositeElement>();
+		if (indexFile != null && indexFile.exists()){
+			try{
+				String xmlContent = readFile(indexFile);
+				Document document = JRXmlUtils.parse(new InputSource(new StringReader(xmlContent)));
+			
+				NodeList adapterNodes = document.getElementsByTagName(XML_TAG_NAME);
+				for (int i = 0; i < adapterNodes.getLength(); ++i) {
+					try{
+						Node adapterNode = adapterNodes.item(i);
+						if (adapterNode.getNodeType() == Node.ELEMENT_NODE && adapterNode.getAttributes().getNamedItem(PROPERTY_NAME)!=null) {
+							MCompositeElement loadedElement = createElementFromNode(adapterNode, contentFolder);
+							if (loadedElement != null) {
+								elementsFound.add(loadedElement);
+							}
+						}
+					}catch(Exception ex){
+						ex.printStackTrace();
+						JaspersoftStudioPlugin.getInstance().logError(ex);
+					}
+				}
+			}catch(Exception ex){
+				ex.printStackTrace();
+				JaspersoftStudioPlugin.getInstance().logError(ex);
+			}
+		}
+		return elementsFound;
+	}
+	
+	/**
 	 * Delete a composite element. This both remove all the physical of the composite element resources from 
 	 * the disk and its entry on the index file. It also notify the listeners that the
 	 * set of elements is changed
@@ -589,6 +723,33 @@ public class CompositeElementManager {
 		}
 		return null;
 	}
+
+	/**
+	 * Add a composite elements to the set of elements and also take the content of a folder and move and
+	 * rename it to be used as resource folder of the added element
+	 * 
+	 * @param name the name of the composite element, must be unique
+	 * @param description the description of the composite element
+	 * @param iconSmall the small icon for the composite element, typically 16x16
+	 * @param iconBig the big icon for the composite element, typically 32x32
+	 * @param jd the jasperdesign containing the element of the composite element. The element must be contained
+	 * in the title band
+	 * @param the content of this folder will be used as resources for the new element, if null or not existing this
+	 * is not used
+	 * @return true if the operation succeed, false otherwise
+	 */
+	public boolean addCompositeElement(String name, String description, String groupID, ImageData iconSmall, ImageData iconBig, JasperDesign jd, File resourceDir){
+		boolean result = addCompositeElement(name, description, groupID, iconSmall, iconBig, jd);
+		if(result && resourceDir != null && resourceDir.exists()){
+			try {
+				FileUtils.copyDirectory(resourceDir, getResourceDir(name));			
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+		}
+		return result;
+	}
 	
 	/**
 	 * Add a new composite element to the set and notify the listeners that the set of composite elements is changed
@@ -599,6 +760,7 @@ public class CompositeElementManager {
 	 * @param iconBig the big icon for the composite element, typically 32x32
 	 * @param jd the jasperdesign containing the element of the composite element. The element must be contained
 	 * in the title band
+	 * @return true if the operation succeed, false otherwise
 	 */
 	public boolean addCompositeElement(String name, String description, String groupID, ImageData iconSmall, ImageData iconBig, JasperDesign jd){
 		Assert.isTrue(!isNameAlreadyUsed(name), "The name must be unique"); //$NON-NLS-1$
@@ -787,31 +949,33 @@ public class CompositeElementManager {
 		}
 	}
 	
+	
 	/**
-	 * From a node of the xml index file it build an MCopositeElement
+	 * From a node of the xml index file it build an MCopositeElement, the resources
+	 * are searched inside a specified folder
 	 * 
 	 * @param adapterNode a not null node
+	 * @param locationFolder the folder where the element data (definition, icons and resource folder) are searched
 	 * @return an MCompositeElement build with the informations inside the node
 	 */
-	private MCompositeElement createElementFromNode(Node adapterNode){
+	private static MCompositeElement createElementFromNode(Node adapterNode, File locationFolder){
 		String name = adapterNode.getAttributes().getNamedItem(PROPERTY_NAME).getNodeValue(); 
 		String path = adapterNode.getAttributes().getNamedItem(PROPERTY_PATH).getNodeValue();
-		File contentFile = ConfigurationManager.getStorageResource(ELEMENTS_STORAGE_KEY, path);
-		
-		if (contentFile != null){
+		File contentFile = new File(locationFolder, path);
+		if (contentFile.exists()){
 			//Get the icons
 			String absoluteIconPathSmall = null;
 			String absoluteIconPathBig = null;
 			Node iconNode =  adapterNode.getAttributes().getNamedItem(PROPERTY_ICON_SMALL);
 			String iconPath = iconNode != null ? iconNode.getNodeValue() : null;
 			if (iconPath != null){
-				File resource = new File(ConfigurationManager.getStorage(ELEMENTS_STORAGE_KEY), iconPath);
+				File resource = new File(locationFolder, iconPath);
 				absoluteIconPathSmall = resource.getAbsolutePath();
 			}
 			iconNode =  adapterNode.getAttributes().getNamedItem(PROPERTY_ICON_BIG);
 			iconPath = iconNode != null ? iconNode.getNodeValue() : null;
 			if (iconPath != null){
-				File resource = new File(ConfigurationManager.getStorage(ELEMENTS_STORAGE_KEY), iconPath);
+				File resource = new File(locationFolder, iconPath);
 				absoluteIconPathBig = resource.getAbsolutePath();
 			}
 			
@@ -827,6 +991,19 @@ public class CompositeElementManager {
 		} else {
 			return null;
 		}
+	}
+	
+	
+	/**
+	 * From a node of the xml index file it build an MCopositeElement, the resources
+	 * are searched inside the composite elements storage
+	 * 
+	 * @param adapterNode a not null node
+	 * @return an MCompositeElement build with the informations inside the node
+	 */
+	private static MCompositeElement createElementFromNode(Node adapterNode){
+		File contentFolder = ConfigurationManager.getStorage(ELEMENTS_STORAGE_KEY);
+		return createElementFromNode(adapterNode, contentFolder);
 	}
 	
 	/**
@@ -880,7 +1057,7 @@ public class CompositeElementManager {
 	 * @param path the path of the file
 	 * @return the XML file
 	 */
-	private String readFile(File file){
+	private static String readFile(File file){
 		BufferedReader br;
 		try {
 			br = new BufferedReader(new FileReader(file));
@@ -984,5 +1161,19 @@ public class CompositeElementManager {
 		for(IResourceDelta affectedResource : delta.getAffectedChildren()){
 			iterateResourceDelta(affectedResource, editedResources);
 		}
+	}
+	
+	/**
+	 * Return a resource folder for a specific element name, if 
+	 * the folder doesn't exist then it is created
+	 * 
+	 * @param the element name for which the folder is requested
+	 * @return an existing resource folder
+	 */
+	public File getResourceDir(String name){
+		File storage = ConfigurationManager.getStorage(ELEMENTS_STORAGE_KEY);				
+		File result = new File(storage, name);
+		result.mkdirs();
+		return result;
 	}
 }
