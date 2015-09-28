@@ -47,10 +47,12 @@ import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.utils.ExpressionInterpreter;
 import com.jaspersoft.studio.utils.ExpressionUtil;
+import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.widgets.map.core.LatLng;
 import com.jaspersoft.studio.widgets.map.core.MapType;
+import com.jaspersoft.studio.widgets.map.core.Marker;
 import com.jaspersoft.studio.widgets.map.ui.PathPickupDialog;
 
 /**
@@ -102,7 +104,7 @@ public class MapPathAndStyleSection extends AbstractSection {
 				if (mapInfo.getZoom() != 0)
 					d.setZoomLevel(mapInfo.getZoom());
 
-				Map<LatLng, StandardItem> map = new HashMap<LatLng, StandardItem>();
+				Map<Marker, StandardItem> map = new HashMap<Marker, StandardItem>();
 				List<ItemData> oldMarkers = (List<ItemData>) mmap
 						.getPropertyValue(StandardMapComponent.PROPERTY_PATH_DATA_LIST);
 				List<ItemData> newMarkers = new ArrayList<ItemData>();
@@ -142,53 +144,74 @@ public class MapPathAndStyleSection extends AbstractSection {
 									.getItemPropertyDouble(ip, expIntr);
 							if (lon == null)
 								continue;
-							LatLng m = new LatLng(lat, lon);
+							Marker m = new Marker(new LatLng(lat, lon));
 							map.put(m, (StandardItem) it);
-							d.getMarkersList().add(m);
+
+							ip = (StandardItemProperty) ItemPropertyUtil
+									.getProperty(it.getProperties(),
+											MapComponent.ITEM_PROPERTY_name);
+							String pname = ip == null ? ""
+									: Misc.nvl(ItemPropertyUtil
+											.getItemPropertyString(ip, expIntr));
+							d.addPoint(m, pname);
 						}
 					}
 				}
 				if (d.open() == Window.OK) {
-					List<LatLng> markersList = d.getMarkersList();
+					Map<String, java.util.List<Marker>> markersList = d
+							.getPointsList();
 					StandardItemData sid = null;
-					for (LatLng m : markersList) {
-						StandardItem si = map.get(m);
-						if (si != null) {
-							StandardItemProperty ip = (StandardItemProperty) ItemPropertyUtil.getProperty(
-									si.getProperties(),
-									MapComponent.ITEM_PROPERTY_latitude);
-							if (ip.getValueExpression() != null)
-								ip.setValueExpression(new JRDesignExpression(m
-										.getLat().toString()));
-							else
-								ip.setValue(m.getLat().toString());
-							ip = (StandardItemProperty) ItemPropertyUtil.getProperty(
-									si.getProperties(),
-									MapComponent.ITEM_PROPERTY_longitude);
-							if (ip.getValueExpression() != null)
-								ip.setValueExpression(new JRDesignExpression(m
-										.getLng().toString()));
-							else
-								ip.setValue(m.getLng().toString());
-						} else {
-							// will add it to the last itemdata, so we append
-							// markers
-							if (sid == null) {
-								if (newMarkers.isEmpty()) {
-									sid = new StandardItemData();
-									newMarkers.add(sid);
-								} else
-									sid = (StandardItemData) newMarkers
-											.get(newMarkers.size() - 1);
+					for (String path : markersList.keySet()) {
+						List<Marker> points = markersList.get(path);
+						for (Marker m : points) {
+							StandardItem si = map.get(m);
+							if (si != null) {
+								StandardItemProperty ip = (StandardItemProperty) ItemPropertyUtil.getProperty(
+										si.getProperties(),
+										MapComponent.ITEM_PROPERTY_latitude);
+								if (ip.getValueExpression() != null)
+									ip.setValueExpression(new JRDesignExpression(
+											m.getPosition().getLat().toString()));
+								else
+									ip.setValue(m.getPosition().getLat()
+											.toString());
+								ip = (StandardItemProperty) ItemPropertyUtil.getProperty(
+										si.getProperties(),
+										MapComponent.ITEM_PROPERTY_longitude);
+								if (ip.getValueExpression() != null)
+									ip.setValueExpression(new JRDesignExpression(
+											m.getPosition().getLng().toString()));
+								else
+									ip.setValue(m.getPosition().getLng()
+											.toString());
+							} else {
+								// will add it to the last itemdata, so we
+								// append
+								// markers
+								if (sid == null) {
+									if (newMarkers.isEmpty()) {
+										sid = new StandardItemData();
+										newMarkers.add(sid);
+									} else
+										sid = (StandardItemData) newMarkers
+												.get(newMarkers.size() - 1);
+								}
+								si = new StandardItem();
+								si.addItemProperty(new StandardItemProperty(
+										MapComponent.ITEM_PROPERTY_name, path,
+										null));
+								si.addItemProperty(new StandardItemProperty(
+										MapComponent.ITEM_PROPERTY_latitude, m
+												.getPosition().getLat()
+												.floatValue()
+												+ "f", null)); //$NON-NLS-1$ //$NON-NLS-2$
+								si.addItemProperty(new StandardItemProperty(
+										MapComponent.ITEM_PROPERTY_longitude, m
+												.getPosition().getLng()
+												.floatValue()
+												+ "f", null)); //$NON-NLS-1$ //$NON-NLS-2$
+								sid.addItem(si);
 							}
-							si = new StandardItem();
-							si.addItemProperty(new StandardItemProperty(
-									MapComponent.ITEM_PROPERTY_latitude, m
-											.getLat().floatValue() + "f", null)); //$NON-NLS-1$ //$NON-NLS-2$
-							si.addItemProperty(new StandardItemProperty(
-									MapComponent.ITEM_PROPERTY_longitude, m
-											.getLng().floatValue() + "f", null)); //$NON-NLS-1$ //$NON-NLS-2$
-							sid.addItem(si);
 						}
 					}
 					changeProperty(
