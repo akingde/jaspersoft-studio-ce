@@ -16,6 +16,8 @@ import net.sf.jasperreports.engine.fonts.FontFamily;
 
 import org.eclipse.jface.wizard.Wizard;
 
+import com.jaspersoft.studio.messages.Messages;
+
 public class FontConfigWizard extends Wizard {
 	private FontFamily font;
 
@@ -25,7 +27,7 @@ public class FontConfigWizard extends Wizard {
 
 	public FontConfigWizard() {
 		super();
-		setWindowTitle("Font Family");
+		setWindowTitle(Messages.FontConfigWizard_0);
 	}
 
 	public FontFamily getFont() {

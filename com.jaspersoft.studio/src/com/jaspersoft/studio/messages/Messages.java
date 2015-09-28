@@ -461,6 +461,8 @@ public class Messages extends NLS {
 	public static String DataPreviewTable_RecordsNum1000;
 	public static String DataPreviewTable_RecordsNum500;
 	public static String DataPreviewTable_RecordsNumAll;
+	public static String DataQueryAdapters_10;
+	public static String DataQueryAdapters_9;
 	public static String DataQueryAdapters_jobname;
 	public static String DataQueryAdapters_languagetitle;
 	public static String DataQueryAdapters_querytab;
@@ -755,6 +757,13 @@ public class Messages extends NLS {
 	public static String FirstPageAction_actionName;
 	public static String FirstPageAction_actionTooltip;
 	public static String FloatCellEditorValidator_this_is_not_a_float_number;
+	public static String FontConfigWizard_0;
+	public static String FontFaceFragment_0;
+	public static String FontFaceFragment_1;
+	public static String FontFaceFragment_3;
+	public static String FontFaceFragment_5;
+	public static String FontFaceFragment_7;
+	public static String FontFamilyPage_0;
 	public static String FontFamilyPage_boldItalicLabel;
 	public static String FontFamilyPage_boldLabel;
 	public static String FontFamilyPage_browseButton;
@@ -952,6 +961,8 @@ public class Messages extends NLS {
 	public static String JRBackwardManager_downloadSize;
 	public static String JRBackwardManager_downloadStart;
 	public static String JRBackwardManager_extracting;
+	public static String JRDefaultDataAdapterStorage_0;
+	public static String JRDefaultDataAdapterStorage_1;
 	public static String JRExporterPreferencePage_0;
 	public static String JRExporterPreferencePage_10;
 	public static String JRExporterPreferencePage_11;
@@ -1675,6 +1686,7 @@ public class Messages extends NLS {
 	public static String PercentagePattern_description;
 	public static String PostSetDatasetName_message;
 	public static String PostSetDatasetName_title;
+	public static String PreferencesDataAdapterStorage_3;
 	public static String PreferencesUtils_CannotLoadJRPRopertiesError;
 	public static String PreferencesUtils_CannotReadJRPropertyError;
 	public static String PreferencesUtils_CannotStoreJRPropertyError;
@@ -1687,6 +1699,8 @@ public class Messages extends NLS {
 	public static String PreviewEditor_preview_b;
 	public static String PreviewEditor_report_fill_canceled;
 	public static String PreviewEditor_starting;
+	public static String PreviewJRPrint_1;
+	public static String PreviewJRPrint_2;
 	public static String PreviousPageAction_actionName;
 	public static String PreviousPageAction_actionTolltip;
 	public static String PropertiesComponent_0;
@@ -2133,6 +2147,8 @@ public class Messages extends NLS {
 	public static String ItemPropertyElementDialog_2;
 
 	public static String VariableNameValidator_variableDuplicatedName;
+	public static String VErrorPreview_0;
+	public static String VErrorPreview_1;
 	public static String VErrorPreview_bytesLabel;
 	public static String VErrorPreview_compilationTimeLabel;
 	public static String VErrorPreview_errorsFoundLabel;
@@ -2165,6 +2181,12 @@ public class Messages extends NLS {
 	public static String ViewExecutionInfoAction_tooltip;
 	public static String ViewSettingsDropDownAction_previewFormatMenu;
 	public static String ViewSettingsDropDownAction_settingsName;
+	public static String ViewsFactory_2;
+	public static String ViewsFactory_4;
+	public static String ViewsFactory_5;
+	public static String ViewsFactory_6;
+	public static String ViewsFactory_7;
+	public static String ViewsFactory_8;
 	public static String ViewsFactory_errorExporterDuplicated;
 	public static String ViewsFactory_errorExporterNull;
 	public static String VInputControls_0;
@@ -2247,6 +2269,9 @@ public class Messages extends NLS {
 	public static String SPItemDataList_2;
 	public static String SPItemDataList_3;
 	public static String SPItemDataList_5;
+	public static String ZoomActualAction_0;
+	public static String ZoomActualAction_1;
+	public static String ZoomActualAction_3;
 
 	private Messages() {
 	}

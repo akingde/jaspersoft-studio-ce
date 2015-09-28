@@ -15,6 +15,7 @@ package com.jaspersoft.studio.data.sql.action.expression;
 import org.eclipse.jface.viewers.TreeViewer;
 
 import com.jaspersoft.studio.data.sql.action.AAction;
+import com.jaspersoft.studio.data.sql.messages.Messages;
 import com.jaspersoft.studio.data.sql.model.query.MHaving;
 import com.jaspersoft.studio.data.sql.model.query.MWhere;
 import com.jaspersoft.studio.data.sql.model.query.expression.MExpression;
@@ -25,7 +26,7 @@ import com.jaspersoft.studio.model.ANode;
 public class CreateExpressionGroup extends AAction {
 
 	public CreateExpressionGroup(TreeViewer treeViewer) {
-		super("Add Expression &Group", treeViewer);
+		super(Messages.CreateExpressionGroup_0, treeViewer);
 	}
 
 	@Override

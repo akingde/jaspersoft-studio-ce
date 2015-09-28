@@ -24,6 +24,7 @@ import com.jaspersoft.studio.data.sql.Util;
 import com.jaspersoft.studio.data.sql.action.AAction;
 import com.jaspersoft.studio.data.sql.action.table.CreateTable;
 import com.jaspersoft.studio.data.sql.dialogs.EditExpressionXDialog;
+import com.jaspersoft.studio.data.sql.messages.Messages;
 import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
 import com.jaspersoft.studio.data.sql.model.metadata.MSqlTable;
 import com.jaspersoft.studio.data.sql.model.query.MHaving;
@@ -46,7 +47,7 @@ public class CreateXExpression extends AAction {
 	private SQLQueryDesigner designer;
 
 	public CreateXExpression(SQLQueryDesigner designer, TreeViewer treeViewer) {
-		super("Add $X{} Exp&ression", treeViewer);
+		super(Messages.CreateXExpression_0, treeViewer);
 		this.designer = designer;
 	}
 

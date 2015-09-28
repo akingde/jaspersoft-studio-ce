@@ -272,6 +272,7 @@ public class Messages extends NLS {
 	public static String SelectorQuery_0;
 	public static String SelectorQuery_localresource;
 	public static String SelectorQuery_selectfromrepository;
+	public static String SelectorQueryWithNon_0;
 	public static String ServerProfilePage_0;
 	public static String ServerProfilePage_1;
 	public static String ServerProfilePage_10;

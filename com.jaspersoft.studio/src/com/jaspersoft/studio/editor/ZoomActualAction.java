@@ -17,12 +17,14 @@ import net.sf.jasperreports.eclipse.JasperReportsPlugin;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.ui.actions.ZoomInAction;
 
+import com.jaspersoft.studio.messages.Messages;
+
 /**
  * Set the zoom to 100% on the inner zoom manager
  */
 public class ZoomActualAction extends ZoomInAction {
 
-	public static final String ID = "EditorZoomActualAction";
+	public static final String ID = Messages.ZoomActualAction_0;
 	
 	/**
 	 * Constructor for ZoomOutAction.
@@ -33,9 +35,9 @@ public class ZoomActualAction extends ZoomInAction {
 	public ZoomActualAction(ZoomManager zoomManager) {
 		super(zoomManager);
 		setId(ID);
-		setText("Zoom Actual");
-		setImageDescriptor(JasperReportsPlugin.getDefault().getImageDescriptor("icons/zoomactual.gif"));
-		setToolTipText("Set the zoom level to 100%");
+		setText(Messages.ZoomActualAction_1);
+		setImageDescriptor(JasperReportsPlugin.getDefault().getImageDescriptor("icons/zoomactual.gif")); //$NON-NLS-1$
+		setToolTipText(Messages.ZoomActualAction_3);
 	}
 
 	/**

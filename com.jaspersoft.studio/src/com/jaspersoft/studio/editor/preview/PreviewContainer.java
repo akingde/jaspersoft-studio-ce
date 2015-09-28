@@ -352,13 +352,13 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 	 */
 	protected void auditPreview(){
 		// Log the preview if not Java
-		if (currentViewer != null && !currentViewer.equals("Java")) {
+		if (currentViewer != null && !currentViewer.equals("Java")) { //$NON-NLS-1$
 			JaspersoftStudioPlugin.getInstance().getUsageManager().audit(currentViewer, UsageStatisticsIDs.CATEGORY_PREVIEW_FORMAT);
 			//Log the language used by the report
 			if (jrContext != null && jrContext.getJasperDesign() != null){
 				String reportLanguage = jrContext.getJasperDesign().getLanguage();
 				if (reportLanguage != null){
-					JaspersoftStudioPlugin.getInstance().getUsageManager().audit("ReportLanguage"+reportLanguage, UsageStatisticsIDs.CATEGORY_REPORT);
+					JaspersoftStudioPlugin.getInstance().getUsageManager().audit("ReportLanguage"+reportLanguage, UsageStatisticsIDs.CATEGORY_REPORT); //$NON-NLS-1$
 				}
 			}
 		}

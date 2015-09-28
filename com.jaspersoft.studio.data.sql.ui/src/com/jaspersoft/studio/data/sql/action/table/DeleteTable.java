@@ -19,6 +19,7 @@ import org.eclipse.jface.viewers.TreeViewer;
 
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.action.DeleteAction;
+import com.jaspersoft.studio.data.sql.messages.Messages;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
 import com.jaspersoft.studio.data.sql.model.query.groupby.MGroupBy;
 import com.jaspersoft.studio.data.sql.model.query.groupby.MGroupByColumn;
@@ -33,7 +34,7 @@ import com.jaspersoft.studio.model.INode;
 public class DeleteTable extends DeleteAction<MFromTable> {
 
 	public DeleteTable(SQLQueryDesigner designer, TreeViewer treeViewer) {
-		super(designer, treeViewer, "Table", MFromTable.class);
+		super(designer, treeViewer, Messages.DeleteTable_0, MFromTable.class);
 		setId(getClass().getCanonicalName());
 	}
 

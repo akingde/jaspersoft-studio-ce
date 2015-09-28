@@ -80,7 +80,7 @@ public class PreferencesDataAdapterStorage extends ADataAdapterStorage {
 				if (adapterNode != null) {
 					NamedNodeMap attributes = adapterNode.getAttributes();
 					if (attributes != null) {
-						Node namedItem = attributes.getNamedItem("class");
+						Node namedItem = attributes.getNamedItem("class"); //$NON-NLS-1$
 						if (namedItem != null) {
 							String adapterClassName = namedItem.getNodeValue();
 							DataAdapterFactory factory = DataAdapterManager.findFactoryByDataAdapterClass(adapterClassName);
@@ -121,7 +121,7 @@ public class PreferencesDataAdapterStorage extends ADataAdapterStorage {
 		// Add a list of default data adapters only if none is found.
 		if (daDescriptors.size() == 0) {
 			Bundle bundle = JaspersoftStudioPlugin.getInstance().getBundle();
-			Enumeration<URL> urls = bundle.findEntries("defaults/dataadapter/prefs/", "*.xml", true);
+			Enumeration<URL> urls = bundle.findEntries("defaults/dataadapter/prefs/", "*.xml", true); //$NON-NLS-1$ //$NON-NLS-2$
 			while (urls.hasMoreElements()) {
 				InputStream in = null;
 				try {
@@ -224,6 +224,6 @@ public class PreferencesDataAdapterStorage extends ADataAdapterStorage {
 
 	@Override
 	public String getStorageName() {
-		return "Global Preferences";
+		return Messages.PreferencesDataAdapterStorage_3;
 	}
 }

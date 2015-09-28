@@ -130,7 +130,7 @@ public class VErrorPreview extends APreview {
 		topToolBar.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		tbManager = new ToolBarManager(topToolBar);
-		msgAction = new Action("Console") { //$NON-NLS-1$
+		msgAction = new Action(Messages.VErrorPreview_0) {  
 			@Override
 			public void run() {
 				stackLayout.topControl = tmessage;
@@ -447,7 +447,7 @@ public class VErrorPreview extends APreview {
 		statComposite.layout();
 	}
 
-	private static DecimalFormat df = new DecimalFormat("#.###");
+	private static DecimalFormat df = new DecimalFormat("#.###"); //$NON-NLS-1$
 	static {
 		df.setRoundingMode(RoundingMode.HALF_UP);
 	}
@@ -477,11 +477,11 @@ public class VErrorPreview extends APreview {
 			String msg = terror.getText() + ErrorUtil.getStackTrace(t) + NL;
 			terror.setText(terror.getText() + msg + NL); //$NON-NLS-1$
 			// The only way we have to find a missing style error is to parse the error message for now
-			String stylesErrorString = "Could not resolve style(s):";
+			String stylesErrorString = Messages.VErrorPreview_1;
 			String m = t.getMessage();
 			if (m != null && m.contains(stylesErrorString) && design != null) {
 				String stylesNotFound = m.substring(m.indexOf(stylesErrorString) + stylesErrorString.length());
-				String[] styleNames = stylesNotFound.split(",");
+				String[] styleNames = stylesNotFound.split(","); //$NON-NLS-1$
 				HashSet<String> styles = new HashSet<String>();
 				for (String name : styleNames)
 					styles.add(name.trim());
@@ -523,7 +523,7 @@ public class VErrorPreview extends APreview {
 	protected void refreshErrorTable() {
 		if (getErrorList().size() > 0)
 			errAction.run();
-		errAction.setText(Messages.VErrorPreview_errorsFoundLabel + getErrorList().size() + ")"); //$NON-NLS-2$
+		errAction.setText(Messages.VErrorPreview_errorsFoundLabel + getErrorList().size() + ")"); //$NON-NLS-2$ //$NON-NLS-1$ //$NON-NLS-1$
 		errorViewer.refresh();
 	}
 

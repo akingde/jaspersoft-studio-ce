@@ -69,14 +69,14 @@ public class DefaultDatasetPropertyDescriptor extends NTextPropertyDescriptor {
 						SelectDefaultDatasetWizard defaultDAwizard = new SelectDefaultDatasetWizard(report);
 						WizardDialog defaultDAdialog = new WizardDialog(UIUtils.getShell(), defaultDAwizard);
 						defaultDAdialog.open();
-						ftext.setText(defaultDAwizard.getValue() != null ? defaultDAwizard.getValue() : "");
+						ftext.setText(defaultDAwizard.getValue() != null ? defaultDAwizard.getValue() : ""); //$NON-NLS-1$
 						handleTextChanged(section,pDescriptor.getId(), defaultDAwizard.getValue());	
 					} else if (section.getElement() instanceof MDataset){
 						MDataset dataset = (MDataset)section.getElement();
 						SelectDefaultDatasetWizard defaultDAwizard = new SelectDefaultDatasetWizard(dataset);
 						WizardDialog defaultDAdialog = new WizardDialog(UIUtils.getShell(), defaultDAwizard);
 						defaultDAdialog.open();
-						ftext.setText(defaultDAwizard.getValue() != null ? defaultDAwizard.getValue() : "");
+						ftext.setText(defaultDAwizard.getValue() != null ? defaultDAwizard.getValue() : ""); //$NON-NLS-1$
 						handleTextChanged(section,pDescriptor.getId(), defaultDAwizard.getValue());
 					}
 				}

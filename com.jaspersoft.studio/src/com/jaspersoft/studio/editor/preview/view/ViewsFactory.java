@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.editor.preview.view;
 
@@ -43,11 +39,11 @@ import com.jaspersoft.studio.editor.preview.view.report.system.XlsxViewer;
 import com.jaspersoft.studio.messages.Messages;
 
 public class ViewsFactory extends AViewsFactory {
-	public static final String X_HTML = "xHTML";
-	public static final String EXCEL_API = "ExcelAPI";
-	public static final String XLS_METADATA = "XLS Metadata";
-	public static final String HTML = "HTML";
-	public static final String HTML_NO_INTERACTIVITY = "HTML (No Interactivity)";
+	public static final String X_HTML = "xHTML"; //$NON-NLS-1$
+	public static final String EXCEL_API = "ExcelAPI"; //$NON-NLS-1$
+	public static final String XLS_METADATA = Messages.ViewsFactory_2;
+	public static final String HTML = "HTML"; //$NON-NLS-1$
+	public static final String HTML_NO_INTERACTIVITY = Messages.ViewsFactory_4;
 	public static final String VIEWER_JAVA = "Java"; //$NON-NLS-1$
 	private static LinkedHashMap<String, Class<? extends APreview>> pcmap = new LinkedHashMap<String, Class<? extends APreview>>();
 	static {
@@ -69,45 +65,47 @@ public class ViewsFactory extends AViewsFactory {
 		pcmap.put("ODT", OdtViewer.class); //$NON-NLS-1$
 		pcmap.put("ODS", OdsViewer.class); //$NON-NLS-1$
 		pcmap.put("PPTx", PowerPointViewer.class); //$NON-NLS-1$
-		pcmap.put("Text", TXTViewer.class); //$NON-NLS-1$
+		pcmap.put(Messages.ViewsFactory_5, TXTViewer.class);
 
 		pcmap.put("SEPARATOR3", null); //$NON-NLS-1$
 
 		pcmap.put("XLS", XlsViewer.class); //$NON-NLS-1$
-		pcmap.put(XLS_METADATA, XlsMetadataViewer.class); //$NON-NLS-1$
+		pcmap.put(XLS_METADATA, XlsMetadataViewer.class);
 		pcmap.put("XLSx", XlsxViewer.class); //$NON-NLS-1$
 		pcmap.put(EXCEL_API, ExcelAPIViewer.class); //$NON-NLS-1$
 		pcmap.put("CSV", CSVViewer.class); //$NON-NLS-1$
-		pcmap.put("CSV Metadata", CSVMetadataViewer.class); //$NON-NLS-1$
-		pcmap.put("JSON Metadata", JSONMetadataViewer.class); //$NON-NLS-1$
+		pcmap.put(Messages.ViewsFactory_6, CSVMetadataViewer.class);
+		pcmap.put(Messages.ViewsFactory_7, JSONMetadataViewer.class);
 
 		pcmap.put("SEPARATOR4", null); //$NON-NLS-1$
 
 		pcmap.put("XML", XMLViewer.class); //$NON-NLS-1$
-		pcmap.put("XML With Images", XMLImagesViewer.class); //$NON-NLS-1$
-		
-		//Load the contributed factories
+		pcmap.put(Messages.ViewsFactory_8, XMLImagesViewer.class);
+
+		// Load the contributed factories
 		int separatorIndex = 5;
 		List<AExporterFactory> factories = JaspersoftStudioPlugin.getExtensionManager().getExportersFactories();
-		for(AExporterFactory factory : factories){
-			//Check that the name\key is unique
-			if (!pcmap.containsKey(factory.getExporterName())){
-				//Check that the key\name and the class are not null 
-				if (factory.getExporterName() == null || factory.getViewerClass() == null){
+		for (AExporterFactory factory : factories) {
+			// Check that the name\key is unique
+			if (!pcmap.containsKey(factory.getExporterName())) {
+				// Check that the key\name and the class are not null
+				if (factory.getExporterName() == null || factory.getViewerClass() == null) {
 					String currentFactoryClass = pcmap.get(factory.getExporterName()).getName();
-					String message = MessageFormat.format(Messages.ViewsFactory_errorExporterNull, new Object[]{currentFactoryClass});
+					String message = MessageFormat.format(Messages.ViewsFactory_errorExporterNull,
+							new Object[] { currentFactoryClass });
 					JaspersoftStudioPlugin.getInstance().logWarning(message);
 					System.out.println(message);
 				} else {
-					if (factory.isSeparatorPlacedBefore()){
-						pcmap.put(SwitchViewsAction.SEPARATOR+separatorIndex, null);
+					if (factory.isSeparatorPlacedBefore()) {
+						pcmap.put(SwitchViewsAction.SEPARATOR + separatorIndex, null);
 						separatorIndex++;
 					}
 					pcmap.put(factory.getExporterName(), factory.getViewerClass());
 				}
 			} else {
 				String currentFactoryClass = pcmap.get(factory.getExporterName()).getName();
-				String message = MessageFormat.format(Messages.ViewsFactory_errorExporterDuplicated, new Object[]{factory.getExporterName(),currentFactoryClass});
+				String message = MessageFormat.format(Messages.ViewsFactory_errorExporterDuplicated,
+						new Object[] { factory.getExporterName(), currentFactoryClass });
 				JaspersoftStudioPlugin.getInstance().logWarning(message);
 				System.out.println(message);
 			}

@@ -28,6 +28,7 @@ import com.jaspersoft.studio.data.sql.Util;
 import com.jaspersoft.studio.data.sql.action.AAction;
 import com.jaspersoft.studio.data.sql.action.table.CreateTable;
 import com.jaspersoft.studio.data.sql.dialogs.EditExpressionDialog;
+import com.jaspersoft.studio.data.sql.messages.Messages;
 import com.jaspersoft.studio.data.sql.model.enums.Operator;
 import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
 import com.jaspersoft.studio.data.sql.model.metadata.MSqlTable;
@@ -51,7 +52,7 @@ public class CreateExpression extends AAction {
 	private SQLQueryDesigner designer;
 
 	public CreateExpression(SQLQueryDesigner designer, TreeViewer treeViewer) {
-		super("Add E&xpression", treeViewer);
+		super(Messages.CreateExpression_0, treeViewer);
 		this.designer = designer;
 	}
 

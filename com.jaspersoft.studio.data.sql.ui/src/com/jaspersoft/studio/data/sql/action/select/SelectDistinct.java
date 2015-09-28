@@ -15,13 +15,14 @@ package com.jaspersoft.studio.data.sql.action.select;
 import org.eclipse.jface.viewers.TreeViewer;
 
 import com.jaspersoft.studio.data.sql.action.AAction;
+import com.jaspersoft.studio.data.sql.messages.Messages;
 import com.jaspersoft.studio.data.sql.model.query.AMKeyword;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelect;
 import com.jaspersoft.studio.model.ANode;
 
 public class SelectDistinct extends AAction {
 
-	private static final String CHANGE_TO = "&Change To ";
+	private static final String CHANGE_TO = Messages.SelectDistinct_0;
 
 	public SelectDistinct(TreeViewer treeViewer) {
 		super(CHANGE_TO + AMKeyword.SELECT_DISTINCT_KEYWORD, treeViewer);

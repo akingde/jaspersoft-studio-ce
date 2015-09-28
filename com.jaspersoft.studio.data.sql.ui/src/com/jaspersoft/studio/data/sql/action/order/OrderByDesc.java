@@ -15,13 +15,14 @@ package com.jaspersoft.studio.data.sql.action.order;
 import org.eclipse.jface.viewers.TreeViewer;
 
 import com.jaspersoft.studio.data.sql.action.AAction;
+import com.jaspersoft.studio.data.sql.messages.Messages;
 import com.jaspersoft.studio.data.sql.model.query.orderby.AMOrderByMember;
 import com.jaspersoft.studio.model.ANode;
 
 public class OrderByDesc extends AAction {
 
 	public OrderByDesc(TreeViewer treeViewer) {
-		super("Set Ascending", treeViewer);
+		super(Messages.OrderByDesc_0, treeViewer);
 	}
 
 	@Override
@@ -39,9 +40,9 @@ public class OrderByDesc extends AAction {
 
 	protected void setMenuText(AMOrderByMember<?> msel) {
 		if (msel.isDesc())
-			setText("Set Ascending");
+			setText(Messages.OrderByDesc_1);
 		else
-			setText("Set Descending");
+			setText(Messages.OrderByDesc_2);
 	}
 
 	@Override

@@ -24,6 +24,7 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import org.eclipse.core.resources.IFile;
 
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /**
@@ -73,7 +74,7 @@ public class JRDefaultDataAdapterStorage extends ADataAdapterStorage {
 
 	@Override
 	public String getStorageName() {
-		return "JRDefault Data Adapter Storage";
+		return Messages.JRDefaultDataAdapterStorage_0;
 	}
 	
 	/**
@@ -162,7 +163,7 @@ public class JRDefaultDataAdapterStorage extends ADataAdapterStorage {
 	 */
 	public String getLabel(DataAdapterDescriptor d) {
 		String label = d.getTitle();
-		return label + " - [JasperReports Default]";
+		return label + Messages.JRDefaultDataAdapterStorage_1;
 	}
 	
 	/**

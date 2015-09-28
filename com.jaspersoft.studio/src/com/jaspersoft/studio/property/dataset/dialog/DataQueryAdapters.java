@@ -63,7 +63,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 
 	/** Property to save a default data adapter to select */
-	public static final String DEFAULT_DATAADAPTER = "com.jaspersoft.studio.data.defaultdataadapter";
+	public static final String DEFAULT_DATAADAPTER = "com.jaspersoft.studio.data.defaultdataadapter"; //$NON-NLS-1$
 
 	private JRDesignDataset newdataset;
 	
@@ -184,8 +184,8 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 				} else if (index > 0 && !languages[0].isEmpty()){
 					//if the input language is a known language and there was before an
 					//entry for a not recognized language then remove it
-					languages[0] = "";
-					langCombo.setItem(0, "");
+					languages[0] = ""; //$NON-NLS-1$
+					langCombo.setItem(0, ""); //$NON-NLS-1$
 				}
 				changeLanguage();
 			}
@@ -219,11 +219,11 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 
 	private void changeLanguage() {
 		if (!isRefresh) {
-			qStatus.showInfo("");
+			qStatus.showInfo(""); //$NON-NLS-1$
 			String lang = langCombo.getText();
 			if (Misc.isNullOrEmpty(lang)) {
-				lang = "SQL";
-				langCombo.setText("SQL");
+				lang = "SQL"; //$NON-NLS-1$
+				langCombo.setText("SQL"); //$NON-NLS-1$
 			}
 			langCombo.setToolTipText(lang);
 			((JRDesignQuery) newdataset.getQuery()).setLanguage(lang);
@@ -270,7 +270,7 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 					newdataset.getPropertiesMap().removeProperty(DEFAULT_DATAADAPTER);
 				}
 				currentDesigner.setDataAdapter(da);
-				qStatus.showInfo("");
+				qStatus.showInfo(""); //$NON-NLS-1$
 			}
 
 			public boolean isNotRunning() {
@@ -326,7 +326,7 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 		if (query == null) {
 			query = new JRDesignQuery();
 			((JRDesignQuery) query).setLanguage(JRJdbcQueryExecuterFactory.QUERY_LANGUAGE_SQL);
-			((JRDesignQuery) query).setText("");
+			((JRDesignQuery) query).setText(""); //$NON-NLS-1$
 			newdataset.setQuery((JRDesignQuery) query);
 		}
 		isRefresh = true;
@@ -379,7 +379,7 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 	protected void doGetFields(IProgressMonitor monitor) {
 		final DataAdapterDescriptor da = dscombo.getSelected();
 		if (da != null && da instanceof IFieldsProvider && ((IFieldsProvider) da).supportsGetFieldsOperation(jConfig)) {
-			qStatus.showInfo("");
+			qStatus.showInfo(""); //$NON-NLS-1$
 
 			monitor.beginTask(Messages.DataQueryAdapters_jobname, -1);
 
@@ -390,14 +390,14 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 			try {
 				final List<JRDesignField> fields = ((IFieldsProvider) da).getFields(das, jConfig, newdataset);
 				if (fields != null) {
-					monitor.setTaskName("Setting Fields");
+					monitor.setTaskName(Messages.DataQueryAdapters_9);
 					Display.getDefault().syncExec(new Runnable() {
 
 						public void run() {
 							setFields(fields);
 						}
 					});
-					monitor.setTaskName("Fields set");
+					monitor.setTaskName(Messages.DataQueryAdapters_10);
 				}
 			} catch (Exception e) {
 				if (e.getCause() != null)

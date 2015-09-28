@@ -15,12 +15,13 @@ package com.jaspersoft.studio.data.sql.action.expression;
 import org.eclipse.jface.viewers.TreeViewer;
 
 import com.jaspersoft.studio.data.sql.action.AAction;
+import com.jaspersoft.studio.data.sql.messages.Messages;
 import com.jaspersoft.studio.data.sql.model.query.expression.MExpressionGroup;
 import com.jaspersoft.studio.model.ANode;
 
 public class NotExpressionGroup extends AAction {
 
-	private static final String CHANGE_TO = "&Add NOT ";
+	private static final String CHANGE_TO = Messages.NotExpressionGroup_0;
 
 	public NotExpressionGroup(TreeViewer treeViewer) {
 		super(CHANGE_TO, treeViewer);
@@ -43,9 +44,9 @@ public class NotExpressionGroup extends AAction {
 
 	protected void setMenuText(MExpressionGroup msel) {
 		if (msel.isNot())
-			setText("Remove &NOT");
+			setText(Messages.NotExpressionGroup_1);
 		else
-			setText("Add &NOT");
+			setText(Messages.NotExpressionGroup_2);
 	}
 
 	@Override

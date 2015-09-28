@@ -17,6 +17,7 @@ import org.eclipse.jface.viewers.TreeViewer;
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.Util;
 import com.jaspersoft.studio.data.sql.action.AMultiSelectionAction;
+import com.jaspersoft.studio.data.sql.messages.Messages;
 import com.jaspersoft.studio.data.sql.model.query.MWhere;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelectColumn;
 import com.jaspersoft.studio.data.sql.ui.gef.parts.ColumnEditPart;
@@ -27,7 +28,7 @@ public class CreateWhereFromColumn extends AMultiSelectionAction {
 	private SQLQueryDesigner designer;
 
 	public CreateWhereFromColumn(SQLQueryDesigner designer, TreeViewer treeViewer) {
-		super("Create &Where Condition", treeViewer);
+		super(Messages.CreateWhereFromColumn_0, treeViewer);
 		this.designer = designer;
 	}
 

@@ -18,6 +18,7 @@ import org.eclipse.jface.viewers.TreeViewer;
 
 import com.jaspersoft.studio.data.sql.Util;
 import com.jaspersoft.studio.data.sql.action.AAction;
+import com.jaspersoft.studio.data.sql.messages.Messages;
 import com.jaspersoft.studio.data.sql.model.ISubQuery;
 import com.jaspersoft.studio.data.sql.model.query.AMKeyword;
 import com.jaspersoft.studio.data.sql.model.query.MHaving;
@@ -30,7 +31,7 @@ import com.jaspersoft.studio.model.INode;
 public class CreateUnion extends AAction {
 
 	public CreateUnion(TreeViewer treeViewer) {
-		super("Create UNION", treeViewer);
+		super(Messages.CreateUnion_0, treeViewer);
 	}
 
 	@Override

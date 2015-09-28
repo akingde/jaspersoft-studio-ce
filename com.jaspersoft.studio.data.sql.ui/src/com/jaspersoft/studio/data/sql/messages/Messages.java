@@ -26,8 +26,13 @@ public class Messages extends NLS {
 	public static String ActionFactory_7;
 	public static String AddTableCommand_0;
 	public static String AddTableCommand_1;
+	public static String ChangeOperator_0;
+	public static String ChangeOperator_1;
+	public static String ChangeSetOperator_0;
 	public static String ColumnsDialog_0;
 	public static String CreateColumn_0;
+	public static String CreateExpression_0;
+	public static String CreateExpressionGroup_0;
 	public static String CreateGroupByColumn_0;
 	public static String CreateGroupByFromColumn_0;
 	public static String CreateHavingFromColumn_0;
@@ -39,6 +44,9 @@ public class Messages extends NLS {
 	public static String CreateSubQueryTable_0;
 	public static String CreateSubSelect_0;
 	public static String CreateTable_0;
+	public static String CreateUnion_0;
+	public static String CreateWhereFromColumn_0;
+	public static String CreateXExpression_0;
 	public static String DBMetadata_0;
 	public static String DBMetadata_1;
 	public static String DBMetadata_2;
@@ -55,6 +63,7 @@ public class Messages extends NLS {
 	public static String DeleteColumn_1;
 	public static String DeleteCommand_2;
 	public static String DeleteCommand_3;
+	public static String DeleteTable_0;
 	public static String DeleteTableJoin_0;
 	public static String DeleteTableJoin_1;
 	public static String DeleteTableJoin_2;
@@ -99,8 +108,15 @@ public class Messages extends NLS {
 	public static String JoinFromTableDialog_1;
 	public static String JoinTable_0;
 	public static String LayoutAction_0;
+	public static String NotExpressionGroup_0;
+	public static String NotExpressionGroup_1;
+	public static String NotExpressionGroup_2;
 	public static String OperandDialog_0;
 	public static String OperandDialog_1;
+	public static String OrderByDesc_0;
+	public static String OrderByDesc_1;
+	public static String OrderByDesc_2;
+	public static String SelectDistinct_0;
 	public static String SQLQueryDesigner_diagram;
 	public static String SQLQueryDesigner_outline;
 	public static String SQLQueryDesigner_readmetadata;

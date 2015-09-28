@@ -45,6 +45,7 @@ import com.jaspersoft.studio.editor.preview.view.AViewsFactory;
 import com.jaspersoft.studio.editor.preview.view.ViewsFactory;
 import com.jaspersoft.studio.editor.preview.view.control.VSimpleErrorPreview;
 import com.jaspersoft.studio.editor.preview.view.report.IJRPrintable;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.utils.Console;
 
 public class PreviewJRPrint extends ABasicEditor {
@@ -157,7 +158,7 @@ public class PreviewJRPrint extends ABasicEditor {
 				throw new PartInitException("Invalid Input: Must be IFileEditorInput or FileStoreEditorInput"); //$NON-NLS-1$
 			}
 			Statistics stats = new Statistics();
-			if (file.getFileExtension().equals(".jrpxml")) {
+			if (file.getFileExtension().equals(".jrpxml")) { //$NON-NLS-1$
 				setJasperPrint(stats, JRPrintXmlLoader.load(in));
 			} else {
 				Object obj = JRLoader.loadObject(in);
@@ -165,7 +166,7 @@ public class PreviewJRPrint extends ABasicEditor {
 					setJasperPrint(stats, (JasperPrint) obj);
 			}
 		} catch (Exception e) {
-			throw new PartInitException("Invalid Input", e);
+			throw new PartInitException(Messages.PreviewJRPrint_1, e);
 		}
 	}
 
@@ -300,7 +301,7 @@ public class PreviewJRPrint extends ABasicEditor {
 				((IJRPrintable) view).setJRPRint(stats, jasperPrint);
 				console.setStatistics(stats);
 			} catch (Exception e) {
-				errorPreview.setMessage("The document is empty.");
+				errorPreview.setMessage(Messages.PreviewJRPrint_2);
 				container.switchView(stats, errorPreview);
 
 				getConsole().addError(e, null);
@@ -349,7 +350,7 @@ public class PreviewJRPrint extends ABasicEditor {
 		Composite container = new Composite(parent, SWT.NONE);
 		container.setLayout(new GridLayout(2, false));
 
-		PlatformUI.getWorkbench().getHelpSystem().setHelp(container, "com.jaspersoft.studio.doc.editor_jrprint");
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(container, "com.jaspersoft.studio.doc.editor_jrprint"); //$NON-NLS-1$
 
 		getTopToolBarManager1(container);
 		getTopToolBarManager(container);

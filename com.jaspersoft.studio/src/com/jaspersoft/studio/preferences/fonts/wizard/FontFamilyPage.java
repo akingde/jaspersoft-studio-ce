@@ -86,7 +86,7 @@ public class FontFamilyPage extends JSSHelpWizardPage {
 		dsname.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		bIsVisible = new Button(composite, SWT.CHECK);
-		bIsVisible.setText("Hidden");
+		bIsVisible.setText(Messages.FontFamilyPage_0);
 		GridData gd = new GridData(GridData.FILL_BOTH);
 		gd.horizontalSpan = 2;
 		bIsVisible.setLayoutData(gd);

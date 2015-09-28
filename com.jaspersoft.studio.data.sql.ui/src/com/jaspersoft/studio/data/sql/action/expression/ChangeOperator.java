@@ -15,6 +15,7 @@ package com.jaspersoft.studio.data.sql.action.expression;
 import org.eclipse.jface.viewers.TreeViewer;
 
 import com.jaspersoft.studio.data.sql.action.AAction;
+import com.jaspersoft.studio.data.sql.messages.Messages;
 import com.jaspersoft.studio.data.sql.model.query.AMKeyword;
 import com.jaspersoft.studio.data.sql.model.query.expression.MExpressionGroup;
 import com.jaspersoft.studio.model.ANode;
@@ -22,7 +23,7 @@ import com.jaspersoft.studio.model.ANode;
 public class ChangeOperator extends AAction {
 
 	public ChangeOperator(TreeViewer treeViewer) {
-		super("Change to" + AMKeyword.OR_OPERATOR, treeViewer);
+		super(Messages.ChangeOperator_0 + AMKeyword.OR_OPERATOR, treeViewer);
 	}
 
 	@Override
@@ -40,9 +41,9 @@ public class ChangeOperator extends AAction {
 
 	protected void setMenuText(MExpressionGroup msel) {
 		if (msel.getValue().equals(AMKeyword.AND_OPERATOR))
-			setText("Change to " + AMKeyword.OR_OPERATOR);
+			setText(Messages.ChangeOperator_1 + AMKeyword.OR_OPERATOR);
 		else
-			setText("Change to " + AMKeyword.AND_OPERATOR);
+			setText(Messages.ChangeOperator_1 + AMKeyword.AND_OPERATOR);
 	}
 
 	@Override
