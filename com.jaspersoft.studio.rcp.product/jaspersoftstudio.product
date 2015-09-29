@@ -42,11 +42,11 @@ Special thanks to all people who support this software.
       startupMessageRect="0,195,575,20"
       startupForegroundColor="FFFFFF" />
    <launcher name="Jaspersoft Studio">
-      <linux icon="../../../../com.jaspersoft.studio.rcp/icons/jss_icon_128.xpm"/>
-      <macosx icon="../../../../com.jaspersoft.studio.rcp/icons/jaspersoftstudio.icns"/>
+      <linux icon="../com.jaspersoft.studio.rcp/icons/jss_icon_128.xpm"/>
+      <macosx icon="../com.jaspersoft.studio.rcp/icons/jaspersoftstudio.icns"/>
       <solaris/>
       <win useIco="true">
-         <ico path="../../../../com.jaspersoft.studio.rcp/icons/jaspersoftstudio.ico"/>
+         <ico path="../com.jaspersoft.studio.rcp/icons/jaspersoftstudio.ico"/>
          <bmp/>
       </win>
    </launcher>
