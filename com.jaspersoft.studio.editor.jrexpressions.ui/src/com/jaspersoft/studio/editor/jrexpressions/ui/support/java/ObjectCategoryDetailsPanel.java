@@ -192,7 +192,7 @@ public class ObjectCategoryDetailsPanel extends Composite {
 				}
 			}
 		});
-		hideBuiltinParams.setToolTipText("Hide built-in parameters"); //$NON-NLS-1$
+		hideBuiltinParams.setToolTipText(Messages.ObjectCategoryDetailsPanel_HideBuiltInParametersTooltip);
 		hideBuiltinVariables = new ToolItem(buttonsToolbar, SWT.CHECK);
 		hideBuiltinVariables.setImage(
 				ResourceManager.getPluginImage(JRExpressionsUIPlugin.PLUGIN_ID, "/resources/icons/filter-variables.png")); //$NON-NLS-1$
@@ -691,7 +691,7 @@ public class ObjectCategoryDetailsPanel extends Composite {
 	private List<ExpObject> getRBKeysDTOList(List<String> rbkeys){
 		List<ExpObject> rbKeysList=new ArrayList<ExpObject>();
     	for(String rbk : rbkeys){
-    		rbKeysList.add(new ExpObject(rbk, ExpObject.TYPE_RBKEY, "java.lang.String"));
+    		rbKeysList.add(new ExpObject(rbk, ExpObject.TYPE_RBKEY, "java.lang.String")); //$NON-NLS-1$
     	}
         reorderList(rbKeysList);
 		return rbKeysList;

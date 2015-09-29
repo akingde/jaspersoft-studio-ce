@@ -27,7 +27,26 @@ public class Messages extends NLS {
 	public static String JavaExpressionEditorComposite_NoValidationIssuesInfo;
 	public static String JavaExpressionEditorComposite_TaskName;
 	public static String JavaExpressionEditorComposite_ValueClassMessage;
+	public static String ObjectCategoryDetailsPanel_HideBuiltInParametersTooltip;
 	public static String ObjectCategoryDetailsPanel_HideBuiltinVars;
+	public static String ObjectCategoryItem_CategoryBuiltInFunctions;
+	public static String ObjectCategoryItem_CategoryCrosstabs;
+	public static String ObjectCategoryItem_CategoryFDataset;
+	public static String ObjectCategoryItem_CategoryFields;
+	public static String ObjectCategoryItem_CategoryFunctionCategory;
+	public static String ObjectCategoryItem_CategoryParameters;
+	public static String ObjectCategoryItem_CategoryPDataset;
+	public static String ObjectCategoryItem_CategoryRecentExpressions;
+	public static String ObjectCategoryItem_CategoryResourceKeys;
+	public static String ObjectCategoryItem_CategoryStaticFunctionCategory;
+	public static String ObjectCategoryItem_CategoryUserDefinedExpressions;
+	public static String ObjectCategoryItem_CategoryVariables;
+	public static String ObjectCategoryItem_CategoryVDataset;
+	public static String ObjectItemStyledLabelProvider_Field;
+	public static String ObjectItemStyledLabelProvider_Key;
+	public static String ObjectItemStyledLabelProvider_Parameter;
+	public static String ObjectItemStyledLabelProvider_Returns;
+	public static String ObjectItemStyledLabelProvider_Variable;
 	public static String StyledTextXtextAdapter2_AutoEditStrategiesError;
 	static {
 		// initialize resource bundle

@@ -16,6 +16,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.wb.swt.ResourceManager;
 
 import com.jaspersoft.studio.editor.jrexpressions.ui.JRExpressionsUIPlugin;
+import com.jaspersoft.studio.editor.jrexpressions.ui.messages.Messages;
 import com.jaspersoft.studio.editor.jrexpressions.ui.support.java.JavaExpressionEditorComposite;
 
 /**
@@ -122,19 +123,19 @@ public class ObjectCategoryItem {
 	 * @see JavaExpressionEditorComposite Example of usage
 	 */
 	public enum Category {
-		PARAMETERS("Parameters",ICON_FOLDER_PARAMETERS), //$NON-NLS-1$
-		FIELDS("Fields", ICON_FOLDER_FIELDS), //$NON-NLS-1$
-		VARIABLES("Variables", ICON_FOLDER_VARIABLES), //$NON-NLS-1$
-		BUILT_IN_FUNCTIONS("Built-in Functions", ICON_FOLDER), //$NON-NLS-1$
-		FUNCTION_CATEGORY("Sub-category",ICON_FOLDER), //$NON-NLS-1$
-		STATIC_FUNCTION_CATEGORY("Static functions sub-category", ICON_FOLDER), //$NON-NLS-1$
-		USER_DEFINED_EXPRESSIONS("User Defined Expressions", ICON_FOLDER), //$NON-NLS-1$
-		RECENT_EXPRESSIONS("Recent Expressions", ICON_FOLDER), //$NON-NLS-1$
-		CROSSTAB("Crosstab", ICON_CROSSTAB), //$NON-NLS-1$
-		PDATASET("Dataset", ICON_DATASET), //$NON-NLS-1$
-		VDATASET("Dataset", ICON_DATASET), //$NON-NLS-1$
-		FDATASET("Dataset", ICON_DATASET), //$NON-NLS-1$
-		RESOURCE_KEYS("Resources", ICON_FOLDER_RESOURCEKEYS); //$NON-NLS-1$
+		PARAMETERS(Messages.ObjectCategoryItem_CategoryParameters,ICON_FOLDER_PARAMETERS), 
+		FIELDS(Messages.ObjectCategoryItem_CategoryFields, ICON_FOLDER_FIELDS), 
+		VARIABLES(Messages.ObjectCategoryItem_CategoryVariables, ICON_FOLDER_VARIABLES), 
+		BUILT_IN_FUNCTIONS(Messages.ObjectCategoryItem_CategoryBuiltInFunctions, ICON_FOLDER), 
+		FUNCTION_CATEGORY(Messages.ObjectCategoryItem_CategoryFunctionCategory,ICON_FOLDER), 
+		STATIC_FUNCTION_CATEGORY(Messages.ObjectCategoryItem_CategoryStaticFunctionCategory, ICON_FOLDER), 
+		USER_DEFINED_EXPRESSIONS(Messages.ObjectCategoryItem_CategoryUserDefinedExpressions, ICON_FOLDER), 
+		RECENT_EXPRESSIONS(Messages.ObjectCategoryItem_CategoryRecentExpressions, ICON_FOLDER), 
+		CROSSTAB(Messages.ObjectCategoryItem_CategoryCrosstabs, ICON_CROSSTAB), 
+		PDATASET(Messages.ObjectCategoryItem_CategoryPDataset, ICON_DATASET), 
+		VDATASET(Messages.ObjectCategoryItem_CategoryVDataset, ICON_DATASET), 
+		FDATASET(Messages.ObjectCategoryItem_CategoryFDataset, ICON_DATASET), 
+		RESOURCE_KEYS(Messages.ObjectCategoryItem_CategoryResourceKeys, ICON_FOLDER_RESOURCEKEYS); 
 		
 		private String dislayName;
 		private String iconPath;
