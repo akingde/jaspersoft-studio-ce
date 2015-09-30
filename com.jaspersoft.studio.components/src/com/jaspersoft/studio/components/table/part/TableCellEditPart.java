@@ -12,16 +12,14 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.table.part;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.jasperreports.components.table.StandardBaseColumn;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 
-import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
-import org.eclipse.draw2d.LineBorder;
-import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.PrecisionRectangle;
@@ -59,7 +57,9 @@ import com.jaspersoft.studio.editor.gef.commands.SetPageConstraintCommand;
 import com.jaspersoft.studio.editor.gef.figures.ReportPageFigure;
 import com.jaspersoft.studio.editor.gef.parts.APrefFigureEditPart;
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
+import com.jaspersoft.studio.editor.gef.parts.FrameFigureEditPart;
 import com.jaspersoft.studio.editor.gef.parts.IContainerPart;
+import com.jaspersoft.studio.editor.gef.parts.editPolicy.ColoredLayoutPositionRectangle;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.PageLayoutEditPolicy;
 import com.jaspersoft.studio.editor.gef.rulers.ReportRuler;
 import com.jaspersoft.studio.editor.outline.editpolicy.CloseSubeditorDeletePolicy;
@@ -120,7 +120,7 @@ public class TableCellEditPart extends APrefFigureEditPart implements IContainer
 				new CloseSubeditorDeletePolicy());
 		installEditPolicy(EditPolicy.LAYOUT_ROLE, new PageLayoutEditPolicy() {
 
-			private RectangleFigure targetFeedback;
+			private ColoredLayoutPositionRectangle targetFeedback;
 
 			protected void eraseLayoutTargetFeedback(Request request) {
 				super.eraseLayoutTargetFeedback(request);
@@ -131,22 +131,29 @@ public class TableCellEditPart extends APrefFigureEditPart implements IContainer
 			}
 
 			protected IFigure getLayoutTargetFeedback(Request request) {
+				List<Object> nodes = new ArrayList<Object>();
 				if (request instanceof ChangeBoundsRequest) {
 					ChangeBoundsRequest cbr = (ChangeBoundsRequest) request;
+					@SuppressWarnings("unchecked")
 					List<EditPart> lst = cbr.getEditParts();
 					for (EditPart ep : lst) {
+						nodes.add(ep.getModel());
 						if (((ANode) ep.getModel()).getParent() == getModel())
 							return null;
 						if (ep instanceof TableCellEditPart)
 							return null;
 					}
-				} else if (request instanceof CreateRequest
-						&& !(getModel() instanceof MCell))
-					return null;
+				} else if (request instanceof CreateRequest){
+					if  (!(getModel() instanceof MCell)){
+						return null;
+					} else {
+						CreateRequest cbr = (CreateRequest) request;
+						nodes.add(cbr.getNewObject());
+					}
+				}
 				if (targetFeedback == null) {
-					targetFeedback = new RectangleFigure();
+					targetFeedback = new ColoredLayoutPositionRectangle(FrameFigureEditPart.addElementColor, 2.0f, getModel(), nodes);
 					targetFeedback.setFill(false);
-
 					IFigure hostFigure = getHostFigure();
 					Rectangle bounds = hostFigure.getBounds();
 					if (hostFigure instanceof HandleBounds)
@@ -155,9 +162,7 @@ public class TableCellEditPart extends APrefFigureEditPart implements IContainer
 					getHostFigure().translateToAbsolute(rect);
 					getFeedbackLayer().translateToRelative(rect);
 
-					targetFeedback.setBounds(rect.shrink(2, 2));
-					targetFeedback.setBorder(new LineBorder(
-							ColorConstants.lightBlue, 3));
+					targetFeedback.setBounds(rect);
 					addFeedback(targetFeedback);
 				}
 				return targetFeedback;

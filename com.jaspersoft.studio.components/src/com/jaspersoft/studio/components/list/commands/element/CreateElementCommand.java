@@ -52,6 +52,7 @@ public class CreateElementCommand extends Command {
 	private JRPropertiesHolder[] pholder;
 	private MList destNode;
 
+	
 	/**
 	 * Instantiates a new creates the element command.
 	 * 
@@ -154,6 +155,7 @@ public class CreateElementCommand extends Command {
 			firstTime = false;
 		}
 		executeCommands();
+		LayoutManager.layoutContainer(destNode);
 	}
 
 	private JSSCompoundCommand commands;
@@ -205,7 +207,7 @@ public class CreateElementCommand extends Command {
 		DesignListContents dlist = (DesignListContents) listcomponent
 				.getContents();
 		dlist.removeElement(jrElement);
-
+		LayoutManager.layoutContainer(destNode);
 	}
 
 	private void removeElements(JRDesignElement element) {

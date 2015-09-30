@@ -39,7 +39,7 @@ public class CreateElementCommand extends Command {
 	private JasperDesign jDesign;
 	private JRDesignCellContents jrCell;
 	private JRDesignCrosstab crosstab;
-
+	private MCell destNode;
 	private Rectangle location;
 
 	private int index = -1;
@@ -53,6 +53,7 @@ public class CreateElementCommand extends Command {
 		this.index = index;
 		this.location = position;
 		this.srcNode = srcNode;
+		this.destNode = destNode;
 		jDesign = destNode.getJasperDesign();
 		pholder = ((IContainerLayout) destNode).getPropertyHolder();
 		crosstab = destNode.getCrosstab().getValue();
@@ -107,6 +108,7 @@ public class CreateElementCommand extends Command {
 			lCmd = new LayoutCommand(jrCell, layout, d);
 		}
 		lCmd.execute();
+		LayoutManager.layoutContainer(destNode);
 	}
 
 	private LayoutCommand lCmd;
@@ -133,6 +135,7 @@ public class CreateElementCommand extends Command {
 	public void undo() {
 		lCmd.undo();
 		jrCell.removeElement(jrElement);
+		LayoutManager.layoutContainer(destNode);
 	}
 
 	private void removeElements(JRDesignElement element) {

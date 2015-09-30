@@ -19,6 +19,7 @@ import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.components.crosstab.messages.Messages;
 import com.jaspersoft.studio.components.crosstab.model.cell.MCell;
+import com.jaspersoft.studio.editor.layout.LayoutManager;
 import com.jaspersoft.studio.model.MGraphicElement;
 
 public class OrphanElementCommand extends Command {
@@ -27,6 +28,7 @@ public class OrphanElementCommand extends Command {
 	private int index;
 	private JRDesignElement jrElement;
 	private JRDesignCellContents jrCell;
+	private MCell parent;
 
 	/**
 	 * Instantiates a new orphan element command.
@@ -40,6 +42,7 @@ public class OrphanElementCommand extends Command {
 		super(Messages.common_orphan_child);
 		this.jrElement = (JRDesignElement) child.getValue();
 		this.jrCell = (JRDesignCellContents) parent.getValue();
+		this.parent = parent;
 	}
 
 	/*
@@ -51,6 +54,7 @@ public class OrphanElementCommand extends Command {
 	public void execute() {
 		index = jrCell.getChildren().indexOf(jrElement);
 		jrCell.removeElement(jrElement);
+		LayoutManager.layoutContainer(parent);
 	}
 
 	/*
@@ -64,6 +68,7 @@ public class OrphanElementCommand extends Command {
 			jrCell.addElement(index, jrElement);
 		else
 			jrCell.addElement(jrElement);
+		LayoutManager.layoutContainer(parent);;
 	}
 
 }

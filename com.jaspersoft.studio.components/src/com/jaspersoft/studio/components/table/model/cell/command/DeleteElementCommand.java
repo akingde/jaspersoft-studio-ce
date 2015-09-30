@@ -18,6 +18,7 @@ import net.sf.jasperreports.engine.design.JRDesignElement;
 import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.components.table.model.column.MCell;
+import com.jaspersoft.studio.editor.layout.LayoutManager;
 import com.jaspersoft.studio.model.MGraphicElement;
 
 public class DeleteElementCommand extends Command {
@@ -26,6 +27,8 @@ public class DeleteElementCommand extends Command {
 	private JRDesignElement jrElement;
 
 	private int elementPosition = 0;
+	
+	private MCell parent;
 
 	/**
 	 * Instantiates a new delete element command.
@@ -39,6 +42,7 @@ public class DeleteElementCommand extends Command {
 		super();
 		this.jrElement = (JRDesignElement) srcNode.getValue();
 		this.jrCell = destNode.getCell();
+		this.parent = destNode;
 	}
 
 	/*
@@ -51,6 +55,7 @@ public class DeleteElementCommand extends Command {
 		if (jrCell != null && jrCell.getChildren() != null) {
 			elementPosition = jrCell.getChildren().indexOf(jrElement);
 			jrCell.removeElement(jrElement);
+			LayoutManager.layoutContainer(parent);
 		}
 	}
 
@@ -78,6 +83,8 @@ public class DeleteElementCommand extends Command {
 				jrCell.addElement(elementPosition, jrElement);
 			else
 				jrCell.addElement(jrElement);
+			
+			LayoutManager.layoutContainer(parent);
 		}
 	}
 }
