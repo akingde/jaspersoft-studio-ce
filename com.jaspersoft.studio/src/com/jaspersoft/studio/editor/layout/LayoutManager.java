@@ -12,6 +12,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.layout;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +21,7 @@ import net.sf.jasperreports.engine.JRCommonElement;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.JRPropertiesHolder;
+import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
@@ -33,9 +35,11 @@ import org.eclipse.ui.IWorkbenchPart;
 import com.jaspersoft.studio.editor.action.layout.LayoutAction;
 import com.jaspersoft.studio.editor.layout.grid.JSSGridBagLayout;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.IContainerLayout;
 import com.jaspersoft.studio.model.IGraphicElementContainer;
 import com.jaspersoft.studio.model.IGroupElement;
+import com.jaspersoft.studio.model.MGraphicElement;
 
 public class LayoutManager {
 	
@@ -135,13 +139,36 @@ public class LayoutManager {
 	}
 	
 	/**
+	 * Given a node return the property map associated to that node
+	 * 
+	 * @param node a not null node
+	 * @return the property map of the node if it can be found, null otherwise.
+	 * The map could or couldn't be a copy, depends on the implementation of the methods
+	 * used to return it
+	 */
+	public static JRPropertiesMap getPropertyMap(ANode node){
+		if (node instanceof APropertyNode){
+			APropertyNode aNode = (APropertyNode)node;
+			Object map = aNode.getPropertyValue(MGraphicElement.PROPERTY_MAP);
+			if (map != null) return (JRPropertiesMap)map;
+		}
+		if (node.getValue() instanceof JRPropertiesMap){
+			return (JRPropertiesMap)node.getValue();
+		} else {
+			JRPropertiesHolder pholder = getPropertyHolder(node);
+			if (pholder != null) return pholder.getPropertiesMap();
+		}
+		return null;
+	}
+	
+	/**
 	 * Create a layout command to layout the container passed as parameter
 	 * 
 	 * @param containerToLayout the container to layout, if null the result will be null
 	 * @return a layout command to do the layout of the passed container, can be null if the 
-	 * contaienr can not be layouted (maybe it null or not a valid container)
+	 * Container can not be layout (maybe it null or not a valid container)
 	 */
-	public static LayoutCommand creteRelayoutCommand(ANode containerToLayout){
+	public static LayoutCommand createRelayoutCommand(ANode containerToLayout){
 		if (containerToLayout == null) return null;
 		Object jrElement = containerToLayout.getValue();
 		
@@ -167,14 +194,80 @@ public class LayoutManager {
 		}
 		
 		//get the properties of the parent
-		JRPropertiesHolder pholder = getPropertyHolder(containerToLayout);
-		if (pholder != null && jrGroup != null) {
-			String str = pholder.getPropertiesMap().getProperty(ILayout.KEY);
+		JRPropertiesMap map = getPropertyMap(containerToLayout);
+		if (map != null && jrGroup != null) {
+			String str = map.getProperty(ILayout.KEY);
 			if (str == null){
 				str = FreeLayout.class.getName();
 			}
 			ILayout parentLayout = LayoutManager.getLayout(str);		
 			return new LayoutCommand(jrGroup, parentLayout, d);
+		}
+		return null;
+	}
+	
+	/**
+	 * Try to create a layout command for a container and if it was possible to create it
+	 * then it is executed
+	 * 
+	 * @param containerToLayout the container to layout, if null this doesn't do anything
+	 */
+	public static void layoutContainer(ANode containerToLayout){
+		LayoutCommand cmd = createRelayoutCommand(containerToLayout);
+		if (cmd != null) cmd.execute();
+	}
+	
+	/**
+	 * Create a map that contains the position of every inside every the specified parent plus a list of passed
+	 * elements (that will be considered by the layout engine like the are inside the parent), layout with the 
+	 * container specified layout. This is used to show visual feedback of a creation or a movement of a child into
+	 * a container. It will use the layout of the container to calculate the new positions but without change the current
+	 * one, since the result of the computation are simply returned
+	 * 
+	 * @param containerToLayout the container to layout, if null this doesn't do anything
+	 * @param additionalElements elements that will be considered by the layout engine like additional children of the container
+	 * @return the map of every element inside the container, plus the additionalElements, which for every element show the position
+	 * inside the container with its layout
+	 */
+	public static Map<JRElement, Rectangle> createLayoutPosition(ANode containerToLayout, List<JRElement> additionalElements){
+		if (containerToLayout == null) return null;
+		Object jrElement = containerToLayout.getValue();
+		
+		//Search the parent group
+		JRElementGroup jrGroup = null;
+		if (containerToLayout instanceof IGroupElement)
+			jrGroup = ((IGroupElement) containerToLayout).getJRElementGroup();
+		else if (containerToLayout.getValue() instanceof JRElementGroup)
+			jrGroup = (JRElementGroup) containerToLayout.getValue();
+		
+		//search the size of the parent
+		Dimension d = new Dimension();
+		if (containerToLayout instanceof IGraphicElementContainer){
+			d = ((IGraphicElementContainer) containerToLayout).getSize();
+		}
+		if (jrElement instanceof JRCommonElement) {
+			JRCommonElement jce = (JRCommonElement) jrElement;
+			d.setSize(new Dimension(jce.getWidth(), jce.getHeight()));
+		} else if (jrElement instanceof JRDesignBand) {
+			JasperDesign jDesign = containerToLayout.getJasperDesign();
+			int w = jDesign.getPageWidth() - jDesign.getLeftMargin() - jDesign.getRightMargin();
+			d.setSize(new Dimension(w, ((JRDesignBand) jrElement).getHeight()));
+		}
+		
+		//get the properties of the parent
+		JRPropertiesMap map = getPropertyMap(containerToLayout);
+		if (map != null && jrGroup != null) {
+			String str = map.getProperty(ILayout.KEY);
+			if (str == null){
+				str = FreeLayout.class.getName();
+			}
+			ILayout parentLayout = LayoutManager.getLayout(str);		
+			List<JRElement> elements = new ArrayList<JRElement>();
+			for(JRElement element : jrGroup.getElements()){
+				elements.add(element);
+			}
+			elements.addAll(additionalElements);
+			return parentLayout.getLayoutPosition(elements.toArray(new JRElement[elements.size()]), d);
 		}
 		return null;
 	}

@@ -35,7 +35,10 @@ import org.eclipse.gef.tools.DragEditPartsTracker;
 import org.eclipse.swt.SWT;
 
 import com.jaspersoft.studio.JSSCompoundCommand;
+import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
 import com.jaspersoft.studio.editor.gef.parts.JSSScalableFreeformRootEditPart;
+import com.jaspersoft.studio.editor.gef.parts.ReportPageEditPart;
+import com.jaspersoft.studio.editor.gef.parts.band.BandEditPart;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IContainer;
 import com.jaspersoft.studio.model.IDesignDragable;
@@ -270,6 +273,12 @@ public class SearchParentDragTracker extends DragEditPartsTracker {
 			org.eclipse.draw2d.Viewport port = ((FigureCanvas) getCurrentViewer().getControl()).getViewport();
 			setAutoexposeHelper(new DragAutoExpose(port, 50));
 		}
+		if (!isInState(STATE_TERMINAL)){
+			Command command = getCurrentCommand();
+			if (command == null || !command.canExecute()){
+				eraseSourceFeedback();
+			}
+		}
 		return super.handleDragInProgress();
 	}
 
@@ -294,6 +303,35 @@ public class SearchParentDragTracker extends DragEditPartsTracker {
 			ANode parentModel = ((ANode) child.getModel()).getParent();
 			if (parentModel == null)
 				return null;
+			//If the drop is outside the page search the band on the y axis or the neares one if
+			//the position is above or under the bands
+			if (child instanceof ReportPageEditPart){
+				ReportPageEditPart rootPart = (ReportPageEditPart)child;
+				ChangeBoundsRequest req = (ChangeBoundsRequest)getTargetRequest();
+				FigureEditPart lastBand = null;
+				FigureEditPart firstBand = null;
+				for(Object element : rootPart.getChildren()){
+					if (element instanceof BandEditPart){
+						FigureEditPart actualChildPart = (FigureEditPart) element;
+						if (firstBand == null) firstBand = actualChildPart;
+						lastBand = actualChildPart;
+						Rectangle bounds = actualChildPart.getFigure().getBounds();
+						if (bounds.y <= req.getLocation().y && req.getLocation().y <= bounds.y + bounds.height){
+							return actualChildPart;
+						}
+					}
+				}
+				if (firstBand != null && req.getLocation().y < firstBand.getFigure().getBounds().y){
+					return firstBand;
+				}
+				if (lastBand != null){
+					Rectangle bounds = lastBand.getFigure().getBounds();
+					if (req.getLocation().y >  bounds.y + bounds.height ){
+						return lastBand;
+					}
+				}
+				return null;
+			}
 			//I search the first container of the target element that it's not in the exclusion set
 			if(selectionHierarchy!=null) {
 				while (selectionHierarchy.contains(parentModel)){
@@ -564,15 +602,25 @@ public class SearchParentDragTracker extends DragEditPartsTracker {
 	 */
 	protected EditPart getTargetEditPart() {
 		EditPart target = super.getTargetEditPart();
+		return getTargetEditPart(target);
+	}
+	
+	/**
+	 * If the passed part is not a container search the fisrst valid
+	 * part for the drop operation and the return it
+	 */
+	protected EditPart getTargetEditPart(EditPart target) {
 		EditPart parent = null;
 		if (!(target instanceof IContainer) || 
-				(selectionHierarchy != null && selectionHierarchy.contains(target.getModel())))
+				(selectionHierarchy != null && selectionHierarchy.contains(target.getModel()))){
 			//If the target of the operation is not a Container or it is into an exclusion set, then the most
 			//near valid parent of the target is searched
 			parent = searchContainer(target);
-		return parent != null ? parent : target;
+		}
+		EditPart result= parent != null ? parent : target;
+		return result;
 	}
-		
+	
 	/**
 	 * Modify the drag behavior when the shift key is pressed. when it is pressed if the mouse
 	 * if moved over an offset (actually ten pixel) in horizontal or in vertical then the element
@@ -667,5 +715,22 @@ public class SearchParentDragTracker extends DragEditPartsTracker {
 		}
 
 		return request;
+	}
+	
+	/**
+	 * The update of the target under the mouse is done using 
+	 * the getTargetEditPart from this class
+	 */
+	protected boolean updateTargetUnderMouse() {
+		if (!isTargetLocked()) {
+			EditPart editPart  = getCurrentViewer().findObjectAtExcluding(getLocation(), getExclusionSet(), getTargetingConditional());
+			if (editPart != null){
+				editPart = getTargetEditPart(editPart);
+			}
+			boolean changed = super.getTargetEditPart() != editPart;
+			setTargetEditPart(editPart);
+			return changed;
+		}
+		return false;
 	}
 };

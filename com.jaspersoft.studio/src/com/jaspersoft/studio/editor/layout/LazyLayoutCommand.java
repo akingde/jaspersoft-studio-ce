@@ -53,7 +53,7 @@ public class LazyLayoutCommand extends Command {
 
 	@Override
 	public void execute() {
-		cmd = LayoutManager.creteRelayoutCommand(container);
+		cmd = LayoutManager.createRelayoutCommand(container);
 		if (cmd != null){
 			cmd.execute();
 		}

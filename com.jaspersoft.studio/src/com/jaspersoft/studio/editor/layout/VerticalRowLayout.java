@@ -68,4 +68,22 @@ public class VerticalRowLayout extends AbstractLayout {
 	public boolean allowChildBoundChange(ANode resizedNode, Rectangle oldBounds, Rectangle newBounds) {
 		return false;
 	}
+
+	@Override
+	public Map<JRElement, Rectangle> getLayoutPosition(JRElement[] elements, Dimension parentSize) {
+		Map<JRElement, Rectangle> map = new HashMap<JRElement, Rectangle>();
+		int x = 0;
+		int y = 0;
+		int w = parentSize.width;
+		int h = (int) Math.floor((float) parentSize.height / elements.length);
+		int rest = parentSize.height - h * elements.length;
+		for (JRElement el : elements) {
+			map.put(el, new Rectangle(x, y, w, h + rest));
+			// if last grab free pixels
+			y += h + rest;
+			if (rest > 0)
+				rest = 0;
+		}
+		return map;
+	}
 }

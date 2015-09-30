@@ -265,9 +265,9 @@ public class JSSGridBagUIProvider implements ILayoutUIProvider{
 		}
 		
 		//get the properties of the parent
-		JRPropertiesHolder pholder = LayoutManager.getPropertyHolder(parent);
+		JRPropertiesMap pholder = LayoutManager.getPropertyMap(parent);
 		if (pholder != null && jrGroup != null) {
-			String str = pholder.getPropertiesMap().getProperty(ILayout.KEY);
+			String str = pholder.getProperty(ILayout.KEY);
 			if (str == null){
 				str = FreeLayout.class.getName();
 			}

@@ -12,7 +12,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.layout;
 
-import net.sf.jasperreports.engine.JRPropertiesHolder;
+import net.sf.jasperreports.engine.JRPropertiesMap;
 
 import org.eclipse.draw2d.geometry.Rectangle;
 
@@ -31,7 +31,7 @@ public abstract class AbstractLayout implements ILayout {
 	}
 	
 	@Override
-	public boolean showAdditionalControls(JRPropertiesHolder elementProperties, JRPropertiesHolder parentProperties) {
+	public boolean showAdditionalControls(JRPropertiesMap elementProperties, JRPropertiesMap parentProperties) {
 		return false;
 	}
 

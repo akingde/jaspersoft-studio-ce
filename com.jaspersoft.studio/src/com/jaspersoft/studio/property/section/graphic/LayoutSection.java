@@ -16,7 +16,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.HashMap;
 
-import net.sf.jasperreports.engine.JRPropertiesHolder;
+import net.sf.jasperreports.engine.JRPropertiesMap;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
@@ -25,12 +25,11 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.Section;
 
-import com.jaspersoft.studio.editor.layout.ILayout;
 import com.jaspersoft.studio.editor.layout.FreeLayout;
+import com.jaspersoft.studio.editor.layout.ILayout;
 import com.jaspersoft.studio.editor.layout.ILayoutUIProvider;
 import com.jaspersoft.studio.editor.layout.LayoutManager;
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IContainerLayout;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
@@ -126,23 +125,6 @@ public class LayoutSection extends AbstractSection {
 	}
 	
 	/**
-	 * Get the properties holder of the current node if it can be found
-	 * 
-	 * @param node the node
-	 * @return the properties holder related to the node or null if it can't be found
-	 */
-	protected JRPropertiesHolder getPropertyHolder(ANode node){
-		if (node != null && node.getValue() instanceof JRPropertiesHolder) {
-			return (JRPropertiesHolder)node.getValue();
-		} 
-		if (node instanceof IContainerLayout){
-			JRPropertiesHolder[] holders = ((IContainerLayout) node).getPropertyHolder();
-			if (holders.length > 0) return holders[0];
-		}
-		return null;
-	}
-	
-	/**
 	 * Show the controls for the configuration of the child of an element with a specific layout,
 	 * if that layout require so.
 	 * 
@@ -150,12 +132,12 @@ public class LayoutSection extends AbstractSection {
 	 * false otherwise
 	 */
 	protected boolean showControls(){
-		JRPropertiesHolder parentProperties = getPropertyHolder(getElement().getParent());
-		JRPropertiesHolder elementProperties = getPropertyHolder(getElement());
-
+		JRPropertiesMap parentProperties = LayoutManager.getPropertyMap(getElement().getParent());
+		JRPropertiesMap elementProperties = LayoutManager.getPropertyMap(getElement());
+		
 		if (parentProperties != null){
 			//get the layout of the parent
-			String str = parentProperties.getPropertiesMap().getProperty(ILayout.KEY);
+			String str = parentProperties.getProperty(ILayout.KEY);
 			if (str == null){
 				str = FreeLayout.class.getName();
 			}

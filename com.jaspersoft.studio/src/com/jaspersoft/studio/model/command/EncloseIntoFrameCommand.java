@@ -190,7 +190,7 @@ public class EncloseIntoFrameCommand extends Command {
 		}
 		
 		//Layout the parent
-		LayoutCommand command = LayoutManager.creteRelayoutCommand(parent);
+		LayoutCommand command = LayoutManager.createRelayoutCommand(parent);
 		if (command!= null){
 			command.execute();
 		}
@@ -222,7 +222,7 @@ public class EncloseIntoFrameCommand extends Command {
 		containerFrame.setY(frameSize.y);
 		containerFrame.setWidth(frameSize.width);
 		containerFrame.setHeight(frameSize.height);
-		LayoutCommand command = LayoutManager.creteRelayoutCommand(parent);
+		LayoutCommand command = LayoutManager.createRelayoutCommand(parent);
 		if (command!= null){
 			command.execute();
 		}
@@ -239,10 +239,8 @@ public class EncloseIntoFrameCommand extends Command {
 		}
 		removeChild(parent, containerFrame);
 		containerFrame = null;
-		LayoutCommand command = LayoutManager.creteRelayoutCommand(parent);
-		if (command!= null){
-			command.execute();
-		}
+		
+		LayoutManager.layoutContainer(parent);
 	}
 	
 	/**

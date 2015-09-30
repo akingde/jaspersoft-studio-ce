@@ -21,8 +21,6 @@ import net.sf.jasperreports.engine.type.BandTypeEnum;
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
-import org.eclipse.draw2d.PositionConstants;
-import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.PrecisionRectangle;
 import org.eclipse.draw2d.geometry.Rectangle;
@@ -58,7 +56,7 @@ import com.jaspersoft.studio.editor.gef.parts.FrameFigureEditPart;
 import com.jaspersoft.studio.editor.gef.parts.IContainerPart;
 import com.jaspersoft.studio.editor.gef.parts.ReportPageEditPart;
 import com.jaspersoft.studio.editor.gef.parts.SnapToGeometryThreshold;
-import com.jaspersoft.studio.editor.gef.parts.editPolicy.ColoredRectangle;
+import com.jaspersoft.studio.editor.gef.parts.editPolicy.ColoredLayoutPositionRectangle;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.JSSSnapFeedBackPolicy;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.PageLayoutEditPolicy;
 import com.jaspersoft.studio.editor.outline.OutlineTreeEditPartFactory;
@@ -229,7 +227,7 @@ public class BandEditPart extends APrefFigureEditPart implements PropertyChangeL
 		installEditPolicy(EditPolicy.LAYOUT_ROLE, new PageLayoutEditPolicy() {
 			
 
-			private RectangleFigure targetFeedback;
+			private ColoredLayoutPositionRectangle targetFeedback;
 
 			@Override
 			protected Command getCreateCommand(ANode parent, Object obj, Rectangle constraint, int index) {
@@ -311,23 +309,31 @@ public class BandEditPart extends APrefFigureEditPart implements PropertyChangeL
 			 * @return feedback figure
 			 */
 			protected IFigure getLayoutTargetFeedback(Request request) {
+				List<Object> nodes = new ArrayList<Object>();
 				if (request.getType().equals(RequestConstants.REQ_CREATE) && request instanceof CreateRequest) {
 					CreateRequest cbr = (CreateRequest) request;
 					if (cbr.getNewObject() instanceof Collection<?>) {
 						Collection<?> c = (Collection<?>) cbr.getNewObject();
-						if (!c.isEmpty() && c.iterator().next() instanceof MStyle)
+						if (!c.isEmpty() && c.iterator().next() instanceof MStyle){
 							return null;
+						}
+					} else {
+						nodes.add(cbr.getNewObject());
 					}
 				} else if (request instanceof ChangeBoundsRequest) {
 					ChangeBoundsRequest cbr = (ChangeBoundsRequest) request;
 					@SuppressWarnings("unchecked")
 					List<EditPart> lst = cbr.getEditParts();
 					for (EditPart ep : lst)
-						if (((ANode) ep.getModel()).getParent() == getModel())
+						if (((ANode) ep.getModel()).getParent() == getModel()){
+							nodes.clear();
 							return null;
+						} else {
+							nodes.add(ep.getModel());
+						}
 				}
 				if (targetFeedback == null) {
-					targetFeedback = new ColoredRectangle(FrameFigureEditPart.addElementColor, 2.0f);
+					targetFeedback = new ColoredLayoutPositionRectangle(FrameFigureEditPart.addElementColor, 2.0f, getModel(), nodes);
 					targetFeedback.setFill(false);
 					IFigure hostFigure = getHostFigure();
 					Rectangle bounds = hostFigure.getBounds();
@@ -442,9 +448,6 @@ public class BandEditPart extends APrefFigureEditPart implements PropertyChangeL
 	}
 
 	public Object getConstraintFor(ChangeBoundsRequest request, GraphicalEditPart child) {
-		if (request.getResizeDirection() == PositionConstants.SOUTH
-				|| request.getResizeDirection() == PositionConstants.NORTH)
-			System.out.println(" Constraint request:  " + request.getSizeDelta() + "  " + request.getResizeDirection()); //$NON-NLS-1$ //$NON-NLS-2$
 		return new Rectangle(0, 0, 0, request.getSizeDelta().height);
 	}
 

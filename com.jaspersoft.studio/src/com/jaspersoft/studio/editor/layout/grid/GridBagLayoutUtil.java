@@ -162,9 +162,9 @@ public class GridBagLayoutUtil {
 				constraint.isFixedSeize = false;
 				constraint.fill = GridBagConstraints.BOTH;
 				prop = comp.getPropertiesMap().getProperty(JSSGridBagLayout.PROPERTY_WEIGHTX);
-				constraint.weightx = prop != null ? Double.parseDouble(prop.toString()) : 1.0;
-				prop = comp.getPropertiesMap().getProperty(JSSGridBagLayout.PROPERTY_WEIGHTY);
 				constraint.weighty = prop != null ? Double.parseDouble(prop.toString()) : 1.0;
+				prop = comp.getPropertiesMap().getProperty(JSSGridBagLayout.PROPERTY_WEIGHTY);
+				constraint.weightx = prop != null ? Double.parseDouble(prop.toString()) : 1.0;
 			}
 
     	comptable.put(comp, constraint);

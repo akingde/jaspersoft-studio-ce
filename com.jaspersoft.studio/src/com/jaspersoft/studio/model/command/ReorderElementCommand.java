@@ -85,7 +85,7 @@ public class ReorderElementCommand extends Command {
 			else
 				((JRDesignFrame) jrGroup).addElement(newIndex, jrElement);
 		}
-		layoutCommand = LayoutManager.creteRelayoutCommand(parent);
+		layoutCommand = LayoutManager.createRelayoutCommand(parent);
 		if (layoutCommand != null){
 			layoutCommand.execute();
 		}

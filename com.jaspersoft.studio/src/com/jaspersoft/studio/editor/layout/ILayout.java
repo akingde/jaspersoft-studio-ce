@@ -15,7 +15,7 @@ package com.jaspersoft.studio.editor.layout;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JRElement;
-import net.sf.jasperreports.engine.JRPropertiesHolder;
+import net.sf.jasperreports.engine.JRPropertiesMap;
 
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
@@ -82,7 +82,7 @@ public interface ILayout {
 	 * @return true if the element should have additional control in the layout section (created trough createControls implementation),
 	 * false otherwise
 	 */
-	public boolean showAdditionalControls(JRPropertiesHolder elementProperties, JRPropertiesHolder parentProperties);
+	public boolean showAdditionalControls(JRPropertiesMap elementProperties, JRPropertiesMap parentProperties);
 	
 	/**
 	 * Check if an operation that edit the bounds of an element is allowed using while the parent is using this layout
@@ -92,4 +92,15 @@ public interface ILayout {
 	 * @param newBounds the new bounds of the child element
 	 */
 	public boolean allowChildBoundChange(ANode resizedNode, Rectangle oldBounds, Rectangle newBounds);
+	
+	/**
+	 * Return the layout position of all the elements of a container. The position of the elements is not
+	 * changed, the new position is only returned in the return vale
+	 * 
+	 * @param elements the elements to be layout, must be not null and all the elements must belong
+	 * to the same parent
+	 * @param c the dimension of the parent
+	 * @return the position of each elements after layout operation
+	 */
+	public abstract Map<JRElement, Rectangle> getLayoutPosition(JRElement[] elements, Dimension parentSize);
 }

@@ -18,6 +18,7 @@ import java.util.Map.Entry;
 
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRPropertiesHolder;
+import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 
 import org.eclipse.draw2d.geometry.Dimension;
@@ -79,7 +80,7 @@ public class JSSGridBagLayout extends AbstractLayout {
 	/**
 	 * When the parent has a grid layout it always show additional controls
 	 */
-	public boolean showAdditionalControls(JRPropertiesHolder elementProperties, JRPropertiesHolder parentProperties) {
+	public boolean showAdditionalControls(JRPropertiesMap elementProperties, JRPropertiesMap parentProperties) {
 		return true;
 	}
 	
@@ -133,5 +134,12 @@ public class JSSGridBagLayout extends AbstractLayout {
 	@Override
 	public String getIcon() {
 		return "icons/layout.png"; //$NON-NLS-1$
+	}
+
+	@Override
+	public Map<JRElement, Rectangle> getLayoutPosition(JRElement[] elements, Dimension parentSize) {
+		GridBagLayoutUtil layout = new GridBagLayoutUtil();
+		Map<JRElement, Rectangle> result = layout.layoutContainer(parentSize, elements);
+		return result;
 	}
 }

@@ -30,9 +30,9 @@ import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
  */
 public class ColoredRectangle extends RectangleFigure{
 	
-	private Color borderColor;
+	protected Color borderColor;
 	
-	private float borderWidth;
+	protected float borderWidth;
 	
 	public ColoredRectangle(Color borderColor, float borderWidth){
 		this.borderColor = borderColor;

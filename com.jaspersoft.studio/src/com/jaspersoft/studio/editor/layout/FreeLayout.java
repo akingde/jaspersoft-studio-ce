@@ -43,4 +43,9 @@ public class FreeLayout extends AbstractLayout {
 	public String getIcon() {
 		return "icons/layout.png"; //$NON-NLS-1$
 	}
+
+	@Override
+	public Map<JRElement, Rectangle> getLayoutPosition(JRElement[] elements, Dimension parentSize) {
+		return null;
+	}
 }

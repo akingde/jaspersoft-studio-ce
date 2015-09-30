@@ -19,24 +19,25 @@ import java.util.List;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.draw2d.geometry.PrecisionRectangle;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.CompoundSnapToHelper;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
+import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.SnapToGrid;
 import org.eclipse.gef.SnapToGuides;
 import org.eclipse.gef.SnapToHelper;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.handles.HandleBounds;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
+import org.eclipse.gef.requests.CreateRequest;
 
 import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.editor.gef.commands.SetPageConstraintCommand;
 import com.jaspersoft.studio.editor.gef.figures.ReportPageFigure;
-import com.jaspersoft.studio.editor.gef.parts.editPolicy.ColoredRectangle;
+import com.jaspersoft.studio.editor.gef.parts.editPolicy.ColoredLayoutPositionRectangle;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.FigureSelectionEditPolicy;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.PageLayoutEditPolicy;
 import com.jaspersoft.studio.editor.outline.OutlineTreeEditPartFactory;
@@ -59,7 +60,7 @@ public class FrameFigureEditPart extends FigureEditPart implements IContainer {
 	/**
 	 * figure of the target feedback
 	 */
-	private RectangleFigure targetFeedback;
+	private ColoredLayoutPositionRectangle targetFeedback;
 
 	@Override
 	public MFrame getModel() {
@@ -181,7 +182,19 @@ public class FrameFigureEditPart extends FigureEditPart implements IContainer {
 			 */
 			protected IFigure getLayoutTargetFeedback(Request request) {
 				if (targetFeedback == null) {
-					targetFeedback = new ColoredRectangle(addElementColor, 2.0f);
+					List<Object> nodes = new ArrayList<Object>();
+					if (request.getType().equals(RequestConstants.REQ_CREATE) && request instanceof CreateRequest) {
+						CreateRequest cbr = (CreateRequest) request;
+						nodes.add(cbr.getNewObject());
+					} else if (request instanceof ChangeBoundsRequest) {
+						ChangeBoundsRequest cbr = (ChangeBoundsRequest) request;
+						@SuppressWarnings("unchecked")
+						List<EditPart> lst = cbr.getEditParts();
+						for (EditPart ep : lst) {
+							nodes.add(ep.getModel());
+						}
+					}
+					targetFeedback = new ColoredLayoutPositionRectangle(FrameFigureEditPart.addElementColor, 2.0f, getModel(), nodes);
 					targetFeedback.setFill(false);
 
 					IFigure hostFigure = getHostFigure();
