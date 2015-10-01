@@ -26,6 +26,7 @@ import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -42,6 +43,7 @@ import org.eclipse.ui.console.MessageConsole;
 import org.eclipse.ui.console.MessageConsoleStream;
 
 import com.ibm.icu.text.MessageFormat;
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.components.customvisualization.CustomVisualizationActivator;
 import com.jaspersoft.studio.components.customvisualization.messages.Messages;
 import com.jaspersoft.studio.preferences.util.PreferencesUtils;
@@ -54,6 +56,11 @@ import com.jaspersoft.studio.preferences.util.PreferencesUtils;
  *
  */
 public class ConsoleExecuter {
+	
+	/**
+	 * The minimum java version required for the compiling
+	 */
+	private static final String MINIMUM_JAVA_VERSION = "1.7";//$NON-NLS-1$
 	
 	/**
 	 * name of the build file
@@ -95,41 +102,22 @@ public class ConsoleExecuter {
 			try {
 				Process process = Runtime.getRuntime().exec(checkVersionCommand);
 				outputStream.println(Messages.ConsoleExecuter_checkVersionStart);
+				outputStream.println(checkVersionCommand);
 				
 				//BufferedReader stdInput = new BufferedReader(new InputStreamReader(process.getInputStream()));
 				BufferedReader stdError = new BufferedReader(new InputStreamReader(process.getErrorStream()));
 				
 				// read the output from the command
 				String s = null;
-				/*try{	
-					while ((s = stdInput.readLine()) != null) {
-						String line = s.toLowerCase().trim();
-						if (line.startsWith("java version")){
-							int start = line.indexOf("\"");
-							int end = start + line.lastIndexOf("\"");
-							String version = line.substring(start, end);
-							if (version.startsWith("1.7")) return true;
-							else {
-								outputStream.println("You need a Java 1.7 to compile this component, you can both:");
-								outputStream.println("-Remove your current java version and install a java 1.7");
-								outputStream.println("-Set the Jaspersoft Studio Property "+CustomVisualizationActivator.JAVA_PATH_PROPERTY+" with the path of the bin folder of a java 1.7");
-							}
-						}
-					}
-				} catch(Exception ex){
-					outputStream.println("Error checking your java version");
-					outputStream.println(ex.getMessage());
-				}*/
-	
-				// read any errors from the attempted command
 				try{
 					while ((s = stdError.readLine()) != null) {
 						String line = s.toLowerCase().trim();
 						if (line.startsWith("java version")){ //$NON-NLS-1$
 							int start = line.indexOf("\"")+1; //$NON-NLS-1$
 							int end = line.lastIndexOf("\""); //$NON-NLS-1$
-							String version = line.substring(start, end);
-							if (version.startsWith("1.7")) { //$NON-NLS-1$
+							//Convert the last number into a version number
+							String version = line.substring(start, end).replaceAll("_", ".");
+							if (versionCompare(version, MINIMUM_JAVA_VERSION)>=0) { 
 								outputStream.println(Messages.ConsoleExecuter_checkSuccess);
 								return true;
 							} else {
@@ -150,6 +138,75 @@ public class ConsoleExecuter {
 			}
 			return false;
 		} 
+		
+		/**
+		 * Pad the array passed as parameter to the length specified as second parameter.
+		 * The padding elements have the value zero
+		 * 
+		 * @param currentNumber a not null array with size lesser then newSize
+		 * @param newSize the new size of the array
+		 * @return a not null array with size new size
+		 */
+		private String[] versionPadding(String[] currentNumber, int newSize){
+			Assert.isTrue(currentNumber.length < newSize);
+		  	String[] equalLenghtVals2 = new String[newSize];
+	    	for(int i = 0; i<newSize; i++){
+	    		if (i<currentNumber.length){
+	    			equalLenghtVals2[i] = currentNumber[i];
+	    		} else {
+	    			equalLenghtVals2[i] = "0";
+	    		}
+	    	}
+	    	return equalLenghtVals2;
+		}
+		
+		/**
+		 * Compares two version strings. 
+		 * 
+		 * Use this instead of String.compareTo() for a non-lexicographical 
+		 * comparison that works for version strings. e.g. "1.10".compareTo("1.6").
+		 * The number of  components of the two version is uniformed to have an 
+		 * one to one comparison (this allow to recognize that 10.0 and 10.0.0 are the
+		 * same version)
+		 *
+		 * 
+		 * @param str1 a string of ordinal numbers separated by decimal points. 
+		 * @param str2 a string of ordinal numbers separated by decimal points.
+		 * @return The result is a negative integer if str1 is _numerically_ less than str2. 
+		 *         The result is a positive integer if str1 is _numerically_ greater than str2. 
+		 *         The result is zero if the strings are _numerically_ equal.
+		 */
+		public Integer versionCompare(String str1, String str2)
+		{
+		    String[] vals1 = str1.split("\\.");
+		    String[] vals2 = str2.split("\\.");
+		    
+		    //Make sure that the two string have the same number of components
+		    if (vals2.length < vals1.length){
+		    	vals2 = versionPadding(vals2, vals1.length);
+		    } else if (vals2.length > vals1.length){
+		    	vals1 = versionPadding(vals1, vals2.length);
+		    }
+		    
+		    int i = 0;
+		    // set index to first non-equal ordinal or length of shortest version string
+		    while (i < vals1.length && i < vals2.length && vals1[i].equals(vals2[i])) 
+		    {
+		      i++;
+		    }
+		    // compare first non-equal ordinal number
+		    if (i < vals1.length && i < vals2.length) 
+		    {
+		        int diff = Integer.valueOf(vals1[i]).compareTo(Integer.valueOf(vals2[i]));
+		        return Integer.signum(diff);
+		    }
+		    // the strings are equal or one string is a substring of the other
+		    // e.g. "1.2.3" = "1.2.3" or "1.2.3" < "1.2.3.4"
+		    else
+		    {
+		        return Integer.signum(vals1.length - vals2.length);
+		    }
+		}
 		
 		@Override
 		protected IStatus run(IProgressMonitor monitor) {
@@ -260,11 +317,32 @@ public class ConsoleExecuter {
 		return result;
 	}
 	
+	/**
+	 * Return the string to execute a Java command. First the path is looked in the property 
+	 * com.jaspersoft.studio.components.customvisualization.javapath, if found it is used. If not
+	 * and the current version is an RCP it is used the java version embedded with studio and used
+	 * to run it. Otherwise will be returned the standard Java command that relay on the environment 
+	 * variables.
+	 * 
+	 * 
+	 * @return a not null string to call the JVM
+	 */
 	private String getJavaCommand(){
 		String javaPath = PreferencesUtils.getJasperReportsProperty(CustomVisualizationActivator.JAVA_PATH_PROPERTY);
-		if (javaPath == null || javaPath.trim().isEmpty()) return "java"; //$NON-NLS-1$
-		if (!javaPath.endsWith(File.pathSeparator)) javaPath+=File.separator;
-		return javaPath+"java"; //$NON-NLS-1$
+		if(javaPath != null && !javaPath.trim().isEmpty()){
+			if (!javaPath.endsWith(File.pathSeparator)) javaPath+=File.separator;
+			return javaPath + "java"; //$NON-NLS-1$
+		} else {
+			boolean isRCP = JaspersoftStudioPlugin.isRCP();
+			if (isRCP){
+				javaPath = System.getProperties().getProperty("java.home");
+				if (javaPath != null && !javaPath.trim().isEmpty()){
+					javaPath+=File.separator + "bin" + File.separator + "java";//$NON-NLS-1$ //$NON-NLS-2$
+					return javaPath;
+				}
+			}
+		}
+		return "java";//$NON-NLS-1$
 	}
 	
 	/**
