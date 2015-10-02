@@ -12,14 +12,17 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeSupport;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.JRRuntimeException;
 import net.sf.jasperreports.engine.JRSimpleTemplate;
+import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.design.JRDesignElementGroup;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.design.events.CollectionElementAddedEvent;
@@ -685,5 +688,69 @@ public abstract class ANode implements INode, Serializable, IAdaptable, Cloneabl
 		h = h * 4;
 		if (h < 1000) h = 1000;
 		return new Point(w, h);
+	}
+	
+	/**
+	 * Add a style to the map of styles for this element. If the style was not
+	 * already in the map it is added with a list containing only this element, otherwise
+	 * this element is appended to the end of the list associated with the style
+	 * 
+	 * @param style the style to add, if null this doensn't do nothing
+	 * @param map map where the style are added, must be not null
+	 */
+	protected void addElementStyle(JRStyle style, HashMap<String, List<ANode>> map){
+		if (style == null) return;
+		List<ANode> list = map.get(style.getName());
+		if (list == null){
+			list = new ArrayList<ANode>();
+			list.add(this);
+			map.put(style.getName(), list);
+		} else {
+			if (!list.contains(this)){
+				list.add(this);
+			}
+		}
+	}
+	
+	/**
+	 * Merge to styles map into one, by also concatenated the list of elements
+	 * when a style is present in both
+	 * 
+	 * @param destination first map and destination of the merge
+	 * @param origin the map that will be merged with the first one
+	 */
+	protected void mergeElementStyle(HashMap<String, List<ANode>> destination, HashMap<String, List<ANode>> origin){
+		for(Entry<String, List<ANode>> entry : origin.entrySet()){
+			String style = entry.getKey();
+			List<ANode> elements = entry.getValue();
+			List<ANode> targetElements = destination.get(style);
+			if (targetElements == null){
+				destination.put(style, elements);
+ 			} else {
+ 				targetElements.addAll(elements);
+ 			}
+		}
+	}
+	
+	/**
+	 * Return the styles used by this element and eventually by its children.
+	 * 
+	 * @return a not null map with the names of all the styles used by this
+	 * element or one of its children. The value corresponding to each style is
+	 * the reference to the element that is using the style
+	 */
+	public HashMap<String, List<ANode>> getUsedStyles(){
+		return new HashMap<String, List<ANode>>();
+	}
+	
+	/**
+	 * Set a style on this element, the default implementation is empty
+	 * but in the subclasses that support styles it should set the style
+	 * on the jr element
+	 * 
+	 * @param style the style to set, could be null to remove it
+	 */
+	public void setStyle(JRStyle style){
+		
 	}
 }

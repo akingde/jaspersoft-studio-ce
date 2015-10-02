@@ -885,21 +885,30 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 	}
 
 	/**
-	 * Return a list of used styles by the element. This is very useful in case of and element like table or crosstab that
-	 * can use many styles
+	 * Return the styles used by this element and eventually by its children.
 	 * 
-	 * @return a not null hashset of the names of all the styles used by this element
+	 * @return a not null map with the names of all the styles used by this
+	 * element or one of its children. The value corresponding to each style is
+	 * the reference to the element that is using the style
 	 */
 	@Override
-	public HashSet<String> getUsedStyles() {
-		HashSet<String> result = new HashSet<String>();
+	public HashMap<String, List<ANode>> getUsedStyles() {
+		HashMap<String, List<ANode>> result = super.getUsedStyles();
 		JRStyle style = getValue().getStyle();
-		if (style != null) {
-			result.add(style.getName());
-		}
+		addElementStyle(style, result);
 		return result;
 	}
-
+	
+	/**
+	 * Set the style on the {@link JRDesignElement} of this node
+	 */
+	@Override
+	public void setStyle(JRStyle style) {
+		if (getValue() != null){
+			getValue().setStyle(style);
+		}
+	}
+	
 	protected SetValueCommand generateSetCommand(APropertyNode target, String propertyId, Object value) {
 		SetValueCommand result = new SetValueCommand();
 		result.setTarget(target);

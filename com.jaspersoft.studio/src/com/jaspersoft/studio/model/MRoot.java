@@ -13,6 +13,8 @@
 package com.jaspersoft.studio.model;
 
 import java.beans.PropertyChangeEvent;
+import java.util.HashMap;
+import java.util.List;
 
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -117,4 +119,14 @@ public class MRoot extends ANode {
 		// do not process any events (to avoid duplicate events)
 	}
 
+	@Override
+	public HashMap<String, List<ANode>> getUsedStyles() {
+		HashMap<String, List<ANode>> result = super.getUsedStyles();
+		for(INode child : getChildren()){
+			if (child instanceof ANode){
+				mergeElementStyle(result, ((ANode) child).getUsedStyles());
+			} 
+		}
+		return result;
+	}
 }

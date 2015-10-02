@@ -8,6 +8,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.model.frame;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -32,7 +33,6 @@ import com.jaspersoft.studio.model.IContainer;
 import com.jaspersoft.studio.model.IContainerEditPart;
 import com.jaspersoft.studio.model.IContainerLayout;
 import com.jaspersoft.studio.model.IGraphicElementContainer;
-import com.jaspersoft.studio.model.IGraphicalPropertiesHandler;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.IPastable;
 import com.jaspersoft.studio.model.IPastableGraphic;
@@ -255,12 +255,11 @@ public class MFrame extends MGraphicElementLineBox implements IPastable, IPastab
 	}
 	
 	@Override
-	public HashSet<String> getUsedStyles() {
-		HashSet<String> usedStyles = super.getUsedStyles();
+	public HashMap<String, List<ANode>> getUsedStyles() {
+		HashMap<String, List<ANode>> usedStyles = super.getUsedStyles();
 		for (INode node : getChildren()) {
-			if (node instanceof IGraphicalPropertiesHandler) {
-				HashSet<String> childStyles = ((IGraphicalPropertiesHandler) node).getUsedStyles();
-				usedStyles.addAll(childStyles);
+			if (node instanceof ANode) {
+				mergeElementStyle(usedStyles, ((ANode) node).getUsedStyles());
 			}
 		}
 		return usedStyles;

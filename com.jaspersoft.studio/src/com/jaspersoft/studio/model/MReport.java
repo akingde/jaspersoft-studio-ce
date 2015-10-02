@@ -1080,4 +1080,15 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 	public boolean canAcceptChildren(ANode child) {
 		return (child instanceof MBand);
 	}
+	
+	@Override
+	public HashMap<String, List<ANode>> getUsedStyles() {
+		HashMap<String, List<ANode>>result = super.getUsedStyles();
+		for(INode child : getChildren()){
+			if (child instanceof ANode){
+				mergeElementStyle(result, ((ANode) child).getUsedStyles());
+			} 
+		}
+		return result;
+	}
 }

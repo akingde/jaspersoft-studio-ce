@@ -14,8 +14,9 @@ package com.jaspersoft.studio.components.table.model.table.command;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 
 import net.sf.jasperreports.eclipse.ui.util.RunnableCancelQuestion.RESPONSE_TYPE;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
@@ -26,11 +27,7 @@ import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.components.table.model.MTable;
-import com.jaspersoft.studio.model.IGraphicalPropertiesHandler;
-import com.jaspersoft.studio.model.INode;
-import com.jaspersoft.studio.model.MReport;
-import com.jaspersoft.studio.model.MRoot;
-import com.jaspersoft.studio.model.band.MBand;
+import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.command.DeleteElementCommand;
 import com.jaspersoft.studio.model.style.command.DeleteStyleCommand;
 
@@ -69,38 +66,41 @@ public class DeleteTableCommand extends DeleteElementCommand {
 	}
 
 	/**
-	 * Return the list of styles used inside the report except for a specific element
+	 * Check if a style is used only by the table or also by someone else
 	 * 
-	 * @param currentNode the current node for the recursion
-	 * @param stylesFound the styles found until now
-	 * @param excludeNode the node to exclude
+	 * @param nodesUsingInsideTable nodes using the style that are inside the table
+	 * @param nodesUsingOutsideTable nodes using the style in the whole report
+	 * 
+	 *  @return true if the styles is used only by the nodes inside the table, false otherwise
 	 */
-	protected void getUsedStyles(INode currentNode, HashSet<String> stylesFound, INode excludeNode){
-		if (currentNode instanceof MRoot && currentNode.getChildren().size() > 0){
-			getUsedStyles(currentNode.getChildren().get(0), stylesFound, excludeNode);
-		} else if (currentNode instanceof MBand || currentNode instanceof MReport){
-			for(INode child : currentNode.getChildren()){
-				getUsedStyles(child, stylesFound, excludeNode);
+	private boolean isUsedOnlyByTable(List<ANode> nodesUsingInsideTable, List<ANode> nodesUsingOutsideTable){
+		if (nodesUsingInsideTable == null || nodesUsingOutsideTable == null) return false;
+		if (nodesUsingInsideTable.size() != nodesUsingOutsideTable.size()) return false;
+		
+		for(ANode nodeUsingInsideTable : nodesUsingInsideTable){
+			if (!nodesUsingOutsideTable.contains(nodeUsingInsideTable)){
+				return false;
 			}
-		} else if (currentNode instanceof IGraphicalPropertiesHandler && currentNode != excludeNode){
-			stylesFound.addAll(((IGraphicalPropertiesHandler)currentNode).getUsedStyles());
 		}
+		return true;
 	}
 	
 	@Override
 	public void execute() {
 		delteStylesCommand.clear();
-		INode root = table.getParent().getRoot();
+		ANode root = (ANode)table.getParent().getRoot();
 		//get the list of styles used in the element
-		HashSet<String> usedStyles = table.getUsedStyles();
-		//Get the map of styles used in the report
-		HashSet<String> reportUsedStyles = new HashSet<String>();
-		getUsedStyles(root, reportUsedStyles, table);
+		HashMap<String, List<ANode>> reportStyles = root.getUsedStyles();
+		HashMap<String, List<ANode>> tableStyles = table.getUsedStyles();
+		
 		//check which styles were used in the element but not in the rest of the report
 		List<String> unusedStyles = new ArrayList<String>();
-		for(String style : usedStyles){
-			if (!reportUsedStyles.contains(style) && jDesign.getStylesMap().containsKey(style)){
-				unusedStyles.add(style);
+		
+		for(Entry<String, List<ANode>> entry : tableStyles.entrySet()){
+			List<ANode> nodesUsingOutsideTable = reportStyles.get(entry.getKey());
+			if (jDesign.getStylesMap().containsKey(entry.getKey()) && 
+					isUsedOnlyByTable(entry.getValue(), nodesUsingOutsideTable)){
+				unusedStyles.add(entry.getKey());
 			}
 		}
 		if (!unusedStyles.isEmpty()){

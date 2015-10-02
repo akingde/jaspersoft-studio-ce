@@ -9,7 +9,6 @@
 package com.jaspersoft.studio.model.style;
 
 import java.beans.PropertyChangeEvent;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,8 +60,8 @@ import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.box.BoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.color.ColorPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptor.combo.FontSizeButtonPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.FontNamePropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.combo.FontSizeButtonPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RWFloatComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RWStyleComboBoxPropertyDescriptor;
@@ -816,27 +815,63 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 
 	/**
 	 * Search all the nodes that are using this styles and set the flag to tell the graphic manager to repaint them
+	 * At the first iteration the node must be the root
 	 * 
 	 * @param childerns
 	 *          the children of the actual level
 	 * @param force force the refresh in all the nodes, ignoring if they are using or not the style
 	 */
-	private void setStyleRefresh(List<INode> childerns, boolean force) {
-		for (INode child : childerns) {
-			if (child instanceof IGraphicalPropertiesHandler) {
-				IGraphicalPropertiesHandler graphicalElement = (IGraphicalPropertiesHandler) child;
-				if (force || getValue().isDefault() || graphicalElement.getUsedStyles().contains(getValue().getName())) {
+	private void setStyleRefresh(INode node, boolean force) {
+		if (force || getValue().isDefault()){
+			if (node instanceof IGraphicalPropertiesHandler){
+				IGraphicalPropertiesHandler graphicalElement = (IGraphicalPropertiesHandler)node;
+				graphicalElement.setChangedProperty(true);
+				//Since a style change can change the presence of an error decorator (the fault property can be inherited)
+				//we need to refresh also the elements depending on this style
+				((ANode)node).revalidateChildren();
+			}
+			//update all the nodes
+			for (INode child : node.getChildren()) {
+				setStyleRefresh(child, force);
+			}
+		} else {
+			HashMap<String, List<ANode>> nodesUsingStyle = ((ANode)node).getUsedStyles();
+			List<ANode> nodes = nodesUsingStyle.get(getValue().getName());
+			if (nodes == null) return;
+			for (ANode aNode : nodes) {
+				if (aNode.getUsedStyles().containsKey(getValue().getName()) && aNode instanceof IGraphicalPropertiesHandler) {
+					IGraphicalPropertiesHandler graphicalElement = (IGraphicalPropertiesHandler)aNode;
 					graphicalElement.setChangedProperty(true);
 					//Since a style change can change the presence of an error decorator (the fault property can be inherited)
 					//we need to refresh also the elements depending on this style
-					((ANode)child).revalidateChildren();
+					((ANode)aNode).revalidateChildren();
 				}
 			}
-			setStyleRefresh(new ArrayList<INode>(child.getChildren()), force);
 		}
-
 	}
 
+	/**
+	 * Return the styles used by this element and eventually by its children.
+	 * 
+	 * @return a not null map with the names of all the styles used by this
+	 * element or one of its children. The value corresponding to each style is
+	 * the reference to the element that is using the style
+	 */
+	@Override
+	public HashMap<String, List<ANode>> getUsedStyles() {
+		HashMap<String, List<ANode>> result = super.getUsedStyles();
+		JRStyle style = getValue().getStyle();
+		addElementStyle(style, result);
+		return result;
+	}
+	
+	@Override
+	public void setStyle(JRStyle style) {
+		if (getValue() != null){
+			((JRDesignStyle)getValue()).setParentStyle(style);
+		}
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -889,7 +924,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 				// Avoid the refresh if the style is not in the hierarchy
 				final INode root = getRoot();
 				if (root != null) {
-					setStyleRefresh(new ArrayList<INode>(root.getChildren()), force);
+					setStyleRefresh(root, force);
 					JSSCompoundCommand.forceRefreshVisuals(JSSCompoundCommand.getMainNode((ANode) root));
 				}
 			}

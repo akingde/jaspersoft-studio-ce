@@ -563,4 +563,15 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 		// check for deleted band
 		return getValue() != null;
 	}
+	
+	@Override
+	public HashMap<String, List<ANode>> getUsedStyles() {
+		HashMap<String, List<ANode>> map = super.getUsedStyles();
+		for (INode node : getChildren()) {
+			if (node instanceof ANode) {
+				mergeElementStyle(map, ((ANode) node).getUsedStyles());
+			}
+		}
+		return map;
+	}
 }

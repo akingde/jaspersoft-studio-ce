@@ -13,6 +13,8 @@
 package com.jaspersoft.studio.components.table.model;
 
 import java.beans.PropertyChangeEvent;
+import java.util.HashMap;
+import java.util.List;
 
 import net.sf.jasperreports.components.table.BaseColumn;
 import net.sf.jasperreports.components.table.StandardBaseColumn;
@@ -118,4 +120,14 @@ public abstract class AMCollection extends MCollection {
 
 	public abstract void createColumn(ANode mth, BaseColumn bc, int i, int index);
 
+	@Override
+	public HashMap<String, List<ANode>> getUsedStyles() {
+		HashMap<String, List<ANode>> result = super.getUsedStyles();
+		for(INode child : getChildren()){
+			if (child instanceof ANode){
+				mergeElementStyle(result, ((ANode) child).getUsedStyles());
+			}
+		}
+		return result;
+	}
 }

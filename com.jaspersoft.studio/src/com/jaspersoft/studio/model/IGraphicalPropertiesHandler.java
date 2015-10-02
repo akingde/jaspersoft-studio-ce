@@ -18,8 +18,7 @@ import java.util.HashSet;
  * Class used to support the refresh system of the elements only when 
  * one of its graphical property is changed. The hasChangedProperty method is used 
  * to know when an element must be refreshed and it can be set. It provide the method
- * to ask the element which are its graphical properties or the list of styles it uses.
- * This last one is to easily set an element for the update when a style used by it is changed  
+ * to ask the element which are its graphical properties it uses.
  * 
  * @author Orlandin Marco
  *
@@ -46,12 +45,4 @@ public interface IGraphicalPropertiesHandler {
 	 * when changed
 	 */
 	public HashSet<String> getGraphicalProperties();
-
-	/**
-	 * Return a list of used styles by the element. This is very useful in case of 
-	 * and element like table or crosstab that can use many styles
-	 * 
-	 * @return a not null hashset of the names of all the styles used by this element
-	 */
-	public HashSet<String> getUsedStyles();
 }

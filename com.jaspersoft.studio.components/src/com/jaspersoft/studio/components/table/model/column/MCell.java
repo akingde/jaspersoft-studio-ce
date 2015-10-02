@@ -13,15 +13,14 @@
 package com.jaspersoft.studio.components.table.model.column;
 
 import java.beans.PropertyChangeEvent;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.components.table.Cell;
 import net.sf.jasperreports.components.table.DesignCell;
-import net.sf.jasperreports.components.table.GroupCell;
 import net.sf.jasperreports.components.table.StandardBaseColumn;
-import net.sf.jasperreports.components.table.StandardColumn;
 import net.sf.jasperreports.engine.JRBoxContainer;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRElementGroup;
@@ -473,17 +472,12 @@ public class MCell extends MColumn implements IGraphicElement,
 		return cachedGraphicalProperties;
 	}
 
-	private void addStyle(HashSet<String> stylesMap, JRStyle style) {
-		if (style != null)
-			stylesMap.add(style.getName());
-	}
-
 	/**
 	 * Return all the styles of the column
 	 */
 	@Override
-	public HashSet<String> getUsedStyles() {
-		StandardBaseColumn standardCol = getValue();
+	public HashMap<String, List<ANode>> getUsedStyles() {
+		/*StandardBaseColumn standardCol = getValue();
 		HashSet<String> result = new HashSet<String>();
 		if (standardCol.getColumnFooter() != null)
 			addStyle(result, standardCol.getColumnFooter().getStyle());
@@ -505,6 +499,28 @@ public class MCell extends MColumn implements IGraphicElement,
 		for (GroupCell gc : standardCol.getGroupFooters())
 			if (gc.getCell() != null)
 				addStyle(result, gc.getCell().getStyle());
+		for (INode node : getChildren()) {
+			if (node instanceof ANode) {
+				result.addAll(((ANode) node).getUsedStyles());
+			}
+		}
+		return result;*/
+		HashMap<String, List<ANode>> result = super.getUsedStyles();
+		if (cell != null){
+			addElementStyle(cell.getStyle(), result);
+		}
+		
+		for (INode node : getChildren()) {
+			if (node instanceof ANode) {
+				mergeElementStyle(result, ((ANode) node).getUsedStyles());
+			}
+		}
+		
 		return result;
+	}
+	
+	@Override
+	public void setStyle(JRStyle style) {
+		cell.setStyle(style);
 	}
 }

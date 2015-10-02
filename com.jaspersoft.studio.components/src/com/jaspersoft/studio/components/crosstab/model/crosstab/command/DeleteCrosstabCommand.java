@@ -14,8 +14,9 @@ package com.jaspersoft.studio.components.crosstab.model.crosstab.command;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 
 import net.sf.jasperreports.eclipse.ui.util.RunnableCancelQuestion.RESPONSE_TYPE;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
@@ -26,11 +27,7 @@ import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.components.crosstab.model.MCrosstab;
 import com.jaspersoft.studio.components.table.messages.Messages;
-import com.jaspersoft.studio.model.IGraphicalPropertiesHandler;
-import com.jaspersoft.studio.model.INode;
-import com.jaspersoft.studio.model.MReport;
-import com.jaspersoft.studio.model.MRoot;
-import com.jaspersoft.studio.model.band.MBand;
+import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.command.DeleteElementCommand;
 import com.jaspersoft.studio.model.style.command.DeleteStyleCommand;
 
@@ -50,7 +47,7 @@ public class DeleteCrosstabCommand extends DeleteElementCommand {
 	/**
 	 * The element to delete
 	 */
-	private MCrosstab table;
+	private MCrosstab crosstab;
 	
 	/**
 	 * Flag to remeber if the operation was cancelled or not
@@ -65,42 +62,45 @@ public class DeleteCrosstabCommand extends DeleteElementCommand {
 	 */
 	public DeleteCrosstabCommand(MCrosstab srcNode) {
 		super(srcNode);
-		table = srcNode;
+		crosstab = srcNode;
 	}
 
 	/**
-	 * Return the list of styles used inside the report except for a specific element
+	 * Check if a style is used only by the crosstab or also by someone else
 	 * 
-	 * @param currentNode the current node for the recursion
-	 * @param stylesFound the styles found until now
-	 * @param excludeNode the node to exclude
+	 * @param nodesUsingInsideCrosstab nodes using the style that are inside the ccrosstab
+	 * @param nodesUsingOutsideCrosstab nodes using the style in the whole report
+	 * 
+	 *  @return true if the styles is used only by the nodes inside the crosstab, false otherwise
 	 */
-	protected void getUsedStyles(INode currentNode, HashSet<String> stylesFound, INode excludeNode){
-		if (currentNode instanceof MRoot && currentNode.getChildren().size() > 0){
-			getUsedStyles(currentNode.getChildren().get(0), stylesFound, excludeNode);
-		} else if (currentNode instanceof MBand || currentNode instanceof MReport){
-			for(INode child : currentNode.getChildren()){
-				getUsedStyles(child, stylesFound, excludeNode);
+	private boolean isUsedOnlyByCrosstab(List<ANode> nodesUsingInsideCrosstab, List<ANode> nodesUsingOutsideCrosstab){
+		if (nodesUsingInsideCrosstab == null || nodesUsingOutsideCrosstab == null) return false;
+		if (nodesUsingInsideCrosstab.size() != nodesUsingOutsideCrosstab.size()) return false;
+		
+		for(ANode nodeUsingInsideTable : nodesUsingInsideCrosstab){
+			if (!nodesUsingOutsideCrosstab.contains(nodeUsingInsideTable)){
+				return false;
 			}
-		} else if (currentNode instanceof IGraphicalPropertiesHandler && currentNode != excludeNode){
-			stylesFound.addAll(((IGraphicalPropertiesHandler)currentNode).getUsedStyles());
 		}
+		return true;
 	}
 	
 	@Override
 	public void execute() {
 		delteStylesCommand.clear();
-		INode root = table.getParent().getRoot();
+		ANode root = (ANode)crosstab.getParent().getRoot();
 		//get the list of styles used in the element
-		HashSet<String> usedStyles = table.getUsedStyles();
-		//Get the map of styles used in the report
-		HashSet<String> reportUsedStyles = new HashSet<String>();
-		getUsedStyles(root, reportUsedStyles, table);
+		HashMap<String, List<ANode>> reportStyles = root.getUsedStyles();
+		HashMap<String, List<ANode>> crosstabStyles = crosstab.getUsedStyles();
+		
 		//check which styles were used in the element but not in the rest of the report
 		List<String> unusedStyles = new ArrayList<String>();
-		for(String style : usedStyles){
-			if (!reportUsedStyles.contains(style) && jDesign.getStylesMap().containsKey(style)){
-				unusedStyles.add(style);
+		
+		for(Entry<String, List<ANode>> entry : crosstabStyles.entrySet()){
+			List<ANode> nodesUsingOutsideTable = reportStyles.get(entry.getKey());
+			if (jDesign.getStylesMap().containsKey(entry.getKey()) && 
+					isUsedOnlyByCrosstab(entry.getValue(), nodesUsingOutsideTable)){
+				unusedStyles.add(entry.getKey());
 			}
 		}
 		if (!unusedStyles.isEmpty()){

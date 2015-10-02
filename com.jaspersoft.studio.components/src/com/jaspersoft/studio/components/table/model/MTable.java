@@ -15,6 +15,7 @@ package com.jaspersoft.studio.components.table.model;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -445,12 +446,11 @@ public class MTable extends MGraphicElement implements IContainer,
 		return datasetList;
 	}
 
-	private void fillUsedStyles(List<INode> children, HashSet<String> map) {
+	private void fillUsedStyles(List<INode> children, HashMap<String, List<ANode>> map) {
 		for (INode node : children) {
-			if (node instanceof IGraphicalPropertiesHandler) {
-				map.addAll(((IGraphicalPropertiesHandler) node).getUsedStyles());
+			if (node instanceof ANode) {
+				mergeElementStyle(map, ((ANode) node).getUsedStyles());
 			}
-			fillUsedStyles(node.getChildren(), map);
 		}
 	}
 
@@ -513,12 +513,12 @@ public class MTable extends MGraphicElement implements IContainer,
 	}
 
 	@Override
-	public HashSet<String> getUsedStyles() {
-		HashSet<String> result = super.getUsedStyles();
+	public HashMap<String, List<ANode>> getUsedStyles() {
+		HashMap<String, List<ANode>> result = super.getUsedStyles();
 		fillUsedStyles(getChildren(), result);
 		return result;
 	}
-
+	
 	@Override
 	public boolean showChildren() {
 		return getParent() instanceof MPage;

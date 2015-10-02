@@ -13,6 +13,7 @@
 package com.jaspersoft.studio.components.crosstab.model.cell;
 
 import java.beans.PropertyChangeEvent;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -506,25 +507,33 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable,
 	}
 
 	@Override
-	public HashSet<String> getUsedStyles() {
+	public HashMap<String, List<ANode>> getUsedStyles() {
 		JRDesignCellContents jrElement = getValue();
-		HashSet<String> result = new HashSet<String>();
-		if (jrElement != null && jrElement.getStyle() != null)
-			result.add(jrElement.getStyle().getName());
+		HashMap<String, List<ANode>> result = super.getUsedStyles();
+		if (jrElement != null && jrElement.getStyle() != null){
+			addElementStyle(jrElement.getStyle(), result);
+		}
+		for (INode node : getChildren()) {
+			if (node instanceof ANode) {
+				mergeElementStyle(result, ((ANode) node).getUsedStyles());
+			}
+		}
 		return result;
 	}
-
+	
+	@Override
+	public void setStyle(JRStyle style) {
+		JRDesignCellContents jrElement = getValue();
+		if (jrElement != null){
+			jrElement.setStyle(style);
+		}
+	}
+	
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		HashSet<String> graphicalProperties = getGraphicalProperties();
 		if (graphicalProperties.contains(evt.getPropertyName())) {
 			setChangedProperty(true);
-			/*
-			 * if (getParent() != null && getParent() instanceof
-			 * IGraphicalPropertiesHandler) {
-			 * ((IGraphicalPropertiesHandler)getParent
-			 * ()).setChangedProperty(true); }
-			 */
 		}
 		super.propertyChange(evt);
 	}

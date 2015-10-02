@@ -12,24 +12,23 @@
  ******************************************************************************/
 package com.jaspersoft.studio.model.style.command;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JRStyle;
-import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.gef.commands.Command;
 
+import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.style.MStyle;
 import com.jaspersoft.studio.model.style.MStyles;
-import com.jaspersoft.studio.utils.ModelUtils;
-/*/*
- * link nodes & together.
+
+/**
+ * Remove a style and update the reference to the node that
+ * are using it to not not reference the style anymore
  * 
- * @author Chicu Veaceslav
+ * @author Orlandin Marco
  */
 public class DeleteStyleCommand extends Command {
 
@@ -42,29 +41,37 @@ public class DeleteStyleCommand extends Command {
 	/** The element position. */
 	private int elementPosition = 0;
 
+	private MStyles destNode;
+
 	/**
-	 * When a style is removed is keeped trace of the element and styles
-	 * that was using that style. So on the undo it is possibile to restore their
-	 * values
+	 * The list of nodes from where the removed style reference
+	 * was deleted, used for the undo
 	 */
-	private List<JRDesignElement> elementsUsingStyle = null;
-	
-	private List<JRDesignStyle> stylesUsingStyle = null;
+	private List<ANode> elementsUsingStyle = null;
 	
 	/**
-	 * Instantiates a new delete style command.
+	 * Instantiates a new delete style command. This 
+	 * constructor support the update of the node to not point
+	 * anymore to the removed style
 	 * 
-	 * @param destNode
-	 *          the dest node
-	 * @param srcNode
-	 *          the src node
+	 * @param destNode the styles parent node
+	 * @param srcNode the style to remove
 	 */
 	public DeleteStyleCommand(MStyles destNode, MStyle srcNode) {
 		super();
 		this.jrDesign = srcNode.getJasperDesign();
 		this.jrStyle = (JRDesignStyle) srcNode.getValue();
+		this.destNode = destNode;
 	}
-	
+
+	/**
+	 * Instantiates a new delete style command. This 
+	 * constructor NOT support the update of the node to not point
+	 * anymore to the removed style
+	 * 
+	 * @param design the JasperDesign of the report
+	 * @param style the style to remove
+	 */
 	public DeleteStyleCommand(JasperDesign design, JRDesignStyle style) {
 		this.jrDesign = design;
 		this.jrStyle = style;
@@ -77,21 +84,18 @@ public class DeleteStyleCommand extends Command {
 	 */
 	@Override
 	public void execute() {
+		//if it was created with the first constructor check the element using the style
+		if (destNode != null){
+			elementsUsingStyle = ((ANode)destNode.getRoot()).getUsedStyles().get(jrStyle.getName());
+		}
+			
 		elementPosition = jrDesign.getStylesList().indexOf(jrStyle);
 		jrDesign.removeStyle(jrStyle);
-		elementsUsingStyle = new ArrayList<JRDesignElement>();
-		for(JRDesignElement element : ModelUtils.getAllElements(jrDesign)){
-			if (jrStyle.equals(element.getStyle())){
-				elementsUsingStyle.add(element);
-				element.setStyle(null);
-			}
-		}
-		stylesUsingStyle = new ArrayList<JRDesignStyle>();
-		for(JRStyle style : jrDesign.getStyles()){
-			if (jrStyle.equals(style.getStyle()) && style instanceof JRDesignStyle){
-				JRDesignStyle baseStyle = (JRDesignStyle)style;
-				stylesUsingStyle.add(baseStyle);
-				baseStyle.setParentStyle(null);
+
+		//Remove the style from the element using it
+		if (elementsUsingStyle != null){
+			for(ANode node : elementsUsingStyle){
+				node.setStyle(null);
 			}
 		}
 	}
@@ -103,7 +107,7 @@ public class DeleteStyleCommand extends Command {
 	 */
 	@Override
 	public boolean canUndo() {
-		if (jrDesign == null || jrStyle == null || elementsUsingStyle == null || stylesUsingStyle == null)
+		if (jrDesign == null || jrStyle == null)
 			return false;
 		return true;
 	}
@@ -120,13 +124,14 @@ public class DeleteStyleCommand extends Command {
 				jrDesign.addStyle(jrStyle);
 			else
 				jrDesign.addStyle(elementPosition, jrStyle);
-			for(JRDesignElement element : elementsUsingStyle){
-				element.setStyle(jrStyle);
+
+			//restore the style in the element using it
+			if (elementsUsingStyle != null){
+				for(ANode node : elementsUsingStyle){
+					node.setStyle(jrStyle);
+				}
+				elementsUsingStyle = null;
 			}
-			for(JRDesignStyle style : stylesUsingStyle){
-				style.setParentStyle(jrStyle);
-			}
-			elementsUsingStyle = null;
 		} catch (JRException e) {
 			e.printStackTrace();
 		}
