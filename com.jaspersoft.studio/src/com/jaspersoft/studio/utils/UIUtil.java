@@ -16,9 +16,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.fieldassist.FieldDecoration;
 import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
+import org.eclipse.jface.util.Util;
 import org.eclipse.jface.viewers.ColumnViewerEditor;
 import org.eclipse.jface.viewers.ColumnViewerEditorActivationEvent;
 import org.eclipse.jface.viewers.ColumnViewerEditorActivationStrategy;
@@ -411,6 +413,16 @@ public class UIUtil {
 			}
 			return false;
 		}
+	}
+	
+	/**
+	 * Checks if we are currently on a Mac OS X platform and running
+	 * inside an Eclipse 4.x based installation.
+	 * 
+	 * @return <code>true</code> if is Mac and we are in E4, <code>false</code> otherwise
+	 */
+	public static boolean isMacAndEclipse4() {
+		return Util.isMac() && Platform.getBundle("org.eclipse.e4.ui.workbench")!=null; //$NON-NLS-1$
 	}
 
 

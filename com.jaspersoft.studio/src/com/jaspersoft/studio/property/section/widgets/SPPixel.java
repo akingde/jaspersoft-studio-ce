@@ -14,10 +14,6 @@ package com.jaspersoft.studio.property.section.widgets;
 
 import java.util.HashMap;
 
-import net.sf.jasperreports.engine.JRPropertiesHolder;
-import net.sf.jasperreports.engine.JRPropertiesMap;
-import net.sf.jasperreports.engine.design.JRDesignElement;
-
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
@@ -26,6 +22,8 @@ import org.eclipse.jface.fieldassist.TextContentAdapter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionEvent;
@@ -54,7 +52,13 @@ import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.report.util.PHolderUtil;
 import com.jaspersoft.studio.property.section.report.util.Unit;
 import com.jaspersoft.studio.property.section.report.util.Unit.PixelConversionException;
+import com.jaspersoft.studio.utils.Misc;
+import com.jaspersoft.studio.utils.UIUtil;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
+import net.sf.jasperreports.engine.JRPropertiesHolder;
+import net.sf.jasperreports.engine.JRPropertiesMap;
+import net.sf.jasperreports.engine.design.JRDesignElement;
 
 /**
  * This class implement a Textfield where display a number with a measure unit. The number and the measure unit can be
@@ -127,13 +131,26 @@ public class SPPixel extends ASPropertyWidget<PixelPropertyDescriptor> {
 	 * Used to store the last text set into the Textfield, needed to prevent that the lost focus event do multiple update
 	 */
 	private String lastSetValue;
+	
+	// Flag used to overcome the problem of focus events in Mac OS X
+	// 	- JSS Bugzilla 42999
+	// 	- Eclipse Bug 383750
+	// It makes sense only on E4 platform and Mac OS X operating systems.
+	// DO NOT USE THIS FLAG FOR OTHER PURPOSES.
+	private boolean editHappened = false;
 
 	@Override
 	protected void handleFocusLost() {
 		super.handleFocusLost();
+		if(UIUtil.isMacAndEclipse4() && !editHappened){
+			insertField.setText(Misc.nvl(lastSetValue));
+		}
 		// Focus lost, do the change only if the text is changed
 		if (lastSetValue == null || !lastSetValue.equals(insertField.getText()))
 			updateValue();
+		if(UIUtil.isMacAndEclipse4()) {
+			editHappened=false;
+		}
 	}
 
 	/**
@@ -811,6 +828,14 @@ public class SPPixel extends ASPropertyWidget<PixelPropertyDescriptor> {
 		if (pDescriptor instanceof PixelPropertyDescriptor && ((PixelPropertyDescriptor) pDescriptor).isReadOnly())
 			style = style | SWT.READ_ONLY;
 		insertField = section.getWidgetFactory().createText(parent, "", style); //$NON-NLS-1$
+		if(UIUtil.isMacAndEclipse4()) {
+			insertField.addModifyListener(new ModifyListener() {
+				@Override
+				public void modifyText(ModifyEvent e) {
+					editHappened=true;
+				}
+			});
+		}
 		insertField.addKeyListener(new KeyListener() {
 			@Override
 			public void keyReleased(KeyEvent e) {

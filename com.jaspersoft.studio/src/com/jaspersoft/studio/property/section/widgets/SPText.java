@@ -12,6 +12,8 @@ import org.eclipse.jface.fieldassist.TextContentAdapter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowData;
@@ -24,12 +26,19 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.descriptors.JSSTextPropertyDescriptor;
 import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.utils.UIUtil;
 import com.jaspersoft.studio.utils.inputhistory.InputHistoryCache;
 
 public class SPText extends AHistorySPropertyWidget {
 	protected Text ftext;
 	protected APropertyNode pnode;
 	protected String savedValue;
+	// Flag used to overcome the problem of focus events in Mac OS X
+	// 	- JSS Bugzilla 42999
+	// 	- Eclipse Bug 383750
+	// It makes sense only on E4 platform and Mac OS X operating systems.
+	// DO NOT USE THIS FLAG FOR OTHER PURPOSES.
+	private boolean editHappened = false;
 
 	/**
 	 * Flag used to avoid that the handletextchanged is called twice when CR is pressed (because the CR made the control
@@ -57,11 +66,13 @@ public class SPText extends AHistorySPropertyWidget {
 			style = ((JSSTextPropertyDescriptor) pDescriptor).getStyle();
 		ftext = section.getWidgetFactory().createText(parent, "", style);
 		autocomplete = new CustomAutoCompleteField(ftext, new TextContentAdapter(), InputHistoryCache.get(getHistoryKey()));
-		// ftext.addModifyListener(new ModifyListener() {
-		// public void modifyText(ModifyEvent e) {
-		// handleTextChanged(section, pDescriptor.getId(), ftext.getText());
-		// }
-		// });
+		if(UIUtil.isMacAndEclipse4()) {
+			ftext.addModifyListener(new ModifyListener() {
+				 public void modifyText(ModifyEvent e) {
+					 editHappened = true;
+				 }
+			});
+		}
 		ftext.addKeyListener(new KeyListener() {
 			@Override
 			public void keyReleased(KeyEvent e) {
@@ -105,14 +116,20 @@ public class SPText extends AHistorySPropertyWidget {
 
 	@Override
 	protected void handleFocusLost() {
+		String currentValue = getCurrentValue();
+		if(UIUtil.isMacAndEclipse4() && !editHappened){
+			ftext.setText(currentValue);
+		}
 		if (!disableFocusLost) {
-			String v = getCurrentValue();
-			if (!(v != null && v.equals(ftext.getText())))
+			if (!(currentValue != null && currentValue.equals(ftext.getText())))
 				handleTextChanged(section, pDescriptor.getId(), ftext.getText());
 			super.handleFocusLost();
 		}
+		if(UIUtil.isMacAndEclipse4()) {
+			editHappened=false;
+		}
 	}
-
+	
 	protected String getCurrentValue() {
 		Object v = section.getElement().getPropertyValue(pDescriptor.getId());
 		if (v instanceof String)
