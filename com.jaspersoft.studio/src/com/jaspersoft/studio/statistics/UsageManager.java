@@ -9,16 +9,13 @@
 package com.jaspersoft.studio.statistics;
 
 import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.io.StringReader;
-import java.net.HttpURLConnection;
 import java.net.InetAddress;
 import java.net.URI;
-import java.net.URL;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -31,10 +28,14 @@ import net.sf.jasperreports.eclipse.util.HttpUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.net.ntp.NTPUDPClient;
 import org.apache.commons.net.ntp.TimeInfo;
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
+import org.apache.http.StatusLine;
 import org.apache.http.client.fluent.Executor;
+import org.apache.http.client.fluent.Form;
 import org.apache.http.client.fluent.Request;
+import org.apache.http.client.fluent.Response;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -448,16 +449,18 @@ public class UsageManager {
 	 */
 	protected void sendStatistics() {
 		BufferedReader responseReader = null;
-		DataOutputStream postWriter = null;
 		try {
 			if (!STATISTICS_SERVER_URL.trim().isEmpty()) {
-				URL obj = new URL(STATISTICS_SERVER_URL);
-				HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-
-				// add request header
-				con.setRequestMethod("POST"); //$NON-NLS-1$
-				con.setRequestProperty("User-Agent", "Mozilla/5.0"); //$NON-NLS-1$ //$NON-NLS-2$
-				con.setRequestProperty("Accept-Language", "en-US,en;q=0.5"); //$NON-NLS-1$ //$NON-NLS-2$
+				//Set the proxy information if any
+				Executor exec = Executor.newInstance();
+				URI fullURI = new URI(STATISTICS_SERVER_URL);
+				HttpUtils.setupProxy(exec, fullURI);
+				HttpHost proxy = HttpUtils.getUnauthProxy(exec, fullURI);
+				Request req = Request.Post(STATISTICS_SERVER_URL);
+				req.addHeader("User-Agent", "Mozilla/5.0");
+				req.addHeader("Accept-Language", "en-US,en;q=0.5");
+				if (proxy != null)
+					req.viaProxy(proxy);
 
 				// Read and convert the statistics into a JSON string
 				UsagesContainer container = new UsagesContainer(ConfigurationManager.getInstallationUUID());
@@ -503,34 +506,34 @@ public class UsageManager {
 				String serializedData = mapper.writeValueAsString(container);
 
 				// Send post request with the JSON string as the data parameter
-				String urlParameters = "data=" + serializedData; //$NON-NLS-1$
-				con.setDoOutput(true);
-				postWriter = new DataOutputStream(con.getOutputStream());
-				postWriter.writeBytes(urlParameters);
-				postWriter.flush();
-				int responseCode = con.getResponseCode();
+				req.bodyForm(Form.form().add("data", serializedData).build());//$NON-NLS-1$
+				
+				Response resp = req.execute();
+				
+				HttpResponse response = resp.returnResponse();
+				StatusLine statusLine = response.getStatusLine();
+				HttpEntity entity = response.getEntity();
+				int responseCode = statusLine.getStatusCode();
 
-				responseReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+				responseReader = new BufferedReader(new InputStreamReader(entity.getContent()));
 				String inputLine;
-				StringBuffer response = new StringBuffer();
-
+				StringBuffer textResponse = new StringBuffer();
 				while ((inputLine = responseReader.readLine()) != null) {
-					response.append(inputLine);
-				}
-
+					textResponse.append(inputLine);
+				}		
+						
 				// Update the upload time
-				if (responseCode == 200 && ModelUtils.safeEquals(response.toString(), "ok")) {
+				if (responseCode == 200 && ModelUtils.safeEquals(textResponse.toString(), "ok")) {
 					setInstallationInfo(TIMESTAMP_INFO, String.valueOf(getCurrentTime()));
 				} else {
 					// print result
-					System.out.println("Response error: " + response.toString());
+					System.out.println("Response error: " + textResponse.toString());
 				}
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			JaspersoftStudioPlugin.getInstance().logError(Messages.UsageManager_errorStatUpload, ex);
 		} finally {
-			FileUtils.closeStream(postWriter);
 			FileUtils.closeStream(responseReader);
 		}
 	}
