@@ -21,6 +21,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.crosstab.model.MCrosstab;
 import com.jaspersoft.studio.components.list.model.MList;
@@ -112,5 +113,11 @@ public class NameSection extends AbstractSection {
 				}
 			}
 		});
+	
+		IPropertyDescriptor columnDescriptor = getElement().getPropertyDescriptor(MTable.PROPERTY_COLUMNS_AUTORESIZE_NEXT);
+		if (columnDescriptor != null){
+			createWidget4Property(getElement(), parent, MTable.PROPERTY_COLUMNS_AUTORESIZE_NEXT, false);
+		}
+	
 	}
 }

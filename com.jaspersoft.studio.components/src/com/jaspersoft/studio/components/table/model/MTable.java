@@ -30,6 +30,7 @@ import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRDatasetRun;
 import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.JRPropertiesHolder;
+import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.component.ComponentKey;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
@@ -66,6 +67,7 @@ import com.jaspersoft.studio.model.MPage;
 import com.jaspersoft.studio.model.dataset.MDatasetRun;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
+import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 import com.jaspersoft.studio.utils.Misc;
 
@@ -73,6 +75,12 @@ public class MTable extends MGraphicElement implements IContainer,
 		IContainerEditPart, IGroupElement, IContainerLayout, IDatasetContainer {
 
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+	
+	/**
+	 * The property used to know if the resize of the column
+	 * take the space from the following one is it is a standard resize
+	 */
+	public static final String PROPERTY_COLUMNS_AUTORESIZE_NEXT = "com.jaspersoft.studio.components.autoresize.next";
 
 	private static IIconDescriptor iconDescriptor;
 
@@ -209,9 +217,7 @@ public class MTable extends MGraphicElement implements IContainer,
 			Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		TableDatasetRunProperyDescriptor datasetRunD = new TableDatasetRunProperyDescriptor(
-				StandardTable.PROPERTY_DATASET_RUN,
-				Messages.MTable_dataset_run, false);
+		TableDatasetRunProperyDescriptor datasetRunD = new TableDatasetRunProperyDescriptor(StandardTable.PROPERTY_DATASET_RUN,Messages.MTable_dataset_run, false);
 		datasetRunD.setDescription(Messages.MTable_dataset_run_description);
 		datasetRunD.setCategory(Messages.MTable_table_properties_category);
 		desc.add(datasetRunD);
@@ -223,9 +229,15 @@ public class MTable extends MGraphicElement implements IContainer,
 		whennodataD.setDescription(Messages.MTable_whennodatadescription);
 		desc.add(whennodataD);
 		whennodataD.setCategory(Messages.MTable_table_properties_category);
+		
+		
+		CheckBoxPropertyDescriptor columnsFillDescriptor = new CheckBoxPropertyDescriptor(PROPERTY_COLUMNS_AUTORESIZE_NEXT, "Columns Next");
+		columnsFillDescriptor.setDescription("When resizing a column the space is taken from the next one");
+		desc.add(columnsFillDescriptor);
+		columnsFillDescriptor.setCategory(Messages.MTable_table_properties_category);
 
-		defaultsMap.put(StandardTable.PROPERTY_WHEN_NO_DATA_TYPE,
-				whennodataD.getEnumValue(WhenNoDataTypeTableEnum.BLANK));
+		defaultsMap.put(StandardTable.PROPERTY_WHEN_NO_DATA_TYPE,whennodataD.getEnumValue(WhenNoDataTypeTableEnum.BLANK));
+		defaultsMap.put(PROPERTY_COLUMNS_AUTORESIZE_NEXT, Boolean.FALSE);
 
 		setHelpPrefix(desc,
 				"net.sf.jasperreports.doc/docs/components.schema.reference.html#table");
@@ -256,8 +268,12 @@ public class MTable extends MGraphicElement implements IContainer,
 			}
 			return mDatasetRun;
 		}
-		if (id.equals(StandardTable.PROPERTY_WHEN_NO_DATA_TYPE))
+		if (id.equals(StandardTable.PROPERTY_WHEN_NO_DATA_TYPE)){
 			return whennodataD.getIntValue(jrTable.getWhenNoDataType());
+		}
+		if (id.equals(PROPERTY_COLUMNS_AUTORESIZE_NEXT)){
+			return hasColumnsAutoresizeNext();
+		}
 
 		return super.getPropertyValue(id);
 	}
@@ -276,10 +292,32 @@ public class MTable extends MGraphicElement implements IContainer,
 				jrTable.setDatasetRun(dr);
 			else
 				jrTable.setDatasetRun(null);
-		}
-		super.setPropertyValue(id, value);
+		} else if (id.equals(PROPERTY_COLUMNS_AUTORESIZE_NEXT)){
+			if (value == null || !Boolean.parseBoolean(value.toString())){
+				getValue().getPropertiesMap().removeProperty(PROPERTY_COLUMNS_AUTORESIZE_NEXT);
+			} else {
+				getValue().getPropertiesMap().setProperty(PROPERTY_COLUMNS_AUTORESIZE_NEXT, value.toString());
+			}
+		} else super.setPropertyValue(id, value);
 	}
 
+	/**
+	 * Check if in the current table is set the flag to autoresize the columns taking the 
+	 * space from the next one when it is drag and dropped
+	 * 
+	 * @return true if the resize of a column should take the space from the next one, false otherwise
+	 */
+	public boolean hasColumnsAutoresizeNext(){
+		if (getValue() != null){
+			JRPropertiesMap map = getValue().getPropertiesMap();
+			Object value = map.getProperty(PROPERTY_COLUMNS_AUTORESIZE_NEXT);
+			if (value != null){
+				return Boolean.parseBoolean(value.toString());
+			}
+		}
+		return false;
+	}
+	
 	public StandardTable getStandardTable() {
 		JRDesignComponentElement jrElement = (JRDesignComponentElement) getValue();
 		StandardTable jrTable = (StandardTable) jrElement.getComponent();

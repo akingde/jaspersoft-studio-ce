@@ -961,6 +961,10 @@
                class="com.jaspersoft.studio.toolbars.CreateColumnAfterContributionItem"
                id="com.jaspersoft.studio.editor.action.createcolumn_after">
          </toolitem>
+         <toolitem
+               class="com.jaspersoft.studio.toolbars.ColumnsEqualWidthContributionItem"
+               id="com.jaspersoft.studio.toolbars.ColumnsEqualWidthContributionItem">
+         </toolitem>
       </toolitemsets>
       <toolitemsets
             id="com.jaspersoft.studio.components.crosstabaction"

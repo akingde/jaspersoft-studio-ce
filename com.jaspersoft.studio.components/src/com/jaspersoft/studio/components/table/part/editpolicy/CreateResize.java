@@ -23,6 +23,7 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 
 import com.jaspersoft.studio.JSSCompoundCommand;
+import com.jaspersoft.studio.components.table.model.MTable;
 import com.jaspersoft.studio.components.table.model.column.MColumn;
 import com.jaspersoft.studio.components.table.part.TableCellEditPart;
 import com.jaspersoft.studio.model.ANode;
@@ -77,6 +78,25 @@ public class CreateResize {
 				setCommand.setPropertyId(StandardBaseColumn.PROPERTY_WIDTH);
 				setCommand.setPropertyValue(width);
 				c.add(setCommand);
+			} else if (request.getResizeDirection() == PositionConstants.EAST){
+				//If the request is a drag to east and the flag is enabled take the space from the next column
+				MTable table = getTableModel(model);
+				if (table != null && table.hasColumnsAutoresizeNext()){
+					int index = mparent.getChildren().indexOf(model);
+					if (index < mparent.getChildren().size()-1){
+						MColumn next = (MColumn) mparent.getChildren().get(index + 1);
+						StandardBaseColumn nextCol = next.getValue();
+						setCommand = new SetValueCommand();
+						setCommand.setTarget(next);
+						setCommand.setPropertyId(StandardBaseColumn.PROPERTY_WIDTH);
+						int newWidth = nextCol.getWidth() - deltaRect.width;
+						if (newWidth < 0) newWidth = 0;
+						setCommand.setPropertyValue(newWidth);
+						c.add(setCommand);
+					} else {
+						return null;
+					}
+				}
 			}
 		}
 		if (request.getSizeDelta().height != 0 && model instanceof MColumn) {
@@ -114,5 +134,20 @@ public class CreateResize {
 		if (c.isEmpty())
 			return null;
 		return c;
+	}
+	
+	/**
+	 * Search starting from a node and going up in the hierarchy an MTable
+	 * 
+	 * @param currentNode a node, should be a node inside a table
+	 * @return an MTable if it is in the upper hierarchy of the current node or null
+	 */
+	private static MTable getTableModel(ANode node){
+		if (node == null) return null;
+		if (node instanceof MTable){
+			return (MTable)node;
+		} else{
+			return getTableModel(node.getParent());
+		}
 	}
 }

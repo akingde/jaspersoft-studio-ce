@@ -27,6 +27,7 @@ import net.sf.jasperreports.components.table.StandardColumnGroup;
 import net.sf.jasperreports.components.table.StandardTable;
 import net.sf.jasperreports.components.table.util.TableUtil;
 import net.sf.jasperreports.engine.JRChild;
+import net.sf.jasperreports.engine.JRPropertiesHolder;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -38,6 +39,9 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import com.jaspersoft.studio.components.table.model.MTable;
 import com.jaspersoft.studio.components.table.model.column.MColumn;
 import com.jaspersoft.studio.components.table.util.TableColumnSize;
+import com.jaspersoft.studio.editor.layout.ILayout;
+import com.jaspersoft.studio.editor.layout.LayoutManager;
+import com.jaspersoft.studio.editor.layout.VerticalRowLayout;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ModelUtils;
@@ -47,7 +51,7 @@ public class TableManager {
 	private TableUtil tableUtil;
 	private TableMatrix mh = new TableMatrix();
 	private JasperDesign jDesign;
-
+	
 	public TableMatrix getMatrixHelper() {
 		return mh;
 	}
@@ -162,6 +166,110 @@ public class TableManager {
 				setColumnGroupWidth((StandardColumnGroup) cell, delta);
 			cell.setWidth(width);
 		}
+	}
+
+	public int getColumnsTotalWidth(){
+		int currentColumnsWidth = 0;
+		for(BaseColumn col : table.getColumns()){
+			currentColumnsWidth += col.getWidth();
+		}
+		return currentColumnsWidth;
+	}
+	
+	/**
+	 * Resize all the columns in the table to match the passed width
+	 * 
+	 * 
+	 * @param newWidth the width that all the columns should have
+	 * @param isProportional if the columns are resized proportionally or they all will have the same width
+	 */
+	public void fillSpace(int newWidth, boolean isProportional){
+		int currentColumnsWidth = 0;
+		for(BaseColumn col : table.getColumns()){
+			currentColumnsWidth += col.getWidth();
+		}
+		if (currentColumnsWidth == newWidth) return;
+		else if(isProportional) {
+			int[] proportionalWidths = new int[table.getColumns().size()];
+			int index = 0;
+
+			
+			//Phase 1: change proportionally the width of each column
+			int columnsTotalWidth = 0;			
+			for(BaseColumn col : table.getColumns()){
+				float proportionalFactor = (float)col.getWidth() / (float)currentColumnsWidth;
+				//casting to int is the same to do the floor operation, since it dorp the decimal
+				int proportionalWidth = (int)(proportionalFactor * newWidth);
+				proportionalWidths[index] = proportionalWidth;
+				columnsTotalWidth += proportionalWidth;
+				index ++;
+			}
+			
+			//Phase 2: reassign what remains
+			int remains = newWidth - columnsTotalWidth;
+			index = 0;
+			while (remains > 0){
+				proportionalWidths[index]++;
+				index++;
+				remains--;
+				if (index == proportionalWidths.length){
+					index = 0;
+				}
+			}
+			
+			//Phase 3: resize the columns
+			index = 0;
+			ILayout defaultLayout = new VerticalRowLayout();
+			for(BaseColumn col : table.getColumns()){
+				if (col.getWidth() != proportionalWidths[index]){
+					setWidth((StandardBaseColumn)col, proportionalWidths[index]);
+					index++;
+					for(Cell cel : getColumnCell(col)){
+						ILayout layout = LayoutManager.getLayout(new JRPropertiesHolder[] { cel }, null, null, defaultLayout);
+						layout.layout(cel.getElements(), new Dimension(col.getWidth(), ((DesignCell)cel).getHeight()));
+					}
+				}
+			}	
+		} else {
+			int columnsSize = newWidth / table.getColumns().size();
+			int extraSpace = newWidth % table.getColumns().size();
+			ILayout defaultLayout = new VerticalRowLayout();
+			for(BaseColumn col : table.getColumns()){
+				int additionalSpace = 0;
+				if (extraSpace > 0){
+					additionalSpace = 1;
+					extraSpace--;
+				}
+				int newColumnWidth = col.getWidth() + additionalSpace + columnsSize;
+				if (newColumnWidth != col.getWidth()){
+					setWidth((StandardBaseColumn)col, newColumnWidth);
+					for(Cell cel : getColumnCell(col)){
+						ILayout layout = LayoutManager.getLayout(new JRPropertiesHolder[] { cel }, null, null, defaultLayout);
+						layout.layout(cel.getElements(), new Dimension(col.getWidth(), ((DesignCell)cel).getHeight()));
+					}
+				}
+			}
+		}
+	}
+	
+	private List<Cell> getColumnCell(BaseColumn cell){
+		List<Cell> result = new ArrayList<Cell>();
+		if (cell instanceof StandardColumn){
+			StandardColumn col = (StandardColumn)cell;
+			result.add(col.getColumnHeader());
+			result.add(col.getTableHeader());
+			result.add(col.getTableFooter());
+			result.add(cell.getColumnFooter());
+			result.add(col.getDetailCell());
+		}
+		else if (cell instanceof StandardColumnGroup){
+			StandardColumnGroup group = (StandardColumnGroup)cell;
+			List<BaseColumn> columns = group.getColumns();
+			for(BaseColumn groupCol : columns){
+				result.addAll(getColumnCell(groupCol));
+			}
+		}
+		return result;
 	}
 
 	private boolean setColumnGroupWidth(StandardColumnGroup cell, int delta) {

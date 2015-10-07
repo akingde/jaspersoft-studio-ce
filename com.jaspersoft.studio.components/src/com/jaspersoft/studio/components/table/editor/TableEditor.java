@@ -32,6 +32,7 @@ import com.jaspersoft.studio.components.table.action.SelectAllElementsAction;
 import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.components.table.model.MTable;
 import com.jaspersoft.studio.components.table.model.column.MCell;
+import com.jaspersoft.studio.components.table.model.column.action.ColumnsEqualWidthAction;
 import com.jaspersoft.studio.components.table.model.column.action.CreateColumnAfterAction;
 import com.jaspersoft.studio.components.table.model.column.action.CreateColumnBeforeAction;
 import com.jaspersoft.studio.components.table.model.column.action.CreateColumnBeginAction;
@@ -168,6 +169,10 @@ public class TableEditor extends NamedSubeditor {
 		registry.registerAction(action);
 		selectionActions.add(CreateColumnCellAction.ID);
 
+		action = new ColumnsEqualWidthAction(this);
+		registry.registerAction(action);
+		selectionActions.add(ColumnsEqualWidthAction.ID);
+		
 		action = new DeleteColumnAction(this);
 		registry.registerAction(action);
 		selectionActions.add(DeleteColumnAction.ID);

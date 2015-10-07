@@ -22,6 +22,8 @@ public class Messages extends NLS {
 	public static String common_orphan_element;
 	public static String common_reorder_elements;
 	public static String common_table_wizard;
+	public static String ColumnsEqualWidthAction_actionName;
+	public static String ColumnsEqualWidthAction_actionTooltip;
 	public static String CreateColumnAction_create_column;
 	public static String CreateColumnAction_create_column_group;
 	public static String CreateColumnAction_create_column_group_tool_tip;
