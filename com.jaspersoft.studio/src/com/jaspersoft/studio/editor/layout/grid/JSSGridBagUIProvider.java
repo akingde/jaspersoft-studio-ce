@@ -342,7 +342,7 @@ public class JSSGridBagUIProvider implements ILayoutUIProvider{
 	private void controlRefresh(Combo widget){
 		modifyGuard = true;
 		int caretPosition = widget.getCaretPosition();
-		widget.getParent().setFocus();
+		widget.getParent().forceFocus();
 		widget.setFocus();
 		widget.setSelection(new Point(caretPosition, caretPosition));
 		modifyGuard = false;
