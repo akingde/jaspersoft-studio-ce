@@ -176,34 +176,43 @@ public class TableWizard extends JSSWizard {
 			int colWidth = 40;
 			if (tableWidth < 0)
 				tableWidth = table.getDefaultWidth();
-			if (lst.size() > 0)
+			if (lst.size() > 0){
 				colWidth = tableWidth / lst.size();
-			for (Object f : lst) {
+				for (Object f : lst) {
+					StandardColumn col = CreateColumnCommand.addColumn(jd, tbl,
+							step4.isTableHeader(), step4.isTableFooter(),
+							step4.isColumnHeader(), step4.isColumnFooter(),
+							step4.isGroupHeader(), step4.isGroupFooter(), -1);
+					col.setWidth(colWidth);
+					DesignCell colHeadCell = (DesignCell) col.getColumnHeader();
+					DesignCell detCell = (DesignCell) col.getDetailCell();
+					if (step4.isColumnHeader()) {
+						JRDesignStaticText sText = (JRDesignStaticText) new MStaticText()
+								.createJRElement(jd);
+						sText.setWidth(col.getWidth());
+						sText.setHeight(colHeadCell.getHeight());
+						sText.setText(((JRField) f).getName());
+						colHeadCell.addElement(sText);
+					}
+					JRDesignTextField fText = (JRDesignTextField) new MTextField()
+							.createJRElement(jd);
+					fText.setWidth(col.getWidth());
+					fText.setHeight(detCell.getHeight());
+					JRDesignExpression jre = new JRDesignExpression();
+					jre.setText("$F{" + ((JRField) f).getName() + "}");//$NON-NLS-1$ //$NON-NLS-2$
+					fText.setExpression(jre);
+					detCell.addElement(fText);
+					tbl.addColumn(col);
+				}
+			} else {
 				StandardColumn col = CreateColumnCommand.addColumn(jd, tbl,
 						step4.isTableHeader(), step4.isTableFooter(),
 						step4.isColumnHeader(), step4.isColumnFooter(),
 						step4.isGroupHeader(), step4.isGroupFooter(), -1);
 				col.setWidth(colWidth);
-				DesignCell colHeadCell = (DesignCell) col.getColumnHeader();
-				DesignCell detCell = (DesignCell) col.getDetailCell();
-				if (step4.isColumnHeader()) {
-					JRDesignStaticText sText = (JRDesignStaticText) new MStaticText()
-							.createJRElement(jd);
-					sText.setWidth(col.getWidth());
-					sText.setHeight(colHeadCell.getHeight());
-					sText.setText(((JRField) f).getName());
-					colHeadCell.addElement(sText);
-				}
-				JRDesignTextField fText = (JRDesignTextField) new MTextField()
-						.createJRElement(jd);
-				fText.setWidth(col.getWidth());
-				fText.setHeight(detCell.getHeight());
-				JRDesignExpression jre = new JRDesignExpression();
-				jre.setText("$F{" + ((JRField) f).getName() + "}");//$NON-NLS-1$ //$NON-NLS-2$
-				fText.setExpression(jre);
-				detCell.addElement(fText);
 				tbl.addColumn(col);
 			}
+			
 		}
 		String dsname = (String) tbl.getDatasetRun().getDatasetName();
 		if (dsname == null || dsname.trim().isEmpty()) {
