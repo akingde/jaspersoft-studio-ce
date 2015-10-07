@@ -44,6 +44,10 @@ import com.jaspersoft.studio.model.MGraphicElement;
 public class LayoutManager {
 	
 	public static ILayout getLayout(JRPropertiesHolder[] elements, JasperDesign jDesign, String uuid) {
+		return getLayout(elements, jDesign, uuid, new FreeLayout());
+	}
+	
+	public static ILayout getLayout(JRPropertiesHolder[] elements, JasperDesign jDesign, String uuid, ILayout def) {
 		for (JRPropertiesHolder pholder : elements) {
 			if (pholder == null || pholder.getPropertiesMap() == null)
 				continue;
@@ -56,7 +60,7 @@ public class LayoutManager {
 			if (prop != null)
 				return instLayout(prop);
 		}
-		return new FreeLayout();
+		return def;
 	}
 
 	public static ILayout instLayout(String prop) {
