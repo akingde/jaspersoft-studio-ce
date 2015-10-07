@@ -15,13 +15,6 @@ package com.jaspersoft.studio.model.subreport.command.wizard;
 import java.io.File;
 import java.net.URI;
 
-import net.sf.jasperreports.eclipse.util.FileUtils;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.design.JRDesignExpression;
-import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.util.JRLoader;
-import net.sf.jasperreports.engine.xml.JRXmlLoader;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -59,6 +52,14 @@ import com.jaspersoft.studio.wizards.ContextHelpIDs;
 import com.jaspersoft.studio.wizards.JSSWizard;
 import com.jaspersoft.studio.wizards.JSSWizardSelectionPage;
 import com.jaspersoft.studio.wizards.ReportNewWizard;
+
+import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.eclipse.util.StringUtils;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.design.JRDesignExpression;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
 public class NewSubreportPage extends JSSWizardSelectionPage implements IExpressionContextSetter {
 
@@ -288,7 +289,7 @@ public class NewSubreportPage extends JSSWizardSelectionPage implements IExpress
 			filepath = filepath.substring(0, filepath.lastIndexOf(".")) + ".jasper"; //$NON-NLS-1$ //$NON-NLS-2$
 		}
 
-		selectedSubreportExpression.setText("\"" + filepath + "\""); //$NON-NLS-1$ //$NON-NLS-2$
+		selectedSubreportExpression.setText("\"" + StringUtils.replaceBackslashWithDoubleBackslash(filepath) + "\""); //$NON-NLS-1$ //$NON-NLS-2$
 		subreportExpressionEditor.setExpression(selectedSubreportExpression);
 
 		storeSettings();
