@@ -80,7 +80,7 @@ public class MTable extends MGraphicElement implements IContainer,
 	 * The property used to know if the resize of the column
 	 * take the space from the following one is it is a standard resize
 	 */
-	public static final String PROPERTY_COLUMNS_AUTORESIZE_NEXT = "com.jaspersoft.studio.components.autoresize.next";
+	public static final String PROPERTY_COLUMNS_AUTORESIZE_NEXT = "com.jaspersoft.studio.components.autoresize.next"; //$NON-NLS-1$
 
 	private static IIconDescriptor iconDescriptor;
 
@@ -114,12 +114,12 @@ public class MTable extends MGraphicElement implements IContainer,
 					JRDesignGroup jrGroup = (JRDesignGroup) evt.getNewValue();
 					MTableGroupHeader newHeader = new MTableGroupHeader(
 							MTable.this, (JRDesignComponentElement) getValue(),
-							jrGroup, "");
+							jrGroup, ""); //$NON-NLS-1$
 					addChild(newHeader, detailIndex);
 					detailIndex += 2;
 					MTableGroupFooter newFooter = new MTableGroupFooter(
 							MTable.this, (JRDesignComponentElement) getValue(),
-							jrGroup, "");
+							jrGroup, ""); //$NON-NLS-1$
 					addChild(newFooter, detailIndex);
 					List<BaseColumn> columns = getStandardTable().getColumns();
 					for (int i = 0; i < columns.size(); i++) {
@@ -231,8 +231,8 @@ public class MTable extends MGraphicElement implements IContainer,
 		whennodataD.setCategory(Messages.MTable_table_properties_category);
 		
 		
-		CheckBoxPropertyDescriptor columnsFillDescriptor = new CheckBoxPropertyDescriptor(PROPERTY_COLUMNS_AUTORESIZE_NEXT, "Columns Next");
-		columnsFillDescriptor.setDescription("When resizing a column the space is taken from the next one");
+		CheckBoxPropertyDescriptor columnsFillDescriptor = new CheckBoxPropertyDescriptor(PROPERTY_COLUMNS_AUTORESIZE_NEXT, Messages.MTable_autoresizeNext);
+		columnsFillDescriptor.setDescription(Messages.MTable_autoresizeNextDescription);
 		desc.add(columnsFillDescriptor);
 		columnsFillDescriptor.setCategory(Messages.MTable_table_properties_category);
 
@@ -240,7 +240,7 @@ public class MTable extends MGraphicElement implements IContainer,
 		defaultsMap.put(PROPERTY_COLUMNS_AUTORESIZE_NEXT, Boolean.FALSE);
 
 		setHelpPrefix(desc,
-				"net.sf.jasperreports.doc/docs/components.schema.reference.html#table");
+				"net.sf.jasperreports.doc/docs/components.schema.reference.html#table"); //$NON-NLS-1$
 	}
 
 	private MDatasetRun mDatasetRun;
@@ -368,7 +368,7 @@ public class MTable extends MGraphicElement implements IContainer,
 	public String getDisplayText() {
 		String name = getPropertiesMap().getProperty(
 				NameSection.getNamePropertyId(this));
-		return getIconDescriptor().getTitle() + " " + Misc.nvl(name);
+		return getIconDescriptor().getTitle() + " " + Misc.nvl(name); //$NON-NLS-1$
 	}
 
 	/*

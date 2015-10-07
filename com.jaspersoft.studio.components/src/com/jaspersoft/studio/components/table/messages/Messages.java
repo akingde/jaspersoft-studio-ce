@@ -48,6 +48,8 @@ public class Messages extends NLS {
 	public static String MColumn_column_width;
 	public static String MColumn_print_when_expression;
 	public static String MColumn_print_when_expression_description;
+	public static String MTable_autoresizeNext;
+	public static String MTable_autoresizeNextDescription;
 	public static String MTable_dataset_run;
 	public static String MTable_dataset_run_description;
 	public static String MTable_table_properties_category;
