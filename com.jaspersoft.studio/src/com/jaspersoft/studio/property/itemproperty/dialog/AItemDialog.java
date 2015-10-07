@@ -120,7 +120,8 @@ public abstract class AItemDialog extends ATitledDialog implements IExpressionCo
 		if (itemData.getDataset() != null) {
 			createDatasetComposite(dsCmp);
 		} else {
-			compositeDatasetInfo.dispose();
+			if (compositeDatasetInfo != null)
+				compositeDatasetInfo.dispose();
 			compositeDatasetInfo = null;
 		}
 		setError(null);
@@ -132,8 +133,10 @@ public abstract class AItemDialog extends ATitledDialog implements IExpressionCo
 		for (int i = 0; i < items.length; i++) {
 			ItemData id = itemDatas.get(i);
 			JRElementDataset ed = id.getDataset();
-
-			items[i] = ed != null && ed.getDatasetRun() != null ? ed.getDatasetRun().getDatasetName() : "No Dataset";
+			if (ed == null)
+				items[i] = "No Dataset";
+			else
+				items[i] = ed.getDatasetRun() != null ? ed.getDatasetRun().getDatasetName() : "Main Dataset";
 			if (id.getItems() != null)
 				items[i] += " ; " + id.getItems().size() + " Items";
 		}
@@ -299,6 +302,8 @@ public abstract class AItemDialog extends ATitledDialog implements IExpressionCo
 			StandardItemData newID = (StandardItemData) itemDatas.get(indx);
 			newID.addItem(item);
 			setItemData(newID);
+			compositeDatasetInfo.dispose();
+			compositeDatasetInfo = null;
 			fillData();
 
 			setupExpressionContext();
