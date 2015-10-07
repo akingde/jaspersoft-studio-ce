@@ -269,13 +269,13 @@ public class ServerProfilePage extends WizardPage implements
 		layout.marginWidth = 0;
 		cmpCAS.setLayout(layout);
 
-		new Label(cmpCAS, SWT.NONE).setText("SSO Server");
+		new Label(cmpCAS, SWT.NONE).setText(Messages.ServerProfilePage_23);
 		ccas = new Combo(cmpCAS, SWT.READ_ONLY | SWT.SINGLE | SWT.BORDER);
 
 		String v = null;
 		v = JasperReportsConfiguration.getDefaultInstance().getPrefStore()
 				.getString(CASPreferencePage.CAS);
-		for (String line : v.split("\n")) {
+		for (String line : v.split("\n")) { //$NON-NLS-1$
 			if (line.isEmpty())
 				continue;
 			try {
@@ -328,7 +328,7 @@ public class ServerProfilePage extends WizardPage implements
 		new Label(cmp, SWT.NONE).setText(Messages.ServerProfilePage_jrversion);
 
 		cversion = new VersionCombo(cmp);
-		((Combo) cversion.getControl()).setItem(0, "Same version with server");
+		((Combo) cversion.getControl()).setItem(0, Messages.ServerProfilePage_25);
 		cversion.setVersion(JRXmlWriterHelper.LAST_VERSION);
 		GridData gd = new GridData();
 		gd.horizontalSpan = 2;
