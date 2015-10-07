@@ -318,7 +318,7 @@
             id="com.jaspersoft.studio.preferences.templates.TemplateLocationsPreferencePage" 
             name="%TemplateLocations"
             class="com.jaspersoft.studio.preferences.templates.TemplateLocationsPreferencePage"
-            category="com.jaspersoft.studio.preferences.StudioPreferencePage">
+            category="com.jaspersoft.studio.preferences.templates">
       </page>
       <page
             category="com.jaspersoft.studio.preferences.DesignerPreferencePage"
@@ -343,6 +343,12 @@
             class="com.jaspersoft.studio.preferences.PalettePreferencePage"
             id="com.jaspersoft.studio.preferences.PalettePreferencePage"
             name="%Palette">
+      </page>
+      <page
+            category="com.jaspersoft.studio.preferences.StudioPreferencePage"
+            class="com.jaspersoft.studio.preferences.templates.PathsPreferencePage"
+            id="com.jaspersoft.studio.preferences.templates"
+            name="%Templates">
       </page>
    </extension>
    <extension
@@ -527,9 +533,9 @@
       </page>
       <page
             id="com.jaspersoft.studio.preferences.templates.TemplateLocationsPreferencePage.property" 
-            name="Template locations"
+            name="%TemplateLocations"
             class="com.jaspersoft.studio.preferences.templates.TemplateLocationsPreferencePage"
-            category="com.jaspersoft.studio.preferences.StudioPreferencePage.property">
+            category="com.jaspersoft.studio.preferences.templates.property">
             <enabledWhen>
 	            <adapt
 	                  type="org.eclipse.core.resources.IProject">
@@ -585,6 +591,12 @@
                   definitionId="com.jaspersoft.studio.projectorjrxml">
             </reference>
          </enabledWhen>
+      </page>
+      <page
+            category="com.jaspersoft.studio.preferences.StudioPreferencePage.property"
+            class="com.jaspersoft.studio.preferences.templates.PathsPreferencePage"
+            id="com.jaspersoft.studio.preferences.templates.property"
+            name="%Templates">
       </page>
    </extension>
    <extension

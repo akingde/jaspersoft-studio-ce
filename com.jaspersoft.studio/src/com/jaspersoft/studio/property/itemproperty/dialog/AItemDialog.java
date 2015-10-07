@@ -23,40 +23,32 @@ import net.sf.jasperreports.engine.design.JRDesignElementDataset;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
-import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
-import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.jface.viewers.TableViewerColumn;
-import org.eclipse.jface.window.ToolTip;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableColumn;
 
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
-import com.jaspersoft.studio.property.itemproperty.desc.ADescriptor;
-import com.jaspersoft.studio.property.itemproperty.label.ItemLabelProvider;
-import com.jaspersoft.studio.swt.widgets.table.EditButton;
-import com.jaspersoft.studio.swt.widgets.table.IEditElement;
-import com.jaspersoft.studio.swt.widgets.table.INewElement;
-import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
-import com.jaspersoft.studio.swt.widgets.table.NewButton;
+import com.jaspersoft.studio.jface.dialogs.EditableDatasetBaseComposite;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.model.dataset.ComponentElementDatasetAdapter;
+import com.jaspersoft.studio.model.dataset.ComponentElementDatasetRunAdapter;
+import com.jaspersoft.studio.model.dataset.IEditableDatasetRun;
+import com.jaspersoft.studio.property.dataset.DatasetRunSelectionListener;
+import com.jaspersoft.studio.property.itemproperty.desc.ADescriptor;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ModelUtils;
-import com.jaspersoft.studio.utils.UIUtil;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public abstract class AItemDialog extends ATitledDialog implements IExpressionContextSetter {
@@ -70,10 +62,10 @@ public abstract class AItemDialog extends ATitledDialog implements IExpressionCo
 
 	protected ADescriptor descriptor;
 	private Button useDatasetB;
-	private TableViewer dsviewer;
-	private EditButton<StandardItemData> dsEditButton;
+	private Combo dsviewer;
+	protected EditableDatasetBaseComposite compositeDatasetInfo;
 
-	private NewButton dsNewButton;
+	private Button dsNewButton;
 
 	public AItemDialog(Shell parentShell, ADescriptor descriptor, JasperReportsConfiguration jrConfig) {
 		super(parentShell);
@@ -120,15 +112,33 @@ public abstract class AItemDialog extends ATitledDialog implements IExpressionCo
 	}
 
 	protected void fillData() {
-
 		useDatasetB.setSelection(itemData.getDataset() != null);
-		enableUseDataset();
-		dsviewer.setInput(itemDatas);
-		dsviewer.getTable().select(itemDatas.indexOf(itemData));
+
+		setupItemDataCombo();
 
 		setupExpressionContext();
+		if (itemData.getDataset() != null) {
+			createDatasetComposite(dsCmp);
+		} else {
+			compositeDatasetInfo.dispose();
+			compositeDatasetInfo = null;
+		}
 		setError(null);
 		validateForm();
+	}
+
+	protected void setupItemDataCombo() {
+		String[] items = new String[itemDatas.size()];
+		for (int i = 0; i < items.length; i++) {
+			ItemData id = itemDatas.get(i);
+			JRElementDataset ed = id.getDataset();
+
+			items[i] = ed != null && ed.getDatasetRun() != null ? ed.getDatasetRun().getDatasetName() : "No Dataset";
+			if (id.getItems() != null)
+				items[i] += " ; " + id.getItems().size() + " Items";
+		}
+		dsviewer.setItems(items);
+		dsviewer.select(itemDatas.indexOf(itemData));
 	}
 
 	protected void validateForm() {
@@ -148,16 +158,12 @@ public abstract class AItemDialog extends ATitledDialog implements IExpressionCo
 	protected ExpressionContext currentExpContext;
 	protected ExpressionContext expContext;
 
+	private Composite dsCmp;
+
 	@Override
 	public void setExpressionContext(ExpressionContext expContext) {
 		this.expContext = expContext;
 		currentExpContext = expContext;
-	}
-
-	private void enableUseDataset() {
-		dsviewer.getTable().setEnabled(useDatasetB.getSelection());
-		dsEditButton.setEnabled(useDatasetB.getSelection());
-		dsNewButton.setEnabled(useDatasetB.getSelection());
 	}
 
 	@Override
@@ -187,67 +193,17 @@ public abstract class AItemDialog extends ATitledDialog implements IExpressionCo
 		bptab.setText(Messages.ItemDialog_7);
 
 		Composite cmp = new Composite(tabFolder, SWT.NONE);
-		cmp.setLayout(new GridLayout(2, false));
+		cmp.setLayout(new GridLayout(3, false));
 
-		useDatasetB = new Button(cmp, SWT.CHECK);
-		useDatasetB.setText(Messages.ItemDialog_6);
-		GridData gd = new GridData();
-		gd.horizontalSpan = 2;
-		useDatasetB.setLayoutData(gd);
-		useDatasetB.addSelectionListener(new SelectionAdapter() {
+		new Label(cmp, SWT.NONE).setText("Item Data");
+
+		dsviewer = new Combo(cmp, SWT.READ_ONLY);
+
+		dsNewButton = new Button(cmp, SWT.PUSH);
+		dsNewButton.setText("Add");
+		dsNewButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				handleUseDataset();
-			}
-		});
-
-		Table table = new Table(cmp, SWT.V_SCROLL | SWT.SINGLE | SWT.FULL_SELECTION | SWT.BORDER);
-		gd = new GridData(GridData.FILL_BOTH);
-		gd.widthHint = 500;
-		gd.heightHint = 300;
-		gd.verticalSpan = 3;
-		table.setLayoutData(gd);
-		table.setLinesVisible(false);
-
-		dsviewer = new TableViewer(table);
-		dsviewer.setContentProvider(new ListContentProvider() {
-			@Override
-			public Object[] getElements(Object inputElement) {
-				if (inputElement instanceof List<?>) {
-					List<ItemData> list = new ArrayList<ItemData>();
-					for (ItemData id : (List<ItemData>) inputElement) {
-						if (id.getDataset() == null)
-							continue;
-						list.add(id);
-					}
-					return list.toArray();
-				}
-				return new Object[0];
-			}
-		});
-		dsviewer.setLabelProvider(new ItemLabelProvider(descriptor));
-		UIUtil.setViewerCellEditingOnDblClick(dsviewer);
-		ColumnViewerToolTipSupport.enableFor(dsviewer, ToolTip.NO_RECREATE);
-
-		TableViewerColumn viewerColumn = new TableViewerColumn(dsviewer, SWT.NONE);
-		TableColumn column = viewerColumn.getColumn();
-		column.setWidth(600);
-		viewerColumn.setLabelProvider(new ItemLabelProvider(descriptor));
-
-		dsNewButton = new NewButton() {
-			protected void afterElementAdded(Object selement) {
-				Button b = getButton(IDialogConstants.OK_ID);
-				b.setEnabled(true);
-				itemData.removeItem(item);
-				((StandardItemData) selement).addItem(item);
-				setItemData((StandardItemData) selement);
-				setupExpressionContext();
-			}
-		};
-		dsNewButton.createNewButtons(cmp, dsviewer, new INewElement() {
-
-			@Override
-			public Object newElement(List<?> input, int pos) {
 				JRDesignElementDataset eds = new JRDesignElementDataset();
 				// eds.setDatasetRun(new JRDesignDatasetRun());
 				ElementDatasetDialog dialog = new ElementDatasetDialog(UIUtils.getShell(), Messages.ItemDialog_7,
@@ -256,50 +212,98 @@ public abstract class AItemDialog extends ATitledDialog implements IExpressionCo
 				if (openChildDialog(dialog) == Dialog.OK) {
 					StandardItemData id = new StandardItemData();
 					id.setDataset(dialog.getDataset());
-					return id;
-				}
-				return null;
-			}
+					int indx = dsviewer.getSelectionIndex();
+					if (indx >= 0 && indx < itemDatas.size())
+						itemDatas.add(indx, id);
+					else
+						itemDatas.add(id);
 
-		});
-		dsEditButton = new EditButton<StandardItemData>();
-		dsEditButton.createEditButtons(cmp, dsviewer, new IEditElement<StandardItemData>() {
-
-			@Override
-			public void editElement(List<StandardItemData> input, int pos) {
-				JRElementDataset ds = itemData.getDataset();
-				ElementDatasetDialog dialog = new ElementDatasetDialog(UIUtils.getShell(), Messages.ItemDialog_7,
-						Messages.ItemDialog_7, (JRElementDataset) ds.clone(), jrConfig);
-				dialog.setExpressionContext(currentExpContext);
-				if (openChildDialog(dialog) == Dialog.OK) {
-					itemData.setDataset(dialog.getDataset());
-					dsviewer.refresh();
+					Button b = getButton(IDialogConstants.OK_ID);
+					b.setEnabled(true);
+					itemData.removeItem(item);
+					id.addItem(item);
+					setItemData(id);
 					setupExpressionContext();
 				}
 			}
 		});
-		dsEditButton.editOnDoubleClick();
-		dsviewer.addSelectionChangedListener(new ISelectionChangedListener() {
 
+		Label sep = new Label(cmp, SWT.SEPARATOR | SWT.HORIZONTAL);
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 3;
+		sep.setLayoutData(gd);
+
+		useDatasetB = new Button(cmp, SWT.CHECK);
+		useDatasetB.setText(Messages.ItemDialog_6);
+		gd = new GridData();
+		gd.horizontalSpan = 3;
+		useDatasetB.setLayoutData(gd);
+		useDatasetB.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void selectionChanged(SelectionChangedEvent event) {
-				handleDsSelectionChanged();
+			public void widgetSelected(SelectionEvent e) {
+				handleUseDataset();
 			}
+		});
 
+		dsCmp = new Composite(cmp, SWT.NONE);
+		dsCmp.setLayout(new FillLayout());
+		gd = new GridData(GridData.FILL_BOTH);
+		gd.horizontalSpan = 3;
+		gd.widthHint = 750;
+		dsCmp.setLayoutData(gd);
+
+		dsviewer.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				handleDsSelectionChanged();
+			};
 		});
 		bptab.setControl(cmp);
 	}
 
+	protected void createDatasetComposite(Composite container) {
+		compositeDatasetInfo = new EditableDatasetBaseComposite(new ComponentElementDatasetAdapter(
+				(JRDesignElementDataset) itemData.getDataset(), jrConfig), container, SWT.NONE) {
+			@Override
+			protected IEditableDatasetRun getEditableDatesetRun() {
+				return new ComponentElementDatasetRunAdapter(this.getEditableDataset());
+			}
+		};
+		compositeDatasetInfo.addDatasetRunSelectionListener(new DatasetRunSelectionListener() {
+			public void selectionChanged() {
+				ExpressionContext contextFromDSRun = getExpressionContextFromDSRun();
+				compositeDatasetInfo.setExpressionContext(contextFromDSRun);
+				setExpressionContext(contextFromDSRun);
+			}
+		});
+		compositeDatasetInfo.setExpressionContext(getExpressionContextFromDSRun());
+		compositeDatasetInfo.setDefaultExpressionContext(expContext);
+
+		dsCmp.layout();
+		UIUtils.relayoutDialog(getShell(), 0, -1);
+		UIUtils.centerDialog(getShell());
+	}
+
+	private ExpressionContext getExpressionContextFromDSRun() {
+		if (itemData.getDataset() != null) {
+			JRDesignDataset ds = ModelUtils.getDesignDatasetForDatasetRun(jrConfig.getJasperDesign(), itemData.getDataset()
+					.getDatasetRun());
+			return new ExpressionContext(ds, jrConfig);
+		}
+		return null;
+	}
+
 	private void handleDsSelectionChanged() {
-		StructuredSelection sel = (StructuredSelection) dsviewer.getSelection();
-		if (sel.getFirstElement() != null) {
+		int indx = dsviewer.getSelectionIndex();
+		if (indx >= 0) {
 			itemData.removeItem(item);
-			StandardItemData newID = (StandardItemData) sel.getFirstElement();
+			StandardItemData newID = (StandardItemData) itemDatas.get(indx);
 			newID.addItem(item);
 			setItemData(newID);
+			fillData();
+
+			setupExpressionContext();
+			validateForm();
 		}
-		setupExpressionContext();
-		validateForm();
 	}
 
 	protected void setupExpressionContext() {
@@ -312,31 +316,16 @@ public abstract class AItemDialog extends ATitledDialog implements IExpressionCo
 	}
 
 	private void handleUseDataset() {
-		Button b = getButton(IDialogConstants.OK_ID);
-		b.setEnabled(true);
 		boolean useDs = useDatasetB.getSelection();
-		enableUseDataset();
-		if (useDs) {
-			if (itemDatas.isEmpty())
-				b.setEnabled(false);
-			else
-				dsviewer.getTable().select(0);
+		if (!useDs) {
+			itemData.setDataset(null);
+			compositeDatasetInfo.dispose();
+			compositeDatasetInfo = null;
 		} else {
-			dsviewer.setSelection(null);
-			itemData.removeItem(item);
-			// let's use a ItemData with no dataset
-			StandardItemData newid = null;
-			for (ItemData id : itemDatas) {
-				if (id.getDataset() == null) {
-					newid = (StandardItemData) id;
-					break;
-				}
-			}
-			if (newid == null)
-				newid = new StandardItemData();
-			newid.addItem(item);
-			setItemData(newid);
+			itemData.setDataset(new JRDesignElementDataset());
+			createDatasetComposite(dsCmp);
 		}
-		handleDsSelectionChanged();
+		setupItemDataCombo();
+		setupExpressionContext();
 	}
 }

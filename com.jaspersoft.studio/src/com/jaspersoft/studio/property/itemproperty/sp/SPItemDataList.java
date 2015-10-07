@@ -84,13 +84,22 @@ public class SPItemDataList extends ASPropertyWidget<AItemDataListPropertyDescri
 
 	private TabFolder tabfolder;
 
-	private TreeViewer dsTViewer;
+	protected TreeViewer dsTViewer;
 	private Button btnAddNewDataset;
 	private Button btnModifyDataset;
 	private Button btnRemoveDataset;
 
 	public SPItemDataList(Composite parent, AbstractSection section, AItemDataListPropertyDescriptor pDescriptor) {
+		this(parent, section, pDescriptor, true);
+	}
+
+	public SPItemDataList(Composite parent, AbstractSection section, AItemDataListPropertyDescriptor pDescriptor,
+			boolean showElements) {
 		super(parent, section, pDescriptor);
+		if (!showElements) {
+			tabfolder.getItem(0).dispose();
+			elTViewer = null;
+		}
 	}
 
 	private ADescriptor getDescriptor() {
@@ -255,7 +264,7 @@ public class SPItemDataList extends ASPropertyWidget<AItemDataListPropertyDescri
 	}
 
 	protected void showItemDialog(List<ItemData> citemsData, StandardItemData itemData, StandardItem item) {
-		getDescriptor().setItemDatas(citemsData);
+		getDescriptor().setItemDatas(citemsData, pnode);
 		getDescriptor().setItemData(itemData);
 		AItemDialog dialog = createItemDialog();
 		dialog.setValues(citemsData, itemData, item);
@@ -295,12 +304,13 @@ public class SPItemDataList extends ASPropertyWidget<AItemDataListPropertyDescri
 
 			@Override
 			public void run() {
-				elTViewer.expandToLevel(itemData, 1);
-				if (item != null)
-					elTViewer.setSelection(new StructuredSelection(item), true);
-				else
-					elTViewer.setSelection(new StructuredSelection(itemData), true);
-
+				if (elTViewer != null) {
+					elTViewer.expandToLevel(itemData, 1);
+					if (item != null)
+						elTViewer.setSelection(new StructuredSelection(item), true);
+					else
+						elTViewer.setSelection(new StructuredSelection(itemData), true);
+				}
 				dsTViewer.expandToLevel(itemData, 1);
 				if (item != null)
 					dsTViewer.setSelection(new StructuredSelection(item), true);
@@ -311,7 +321,7 @@ public class SPItemDataList extends ASPropertyWidget<AItemDataListPropertyDescri
 	}
 
 	private void createDatasetsTab(TabFolder parentFolder) {
-		TabItem datasetsTab = new TabItem(parentFolder, SWT.NONE);
+		datasetsTab = new TabItem(parentFolder, SWT.NONE);
 		Composite datasetsCmp = section.getWidgetFactory().createComposite(parentFolder);
 		datasetsCmp.setLayout(new GridLayout(2, false));
 		datasetsTab.setControl(datasetsCmp);
@@ -322,7 +332,7 @@ public class SPItemDataList extends ASPropertyWidget<AItemDataListPropertyDescri
 		GridData gd = new GridData(GridData.FILL_BOTH);
 		gd.verticalSpan = 5;
 		tree.setLayoutData(gd);
-		dsTViewer.setLabelProvider(new ItemLabelProvider(getDescriptor()));
+		createDsLabelProvider();
 		dsTViewer.setContentProvider(new ItemDataListContentProvider(true));
 		ColumnViewerToolTipSupport.enableFor(dsTViewer, ToolTip.NO_RECREATE);
 
@@ -366,7 +376,7 @@ public class SPItemDataList extends ASPropertyWidget<AItemDataListPropertyDescri
 			}
 		});
 
-		btnUpDataset = section.getWidgetFactory().createButton(datasetsCmp, "Up", SWT.NONE);
+		btnUpDataset = section.getWidgetFactory().createButton(datasetsCmp, Messages.SPItemDataList_0, SWT.NONE);
 		btnUpDataset.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 1, 1));
 		btnUpDataset.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -375,7 +385,7 @@ public class SPItemDataList extends ASPropertyWidget<AItemDataListPropertyDescri
 			}
 		});
 
-		btnDownDataset = section.getWidgetFactory().createButton(datasetsCmp, "Down", SWT.NONE);
+		btnDownDataset = section.getWidgetFactory().createButton(datasetsCmp, Messages.SPItemDataList_4, SWT.NONE);
 		btnDownDataset.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 1, 1));
 		btnDownDataset.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -385,6 +395,10 @@ public class SPItemDataList extends ASPropertyWidget<AItemDataListPropertyDescri
 		});
 
 		enableDefaultDatasetsButtons();
+	}
+
+	protected void createDsLabelProvider() {
+		dsTViewer.setLabelProvider(new ItemLabelProvider(getDescriptor()));
 	}
 
 	private void handleUpElement(TreeViewer tviewer) {
@@ -425,7 +439,8 @@ public class SPItemDataList extends ASPropertyWidget<AItemDataListPropertyDescri
 							items.set(ind, tmp);
 							if (es != null)
 								es.fireIndexedPropertyChange((String) pDescriptor.getId(), newind, tmp, item);
-							elTViewer.refresh(true);
+							if (elTViewer != null)
+								elTViewer.refresh(true);
 							dsTViewer.refresh(true);
 							btnUpDataset.setEnabled(newind > 0);
 							btnDownDataset.setEnabled(newind < size - 1);
@@ -437,12 +452,14 @@ public class SPItemDataList extends ASPropertyWidget<AItemDataListPropertyDescri
 		}
 	}
 
-	private List<ItemData> itemDatas;
+	protected List<ItemData> itemDatas;
 
 	private Button btnUpDataset;
 
 	private Button btnDownDataset;
-	private APropertyNode pnode;
+	protected APropertyNode pnode;
+
+	protected TabItem datasetsTab;
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -450,9 +467,10 @@ public class SPItemDataList extends ASPropertyWidget<AItemDataListPropertyDescri
 		this.pnode = pnode;
 		itemDatas = (List<ItemData>) value;
 
-		elTViewer.setInput(itemDatas);
+		if (elTViewer != null)
+			elTViewer.setInput(itemDatas);
 		dsTViewer.setInput(itemDatas);
-		getDescriptor().setItemDatas(itemDatas);
+		getDescriptor().setItemDatas(itemDatas, pnode);
 		enableDefaultDatasetsButtons();
 		enableDefaultTreeButtons();
 		JRDesignElement designEl = null;
@@ -469,6 +487,8 @@ public class SPItemDataList extends ASPropertyWidget<AItemDataListPropertyDescri
 	}
 
 	private void enableDefaultTreeButtons() {
+		if (elTViewer == null)
+			return;
 		btnAddElement.setEnabled(true);
 		boolean enableMoveBtns = !elTViewer.getSelection().isEmpty();
 		btnEditElement.setEnabled(enableMoveBtns);
@@ -511,6 +531,31 @@ public class SPItemDataList extends ASPropertyWidget<AItemDataListPropertyDescri
 	@Override
 	public void setExpressionContext(ExpressionContext expContext) {
 		this.expContext = expContext;
+	}
+
+	public int getSelectedItemDataIndex() {
+		StructuredSelection sel = null;
+		if (elTViewer != null && tabfolder.getSelectionIndex() == 0)
+			sel = (StructuredSelection) elTViewer.getSelection();
+		else
+			sel = (StructuredSelection) dsTViewer.getSelection();
+		Object obj = sel.getFirstElement();
+		if (obj instanceof ItemData)
+			return itemDatas.indexOf(obj);
+		if (obj instanceof Item) {
+			Item item = (Item) obj;
+			for (ItemData id : itemDatas) {
+				List<Item> items = id.getItems();
+				if (Misc.isNullOrEmpty(items))
+					continue;
+				for (Item it : items)
+					if (it == item)
+						return itemDatas.indexOf(id);
+			}
+		}
+		if (!Misc.isNullOrEmpty(itemDatas))
+			return 0;
+		return -1;
 	}
 
 }

@@ -58,7 +58,7 @@ public class ItemPropertyUtil {
 	public static Object getItemPropertyValue(StandardItemProperty ip, ExpressionInterpreter expIntr) {
 		if (ip == null)
 			return null;
-		if (ip.getValueExpression() != null)
+		if (ip.getValueExpression() != null && expIntr != null)
 			return expIntr.interpretExpression(Misc.nvl(ip.getValueExpression().getText()));
 		if (ip.getValue() != null)
 			return ip.getValue();

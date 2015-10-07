@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -71,7 +73,13 @@ public class SPRCombo extends ASPropertyWidget<RComboBoxPropertyDescriptor> {
 	private Object b;
 
 	public void refresh() {
-		setData(pnode, b);
+		UIUtils.getDisplay().syncExec(new Runnable() {
+
+			@Override
+			public void run() {
+				setData(pnode, b);
+			}
+		});
 	}
 
 	public void setData(APropertyNode pnode, Object b) {

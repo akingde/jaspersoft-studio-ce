@@ -308,6 +308,23 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 		for (PropertyChangeListener l : Arrays.asList(propertyChangeSupport.getPropertyChangeListeners())) {
 			propertyChangeSupport.removePropertyChangeListener(l);
 		}
+		if (toDispose != null)
+			for (IDisposeListener d : toDispose)
+				d.dispose();
+	}
+
+	private List<IDisposeListener> toDispose;
+
+	public void addDisposeListener(IDisposeListener listener) {
+		if (toDispose == null)
+			toDispose = new ArrayList<IDisposeListener>();
+		toDispose.add(listener);
+	}
+
+	public void removeDisposeListener(IDisposeListener listener) {
+		if (toDispose == null)
+			return;
+		toDispose.remove(listener);
 	}
 
 	public void put(String key, Object value) {
@@ -796,7 +813,7 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 		}
 		return localRepositoryService;
 	}
-	
+
 	/**
 	 * @return the associated report file if any, <code>null</code> otherwise
 	 */

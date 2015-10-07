@@ -28,6 +28,11 @@ public class ItemPropertyDescription<T> {
 	private String description;
 	private boolean mandatory;
 	private T defaultValue;
+	private boolean readOnly;
+
+	public ItemPropertyDescription() {
+		super();
+	}
 
 	public ItemPropertyDescription(String name, String description, boolean mandatory) {
 		this(name, name, description, mandatory, null);
@@ -48,6 +53,14 @@ public class ItemPropertyDescription<T> {
 		this.description = description;
 		this.mandatory = mandatory;
 		this.defaultValue = defaultValue;
+	}
+
+	public boolean isReadOnly() {
+		return readOnly;
+	}
+
+	public void setReadOnly(boolean readOnly) {
+		this.readOnly = readOnly;
 	}
 
 	public boolean isMultiline() {

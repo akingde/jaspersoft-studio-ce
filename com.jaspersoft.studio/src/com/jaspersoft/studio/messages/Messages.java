@@ -2265,9 +2265,11 @@ public class Messages extends NLS {
 	public static String ItemListCellEditor_0;
 	public static String ItemListCellEditor_1;
 	public static String SPItemdDataList_0;
+	public static String SPItemDataList_0;
 	public static String SPItemDataList_1;
 	public static String SPItemDataList_2;
 	public static String SPItemDataList_3;
+	public static String SPItemDataList_4;
 	public static String SPItemDataList_5;
 	public static String ZoomActualAction_0;
 	public static String ZoomActualAction_1;

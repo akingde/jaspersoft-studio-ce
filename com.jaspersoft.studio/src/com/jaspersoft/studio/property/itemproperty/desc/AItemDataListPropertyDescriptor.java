@@ -40,12 +40,12 @@ public abstract class AItemDataListPropertyDescriptor extends NTextPropertyDescr
 
 	@Override
 	public ASPropertyWidget<AItemDataListPropertyDescriptor> createWidget(Composite parent, AbstractSection section) {
-		SPItemDataList sp = createSPWidget(parent, section);
-		sp.setExpressionContext(expContext);
+		ASPropertyWidget<AItemDataListPropertyDescriptor> sp = createSPWidget(parent, section);
+		((IExpressionContextSetter) sp).setExpressionContext(expContext);
 		return sp;
 	}
 
-	protected SPItemDataList createSPWidget(Composite parent, AbstractSection section) {
+	protected ASPropertyWidget<AItemDataListPropertyDescriptor> createSPWidget(Composite parent, AbstractSection section) {
 		return new SPItemDataList(parent, section, this);
 	}
 

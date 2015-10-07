@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.jface.dialogs;
 
@@ -63,7 +59,7 @@ import com.jaspersoft.studio.property.dataset.DatasetRunSelectionListener;
 import com.jaspersoft.studio.swt.widgets.WTextExpression;
 import com.jaspersoft.studio.utils.ModelUtils;
 
-/** 
+/**
  * This generic composite can be reused in dialogs/wizards when there is the need to edit the dataset run information of
  * a report element.<br>
  * 
@@ -72,8 +68,8 @@ import com.jaspersoft.studio.utils.ModelUtils;
  * @see IEditableDatasetRun
  * 
  */
-public class DatasetRunBaseComposite extends Composite implements IExpressionContextSetter{
-	
+public class DatasetRunBaseComposite extends Composite implements IExpressionContextSetter {
+
 	private IEditableDatasetRun datasetRunInstance;
 	private Combo comboSubDataset;
 	private TabFolder tabFolderDataSetRun;
@@ -84,34 +80,37 @@ public class DatasetRunBaseComposite extends Composite implements IExpressionCon
 	private TableViewer tableViewerDatasetRunParams;
 	private List<DatasetRunSelectionListener> dsRunSelectionListeners;
 	private ExpressionContext expContext;
-	
+
 	/**
-	 * Map of the dataset run created from this composite, to allow to switch between differents 
-	 * dataset run without loose the previous settings
+	 * Map of the dataset run created from this composite, to allow to switch between differents dataset run without loose
+	 * the previous settings
 	 */
 	private HashMap<String, JRDesignDatasetRun> datasetRunMap = new HashMap<String, JRDesignDatasetRun>();
 
 	public DatasetRunBaseComposite(IEditableDatasetRun datasetRun, Composite parent, int style) {
 		super(parent, style);
-		this.dsRunSelectionListeners=new ArrayList<DatasetRunSelectionListener>();
-		this.setLayout(new GridLayout(2,false));
-		this.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 2));
-		this.datasetRunInstance=datasetRun;
-		
+		this.dsRunSelectionListeners = new ArrayList<DatasetRunSelectionListener>();
+		this.setLayout(new GridLayout(2, false));
+		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true, 2, 2);
+		gd.heightHint = 300;
+		gd.horizontalSpan = 2;
+		this.setLayoutData(gd);
+		this.datasetRunInstance = datasetRun;
+
 		Label lblSubDataset = new Label(this, SWT.NONE);
 		lblSubDataset.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		lblSubDataset.setText(Messages.DatasetRunBaseComposite_SubDatasetLbl);
-		
+
 		comboSubDataset = new Combo(this, SWT.NONE | SWT.READ_ONLY);
 		GridData gd_combo = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
 		gd_combo.horizontalIndent = 15;
 		comboSubDataset.setLayoutData(gd_combo);
 		comboSubDataset.addSelectionListener(new SelectionListener() {
-			
+
 			public void widgetSelected(SelectionEvent e) {
-				int selIndex=((Combo)e.widget).getSelectionIndex();
+				int selIndex = ((Combo) e.widget).getSelectionIndex();
 				updateSubDatasetInformation(selIndex);
-				// On dataset selection change we force the initial 
+				// On dataset selection change we force the initial
 				// selection of the No connection / datasource expression
 				comboConnDS.select(0);
 				connDSExpression.setEnabled(false);
@@ -119,37 +118,36 @@ public class DatasetRunBaseComposite extends Composite implements IExpressionCon
 				connDSExpression.setExpression(null);
 				notifyDatasetRunSelectionChanged();
 			}
-			
+
 			public void widgetDefaultSelected(SelectionEvent e) {
-				
+
 			}
 		});
-		
+
 		tabFolderDataSetRun = new TabFolder(this, SWT.NONE);
 		GridData gd_tabFolderDataSetRun = new GridData(SWT.FILL, SWT.FILL, true, true, 2, 2);
 		tabFolderDataSetRun.setLayoutData(gd_tabFolderDataSetRun);
 		tabFolderDataSetRun.setEnabled(false);
 		tabFolderDataSetRun.setVisible(false);
 
-		
 		TabItem tbtmConnectionDatasourceExpression = new TabItem(tabFolderDataSetRun, SWT.NONE);
 		tbtmConnectionDatasourceExpression.setText(Messages.DatasetRunBaseComposite_ConnDSExprTab);
-		
+
 		Composite compositeConnDSExpContent = new Composite(tabFolderDataSetRun, SWT.NONE);
 		tbtmConnectionDatasourceExpression.setControl(compositeConnDSExpContent);
 		compositeConnDSExpContent.setLayout(new GridLayout(1, false));
-		
+
 		Label lblConnDSExprSelection = new Label(compositeConnDSExpContent, SWT.NONE);
 		lblConnDSExprSelection.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 1, 1));
 		lblConnDSExprSelection.setText(Messages.DatasetRunBaseComposite_ConnDSExprLbl);
-		
+
 		comboConnDS = new Combo(compositeConnDSExpContent, SWT.NONE | SWT.READ_ONLY);
 		comboConnDS.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false, 1, 1));
 		comboConnDS.addSelectionListener(new SelectionListener() {
-			
+
 			public void widgetSelected(SelectionEvent e) {
-				int connectionType=((Combo)e.widget).getSelectionIndex();
-				
+				int connectionType = ((Combo) e.widget).getSelectionIndex();
+
 				switch (connectionType) {
 				case 0:
 					connDSExpression.setEnabled(false);
@@ -159,114 +157,117 @@ public class DatasetRunBaseComposite extends Composite implements IExpressionCon
 				case 1:
 					connDSExpression.setEnabled(true);
 					connDSExpression.setVisible(true);
-					connDSExpression.setExpression(new JRDesignExpression("$P{REPORT_CONNECTION}"));			 //$NON-NLS-1$
+					connDSExpression.setExpression(new JRDesignExpression("$P{REPORT_CONNECTION}")); //$NON-NLS-1$
 					break;
 				case 2:
 					connDSExpression.setEnabled(true);
 					connDSExpression.setVisible(true);
-					connDSExpression.setExpression(new JRDesignExpression("new net.sf.jasperreports.engine.JREmptyDataSource(1)")); //$NON-NLS-1$
+					connDSExpression
+							.setExpression(new JRDesignExpression("new net.sf.jasperreports.engine.JREmptyDataSource(1)")); //$NON-NLS-1$
 					break;
 				}
 			}
-			
+
 			public void widgetDefaultSelected(SelectionEvent e) {
-				
+
 			}
 		});
-		
-		connDSExpression = new WTextExpression(compositeConnDSExpContent, SWT.NONE, Messages.DatasetRunBaseComposite_ConnDSExprWidgetLbl, WTextExpression.LABEL_ON_LEFT){
+
+		connDSExpression = new WTextExpression(compositeConnDSExpContent, SWT.NONE,
+				Messages.DatasetRunBaseComposite_ConnDSExprWidgetLbl, WTextExpression.LABEL_ON_LEFT) {
 			@Override
 			public void setExpression(JRDesignExpression exp) {
 				super.setExpression(exp);
-				int connectionType=comboConnDS.getSelectionIndex();		
+				int connectionType = comboConnDS.getSelectionIndex();
 				switch (connectionType) {
-					case 0:
-						datasetRunInstance.setConnectionExpression(null);
-						datasetRunInstance.setDataSourceExpression(null);
-						break;
-					case 1:
-			            datasetRunInstance.setDataSourceExpression(null);
-			            datasetRunInstance.setConnectionExpression(exp);			
-						break;
-					case 2:
-						datasetRunInstance.setConnectionExpression(null);
-						datasetRunInstance.setDataSourceExpression(exp);
-						break;
+				case 0:
+					datasetRunInstance.setConnectionExpression(null);
+					datasetRunInstance.setDataSourceExpression(null);
+					break;
+				case 1:
+					datasetRunInstance.setDataSourceExpression(null);
+					datasetRunInstance.setConnectionExpression(exp);
+					break;
+				case 2:
+					datasetRunInstance.setConnectionExpression(null);
+					datasetRunInstance.setDataSourceExpression(exp);
+					break;
 				}
 			}
 		};
-		connDSExpression.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true,1,1));
-		
+		connDSExpression.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+
 		TabItem tbtmParameters = new TabItem(tabFolderDataSetRun, SWT.NONE);
 		tbtmParameters.setText(Messages.DatasetRunBaseComposite_ParametersTab);
 
 		Composite compositeParametersContent = new Composite(tabFolderDataSetRun, SWT.NONE);
 		tbtmParameters.setControl(compositeParametersContent);
 		compositeParametersContent.setLayout(new GridLayout(2, false));
-		
-		Composite compositeTableViewerDSRunParams=new Composite(compositeParametersContent, SWT.NONE);
+
+		Composite compositeTableViewerDSRunParams = new Composite(compositeParametersContent, SWT.NONE);
 		compositeTableViewerDSRunParams.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 3));
 		TableColumnLayout layoutForTableViewerDSRunParams = new TableColumnLayout();
 		compositeTableViewerDSRunParams.setLayout(layoutForTableViewerDSRunParams);
-		
+
 		tableViewerDatasetRunParams = new TableViewer(compositeTableViewerDSRunParams, SWT.BORDER | SWT.FULL_SELECTION);
 		Table tableDatasetRunParameters = tableViewerDatasetRunParams.getTable();
 		tableDatasetRunParameters.setHeaderVisible(true);
 		tableDatasetRunParameters.setLinesVisible(true);
-		
+
 		TableViewerColumn tblclmnDatasetRunParam = new TableViewerColumn(tableViewerDatasetRunParams, SWT.NONE);
 		tblclmnDatasetRunParam.getColumn().setWidth(156);
 		tblclmnDatasetRunParam.getColumn().setText(Messages.DatasetRunBaseComposite_ParametersCol1);
 		tblclmnDatasetRunParam.setLabelProvider(new DSParameterNameLabelProvider());
-		layoutForTableViewerDSRunParams.setColumnData(tblclmnDatasetRunParam.getColumn(), new ColumnWeightData(1, ColumnWeightData.MINIMUM_WIDTH, true));
-		
+		layoutForTableViewerDSRunParams.setColumnData(tblclmnDatasetRunParam.getColumn(), new ColumnWeightData(1,
+				ColumnWeightData.MINIMUM_WIDTH, true));
+
 		TableViewerColumn tblclmnDatasetRunParamExp = new TableViewerColumn(tableViewerDatasetRunParams, SWT.NONE);
 		tblclmnDatasetRunParamExp.getColumn().setWidth(187);
 		tblclmnDatasetRunParamExp.getColumn().setText(Messages.DatasetRunBaseComposite_ParametersCol2);
 		tblclmnDatasetRunParamExp.setLabelProvider(new DSParameterExpressionLabelProvider());
-		layoutForTableViewerDSRunParams.setColumnData(tblclmnDatasetRunParamExp.getColumn(), new ColumnWeightData(1, ColumnWeightData.MINIMUM_WIDTH, true));
-		
+		layoutForTableViewerDSRunParams.setColumnData(tblclmnDatasetRunParamExp.getColumn(), new ColumnWeightData(1,
+				ColumnWeightData.MINIMUM_WIDTH, true));
+
 		tableViewerDatasetRunParams.setContentProvider(new ArrayContentProvider());
 		tableViewerDatasetRunParams.addDoubleClickListener(new IDoubleClickListener() {
-			
+
 			public void doubleClick(DoubleClickEvent event) {
 				Object selElement = ((IStructuredSelection) event.getSelection()).getFirstElement();
-				if (selElement!=null){
-					JRDesignDataset designDS = 
-							(JRDesignDataset)datasetRunInstance.getEditableDataset().getJasperDesign().getDatasetMap().get(
-									datasetRunInstance.getJRDatasetRun().getDatasetName());
-					JRDesignDatasetParameter originalParameter=(JRDesignDatasetParameter)selElement;
-					DatasetRunPameterDialog dialog=new DatasetRunPameterDialog((JRDesignDatasetParameter)originalParameter.clone(), designDS, getShell());
+				if (selElement != null) {
+					JRDesignDataset designDS = (JRDesignDataset) datasetRunInstance.getEditableDataset().getJasperDesign()
+							.getDatasetMap().get(datasetRunInstance.getJRDatasetRun().getDatasetName());
+					JRDesignDatasetParameter originalParameter = (JRDesignDatasetParameter) selElement;
+					DatasetRunPameterDialog dialog = new DatasetRunPameterDialog((JRDesignDatasetParameter) originalParameter
+							.clone(), designDS, getShell());
 					dialog.setExpressionContext(expContext);
-					if(dialog.open()==Window.OK){
+					if (dialog.open() == Window.OK) {
 						JRDesignDatasetParameter modifiedParameter = dialog.getModifiedDatasetParameter();
 						datasetRunInstance.removeParameter(originalParameter);
 						datasetRunInstance.addParameter(modifiedParameter);
 						tableViewerDatasetRunParams.setInput(datasetRunInstance.getJRDatasetRun().getParameters());
 					}
-				}				
+				}
 			}
 		});
-		
+
 		Button btnAddParamDatasetRun = new Button(compositeParametersContent, SWT.NONE);
 		btnAddParamDatasetRun.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 1, 1));
 		btnAddParamDatasetRun.setText(Messages.DatasetRunBaseComposite_AddParamBtn);
 		btnAddParamDatasetRun.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				JRDesignDataset designDS = 
-						(JRDesignDataset)datasetRunInstance.getEditableDataset().getJasperDesign().getDatasetMap().get(
-								datasetRunInstance.getJRDatasetRun().getDatasetName());
-				DatasetRunPameterDialog dialog=new DatasetRunPameterDialog(null, designDS, getShell());
+				JRDesignDataset designDS = (JRDesignDataset) datasetRunInstance.getEditableDataset().getJasperDesign()
+						.getDatasetMap().get(datasetRunInstance.getJRDatasetRun().getDatasetName());
+				DatasetRunPameterDialog dialog = new DatasetRunPameterDialog(null, designDS, getShell());
 				dialog.setExpressionContext(expContext);
-				if(dialog.open()==Window.OK){
+				if (dialog.open() == Window.OK) {
 					JRDesignDatasetParameter newParameter = dialog.getModifiedDatasetParameter();
 					datasetRunInstance.addParameter(newParameter);
 					tableViewerDatasetRunParams.setInput(datasetRunInstance.getJRDatasetRun().getParameters());
 				}
 			}
 		});
-		
+
 		Button btnModifyParameterDatasetRun = new Button(compositeParametersContent, SWT.NONE);
 		btnModifyParameterDatasetRun.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 1, 1));
 		btnModifyParameterDatasetRun.setText(Messages.DatasetRunBaseComposite_ModifyParamBtn);
@@ -274,14 +275,14 @@ public class DatasetRunBaseComposite extends Composite implements IExpressionCon
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				Object selElement = ((IStructuredSelection) tableViewerDatasetRunParams.getSelection()).getFirstElement();
-				if (selElement!=null){
-					JRDesignDataset designDS = 
-							(JRDesignDataset)datasetRunInstance.getEditableDataset().getJasperDesign().getDatasetMap().get(
-									datasetRunInstance.getJRDatasetRun().getDatasetName());
-					JRDesignDatasetParameter originalParameter=(JRDesignDatasetParameter)selElement;
-					DatasetRunPameterDialog dialog=new DatasetRunPameterDialog((JRDesignDatasetParameter)originalParameter.clone(), designDS, getShell());
+				if (selElement != null) {
+					JRDesignDataset designDS = (JRDesignDataset) datasetRunInstance.getEditableDataset().getJasperDesign()
+							.getDatasetMap().get(datasetRunInstance.getJRDatasetRun().getDatasetName());
+					JRDesignDatasetParameter originalParameter = (JRDesignDatasetParameter) selElement;
+					DatasetRunPameterDialog dialog = new DatasetRunPameterDialog((JRDesignDatasetParameter) originalParameter
+							.clone(), designDS, getShell());
 					dialog.setExpressionContext(expContext);
-					if(dialog.open()==Window.OK){
+					if (dialog.open() == Window.OK) {
 						JRDesignDatasetParameter modifiedParameter = dialog.getModifiedDatasetParameter();
 						datasetRunInstance.removeParameter(originalParameter);
 						datasetRunInstance.addParameter(modifiedParameter);
@@ -290,7 +291,7 @@ public class DatasetRunBaseComposite extends Composite implements IExpressionCon
 				}
 			}
 		});
-		
+
 		Button btnRemoveParameterDatasetRun = new Button(compositeParametersContent, SWT.NONE);
 		btnRemoveParameterDatasetRun.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 1, 1));
 		btnRemoveParameterDatasetRun.setText(Messages.DatasetRunBaseComposite_RemoveParamBtn);
@@ -298,52 +299,53 @@ public class DatasetRunBaseComposite extends Composite implements IExpressionCon
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				Object selElement = ((IStructuredSelection) tableViewerDatasetRunParams.getSelection()).getFirstElement();
-				if (selElement!=null){
-					datasetRunInstance.removeParameter((JRDesignDatasetParameter)selElement);
+				if (selElement != null) {
+					datasetRunInstance.removeParameter((JRDesignDatasetParameter) selElement);
 					tableViewerDatasetRunParams.setInput(datasetRunInstance.getJRDatasetRun().getParameters());
 				}
 			}
 		});
-		
+
 		TabItem tbtmParametersMapExp = new TabItem(tabFolderDataSetRun, SWT.NONE);
 		tbtmParametersMapExp.setText(Messages.DatasetRunBaseComposite_ParametersMapExprTab);
-		
+
 		Composite compositeParamsExpMapBox = new Composite(tabFolderDataSetRun, SWT.NONE);
 		tbtmParametersMapExp.setControl(compositeParamsExpMapBox);
 		GridLayout gl_compositeParamsExpMapBox = new GridLayout(3, false);
 		compositeParamsExpMapBox.setLayout(gl_compositeParamsExpMapBox);
-		paramsMapExpression = new WTextExpression(compositeParamsExpMapBox, SWT.NONE, Messages.DatasetRunBaseComposite_ParametersMapExprWidgetLbl, WTextExpression.LABEL_ON_TOP){
+		paramsMapExpression = new WTextExpression(compositeParamsExpMapBox, SWT.NONE,
+				Messages.DatasetRunBaseComposite_ParametersMapExprWidgetLbl, WTextExpression.LABEL_ON_TOP) {
 
 			@Override
 			public void setExpression(JRDesignExpression exp) {
 				super.setExpression(exp);
 				datasetRunInstance.setParametersMapExpression(exp);
 			}
-			
+
 		};
 		paramsMapExpression.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1));
-				
-		//CREATE THE DATASET RUN RETURN VALUES PAGE
+
+		// CREATE THE DATASET RUN RETURN VALUES PAGE
 		createDatasetRunReturnTab();
-	
+
 		initWidgets();
 	}
-	
+
 	/**
 	 * Create the controls to define the dataset run return values
 	 */
-	private void createDatasetRunReturnTab(){
+	private void createDatasetRunReturnTab() {
 		TabItem tbtmParametersMapExp = new TabItem(tabFolderDataSetRun, SWT.NONE);
 		tbtmParametersMapExp.setText(Messages.common_return_values);
 		Composite container = new Composite(tabFolderDataSetRun, SWT.NONE);
-		container.setLayout(new GridLayout(1,false));
+		container.setLayout(new GridLayout(1, false));
 		container.setLayoutData(new GridData(GridData.FILL_BOTH));
 		returnValueEditor = new DatasetRunRVPropertyPage(null);
 		returnValueEditor.setValue(null);
 		returnValueEditor.createControl(container);
-		//Add a listener to update the dataset run when the return values list changes
+		// Add a listener to update the dataset run when the return values list changes
 		returnValueEditor.addModifyListener(new ModifyListener() {
-			
+
 			@Override
 			public void modifyText(ModifyEvent e) {
 				returnValueEditor.saveValuesIntoDataset();
@@ -353,67 +355,61 @@ public class DatasetRunBaseComposite extends Composite implements IExpressionCon
 	}
 
 	/*
-	 * Inits all the components inside the composite mask. 
+	 * Inits all the components inside the composite mask.
 	 */
 	private void initWidgets() {
 		// Sub dataset information
 		fillSubDatasetComboBox();
-		if (this.datasetRunInstance.getJRDatasetRun()==null){
+		if (this.datasetRunInstance.getJRDatasetRun() == null) {
 			// Force selection for the report main dataset
 			comboSubDataset.select(0);
 			tabFolderDataSetRun.setEnabled(false);
 			tabFolderDataSetRun.setVisible(false);
-		}
-		else {
+		} else {
 			// Select the correct dataset name
 			String datasetName = this.datasetRunInstance.getJRDatasetRun().getDatasetName();
-			//save the dataset inside the map
-			datasetRunMap.put(datasetName, (JRDesignDatasetRun)datasetRunInstance.getJRDatasetRun());
-			for (int i=0;i<comboSubDataset.getItemCount();i++){
-				if (comboSubDataset.getItem(i).equals(datasetName)){
+			// save the dataset inside the map
+			datasetRunMap.put(datasetName, (JRDesignDatasetRun) datasetRunInstance.getJRDatasetRun());
+			for (int i = 0; i < comboSubDataset.getItemCount(); i++) {
+				if (comboSubDataset.getItem(i).equals(datasetName)) {
 					comboSubDataset.select(i);
 					break;
 				}
 			}
-			if (comboSubDataset.getSelectionIndex()>=1){
+			if (comboSubDataset.getSelectionIndex() >= 1) {
 				tabFolderDataSetRun.setEnabled(true);
 				tabFolderDataSetRun.setVisible(true);
-			}
-			else{
+			} else {
 				// Handle dirty dataset name for dataset run information
-				MessageDialog.openError(getShell(), Messages.DatasetRunBaseComposite_SubDatasetErrorTitle, 
-						MessageFormat.format(Messages.DatasetRunBaseComposite_SubDatasetErrorMsg, new Object[]{datasetName}));
+				MessageDialog.openError(getShell(), Messages.DatasetRunBaseComposite_SubDatasetErrorTitle,
+						MessageFormat.format(Messages.DatasetRunBaseComposite_SubDatasetErrorMsg, new Object[] { datasetName }));
 				tabFolderDataSetRun.setEnabled(false);
 				tabFolderDataSetRun.setVisible(false);
 				comboSubDataset.select(0);
 			}
 		}
-		
+
 		// Connection/Datasource Expression
-		comboConnDS.setItems(new String[]{
-				"Don't use connection or datasource", //$NON-NLS-1$
+		comboConnDS.setItems(new String[] { "Don't use connection or datasource", //$NON-NLS-1$
 				"Use a Connection expression", //$NON-NLS-1$
-				"Use a DataSource expression"}); //$NON-NLS-1$
-		JRDesignExpression exp1=null;
-		if (datasetRunInstance.getJRDatasetRun()==null) {
+				"Use a DataSource expression" }); //$NON-NLS-1$
+		JRDesignExpression exp1 = null;
+		if (datasetRunInstance.getJRDatasetRun() == null) {
 			comboConnDS.select(0);
 			this.connDSExpression.setEnabled(false);
 			this.connDSExpression.setVisible(false);
-		}
-		else {
-			if (datasetRunInstance.getJRDatasetRun().getConnectionExpression()!=null){
+		} else {
+			if (datasetRunInstance.getJRDatasetRun().getConnectionExpression() != null) {
 				comboConnDS.select(1);
 				this.connDSExpression.setEnabled(true);
 				this.connDSExpression.setVisible(true);
-				exp1=(JRDesignExpression)datasetRunInstance.getJRDatasetRun().getConnectionExpression();
-			}
-			else if (datasetRunInstance.getJRDatasetRun().getDataSourceExpression()!=null){
+				exp1 = (JRDesignExpression) datasetRunInstance.getJRDatasetRun().getConnectionExpression();
+			} else if (datasetRunInstance.getJRDatasetRun().getDataSourceExpression() != null) {
 				comboConnDS.select(2);
 				this.connDSExpression.setEnabled(true);
 				this.connDSExpression.setVisible(true);
-				exp1=(JRDesignExpression)datasetRunInstance.getJRDatasetRun().getDataSourceExpression();
-			}
-			else {
+				exp1 = (JRDesignExpression) datasetRunInstance.getJRDatasetRun().getDataSourceExpression();
+			} else {
 				comboConnDS.select(0);
 				this.connDSExpression.setEnabled(false);
 				this.connDSExpression.setVisible(false);
@@ -422,91 +418,90 @@ public class DatasetRunBaseComposite extends Composite implements IExpressionCon
 		this.connDSExpression.setExpression(exp1);
 
 		// Parameters
-		if (datasetRunInstance.getJRDatasetRun()!=null){
+		if (datasetRunInstance.getJRDatasetRun() != null) {
 			tableViewerDatasetRunParams.setInput(datasetRunInstance.getJRDatasetRun().getParameters());
 		}
-		
+
 		// Parameters Map Expression
-		JRDesignExpression exp2=null;
-		if (datasetRunInstance.getJRDatasetRun()!=null){
-			exp2=(JRDesignExpression) datasetRunInstance.getJRDatasetRun().getParametersMapExpression();
+		JRDesignExpression exp2 = null;
+		if (datasetRunInstance.getJRDatasetRun() != null) {
+			exp2 = (JRDesignExpression) datasetRunInstance.getJRDatasetRun().getParametersMapExpression();
 		}
 		paramsMapExpression.setExpression(exp2);
-		
-		//set the dataset run in the return values control
-		returnValueEditor.setDatasetRun((JRDesignDatasetRun)datasetRunInstance.getJRDatasetRun(), datasetRunInstance.getEditableDataset().getJasperDesign());
+
+		// set the dataset run in the return values control
+		returnValueEditor.setDatasetRun((JRDesignDatasetRun) datasetRunInstance.getJRDatasetRun(), datasetRunInstance
+				.getEditableDataset().getJasperDesign());
 	}
-	
+
 	/*
-	 * Fills the dataset list combo box. 
+	 * Fills the dataset list combo box.
 	 */
 	private void fillSubDatasetComboBox() {
 		List<JRDataset> datasetsList = this.datasetRunInstance.getEditableDataset().getJasperDesign().getDatasetsList();
 		comboSubDataset.removeAll();
-		List<String> datasetNames=new ArrayList<String>();
+		List<String> datasetNames = new ArrayList<String>();
 		// Always add the report main dataset
 		datasetNames.add("[Report main dataset]"); //$NON-NLS-1$
-		if (datasetsList!=null && !datasetsList.isEmpty()){
+		if (datasetsList != null && !datasetsList.isEmpty()) {
 			// Add all other datasets
-			for (int i=0;i<datasetsList.size();i++){
+			for (int i = 0; i < datasetsList.size(); i++) {
 				JRDataset currDS = datasetsList.get(i);
 				datasetNames.add(currDS.getName());
 			}
 		}
-		comboSubDataset.setItems(datasetNames.toArray(new String[]{}));
+		comboSubDataset.setItems(datasetNames.toArray(new String[] {}));
 	}
-	
+
 	/*
 	 * Updates the sub dataset information with the correct selected dataset name.
 	 */
 	private void updateSubDatasetInformation(int selIndex) {
-		if (selIndex==0){
+		if (selIndex == 0) {
 			// Must force the use of the report main dataset
 			this.datasetRunInstance.resetDatasetRun(true);
 			tabFolderDataSetRun.setEnabled(false);
 			tabFolderDataSetRun.setVisible(false);
-		}
-		else {
-			String selectDatasetName=comboSubDataset.getItem(selIndex);
-			//If the dataset run was already created recover it from the map
-			if (datasetRunMap.containsKey(selectDatasetName)){
+		} else {
+			String selectDatasetName = comboSubDataset.getItem(selIndex);
+			// If the dataset run was already created recover it from the map
+			if (datasetRunMap.containsKey(selectDatasetName)) {
 				this.datasetRunInstance.setDatasetRun(datasetRunMap.get(selectDatasetName));
 			} else {
-				//Otherwise create a new one and put it on the map
+				// Otherwise create a new one and put it on the map
 				JRDesignDatasetRun newDataset = new JRDesignDatasetRun();
 				newDataset.setDatasetName(selectDatasetName);
 				datasetRunMap.put(selectDatasetName, newDataset);
 				this.datasetRunInstance.setDatasetRun(newDataset);
 			}
-			
+
 			tabFolderDataSetRun.setEnabled(true);
 			tabFolderDataSetRun.setVisible(true);
 		}
 	}
 
-	
-	/* 
+	/*
 	 * Label provider for the first column of the viewer (dataset parameter name).
 	 */
 	private class DSParameterNameLabelProvider extends ColumnLabelProvider {
 		@Override
 		public String getText(Object element) {
-			if (element!=null){
-				return ((JRDatasetParameter)element).getName();
+			if (element != null) {
+				return ((JRDatasetParameter) element).getName();
 			}
 			return null;
 		}
 	}
-	
+
 	/*
 	 * Label provider for the second column of the viewer (dataset parameter expression).
 	 */
 	private class DSParameterExpressionLabelProvider extends ColumnLabelProvider {
 		@Override
 		public String getText(Object element) {
-			if (element!=null){
-				JRExpression expression = ((JRDatasetParameter)element).getExpression();
-				if (expression!=null){
+			if (element != null) {
+				JRExpression expression = ((JRDatasetParameter) element).getExpression();
+				if (expression != null) {
 					return expression.getText();
 				}
 			}
@@ -514,39 +509,40 @@ public class DatasetRunBaseComposite extends Composite implements IExpressionCon
 		}
 	}
 
-	public void addDatasetRunSelectionListener(DatasetRunSelectionListener listener){
+	public void addDatasetRunSelectionListener(DatasetRunSelectionListener listener) {
 		dsRunSelectionListeners.add(listener);
 	}
-	
-	public void removeDatasetRunSelectionListener(DatasetRunSelectionListener listener){
+
+	public void removeDatasetRunSelectionListener(DatasetRunSelectionListener listener) {
 		dsRunSelectionListeners.remove(listener);
 	}
-	
-	private void notifyDatasetRunSelectionChanged(){
-		for(DatasetRunSelectionListener l : dsRunSelectionListeners){
+
+	private void notifyDatasetRunSelectionChanged() {
+		for (DatasetRunSelectionListener l : dsRunSelectionListeners) {
 			l.selectionChanged();
 		}
 		fixDSParametersList();
-		
-		//Return values 
-		returnValueEditor.setDatasetRun((JRDesignDatasetRun)datasetRunInstance.getJRDatasetRun(), datasetRunInstance.getEditableDataset().getJasperDesign());
+
+		// Return values
+		returnValueEditor.setDatasetRun((JRDesignDatasetRun) datasetRunInstance.getJRDatasetRun(), datasetRunInstance
+				.getEditableDataset().getJasperDesign());
 	}
 
-	/* 
-	 * Fixes the dataset run parameters in the list.
-	 * We can keep the ones with the same name, discard others.
+	/*
+	 * Fixes the dataset run parameters in the list. We can keep the ones with the same name, discard others.
 	 */
 	private void fixDSParametersList() {
 		JRDatasetParameter[] currParams = (JRDatasetParameter[]) tableViewerDatasetRunParams.getInput();
 		String datasetName = "";
 		JRDatasetRun jrDatasetRun = datasetRunInstance.getJRDatasetRun();
-		if(jrDatasetRun!=null) {
+		if (jrDatasetRun != null) {
 			datasetName = jrDatasetRun.getDatasetName();
-			List<JRParameter> parameters4Datasource = ModelUtils.getParameters4Datasource(datasetRunInstance.getEditableDataset().getJasperDesign(), datasetName);
-			if(currParams!=null) {
-				for(JRDatasetParameter p1 : currParams) {
-					for(JRParameter p2 : parameters4Datasource) {
-						if(p2.getName().equals(p1.getName())){
+			List<JRParameter> parameters4Datasource = ModelUtils.getParameters4Datasource(datasetRunInstance
+					.getEditableDataset().getJasperDesign(), datasetName);
+			if (currParams != null) {
+				for (JRDatasetParameter p1 : currParams) {
+					for (JRParameter p2 : parameters4Datasource) {
+						if (p2.getName().equals(p1.getName())) {
 							datasetRunInstance.addParameter((JRDatasetParameter) p1.clone());
 							break;
 						}
@@ -554,20 +550,22 @@ public class DatasetRunBaseComposite extends Composite implements IExpressionCon
 				}
 			}
 			tableViewerDatasetRunParams.setInput(datasetRunInstance.getJRDatasetRun().getParameters());
-		}
-		else {
+		} else {
 			// switching to main one
 			tableViewerDatasetRunParams.getTable().clearAll();
 		}
-		
+
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.jaspersoft.studio.editor.expression.IExpressionContextSetter#setExpressionContext(com.jaspersoft.studio.editor.expression.ExpressionContext)
+	 * 
+	 * @see
+	 * com.jaspersoft.studio.editor.expression.IExpressionContextSetter#setExpressionContext(com.jaspersoft.studio.editor
+	 * .expression.ExpressionContext)
 	 */
 	public void setExpressionContext(ExpressionContext expContext) {
-		this.expContext=expContext;
+		this.expContext = expContext;
 		this.connDSExpression.setExpressionContext(expContext);
 		this.paramsMapExpression.setExpressionContext(expContext);
 	}

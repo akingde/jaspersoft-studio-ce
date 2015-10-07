@@ -146,6 +146,10 @@ public class Misc {
 		return value == null || value.isEmpty();
 	}
 
+	public static <T> boolean isNullOrEmpty(T[] value) {
+		return value == null || value.length == 0;
+	}
+
 	public static String nullIfEmpty(String value) {
 		return value != null && value.isEmpty() ? null : value;
 	}

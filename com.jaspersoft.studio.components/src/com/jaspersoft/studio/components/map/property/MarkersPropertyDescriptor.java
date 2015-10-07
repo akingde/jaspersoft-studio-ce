@@ -18,16 +18,9 @@ import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
-import org.eclipse.swt.custom.ScrolledComposite;
-import org.eclipse.swt.events.ControlAdapter;
-import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.ui.forms.events.ExpansionAdapter;
-import org.eclipse.ui.forms.events.ExpansionEvent;
-import org.eclipse.ui.forms.widgets.Section;
 
 import com.jaspersoft.studio.components.map.property.desc.MarkersDescriptor;
 import com.jaspersoft.studio.messages.Messages;
@@ -62,23 +55,14 @@ public class MarkersPropertyDescriptor extends AItemDataListPropertyDescriptor {
 				return new FormItemDialog(UIUtils.getShell(), getDescriptor(),
 						(JasperReportsConfiguration) section
 								.getJasperReportsContext()) {
-					private ScrolledComposite sc;
 
 					@Override
 					protected void createValue(CTabFolder tabFolder) {
 						CTabItem bptab = new CTabItem(tabFolder, SWT.NONE);
 						bptab.setText(Messages.ItemDialog_0);
 
-						sc = new ScrolledComposite(tabFolder, SWT.V_SCROLL);
-
-						final Composite cmp = new Composite(sc, SWT.NONE);
-						cmp.setLayout(new GridLayout(2, false));
-
-						sc.setContent(cmp);
-						sc.setExpandHorizontal(true);
-						sc.setExpandVertical(true);
-						sc.setAlwaysShowScrollBars(true);
-						bptab.setControl(sc);
+						final Composite cmp = createScrolledComposite(
+								tabFolder, bptab);
 
 						Label lbl = new Label(cmp, SWT.NONE);
 						GridData gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -189,41 +173,7 @@ public class MarkersPropertyDescriptor extends AItemDataListPropertyDescriptor {
 						createItemProperty(cmp,
 								MapComponent.ITEM_PROPERTY_MARKER_size);
 
-						sc.setMinSize(cmp.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-						sc.addControlListener(new ControlAdapter() {
-							public void controlResized(ControlEvent e) {
-								sc.setMinSize(cmp.computeSize(SWT.DEFAULT,
-										SWT.DEFAULT));
-							}
-						});
-					}
-
-					private Composite createSection(Composite parent,
-							String text) {
-						Section ec = new Section(parent, Section.TREE_NODE);
-						ec.setText(text);
-						ec.addExpansionListener(new ExpansionAdapter() {
-							@Override
-							public void expansionStateChanged(ExpansionEvent e) {
-								sc.setMinSize(sc.getContent().computeSize(
-										SWT.DEFAULT, SWT.DEFAULT));
-							}
-						});
-						GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-						gd.horizontalSpan = 2;
-						ec.setLayoutData(gd);
-
-						Composite c = new Composite(ec, SWT.WRAP);
-						c.setLayout(new GridLayout(2, false));
-						ec.setClient(c);
-						return c;
-					}
-
-					private void createSeparator(Composite cmp) {
-						GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-						gd.horizontalSpan = 2;
-						new Label(cmp, SWT.SEPARATOR | SWT.HORIZONTAL)
-								.setLayoutData(gd);
+						configScrolledComposite(cmp);
 					}
 
 				};

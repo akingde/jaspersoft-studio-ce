@@ -25,11 +25,7 @@ import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
-import org.eclipse.swt.custom.ScrolledComposite;
-import org.eclipse.swt.events.ControlAdapter;
-import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
@@ -63,23 +59,14 @@ public class PathPropertyDescriptor extends AItemDataListPropertyDescriptor {
 				return new FormItemDialog(UIUtils.getShell(), getDescriptor(),
 						(JasperReportsConfiguration) section
 								.getJasperReportsContext()) {
-					private ScrolledComposite sc;
 
 					@Override
 					protected void createValue(CTabFolder tabFolder) {
 						CTabItem bptab = new CTabItem(tabFolder, SWT.NONE);
 						bptab.setText(Messages.ItemDialog_0);
 
-						sc = new ScrolledComposite(tabFolder, SWT.V_SCROLL);
-
-						final Composite cmp = new Composite(sc, SWT.NONE);
-						cmp.setLayout(new GridLayout(2, false));
-
-						sc.setContent(cmp);
-						sc.setExpandHorizontal(true);
-						sc.setExpandVertical(true);
-						sc.setAlwaysShowScrollBars(true);
-						bptab.setControl(sc);
+						final Composite cmp = createScrolledComposite(
+								tabFolder, bptab);
 
 						createItemProperty(cmp, MapComponent.ITEM_PROPERTY_name);
 
@@ -134,21 +121,9 @@ public class PathPropertyDescriptor extends AItemDataListPropertyDescriptor {
 						createItemProperty(cmp,
 								MapComponent.ITEM_PROPERTY_MARKER_zIndex);
 
-						sc.setMinSize(cmp.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-						sc.addControlListener(new ControlAdapter() {
-							public void controlResized(ControlEvent e) {
-								sc.setMinSize(cmp.computeSize(SWT.DEFAULT,
-										SWT.DEFAULT));
-							}
-						});
+						configScrolledComposite(cmp);
 					}
 
-					private void createSeparator(Composite cmp) {
-						GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-						gd.horizontalSpan = 2;
-						new Label(cmp, SWT.SEPARATOR | SWT.HORIZONTAL)
-								.setLayoutData(gd);
-					}
 				};
 			}
 

@@ -19,6 +19,7 @@ import org.eclipse.swt.graphics.Image;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.utils.Misc;
 
 /**
@@ -26,7 +27,15 @@ import com.jaspersoft.studio.utils.Misc;
  * 
  */
 public abstract class ADescriptor {
+	protected boolean showAllProperties = false;
 	protected ItemPropertyDescription<?>[] itemProperties;
+
+	public ADescriptor() {
+	}
+
+	public boolean isShowAllProperties() {
+		return showAllProperties;
+	}
 
 	/**
 	 * @return the itemProperties
@@ -57,6 +66,7 @@ public abstract class ADescriptor {
 	protected ItemData itemData;
 	protected Item item;
 	protected ItemProperty oldItemProperty;
+	protected APropertyNode pnode;
 
 	public Image getIcon(Object element) {
 		if (element instanceof ItemData)
@@ -80,8 +90,9 @@ public abstract class ADescriptor {
 		return itemData;
 	}
 
-	public void setItemDatas(List<ItemData> itemDatas) {
+	public void setItemDatas(List<ItemData> itemDatas, APropertyNode pnode) {
 		this.itemDatas = itemDatas;
+		this.pnode = pnode;
 	}
 
 	public void validateItem(ItemProperty itemProperty) throws Exception {
