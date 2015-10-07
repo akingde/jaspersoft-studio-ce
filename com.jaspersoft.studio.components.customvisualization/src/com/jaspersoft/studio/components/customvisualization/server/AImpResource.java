@@ -15,6 +15,8 @@ package com.jaspersoft.studio.components.customvisualization.server;
 import java.io.File;
 import java.util.Set;
 
+import net.sf.jasperreports.components.map.ItemProperty;
+import net.sf.jasperreports.components.map.StandardItemProperty;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -22,8 +24,6 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-import com.jaspersoft.jasperreports.customvisualization.CVItemProperty;
-import com.jaspersoft.jasperreports.customvisualization.design.CVDesignItemProperty;
 import com.jaspersoft.studio.server.model.AFileResource;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.publish.PublishOptions;
@@ -36,7 +36,7 @@ public abstract class AImpResource extends AImpObject {
 		super(jrConfig);
 	}
 
-	public AFileResource publish(JasperDesign jd, CVItemProperty img,
+	public AFileResource publish(JasperDesign jd, ItemProperty img,
 			MReportUnit mrunit, IProgressMonitor monitor, Set<String> fileset,
 			IFile file) throws Exception {
 		String str = img.getValue();
@@ -56,8 +56,8 @@ public abstract class AImpResource extends AImpObject {
 				if (!f.getName().contains(":"))
 					popt.setExpression("repo:" + f.getName());
 			} else if (Misc.isNullOrEmpty(img.getValue())) {
-				popt.setValueSetter(popt.new ValueSetter<CVDesignItemProperty>(
-						(CVDesignItemProperty) img) {
+				popt.setValueSetter(popt.new ValueSetter<StandardItemProperty>(
+						(StandardItemProperty) img) {
 
 					@Override
 					public void setup() {

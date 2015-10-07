@@ -12,6 +12,9 @@ public class Messages extends NLS {
 	public static String CreateCustomVisualizationCommand_ShowOrNot;
 	public static String CreateCustomVisualizationCommand_WarningMessage;
 	public static String CreateCustomVisualizationCommand_WarningTitle;
+	public static String CVCDescriptorsPreferencePage_0;
+	public static String CVCDescriptorsPreferencePage_1;
+	public static String CVCDescriptorsPreferencePage_2;
 	public static String CVItemDataDialog_Add;
 	public static String CVItemDataDialog_DatasetTab;
 	public static String CVItemDataDialog_Edit;
@@ -96,6 +99,7 @@ public class Messages extends NLS {
 	public static String CustomVisualizationComponentTablePage_errorEmpty;
 	public static String CustomVisualizationComponentTablePage_errorInvalidGeneric;
 	public static String CustomVisualizationComponentTablePage_errorProjectExist;
+	public static String UIManager_2;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

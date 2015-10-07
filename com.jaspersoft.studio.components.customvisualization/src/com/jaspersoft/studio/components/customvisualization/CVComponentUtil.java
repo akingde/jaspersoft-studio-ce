@@ -5,7 +5,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.customvisualization;
 
-import com.jaspersoft.jasperreports.customvisualization.CVItemProperty;
+import net.sf.jasperreports.components.map.ItemProperty;
 
 
 /**
@@ -22,11 +22,11 @@ public class CVComponentUtil {
 	public static final String PHANTOMJS_VERSIONCHECK_CMD = "phantomjs -v";
 	public static final String PHANTOMJS_URL_DOWNLOAD = "http://phantomjs.org/download.html";
 	
-	public static String getCVItemPropertyValueAsString(CVItemProperty property) {
+	public static String getCVItemPropertyValueAsString(ItemProperty property) {
 		return getCVItemPropertyValueAsString(property, false);
 	}
 	
-	public static String getCVItemPropertyValueAsString(CVItemProperty property, boolean addDoubleQuotes) {
+	public static String getCVItemPropertyValueAsString(ItemProperty property, boolean addDoubleQuotes) {
 		if(property!=null) {
 			String propertyValue=property.getValue();
 			if(propertyValue == null && property.getValueExpression()!=null) {

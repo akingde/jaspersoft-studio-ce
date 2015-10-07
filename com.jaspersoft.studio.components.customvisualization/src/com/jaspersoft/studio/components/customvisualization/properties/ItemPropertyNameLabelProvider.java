@@ -5,9 +5,9 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.customvisualization.properties;
 
-import org.eclipse.jface.viewers.ColumnLabelProvider;
+import net.sf.jasperreports.components.map.ItemProperty;
 
-import com.jaspersoft.jasperreports.customvisualization.CVItemProperty;
+import org.eclipse.jface.viewers.ColumnLabelProvider;
 
 /**
  * Label provider for the column name of a table containing a list of
@@ -20,8 +20,8 @@ public class ItemPropertyNameLabelProvider extends ColumnLabelProvider {
 
 	@Override
 	public String getText(Object element) {
-		if (element instanceof CVItemProperty) {
-			return ((CVItemProperty) element).getName();
+		if (element instanceof ItemProperty) {
+			return ((ItemProperty) element).getName();
 		}
 		return super.getText(element);
 	}

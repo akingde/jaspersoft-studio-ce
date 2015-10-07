@@ -8,6 +8,8 @@ package com.jaspersoft.studio.components.customvisualization.model;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.components.map.ItemData;
+import net.sf.jasperreports.components.map.ItemProperty;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.component.ComponentKey;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
@@ -20,8 +22,6 @@ import net.sf.jasperreports.engine.util.JRCloneUtils;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
-import com.jaspersoft.jasperreports.customvisualization.CVItemData;
-import com.jaspersoft.jasperreports.customvisualization.CVItemProperty;
 import com.jaspersoft.jasperreports.customvisualization.design.CVDesignComponent;
 import com.jaspersoft.studio.components.customvisualization.CVNodeIconDescriptor;
 import com.jaspersoft.studio.components.customvisualization.messages.Messages;
@@ -41,7 +41,7 @@ import com.jaspersoft.studio.utils.ModelUtils;
  * Model object representing the Custom Visualization component element.
  * 
  * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
- *
+ * 
  */
 public class MCustomVisualization extends MGraphicElement implements
 		IDatasetContainer {
@@ -180,7 +180,7 @@ public class MCustomVisualization extends MGraphicElement implements
 				.setDescription(Messages.MCustomVisualization_ItemPropertiesDesc);
 		desc.add(bItemPropsD);
 
-		CVItemDataDescriptor bItemDataD = new CVItemDataDescriptor(
+		CVCItemDataPropertyDescriptor bItemDataD = new CVCItemDataPropertyDescriptor(
 				CVDesignComponent.PROPERTY_ITEM_DATA,
 				Messages.MCustomVisualization_ItemData);
 		bItemDataD.setDescription(Messages.MCustomVisualization_ItemDataDesc);
@@ -197,7 +197,8 @@ public class MCustomVisualization extends MGraphicElement implements
 		bItemDataD
 				.setCategory(Messages.MCustomVisualization_CVPropertiesCategory);
 
-		defaultsMap.put(CVDesignComponent.PROPERTY_EVALUATION_TIME,EvaluationTimeEnum.NOW);
+		defaultsMap.put(CVDesignComponent.PROPERTY_EVALUATION_TIME,
+				EvaluationTimeEnum.NOW);
 
 		onErrorTypeD = new NamedEnumPropertyDescriptor<OnErrorTypeEnum>(
 				CVDesignComponent.PROPERTY_ON_ERROR_TYPE,
@@ -246,9 +247,10 @@ public class MCustomVisualization extends MGraphicElement implements
 		JRDesignComponentElement jrElement = (JRDesignComponentElement) getValue();
 		CVDesignComponent cvComp = (CVDesignComponent) jrElement.getComponent();
 		if (CVDesignComponent.PROPERTY_EVALUATION_TIME.equals(id)) {
-			EvaluationTimeEnum evalTime = EnumHelper.getEnumByObjectValue(EvaluationTimeEnum.values(), value);
+			EvaluationTimeEnum evalTime = EnumHelper.getEnumByObjectValue(
+					EvaluationTimeEnum.values(), value);
 			cvComp.setEvaluationTime(evalTime);
-			if(evalTime != null && !evalTime.equals(EvaluationTimeEnum.GROUP)) {
+			if (evalTime != null && !evalTime.equals(EvaluationTimeEnum.GROUP)) {
 				cvComp.setEvaluationGroup(null);
 			}
 		} else if (CVDesignComponent.PROPERTY_EVALUATION_GROUP.equals(id)) {
@@ -258,21 +260,21 @@ public class MCustomVisualization extends MGraphicElement implements
 				value = null;
 			cvComp.setProcessingClass((String) value);
 		} else if (CVDesignComponent.PROPERTY_ITEM_PROPERTIES.equals(id)) {
-			CVItemProperty[] toRemove = cvComp.getItemProperties().toArray(
-					new CVItemProperty[] {});
-			for (CVItemProperty i : toRemove) {
+			ItemProperty[] toRemove = cvComp.getItemProperties().toArray(
+					new ItemProperty[] {});
+			for (ItemProperty i : toRemove) {
 				cvComp.removeItemProperty(i);
 			}
-			for (CVItemProperty i : (List<CVItemProperty>) value) {
+			for (ItemProperty i : (List<ItemProperty>) value) {
 				cvComp.addItemProperty(i);
 			}
 		} else if (CVDesignComponent.PROPERTY_ITEM_DATA.equals(id)) {
-			CVItemData[] toRemove = cvComp.getItemData().toArray(
-					new CVItemData[] {});
-			for (CVItemData i : toRemove) {
+			ItemData[] toRemove = cvComp.getItemData().toArray(
+					new ItemData[] {});
+			for (ItemData i : toRemove) {
 				cvComp.removeItemData(i);
 			}
-			for (CVItemData i : (List<CVItemData>) value) {
+			for (ItemData i : (List<ItemData>) value) {
 				cvComp.addItemData(i);
 			}
 		} else if (CVDesignComponent.PROPERTY_ON_ERROR_TYPE.equals(id)) {

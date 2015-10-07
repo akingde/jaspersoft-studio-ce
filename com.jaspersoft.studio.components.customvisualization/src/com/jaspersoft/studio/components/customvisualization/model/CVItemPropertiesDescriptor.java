@@ -13,7 +13,6 @@ import com.jaspersoft.jasperreports.customvisualization.design.CVDesignComponent
 import com.jaspersoft.studio.components.customvisualization.properties.SPCVItemPropertiesList;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 import com.jaspersoft.studio.property.section.AbstractSection;
-import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 
 /**
  * Property descriptor for the
@@ -39,7 +38,7 @@ public class CVItemPropertiesDescriptor extends NTextPropertyDescriptor {
 	}
 	
 	@Override
-	public ASPropertyWidget createWidget(Composite parent,
+	public SPCVItemPropertiesList createWidget(Composite parent,
 			AbstractSection section) {
 		return new SPCVItemPropertiesList(parent,section,this);
 	}

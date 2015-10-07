@@ -5,9 +5,10 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.customvisualization.properties;
 
+import net.sf.jasperreports.components.map.ItemProperty;
+
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 
-import com.jaspersoft.jasperreports.customvisualization.CVItemProperty;
 import com.jaspersoft.studio.components.customvisualization.CVComponentUtil;
 import com.jaspersoft.studio.utils.Misc;
 
@@ -22,9 +23,9 @@ public class ItemPropertyValueLabelProvider extends ColumnLabelProvider {
 
 	@Override
 	public String getText(Object element) {
-		if (element instanceof CVItemProperty) {
+		if (element instanceof ItemProperty) {
 			String value = CVComponentUtil
-					.getCVItemPropertyValueAsString((CVItemProperty) element);
+					.getCVItemPropertyValueAsString((ItemProperty) element);
 			return Misc.nvl(value);
 		}
 		return super.getText(element);

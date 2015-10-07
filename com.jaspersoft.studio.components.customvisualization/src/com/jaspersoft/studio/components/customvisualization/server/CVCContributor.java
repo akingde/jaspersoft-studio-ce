@@ -2,6 +2,7 @@ package com.jaspersoft.studio.components.customvisualization.server;
 
 import java.util.Set;
 
+import net.sf.jasperreports.components.map.ItemProperty;
 import net.sf.jasperreports.engine.component.Component;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignElement;
@@ -10,7 +11,6 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-import com.jaspersoft.jasperreports.customvisualization.CVItemProperty;
 import com.jaspersoft.jasperreports.customvisualization.design.CVDesignComponent;
 import com.jaspersoft.studio.server.model.AMJrxmlContainer;
 import com.jaspersoft.studio.server.model.MReportUnit;
@@ -38,7 +38,7 @@ public class CVCContributor implements IPublishContributor {
 		Component cmp = jrElement.getComponent();
 		if (cmp instanceof CVDesignComponent) {
 			CVDesignComponent cvComp = (CVDesignComponent) cmp;
-			for (CVItemProperty p : cvComp.getItemProperties()) {
+			for (ItemProperty p : cvComp.getItemProperties()) {
 				if (p.getName().equalsIgnoreCase("css")) {
 					impcss.publish(jasper, p, (MReportUnit) mrunit, monitor,
 							fileset, file);
