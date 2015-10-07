@@ -79,7 +79,14 @@ public class ActionFactory {
 		actions.add(new CreateSelectExpression(treeViewer));
 		actions.add(new CreateSubSelect(treeViewer));
 		actions.add(null);
+		actions.add(new JoinTable(designer, treeViewer));
+		actions.add(new CreateTable(designer, treeViewer));
+		actions.add(new CreateSubQueryTable(designer, treeViewer));
+		actions.add(null);
 		actions.add(new EditColumn(treeViewer));
+		actions.add(new EditTableJoin(designer, treeViewer));
+		actions.add(new EditTable(designer, treeViewer));
+
 		actions.add(null);
 		actions.add(new DeleteColumn(designer, treeViewer));
 		actions.add(new DeleteAction<MSelectSubQuery>(designer, treeViewer,
@@ -120,15 +127,7 @@ public class ActionFactory {
 				return null;
 			}
 		});
-		actions.add(null);
 
-		actions.add(new JoinTable(designer, treeViewer));
-		actions.add(new CreateTable(designer, treeViewer));
-		actions.add(new CreateSubQueryTable(designer, treeViewer));
-		actions.add(null);
-		actions.add(new EditTableJoin(designer, treeViewer));
-		actions.add(new EditTable(designer, treeViewer));
-		actions.add(null);
 		actions.add(new DeleteTableJoin(designer, treeViewer));
 		actions.add(new DeleteTable(designer, treeViewer));
 		actions.add(null);
