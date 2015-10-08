@@ -32,6 +32,7 @@ import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.descriptors.JSSTextPropertyDescriptor;
 import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 import com.jaspersoft.studio.property.section.widgets.SPText;
 
 public class NameSection extends AbstractSection {
@@ -116,7 +117,10 @@ public class NameSection extends AbstractSection {
 	
 		IPropertyDescriptor columnDescriptor = getElement().getPropertyDescriptor(MTable.PROPERTY_COLUMNS_AUTORESIZE_NEXT);
 		if (columnDescriptor != null){
-			createWidget4Property(getElement(), parent, MTable.PROPERTY_COLUMNS_AUTORESIZE_NEXT, false);
+			ASPropertyWidget<?> widget = createWidget4Property(getElement(), parent, MTable.PROPERTY_COLUMNS_AUTORESIZE_NEXT, false);
+			GridData controlData = new GridData();
+			controlData.horizontalSpan = 2;
+			widget.getControl().setLayoutData(controlData);
 		}
 	
 	}
