@@ -20,10 +20,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-import net.sf.jasperreports.eclipse.classpath.container.JRClasspathContainer;
-import net.sf.jasperreports.eclipse.classpath.container.JRDependenciesClasspathContainer;
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -54,6 +50,10 @@ import org.eclipse.ui.console.MessageConsole;
 import org.eclipse.ui.console.MessageConsoleStream;
 
 import com.jaspersoft.studio.messages.Messages;
+
+import net.sf.jasperreports.eclipse.classpath.container.JRClasspathContainer;
+import net.sf.jasperreports.eclipse.classpath.container.JRDependenciesClasspathContainer;
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 /**
  * Compile a jrxml file from command line using a specific version of JasperReport.
@@ -301,7 +301,7 @@ public class ConsoleExecuter {
 		IProject project = getProject(fileToCompile);
 		if (project != null){
 			String separator = ";"; //$NON-NLS-1$
-			if (Util.isMac()) separator = ":"; //$NON-NLS-1$
+			if (Util.isMac() || Util.isLinux()) separator = ":"; //$NON-NLS-1$
 			//Add the project folder to the workspace, actually not used
 			/*IWorkspace workspace = ResourcesPlugin.getWorkspace();  
 			File projectFile = workspace.getRoot().findMember(project.getFullPath()).getLocation().toFile();
