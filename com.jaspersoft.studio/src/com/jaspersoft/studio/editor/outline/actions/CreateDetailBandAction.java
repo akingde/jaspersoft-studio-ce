@@ -12,18 +12,13 @@ import java.util.List;
 
 import net.sf.jasperreports.engine.type.BandTypeEnum;
 
-import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 
 import com.jaspersoft.studio.editor.action.ACachedSelectionAction;
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.model.INode;
-import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.model.band.command.CreateBandDetailCommand;
 
@@ -55,24 +50,7 @@ public class CreateDetailBandAction extends ACachedSelectionAction {
 	@Override
 	protected boolean calculateEnabled() {
 		List<Object> elements = editor.getSelectionCache().getSelectionModelForType(MBand.class);
-		return (elements.size() == 1 && ((MBand) elements.get(0)).getBandType() == BandTypeEnum.DETAIL)
-				|| getParentBand() != null;
-	}
-
-	private MBand getParentBand() {
-		StructuredSelection sel = (StructuredSelection) editor.getSelectionCache().getLastRawSelection();
-		Object obj = sel.getFirstElement();
-		if (obj instanceof EditPart)
-			obj = ((EditPart) obj).getModel();
-		if (obj instanceof ANode) {
-			INode p = (ANode) obj;
-			do {
-				p = ((ANode) p).getParent();
-			} while (p != null && !(p instanceof MBand) && !(p instanceof MRoot));
-			if (p instanceof MBand && ((MBand) p).getBandType() == BandTypeEnum.DETAIL)
-				return (MBand) p;
-		}
-		return null;
+		return (elements.size() == 1 && ((MBand) elements.get(0)).getBandType() == BandTypeEnum.DETAIL);
 	}
 
 	/**
@@ -81,14 +59,9 @@ public class CreateDetailBandAction extends ACachedSelectionAction {
 	@Override
 	public Command createCommand() {
 		List<Object> elements = editor.getSelectionCache().getSelectionModelForType(MBand.class);
-		MBand current = null;
-		if (((MBand) elements.get(0)).getBandType() == BandTypeEnum.DETAIL)
-			current = (MBand) elements.get(0);
-		else
-			current = getParentBand();
-		if (current != null)
-			return new CreateBandDetailCommand((MBand) elements.get(0), new MBand());
-		return null;
+		//The calculate enabled already assure that there is only one band and it is a detail, any other check is not
+		//necessary
+		return new CreateBandDetailCommand((MBand) elements.get(0), new MBand());
 	}
 
 	@Override
