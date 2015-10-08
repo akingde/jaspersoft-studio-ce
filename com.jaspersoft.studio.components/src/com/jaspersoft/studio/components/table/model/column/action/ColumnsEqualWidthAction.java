@@ -27,6 +27,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.components.Activator;
 import com.jaspersoft.studio.components.crosstab.model.cell.MCell;
+import com.jaspersoft.studio.components.table.TableManager;
 import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.components.table.model.MTable;
 import com.jaspersoft.studio.components.table.model.column.MColumn;
@@ -102,7 +103,7 @@ public class ColumnsEqualWidthAction extends ACachedSelectionAction {
 	 */
 	public void run(ISelection selecition) {
 		List<MColumn> columns = getSelectionSet(selecition);
-		MTable table = getTable((ANode)columns.get(0));
+		MTable table = TableManager.getTableNode((ANode)columns.get(0));
 		int tableWidth = table.getValue().getWidth();
 		int columnsWidth = table.getTableManager().getColumnsTotalWidth();
 		int selectedColumnsWidth = 0;
@@ -136,17 +137,5 @@ public class ColumnsEqualWidthAction extends ACachedSelectionAction {
 	@Override
 	public void run() {
 		run(getSelection());
-	}
-	
-	/**
-	 * Search starting from a node and going up in the hierarchy an MTable
-	 * 
-	 * @param currentNode a node, should be a node inside a table
-	 * @return an MTable if it is in the upper hierarchy of the current node or null
-	 */
-	private MTable getTable(ANode currentNode){
-		if (currentNode == null) return null;
-		else if (currentNode instanceof MTable) return (MTable)currentNode;
-		else return getTable(currentNode.getParent());
 	}
 }

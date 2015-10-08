@@ -27,6 +27,7 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.IWorkbenchPart;
 
+import com.jaspersoft.studio.components.table.TableManager;
 import com.jaspersoft.studio.components.table.editor.TableEditor;
 import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.components.table.model.AMCollection;
@@ -34,6 +35,8 @@ import com.jaspersoft.studio.components.table.model.MTable;
 import com.jaspersoft.studio.components.table.model.column.MCell;
 import com.jaspersoft.studio.components.table.model.column.MColumn;
 import com.jaspersoft.studio.editor.action.ACachedSelectionAction;
+import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.MPage;
 
 /**
  * @author Veaceslav Chicu (schicu@users.sourceforge.net)
@@ -62,9 +65,16 @@ public class SelectAllCellsAction extends ACachedSelectionAction {
 		for (Object obj : tables) {
 			if (obj instanceof EditPart)
 				obj = ((EditPart) obj).getModel();
-			if (obj instanceof MTable || obj instanceof MColumn
-					|| obj instanceof AMCollection)
-				return true;
+			if (obj instanceof MTable){
+				if (((MTable)obj).getParent() instanceof MPage){
+					return true;
+				}
+			} else if (obj instanceof MColumn || obj instanceof AMCollection){
+				MTable table = TableManager.getTableNode((ANode)obj);
+				if (table.getParent() instanceof MPage){
+					return true;
+				}
+			}
 		}
 		return false;
 	}

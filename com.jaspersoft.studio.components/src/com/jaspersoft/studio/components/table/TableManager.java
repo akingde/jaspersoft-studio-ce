@@ -417,6 +417,18 @@ public class TableManager {
 		}
 		return null;
 	}
+	
+	/**
+	 * Search starting from a node and going up in the hierarchy an MTable
+	 * 
+	 * @param currentNode a node, should be a node inside a table
+	 * @return an MTable if it is in the upper hierarchy of the current node or null
+	 */
+	public static MTable getTableNode(ANode currentNode){
+		if (currentNode == null) return null;
+		else if (currentNode instanceof MTable) return (MTable)currentNode;
+		else return getTableNode(currentNode.getParent());
+	}
 
 	public Dimension getCellPackSize(ColumnCell cc) {
 		cc = mh.getColumnCell(cc);

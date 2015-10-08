@@ -24,12 +24,14 @@ import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.IWorkbenchPart;
 
+import com.jaspersoft.studio.components.table.TableManager;
 import com.jaspersoft.studio.components.table.editor.TableEditor;
 import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.components.table.model.AMCollection;
 import com.jaspersoft.studio.components.table.model.MTable;
 import com.jaspersoft.studio.components.table.model.column.MColumn;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.MPage;
 import com.jaspersoft.studio.utils.ModelUtils;
 
 /**
@@ -59,9 +61,16 @@ public class SelectAllElementsAction extends SelectionAction {
 		for (Object obj : tables) {
 			if (obj instanceof EditPart)
 				obj = ((EditPart) obj).getModel();
-			if (obj instanceof MTable || obj instanceof MColumn
-					|| obj instanceof AMCollection)
-				return true;
+			if (obj instanceof MTable){
+				if (((MTable)obj).getParent() instanceof MPage){
+					return true;
+				}
+			} else if (obj instanceof MColumn || obj instanceof AMCollection){
+				MTable table = TableManager.getTableNode((ANode)obj);
+				if (table.getParent() instanceof MPage){
+					return true;
+				}
+			}
 		}
 		return false;
 	}
