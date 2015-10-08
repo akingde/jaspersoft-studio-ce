@@ -51,7 +51,7 @@ public class ItemLabelProvider extends ColumnLabelProvider implements ITableLabe
 		} else if (element instanceof JRDatasetRun) {
 			return Misc.nvl(((JRDatasetRun) element).getDatasetName(), Messages.ItemLabelProvider_3);
 		} else if (element instanceof ItemData) {
-			return getText4ItemData(element);
+			return getText4ItemData((ItemData) element);
 		} else if (element instanceof Item) {
 			StandardItem item = (StandardItem) element;
 			if (!Misc.isNullOrEmpty(item.getProperties())) {
@@ -76,7 +76,7 @@ public class ItemLabelProvider extends ColumnLabelProvider implements ITableLabe
 		return super.getText(element);
 	}
 
-	protected String getText4ItemData(Object element) {
+	public String getText4ItemData(ItemData element) {
 		ItemData id = (ItemData) element;
 		JRElementDataset ds = id.getDataset();
 		return (ds != null ? getText(ds) : Messages.ItemLabelProvider_2);

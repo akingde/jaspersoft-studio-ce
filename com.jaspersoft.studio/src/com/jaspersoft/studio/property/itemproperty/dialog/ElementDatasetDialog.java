@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.property.itemproperty.dialog;
 
@@ -41,8 +37,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  * @author Veaceslav Chicu (schicu@users.sourceforge.net)
  * 
  */
-public class ElementDatasetDialog extends TitleAreaDialog implements
-		IExpressionContextSetter {
+public class ElementDatasetDialog extends TitleAreaDialog implements IExpressionContextSetter {
 
 	private String title;
 	private String message;
@@ -50,8 +45,7 @@ public class ElementDatasetDialog extends TitleAreaDialog implements
 	private JasperReportsConfiguration jConfig;
 	protected EditableDatasetBaseComposite compositeDatasetInfo;
 
-	public ElementDatasetDialog(Shell parentShell, String title,
-			String message, JRElementDataset dataset,
+	public ElementDatasetDialog(Shell parentShell, String title, String message, JRElementDataset dataset,
 			JasperReportsConfiguration jConfig) {
 		super(parentShell);
 		this.title = title;
@@ -77,36 +71,35 @@ public class ElementDatasetDialog extends TitleAreaDialog implements
 	protected Control createDialogArea(Composite parent) {
 		Composite area = (Composite) super.createDialogArea(parent);
 
+		createElementDatasetArea(area);
+
+		return area;
+	}
+
+	protected void createElementDatasetArea(Composite area) {
 		preElementDataset(area);
 
 		Composite container = new Composite(area, SWT.NONE);
 		container.setLayout(new FillLayout());
 		container.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		compositeDatasetInfo = new EditableDatasetBaseComposite(
-				new ComponentElementDatasetAdapter(dataset, jConfig),
+		compositeDatasetInfo = new EditableDatasetBaseComposite(new ComponentElementDatasetAdapter(dataset, jConfig),
 				container, SWT.NONE) {
 			@Override
 			protected IEditableDatasetRun getEditableDatesetRun() {
-				return new ComponentElementDatasetRunAdapter(
-						this.getEditableDataset());
+				return new ComponentElementDatasetRunAdapter(this.getEditableDataset());
 			}
 		};
-		compositeDatasetInfo
-				.addDatasetRunSelectionListener(new DatasetRunSelectionListener() {
-					public void selectionChanged() {
-						ExpressionContext contextFromDSRun = getExpressionContextFromDSRun();
-						compositeDatasetInfo
-								.setExpressionContext(contextFromDSRun);
-					}
-				});
-		compositeDatasetInfo
-				.setExpressionContext(getExpressionContextFromDSRun());
+		compositeDatasetInfo.addDatasetRunSelectionListener(new DatasetRunSelectionListener() {
+			public void selectionChanged() {
+				ExpressionContext contextFromDSRun = getExpressionContextFromDSRun();
+				compositeDatasetInfo.setExpressionContext(contextFromDSRun);
+			}
+		});
+		compositeDatasetInfo.setExpressionContext(getExpressionContextFromDSRun());
 		compositeDatasetInfo.setDefaultExpressionContext(expContext);
 
 		setTitle(this.title);
 		setMessage(this.message);
-
-		return area;
 	}
 
 	protected void preElementDataset(Composite parent) {
@@ -122,8 +115,7 @@ public class ElementDatasetDialog extends TitleAreaDialog implements
 
 	private ExpressionContext getExpressionContextFromDSRun() {
 		if (dataset != null) {
-			JRDesignDataset ds = ModelUtils.getDesignDatasetForDatasetRun(
-					jConfig.getJasperDesign(), dataset.getDatasetRun());
+			JRDesignDataset ds = ModelUtils.getDesignDatasetForDatasetRun(jConfig.getJasperDesign(), dataset.getDatasetRun());
 			return new ExpressionContext(ds, jConfig);
 		}
 		return null;

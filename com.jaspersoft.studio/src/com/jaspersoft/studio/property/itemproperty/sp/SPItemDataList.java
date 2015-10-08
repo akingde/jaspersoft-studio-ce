@@ -205,7 +205,13 @@ public class SPItemDataList extends ASPropertyWidget<AItemDataListPropertyDescri
 			else
 				ds = (JRElementDataset) ds.clone();
 			ItemDataDialog dialog = new ItemDataDialog(UIUtils.getShell(), Messages.SPItemDataList_3,
-					Messages.SPItemDataList_3, itemData, (JasperReportsConfiguration) section.getJasperReportsContext());
+					Messages.SPItemDataList_3, itemDatas, itemData,
+					(JasperReportsConfiguration) section.getJasperReportsContext(), getDescriptor(), expContext, pnode) {
+				@Override
+				protected AItemDialog createItemDialog() {
+					return SPItemDataList.this.createItemDialog();
+				}
+			};
 			if (dialog.open() == Dialog.OK) {
 				itemData.setDataset(dialog.getDataset());
 				dsTViewer.refresh();

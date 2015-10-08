@@ -54,18 +54,16 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 public abstract class AItemDialog extends ATitledDialog implements IExpressionContextSetter {
 	private JasperReportsConfiguration jrConfig;
 
-	private List<ItemData> itemDatas;
-	private StandardItemData itemData;
+	protected List<ItemData> itemDatas;
+	protected StandardItemData itemData;
 	protected StandardItem item;
 
 	private CTabFolder tabFolder;
 
 	protected ADescriptor descriptor;
 	private Button useDatasetB;
-	private Combo dsviewer;
+	protected Combo dsviewer;
 	protected EditableDatasetBaseComposite compositeDatasetInfo;
-
-	private Button dsNewButton;
 
 	public AItemDialog(Shell parentShell, ADescriptor descriptor, JasperReportsConfiguration jrConfig) {
 		super(parentShell);
@@ -198,12 +196,51 @@ public abstract class AItemDialog extends ATitledDialog implements IExpressionCo
 		Composite cmp = new Composite(tabFolder, SWT.NONE);
 		cmp.setLayout(new GridLayout(3, false));
 
+		createDataItemSelector(cmp);
+
+		useDatasetB = new Button(cmp, SWT.CHECK);
+		useDatasetB.setText(Messages.ItemDialog_6);
+		GridData gd = new GridData();
+		gd.horizontalSpan = 3;
+		useDatasetB.setLayoutData(gd);
+		useDatasetB.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				handleUseDataset();
+			}
+		});
+
+		dsCmp = new Composite(cmp, SWT.NONE);
+		dsCmp.setLayout(new FillLayout());
+		gd = new GridData(GridData.FILL_BOTH);
+		gd.horizontalSpan = 3;
+		gd.widthHint = 750;
+		dsCmp.setLayoutData(gd);
+
+		bptab.setControl(cmp);
+	}
+
+	protected void createDataItemSelector(Composite cmp) {
 		new Label(cmp, SWT.NONE).setText("Item Data");
 
 		dsviewer = new Combo(cmp, SWT.READ_ONLY);
 
-		dsNewButton = new Button(cmp, SWT.PUSH);
-		dsNewButton.setText("Add");
+		createAddItemDataButton(cmp);
+
+		Label sep = new Label(cmp, SWT.SEPARATOR | SWT.HORIZONTAL);
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 3;
+		sep.setLayoutData(gd);
+		dsviewer.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				handleDsSelectionChanged();
+			};
+		});
+	}
+
+	protected void createAddItemDataButton(Composite cmp) {
+		Button dsNewButton = new Button(cmp, SWT.PUSH);
+		dsNewButton.setText(Messages.common_add);
 		dsNewButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -230,37 +267,6 @@ public abstract class AItemDialog extends ATitledDialog implements IExpressionCo
 				}
 			}
 		});
-
-		Label sep = new Label(cmp, SWT.SEPARATOR | SWT.HORIZONTAL);
-		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 3;
-		sep.setLayoutData(gd);
-
-		useDatasetB = new Button(cmp, SWT.CHECK);
-		useDatasetB.setText(Messages.ItemDialog_6);
-		gd = new GridData();
-		gd.horizontalSpan = 3;
-		useDatasetB.setLayoutData(gd);
-		useDatasetB.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				handleUseDataset();
-			}
-		});
-
-		dsCmp = new Composite(cmp, SWT.NONE);
-		dsCmp.setLayout(new FillLayout());
-		gd = new GridData(GridData.FILL_BOTH);
-		gd.horizontalSpan = 3;
-		gd.widthHint = 750;
-		dsCmp.setLayoutData(gd);
-
-		dsviewer.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				handleDsSelectionChanged();
-			};
-		});
-		bptab.setControl(cmp);
 	}
 
 	protected void createDatasetComposite(Composite container) {
