@@ -307,10 +307,6 @@ public class AppContextMenuProvider extends AContextMenuProvider {
 		action = getActionRegistry().getAction(CreateBandAction.ID);
 		if (action != null && action.isEnabled())
 			menu.appendToGroup(GEFActionConstants.GROUP_ADD, action);
-		
-		action = getActionRegistry().getAction(CreateDetailBandAction.ID);
-		if (action != null && action.isEnabled())
-			menu.appendToGroup(GEFActionConstants.GROUP_ADD, action);
 
 		action = getActionRegistry().getAction(CreatePinAction.ID);
 		if (action != null && action.isEnabled())
@@ -592,6 +588,10 @@ public class AppContextMenuProvider extends AContextMenuProvider {
 
 		action = getActionRegistry().getAction(MaximizeContainerAction.ID);
 		if (action.isEnabled())
+			menu.add(action);
+		
+		action = getActionRegistry().getAction(CreateDetailBandAction.ID);
+		if (action != null && action.isEnabled())
 			menu.add(action);
 
 		action = getActionRegistry().getAction(StretchToContentAction.ID);

@@ -12,13 +12,16 @@ import java.util.List;
 
 import net.sf.jasperreports.engine.type.BandTypeEnum;
 
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 
 import com.jaspersoft.studio.editor.action.ACachedSelectionAction;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.model.band.command.CreateBandDetailCommand;
 
@@ -50,7 +53,14 @@ public class CreateDetailBandAction extends ACachedSelectionAction {
 	@Override
 	protected boolean calculateEnabled() {
 		List<Object> elements = editor.getSelectionCache().getSelectionModelForType(MBand.class);
-		return (elements.size() == 1 && ((MBand) elements.get(0)).getBandType() == BandTypeEnum.DETAIL);
+		if  (elements.size() == 1 && ((MBand) elements.get(0)).getBandType() == BandTypeEnum.DETAIL){
+			return true;
+		}
+		elements = editor.getSelectionCache().getSelectionModelForType(ANode.class);
+		if (elements.size() > 0 || getParentBand((ANode)elements.get(0)) != null){
+			return true;
+		}
+		return false;
 	}
 
 	/**
@@ -59,9 +69,39 @@ public class CreateDetailBandAction extends ACachedSelectionAction {
 	@Override
 	public Command createCommand() {
 		List<Object> elements = editor.getSelectionCache().getSelectionModelForType(MBand.class);
-		//The calculate enabled already assure that there is only one band and it is a detail, any other check is not
-		//necessary
-		return new CreateBandDetailCommand((MBand) elements.get(0), new MBand());
+		MBand current = null;
+		if (elements.size() == 1) {
+			//First case of the calculate enabled
+			current = (MBand) elements.get(0);
+		} else {
+			//Second case of the calculate enabled
+			StructuredSelection sel = (StructuredSelection) editor.getSelectionCache().getLastRawSelection();
+			Object obj = sel.getFirstElement();
+			if (obj instanceof EditPart)
+				obj = ((EditPart) obj).getModel();
+			if (obj instanceof ANode) {
+				current = getParentBand((ANode)obj);
+			}
+		}
+		if (current != null){
+			return new CreateBandDetailCommand(current, new MBand());
+		}
+		return null;
+	}
+	
+	/**
+	 * Starting from an element go up in the hierarchy searching for a detail band
+	 * if found it is returned otherwise it return null
+	 * 
+	 * @return a detail band, ancestor of the element, if it can't be found it return null
+	 */
+	private MBand getParentBand(ANode node) {
+		if (node == null) return null;
+		if (node instanceof MBand && ((MBand) node).getBandType() == BandTypeEnum.DETAIL){
+			return (MBand)node;
+		} else {
+			return getParentBand(node.getParent());
+		}
 	}
 
 	@Override
