@@ -189,8 +189,10 @@ public abstract class ItemPropertiesUtil extends AItemPropertiesUtil {
 					}
 					items[i] = f;
 				}
-				dsviewer.setItems(items);
-				dsviewer.select(itemDatas.indexOf(itemData));
+				if (dsviewer != null) {
+					dsviewer.setItems(items);
+					dsviewer.select(itemDatas.indexOf(itemData));
+				}
 			}
 		};
 	}

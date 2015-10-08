@@ -100,7 +100,6 @@ public class SPCVCItemDataList extends
 
 	private void handleEditElement(TreeViewer tviewer) {
 		StructuredSelection sel = (StructuredSelection) tviewer.getSelection();
-		sel.getFirstElement();
 		Object obj = sel.getFirstElement();
 		if (sel == null || obj == null)
 			return;
@@ -443,7 +442,6 @@ public class SPCVCItemDataList extends
 
 		dsTViewer.setInput(itemDatas);
 		getDescriptor().setItemDatas(itemDatas, pnode);
-		enableDefaultDatasetsButtons();
 		JRDesignElement designEl = null;
 		if (pnode.getValue() instanceof JRDesignElement)
 			designEl = (JRDesignElement) pnode.getValue();
@@ -458,7 +456,12 @@ public class SPCVCItemDataList extends
 		dsTViewer.expandAll();
 
 		cd = putil.getComponentDescriptor();
+
 		dsTViewer.refresh(true);
+		if (dsTViewer.getSelection().isEmpty() && !itemDatas.isEmpty())
+			dsTViewer.setSelection(new StructuredSelection(itemDatas.get(0)));
+
+		enableDefaultDatasetsButtons();
 	}
 
 	private ItemPropertiesUtil putil = new ItemPropertiesUtil(pDescriptor,
@@ -532,7 +535,7 @@ public class SPCVCItemDataList extends
 					btnAddNewDataset.setEnabled(false);
 					break;
 				}
-				if (c < indx + 1) {
+				if (c <= indx + 1) {
 					btnAddNewDataset.setEnabled(false);
 					break;
 				}
