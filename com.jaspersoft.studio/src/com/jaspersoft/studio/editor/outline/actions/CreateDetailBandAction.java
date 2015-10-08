@@ -57,7 +57,7 @@ public class CreateDetailBandAction extends ACachedSelectionAction {
 			return true;
 		}
 		elements = editor.getSelectionCache().getSelectionModelForType(ANode.class);
-		if (elements.size() > 0 || getParentBand((ANode)elements.get(0)) != null){
+		if (elements.size() > 0 && getParentBand((ANode)elements.get(0)) != null){
 			return true;
 		}
 		return false;
