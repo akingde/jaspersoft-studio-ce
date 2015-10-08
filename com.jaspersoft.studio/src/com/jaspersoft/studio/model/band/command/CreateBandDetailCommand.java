@@ -34,10 +34,8 @@ public class CreateBandDetailCommand extends Command {
 	/**
 	 * Instantiates a new creates the band detail command.
 	 * 
-	 * @param destNode
-	 *          the dest node
-	 * @param srcNode
-	 *          the src node
+	 * @param destNode the band after which the new band should be placed
+	 * @param srcNode the new band
 	 */
 	public CreateBandDetailCommand(MBand destNode, MBand srcNode) {
 		super();
