@@ -248,7 +248,7 @@ public class SPCVItemPropertiesList extends
 						c.dispose();
 					ExpressionContext ec = getExpressionContext();
 					CVCPropertyDescriptor descriptor = new CVCPropertyDescriptor();
-					if (cd.getSections() != null)
+					if (cd != null && cd.getSections() != null)
 						for (ComponentSectionDescriptor csd : cd.getSections()) {
 							Composite c = null;
 							if (csd.isExpandable())
