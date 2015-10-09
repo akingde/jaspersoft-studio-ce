@@ -100,7 +100,7 @@ public abstract class ItemDataDialog extends ElementDatasetDialog {
 		createItems(tabFolder);
 
 		CTabItem tabItem = new CTabItem(tabFolder, SWT.NONE);
-		tabItem.setText("Dataset");
+		tabItem.setText(Messages.common_dataset);
 
 		Composite cmp = new Composite(tabFolder, SWT.NONE);
 		cmp.setLayout(new GridLayout());
@@ -112,7 +112,7 @@ public abstract class ItemDataDialog extends ElementDatasetDialog {
 
 	private void createItems(CTabFolder tabFolder) {
 		CTabItem tabItem = new CTabItem(tabFolder, SWT.NONE);
-		tabItem.setText("Items");
+		tabItem.setText(Messages.ItemLabelProvider_0);
 
 		Composite cmp = new Composite(tabFolder, SWT.NONE);
 		cmp.setLayout(new GridLayout(2, false));

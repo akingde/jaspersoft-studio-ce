@@ -123,7 +123,7 @@ public class SPCVCItemDataList extends
 					false, tviewer, clones);
 
 			ItemDataDialog dialog = new ItemDataDialog(UIUtils.getShell(),
-					itemDataLabelProvider.getText4ItemData(itemData), "",
+					itemDataLabelProvider.getText4ItemData(itemData), "", //$NON-NLS-1$
 					clones, itemDataClone,
 					(JasperReportsConfiguration) section
 							.getJasperReportsContext(), getDescriptor(),
@@ -181,7 +181,7 @@ public class SPCVCItemDataList extends
 			ds = (JRElementDataset) ds.clone();
 		clones.add(itemData);
 		ItemDataDialog dialog = new ItemDataDialog(UIUtils.getShell(),
-				itemDataLabelProvider.getText4ItemData(itemData), "", clones,
+				itemDataLabelProvider.getText4ItemData(itemData), "", clones, //$NON-NLS-1$
 				itemData,
 				(JasperReportsConfiguration) section.getJasperReportsContext(),
 				getDescriptor(), expContext, pnode) {
