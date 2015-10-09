@@ -179,6 +179,7 @@ public class SPCVCItemDataList extends
 			ds = new JRDesignElementDataset();
 		else
 			ds = (JRElementDataset) ds.clone();
+		clones.add(itemData);
 		ItemDataDialog dialog = new ItemDataDialog(UIUtils.getShell(),
 				itemDataLabelProvider.getText4ItemData(itemData), "", clones,
 				itemData,

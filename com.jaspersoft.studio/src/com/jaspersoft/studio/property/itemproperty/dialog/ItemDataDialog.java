@@ -151,6 +151,7 @@ public abstract class ItemDataDialog extends ElementDatasetDialog {
 						}
 					}
 				}
+				idClone.addItem(item);
 				descriptor.setItemDatas(clones, pnode);
 				descriptor.setItemData(idClone);
 				descriptor.setItem(item);
@@ -159,7 +160,11 @@ public abstract class ItemDataDialog extends ElementDatasetDialog {
 				dialog.setValues(clones, itemData, item);
 				dialog.setExpressionContext(expContext);
 				try {
-					if (dialog.open() != Dialog.OK)
+					if (dialog.open() == Dialog.OK) {
+						itemDatas.clear();
+						itemDatas.addAll(clones);
+						itemData = dialog.getItemData();
+					} else
 						item = null;
 				} finally {
 					descriptor.setItem(item);
