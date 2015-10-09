@@ -24,7 +24,7 @@ public class AItemPropertiesUtil {
 
 	protected AItemDialog createItemDialog() {
 		return new TableItemDialog(UIUtils.getShell(), getDescriptor(),
-				(JasperReportsConfiguration) section.getJasperReportsContext());
+				(JasperReportsConfiguration) section.getJasperReportsContext(), true);
 	}
 
 	private ADescriptor getDescriptor() {

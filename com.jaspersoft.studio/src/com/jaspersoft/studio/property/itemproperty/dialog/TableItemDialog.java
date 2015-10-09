@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.property.itemproperty.dialog;
 
@@ -51,23 +47,30 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class TableItemDialog extends AItemDialog {
 
-	public TableItemDialog(Shell parentShell, ADescriptor descriptor,
-			JasperReportsConfiguration jrConfig) {
-		super(parentShell, descriptor, jrConfig);
+	public TableItemDialog(Shell parentShell, ADescriptor descriptor, JasperReportsConfiguration jrConfig,
+			boolean showDataset) {
+		super(parentShell, descriptor, jrConfig, showDataset);
 	}
 
 	private EditButton<StandardItemProperty> bpropEdit;
 	private TableViewer tviewer;
+	private Composite vcmp;
 
 	protected void createValue(CTabFolder tabFolder) {
 		CTabItem bptab = new CTabItem(tabFolder, SWT.NONE);
 		bptab.setText(Messages.ItemDialog_0);
 
-		Composite cmp = new Composite(tabFolder, SWT.NONE);
-		cmp.setLayout(new GridLayout(2, false));
+		createValue(tabFolder);
+		
+		bptab.setControl(vcmp);
+	}
 
-		Table wtable = new Table(cmp, SWT.V_SCROLL | SWT.MULTI
-				| SWT.FULL_SELECTION | SWT.BORDER);
+	@Override
+	protected void createValue(Composite parent) {
+		vcmp = new Composite(parent, SWT.NONE);
+		vcmp.setLayout(new GridLayout(2, false));
+
+		Table wtable = new Table(vcmp, SWT.V_SCROLL | SWT.MULTI | SWT.FULL_SELECTION | SWT.BORDER);
 		GridData gd = new GridData(GridData.FILL_BOTH);
 		gd.widthHint = 500;
 		gd.heightHint = 300;
@@ -119,7 +122,7 @@ public class TableItemDialog extends AItemDialog {
 			}
 		});
 
-		Composite bGroup = new Composite(cmp, SWT.NONE);
+		Composite bGroup = new Composite(vcmp, SWT.NONE);
 		bGroup.setLayout(new GridLayout(1, false));
 		bGroup.setLayoutData(new GridData(GridData.FILL_VERTICAL));
 
@@ -133,8 +136,7 @@ public class TableItemDialog extends AItemDialog {
 				StandardItemProperty prop = new StandardItemProperty("newname", //$NON-NLS-1$
 						"value", null); //$NON-NLS-1$
 				descriptor.setOldItemProperty(null);
-				ItemPropertyDialog dialog = new ItemPropertyDialog(getShell(),
-						prop, descriptor);
+				ItemPropertyDialog dialog = new ItemPropertyDialog(getShell(), prop, descriptor);
 				dialog.setExpressionContext(currentExpContext);
 				if (openChildDialog(dialog) == Window.OK)
 					return dialog.getValue();
@@ -145,35 +147,29 @@ public class TableItemDialog extends AItemDialog {
 
 		bpropEdit = new EditButton<StandardItemProperty>() {
 			@Override
-			protected void afterElementModified(Object element,
-					List<StandardItemProperty> inlist, int ind) {
+			protected void afterElementModified(Object element, List<StandardItemProperty> inlist, int ind) {
 				validateForm();
 			}
 		};
-		bpropEdit.createEditButtons(bGroup, tviewer,
-				new IEditElement<StandardItemProperty>() {
+		bpropEdit.createEditButtons(bGroup, tviewer, new IEditElement<StandardItemProperty>() {
 
-					@Override
-					public void editElement(List<StandardItemProperty> input,
-							int pos) {
-						StandardItemProperty old = input.get(pos);
-						descriptor.setOldItemProperty(old);
-						StandardItemProperty prop = (StandardItemProperty) old
-								.clone();
-						ItemPropertyDialog dialog = new ItemPropertyDialog(
-								getShell(), prop, descriptor);
-						dialog.setExpressionContext(currentExpContext);
-						if (openChildDialog(dialog) == Window.OK)
-							input.set(pos, dialog.getValue());
-					}
-				});
+			@Override
+			public void editElement(List<StandardItemProperty> input, int pos) {
+				StandardItemProperty old = input.get(pos);
+				descriptor.setOldItemProperty(old);
+				StandardItemProperty prop = (StandardItemProperty) old.clone();
+				ItemPropertyDialog dialog = new ItemPropertyDialog(getShell(), prop, descriptor);
+				dialog.setExpressionContext(currentExpContext);
+				if (openChildDialog(dialog) == Window.OK)
+					input.set(pos, dialog.getValue());
+			}
+		});
 		final DeleteButton delb = new DeleteButton() {
 
 			/*
 			 * (non-Javadoc)
 			 * 
-			 * @see com.jaspersoft.studio.swt.widgets.table.DeleteButton#
-			 * afterElementDeleted(java.lang.Object)
+			 * @see com.jaspersoft.studio.swt.widgets.table.DeleteButton# afterElementDeleted(java.lang.Object)
 			 */
 			@Override
 			protected void afterElementDeleted(Object element) {
@@ -183,18 +179,14 @@ public class TableItemDialog extends AItemDialog {
 			@Override
 			protected boolean confirmDelete(Object obj) {
 				StandardItemProperty p = (StandardItemProperty) obj;
-				ItemPropertyDescription<?> ipd = descriptor.getDescription(p
-						.getName());
+				ItemPropertyDescription<?> ipd = descriptor.getDescription(p.getName());
 				if (ipd.isMandatory())
-					if (!UIUtils.showConfirmation(Messages.ItemDialog_3,
-							Messages.ItemDialog_4))
+					if (!UIUtils.showConfirmation(Messages.ItemDialog_3, Messages.ItemDialog_4))
 						return false;
 				return super.confirmDelete(obj);
 			}
 		};
 		delb.createDeleteButton(bGroup, tviewer);
-
-		bptab.setControl(cmp);
 	}
 
 	protected void fillData() {
@@ -203,4 +195,5 @@ public class TableItemDialog extends AItemDialog {
 
 		super.fillData();
 	}
+
 }

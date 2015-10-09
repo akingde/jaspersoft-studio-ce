@@ -38,8 +38,9 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public abstract class FormItemDialog extends AItemDialog {
 
-	public FormItemDialog(Shell parentShell, ADescriptor descriptor, JasperReportsConfiguration jrConfig) {
-		super(parentShell, descriptor, jrConfig);
+	public FormItemDialog(Shell parentShell, ADescriptor descriptor, JasperReportsConfiguration jrConfig,
+			boolean showDataset) {
+		super(parentShell, descriptor, jrConfig, showDataset);
 	}
 
 	@Override
@@ -104,7 +105,13 @@ public abstract class FormItemDialog extends AItemDialog {
 	protected ScrolledComposite sc;
 
 	protected Composite createScrolledComposite(CTabFolder tabFolder, CTabItem bptab) {
-		sc = new ScrolledComposite(tabFolder, SWT.V_SCROLL);
+		Composite cmp = createScrolledComposite(tabFolder);
+		bptab.setControl(sc);
+		return cmp;
+	}
+
+	protected Composite createScrolledComposite(Composite parent) {
+		sc = new ScrolledComposite(parent, SWT.V_SCROLL);
 
 		final Composite cmp = new Composite(sc, SWT.NONE);
 		cmp.setLayout(new GridLayout(2, false));
@@ -113,7 +120,6 @@ public abstract class FormItemDialog extends AItemDialog {
 		sc.setExpandHorizontal(true);
 		sc.setExpandVertical(true);
 		sc.setAlwaysShowScrollBars(true);
-		bptab.setControl(sc);
 		return cmp;
 	}
 

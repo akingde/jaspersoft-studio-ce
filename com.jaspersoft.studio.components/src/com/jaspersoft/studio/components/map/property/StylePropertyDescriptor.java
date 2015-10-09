@@ -52,7 +52,7 @@ public class StylePropertyDescriptor extends AItemDataListPropertyDescriptor {
 			protected AItemDialog createItemDialog() {
 				return new FormItemDialog(UIUtils.getShell(), getDescriptor(),
 						(JasperReportsConfiguration) section
-								.getJasperReportsContext()) {
+								.getJasperReportsContext(), true) {
 
 					@Override
 					protected void createValue(CTabFolder tabFolder) {
@@ -101,6 +101,12 @@ public class StylePropertyDescriptor extends AItemDataListPropertyDescriptor {
 								MapComponent.ITEM_PROPERTY_MARKER_zIndex);
 
 						configScrolledComposite(cmp);
+					}
+
+					@Override
+					protected void createValue(Composite parent) {
+						// TODO Auto-generated method stub
+						
 					}
 
 				};

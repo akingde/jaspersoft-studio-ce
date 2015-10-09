@@ -284,7 +284,7 @@ public class SPItemDataList extends ASPropertyWidget<AItemDataListPropertyDescri
 
 	protected AItemDialog createItemDialog() {
 		return new TableItemDialog(UIUtils.getShell(), getDescriptor(),
-				(JasperReportsConfiguration) section.getJasperReportsContext());
+				(JasperReportsConfiguration) section.getJasperReportsContext(), true);
 	}
 
 	private ItemData getStandardItemData(boolean createNew, TreeViewer tviewer, List<ItemData> clones) {

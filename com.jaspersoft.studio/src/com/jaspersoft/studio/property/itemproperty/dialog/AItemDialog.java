@@ -58,18 +58,18 @@ public abstract class AItemDialog extends ATitledDialog implements IExpressionCo
 	protected StandardItemData itemData;
 	protected StandardItem item;
 
-	private CTabFolder tabFolder;
-
 	protected ADescriptor descriptor;
 	private Button useDatasetB;
 	protected Combo dsviewer;
 	protected EditableDatasetBaseComposite compositeDatasetInfo;
+	protected boolean showDataset = true;
 
-	public AItemDialog(Shell parentShell, ADescriptor descriptor, JasperReportsConfiguration jrConfig) {
+	public AItemDialog(Shell parentShell, ADescriptor descriptor, JasperReportsConfiguration jrConfig, boolean showDataset) {
 		super(parentShell);
 		setTitle(descriptor.getDisplayName());
 		this.jrConfig = jrConfig;
 		this.descriptor = descriptor;
+		this.showDataset = showDataset;
 	}
 
 	/*
@@ -110,18 +110,21 @@ public abstract class AItemDialog extends ATitledDialog implements IExpressionCo
 	}
 
 	protected void fillData() {
-		useDatasetB.setSelection(itemData.getDataset() != null);
+		if (showDataset) {
+			useDatasetB.setSelection(itemData.getDataset() != null);
 
-		setupItemDataCombo();
+			setupItemDataCombo();
+			setupExpressionContext();
+			if (itemData.getDataset() != null) {
+				createDatasetComposite(dsCmp);
+			} else {
+				if (compositeDatasetInfo != null)
+					compositeDatasetInfo.dispose();
+				compositeDatasetInfo = null;
+			}
+		} else
+			setupExpressionContext();
 
-		setupExpressionContext();
-		if (itemData.getDataset() != null) {
-			createDatasetComposite(dsCmp);
-		} else {
-			if (compositeDatasetInfo != null)
-				compositeDatasetInfo.dispose();
-			compositeDatasetInfo = null;
-		}
 		setError(null);
 		validateForm();
 	}
@@ -170,12 +173,14 @@ public abstract class AItemDialog extends ATitledDialog implements IExpressionCo
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		Composite cmp = (Composite) super.createDialogArea(parent);
+		if (showDataset) {
+			CTabFolder tabFolder = new CTabFolder(cmp, SWT.FLAT | SWT.TOP);
+			tabFolder.setLayoutData(new GridData(GridData.FILL_BOTH));
 
-		tabFolder = new CTabFolder(cmp, SWT.FLAT | SWT.TOP);
-		tabFolder.setLayoutData(new GridData(GridData.FILL_BOTH));
-
-		createValue(tabFolder);
-		createDataset(tabFolder);
+			createValue(tabFolder);
+			createDataset(tabFolder);
+		} else
+			createValue(parent);
 		UIUtils.getDisplay().asyncExec(new Runnable() {
 
 			@Override
@@ -188,6 +193,8 @@ public abstract class AItemDialog extends ATitledDialog implements IExpressionCo
 	}
 
 	protected abstract void createValue(CTabFolder tabFolder);
+
+	protected abstract void createValue(Composite parent);
 
 	private void createDataset(CTabFolder tabFolder) {
 		CTabItem bptab = new CTabItem(tabFolder, SWT.NONE);

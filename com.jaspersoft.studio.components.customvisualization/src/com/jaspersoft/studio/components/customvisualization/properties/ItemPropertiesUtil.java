@@ -16,8 +16,9 @@ import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
 
 import com.jaspersoft.jasperreports.customvisualization.design.CVDesignComponent;
 import com.jaspersoft.studio.components.customvisualization.ui.ComponentDatasetDescriptor;
@@ -130,7 +131,8 @@ public abstract class ItemPropertiesUtil extends AItemPropertiesUtil {
 			}
 		}
 		return new TableItemDialog(UIUtils.getShell(), getDescriptor(),
-				(JasperReportsConfiguration) section.getJasperReportsContext()) {
+				(JasperReportsConfiguration) section.getJasperReportsContext(),
+				false) {
 			@Override
 			protected void createDataItemSelector(Composite cmp) {
 
@@ -140,10 +142,40 @@ public abstract class ItemPropertiesUtil extends AItemPropertiesUtil {
 
 	private AItemDialog createForm(JasperReportsConfiguration jConf,
 			final ComponentDatasetDescriptor cdd) {
-		return new FormItemDialog(UIUtils.getShell(), getDescriptor(), jConf) {
+		return new FormItemDialog(UIUtils.getShell(), getDescriptor(), jConf,
+				false) {
 			@Override
 			protected void createDataItemSelector(Composite cmp) {
 
+			}
+
+			@Override
+			protected void createValue(Composite parent) {
+				Composite cmp = createScrolledComposite(parent);
+				GridData gd = new GridData(GridData.FILL_BOTH);
+				gd.widthHint = 400;
+				sc.setLayoutData(gd);
+
+				createProperties(cdd, cmp);
+			}
+
+			protected void createProperties(
+					final ComponentDatasetDescriptor cdd, Composite cmp) {
+				boolean first = true;
+				for (ComponentSectionDescriptor s : cdd.getSections()) {
+					Composite c = null;
+					if (s.isExpandable())
+						c = createSection(cmp, s.getName());
+					else {
+						c = cmp;
+						if (!first)
+							createSeparator(cmp);
+					}
+					for (ComponentPropertyDescriptor pd : s.getProperties())
+						createItemProperty(c, pd.getName());
+					first = false;
+				}
+				configScrolledComposite(cmp);
 			}
 
 			@Override
@@ -153,18 +185,7 @@ public abstract class ItemPropertiesUtil extends AItemPropertiesUtil {
 
 				Composite cmp = createScrolledComposite(tabFolder, bptab);
 
-				for (ComponentSectionDescriptor s : cdd.getSections()) {
-					Composite c = null;
-					if (s.isExpandable())
-						c = createSection(cmp, s.getName());
-					else {
-						c = cmp;
-						createSeparator(cmp);
-					}
-					for (ComponentPropertyDescriptor pd : s.getProperties())
-						createItemProperty(c, pd.getName());
-				}
-				configScrolledComposite(cmp);
+				createProperties(cdd, cmp);
 			}
 
 			@Override
@@ -194,6 +215,7 @@ public abstract class ItemPropertiesUtil extends AItemPropertiesUtil {
 					dsviewer.select(itemDatas.indexOf(itemData));
 				}
 			}
+
 		};
 	}
 

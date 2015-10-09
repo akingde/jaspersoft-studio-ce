@@ -117,10 +117,15 @@ public abstract class ItemDataDialog extends ElementDatasetDialog {
 		Composite cmp = new Composite(tabFolder, SWT.NONE);
 		cmp.setLayout(new GridLayout(2, false));
 
-		final TableViewer viewer = new TableViewer(cmp, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION
+		final TableViewer viewer = new TableViewer(cmp, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION
 				| SWT.BORDER);
 		viewer.setContentProvider(ArrayContentProvider.getInstance());
-		viewer.setLabelProvider(new ItemLabelProvider(descriptor));
+		viewer.setLabelProvider(new ItemLabelProvider(descriptor) {
+			@Override
+			public String getColumnText(Object element, int columnIndex) {
+				return getText(element);
+			}
+		});
 		viewer.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
 
 		Composite c = new Composite(cmp, SWT.NONE);
@@ -130,6 +135,9 @@ public abstract class ItemDataDialog extends ElementDatasetDialog {
 
 			@Override
 			public Object newElement(List<?> input, int pos) {
+				int indx = itemDatas.indexOf(itemData);
+				List<ItemData> clones = JRCloneUtils.cloneList(itemDatas);
+				StandardItemData idClone = (StandardItemData) clones.get(indx);
 				StandardItem item = new StandardItem();
 				for (ItemPropertyDescription<?> ipd : descriptor.getItemPropertyDescriptors()) {
 					if (ipd.isMandatory()) {
@@ -143,11 +151,10 @@ public abstract class ItemDataDialog extends ElementDatasetDialog {
 						}
 					}
 				}
-				itemData.addItem(item);
-				List<ItemData> clones = JRCloneUtils.cloneList(itemDatas);
-
 				descriptor.setItemDatas(clones, pnode);
-				descriptor.setItemData(itemData);
+				descriptor.setItemData(idClone);
+				descriptor.setItem(item);
+
 				AItemDialog dialog = createItemDialog();
 				dialog.setValues(clones, itemData, item);
 				dialog.setExpressionContext(expContext);
@@ -170,17 +177,18 @@ public abstract class ItemDataDialog extends ElementDatasetDialog {
 				int indx = itemDatas.indexOf(itemData);
 				List<ItemData> clones = JRCloneUtils.cloneList(itemDatas);
 				StandardItemData idClone = (StandardItemData) clones.get(indx);
-				List<Item> itemClones = JRCloneUtils.cloneList(idClone.getItems());
-				StandardItem itemClone = (StandardItem) itemClones.get(pos);
+				StandardItem itemClone = (StandardItem) idClone.getItems().get(pos);
 				descriptor.setItemDatas(clones, pnode);
 				descriptor.setItemData(idClone);
 				descriptor.setItem(itemClone);
-				AItemDialog dialog = createItemDialog();
-				dialog.setValues(clones, idClone, itemClone);
-				dialog.setExpressionContext(expContext);
 				try {
-					if (dialog.open() != Dialog.OK) {
+					AItemDialog dialog = createItemDialog();
+					dialog.setValues(clones, idClone, itemClone);
+					dialog.setExpressionContext(expContext);
+					if (dialog.open() == Dialog.OK) {
 						itemData = dialog.getItemData();
+						input.set(pos, itemClone);
+						itemData.getItems().set(indx, itemClone);
 						itemDatas.set(indx, itemData);
 					}
 				} finally {
