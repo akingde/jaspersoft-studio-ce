@@ -248,7 +248,7 @@ public class SPCVItemPropertiesList extends
 						c.dispose();
 					ExpressionContext ec = getExpressionContext();
 					CVCPropertyDescriptor descriptor = new CVCPropertyDescriptor();
-					if (cd != null && cd.getSections() != null)
+					if (cd != null && cd.getSections() != null) {
 						for (ComponentSectionDescriptor csd : cd.getSections()) {
 							Composite c = null;
 							if (csd.isExpandable())
@@ -265,9 +265,10 @@ public class SPCVItemPropertiesList extends
 								createItemProperty(c, ipdesc, descriptor, ec);
 							}
 						}
-					form.layout(true);
-					stackLayout.topControl = form;
-					cmp.layout(true);
+						form.layout(true);
+						stackLayout.topControl = form;
+						cmp.layout(true);
+					}
 					return;
 				}
 			}
