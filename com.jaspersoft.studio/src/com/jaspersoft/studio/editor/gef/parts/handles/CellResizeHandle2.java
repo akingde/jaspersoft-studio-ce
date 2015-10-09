@@ -13,12 +13,15 @@
 package com.jaspersoft.studio.editor.gef.parts.handles;
 
 import org.eclipse.draw2d.ColorConstants;
+import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.GraphicalEditPart;
+import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.handles.ResizeHandle;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.wb.swt.SWTResourceManager;
 
 import com.jaspersoft.studio.editor.gef.parts.IPrefEditPart;
+import com.jaspersoft.studio.editor.gef.parts.editPolicy.JSSCompoundResizeTracker;
 
 /*
  * The Class BandResizeHandle2.
@@ -27,6 +30,7 @@ public class CellResizeHandle2 extends ResizeHandle {
 
 	/** The tracker. */
 	CellResizeTracker tracker = null;
+	private int cursorDirection = 0;
 
 	/**
 	 * Constructor for SectionResizeHandle.
@@ -40,6 +44,7 @@ public class CellResizeHandle2 extends ResizeHandle {
 		super(owner, direction);
 		setLocator(new CellResizeHandleLocator2(owner, direction));
 		setPreferredSize(2, 2);
+		cursorDirection = direction;
 	}
 
 	@Override
@@ -61,4 +66,20 @@ public class CellResizeHandle2 extends ResizeHandle {
 		return getBorderColor();// super.getFillColor();
 	}
 
+	@Override
+	protected DragTracker createDragTracker() {
+		return new JSSCompoundResizeTracker(getOwner(), cursorDirection){
+			
+			@Override
+			protected boolean handleDragInProgress() {
+				if (!isInState(STATE_TERMINAL)){
+					Command command = getCurrentCommand();
+					if (command == null || !command.canExecute()){
+						eraseSourceFeedback();
+					}
+				}
+				return super.handleDragInProgress();
+			}
+		};
+	}
 }

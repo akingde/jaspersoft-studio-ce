@@ -71,7 +71,7 @@ public class SubEditorEditPartTracker extends NotMovablePartDragTracker {
 		boolean wasDragging = movedPastThreshold();
  		if (me.button == 1 && !wasDragging) {
 			EditPart clickedPart = viewer.findObjectAt(new Point(me.x, me.y));
-			viewer.select(clickedPart);
+			if (clickedPart != null) viewer.select(clickedPart);
 		} else
 			super.mouseUp(me, viewer);
 	};

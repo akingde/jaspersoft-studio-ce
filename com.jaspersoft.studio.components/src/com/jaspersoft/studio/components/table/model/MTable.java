@@ -38,8 +38,6 @@ import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
 import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.design.events.CollectionElementAddedEvent;
-import net.sf.jasperreports.engine.design.events.CollectionElementRemovedEvent;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
@@ -82,6 +80,12 @@ public class MTable extends MGraphicElement implements IContainer,
 	 */
 	public static final String PROPERTY_COLUMNS_AUTORESIZE_NEXT = "com.jaspersoft.studio.components.autoresize.next"; //$NON-NLS-1$
 
+	/**
+	 * The property used to know if the columns of the table are automatically resize if necessary to fit the table area, the width is distributed
+	 * proportionally to the columns initial size
+	 */
+	public static final String PROPERTY_COLUMNS_AUTORESIZE_PROPORTIONAL = "com.jaspersoft.studio.components.autoresize.proportional"; //$NON-NLS-1$
+	
 	private static IIconDescriptor iconDescriptor;
 
 	private TableManager ctManager;
@@ -231,14 +235,21 @@ public class MTable extends MGraphicElement implements IContainer,
 		whennodataD.setCategory(Messages.MTable_table_properties_category);
 		
 		
-		CheckBoxPropertyDescriptor columnsFillDescriptor = new CheckBoxPropertyDescriptor(PROPERTY_COLUMNS_AUTORESIZE_NEXT, Messages.MTable_autoresizeNext);
-		columnsFillDescriptor.setDescription(Messages.MTable_autoresizeNextDescription);
+		CheckBoxPropertyDescriptor columnsIncreaseDescriptor = new CheckBoxPropertyDescriptor(PROPERTY_COLUMNS_AUTORESIZE_NEXT, Messages.MTable_autoresizeNext);
+		columnsIncreaseDescriptor.setDescription(Messages.MTable_autoresizeNextDescription);
+		desc.add(columnsIncreaseDescriptor);
+		columnsIncreaseDescriptor.setCategory(Messages.MTable_table_properties_category);
+		
+		CheckBoxPropertyDescriptor columnsFillDescriptor = new CheckBoxPropertyDescriptor(PROPERTY_COLUMNS_AUTORESIZE_PROPORTIONAL, Messages.MTable_propertyForceFill);
+		columnsFillDescriptor.setDescription(Messages.MTable_propertyForceFillDescription);
 		desc.add(columnsFillDescriptor);
 		columnsFillDescriptor.setCategory(Messages.MTable_table_properties_category);
 
+
 		defaultsMap.put(StandardTable.PROPERTY_WHEN_NO_DATA_TYPE,whennodataD.getEnumValue(WhenNoDataTypeTableEnum.BLANK));
 		defaultsMap.put(PROPERTY_COLUMNS_AUTORESIZE_NEXT, Boolean.FALSE);
-
+		defaultsMap.put(PROPERTY_COLUMNS_AUTORESIZE_PROPORTIONAL, Boolean.FALSE);
+		
 		setHelpPrefix(desc,
 				"net.sf.jasperreports.doc/docs/components.schema.reference.html#table"); //$NON-NLS-1$
 	}
@@ -274,6 +285,9 @@ public class MTable extends MGraphicElement implements IContainer,
 		if (id.equals(PROPERTY_COLUMNS_AUTORESIZE_NEXT)){
 			return hasColumnsAutoresizeNext();
 		}
+		if (id.equals(PROPERTY_COLUMNS_AUTORESIZE_PROPORTIONAL)){
+			return hasColumnsAutoresizeProportional();
+		}
 
 		return super.getPropertyValue(id);
 	}
@@ -298,6 +312,16 @@ public class MTable extends MGraphicElement implements IContainer,
 			} else {
 				getValue().getPropertiesMap().setProperty(PROPERTY_COLUMNS_AUTORESIZE_NEXT, value.toString());
 			}
+		} else if (id.equals(PROPERTY_COLUMNS_AUTORESIZE_PROPORTIONAL)){
+			Object oldValue = getValue().getPropertiesMap().getProperty(PROPERTY_COLUMNS_AUTORESIZE_PROPORTIONAL);
+			Object newValue = null;
+			if (value == null || !Boolean.parseBoolean(value.toString())){
+				getValue().getPropertiesMap().removeProperty(PROPERTY_COLUMNS_AUTORESIZE_PROPORTIONAL);
+			} else {
+				getValue().getPropertiesMap().setProperty(PROPERTY_COLUMNS_AUTORESIZE_PROPORTIONAL, value.toString());
+				newValue = value;
+			}
+			propertyChange(new PropertyChangeEvent(this, PROPERTY_COLUMNS_AUTORESIZE_PROPORTIONAL, oldValue, newValue));
 		} else super.setPropertyValue(id, value);
 	}
 
@@ -311,6 +335,23 @@ public class MTable extends MGraphicElement implements IContainer,
 		if (getValue() != null){
 			JRPropertiesMap map = getValue().getPropertiesMap();
 			Object value = map.getProperty(PROPERTY_COLUMNS_AUTORESIZE_NEXT);
+			if (value != null){
+				return Boolean.parseBoolean(value.toString());
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * Check if in the current table is set the flag to autoresize the columns taking the 
+	 * space from the next one when it is drag and dropped
+	 * 
+	 * @return true if the resize of a column should take the space from the next one, false otherwise
+	 */
+	public boolean hasColumnsAutoresizeProportional(){
+		if (getValue() != null){
+			JRPropertiesMap map = getValue().getPropertiesMap();
+			Object value = map.getProperty(PROPERTY_COLUMNS_AUTORESIZE_PROPORTIONAL);
 			if (value != null){
 				return Boolean.parseBoolean(value.toString());
 			}
@@ -422,15 +463,14 @@ public class MTable extends MGraphicElement implements IContainer,
 			}
 		}
 
-		if (getTableManager() != null
-				&& (getParent() instanceof MPage
-						&& evt instanceof CollectionElementAddedEvent
-						|| evt instanceof CollectionElementRemovedEvent
-						|| evt.getOldValue() instanceof DesignCell || evt
-							.getNewValue() instanceof DesignCell)){
+		if (getTableManager() != null){
 			getTableManager().update();
-		} else if (getTableManager() != null){
-			getTableManager().update();
+			if (hasColumnsAutoresizeProportional() && isColumnsResizeEvent(evt)){
+				String oldValue = getValue().getPropertiesMap().getProperty(PROPERTY_COLUMNS_AUTORESIZE_PROPORTIONAL);
+				getValue().getPropertiesMap().removeProperty(PROPERTY_COLUMNS_AUTORESIZE_PROPORTIONAL);
+				getTableManager().fillSpace(getValue().getWidth(), true);
+				getValue().getPropertiesMap().setProperty(PROPERTY_COLUMNS_AUTORESIZE_PROPORTIONAL, oldValue);
+			}
 		}
 	
 		if (!(evt.getPropertyName().equals(StandardColumn.PROPERTY_TABLE_FOOTER) ||
@@ -448,6 +488,19 @@ public class MTable extends MGraphicElement implements IContainer,
 				}
 			}
 		}
+	}
+	
+	private boolean isColumnsResizeEvent(PropertyChangeEvent evt){
+		if (evt.getPropertyName().equals(JRDesignElement.PROPERTY_WIDTH)){
+			return true;
+		}
+		if (evt.getPropertyName().equals(StandardTable.PROPERTY_COLUMNS)){
+			return true;
+		}
+		if (evt.getPropertyName().equals(PROPERTY_COLUMNS_AUTORESIZE_PROPORTIONAL)){
+			return true;
+		}
+		return false;
 	}
 
 	@Override

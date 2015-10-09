@@ -36,7 +36,6 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editpolicies.ResizableEditPolicy;
 import org.eclipse.gef.handles.MoveHandle;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
-import org.eclipse.gef.tools.DragEditPartsTracker;
 
 import com.jaspersoft.studio.components.table.model.column.MColumn;
 import com.jaspersoft.studio.components.table.model.column.command.MoveColumnCommand;
@@ -300,19 +299,5 @@ public class TableCellResizableEditPolicy extends ResizableEditPolicy {
 				}
 			}
 		}
-	}
-	
-	@Override
-	protected DragEditPartsTracker getDragTracker() {
-		return new DragEditPartsTracker(getHost()){
-			
-			@Override
-			protected void showSourceFeedback() {
-				Command command = getCurrentCommand();
-				if (command != null && command.canExecute()){
-					super.showSourceFeedback();
-				}
-			}
-		};
 	}
 }

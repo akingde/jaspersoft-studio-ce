@@ -52,6 +52,8 @@ public class Messages extends NLS {
 	public static String MTable_autoresizeNextDescription;
 	public static String MTable_dataset_run;
 	public static String MTable_dataset_run_description;
+	public static String MTable_propertyForceFill;
+	public static String MTable_propertyForceFillDescription;
 	public static String MTable_table_properties_category;
 	public static String MTable_whennodatadescription;
 	public static String MTable_whennodatalabel;

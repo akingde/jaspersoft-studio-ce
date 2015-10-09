@@ -122,6 +122,13 @@ public class NameSection extends AbstractSection {
 			controlData.horizontalSpan = 2;
 			widget.getControl().setLayoutData(controlData);
 		}
-	
+
+		columnDescriptor = getElement().getPropertyDescriptor(MTable.PROPERTY_COLUMNS_AUTORESIZE_PROPORTIONAL);
+		if (columnDescriptor != null){
+			ASPropertyWidget<?> widget = createWidget4Property(getElement(), parent, MTable.PROPERTY_COLUMNS_AUTORESIZE_PROPORTIONAL, false);
+			GridData controlData = new GridData();
+			controlData.horizontalSpan = 2;
+			widget.getControl().setLayoutData(controlData);
+		}
 	}
 }

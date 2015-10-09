@@ -18,6 +18,7 @@ import java.util.List;
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.GraphicalEditPart;
+import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.handles.ResizeHandle;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.wb.swt.SWTResourceManager;
@@ -70,12 +71,21 @@ public class CellResizeHandle extends ResizeHandle {
 
 	protected DragTracker createDragTracker() {
 		return new JSSCompoundResizeTracker(getOwner(), cursorDirection) {
+			
 			@SuppressWarnings({ "rawtypes", "unchecked" })
 			@Override
 			protected List createOperationSet() {
 				ArrayList res = new ArrayList();
 				res.add(getOwner());
 				return res;
+			}
+			
+			@Override
+			protected void showSourceFeedback() {
+				Command command = getCurrentCommand();
+				if (command != null && command.canExecute()){
+					super.showSourceFeedback();
+				}
 			}
 		};
 	}
