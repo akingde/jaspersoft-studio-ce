@@ -24,6 +24,7 @@ import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.components.Activator;
 import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.components.table.model.AMCollection;
+import com.jaspersoft.studio.components.table.model.MTable;
 import com.jaspersoft.studio.components.table.model.column.MColumn;
 import com.jaspersoft.studio.components.table.model.column.command.CheckColumnsOrder;
 import com.jaspersoft.studio.components.table.model.column.command.FixCellHeightsCommand;
@@ -72,22 +73,23 @@ public class GroupColumnsAction extends ACreateAction {
 		setEnabled(false);
 	}
 
-	@Override
-	public Command createCommand() {
+	private List<MColumn> getSelectedColumns(){
+		List<MColumn> columns = new ArrayList<MColumn>();
 		List<Object> objects = getSelectedObjects();
 		if (objects.isEmpty())
 			return null;
-		List<MColumn> columns = new ArrayList<MColumn>();
 		for (Object obj : objects) {
-			if (!(obj instanceof EditPart))
-				return super.createCommand();
-			EditPart ep = (EditPart) obj;
-			if (ep.getModel() instanceof MColumn)
-				columns.add((MColumn) ep.getModel());
-			else
-				return super.createCommand();
+			if (obj instanceof EditPart)
+				obj = ((EditPart)obj).getModel();
+			if (obj instanceof MColumn)
+				columns.add((MColumn)obj);
 		}
-
+		return columns;
+	}
+	
+	@Override
+	public Command createCommand() {
+		List<MColumn> columns = getSelectedColumns();
 		MColumn fmc = columns.get(0);
 		ANode mparent = fmc.getParent();
 		if (mparent == null)
@@ -121,6 +123,17 @@ public class GroupColumnsAction extends ACreateAction {
 		c.add(new FixCellHeightsCommand(fmc));
 		c.add(new RefreshColumnNamesCommand(mparent, true, false));
 		return c;
+	}
+	
+	@Override
+	protected boolean calculateEnabled() {
+		List<MColumn> columns = getSelectedColumns();
+		if (columns.isEmpty()) return false;
+		MTable table = columns.get(0).getMTable(); 
+		if (table != null){
+			return table.getStandardTable().getColumns().size() > 0;
+		}
+		return false;
 	}
 
 	public CreateColumnGroupCommand createGroup(int index, ANode mparent,

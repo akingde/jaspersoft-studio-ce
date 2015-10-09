@@ -66,13 +66,20 @@ public class SelectAllCellsAction extends ACachedSelectionAction {
 			if (obj instanceof EditPart)
 				obj = ((EditPart) obj).getModel();
 			if (obj instanceof MTable){
-				if (((MTable)obj).getParent() instanceof MPage){
-					return true;
+				MTable table = (MTable)obj;
+				if (table != null){
+					StandardTable jrTable = table.getStandardTable();
+					if ((table.getParent() instanceof MPage) && jrTable.getColumns().size()>0){
+						return true;
+					}
 				}
 			} else if (obj instanceof MColumn || obj instanceof AMCollection){
 				MTable table = TableManager.getTableNode((ANode)obj);
-				if (table.getParent() instanceof MPage){
-					return true;
+				if (table != null){
+					StandardTable jrTable = table.getStandardTable();
+					if ((table.getParent() instanceof MPage) && jrTable.getColumns().size()>0){
+						return true;
+					}
 				}
 			}
 		}
