@@ -116,15 +116,15 @@ public class SPCVCItemDataList extends
 				showItemDialog(clones, itemDataClone, item);
 			}
 		} else if (obj instanceof StandardItemData) {
-			StandardItemData itemData = (StandardItemData) obj;
-			JRElementDataset ds = itemData.getDataset();
-			if (ds == null)
-				ds = new JRDesignElementDataset();
-			else
-				ds = (JRElementDataset) ds.clone();
+			List<ItemData> clones = JRCloneUtils.cloneList(itemDatas);
+			StandardItemData itemData = (StandardItemData) getStandardItemData(
+					false, tviewer, itemDatas);
+			StandardItemData itemDataClone = (StandardItemData) getStandardItemData(
+					false, tviewer, clones);
+
 			ItemDataDialog dialog = new ItemDataDialog(UIUtils.getShell(),
 					itemDataLabelProvider.getText4ItemData(itemData), "",
-					itemDatas, itemData,
+					clones, itemDataClone,
 					(JasperReportsConfiguration) section
 							.getJasperReportsContext(), getDescriptor(),
 					expContext, pnode) {
@@ -134,10 +134,9 @@ public class SPCVCItemDataList extends
 					return SPCVCItemDataList.this.createItemDialog();
 				}
 			};
-			if (dialog.open() == Dialog.OK) {
-				itemData.setDataset(dialog.getDataset());
-				dsTViewer.refresh();
-			}
+			if (dialog.open() == Dialog.OK)
+				section.changeProperty(pDescriptor.getId(),
+						new ArrayList<ItemData>(clones));
 		}
 	}
 
@@ -173,6 +172,7 @@ public class SPCVCItemDataList extends
 	}
 
 	protected void handleNewElement(TreeViewer tviewer) {
+		List<ItemData> clones = JRCloneUtils.cloneList(itemDatas);
 		StandardItemData itemData = new StandardItemData();
 		JRElementDataset ds = itemData.getDataset();
 		if (ds == null)
@@ -180,8 +180,8 @@ public class SPCVCItemDataList extends
 		else
 			ds = (JRElementDataset) ds.clone();
 		ItemDataDialog dialog = new ItemDataDialog(UIUtils.getShell(),
-				itemDataLabelProvider.getText4ItemData(itemData), "",
-				itemDatas, itemData,
+				itemDataLabelProvider.getText4ItemData(itemData), "", clones,
+				itemData,
 				(JasperReportsConfiguration) section.getJasperReportsContext(),
 				getDescriptor(), expContext, pnode) {
 
@@ -190,11 +190,9 @@ public class SPCVCItemDataList extends
 				return SPCVCItemDataList.this.createItemDialog();
 			}
 		};
-		if (dialog.open() == Dialog.OK) {
-			itemData.setDataset(dialog.getDataset());
-			itemDatas.add(itemData);
-			dsTViewer.refresh();
-		}
+		if (dialog.open() == Dialog.OK)
+			section.changeProperty(pDescriptor.getId(),
+					new ArrayList<ItemData>(clones));
 	}
 
 	protected void showItemDialog(List<ItemData> citemsData,
@@ -208,7 +206,7 @@ public class SPCVCItemDataList extends
 
 	private ItemData getStandardItemData(boolean createNew, TreeViewer tviewer,
 			List<ItemData> clones) {
-		IStructuredSelection sel = (IStructuredSelection) tviewer
+		IStructuredSelection sel = (IStructuredSelection) dsTViewer
 				.getSelection();
 		Object fe = sel.getFirstElement();
 		if (fe != null) {
@@ -522,27 +520,29 @@ public class SPCVCItemDataList extends
 			}
 		} else if (sel instanceof ItemData) {
 			int indx = itemDatas.indexOf((ItemData) sel);
-			List<ComponentDatasetDescriptor> ds = cd.getDatasets();
-			int c = 0;
-			for (int i = 0; i < ds.size(); i++) {
-				ComponentDatasetDescriptor cdd = ds.get(i);
-				int card = cdd.getCardinality();
-				if (card > 0)
-					c += card;
-				if (i < indx)
-					continue;
-				else if (card <= 0) {
-					btnAddNewDataset.setEnabled(false);
-					break;
+			if (cd != null) {
+				List<ComponentDatasetDescriptor> ds = cd.getDatasets();
+				int c = 0;
+				for (int i = 0; i < ds.size(); i++) {
+					ComponentDatasetDescriptor cdd = ds.get(i);
+					int card = cdd.getCardinality();
+					if (card > 0)
+						c += card;
+					if (i < indx)
+						continue;
+					else if (card <= 0) {
+						btnAddNewDataset.setEnabled(false);
+						break;
+					}
+					if (c <= indx + 1) {
+						btnAddNewDataset.setEnabled(false);
+						break;
+					}
 				}
-				if (c <= indx + 1) {
-					btnAddNewDataset.setEnabled(false);
-					break;
-				}
+				ComponentDatasetDescriptor cdd = ds.get(ds.size() - 1);
+				btnRemoveDataset.setEnabled(cdd.getCardinality() <= 0
+						|| c < itemDatas.size());
 			}
-			ComponentDatasetDescriptor cdd = ds.get(ds.size() - 1);
-			btnRemoveDataset.setEnabled(cdd.getCardinality() <= 0
-					|| c < itemDatas.size());
 		}
 		btnUpDataset.setEnabled(false);
 		btnDownDataset.setEnabled(false);

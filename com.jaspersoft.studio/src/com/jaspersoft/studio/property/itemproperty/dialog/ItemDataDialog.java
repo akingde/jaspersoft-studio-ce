@@ -186,10 +186,11 @@ public abstract class ItemDataDialog extends ElementDatasetDialog {
 					dialog.setValues(clones, idClone, itemClone);
 					dialog.setExpressionContext(expContext);
 					if (dialog.open() == Dialog.OK) {
-						itemData = dialog.getItemData();
 						input.set(pos, itemClone);
-						itemData.getItems().set(indx, itemClone);
-						itemDatas.set(indx, itemData);
+						// itemData.getItems().set(indx, itemClone);
+						itemDatas.clear();
+						itemDatas.addAll(clones);
+						itemData = dialog.getItemData();
 					}
 				} finally {
 					descriptor.setItem(itemData.getItems().get(pos));
