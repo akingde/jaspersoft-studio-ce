@@ -248,22 +248,23 @@ public class SPCVItemPropertiesList extends
 						c.dispose();
 					ExpressionContext ec = getExpressionContext();
 					CVCPropertyDescriptor descriptor = new CVCPropertyDescriptor();
-					for (ComponentSectionDescriptor csd : cd.getSections()) {
-						Composite c = null;
-						if (csd.isExpandable())
-							c = createSection(form, csd.getName());
-						else {
-							c = form;
-							FormItemDialog.createSeparator(form);
+					if (cd.getSections() != null)
+						for (ComponentSectionDescriptor csd : cd.getSections()) {
+							Composite c = null;
+							if (csd.isExpandable())
+								c = createSection(form, csd.getName());
+							else {
+								c = form;
+								FormItemDialog.createSeparator(form);
+							}
+							for (ComponentPropertyDescriptor pd : csd
+									.getProperties()) {
+								ItemPropertyDescription<?> ipdesc = UIManager
+										.createItemPropertyDescriptor(pd);
+								descriptor.addItemPropertyDescriptor(ipdesc);
+								createItemProperty(c, ipdesc, descriptor, ec);
+							}
 						}
-						for (ComponentPropertyDescriptor pd : csd
-								.getProperties()) {
-							ItemPropertyDescription<?> ipdesc = UIManager
-									.createItemPropertyDescriptor(pd);
-							descriptor.addItemPropertyDescriptor(ipdesc);
-							createItemProperty(c, ipdesc, descriptor, ec);
-						}
-					}
 					form.layout(true);
 					stackLayout.topControl = form;
 					cmp.layout(true);
