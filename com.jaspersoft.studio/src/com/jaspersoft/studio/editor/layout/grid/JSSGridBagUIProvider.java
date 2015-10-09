@@ -86,6 +86,8 @@ public class JSSGridBagUIProvider implements ILayoutUIProvider{
 		}
 	}
 	
+	private static final String TOOLTIP_KEY = "tooltip";
+	
 	/**
 	 * The combo where the user can set the column position or select the relative value
 	 */
@@ -309,7 +311,7 @@ public class JSSGridBagUIProvider implements ILayoutUIProvider{
 		if (message == null){
 			if (widget.getBackground() != null){
 				widget.setBackground(null);
-				widget.setToolTipText(null);
+				widget.setToolTipText((String)widget.getData(TOOLTIP_KEY));
 				changed = true;
 			}
 		} else {
@@ -479,7 +481,9 @@ public class JSSGridBagUIProvider implements ILayoutUIProvider{
 		container.setLayout(new GridLayout(4, false));
 		container.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
-		new Label(container, SWT.NONE).setText(Messages.JSSGridBagLayout_rowLabel);
+		Label rowPositionLabel = new Label(container, SWT.NONE);
+		rowPositionLabel.setText(Messages.JSSGridBagLayout_rowLabel);
+		rowPositionLabel.setToolTipText(Messages.JSSGridBagUIProvider_rowPositionTooltip);
 		rowPosition= new Combo(container, SWT.BORDER);
 		rowPosition.setItems(new String[]{Messages.JSSGridBagLayout_relativeString});
 		rowPosition.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -494,8 +498,12 @@ public class JSSGridBagUIProvider implements ILayoutUIProvider{
 	  rowPosition.addKeyListener(listener);
 	  rowPosition.addModifyListener(listener);
 	  rowPosition.addFocusListener(listener);
+	  rowPosition.setData(TOOLTIP_KEY, Messages.JSSGridBagUIProvider_rowPositionTooltip);
+	  rowPosition.setToolTipText(Messages.JSSGridBagUIProvider_rowPositionTooltip);
 		
-		new Label(container, SWT.NONE).setText(Messages.JSSGridBagLayout_columnLabel);
+		Label columnPositionLabel = new Label(container, SWT.NONE);
+		columnPositionLabel.setText(Messages.JSSGridBagLayout_columnLabel);
+		columnPositionLabel.setToolTipText(Messages.JSSGridBagUIProvider_columnPoistionToolTip);
 		columnPosition = new Combo(container, SWT.BORDER);
 		columnPosition.setItems(new String[]{Messages.JSSGridBagLayout_relativeString});
 		columnPosition.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -510,23 +518,34 @@ public class JSSGridBagUIProvider implements ILayoutUIProvider{
 	  columnPosition.addKeyListener(listener);
 	  columnPosition.addModifyListener(listener);
 	  columnPosition.addFocusListener(listener);
-	  
-		new Label(container, SWT.NONE).setText(Messages.JSSGridBagLayout_rowSpanLabel);
+	  columnPosition.setData(TOOLTIP_KEY, Messages.JSSGridBagUIProvider_columnPoistionToolTip);
+	  columnPosition.setToolTipText(Messages.JSSGridBagUIProvider_columnPoistionToolTip);  
+		
+	  Label rowSpanLabel = new Label(container, SWT.NONE);
+	  rowSpanLabel.setText(Messages.JSSGridBagLayout_rowSpanLabel);
+	  rowSpanLabel.setToolTipText(Messages.JSSGridBagUIProvider_rowSpanToolTip);
 		rowSpan = new Text(container, SWT.BORDER);
 		rowSpan.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		rowSpan.addKeyListener(listener);
 		rowSpan.addModifyListener(listener);
 		rowSpan.addFocusListener(listener);
-	  
+		rowSpan.setData(TOOLTIP_KEY, Messages.JSSGridBagUIProvider_rowSpanToolTip);
+		rowSpan.setToolTipText(Messages.JSSGridBagUIProvider_rowSpanToolTip);
 		
-		new Label(container, SWT.NONE).setText(Messages.JSSGridBagLayout_columnSpanLabel);
+		Label columnSpanLabel = new Label(container, SWT.NONE);
+		columnSpanLabel.setText(Messages.JSSGridBagLayout_columnSpanLabel);
+		columnSpanLabel.setToolTipText(Messages.JSSGridBagUIProvider_columnSpanToolTip);
 		columnSpan = new Text(container, SWT.BORDER);
 		columnSpan.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		columnSpan.addKeyListener(listener);
 		columnSpan.addModifyListener(listener);
 		columnSpan.addFocusListener(listener);
+		columnSpan.setData(TOOLTIP_KEY, Messages.JSSGridBagUIProvider_columnSpanToolTip);
+		columnSpan.setToolTipText(Messages.JSSGridBagUIProvider_columnSpanToolTip);
 		
-		new Label(container, SWT.NONE).setText(Messages.JSSGridBagLayout_labelFixedSize);
+		Label fixedSizeLabel = new Label(container, SWT.NONE);
+		fixedSizeLabel.setText(Messages.JSSGridBagLayout_labelFixedSize);
+		fixedSizeLabel.setToolTipText(Messages.JSSGridBagUIProvider_fixedSizeTooltip);
 		fixedSizeCombo = new Combo(container, SWT.READ_ONLY);
 		fixedSizeCombo.setItems(new String[]{Messages.SP3Boolean_False_Value, Messages.SP3Boolean_True_Value});
 		GridData fixedComboData = new GridData();
@@ -540,20 +559,31 @@ public class JSSGridBagUIProvider implements ILayoutUIProvider{
 				updateElement();
 			}
 		});
+		fixedSizeCombo.setData(TOOLTIP_KEY, Messages.JSSGridBagUIProvider_fixedSizeTooltip);
+		fixedSizeCombo.setToolTipText(Messages.JSSGridBagUIProvider_fixedSizeTooltip);
 		
-		new Label(container, SWT.NONE).setText(Messages.JSSGridBagLayout_rowWeightLabel);
+		
+		Label columnWeightLabel = new Label(container, SWT.NONE);
+		columnWeightLabel.setText(Messages.JSSGridBagLayout_rowWeightLabel);
+		columnWeightLabel.setToolTipText(Messages.JSSGridBagUIProvider_columnWeightTooltip);
 		columnWeight = new Text(container, SWT.BORDER);
 		columnWeight.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		columnWeight.addKeyListener(listener);
 		columnWeight.addModifyListener(listener);
 		columnWeight.addFocusListener(listener);
+		columnWeight.setData(TOOLTIP_KEY, Messages.JSSGridBagUIProvider_columnWeightTooltip);
+		columnWeight.setToolTipText(Messages.JSSGridBagUIProvider_columnWeightTooltip);
 		
-		new Label(container, SWT.NONE).setText(Messages.JSSGridBagLayout_columnWeightLabel);
+		Label rowWeightLabel = new Label(container, SWT.NONE);
+		rowWeightLabel.setText(Messages.JSSGridBagLayout_columnWeightLabel);
+		rowWeightLabel.setToolTipText(Messages.JSSGridBagUIProvider_rowWeightTooltip);
 		rowWeight = new Text(container, SWT.BORDER);
 		rowWeight.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		rowWeight.addKeyListener(listener);
 		rowWeight.addModifyListener(listener);
 		rowWeight.addFocusListener(listener);
+		rowWeight.setData(TOOLTIP_KEY, Messages.JSSGridBagUIProvider_rowWeightTooltip);
+		rowWeight.setToolTipText(Messages.JSSGridBagUIProvider_rowWeightTooltip);
 	}
 	
 	@Override

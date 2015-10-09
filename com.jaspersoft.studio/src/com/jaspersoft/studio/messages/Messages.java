@@ -1025,6 +1025,13 @@ public class Messages extends NLS {
 	public static String JSSGridBagLayout_rowSpanLabel;
 	public static String JSSGridBagLayout_rowWeightLabel;
 	public static String JSSGridBagLayout_validNumberValue;
+	public static String JSSGridBagUIProvider_columnPoistionToolTip;
+	public static String JSSGridBagUIProvider_columnSpanToolTip;
+	public static String JSSGridBagUIProvider_columnWeightTooltip;
+	public static String JSSGridBagUIProvider_fixedSizeTooltip;
+	public static String JSSGridBagUIProvider_rowPositionTooltip;
+	public static String JSSGridBagUIProvider_rowSpanToolTip;
+	public static String JSSGridBagUIProvider_rowWeightTooltip;
 	public static String JSSPixelEditorValidator_errorExceed;
 	public static String JSSPixelEditorValidator_errorNegative;
 	public static String JSSPixelEditorValidator_errorNull;
