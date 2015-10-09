@@ -28,6 +28,7 @@ import org.eclipse.gef.commands.Command;
 import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.components.table.model.MTable;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.MPage;
 import com.jaspersoft.studio.model.command.DeleteElementCommand;
 import com.jaspersoft.studio.model.style.command.DeleteStyleCommand;
 
@@ -141,5 +142,9 @@ public class DeleteTableCommand extends DeleteElementCommand {
 			super.undo();
 		}
 	}
-	
+
+	@Override
+	public boolean canExecute() {
+		return super.canExecute() && !(table.getParent() instanceof MPage);
+	}
 }
