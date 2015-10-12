@@ -528,27 +528,30 @@ public class SPCVCItemDataList extends
 			int indx = itemDatas.indexOf((ItemData) sel);
 			if (cd != null) {
 				List<ComponentDatasetDescriptor> ds = cd.getDatasets();
-				int c = 0;
-				for (int i = 0; i < ds.size(); i++) {
-					ComponentDatasetDescriptor cdd = ds.get(i);
-					int card = cdd.getCardinality();
-					if (card > 0)
-						c += card;
-					if (i < indx)
-						continue;
-					else if (card <= 0) {
-						btnAddNewDataset.setEnabled(false);
-						break;
+				if (ds != null)
+				{
+					int c = 0;
+					for (int i = 0; i < ds.size(); i++) {
+						ComponentDatasetDescriptor cdd = ds.get(i);
+						int card = cdd.getCardinality();
+						if (card > 0)
+							c += card;
+						if (i < indx)
+							continue;
+						else if (card <= 0) {
+							btnAddNewDataset.setEnabled(false);
+							break;
+						}
+						if (c <= indx + 1) {
+							btnAddNewDataset.setEnabled(false);
+							break;
+						}
 					}
-					if (c <= indx + 1) {
-						btnAddNewDataset.setEnabled(false);
-						break;
+					if (!ds.isEmpty()) {
+						ComponentDatasetDescriptor cdd = ds.get(ds.size() - 1);
+						btnRemoveDataset.setEnabled(cdd.getCardinality() <= 0
+								|| c < itemDatas.size());
 					}
-				}
-				if (!ds.isEmpty()) {
-					ComponentDatasetDescriptor cdd = ds.get(ds.size() - 1);
-					btnRemoveDataset.setEnabled(cdd.getCardinality() <= 0
-							|| c < itemDatas.size());
 				}
 			}
 		}
