@@ -12,9 +12,11 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import net.sf.jasperreports.eclipse.builder.JasperReportCompiler;
@@ -351,6 +353,17 @@ public class ReportControler {
 							return Status.CANCEL_STATUS;
 
 						setupDataAdapter(pcontainer);
+
+						// remove parameters that are not for prompting
+						Set<String> toRemove = new HashSet<String>();
+						for (String key : jasperParameters.keySet()) {
+							JRParameter p = jd.getParametersMap().get(key);
+							if (p != null && !p.isSystemDefined() && !p.isForPrompting())
+								toRemove.add(p.getName());
+						}
+						for (String key : toRemove)
+							jasperParameters.remove(key);
+
 						if (pcontainer.getMode().equals(RunStopAction.MODERUN_JIVE)) {
 							runJive(pcontainer, file, jasperReport);
 						} else {
