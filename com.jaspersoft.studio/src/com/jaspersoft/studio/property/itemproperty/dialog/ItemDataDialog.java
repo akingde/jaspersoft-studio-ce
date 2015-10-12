@@ -72,7 +72,7 @@ public abstract class ItemDataDialog extends ElementDatasetDialog {
 	@Override
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
-		newShell.setText("The name of the dataset");
+		newShell.setText("Items");
 	}
 
 	@Override
@@ -83,7 +83,12 @@ public abstract class ItemDataDialog extends ElementDatasetDialog {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				hasDS = bhasds.getSelection();
+				if (hasDS)
+					itemData.setDataset(getDataset());
+				else
+					itemData.setDataset(null);
 				UIUtils.setEnabled(compositeDatasetInfo, hasDS);
+
 			}
 		});
 		bhasds.setSelection(itemData.getDataset() != null);
@@ -112,7 +117,7 @@ public abstract class ItemDataDialog extends ElementDatasetDialog {
 
 	private void createItems(CTabFolder tabFolder) {
 		CTabItem tabItem = new CTabItem(tabFolder, SWT.NONE);
-		tabItem.setText(Messages.ItemLabelProvider_0);
+		tabItem.setText("Items");
 
 		Composite cmp = new Composite(tabFolder, SWT.NONE);
 		cmp.setLayout(new GridLayout(2, false));

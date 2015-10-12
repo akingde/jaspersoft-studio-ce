@@ -38,6 +38,7 @@ import org.eclipse.jface.window.ToolTip;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -123,7 +124,8 @@ public class SPCVCItemDataList extends
 					false, tviewer, clones);
 
 			ItemDataDialog dialog = new ItemDataDialog(UIUtils.getShell(),
-					itemDataLabelProvider.getText4ItemData(itemData), "", //$NON-NLS-1$
+					itemDataLabelProvider.getText4ItemData(itemData),
+					"", //$NON-NLS-1$
 					clones, itemDataClone,
 					(JasperReportsConfiguration) section
 							.getJasperReportsContext(), getDescriptor(),
@@ -174,11 +176,6 @@ public class SPCVCItemDataList extends
 	protected void handleNewElement(TreeViewer tviewer) {
 		List<ItemData> clones = JRCloneUtils.cloneList(itemDatas);
 		StandardItemData itemData = new StandardItemData();
-		JRElementDataset ds = itemData.getDataset();
-		if (ds == null)
-			ds = new JRDesignElementDataset();
-		else
-			ds = (JRElementDataset) ds.clone();
 		clones.add(itemData);
 		ItemDataDialog dialog = new ItemDataDialog(UIUtils.getShell(),
 				itemDataLabelProvider.getText4ItemData(itemData), "", clones, //$NON-NLS-1$
@@ -191,9 +188,11 @@ public class SPCVCItemDataList extends
 				return SPCVCItemDataList.this.createItemDialog();
 			}
 		};
-		if (dialog.open() == Dialog.OK)
+		if (dialog.open() == Dialog.OK) {
+
 			section.changeProperty(pDescriptor.getId(),
 					new ArrayList<ItemData>(clones));
+		}
 	}
 
 	protected void showItemDialog(List<ItemData> citemsData,
@@ -337,6 +336,11 @@ public class SPCVCItemDataList extends
 	protected void createDsLabelProvider() {
 		itemDataLabelProvider = new ItemLabelProvider(getDescriptor()) {
 			@Override
+			public Image getImage(Object element) {
+				return null;
+			}
+
+			@Override
 			public String getText4ItemData(ItemData element) {
 				if (cd != null && !Misc.isNullOrEmpty(cd.getDatasets())) {
 					int indx = itemDatas.indexOf(element);
@@ -351,7 +355,9 @@ public class SPCVCItemDataList extends
 							return cdd.getLabel();
 					}
 				}
-				return super.getText4ItemData(element);
+				JRElementDataset ds = element.getDataset();
+				return (ds != null ? getText(ds) : "Item Data "
+						+ (itemDatas.indexOf(element) + 1));
 			}
 
 			@Override

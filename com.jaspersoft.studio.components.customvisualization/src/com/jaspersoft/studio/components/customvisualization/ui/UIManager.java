@@ -12,9 +12,11 @@ import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
@@ -38,6 +40,17 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 public class UIManager {
 	private static Map<String, ComponentDescriptor> cachePlugin = new HashMap<String, ComponentDescriptor>();
 	private static Map<JasperReportsConfiguration, Map<String, ComponentDescriptor>> cache = new HashMap<JasperReportsConfiguration, Map<String, ComponentDescriptor>>();
+
+	public static List<ComponentDescriptor> getModules(
+			JasperReportsConfiguration jConfig) {
+		if(cache == null){
+			// initCache(jConfig);
+		}
+		Map<String, ComponentDescriptor> map = cache.get(jConfig);
+		if (map != null)
+			return new ArrayList<ComponentDescriptor>(map.values());
+		return null;
+	}
 
 	public static ComponentDescriptor getDescriptor(
 			final JasperReportsConfiguration jConfig, String module) {
