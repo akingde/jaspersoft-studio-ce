@@ -26,7 +26,11 @@ import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.repo.RepositoryUtil;
 
+import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.swt.graphics.Image;
 
@@ -48,6 +52,42 @@ public class UIManager {
 	private static Map<String, ComponentDescriptor> cachePlugin = new HashMap<String, ComponentDescriptor>();
 	private static Map<JasperReportsConfiguration, Map<String, ComponentDescriptor>> cache = new HashMap<JasperReportsConfiguration, Map<String, ComponentDescriptor>>();
 	private static Map<ComponentDescriptor, Image> imageCache = new HashMap<ComponentDescriptor, Image>();
+
+	public static void copyFile(ComponentDescriptor cd,
+			JasperReportsConfiguration jConf, String path) {
+		if (Misc.isNullOrEmpty(path))
+			return;
+		IFile f = (IFile) jConf.get(FileUtils.KEY_FILE);
+		if (f == null)
+			return;
+		IContainer destFolder = f.getParent();
+		File dest = new File(destFolder.getRawLocation().toFile(), path);
+
+		InputStream is = null;
+		try {
+			if (isInPlugin(cd)) {
+				URL url = CustomVisualizationActivator.getDefault().getBundle()
+						.getEntry(path);
+				if (url != null)
+					is = url.openStream();
+			} else {
+				is = RepositoryUtil.getInstance(jConf)
+						.getInputStreamFromLocation(path);
+			}
+			if (is != null) {
+				org.apache.commons.io.FileUtils.copyInputStreamToFile(is, dest);
+				destFolder.refreshLocal(1, new NullProgressMonitor());
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (JRException e) {
+			e.printStackTrace();
+		} catch (CoreException e) {
+			e.printStackTrace();
+		} finally {
+			FileUtils.closeStream(is);
+		}
+	}
 
 	public static Image getThumbnail(ComponentDescriptor cd,
 			JasperReportsConfiguration jConf) {
