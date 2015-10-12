@@ -14,7 +14,7 @@ public class ComponentPropertyDescriptor {
 	private String description;
 	private boolean mandatory;
 	private String defaultValue;
-	private boolean readOnly;
+	private boolean readOnly=false;
 	private String min;
 	private String max;
 	private String type;

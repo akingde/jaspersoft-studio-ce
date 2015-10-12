@@ -299,7 +299,7 @@ public class SPCVItemPropertiesList extends
 		expr.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		expr.setToolTipText(ipd.getDescription());
 		expr.setExpressionContext(ec);
-		expr.setEnabled(ipd.isReadOnly());
+		expr.setEnabled(!ipd.isReadOnly());
 		final ItemProperty p = ItemPropertyUtil.getProperty(itemProps,
 				ipd.getName());
 		if (p != null)
