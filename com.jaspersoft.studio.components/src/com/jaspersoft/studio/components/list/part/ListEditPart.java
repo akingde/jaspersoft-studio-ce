@@ -40,6 +40,7 @@ import com.jaspersoft.studio.callout.pin.PinEditPart;
 import com.jaspersoft.studio.callout.pin.command.PinSetConstraintCommand;
 import com.jaspersoft.studio.compatibility.ToolUtilitiesCompatibility;
 import com.jaspersoft.studio.components.SubEditorEditPartTracker;
+import com.jaspersoft.studio.components.SubeditorResizableEditPolicy;
 import com.jaspersoft.studio.components.list.ListComponentFactory;
 import com.jaspersoft.studio.components.list.figure.ListFigure;
 import com.jaspersoft.studio.components.list.model.MList;
@@ -198,6 +199,7 @@ public class ListEditPart extends EditableFigureEditPart {
 
 				});
 		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE, new FigureSelectionEditPolicy());
+		installEditPolicy(EditPolicy.PRIMARY_DRAG_ROLE, new SubeditorResizableEditPolicy());
 	}
 
 	@Override

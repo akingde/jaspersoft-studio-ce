@@ -20,6 +20,7 @@ import org.eclipse.gef.Request;
 
 import com.jaspersoft.studio.compatibility.ToolUtilitiesCompatibility;
 import com.jaspersoft.studio.components.SubEditorEditPartTracker;
+import com.jaspersoft.studio.components.SubeditorResizableEditPolicy;
 import com.jaspersoft.studio.components.table.model.MTable;
 import com.jaspersoft.studio.editor.gef.parts.EditableFigureEditPart;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.FigurePageLayoutEditPolicy;
@@ -41,8 +42,9 @@ public class TableEditPart extends EditableFigureEditPart {
 		installEditPolicy(EditPolicy.COMPONENT_ROLE, new CloseSubeditorDeletePolicy());
 		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE, new FigureSelectionEditPolicy());
 		installEditPolicy(EditPolicy.LAYOUT_ROLE, new FigurePageLayoutEditPolicy());
+		installEditPolicy(EditPolicy.PRIMARY_DRAG_ROLE, new SubeditorResizableEditPolicy());
 	}
-
+	
 	@Override
 	protected void setupFigure(IFigure rect) {
 		super.setupFigure(rect);

@@ -402,11 +402,13 @@ public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
 	/**
 	 * Override of the method to avoid to add the standard edit policy on the 
 	 * background elements, since it need its own policies to be handled correctly,
-	 * for example it has a drag behavior really different from the other elements
+	 * for example it has a drag behavior really different from the other elements.
+	 * 
+	 * Also add the policy only to the elements that doesn't already have a specific EditPolicy.PRIMARY_DRAG_ROLE
 	 */
 	@Override
 	protected void decorateChild(EditPart child) {
-		if (!(child instanceof BackgroundImageEditPart)){
+		if (!(child instanceof BackgroundImageEditPart) && child.getEditPolicy(EditPolicy.PRIMARY_DRAG_ROLE) == null){
 			EditPolicy policy = createChildEditPolicy(child);
 			child.installEditPolicy(EditPolicy.PRIMARY_DRAG_ROLE, policy);
 		}
