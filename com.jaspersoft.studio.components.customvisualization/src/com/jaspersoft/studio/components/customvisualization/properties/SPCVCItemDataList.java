@@ -545,9 +545,11 @@ public class SPCVCItemDataList extends
 						break;
 					}
 				}
-				ComponentDatasetDescriptor cdd = ds.get(ds.size() - 1);
-				btnRemoveDataset.setEnabled(cdd.getCardinality() <= 0
-						|| c < itemDatas.size());
+				if (!ds.isEmpty()) {
+					ComponentDatasetDescriptor cdd = ds.get(ds.size() - 1);
+					btnRemoveDataset.setEnabled(cdd.getCardinality() <= 0
+							|| c < itemDatas.size());
+				}
 			}
 		}
 		btnUpDataset.setEnabled(false);
