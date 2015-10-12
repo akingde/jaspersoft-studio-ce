@@ -19,6 +19,8 @@ import java.util.Set;
 
 import org.eclipse.jface.wizard.IWizard;
 
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
 public abstract class JSSWizardPage extends JSSHelpWizardPage {
 	
 	protected JSSWizardPage(String pageName) {
@@ -50,6 +52,12 @@ public abstract class JSSWizardPage extends JSSHelpWizardPage {
 		return null;
 	}
 	
+	public JasperReportsConfiguration getConfig() {
+		Map<String, Object> m = getSettings();
+		if(m != null)
+			return (JasperReportsConfiguration) getSettings().get(JSSWizard.JASPERREPORTS_CONFIGURATION);
+		return JasperReportsConfiguration.getDefaultInstance();
+	}
 	
 	
 	//If something changes dynamically (besides moving between pages), e.g.

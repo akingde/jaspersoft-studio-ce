@@ -8,6 +8,9 @@ package com.jaspersoft.studio.components.customvisualization.model.command;
 import java.io.IOException;
 import java.util.List;
 
+import net.sf.jasperreports.components.map.StandardItem;
+import net.sf.jasperreports.components.map.StandardItemData;
+import net.sf.jasperreports.components.map.StandardItemProperty;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.viewer.BrowserUtils;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
@@ -37,7 +40,10 @@ import com.jaspersoft.jasperreports.customvisualization.design.CVDesignComponent
 import com.jaspersoft.studio.components.customvisualization.CVComponentUtil;
 import com.jaspersoft.studio.components.customvisualization.messages.Messages;
 import com.jaspersoft.studio.components.customvisualization.model.MCustomVisualization;
+import com.jaspersoft.studio.components.customvisualization.ui.ComponentDatasetDescriptor;
 import com.jaspersoft.studio.components.customvisualization.ui.ComponentDescriptor;
+import com.jaspersoft.studio.components.customvisualization.ui.ComponentPropertyDescriptor;
+import com.jaspersoft.studio.components.customvisualization.ui.ComponentSectionDescriptor;
 import com.jaspersoft.studio.components.customvisualization.ui.UIManager;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MElementGroup;
@@ -114,22 +120,54 @@ public class CreateCustomVisualizationCommand extends CreateElementCommand {
 			List<ComponentDescriptor> modules = UIManager.getModules(jConfig);
 			if (!Misc.isNullOrEmpty(modules)) {
 				CVCWizard wizard = new CVCWizard(modules);
+				wizard.setConfig(jConfig);
 				WizardDialog d = new WizardDialog(UIUtils.getShell(), wizard);
 				if (d.open() == Dialog.OK) {
 					ComponentDescriptor m = wizard.getModule();
 					CVDesignComponent cvComp = (CVDesignComponent) ((JRDesignComponentElement) jrElement)
 							.getComponent();
+					if (m.getSections() != null)
+						for (ComponentSectionDescriptor csd : m.getSections()) {
+							if (csd.getProperties() != null)
+								for (ComponentPropertyDescriptor cpd : csd
+										.getProperties()) {
+									if (cpd.isMandatory()) {
+										cvComp.addItemProperty(new StandardItemProperty(
+												cpd.getName(), cpd
+														.getDefaultValue(),
+												null));
+									}
+								}
+						}
+					// build default item data with default values
+					List<ComponentDatasetDescriptor> ds = m.getDatasets();
+					if (ds != null)
+						for (ComponentDatasetDescriptor cdd : ds) {
+							if (cdd.getCardinality() >= 0)
+								for (int i = 0; i < cdd.getCardinality(); i++) {
+									StandardItemData id = new StandardItemData();
+									if (cdd.getSections() != null)
+										for (ComponentSectionDescriptor csd : cdd
+												.getSections())
+											if (!Misc.isNullOrEmpty(csd
+													.getProperties())) {
+												StandardItem item = new StandardItem();
+												id.addItem(item);
+												for (ComponentPropertyDescriptor cpd : csd
+														.getProperties())
+													if (cpd.isMandatory())
+														item.addItemProperty(new StandardItemProperty(
+																cpd.getName(),
+																cpd.getDefaultValue(),
+																null));
+											}
+									cvComp.addItemData(id);
+									if (ds.get(ds.size() - 1) == cdd)
+										break;
+								}
 
-					// cvComp.addItemProperty(new StandardItemProperty("script",
-					// m
-					// .getPathJS(), null));
-					// cvComp.addItemProperty(new StandardItemProperty("css", m
-					// .getPathCSS(), null));
-					// cvComp.addItemProperty(new StandardItemProperty("module",
-					// m
-					// .getModule(), null));
+						}
 
-					// build also default item data with default values
 				}
 			}
 		}

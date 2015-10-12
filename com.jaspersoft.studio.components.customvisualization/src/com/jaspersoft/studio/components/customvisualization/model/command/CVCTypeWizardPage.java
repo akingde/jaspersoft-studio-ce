@@ -5,9 +5,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.customvisualization.model.command;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.nebula.widgets.gallery.Gallery;
 import org.eclipse.nebula.widgets.gallery.GalleryItem;
@@ -25,7 +23,9 @@ import org.eclipse.swt.widgets.Scale;
 
 import com.jaspersoft.studio.components.customvisualization.CustomVisualizationActivator;
 import com.jaspersoft.studio.components.customvisualization.ui.ComponentDescriptor;
-import com.jaspersoft.studio.utils.UIUtil;
+import com.jaspersoft.studio.components.customvisualization.ui.UIManager;
+import com.jaspersoft.studio.utils.Misc;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.wizards.JSSWizardPage;
 
 public class CVCTypeWizardPage extends JSSWizardPage {
@@ -36,8 +36,6 @@ public class CVCTypeWizardPage extends JSSWizardPage {
 	private Scale zoomFactor;
 	private Gallery chartsGallery;
 	private GalleryItem itemGroup;
-	private static Map<String, Image> standardImages = new HashMap<String, Image>();
-	private static Map<String, Image> selectedImages = new HashMap<String, Image>();
 
 	protected CVCTypeWizardPage(List<ComponentDescriptor> modules) {
 		super("cvcwizard"); //$NON-NLS-1$
@@ -113,12 +111,12 @@ public class CVCTypeWizardPage extends JSSWizardPage {
 	}
 
 	private void setTableSelection() {
-		// for (GalleryItem ti : itemGroup.getItems()) {
-		// if (((Byte) ti.getData()) == chartType) {
-		// chartsGallery.setSelection(new GalleryItem[] { ti });
-		// break;
-		// }
-		// }
+		for (GalleryItem ti : itemGroup.getItems()) {
+			if (ti.getData() == module) {
+				chartsGallery.setSelection(new GalleryItem[] { ti });
+				break;
+			}
+		}
 	}
 
 	private void fillTableb4j(Gallery table, GalleryItem rootItem) {
@@ -126,22 +124,42 @@ public class CVCTypeWizardPage extends JSSWizardPage {
 
 		GalleryItem tib = new GalleryItem(rootItem, SWT.NONE);
 		tib.setText("Blank");
-		setGallyeryItemImageInfo(tib, "icons/blank.gif"); //$NON-NLS-1$ 
+		setGallyeryItemImageInfo(tib, "icons/cvcomponent-32.png"); //$NON-NLS-1$ 
 
+		JasperReportsConfiguration jConf = getConfig();
 		for (ComponentDescriptor cd : modules) {
 			GalleryItem ti = new GalleryItem(rootItem, SWT.NONE);
 			ti.setText(cd.getLabel());
-			setGallyeryItemImageInfo(ti, cd.getThumbnail()); //$NON-NLS-1$
+
+			setGallyeryItemImageInfo(ti, cd, jConf); //$NON-NLS-1$
+
 			ti.setData(cd);
 		}
 		table.setRedraw(true);
 	}
 
 	private static void setGallyeryItemImageInfo(GalleryItem item,
+			ComponentDescriptor cd, JasperReportsConfiguration jConf) {
+		if (!Misc.isNullOrEmpty(cd.getThumbnail()) && !UIManager.isInPlugin(cd)) {
+			Image img = UIManager.getThumbnail(cd, jConf);
+			if (img != null) {
+				item.setSelectedImage(img);
+				item.setStandardImage(img);
+				item.setImage(img);
+			}
+		}
+		setGallyeryItemImageInfo(item, "icons/icons/cvcomponent-32.png");
+	}
+
+	private static void setGallyeryItemImageInfo(GalleryItem item,
 			String imagePath) {
-		UIUtil.setGallyeryItemImageInfo(item,
-				CustomVisualizationActivator.PLUGIN_ID, imagePath,
-				selectedImages, standardImages);
+		Image img = CustomVisualizationActivator.getDefault().getImage(
+				imagePath);
+		if (img != null) {
+			item.setSelectedImage(img);
+			item.setStandardImage(img);
+			item.setImage(img);
+		}
 	}
 
 	@Override

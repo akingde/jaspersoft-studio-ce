@@ -8,6 +8,7 @@ package com.jaspersoft.studio.components.customvisualization.ui;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -21,8 +22,13 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
+import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.repo.RepositoryUtil;
+
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.swt.graphics.Image;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -34,49 +40,63 @@ import com.jaspersoft.studio.property.itemproperty.desc.ColorPropertyDescription
 import com.jaspersoft.studio.property.itemproperty.desc.ComboItemPropertyDescription;
 import com.jaspersoft.studio.property.itemproperty.desc.ItemPropertyDescription;
 import com.jaspersoft.studio.property.itemproperty.desc.NumberPropertyDescription;
+import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.IDisposeListener;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class UIManager {
 	private static Map<String, ComponentDescriptor> cachePlugin = new HashMap<String, ComponentDescriptor>();
 	private static Map<JasperReportsConfiguration, Map<String, ComponentDescriptor>> cache = new HashMap<JasperReportsConfiguration, Map<String, ComponentDescriptor>>();
+	private static Map<ComponentDescriptor, Image> imageCache = new HashMap<ComponentDescriptor, Image>();
+
+	public static Image getThumbnail(ComponentDescriptor cd,
+			JasperReportsConfiguration jConf) {
+		Image img = imageCache.get(cd);
+		if (img == null && !Misc.isNullOrEmpty(cd.getThumbnail())) {
+			try {
+				InputStream is = RepositoryUtil.getInstance(jConf)
+						.getInputStreamFromLocation(cd.getThumbnail());
+				if (is != null) {
+					try {
+						img = new Image(null, is);
+						imageCache.put(cd, img);
+					} finally {
+						FileUtils.closeStream(is);
+					}
+				}
+			} catch (JRException e) {
+				e.printStackTrace();
+			}
+		}
+		return img;
+	}
 
 	public static List<ComponentDescriptor> getModules(
 			JasperReportsConfiguration jConfig) {
-		if(cache == null){
-			// initCache(jConfig);
-		}
-		Map<String, ComponentDescriptor> map = cache.get(jConfig);
-		if (map != null)
-			return new ArrayList<ComponentDescriptor>(map.values());
-		return null;
+		List<ComponentDescriptor> res = new ArrayList<ComponentDescriptor>();
+		if (cachePlugin == null)
+			initCachePlugin();
+		res.addAll(cachePlugin.values());
+		Map<String, ComponentDescriptor> modules = initCacheJConfig(jConfig);
+		res.addAll(modules.values());
+		return res;
 	}
 
 	public static ComponentDescriptor getDescriptor(
 			final JasperReportsConfiguration jConfig, String module) {
-		// let's look if we cached something
-		Map<String, ComponentDescriptor> modules = cache.get(jConfig);
-		if (modules == null) {
-			modules = new HashMap<String, ComponentDescriptor>();
-			cache.put(jConfig, modules);
-			jConfig.addDisposeListener(new IDisposeListener() {
-
-				@Override
-				public void dispose() {
-					cache.remove(jConfig);
-				}
-			});
-		}
-		ComponentDescriptor d = modules.get(module);
+		if (cachePlugin == null)
+			initCachePlugin();
+		ComponentDescriptor d = cachePlugin.get(module);
 		if (d != null)
 			return d;
+		Map<String, ComponentDescriptor> modules = cache.get(jConfig);
+		if (modules == null)
+			modules = initCacheJConfig(jConfig);
+		// let's look if we cached something
+		return modules.get(module);
+	}
 
-		// ok, let's look into plugin,
-		d = cachePlugin.get(module);
-		if (d != null) {
-			modules.put(module, d);
-			return d;
-		}
+	protected static CustomVisualizationActivator initCachePlugin() {
 		CustomVisualizationActivator activator = CustomVisualizationActivator
 				.getDefault();
 		Enumeration<?> en = activator.getBundle().findEntries("resources", //$NON-NLS-1$
@@ -86,9 +106,8 @@ public class UIManager {
 			try {
 				// use jackson to read the file
 				ComponentDescriptor cd = readURL(url);
-				cachePlugin.put(module, d);
-				if (d.getModule().equals(module))
-					d = cd;
+				if (cd != null)
+					cachePlugin.put(cd.getModule(), cd);
 			} catch (Exception ex) {
 				// Log error but continue...
 				activator.log(new Status(IStatus.ERROR,
@@ -97,50 +116,65 @@ public class UIManager {
 										new Object[] { url }), ex));
 			}
 		}
-		if (d != null) {
-			modules.put(module, d);
-			return d;
-		}
+		return activator;
+	}
 
-		// ok, let's look into our preferences
+	protected static Map<String, ComponentDescriptor> initCacheJConfig(
+			final JasperReportsConfiguration jConf) {
+		Map<String, ComponentDescriptor> modules = cache.get(jConf);
+		if (modules == null) {
+			modules = new HashMap<String, ComponentDescriptor>();
+			cache.put(jConf, modules);
+			jConf.addDisposeListener(new IDisposeListener() {
 
-		String paths = jConfig.getPrefStore().getString(
-				CVCDescriptorsPreferencePage.RESOURCE_PATHS);
-		StringTokenizer st = new StringTokenizer(paths, File.pathSeparator
-				+ "\n\r"); //$NON-NLS-1$
-		Set<String> pathsList = new LinkedHashSet<String>();
-		while (st.hasMoreTokens())
-			pathsList.add(st.nextToken());
-		for (String dir : pathsList) {
-			File[] files = new File(dir).listFiles(new FileFilter() {
 				@Override
-				public boolean accept(File f) {
-					return f.getName().endsWith(".json"); //$NON-NLS-1$
+				public void dispose() {
+					cache.remove(jConf);
 				}
 			});
-			if (files == null)
-				continue;
-			for (File f : files) {
-				URL url = null;
-				try {
-					url = f.toURI().toURL();
-					ComponentDescriptor cd = readURL(url);
-					if (cd != null && cd.getModule().equals(module)) {
-						modules.put(module, cd);
-						return cd;
+
+			String paths = jConf.getPrefStore().getString(
+					CVCDescriptorsPreferencePage.RESOURCE_PATHS);
+			StringTokenizer st = new StringTokenizer(paths, File.pathSeparator
+					+ "\n\r"); //$NON-NLS-1$
+			Set<String> pathsList = new LinkedHashSet<String>();
+			while (st.hasMoreTokens())
+				pathsList.add(st.nextToken());
+			for (String dir : pathsList) {
+				File[] files = new File(dir).listFiles(new FileFilter() {
+					@Override
+					public boolean accept(File f) {
+						return f.getName().endsWith(".json"); //$NON-NLS-1$
 					}
-				} catch (MalformedURLException e) {
-					// we are not interested to handle this
-				} catch (Exception ex) {
-					// Log error but continue...
-					activator.log(new Status(IStatus.ERROR,
-							CustomVisualizationActivator.PLUGIN_ID,
-							MessageFormat.format(Messages.UIManager_2,
-									new Object[] { url }), ex));
+				});
+				if (files == null)
+					continue;
+				for (File f : files) {
+					URL url = null;
+					try {
+						url = f.toURI().toURL();
+						ComponentDescriptor cd = readURL(url);
+						if (cd != null)
+							modules.put(cd.getModule(), cd);
+					} catch (MalformedURLException e) {
+						// we are not interested to handle this
+					} catch (Exception ex) {
+						// Log error but continue...
+						CustomVisualizationActivator.getDefault().log(
+								new Status(IStatus.ERROR,
+										CustomVisualizationActivator.PLUGIN_ID,
+										MessageFormat.format(
+												Messages.UIManager_2,
+												new Object[] { url }), ex));
+					}
 				}
 			}
 		}
-		return null;
+		return modules;
+	}
+
+	public static boolean isInPlugin(ComponentDescriptor cd) {
+		return cachePlugin.values().contains(cd);
 	}
 
 	private static ComponentDescriptor readURL(URL url) {

@@ -20,7 +20,6 @@ import net.sf.jasperreports.engine.JRElementDataset;
 import net.sf.jasperreports.engine.component.Component;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignElement;
-import net.sf.jasperreports.engine.design.JRDesignElementDataset;
 import net.sf.jasperreports.engine.design.events.JRPropertyChangeSupport;
 import net.sf.jasperreports.engine.util.JRCloneUtils;
 
