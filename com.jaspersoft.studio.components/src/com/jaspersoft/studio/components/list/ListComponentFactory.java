@@ -45,6 +45,8 @@ import com.jaspersoft.studio.components.list.part.ListEditPart;
 import com.jaspersoft.studio.components.list.part.ListPageEditPart;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
+import com.jaspersoft.studio.editor.tools.CompositeElementManager;
+import com.jaspersoft.studio.editor.tools.MCompositeElement;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.IGraphicElementContainer;
@@ -209,6 +211,10 @@ public class ListComponentFactory implements IComponentFactory {
 				return new CreateListCommand(parent, (MGraphicElement) child, location, newIndex);
 			}
 		}
+		//If it is a custom tool require the command to the toolmanger
+		if (child instanceof MCompositeElement && parent instanceof MList){
+			return CompositeElementManager.INSTANCE.getCommand(parent, (MCompositeElement)child, location, newIndex);
+		} 
 		if (child instanceof MImage && parent instanceof MList) {
 			return new CreateImageCommand((MList) parent,(MGraphicElement) child, location, newIndex);
 		}

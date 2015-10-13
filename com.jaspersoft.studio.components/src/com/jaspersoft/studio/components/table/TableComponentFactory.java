@@ -114,6 +114,8 @@ import com.jaspersoft.studio.editor.JrxmlEditor;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.editor.report.ReportContainer;
+import com.jaspersoft.studio.editor.tools.CompositeElementManager;
+import com.jaspersoft.studio.editor.tools.MCompositeElement;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IGraphicElementContainer;
 import com.jaspersoft.studio.model.IGroupElement;
@@ -546,6 +548,10 @@ public class TableComponentFactory implements IComponentFactory {
 				return new CreateColumnCommand((MColumn) parent,
 						(MColumn) child, newIndex);
 		}
+		//If it is a custom tool require the command to the toolmanger
+		if (child instanceof MCompositeElement){
+			return CompositeElementManager.INSTANCE.getCommand(parent, (MCompositeElement)child, location, newIndex);
+		} 
 		if (child instanceof MTable) {
 			if (parent instanceof MElementGroup)
 				return new CreateTableCommand((MElementGroup) parent,

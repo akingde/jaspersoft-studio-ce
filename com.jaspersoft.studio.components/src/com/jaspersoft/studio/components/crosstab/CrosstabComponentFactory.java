@@ -119,6 +119,8 @@ import com.jaspersoft.studio.components.crosstab.part.CrosstabTitleEditPart;
 import com.jaspersoft.studio.components.crosstab.part.CrosstabWhenNoDataEditPart;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
+import com.jaspersoft.studio.editor.tools.CompositeElementManager;
+import com.jaspersoft.studio.editor.tools.MCompositeElement;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IGraphicElementContainer;
 import com.jaspersoft.studio.model.IGroupElement;
@@ -464,6 +466,10 @@ public class CrosstabComponentFactory implements IComponentFactory {
 					return new CreateTitleCellCommand(crosstab, null);
 			}
 		}
+		//If it is a custom tool require the command to the toolmanger
+		if (child instanceof MCompositeElement){
+			return CompositeElementManager.INSTANCE.getCommand(parent, (MCompositeElement)child, location, newIndex);
+		}  
 		if (child instanceof MGraphicElement && parent instanceof MCell)
 			return new CreateElementCommand((MCell) parent, (MGraphicElement) child, location, newIndex);
 		if (child instanceof MElementGroup && parent instanceof MCell)
