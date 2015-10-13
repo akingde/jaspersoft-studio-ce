@@ -101,10 +101,12 @@ public class NumberPropertyDescription<T extends Number> extends ItemPropertyDes
 				} else {
 					e.doit = BigDecimalValidator.getInstance().isValid(number, Locale.US);
 				}
-				if (e.doit && min != null && min instanceof Comparable<?>)
-					e.doit = ((Comparable) min).compareTo(n) >= 0;
-				if (e.doit && max != null && max instanceof Comparable<?>)
-					e.doit = ((Comparable) max).compareTo(n) <= 0;
+				if (n != null) {
+					if (e.doit && min != null && min instanceof Comparable<?>)
+						e.doit = ((Comparable) min).compareTo(n) >= 0;
+					if (e.doit && max != null && max instanceof Comparable<?>)
+						e.doit = ((Comparable) max).compareTo(n) <= 0;
+				}
 			}
 		});
 		return ctrl;
