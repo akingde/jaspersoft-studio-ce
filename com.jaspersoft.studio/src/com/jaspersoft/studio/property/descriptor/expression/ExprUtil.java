@@ -53,7 +53,7 @@ public class ExprUtil {
 		return "";
 	}
 
-	private static <T extends JRExpression> T checkEmpty(T e) {
+	public static <T extends JRExpression> T checkEmpty(T e) {
 		if (e.getText().trim().isEmpty())
 			return null;
 		return e;

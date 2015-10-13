@@ -5,8 +5,10 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.customvisualization.model;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import net.sf.jasperreports.components.map.ItemData;
 import net.sf.jasperreports.components.map.ItemProperty;
@@ -35,6 +37,7 @@ import com.jaspersoft.studio.property.descriptor.classname.NClassTypePropertyDes
 import com.jaspersoft.studio.property.descriptor.combo.RComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
+import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ModelUtils;
 
 /**
@@ -134,14 +137,14 @@ public class MCustomVisualization extends MGraphicElement implements
 		super.setValue(value);
 	}
 
-	private Object getComponent() {
+	public CVDesignComponent getComponent() {
 		return getComponent(getValue());
 	}
 
-	private Object getComponent(Object value) {
+	private CVDesignComponent getComponent(Object value) {
 		if (value != null) {
 			JRDesignComponentElement jrElement = (JRDesignComponentElement) value;
-			return jrElement.getComponent();
+			return (CVDesignComponent) jrElement.getComponent();
 		}
 		return null;
 	}
@@ -260,14 +263,21 @@ public class MCustomVisualization extends MGraphicElement implements
 				value = null;
 			cvComp.setProcessingClass((String) value);
 		} else if (CVDesignComponent.PROPERTY_ITEM_PROPERTIES.equals(id)) {
-			ItemProperty[] toRemove = cvComp.getItemProperties().toArray(
-					new ItemProperty[] {});
-			for (ItemProperty i : toRemove) {
-				cvComp.removeItemProperty(i);
-			}
+			cvComp.getItemProperties().clear();
+			Set<String> keys = new HashSet<String>();
 			for (ItemProperty i : (List<ItemProperty>) value) {
-				cvComp.addItemProperty(i);
+				if (Misc.isNullOrEmpty(i.getValue())
+						&& (i.getValueExpression() == null || Misc
+								.isNullOrEmpty(i.getValueExpression().getText())))
+					continue;
+				if (keys.contains(i.getName()))
+					continue;
+				keys.add(i.getName());
+				cvComp.getItemProperties().add(i);
 			}
+			// let's not refresh ui on every removeItem, addItem
+			cvComp.getEventSupport().fireIndexedPropertyChange(
+					CVDesignComponent.PROPERTY_ITEM_PROPERTIES, 0, true, false);
 		} else if (CVDesignComponent.PROPERTY_ITEM_DATA.equals(id)) {
 			ItemData[] toRemove = cvComp.getItemData().toArray(
 					new ItemData[] {});

@@ -27,8 +27,8 @@ public class ItemPropertyDescription<T> {
 	private String label;
 	private String description;
 	private boolean mandatory;
-	private T defaultValue;
-	private boolean readOnly;
+	protected T defaultValue;
+	protected boolean readOnly;
 
 	public ItemPropertyDescription() {
 		super();
@@ -144,8 +144,11 @@ public class ItemPropertyDescription<T> {
 					return;
 				Point p = textExpression.getSelection();
 
-				handleEdit(textExpression, wiProp.getValue());
-				wiProp.setValue(wiProp.getValue());
+				StandardItemProperty v = wiProp.getValue();
+				if (v == null)
+					v = new StandardItemProperty(getName(), null, null);
+				handleEdit(textExpression, v);
+				wiProp.setValue(v);
 				// if (!textExpression.isDisposed())
 				textExpression.setSelection(p);
 			}
@@ -156,6 +159,8 @@ public class ItemPropertyDescription<T> {
 	public void setValue(Control c, IWItemProperty wip) {
 		if (c instanceof Text) {
 			Text txtExpr = (Text) c;
+			if (wip.getValue() == null)
+				wip.setValue(new StandardItemProperty(getName(), null, null));
 			String txt = wip.getLabelProvider().getText(wip.getValue());
 			txt = toSimpleString(txt);
 			Point oldSelection = txtExpr.getSelection();

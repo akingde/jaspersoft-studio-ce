@@ -1,18 +1,15 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.utils;
 
 import java.awt.image.BufferedImage;
+import java.awt.image.ColorModel;
 import java.awt.image.DirectColorModel;
 import java.awt.image.IndexColorModel;
 import java.awt.image.WritableRaster;
@@ -89,18 +86,18 @@ public class ImageUtils {
 		}
 		return scaled;
 	}
-	
+
 	/**
-	 * Resize an image keeping its ratio. The resized edge is the bigger one, and the other
-	 * is resized as well to keep the proportion
+	 * Resize an image keeping its ratio. The resized edge is the bigger one, and the other is resized as well to keep the
+	 * proportion
 	 * 
-	 * @param size the size of the bigger edge of the image, must be a positive value
-	 * @param source the source image, must be not null and not disposed. The image
-	 * is not disposed by this method
-	 * @return the result image data where the width or height (depends which was
-	 * the bigger one) is of the specified size
+	 * @param size
+	 *          the size of the bigger edge of the image, must be a positive value
+	 * @param source
+	 *          the source image, must be not null and not disposed. The image is not disposed by this method
+	 * @return the result image data where the width or height (depends which was the bigger one) is of the specified size
 	 */
-	public static ImageData resizeKeepingRatio(int size, Image source){
+	public static ImageData resizeKeepingRatio(int size, Image source) {
 		// Sanity checks
 		Assert.isNotNull(source, "The image to resize can not be null.");
 		Assert.isTrue(!source.isDisposed(), "The image to resize is disposed.");
@@ -108,27 +105,27 @@ public class ImageUtils {
 		int width = source.getImageData().width;
 		int height = source.getImageData().height;
 		boolean needResize = false;
-		if (width > height){
-			if (width != size){
-				height = (int)Math.round((double)(size * height)/(double)width);
+		if (width > height) {
+			if (width != size) {
+				height = (int) Math.round((double) (size * height) / (double) width);
 				width = size;
 				needResize = true;
 			}
 		} else {
-			if (height != size){
-				width = (int)Math.round((double)(size * width)/(double)height);
+			if (height != size) {
+				width = (int) Math.round((double) (size * width) / (double) height);
 				height = size;
 				needResize = true;
 			}
 		}
-		if (needResize){
+		if (needResize) {
 			// Perform resize operation using anti-alias and interpolation settings
 			Image scaled = new Image(Display.getDefault(), width, height);
 			GC gc = new GC(scaled);
 			try {
 				gc.setAntialias(SWT.ON);
 				gc.setInterpolation(SWT.HIGH);
-				gc.drawImage(source, 0, 0, source.getBounds().width, source.getBounds().height, 0, 0, width,height);
+				gc.drawImage(source, 0, 0, source.getBounds().width, source.getBounds().height, 0, 0, width, height);
 			} finally {
 				gc.dispose();
 			}
@@ -141,19 +138,21 @@ public class ImageUtils {
 	}
 
 	/**
-	 * Gets a new resized image from the specified original one. The new image 
-	 * must be bigger of the original one and the original will not resized but padded
-	 * with a specified color. The original image will be centered on the new one. If
-	 * the new image has the same size of the original for both width and height then 
-	 * the original image is returned
+	 * Gets a new resized image from the specified original one. The new image must be bigger of the original one and the
+	 * original will not resized but padded with a specified color. The original image will be centered on the new one. If
+	 * the new image has the same size of the original for both width and height then the original image is returned
 	 * <p>
 	 * Please note that the source image is not disposed or directly modified. The rescaled image returned is not cached
 	 * and it is up to the caller to dispose it when no longer needed in its code.
 	 * 
-	 * @param originalImage the original image, not null and not disposed
-	 * @param width the new width of the image, must be greater or equals of the original
-	 * @param height the new height of the image, must be greater or equal of the original
-	 * @param backGround the background color used to pad the image
+	 * @param originalImage
+	 *          the original image, not null and not disposed
+	 * @param width
+	 *          the new width of the image, must be greater or equals of the original
+	 * @param height
+	 *          the new height of the image, must be greater or equal of the original
+	 * @param backGround
+	 *          the background color used to pad the image
 	 * @return the resized image
 	 */
 	public static Image padImage(Image originalImage, int width, int height, RGB backGround) {
@@ -161,10 +160,12 @@ public class ImageUtils {
 		Assert.isNotNull(originalImage, "The image to resize can not be null.");
 		Assert.isTrue(!originalImage.isDisposed(), "The image to resize is disposed.");
 		Assert.isTrue(width >= originalImage.getImageData().width, "Please specify a valid width value for the new image.");
-		Assert.isTrue(height >= originalImage.getImageData().height, "Please specify a valid height value for the new image.");
+		Assert.isTrue(height >= originalImage.getImageData().height,
+				"Please specify a valid height value for the new image.");
 		int originalHeight = originalImage.getImageData().height;
 		int originalWidth = originalImage.getImageData().width;
-		if (width == originalWidth && height == originalHeight) return originalImage;
+		if (width == originalWidth && height == originalHeight)
+			return originalImage;
 		// Perform resize operation using anti-alias and interpolation settings
 		Image scaled = new Image(Display.getDefault(), width, height);
 		GC gc = new GC(scaled);
@@ -173,10 +174,10 @@ public class ImageUtils {
 			gc.setInterpolation(SWT.HIGH);
 			gc.setBackground(ResourceManager.getColor(backGround));
 			gc.fillRectangle(0, 0, width, height);
-			int destX = (width-originalImage.getImageData().width)/2;
-			int destY = (height-originalImage.getImageData().height)/2;
-			gc.drawImage(originalImage, 0, 0, originalImage.getBounds().width, originalImage.getBounds().height, destX, destY, originalHeight,
-					originalWidth);
+			int destX = (width - originalImage.getImageData().width) / 2;
+			int destY = (height - originalImage.getImageData().height) / 2;
+			gc.drawImage(originalImage, 0, 0, originalImage.getBounds().width, originalImage.getBounds().height, destX,
+					destY, originalHeight, originalWidth);
 		} finally {
 			gc.dispose();
 		}
@@ -203,57 +204,105 @@ public class ImageUtils {
 	public static List<String> getAllowedImageFileExtensions() {
 		return IMG_FILE_EXTENSIONS;
 	}
-	
 
-	 /**
-	  * Convert an AWT BufferedImage to an swt imagedata
-	  * 
-	  * @param bufferedImage the awt buffered image
-	  * @return the converted image data
-	  */
+	public static BufferedImage convertToAWT(ImageData data) {
+		ColorModel colorModel = null;
+		PaletteData palette = data.palette;
+		if (palette.isDirect) {
+			colorModel = new DirectColorModel(data.depth, palette.redMask, palette.greenMask, palette.blueMask);
+			BufferedImage bufferedImage = new BufferedImage(colorModel, colorModel.createCompatibleWritableRaster(data.width,
+					data.height), false, null);
+			for (int y = 0; y < data.height; y++) {
+				for (int x = 0; x < data.width; x++) {
+					int pixel = data.getPixel(x, y);
+					RGB rgb = palette.getRGB(pixel);
+					bufferedImage.setRGB(x, y, rgb.red << 16 | rgb.green << 8 | rgb.blue);
+				}
+			}
+			return bufferedImage;
+		} else {
+			RGB[] rgbs = palette.getRGBs();
+			byte[] red = new byte[rgbs.length];
+			byte[] green = new byte[rgbs.length];
+			byte[] blue = new byte[rgbs.length];
+			for (int i = 0; i < rgbs.length; i++) {
+				RGB rgb = rgbs[i];
+				red[i] = (byte) rgb.red;
+				green[i] = (byte) rgb.green;
+				blue[i] = (byte) rgb.blue;
+			}
+			if (data.transparentPixel != -1) {
+				colorModel = new IndexColorModel(data.depth, rgbs.length, red, green, blue, data.transparentPixel);
+			} else {
+				colorModel = new IndexColorModel(data.depth, rgbs.length, red, green, blue);
+			}
+			BufferedImage bufferedImage = new BufferedImage(colorModel, colorModel.createCompatibleWritableRaster(data.width,
+					data.height), false, null);
+			WritableRaster raster = bufferedImage.getRaster();
+			int[] pixelArray = new int[1];
+			for (int y = 0; y < data.height; y++) {
+				for (int x = 0; x < data.width; x++) {
+					int pixel = data.getPixel(x, y);
+					pixelArray[0] = pixel;
+					raster.setPixel(x, y, pixelArray);
+				}
+			}
+			return bufferedImage;
+		}
+	}
+
+	/**
+	 * Convert an AWT BufferedImage to an swt imagedata
+	 * 
+	 * @param bufferedImage
+	 *          the awt buffered image
+	 * @return the converted image data
+	 */
 	public static ImageData convertToSWT(BufferedImage bufferedImage) {
-	  	if (bufferedImage.getColorModel() instanceof DirectColorModel) {
-	  		DirectColorModel colorModel = (DirectColorModel)bufferedImage.getColorModel();
-	  		PaletteData palette = new PaletteData(colorModel.getRedMask(), colorModel.getGreenMask(), colorModel.getBlueMask());
-	  		ImageData data = new ImageData(bufferedImage.getWidth(), bufferedImage.getHeight(), colorModel.getPixelSize(), palette);
-	  		for (int y = 0; y < data.height; y++) {
-	  			for (int x = 0; x < data.width; x++) {
-	  				int rgb = bufferedImage.getRGB(x, y);
-	  				int pixel = palette.getPixel(new RGB((rgb >> 16) & 0xFF, (rgb >> 8) & 0xFF, rgb & 0xFF)); 
-	  				data.setPixel(x, y, pixel);
-	  				if (colorModel.hasAlpha()) {
-	  					data.setAlpha(x, y, (rgb >> 24) & 0xFF);
-	  				}
-	  			}
-	  		}
-	  		return data;		
-	  	} else if (bufferedImage.getColorModel() instanceof IndexColorModel) {
-	  		IndexColorModel colorModel = (IndexColorModel)bufferedImage.getColorModel();
-	  		int size = colorModel.getMapSize();
-	  		byte[] reds = new byte[size];
-	  		byte[] greens = new byte[size];
-	  		byte[] blues = new byte[size];
-	  		colorModel.getReds(reds);
-	  		colorModel.getGreens(greens);
-	  		colorModel.getBlues(blues);
-	  		RGB[] rgbs = new RGB[size];
-	  		for (int i = 0; i < rgbs.length; i++) {
-	  			rgbs[i] = new RGB(reds[i] & 0xFF, greens[i] & 0xFF, blues[i] & 0xFF);
-	  		}
-	  		PaletteData palette = new PaletteData(rgbs);
-	  		ImageData data = new ImageData(bufferedImage.getWidth(), bufferedImage.getHeight(), colorModel.getPixelSize(), palette);
-	  		data.transparentPixel = colorModel.getTransparentPixel();
-	  		WritableRaster raster = bufferedImage.getRaster();
-	  		int[] pixelArray = new int[1];
-	  		for (int y = 0; y < data.height; y++) {
-	  			for (int x = 0; x < data.width; x++) {
-	  				raster.getPixel(x, y, pixelArray);
-	  				data.setPixel(x, y, pixelArray[0]);
-	  			}
-	  		}
-	  		return data;
-	  	}
-	  	return null;
-	  }
-
+		if (bufferedImage.getColorModel() instanceof DirectColorModel) {
+			DirectColorModel colorModel = (DirectColorModel) bufferedImage.getColorModel();
+			PaletteData palette = new PaletteData(colorModel.getRedMask(), colorModel.getGreenMask(),
+					colorModel.getBlueMask());
+			ImageData data = new ImageData(bufferedImage.getWidth(), bufferedImage.getHeight(), colorModel.getPixelSize(),
+					palette);
+			for (int y = 0; y < data.height; y++) {
+				for (int x = 0; x < data.width; x++) {
+					int rgb = bufferedImage.getRGB(x, y);
+					int pixel = palette.getPixel(new RGB((rgb >> 16) & 0xFF, (rgb >> 8) & 0xFF, rgb & 0xFF));
+					data.setPixel(x, y, pixel);
+					if (colorModel.hasAlpha()) {
+						data.setAlpha(x, y, (rgb >> 24) & 0xFF);
+					}
+				}
+			}
+			return data;
+		} else if (bufferedImage.getColorModel() instanceof IndexColorModel) {
+			IndexColorModel colorModel = (IndexColorModel) bufferedImage.getColorModel();
+			int size = colorModel.getMapSize();
+			byte[] reds = new byte[size];
+			byte[] greens = new byte[size];
+			byte[] blues = new byte[size];
+			colorModel.getReds(reds);
+			colorModel.getGreens(greens);
+			colorModel.getBlues(blues);
+			RGB[] rgbs = new RGB[size];
+			for (int i = 0; i < rgbs.length; i++) {
+				rgbs[i] = new RGB(reds[i] & 0xFF, greens[i] & 0xFF, blues[i] & 0xFF);
+			}
+			PaletteData palette = new PaletteData(rgbs);
+			ImageData data = new ImageData(bufferedImage.getWidth(), bufferedImage.getHeight(), colorModel.getPixelSize(),
+					palette);
+			data.transparentPixel = colorModel.getTransparentPixel();
+			WritableRaster raster = bufferedImage.getRaster();
+			int[] pixelArray = new int[1];
+			for (int y = 0; y < data.height; y++) {
+				for (int x = 0; x < data.width; x++) {
+					raster.getPixel(x, y, pixelArray);
+					data.setPixel(x, y, pixelArray[0]);
+				}
+			}
+			return data;
+		}
+		return null;
+	}
 }

@@ -50,8 +50,6 @@ public class ComboItemPropertyDescription<T> extends ItemPropertyDescription<T> 
 		this.readOnly = readOnly;
 	}
 
-	private boolean readOnly = false;
-
 	public void handleEdit(Control txt, StandardItemProperty value) {
 		super.handleEdit(txt, value);
 		if (txt instanceof Combo) {
@@ -81,8 +79,10 @@ public class ComboItemPropertyDescription<T> extends ItemPropertyDescription<T> 
 			public void widgetSelected(SelectionEvent e) {
 				if (wiProp.isRefresh())
 					return;
-
-				handleEdit(textExpression, wiProp.getValue());
+				StandardItemProperty v = wiProp.getValue();
+				if (v == null)
+					v = new StandardItemProperty(getName(), null, null);
+				handleEdit(textExpression, v);
 				wiProp.setValue(wiProp.getValue());
 			}
 		});
@@ -94,12 +94,15 @@ public class ComboItemPropertyDescription<T> extends ItemPropertyDescription<T> 
 				if (wiProp.isRefresh())
 					return;
 				Point p = textExpression.getSelection();
-
-				handleEdit(textExpression, wiProp.getValue());
+				StandardItemProperty v = wiProp.getValue();
+				if (v == null)
+					v = new StandardItemProperty(getName(), null, null);
+				handleEdit(textExpression, v);
 				wiProp.setValue(wiProp.getValue());
 				textExpression.setSelection(p);
 			}
 		});
+		layout.topControl = textExpression;
 		return cmp;
 	}
 
@@ -107,6 +110,8 @@ public class ComboItemPropertyDescription<T> extends ItemPropertyDescription<T> 
 	public void setValue(Control c, IWItemProperty wip) {
 		Composite cmp = (Composite) wip.getControl();
 		StackLayout layout = (StackLayout) cmp.getLayout();
+		if (wip.getValue() == null)
+			wip.setValue(new StandardItemProperty(getName(), null, null));
 		if (wip.getValue().getValueExpression() != null) {
 			Text txt = (Text) cmp.getChildren()[0];
 			super.setValue(txt, wip);

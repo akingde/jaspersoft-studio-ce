@@ -146,9 +146,10 @@ public class CVCTypeWizardPage extends JSSWizardPage {
 				item.setSelectedImage(img);
 				item.setStandardImage(img);
 				item.setImage(img);
+				return;
 			}
 		}
-		setGallyeryItemImageInfo(item, "icons/icons/cvcomponent-32.png");
+		setGallyeryItemImageInfo(item, "icons/cvcomponent-32.png");
 	}
 
 	private static void setGallyeryItemImageInfo(GalleryItem item,

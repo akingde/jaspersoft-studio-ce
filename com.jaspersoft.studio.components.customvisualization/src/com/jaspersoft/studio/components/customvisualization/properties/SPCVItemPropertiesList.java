@@ -5,6 +5,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.customvisualization.properties;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.jasperreports.components.map.ItemProperty;
@@ -220,10 +221,15 @@ public class SPCVItemPropertiesList extends
 		return propertiesTV;
 	}
 
+	private ComponentDescriptor cd;
+	private List<WItemProperty> wIProps = new ArrayList<WItemProperty>();
+
 	@Override
 	@SuppressWarnings("unchecked")
 	public void setData(APropertyNode pnode, Object value) {
 		itemProps = (List<ItemProperty>) value;
+		if (itemProps == null)
+			itemProps = new ArrayList<ItemProperty>();
 		propertiesTV.setInput(itemProps);
 
 		JasperDesign jd = pnode.getJasperDesign();
@@ -242,27 +248,46 @@ public class SPCVItemPropertiesList extends
 				String module = ItemPropertyUtil.getItemPropertyString(
 						(StandardItemProperty) ip, expIntr);
 				if (!Misc.isNullOrEmpty(module)) {
-					ComponentDescriptor cd = UIManager.getDescriptor(jConf,
+					ComponentDescriptor newCd = UIManager.getDescriptor(jConf,
 							module);
+					if (newCd == cd) {
+						refresh = true;
+						try {
+							for (WItemProperty wip : wIProps)
+								wip.setValue((StandardItemProperty) ItemPropertyUtil
+										.getProperty(itemProps, wip.getIpDesc()
+												.getName()));
+						} finally {
+							refresh = false;
+						}
+						return;
+					}
+					cd = newCd;
+					wIProps.clear();
 					for (Control c : form.getChildren())
 						c.dispose();
 					ExpressionContext ec = getExpressionContext();
 					CVCPropertyDescriptor descriptor = new CVCPropertyDescriptor();
 					if (cd != null && cd.getSections() != null) {
+						boolean first = true;
 						for (ComponentSectionDescriptor csd : cd.getSections()) {
 							Composite c = null;
+
 							if (csd.isExpandable())
 								c = createSection(form, csd.getName());
 							else {
 								c = form;
-								FormItemDialog.createSeparator(form);
+								if (!first)
+									FormItemDialog.createSeparator(form);
 							}
+							first = false;
 							for (ComponentPropertyDescriptor pd : csd
 									.getProperties()) {
 								ItemPropertyDescription<?> ipdesc = UIManager
 										.createItemPropertyDescriptor(pd);
 								descriptor.addItemPropertyDescriptor(ipdesc);
-								createItemProperty(c, ipdesc, descriptor, ec);
+								wIProps.add(createItemProperty(c, ipdesc,
+										descriptor, ec));
 							}
 						}
 						form.layout(true);
@@ -288,8 +313,8 @@ public class SPCVItemPropertiesList extends
 	}
 
 	protected WItemProperty createItemProperty(Composite cmp,
-			ItemPropertyDescription<?> ipd, CVCPropertyDescriptor descriptor,
-			ExpressionContext ec) {
+			final ItemPropertyDescription<?> ipd,
+			CVCPropertyDescriptor descriptor, ExpressionContext ec) {
 		Label lbl = new Label(cmp, SWT.NONE);
 		lbl.setText(ipd.getLabel());
 		lbl.setToolTipText(ipd.getDescription());
@@ -299,7 +324,8 @@ public class SPCVItemPropertiesList extends
 		expr.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		expr.setToolTipText(ipd.getDescription());
 		expr.setExpressionContext(ec);
-		expr.setEnabled(!ipd.isReadOnly());
+		if (ipd.isReadOnly())
+			expr.setEnabled(false);
 		final ItemProperty p = ItemPropertyUtil.getProperty(itemProps,
 				ipd.getName());
 		if (p != null)
@@ -308,10 +334,14 @@ public class SPCVItemPropertiesList extends
 
 			@Override
 			public void itemModified(ItemPropertyModifiedEvent event) {
+				if (refresh)
+					return;
 				UIUtils.getDisplay().asyncExec(new Runnable() {
 
 					@Override
 					public void run() {
+						ItemProperty p = ItemPropertyUtil.getProperty(
+								itemProps, ipd.getName());
 						if (p != null) {
 							int idx = itemProps.indexOf(p);
 							if (idx >= 0)
@@ -331,6 +361,8 @@ public class SPCVItemPropertiesList extends
 
 		return expr;
 	}
+
+	private boolean refresh = false;
 
 	protected Composite createSection(Composite parent, String text) {
 		Section ec = new Section(parent, Section.TREE_NODE);

@@ -1,5 +1,6 @@
 package com.jaspersoft.studio.property.itemproperty.desc;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Locale;
 
@@ -49,6 +50,13 @@ public class NumberPropertyDescription<T extends Number> extends ItemPropertyDes
 	}
 
 	@Override
+	public Class<?> getType() {
+		if (defaultValue != null)
+			return defaultValue.getClass();
+		return BigDecimal.class;
+	}
+
+	@Override
 	public Control createControl(IWItemProperty wiProp, Composite parent) {
 		Text ctrl = (Text) super.createControl(wiProp, parent);
 		ctrl.addVerifyListener(new VerifyListener() {
@@ -57,24 +65,41 @@ public class NumberPropertyDescription<T extends Number> extends ItemPropertyDes
 			public void verifyText(VerifyEvent e) {
 				if (Misc.isNullOrEmpty(e.text))
 					return;
+				String number = e.text;
+				String oldText = ((Text) e.widget).getText();
+				if (e.start != e.end)
+					oldText = oldText.substring(0, e.start) + oldText.substring(e.end);
+				number = oldText.substring(0, e.start) + e.text;
+				if (oldText.length() - 1 > e.start + 1)
+					number += oldText.substring(e.start + 1);
+
+				if (number.equals("-")) //$NON-NLS-1$
+					number = "-0";//$NON-NLS-1$
+				if (number.equals(".")) //$NON-NLS-1$
+					number = "0.";//$NON-NLS-1$
+
+				if (number.isEmpty()) {
+					e.doit = true;
+					return;
+				}
 				Number n = null;
 				Class<?> type = getType();
 				if (type.equals(Long.class)) {
-					Long.parseLong(e.text);
+					Long.parseLong(number);
 				} else if (type.equals(BigInteger.class)) {
-					new BigInteger(e.text);
+					new BigInteger(number);
 				} else if (type.equals(Float.class)) {
-					e.doit = FloatValidator.getInstance().isValid(e.text, Locale.US);
+					e.doit = FloatValidator.getInstance().isValid(number, Locale.US);
 				} else if (type.equals(Double.class)) {
-					e.doit = DoubleValidator.getInstance().isValid(e.text, Locale.US);
+					e.doit = DoubleValidator.getInstance().isValid(number, Locale.US);
 				} else if (type.equals(Integer.class)) {
-					e.doit = IntegerValidator.getInstance().isValid(e.text, Locale.US);
+					e.doit = IntegerValidator.getInstance().isValid(number, Locale.US);
 				} else if (type.equals(Short.class)) {
-					e.doit = ShortValidator.getInstance().isValid(e.text, Locale.US);
+					e.doit = ShortValidator.getInstance().isValid(number, Locale.US);
 				} else if (type.equals(Byte.class)) {
-					e.doit = ByteValidator.getInstance().isValid(e.text, Locale.US);
+					e.doit = ByteValidator.getInstance().isValid(number, Locale.US);
 				} else {
-					e.doit = BigDecimalValidator.getInstance().isValid(e.text, Locale.US);
+					e.doit = BigDecimalValidator.getInstance().isValid(number, Locale.US);
 				}
 				if (e.doit && min != null && min instanceof Comparable<?>)
 					e.doit = ((Comparable) min).compareTo(n) >= 0;

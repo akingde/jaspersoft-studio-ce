@@ -6,14 +6,12 @@
 package com.jaspersoft.studio.components.customvisualization.model.command;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 
 import net.sf.jasperreports.components.map.StandardItem;
 import net.sf.jasperreports.components.map.StandardItemData;
 import net.sf.jasperreports.components.map.StandardItemProperty;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.eclipse.viewer.BrowserUtils;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 

@@ -79,6 +79,7 @@ public class SPCVCItemDataList extends
 	private Button btnAddNewDataset;
 	private Button btnModifyDataset;
 	private Button btnRemoveDataset;
+	private Composite dsParent;
 
 	public SPCVCItemDataList(Composite parent, AbstractSection section,
 			AItemDataListPropertyDescriptor pDescriptor) {
@@ -91,7 +92,9 @@ public class SPCVCItemDataList extends
 
 	@Override
 	protected void createComponent(Composite parent) {
-		createDatasetsTab(parent);
+		dsParent = section.getWidgetFactory().createComposite(parent);
+		dsParent.setLayout(new GridLayout(2, false));
+		createDatasetsTab(dsParent);
 	}
 
 	protected ViewerComparator getElementViewerComparator() {
@@ -239,8 +242,10 @@ public class SPCVCItemDataList extends
 	}
 
 	private void createDatasetsTab(Composite parent) {
+
 		datasetsCmp = section.getWidgetFactory().createComposite(parent);
 		datasetsCmp.setLayout(new GridLayout(2, false));
+		datasetsCmp.setLayoutData(new GridData(GridData.FILL_BOTH));
 
 		dsTViewer = new TreeViewer(datasetsCmp, SWT.SINGLE | SWT.H_SCROLL
 				| SWT.V_SCROLL | SWT.BORDER);
@@ -444,6 +449,23 @@ public class SPCVCItemDataList extends
 		putil.setPnode(pnode);
 		putil.setItemDatas(itemDatas);
 
+		cd = putil.getComponentDescriptor();
+		if (cd != null && Misc.isNullOrEmpty(cd.getDatasets())
+				&& !datasetsCmp.isDisposed()) {
+			datasetsCmp.dispose();
+			dsParent.layout(true);
+		}
+		if (cd != null && !Misc.isNullOrEmpty(cd.getDatasets())
+				&& datasetsCmp.isDisposed()) {
+			createDatasetsTab(dsParent);
+			dsParent.layout(true);
+		}
+		if (cd == null && datasetsCmp.isDisposed()) {
+			createDatasetsTab(dsParent);
+			dsParent.layout(true);
+		}
+		if (datasetsCmp.isDisposed())
+			return;
 		dsTViewer.setInput(itemDatas);
 		getDescriptor().setItemDatas(itemDatas, pnode);
 		JRDesignElement designEl = null;
@@ -458,8 +480,6 @@ public class SPCVCItemDataList extends
 					designEl, pnode));
 
 		dsTViewer.expandAll();
-
-		cd = putil.getComponentDescriptor();
 
 		dsTViewer.refresh(true);
 		if (dsTViewer.getSelection().isEmpty() && !itemDatas.isEmpty())
@@ -528,8 +548,7 @@ public class SPCVCItemDataList extends
 			int indx = itemDatas.indexOf((ItemData) sel);
 			if (cd != null) {
 				List<ComponentDatasetDescriptor> ds = cd.getDatasets();
-				if (ds != null)
-				{
+				if (ds != null) {
 					int c = 0;
 					for (int i = 0; i < ds.size(); i++) {
 						ComponentDatasetDescriptor cdd = ds.get(i);
@@ -561,7 +580,7 @@ public class SPCVCItemDataList extends
 
 	@Override
 	public Control getControl() {
-		return datasetsCmp;
+		return dsParent;
 	}
 
 	@Override

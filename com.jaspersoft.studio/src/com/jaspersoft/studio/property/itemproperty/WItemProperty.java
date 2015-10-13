@@ -306,11 +306,15 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 	public void setValue(StandardItemProperty exp) {
 		isRefresh = true;
 		try {
-			if (this.value == null)
-				this.value = exp;
-			else {
-				this.value.setValue(exp.getValue());
-				this.value.setValueExpression(exp.getValueExpression());
+			if (this.value != exp) {
+				if (exp == null)
+					exp = new StandardItemProperty(ipDesc.getName(), null, null);
+				if (this.value == null)
+					this.value = exp;
+				else {
+					this.value.setValue(exp.getValue());
+					this.value.setValueExpression(exp.getValueExpression());
+				}
 			}
 
 			ipDesc.setValue(textExpression, this);
@@ -451,4 +455,7 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 
 	private ItemPropertyDescription<?> ipDesc;
 
+	public ItemPropertyDescription<?> getIpDesc() {
+		return ipDesc;
+	}
 }

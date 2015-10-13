@@ -42,6 +42,7 @@ public class ColorPropertyDescription<T> extends ItemPropertyDescription<T> {
 			String tvalue = Colors.getHexEncodedRGBColor(((WColorPicker) txt).getSelectedColorAsRGB());
 			if (tvalue != null && tvalue.isEmpty())
 				tvalue = null;
+
 			if (value.getValueExpression() != null)
 				((JRDesignExpression) value.getValueExpression()).setText(tvalue);
 			else
@@ -64,11 +65,14 @@ public class ColorPropertyDescription<T> extends ItemPropertyDescription<T> {
 			public void changed(ColorSelectedEvent e) {
 				if (wiProp.isRefresh())
 					return;
-
-				handleEdit(textExpression, wiProp.getValue());
+				StandardItemProperty v = wiProp.getValue();
+				if (v == null)
+					v = new StandardItemProperty(getName(), null, null);
+				handleEdit(textExpression, v);
 				wiProp.setValue(wiProp.getValue());
 			}
 		});
+		layout.topControl = textExpression;
 		return cmp;
 	}
 
@@ -76,6 +80,8 @@ public class ColorPropertyDescription<T> extends ItemPropertyDescription<T> {
 	public void setValue(Control c, IWItemProperty wip) {
 		Composite cmp = (Composite) wip.getControl();
 		StackLayout layout = (StackLayout) cmp.getLayout();
+		if (wip.getValue() == null)
+			wip.setValue(new StandardItemProperty(getName(), null, null));
 		if (wip.getValue().getValueExpression() != null) {
 			Text txt = (Text) cmp.getChildren()[0];
 			super.setValue(txt, wip);

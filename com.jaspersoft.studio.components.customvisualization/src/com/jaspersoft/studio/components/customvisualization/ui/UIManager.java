@@ -22,9 +22,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
+import net.sf.jasperreports.components.map.ItemProperty;
+import net.sf.jasperreports.components.map.StandardItemProperty;
 import net.sf.jasperreports.eclipse.util.FileUtils;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.repo.RepositoryUtil;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
@@ -39,7 +39,9 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jaspersoft.studio.components.customvisualization.CustomVisualizationActivator;
 import com.jaspersoft.studio.components.customvisualization.messages.Messages;
+import com.jaspersoft.studio.components.customvisualization.model.MCustomVisualization;
 import com.jaspersoft.studio.components.customvisualization.ui.preferences.CVCDescriptorsPreferencePage;
+import com.jaspersoft.studio.model.util.ItemPropertyUtil;
 import com.jaspersoft.studio.property.itemproperty.desc.ColorPropertyDescription;
 import com.jaspersoft.studio.property.itemproperty.desc.ComboItemPropertyDescription;
 import com.jaspersoft.studio.property.itemproperty.desc.ItemPropertyDescription;
@@ -52,6 +54,23 @@ public class UIManager {
 	private static Map<String, ComponentDescriptor> cachePlugin = new HashMap<String, ComponentDescriptor>();
 	private static Map<JasperReportsConfiguration, Map<String, ComponentDescriptor>> cache = new HashMap<JasperReportsConfiguration, Map<String, ComponentDescriptor>>();
 	private static Map<ComponentDescriptor, Image> imageCache = new HashMap<ComponentDescriptor, Image>();
+	private static Map<ComponentDescriptor, String> parentsPath = new HashMap<ComponentDescriptor, String>();
+
+	public static ComponentDescriptor getComponentDescriptor(
+			MCustomVisualization model) {
+		List<ItemProperty> props = model.getComponent().getItemProperties();
+		if (props != null) {
+			ItemProperty p = ItemPropertyUtil.getProperty(props, "module");
+			if (p != null) {
+				// let's ignore interpretter
+				String module = ItemPropertyUtil.getItemPropertyString(
+						(StandardItemProperty) p, null);
+				if (!Misc.isNullOrEmpty(module))
+					return getDescriptor(model.getJasperConfiguration(), module);
+			}
+		}
+		return null;
+	}
 
 	public static void copyFile(ComponentDescriptor cd,
 			JasperReportsConfiguration jConf, String path) {
@@ -71,16 +90,15 @@ public class UIManager {
 				if (url != null)
 					is = url.openStream();
 			} else {
-				is = RepositoryUtil.getInstance(jConf)
-						.getInputStreamFromLocation(path);
+				String uri = parentsPath.get(cd);
+				if (uri != null)
+					is = new URL(uri + path).openStream();
 			}
 			if (is != null) {
 				org.apache.commons.io.FileUtils.copyInputStreamToFile(is, dest);
 				destFolder.refreshLocal(1, new NullProgressMonitor());
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (JRException e) {
 			e.printStackTrace();
 		} catch (CoreException e) {
 			e.printStackTrace();
@@ -94,17 +112,22 @@ public class UIManager {
 		Image img = imageCache.get(cd);
 		if (img == null && !Misc.isNullOrEmpty(cd.getThumbnail())) {
 			try {
-				InputStream is = RepositoryUtil.getInstance(jConf)
-						.getInputStreamFromLocation(cd.getThumbnail());
-				if (is != null) {
-					try {
-						img = new Image(null, is);
-						imageCache.put(cd, img);
-					} finally {
-						FileUtils.closeStream(is);
+				String uri = parentsPath.get(cd);
+				if (uri != null) {
+					InputStream is = new URL(uri + cd.getThumbnail())
+							.openStream();
+					if (is != null) {
+						try {
+							img = new Image(null, is);
+							imageCache.put(cd, img);
+						} finally {
+							FileUtils.closeStream(is);
+						}
 					}
 				}
-			} catch (JRException e) {
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
@@ -146,8 +169,13 @@ public class UIManager {
 			try {
 				// use jackson to read the file
 				ComponentDescriptor cd = readURL(url);
-				if (cd != null)
+				if (cd != null) {
 					cachePlugin.put(cd.getModule(), cd);
+					parentsPath.put(
+							cd,
+							url.toURI().toASCIIString()
+									.replaceAll(cd.getModule() + ".json$", ""));
+				}
 			} catch (Exception ex) {
 				// Log error but continue...
 				activator.log(new Status(IStatus.ERROR,
@@ -169,6 +197,16 @@ public class UIManager {
 
 				@Override
 				public void dispose() {
+					Map<String, ComponentDescriptor> map = cache.get(jConf);
+					if (map != null) {
+						for (ComponentDescriptor cd : map.values()) {
+							Image img = imageCache.get(cd);
+							if (img != null)
+								img.dispose();
+							imageCache.remove(cd);
+							parentsPath.remove(cd);
+						}
+					}
 					cache.remove(jConf);
 				}
 			});
@@ -194,8 +232,11 @@ public class UIManager {
 					try {
 						url = f.toURI().toURL();
 						ComponentDescriptor cd = readURL(url);
-						if (cd != null)
+						if (cd != null) {
 							modules.put(cd.getModule(), cd);
+							parentsPath.put(cd, f.getParentFile().toURI()
+									.toASCIIString());
+						}
 					} catch (MalformedURLException e) {
 						// we are not interested to handle this
 					} catch (Exception ex) {
@@ -263,7 +304,14 @@ public class UIManager {
 				def = new Float(cpd.getDefaultValue());
 			desc = new NumberPropertyDescription<Float>(cpd.getName(),
 					cpd.getLabel(), cpd.getDescription(), cpd.isMandatory(),
-					(Float) def, min, max);
+					(Float) def, min, max) {
+				@Override
+				public Class<?> getType() {
+					if (defaultValue != null)
+						return defaultValue.getClass();
+					return Float.class;
+				}
+			};
 		} else if (cpd.getType().equalsIgnoreCase("integer")) {
 			if (cpd.getMin() != null)
 				min = new Integer(cpd.getMin());
@@ -273,7 +321,14 @@ public class UIManager {
 				def = new Integer(cpd.getDefaultValue());
 			desc = new NumberPropertyDescription<Integer>(cpd.getName(),
 					cpd.getLabel(), cpd.getDescription(), cpd.isMandatory(),
-					(Integer) def, min, max);
+					(Integer) def, min, max) {
+				@Override
+				public Class<?> getType() {
+					if (defaultValue != null)
+						return defaultValue.getClass();
+					return Integer.class;
+				}
+			};
 		} else if (cpd.getType().equalsIgnoreCase("double")) {
 			if (cpd.getMin() != null)
 				min = new BigDecimal(cpd.getMin());
@@ -283,7 +338,14 @@ public class UIManager {
 				def = new BigDecimal(cpd.getDefaultValue());
 			desc = new NumberPropertyDescription<BigDecimal>(cpd.getName(),
 					cpd.getLabel(), cpd.getDescription(), cpd.isMandatory(),
-					(BigDecimal) def, min, max);
+					(BigDecimal) def, min, max) {
+				@Override
+				public Class<?> getType() {
+					if (defaultValue != null)
+						return defaultValue.getClass();
+					return Double.class;
+				}
+			};
 		}
 		if (desc != null)
 			desc.setReadOnly(cpd.isReadOnly());
