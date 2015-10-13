@@ -97,24 +97,22 @@ public class ColumnsEqualWidthAction extends ACachedSelectionAction {
 	
 	/**
 	 * Calculate the size of the selected columns and set their width to have 
-	 * them all of the same width, occupying all the available space
+	 * them all of the same width. The space divided between columns is the same
+	 * space the columns were occupying when this action is executed
 	 * 
 	 * @param selecition the current selection, should be a structured selection
 	 */
 	public void run(ISelection selecition) {
 		List<MColumn> columns = getSelectionSet(selecition);
 		MTable table = TableManager.getTableNode((ANode)columns.get(0));
-		int tableWidth = table.getValue().getWidth();
-		int columnsWidth = table.getTableManager().getColumnsTotalWidth();
 		int selectedColumnsWidth = 0;
 		for(Object column : columns){
 			APropertyNode node = (APropertyNode)column;
 			int colWidth = (Integer)node.getPropertyValue(JRDesignElement.PROPERTY_WIDTH);
 			selectedColumnsWidth+=colWidth;
 		}
-		int extraSpace = tableWidth - columnsWidth > 0 ? tableWidth - columnsWidth : 0;
-		int selectedColumnsNewWidth = (selectedColumnsWidth + extraSpace) / columns.size();
-		int remains =  (selectedColumnsWidth + extraSpace) % columns.size();
+		int selectedColumnsNewWidth = selectedColumnsWidth / columns.size();
+		int remains = selectedColumnsWidth % columns.size();
 		JSSCompoundCommand cmd = new JSSCompoundCommand(table);
 		for(Object column : columns){
 			int newWidth = selectedColumnsNewWidth;
