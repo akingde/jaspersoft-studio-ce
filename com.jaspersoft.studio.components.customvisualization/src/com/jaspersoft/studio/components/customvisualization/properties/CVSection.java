@@ -55,8 +55,8 @@ public class CVSection extends AbstractSection {
 		itemDataW.getControl().setLayoutData(
 				new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
 
-		createWidget4Property(parent,
-				CVDesignComponent.PROPERTY_PROCESSING_CLASS);
+		// createWidget4Property(parent,
+		// CVDesignComponent.PROPERTY_PROCESSING_CLASS);
 	}
 
 	@Override
