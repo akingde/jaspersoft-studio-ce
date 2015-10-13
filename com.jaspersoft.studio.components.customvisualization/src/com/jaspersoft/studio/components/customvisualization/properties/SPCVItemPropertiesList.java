@@ -272,9 +272,10 @@ public class SPCVItemPropertiesList extends
 						boolean first = true;
 						for (ComponentSectionDescriptor csd : cd.getSections()) {
 							Composite c = null;
-
 							if (csd.isExpandable())
 								c = createSection(form, csd.getName());
+							else if (!Misc.isNullOrEmpty(csd.getName()))
+								c = createGroup(form, csd.getName());
 							else {
 								c = form;
 								if (!first)
@@ -375,6 +376,22 @@ public class SPCVItemPropertiesList extends
 		Composite c = new Composite(ec, SWT.WRAP);
 		c.setLayout(new GridLayout(2, false));
 		ec.setClient(c);
+		return c;
+	}
+
+	protected Composite createGroup(Composite parent, String text) {
+		Group ec = new Group(parent, Section.TREE_NODE);
+		ec.setText(text);
+		ec.setLayout(new GridLayout());
+
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 2;
+		ec.setLayoutData(gd);
+
+		Composite c = new Composite(ec, SWT.WRAP);
+		c.setLayout(new GridLayout(2, false));
+		c.setLayoutData(new GridData(GridData.FILL_BOTH));
+
 		return c;
 	}
 

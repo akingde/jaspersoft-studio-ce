@@ -11,14 +11,14 @@ import java.util.List;
 
 public class ComponentSectionDescriptor {
 	private String name;
-	private boolean isExpandable = false;
+	private boolean expandable = false;
 
 	public boolean isExpandable() {
-		return isExpandable;
+		return expandable;
 	}
 
-	public void setExpandable(boolean isExpandable) {
-		this.isExpandable = isExpandable;
+	public void setExpandable(boolean expandable) {
+		this.expandable = expandable;
 	}
 
 	public void setName(String name) {

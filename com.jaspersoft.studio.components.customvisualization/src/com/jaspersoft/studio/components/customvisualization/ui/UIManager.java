@@ -302,6 +302,8 @@ public class UIManager {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
+		} catch (Throwable e) {
+			e.printStackTrace();
 		}
 		return null;
 	}
