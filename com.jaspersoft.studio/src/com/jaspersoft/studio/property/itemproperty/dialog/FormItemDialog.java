@@ -29,6 +29,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.forms.events.ExpansionAdapter;
 import org.eclipse.ui.forms.events.ExpansionEvent;
 import org.eclipse.ui.forms.widgets.Section;
+import org.eclipse.wb.swt.ResourceManager;
 
 import com.jaspersoft.studio.property.itemproperty.WItemProperty;
 import com.jaspersoft.studio.property.itemproperty.desc.ADescriptor;
@@ -136,13 +137,23 @@ public abstract class FormItemDialog extends AItemDialog {
 	protected Composite createSection(Composite parent, String text) {
 		Section ec = new Section(parent, Section.TREE_NODE);
 		ec.setText(text);
+		ec.setExpanded(true);
+		ec.setFont(ResourceManager.getBoldFont(ec.getFont()));
+
+		Label lbl = new Label(ec, SWT.SEPARATOR | SWT.HORIZONTAL);
+		ec.setSeparatorControl(lbl);
+
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 2;
+		ec.setLayoutData(gd);
+
 		ec.addExpansionListener(new ExpansionAdapter() {
 			@Override
 			public void expansionStateChanged(ExpansionEvent e) {
 				sc.setMinSize(sc.getContent().computeSize(SWT.DEFAULT, SWT.DEFAULT));
 			}
 		});
-		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		ec.setLayoutData(gd);
 
@@ -153,9 +164,14 @@ public abstract class FormItemDialog extends AItemDialog {
 	}
 
 	protected Composite createGroup(Composite parent, String text) {
-		Group ec = new Group(parent, Section.TREE_NODE);
-		ec.setText(text);
+		Composite ec = new Composite(parent, Section.TREE_NODE);
 		ec.setLayout(new GridLayout());
+
+		Label lbl = new Label(ec, SWT.NONE);
+		lbl.setText(text);
+		lbl.setFont(ResourceManager.getBoldFont(lbl.getFont()));
+
+		new Label(ec, SWT.SEPARATOR | SWT.HORIZONTAL).setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;

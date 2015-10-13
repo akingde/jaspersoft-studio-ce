@@ -35,6 +35,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.widgets.Section;
+import org.eclipse.wb.swt.ResourceManager;
 
 import com.jaspersoft.jasperreports.customvisualization.design.CVDesignComponent;
 import com.jaspersoft.studio.components.customvisualization.messages.Messages;
@@ -368,6 +369,11 @@ public class SPCVItemPropertiesList extends
 	protected Composite createSection(Composite parent, String text) {
 		Section ec = new Section(parent, Section.TREE_NODE);
 		ec.setText(text);
+		ec.setExpanded(true);
+		ec.setFont(ResourceManager.getBoldFont(ec.getFont()));
+
+		Label lbl = new Label(ec, SWT.SEPARATOR | SWT.HORIZONTAL);
+		ec.setSeparatorControl(lbl);
 
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
@@ -376,13 +382,20 @@ public class SPCVItemPropertiesList extends
 		Composite c = new Composite(ec, SWT.WRAP);
 		c.setLayout(new GridLayout(2, false));
 		ec.setClient(c);
+
 		return c;
 	}
 
 	protected Composite createGroup(Composite parent, String text) {
-		Group ec = new Group(parent, Section.TREE_NODE);
-		ec.setText(text);
+		Composite ec = new Composite(parent, Section.TREE_NODE);
 		ec.setLayout(new GridLayout());
+
+		Label lbl = new Label(ec, SWT.NONE);
+		lbl.setText(text);
+		lbl.setFont(ResourceManager.getBoldFont(lbl.getFont()));
+
+		new Label(ec, SWT.SEPARATOR | SWT.HORIZONTAL)
+				.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
