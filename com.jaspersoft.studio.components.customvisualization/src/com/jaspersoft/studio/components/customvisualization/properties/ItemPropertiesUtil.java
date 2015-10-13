@@ -170,6 +170,8 @@ public abstract class ItemPropertiesUtil extends AItemPropertiesUtil {
 					Composite c = null;
 					if (s.isExpandable())
 						c = createSection(cmp, s.getName());
+					else if (!Misc.isNullOrEmpty(s.getName()))
+						c = createGroup(cmp, s.getName());
 					else {
 						c = cmp;
 						if (!first)
