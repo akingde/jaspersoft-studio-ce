@@ -65,6 +65,9 @@ public class ItemPropertiesEditor extends EditorPart {
 			UIUtils.showError(e);
 		} catch (CoreException e) {
 			UIUtils.showError(e);
+		} catch (Exception e)
+		{
+			UIUtils.showError(e);
 		}
 	}
 
@@ -95,6 +98,9 @@ public class ItemPropertiesEditor extends EditorPart {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
+		} catch (Exception e)
+		{
+			UIUtils.showError(e);
 		} finally {
 			FileUtils.closeStream(content);
 		}
