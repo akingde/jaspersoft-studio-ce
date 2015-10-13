@@ -82,7 +82,6 @@ public class NumberPropertyDescription<T extends Number> extends ItemPropertyDes
 					e.doit = true;
 					return;
 				}
-				Number n = null;
 				Class<?> type = getType();
 				if (type.equals(Long.class)) {
 					Long.parseLong(number);
@@ -101,14 +100,37 @@ public class NumberPropertyDescription<T extends Number> extends ItemPropertyDes
 				} else {
 					e.doit = BigDecimalValidator.getInstance().isValid(number, Locale.US);
 				}
+				Number n = getNumber(number);
 				if (n != null) {
 					if (e.doit && min != null && min instanceof Comparable<?>)
-						e.doit = ((Comparable) min).compareTo(n) >= 0;
+						e.doit = ((Comparable) min).compareTo(n) <= 0;
 					if (e.doit && max != null && max instanceof Comparable<?>)
-						e.doit = ((Comparable) max).compareTo(n) <= 0;
+						e.doit = ((Comparable) max).compareTo(n) >= 0;
 				}
 			}
 		});
 		return ctrl;
+	}
+
+	protected Number getNumber(String number) throws NumberFormatException {
+		Class<?> typ = getType();
+		if (typ.equals(Long.class))
+			return new Long(number);
+		else if (typ.equals(BigInteger.class))
+			return new BigInteger(number);
+		else if (typ.equals(Float.class))
+			return new Float(number);
+		else if (typ.equals(Double.class))
+			return new Double(number);
+		else if (typ.equals(Integer.class))
+			return new Integer(number);
+		else if (typ.equals(Short.class))
+			return new Short(number);
+		else if (typ.equals(Byte.class))
+			return new Byte(number);
+		else if (typ.equals(BigDecimal.class))
+			return new BigDecimal(number);
+
+		return null;
 	}
 }

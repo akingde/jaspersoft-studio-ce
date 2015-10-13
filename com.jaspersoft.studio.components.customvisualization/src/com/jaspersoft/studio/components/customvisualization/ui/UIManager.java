@@ -5,6 +5,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.customvisualization.ui;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
@@ -32,6 +34,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.swt.graphics.Image;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -193,6 +196,37 @@ public class UIManager {
 		if (modules == null) {
 			modules = new HashMap<String, ComponentDescriptor>();
 			cache.put(jConf, modules);
+			jConf.getPrefStore().addPropertyChangeListener(
+					new IPropertyChangeListener() {
+
+						@Override
+						public void propertyChange(
+								org.eclipse.jface.util.PropertyChangeEvent event) {
+							event.getProperty();
+							for (ComponentDescriptor cd : cache.get(jConf)
+									.values()) {
+								imageCache.remove(cd);
+								parentsPath.remove(cd);
+							}
+							cache.remove(jConf);
+							initCacheJConfig(jConf);
+						}
+					});
+			jConf.getPropertyChangeSupport().addPropertyChangeListener(
+					new PropertyChangeListener() {
+
+						@Override
+						public void propertyChange(PropertyChangeEvent evt) {
+							evt.getNewValue();
+							for (ComponentDescriptor cd : cache.get(jConf)
+									.values()) {
+								imageCache.remove(cd);
+								parentsPath.remove(cd);
+							}
+							cache.remove(jConf);
+							initCacheJConfig(jConf);
+						}
+					});
 			jConf.addDisposeListener(new IDisposeListener() {
 
 				@Override
