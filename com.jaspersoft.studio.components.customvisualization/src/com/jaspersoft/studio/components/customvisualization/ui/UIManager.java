@@ -314,11 +314,7 @@ public class UIManager {
 		Number min = null;
 		Number max = null;
 		Number def = null;
-		if (cpd.getType().equalsIgnoreCase("text"))
-			desc = new ItemPropertyDescription<String>(cpd.getName(),
-					cpd.getLabel(), cpd.getDescription(), cpd.isMandatory(),
-					cpd.getDefaultValue());
-		else if (cpd.getType().equalsIgnoreCase("path"))
+		if (cpd.getType().equalsIgnoreCase("path"))
 			desc = new ItemPropertyDescription<String>(cpd.getName(),
 					cpd.getLabel(), cpd.getDescription(), cpd.isMandatory(),
 					cpd.getDefaultValue());
@@ -382,6 +378,10 @@ public class UIManager {
 					return Double.class;
 				}
 			};
+		} else {
+			desc = new ItemPropertyDescription<String>(cpd.getName(),
+					cpd.getLabel(), cpd.getDescription(), cpd.isMandatory(),
+					cpd.getDefaultValue());
 		}
 		if (desc != null)
 			desc.setReadOnly(cpd.isReadOnly());
