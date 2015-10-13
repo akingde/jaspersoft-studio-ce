@@ -131,7 +131,7 @@ public class CreateCustomVisualizationCommand extends CreateElementCommand {
 							if (csd.getProperties() != null)
 								for (ComponentPropertyDescriptor cpd : csd
 										.getProperties()) {
-									if (cpd.isMandatory()) {
+									if (cpd.getDefaultValue() != null) {
 										cvComp.addItemProperty(new StandardItemProperty(
 												cpd.getName(), cpd
 														.getDefaultValue(),
@@ -159,7 +159,7 @@ public class CreateCustomVisualizationCommand extends CreateElementCommand {
 												id.addItem(item);
 												for (ComponentPropertyDescriptor cpd : csd
 														.getProperties())
-													if (cpd.isMandatory())
+													if (cpd.getDefaultValue() != null)
 														item.addItemProperty(new StandardItemProperty(
 																cpd.getName(),
 																cpd.getDefaultValue(),
@@ -173,13 +173,14 @@ public class CreateCustomVisualizationCommand extends CreateElementCommand {
 						}
 
 				}
-			}
+			} else
+				jrElement = null;
 		}
 		if (jrElement != null)
 			setElementBounds();
 	}
 
-	private class HyperlinkInfoDialog extends MessageDialog {
+	class HyperlinkInfoDialog extends MessageDialog {
 
 		private String url;
 
