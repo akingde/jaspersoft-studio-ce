@@ -36,6 +36,7 @@ import com.jaspersoft.studio.property.itemproperty.desc.ADescriptor;
 import com.jaspersoft.studio.property.itemproperty.desc.ItemPropertyDescription;
 import com.jaspersoft.studio.property.itemproperty.event.ItemPropertyModifiedEvent;
 import com.jaspersoft.studio.property.itemproperty.event.ItemPropertyModifiedListener;
+import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public abstract class FormItemDialog extends AItemDialog {
@@ -136,7 +137,7 @@ public abstract class FormItemDialog extends AItemDialog {
 
 	protected Composite createSection(Composite parent, String text) {
 		Section ec = new Section(parent, Section.TREE_NODE);
-		ec.setText(text);
+		ec.setText(Misc.nvl(text));
 		ec.setExpanded(true);
 		ec.setFont(ResourceManager.getBoldFont(ec.getFont()));
 
@@ -166,11 +167,11 @@ public abstract class FormItemDialog extends AItemDialog {
 	protected Composite createGroup(Composite parent, String text) {
 		Composite ec = new Composite(parent, Section.TREE_NODE);
 		ec.setLayout(new GridLayout());
-
-		Label lbl = new Label(ec, SWT.NONE);
-		lbl.setText(text);
-		lbl.setFont(ResourceManager.getBoldFont(lbl.getFont()));
-
+		if (!Misc.isNullOrEmpty(text)) {
+			Label lbl = new Label(ec, SWT.NONE);
+			lbl.setText(text);
+			lbl.setFont(ResourceManager.getBoldFont(lbl.getFont()));
+		}
 		new Label(ec, SWT.SEPARATOR | SWT.HORIZONTAL).setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
