@@ -269,6 +269,7 @@ public class CompositeElementDefinitionWizardPage extends JSSHelpWizardPage {
 		palettePosition.select(initialIndex);
 		
 		setControl(container);
+		addListeners();
 	}
 	
 	/**
