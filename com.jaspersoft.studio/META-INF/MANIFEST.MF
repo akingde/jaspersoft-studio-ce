@@ -369,6 +369,7 @@ Export-Package: com.jaspersoft.studio;
    org.eclipse.gef.ui.palette,
    org.eclipse.jface.dialogs",
  com.jaspersoft.studio.editor.style,
+ com.jaspersoft.studio.editor.tools,
  com.jaspersoft.studio.editor.util;
   uses:="org.eclipse.core.runtime,
    org.eclipse.jface.resource,
