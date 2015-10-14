@@ -1,5 +1,9 @@
 package com.jaspersoft.studio.editor.layout.grid;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import net.sf.jasperreports.engine.JRCommonElement;
 import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.JRPropertiesHolder;
@@ -7,28 +11,26 @@ import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
-import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.gef.commands.CommandStack;
-import org.eclipse.jface.util.Util;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.events.VerifyEvent;
+import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.swt.widgets.Widget;
 
 import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.editor.layout.FreeLayout;
@@ -59,19 +61,16 @@ public class JSSGridBagUIProvider implements ILayoutUIProvider{
 	 * @author Orlandin Marco
 	 *
 	 */
-	private class ValidationModifyListener extends KeyAdapter implements ModifyListener, FocusListener{
-		
-		@Override
-		public void modifyText(ModifyEvent e) {
-			//on the modify only validate the controls
-			validateControl(e.widget);
-		}	
+	private class ValidationModifyListener extends KeyAdapter implements FocusListener{
 		
 		@Override
 		public void keyPressed(KeyEvent e) {
 			//when enter is pressed validate the control an save the changes
 			if (e.keyCode == SWT.CR){
-				validateControl(e.widget);
+				//If it is a new value in the combo update the hints
+				if (e.widget == columnPosition || e.widget == rowPosition){
+					updateComboHints((Combo)e.widget);
+				}
 				updateElement();
 			}
 		}
@@ -82,11 +81,89 @@ public class JSSGridBagUIProvider implements ILayoutUIProvider{
 
 		@Override
 		public void focusLost(FocusEvent e) {
+			//If it is a new value in the combo update the hints
+			if (e.widget == columnPosition || e.widget == rowPosition){
+				updateComboHints((Combo)e.widget);
+			}
 			updateElement();
 		}
 	}
 	
-	private static final String TOOLTIP_KEY = "tooltip";
+	/**
+	 * Selection listener used when a position from the combo is selected. It doesn't update
+	 * the hints list since the element was already in the combo items
+	 */
+	private SelectionListener comboSelectionListener = new SelectionAdapter() {
+  	
+  	@Override
+  	public void widgetSelected(SelectionEvent e) {
+  		updateElement();
+  	}
+	};
+	
+	/**
+	 * Verify listener that doesn't allow to insert an invalid weight.
+	 * It allow only digits and one single .
+	 */
+	private VerifyListener weightVerify = new VerifyListener() {
+		
+		@Override
+		public void verifyText(VerifyEvent e) {
+			if (e.text.isEmpty()) return;
+			if (!e.text.matches("[0-9\\.]+")){
+				e.doit = false;
+				return;
+			}
+			String currentText = ((Text)e.widget).getText();
+			if (e.text.contains(".")){
+				if (currentText.contains(".")) {
+					e.doit = false;
+					return;
+				}
+			}
+			try{
+				String firstPart = currentText.substring(0, e.start);
+				String secondPart = currentText.substring(e.end, currentText.length());
+				double value = Double.parseDouble(firstPart + e.text + secondPart);
+				if (value < 0d){
+					e.doit = false;
+					return;
+				}
+			} catch (Exception ex){
+				e.doit = false;
+				return;
+			}
+		}
+	};
+	
+	/**
+	 * Verify listener for the position, it allows positive digits
+	 */
+	private VerifyListener positionVerify = new VerifyListener() {
+		
+		@Override
+		public void verifyText(VerifyEvent e) {
+			if (e.text.isEmpty()) return;
+			
+			try{
+				String currentText = ((Combo)e.widget).getText();
+				String firstPart = currentText.substring(0, e.start);
+				String secondPart = currentText.substring(e.end, currentText.length());
+				String newText = firstPart + e.text + secondPart;
+				if (!newText.trim().equals(Messages.JSSGridBagLayout_relativeString)){
+					int value = Integer.parseInt(newText);
+					if (value < 0){
+						e.doit = false;
+						return;
+					}
+				}
+			} catch (Exception ex){
+				e.doit = false;
+				return;
+			}
+		}
+	};
+	
 	
 	/**
 	 * The combo where the user can set the column position or select the relative value
@@ -111,12 +188,12 @@ public class JSSGridBagUIProvider implements ILayoutUIProvider{
 	/**
 	 * The text where the user can insert the row row
 	 */
-	private Text rowSpan;
+	private Spinner rowSpan;
 	
 	/**
 	 * The text where the user can insert the column span
 	 */
-	private Text columnSpan;
+	private Spinner columnSpan;
 	
 	/**
 	 * The currently selected element
@@ -144,6 +221,16 @@ public class JSSGridBagUIProvider implements ILayoutUIProvider{
 	private ValidationModifyListener listener = new ValidationModifyListener();
 	
 	/**
+	 * Hints list used on the row position combo, the first value must be always the relative one
+	 */
+	private List<String> rowHint = new ArrayList<String>(Arrays.asList(new String[]{Messages.JSSGridBagLayout_relativeString, "0", "1","2","3","4"}));
+	
+	/**
+	 * Hints list used in the column position combo, the first value must be always the relative one
+	 */
+	private List<String> colHint = new ArrayList<String>(Arrays.asList(new String[]{Messages.JSSGridBagLayout_relativeString, "0", "1","2","3","4"}));
+	
+	/**
 	 * Apply the current properties to all the selected elements, only if their properties
 	 * are different from the inserted one, and then if at least an element is changed relayout 
 	 * the container
@@ -158,12 +245,16 @@ public class JSSGridBagUIProvider implements ILayoutUIProvider{
 				JRPropertiesHolder currentElement = LayoutManager.getPropertyHolder(node);
 				if (currentElement != null && hasValueChanged(node)){
 					JRPropertiesMap clone = (JRPropertiesMap)currentElement.getPropertiesMap().clone();
+					
 					clone.setProperty(JSSGridBagLayout.PROPERTY_X, String.valueOf(getComboValue(columnPosition)));
 					clone.setProperty(JSSGridBagLayout.PROPERTY_Y, String.valueOf(getComboValue(rowPosition)));
-					clone.setProperty(JSSGridBagLayout.PROPERTY_WEIGHTX, columnWeight.getText());
-					clone.setProperty(JSSGridBagLayout.PROPERTY_WEIGHTY, rowWeight.getText());
+					
+					clone.setProperty(JSSGridBagLayout.PROPERTY_WEIGHT_COLUMN, columnWeight.getText());
+					clone.setProperty(JSSGridBagLayout.PROPERTY_WEIGHT_ROW, rowWeight.getText());
+					
 					clone.setProperty(JSSGridBagLayout.PROPERTY_ROWSPAN, rowSpan.getText());
 					clone.setProperty(JSSGridBagLayout.PROPERTY_COLSPAN, columnSpan.getText());
+					
 					clone.setProperty(JSSGridBagLayout.PROPERTY_IS_FIXED, String.valueOf(isFixedSize()));
 					SetValueCommand setMapCommand = new SetValueCommand("Layout Settings"); //$NON-NLS-1$
 					setMapCommand.setTarget(node);
@@ -183,51 +274,81 @@ public class JSSGridBagUIProvider implements ILayoutUIProvider{
 	}
 	
 	/**
-	 * Check if the properties of the passed element are different from the input one, or if
-	 * there are some validation error on the widgets
+	 * Update the hints of the combo adding the current combo value to 
+	 * the hints if it was not already present. The first value, relative,
+	 * is always left untouched
+	 * 
+	 * @param widget the combo to update.
+	 */
+	private void updateComboHints(Combo widget){
+		List<String> hints = null;
+		String text = widget.getText();
+		if (widget == rowPosition){
+			hints = rowHint;
+		} else {
+			hints = colHint;
+		}
+		if (hints != null){
+			int index = hints.indexOf(text);
+			if (index == -1){
+				//if the hints list is too big remove the last value
+				if (hints.size() >= 7) {
+					hints.remove(hints.size()-1);
+				}
+				hints.add(1, text);
+				widget.removeSelectionListener(comboSelectionListener);
+				widget.setItems(hints.toArray(new String[hints.size()]));
+				Point caretLocation = widget.getCaretLocation();
+				widget.select(1);
+				widget.setSelection(caretLocation);
+				widget.addSelectionListener(comboSelectionListener);
+			}
+		}
+	}
+	
+	/**
+	 * Check if the properties of the passed element are different from the input on
 	 * 
 	 * @param element the element to check, must be not null
 	 * @return true if the provided property are valid and different from the one of the element,
 	 * false otherwise
 	 */
 	private boolean hasValueChanged(ANode element){
-		//check if the widgets values are valid
-		if (columnWeight.getToolTipText() != null || 
-					rowWeight.getToolTipText() != null ||
-						rowSpan.getToolTipText() != null ||
-								columnSpan.getToolTipText() != null ||
-									columnPosition.getToolTipText() != null ||
-										rowPosition.getToolTipText() != null){
-			return false;
-		}
 		
 		//the property are valid, check if they are different also
 		JRPropertiesHolder currentElement = LayoutManager.getPropertyHolder(element);
 		if (currentElement != null){
+			
 			Object prop = currentElement.getPropertiesMap().getProperty(JSSGridBagLayout.PROPERTY_X);
 			prop = prop != null ? prop.toString() : String.valueOf(GridBagConstraints.RELATIVE);
 			if (!prop.equals(String.valueOf(getComboValue(columnPosition)))) return true;
-			
+				
 			prop = currentElement.getPropertiesMap().getProperty(JSSGridBagLayout.PROPERTY_Y);
 			prop = prop != null ? prop.toString() : String.valueOf(GridBagConstraints.RELATIVE);
 			if (!prop.equals(String.valueOf(getComboValue(rowPosition)))) return true;
 			
-			prop = currentElement.getPropertiesMap().getProperty(JSSGridBagLayout.PROPERTY_WEIGHTX);
+			prop = currentElement.getPropertiesMap().getProperty(JSSGridBagLayout.PROPERTY_WEIGHT_COLUMN);
 			prop = prop != null ? prop.toString() : String.valueOf(1.0);
+			columnWeight.removeVerifyListener(weightVerify);
+			columnWeight.setText(parseWeight(columnWeight.getText()));
+			columnWeight.addVerifyListener(weightVerify);
 			if (!prop.equals(columnWeight.getText())) return true;
 			
-			prop = currentElement.getPropertiesMap().getProperty(JSSGridBagLayout.PROPERTY_WEIGHTY);
+			prop = currentElement.getPropertiesMap().getProperty(JSSGridBagLayout.PROPERTY_WEIGHT_ROW);
 			prop = prop != null ? prop.toString() : String.valueOf(1.0);
+			rowWeight.removeVerifyListener(weightVerify);
+			rowWeight.setText(parseWeight(rowWeight.getText()));
+			rowWeight.addVerifyListener(weightVerify);
 			if (!prop.equals(rowWeight.getText())) return true;
-			
+		
 			prop = currentElement.getPropertiesMap().getProperty(JSSGridBagLayout.PROPERTY_ROWSPAN);
 			prop = prop != null ? prop.toString() : String.valueOf(1);
 			if (!prop.equals(rowSpan.getText())) return true;		
-			
+
 			prop = currentElement.getPropertiesMap().getProperty(JSSGridBagLayout.PROPERTY_COLSPAN);
 			prop = prop != null ? prop.toString() : String.valueOf(1);
 			if (!prop.equals(columnSpan.getText())) return true;
-			
+		
 			prop = currentElement.getPropertiesMap().getProperty(JSSGridBagLayout.PROPERTY_IS_FIXED);
 			boolean value = prop != null ? Boolean.parseBoolean(prop.toString()) : false;
 			int selectionIndex = value ? 1 : 0;
@@ -297,148 +418,8 @@ public class JSSGridBagUIProvider implements ILayoutUIProvider{
 	}
 	
 	/**
-	 * Set an error message on an element and make its background
-	 * red, or remove it and set the background to the default.
-	 * On macosx the element is also forced to lost and regain 
-	 * the focus to avoid an SWT glitch
-	 * 
-	 * @param message the error message, it is shown as tooltip. Use null
-	 * to remove a previously set error message
-	 * @param widget the widget where the error is set\removed
-	 */
-	private void setError(String message, Control widget){
-		boolean changed = false;
-		if (message == null){
-			if (widget.getBackground() != null){
-				widget.setBackground(null);
-				widget.setToolTipText((String)widget.getData(TOOLTIP_KEY));
-				changed = true;
-			}
-		} else {
-			if (widget.getBackground() != ColorConstants.red){
-				widget.setBackground(ColorConstants.red);
-				widget.setToolTipText(message);
-				changed = true;
-			}
-		}
-		//if the platform is mac and the status of the widget is changed
-		//then use the focus trick to force the refresh
-		if (changed && Util.isMac()){
-			if (widget instanceof Combo){
-				controlRefresh((Combo)widget);
-			} else {
-				controlRefresh((Text)widget);
-			}
-		}
-	}
-	
-	/**
-	 * Force the visual refresh of a combo control on make, make 
-	 * it lose and regain the focus. The position of the caret is
-	 * saved before to loose the focus and then restored. The flag to
-	 * store a property is disable to avoid the focus event when it is
-	 * only a refresh
-	 * 
-	 * @param widget the combo widget, must be not null
-	 */
-	private void controlRefresh(Combo widget){
-		modifyGuard = true;
-		int caretPosition = widget.getCaretPosition();
-		widget.getParent().forceFocus();
-		widget.setFocus();
-		widget.setSelection(new Point(caretPosition, caretPosition));
-		modifyGuard = false;
-	}
-	
-	/**
-	 * Force the visual refresh of a text control on make, make 
-	 * it lose and regain the focus. The position of the caret is
-	 * saved before to loose the focus and then restored. The flag to
-	 * store a property is disable to avoid the focus event when it is
-	 * only a refresh
-	 * 
-	 * @param widget the text widget, must be not null
-	 */
-	private void controlRefresh(Text widget){
-		modifyGuard = true;
-		int caretPosition = widget.getCaretPosition();
-		widget.getParent().setFocus();
-		widget.setFocus();
-		widget.setSelection(new Point(caretPosition, caretPosition));
-		modifyGuard = false;
-	}
-	
-	/**
-	 * Check if the value of the row\column position combo is valid.
-	 * The value is valid is is a positive integer or the relative string
-	 * If it is not valid the error is set on the combo
-	 * 
-	 * @param widget the combo to check, must be not null
-	 */
-	protected void validateCombo(Combo widget){
-		String text = widget.getText();
-		if (text.trim().isEmpty()) {
-			setError(Messages.JSSGridBagLayout_emptyValue, widget);
-			return;
-		} 
-		try {
-			int value = getComboValue(widget);
-			if (value < 0 && value != GridBagConstraints.RELATIVE){
-				setError(Messages.JSSGridBagLayout_notNegativeValue, widget);
-				return;						
-			}
-		} catch (Exception ex) {
-			setError(Messages.JSSGridBagLayout_validNumberValue, widget);
-			return;
-		}
-		setError(null, widget);
-	}	
-	
-	/**
-	 * Check if the value of a text input area is valid.
-	 * The value is valid is is a positive number or the relative string,
-	 * also the type of the number can be set trough a parameter to check if
-	 * it is a valid integer or double
-	 * If it is not valid the error is set on the text
-	 * 
-	 * @param widget the Text to check, must be not null
-	 * @param the type of the value expected in the text, must be integer or double
-	 */
-	protected void validateText(Text widget, Class<?> type){
-		String text = widget.getText();
-		if (text.trim().isEmpty()) {
-			setError(Messages.JSSGridBagLayout_emptyValue, widget);
-			return;
-		} 
-		if (type == Integer.class){
-			try {
-				int value = Integer.parseInt(text);
-				if (value < 0){
-					setError(Messages.JSSGridBagLayout_notNegativeValue, widget);
-					return;						
-				}
-			} catch (Exception ex) {
-				setError(Messages.JSSGridBagLayout_validNumberValue, widget);
-				return;
-			}
-		} else if (type == Double.class){
-			try {
-				double value = Double.parseDouble(text);
-				if (value < 0d){
-					setError(Messages.JSSGridBagLayout_notNegativeValue, widget);
-					return;						
-				}
-			} catch (Exception ex) {
-				setError(Messages.JSSGridBagLayout_validNumberValue, widget);
-				return;
-			}
-		}
-		setError(null, widget);
-	}
-	
-	/**
 	 * Enable or disable the weight widgets if the size
-	 * is marked as fiexd or not
+	 * is marked as fixed or not
 	 */
 	protected void refreshWeightWidgets(){
 		columnWeight.setEnabled(!isFixedSize());
@@ -456,25 +437,6 @@ public class JSSGridBagUIProvider implements ILayoutUIProvider{
 		return fixedSizeCombo.getSelectionIndex() == 1;
 	}
 	
-	/**
-	 * Validate a generic control and set or remove the error from it
-	 * 
-	 * @param widget the control
-	 */
-	protected void validateControl(Widget widget){
-		if (!modifyGuard){
-			if (widget == rowPosition || widget == columnPosition){
-				validateCombo((Combo)widget);
-			} else if (widget == rowSpan || widget == columnSpan){
-				validateText((Text)widget, Integer.class);
-			} else if (widget == rowWeight || widget == columnWeight){
-				validateText((Text)widget, Double.class);
-			}
-		}
-	}
-	
-
-
 	@Override
 	public void createControls(Composite parent) {
 		Composite container = new Composite(parent, SWT.NONE);
@@ -485,62 +447,59 @@ public class JSSGridBagUIProvider implements ILayoutUIProvider{
 		rowPositionLabel.setText(Messages.JSSGridBagLayout_rowLabel);
 		rowPositionLabel.setToolTipText(Messages.JSSGridBagUIProvider_rowPositionTooltip);
 		rowPosition= new Combo(container, SWT.BORDER);
-		rowPosition.setItems(new String[]{Messages.JSSGridBagLayout_relativeString});
+		rowPosition.setItems(rowHint.toArray(new String[rowHint.size()]));
 		rowPosition.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-	  rowPosition.addSelectionListener(new SelectionAdapter() {
-	  	
-	  	@Override
-	  	public void widgetSelected(SelectionEvent e) {
-	  		validateCombo(rowPosition);
-	  		updateElement();
-	  	}
-		});
+		rowPosition.addSelectionListener(comboSelectionListener);
+	  
 	  rowPosition.addKeyListener(listener);
-	  rowPosition.addModifyListener(listener);
+	  rowPosition.addVerifyListener(positionVerify);
 	  rowPosition.addFocusListener(listener);
-	  rowPosition.setData(TOOLTIP_KEY, Messages.JSSGridBagUIProvider_rowPositionTooltip);
 	  rowPosition.setToolTipText(Messages.JSSGridBagUIProvider_rowPositionTooltip);
 		
 		Label columnPositionLabel = new Label(container, SWT.NONE);
 		columnPositionLabel.setText(Messages.JSSGridBagLayout_columnLabel);
 		columnPositionLabel.setToolTipText(Messages.JSSGridBagUIProvider_columnPoistionToolTip);
 		columnPosition = new Combo(container, SWT.BORDER);
-		columnPosition.setItems(new String[]{Messages.JSSGridBagLayout_relativeString});
+		columnPosition.setItems(colHint.toArray(new String[colHint.size()]));
 		columnPosition.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-	  columnPosition.addSelectionListener(new SelectionAdapter() {
-	  	
-	  	@Override
-	  	public void widgetSelected(SelectionEvent e) {
-	  		validateCombo(columnPosition);
-	  		updateElement();
-	  	}
-		});
+	  columnPosition.addSelectionListener(comboSelectionListener);
 	  columnPosition.addKeyListener(listener);
-	  columnPosition.addModifyListener(listener);
+	  columnPosition.addVerifyListener(positionVerify);
 	  columnPosition.addFocusListener(listener);
-	  columnPosition.setData(TOOLTIP_KEY, Messages.JSSGridBagUIProvider_columnPoistionToolTip);
 	  columnPosition.setToolTipText(Messages.JSSGridBagUIProvider_columnPoistionToolTip);  
 		
 	  Label rowSpanLabel = new Label(container, SWT.NONE);
 	  rowSpanLabel.setText(Messages.JSSGridBagLayout_rowSpanLabel);
 	  rowSpanLabel.setToolTipText(Messages.JSSGridBagUIProvider_rowSpanToolTip);
-		rowSpan = new Text(container, SWT.BORDER);
+		rowSpan = new Spinner(container, SWT.BORDER | SWT.READ_ONLY);
+		rowSpan.setMinimum(1);
 		rowSpan.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		rowSpan.addKeyListener(listener);
-		rowSpan.addModifyListener(listener);
 		rowSpan.addFocusListener(listener);
-		rowSpan.setData(TOOLTIP_KEY, Messages.JSSGridBagUIProvider_rowSpanToolTip);
+	  rowSpan.addSelectionListener(new SelectionAdapter() {
+	  	
+	  	@Override
+	  	public void widgetSelected(SelectionEvent e) {
+	  		updateElement();
+	  	}
+		});
 		rowSpan.setToolTipText(Messages.JSSGridBagUIProvider_rowSpanToolTip);
 		
 		Label columnSpanLabel = new Label(container, SWT.NONE);
 		columnSpanLabel.setText(Messages.JSSGridBagLayout_columnSpanLabel);
 		columnSpanLabel.setToolTipText(Messages.JSSGridBagUIProvider_columnSpanToolTip);
-		columnSpan = new Text(container, SWT.BORDER);
+		columnSpan = new Spinner(container, SWT.BORDER | SWT.READ_ONLY); 
+		columnSpan.setMinimum(1);
 		columnSpan.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		columnSpan.addKeyListener(listener);
-		columnSpan.addModifyListener(listener);
 		columnSpan.addFocusListener(listener);
-		columnSpan.setData(TOOLTIP_KEY, Messages.JSSGridBagUIProvider_columnSpanToolTip);
+	  columnSpan.addSelectionListener(new SelectionAdapter() {
+	  	
+	  	@Override
+	  	public void widgetSelected(SelectionEvent e) {
+	  		updateElement();
+	  	}
+		});
 		columnSpan.setToolTipText(Messages.JSSGridBagUIProvider_columnSpanToolTip);
 		
 		Label fixedSizeLabel = new Label(container, SWT.NONE);
@@ -559,31 +518,104 @@ public class JSSGridBagUIProvider implements ILayoutUIProvider{
 				updateElement();
 			}
 		});
-		fixedSizeCombo.setData(TOOLTIP_KEY, Messages.JSSGridBagUIProvider_fixedSizeTooltip);
 		fixedSizeCombo.setToolTipText(Messages.JSSGridBagUIProvider_fixedSizeTooltip);
 		
-		
-		Label columnWeightLabel = new Label(container, SWT.NONE);
-		columnWeightLabel.setText(Messages.JSSGridBagLayout_rowWeightLabel);
-		columnWeightLabel.setToolTipText(Messages.JSSGridBagUIProvider_columnWeightTooltip);
-		columnWeight = new Text(container, SWT.BORDER);
-		columnWeight.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		columnWeight.addKeyListener(listener);
-		columnWeight.addModifyListener(listener);
-		columnWeight.addFocusListener(listener);
-		columnWeight.setData(TOOLTIP_KEY, Messages.JSSGridBagUIProvider_columnWeightTooltip);
-		columnWeight.setToolTipText(Messages.JSSGridBagUIProvider_columnWeightTooltip);
-		
 		Label rowWeightLabel = new Label(container, SWT.NONE);
-		rowWeightLabel.setText(Messages.JSSGridBagLayout_columnWeightLabel);
+		rowWeightLabel.setText(Messages.JSSGridBagLayout_rowWeightLabel);
 		rowWeightLabel.setToolTipText(Messages.JSSGridBagUIProvider_rowWeightTooltip);
 		rowWeight = new Text(container, SWT.BORDER);
 		rowWeight.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		rowWeight.addKeyListener(listener);
-		rowWeight.addModifyListener(listener);
 		rowWeight.addFocusListener(listener);
-		rowWeight.setData(TOOLTIP_KEY, Messages.JSSGridBagUIProvider_rowWeightTooltip);
+		rowWeight.addVerifyListener(weightVerify);
 		rowWeight.setToolTipText(Messages.JSSGridBagUIProvider_rowWeightTooltip);
+		
+		Label columnWeightLabel = new Label(container, SWT.NONE);
+		columnWeightLabel.setText(Messages.JSSGridBagLayout_columnWeightLabel);
+		columnWeightLabel.setToolTipText(Messages.JSSGridBagUIProvider_columnWeightTooltip);
+		columnWeight = new Text(container, SWT.BORDER);
+		columnWeight.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		columnWeight.addKeyListener(listener);
+		columnWeight.addFocusListener(listener);
+		columnWeight.addVerifyListener(weightVerify);
+		columnWeight.setToolTipText(Messages.JSSGridBagUIProvider_columnWeightTooltip);
+	}
+	
+  /**
+   * Parse the weight property and return a valid value to
+   * be used on the layout. If the property contains a valid value
+   * (double >= 0) then it is returned, otherwise it uses the default value
+   * 1.0. Also since the value is returned as text if it ends with . or there 
+   * isn't a decimal part then it is modified to end like .0
+   * 
+   * @param prop the value of the property
+   * @return a valid weight value, as text
+   */
+	private String parseWeight(Object prop){
+		if(prop != null){
+			String value = prop.toString().trim();
+			try{
+				double result = Double.parseDouble(value);
+				if (result >= 0d){
+					if (value.endsWith(".")){
+						value += "0";
+					} else if (!value.contains(".")){
+						value += ".0";
+					}
+					return value;
+				}
+			} catch (Exception ex){
+			}
+		}
+		return "1.0";
+	}
+	
+  /**
+   * Parse the span property and return a valid value to
+   * be used on the layout. If the property contains a valid value
+   * (int >= 0) then it is returned, otherwise it uses the default value
+   * 1
+   * 
+   * @param prop the value of the property
+   * @return a valid span value
+   */
+	private Integer parseSpan(Object prop){
+		if(prop != null){
+			String value = prop.toString().trim();
+			try{
+				int result = Integer.parseInt(value);
+				if (result >= 1){
+					return result;
+				}
+			} catch (Exception ex){
+			}
+		}
+		return 1;
+	}
+	
+  /**
+   * Parse the position property and return a valid value to
+   * be used on the layout. If the property contains a valid value
+   * (int >= 0) then it is returned, otherwise it uses the default value
+   * GridBagConstraints.RELATIVE
+   * 
+   * @param prop the value of the property
+   * @return a valid weight position
+   */
+	private String parsePosition(Object prop){
+		if(prop != null){
+			String value = prop.toString().trim();
+			if (!value.equals(Messages.JSSGridBagLayout_relativeString)){
+				try{
+					int result = Integer.parseInt(value);
+					if (result >= 0){
+						return String.valueOf(result);
+					}
+				} catch (Exception ex){
+				}
+			}
+		}
+		return Messages.JSSGridBagLayout_relativeString;
 	}
 	
 	@Override
@@ -594,35 +626,43 @@ public class JSSGridBagUIProvider implements ILayoutUIProvider{
 		if (currentElement != null){
 			modifyGuard = true;
 		
+			columnPosition.removeVerifyListener(positionVerify);
 			Object prop = currentElement.getPropertiesMap().getProperty(JSSGridBagLayout.PROPERTY_X);
 			prop = prop != null ? prop.toString() : String.valueOf(GridBagConstraints.RELATIVE);
 			if (prop.equals(String.valueOf(GridBagConstraints.RELATIVE))){
 				columnPosition.select(0);
 				columnPosition.setText(columnPosition.getItem(0));
 			} else {
-				columnPosition.setText(prop.toString());
+				columnPosition.setText(parsePosition(prop));
 			}
+			columnPosition.addVerifyListener(positionVerify);
 			
+			rowPosition.removeVerifyListener(positionVerify);
 			prop = currentElement.getPropertiesMap().getProperty(JSSGridBagLayout.PROPERTY_Y);
 			prop = prop != null ? prop.toString() : String.valueOf(GridBagConstraints.RELATIVE);
 			if (prop.equals(String.valueOf(GridBagConstraints.RELATIVE))){
 				rowPosition.select(0);
 				rowPosition.setText(rowPosition.getItem(0));
 			} else {
-				rowPosition.setText(prop.toString());
+				rowPosition.setText(parsePosition(prop));
 			}
+			rowPosition.addVerifyListener(positionVerify);
 			
-			prop = currentElement.getPropertiesMap().getProperty(JSSGridBagLayout.PROPERTY_WEIGHTX);
-			columnWeight.setText(prop != null ? prop.toString() : String.valueOf(1.0));
+			columnWeight.removeVerifyListener(weightVerify);
+			prop = currentElement.getPropertiesMap().getProperty(JSSGridBagLayout.PROPERTY_WEIGHT_COLUMN);
+			columnWeight.setText(parseWeight(prop));
+			columnWeight.addVerifyListener(weightVerify);
 			
-			prop = currentElement.getPropertiesMap().getProperty(JSSGridBagLayout.PROPERTY_WEIGHTY);
-			rowWeight.setText(prop != null ? prop.toString() : String.valueOf(1.0));
+			rowWeight.removeVerifyListener(weightVerify);
+			prop = currentElement.getPropertiesMap().getProperty(JSSGridBagLayout.PROPERTY_WEIGHT_ROW);
+			rowWeight.setText(parseWeight(prop));
+			rowWeight.addVerifyListener(weightVerify);
 			
 			prop = currentElement.getPropertiesMap().getProperty(JSSGridBagLayout.PROPERTY_ROWSPAN);
-			rowSpan.setText(prop != null ? prop.toString() : String.valueOf(1));
+			rowSpan.setSelection(parseSpan(prop));
 			
 			prop = currentElement.getPropertiesMap().getProperty(JSSGridBagLayout.PROPERTY_COLSPAN);
-			columnSpan.setText(prop != null ? prop.toString() : String.valueOf(1));
+			columnSpan.setSelection(parseSpan(prop));
 			
 			prop = currentElement.getPropertiesMap().getProperty(JSSGridBagLayout.PROPERTY_IS_FIXED);
 			boolean value = prop != null ? Boolean.parseBoolean(prop.toString()) : false;

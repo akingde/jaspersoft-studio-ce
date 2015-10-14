@@ -181,8 +181,8 @@ public class EncloseIntoFrameCommand extends Command {
 				JRPropertiesMap frameMap = containerFrame.getPropertiesMap();
 				if (map.containsProperty(JSSGridBagLayout.PROPERTY_COLSPAN)) frameMap.setProperty(JSSGridBagLayout.PROPERTY_COLSPAN, map.getProperty(JSSGridBagLayout.PROPERTY_COLSPAN));
 				if (map.containsProperty(JSSGridBagLayout.PROPERTY_ROWSPAN)) frameMap.setProperty(JSSGridBagLayout.PROPERTY_ROWSPAN, map.getProperty(JSSGridBagLayout.PROPERTY_ROWSPAN));
-				if (map.containsProperty(JSSGridBagLayout.PROPERTY_WEIGHTX)) frameMap.setProperty(JSSGridBagLayout.PROPERTY_WEIGHTX, map.getProperty(JSSGridBagLayout.PROPERTY_WEIGHTX));
-				if (map.containsProperty(JSSGridBagLayout.PROPERTY_WEIGHTY)) frameMap.setProperty(JSSGridBagLayout.PROPERTY_WEIGHTY, map.getProperty(JSSGridBagLayout.PROPERTY_WEIGHTY));
+				if (map.containsProperty(JSSGridBagLayout.PROPERTY_WEIGHT_COLUMN)) frameMap.setProperty(JSSGridBagLayout.PROPERTY_WEIGHT_COLUMN, map.getProperty(JSSGridBagLayout.PROPERTY_WEIGHT_COLUMN));
+				if (map.containsProperty(JSSGridBagLayout.PROPERTY_WEIGHT_ROW)) frameMap.setProperty(JSSGridBagLayout.PROPERTY_WEIGHT_ROW, map.getProperty(JSSGridBagLayout.PROPERTY_WEIGHT_ROW));
 				if (map.containsProperty(JSSGridBagLayout.PROPERTY_X)) frameMap.setProperty(JSSGridBagLayout.PROPERTY_X, map.getProperty(JSSGridBagLayout.PROPERTY_X));
 				if (map.containsProperty(JSSGridBagLayout.PROPERTY_Y)) frameMap.setProperty(JSSGridBagLayout.PROPERTY_Y, map.getProperty(JSSGridBagLayout.PROPERTY_Y));
 				if (map.containsProperty(JSSGridBagLayout.PROPERTY_IS_FIXED)) frameMap.setProperty(JSSGridBagLayout.PROPERTY_IS_FIXED, map.getProperty(JSSGridBagLayout.PROPERTY_IS_FIXED));

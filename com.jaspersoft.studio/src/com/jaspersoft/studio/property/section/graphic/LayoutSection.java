@@ -83,7 +83,7 @@ public class LayoutSection extends AbstractSection {
 		
 		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
-			if (evt.getPropertyName().equals(MGraphicElement.PROPERTY_MAP)){
+			if (evt.getPropertyName().equals(MGraphicElement.PROPERTY_MAP) && evt.getSource() != getElement()){
 				showSection();
 			}
 		}

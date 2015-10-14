@@ -15,9 +15,9 @@ package com.jaspersoft.studio.editor.layout.grid;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Hashtable;
-import java.util.Arrays;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JRElement;
@@ -142,13 +142,13 @@ public class GridBagLayoutUtil {
 
 			GridBagConstraints constraint = new GridBagConstraints();
 			Object prop = comp.getPropertiesMap().getProperty(JSSGridBagLayout.PROPERTY_X);
-			constraint.gridx = prop != null ? Integer.parseInt(prop.toString()) : GridBagConstraints.RELATIVE;
+			constraint.gridx = parsePosition(prop);
 			prop = comp.getPropertiesMap().getProperty(JSSGridBagLayout.PROPERTY_Y);
-			constraint.gridy = prop != null ? Integer.parseInt(prop.toString()) : GridBagConstraints.RELATIVE;
+			constraint.gridy = parsePosition(prop);
 			prop = comp.getPropertiesMap().getProperty(JSSGridBagLayout.PROPERTY_ROWSPAN);
-			constraint.gridheight = prop != null ? Integer.parseInt(prop.toString()) : 1;
+			constraint.gridheight = parseSpan(prop);
 			prop = comp.getPropertiesMap().getProperty(JSSGridBagLayout.PROPERTY_COLSPAN);
-			constraint.gridwidth = prop != null ? Integer.parseInt(prop.toString()) : 1;
+			constraint.gridwidth = parseSpan(prop);
 			
 			prop = comp.getPropertiesMap().getProperty(JSSGridBagLayout.PROPERTY_IS_FIXED);
 			boolean value = prop != null ? Boolean.parseBoolean(prop.toString()) : false;		
@@ -161,14 +161,83 @@ public class GridBagLayoutUtil {
 			} else {
 				constraint.isFixedSeize = false;
 				constraint.fill = GridBagConstraints.BOTH;
-				prop = comp.getPropertiesMap().getProperty(JSSGridBagLayout.PROPERTY_WEIGHTX);
-				constraint.weighty = prop != null ? Double.parseDouble(prop.toString()) : 1.0;
-				prop = comp.getPropertiesMap().getProperty(JSSGridBagLayout.PROPERTY_WEIGHTY);
-				constraint.weightx = prop != null ? Double.parseDouble(prop.toString()) : 1.0;
+				prop = comp.getPropertiesMap().getProperty(JSSGridBagLayout.PROPERTY_WEIGHT_ROW);
+				constraint.weighty = parseWeight(prop);
+				prop = comp.getPropertiesMap().getProperty(JSSGridBagLayout.PROPERTY_WEIGHT_COLUMN);
+				constraint.weightx = parseWeight(prop);
 			}
 
     	comptable.put(comp, constraint);
     }
+    
+    /**
+     * Parse the weight property and return a valid value to
+     * be used on the layout. If the property contains a valid value
+     * (double >= 0) then it is returned, otherwise it uses the default value
+     * 1.0
+     * 
+     * @param prop the value of the property
+     * @return a valid weight value
+     */
+    protected double parseWeight(Object prop){
+  		if(prop != null){
+  			String value = prop.toString().trim();
+  			try{
+  				double result = Double.parseDouble(value);
+  				if (result >= 0d){
+  					return result;
+  				}
+  			} catch (Exception ex){
+  			}
+  		}
+  		return 1.0d;
+  	}
+  	
+    /**
+     * Parse the span property and return a valid value to
+     * be used on the layout. If the property contains a valid value
+     * (int >= 0) then it is returned, otherwise it uses the default value
+     * 1
+     * 
+     * @param prop the value of the property
+     * @return a valid span value
+     */
+  	protected int parseSpan(Object prop){
+  		if(prop != null){
+  			String value = prop.toString().trim();
+  			try{
+  				int result = Integer.parseInt(value);
+  				if (result >= 1){
+  					return result;
+  				}
+  			} catch (Exception ex){
+  			}
+  		}
+  		return 1;
+  	}
+  	
+    /**
+     * Parse the position property and return a valid value to
+     * be used on the layout. If the property contains a valid value
+     * (int >= 0) then it is returned, otherwise it uses the default value
+     * GridBagConstraints.RELATIVE
+     * 
+     * @param prop the value of the property
+     * @return a valid weight position
+     */
+  	protected int parsePosition(Object prop){
+  		if(prop != null){
+  			String value = prop.toString().trim();
+  			try{
+					int result = Integer.parseInt(value);
+					if (result >= 0){
+						return result;
+					}
+				} catch (Exception ex){
+				}
+  		}
+  		return GridBagConstraints.RELATIVE;
+  	}
 
     /**
      * Gets the constraints for the specified component.  A copy of
@@ -334,7 +403,7 @@ public class GridBagLayoutUtil {
      * @param children the children to layout
      */
     public Map<JRElement, org.eclipse.draw2d.geometry.Rectangle> layoutContainer(Dimension parentSize, JRElement[] children) {
-        return ArrangeGrid(parentSize, children);
+        return arrangeGrid(parentSize, children);
     }
     
     /**
@@ -349,7 +418,7 @@ public class GridBagLayoutUtil {
      */
     public Map<JRElement, org.eclipse.draw2d.geometry.Rectangle> layoutContainer(org.eclipse.draw2d.geometry.Dimension parentSize, JRElement[] children) {
     	Dimension dim = new Dimension(parentSize.width, parentSize.height);
-    	return ArrangeGrid(dim, children);
+    	return arrangeGrid(dim, children);
     }
 
     /**
@@ -854,19 +923,16 @@ public class GridBagLayoutUtil {
     }
 
     /**
-     * This method is obsolete and supplied for backwards
-     * compatibility only; new code should call {@link
-     * #arrangeGrid(Container) arrangeGrid} instead.
-     * This method is the same as <code>arrangeGrid</code>;
-     * refer to <code>arrangeGrid</code> for details on the
-     * parameter
+     * Lays out the specified set of elements using the grid bag layout.
+     * The elements are not moved but it is returned a map where for each element is contained
+     * the position and size of the element itself.
      * 
      * @param parentSize the size of the parent
      * @param children the children to layout
-     * @return a map where containing as keys each of the child passed, and as values hte position of the elements
+     * @return a map where containing as keys each of the child passed, and as values the position of the elements
      * according to the layout.
      */
-    protected HashMap<JRElement, org.eclipse.draw2d.geometry.Rectangle> ArrangeGrid(Dimension parentSize, JRElement[] components) {
+    protected HashMap<JRElement, org.eclipse.draw2d.geometry.Rectangle> arrangeGrid(Dimension parentSize, JRElement[] components) {
         int compindex;
         GridBagConstraints constraints;
         Rectangle r = new Rectangle();
