@@ -30,7 +30,9 @@ import com.jaspersoft.studio.editor.layout.ILayout;
 import com.jaspersoft.studio.editor.layout.ILayoutUIProvider;
 import com.jaspersoft.studio.editor.layout.LayoutManager;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.IContainerLayout;
+import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.descriptors.JSSComboPropertyDescriptor;
@@ -57,6 +59,12 @@ public class LayoutSection extends AbstractSection {
 	 * The layout combo where the layout can be selected
 	 */
 	private SPLayoutCombo layoutCombo;
+	
+	/**
+	 * Node of the root where the last listener was placed, until it is null
+	 * it means that there aren't active listeners
+	 */
+	private INode listenedRoot = null;
 	
 	/**
 	 * Hashmap used to cache the created configuration composite for a specific layout
@@ -122,6 +130,12 @@ public class LayoutSection extends AbstractSection {
 		setLayoutAreaVisible(false);
 		widgets.put(pd.getId(), layoutCombo); 
 			
+	}
+	
+	@Override
+	public void setElement(APropertyNode element) {
+		// TODO Auto-generated method stub
+		super.setElement(element);
 	}
 	
 	/**
@@ -231,9 +245,15 @@ public class LayoutSection extends AbstractSection {
 	@Override
 	public void aboutToBeShown() {
 		super.aboutToBeShown();
+		//if there is an active listener remove it
+		if (listenedRoot != null){
+			listenedRoot.getPropertyChangeSupport().removePropertyChangeListener(elementPropertyChange);
+			listenedRoot = null;
+		}
+		//Then add a new listener to the root
 		if (getElement() != null && getElement().getRoot() != null){
-			getElement().getRoot().getPropertyChangeSupport().removePropertyChangeListener(elementPropertyChange);
-			getElement().getRoot().getPropertyChangeSupport().addPropertyChangeListener(elementPropertyChange);
+			listenedRoot = getElement().getRoot();
+			listenedRoot.getPropertyChangeSupport().addPropertyChangeListener(elementPropertyChange);
 			showSection();
 		}
 	}
@@ -241,8 +261,10 @@ public class LayoutSection extends AbstractSection {
 	@Override
 	public void aboutToBeHidden() {
 		super.aboutToBeHidden();
-		if (getElement() != null && getElement().getRoot() != null){
-			getElement().getRoot().getPropertyChangeSupport().removePropertyChangeListener(elementPropertyChange);
+		//if there is an active listener remove it
+		if (listenedRoot != null){
+			listenedRoot.getPropertyChangeSupport().removePropertyChangeListener(elementPropertyChange);
+			listenedRoot = null;
 		}
 	}
 	

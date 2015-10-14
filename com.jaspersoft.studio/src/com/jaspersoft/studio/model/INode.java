@@ -64,6 +64,13 @@ public interface INode extends PropertyChangeListener {
 	 * @return the property change support
 	 */
 	public PropertyChangeSupport getPropertyChangeSupport();
+	
+	/**
+	 * Gets the root.
+	 * 
+	 * @return the root
+	 */
+	public INode getRoot();
 
 	// -- CellLabelProvider methods, move to interface
 	// ------------------------------------------------------------------------------------

@@ -147,6 +147,12 @@ public class StylesListSection extends AbstractSection {
 	private Composite mainComposite = null; 
 
 	/**
+	 * Node of the root where the last listener was placed, until it is null
+	 * it means that there aren't active listeners
+	 */
+	private INode listenedRoot = null;
+	
+	/**
 	 * Manager for the events binded to the mouse
 	 */
 	private IconMouseTracker trackerListener = new IconMouseTracker();
@@ -854,7 +860,7 @@ public class StylesListSection extends AbstractSection {
 	 * get the styles
 	 * @return reference to the father of all the styles
 	 */
-	private ANode getStylesRoot(APropertyNode element) {
+	private ANode getStylesRoot(INode element) {
 		INode root = element.getRoot();
 		ANode stylesClass = null;
 		if (root != null){
@@ -879,11 +885,17 @@ public class StylesListSection extends AbstractSection {
 	 * Add not only this node to the notify handler but all it's root, so even change in it's styles will be notified
 	 */
 	public void aboutToBeShown() {
-		if (getElement() != null) {
-			getElement().getRoot().getPropertyChangeSupport().removePropertyChangeListener(this);
-			getElement().getRoot().getPropertyChangeSupport().addPropertyChangeListener(this);
+		//if there is an active listener remove it
+		if (listenedRoot != null){
+			listenedRoot.getPropertyChangeSupport().removePropertyChangeListener(this);
+			listenedRoot = null;
+		}
+		
+		if (getElement() != null && getElement().getRoot() != null) {
+			listenedRoot = getElement().getRoot();
+			listenedRoot.getPropertyChangeSupport().addPropertyChangeListener(this);
 			// Set the handler for every style also because in this way an update of the style is immediately reflected
-			ANode stylesRoot = getStylesRoot(getElement());
+			ANode stylesRoot = getStylesRoot(listenedRoot);
 			if (stylesRoot != null){
 				for (INode style : stylesRoot.getChildren()) {
 					style.getPropertyChangeSupport().removePropertyChangeListener(this);
@@ -899,15 +911,17 @@ public class StylesListSection extends AbstractSection {
 	 * Add not only this node to the notify handler but all it's root, so even change in it's styles will be notified
 	 */
 	public void aboutToBeHidden() {
-		if (getElement() != null && getElement().getRoot() != null) {
-			getElement().getRoot().getPropertyChangeSupport().removePropertyChangeListener(this);
-			ANode styles = getStylesRoot(getElement());
+		//if there is an active listener remove it
+		if (listenedRoot != null){
+			listenedRoot.getPropertyChangeSupport().removePropertyChangeListener(this);
+			ANode styles = getStylesRoot(listenedRoot);
 			// check in case the selected element was deleted
 			if (styles != null) {
 				for (INode style : styles.getChildren()) {
 					style.getPropertyChangeSupport().removePropertyChangeListener(this);
 				}
 			}
+			listenedRoot = null;
 		}
 		shown = false;
 	}
