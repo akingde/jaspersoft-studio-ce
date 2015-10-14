@@ -8,9 +8,9 @@ package com.jaspersoft.studio.components.customvisualization.model.command;
 import java.io.IOException;
 import java.util.List;
 
-import net.sf.jasperreports.components.map.StandardItem;
-import net.sf.jasperreports.components.map.StandardItemData;
-import net.sf.jasperreports.components.map.StandardItemProperty;
+import net.sf.jasperreports.components.items.StandardItem;
+import net.sf.jasperreports.components.items.StandardItemData;
+import net.sf.jasperreports.components.items.StandardItemProperty;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.viewer.BrowserUtils;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
@@ -172,9 +172,9 @@ public class CreateCustomVisualizationCommand extends CreateElementCommand {
 
 						}
 
-				}
-			} else
-				jrElement = null;
+				} else
+					jrElement = null;
+			}
 		}
 		if (jrElement != null)
 			setElementBounds();
