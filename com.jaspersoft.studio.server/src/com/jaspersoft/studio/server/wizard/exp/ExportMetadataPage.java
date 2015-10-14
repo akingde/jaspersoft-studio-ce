@@ -62,7 +62,8 @@ public class ExportMetadataPage extends WizardPage {
 		setDescription(Messages.ExportMetadataPage_1);
 		bindingContext = new DataBindingContext();
 		try {
-			value.setFile(SystemUtils.getUserDir().getCanonicalPath() + File.separator + "export.zip"); //$NON-NLS-1$
+			value.setFile(SystemUtils.getUserDir().getCanonicalPath()
+					+ File.separator + "export.zip"); //$NON-NLS-1$
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -90,7 +91,8 @@ public class ExportMetadataPage extends WizardPage {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-				FileDialog fd = new FileDialog(Display.getDefault().getActiveShell());
+				FileDialog fd = new FileDialog(Display.getDefault()
+						.getActiveShell(), SWT.SAVE);
 				fd.setFileName("export.zip"); //$NON-NLS-1$
 				fd.setFilterPath(root.getLocation().toOSString());
 				fd.setFilterExtensions(new String[] { "*.zip", "*.*" }); //$NON-NLS-1$ //$NON-NLS-2$  
@@ -134,14 +136,24 @@ public class ExportMetadataPage extends WizardPage {
 		bIncMonEvt.setLayoutData(gd);
 		bIncMonEvt.setSelection(true);
 
-		Binding binding = bindingContext.bindValue(SWTObservables.observeText(tfile, SWT.Modify), PojoObservables.observeValue(value, "file"), //$NON-NLS-1$
-				new UpdateValueStrategy().setAfterConvertValidator(new EmptyStringValidator()), null);
-		ControlDecorationSupport.create(binding, SWT.TOP | SWT.LEFT, null, new ControlDecorationUpdater());
-		bindingContext.bindValue(SWTObservables.observeSelection(bIncRepPerm), PojoObservables.observeValue(value, "incRepositoryPermission")); //$NON-NLS-1$
-		bindingContext.bindValue(SWTObservables.observeSelection(bIncRepJobs), PojoObservables.observeValue(value, "incReportJobs")); //$NON-NLS-1$
-		bindingContext.bindValue(SWTObservables.observeSelection(bIncAccEvt), PojoObservables.observeValue(value, "includeAccessEvents")); //$NON-NLS-1$
-		bindingContext.bindValue(SWTObservables.observeSelection(bIncAudEvt), PojoObservables.observeValue(value, "includeAuditEvents")); //$NON-NLS-1$
-		bindingContext.bindValue(SWTObservables.observeSelection(bIncMonEvt), PojoObservables.observeValue(value, "includeMonitoringEvents")); //$NON-NLS-1$
+		Binding binding = bindingContext.bindValue(
+				SWTObservables.observeText(tfile, SWT.Modify),
+				PojoObservables.observeValue(value, "file"), //$NON-NLS-1$
+				new UpdateValueStrategy()
+						.setAfterConvertValidator(new EmptyStringValidator()),
+				null);
+		ControlDecorationSupport.create(binding, SWT.TOP | SWT.LEFT, null,
+				new ControlDecorationUpdater());
+		bindingContext.bindValue(SWTObservables.observeSelection(bIncRepPerm),
+				PojoObservables.observeValue(value, "incRepositoryPermission")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeSelection(bIncRepJobs),
+				PojoObservables.observeValue(value, "incReportJobs")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeSelection(bIncAccEvt),
+				PojoObservables.observeValue(value, "includeAccessEvents")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeSelection(bIncAudEvt),
+				PojoObservables.observeValue(value, "includeAuditEvents")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeSelection(bIncMonEvt),
+				PojoObservables.observeValue(value, "includeMonitoringEvents")); //$NON-NLS-1$
 	}
 
 	public ExportOptions getValue() {
