@@ -148,6 +148,7 @@ public abstract class ItemPropertiesUtil extends AItemPropertiesUtil {
 			final ComponentDatasetDescriptor cdd) {
 		return new FormItemDialog(UIUtils.getShell(), getDescriptor(), jConf,
 				false) {
+
 			@Override
 			protected void createDataItemSelector(Composite cmp) {
 
@@ -161,6 +162,11 @@ public abstract class ItemPropertiesUtil extends AItemPropertiesUtil {
 				sc.setLayoutData(gd);
 
 				createProperties(cdd, cmp);
+			}
+
+			@Override
+			protected void createValues(Composite cmp) {
+
 			}
 
 			protected void createProperties(

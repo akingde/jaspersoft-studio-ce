@@ -16,14 +16,11 @@ import net.sf.jasperreports.components.map.MapComponent;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CTabFolder;
-import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
 import com.jaspersoft.studio.components.map.property.desc.MarkersDescriptor;
-import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.property.itemproperty.desc.AItemDataListPropertyDescriptor;
 import com.jaspersoft.studio.property.itemproperty.dialog.AItemDialog;
 import com.jaspersoft.studio.property.itemproperty.dialog.FormItemDialog;
@@ -57,13 +54,7 @@ public class MarkersPropertyDescriptor extends AItemDataListPropertyDescriptor {
 								.getJasperReportsContext(), true) {
 
 					@Override
-					protected void createValue(CTabFolder tabFolder) {
-						CTabItem bptab = new CTabItem(tabFolder, SWT.NONE);
-						bptab.setText(Messages.ItemDialog_0);
-
-						final Composite cmp = createScrolledComposite(
-								tabFolder, bptab);
-
+					protected void createValues(Composite cmp) {
 						Label lbl = new Label(cmp, SWT.NONE);
 						GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 						gd.horizontalSpan = 2;
@@ -172,14 +163,6 @@ public class MarkersPropertyDescriptor extends AItemDataListPropertyDescriptor {
 								MapComponent.ITEM_PROPERTY_visible);
 						createItemProperty(cmp,
 								MapComponent.ITEM_PROPERTY_MARKER_size);
-
-						configScrolledComposite(cmp);
-					}
-
-					@Override
-					protected void createValue(Composite parent) {
-						// TODO Auto-generated method stub
-						
 					}
 
 				};

@@ -30,6 +30,7 @@ import org.eclipse.ui.forms.events.ExpansionEvent;
 import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.wb.swt.ResourceManager;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.property.itemproperty.WItemProperty;
 import com.jaspersoft.studio.property.itemproperty.desc.ADescriptor;
 import com.jaspersoft.studio.property.itemproperty.desc.ItemPropertyDescription;
@@ -46,7 +47,24 @@ public abstract class FormItemDialog extends AItemDialog {
 	}
 
 	@Override
-	protected abstract void createValue(CTabFolder tabFolder);
+	protected void createValue(CTabFolder tabFolder) {
+		CTabItem bptab = new CTabItem(tabFolder, SWT.NONE);
+		bptab.setText(Messages.ItemDialog_0);
+
+		Composite cmp = createScrolledComposite(tabFolder, bptab);
+		createValues(cmp);
+		configScrolledComposite(cmp);
+	}
+
+	@Override
+	protected void createValue(Composite parent) {
+		Composite cmp = createScrolledComposite(sc);
+
+		createValues(cmp);
+		configScrolledComposite(cmp);
+	}
+
+	protected abstract void createValues(final Composite cmp);
 
 	@Override
 	protected void fillData() {
@@ -112,9 +130,16 @@ public abstract class FormItemDialog extends AItemDialog {
 	}
 
 	protected Composite createScrolledComposite(Composite parent) {
+		if (parent.getLayout() instanceof GridLayout) {
+			GridLayout l = (GridLayout) parent.getLayout();
+			l.marginHeight = 0;
+			l.marginWidth = 0;
+			l.marginTop = 0;
+		}
 		sc = new ScrolledComposite(parent, SWT.V_SCROLL);
+		sc.setLayoutData(new GridData(GridData.FILL_BOTH));
 
-		final Composite cmp = new Composite(sc, SWT.NONE);
+		Composite cmp = new Composite(sc, SWT.NONE);
 		cmp.setLayout(new GridLayout(2, false));
 
 		sc.setContent(cmp);

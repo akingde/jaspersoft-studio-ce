@@ -180,7 +180,7 @@ public abstract class AItemDialog extends ATitledDialog implements IExpressionCo
 			createValue(tabFolder);
 			createDataset(tabFolder);
 		} else
-			createValue(parent);
+			createValue(cmp);
 		UIUtils.getDisplay().asyncExec(new Runnable() {
 
 			@Override

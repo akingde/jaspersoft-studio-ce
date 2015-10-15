@@ -23,14 +23,11 @@ import net.sf.jasperreports.engine.JRExpression;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CTabFolder;
-import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
 import com.jaspersoft.studio.components.map.property.desc.PathDescriptor;
-import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.util.ItemPropertyUtil;
 import com.jaspersoft.studio.property.itemproperty.desc.AItemDataListPropertyDescriptor;
 import com.jaspersoft.studio.property.itemproperty.dialog.AItemDialog;
@@ -61,13 +58,7 @@ public class PathPropertyDescriptor extends AItemDataListPropertyDescriptor {
 								.getJasperReportsContext(), true) {
 
 					@Override
-					protected void createValue(CTabFolder tabFolder) {
-						CTabItem bptab = new CTabItem(tabFolder, SWT.NONE);
-						bptab.setText(Messages.ItemDialog_0);
-
-						final Composite cmp = createScrolledComposite(
-								tabFolder, bptab);
-
+					protected void createValues(Composite cmp) {
 						createItemProperty(cmp, MapComponent.ITEM_PROPERTY_name);
 
 						Label lbl = new Label(cmp, SWT.NONE);
@@ -120,14 +111,6 @@ public class PathPropertyDescriptor extends AItemDataListPropertyDescriptor {
 								MapComponent.ITEM_PROPERTY_visible);
 						createItemProperty(cmp,
 								MapComponent.ITEM_PROPERTY_MARKER_zIndex);
-
-						configScrolledComposite(cmp);
-					}
-
-					@Override
-					protected void createValue(Composite parent) {
-						// TODO Auto-generated method stub
-						
 					}
 
 				};
