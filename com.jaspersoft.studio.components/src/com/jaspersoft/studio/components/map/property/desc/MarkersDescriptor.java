@@ -111,19 +111,19 @@ public class MarkersDescriptor extends ADescriptor {
 				new ItemPropertyDescription<Integer>(
 						MapComponent.ITEM_PROPERTY_MARKER_ICON_ORIGIN_x,
 						Messages.MarkersDescriptor_22,
-						Messages.MarkersDescriptor_23, false),
+						Messages.MarkersDescriptor_23, false, new Integer(0)),
 				new ItemPropertyDescription<Integer>(
 						MapComponent.ITEM_PROPERTY_MARKER_ICON_ORIGIN_y,
 						Messages.MarkersDescriptor_24,
-						Messages.MarkersDescriptor_25, false),
+						Messages.MarkersDescriptor_25, false, new Integer(0)),
 				new ItemPropertyDescription<Integer>(
 						MapComponent.ITEM_PROPERTY_MARKER_ICON_ANCHOR_x,
 						Messages.MarkersDescriptor_26,
-						Messages.MarkersDescriptor_27, false),
+						Messages.MarkersDescriptor_27, false, new Integer(0)),
 				new ItemPropertyDescription<Integer>(
 						MapComponent.ITEM_PROPERTY_MARKER_ICON_ANCHOR_y,
 						Messages.MarkersDescriptor_28,
-						Messages.MarkersDescriptor_29, false),
+						Messages.MarkersDescriptor_29, false, new Integer(0)),
 
 				new ItemPropertyDescription<String>(
 						MapComponent.ITEM_PROPERTY_MARKER_shadow,
@@ -144,19 +144,19 @@ public class MarkersDescriptor extends ADescriptor {
 				new ItemPropertyDescription<Integer>(
 						MapComponent.ITEM_PROPERTY_MARKER_SHADOW_ORIGIN_x,
 						Messages.MarkersDescriptor_38,
-						Messages.MarkersDescriptor_39, false),
+						Messages.MarkersDescriptor_39, false, new Integer(0)),
 				new ItemPropertyDescription<Integer>(
 						MapComponent.ITEM_PROPERTY_MARKER_SHADOW_ORIGIN_y,
 						Messages.MarkersDescriptor_40,
-						Messages.MarkersDescriptor_41, false),
+						Messages.MarkersDescriptor_41, false, new Integer(0)),
 				new ItemPropertyDescription<Integer>(
 						MapComponent.ITEM_PROPERTY_MARKER_SHADOW_ANCHOR_x,
 						Messages.MarkersDescriptor_42,
-						Messages.MarkersDescriptor_43, false),
+						Messages.MarkersDescriptor_43, false, new Integer(0)),
 				new ItemPropertyDescription<Integer>(
 						MapComponent.ITEM_PROPERTY_MARKER_SHADOW_ANCHOR_y,
 						Messages.MarkersDescriptor_44,
-						Messages.MarkersDescriptor_45, false),
+						Messages.MarkersDescriptor_45, false, new Integer(0)),
 
 				new ItemPropertyDescription<String>(
 						MapComponent.ITEM_PROPERTY_MARKER_INFOWINDOW_content,

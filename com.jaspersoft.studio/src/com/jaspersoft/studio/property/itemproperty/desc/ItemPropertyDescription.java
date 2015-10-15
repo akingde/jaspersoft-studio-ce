@@ -134,7 +134,7 @@ public class ItemPropertyDescription<T> {
 	}
 
 	public Control createControl(final IWItemProperty wiProp, Composite parent) {
-		final Text textExpression = new Text(parent, SWT.BORDER | SWT.WRAP | SWT.V_SCROLL);
+		final Text textExpression = new Text(parent, SWT.BORDER);
 		textExpression.setLayoutData(new GridData(GridData.FILL_BOTH));
 		textExpression.addModifyListener(new ModifyListener() {
 
