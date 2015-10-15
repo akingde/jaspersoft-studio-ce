@@ -8,7 +8,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.itemproperty.label;
 
-import net.sf.jasperreports.components.map.ItemProperty;
+import net.sf.jasperreports.components.items.ItemProperty;
 
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;

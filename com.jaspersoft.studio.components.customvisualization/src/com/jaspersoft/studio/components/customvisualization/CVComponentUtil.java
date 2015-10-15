@@ -5,7 +5,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.customvisualization;
 
-import net.sf.jasperreports.components.map.ItemProperty;
+import net.sf.jasperreports.components.items.ItemProperty;
+ 
 
 
 /**

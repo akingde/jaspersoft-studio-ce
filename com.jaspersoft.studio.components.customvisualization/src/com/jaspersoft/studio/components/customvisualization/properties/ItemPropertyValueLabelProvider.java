@@ -4,8 +4,9 @@
  * Licensed under commercial Jaspersoft Subscription License Agreement
  ******************************************************************************/
 package com.jaspersoft.studio.components.customvisualization.properties;
+ 
 
-import net.sf.jasperreports.components.map.ItemProperty;
+import net.sf.jasperreports.components.items.ItemProperty;
 
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 
