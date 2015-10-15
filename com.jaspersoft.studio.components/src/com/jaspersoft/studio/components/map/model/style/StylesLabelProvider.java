@@ -11,8 +11,9 @@
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.components.map.model.style;
+ 
 
-import net.sf.jasperreports.components.map.ItemProperty;
+import net.sf.jasperreports.components.items.ItemProperty;
 
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;

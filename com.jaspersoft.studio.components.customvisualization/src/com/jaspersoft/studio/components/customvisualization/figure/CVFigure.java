@@ -77,7 +77,6 @@ public class CVFigure extends JRComponentFigure {
 		ComponentDescriptor cd = UIManager
 				.getComponentDescriptor((MCustomVisualization) model);
 		if (cd != null) {
-			System.out.println(cd.getModule());
 			org.eclipse.swt.graphics.Image img = UIManager.getThumbnail(cd,
 					model.getJasperConfiguration());
 			if (img != null) {

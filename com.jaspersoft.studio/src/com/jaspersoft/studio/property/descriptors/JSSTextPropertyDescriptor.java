@@ -59,8 +59,8 @@ public class JSSTextPropertyDescriptor extends TextPropertyDescriptor implements
 		return style;
 	}
 
-	public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
-		ASPropertyWidget textWidget = new SPText(parent, section, this);
+	public ASPropertyWidget<?> createWidget(Composite parent, AbstractSection section) {
+		ASPropertyWidget<?> textWidget = new SPText(parent, section, this);
 		textWidget.setReadOnly(readOnly);
 		return textWidget;
 	}

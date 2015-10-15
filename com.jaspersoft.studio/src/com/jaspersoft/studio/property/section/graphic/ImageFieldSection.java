@@ -44,7 +44,7 @@ public class ImageFieldSection extends AbstractRealValueSection {
 
 		parent.setLayout(new GridLayout(2, false));
 
-		ASPropertyWidget w = createWidget4Property(parent, JRDesignImage.PROPERTY_EXPRESSION);
+		ASPropertyWidget<?> w = createWidget4Property(parent, JRDesignImage.PROPERTY_EXPRESSION);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 1;
 		w.getControl().setLayoutData(gd);

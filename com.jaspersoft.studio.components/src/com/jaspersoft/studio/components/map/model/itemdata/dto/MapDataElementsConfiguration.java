@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.jasperreports.components.map.ItemData;
+import net.sf.jasperreports.components.items.ItemData;
 import net.sf.jasperreports.engine.JRCloneable;
 import net.sf.jasperreports.engine.JRDatasetRun;
 import net.sf.jasperreports.engine.util.JRCloneUtils;

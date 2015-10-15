@@ -15,13 +15,12 @@ package com.jaspersoft.studio.components.map.model.marker.dialog;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.jasperreports.components.map.Item;
-import net.sf.jasperreports.components.map.ItemProperty;
-import net.sf.jasperreports.components.map.StandardItem;
-import net.sf.jasperreports.components.map.StandardItemProperty;
+import net.sf.jasperreports.components.items.Item;
+import net.sf.jasperreports.components.items.ItemProperty;
+import net.sf.jasperreports.components.items.StandardItem;
+import net.sf.jasperreports.components.items.StandardItemProperty;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.BasicMapInfoData;
-import net.sf.jasperreports.engine.design.JRDesignExpression;
 
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.TableLayout;
@@ -53,7 +52,6 @@ import com.jaspersoft.studio.swt.widgets.table.INewElement;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.swt.widgets.table.ListOrderButtons;
 import com.jaspersoft.studio.swt.widgets.table.NewButton;
-import com.jaspersoft.studio.widgets.map.core.LatLng;
 import com.jaspersoft.studio.widgets.map.ui.MarkersPickupDialog;
 
 public class MarkerPage extends WizardPage {

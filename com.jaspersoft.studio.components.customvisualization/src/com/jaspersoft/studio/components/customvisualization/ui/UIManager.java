@@ -24,8 +24,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-import net.sf.jasperreports.components.map.ItemProperty;
-import net.sf.jasperreports.components.map.StandardItemProperty;
+import net.sf.jasperreports.components.items.ItemProperty;
+import net.sf.jasperreports.components.items.StandardItemProperty;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 
 import org.eclipse.core.resources.IContainer;
@@ -202,14 +202,17 @@ public class UIManager {
 						@Override
 						public void propertyChange(
 								org.eclipse.jface.util.PropertyChangeEvent event) {
-							event.getProperty();
-							for (ComponentDescriptor cd : cache.get(jConf)
-									.values()) {
-								imageCache.remove(cd);
-								parentsPath.remove(cd);
+							if (event
+									.getProperty()
+									.equals(CVCDescriptorsPreferencePage.RESOURCE_PATHS)) {
+								for (ComponentDescriptor cd : cache.get(jConf)
+										.values()) {
+									imageCache.remove(cd);
+									parentsPath.remove(cd);
+								}
+								cache.remove(jConf);
+								initCacheJConfig(jConf);
 							}
-							cache.remove(jConf);
-							initCacheJConfig(jConf);
 						}
 					});
 			jConf.getPropertyChangeSupport().addPropertyChangeListener(
@@ -217,14 +220,20 @@ public class UIManager {
 
 						@Override
 						public void propertyChange(PropertyChangeEvent evt) {
-							evt.getNewValue();
-							for (ComponentDescriptor cd : cache.get(jConf)
-									.values()) {
-								imageCache.remove(cd);
-								parentsPath.remove(cd);
+							if (evt.getPropertyName().equals("preferences")
+									&& evt.getNewValue() instanceof PropertyChangeEvent) {
+								evt = (PropertyChangeEvent) evt.getNewValue();
+								if (evt.getPropertyName()
+										.equals(CVCDescriptorsPreferencePage.RESOURCE_PATHS)) {
+									for (ComponentDescriptor cd : cache.get(
+											jConf).values()) {
+										imageCache.remove(cd);
+										parentsPath.remove(cd);
+									}
+									cache.remove(jConf);
+									initCacheJConfig(jConf);
+								}
 							}
-							cache.remove(jConf);
-							initCacheJConfig(jConf);
 						}
 					});
 			jConf.addDisposeListener(new IDisposeListener() {

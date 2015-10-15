@@ -15,8 +15,8 @@ package com.jaspersoft.studio.components.customvisualization.server;
 import java.io.File;
 import java.util.Set;
 
-import net.sf.jasperreports.components.map.ItemProperty;
-import net.sf.jasperreports.components.map.StandardItemProperty;
+import net.sf.jasperreports.components.items.ItemProperty;
+import net.sf.jasperreports.components.items.StandardItemProperty;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JasperDesign;

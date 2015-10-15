@@ -32,7 +32,7 @@ public class ImportDeclarationPropertyDescriptor extends NTextPropertyDescriptor
 		return editor;
 	}
 
-	public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
+	public ASPropertyWidget<?> createWidget(Composite parent, AbstractSection section) {
 		return new SPImport(parent, section, this);
 	}
 }

@@ -15,8 +15,8 @@ package com.jaspersoft.studio.property.itemproperty.sp;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.jasperreports.components.map.Item;
-import net.sf.jasperreports.components.map.ItemData;
+import net.sf.jasperreports.components.items.Item;
+import net.sf.jasperreports.components.items.ItemData;
 
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;

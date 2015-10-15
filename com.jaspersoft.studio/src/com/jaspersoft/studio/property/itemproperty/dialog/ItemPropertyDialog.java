@@ -12,8 +12,8 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
-import net.sf.jasperreports.components.map.ItemProperty;
-import net.sf.jasperreports.components.map.StandardItemProperty;
+import net.sf.jasperreports.components.items.ItemProperty;
+import net.sf.jasperreports.components.items.StandardItemProperty;
 import net.sf.jasperreports.eclipse.ui.ATitledDialog;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 

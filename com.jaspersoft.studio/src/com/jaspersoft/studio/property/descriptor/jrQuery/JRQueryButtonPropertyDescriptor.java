@@ -62,7 +62,7 @@ public class JRQueryButtonPropertyDescriptor extends PropertyDescriptor implemen
 		return new JRQueryLabelProvider(canBeNull);
 	}
 
-	public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
+	public ASPropertyWidget<?> createWidget(Composite parent, AbstractSection section) {
 		return new SPQueryButton(parent, section, this, buttonText);
 	}
 

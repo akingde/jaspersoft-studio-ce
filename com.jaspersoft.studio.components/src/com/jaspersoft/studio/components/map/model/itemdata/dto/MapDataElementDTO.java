@@ -15,9 +15,9 @@ package com.jaspersoft.studio.components.map.model.itemdata.dto;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.jasperreports.components.map.Item;
-import net.sf.jasperreports.components.map.ItemData;
-import net.sf.jasperreports.components.map.ItemProperty;
+import net.sf.jasperreports.components.items.Item;
+import net.sf.jasperreports.components.items.ItemData;
+import net.sf.jasperreports.components.items.ItemProperty;
 import net.sf.jasperreports.engine.JRCloneable;
 import net.sf.jasperreports.engine.util.JRCloneUtils;
 

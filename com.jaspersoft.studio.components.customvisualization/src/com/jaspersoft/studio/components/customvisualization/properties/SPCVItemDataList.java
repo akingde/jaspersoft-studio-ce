@@ -7,7 +7,7 @@ package com.jaspersoft.studio.components.customvisualization.properties;
 
 import java.util.List;
 
-import net.sf.jasperreports.components.map.ItemData;
+import net.sf.jasperreports.components.items.ItemData;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 import org.eclipse.jface.viewers.ArrayContentProvider;

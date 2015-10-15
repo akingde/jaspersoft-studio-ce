@@ -14,7 +14,7 @@ public class JSSEvaluationComboPropertyDescriptor extends JSSComboPropertyDescri
 		super(id, displayName, labels);
 	}
 
-	public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
+	public ASPropertyWidget<?> createWidget(Composite parent, AbstractSection section) {
 		combo =  new SPEvaluationReadCombo(parent, section, this);
 		return combo;
 	}

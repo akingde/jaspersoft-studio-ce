@@ -8,7 +8,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.itemproperty.desc;
 
-import net.sf.jasperreports.components.map.StandardItemProperty;
+import net.sf.jasperreports.components.items.StandardItemProperty;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 
 import org.eclipse.swt.SWT;
@@ -174,8 +174,17 @@ public class ItemPropertyDescription<T> {
 			String tooltip = "";
 			if (!Misc.isNullOrEmpty(txt))
 				tooltip += "\n\n" + txt;
-			tooltip += "\n\n" + getDescription();
+			tooltip += "\n\n" + getToolTip();
 			txtExpr.setToolTipText(tooltip.trim());
 		}
 	}
+
+	public String getToolTip() {
+		String tt = Misc.nvl(getDescription());
+		tt += "\n" + (isMandatory() ? "Mandatory" : "Optional");
+		if (!Misc.isNullOrEmpty(getDefaultValueString()))
+			tt += "\nDefault: " + getDefaultValueString();
+		return tt;
+	}
+
 }

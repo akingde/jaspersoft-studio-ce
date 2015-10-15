@@ -94,8 +94,8 @@ public class DefaultDatasetPropertyDescriptor extends NTextPropertyDescriptor {
 		return editor;
 	}
 
-	public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
-		ASPropertyWidget textWidget = new SPDatasetWidget(parent, section, this);
+	public ASPropertyWidget<?> createWidget(Composite parent, AbstractSection section) {
+		ASPropertyWidget<?> textWidget = new SPDatasetWidget(parent, section, this);
 		return textWidget;
 	}
 	

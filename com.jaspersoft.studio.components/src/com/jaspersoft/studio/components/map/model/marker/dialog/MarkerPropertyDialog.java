@@ -14,7 +14,7 @@ package com.jaspersoft.studio.components.map.model.marker.dialog;
 
 import java.util.List;
 
-import net.sf.jasperreports.components.map.StandardItemProperty;
+import net.sf.jasperreports.components.items.StandardItemProperty;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 
 import org.eclipse.jface.dialogs.Dialog;
@@ -63,7 +63,8 @@ public class MarkerPropertyDialog extends Dialog {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.jface.window.Window#configureShell(org.eclipse.swt.widgets
+	 * @see
+	 * org.eclipse.jface.window.Window#configureShell(org.eclipse.swt.widgets
 	 * .Shell)
 	 */
 	protected void configureShell(Shell newShell) {
@@ -90,7 +91,8 @@ public class MarkerPropertyDialog extends Dialog {
 		label.setText(Messages.MarkerPropertyDialog_PropertyName);
 
 		cprop = new Text(composite, SWT.BORDER);
-		cprop.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.HORIZONTAL_ALIGN_FILL));
+		cprop.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL
+				| GridData.HORIZONTAL_ALIGN_FILL));
 		cprop.addModifyListener(new ModifyListener() {
 
 			@Override
@@ -130,14 +132,16 @@ public class MarkerPropertyDialog extends Dialog {
 			}
 		});
 
-		List<ElementDescription> propertyDescriptions = ElementDescription.getPropertiesInformation(propsDescFile);
-		if(!propertyDescriptions.isEmpty()) {
-			final SelectableComposite infoPanel = new SelectableComposite(composite);
+		List<ElementDescription> propertyDescriptions = ElementDescription
+				.getPropertiesInformation(propsDescFile);
+		if (!propertyDescriptions.isEmpty()) {
+			final SelectableComposite infoPanel = new SelectableComposite(
+					composite);
 			infoPanel.setItems(propertyDescriptions);
-			GridData infoGD = new GridData(SWT.FILL,SWT.FILL,true,true,2,1);
+			GridData infoGD = new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1);
 			infoGD.heightHint = 200;
 			infoGD.widthHint = 500;
-			infoGD.verticalIndent=5;
+			infoGD.verticalIndent = 5;
 			infoPanel.setLayoutData(infoGD);
 			infoPanel.SetDoubleClickListener(new SelectionAdapter() {
 				@Override
@@ -146,7 +150,7 @@ public class MarkerPropertyDialog extends Dialog {
 				}
 			});
 		}
-		
+
 		fillValue(value);
 		return composite;
 	}
@@ -159,7 +163,8 @@ public class MarkerPropertyDialog extends Dialog {
 		label.setText(Messages.MarkerPropertyDialog_ValueExpression);
 
 		evalue = new WTextExpression(composite, SWT.NONE, 1);
-		evalue.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.HORIZONTAL_ALIGN_FILL));
+		evalue.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL
+				| GridData.HORIZONTAL_ALIGN_FILL));
 		evalue.addModifyListener(new ExpressionModifiedListener() {
 			@Override
 			public void expressionModified(ExpressionModifiedEvent event) {
@@ -179,7 +184,8 @@ public class MarkerPropertyDialog extends Dialog {
 		label.setText(Messages.MarkerPropertyDialog_Value);
 
 		tvalue = new Text(composite, SWT.BORDER);
-		tvalue.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.HORIZONTAL_ALIGN_FILL));
+		tvalue.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL
+				| GridData.HORIZONTAL_ALIGN_FILL));
 		tvalue.addModifyListener(new ModifyListener() {
 
 			@Override
@@ -195,7 +201,8 @@ public class MarkerPropertyDialog extends Dialog {
 
 	private boolean isMandatory = false;
 
-	public void setValue(StandardItemProperty value, ExpressionContext expContext, boolean isMandatory) {
+	public void setValue(StandardItemProperty value,
+			ExpressionContext expContext, boolean isMandatory) {
 		this.value = value;
 		this.expContext = expContext;
 		this.isMandatory = isMandatory;
@@ -212,7 +219,8 @@ public class MarkerPropertyDialog extends Dialog {
 		cprop.setText(Misc.nvl(value.getName()));
 		if (value.getValueExpression() != null) {
 			buseexpr.setSelection(true);
-			evalue.setExpression((JRDesignExpression) value.getValueExpression());
+			evalue.setExpression((JRDesignExpression) value
+					.getValueExpression());
 		} else {
 			buseexpr.setSelection(false);
 			tvalue.setText(Misc.nvl(value.getValue()));

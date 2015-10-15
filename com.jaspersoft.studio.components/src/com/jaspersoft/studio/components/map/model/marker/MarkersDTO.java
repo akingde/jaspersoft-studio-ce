@@ -14,7 +14,7 @@ package com.jaspersoft.studio.components.map.model.marker;
 
 import java.util.List;
 
-import net.sf.jasperreports.components.map.Item;
+import net.sf.jasperreports.components.items.Item;
 
 import com.jaspersoft.studio.model.ANode;
 

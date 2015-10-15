@@ -7,8 +7,8 @@
  * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.property.itemproperty.sp;
-
-import net.sf.jasperreports.components.map.StandardItemProperty;
+ 
+import net.sf.jasperreports.components.items.StandardItemProperty;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 
 import org.eclipse.swt.SWT;

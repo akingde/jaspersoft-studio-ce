@@ -10,7 +10,7 @@ package com.jaspersoft.studio.property.itemproperty.dialog;
 
 import java.util.List;
 
-import net.sf.jasperreports.components.map.StandardItemProperty;
+import net.sf.jasperreports.components.items.StandardItemProperty;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
@@ -32,6 +32,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.property.itemproperty.desc.ADescriptor;
 import com.jaspersoft.studio.property.itemproperty.desc.ItemPropertyDescription;
 import com.jaspersoft.studio.property.itemproperty.label.ItemPropertyLabelProvider;
@@ -41,7 +42,6 @@ import com.jaspersoft.studio.swt.widgets.table.IEditElement;
 import com.jaspersoft.studio.swt.widgets.table.INewElement;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.swt.widgets.table.NewButton;
-import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.utils.UIUtil;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 

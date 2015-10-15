@@ -48,7 +48,7 @@ public class FontPropertyDescriptor extends PropertyDescriptor implements IPrope
 		};
 	}
 
-	public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
+	public ASPropertyWidget<?> createWidget(Composite parent, AbstractSection section) {
 		return new SPFont(parent, section, this);
 	}
 

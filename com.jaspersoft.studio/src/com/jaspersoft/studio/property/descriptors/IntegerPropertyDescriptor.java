@@ -84,7 +84,7 @@ public class IntegerPropertyDescriptor extends TextPropertyDescriptor implements
 		return editor;
 	}
 
-	public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
+	public ASPropertyWidget<?> createWidget(Composite parent, AbstractSection section) {
 		SPNumber spNumber = new SPNumber(parent, section, this);
 		spNumber.setNumType(Integer.class);
 		return spNumber;

@@ -30,7 +30,7 @@ import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 
 public class GroupSection extends AbstractSection {
-	private ASPropertyWidget nameWidget;
+	private ASPropertyWidget<?> nameWidget;
 
 	public void createControls(Composite parent, TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);

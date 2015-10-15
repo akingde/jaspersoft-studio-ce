@@ -57,7 +57,7 @@ public class ColorPropertyDescriptor extends org.eclipse.ui.views.properties.Col
 		return new ColorLabelProvider(canBeNull);
 	}
 
-	public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
+	public ASPropertyWidget<?> createWidget(Composite parent, AbstractSection section) {
 		return new SPColor(parent, section, this);
 	}
 

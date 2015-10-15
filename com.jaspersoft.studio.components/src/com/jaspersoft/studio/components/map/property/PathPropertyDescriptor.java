@@ -14,8 +14,8 @@ package com.jaspersoft.studio.components.map.property;
 
 import java.util.List;
 
-import net.sf.jasperreports.components.map.Item;
-import net.sf.jasperreports.components.map.ItemProperty;
+import net.sf.jasperreports.components.items.Item;
+import net.sf.jasperreports.components.items.ItemProperty;
 import net.sf.jasperreports.components.map.MapComponent;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.JRExpression;

@@ -68,7 +68,7 @@ public class BookmarkSection extends AbstractSection {
 			section = (ExpandableComposite)parent.getParent();
 			parent.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 			if (anchorNameProperty != null) {
-				ASPropertyWidget exp = createWidget4Property(parent, anchorNameProperty, true);  
+				ASPropertyWidget<?> exp = createWidget4Property(parent, anchorNameProperty, true);  
 				exp.getControl().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 			}
 			if (bookmarkLevelProperty != null){

@@ -35,7 +35,7 @@ import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 
 public class DatasetSection extends AbstractSection {
 	
-	private ASPropertyWidget nameWidget = null;
+	private ASPropertyWidget<?> nameWidget = null;
 	
 	public void createControls(Composite parent, TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);

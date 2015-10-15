@@ -11,8 +11,8 @@ package com.jaspersoft.studio.property.itemproperty.dialog;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.sf.jasperreports.components.map.ItemProperty;
-import net.sf.jasperreports.components.map.StandardItemProperty;
+import net.sf.jasperreports.components.items.ItemProperty;
+import net.sf.jasperreports.components.items.StandardItemProperty;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
@@ -23,7 +23,6 @@ import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.forms.events.ExpansionAdapter;
@@ -82,11 +81,10 @@ public abstract class FormItemDialog extends AItemDialog {
 
 		Label lbl = new Label(cmp, SWT.NONE);
 		lbl.setText(ipd.getLabel());
-		lbl.setToolTipText(ipd.getDescription());
+		lbl.setToolTipText(ipd.getToolTip());
 
 		final WItemProperty expr = new WItemProperty(cmp, SWT.NONE, 1, descriptor, ipd);
 		expr.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		expr.setToolTipText(ipd.getDescription());
 		expr.addModifyListener(new ItemPropertyModifiedListener() {
 
 			@Override

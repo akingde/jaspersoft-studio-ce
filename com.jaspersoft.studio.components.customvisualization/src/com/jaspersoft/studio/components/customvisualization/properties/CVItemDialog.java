@@ -4,10 +4,10 @@
  * Licensed under commercial Jaspersoft Subscription License Agreement
  ******************************************************************************/
 package com.jaspersoft.studio.components.customvisualization.properties;
-
-import net.sf.jasperreports.components.map.Item;
-import net.sf.jasperreports.components.map.ItemProperty;
-import net.sf.jasperreports.components.map.StandardItem;
+ 
+import net.sf.jasperreports.components.items.Item;
+import net.sf.jasperreports.components.items.ItemProperty;
+import net.sf.jasperreports.components.items.StandardItem;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 import org.eclipse.jface.dialogs.Dialog;

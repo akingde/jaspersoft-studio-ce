@@ -93,32 +93,32 @@ public class HyperlinkSection extends AbstractSection {
 	/**
 	 * Widget of the anchor field (only the field to insert the data, not the label with the name of the field)
 	 */
-	private ASPropertyWidget anchorWidget;
+	private ASPropertyWidget<?> anchorWidget;
 	
 	/**
 	 * Widget of the reference field (only the field to insert the data, not the label with the name of the field)
 	 */
-	private ASPropertyWidget referenceWidget;
+	private ASPropertyWidget<?> referenceWidget;
 	
 	/**
 	 * Widget of the parameters field (only the field to insert the data, not the label with the name of the field)
 	 */
-	private ASPropertyWidget parametersWidget;
+	private ASPropertyWidget<?> parametersWidget;
 	
 	/**
 	 * Widget of the when field (only the field to insert the data, not the label with the name of the field)
 	 */
-	private ASPropertyWidget whenWidget;
+	private ASPropertyWidget<?> whenWidget;
 	
 	/**
 	 * Widget of the tooltip field (only the field to insert the data, not the label with the name of the field)
 	 */
-	private ASPropertyWidget tooltipWidget;
+	private ASPropertyWidget<?> tooltipWidget;
 	
 	/**
 	 * Widget of the page field (only the field to insert the data, not the label with the name of the field)
 	 */
-	private ASPropertyWidget pageWidget;
+	private ASPropertyWidget<?> pageWidget;
 	
 	/**
 	 * Control of the target selection field (only the field to insert the data, not the label with the name of the field)

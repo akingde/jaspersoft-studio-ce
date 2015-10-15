@@ -8,8 +8,8 @@ package com.jaspersoft.studio.components.customvisualization.properties;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.jasperreports.components.map.ItemProperty;
-import net.sf.jasperreports.components.map.StandardItemProperty;
+import net.sf.jasperreports.components.items.ItemProperty;
+import net.sf.jasperreports.components.items.StandardItemProperty;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -319,12 +319,11 @@ public class SPCVItemPropertiesList extends
 			CVCPropertyDescriptor descriptor, ExpressionContext ec) {
 		Label lbl = new Label(cmp, SWT.NONE);
 		lbl.setText(ipd.getLabel());
-		lbl.setToolTipText(ipd.getDescription());
+		lbl.setToolTipText(ipd.getToolTip());
 
 		final WItemProperty expr = new WItemProperty(cmp, SWT.NONE, 1,
 				descriptor, ipd);
 		expr.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		expr.setToolTipText(ipd.getDescription());
 		expr.setExpressionContext(ec);
 		if (ipd.isReadOnly())
 			expr.setEnabled(false);

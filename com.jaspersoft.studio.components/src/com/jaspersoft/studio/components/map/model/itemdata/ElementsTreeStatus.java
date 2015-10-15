@@ -15,7 +15,7 @@ package com.jaspersoft.studio.components.map.model.itemdata;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.jasperreports.components.map.ItemProperty;
+import net.sf.jasperreports.components.items.ItemProperty;
 
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;

@@ -80,7 +80,7 @@ public class CheckBoxPropertyDescriptor extends PropertyDescriptor implements IP
 		return new CheckBoxLabelProvider(canBeNull);
 	}
 
-	public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
+	public ASPropertyWidget<?> createWidget(Composite parent, AbstractSection section) {
 		if (!showTextOnButton && canBeNull == NullEnum.NOTNULL)
 			return new SPBooleanNoText(parent, section, this);
 		else if (canBeNull == NullEnum.NOTNULL)

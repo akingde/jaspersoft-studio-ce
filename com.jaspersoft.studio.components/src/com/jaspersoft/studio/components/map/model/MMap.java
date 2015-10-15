@@ -18,9 +18,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import net.sf.jasperreports.components.map.ItemData;
+import net.sf.jasperreports.components.items.ItemData;
+import net.sf.jasperreports.components.items.StandardItemData;
 import net.sf.jasperreports.components.map.MapComponent;
-import net.sf.jasperreports.components.map.StandardItemData;
 import net.sf.jasperreports.components.map.StandardMapComponent;
 import net.sf.jasperreports.components.map.type.MapImageTypeEnum;
 import net.sf.jasperreports.components.map.type.MapScaleEnum;

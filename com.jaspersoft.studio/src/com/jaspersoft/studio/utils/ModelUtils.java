@@ -23,9 +23,9 @@ import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
 
-import net.sf.jasperreports.components.map.ItemData;
+import net.sf.jasperreports.components.items.ItemData;
+import net.sf.jasperreports.components.items.StandardItemData;
 import net.sf.jasperreports.components.map.MapComponent;
-import net.sf.jasperreports.components.map.StandardItemData;
 import net.sf.jasperreports.components.map.StandardMapComponent;
 import net.sf.jasperreports.components.table.BaseColumn;
 import net.sf.jasperreports.components.table.Cell;

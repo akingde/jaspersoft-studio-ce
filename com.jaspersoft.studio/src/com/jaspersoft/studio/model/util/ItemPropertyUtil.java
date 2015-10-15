@@ -11,9 +11,9 @@ package com.jaspersoft.studio.model.util;
 
 import java.util.List;
 
-import net.sf.jasperreports.components.map.ItemProperty;
-import net.sf.jasperreports.components.map.StandardItem;
-import net.sf.jasperreports.components.map.StandardItemProperty;
+import net.sf.jasperreports.components.items.ItemProperty;
+import net.sf.jasperreports.components.items.StandardItem;
+import net.sf.jasperreports.components.items.StandardItemProperty;
 
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 

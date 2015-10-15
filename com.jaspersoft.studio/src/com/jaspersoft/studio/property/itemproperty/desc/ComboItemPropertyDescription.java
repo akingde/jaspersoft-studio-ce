@@ -1,6 +1,6 @@
 package com.jaspersoft.studio.property.itemproperty.desc;
 
-import net.sf.jasperreports.components.map.StandardItemProperty;
+import net.sf.jasperreports.components.items.StandardItemProperty;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 
 import org.eclipse.swt.SWT;
@@ -134,7 +134,7 @@ public class ComboItemPropertyDescription<T> extends ItemPropertyDescription<T> 
 			String tooltip = "";
 			if (!Misc.isNullOrEmpty(txt))
 				tooltip += "\n\n" + txt;
-			tooltip += "\n\n" + getDescription();
+			tooltip += "\n\n" + getToolTip();
 			combo.setToolTipText(tooltip.trim());
 		}
 		cmp.layout();

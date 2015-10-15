@@ -12,8 +12,11 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.action.resource;
 
+import java.util.List;
+
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -22,6 +25,8 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.wb.swt.ResourceManager;
 
+import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
+import com.jaspersoft.jasperserver.dto.permissions.RepositoryPermission;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.server.messages.Messages;
@@ -30,7 +35,7 @@ import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.protocol.Feature;
 import com.jaspersoft.studio.server.protocol.IConnection;
 import com.jaspersoft.studio.server.wizard.exp.ExportMetadataWizard;
-import com.jaspersoft.studio.utils.Callback;
+import com.jaspersoft.studio.server.wizard.permission.PermissionOptions;
 
 /**
  * Action for importing the selected DataSource in the JRS tree as Data Adapter
@@ -61,17 +66,34 @@ public class ExportMetadataAction extends Action {
 		Object firstElement = selection.getFirstElement();
 		if (firstElement != null) {
 			MServerProfile msp = null;
+			INode n = null;
 			if (firstElement instanceof MServerProfile)
 				msp = (MServerProfile) firstElement;
 			else if (firstElement instanceof AMResource) {
-				INode n = ((AMResource) firstElement).getRoot();
+				n = ((AMResource) firstElement).getRoot();
 				if (n instanceof MServerProfile)
 					msp = (MServerProfile) n;
 			}
 			try {
 				IConnection c = msp.getWsClient();
-				if (c != null)
+				if (c != null) {
 					en = msp != null && c.isSupported(Feature.EXPORTMETADATA);
+					// we should check permission, but it's expensive
+					// if (en && firstElement instanceof AMResource) {
+					// PermissionOptions popt = new PermissionOptions();
+					// popt.setEffectivePermissions(true);
+					// popt.setRecipientTypeUser(false);
+					//
+					// List<RepositoryPermission> perms = c.getPermissions(
+					// ((AMResource) firstElement).getValue(),
+					// new NullProgressMonitor(), popt);
+					// for (RepositoryPermission p : perms) {
+					// if (p.getRecipient().equals("role:/ROLE_SUPERUSER"))
+					// return true;
+					// }
+					// return false;
+					// }
+				}
 			} catch (Exception e) {
 				en = false;
 			}
@@ -89,7 +111,6 @@ public class ExportMetadataAction extends Action {
 		WizardDialog dialog = new WizardDialog(UIUtils.getShell(), wizard);
 		dialog.create();
 		if (dialog.open() == Dialog.OK) {
-
 		}
 	}
 

@@ -17,8 +17,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.jasperreports.components.map.ItemProperty;
-import net.sf.jasperreports.components.map.StandardItem;
+import net.sf.jasperreports.components.items.ItemProperty;
+import net.sf.jasperreports.components.items.StandardItem;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 

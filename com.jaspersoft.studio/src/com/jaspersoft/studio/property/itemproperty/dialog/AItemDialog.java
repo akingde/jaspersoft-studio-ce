@@ -11,10 +11,10 @@ package com.jaspersoft.studio.property.itemproperty.dialog;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.jasperreports.components.map.ItemData;
-import net.sf.jasperreports.components.map.ItemProperty;
-import net.sf.jasperreports.components.map.StandardItem;
-import net.sf.jasperreports.components.map.StandardItemData;
+import net.sf.jasperreports.components.items.ItemData;
+import net.sf.jasperreports.components.items.ItemProperty;
+import net.sf.jasperreports.components.items.StandardItem;
+import net.sf.jasperreports.components.items.StandardItemData;
 import net.sf.jasperreports.eclipse.ui.ATitledDialog;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.JRElementDataset;

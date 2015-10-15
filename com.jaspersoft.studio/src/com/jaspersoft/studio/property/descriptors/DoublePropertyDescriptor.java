@@ -83,7 +83,7 @@ public class DoublePropertyDescriptor extends TextPropertyDescriptor implements 
 		return editor;
 	}
 
-	public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
+	public ASPropertyWidget<?> createWidget(Composite parent, AbstractSection section) {
 		SPNumber spNumber = new SPNumber(parent, section, this);
 		spNumber.setNumType(Double.class);
 		return spNumber;

@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import net.sf.jasperreports.components.map.ItemData;
-import net.sf.jasperreports.components.map.ItemProperty;
+import net.sf.jasperreports.components.items.ItemData;
+import net.sf.jasperreports.components.items.ItemProperty;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.component.ComponentKey;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;

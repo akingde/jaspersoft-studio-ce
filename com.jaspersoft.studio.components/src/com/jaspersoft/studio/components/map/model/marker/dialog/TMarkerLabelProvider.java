@@ -14,8 +14,8 @@ package com.jaspersoft.studio.components.map.model.marker.dialog;
 
 import java.util.List;
 
-import net.sf.jasperreports.components.map.Item;
-import net.sf.jasperreports.components.map.ItemProperty;
+import net.sf.jasperreports.components.items.Item;
+import net.sf.jasperreports.components.items.ItemProperty;
 
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;

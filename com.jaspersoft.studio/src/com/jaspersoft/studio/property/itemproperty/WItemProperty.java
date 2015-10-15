@@ -11,7 +11,7 @@ package com.jaspersoft.studio.property.itemproperty;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.jasperreports.components.map.StandardItemProperty;
+import net.sf.jasperreports.components.items.StandardItemProperty;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 
@@ -39,11 +39,13 @@ import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
 import com.jaspersoft.studio.property.itemproperty.desc.ADescriptor;
 import com.jaspersoft.studio.property.itemproperty.desc.IWItemProperty;
 import com.jaspersoft.studio.property.itemproperty.desc.ItemPropertyDescription;
+import com.jaspersoft.studio.property.itemproperty.desc.NumberPropertyDescription;
 import com.jaspersoft.studio.property.itemproperty.dialog.ItemPropertyElementDialog;
 import com.jaspersoft.studio.property.itemproperty.event.ItemPropertyModifiedEvent;
 import com.jaspersoft.studio.property.itemproperty.event.ItemPropertyModifiedListener;
 import com.jaspersoft.studio.property.itemproperty.label.ItemPropertyLabelProvider;
 import com.jaspersoft.studio.swt.events.ExpressionModifiedListener;
+import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.UIUtil;
 
 /**
@@ -221,7 +223,12 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 		});
 
 		configureWidgetsLayoutData(showMode);
-
+		if (ipd != null) {
+			String tt = ipd.getToolTip();
+			txtLabel.setToolTipText(tt);
+			textExpression.setToolTipText(ipd.getToolTip());
+			btnEditExpression.setToolTipText(ipd.getToolTip());
+		}
 	}
 
 	public boolean isRefresh() {

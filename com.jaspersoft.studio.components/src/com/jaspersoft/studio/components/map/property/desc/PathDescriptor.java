@@ -11,11 +11,11 @@
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.components.map.property.desc;
-
-import net.sf.jasperreports.components.map.Item;
-import net.sf.jasperreports.components.map.ItemProperty;
+ 
+import net.sf.jasperreports.components.items.Item;
+import net.sf.jasperreports.components.items.ItemProperty;
+import net.sf.jasperreports.components.items.StandardItemProperty;
 import net.sf.jasperreports.components.map.MapComponent;
-import net.sf.jasperreports.components.map.StandardItemProperty;
 
 import org.eclipse.swt.graphics.Image;
 

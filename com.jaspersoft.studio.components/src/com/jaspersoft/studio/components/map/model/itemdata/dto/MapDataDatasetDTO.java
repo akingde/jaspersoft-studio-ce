@@ -11,8 +11,8 @@
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.components.map.model.itemdata.dto;
-
-import net.sf.jasperreports.components.map.ItemData;
+ 
+import net.sf.jasperreports.components.items.ItemData;
 import net.sf.jasperreports.engine.JRCloneable;
 import net.sf.jasperreports.engine.JRElementDataset;
 

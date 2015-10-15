@@ -74,7 +74,7 @@ public class ConvertGroupBy {
 				else {
 					for (INode sn : msel.getChildren()) {
 						if (sn instanceof AMQueryAliased) {
-							String alias = ((AMQueryAliased) sn).getAlias();
+							String alias = ((AMQueryAliased<?>) sn).getAlias();
 							if (!Misc.isNullOrEmpty(alias)
 									&& alias.equalsIgnoreCase(column)) {
 								if (sn instanceof MSelectColumn)

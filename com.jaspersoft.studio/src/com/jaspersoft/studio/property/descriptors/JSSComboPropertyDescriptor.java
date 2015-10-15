@@ -48,7 +48,7 @@ public class JSSComboPropertyDescriptor extends ComboBoxPropertyDescriptor imple
 		return editor;
 	}
 
-	public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
+	public ASPropertyWidget<?> createWidget(Composite parent, AbstractSection section) {
 		combo =  new SPReadCombo(parent, section, this);
 		return combo;
 	}

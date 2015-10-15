@@ -56,6 +56,14 @@ public class NumberPropertyDescription<T extends Number> extends ItemPropertyDes
 		return BigDecimal.class;
 	}
 
+	public Number getMin() {
+		return min;
+	}
+
+	public Number getMax() {
+		return max;
+	}
+
 	@Override
 	public Control createControl(IWItemProperty wiProp, Composite parent) {
 		Text ctrl = (Text) super.createControl(wiProp, parent);
@@ -132,5 +140,15 @@ public class NumberPropertyDescription<T extends Number> extends ItemPropertyDes
 			return new BigDecimal(number);
 
 		return null;
+	}
+
+	@Override
+	public String getToolTip() {
+		String tt = super.getToolTip();
+		if (getMin() != null)
+			tt += "\nmin: " + getMin();
+		if (getMax() != null)
+			tt += "\nmax: " + getMax();
+		return tt;
 	}
 }

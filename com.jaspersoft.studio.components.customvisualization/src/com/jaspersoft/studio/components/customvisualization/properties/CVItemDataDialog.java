@@ -4,11 +4,11 @@
  * Licensed under commercial Jaspersoft Subscription License Agreement
  ******************************************************************************/
 package com.jaspersoft.studio.components.customvisualization.properties;
-
-import net.sf.jasperreports.components.map.Item;
-import net.sf.jasperreports.components.map.ItemData;
-import net.sf.jasperreports.components.map.StandardItem;
-import net.sf.jasperreports.components.map.StandardItemData;
+ 
+import net.sf.jasperreports.components.items.Item;
+import net.sf.jasperreports.components.items.ItemData;
+import net.sf.jasperreports.components.items.StandardItem;
+import net.sf.jasperreports.components.items.StandardItemData;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignElementDataset;

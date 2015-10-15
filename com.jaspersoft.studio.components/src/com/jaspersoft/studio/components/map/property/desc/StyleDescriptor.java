@@ -15,9 +15,9 @@ package com.jaspersoft.studio.components.map.property.desc;
 import java.util.HashSet;
 import java.util.Set;
 
-import net.sf.jasperreports.components.map.Item;
-import net.sf.jasperreports.components.map.ItemData;
-import net.sf.jasperreports.components.map.ItemProperty;
+import net.sf.jasperreports.components.items.Item;
+import net.sf.jasperreports.components.items.ItemData;
+import net.sf.jasperreports.components.items.ItemProperty;
 import net.sf.jasperreports.components.map.MapComponent;
 
 import org.eclipse.swt.graphics.Image;

@@ -54,7 +54,7 @@ public class HyperlinkParameterPropertyDescriptor extends NTextPropertyDescripto
 		this.expContext = expContext;
 	}
 
-	public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
+	public ASPropertyWidget<?> createWidget(Composite parent, AbstractSection section) {
 		return new SPHyperlinkParameter(parent, section, this);
 	}
 }

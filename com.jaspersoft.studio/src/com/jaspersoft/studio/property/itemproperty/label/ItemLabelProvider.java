@@ -10,10 +10,10 @@ package com.jaspersoft.studio.property.itemproperty.label;
 
 import java.util.Collection;
 
-import net.sf.jasperreports.components.map.Item;
-import net.sf.jasperreports.components.map.ItemData;
-import net.sf.jasperreports.components.map.ItemProperty;
-import net.sf.jasperreports.components.map.StandardItem;
+import net.sf.jasperreports.components.items.Item;
+import net.sf.jasperreports.components.items.ItemData;
+import net.sf.jasperreports.components.items.ItemProperty;
+import net.sf.jasperreports.components.items.StandardItem;
 import net.sf.jasperreports.engine.JRDatasetRun;
 import net.sf.jasperreports.engine.JRElementDataset;
 import net.sf.jasperreports.engine.type.IncrementTypeEnum;
@@ -25,9 +25,9 @@ import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.property.itemproperty.desc.ADescriptor;
 import com.jaspersoft.studio.property.itemproperty.desc.ItemPropertyDescription;
-import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.utils.Misc;
 
 public class ItemLabelProvider extends ColumnLabelProvider implements ITableLabelProvider {
