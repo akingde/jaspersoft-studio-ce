@@ -11,8 +11,9 @@
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.components.map.property.desc;
- 
+
 import net.sf.jasperreports.components.items.Item;
+import net.sf.jasperreports.components.items.ItemData;
 import net.sf.jasperreports.components.items.ItemProperty;
 import net.sf.jasperreports.components.items.StandardItemProperty;
 import net.sf.jasperreports.components.map.MapComponent;
@@ -26,6 +27,7 @@ import com.jaspersoft.studio.property.itemproperty.desc.ADescriptor;
 import com.jaspersoft.studio.property.itemproperty.desc.ColorPropertyDescription;
 import com.jaspersoft.studio.property.itemproperty.desc.ComboItemPropertyDescription;
 import com.jaspersoft.studio.property.itemproperty.desc.ItemPropertyDescription;
+import com.jaspersoft.studio.property.itemproperty.desc.NumberPropertyDescription;
 import com.jaspersoft.studio.utils.Misc;
 
 /**
@@ -83,14 +85,17 @@ public class PathDescriptor extends ADescriptor {
 						Messages.PathDescriptor_1, Messages.PathDescriptor_2,
 						false, MapComponent.DEFAULT_PATH_NAME),
 
-				new ItemPropertyDescription<Float>(
+				new NumberPropertyDescription<Float>(
 						MapComponent.ITEM_PROPERTY_latitude,
-						Messages.MarkerPage_LatitudeColumn, "", true,
-						new Float("37.7833")), //$NON-NLS-1$
-				new ItemPropertyDescription<Float>(
+						Messages.MarkerPage_LatitudeColumn, "", false,
+						new Float("37.7833"),
+						new Float("-85f"), new Float("85f")), //$NON-NLS-1$
+				new NumberPropertyDescription<Float>(
 						MapComponent.ITEM_PROPERTY_longitude,
-						Messages.MarkerPage_LongitudeColumn, "", true,
-						new Float("-122.4167")), //$NON-NLS-1$
+						Messages.MarkerPage_LongitudeColumn, "", false,
+						new Float("-122.4167"), new Float("-180"), new Float(
+								"180")), //$NON-NLS-1$
+
 				new ItemPropertyDescription<String>(
 						MapComponent.ITEM_PROPERTY_address,
 						Messages.PathDescriptor_3, Messages.PathDescriptor_4,
@@ -160,5 +165,36 @@ public class PathDescriptor extends ADescriptor {
 						false),
 
 		};
+	}
+
+	@Override
+	public void validateItem(ItemProperty itemProperty) throws Exception {
+		super.validateItem(itemProperty);
+		if (itemProperty == null)
+			for (ItemData id : itemDatas) {
+				if (id.getItems() == null)
+					continue;
+				for (Item it : id.getItems()) {
+					if (it.getProperties() == null)
+						continue;
+					boolean address = false;
+					boolean lon = false;
+					boolean lat = false;
+					if (ItemPropertyUtil.hasValue(it.getProperties(),
+							MapComponent.ITEM_PROPERTY_latitude))
+						lat = true;
+					if (ItemPropertyUtil.hasValue(it.getProperties(),
+							MapComponent.ITEM_PROPERTY_longitude))
+						lon = true;
+					if (ItemPropertyUtil.hasValue(it.getProperties(),
+							MapComponent.ITEM_PROPERTY_address)) {
+						address = true;
+						break;
+					}
+					if (!address && !(lon && lat))
+						throw new Exception(
+								"You must have Address or Latitude/Longitude");
+				}
+			}
 	}
 }

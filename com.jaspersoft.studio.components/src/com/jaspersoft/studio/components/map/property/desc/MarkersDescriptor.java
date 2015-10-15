@@ -12,9 +12,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.map.property.desc;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import net.sf.jasperreports.components.items.Item;
 import net.sf.jasperreports.components.items.ItemData;
 import net.sf.jasperreports.components.items.ItemProperty;
@@ -29,6 +26,7 @@ import com.jaspersoft.studio.property.itemproperty.desc.ADescriptor;
 import com.jaspersoft.studio.property.itemproperty.desc.ColorPropertyDescription;
 import com.jaspersoft.studio.property.itemproperty.desc.ComboItemPropertyDescription;
 import com.jaspersoft.studio.property.itemproperty.desc.ItemPropertyDescription;
+import com.jaspersoft.studio.property.itemproperty.desc.NumberPropertyDescription;
 
 /**
  * @author Veaceslav Chicu (schicu@users.sourceforge.net)
@@ -67,14 +65,17 @@ public class MarkersDescriptor extends ADescriptor {
 						MapComponent.ITEM_PROPERTY_MARKER_title,
 						Messages.MarkersDescriptor_1, "", false, "Marker"), //$NON-NLS-1$
 
-				new ItemPropertyDescription<Float>(
+				new NumberPropertyDescription<Float>(
 						MapComponent.ITEM_PROPERTY_latitude,
 						Messages.MarkerPage_LatitudeColumn, "", false,
-						new Float("37.7833")), //$NON-NLS-1$
-				new ItemPropertyDescription<Float>(
+						new Float("37.7833"),
+						new Float("-85f"), new Float("85f")), //$NON-NLS-1$
+				new NumberPropertyDescription<Float>(
 						MapComponent.ITEM_PROPERTY_longitude,
 						Messages.MarkerPage_LongitudeColumn, "", false,
-						new Float("-122.4167")), //$NON-NLS-1$
+						new Float("-122.4167"), new Float("-180"), new Float(
+								"180")), //$NON-NLS-1$
+
 				new ItemPropertyDescription<String>(
 						MapComponent.ITEM_PROPERTY_address,
 						Messages.MarkersDescriptor_3,
@@ -230,46 +231,31 @@ public class MarkersDescriptor extends ADescriptor {
 	@Override
 	public void validateItem(ItemProperty itemProperty) throws Exception {
 		super.validateItem(itemProperty);
-		if (itemProperty != null)
+		if (itemProperty == null)
 			for (ItemData id : itemDatas) {
 				if (id.getItems() == null)
 					continue;
 				for (Item it : id.getItems()) {
 					if (it.getProperties() == null)
 						continue;
-					ItemProperty p = ItemPropertyUtil.getProperty(
-							it.getProperties(),
-							MapComponent.ITEM_PROPERTY_MARKER_title);
-					if (p == null || p == oldItemProperty)
-						continue;
-					if (itemProperty.getValue() != null) {
-						if (p.getValue() == null)
-							continue;
-						if (p.getValue().equals(itemProperty.getValue()))
-							throw new Exception(Messages.MarkersDescriptor_2);
+					boolean address = false;
+					boolean lon = false;
+					boolean lat = false;
+					if (ItemPropertyUtil.hasValue(it.getProperties(),
+							MapComponent.ITEM_PROPERTY_latitude))
+						lat = true;
+					if (ItemPropertyUtil.hasValue(it.getProperties(),
+							MapComponent.ITEM_PROPERTY_longitude))
+						lon = true;
+					if (ItemPropertyUtil.hasValue(it.getProperties(),
+							MapComponent.ITEM_PROPERTY_address)) {
+						address = true;
+						break;
 					}
-
+					if (!address && !(lon && lat))
+						throw new Exception(
+								"You must have Address or Latitude/Longitude");
 				}
 			}
-		else {
-			Set<String> names = new HashSet<String>();
-			for (ItemData id : itemDatas) {
-				if (id.getItems() == null)
-					continue;
-				for (Item it : id.getItems()) {
-					if (it.getProperties() == null)
-						continue;
-					ItemProperty p = ItemPropertyUtil.getProperty(
-							it.getProperties(),
-							MapComponent.ITEM_PROPERTY_MARKER_title);
-					if (p == null || p.getValueExpression() != null
-							|| p.getValue() == null)
-						continue;
-					if (names.contains(p.getValue()))
-						throw new Exception(Messages.MarkersDescriptor_70);
-					names.add(p.getValue());
-				}
-			}
-		}
 	}
 }

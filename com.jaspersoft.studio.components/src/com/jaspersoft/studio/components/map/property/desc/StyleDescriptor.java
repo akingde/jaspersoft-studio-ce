@@ -188,8 +188,7 @@ public class StyleDescriptor extends ADescriptor {
 									MapComponent.ITEM_PROPERTY_name);
 					if (p == null || p.getValueExpression() != null
 							|| p.getValue() == null)
-						throw new Exception(MapComponent.ITEM_PROPERTY_name
-								+ " is mandatory property.");
+						continue;
 					if (names.contains(p.getValue()))
 						throw new Exception(
 								com.jaspersoft.studio.messages.Messages.StyleDescriptor_5);

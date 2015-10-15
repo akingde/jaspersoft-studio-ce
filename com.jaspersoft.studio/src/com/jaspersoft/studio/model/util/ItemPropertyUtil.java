@@ -31,6 +31,15 @@ public class ItemPropertyUtil {
 		return null;
 	}
 
+	public static boolean hasValue(List<ItemProperty> items, String name) {
+		ItemProperty p = getProperty(items, name);
+		if (p != null
+				&& (!Misc.isNullOrEmpty(p.getValue()) || (p.getValueExpression() != null && Misc.isNullOrEmpty(p
+						.getValueExpression().getText()))))
+			return true;
+		return false;
+	}
+
 	public static void setProperty(StandardItem item, String key, ItemProperty ip) {
 		List<ItemProperty> props = item.getProperties();
 		if (props != null) {
