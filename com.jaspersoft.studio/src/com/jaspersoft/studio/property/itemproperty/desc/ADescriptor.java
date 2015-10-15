@@ -8,7 +8,9 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.itemproperty.desc;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import net.sf.jasperreports.components.items.Item;
 import net.sf.jasperreports.components.items.ItemData;
@@ -20,6 +22,7 @@ import org.eclipse.swt.graphics.Image;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.model.util.ItemPropertyUtil;
 import com.jaspersoft.studio.utils.Misc;
 
 /**
@@ -105,7 +108,22 @@ public abstract class ADescriptor {
 				if (ip.getName().equals(itemProperty.getName()))
 					throw new Exception(Messages.ADescriptor_3);
 			}
-		}
+		} else
+			for (ItemData id : itemDatas) {
+				if (id.getItems() == null)
+					continue;
+				for (Item it : id.getItems()) {
+					if (it.getProperties() == null)
+						continue;
+					for (ItemPropertyDescription<?> ipd : getItemPropertyDescriptors()) {
+						if (ipd.isMandatory()) {
+							ItemProperty p = ItemPropertyUtil.getProperty(it.getProperties(), ipd.getName());
+							if (p == null || p.getValueExpression() != null || Misc.isNullOrEmpty(p.getValue()))
+								throw new Exception(ipd.getLabel() + " is mandatory property.");
+						}
+					}
+				}
+			}
 	}
 
 }

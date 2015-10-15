@@ -44,7 +44,7 @@ public class StyleDescriptor extends ADescriptor {
 	 */
 	@Override
 	public String getDisplayName() {
-		return "Style"; //$NON-NLS-1$
+		return com.jaspersoft.studio.messages.Messages.StyleDescriptor_6;
 	}
 
 	/*
@@ -74,7 +74,8 @@ public class StyleDescriptor extends ADescriptor {
 						MapComponent.ITEM_PROPERTY_name,
 						com.jaspersoft.studio.messages.Messages.common_name,
 						com.jaspersoft.studio.messages.Messages.StyleDescriptor_0,
-						false, com.jaspersoft.studio.messages.Messages.StyleDescriptor_1),
+						true,
+						com.jaspersoft.studio.messages.Messages.StyleDescriptor_1),
 				new ItemPropertyDescription<String>(
 						MapComponent.ITEM_PROPERTY_style,
 						com.jaspersoft.studio.messages.Messages.StyleDescriptor_2,
@@ -187,7 +188,8 @@ public class StyleDescriptor extends ADescriptor {
 									MapComponent.ITEM_PROPERTY_name);
 					if (p == null || p.getValueExpression() != null
 							|| p.getValue() == null)
-						continue;
+						throw new Exception(MapComponent.ITEM_PROPERTY_name
+								+ " is mandatory property.");
 					if (names.contains(p.getValue()))
 						throw new Exception(
 								com.jaspersoft.studio.messages.Messages.StyleDescriptor_5);

@@ -1940,6 +1940,7 @@ public class Messages extends NLS {
 	public static String StyleDescriptor_3;
 	public static String StyleDescriptor_4;
 	public static String StyleDescriptor_5;
+	public static String StyleDescriptor_6;
 	public static String StyleEditPart_styleTemplatePrefix;
 	public static String StylesListSection_Inherited_From_Default_Style;
 	public static String StylesListSection_NotEditable_Message;

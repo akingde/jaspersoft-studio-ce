@@ -58,7 +58,7 @@ public abstract class FormItemDialog extends AItemDialog {
 
 	@Override
 	protected void createValue(Composite parent) {
-		Composite cmp = createScrolledComposite(sc);
+		Composite cmp = createScrolledComposite(parent);
 
 		createValues(cmp);
 		configScrolledComposite(cmp);
@@ -130,7 +130,7 @@ public abstract class FormItemDialog extends AItemDialog {
 	}
 
 	protected Composite createScrolledComposite(Composite parent) {
-		if (parent.getLayout() instanceof GridLayout) {
+		if (parent.getLayout() != null && parent.getLayout() instanceof GridLayout) {
 			GridLayout l = (GridLayout) parent.getLayout();
 			l.marginHeight = 0;
 			l.marginWidth = 0;
