@@ -261,6 +261,9 @@ public class SPCVItemPropertiesList extends
 						} finally {
 							refresh = false;
 						}
+						form.layout(true);
+						stackLayout.topControl = form;
+						cmp.layout(true);
 						return;
 					}
 					cd = newCd;
