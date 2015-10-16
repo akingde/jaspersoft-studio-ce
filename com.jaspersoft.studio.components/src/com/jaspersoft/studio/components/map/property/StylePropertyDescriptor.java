@@ -48,7 +48,7 @@ public class StylePropertyDescriptor extends AItemDataListPropertyDescriptor {
 			protected AItemDialog createItemDialog() {
 				return new FormItemDialog(UIUtils.getShell(), getDescriptor(),
 						(JasperReportsConfiguration) section
-								.getJasperReportsContext(), true) {
+								.getJasperReportsContext(), true, false) {
 
 					@Override
 					protected void createValues(Composite cmp) {

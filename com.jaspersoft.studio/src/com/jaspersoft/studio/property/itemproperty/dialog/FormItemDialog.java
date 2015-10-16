@@ -40,10 +40,23 @@ import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public abstract class FormItemDialog extends AItemDialog {
+	private boolean showAddDatasetButton = true;
 
 	public FormItemDialog(Shell parentShell, ADescriptor descriptor, JasperReportsConfiguration jrConfig,
 			boolean showDataset) {
 		super(parentShell, descriptor, jrConfig, showDataset);
+	}
+
+	public FormItemDialog(Shell parentShell, ADescriptor descriptor, JasperReportsConfiguration jrConfig,
+			boolean showDataset, boolean showAddDatasetButton) {
+		super(parentShell, descriptor, jrConfig, showDataset);
+		this.showAddDatasetButton = showAddDatasetButton;
+	}
+
+	@Override
+	protected void createAddItemDataButton(Composite cmp) {
+		if (showAddDatasetButton)
+			super.createAddItemDataButton(cmp);
 	}
 
 	@Override

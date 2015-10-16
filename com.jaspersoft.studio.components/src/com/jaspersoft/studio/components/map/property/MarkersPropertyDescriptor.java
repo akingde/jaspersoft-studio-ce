@@ -46,12 +46,12 @@ public class MarkersPropertyDescriptor extends AItemDataListPropertyDescriptor {
 
 	protected SPItemDataList createSPWidget(Composite parent,
 			AbstractSection section) {
-		return new SPItemDataList(parent, section, this) {
+		return new SPItemDataList(parent, section, this, false) {
 			@Override
 			protected AItemDialog createItemDialog() {
 				return new FormItemDialog(UIUtils.getShell(), getDescriptor(),
 						(JasperReportsConfiguration) section
-								.getJasperReportsContext(), true) {
+								.getJasperReportsContext(), true, false) {
 
 					@Override
 					protected void createValues(Composite cmp) {

@@ -82,8 +82,6 @@ public class SPItemDataList extends ASPropertyWidget<AItemDataListPropertyDescri
 	private Button btnEditElement;
 	private Button btnDelElement;
 
-	private TabFolder tabfolder;
-
 	protected TreeViewer dsTViewer;
 	private Button btnAddNewDataset;
 	private Button btnModifyDataset;
@@ -96,11 +94,21 @@ public class SPItemDataList extends ASPropertyWidget<AItemDataListPropertyDescri
 	public SPItemDataList(Composite parent, AbstractSection section, AItemDataListPropertyDescriptor pDescriptor,
 			boolean showElements) {
 		super(parent, section, pDescriptor);
-		if (!showElements) {
-			tabfolder.getItem(0).dispose();
-			elTViewer = null;
+		if (showElements)
+			control = createComponentTab(parent);
+		else {
+			control = createDatasetsTab(parent);
+			GridData gd = new GridData(SWT.FILL, SWT.TOP, true, false, 1, 1);
+			gd.heightHint = 300;
+			// gd.widthHint = 300;
+			control.setLayoutData(gd);
 		}
+
+		if (getControl() != null)
+			setupFocusControl(pDescriptor, getControl());
 	}
+
+	private Control control;
 
 	private ADescriptor getDescriptor() {
 		return pDescriptor.getDescriptor();
@@ -108,26 +116,33 @@ public class SPItemDataList extends ASPropertyWidget<AItemDataListPropertyDescri
 
 	@Override
 	protected void createComponent(Composite parent) {
+
+	}
+
+	protected Control createComponentTab(Composite parent) {
 		tabfolder = new TabFolder(parent, SWT.NONE);
 		GridData gd = new GridData(SWT.FILL, SWT.TOP, true, false, 1, 1);
 		gd.heightHint = 300;
 		// gd.widthHint = 300;
 		tabfolder.setLayoutData(gd);
 
-		createElementsTab(tabfolder);
-		createDatasetsTab(tabfolder);
+		TabItem elementsTab = new TabItem(tabfolder, SWT.NONE);
+		elementsTab.setText(pDescriptor.getDisplayName());
+		elementsTab.setControl(createElementsTab(tabfolder));
+
+		TabItem datasetsTab = new TabItem(tabfolder, SWT.NONE);
+		datasetsTab.setText(Messages.SPItemDataList_5);
+		datasetsTab.setControl(createDatasetsTab(tabfolder));
+		return tabfolder;
 	}
 
 	protected ViewerComparator getElementViewerComparator() {
 		return null;
 	}
 
-	private void createElementsTab(TabFolder parentFolder) {
-		TabItem elementsTab = new TabItem(parentFolder, SWT.NONE);
+	private Control createElementsTab(Composite parentFolder) {
 		Composite elementsCmp = section.getWidgetFactory().createComposite(parentFolder);
 		elementsCmp.setLayout(new GridLayout(2, false));
-		elementsTab.setControl(elementsCmp);
-		elementsTab.setText(pDescriptor.getDisplayName());
 
 		elTViewer = new TreeViewer(elementsCmp, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
 		Tree elementsTree = elTViewer.getTree();
@@ -180,6 +195,7 @@ public class SPItemDataList extends ASPropertyWidget<AItemDataListPropertyDescri
 		});
 
 		enableDefaultTreeButtons();
+		return elementsCmp;
 	}
 
 	private void handleEditElement(TreeViewer tviewer) {
@@ -326,12 +342,9 @@ public class SPItemDataList extends ASPropertyWidget<AItemDataListPropertyDescri
 		});
 	}
 
-	private void createDatasetsTab(TabFolder parentFolder) {
-		datasetsTab = new TabItem(parentFolder, SWT.NONE);
+	private Composite createDatasetsTab(Composite parentFolder) {
 		Composite datasetsCmp = section.getWidgetFactory().createComposite(parentFolder);
 		datasetsCmp.setLayout(new GridLayout(2, false));
-		datasetsTab.setControl(datasetsCmp);
-		datasetsTab.setText(Messages.SPItemDataList_5);
 
 		dsTViewer = new TreeViewer(datasetsCmp, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
 		Tree tree = dsTViewer.getTree();
@@ -401,6 +414,7 @@ public class SPItemDataList extends ASPropertyWidget<AItemDataListPropertyDescri
 		});
 
 		enableDefaultDatasetsButtons();
+		return datasetsCmp;
 	}
 
 	protected void createDsLabelProvider() {
@@ -465,7 +479,7 @@ public class SPItemDataList extends ASPropertyWidget<AItemDataListPropertyDescri
 	private Button btnDownDataset;
 	protected APropertyNode pnode;
 
-	protected TabItem datasetsTab;
+	private TabFolder tabfolder;
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -531,7 +545,7 @@ public class SPItemDataList extends ASPropertyWidget<AItemDataListPropertyDescri
 
 	@Override
 	public Control getControl() {
-		return tabfolder;
+		return control;
 	}
 
 	@Override
