@@ -13,10 +13,12 @@
 package com.jaspersoft.studio.components.table;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import net.sf.jasperreports.components.table.BaseColumn;
 import net.sf.jasperreports.components.table.Cell;
@@ -161,19 +163,71 @@ public class TableManager {
 		if (width >= 0) {
 			int delta = width - cell.getWidth();
 			if (cell instanceof StandardColumn)
-				setColumnWidth(table.getColumns(), cell, delta);
+				setGroupHeaderWidth(table.getColumns(), cell, delta);
 			else if (cell instanceof StandardColumnGroup)
 				setColumnGroupWidth((StandardColumnGroup) cell, delta);
 			cell.setWidth(width);
 		}
 	}
+	
+	/**
+	 * Set the width of this column, if it is a column group also its internal
+	 * columns are resized to fill the group. They are resized keeping the ratio
+	 * between them 
+	 */
+	public void setProportionalWidth(StandardBaseColumn column, int width) {
+		if (width >= 0) {
+			int delta = width - column.getWidth();
+			//Look if it is inside a 
+			if (column instanceof StandardColumn)
+				setGroupHeaderWidth(table.getColumns(), column, delta);
+			if (column instanceof StandardColumnGroup)
+				setProportionalColumnGroupWidth((StandardColumnGroup) column, width);
+			column.setWidth(width);
+		}
+	}
 
+	/**
+	 * Return the width of all the column in the table
+	 */
 	public int getColumnsTotalWidth(){
 		int currentColumnsWidth = 0;
 		for(BaseColumn col : table.getColumns()){
 			currentColumnsWidth += col.getWidth();
 		}
 		return currentColumnsWidth;
+	}
+	
+	private int[] getColumnsProportionalWidth(List<BaseColumn> columns, int newWidth){
+		int[] proportionalWidths = new int[columns.size()];
+		int index = 0;
+		int currentColumnsWidth = 0;
+		for(BaseColumn col : columns){
+			currentColumnsWidth += col.getWidth();
+		}
+		//Phase 1: change proportionally the width of each column
+		int columnsTotalWidth = 0;			
+		for(BaseColumn col : columns){
+			float proportionalFactor = (float)col.getWidth() / (float)currentColumnsWidth;
+			//casting to int is the same to do the floor operation, since it drop the decimal
+			int proportionalWidth = (int)(proportionalFactor * newWidth);
+			proportionalWidths[index] = proportionalWidth;
+			columnsTotalWidth += proportionalWidth;
+			index ++;
+		}
+		
+		//Phase 2: reassign what remains
+		int remains = newWidth - columnsTotalWidth;
+		index = 0;
+		while (remains > 0){
+			proportionalWidths[index]++;
+			index++;
+			remains--;
+			if (index == proportionalWidths.length){
+				index = 0;
+			}
+		}
+		return proportionalWidths;
 	}
 	
 	/**
@@ -188,45 +242,23 @@ public class TableManager {
 		for(BaseColumn col : table.getColumns()){
 			currentColumnsWidth += col.getWidth();
 		}
-		if (currentColumnsWidth == newWidth) return;
+		if (currentColumnsWidth == newWidth) {
+			return;
+		}
 		else if(isProportional) {
-			int[] proportionalWidths = new int[table.getColumns().size()];
-			int index = 0;
-
 			
-			//Phase 1: change proportionally the width of each column
-			int columnsTotalWidth = 0;			
-			for(BaseColumn col : table.getColumns()){
-				float proportionalFactor = (float)col.getWidth() / (float)currentColumnsWidth;
-				//casting to int is the same to do the floor operation, since it dorp the decimal
-				int proportionalWidth = (int)(proportionalFactor * newWidth);
-				proportionalWidths[index] = proportionalWidth;
-				columnsTotalWidth += proportionalWidth;
-				index ++;
-			}
-			
-			//Phase 2: reassign what remains
-			int remains = newWidth - columnsTotalWidth;
-			index = 0;
-			while (remains > 0){
-				proportionalWidths[index]++;
-				index++;
-				remains--;
-				if (index == proportionalWidths.length){
-					index = 0;
-				}
-			}
+			int[] proportionalWidths = getColumnsProportionalWidth(table.getColumns(), newWidth);
 			
 			//Phase 3: resize the columns
-			index = 0;
+			int index = 0;
 			ILayout defaultLayout = new VerticalRowLayout();
 			for(BaseColumn col : table.getColumns()){
 				if (col.getWidth() != proportionalWidths[index]){
-					setWidth((StandardBaseColumn)col, proportionalWidths[index]);
+					setProportionalWidth((StandardBaseColumn)col, proportionalWidths[index]);
 					index++;
-					for(Cell cel : getColumnCell(col)){
-						ILayout layout = LayoutManager.getLayout(new JRPropertiesHolder[] { cel }, null, null, defaultLayout);
-						layout.layout(cel.getElements(), new Dimension(col.getWidth(), ((DesignCell)cel).getHeight()));
+					for(Entry<Cell, Integer> cell : getColumnCell(col).entrySet()){
+						ILayout layout = LayoutManager.getLayout(new JRPropertiesHolder[] { cell.getKey() }, null, null, defaultLayout);
+						layout.layout(cell.getKey().getElements(), new Dimension(cell.getValue(), ((DesignCell)cell.getKey()).getHeight()));
 					}
 				}
 			}	
@@ -243,30 +275,37 @@ public class TableManager {
 				int newColumnWidth = col.getWidth() + additionalSpace + columnsSize;
 				if (newColumnWidth != col.getWidth()){
 					setWidth((StandardBaseColumn)col, newColumnWidth);
-					for(Cell cel : getColumnCell(col)){
-						ILayout layout = LayoutManager.getLayout(new JRPropertiesHolder[] { cel }, null, null, defaultLayout);
-						layout.layout(cel.getElements(), new Dimension(col.getWidth(), ((DesignCell)cel).getHeight()));
+					for(Entry<Cell, Integer> cell : getColumnCell(col).entrySet()){
+						ILayout layout = LayoutManager.getLayout(new JRPropertiesHolder[] { cell.getKey() }, null, null, defaultLayout);
+						layout.layout(cell.getKey().getElements(), new Dimension(cell.getValue(), ((DesignCell)cell.getKey()).getHeight()));
 					}
 				}
 			}
 		}
 	}
 	
-	private List<Cell> getColumnCell(BaseColumn cell){
-		List<Cell> result = new ArrayList<Cell>();
+	/**
+	 * Return all the cell inside a column. If it is a group it
+	 * recursively return also the other cell
+	 * 
+	 * @return a not null has map for every cell found where the key
+	 * is a cell and the value is its width
+	 */
+	private HashMap<Cell, Integer> getColumnCell(BaseColumn cell){
+		HashMap<Cell, Integer> result = new HashMap<Cell, Integer>();
 		if (cell instanceof StandardColumn){
 			StandardColumn col = (StandardColumn)cell;
-			result.add(col.getColumnHeader());
-			result.add(col.getTableHeader());
-			result.add(col.getTableFooter());
-			result.add(cell.getColumnFooter());
-			result.add(col.getDetailCell());
+			result.put(col.getColumnHeader(), col.getWidth());
+			result.put(col.getTableHeader(), col.getWidth());
+			result.put(col.getTableFooter(), col.getWidth());
+			result.put(cell.getColumnFooter(), col.getWidth());
+			result.put(col.getDetailCell(), col.getWidth());
 		}
 		else if (cell instanceof StandardColumnGroup){
 			StandardColumnGroup group = (StandardColumnGroup)cell;
 			List<BaseColumn> columns = group.getColumns();
 			for(BaseColumn groupCol : columns){
-				result.addAll(getColumnCell(groupCol));
+				result.putAll(getColumnCell(groupCol));
 			}
 		}
 		return result;
@@ -291,13 +330,35 @@ public class TableManager {
 		}
 		return false;
 	}
-
-	private boolean setColumnWidth(List<BaseColumn> col,
-			StandardBaseColumn cell, int delta) {
+	
+	private void setProportionalColumnGroupWidth(StandardColumnGroup column, int width) {
+		List<BaseColumn> columns = column.getColumns();
+		int[] proportionalNewWidth = getColumnsProportionalWidth(columns, width);
+		int index = 0;
+		for (BaseColumn col : columns) {
+			StandardBaseColumn bc = (StandardBaseColumn) col;
+			bc.setWidth(proportionalNewWidth[index]);
+			if (bc instanceof StandardColumnGroup){
+				setColumnGroupWidth((StandardColumnGroup) bc, proportionalNewWidth[index]);
+			}
+			index++;
+		}
+	}
+	
+	/**
+	 * Search a group header from a cell contained in it and when it is bound change
+	 * the size  of his width to increase or decrease of the same delta of the cell
+	 * 
+	 * @param col the columns set where the cell is searched
+	 * @param cell the cell to search
+	 * @param delta how much the cell increased or decreased
+	 * @return used in the recursive iteration to know if the cell was found inside a specific group
+	 */
+	private boolean setGroupHeaderWidth(List<BaseColumn> col, StandardBaseColumn cell, int delta) {
 		for (BaseColumn bc : col) {
 			if (bc instanceof StandardColumnGroup) {
 				StandardColumnGroup scg = (StandardColumnGroup) bc;
-				boolean b = setColumnWidth(scg.getColumns(), cell, delta);
+				boolean b = setGroupHeaderWidth(scg.getColumns(), cell, delta);
 				if (b) {
 					scg.setWidth(scg.getWidth() + delta);
 					return true;

@@ -24,6 +24,8 @@ public class Messages extends NLS {
 	public static String common_table_wizard;
 	public static String ColumnsEqualWidthAction_actionName;
 	public static String ColumnsEqualWidthAction_actionTooltip;
+	public static String ColumnsStretchToTableAction_actionDescription;
+	public static String ColumnsStretchToTableAction_actionName;
 	public static String CreateColumnAction_create_column;
 	public static String CreateColumnAction_create_column_group;
 	public static String CreateColumnAction_create_column_group_tool_tip;
@@ -118,6 +120,12 @@ public class Messages extends NLS {
 	public static String DeleteRowAction_tooltip;
 	public static String DeleteTableCommand_unusedMessage;
 	public static String DeleteTableCommand_unusedTitle;
+	public static String PDF508TableElementDecorator_0;
+	public static String PdfActionTable_defaultLabel;
+	public static String PdfActionTable_disabledLabel;
+	public static String PdfActionTable_disableInheritLabel;
+	public static String PdfActionTable_enabledLabel;
+	public static String PdfActionTable_enableInheritLabel;
 	public static String SelectAllCellsAction_1;
 	public static String SelectAllElementsAction_1;
 	public static String UnGroupColumnsAction_title;

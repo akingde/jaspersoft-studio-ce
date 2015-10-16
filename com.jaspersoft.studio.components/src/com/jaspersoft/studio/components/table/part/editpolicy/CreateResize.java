@@ -85,9 +85,8 @@ public class CreateResize {
 				MTable table = getTableModel(model);
 				if (table != null){
 					if (table.hasColumnsAutoresizeProportional()){
-						int index = mparent.getChildren().indexOf(model);
-						if (index < mparent.getChildren().size()-1 && canColumnIncrease(model, table, width)){
-							MColumn next = (MColumn) mparent.getChildren().get(index + 1);
+						MColumn next = model.getNextColumn();
+						if (next != null){
 							StandardBaseColumn nextCol = next.getValue();
 							setCommand = new SetValueCommand();
 							setCommand.setTarget(next);
@@ -96,15 +95,10 @@ public class CreateResize {
 							if (newWidth < 0) newWidth = 0;
 							setCommand.setPropertyValue(newWidth);
 							c.add(setCommand);
-						} else {
-							return null;
-							//it is not possible to resize the last column with this policy
 						}
 					} else if (table.hasColumnsAutoresizeNext()){
-						int index = mparent.getChildren().indexOf(model);
-						if (index < mparent.getChildren().size()-1){
-							// resize the next column if it's not the last one
-							MColumn next = (MColumn) mparent.getChildren().get(index + 1);
+						MColumn next = model.getNextColumn();
+						if (next != null){
 							StandardBaseColumn nextCol = next.getValue();
 							setCommand = new SetValueCommand();
 							setCommand.setTarget(next);

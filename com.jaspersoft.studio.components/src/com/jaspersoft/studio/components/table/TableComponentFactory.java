@@ -78,6 +78,7 @@ import com.jaspersoft.studio.components.table.model.cell.command.ReorderElementG
 import com.jaspersoft.studio.components.table.model.column.MCell;
 import com.jaspersoft.studio.components.table.model.column.MColumn;
 import com.jaspersoft.studio.components.table.model.column.action.ColumnsEqualWidthAction;
+import com.jaspersoft.studio.components.table.model.column.action.ColumnsStretchToTableAction;
 import com.jaspersoft.studio.components.table.model.column.action.CreateColumnAfterAction;
 import com.jaspersoft.studio.components.table.model.column.action.CreateColumnBeforeAction;
 import com.jaspersoft.studio.components.table.model.column.action.CreateColumnBeginAction;
@@ -771,6 +772,7 @@ public class TableComponentFactory implements IComponentFactory {
 		lst.add(UnGroupColumnsAction.ID);
 		lst.add(CreateColumnCellAction.ID);
 		lst.add(ColumnsEqualWidthAction.ID);
+		lst.add(ColumnsStretchToTableAction.ID);
 		
 		lst.add(AContextMenuProvider.SEPARATOR);
 		lst.add(DeleteColumnAction.ID);

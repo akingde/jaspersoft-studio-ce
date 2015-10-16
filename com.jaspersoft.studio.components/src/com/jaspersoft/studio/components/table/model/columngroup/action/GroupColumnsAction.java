@@ -128,7 +128,7 @@ public class GroupColumnsAction extends ACreateAction {
 	@Override
 	protected boolean calculateEnabled() {
 		List<MColumn> columns = getSelectedColumns();
-		if (columns.isEmpty()) return false;
+		if (columns == null|| columns.isEmpty()) return false;
 		MTable table = columns.get(0).getMTable(); 
 		if (table != null){
 			return table.getStandardTable().getColumns().size() > 0;

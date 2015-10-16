@@ -531,4 +531,16 @@ public class MColumn extends APropertyNode implements IPastable, IContainer,
 		return new JRPropertiesHolder[] { getValue(), getMTable().getValue() };
 	}
 
+	public MColumn getNextColumn(){
+		ANode parent = getParent();
+		int index = parent.getChildren().indexOf(this);
+		if (index < parent.getChildren().size()-1){
+			return (MColumn)parent.getChildren().get(index+1);
+		} else {
+			if (parent instanceof MColumnGroup){
+				return ((MColumnGroup)parent).getNextColumn();
+			}
+		}
+		return null;
+	}
 }

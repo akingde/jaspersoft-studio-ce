@@ -21,15 +21,15 @@ import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.wb.swt.ResourceManager;
 
-import com.jaspersoft.studio.components.table.model.column.action.ColumnsStretchToTableAction;
+import com.jaspersoft.studio.components.table.model.column.action.ColumnsEqualWidthAction;
 
 /**
- * Create the toolbar button to make the selected column of the table of the equal width
+ * Create the toolbar button to make the selected column to fill the table width
  * 
  * @author Orlandin Marco
  *
  */
-public class ColumnsEqualWidthContributionItem extends CommonToolbarHandler {
+public class ColumnsStretchToTableContributionItem extends CommonToolbarHandler {
 
 	/**
 	 * The button to press to activate the action
@@ -39,7 +39,7 @@ public class ColumnsEqualWidthContributionItem extends CommonToolbarHandler {
 	/**
 	 * Action that will be executed to add the column, executed when the button is pressed
 	 */
-	protected ColumnsStretchToTableAction resizeColumnsAction = new ColumnsStretchToTableAction(null);
+	protected ColumnsEqualWidthAction resizeColumnsAction = new ColumnsEqualWidthAction(null);
 	
 	
 	/**
