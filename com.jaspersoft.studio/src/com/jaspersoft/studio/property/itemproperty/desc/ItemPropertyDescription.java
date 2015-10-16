@@ -21,6 +21,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.utils.Misc;
+import com.jaspersoft.studio.utils.inputhistory.InputHistoryCache;
 
 public class ItemPropertyDescription<T> {
 	private String name;
@@ -136,6 +137,7 @@ public class ItemPropertyDescription<T> {
 	public Control createControl(final IWItemProperty wiProp, Composite parent) {
 		final Text textExpression = new Text(parent, SWT.BORDER);
 		textExpression.setLayoutData(new GridData(GridData.FILL_BOTH));
+		InputHistoryCache.bindText(textExpression, name);
 		textExpression.addModifyListener(new ModifyListener() {
 
 			@Override
