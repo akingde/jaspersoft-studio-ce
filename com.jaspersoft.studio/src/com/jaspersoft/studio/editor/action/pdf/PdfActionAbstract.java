@@ -29,7 +29,7 @@ import com.jaspersoft.studio.property.SetValueCommand;
 /**
  * The Class PdfActionAbstract implements common action (most UI related) of the pdf action
  */
-public abstract class PdfActionAbstact extends CustomSelectionAction {
+public abstract class PdfActionAbstract extends CustomSelectionAction {
 
 	/** Id of the actions */
 	public final String ID_Full; //$NON-NLS-1$
@@ -63,7 +63,7 @@ public abstract class PdfActionAbstact extends CustomSelectionAction {
 	 * @param ID_None
 	 *          Id of the action when click on None
 	 */
-	public PdfActionAbstact(IWorkbenchPart part, Position action_position, String ID_Full, String ID_Start,
+	public PdfActionAbstract(IWorkbenchPart part, Position action_position, String ID_Full, String ID_Start,
 			String ID_End, String ID_None) {
 		super(part, IAction.AS_CHECK_BOX);
 		this.action_position = action_position;

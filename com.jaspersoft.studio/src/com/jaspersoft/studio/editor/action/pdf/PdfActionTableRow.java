@@ -15,7 +15,7 @@ package com.jaspersoft.studio.editor.action.pdf;
 
 import org.eclipse.ui.IWorkbenchPart;
 
-public class PdfActionTableRow extends PdfActionAbstact {
+public class PdfActionTableRow extends PdfActionAbstract {
 	
 	/** Id of the actions */
 	public static final String ID_TableRow_Full = "PdfAction_TableRow_Full"; //$NON-NLS-1$

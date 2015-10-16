@@ -95,10 +95,11 @@ public class PDFDecorator implements IDecorator, TextDecoratorInterface {
 				boolean drawstart = false;
 				boolean drawend = false;
 
-				String[] tags = { "net.sf.jasperreports.export.pdf.tag.h1", "H1", "net.sf.jasperreports.export.pdf.tag.h2",
-						"H2", "net.sf.jasperreports.export.pdf.tag.h3", "H3", "net.sf.jasperreports.export.pdf.tag.table", "TBL",
-						"net.sf.jasperreports.export.pdf.tag.tr", "TR", "net.sf.jasperreports.export.pdf.tag.th", "TH",
-						"net.sf.jasperreports.export.pdf.tag.td", "TD" };
+				String[] tags = { "net.sf.jasperreports.export.pdf.tag.h1", "H1", "net.sf.jasperreports.export.pdf.tag.h2", "H2", 
+						"net.sf.jasperreports.export.pdf.tag.h3", "H3", "net.sf.jasperreports.export.pdf.tag.h4", "H4", 
+						"net.sf.jasperreports.export.pdf.tag.h5", "H5", "net.sf.jasperreports.export.pdf.tag.h6", "H6",
+						"net.sf.jasperreports.export.pdf.tag.table", "TBL", "net.sf.jasperreports.export.pdf.tag.tr", "TR", 
+						"net.sf.jasperreports.export.pdf.tag.th", "TH","net.sf.jasperreports.export.pdf.tag.td", "TD" };
 
 				JRPropertiesMap v = fig.getJrElement().getPropertiesMap();
 				for (int i = 0; i < tags.length; i += 2) {
@@ -214,10 +215,11 @@ public class PDFDecorator implements IDecorator, TextDecoratorInterface {
 		String fullString = "";
 		String endString = "";
 
-		String[] tags = { "net.sf.jasperreports.export.pdf.tag.h1", "H1", "net.sf.jasperreports.export.pdf.tag.h2",
-				"H2", "net.sf.jasperreports.export.pdf.tag.h3", "H3", "net.sf.jasperreports.export.pdf.tag.table", "TBL",
-				"net.sf.jasperreports.export.pdf.tag.tr", "TR", "net.sf.jasperreports.export.pdf.tag.th", "TH",
-				"net.sf.jasperreports.export.pdf.tag.td", "TD" };
+		String[] tags = { "net.sf.jasperreports.export.pdf.tag.h1", "H1", "net.sf.jasperreports.export.pdf.tag.h2", "H2", 
+				"net.sf.jasperreports.export.pdf.tag.h3", "H3", "net.sf.jasperreports.export.pdf.tag.h4", "H4", 
+				"net.sf.jasperreports.export.pdf.tag.h5", "H5", "net.sf.jasperreports.export.pdf.tag.h6", "H6",
+				"net.sf.jasperreports.export.pdf.tag.table", "TBL", "net.sf.jasperreports.export.pdf.tag.tr", "TR", 
+				"net.sf.jasperreports.export.pdf.tag.th", "TH","net.sf.jasperreports.export.pdf.tag.td", "TD" };
 
 		for (int i = 0; i < tags.length; i += 2) {
 			String prop = tags[i];

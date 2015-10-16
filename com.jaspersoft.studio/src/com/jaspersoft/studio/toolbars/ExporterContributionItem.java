@@ -34,9 +34,7 @@ import org.eclipse.ui.IWorkbenchPart;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.action.CustomSelectionAction;
-import com.jaspersoft.studio.editor.gef.decorator.csv.CSVElementDecorator;
-import com.jaspersoft.studio.editor.gef.decorator.pdf.PDF508ElementDecorator;
-import com.jaspersoft.studio.editor.gef.decorator.xls.XLSElementDecorator;
+import com.jaspersoft.studio.editor.gef.decorator.IElementDecorator;
 
 /**
  * This class implements an action that when run open a contextual menu on the pointer location.
@@ -102,20 +100,13 @@ public class ExporterContributionItem extends CommonToolbarHandler{
 		
 		manager = new MenuManager();
 		ActionRegistry registry = new ActionRegistry();
-		//Create the PDF decorator
-		PDF508ElementDecorator pdfDecorator = new PDF508ElementDecorator();
+
 		IWorkbenchPart activePart = getWorkbenchPart();
-		pdfDecorator.registerActions(registry, new ArrayList<String>(), activePart);
-		pdfDecorator.fillContextMenu(registry,manager);
-		//Create the XLS decorator
-		XLSElementDecorator xlsDecorator = new XLSElementDecorator();
-		xlsDecorator.registerActions(registry, new ArrayList<String>(), activePart);
-		xlsDecorator.fillContextMenu(registry,manager);
-		//Create the CSV action
-		CSVElementDecorator csvDecorator = new CSVElementDecorator();
-		csvDecorator.registerActions(registry, new ArrayList<String>(), activePart);
 		ISelection actualSelection =  getLastRawSelection();
-		csvDecorator.fillContextMenu(registry,manager, (IStructuredSelection)actualSelection);
+		for(IElementDecorator decorator : JaspersoftStudioPlugin.getDecoratorManager().getDecorators()){
+			decorator.registerActions(registry, new ArrayList<String>(), activePart);
+			decorator.fillContextMenu(registry,manager, (IStructuredSelection)actualSelection);
+		}
 		popupMenu = new Menu(Display.getCurrent().getActiveShell());
 		createMenu(popupMenu, manager.getItems());
 	}

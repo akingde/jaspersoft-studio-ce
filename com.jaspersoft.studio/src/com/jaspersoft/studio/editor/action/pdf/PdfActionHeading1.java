@@ -15,7 +15,7 @@ package com.jaspersoft.studio.editor.action.pdf;
 
 import org.eclipse.ui.IWorkbenchPart;
 
-public class PdfActionHeading1 extends PdfActionAbstact {
+public class PdfActionHeading1 extends PdfActionAbstract {
 	
 	/** Id of the actions */
 	public static final String ID_Heading1_Full = "PdfAction_Heading1_Full"; //$NON-NLS-1$

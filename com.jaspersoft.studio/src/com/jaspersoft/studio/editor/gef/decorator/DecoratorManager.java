@@ -58,6 +58,10 @@ public class DecoratorManager {
 		for (IElementDecorator f : nodeFactory)
 			f.registerActions(registry, selectionActions, gviewer, part);
 	}
+	
+	public List<IElementDecorator> getDecorators(){
+		return nodeFactory;
+	}
 
 	public void buildContextMenu(ActionRegistry registry, EditPartViewer viewer, IMenuManager menu) {
 		for (IElementDecorator f : nodeFactory)

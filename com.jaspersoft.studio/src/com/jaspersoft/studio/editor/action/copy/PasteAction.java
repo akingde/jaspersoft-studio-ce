@@ -114,7 +114,7 @@ public class PasteAction extends ACachedSelectionAction {
 		GraphicalViewer viewer = (GraphicalViewer) getWorkbenchPart().getAdapter(GraphicalViewer.class);
 		if (viewer != null && command instanceof PasteCommand) {
 			PasteCommand standardPasteCommand = (PasteCommand)command;
-			viewer.setSelection(new StructuredSelection(getSelectableEditParts(viewer, standardPasteCommand.getPasteParent(),																																		standardPasteCommand.getCreatedNodesNumber())));
+			viewer.setSelection(new StructuredSelection(getSelectableEditParts(viewer, standardPasteCommand.getPasteParent(),	standardPasteCommand.getCreatedNodesNumber())));
 		}
 	}
 

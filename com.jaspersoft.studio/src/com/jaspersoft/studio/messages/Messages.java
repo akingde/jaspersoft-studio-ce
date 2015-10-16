@@ -1607,6 +1607,9 @@ public class Messages extends NLS {
 	public static String PdfAction_Full;
 	public static String PdfAction_None;
 	public static String PdfAction_Start;
+	public static String PDF508ElementDecorator_Heading4;
+	public static String PDF508ElementDecorator_Heading5;
+	public static String PDF508ElementDecorator_Heading6;
 	public static String PDF508ElementDecorator_Menu_Heading;
 	public static String PDF508ElementDecorator_Menu_Heading1;
 	public static String PDF508ElementDecorator_Menu_Heading2;

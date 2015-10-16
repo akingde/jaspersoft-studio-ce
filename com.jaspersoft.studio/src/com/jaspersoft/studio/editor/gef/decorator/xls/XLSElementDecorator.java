@@ -189,7 +189,7 @@ public class XLSElementDecorator extends TextElementDecorator {
 		registerActions(registry, selectionActions, part);
 	}
 
-	public void fillContextMenu(ActionRegistry registry, IMenuManager menu) {
+	public void fillContextMenu(ActionRegistry registry, IMenuManager menu, IStructuredSelection sel) {
 		MenuManager submenu = new MenuManager(Messages.XLSElementDecorator_xlsTagsMenu);
 		MenuManager fitMenu = new MenuManager(Messages.XLSElementDecorator_fitMenu);
 		MenuManager autoFilterMenu = new MenuManager(Messages.XLSElementDecorator_autoFilterMenu);
@@ -269,7 +269,7 @@ public class XLSElementDecorator extends TextElementDecorator {
 			if (!(ep.getModel() instanceof MGraphicElement))
 				return;
 		}
-		fillContextMenu(registry, menu);
+		fillContextMenu(registry, menu, sel);
 	}
 
 	@Override

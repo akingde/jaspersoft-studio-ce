@@ -21,6 +21,8 @@ import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.actions.RetargetAction;
 
 import com.jaspersoft.studio.editor.gef.decorator.IElementDecorator;
@@ -104,6 +106,15 @@ public class ElementErrorDecorator implements IElementDecorator {
 			actionIDs.add(ShowErrorsAction.ID);
 		}
 		return actionIDs;
+	}
+
+	@Override
+	public void fillContextMenu(ActionRegistry registry, IMenuManager menu, IStructuredSelection sel) {
+
+	}
+
+	@Override
+	public void registerActions(ActionRegistry registry, List<String> selectionActions, IWorkbenchPart part) {
 	}
 
 }

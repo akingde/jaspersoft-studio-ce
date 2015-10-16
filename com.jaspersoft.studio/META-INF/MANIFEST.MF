@@ -178,6 +178,9 @@ Export-Package: com.jaspersoft.studio;
    org.eclipse.draw2d.geometry,
    com.jaspersoft.studio.model,
    org.eclipse.gef",
+ com.jaspersoft.studio.editor.gef.decorator,
+ com.jaspersoft.studio.editor.gef.decorator.pdf,
+ com.jaspersoft.studio.editor.gef.decorator.text,
  com.jaspersoft.studio.editor.gef.figures;
   uses:="net.sf.jasperreports.engine.design,
    org.eclipse.swt.graphics,

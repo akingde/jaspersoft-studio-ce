@@ -965,6 +965,10 @@
                class="com.jaspersoft.studio.toolbars.ColumnsEqualWidthContributionItem"
                id="com.jaspersoft.studio.toolbars.ColumnsEqualWidthContributionItem">
          </toolitem>
+         <toolitem
+               class="com.jaspersoft.studio.toolbars.ColumnsStretchToTableContributionItem"
+               id="com.jaspersoft.studio.toolbars.ColumnsStretchToTableContributionItem">
+         </toolitem>
       </toolitemsets>
       <toolitemsets
             id="com.jaspersoft.studio.components.crosstabaction"
@@ -987,5 +991,11 @@
       <componentConverter
             ClassFactory="com.jaspersoft.studio.components.barcode.figure.LazyBarcodeDesignConverter">
       </componentConverter>
+   </extension>
+   <extension
+         point="com.jaspersoft.studio.decorators">
+      <decorator
+            ClassFactory="com.jaspersoft.studio.components.table.decorator.PDF508TableElementDecorator">
+      </decorator>
    </extension>
 </plugin>
