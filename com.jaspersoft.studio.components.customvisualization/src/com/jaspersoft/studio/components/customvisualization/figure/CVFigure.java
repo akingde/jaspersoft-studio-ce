@@ -86,4 +86,9 @@ public class CVFigure extends JRComponentFigure {
 		}
 		return null;
 	}
+	
+	@Override
+	protected boolean allowsFigureDrawCache() {
+		return true;
+	}
 }
