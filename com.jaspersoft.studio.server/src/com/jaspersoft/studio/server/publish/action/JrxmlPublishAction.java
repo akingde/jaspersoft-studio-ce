@@ -34,6 +34,7 @@ import com.jaspersoft.studio.server.model.AMJrxmlContainer;
 import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.publish.FindResources;
+import com.jaspersoft.studio.server.publish.OverwriteEnum;
 import com.jaspersoft.studio.server.publish.Publish;
 import com.jaspersoft.studio.server.publish.PublishUtil;
 import com.jaspersoft.studio.server.publish.wizard.Publish2ServerWizard;
@@ -132,10 +133,14 @@ public class JrxmlPublishAction extends AContributorAction {
 								for (Object obj : resources) {
 									if (obj instanceof AMResource) {
 										AMResource mres = (AMResource) obj;
-										PublishUtil.loadPreferences(monitor,
-												file, mres);
-										if (mres.getPublishOptions()
-												.getOverwrite() == null) {
+										if (!PublishUtil.loadPreferences(
+												monitor, file, mres)
+												&& mres.getPublishOptions() != null
+												&& mres.getPublishOptions()
+														.getOverwrite() != null
+												&& mres.getPublishOptions()
+														.getOverwrite()
+														.equals(OverwriteEnum.OVERWRITE)) {
 											showdialog = true;
 											break;
 										}

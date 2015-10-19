@@ -40,6 +40,7 @@ import org.eclipse.ui.handlers.HandlerUtil;
 import org.xml.sax.InputSource;
 
 import com.jaspersoft.studio.editor.AbstractJRXMLEditor;
+import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.publish.action.JrxmlPublishAction;
 import com.jaspersoft.studio.server.publish.wizard.PublishFile2ServerWizard;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
@@ -84,7 +85,7 @@ public class PublishHandler extends AbstractHandler {
 			}
 		}
 		if (file == null)
-			UIUtils.showInformation("Please select a file to publish to JasperReports Server");
+			UIUtils.showInformation(Messages.PublishHandler_0);
 		String ext = file.getFileExtension();
 		if (ext.equals(FileExtension.JRXML) || ext.equals(FileExtension.JASPER)) {
 			if (jContext == null) {

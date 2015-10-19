@@ -194,18 +194,22 @@ public class PublishUtil {
 		}
 	}
 
-	public static void loadPreferences(IProgressMonitor monitor, IFile ifile,
-			AMResource f) {
+	public static boolean loadPreferences(IProgressMonitor monitor,
+			IFile ifile, AMResource f) {
+		boolean exists = false;
 		PublishOptions popt = f.getPublishOptions();
 		String prefix = f.getValue().getName();
 		try {
 			String ovw = ifile.getPersistentProperty(new QualifiedName(
 					Activator.PLUGIN_ID, prefix + ".overwrite"));
-			if (ovw != null)
+			if (ovw != null) {
+				exists = true;
 				popt.setOverwrite(OverwriteEnum.getByValue(ovw));
+			}
 			String ref = ifile.getPersistentProperty(new QualifiedName(
 					Activator.PLUGIN_ID, prefix + ".reference"));
 			if (ref != null) {
+				exists = true;
 				popt.setPublishMethod(ResourcePublishMethod.valueOf(ref));
 				String path = ifile.getPersistentProperty(new QualifiedName(
 						Activator.PLUGIN_ID, prefix + ".refPATH"));
@@ -223,6 +227,7 @@ public class PublishUtil {
 			popt.setPublishMethod(ResourcePublishMethod.LOCAL);
 			e.printStackTrace();
 		}
+		return exists;
 	}
 
 	public static List<String[]> loadPath(IProgressMonitor monitor, IFile ifile)
