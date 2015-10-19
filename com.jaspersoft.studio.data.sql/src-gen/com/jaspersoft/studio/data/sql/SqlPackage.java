@@ -170,7 +170,7 @@ public interface SqlPackage extends EPackage
   int LIMIT__L1 = 0;
 
   /**
-   * The feature id for the '<em><b>L2</b></em>' containment reference.
+   * The feature id for the '<em><b>L2</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -3641,15 +3641,15 @@ public interface SqlPackage extends EPackage
   EAttribute getLimit_L1();
 
   /**
-   * Returns the meta object for the containment reference '{@link com.jaspersoft.studio.data.sql.Limit#getL2 <em>L2</em>}'.
+   * Returns the meta object for the attribute '{@link com.jaspersoft.studio.data.sql.Limit#getL2 <em>L2</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>L2</em>'.
+   * @return the meta object for the attribute '<em>L2</em>'.
    * @see com.jaspersoft.studio.data.sql.Limit#getL2()
    * @see #getLimit()
    * @generated
    */
-  EReference getLimit_L2();
+  EAttribute getLimit_L2();
 
   /**
    * Returns the meta object for class '{@link com.jaspersoft.studio.data.sql.SelectQuery <em>Select Query</em>}'.
@@ -6426,12 +6426,12 @@ public interface SqlPackage extends EPackage
     EAttribute LIMIT__L1 = eINSTANCE.getLimit_L1();
 
     /**
-     * The meta object literal for the '<em><b>L2</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>L2</b></em>' attribute feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference LIMIT__L2 = eINSTANCE.getLimit_L2();
+    EAttribute LIMIT__L2 = eINSTANCE.getLimit_L2();
 
     /**
      * The meta object literal for the '{@link com.jaspersoft.studio.data.sql.impl.SelectQueryImpl <em>Select Query</em>}' class.

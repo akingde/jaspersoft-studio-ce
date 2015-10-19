@@ -32,12 +32,12 @@ public interface Limit extends EObject
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>L1</em>' attribute.
-   * @see #setL1(int)
+   * @see #setL1(Integer)
    * @see com.jaspersoft.studio.data.sql.SqlPackage#getLimit_L1()
    * @model
    * @generated
    */
-  int getL1();
+  Integer getL1();
 
   /**
    * Sets the value of the '{@link com.jaspersoft.studio.data.sql.Limit#getL1 <em>L1</em>}' attribute.
@@ -47,32 +47,32 @@ public interface Limit extends EObject
    * @see #getL1()
    * @generated
    */
-  void setL1(int value);
+  void setL1(Integer value);
 
   /**
-   * Returns the value of the '<em><b>L2</b></em>' containment reference.
+   * Returns the value of the '<em><b>L2</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <p>
-   * If the meaning of the '<em>L2</em>' containment reference isn't clear,
+   * If the meaning of the '<em>L2</em>' attribute isn't clear,
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   * @return the value of the '<em>L2</em>' containment reference.
-   * @see #setL2(IntegerValue)
+   * @return the value of the '<em>L2</em>' attribute.
+   * @see #setL2(Integer)
    * @see com.jaspersoft.studio.data.sql.SqlPackage#getLimit_L2()
-   * @model containment="true"
+   * @model
    * @generated
    */
-  IntegerValue getL2();
+  Integer getL2();
 
   /**
-   * Sets the value of the '{@link com.jaspersoft.studio.data.sql.Limit#getL2 <em>L2</em>}' containment reference.
+   * Sets the value of the '{@link com.jaspersoft.studio.data.sql.Limit#getL2 <em>L2</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>L2</em>' containment reference.
+   * @param value the new value of the '<em>L2</em>' attribute.
    * @see #getL2()
    * @generated
    */
-  void setL2(IntegerValue value);
+  void setL2(Integer value);
 
 } // Limit

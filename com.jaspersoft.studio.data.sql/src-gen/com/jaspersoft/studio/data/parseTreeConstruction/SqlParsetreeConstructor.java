@@ -370,11 +370,11 @@ protected class Offset_OffsetAssignment extends AssignmentToken  {
 /************ begin Rule Limit ****************
  *
  * Limit:
- * 	{Limit} "ALL" | l1=INT ("," l2=IntegerValue)?;
+ * 	{Limit} "ALL" | l1=UNSIGNED ("," l2=UNSIGNED)?;
  *
  **/
 
-// {Limit} "ALL" | l1=INT ("," l2=IntegerValue)?
+// {Limit} "ALL" | l1=UNSIGNED ("," l2=UNSIGNED)?
 protected class Limit_Alternatives extends AlternativesToken {
 
 	public Limit_Alternatives(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
@@ -475,7 +475,7 @@ protected class Limit_ALLKeyword_0_1 extends KeywordToken  {
 }
 
 
-// l1=INT ("," l2=IntegerValue)?
+// l1=UNSIGNED ("," l2=UNSIGNED)?
 protected class Limit_Group_1 extends GroupToken {
 	
 	public Limit_Group_1(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
@@ -498,7 +498,7 @@ protected class Limit_Group_1 extends GroupToken {
 
 }
 
-// l1=INT
+// l1=UNSIGNED
 protected class Limit_L1Assignment_1_0 extends AssignmentToken  {
 	
 	public Limit_L1Assignment_1_0(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
@@ -521,9 +521,9 @@ protected class Limit_L1Assignment_1_0 extends AssignmentToken  {
 	public IEObjectConsumer tryConsume() {
 		if((value = eObjectConsumer.getConsumable("l1",true)) == null) return null;
 		IEObjectConsumer obj = eObjectConsumer.cloneAndConsume("l1");
-		if(valueSerializer.isValid(obj.getEObject(), grammarAccess.getLimitAccess().getL1INTTerminalRuleCall_1_0_0(), value, null)) {
+		if(valueSerializer.isValid(obj.getEObject(), grammarAccess.getLimitAccess().getL1UNSIGNEDTerminalRuleCall_1_0_0(), value, null)) {
 			type = AssignmentType.TERMINAL_RULE_CALL;
-			element = grammarAccess.getLimitAccess().getL1INTTerminalRuleCall_1_0_0();
+			element = grammarAccess.getLimitAccess().getL1UNSIGNEDTerminalRuleCall_1_0_0();
 			return obj;
 		}
 		return null;
@@ -531,7 +531,7 @@ protected class Limit_L1Assignment_1_0 extends AssignmentToken  {
 
 }
 
-// ("," l2=IntegerValue)?
+// ("," l2=UNSIGNED)?
 protected class Limit_Group_1_1 extends GroupToken {
 	
 	public Limit_Group_1_1(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
@@ -575,7 +575,7 @@ protected class Limit_CommaKeyword_1_1_0 extends KeywordToken  {
 
 }
 
-// l2=IntegerValue
+// l2=UNSIGNED
 protected class Limit_L2Assignment_1_1_1 extends AssignmentToken  {
 	
 	public Limit_L2Assignment_1_1_1(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
@@ -590,7 +590,7 @@ protected class Limit_L2Assignment_1_1_1 extends AssignmentToken  {
     @Override
 	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
 		switch(index) {
-			case 0: return new IntegerValue_IntegerAssignment(this, this, 0, inst);
+			case 0: return new Limit_CommaKeyword_1_1_0(lastRuleCallOrigin, this, 0, inst);
 			default: return null;
 		}	
 	}
@@ -599,26 +599,14 @@ protected class Limit_L2Assignment_1_1_1 extends AssignmentToken  {
 	public IEObjectConsumer tryConsume() {
 		if((value = eObjectConsumer.getConsumable("l2",false)) == null) return null;
 		IEObjectConsumer obj = eObjectConsumer.cloneAndConsume("l2");
-		if(value instanceof EObject) { // org::eclipse::xtext::impl::RuleCallImpl
-			IEObjectConsumer param = createEObjectConsumer((EObject)value);
-			if(param.isInstanceOf(grammarAccess.getIntegerValueRule().getType().getClassifier())) {
-				type = AssignmentType.PARSER_RULE_CALL;
-				element = grammarAccess.getLimitAccess().getL2IntegerValueParserRuleCall_1_1_1_0(); 
-				consumed = obj;
-				return param;
-			}
+		if(valueSerializer.isValid(obj.getEObject(), grammarAccess.getLimitAccess().getL2UNSIGNEDTerminalRuleCall_1_1_1_0(), value, null)) {
+			type = AssignmentType.TERMINAL_RULE_CALL;
+			element = grammarAccess.getLimitAccess().getL2UNSIGNEDTerminalRuleCall_1_1_1_0();
+			return obj;
 		}
 		return null;
 	}
 
-    @Override
-	public AbstractToken createFollowerAfterReturn(AbstractToken next,	int actIndex, int index, IEObjectConsumer inst) {
-		if(value == inst.getEObject() && !inst.isConsumed()) return null;
-		switch(index) {
-			case 0: return new Limit_CommaKeyword_1_1_0(lastRuleCallOrigin, next, actIndex, consumed);
-			default: return null;
-		}	
-	}	
 }
 
 

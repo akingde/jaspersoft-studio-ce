@@ -28,7 +28,7 @@ public class ConvertLimit {
 			if (cols.getL1() > 0) {
 				lim += cols.getL1();
 				if (cols.getL2() != null)
-					lim += ", " + cols.getL2().getInteger();
+					lim += ", " + cols.getL2();
 			} else
 				lim += "ANY";
 			new AMKeyword(mroot, lim, null);

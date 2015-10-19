@@ -15448,8 +15448,8 @@ rule__Limit__L1Assignment_1_0
     }
 :
 (
-{ before(grammarAccess.getLimitAccess().getL1INTTerminalRuleCall_1_0_0()); }
-	RULE_INT{ after(grammarAccess.getLimitAccess().getL1INTTerminalRuleCall_1_0_0()); }
+{ before(grammarAccess.getLimitAccess().getL1UNSIGNEDTerminalRuleCall_1_0_0()); }
+	RULE_UNSIGNED{ after(grammarAccess.getLimitAccess().getL1UNSIGNEDTerminalRuleCall_1_0_0()); }
 )
 
 ;
@@ -15463,8 +15463,8 @@ rule__Limit__L2Assignment_1_1_1
     }
 :
 (
-{ before(grammarAccess.getLimitAccess().getL2IntegerValueParserRuleCall_1_1_1_0()); }
-	ruleIntegerValue{ after(grammarAccess.getLimitAccess().getL2IntegerValueParserRuleCall_1_1_1_0()); }
+{ before(grammarAccess.getLimitAccess().getL2UNSIGNEDTerminalRuleCall_1_1_1_0()); }
+	RULE_UNSIGNED{ after(grammarAccess.getLimitAccess().getL2UNSIGNEDTerminalRuleCall_1_1_1_0()); }
 )
 
 ;

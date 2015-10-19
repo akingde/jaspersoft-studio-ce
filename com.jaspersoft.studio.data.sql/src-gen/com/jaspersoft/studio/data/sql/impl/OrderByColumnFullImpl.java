@@ -49,7 +49,7 @@ public class OrderByColumnFullImpl extends OrOrderByColumnImpl implements OrderB
    * @generated
    * @ordered
    */
-  protected static final int COL_ORDER_INT_EDEFAULT = 0;
+  protected static final Integer COL_ORDER_INT_EDEFAULT = null;
 
   /**
    * The cached value of the '{@link #getColOrderInt() <em>Col Order Int</em>}' attribute.
@@ -59,7 +59,7 @@ public class OrderByColumnFullImpl extends OrOrderByColumnImpl implements OrderB
    * @generated
    * @ordered
    */
-  protected int colOrderInt = COL_ORDER_INT_EDEFAULT;
+  protected Integer colOrderInt = COL_ORDER_INT_EDEFAULT;
 
   /**
    * The default value of the '{@link #getDirection() <em>Direction</em>}' attribute.
@@ -155,7 +155,7 @@ public class OrderByColumnFullImpl extends OrOrderByColumnImpl implements OrderB
    * <!-- end-user-doc -->
    * @generated
    */
-  public int getColOrderInt()
+  public Integer getColOrderInt()
   {
     return colOrderInt;
   }
@@ -165,9 +165,9 @@ public class OrderByColumnFullImpl extends OrOrderByColumnImpl implements OrderB
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setColOrderInt(int newColOrderInt)
+  public void setColOrderInt(Integer newColOrderInt)
   {
-    int oldColOrderInt = colOrderInt;
+    Integer oldColOrderInt = colOrderInt;
     colOrderInt = newColOrderInt;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.ORDER_BY_COLUMN_FULL__COL_ORDER_INT, oldColOrderInt, colOrderInt));
@@ -291,7 +291,7 @@ public class OrderByColumnFullImpl extends OrOrderByColumnImpl implements OrderB
       case SqlPackage.ORDER_BY_COLUMN_FULL__COL_ORDER:
         return colOrder != null;
       case SqlPackage.ORDER_BY_COLUMN_FULL__COL_ORDER_INT:
-        return colOrderInt != COL_ORDER_INT_EDEFAULT;
+        return COL_ORDER_INT_EDEFAULT == null ? colOrderInt != null : !COL_ORDER_INT_EDEFAULT.equals(colOrderInt);
       case SqlPackage.ORDER_BY_COLUMN_FULL__DIRECTION:
         return DIRECTION_EDEFAULT == null ? direction != null : !DIRECTION_EDEFAULT.equals(direction);
     }

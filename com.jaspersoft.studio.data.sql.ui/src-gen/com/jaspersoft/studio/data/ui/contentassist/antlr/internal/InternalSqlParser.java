@@ -7133,7 +7133,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             if ( (LA2_0==KEYWORD_26) ) {
                 alt2=1;
             }
-            else if ( (LA2_0==RULE_INT) ) {
+            else if ( (LA2_0==RULE_UNSIGNED) ) {
                 alt2=2;
             }
             else {
@@ -7413,11 +7413,11 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
                 if ( (LA5_1==KEYWORD_6) ) {
                     int LA5_6 = input.LA(3);
 
-                    if ( (LA5_6==RULE_STAR) ) {
-                        alt5=3;
-                    }
-                    else if ( ((LA5_6>=RULE_STRING && LA5_6<=RULE_ID)) ) {
+                    if ( ((LA5_6>=RULE_STRING && LA5_6<=RULE_ID)) ) {
                         alt5=1;
+                    }
+                    else if ( (LA5_6==RULE_STAR) ) {
+                        alt5=3;
                     }
                     else {
                         NoViableAltException nvae =
@@ -7444,11 +7444,11 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
                 if ( (LA5_2==KEYWORD_6) ) {
                     int LA5_6 = input.LA(3);
 
-                    if ( (LA5_6==RULE_STAR) ) {
-                        alt5=3;
-                    }
-                    else if ( ((LA5_6>=RULE_STRING && LA5_6<=RULE_ID)) ) {
+                    if ( ((LA5_6>=RULE_STRING && LA5_6<=RULE_ID)) ) {
                         alt5=1;
+                    }
+                    else if ( (LA5_6==RULE_STAR) ) {
+                        alt5=3;
                     }
                     else {
                         NoViableAltException nvae =
@@ -7475,11 +7475,11 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
                 if ( (LA5_3==KEYWORD_6) ) {
                     int LA5_6 = input.LA(3);
 
-                    if ( (LA5_6==RULE_STAR) ) {
-                        alt5=3;
-                    }
-                    else if ( ((LA5_6>=RULE_STRING && LA5_6<=RULE_ID)) ) {
+                    if ( ((LA5_6>=RULE_STRING && LA5_6<=RULE_ID)) ) {
                         alt5=1;
+                    }
+                    else if ( (LA5_6==RULE_STAR) ) {
+                        alt5=3;
                     }
                     else {
                         NoViableAltException nvae =
@@ -8697,11 +8697,11 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
                 {
                 int LA17_4 = input.LA(2);
 
-                if ( (LA17_4==EOF||LA17_4==KEYWORD_119||LA17_4==KEYWORD_111||LA17_4==KEYWORD_102||LA17_4==KEYWORD_95||LA17_4==KEYWORD_98||LA17_4==KEYWORD_88||LA17_4==KEYWORD_74||LA17_4==KEYWORD_76||LA17_4==KEYWORD_79||LA17_4==KEYWORD_58||LA17_4==KEYWORD_61||(LA17_4>=KEYWORD_63 && LA17_4<=KEYWORD_64)||(LA17_4>=KEYWORD_71 && LA17_4<=KEYWORD_73)||LA17_4==KEYWORD_40||LA17_4==KEYWORD_42||LA17_4==KEYWORD_44||LA17_4==KEYWORD_53||LA17_4==KEYWORD_55||LA17_4==KEYWORD_27||LA17_4==KEYWORD_22||LA17_4==KEYWORD_2||LA17_4==KEYWORD_4||LA17_4==RULE_JRNPARAM) ) {
-                    alt17=4;
-                }
-                else if ( (LA17_4==KEYWORD_114||LA17_4==KEYWORD_116||LA17_4==KEYWORD_108||LA17_4==KEYWORD_96||LA17_4==KEYWORD_82||LA17_4==KEYWORD_87||LA17_4==KEYWORD_75||LA17_4==KEYWORD_78||LA17_4==KEYWORD_46||LA17_4==KEYWORD_14||(LA17_4>=KEYWORD_16 && LA17_4<=KEYWORD_18)||LA17_4==KEYWORD_20||(LA17_4>=KEYWORD_23 && LA17_4<=KEYWORD_24)||LA17_4==KEYWORD_3||LA17_4==KEYWORD_5||(LA17_4>=KEYWORD_7 && LA17_4<=KEYWORD_10)||LA17_4==RULE_STAR) ) {
+                if ( (LA17_4==KEYWORD_114||LA17_4==KEYWORD_116||LA17_4==KEYWORD_108||LA17_4==KEYWORD_96||LA17_4==KEYWORD_82||LA17_4==KEYWORD_87||LA17_4==KEYWORD_75||LA17_4==KEYWORD_78||LA17_4==KEYWORD_46||LA17_4==KEYWORD_14||(LA17_4>=KEYWORD_16 && LA17_4<=KEYWORD_18)||LA17_4==KEYWORD_20||(LA17_4>=KEYWORD_23 && LA17_4<=KEYWORD_24)||LA17_4==KEYWORD_3||LA17_4==KEYWORD_5||(LA17_4>=KEYWORD_7 && LA17_4<=KEYWORD_10)||LA17_4==RULE_STAR) ) {
                     alt17=2;
+                }
+                else if ( (LA17_4==EOF||LA17_4==KEYWORD_119||LA17_4==KEYWORD_111||LA17_4==KEYWORD_102||LA17_4==KEYWORD_95||LA17_4==KEYWORD_98||LA17_4==KEYWORD_88||LA17_4==KEYWORD_74||LA17_4==KEYWORD_76||LA17_4==KEYWORD_79||LA17_4==KEYWORD_58||LA17_4==KEYWORD_61||(LA17_4>=KEYWORD_63 && LA17_4<=KEYWORD_64)||(LA17_4>=KEYWORD_71 && LA17_4<=KEYWORD_73)||LA17_4==KEYWORD_40||LA17_4==KEYWORD_42||LA17_4==KEYWORD_44||LA17_4==KEYWORD_53||LA17_4==KEYWORD_55||LA17_4==KEYWORD_27||LA17_4==KEYWORD_22||LA17_4==KEYWORD_2||LA17_4==KEYWORD_4||LA17_4==RULE_JRNPARAM) ) {
+                    alt17=4;
                 }
                 else {
                     NoViableAltException nvae =
@@ -10182,11 +10182,11 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             if ( (LA30_0==KEYWORD_1) ) {
                 int LA30_1 = input.LA(2);
 
-                if ( (LA30_1==KEYWORD_81) ) {
-                    alt30=1;
-                }
-                else if ( ((LA30_1>=RULE_SIGNED_DOUBLE && LA30_1<=RULE_STRING_)) ) {
+                if ( ((LA30_1>=RULE_SIGNED_DOUBLE && LA30_1<=RULE_STRING_)) ) {
                     alt30=2;
+                }
+                else if ( (LA30_1==KEYWORD_81) ) {
+                    alt30=1;
                 }
                 else {
                     NoViableAltException nvae =
@@ -10566,11 +10566,11 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
                 {
                 int LA33_1 = input.LA(2);
 
-                if ( (LA33_1==KEYWORD_1) ) {
-                    alt33=6;
-                }
-                else if ( (LA33_1==EOF||LA33_1==KEYWORD_122||LA33_1==KEYWORD_119||LA33_1==KEYWORD_111||LA33_1==KEYWORD_114||LA33_1==KEYWORD_116||LA33_1==KEYWORD_108||(LA33_1>=KEYWORD_101 && LA33_1<=KEYWORD_103)||(LA33_1>=KEYWORD_95 && LA33_1<=KEYWORD_96)||LA33_1==KEYWORD_98||LA33_1==KEYWORD_82||(LA33_1>=KEYWORD_87 && LA33_1<=KEYWORD_88)||(LA33_1>=KEYWORD_74 && LA33_1<=KEYWORD_76)||(LA33_1>=KEYWORD_78 && LA33_1<=KEYWORD_79)||LA33_1==KEYWORD_58||LA33_1==KEYWORD_61||(LA33_1>=KEYWORD_63 && LA33_1<=KEYWORD_64)||LA33_1==KEYWORD_67||(LA33_1>=KEYWORD_70 && LA33_1<=KEYWORD_73)||(LA33_1>=KEYWORD_37 && LA33_1<=KEYWORD_40)||LA33_1==KEYWORD_42||LA33_1==KEYWORD_44||LA33_1==KEYWORD_46||LA33_1==KEYWORD_51||LA33_1==KEYWORD_53||LA33_1==KEYWORD_55||LA33_1==KEYWORD_25||LA33_1==KEYWORD_27||LA33_1==KEYWORD_29||LA33_1==KEYWORD_31||LA33_1==KEYWORD_14||(LA33_1>=KEYWORD_16 && LA33_1<=KEYWORD_20)||(LA33_1>=KEYWORD_22 && LA33_1<=KEYWORD_24)||(LA33_1>=KEYWORD_2 && LA33_1<=KEYWORD_10)||(LA33_1>=KEYWORD_12 && LA33_1<=KEYWORD_13)||(LA33_1>=RULE_JRNPARAM && LA33_1<=RULE_STAR)||(LA33_1>=RULE_STRING && LA33_1<=RULE_ID)) ) {
+                if ( (LA33_1==EOF||LA33_1==KEYWORD_122||LA33_1==KEYWORD_119||LA33_1==KEYWORD_111||LA33_1==KEYWORD_114||LA33_1==KEYWORD_116||LA33_1==KEYWORD_108||(LA33_1>=KEYWORD_101 && LA33_1<=KEYWORD_103)||(LA33_1>=KEYWORD_95 && LA33_1<=KEYWORD_96)||LA33_1==KEYWORD_98||LA33_1==KEYWORD_82||(LA33_1>=KEYWORD_87 && LA33_1<=KEYWORD_88)||(LA33_1>=KEYWORD_74 && LA33_1<=KEYWORD_76)||(LA33_1>=KEYWORD_78 && LA33_1<=KEYWORD_79)||LA33_1==KEYWORD_58||LA33_1==KEYWORD_61||(LA33_1>=KEYWORD_63 && LA33_1<=KEYWORD_64)||LA33_1==KEYWORD_67||(LA33_1>=KEYWORD_70 && LA33_1<=KEYWORD_73)||(LA33_1>=KEYWORD_37 && LA33_1<=KEYWORD_40)||LA33_1==KEYWORD_42||LA33_1==KEYWORD_44||LA33_1==KEYWORD_46||LA33_1==KEYWORD_51||LA33_1==KEYWORD_53||LA33_1==KEYWORD_55||LA33_1==KEYWORD_25||LA33_1==KEYWORD_27||LA33_1==KEYWORD_29||LA33_1==KEYWORD_31||LA33_1==KEYWORD_14||(LA33_1>=KEYWORD_16 && LA33_1<=KEYWORD_20)||(LA33_1>=KEYWORD_22 && LA33_1<=KEYWORD_24)||(LA33_1>=KEYWORD_2 && LA33_1<=KEYWORD_10)||(LA33_1>=KEYWORD_12 && LA33_1<=KEYWORD_13)||(LA33_1>=RULE_JRNPARAM && LA33_1<=RULE_STAR)||(LA33_1>=RULE_STRING && LA33_1<=RULE_ID)) ) {
                     alt33=1;
+                }
+                else if ( (LA33_1==KEYWORD_1) ) {
+                    alt33=6;
                 }
                 else {
                     NoViableAltException nvae =
@@ -11663,11 +11663,11 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
             else if ( (LA44_0==KEYWORD_1) ) {
                 int LA44_2 = input.LA(2);
 
-                if ( (LA44_2==KEYWORD_84||LA44_2==KEYWORD_57||LA44_2==KEYWORD_36||LA44_2==KEYWORD_1||(LA44_2>=RULE_JRPARAM && LA44_2<=RULE_JRNPARAM)||(LA44_2>=RULE_UNSIGNED && LA44_2<=RULE_SIGNED_DOUBLE)||(LA44_2>=RULE_STRING_ && LA44_2<=RULE_ID)) ) {
-                    alt44=2;
-                }
-                else if ( (LA44_2==KEYWORD_81) ) {
+                if ( (LA44_2==KEYWORD_81) ) {
                     alt44=1;
+                }
+                else if ( (LA44_2==KEYWORD_84||LA44_2==KEYWORD_57||LA44_2==KEYWORD_36||LA44_2==KEYWORD_1||(LA44_2>=RULE_JRPARAM && LA44_2<=RULE_JRNPARAM)||(LA44_2>=RULE_UNSIGNED && LA44_2<=RULE_SIGNED_DOUBLE)||(LA44_2>=RULE_STRING_ && LA44_2<=RULE_ID)) ) {
+                    alt44=2;
                 }
                 else {
                     NoViableAltException nvae =
@@ -42415,21 +42415,21 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__Limit__L1Assignment_1_0"
-    // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSqlParser.g:15445:1: rule__Limit__L1Assignment_1_0 : ( RULE_INT ) ;
+    // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSqlParser.g:15445:1: rule__Limit__L1Assignment_1_0 : ( RULE_UNSIGNED ) ;
     public final void rule__Limit__L1Assignment_1_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSqlParser.g:15449:1: ( ( RULE_INT ) )
-            // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSqlParser.g:15450:1: ( RULE_INT )
+            // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSqlParser.g:15449:1: ( ( RULE_UNSIGNED ) )
+            // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSqlParser.g:15450:1: ( RULE_UNSIGNED )
             {
-            // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSqlParser.g:15450:1: ( RULE_INT )
-            // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSqlParser.g:15451:1: RULE_INT
+            // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSqlParser.g:15450:1: ( RULE_UNSIGNED )
+            // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSqlParser.g:15451:1: RULE_UNSIGNED
             {
-             before(grammarAccess.getLimitAccess().getL1INTTerminalRuleCall_1_0_0()); 
-            match(input,RULE_INT,FOLLOW_RULE_INT_in_rule__Limit__L1Assignment_1_031582); 
-             after(grammarAccess.getLimitAccess().getL1INTTerminalRuleCall_1_0_0()); 
+             before(grammarAccess.getLimitAccess().getL1UNSIGNEDTerminalRuleCall_1_0_0()); 
+            match(input,RULE_UNSIGNED,FOLLOW_RULE_UNSIGNED_in_rule__Limit__L1Assignment_1_031582); 
+             after(grammarAccess.getLimitAccess().getL1UNSIGNEDTerminalRuleCall_1_0_0()); 
 
             }
 
@@ -42452,25 +42452,21 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__Limit__L2Assignment_1_1_1"
-    // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSqlParser.g:15460:1: rule__Limit__L2Assignment_1_1_1 : ( ruleIntegerValue ) ;
+    // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSqlParser.g:15460:1: rule__Limit__L2Assignment_1_1_1 : ( RULE_UNSIGNED ) ;
     public final void rule__Limit__L2Assignment_1_1_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSqlParser.g:15464:1: ( ( ruleIntegerValue ) )
-            // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSqlParser.g:15465:1: ( ruleIntegerValue )
+            // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSqlParser.g:15464:1: ( ( RULE_UNSIGNED ) )
+            // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSqlParser.g:15465:1: ( RULE_UNSIGNED )
             {
-            // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSqlParser.g:15465:1: ( ruleIntegerValue )
-            // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSqlParser.g:15466:1: ruleIntegerValue
+            // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSqlParser.g:15465:1: ( RULE_UNSIGNED )
+            // ../com.jaspersoft.studio.data.sql.ui/src-gen/com/jaspersoft/studio/data/ui/contentassist/antlr/internal/InternalSqlParser.g:15466:1: RULE_UNSIGNED
             {
-             before(grammarAccess.getLimitAccess().getL2IntegerValueParserRuleCall_1_1_1_0()); 
-            pushFollow(FOLLOW_ruleIntegerValue_in_rule__Limit__L2Assignment_1_1_131613);
-            ruleIntegerValue();
-
-            state._fsp--;
-
-             after(grammarAccess.getLimitAccess().getL2IntegerValueParserRuleCall_1_1_1_0()); 
+             before(grammarAccess.getLimitAccess().getL2UNSIGNEDTerminalRuleCall_1_1_1_0()); 
+            match(input,RULE_UNSIGNED,FOLLOW_RULE_UNSIGNED_in_rule__Limit__L2Assignment_1_1_131613); 
+             after(grammarAccess.getLimitAccess().getL2UNSIGNEDTerminalRuleCall_1_1_1_0()); 
 
             }
 
@@ -49925,7 +49921,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
     public static final BitSet FOLLOW_rule__Limit__L1Assignment_1_0_in_rule__Limit__Group_1__0__Impl10160 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__Limit__Group_1__1__Impl_in_rule__Limit__Group_1__110190 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__Limit__Group_1_1__0_in_rule__Limit__Group_1__1__Impl10217 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__Limit__Group_1_1__0__Impl_in_rule__Limit__Group_1_1__010252 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000000040L});
+    public static final BitSet FOLLOW_rule__Limit__Group_1_1__0__Impl_in_rule__Limit__Group_1_1__010252 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000000020L});
     public static final BitSet FOLLOW_rule__Limit__Group_1_1__1_in_rule__Limit__Group_1_1__010255 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_KEYWORD_4_in_rule__Limit__Group_1_1__0__Impl10283 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__Limit__Group_1_1__1__Impl_in_rule__Limit__Group_1_1__110314 = new BitSet(new long[]{0x0000000000000002L});
@@ -50012,7 +50008,7 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
     public static final BitSet FOLLOW_KEYWORD_98_in_rule__Select__Group_9__0__Impl12155 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__Select__Group_9__1__Impl_in_rule__Select__Group_9__112186 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__Select__OrderByEntryAssignment_9_1_in_rule__Select__Group_9__1__Impl12213 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__Select__Group_10__0__Impl_in_rule__Select__Group_10__012247 = new BitSet(new long[]{0x0000000000000000L,0x0000000100000000L,0x0000000000000040L});
+    public static final BitSet FOLLOW_rule__Select__Group_10__0__Impl_in_rule__Select__Group_10__012247 = new BitSet(new long[]{0x0000000000000000L,0x0000000100000000L,0x0000000000000020L});
     public static final BitSet FOLLOW_rule__Select__Group_10__1_in_rule__Select__Group_10__012250 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_KEYWORD_63_in_rule__Select__Group_10__0__Impl12278 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__Select__Group_10__1__Impl_in_rule__Select__Group_10__112309 = new BitSet(new long[]{0x0000000000000002L});
@@ -50804,8 +50800,8 @@ public class InternalSqlParser extends AbstractInternalContentAssistParser {
     public static final BitSet FOLLOW_ruleIntegerValue_in_rule__FetchFirst__FetchFirstAssignment_031487 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__FetchFirst__RowAlternatives_1_0_in_rule__FetchFirst__RowAssignment_131518 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_RULE_INT_in_rule__Offset__OffsetAssignment31551 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_RULE_INT_in_rule__Limit__L1Assignment_1_031582 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleIntegerValue_in_rule__Limit__L2Assignment_1_1_131613 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_RULE_UNSIGNED_in_rule__Limit__L1Assignment_1_031582 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_RULE_UNSIGNED_in_rule__Limit__L2Assignment_1_1_131613 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleSelectSubSet_in_rule__SelectQuery__OpAssignment_131644 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__SelectSubSet__OpAlternatives_0_0_in_rule__SelectSubSet__OpAssignment_031675 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_KEYWORD_26_in_rule__SelectSubSet__AllAssignment_131713 = new BitSet(new long[]{0x0000000000000002L});

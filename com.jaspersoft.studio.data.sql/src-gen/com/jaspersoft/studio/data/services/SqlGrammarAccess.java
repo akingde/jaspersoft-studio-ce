@@ -99,17 +99,17 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Keyword cALLKeyword_0_1 = (Keyword)cGroup_0.eContents().get(1);
 		private final Group cGroup_1 = (Group)cAlternatives.eContents().get(1);
 		private final Assignment cL1Assignment_1_0 = (Assignment)cGroup_1.eContents().get(0);
-		private final RuleCall cL1INTTerminalRuleCall_1_0_0 = (RuleCall)cL1Assignment_1_0.eContents().get(0);
+		private final RuleCall cL1UNSIGNEDTerminalRuleCall_1_0_0 = (RuleCall)cL1Assignment_1_0.eContents().get(0);
 		private final Group cGroup_1_1 = (Group)cGroup_1.eContents().get(1);
 		private final Keyword cCommaKeyword_1_1_0 = (Keyword)cGroup_1_1.eContents().get(0);
 		private final Assignment cL2Assignment_1_1_1 = (Assignment)cGroup_1_1.eContents().get(1);
-		private final RuleCall cL2IntegerValueParserRuleCall_1_1_1_0 = (RuleCall)cL2Assignment_1_1_1.eContents().get(0);
+		private final RuleCall cL2UNSIGNEDTerminalRuleCall_1_1_1_0 = (RuleCall)cL2Assignment_1_1_1.eContents().get(0);
 		
 		//Limit:
-		//	{Limit} "ALL" | l1=INT ("," l2=IntegerValue)?;
+		//	{Limit} "ALL" | l1=UNSIGNED ("," l2=UNSIGNED)?;
 		public ParserRule getRule() { return rule; }
 
-		//{Limit} "ALL" | l1=INT ("," l2=IntegerValue)?
+		//{Limit} "ALL" | l1=UNSIGNED ("," l2=UNSIGNED)?
 		public Alternatives getAlternatives() { return cAlternatives; }
 
 		//{Limit} "ALL"
@@ -121,26 +121,26 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		//"ALL"
 		public Keyword getALLKeyword_0_1() { return cALLKeyword_0_1; }
 
-		//l1=INT ("," l2=IntegerValue)?
+		//l1=UNSIGNED ("," l2=UNSIGNED)?
 		public Group getGroup_1() { return cGroup_1; }
 
-		//l1=INT
+		//l1=UNSIGNED
 		public Assignment getL1Assignment_1_0() { return cL1Assignment_1_0; }
 
-		//INT
-		public RuleCall getL1INTTerminalRuleCall_1_0_0() { return cL1INTTerminalRuleCall_1_0_0; }
+		//UNSIGNED
+		public RuleCall getL1UNSIGNEDTerminalRuleCall_1_0_0() { return cL1UNSIGNEDTerminalRuleCall_1_0_0; }
 
-		//("," l2=IntegerValue)?
+		//("," l2=UNSIGNED)?
 		public Group getGroup_1_1() { return cGroup_1_1; }
 
 		//","
 		public Keyword getCommaKeyword_1_1_0() { return cCommaKeyword_1_1_0; }
 
-		//l2=IntegerValue
+		//l2=UNSIGNED
 		public Assignment getL2Assignment_1_1_1() { return cL2Assignment_1_1_1; }
 
-		//IntegerValue
-		public RuleCall getL2IntegerValueParserRuleCall_1_1_1_0() { return cL2IntegerValueParserRuleCall_1_1_1_0; }
+		//UNSIGNED
+		public RuleCall getL2UNSIGNEDTerminalRuleCall_1_1_1_0() { return cL2UNSIGNEDTerminalRuleCall_1_1_1_0; }
 	}
 
 	public class SelectQueryElements extends AbstractParserRuleElementFinder {
@@ -4236,7 +4236,7 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//Limit:
-	//	{Limit} "ALL" | l1=INT ("," l2=IntegerValue)?;
+	//	{Limit} "ALL" | l1=UNSIGNED ("," l2=UNSIGNED)?;
 	public LimitElements getLimitAccess() {
 		return (pLimit != null) ? pLimit : (pLimit = new LimitElements());
 	}
@@ -5126,7 +5126,7 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		return (tSTAR != null) ? tSTAR : (tSTAR = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "STAR"));
 	} 
 
-	//terminal UNSIGNED returns ecore::EInt:
+	//terminal UNSIGNED returns ecore::EIntegerObject:
 	//	"0".."9"+;
 	public TerminalRule getUNSIGNEDRule() {
 		return (tUNSIGNED != null) ? tUNSIGNED : (tUNSIGNED = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "UNSIGNED"));

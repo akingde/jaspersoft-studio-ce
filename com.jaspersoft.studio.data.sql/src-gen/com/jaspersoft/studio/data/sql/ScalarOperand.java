@@ -167,12 +167,12 @@ public interface ScalarOperand extends OperandList
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>So UInt</em>' attribute.
-   * @see #setSoUInt(int)
+   * @see #setSoUInt(Integer)
    * @see com.jaspersoft.studio.data.sql.SqlPackage#getScalarOperand_SoUInt()
    * @model
    * @generated
    */
-  int getSoUInt();
+  Integer getSoUInt();
 
   /**
    * Sets the value of the '{@link com.jaspersoft.studio.data.sql.ScalarOperand#getSoUInt <em>So UInt</em>}' attribute.
@@ -182,7 +182,7 @@ public interface ScalarOperand extends OperandList
    * @see #getSoUInt()
    * @generated
    */
-  void setSoUInt(int value);
+  void setSoUInt(Integer value);
 
   /**
    * Returns the value of the '<em><b>Soint</b></em>' attribute.

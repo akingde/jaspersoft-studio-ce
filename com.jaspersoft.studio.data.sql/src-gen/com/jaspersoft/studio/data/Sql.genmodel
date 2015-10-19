@@ -55,7 +55,7 @@
     </genClasses>
     <genClasses ecoreClass="Sql.ecore#//Limit">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//Limit/l1"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Limit/l2"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//Limit/l2"/>
     </genClasses>
     <genClasses ecoreClass="Sql.ecore#//SelectQuery"/>
     <genClasses ecoreClass="Sql.ecore#//SelectSubSet">

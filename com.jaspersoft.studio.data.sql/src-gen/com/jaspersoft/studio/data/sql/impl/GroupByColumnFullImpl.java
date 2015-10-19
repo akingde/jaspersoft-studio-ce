@@ -60,7 +60,7 @@ public class GroupByColumnFullImpl extends OrGroupByColumnImpl implements GroupB
    * @generated
    * @ordered
    */
-  protected static final int GR_BY_INT_EDEFAULT = 0;
+  protected static final Integer GR_BY_INT_EDEFAULT = null;
 
   /**
    * The cached value of the '{@link #getGrByInt() <em>Gr By Int</em>}' attribute.
@@ -70,7 +70,7 @@ public class GroupByColumnFullImpl extends OrGroupByColumnImpl implements GroupB
    * @generated
    * @ordered
    */
-  protected int grByInt = GR_BY_INT_EDEFAULT;
+  protected Integer grByInt = GR_BY_INT_EDEFAULT;
 
   /**
    * <!-- begin-user-doc -->
@@ -194,7 +194,7 @@ public class GroupByColumnFullImpl extends OrGroupByColumnImpl implements GroupB
    * <!-- end-user-doc -->
    * @generated
    */
-  public int getGrByInt()
+  public Integer getGrByInt()
   {
     return grByInt;
   }
@@ -204,9 +204,9 @@ public class GroupByColumnFullImpl extends OrGroupByColumnImpl implements GroupB
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setGrByInt(int newGrByInt)
+  public void setGrByInt(Integer newGrByInt)
   {
-    int oldGrByInt = grByInt;
+    Integer oldGrByInt = grByInt;
     grByInt = newGrByInt;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.GROUP_BY_COLUMN_FULL__GR_BY_INT, oldGrByInt, grByInt));
@@ -311,7 +311,7 @@ public class GroupByColumnFullImpl extends OrGroupByColumnImpl implements GroupB
       case SqlPackage.GROUP_BY_COLUMN_FULL__GB_FUNCTION:
         return gbFunction != null;
       case SqlPackage.GROUP_BY_COLUMN_FULL__GR_BY_INT:
-        return grByInt != GR_BY_INT_EDEFAULT;
+        return GR_BY_INT_EDEFAULT == null ? grByInt != null : !GR_BY_INT_EDEFAULT.equals(grByInt);
     }
     return super.eIsSet(featureID);
   }

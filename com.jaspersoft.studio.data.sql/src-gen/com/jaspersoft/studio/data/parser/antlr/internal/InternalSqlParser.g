@@ -240,9 +240,9 @@ ruleLimit returns [EObject current=null]
 )
     |((
 (
-		lv_l1_2_0=RULE_INT
+		lv_l1_2_0=RULE_UNSIGNED
 		{
-			newLeafNode(lv_l1_2_0, grammarAccess.getLimitAccess().getL1INTTerminalRuleCall_1_0_0()); 
+			newLeafNode(lv_l1_2_0, grammarAccess.getLimitAccess().getL1UNSIGNEDTerminalRuleCall_1_0_0()); 
 		}
 		{
 	        if ($current==null) {
@@ -252,7 +252,7 @@ ruleLimit returns [EObject current=null]
        			$current, 
        			"l1",
         		lv_l1_2_0, 
-        		"INT");
+        		"UNSIGNED");
 	    }
 
 )
@@ -263,19 +263,19 @@ ruleLimit returns [EObject current=null]
     }
 (
 (
-		{ 
-	        newCompositeNode(grammarAccess.getLimitAccess().getL2IntegerValueParserRuleCall_1_1_1_0()); 
-	    }
-		lv_l2_4_0=ruleIntegerValue		{
+		lv_l2_4_0=RULE_UNSIGNED
+		{
+			newLeafNode(lv_l2_4_0, grammarAccess.getLimitAccess().getL2UNSIGNEDTerminalRuleCall_1_1_1_0()); 
+		}
+		{
 	        if ($current==null) {
-	            $current = createModelElementForParent(grammarAccess.getLimitRule());
+	            $current = createModelElement(grammarAccess.getLimitRule());
 	        }
-       		set(
+       		setWithLastConsumed(
        			$current, 
        			"l2",
         		lv_l2_4_0, 
-        		"IntegerValue");
-	        afterParserOrEnumRuleCall();
+        		"UNSIGNED");
 	    }
 
 )
