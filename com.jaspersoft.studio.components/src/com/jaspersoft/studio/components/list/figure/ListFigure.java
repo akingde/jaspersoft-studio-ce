@@ -80,4 +80,9 @@ public class ListFigure extends JRComponentFigure {
 			g.setColor(oldColor);
 		}
 	}
+	
+	@Override
+	protected boolean allowsFigureDrawCache() {
+		return true;
+	}
 }
