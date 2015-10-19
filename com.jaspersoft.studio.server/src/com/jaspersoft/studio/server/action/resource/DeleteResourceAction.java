@@ -33,6 +33,7 @@ import org.eclipse.ui.actions.ActionFactory;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.model.MFolder;
 import com.jaspersoft.studio.server.model.MReportUnit;
@@ -61,7 +62,8 @@ public class DeleteResourceAction extends Action {
 	public boolean isEnabled() {
 		Object firstElement = ((TreeSelection) treeViewer.getSelection())
 				.getFirstElement();
-		boolean b = firstElement != null && (firstElement instanceof AMResource);
+		boolean b = firstElement != null
+				&& (firstElement instanceof AMResource);
 		if (b) {
 			AMResource mres = (AMResource) firstElement;
 			int pmask = mres.getValue().getPermissionMask(mres.getWsClient());
@@ -106,7 +108,9 @@ public class DeleteResourceAction extends Action {
 											.getValue().getChildren();
 									String uri = mres.getValue().getUriString();
 									for (ResourceDescriptor rd : children) {
-										if (rd.getUriString() != null && rd.getUriString().equals(uri)) {
+										if (rd.getUriString() != null
+												&& rd.getUriString()
+														.equals(uri)) {
 											toDel = rd;
 											break;
 										}
@@ -123,6 +127,7 @@ public class DeleteResourceAction extends Action {
 								monitor.subTask(mrunit.getDisplayText());
 								WSClientHelper.save(monitor, mrunit);
 								deleted.add(mrunit);
+								WSClientHelper.refreshResource(mrunit, monitor);
 							} catch (Throwable e) {
 								UIUtils.showError(e);
 							}
@@ -141,8 +146,12 @@ public class DeleteResourceAction extends Action {
 				private void deleteResource(IProgressMonitor monitor,
 						final AMResource mres) {
 					try {
+						ANode p = mres.getParent();
 						monitor.subTask(mres.getDisplayText());
 						WSClientHelper.deleteResource(monitor, mres);
+						if (p != null && p instanceof AMResource)
+							WSClientHelper.refreshResource((AMResource) p,
+									monitor);
 					} catch (Throwable e) {
 						UIUtils.showError(e);
 					}
