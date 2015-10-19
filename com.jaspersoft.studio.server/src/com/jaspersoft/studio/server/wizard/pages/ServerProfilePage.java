@@ -325,17 +325,23 @@ public class ServerProfilePage extends WizardPage implements
 		Composite cmp = new Composite(parent, SWT.NONE);
 		cmp.setLayout(new GridLayout(3, false));
 
-		new Label(cmp, SWT.NONE).setText(Messages.ServerProfilePage_jrversion);
+		Label lbl = new Label(cmp, SWT.NONE);
+		lbl.setText(Messages.ServerProfilePage_jrversion);
 
 		cversion = new VersionCombo(cmp);
-		((Combo) cversion.getControl()).setItem(0, Messages.ServerProfilePage_25);
+		((Combo) cversion.getControl()).setItem(0,
+				Messages.ServerProfilePage_25);
 		cversion.setVersion(JRXmlWriterHelper.LAST_VERSION);
 		GridData gd = new GridData();
 		gd.horizontalSpan = 2;
 		cversion.getControl().setLayoutData(gd);
 
-		new Label(cmp, SWT.NONE)
-				.setText(Messages.ServerProfilePage_connectiontimeout);
+		String tt = Messages.ServerProfilePage_24;
+		lbl.setToolTipText(tt);
+		cversion.getControl().setToolTipText(tt);
+
+		lbl = new Label(cmp, SWT.NONE);
+		lbl.setText(Messages.ServerProfilePage_connectiontimeout);
 
 		ttimeout = new Text(cmp, SWT.BORDER);
 		gd = new GridData();
@@ -343,8 +349,15 @@ public class ServerProfilePage extends WizardPage implements
 		gd.widthHint = 100;
 		ttimeout.setLayoutData(gd);
 
+		tt = Messages.ServerProfilePage_26;
+		lbl.setToolTipText(tt);
+		ttimeout.setToolTipText(tt);
+
 		bchunked = new Button(cmp, SWT.CHECK);
 		bchunked.setText(Messages.ServerProfilePage_chunkedrequest);
+
+		tt = Messages.ServerProfilePage_27;
+		bchunked.setToolTipText(tt);
 
 		bdaterange = new Button(cmp, SWT.CHECK);
 		bdaterange.setText(Messages.ServerProfilePage_daterangeexpression);
@@ -352,11 +365,16 @@ public class ServerProfilePage extends WizardPage implements
 		gd.horizontalSpan = 2;
 		bdaterange.setLayoutData(gd);
 
+		tt = Messages.ServerProfilePage_28;
+		bchunked.setToolTipText(tt);
+
 		bUseSoap = new Button(cmp, SWT.CHECK);
 		bUseSoap.setText(Messages.ServerProfilePage_6);
 		// gd = new GridData();
 		// gd.horizontalSpan = 3;
 		// bUseSoap.setLayoutData(gd);
+		tt = Messages.ServerProfilePage_29;
+		bchunked.setToolTipText(tt);
 
 		bSyncDA = new Button(cmp, SWT.CHECK);
 		bSyncDA.setText(Messages.ServerProfilePage_14);
@@ -388,7 +406,7 @@ public class ServerProfilePage extends WizardPage implements
 		});
 
 		String ttip = Messages.ServerProfilePage_7;
-		Label lbl = new Label(cmp, SWT.NONE);
+		lbl = new Label(cmp, SWT.NONE);
 		lbl.setText(Messages.ServerProfilePage_12);
 		lbl.setToolTipText(ttip);
 
@@ -439,6 +457,10 @@ public class ServerProfilePage extends WizardPage implements
 		gd.horizontalSpan = 2;
 		loc.setLayoutData(gd);
 
+		tt = Messages.ServerProfilePage_30;
+		lbl.setToolTipText(tt);
+		loc.setToolTipText(tt);
+
 		lbl = new Label(cmp, SWT.NONE);
 		lbl.setText(Messages.ServerProfilePage_22);
 
@@ -446,6 +468,10 @@ public class ServerProfilePage extends WizardPage implements
 		gd = new GridData();
 		gd.horizontalSpan = 2;
 		tz.setLayoutData(gd);
+
+		tt = Messages.ServerProfilePage_31;
+		lbl.setToolTipText(tt);
+		loc.setToolTipText(tt);
 
 		return cmp;
 	}

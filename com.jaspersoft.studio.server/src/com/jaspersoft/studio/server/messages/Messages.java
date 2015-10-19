@@ -290,8 +290,15 @@ public class Messages extends NLS {
 	public static String ServerProfilePage_21;
 	public static String ServerProfilePage_22;
 	public static String ServerProfilePage_23;
+	public static String ServerProfilePage_24;
 	public static String ServerProfilePage_25;
+	public static String ServerProfilePage_26;
+	public static String ServerProfilePage_27;
+	public static String ServerProfilePage_28;
+	public static String ServerProfilePage_29;
 	public static String ServerProfilePage_3;
+	public static String ServerProfilePage_30;
+	public static String ServerProfilePage_31;
 	public static String ServerProfilePage_4;
 	public static String ServerProfilePage_5;
 	public static String ServerProfilePage_6;
