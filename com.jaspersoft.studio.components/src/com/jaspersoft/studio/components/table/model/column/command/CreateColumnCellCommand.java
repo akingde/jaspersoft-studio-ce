@@ -52,6 +52,8 @@ public class CreateColumnCellCommand extends Command {
 					.getName();
 		this.jrColumn = (StandardBaseColumn) srcNode.getValue();
 		height = srcNode.getBounds().height;
+		//don't create cell with zero height to provide a feedback on the graphical editor
+		if (height == 0) height = 30;
 	}
 
 	/*
