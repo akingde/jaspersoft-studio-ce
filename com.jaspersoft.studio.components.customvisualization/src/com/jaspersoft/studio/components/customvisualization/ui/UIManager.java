@@ -54,7 +54,7 @@ import com.jaspersoft.studio.utils.jasper.IDisposeListener;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class UIManager {
-	private static Map<String, ComponentDescriptor> cachePlugin = new HashMap<String, ComponentDescriptor>();
+	private static Map<String, ComponentDescriptor> cachePlugin;
 	private static Map<JasperReportsConfiguration, Map<String, ComponentDescriptor>> cache = new HashMap<JasperReportsConfiguration, Map<String, ComponentDescriptor>>();
 	private static Map<ComponentDescriptor, Image> imageCache = new HashMap<ComponentDescriptor, Image>();
 	private static Map<ComponentDescriptor, String> parentsPath = new HashMap<ComponentDescriptor, String>();
@@ -163,9 +163,11 @@ public class UIManager {
 	}
 
 	protected static CustomVisualizationActivator initCachePlugin() {
+		if (cachePlugin == null)
+			cachePlugin = new HashMap<String, ComponentDescriptor>();
 		CustomVisualizationActivator activator = CustomVisualizationActivator
 				.getDefault();
-		Enumeration<?> en = activator.getBundle().findEntries("resources", //$NON-NLS-1$
+		Enumeration<?> en = activator.getBundle().findEntries("components", //$NON-NLS-1$
 				"*.json", true); //$NON-NLS-1$
 		while (en != null && en.hasMoreElements()) {
 			URL url = (URL) en.nextElement();
@@ -174,10 +176,12 @@ public class UIManager {
 				ComponentDescriptor cd = readURL(url);
 				if (cd != null) {
 					cachePlugin.put(cd.getModule(), cd);
-					parentsPath.put(
-							cd,
-							url.toURI().toASCIIString()
-									.replaceAll(cd.getModule() + ".json$", ""));
+					String purl = url.toURI().toASCIIString();
+					int indx = purl.lastIndexOf("/");
+					if (indx != -1) {
+						purl = purl.substring(0, indx + 1);
+						parentsPath.put(cd, purl);
+					}
 				}
 			} catch (Exception ex) {
 				// Log error but continue...

@@ -1,0 +1,96 @@
+{
+    "label": "Figures", 
+    "description": "Display a list of figures",
+    "module":"figures",
+    "thumbnail": "Figures.png",
+    "sections": [
+            {
+              "name": "separator",
+              "properties": [
+                {
+                  "name": "script",
+                  "label": "Script Path",
+                  "description": "Script path",
+                  "mandatory": "true",
+                  "type": "PATH",
+                  "defaultValue":"d3_zoomable_circle_packing.min.js",
+                  "readOnly": "true"
+                },
+                {
+                  "name": "css",
+                  "label": "CSS Path",
+                  "description": "CSS path",
+                  "mandatory": "true",
+                  "defaultValue": "d3_zoomable_circle_packing.css",
+                  "type": "PATH",
+                  "readOnly": "true"
+                },
+                {
+                  "name": "module",
+                  "label": "module",
+                  "description": "module",
+                  "mandatory": "true",
+                  "defaultValue": "d3circle",
+                  "type": "TEXT"
+                }
+              ]
+            },
+            {
+              "name": "Data",
+              "properties": [
+                {
+                  "name": "itemsValue",
+                  "label": "Items Value",
+                  "description": "The number of selected values.",
+                  "mandatory": "false",
+                  "type": "double",
+                  "defaultValue":"1"
+                },
+                {
+                  "name": "itemsCount",
+                  "label": "Items Count",
+                  "description": "The number of phantom figures.",
+                  "mandatory": "false",
+                  "type": "double",
+                  "defaultValue":"1"
+                },
+                {
+                  "name": "figureColor",
+                  "label": "Selection Color",
+                  "description": "The color used for selected items.",
+                  "mandatory": "false",
+                  "type": "color",
+                  "defaultValue":"#000000"
+                },
+                {
+                  "name": "figureOpacity",
+                  "label": "Selection Opacity",
+                  "description": "The opacity used for selected items.",
+                  "mandatory": "false",
+                  "type": "float",
+                  "defaultValue":"1",
+                  "min":"0",
+                  "max":"1"
+                },
+                {
+                  "name": "phantomColor",
+                  "label": "Phantom Color",
+                  "description": "The color used for phantom items.",
+                  "mandatory": "false",
+                  "type": "color",
+                  "defaultValue":"#0000000"
+                },
+                {
+                  "name": "phantomOpacity",
+                  "label": "Phantom Opacity",
+                  "description": "The opacity used for phantom items.",
+                  "mandatory": "false",
+                  "type": "float",
+                  "defaultValue":"0.2",
+                  "min":"0",
+                  "max":"1"
+                }
+              ]
+            }
+  ]
+}

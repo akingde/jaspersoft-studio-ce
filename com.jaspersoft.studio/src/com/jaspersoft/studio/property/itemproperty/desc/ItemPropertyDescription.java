@@ -176,7 +176,7 @@ public class ItemPropertyDescription<T> {
 			String tooltip = "";
 			if (!Misc.isNullOrEmpty(txt))
 				tooltip += "\n\n" + txt;
-			tooltip += "\n\n" + getToolTip();
+			tooltip += "\n" + getToolTip();
 			txtExpr.setToolTipText(tooltip.trim());
 		}
 	}

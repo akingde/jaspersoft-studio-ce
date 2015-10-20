@@ -124,7 +124,7 @@ public class CVCTypeWizardPage extends JSSWizardPage {
 
 		GalleryItem tib = new GalleryItem(rootItem, SWT.NONE);
 		tib.setText("Blank");
-		setGallyeryItemImageInfo(tib, "icons/cvcomponent-32.png"); //$NON-NLS-1$ 
+		setGallyeryItemImageInfo(tib, "icons/blank_a4.png"); //$NON-NLS-1$ 
 
 		JasperReportsConfiguration jConf = getConfig();
 		for (ComponentDescriptor cd : modules) {
@@ -140,7 +140,7 @@ public class CVCTypeWizardPage extends JSSWizardPage {
 
 	private static void setGallyeryItemImageInfo(GalleryItem item,
 			ComponentDescriptor cd, JasperReportsConfiguration jConf) {
-		if (!Misc.isNullOrEmpty(cd.getThumbnail()) && !UIManager.isInPlugin(cd)) {
+		if (!Misc.isNullOrEmpty(cd.getThumbnail())) {
 			Image img = UIManager.getThumbnail(cd, jConf);
 			if (img != null) {
 				item.setSelectedImage(img);
@@ -149,7 +149,7 @@ public class CVCTypeWizardPage extends JSSWizardPage {
 				return;
 			}
 		}
-		setGallyeryItemImageInfo(item, "icons/cvcomponent-32.png");
+		setGallyeryItemImageInfo(item, "icons/blank_a4.png");
 	}
 
 	private static void setGallyeryItemImageInfo(GalleryItem item,

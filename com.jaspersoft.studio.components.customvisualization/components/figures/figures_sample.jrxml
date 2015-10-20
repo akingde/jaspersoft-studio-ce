@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.2.0.qualifier using JasperReports Library version 6.1.2  -->
+<!-- 2015-10-12T18:51:27 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="TOI_Circle_test" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="31c5bd3e-7f1a-4ab1-b4e4-a617f592984c">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<queryString language="SQL">
+		<![CDATA[]]>
+	</queryString>
+	<title>
+		<band height="656" splitType="Stretch">
+			<componentElement>
+				<reportElement x="0" y="0" width="80" height="120" uuid="fbb36477-0a3a-4763-98ce-94237b08671e"/>
+				<cvc:customvisualization xmlns:cvc="http://www.jaspersoft.com/cvcomponent" xsi:schemaLocation="http://www.jaspersoft.com/cvcomponent http://www.jaspersoft.com/cvcomponent/component.xsd" evaluationTime="Report">
+					<cvc:itemProperty name="script" value="figures.min.js"/>
+					<cvc:itemProperty name="module" value="figures"/>
+					<cvc:itemProperty name="css" value="figures.css"/>
+				</cvc:customvisualization>
+			</componentElement>
+			<staticText>
+				<reportElement x="100" y="0" width="440" height="70" uuid="2bbb6238-c82f-4ed8-b6df-6dfddcf1036e"/>
+				<text><![CDATA[Default. Single man.]]></text>
+			</staticText>
+			<componentElement>
+				<reportElement x="0" y="210" width="540" height="240" uuid="74263625-4f6f-4dc5-b632-2f4ebbbeb26c"/>
+				<cvc:customvisualization xmlns:cvc="http://www.jaspersoft.com/cvcomponent" xsi:schemaLocation="http://www.jaspersoft.com/cvcomponent http://www.jaspersoft.com/cvcomponent/component.xsd" evaluationTime="Report">
+					<cvc:itemProperty name="script" value="figures.min.js"/>
+					<cvc:itemProperty name="module" value="figures"/>
+					<cvc:itemProperty name="css" value="figures.css"/>
+					<cvc:itemProperty name="itemsCount" value="100"/>
+					<cvc:itemProperty name="itemsValue" value="1.5"/>
+					<cvc:cvData>
+						<cvc:item>
+							<cvc:itemProperty name="newname" value="value">
+								<valueExpression><![CDATA["Value"]]></valueExpression>
+							</cvc:itemProperty>
+						</cvc:item>
+					</cvc:cvData>
+				</cvc:customvisualization>
+			</componentElement>
+			<staticText>
+				<reportElement x="100" y="140" width="440" height="70" uuid="a3766664-1e1d-446e-b155-30c994b3f359"/>
+				<text><![CDATA[Value: 2, Items Count 3]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band/>
+	</detail>
+</jasperReport>
