@@ -25,6 +25,7 @@ import com.jaspersoft.studio.components.Activator;
 import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.components.table.model.AMCollection;
 import com.jaspersoft.studio.components.table.model.MTable;
+import com.jaspersoft.studio.components.table.model.MTableDetail;
 import com.jaspersoft.studio.components.table.model.column.MColumn;
 import com.jaspersoft.studio.components.table.model.column.command.CheckColumnsOrder;
 import com.jaspersoft.studio.components.table.model.column.command.FixCellHeightsCommand;
@@ -81,10 +82,31 @@ public class GroupColumnsAction extends ACreateAction {
 		for (Object obj : objects) {
 			if (obj instanceof EditPart)
 				obj = ((EditPart)obj).getModel();
-			if (obj instanceof MColumn)
-				columns.add((MColumn)obj);
+			if (obj instanceof MColumn){
+				MColumn col = (MColumn)obj;
+				if (!isTableDetail(col)){
+					columns.add(col);
+				}
+			}
 		}
 		return columns;
+	}
+
+	/**
+	 * Check if a column is a descendant of the table detail 
+	 * 
+	 * @param column a column
+	 * @return true if the column is null, one of his ancestor before
+	 * the collection node is null or if its collection node is a {@link MTableDetail},
+	 * false otherwise
+	 */
+	private boolean isTableDetail(MColumn column){
+		if (column == null) return true;
+		ANode parent = column.getParent();
+		while (parent != null && !(parent instanceof AMCollection)){
+			parent = parent.getParent();
+		}
+		return (parent == null || parent instanceof MTableDetail);
 	}
 	
 	@Override
