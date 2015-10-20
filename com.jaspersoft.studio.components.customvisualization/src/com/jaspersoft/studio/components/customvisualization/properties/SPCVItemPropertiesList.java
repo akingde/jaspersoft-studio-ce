@@ -251,6 +251,11 @@ public class SPCVItemPropertiesList extends
 				if (!Misc.isNullOrEmpty(module)) {
 					ComponentDescriptor newCd = UIManager.getDescriptor(jConf,
 							module);
+					if (newCd == null) {
+						stackLayout.topControl = propertiesGrp;
+						cmp.layout(true);
+						return;
+					}
 					if (newCd == cd) {
 						refresh = true;
 						try {

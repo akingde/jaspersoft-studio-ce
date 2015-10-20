@@ -87,16 +87,25 @@ public class UIManager {
 
 		InputStream is = null;
 		try {
-			if (isInPlugin(cd)) {
-				URL url = CustomVisualizationActivator.getDefault().getBundle()
-						.getEntry(path);
-				if (url != null)
-					is = url.openStream();
-			} else {
-				String uri = parentsPath.get(cd);
-				if (uri != null)
-					is = new URL(uri + path).openStream();
-			}
+			// if (isInPlugin(cd)) {
+			// String uri = parentsPath.get(cd);
+			// if (uri != null)
+			// is = new URL(uri + path).openStream();
+
+			// String uri = parentsPath.get(cd);
+			// if (uri != null)
+			// uri += path;
+			// URL url =
+			// CustomVisualizationActivator.getDefault().getBundle()
+			// .getEntry(uri);
+
+			// if (url != null)
+			// is = url.openStream();
+			// } else {
+			String uri = parentsPath.get(cd);
+			if (uri != null)
+				is = new URL(uri + path).openStream();
+			// }
 			if (is != null) {
 				org.apache.commons.io.FileUtils.copyInputStreamToFile(is, dest);
 				destFolder.refreshLocal(1, new NullProgressMonitor());

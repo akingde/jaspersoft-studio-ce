@@ -5,7 +5,8 @@
     "thumbnail": "Figures.png",
     "sections": [
             {
-              "name": "separator",
+              "name": "Script",
+              "expandable" : "true",
               "properties": [
                 {
                   "name": "script",
@@ -13,30 +14,32 @@
                   "description": "Script path",
                   "mandatory": "true",
                   "type": "PATH",
-                  "defaultValue":"d3_zoomable_circle_packing.min.js",
-                  "readOnly": "true"
+                  "defaultValue":"figures.min.js",
+                  "readOnly": "false"
                 },
                 {
                   "name": "css",
                   "label": "CSS Path",
                   "description": "CSS path",
                   "mandatory": "true",
-                  "defaultValue": "d3_zoomable_circle_packing.css",
+                  "defaultValue": "figures.css",
                   "type": "PATH",
-                  "readOnly": "true"
+                  "readOnly": "false"
                 },
                 {
                   "name": "module",
                   "label": "module",
                   "description": "module",
                   "mandatory": "true",
-                  "defaultValue": "d3circle",
-                  "type": "TEXT"
+                  "defaultValue": "figures",
+                  "type": "TEXT",
+                  "readOnly": "true"
                 }
               ]
             },
             {
               "name": "Data",
+              "expandable" : "true",
               "properties": [
                 {
                   "name": "itemsValue",
@@ -53,6 +56,23 @@
                   "mandatory": "false",
                   "type": "double",
                   "defaultValue":"1"
+                },
+                {
+                  "name": "figure",
+                  "label": "Figure",
+                  "description": "Male, Female, Custom",
+                  "mandatory": "true",
+                  "type": "combo",
+                  "options": ["Male","Female","Custom"], 
+                  "defaultValue":"Male"
+                },
+                {
+                  "name": "customPath",
+                  "label": "Custom Path",
+                  "description": "An SVG Path Data to form the figure to display",
+                  "mandatory": "false",
+                  "type": "text",
+                  "defaultValue":""
                 },
                 {
                   "name": "figureColor",
@@ -73,6 +93,15 @@
                   "max":"1"
                 },
                 {
+                  "name": "showPhantom",
+                  "label": "Show Phantom Figures",
+                  "description": "Shows the phantom figures accordingly to items count",
+                  "mandatory": "false",
+                  "type": "combo",
+                  "options": ["true","false"], 
+                  "defaultValue":"true"
+                },
+                {
                   "name": "phantomColor",
                   "label": "Phantom Color",
                   "description": "The color used for phantom items.",
@@ -90,6 +119,72 @@
                   "min":"0",
                   "max":"1"
                 }
+              ]
+            },
+            {
+              "name": "Grid",
+              "expandable" : "true",
+              "properties": [
+                {
+                  "name": "rows",
+                  "label": "Rows (optional)",
+                  "description": "Layout the figures using this number of rows",
+                  "mandatory": "false",
+                  "type": "integer",
+                  "defaultValue":"0"
+                },
+                {
+                  "name": "columns",
+                  "label": "Columns (optional)",
+                  "description": "Layout the figures using this number of columns",
+                  "mandatory": "false",
+                  "type": "integer",
+                  "defaultValue":"0"
+                },
+                {
+                  "name": "maximizeColumnNumber",
+                  "label": "Maximize cols number",
+                  "description": "Fill the columns as many as fit the based the number of rows.",
+                  "mandatory": "false",
+                  "type": "combo",
+                  "options": ["","true","false"], 
+                  "defaultValue":"true"
+                },
+                {
+                  "name": "vAlign",
+                  "label": "Verical Alignment",
+                  "description": "Vertical Alignment of the overall set of figures",
+                  "mandatory": "false",
+                  "type": "combo",
+                  "options": ["top","middle","bottom"], 
+                  "defaultValue":"top"
+                },
+                {
+                  "name": "hAlign",
+                  "label": "Horizontal Alignment",
+                  "description": "Horizontal Alignment of the overall set of figures",
+                  "mandatory": "false",
+                  "type": "combo",
+                  "options": ["left","center","right"], 
+                  "defaultValue":"left"
+                },
+                {
+                  "name": "hPadding",
+                  "label": "Horizontal Padding",
+                  "description": "The space between figures",
+                  "mandatory": "false",
+                  "type": "integer",
+                  "defaultValue":"10"
+                },
+                {
+                  "name": "vPadding",
+                  "label": "Vertical Padding",
+                  "description": "The space between figures",
+                  "mandatory": "false",
+                  "type": "integer",
+                  "defaultValue":"10"
+                }
+                  
               ]
             }
   ]
