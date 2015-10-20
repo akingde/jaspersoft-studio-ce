@@ -32,7 +32,8 @@ public class CreateOrderByFromColumn extends AMultiSelectionAction {
 	}
 
 	protected boolean isGoodNode(ANode element) {
-		return element instanceof MSelectColumn || element instanceof MSelectExpression;
+		return element instanceof MSelectColumn;
+		// || element instanceof MSelectExpression;
 	}
 
 	@Override
