@@ -545,7 +545,14 @@ public class MColumn extends APropertyNode implements IPastable, IContainer,
 
 	public MColumn getNextColumn(){
 		ANode parent = getParent();
-		int index = parent.getChildren().indexOf(this);
+		ANode child = this;
+		//If the resized cell is a group cell go up to find the 
+		//next to the group
+		while(parent instanceof MColumnGroupCell){
+			child = parent;
+			parent = parent.getParent();
+		}
+		int index = parent.getChildren().indexOf(child);
 		if (index < parent.getChildren().size()-1){
 			return (MColumn)parent.getChildren().get(index+1);
 		} else {
