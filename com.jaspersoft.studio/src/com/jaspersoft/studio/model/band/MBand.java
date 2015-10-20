@@ -34,6 +34,9 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.editor.layout.FreeLayout;
+import com.jaspersoft.studio.editor.layout.ILayout;
+import com.jaspersoft.studio.editor.layout.LayoutManager;
 import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.messages.MessagesByKeys;
@@ -573,5 +576,10 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 			}
 		}
 		return map;
+	}
+
+	@Override
+	public ILayout getDefaultLayout() {
+		return LayoutManager.getLayout(FreeLayout.class.getName());
 	}
 }

@@ -12,8 +12,20 @@
  ******************************************************************************/
 package com.jaspersoft.studio.model;
 
+import com.jaspersoft.studio.editor.layout.ILayout;
+
 import net.sf.jasperreports.engine.JRPropertiesHolder;
 
 public interface IContainerLayout {
+	
 	public JRPropertiesHolder[] getPropertyHolder();
+	
+	/**
+	 * Return the default layout used for this element when no other
+	 * layout is defined
+	 * 
+	 * @return the layout to be used by default, if it return null then 
+	 * the FreeLayout is used
+	 */
+	public ILayout getDefaultLayout();
 }

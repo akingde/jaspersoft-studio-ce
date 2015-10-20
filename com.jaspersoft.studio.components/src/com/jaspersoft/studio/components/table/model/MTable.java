@@ -50,7 +50,9 @@ import com.jaspersoft.studio.components.table.TableNodeIconDescriptor;
 import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.components.table.model.column.MColumn;
 import com.jaspersoft.studio.editor.defaults.DefaultManager;
+import com.jaspersoft.studio.editor.layout.FreeLayout;
 import com.jaspersoft.studio.editor.layout.ILayout;
+import com.jaspersoft.studio.editor.layout.LayoutManager;
 import com.jaspersoft.studio.editor.layout.VerticalRowLayout;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IContainer;
@@ -464,13 +466,13 @@ public class MTable extends MGraphicElement implements IContainer,
 		}
 
 		if (getTableManager() != null){
-			getTableManager().update();
 			if (hasColumnsAutoresizeProportional() && isColumnsResizeEvent(evt)){
 				String oldValue = getValue().getPropertiesMap().getProperty(PROPERTY_COLUMNS_AUTORESIZE_PROPORTIONAL);
 				getValue().getPropertiesMap().removeProperty(PROPERTY_COLUMNS_AUTORESIZE_PROPORTIONAL);
 				getTableManager().fillSpace(getValue().getWidth(), true);
 				getValue().getPropertiesMap().setProperty(PROPERTY_COLUMNS_AUTORESIZE_PROPORTIONAL, oldValue);
 			}
+			getTableManager().update();
 		}
 	
 		if (!(evt.getPropertyName().equals(StandardColumn.PROPERTY_TABLE_FOOTER) ||
@@ -618,5 +620,10 @@ public class MTable extends MGraphicElement implements IContainer,
 	@Override
 	public void createSubeditor() {
 		TableComponentFactory.createSubeditor(this);
+	}
+	
+	@Override
+	public ILayout getDefaultLayout() {
+		return LayoutManager.getLayout(FreeLayout.class.getName());
 	}
 }

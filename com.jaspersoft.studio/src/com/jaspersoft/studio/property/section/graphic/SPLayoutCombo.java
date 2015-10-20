@@ -33,6 +33,7 @@ import com.jaspersoft.studio.editor.layout.ILayout;
 import com.jaspersoft.studio.editor.layout.LayoutCommand;
 import com.jaspersoft.studio.editor.layout.LayoutManager;
 import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.model.IContainerLayout;
 import com.jaspersoft.studio.model.IGraphicElementContainer;
 import com.jaspersoft.studio.model.IGroupElement;
 import com.jaspersoft.studio.model.INode;
@@ -106,7 +107,7 @@ public class SPLayoutCombo extends SPReadCombo<IPropertyDescriptor> {
 	@Override
 	public void setData(APropertyNode pnode, Object b) {
 		this.pnode = pnode;
-		index = 0;
+		index = -1;
 		Object obj = pnode.getValue();
 		if (b instanceof JRPropertiesMap) {
 			index = getIndex(null, (JRPropertiesMap) b);
@@ -115,6 +116,16 @@ public class SPLayoutCombo extends SPReadCombo<IPropertyDescriptor> {
 		} else if (obj instanceof JRBaseElement) {
 			JasperDesign jDesign = pnode.getJasperDesign();
 			index = getIndex(jDesign, ((JRBaseElement) obj).getUUID().toString());
+		}
+		if (index == -1){
+			if (pnode != null && pnode instanceof IContainerLayout){
+				IContainerLayout layoutContainer = (IContainerLayout)pnode;
+				ILayout defaultLayout = layoutContainer.getDefaultLayout();
+				if (defaultLayout != null){
+					index = getIndex(defaultLayout.getClass().getName());
+				} 
+			}
+			if (index == -1) index = 0;
 		}
 		combo.select(index);
 	}
@@ -128,14 +139,24 @@ public class SPLayoutCombo extends SPReadCombo<IPropertyDescriptor> {
 		if (uuid != null)
 			key += "." + uuid; //$NON-NLS-1$
 		String str = pmap.getProperty(key);
-		if (str != null) {
+		return getIndex(str);
+	}
+	
+	/**
+	 * Get the layout index in the combo from its classname
+	 * 
+	 * @param the classname of the layout
+	 * @return the index of the layout in the combo or -1 if it can't be found
+	 */
+	private int getIndex(String layoutName) {
+		if (layoutName != null) {
 			for (int i = 0; i < layouts.length; i++) {
-				if (layouts[i].getClass().getName().equals(str)) {
+				if (layouts[i].getClass().getName().equals(layoutName)) {
 					return i;
 				}
 			}
 		}
-		return 0;
+		return -1;
 	}
 	
 	@Override

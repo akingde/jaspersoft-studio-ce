@@ -30,7 +30,6 @@ import com.jaspersoft.studio.editor.layout.ILayout;
 import com.jaspersoft.studio.editor.layout.ILayoutUIProvider;
 import com.jaspersoft.studio.editor.layout.LayoutManager;
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.IContainerLayout;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MGraphicElement;
@@ -130,12 +129,6 @@ public class LayoutSection extends AbstractSection {
 		setLayoutAreaVisible(false);
 		widgets.put(pd.getId(), layoutCombo); 
 			
-	}
-	
-	@Override
-	public void setElement(APropertyNode element) {
-		// TODO Auto-generated method stub
-		super.setElement(element);
 	}
 	
 	/**

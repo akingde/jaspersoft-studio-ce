@@ -33,6 +33,7 @@ import com.jaspersoft.studio.components.table.model.column.MCell;
 import com.jaspersoft.studio.editor.layout.ILayout;
 import com.jaspersoft.studio.editor.layout.LayoutCommand;
 import com.jaspersoft.studio.editor.layout.LayoutManager;
+import com.jaspersoft.studio.editor.layout.VerticalRowLayout;
 import com.jaspersoft.studio.model.IContainerLayout;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.utils.SelectionHelper;
@@ -124,7 +125,7 @@ public class CreateElementCommand extends Command {
 
 		Dimension d = new Dimension(jrColumn.getWidth(), jrCell.getHeight());
 		if (lCmd == null) {
-			ILayout layout = LayoutManager.getLayout(pholder, jDesign, null);
+			ILayout layout = LayoutManager.getLayout(pholder, jDesign, null, new VerticalRowLayout());
 			lCmd = new LayoutCommand(jrCell, layout, d);
 		}
 		lCmd.execute();

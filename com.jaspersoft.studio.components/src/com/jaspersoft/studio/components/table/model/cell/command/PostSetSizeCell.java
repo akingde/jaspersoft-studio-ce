@@ -33,6 +33,7 @@ import com.jaspersoft.studio.components.table.model.column.MColumn;
 import com.jaspersoft.studio.editor.layout.ILayout;
 import com.jaspersoft.studio.editor.layout.LayoutCommand;
 import com.jaspersoft.studio.editor.layout.LayoutManager;
+import com.jaspersoft.studio.editor.layout.VerticalRowLayout;
 import com.jaspersoft.studio.property.IPostSetValue;
 
 public class PostSetSizeCell implements IPostSetValue {
@@ -83,7 +84,7 @@ public class PostSetSizeCell implements IPostSetValue {
 				continue;
 			pholder[0] = ccell.cell;
 			pholder[1] = ccell.column;
-			ILayout layout = LayoutManager.getLayout(pholder, jDesign, null);
+			ILayout layout = LayoutManager.getLayout(pholder, jDesign, null, new VerticalRowLayout());
 			Rectangle r = ccell.getBounds();
 			Dimension d = new Dimension(r.width, r.height);
 

@@ -47,6 +47,9 @@ import com.jaspersoft.studio.components.table.model.columngroup.MColumnGroup;
 import com.jaspersoft.studio.components.table.model.columngroup.MColumnGroupCell;
 import com.jaspersoft.studio.components.table.util.TableColumnNumerator;
 import com.jaspersoft.studio.components.table.util.TableColumnSize;
+import com.jaspersoft.studio.editor.layout.ILayout;
+import com.jaspersoft.studio.editor.layout.LayoutManager;
+import com.jaspersoft.studio.editor.layout.VerticalRowLayout;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.IContainer;
@@ -305,26 +308,35 @@ public class MColumn extends APropertyNode implements IPastable, IContainer,
 	 */
 	public Object getPropertyValue(Object id) {
 		StandardBaseColumn jrElement = getValue();
-		if (id.equals(StandardBaseColumn.PROPERTY_WIDTH))
+		if (id.equals(StandardBaseColumn.PROPERTY_WIDTH)){
 			return jrElement.getWidth();
-		if (id.equals(StandardBaseColumn.PROPERTY_PRINT_WHEN_EXPRESSION))
-			return ExprUtil.getExpression(jrElement.getPrintWhenExpression());
-		if (id.equals(DesignCell.PROPERTY_HEIGHT))
-			return getMTable().getTableManager().getYhcolumn(type, grName,
-					jrElement).height;
-		JRPropertiesMap propertiesMap = jrElement.getPropertiesMap();
-		if (propertiesMap != null)
-			propertiesMap = propertiesMap.cloneProperties();
-		if (id.equals(JRDesignElement.PROPERTY_PROPERTY_EXPRESSIONS)) {
-			JRPropertyExpression[] propertyExpressions = jrElement
-					.getPropertyExpressions();
-			if (propertyExpressions != null)
-				propertyExpressions = propertyExpressions.clone();
-			return new PropertyExpressionsDTO(propertyExpressions,
-					propertiesMap, this);
 		}
-		if (id.equals(MGraphicElement.PROPERTY_MAP))
+		if (id.equals(StandardBaseColumn.PROPERTY_PRINT_WHEN_EXPRESSION)){
+			return ExprUtil.getExpression(jrElement.getPrintWhenExpression());
+		}
+		if (id.equals(DesignCell.PROPERTY_HEIGHT)){
+			return getMTable().getTableManager().getYhcolumn(type, grName, jrElement).height;
+		}
+		if (id.equals(JRDesignElement.PROPERTY_PROPERTY_EXPRESSIONS)) {
+			JRPropertyExpression[] propertyExpressions = jrElement.getPropertyExpressions();
+			if (propertyExpressions != null){
+				propertyExpressions = propertyExpressions.clone();
+			}
+			
+			JRPropertiesMap propertiesMap = jrElement.getPropertiesMap();
+			if (propertiesMap != null){
+				propertiesMap = propertiesMap.cloneProperties();
+			}
+			
+			return new PropertyExpressionsDTO(propertyExpressions, propertiesMap, this);
+		}
+		if (id.equals(MGraphicElement.PROPERTY_MAP)){
+			JRPropertiesMap propertiesMap = jrElement.getPropertiesMap();
+			if (propertiesMap != null){
+				propertiesMap = propertiesMap.cloneProperties();
+			}
 			return propertiesMap;
+		}
 		return null;
 	}
 
@@ -542,5 +554,10 @@ public class MColumn extends APropertyNode implements IPastable, IContainer,
 			}
 		}
 		return null;
+	}
+	
+	@Override
+	public ILayout getDefaultLayout() {
+		return LayoutManager.getLayout(VerticalRowLayout.class.getName());
 	}
 }

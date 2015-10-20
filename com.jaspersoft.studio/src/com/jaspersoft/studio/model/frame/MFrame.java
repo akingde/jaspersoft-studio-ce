@@ -26,6 +26,9 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.editor.defaults.DefaultManager;
+import com.jaspersoft.studio.editor.layout.FreeLayout;
+import com.jaspersoft.studio.editor.layout.ILayout;
+import com.jaspersoft.studio.editor.layout.LayoutManager;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.messages.MessagesByKeys;
 import com.jaspersoft.studio.model.ANode;
@@ -270,5 +273,10 @@ public class MFrame extends MGraphicElementLineBox implements IPastable, IPastab
 		result.add(JRDesignFrame.PROPERTY_CHILDREN);
 		result.add(JRDesignElement.PROPERTY_ELEMENT_GROUP);
 		return result;
+	}
+	
+	@Override
+	public ILayout getDefaultLayout() {
+		return LayoutManager.getLayout(FreeLayout.class.getName());
 	}
 }

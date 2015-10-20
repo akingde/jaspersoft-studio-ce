@@ -41,6 +41,9 @@ import com.jaspersoft.studio.components.crosstab.CrosstabCell;
 import com.jaspersoft.studio.components.crosstab.CrosstabNodeIconDescriptor;
 import com.jaspersoft.studio.components.crosstab.messages.Messages;
 import com.jaspersoft.studio.components.crosstab.model.MCrosstab;
+import com.jaspersoft.studio.editor.layout.ILayout;
+import com.jaspersoft.studio.editor.layout.LayoutManager;
+import com.jaspersoft.studio.editor.layout.VerticalRowLayout;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.IContainer;
@@ -536,5 +539,10 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable,
 			setChangedProperty(true);
 		}
 		super.propertyChange(evt);
+	}
+
+	@Override
+	public ILayout getDefaultLayout() {
+		return LayoutManager.getLayout(VerticalRowLayout.class.getName());
 	}
 }

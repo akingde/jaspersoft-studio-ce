@@ -151,16 +151,18 @@ public class LayoutManager {
 	 * used to return it
 	 */
 	public static JRPropertiesMap getPropertyMap(ANode node){
-		if (node instanceof APropertyNode){
-			APropertyNode aNode = (APropertyNode)node;
-			Object map = aNode.getPropertyValue(MGraphicElement.PROPERTY_MAP);
-			if (map != null) return (JRPropertiesMap)map;
-		}
-		if (node.getValue() instanceof JRPropertiesMap){
-			return (JRPropertiesMap)node.getValue();
-		} else {
-			JRPropertiesHolder pholder = getPropertyHolder(node);
-			if (pholder != null) return pholder.getPropertiesMap();
+		if (node != null){
+			if (node instanceof APropertyNode){
+				APropertyNode aNode = (APropertyNode)node;
+				Object map = aNode.getPropertyValue(MGraphicElement.PROPERTY_MAP);
+				if (map != null) return (JRPropertiesMap)map;
+			}
+			if (node.getValue() instanceof JRPropertiesMap){
+				return (JRPropertiesMap)node.getValue();
+			} else {
+				JRPropertiesHolder pholder = getPropertyHolder(node);
+				if (pholder != null) return pholder.getPropertiesMap();
+			}
 		}
 		return null;
 	}
@@ -202,7 +204,13 @@ public class LayoutManager {
 		if (map != null && jrGroup != null) {
 			String str = map.getProperty(ILayout.KEY);
 			if (str == null){
-				str = FreeLayout.class.getName();
+				if (containerToLayout instanceof IContainerLayout){
+					ILayout defLayout = ((IContainerLayout)containerToLayout).getDefaultLayout();
+					if (defLayout != null){
+						str = defLayout.getClass().getName();
+					}
+				}
+				if (str == null) str = FreeLayout.class.getName();
 			}
 			ILayout parentLayout = LayoutManager.getLayout(str);		
 			return new LayoutCommand(jrGroup, parentLayout, d);
@@ -263,7 +271,13 @@ public class LayoutManager {
 		if (map != null && jrGroup != null) {
 			String str = map.getProperty(ILayout.KEY);
 			if (str == null){
-				str = FreeLayout.class.getName();
+				if (containerToLayout instanceof IContainerLayout){
+					ILayout defLayout = ((IContainerLayout)containerToLayout).getDefaultLayout();
+					if (defLayout != null){
+						str = defLayout.getClass().getName();
+					}
+				}
+				if (str == null) str = FreeLayout.class.getName();
 			}
 			ILayout parentLayout = LayoutManager.getLayout(str);		
 			List<JRElement> elements = new ArrayList<JRElement>();

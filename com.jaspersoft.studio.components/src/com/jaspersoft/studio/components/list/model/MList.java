@@ -46,6 +46,9 @@ import com.jaspersoft.studio.components.list.ListNodeIconDescriptor;
 import com.jaspersoft.studio.components.list.messages.Messages;
 import com.jaspersoft.studio.components.section.name.NameSection;
 import com.jaspersoft.studio.editor.defaults.DefaultManager;
+import com.jaspersoft.studio.editor.layout.FreeLayout;
+import com.jaspersoft.studio.editor.layout.ILayout;
+import com.jaspersoft.studio.editor.layout.LayoutManager;
 import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IContainer;
@@ -532,5 +535,10 @@ public class MList extends MGraphicElement implements IPastable,
 	@Override
 	public void createSubeditor() {
 		ListComponentFactory.createSubeditor(this);
+	}
+	
+	@Override
+	public ILayout getDefaultLayout() {
+		return LayoutManager.getLayout(FreeLayout.class.getName());
 	}
 }
