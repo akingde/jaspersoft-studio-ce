@@ -29,11 +29,14 @@ import com.jaspersoft.studio.components.table.ColumnCell;
 import com.jaspersoft.studio.components.table.Guide;
 import com.jaspersoft.studio.components.table.TableManager;
 import com.jaspersoft.studio.components.table.model.MTable;
+import com.jaspersoft.studio.components.table.model.column.MCell;
 import com.jaspersoft.studio.components.table.model.column.MColumn;
 import com.jaspersoft.studio.editor.layout.ILayout;
 import com.jaspersoft.studio.editor.layout.LayoutCommand;
 import com.jaspersoft.studio.editor.layout.LayoutManager;
 import com.jaspersoft.studio.editor.layout.VerticalRowLayout;
+import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.property.IPostSetValue;
 
 public class PostSetSizeCell implements IPostSetValue {
@@ -54,16 +57,20 @@ public class PostSetSizeCell implements IPostSetValue {
 	public Command getResizeCommand(MColumn mcell, JasperDesign jDesign,
 			Object prop) {
 		MTable mTable = mcell.getMTable();
-
-		JRPropertiesHolder[] pholder = new JRPropertiesHolder[3];
-		pholder[2] = mTable.getValue();
-
-		TableManager tb = mTable.getTableManager();
 		JSSCompoundCommand c = new JSSCompoundCommand("Resize Table Cell", mTable);
-		ColumnCell cc = tb.getMatrixHelper().getColumnCell(
-				new ColumnCell(mcell.getType(), mcell.getGrName(), mcell
-						.getValue()));
-		if (prop.equals(DesignCell.PROPERTY_HEIGHT))
+		if (prop.equals(StandardBaseColumn.PROPERTY_WIDTH)){
+			//a width change can affect many columns other then the one resized, so we need to refresh the 
+			//layout of all the table
+			createLayoutCommand(mTable, c);
+		} else if (prop.equals(DesignCell.PROPERTY_HEIGHT)){
+			JRPropertiesHolder[] pholder = new JRPropertiesHolder[3];
+			pholder[2] = mTable.getValue();
+
+			TableManager tb = mTable.getTableManager();
+			
+			ColumnCell cc = tb.getMatrixHelper().getColumnCell(
+					new ColumnCell(mcell.getType(), mcell.getGrName(), mcell
+							.getValue()));
 			if (TableManager.isBottomOfTable(cc.type)) {
 				Guide guide = cc.getNorth();
 				createCommands(jDesign, pholder, c, guide.getNext());
@@ -71,13 +78,26 @@ public class PostSetSizeCell implements IPostSetValue {
 				Guide guide = cc.getSouth();
 				createCommands(jDesign, pholder, c, guide.getPrev());
 			}
-		else if (prop.equals(StandardBaseColumn.PROPERTY_WIDTH)) {
-			Guide guide = cc.getWest();
-			createCommands(jDesign, pholder, c, guide.getNext());
 		}
 		return c;
 	}
 
+	/**
+	 * Create a command to layout the current node if it is a cell, otherwise it 
+	 * will search recursively a cell in every child of the node
+	 */
+	public void createLayoutCommand(INode node, JSSCompoundCommand c){
+		if (node == null) return;
+		if (node instanceof MCell){
+			Command cmd = LayoutManager.createRelayoutCommand((ANode)node);
+			if (cmd != null) c.add(cmd);
+		} else {
+			for(INode child : node.getChildren()){
+				createLayoutCommand(child, c);
+			}
+		}
+	}
+	
 	public void createCommands(JasperDesign jDesign, JRPropertiesHolder[] pholder, JSSCompoundCommand c, List<ColumnCell> cells) {
 		for (ColumnCell ccell : cells) {
 			if (ccell.cell == null)
