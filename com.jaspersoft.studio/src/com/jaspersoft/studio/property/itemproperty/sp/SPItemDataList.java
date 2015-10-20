@@ -270,7 +270,7 @@ public class SPItemDataList extends ASPropertyWidget<AItemDataListPropertyDescri
 
 		StandardItem item = new StandardItem();
 		for (ItemPropertyDescription<?> ipd : getDescriptor().getItemPropertyDescriptors()) {
-			if (ipd.isMandatory()) {
+			if (ipd.isMandatory() || !Misc.isNullOrEmpty(ipd.getDefaultValueString())) {
 				StandardItemProperty p = new StandardItemProperty(ipd.getName(), ipd.getDefaultValueString(), null);
 				item.addItemProperty(p);
 				StructuredSelection s = (StructuredSelection) tviewer.getSelection();
