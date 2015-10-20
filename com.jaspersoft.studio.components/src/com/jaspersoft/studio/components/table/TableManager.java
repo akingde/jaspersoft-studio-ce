@@ -219,7 +219,7 @@ public class TableManager {
 		//Phase 2: reassign what remains
 		int remains = newWidth - columnsTotalWidth;
 		index = 0;
-		while (remains > 0){
+		while (remains > 0 && proportionalWidths.length > 0){
 			proportionalWidths[index]++;
 			index++;
 			remains--;
@@ -238,46 +238,48 @@ public class TableManager {
 	 * @param isProportional if the columns are resized proportionally or they all will have the same width
 	 */
 	public void fillSpace(int newWidth, boolean isProportional){
-		int currentColumnsWidth = 0;
-		for(BaseColumn col : table.getColumns()){
-			currentColumnsWidth += col.getWidth();
-		}
-		if (currentColumnsWidth == newWidth) {
-			return;
-		}
-		else if(isProportional) {
-			
-			int[] proportionalWidths = getColumnsProportionalWidth(table.getColumns(), newWidth);
-			
-			//Phase 3: resize the columns
-			int index = 0;
-			ILayout defaultLayout = new VerticalRowLayout();
+		//Only one of this operation allowed on the at the same time
+		synchronized (table) {
+			int currentColumnsWidth = 0;
 			for(BaseColumn col : table.getColumns()){
-				if (col.getWidth() != proportionalWidths[index]){
-					setProportionalWidth((StandardBaseColumn)col, proportionalWidths[index]);
-					index++;
-					for(Entry<Cell, Integer> cell : getColumnCell(col).entrySet()){
-						ILayout layout = LayoutManager.getLayout(new JRPropertiesHolder[] { cell.getKey() }, null, null, defaultLayout);
-						layout.layout(cell.getKey().getElements(), new Dimension(cell.getValue(), ((DesignCell)cell.getKey()).getHeight()));
+				currentColumnsWidth += col.getWidth();
+			}
+			if (currentColumnsWidth == newWidth) {
+				return;
+			} else if(isProportional) {
+				
+				int[] proportionalWidths = getColumnsProportionalWidth(table.getColumns(), newWidth);
+				
+				//Phase 3: resize the columns
+				int index = 0;
+				ILayout defaultLayout = new VerticalRowLayout();
+				for(BaseColumn col : table.getColumns()){
+					if (col.getWidth() != proportionalWidths[index]){
+						setProportionalWidth((StandardBaseColumn)col, proportionalWidths[index]);
+						for(Entry<Cell, Integer> cell : getColumnCell(col).entrySet()){
+							ILayout layout = LayoutManager.getLayout(new JRPropertiesHolder[] { cell.getKey() }, null, null, defaultLayout);
+							layout.layout(cell.getKey().getElements(), new Dimension(cell.getValue(), ((DesignCell)cell.getKey()).getHeight()));
+						}
 					}
+					index++;
 				}
-			}	
-		} else {
-			int columnsSize = newWidth / table.getColumns().size();
-			int extraSpace = newWidth % table.getColumns().size();
-			ILayout defaultLayout = new VerticalRowLayout();
-			for(BaseColumn col : table.getColumns()){
-				int additionalSpace = 0;
-				if (extraSpace > 0){
-					additionalSpace = 1;
-					extraSpace--;
-				}
-				int newColumnWidth = col.getWidth() + additionalSpace + columnsSize;
-				if (newColumnWidth != col.getWidth()){
-					setWidth((StandardBaseColumn)col, newColumnWidth);
-					for(Entry<Cell, Integer> cell : getColumnCell(col).entrySet()){
-						ILayout layout = LayoutManager.getLayout(new JRPropertiesHolder[] { cell.getKey() }, null, null, defaultLayout);
-						layout.layout(cell.getKey().getElements(), new Dimension(cell.getValue(), ((DesignCell)cell.getKey()).getHeight()));
+			} else {
+				int columnsSize = newWidth / table.getColumns().size();
+				int extraSpace = newWidth % table.getColumns().size();
+				ILayout defaultLayout = new VerticalRowLayout();
+				for(BaseColumn col : table.getColumns()){
+					int additionalSpace = 0;
+					if (extraSpace > 0){
+						additionalSpace = 1;
+						extraSpace--;
+					}
+					int newColumnWidth = col.getWidth() + additionalSpace + columnsSize;
+					if (newColumnWidth != col.getWidth()){
+						setWidth((StandardBaseColumn)col, newColumnWidth);
+						for(Entry<Cell, Integer> cell : getColumnCell(col).entrySet()){
+							ILayout layout = LayoutManager.getLayout(new JRPropertiesHolder[] { cell.getKey() }, null, null, defaultLayout);
+							layout.layout(cell.getKey().getElements(), new Dimension(cell.getValue(), ((DesignCell)cell.getKey()).getHeight()));
+						}
 					}
 				}
 			}
@@ -295,11 +297,11 @@ public class TableManager {
 		HashMap<Cell, Integer> result = new HashMap<Cell, Integer>();
 		if (cell instanceof StandardColumn){
 			StandardColumn col = (StandardColumn)cell;
-			result.put(col.getColumnHeader(), col.getWidth());
-			result.put(col.getTableHeader(), col.getWidth());
-			result.put(col.getTableFooter(), col.getWidth());
-			result.put(cell.getColumnFooter(), col.getWidth());
-			result.put(col.getDetailCell(), col.getWidth());
+			if (col.getColumnHeader() != null) result.put(col.getColumnHeader(), col.getWidth());
+			if (col.getTableHeader() != null) result.put(col.getTableHeader(), col.getWidth());
+			if (col.getTableFooter() != null) result.put(col.getTableFooter(), col.getWidth());
+			if (col.getColumnFooter() != null) result.put(cell.getColumnFooter(), col.getWidth());
+			if (col.getDetailCell() != null) result.put(col.getDetailCell(), col.getWidth());
 		}
 		else if (cell instanceof StandardColumnGroup){
 			StandardColumnGroup group = (StandardColumnGroup)cell;
@@ -331,8 +333,8 @@ public class TableManager {
 		return false;
 	}
 	
-	private void setProportionalColumnGroupWidth(StandardColumnGroup column, int width) {
-		List<BaseColumn> columns = column.getColumns();
+	private void setProportionalColumnGroupWidth(StandardColumnGroup columnGroup, int width) {
+		List<BaseColumn> columns = columnGroup.getColumns();
 		int[] proportionalNewWidth = getColumnsProportionalWidth(columns, width);
 		int index = 0;
 		for (BaseColumn col : columns) {

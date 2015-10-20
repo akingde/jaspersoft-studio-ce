@@ -22,12 +22,10 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 
-import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.components.table.model.MTable;
 import com.jaspersoft.studio.components.table.model.column.MColumn;
 import com.jaspersoft.studio.components.table.part.TableCellEditPart;
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.property.SetValueCommand;
 
 public class CreateResize {
@@ -54,7 +52,8 @@ public class CreateResize {
 		StandardBaseColumn jrColumn = model.getValue();
 		PrecisionRectangle deltaRect = new PrecisionRectangle(new Rectangle(0,0, sd.width, sd.height));
 		editPart.getFigure().translateToRelative(deltaRect);
-		JSSCompoundCommand c = new JSSCompoundCommand("Change Cell Size", model); //$NON-NLS-1$
+		MTable table = getTableModel(model);
+		SetTableCellsSizeCommand c = new SetTableCellsSizeCommand(table);
 		if (request.getSizeDelta().width != 0) {
 			int w = deltaRect.width;
 			if (request.getResizeDirection() == PositionConstants.WEST)
@@ -62,12 +61,7 @@ public class CreateResize {
 			int width = jrColumn.getWidth() + w;
 			if (width < 0)
 				return null;
-
-			SetValueCommand setCommand = new SetValueCommand();
-			setCommand.setTarget(model);
-			setCommand.setPropertyId(StandardBaseColumn.PROPERTY_WIDTH);
-			setCommand.setPropertyValue(width);
-			c.add(setCommand);
+			c.setWidth(model, width);
 
 			if (request.getResizeDirection() == PositionConstants.WEST) {
 				jrColumn = oldmodel.getValue();
@@ -75,41 +69,29 @@ public class CreateResize {
 				width = jrColumn.getWidth() + w;
 				if (width < 0)
 					return null;
-				setCommand = new SetValueCommand();
-				setCommand.setTarget(oldmodel);
-				setCommand.setPropertyId(StandardBaseColumn.PROPERTY_WIDTH);
-				setCommand.setPropertyValue(width);
-				c.add(setCommand);
+				c.setWidth(oldmodel, width);
 			} else if (request.getResizeDirection() == PositionConstants.EAST){
 				//If the request is a drag to east and the flag is enabled take the space from the next column
-				MTable table = getTableModel(model);
+				
 				if (table != null){
 					if (table.hasColumnsAutoresizeProportional()){
 						MColumn next = model.getNextColumn();
 						if (next != null){
 							StandardBaseColumn nextCol = next.getValue();
-							setCommand = new SetValueCommand();
-							setCommand.setTarget(next);
-							setCommand.setPropertyId(StandardBaseColumn.PROPERTY_WIDTH);
 							int newWidth = nextCol.getWidth() - deltaRect.width;
-							if (newWidth < 0) newWidth = 0;
-							setCommand.setPropertyValue(newWidth);
-							c.add(setCommand);
+							if (newWidth < 0) newWidth = 0;;
+							c.setWidth(next, newWidth);
 						}
 					} else if (table.hasColumnsAutoresizeNext()){
 						MColumn next = model.getNextColumn();
 						if (next != null){
 							StandardBaseColumn nextCol = next.getValue();
-							setCommand = new SetValueCommand();
-							setCommand.setTarget(next);
-							setCommand.setPropertyId(StandardBaseColumn.PROPERTY_WIDTH);
 							int newWidth = nextCol.getWidth() - deltaRect.width;
 							if (newWidth < 0){
 								//newWidth = 0;
 								return null;
 							}
-							setCommand.setPropertyValue(newWidth);
-							c.add(setCommand);
+							c.setWidth(next, newWidth);
 						} 
 					}
 				} 
@@ -152,7 +134,7 @@ public class CreateResize {
 		return c;
 	}
 	
-	private static boolean canColumnIncrease(MColumn col, MTable table, int newWidth){
+	/*private static boolean canColumnIncrease(MColumn col, MTable table, int newWidth){
 		int columnWidthBefore = 0;
 		for(INode currentCol : col.getParent().getChildren()){
 			if (currentCol == col){
@@ -167,7 +149,7 @@ public class CreateResize {
 		} else {
 			return true;
 		}
-	} 
+	} */
 	
 	/**
 	 * Search starting from a node and going up in the hierarchy an MTable
