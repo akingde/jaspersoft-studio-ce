@@ -116,6 +116,8 @@ public abstract class AItemDialog extends ATitledDialog implements IExpressionCo
 			setupItemDataCombo();
 			setupExpressionContext();
 			if (itemData.getDataset() != null) {
+				if (compositeDatasetInfo != null)
+					compositeDatasetInfo.dispose();
 				createDatasetComposite(dsCmp);
 			} else {
 				if (compositeDatasetInfo != null)
@@ -231,11 +233,14 @@ public abstract class AItemDialog extends ATitledDialog implements IExpressionCo
 		new Label(cmp, SWT.NONE).setText("Item Data");
 
 		dsviewer = new Combo(cmp, SWT.READ_ONLY);
+		GridData gd = new GridData();
+		gd.widthHint = 200;
+		dsviewer.setLayoutData(gd);
 
 		createAddItemDataButton(cmp);
 
 		Label sep = new Label(cmp, SWT.SEPARATOR | SWT.HORIZONTAL);
-		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 3;
 		sep.setLayoutData(gd);
 		dsviewer.addSelectionListener(new SelectionAdapter() {
@@ -271,6 +276,8 @@ public abstract class AItemDialog extends ATitledDialog implements IExpressionCo
 					id.addItem(item);
 					setItemData(id);
 					setupExpressionContext();
+
+					fillData();
 				}
 			}
 		});
@@ -330,7 +337,7 @@ public abstract class AItemDialog extends ATitledDialog implements IExpressionCo
 					.getDatasetRun());
 			currentExpContext = new ExpressionContext(ds, jrConfig);
 		} else
-			currentExpContext = expContext;
+			currentExpContext = new ExpressionContext(jrConfig);
 	}
 
 	private void handleUseDataset() {

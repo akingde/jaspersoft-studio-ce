@@ -79,7 +79,7 @@ public class ItemLabelProvider extends ColumnLabelProvider implements ITableLabe
 	public String getText4ItemData(ItemData element) {
 		ItemData id = (ItemData) element;
 		JRElementDataset ds = id.getDataset();
-		return (ds != null ? getText(ds) : Messages.ItemLabelProvider_2);
+		return (ds != null ? getText(ds) + " ; " + id.getItems().size() + " Items" : Messages.ItemLabelProvider_2);
 	}
 
 	/*
@@ -133,7 +133,8 @@ public class ItemLabelProvider extends ColumnLabelProvider implements ITableLabe
 	public String getToolTipText(Object element) {
 		if (element instanceof JRElementDataset) {
 			JRElementDataset ed = (JRElementDataset) element;
-			String str = getText(ed.getDatasetRun()) + "\n"; //$NON-NLS-1$
+			String str = ed.getDatasetRun() == null ? Messages.ItemLabelProvider_3 : getText(ed.getDatasetRun()) + "\n"; //$NON-NLS-1$
+			str += "\n"; //$NON-NLS-1$
 			str += Messages.ItemLabelProvider_11 + ed.getResetTypeValue();
 			if (ed.getResetTypeValue() == ResetTypeEnum.GROUP && ed.getResetGroup() != null)
 				str += ed.getResetGroup().getName();
@@ -141,10 +142,11 @@ public class ItemLabelProvider extends ColumnLabelProvider implements ITableLabe
 			str += Messages.ItemLabelProvider_13 + ed.getIncrementTypeValue();
 			if (ed.getIncrementTypeValue() == IncrementTypeEnum.GROUP && ed.getIncrementGroup() != null)
 				str += ed.getIncrementGroup().getName();
-			str += "\n"; //$NON-NLS-1$
-			if (ed.getIncrementWhenExpression() != null)
-				str += Messages.ItemLabelProvider_15 + ed.getIncrementWhenExpression().getText();
 
+			if (ed.getIncrementWhenExpression() != null) {
+				str += "\n"; //$NON-NLS-1$
+				str += Messages.ItemLabelProvider_15 + ed.getIncrementWhenExpression().getText();
+			}
 			return str;
 		}
 		if (element instanceof ItemData) {
@@ -176,7 +178,7 @@ public class ItemLabelProvider extends ColumnLabelProvider implements ITableLabe
 	protected String getToolTipText4ItemData(Object element) {
 		ItemData id = (ItemData) element;
 		JRElementDataset ds = id.getDataset();
-		return (ds != null ? getToolTipText(ds) : Messages.ItemLabelProvider_18);
+		return (ds != null ? getToolTipText(ds) + "\n" + id.getItems().size() + " Items" : Messages.ItemLabelProvider_18);
 	}
 
 	@Override

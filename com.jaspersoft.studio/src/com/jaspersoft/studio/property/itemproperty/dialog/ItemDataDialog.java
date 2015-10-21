@@ -131,7 +131,9 @@ public abstract class ItemDataDialog extends ElementDatasetDialog {
 				return getText(element);
 			}
 		});
-		viewer.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
+		GridData gd = new GridData(GridData.FILL_BOTH);
+		gd.widthHint = 600;
+		viewer.getTable().setLayoutData(gd);
 
 		Composite c = new Composite(cmp, SWT.NONE);
 		c.setLayout(new GridLayout());

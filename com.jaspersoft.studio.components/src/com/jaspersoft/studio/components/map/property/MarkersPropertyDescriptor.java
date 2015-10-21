@@ -51,7 +51,7 @@ public class MarkersPropertyDescriptor extends AItemDataListPropertyDescriptor {
 			protected AItemDialog createItemDialog() {
 				return new FormItemDialog(UIUtils.getShell(), getDescriptor(),
 						(JasperReportsConfiguration) section
-								.getJasperReportsContext(), true, false) {
+								.getJasperReportsContext(), true, true) {
 
 					@Override
 					protected void createValues(Composite cmp) {
