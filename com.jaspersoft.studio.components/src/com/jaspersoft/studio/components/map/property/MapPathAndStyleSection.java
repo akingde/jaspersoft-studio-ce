@@ -71,11 +71,11 @@ public class MapPathAndStyleSection extends AbstractSection {
 		parent.setLayout(new GridLayout(1, false));
 
 		FormText mapPickSuggestion = new FormText(parent, SWT.NONE);
+		mapPickSuggestion.setWhitespaceNormalized(true);
 		mapPickSuggestion.setText(Messages.MapPathAndStyleSection_0, true,
 				false);
 		mapPickSuggestion.setLayoutData(new GridData(
 				GridData.HORIZONTAL_ALIGN_CENTER));
-		mapPickSuggestion.setWhitespaceNormalized(true);
 		mapPickSuggestion.addHyperlinkListener(new HyperlinkAdapter() {
 
 			@Override
