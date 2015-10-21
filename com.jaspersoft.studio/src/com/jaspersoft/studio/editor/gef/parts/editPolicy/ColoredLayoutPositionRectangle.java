@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JRElement;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.geometry.Rectangle;
@@ -29,6 +30,7 @@ import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
 import com.jaspersoft.studio.editor.layout.LayoutManager;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MGraphicElement;
+import com.jaspersoft.studio.model.band.MBand;
 
 /**
  * Rectangle figure with colored border, used show a color feedback on
@@ -141,11 +143,17 @@ public class ColoredLayoutPositionRectangle extends ColoredRectangle{
 		if (positions != null){
 			Graphics2D g = ComponentFigure.getG2D(graphics);
 			Rectangle r = Rectangle.SINGLETON.setBounds(getBounds());
+			int offset = 0;
+			//In the band the draw should start from the page margin, so we add an offset
+			if (container instanceof MBand){
+				JasperDesign jd = container.getJasperDesign();
+				offset = jd.getLeftMargin();
+			}
 			for(Rectangle elementPosition : positions.values()){
 				if (elementPosition != null){
 					g.setStroke(new BasicStroke(borderWidth));
 					g.setColor(new Color(159, 159, 159));
-					int x1 = r.x + elementPosition.x+3;
+					int x1 = offset + r.x + elementPosition.x+3;
 					int y1 = r.y + elementPosition.y+3;
 					g.drawRect(x1, y1, elementPosition.width-6, elementPosition.height-6);
 				}
