@@ -1,24 +1,22 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.property.section.report;
+
+import java.beans.PropertyChangeEvent;
 
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -35,8 +33,9 @@ import com.jaspersoft.studio.property.section.AbstractSection;
 
 /**
  * Section to display the page format section in the report tab
+ * 
  * @author Orlandin Marco
- *
+ * 
  */
 public class PageFormatSection extends AbstractSection {
 
@@ -155,19 +154,13 @@ public class PageFormatSection extends AbstractSection {
 		previewInfo.setLayoutData(gd);
 		// Adding the previw widget
 		previewWidget = new PageFormatWidget(previewInfo, SWT.NONE);
-		previewWidget.getCanvas().addMouseListener(new MouseListener() {
-			@Override
-			public void mouseUp(MouseEvent e) {
-			}
+		previewWidget.getCanvas().addMouseListener(new MouseAdapter() {
 
 			@Override
 			public void mouseDown(MouseEvent e) {
 				openEditDialog();
 			}
 
-			@Override
-			public void mouseDoubleClick(MouseEvent e) {
-			}
 		});
 		// Adding the textual info
 		Composite textualInfo = new Composite(previewInfo, SWT.NONE);
@@ -180,7 +173,8 @@ public class PageFormatSection extends AbstractSection {
 		valuesLabel = new StyledText(textualInfo, SWT.READ_ONLY);
 		valuesLabel.setEnabled(false);
 		// Add the button
-		Button editLayoutButton = getWidgetFactory().createButton(pageFormatPanel, Messages.PageFormatSection_buttonText, SWT.PUSH);
+		Button editLayoutButton = getWidgetFactory().createButton(pageFormatPanel, Messages.PageFormatSection_buttonText,
+				SWT.PUSH);
 		gd = new GridData();
 		gd.horizontalAlignment = SWT.CENTER;
 		editLayoutButton.setLayoutData(gd);
@@ -191,6 +185,18 @@ public class PageFormatSection extends AbstractSection {
 			}
 		});
 		// Set the datafiels
+		setPreviewWidgetData();
+	}
+
+	@Override
+	public void refresh() {
+		super.refresh();
+		setPreviewWidgetData();
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		super.propertyChange(evt);
 		setPreviewWidgetData();
 	}
 }
