@@ -222,9 +222,9 @@ public class MapPathAndStyleSection extends AbstractSection {
 		});
 
 		createWidget4Property(parent,
-				StandardMapComponent.PROPERTY_PATH_DATA_LIST, false);
+				StandardMapComponent.PROPERTY_PATH_DATA_LIST);
 		createWidget4Property(parent,
-				StandardMapComponent.PROPERTY_PATH_STYLE_LIST, false);
+				StandardMapComponent.PROPERTY_PATH_STYLE_LIST);
 	}
 
 }
