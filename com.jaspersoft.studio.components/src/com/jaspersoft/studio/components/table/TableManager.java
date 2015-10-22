@@ -341,7 +341,7 @@ public class TableManager {
 			StandardBaseColumn bc = (StandardBaseColumn) col;
 			bc.setWidth(proportionalNewWidth[index]);
 			if (bc instanceof StandardColumnGroup){
-				setColumnGroupWidth((StandardColumnGroup) bc, proportionalNewWidth[index]);
+				setProportionalColumnGroupWidth((StandardColumnGroup) bc, proportionalNewWidth[index]);
 			}
 			index++;
 		}
