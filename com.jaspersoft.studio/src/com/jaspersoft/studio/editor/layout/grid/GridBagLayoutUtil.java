@@ -143,12 +143,31 @@ public class GridBagLayoutUtil {
 			GridBagConstraints constraint = new GridBagConstraints();
 			Object prop = comp.getPropertiesMap().getProperty(JSSGridBagLayout.PROPERTY_X);
 			constraint.gridx = parsePosition(prop);
+			//limit value too big
+			if (constraint.gridx > JSSGridBagUIProvider.MAX_COL_NUMBER){
+				constraint.gridx = JSSGridBagUIProvider.MAX_COL_NUMBER;
+			}
+			
 			prop = comp.getPropertiesMap().getProperty(JSSGridBagLayout.PROPERTY_Y);
 			constraint.gridy = parsePosition(prop);
+			//limit value too big
+			if (constraint.gridy > JSSGridBagUIProvider.MAX_ROW_NUMBER){
+				constraint.gridy = JSSGridBagUIProvider.MAX_ROW_NUMBER;
+			}
+			
 			prop = comp.getPropertiesMap().getProperty(JSSGridBagLayout.PROPERTY_ROWSPAN);
 			constraint.gridheight = parseSpan(prop);
+			//limit value too big
+			if (constraint.gridheight > JSSGridBagUIProvider.MAX_ROW_NUMBER){
+				constraint.gridheight = JSSGridBagUIProvider.MAX_ROW_NUMBER;
+			}
+			
 			prop = comp.getPropertiesMap().getProperty(JSSGridBagLayout.PROPERTY_COLSPAN);
 			constraint.gridwidth = parseSpan(prop);
+			//limit value too big
+			if (constraint.gridwidth > JSSGridBagUIProvider.MAX_COL_NUMBER){
+				constraint.gridwidth = JSSGridBagUIProvider.MAX_COL_NUMBER;
+			}
 			
 			prop = comp.getPropertiesMap().getProperty(JSSGridBagLayout.PROPERTY_IS_FIXED);
 			boolean value = prop != null ? Boolean.parseBoolean(prop.toString()) : false;		

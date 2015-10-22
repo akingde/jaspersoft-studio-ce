@@ -1025,7 +1025,7 @@ public class Messages extends NLS {
 	public static String JSSGridBagLayout_rowSpanLabel;
 	public static String JSSGridBagLayout_rowWeightLabel;
 	public static String JSSGridBagLayout_validNumberValue;
-	public static String JSSGridBagUIProvider_columnPoistionToolTip;
+	public static String JSSGridBagUIProvider_columnPositionToolTip;
 	public static String JSSGridBagUIProvider_columnSpanToolTip;
 	public static String JSSGridBagUIProvider_columnWeightTooltip;
 	public static String JSSGridBagUIProvider_fixedSizeTooltip;

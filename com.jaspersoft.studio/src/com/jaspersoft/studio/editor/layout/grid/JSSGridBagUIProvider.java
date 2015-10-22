@@ -1,7 +1,10 @@
 package com.jaspersoft.studio.editor.layout.grid;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import net.sf.jasperreports.engine.JRCommonElement;
@@ -28,7 +31,9 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Text;
 
@@ -55,6 +60,16 @@ import com.jaspersoft.studio.property.section.AbstractSection;
  */
 public class JSSGridBagUIProvider implements ILayoutUIProvider{
 
+	/**
+	 * The maximum number of row and the maximum row span value
+	 */
+	protected static final int MAX_ROW_NUMBER = 1000;
+
+	/**
+	 * The maximum number of column and the maximum column span value
+	 */
+	protected static final int MAX_COL_NUMBER = 250;
+	
 	/**
 	 * The listener used to store the changes and update the control status
 	 * 
@@ -143,8 +158,14 @@ public class JSSGridBagUIProvider implements ILayoutUIProvider{
 		
 		@Override
 		public void verifyText(VerifyEvent e) {
-			if (e.text.isEmpty()) return;
-			
+			if (e.text.isEmpty() && e.keyCode == SWT.BS){
+				//Combo combo = (Combo)e.widget;
+				//String currentText = combo.getText();
+				//if (currentText.matches("[a-zA-Z]+")){
+				//	combo.setText("");
+				//}
+				return;
+			}
 			try{
 				String currentText = ((Combo)e.widget).getText();
 				String firstPart = currentText.substring(0, e.start);
@@ -152,7 +173,8 @@ public class JSSGridBagUIProvider implements ILayoutUIProvider{
 				String newText = firstPart + e.text + secondPart;
 				if (!newText.trim().equals(Messages.JSSGridBagLayout_relativeString)){
 					int value = Integer.parseInt(newText);
-					if (value < 0){
+					int maxNumber = e.widget == columnPosition ? MAX_COL_NUMBER : MAX_ROW_NUMBER;
+					if (value < 0 || value > maxNumber){
 						e.doit = false;
 						return;
 					}
@@ -164,6 +186,53 @@ public class JSSGridBagUIProvider implements ILayoutUIProvider{
 		}
 	};
 	
+	/**
+	 * Verify listener for the span, it allows positive digits
+	 */
+	private Listener spanVerify = new Listener() {
+		
+		@Override
+		public void handleEvent(Event e){
+			if (e.text.isEmpty()) return;
+			
+			try{
+	      Spinner spinner = (Spinner)e.widget;
+				String currentText = spinner.getText();
+				String firstPart = currentText.substring(0, e.start);
+				String secondPart = currentText.substring(e.end, currentText.length());
+				String newText = firstPart + e.text + secondPart;
+	      int value = Integer.parseInt(newText);
+	      if (value < 1 || value > spinner.getMaximum()){
+	      	e.doit = false;
+	      }
+	    } catch (NumberFormatException ex) {
+	      e.doit = false;
+	    }
+		}
+	};
+	
+	Comparator<String> hintsComparator = new Comparator<String>() {
+
+		@Override
+		public int compare(String o1, String o2) {
+			if (Messages.JSSGridBagLayout_relativeString.equals(o1)){
+				if (Messages.JSSGridBagLayout_relativeString.equals(o2)){
+					return 0;
+				} else return -1; 
+			} else if (Messages.JSSGridBagLayout_relativeString.equals(o2)){
+				if (Messages.JSSGridBagLayout_relativeString.equals(o1)){
+					return 0;
+				} else return 1; 
+			} else if (o1 == null){
+				if (o2 == null) return 0;
+				else return -1;
+			} else if (o2 == null){
+				//at this point o1 is not null for sure
+				return 1;
+			}
+			return Integer.compare(Integer.parseInt(o1), Integer.parseInt(o2));
+		}
+	};
 	
 	/**
 	 * The combo where the user can set the column position or select the relative value
@@ -230,6 +299,7 @@ public class JSSGridBagUIProvider implements ILayoutUIProvider{
 	 */
 	private List<String> colHint = new ArrayList<String>(Arrays.asList(new String[]{Messages.JSSGridBagLayout_relativeString, "0", "1","2","3","4"}));
 	
+	
 	/**
 	 * Apply the current properties to all the selected elements, only if their properties
 	 * are different from the inserted one, and then if at least an element is changed relayout 
@@ -282,26 +352,26 @@ public class JSSGridBagUIProvider implements ILayoutUIProvider{
 	 */
 	private void updateComboHints(Combo widget){
 		List<String> hints = null;
-		String text = widget.getText();
-		if (widget == rowPosition){
-			hints = rowHint;
-		} else {
-			hints = colHint;
-		}
-		if (hints != null){
-			int index = hints.indexOf(text);
-			if (index == -1){
-				//if the hints list is too big remove the last value
-				if (hints.size() >= 7) {
-					hints.remove(hints.size()-1);
+		String text = getComboTextValue(widget);
+		if (!text.trim().isEmpty()){
+			if (widget == rowPosition){
+				hints = rowHint;
+			} else {
+				hints = colHint;
+			}
+			if (hints != null){
+				int index = hints.indexOf(text);
+				if (index == -1){
+					hints.add(text);
+					Collections.sort(hints, hintsComparator); 
+					widget.removeSelectionListener(comboSelectionListener);
+					widget.setItems(hints.toArray(new String[hints.size()]));
+					int elementIndex = hints.indexOf(text);
+					Point caretLocation = widget.getCaretLocation();
+					widget.select(elementIndex);
+					widget.setSelection(caretLocation);
+					widget.addSelectionListener(comboSelectionListener);
 				}
-				hints.add(1, text);
-				widget.removeSelectionListener(comboSelectionListener);
-				widget.setItems(hints.toArray(new String[hints.size()]));
-				Point caretLocation = widget.getCaretLocation();
-				widget.select(1);
-				widget.setSelection(caretLocation);
-				widget.addSelectionListener(comboSelectionListener);
 			}
 		}
 	}
@@ -321,23 +391,51 @@ public class JSSGridBagUIProvider implements ILayoutUIProvider{
 			
 			Object prop = currentElement.getPropertiesMap().getProperty(JSSGridBagLayout.PROPERTY_X);
 			prop = prop != null ? prop.toString() : String.valueOf(GridBagConstraints.RELATIVE);
+			//If the text is empty then restore the current value
+			if(columnPosition.getText().trim().isEmpty()){
+				if (prop.equals(String.valueOf(GridBagConstraints.RELATIVE))){
+					columnPosition.select(0);
+					columnPosition.setText(columnPosition.getItem(0));
+				} else {
+					columnPosition.setText(parsePosition(prop));
+				}
+			}
 			if (!prop.equals(String.valueOf(getComboValue(columnPosition)))) return true;
 				
 			prop = currentElement.getPropertiesMap().getProperty(JSSGridBagLayout.PROPERTY_Y);
 			prop = prop != null ? prop.toString() : String.valueOf(GridBagConstraints.RELATIVE);
+			//If the text is empty then restore the current value
+			if(rowPosition.getText().trim().isEmpty()){
+				if (prop.equals(String.valueOf(GridBagConstraints.RELATIVE))){
+					rowPosition.select(0);
+					rowPosition.setText(columnPosition.getItem(0));
+				} else {
+					rowPosition.setText(parsePosition(prop));
+				}
+			}
 			if (!prop.equals(String.valueOf(getComboValue(rowPosition)))) return true;
 			
 			prop = currentElement.getPropertiesMap().getProperty(JSSGridBagLayout.PROPERTY_WEIGHT_COLUMN);
 			prop = prop != null ? prop.toString() : String.valueOf(1.0);
 			columnWeight.removeVerifyListener(weightVerify);
-			columnWeight.setText(parseWeight(columnWeight.getText()));
+			//If the text is empty then restore the current value
+			if (columnWeight.getText().trim().isEmpty()){
+				columnWeight.setText(parseWeight(prop));
+			} else {
+				columnWeight.setText(parseWeight(columnWeight.getText()));
+			}
 			columnWeight.addVerifyListener(weightVerify);
 			if (!prop.equals(columnWeight.getText())) return true;
 			
 			prop = currentElement.getPropertiesMap().getProperty(JSSGridBagLayout.PROPERTY_WEIGHT_ROW);
 			prop = prop != null ? prop.toString() : String.valueOf(1.0);
 			rowWeight.removeVerifyListener(weightVerify);
-			rowWeight.setText(parseWeight(rowWeight.getText()));
+			//If the text is empty then restore the current value
+			if (rowWeight.getText().trim().isEmpty()){
+				rowWeight.setText(parseWeight(prop));
+			} else {
+				rowWeight.setText(parseWeight(rowWeight.getText()));
+			}
 			rowWeight.addVerifyListener(weightVerify);
 			if (!prop.equals(rowWeight.getText())) return true;
 		
@@ -412,10 +510,38 @@ public class JSSGridBagUIProvider implements ILayoutUIProvider{
 		if (widget.getText().trim().equalsIgnoreCase(Messages.JSSGridBagLayout_relativeString)){
 			return GridBagConstraints.RELATIVE; 
 		} else {
-			int value = Integer.parseInt(widget.getText());
-			return value;
+			try {
+				int value = Integer.parseInt(widget.getText());
+				return value;
+			} catch (Exception ex){
+				widget.setText(Messages.JSSGridBagLayout_relativeString);
+				return GridBagConstraints.RELATIVE;
+			}
 		}
 	}
+	
+	/**
+	 * Get the value inserted in the combo for the row or column position.
+	 * If the value is the string to identify the relative value then the 
+	 * relative numeric value is returned
+	 * 
+	 * @param widget the combo
+	 * @return a valid column or row position
+	 */
+	private String getComboTextValue(Combo widget){
+		if (widget.getText().trim().equalsIgnoreCase(Messages.JSSGridBagLayout_relativeString)){
+			return Messages.JSSGridBagLayout_relativeString; 
+		} else {
+			try {
+				int value = Integer.parseInt(widget.getText());
+				return String.valueOf(value);
+			} catch (Exception ex){
+				widget.setText(Messages.JSSGridBagLayout_relativeString);
+				return Messages.JSSGridBagLayout_relativeString;
+			}
+		}
+	}
+	
 	
 	/**
 	 * Enable or disable the weight widgets if the size
@@ -445,20 +571,21 @@ public class JSSGridBagUIProvider implements ILayoutUIProvider{
 		
 		Label rowPositionLabel = new Label(container, SWT.NONE);
 		rowPositionLabel.setText(Messages.JSSGridBagLayout_rowLabel);
-		rowPositionLabel.setToolTipText(Messages.JSSGridBagUIProvider_rowPositionTooltip);
+		String rowTooltip = MessageFormat.format(Messages.JSSGridBagUIProvider_rowPositionTooltip, new Object[]{MAX_ROW_NUMBER});
+		rowPositionLabel.setToolTipText(rowTooltip);
 		rowPosition= new Combo(container, SWT.BORDER);
 		rowPosition.setItems(rowHint.toArray(new String[rowHint.size()]));
 		rowPosition.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		rowPosition.addSelectionListener(comboSelectionListener);
-	  
 	  rowPosition.addKeyListener(listener);
 	  rowPosition.addVerifyListener(positionVerify);
 	  rowPosition.addFocusListener(listener);
-	  rowPosition.setToolTipText(Messages.JSSGridBagUIProvider_rowPositionTooltip);
+	  rowPosition.setToolTipText(rowTooltip);
 		
 		Label columnPositionLabel = new Label(container, SWT.NONE);
 		columnPositionLabel.setText(Messages.JSSGridBagLayout_columnLabel);
-		columnPositionLabel.setToolTipText(Messages.JSSGridBagUIProvider_columnPoistionToolTip);
+		String columnTooltip = MessageFormat.format(Messages.JSSGridBagUIProvider_columnPositionToolTip, new Object[]{MAX_COL_NUMBER});
+		columnPositionLabel.setToolTipText(columnTooltip);
 		columnPosition = new Combo(container, SWT.BORDER);
 		columnPosition.setItems(colHint.toArray(new String[colHint.size()]));
 		columnPosition.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -466,15 +593,17 @@ public class JSSGridBagUIProvider implements ILayoutUIProvider{
 	  columnPosition.addKeyListener(listener);
 	  columnPosition.addVerifyListener(positionVerify);
 	  columnPosition.addFocusListener(listener);
-	  columnPosition.setToolTipText(Messages.JSSGridBagUIProvider_columnPoistionToolTip);  
+	  columnPosition.setToolTipText(columnTooltip);  
 		
 	  Label rowSpanLabel = new Label(container, SWT.NONE);
 	  rowSpanLabel.setText(Messages.JSSGridBagLayout_rowSpanLabel);
 	  rowSpanLabel.setToolTipText(Messages.JSSGridBagUIProvider_rowSpanToolTip);
-		rowSpan = new Spinner(container, SWT.BORDER | SWT.READ_ONLY);
+		rowSpan = new Spinner(container, SWT.BORDER);
 		rowSpan.setMinimum(1);
+		rowSpan.setMaximum(MAX_ROW_NUMBER);
 		rowSpan.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		rowSpan.addKeyListener(listener);
+		rowSpan.addListener(SWT.Verify, spanVerify);
 		rowSpan.addFocusListener(listener);
 	  rowSpan.addSelectionListener(new SelectionAdapter() {
 	  	
@@ -488,10 +617,12 @@ public class JSSGridBagUIProvider implements ILayoutUIProvider{
 		Label columnSpanLabel = new Label(container, SWT.NONE);
 		columnSpanLabel.setText(Messages.JSSGridBagLayout_columnSpanLabel);
 		columnSpanLabel.setToolTipText(Messages.JSSGridBagUIProvider_columnSpanToolTip);
-		columnSpan = new Spinner(container, SWT.BORDER | SWT.READ_ONLY); 
+		columnSpan = new Spinner(container, SWT.BORDER); 
 		columnSpan.setMinimum(1);
+		columnSpan.setMaximum(MAX_COL_NUMBER);
 		columnSpan.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		columnSpan.addKeyListener(listener);
+		columnSpan.addListener(SWT.Verify, spanVerify);
 		columnSpan.addFocusListener(listener);
 	  columnSpan.addSelectionListener(new SelectionAdapter() {
 	  	
