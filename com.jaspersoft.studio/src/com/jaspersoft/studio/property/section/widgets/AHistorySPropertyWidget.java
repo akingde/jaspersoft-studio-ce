@@ -15,12 +15,12 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.utils.inputhistory.InputHistoryCache;
 
-public abstract class AHistorySPropertyWidget extends ASPropertyWidget<IPropertyDescriptor> {
+public abstract class AHistorySPropertyWidget<K extends IPropertyDescriptor> extends ASPropertyWidget<K> {
 
 	public static final String HIST_PREFIX = "asproperty.";
 	protected CustomAutoCompleteField autocomplete;
 
-	public AHistorySPropertyWidget(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
+	public AHistorySPropertyWidget(Composite parent, AbstractSection section, K pDescriptor) {
 		super(parent, section, pDescriptor);
 	}
 
@@ -34,7 +34,8 @@ public abstract class AHistorySPropertyWidget extends ASPropertyWidget<IProperty
 	protected void handleFocusLost() {
 		if (autocomplete != null) {
 			autocomplete.setProposals(InputHistoryCache.get(null));
-			InputHistoryCache.put(getHistoryKey(), getTextControl().getText());
+			if (getTextControl() != null)
+				InputHistoryCache.put(getHistoryKey(), getTextControl().getText());
 		}
 		super.handleFocusLost();
 	}

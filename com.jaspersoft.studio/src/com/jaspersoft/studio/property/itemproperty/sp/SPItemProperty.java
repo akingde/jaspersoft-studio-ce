@@ -7,15 +7,14 @@
  * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.property.itemproperty.sp;
- 
-import net.sf.jasperreports.components.items.StandardItemProperty;
-import net.sf.jasperreports.engine.design.JRDesignElement;
 
+import org.eclipse.jface.fieldassist.TextContentAdapter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
@@ -27,10 +26,16 @@ import com.jaspersoft.studio.property.itemproperty.desc.ItemPropertyDescriptor;
 import com.jaspersoft.studio.property.itemproperty.event.ItemPropertyModifiedEvent;
 import com.jaspersoft.studio.property.itemproperty.event.ItemPropertyModifiedListener;
 import com.jaspersoft.studio.property.section.AbstractSection;
-import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
+import com.jaspersoft.studio.property.section.widgets.AHistorySPropertyWidget;
+import com.jaspersoft.studio.property.section.widgets.CustomAutoCompleteField;
 import com.jaspersoft.studio.utils.ModelUtils;
+import com.jaspersoft.studio.utils.inputhistory.InputHistoryCache;
 
-public class SPItemProperty extends ASPropertyWidget<ItemPropertyDescriptor> implements IExpressionContextSetter {
+import net.sf.jasperreports.components.items.StandardItemProperty;
+import net.sf.jasperreports.engine.design.JRDesignElement;
+
+public class SPItemProperty extends AHistorySPropertyWidget<ItemPropertyDescriptor>
+		implements IExpressionContextSetter {
 	private WItemProperty expr;
 
 	public SPItemProperty(Composite parent, AbstractSection section, ItemPropertyDescriptor pDescriptor) {
@@ -49,7 +54,7 @@ public class SPItemProperty extends ASPropertyWidget<ItemPropertyDescriptor> imp
 
 	protected void createComponent(Composite parent) {
 		ADescriptor d = pDescriptor.getDescriptor();
-		ItemPropertyDescription<?> ipd =	d.getDescription((String) pDescriptor.getId());
+		ItemPropertyDescription<?> ipd = d.getDescription((String) pDescriptor.getId());
 		expr = new WItemProperty(parent, SWT.NONE, 1, d, ipd);
 		expr.addModifyListener(new ItemPropertyModifiedListener() {
 			@Override
@@ -60,7 +65,11 @@ public class SPItemProperty extends ASPropertyWidget<ItemPropertyDescriptor> imp
 		});
 		if (parent.getLayout() instanceof GridLayout)
 			expr.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		expr.getControl().addFocusListener(focusListener); 
+		expr.getControl().addFocusListener(focusListener);
+		Text textControl = getTextControl();
+		if (textControl != null)
+			autocomplete = new CustomAutoCompleteField(textControl, new TextContentAdapter(),
+					InputHistoryCache.get(getHistoryKey()));
 	}
 
 	public void setData(APropertyNode pnode, Object b) {
@@ -84,6 +93,13 @@ public class SPItemProperty extends ASPropertyWidget<ItemPropertyDescriptor> imp
 
 	public void setExpressionContext(ExpressionContext exprContext) {
 		expr.setExpressionContext(exprContext);
+	}
+
+	@Override
+	protected Text getTextControl() {
+		if (expr.getControl() != null && expr.getControl() instanceof Text)
+			return (Text) expr.getControl();
+		return null;
 	}
 
 }

@@ -34,7 +34,7 @@ import com.jaspersoft.studio.swt.widgets.WTextExpression;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.inputhistory.InputHistoryCache;
 
-public class SPExpression extends AHistorySPropertyWidget implements IExpressionContextSetter {
+public class SPExpression extends AHistorySPropertyWidget<IPropertyDescriptor> implements IExpressionContextSetter {
 	private WTextExpression expr;
 
 	public SPExpression(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
