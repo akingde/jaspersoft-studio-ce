@@ -117,6 +117,17 @@ public class ReportContainer extends MultiPageToolbarEditorPart implements ITabb
 	private List<AbstractVisualEditor> editors = new ArrayList<AbstractVisualEditor>();
 
 	/**
+	 * Map of the subeditors opened, the key is the JRObject edited in the subeditor the value
+	 * it the subeditor used to edit it
+	 */
+	private Map<Object, AbstractVisualEditor> ccMap = new HashMap<Object, AbstractVisualEditor>();
+
+	/**
+	 * The extension manager
+	 */
+	private ExtensionManager m = JaspersoftStudioPlugin.getExtensionManager();
+	
+	/**
 	 * The selection cache used by all the editors in this container (report editor and eventually its subeditors) The
 	 * selection cache is passed to the subeditors trough the jasper configuration. The cached is stored when this
 	 * container is created and can be retrieved with the SELECTION_CACHE_KEY
@@ -262,10 +273,6 @@ public class ReportContainer extends MultiPageToolbarEditorPart implements ITabb
 		updateVisualView();
 	}
 
-	private Map<Object, AbstractVisualEditor> ccMap = new HashMap<Object, AbstractVisualEditor>();
-
-	private ExtensionManager m = JaspersoftStudioPlugin.getExtensionManager();
-
 	private AbstractVisualEditor createEditorPage(Object obj) {
 		AbstractVisualEditor ave = ccMap.get(obj);
 		try {
@@ -322,8 +329,11 @@ public class ReportContainer extends MultiPageToolbarEditorPart implements ITabb
 		ave.setModel(null);
 		ave.removePropertyListener(titleListener);
 		int ind = editors.indexOf(ave);
-		if (ind >= 0 && ind < getPageCount())
+		//Check if the removed page is the current one
+		boolean switchToMainPage = ind == getActivePage();
+		if (ind >= 0 && ind < getPageCount()){
 			removePage(ind);
+		}
 		editors.remove(ind);
 		if (evt != null) {
 			ccMap.remove(evt.getOldValue());
@@ -339,6 +349,8 @@ public class ReportContainer extends MultiPageToolbarEditorPart implements ITabb
 			ccMap.remove(okey);
 		}
 		ave.dispose();
+		//If the removed page was the current one go back to the main page
+		if (switchToMainPage) setActivePage(0);
 	}
 
 	/**
