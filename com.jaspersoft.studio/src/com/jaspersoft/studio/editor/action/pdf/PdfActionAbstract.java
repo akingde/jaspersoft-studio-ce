@@ -78,27 +78,24 @@ public abstract class PdfActionAbstract extends CustomSelectionAction {
 
 	@Override
 	public boolean isChecked() {
-		if (!freshChecked) {
-			freshChecked = true;
-			ischecked = true;
-			List<Object> graphicalElements = editor.getSelectionCache().getSelectionModelForType(MGraphicElement.class);
-			if (graphicalElements.isEmpty()) {
-				ischecked = false;
-			} else {
-				String attributeId = GetPropertyName();
-				String value = GetPropertyValue();
-				for (Object element : graphicalElements) {
-					MGraphicElement model = (MGraphicElement) element;
-					JRPropertiesMap v = (JRPropertiesMap) model.getPropertiesMap();
-					if (v == null) {
+		ischecked = true;
+		List<Object> graphicalElements = editor.getSelectionCache().getSelectionModelForType(MGraphicElement.class);
+		if (graphicalElements.isEmpty()) {
+			ischecked = false;
+		} else {
+			String attributeId = GetPropertyName();
+			String value = GetPropertyValue();
+			for (Object element : graphicalElements) {
+				MGraphicElement model = (MGraphicElement) element;
+				JRPropertiesMap v = (JRPropertiesMap) model.getPropertiesMap();
+				if (v == null) {
+					ischecked = false;
+					break;
+				} else {
+					Object oldValue = v.getProperty(attributeId);
+					if (oldValue == null || !oldValue.equals(value)) {
 						ischecked = false;
 						break;
-					} else {
-						Object oldValue = v.getProperty(attributeId);
-						if (oldValue == null || !oldValue.equals(value)) {
-							ischecked = false;
-							break;
-						}
 					}
 				}
 			}
@@ -207,7 +204,6 @@ public abstract class PdfActionAbstract extends CustomSelectionAction {
 			command.setReferenceNodeIfNull(grModel);
 			command.add(createCommand(grModel));
 		}
-		freshChecked = false;
 		return command;
 	}
 

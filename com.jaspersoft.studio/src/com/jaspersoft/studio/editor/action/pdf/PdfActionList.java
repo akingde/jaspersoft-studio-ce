@@ -10,7 +10,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
-package com.jaspersoft.studio.components.list.decorator;
+package com.jaspersoft.studio.editor.action.pdf;
 
 import java.util.List;
 
@@ -21,7 +21,6 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.ui.IWorkbenchPart;
 
 import com.jaspersoft.studio.JSSCompoundCommand;
-import com.jaspersoft.studio.components.list.model.MList;
 import com.jaspersoft.studio.editor.action.CustomSelectionAction;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.MGraphicElement;
@@ -36,22 +35,22 @@ public class PdfActionList extends CustomSelectionAction {
 	/**
 	 * The id of the action when it is instanced as full
 	 */
-	public static final String ID_FULL = "net.sf.jasperreports.components.list.generate.pdf.tags.full"; //$NON-NLS-1$
+	public static final String ID_FULL = "net.sf.jasperreports.list.generate.pdf.tags.full"; //$NON-NLS-1$
 	
 	/**
 	 * The id of the action when it is instanced as start
 	 */	
-	public static final String ID_START = "net.sf.jasperreports.components.list.generate.pdf.tags.start"; //$NON-NLS-1$
+	public static final String ID_START = "net.sf.jasperreports.list.generate.pdf.tags.start"; //$NON-NLS-1$
 	
 	/**
 	 * The id of the action when it is instanced as end
 	 */
-	public static final String ID_END = "net.sf.jasperreports.components.list.generate.pdf.tags.end"; //$NON-NLS-1$
+	public static final String ID_END = "net.sf.jasperreports.list.generate.pdf.tags.end"; //$NON-NLS-1$
 	
 	/**
 	 * The id of the action when it is instanced as disabled
 	 */
-	public static final String ID_NONE = "net.sf.jasperreports.components.list.generate.pdf.tags.none"; //$NON-NLS-1$
+	public static final String ID_NONE = "net.sf.jasperreports.list.generate.pdf.tags.none"; //$NON-NLS-1$
 	
 	/**
 	 * The property of JR this action write
@@ -74,16 +73,6 @@ public class PdfActionList extends CustomSelectionAction {
 		initUI();
 	}
 
-	/**
-	 * Calculate if the action is enabled
-	 * 
-	 * @return check if a report or a table are selected
-	 */
-	@Override
-	protected boolean calculateEnabled() {
-		List<Object> graphicalElements = editor.getSelectionCache().getSelectionModelForType(MList.class);
-		return  (graphicalElements.size() > 0);
-	}
 	
 	@Override
 	public boolean isChecked() {
@@ -188,16 +177,21 @@ public class PdfActionList extends CustomSelectionAction {
 	}
 
 	@Override
-	protected Command createCommand() {
-		List<Object> graphicalElements = editor.getSelectionCache().getSelectionModelForType(MList.class);
+	protected Command createCommand() {	
+		List<Object> graphicalElements = editor.getSelectionCache().getSelectionModelForType(MGraphicElement.class);
+		if (graphicalElements.isEmpty())
+			return null;
 		JSSCompoundCommand command = new JSSCompoundCommand(getText(), null);
 		for (Object element : graphicalElements) {
 			MGraphicElement grModel = (MGraphicElement) element;
 			command.setReferenceNodeIfNull(grModel);
 			command.add(createCommand(grModel));
 		}
+		freshChecked = false;
 		return command;
 	}
+	
+	
 
 	/**
 	 * Performs the create action on the selected objects.

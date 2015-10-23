@@ -99,7 +99,8 @@ public class PDFDecorator implements IDecorator, TextDecoratorInterface {
 						"net.sf.jasperreports.export.pdf.tag.h3", "H3", "net.sf.jasperreports.export.pdf.tag.h4", "H4", 
 						"net.sf.jasperreports.export.pdf.tag.h5", "H5", "net.sf.jasperreports.export.pdf.tag.h6", "H6",
 						"net.sf.jasperreports.export.pdf.tag.table", "TBL", "net.sf.jasperreports.export.pdf.tag.tr", "TR", 
-						"net.sf.jasperreports.export.pdf.tag.th", "TH","net.sf.jasperreports.export.pdf.tag.td", "TD" };
+						"net.sf.jasperreports.export.pdf.tag.th", "TH","net.sf.jasperreports.export.pdf.tag.td", "TD",
+						"net.sf.jasperreports.export.pdf.tag.l", "LIST", "net.sf.jasperreports.export.pdf.tag.li", "LIST ITEM"};
 
 				JRPropertiesMap v = fig.getJrElement().getPropertiesMap();
 				for (int i = 0; i < tags.length; i += 2) {
@@ -219,7 +220,8 @@ public class PDFDecorator implements IDecorator, TextDecoratorInterface {
 				"net.sf.jasperreports.export.pdf.tag.h3", "H3", "net.sf.jasperreports.export.pdf.tag.h4", "H4", 
 				"net.sf.jasperreports.export.pdf.tag.h5", "H5", "net.sf.jasperreports.export.pdf.tag.h6", "H6",
 				"net.sf.jasperreports.export.pdf.tag.table", "TBL", "net.sf.jasperreports.export.pdf.tag.tr", "TR", 
-				"net.sf.jasperreports.export.pdf.tag.th", "TH","net.sf.jasperreports.export.pdf.tag.td", "TD" };
+				"net.sf.jasperreports.export.pdf.tag.th", "TH","net.sf.jasperreports.export.pdf.tag.td", "TD",
+				"net.sf.jasperreports.export.pdf.tag.l", "LIST", "net.sf.jasperreports.export.pdf.tag.li", "LIST ITEM"};
 
 		for (int i = 0; i < tags.length; i += 2) {
 			String prop = tags[i];

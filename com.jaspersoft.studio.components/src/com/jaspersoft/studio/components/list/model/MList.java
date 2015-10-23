@@ -218,7 +218,7 @@ public class MList extends MGraphicElement implements IPastable,
 	@Override
 	public Object getPropertyValue(Object id) {
 		StandardListComponent jrList = getList();
-
+		
 		if (id.equals(StandardListComponent.PROPERTY_IGNORE_WIDTH))
 			return jrList.getIgnoreWidth();
 		if (id.equals(StandardListComponent.PROPERTY_PRINT_ORDER))
@@ -250,7 +250,6 @@ public class MList extends MGraphicElement implements IPastable,
 	@Override
 	public void setPropertyValue(Object id, Object value) {
 		StandardListComponent jrList = getList();
-
 		if (id.equals(StandardListComponent.PROPERTY_IGNORE_WIDTH))
 			jrList.setIgnoreWidth((Boolean) value);
 		else if (id.equals(StandardListComponent.PROPERTY_PRINT_ORDER))

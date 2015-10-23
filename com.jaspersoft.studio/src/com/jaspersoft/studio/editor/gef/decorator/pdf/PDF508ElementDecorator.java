@@ -33,6 +33,8 @@ import com.jaspersoft.studio.editor.action.pdf.PdfActionHeading3;
 import com.jaspersoft.studio.editor.action.pdf.PdfActionHeading4;
 import com.jaspersoft.studio.editor.action.pdf.PdfActionHeading5;
 import com.jaspersoft.studio.editor.action.pdf.PdfActionHeading6;
+import com.jaspersoft.studio.editor.action.pdf.PdfActionList;
+import com.jaspersoft.studio.editor.action.pdf.PdfActionListItem;
 import com.jaspersoft.studio.editor.action.pdf.PdfActionTable;
 import com.jaspersoft.studio.editor.action.pdf.PdfActionTableDetail;
 import com.jaspersoft.studio.editor.action.pdf.PdfActionTableHeader;
@@ -239,13 +241,51 @@ public class PDF508ElementDecorator extends TextElementDecorator{
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
 	}
+	
+	public void registerListItemActions(ActionRegistry registry, IWorkbenchPart part, List<String> selectionActions) {
+		IAction action = new PdfActionListItem(part, PdfActionListItem.TYPE.END);
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
 
+		action = new PdfActionListItem(part, PdfActionListItem.TYPE.FULL);
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
+		
+		action = new PdfActionListItem(part, PdfActionListItem.TYPE.START);
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
+		
+		action = new PdfActionListItem(part, PdfActionListItem.TYPE.NONE);
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
+	}
+
+	public void registerListActions(ActionRegistry registry, IWorkbenchPart part, List<String> selectionActions) {
+		IAction action = new PdfActionList(part, PdfActionList.TYPE.END);
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
+
+		action = new PdfActionList(part, PdfActionList.TYPE.FULL);
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
+		
+		action = new PdfActionList(part, PdfActionList.TYPE.START);
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
+		
+		action = new PdfActionList(part, PdfActionList.TYPE.NONE);
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
+	}
+	
 	public void registerActions(ActionRegistry registry, List<String> selectionActions, IWorkbenchPart part) {
 		registerHeading(registry, part, selectionActions);
 		registerTable(registry, part, selectionActions);
 		registerTableRow(registry, part, selectionActions);
 		registerTableHeader(registry, part, selectionActions);
 		registerTableDetail(registry, part, selectionActions);
+		registerListActions(registry, part, selectionActions);
+		registerListItemActions(registry, part, selectionActions);
 	}
 
 	@Override
@@ -282,6 +322,8 @@ public class PDF508ElementDecorator extends TextElementDecorator{
 		MenuManager submenuTableRow = new MenuManager(Messages.PDF508ElementDecorator_Menu_TableRow);
 		MenuManager submenuTableHeader = new MenuManager(Messages.PDF508ElementDecorator_Menu_TableHeader);
 		MenuManager submenuTableDetails = new MenuManager(Messages.PDF508ElementDecorator_Menu_TableDetails);
+		MenuManager submenuList = new MenuManager(Messages.PDF508ElementDecorator_listLabel);
+		MenuManager submenuListItem = new MenuManager(Messages.PDF508ElementDecorator_listItemLabel);
 
 		submenuHeading.add(submenuHeading1);
 		submenuHeading.add(submenuHeading2);
@@ -294,6 +336,8 @@ public class PDF508ElementDecorator extends TextElementDecorator{
 		submenu.add(submenuTableRow);
 		submenu.add(submenuTableHeader);
 		submenu.add(submenuTableDetails);
+		submenu.add(submenuList);
+		submenu.add(submenuListItem);
 
 		IAction action;
 		// Adding actions for Heading 1
@@ -395,6 +439,26 @@ public class PDF508ElementDecorator extends TextElementDecorator{
 		submenuTableDetails.add(action);
 		action = registry.getAction(PdfActionTableDetail.ID_TableDetail_None);
 		submenuTableDetails.add(action);
+		
+		//adding actions for list
+		action = registry.getAction(PdfActionList.ID_FULL);
+		submenuList.add(action);
+		action = registry.getAction(PdfActionList.ID_START);
+		submenuList.add(action);
+		action = registry.getAction(PdfActionList.ID_END);
+		submenuList.add(action);
+		action = registry.getAction(PdfActionList.ID_NONE);
+		submenuList.add(action);
+		
+		//adding actions for the list item
+		action = registry.getAction(PdfActionListItem.ID_FULL);
+		submenuListItem.add(action);
+		action = registry.getAction(PdfActionListItem.ID_START);
+		submenuListItem.add(action);
+		action = registry.getAction(PdfActionListItem.ID_END);
+		submenuListItem.add(action);
+		action = registry.getAction(PdfActionListItem.ID_NONE);
+		submenuListItem.add(action);
 
 		menu.add(submenu);
 	}
