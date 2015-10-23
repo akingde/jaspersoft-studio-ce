@@ -16,8 +16,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.ui.actions.ActionRegistry;
@@ -60,6 +58,8 @@ import com.jaspersoft.studio.editor.report.SelectionChangedListener;
 import com.jaspersoft.studio.editor.xml.XMLEditor;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.toolbars.CommonToolbarHandler;
+
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 /*
  * Manages the installation/deinstallation of global actions for multi-page editors. Responsible for the redirection of
