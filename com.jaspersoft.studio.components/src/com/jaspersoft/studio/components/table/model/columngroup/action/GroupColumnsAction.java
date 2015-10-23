@@ -20,7 +20,6 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.ui.IWorkbenchPart;
 
-import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.components.Activator;
 import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.components.table.model.AMCollection;
@@ -33,6 +32,7 @@ import com.jaspersoft.studio.components.table.model.column.command.MoveColumnCom
 import com.jaspersoft.studio.components.table.model.column.command.RefreshColumnNamesCommand;
 import com.jaspersoft.studio.components.table.model.columngroup.MColumnGroup;
 import com.jaspersoft.studio.components.table.model.columngroup.command.CreateColumnGroupCommand;
+import com.jaspersoft.studio.components.table.part.editpolicy.JSSCompundTableCommand;
 import com.jaspersoft.studio.editor.outline.actions.ACreateAction;
 import com.jaspersoft.studio.editor.palette.JDPaletteCreationFactory;
 import com.jaspersoft.studio.model.ANode;
@@ -74,22 +74,43 @@ public class GroupColumnsAction extends ACreateAction {
 		setEnabled(false);
 	}
 
+	/**
+	 * Return a list of unique columns, not children of the detail and under the
+	 * same parent to group 
+	 * 
+	 * @return the list of column to group, can be null if the selection is invalid
+	 */
 	private List<MColumn> getSelectedColumns(){
 		List<MColumn> columns = new ArrayList<MColumn>();
 		List<Object> objects = getSelectedObjects();
-		if (objects.isEmpty())
-			return null;
+		AMCollection currentParent = null;
 		for (Object obj : objects) {
 			if (obj instanceof EditPart)
 				obj = ((EditPart)obj).getModel();
 			if (obj instanceof MColumn){
 				MColumn col = (MColumn)obj;
 				if (!isTableDetail(col)){
+					//Check if has the same parent
+					if (currentParent != null){
+						if (currentParent != getColumnCollection(col)){
+							return null;
+						}
+					} else {
+						currentParent = getColumnCollection(col);
+					}
 					columns.add(col);
 				}
 			}
 		}
 		return columns;
+	}
+	
+	private AMCollection getColumnCollection(MColumn col){
+		ANode parent = col.getParent();
+		while(parent != null && !(parent instanceof AMCollection)){
+			parent = parent.getParent();
+		}
+		return (AMCollection)parent;
 	}
 
 	/**
@@ -116,8 +137,7 @@ public class GroupColumnsAction extends ACreateAction {
 		ANode mparent = fmc.getParent();
 		if (mparent == null)
 			return null;
-		JSSCompoundCommand c = new JSSCompoundCommand(
-				Messages.CreateColumnAction_create_column_group, mparent);
+		JSSCompundTableCommand c = new JSSCompundTableCommand(Messages.CreateColumnAction_create_column_group, fmc.getMTable());
 		MColumnGroup mcolgr = new MColumnGroup();
 		int index = mparent.getChildren().indexOf(fmc);
 		CreateColumnGroupCommand cmd = createGroup(index, mparent, mcolgr);

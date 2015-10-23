@@ -20,7 +20,7 @@ import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.SetValueCommand;
 
 /**
- * Command used to set the width of one or more table cells. It disable
+ * Command used to set the property of one or more table cells. It disable
  * the autoresize property if it was enable before to execute the resize.
  * This is done to avoid continuous calculation of the table fill during
  * the resize operations.
@@ -31,7 +31,7 @@ import com.jaspersoft.studio.property.SetValueCommand;
  * @author Orlandin Marco
  *
  */
-public class SetTableCellsSizeCommand extends JSSCompoundCommand {
+public class JSSCompundTableCommand extends JSSCompoundCommand {
 
 	/**
 	 * The table containing the resized columns
@@ -39,12 +39,23 @@ public class SetTableCellsSizeCommand extends JSSCompoundCommand {
 	private MTable table;
 	
 	/**
-	 * Create the resize command
+	 * Create the command for the resize
 	 * 
-	 * @param table s not null table containing the resized columns
+	 * @param table a not null table containing the resized columns
 	 */
-	public SetTableCellsSizeCommand(MTable table){
+	public JSSCompundTableCommand(MTable table){
 		super("Change Cell Size", table);
+		this.table = table;
+	}
+	
+	/**
+	 * Create a general command
+	 * 
+	 * @param commandText the textual name of the commandß
+	 * @param table a not null table containing the resized columns
+	 */
+	public JSSCompundTableCommand(String commandText, MTable table){
+		super(commandText, table);
 		this.table = table;
 	}
 	

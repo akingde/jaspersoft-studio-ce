@@ -53,7 +53,7 @@ public class CreateResize {
 		PrecisionRectangle deltaRect = new PrecisionRectangle(new Rectangle(0,0, sd.width, sd.height));
 		editPart.getFigure().translateToRelative(deltaRect);
 		MTable table = getTableModel(model);
-		SetTableCellsSizeCommand c = new SetTableCellsSizeCommand(table);
+		JSSCompundTableCommand c = new JSSCompundTableCommand(table);
 		if (request.getSizeDelta().width != 0) {
 			int w = deltaRect.width;
 			if (request.getResizeDirection() == PositionConstants.WEST)
