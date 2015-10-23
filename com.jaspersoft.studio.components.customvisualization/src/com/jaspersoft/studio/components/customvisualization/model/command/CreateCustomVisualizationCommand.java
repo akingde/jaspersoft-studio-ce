@@ -5,6 +5,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.customvisualization.model.command;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -37,6 +38,7 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 
 import com.jaspersoft.jasperreports.customvisualization.design.CVDesignComponent;
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.components.customvisualization.CVComponentUtil;
 import com.jaspersoft.studio.components.customvisualization.messages.Messages;
 import com.jaspersoft.studio.components.customvisualization.model.MCustomVisualization;
@@ -123,10 +125,12 @@ public class CreateCustomVisualizationCommand extends CreateElementCommand {
 				wizard.setConfig(jConfig);
 				WizardDialog d = new WizardDialog(UIUtils.getShell(), wizard);
 				if (d.open() == Dialog.OK) {
-					ComponentDescriptor m = wizard.getModule();
 					CVDesignComponent cvComp = (CVDesignComponent) ((JRDesignComponentElement) jrElement)
 							.getComponent();
-					if (m.getSections() != null)
+					
+					ComponentDescriptor m = wizard.getModule();
+					if (m != null && m.getSections() != null)
+					{
 						for (ComponentSectionDescriptor csd : m.getSections()) {
 							if (csd.getProperties() != null)
 								for (ComponentPropertyDescriptor cpd : csd
@@ -136,44 +140,64 @@ public class CreateCustomVisualizationCommand extends CreateElementCommand {
 												cpd.getName(), cpd
 														.getDefaultValue(),
 												null));
-										if (cpd.getType().equalsIgnoreCase(
-												"path"))
-											UIManager.copyFile(m, jConfig,
-													cpd.getDefaultValue());
+										
+										// If the type of the property is a path, we copy the resource in the report
+										// folder...
+										if (cpd.getType().equalsIgnoreCase("path"))
+										{
+											try {
+												String fileName = cpd.getDefaultValue();
+												if (fileName != null && (new File(fileName)).exists())
+												{
+													UIManager.copyFile(m, jConfig, cpd.getDefaultValue());
+												}
+												else
+												{
+													JaspersoftStudioPlugin.getInstance().logWarning("File for property '" + cpd.getLabel() + "' called '"  + fileName  + "' not found or not specified");
+												}
+											} catch (Exception ex)
+											{
+												JaspersoftStudioPlugin.getInstance().logWarning("File " + cpd.getLabel() + " not found or not specified");
+											}
+										}
 									}
 								}
 						}
-					// build default item data with default values
-					List<ComponentDatasetDescriptor> ds = m.getDatasets();
-					if (ds != null)
-						for (ComponentDatasetDescriptor cdd : ds) {
-							if (cdd.getCardinality() >= 0)
-								for (int i = 0; i < cdd.getCardinality(); i++) {
-									StandardItemData id = new StandardItemData();
-									if (cdd.getSections() != null)
-										for (ComponentSectionDescriptor csd : cdd
-												.getSections())
-											if (!Misc.isNullOrEmpty(csd
-													.getProperties())) {
-												StandardItem item = new StandardItem();
-												id.addItem(item);
-												for (ComponentPropertyDescriptor cpd : csd
-														.getProperties())
-													if (cpd.getDefaultValue() != null)
-														item.addItemProperty(new StandardItemProperty(
-																cpd.getName(),
-																cpd.getDefaultValue(),
-																null));
-											}
-									cvComp.addItemData(id);
-									if (ds.get(ds.size() - 1) == cdd)
-										break;
-								}
-
-						}
+					
+						// build default item data with default values
+						List<ComponentDatasetDescriptor> ds = m.getDatasets();
+						if (ds != null)
+							for (ComponentDatasetDescriptor cdd : ds) {
+								if (cdd.getCardinality() >= 0)
+									for (int i = 0; i < cdd.getCardinality(); i++) {
+										StandardItemData id = new StandardItemData();
+										if (cdd.getSections() != null)
+											for (ComponentSectionDescriptor csd : cdd
+													.getSections())
+												if (!Misc.isNullOrEmpty(csd
+														.getProperties())) {
+													StandardItem item = new StandardItem();
+													id.addItem(item);
+													for (ComponentPropertyDescriptor cpd : csd
+															.getProperties())
+														if (cpd.getDefaultValue() != null)
+															item.addItemProperty(new StandardItemProperty(
+																	cpd.getName(),
+																	cpd.getDefaultValue(),
+																	null));
+												}
+										cvComp.addItemData(id);
+										if (ds.get(ds.size() - 1) == cdd)
+											break;
+									}
+	
+							}
+					}
 
 				} else
+				{
 					jrElement = null;
+				}
 			}
 		}
 		if (jrElement != null)

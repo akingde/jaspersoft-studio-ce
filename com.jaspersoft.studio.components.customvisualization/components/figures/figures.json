@@ -2,7 +2,7 @@
     "label": "Figures", 
     "description": "Display a list of figures",
     "module":"figures",
-    "thumbnail": "Figures.png",
+    "thumbnail": "figures.png",
     "sections": [
             {
               "name": "Script",
@@ -31,7 +31,7 @@
                   "label": "module",
                   "description": "module",
                   "mandatory": "true",
-                  "defaultValue": "figures",
+                  "defaultValue": "d3circle",
                   "type": "TEXT",
                   "readOnly": "true"
                 }

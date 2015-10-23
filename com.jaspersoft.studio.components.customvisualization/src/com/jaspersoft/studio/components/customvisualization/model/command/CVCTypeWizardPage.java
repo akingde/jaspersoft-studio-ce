@@ -59,6 +59,10 @@ public class CVCTypeWizardPage extends JSSWizardPage {
 		zoomFactor.setMaximum(50);
 		zoomFactor.setIncrement(1);
 		zoomFactor.setPageIncrement(5);
+		
+		// Set the default zoom value to 1. In order to activate it, we will force a refresh at the end of this method.
+		zoomFactor.setSelection(1);
+		
 		GridData gd = new GridData(GridData.HORIZONTAL_ALIGN_END);
 		gd.widthHint = 150;
 		zoomFactor.setLayoutData(gd);
@@ -87,11 +91,21 @@ public class CVCTypeWizardPage extends JSSWizardPage {
 		chartsGallery.addSelectionListener(new SelectionListener() {
 
 			public void widgetSelected(SelectionEvent e) {
-				if (e.item instanceof GalleryItem) {
+				
+				
+				System.out.println("Selection changed..." + e.item);
+				
+				if (e.item != null && e.item instanceof GalleryItem) {
 					module = (ComponentDescriptor) ((GalleryItem) e.item)
 							.getData();
-					getContainer().updateButtons();
 				}
+				else
+				{
+					// Empty selection...
+					module = null;
+				}
+				
+				getContainer().updateButtons();
 			}
 
 			public void widgetDefaultSelected(SelectionEvent e) {
@@ -100,14 +114,21 @@ public class CVCTypeWizardPage extends JSSWizardPage {
 		});
 
 		setTableSelection();
-		zoomFactor.addSelectionListener(new SelectionAdapter() {
+		
+		SelectionAdapter sa = new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				double c = 1 + 0.1 * zoomFactor.getSelection();
 				gr.setItemSize((int) (GALLERY_WIDTH * c),
 						(int) (GALLERY_HEIGHT * c));
 			}
-		});
+		};
+		
+		zoomFactor.addSelectionListener(sa);
+		
+		// Kick an immediate refresh to apply the default zoom.
+		sa.widgetSelected(null);
+		
 	}
 
 	private void setTableSelection() {
@@ -167,4 +188,16 @@ public class CVCTypeWizardPage extends JSSWizardPage {
 	protected String getContextName() {
 		return "";
 	}
+
+	/**
+	 * We allow the user to click finish only if at least a component has been selected.
+	 */
+	@Override
+	public boolean isPageComplete() {
+		return this.chartsGallery.getSelectionCount() > 0;
+	}
+
+	
+	
+	
 }
