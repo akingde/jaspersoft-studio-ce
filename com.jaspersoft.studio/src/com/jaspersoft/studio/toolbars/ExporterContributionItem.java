@@ -23,8 +23,6 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
@@ -112,11 +110,8 @@ public class ExporterContributionItem extends CommonToolbarHandler{
 	}
 	
 	@Override
-	protected Control createControl(Composite parent) {
-		super.createControl(parent);
-		ToolBar buttons = new ToolBar(parent, SWT.FLAT | SWT.WRAP);
-		
-		ToolItem changeImage = new ToolItem(buttons, SWT.PUSH);
+	protected boolean fillWithToolItems(ToolBar parent) {
+		ToolItem changeImage = new ToolItem(parent, SWT.PUSH);
 		changeImage.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/equalizer--arrow.png"));
 		changeImage.setToolTipText("Set exporter properties");
 		changeImage.addSelectionListener(new SelectionAdapter() {
@@ -132,8 +127,8 @@ public class ExporterContributionItem extends CommonToolbarHandler{
 		     }
 			}
 		});
-		
-		return buttons;
+		getToolItems().add(changeImage);
+		return true;
 	}
 	
 	/**

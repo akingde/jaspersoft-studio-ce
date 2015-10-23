@@ -17,12 +17,6 @@ import java.beans.PropertyChangeListener;
 import java.text.MessageFormat;
 import java.util.List;
 
-import net.sf.jasperreports.engine.base.JRBaseFont;
-import net.sf.jasperreports.engine.base.JRBaseStyle;
-import net.sf.jasperreports.engine.design.JRDesignStyle;
-import net.sf.jasperreports.engine.type.HorizontalTextAlignEnum;
-import net.sf.jasperreports.engine.type.VerticalTextAlignEnum;
-
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.swt.SWT;
@@ -33,11 +27,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.layout.RowData;
-import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Combo;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.views.properties.IPropertySource;
@@ -51,6 +41,12 @@ import com.jaspersoft.studio.model.text.MTextElement;
 import com.jaspersoft.studio.property.SetValueCommand;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ModelUtils;
+
+import net.sf.jasperreports.engine.base.JRBaseFont;
+import net.sf.jasperreports.engine.base.JRBaseStyle;
+import net.sf.jasperreports.engine.design.JRDesignStyle;
+import net.sf.jasperreports.engine.type.HorizontalTextAlignEnum;
+import net.sf.jasperreports.engine.type.VerticalTextAlignEnum;
 
 /**
  * Controls to change the textual attributes of the selected elements
@@ -66,11 +62,6 @@ public class TextualContributionItem extends CommonToolbarHandler {
 	private APropertyNode showedNode = null;
 
 	/**
-	 * Main container of the controls
-	 */
-	private Composite controlsArea;
-	
-	/**
 	 * Combo with the font names
 	 */
 	private Combo fontName;
@@ -80,7 +71,7 @@ public class TextualContributionItem extends CommonToolbarHandler {
 	/**
 	 * Combo with the font sizes
 	 */
-	private Combo fontSizeCombo;
+	private Combo fontSize;
 	
 	/**
 	 * The combo background default color
@@ -135,7 +126,7 @@ public class TextualContributionItem extends CommonToolbarHandler {
 		
 		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
-			if (fontSizeCombo == null || fontSizeCombo.isDisposed() || fontName.isDisposed())
+			if (fontSize == null || fontSize.isDisposed() || fontName.isDisposed())
 				return;
 
 			refreshing = true;
@@ -225,7 +216,7 @@ public class TextualContributionItem extends CommonToolbarHandler {
 				if (selection.isEmpty())
 					return;
 				JSSCompoundCommand cc = new JSSCompoundCommand(null);
-				String text = fontSizeCombo.getText().trim();
+				String text = fontSize.getText().trim();
 				//If the string ends with the separator probably the user must still insert char, so don't set it 
 				if (!(text.endsWith(",") || text.endsWith("."))){
 					try{
@@ -238,10 +229,10 @@ public class TextualContributionItem extends CommonToolbarHandler {
 							}
 						}
 						getCommandStack().execute(cc);
-						fontSizeCombo.setBackground(comboBackgroundDefault);
+						fontSize.setBackground(comboBackgroundDefault);
 					} catch(NumberFormatException ex){
 						//If the value is not a valid number the the background of the textarea became red
-						fontSizeCombo.setBackground(ResourceManager.getColor(255, 0, 0));
+						fontSize.setBackground(ResourceManager.getColor(255, 0, 0));
 					}
 				}
 			}
@@ -303,100 +294,101 @@ public class TextualContributionItem extends CommonToolbarHandler {
 			}
 		}
 	};
-	
 
-	protected Control createControl(Composite parent) {
-		super.createControl(parent);
-		controlsArea = new Composite(parent, SWT.NONE);
-		RowLayout layout = new RowLayout();
-		layout.marginBottom = 0;
-		layout.marginTop = 0;
-		layout.marginLeft = 0;
-		layout.marginRight = 0;
-		controlsArea.setLayout(layout);
-		
+	@Override
+	protected boolean fillWithToolItems(ToolBar parent) {
 		fontList = null;
-		fontName = new Combo(controlsArea, SWT.DROP_DOWN);
+		ToolItem tiFontName = new ToolItem(parent,SWT.SEPARATOR);
+		fontName = new Combo(parent, SWT.DROP_DOWN);
 		fontName.setData(JRDesignStyle.PROPERTY_FONT_NAME);
 		fontName.addSelectionListener(fontNameComboSelect);
 		setAvailableFonts();
+		fontName.pack();
+		tiFontName.setWidth(fontName.getSize().x);
+		tiFontName.setControl(fontName);
+		getToolItems().add(tiFontName);
 		
-		fontSizeCombo = new Combo(controlsArea, SWT.DROP_DOWN);
-		fontSizeCombo.setData(JRDesignStyle.PROPERTY_FONT_SIZE);
-		fontSizeCombo.setItems(ModelUtils.FONT_SIZES);
-		fontSizeCombo.addModifyListener(fontSizeComboModify);
-
-		RowData data = new RowData();
-		data.width = 50;
-		fontSizeCombo.setLayoutData(data);
-		comboBackgroundDefault = fontSizeCombo.getBackground();
+		ToolItem tiFontSizeCombo = new ToolItem(parent,SWT.SEPARATOR);
+		fontSize = new Combo(parent, SWT.DROP_DOWN);
+		fontSize.setData(JRDesignStyle.PROPERTY_FONT_SIZE);
+		fontSize.setItems(ModelUtils.FONT_SIZES);
+		fontSize.addModifyListener(fontSizeComboModify);
+		comboBackgroundDefault = fontSize.getBackground();
+		fontSize.pack();
+		tiFontSizeCombo.setWidth(fontSize.getSize().x);
+		tiFontSizeCombo.setControl(fontSize);
+		getToolItems().add(tiFontSizeCombo);
 		
-		ToolBar sizeButtons = new ToolBar(controlsArea, SWT.FLAT | SWT.WRAP);
-		incrementButton = createFontSizeButton(true, sizeButtons);
-		createFontSizeButton(false, sizeButtons);
+		incrementButton = createFontSizeButton(true, parent);
+		ToolItem decrementButton = createFontSizeButton(false, parent);
+		getToolItems().add(incrementButton);
+		getToolItems().add(decrementButton);
 		
 		//Italic and bold button
-
-		ToolBar buttons = new ToolBar(controlsArea, SWT.FLAT | SWT.WRAP);
-		
-		bold = new ToolItem(buttons, SWT.CHECK);
+		bold = new ToolItem(parent, SWT.CHECK);
 		bold.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/font-bold.gif"));		
 		bold.setToolTipText("Bold");
 		bold.setData(JRDesignStyle.PROPERTY_BOLD);
 		bold.addSelectionListener(booleanButtonSelected);
 		bold.setWidth(25);
+		getToolItems().add(bold);
 		
-		italic = new ToolItem(buttons, SWT.CHECK);
+		italic = new ToolItem(parent, SWT.CHECK);
 		italic.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/font-italic.gif"));		
 		italic.setToolTipText("Italic");
 		italic.setData(JRDesignStyle.PROPERTY_ITALIC);
 		italic.addSelectionListener(booleanButtonSelected);
 		italic.setWidth(25);
+		getToolItems().add(italic);
 		
 		//Buttons to set the text alignment
+		ToolItem alignLeftButton = new ToolItem(parent, SWT.PUSH);
+		alignLeftButton.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/left_align.gif"));
+		alignLeftButton.setData(HorizontalTextAlignEnum.LEFT);
+		alignLeftButton.addSelectionListener(pushButtonPressed);
+		getToolItems().add(alignLeftButton);
 		
-		buttons = new ToolBar(controlsArea, SWT.FLAT | SWT.WRAP);
+		ToolItem alignCenterButton = new ToolItem(parent, SWT.PUSH);
+		alignCenterButton.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/center_align.gif"));
+		alignCenterButton.setData(HorizontalTextAlignEnum.CENTER);
+		alignCenterButton.addSelectionListener(pushButtonPressed);
+		getToolItems().add(alignCenterButton);
 		
-		ToolItem alignButton = new ToolItem(buttons, SWT.PUSH);
-		alignButton.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/left_align.gif"));
-		alignButton.setData(HorizontalTextAlignEnum.LEFT);
-		alignButton.addSelectionListener(pushButtonPressed);
+		ToolItem alignRightButton = new ToolItem(parent, SWT.PUSH);
+		alignRightButton.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/right_align.gif"));
+		alignRightButton.setData(HorizontalTextAlignEnum.RIGHT);
+		alignRightButton.addSelectionListener(pushButtonPressed);
+		getToolItems().add(alignRightButton);
 		
-		alignButton = new ToolItem(buttons, SWT.PUSH);
-		alignButton.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/center_align.gif"));
-		alignButton.setData(HorizontalTextAlignEnum.CENTER);
-		alignButton.addSelectionListener(pushButtonPressed);
+		ToolItem alignJustifiedButton = new ToolItem(parent, SWT.PUSH);
+		alignJustifiedButton.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/justified_align.gif"));
+		alignJustifiedButton.setData(HorizontalTextAlignEnum.JUSTIFIED);
+		alignJustifiedButton.addSelectionListener(pushButtonPressed);
+		getToolItems().add(alignJustifiedButton);
 		
-		alignButton = new ToolItem(buttons, SWT.PUSH);
-		alignButton.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/right_align.gif"));
-		alignButton.setData(HorizontalTextAlignEnum.RIGHT);
-		alignButton.addSelectionListener(pushButtonPressed);
+		new ToolItem(parent, SWT.SEPARATOR);
 		
-		alignButton = new ToolItem(buttons, SWT.PUSH);
-		alignButton.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/justified_align.gif"));
-		alignButton.setData(HorizontalTextAlignEnum.JUSTIFIED);
-		alignButton.addSelectionListener(pushButtonPressed);
+		ToolItem alignTopButton = new ToolItem(parent, SWT.PUSH);
+		alignTopButton.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/formatting/edit-vertical-alignment-top.png"));
+		alignTopButton.setData(VerticalTextAlignEnum.TOP);
+		alignTopButton.addSelectionListener(pushButtonPressed);
+		getToolItems().add(alignTopButton);
 		
-		new ToolItem(buttons, SWT.SEPARATOR);
+		ToolItem alignMiddleButton = new ToolItem(parent, SWT.PUSH);
+		alignMiddleButton.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/formatting/edit-vertical-alignment-middle.png"));
+		alignMiddleButton.setData(VerticalTextAlignEnum.MIDDLE);
+		alignMiddleButton.addSelectionListener(pushButtonPressed);
+		getToolItems().add(alignMiddleButton);
 		
-		alignButton = new ToolItem(buttons, SWT.PUSH);
-		alignButton.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/formatting/edit-vertical-alignment-top.png"));
-		alignButton.setData(VerticalTextAlignEnum.TOP);
-		alignButton.addSelectionListener(pushButtonPressed);
-		
-		alignButton = new ToolItem(buttons, SWT.PUSH);
-		alignButton.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/formatting/edit-vertical-alignment-middle.png"));
-		alignButton.setData(VerticalTextAlignEnum.MIDDLE);
-		alignButton.addSelectionListener(pushButtonPressed);
-		
-		alignButton = new ToolItem(buttons, SWT.PUSH);
-		alignButton.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/formatting/edit-vertical-alignment.png"));
-		alignButton.setData(VerticalTextAlignEnum.BOTTOM);
-		alignButton.addSelectionListener(pushButtonPressed);
+		ToolItem alignBottomButton = new ToolItem(parent, SWT.PUSH);
+		alignBottomButton.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/formatting/edit-vertical-alignment.png"));
+		alignBottomButton.setData(VerticalTextAlignEnum.BOTTOM);
+		alignBottomButton.addSelectionListener(pushButtonPressed);
+		getToolItems().add(alignBottomButton);
 		
 		setAllControlsData();
-
-		return controlsArea;
+		
+		return true;
 	}
 
 	
@@ -513,10 +505,10 @@ public class TextualContributionItem extends CommonToolbarHandler {
 	 * When the combo text is set the unnecessary decimal zeros are removed
 	 */
 	protected void setFontSizeComboText(Object value) {
-		if (value == null || fontSizeCombo == null || fontSizeCombo.isDisposed())
+		if (value == null || fontSize == null || fontSize.isDisposed())
 			return;
 		String str = removeUnnecessaryZeros((String) value);
-		String[] items = fontSizeCombo.getItems();
+		String[] items = fontSize.getItems();
 		int selection = -1;
 		for (int i = 0; i < items.length; i++) {
 			if (Misc.compare(items[i], str, false)) {
@@ -524,12 +516,12 @@ public class TextualContributionItem extends CommonToolbarHandler {
 				break;
 			}
 		}
-		if (selection != -1) fontSizeCombo.select(selection);
-		else fontSizeCombo.setText(Misc.nvl(str, new Integer(10)).toString());
-		int stringLength = fontSizeCombo.getText().length();
+		if (selection != -1) fontSize.select(selection);
+		else fontSize.setText(Misc.nvl(str, new Integer(10)).toString());
+		int stringLength = fontSize.getText().length();
 
-		fontSizeCombo.setSelection(new Point(stringLength, stringLength));
-		fontSizeCombo.getParent().layout(true);
+		fontSize.setSelection(new Point(stringLength, stringLength));
+		fontSize.getParent().layout(true);
 	}
 	
 	/**
@@ -565,7 +557,7 @@ public class TextualContributionItem extends CommonToolbarHandler {
 	 * selected element
 	 */
 	protected void setAllControlsData(){
-		if (fontSizeCombo == null || fontSizeCombo.isDisposed() || fontName.isDisposed()) return;
+		if (fontSize == null || fontSize.isDisposed() || fontName.isDisposed()) return;
 		refreshing = true;
 		List<Object> selection = getSelectionForType(MTextElement.class);
 		if (selection.size() == 1){
@@ -599,15 +591,11 @@ public class TextualContributionItem extends CommonToolbarHandler {
 			showedNode.getPropertyChangeSupport().removePropertyChangeListener(nodeChangeListener);
 			showedNode = null;
 		}
-		if (controlsArea != null) {
-			controlsArea.dispose();
-			controlsArea = null;
-		}
 		if (comboBackgroundDefault != null){
 			comboBackgroundDefault.dispose();
 			comboBackgroundDefault = null;
 		}
-		fontSizeCombo = null;
+		fontSize = null;
 		bold = null;
 		italic = null;
 		factor = 10;

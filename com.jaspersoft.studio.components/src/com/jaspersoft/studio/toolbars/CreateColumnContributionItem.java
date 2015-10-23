@@ -15,8 +15,6 @@ package com.jaspersoft.studio.toolbars;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.wb.swt.ResourceManager;
@@ -54,8 +52,7 @@ public abstract class CreateColumnContributionItem extends CommonToolbarHandler 
 	 * Selection listener that create the right command when a button is pushed
 	 */
 	protected SelectionAdapter pushButtonPressed = new SelectionAdapter() {
-		
-	
+		@Override
 		public void widgetSelected(SelectionEvent e) {
 			createColumnAction.setWorkbenchPart(getWorkbenchPart());
 			createColumnAction.execute(getLastRawSelection());
@@ -84,16 +81,14 @@ public abstract class CreateColumnContributionItem extends CommonToolbarHandler 
 	}
 	
 	@Override
-	protected Control createControl(Composite parent) {
-		
-		ToolBar buttons = new ToolBar(parent, SWT.FLAT | SWT.WRAP);
-		
-		button = new ToolItem(buttons, SWT.PUSH);
+	protected boolean fillWithToolItems(ToolBar parent) {
+		button = new ToolItem(parent, SWT.PUSH);
 		button.setImage(ResourceManager.getImage(createColumnAction.getImageDescriptor()));
 		button.setToolTipText(createColumnAction.getToolTipText());
 		button.addSelectionListener(pushButtonPressed);
-		
+		getToolItems().add(button);
 		setEnablement();
-		return buttons;
+		return true;
 	}
+	
 }

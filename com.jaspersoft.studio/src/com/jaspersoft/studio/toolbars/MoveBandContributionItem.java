@@ -17,8 +17,6 @@ import java.util.List;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.wb.swt.ResourceManager;
@@ -90,36 +88,38 @@ public class MoveBandContributionItem extends CommonToolbarHandler{
 	};
 	
 	@Override
-	protected Control createControl(Composite parent) {
-		super.createControl(parent);
-		ToolBar buttons = new ToolBar(parent, SWT.FLAT | SWT.WRAP);
-		
-		moveBandDown = new ToolItem(buttons, SWT.PUSH);
+	protected boolean fillWithToolItems(ToolBar parent) {
+		moveBandDown = new ToolItem(parent, SWT.PUSH);
 		moveBandDown.setImage(ResourceManager.getImage(moveBandDownAction.getImageDescriptor()));
 		moveBandDown.setToolTipText(moveBandDownAction.getToolTipText());
 		moveBandDown.setData(moveBandDownAction);
 		moveBandDown.addSelectionListener(pushButtonPressed);
+		getToolItems().add(moveBandDown);
 		
-		moveBandUp = new ToolItem(buttons, SWT.PUSH);
+		moveBandUp = new ToolItem(parent, SWT.PUSH);
 		moveBandUp.setImage(ResourceManager.getImage(moveBandUpAction.getImageDescriptor()));
 		moveBandUp.setToolTipText(moveBandUpAction.getToolTipText());
 		moveBandUp.setData(moveBandUpAction);
 		moveBandUp.addSelectionListener(pushButtonPressed);
+		getToolItems().add(moveBandUp);
 		
-		moveGroupDown = new ToolItem(buttons, SWT.PUSH);
+		moveGroupDown = new ToolItem(parent, SWT.PUSH);
 		moveGroupDown.setImage(ResourceManager.getImage(moveGroupDownAction.getImageDescriptor()));
 		moveGroupDown.setToolTipText(moveGroupDownAction.getToolTipText());
 		moveGroupDown.setData(moveGroupDownAction);
 		moveGroupDown.addSelectionListener(pushButtonPressed);
+		getToolItems().add(moveGroupDown);
 		
-		moveGroupUp = new ToolItem(buttons, SWT.PUSH);
+		moveGroupUp = new ToolItem(parent, SWT.PUSH);
 		moveGroupUp.setImage(ResourceManager.getImage(moveGroupUpAction.getImageDescriptor()));
 		moveGroupUp.setToolTipText(moveGroupUpAction.getToolTipText());
 		moveGroupUp.setData(moveGroupUpAction);
 		moveGroupUp.addSelectionListener(pushButtonPressed);
+		getToolItems().add(moveGroupUp);
 		
 		setEnablement();
-		return buttons;
+		
+		return true;
 	}
 	
 	private void setEnablement(){

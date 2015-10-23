@@ -16,8 +16,6 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.wb.swt.ResourceManager;
@@ -76,17 +74,14 @@ public class CreateRowGroupContributionItem extends CommonToolbarHandler{
 	}
 	
 	@Override
-	protected Control createControl(Composite parent) {
-		
-		ToolBar buttons = new ToolBar(parent, SWT.FLAT | SWT.WRAP);
-		
-		button = new ToolItem(buttons, SWT.PUSH);
+	protected boolean fillWithToolItems(ToolBar parent) {
+		button = new ToolItem(parent, SWT.PUSH);
 		button.setImage(ResourceManager.getImage(createColumnAction.getImageDescriptor()));
 		button.setToolTipText(createColumnAction.getToolTipText());
 		button.addSelectionListener(pushButtonPressed);
-		
+		getToolItems().add(button);
 		setEnablement();
-		return buttons;
+		return true;
 	}
 
 	@Override
@@ -99,12 +94,4 @@ public class CreateRowGroupContributionItem extends CommonToolbarHandler{
 		return false;
 	}
 	
-	@Override
-	public void dispose() {
-		super.dispose();
-		if (button != null){
-			button.dispose(); 
-			button = null;
-		}
-	}
 }

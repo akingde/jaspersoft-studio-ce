@@ -18,8 +18,6 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
@@ -36,11 +34,8 @@ import com.jaspersoft.studio.callout.action.CreatePinAction;
 public class CreationContributionItem extends CommonToolbarHandler {
 
 	@Override
-	protected Control createControl(Composite parent) {
-		super.createControl(parent);
-		ToolBar buttons = new ToolBar(parent, SWT.FLAT | SWT.WRAP);
-		
-		ToolItem createPin = new ToolItem(buttons, SWT.PUSH);
+	protected boolean fillWithToolItems(ToolBar parent) {
+		ToolItem createPin = new ToolItem(parent, SWT.PUSH);
 		createPin.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/pin-16.png"));
 		createPin.addSelectionListener(new SelectionAdapter() {
 		
@@ -55,8 +50,8 @@ public class CreationContributionItem extends CommonToolbarHandler {
 				}
 			}
 		});
-		
-		return buttons;
+		getToolItems().add(createPin);
+		return true;
 	}
 	
 	@Override

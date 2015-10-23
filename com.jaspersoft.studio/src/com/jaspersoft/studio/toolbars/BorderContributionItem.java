@@ -17,22 +17,15 @@ import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.jasperreports.engine.JRPen;
-import net.sf.jasperreports.engine.base.JRBasePen;
-import net.sf.jasperreports.engine.type.LineStyleEnum;
-
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.nebula.widgets.tablecombo.TableCombo;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.swt.widgets.ToolBar;
+import org.eclipse.swt.widgets.ToolItem;
 
 import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.editor.action.border.TemplateBorder;
@@ -44,6 +37,10 @@ import com.jaspersoft.studio.model.MLinePen;
 import com.jaspersoft.studio.property.SetValueCommand;
 import com.jaspersoft.studio.utils.AlfaRGB;
 
+import net.sf.jasperreports.engine.JRPen;
+import net.sf.jasperreports.engine.base.JRBasePen;
+import net.sf.jasperreports.engine.type.LineStyleEnum;
+
 /**
  * Component that represent a combo with inside the preview of some border presets. This component should 
  * be placed in the toolbar when an element that can have borders is selected
@@ -52,10 +49,6 @@ import com.jaspersoft.studio.utils.AlfaRGB;
  *
  */
 public class BorderContributionItem extends CommonToolbarHandler {
-		/**
-		 * The composite that will displayed in the toolbar, it contains a label and the combo
-		 */
-		private Composite control;
 		
 		/**
 		 * The combo with the border presets inside
@@ -215,22 +208,17 @@ public class BorderContributionItem extends CommonToolbarHandler {
 			  setCorrectValue();
 		}
 
-
-		/**
-		 * Crate the  control 
-		 * @param parent
-		 * @return a composite with a label and the combo preview inside
-		 */
-		protected Control createControl(Composite parent) {
-			super.createControl(parent);
-			control = new Composite(parent, SWT.None);
-			GridLayout layout = new GridLayout(2,false);
-			layout.marginHeight = 0;
-			layout.verticalSpacing = 0;
-			control.setLayout(layout);
-			Label label = new Label(control, SWT.None);
-			label.setText(Messages.ATableComboContribution_presets_label);
-			combo = new TableCombo(control, SWT.BORDER | SWT.READ_ONLY);
+		@Override
+		protected boolean fillWithToolItems(ToolBar parent) {
+			// FIXME - Temporary solution when solving Bugzilla #44189
+			// It appears that in Windows with Eclipse Mars it's not correctly
+			// Creating a possible ToolItem separator containing a composite/label.
+			ToolItem tiBorderLbl = new ToolItem(parent,SWT.PUSH);
+			tiBorderLbl.setText(Messages.ATableComboContribution_presets_label);
+			getToolItems().add(tiBorderLbl);
+			
+			ToolItem tiBorderCombo = new ToolItem(parent,SWT.SEPARATOR);
+			combo = new TableCombo(parent, SWT.BORDER | SWT.READ_ONLY);
 			combo.setEditable(false);
 			combo.addSelectionListener(new SelectionAdapter() {
 					@Override
@@ -238,17 +226,14 @@ public class BorderContributionItem extends CommonToolbarHandler {
 						changeProperty();
 					}
 			});
-			
-			GridData comboData = new GridData();
-			comboData.grabExcessVerticalSpace = true;
-			comboData.grabExcessHorizontalSpace = true;
-			comboData.widthHint = 130;
-			comboData.minimumWidth = 130;
-			comboData.minimumHeight = 20;
-			combo.setLayoutData(comboData);
 			loadImages();
 			setAllControlsData();
-			return control;
+			combo.pack();
+			tiBorderCombo.setWidth(130);
+			tiBorderCombo.setControl(combo);
+			getToolItems().add(tiBorderCombo);
+			
+			return true;
 		}
 		
 		/**
@@ -291,14 +276,6 @@ public class BorderContributionItem extends CommonToolbarHandler {
 		@Override
 		public void dispose() {
 			super.dispose();
-			if (combo != null){
-				combo.dispose();
-				combo = null;
-			}
-			if (control != null){
-				control.dispose();
-				control = null;
-			}
 			if (showedNode != null) {
 				showedNode.getPropertyChangeSupport().removePropertyChangeListener(modelListener);
 				showedNode = null;

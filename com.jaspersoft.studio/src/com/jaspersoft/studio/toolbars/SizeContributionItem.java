@@ -18,8 +18,6 @@ import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
@@ -60,29 +58,29 @@ public class SizeContributionItem extends CommonToolbarHandler{
 	};
 	
 	@Override
-	protected Control createControl(Composite parent) {
-		super.createControl(parent);
-		ToolBar buttons = new ToolBar(parent, SWT.FLAT | SWT.WRAP);
+	protected boolean fillWithToolItems(ToolBar parent) {
+		ToolItem sizeButtonWidth = new ToolItem(parent, SWT.PUSH);
+		sizeButtonWidth.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/eclipseapps/size_to_control_width.gif"));
+		sizeButtonWidth.setData(Size2BorderAction.WIDTH);
+		sizeButtonWidth.setToolTipText(Messages.Size2BorderAction_fit_width_tool_tip);
+		sizeButtonWidth.addSelectionListener(pushButtonPressed);
+		getToolItems().add(sizeButtonWidth);
 		
-		ToolItem sizeButton = new ToolItem(buttons, SWT.PUSH);
-		sizeButton.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/eclipseapps/size_to_control_width.gif"));
-		sizeButton.setData(Size2BorderAction.WIDTH);
-		sizeButton.setToolTipText(Messages.Size2BorderAction_fit_width_tool_tip);
-		sizeButton.addSelectionListener(pushButtonPressed);
+		ToolItem sizeButtonHeight = new ToolItem(parent, SWT.PUSH);
+		sizeButtonHeight.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/eclipseapps/size_to_control_height.gif"));
+		sizeButtonHeight.setData(Size2BorderAction.HEIGHT);
+		sizeButtonHeight.setToolTipText(Messages.Size2BorderAction_fit_height_tool_tip);
+		sizeButtonHeight.addSelectionListener(pushButtonPressed);
+		getToolItems().add(sizeButtonHeight);
 		
-		sizeButton = new ToolItem(buttons, SWT.PUSH);
-		sizeButton.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/eclipseapps/size_to_control_height.gif"));
-		sizeButton.setData(Size2BorderAction.HEIGHT);
-		sizeButton.setToolTipText(Messages.Size2BorderAction_fit_height_tool_tip);
-		sizeButton.addSelectionListener(pushButtonPressed);
+		ToolItem sizeButtonBoth = new ToolItem(parent, SWT.PUSH);
+		sizeButtonBoth.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/eclipseapps/size_to_control.gif"));
+		sizeButtonBoth.setData(Size2BorderAction.BOTH);
+		sizeButtonBoth.setToolTipText(Messages.Size2BorderAction_fit_both_tool_tip);
+		sizeButtonBoth.addSelectionListener(pushButtonPressed);
+		getToolItems().add(sizeButtonBoth);
 		
-		sizeButton = new ToolItem(buttons, SWT.PUSH);
-		sizeButton.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/eclipseapps/size_to_control.gif"));
-		sizeButton.setData(Size2BorderAction.BOTH);
-		sizeButton.setToolTipText(Messages.Size2BorderAction_fit_both_tool_tip);
-		sizeButton.addSelectionListener(pushButtonPressed);
-		
-		return buttons;
+		return true;
 	}
 	
 	@Override
