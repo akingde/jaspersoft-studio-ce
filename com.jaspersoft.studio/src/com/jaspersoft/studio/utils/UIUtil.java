@@ -50,6 +50,8 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.wb.swt.ResourceManager;
 import org.eclipse.wb.swt.SWTResourceManager;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.Version;
 
 import com.jaspersoft.studio.swt.events.ExpressionModifiedEvent;
 import com.jaspersoft.studio.swt.events.ExpressionModifiedListener;
@@ -422,8 +424,53 @@ public class UIUtil {
 	 * @return <code>true</code> if is Mac and we are in E4, <code>false</code> otherwise
 	 */
 	public static boolean isMacAndEclipse4() {
-		return Util.isMac() && Platform.getBundle("org.eclipse.e4.ui.workbench")!=null; //$NON-NLS-1$
+		return Util.isMac() && isEclipse4();
 	}
 
-
+	/**
+	 * Checks if we are running into an Eclipse 4 based environment.
+	 * 
+	 * @return <code>true</code> if we are in E4, <code>false</code> otherwise
+	 */
+	public static boolean isEclipse4() {
+		return Platform.getBundle("org.eclipse.e4.ui.workbench")!=null; //$NON-NLS-1$
+	}
+	
+	/**
+	 * Returns the Eclipse version (i.e. 4.5.1) in the format <code>major.minor.micro</code>. 
+	 * 
+	 * @see Version
+	 * @return the Eclipse version number
+	 */
+	public static String getEclipseVersion() {
+		Bundle platformBundle = Platform.getBundle("org.eclipse.platform"); //$NON-NLS-1$
+		Bundle rcpBundle = Platform.getBundle("org.eclipse.rcp"); //$NON-NLS-1$
+		Version version = null;
+		if(platformBundle!=null) {
+			version = platformBundle.getVersion();
+		}
+		if(version==null && rcpBundle!=null){
+			version = rcpBundle.getVersion();
+		}
+		if(version!=null){
+			return version.getMajor() + "." + version.getMinor() + "." + version.getMicro();
+		}
+		else {
+			// FIXME - Maybe it would be better to throw an exception?
+			return "0.0.0"; //$NON-NLS-1$
+		}
+	}
+	
+	/**
+	 * There is the bug in the custom JSS toolbar rendering with Eclipse Mars version.
+	 * This was mostly observed in Windows.
+	 * The method checks if it is the case of applying the trick to handle the toolbar rendering correctly.
+	 * 
+	 * @see Bugzilla #44189
+	 * @return <code>true</code> if the toolbar 
+	 */
+	public static boolean shouldTrickToolbar() {
+		return isEclipse4();
+	}
+	
 }
