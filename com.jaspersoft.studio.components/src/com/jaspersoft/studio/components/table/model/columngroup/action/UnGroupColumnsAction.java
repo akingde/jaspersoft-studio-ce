@@ -22,7 +22,6 @@ import org.eclipse.gef.editparts.AbstractEditPart;
 import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.ui.IWorkbenchPart;
 
-import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.components.Activator;
 import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.components.table.model.AMCollection;
@@ -36,6 +35,7 @@ import com.jaspersoft.studio.components.table.model.column.command.RefreshColumn
 import com.jaspersoft.studio.components.table.model.columngroup.MColumnGroup;
 import com.jaspersoft.studio.components.table.model.columngroup.MColumnGroupCell;
 import com.jaspersoft.studio.components.table.part.TableCellEditPart;
+import com.jaspersoft.studio.components.table.part.editpolicy.JSSCompundTableCommand;
 import com.jaspersoft.studio.editor.outline.part.TreeEditPart;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
@@ -79,7 +79,7 @@ public class UnGroupColumnsAction extends SelectionAction {
 			if (sel instanceof TableCellEditPart || sel instanceof TreeEditPart)
 				sel = ((AbstractEditPart) sel).getModel();
 			if (sel instanceof MColumn) {
-				JSSCompoundCommand c = new JSSCompoundCommand(Messages.UnGroupColumnsAction_title, (ANode)sel); 
+				JSSCompundTableCommand c = new JSSCompundTableCommand(Messages.UnGroupColumnsAction_title, ((MColumn)sel).getMTable()); 
 
 				MColumn fmc = (MColumn) sel;
 				ANode mparent = fmc.getParent();

@@ -68,37 +68,43 @@ import com.jaspersoft.studio.property.descriptor.propexpr.PropertyExpressionsDTO
 import com.jaspersoft.studio.property.descriptors.PixelPropertyDescriptor;
 import com.jaspersoft.studio.utils.Misc;
 
-public class MColumn extends APropertyNode implements IPastable, IContainer,
-		IContainerLayout, IGraphicElement, IContainerEditPart {
+public class MColumn extends APropertyNode implements IPastable, IContainer,IContainerLayout, IGraphicElement, IContainerEditPart {
+	
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
-	/** The icon descriptor. */
+
 	private static IIconDescriptor iconDescriptor;
 
 	public static String PROPERTY_NAME = "NAME";
+	
 	public static String COLUMN_NAME = "com.jaspersoft.studio.components.table.model.column.name";
 
+	private JRDesignGroup jrGroup;
+	
 	/**
-	 * Gets the icon descriptor.
-	 * 
-	 * @return the icon descriptor
+	 * Last valid value for the table containing this node, this reference because it could be 
+	 * need for some undo operations (SetValueCommand) even after this node was detached from the table
 	 */
-	public static IIconDescriptor getIconDescriptor() {
-		if (iconDescriptor == null)
-			iconDescriptor = new TableNodeIconDescriptor("tablecell"); //$NON-NLS-1$
-		return iconDescriptor;
-	}
+	private MTable containerTable;
+	
+	/**
+	 * Last valid value for the section containing this node, this reference because it could be 
+	 * need for some undo operations (SetValueCommand) even after this node was detached from the table
+	 */
+	private AMCollection containerSection;
+	
+	private List<ANode> list;
+
+	private String name;
+	
+	private String grName;
+	
+	private int type = TableUtil.TABLE_HEADER;
 
 	/**
 	 * Instantiates a new m field.
 	 */
 	public MColumn() {
 		super();
-	}
-
-	private JRDesignGroup jrGroup;
-
-	public JRDesignGroup getJrGroup() {
-		return jrGroup;
 	}
 
 	/**
@@ -111,8 +117,7 @@ public class MColumn extends APropertyNode implements IPastable, IContainer,
 	 * @param newIndex
 	 *            the new index
 	 */
-	public MColumn(ANode parent, StandardBaseColumn column, String name,
-			int index) {
+	public MColumn(ANode parent, StandardBaseColumn column, String name,int index) {
 		super(parent, index);
 		setValue(column);
 		this.name = name;
@@ -129,6 +134,30 @@ public class MColumn extends APropertyNode implements IPastable, IContainer,
 				grName = jrGroup.getName();
 			}
 		}
+	}
+	
+	/**
+	 * Store the table and section ancestor of this node. When the parent
+	 * is set to null the old value are maintained to allow the undo operation
+	 * to be executed on this node
+	 */
+	@Override
+	public void setParent(ANode newparent, int newIndex) {
+		super.setParent(newparent, newIndex);
+		ANode node = getParent();
+		while (node != null) {
+			if (node instanceof MTable) {
+				containerTable = (MTable) node;
+				break;
+			} else if (node instanceof AMCollection){
+				containerSection = (AMCollection) node;
+			}
+			node = node.getParent();
+		}
+	}
+	
+	public JRDesignGroup getJrGroup() {
+		return jrGroup;
 	}
 
 	public MColumn getNorth() {
@@ -169,9 +198,6 @@ public class MColumn extends APropertyNode implements IPastable, IContainer,
 		return null;
 	}
 
-	private String grName;
-	private int type = TableUtil.TABLE_HEADER;
-
 	public int getType() {
 		return type;
 	}
@@ -184,8 +210,6 @@ public class MColumn extends APropertyNode implements IPastable, IContainer,
 	public StandardBaseColumn getValue() {
 		return (StandardBaseColumn) super.getValue();
 	}
-
-	private String name;
 
 	@Override
 	public Color getForeground() {
@@ -280,14 +304,6 @@ public class MColumn extends APropertyNode implements IPastable, IContainer,
 				Messages.MColumn_column_width);
 		desc.add(wD);
 
-		// JPropertiesPropertyDescriptor propertiesMapD = new
-		// JPropertiesPropertyDescriptor(
-		// MGraphicElement.PROPERTY_MAP,
-		// com.jaspersoft.studio.messages.Messages.common_properties);
-		// propertiesMapD
-		// .setDescription(com.jaspersoft.studio.messages.Messages.common_properties);
-		// desc.add(propertiesMapD);
-
 		JPropertyExpressionsDescriptor propertiesD = new JPropertyExpressionsDescriptor(
 				JRDesignElement.PROPERTY_PROPERTY_EXPRESSIONS,
 				com.jaspersoft.studio.messages.Messages.MGraphicElement_property_expressions);
@@ -340,65 +356,42 @@ public class MColumn extends APropertyNode implements IPastable, IContainer,
 		return null;
 	}
 
-	private boolean canSet = true;
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java
-	 * .lang.Object, java.lang.Object)
-	 */
 	public void setPropertyValue(Object id, Object value) {
 		StandardBaseColumn jrElement = getValue();
 
 		if (id.equals(StandardBaseColumn.PROPERTY_WIDTH)) {
-			if ((Integer) value >= 0 && canSet) {
-				canSet = false;
-				MTable table = getMTable();
-
-				table.getTableManager().setWidth(jrElement, (Integer) value);
-				table.getTableManager().update();
-				// table.getTableManager().refresh();
-				getPropertyChangeSupport()
-						.firePropertyChange(
-								new PropertyChangeEvent(this,
-										StandardBaseColumn.PROPERTY_WIDTH,
-										null, value));
-
-				canSet = true;
+			if ((Integer) value >= 0) {
+				//don't allow concurrent modification
+				synchronized (getValue()) {
+					containerTable.getTableManager().setWidth(jrElement, (Integer) value);
+					containerTable.getTableManager().update();
+					PropertyChangeEvent event = new PropertyChangeEvent(this, StandardBaseColumn.PROPERTY_WIDTH, null, value);
+					getPropertyChangeSupport().firePropertyChange(event);
+				}
 			}
 		} else if (id.equals(DesignCell.PROPERTY_HEIGHT)) {
-			MTable mtable = getMTable();
 			Integer height = (Integer) value;
-			AMCollection section = getSection();
-			if (section != null && height.intValue() >= 0) {
+			if (containerSection != null && height.intValue() >= 0) {
 
 				@SuppressWarnings("unchecked")
-				Class<AMCollection> classType = (Class<AMCollection>) section
-						.getClass();
+				Class<AMCollection> classType = (Class<AMCollection>) containerSection.getClass();
 				String grName = null;
-				if (section instanceof MTableGroupHeader)
-					grName = ((MTableGroupHeader) section).getJrDesignGroup()
-							.getName();
-				if (section instanceof MTableGroupFooter)
-					grName = ((MTableGroupFooter) section).getJrDesignGroup()
-							.getName();
-
-				mtable.getTableManager().setHeight(null, height, jrElement,
-						TableColumnSize.getType(classType), grName);
-
-				// cell.setHeight(height);
-				mtable.getTableManager().update();
+				if (containerSection instanceof MTableGroupHeader) {
+					grName = ((MTableGroupHeader) containerSection).getJrDesignGroup().getName();
+				} else if (containerSection instanceof MTableGroupFooter){
+					grName = ((MTableGroupFooter) containerSection).getJrDesignGroup().getName();
+				}
+				
+				containerTable.getTableManager().setHeight(null, height, jrElement, TableColumnSize.getType(classType), grName);
+				containerTable.getTableManager().update();
 
 				getPropertyChangeSupport().firePropertyChange(
 						new PropertyChangeEvent(this,
 								DesignCell.PROPERTY_HEIGHT, null, value));
 			}
-		} else if (id.equals(StandardBaseColumn.PROPERTY_PRINT_WHEN_EXPRESSION))
-			jrElement.setPrintWhenExpression(ExprUtil.setValues(
-					jrElement.getPrintWhenExpression(), value, null));
-		else if (id.equals(MGraphicElement.PROPERTY_MAP)) {
+		} else if (id.equals(StandardBaseColumn.PROPERTY_PRINT_WHEN_EXPRESSION)){
+			jrElement.setPrintWhenExpression(ExprUtil.setValues(jrElement.getPrintWhenExpression(), value, null));
+		} else if (id.equals(MGraphicElement.PROPERTY_MAP)) {
 			JRPropertiesMap v = (JRPropertiesMap) value;
 			String[] names = jrElement.getPropertiesMap().getPropertyNames();
 			for (int i = 0; i < names.length; i++) {
@@ -452,19 +445,6 @@ public class MColumn extends APropertyNode implements IPastable, IContainer,
 		return null;
 	}
 
-	public MTable getMTable() {
-		ANode node = getParent();
-		while (node != null) {
-			if (node instanceof MTable) {
-				return (MTable) node;
-			}
-			node = node.getParent();
-		}
-		return null;
-	}
-
-	private List<ANode> list;
-
 	public List<ANode> getAMCollection() {
 		if (list == null) {
 			list = new ArrayList<ANode>();
@@ -513,13 +493,11 @@ public class MColumn extends APropertyNode implements IPastable, IContainer,
 	}
 
 	public AMCollection getSection() {
-		INode n = getParent();
-		while (n != null) {
-			if (n instanceof AMCollection)
-				return (AMCollection) n;
-			n = n.getParent();
-		}
-		return null;
+		return containerSection;
+	}
+	
+	public MTable getMTable() {
+		return containerTable;
 	}
 
 	public Rectangle getBounds() {
@@ -566,5 +544,16 @@ public class MColumn extends APropertyNode implements IPastable, IContainer,
 	@Override
 	public ILayout getDefaultLayout() {
 		return LayoutManager.getLayout(VerticalRowLayout.class.getName());
+	}
+	
+	/**
+	 * Gets the icon descriptor.
+	 * 
+	 * @return the icon descriptor
+	 */
+	public static IIconDescriptor getIconDescriptor() {
+		if (iconDescriptor == null)
+			iconDescriptor = new TableNodeIconDescriptor("tablecell"); //$NON-NLS-1$
+		return iconDescriptor;
 	}
 }

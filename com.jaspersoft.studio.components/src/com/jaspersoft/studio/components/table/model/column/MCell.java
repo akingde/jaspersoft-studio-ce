@@ -305,18 +305,6 @@ public class MCell extends MColumn implements IGraphicElement,
 	}
 
 	@Override
-	public MTable getMTable() {
-		INode node = getParent();
-		while (node != null) {
-			if (node instanceof MTable) {
-				return (MTable) node;
-			}
-			node = node.getParent();
-		}
-		return null;
-	}
-
-	@Override
 	public Color getForeground() {
 		return ColorConstants.black;
 	}

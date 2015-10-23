@@ -56,8 +56,7 @@ public class MColumnGroup extends MColumn {
 	/** The descriptors. */
 	protected static IPropertyDescriptor[] descriptors;
 
-	public MColumnGroup(ANode parent, StandardColumnGroup jrDataset,
-			String name, int index) {
+	public MColumnGroup(ANode parent, StandardColumnGroup jrDataset,String name, int index) {
 		super(parent, jrDataset, name, index);
 	}
 

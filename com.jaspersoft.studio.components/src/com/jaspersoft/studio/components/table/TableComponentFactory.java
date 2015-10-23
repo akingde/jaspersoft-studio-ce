@@ -403,16 +403,16 @@ public class TableComponentFactory implements IComponentFactory {
 		return new MColumn(parent, (StandardBaseColumn) bc, name, index);
 	}
 
-	public static MColumn getColumnGroup(ANode mth, StandardColumnGroup scg,
-			DesignCell cell, int i, int index) {
+	public static MColumn getColumnGroup(ANode mth, StandardColumnGroup scg, DesignCell cell, int i, int index) {
 		String name = Messages.common_columns
 				+ " " + i + "-" + (i + scg.getColumns().size() - 1); //$NON-NLS-1$ //$NON-NLS-2$
 		MColumn mcg = null;
 		if (cell != null) {
 			mcg = new MColumnGroupCell(mth, scg, cell, name, index);
 			ReportFactory.createElementsForBand(mcg, cell.getChildren());
-		} else
+		} else {
 			mcg = new MColumnGroup(mth, scg, name, index);
+		}
 		return mcg;
 	}
 
