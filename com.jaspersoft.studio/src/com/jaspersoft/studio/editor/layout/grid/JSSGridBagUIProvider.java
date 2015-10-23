@@ -571,7 +571,7 @@ public class JSSGridBagUIProvider implements ILayoutUIProvider{
 		
 		Label rowPositionLabel = new Label(container, SWT.NONE);
 		rowPositionLabel.setText(Messages.JSSGridBagLayout_rowLabel);
-		String rowTooltip = MessageFormat.format(Messages.JSSGridBagUIProvider_rowPositionTooltip, new Object[]{MAX_ROW_NUMBER});
+		String rowTooltip = MessageFormat.format(Messages.JSSGridBagUIProvider_rowPositionTooltip, new Object[]{String.valueOf(MAX_ROW_NUMBER)});
 		rowPositionLabel.setToolTipText(rowTooltip);
 		rowPosition= new Combo(container, SWT.BORDER);
 		rowPosition.setItems(rowHint.toArray(new String[rowHint.size()]));
@@ -584,7 +584,7 @@ public class JSSGridBagUIProvider implements ILayoutUIProvider{
 		
 		Label columnPositionLabel = new Label(container, SWT.NONE);
 		columnPositionLabel.setText(Messages.JSSGridBagLayout_columnLabel);
-		String columnTooltip = MessageFormat.format(Messages.JSSGridBagUIProvider_columnPositionToolTip, new Object[]{MAX_COL_NUMBER});
+		String columnTooltip = MessageFormat.format(Messages.JSSGridBagUIProvider_columnPositionToolTip, new Object[]{String.valueOf(MAX_COL_NUMBER)});
 		columnPositionLabel.setToolTipText(columnTooltip);
 		columnPosition = new Combo(container, SWT.BORDER);
 		columnPosition.setItems(colHint.toArray(new String[colHint.size()]));

@@ -997,5 +997,11 @@
       <decorator
             ClassFactory="com.jaspersoft.studio.components.table.decorator.PDF508TableElementDecorator">
       </decorator>
+      <decorator
+            ClassFactory="com.jaspersoft.studio.components.list.decorator.PDF508ListElementDecorator">
+      </decorator>
+      <decorator
+            ClassFactory="com.jaspersoft.studio.components.list.decorator.PDF508ListItemElementDecorator">
+      </decorator>
    </extension>
 </plugin>

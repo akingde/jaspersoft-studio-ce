@@ -38,8 +38,13 @@ public class DecoratorManager {
 		for (IConfigurationElement e : config) {
 			try {
 				Object o = e.createExecutableExtension("ClassFactory"); //$NON-NLS-1$
-				if (o instanceof IElementDecorator)
-					nodeFactory.add((IElementDecorator) o);
+				if (o instanceof IElementDecorator){
+					if (JaspersoftStudioPlugin.PLUGIN_ID.equalsIgnoreCase(e.getContributor().getName())){
+						nodeFactory.add(0, (IElementDecorator)o);
+					} else {
+						nodeFactory.add((IElementDecorator) o);
+					}
+				}
 			} catch (CoreException ex) {
 				System.out.println(ex.getMessage());
 			}
