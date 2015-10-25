@@ -72,7 +72,7 @@ public class MoveBandContributionItem extends CommonToolbarHandler{
 		
 	
 		public void widgetSelected(SelectionEvent e) {
-			SetWorkbenchAction action = (SetWorkbenchAction)e.widget.getData();
+			SetWorkbenchAction action = (SetWorkbenchAction)e.widget.getData(WIDGET_DATA_KEY);
 			action.setWorkbenchPart(getWorkbenchPart());
 			action.isEnabled();
 			if (action == moveBandDownAction || action == moveBandUpAction){
@@ -92,28 +92,28 @@ public class MoveBandContributionItem extends CommonToolbarHandler{
 		moveBandDown = new ToolItem(parent, SWT.PUSH);
 		moveBandDown.setImage(ResourceManager.getImage(moveBandDownAction.getImageDescriptor()));
 		moveBandDown.setToolTipText(moveBandDownAction.getToolTipText());
-		moveBandDown.setData(moveBandDownAction);
+		moveBandDown.setData(WIDGET_DATA_KEY, moveBandDownAction);
 		moveBandDown.addSelectionListener(pushButtonPressed);
 		getToolItems().add(moveBandDown);
 		
 		moveBandUp = new ToolItem(parent, SWT.PUSH);
 		moveBandUp.setImage(ResourceManager.getImage(moveBandUpAction.getImageDescriptor()));
 		moveBandUp.setToolTipText(moveBandUpAction.getToolTipText());
-		moveBandUp.setData(moveBandUpAction);
+		moveBandUp.setData(WIDGET_DATA_KEY, moveBandUpAction);
 		moveBandUp.addSelectionListener(pushButtonPressed);
 		getToolItems().add(moveBandUp);
 		
 		moveGroupDown = new ToolItem(parent, SWT.PUSH);
 		moveGroupDown.setImage(ResourceManager.getImage(moveGroupDownAction.getImageDescriptor()));
 		moveGroupDown.setToolTipText(moveGroupDownAction.getToolTipText());
-		moveGroupDown.setData(moveGroupDownAction);
+		moveGroupDown.setData(WIDGET_DATA_KEY, moveGroupDownAction);
 		moveGroupDown.addSelectionListener(pushButtonPressed);
 		getToolItems().add(moveGroupDown);
 		
 		moveGroupUp = new ToolItem(parent, SWT.PUSH);
 		moveGroupUp.setImage(ResourceManager.getImage(moveGroupUpAction.getImageDescriptor()));
 		moveGroupUp.setToolTipText(moveGroupUpAction.getToolTipText());
-		moveGroupUp.setData(moveGroupUpAction);
+		moveGroupUp.setData(WIDGET_DATA_KEY, moveGroupUpAction);
 		moveGroupUp.addSelectionListener(pushButtonPressed);
 		getToolItems().add(moveGroupUp);
 		

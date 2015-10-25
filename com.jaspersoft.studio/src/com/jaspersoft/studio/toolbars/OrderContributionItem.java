@@ -56,13 +56,13 @@ public class OrderContributionItem extends CommonToolbarHandler{
 				return;
 			
 			JSSCompoundCommand compoundCmd = null;
-			if (ORDER_TYPE.FORWARD.equals(e.widget.getData())){
+			if (ORDER_TYPE.FORWARD.equals(e.widget.getData(WIDGET_DATA_KEY))){
 				compoundCmd = generateBringForwardCommand(selection);
-			} else if (ORDER_TYPE.BACKWARD.equals(e.widget.getData())){
+			} else if (ORDER_TYPE.BACKWARD.equals(e.widget.getData(WIDGET_DATA_KEY))){
 				compoundCmd = generateBringBackwardCommand(selection);
-			} else if (ORDER_TYPE.TOP.equals(e.widget.getData())){
+			} else if (ORDER_TYPE.TOP.equals(e.widget.getData(WIDGET_DATA_KEY))){
 				compoundCmd = generateBringTopCommand(selection);
-			} else if (ORDER_TYPE.BOTTOM.equals(e.widget.getData())){
+			} else if (ORDER_TYPE.BOTTOM.equals(e.widget.getData(WIDGET_DATA_KEY))){
 				compoundCmd = generateBringBottomCommand(selection);
 			}
 			
@@ -77,28 +77,28 @@ public class OrderContributionItem extends CommonToolbarHandler{
 	protected boolean fillWithToolItems(ToolBar parent) {
 		ToolItem moveForward = new ToolItem(parent, SWT.PUSH);
 		moveForward.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/eclipseapps/elcl16/bring_forward.gif"));
-		moveForward.setData(ORDER_TYPE.FORWARD);
+		moveForward.setData(WIDGET_DATA_KEY, ORDER_TYPE.FORWARD);
 		moveForward.setToolTipText(Messages.BringForwardAction_bring_forward_tool_tip);
 		moveForward.addSelectionListener(pushButtonPressed);
 		getToolItems().add(moveForward);
 		
 		ToolItem moveBackward = new ToolItem(parent, SWT.PUSH);
 		moveBackward.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/eclipseapps/elcl16/send_to_back.gif"));
-		moveBackward.setData(ORDER_TYPE.BACKWARD);
+		moveBackward.setData(WIDGET_DATA_KEY, ORDER_TYPE.BACKWARD);
 		moveBackward.setToolTipText(Messages.BringBackwardAction_send_backward_tool_tip);
 		moveBackward.addSelectionListener(pushButtonPressed);
 		getToolItems().add(moveBackward);
 		
 		ToolItem moveTop = new ToolItem(parent, SWT.PUSH);
 		moveTop.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/eclipseapps/elcl16/bring_to_front.gif"));
-		moveTop.setData(ORDER_TYPE.TOP);
+		moveTop.setData(WIDGET_DATA_KEY, ORDER_TYPE.TOP);
 		moveTop.setToolTipText(Messages.BringToFrontAction_bring_to_front_tool_tip);
 		moveTop.addSelectionListener(pushButtonPressed);
 		getToolItems().add(moveTop);
 		
 		ToolItem moveBottom = new ToolItem(parent, SWT.PUSH);
 		moveBottom.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/eclipseapps/elcl16/send_backward.gif"));
-		moveBottom.setData(ORDER_TYPE.BOTTOM);
+		moveBottom.setData(WIDGET_DATA_KEY, ORDER_TYPE.BOTTOM);
 		moveBottom.setToolTipText(Messages.BringToBackAction_send_to_back_tool_tip);
 		moveBottom.addSelectionListener(pushButtonPressed);
 		getToolItems().add(moveBottom);

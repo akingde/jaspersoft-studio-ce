@@ -53,6 +53,9 @@ import net.sf.jasperreports.eclipse.ui.util.UIUtils;
  */
 public abstract class CommonToolbarHandler extends ContributionItem {
 	
+	/** Key for widget data information */
+	public static String WIDGET_DATA_KEY = "OPERATION";
+	
 	/**
 	 * The custom controls are dynamically loaded starting from the class specified in the 
 	 * extension point. This map bind a control id to its class, to load them once

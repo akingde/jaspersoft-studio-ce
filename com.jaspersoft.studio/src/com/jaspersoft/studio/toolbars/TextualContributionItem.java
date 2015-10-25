@@ -250,7 +250,7 @@ public class TextualContributionItem extends CommonToolbarHandler {
 				if (selection.isEmpty())
 					return;
 				Object value =	((ToolItem)e.widget).getSelection();
-				Object property = e.widget.getData();
+				Object property = e.widget.getData(WIDGET_DATA_KEY);
 				JSSCompoundCommand cc = new JSSCompoundCommand(null);
 				for(Object textElement : selection){
 					Command changeValueCmd = createCommand(textElement, value, property);
@@ -278,7 +278,7 @@ public class TextualContributionItem extends CommonToolbarHandler {
 					
 					JSSCompoundCommand changeSizeCommands = new JSSCompoundCommand(null);
 					String property = "";
-					Object data = e.widget.getData();
+					Object data = e.widget.getData(WIDGET_DATA_KEY);
 					if (data instanceof VerticalTextAlignEnum) property = JRBaseStyle.PROPERTY_VERTICAL_TEXT_ALIGNMENT;
 					else if (data instanceof HorizontalTextAlignEnum) property = JRBaseStyle.PROPERTY_HORIZONTAL_TEXT_ALIGNMENT;
 					else return;
@@ -300,7 +300,7 @@ public class TextualContributionItem extends CommonToolbarHandler {
 		fontList = null;
 		ToolItem tiFontName = new ToolItem(parent,SWT.SEPARATOR);
 		fontName = new Combo(parent, SWT.DROP_DOWN);
-		fontName.setData(JRDesignStyle.PROPERTY_FONT_NAME);
+		fontName.setData(WIDGET_DATA_KEY, JRDesignStyle.PROPERTY_FONT_NAME);
 		fontName.addSelectionListener(fontNameComboSelect);
 		setAvailableFonts();
 		fontName.pack();
@@ -310,7 +310,7 @@ public class TextualContributionItem extends CommonToolbarHandler {
 		
 		ToolItem tiFontSizeCombo = new ToolItem(parent,SWT.SEPARATOR);
 		fontSize = new Combo(parent, SWT.DROP_DOWN);
-		fontSize.setData(JRDesignStyle.PROPERTY_FONT_SIZE);
+		fontSize.setData(WIDGET_DATA_KEY, JRDesignStyle.PROPERTY_FONT_SIZE);
 		fontSize.setItems(ModelUtils.FONT_SIZES);
 		fontSize.addModifyListener(fontSizeComboModify);
 		comboBackgroundDefault = fontSize.getBackground();
@@ -328,7 +328,7 @@ public class TextualContributionItem extends CommonToolbarHandler {
 		bold = new ToolItem(parent, SWT.CHECK);
 		bold.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/font-bold.gif"));		
 		bold.setToolTipText("Bold");
-		bold.setData(JRDesignStyle.PROPERTY_BOLD);
+		bold.setData(WIDGET_DATA_KEY, JRDesignStyle.PROPERTY_BOLD);
 		bold.addSelectionListener(booleanButtonSelected);
 		bold.setWidth(25);
 		getToolItems().add(bold);
@@ -336,7 +336,7 @@ public class TextualContributionItem extends CommonToolbarHandler {
 		italic = new ToolItem(parent, SWT.CHECK);
 		italic.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/font-italic.gif"));		
 		italic.setToolTipText("Italic");
-		italic.setData(JRDesignStyle.PROPERTY_ITALIC);
+		italic.setData(WIDGET_DATA_KEY, JRDesignStyle.PROPERTY_ITALIC);
 		italic.addSelectionListener(booleanButtonSelected);
 		italic.setWidth(25);
 		getToolItems().add(italic);
@@ -344,25 +344,25 @@ public class TextualContributionItem extends CommonToolbarHandler {
 		//Buttons to set the text alignment
 		ToolItem alignLeftButton = new ToolItem(parent, SWT.PUSH);
 		alignLeftButton.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/left_align.gif"));
-		alignLeftButton.setData(HorizontalTextAlignEnum.LEFT);
+		alignLeftButton.setData(WIDGET_DATA_KEY, HorizontalTextAlignEnum.LEFT);
 		alignLeftButton.addSelectionListener(pushButtonPressed);
 		getToolItems().add(alignLeftButton);
 		
 		ToolItem alignCenterButton = new ToolItem(parent, SWT.PUSH);
 		alignCenterButton.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/center_align.gif"));
-		alignCenterButton.setData(HorizontalTextAlignEnum.CENTER);
+		alignCenterButton.setData(WIDGET_DATA_KEY, HorizontalTextAlignEnum.CENTER);
 		alignCenterButton.addSelectionListener(pushButtonPressed);
 		getToolItems().add(alignCenterButton);
 		
 		ToolItem alignRightButton = new ToolItem(parent, SWT.PUSH);
 		alignRightButton.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/right_align.gif"));
-		alignRightButton.setData(HorizontalTextAlignEnum.RIGHT);
+		alignRightButton.setData(WIDGET_DATA_KEY, HorizontalTextAlignEnum.RIGHT);
 		alignRightButton.addSelectionListener(pushButtonPressed);
 		getToolItems().add(alignRightButton);
 		
 		ToolItem alignJustifiedButton = new ToolItem(parent, SWT.PUSH);
 		alignJustifiedButton.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/justified_align.gif"));
-		alignJustifiedButton.setData(HorizontalTextAlignEnum.JUSTIFIED);
+		alignJustifiedButton.setData(WIDGET_DATA_KEY, HorizontalTextAlignEnum.JUSTIFIED);
 		alignJustifiedButton.addSelectionListener(pushButtonPressed);
 		getToolItems().add(alignJustifiedButton);
 		
@@ -370,19 +370,19 @@ public class TextualContributionItem extends CommonToolbarHandler {
 		
 		ToolItem alignTopButton = new ToolItem(parent, SWT.PUSH);
 		alignTopButton.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/formatting/edit-vertical-alignment-top.png"));
-		alignTopButton.setData(VerticalTextAlignEnum.TOP);
+		alignTopButton.setData(WIDGET_DATA_KEY, VerticalTextAlignEnum.TOP);
 		alignTopButton.addSelectionListener(pushButtonPressed);
 		getToolItems().add(alignTopButton);
 		
 		ToolItem alignMiddleButton = new ToolItem(parent, SWT.PUSH);
 		alignMiddleButton.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/formatting/edit-vertical-alignment-middle.png"));
-		alignMiddleButton.setData(VerticalTextAlignEnum.MIDDLE);
+		alignMiddleButton.setData(WIDGET_DATA_KEY, VerticalTextAlignEnum.MIDDLE);
 		alignMiddleButton.addSelectionListener(pushButtonPressed);
 		getToolItems().add(alignMiddleButton);
 		
 		ToolItem alignBottomButton = new ToolItem(parent, SWT.PUSH);
 		alignBottomButton.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/formatting/edit-vertical-alignment.png"));
-		alignBottomButton.setData(VerticalTextAlignEnum.BOTTOM);
+		alignBottomButton.setData(WIDGET_DATA_KEY, VerticalTextAlignEnum.BOTTOM);
 		alignBottomButton.addSelectionListener(pushButtonPressed);
 		getToolItems().add(alignBottomButton);
 		
@@ -410,7 +410,7 @@ public class TextualContributionItem extends CommonToolbarHandler {
 		ToolItem button = new ToolItem(buttons, SWT.PUSH);
 		button.setImage(imageValue);
 		button.setToolTipText(message);		
-		button.setData(JRDesignStyle.PROPERTY_FONT_SIZE);
+		button.setData(WIDGET_DATA_KEY, JRDesignStyle.PROPERTY_FONT_SIZE);
 		button.setWidth(25);
 		button.addSelectionListener(fontSizeButtonSelect);
 		return button;

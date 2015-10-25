@@ -44,7 +44,7 @@ public class SizeContributionItem extends CommonToolbarHandler{
 				return;
 			
 			JSSCompoundCommand compoundCmd =  new JSSCompoundCommand("Resize Operation", null); 
-			int alignment = (Integer)e.widget.getData();
+			int alignment = (Integer)e.widget.getData(WIDGET_DATA_KEY);
 			for (Object model : selection) {
 				compoundCmd.add(new ResizeCommand(alignment, (MGraphicElement)model));
 				compoundCmd.setReferenceNodeIfNull(model);
@@ -61,21 +61,21 @@ public class SizeContributionItem extends CommonToolbarHandler{
 	protected boolean fillWithToolItems(ToolBar parent) {
 		ToolItem sizeButtonWidth = new ToolItem(parent, SWT.PUSH);
 		sizeButtonWidth.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/eclipseapps/size_to_control_width.gif"));
-		sizeButtonWidth.setData(Size2BorderAction.WIDTH);
+		sizeButtonWidth.setData(WIDGET_DATA_KEY,Size2BorderAction.WIDTH);
 		sizeButtonWidth.setToolTipText(Messages.Size2BorderAction_fit_width_tool_tip);
 		sizeButtonWidth.addSelectionListener(pushButtonPressed);
 		getToolItems().add(sizeButtonWidth);
 		
 		ToolItem sizeButtonHeight = new ToolItem(parent, SWT.PUSH);
 		sizeButtonHeight.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/eclipseapps/size_to_control_height.gif"));
-		sizeButtonHeight.setData(Size2BorderAction.HEIGHT);
+		sizeButtonHeight.setData(WIDGET_DATA_KEY,Size2BorderAction.HEIGHT);
 		sizeButtonHeight.setToolTipText(Messages.Size2BorderAction_fit_height_tool_tip);
 		sizeButtonHeight.addSelectionListener(pushButtonPressed);
 		getToolItems().add(sizeButtonHeight);
 		
 		ToolItem sizeButtonBoth = new ToolItem(parent, SWT.PUSH);
 		sizeButtonBoth.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/eclipseapps/size_to_control.gif"));
-		sizeButtonBoth.setData(Size2BorderAction.BOTH);
+		sizeButtonBoth.setData(WIDGET_DATA_KEY,Size2BorderAction.BOTH);
 		sizeButtonBoth.setToolTipText(Messages.Size2BorderAction_fit_both_tool_tip);
 		sizeButtonBoth.addSelectionListener(pushButtonPressed);
 		getToolItems().add(sizeButtonBoth);
