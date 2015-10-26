@@ -19,9 +19,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.eclipse.util.FileUtils;
-
 import org.apache.commons.codec.binary.Base64;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.gef.ui.actions.Clipboard;
@@ -43,12 +40,15 @@ import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.util.ModelVisitor;
 import com.jaspersoft.studio.server.ResourceFactory;
 import com.jaspersoft.studio.server.WSClientHelper;
-import com.jaspersoft.studio.server.model.MFolder;
-import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.model.IInputControlsContainer;
+import com.jaspersoft.studio.server.model.MFolder;
+import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.protocol.IConnection;
+
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.FileUtils;
 
 public class PasteResourceAction extends Action {
 	protected TreeViewer treeViewer;
@@ -71,9 +71,9 @@ public class PasteResourceAction extends Action {
 		boolean res = super.isEnabled();
 		boolean iscut = false;
 		contents = Clipboard.getDefault().getContents();
+		ANode parent = getSelected();
 		if (res && contents != null && contents instanceof List<?>) {
 			List<?> list = (List<?>) contents;
-			ANode parent = getSelected();
 			res = false;
 			for (Object obj : list)
 				if (obj instanceof AMResource && obj instanceof ICopyable) {
@@ -97,6 +97,10 @@ public class PasteResourceAction extends Action {
 					AMResource mres = (AMResource) firstElement;
 					int pmask = mres.getValue().getPermissionMask(mres.getWsClient());
 					res = res && (pmask == 1 || (pmask & 4) == 4);
+					if (!isSameServer(parent, (AMResource) mres)
+							&& (mres instanceof IInputControlsContainer || mres instanceof MFolder)) {
+						return false;
+					}
 				}
 			}
 		}
