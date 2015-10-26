@@ -36,7 +36,7 @@ hdiutil mount jaspersoftstudio.dmg.sparsebundle
 #Signing the application
 
 # Copy all the files
-cp -Rf jaspersoftstudio/*  "/Volumes/TIBCO Jaspersoft Studio/TIBCO Jaspersoft Studio/"
+cp -Rf jaspersoftstudio.app/*  "/Volumes/TIBCO Jaspersoft Studio/TIBCO Jaspersoft Studio/"
 open "/Volumes/TIBCO Jaspersoft Studio"
 #echo "Sleeping for 3 seconds"
 sleep 3

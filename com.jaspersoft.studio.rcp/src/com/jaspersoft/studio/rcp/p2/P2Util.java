@@ -52,7 +52,7 @@ public class P2Util {
 				repos.add(repoEl);
 			}
 			ElementUtils.updateRepositoryUsingElements(
-					ProvisioningUI.getDefaultUI(), repos.toArray(new MetadataRepositoryElement[repos.size()]), null);
+					ProvisioningUI.getDefaultUI(), repos.toArray(new MetadataRepositoryElement[repos.size()]));
 		} catch (URISyntaxException e) {
 			Activator.getDefault().logError(Messages.P2Util_ErrorMessage, e);
 		}

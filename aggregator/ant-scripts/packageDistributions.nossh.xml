@@ -174,9 +174,9 @@
 		<property name="mac.x86_64.zipfile" value="${dist}/JaspersoftStudio-macosx.cocoa.x86_64.zip" />
 
 		<!-- copy additional licensing files -->
-		<copy file="${basedir}/rootfiles/license/license.txt" todir="${dirlocation.mac.x86_64}/${productRootFolder}" />
-		<copy file="${basedir}/rootfiles/license/Third-Party-Notices.txt" todir="${dirlocation.mac.x86_64}/${productRootFolder}" />
-		<copy file="${basedir}/rootfiles/license/Third-Party-Notices.pdf" todir="${dirlocation.mac.x86_64}/${productRootFolder}" />
+		<copy file="${basedir}/rootfiles/license/license.txt" todir="${dirlocation.mac.x86_64}/${productRootFolder}.app/Contents/Eclipse/" />
+		<copy file="${basedir}/rootfiles/license/Third-Party-Notices.txt" todir="${dirlocation.mac.x86_64}/${productRootFolder}.app/Contents/Eclipse/" />
+		<copy file="${basedir}/rootfiles/license/Third-Party-Notices.pdf" todir="${dirlocation.mac.x86_64}/${productRootFolder}.app/Contents/Eclipse/" />
 		
 		<zip destfile="${mac.x86_64.zipfile}">
 			<fileset dir="${dirlocation.mac.x86_64}"/>

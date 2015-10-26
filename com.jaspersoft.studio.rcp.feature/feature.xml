@@ -79,12 +79,6 @@
          search-location="both"/>
 
    <includes
-         id="org.eclipse.jgit.java7"
-         version="0.0.0"
-         optional="true"
-         search-location="both"/>
-
-   <includes
          id="org.eclipse.jgit.pgm"
          version="0.0.0"
          optional="true"
@@ -105,6 +99,14 @@
          version="0.0.0"
          search-location="both"/>
 
+   <includes
+         id="org.eclipse.rcp"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.jgit.http.apache"
+         version="0.0.0"/>
+
    <requires>
       <import plugin="org.eclipse.ui.intro"/>
       <import plugin="com.jaspersoft.studio" version="6.2.0" match="greaterOrEqual"/>
@@ -118,11 +120,12 @@
       <import plugin="org.eclipse.ui.views.log"/>
       <import plugin="org.eclipse.debug.core" version="3.5.0" match="compatible"/>
       <import plugin="org.eclipse.jdt.debug" version="3.5.0" match="compatible"/>
-      <import plugin="org.eclipse.core.runtime" version="3.5.0" match="compatible"/>
+      <import plugin="org.eclipse.core.runtime" version="3.11.0" match="compatible"/>
       <import plugin="org.eclipse.jdt.core" version="3.5.0" match="compatible"/>
       <import plugin="org.eclipse.jdt.launching" version="3.5.0" match="compatible"/>
       <import plugin="org.eclipse.jface" version="3.5.0" match="compatible"/>
       <import plugin="org.eclipse.ui" version="3.5.0" match="compatible"/>
+      <import plugin="org.eclipse.e4.ui.css.swt.theme"/>
    </requires>
 
    <plugin
@@ -147,5 +150,11 @@
          install-size="0"
          version="0.0.0"
          unpack="false"/>
+
+   <plugin
+         id="org.eclipse.ui.themes"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
 
 </feature>

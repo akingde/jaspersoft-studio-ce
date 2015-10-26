@@ -12,15 +12,17 @@
  ******************************************************************************/
 package com.jaspersoft.studio.rcp;
 
-import net.sf.jasperreports.eclipse.AbstractJRUIPlugin;
-
 import org.eclipse.equinox.p2.ui.Policy;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
+import org.eclipse.ui.IWorkbenchPreferenceConstants;
+import org.eclipse.ui.internal.util.PrefUtil;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 
 import com.jaspersoft.studio.rcp.p2.JSSP2Policy;
+
+import net.sf.jasperreports.eclipse.AbstractJRUIPlugin;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -54,6 +56,9 @@ public class Activator extends AbstractJRUIPlugin {
 		// Register the p2 UI policy
 		registerP2Policy(context);
 		getPreferenceStore().addPropertyChangeListener(getPreferenceListener());
+		// FIXME - Temporary workaround for Bugzilla #44286
+		// See also Eclipse bug: https://bugs.eclipse.org/bugs/show_bug.cgi?id=475578
+		PrefUtil.getAPIPreferenceStore().putValue(IWorkbenchPreferenceConstants.PROMPT_WHEN_SAVEABLE_STILL_OPEN,"false"); //$NON-NLS-1$
 	}
 
 	/*
