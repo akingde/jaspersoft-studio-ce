@@ -95,7 +95,7 @@ public class ColumnsEqualWidthContributionItem extends CommonToolbarHandler {
 		button.setToolTipText(resizeColumnsAction.getToolTipText());
 		button.addSelectionListener(pushButtonPressed);
 		getToolItems().add(button);
-		setEnablement(false);
+		setEnablement(isVisible());
 		return true;
 	}
 
