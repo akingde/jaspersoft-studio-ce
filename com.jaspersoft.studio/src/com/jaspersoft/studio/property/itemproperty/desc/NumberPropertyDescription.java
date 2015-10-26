@@ -108,12 +108,16 @@ public class NumberPropertyDescription<T extends Number> extends ItemPropertyDes
 				} else {
 					e.doit = BigDecimalValidator.getInstance().isValid(number, Locale.US);
 				}
-				Number n = getNumber(number);
-				if (n != null) {
-					if (e.doit && min != null && min instanceof Comparable<?>)
-						e.doit = ((Comparable) min).compareTo(n) <= 0;
-					if (e.doit && max != null && max instanceof Comparable<?>)
-						e.doit = ((Comparable) max).compareTo(n) >= 0;
+				try {
+					Number n = getNumber(number);
+					if (n != null) {
+						if (e.doit && min != null && min instanceof Comparable<?>)
+							e.doit = ((Comparable) min).compareTo(n) <= 0;
+						if (e.doit && max != null && max instanceof Comparable<?>)
+							e.doit = ((Comparable) max).compareTo(n) >= 0;
+					}
+				} catch (NumberFormatException e1) {
+					e.doit = false;
 				}
 			}
 		});
