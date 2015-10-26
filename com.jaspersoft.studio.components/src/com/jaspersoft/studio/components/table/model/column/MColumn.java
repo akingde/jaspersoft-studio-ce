@@ -154,6 +154,11 @@ public class MColumn extends APropertyNode implements IPastable, IContainer,ICon
 			}
 			node = node.getParent();
 		}
+		//When the node is removed (because maybe a cell was deleted) the value is not
+		//set to null, in this case remove this listener from the node
+		if (newparent == null && getValue() != null){
+			getValue().getEventSupport().removePropertyChangeListener(this);
+		}
 	}
 	
 	public JRDesignGroup getJrGroup() {
@@ -466,8 +471,7 @@ public class MColumn extends APropertyNode implements IPastable, IContainer,ICon
 			if (evt.getPropertyName().equals(section.getCellEvent())) {
 				if (evt.getSource() == this.getValue()) {
 
-					final StandardBaseColumn bc = (StandardBaseColumn) evt
-							.getSource();
+					final StandardBaseColumn bc = (StandardBaseColumn) evt.getSource();
 
 					final ANode parent = (ANode) getParent();
 					final MColumn child = this;
