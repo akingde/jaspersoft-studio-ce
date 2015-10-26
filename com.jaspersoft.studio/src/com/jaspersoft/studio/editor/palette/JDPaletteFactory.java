@@ -51,7 +51,6 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  */
 public class JDPaletteFactory {
 
-	
 	public static PaletteGroup getBaseElementsGroup(){
 		PaletteGroup pgc = new PaletteGroup();
 		pgc.setId(IPaletteContributor.KEY_COMMON_ELEMENTS);
@@ -135,23 +134,28 @@ public class JDPaletteFactory {
 		}
 
 		CompositeElementHandler handler = new CompositeElementHandler(paletteRoot);
+		PalettePrenferencesListener hiddenElementsHandler = new PalettePrenferencesListener();
 		for (PaletteGroup p : ordpgrps) {
 			if (p.getId().equals(IPaletteContributor.KEY_COMMON_ELEMENTS)) {
 				PaletteDrawer drawer = createElements(paletteRoot, ignore, p, mapEntry);
 				getEntries4Key(drawer, ignore, "", mapEntry); //$NON-NLS-1$ 
 				handler.addPaletteGroup(p.getId(), drawer);
+				hiddenElementsHandler.addDrawer(drawer);
 			} else if (p.getId().equals(IPaletteContributor.KEY_COMMON_CONTAINER)) {
 				PaletteDrawer drawer = createGroup(paletteRoot, ignore, p.getName(), p.getImage());
 				createContainers(drawer, ignore, p, mapEntry);
 				handler.addPaletteGroup(p.getId(), drawer);
+				hiddenElementsHandler.addDrawer(drawer);
 			} else if (p.getId().equals(IPaletteContributor.KEY_COMMON_TOOLS)) {
 				PaletteDrawer drawer = createGroup(paletteRoot, ignore, p.getName(), p.getImage());
 				createOtherElements(drawer, ignore, p, mapEntry);
 				handler.addPaletteGroup(p.getId(), drawer);
+				hiddenElementsHandler.addDrawer(drawer);
 			} else {
 				PaletteDrawer drawer = createGroup(paletteRoot, ignore, p.getName(), p.getImage());
 				getEntries4Key(drawer, ignore, p.getId(), mapEntry);
 				handler.addPaletteGroup(p.getId(), drawer);
+				hiddenElementsHandler.addDrawer(drawer);
 			}
 		}
 		//create the current composite elements entry
@@ -159,6 +163,7 @@ public class JDPaletteFactory {
 		//Add the modify listener to the tools manager to get notified when the composite elements
 		//changes
 		CompositeElementManager.INSTANCE.addModifyListener(handler);
+		JaspersoftStudioPlugin.getInstance().getPreferenceStore().addPropertyChangeListener(hiddenElementsHandler);
 		return paletteRoot;
 	}
 
@@ -292,8 +297,9 @@ public class JDPaletteFactory {
 		if (plist != null)
 			for (PaletteEntry entry : plist) {
 				if (ignore != null && entry instanceof CombinedTemplateCreationEntry
-						&& ignore.contains(((CombinedTemplateCreationEntry) entry).getTemplate().toString()))
-					continue;
+						&& ignore.contains(((CombinedTemplateCreationEntry) entry).getTemplate().toString())){
+					entry.setVisible(false);
+				}
 				drawer.add(entry);
 			}
 	}
