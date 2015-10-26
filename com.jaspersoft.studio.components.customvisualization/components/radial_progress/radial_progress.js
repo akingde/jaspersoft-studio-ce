@@ -52,6 +52,7 @@ define('radial_progress',['d3'], function (d3) {
                 options.ringPadding = parseFloat(options.ringPadding);
                 options.animation = checkBoolean(options.animation);
                 options.autoFit = checkBoolean(options.autoFit);
+                options.showBackground = checkBoolean(options.showBackground);
          
                 // The max diameter
                 var diameter = Math.min(w - options.hPadding*2, h-options.vPadding*2);

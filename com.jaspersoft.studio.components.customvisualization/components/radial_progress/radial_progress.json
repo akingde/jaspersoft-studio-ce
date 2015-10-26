@@ -93,7 +93,7 @@
                   "max":"1"
                 },
                 {
-                  "name": "showBackGround",
+                  "name": "showBackground",
                   "label": "Show Background",
                   "description": "Shows the background rings",
                   "mandatory": "false",
