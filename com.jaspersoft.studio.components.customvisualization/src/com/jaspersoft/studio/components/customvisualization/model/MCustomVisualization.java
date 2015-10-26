@@ -46,8 +46,7 @@ import com.jaspersoft.studio.utils.ModelUtils;
  * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
  * 
  */
-public class MCustomVisualization extends MGraphicElement implements
-		IDatasetContainer {
+public class MCustomVisualization extends MGraphicElement implements IDatasetContainer {
 
 	private static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	private static IIconDescriptor iconDescriptor;
@@ -61,8 +60,7 @@ public class MCustomVisualization extends MGraphicElement implements
 		super();
 	}
 
-	public MCustomVisualization(ANode parent,
-			JRDesignComponentElement jrObject, int newIndex) {
+	public MCustomVisualization(ANode parent, JRDesignComponentElement jrObject, int newIndex) {
 		super(parent, jrObject, newIndex);
 	}
 
@@ -77,8 +75,7 @@ public class MCustomVisualization extends MGraphicElement implements
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1,
-			Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
 		descriptors = descriptors1;
 		defaultsMap = defaultsMap1;
 	}
@@ -115,8 +112,7 @@ public class MCustomVisualization extends MGraphicElement implements
 		JRDesignComponentElement el = new JRDesignComponentElement();
 		CVDesignComponent cvComp = new CVDesignComponent();
 		el.setComponent(cvComp);
-		el.setComponentKey(new ComponentKey(
-				"http://www.jaspersoft.com/cvcomponent", "cvc", "customvisualization")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		el.setComponentKey(new ComponentKey("http://www.jaspersoft.com/cvcomponent", "cvc", "customvisualization")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		return el;
 	}
 
@@ -125,14 +121,12 @@ public class MCustomVisualization extends MGraphicElement implements
 		if (getValue() != null) {
 			Object obj = getComponent();
 			if (obj instanceof JRChangeEventsSupport)
-				((JRChangeEventsSupport) obj).getEventSupport()
-						.removePropertyChangeListener(this);
+				((JRChangeEventsSupport) obj).getEventSupport().removePropertyChangeListener(this);
 		}
 		if (value != null) {
 			Object obj = getComponent(value);
 			if (value instanceof JRChangeEventsSupport)
-				((JRChangeEventsSupport) obj).getEventSupport()
-						.addPropertyChangeListener(this);
+				((JRChangeEventsSupport) obj).getEventSupport().addPropertyChangeListener(this);
 		}
 		super.setValue(value);
 	}
@@ -150,69 +144,49 @@ public class MCustomVisualization extends MGraphicElement implements
 	}
 
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc,
-			Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
 		evaluationTimeD = new NamedEnumPropertyDescriptor<EvaluationTimeEnum>(
-				CVDesignComponent.PROPERTY_EVALUATION_TIME,
-				Messages.MCustomVisualization_EvalTime,
+				CVDesignComponent.PROPERTY_EVALUATION_TIME, Messages.MCustomVisualization_EvalTime,
 				EvaluationTimeEnum.AUTO, NullEnum.NOTNULL);
-		evaluationTimeD
-				.setDescription(Messages.MCustomVisualization_EvalTimeDesc);
+		evaluationTimeD.setDescription(Messages.MCustomVisualization_EvalTimeDesc);
 		desc.add(evaluationTimeD);
 
-		evaluationGroupNameD = new RComboBoxPropertyDescriptor(
-				CVDesignComponent.PROPERTY_EVALUATION_GROUP,
+		evaluationGroupNameD = new RComboBoxPropertyDescriptor(CVDesignComponent.PROPERTY_EVALUATION_GROUP,
 				"Evaluation Group", new String[] { "" }); //$NON-NLS-1$ //$NON-NLS-2$
-		evaluationGroupNameD
-				.setDescription(Messages.MCustomVisualization_EvalGroupDesc);
+		evaluationGroupNameD.setDescription(Messages.MCustomVisualization_EvalGroupDesc);
 		desc.add(evaluationGroupNameD);
 
 		NClassTypePropertyDescriptor processingClassD = new NClassTypePropertyDescriptor(
-				CVDesignComponent.PROPERTY_PROCESSING_CLASS,
-				Messages.MCustomVisualization_ProcessingClass);
-		processingClassD
-				.setDescription(Messages.MCustomVisualization_ProcessingClassDesc);
+				CVDesignComponent.PROPERTY_PROCESSING_CLASS, Messages.MCustomVisualization_ProcessingClass);
+		processingClassD.setDescription(Messages.MCustomVisualization_ProcessingClassDesc);
 		desc.add(processingClassD);
 
 		CVItemPropertiesDescriptor bItemPropsD = new CVItemPropertiesDescriptor(
-				CVDesignComponent.PROPERTY_ITEM_PROPERTIES,
-				Messages.MCustomVisualization_ItemProperties);
-		bItemPropsD
-				.setDescription(Messages.MCustomVisualization_ItemPropertiesDesc);
+				CVDesignComponent.PROPERTY_ITEM_PROPERTIES, Messages.MCustomVisualization_ItemProperties);
+		bItemPropsD.setDescription(Messages.MCustomVisualization_ItemPropertiesDesc);
 		desc.add(bItemPropsD);
 
 		CVCItemDataPropertyDescriptor bItemDataD = new CVCItemDataPropertyDescriptor(
-				CVDesignComponent.PROPERTY_ITEM_DATA,
-				Messages.MCustomVisualization_ItemData);
+				CVDesignComponent.PROPERTY_ITEM_DATA, Messages.MCustomVisualization_ItemData);
 		bItemDataD.setDescription(Messages.MCustomVisualization_ItemDataDesc);
 		desc.add(bItemDataD);
 
-		evaluationTimeD
-				.setCategory(Messages.MCustomVisualization_CVPropertiesCategory);
-		evaluationGroupNameD
-				.setCategory(Messages.MCustomVisualization_CVPropertiesCategory);
-		processingClassD
-				.setCategory(Messages.MCustomVisualization_CVPropertiesCategory);
-		bItemPropsD
-				.setCategory(Messages.MCustomVisualization_CVPropertiesCategory);
-		bItemDataD
-				.setCategory(Messages.MCustomVisualization_CVPropertiesCategory);
+		evaluationTimeD.setCategory(Messages.MCustomVisualization_CVPropertiesCategory);
+		evaluationGroupNameD.setCategory(Messages.MCustomVisualization_CVPropertiesCategory);
+		processingClassD.setCategory(Messages.MCustomVisualization_CVPropertiesCategory);
+		bItemPropsD.setCategory(Messages.MCustomVisualization_CVPropertiesCategory);
+		bItemDataD.setCategory(Messages.MCustomVisualization_CVPropertiesCategory);
 
-		defaultsMap.put(CVDesignComponent.PROPERTY_EVALUATION_TIME,
-				EvaluationTimeEnum.NOW);
+		defaultsMap.put(CVDesignComponent.PROPERTY_EVALUATION_TIME, EvaluationTimeEnum.NOW);
 
-		onErrorTypeD = new NamedEnumPropertyDescriptor<OnErrorTypeEnum>(
-				CVDesignComponent.PROPERTY_ON_ERROR_TYPE,
-				Messages.MCustomVisualization_OnErrorType,
-				OnErrorTypeEnum.BLANK, NullEnum.NULL);
-		onErrorTypeD
-				.setDescription(Messages.MCustomVisualization_OnErrorTypeDesc);
+		onErrorTypeD = new NamedEnumPropertyDescriptor<OnErrorTypeEnum>(CVDesignComponent.PROPERTY_ON_ERROR_TYPE,
+				Messages.MCustomVisualization_OnErrorType, OnErrorTypeEnum.BLANK, NullEnum.NULL);
+		onErrorTypeD.setDescription(Messages.MCustomVisualization_OnErrorTypeDesc);
 		desc.add(onErrorTypeD);
 
-		defaultsMap.put(CVDesignComponent.PROPERTY_ON_ERROR_TYPE,
-				onErrorTypeD.getIntValue(OnErrorTypeEnum.ERROR));
+		defaultsMap.put(CVDesignComponent.PROPERTY_ON_ERROR_TYPE, onErrorTypeD.getIntValue(OnErrorTypeEnum.ERROR));
 	}
 
 	@Override
@@ -250,8 +224,7 @@ public class MCustomVisualization extends MGraphicElement implements
 		JRDesignComponentElement jrElement = (JRDesignComponentElement) getValue();
 		CVDesignComponent cvComp = (CVDesignComponent) jrElement.getComponent();
 		if (CVDesignComponent.PROPERTY_EVALUATION_TIME.equals(id)) {
-			EvaluationTimeEnum evalTime = EnumHelper.getEnumByObjectValue(
-					EvaluationTimeEnum.values(), value);
+			EvaluationTimeEnum evalTime = EnumHelper.getEnumByObjectValue(EvaluationTimeEnum.values(), value);
 			cvComp.setEvaluationTime(evalTime);
 			if (evalTime != null && !evalTime.equals(EvaluationTimeEnum.GROUP)) {
 				cvComp.setEvaluationGroup(null);
@@ -266,21 +239,20 @@ public class MCustomVisualization extends MGraphicElement implements
 			cvComp.getItemProperties().clear();
 			Set<String> keys = new HashSet<String>();
 			for (ItemProperty i : (List<ItemProperty>) value) {
-				if (Misc.isNullOrEmpty(i.getValue())
-						&& (i.getValueExpression() == null || Misc
-								.isNullOrEmpty(i.getValueExpression().getText())))
-					continue;
+				// if (Misc.isNullOrEmpty(i.getValue())
+				// && (i.getValueExpression() == null || Misc
+				// .isNullOrEmpty(i.getValueExpression().getText())))
+				// continue;
 				if (keys.contains(i.getName()))
 					continue;
 				keys.add(i.getName());
 				cvComp.getItemProperties().add(i);
 			}
 			// let's not refresh ui on every removeItem, addItem
-			cvComp.getEventSupport().fireIndexedPropertyChange(
-					CVDesignComponent.PROPERTY_ITEM_PROPERTIES, 0, true, false);
+			cvComp.getEventSupport().fireIndexedPropertyChange(CVDesignComponent.PROPERTY_ITEM_PROPERTIES, 0, true,
+					false);
 		} else if (CVDesignComponent.PROPERTY_ITEM_DATA.equals(id)) {
-			ItemData[] toRemove = cvComp.getItemData().toArray(
-					new ItemData[] {});
+			ItemData[] toRemove = cvComp.getItemData().toArray(new ItemData[] {});
 			for (ItemData i : toRemove) {
 				cvComp.removeItemData(i);
 			}
