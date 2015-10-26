@@ -124,8 +124,8 @@ public class BookPagesFigure extends RectangleFigure {
 		
 		
 		String text = this.model.getDisplayText();
-		if(text.length()>20){
-			text = "..."+text.substring(text.length()-17);
+		if(text.length()>=20){
+			text = text.substring(0, 2)+"..."+text.substring(text.length()-15);
 		}
 		
 		textFigure = new Label(text);
