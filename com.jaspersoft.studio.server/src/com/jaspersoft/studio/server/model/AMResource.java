@@ -102,8 +102,7 @@ public abstract class AMResource extends APropertyNode implements ICopyable {
 			if (getValue().isMainReport())
 				tip += "\nIs Main Report";
 			tip += "\ndescription: " + Misc.nvl(getValue().getDescription());
-			tip += "\nPermission: "
-					+ getValue().getPermissionMask(getWsClient());
+			tip += "\nPermission: " + getValue().getPermissionMask(getWsClient());
 			return tip;
 		}
 		return getThisIconDescriptor().getToolTip();
@@ -121,8 +120,7 @@ public abstract class AMResource extends APropertyNode implements ICopyable {
 			if (mrunit.getValue() != null && getValue() != null) {
 				String par = mrunit.getValue().getUriString() + "_files";
 				if (!par.equals(getValue().getParentFolder()))
-					return ResourceManager.decorateImage(icon16,
-							LINK_DECORATOR, ResourceManager.BOTTOM_LEFT);
+					return ResourceManager.decorateImage(icon16, LINK_DECORATOR, ResourceManager.BOTTOM_LEFT);
 			}
 		}
 		return icon16;
@@ -142,17 +140,14 @@ public abstract class AMResource extends APropertyNode implements ICopyable {
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1,
-			Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
 		descriptors = descriptors1;
 		defaultsMap = defaultsMap1;
 	}
 
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc,
-			Map<String, Object> defaultsMap) {
-		NTextPropertyDescriptor textD = new NTextPropertyDescriptor(
-				"SOMEPROPERTIES", Messages.common_datasource_name);
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
+		NTextPropertyDescriptor textD = new NTextPropertyDescriptor("SOMEPROPERTIES", Messages.common_datasource_name);
 		desc.add(textD);
 	}
 
@@ -173,11 +168,9 @@ public abstract class AMResource extends APropertyNode implements ICopyable {
 		if (parent != null) {
 			if (parent instanceof AMResource)
 				if (parent instanceof MFolder)
-					rd.setParentFolder(((AMResource) parent).getValue()
-							.getUriString());
+					rd.setParentFolder(((AMResource) parent).getValue().getUriString());
 				else
-					rd.setParentFolder(((AMResource) parent).getValue()
-							.getUriString() + "_files");
+					rd.setParentFolder(((AMResource) parent).getValue().getUriString() + "_files");
 			else
 				rd.setParentFolder("/");
 		}
@@ -204,19 +197,21 @@ public abstract class AMResource extends APropertyNode implements ICopyable {
 		this.mroot = mroot;
 	}
 
+	private IConnection wsClient;
+
 	public IConnection getWsClient() {
 		Object obj = getRoot();
 		if (obj == null)
 			obj = mroot;
 		if (obj instanceof MServerProfile) {
 			try {
-				return ((MServerProfile) obj)
-						.getWsClient(new NullProgressMonitor());
+				wsClient = ((MServerProfile) obj).getWsClient(new NullProgressMonitor());
+				return wsClient;
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
-		return null;
+		return wsClient;
 	}
 
 	public boolean isSupported(Feature f) {
@@ -228,9 +223,8 @@ public abstract class AMResource extends APropertyNode implements ICopyable {
 
 	public MReportUnit getReportUnit() {
 		INode node = this;
-		while (node != null && node.getParent() != null
-				&& !(node instanceof MServerProfile)
-				&& !(node instanceof MRoot) && !(node instanceof MReportUnit)) {
+		while (node != null && node.getParent() != null && !(node instanceof MServerProfile) && !(node instanceof MRoot)
+				&& !(node instanceof MReportUnit)) {
 			node = node.getParent();
 		}
 		if (node instanceof MReportUnit)
@@ -239,8 +233,7 @@ public abstract class AMResource extends APropertyNode implements ICopyable {
 	}
 
 	public boolean isCopyable2(Object parent) {
-		if (parent instanceof MFolder || parent instanceof MReportUnit
-				|| parent instanceof MServerProfile)
+		if (parent instanceof MFolder || parent instanceof MReportUnit || parent instanceof MServerProfile)
 			return true;
 		return false;
 	}

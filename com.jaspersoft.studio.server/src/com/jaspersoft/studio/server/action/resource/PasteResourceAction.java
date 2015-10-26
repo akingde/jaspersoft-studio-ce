@@ -247,8 +247,9 @@ public class PasteResourceAction extends Action {
 							file = null;
 						}
 						if (parent instanceof MFolder) {
-							rd.setUriString(dURI + "/" + rd.getName() + (copy ? "_COPY" : "")); //$NON-NLS-1$
-							rd.setLabel(origin.getLabel() + (copy ? "_COPY" : ""));
+							String suf = getCopyName(parent, rd.getName());
+							rd.setUriString(dURI + "/" + rd.getName() + (copy ? suf : "")); //$NON-NLS-1$
+							rd.setLabel(origin.getLabel() + (copy ? suf : ""));
 							fixUris(rd, monitor, mc);
 							ws.addOrModifyResource(monitor, rd, file);
 						} else if (parent instanceof MReportUnit)
@@ -267,8 +268,9 @@ public class PasteResourceAction extends Action {
 							}
 
 							rd.setIsNew(true);
-							rd.setUriString(dURI + "/" + rd.getName() + "_COPY"); //$NON-NLS-1$
-							rd.setLabel(rd.getLabel() + "_COPY");
+							String suf = getCopyName(parent, rd.getName());
+							rd.setUriString(dURI + "/" + rd.getName() + suf); //$NON-NLS-1$
+							rd.setLabel(rd.getLabel() + suf);
 							fixUris(rd, monitor, mc);
 							if (monitor.isCanceled())
 								return;
@@ -282,9 +284,10 @@ public class PasteResourceAction extends Action {
 						}
 					} else if (parent instanceof MReportUnit) {
 						if (copy) {
-							origin.setName(origin.getName() + "_COPY");
-							origin.setLabel(origin.getName() + "_COPY");
-							origin.setUriString(origin.getUriString() + "_COPY");
+							String suf = getCopyName(parent, origin.getName());
+							origin.setName(origin.getName() + suf);
+							origin.setLabel(origin.getName() + suf);
+							origin.setUriString(origin.getUriString() + suf);
 						}
 						if (!(m.getParent() instanceof MFolder) && m.getParent() instanceof AMResource) {
 							if (origin.getParentFolder() != null && !origin.getParentFolder().endsWith("_files")) //$NON-NLS-1$
@@ -304,6 +307,19 @@ public class PasteResourceAction extends Action {
 		toRefresh.add(parent);
 		for (ANode n : toRefresh)
 			refreshNode(n, monitor);
+	}
+
+	private String getCopyName(ANode parent, String name) {
+		String res = "_COPY";
+		for (int i = 0, j = 0; i < parent.getChildren().size(); i++) {
+			INode n = parent.getChildren().get(i);
+			if (n instanceof AMResource && ((AMResource) n).getValue().getName().equals(name + res)) {
+				i = 0;
+				j++;
+				res = "_COPY" + j;
+			}
+		}
+		return res;
 	}
 
 	protected void deleteIfCut(IProgressMonitor monitor, AMResource m) throws Exception {
