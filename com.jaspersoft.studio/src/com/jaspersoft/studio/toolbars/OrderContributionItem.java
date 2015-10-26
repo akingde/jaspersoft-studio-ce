@@ -19,6 +19,8 @@ import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
@@ -72,6 +74,37 @@ public class OrderContributionItem extends CommonToolbarHandler{
 			}
 		}
 	};
+	
+	@Override
+	protected Control createControl(Composite parent) {
+		ToolBar buttons = new ToolBar(parent, SWT.FLAT | SWT.WRAP);
+		
+		ToolItem moveButton = new ToolItem(buttons, SWT.PUSH);
+		moveButton.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/eclipseapps/elcl16/bring_forward.gif"));
+		moveButton.setData(WIDGET_DATA_KEY, ORDER_TYPE.FORWARD);
+		moveButton.setToolTipText(Messages.BringForwardAction_bring_forward_tool_tip);
+		moveButton.addSelectionListener(pushButtonPressed);
+		
+		moveButton = new ToolItem(buttons, SWT.PUSH);
+		moveButton.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/eclipseapps/elcl16/send_to_back.gif"));
+		moveButton.setData(WIDGET_DATA_KEY, ORDER_TYPE.BACKWARD);
+		moveButton.setToolTipText(Messages.BringBackwardAction_send_backward_tool_tip);
+		moveButton.addSelectionListener(pushButtonPressed);
+		
+		moveButton = new ToolItem(buttons, SWT.PUSH);
+		moveButton.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/eclipseapps/elcl16/bring_to_front.gif"));
+		moveButton.setData(WIDGET_DATA_KEY, ORDER_TYPE.TOP);
+		moveButton.setToolTipText(Messages.BringToFrontAction_bring_to_front_tool_tip);
+		moveButton.addSelectionListener(pushButtonPressed);
+		
+		moveButton = new ToolItem(buttons, SWT.PUSH);
+		moveButton.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/eclipseapps/elcl16/send_backward.gif"));
+		moveButton.setData(WIDGET_DATA_KEY, ORDER_TYPE.BOTTOM);
+		moveButton.setToolTipText(Messages.BringToBackAction_send_to_back_tool_tip);
+		moveButton.addSelectionListener(pushButtonPressed);
+		
+		return buttons;
+	}
 	
 	@Override
 	protected boolean fillWithToolItems(ToolBar parent) {

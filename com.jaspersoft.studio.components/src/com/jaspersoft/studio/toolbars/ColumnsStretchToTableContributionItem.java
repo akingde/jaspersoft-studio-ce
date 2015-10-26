@@ -15,6 +15,8 @@ package com.jaspersoft.studio.toolbars;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.wb.swt.ResourceManager;
@@ -63,6 +65,30 @@ public class ColumnsStretchToTableContributionItem extends CommonToolbarHandler 
 			}
 		}
 	}
+	
+	
+	@Override
+	public void dispose() {
+		super.dispose();
+		if (button != null){
+			button.dispose(); 
+			button = null;
+		}
+	}
+	
+	@Override
+	protected Control createControl(Composite parent) {
+		
+		ToolBar buttons = new ToolBar(parent, SWT.FLAT | SWT.WRAP);
+		
+		button = new ToolItem(buttons, SWT.PUSH);
+		button.setImage(ResourceManager.getImage(resizeColumnsAction.getImageDescriptor()));
+		button.setToolTipText(resizeColumnsAction.getToolTipText());
+		button.addSelectionListener(pushButtonPressed);
+		
+		setEnablement(false);
+		return buttons;
+	}	
 
 	@Override
 	protected boolean fillWithToolItems(ToolBar parent) {

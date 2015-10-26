@@ -17,6 +17,8 @@ import java.util.List;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.wb.swt.ResourceManager;
@@ -86,6 +88,38 @@ public class MoveBandContributionItem extends CommonToolbarHandler{
 			}
 		}
 	};
+	
+	@Override
+	protected Control createControl(Composite parent) {
+		ToolBar buttons = new ToolBar(parent, SWT.FLAT | SWT.WRAP);
+		
+		moveBandDown = new ToolItem(buttons, SWT.PUSH);
+		moveBandDown.setImage(ResourceManager.getImage(moveBandDownAction.getImageDescriptor()));
+		moveBandDown.setToolTipText(moveBandDownAction.getToolTipText());
+		moveBandDown.setData(WIDGET_DATA_KEY, moveBandDownAction);
+		moveBandDown.addSelectionListener(pushButtonPressed);
+		
+		moveBandUp = new ToolItem(buttons, SWT.PUSH);
+		moveBandUp.setImage(ResourceManager.getImage(moveBandUpAction.getImageDescriptor()));
+		moveBandUp.setToolTipText(moveBandUpAction.getToolTipText());
+		moveBandUp.setData(WIDGET_DATA_KEY, moveBandUpAction);
+		moveBandUp.addSelectionListener(pushButtonPressed);
+		
+		moveGroupDown = new ToolItem(buttons, SWT.PUSH);
+		moveGroupDown.setImage(ResourceManager.getImage(moveGroupDownAction.getImageDescriptor()));
+		moveGroupDown.setToolTipText(moveGroupDownAction.getToolTipText());
+		moveGroupDown.setData(WIDGET_DATA_KEY, moveGroupDownAction);
+		moveGroupDown.addSelectionListener(pushButtonPressed);
+		
+		moveGroupUp = new ToolItem(buttons, SWT.PUSH);
+		moveGroupUp.setImage(ResourceManager.getImage(moveGroupUpAction.getImageDescriptor()));
+		moveGroupUp.setToolTipText(moveGroupUpAction.getToolTipText());
+		moveGroupUp.setData(WIDGET_DATA_KEY, moveGroupUpAction);
+		moveGroupUp.addSelectionListener(pushButtonPressed);
+		
+		setEnablement();
+		return buttons;
+	}
 	
 	@Override
 	protected boolean fillWithToolItems(ToolBar parent) {

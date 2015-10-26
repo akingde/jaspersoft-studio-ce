@@ -18,6 +18,8 @@ import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
@@ -56,6 +58,31 @@ public class SizeContributionItem extends CommonToolbarHandler{
 			}
 		}
 	};
+	
+	@Override
+	protected Control createControl(Composite parent) {
+		ToolBar buttons = new ToolBar(parent, SWT.FLAT | SWT.WRAP);
+		
+		ToolItem sizeButton = new ToolItem(buttons, SWT.PUSH);
+		sizeButton.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/eclipseapps/size_to_control_width.gif"));
+		sizeButton.setData(WIDGET_DATA_KEY, Size2BorderAction.WIDTH);
+		sizeButton.setToolTipText(Messages.Size2BorderAction_fit_width_tool_tip);
+		sizeButton.addSelectionListener(pushButtonPressed);
+		
+		sizeButton = new ToolItem(buttons, SWT.PUSH);
+		sizeButton.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/eclipseapps/size_to_control_height.gif"));
+		sizeButton.setData(WIDGET_DATA_KEY, Size2BorderAction.HEIGHT);
+		sizeButton.setToolTipText(Messages.Size2BorderAction_fit_height_tool_tip);
+		sizeButton.addSelectionListener(pushButtonPressed);
+		
+		sizeButton = new ToolItem(buttons, SWT.PUSH);
+		sizeButton.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/eclipseapps/size_to_control.gif"));
+		sizeButton.setData(WIDGET_DATA_KEY, Size2BorderAction.BOTH);
+		sizeButton.setToolTipText(Messages.Size2BorderAction_fit_both_tool_tip);
+		sizeButton.addSelectionListener(pushButtonPressed);
+		
+		return buttons;
+	}
 	
 	@Override
 	protected boolean fillWithToolItems(ToolBar parent) {

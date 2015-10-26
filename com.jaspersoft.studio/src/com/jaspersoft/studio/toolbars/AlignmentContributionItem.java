@@ -18,6 +18,8 @@ import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
@@ -85,6 +87,61 @@ public class AlignmentContributionItem extends CommonToolbarHandler{
 		}
 	};
 
+	@Override
+	protected Control createControl(Composite parent) {
+		ToolBar buttons = new ToolBar(parent, SWT.FLAT | SWT.WRAP);
+		
+		ToolItem button = new ToolItem(buttons, SWT.PUSH);
+		button.setToolTipText(Messages.Align2BorderAction_align_to_left_tool_tip);
+		button.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/align-band-left.gif"));
+		button.setData(WIDGET_DATA_KEY, new Integer(PositionConstants.LEFT));
+		button.addSelectionListener(alignButtonPressed);
+		
+		button = new ToolItem(buttons, SWT.PUSH);
+		button.setToolTipText(Messages.Align2BorderAction_align_to_right_tool_tip);
+		button.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/align-band-right.gif"));
+		button.setData(WIDGET_DATA_KEY, new Integer(PositionConstants.RIGHT));
+		button.addSelectionListener(alignButtonPressed);
+
+		button = new ToolItem(buttons, SWT.PUSH);
+		button.setToolTipText(Messages.Align2BorderAction_align_to_top_tool_tip);
+		button.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/align-band-top.gif"));
+		button.setData(WIDGET_DATA_KEY, new Integer(PositionConstants.TOP));
+		button.addSelectionListener(alignButtonPressed);
+
+		button = new ToolItem(buttons, SWT.PUSH);
+		button.setToolTipText(Messages.Align2BorderAction_align_to_bottom_tool_tip);
+		button.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/align-band-bottom.gif"));
+		button.setData(WIDGET_DATA_KEY, new Integer(PositionConstants.BOTTOM));
+		button.addSelectionListener(alignButtonPressed);
+		
+		button = new ToolItem(buttons, SWT.PUSH);
+		button.setToolTipText(Messages.Align2BorderAction_align_to_center_tool_tip);
+		button.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/align-band-center.gif"));
+		button.setData(WIDGET_DATA_KEY, new Integer(PositionConstants.CENTER));
+		button.addSelectionListener(alignButtonPressed);
+
+		button = new ToolItem(buttons, SWT.PUSH);
+		button.setToolTipText(Messages.Align2BorderAction_align_to_middle_tool_tip);
+		button.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/align-band-middle.gif"));
+		button.setData(WIDGET_DATA_KEY, new Integer(PositionConstants.MIDDLE));
+		button.addSelectionListener(alignButtonPressed);
+		
+		button = new ToolItem(buttons, SWT.PUSH);
+		button.setToolTipText(Messages.JoinLeftAction_actionDescription);
+		button.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/joinleft.png"));
+		button.setData(WIDGET_DATA_KEY, JOIN_DIRECTION.LEFT);
+		button.addSelectionListener(joinButtonPressed);
+		
+		button = new ToolItem(buttons, SWT.PUSH);
+		button.setToolTipText(Messages.JoinRightAction_actionDescription);
+		button.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/joinright.png"));
+		button.setData(WIDGET_DATA_KEY, JOIN_DIRECTION.RIGHT);
+		button.addSelectionListener(joinButtonPressed);
+		
+		return buttons;
+	}
+	
 	@Override
 	protected boolean fillWithToolItems(ToolBar parent) {
 		ToolItem alignToLeft = new ToolItem(parent, SWT.PUSH);

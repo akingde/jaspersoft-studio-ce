@@ -23,6 +23,7 @@ import org.eclipse.nebula.widgets.tablecombo.TableCombo;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
@@ -49,6 +50,10 @@ import net.sf.jasperreports.engine.type.LineStyleEnum;
  *
  */
 public class BorderContributionItem extends CommonToolbarHandler {
+		/**
+		 * The composite that will displayed in the toolbar, it contains a label and the combo
+		 */	 
+		private Composite control;
 		
 		/**
 		 * The combo with the border presets inside
@@ -276,6 +281,14 @@ public class BorderContributionItem extends CommonToolbarHandler {
 		@Override
 		public void dispose() {
 			super.dispose();
+			if (combo != null){
+				combo.dispose();
+				combo = null;
+			}
+			if (control != null){
+				control.dispose();
+				control = null;
+			}
 			if (showedNode != null) {
 				showedNode.getPropertyChangeSupport().removePropertyChangeListener(modelListener);
 				showedNode = null;

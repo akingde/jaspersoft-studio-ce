@@ -40,6 +40,7 @@ import org.eclipse.ui.IEditorPart;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.report.CachedSelectionProvider;
 import com.jaspersoft.studio.editor.toolitems.ToolItemsSet;
+import com.jaspersoft.studio.utils.UIUtil;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
@@ -90,7 +91,9 @@ public abstract class CommonToolbarHandler extends ContributionItem {
 	public static void updateSelection(final IEditorPart activeEditor, final IActionBars bars){
 		UIUtils.checkUIThread();
 		// FIXME - temporary forcing the clear for Bugzilla #44189.
-		clearToolbars(bars);
+		if(UIUtil.shouldTrickToolbar()){
+			clearToolbars(bars);
+		}
 		if (bars instanceof IActionBars2 && ((IActionBars2) bars).getCoolBarManager() instanceof SubCoolBarManager) {
 			ICoolBarManager cbm = (ICoolBarManager) ((SubCoolBarManager) ((IActionBars2) bars).getCoolBarManager()).getParent();
 			for(ToolItemsSet toolbar : JaspersoftStudioPlugin.getToolItemsManager().getSets()){
@@ -116,8 +119,10 @@ public abstract class CommonToolbarHandler extends ContributionItem {
 				}
 			}
 			// FIXME - temporary commented for Bugzilla #44189.
-//			cbm.update(true);
-//			bars.updateActionBars();
+			if(!UIUtil.shouldTrickToolbar()) {
+				cbm.update(true);
+				bars.updateActionBars();
+			}
 		}
 	}
 	
@@ -415,7 +420,10 @@ public abstract class CommonToolbarHandler extends ContributionItem {
    * overriding this method.
    */
 	public final void fill(ToolBar parent, int index) {
-		if(!fillWithToolItems(parent)){
+		if(UIUtil.shouldTrickToolbar()){
+			fillWithToolItems(parent);			
+		}
+		else{
 			// Old deprecated way. Just for back compatibility
 			Control control = createControl(parent);
 			if (control == null) {
