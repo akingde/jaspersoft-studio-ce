@@ -13,13 +13,9 @@
 package com.jaspersoft.studio.server.wizard.pages;
 
 import java.io.ByteArrayInputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
-
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.eclipse.ui.validator.EmptyStringValidator;
-import net.sf.jasperreports.eclipse.ui.validator.NotEmptyIFolderValidator;
-import net.sf.jasperreports.eclipse.util.CastorHelper;
 
 import org.apache.commons.codec.binary.Base64;
 import org.eclipse.core.databinding.DataBindingContext;
@@ -27,17 +23,21 @@ import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.beans.PojoObservables;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.databinding.wizard.WizardPageSupport;
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.custom.StackLayout;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -56,6 +56,7 @@ import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.wb.swt.SWTResourceManager;
 
+import com.jaspersoft.jasperserver.dto.authority.ClientRole;
 import com.jaspersoft.jasperserver.dto.serverinfo.ServerInfo;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
@@ -67,10 +68,13 @@ import com.jaspersoft.studio.server.model.server.ServerProfile;
 import com.jaspersoft.studio.server.preferences.CASListFieldEditor;
 import com.jaspersoft.studio.server.preferences.CASPreferencePage;
 import com.jaspersoft.studio.server.preferences.SSOServer;
+import com.jaspersoft.studio.server.protocol.Feature;
 import com.jaspersoft.studio.server.protocol.IConnection;
+import com.jaspersoft.studio.server.protocol.JdbcDriver;
 import com.jaspersoft.studio.server.protocol.Version;
 import com.jaspersoft.studio.server.secret.JRServerSecretsProvider;
 import com.jaspersoft.studio.server.wizard.validator.URLValidator;
+import com.jaspersoft.studio.swt.widgets.ClasspathComponent;
 import com.jaspersoft.studio.swt.widgets.WLocale;
 import com.jaspersoft.studio.swt.widgets.WSecretText;
 import com.jaspersoft.studio.swt.widgets.WTimeZone;
@@ -79,8 +83,12 @@ import com.jaspersoft.studio.utils.UIUtil;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.wizards.WizardEndingStateListener;
 
-public class ServerProfilePage extends WizardPage implements
-		WizardEndingStateListener {
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.ui.validator.EmptyStringValidator;
+import net.sf.jasperreports.eclipse.ui.validator.NotEmptyIFolderValidator;
+import net.sf.jasperreports.eclipse.util.CastorHelper;
+
+public class ServerProfilePage extends WizardPage implements WizardEndingStateListener {
 	private MServerProfile sprofile;
 	private WSecretText tpass;
 	private Text tuser;
@@ -144,8 +152,7 @@ public class ServerProfilePage extends WizardPage implements
 
 		createCredentials(gr);
 
-		final Section expcmp = new Section(composite,
-				ExpandableComposite.TREE_NODE);
+		final Section expcmp = new Section(composite, ExpandableComposite.TREE_NODE);
 		expcmp.setTitleBarForeground(SWTResourceManager.getColor(SWT.COLOR_RED));
 		UIUtil.setBold(expcmp);
 		expcmp.setText(Messages.ServerProfilePage_advancedsettings);
@@ -154,7 +161,7 @@ public class ServerProfilePage extends WizardPage implements
 		expcmp.setLayoutData(gd);
 		expcmp.setExpanded(false);
 
-		CTabFolder tabFolder = new CTabFolder(expcmp, SWT.BOTTOM);
+		tabFolder = new CTabFolder(expcmp, SWT.BOTTOM);
 		expcmp.setClient(tabFolder);
 
 		CTabItem bptab = new CTabItem(tabFolder, SWT.NONE);
@@ -165,6 +172,8 @@ public class ServerProfilePage extends WizardPage implements
 		bptab.setText(Messages.ServerProfilePage_5);
 		bptab.setControl(createInfo(tabFolder));
 
+		createJdbcDrivers(tabFolder);
+
 		tabFolder.setSelection(0);
 
 		expcmp.addExpansionListener(new ExpansionAdapter() {
@@ -174,69 +183,44 @@ public class ServerProfilePage extends WizardPage implements
 		});
 		ServerProfile value = sprofile.getValue();
 		Proxy proxy = new Proxy(value);
-		dbc.bindValue(SWTObservables.observeText(tname, SWT.Modify),
-				PojoObservables.observeValue(value, "name"), //$NON-NLS-1$
-				new UpdateValueStrategy()
-						.setAfterConvertValidator(new EmptyStringValidator() {
-							@Override
-							public IStatus validate(Object value) {
-								IStatus s = super.validate(value);
-								if (s.equals(Status.OK_STATUS)
-										&& !ServerManager.isUniqueName(
-												sprofile, (String) value)) {
-									return ValidationStatus
-											.warning(Messages.ServerProfilePage_13);
-								}
-								return s;
-							}
-						}), null);
-		dbc.bindValue(SWTObservables.observeText(turl, SWT.Modify),
-				PojoObservables.observeValue(proxy, "url"), //$NON-NLS-1$
-				new UpdateValueStrategy()
-						.setAfterConvertValidator(new URLValidator()), null);
-		dbc.bindValue(
-				SWTObservables.observeText(lpath, SWT.Modify),
-				PojoObservables.observeValue(proxy, "projectPath"), //$NON-NLS-1$
-				new UpdateValueStrategy()
-						.setAfterConvertValidator(new NotEmptyIFolderValidator()),
-				null);
+		dbc.bindValue(SWTObservables.observeText(tname, SWT.Modify), PojoObservables.observeValue(value, "name"), //$NON-NLS-1$
+				new UpdateValueStrategy().setAfterConvertValidator(new EmptyStringValidator() {
+					@Override
+					public IStatus validate(Object value) {
+						IStatus s = super.validate(value);
+						if (s.equals(Status.OK_STATUS) && !ServerManager.isUniqueName(sprofile, (String) value)) {
+							return ValidationStatus.warning(Messages.ServerProfilePage_13);
+						}
+						return s;
+					}
+				}), null);
+		dbc.bindValue(SWTObservables.observeText(turl, SWT.Modify), PojoObservables.observeValue(proxy, "url"), //$NON-NLS-1$
+				new UpdateValueStrategy().setAfterConvertValidator(new URLValidator()), null);
+		dbc.bindValue(SWTObservables.observeText(lpath, SWT.Modify), PojoObservables.observeValue(proxy, "projectPath"), //$NON-NLS-1$
+				new UpdateValueStrategy().setAfterConvertValidator(new NotEmptyIFolderValidator()), null);
 		dbc.bindValue(SWTObservables.observeText(torg, SWT.Modify),
 				PojoObservables.observeValue(value, "organisation")); //$NON-NLS-1$
-		dbc.bindValue(
-				SWTObservables.observeText(tuser, SWT.Modify),
-				PojoObservables.observeValue(value, "user"), //$NON-NLS-1$
-				new UpdateValueStrategy()
-						.setAfterConvertValidator(new UsernameValidator()),
-				null);
-		dbc.bindValue(SWTObservables.observeText(tpass, SWT.Modify),
-				PojoObservables.observeValue(value, "pass")); //$NON-NLS-1$
+		dbc.bindValue(SWTObservables.observeText(tuser, SWT.Modify), PojoObservables.observeValue(value, "user"), //$NON-NLS-1$
+				new UpdateValueStrategy().setAfterConvertValidator(new UsernameValidator()), null);
+		dbc.bindValue(SWTObservables.observeText(tpass, SWT.Modify), PojoObservables.observeValue(value, "pass")); //$NON-NLS-1$
 
-		dbc.bindValue(SWTObservables.observeText(ttimeout, SWT.Modify),
-				PojoObservables.observeValue(value, "timeout")); //$NON-NLS-1$
+		dbc.bindValue(SWTObservables.observeText(ttimeout, SWT.Modify), PojoObservables.observeValue(value, "timeout")); //$NON-NLS-1$
 
-		dbc.bindValue(SWTObservables.observeSelection(bchunked),
-				PojoObservables.observeValue(value, "chunked")); //$NON-NLS-1$
-		dbc.bindValue(SWTObservables.observeText(bmime),
-				PojoObservables.observeValue(proxy, "mime")); //$NON-NLS-1$
-		dbc.bindValue(SWTObservables.observeText(loc.getCombo()),
-				PojoObservables.observeValue(value, "locale")); //$NON-NLS-1$
-		dbc.bindValue(SWTObservables.observeText(tz.getCombo()),
-				PojoObservables.observeValue(value, "timeZone")); //$NON-NLS-1$
+		dbc.bindValue(SWTObservables.observeSelection(bchunked), PojoObservables.observeValue(value, "chunked")); //$NON-NLS-1$
+		dbc.bindValue(SWTObservables.observeText(bmime), PojoObservables.observeValue(proxy, "mime")); //$NON-NLS-1$
+		dbc.bindValue(SWTObservables.observeText(loc.getCombo()), PojoObservables.observeValue(value, "locale")); //$NON-NLS-1$
+		dbc.bindValue(SWTObservables.observeText(tz.getCombo()), PojoObservables.observeValue(value, "timeZone")); //$NON-NLS-1$
 
 		dbc.bindValue(SWTObservables.observeSelection(bdaterange),
 				PojoObservables.observeValue(value, "supportsDateRanges")); //$NON-NLS-1$
-		dbc.bindValue(SWTObservables.observeSelection(bUseSoap),
-				PojoObservables.observeValue(value, "useOnlySOAP")); //$NON-NLS-1$
-		dbc.bindValue(SWTObservables.observeSelection(bSyncDA),
-				PojoObservables.observeValue(value, "syncDA")); //$NON-NLS-1$
-		dbc.bindValue(SWTObservables.observeSelection(bSSO),
-				PojoObservables.observeValue(value, "useSSO")); //$NON-NLS-1$
+		dbc.bindValue(SWTObservables.observeSelection(bUseSoap), PojoObservables.observeValue(value, "useOnlySOAP")); //$NON-NLS-1$
+		dbc.bindValue(SWTObservables.observeSelection(bSyncDA), PojoObservables.observeValue(value, "syncDA")); //$NON-NLS-1$
+		dbc.bindValue(SWTObservables.observeSelection(bSSO), PojoObservables.observeValue(value, "useSSO")); //$NON-NLS-1$
 
 		dbc.bindValue(SWTObservables.observeText(cversion.getControl()),
 				PojoObservables.observeValue(proxy, "jrVersion")); //$NON-NLS-1$
 
-		tpass.loadSecret(JRServerSecretsProvider.SECRET_NODE_ID,
-				Misc.nvl(sprofile.getValue().getPass()));
+		tpass.loadSecret(JRServerSecretsProvider.SECRET_NODE_ID, Misc.nvl(sprofile.getValue().getPass()));
 
 		showServerInfo();
 	}
@@ -273,14 +257,12 @@ public class ServerProfilePage extends WizardPage implements
 		ccas = new Combo(cmpCAS, SWT.READ_ONLY | SWT.SINGLE | SWT.BORDER);
 
 		String v = null;
-		v = JasperReportsConfiguration.getDefaultInstance().getPrefStore()
-				.getString(CASPreferencePage.CAS);
+		v = JasperReportsConfiguration.getDefaultInstance().getPrefStore().getString(CASPreferencePage.CAS);
 		for (String line : v.split("\n")) { //$NON-NLS-1$
 			if (line.isEmpty())
 				continue;
 			try {
-				SSOServer srv = (SSOServer) CastorHelper.read(
-						new ByteArrayInputStream(Base64.decodeBase64(line)),
+				SSOServer srv = (SSOServer) CastorHelper.read(new ByteArrayInputStream(Base64.decodeBase64(line)),
 						CASListFieldEditor.mapping);
 				ssoservers.add(srv);
 			} catch (Exception e) {
@@ -320,6 +302,9 @@ public class ServerProfilePage extends WizardPage implements
 	private Composite cmpCAS;
 	private StackLayout stackLayout;
 	private Composite cmpCredential;
+	private CTabItem drvtab;
+	private CTabFolder tabFolder;
+	private Button bUpld;
 
 	private Composite createAdvancedSettings(Composite parent) {
 		Composite cmp = new Composite(parent, SWT.NONE);
@@ -329,8 +314,7 @@ public class ServerProfilePage extends WizardPage implements
 		lbl.setText(Messages.ServerProfilePage_jrversion);
 
 		cversion = new VersionCombo(cmp);
-		((Combo) cversion.getControl()).setItem(0,
-				Messages.ServerProfilePage_25);
+		((Combo) cversion.getControl()).setItem(0, Messages.ServerProfilePage_25);
 		cversion.setVersion(JRXmlWriterHelper.LAST_VERSION);
 		GridData gd = new GridData();
 		gd.horizontalSpan = 2;
@@ -434,15 +418,12 @@ public class ServerProfilePage extends WizardPage implements
 		blpath.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				ContainerSelectionDialog csd = new ContainerSelectionDialog(
-						getShell(), ResourcesPlugin.getWorkspace().getRoot(),
-						true, Messages.ServerProfilePage_19);
+				ContainerSelectionDialog csd = new ContainerSelectionDialog(getShell(),
+						ResourcesPlugin.getWorkspace().getRoot(), true, Messages.ServerProfilePage_19);
 				if (csd.open() == Dialog.OK) {
 					Object[] selection = csd.getResult();
-					if (selection != null && selection.length > 0
-							&& selection[0] instanceof Path) {
-						sprofile.setProjectPath(((Path) selection[0])
-								.toPortableString());
+					if (selection != null && selection.length > 0 && selection[0] instanceof Path) {
+						sprofile.setProjectPath(((Path) selection[0]).toPortableString());
 						dbc.updateTargets();
 					}
 				}
@@ -480,8 +461,7 @@ public class ServerProfilePage extends WizardPage implements
 		Composite cmp = new Composite(parent, SWT.NONE);
 		cmp.setLayout(new GridLayout());
 
-		txtInfo = new Text(cmp, SWT.READ_ONLY | SWT.MULTI | SWT.WRAP
-				| SWT.V_SCROLL);
+		txtInfo = new Text(cmp, SWT.READ_ONLY | SWT.MULTI | SWT.WRAP | SWT.V_SCROLL);
 		txtInfo.setLayoutData(new GridData(GridData.FILL_BOTH));
 		txtInfo.setBackground(cmp.getBackground());
 
@@ -547,8 +527,7 @@ public class ServerProfilePage extends WizardPage implements
 
 	@Override
 	public void performHelp() {
-		PlatformUI.getWorkbench().getHelpSystem()
-				.displayHelp("com.jaspersoft.studio.doc.jaspersoftserver"); //$NON-NLS-1$
+		PlatformUI.getWorkbench().getHelpSystem().displayHelp("com.jaspersoft.studio.doc.jaspersoftserver"); //$NON-NLS-1$
 	}
 
 	@Override
@@ -564,4 +543,115 @@ public class ServerProfilePage extends WizardPage implements
 
 	}
 
+	public void connect() {
+		UIUtils.getDisplay().asyncExec(new Runnable() {
+
+			@Override
+			public void run() {
+				if (drvtab != null)
+					drvtab.dispose();
+			}
+		});
+	}
+
+	public void connectionOK() {
+		UIUtils.getDisplay().asyncExec(new Runnable() {
+
+			@Override
+			public void run() {
+				if (drvtab != null)
+					drvtab.dispose();
+				createJdbcDrivers(tabFolder);
+			}
+		});
+	}
+
+	private void createJdbcDrivers(CTabFolder tabFolder) {
+		if (sprofile.getWsClient() == null || !sprofile.getWsClient().isSupported(Feature.EXPORTMETADATA)
+				|| sprofile.getWsClient().getServerProfile() == null
+				|| sprofile.getWsClient().getServerProfile().getClientUser() == null)
+			return;
+		boolean hasPermission = false;
+		for (ClientRole r : sprofile.getWsClient().getServerProfile().getClientUser().getRoleSet())
+			if (r.getName().equals("ROLE_SUPERUSER")) {
+				hasPermission = true;
+				break;
+			}
+		if (!hasPermission)
+			return;
+
+		drvtab = new CTabItem(tabFolder, SWT.NONE);
+		drvtab.setText("JDBC Drivers");
+
+		Composite cmp = new Composite(tabFolder, SWT.NONE);
+		cmp.setLayout(new GridLayout(2, false));
+
+		Label lbl = new Label(cmp, SWT.NONE | SWT.WRAP);
+		lbl.setText(
+				"You can upload jdbc drivers to the server. Warning, drivers are global on the server, please be careful.");
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.widthHint = 300;
+		gd.horizontalSpan = 2;
+		lbl.setLayoutData(gd);
+
+		new Label(cmp, SWT.NONE).setText("Driver Class Name");
+		final Text dname = new Text(cmp, SWT.BORDER);
+		dname.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+
+		final ClasspathComponent cpath = new ClasspathComponent(cmp) {
+			@Override
+			protected void handleClasspathChanged() {
+				bUpld.setEnabled(!Misc.isNullOrEmpty(getClasspaths()) && !Misc.isNullOrEmpty(dname.getText()));
+			}
+		};
+		gd = new GridData(GridData.FILL_BOTH);
+		gd.horizontalSpan = 2;
+		cpath.getControl().setLayoutData(gd);
+
+		bUpld = new Button(cmp, SWT.PUSH);
+		bUpld.setText("Upload");
+		gd = new GridData(GridData.HORIZONTAL_ALIGN_CENTER);
+		gd.horizontalSpan = 2;
+		bUpld.setLayoutData(gd);
+		bUpld.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				try {
+					getContainer().run(false, true, new IRunnableWithProgress() {
+
+						@Override
+						public void run(IProgressMonitor monitor)
+								throws InvocationTargetException, InterruptedException {
+							monitor.beginTask("Uploading JDBC", IProgressMonitor.UNKNOWN);
+							JdbcDriver driver = new JdbcDriver();
+							driver.setClassname(dname.getText());
+							driver.setPaths(cpath.getClasspaths());
+							try {
+								sprofile.getWsClient().uploadJdbcDrivers(driver, monitor);
+
+								UIUtils.showInformation("Drivers uploaded successfully.");
+							} catch (Exception e) {
+								UIUtils.showError(e);
+							}
+						}
+					});
+				} catch (InvocationTargetException e1) {
+					UIUtils.showError(e1.getCause());
+				} catch (InterruptedException e1) {
+					UIUtils.showError(e1.getCause());
+				}
+			}
+		});
+		bUpld.setEnabled(!Misc.isNullOrEmpty(cpath.getClasspaths()) && !Misc.isNullOrEmpty(dname.getText()));
+
+		dname.addModifyListener(new ModifyListener() {
+
+			@Override
+			public void modifyText(ModifyEvent e) {
+				bUpld.setEnabled(!Misc.isNullOrEmpty(cpath.getClasspaths()) && !Misc.isNullOrEmpty(dname.getText()));
+			}
+		});
+
+		drvtab.setControl(cmp);
+	}
 }

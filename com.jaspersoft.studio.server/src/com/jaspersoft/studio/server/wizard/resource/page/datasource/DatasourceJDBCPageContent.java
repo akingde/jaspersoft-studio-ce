@@ -12,10 +12,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.wizard.resource.page.datasource;
 
-import net.sf.jasperreports.data.AbstractDataAdapterService;
-import net.sf.jasperreports.data.jdbc.JdbcDataAdapter;
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.util.SecretsUtil;
+import java.util.List;
 
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.beans.PojoObservables;
@@ -36,8 +33,14 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.wizard.resource.APageContent;
+import com.jaspersoft.studio.swt.widgets.ClasspathComponent;
 import com.jaspersoft.studio.utils.UIUtil;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
+import net.sf.jasperreports.data.AbstractDataAdapterService;
+import net.sf.jasperreports.data.jdbc.JdbcDataAdapter;
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.util.SecretsUtil;
 
 public class DatasourceJDBCPageContent extends APageContent {
 
@@ -45,9 +48,9 @@ public class DatasourceJDBCPageContent extends APageContent {
 	private Text turl;
 	private Text tuser;
 	private Text tpass;
+	private ClasspathComponent cpath;
 
-	public DatasourceJDBCPageContent(ANode parent, AMResource resource,
-			DataBindingContext bindingContext) {
+	public DatasourceJDBCPageContent(ANode parent, AMResource resource, DataBindingContext bindingContext) {
 		super(parent, resource, bindingContext);
 	}
 
@@ -90,8 +93,38 @@ public class DatasourceJDBCPageContent extends APageContent {
 		tpass.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		TimeZoneProperty.addTimeZone(res, composite);
-
 		createImportButton(composite, tdriver, turl, tuser, tpass);
+		// try {
+		// if (res.getWsClient().isSupported(Feature.SEARCHREPOSITORY)) {
+		// Label lbl = new Label(composite, SWT.SEPARATOR | SWT.HORIZONTAL);
+		// GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		// gd.horizontalSpan = 2;
+		// lbl.setLayoutData(gd);
+		//
+		// new Label(composite, SWT.NONE);
+		//
+		// lbl = new Label(composite, SWT.NONE | SWT.WRAP);
+		// lbl.setText(
+		// "You can upload jdbc drivers to the server. Warning, drivers are
+		// global on the server, be careful.");
+		// gd = new GridData(GridData.FILL_HORIZONTAL);
+		// gd.widthHint = 300;
+		// lbl.setLayoutData(gd);
+		//
+		// new Label(composite, SWT.NONE);
+		//
+		// cpath = new ClasspathComponent(composite) {
+		// @Override
+		// protected void handleClasspathChanged() {
+		// ResourceDescriptor rd = res.getValue();
+		// rd.setValue(getClasspaths());
+		// }
+		// };
+		// cpath.getControl().setLayoutData(new GridData(GridData.FILL_BOTH));
+		// }
+		// } catch (Exception e) {
+		// e.printStackTrace();
+		// }
 
 		rebind();
 		return composite;
@@ -100,8 +133,7 @@ public class DatasourceJDBCPageContent extends APageContent {
 	@Override
 	protected void rebind() {
 		ResourceDescriptor rd = res.getValue();
-		bindingContext.bindValue(
-				SWTObservables.observeText(tdriver, SWT.Modify),
+		bindingContext.bindValue(SWTObservables.observeText(tdriver, SWT.Modify),
 				PojoObservables.observeValue(rd, "driverClass")); //$NON-NLS-1$
 		bindingContext.bindValue(SWTObservables.observeText(turl, SWT.Modify),
 				PojoObservables.observeValue(rd, "connectionUrl")); //$NON-NLS-1$
@@ -109,15 +141,16 @@ public class DatasourceJDBCPageContent extends APageContent {
 				PojoObservables.observeValue(rd, "username")); //$NON-NLS-1$
 		bindingContext.bindValue(SWTObservables.observeText(tpass, SWT.Modify),
 				PojoObservables.observeValue(rd, "password")); //$NON-NLS-1$
+		if (cpath != null && res.getValue() != null && res.getValue() instanceof List)
+			cpath.setClasspaths((List<String>) res.getValue());
 	}
 
-	protected void createImportButton(Composite composite, final Text tdriver,
-			final Text turl, final Text tuser, final Text tpass) {
+	protected void createImportButton(Composite composite, final Text tdriver, final Text turl, final Text tuser,
+			final Text tpass) {
 		Button importDA = new Button(composite, SWT.NONE);
 		importDA.setText(Messages.RDDatasourceJDBCPage_ImportButton);
 		importDA.setToolTipText(Messages.RDDatasourceJDBCPage_ImportButtonTooltip);
-		importDA.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, true, false, 2,
-				1));
+		importDA.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, true, false, 2, 1));
 		importDA.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -152,8 +185,7 @@ public class DatasourceJDBCPageContent extends APageContent {
 		if (jrconfig == null)
 			jrconfig = JasperReportsConfiguration.getDefaultInstance();
 		SecretsUtil secretsUtil = SecretsUtil.getInstance(jrconfig);
-		return secretsUtil.getSecret(
-				AbstractDataAdapterService.SECRETS_CATEGORY, encodedPasswd);
+		return secretsUtil.getSecret(AbstractDataAdapterService.SECRETS_CATEGORY, encodedPasswd);
 	}
 
 	@Override

@@ -87,13 +87,16 @@ public class ServerProfileWizard extends Wizard {
 	private void connectionOK() {
 		UIUtils.getDisplay().asyncExec(new Runnable() {
 			public void run() {
-				MessageDialog.openInformation(getShell(), Messages.ServerProfileWizard_1, Messages.ServerProfileWizard_2);
+				MessageDialog.openInformation(getShell(), Messages.ServerProfileWizard_1,
+						Messages.ServerProfileWizard_2);
+				page0.connectionOK();
 			}
 		});
 	}
 
 	private IStatus connect(final boolean onlycheck, IProgressMonitor monitor) throws InvocationTargetException {
 		try {
+			page0.connect();
 			monitor.beginTask(Messages.ServerProfileWizard_3, IProgressMonitor.UNKNOWN);
 			if (onlycheck) {
 				if (WSClientHelper.checkConnection(serverProfile, monitor))

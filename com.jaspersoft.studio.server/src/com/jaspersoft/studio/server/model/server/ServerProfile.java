@@ -16,15 +16,15 @@ import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import com.jaspersoft.jasperserver.dto.authority.ClientUser;
+import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
+
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.design.events.JRChangeEventsSupport;
 import net.sf.jasperreports.engine.design.events.JRPropertyChangeSupport;
 import net.sf.jasperreports.repo.Resource;
 
-import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
-
-public class ServerProfile implements Resource, Cloneable, Serializable,
-		JRChangeEventsSupport {
+public class ServerProfile implements Resource, Cloneable, Serializable, JRChangeEventsSupport {
 
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
@@ -46,8 +46,17 @@ public class ServerProfile implements Resource, Cloneable, Serializable,
 	private String timeZone;
 	private boolean useSSO = false;
 	private String ssoUuid;
-	private JRPropertyChangeSupport propertyChange = new JRPropertyChangeSupport(
-			this);
+	private ClientUser clientUser;
+
+	private JRPropertyChangeSupport propertyChange = new JRPropertyChangeSupport(this);
+
+	public ClientUser getClientUser() {
+		return clientUser;
+	}
+
+	public void setClientUser(ClientUser clientUser) {
+		this.clientUser = clientUser;
+	}
 
 	public String getSsoUuid() {
 		return ssoUuid;

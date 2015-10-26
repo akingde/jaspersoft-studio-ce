@@ -46,6 +46,7 @@ import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.model.MFolder;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.AMResource;
+import com.jaspersoft.studio.server.model.IInputControlsContainer;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.protocol.IConnection;
 
@@ -59,12 +60,9 @@ public class PasteResourceAction extends Action {
 		setId(ActionFactory.PASTE.getId());
 		setText(Messages.common_paste);
 		setToolTipText(Messages.common_paste);
-		ISharedImages sharedImages = PlatformUI.getWorkbench()
-				.getSharedImages();
-		setImageDescriptor(sharedImages
-				.getImageDescriptor(ISharedImages.IMG_TOOL_PASTE));
-		setDisabledImageDescriptor(sharedImages
-				.getImageDescriptor(ISharedImages.IMG_TOOL_PASTE_DISABLED));
+		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
+		setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_PASTE));
+		setDisabledImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_PASTE_DISABLED));
 		this.treeViewer = treeViewer;
 	}
 
@@ -85,17 +83,19 @@ public class PasteResourceAction extends Action {
 						res = true;
 						break;
 					}
+					if (!isSameServer(parent, (AMResource) obj)
+							&& (obj instanceof IInputControlsContainer || obj instanceof MFolder)) {
+						return false;
+					}
 				}
 		}
 		if (res) {
-			Object firstElement = ((TreeSelection) treeViewer.getSelection())
-					.getFirstElement();
+			Object firstElement = ((TreeSelection) treeViewer.getSelection()).getFirstElement();
 			res = firstElement != null;
 			if (res) {
 				if (firstElement instanceof AMResource) {
 					AMResource mres = (AMResource) firstElement;
-					int pmask = mres.getValue().getPermissionMask(
-							mres.getWsClient());
+					int pmask = mres.getValue().getPermissionMask(mres.getWsClient());
 					res = res && (pmask == 1 || (pmask & 4) == 4);
 				}
 			}
@@ -123,12 +123,11 @@ public class PasteResourceAction extends Action {
 		ProgressMonitorDialog pm = new ProgressMonitorDialog(UIUtils.getShell());
 		try {
 			pm.run(true, true, new IRunnableWithProgress() {
-				public void run(IProgressMonitor monitor)
-						throws InvocationTargetException, InterruptedException {
+				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 					try {
 						INode root = parent.getRoot();
-						final String puri = parent instanceof AMResource ? ((AMResource) parent)
-								.getValue().getUriString() : ""; //$NON-NLS-1$
+						final String puri = parent instanceof AMResource
+								? ((AMResource) parent).getValue().getUriString() : ""; //$NON-NLS-1$
 						doWork(monitor, parent, list);
 						ANode p = parent;
 						if (parent instanceof AMResource)
@@ -138,10 +137,7 @@ public class PasteResourceAction extends Action {
 								public boolean visit(INode n) {
 									if (n instanceof AMResource) {
 										AMResource mres = (AMResource) n;
-										if (mres.getValue() != null
-												&& mres.getValue()
-														.getUriString()
-														.equals(puri)) {
+										if (mres.getValue() != null && mres.getValue().getUriString().equals(puri)) {
 											setObject(mres);
 											stop();
 										}
@@ -179,8 +175,7 @@ public class PasteResourceAction extends Action {
 	private boolean exists = false;
 	private PasteDialog d;
 
-	private void doWork(IProgressMonitor monitor, ANode parent, List<?> list)
-			throws Exception {
+	private void doWork(IProgressMonitor monitor, ANode parent, List<?> list) throws Exception {
 		MServerProfile sp = (MServerProfile) parent.getRoot();
 		String dURI = ((AMResource) parent).getValue().getUriString();
 		IConnection ws = sp.getWsClient(monitor);
@@ -188,8 +183,7 @@ public class PasteResourceAction extends Action {
 
 		monitor.beginTask(Messages.PasteResourceAction_1 + dURI, list.size());
 		if (parent instanceof MReportUnit)
-			parent.setValue(ws.get(monitor, ((AMResource) parent).getValue(),
-					null));
+			parent.setValue(ws.get(monitor, ((AMResource) parent).getValue(), null));
 
 		for (Object obj : list) {
 			if (obj instanceof AMResource && obj instanceof ICopyable) {
@@ -243,18 +237,14 @@ public class PasteResourceAction extends Action {
 						File file = FileUtils.createTempFile("tmp", "file"); //$NON-NLS-1$ //$NON-NLS-2$
 						try {
 							rd = mc.get(monitor, origin, file);
-							rd.setData(Base64
-									.encodeBase64(net.sf.jasperreports.eclipse.util.FileUtils
-											.getBytes(file)));
+							rd.setData(Base64.encodeBase64(net.sf.jasperreports.eclipse.util.FileUtils.getBytes(file)));
 							rd.setHasData(origin.getData() != null);
 						} catch (Throwable e) {
 							file = null;
 						}
 						if (parent instanceof MFolder) {
-							rd.setUriString(dURI
-									+ "/" + rd.getName() + (copy ? "_COPY" : "")); //$NON-NLS-1$
-							rd.setLabel(origin.getLabel()
-									+ (copy ? "_COPY" : ""));
+							rd.setUriString(dURI + "/" + rd.getName() + (copy ? "_COPY" : "")); //$NON-NLS-1$
+							rd.setLabel(origin.getLabel() + (copy ? "_COPY" : ""));
 							fixUris(rd, monitor, mc);
 							ws.addOrModifyResource(monitor, rd, file);
 						} else if (parent instanceof MReportUnit)
@@ -266,8 +256,7 @@ public class PasteResourceAction extends Action {
 							try {
 								rd = mc.get(monitor, origin, file);
 								rd.setData(Base64
-										.encodeBase64(net.sf.jasperreports.eclipse.util.FileUtils
-												.getBytes(file)));
+										.encodeBase64(net.sf.jasperreports.eclipse.util.FileUtils.getBytes(file)));
 								rd.setHasData(origin.getData() != null);
 							} catch (Throwable e) {
 								file = null;
@@ -293,11 +282,8 @@ public class PasteResourceAction extends Action {
 							origin.setLabel(origin.getName() + "_COPY");
 							origin.setUriString(origin.getUriString() + "_COPY");
 						}
-						if (!(m.getParent() instanceof MFolder)
-								&& m.getParent() instanceof AMResource) {
-							if (origin.getParentFolder() != null
-									&& !origin.getParentFolder().endsWith(
-											"_files")) //$NON-NLS-1$
+						if (!(m.getParent() instanceof MFolder) && m.getParent() instanceof AMResource) {
+							if (origin.getParentFolder() != null && !origin.getParentFolder().endsWith("_files")) //$NON-NLS-1$
 								origin.setIsReference(true);
 						}
 						saveToReportUnit(monitor, parent, ws, origin);
@@ -310,24 +296,21 @@ public class PasteResourceAction extends Action {
 				break;
 		}
 		if (parent instanceof MReportUnit)
-			parent.setValue(ws.addOrModifyResource(monitor,
-					(ResourceDescriptor) parent.getValue(), null));
+			parent.setValue(ws.addOrModifyResource(monitor, (ResourceDescriptor) parent.getValue(), null));
 		toRefresh.add(parent);
 		for (ANode n : toRefresh)
 			refreshNode(n, monitor);
 	}
 
-	protected void deleteIfCut(IProgressMonitor monitor, AMResource m)
-			throws Exception {
+	protected void deleteIfCut(IProgressMonitor monitor, AMResource m) throws Exception {
 		if (m.isCut()) {
 			m.setCut(false);
 			WSClientHelper.deleteResource(monitor, m);
 		}
 	}
 
-	protected void saveToReportUnit(IProgressMonitor monitor, ANode parent,
-			IConnection ws, ResourceDescriptor origin) throws IOException,
-			Exception {
+	protected void saveToReportUnit(IProgressMonitor monitor, ANode parent, IConnection ws, ResourceDescriptor origin)
+			throws IOException, Exception {
 		ResourceDescriptor prd = (ResourceDescriptor) parent.getValue();
 		ResourceDescriptor rd = null;
 		File file = null;
@@ -339,22 +322,18 @@ public class PasteResourceAction extends Action {
 			rd.setIsNew(true);
 			rd.setIsReference(true);
 			rd.setReferenceUri(origin.getUriString());
-			rd.setParentFolder(prd.getParentFolder()
-					+ "/" + prd.getName() + "_files"); //$NON-NLS-1$ //$NON-NLS-2$
+			rd.setParentFolder(prd.getParentFolder() + "/" + prd.getName() + "_files"); //$NON-NLS-1$ //$NON-NLS-2$
 			if (ResourceFactory.isFileResourceType(origin))
 				rd.setWsType(ResourceDescriptor.TYPE_REFERENCE);
 			else
 				rd.setWsType(origin.getWsType());
-			rd.setUriString(prd.getParentFolder()
-					+ "/" + prd.getName() + "_files/" + prd.getName()); //$NON-NLS-1$ //$NON-NLS-2$
+			rd.setUriString(prd.getParentFolder() + "/" + prd.getName() + "_files/" + prd.getName()); //$NON-NLS-1$ //$NON-NLS-2$
 		} else {
 			file = FileUtils.createTempFile("tmp", "file"); //$NON-NLS-1$ //$NON-NLS-2$
 
 			try {
 				rd = ws.get(monitor, origin, file);
-				rd.setData(Base64
-						.encodeBase64(net.sf.jasperreports.eclipse.util.FileUtils
-								.getBytes(file)));
+				rd.setData(Base64.encodeBase64(net.sf.jasperreports.eclipse.util.FileUtils.getBytes(file)));
 				rd.setHasData(rd.getData() != null);
 
 				rd = doPasteIntoReportUnit(prd, rd);
@@ -373,16 +352,14 @@ public class PasteResourceAction extends Action {
 		else if (parent instanceof MServerProfile)
 			pc = ((MServerProfile) parent).getWsClient();
 		if (pc != null && mc != null)
-			return mc.getServerProfile().getUrl()
-					.equals(pc.getServerProfile().getUrl());
+			return mc.getServerProfile().getUrl().equals(pc.getServerProfile().getUrl());
 
 		return true;
 	}
 
-	protected ResourceDescriptor doPasteIntoReportUnit(ResourceDescriptor prd,
-			ResourceDescriptor origin) {
+	protected ResourceDescriptor doPasteIntoReportUnit(ResourceDescriptor prd, ResourceDescriptor origin) {
 		String ruuri = prd.getUriString();
-		origin.setParentFolder(ruuri + "_files"); //$NON-NLS-1$ 
+		origin.setParentFolder(ruuri + "_files"); //$NON-NLS-1$
 		origin.setIsNew(true);
 		origin.setName(getRName(origin.getName(), prd.getChildren()));
 		origin.setUriString(origin.getParentFolder() + "/" + origin.getName()); //$NON-NLS-1$
@@ -412,8 +389,7 @@ public class PasteResourceAction extends Action {
 		return n;
 	}
 
-	private void fixUris(ResourceDescriptor rd, IProgressMonitor monitor,
-			IConnection mc) {
+	private void fixUris(ResourceDescriptor rd, IProgressMonitor monitor, IConnection mc) {
 		for (ResourceDescriptor r : rd.getChildren()) {
 			r.setIsNew(true);
 			if (!r.getIsReference() && r.getParentFolder().contains("_file")) {
@@ -422,16 +398,13 @@ public class PasteResourceAction extends Action {
 					file = FileUtils.createTempFile("tmp", "file");
 					try {
 						r = mc.get(monitor, r, file);
-						r.setData(Base64
-								.encodeBase64(net.sf.jasperreports.eclipse.util.FileUtils
-										.getBytes(file)));
+						r.setData(Base64.encodeBase64(net.sf.jasperreports.eclipse.util.FileUtils.getBytes(file)));
 						r.setHasData(r.getData() != null);
 					} catch (Throwable e) {
 						file = null;
 					}
 
-					r.setUriString(r.getUriString().replaceFirst(
-							r.getParentFolder(), rd.getUriString() + "_file"));
+					r.setUriString(r.getUriString().replaceFirst(r.getParentFolder(), rd.getUriString() + "_file"));
 					r.setParentFolder(rd.getUriString());
 					fixUris(r, monitor, mc);
 				} catch (IOException e1) {
@@ -444,13 +417,11 @@ public class PasteResourceAction extends Action {
 		}
 	}
 
-	private void refreshNode(INode p, IProgressMonitor monitor)
-			throws Exception {
+	private void refreshNode(INode p, IProgressMonitor monitor) throws Exception {
 		if (p instanceof AMResource)
 			WSClientHelper.refreshResource((AMResource) p, monitor);
 		else if (p instanceof MServerProfile) {
-			WSClientHelper.listFolder(((MServerProfile) p),
-					((MServerProfile) p).getWsClient(monitor),
+			WSClientHelper.listFolder(((MServerProfile) p), ((MServerProfile) p).getWsClient(monitor),
 					Messages.PasteResourceAction_15, monitor, 2);
 		}
 	}

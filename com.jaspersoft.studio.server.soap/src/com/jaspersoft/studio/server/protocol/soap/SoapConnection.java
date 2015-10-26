@@ -27,10 +27,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import net.sf.jasperreports.eclipse.util.FileUtils;
-import net.sf.jasperreports.engine.JRQueryChunk;
-import net.sf.jasperreports.engine.design.JRDesignQuery;
-
 import org.apache.axis.AxisProperties;
 import org.apache.axis.components.net.DefaultCommonsHTTPClientProperties;
 import org.apache.commons.codec.binary.Base64;
@@ -46,6 +42,7 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.Argument;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ListItem;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.jasperserver.dto.authority.ClientUser;
+import com.jaspersoft.jasperserver.dto.jdbcdrivers.JdbcDriverInfo;
 import com.jaspersoft.jasperserver.dto.permissions.RepositoryPermission;
 import com.jaspersoft.jasperserver.dto.resources.ClientResource;
 import com.jaspersoft.jasperserver.dto.serverinfo.ServerInfo;
@@ -57,6 +54,7 @@ import com.jaspersoft.studio.server.model.datasource.filter.IDatasourceFilter;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
 import com.jaspersoft.studio.server.protocol.Feature;
 import com.jaspersoft.studio.server.protocol.IConnection;
+import com.jaspersoft.studio.server.protocol.JdbcDriver;
 import com.jaspersoft.studio.server.protocol.ReportExecution;
 import com.jaspersoft.studio.server.publish.PublishUtil;
 import com.jaspersoft.studio.server.wizard.exp.ExportOptions;
@@ -64,6 +62,10 @@ import com.jaspersoft.studio.server.wizard.imp.ImportOptions;
 import com.jaspersoft.studio.server.wizard.permission.PermissionOptions;
 import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorDatasource;
 import com.jaspersoft.studio.utils.Misc;
+
+import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.engine.JRQueryChunk;
+import net.sf.jasperreports.engine.design.JRDesignQuery;
 
 public class SoapConnection implements IConnection {
 	protected DateFormat dateFormat = SimpleDateFormat.getDateInstance();
@@ -684,6 +686,18 @@ public class SoapConnection implements IConnection {
 			List<RepositoryPermission> perms, PermissionOptions options,
 			IProgressMonitor monitor) throws Exception {
 		return perms;
+	}
+
+	@Override
+	public void uploadJdbcDrivers(JdbcDriver driver, IProgressMonitor monitor) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public JdbcDriverInfo getJdbcDrivers(IProgressMonitor monitor) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

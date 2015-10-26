@@ -353,6 +353,8 @@ public class Messages extends NLS {
 	public static String ResourcesPage_title;
 	public static String ResourceToFolderAction_0;
 	public static String ResourceWizard_windowtitle;
+	public static String RestV2ConnectionJersey_0;
+	public static String RestV2ConnectionJersey_175;
 	public static String RDJarPage_title;
 	public static String RDJrxmlPage_title;
 	public static String RDStyleTemplatePage_title;

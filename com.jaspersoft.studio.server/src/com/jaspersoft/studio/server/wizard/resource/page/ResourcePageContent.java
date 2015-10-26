@@ -104,7 +104,7 @@ public class ResourcePageContent extends APageContent {
 		bisRef.setText(Messages.ResourcePageContent_isReference);
 		bisRef.setEnabled(false);
 
-		if (res.getWsClient().isSupported(Feature.PERMISSION)) {
+		if (res.getWsClient() != null && res.getWsClient().isSupported(Feature.PERMISSION)) {
 			bPerm = new Button(composite, SWT.PUSH);
 			bPerm.setText(Messages.ResourcePageContent_0);
 			if (res.getValue().getIsNew())
@@ -187,8 +187,10 @@ public class ResourcePageContent extends APageContent {
 	protected void rebind() {
 		ResourceDescriptor rd = res.getValue();
 		if (tudate != null)
-			bindingContext.bindValue(SWTObservables.observeText(tudate, SWT.NONE), PojoObservables.observeValue(proxy, "updateDate")); //$NON-NLS-1$
-		bindingContext.bindValue(SWTObservables.observeText(tparent, SWT.NONE), PojoObservables.observeValue(proxy, "parentFolder")); //$NON-NLS-1$
+			bindingContext.bindValue(SWTObservables.observeText(tudate, SWT.NONE),
+					PojoObservables.observeValue(proxy, "updateDate")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeText(tparent, SWT.NONE),
+				PojoObservables.observeValue(proxy, "parentFolder")); //$NON-NLS-1$
 		IConnection c = res.getWsClient();
 		final Format f = (c != null ? c.getTimestampFormat() : DateFormat.getTimeInstance());
 
@@ -212,27 +214,32 @@ public class ResourcePageContent extends APageContent {
 				return f.format(fromObject);
 			}
 		};
-		bindingContext.bindValue(SWTObservables.observeText(tcdate, SWT.NONE), PojoObservables.observeValue(rd, "creationDate"), new UpdateValueStrategy().setConverter(t2mConv), //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeText(tcdate, SWT.NONE),
+				PojoObservables.observeValue(rd, "creationDate"), new UpdateValueStrategy().setConverter(t2mConv), //$NON-NLS-1$
 				new UpdateValueStrategy().setConverter(m2tConv));
 
-		bindingContext.bindValue(SWTObservables.observeText(ttype, SWT.NONE), PojoObservables.observeValue(rd, "wsType")); //$NON-NLS-1$ 
-		bindingContext.bindValue(SWTObservables.observeSelection(bisRef), PojoObservables.observeValue(rd, "isReference")); //$NON-NLS-1$ 
+		bindingContext.bindValue(SWTObservables.observeText(ttype, SWT.NONE),
+				PojoObservables.observeValue(rd, "wsType")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeSelection(bisRef),
+				PojoObservables.observeValue(rd, "isReference")); //$NON-NLS-1$
 		bindingContext.bindValue(SWTObservables.observeText(tid, SWT.Modify), PojoObservables.observeValue(rd, "name"), //$NON-NLS-1$
 				new UpdateValueStrategy().setAfterConvertValidator(new IDStringValidator()), null);
 
-		bindingContext.bindValue(SWTObservables.observeText(tname, SWT.Modify), PojoObservables.observeValue(rd, "label"), //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeText(tname, SWT.Modify),
+				PojoObservables.observeValue(rd, "label"), //$NON-NLS-1$
 				new UpdateValueStrategy().setAfterConvertValidator(new EmptyStringValidator()), null);
-		bindingContext.bindValue(SWTObservables.observeText(tdesc, SWT.Modify), PojoObservables.observeValue(rd, "description")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeText(tdesc, SWT.Modify),
+				PojoObservables.observeValue(rd, "description")); //$NON-NLS-1$
 		bindingContext.updateTargets();
-//		bindingContext.updateModels();
-		 
+		// bindingContext.updateModels();
+
 		final IConnection con = getWsClient();
 		if (!rd.getIsNew() && !con.isSupported(Feature.SEARCHREPOSITORY) && res instanceof MAdHocDataView) {
 			ttype.setEnabled(false);
 			if (tname != null)
 				tname.setEnabled(false);
 			if (tdesc != null)
-				tdesc.setEnabled(false); 
+				tdesc.setEnabled(false);
 			UIUtils.getDisplay().asyncExec(new Runnable() {
 
 				@Override
