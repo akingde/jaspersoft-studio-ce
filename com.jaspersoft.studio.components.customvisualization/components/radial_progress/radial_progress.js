@@ -151,20 +151,25 @@ define('radial_progress',['d3'], function (d3) {
             
             
                 var textFormatter = d3.format(options.valueFormat);
-            
-                var txt = svg.append("text").text( d3.format(options.valueFormat)(options.value))
+                
+                var txt_g = svg.append("g");
+                var txt = txt_g.append("text").text( d3.format(options.valueFormat)(options.value))
                         .datum({value: options.value})
                         .attr("x", "50%")
-                        .attr("y", "50%")
+                        .attr("y", "0")
                         .attr("text-anchor","middle")
-                        .attr("alignment-baseline","central")
+                        //.attr("alignment-baseline","middle")
                         .attr("fill", options.fgColor)
                         .attr("fill-opacity", options.fgOpacity);
-                    //    .style("font-size", 90)
-                    //    .style("font-family", "arial,sans-serif")
-                        
-                
-                if (options.animation) {
+
+                // We need to find the baseline correction, since batik does not support alignment-baseline...
+                 var bbox = txt.node().getBBox();
+                 var baseline = bbox.height + bbox.y;
+						  
+                 var text_y = ((h - bbox.height) / 2) + bbox.height - baseline;
+                 txt_g.attr("transform","translate(0," + text_y + ")");
+         
+                 if (options.animation) {
                     
                     txt.transition()
                         .duration(750)
