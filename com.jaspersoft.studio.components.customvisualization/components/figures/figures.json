@@ -31,7 +31,7 @@
                   "label": "module",
                   "description": "module",
                   "mandatory": "true",
-                  "defaultValue": "d3circle",
+                  "defaultValue": "figures",
                   "type": "TEXT",
                   "readOnly": "true"
                 }

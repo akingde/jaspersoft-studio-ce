@@ -147,7 +147,7 @@ public class CreateCustomVisualizationCommand extends CreateElementCommand {
 										{
 											try {
 												String fileName = cpd.getDefaultValue();
-												if (fileName != null && (new File(fileName)).exists())
+												if (fileName != null)
 												{
 													UIManager.copyFile(m, jConfig, cpd.getDefaultValue());
 												}
