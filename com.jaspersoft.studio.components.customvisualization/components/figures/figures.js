@@ -20,11 +20,11 @@ define('figures',['d3'], function (d3) {
         	figure: "Male",
         	itemsCount: 1,
         	itemsValue: 1,
-        	figureColor: "#000000",
-            figureOpacity: "1",
-        	phantomColor: "#0000000",
-            phantomOpacity: "0.2",
-        	showPhantom: true,
+        	fgColor: "#000000",
+            fgOpacity: "1",
+        	bgColor: "#0000000",
+            bgOpacity: "0.2",
+        	showBackground: true,
         	rows: 0,
         	columns: 0,
         	vAlign: "top",  // top, bottom, middle
@@ -54,10 +54,10 @@ define('figures',['d3'], function (d3) {
          };
          
          // Converting boolean from strings...
-         options.showPhantom = checkBoolean(options.showPhantom);
+         options.showBackground = checkBoolean(options.showBackground);
          options.maximizeColumnNumber = checkBoolean(options.maximizeColumnNumber);
          
-         var showPhantom = options.showPhantom;
+         var showPhantom = options.showBackground;
         
          
         if (items_count < items_value) {
@@ -119,68 +119,6 @@ define('figures',['d3'], function (d3) {
 			figurePath = "M 111.16211,7.0859375 C 89.859805,7.0865511 72.591331,24.355899 72.591797,45.658203 c 6.14e-4,21.301541 17.268771,38.569699 38.570313,38.570313 21.3023,4.63e-4 38.57165,-17.268011 38.57227,-38.570313 4.6e-4,-21.303066 -17.2692,-38.5727289 -38.57227,-38.5722655 z m 0,81.4550785 -43.214844,0 c -13.25556,0 -20.201482,11.206694 -23.927735,23.927734 L 8.078125,235.17383 c -3.726252,12.72104 3.328424,36.68164 16.583984,36.68164 l 0.357422,0 43.285157,-136.16992 c 0.479517,-1.50848 1.274561,-2.85743 2.857421,-2.85743 1.58285,0 2.857422,1.27457 2.857422,2.85743 l 0,24.35156 -43.503906,149.72266 43.688997,-0.28002 -0.157747,124.03978 c -0.01335,10.49966 7.325182,18.95313 16.425781,18.95313 9.100601,0 16.427734,-8.45346 16.427734,-18.95313 l 0,-123.73222 8.88086,0.0279 0,123.25898 c 0,10.49967 7.32713,18.95312 16.42773,18.95312 9.1006,0 16.42579,-8.45345 16.42579,-18.95312 l 0,-123.40879 43.53125,0.28001 -43.50391,-150.35364 0,-24.35157 c 0,-1.58286 1.27457,-2.85742 2.85742,-2.85742 1.58286,0 2.3779,1.34894 2.85742,2.85742 l 43.28516,136.16993 0.35742,0 c 13.25556,0 20.31025,-23.9606 16.58399,-36.68164 L 178.66211,112.02344 C 174.93585,99.302397 167.83295,86.061677 154.73438,88.095703 Z"; 
 		}
         
-        
-		/*
-	    var createPattern = function(name, color, opacity) {
-	    	// the background is a pattern...
-			var pattern = defs.append("pattern")
-				.attr("id", name)
-				.attr("patternUnits", "objectBoundingBox")
-				.attr("width", 1.0)
-				.attr("height", 1.0)
-				.attr("patternTransform", "translate(0,0)")
-				.append("g");
-				
-			var figure = pattern.append("path");
-				
-			if (options.customPath != "")
-			{
-				figure.attr("d", options.customPath);
-			}
-			else if (man)
-			{
-				figure.attr("d", "M 67.142578,0 A 38.571423,38.571423 0 0 0 28.572266,38.572266 38.571423,38.571423 0 0 0 67.142578,77.142578 38.571423,38.571423 0 0 0 105.71484,38.572266 38.571423,38.571423 0 0 0 67.142578,0 Z M 23.927734,81.455078 C 10.672174,81.455078 0,92.127252 0,105.38281 l 0,143.57422 c 0,13.25556 10.672174,23.92774 23.927734,23.92774 l 0.357422,0 0,-144.28516 c 0,-1.58286 1.274562,-2.85742 2.857422,-2.85742 1.58285,0 2.857422,1.27456 2.857422,2.85742 l 0,144.28516 0.02734,0 0,153.54882 c 0,10.49967 7.325181,18.95313 16.425781,18.95313 9.1006,0 16.427734,-8.45346 16.427734,-18.95313 l 0,-153.54882 4.261719,0 4.261719,0 0,153.54882 c 0,10.49967 7.327134,18.95313 16.427734,18.95313 9.1006,0 16.425783,-8.45346 16.425783,-18.95313 l 0,-153.54882 0.0273,0 0,-144.28516 c 0,-1.58286 1.27457,-2.85742 2.85742,-2.85742 1.58286,0 2.85742,1.27456 2.85742,2.85742 l 0,144.28516 0.35742,0 c 13.25556,0 23.92774,-10.67218 23.92774,-23.92774 l 0,-143.57422 c 0,-13.255558 -10.67218,-23.927732 -23.92774,-23.927732 l -43.214846,0 -43.214844,0 z");
-			}
-			else
-			{
-				figure.attr("d", "M 111.16211,7.0859375 C 89.859805,7.0865511 72.591331,24.355899 72.591797,45.658203 c 6.14e-4,21.301541 17.268771,38.569699 38.570313,38.570313 21.3023,4.63e-4 38.57165,-17.268011 38.57227,-38.570313 4.6e-4,-21.303066 -17.2692,-38.5727289 -38.57227,-38.5722655 z m 0,81.4550785 -43.214844,0 c -13.25556,0 -20.201482,11.206694 -23.927735,23.927734 L 8.078125,235.17383 c -3.726252,12.72104 3.328424,36.68164 16.583984,36.68164 l 0.357422,0 43.285157,-136.16992 c 0.479517,-1.50848 1.274561,-2.85743 2.857421,-2.85743 1.58285,0 2.857422,1.27457 2.857422,2.85743 l 0,24.35156 -43.503906,149.72266 43.688997,-0.28002 -0.157747,124.03978 c -0.01335,10.49966 7.325182,18.95313 16.425781,18.95313 9.100601,0 16.427734,-8.45346 16.427734,-18.95313 l 0,-123.73222 8.88086,0.0279 0,123.25898 c 0,10.49967 7.32713,18.95312 16.42773,18.95312 9.1006,0 16.42579,-8.45345 16.42579,-18.95312 l 0,-123.40879 43.53125,0.28001 -43.50391,-150.35364 0,-24.35157 c 0,-1.58286 1.27457,-2.85742 2.85742,-2.85742 1.58286,0 2.3779,1.34894 2.85742,2.85742 l 43.28516,136.16993 0.35742,0 c 13.25556,0 20.31025,-23.9606 16.58399,-36.68164 L 178.66211,112.02344 C 174.93585,99.302397 167.83295,86.061677 154.73438,88.095703 Z"); 
-				
-			}
-			
-			figure.attr("fill", color);
-            figure.attr("fill-opacity", opacity);
-            
-            
-			
-			// Center the path...
-			var bbox = getbbox2(figure.attr("d"));
-		    var fwidth = bbox.width;
-		    var fheight = bbox.height;
-		   
-            figure.attr("transform", "translate(" + (-bbox.x+5) + "," + (-bbox.y+5)  + ")");
-		   
-		   // Add some fixed padding to isolate the figure...(10 px...)
-		   // This will prevent to have repeating backgrounds making the single figure dirty...
-		   
-//		   pattern.append("rect")
-//			   .attr("x", 0)
-//			   .attr("y", 0)
-//			   .attr("width", fwidth+10)
-//			   .attr("height", fheight+10)
-//			   .style("fill","#000000")
-//               .style("fill-opacity","0");
-            
-            figureBbox.width = fwidth+10;
-            figureBbox.height = fheight+10;
-            
-	    };
-	    
-	    
-	    createPattern("figure", options.figureColor, options.figureOpacity);
-	    createPattern("figure_gray", options.phantomColor, options.phantomOpacity);
-	    
-	    */
-	    
 	    var bbox = getbbox2(figurePath);
 	    
 	    // Add some minimal path padding.
@@ -365,7 +303,7 @@ define('figures',['d3'], function (d3) {
 						//		   .attr("width", bbox.width)
 						//		   .attr("height", bbox.height);
 								   
-						phantom = appendFigure( phantom, options.phantomColor, options.phantomOpacity ); 		   
+						phantom = appendFigure( phantom, options.bgColor, options.bgOpacity ); 		   
 								   //.attr("fill","url(#figure_gray)");
 								   //.style("stroke","#000")
 								   //.style("stroke-width","0px"); 	
@@ -390,7 +328,7 @@ define('figures',['d3'], function (d3) {
 						//		   .attr("width", bbox.width)
 						//		   .attr("height", bbox.height);
 								   
-						itemFigure =appendFigure( itemFigure, options.figureColor, options.figureOpacity );	
+						itemFigure =appendFigure( itemFigure, options.fgColor, options.fgOpacity );	
 						itemFigure.attr("transform","translate(" + (i * bbox.width) + "," + j * bbox.height +")");		 
 								   
 								   //.attr("fill","url(#figure)");

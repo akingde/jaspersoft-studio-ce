@@ -47,7 +47,7 @@
                   "description": "The value use to calculate the percentage based on the target value",
                   "mandatory": "false",
                   "type": "double",
-                  "defaultValue":"1"
+                  "defaultValue":"90"
                 },
                 {
                   "name": "target",
@@ -55,7 +55,7 @@
                   "description": "If not specified, it defaults to 1",
                   "mandatory": "false",
                   "type": "double",
-                  "defaultValue":"1"
+                  "defaultValue":"100"
                 },
                 {
                   "name": "valueFormat",
@@ -63,7 +63,16 @@
                   "description": "How to format the value (D3js syntax)",
                   "mandatory": "false",
                   "type": "text",
-                  "defaultValue":".2f"
+                  "defaultValue":".1%"
+                },
+                {
+                  "name": "autoFit",
+                  "label": "Auto fit",
+                  "description": "If true, the font size of the label is automatically calculated.",
+                  "mandatory": "false",
+                  "type": "combo",
+                  "options": ["true","false"], 
+                  "defaultValue":"true"
                 },
                 {
                   "name": "fgColor",
@@ -84,7 +93,7 @@
                   "max":"1"
                 },
                 {
-                  "name": "showBackGround:",
+                  "name": "showBackGround",
                   "label": "Show Background",
                   "description": "Shows the background rings",
                   "mandatory": "false",
@@ -106,7 +115,7 @@
                   "description": "The opacity of the background color.",
                   "mandatory": "false",
                   "type": "float",
-                  "defaultValue":"1",
+                  "defaultValue":"0.2",
                   "min":"0",
                   "max":"1"
                 }
@@ -133,7 +142,7 @@
                   "defaultValue":"4.0"
                 },
                 {
-                  "name": "maxRings:",
+                  "name": "maxRings",
                   "label": "Max number of rings",
                   "description": "The maximum number of rings displayed",
                   "mandatory": "false",
@@ -143,7 +152,7 @@
                 {
                   "name": "hPadding",
                   "label": "Horizontal Padding",
-                  "description": "The space between figures",
+                  "description": "The space at left and right",
                   "mandatory": "false",
                   "type": "integer",
                   "defaultValue":"10"
@@ -151,7 +160,7 @@
                 {
                   "name": "vPadding",
                   "label": "Vertical Padding",
-                  "description": "The space between figures",
+                  "description": "The space at top and bottom",
                   "mandatory": "false",
                   "type": "integer",
                   "defaultValue":"10"
@@ -159,7 +168,7 @@
                 {
                   "name": "animation",
                   "label": "Use animation",
-                  "description": "The space between figures",
+                  "description": "Use an animation when displaying the component",
                   "mandatory": "false",
                   "type": "combo",
                   "options": ["true","false"], 

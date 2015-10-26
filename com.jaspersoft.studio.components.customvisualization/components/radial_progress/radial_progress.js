@@ -32,11 +32,12 @@ define('radial_progress',['d3'], function (d3) {
                         bgOpacity: 0.2,
                         ringThickness: 4,
                         ringPadding: 4,
-                        showBackGround: true,
+                        showBackground: true,
                         hPadding: 10,
                         vPadding: 10,
                         maxRings: 5,
                         valueFormat: ".2f",
+                        autoFit: true,
                         animation: true
                 }
 
@@ -50,6 +51,7 @@ define('radial_progress',['d3'], function (d3) {
                 options.ringThickness = parseFloat(options.ringThickness);
                 options.ringPadding = parseFloat(options.ringPadding);
                 options.animation = checkBoolean(options.animation);
+                options.autoFit = checkBoolean(options.autoFit);
          
                 // The max diameter
                 var diameter = Math.min(w - options.hPadding*2, h-options.vPadding*2);
@@ -67,6 +69,7 @@ define('radial_progress',['d3'], function (d3) {
                 var rings = [];
                 var currentValue = options.value;
                 var index = 0;
+                var lastRingRadius = (diameter/2);
                 
                 while (currentValue > 0)
                 {
@@ -77,6 +80,8 @@ define('radial_progress',['d3'], function (d3) {
                     ring_item.endAngle = 360 * (ring_item.value)  * (Math.PI/180);
                     ring_item.outerRadius = (diameter/2) - (index * (options.ringThickness + options.ringPadding));
                     ring_item.innerRadius = ring_item.outerRadius - options.ringThickness;
+                    
+                    lastRingRadius = ring_item.innerRadius;
                     
                     index++;
                     currentValue -= 1;
@@ -116,7 +121,7 @@ define('radial_progress',['d3'], function (d3) {
                 
                 var rings_container_bg = svg.append("g").attr("class", "rings_bg").attr("transform","translate(" + w/2 + "," + h/2 + ")");
                 
-                if (options.showBackGround)
+                if (options.showBackground)
                 {
                      var ring_bg_nodes = rings_container_bg.selectAll("path").data(rings); 
                      
@@ -155,7 +160,7 @@ define('radial_progress',['d3'], function (d3) {
                 var txt_g = svg.append("g");
                 var txt = txt_g.append("text").text( d3.format(options.valueFormat)(options.value))
                         .datum({value: options.value})
-                        .attr("x", "50%")
+                        .attr("x", "0")
                         .attr("y", "0")
                         .attr("text-anchor","middle")
                         //.attr("alignment-baseline","middle")
@@ -164,11 +169,21 @@ define('radial_progress',['d3'], function (d3) {
 
                 // We need to find the baseline correction, since batik does not support alignment-baseline...
                  var bbox = txt.node().getBBox();
-                 var baseline = bbox.height + bbox.y;
-						  
+				 var baseline = bbox.height + bbox.y;
                  var text_y = ((h - bbox.height) / 2) + bbox.height - baseline;
-                 txt_g.attr("transform","translate(0," + text_y + ")");
+                 var text_x = (w  / 2);
+                 txt_g.attr("transform","translate(" + text_x + "," + text_y + ")");
          
+                 if (options.autoFit)
+                 {
+                    // In this case we need to be sure that the text box is not big as the last ring...
+                    var box_radius = Math.sqrt( Math.pow(bbox.height/2,2) +  Math.pow(bbox.width/2,2) );
+                    var ratio = lastRingRadius / box_radius;
+                    text_y = ((h - bbox.height*ratio) / 2) + bbox.height*ratio - baseline*ratio;
+                    text_x = (w  / 2);
+                    txt_g.attr("transform","translate(" + text_x + "," + text_y + ") scale(" + ratio + ")");
+                 }
+            
                  if (options.animation) {
                     
                     txt.transition()

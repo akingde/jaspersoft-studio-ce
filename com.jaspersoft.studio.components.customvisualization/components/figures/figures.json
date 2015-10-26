@@ -75,17 +75,17 @@
                   "defaultValue":""
                 },
                 {
-                  "name": "figureColor",
-                  "label": "Selection Color",
-                  "description": "The color used for selected items.",
+                  "name": "fgColor",
+                  "label": "Foreground Colour",
+                  "description": "The color used to plot the figures.",
                   "mandatory": "false",
                   "type": "color",
                   "defaultValue":"#000000"
                 },
                 {
-                  "name": "figureOpacity",
-                  "label": "Selection Opacity",
-                  "description": "The opacity used for selected items.",
+                  "name": "fgOpacity",
+                  "label": "Foreground Opacity",
+                  "description": "Opacity of the foreground color. Opacity spans from 0 (transparent) to 1 (fully visible)",
                   "mandatory": "false",
                   "type": "float",
                   "defaultValue":"1",
@@ -93,26 +93,26 @@
                   "max":"1"
                 },
                 {
-                  "name": "showPhantom",
-                  "label": "Show Phantom Figures",
-                  "description": "Shows the phantom figures accordingly to items count",
+                  "name": "showBackground",
+                  "label": "Show Background Figures",
+                  "description": "Show or hide the background figures",
                   "mandatory": "false",
                   "type": "combo",
                   "options": ["true","false"], 
                   "defaultValue":"true"
                 },
                 {
-                  "name": "phantomColor",
-                  "label": "Phantom Color",
-                  "description": "The color used for phantom items.",
+                  "name": "bgColor",
+                  "label": "Background Color",
+                  "description": "The background color used for the not selected figures.",
                   "mandatory": "false",
                   "type": "color",
                   "defaultValue":"#0000000"
                 },
                 {
-                  "name": "phantomOpacity",
-                  "label": "Phantom Opacity",
-                  "description": "The opacity used for phantom items.",
+                  "name": "bgOpacity",
+                  "label": "Background Opacity",
+                  "description": "Opacity of the background color. Opacity spans from 0 (transparent) to 1 (fully visible)",
                   "mandatory": "false",
                   "type": "float",
                   "defaultValue":"0.2",
