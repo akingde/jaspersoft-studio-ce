@@ -230,10 +230,12 @@ public class JSSGridBagUIProvider implements ILayoutUIProvider{
 				//at this point o1 is not null for sure
 				return 1;
 			}
-			return Integer.compare(Integer.parseInt(o1), Integer.parseInt(o2));
+			int hint1 = Integer.parseInt(o1);
+			int hint2 = Integer.parseInt(o2);
+			return (hint1 < hint2) ? -1 : ((hint1 == hint2) ? 0 : 1);
 		}
 	};
-	
+
 	/**
 	 * The combo where the user can set the column position or select the relative value
 	 */
