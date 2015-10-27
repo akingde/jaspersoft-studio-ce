@@ -161,6 +161,8 @@ public class JDBCDataAdapterComposite extends ADataAdapterComposite {
 						"tibcosoftware.jdbc.mongodb.MongoDBDriver", "jdbc:tibcosoftware:mongodb://{0}:$[dbPort];SchemaDefinition=[schemaDefinition]"), //$NON-NLS-1$ //$NON-NLS-2$
 				new JDBCDriverDefinition("RedShift (TIBCO Jaspersoft)", //$NON-NLS-1$
 						"tibcosoftware.jdbc.redshift.RedshiftDriver", "jdbc:tibcosoftware:redshift://{0}:$[dbPort];databaseName={1};TransactionMode=ignore;LoginTimeout=30"), //$NON-NLS-1$ //$NON-NLS-2$
+				new JDBCDriverDefinition("SparkSQL (TIBCO Jaspersoft)", //$NON-NLS-1$
+						"tibcosoftware.jdbc.sparksql.SparkSQLDriver", "jdbc:tibcosoftware:sparksql://{0}:10000") //$NON-NLS-1$ //$NON-NLS-2$
 		
 		};  
 		
