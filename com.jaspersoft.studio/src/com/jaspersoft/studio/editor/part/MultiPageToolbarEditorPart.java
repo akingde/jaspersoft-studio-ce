@@ -15,8 +15,6 @@ package com.jaspersoft.studio.editor.part;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -69,6 +67,8 @@ import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.part.PageSwitcher;
 import org.eclipse.ui.services.IDisposable;
 import org.eclipse.ui.services.IServiceLocator;
+
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 public abstract class MultiPageToolbarEditorPart extends EditorPart implements IPageChangeProvider {
 
@@ -228,7 +228,7 @@ public abstract class MultiPageToolbarEditorPart extends EditorPart implements I
 	 *          The composite in which the container tab folder should be created; must not be <code>null</code>.
 	 * @return a new container
 	 */
-	private TFContainer createContainer(final Composite parent) {
+	private TFContainer createContainer(Composite parent) {
 		// use SWT.FLAT style so that an extra 1 pixel border is not reserved
 		// inside the folder
 		parent.setLayout(new FillLayout());
@@ -237,18 +237,7 @@ public abstract class MultiPageToolbarEditorPart extends EditorPart implements I
 			public void widgetSelected(SelectionEvent e) {
 				ToolItem ti = (ToolItem) e.getSource();
 				int newPageIndex = newContainer.indexOf((TFItem) ti.getData());
-				int oldPageIndex = getActivePage();
-				container.setSelection(newPageIndex);
-				pageChange(newPageIndex, oldPageIndex);
-				// TODO, workaround here, after selection, container is not refreshed
-				final Point size = parent.getParent().getSize();
-				parent.getParent().setSize(size.x - 2, size.y - 2);
-				UIUtils.getDisplay().asyncExec(new Runnable() {
-					@Override
-					public void run() {
-						parent.getParent().setSize(size.x, size.y);
-					}
-				});
+				switchEditorPage(newPageIndex);
 			}
 		});
 		newContainer.addTraverseListener(new TraverseListener() {
@@ -267,6 +256,27 @@ public abstract class MultiPageToolbarEditorPart extends EditorPart implements I
 			}
 		});
 		return newContainer;
+	}
+	
+	/**
+	 * Switch the editor page to the selected page
+	 * 
+	 * @param newPageIndex the index of the page to be shown, must be a valid index
+	 */
+	protected void switchEditorPage(int newPageIndex){
+		Assert.isTrue(newPageIndex >= 0 && newPageIndex < getPageCount());
+		int oldPageIndex = getActivePage();
+		container.setSelection(newPageIndex);
+		pageChange(newPageIndex, oldPageIndex);
+		final Composite containerParent = container.getParent();
+		final Point size = containerParent.getParent().getSize();
+		containerParent.getParent().setSize(size.x - 2, size.y - 2);
+		UIUtils.getDisplay().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				containerParent.getParent().setSize(size.x, size.y);
+			}
+		});
 	}
 
 	/**

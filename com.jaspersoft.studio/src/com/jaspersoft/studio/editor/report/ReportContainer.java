@@ -331,6 +331,10 @@ public class ReportContainer extends MultiPageToolbarEditorPart implements ITabb
 		int ind = editors.indexOf(ave);
 		//Check if the removed page is the current one
 		boolean switchToMainPage = ind == getActivePage();
+		if (switchToMainPage){
+			//If the removed page was the current one go back to the main page
+			switchEditorPage(0);
+		}
 		if (ind >= 0 && ind < getPageCount()){
 			removePage(ind);
 		}
@@ -349,8 +353,6 @@ public class ReportContainer extends MultiPageToolbarEditorPart implements ITabb
 			ccMap.remove(okey);
 		}
 		ave.dispose();
-		//If the removed page was the current one go back to the main page
-		if (switchToMainPage) setActivePage(0);
 	}
 
 	/**
