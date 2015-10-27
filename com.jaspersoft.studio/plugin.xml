@@ -2073,4 +2073,13 @@
              actionId="com.jaspersoft.studio.ask_usage_statistics">
        </actionProvider>
     </extension>
+    <extension
+          point="org.eclipse.ui.bindings">
+       <key
+             commandId="org.eclipse.ui.edit.delete"
+             contextId="org.eclipse.ui.contexts.window"
+             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+             sequence="BS">
+       </key>
+    </extension>
 </plugin>
