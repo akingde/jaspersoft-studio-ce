@@ -50,6 +50,7 @@ import com.jaspersoft.studio.data.sql.action.union.ChangeSetOperator;
 import com.jaspersoft.studio.data.sql.action.union.CreateUnion;
 import com.jaspersoft.studio.data.sql.messages.Messages;
 import com.jaspersoft.studio.data.sql.model.query.AMKeyword;
+import com.jaspersoft.studio.data.sql.model.query.AMQueryObject;
 import com.jaspersoft.studio.data.sql.model.query.MUnion;
 import com.jaspersoft.studio.data.sql.model.query.expression.MExpression;
 import com.jaspersoft.studio.data.sql.model.query.expression.MExpressionGroup;
@@ -89,17 +90,14 @@ public class ActionFactory {
 
 		actions.add(null);
 		actions.add(new DeleteColumn(designer, treeViewer));
-		actions.add(new DeleteAction<MSelectSubQuery>(designer, treeViewer,
-				Messages.ActionFactory_0, MSelectSubQuery.class));
-		actions.add(new DeleteAction<MQueryTable>(designer, treeViewer,
-				Messages.ActionFactory_0, MQueryTable.class) {
+		actions.add(new DeleteAction<MSelectSubQuery>(designer, treeViewer, Messages.ActionFactory_0,
+				MSelectSubQuery.class));
+		actions.add(new DeleteAction<MQueryTable>(designer, treeViewer, Messages.ActionFactory_0, MQueryTable.class) {
 			@Override
 			protected boolean isGoodNode(ANode element) {
 				boolean gn = super.isGoodNode(element);
-				if (!gn
-						&& element.getValue() instanceof MQueryTable
-						|| (designer.isDiagram() && element.getParent() != null && isGoodNode(element
-								.getParent())))
+				if (!gn && element.getValue() instanceof MQueryTable
+						|| (designer.isDiagram() && element.getParent() != null && isGoodNode(element.getParent())))
 					return true;
 				return gn;
 			}
@@ -110,8 +108,7 @@ public class ActionFactory {
 				if (!b && obj instanceof ANode) {
 					ANode element = (ANode) obj;
 					if (element.getValue() instanceof MQueryTable
-							|| (element.getParent() != null && isObjectToDelete(element
-									.getParent())))
+							|| (element.getParent() != null && isObjectToDelete(element.getParent())))
 						return true;
 				}
 				return b;
@@ -134,20 +131,66 @@ public class ActionFactory {
 
 		actions.add(new CreateGroupByColumn(designer, treeViewer));
 		actions.add(null);
-		actions.add(new DeleteAction<MGroupByColumn>(designer, treeViewer,
-				Messages.ActionFactory_2, MGroupByColumn.class));
-		actions.add(new DeleteAction<MGroupByExpression>(designer, treeViewer,
-				Messages.ActionFactory_1, MGroupByExpression.class));
+		actions.add(
+				new DeleteAction<AMQueryObject>(designer, treeViewer, Messages.ActionFactory_2, AMQueryObject.class) {
+					@Override
+					public boolean calculateEnabled(Object[] selection) {
+						if (selection.length == 1) {
+							if (selection[0] instanceof MGroupByColumn)
+								setText(Messages.DeleteAction_0 + " " + Messages.ActionFactory_2);
+							else if (selection[0] instanceof MGroupByExpression)
+								setText(Messages.DeleteAction_0 + " " + Messages.ActionFactory_1);
+						} else
+							setText(Messages.DeleteAction_0);
+						return super.calculateEnabled(selection);
+					}
+
+					@Override
+					protected boolean isGoodNode(ANode element) {
+						return MGroupByColumn.class.isAssignableFrom(element.getClass())
+								|| MGroupByExpression.class.isAssignableFrom(element.getClass());
+					}
+
+					@Override
+					protected boolean isObjectToDelete(Object obj) {
+						return MGroupByColumn.class.isAssignableFrom(obj.getClass())
+								|| MGroupByExpression.class.isAssignableFrom(obj.getClass());
+					}
+				});
 		actions.add(null);
 
 		actions.add(new CreateOrderByColumn(designer, treeViewer));
 		actions.add(null);
 		actions.add(new OrderByDesc(treeViewer));
 		actions.add(null);
-		actions.add(new DeleteAction<MOrderByColumn>(designer, treeViewer,
-				Messages.ActionFactory_2, MOrderByColumn.class));
-		actions.add(new DeleteAction<MOrderByExpression>(designer, treeViewer,
-				Messages.ActionFactory_1, MOrderByExpression.class));
+		actions.add(
+				new DeleteAction<AMQueryObject>(designer, treeViewer, Messages.ActionFactory_2, AMQueryObject.class) {
+					@Override
+					public boolean calculateEnabled(Object[] selection) {
+						if (selection.length == 1) {
+							if (selection[0] instanceof MOrderByColumn)
+								setText(Messages.DeleteAction_0 + " " + Messages.ActionFactory_2);
+							else if (selection[0] instanceof MOrderByExpression)
+								setText(Messages.DeleteAction_0 + " " + Messages.ActionFactory_1);
+						} else
+							setText(Messages.DeleteAction_0);
+						return super.calculateEnabled(selection);
+					}
+
+					@Override
+					protected boolean isGoodNode(ANode element) {
+						return MOrderByColumn.class.isAssignableFrom(element.getClass())
+								|| MOrderByExpression.class.isAssignableFrom(element.getClass());
+					}
+
+					@Override
+					protected boolean isObjectToDelete(Object obj) {
+						return MOrderByColumn.class.isAssignableFrom(obj.getClass())
+								|| MOrderByExpression.class.isAssignableFrom(obj.getClass());
+					}
+				});
+		actions.add(new DeleteAction<MOrderByExpression>(designer, treeViewer, Messages.ActionFactory_1,
+				MOrderByExpression.class));
 
 		actions.add(null);
 		actions.add(new CreateExpressionGroup(treeViewer));
@@ -158,30 +201,22 @@ public class ActionFactory {
 		actions.add(null);
 		actions.add(new CreateUnion(treeViewer));
 		actions.add(null);
-		actions.add(new ChangeSetOperator(AMKeyword.SET_OPERATOR_UNION,
-				treeViewer));
-		actions.add(new ChangeSetOperator(AMKeyword.SET_OPERATOR_UNION_ALL,
-				treeViewer));
-		actions.add(new ChangeSetOperator(AMKeyword.SET_OPERATOR_EXCEPT,
-				treeViewer));
-		actions.add(new ChangeSetOperator(AMKeyword.SET_OPERATOR_INTERSECT,
-				treeViewer));
-		actions.add(new ChangeSetOperator(AMKeyword.SET_OPERATOR_MINUS,
-				treeViewer));
+		actions.add(new ChangeSetOperator(AMKeyword.SET_OPERATOR_UNION, treeViewer));
+		actions.add(new ChangeSetOperator(AMKeyword.SET_OPERATOR_UNION_ALL, treeViewer));
+		actions.add(new ChangeSetOperator(AMKeyword.SET_OPERATOR_EXCEPT, treeViewer));
+		actions.add(new ChangeSetOperator(AMKeyword.SET_OPERATOR_INTERSECT, treeViewer));
+		actions.add(new ChangeSetOperator(AMKeyword.SET_OPERATOR_MINUS, treeViewer));
 		actions.add(null);
 		actions.add(new EditExpression(treeViewer));
 		actions.add(null);
-		actions.add(new DeleteAction<MUnion>(designer, treeViewer,
-				Messages.ActionFactory_4, MUnion.class));
+		actions.add(new DeleteAction<MUnion>(designer, treeViewer, Messages.ActionFactory_4, MUnion.class));
 		actions.add(null);
-		actions.add(new DeleteAction<MExpression>(designer, treeViewer,
-				Messages.ActionFactory_5, MExpression.class));
-		actions.add(new DeleteAction<MExpressionX>(designer, treeViewer,
-				Messages.ActionFactory_6, MExpressionX.class));
-		actions.add(new DeleteAction<MExpressionPNot>(designer, treeViewer,
-				Messages.ActionFactory_3, MExpressionPNot.class));
-		actions.add(new DeleteAction<MExpressionGroup>(designer, treeViewer,
-				Messages.ActionFactory_7, MExpressionGroup.class));
+		actions.add(new DeleteAction<MExpression>(designer, treeViewer, Messages.ActionFactory_5, MExpression.class));
+		actions.add(new DeleteAction<MExpressionX>(designer, treeViewer, Messages.ActionFactory_6, MExpressionX.class));
+		actions.add(new DeleteAction<MExpressionPNot>(designer, treeViewer, Messages.ActionFactory_3,
+				MExpressionPNot.class));
+		actions.add(new DeleteAction<MExpressionGroup>(designer, treeViewer, Messages.ActionFactory_7,
+				MExpressionGroup.class));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -209,8 +244,7 @@ public class ActionFactory {
 	public List<DeleteAction<?>> getDeleteActions(Object[] selection) {
 		List<DeleteAction<?>> res = new ArrayList<DeleteAction<?>>();
 		for (AAction act : actions) {
-			if (act != null && act instanceof DeleteAction
-					&& act.calculateEnabled(selection))
+			if (act != null && act instanceof DeleteAction && act.calculateEnabled(selection))
 				res.add((DeleteAction<?>) act);
 		}
 		return res;
