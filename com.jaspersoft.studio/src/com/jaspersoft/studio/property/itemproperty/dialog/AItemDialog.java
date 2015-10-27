@@ -64,7 +64,8 @@ public abstract class AItemDialog extends ATitledDialog implements IExpressionCo
 	protected EditableDatasetBaseComposite compositeDatasetInfo;
 	protected boolean showDataset = true;
 
-	public AItemDialog(Shell parentShell, ADescriptor descriptor, JasperReportsConfiguration jrConfig, boolean showDataset) {
+	public AItemDialog(Shell parentShell, ADescriptor descriptor, JasperReportsConfiguration jrConfig,
+			boolean showDataset) {
 		super(parentShell);
 		setTitle(descriptor.getDisplayName());
 		this.jrConfig = jrConfig;
@@ -118,7 +119,7 @@ public abstract class AItemDialog extends ATitledDialog implements IExpressionCo
 			if (itemData.getDataset() != null) {
 				if (compositeDatasetInfo != null)
 					compositeDatasetInfo.dispose();
-				createDatasetComposite(dsCmp);
+				createDatasetComposite(dsCmp, true);
 			} else {
 				if (compositeDatasetInfo != null)
 					compositeDatasetInfo.dispose();
@@ -283,9 +284,10 @@ public abstract class AItemDialog extends ATitledDialog implements IExpressionCo
 		});
 	}
 
-	protected void createDatasetComposite(Composite container) {
-		compositeDatasetInfo = new EditableDatasetBaseComposite(new ComponentElementDatasetAdapter(
-				(JRDesignElementDataset) itemData.getDataset(), jrConfig), container, SWT.NONE) {
+	protected void createDatasetComposite(Composite container, boolean center) {
+		compositeDatasetInfo = new EditableDatasetBaseComposite(
+				new ComponentElementDatasetAdapter((JRDesignElementDataset) itemData.getDataset(), jrConfig), container,
+				SWT.NONE) {
 			@Override
 			protected IEditableDatasetRun getEditableDatesetRun() {
 				return new ComponentElementDatasetRunAdapter(this.getEditableDataset());
@@ -303,13 +305,14 @@ public abstract class AItemDialog extends ATitledDialog implements IExpressionCo
 
 		dsCmp.layout();
 		UIUtils.relayoutDialog(getShell(), 0, -1);
-		UIUtils.centerDialog(getShell());
+		if (center)
+			UIUtils.centerDialog(getShell());
 	}
 
 	private ExpressionContext getExpressionContextFromDSRun() {
 		if (itemData.getDataset() != null) {
-			JRDesignDataset ds = ModelUtils.getDesignDatasetForDatasetRun(jrConfig.getJasperDesign(), itemData.getDataset()
-					.getDatasetRun());
+			JRDesignDataset ds = ModelUtils.getDesignDatasetForDatasetRun(jrConfig.getJasperDesign(),
+					itemData.getDataset().getDatasetRun());
 			return new ExpressionContext(ds, jrConfig);
 		}
 		return null;
@@ -333,8 +336,8 @@ public abstract class AItemDialog extends ATitledDialog implements IExpressionCo
 
 	protected void setupExpressionContext() {
 		if (itemData.getDataset() != null) {
-			JRDesignDataset ds = ModelUtils.getDesignDatasetForDatasetRun(jrConfig.getJasperDesign(), itemData.getDataset()
-					.getDatasetRun());
+			JRDesignDataset ds = ModelUtils.getDesignDatasetForDatasetRun(jrConfig.getJasperDesign(),
+					itemData.getDataset().getDatasetRun());
 			currentExpContext = new ExpressionContext(ds, jrConfig);
 		} else
 			currentExpContext = new ExpressionContext(jrConfig);
@@ -348,7 +351,7 @@ public abstract class AItemDialog extends ATitledDialog implements IExpressionCo
 			compositeDatasetInfo = null;
 		} else {
 			itemData.setDataset(new JRDesignElementDataset());
-			createDatasetComposite(dsCmp);
+			createDatasetComposite(dsCmp, false);
 		}
 		setupItemDataCombo();
 		setupExpressionContext();
