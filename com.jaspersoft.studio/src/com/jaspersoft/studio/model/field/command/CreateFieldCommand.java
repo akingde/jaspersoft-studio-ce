@@ -56,14 +56,16 @@ public class CreateFieldCommand extends Command {
 		this.jrDataSet = (JRDesignDataset) destNode.getValue();
 		this.index = index;
 		if (srcNode != null && srcNode.getValue() != null)
-			this.jrField = (JRDesignField) srcNode.getValue();
+			this.jrField = (JRDesignField) srcNode.getValue().clone();
 	}
 
 	public CreateFieldCommand(JRDesignDataset destNode, JRDesignField srcNode, int index) {
 		super();
 		this.jrDataSet = destNode;
 		this.index = index;
-		this.jrField = srcNode;
+		if (srcNode != null){
+			this.jrField = (JRDesignField)srcNode.clone();
+		}
 	}
 
 	/*
@@ -75,7 +77,7 @@ public class CreateFieldCommand extends Command {
 	public void execute() {
 		if (jrField == null) {
 			this.jrField = MField.createJRField(jrDataSet);
-		}
+		} 
 		if (jrField != null) {
 			if (index < 0)
 				index = jrDataSet.getFieldsList().size();
@@ -87,9 +89,12 @@ public class CreateFieldCommand extends Command {
 			} catch (JRException e) {
 				e.printStackTrace();
 				if (e.getMessage().startsWith("Duplicate declaration")) { //$NON-NLS-1$
-					String defaultName = ModelUtils.getDefaultName(jrDataSet.getFieldsMap(), "CopyOFField_"); //$NON-NLS-1$
-					InputDialog dlg = new InputDialog(Display.getCurrent().getActiveShell(),
-							Messages.CreateFieldCommand_field_name, Messages.CreateFieldCommand_field_name_text_dialog, defaultName,
+					String defaultName = "CopyOf_" + jrField.getName();
+					if (jrDataSet.getFieldsMap().containsKey(defaultName)){
+						defaultName = ModelUtils.getDefaultName(jrDataSet.getFieldsMap(), defaultName + "_"); //$NON-NLS-1$
+					}
+					
+					InputDialog dlg = new InputDialog(Display.getCurrent().getActiveShell(),Messages.CreateFieldCommand_field_name, Messages.CreateFieldCommand_field_name_text_dialog, defaultName,
 							null);
 					if (dlg.open() == InputDialog.OK) {
 						jrField.setName(dlg.getValue());
