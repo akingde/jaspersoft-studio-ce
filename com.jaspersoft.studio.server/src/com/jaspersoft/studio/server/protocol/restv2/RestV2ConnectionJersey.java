@@ -44,10 +44,10 @@ import org.glassfish.jersey.apache.connector.ApacheClientProperties;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.client.spi.Connector;
+import org.glassfish.jersey.media.multipart.Boundary;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.media.multipart.file.FileDataBodyPart;
-import org.glassfish.jersey.message.internal.MediaTypes;
 
 import com.jaspersoft.ireport.jasperserver.ws.FileContent;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.Argument;
@@ -114,7 +114,6 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 		this.eh = new RESTv2ExceptionHandler(this);
 
 		ClientConfig clientConfig = new ClientConfig();
-
 		// values are in milliseconds
 		// clientConfig.property(ClientProperties.READ_TIMEOUT,
 		// sp.getTimeout());
@@ -512,11 +511,12 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 		if (Misc.isNullOrEmpty(driver.getPaths()))
 			return;
 		FormDataMultiPart entity = new FormDataMultiPart();
+		entity.type(Boundary.addBoundary(MediaType.MULTIPART_FORM_DATA_TYPE));
 		entity.field("className", driver.getClassname()); //$NON-NLS-1$
 		for (int i = 0; i < driver.getPaths().size(); i++) {
 			File file = new File(driver.getPaths().get(i));
 			if (file.exists())
-				entity.bodyPart(new FileDataBodyPart("file_" + i, file, MediaType.APPLICATION_OCTET_STREAM_TYPE)); //$NON-NLS-1$
+				entity.bodyPart(new FileDataBodyPart("file_" + i, file)); //$NON-NLS-1$
 		}
 
 		WebTarget tgt = target.path("jdbcDrivers"); //$NON-NLS-1$
