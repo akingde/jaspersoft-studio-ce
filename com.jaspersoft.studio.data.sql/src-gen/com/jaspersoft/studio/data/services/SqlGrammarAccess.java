@@ -13,7 +13,6 @@ import org.eclipse.xtext.*;
 import org.eclipse.xtext.service.GrammarProvider;
 import org.eclipse.xtext.service.AbstractElementFinder.*;
 
-import org.eclipse.xtext.common.services.TerminalsGrammarAccess;
 
 @Singleton
 public class SqlGrammarAccess extends AbstractGrammarElementFinder {
@@ -4165,17 +4164,16 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	private TerminalRule tSTRING;
 	private TerminalRule tDBNAME;
 	private TerminalRule tID;
+	private TerminalRule tML_COMMENT;
 	private TerminalRule tSL_COMMENT;
+	private TerminalRule tWS;
+	private TerminalRule tANY_OTHER;
 	
 	private final Grammar grammar;
 
-	private TerminalsGrammarAccess gaTerminals;
-
 	@Inject
-	public SqlGrammarAccess(GrammarProvider grammarProvider,
-		TerminalsGrammarAccess gaTerminals) {
+	public SqlGrammarAccess(GrammarProvider grammarProvider) {
 		this.grammar = internalFindGrammar(grammarProvider);
-		this.gaTerminals = gaTerminals;
 	}
 	
 	protected Grammar internalFindGrammar(GrammarProvider grammarProvider) {
@@ -4199,10 +4197,6 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		return grammar;
 	}
 	
-
-	public TerminalsGrammarAccess getTerminalsGrammarAccess() {
-		return gaTerminals;
-	}
 
 	
 	//Model:
@@ -5132,7 +5126,7 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		return (tUNSIGNED != null) ? tUNSIGNED : (tUNSIGNED = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "UNSIGNED"));
 	} 
 
-	//terminal INT returns ecore::EInt:
+	//terminal INT returns ecore::EIntegerObject:
 	//	"-"? UNSIGNED;
 	public TerminalRule getINTRule() {
 		return (tINT != null) ? tINT : (tINT = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "INT"));
@@ -5190,27 +5184,27 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		return (tID != null) ? tID : (tID = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "ID"));
 	} 
 
+	//terminal ML_COMMENT:
+	//	"/ *"->"* /";
+	public TerminalRule getML_COMMENTRule() {
+		return (tML_COMMENT != null) ? tML_COMMENT : (tML_COMMENT = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "ML_COMMENT"));
+	} 
+
 	//terminal SL_COMMENT:
 	//	("--" | "#" | "//") !("\n" | "\r")* ("\r"? "\n")?;
 	public TerminalRule getSL_COMMENTRule() {
 		return (tSL_COMMENT != null) ? tSL_COMMENT : (tSL_COMMENT = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "SL_COMMENT"));
 	} 
 
-	//terminal ML_COMMENT:
-	//	"/ *"->"* /";
-	public TerminalRule getML_COMMENTRule() {
-		return gaTerminals.getML_COMMENTRule();
-	} 
-
 	//terminal WS:
 	//	(" " | "\t" | "\r" | "\n")+;
 	public TerminalRule getWSRule() {
-		return gaTerminals.getWSRule();
+		return (tWS != null) ? tWS : (tWS = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "WS"));
 	} 
 
 	//terminal ANY_OTHER:
 	//	.;
 	public TerminalRule getANY_OTHERRule() {
-		return gaTerminals.getANY_OTHERRule();
+		return (tANY_OTHER != null) ? tANY_OTHER : (tANY_OTHER = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "ANY_OTHER"));
 	} 
 }

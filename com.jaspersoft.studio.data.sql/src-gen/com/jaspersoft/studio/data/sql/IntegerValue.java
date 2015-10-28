@@ -31,12 +31,12 @@ public interface IntegerValue extends EObject
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Integer</em>' attribute.
-   * @see #setInteger(int)
+   * @see #setInteger(Integer)
    * @see com.jaspersoft.studio.data.sql.SqlPackage#getIntegerValue_Integer()
    * @model
    * @generated
    */
-  int getInteger();
+  Integer getInteger();
 
   /**
    * Sets the value of the '{@link com.jaspersoft.studio.data.sql.IntegerValue#getInteger <em>Integer</em>}' attribute.
@@ -46,6 +46,6 @@ public interface IntegerValue extends EObject
    * @see #getInteger()
    * @generated
    */
-  void setInteger(int value);
+  void setInteger(Integer value);
 
 } // IntegerValue

@@ -35,7 +35,7 @@ public class IntegerValueImpl extends MinimalEObjectImpl.Container implements In
    * @generated
    * @ordered
    */
-  protected static final int INTEGER_EDEFAULT = 0;
+  protected static final Integer INTEGER_EDEFAULT = null;
 
   /**
    * The cached value of the '{@link #getInteger() <em>Integer</em>}' attribute.
@@ -45,7 +45,7 @@ public class IntegerValueImpl extends MinimalEObjectImpl.Container implements In
    * @generated
    * @ordered
    */
-  protected int integer = INTEGER_EDEFAULT;
+  protected Integer integer = INTEGER_EDEFAULT;
 
   /**
    * <!-- begin-user-doc -->
@@ -73,7 +73,7 @@ public class IntegerValueImpl extends MinimalEObjectImpl.Container implements In
    * <!-- end-user-doc -->
    * @generated
    */
-  public int getInteger()
+  public Integer getInteger()
   {
     return integer;
   }
@@ -83,9 +83,9 @@ public class IntegerValueImpl extends MinimalEObjectImpl.Container implements In
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setInteger(int newInteger)
+  public void setInteger(Integer newInteger)
   {
-    int oldInteger = integer;
+    Integer oldInteger = integer;
     integer = newInteger;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.INTEGER_VALUE__INTEGER, oldInteger, integer));
@@ -152,7 +152,7 @@ public class IntegerValueImpl extends MinimalEObjectImpl.Container implements In
     switch (featureID)
     {
       case SqlPackage.INTEGER_VALUE__INTEGER:
-        return integer != INTEGER_EDEFAULT;
+        return INTEGER_EDEFAULT == null ? integer != null : !INTEGER_EDEFAULT.equals(integer);
     }
     return super.eIsSet(featureID);
   }

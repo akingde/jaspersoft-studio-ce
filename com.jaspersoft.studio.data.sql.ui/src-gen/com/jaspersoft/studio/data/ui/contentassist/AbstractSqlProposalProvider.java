@@ -5,7 +5,7 @@ package com.jaspersoft.studio.data.ui.contentassist;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.*;
-import org.eclipse.xtext.common.ui.contentassist.TerminalsProposalProvider;
+import org.eclipse.xtext.ui.editor.contentassist.AbstractJavaBasedContentProposalProvider;
 import org.eclipse.xtext.ui.editor.contentassist.ICompletionProposalAcceptor;
 import org.eclipse.xtext.ui.editor.contentassist.ContentAssistContext;
 
@@ -15,7 +15,7 @@ import org.eclipse.xtext.ui.editor.contentassist.ContentAssistContext;
  * with a more concrete subtype. 
  */
 @SuppressWarnings("all")
-public class AbstractSqlProposalProvider extends TerminalsProposalProvider {
+public class AbstractSqlProposalProvider extends AbstractJavaBasedContentProposalProvider {
 		
 	public void completeModel_Query(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
 		completeRuleCall(((RuleCall)assignment.getTerminal()), context, acceptor);
@@ -869,7 +869,16 @@ public class AbstractSqlProposalProvider extends TerminalsProposalProvider {
 	public void complete_ID(EObject model, RuleCall ruleCall, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
 		// subclasses may override
 	}
+	public void complete_ML_COMMENT(EObject model, RuleCall ruleCall, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+		// subclasses may override
+	}
 	public void complete_SL_COMMENT(EObject model, RuleCall ruleCall, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+		// subclasses may override
+	}
+	public void complete_WS(EObject model, RuleCall ruleCall, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+		// subclasses may override
+	}
+	public void complete_ANY_OTHER(EObject model, RuleCall ruleCall, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
 		// subclasses may override
 	}
 }

@@ -162,7 +162,7 @@ public class ScalarOperandImpl extends OperandListImpl implements ScalarOperand
    * @generated
    * @ordered
    */
-  protected static final int SOINT_EDEFAULT = 0;
+  protected static final Integer SOINT_EDEFAULT = null;
 
   /**
    * The cached value of the '{@link #getSoint() <em>Soint</em>}' attribute.
@@ -172,7 +172,7 @@ public class ScalarOperandImpl extends OperandListImpl implements ScalarOperand
    * @generated
    * @ordered
    */
-  protected int soint = SOINT_EDEFAULT;
+  protected Integer soint = SOINT_EDEFAULT;
 
   /**
    * <!-- begin-user-doc -->
@@ -338,7 +338,7 @@ public class ScalarOperandImpl extends OperandListImpl implements ScalarOperand
    * <!-- end-user-doc -->
    * @generated
    */
-  public int getSoint()
+  public Integer getSoint()
   {
     return soint;
   }
@@ -348,9 +348,9 @@ public class ScalarOperandImpl extends OperandListImpl implements ScalarOperand
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setSoint(int newSoint)
+  public void setSoint(Integer newSoint)
   {
-    int oldSoint = soint;
+    Integer oldSoint = soint;
     soint = newSoint;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.SCALAR_OPERAND__SOINT, oldSoint, soint));
@@ -477,7 +477,7 @@ public class ScalarOperandImpl extends OperandListImpl implements ScalarOperand
       case SqlPackage.SCALAR_OPERAND__SO_UINT:
         return SO_UINT_EDEFAULT == null ? soUInt != null : !SO_UINT_EDEFAULT.equals(soUInt);
       case SqlPackage.SCALAR_OPERAND__SOINT:
-        return soint != SOINT_EDEFAULT;
+        return SOINT_EDEFAULT == null ? soint != null : !SOINT_EDEFAULT.equals(soint);
     }
     return super.eIsSet(featureID);
   }

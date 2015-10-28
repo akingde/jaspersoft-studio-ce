@@ -296,6 +296,10 @@ public class ConvertSelectColumns {
 			return sc.getSotime().toString();
 		if (sc.getSodbl() != null)
 			return sc.getSodbl().toString();
+		if (sc.getSoUInt() != null)
+			return sc.getSoUInt().toString();
+		if (sc.getSoint() != null)
+			return sc.getSoint().toString();
 		return "";
 	}
 

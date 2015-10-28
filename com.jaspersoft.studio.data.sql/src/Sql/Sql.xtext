@@ -1,4 +1,4 @@
-grammar com.jaspersoft.studio.data.Sql with org.eclipse.xtext.common.Terminals hidden(WS, ML_COMMENT, SL_COMMENT)
+grammar com.jaspersoft.studio.data.Sql hidden(WS, ML_COMMENT, SL_COMMENT)
 
 import "http://www.eclipse.org/emf/2002/Ecore" as ecore
 generate sql "http://www.com.jaspersoft.studio.data.Sql"
@@ -253,7 +253,7 @@ ScalarOperand returns ScalarOperand:
 	sostr=StringOperand | sodbl=SIGNED_DOUBLE | sodate=DATE | sotime=TIME | sodt=TIMESTAMP;
 
 ScalarNumberOperand returns ScalarOperand:
-	soUInt = UNSIGNED | soint=INT | sodbl=SIGNED_DOUBLE | sostr=StringOperand;
+	soUInt=UNSIGNED | soint=INT | sodbl=SIGNED_DOUBLE | sostr=StringOperand;
 
 SQLCASE returns SQLCaseOperand:
 	'CASE' (expr=FullExpression)? when=SQLCaseWhens 'END';
@@ -303,7 +303,7 @@ terminal STAR:
 terminal UNSIGNED returns ecore::EIntegerObject:
 	('0'..'9')+;
 
-terminal INT returns ecore::EInt:
+terminal INT returns ecore::EIntegerObject:
 	'-'? UNSIGNED;
 
 terminal SIGNED_DOUBLE returns ecore::EBigDecimal:
@@ -337,7 +337,15 @@ terminal ID:
 	'歴'..'す' | 'ア'..'ン' | '豈'..'﫿' | '㐀'..'䶿' | '＿' |
 	'0'..'9')*;
 
+terminal ML_COMMENT:
+	'/*'->'*/';
+
 terminal SL_COMMENT:
 	('--' | '#' | '//') !('\n' | '\r')* ('\r'? '\n')?;
 
+terminal WS:
+	(' ' | '\t' | '\r' | '\n')+;
+
+terminal ANY_OTHER:
+	.;
  

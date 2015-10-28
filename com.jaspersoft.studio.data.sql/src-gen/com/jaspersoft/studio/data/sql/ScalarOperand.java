@@ -193,12 +193,12 @@ public interface ScalarOperand extends OperandList
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Soint</em>' attribute.
-   * @see #setSoint(int)
+   * @see #setSoint(Integer)
    * @see com.jaspersoft.studio.data.sql.SqlPackage#getScalarOperand_Soint()
    * @model
    * @generated
    */
-  int getSoint();
+  Integer getSoint();
 
   /**
    * Sets the value of the '{@link com.jaspersoft.studio.data.sql.ScalarOperand#getSoint <em>Soint</em>}' attribute.
@@ -208,6 +208,6 @@ public interface ScalarOperand extends OperandList
    * @see #getSoint()
    * @generated
    */
-  void setSoint(int value);
+  void setSoint(Integer value);
 
 } // ScalarOperand

@@ -71,7 +71,7 @@ public class OpFunctionCastImpl extends MinimalEObjectImpl.Container implements 
    * @generated
    * @ordered
    */
-  protected static final int P_EDEFAULT = 0;
+  protected static final Integer P_EDEFAULT = null;
 
   /**
    * The cached value of the '{@link #getP() <em>P</em>}' attribute.
@@ -81,7 +81,7 @@ public class OpFunctionCastImpl extends MinimalEObjectImpl.Container implements 
    * @generated
    * @ordered
    */
-  protected int p = P_EDEFAULT;
+  protected Integer p = P_EDEFAULT;
 
   /**
    * The default value of the '{@link #getP2() <em>P2</em>}' attribute.
@@ -91,7 +91,7 @@ public class OpFunctionCastImpl extends MinimalEObjectImpl.Container implements 
    * @generated
    * @ordered
    */
-  protected static final int P2_EDEFAULT = 0;
+  protected static final Integer P2_EDEFAULT = null;
 
   /**
    * The cached value of the '{@link #getP2() <em>P2</em>}' attribute.
@@ -101,7 +101,7 @@ public class OpFunctionCastImpl extends MinimalEObjectImpl.Container implements 
    * @generated
    * @ordered
    */
-  protected int p2 = P2_EDEFAULT;
+  protected Integer p2 = P2_EDEFAULT;
 
   /**
    * <!-- begin-user-doc -->
@@ -200,7 +200,7 @@ public class OpFunctionCastImpl extends MinimalEObjectImpl.Container implements 
    * <!-- end-user-doc -->
    * @generated
    */
-  public int getP()
+  public Integer getP()
   {
     return p;
   }
@@ -210,9 +210,9 @@ public class OpFunctionCastImpl extends MinimalEObjectImpl.Container implements 
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setP(int newP)
+  public void setP(Integer newP)
   {
-    int oldP = p;
+    Integer oldP = p;
     p = newP;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.OP_FUNCTION_CAST__P, oldP, p));
@@ -223,7 +223,7 @@ public class OpFunctionCastImpl extends MinimalEObjectImpl.Container implements 
    * <!-- end-user-doc -->
    * @generated
    */
-  public int getP2()
+  public Integer getP2()
   {
     return p2;
   }
@@ -233,9 +233,9 @@ public class OpFunctionCastImpl extends MinimalEObjectImpl.Container implements 
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setP2(int newP2)
+  public void setP2(Integer newP2)
   {
-    int oldP2 = p2;
+    Integer oldP2 = p2;
     p2 = newP2;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.OP_FUNCTION_CAST__P2, oldP2, p2));
@@ -346,9 +346,9 @@ public class OpFunctionCastImpl extends MinimalEObjectImpl.Container implements 
       case SqlPackage.OP_FUNCTION_CAST__TYPE:
         return TYPE_EDEFAULT == null ? type != null : !TYPE_EDEFAULT.equals(type);
       case SqlPackage.OP_FUNCTION_CAST__P:
-        return p != P_EDEFAULT;
+        return P_EDEFAULT == null ? p != null : !P_EDEFAULT.equals(p);
       case SqlPackage.OP_FUNCTION_CAST__P2:
-        return p2 != P2_EDEFAULT;
+        return P2_EDEFAULT == null ? p2 != null : !P2_EDEFAULT.equals(p2);
     }
     return super.eIsSet(featureID);
   }
