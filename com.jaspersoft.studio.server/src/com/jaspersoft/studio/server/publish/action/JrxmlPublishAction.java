@@ -26,16 +26,19 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.wizard.WizardDialog;
 
+import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.Activator;
 import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.AMJrxmlContainer;
 import com.jaspersoft.studio.server.model.AMResource;
+import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.publish.FindResources;
 import com.jaspersoft.studio.server.publish.OverwriteEnum;
 import com.jaspersoft.studio.server.publish.Publish;
+import com.jaspersoft.studio.server.publish.PublishOptions;
 import com.jaspersoft.studio.server.publish.PublishUtil;
 import com.jaspersoft.studio.server.publish.wizard.Publish2ServerWizard;
 import com.jaspersoft.studio.utils.AContributorAction;
@@ -56,8 +59,7 @@ public class JrxmlPublishAction extends AContributorAction {
 	public JrxmlPublishAction() {
 		super(ID, Messages.JrxmlPublishAction_title);
 		setToolTipText(Messages.JrxmlPublishAction_tooltip);
-		setImageDescriptor(Activator.getDefault().getImageDescriptor(
-				"icons/server--upload.png")); //$NON-NLS-1$
+		setImageDescriptor(Activator.getDefault().getImageDescriptor("icons/server--upload.png")); //$NON-NLS-1$
 	}
 
 	public void setSilent(boolean silent) {
@@ -73,8 +75,7 @@ public class JrxmlPublishAction extends AContributorAction {
 				Job job = new Job(Messages.FindReportUnit_jobname) {
 					@Override
 					protected IStatus run(IProgressMonitor monitor) {
-						monitor.beginTask(Messages.JrxmlPublishAction_0,
-								IProgressMonitor.UNKNOWN);
+						monitor.beginTask(Messages.JrxmlPublishAction_0, IProgressMonitor.UNKNOWN);
 						try {
 							status = doRun(monitor);
 						} finally {
@@ -109,48 +110,54 @@ public class JrxmlPublishAction extends AContributorAction {
 		return status;
 	}
 
-	public IStatus publishReportUnit(JasperDesign jd, int startpage,
-			IProgressMonitor monitor) {
+	public IStatus publishReportUnit(JasperDesign jd, int startpage, IProgressMonitor monitor) {
 		IStatus status = Status.CANCEL_STATUS;
 		IFile file = (IFile) jrConfig.get(FileUtils.KEY_FILE);
 		try {
 			if (silent) {
 				// let's look if server exists, and url exists
-				MServerProfile msrv = ServerManager.getServerProfile(jd,
-						jrConfig, monitor);
+				MServerProfile msrv = ServerManager.getServerProfile(jd, jrConfig, monitor);
 				if (msrv != null) {
 					msrv.setJasperConfiguration(jrConfig);
-					ANode n = FindResources.findReportUnit(msrv, monitor, jd,
-							file);
+					ANode n = FindResources.findReportUnit(msrv, monitor, jd, file);
 					n.setJasperConfiguration(jrConfig);
 					if (n != null && n instanceof AMJrxmlContainer) {
 						// let's check if there are new resources?
 						try {
 							boolean showdialog = false;
-							List<?> resources = FindResources.findResources(
-									monitor, (AMJrxmlContainer) n, jd);
+							List<?> resources = FindResources.findResources(monitor, (AMJrxmlContainer) n, jd);
 							if (resources != null) {
 								for (Object obj : resources) {
 									if (obj instanceof AMResource) {
 										AMResource mres = (AMResource) obj;
-										if (!PublishUtil.loadPreferences(
-												monitor, file, mres)
-												&& mres.getPublishOptions() != null
-												&& mres.getPublishOptions()
-														.getOverwrite() != null
-												&& mres.getPublishOptions()
-														.getOverwrite()
-														.equals(OverwriteEnum.OVERWRITE)) {
-											showdialog = true;
-											break;
+										PublishOptions po = mres.getPublishOptions();
+										if (!PublishUtil.loadPreferences(monitor, file, mres) && po != null
+												&& po.getOverwrite() != null
+												&& po.getOverwrite().equals(OverwriteEnum.OVERWRITE)) {
+											if (n instanceof MReportUnit) {
+												// let's see if resource already
+												// exists
+												// (a reference for example) set
+												// to ignore
+												for (ResourceDescriptor r : ((MReportUnit) n).getValue()
+														.getChildren()) {
+													if (r.getName().equals(mres)) {
+														po.setOverwrite(OverwriteEnum.IGNORE);
+														break;
+													}
+												}
+											}
+											if (po.getOverwrite().equals(OverwriteEnum.OVERWRITE)) {
+												showdialog = true;
+												break;
+											}
 										}
 									}
 								}
 							}
 							if (!showdialog) {
 								// publish
-								new Publish(jrConfig).publish(
-										(AMJrxmlContainer) n, jd, monitor);
+								new Publish(jrConfig).publish((AMJrxmlContainer) n, jd, monitor);
 								return Status.OK_STATUS;
 							}
 						} catch (Exception e) {
@@ -160,8 +167,7 @@ public class JrxmlPublishAction extends AContributorAction {
 				}
 			}
 
-			Publish2ServerWizard wizard = new Publish2ServerWizard(jd,
-					jrConfig, startpage);
+			Publish2ServerWizard wizard = new Publish2ServerWizard(jd, jrConfig, startpage);
 			WizardDialog dialog = new WizardDialog(UIUtils.getShell(), wizard);
 			if (dialog.open() == Dialog.OK) {
 				// ANode node = wizard.getNode();
