@@ -73,6 +73,7 @@ import com.jaspersoft.studio.data.sql.model.query.from.MFrom;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTableJoin;
 import com.jaspersoft.studio.data.sql.model.query.groupby.MGroupBy;
 import com.jaspersoft.studio.data.sql.model.query.groupby.MGroupByColumn;
+import com.jaspersoft.studio.data.sql.model.query.groupby.MGroupByExpression;
 import com.jaspersoft.studio.data.sql.model.query.orderby.AMOrderByMember;
 import com.jaspersoft.studio.data.sql.model.query.orderby.MOrderBy;
 import com.jaspersoft.studio.data.sql.model.query.orderby.MOrderByColumn;
@@ -131,35 +132,29 @@ public class SQLQueryOutline {
 		treeViewer.getControl().setMenu(menu);
 
 		int ops = DND.DROP_COPY | DND.DROP_MOVE;
-		Transfer[] transfers = new Transfer[] { NodeTransfer.getInstance(),
-				PluginTransfer.getInstance() };
-		treeViewer.addDragSupport(ops, transfers, new NodeDragListener(
-				treeViewer) {
+		Transfer[] transfers = new Transfer[] { NodeTransfer.getInstance(), PluginTransfer.getInstance() };
+		treeViewer.addDragSupport(ops, transfers, new NodeDragListener(treeViewer) {
 			@Override
 			public void dragStart(DragSourceEvent event) {
-				IStructuredSelection selection = (IStructuredSelection) viewer
-						.getSelection();
+				IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
 				Object fe = selection.getFirstElement();
 				event.doit = !viewer.getSelection().isEmpty() && isDragable(fe);
 			}
 
 			public boolean isDragable(Object fe) {
-				if (fe instanceof MSelect || fe instanceof MFrom
-						|| fe instanceof MGroupBy || fe instanceof MHaving
-						|| fe instanceof MWhere || fe instanceof MOrderBy
-						|| fe instanceof MUnion)
+				if (fe instanceof MSelect || fe instanceof MFrom || fe instanceof MGroupBy || fe instanceof MHaving
+						|| fe instanceof MWhere || fe instanceof MOrderBy || fe instanceof MUnion)
 					return false;
 				return true;
 			}
 		});
 
-		transfers = new Transfer[] { NodeTransfer.getInstance(),
-				TemplateTransfer.getInstance(), PluginTransfer.getInstance() };
+		transfers = new Transfer[] { NodeTransfer.getInstance(), TemplateTransfer.getInstance(),
+				PluginTransfer.getInstance() };
 		NodeTreeDropAdapter dropAdapter = new NodeTreeDropAdapter(treeViewer) {
 			@Override
 			public boolean validateDrop(Object target, int op, TransferData type) {
-				return super.validateDrop(target, op, type)
-						|| TemplateTransfer.getInstance().isSupportedType(type);
+				return super.validateDrop(target, op, type) || TemplateTransfer.getInstance().isSupportedType(type);
 			}
 
 			@Override
@@ -180,8 +175,7 @@ public class SQLQueryOutline {
 				else
 					objects.add(data);
 				Object target = getCurrentTarget();
-				if (target instanceof ANode
-						&& ((ANode) target).getParent() == null)
+				if (target instanceof ANode && ((ANode) target).getParent() == null)
 					return false;
 				doDropObjects((ANode) target, objects);
 				return doDrop((ANode) target, Util.getAllNodes(data));
@@ -193,8 +187,7 @@ public class SQLQueryOutline {
 					if (obj instanceof JRDesignParameter)
 						prms.add((JRDesignParameter) obj);
 				if (!prms.isEmpty()) {
-					CreateExpression ce = afactory
-							.getAction(CreateExpression.class);
+					CreateExpression ce = afactory.getAction(CreateExpression.class);
 					if (ce.calculateEnabled(new Object[] { target }))
 						ce.run(prms);
 				}
@@ -211,9 +204,8 @@ public class SQLQueryOutline {
 				if (!others.isEmpty()) {
 					for (ANode n : others) {
 						ANode oldNode = Util.getOldNode((ANode) target, n);
-						if ((target instanceof MExpressionGroup
-								|| target instanceof MWhere
-								|| target instanceof MHaving || target instanceof MFromTableJoin)
+						if ((target instanceof MExpressionGroup || target instanceof MWhere || target instanceof MHaving
+								|| target instanceof MFromTableJoin)
 								&& (n instanceof MExpression || n instanceof MExpressionGroup)) {
 							oldNode.setParent(null, -1);
 							oldNode.setParent((ANode) target, -1);
@@ -230,43 +222,39 @@ public class SQLQueryOutline {
 							refreshAndReveal(oldNode);
 							continue;
 						}
-						if (n instanceof MSelectColumn
-								|| n instanceof MSelectExpression) {
+						if (n instanceof MSelectColumn || n instanceof MSelectExpression) {
 							int ind = -1;
 							// can drop also in a child of one of this
 							if (target instanceof MWhere) {
 
 							}
-							if (target instanceof MGroupByColumn) {
-								ANode p = ((MGroupByColumn) target).getParent();
+							if (target instanceof MGroupByColumn || target instanceof MGroupByExpression) {
+								ANode p = ((ANode) target).getParent();
 								ind = p.getChildren().indexOf(target);
 								target = p;
 							}
 							if (target instanceof MGroupBy) {
-								if (n instanceof MSelectColumn)
-									refreshAndReveal(new MGroupByColumn(
-											(MGroupBy) target,
-											(MSelectColumn) n, ind));
+								if (n instanceof MSelectExpression)
+									refreshAndReveal(
+											new MGroupByExpression((MGroupBy) target, (MSelectExpression) n, ind));
+								else if (n instanceof MSelectColumn)
+									refreshAndReveal(new MGroupByColumn((MGroupBy) target, (MSelectColumn) n, ind));
 								continue;
 							}
 							if (target instanceof MHaving) {
 
 							}
 							if (target instanceof AMOrderByMember) {
-								ANode p = ((AMOrderByMember<?>) target)
-										.getParent();
+								ANode p = ((AMOrderByMember<?>) target).getParent();
 								ind = p.getChildren().indexOf(target);
 								target = p;
 							}
 							if (target instanceof MOrderBy) {
 								if (n instanceof MSelectExpression)
-									refreshAndReveal(new MOrderByExpression(
-											(MOrderBy) target,
-											(MSelectExpression) n, ind));
+									refreshAndReveal(
+											new MOrderByExpression((MOrderBy) target, (MSelectExpression) n, ind));
 								else
-									refreshAndReveal(new MOrderByColumn(
-											(MOrderBy) target,
-											(MSelectColumn) n, ind));
+									refreshAndReveal(new MOrderByColumn((MOrderBy) target, (MSelectColumn) n, ind));
 								continue;
 							}
 						}
@@ -282,12 +270,9 @@ public class SQLQueryOutline {
 					parent = (ANode) target;
 				else if (target.getClass().isAssignableFrom(n.getClass()))
 					parent = ((ANode) target).getParent();
-				else if (target instanceof ANode
-						&& n instanceof ANode
-						&& n != null
+				else if (target instanceof ANode && n instanceof ANode && n != null
 						&& ((ANode) target).getParent() != null
-						&& ((ANode) target).getParent().equals(
-								((ANode) n).getParent()))
+						&& ((ANode) target).getParent().equals(((ANode) n).getParent()))
 					parent = ((ANode) target).getParent();
 
 				if (n.getParent().equals(parent)) {
@@ -308,8 +293,7 @@ public class SQLQueryOutline {
 				if (!tablesset.isEmpty()) {
 					Set<MSqlTable> tmp = new LinkedHashSet<MSqlTable>();
 					for (MSqlTable t : tablesset) {
-						MSqlTable mt = Util.getTable(designer.getDbMetadata()
-								.getRoot(), t);
+						MSqlTable mt = Util.getTable(designer.getDbMetadata().getRoot(), t);
 						designer.getDbMetadata().loadTable(mt);
 						tmp.add(mt);
 					}
@@ -318,8 +302,7 @@ public class SQLQueryOutline {
 
 					for (MSqlTable t : tablesset)
 						designer.getDbMetadata().loadTable(t);
-					if (target instanceof MSelect
-							|| target instanceof MSelectColumn
+					if (target instanceof MSelect || target instanceof MSelectColumn
 							|| target instanceof MSelectExpression) {
 						Set<MSQLColumn> cols = new HashSet<MSQLColumn>();
 						for (MSqlTable t : tablesset) {
@@ -341,16 +324,13 @@ public class SQLQueryOutline {
 					ct.setCheckTables(false);
 					if (ct.calculateEnabled(new Object[] { target }))
 						ct.run(colsset);
-					CreateGroupByColumn cg = afactory
-							.getAction(CreateGroupByColumn.class);
+					CreateGroupByColumn cg = afactory.getAction(CreateGroupByColumn.class);
 					if (cg.calculateEnabled(new Object[] { target }))
 						cg.run(colsset);
-					CreateOrderByColumn co = afactory
-							.getAction(CreateOrderByColumn.class);
+					CreateOrderByColumn co = afactory.getAction(CreateOrderByColumn.class);
 					if (co.calculateEnabled(new Object[] { target }))
 						co.run(colsset);
-					CreateExpression ce = afactory
-							.getAction(CreateExpression.class);
+					CreateExpression ce = afactory.getAction(CreateExpression.class);
 					if (ce.calculateEnabled(new Object[] { target }))
 						ce.run(colsset);
 				}
@@ -382,8 +362,7 @@ public class SQLQueryOutline {
 				if (event.character == SWT.DEL && event.stateMask == 0) {
 					TreeSelection s = (TreeSelection) treeViewer.getSelection();
 
-					List<DeleteAction<?>> dactions = afactory
-							.getDeleteActions(s != null ? s.toArray() : null);
+					List<DeleteAction<?>> dactions = afactory.getDeleteActions(s != null ? s.toArray() : null);
 					for (DeleteAction<?> da : dactions) {
 						da.run();
 						break;
