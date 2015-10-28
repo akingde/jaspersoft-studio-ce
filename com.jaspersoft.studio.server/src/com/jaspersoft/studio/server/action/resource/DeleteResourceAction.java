@@ -17,8 +17,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
@@ -26,27 +24,29 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
-import org.eclipse.swt.SWT;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.actions.ActionFactory;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.WSClientHelper;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.model.MFolder;
 import com.jaspersoft.studio.server.model.MReportUnit;
-import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+
 public class DeleteResourceAction extends Action {
+	
+	public static final String ID = "com.jaspersoft.studio.server.action.resource.deleteResourceAction";
+	
 	private TreeViewer treeViewer;
 
 	public DeleteResourceAction(TreeViewer treeViewer) {
 		super();
-		setId(ActionFactory.DELETE.getId());
-		setAccelerator(SWT.DEL);
+		setId(ID);
 		setText(Messages.common_delete);
 		setToolTipText(Messages.common_delete);
 		ISharedImages sharedImages = PlatformUI.getWorkbench()

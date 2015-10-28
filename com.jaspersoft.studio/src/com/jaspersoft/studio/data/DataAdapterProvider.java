@@ -20,6 +20,7 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.util.TransferDragSourceListener;
 import org.eclipse.jface.util.TransferDropTargetListener;
+import org.eclipse.jface.util.Util;
 import org.eclipse.jface.viewers.TreeExpansionEvent;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
@@ -92,9 +93,21 @@ public class DataAdapterProvider implements IRepositoryViewProvider {
 			lst.add(importDataAdapterItemAction);
 		return lst;
 	}
+	
+	/**
+	 * Check if the key event has the push of the delete key on mac
+	 * 
+	 * @param event a not null key event
+	 * @return true if the current OS is mac and the pressed key is the delete one (BS)
+	 */
+	private boolean isMacDelete(KeyEvent event){
+		return Util.isMac() && event.character == SWT.BS;
+	}
+
 
 	public void hookKeyEvent(TreeViewer treeViewer, KeyEvent event) {
-		if (event.character == SWT.DEL && event.stateMask == 0) {
+		//Triggered when delete is used or backspace on mac also
+		if ((event.character == SWT.DEL || isMacDelete(event)) && event.stateMask == 0) {
 			if (deleteDataAdapterItemAction.isEnabled())
 				deleteDataAdapterItemAction.run();
 		}

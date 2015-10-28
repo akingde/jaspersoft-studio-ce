@@ -12,26 +12,28 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.action.server;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
-import org.eclipse.ui.actions.ActionFactory;
 
 import com.jaspersoft.studio.server.Activator;
 import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+
 public class DeleteServerAction extends Action {
+	
+	public static final String ID = "com.jaspersoft.studio.server.action.resource.deleteServerAction";
+	
 	private TreeViewer treeViewer;
 
 	public DeleteServerAction(TreeViewer treeViewer) {
 		super();
 		this.treeViewer = treeViewer;
-		setId(ActionFactory.DELETE.getId());
+		setId(ID);
 		setText(com.jaspersoft.studio.messages.Messages.common_delete);
 		setDescription(Messages.DeleteServerAction_desc);
 		setToolTipText(Messages.DeleteServerAction_desc); //$NON-NLS-1$
