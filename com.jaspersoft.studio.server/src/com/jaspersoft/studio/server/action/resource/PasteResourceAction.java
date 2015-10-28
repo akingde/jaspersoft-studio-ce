@@ -77,30 +77,33 @@ public class PasteResourceAction extends Action {
 			res = false;
 			for (Object obj : list)
 				if (obj instanceof AMResource && obj instanceof ICopyable) {
+					if (!isSameServer(parent, (AMResource) obj)
+							&& (obj instanceof IInputControlsContainer || obj instanceof MFolder)) {
+						return false;
+					}
 					ICopyable c = (ICopyable) obj;
 					if (c.isCopyable2(parent)) {
 						iscut = ((AMResource) obj).isCut();
 						res = true;
 						break;
 					}
-					if (!isSameServer(parent, (AMResource) obj)
-							&& (obj instanceof IInputControlsContainer || obj instanceof MFolder)) {
-						return false;
-					}
 				}
+			return true;
 		}
+		if (contents == null)
+			return false;
 		if (res) {
 			Object firstElement = ((TreeSelection) treeViewer.getSelection()).getFirstElement();
 			res = firstElement != null;
 			if (res) {
 				if (firstElement instanceof AMResource) {
 					AMResource mres = (AMResource) firstElement;
-					int pmask = mres.getValue().getPermissionMask(mres.getWsClient());
-					res = res && (pmask == 1 || (pmask & 4) == 4);
 					if (!isSameServer(parent, (AMResource) mres)
 							&& (mres instanceof IInputControlsContainer || mres instanceof MFolder)) {
 						return false;
 					}
+					int pmask = mres.getValue().getPermissionMask(mres.getWsClient());
+					res = res && (pmask == 1 || (pmask & 4) == 4);
 				}
 			}
 		}
