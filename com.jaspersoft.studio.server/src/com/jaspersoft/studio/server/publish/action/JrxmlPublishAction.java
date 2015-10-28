@@ -141,7 +141,8 @@ public class JrxmlPublishAction extends AContributorAction {
 												// to ignore
 												for (ResourceDescriptor r : ((MReportUnit) n).getValue()
 														.getChildren()) {
-													if (r.getName().equals(mres)) {
+													if (r.getWsType().equals(mres.getValue().getWsType())
+															&& r.getName().equals(mres)) {
 														po.setOverwrite(OverwriteEnum.IGNORE);
 														break;
 													}
