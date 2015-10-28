@@ -189,8 +189,6 @@ public class ActionFactory {
 								|| MOrderByExpression.class.isAssignableFrom(obj.getClass());
 					}
 				});
-		actions.add(new DeleteAction<MOrderByExpression>(designer, treeViewer, Messages.ActionFactory_1,
-				MOrderByExpression.class));
 
 		actions.add(null);
 		actions.add(new CreateExpressionGroup(treeViewer));
