@@ -26,6 +26,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.descriptors.JSSTextPropertyDescriptor;
 import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.UIUtil;
 import com.jaspersoft.studio.utils.inputhistory.InputHistoryCache;
 
@@ -118,7 +119,7 @@ public class SPText extends AHistorySPropertyWidget {
 	protected void handleFocusLost() {
 		String currentValue = getCurrentValue();
 		if(UIUtil.isMacAndEclipse4() && !editHappened){
-			ftext.setText(currentValue);
+			ftext.setText(Misc.nvl(currentValue));
 		}
 		if (!disableFocusLost) {
 			if (!(currentValue != null && currentValue.equals(ftext.getText())))
