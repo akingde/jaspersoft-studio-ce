@@ -56,6 +56,10 @@ public class Activator extends AbstractJRUIPlugin {
 		// Register the p2 UI policy
 		registerP2Policy(context);
 		getPreferenceStore().addPropertyChangeListener(getPreferenceListener());
+	}
+	
+	@Override
+	protected void postStartOperations() {
 		// FIXME - Temporary workaround for Bugzilla #44286
 		// See also Eclipse bug: https://bugs.eclipse.org/bugs/show_bug.cgi?id=475578
 		PrefUtil.getAPIPreferenceStore().putValue(IWorkbenchPreferenceConstants.PROMPT_WHEN_SAVEABLE_STILL_OPEN,"false"); //$NON-NLS-1$
