@@ -11,20 +11,6 @@ package com.jaspersoft.studio.property.itemproperty.sp;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.jasperreports.components.items.Item;
-import net.sf.jasperreports.components.items.ItemData;
-import net.sf.jasperreports.components.items.StandardItem;
-import net.sf.jasperreports.components.items.StandardItemData;
-import net.sf.jasperreports.components.items.StandardItemProperty;
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.engine.JRElementDataset;
-import net.sf.jasperreports.engine.component.Component;
-import net.sf.jasperreports.engine.design.JRDesignComponentElement;
-import net.sf.jasperreports.engine.design.JRDesignElement;
-import net.sf.jasperreports.engine.design.JRDesignElementDataset;
-import net.sf.jasperreports.engine.design.events.JRPropertyChangeSupport;
-import net.sf.jasperreports.engine.util.JRCloneUtils;
-
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.DoubleClickEvent;
@@ -54,7 +40,6 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.itemproperty.desc.ADescriptor;
 import com.jaspersoft.studio.property.itemproperty.desc.AItemDataListPropertyDescriptor;
-import com.jaspersoft.studio.property.itemproperty.desc.ItemPropertyDescription;
 import com.jaspersoft.studio.property.itemproperty.dialog.AItemDialog;
 import com.jaspersoft.studio.property.itemproperty.dialog.ItemDataDialog;
 import com.jaspersoft.studio.property.itemproperty.dialog.TableItemDialog;
@@ -65,14 +50,27 @@ import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
+import net.sf.jasperreports.components.items.Item;
+import net.sf.jasperreports.components.items.ItemData;
+import net.sf.jasperreports.components.items.StandardItem;
+import net.sf.jasperreports.components.items.StandardItemData;
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.engine.JRElementDataset;
+import net.sf.jasperreports.engine.component.Component;
+import net.sf.jasperreports.engine.design.JRDesignComponentElement;
+import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.design.JRDesignElementDataset;
+import net.sf.jasperreports.engine.design.events.JRPropertyChangeSupport;
+import net.sf.jasperreports.engine.util.JRCloneUtils;
+
 /**
  * Widget that allows to manage the <code>ItemDataList</code> property.
  * 
  * @author Veaceslav Chicu (schicu@users.sourceforge.net)
  * 
  */
-public class SPItemDataList extends ASPropertyWidget<AItemDataListPropertyDescriptor> implements
-		IExpressionContextSetter {
+public class SPItemDataList extends ASPropertyWidget<AItemDataListPropertyDescriptor>
+		implements IExpressionContextSetter {
 
 	private ExpressionContext expContext;
 
@@ -264,25 +262,42 @@ public class SPItemDataList extends ASPropertyWidget<AItemDataListPropertyDescri
 
 	protected void handleNewElement(TreeViewer tviewer) {
 		List<ItemData> clones = JRCloneUtils.cloneList(itemDatas);
-		StandardItemData itemData = (StandardItemData) getStandardItemData(true, tviewer, clones);
-		if (!clones.contains(itemData))
-			clones.add(itemData);
+		StandardItemData itemData = new StandardItemData();
+		clones.add(itemData);
+		ItemDataDialog dialog = new ItemDataDialog(UIUtils.getShell(), Messages.SPItemDataList_3, "", //$NON-NLS-1$
+				clones, itemData, (JasperReportsConfiguration) section.getJasperReportsContext(), getDescriptor(), expContext,
+				pnode) {
 
-		StandardItem item = new StandardItem();
-		for (ItemPropertyDescription<?> ipd : getDescriptor().getItemPropertyDescriptors()) {
-			if (ipd.isMandatory() || !Misc.isNullOrEmpty(ipd.getDefaultValueString())) {
-				StandardItemProperty p = new StandardItemProperty(ipd.getName(), ipd.getDefaultValueString(), null);
-				item.addItemProperty(p);
-				StructuredSelection s = (StructuredSelection) tviewer.getSelection();
-				if (s != null) {
-					Object obj = s.getFirstElement();
-					if (obj != null && obj instanceof Item)
-						getDescriptor().setupDefaultValue((Item) obj, p);
-				}
+			@Override
+			protected AItemDialog createItemDialog() {
+				return SPItemDataList.this.createItemDialog();
 			}
+		};
+		if (dialog.open() == Dialog.OK) {
+
+			section.changeProperty(pDescriptor.getId(), new ArrayList<ItemData>(clones));
 		}
-		itemData.addItem(item);
-		showItemDialog(clones, itemData, item);
+
+		// List<ItemData> clones = JRCloneUtils.cloneList(itemDatas);
+		// StandardItemData itemData = (StandardItemData) getStandardItemData(true, tviewer, clones);
+		// if (!clones.contains(itemData))
+		// clones.add(itemData);
+		//
+		// StandardItem item = new StandardItem();
+		// for (ItemPropertyDescription<?> ipd : getDescriptor().getItemPropertyDescriptors()) {
+		// if (ipd.isMandatory() || !Misc.isNullOrEmpty(ipd.getDefaultValueString())) {
+		// StandardItemProperty p = new StandardItemProperty(ipd.getName(), ipd.getDefaultValueString(), null);
+		// item.addItemProperty(p);
+		// StructuredSelection s = (StructuredSelection) tviewer.getSelection();
+		// if (s != null) {
+		// Object obj = s.getFirstElement();
+		// if (obj != null && obj instanceof Item)
+		// getDescriptor().setupDefaultValue((Item) obj, p);
+		// }
+		// }
+		// }
+		// itemData.addItem(item);
+		// showItemDialog(clones, itemData, item);
 	}
 
 	protected void showItemDialog(List<ItemData> citemsData, StandardItemData itemData, StandardItem item) {
@@ -300,7 +315,7 @@ public class SPItemDataList extends ASPropertyWidget<AItemDataListPropertyDescri
 
 	protected AItemDialog createItemDialog() {
 		return new TableItemDialog(UIUtils.getShell(), getDescriptor(),
-				(JasperReportsConfiguration) section.getJasperReportsContext(), true);
+				(JasperReportsConfiguration) section.getJasperReportsContext(), false);
 	}
 
 	private ItemData getStandardItemData(boolean createNew, TreeViewer tviewer, List<ItemData> clones) {
@@ -352,7 +367,14 @@ public class SPItemDataList extends ASPropertyWidget<AItemDataListPropertyDescri
 		gd.verticalSpan = 5;
 		tree.setLayoutData(gd);
 		createDsLabelProvider();
-		dsTViewer.setContentProvider(new ItemDataListContentProvider(true));
+		dsTViewer.setContentProvider(new ItemDataListContentProvider(true) {
+			@Override
+			public Object[] getChildren(Object parentElement) {
+				if (parentElement instanceof ItemData)
+					return new Object[0];
+				return super.getChildren(parentElement);
+			}
+		});
 		ColumnViewerToolTipSupport.enableFor(dsTViewer, ToolTip.NO_RECREATE);
 
 		dsTViewer.addSelectionChangedListener(new ISelectionChangedListener() {

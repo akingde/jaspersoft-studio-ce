@@ -41,54 +41,39 @@ public class StylePropertyDescriptor extends AItemDataListPropertyDescriptor {
 		descriptor = new StyleDescriptor();
 	}
 
-	protected SPItemDataList createSPWidget(Composite parent,
-			AbstractSection section) {
+	protected SPItemDataList createSPWidget(Composite parent, AbstractSection section) {
 		return new SPItemDataList(parent, section, this, false) {
 			@Override
 			protected AItemDialog createItemDialog() {
 				return new FormItemDialog(UIUtils.getShell(), getDescriptor(),
-						(JasperReportsConfiguration) section
-								.getJasperReportsContext(), true, false) {
+						(JasperReportsConfiguration) section.getJasperReportsContext(), false, false) {
 
 					@Override
 					protected void createValues(Composite cmp) {
 						createItemProperty(cmp, MapComponent.ITEM_PROPERTY_name);
 
-						createItemProperty(cmp,
-								MapComponent.ITEM_PROPERTY_style);
+						createItemProperty(cmp, MapComponent.ITEM_PROPERTY_style);
 
 						createSeparator(cmp);
 
-						createItemProperty(cmp,
-								MapComponent.ITEM_PROPERTY_STYLE_strokeColor);
-						createItemProperty(cmp,
-								MapComponent.ITEM_PROPERTY_STYLE_strokeOpacity);
-						createItemProperty(cmp,
-								MapComponent.ITEM_PROPERTY_STYLE_strokeWeight);
+						createItemProperty(cmp, MapComponent.ITEM_PROPERTY_STYLE_strokeColor);
+						createItemProperty(cmp, MapComponent.ITEM_PROPERTY_STYLE_strokeOpacity);
+						createItemProperty(cmp, MapComponent.ITEM_PROPERTY_STYLE_strokeWeight);
 
 						createSeparator(cmp);
 
-						createItemProperty(cmp,
-								MapComponent.ITEM_PROPERTY_STYLE_fillColor);
-						createItemProperty(cmp,
-								MapComponent.ITEM_PROPERTY_STYLE_fillOpacity);
+						createItemProperty(cmp, MapComponent.ITEM_PROPERTY_STYLE_fillColor);
+						createItemProperty(cmp, MapComponent.ITEM_PROPERTY_STYLE_fillOpacity);
 
 						createSeparator(cmp);
 
-						createItemProperty(cmp,
-								MapComponent.ITEM_PROPERTY_STYLE_isPolygon);
-						createItemProperty(cmp,
-								MapComponent.ITEM_PROPERTY_clickable);
-						createItemProperty(cmp,
-								MapComponent.ITEM_PROPERTY_STYLE_editable);
-						createItemProperty(cmp,
-								MapComponent.ITEM_PROPERTY_draggable);
-						createItemProperty(cmp,
-								MapComponent.ITEM_PROPERTY_STYLE_geodesic);
-						createItemProperty(cmp,
-								MapComponent.ITEM_PROPERTY_visible);
-						createItemProperty(cmp,
-								MapComponent.ITEM_PROPERTY_MARKER_zIndex);
+						createItemProperty(cmp, MapComponent.ITEM_PROPERTY_STYLE_isPolygon);
+						createItemProperty(cmp, MapComponent.ITEM_PROPERTY_clickable);
+						createItemProperty(cmp, MapComponent.ITEM_PROPERTY_STYLE_editable);
+						createItemProperty(cmp, MapComponent.ITEM_PROPERTY_draggable);
+						createItemProperty(cmp, MapComponent.ITEM_PROPERTY_STYLE_geodesic);
+						createItemProperty(cmp, MapComponent.ITEM_PROPERTY_visible);
+						createItemProperty(cmp, MapComponent.ITEM_PROPERTY_MARKER_zIndex);
 					}
 
 				};

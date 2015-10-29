@@ -48,14 +48,12 @@ public class PathPropertyDescriptor extends AItemDataListPropertyDescriptor {
 		super(id, displayName);
 	}
 
-	protected SPItemDataList createSPWidget(Composite parent,
-			AbstractSection section) {
+	protected SPItemDataList createSPWidget(Composite parent, AbstractSection section) {
 		return new SPItemDataList(parent, section, this, false) {
 			@Override
 			protected AItemDialog createItemDialog() {
 				return new FormItemDialog(UIUtils.getShell(), getDescriptor(),
-						(JasperReportsConfiguration) section
-								.getJasperReportsContext(), true, false) {
+						(JasperReportsConfiguration) section.getJasperReportsContext(), false, false) {
 
 					@Override
 					protected void createValues(Composite cmp) {
@@ -67,50 +65,34 @@ public class PathPropertyDescriptor extends AItemDataListPropertyDescriptor {
 						lbl.setLayoutData(gd);
 						lbl.setText(com.jaspersoft.studio.messages.Messages.MapSection_1);
 
-						createItemProperty(cmp,
-								MapComponent.ITEM_PROPERTY_latitude);
-						createItemProperty(cmp,
-								MapComponent.ITEM_PROPERTY_longitude);
-						createItemProperty(cmp,
-								MapComponent.ITEM_PROPERTY_address);
+						createItemProperty(cmp, MapComponent.ITEM_PROPERTY_latitude);
+						createItemProperty(cmp, MapComponent.ITEM_PROPERTY_longitude);
+						createItemProperty(cmp, MapComponent.ITEM_PROPERTY_address);
 
 						createSeparator(cmp);
 
-						createItemProperty(cmp,
-								MapComponent.ITEM_PROPERTY_style);
+						createItemProperty(cmp, MapComponent.ITEM_PROPERTY_style);
 
 						createSeparator(cmp);
 
-						createItemProperty(cmp,
-								MapComponent.ITEM_PROPERTY_STYLE_strokeColor);
-						createItemProperty(cmp,
-								MapComponent.ITEM_PROPERTY_STYLE_strokeOpacity);
-						createItemProperty(cmp,
-								MapComponent.ITEM_PROPERTY_STYLE_strokeWeight);
+						createItemProperty(cmp, MapComponent.ITEM_PROPERTY_STYLE_strokeColor);
+						createItemProperty(cmp, MapComponent.ITEM_PROPERTY_STYLE_strokeOpacity);
+						createItemProperty(cmp, MapComponent.ITEM_PROPERTY_STYLE_strokeWeight);
 
 						createSeparator(cmp);
 
-						createItemProperty(cmp,
-								MapComponent.ITEM_PROPERTY_STYLE_fillColor);
-						createItemProperty(cmp,
-								MapComponent.ITEM_PROPERTY_STYLE_fillOpacity);
+						createItemProperty(cmp, MapComponent.ITEM_PROPERTY_STYLE_fillColor);
+						createItemProperty(cmp, MapComponent.ITEM_PROPERTY_STYLE_fillOpacity);
 
 						createSeparator(cmp);
 
-						createItemProperty(cmp,
-								MapComponent.ITEM_PROPERTY_STYLE_isPolygon);
-						createItemProperty(cmp,
-								MapComponent.ITEM_PROPERTY_clickable);
-						createItemProperty(cmp,
-								MapComponent.ITEM_PROPERTY_STYLE_editable);
-						createItemProperty(cmp,
-								MapComponent.ITEM_PROPERTY_draggable);
-						createItemProperty(cmp,
-								MapComponent.ITEM_PROPERTY_STYLE_geodesic);
-						createItemProperty(cmp,
-								MapComponent.ITEM_PROPERTY_visible);
-						createItemProperty(cmp,
-								MapComponent.ITEM_PROPERTY_MARKER_zIndex);
+						createItemProperty(cmp, MapComponent.ITEM_PROPERTY_STYLE_isPolygon);
+						createItemProperty(cmp, MapComponent.ITEM_PROPERTY_clickable);
+						createItemProperty(cmp, MapComponent.ITEM_PROPERTY_STYLE_editable);
+						createItemProperty(cmp, MapComponent.ITEM_PROPERTY_draggable);
+						createItemProperty(cmp, MapComponent.ITEM_PROPERTY_STYLE_geodesic);
+						createItemProperty(cmp, MapComponent.ITEM_PROPERTY_visible);
+						createItemProperty(cmp, MapComponent.ITEM_PROPERTY_MARKER_zIndex);
 					}
 
 				};
@@ -135,14 +117,12 @@ public class PathPropertyDescriptor extends AItemDataListPropertyDescriptor {
 							JRExpression ip1exp = ip1.getValueExpression();
 							JRExpression ip2exp = ip2.getValueExpression();
 							if (ip1exp != null && ip2exp != null)
-								return Misc.nvl(ip1exp.getText()).compareTo(
-										Misc.nvl(ip2exp.getText()));
+								return Misc.nvl(ip1exp.getText()).compareTo(Misc.nvl(ip2exp.getText()));
 							if (ip1exp != null)
 								return -1;
 							if (ip2exp != null)
 								return 1;
-							return Misc.nvl(ip1.getValue()).compareTo(
-									Misc.nvl(ip2.getValue()));
+							return Misc.nvl(ip1.getValue()).compareTo(Misc.nvl(ip2.getValue()));
 						}
 						return -1;
 					}
@@ -150,8 +130,7 @@ public class PathPropertyDescriptor extends AItemDataListPropertyDescriptor {
 					private ItemProperty getItemProperty(Item item) {
 						List<ItemProperty> p = item.getProperties();
 						if (p != null)
-							return ItemPropertyUtil.getProperty(p,
-									MapComponent.ITEM_PROPERTY_name);
+							return ItemPropertyUtil.getProperty(p, MapComponent.ITEM_PROPERTY_name);
 
 						return null;
 					}
