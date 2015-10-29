@@ -253,14 +253,16 @@ public class ReportEditor extends AbstractVisualEditor {
 		toolbarManager.add(new Separator());
 		toolbarManager.add(getActionRegistry().getAction(GEFActionConstants.ZOOM_IN));
 		toolbarManager.add(getActionRegistry().getAction(GEFActionConstants.ZOOM_OUT));
-		RZoomComboContributionItem zoomItem = new RZoomComboContributionItem(getEditorSite().getPage());
+		if (zoomItem != null) {
+			zoomItem.dispose();
+			zoomItem = null;
+		}
 		GraphicalViewer graphicalViewer = getGraphicalViewer();
 		ZoomManager property = (ZoomManager) graphicalViewer.getProperty(ZoomManager.class.toString());
 		if (property != null){
-			zoomItem.setZoomManager(property);
+			zoomItem = new RZoomComboContributionItem(property);
+			toolbarManager.add(zoomItem);
 		}
-		zoomItem.setEnabled(true);
-		toolbarManager.add(zoomItem);
 		toolbarManager.add(new Separator());
 		// Contributed actions
 		List<AContributorAction> contributedActions = JaspersoftStudioPlugin.getExtensionManager().getActions();

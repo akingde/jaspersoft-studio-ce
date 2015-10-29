@@ -237,7 +237,7 @@ public class JrtxEditorContributor extends MultiPageEditorActionBarContributor {
 		tbm.add(getAction(GEFActionConstants.ZOOM_IN));
 		tbm.add(getAction(GEFActionConstants.ZOOM_OUT));
 		if (zoomCombo == null)
-			zoomCombo = new RZoomComboContributionItem(getPage());
+			zoomCombo = new RZoomComboContributionItem();
 		zoomCombo.setEnabled(true);
 		tbm.add(zoomCombo);
 		tbm.update(true);

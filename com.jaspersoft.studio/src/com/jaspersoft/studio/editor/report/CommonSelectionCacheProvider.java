@@ -251,6 +251,7 @@ public class CommonSelectionCacheProvider {
 	 * structured selection
 	 */
 	public void selectionChanged(ISelection selection) {
+		if (selection == null) return;
 		if (!selection.equals(lastSelection) && selection instanceof IStructuredSelection){
 			lastSelection = selection;
 			reinitializeMaps();

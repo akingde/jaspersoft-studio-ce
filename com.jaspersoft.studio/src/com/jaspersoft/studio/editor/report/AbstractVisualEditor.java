@@ -1046,6 +1046,8 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 	protected void createEditorActions(ActionRegistry registry) {
 
 	}
+	
+	protected RZoomComboContributionItem zoomItem = null;
 
 	/**
 	 * Contributes items to the specified toolbar that is supposed to be put on the top right of the current visual editor
@@ -1068,13 +1070,16 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 	public void contributeItemsToEditorTopToolbar(IToolBarManager toolbarManager) {
 		toolbarManager.add(getActionRegistry().getAction(GEFActionConstants.ZOOM_IN));
 		toolbarManager.add(getActionRegistry().getAction(GEFActionConstants.ZOOM_OUT));
-		RZoomComboContributionItem zoomItem = new RZoomComboContributionItem(getEditorSite().getPage());
+		if (zoomItem != null) {
+			zoomItem.dispose();
+			zoomItem = null;
+		}
 		GraphicalViewer graphicalViewer = getGraphicalViewer();
 		ZoomManager property = (ZoomManager) graphicalViewer.getProperty(ZoomManager.class.toString());
-		if (property != null)
-			zoomItem.setZoomManager(property);
-		zoomItem.setEnabled(true);
-		toolbarManager.add(zoomItem);
+		if (property != null){
+			zoomItem = new RZoomComboContributionItem(property);
+			toolbarManager.add(zoomItem);
+		}
 		toolbarManager.add(new Separator());
 		// Global "View" menu items
 		toolbarManager.add(new ViewSettingsDropDownAction(getActionRegistry()));

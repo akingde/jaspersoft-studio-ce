@@ -10,13 +10,6 @@ package com.jaspersoft.studio.editor;
 
 import java.util.HashSet;
 
-import net.sf.jasperreports.eclipse.builder.jdt.JRErrorHandler;
-import net.sf.jasperreports.engine.JRDataset;
-import net.sf.jasperreports.engine.JRExpressionCollector;
-import net.sf.jasperreports.engine.design.JRDesignDataset;
-import net.sf.jasperreports.engine.design.JRDesignExpression;
-import net.sf.jasperreports.engine.design.JasperDesign;
-
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.dialogs.IPageChangedListener;
@@ -36,6 +29,13 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.util.ReportFactory;
+
+import net.sf.jasperreports.eclipse.builder.jdt.JRErrorHandler;
+import net.sf.jasperreports.engine.JRDataset;
+import net.sf.jasperreports.engine.JRExpressionCollector;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
+import net.sf.jasperreports.engine.design.JRDesignExpression;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 /*
  * An example showing how to create a multi-page editor. This example has 3 pages: <ul> <li>page 0 contains a nested
@@ -186,5 +186,4 @@ public class JrxmlEditor extends AbstractJRXMLEditor implements IJROBjectEditor,
 	protected INode createEditorModel() {
 		return ReportFactory.createReport(jrContext);
 	}
-
 }
