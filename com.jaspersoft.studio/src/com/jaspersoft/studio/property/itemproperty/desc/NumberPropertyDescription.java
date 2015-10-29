@@ -65,12 +65,14 @@ public class NumberPropertyDescription<T extends Number> extends ItemPropertyDes
 	}
 
 	@Override
-	public Control createControl(IWItemProperty wiProp, Composite parent) {
+	public Control createControl(final IWItemProperty wiProp, Composite parent) {
 		Text ctrl = (Text) super.createControl(wiProp, parent);
 		ctrl.addVerifyListener(new VerifyListener() {
 
 			@Override
 			public void verifyText(VerifyEvent e) {
+				if (wiProp.getValue().getValueExpression() != null)
+					return;
 				if (Misc.isNullOrEmpty(e.text))
 					return;
 				String number = e.text;
