@@ -12,8 +12,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.book.editors.figures;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -30,6 +28,8 @@ import org.eclipse.wb.swt.ResourceManager;
 
 import com.jaspersoft.studio.book.ReportThumbnailsManager;
 import com.jaspersoft.studio.book.model.MReportPart;
+
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 /**
  * This is the figure that shows a single document icon in a book section.
@@ -125,7 +125,7 @@ public class BookPagesFigure extends RectangleFigure {
 		
 		String text = this.model.getDisplayText();
 		if(text.length()>=20){
-			text = text.substring(0, 2)+"..."+text.substring(text.length()-15);
+			text = text.substring(0, 16)+"..\"";
 		}
 		
 		textFigure = new Label(text);
@@ -220,8 +220,8 @@ public class BookPagesFigure extends RectangleFigure {
 	
 	public void updateText(){
 		String text = this.model.getDisplayText();
-		if(text.length()>20){
-			text = "..."+text.substring(text.length()-17);
+		if(text.length()>=20){
+			text = text.substring(0, 16)+"..\"";
 		}
 		textFigure.setText(text);
 		toolTipFigure.setMessage(model.getDisplayText());
