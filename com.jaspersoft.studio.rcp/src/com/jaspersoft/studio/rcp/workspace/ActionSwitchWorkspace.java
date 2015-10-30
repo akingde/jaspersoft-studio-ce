@@ -41,7 +41,7 @@ public class ActionSwitchWorkspace extends Action {
  
     @Override 
     public void run() { 
-        PickWorkspaceDialog pwd = new PickWorkspaceDialog(true, titleImage); 
+        PickWorkspaceDialog pwd = new PickWorkspaceDialog(true, titleImage,false); 
         int pick = pwd.open(); 
         if (pick == Dialog.CANCEL) 
             return; 

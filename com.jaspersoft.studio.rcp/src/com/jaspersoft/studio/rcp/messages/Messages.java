@@ -19,6 +19,8 @@ public class Messages extends NLS {
 	public static String ActionSwitchWorkspace_ActionLabel;
 	public static String ActionSwitchWorkspace_DialogTitle;
 	public static String ActionSwitchWorkspace_RestartMsg;
+	public static String Application_ErrorTitle;
+	public static String Application_WorkspaceErrorMsg;
 	public static String ApplicationWorkbenchAdvisor_ProductName;
 	public static String ApplicationWorkbenchAdvisor_RepositoryURLReadError;
 	public static String ApplicationWorkbenchWindowAdvisor_jasper_open_studio;
@@ -61,6 +63,12 @@ public class Messages extends NLS {
 	public static String UpdateHandler_NoUpdatesMessage;
 	public static String UpdateHandler_NoUpdatesTitle;
 	public static String UpdateHandler_TaskName;
+	public static String WorkspaceUtils_LinkText;
+	public static String WorkspaceUtils_WarningDialogMsg1;
+	public static String WorkspaceUtils_WarningDialogMsg2;
+	public static String WorkspaceUtils_WarningDialogMsg3;
+	public static String WorkspaceUtils_WarningDialogMsg4;
+	public static String WorkspaceUtils_WarningDialogTitle;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

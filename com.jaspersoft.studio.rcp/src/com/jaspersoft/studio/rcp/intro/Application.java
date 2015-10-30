@@ -14,6 +14,7 @@ package com.jaspersoft.studio.rcp.intro;
 
 import java.net.URL;
 
+import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
@@ -27,7 +28,9 @@ import org.eclipse.ui.PlatformUI;
 
 import com.jaspersoft.studio.rcp.Activator;
 import com.jaspersoft.studio.rcp.OpenDocumentEventProcessor;
+import com.jaspersoft.studio.rcp.messages.Messages;
 import com.jaspersoft.studio.rcp.workspace.PickWorkspaceDialog;
+import com.jaspersoft.studio.rcp.workspace.WorkspaceUtils;
 
 /**
  * This class controls all aspects of the application's execution
@@ -40,8 +43,6 @@ public class Application implements IApplication {
 	 * @see org.eclipse.equinox.app.IApplication#start(org.eclipse.equinox.app.IApplicationContext)
 	 */
 	public Object start(IApplicationContext context) throws Exception{
-		
-	
 		OpenDocumentEventProcessor openDocProcessor = new OpenDocumentEventProcessor();
 		//org.eclipse.ui.internal.misc.Policy.DEBUG_SWT_GRAPHICS = true;
 		//org.eclipse.ui.internal.misc.Policy.DEBUG_SWT_DEBUG = true;
@@ -49,55 +50,59 @@ public class Application implements IApplication {
 		display.addListener(SWT.OpenDocument, openDocProcessor);
 		
 		try {
-			Location instanceLoc = Platform.getInstanceLocation(); 
-			 
-			if(!instanceLoc.allowsDefault() && !instanceLoc.isSet()) {
-		        // get the last used workspace location 
-		        String lastUsedWs = PickWorkspaceDialog.getLastSetWorkspaceDirectory();
-		        // usually do not show pickup dialog at startup
-		        boolean showPickupDialog = false;
-		 
-		        // check to ensure the workspace location is still OK 
-	            // if there's any problem whatsoever with the workspace, force a dialog which in its turn will tell them what's bad
-	            String ret = PickWorkspaceDialog.checkWorkspaceDirectory(Display.getDefault().getActiveShell(), lastUsedWs, false, false); 
-	            if (ret != null) { 
-	            	showPickupDialog = true;
-	            }
-		 
-		        if (showPickupDialog) { 
-		            PickWorkspaceDialog pwd = new PickWorkspaceDialog(false,Activator.getDefault().getImage("icons/jss_icon_64.png")); 
-		            int pick = pwd.open(); 
-		 
-		            // if the user cancelled, we can't do anything as we need a workspace, so in this case, we tell them and exit 
-		            if (pick == Window.CANCEL) { 
-			            if (pwd.getSelectedWorkspaceLocation()  == null) { 
-			                MessageDialog.openError(display.getActiveShell(), "Error", 
-			                    "The application can not start without a workspace root and will now exit."); 
-			                try { 
-			                PlatformUI.getWorkbench().close(); 
-			                } catch (Exception err) { 
-			 
-			                } 
-			                System.exit(0); 
-			                return IApplication.EXIT_OK; 
-			            } 
-		            } 
-		            else { 
-		            	// tell Eclipse what the selected location was and continue 
-		            	instanceLoc.set(new URL("file", null, pwd.getSelectedWorkspaceLocation()), false); 
-		            } 
-		        } 
-		        else { 
-		            // set the last used location and continue 
-		            instanceLoc.set(new URL("file", null, lastUsedWs), false); 
-		        }
+			Location instanceLoc = Platform.getInstanceLocation();
+			
+			if(instanceLoc == null) {
+				// FIXME - raise exception?!
+			}
+			else {
+				if(!instanceLoc.isSet()) {
+					// Location is not set let's proceed using the default one
+					instanceLoc.set(new URL("file", null, PickWorkspaceDialog.getLastSetWorkspaceDirectory()), false); //$NON-NLS-1$
+				}
+				// Checks if workspace exists
+				boolean workspaceExists = WorkspaceUtils.checkWorkspaceExists(instanceLoc);
+				if(workspaceExists) {
+					boolean isLegacyWS = WorkspaceUtils.isLegacyWorkspace(instanceLoc);
+					if(isLegacyWS){
+						MessageDialog warningDialog = WorkspaceUtils.getLegacyWorkspaceWarningDialog(
+								FileLocator.toFileURL(instanceLoc.getURL()).getPath());
+						if(warningDialog.open()==Window.OK) {
+							// Show chooser dialog
+				            PickWorkspaceDialog pwd = new PickWorkspaceDialog(false,Activator.getDefault().getImage("icons/jss_icon_64.png"),true);  //$NON-NLS-1$
+				            int pick = pwd.open(); 
+				 
+				            // if the user cancelled, we can't do anything as we need a workspace, so in this case, we tell them and exit 
+				            if (pick == Window.CANCEL) { 
+					            if (pwd.getSelectedWorkspaceLocation()  == null) { 
+					                MessageDialog.openError(display.getActiveShell(), Messages.Application_ErrorTitle, 
+					                    Messages.Application_WorkspaceErrorMsg); 
+					                try { 
+					                	PlatformUI.getWorkbench().close(); 
+					                } catch (Exception err) { 
+					 
+					                } 
+					                System.exit(0); 
+					                return IApplication.EXIT_OK; 
+					            } 
+				            } 
+				            else { 
+				            	// Let's restart since the new location has been chosen
+				            	// and we can not set twice the location once already set.
+				            	return IApplication.EXIT_RESTART;
+				            } 
+						}
+					}
+				}
 			}
 			
 			int returnCode = PlatformUI.createAndRunWorkbench(display, new ApplicationWorkbenchAdvisor(openDocProcessor));
 		    if (returnCode !=  PlatformUI.RETURN_RESTART) return EXIT_OK;
-		    return EXIT_RELAUNCH.equals(Integer.getInteger(PROP_EXIT_CODE)) ? EXIT_RELAUNCH : EXIT_RESTART;		} finally {
+		    return EXIT_RELAUNCH.equals(Integer.getInteger(PROP_EXIT_CODE)) ? EXIT_RELAUNCH : EXIT_RESTART;
+		} finally {
 			display.dispose();
 		}
+
 	}
 
 	/* (non-Javadoc)
