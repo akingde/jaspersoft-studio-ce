@@ -22,6 +22,7 @@ import net.sf.jasperreports.engine.JRPropertiesUtil.PropertySuffix;
 import com.jaspersoft.studio.data.adapter.IReportDescriptor;
 import com.jaspersoft.studio.preferences.util.PreferencesUtils;
 import com.jaspersoft.studio.preferences.util.PropertiesHelper;
+import com.jaspersoft.studio.wizards.ContextHelpIDs;
 
 /**
  * Page of the wizard used to import the properties from a Jaspersoft Studio Workspace into
@@ -70,5 +71,10 @@ public class JSSPropertiesPage extends ShowPropertiesPage {
 			}
 		}
 		return readKeys;
+	}
+	
+	@Override
+	protected String getContextName() {
+		return ContextHelpIDs.WIZARD_IMPORT_WORKSPACE;
 	}
 }

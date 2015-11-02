@@ -115,6 +115,9 @@
      <topic href="html/wizard/translation/installtranslation.html" label="Install a Translation">
      </topic>
   </topic>
+       <topic label="Import/Export">
+			<topic href="html/wizard/importworkspace/importworkspace.html" label="Import Jaspersoft Studio Resources from another workspace" />
+   </topic>
  </topic>
   <topic label="Developer Guide">
      <topic label="Extension Points">

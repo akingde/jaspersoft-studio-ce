@@ -25,6 +25,7 @@ import org.eclipse.swt.widgets.DirectoryDialog;
 import com.jaspersoft.studio.data.adapter.IReportDescriptor;
 import com.jaspersoft.studio.data.adapter.JSSDescriptor;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.wizards.ContextHelpIDs;
 
 /**
  * Dialog page that allow to choose a workspace folder from where the configuration
@@ -103,7 +104,7 @@ public class SelectWorkspacePage extends ListInstallationPage {
 
 	@Override
 	protected String getContextName() {
-		return null;
+		return ContextHelpIDs.WIZARD_IMPORT_WORKSPACE;
 	}
 
 }

@@ -45,7 +45,7 @@ import com.jaspersoft.studio.preferences.util.PreferencesUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /**
- * Wizard to import one of more data adapters definition from the previous installations of iReport
+ * Wizard to import one of more data adapters definition from the previous installations of Jaspersoft Studio
  * 
  * @author Orlandin Marco
  * 
@@ -53,7 +53,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 public class ImportJSSAdapterWizard extends Wizard implements IImportWizard {
 
 	/**
-	 * Page that list the ireport installations
+	 * Page that list the Jaspersoft Studio workspace
 	 */
 	private SelectWorkspacePage page0 = new SelectWorkspacePage();
 

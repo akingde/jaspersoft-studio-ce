@@ -50,6 +50,7 @@ import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.model.server.MServers;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
 import com.jaspersoft.studio.server.wizard.pages.ShowServersPage;
+import com.jaspersoft.studio.wizards.ContextHelpIDs;
 
 /**
  * Wizard to import one of more connections to JRS from other workspaces of JSS
@@ -182,6 +183,11 @@ public class ImportJSSServersWizard extends Wizard implements IImportWizard {
  			}
 			
 			return result;
+		}
+		
+		@Override
+		protected String getContextName() {
+			return ContextHelpIDs.WIZARD_IMPORT_WORKSPACE;
 		}
 		
 	}

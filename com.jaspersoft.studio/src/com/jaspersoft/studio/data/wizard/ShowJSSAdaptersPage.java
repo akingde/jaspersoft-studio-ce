@@ -100,7 +100,7 @@ public class ShowJSSAdaptersPage extends ShowAdaptersPage {
 	
 	@Override
 	protected String getContextName() {
-		return ContextHelpIDs.WIZARD_IMPORT_SELECT_ADAPTERS;
+		return ContextHelpIDs.WIZARD_IMPORT_WORKSPACE;
 	}
 
 }

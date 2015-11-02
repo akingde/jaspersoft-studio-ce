@@ -411,4 +411,7 @@
    <context id="defaultDA">
       <description>The default data adapter is used automatically by JasperReports when no other data adapter is specified. Using this property means that the informations to locate the data adapter for the Main Dataset or the Subdataset are enterely inside the report and it can be executed without specifing them</description>
    </context>
+   <context id="importWorkspace">
+      <topic href="html/wizard/importworkspace/importworkspace.html" label="When you need to import the content of another Jaspersoft Studio Workspace the user needs to perform some operation to import the different kinds of resources. The tutorial linked below show how to do this operations."/>
+   </context>
 </contexts>

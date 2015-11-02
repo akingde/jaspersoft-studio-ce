@@ -107,4 +107,6 @@ public class ContextHelpIDs {
 	public static final String WIZARD_COMPOSITE_ELEMENTS = PREFIX.concat("compositeElement");
 	
 	public static final String WIZARD_DEFAULT_DATA_ADAPTER = PREFIX.concat("defaultDA");
+	
+	public static final String WIZARD_IMPORT_WORKSPACE = PREFIX.concat("importWorkspace");
 }
