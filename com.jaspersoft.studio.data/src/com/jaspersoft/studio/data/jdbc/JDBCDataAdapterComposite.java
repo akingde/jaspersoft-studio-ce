@@ -15,10 +15,6 @@ package com.jaspersoft.studio.data.jdbc;
 import java.util.Arrays;
 import java.util.Comparator;
 
-import net.sf.jasperreports.data.DataAdapter;
-import net.sf.jasperreports.data.jdbc.JdbcDataAdapter;
-import net.sf.jasperreports.engine.JasperReportsContext;
-
 import org.eclipse.core.databinding.beans.PojoObservables;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.viewers.ComboViewer;
@@ -46,6 +42,10 @@ import com.jaspersoft.studio.swt.widgets.PropertiesComponent;
 import com.jaspersoft.studio.swt.widgets.WSecretText;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.UIUtil;
+
+import net.sf.jasperreports.data.DataAdapter;
+import net.sf.jasperreports.data.jdbc.JdbcDataAdapter;
+import net.sf.jasperreports.engine.JasperReportsContext;
 
 public class JDBCDataAdapterComposite extends ADataAdapterComposite {
 	
@@ -162,7 +162,7 @@ public class JDBCDataAdapterComposite extends ADataAdapterComposite {
 				new JDBCDriverDefinition("RedShift (TIBCO Jaspersoft)", //$NON-NLS-1$
 						"tibcosoftware.jdbc.redshift.RedshiftDriver", "jdbc:tibcosoftware:redshift://{0}:$[dbPort];databaseName={1};TransactionMode=ignore;LoginTimeout=30"), //$NON-NLS-1$ //$NON-NLS-2$
 				new JDBCDriverDefinition("SparkSQL (TIBCO Jaspersoft)", //$NON-NLS-1$
-						"tibcosoftware.jdbc.sparksql.SparkSQLDriver", "jdbc:tibcosoftware:sparksql://{0}:10000") //$NON-NLS-1$ //$NON-NLS-2$
+						"tibcosoftware.jdbc.sparksql.SparkSQLDriver", "jdbc:tibcosoftware:sparksql://{0}:10000;TransactionMode=ignore") //$NON-NLS-1$ //$NON-NLS-2$
 		
 		};  
 		
