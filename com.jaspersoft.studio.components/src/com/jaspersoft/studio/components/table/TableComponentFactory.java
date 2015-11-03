@@ -324,8 +324,7 @@ public class TableComponentFactory implements IComponentFactory {
 			for (BaseColumn bcg : scg.getColumns())
 				i = createCellDetail(mth, bcg, i, i);
 		} else {
-			createColumnCell(mth, bc, i, ((StandardColumn) bc).getDetailCell(),
-					index);
+			createColumnCell(mth, bc, i, ((StandardColumn) bc).getDetailCell(),index);
 			return ++i;
 		}
 		return i;

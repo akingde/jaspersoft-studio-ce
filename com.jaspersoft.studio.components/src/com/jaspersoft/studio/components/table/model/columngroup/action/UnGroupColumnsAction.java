@@ -79,7 +79,7 @@ public class UnGroupColumnsAction extends SelectionAction {
 			if (sel instanceof TableCellEditPart || sel instanceof TreeEditPart)
 				sel = ((AbstractEditPart) sel).getModel();
 			if (sel instanceof MColumn) {
-				JSSCompundTableCommand c = new JSSCompundTableCommand(Messages.UnGroupColumnsAction_title, ((MColumn)sel).getMTable()); 
+				JSSCompundTableCommand c = new JSSCompundTableCommand(Messages.UnGroupColumnsAction_title, ((MColumn)sel).getMTable(), true); 
 
 				MColumn fmc = (MColumn) sel;
 				ANode mparent = fmc.getParent();
@@ -88,7 +88,9 @@ public class UnGroupColumnsAction extends SelectionAction {
 				//Create the commands to fix the order on the undo
 				List<CheckColumnsOrder> fixOrderCommandList = new ArrayList<CheckColumnsOrder>();
 				for (INode src : fmc.getChildren()){
-					fixOrderCommandList.add(new CheckColumnsOrder((MColumn)src));
+					if (src instanceof MColumn){
+						fixOrderCommandList.add(new CheckColumnsOrder((MColumn)src));
+					}
 				}
 				Collections.sort(fixOrderCommandList);
 				//This commands are executed on the undo, so the list must be reversed
@@ -98,17 +100,18 @@ public class UnGroupColumnsAction extends SelectionAction {
 				//Create the commands to move the columns
 				int baseIndex = mparent.getChildren().indexOf(fmc);
 				for (INode src : fmc.getChildren()) {
-					if (mparent instanceof MColumnGroup || mparent instanceof MColumnGroupCell){
-						MoveColumnCommand moveCommand = new MoveColumnCommand((MColumn) src, (MColumn) mparent, false);
-						moveCommand.setNewIndex(baseIndex);
-						baseIndex++;
-						c.add(moveCommand);
-					}
-					else {
-						MoveColumnCommand moveCommand = new MoveColumnCommand((MColumn) src, null, false);
-						moveCommand.setNewIndex(baseIndex);
-						baseIndex++;
-						c.add(moveCommand);
+					if (src instanceof MColumn){
+						if (mparent instanceof MColumnGroup || mparent instanceof MColumnGroupCell){
+							MoveColumnCommand moveCommand = new MoveColumnCommand((MColumn) src, (MColumn) mparent, false);
+							moveCommand.setNewIndex(baseIndex);
+							baseIndex++;
+							c.add(moveCommand);
+						} else {
+							MoveColumnCommand moveCommand = new MoveColumnCommand((MColumn) src, null, false);
+							moveCommand.setNewIndex(baseIndex);
+							baseIndex++;
+							c.add(moveCommand);
+						}
 					}
 				}
 				if (mparent instanceof MColumnGroup)

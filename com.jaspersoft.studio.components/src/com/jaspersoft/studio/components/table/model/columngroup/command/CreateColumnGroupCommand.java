@@ -15,18 +15,18 @@ package com.jaspersoft.studio.components.table.model.columngroup.command;
 import java.util.Iterator;
 import java.util.List;
 
+import com.jaspersoft.studio.components.table.TableManager;
+import com.jaspersoft.studio.components.table.model.AMCollection;
+import com.jaspersoft.studio.components.table.model.column.MColumn;
+import com.jaspersoft.studio.components.table.model.column.command.CreateColumnCommand;
+import com.jaspersoft.studio.components.table.model.columngroup.MColumnGroup;
+
 import net.sf.jasperreports.components.table.StandardBaseColumn;
 import net.sf.jasperreports.components.table.StandardColumnGroup;
 import net.sf.jasperreports.components.table.StandardTable;
 import net.sf.jasperreports.components.table.util.TableUtil;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
 import net.sf.jasperreports.engine.design.JasperDesign;
-
-import com.jaspersoft.studio.components.table.TableManager;
-import com.jaspersoft.studio.components.table.model.AMCollection;
-import com.jaspersoft.studio.components.table.model.column.MColumn;
-import com.jaspersoft.studio.components.table.model.column.command.CreateColumnCommand;
-import com.jaspersoft.studio.components.table.model.columngroup.MColumnGroup;
 
 /*
  * link nodes & together.
@@ -91,7 +91,7 @@ public class CreateColumnGroupCommand extends CreateColumnCommand {
 
 	@Override
 	public void execute() {
-		TableManager tb = new TableManager(jrTable, jrDesign);
+		TableManager tb = tableNode.getTableManager();
 		super.execute();
 		if (resize) {
 			int height = MColumnGroup.DEFAULT_CELL_HEIGHT;

@@ -12,17 +12,17 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.table.model.column.command;
 
-import net.sf.jasperreports.components.table.StandardBaseColumn;
-import net.sf.jasperreports.components.table.StandardTable;
-
 import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.components.table.TableManager;
 import com.jaspersoft.studio.components.table.model.AMCollection;
+import com.jaspersoft.studio.components.table.model.MTable;
 import com.jaspersoft.studio.components.table.model.MTableGroupFooter;
 import com.jaspersoft.studio.components.table.model.MTableGroupHeader;
 import com.jaspersoft.studio.components.table.model.column.MColumn;
-import com.jaspersoft.studio.model.ANode;
+
+import net.sf.jasperreports.components.table.StandardBaseColumn;
+import net.sf.jasperreports.components.table.StandardTable;
 /*
  * link nodes & together.
  * 
@@ -32,27 +32,31 @@ public class DeleteColumnCommand extends Command {
 
 	private StandardTable jrTable;
 	private StandardBaseColumn jrColumn;
+	private MTable tableNode;
 
 	/** The element position. */
 	private int elementPosition = 0;
 
 	public DeleteColumnCommand(AMCollection destNode, MColumn srcNode) {
 		super();
-		this.jrTable = TableManager.getTable(destNode);
+		this.tableNode = TableManager.getTableNode(destNode);
+		this.jrTable = tableNode.getStandardTable();
 		this.jrColumn = (StandardBaseColumn) srcNode.getValue();
 		elementPosition = jrTable.getColumns().indexOf(jrColumn);
 	}
 
 	public DeleteColumnCommand(MTableGroupHeader destNode, MColumn srcNode) {
 		super();
-		this.jrTable = TableManager.getTable((ANode) destNode.getParent());
+		this.tableNode = TableManager.getTableNode(destNode);
+		this.jrTable = tableNode.getStandardTable();
 		this.jrColumn = (StandardBaseColumn) srcNode.getValue();
 		elementPosition = jrTable.getColumns().indexOf(jrColumn);
 	}
 
 	public DeleteColumnCommand(MTableGroupFooter destNode, MColumn srcNode) {
 		super();
-		this.jrTable = TableManager.getTable((ANode) destNode.getParent());
+		this.tableNode = TableManager.getTableNode(destNode);
+		this.jrTable = tableNode.getStandardTable();
 		this.jrColumn = (StandardBaseColumn) srcNode.getValue();
 		elementPosition = jrTable.getColumns().indexOf(jrColumn);
 	}
@@ -65,6 +69,7 @@ public class DeleteColumnCommand extends Command {
 	@Override
 	public void execute() {
 		jrTable.removeColumn(jrColumn);
+		tableNode.getTableManager().updateTableSpans();
 	}
 
 	/*
@@ -90,6 +95,7 @@ public class DeleteColumnCommand extends Command {
 			jrTable.addColumn(jrColumn);
 		else
 			jrTable.addColumn(elementPosition, jrColumn);
+		
+		tableNode.getTableManager().updateTableSpans();
 	}
-
 }

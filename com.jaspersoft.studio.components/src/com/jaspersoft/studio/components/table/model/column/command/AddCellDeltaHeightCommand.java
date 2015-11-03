@@ -14,7 +14,8 @@ package com.jaspersoft.studio.components.table.model.column.command;
 
 import org.eclipse.gef.commands.Command;
 
-import com.jaspersoft.studio.components.table.model.column.MCell;
+import net.sf.jasperreports.components.table.Cell;
+import net.sf.jasperreports.components.table.DesignCell;
 
 /**
  * Command to add a delta (positive or negative) to the height of a cell. If the 
@@ -41,26 +42,26 @@ public class AddCellDeltaHeightCommand extends Command{
 	/**
 	 * The cell to change
 	 */
-	private MCell cell;
+	private DesignCell cell;
 	
 	/**
 	 * Create an instance of the class
 	 * 
-	 * @param cell
-	 * @param newHeight
+	 * @param cell a not null cell
+	 * @param newHeight the new height of the cell
 	 */
-	public AddCellDeltaHeightCommand(MCell cell, int newHeight){
-		this.cell = cell;
+	public AddCellDeltaHeightCommand(Cell cell, int newHeight){
+		this.cell = (DesignCell)cell;
 		this.newHeightDelta = newHeight;
 	}
 	
 	@Override
 	public void execute() {
-		oldHeight = cell.getCell().getHeight();
-		if (newHeightDelta < 0 && cell.getCell().getHeight() < Math.abs(newHeightDelta)){
-			newHeightDelta = -cell.getCell().getHeight();
+		oldHeight = cell.getHeight();
+		if (newHeightDelta < 0 && cell.getHeight() < Math.abs(newHeightDelta)){
+			newHeightDelta = -cell.getHeight();
 		}
-		cell.getCell().setHeight(cell.getCell().getHeight()+newHeightDelta);
+		cell.setHeight(cell.getHeight()+newHeightDelta);
 	}
 	
 	@Override
@@ -70,6 +71,6 @@ public class AddCellDeltaHeightCommand extends Command{
 	
 	@Override
 	public void undo() {
-		cell.getCell().setHeight(oldHeight);
+		cell.setHeight(oldHeight);
 	}
 }

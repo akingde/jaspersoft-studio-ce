@@ -12,12 +12,12 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.table.part.editpolicy;
 
-import net.sf.jasperreports.components.table.StandardBaseColumn;
-
 import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.components.table.model.MTable;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.SetValueCommand;
+
+import net.sf.jasperreports.components.table.StandardBaseColumn;
 
 /**
  * Command used to set the property of one or more table cells. It disable
@@ -26,7 +26,10 @@ import com.jaspersoft.studio.property.SetValueCommand;
  * the resize operations.
  * If the option was enabled before the operations then it is re-enabled at 
  * the end and this will trigger the correct table fill procedure. But in 
- * this way it is executed only once at the end
+ * this way it is executed only once at the end.
+ * 
+ * Allow also to update the span of all the cells in the table when the command
+ * is executed, undone o redone
  * 
  * @author Orlandin Marco
  *
@@ -39,24 +42,44 @@ public class JSSCompundTableCommand extends JSSCompoundCommand {
 	private MTable table;
 	
 	/**
+	 * Flag used to know if on the execute the span of the cells should be updated
+	 */
+	private boolean updateTableSpan = false;
+	
+	/**
+	 * Create the command for the resize
+	 * 
+	 * @param table a not null table containing the resized columns
+	 * @param updateTableSpan if set to true will update the span of 
+	 * all the cells in the table when the command is executed, undone o redone
+	 */
+	public JSSCompundTableCommand(MTable table, boolean updateTableSpan){
+		super("Change Cell Size", table);
+		this.table = table;
+		this.updateTableSpan = updateTableSpan;
+	}
+	
+	/**
 	 * Create the command for the resize
 	 * 
 	 * @param table a not null table containing the resized columns
 	 */
 	public JSSCompundTableCommand(MTable table){
-		super("Change Cell Size", table);
-		this.table = table;
+		this(table, false);
 	}
 	
 	/**
 	 * Create a general command
 	 * 
-	 * @param commandText the textual name of the commandß
+	 * @param commandText the textual name of the command
 	 * @param table a not null table containing the resized columns
+	 * @param updateTableSpan if set to true will update the span of 
+	 * all the cells in the table when the command is executed, undone o redone
 	 */
-	public JSSCompundTableCommand(String commandText, MTable table){
+	public JSSCompundTableCommand(String commandText, MTable table, boolean updateTableSpan){
 		super(commandText, table);
 		this.table = table;
+		this.updateTableSpan = updateTableSpan;
 	}
 	
 	/**
@@ -82,6 +105,9 @@ public class JSSCompundTableCommand extends JSSCompoundCommand {
 		} else {
 			super.execute();
 		}
+		if (updateTableSpan){
+			table.getTableManager().updateTableSpans();
+		}
 	}
 	
 	@Override
@@ -93,6 +119,22 @@ public class JSSCompundTableCommand extends JSSCompoundCommand {
 		} else {
 			super.undo();
 		}
+		if (updateTableSpan){
+			table.getTableManager().updateTableSpans();
+		}
 	}
 	
+	@Override
+	public void redo() {
+		if (table.hasColumnsAutoresizeProportional()){
+			table.setPropertyValue(MTable.PROPERTY_COLUMNS_AUTORESIZE_PROPORTIONAL, false);
+			super.redo();
+			table.setPropertyValue(MTable.PROPERTY_COLUMNS_AUTORESIZE_PROPORTIONAL, true);
+		} else {
+			super.redo();
+		}
+		if (updateTableSpan){
+			table.getTableManager().updateTableSpans();
+		}
+	}
 }

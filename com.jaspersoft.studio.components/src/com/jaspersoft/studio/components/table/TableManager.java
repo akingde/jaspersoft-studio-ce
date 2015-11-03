@@ -20,20 +20,6 @@ import java.util.ListIterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import net.sf.jasperreports.components.table.BaseColumn;
-import net.sf.jasperreports.components.table.Cell;
-import net.sf.jasperreports.components.table.DesignCell;
-import net.sf.jasperreports.components.table.StandardBaseColumn;
-import net.sf.jasperreports.components.table.StandardColumn;
-import net.sf.jasperreports.components.table.StandardColumnGroup;
-import net.sf.jasperreports.components.table.StandardTable;
-import net.sf.jasperreports.components.table.util.TableUtil;
-import net.sf.jasperreports.engine.JRChild;
-import net.sf.jasperreports.engine.JRPropertiesHolder;
-import net.sf.jasperreports.engine.design.JRDesignComponentElement;
-import net.sf.jasperreports.engine.design.JRDesignGroup;
-import net.sf.jasperreports.engine.design.JasperDesign;
-
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
@@ -47,6 +33,26 @@ import com.jaspersoft.studio.editor.layout.VerticalRowLayout;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ModelUtils;
+
+import net.sf.jasperreports.components.table.BaseColumn;
+import net.sf.jasperreports.components.table.Cell;
+import net.sf.jasperreports.components.table.Column;
+import net.sf.jasperreports.components.table.ColumnGroup;
+import net.sf.jasperreports.components.table.ColumnVisitor;
+import net.sf.jasperreports.components.table.DesignCell;
+import net.sf.jasperreports.components.table.StandardBaseColumn;
+import net.sf.jasperreports.components.table.StandardColumn;
+import net.sf.jasperreports.components.table.StandardColumnGroup;
+import net.sf.jasperreports.components.table.StandardTable;
+import net.sf.jasperreports.components.table.util.TableUtil;
+import net.sf.jasperreports.engine.JRChild;
+import net.sf.jasperreports.engine.JRDatasetRun;
+import net.sf.jasperreports.engine.JRGroup;
+import net.sf.jasperreports.engine.JRPropertiesHolder;
+import net.sf.jasperreports.engine.design.JRDesignComponentElement;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
+import net.sf.jasperreports.engine.design.JRDesignGroup;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 public class TableManager {
 	private StandardTable table;
@@ -295,15 +301,17 @@ public class TableManager {
 	 */
 	private HashMap<Cell, Integer> getColumnCell(BaseColumn cell){
 		HashMap<Cell, Integer> result = new HashMap<Cell, Integer>();
-		if (cell instanceof StandardColumn){
-			StandardColumn col = (StandardColumn)cell;
+		if (cell instanceof StandardBaseColumn){
+			StandardBaseColumn col = (StandardBaseColumn)cell;
 			if (col.getColumnHeader() != null) result.put(col.getColumnHeader(), col.getWidth());
 			if (col.getTableHeader() != null) result.put(col.getTableHeader(), col.getWidth());
 			if (col.getTableFooter() != null) result.put(col.getTableFooter(), col.getWidth());
 			if (col.getColumnFooter() != null) result.put(cell.getColumnFooter(), col.getWidth());
-			if (col.getDetailCell() != null) result.put(col.getDetailCell(), col.getWidth());
 		}
-		else if (cell instanceof StandardColumnGroup){
+		if (cell instanceof StandardColumn){
+			StandardColumn col = (StandardColumn)cell;
+			if (col.getDetailCell() != null) result.put(col.getDetailCell(), col.getWidth());
+		} else if (cell instanceof StandardColumnGroup){
 			StandardColumnGroup group = (StandardColumnGroup)cell;
 			List<BaseColumn> columns = group.getColumns();
 			for(BaseColumn groupCol : columns){
@@ -544,5 +552,348 @@ public class TableManager {
 		return type == TableUtil.COLUMN_FOOTER
 				|| type == TableUtil.TABLE_FOOTER
 				|| type == TableUtil.COLUMN_GROUP_FOOTER;
+	}
+	
+	//SPAN CALCULATION CODE
+	
+	/**
+	 * Class that allow to extract the cell of a specific type from a table column
+	 */
+	public static class ColumnCellSelector
+	{
+		/**
+		 * The type that can be extracted from the column
+		 */
+		public enum TYPE{TABLE_HEADER, TABLE_FOOTER, COLUMN_HEADER, COLUMN_FOOTER, GROUP_HEADER, GROUP_FOOTER}
+		
+		/**
+		 * Extract the cell of a specific type from a column
+		 * 
+		 * @param column the column, must be not null
+		 * @param type the type of the cell, must be not null
+		 * @param the name of the group, can be null but only if the type is different from group header or footer
+		 * @return the extracted cell, can be null if the cell is not found
+		 */
+		public Cell getCell(Column column, TYPE type, String groupName)
+		{
+			return getCell((BaseColumn) column, type, groupName);
+		}
+
+		/**
+		 * {@link #getCell(Column, TYPE, String)}
+		 */
+		public Cell getCell(ColumnGroup group, TYPE type, String groupName)
+		{
+			return getCell((BaseColumn) group, type, groupName);
+		}
+		
+		/**
+		 * {@link #getCell(Column, TYPE, String)}
+		 */
+		protected Cell getCell(BaseColumn column, TYPE type, String groupName){
+			if (type == TYPE.TABLE_HEADER){
+				return column.getTableHeader();
+			} else if (type == TYPE.TABLE_FOOTER){
+				return column.getTableFooter();
+			} else if (type == TYPE.COLUMN_FOOTER){
+				return column.getColumnFooter();
+			} else if (type == TYPE.COLUMN_HEADER){
+				return column.getColumnHeader();
+			} else if (type == TYPE.GROUP_FOOTER){
+				return column.getGroupFooter(groupName);
+			} else if (type == TYPE.GROUP_HEADER){
+				return column.getGroupHeader(groupName);
+			}
+			return null;
+		}
+	}
+	
+	/**
+	 * The cell selector used to visit a column and extract the cell
+	 */
+	protected ColumnCellSelector cellSelector = new ColumnCellSelector();
+	
+	/**
+	 * Return a map of the cells in the table header with the appropriate span value
+	 * 
+	 * @return a not null hash map where the key is a cell of the requested section and the value
+	 * is the required span for the cell
+	 */
+	public HashMap<Cell, Integer> getTableHeaderSpans(){
+		return verifyColumnHeights(table.getColumns(), ColumnCellSelector.TYPE.TABLE_HEADER);
+	}
+	
+	/**
+	 * Return a map of the cells in the table footer with the appropriate span value
+	 * 
+	 * @return a not null hash map where the key is a cell of the requested section and the value
+	 * is the required span for the cell
+	 */
+	public HashMap<Cell, Integer> getTableFooterSpans(){
+		return verifyColumnHeights(table.getColumns(), ColumnCellSelector.TYPE.TABLE_FOOTER);
+	}
+	
+	/**
+	 * Return a map of the cells in the column footer with the appropriate span value
+	 * 
+	 * @return a not null hash map where the key is a cell of the requested section and the value
+	 * is the required span for the cell
+	 */
+	public HashMap<Cell, Integer> getColumnFooterSpans(){
+		return verifyColumnHeights(table.getColumns(), ColumnCellSelector.TYPE.COLUMN_FOOTER);
+	}
+
+	/**
+	 * Return a map of the cells in the column header with the appropriate span value
+	 * 
+	 * @return a not null hash map where the key is a cell of the requested section and the value
+	 * is the required span for the cell
+	 */
+	public HashMap<Cell, Integer> getColumnHeaderSpans(){
+		return verifyColumnHeights(table.getColumns(), ColumnCellSelector.TYPE.COLUMN_HEADER);
+	}
+	
+	/**
+	 * Return a map of the cells in the group header of a specific group, with the appropriate span value
+	 * 
+	 * @param groupName a not null group name
+	 * @return a not null hash map where the key is a cell of the requested section and the value
+	 * is the required span for the cell
+	 */
+	public HashMap<Cell, Integer> getGroupHeaderSpans(String groupName){
+		return verifyColumnHeights(table.getColumns(), ColumnCellSelector.TYPE.GROUP_HEADER, groupName);
+	}
+
+	/**
+	 * Return a map of the cells in the group footer of a specific group, with the appropriate span value
+	 * 
+	 * @param groupName a not null group name
+	 * @return a not null hash map where the key is a cell of the requested section and the value
+	 * is the required span for the cell
+	 */
+	public HashMap<Cell, Integer> getGroupFooterSpans(String groupName){
+		return verifyColumnHeights(table.getColumns(), ColumnCellSelector.TYPE.GROUP_FOOTER, groupName);
+	}
+
+	/**
+	 * Return a map of the cells in the table with the appropriate span value
+	 * 
+	 * @return a not null hash map where the key is a cell and the value
+	 * is the required span for the cell
+	 */
+	public HashMap<Cell, Integer> getTableSpans(){
+		HashMap<Cell, Integer> result = new HashMap<Cell, Integer>();
+		result.putAll(getTableHeaderSpans());
+		result.putAll(getTableFooterSpans());
+		result.putAll(getColumnHeaderSpans());
+		result.putAll(getColumnFooterSpans());
+		
+		JRDatasetRun datasetRun = table.getDatasetRun();
+		if (datasetRun != null)
+		{
+			JRDesignDataset tableDataset = (JRDesignDataset) jDesign.getDatasetMap().get(datasetRun.getDatasetName());
+			if (tableDataset!= null)
+			{
+				JRGroup[] groups = tableDataset.getGroups();
+				if (groups != null)
+				{
+					for (int i = 0; i < groups.length; i++)
+					{
+						final String groupName = groups[i].getName();
+						result.putAll(getGroupHeaderSpans(groupName));
+						result.putAll(getGroupFooterSpans(groupName));
+					}
+				}
+			}
+		}
+		return result;
+	}
+	
+	/**
+	 * Refresh the span value of all the cells in the table
+	 */
+	public void updateTableSpans(){
+		HashMap<Cell, Integer> spans = getTableSpans();
+		if (spans != null){
+			for(Entry<Cell, Integer> value : spans.entrySet()){
+				if (value.getKey().getRowSpan() != value.getValue()){
+					((DesignCell)value.getKey()).setRowSpan(value.getValue());
+				}
+			}
+		}
+	}
+	
+	//Calculation methods
+	
+	/**
+	 * Return a map of the cells extracted by the specified extractor form the set of columns, with the appropriate span value
+	 * 
+	 * @param columns a not null set of columns used to calculate the span, to have a correct result it should be all the columns 
+	 * on the table, otherwise the count of the row could miss some informations
+	 * @param type the section of the table used where the spans are calculated, using this method the section should not be a group header or footer
+	 * @return a not null hash map where the key is a cell of the requested section and the value
+	 * is the required span for the cell
+	 */
+	protected HashMap<Cell, Integer> verifyColumnHeights(List<BaseColumn> columns, final ColumnCellSelector.TYPE type){
+		return verifyColumnHeights(columns, type, null);
+	}
+	
+	/**
+	 * Return a map of the cells extracted by the specified extractor form the set of columns, with the appropriate span value
+	 * 
+	 * @param columns a not null set of columns used to calculate the span, to have a correct result it should be all the columns 
+	 * on the table, otherwise the count of the row could miss some informations
+	 * @param type the section of the table used where the spans are calculated
+	 * @param groupName the group if the requested section is a group header or a group footer, in this case this shouldn't be null, otherwise
+	 * it can be null
+	 * @return a not null hash map where the key is a cell of the requested section and the value
+	 * is the required span for the cell
+	 */
+	protected HashMap<Cell, Integer> verifyColumnHeights(List<BaseColumn> columns, final ColumnCellSelector.TYPE type, final String groupName)
+	{
+		final List<List<Cell>> tableCellRows = new ArrayList<List<Cell>>();
+		HashMap<Cell, Integer> result = new HashMap<Cell, Integer>();
+		ColumnVisitor<Void> cellCollector = new ColumnVisitor<Void>()
+		{
+			int rowIdx = 0;
+			
+			protected List<Cell> getRow()
+			{
+				int currentRowCount = tableCellRows.size();
+				if (rowIdx >= currentRowCount)
+				{
+					for (int i = currentRowCount; i <= rowIdx; i++)
+					{
+						tableCellRows.add(new ArrayList<Cell>());
+					}
+				}
+				return tableCellRows.get(rowIdx);
+			}
+			
+			public Void visitColumn(Column column)
+			{
+				Cell cell = cellSelector.getCell(column, type, groupName);
+				if (cell != null)
+				{
+					getRow().add(cell);
+				}
+				return null;
+			}
+
+			public Void visitColumnGroup(ColumnGroup columnGroup)
+			{
+				Cell cell = cellSelector.getCell(columnGroup, type, groupName);
+				if (cell != null)
+				{
+					getRow().add(cell);
+				}
+				
+				int span = cell == null ? 0 : 1;
+				if (cell != null && cell.getRowSpan() != null && cell.getRowSpan() > 1)
+				{
+					span = cell.getRowSpan();
+				}
+				
+				rowIdx += span;
+				for (BaseColumn subcolumn : columnGroup.getColumns())
+				{
+					subcolumn.visitColumn(this);
+				}
+				rowIdx -= span;
+				
+				return null;
+			}
+		};
+		
+		for (BaseColumn column : columns)
+		{
+			column.visitColumn(cellCollector);
+		}
+
+		List<Integer> rowHeights = new ArrayList<Integer>(tableCellRows.size());
+		for (int rowIdx = 0; rowIdx < tableCellRows.size(); ++rowIdx)
+		{
+			Integer rowHeight = null;
+			// going back on rows in order to determine row height
+			int spanHeight = 0;
+			prevRowLoop:
+			for (int idx = rowIdx; idx >= 0; --idx)
+			{
+				for (Cell cell : tableCellRows.get(idx))
+				{
+					int rowSpan = cell.getRowSpan() == null ? 1 : cell.getRowSpan();
+					if (idx + rowSpan - 1 == rowIdx && cell.getHeight() != null)
+					{
+						rowHeight = cell.getHeight() - spanHeight;
+						break prevRowLoop;
+					}
+				}
+				
+				if (rowIdx > 0)
+				{
+					spanHeight += rowHeights.get(rowIdx - 1);
+				}
+			}
+			
+			if (rowHeight == null)
+			{
+				return result;
+			}
+			else
+			{
+				rowHeights.add(rowHeight);
+			}
+		}
+
+		for (ListIterator<List<Cell>> rowIt = tableCellRows.listIterator(); rowIt.hasNext();)
+		{
+			List<Cell> row = rowIt.next();
+			int rowIdx = rowIt.previousIndex();
+			int rowHeight = rowHeights.get(rowIdx);
+			
+			for (Cell cell : row)
+			{	
+				Integer height = cell.getHeight();
+				
+				/*if (height != null)
+				{
+					int spanHeight = rowHeight;
+					int maxSpan = tableCellRows.size() - rowIdx;
+					for (int idx = 1; idx < maxSpan; ++idx){
+						spanHeight += rowHeights.get(rowIdx + idx);
+						if (cell.getHeight() == spanHeight)
+						{
+							result.put(cell, idx);
+							break;
+						} 
+					}
+					if (cell.getHeight() == spanHeight)
+					{
+						result.put(cell, maxSpan);
+						break;
+					} 
+				}*/ 
+				
+				if (height != null)
+				{
+					int span = 1;
+					while( rowIdx + span <= tableCellRows.size()){
+						int spanHeight = rowHeight;
+						for (int idx = 1; idx < span; ++idx){
+							spanHeight += rowHeights.get(rowIdx + idx);
+						}
+						
+						if (cell.getHeight() != spanHeight)
+						{
+							span++;
+						} else {
+							result.put(cell, span);
+							break;
+						}
+					}
+				}
+			}
+		}
+		return result;
 	}
 }

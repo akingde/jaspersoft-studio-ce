@@ -27,6 +27,7 @@ import com.jaspersoft.studio.components.table.model.MTable;
 import com.jaspersoft.studio.components.table.model.MTableDetail;
 import com.jaspersoft.studio.components.table.model.column.MColumn;
 import com.jaspersoft.studio.components.table.model.column.command.CheckColumnsOrder;
+import com.jaspersoft.studio.components.table.model.column.command.CreateColumnGroupCellCommand;
 import com.jaspersoft.studio.components.table.model.column.command.FixCellHeightsCommand;
 import com.jaspersoft.studio.components.table.model.column.command.MoveColumnCommand;
 import com.jaspersoft.studio.components.table.model.column.command.RefreshColumnNamesCommand;
@@ -37,8 +38,10 @@ import com.jaspersoft.studio.editor.outline.actions.ACreateAction;
 import com.jaspersoft.studio.editor.palette.JDPaletteCreationFactory;
 import com.jaspersoft.studio.model.ANode;
 
-/*
- * The Class CreateGroupAction.
+import net.sf.jasperreports.components.table.StandardColumnGroup;
+
+/**
+ *  Create group from a set of columns and create also an header for them 
  */
 public class GroupColumnsAction extends ACreateAction {
 
@@ -137,12 +140,12 @@ public class GroupColumnsAction extends ACreateAction {
 		ANode mparent = fmc.getParent();
 		if (mparent == null)
 			return null;
-		JSSCompundTableCommand c = new JSSCompundTableCommand(Messages.CreateColumnAction_create_column_group, fmc.getMTable());
+		JSSCompundTableCommand c = new JSSCompundTableCommand(Messages.CreateColumnAction_create_column_group, fmc.getMTable(), true);
 		MColumnGroup mcolgr = new MColumnGroup();
 		int index = mparent.getChildren().indexOf(fmc);
 		CreateColumnGroupCommand cmd = createGroup(index, mparent, mcolgr);
-		mcolgr.setValue(cmd.createColumn(fmc.getJasperDesign(), fmc.getMTable()
-				.getStandardTable()));
+		StandardColumnGroup newGroup = (StandardColumnGroup)cmd.createColumn(fmc.getJasperDesign(), fmc.getMTable().getStandardTable());
+		mcolgr.setValue(newGroup);
 
 		c.add(new RefreshColumnNamesCommand(mparent, false, true));
 
@@ -164,6 +167,7 @@ public class GroupColumnsAction extends ACreateAction {
 
 		c.add(new FixCellHeightsCommand(fmc));
 		c.add(new RefreshColumnNamesCommand(mparent, true, false));
+		c.add(new CreateColumnGroupCellCommand(fmc.getSection(), mparent, newGroup));
 		return c;
 	}
 	

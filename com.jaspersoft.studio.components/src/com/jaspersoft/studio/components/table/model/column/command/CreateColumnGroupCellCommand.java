@@ -12,15 +12,11 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.table.model.column.command;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.jasperreports.components.table.Cell;
-import net.sf.jasperreports.components.table.DesignCell;
-import net.sf.jasperreports.components.table.GroupCell;
-import net.sf.jasperreports.components.table.StandardBaseColumn;
-import net.sf.jasperreports.components.table.StandardGroupCell;
-
 import com.jaspersoft.studio.JSSCompoundCommand;
+import com.jaspersoft.studio.components.table.model.AMCollection;
 import com.jaspersoft.studio.components.table.model.MTable;
 import com.jaspersoft.studio.components.table.model.MTableColumnFooter;
 import com.jaspersoft.studio.components.table.model.MTableColumnHeader;
@@ -34,46 +30,92 @@ import com.jaspersoft.studio.components.table.model.columngroup.MColumnGroupCell
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 
+import net.sf.jasperreports.components.table.BaseColumn;
+import net.sf.jasperreports.components.table.Cell;
+import net.sf.jasperreports.components.table.DesignCell;
+import net.sf.jasperreports.components.table.GroupCell;
+import net.sf.jasperreports.components.table.StandardBaseColumn;
+import net.sf.jasperreports.components.table.StandardColumnGroup;
+import net.sf.jasperreports.components.table.StandardGroupCell;
+
 /**
- * Create a cell for an MColoumnGrop
+ * Create a cell for a column group
  * 
  * @author Orlandin Marco
  *
  */
 public class CreateColumnGroupCellCommand extends JSSCompoundCommand {
 
+	/**
+	 * The column group where the cell is created
+	 */
 	private StandardBaseColumn jrColumn;
-	private Class<ANode> type;
+	
+	/**
+	 * The group name if the section is a group header or footer
+	 */
 	private String groupName;
+	
+	/**
+	 * The created cell
+	 */
 	private Cell jrCell;
+	
+	/**
+	 * The height for the new cell
+	 */
 	private int height = 0;
-	private List<INode> columns;
-	private ANode parent;
+	
+	/**
+	 * The section where the column group is placed
+	 */
+	private ANode section;
+	
+	/**
+	 * The section type where the column group is placed
+	 */
+	private Class<AMCollection> type;
+	
+	/**
+	 * The table node
+	 */
+	private MTable tableNode;
+	
+	/**
+	 * The parent of the column group
+	 */
+	private ANode groupColumnParent;
 
+	/**
+	 * Create the command
+	 * 
+	 * @param section a not null section where the column group is placed
+	 * @param srcNode the column group where the cell will be created
+	 */
+	public CreateColumnGroupCellCommand(AMCollection section, MColumnGroup srcNode) {
+		this(section, srcNode.getParent(), srcNode.getValue());
+	}
+	
+	/**
+	 * Create the command
+	 * 
+	 * @param section a not null section where the column group is placed
+	 * @param groupColumnParent the parent of the group where the cell will be placed
+	 * @param groupColumn the column group where the cell will be created
+	 */
 	@SuppressWarnings("unchecked")
-	public CreateColumnGroupCellCommand(ANode parent, MColumnGroup srcNode) {
-		super(parent);
-		columns = srcNode.getChildren();
-		type = (Class<ANode>) parent.getClass();
-		this.parent = parent;
-		if (parent instanceof MTableGroupHeader){
-			groupName = ((MTableGroupHeader) parent).getJrDesignGroup().getName();
+	public CreateColumnGroupCellCommand(AMCollection section, ANode groupColumnParent, StandardColumnGroup groupColumn) {
+		super(section);
+		this.tableNode = (MTable)section.getParent();
+		this.type = (Class<AMCollection>) section.getClass();
+		this.jrColumn = groupColumn;
+		this.section = section;
+		this.groupColumnParent = groupColumnParent;
+		if (section instanceof MTableGroupHeader){
+			groupName = ((MTableGroupHeader) section).getJrDesignGroup().getName();
 		}
-		if (parent instanceof MTableGroupFooter){
-			groupName = ((MTableGroupFooter) parent).getJrDesignGroup().getName();
-		}
-		this.jrColumn = (StandardBaseColumn) srcNode.getValue();
-		height = searchSuggestedHeight(srcNode.getParent());
-		if (height == -1){
-			//It's the first added group cell in the row,  need to increase space for 
-			//all the cells outside this group
-			height = MColumnGroup.DEFAULT_CELL_HEIGHT;
-			setCellToIncrease(getRow(srcNode).getChildren(), srcNode, height);
-		} else {
-			//Need to decrease the cell height inside this group if they are bigger enough
-			//otherwise we take the value most closer to the height
-			height = getMinCellHeight(columns, height);
-			setCellHeightDelta(columns, -height);
+		if (section instanceof MTableGroupFooter){
+			groupName = ((MTableGroupFooter) section).getJrDesignGroup().getName();
 		}
 	}
 	
@@ -103,15 +145,54 @@ public class CreateColumnGroupCellCommand extends JSSCompoundCommand {
 	}
 	
 	/**
-	 * Return the Node of the entire row where the passed node is contained
+	 * Get all the cell into a specific into a specific column and its subcolumn
+	 * if it is a group. In this case the cells of the group itself are not returned
+	 * Also the cell are taken only from the section where the new cell will be created
 	 * 
-	 * @param cell the node
-	 * @return the row where the node is
+	 * @param column a not null column
+	 * @return a not null list of cell
 	 */
-	private ANode getRow(ANode cell){
-		ANode parent = cell.getParent();
-		if (parent instanceof MTable) return cell;
-		else return getRow(parent);
+	private List<Cell> getAllCells(BaseColumn column){
+		List<Cell> result = new ArrayList<Cell>();
+		if (column instanceof StandardColumnGroup){
+			StandardColumnGroup group = (StandardColumnGroup)column;
+			for(BaseColumn subCol : group.getColumns()){
+				result.addAll(getAllCells(subCol));
+			}
+		} else {
+			Cell currentCell = null;
+			if (type.isAssignableFrom(MTableHeader.class))
+				currentCell = column.getTableHeader();
+			else if (type.isAssignableFrom(MTableFooter.class))
+				currentCell = column.getTableFooter();
+			else if (type.isAssignableFrom(MTableColumnHeader.class))
+				currentCell = column.getColumnHeader();
+			else if (type.isAssignableFrom(MTableColumnFooter.class))
+				currentCell = column.getColumnFooter();
+			else if (type.isAssignableFrom(MTableGroupHeader.class)){
+				int groupIndex = getGroupIndex(section);
+				List<GroupCell> groupHeaders = column.getGroupHeaders();
+				if (groupIndex != -1 && groupHeaders.size()>groupIndex){
+					for(GroupCell groupHeader : groupHeaders){
+						if (groupHeader.getCell() != null){
+							result.add(groupHeader.getCell());
+						}
+					}
+				}
+			} else if (type.isAssignableFrom(MTableGroupFooter.class)){
+				int groupIndex = getGroupIndex(section);
+				List<GroupCell> groupFooters = column.getGroupFooters();
+				if (groupIndex != -1 && groupFooters.size()>groupIndex){
+					for(GroupCell groupFooter : groupFooters){
+						if (groupFooter.getCell() != null){
+							result.add(groupFooter.getCell());
+						}
+					}
+				}
+			}
+			if (currentCell != null) result.add(currentCell);
+		}
+		return result;
 	}
 	
 	/**
@@ -122,11 +203,11 @@ public class CreateColumnGroupCellCommand extends JSSCompoundCommand {
 	 * @param exclusion the excluded ancestor
 	 * @param newHeightDelta the delta to apply to the height (can be positive or negative)
 	 */
-	private void setCellToIncrease(List<INode> children, MColumnGroup exclusion, int newHeightDelta){
+	private void setCellToIncrease(List<INode> children, StandardBaseColumn exclusion, int newHeightDelta){
 		for(INode child : children){
-			if (child != exclusion){
+			if (child.getValue() != exclusion){
 				if (child.getClass().equals(MCell.class)){
-					add(new AddCellDeltaHeightCommand((MCell)child, newHeightDelta));
+					add(new AddCellDeltaHeightCommand(((MCell)child).getCell(), newHeightDelta));
 				}
 				setCellToIncrease(child.getChildren(), exclusion, newHeightDelta);
 			}
@@ -140,12 +221,9 @@ public class CreateColumnGroupCellCommand extends JSSCompoundCommand {
 	 * @param children the current children
 	 * @param newHeightDelta the delta to apply to the height (can be positive or negative)
 	 */
-	private void setCellHeightDelta(List<INode> children, int newHeightDelta){
-		for(INode child : children){
-			if (child.getClass().equals(MCell.class)){
-				add(new AddCellDeltaHeightCommand((MCell)child, newHeightDelta));
-			}
-			setCellHeightDelta(child.getChildren(), newHeightDelta);
+	private void setCellHeightDelta(List<Cell> children, int newHeightDelta){
+		for(Cell child : children){
+			add(new AddCellDeltaHeightCommand(child, newHeightDelta));
 		}
 	}
 	
@@ -165,14 +243,10 @@ public class CreateColumnGroupCellCommand extends JSSCompoundCommand {
 	 * @param actualMin the comparison min
 	 * @return the safe min value
 	 */
-	private int getMinCellHeight(List<INode> children, int actualMin){
-		for(INode child : children){
-			if (child.getClass().equals(MCell.class)){
-				int cellHehight = ((MCell)child).getCell().getHeight();
-				if (actualMin > cellHehight) actualMin = cellHehight;
-			}
-			int recursiveMin = getMinCellHeight(child.getChildren(), actualMin);
-			if (recursiveMin<actualMin) return recursiveMin;
+	private int getMinCellHeight(List<Cell> children, int actualMin){
+		for(Cell child : children){
+			int cellHehight = child.getHeight();
+			if (actualMin > cellHehight) actualMin = cellHehight;
 		}
 		return actualMin;
 	}
@@ -196,13 +270,29 @@ public class CreateColumnGroupCellCommand extends JSSCompoundCommand {
 		return -1;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.gef.commands.Command#execute()
+	/**
+	 * Calculate the height of the new group cell
 	 */
-	@Override
-	public void execute() {
+	protected void computeHeight(){
+		height = searchSuggestedHeight(groupColumnParent);
+		if (height == -1){
+			//It's the first added group cell in the row,  need to increase space for 
+			//all the cells outside this group
+			height = MColumnGroup.DEFAULT_CELL_HEIGHT;
+			setCellToIncrease(section.getChildren(), jrColumn, height);
+		} else {
+			//Need to decrease the cell height inside this group if they are bigger enough
+			//otherwise we take the value most closer to the height
+			List<Cell> columnCells = getAllCells(jrColumn);
+			height = getMinCellHeight(columnCells, height);
+			setCellHeightDelta(columnCells, -height);
+		}
+	}
+	
+	/**
+	 * Create the group cell and update the table span
+	 */
+	protected void createGroupCell(){
 		if (jrCell == null) {
 			jrCell = createCell();
 		}
@@ -216,7 +306,7 @@ public class CreateColumnGroupCellCommand extends JSSCompoundCommand {
 			jrColumn.setColumnFooter(jrCell);
 
 		else if (type.isAssignableFrom(MTableGroupHeader.class)){
-			int groupIndex = getGroupIndex(parent);
+			int groupIndex = getGroupIndex(section);
 			List<GroupCell> groupHeaders = jrColumn.getGroupHeaders();
 			if (groupIndex != -1 && groupHeaders.size()> groupIndex){
 				StandardGroupCell groupCell = new StandardGroupCell(groupName, jrCell);
@@ -228,7 +318,7 @@ public class CreateColumnGroupCellCommand extends JSSCompoundCommand {
 
 		}
 		else if (type.isAssignableFrom(MTableGroupFooter.class)){
-			int groupIndex = getGroupIndex(parent);
+			int groupIndex = getGroupIndex(section);
 			List<GroupCell> groupFooters = jrColumn.getGroupFooters();
 			if (groupIndex != -1 && groupFooters.size()>groupIndex){
 				StandardGroupCell groupCell = new StandardGroupCell(groupName, jrCell);
@@ -240,12 +330,17 @@ public class CreateColumnGroupCellCommand extends JSSCompoundCommand {
 		}
 		
 		super.execute();
+		tableNode.getTableManager().updateTableSpans();
 	}
-
-	protected Cell createCell() {
-		DesignCell cell = new DesignCell();
-		cell.setHeight(height);
-		return cell;
+	
+	/**
+	 * Execute the command, first calculate the new cell height and then
+	 * create it
+	 */
+	@Override
+	public void execute() {
+		computeHeight();
+		createGroupCell();
 	}
 
 	@Override
@@ -253,9 +348,19 @@ public class CreateColumnGroupCellCommand extends JSSCompoundCommand {
 		return true;
 	}
 
+	/**
+	 * The redo differently from the execute doens't recalculate the height
+	 * but recreate only the cell
+	 */
 	@Override
 	public void redo() {
-		execute();
+		createGroupCell();
+	}
+
+	protected Cell createCell() {
+		DesignCell cell = new DesignCell();
+		cell.setHeight(height);
+		return cell;
 	}
 
 	@Override
@@ -274,5 +379,6 @@ public class CreateColumnGroupCellCommand extends JSSCompoundCommand {
 		else if (type.isAssignableFrom(MTableGroupFooter.class))
 			jrColumn.setGroupFooter(groupName, null);
 		super.undo();
+		tableNode.getTableManager().updateTableSpans();
 	}
 }

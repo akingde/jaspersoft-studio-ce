@@ -14,7 +14,9 @@ package com.jaspersoft.studio.components.table.model.column.command;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 
 import net.sf.jasperreports.components.table.Cell;
 import net.sf.jasperreports.components.table.DesignCell;
@@ -24,6 +26,7 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.gef.commands.Command;
 
+import com.jaspersoft.studio.components.table.TableManager;
 import com.jaspersoft.studio.components.table.model.MTableColumnFooter;
 import com.jaspersoft.studio.components.table.model.MTableColumnHeader;
 import com.jaspersoft.studio.components.table.model.MTableFooter;
@@ -50,6 +53,7 @@ public class CreateColumnCellCommand extends Command {
 	private Cell jrCell;
 	private int height = 0;
 	private ANode column;
+	private HashMap<Cell, Integer> oldSpans = new HashMap<Cell, Integer>();
 
 	@SuppressWarnings("unchecked")
 	public CreateColumnCellCommand(ANode parent, MColumn srcNode) {
@@ -133,12 +137,12 @@ public class CreateColumnCellCommand extends Command {
 			Collections.reverse(children);
 		}
 		for(INode node : group.getChildren()){
-			if (node instanceof MColumnGroup || node instanceof MColumnGroup){
+			if (node instanceof MColumnGroup || node instanceof MColumnGroupCell){
 				String style = getStyleFromColumnGroup((MColumn)node, startFromRight);
 				if (style != null) return style;
 			} else if (node instanceof MColumn){
 				String style = (String)((APropertyNode)node).getPropertyValue(DesignCell.PROPERTY_STYLE);
-				if (style != null) return style;
+				if (style != null && !style.isEmpty()) return style;
 			}
 		}
 		return null;
@@ -151,23 +155,40 @@ public class CreateColumnCellCommand extends Command {
 	 */
 	@Override
 	public void execute() {
+		TableManager manager = ((MColumn)column).getMTable().getTableManager();
 		if (jrCell == null) {
 			jrCell = createCell();
 		}
+		HashMap<Cell, Integer> spans = null;
 		if (type.isAssignableFrom(MTableHeader.class)){
 			jrColumn.setTableHeader(jrCell);
-		}
-		else if (type.isAssignableFrom(MTableFooter.class))
+			spans = manager.getTableHeaderSpans();
+		} else if (type.isAssignableFrom(MTableFooter.class)){
 			jrColumn.setTableFooter(jrCell);
-		else if (type.isAssignableFrom(MTableColumnHeader.class))
+			spans = manager.getTableFooterSpans();
+		}
+		else if (type.isAssignableFrom(MTableColumnHeader.class)){
 			jrColumn.setColumnHeader(jrCell);
-		else if (type.isAssignableFrom(MTableColumnFooter.class))
+			spans = manager.getColumnHeaderSpans();
+		} else if (type.isAssignableFrom(MTableColumnFooter.class)){
 			jrColumn.setColumnFooter(jrCell);
-
-		else if (type.isAssignableFrom(MTableGroupHeader.class))
+			spans = manager.getColumnFooterSpans();
+		}else if (type.isAssignableFrom(MTableGroupHeader.class)){
 			jrColumn.setGroupHeader(groupName, jrCell);
-		else if (type.isAssignableFrom(MTableGroupFooter.class))
+			spans = manager.getGroupHeaderSpans(groupName);
+		} else if (type.isAssignableFrom(MTableGroupFooter.class)){
 			jrColumn.setGroupFooter(groupName, jrCell);
+			spans = manager.getGroupFooterSpans(groupName);
+		}
+		
+		if (spans != null){
+			for(Entry<Cell, Integer> value : spans.entrySet()){
+				if (value.getKey().getRowSpan() != value.getValue()){
+					oldSpans.put(value.getKey(), value.getKey().getRowSpan());
+					((DesignCell)value.getKey()).setRowSpan(value.getValue());
+				}
+			}
+		}
 	}
 
 	protected Cell createCell() {
@@ -203,6 +224,12 @@ public class CreateColumnCellCommand extends Command {
 	 */
 	@Override
 	public void undo() {
+		//Restore the old spans
+		for(Entry<Cell, Integer> value : oldSpans.entrySet()){
+			((DesignCell)value.getKey()).setRowSpan(value.getValue());
+		}
+		oldSpans.clear();
+		
 		if (type.isAssignableFrom(MTableHeader.class))
 			jrColumn.setTableHeader(null);
 		else if (type.isAssignableFrom(MTableFooter.class))

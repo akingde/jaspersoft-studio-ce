@@ -15,18 +15,6 @@ package com.jaspersoft.studio.components.table.model.column.command;
 import java.util.Iterator;
 import java.util.List;
 
-import net.sf.jasperreports.components.table.BaseColumn;
-import net.sf.jasperreports.components.table.Cell;
-import net.sf.jasperreports.components.table.Column;
-import net.sf.jasperreports.components.table.DesignCell;
-import net.sf.jasperreports.components.table.StandardBaseColumn;
-import net.sf.jasperreports.components.table.StandardColumn;
-import net.sf.jasperreports.components.table.StandardColumnGroup;
-import net.sf.jasperreports.components.table.StandardTable;
-import net.sf.jasperreports.components.table.util.TableUtil;
-import net.sf.jasperreports.engine.design.JRDesignGroup;
-import net.sf.jasperreports.engine.design.JasperDesign;
-
 import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.components.table.TableManager;
@@ -40,6 +28,18 @@ import com.jaspersoft.studio.components.table.model.columngroup.MColumnGroupCell
 import com.jaspersoft.studio.components.table.util.TableColumnSize;
 import com.jaspersoft.studio.model.ANode;
 
+import net.sf.jasperreports.components.table.BaseColumn;
+import net.sf.jasperreports.components.table.Cell;
+import net.sf.jasperreports.components.table.Column;
+import net.sf.jasperreports.components.table.DesignCell;
+import net.sf.jasperreports.components.table.StandardBaseColumn;
+import net.sf.jasperreports.components.table.StandardColumn;
+import net.sf.jasperreports.components.table.StandardColumnGroup;
+import net.sf.jasperreports.components.table.StandardTable;
+import net.sf.jasperreports.components.table.util.TableUtil;
+import net.sf.jasperreports.engine.design.JRDesignGroup;
+import net.sf.jasperreports.engine.design.JasperDesign;
+
 /*
  * link nodes & together.
  * 
@@ -52,6 +52,7 @@ public class CreateColumnCommand extends Command {
 	protected StandardTable jrTable;
 	protected JasperDesign jrDesign;
 	private int index;
+	protected MTable tableNode;
 
 	public CreateColumnCommand(AMCollection destNode, MColumn srcNode, int index) {
 		this((ANode) destNode, srcNode, index);
@@ -79,7 +80,8 @@ public class CreateColumnCommand extends Command {
 
 	protected CreateColumnCommand(ANode destNode, MColumn srcNode, int index) {
 		super();
-		this.jrTable = TableManager.getTable(destNode);
+		this.tableNode = TableManager.getTableNode(destNode);
+		this.jrTable = tableNode.getStandardTable();
 		this.index = index;
 		this.jrColumn = (StandardBaseColumn) srcNode.getValue();
 		this.jrDesign = destNode.getJasperDesign();
@@ -95,6 +97,16 @@ public class CreateColumnCommand extends Command {
 	 */
 	@Override
 	public void execute() {
+		if (tableNode.hasColumnsAutoresizeProportional()){
+			tableNode.setPropertyValue(MTable.PROPERTY_COLUMNS_AUTORESIZE_PROPORTIONAL, false);
+			createAndAddColumn();
+			tableNode.setPropertyValue(MTable.PROPERTY_COLUMNS_AUTORESIZE_PROPORTIONAL, true);
+		} else {
+			createAndAddColumn();
+		}
+	}
+	
+	private void createAndAddColumn(){
 		if (jrColumn == null)
 			jrColumn = createColumn(jrDesign, jrTable);
 		if (pColGroup != null) {
@@ -108,6 +120,8 @@ public class CreateColumnCommand extends Command {
 			else
 				jrTable.addColumn(jrColumn);
 		}
+		
+		tableNode.getTableManager().updateTableSpans();
 	}
 
 	public StandardBaseColumn createColumn(JasperDesign jrDesign, StandardTable jrTable) {		
@@ -236,13 +250,7 @@ public class CreateColumnCommand extends Command {
 		return true;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.gef.commands.Command#undo()
-	 */
-	@Override
-	public void undo() {
+	private void removeAddedColumn() {
 		if (pColGroup != null) {
 			index = pColGroup.getColumns().indexOf(jrColumn);
 			pColGroup.removeColumn(jrColumn);
@@ -251,4 +259,16 @@ public class CreateColumnCommand extends Command {
 			jrTable.removeColumn(jrColumn);
 		}
 	}
+	
+	@Override
+	public void undo() {
+		//when the operaiton is undone refresh the size
+		if (tableNode.hasColumnsAutoresizeProportional()){
+			tableNode.setPropertyValue(MTable.PROPERTY_COLUMNS_AUTORESIZE_PROPORTIONAL, false);
+			removeAddedColumn();
+			tableNode.setPropertyValue(MTable.PROPERTY_COLUMNS_AUTORESIZE_PROPORTIONAL, true);
+		} else {
+			removeAddedColumn();
+		}
+	}	
 }
