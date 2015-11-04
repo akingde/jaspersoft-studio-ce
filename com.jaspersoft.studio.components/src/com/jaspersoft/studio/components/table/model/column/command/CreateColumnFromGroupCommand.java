@@ -15,7 +15,16 @@ package com.jaspersoft.studio.components.table.model.column.command;
 import java.util.Iterator;
 import java.util.List;
 
+import org.eclipse.gef.commands.Command;
+
+import com.jaspersoft.studio.components.table.TableManager;
+import com.jaspersoft.studio.components.table.model.column.MColumn;
+import com.jaspersoft.studio.components.table.model.columngroup.MColumnGroup;
+import com.jaspersoft.studio.components.table.model.columngroup.MColumnGroupCell;
+import com.jaspersoft.studio.components.table.util.TableColumnSize;
+
 import net.sf.jasperreports.components.table.BaseColumn;
+import net.sf.jasperreports.components.table.Cell;
 import net.sf.jasperreports.components.table.DesignCell;
 import net.sf.jasperreports.components.table.StandardBaseColumn;
 import net.sf.jasperreports.components.table.StandardColumn;
@@ -24,14 +33,6 @@ import net.sf.jasperreports.components.table.StandardTable;
 import net.sf.jasperreports.components.table.util.TableUtil;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
 import net.sf.jasperreports.engine.design.JasperDesign;
-
-import org.eclipse.gef.commands.Command;
-
-import com.jaspersoft.studio.components.table.TableManager;
-import com.jaspersoft.studio.components.table.model.column.MColumn;
-import com.jaspersoft.studio.components.table.model.columngroup.MColumnGroup;
-import com.jaspersoft.studio.components.table.model.columngroup.MColumnGroupCell;
-import com.jaspersoft.studio.components.table.util.TableColumnSize;
 
 /*
  * link nodes & together.
@@ -102,33 +103,36 @@ public class CreateColumnFromGroupCommand extends Command {
 		DesignCell cell = null;
 		if (createTHeader) {
 			cell = new DesignCell();
-			cell.setHeight(TableColumnSize.getInitGroupHeight(jrTable, jrGroup,
-					TableUtil.TABLE_HEADER, null));
+			cell.setHeight(TableColumnSize.getInitGroupHeight(jrTable, jrGroup,TableUtil.TABLE_HEADER, null));
 			col.setTableHeader(cell);
+			if (sibling!=null && sibling.getTableHeader() != null) cell.setStyle(sibling.getTableHeader().getStyle());
 		}
 		if (createTFooter) {
 			cell = new DesignCell();
-			cell.setHeight(TableColumnSize.getInitGroupHeight(jrTable, jrGroup,
-					TableUtil.TABLE_FOOTER, null));
+			cell.setHeight(TableColumnSize.getInitGroupHeight(jrTable, jrGroup,TableUtil.TABLE_FOOTER, null));
 			col.setTableFooter(cell);
+			if (sibling!=null && sibling.getTableFooter() != null) cell.setStyle(sibling.getTableFooter().getStyle());
 		}
 		if (createCHeader) {
 			cell = new DesignCell();
-			cell.setHeight(TableColumnSize.getInitGroupHeight(jrTable, jrGroup,
-					TableUtil.COLUMN_HEADER, null));
+			cell.setHeight(TableColumnSize.getInitGroupHeight(jrTable, jrGroup,TableUtil.COLUMN_HEADER, null));
 			col.setColumnHeader(cell);
+			if (sibling!=null && sibling.getColumnHeader() != null) cell.setStyle(sibling.getColumnHeader().getStyle());
 		}
 		if (createCFooter) {
 			cell = new DesignCell();
-			cell.setHeight(TableColumnSize.getInitGroupHeight(jrTable, jrGroup,
-					TableUtil.COLUMN_FOOTER, null));
+			cell.setHeight(TableColumnSize.getInitGroupHeight(jrTable, jrGroup,TableUtil.COLUMN_FOOTER, null));
 			col.setColumnFooter(cell);
+			if (sibling!=null && sibling.getColumnFooter() != null) cell.setStyle(sibling.getColumnFooter().getStyle());
 		}
 
 		cell = new DesignCell();
-		cell.setHeight(TableColumnSize.getInitGroupHeight(jrTable, jrGroup,
-				TableUtil.COLUMN_DETAIL, null));
+		cell.setHeight(TableColumnSize.getInitGroupHeight(jrTable, jrGroup,TableUtil.COLUMN_DETAIL, null));
 		col.setDetailCell(cell);
+		if (sibling!=null && sibling instanceof StandardBaseColumn) {
+			StandardColumn siblingStandardCol = (StandardColumn)sibling;
+			cell.setStyle(siblingStandardCol.getDetailCell().getStyle());
+		}
 
 		List<?> groupsList = TableUtil.getGroupList(jrTable, jrDesign);
 		if (groupsList != null)
@@ -136,17 +140,21 @@ public class CreateColumnFromGroupCommand extends Command {
 				JRDesignGroup jrDesignGroup = (JRDesignGroup) it.next();
 				if (createGHeader) {
 					cell = new DesignCell();
-					cell.setHeight(TableColumnSize.getInitGroupHeight(jrTable,
-							jrGroup, TableUtil.COLUMN_GROUP_HEADER,
-							jrDesignGroup.getName()));
+					cell.setHeight(TableColumnSize.getInitGroupHeight(jrTable,jrGroup, TableUtil.COLUMN_GROUP_HEADER,jrDesignGroup.getName()));
 					col.setGroupHeader(jrDesignGroup.getName(), cell);
+					Cell siblingGroupCell = sibling.getGroupHeader(jrDesignGroup.getName());
+					if (siblingGroupCell != null){
+						cell.setStyle(siblingGroupCell.getStyle());
+					}
 				}
 				if (createGFooter) {
 					cell = new DesignCell();
-					cell.setHeight(TableColumnSize.getInitGroupHeight(jrTable,
-							jrGroup, TableUtil.COLUMN_GROUP_FOOTER,
-							jrDesignGroup.getName()));
+					cell.setHeight(TableColumnSize.getInitGroupHeight(jrTable,jrGroup, TableUtil.COLUMN_GROUP_FOOTER,jrDesignGroup.getName()));
 					col.setGroupFooter(jrDesignGroup.getName(), cell);
+					Cell siblingGroupCell = sibling.getGroupFooter(jrDesignGroup.getName());
+					if (siblingGroupCell != null){
+						cell.setStyle(siblingGroupCell.getStyle());
+					}
 				}
 			}
 		return col;
