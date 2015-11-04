@@ -83,7 +83,14 @@ public class RemoveTableStylesAction extends ACachedSelectionAction {
 	@Override
 	protected boolean calculateEnabled() {
 		List<Object> tables = editor.getSelectionCache().getSelectionModelForType(MTable.class);
-		return tables.size() > 0;
+		for(Object obj :tables){
+			MTable table = (MTable)obj;
+			StandardTable jrTable = (StandardTable)((JRDesignComponentElement)table.getValue()).getComponent();
+			if (hasStyles(jrTable.getColumns())){
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	/**
@@ -167,6 +174,47 @@ public class RemoveTableStylesAction extends ACachedSelectionAction {
 				createCommandForColumns(colGroup.getColumns(), command);
 			}
 		}
+	}
+	
+	protected boolean hasStyles(List<BaseColumn> columns){
+		for (BaseColumn col : columns){
+			if (hasStyle(col.getColumnFooter())) return true;
+			if (hasStyle(col.getColumnHeader())) return true;
+			if (hasStyle(col.getTableFooter())) return true;
+			if (hasStyle(col.getTableHeader())) return true;
+			
+			for(GroupCell cell : col.getGroupFooters()){
+				if (hasStyle(cell.getCell())){
+					return true;
+				}
+			}
+			
+			for(GroupCell cell : col.getGroupHeaders()){
+				if (hasStyle(cell.getCell())){
+					return true;
+				}
+			}
+			
+			if (col instanceof StandardColumn){
+				StandardColumn baseCol = (StandardColumn)col;
+				if (hasStyle(baseCol.getDetailCell())){
+					return true;
+				}
+			}
+			
+			if (col instanceof StandardColumnGroup){
+				StandardColumnGroup colGroup = (StandardColumnGroup)col;
+				if (hasStyles(colGroup.getColumns())) return true;
+			}
+		}
+		return false;
+	}
+	
+	protected boolean hasStyle(Cell cell){
+		if (cell != null && (cell.getStyle() != null || cell.getStyleNameReference() != null)){
+			return true;
+		}
+		return false;
 	}
 	
 	/**

@@ -143,6 +143,7 @@ import com.jaspersoft.studio.plugin.IPaletteContributor;
 import com.jaspersoft.studio.plugin.PaletteContributor;
 import com.jaspersoft.studio.property.SetValueCommand;
 import com.jaspersoft.studio.utils.ModelUtils;
+import com.jaspersoft.studio.utils.Pair;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class TableComponentFactory implements IComponentFactory {
@@ -262,7 +263,8 @@ public class TableComponentFactory implements IComponentFactory {
 			MTableHeader mth, MTableColumnHeader mch, MTableDetail mtd,
 			MTableColumnFooter mcf, MTableFooter mtf,
 			List<MTableGroupHeader> grHeaders, List<MTableGroupFooter> grFooter) {
-		int j = 1;
+		
+		Pair<Integer, Integer> detailIndex = new Pair<Integer, Integer>(1, 0);
 		for (int i = 0; i < columns.size(); i++) {
 			BaseColumn bc = columns.get(i);
 			createCellTableHeader(mth, bc, i + 1, i);
@@ -273,7 +275,7 @@ public class TableComponentFactory implements IComponentFactory {
 				createCellGroupHeader(mtgh, bc, i + 1, mtgh.getJrDesignGroup()
 						.getName(), i);
 
-			j = createCellDetail(mtd, bc, j, i);
+			detailIndex = createCellDetail(mtd, bc, detailIndex);
 
 			for (MTableGroupFooter mtgh : grFooter)
 				createCellGroupFooter(mtgh, bc, i + 1, mtgh.getJrDesignGroup()
@@ -317,17 +319,17 @@ public class TableComponentFactory implements IComponentFactory {
 		return i;
 	}
 
-	public static int createCellDetail(ANode mth, BaseColumn bc, int i,
-			int index) {
+	public static Pair<Integer, Integer> createCellDetail(ANode mth, BaseColumn bc, Pair<Integer, Integer> columnNumberIndex) {
 		if (bc instanceof StandardColumnGroup) {
 			StandardColumnGroup scg = (StandardColumnGroup) bc;
-			for (BaseColumn bcg : scg.getColumns())
-				i = createCellDetail(mth, bcg, i, i);
+			for (BaseColumn bcg : scg.getColumns()){
+				columnNumberIndex = createCellDetail(mth, bcg, columnNumberIndex);
+			}
 		} else {
-			createColumnCell(mth, bc, i, ((StandardColumn) bc).getDetailCell(),index);
-			return ++i;
+			createColumnCell(mth, bc, columnNumberIndex.getKey(), ((StandardColumn) bc).getDetailCell(), columnNumberIndex.getValue());
+			return new Pair<Integer, Integer>(columnNumberIndex.getKey() + 1, columnNumberIndex.getValue() + 1);
 		}
-		return i;
+		return columnNumberIndex;
 	}
 
 	public static int createCellColumnHeader(ANode mth, BaseColumn bc, int i,
@@ -390,13 +392,22 @@ public class TableComponentFactory implements IComponentFactory {
 		return i;
 	}
 
+	/**
+	 * 
+	 * @param parent
+	 * @param bc
+	 * @param i number of the cell used for the name
+	 * @param cell the cell used as value of the node
+	 * @param index index of the cell node
+	 * @return
+	 */
 	public static ANode createColumnCell(ANode parent, BaseColumn bc, int i,
-			Cell grHeader, int index) {
+			Cell cell, int index) {
 		String name = i > 0 ? Messages.common_column + i : null;
-		if (grHeader != null) {
+		if (cell != null) {
 			MCell mc = new MCell(parent, (StandardBaseColumn) bc,
-					(DesignCell) grHeader, name, index);
-			ReportFactory.createElementsForBand(mc, grHeader.getChildren());
+					(DesignCell) cell, name, index);
+			ReportFactory.createElementsForBand(mc, cell.getChildren());
 			return mc;
 		}
 		return new MColumn(parent, (StandardBaseColumn) bc, name, index);

@@ -18,16 +18,6 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import net.sf.jasperreports.engine.JRConstants;
-import net.sf.jasperreports.engine.JRElementGroup;
-import net.sf.jasperreports.engine.JRRuntimeException;
-import net.sf.jasperreports.engine.JRSimpleTemplate;
-import net.sf.jasperreports.engine.JRStyle;
-import net.sf.jasperreports.engine.design.JRDesignElementGroup;
-import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.design.events.CollectionElementAddedEvent;
-import net.sf.jasperreports.engine.design.events.JRChangeEventsSupport;
-
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.gef.EditPart;
 import org.eclipse.jface.viewers.StyledString;
@@ -45,6 +35,16 @@ import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.model.util.ReportFactory;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
+import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRElementGroup;
+import net.sf.jasperreports.engine.JRRuntimeException;
+import net.sf.jasperreports.engine.JRSimpleTemplate;
+import net.sf.jasperreports.engine.JRStyle;
+import net.sf.jasperreports.engine.design.JRDesignElementGroup;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.design.events.CollectionElementAddedEvent;
+import net.sf.jasperreports.engine.design.events.JRChangeEventsSupport;
 
 /*
  * The Class ANode.
