@@ -69,8 +69,8 @@ import net.sf.jasperreports.engine.util.JRCloneUtils;
  * @author Veaceslav Chicu (schicu@users.sourceforge.net)
  * 
  */
-public class SPItemDataList extends ASPropertyWidget<AItemDataListPropertyDescriptor>
-		implements IExpressionContextSetter {
+public class SPItemDataList extends ASPropertyWidget<AItemDataListPropertyDescriptor> implements
+		IExpressionContextSetter {
 
 	protected ExpressionContext expContext;
 
@@ -148,7 +148,7 @@ public class SPItemDataList extends ASPropertyWidget<AItemDataListPropertyDescri
 		gd.verticalSpan = 3;
 		elementsTree.setLayoutData(gd);
 		elTViewer.setLabelProvider(new ItemLabelProvider(getDescriptor()));
-		elTViewer.setContentProvider(new ItemDataListContentProvider(false));
+		elTViewer.setContentProvider(new ItemDataListContentProvider(true));
 		elTViewer.setComparator(getElementViewerComparator());
 		ColumnViewerToolTipSupport.enableFor(elTViewer, ToolTip.NO_RECREATE);
 
@@ -283,9 +283,9 @@ public class SPItemDataList extends ASPropertyWidget<AItemDataListPropertyDescri
 	}
 
 	protected ItemDataDialog createItemDataDialog(List<ItemData> clones, StandardItemData itemData) {
-		ItemDataDialog dialog = new ItemDataDialog(UIUtils.getShell(), Messages.SPItemDataList_6, Messages.SPItemDataList_7,
-				clones, itemData, (JasperReportsConfiguration) section.getJasperReportsContext(), getDescriptor(), expContext,
-				pnode) {
+		ItemDataDialog dialog = new ItemDataDialog(UIUtils.getShell(), Messages.SPItemDataList_6,
+				Messages.SPItemDataList_7, clones, itemData, (JasperReportsConfiguration) section.getJasperReportsContext(),
+				getDescriptor(), expContext, pnode) {
 
 			@Override
 			protected AItemDialog createItemDialog() {

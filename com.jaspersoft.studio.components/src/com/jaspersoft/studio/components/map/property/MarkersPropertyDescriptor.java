@@ -44,12 +44,14 @@ public class MarkersPropertyDescriptor extends AItemDataListPropertyDescriptor {
 		descriptor = new MarkersDescriptor();
 	}
 
-	protected SPItemDataList createSPWidget(Composite parent, AbstractSection section) {
+	protected SPItemDataList createSPWidget(Composite parent,
+			AbstractSection section) {
 		return new SPItemDataList(parent, section, this, false) {
 			@Override
 			protected AItemDialog createItemDialog() {
 				return new FormItemDialog(UIUtils.getShell(), getDescriptor(),
-						(JasperReportsConfiguration) section.getJasperReportsContext(), false, false) {
+						(JasperReportsConfiguration) section
+								.getJasperReportsContext(), false, false) {
 
 					@Override
 					protected void createValues(Composite cmp) {
@@ -59,62 +61,111 @@ public class MarkersPropertyDescriptor extends AItemDataListPropertyDescriptor {
 						lbl.setLayoutData(gd);
 						lbl.setText(com.jaspersoft.studio.messages.Messages.MapSection_1);
 
-						createItemProperty(cmp, MapComponent.ITEM_PROPERTY_latitude);
-						createItemProperty(cmp, MapComponent.ITEM_PROPERTY_longitude);
-						createItemProperty(cmp, MapComponent.ITEM_PROPERTY_address);
+						createItemProperty(cmp,
+								MapComponent.ITEM_PROPERTY_latitude);
+						createItemProperty(cmp,
+								MapComponent.ITEM_PROPERTY_longitude);
+						createItemProperty(cmp,
+								MapComponent.ITEM_PROPERTY_address);
 
 						createSeparator(cmp);
 
-						createItemProperty(cmp, MapComponent.ITEM_PROPERTY_MARKER_title);
-						createItemProperty(cmp, MapComponent.ITEM_PROPERTY_MARKER_url);
-						createItemProperty(cmp, MapComponent.ITEM_PROPERTY_MARKER_target);
+						createItemProperty(cmp,
+								MapComponent.ITEM_PROPERTY_MARKER_title);
+						createItemProperty(cmp,
+								MapComponent.ITEM_PROPERTY_MARKER_url);
+						createItemProperty(cmp,
+								MapComponent.ITEM_PROPERTY_MARKER_target);
 
-						createItemProperty(cmp, MapComponent.ITEM_PROPERTY_MARKER_icon);
+						createItemProperty(cmp,
+								MapComponent.ITEM_PROPERTY_MARKER_icon);
 
-						Composite c = createSection(cmp,
-								com.jaspersoft.studio.components.map.messages.Messages.MarkersPropertyDescriptor_1);
+						Composite c = createSection(
+								cmp,
+								com.jaspersoft.studio.components.map.messages.Messages.MarkersPropertyDescriptor_1,
+								false);
 
-						createItemProperty(c, MapComponent.ITEM_PROPERTY_MARKER_ICON_url);
-						createItemProperty(c, MapComponent.ITEM_PROPERTY_MARKER_ICON_width);
-						createItemProperty(c, MapComponent.ITEM_PROPERTY_MARKER_ICON_height);
-						createItemProperty(c, MapComponent.ITEM_PROPERTY_MARKER_ICON_ORIGIN_x);
-						createItemProperty(c, MapComponent.ITEM_PROPERTY_MARKER_ICON_ORIGIN_y);
-						createItemProperty(c, MapComponent.ITEM_PROPERTY_MARKER_ICON_ANCHOR_x);
-						createItemProperty(c, MapComponent.ITEM_PROPERTY_MARKER_ICON_ANCHOR_y);
+						createItemProperty(c,
+								MapComponent.ITEM_PROPERTY_MARKER_ICON_url);
+						createItemProperty(c,
+								MapComponent.ITEM_PROPERTY_MARKER_ICON_width);
+						createItemProperty(c,
+								MapComponent.ITEM_PROPERTY_MARKER_ICON_height);
+						createItemProperty(c,
+								MapComponent.ITEM_PROPERTY_MARKER_ICON_ORIGIN_x);
+						createItemProperty(c,
+								MapComponent.ITEM_PROPERTY_MARKER_ICON_ORIGIN_y);
+						createItemProperty(c,
+								MapComponent.ITEM_PROPERTY_MARKER_ICON_ANCHOR_x);
+						createItemProperty(c,
+								MapComponent.ITEM_PROPERTY_MARKER_ICON_ANCHOR_y);
 
-						createItemProperty(cmp, MapComponent.ITEM_PROPERTY_MARKER_shadow);
+						createItemProperty(cmp,
+								MapComponent.ITEM_PROPERTY_MARKER_shadow);
 
-						c = createSection(cmp,
-								com.jaspersoft.studio.components.map.messages.Messages.MarkersPropertyDescriptor_2);
+						c = createSection(
+								cmp,
+								com.jaspersoft.studio.components.map.messages.Messages.MarkersPropertyDescriptor_2,
+								false);
 
-						createItemProperty(c, MapComponent.ITEM_PROPERTY_MARKER_SHADOW_url);
-						createItemProperty(c, MapComponent.ITEM_PROPERTY_MARKER_SHADOW_width);
-						createItemProperty(c, MapComponent.ITEM_PROPERTY_MARKER_SHADOW_height);
-						createItemProperty(c, MapComponent.ITEM_PROPERTY_MARKER_SHADOW_ORIGIN_x);
-						createItemProperty(c, MapComponent.ITEM_PROPERTY_MARKER_SHADOW_ORIGIN_y);
-						createItemProperty(c, MapComponent.ITEM_PROPERTY_MARKER_SHADOW_ANCHOR_x);
-						createItemProperty(c, MapComponent.ITEM_PROPERTY_MARKER_SHADOW_ANCHOR_y);
+						createItemProperty(c,
+								MapComponent.ITEM_PROPERTY_MARKER_SHADOW_url);
+						createItemProperty(c,
+								MapComponent.ITEM_PROPERTY_MARKER_SHADOW_width);
+						createItemProperty(c,
+								MapComponent.ITEM_PROPERTY_MARKER_SHADOW_height);
+						createItemProperty(
+								c,
+								MapComponent.ITEM_PROPERTY_MARKER_SHADOW_ORIGIN_x);
+						createItemProperty(
+								c,
+								MapComponent.ITEM_PROPERTY_MARKER_SHADOW_ORIGIN_y);
+						createItemProperty(
+								c,
+								MapComponent.ITEM_PROPERTY_MARKER_SHADOW_ANCHOR_x);
+						createItemProperty(
+								c,
+								MapComponent.ITEM_PROPERTY_MARKER_SHADOW_ANCHOR_y);
 
-						c = createSection(cmp,
-								com.jaspersoft.studio.components.map.messages.Messages.MarkersPropertyDescriptor_0);
+						c = createSection(
+								cmp,
+								com.jaspersoft.studio.components.map.messages.Messages.MarkersPropertyDescriptor_0,
+								false);
 
-						createItemProperty(c, MapComponent.ITEM_PROPERTY_MARKER_INFOWINDOW_content);
-						createItemProperty(c, MapComponent.ITEM_PROPERTY_MARKER_INFOWINDOW_pixelOffset);
-						createItemProperty(c, MapComponent.ITEM_PROPERTY_MARKER_INFOWINDOW_maxWidth);
+						createItemProperty(
+								c,
+								MapComponent.ITEM_PROPERTY_MARKER_INFOWINDOW_content);
+						createItemProperty(
+								c,
+								MapComponent.ITEM_PROPERTY_MARKER_INFOWINDOW_pixelOffset);
+						createItemProperty(
+								c,
+								MapComponent.ITEM_PROPERTY_MARKER_INFOWINDOW_maxWidth);
 
 						createSeparator(cmp);
 
-						createItemProperty(cmp, MapComponent.ITEM_PROPERTY_MARKER_color);
-						createItemProperty(cmp, MapComponent.ITEM_PROPERTY_MARKER_label);
-						createItemProperty(cmp, MapComponent.ITEM_PROPERTY_MARKER_cursor);
-						createItemProperty(cmp, MapComponent.ITEM_PROPERTY_MARKER_zIndex);
-						createItemProperty(cmp, MapComponent.ITEM_PROPERTY_clickable);
-						createItemProperty(cmp, MapComponent.ITEM_PROPERTY_draggable);
-						createItemProperty(cmp, MapComponent.ITEM_PROPERTY_MARKER_flat);
-						createItemProperty(cmp, MapComponent.ITEM_PROPERTY_MARKER_optimized);
-						createItemProperty(cmp, MapComponent.ITEM_PROPERTY_MARKER_raiseOnDrag);
-						createItemProperty(cmp, MapComponent.ITEM_PROPERTY_visible);
-						createItemProperty(cmp, MapComponent.ITEM_PROPERTY_MARKER_size);
+						createItemProperty(cmp,
+								MapComponent.ITEM_PROPERTY_MARKER_color);
+						createItemProperty(cmp,
+								MapComponent.ITEM_PROPERTY_MARKER_label);
+						createItemProperty(cmp,
+								MapComponent.ITEM_PROPERTY_MARKER_cursor);
+						createItemProperty(cmp,
+								MapComponent.ITEM_PROPERTY_MARKER_zIndex);
+						createItemProperty(cmp,
+								MapComponent.ITEM_PROPERTY_clickable);
+						createItemProperty(cmp,
+								MapComponent.ITEM_PROPERTY_draggable);
+						createItemProperty(cmp,
+								MapComponent.ITEM_PROPERTY_MARKER_flat);
+						createItemProperty(cmp,
+								MapComponent.ITEM_PROPERTY_MARKER_optimized);
+						createItemProperty(cmp,
+								MapComponent.ITEM_PROPERTY_MARKER_raiseOnDrag);
+						createItemProperty(cmp,
+								MapComponent.ITEM_PROPERTY_visible);
+						createItemProperty(cmp,
+								MapComponent.ITEM_PROPERTY_MARKER_size);
 					}
 
 				};
