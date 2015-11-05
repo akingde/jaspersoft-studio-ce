@@ -10,6 +10,7 @@ package com.jaspersoft.studio.property.section.report;
 
 import java.beans.PropertyChangeEvent;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.jface.window.Window;
@@ -197,6 +198,13 @@ public class PageFormatSection extends AbstractSection {
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		super.propertyChange(evt);
-		setPreviewWidgetData();
+		UIUtils.getDisplay().syncExec(new Runnable() {
+			
+			@Override
+			public void run() {
+				setPreviewWidgetData();
+			}
+		});
+		
 	}
 }
