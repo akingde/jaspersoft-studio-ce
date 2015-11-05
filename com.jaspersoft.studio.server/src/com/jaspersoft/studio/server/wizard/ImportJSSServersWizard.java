@@ -22,12 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.eclipse.util.CastorHelper;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.util.JRXmlUtils;
-import net.sf.jasperreports.util.CastorUtil;
-
+import org.apache.commons.codec.binary.Base64;
+import org.eclipse.equinox.security.storage.StorageException;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.wizard.Wizard;
@@ -43,14 +39,26 @@ import com.jaspersoft.studio.data.wizard.ListInstallationPage;
 import com.jaspersoft.studio.data.wizard.SelectWorkspacePage;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MRoot;
+import com.jaspersoft.studio.preferences.util.PreferencesUtils;
 import com.jaspersoft.studio.repository.RepositoryView;
 import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.action.server.EditServerAction;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.model.server.MServers;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
+import com.jaspersoft.studio.server.preferences.CASListFieldEditor;
+import com.jaspersoft.studio.server.preferences.CASPreferencePage;
+import com.jaspersoft.studio.server.preferences.SSOServer;
+import com.jaspersoft.studio.server.secret.JRServerSecretsProvider;
 import com.jaspersoft.studio.server.wizard.pages.ShowServersPage;
 import com.jaspersoft.studio.wizards.ContextHelpIDs;
+
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.CastorHelper;
+import net.sf.jasperreports.eclipse.util.SecureStorageUtils;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.util.JRXmlUtils;
+import net.sf.jasperreports.util.CastorUtil;
 
 /**
  * Wizard to import one of more connections to JRS from other workspaces of JSS
@@ -214,7 +222,24 @@ public class ImportJSSServersWizard extends Wizard implements IImportWizard {
 	 */
 	@Override
 	public boolean performFinish() {
-
+		//read and in case import the cas servers
+		String currentServersProp = PreferencesUtils.getJaspersoftStudioPrefStore().getString(CASPreferencePage.CAS);
+		List<SSOServer> currentServers = ShowServersPage.getCASServers(currentServersProp);
+		for(SSOServer server : page1.getSSOToImport()){
+			currentServers.add(server);
+		}
+		String v = "";
+		for (SSOServer srv : currentServers) {
+			v += Base64.encodeBase64String(CastorHelper.write(srv, CASListFieldEditor.getMapping()).getBytes()) + "\n";
+			try {
+				if (srv.getPassuuid() != null)
+					SecureStorageUtils.saveToDefaultSecurePreferences(JRServerSecretsProvider.SECRET_NODE_ID, srv.getPassuuid(), srv.getPassword());
+			} catch (StorageException e) {
+				e.printStackTrace();
+			}
+		}
+		PreferencesUtils.getJaspersoftStudioPrefStore().setValue(CASPreferencePage.CAS, v);
+		
 		// Get the treeview and the MServers node from the repository view if it is
 		// available
 		RepositoryView view = getRepositoryView();
@@ -231,6 +256,7 @@ public class ImportJSSServersWizard extends Wizard implements IImportWizard {
 				}
 			}
 		}
+
 
 		// Create every server and if the repository view is open add also the nodes
 		// to the tree view

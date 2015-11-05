@@ -12,10 +12,12 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.wizard.pages;
 
+import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import org.apache.commons.codec.binary.Base64;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.SWT;
@@ -30,8 +32,13 @@ import com.jaspersoft.studio.data.adapter.IReportDescriptor;
 import com.jaspersoft.studio.data.wizard.ListInstallationPage;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
+import com.jaspersoft.studio.server.preferences.CASListFieldEditor;
+import com.jaspersoft.studio.server.preferences.CASPreferencePage;
+import com.jaspersoft.studio.server.preferences.SSOServer;
 import com.jaspersoft.studio.server.utils.Encrypter;
 import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
+
+import net.sf.jasperreports.eclipse.util.CastorHelper;
 
 /**
  * Show a list of checkboxes where every box is a server connection found inside a server 
@@ -66,6 +73,11 @@ public class ShowServersPage extends JSSHelpWizardPage {
 	 * Label shown where there aren't element that could be imported
 	 */
 	private Label noElementLabel = null;
+	
+	/**
+	 * List of SSO server found in the imported configuration
+	 */
+	private List<SSOServer> ssoServers = new ArrayList<SSOServer>();
 	
 	public ShowServersPage() {
 		super("IReportDatasourceList"); //$NON-NLS-1$
@@ -125,6 +137,9 @@ public class ShowServersPage extends JSSHelpWizardPage {
 			Properties prop = selectedInstallation.getServerConnection();
 	
 			if (prop != null){
+				//Initialize the list of sso servers
+				ssoServers = getCASServers(prop.getProperty(CASPreferencePage.CAS));
+				
 				List<ServerProfile> checkBoxData = createCheckBoxData(prop);
 				for(ServerProfile srv : checkBoxData)
 				{
@@ -141,6 +156,32 @@ public class ShowServersPage extends JSSHelpWizardPage {
 			content.layout();
 			((ScrolledComposite)content.getParent()).setMinSize(content.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 		}
+	}
+	
+	/**
+	 * Get the property of the SSO servers from a configuration and
+	 * deserialize it to get the servers elements.
+	 */
+	public static List<SSOServer> getCASServers(String casProp){
+		List<SSOServer> servers = new ArrayList<SSOServer>();
+		if (casProp != null){
+			for (String line : casProp.split("\n")) {
+				if (line.isEmpty())
+					continue;
+				try {
+					SSOServer srv = (SSOServer) CastorHelper.read(new ByteArrayInputStream(Base64.decodeBase64(line)), CASListFieldEditor.getMapping());
+					servers.add(srv);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return servers;
+	}
+	
+	
+	public List<SSOServer> getSSOToImport(){
+		return ssoServers;
 	}
 	
 	/**
