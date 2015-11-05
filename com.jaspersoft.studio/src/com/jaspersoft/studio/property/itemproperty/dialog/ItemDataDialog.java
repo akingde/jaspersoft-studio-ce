@@ -49,11 +49,11 @@ import com.jaspersoft.studio.swt.widgets.table.NewButton;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public abstract class ItemDataDialog extends ElementDatasetDialog {
-	private StandardItemData itemData;
+	protected StandardItemData itemData;
 	private Button bhasds;
 	private boolean hasDS;
 	private ADescriptor descriptor;
-	private List<ItemData> itemDatas;
+	protected List<ItemData> itemDatas;
 	private ExpressionContext expContext;
 	private APropertyNode pnode;
 
@@ -72,7 +72,7 @@ public abstract class ItemDataDialog extends ElementDatasetDialog {
 	@Override
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
-		newShell.setText("Items");
+		newShell.setText(getItemName());
 	}
 
 	@Override
@@ -98,6 +98,7 @@ public abstract class ItemDataDialog extends ElementDatasetDialog {
 	protected void createElementDatasetArea(Composite area) {
 		Composite c = new Composite(area, SWT.NONE);
 		c.setLayout(new GridLayout());
+		c.setLayoutData(new GridData(GridData.FILL_BOTH));
 
 		CTabFolder tabFolder = new CTabFolder(c, SWT.FLAT | SWT.TOP);
 		tabFolder.setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -115,15 +116,15 @@ public abstract class ItemDataDialog extends ElementDatasetDialog {
 		tabItem.setControl(cmp);
 	}
 
-	private void createItems(CTabFolder tabFolder) {
+	protected void createItems(CTabFolder tabFolder) {
 		CTabItem tabItem = new CTabItem(tabFolder, SWT.NONE);
-		tabItem.setText("Items");
+		tabItem.setText(getItemName());
 
 		Composite cmp = new Composite(tabFolder, SWT.NONE);
 		cmp.setLayout(new GridLayout(2, false));
 
-		final TableViewer viewer = new TableViewer(cmp, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION
-				| SWT.BORDER);
+		final TableViewer viewer = new TableViewer(cmp,
+				SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.BORDER);
 		viewer.setContentProvider(ArrayContentProvider.getInstance());
 		viewer.setLabelProvider(new ItemLabelProvider(descriptor) {
 			@Override
@@ -218,6 +219,10 @@ public abstract class ItemDataDialog extends ElementDatasetDialog {
 		tabItem.setControl(cmp);
 
 		viewer.setInput(itemData.getItems());
+	}
+
+	protected String getItemName() {
+		return "Items";
 	}
 
 	protected abstract AItemDialog createItemDialog();
