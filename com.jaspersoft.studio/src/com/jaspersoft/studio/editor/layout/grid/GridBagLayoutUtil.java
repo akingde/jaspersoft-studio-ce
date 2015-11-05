@@ -604,6 +604,7 @@ public class GridBagLayoutUtil {
               if(curY < 0)
                   curY = 0;
           }
+          curRow = curY;
 
           px = curX + curWidth;
           if (layoutWidth < px) {
@@ -629,18 +630,6 @@ public class GridBagLayoutUtil {
 	          constraints.minWidth = 0;
 	          constraints.minHeight = 0;
           }
-          /* Zero width and height must mean that this is the last item (or
-           * else something is wrong). */
-          if (constraints.gridheight == 0 && constraints.gridwidth == 0)
-              curRow = curCol = -1;
-
-          /* Zero width starts a new row */
-          if (constraints.gridheight == 0 && curRow < 0)
-              curCol = curX + curWidth;
-
-          /* Zero height starts a new column */
-          else if (constraints.gridwidth == 0 && curCol < 0)
-              curRow = curY + curHeight;
       } //for (components) loop
 
 
@@ -719,6 +708,7 @@ public class GridBagLayoutUtil {
               if(curY < 0)
                   curY = 0;
           }
+          curRow = curY;
 
           if (curWidth <= 0) {
               curWidth += r.width - curX;
@@ -737,14 +727,6 @@ public class GridBagLayoutUtil {
 
           for (i = curX; i < (curX + curWidth); i++) { yMaxArray[i] = py; }
           for (i = curY; i < (curY + curHeight); i++) { xMaxArray[i] = px; }
-
-          /* Make negative sizes start a new row/column */
-          if (constraints.gridheight == 0 && constraints.gridwidth == 0)
-              curRow = curCol = -1;
-          if (constraints.gridheight == 0 && curRow < 0)
-              curCol = curX + curWidth;
-          else if (constraints.gridwidth == 0 && curCol < 0)
-              curRow = curY + curHeight;
 
           /* Assign the new values to the gridbag slave */
           constraints.tempX = curX;
