@@ -362,7 +362,7 @@ public class SPItemDataList extends ASPropertyWidget<AItemDataListPropertyDescri
 		gd.verticalSpan = 5;
 		tree.setLayoutData(gd);
 		createDsLabelProvider();
-		dsTViewer.setContentProvider(new ItemDataListContentProvider(true) {
+		dsTViewer.setContentProvider(new ItemDataListContentProvider(false) {
 			@Override
 			public Object[] getChildren(Object parentElement) {
 				if (parentElement instanceof ItemData)
