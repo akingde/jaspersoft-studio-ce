@@ -34,7 +34,7 @@ public class ItemPropertyUtil {
 	public static boolean hasValue(List<ItemProperty> items, String name) {
 		ItemProperty p = getProperty(items, name);
 		if (p != null
-				&& (!Misc.isNullOrEmpty(p.getValue()) || (p.getValueExpression() != null && Misc.isNullOrEmpty(p
+				&& (!Misc.isNullOrEmpty(p.getValue()) || (p.getValueExpression() != null && !Misc.isNullOrEmpty(p
 						.getValueExpression().getText()))))
 			return true;
 		return false;
