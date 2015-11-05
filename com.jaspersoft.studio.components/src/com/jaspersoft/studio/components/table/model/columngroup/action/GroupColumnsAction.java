@@ -13,6 +13,7 @@
 package com.jaspersoft.studio.components.table.model.columngroup.action;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -78,8 +79,8 @@ public class GroupColumnsAction extends ACreateAction {
 	}
 
 	/**
-	 * Return a list of unique columns, not children of the detail and under the
-	 * same parent to group 
+	 * Return a list of unique and consecutive columns, not children of the detail 
+	 * and under the same parent, this column can be grouped 
 	 * 
 	 * @return the list of column to group, can be null if the selection is invalid
 	 */
@@ -104,6 +105,23 @@ public class GroupColumnsAction extends ACreateAction {
 					columns.add(col);
 				}
 			}
+		}
+		
+		//If there are more than one column selected check if they are consecutive
+		if (currentParent != null && columns.size() > 1){
+			int[] indexes = new int[columns.size()];
+			int i = 0;
+			for(MColumn col : columns){
+				indexes[i] = currentParent.getChildren().indexOf(col);
+				i++;
+			}
+			Arrays.sort(indexes);
+			for (i = 0; i < indexes.length - 1; i++) {
+				  if (indexes[i] + 1 != indexes[i + 1]) {
+					  //not consecutive
+					  return null;
+				  }
+				}
 		}
 		return columns;
 	}
