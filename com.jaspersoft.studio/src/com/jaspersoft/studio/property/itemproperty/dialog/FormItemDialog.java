@@ -81,23 +81,28 @@ public abstract class FormItemDialog extends AItemDialog {
 
 	@Override
 	protected void fillData() {
-		for (String key : map.keySet()) {
-			WItemProperty expr = map.get(key);
-			expr.setExpressionContext(currentExpContext);
-			boolean createNew = true;
-			for (ItemProperty ip : item.getProperties()) {
-				if (ip.getName().equals(key)) {
-					expr.setValue((StandardItemProperty) ip);
-					createNew = false;
-					break;
+		refresh = true;
+		try {
+			for (String key : map.keySet()) {
+				WItemProperty expr = map.get(key);
+				expr.setExpressionContext(currentExpContext);
+				boolean createNew = true;
+				for (ItemProperty ip : item.getProperties()) {
+					if (ip.getName().equals(key)) {
+						expr.setValue((StandardItemProperty) ip);
+						createNew = false;
+						break;
+					}
+				}
+				if (createNew) {
+					StandardItemProperty p = new StandardItemProperty();
+					p.setName(key);
+					expr.setValue(p);
+					item.addItemProperty(p);
 				}
 			}
-			if (createNew) {
-				StandardItemProperty p = new StandardItemProperty();
-				p.setName(key);
-				expr.setValue(p);
-				item.addItemProperty(p);
-			}
+		} finally {
+			refresh = false;
 		}
 		super.fillData();
 	}
