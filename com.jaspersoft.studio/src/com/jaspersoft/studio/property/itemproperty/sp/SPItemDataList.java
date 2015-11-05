@@ -72,7 +72,7 @@ import net.sf.jasperreports.engine.util.JRCloneUtils;
 public class SPItemDataList extends ASPropertyWidget<AItemDataListPropertyDescriptor>
 		implements IExpressionContextSetter {
 
-	private ExpressionContext expContext;
+	protected ExpressionContext expContext;
 
 	// Widget stuff
 	private TreeViewer elTViewer;
@@ -218,14 +218,7 @@ public class SPItemDataList extends ASPropertyWidget<AItemDataListPropertyDescri
 				ds = new JRDesignElementDataset();
 			else
 				ds = (JRElementDataset) ds.clone();
-			ItemDataDialog dialog = new ItemDataDialog(UIUtils.getShell(), Messages.SPItemDataList_3,
-					Messages.SPItemDataList_3, itemDatas, itemData,
-					(JasperReportsConfiguration) section.getJasperReportsContext(), getDescriptor(), expContext, pnode) {
-				@Override
-				protected AItemDialog createItemDialog() {
-					return SPItemDataList.this.createItemDialog();
-				}
-			};
+			ItemDataDialog dialog = createItemDataDialog(itemDatas, itemData);
 			if (dialog.open() == Dialog.OK) {
 				itemData.setDataset(dialog.getDataset());
 				dsTViewer.refresh();
@@ -264,19 +257,8 @@ public class SPItemDataList extends ASPropertyWidget<AItemDataListPropertyDescri
 		List<ItemData> clones = JRCloneUtils.cloneList(itemDatas);
 		StandardItemData itemData = new StandardItemData();
 		clones.add(itemData);
-		ItemDataDialog dialog = new ItemDataDialog(UIUtils.getShell(), Messages.SPItemDataList_3, "", //$NON-NLS-1$
-				clones, itemData, (JasperReportsConfiguration) section.getJasperReportsContext(), getDescriptor(), expContext,
-				pnode) {
-
-			@Override
-			protected AItemDialog createItemDialog() {
-				return SPItemDataList.this.createItemDialog();
-			}
-		};
-		if (dialog.open() == Dialog.OK) {
-
+		if (createItemDataDialog(clones, itemData).open() == Dialog.OK)
 			section.changeProperty(pDescriptor.getId(), new ArrayList<ItemData>(clones));
-		}
 
 		// List<ItemData> clones = JRCloneUtils.cloneList(itemDatas);
 		// StandardItemData itemData = (StandardItemData) getStandardItemData(true, tviewer, clones);
@@ -298,6 +280,19 @@ public class SPItemDataList extends ASPropertyWidget<AItemDataListPropertyDescri
 		// }
 		// itemData.addItem(item);
 		// showItemDialog(clones, itemData, item);
+	}
+
+	protected ItemDataDialog createItemDataDialog(List<ItemData> clones, StandardItemData itemData) {
+		ItemDataDialog dialog = new ItemDataDialog(UIUtils.getShell(), Messages.SPItemDataList_6, Messages.SPItemDataList_7,
+				clones, itemData, (JasperReportsConfiguration) section.getJasperReportsContext(), getDescriptor(), expContext,
+				pnode) {
+
+			@Override
+			protected AItemDialog createItemDialog() {
+				return SPItemDataList.this.createItemDialog();
+			}
+		};
+		return dialog;
 	}
 
 	protected void showItemDialog(List<ItemData> citemsData, StandardItemData itemData, StandardItem item) {

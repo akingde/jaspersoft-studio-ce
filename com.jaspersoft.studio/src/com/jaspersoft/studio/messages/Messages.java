@@ -2284,6 +2284,8 @@ public class Messages extends NLS {
 	public static String SPItemDataList_3;
 	public static String SPItemDataList_4;
 	public static String SPItemDataList_5;
+	public static String SPItemDataList_6;
+	public static String SPItemDataList_7;
 	public static String ZoomActualAction_0;
 	public static String ZoomActualAction_1;
 	public static String ZoomActualAction_3;
