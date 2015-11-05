@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.utils;
 
@@ -48,6 +44,7 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.wb.swt.ResourceManager;
 import org.eclipse.wb.swt.SWTResourceManager;
 import org.osgi.framework.Bundle;
@@ -131,6 +128,29 @@ public class UIUtil {
 			lbl.setLayoutData(gd);
 		}
 		return lbl;
+	}
+
+	public static Composite createSection(Composite parent, String text, boolean expanded, int cols) {
+		Section ec = new Section(parent, Section.TREE_NODE);
+		ec.setText(Misc.nvl(text));
+		ec.setExpanded(expanded);
+		ec.setFont(ResourceManager.getBoldFont(ec.getFont()));
+
+		Label lbl = new Label(ec, SWT.SEPARATOR | SWT.HORIZONTAL);
+		ec.setSeparatorControl(lbl);
+
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 2;
+		ec.setLayoutData(gd);
+
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 2;
+		ec.setLayoutData(gd);
+
+		Composite c = new Composite(ec, SWT.WRAP);
+		c.setLayout(new GridLayout(cols, false));
+		ec.setClient(c);
+		return c;
 	}
 
 	public static void setBold(Control control) {
@@ -305,8 +325,8 @@ public class UIUtil {
 		final ControlDecoration textDecoration = new ControlDecoration(control, SWT.LEFT | SWT.TOP);
 		textDecoration.setDescriptionText(description);
 		textDecoration.setMarginWidth(marginWidth);
-		FieldDecoration fieldDecoration = FieldDecorationRegistry.getDefault().getFieldDecoration(
-				FieldDecorationRegistry.DEC_ERROR);
+		FieldDecoration fieldDecoration = FieldDecorationRegistry.getDefault()
+				.getFieldDecoration(FieldDecorationRegistry.DEC_ERROR);
 		textDecoration.setImage(fieldDecoration.getImage());
 		return textDecoration;
 	}
@@ -352,8 +372,8 @@ public class UIUtil {
 			Image itemImage = ResourceManager.getPluginImage(pluginID, imagePath);
 			// Add viewer required effects to the images shown...
 			selectedImg = new Image(itemImage.getDevice(), SWTImageEffects.extendArea(itemImage.getImageData(), 20, null));
-			standardImg = new Image(itemImage.getDevice(), Glow.glow(itemImage.getImageData(),
-					ResourceManager.getColor(SWT.COLOR_GRAY), 20, 0, 255));
+			standardImg = new Image(itemImage.getDevice(),
+					Glow.glow(itemImage.getImageData(), ResourceManager.getColor(SWT.COLOR_GRAY), 20, 0, 255));
 			// Cache images
 			standardImagesCache.put(imagePath, standardImg);
 			selectedImagesCache.put(imagePath, selectedImg);
@@ -370,56 +390,54 @@ public class UIUtil {
 		return keyCode == SWT.ARROW_DOWN || keyCode == SWT.ARROW_LEFT || keyCode == SWT.ARROW_RIGHT
 				|| keyCode == SWT.ARROW_UP;
 	}
-	
+
 	/**
-	 * Utility enumeration that maintains a collection of the know
-	 * extensions for files that can be open with a direct double click
-	 * from a file system navigator (i.e: in Windows).
+	 * Utility enumeration that maintains a collection of the know extensions for files that can be open with a direct
+	 * double click from a file system navigator (i.e: in Windows).
 	 */
 	public static enum EditorExtension {
-		JRXML(".jrxml"), JRCTX(".jrctx"), JRTX(".jrtx"),
-		JASPER(".jasper"), JRPRINT(".jrprint"), JRPXML(".jrpxml"),
-		JSSCE(".jssce");
-		
+		JRXML(".jrxml"), JRCTX(".jrctx"), JRTX(".jrtx"), JASPER(".jasper"), JRPRINT(".jrprint"), JRPXML(".jrpxml"), JSSCE(
+				".jssce");
+
 		private String extension;
+
 		private EditorExtension(String extension) {
 			this.extension = extension;
 		}
 
-		public String getExtension(){
+		public String getExtension() {
 			return this.extension;
 		}
-		
+
 		public static boolean isKnowExtension(String extension) {
-			for(EditorExtension ex : values()) {
-				if(ex.getExtension().equals(extension)){
+			for (EditorExtension ex : values()) {
+				if (ex.getExtension().equals(extension)) {
 					return true;
 				}
 			}
 			return false;
 		}
-		
+
 		public static List<String> getKnowExtensions() {
 			List<String> result = new ArrayList<String>();
-			for(EditorExtension ex : values()){
+			for (EditorExtension ex : values()) {
 				result.add(ex.getExtension());
 			}
 			return result;
 		}
-		
+
 		public static boolean hasValidExtension(String filepath) {
-			for(String ext : getKnowExtensions()){
-				if(filepath.endsWith(ext)){
+			for (String ext : getKnowExtensions()) {
+				if (filepath.endsWith(ext)) {
 					return true;
 				}
 			}
 			return false;
 		}
 	}
-	
+
 	/**
-	 * Checks if we are currently on a Mac OS X platform and running
-	 * inside an Eclipse 4.x based installation.
+	 * Checks if we are currently on a Mac OS X platform and running inside an Eclipse 4.x based installation.
 	 * 
 	 * @return <code>true</code> if is Mac and we are in E4, <code>false</code> otherwise
 	 */
@@ -433,11 +451,11 @@ public class UIUtil {
 	 * @return <code>true</code> if we are in E4, <code>false</code> otherwise
 	 */
 	public static boolean isEclipse4() {
-		return Platform.getBundle("org.eclipse.e4.ui.workbench")!=null; //$NON-NLS-1$
+		return Platform.getBundle("org.eclipse.e4.ui.workbench") != null; //$NON-NLS-1$
 	}
-	
+
 	/**
-	 * Returns the Eclipse version (i.e. 4.5.1) in the format <code>major.minor.micro</code>. 
+	 * Returns the Eclipse version (i.e. 4.5.1) in the format <code>major.minor.micro</code>.
 	 * 
 	 * @see Version
 	 * @return the Eclipse version number
@@ -446,31 +464,29 @@ public class UIUtil {
 		Bundle platformBundle = Platform.getBundle("org.eclipse.platform"); //$NON-NLS-1$
 		Bundle rcpBundle = Platform.getBundle("org.eclipse.rcp"); //$NON-NLS-1$
 		Version version = null;
-		if(platformBundle!=null) {
+		if (platformBundle != null) {
 			version = platformBundle.getVersion();
 		}
-		if(version==null && rcpBundle!=null){
+		if (version == null && rcpBundle != null) {
 			version = rcpBundle.getVersion();
 		}
-		if(version!=null){
+		if (version != null) {
 			return version.getMajor() + "." + version.getMinor() + "." + version.getMicro();
-		}
-		else {
+		} else {
 			// FIXME - Maybe it would be better to throw an exception?
 			return "0.0.0"; //$NON-NLS-1$
 		}
 	}
-	
+
 	/**
-	 * There is the bug in the custom JSS toolbar rendering with Eclipse Mars version.
-	 * This was mostly observed in Windows.
-	 * The method checks if it is the case of applying the trick to handle the toolbar rendering correctly.
+	 * There is the bug in the custom JSS toolbar rendering with Eclipse Mars version. This was mostly observed in
+	 * Windows. The method checks if it is the case of applying the trick to handle the toolbar rendering correctly.
 	 * 
 	 * @see Bugzilla #44189
-	 * @return <code>true</code> if the toolbar 
+	 * @return <code>true</code> if the toolbar
 	 */
 	public static boolean shouldTrickToolbar() {
 		return isEclipse4();
 	}
-	
+
 }
