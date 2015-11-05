@@ -172,9 +172,13 @@ public abstract class FormItemDialog extends AItemDialog {
 	}
 
 	protected Composite createSection(Composite parent, String text) {
+		return createSection(parent, text, true);
+	}
+
+	protected Composite createSection(Composite parent, String text, boolean expanded) {
 		Section ec = new Section(parent, Section.TREE_NODE);
 		ec.setText(Misc.nvl(text));
-		ec.setExpanded(true);
+		ec.setExpanded(expanded);
 		ec.setFont(ResourceManager.getBoldFont(ec.getFont()));
 
 		Label lbl = new Label(ec, SWT.SEPARATOR | SWT.HORIZONTAL);
