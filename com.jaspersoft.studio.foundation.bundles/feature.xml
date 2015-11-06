@@ -2,7 +2,7 @@
 <feature
       id="com.jaspersoft.studio.foundation.bundles"
       label="Jaspersoft Studio Required Additional Bundles"
-      version="1.0.4"
+      version="1.0.5"
       provider-name="TIBCO Software Inc.">
 
    <description url="http://community.jaspersoft.com/project/jaspersoft-studio">
@@ -71,7 +71,7 @@
          id="com.jaspersoft.studio.bundles.itext"
          download-size="0"
          install-size="0"
-         version="2.1.7.s3"/>
+         version="2.1.7.s4"/>
 
    <plugin
          id="com.jaspersoft.studio.bundles.jxl"
@@ -143,20 +143,6 @@
          unpack="false"/>
 
    <plugin
-         id="org.apache.servicemix.bundles.jcommon"
-         download-size="0"
-         install-size="0"
-         version="1.0.15.1"
-         unpack="false"/>
-
-   <plugin
-         id="org.apache.servicemix.bundles.jfreechart"
-         download-size="0"
-         install-size="0"
-         version="1.0.12.1"
-         unpack="false"/>
-
-   <plugin
          id="org.apache.servicemix.bundles.rhino"
          download-size="0"
          install-size="0"
@@ -197,6 +183,20 @@
          download-size="0"
          install-size="0"
          version="2.3.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.jfree.jcommon-osgi"
+         download-size="0"
+         install-size="0"
+         version="1.0.23"
+         unpack="false"/>
+
+   <plugin
+         id="org.jfree.chart-osgi"
+         download-size="0"
+         install-size="0"
+         version="1.0.19"
          unpack="false"/>
 
 </feature>
