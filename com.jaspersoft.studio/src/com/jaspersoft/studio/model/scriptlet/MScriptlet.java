@@ -15,6 +15,7 @@ import java.util.Map;
 import net.sf.jasperreports.engine.JRAbstractScriptlet;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRDefaultScriptlet;
+import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRScriptlet;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignScriptlet;
@@ -144,15 +145,15 @@ public class MScriptlet extends APropertyNode implements ICopyable, IDragable {
 		classD.setClasses(clist);
 		classD.setDescription(Messages.MScriptlet_class_description);
 		desc.add(classD);
-		classD.setHelpRefBuilder(new HelpReferenceBuilder(
-				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#scriptlet_class"));
+		classD.setHelpRefBuilder(
+				new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#scriptlet_class"));
 
 		NTextPropertyDescriptor descriptionD = new NTextPropertyDescriptor(JRDesignScriptlet.PROPERTY_DESCRIPTION,
 				Messages.common_description);
 		descriptionD.setDescription(Messages.MScriptlet_description_description);
 		desc.add(descriptionD);
-		descriptionD.setHelpRefBuilder(new HelpReferenceBuilder(
-				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#scriptletDescription"));
+		descriptionD.setHelpRefBuilder(
+				new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#scriptletDescription"));
 
 		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#scriptlet");
 	}
@@ -183,19 +184,27 @@ public class MScriptlet extends APropertyNode implements ICopyable, IDragable {
 		if (id.equals(JRDesignScriptlet.PROPERTY_NAME)) {
 			if (!value.equals("")) {
 				JRDesignDataset d = ModelUtils.getDataset(this);
-				for (JRScriptlet p : d.getScriptlets()) {
-					if (p == jrField)
-						continue;
-					if (p.getName().equals(value)) {
-						// warn?
-						return;
-					}
-				}
+				d.removeScriptlet(jrField);
+
+				// for (JRScriptlet p : d.getScriptlets()) {
+				// if (p == jrField)
+				// continue;
+				// if (p.getName().equals(value)) {
+				// // warn?
+				// return;
+				// }
+				// }
 				jrField.setName((String) value);
-				if (d != null) {
-					d.getScriptletsMap().remove(jrField);
-					d.getScriptletsMap().put(jrField.getName(), jrField);
+				try {
+					d.addScriptlet(jrField);
+				} catch (JRException e) {
+					e.printStackTrace();
+					return;
 				}
+				// if (d != null) {
+				// d.getScriptletsMap().remove(jrField);
+				// d.getScriptletsMap().put(jrField.getName(), jrField);
+				// }
 			}
 		} else if (id.equals(JRDesignScriptlet.PROPERTY_VALUE_CLASS_NAME)) {
 			if (((String) value).isEmpty())
