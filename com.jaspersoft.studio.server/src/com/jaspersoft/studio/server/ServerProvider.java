@@ -16,8 +16,6 @@ import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -65,12 +63,15 @@ import com.jaspersoft.studio.server.dnd.RepositoryFileResourceDropTargetListener
 import com.jaspersoft.studio.server.dnd.RepositoryImageDragSourceListener;
 import com.jaspersoft.studio.server.dnd.UnitDragSourceListener;
 import com.jaspersoft.studio.server.model.AFileResource;
-import com.jaspersoft.studio.server.model.MFolder;
-import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.AMResource;
+import com.jaspersoft.studio.server.model.MFolder;
+import com.jaspersoft.studio.server.model.MJrxml;
+import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.model.server.MServers;
 import com.jaspersoft.studio.server.protocol.Feature;
+
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 public class ServerProvider implements IRepositoryViewProvider {
 	private CreateServerAction createServerAction;
@@ -265,24 +266,26 @@ public class ServerProvider implements IRepositoryViewProvider {
 		}
 		return lst;
 	}
-	
+
 	/**
 	 * Check if the key event has the push of the delete key on mac
 	 * 
-	 * @param event a not null key event
-	 * @return true if the current OS is mac and the pressed key is the delete one (BS)
+	 * @param event
+	 *            a not null key event
+	 * @return true if the current OS is mac and the pressed key is the delete
+	 *         one (BS)
 	 */
-	private boolean isMacDelete(KeyEvent event){
+	private boolean isMacDelete(KeyEvent event) {
 		return Util.isMac() && event.character == SWT.BS;
 	}
 
 	public void hookKeyEvent(TreeViewer treeViewer, KeyEvent event) {
-		//Triggered when delete is used or backspace on mac also
+		// Triggered when delete is used or backspace on mac also
 		if ((event.character == SWT.DEL || isMacDelete(event)) && event.stateMask == 0) {
-			if (deleteServerAction.isEnabled()){
+			if (deleteServerAction.isEnabled()) {
 				deleteServerAction.run();
 			}
-			if (deleteAction.isEnabled()){
+			if (deleteAction.isEnabled()) {
 				deleteAction.run();
 			}
 		} else if (((event.stateMask & SWT.CTRL) == SWT.CTRL) && (event.keyCode == 'f'))
@@ -307,7 +310,8 @@ public class ServerProvider implements IRepositoryViewProvider {
 		// runReportUnitAction.run();
 		else if (openInEditorAction.isEnabled())
 			openInEditorAction.run();
-		else if (runReportUnitAction.isEnabled())
+		else if ((el instanceof MReportUnit || (el instanceof ANode && ((ANode) el).getParent() instanceof MReportUnit)
+				&& el instanceof MJrxml && ((MJrxml) el).getValue().isMainReport()) && runReportUnitAction.isEnabled())
 			runReportUnitAction.run();
 		else if (el instanceof AMResource && editAction.isEnabled())
 			editAction.run();
