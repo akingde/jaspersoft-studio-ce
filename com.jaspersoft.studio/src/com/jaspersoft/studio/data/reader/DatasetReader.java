@@ -15,14 +15,27 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.resources.IResource;
+
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.data.DataAdapterDescriptor;
+import com.jaspersoft.studio.data.adapter.DataAdapterParameterContributorFactory;
+import com.jaspersoft.studio.editor.preview.view.control.ReportControler;
+import com.jaspersoft.studio.utils.ModelUtils;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
 import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.DataAdapterServiceUtil;
 import net.sf.jasperreports.eclipse.builder.JasperReportCompiler;
+import net.sf.jasperreports.eclipse.builder.Markers;
 import net.sf.jasperreports.eclipse.builder.jdt.JRErrorHandler;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.JRField;
 import net.sf.jasperreports.engine.JRParameter;
+import net.sf.jasperreports.engine.JRScriptlet;
 import net.sf.jasperreports.engine.JRSortField;
 import net.sf.jasperreports.engine.JRVariable;
 import net.sf.jasperreports.engine.JasperCompileManager;
@@ -34,15 +47,6 @@ import net.sf.jasperreports.engine.design.JRDesignQuery;
 import net.sf.jasperreports.engine.design.JRDesignVariable;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
-
-import org.eclipse.core.resources.IFile;
-
-import com.jaspersoft.studio.JaspersoftStudioPlugin;
-import com.jaspersoft.studio.data.DataAdapterDescriptor;
-import com.jaspersoft.studio.data.adapter.DataAdapterParameterContributorFactory;
-import com.jaspersoft.studio.editor.preview.view.control.ReportControler;
-import com.jaspersoft.studio.utils.ModelUtils;
-import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /**
  * Reader class for generic dataset.
@@ -102,8 +106,8 @@ public class DatasetReader {
 		try {
 			running = true;
 			// 1. Load JD from custom data preview report
-			String reportLocation = JaspersoftStudioPlugin.getInstance().getFileLocation(
-					DataPreviewScriptlet.PREVIEW_REPORT_PATH);
+			String reportLocation = JaspersoftStudioPlugin.getInstance()
+					.getFileLocation(DataPreviewScriptlet.PREVIEW_REPORT_PATH);
 			is = new FileInputStream(reportLocation);
 			JasperDesign dataJD = JRXmlLoader.load(jConfig, is);
 
@@ -164,14 +168,27 @@ public class DatasetReader {
 			for (JRSortField sf : designDataset.getSortFieldsList())
 				dataJD.addSortField(sf);
 
+			// 6.b add scriptlets
+			dataJD.getScriptletsList().clear();
+			dataJD.getMainDesignDataset().getScriptletsMap().clear();
+			for (JRScriptlet sf : designDataset.getScriptletsList())
+				dataJD.addScriptlet(sf);
+
 			// 6. Compile report
 			JasperReport jrobj = null;
 			IFile f = (IFile) jConfig.get(FileUtils.KEY_FILE);
 			if (f != null) {
+				Markers.deleteMarkers(f);
 				JasperReportCompiler compiler = new JasperReportCompiler();
 				compiler.setErrorHandler(new JRErrorHandler(f));
 				compiler.setProject(f.getProject());
 				jrobj = compiler.compileReport(jConfig, dataJD);
+				if (jrobj == null) {
+					IMarker[] markers = f.findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE);
+					for (IMarker m : markers)
+						UIUtils.showError(new Exception(m.getAttribute(IMarker.MESSAGE).toString()));
+					return;
+				}
 			} else
 				jrobj = JasperCompileManager.getInstance(jConfig).compile(dataJD);
 
