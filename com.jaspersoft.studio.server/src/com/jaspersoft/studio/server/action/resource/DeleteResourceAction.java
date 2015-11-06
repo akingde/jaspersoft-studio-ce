@@ -39,9 +39,9 @@ import com.jaspersoft.studio.server.model.server.MServerProfile;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 public class DeleteResourceAction extends Action {
-	
+
 	public static final String ID = "com.jaspersoft.studio.server.action.resource.deleteResourceAction";
-	
+
 	private TreeViewer treeViewer;
 
 	public DeleteResourceAction(TreeViewer treeViewer) {
@@ -49,21 +49,16 @@ public class DeleteResourceAction extends Action {
 		setId(ID);
 		setText(Messages.common_delete);
 		setToolTipText(Messages.common_delete);
-		ISharedImages sharedImages = PlatformUI.getWorkbench()
-				.getSharedImages();
-		setImageDescriptor(sharedImages
-				.getImageDescriptor(ISharedImages.IMG_TOOL_DELETE));
-		setDisabledImageDescriptor(sharedImages
-				.getImageDescriptor(ISharedImages.IMG_TOOL_DELETE_DISABLED));
+		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
+		setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_DELETE));
+		setDisabledImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_DELETE_DISABLED));
 		this.treeViewer = treeViewer;
 	}
 
 	@Override
 	public boolean isEnabled() {
-		Object firstElement = ((TreeSelection) treeViewer.getSelection())
-				.getFirstElement();
-		boolean b = firstElement != null
-				&& (firstElement instanceof AMResource);
+		Object firstElement = ((TreeSelection) treeViewer.getSelection()).getFirstElement();
+		boolean b = firstElement != null && (firstElement instanceof AMResource);
 		if (b) {
 			AMResource mres = (AMResource) firstElement;
 			int pmask = mres.getValue().getPermissionMask(mres.getWsClient());
@@ -81,36 +76,33 @@ public class DeleteResourceAction extends Action {
 		ProgressMonitorDialog pm = new ProgressMonitorDialog(UIUtils.getShell());
 		try {
 			pm.run(true, true, new IRunnableWithProgress() {
-				public void run(IProgressMonitor monitor)
-						throws InvocationTargetException, InterruptedException {
+				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 					monitor.beginTask(Messages.DeleteResourceAction_0, p.length);
 					try {
+						Set<ANode> toRefresh = new HashSet<ANode>();
 						Set<MReportUnit> set = new HashSet<MReportUnit>();
 						Set<MReportUnit> deleted = new HashSet<MReportUnit>();
 						for (int i = 0; i < p.length; i++) {
 							final Object obj = p[i].getLastSegment();
 							if (obj instanceof AMResource) {
+								if (((ANode) obj).getParent() != null)
+									toRefresh.add(((ANode) obj).getParent());
 								AMResource mres = (AMResource) obj;
-								if (mres.getParent() instanceof MServerProfile
-										|| mres.getParent() instanceof MFolder) {
+								if (mres.getParent() instanceof MServerProfile || mres.getParent() instanceof MFolder) {
 									deleteResource(monitor, (AMResource) obj);
 									if (mres instanceof MReportUnit)
 										deleted.add((MReportUnit) mres);
 								} else if (mres.getParent() instanceof MReportUnit) {
-									MReportUnit mrunit = (MReportUnit) mres
-											.getParent();
+									MReportUnit mrunit = (MReportUnit) mres.getParent();
 									mrunit.getChildren().remove(mres);
 									if (deleted.contains(mrunit))
 										continue;
 									set.add(mrunit);
 									ResourceDescriptor toDel = null;
-									List<ResourceDescriptor> children = mrunit
-											.getValue().getChildren();
+									List<ResourceDescriptor> children = mrunit.getValue().getChildren();
 									String uri = mres.getValue().getUriString();
 									for (ResourceDescriptor rd : children) {
-										if (rd.getUriString() != null
-												&& rd.getUriString()
-														.equals(uri)) {
+										if (rd.getUriString() != null && rd.getUriString().equals(uri)) {
 											toDel = rd;
 											break;
 										}
@@ -132,6 +124,20 @@ public class DeleteResourceAction extends Action {
 								UIUtils.showError(e);
 							}
 						}
+						for (ANode n : toRefresh) {
+							if (n instanceof AMResource)
+								try {
+									WSClientHelper.refreshResource((AMResource) n, monitor);
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+							else if (n instanceof MServerProfile)
+								try {
+									WSClientHelper.connectGetData((MServerProfile) n, monitor);
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+						}
 						UIUtils.getDisplay().asyncExec(new Runnable() {
 
 							public void run() {
@@ -143,15 +149,13 @@ public class DeleteResourceAction extends Action {
 					}
 				}
 
-				private void deleteResource(IProgressMonitor monitor,
-						final AMResource mres) {
+				private void deleteResource(IProgressMonitor monitor, final AMResource mres) {
 					try {
 						ANode p = mres.getParent();
 						monitor.subTask(mres.getDisplayText());
 						WSClientHelper.deleteResource(monitor, mres);
-						if (p != null && p instanceof AMResource)
-							WSClientHelper.refreshResource((AMResource) p,
-									monitor);
+//						if (p != null && p instanceof AMResource)
+//							WSClientHelper.refreshResource((AMResource) p, monitor);
 					} catch (Throwable e) {
 						UIUtils.showError(e);
 					}
