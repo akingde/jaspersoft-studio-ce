@@ -169,8 +169,8 @@ public class ItemPropertyDescription<T> {
 
 			txtExpr.setText(txt);
 
-			oldSelection.x = Math.max(txt.length(), oldSelection.x);
-			oldSelection.y = Math.max(txt.length(), oldSelection.y);
+			oldSelection.x = Math.min(txt.length(), oldSelection.x);
+			oldSelection.y = Math.min(txt.length(), oldSelection.y);
 			txtExpr.setSelection(oldSelection);
 
 			String tooltip = "";
