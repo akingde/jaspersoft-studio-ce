@@ -5,16 +5,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.customvisualization.model.command;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
-
-import net.sf.jasperreports.components.items.StandardItem;
-import net.sf.jasperreports.components.items.StandardItemData;
-import net.sf.jasperreports.components.items.StandardItemProperty;
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.eclipse.viewer.BrowserUtils;
-import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.draw2d.geometry.Rectangle;
@@ -54,6 +46,13 @@ import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.model.command.CreateElementCommand;
 import com.jaspersoft.studio.model.frame.MFrame;
 import com.jaspersoft.studio.utils.Misc;
+
+import net.sf.jasperreports.components.items.StandardItem;
+import net.sf.jasperreports.components.items.StandardItemData;
+import net.sf.jasperreports.components.items.StandardItemProperty;
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.viewer.BrowserUtils;
+import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 
 /**
  * Create command for the Custom Visualization component element.

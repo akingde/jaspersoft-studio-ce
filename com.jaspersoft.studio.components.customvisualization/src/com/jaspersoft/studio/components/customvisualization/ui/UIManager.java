@@ -59,15 +59,13 @@ public class UIManager {
 	private static Map<ComponentDescriptor, Image> imageCache = new HashMap<ComponentDescriptor, Image>();
 	private static Map<ComponentDescriptor, String> parentsPath = new HashMap<ComponentDescriptor, String>();
 
-	public static ComponentDescriptor getComponentDescriptor(
-			MCustomVisualization model) {
+	public static ComponentDescriptor getComponentDescriptor(MCustomVisualization model) {
 		List<ItemProperty> props = model.getComponent().getItemProperties();
 		if (props != null) {
 			ItemProperty p = ItemPropertyUtil.getProperty(props, "module");
 			if (p != null) {
 				// let's ignore interpretter
-				String module = ItemPropertyUtil.getItemPropertyString(
-						(StandardItemProperty) p, null);
+				String module = ItemPropertyUtil.getItemPropertyString((StandardItemProperty) p, null);
 				if (!Misc.isNullOrEmpty(module))
 					return getDescriptor(model.getJasperConfiguration(), module);
 			}
@@ -75,18 +73,17 @@ public class UIManager {
 		return null;
 	}
 
-	public static void copyFile(ComponentDescriptor cd,
-			JasperReportsConfiguration jConf, String path) {
+	public static void copyFile(ComponentDescriptor cd, JasperReportsConfiguration jConf, String path) {
 		if (Misc.isNullOrEmpty(path))
 			return;
 		IFile f = (IFile) jConf.get(FileUtils.KEY_FILE);
 		if (f == null)
 			return;
 		IContainer destFolder = f.getParent();
-		File dest = new File(destFolder.getRawLocation().toFile(), path);
-
 		InputStream is = null;
 		try {
+			File dest = new File(destFolder.getLocationURI().toURL().getFile(), path);
+
 			// if (isInPlugin(cd)) {
 			// String uri = parentsPath.get(cd);
 			// if (uri != null)
@@ -119,15 +116,13 @@ public class UIManager {
 		}
 	}
 
-	public static Image getThumbnail(ComponentDescriptor cd,
-			JasperReportsConfiguration jConf) {
+	public static Image getThumbnail(ComponentDescriptor cd, JasperReportsConfiguration jConf) {
 		Image img = imageCache.get(cd);
 		if (img == null && !Misc.isNullOrEmpty(cd.getThumbnail())) {
 			try {
 				String uri = parentsPath.get(cd);
 				if (uri != null) {
-					InputStream is = new URL(uri + cd.getThumbnail())
-							.openStream();
+					InputStream is = new URL(uri + cd.getThumbnail()).openStream();
 					if (is != null) {
 						try {
 							img = new Image(null, is);
@@ -146,8 +141,7 @@ public class UIManager {
 		return img;
 	}
 
-	public static List<ComponentDescriptor> getModules(
-			JasperReportsConfiguration jConfig) {
+	public static List<ComponentDescriptor> getModules(JasperReportsConfiguration jConfig) {
 		List<ComponentDescriptor> res = new ArrayList<ComponentDescriptor>();
 		if (cachePlugin == null)
 			initCachePlugin();
@@ -157,8 +151,7 @@ public class UIManager {
 		return res;
 	}
 
-	public static ComponentDescriptor getDescriptor(
-			final JasperReportsConfiguration jConfig, String module) {
+	public static ComponentDescriptor getDescriptor(final JasperReportsConfiguration jConfig, String module) {
 		if (cachePlugin == null)
 			initCachePlugin();
 		ComponentDescriptor d = cachePlugin.get(module);
@@ -174,8 +167,7 @@ public class UIManager {
 	protected static CustomVisualizationActivator initCachePlugin() {
 		if (cachePlugin == null)
 			cachePlugin = new HashMap<String, ComponentDescriptor>();
-		CustomVisualizationActivator activator = CustomVisualizationActivator
-				.getDefault();
+		CustomVisualizationActivator activator = CustomVisualizationActivator.getDefault();
 		Enumeration<?> en = activator.getBundle().findEntries("components", //$NON-NLS-1$
 				"*.json", true); //$NON-NLS-1$
 		while (en != null && en.hasMoreElements()) {
@@ -194,61 +186,50 @@ public class UIManager {
 				}
 			} catch (Exception ex) {
 				// Log error but continue...
-				activator.log(new Status(IStatus.ERROR,
-						CustomVisualizationActivator.PLUGIN_ID, MessageFormat
-								.format(Messages.UIManager_2,
-										new Object[] { url }), ex));
+				activator.log(new Status(IStatus.ERROR, CustomVisualizationActivator.PLUGIN_ID,
+						MessageFormat.format(Messages.UIManager_2, new Object[] { url }), ex));
 			}
 		}
 		return activator;
 	}
 
-	protected static Map<String, ComponentDescriptor> initCacheJConfig(
-			final JasperReportsConfiguration jConf) {
+	protected static Map<String, ComponentDescriptor> initCacheJConfig(final JasperReportsConfiguration jConf) {
 		Map<String, ComponentDescriptor> modules = cache.get(jConf);
 		if (modules == null) {
 			modules = new HashMap<String, ComponentDescriptor>();
 			cache.put(jConf, modules);
-			jConf.getPrefStore().addPropertyChangeListener(
-					new IPropertyChangeListener() {
+			jConf.getPrefStore().addPropertyChangeListener(new IPropertyChangeListener() {
 
-						@Override
-						public void propertyChange(
-								org.eclipse.jface.util.PropertyChangeEvent event) {
-							if (event
-									.getProperty()
-									.equals(CVCDescriptorsPreferencePage.RESOURCE_PATHS)) {
-								for (ComponentDescriptor cd : cache.get(jConf)
-										.values()) {
-									imageCache.remove(cd);
-									parentsPath.remove(cd);
-								}
-								cache.remove(jConf);
-								initCacheJConfig(jConf);
-							}
+				@Override
+				public void propertyChange(org.eclipse.jface.util.PropertyChangeEvent event) {
+					if (event.getProperty().equals(CVCDescriptorsPreferencePage.RESOURCE_PATHS)) {
+						for (ComponentDescriptor cd : cache.get(jConf).values()) {
+							imageCache.remove(cd);
+							parentsPath.remove(cd);
 						}
-					});
-			jConf.getPropertyChangeSupport().addPropertyChangeListener(
-					new PropertyChangeListener() {
+						cache.remove(jConf);
+						initCacheJConfig(jConf);
+					}
+				}
+			});
+			jConf.getPropertyChangeSupport().addPropertyChangeListener(new PropertyChangeListener() {
 
-						@Override
-						public void propertyChange(PropertyChangeEvent evt) {
-							if (evt.getPropertyName().equals("preferences")
-									&& evt.getNewValue() instanceof PropertyChangeEvent) {
-								evt = (PropertyChangeEvent) evt.getNewValue();
-								if (evt.getPropertyName()
-										.equals(CVCDescriptorsPreferencePage.RESOURCE_PATHS)) {
-									for (ComponentDescriptor cd : cache.get(
-											jConf).values()) {
-										imageCache.remove(cd);
-										parentsPath.remove(cd);
-									}
-									cache.remove(jConf);
-									initCacheJConfig(jConf);
-								}
+				@Override
+				public void propertyChange(PropertyChangeEvent evt) {
+					if (evt.getPropertyName().equals("preferences")
+							&& evt.getNewValue() instanceof PropertyChangeEvent) {
+						evt = (PropertyChangeEvent) evt.getNewValue();
+						if (evt.getPropertyName().equals(CVCDescriptorsPreferencePage.RESOURCE_PATHS)) {
+							for (ComponentDescriptor cd : cache.get(jConf).values()) {
+								imageCache.remove(cd);
+								parentsPath.remove(cd);
 							}
+							cache.remove(jConf);
+							initCacheJConfig(jConf);
 						}
-					});
+					}
+				}
+			});
 			jConf.addDisposeListener(new IDisposeListener() {
 
 				@Override
@@ -267,10 +248,8 @@ public class UIManager {
 				}
 			});
 
-			String paths = jConf.getPrefStore().getString(
-					CVCDescriptorsPreferencePage.RESOURCE_PATHS);
-			StringTokenizer st = new StringTokenizer(paths, File.pathSeparator
-					+ "\n\r"); //$NON-NLS-1$
+			String paths = jConf.getPrefStore().getString(CVCDescriptorsPreferencePage.RESOURCE_PATHS);
+			StringTokenizer st = new StringTokenizer(paths, File.pathSeparator + "\n\r"); //$NON-NLS-1$
 			Set<String> pathsList = new LinkedHashSet<String>();
 			while (st.hasMoreTokens())
 				pathsList.add(st.nextToken());
@@ -290,19 +269,15 @@ public class UIManager {
 						ComponentDescriptor cd = readURL(url);
 						if (cd != null) {
 							modules.put(cd.getModule(), cd);
-							parentsPath.put(cd, f.getParentFile().toURI()
-									.toASCIIString());
+							parentsPath.put(cd, f.getParentFile().toURI().toASCIIString());
 						}
 					} catch (MalformedURLException e) {
 						// we are not interested to handle this
 					} catch (Exception ex) {
 						// Log error but continue...
-						CustomVisualizationActivator.getDefault().log(
-								new Status(IStatus.ERROR,
-										CustomVisualizationActivator.PLUGIN_ID,
-										MessageFormat.format(
-												Messages.UIManager_2,
-												new Object[] { url }), ex));
+						CustomVisualizationActivator.getDefault()
+								.log(new Status(IStatus.ERROR, CustomVisualizationActivator.PLUGIN_ID,
+										MessageFormat.format(Messages.UIManager_2, new Object[] { url }), ex));
 					}
 				}
 			}
@@ -330,24 +305,20 @@ public class UIManager {
 		return null;
 	}
 
-	public static ItemPropertyDescription<?> createItemPropertyDescriptor(
-			ComponentPropertyDescriptor cpd) {
+	public static ItemPropertyDescription<?> createItemPropertyDescriptor(ComponentPropertyDescriptor cpd) {
 		ItemPropertyDescription<?> desc = null;
 		Number min = null;
 		Number max = null;
 		Number def = null;
 		if (cpd.getType().equalsIgnoreCase("path"))
-			desc = new ItemPropertyDescription<String>(cpd.getName(),
-					cpd.getLabel(), cpd.getDescription(), cpd.isMandatory(),
-					cpd.getDefaultValue());
+			desc = new ItemPropertyDescription<String>(cpd.getName(), cpd.getLabel(), cpd.getDescription(),
+					cpd.isMandatory(), cpd.getDefaultValue());
 		else if (cpd.getType().equalsIgnoreCase("combo"))
-			desc = new ComboItemPropertyDescription<String>(cpd.getName(),
-					cpd.getLabel(), cpd.getDescription(), cpd.isMandatory(),
-					cpd.getDefaultValue(), cpd.getOptions());
+			desc = new ComboItemPropertyDescription<String>(cpd.getName(), cpd.getLabel(), cpd.getDescription(),
+					cpd.isMandatory(), cpd.getDefaultValue(), cpd.getOptions());
 		else if (cpd.getType().equalsIgnoreCase("color"))
-			desc = new ColorPropertyDescription<String>(cpd.getName(),
-					cpd.getLabel(), cpd.getDescription(), cpd.isMandatory(),
-					cpd.getDefaultValue());
+			desc = new ColorPropertyDescription<String>(cpd.getName(), cpd.getLabel(), cpd.getDescription(),
+					cpd.isMandatory(), cpd.getDefaultValue());
 
 		else if (cpd.getType().equalsIgnoreCase("float")) {
 			if (cpd.getMin() != null)
@@ -356,9 +327,8 @@ public class UIManager {
 				max = new Float(cpd.getMax());
 			if (cpd.getDefaultValue() != null)
 				def = new Float(cpd.getDefaultValue());
-			desc = new NumberPropertyDescription<Float>(cpd.getName(),
-					cpd.getLabel(), cpd.getDescription(), cpd.isMandatory(),
-					(Float) def, min, max) {
+			desc = new NumberPropertyDescription<Float>(cpd.getName(), cpd.getLabel(), cpd.getDescription(),
+					cpd.isMandatory(), (Float) def, min, max) {
 				@Override
 				public Class<?> getType() {
 					if (defaultValue != null)
@@ -373,9 +343,8 @@ public class UIManager {
 				max = new Integer(cpd.getMax());
 			if (cpd.getDefaultValue() != null)
 				def = new Integer(cpd.getDefaultValue());
-			desc = new NumberPropertyDescription<Integer>(cpd.getName(),
-					cpd.getLabel(), cpd.getDescription(), cpd.isMandatory(),
-					(Integer) def, min, max) {
+			desc = new NumberPropertyDescription<Integer>(cpd.getName(), cpd.getLabel(), cpd.getDescription(),
+					cpd.isMandatory(), (Integer) def, min, max) {
 				@Override
 				public Class<?> getType() {
 					if (defaultValue != null)
@@ -390,9 +359,8 @@ public class UIManager {
 				max = new BigDecimal(cpd.getMax());
 			if (cpd.getDefaultValue() != null)
 				def = new BigDecimal(cpd.getDefaultValue());
-			desc = new NumberPropertyDescription<BigDecimal>(cpd.getName(),
-					cpd.getLabel(), cpd.getDescription(), cpd.isMandatory(),
-					(BigDecimal) def, min, max) {
+			desc = new NumberPropertyDescription<BigDecimal>(cpd.getName(), cpd.getLabel(), cpd.getDescription(),
+					cpd.isMandatory(), (BigDecimal) def, min, max) {
 				@Override
 				public Class<?> getType() {
 					if (defaultValue != null)
@@ -401,9 +369,8 @@ public class UIManager {
 				}
 			};
 		} else {
-			desc = new ItemPropertyDescription<String>(cpd.getName(),
-					cpd.getLabel(), cpd.getDescription(), cpd.isMandatory(),
-					cpd.getDefaultValue());
+			desc = new ItemPropertyDescription<String>(cpd.getName(), cpd.getLabel(), cpd.getDescription(),
+					cpd.isMandatory(), cpd.getDefaultValue());
 		}
 		if (desc != null)
 			desc.setReadOnly(cpd.isReadOnly());
