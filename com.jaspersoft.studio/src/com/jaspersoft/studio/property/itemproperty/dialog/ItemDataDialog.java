@@ -165,7 +165,7 @@ public abstract class ItemDataDialog extends ElementDatasetDialog {
 				descriptor.setItem(item);
 
 				AItemDialog dialog = createItemDialog();
-				dialog.setValues(clones, itemData, item);
+				dialog.setValues(clones, idClone, item);
 				dialog.setExpressionContext(expContext);
 				try {
 					if (dialog.open() == Dialog.OK) {
