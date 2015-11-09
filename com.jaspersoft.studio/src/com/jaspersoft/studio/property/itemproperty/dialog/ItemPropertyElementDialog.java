@@ -7,7 +7,7 @@
  * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.property.itemproperty.dialog;
- 
+
 import net.sf.jasperreports.components.items.StandardItemProperty;
 import net.sf.jasperreports.eclipse.ui.ATitledDialog;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
@@ -57,8 +57,9 @@ public class ItemPropertyElementDialog extends ATitledDialog implements IExpress
 		this.descriptor = descriptor;
 		this.pname = (StandardItemProperty) pname.clone();
 		ipDesc = descriptor.getDescription(pname.getName());
-		setTitle(NLS.bind(Messages.ItemPropertyElementDialog_0, pname != null ? pname.getName() : "")); //$NON-NLS-2$
+		setTitle(NLS.bind(Messages.ItemPropertyElementDialog_0, pname != null ? pname.getName() : "")); // $NON-NLS-2$
 		setDescription(ipDesc.getDescription());
+		setDefaultSize(400, 200);
 	}
 
 	@Override

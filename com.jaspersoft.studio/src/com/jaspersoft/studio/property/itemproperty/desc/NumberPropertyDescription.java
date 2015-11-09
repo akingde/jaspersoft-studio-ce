@@ -53,6 +53,10 @@ public class NumberPropertyDescription<T extends Number> extends ItemPropertyDes
 	public Class<?> getType() {
 		if (defaultValue != null)
 			return defaultValue.getClass();
+		if (min != null)
+			return min.getClass();
+		if (max != null)
+			return max.getClass();
 		return BigDecimal.class;
 	}
 
