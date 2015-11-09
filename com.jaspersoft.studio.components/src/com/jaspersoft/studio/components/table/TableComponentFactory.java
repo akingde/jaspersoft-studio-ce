@@ -23,6 +23,7 @@ import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.UnexecutableCommand;
 import org.eclipse.jface.action.Action;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.part.WorkbenchPart;
@@ -490,6 +491,21 @@ public class TableComponentFactory implements IComponentFactory {
 			return cmd;
 		}
 
+		//Avoid to move element from an existing section to another
+		if (child instanceof MColumn){
+			AMCollection parentSection = null;
+			AMCollection childSection = ((MColumn)child).getSection();
+			if (parent instanceof MColumn){
+				parentSection = ((MColumn)parent).getSection();
+			} else if (parent instanceof AMCollection){
+				parentSection = (AMCollection)parent;
+			}		
+			//Check if the child section is null to understood if it is the creation of a new element
+			//or the movement of an existing one
+			if (childSection != parentSection && childSection != null) return UnexecutableCommand.INSTANCE;
+		} else if (child instanceof AMCollection){
+			 return UnexecutableCommand.INSTANCE;
+		}
 
 		if (child instanceof MCell) {
 			if (parent instanceof MColumnGroup)
@@ -498,32 +514,26 @@ public class TableComponentFactory implements IComponentFactory {
 				return new MoveColumnIntoGroupCommand((StandardColumnGroup)parent.getValue(), (MCell)child); 
 			}
 
+
 		}  else if (child instanceof MColumnGroup) {
-			if (parent instanceof AMCollection)
-				return new CreateColumnGroupCommand((AMCollection) parent,
-						(MColumnGroup) child, newIndex);
-
-			if (parent instanceof MColumnGroupCell)
-				return new CreateColumnGroupFromGroupCommand(
-						(MColumnGroupCell) parent, (MColumnGroup) child,
-						newIndex);
-			if (parent instanceof MColumnGroup)
-				return new CreateColumnGroupFromGroupCommand(
-						(MColumnGroup) parent, (MColumnGroup) child, newIndex);
-
-			if (parent.getParent() instanceof MColumnGroupCell)
-				return new CreateColumnGroupFromGroupCommand(
-						(MColumnGroupCell) parent.getParent(),
-						(MColumnGroup) child, newIndex);
-			if (parent.getParent() instanceof MColumnGroup)
-				return new CreateColumnGroupFromGroupCommand(
-						(MColumnGroup) parent.getParent(),
-						(MColumnGroup) child, newIndex);
-
-			if (parent instanceof MColumn)
-				return new CreateColumnGroupCommand((MColumn) parent,
-						(MColumnGroup) child, newIndex);
-
+			if (parent instanceof AMCollection){
+				return new CreateColumnGroupCommand((AMCollection) parent,(MColumnGroup) child, newIndex);
+			}
+			if (parent instanceof MColumnGroupCell){
+				return new CreateColumnGroupFromGroupCommand((MColumnGroupCell) parent, (MColumnGroup) child, newIndex);
+			}
+			if (parent instanceof MColumnGroup){
+				return new CreateColumnGroupFromGroupCommand((MColumnGroup) parent, (MColumnGroup) child, newIndex);
+			}
+			if (parent.getParent() instanceof MColumnGroupCell){
+				return new CreateColumnGroupFromGroupCommand((MColumnGroupCell) parent.getParent(),(MColumnGroup) child, newIndex);
+			}
+			if (parent.getParent() instanceof MColumnGroup){
+				return new CreateColumnGroupFromGroupCommand((MColumnGroup) parent.getParent(),(MColumnGroup) child, newIndex);
+			}
+			if (parent instanceof MColumn){
+				return new CreateColumnGroupCommand((MColumn) parent,(MColumnGroup) child, newIndex);
+			}
 		} else if (child instanceof MColumn) {
 			if (parent instanceof MTable)
 				return new CreateColumnCommand((MTable) parent,
