@@ -18,20 +18,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.jasperreports.components.table.Cell;
-import net.sf.jasperreports.components.table.DesignCell;
-import net.sf.jasperreports.components.table.StandardBaseColumn;
-import net.sf.jasperreports.engine.JRBoxContainer;
-import net.sf.jasperreports.engine.JRConstants;
-import net.sf.jasperreports.engine.JRElementGroup;
-import net.sf.jasperreports.engine.JRPropertiesHolder;
-import net.sf.jasperreports.engine.JRPropertiesMap;
-import net.sf.jasperreports.engine.JRStyle;
-import net.sf.jasperreports.engine.design.JRDesignElement;
-import net.sf.jasperreports.engine.design.JRDesignElementGroup;
-import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.design.events.CollectionElementAddedEvent;
-
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.swt.graphics.Color;
@@ -54,13 +40,26 @@ import com.jaspersoft.studio.model.IPastable;
 import com.jaspersoft.studio.model.IPastableGraphic;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.MLineBox;
-import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.util.ReportFactory;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.box.BoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.IntegerPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.PixelPropertyDescriptor;
+
+import net.sf.jasperreports.components.table.Cell;
+import net.sf.jasperreports.components.table.DesignCell;
+import net.sf.jasperreports.components.table.StandardBaseColumn;
+import net.sf.jasperreports.engine.JRBoxContainer;
+import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRElementGroup;
+import net.sf.jasperreports.engine.JRPropertiesHolder;
+import net.sf.jasperreports.engine.JRPropertiesMap;
+import net.sf.jasperreports.engine.JRStyle;
+import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.design.JRDesignElementGroup;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.design.events.CollectionElementAddedEvent;
 
 public class MCell extends MColumn implements IGraphicElement,
 		IPastableGraphic, ILineBox, IGraphicElementContainer, IPastable,
@@ -372,17 +371,6 @@ public class MCell extends MColumn implements IGraphicElement,
 
 	public int getLeftPadding() {
 		return cell.getLineBox().getLeftPadding();
-	}
-
-	public MTable getTable() {
-		INode node = this;
-		while (node != null && node.getParent() != null
-				&& !(node instanceof MTable) && !(node instanceof MRoot)) {
-			node = node.getParent();
-		}
-		if (node instanceof MTable)
-			return (MTable) node;
-		return null;
 	}
 
 	@Override

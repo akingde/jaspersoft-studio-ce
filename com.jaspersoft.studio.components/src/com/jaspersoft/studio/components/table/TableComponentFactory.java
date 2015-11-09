@@ -17,24 +17,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
-import net.sf.jasperreports.components.table.BaseColumn;
-import net.sf.jasperreports.components.table.Cell;
-import net.sf.jasperreports.components.table.DesignCell;
-import net.sf.jasperreports.components.table.StandardBaseColumn;
-import net.sf.jasperreports.components.table.StandardColumn;
-import net.sf.jasperreports.components.table.StandardColumnGroup;
-import net.sf.jasperreports.components.table.StandardTable;
-import net.sf.jasperreports.components.table.util.TableUtil;
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.engine.JRStyle;
-import net.sf.jasperreports.engine.component.Component;
-import net.sf.jasperreports.engine.design.JRDesignComponentElement;
-import net.sf.jasperreports.engine.design.JRDesignDataset;
-import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
-import net.sf.jasperreports.engine.design.JRDesignElement;
-import net.sf.jasperreports.engine.design.JRDesignGroup;
-import net.sf.jasperreports.engine.design.JasperDesign;
-
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
@@ -84,13 +66,12 @@ import com.jaspersoft.studio.components.table.model.column.action.CreateColumnBe
 import com.jaspersoft.studio.components.table.model.column.action.CreateColumnBeginAction;
 import com.jaspersoft.studio.components.table.model.column.action.CreateColumnCellAction;
 import com.jaspersoft.studio.components.table.model.column.action.CreateColumnEndAction;
+import com.jaspersoft.studio.components.table.model.column.action.CreateColumnGroupCellAction;
 import com.jaspersoft.studio.components.table.model.column.action.DeleteColumnAction;
 import com.jaspersoft.studio.components.table.model.column.action.DeleteColumnCellAction;
 import com.jaspersoft.studio.components.table.model.column.action.DeleteRowAction;
-import com.jaspersoft.studio.components.table.model.column.command.CreateColumnCellCommand;
 import com.jaspersoft.studio.components.table.model.column.command.CreateColumnCommand;
 import com.jaspersoft.studio.components.table.model.column.command.CreateColumnFromGroupCommand;
-import com.jaspersoft.studio.components.table.model.column.command.CreateColumnGroupCellCommand;
 import com.jaspersoft.studio.components.table.model.column.command.DeleteColumnCellCommand;
 import com.jaspersoft.studio.components.table.model.column.command.DeleteColumnCommand;
 import com.jaspersoft.studio.components.table.model.column.command.DeleteColumnFromGroupCommand;
@@ -104,6 +85,7 @@ import com.jaspersoft.studio.components.table.model.columngroup.action.GroupColu
 import com.jaspersoft.studio.components.table.model.columngroup.action.UnGroupColumnsAction;
 import com.jaspersoft.studio.components.table.model.columngroup.command.CreateColumnGroupCommand;
 import com.jaspersoft.studio.components.table.model.columngroup.command.CreateColumnGroupFromGroupCommand;
+import com.jaspersoft.studio.components.table.model.columngroup.command.MoveColumnIntoGroupCommand;
 import com.jaspersoft.studio.components.table.model.columngroup.command.ReorderColumnGroupCommand;
 import com.jaspersoft.studio.components.table.model.table.command.CreateTableCommand;
 import com.jaspersoft.studio.components.table.model.table.command.DeleteTableCommand;
@@ -145,6 +127,24 @@ import com.jaspersoft.studio.property.SetValueCommand;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.Pair;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
+import net.sf.jasperreports.components.table.BaseColumn;
+import net.sf.jasperreports.components.table.Cell;
+import net.sf.jasperreports.components.table.DesignCell;
+import net.sf.jasperreports.components.table.StandardBaseColumn;
+import net.sf.jasperreports.components.table.StandardColumn;
+import net.sf.jasperreports.components.table.StandardColumnGroup;
+import net.sf.jasperreports.components.table.StandardTable;
+import net.sf.jasperreports.components.table.util.TableUtil;
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.engine.JRStyle;
+import net.sf.jasperreports.engine.component.Component;
+import net.sf.jasperreports.engine.design.JRDesignComponentElement;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
+import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
+import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.design.JRDesignGroup;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 public class TableComponentFactory implements IComponentFactory {
 
@@ -490,15 +490,15 @@ public class TableComponentFactory implements IComponentFactory {
 			return cmd;
 		}
 
+
 		if (child instanceof MCell) {
 			if (parent instanceof MColumnGroup)
-				return new CreateColumnGroupCellCommand(
-						((MColumn) parent).getSection(), (MColumnGroup) parent);
-			if (parent instanceof MColumn && !(parent instanceof MCell))
-				return new CreateColumnCellCommand(
-						((MColumn) parent).getSection(), (MColumn) parent);
+				return new MoveColumnIntoGroupCommand((StandardColumnGroup)parent.getValue(), (MCell)child); 
+			if (parent instanceof MColumnGroupCell){
+				return new MoveColumnIntoGroupCommand((StandardColumnGroup)parent.getValue(), (MCell)child); 
+			}
 
-		} else if (child instanceof MColumnGroup) {
+		}  else if (child instanceof MColumnGroup) {
 			if (parent instanceof AMCollection)
 				return new CreateColumnGroupCommand((AMCollection) parent,
 						(MColumnGroup) child, newIndex);
@@ -781,6 +781,7 @@ public class TableComponentFactory implements IComponentFactory {
 		lst.add(GroupColumnsAction.ID);
 		lst.add(UnGroupColumnsAction.ID);
 		lst.add(CreateColumnCellAction.ID);
+		lst.add(CreateColumnGroupCellAction.ID);
 		lst.add(ColumnsEqualWidthAction.ID);
 		lst.add(ColumnsStretchToTableAction.ID);
 		

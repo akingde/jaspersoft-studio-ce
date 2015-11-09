@@ -27,6 +27,7 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.components.table.TableManager;
+import com.jaspersoft.studio.components.table.model.AMCollection;
 import com.jaspersoft.studio.components.table.model.MTableColumnFooter;
 import com.jaspersoft.studio.components.table.model.MTableColumnHeader;
 import com.jaspersoft.studio.components.table.model.MTableFooter;
@@ -48,7 +49,7 @@ import com.jaspersoft.studio.model.INode;
 public class CreateColumnCellCommand extends Command {
 
 	private StandardBaseColumn jrColumn;
-	private Class<ANode> type;
+	private Class<AMCollection> type;
 	private String groupName;
 	private Cell jrCell;
 	private int height = 0;
@@ -56,9 +57,9 @@ public class CreateColumnCellCommand extends Command {
 	private HashMap<Cell, Integer> oldSpans = new HashMap<Cell, Integer>();
 
 	@SuppressWarnings("unchecked")
-	public CreateColumnCellCommand(ANode parent, MColumn srcNode) {
+	public CreateColumnCellCommand(AMCollection parent, MColumn srcNode) {
 		super();
-		type = (Class<ANode>) parent.getClass();
+		type = (Class<AMCollection>) parent.getClass();
 		if (parent instanceof MTableGroupHeader)
 			groupName = ((MTableGroupHeader) parent).getJrDesignGroup()
 					.getName();

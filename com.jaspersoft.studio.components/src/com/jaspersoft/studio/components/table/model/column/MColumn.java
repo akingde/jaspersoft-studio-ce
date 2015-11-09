@@ -17,19 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.jasperreports.components.table.DesignCell;
-import net.sf.jasperreports.components.table.StandardBaseColumn;
-import net.sf.jasperreports.components.table.util.TableUtil;
-import net.sf.jasperreports.engine.JRConstants;
-import net.sf.jasperreports.engine.JRPropertiesHolder;
-import net.sf.jasperreports.engine.JRPropertiesMap;
-import net.sf.jasperreports.engine.JRPropertyExpression;
-import net.sf.jasperreports.engine.design.JRDesignElement;
-import net.sf.jasperreports.engine.design.JRDesignGroup;
-import net.sf.jasperreports.engine.design.JRDesignPropertyExpression;
-import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.design.events.JRPropertyChangeSupport;
-
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -59,6 +46,7 @@ import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.IPastable;
 import com.jaspersoft.studio.model.MGraphicElement;
+import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
@@ -67,6 +55,19 @@ import com.jaspersoft.studio.property.descriptor.propexpr.PropertyExpressionDTO;
 import com.jaspersoft.studio.property.descriptor.propexpr.PropertyExpressionsDTO;
 import com.jaspersoft.studio.property.descriptors.PixelPropertyDescriptor;
 import com.jaspersoft.studio.utils.Misc;
+
+import net.sf.jasperreports.components.table.DesignCell;
+import net.sf.jasperreports.components.table.StandardBaseColumn;
+import net.sf.jasperreports.components.table.util.TableUtil;
+import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRPropertiesHolder;
+import net.sf.jasperreports.engine.JRPropertiesMap;
+import net.sf.jasperreports.engine.JRPropertyExpression;
+import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.design.JRDesignGroup;
+import net.sf.jasperreports.engine.design.JRDesignPropertyExpression;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.design.events.JRPropertyChangeSupport;
 
 public class MColumn extends APropertyNode implements IPastable, IContainer,IContainerLayout, IGraphicElement, IContainerEditPart {
 	
@@ -560,4 +561,22 @@ public class MColumn extends APropertyNode implements IPastable, IContainer,ICon
 			iconDescriptor = new TableNodeIconDescriptor("tablecell"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
+	
+	/**
+	 * Return the table model that contains this column
+	 * 
+	 * @return the table model that contains this column or null if this
+	 * column is not in hierarchy with a table node
+	 */
+	public MTable getTable() {
+		INode node = this;
+		while (node != null && node.getParent() != null
+				&& !(node instanceof MTable) && !(node instanceof MRoot)) {
+			node = node.getParent();
+		}
+		if (node instanceof MTable)
+			return (MTable) node;
+		return null;
+	}
+
 }

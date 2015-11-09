@@ -106,6 +106,11 @@ public class CreateColumnCommand extends Command {
 		}
 	}
 	
+	@Override
+	public boolean canExecute() {
+		return tableNode != null;
+	}
+	
 	private void createAndAddColumn(){
 		if (jrColumn == null)
 			jrColumn = createColumn(jrDesign, jrTable);

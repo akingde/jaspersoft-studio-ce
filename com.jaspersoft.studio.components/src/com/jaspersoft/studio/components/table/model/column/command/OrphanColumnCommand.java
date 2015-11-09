@@ -21,8 +21,10 @@ import com.jaspersoft.studio.components.table.TableManager;
 import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.components.table.model.AMCollection;
 import com.jaspersoft.studio.components.table.model.column.MColumn;
-/*
- * The Class OrphanElementGroupCommand.
+
+/**
+ * Delete a standard column from its parent. It also refresh the
+ * name after its execution
  * 
  * @author Chicu Veaceslav
  */
@@ -33,6 +35,7 @@ public class OrphanColumnCommand extends Command {
 
 	private StandardBaseColumn jrColumn;
 	private StandardTable jrTable;
+	protected RefreshColumnNamesCommand refreshNameCommand;
 
 	/**
 	 * Instantiates a new orphan element group command.
@@ -46,6 +49,7 @@ public class OrphanColumnCommand extends Command {
 		super(Messages.common_orphan_element);
 		this.jrTable = TableManager.getTable(parent);
 		this.jrColumn = (StandardBaseColumn) child.getValue();
+		refreshNameCommand = new RefreshColumnNamesCommand(child.getMTable(), true, true);
 	}
 
 	/*
@@ -57,6 +61,7 @@ public class OrphanColumnCommand extends Command {
 	public void execute() {
 		index = jrTable.getColumns().indexOf(jrColumn);
 		jrTable.removeColumn(jrColumn);
+		refreshNameCommand.execute();
 	}
 
 	/*
@@ -70,5 +75,6 @@ public class OrphanColumnCommand extends Command {
 			jrTable.addColumn(index, jrColumn);
 		else
 			jrTable.addColumn(jrColumn);
+		refreshNameCommand.undo();
 	}
 }

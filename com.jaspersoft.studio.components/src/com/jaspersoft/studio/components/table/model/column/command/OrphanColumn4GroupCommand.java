@@ -12,20 +12,23 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.table.model.column.command;
 
-import net.sf.jasperreports.components.table.StandardBaseColumn;
-import net.sf.jasperreports.components.table.StandardColumnGroup;
-import net.sf.jasperreports.components.table.StandardTable;
-
 import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.components.table.TableManager;
 import com.jaspersoft.studio.components.table.messages.Messages;
+import com.jaspersoft.studio.components.table.model.MTable;
 import com.jaspersoft.studio.components.table.model.column.MColumn;
 import com.jaspersoft.studio.components.table.model.columngroup.MColumnGroup;
 import com.jaspersoft.studio.components.table.model.columngroup.MColumnGroupCell;
 import com.jaspersoft.studio.components.table.util.TableColumnSize;
-/*
- * The Class OrphanElementGroupCommand.
+
+import net.sf.jasperreports.components.table.StandardBaseColumn;
+import net.sf.jasperreports.components.table.StandardColumnGroup;
+import net.sf.jasperreports.components.table.StandardTable;
+
+/**
+ * Delete a column group column from its parent. It also refresh the
+ * name after its execution
  * 
  * @author Chicu Veaceslav
  */
@@ -37,6 +40,7 @@ public class OrphanColumn4GroupCommand extends Command {
 	private StandardBaseColumn jrColumn;
 	protected StandardTable jrTable;
 	private StandardColumnGroup jrGroup;
+	protected RefreshColumnNamesCommand refreshNameCommand;
 
 	/**
 	 * Instantiates a new orphan element group command.
@@ -48,16 +52,20 @@ public class OrphanColumn4GroupCommand extends Command {
 	 */
 	public OrphanColumn4GroupCommand(MColumnGroup parent, MColumn child) {
 		super(Messages.common_orphan_element);
+		MTable tableNode = parent.getMTable();
 		this.jrGroup = (StandardColumnGroup) parent.getValue();
 		this.jrColumn = (StandardBaseColumn) child.getValue();
-		this.jrTable = TableManager.getTable(parent.getMTable());
+		this.jrTable = TableManager.getTable(tableNode);
+		refreshNameCommand = new RefreshColumnNamesCommand(tableNode, true, true);
 	}
 
 	public OrphanColumn4GroupCommand(MColumnGroupCell parent, MColumn child) {
 		super(Messages.common_orphan_element);
+		MTable tableNode = parent.getMTable();
 		this.jrGroup = (StandardColumnGroup) parent.getValue();
 		this.jrColumn = (StandardBaseColumn) child.getValue();
-		this.jrTable = TableManager.getTable(parent.getMTable());
+		this.jrTable = TableManager.getTable(tableNode);
+		refreshNameCommand = new RefreshColumnNamesCommand(tableNode, true, true);
 	}
 
 	/*
@@ -70,6 +78,7 @@ public class OrphanColumn4GroupCommand extends Command {
 		index = jrGroup.getColumns().indexOf(jrColumn);
 		jrGroup.removeColumn(jrColumn);
 		TableColumnSize.setGroupWidth2Top(jrTable.getColumns(), jrGroup, -jrColumn.getWidth());
+		refreshNameCommand.execute();
 	}
 
 	/*
@@ -84,5 +93,6 @@ public class OrphanColumn4GroupCommand extends Command {
 		else
 			jrGroup.addColumn(jrColumn);
 		TableColumnSize.setGroupWidth2Top(jrTable.getColumns(), jrGroup, jrColumn.getWidth());
+		refreshNameCommand.undo();
 	}
 }
