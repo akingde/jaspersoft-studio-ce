@@ -69,8 +69,8 @@ import net.sf.jasperreports.engine.util.JRCloneUtils;
  * @author Veaceslav Chicu (schicu@users.sourceforge.net)
  * 
  */
-public class SPItemDataList extends ASPropertyWidget<AItemDataListPropertyDescriptor> implements
-		IExpressionContextSetter {
+public class SPItemDataList extends ASPropertyWidget<AItemDataListPropertyDescriptor>
+		implements IExpressionContextSetter {
 
 	protected ExpressionContext expContext;
 
@@ -283,9 +283,9 @@ public class SPItemDataList extends ASPropertyWidget<AItemDataListPropertyDescri
 	}
 
 	protected ItemDataDialog createItemDataDialog(List<ItemData> clones, StandardItemData itemData) {
-		ItemDataDialog dialog = new ItemDataDialog(UIUtils.getShell(), Messages.SPItemDataList_6,
-				Messages.SPItemDataList_7, clones, itemData, (JasperReportsConfiguration) section.getJasperReportsContext(),
-				getDescriptor(), expContext, pnode) {
+		ItemDataDialog dialog = new ItemDataDialog(UIUtils.getShell(), Messages.SPItemDataList_6, Messages.SPItemDataList_7,
+				clones, itemData, (JasperReportsConfiguration) section.getJasperReportsContext(), getDescriptor(), expContext,
+				pnode) {
 
 			@Override
 			protected AItemDialog createItemDialog() {
@@ -362,7 +362,7 @@ public class SPItemDataList extends ASPropertyWidget<AItemDataListPropertyDescri
 		gd.verticalSpan = 5;
 		tree.setLayoutData(gd);
 		createDsLabelProvider();
-		dsTViewer.setContentProvider(new ItemDataListContentProvider(false) {
+		dsTViewer.setContentProvider(new ItemDataListContentProvider(true) {
 			@Override
 			public Object[] getChildren(Object parentElement) {
 				if (parentElement instanceof ItemData)
