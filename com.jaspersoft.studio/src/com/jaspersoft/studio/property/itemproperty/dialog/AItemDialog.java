@@ -67,7 +67,7 @@ public abstract class AItemDialog extends ATitledDialog implements IExpressionCo
 	public AItemDialog(Shell parentShell, ADescriptor descriptor, JasperReportsConfiguration jrConfig, boolean showDataset) {
 		super(parentShell);
 		setTitle(descriptor.getDisplayName());
-		setDefaultSize(600, 700);
+		setDefaultSize(500, 600);
 		this.jrConfig = jrConfig;
 		this.descriptor = descriptor;
 		this.showDataset = showDataset;

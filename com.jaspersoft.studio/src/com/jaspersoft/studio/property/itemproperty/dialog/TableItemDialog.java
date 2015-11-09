@@ -69,6 +69,7 @@ public class TableItemDialog extends AItemDialog {
 	protected void createValue(Composite parent) {
 		vcmp = new Composite(parent, SWT.NONE);
 		vcmp.setLayout(new GridLayout(2, false));
+		vcmp.setLayoutData(new GridData(GridData.FILL_BOTH));
 
 		Table wtable = new Table(vcmp, SWT.V_SCROLL | SWT.MULTI | SWT.FULL_SELECTION | SWT.BORDER);
 		GridData gd = new GridData(GridData.FILL_BOTH);
