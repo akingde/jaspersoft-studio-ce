@@ -130,6 +130,8 @@ public abstract class AItemDialog extends ATitledDialog implements IExpressionCo
 
 		setError(null);
 		validateForm();
+		tcmp.getParent().update();
+		tcmp.getParent().layout(true);
 	}
 
 	protected void setupItemDataCombo() {

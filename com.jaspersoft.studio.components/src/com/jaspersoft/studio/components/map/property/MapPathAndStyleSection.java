@@ -65,25 +65,21 @@ import com.jaspersoft.studio.widgets.map.ui.PathPickupDialog;
 public class MapPathAndStyleSection extends AbstractSection {
 
 	@Override
-	public void createControls(Composite parent,
-			TabbedPropertySheetPage aTabbedPropertySheetPage) {
+	public void createControls(Composite parent, TabbedPropertySheetPage aTabbedPropertySheetPage) {
 		super.createControls(parent, aTabbedPropertySheetPage);
 		parent.setLayout(new GridLayout(1, false));
 
 		FormText mapPickSuggestion = new FormText(parent, SWT.NONE);
 		mapPickSuggestion.setWhitespaceNormalized(true);
-		mapPickSuggestion.setText(Messages.MapPathAndStyleSection_0, true,
-				false);
-		mapPickSuggestion.setLayoutData(new GridData(
-				GridData.HORIZONTAL_ALIGN_CENTER));
+		mapPickSuggestion.setText(Messages.MapPathAndStyleSection_0, true, false);
+		mapPickSuggestion.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		mapPickSuggestion.addHyperlinkListener(new HyperlinkAdapter() {
 
 			@Override
 			public void linkActivated(HyperlinkEvent e) {
 				MMap mmap = (MMap) getElement();
 				JasperDesign jd = mmap.getJasperDesign();
-				JasperReportsConfiguration jConf = mmap
-						.getJasperConfiguration();
+				JasperReportsConfiguration jConf = mmap.getJasperConfiguration();
 				PathPickupDialog d = new PathPickupDialog(UIUtils.getShell()) {
 					@Override
 					protected void configureShell(Shell newShell) {
@@ -92,15 +88,12 @@ public class MapPathAndStyleSection extends AbstractSection {
 					}
 				};
 				BasicMapInfoData mapInfo = mmap.getBasicMapInformation();
-				if (mapInfo.getLatitude() != null
-						&& mapInfo.getLongitude() != null)
-					d.setMapCenter(new LatLng(mapInfo.getLatitude(), mapInfo
-							.getLongitude(), true));
+				if (mapInfo.getLatitude() != null && mapInfo.getLongitude() != null)
+					d.setMapCenter(new LatLng(mapInfo.getLatitude(), mapInfo.getLongitude(), true));
 				if (mapInfo.getAddress() != null)
 					d.setAddress(mapInfo.getAddress());
 				if (mapInfo.getMapType() != null)
-					d.setMapType(MapType.fromStringID(mapInfo.getMapType()
-							.getName()));
+					d.setMapType(MapType.fromStringID(mapInfo.getMapType().getName()));
 				if (mapInfo.getZoom() != 0)
 					d.setZoomLevel(mapInfo.getZoom());
 
@@ -115,75 +108,60 @@ public class MapPathAndStyleSection extends AbstractSection {
 
 						JRDesignDataset dataset = null;
 						if (id != null && id.getDataset() != null)
-							dataset = ModelUtils.getDesignDatasetForDatasetRun(
-									jd, id.getDataset().getDatasetRun());
+							dataset = ModelUtils.getDesignDatasetForDatasetRun(jd, id.getDataset().getDatasetRun());
 						if (dataset == null)
 							dataset = ModelUtils.getDataset(mmap);
 						if (dataset == null)
 							dataset = (JRDesignDataset) jd.getMainDataset();
 
-						ExpressionInterpreter expIntr = ExpressionUtil
-								.getCachedInterpreter(dataset, jd, jConf);
+						ExpressionInterpreter expIntr = ExpressionUtil.getCachedInterpreter(dataset, jd, jConf);
 						for (Item it : id.getItems()) {
-							StandardItemProperty ip = (StandardItemProperty) ItemPropertyUtil.getProperty(
-									it.getProperties(),
-									MapComponent.ITEM_PROPERTY_latitude);
+							StandardItemProperty ip = (StandardItemProperty) ItemPropertyUtil
+									.getProperty(it.getProperties(), MapComponent.ITEM_PROPERTY_latitude);
 							if (ip == null)
 								continue;
-							Double lat = ItemPropertyUtil
-									.getItemPropertyDouble(ip, expIntr);
+							Double lat = ItemPropertyUtil.getItemPropertyDouble(ip, expIntr);
 							if (lat == null)
 								continue;
 
-							ip = (StandardItemProperty) ItemPropertyUtil.getProperty(
-									it.getProperties(),
+							ip = (StandardItemProperty) ItemPropertyUtil.getProperty(it.getProperties(),
 									MapComponent.ITEM_PROPERTY_longitude);
 							if (ip == null)
 								continue;
-							Double lon = ItemPropertyUtil
-									.getItemPropertyDouble(ip, expIntr);
+							Double lon = ItemPropertyUtil.getItemPropertyDouble(ip, expIntr);
 							if (lon == null)
 								continue;
 							Marker m = new Marker(new LatLng(lat, lon));
 							map.put(m, (StandardItem) it);
 
-							ip = (StandardItemProperty) ItemPropertyUtil
-									.getProperty(it.getProperties(),
-											MapComponent.ITEM_PROPERTY_name);
+							ip = (StandardItemProperty) ItemPropertyUtil.getProperty(it.getProperties(),
+									MapComponent.ITEM_PROPERTY_name);
 							String pname = ip == null ? ""
-									: Misc.nvl(ItemPropertyUtil
-											.getItemPropertyString(ip, expIntr));
+									: Misc.nvl(ItemPropertyUtil.getItemPropertyString(ip, expIntr));
 							d.addPoint(m, pname);
 						}
 					}
 				}
 				if (d.open() == Window.OK) {
-					Map<String, java.util.List<Marker>> markersList = d
-							.getPointsList();
+					Map<String, java.util.List<Marker>> markersList = d.getPointsList();
 					StandardItemData sid = null;
 					for (String path : markersList.keySet()) {
 						List<Marker> points = markersList.get(path);
 						for (Marker m : points) {
 							StandardItem si = map.get(m);
 							if (si != null) {
-								StandardItemProperty ip = (StandardItemProperty) ItemPropertyUtil.getProperty(
-										si.getProperties(),
-										MapComponent.ITEM_PROPERTY_latitude);
+								StandardItemProperty ip = (StandardItemProperty) ItemPropertyUtil
+										.getProperty(si.getProperties(), MapComponent.ITEM_PROPERTY_latitude);
 								if (ip.getValueExpression() != null)
-									ip.setValueExpression(new JRDesignExpression(
-											m.getPosition().getLat().toString()));
+									ip.setValueExpression(new JRDesignExpression(m.getPosition().getLat().toString()));
 								else
-									ip.setValue(m.getPosition().getLat()
-											.toString());
-								ip = (StandardItemProperty) ItemPropertyUtil.getProperty(
-										si.getProperties(),
+									ip.setValue(m.getPosition().getLat().toString());
+								ip = (StandardItemProperty) ItemPropertyUtil.getProperty(si.getProperties(),
 										MapComponent.ITEM_PROPERTY_longitude);
 								if (ip.getValueExpression() != null)
-									ip.setValueExpression(new JRDesignExpression(
-											m.getPosition().getLng().toString()));
+									ip.setValueExpression(new JRDesignExpression(m.getPosition().getLng().toString()));
 								else
-									ip.setValue(m.getPosition().getLng()
-											.toString());
+									ip.setValue(m.getPosition().getLng().toString());
 							} else {
 								// will add it to the last itemdata, so we
 								// append
@@ -193,38 +171,26 @@ public class MapPathAndStyleSection extends AbstractSection {
 										sid = new StandardItemData();
 										newMarkers.add(sid);
 									} else
-										sid = (StandardItemData) newMarkers
-												.get(newMarkers.size() - 1);
+										sid = (StandardItemData) newMarkers.get(newMarkers.size() - 1);
 								}
 								si = new StandardItem();
-								si.addItemProperty(new StandardItemProperty(
-										MapComponent.ITEM_PROPERTY_name, path,
-										null));
-								si.addItemProperty(new StandardItemProperty(
-										MapComponent.ITEM_PROPERTY_latitude, m
-												.getPosition().getLat()
-												.floatValue()
-												+ "f", null)); //$NON-NLS-1$ //$NON-NLS-2$
-								si.addItemProperty(new StandardItemProperty(
-										MapComponent.ITEM_PROPERTY_longitude, m
-												.getPosition().getLng()
-												.floatValue()
-												+ "f", null)); //$NON-NLS-1$ //$NON-NLS-2$
+								si.addItemProperty(
+										new StandardItemProperty(MapComponent.ITEM_PROPERTY_name, path, null));
+								si.addItemProperty(new StandardItemProperty(MapComponent.ITEM_PROPERTY_latitude,
+										m.getPosition().getLat().floatValue() + "f", null)); //$NON-NLS-1$ //$NON-NLS-2$
+								si.addItemProperty(new StandardItemProperty(MapComponent.ITEM_PROPERTY_longitude,
+										m.getPosition().getLng().floatValue() + "f", null)); //$NON-NLS-1$ //$NON-NLS-2$
 								sid.addItem(si);
 							}
 						}
 					}
-					changeProperty(
-							StandardMapComponent.PROPERTY_PATH_DATA_LIST,
-							newMarkers);
+					changeProperty(StandardMapComponent.PROPERTY_PATH_DATA_LIST, newMarkers);
 				}
 			}
 		});
 
-		createWidget4Property(parent,
-				StandardMapComponent.PROPERTY_PATH_DATA_LIST);
-		createWidget4Property(parent,
-				StandardMapComponent.PROPERTY_PATH_STYLE_LIST);
+		createWidget4Property(parent, StandardMapComponent.PROPERTY_PATH_DATA_LIST);
+		createWidget4Property(parent, StandardMapComponent.PROPERTY_PATH_STYLE_LIST);
 	}
 
 }

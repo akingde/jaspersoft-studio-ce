@@ -100,7 +100,7 @@ public class MarkersPropertyDescriptor extends AItemDataListPropertyDescriptor {
 						@Override
 						public void widgetSelected(SelectionEvent e) {
 							if (tabFolder.getSelection() == tabItem)
-								pmap.initMap(); 
+								pmap.initMap();
 						}
 					});
 
@@ -207,7 +207,8 @@ public class MarkersPropertyDescriptor extends AItemDataListPropertyDescriptor {
 
 											msmap.put(m, (StandardItem) it);
 											LatLng position = m.getPosition();
-											markersList.add(position.getLat() + " : " + position.getLng());
+											if (markersList != null)
+												markersList.add(position.getLat() + " : " + position.getLng());
 										}
 									}
 								}

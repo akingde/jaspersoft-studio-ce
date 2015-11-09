@@ -59,7 +59,7 @@ public class ItemLabelProvider extends ColumnLabelProvider implements ITableLabe
 				if (descriptor.isShowAllProperties() && Misc.isNullOrEmpty(descriptor.getItemPropertyDescriptors()))
 					for (ItemProperty ip : item.getProperties())
 						str += ip.getName() + ": " + iplp.getText(ip) //$NON-NLS-1$
-								+ "; "; //$NON-NLS-1$ 
+								+ "; "; //$NON-NLS-1$
 				else
 					for (ItemPropertyDescription<?> ipd : descriptor.getItemPropertyDescriptors()) {
 						// if (ipd.isMandatory())
@@ -159,7 +159,7 @@ public class ItemLabelProvider extends ColumnLabelProvider implements ITableLabe
 				if (descriptor.isShowAllProperties() && Misc.isNullOrEmpty(descriptor.getItemPropertyDescriptors()))
 					for (ItemProperty ip : item.getProperties())
 						str += ip.getName() + ": " + iplp.getText(ip) //$NON-NLS-1$
-								+ "; "; //$NON-NLS-1$ 
+								+ "; "; //$NON-NLS-1$
 				else
 					for (ItemPropertyDescription<?> ipd : descriptor.getItemPropertyDescriptors()) {
 						for (ItemProperty ip : item.getProperties()) {

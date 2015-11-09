@@ -25,6 +25,7 @@ import org.eclipse.jface.window.ToolTip;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -435,7 +436,18 @@ public class SPItemDataList extends ASPropertyWidget<AItemDataListPropertyDescri
 	}
 
 	protected void createDsLabelProvider() {
-		dsTViewer.setLabelProvider(new ItemLabelProvider(getDescriptor()));
+		dsTViewer.setLabelProvider(new ItemLabelProvider(getDescriptor()) {
+			@Override
+			public Image getImage(Object element) {
+				return null;
+			}
+
+			@Override
+			public String getText4ItemData(ItemData element) {
+				JRElementDataset ds = element.getDataset();
+				return (ds != null ? getText(ds) : "Item Data " + (itemDatas.indexOf(element) + 1));
+			}
+		});
 	}
 
 	private void handleUpElement(TreeViewer tviewer) {
