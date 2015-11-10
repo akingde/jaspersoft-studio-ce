@@ -92,12 +92,24 @@ public class JSSCompoundCommand extends CompoundCommand {
 	
 	/**
 	 * Set the reference node node if and only if the actual value
-	 * is null
+	 * is null. the passed node is used to get the root is possible and
+	 * that is used as reference node. This is done because maybe the node
+	 * will be deleted by another command in the meantime, so during the execution
+	 * it could be outside the hierarchy. The root instead is never deleted
 	 * 
 	 * @param referenceNode the reference node
 	 */
 	public void setReferenceNodeIfNull(ANode referenceNode){
-		if (this.referenceNode == null) this.referenceNode = referenceNode;
+		if (this.referenceNode == null) {
+			ANode newReferenceNode = referenceNode;
+			if (newReferenceNode != null){
+				ANode root = (ANode)newReferenceNode.getRoot();
+				if (root != null){
+					newReferenceNode = root;
+				}
+			}
+			this.referenceNode = newReferenceNode;
+		}
 	}
 	
 	/**
@@ -108,8 +120,15 @@ public class JSSCompoundCommand extends CompoundCommand {
 	 */
 	public void setReferenceNodeIfNull(Object referenceNode){
 		if (this.referenceNode == null && referenceNode instanceof ANode){
-			this.referenceNode = (ANode)referenceNode;
-		}
+			ANode newReferenceNode = (ANode)referenceNode;
+			if (newReferenceNode != null){
+				ANode root = (ANode)newReferenceNode.getRoot();
+				if (root != null){
+					newReferenceNode = root;
+				}
+			}
+			this.referenceNode = newReferenceNode;
+		} 
 	}
 	
 	/**
