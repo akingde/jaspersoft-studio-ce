@@ -35,8 +35,7 @@ import com.jaspersoft.studio.components.table.model.column.command.RefreshColumn
 import com.jaspersoft.studio.components.table.model.columngroup.MColumnGroup;
 import com.jaspersoft.studio.components.table.model.columngroup.command.CreateColumnGroupCommand;
 import com.jaspersoft.studio.components.table.part.editpolicy.JSSCompundTableCommand;
-import com.jaspersoft.studio.editor.outline.actions.ACreateAction;
-import com.jaspersoft.studio.editor.palette.JDPaletteCreationFactory;
+import com.jaspersoft.studio.editor.action.ACachedSelectionAction;
 import com.jaspersoft.studio.model.ANode;
 
 import net.sf.jasperreports.components.table.StandardColumnGroup;
@@ -44,7 +43,7 @@ import net.sf.jasperreports.components.table.StandardColumnGroup;
 /**
  *  Create group from a set of columns and create also an header for them 
  */
-public class GroupColumnsAction extends ACreateAction {
+public class GroupColumnsAction extends ACachedSelectionAction {
 
 	/**
 	 * The Constant ID.
@@ -59,7 +58,6 @@ public class GroupColumnsAction extends ACreateAction {
 	 */
 	public GroupColumnsAction(IWorkbenchPart part) {
 		super(part);
-		setCreationFactory(new JDPaletteCreationFactory(MColumnGroup.class));
 	}
 
 	/**
@@ -71,10 +69,8 @@ public class GroupColumnsAction extends ACreateAction {
 		setText(Messages.CreateColumnAction_create_column_group);
 		setToolTipText(Messages.CreateColumnAction_create_column_group_tool_tip);
 		setId(GroupColumnsAction.ID);
-		setImageDescriptor(Activator.getDefault().getImageDescriptor(
-				"icons/table-join-row.png"));
-		setDisabledImageDescriptor(Activator.getDefault().getImageDescriptor(
-				"icons/table-join-row.png"));
+		setImageDescriptor(Activator.getDefault().getImageDescriptor("icons/table-join-row.png"));
+		setDisabledImageDescriptor(Activator.getDefault().getImageDescriptor("icons/table-join-row.png"));
 		setEnabled(false);
 	}
 
