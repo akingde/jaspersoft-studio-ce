@@ -114,7 +114,10 @@ public class JSSCompoundCommand extends CompoundCommand {
 	
 	/**
 	 * Set the reference node node if and only if the actual value
-	 * is null and the new value is an ANode
+	 * is null and the value is an ANode. the passed node is used to get the root 
+	 * is possible and that is used as reference node. This is done because maybe the node
+	 * will be deleted by another command in the meantime, so during the execution
+	 * it could be outside the hierarchy. The root instead is never deleted
 	 * 
 	 * @param referenceNode the reference node
 	 */
