@@ -107,6 +107,10 @@
          id="org.eclipse.jgit.http.apache"
          version="0.0.0"/>
 
+   <includes
+         id="org.eclipse.help"
+         version="0.0.0"/>
+
    <requires>
       <import plugin="org.eclipse.ui.intro"/>
       <import plugin="com.jaspersoft.studio" version="6.2.0" match="greaterOrEqual"/>
