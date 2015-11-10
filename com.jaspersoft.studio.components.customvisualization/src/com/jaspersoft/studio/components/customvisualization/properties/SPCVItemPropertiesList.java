@@ -19,12 +19,16 @@ import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
+import org.eclipse.swt.events.KeyAdapter;
+import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -68,8 +72,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
  * 
  */
-public class SPCVItemPropertiesList extends
-		ASPropertyWidget<CVItemPropertiesDescriptor> {
+public class SPCVItemPropertiesList extends ASPropertyWidget<CVItemPropertiesDescriptor> {
 
 	private TableViewer propertiesTV;
 	private Button btnAddProperty;
@@ -81,8 +84,7 @@ public class SPCVItemPropertiesList extends
 	private Composite form;
 	private Composite cmp;
 
-	public SPCVItemPropertiesList(Composite parent, AbstractSection section,
-			CVItemPropertiesDescriptor pdescriptor) {
+	public SPCVItemPropertiesList(Composite parent, AbstractSection section, CVItemPropertiesDescriptor pdescriptor) {
 		super(parent, section, pdescriptor);
 	}
 
@@ -103,13 +105,11 @@ public class SPCVItemPropertiesList extends
 	}
 
 	private void addNewPropertyBtnPressed() {
-		CVItemPropertyDialog d = new CVItemPropertyDialog(UIUtils.getShell(),
-				null, null);
+		CVItemPropertyDialog d = new CVItemPropertyDialog(UIUtils.getShell(), null, null);
 		d.setExpressionContext(getExpressionContext());
 		if (d.open() == Window.OK) {
 			itemProps.add(d.getItemProperty());
-			section.changeProperty(CVDesignComponent.PROPERTY_ITEM_PROPERTIES,
-					itemProps);
+			section.changeProperty(CVDesignComponent.PROPERTY_ITEM_PROPERTIES, itemProps);
 		}
 	}
 
@@ -117,15 +117,13 @@ public class SPCVItemPropertiesList extends
 		ItemProperty p = getCurrentSelectedProperty();
 		if (p != null) {
 			ItemProperty clonedP = (ItemProperty) p.clone();
-			CVItemPropertyDialog d = new CVItemPropertyDialog(
-					UIUtils.getShell(), clonedP, null);
+			CVItemPropertyDialog d = new CVItemPropertyDialog(UIUtils.getShell(), clonedP, null);
 			d.setExpressionContext(getExpressionContext());
 			if (d.open() == Window.OK) {
 				int idx = itemProps.indexOf(p);
 				itemProps.remove(p);
 				itemProps.add(idx, clonedP);
-				section.changeProperty(
-						CVDesignComponent.PROPERTY_ITEM_PROPERTIES, itemProps);
+				section.changeProperty(CVDesignComponent.PROPERTY_ITEM_PROPERTIES, itemProps);
 			}
 		}
 	}
@@ -134,14 +132,12 @@ public class SPCVItemPropertiesList extends
 		ItemProperty p = getCurrentSelectedProperty();
 		if (p != null) {
 			itemProps.remove(p);
-			section.changeProperty(CVDesignComponent.PROPERTY_ITEM_PROPERTIES,
-					itemProps);
+			section.changeProperty(CVDesignComponent.PROPERTY_ITEM_PROPERTIES, itemProps);
 		}
 	}
 
 	private ItemProperty getCurrentSelectedProperty() {
-		Object selEl = ((IStructuredSelection) propertiesTV.getSelection())
-				.getFirstElement();
+		Object selEl = ((IStructuredSelection) propertiesTV.getSelection()).getFirstElement();
 		if (selEl instanceof ItemProperty) {
 			return (ItemProperty) selEl;
 		}
@@ -152,27 +148,23 @@ public class SPCVItemPropertiesList extends
 		propertiesGrp = new Group(parent, SWT.NONE);
 		propertiesGrp.setLayout(new GridLayout(2, false));
 
-		Composite cmpItemPropertiesTableViewer = new Composite(propertiesGrp,
-				SWT.NONE);
-		cmpItemPropertiesTableViewer.setLayoutData(new GridData(SWT.FILL,
-				SWT.FILL, true, true, 1, 3));
+		Composite cmpItemPropertiesTableViewer = new Composite(propertiesGrp, SWT.NONE);
+		cmpItemPropertiesTableViewer.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 3));
 		TableColumnLayout tl_itemPropertiesTableViewer = new TableColumnLayout();
 		cmpItemPropertiesTableViewer.setLayout(tl_itemPropertiesTableViewer);
 
-		propertiesTV = new TableViewer(cmpItemPropertiesTableViewer, SWT.BORDER
-				| SWT.V_SCROLL | SWT.SINGLE | SWT.FULL_SELECTION);
+		propertiesTV = new TableViewer(cmpItemPropertiesTableViewer,
+				SWT.BORDER | SWT.V_SCROLL | SWT.SINGLE | SWT.FULL_SELECTION);
 		propertiesTV.getTable().setHeaderVisible(true);
 		propertiesTV.getTable().setLinesVisible(true);
 
-		TableViewerColumn tvcName = new TableViewerColumn(propertiesTV,
-				SWT.NONE);
+		TableViewerColumn tvcName = new TableViewerColumn(propertiesTV, SWT.NONE);
 		tvcName.getColumn().setText(Messages.SPCVItemPropertiesList_ColName);
 		tvcName.setLabelProvider(new ItemPropertyNameLabelProvider());
 		tl_itemPropertiesTableViewer.setColumnData(tvcName.getColumn(),
 				new ColumnWeightData(1, ColumnWeightData.MINIMUM_WIDTH, true));
 
-		TableViewerColumn tvcValue = new TableViewerColumn(propertiesTV,
-				SWT.NONE);
+		TableViewerColumn tvcValue = new TableViewerColumn(propertiesTV, SWT.NONE);
 		tvcValue.getColumn().setText(Messages.SPCVItemPropertiesList_ColValue);
 		tvcValue.setLabelProvider(new ItemPropertyValueLabelProvider());
 		tl_itemPropertiesTableViewer.setColumnData(tvcValue.getColumn(),
@@ -189,8 +181,7 @@ public class SPCVItemPropertiesList extends
 
 		btnAddProperty = new Button(propertiesGrp, SWT.PUSH);
 		btnAddProperty.setText(Messages.SPCVItemPropertiesList_Add);
-		btnAddProperty.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false,
-				false));
+		btnAddProperty.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false));
 		btnAddProperty.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -200,8 +191,7 @@ public class SPCVItemPropertiesList extends
 
 		btnModifyProperty = new Button(propertiesGrp, SWT.PUSH);
 		btnModifyProperty.setText(Messages.SPCVItemPropertiesList_Edit);
-		btnModifyProperty.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false,
-				false));
+		btnModifyProperty.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false));
 		btnModifyProperty.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -211,14 +201,27 @@ public class SPCVItemPropertiesList extends
 
 		btnRemoveProperty = new Button(propertiesGrp, SWT.PUSH);
 		btnRemoveProperty.setText(Messages.SPCVItemPropertiesList_Remove);
-		btnRemoveProperty.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false,
-				false));
+		btnRemoveProperty.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false));
 		btnRemoveProperty.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				removePropertyBtnPressed();
 			}
 		});
+		propertiesTV.addSelectionChangedListener(new ISelectionChangedListener() {
+
+			@Override
+			public void selectionChanged(SelectionChangedEvent event) {
+				enablePropertiesTVButtons();
+			}
+		});
+		propertiesTV.getTable().addKeyListener(new KeyAdapter() {
+			public void keyReleased(KeyEvent e) {
+				if (btnRemoveProperty.isEnabled() && (e.keyCode == SWT.DEL || e.keyCode == SWT.BS))
+					removePropertyBtnPressed();
+			}
+		});
+		enablePropertiesTVButtons();
 		return propertiesTV;
 	}
 
@@ -241,16 +244,13 @@ public class SPCVItemPropertiesList extends
 		if (dataset == null)
 			dataset = (JRDesignDataset) jd.getMainDataset();
 
-		ExpressionInterpreter expIntr = ExpressionUtil.getCachedInterpreter(
-				dataset, jd, jConf);
+		ExpressionInterpreter expIntr = ExpressionUtil.getCachedInterpreter(dataset, jd, jConf);
 		for (ItemProperty ip : itemProps) {
 			// let's get our description
 			if (ip.getName().equals("module")) {
-				String module = ItemPropertyUtil.getItemPropertyString(
-						(StandardItemProperty) ip, expIntr);
+				String module = ItemPropertyUtil.getItemPropertyString((StandardItemProperty) ip, expIntr);
 				if (!Misc.isNullOrEmpty(module)) {
-					ComponentDescriptor newCd = UIManager.getDescriptor(jConf,
-							module);
+					ComponentDescriptor newCd = UIManager.getDescriptor(jConf, module);
 					if (newCd == null) {
 						stackLayout.topControl = propertiesGrp;
 						cmp.layout(true);
@@ -260,9 +260,8 @@ public class SPCVItemPropertiesList extends
 						refresh = true;
 						try {
 							for (WItemProperty wip : wIProps)
-								wip.setValue((StandardItemProperty) ItemPropertyUtil
-										.getProperty(itemProps, wip.getIpDesc()
-												.getName()));
+								wip.setValue((StandardItemProperty) ItemPropertyUtil.getProperty(itemProps,
+										wip.getIpDesc().getName()));
 						} finally {
 							refresh = false;
 						}
@@ -291,13 +290,10 @@ public class SPCVItemPropertiesList extends
 									FormItemDialog.createSeparator(form);
 							}
 							first = false;
-							for (ComponentPropertyDescriptor pd : csd
-									.getProperties()) {
-								ItemPropertyDescription<?> ipdesc = UIManager
-										.createItemPropertyDescriptor(pd);
+							for (ComponentPropertyDescriptor pd : csd.getProperties()) {
+								ItemPropertyDescription<?> ipdesc = UIManager.createItemPropertyDescriptor(pd);
 								descriptor.addItemPropertyDescriptor(ipdesc);
-								wIProps.add(createItemProperty(c, ipdesc,
-										descriptor, ec));
+								wIProps.add(createItemProperty(c, ipdesc, descriptor, ec));
 							}
 						}
 						form.layout(true);
@@ -318,25 +314,21 @@ public class SPCVItemPropertiesList extends
 	}
 
 	private ExpressionContext getExpressionContext() {
-		return ModelUtils.getElementExpressionContext(null,
-				section.getElement());
+		return ModelUtils.getElementExpressionContext(null, section.getElement());
 	}
 
-	protected WItemProperty createItemProperty(Composite cmp,
-			final ItemPropertyDescription<?> ipd,
+	protected WItemProperty createItemProperty(Composite cmp, final ItemPropertyDescription<?> ipd,
 			CVCPropertyDescriptor descriptor, ExpressionContext ec) {
 		Label lbl = new Label(cmp, SWT.NONE);
 		lbl.setText(ipd.getLabel());
 		lbl.setToolTipText(ipd.getToolTip());
 
-		final WItemProperty expr = new WItemProperty(cmp, SWT.NONE, 1,
-				descriptor, ipd);
+		final WItemProperty expr = new WItemProperty(cmp, SWT.NONE, 1, descriptor, ipd);
 		expr.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		expr.setExpressionContext(ec);
 		if (ipd.isReadOnly())
 			expr.setEnabled(false);
-		final ItemProperty p = ItemPropertyUtil.getProperty(itemProps,
-				ipd.getName());
+		final ItemProperty p = ItemPropertyUtil.getProperty(itemProps, ipd.getName());
 		if (p != null)
 			expr.setValue((StandardItemProperty) p);
 		expr.addModifyListener(new ItemPropertyModifiedListener() {
@@ -349,8 +341,7 @@ public class SPCVItemPropertiesList extends
 
 					@Override
 					public void run() {
-						ItemProperty p = ItemPropertyUtil.getProperty(
-								itemProps, ipd.getName());
+						ItemProperty p = ItemPropertyUtil.getProperty(itemProps, ipd.getName());
 						if (p != null) {
 							int idx = itemProps.indexOf(p);
 							if (idx >= 0)
@@ -359,9 +350,7 @@ public class SPCVItemPropertiesList extends
 								itemProps.add(expr.getValue());
 						} else
 							itemProps.add(expr.getValue());
-						section.changeProperty(
-								CVDesignComponent.PROPERTY_ITEM_PROPERTIES,
-								itemProps);
+						section.changeProperty(CVDesignComponent.PROPERTY_ITEM_PROPERTIES, itemProps);
 					}
 				});
 
@@ -402,8 +391,7 @@ public class SPCVItemPropertiesList extends
 			lbl.setText(text);
 			lbl.setFont(ResourceManager.getBoldFont(lbl.getFont()));
 		}
-		new Label(ec, SWT.SEPARATOR | SWT.HORIZONTAL)
-				.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		new Label(ec, SWT.SEPARATOR | SWT.HORIZONTAL).setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
@@ -414,6 +402,11 @@ public class SPCVItemPropertiesList extends
 		c.setLayoutData(new GridData(GridData.FILL_BOTH));
 
 		return c;
+	}
+
+	private void enablePropertiesTVButtons() {
+		btnModifyProperty.setEnabled(!propertiesTV.getSelection().isEmpty());
+		btnRemoveProperty.setEnabled(!propertiesTV.getSelection().isEmpty());
 	}
 
 	private class CVCPropertyDescriptor extends ADescriptor {
