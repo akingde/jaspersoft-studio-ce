@@ -10,8 +10,6 @@ package com.jaspersoft.studio.editor.outline.actions;
 
 import java.util.List;
 
-import net.sf.jasperreports.engine.type.BandTypeEnum;
-
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -22,8 +20,11 @@ import org.eclipse.ui.PlatformUI;
 import com.jaspersoft.studio.editor.action.ACachedSelectionAction;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.model.band.command.CreateBandDetailCommand;
+
+import net.sf.jasperreports.engine.type.BandTypeEnum;
 
 /**
  * Action used to add a new detail band to the report
@@ -48,15 +49,11 @@ public class CreateDetailBandAction extends ACachedSelectionAction {
 	}
 
 	/**
-	 * The action is enabled only if there is a single band selected and that band is a detail
+	 * The action is enabled on the elements inside a detail band
 	 */
 	@Override
 	protected boolean calculateEnabled() {
-		List<Object> elements = editor.getSelectionCache().getSelectionModelForType(MBand.class);
-		if  (elements.size() == 1 && ((MBand) elements.get(0)).getBandType() == BandTypeEnum.DETAIL){
-			return true;
-		}
-		elements = editor.getSelectionCache().getSelectionModelForType(ANode.class);
+		List<Object> elements = editor.getSelectionCache().getSelectionModelForType(MGraphicElement.class);
 		if (elements.size() > 0 && getParentBand((ANode)elements.get(0)) != null){
 			return true;
 		}

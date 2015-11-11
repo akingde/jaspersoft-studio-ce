@@ -64,6 +64,7 @@ import com.jaspersoft.studio.editor.outline.actions.CreateBandAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateConditionalStyleAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateDatasetAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateDetailBandAction;
+import com.jaspersoft.studio.editor.outline.actions.CreateDetailBandActionOnDetail;
 import com.jaspersoft.studio.editor.outline.actions.CreateFieldAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateGroupAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateParameterAction;
@@ -344,7 +345,7 @@ public class AppContextMenuProvider extends AContextMenuProvider {
 		if (action != null && action.isEnabled())
 			menu.add(action);
 
-		//HIDE abd SHOW BAND ACTIONS
+		//HIDE and SHOW BAND ACTIONS
 		action = getActionRegistry().getAction(HideElementsAction.ID_VISIBLE);
 		if (action != null && action.isEnabled())
 			menu.add(action);
@@ -352,8 +353,11 @@ public class AppContextMenuProvider extends AContextMenuProvider {
 		action = getActionRegistry().getAction(HideElementsAction.ID_NOT_VISIBLE);
 		if (action != null && action.isEnabled())
 			menu.add(action);
-		
 
+		action = getActionRegistry().getAction(CreateDetailBandActionOnDetail.ID);
+		if (action != null && action.isEnabled())
+			menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
+		
 		action = getActionRegistry().getAction(ActionFactory.DELETE.getId());
 		if (action != null && action.isEnabled())
 			menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
