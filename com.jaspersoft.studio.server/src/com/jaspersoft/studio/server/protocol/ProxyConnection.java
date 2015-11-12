@@ -463,6 +463,8 @@ public class ProxyConnection implements IConnection {
 
 	@Override
 	public boolean isSupported(Feature f) {
+		if (c == null)
+			return false;
 		return c.isSupported(f);
 	}
 
