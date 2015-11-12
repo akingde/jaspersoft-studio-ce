@@ -61,7 +61,9 @@ public class MapDatasetSection extends AbstractSection {
 
 		FormText mapPickSuggestion = new FormText(parent, SWT.NONE);
 		mapPickSuggestion.setText(Messages.MarkerPage_0, true, false);
-		mapPickSuggestion.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalIndent = 5;
+		mapPickSuggestion.setLayoutData(gd);
 		mapPickSuggestion.setWhitespaceNormalized(true);
 		mapPickSuggestion.addHyperlinkListener(new HyperlinkAdapter() {
 

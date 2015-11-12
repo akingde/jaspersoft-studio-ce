@@ -444,8 +444,7 @@ public class SPItemDataList extends ASPropertyWidget<AItemDataListPropertyDescri
 
 			@Override
 			public String getText4ItemData(ItemData element) {
-				JRElementDataset ds = element.getDataset();
-				return (ds != null ? getText(ds) : "Item Data " + (itemDatas.indexOf(element) + 1));
+				return "Item Data " + (itemDatas.indexOf(element) + 1);
 			}
 		});
 	}
