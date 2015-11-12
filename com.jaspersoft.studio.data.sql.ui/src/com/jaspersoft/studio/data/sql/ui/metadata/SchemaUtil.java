@@ -56,7 +56,8 @@ public class SchemaUtil {
 				stmt.close();
 			} else if (dbproduct.equalsIgnoreCase("Apache Hive")
 					|| dbproduct.equalsIgnoreCase("Impala")
-					|| dbproduct.equalsIgnoreCase("ApacheHive")) {
+					|| dbproduct.equalsIgnoreCase("ApacheHive")
+					|| dbproduct.equalsIgnoreCase("Spark SQL")) {
 				List<String> schemas = new ArrayList<String>();
 				ResultSet rs = c.getMetaData().getSchemas();
 				try {
