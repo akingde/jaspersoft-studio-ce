@@ -173,7 +173,7 @@ public class CompileAction extends SelectionAction implements IMenuCreator {
 				// we are also not looking very good for for subreports, because expression evaluation is not good
 				// file.getProject().build(IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor);
 				if (compileMain){
-					IFile destFIle = builder.compileJRXML(mfile, monitor);
+					IFile destFIle = builder.compileJRXML(mfile, monitor, jConfig);
 					if (console != null && destFIle != null){
 						File file =  destFIle.getRawLocation().toFile();
 						if (file.exists()){
@@ -187,7 +187,7 @@ public class CompileAction extends SelectionAction implements IMenuCreator {
 				for (File f : fmap.keySet()) {
 					IFile file = fmap.get(f);
 					if (file != null) {
-						builder.compileJRXML(file, monitor);
+						builder.compileJRXML(file, monitor, jConfig);
 					} else {
 						try {
 							JasperCompileManager.compileReportToFile(f.getAbsolutePath());
@@ -271,12 +271,12 @@ public class CompileAction extends SelectionAction implements IMenuCreator {
 
 				JasperReportsBuilder builder = new JasperReportsBuilder();
 				if (compileMain)
-					builder.compileJRXML(mfile, monitor);
+					builder.compileJRXML(mfile, monitor, jConfig);
 				Map<File, IFile> fmap = SubreportsUtil.getSubreportFiles(jConfig, mfile, jConfig.getJasperDesign(), monitor);
 				for (File f : fmap.keySet()) {
 					IFile file = fmap.get(f);
 					if (file != null) {
-						builder.compileJRXML(file, monitor);
+						builder.compileJRXML(file, monitor, jConfig);
 					} else {
 						try {
 							JasperCompileManager.compileReportToFile(f.getAbsolutePath());

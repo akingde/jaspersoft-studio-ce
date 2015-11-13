@@ -624,7 +624,7 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 			if (JRXMLUtils.getFileExtension(getEditorInput()).equals("")) { //$NON-NLS-1$
 				// save binary
 				try {
-					new JasperReportsBuilder().compileJRXML(resource, monitor);
+					new JasperReportsBuilder().compileJRXML(resource, monitor, getJrContext());
 				} catch (Throwable e) {
 					e.printStackTrace();
 				}
