@@ -23,6 +23,12 @@ import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterEditor;
 
 public class EmptyDataAdapterDescriptor extends DataAdapterDescriptor {
+	
+	/**
+	 * Name of the empty data adapter
+	 */
+	public static final String EMPTY_ADAPTER_NAME ="One Empty Record";
+	
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	@Override

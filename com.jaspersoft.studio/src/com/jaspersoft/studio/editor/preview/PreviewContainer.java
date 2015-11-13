@@ -58,6 +58,7 @@ import org.eclipse.ui.PlatformUI;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterManager;
+import com.jaspersoft.studio.data.empty.EmptyDataAdapterDescriptor;
 import com.jaspersoft.studio.data.storage.JRDefaultDataAdapterStorage;
 import com.jaspersoft.studio.data.widget.DataAdapterAction;
 import com.jaspersoft.studio.data.widget.IDataAdapterRunnable;
@@ -526,6 +527,9 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 				DataAdapterDescriptor defaultDA = defaultStorage.getDefaultJRDataAdapter(jd.getMainDesignDataset());
 				if (defaultDA != null){
 					pt.setDataAdapters(defaultDA.getName());
+				} else {
+					//If no data adapter is available select the default one
+					pt.setDataAdapters(EmptyDataAdapterDescriptor.EMPTY_ADAPTER_NAME);
 				}
 			}
 		}

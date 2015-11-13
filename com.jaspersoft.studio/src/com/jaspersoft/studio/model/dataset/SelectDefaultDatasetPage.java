@@ -133,6 +133,8 @@ public class SelectDefaultDatasetPage extends JSSHelpWizardPage {
 		btnWorkspaceResource.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				//reset the path
+				pathText.setText("");
 				changeSelectionMode();
 				path = pathText.getText();
 				getWizard().getContainer().updateButtons();
@@ -144,6 +146,8 @@ public class SelectDefaultDatasetPage extends JSSHelpWizardPage {
 		btnAbsolutePath.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				//reset the path
+				pathText.setText("");
 				changeSelectionMode();
 				path = pathText.getText();
 				getWizard().getContainer().updateButtons();
@@ -155,6 +159,8 @@ public class SelectDefaultDatasetPage extends JSSHelpWizardPage {
 		btnUrlRemote.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				//reset the path
+				pathText.setText("");
 				changeSelectionMode();
 				path = pathText.getText();
 				getWizard().getContainer().updateButtons();
@@ -177,6 +183,8 @@ public class SelectDefaultDatasetPage extends JSSHelpWizardPage {
 		btnCustom.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				//reset the path
+				pathText.setText("");
 				changeSelectionMode();
 				path = pathText.getText();
 				getWizard().getContainer().updateButtons();

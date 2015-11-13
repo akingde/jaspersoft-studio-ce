@@ -46,6 +46,7 @@ import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterManager;
 import com.jaspersoft.studio.data.IWizardDataEditorProvider;
 import com.jaspersoft.studio.data.actions.CreateDataAdapterAction;
+import com.jaspersoft.studio.data.empty.EmptyDataAdapterDescriptor;
 import com.jaspersoft.studio.data.storage.ADataAdapterStorage;
 import com.jaspersoft.studio.data.ui.SimpleQueryWizardDataEditorComposite;
 import com.jaspersoft.studio.messages.Messages;
@@ -268,7 +269,7 @@ public class StaticWizardDataSourcePage extends JSSWizardRunnablePage {
 		}
 
 		if (dataAdapterDescriptors.size() > 0) {
-			if (!selectDataAdapter("One Empty Record"))
+			if (!selectDataAdapter(EmptyDataAdapterDescriptor.EMPTY_ADAPTER_NAME))
 				if (!selectDataAdapter("Sample DB"))
 					dataAdaptersCombo.select(0);
 			// update the editor control state
