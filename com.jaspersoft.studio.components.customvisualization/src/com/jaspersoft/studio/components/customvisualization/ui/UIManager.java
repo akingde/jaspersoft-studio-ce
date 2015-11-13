@@ -82,7 +82,7 @@ public class UIManager {
 		IContainer destFolder = f.getParent();
 		InputStream is = null;
 		try {
-			File dest = new File(destFolder.getLocationURI().toURL().getFile(), path);
+			File dest = new File(destFolder.getLocation().toOSString(), path);
 
 			// if (isInPlugin(cd)) {
 			// String uri = parentsPath.get(cd);
