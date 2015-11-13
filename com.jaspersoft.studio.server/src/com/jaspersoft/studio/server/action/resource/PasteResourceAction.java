@@ -15,6 +15,8 @@ package com.jaspersoft.studio.server.action.resource;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -375,7 +377,13 @@ public class PasteResourceAction extends Action {
 		else if (parent instanceof MServerProfile)
 			pc = ((MServerProfile) parent).getWsClient();
 		if (pc != null && mc != null)
-			return mc.getServerProfile().getUrl().equals(pc.getServerProfile().getUrl());
+			try {
+				return mc.getServerProfile().getUrl().equals(pc.getServerProfile().getUrl());
+			} catch (MalformedURLException e) {
+				UIUtils.showError(e);
+			} catch (URISyntaxException e) {
+				UIUtils.showError(e);
+			}
 
 		return true;
 	}

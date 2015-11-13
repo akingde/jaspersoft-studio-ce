@@ -14,6 +14,8 @@ package com.jaspersoft.studio.server.export;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -51,7 +53,8 @@ public class AExporter {
 		this.path = path;
 	}
 
-	public IFile exportToIFile(AMResource res, ResourceDescriptor rd, String fkeyname, IProgressMonitor monitor) throws Exception {
+	public IFile exportToIFile(AMResource res, ResourceDescriptor rd, String fkeyname, IProgressMonitor monitor)
+			throws Exception {
 		IFile f = getTempFile(res, rd, fkeyname, getExtension(res), monitor);
 		setServerLocation(res, f);
 		return f;
@@ -62,10 +65,18 @@ public class AExporter {
 			MServerProfile sp = (MServerProfile) res.getRoot();
 			if (sp != null) {
 				ServerProfile v = sp.getValue();
-				f.setPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, PROP_SERVERURL), v.getUrl());
-				f.setPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, PROP_USER), v.getUser() + (v.getOrganisation() != null ? "|" + v.getOrganisation() : ""));
+				try {
+					f.setPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, PROP_SERVERURL), v.getUrl());
+					f.setPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, PROP_USER),
+							v.getUser() + (v.getOrganisation() != null ? "|" + v.getOrganisation() : ""));
+				} catch (MalformedURLException e) {
+					e.printStackTrace();
+				} catch (URISyntaxException e) {
+					e.printStackTrace();
+				}
 			}
-			f.setPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, PROP_REPORTRESOURCE), res.getValue().getUriString());
+			f.setPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, PROP_REPORTRESOURCE),
+					res.getValue().getUriString());
 		}
 	}
 
@@ -75,7 +86,8 @@ public class AExporter {
 		return "";
 	}
 
-	protected IFile getTempFile(AMResource res, ResourceDescriptor rd, String fkeyname, String dextention, IProgressMonitor monitor) throws Exception {
+	protected IFile getTempFile(AMResource res, ResourceDescriptor rd, String fkeyname, String dextention,
+			IProgressMonitor monitor) throws Exception {
 		IFile f = fileurimap.get(fkeyname);
 		if (path != null) {
 			f = ResourcesPlugin.getWorkspace().getRoot().getFile(path);

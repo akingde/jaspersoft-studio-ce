@@ -14,6 +14,8 @@ package com.jaspersoft.studio.server.model.server;
 
 import java.beans.PropertyChangeEvent;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 
 import net.sf.jasperreports.eclipse.builder.jdt.JDTUtils;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
@@ -78,8 +80,7 @@ public class MServerProfile extends ANode {
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		if (evt.getPropertyName().equals(ServerProfile.PROPERTY_NAME)
-				&& getParent() != null) {
+		if (evt.getPropertyName().equals(ServerProfile.PROPERTY_NAME) && getParent() != null) {
 			// The name is changed, ask the parent to reorder the node
 			getParent().propertyChange(evt);
 		}
@@ -91,8 +92,7 @@ public class MServerProfile extends ANode {
 		if (getParent() != null)
 			((ANode) getParent().getRoot()).setJasperConfiguration(jConfig);
 		if (getValue() != null && jConfig != null)
-			jConfig.setProperty(JRXmlBaseWriter.PROPERTY_REPORT_VERSION,
-					getValue().getJrVersion());
+			jConfig.setProperty(JRXmlBaseWriter.PROPERTY_REPORT_VERSION, getValue().getJrVersion());
 	}
 
 	/**
@@ -137,14 +137,21 @@ public class MServerProfile extends ANode {
 		ServerProfile v = getValue();
 		if (v != null && v.getName() != null && !v.getName().isEmpty()) {
 			String tt = v.getName();
-			if (v.getUrl() != null)
-				tt += "\n" + v.getUrl(); //$NON-NLS-1$
-			if (v.getUser() != null)
-				tt += Messages.MServerProfile_2 + v.getUser();
-			String ci = getConnectionInfo();
-			if (!Misc.isNullOrEmpty(ci))
-				tt += "\n\n" + ci; //$NON-NLS-1$
-			return tt;
+			try {
+				if (v.getUrl() != null)
+					tt += "\n" + v.getUrl();
+				if (v.getUser() != null)
+					tt += Messages.MServerProfile_2 + v.getUser();
+				String ci = getConnectionInfo();
+				if (!Misc.isNullOrEmpty(ci))
+					tt += "\n\n" + ci; //$NON-NLS-1$
+				return tt;
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+			} catch (URISyntaxException e) {
+				e.printStackTrace();
+			} // $NON-NLS-1$
+
 		}
 		return getIconDescriptor().getTitle();
 	}
@@ -155,19 +162,14 @@ public class MServerProfile extends ANode {
 			try {
 				ServerInfo info = wsClient.getServerInfo(null);
 				tt += Messages.MServerProfile_5 + info.getVersion();
-				tt += Messages.MServerProfile_6
-						+ Misc.nvl(info.getEditionName())
-						+ " " + (info.getEdition() != null ? info.getEdition() : ""); //$NON-NLS-2$ //$NON-NLS-3$
+				tt += Messages.MServerProfile_6 + Misc.nvl(info.getEditionName()) + " "
+						+ (info.getEdition() != null ? info.getEdition() : ""); //$NON-NLS-1$ //$NON-NLS-3$
 				tt += Messages.MServerProfile_9 + Misc.nvl(info.getBuild());
-				tt += Messages.MServerProfile_10
-						+ Misc.nvl(info.getLicenseType());
-				tt += Messages.MServerProfile_11
-						+ Misc.nvl(info.getExpiration());
+				tt += Messages.MServerProfile_10 + Misc.nvl(info.getLicenseType());
+				tt += Messages.MServerProfile_11 + Misc.nvl(info.getExpiration());
 				tt += Messages.MServerProfile_12 + Misc.nvl(info.getFeatures());
-				tt += Messages.MServerProfile_13
-						+ Misc.nvl(info.getDateFormatPattern());
-				tt += Messages.MServerProfile_14
-						+ Misc.nvl(info.getDatetimeFormatPattern());
+				tt += Messages.MServerProfile_13 + Misc.nvl(info.getDateFormatPattern());
+				tt += Messages.MServerProfile_14 + Misc.nvl(info.getDatetimeFormatPattern());
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -233,16 +235,12 @@ public class MServerProfile extends ANode {
 		// When the value changes maybe is changed the name so send the event to
 		// reorder the node
 		if (getParent() != null)
-			getParent().propertyChange(
-					new PropertyChangeEvent(this, ServerManager.SERVERPROFILE,
-							oldValue, value));
+			getParent().propertyChange(new PropertyChangeEvent(this, ServerManager.SERVERPROFILE, oldValue, value));
 		if (getJasperConfiguration() != null) {
 			if (value == null)
-				getJasperConfiguration().removeProperty(
-						JRXmlBaseWriter.PROPERTY_REPORT_VERSION);
+				getJasperConfiguration().removeProperty(JRXmlBaseWriter.PROPERTY_REPORT_VERSION);
 			else
-				getJasperConfiguration().setProperty(
-						JRXmlBaseWriter.PROPERTY_REPORT_VERSION,
+				getJasperConfiguration().setProperty(JRXmlBaseWriter.PROPERTY_REPORT_VERSION,
 						((ServerProfile) value).getJrVersion());
 		}
 	}
@@ -259,8 +257,7 @@ public class MServerProfile extends ANode {
 		resetTmpPaths();
 	}
 
-	public IFolder getTmpDir(IProgressMonitor monitor) throws IOException,
-			CoreException {
+	public IFolder getTmpDir(IProgressMonitor monitor) throws IOException, CoreException {
 		if (tmpDir == null || !tmpDir.exists()) {
 			String prjpath = getValue().getProjectPath();
 			if (prjpath != null && !prjpath.trim().isEmpty()) {
@@ -271,21 +268,15 @@ public class MServerProfile extends ANode {
 				String ppath = indx >= 0 ? path.substring(0, indx) : path;
 				String fpath = indx >= 0 ? path.substring(indx) : "/"; //$NON-NLS-1$
 
-				IProject prj = ResourcesPlugin.getWorkspace().getRoot()
-						.getProject(ppath);
+				IProject prj = ResourcesPlugin.getWorkspace().getRoot().getProject(ppath);
 				tmpDir = prj.getFolder(fpath);
 			} else {
 				// Need to enable or disable the linked resources support
-				boolean isAllowdLinkedResource = JDTUtils
-						.isAllowdLinkedResourcesSupport();
+				boolean isAllowdLinkedResource = JDTUtils.isAllowdLinkedResourcesSupport();
 				if (!isAllowdLinkedResource)
 					JDTUtils.setLinkedResourcesSupport(true);
-				tmpDir = FileUtils
-						.getInProjectFolder(
-								FileUtils
-										.createTempDir(
-												getValue().getName().replace(
-														" ", "") + "-").toURI(), monitor); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				tmpDir = FileUtils.getInProjectFolder(
+						FileUtils.createTempDir(getValue().getName().replace(" ", "") + "-").toURI(), monitor); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				if (!isAllowdLinkedResource)
 					JDTUtils.setLinkedResourcesSupport(false);
 			}

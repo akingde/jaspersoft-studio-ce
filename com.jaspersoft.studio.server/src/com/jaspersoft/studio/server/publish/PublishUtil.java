@@ -12,6 +12,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.publish;
 
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -44,32 +46,24 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 public class PublishUtil {
 	public static final String KEY_PUBLISH2JSS_DATA = "PUBLISH2JSS_DATA"; //$NON-NLS-1$
 
-	public static List<AMResource> getResources(AMResource parent,
-			IProgressMonitor monitor, JasperReportsConfiguration jrConfig) {
-		List<AMResource> resources = jrConfig.get(KEY_PUBLISH2JSS_DATA,
-				new ArrayList<AMResource>());
+	public static List<AMResource> getResources(AMResource parent, IProgressMonitor monitor,
+			JasperReportsConfiguration jrConfig) {
+		List<AMResource> resources = jrConfig.get(KEY_PUBLISH2JSS_DATA, new ArrayList<AMResource>());
 		jrConfig.put(KEY_PUBLISH2JSS_DATA, resources);
-		loadPreferences(parent, monitor,
-				(IFile) jrConfig.get(FileUtils.KEY_FILE), resources);
+		loadPreferences(parent, monitor, (IFile) jrConfig.get(FileUtils.KEY_FILE), resources);
 		return resources;
 	}
 
-	public static ResourceDescriptor getMainReport(IProgressMonitor monitor,
-			MReportUnit mrunit, JasperDesign jd) {
+	public static ResourceDescriptor getMainReport(IProgressMonitor monitor, MReportUnit mrunit, JasperDesign jd) {
 		String jrxmln = jd.getProperty(AExporter.PROP_REPORTRESOURCE);
 		String unit = mrunit.getValue().getUriString();
 		if (jrxmln != null) {
-			if (unit != null
-					&& jrxmln.startsWith(unit)
-					&& jrxmln.length() > unit.length()
-					&& jrxmln
-							.substring((unit + WSClientHelper._FILES).length())
-							.indexOf('/') < 0) {
+			if (unit != null && jrxmln.startsWith(unit) && jrxmln.length() > unit.length()
+					&& jrxmln.substring((unit + WSClientHelper._FILES).length()).indexOf('/') < 0) {
 				MServerProfile sp = (MServerProfile) mrunit.getRoot();
 				if (sp != null) {
 					ResourceDescriptor rd = new ResourceDescriptor();
-					rd.setName(jrxmln.substring((unit + WSClientHelper._FILES)
-							.length()));
+					rd.setName(jrxmln.substring((unit + WSClientHelper._FILES).length()));
 					rd.setLabel(IDStringValidator.safeChar(rd.getName()));
 					rd.setUriString(jrxmln);
 					rd.setParentFolder(unit + "_files");
@@ -121,10 +115,8 @@ public class PublishUtil {
 				children.set(i, child);
 				return;
 			}
-			if ((child.getUriString() == null && r.getUriString() == null && child
-					.getWsType().equals(r.getWsType()))
-					|| (r.getUriString() != null && r.getUriString().equals(
-							child.getUriString()))) {
+			if ((child.getUriString() == null && r.getUriString() == null && child.getWsType().equals(r.getWsType()))
+					|| (r.getUriString() != null && r.getUriString().equals(child.getUriString()))) {
 				if (r.isMainReport())
 					child.setMainReport(true);
 				children.set(i, child);
@@ -141,8 +133,7 @@ public class PublishUtil {
 			rd.setLabel(name);
 	}
 
-	public static void savePreferences(IFile ifile, List<AMResource> files)
-			throws CoreException {
+	public static void savePreferences(IFile ifile, List<AMResource> files) throws CoreException {
 		Map<QualifiedName, String> pmap = ifile.getPersistentProperties();
 		for (QualifiedName key : pmap.keySet()) {
 			if (key.equals(JrxmlExporter.KEY_REPORT_ISMAIN))
@@ -160,66 +151,57 @@ public class PublishUtil {
 				ovw = OverwriteEnum.OVERWRITE;
 			else if (ovw.equals(OverwriteEnum.OVERWRITE))
 				ovw = OverwriteEnum.IGNORE;
-			ifile.setPersistentProperty(new QualifiedName(Activator.PLUGIN_ID,
-					prefix + ".overwrite"), ovw.getValue());
+			ifile.setPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, prefix + ".overwrite"), ovw.getValue());
 
-			ifile.setPersistentProperty(new QualifiedName(Activator.PLUGIN_ID,
-					prefix + ".reference"), popt.getPublishMethod().toString());
+			ifile.setPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, prefix + ".reference"),
+					popt.getPublishMethod().toString());
 			if (popt.getReferencedResource() != null)
-				ifile.setPersistentProperty(new QualifiedName(
-						Activator.PLUGIN_ID, prefix + ".refPATH"), popt
-						.getReferencedResource().getUriString());
+				ifile.setPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, prefix + ".refPATH"),
+						popt.getReferencedResource().getUriString());
 			else
-				ifile.setPersistentProperty(new QualifiedName(
-						Activator.PLUGIN_ID, prefix + ".refPATH"), null);
+				ifile.setPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, prefix + ".refPATH"), null);
 		}
 	}
 
-	public static void savePreferencesNoOverwrite(IFile ifile, AMResource f)
-			throws CoreException {
+	public static void savePreferencesNoOverwrite(IFile ifile, AMResource f) throws CoreException {
 		if (f instanceof MInputControl) {
 			String prefix = f.getValue().getName();
-			ifile.setPersistentProperty(new QualifiedName(Activator.PLUGIN_ID,
-					prefix + ".overwrite"), Boolean.toString(false));
+			ifile.setPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, prefix + ".overwrite"),
+					Boolean.toString(false));
 		}
 	}
 
-	public static void loadPreferences(AMResource parent,
-			IProgressMonitor monitor, IFile ifile, List<AMResource> files) {
-		if (parent == null || parent.getValue() == null
-				|| parent.getValue().getIsNew())
+	public static void loadPreferences(AMResource parent, IProgressMonitor monitor, IFile ifile,
+			List<AMResource> files) {
+		if (parent == null || parent.getValue() == null || parent.getValue().getIsNew())
 			return;
 		for (AMResource f : files) {
 			loadPreferences(monitor, ifile, f);
 		}
 	}
 
-	public static boolean loadPreferences(IProgressMonitor monitor,
-			IFile ifile, AMResource f) {
+	public static boolean loadPreferences(IProgressMonitor monitor, IFile ifile, AMResource f) {
 		boolean exists = false;
 		PublishOptions popt = f.getPublishOptions();
 		String prefix = f.getValue().getName();
 		try {
-			String ovw = ifile.getPersistentProperty(new QualifiedName(
-					Activator.PLUGIN_ID, prefix + ".overwrite"));
+			String ovw = ifile.getPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, prefix + ".overwrite"));
 			if (ovw != null) {
 				exists = true;
 				popt.setOverwrite(OverwriteEnum.getByValue(ovw));
 			}
-			String ref = ifile.getPersistentProperty(new QualifiedName(
-					Activator.PLUGIN_ID, prefix + ".reference"));
+			String ref = ifile.getPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, prefix + ".reference"));
 			if (ref != null) {
 				exists = true;
 				popt.setPublishMethod(ResourcePublishMethod.valueOf(ref));
-				String path = ifile.getPersistentProperty(new QualifiedName(
-						Activator.PLUGIN_ID, prefix + ".refPATH"));
+				String path = ifile.getPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, prefix + ".refPATH"));
 				if (path != null) {
 					ResourceDescriptor rd = new ResourceDescriptor();
 					rd.setParentFolder(RDUtil.getParentFolder(path));
 					rd.setUriString(path);
 					rd.setWsType(f.getValue().getWsType());
-					popt.setReferencedResource(WSClientHelper.getResource(
-							monitor, f, rd, FileUtils.createTempFile("tmp", "")));
+					popt.setReferencedResource(
+							WSClientHelper.getResource(monitor, f, rd, FileUtils.createTempFile("tmp", "")));
 				} else
 					popt.setPublishMethod(ResourcePublishMethod.LOCAL);
 			}
@@ -230,34 +212,36 @@ public class PublishUtil {
 		return exists;
 	}
 
-	public static List<String[]> loadPath(IProgressMonitor monitor, IFile ifile)
-			throws CoreException {
+	public static List<String[]> loadPath(IProgressMonitor monitor, IFile ifile) throws CoreException {
 		List<String[]> paths = new ArrayList<String[]>();
 		Map<QualifiedName, String> pmap = ifile.getPersistentProperties();
 		int substr = "JRSPATH.".length();
 		for (QualifiedName key : pmap.keySet()) {
 			String lname = key.getLocalName();
-			if (key.getQualifier().equals(Activator.PLUGIN_ID)
-					&& lname.startsWith("JRSPATH."))
+			if (key.getQualifier().equals(Activator.PLUGIN_ID) && lname.startsWith("JRSPATH."))
 				paths.add(new String[] { lname.substring(substr), pmap.get(key) });
-			if (key.getQualifier().equals(Activator.PLUGIN_ID)
-					&& lname.startsWith("JRSUSER."))
+			if (key.getQualifier().equals(Activator.PLUGIN_ID) && lname.startsWith("JRSUSER."))
 				paths.add(new String[] { lname, pmap.get(key) });
 		}
 		return paths;
 	}
 
-	public static void savePath(IFile ifile, AMResource mres)
-			throws CoreException {
+	public static void savePath(IFile ifile, AMResource mres) throws CoreException {
 		ServerProfile sp = mres.getWsClient().getServerProfile();
-		String jrs = sp.getUrl();
-		String user = sp.getUser();
-		if (!Misc.isNullOrEmpty(sp.getOrganisation()))
-			user += "|" + sp.getOrganisation();
-		String uri = mres.getValue().getUriString();
-		ifile.setPersistentProperty(new QualifiedName(Activator.PLUGIN_ID,
-				"JRSPATH." + jrs), uri);
-		ifile.setPersistentProperty(new QualifiedName(Activator.PLUGIN_ID,
-				"JRSUSER." + user), user);
+		String jrs;
+		try {
+			jrs = sp.getUrl();
+			String user = sp.getUser();
+			if (!Misc.isNullOrEmpty(sp.getOrganisation()))
+				user += "|" + sp.getOrganisation();
+			String uri = mres.getValue().getUriString();
+			ifile.setPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, "JRSPATH." + jrs), uri);
+			ifile.setPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, "JRSUSER." + user), user);
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		}
+
 	}
 }

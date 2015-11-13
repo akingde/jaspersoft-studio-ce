@@ -14,6 +14,8 @@ package com.jaspersoft.studio.server.wizard.pages;
 
 import java.io.ByteArrayInputStream;
 import java.lang.reflect.InvocationTargetException;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -495,7 +497,7 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 			sp.setUrl(Misc.nvl(url).trim());
 		}
 
-		public String getUrl() {
+		public String getUrl() throws MalformedURLException, URISyntaxException {
 			return sp.getUrl();
 		}
 

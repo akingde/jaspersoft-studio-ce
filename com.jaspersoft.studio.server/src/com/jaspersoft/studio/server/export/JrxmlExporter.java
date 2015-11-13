@@ -13,6 +13,8 @@
 package com.jaspersoft.studio.server.export;
 
 import java.io.ByteArrayInputStream;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -37,16 +39,15 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class JrxmlExporter extends AExporter {
 	public static final String PROP_REPORT_ISMAIN = "ireport.jasperserver.report.ismain";
-	public static final QualifiedName KEY_REPORT_ISMAIN = new QualifiedName(
-			Activator.PLUGIN_ID, PROP_REPORT_ISMAIN);
+	public static final QualifiedName KEY_REPORT_ISMAIN = new QualifiedName(Activator.PLUGIN_ID, PROP_REPORT_ISMAIN);
 
 	public JrxmlExporter(IPath path) {
 		super(path);
 	}
 
 	@Override
-	public IFile exportToIFile(AMResource res, ResourceDescriptor rd,
-			String fkeyname, IProgressMonitor monitor) throws Exception {
+	public IFile exportToIFile(AMResource res, ResourceDescriptor rd, String fkeyname, IProgressMonitor monitor)
+			throws Exception {
 		IFile f = super.exportToIFile(res, rd, fkeyname, monitor);
 		if (f != null) {
 			boolean disposeContext = false;
@@ -67,10 +68,8 @@ public class JrxmlExporter extends AExporter {
 				if (sp != null)
 					f.setContents(
 							new ByteArrayInputStream(JRXmlWriterHelper
-									.writeReport(null, jd,
-											sp.getValue().getJrVersion())
-									.getBytes("UTF-8")), IFile.KEEP_HISTORY
-									| IFile.FORCE, monitor);
+									.writeReport(null, jd, sp.getValue().getJrVersion()).getBytes("UTF-8")),
+							IFile.KEEP_HISTORY | IFile.FORCE, monitor);
 			} catch (Exception e) {
 				e.printStackTrace();
 			} finally {
@@ -79,8 +78,7 @@ public class JrxmlExporter extends AExporter {
 			}
 		}
 		if (f != null)
-			f.setPersistentProperty(KEY_REPORT_ISMAIN,
-					Boolean.toString(res.getValue().isMainReport()));
+			f.setPersistentProperty(KEY_REPORT_ISMAIN, Boolean.toString(res.getValue().isMainReport()));
 		return f;
 	}
 
@@ -89,19 +87,21 @@ public class JrxmlExporter extends AExporter {
 		if (n != null && n instanceof MServerProfile) {
 			MServerProfile server = (MServerProfile) n;
 			ServerProfile v = server.getValue();
-			jd.setProperty(AExporter.PROP_SERVERURL, v.getUrl());
-			jd.setProperty(
-					AExporter.PROP_USER,
-					v.getUser()
-							+ (v.getOrganisation() != null ? "|"
-									+ v.getOrganisation() : ""));
+			try {
+				jd.setProperty(AExporter.PROP_SERVERURL, v.getUrl());
+				jd.setProperty(AExporter.PROP_USER,
+						v.getUser() + (v.getOrganisation() != null ? "|" + v.getOrganisation() : ""));
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+			} catch (URISyntaxException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
 	protected void setPropReportUnit(AMResource res, JasperDesign jd) {
 		if (!res.getValue().isMainReport())
-			jd.setProperty(AExporter.PROP_REPORTRESOURCE, res.getValue()
-					.getUriString());
+			jd.setProperty(AExporter.PROP_REPORTRESOURCE, res.getValue().getUriString());
 		MReportUnit repunit = res.getReportUnit();
 		if (repunit != null) {
 			ResourceDescriptor runit = repunit.getValue();
@@ -131,7 +131,6 @@ public class JrxmlExporter extends AExporter {
 		// }
 	}
 
-	protected void cacheResource(AMResource res, JRExpression imgexp)
-			throws Exception {
+	protected void cacheResource(AMResource res, JRExpression imgexp) throws Exception {
 	}
 }

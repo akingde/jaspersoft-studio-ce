@@ -12,6 +12,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.protocol.restv2;
 
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.text.DateFormat;
 import java.text.Format;
 import java.text.NumberFormat;
@@ -47,7 +49,7 @@ public abstract class ARestV2Connection implements IConnection {
 		return true;
 	}
 
-	protected String url(String suffix) {
+	protected String url(String suffix) throws MalformedURLException, URISyntaxException {
 		return sp.getUrl() + SUFFIX + suffix;
 	}
 
@@ -117,7 +119,14 @@ public abstract class ARestV2Connection implements IConnection {
 
 	@Override
 	public String getWebservicesUri() {
-		return sp.getUrl();
+		try {
+			return sp.getUrl();
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	@Override

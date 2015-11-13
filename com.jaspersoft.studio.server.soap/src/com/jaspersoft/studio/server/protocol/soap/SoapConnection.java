@@ -140,7 +140,7 @@ public class SoapConnection implements IConnection {
 		return true;
 	}
 
-	private static void setupJServer(JServer server, ServerProfile sp) {
+	private static void setupJServer(JServer server, ServerProfile sp) throws Exception{
 		AxisProperties
 				.setProperty(
 						DefaultCommonsHTTPClientProperties.MAXIMUM_CONNECTIONS_PER_HOST_PROPERTY_KEY,

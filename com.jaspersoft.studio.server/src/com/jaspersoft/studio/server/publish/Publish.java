@@ -14,6 +14,8 @@ package com.jaspersoft.studio.server.publish;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,22 +61,17 @@ public class Publish {
 		this.jrConfig = jrConfig;
 	}
 
-	public IStatus publish(AMJrxmlContainer node, JasperDesign jd,
-			IProgressMonitor monitor) {
+	public IStatus publish(AMJrxmlContainer node, JasperDesign jd, IProgressMonitor monitor) {
 		try {
-			boolean isNewRU = node instanceof MReportUnit
-					&& node.getValue().getIsNew();
+			boolean isNewRU = node instanceof MReportUnit && node.getValue().getIsNew();
 			publishResources(monitor, jd, node);
 			if (monitor.isCanceled())
 				return Status.CANCEL_STATUS;
 			// UIUtils.showInformation(Messages.JrxmlPublishAction_successpublishing);
 
 			if (isNewRU)
-				JaspersoftStudioPlugin
-						.getInstance()
-						.getUsageManager()
-						.audit(UsageStatisticsIDs.SERVER_UPLOAD,
-								UsageStatisticsIDs.CATEGORY_SERVER);
+				JaspersoftStudioPlugin.getInstance().getUsageManager().audit(UsageStatisticsIDs.SERVER_UPLOAD,
+						UsageStatisticsIDs.CATEGORY_SERVER);
 
 			String str = Messages.Publish_0;
 			for (String mres : resources)
@@ -101,14 +98,13 @@ public class Publish {
 		return Status.OK_STATUS;
 	}
 
-	private IStatus publishResources(IProgressMonitor monitor, JasperDesign jd,
-			AMJrxmlContainer parent) throws Exception {
+	private IStatus publishResources(IProgressMonitor monitor, JasperDesign jd, AMJrxmlContainer parent)
+			throws Exception {
 		MReportUnit mrunit = null;
 		MJrxml jrxml = null;
 		if (parent instanceof MReportUnit) {
 			mrunit = (MReportUnit) parent;
-			jrxml = new MJrxml(mrunit, PublishUtil.getMainReport(monitor,
-					mrunit, jd), 0);
+			jrxml = new MJrxml(mrunit, PublishUtil.getMainReport(monitor, mrunit, jd), 0);
 		} else if (parent.getParent() instanceof MReportUnit) {
 			jrxml = (MJrxml) parent;
 			mrunit = (MReportUnit) parent.getParent();
@@ -117,20 +113,16 @@ public class Publish {
 		} else
 			return Status.CANCEL_STATUS;
 
-		File file = FileUtils
-				.createTempFile("jrsres", FileExtension.PointJRXML); //$NON-NLS-1$ 
+		File file = FileUtils.createTempFile("jrsres", FileExtension.PointJRXML); //$NON-NLS-1$
 		String version = ServerManager.getVersion(Misc.nvl(mrunit, jrxml));
 		ResourceDescriptor rdjrxml = jrxml.getValue();
-		if (rdjrxml.getParentFolder() != null
-				&& !rdjrxml.getParentFolder().endsWith("_files")) //$NON-NLS-1$
+		if (rdjrxml.getParentFolder() != null && !rdjrxml.getParentFolder().endsWith("_files")) //$NON-NLS-1$
 			rdjrxml.setIsReference(true);
 
-		List<AMResource> resources = ((JasperReportsConfiguration) jrConfig)
-				.get(PublishUtil.KEY_PUBLISH2JSS_DATA,
-						new ArrayList<AMResource>());
+		List<AMResource> resources = ((JasperReportsConfiguration) jrConfig).get(PublishUtil.KEY_PUBLISH2JSS_DATA,
+				new ArrayList<AMResource>());
 		updSelectedResources(monitor, resources, version);
-		FileUtils.writeFile(file,
-				JRXmlWriterHelper.writeReport(jrConfig, jd, version));
+		FileUtils.writeFile(file, JRXmlWriterHelper.writeReport(jrConfig, jd, version));
 		jrxml.setFile(file);
 
 		IFile ifile = (IFile) jrConfig.get(FileUtils.KEY_FILE);
@@ -174,9 +166,8 @@ public class Publish {
 				if (rd.getUriString() == null)
 					continue;
 				String wsType = rd.getWsType();
-				if (rd.getUriString().equals(rdjrxml.getUriString())
-						&& (wsType.equals(ResourceDescriptor.TYPE_JRXML) || wsType
-								.equals(ResourceDescriptor.TYPE_REFERENCE))) {
+				if (rd.getUriString().equals(rdjrxml.getUriString()) && (wsType.equals(ResourceDescriptor.TYPE_JRXML)
+						|| wsType.equals(ResourceDescriptor.TYPE_REFERENCE))) {
 					isMain = rd.isMainReport();
 					break;
 				}
@@ -184,13 +175,10 @@ public class Publish {
 			rdjrxml.setMainReport(isMain);
 			PublishUtil.setChild(r, rdjrxml);
 			for (AMResource res : resources) {
-				if (res.getPublishOptions().getOverwrite(OverwriteEnum.IGNORE)
-						.equals(OverwriteEnum.OVERWRITE)) {
+				if (res.getPublishOptions().getOverwrite(OverwriteEnum.IGNORE).equals(OverwriteEnum.OVERWRITE)) {
 					ResourceDescriptor rd = res.getValue();
-					if (rd.getData() != null
-							&& !rd.getParentFolder().endsWith("_files")) { //$NON-NLS-1$
-						mrunit.getWsClient().addOrModifyResource(monitor, rd,
-								null);
+					if (rd.getData() != null && !rd.getParentFolder().endsWith("_files")) { //$NON-NLS-1$
+						mrunit.getWsClient().addOrModifyResource(monitor, rd, null);
 					} else
 						PublishUtil.setChild(r, rd);
 				}
@@ -198,8 +186,7 @@ public class Publish {
 			mrunit.getWsClient().addOrModifyResource(monitor, r, file);
 			this.resources.add(r.getUriString());
 			for (AMResource res : resources)
-				if (res.getPublishOptions().getOverwrite(OverwriteEnum.IGNORE)
-						.equals(OverwriteEnum.OVERWRITE)) {
+				if (res.getPublishOptions().getOverwrite(OverwriteEnum.IGNORE).equals(OverwriteEnum.OVERWRITE)) {
 					PublishUtil.savePreferencesNoOverwrite(ifile, res);
 					this.resources.add(res.getValue().getUriString());
 				}
@@ -207,8 +194,7 @@ public class Publish {
 			jrxml.setValue(saveResource(monitor, jrxml));
 			for (AMResource res : resources) {
 				PublishOptions popt = res.getPublishOptions();
-				if (popt.getOverwrite(OverwriteEnum.IGNORE).equals(
-						OverwriteEnum.OVERWRITE)) {
+				if (popt.getOverwrite(OverwriteEnum.IGNORE).equals(OverwriteEnum.OVERWRITE)) {
 					saveResource(monitor, res);
 					PublishUtil.savePreferencesNoOverwrite(ifile, res);
 				}
@@ -219,19 +205,16 @@ public class Publish {
 		return Status.OK_STATUS;
 	}
 
-	protected void updSelectedResources(IProgressMonitor monitor,
-			List<AMResource> files, String version) throws IOException,
-			Exception {
+	protected void updSelectedResources(IProgressMonitor monitor, List<AMResource> files, String version)
+			throws IOException, Exception {
 		List<MJrxml> toSave = new ArrayList<MJrxml>();
 		for (AMResource res : files) {
 			PublishOptions popt = res.getPublishOptions();
-			if (!popt.getOverwrite(OverwriteEnum.IGNORE).equals(
-					OverwriteEnum.IGNORE)) {
+			if (!popt.getOverwrite(OverwriteEnum.IGNORE).equals(OverwriteEnum.IGNORE)) {
 				if (popt.getValueSetter() != null) {
 					popt.getValueSetter().setup();
 				} else if (popt.getjExpression() != null) {
-					if (popt.getOverwrite(OverwriteEnum.IGNORE).equals(
-							OverwriteEnum.ONLY_EXPRESSION))
+					if (popt.getOverwrite(OverwriteEnum.IGNORE).equals(OverwriteEnum.ONLY_EXPRESSION))
 						popt.getjExpression().setText(popt.getExpression());
 					if (popt.getPublishMethod() == ResourcePublishMethod.REWRITEEXPRESSION)
 						popt.getjExpression().setText(popt.getRepoExpression());
@@ -246,13 +229,10 @@ public class Publish {
 							if (popt.getReferencedResource() == null)
 								continue;
 							ResourceDescriptor rd = res.getValue();
-							dauri = popt.getReferencedResource().getUriString()
-									+ rd.getName();
+							dauri = popt.getReferencedResource().getUriString() + rd.getName();
 						}
-					popt.getDataset()
-							.setProperty(
-									DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION,
-									"repo:" + dauri); //$NON-NLS-1$
+					popt.getDataset().setProperty(DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION,
+							"repo:" + dauri); //$NON-NLS-1$
 				}
 				if (popt.getPublishMethod() != null)
 					if (popt.getPublishMethod() == ResourcePublishMethod.REFERENCE) {
@@ -263,8 +243,7 @@ public class Publish {
 						ref.setLabel(rd.getLabel());
 						ref.setDescription(rd.getDescription());
 						ref.setIsReference(true);
-						ref.setReferenceUri(popt.getReferencedResource()
-								.getUriString());
+						ref.setReferenceUri(popt.getReferencedResource().getUriString());
 						ref.setParentFolder(rd.getParentFolder());
 						ref.setUriString(rd.getUriString());
 						ref.setWsType(rd.getWsType());// ResourceDescriptor.TYPE_REFERENCE);
@@ -274,8 +253,7 @@ public class Publish {
 						if (popt.getReferencedResource() == null)
 							continue;
 						ResourceDescriptor rd = res.getValue();
-						rd.setParentFolder(popt.getReferencedResource()
-								.getUriString());
+						rd.setParentFolder(popt.getReferencedResource().getUriString());
 						rd.setUriString(rd.getParentFolder() + "/" //$NON-NLS-1$
 								+ rd.getName());
 					} else if (popt.getPublishMethod() == ResourcePublishMethod.REWRITEEXPRESSION) {
@@ -285,15 +263,13 @@ public class Publish {
 			}
 		}
 		for (MJrxml mjrxml : toSave) {
-			String rp = JRXmlWriterHelper.writeReport(jrConfig, mjrxml.getJd(),
-					version);
+			String rp = JRXmlWriterHelper.writeReport(jrConfig, mjrxml.getJd(), version);
 			mjrxml.getValue().setData(Base64.encodeBase64(rp.getBytes()));
 			FileUtils.writeFile(mjrxml.getFile(), rp);
 		}
 	}
 
-	private ResourceDescriptor saveResource(IProgressMonitor monitor,
-			AMResource mres) throws Exception {
+	private ResourceDescriptor saveResource(IProgressMonitor monitor, AMResource mres) throws Exception {
 		String uri = mres.getValue().getUriString();
 		ResourceDescriptor rd = WSClientHelper.save(monitor, mres);
 		if (rd != null)
@@ -311,27 +287,27 @@ public class Publish {
 				if (n != null && n instanceof MServerProfile) {
 					MServerProfile server = (MServerProfile) n;
 					ServerProfile v = server.getValue();
-					rpt.setProperty(AExporter.PROP_SERVERURL, v.getUrl());
-					rpt.setProperty(
-							AExporter.PROP_USER,
-							v.getUser()
-									+ (v.getOrganisation() != null ? "|" //$NON-NLS-1$
-											+ v.getOrganisation() : "")); //$NON-NLS-1$
+					try {
+						rpt.setProperty(AExporter.PROP_SERVERURL, v.getUrl());
+					} catch (MalformedURLException e) {
+						UIUtils.showError(e);
+					} catch (URISyntaxException e) {
+						UIUtils.showError(e);
+					}
+					rpt.setProperty(AExporter.PROP_USER, v.getUser() + (v.getOrganisation() != null ? "|" //$NON-NLS-1$
+							+ v.getOrganisation() : "")); //$NON-NLS-1$
 				}
 				ResourceDescriptor rd = node.getValue();
 				if (rd.getWsType().equals(ResourceDescriptor.TYPE_REPORTUNIT))
 					for (Object r : rd.getChildren())
-						if (((ResourceDescriptor) r).getWsType().equals(
-								ResourceDescriptor.TYPE_JRXML)) {
+						if (((ResourceDescriptor) r).getWsType().equals(ResourceDescriptor.TYPE_JRXML)) {
 							rd = (ResourceDescriptor) r;
 							break;
 						}
-				rpt.setProperty(AExporter.PROP_REPORTRESOURCE,
-						rd.getUriString());
+				rpt.setProperty(AExporter.PROP_REPORTRESOURCE, rd.getUriString());
 				if (node.getParent() instanceof MReportUnit) {
 					MReportUnit mrunit = (MReportUnit) node.getParent();
-					rpt.setProperty(AExporter.PROP_REPORTUNIT, mrunit
-							.getValue().getUriString());
+					rpt.setProperty(AExporter.PROP_REPORTUNIT, mrunit.getValue().getUriString());
 				}
 				try {
 					IFile iFile = (IFile) jrConfig.get(FileUtils.KEY_FILE);

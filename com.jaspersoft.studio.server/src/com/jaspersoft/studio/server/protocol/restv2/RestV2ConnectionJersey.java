@@ -16,7 +16,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.net.IDN;
+import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -142,7 +142,7 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 		clientConfig.connectorProvider(connector);
 
 		// clientConfig.connector(connector);
-		HttpUtils.setupProxy(clientConfig, sp.getURL().toURI());
+		HttpUtils.setupProxy(clientConfig, HttpUtils.toSafeUri(sp.getURL()));
 
 		Client client = ClientBuilder.newBuilder().withConfig(clientConfig).build();
 		client.register(MultiPartFeature.class);
@@ -159,7 +159,7 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 		else if (url.endsWith("services/repository")) //$NON-NLS-1$
 			url = url.substring(0, url.lastIndexOf("/services/repository")); //$NON-NLS-1$
 		if (!url.endsWith("/")) //$NON-NLS-1$
-			url += "/"; //$NON-NLS-1$
+			url += "/"; //$NON-NLS-1$ 
 		try {
 			target = client.target(url + "j_spring_security_check"); //$NON-NLS-1$
 			target = target.queryParam("forceDefaultRedirect", "false"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -180,7 +180,7 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 			toObj(connector.get(req, monitor), String.class, monitor);
 		} finally {
 			// ok, now check others
-			target = client.target(IDN.toASCII(url + SUFFIX));
+			target = client.target(url + SUFFIX);
 		}
 		getServerInfo(monitor);
 		try {

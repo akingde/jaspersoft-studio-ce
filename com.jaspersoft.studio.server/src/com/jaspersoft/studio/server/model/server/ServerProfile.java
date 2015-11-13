@@ -14,10 +14,12 @@ package com.jaspersoft.studio.server.model.server;
 
 import java.io.Serializable;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 
 import com.jaspersoft.jasperserver.dto.authority.ClientUser;
 import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
+import com.jaspersoft.studio.server.utils.HttpUtils;
 
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.design.events.JRChangeEventsSupport;
@@ -153,15 +155,18 @@ public class ServerProfile implements Resource, Cloneable, Serializable, JRChang
 		propertyChange.firePropertyChange(PROPERTY_NAME, oldName, name);
 	}
 
-	public String getUrl() {
+	public String getUrl() throws MalformedURLException, URISyntaxException {
+		if (url == null)
+			return null;
 		if (!url.endsWith("/"))
 			url += "/";
+		url = HttpUtils.toSafeUri(new URL(url)).toASCIIString();
 		return url;
 	}
 
 	private URL url_;
 
-	public URL getURL() throws MalformedURLException {
+	public URL getURL() throws MalformedURLException, URISyntaxException {
 		if (url_ == null)
 			url_ = new URL(getUrl());
 		return url_;

@@ -13,6 +13,8 @@
 package com.jaspersoft.studio.server.action.resource;
 
 import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.viewer.BrowserUtils;
@@ -43,8 +45,7 @@ public class OpenInBrowserAction extends Action {
 		setId(ID);
 		setText(Messages.OpenInBrowserAction_1);
 		setToolTipText(Messages.OpenInBrowserAction_2);
-		setImageDescriptor(JaspersoftStudioPlugin.getInstance()
-				.getImageDescriptor("icons/jrs.png")); //$NON-NLS-1$
+		setImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/jrs.png")); //$NON-NLS-1$
 		this.treeViewer = treeViewer;
 	}
 
@@ -52,59 +53,60 @@ public class OpenInBrowserAction extends Action {
 	public boolean isEnabled() {
 		TreeSelection treeSelection = (TreeSelection) treeViewer.getSelection();
 		Object firstElement = treeSelection.getFirstElement();
-		if (treeSelection.size() == 1
-				&& (firstElement instanceof AMResource || firstElement instanceof MServerProfile))
+		if (treeSelection.size() == 1 && (firstElement instanceof AMResource || firstElement instanceof MServerProfile))
 			return true;
 		return false;
 	}
 
 	@Override
 	public void run() {
-		TreeSelection s = (TreeSelection) treeViewer.getSelection();
-		Object obj = s.getFirstElement();
-		if (obj instanceof MServerProfile) {
-			MServerProfile msp = (MServerProfile) obj;
-			BrowserUtils.openExternalBrowser(msp.getValue().getUrl());
-		} else if (obj instanceof AMResource) {
-			final AMResource mr = (AMResource) obj;
-			MServerProfile msp = (MServerProfile) mr.getRoot();
+		try {
+			TreeSelection s = (TreeSelection) treeViewer.getSelection();
+			Object obj = s.getFirstElement();
+			if (obj instanceof MServerProfile) {
+				MServerProfile msp = (MServerProfile) obj;
+				BrowserUtils.openExternalBrowser(msp.getValue().getUrl());
+			} else if (obj instanceof AMResource) {
+				final AMResource mr = (AMResource) obj;
+				MServerProfile msp = (MServerProfile) mr.getRoot();
 
-			final String uri = msp.getValue().getUrl();
+				final String uri = msp.getValue().getUrl();
 
-			try {
-				if (mr instanceof MReference) {
-					Job job = new Job(Messages.FindReportUnit_jobname) {
-						@Override
-						protected IStatus run(IProgressMonitor monitor) {
-							monitor.beginTask("Resolving reference",
-									IProgressMonitor.UNKNOWN);
-							try {
-								ResourceDescriptor rd = ReferenceResolver
-										.resolveReference((MReference) mr,
-												monitor);
-								AMResource mres = ResourceFactory.getResource(
-										null, rd, -1);
-								if (mres != null)
-									openInBrowser(mres, uri);
-								return Status.OK_STATUS;
-							} catch (Exception e) {
-								UIUtils.showError(e);
+				try {
+					if (mr instanceof MReference) {
+						Job job = new Job(Messages.FindReportUnit_jobname) {
+							@Override
+							protected IStatus run(IProgressMonitor monitor) {
+								monitor.beginTask("Resolving reference", IProgressMonitor.UNKNOWN);
+								try {
+									ResourceDescriptor rd = ReferenceResolver.resolveReference((MReference) mr,
+											monitor);
+									AMResource mres = ResourceFactory.getResource(null, rd, -1);
+									if (mres != null)
+										openInBrowser(mres, uri);
+									return Status.OK_STATUS;
+								} catch (Exception e) {
+									UIUtils.showError(e);
+								}
+								return Status.CANCEL_STATUS;
 							}
-							return Status.CANCEL_STATUS;
-						}
-					};
-					job.setPriority(Job.LONG);
-					job.schedule();
-				} else
-					openInBrowser(mr, uri);
-			} catch (UnsupportedEncodingException e) {
-				UIUtils.showError(e);
+						};
+						job.setPriority(Job.LONG);
+						job.schedule();
+					} else
+						openInBrowser(mr, uri);
+				} catch (UnsupportedEncodingException e) {
+					UIUtils.showError(e);
+				}
 			}
+		} catch (MalformedURLException e) {
+			UIUtils.showError(e);
+		} catch (URISyntaxException e) {
+			UIUtils.showError(e);
 		}
 	}
 
-	private void openInBrowser(AMResource mr, String uri)
-			throws UnsupportedEncodingException {
+	private void openInBrowser(AMResource mr, String uri) throws UnsupportedEncodingException {
 		String jrsUrl = mr.getJRSUrl();
 		if (jrsUrl == null) {
 			UIUtils.showInformation("This resource url can't be opened directly from here.");
