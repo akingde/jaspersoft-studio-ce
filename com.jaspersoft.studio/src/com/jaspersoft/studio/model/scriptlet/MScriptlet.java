@@ -185,15 +185,6 @@ public class MScriptlet extends APropertyNode implements ICopyable, IDragable {
 			if (!value.equals("")) {
 				JRDesignDataset d = ModelUtils.getDataset(this);
 				d.removeScriptlet(jrField);
-
-				// for (JRScriptlet p : d.getScriptlets()) {
-				// if (p == jrField)
-				// continue;
-				// if (p.getName().equals(value)) {
-				// // warn?
-				// return;
-				// }
-				// }
 				jrField.setName((String) value);
 				try {
 					d.addScriptlet(jrField);
@@ -201,15 +192,19 @@ public class MScriptlet extends APropertyNode implements ICopyable, IDragable {
 					e.printStackTrace();
 					return;
 				}
-				// if (d != null) {
-				// d.getScriptletsMap().remove(jrField);
-				// d.getScriptletsMap().put(jrField.getName(), jrField);
-				// }
 			}
 		} else if (id.equals(JRDesignScriptlet.PROPERTY_VALUE_CLASS_NAME)) {
 			if (((String) value).isEmpty())
 				value = null;
 			jrField.setValueClassName((String) value);
+			JRDesignDataset d = ModelUtils.getDataset(this);
+			d.removeScriptlet(jrField);
+			try {
+				d.addScriptlet(jrField);
+			} catch (JRException e) {
+				e.printStackTrace();
+				return;
+			}
 		} else if (id.equals(JRDesignScriptlet.PROPERTY_DESCRIPTION))
 			jrField.setDescription((String) value);
 	}

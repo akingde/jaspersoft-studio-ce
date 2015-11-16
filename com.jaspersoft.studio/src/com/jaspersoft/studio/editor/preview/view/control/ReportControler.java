@@ -342,7 +342,7 @@ public class ReportControler {
 					if (jasperReport == null)
 						jasperReport = compileJasperDesign(file, jd, monitor);
 					if (jasperReport != null) {
-						if (pcontainer.isRunDirty()) {
+						if (pcontainer.isRunDirty() || prmInput == null) {
 							ExpressionUtil.initBuiltInParameters(jrContext, jasperReport);
 							if (viewmap != null)
 								fillForms();
