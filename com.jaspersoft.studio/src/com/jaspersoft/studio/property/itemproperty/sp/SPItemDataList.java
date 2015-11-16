@@ -56,11 +56,9 @@ import net.sf.jasperreports.components.items.ItemData;
 import net.sf.jasperreports.components.items.StandardItem;
 import net.sf.jasperreports.components.items.StandardItemData;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.engine.JRElementDataset;
 import net.sf.jasperreports.engine.component.Component;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignElement;
-import net.sf.jasperreports.engine.design.JRDesignElementDataset;
 import net.sf.jasperreports.engine.design.events.JRPropertyChangeSupport;
 import net.sf.jasperreports.engine.util.JRCloneUtils;
 
@@ -213,15 +211,13 @@ public class SPItemDataList extends ASPropertyWidget<AItemDataListPropertyDescri
 				showItemDialog(clones, itemDataClone, item);
 			}
 		} else if (obj instanceof StandardItemData) {
-			StandardItemData itemData = (StandardItemData) obj;
-			JRElementDataset ds = itemData.getDataset();
-			if (ds == null)
-				ds = new JRDesignElementDataset();
-			else
-				ds = (JRElementDataset) ds.clone();
-			ItemDataDialog dialog = createItemDataDialog(itemDatas, itemData);
+			List<ItemData> clones = JRCloneUtils.cloneList(itemDatas);
+			StandardItemData itemDataClone = (StandardItemData) getStandardItemData(false, tviewer, clones);
+
+			ItemDataDialog dialog = createItemDataDialog(clones, itemDataClone);
 			if (dialog.open() == Dialog.OK) {
-				itemData.setDataset(dialog.getDataset());
+				int ind = itemDatas.indexOf((StandardItem) obj);
+				itemDatas.set(ind, itemDataClone);
 				dsTViewer.refresh();
 			}
 		}
