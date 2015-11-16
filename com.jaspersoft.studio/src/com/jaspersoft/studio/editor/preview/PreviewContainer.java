@@ -100,13 +100,12 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 	private AReportAction zoomActualAction = null;
 
 	private DataAdapterDescriptor dataAdapterDesc;
-	
+
 	/**
-	 * Flag used to enable or disable the run of the report when
-	 * the JasperDesign is set
+	 * Flag used to enable or disable the run of the report when the JasperDesign is set
 	 */
 	private boolean runWhenInitilizing = true;
-	
+
 	public PreviewContainer() {
 		super(true);
 	}
@@ -259,7 +258,8 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 			if (jrContext != null) {
 				project = (IProject) jrContext.get(FileUtils.KEY_IPROJECT);
 			}
-			topToolBarManager1 = new PreviewTopToolBarManager(this, container, DataAdapterManager.getDataAdapter(file, project, jrContext));
+			topToolBarManager1 = new PreviewTopToolBarManager(this, container,
+					DataAdapterManager.getDataAdapter(file, project, jrContext));
 		}
 		return (PreviewTopToolBarManager) topToolBarManager1;
 	}
@@ -347,19 +347,21 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 		super.createRight(parent);
 		return rightComposite;
 	}
-	
+
 	/**
 	 * Log the report language and preview type (different from java) when the report is executed
 	 */
-	protected void auditPreview(){
+	protected void auditPreview() {
 		// Log the preview if not Java
 		if (currentViewer != null && !currentViewer.equals("Java")) { //$NON-NLS-1$
-			JaspersoftStudioPlugin.getInstance().getUsageManager().audit(currentViewer, UsageStatisticsIDs.CATEGORY_PREVIEW_FORMAT);
-			//Log the language used by the report
-			if (jrContext != null && jrContext.getJasperDesign() != null){
+			JaspersoftStudioPlugin.getInstance().getUsageManager().audit(currentViewer,
+					UsageStatisticsIDs.CATEGORY_PREVIEW_FORMAT);
+			// Log the language used by the report
+			if (jrContext != null && jrContext.getJasperDesign() != null) {
 				String reportLanguage = jrContext.getJasperDesign().getLanguage();
-				if (reportLanguage != null){
-					JaspersoftStudioPlugin.getInstance().getUsageManager().audit("ReportLanguage"+reportLanguage, UsageStatisticsIDs.CATEGORY_REPORT); //$NON-NLS-1$
+				if (reportLanguage != null) {
+					JaspersoftStudioPlugin.getInstance().getUsageManager().audit("ReportLanguage" + reportLanguage, //$NON-NLS-1$
+							UsageStatisticsIDs.CATEGORY_REPORT);
 				}
 			}
 		}
@@ -384,9 +386,10 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 			if (myDataAdapter != null) {
 				// TODO should we save the reference in the JRXML ?
 				dataAdapterDesc = myDataAdapter;
+				setParameterDirty(false);
 			} else {
 				DataAdapterAction daWidget = ((PreviewTopToolBarManager) topToolBarManager1).getDataSourceWidget();
-				dataAdapterDesc = daWidget.isDefaultDASelected() ? null :  daWidget.getSelected();
+				dataAdapterDesc = daWidget.isDefaultDASelected() ? null : daWidget.getSelected(); 
 			}
 
 			addPreviewModeContributeProperties();
@@ -396,8 +399,8 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 	}
 
 	private void addPreviewModeContributeProperties() {
-		List<PreviewModeDetails> previewDetails = JaspersoftStudioPlugin.getExtensionManager().getAllPreviewModeDetails(
-				Misc.nvl(this.runMode));
+		List<PreviewModeDetails> previewDetails = JaspersoftStudioPlugin.getExtensionManager()
+				.getAllPreviewModeDetails(Misc.nvl(this.runMode));
 		for (PreviewModeDetails d : previewDetails) {
 			Map<String, String> previewModeProperties = d.getPreviewModeProperties();
 			for (String pKey : previewModeProperties.keySet()) {
@@ -459,6 +462,10 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 		return isParameterDirty;
 	}
 
+	public void setParameterDirty(boolean isParameterDirty) {
+		this.isParameterDirty = isParameterDirty;
+	}
+
 	public void setRunDirty(boolean isRunDirty) {
 		this.isRunDirty = isRunDirty;
 		isParameterDirty = isRunDirty;
@@ -477,7 +484,7 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 					getReportControler().setJrContext(jConfig);
 					setupDataAdapter();
 
-					if ((isRunDirty || getJasperPrint() == null) && runWhenInitilizing){
+					if ((isRunDirty || getJasperPrint() == null) && runWhenInitilizing) {
 						runReport(dataAdapterDesc);
 					}
 					propChangeListener = new PropertyChangeListener() {
@@ -520,12 +527,12 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 			DataAdapterAction daWidget = ((PreviewTopToolBarManager) topToolBarManager1).getDataSourceWidget();
 			if (strda != null) {
 				pt.setDataAdapters(strda);
-				dataAdapterDesc = daWidget.isDefaultDASelected() ? null :  daWidget.getSelected();
+				dataAdapterDesc = daWidget.isDefaultDASelected() ? null : daWidget.getSelected();
 			} else {
-				//If there is not a default JSS Da but it is defined a JR default da then select it on the preview
+				// If there is not a default JSS Da but it is defined a JR default da then select it on the preview
 				JRDefaultDataAdapterStorage defaultStorage = DataAdapterManager.getJRDefaultStorage(getConfiguration());
 				DataAdapterDescriptor defaultDA = defaultStorage.getDefaultJRDataAdapter(jd.getMainDesignDataset());
-				if (defaultDA != null){
+				if (defaultDA != null) {
 					pt.setDataAdapters(defaultDA.getName());
 				} else {
 					//If no data adapter is available select the default one
@@ -584,15 +591,15 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 	public JasperReportsConfiguration getConfiguration() {
 		return jrContext;
 	}
-	
+
 	/**
-	 * Flag used to enable or disable the run of the report when
-	 * the JasperDesign is set trough setJasperDesign(final JasperReportsConfiguration jConfig)
+	 * Flag used to enable or disable the run of the report when the JasperDesign is set trough setJasperDesign(final
+	 * JasperReportsConfiguration jConfig)
 	 * 
-	 * @param value true if the report should be run when the JasperDesign is set, 
-	 * false otherwise
+	 * @param value
+	 *          true if the report should be run when the JasperDesign is set, false otherwise
 	 */
-	public void setRunWhenInitilizing(boolean value){
+	public void setRunWhenInitilizing(boolean value) {
 		runWhenInitilizing = value;
 	}
 }
