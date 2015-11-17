@@ -216,7 +216,7 @@ public class SPItemDataList extends ASPropertyWidget<AItemDataListPropertyDescri
 
 			ItemDataDialog dialog = createItemDataDialog(clones, itemDataClone);
 			if (dialog.open() == Dialog.OK) {
-				int ind = itemDatas.indexOf((StandardItem) obj);
+				int ind = itemDatas.indexOf((StandardItemData) obj);
 				itemDatas.set(ind, itemDataClone);
 				dsTViewer.refresh();
 			}
