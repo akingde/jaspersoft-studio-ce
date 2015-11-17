@@ -20,6 +20,7 @@ public interface IDataAdapterRunnable {
 	public boolean isNotRunning();
 
 	public void runReport(DataAdapterDescriptor myDataAdapter);
+	public void runReport(DataAdapterDescriptor myDataAdapter, boolean prmDirty);
 	
 	/**
 	 * Return the JasperReportsConfiguration of the loaded report

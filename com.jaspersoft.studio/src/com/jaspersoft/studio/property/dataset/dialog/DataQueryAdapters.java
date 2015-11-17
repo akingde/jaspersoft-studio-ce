@@ -281,6 +281,11 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 			public JasperReportsConfiguration getConfiguration() {
 				return jConfig;
 			}
+
+			@Override
+			public void runReport(DataAdapterDescriptor myDataAdapter, boolean prmDirty) {
+				runReport(myDataAdapter);
+			}
 		};
 		dscombo = new DataAdapterAction(adapterRunReport, DataAdapterManager.getDataAdapter(file, jConfig), newdataset);
 
