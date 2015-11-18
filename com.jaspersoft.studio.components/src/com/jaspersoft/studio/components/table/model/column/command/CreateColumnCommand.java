@@ -81,13 +81,13 @@ public class CreateColumnCommand extends Command {
 	protected CreateColumnCommand(ANode destNode, MColumn srcNode, int index) {
 		super();
 		this.tableNode = TableManager.getTableNode(destNode);
-		this.jrTable = tableNode.getStandardTable();
+		this.jrTable = tableNode != null ? tableNode.getStandardTable() : null;
 		this.index = index;
 		this.jrColumn = (StandardBaseColumn) srcNode.getValue();
 		this.jrDesign = destNode.getJasperDesign();
-		if (destNode instanceof MColumnGroup
-				|| destNode instanceof MColumnGroupCell)
+		if (destNode instanceof MColumnGroup || destNode instanceof MColumnGroupCell){
 			pColGroup = (StandardColumnGroup) destNode.getValue();
+		}
 	}
 
 	/*
@@ -108,7 +108,7 @@ public class CreateColumnCommand extends Command {
 	
 	@Override
 	public boolean canExecute() {
-		return tableNode != null;
+		return tableNode != null && jrTable != null;
 	}
 	
 	private void createAndAddColumn(){

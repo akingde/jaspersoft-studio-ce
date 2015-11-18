@@ -127,7 +127,8 @@ public class MTableDetail extends AMCollection {
 			} else {
 				mTable.getTableManager().refresh();
 			}
-		} else super.propertyChange(evt);
+		} 
+		super.propertyChange(evt);
 	}
 	
 	/**

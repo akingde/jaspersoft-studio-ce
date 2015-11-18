@@ -502,37 +502,42 @@ public class TableManager {
 	}
 
 	public Dimension getCellPackSize(ColumnCell cc) {
+		Dimension result = new Dimension(0, 0);
 		cc = mh.getColumnCell(cc);
-		Guide g = cc.getEast();
-		int w = -g.getY();
-		for (ColumnCell c : g.getPrev()) {
-			Cell cell = TableUtil.getCell(c.column, c.type, c.grName);
-			if (cell != null) {
-				List<JRChild> cells = cell.getChildren();
-				if (!cells.isEmpty()) {
-					int width = ModelUtils.getContainerSize(cells,
-							new Dimension(0, 0)).width;
-
-					w = Math.max(w, width - c.column.getWidth());
+		if (cc != null){
+			Guide g = cc.getEast();
+			int w = -g.getY();
+			for (ColumnCell c : g.getPrev()) {
+				Cell cell = TableUtil.getCell(c.column, c.type, c.grName);
+				if (cell != null) {
+					List<JRChild> cells = cell.getChildren();
+					if (!cells.isEmpty()) {
+						int width = ModelUtils.getContainerSize(cells,
+								new Dimension(0, 0)).width;
+	
+						w = Math.max(w, width - c.column.getWidth());
+					}
 				}
 			}
-		}
-		g = cc.getSouth();
-		int h = -g.getY();
-		for (ColumnCell c : g.getPrev()) {
-			Cell cell = TableUtil.getCell(c.column, c.type, c.grName);
-			if (cell != null) {
-				List<JRChild> cells = cell.getChildren();
-				if (!cells.isEmpty()) {
-					int height = ModelUtils.getContainerSize(cells,
-							new Dimension(0, 0)).height;
-
-					h = Math.max(h, height - cell.getHeight());
+			g = cc.getSouth();
+			int h = -g.getY();
+			for (ColumnCell c : g.getPrev()) {
+				Cell cell = TableUtil.getCell(c.column, c.type, c.grName);
+				if (cell != null) {
+					List<JRChild> cells = cell.getChildren();
+					if (!cells.isEmpty()) {
+						int height = ModelUtils.getContainerSize(cells,
+								new Dimension(0, 0)).height;
+	
+						h = Math.max(h, height - cell.getHeight());
+					}
 				}
 			}
+			Rectangle b = cc.getBounds();
+			result.setWidth(b.width + w);
+			result.setHeight(b.height + h);
 		}
-		Rectangle b = cc.getBounds();
-		return new Dimension(b.width + w, b.height + h);
+		return result;
 	}
 
 	public void update() {
