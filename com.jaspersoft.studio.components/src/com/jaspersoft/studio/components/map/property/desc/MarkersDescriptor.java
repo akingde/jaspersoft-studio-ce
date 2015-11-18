@@ -27,6 +27,7 @@ import com.jaspersoft.studio.property.itemproperty.desc.ColorPropertyDescription
 import com.jaspersoft.studio.property.itemproperty.desc.ComboItemPropertyDescription;
 import com.jaspersoft.studio.property.itemproperty.desc.ItemPropertyDescription;
 import com.jaspersoft.studio.property.itemproperty.desc.NumberPropertyDescription;
+import com.jaspersoft.studio.utils.Misc;
 
 /**
  * @author Veaceslav Chicu (schicu@users.sourceforge.net)
@@ -175,8 +176,8 @@ public class MarkersDescriptor extends ADescriptor {
 				if (id.getItems() == null)
 					continue;
 				for (Item it : id.getItems()) {
-					if (it.getProperties() == null)
-						continue;
+					if (Misc.isNullOrEmpty(it.getProperties()))
+						throw new Exception("You must have Address or Latitude/Longitude");
 					boolean address = false;
 					boolean lon = false;
 					boolean lat = false;
@@ -184,10 +185,8 @@ public class MarkersDescriptor extends ADescriptor {
 						lat = true;
 					if (ItemPropertyUtil.hasValue(it.getProperties(), MapComponent.ITEM_PROPERTY_longitude))
 						lon = true;
-					if (ItemPropertyUtil.hasValue(it.getProperties(), MapComponent.ITEM_PROPERTY_address)) {
-						address = true;
-						break;
-					}
+					if (ItemPropertyUtil.hasValue(it.getProperties(), MapComponent.ITEM_PROPERTY_address))
+						continue;
 					if (!address && !(lon && lat))
 						throw new Exception("You must have Address or Latitude/Longitude");
 				}

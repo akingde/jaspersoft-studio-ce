@@ -139,8 +139,8 @@ public class PathDescriptor extends ADescriptor {
 				if (id.getItems() == null)
 					continue;
 				for (Item it : id.getItems()) {
-					if (it.getProperties() == null)
-						continue;
+					if (Misc.isNullOrEmpty(it.getProperties()))
+						throw new Exception("You must have Address or Latitude/Longitude");
 					boolean address = false;
 					boolean lon = false;
 					boolean lat = false;
@@ -148,10 +148,8 @@ public class PathDescriptor extends ADescriptor {
 						lat = true;
 					if (ItemPropertyUtil.hasValue(it.getProperties(), MapComponent.ITEM_PROPERTY_longitude))
 						lon = true;
-					if (ItemPropertyUtil.hasValue(it.getProperties(), MapComponent.ITEM_PROPERTY_address)) {
-						address = true;
-						break;
-					}
+					if (ItemPropertyUtil.hasValue(it.getProperties(), MapComponent.ITEM_PROPERTY_address))
+						continue;
 					if (!address && !(lon && lat))
 						throw new Exception("You must have Address or Latitude/Longitude");
 				}
