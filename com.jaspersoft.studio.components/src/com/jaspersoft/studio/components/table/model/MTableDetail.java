@@ -127,8 +127,10 @@ public class MTableDetail extends AMCollection {
 			} else {
 				mTable.getTableManager().refresh();
 			}
-		} 
-		super.propertyChange(evt);
+			//need to call this to refresh the editpart without passing from the super call
+			revalidateChildren();
+			firePropertyChange(evt);
+		} else super.propertyChange(evt);
 	}
 	
 	/**
