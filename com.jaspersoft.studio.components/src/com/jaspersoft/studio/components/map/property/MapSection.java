@@ -57,6 +57,7 @@ public class MapSection extends AbstractSection {
 		mapPickSuggestion.setText(Messages.MapSection_0, true, false);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
+		gd.horizontalIndent = 5;
 		mapPickSuggestion.setLayoutData(gd);
 		mapPickSuggestion.setWhitespaceNormalized(true);
 		mapPickSuggestion.addHyperlinkListener(new HyperlinkAdapter() {
