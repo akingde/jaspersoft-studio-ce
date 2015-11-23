@@ -13,16 +13,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import net.sf.jasperreports.engine.JRDataset;
-import net.sf.jasperreports.engine.JRDatasetParameter;
-import net.sf.jasperreports.engine.JRDatasetRun;
-import net.sf.jasperreports.engine.JRExpression;
-import net.sf.jasperreports.engine.JRParameter;
-import net.sf.jasperreports.engine.design.JRDesignDataset;
-import net.sf.jasperreports.engine.design.JRDesignDatasetParameter;
-import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
-import net.sf.jasperreports.engine.design.JRDesignExpression;
-
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.TableColumnLayout;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -35,6 +25,8 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CTabFolder;
+import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -46,8 +38,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.TabFolder;
-import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Table;
 
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
@@ -58,6 +48,16 @@ import com.jaspersoft.studio.model.dataset.descriptor.DatasetRunRVPropertyPage;
 import com.jaspersoft.studio.property.dataset.DatasetRunSelectionListener;
 import com.jaspersoft.studio.swt.widgets.WTextExpression;
 import com.jaspersoft.studio.utils.ModelUtils;
+
+import net.sf.jasperreports.engine.JRDataset;
+import net.sf.jasperreports.engine.JRDatasetParameter;
+import net.sf.jasperreports.engine.JRDatasetRun;
+import net.sf.jasperreports.engine.JRExpression;
+import net.sf.jasperreports.engine.JRParameter;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
+import net.sf.jasperreports.engine.design.JRDesignDatasetParameter;
+import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
+import net.sf.jasperreports.engine.design.JRDesignExpression;
 
 /**
  * This generic composite can be reused in dialogs/wizards when there is the need to edit the dataset run information of
@@ -72,7 +72,7 @@ public class DatasetRunBaseComposite extends Composite implements IExpressionCon
 
 	private IEditableDatasetRun datasetRunInstance;
 	private Combo comboSubDataset;
-	private TabFolder tabFolderDataSetRun;
+	private CTabFolder tabFolderDataSetRun;
 	private Combo comboConnDS;
 	private WTextExpression connDSExpression;
 	private WTextExpression paramsMapExpression;
@@ -124,13 +124,13 @@ public class DatasetRunBaseComposite extends Composite implements IExpressionCon
 			}
 		});
 
-		tabFolderDataSetRun = new TabFolder(this, SWT.NONE);
+		tabFolderDataSetRun = new CTabFolder(this, SWT.NONE);
 		GridData gd_tabFolderDataSetRun = new GridData(SWT.FILL, SWT.FILL, true, true, 2, 2);
 		tabFolderDataSetRun.setLayoutData(gd_tabFolderDataSetRun);
 		tabFolderDataSetRun.setEnabled(false);
 		tabFolderDataSetRun.setVisible(false);
 
-		TabItem tbtmConnectionDatasourceExpression = new TabItem(tabFolderDataSetRun, SWT.NONE);
+		CTabItem tbtmConnectionDatasourceExpression = new CTabItem(tabFolderDataSetRun, SWT.NONE);
 		tbtmConnectionDatasourceExpression.setText(Messages.DatasetRunBaseComposite_ConnDSExprTab);
 
 		Composite compositeConnDSExpContent = new Composite(tabFolderDataSetRun, SWT.NONE);
@@ -197,7 +197,7 @@ public class DatasetRunBaseComposite extends Composite implements IExpressionCon
 		};
 		connDSExpression.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 
-		TabItem tbtmParameters = new TabItem(tabFolderDataSetRun, SWT.NONE);
+		CTabItem tbtmParameters = new CTabItem(tabFolderDataSetRun, SWT.NONE);
 		tbtmParameters.setText(Messages.DatasetRunBaseComposite_ParametersTab);
 
 		Composite compositeParametersContent = new Composite(tabFolderDataSetRun, SWT.NONE);
@@ -306,7 +306,7 @@ public class DatasetRunBaseComposite extends Composite implements IExpressionCon
 			}
 		});
 
-		TabItem tbtmParametersMapExp = new TabItem(tabFolderDataSetRun, SWT.NONE);
+		CTabItem tbtmParametersMapExp = new CTabItem(tabFolderDataSetRun, SWT.NONE);
 		tbtmParametersMapExp.setText(Messages.DatasetRunBaseComposite_ParametersMapExprTab);
 
 		Composite compositeParamsExpMapBox = new Composite(tabFolderDataSetRun, SWT.NONE);
@@ -335,7 +335,7 @@ public class DatasetRunBaseComposite extends Composite implements IExpressionCon
 	 * Create the controls to define the dataset run return values
 	 */
 	private void createDatasetRunReturnTab() {
-		TabItem tbtmParametersMapExp = new TabItem(tabFolderDataSetRun, SWT.NONE);
+		CTabItem tbtmParametersMapExp = new CTabItem(tabFolderDataSetRun, SWT.NONE);
 		tbtmParametersMapExp.setText(Messages.common_return_values);
 		Composite container = new Composite(tabFolderDataSetRun, SWT.NONE);
 		container.setLayout(new GridLayout(1, false));
@@ -526,6 +526,10 @@ public class DatasetRunBaseComposite extends Composite implements IExpressionCon
 		// Return values
 		returnValueEditor.setDatasetRun((JRDesignDatasetRun) datasetRunInstance.getJRDatasetRun(), datasetRunInstance
 				.getEditableDataset().getJasperDesign());
+		
+		if(tabFolderDataSetRun.isVisible()){
+			tabFolderDataSetRun.setSelection(0);
+		}
 	}
 
 	/*
