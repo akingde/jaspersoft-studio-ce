@@ -15,6 +15,8 @@ package com.jaspersoft.studio.components.table.model.dialog;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.Figure;
@@ -31,6 +33,8 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 
 import com.jaspersoft.studio.components.table.model.dialog.TableStyle.BorderStyleEnum;
 import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
@@ -70,6 +74,12 @@ public class TableStylePreview extends Composite {
 	private J2DLightweightSystem lws;
 	
 	/**
+	 * List of preview paint listener, called when the figure is painted. They
+	 * can be used to perform additional paint operation
+	 */
+	private List<Listener> previewPaintListener = new ArrayList<Listener>();
+	
+	/**
 	 * Create a preview with a default table style
 	 *
 	 * @param parent
@@ -83,12 +93,6 @@ public class TableStylePreview extends Composite {
 		createFigure();
 	}
 	
-	public TableStylePreview(Composite parent, int style, TableStyle tableStyle) {
-		super(parent, style);
-		this.tableStyle = tableStyle;
-		createFigure();
-	}
-	
 	/**
 	 * Set the table style and redraw the preview image
 	 * 
@@ -99,8 +103,6 @@ public class TableStylePreview extends Composite {
 		setTBounds();
 	}
 	
-
-
 	private void createFigure(){
 		setLayout(new GridLayout(1,false));
 		lws = new J2DLightweightSystem();
@@ -187,6 +189,7 @@ public class TableStylePreview extends Composite {
 			        g.drawLine(x, y, x, y+h);
 			        g.drawLine(x+w, y, x+w, y+h-1);
 			    }
+		        firePreviewPaintListeners(g, x, y, w, h);
 			}
 		};
 		borderPreview.setBorder(new ShadowBorder());
@@ -204,12 +207,12 @@ public class TableStylePreview extends Composite {
 			}
 		});
 	}
-	
+
 	/**
 	 * Set the size of the preview area and request a redraw
 	 */
 	public void setTBounds() {
-		if (!isDisposed()) {
+		if (!isDisposed() ) {
 			Dimension psize = parentFigure.getSize();
 			borderPreview.setSize(psize);
 			borderPreview.setLocation(new Point(0,0));
@@ -220,4 +223,48 @@ public class TableStylePreview extends Composite {
 		}
 	}
 
+	/**
+	 * Add a preview figure paint listener. The listener is called
+	 * once the preview figure is painted. On the data of the event
+	 * there will be the graphics used to paint the preview figure
+	 * so something else can be painted on top of it
+	 * 
+	 * @param listener a unique and not null listener
+	 */
+	public void addPreviewPaintListenr(Listener listener){
+		if (listener != null && !previewPaintListener.contains(listener)){
+			previewPaintListener.add(listener);
+		}
+	}
+	
+	/**
+	 * Fire all the added preview paint listener
+	 * 
+	 * @param graphics the graphics used to paint the preview figure
+	 * @param x the x of the preview figure
+	 * @param y the y of the preview figure
+	 * @param w the width of the preview figure
+	 * @param h the height of the previw figure
+	 */
+	protected void firePreviewPaintListeners(Graphics2D graphics, int x, int y, int w, int h){
+		Event e = new Event();
+		e.widget = this;
+		e.data = graphics;
+		e.x = x;
+		e.y = y;
+		e.width = w;
+		e.height = h;
+		for(Listener listener : previewPaintListener){
+			listener.handleEvent(e);
+		}
+	}
+	
+	/**
+	 * When the composite is disposed the list listener is cleared
+	 */
+	@Override
+	public void dispose() {
+		super.dispose();
+		previewPaintListener.clear();
+	}
 }

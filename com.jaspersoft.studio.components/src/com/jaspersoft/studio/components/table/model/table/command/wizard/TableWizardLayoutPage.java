@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.draw2d.ColorConstants;
+import org.eclipse.jface.util.Util;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -29,8 +30,10 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
@@ -645,9 +648,10 @@ public class TableWizardLayoutPage extends JSSHelpWizardPage {
 	/**
 	 * Generate the preview area
 	 * 
-	 * @param parent
+	 * @param parent the parent where the controls are created
+	 * @param wizardMainTab the main composite of the wizard page
 	 */
-	private void createPreview(Composite parent) {
+	private void createPreview(Composite parent, final Composite wizardMainTab) {
 		Group group = new Group(parent, SWT.NONE);
 		group.setText(Messages.TableWizardLayoutPage_style_preview_group);
 		group.setLayout(new GridLayout(1, false));
@@ -655,6 +659,18 @@ public class TableWizardLayoutPage extends JSSHelpWizardPage {
 
 		preview = new TableStylePreview(group, SWT.NONE);
 		preview.setLayoutData(new GridData(GridData.FILL_BOTH));
+		//Add a preview paint listener to fix a linux refresh problem that show the 
+		//preview figure on the first page of the wizard. This is a gtk bug on elcipse 4.5 and to 
+		//fix it a redraw of the dialog composite must be called
+		preview.addPreviewPaintListenr(new Listener() {
+			
+			@Override
+			public void handleEvent(Event event) {
+				if (Util.isLinux()){
+					wizardMainTab.redraw();
+				}
+			}
+		});
 	}
 
 	private void createTitleLabel(Composite parent) {
@@ -692,7 +708,7 @@ public class TableWizardLayoutPage extends JSSHelpWizardPage {
 		createLeftCol(dialog);
 
 		// Creating the right preview col
-		createPreview(dialog);
+		createPreview(dialog, parent);
 
 		// Create the bottom band
 		if (createBottom)

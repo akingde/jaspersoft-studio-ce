@@ -15,6 +15,8 @@ package com.jaspersoft.studio.components.crosstab.model.dialog;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.Figure;
@@ -31,6 +33,8 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 
 import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
 import com.jaspersoft.studio.editor.gef.figures.borders.ShadowBorder;
@@ -65,9 +69,15 @@ public class CrosstabStylePreview extends Composite {
 	/**
 	 * Figure where the table will be painted
 	 */
-	private RectangleFigure borderPreview;
+	private RectangleFigure crosstabPreview;
 	
 	private J2DLightweightSystem lws;
+	
+	/**
+	 * List of preview paint listener, called when the figure is painted. They
+	 * can be used to perform additional paint operation
+	 */
+	private List<Listener> previewPaintListener = new ArrayList<Listener>();
 	
 	/**
 	 * Create a preview with a default crosstab style.
@@ -78,12 +88,6 @@ public class CrosstabStylePreview extends Composite {
 	public CrosstabStylePreview(Composite parent, int style){
 		super(parent, style);
 		crosstabStyle = new CrosstabStyle(AlfaRGB.getFullyOpaque(ColorConstants.lightBlue.getRGB()), ColorSchemaGenerator.SCHEMAS.DEFAULT, false);
-		createFigure();
-	}
-	
-	public CrosstabStylePreview(Composite parent, int style, CrosstabStyle tableStyle) {
-		super(parent, style);
-		this.crosstabStyle = tableStyle;
 		createFigure();
 	}
 	
@@ -111,8 +115,7 @@ public class CrosstabStylePreview extends Composite {
 		parentFigure = new Figure();
 		parentFigure.setLayoutManager(new XYLayout());
 		lws.setContents(parentFigure);
-		
-		borderPreview = new RectangleFigure() {
+		crosstabPreview = new RectangleFigure() {
 
 			@Override
 			public void paint(Graphics graphics) {
@@ -173,10 +176,11 @@ public class CrosstabStylePreview extends Composite {
 				    		g.drawLine(x+rowWidth*i, y, x+rowWidth*i, y+h);
 				    }
 		        }
+		        firePreviewPaintListeners(g, x, y, w, h);
 			}
 		};
-		borderPreview.setBorder(new ShadowBorder());
-		parentFigure.add(borderPreview);	
+		crosstabPreview.setBorder(new ShadowBorder());
+		parentFigure.add(crosstabPreview);	
 		addControlListener(new ControlAdapter() {
 			@Override
 			public void controlResized(ControlEvent e) {
@@ -197,8 +201,8 @@ public class CrosstabStylePreview extends Composite {
 	public void setTBounds() {
 		if (!isDisposed()) {
 			Dimension psize = parentFigure.getSize();
-			borderPreview.setSize(psize);
-			borderPreview.setLocation(new Point(0,0));
+			crosstabPreview.setSize(psize);
+			crosstabPreview.setLocation(new Point(0,0));
 			parentFigure.invalidate();
 
 			square.redraw();
@@ -206,4 +210,48 @@ public class CrosstabStylePreview extends Composite {
 		}
 	}
 
+	/**
+	 * Add a preview figure paint listener. The listener is called
+	 * once the preview figure is painted. On the data of the event
+	 * there will be the graphics used to paint the preview figure
+	 * so something else can be painted on top of it
+	 * 
+	 * @param listener a unique and not null listener
+	 */
+	public void addPreviewPaintListenr(Listener listener){
+		if (listener != null && !previewPaintListener.contains(listener)){
+			previewPaintListener.add(listener);
+		}
+	}
+	
+	/**
+	 * Fire all the added preview paint listener
+	 * 
+	 * @param graphics the graphics used to paint the preview figure
+	 * @param x the x of the preview figure
+	 * @param y the y of the preview figure
+	 * @param w the width of the preview figure
+	 * @param h the height of the previw figure
+	 */
+	protected void firePreviewPaintListeners(Graphics2D graphics, int x, int y, int w, int h){
+		Event e = new Event();
+		e.widget = this;
+		e.data = graphics;
+		e.x = x;
+		e.y = y;
+		e.width = w;
+		e.height = h;
+		for(Listener listener : previewPaintListener){
+			listener.handleEvent(e);
+		}
+	}
+	
+	/**
+	 * When the composite is disposed the list listener is cleared
+	 */
+	@Override
+	public void dispose() {
+		super.dispose();
+		previewPaintListener.clear();
+	}
 }

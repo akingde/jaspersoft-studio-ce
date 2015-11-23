@@ -14,6 +14,7 @@ package com.jaspersoft.studio.components.crosstab.model.crosstab.command.wizard;
 
 import java.awt.Color;
 
+import org.eclipse.jface.util.Util;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -25,8 +26,10 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.components.Activator;
@@ -209,13 +212,13 @@ public class CrosstabWizardLayoutPage extends JSSHelpWizardPage {
 		Composite checkComposite = new Composite(parent, SWT.NONE);
 		checkComposite.setLayout(new GridLayout(2,false));
 		checkComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
-		whiteGrid = new Button(checkComposite, SWT.CHECK);
+		whiteGrid = new Button(checkComposite, SWT.CHECK | SWT.WRAP);
 		whiteGrid.setText(Messages.CrosstabWizardLayoutPage_white_grid_check);
 		GridData checkBoxData = new GridData(GridData.FILL_HORIZONTAL);
 		checkBoxData.horizontalSpan = 2;
 		whiteGrid.setLayoutData(checkBoxData);
 		
-		showGrid = new Button(checkComposite, SWT.CHECK);
+		showGrid = new Button(checkComposite, SWT.CHECK | SWT.WRAP);
 		showGrid.setText(Messages.CrosstabWizardLayoutPage_noGrid_label);
 		GridData showGridData = new GridData(GridData.FILL_HORIZONTAL);
 		showGridData.horizontalSpan = 2;
@@ -326,9 +329,10 @@ public class CrosstabWizardLayoutPage extends JSSHelpWizardPage {
 	/**
 	 * Generate the preview area
 	 * 
-	 * @param parent
+	 * @param parent the parent where the controls are created
+	 * @param wizardMainTab the main composite of the wizard page
 	 */
-	private void createPreview(Composite parent){
+	private void createPreview(Composite parent, final Composite wizardMainTab){
 		Group group = new Group(parent, SWT.NONE);
 		group.setText(Messages.CrosstabWizardLayoutPage_style_preview_group);
 		group.setLayout(new GridLayout(1,false));
@@ -336,6 +340,18 @@ public class CrosstabWizardLayoutPage extends JSSHelpWizardPage {
 		
 		preview = new CrosstabStylePreview(group, SWT.NONE);
 		preview.setLayoutData(new GridData(GridData.FILL_BOTH));
+		//Add a preview paint listener to fix a linux refresh problem that show the 
+		//preview figure on the first page of the wizard. This is a gtk bug on elcipse 4.5 and to 
+		//fix it a redraw of the dialog composite must be called
+		preview.addPreviewPaintListenr(new Listener() {
+			
+			@Override
+			public void handleEvent(Event event) {
+				if (Util.isLinux()){
+					wizardMainTab.redraw();
+				}
+			}
+		});
 	}
 	
 	/**
@@ -414,7 +430,7 @@ public class CrosstabWizardLayoutPage extends JSSHelpWizardPage {
 		//Create the title
 		if (createTitle) createTitleLabel(dialog);
 		createLeftCol(dialog);
-		createPreview(dialog);
+		createPreview(dialog, parent);
 		if (templateToOpen != null) setData();
 		notifyChange();
 		
