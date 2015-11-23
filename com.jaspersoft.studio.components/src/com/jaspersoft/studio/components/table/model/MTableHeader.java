@@ -30,7 +30,7 @@ import net.sf.jasperreports.components.table.StandardTable;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 
-public class MTableHeader extends AMCollection {
+public class MTableHeader extends AMFooterHeaderCollection {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;

@@ -27,7 +27,7 @@ import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 
-public class MTableGroupHeader extends AMCollection {
+public class MTableGroupHeader extends AMFooterHeaderCollection {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;

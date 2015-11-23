@@ -25,7 +25,7 @@ import com.jaspersoft.studio.components.table.TableNodeIconDescriptor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 
-public class MTableColumnFooter extends AMCollection {
+public class MTableColumnFooter extends AMFooterHeaderCollection {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
