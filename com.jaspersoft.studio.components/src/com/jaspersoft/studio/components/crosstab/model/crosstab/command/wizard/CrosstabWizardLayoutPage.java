@@ -340,9 +340,10 @@ public class CrosstabWizardLayoutPage extends JSSHelpWizardPage {
 		
 		preview = new CrosstabStylePreview(group, SWT.NONE);
 		preview.setLayoutData(new GridData(GridData.FILL_BOTH));
-		//Add a preview paint listener to fix a linux refresh problem that show the 
-		//preview figure on the first page of the wizard. This is a gtk bug on elcipse 4.5 and to 
-		//fix it a redraw of the dialog composite must be called
+		//FIXME: Add a preview paint listener to fix a linux refresh problem that show the 
+		//preview figure on the first page of the wizard. This is a gtk 3 bug on elcipse 4.5 and to 
+		//fix it a redraw of the dialog composite must be called. This can be removed one this bug
+		//https://www.eclipse.org/forums/index.php/m/1715309/ is fixed
 		preview.addPreviewPaintListenr(new Listener() {
 			
 			@Override
