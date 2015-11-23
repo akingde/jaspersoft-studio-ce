@@ -69,9 +69,8 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  * @author Veaceslav Chicu (schicu@users.sourceforge.net)
  * 
  */
-public class SPCVCItemDataList extends
-		ASPropertyWidget<AItemDataListPropertyDescriptor> implements
-		IExpressionContextSetter {
+public class SPCVCItemDataList extends ASPropertyWidget<AItemDataListPropertyDescriptor>
+		implements IExpressionContextSetter {
 
 	private ExpressionContext expContext;
 
@@ -81,8 +80,7 @@ public class SPCVCItemDataList extends
 	private Button btnRemoveDataset;
 	private Composite dsParent;
 
-	public SPCVCItemDataList(Composite parent, AbstractSection section,
-			AItemDataListPropertyDescriptor pDescriptor) {
+	public SPCVCItemDataList(Composite parent, AbstractSection section, AItemDataListPropertyDescriptor pDescriptor) {
 		super(parent, section, pDescriptor);
 	}
 
@@ -108,30 +106,22 @@ public class SPCVCItemDataList extends
 			return;
 		if (obj instanceof StandardItem) {
 			List<ItemData> clones = JRCloneUtils.cloneList(itemDatas);
-			StandardItemData itemData = (StandardItemData) getStandardItemData(
-					false, tviewer, itemDatas);
-			StandardItemData itemDataClone = (StandardItemData) getStandardItemData(
-					false, tviewer, clones);
+			StandardItemData itemData = (StandardItemData) getStandardItemData(false, tviewer, itemDatas);
+			StandardItemData itemDataClone = (StandardItemData) getStandardItemData(false, tviewer, clones);
 			int ind = itemData.getItems().indexOf((StandardItem) obj);
 			if (ind >= 0) {
-				StandardItem item = (StandardItem) itemDataClone.getItems()
-						.get(ind);
+				StandardItem item = (StandardItem) itemDataClone.getItems().get(ind);
 				showItemDialog(clones, itemDataClone, item);
 			}
 		} else if (obj instanceof StandardItemData) {
 			List<ItemData> clones = JRCloneUtils.cloneList(itemDatas);
-			StandardItemData itemData = (StandardItemData) getStandardItemData(
-					false, tviewer, itemDatas);
-			StandardItemData itemDataClone = (StandardItemData) getStandardItemData(
-					false, tviewer, clones);
+			StandardItemData itemData = (StandardItemData) getStandardItemData(false, tviewer, itemDatas);
+			StandardItemData itemDataClone = (StandardItemData) getStandardItemData(false, tviewer, clones);
 
 			ItemDataDialog dialog = new ItemDataDialog(UIUtils.getShell(),
-					itemDataLabelProvider.getText4ItemData(itemData),
-					"", //$NON-NLS-1$
-					clones, itemDataClone,
-					(JasperReportsConfiguration) section
-							.getJasperReportsContext(), getDescriptor(),
-					expContext, pnode) {
+					itemDataLabelProvider.getText4ItemData(itemData), "", //$NON-NLS-1$
+					clones, itemDataClone, (JasperReportsConfiguration) section.getJasperReportsContext(),
+					getDescriptor(), expContext, pnode) {
 
 				@Override
 				protected AItemDialog createItemDialog() {
@@ -139,8 +129,7 @@ public class SPCVCItemDataList extends
 				}
 			};
 			if (dialog.open() == Dialog.OK)
-				section.changeProperty(pDescriptor.getId(),
-						new ArrayList<ItemData>(clones));
+				section.changeProperty(pDescriptor.getId(), new ArrayList<ItemData>(clones));
 		}
 	}
 
@@ -153,37 +142,32 @@ public class SPCVCItemDataList extends
 
 		if (obj instanceof StandardItem) {
 			StandardItem item = (StandardItem) obj;
-			StandardItemData itemData = (StandardItemData) getStandardItemData(
-					false, tviewer, itemDatas);
+			StandardItemData itemData = (StandardItemData) getStandardItemData(false, tviewer, itemDatas);
 			if (itemData != null) {
-				StandardItemData itemDataClone = (StandardItemData) getStandardItemData(
-						false, tviewer, clones);
+				StandardItemData itemDataClone = (StandardItemData) getStandardItemData(false, tviewer, clones);
 				int ind = itemData.getItems().indexOf(item);
 				if (ind >= 0 && !itemData.getItems().isEmpty())
 					itemDataClone.removeItem(itemDataClone.getItems().get(ind));
 			}
 		} else if (obj instanceof StandardItemData) {
 			StandardItemData itemData = (StandardItemData) obj;
-			StandardItemData itemDataClone = (StandardItemData) getStandardItemData(
-					false, tviewer, clones);
+			StandardItemData itemDataClone = (StandardItemData) getStandardItemData(false, tviewer, clones);
 			int ind = itemDatas.indexOf(itemData);
 			if (ind >= 0)
 				clones.remove(itemDataClone);
 		} else
 			return;
-		section.changeProperty(pDescriptor.getId(), new ArrayList<ItemData>(
-				clones));
+		section.changeProperty(pDescriptor.getId(), new ArrayList<ItemData>(clones));
 	}
 
 	protected void handleNewElement(TreeViewer tviewer) {
 		List<ItemData> clones = JRCloneUtils.cloneList(itemDatas);
 		StandardItemData itemData = new StandardItemData();
 		clones.add(itemData);
-		ItemDataDialog dialog = new ItemDataDialog(UIUtils.getShell(),
-				itemDataLabelProvider.getText4ItemData(itemData), "", clones, //$NON-NLS-1$
-				itemData,
-				(JasperReportsConfiguration) section.getJasperReportsContext(),
-				getDescriptor(), expContext, pnode) {
+		ItemDataDialog dialog = new ItemDataDialog(UIUtils.getShell(), itemDataLabelProvider.getText4ItemData(itemData),
+				"", clones, //$NON-NLS-1$
+				itemData, (JasperReportsConfiguration) section.getJasperReportsContext(), getDescriptor(), expContext,
+				pnode) {
 
 			@Override
 			protected AItemDialog createItemDialog() {
@@ -192,13 +176,11 @@ public class SPCVCItemDataList extends
 		};
 		if (dialog.open() == Dialog.OK) {
 
-			section.changeProperty(pDescriptor.getId(),
-					new ArrayList<ItemData>(clones));
+			section.changeProperty(pDescriptor.getId(), new ArrayList<ItemData>(clones));
 		}
 	}
 
-	protected void showItemDialog(List<ItemData> citemsData,
-			StandardItemData itemData, StandardItem item) {
+	protected void showItemDialog(List<ItemData> citemsData, StandardItemData itemData, StandardItem item) {
 		putil.showItemDialog(citemsData, itemData, item, expContext);
 	}
 
@@ -206,10 +188,8 @@ public class SPCVCItemDataList extends
 		return putil.createItemDialog();
 	}
 
-	private ItemData getStandardItemData(boolean createNew, TreeViewer tviewer,
-			List<ItemData> clones) {
-		IStructuredSelection sel = (IStructuredSelection) dsTViewer
-				.getSelection();
+	private ItemData getStandardItemData(boolean createNew, TreeViewer tviewer, List<ItemData> clones) {
+		IStructuredSelection sel = (IStructuredSelection) dsTViewer.getSelection();
 		Object fe = sel.getFirstElement();
 		if (fe != null) {
 			if (fe instanceof StandardItemData)
@@ -235,8 +215,7 @@ public class SPCVCItemDataList extends
 				if (item != null)
 					dsTViewer.setSelection(new StructuredSelection(item), true);
 				else
-					dsTViewer.setSelection(new StructuredSelection(itemData),
-							true);
+					dsTViewer.setSelection(new StructuredSelection(itemData), true);
 			}
 		});
 	}
@@ -247,8 +226,7 @@ public class SPCVCItemDataList extends
 		datasetsCmp.setLayout(new GridLayout(2, false));
 		datasetsCmp.setLayoutData(new GridData(GridData.FILL_BOTH));
 
-		dsTViewer = new TreeViewer(datasetsCmp, SWT.SINGLE | SWT.H_SCROLL
-				| SWT.V_SCROLL | SWT.BORDER);
+		dsTViewer = new TreeViewer(datasetsCmp, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
 		Tree tree = dsTViewer.getTree();
 		GridData gd = new GridData(GridData.FILL_BOTH);
 		gd.verticalSpan = 5;
@@ -277,10 +255,8 @@ public class SPCVCItemDataList extends
 			}
 		});
 
-		btnAddNewDataset = section.getWidgetFactory().createButton(datasetsCmp,
-				Messages.SPItemdDataList_0, SWT.NONE);
-		btnAddNewDataset.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false,
-				false, 1, 1));
+		btnAddNewDataset = section.getWidgetFactory().createButton(datasetsCmp, Messages.SPItemdDataList_0, SWT.NONE);
+		btnAddNewDataset.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 1, 1));
 		btnAddNewDataset.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -288,10 +264,8 @@ public class SPCVCItemDataList extends
 			}
 		});
 
-		btnModifyDataset = section.getWidgetFactory().createButton(datasetsCmp,
-				Messages.SPItemDataList_1, SWT.NONE);
-		btnModifyDataset.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false,
-				false, 1, 1));
+		btnModifyDataset = section.getWidgetFactory().createButton(datasetsCmp, Messages.SPItemDataList_1, SWT.NONE);
+		btnModifyDataset.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 1, 1));
 		btnModifyDataset.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -299,10 +273,8 @@ public class SPCVCItemDataList extends
 			}
 		});
 
-		btnRemoveDataset = section.getWidgetFactory().createButton(datasetsCmp,
-				Messages.SPItemDataList_2, SWT.NONE);
-		btnRemoveDataset.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false,
-				false, 1, 1));
+		btnRemoveDataset = section.getWidgetFactory().createButton(datasetsCmp, Messages.SPItemDataList_2, SWT.NONE);
+		btnRemoveDataset.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 1, 1));
 		btnRemoveDataset.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -310,10 +282,8 @@ public class SPCVCItemDataList extends
 			}
 		});
 
-		btnUpDataset = section.getWidgetFactory().createButton(datasetsCmp,
-				Messages.SPItemDataList_0, SWT.NONE);
-		btnUpDataset.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false,
-				false, 1, 1));
+		btnUpDataset = section.getWidgetFactory().createButton(datasetsCmp, Messages.SPItemDataList_0, SWT.NONE);
+		btnUpDataset.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 1, 1));
 		btnUpDataset.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -321,10 +291,8 @@ public class SPCVCItemDataList extends
 			}
 		});
 
-		btnDownDataset = section.getWidgetFactory().createButton(datasetsCmp,
-				Messages.SPItemDataList_4, SWT.NONE);
-		btnDownDataset.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false,
-				false, 1, 1));
+		btnDownDataset = section.getWidgetFactory().createButton(datasetsCmp, Messages.SPItemDataList_4, SWT.NONE);
+		btnDownDataset.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 1, 1));
 		btnDownDataset.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -359,9 +327,7 @@ public class SPCVCItemDataList extends
 							return cdd.getLabel();
 					}
 				}
-				JRElementDataset ds = element.getDataset();
-				return (ds != null ? getText(ds) : "Item Data "
-						+ (itemDatas.indexOf(element) + 1));
+				return "Item Data " + (itemDatas.indexOf(element) + 1);
 			}
 
 			@Override
@@ -381,25 +347,21 @@ public class SPCVCItemDataList extends
 		moveItem(false);
 	}
 
-	protected JRPropertyChangeSupport getComponentEventSupport(
-			JRDesignComponentElement jrElement) {
+	protected JRPropertyChangeSupport getComponentEventSupport(JRDesignComponentElement jrElement) {
 		Component c = jrElement.getComponent();
 		if (c instanceof net.sf.jasperreports.engine.design.events.JRChangeEventsSupport)
-			return ((net.sf.jasperreports.engine.design.events.JRChangeEventsSupport) c)
-					.getEventSupport();
+			return ((net.sf.jasperreports.engine.design.events.JRChangeEventsSupport) c).getEventSupport();
 		return null;
 	}
 
 	private void moveItem(boolean up) {
-		StructuredSelection selection = (StructuredSelection) dsTViewer
-				.getSelection();
+		StructuredSelection selection = (StructuredSelection) dsTViewer.getSelection();
 		if (selection == null)
 			return;
 		Object sel = selection.getFirstElement();
 		if (sel instanceof Item) {
 			Item item = (Item) sel;
-			JRPropertyChangeSupport es = getComponentEventSupport((JRDesignComponentElement) pnode
-					.getValue());
+			JRPropertyChangeSupport es = getComponentEventSupport((JRDesignComponentElement) pnode.getValue());
 			for (ItemData id : itemDatas) {
 				List<Item> items = id.getItems();
 				if (Misc.isNullOrEmpty(items))
@@ -409,15 +371,12 @@ public class SPCVCItemDataList extends
 					for (int i = 0; i < size; i++) {
 						if (items.get(i) == item) {
 							int ind = items.indexOf(item);
-							int newind = up ? Math.max(0, ind - 1) : Math.min(
-									items.size() - 1, ind + 1);
+							int newind = up ? Math.max(0, ind - 1) : Math.min(items.size() - 1, ind + 1);
 							Item tmp = items.get(newind);
 							items.set(newind, item);
 							items.set(ind, tmp);
 							if (es != null)
-								es.fireIndexedPropertyChange(
-										(String) pDescriptor.getId(), newind,
-										tmp, item);
+								es.fireIndexedPropertyChange((String) pDescriptor.getId(), newind, tmp, item);
 							dsTViewer.refresh(true);
 							btnUpDataset.setEnabled(newind > 0);
 							btnDownDataset.setEnabled(newind < size - 1);
@@ -450,13 +409,11 @@ public class SPCVCItemDataList extends
 		putil.setItemDatas(itemDatas);
 
 		cd = putil.getComponentDescriptor();
-		if (cd != null && Misc.isNullOrEmpty(cd.getDatasets())
-				&& !datasetsCmp.isDisposed()) {
+		if (cd != null && Misc.isNullOrEmpty(cd.getDatasets()) && !datasetsCmp.isDisposed()) {
 			datasetsCmp.dispose();
 			dsParent.layout(true);
 		}
-		if (cd != null && !Misc.isNullOrEmpty(cd.getDatasets())
-				&& datasetsCmp.isDisposed()) {
+		if (cd != null && !Misc.isNullOrEmpty(cd.getDatasets()) && datasetsCmp.isDisposed()) {
 			createDatasetsTab(dsParent);
 			dsParent.layout(true);
 		}
@@ -476,8 +433,7 @@ public class SPCVCItemDataList extends
 		if (expContextAdapter != null)
 			setExpressionContext((ExpressionContext) expContextAdapter);
 		else
-			setExpressionContext(ModelUtils.getElementExpressionContext(
-					designEl, pnode));
+			setExpressionContext(ModelUtils.getElementExpressionContext(designEl, pnode));
 
 		dsTViewer.expandAll();
 
@@ -488,8 +444,7 @@ public class SPCVCItemDataList extends
 		enableDefaultDatasetsButtons();
 	}
 
-	private ItemPropertiesUtil putil = new ItemPropertiesUtil(pDescriptor,
-			section) {
+	private ItemPropertiesUtil putil = new ItemPropertiesUtil(pDescriptor, section) {
 		@Override
 		public int getSelectedItemDataIndex() {
 			StructuredSelection sel = null;
@@ -522,8 +477,7 @@ public class SPCVCItemDataList extends
 
 	private void enableDefaultDatasetsButtons() {
 		btnAddNewDataset.setEnabled(true);
-		StructuredSelection selection = (StructuredSelection) dsTViewer
-				.getSelection();
+		StructuredSelection selection = (StructuredSelection) dsTViewer.getSelection();
 		btnModifyDataset.setEnabled(!selection.isEmpty());
 		btnRemoveDataset.setEnabled(!selection.isEmpty());
 
@@ -568,8 +522,7 @@ public class SPCVCItemDataList extends
 					}
 					if (!ds.isEmpty()) {
 						ComponentDatasetDescriptor cdd = ds.get(ds.size() - 1);
-						btnRemoveDataset.setEnabled(cdd.getCardinality() <= 0
-								|| c < itemDatas.size());
+						btnRemoveDataset.setEnabled(cdd.getCardinality() <= 0 || c < itemDatas.size());
 					}
 				}
 			}
