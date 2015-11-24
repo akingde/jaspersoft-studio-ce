@@ -409,7 +409,7 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 		lbl.setText(Messages.ServerProfilePage_17);
 		lbl.setToolTipText(ttip);
 
-		lpath = new Text(cmp, SWT.BORDER);
+		lpath = new Text(cmp, SWT.BORDER | SWT.READ_ONLY);
 		lpath.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		lpath.setToolTipText(ttip);
 
