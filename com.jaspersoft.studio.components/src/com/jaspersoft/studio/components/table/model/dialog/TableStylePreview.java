@@ -19,6 +19,7 @@ import java.util.List;
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.Graphics;
+import org.eclipse.draw2d.LightweightSystem;
 import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.draw2d.XYLayout;
 import org.eclipse.draw2d.geometry.Dimension;
@@ -38,7 +39,6 @@ import org.eclipse.wb.swt.SWTResourceManager;
 
 import com.jaspersoft.studio.components.table.model.dialog.TableStyle.BorderStyleEnum;
 import com.jaspersoft.studio.editor.gef.figures.borders.ShadowBorder;
-import com.jaspersoft.studio.editor.java2d.J2DLightweightSystem;
 import com.jaspersoft.studio.property.color.ColorSchemaGenerator;
 import com.jaspersoft.studio.utils.AlfaRGB;
 
@@ -70,7 +70,7 @@ public class TableStylePreview extends Composite {
 	 */
 	private RectangleFigure borderPreview;
 	
-	private J2DLightweightSystem lws;
+	private LightweightSystem lws;
 	
 	/**
 	 * List of preview paint listener, called when the figure is painted. They
@@ -104,7 +104,7 @@ public class TableStylePreview extends Composite {
 	
 	private void createFigure(){
 		setLayout(new GridLayout(1,false));
-		lws = new J2DLightweightSystem();
+		lws = new LightweightSystem();
 		square = new Canvas(this, SWT.NO_REDRAW_RESIZE | SWT.NO_BACKGROUND);
 		GridData gd = new GridData(GridData.FILL_BOTH);
 		gd.verticalSpan = 2;
