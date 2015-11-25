@@ -13,8 +13,6 @@
 package com.jaspersoft.studio.components.crosstab.model.dialog;
 
 import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +23,7 @@ import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.draw2d.XYLayout;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
@@ -35,8 +34,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
+import org.eclipse.wb.swt.SWTResourceManager;
 
-import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
 import com.jaspersoft.studio.editor.gef.figures.borders.ShadowBorder;
 import com.jaspersoft.studio.editor.java2d.J2DLightweightSystem;
 import com.jaspersoft.studio.property.color.ColorSchemaGenerator;
@@ -128,55 +127,60 @@ public class CrosstabStylePreview extends Composite {
 		        //I recalculate the total width and height with the rounded values;
 		        w = rowWidth*4;
 		        h = rowHeight*4;
-		        Graphics2D g = ComponentFigure.getG2D(graphics);
+		        org.eclipse.swt.graphics.Color originalBackgroun = graphics.getBackgroundColor();
+		        org.eclipse.swt.graphics.Color originalForeground = graphics.getForegroundColor();
+		        
 		        
 		        //Last row and column
 		        Rectangle lastRow = new Rectangle(x, y+rowHeight*3, w, rowHeight);
 		        Rectangle lastCol = new Rectangle(x+rowWidth*3, y, rowWidth, h);
-		        g.setColor(crosstabStyle.getColorValue(CrosstabStyle.COLOR_TOTAL));
-		        g.fillRect(lastRow.x, lastRow.y, lastRow.width, lastRow.height);
-		        g.fillRect(lastCol.x, lastCol.y, lastCol.width, lastCol.height);
+		        graphics.setBackgroundColor(getSwtColor(crosstabStyle.getColorValue(CrosstabStyle.COLOR_TOTAL)));
+		        graphics.fillRectangle(lastRow.x, lastRow.y, lastRow.width, lastRow.height);
+		        graphics.fillRectangle(lastCol.x, lastCol.y, lastCol.width, lastCol.height);
 		        
 		        //column and row before the last
 		        Rectangle beforeLastRow = new Rectangle(x, y+rowHeight*2, rowWidth*3, rowHeight);
 		        Rectangle beforeLastCol = new Rectangle(x+rowWidth*2, y, rowWidth, rowHeight*3);
-		        g.setColor(crosstabStyle.getColorValue(CrosstabStyle.COLOR_GROUP));
-		        g.fillRect(beforeLastRow.x, beforeLastRow.y, beforeLastRow.width, beforeLastRow.height);
-		        g.fillRect(beforeLastCol.x, beforeLastCol.y, beforeLastCol.width, beforeLastCol.height);
+		        graphics.setBackgroundColor(getSwtColor(crosstabStyle.getColorValue(CrosstabStyle.COLOR_GROUP)));
+		        graphics.fillRectangle(beforeLastRow.x, beforeLastRow.y, beforeLastRow.width, beforeLastRow.height);
+		        graphics.fillRectangle(beforeLastCol.x, beforeLastCol.y, beforeLastCol.width, beforeLastCol.height);
 		        
 		        //detail cell
 		        Rectangle detail = new Rectangle(x +rowWidth, y+rowHeight, rowWidth, rowHeight);
-		        g.setColor(crosstabStyle.getColorValue(CrosstabStyle.COLOR_DETAIL));
-		        g.fillRect(detail.x, detail.y, detail.width, detail.height);
+		        graphics.setBackgroundColor(getSwtColor(crosstabStyle.getColorValue(CrosstabStyle.COLOR_DETAIL)));
+		        graphics.fillRectangle(detail.x, detail.y, detail.width, detail.height);
 		        
 		        //Measure cells
 		        Rectangle measure1 = new Rectangle(x, y+rowHeight, rowWidth, rowHeight);
 		        Rectangle measure2 = new Rectangle(x + rowWidth, y, rowWidth, rowHeight);
-		        g.setColor(crosstabStyle.getColorValue(CrosstabStyle.COLOR_MEASURES));
-		        g.fillRect(measure1.x, measure1.y, measure1.width, measure1.height);
-		        g.fillRect(measure2.x, measure2.y, measure2.width, measure2.height);
+		        graphics.setBackgroundColor(getSwtColor(crosstabStyle.getColorValue(CrosstabStyle.COLOR_MEASURES)));
+		        graphics.fillRectangle(measure1.x, measure1.y, measure1.width, measure1.height);
+		        graphics.fillRectangle(measure2.x, measure2.y, measure2.width, measure2.height);
 		        
 		        if (crosstabStyle.isShowGrid()){
-			        if (crosstabStyle.getWhiteGrid()) g.setColor(Color.white);
-			        else g.setColor(Color.black);
+			        if (crosstabStyle.getWhiteGrid()) graphics.setForegroundColor(ColorConstants.white);
+			        else graphics.setForegroundColor(ColorConstants.black);
 				    // Draw border...
 				    for (int i=0; i<5; i++)
 				    {	
 				    	if (i==0)
-				    		g.drawLine(x + rowWidth, y+rowHeight*i, x+w, y+rowHeight*i);
+				    		graphics.drawLine(x + rowWidth, y+rowHeight*i, x+w, y+rowHeight*i);
 				    	else 
-				    		g.drawLine(x, y+rowHeight*i, x+w, y+rowHeight*i);
+				    		graphics.drawLine(x, y+rowHeight*i, x+w, y+rowHeight*i);
 				    }
 	
 				    for (int i=0; i<5; i++)
 				    {	
 				    	if (i==0)
-				    		g.drawLine(x+rowWidth*i, y + rowHeight, x+rowWidth*i, y+h);
+				    		graphics.drawLine(x+rowWidth*i, y + rowHeight, x+rowWidth*i, y+h);
 				    	else 
-				    		g.drawLine(x+rowWidth*i, y, x+rowWidth*i, y+h);
+				    		graphics.drawLine(x+rowWidth*i, y, x+rowWidth*i, y+h);
 				    }
 		        }
-		        firePreviewPaintListeners(g, x, y, w, h);
+
+		        graphics.setBackgroundColor(originalBackgroun);
+		        graphics.setForegroundColor(originalForeground);
+		        firePreviewPaintListeners(graphics, x, y, w, h);
 			}
 		};
 		crosstabPreview.setBorder(new ShadowBorder());
@@ -193,6 +197,10 @@ public class CrosstabStylePreview extends Composite {
 				setTBounds();
 			}
 		});
+	}
+	
+	private org.eclipse.swt.graphics.Color getSwtColor(Color awtColor){
+		return SWTResourceManager.getColor(awtColor.getRed(), awtColor.getGreen(), awtColor.getBlue());
 	}
 	
 	/**
@@ -233,7 +241,7 @@ public class CrosstabStylePreview extends Composite {
 	 * @param w the width of the preview figure
 	 * @param h the height of the previw figure
 	 */
-	protected void firePreviewPaintListeners(Graphics2D graphics, int x, int y, int w, int h){
+	protected void firePreviewPaintListeners(Graphics graphics, int x, int y, int w, int h){
 		Event e = new Event();
 		e.widget = this;
 		e.data = graphics;

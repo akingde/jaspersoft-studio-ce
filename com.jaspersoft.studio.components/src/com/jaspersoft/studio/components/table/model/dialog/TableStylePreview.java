@@ -13,8 +13,6 @@
 package com.jaspersoft.studio.components.table.model.dialog;
 
 import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +23,7 @@ import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.draw2d.XYLayout;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
@@ -35,9 +34,9 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
+import org.eclipse.wb.swt.SWTResourceManager;
 
 import com.jaspersoft.studio.components.table.model.dialog.TableStyle.BorderStyleEnum;
-import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
 import com.jaspersoft.studio.editor.gef.figures.borders.ShadowBorder;
 import com.jaspersoft.studio.editor.java2d.J2DLightweightSystem;
 import com.jaspersoft.studio.property.color.ColorSchemaGenerator;
@@ -124,55 +123,58 @@ public class TableStylePreview extends Composite {
 			    int w = getBounds().width -10;
 			    int h = getBounds().height-10;
 		        int rowHeight = h/7;
+		        org.eclipse.swt.graphics.Color originalBackgroun = graphics.getBackgroundColor();
+		        org.eclipse.swt.graphics.Color originalForeground = graphics.getForegroundColor();
+		        
 		        Rectangle row_bounds = new Rectangle(x,y + rowHeight*2, w, rowHeight);
-		        Graphics2D g = ComponentFigure.getG2D(graphics);
 		        
 		        Color colorDetail =  tableStyle.getColorValue(TableStyle.STANDARD_COLOR_DETAIL);
 		        
-		        g.setColor(colorDetail);
-			    g.fillRect(row_bounds.x, row_bounds.y, row_bounds.width, row_bounds.height);
+		        graphics.setBackgroundColor(getSwtColor(colorDetail));
+			    graphics.fillRectangle(row_bounds.x, row_bounds.y, row_bounds.width, row_bounds.height);
 			    Color c = null;
 			    row_bounds = new Rectangle(x,y + rowHeight*3, w, rowHeight);
-			    g.setColor(colorDetail);
+			    graphics.setBackgroundColor(getSwtColor(colorDetail));
 			    if (tableStyle.hasAlternateColor())
 			    {
 			    	c = tableStyle.getColorValue(TableStyle.COLOR_DETAIL);
-			        g.setColor(c);
+			    	graphics.setBackgroundColor(getSwtColor(c));
 			    }
-			    g.fill(row_bounds);
+			    graphics.fillRectangle(row_bounds);
+			    
 			    row_bounds = new Rectangle(x,y + rowHeight*4, w, rowHeight);
-			    g.setColor(colorDetail);
-			    g.fill(row_bounds);
+			    graphics.setBackgroundColor(getSwtColor(colorDetail));
+			    graphics.fillRectangle(row_bounds);
 
 			    // TABLE HEADER
 			    row_bounds = new Rectangle(x,y + rowHeight*0, w, rowHeight);
 			    c = tableStyle.getColorValue(TableStyle.COLOR_TABLE_HEADER);
-			    g.setColor(c);
-			    g.fill(row_bounds);
+			    graphics.setBackgroundColor(getSwtColor(c));
+			    graphics.fillRectangle(row_bounds);
 
 			    // TABLE FOOTER
 			    row_bounds = new Rectangle(x,y + rowHeight*6, w, rowHeight);
-			    g.setColor(c);
-			    g.fill(row_bounds);
+			    graphics.setBackgroundColor(getSwtColor(c));
+			    graphics.fillRectangle(row_bounds);
 
 
 			    // COLUMN HEADER
 			    row_bounds = new Rectangle(x,y + rowHeight*1, w, rowHeight);
 			    c = tableStyle.getColorValue(TableStyle.COLOR_COL_HEADER);
-			    g.setColor(c);
-			    g.fill(row_bounds);
+			    graphics.setBackgroundColor(getSwtColor(c));
+			    graphics.fillRectangle(row_bounds);
 
 			    // COLUMN FOOTER
 			    row_bounds = new Rectangle(x,y + rowHeight*5, w, rowHeight);
-			    g.setColor(c);
-			    g.fill(row_bounds);
+			    graphics.setBackgroundColor(getSwtColor(c));
+			    graphics.fillRectangle(row_bounds);
 
 
-			    g.setColor(tableStyle.getBorderColor());
+			    graphics.setForegroundColor(getSwtColor(tableStyle.getBorderColor()));
 			    // Draw border...
 			    for (int i=0; i<8; ++i)
 			    {
-			    	g.drawLine(x, y+rowHeight*i, x+w, y+rowHeight*i);
+			    	graphics.drawLine(x, y+rowHeight*i, x+w, y+rowHeight*i);
 			    }
 
 			    h = rowHeight*7;
@@ -180,16 +182,19 @@ public class TableStylePreview extends Composite {
 			    {
 			        for (int i=0; i<3; ++i)
 			        {
-			            g.drawLine(x+(i*(w/3)), y, x+(i*(w/3)), y+h);
+			        	graphics.drawLine(x+(i*(w/3)), y, x+(i*(w/3)), y+h);
 			        }
-			        g.drawLine(x+w, y, x+w, y+h-1);
+			        graphics.drawLine(x+w, y, x+w, y+h-1);
 			    }
 			    if (tableStyle.getBorderStyle() == BorderStyleEnum.ONLY_HORIZONTAL)
 			    {
-			        g.drawLine(x, y, x, y+h);
-			        g.drawLine(x+w, y, x+w, y+h-1);
+			    	graphics.drawLine(x, y, x, y+h);
+			    	graphics.drawLine(x+w, y, x+w, y+h-1);
 			    }
-		        firePreviewPaintListeners(g, x, y, w, h);
+			    
+		        graphics.setBackgroundColor(originalBackgroun);
+		        graphics.setForegroundColor(originalForeground);
+		        firePreviewPaintListeners(graphics, x, y, w, h);
 			}
 		};
 		borderPreview.setBorder(new ShadowBorder());
@@ -206,6 +211,10 @@ public class TableStylePreview extends Composite {
 				setTBounds();
 			}
 		});
+	}
+	
+	private org.eclipse.swt.graphics.Color getSwtColor(Color awtColor){
+		return SWTResourceManager.getColor(awtColor.getRed(), awtColor.getGreen(), awtColor.getBlue());
 	}
 
 	/**
@@ -246,7 +255,7 @@ public class TableStylePreview extends Composite {
 	 * @param w the width of the preview figure
 	 * @param h the height of the previw figure
 	 */
-	protected void firePreviewPaintListeners(Graphics2D graphics, int x, int y, int w, int h){
+	protected void firePreviewPaintListeners(Graphics graphics, int x, int y, int w, int h){
 		Event e = new Event();
 		e.widget = this;
 		e.data = graphics;

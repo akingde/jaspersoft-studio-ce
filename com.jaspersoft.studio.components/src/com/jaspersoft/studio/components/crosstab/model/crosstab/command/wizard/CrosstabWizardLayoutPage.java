@@ -14,7 +14,6 @@ package com.jaspersoft.studio.components.crosstab.model.crosstab.command.wizard;
 
 import java.awt.Color;
 
-import org.eclipse.jface.util.Util;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -26,10 +25,8 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.components.Activator;
@@ -340,19 +337,6 @@ public class CrosstabWizardLayoutPage extends JSSHelpWizardPage {
 		
 		preview = new CrosstabStylePreview(group, SWT.NONE);
 		preview.setLayoutData(new GridData(GridData.FILL_BOTH));
-		//FIXME: Add a preview paint listener to fix a linux refresh problem that show the 
-		//preview figure on the first page of the wizard. This is a gtk 3 bug on elcipse 4.5 and to 
-		//fix it a redraw of the dialog composite must be called. This can be removed one this bug
-		//https://www.eclipse.org/forums/index.php/m/1715309/ is fixed
-		preview.addPreviewPaintListenr(new Listener() {
-			
-			@Override
-			public void handleEvent(Event event) {
-				if (Util.isLinux()){
-					wizardMainTab.redraw();
-				}
-			}
-		});
 	}
 	
 	/**
