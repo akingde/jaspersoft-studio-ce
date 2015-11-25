@@ -19,21 +19,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-import net.sf.jasperreports.eclipse.builder.JasperReportCompiler;
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.eclipse.util.FileUtils;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JRParameter;
-import net.sf.jasperreports.engine.JRScriptlet;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.design.JRDesignParameter;
-import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.fill.AsynchronousFillHandle;
-import net.sf.jasperreports.engine.fill.AsynchronousFilllListener;
-import net.sf.jasperreports.engine.fill.FillListener;
-import net.sf.jasperreports.engine.scriptlets.ScriptletFactory;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.Assert;
@@ -80,6 +65,21 @@ import com.jaspersoft.studio.utils.Console;
 import com.jaspersoft.studio.utils.ExpressionUtil;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
+import net.sf.jasperreports.eclipse.builder.JasperReportCompiler;
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRParameter;
+import net.sf.jasperreports.engine.JRScriptlet;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.design.JRDesignParameter;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.fill.AsynchronousFillHandle;
+import net.sf.jasperreports.engine.fill.AsynchronousFilllListener;
+import net.sf.jasperreports.engine.fill.FillListener;
+import net.sf.jasperreports.engine.scriptlets.ScriptletFactory;
+
 public class ReportControler {
 
 	public static final String ST_RECORDCOUNTER = "RECORDCOUNTER"; //$NON-NLS-1$
@@ -101,6 +101,7 @@ public class ReportControler {
 	public static final String FORM_PARAMETERS = "report_configuration_inputParameters"; //$NON-NLS-1$
 
 	public static List<IDataInput> inputs = new ArrayList<IDataInput>();
+
 	static {
 		inputs.add(new BooleanInput());
 		inputs.add(new TextInput());
@@ -163,26 +164,28 @@ public class ReportControler {
 			setDefaultParameterValues(jasperParameters, jrContext);
 		} else {
 			Map<String, Object> map = new HashMap<String, Object>();
-			List<JRParameter> prm = jrContext.getJasperDesign().getParametersList();
-			for (JRParameter p : prm) {
-				Object obj = jasperParameters.get(p.getName());
-				if (p.getName().endsWith(JRScriptlet.SCRIPTLET_PARAMETER_NAME_SUFFIX))
-					continue;
-				if (p.getName().equals(JRParameter.REPORT_DATA_SOURCE))
-					continue;
-				if (p.getName().equals(JRParameter.REPORT_CONNECTION))
-					continue;
-				if (p.getName().startsWith("XML_") || p.getName().startsWith("MONDRIAN_") //$NON-NLS-1$ //$NON-NLS-1$
-						|| p.getName().startsWith("XLSX_") || p.getName().startsWith("XLS_") //$NON-NLS-1$ //$NON-NLS-1$
-						|| p.getName().startsWith("JSON_") || p.getName().startsWith("HIBERNATE_") //$NON-NLS-1$ //$NON-NLS-1$
-						|| p.getName().startsWith("JPA_") || p.getName().startsWith("CSV_") //$NON-NLS-1$ //$NON-NLS-1$
-						|| p.getName().contains("csv.source") || p.getName().startsWith("XMLA_")) //$NON-NLS-1$ //$NON-NLS-1$
-					continue;
-				try {
-					if (obj != null && p.getValueClass().isAssignableFrom(obj.getClass()) && p.isForPrompting()) {
-						map.put(p.getName(), obj);
+			if (jrContext.getJasperDesign() != null) {
+				List<JRParameter> prm = jrContext.getJasperDesign().getParametersList();
+				for (JRParameter p : prm) {
+					Object obj = jasperParameters.get(p.getName());
+					if (p.getName().endsWith(JRScriptlet.SCRIPTLET_PARAMETER_NAME_SUFFIX))
+						continue;
+					if (p.getName().equals(JRParameter.REPORT_DATA_SOURCE))
+						continue;
+					if (p.getName().equals(JRParameter.REPORT_CONNECTION))
+						continue;
+					if (p.getName().startsWith("XML_") || p.getName().startsWith("MONDRIAN_") //$NON-NLS-1$
+							|| p.getName().startsWith("XLSX_") || p.getName().startsWith("XLS_") //$NON-NLS-1$
+							|| p.getName().startsWith("JSON_") || p.getName().startsWith("HIBERNATE_") //$NON-NLS-1$
+							|| p.getName().startsWith("JPA_") || p.getName().startsWith("CSV_") //$NON-NLS-1$
+							|| p.getName().contains("csv.source") || p.getName().startsWith("XMLA_")) //$NON-NLS-1$
+						continue;
+					try {
+						if (obj != null && p.getValueClass().isAssignableFrom(obj.getClass()) && p.isForPrompting()) {
+							map.put(p.getName(), obj);
+						}
+					} catch (Exception e) {
 					}
-				} catch (Exception e) {
 				}
 			}
 			jasperParameters.clear();
@@ -292,7 +295,8 @@ public class ReportControler {
 		});
 	}
 
-	public static void finishCompiledReport(final Console c, final AVParameters prmInput, final PreviewJRPrint pcontainer) {
+	public static void finishCompiledReport(final Console c, final AVParameters prmInput,
+			final PreviewJRPrint pcontainer) {
 		UIUtils.getDisplay().syncExec(new Runnable() {
 
 			public void run() {
@@ -318,8 +322,8 @@ public class ReportControler {
 
 	private void runJob(final PreviewContainer pcontainer) {
 		fillError = null;
-		Job job = new Job(Messages.PreviewEditor_preview_a
-				+ ": " + jrContext.getJasperDesign().getName() + Messages.PreviewEditor_preview_b) { //$NON-NLS-1$ 
+		Job job = new Job(Messages.PreviewEditor_preview_a + ": " + jrContext.getJasperDesign().getName() //$NON-NLS-1$
+				+ Messages.PreviewEditor_preview_b) {
 
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
