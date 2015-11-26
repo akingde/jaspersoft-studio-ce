@@ -122,6 +122,8 @@ public class Messages extends NLS {
 	public static String MCrosstab_run_direction_description;
 	public static String MCrosstabDataset_data_presorted;
 	public static String MCrosstabDataset_data_presorted_description;
+	public static String MCrosstabGroup_0;
+	public static String MCrosstabGroup_1;
 	public static String MCrosstabGroup_bucket_description;
 	public static String MCrosstabGroup_name_description;
 	public static String MCrosstabGroup_total_position_description;

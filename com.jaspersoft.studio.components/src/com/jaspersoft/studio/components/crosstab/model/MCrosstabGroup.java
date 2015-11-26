@@ -16,11 +16,6 @@ import java.beans.PropertyChangeEvent;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.jasperreports.crosstabs.JRCrosstabGroup;
-import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabGroup;
-import net.sf.jasperreports.crosstabs.type.CrosstabTotalPositionEnum;
-import net.sf.jasperreports.engine.JRConstants;
-
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource;
 
@@ -28,11 +23,16 @@ import com.jaspersoft.studio.components.crosstab.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.property.descriptor.JRPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
+import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 
-public abstract class MCrosstabGroup extends MDatasetGroupNode implements
-		IPropertySource {
+import net.sf.jasperreports.crosstabs.JRCrosstabGroup;
+import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabGroup;
+import net.sf.jasperreports.crosstabs.type.CrosstabTotalPositionEnum;
+import net.sf.jasperreports.engine.JRConstants;
+
+public abstract class MCrosstabGroup extends MDatasetGroupNode implements IPropertySource {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	/**
@@ -80,8 +80,7 @@ public abstract class MCrosstabGroup extends MDatasetGroupNode implements
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1,
-			Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
 		descriptors = descriptors1;
 		defaultsMap = defaultsMap1;
 	}
@@ -93,25 +92,27 @@ public abstract class MCrosstabGroup extends MDatasetGroupNode implements
 	 *            the desc
 	 */
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc,
-			Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		totalPositionD = new NamedEnumPropertyDescriptor<CrosstabTotalPositionEnum>(
-				JRDesignCrosstabGroup.PROPERTY_TOTAL_POSITION,
-				Messages.common_total_position, CrosstabTotalPositionEnum.NONE,
-				NullEnum.NOTNULL);
-		totalPositionD
-				.setDescription(Messages.MCrosstabGroup_total_position_description);
+				JRDesignCrosstabGroup.PROPERTY_TOTAL_POSITION, Messages.common_total_position,
+				CrosstabTotalPositionEnum.NONE, NullEnum.NOTNULL);
+		totalPositionD.setDescription(Messages.MCrosstabGroup_total_position_description);
 		desc.add(totalPositionD);
 
-		NTextPropertyDescriptor nameD = new NTextPropertyDescriptor(
-				JRDesignCrosstabGroup.PROPERTY_NAME, Messages.common_name);
+		NTextPropertyDescriptor nameD = new NTextPropertyDescriptor(JRDesignCrosstabGroup.PROPERTY_NAME,
+				Messages.common_name);
 		nameD.setDescription(Messages.MCrosstabGroup_name_description);
 		desc.add(nameD);
 
-		JRPropertyDescriptor bucketD = new JRPropertyDescriptor(
-				JRDesignCrosstabGroup.PROPERTY_BUCKET, Messages.common_bucket);
+		JRPropertyDescriptor bucketD = new JRPropertyDescriptor(JRDesignCrosstabGroup.PROPERTY_BUCKET,
+				Messages.common_bucket);
 		bucketD.setDescription(Messages.MCrosstabGroup_bucket_description);
 		desc.add(bucketD);
+
+		CheckBoxPropertyDescriptor merge = new CheckBoxPropertyDescriptor(
+				JRDesignCrosstabGroup.PROPERTY_MERGE_HEADER_CELLS, Messages.MCrosstabGroup_0);
+		merge.setDescription(Messages.MCrosstabGroup_1);
+		desc.add(merge);
 
 	}
 
@@ -139,6 +140,8 @@ public abstract class MCrosstabGroup extends MDatasetGroupNode implements
 			mBucket.setValue(jrField.getBucket());
 			return mBucket;
 		}
+		if (id.equals(JRDesignCrosstabGroup.PROPERTY_MERGE_HEADER_CELLS))
+			return new Boolean(jrField.getMergeHeaderCells());
 		return null;
 	}
 
@@ -173,9 +176,8 @@ public abstract class MCrosstabGroup extends MDatasetGroupNode implements
 			MCrosstab cross = getMCrosstab();
 			cross.getCrosstabManager().refresh();
 			getPropertyChangeSupport().firePropertyChange(
-					new PropertyChangeEvent(this,
-							JRDesignCrosstabGroup.PROPERTY_TOTAL_POSITION,
-							null, value));
-		}
+					new PropertyChangeEvent(this, JRDesignCrosstabGroup.PROPERTY_TOTAL_POSITION, null, value));
+		} else if (id.equals(JRDesignCrosstabGroup.PROPERTY_MERGE_HEADER_CELLS))
+			jrField.setMergeHeaderCells(((Boolean) value).booleanValue());
 	}
 }

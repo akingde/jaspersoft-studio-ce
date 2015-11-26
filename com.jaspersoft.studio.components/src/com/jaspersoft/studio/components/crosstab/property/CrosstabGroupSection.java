@@ -27,20 +27,20 @@ public class CrosstabGroupSection extends AbstractSection {
 	 * @see org.eclipse.ui.views.properties.tabbed.ITabbedPropertySection#createControls(org.eclipse.swt.widgets.Composite,
 	 *      org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage)
 	 */
-	public void createControls(final Composite parent,
-			TabbedPropertySheetPage tabbedPropertySheetPage) {
+	public void createControls(final Composite parent, TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
 
 		parent.setLayout(new GridLayout(2, false));
 		createWidget4Property(parent, JRDesignCrosstabGroup.PROPERTY_NAME);
-		createWidget4Property(parent,
-				JRDesignCrosstabGroup.PROPERTY_TOTAL_POSITION);
+		createWidget4Property(parent, JRDesignCrosstabGroup.PROPERTY_TOTAL_POSITION);
+		createWidget4Property(parent, JRDesignCrosstabGroup.PROPERTY_MERGE_HEADER_CELLS);
 	}
-	
+
 	@Override
 	protected void initializeProvidedProperties() {
 		super.initializeProvidedProperties();
 		addProvidedProperties(JRDesignCrosstabGroup.PROPERTY_NAME, Messages.common_name);
 		addProvidedProperties(JRDesignCrosstabGroup.PROPERTY_TOTAL_POSITION, Messages.common_total_position);
+		addProvidedProperties(JRDesignCrosstabGroup.PROPERTY_MERGE_HEADER_CELLS, Messages.MCrosstabGroup_0);
 	}
 }
