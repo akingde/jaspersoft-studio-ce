@@ -715,6 +715,7 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 					}
 				}
 				// now change properties, first remove the old ones if any
+				JRPropertiesMap originalMap = jrElement.getPropertiesMap().cloneProperties();
 				String[] names = jrElement.getPropertiesMap().getPropertyNames();
 				for (int i = 0; i < names.length; i++) {
 					jrElement.getPropertiesMap().removeProperty(names[i]);
@@ -725,7 +726,7 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 						jrElement.getPropertiesMap().setProperty(p.getName(), p.getValue());
 					}
 				}
-				this.getPropertyChangeSupport().firePropertyChange(PROPERTY_MAP, false, true);
+				propertyChange(new PropertyChangeEvent(jrElement, PROPERTY_MAP, originalMap, jrElement.getPropertiesMap()));
 			}
 		} else if (id.equals(JRDesignElement.PROPERTY_HEIGHT)) {
 			jrElement.setHeight((Integer) Misc.nvl(value, Integer.valueOf(0)));
@@ -767,15 +768,17 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		else if (id.equals(JRDesignElement.PROPERTY_PRINT_WHEN_DETAIL_OVERFLOWS))
 			jrElement.setPrintWhenDetailOverflows(((Boolean) value).booleanValue());
 		else if (id.equals(PROPERTY_MAP)) {
+			JRPropertiesMap originalMap = jrElement.getPropertiesMap().cloneProperties();
 			JRPropertiesMap v = (JRPropertiesMap) value;
 			String[] names = jrElement.getPropertiesMap().getPropertyNames();
 			for (int i = 0; i < names.length; i++) {
 				jrElement.getPropertiesMap().removeProperty(names[i]);
 			}
 			names = v.getPropertyNames();
-			for (int i = 0; i < names.length; i++)
+			for (int i = 0; i < names.length; i++){
 				jrElement.getPropertiesMap().setProperty(names[i], v.getProperty(names[i]));
-			this.getPropertyChangeSupport().firePropertyChange(PROPERTY_MAP, false, true);
+			}
+			propertyChange(new PropertyChangeEvent(jrElement, PROPERTY_MAP, originalMap, jrElement.getPropertiesMap()));
 		}
 	}
 

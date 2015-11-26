@@ -263,6 +263,7 @@ Export-Package: com.jaspersoft.studio;
    org.eclipse.gef.ui.parts",
  com.jaspersoft.studio.editor.layout,
  com.jaspersoft.studio.editor.menu,
+ com.jaspersoft.studio.editor.name,
  com.jaspersoft.studio.editor.outline;
   uses:="org.eclipse.core.runtime,
    org.eclipse.gef.ui.actions,

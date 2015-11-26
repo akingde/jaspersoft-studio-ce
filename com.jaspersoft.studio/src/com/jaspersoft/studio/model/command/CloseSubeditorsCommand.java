@@ -12,6 +12,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.model.command;
 
+import java.beans.PropertyChangeEvent;
 import java.util.List;
 
 import net.sf.jasperreports.engine.design.events.JRChangeEventsSupport;
@@ -95,7 +96,8 @@ public class CloseSubeditorsCommand extends Command{
 			sendDeleteEvent(child.getChildren());
 			if (child.getValue() instanceof JRChangeEventsSupport){
 				JRChangeEventsSupport eventElement = (JRChangeEventsSupport)child.getValue();
-				eventElement.getEventSupport().firePropertyChange(ReportContainer.CLOSE_EDITOR_PROPERTY, child.getValue(), null);
+				PropertyChangeEvent event = new PropertyChangeEvent(child.getValue(), ReportContainer.CLOSE_EDITOR_PROPERTY, child.getValue(), null);
+				eventElement.getEventSupport().firePropertyChange(event);
 			}
 		}
 	}

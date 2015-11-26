@@ -10,17 +10,11 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
-package com.jaspersoft.studio.components.section.name;
-
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-
-import net.sf.jasperreports.engine.base.JRBaseElement;
+package com.jaspersoft.studio.editor.name;
 
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
-import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -33,18 +27,6 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  */
 public abstract class NamedSubeditor extends AbstractVisualEditor {
 
-	/**
-	 * Listneer to update the editor name when some properties of the managed
-	 * element changes
-	 */
-	protected PropertyChangeListener mListener = new PropertyChangeListener() {
-
-		@Override
-		public void propertyChange(PropertyChangeEvent arg0) {
-			setupPartName();
-		}
-	};
-	
 	public NamedSubeditor(JasperReportsConfiguration jrContext) {
 		super(jrContext);
 	}
@@ -55,43 +37,30 @@ public abstract class NamedSubeditor extends AbstractVisualEditor {
 	 */
 	@Override
 	public void setModel(INode model) {
-		INode oldModel = getModel();
-		if (oldModel != null && oldModel instanceof MRoot && oldModel.getChildren().size() > 0) {
-			INode n = oldModel.getChildren().get(0);
-			n.getPropertyChangeSupport().removePropertyChangeListener(mListener);
-		}
 		super.setModel(model);
-		if (model != null && model instanceof MRoot && model.getChildren().size() > 0) {
-			INode n = model.getChildren().get(0);
-			n.getPropertyChangeSupport().addPropertyChangeListener(mListener);
-		}
-		setupPartName();
+		updateEditorName();
 	}
 	
 	/**
 	 * Update the name of the editor, if it is present on the element uses that one, otherwise
 	 * a default name for the editor is used
 	 */
-	protected void setupPartName() {
-		ANode node = getEditedNode();
-		if (node != null && node.getValue() instanceof JRBaseElement) {
-			JRBaseElement el = (JRBaseElement)node.getValue();
-			String name = el.getPropertiesMap().getProperty(NameSection.getNamePropertyId(node));
-			if (!Misc.isNullOrEmpty(name)) {
-				setPartName(name);
-				return;
-			}
+	public void updateEditorName() {
+		String currentName = getEditorName();
+		if (!Misc.isNullOrEmpty(currentName)) {
+			setPartName(currentName);
+			return;
 		}
-		setPartName(getDefaultPartName());
+		setPartName(getDefaultEditorName());
 	}
 	
 	/**
 	 * Return the default name for the editor, when the managed model
 	 * has not a name
 	 * 
-	 * @return a name for the editor
+	 * @return a name for the editor, must be not empty and not null
 	 */
-	public abstract String getDefaultPartName();
+	public abstract String getDefaultEditorName();
 	
 	/**
 	 * Return the node edited inside the editor
@@ -100,4 +69,11 @@ public abstract class NamedSubeditor extends AbstractVisualEditor {
 	 */
 	public abstract ANode getEditedNode();
 	
+	/**
+	 * Return the default name for the editor, taken from the managed 
+	 * model
+	 * 
+	 * @return a name for the editor, if null the default name will be used
+	 */
+	public abstract String getEditorName();
 }

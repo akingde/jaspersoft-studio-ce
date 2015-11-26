@@ -26,13 +26,14 @@ import org.eclipse.jface.action.Separator;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.components.list.messages.Messages;
 import com.jaspersoft.studio.components.list.model.MList;
-import com.jaspersoft.studio.components.section.name.NamedSubeditor;
+import com.jaspersoft.studio.components.section.name.NameSection;
 import com.jaspersoft.studio.editor.gef.parts.JSSGraphicalViewerKeyHandler;
 import com.jaspersoft.studio.editor.gef.parts.JasperDesignEditPartFactory;
 import com.jaspersoft.studio.editor.gef.parts.MainDesignerRootEditPart;
 import com.jaspersoft.studio.editor.gef.rulers.ReportRuler;
 import com.jaspersoft.studio.editor.gef.rulers.ReportRulerProvider;
 import com.jaspersoft.studio.editor.java2d.JSSScrollingGraphicalViewer;
+import com.jaspersoft.studio.editor.name.NamedSubeditor;
 import com.jaspersoft.studio.editor.report.ParentSelectionOverrider;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
@@ -42,6 +43,8 @@ import com.jaspersoft.studio.property.dataset.dialog.ContextualDatasetAction;
 import com.jaspersoft.studio.property.dataset.dialog.DatasetAction;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
+import net.sf.jasperreports.engine.base.JRBaseElement;
+
 /*
  * The Class TableEditor.
  * 
@@ -50,7 +53,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 public class ListEditor extends NamedSubeditor {
 	public ListEditor(JasperReportsConfiguration jrContext) {
 		super(jrContext);
-		setPartName(getDefaultPartName());
+		setPartName(getDefaultEditorName());
 		setPartImage(JaspersoftStudioPlugin.getInstance().getImage(MList.getIconDescriptor().getIcon16()));
 	}
 
@@ -129,7 +132,7 @@ public class ListEditor extends NamedSubeditor {
 	}
 
 	@Override
-	public String getDefaultPartName() {
+	public String getDefaultEditorName() {
 		return Messages.common_list;
 	}
 
@@ -154,4 +157,13 @@ public class ListEditor extends NamedSubeditor {
 		return null;
 	}
 
+	@Override
+	public String getEditorName() {
+		ANode node = getEditedNode();
+		if (node != null && node.getValue() instanceof JRBaseElement) {
+			JRBaseElement el = (JRBaseElement)node.getValue();
+			return el.getPropertiesMap().getProperty(NameSection.getNamePropertyId(node));
+		}
+		return null;
+	}
 }

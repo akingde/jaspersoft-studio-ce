@@ -60,6 +60,7 @@ import com.jaspersoft.studio.editor.layout.FreeLayout;
 import com.jaspersoft.studio.editor.layout.ILayout;
 import com.jaspersoft.studio.editor.layout.LayoutManager;
 import com.jaspersoft.studio.editor.layout.VerticalRowLayout;
+import com.jaspersoft.studio.editor.report.ReportContainer;
 import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IContainer;
@@ -431,13 +432,15 @@ public class MCrosstab extends MGraphicElementLineBox implements IContainer,
 
 	@Override
 	public void propertyChange(final PropertyChangeEvent evt) {
-		if (getParent() == null || flagRefreshCells)
-			return;
+		if (getParent() == null || flagRefreshCells) return;
+		
 		String pname = evt.getPropertyName();
 		Object newValue = evt.getNewValue();
 		Object oldValue = evt.getOldValue();
-		if (pname.equals(JRDesignElement.PROPERTY_WIDTH)
-				|| pname.equals(JRDesignElement.PROPERTY_HEIGHT)) {
+		if(pname.equals(PROPERTY_MAP)){
+			//fire the event to update the editor name, because the property of the name could be changed
+			 firePropertyChange(new PropertyChangeEvent(getValue(), ReportContainer.RENAME_EDITOR_PROPERTY, oldValue, newValue));
+		} if (pname.equals(JRDesignElement.PROPERTY_WIDTH) || pname.equals(JRDesignElement.PROPERTY_HEIGHT)) {
 			getValue().preprocess();
 			getCrosstabManager().init(getValue());
 		} else if (pname.equals(JRDesignCrosstab.PROPERTY_HEADER_CELL)) {
@@ -487,16 +490,14 @@ public class MCrosstab extends MGraphicElementLineBox implements IContainer,
 							INode n = child.get(i);
 							if (n instanceof MTitle) {
 								removeChild((ANode) n);
-								new MTitleCell(this,
-										(CrosstabColumnCell) newValue, i);
+								new MTitleCell(this, (CrosstabColumnCell) newValue, i);
 								break;
 							}
 						}
 					}
 				}
 				getCrosstabManager().refresh();
-			} else if (pname
-					.equals(JRDesignCrosstab.PROPERTY_WHEN_NO_DATA_CELL)) {
+			} else if (pname.equals(JRDesignCrosstab.PROPERTY_WHEN_NO_DATA_CELL)) {
 				if (evt.getSource() == getValue()) {
 					if (oldValue != null && newValue == null) {
 						List<INode> child = this.getChildren();
@@ -515,8 +516,7 @@ public class MCrosstab extends MGraphicElementLineBox implements IContainer,
 							INode n = child.get(i);
 							if (n instanceof MCrosstabWhenNoData) {
 								removeChild((ANode) n);
-								new MCrosstabWhenNoDataCell(this,
-										(JRCellContents) newValue, i);
+								new MCrosstabWhenNoDataCell(this, (JRCellContents) newValue, i);
 								break;
 							}
 						}
@@ -526,15 +526,12 @@ public class MCrosstab extends MGraphicElementLineBox implements IContainer,
 			} else if (pname.equals(JRDesignCrosstab.PROPERTY_CELLS)
 					|| pname.equals(JRDesignCrosstab.PROPERTY_ROW_GROUPS)
 					|| pname.equals(JRDesignCrosstab.PROPERTY_COLUMN_GROUPS)) {
-				if (evt.getSource() == getValue() && getValue() != null
-						&& !flagRefreshCells) {
+				if (evt.getSource() == getValue() && getValue() != null && !flagRefreshCells) {
 					flagRefreshCells = true;
 					CrosstabComponentFactory.deleteCellNodes(MCrosstab.this);
 					Display.getDefault().asyncExec(new Runnable() {
 						public void run() {
-							CrosstabComponentFactory.createCellNodes(
-									(JRDesignCrosstab) getValue(),
-									MCrosstab.this);
+							CrosstabComponentFactory.createCellNodes((JRDesignCrosstab) getValue(), MCrosstab.this);
 							getCrosstabManager().refresh();
 							flagRefreshCells = false;
 							MCrosstab.super.propertyChange(evt);

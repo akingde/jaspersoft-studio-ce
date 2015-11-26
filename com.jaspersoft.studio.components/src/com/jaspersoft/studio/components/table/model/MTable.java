@@ -54,6 +54,7 @@ import com.jaspersoft.studio.editor.layout.FreeLayout;
 import com.jaspersoft.studio.editor.layout.ILayout;
 import com.jaspersoft.studio.editor.layout.LayoutManager;
 import com.jaspersoft.studio.editor.layout.VerticalRowLayout;
+import com.jaspersoft.studio.editor.report.ReportContainer;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IContainer;
 import com.jaspersoft.studio.model.IContainerEditPart;
@@ -441,12 +442,12 @@ public class MTable extends MGraphicElement implements IContainer,
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 
-		if (evt.getPropertyName().equals(StandardTable.PROPERTY_DATASET_RUN)) {
+		if(evt.getPropertyName().equals(PROPERTY_MAP)){
+			//fire the event to update the editor name, because the property of the name could be changed
+			firePropertyChange(new PropertyChangeEvent(getValue(), ReportContainer.RENAME_EDITOR_PROPERTY, evt.getOldValue(), evt.getNewValue()));
+		} else if (evt.getPropertyName().equals(StandardTable.PROPERTY_DATASET_RUN)) {
 			addDatasetGroupListener();
-		}
-
-		if (evt.getPropertyName().equals(
-				MGraphicElement.FORCE_GRAPHICAL_REFRESH)) {
+		} else if (evt.getPropertyName().equals(MGraphicElement.FORCE_GRAPHICAL_REFRESH)) {
 			ANode parent = getParent();
 			IGraphicalPropertiesHandler upperGrahpicHandler = null;
 			while (parent != null) {
@@ -456,12 +457,7 @@ public class MTable extends MGraphicElement implements IContainer,
 				parent = parent.getParent();
 			}
 			if (upperGrahpicHandler != null) {
-				((MGraphicElement) upperGrahpicHandler)
-						.getValue()
-						.getEventSupport()
-						.firePropertyChange(
-								MGraphicElement.FORCE_GRAPHICAL_REFRESH, null,
-								null);
+				((MGraphicElement) upperGrahpicHandler).getValue().getEventSupport().firePropertyChange(MGraphicElement.FORCE_GRAPHICAL_REFRESH, null, null);
 			}
 		}
 

@@ -49,6 +49,7 @@ import com.jaspersoft.studio.editor.defaults.DefaultManager;
 import com.jaspersoft.studio.editor.layout.FreeLayout;
 import com.jaspersoft.studio.editor.layout.ILayout;
 import com.jaspersoft.studio.editor.layout.LayoutManager;
+import com.jaspersoft.studio.editor.report.ReportContainer;
 import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IContainer;
@@ -390,43 +391,33 @@ public class MList extends MGraphicElement implements IPastable,
 		if (evt.getSource() == getValue()) {
 			if (evt.getPropertyName().equals(JRDesignElement.PROPERTY_HEIGHT)) {
 				JRDesignComponentElement jrElement = (JRDesignComponentElement) getValue();
-				StandardListComponent jrList = (StandardListComponent) jrElement
-						.getComponent();
-				((DesignListContents) jrList.getContents())
-						.setHeight((Integer) evt.getNewValue());
-			} else if (evt.getPropertyName().equals(
-					JRDesignElement.PROPERTY_WIDTH)) {
+				StandardListComponent jrList = (StandardListComponent) jrElement.getComponent();
+				((DesignListContents) jrList.getContents()).setHeight((Integer) evt.getNewValue());
+			} else if (evt.getPropertyName().equals(JRDesignElement.PROPERTY_WIDTH)) {
 				JRDesignComponentElement jrElement = (JRDesignComponentElement) getValue();
-				StandardListComponent jrList = (StandardListComponent) jrElement
-						.getComponent();
-				((DesignListContents) jrList.getContents())
-						.setWidth((Integer) evt.getNewValue());
+				StandardListComponent jrList = (StandardListComponent) jrElement.getComponent();
+				((DesignListContents) jrList.getContents()).setWidth((Integer) evt.getNewValue());
 			}
 		}
-		// Add the children at the model only if the list is opned into a
-		// separate
-		// editor
-		if (evt.getPropertyName()
-				.equals(JRDesignElementGroup.PROPERTY_CHILDREN)
-				&& getParent() instanceof MPage) {
+	
+		if(evt.getPropertyName().equals(PROPERTY_MAP)){
+			//fire the event to update the editor name, because the property of the name could be changed
+			firePropertyChange(new PropertyChangeEvent(getValue(), ReportContainer.RENAME_EDITOR_PROPERTY, evt.getOldValue(), evt.getNewValue()));
+		} else if (evt.getPropertyName().equals(JRDesignElementGroup.PROPERTY_CHILDREN) && getParent() instanceof MPage) {
+			// Add the children at the model only if the list is opened into a separate editor
 			if (evt.getSource() == getJRElementGroup()) {
 				if (evt.getOldValue() == null && evt.getNewValue() != null) {
 					int newIndex = -1;
 					if (evt instanceof CollectionElementAddedEvent) {
-						newIndex = ((CollectionElementAddedEvent) evt)
-								.getAddedIndex();
+						newIndex = ((CollectionElementAddedEvent) evt).getAddedIndex();
 					}
 					// add the node to this parent
-					ANode n = ReportFactory.createNode(this, evt.getNewValue(),
-							newIndex);
+					ANode n = ReportFactory.createNode(this, evt.getNewValue(), newIndex);
 					if (evt.getNewValue() instanceof JRElementGroup) {
-						JRElementGroup jrFrame = (JRElementGroup) evt
-								.getNewValue();
-						ReportFactory.createElementsForBand(n,
-								jrFrame.getChildren());
+						JRElementGroup jrFrame = (JRElementGroup) evt.getNewValue();
+						ReportFactory.createElementsForBand(n,jrFrame.getChildren());
 					}
-				} else if (evt.getOldValue() != null
-						&& evt.getNewValue() == null) {
+				} else if (evt.getOldValue() != null && evt.getNewValue() == null) {
 					// delete
 					for (INode n : getChildren()) {
 						if (n.getValue() == evt.getOldValue()) {
@@ -437,13 +428,14 @@ public class MList extends MGraphicElement implements IPastable,
 				} else {
 					// changed
 					for (INode n : getChildren()) {
-						if (n.getValue() == evt.getOldValue())
+						if (n.getValue() == evt.getOldValue()){
 							n.setValue(evt.getNewValue());
+						}
 					}
 				}
 			}
 		}
-		getPropertyChangeSupport().firePropertyChange(evt);
+		super.propertyChange(evt);
 	}
 
 	@Override

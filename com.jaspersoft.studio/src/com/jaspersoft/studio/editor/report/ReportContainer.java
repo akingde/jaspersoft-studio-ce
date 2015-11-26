@@ -62,6 +62,7 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.IJROBjectEditor;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.ExpressionContext.Visibility;
+import com.jaspersoft.studio.editor.name.NamedSubeditor;
 import com.jaspersoft.studio.editor.expression.ExpressionEditorSupportUtil;
 import com.jaspersoft.studio.editor.part.MultiPageToolbarEditorPart;
 import com.jaspersoft.studio.messages.Messages;
@@ -96,10 +97,17 @@ public class ReportContainer extends MultiPageToolbarEditorPart implements ITabb
 
 	/**
 	 * Property used by an element to ask to the container to check if for that element there is an editor opened and in
-	 * that case close it. The property change event must have the old value set with the JRelement that it is requesting
+	 * that case close it. The property change event must have the source value set with the JRelement that it is requesting
 	 * the editor closing
 	 */
 	public static final String CLOSE_EDITOR_PROPERTY = "closeElementEditor";
+	
+	/**
+	 * Property used by an element to ask to the container to check if for that element there is an editor opened and in
+	 * that case refresh its name. The property change event must have the source value set with the JRelement that it is requesting
+	 * the editor closing
+	 */
+	public static final String RENAME_EDITOR_PROPERTY = "renamedElementEditor";
 	
 	/**
 	 * Flag used to know if in the current editor the background image is in edit mode, if available
@@ -239,9 +247,14 @@ public class ReportContainer extends MultiPageToolbarEditorPart implements ITabb
 
 			String propertyName = evt.getPropertyName();
 			if (propertyName.equals(CLOSE_EDITOR_PROPERTY)) {
-				AbstractVisualEditor obj = ccMap.get(evt.getOldValue());
+				AbstractVisualEditor obj = ccMap.get(evt.getSource());
 				if (obj != null)
 					removeEditorPage(evt, obj);
+			} else if (propertyName.equals(RENAME_EDITOR_PROPERTY)){
+				AbstractVisualEditor obj = ccMap.get(evt.getSource());
+				if (obj != null && obj instanceof NamedSubeditor){
+					((NamedSubeditor)obj).updateEditorName();
+				}
 			} else if (evt.getNewValue() != null && evt.getOldValue() == null) {
 				// createEditorPage(evt.getNewValue());
 			} else if (evt.getNewValue() == null && evt.getOldValue() != null) {
@@ -301,7 +314,7 @@ public class ReportContainer extends MultiPageToolbarEditorPart implements ITabb
 						setPageImage(index, ave.getPartImage());
 
 						rep.getPropertyChangeSupport().addPropertyChangeListener(modelListener);
-
+						
 						ave.addPropertyListener(titleListener);
 					}
 				}
