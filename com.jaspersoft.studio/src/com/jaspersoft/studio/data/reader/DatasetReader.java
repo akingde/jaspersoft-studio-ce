@@ -33,7 +33,9 @@ import net.sf.jasperreports.eclipse.builder.Markers;
 import net.sf.jasperreports.eclipse.builder.jdt.JRErrorHandler;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRField;
+import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JRScriptlet;
 import net.sf.jasperreports.engine.JRSortField;
@@ -42,11 +44,13 @@ import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
+import net.sf.jasperreports.engine.design.JRDesignGroup;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
 import net.sf.jasperreports.engine.design.JRDesignQuery;
 import net.sf.jasperreports.engine.design.JRDesignVariable;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
+import net.sf.jasperreports.engine.xml.JRXmlWriter;
 
 /**
  * Reader class for generic dataset.
@@ -157,10 +161,44 @@ public class DatasetReader {
 			// Clear "dirty" variables
 			dataJD.getVariablesList().clear();
 			dataJD.getVariablesMap().clear();
-			//
+
+			// 5.b add groups
+			dataJD.getGroupsList().clear();
+			dataJD.getMainDesignDataset().getGroupsMap().clear();
+			for (JRGroup sf : designDataset.getGroupsList()) {
+				JRDesignGroup gr = new JRDesignGroup();
+				gr.setName(sf.getName());
+				// gr.setExpression(sf.getExpression());
+				dataJD.addGroup(gr);
+			}
+
+			// 5.c add the variables, ignore duplicates
 			JRVariable[] variables = designDataset.getVariables();
 			for (JRVariable f : variables)
-				dataJD.addVariable((JRDesignVariable) f);
+				try {
+					JRDesignVariable v = new JRDesignVariable();
+					v.setName(f.getName());
+					v.setSystemDefined(f.isSystemDefined());
+					v.setValueClassName(f.getValueClassName());
+					v.setCalculation(f.getCalculationValue());
+					v.setExpression(f.getExpression());
+					v.setInitialValueExpression(f.getInitialValueExpression());
+
+					v.setIncrementerFactoryClassName(f.getIncrementerFactoryClassName());
+					v.setIncrementType(f.getIncrementTypeValue());
+					if (f.getIncrementGroup() != null)
+						v.setIncrementGroup(dataJD.getGroupsMap().get(f.getIncrementGroup().getName()));
+
+					v.setResetType(f.getResetTypeValue());
+					if (f.getResetGroup() != null)
+						v.setResetGroup(dataJD.getGroupsMap().get(f.getResetGroup().getName()));
+
+					dataJD.addVariable(v);
+				} catch (JRException e) {
+					// it's possible we'll have some duplicates from groups
+					if (!e.getMessage().equals(JRDesignDataset.EXCEPTION_MESSAGE_KEY_DUPLICATE_VARIABLE))
+						e.printStackTrace();
+				}
 
 			// 6. add sort fields
 			dataJD.getSortFieldsList().clear();
@@ -178,6 +216,7 @@ public class DatasetReader {
 			JasperReport jrobj = null;
 			IFile f = (IFile) jConfig.get(FileUtils.KEY_FILE);
 			if (f != null) {
+				System.out.println(JRXmlWriter.writeReport(dataJD, "UTF-8"));
 				Markers.deleteMarkers(f);
 				JasperReportCompiler compiler = new JasperReportCompiler();
 				compiler.setErrorHandler(new JRErrorHandler(f));
