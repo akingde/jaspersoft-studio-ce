@@ -216,7 +216,7 @@ public class DatasetReader {
 			JasperReport jrobj = null;
 			IFile f = (IFile) jConfig.get(FileUtils.KEY_FILE);
 			if (f != null) {
-				System.out.println(JRXmlWriter.writeReport(dataJD, "UTF-8"));
+//				System.out.println(JRXmlWriter.writeReport(dataJD, "UTF-8"));
 				Markers.deleteMarkers(f);
 				JasperReportCompiler compiler = new JasperReportCompiler();
 				compiler.setErrorHandler(new JRErrorHandler(f));
