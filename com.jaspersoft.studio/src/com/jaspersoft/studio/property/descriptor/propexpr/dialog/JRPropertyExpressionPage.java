@@ -65,9 +65,12 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 			PropertyDTO v = (PropertyDTO) input.get(pos);
 			if (v == null) return;
 			JRPropertyExpressionDialog dialog = new JRPropertyExpressionDialog(Display.getDefault().getActiveShell());
-			dialog.setValue(v);
+			//the edited value must be a clone, otherwise changes done in the dialog 
+			//will be propagated even if the cancel button is pressed
+			PropertyDTO editedValue = v.clone();
+			dialog.setValue(editedValue);
 			if (dialog.open() == Window.OK)
-				input.set(pos, v);
+				input.set(pos, editedValue);
 		}
 	}
 

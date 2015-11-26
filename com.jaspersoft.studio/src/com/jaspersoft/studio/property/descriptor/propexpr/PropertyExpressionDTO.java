@@ -65,6 +65,8 @@ public class PropertyExpressionDTO extends PropertyDTO{
 	 */
 	@Override
 	public PropertyExpressionDTO clone(){
-		return new PropertyExpressionDTO(this.isExpression(), new String(this.getName()), new String(this.getValue()));
+		PropertyExpressionDTO result = new PropertyExpressionDTO(this.isExpression(), new String(this.getName()), new String(this.getValue()));
+		result.setPnode(getPnode());
+		return result;
 	}
 }
