@@ -531,6 +531,10 @@ public class Messages extends NLS {
 	public static String DeleteGroupReportAction_delete_group_tool_tip;
 	public static String DeleteGuideCommand_delete_guide;
 	public static String DeleteResourceAction_0;
+	public static String DeleteServerAction_1;
+	public static String DeleteServerAction_2;
+	public static String DeleteServerAction_4;
+	public static String DeleteServerAction_desc;
 	public static String DeleteToolAction_actionName;
 	public static String DeleteToolAction_messageDescription;
 	public static String DeleteToolAction_messageTitle;
