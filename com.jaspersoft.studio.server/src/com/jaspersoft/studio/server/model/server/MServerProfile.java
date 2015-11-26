@@ -17,19 +17,13 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 
-import net.sf.jasperreports.eclipse.builder.jdt.JDTUtils;
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.eclipse.util.CastorHelper;
-import net.sf.jasperreports.eclipse.util.FileUtils;
-import net.sf.jasperreports.engine.JRConstants;
-import net.sf.jasperreports.engine.xml.JRXmlBaseWriter;
-
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -48,6 +42,12 @@ import com.jaspersoft.studio.server.protocol.IConnection;
 import com.jaspersoft.studio.utils.Callback;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.CastorHelper;
+import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.xml.JRXmlBaseWriter;
 
 /* 
  * 
@@ -269,19 +269,34 @@ public class MServerProfile extends ANode {
 				String fpath = indx >= 0 ? path.substring(indx) : "/"; //$NON-NLS-1$
 
 				IProject prj = ResourcesPlugin.getWorkspace().getRoot().getProject(ppath);
-				tmpDir = prj.getFolder(fpath);
-			} else {
-				// Need to enable or disable the linked resources support
-				boolean isAllowdLinkedResource = JDTUtils.isAllowdLinkedResourcesSupport();
-				if (!isAllowdLinkedResource)
-					JDTUtils.setLinkedResourcesSupport(true);
-				tmpDir = FileUtils.getInProjectFolder(
-						FileUtils.createTempDir(getValue().getName().replace(" ", "") + "-").toURI(), monitor); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				if (!isAllowdLinkedResource)
-					JDTUtils.setLinkedResourcesSupport(false);
+				if (prj != null)
+					tmpDir = prj.getFolder(fpath);
 			}
-			if (!tmpDir.exists())
+			if (tmpDir == null) {
+				// Need to enable or disable the linked resources support
+				// boolean isAllowdLinkedResource =
+				// JDTUtils.isAllowdLinkedResourcesSupport();
+				// if (!isAllowdLinkedResource)
+				// JDTUtils.setLinkedResourcesSupport(true);
+				// tmpDir = FileUtils.getInProjectFolder(
+				// FileUtils.createTempDir(getValue().getName().replace(" ", "")
+				// + "-").toURI(), monitor); //$NON-NLS-1$ //$NON-NLS-2$
+				// //$NON-NLS-3$
+				// if (!isAllowdLinkedResource)
+				// JDTUtils.setLinkedResourcesSupport(false);
+
+				IProject prj = FileUtils.getProject(new NullProgressMonitor());
+				int i = 1;
+				do {
+					tmpDir = prj.getFolder(getValue().getName().replace(" ", "") + "-" + i);
+					i++;
+				} while (tmpDir.exists());
+			}
+			getValue().setProjectPath(tmpDir.getFullPath().toOSString());
+			if (!tmpDir.exists()) {
 				tmpDir.create(true, true, monitor);
+				ServerManager.saveServerProfile(this);
+			}
 		}
 		return tmpDir;
 	}

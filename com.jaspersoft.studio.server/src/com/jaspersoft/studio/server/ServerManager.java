@@ -160,14 +160,19 @@ public class ServerManager {
 		}
 	}
 
-	public static void saveServerProfile(MServerProfile adapter) {
+	public static void saveServerProfile(final MServerProfile adapter) {
 		if (serverProfiles.containsKey(adapter)) {
 			// It's an edit, remove the old configuration file and save the new
 			// one
 			String path = serverProfiles.get(adapter);
 			ConfigurationManager.removeStoregeResource(PREF_TAG, path);
 			saveIntoStrage(adapter, path);
-			propertyChangeSupport.firePropertyChange(new PropertyChangeEvent(adapter, SERVERPROFILE, null, adapter));
+			UIUtils.getDisplay().syncExec(new Runnable() {
+				public void run() {
+					propertyChangeSupport
+							.firePropertyChange(new PropertyChangeEvent(adapter, SERVERPROFILE, null, adapter));
+				}
+			});
 		}
 	}
 

@@ -24,11 +24,18 @@ import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.beans.PojoObservables;
 import org.eclipse.core.databinding.validation.ValidationStatus;
+import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.databinding.wizard.WizardPageSupport;
 import org.eclipse.jface.dialogs.Dialog;
@@ -52,6 +59,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ContainerSelectionDialog;
+import org.eclipse.ui.dialogs.ISelectionValidator;
 import org.eclipse.ui.forms.events.ExpansionAdapter;
 import org.eclipse.ui.forms.events.ExpansionEvent;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
@@ -89,6 +97,7 @@ import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.ui.validator.EmptyStringValidator;
 import net.sf.jasperreports.eclipse.ui.validator.NotEmptyIFolderValidator;
 import net.sf.jasperreports.eclipse.util.CastorHelper;
+import net.sf.jasperreports.eclipse.util.FileUtils;
 
 public class ServerProfilePage extends WizardPage implements WizardEndingStateListener {
 	private MServerProfile sprofile;
@@ -420,8 +429,67 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 		blpath.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				ContainerSelectionDialog csd = new ContainerSelectionDialog(getShell(),
-						ResourcesPlugin.getWorkspace().getRoot(), true, Messages.ServerProfilePage_19);
+				IContainer root = ResourcesPlugin.getWorkspace().getRoot();
+				ServerProfile sp = sprofile.getValue();
+				String ppath = sp.getProjectPath();
+				if (!Misc.isNullOrEmpty(ppath)) {
+					IResource r = root.findMember(ppath);
+					if (r instanceof IContainer)
+						root = (IContainer) r;
+					else if (r == null) {
+						IContainer c = null;
+						for (IProject p : ResourcesPlugin.getWorkspace().getRoot().getProjects())
+							if (p.isOpen()) {
+								String prjName = "/" + p.getName();
+								if (ppath.equals(prjName)) {
+									c = p;
+									break;
+								}
+								prjName += "/";
+								if (ppath.startsWith(prjName)) {
+									IFolder f = p.getFolder(ppath.substring(prjName.length()));
+									if (f.exists())
+										c = f;
+									else
+										c = p;
+									break;
+								}
+							}
+						if (c == null)
+							ppath = null;
+						else
+							root = c;
+					} else
+						ppath = null;
+				}
+				if (Misc.isNullOrEmpty(ppath)) {
+					try {
+						IProject prj = FileUtils.getProject(new NullProgressMonitor());
+						if (prj != null)
+							root = prj.getFolder(sp.getName().replace(" ", "") + "-" + System.currentTimeMillis());
+					} catch (JavaModelException e1) {
+						UIUtils.showError(e1);
+					} catch (CoreException e1) {
+						UIUtils.showError(e1);
+					}
+				}
+				ContainerSelectionDialog csd = new ContainerSelectionDialog(getShell(), root, true, null);
+				csd.setValidator(new ISelectionValidator() {
+
+					@Override
+					public String isValid(Object selection) {
+						if (selection instanceof Path) {
+							Path sp = (Path) selection;
+							String s0 = sp.segment(0);
+							for (IProject p : ResourcesPlugin.getWorkspace().getRoot().getProjects())
+								if (p.isOpen() && s0.equals(p.getName()))
+									return null;
+							return "Please select a folder from a project";
+						}
+						return null;
+					}
+				});
+				csd.showClosedProjects(false);
 				if (csd.open() == Dialog.OK) {
 					Object[] selection = csd.getResult();
 					if (selection != null && selection.length > 0 && selection[0] instanceof Path) {
