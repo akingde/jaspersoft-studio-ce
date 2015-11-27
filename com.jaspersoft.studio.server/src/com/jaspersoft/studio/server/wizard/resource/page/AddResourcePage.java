@@ -55,6 +55,7 @@ import com.jaspersoft.studio.server.model.MRStyleTemplate;
 import com.jaspersoft.studio.server.model.MReference;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.AMResource;
+import com.jaspersoft.studio.server.model.MContentResource;
 import com.jaspersoft.studio.server.model.MResourceBundle;
 import com.jaspersoft.studio.server.model.MXmlFile;
 import com.jaspersoft.studio.server.model.datasource.MRDatasourceAWS;
@@ -188,7 +189,8 @@ public class AddResourcePage extends WizardPage {
 				new MDataType(root, MDataType.createDescriptor(parent), -1);
 				new MRQuery(root, MRQuery.createDescriptor(parent), -1);
 				// if (!isSoap(root))
-				// new MRDashboard(root, MRDashboard.createDescriptor(parent), -1);
+				// new MRDashboard(root, MRDashboard.createDescriptor(parent),
+				// -1);
 
 				MRoot oroot = new MRoot(root, null) {
 					public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
@@ -227,6 +229,7 @@ public class AddResourcePage extends WizardPage {
 			new MResourceBundle(root, MResourceBundle.createDescriptor(parent), -1);
 			new MRFont(root, MRFont.createDescriptor(parent), -1);
 			new MRImage(root, MRImage.createDescriptor(parent), -1);
+			new MContentResource(root, MContentResource.createDescriptor(parent), -1);
 			new MRStyleTemplate(root, MRStyleTemplate.createDescriptor(parent), -1);
 			new MXmlFile(root, MXmlFile.createDescriptor(parent), -1);
 			new MRDataAdapter(root, MRDataAdapter.createDescriptor(parent), -1);
