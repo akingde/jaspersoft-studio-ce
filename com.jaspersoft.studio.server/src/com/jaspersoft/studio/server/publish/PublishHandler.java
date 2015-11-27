@@ -15,12 +15,6 @@ package com.jaspersoft.studio.server.publish;
 import java.net.URI;
 import java.util.zip.ZipFile;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.eclipse.util.FileExtension;
-import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.xml.JRXmlDigesterFactory;
-import net.sf.jasperreports.engine.xml.JRXmlLoader;
-
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -37,13 +31,16 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.handlers.HandlerUtil;
-import org.xml.sax.InputSource;
 
 import com.jaspersoft.studio.editor.AbstractJRXMLEditor;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.publish.action.JrxmlPublishAction;
 import com.jaspersoft.studio.server.publish.wizard.PublishFile2ServerWizard;
+import com.jaspersoft.studio.utils.JRXMLUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.FileExtension;
 
 public class PublishHandler extends AbstractHandler {
 	private static IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
@@ -91,8 +88,7 @@ public class PublishHandler extends AbstractHandler {
 			if (jContext == null) {
 				jContext = JasperReportsConfiguration.getDefaultJRConfig(file);
 				try {
-					JasperDesign jd = new JRXmlLoader(jContext, JRXmlDigesterFactory.createDigester(jContext)).loadXML(new InputSource(file.getContents()));
-					jContext.setJasperDesign(jd);
+					jContext.setJasperDesign(JRXMLUtils.getJasperDesign(jContext, file.getContents(), ext));
 				} catch (Exception e) {
 					e.printStackTrace();
 					jContext.dispose();

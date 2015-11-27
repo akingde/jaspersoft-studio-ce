@@ -1,17 +1,14 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.utils;
 
+import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
@@ -22,6 +19,7 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
+import net.sf.jasperreports.engine.xml.JRXmlWriter;
 
 import org.eclipse.jdt.internal.ui.javaeditor.JarEntryEditorInput;
 import org.eclipse.ui.IEditorInput;
@@ -39,14 +37,14 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  */
 @SuppressWarnings("restriction")
 public class JRXMLUtils {
-	
+
 	/**
 	 * Gets a JRXML input stream from an existing one, that can be either a .jasper file or .jrxml.
 	 * <p>
 	 * Others file extension are not meant to return a valid JRXML input stream.
 	 * 
-	 * @param jrContext 
-	 * 					the JasperReports context 
+	 * @param jrContext
+	 *          the JasperReports context
 	 * @param in
 	 *          the original input stream
 	 * @param fileExtension
@@ -78,42 +76,44 @@ public class JRXMLUtils {
 	}
 
 	/**
-	 * Gets the {@link JasperDesign} out of the specified input stream, using the JasperReports context
-	 * as possible additional information.
+	 * Gets the {@link JasperDesign} out of the specified input stream, using the JasperReports context as possible
+	 * additional information.
 	 * 
 	 * @param jrContext
-	 * 					the JasperReports context
+	 *          the JasperReports context
 	 * @param in
-	 * 					the report input stream
+	 *          the report input stream
 	 * @param fileExtension
-	 * 					the original file extension
+	 *          the original file extension
 	 * @return the {@link JasperDesign} of the report
 	 * @throws JRException
 	 */
-	public static JasperDesign getJasperDesign(JasperReportsConfiguration jrContext, InputStream in,
-			String fileExtension) throws JRException {
-		if (fileExtension.equals(FileExtension.JASPER))
-			return (JasperDesign) JRLoader.loadObject(in);
+	public static JasperDesign getJasperDesign(JasperReportsConfiguration jrContext, InputStream in, String fileExtension)
+			throws JRException {
+		if (fileExtension.equals(FileExtension.JASPER)) {
+			JasperReport jr = (JasperReport) JRLoader.loadObject(in);
+			return JRXmlLoader.load(new ByteArrayInputStream(JRXmlWriter.writeReport(jr, "UTF-8").getBytes()));
+		}
 		if (fileExtension.equals(FileExtension.JRXML))
 			return JRXmlLoader.load(jrContext, in);
 		return null;
 	}
-	
+
 	/**
 	 * Gets a JRXML input stream from an existing one, that can be either a .jasper file or .jrxml.
 	 * <p>
 	 * Others file extension are not meant to return a valid JRXML input stream.
 	 * 
 	 * @param jrContext
-	 * 					the JasperReports context
+	 *          the JasperReports context
 	 * @param editorInput
-	 * 					the editor input used to retrieve the file extension
+	 *          the editor input used to retrieve the file extension
 	 * @param encoding
-	 * 					the file encoding
+	 *          the file encoding
 	 * @param in
-	 * 					the original input stream
+	 *          the original input stream
 	 * @param version
-	 * 					the JR version
+	 *          the JR version
 	 * @return a valid JRXML input stream, <code>null</code> if not possible
 	 * @throws JRException
 	 */
@@ -123,13 +123,13 @@ public class JRXMLUtils {
 		InputStream jrxmlInputStream = getJRXMLInputStream(jrContext, in, fileExtension, encoding, version);
 		return jrxmlInputStream != null ? jrxmlInputStream : in;
 	}
-	
+
 	/**
 	 * Tries to guess the file extension based upon on the specified editor input.
 	 * 
 	 * @param editorInput
-	 * 					the editor input used to retrieve the file extension
-	 * @return the extension of file currently handled by the  specified editor input
+	 *          the editor input used to retrieve the file extension
+	 * @return the extension of file currently handled by the specified editor input
 	 */
 	public static String getFileExtension(IEditorInput editorInput) {
 		String fileExtention = ""; //$NON-NLS-1$
@@ -143,5 +143,5 @@ public class JRXMLUtils {
 		}
 		return fileExtention;
 	}
-	
+
 }
