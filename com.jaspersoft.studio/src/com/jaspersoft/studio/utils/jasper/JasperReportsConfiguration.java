@@ -31,6 +31,26 @@ import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.Vector;
 
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.fluent.Executor;
+import org.apache.http.client.fluent.Request;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.ui.preferences.ScopedPreferenceStore;
+
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.model.MGraphicElement;
+import com.jaspersoft.studio.preferences.fonts.FontsPreferencePage;
+import com.jaspersoft.studio.preferences.fonts.utils.FontUtils;
+import com.jaspersoft.studio.prm.ParameterSet;
+import com.jaspersoft.studio.prm.ParameterSetProvider;
+import com.jaspersoft.studio.utils.ExpressionUtil;
+import com.jaspersoft.studio.utils.Misc;
+import com.jaspersoft.studio.utils.ModelUtils;
+
 import net.sf.jasperreports.data.AbstractClasspathAwareDataAdapterService;
 import net.sf.jasperreports.eclipse.MScopedPreferenceStore;
 import net.sf.jasperreports.eclipse.classpath.JavaProjectClassLoader;
@@ -60,26 +80,6 @@ import net.sf.jasperreports.repo.FileRepositoryPersistenceServiceFactory;
 import net.sf.jasperreports.repo.FileRepositoryService;
 import net.sf.jasperreports.repo.PersistenceServiceFactory;
 import net.sf.jasperreports.repo.RepositoryService;
-
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.fluent.Executor;
-import org.apache.http.client.fluent.Request;
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.jdt.core.JavaCore;
-import org.eclipse.jface.util.IPropertyChangeListener;
-import org.eclipse.ui.preferences.ScopedPreferenceStore;
-
-import com.jaspersoft.studio.JaspersoftStudioPlugin;
-import com.jaspersoft.studio.model.MGraphicElement;
-import com.jaspersoft.studio.preferences.fonts.FontsPreferencePage;
-import com.jaspersoft.studio.preferences.fonts.utils.FontUtils;
-import com.jaspersoft.studio.prm.ParameterSet;
-import com.jaspersoft.studio.prm.ParameterSetProvider;
-import com.jaspersoft.studio.utils.ExpressionUtil;
-import com.jaspersoft.studio.utils.Misc;
-import com.jaspersoft.studio.utils.ModelUtils;
 
 public class JasperReportsConfiguration extends LocalJasperReportsContext implements JasperReportsContext {
 
@@ -219,14 +219,17 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 	}
 
 	protected void initClassloader(IFile file) {
-		if (javaclassloader != null && classpathlistener != null)
+		if (javaclassloader != null && classpathlistener != null) {
 			javaclassloader.removeClasspathListener(classpathlistener);
+			remove(JavaProjectClassLoader.JAVA_PROJECT_CLASS_LOADER_KEY);
+		}
 		try {
 			ClassLoader cl = Thread.currentThread().getContextClassLoader();
 			if (file != null) {
 				IProject project = file.getProject();
 				if (project != null && project.getNature(JavaCore.NATURE_ID) != null) {
 					javaclassloader = JavaProjectClassLoader.instance(JavaCore.create(project), cl);
+					put(JavaProjectClassLoader.JAVA_PROJECT_CLASS_LOADER_KEY, javaclassloader);
 					classpathlistener = new ClasspathListener();
 					javaclassloader.addClasspathListener(classpathlistener);
 					cl = javaclassloader;

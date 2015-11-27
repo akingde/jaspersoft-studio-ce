@@ -30,6 +30,8 @@
       <import plugin="org.apache.commons.codec" version="1.6.0" match="greaterOrEqual"/>
       <import plugin="org.apache.commons.logging" version="1.1.1" match="greaterOrEqual"/>
       <import plugin="org.w3c.dom.svg" version="1.1.0" match="greaterOrEqual"/>
+      <import plugin="org.apache.ant"/>
+      <import plugin="org.eclipse.core.runtime"/>
    </requires>
 
    <plugin
@@ -85,13 +87,6 @@
          download-size="0"
          install-size="0"
          version="3.10.1.201502161145"/>
-
-   <plugin
-         id="groovy-all"
-         download-size="0"
-         install-size="0"
-         version="2.0.1"
-         unpack="false"/>
 
    <plugin
          id="com.fasterxml.jackson.core.jackson-annotations"
@@ -198,5 +193,11 @@
          install-size="0"
          version="1.0.19"
          unpack="false"/>
+
+   <plugin
+         id="org.codehaus.groovy"
+         download-size="0"
+         install-size="0"
+         version="2.4.3.xx-201508121448-e45"/>
 
 </feature>
