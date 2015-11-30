@@ -218,7 +218,7 @@ public class CreateColumnCommand extends Command {
 				cell.setRowTotalGroup(r.getName());
 				jrCross.addCell(cell);
 				cell.setHeight(jrRowGr.getHeight());
-				cell.setWidth(r.getWidth());
+				cell.setWidth(60);
 				// Add some cells...
 
 			}

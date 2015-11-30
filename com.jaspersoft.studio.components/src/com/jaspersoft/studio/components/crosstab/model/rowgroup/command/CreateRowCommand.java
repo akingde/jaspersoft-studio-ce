@@ -14,7 +14,22 @@ package com.jaspersoft.studio.components.crosstab.model.rowgroup.command;
 
 import java.util.List;
 
+import org.eclipse.gef.commands.Command;
+import org.eclipse.jface.dialogs.InputDialog;
+import org.eclipse.swt.widgets.Display;
+
+import com.jaspersoft.studio.components.crosstab.messages.Messages;
+import com.jaspersoft.studio.components.crosstab.model.MCrosstab;
+import com.jaspersoft.studio.components.crosstab.model.cell.MCell;
+import com.jaspersoft.studio.components.crosstab.model.rowgroup.MRowGroup;
+import com.jaspersoft.studio.components.crosstab.model.rowgroup.MRowGroups;
+import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.text.MTextField;
+import com.jaspersoft.studio.utils.ModelUtils;
+
+import net.sf.jasperreports.crosstabs.JRCrosstabCell;
 import net.sf.jasperreports.crosstabs.JRCrosstabColumnGroup;
+import net.sf.jasperreports.crosstabs.JRCrosstabRowGroup;
 import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabBucket;
@@ -28,19 +43,6 @@ import net.sf.jasperreports.engine.design.JRDesignStaticText;
 import net.sf.jasperreports.engine.design.JRDesignTextField;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.util.Pair;
-
-import org.eclipse.gef.commands.Command;
-import org.eclipse.jface.dialogs.InputDialog;
-import org.eclipse.swt.widgets.Display;
-
-import com.jaspersoft.studio.components.crosstab.messages.Messages;
-import com.jaspersoft.studio.components.crosstab.model.MCrosstab;
-import com.jaspersoft.studio.components.crosstab.model.cell.MCell;
-import com.jaspersoft.studio.components.crosstab.model.rowgroup.MRowGroup;
-import com.jaspersoft.studio.components.crosstab.model.rowgroup.MRowGroups;
-import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.model.text.MTextField;
-import com.jaspersoft.studio.utils.ModelUtils;
 
 /*
  * link nodes & together.
@@ -129,13 +131,20 @@ public class CreateRowCommand extends Command {
 		}
 	}
 
-	public static JRDesignCrosstabRowGroup createRowGroup(
-			JasperDesign jasperDesign, JRDesignCrosstab jrCrosstab,
-			String name, CrosstabTotalPositionEnum total) {
+	public static JRDesignCrosstabRowGroup createRowGroup(JasperDesign jasperDesign, JRDesignCrosstab jrCrosstab,String name, CrosstabTotalPositionEnum total) {
+			
+		int width = 60;
+		for(JRCrosstabRowGroup group : jrCrosstab.getRowGroups()){
+			width = group.getWidth();
+			break;
+		}
+		
 		JRDesignCrosstabRowGroup jrGroup = new JRDesignCrosstabRowGroup();
 		jrGroup.setTotalPosition(total);
 		jrGroup.setName(ModelUtils.getDefaultName(jrCrosstab, name));
-		jrGroup.setWidth(60);
+		jrGroup.setWidth(width);
+		
+		
 
 		JRDesignExpression exp = new JRDesignExpression();
 		exp.setText(""); //$NON-NLS-1$
@@ -177,13 +186,19 @@ public class CreateRowCommand extends Command {
 
 	public static void addRowGroup(JRDesignCrosstab jrCross,
 			JRDesignCrosstabRowGroup jrRowGr, int index) throws JRException {
+		
+		
+		JRCrosstabRowGroup lastGroup = null; 
+		if (!jrCross.getRowGroupsList().isEmpty()){
+			lastGroup = jrCross.getRowGroupsList().get(jrCross.getRowGroupsList().size()-1);
+		}
+		
 		if (index >= 0 && index < jrCross.getRowGroupsList().size())
 			jrCross.addRowGroup(index, jrRowGr);
 		else
 			jrCross.addRowGroup(jrRowGr);
 
-		if (!jrCross.getCellsMap().containsKey(
-				new Pair<String, String>(null, null))) {
+		if (!jrCross.getCellsMap().containsKey(new Pair<String, String>(null, null))) {
 			JRDesignCrosstabCell dT = new JRDesignCrosstabCell();
 			dT.setColumnTotalGroup(null);
 			dT.setRowTotalGroup(null);
@@ -196,8 +211,14 @@ public class CreateRowCommand extends Command {
 		dT.setRowTotalGroup(jrRowGr.getName());
 		jrCross.addCell(dT);
 		dT.setHeight(20);
-		dT.setWidth(jrRowGr.getWidth());
-
+		if (lastGroup != null){
+			Pair<String, String> key = new Pair<String,String>(lastGroup.getName(), dT.getColumnTotalGroup());
+			JRCrosstabCell cell = jrCross.getCellsMap().get(key);
+			dT.setWidth(cell.getWidth());
+		} else {
+			dT.setWidth(jrRowGr.getWidth());
+		}
+		
 		List<JRCrosstabColumnGroup> columns = jrCross.getColumnGroupsList();
 		if (columns != null)
 			for (JRCrosstabColumnGroup c : columns) {
@@ -206,7 +227,14 @@ public class CreateRowCommand extends Command {
 				cell.setColumnTotalGroup(c.getName());
 				jrCross.addCell(cell);
 				cell.setHeight(c.getHeight());
-				cell.setWidth(jrRowGr.getWidth());
+				
+				if (lastGroup != null){
+					Pair<String, String> key = new Pair<String,String>(lastGroup.getName(), c.getName());
+					JRCrosstabCell otherCell = jrCross.getCellsMap().get(key);
+					cell.setWidth(otherCell.getWidth());
+				} else {
+					cell.setWidth(jrRowGr.getWidth());
+				}
 			}
 
 		jrCross.preprocess();
