@@ -18,9 +18,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.engine.design.JRDesignParameter;
-
 import org.eclipse.gef.dnd.TemplateTransfer;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -89,6 +86,9 @@ import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.outline.ReportTreeContetProvider;
 import com.jaspersoft.studio.outline.ReportTreeLabelProvider;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.engine.design.JRDesignParameter;
+
 public class SQLQueryOutline {
 	private SQLQueryDesigner designer;
 
@@ -152,6 +152,7 @@ public class SQLQueryOutline {
 		transfers = new Transfer[] { NodeTransfer.getInstance(), TemplateTransfer.getInstance(),
 				PluginTransfer.getInstance() };
 		NodeTreeDropAdapter dropAdapter = new NodeTreeDropAdapter(treeViewer) {
+
 			@Override
 			public boolean validateDrop(Object target, int op, TransferData type) {
 				return super.validateDrop(target, op, type) || TemplateTransfer.getInstance().isSupportedType(type);
