@@ -33,7 +33,7 @@ public class CrosstabGroupSection extends AbstractSection {
 		parent.setLayout(new GridLayout(2, false));
 		createWidget4Property(parent, JRDesignCrosstabGroup.PROPERTY_NAME);
 		createWidget4Property(parent, JRDesignCrosstabGroup.PROPERTY_TOTAL_POSITION);
-		createWidget4Property(parent, JRDesignCrosstabGroup.PROPERTY_MERGE_HEADER_CELLS);
+		createWidget4Property(parent, JRDesignCrosstabGroup.PROPERTY_MERGE_HEADER_CELLS, false);
 	}
 
 	@Override
