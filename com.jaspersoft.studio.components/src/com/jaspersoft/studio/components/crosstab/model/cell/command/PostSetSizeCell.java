@@ -12,24 +12,18 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.crosstab.model.cell.command;
 
-import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
-import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabCell;
-import net.sf.jasperreports.engine.design.JasperDesign;
-
-import org.eclipse.draw2d.geometry.Dimension;
-import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.ui.views.properties.IPropertySource;
 
 import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.components.crosstab.model.MCrosstab;
 import com.jaspersoft.studio.components.crosstab.model.cell.MCell;
-import com.jaspersoft.studio.editor.layout.ILayout;
-import com.jaspersoft.studio.editor.layout.LayoutCommand;
 import com.jaspersoft.studio.editor.layout.LayoutManager;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.property.IPostSetValue;
+
+import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabCell;
 
 public class PostSetSizeCell implements IPostSetValue {
 
