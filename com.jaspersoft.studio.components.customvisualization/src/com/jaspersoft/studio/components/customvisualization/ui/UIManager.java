@@ -7,10 +7,12 @@ package com.jaspersoft.studio.components.customvisualization.ui;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -24,10 +26,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-import net.sf.jasperreports.components.items.ItemProperty;
-import net.sf.jasperreports.components.items.StandardItemProperty;
-import net.sf.jasperreports.eclipse.util.FileUtils;
-
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
@@ -37,6 +35,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.swt.graphics.Image;
 
+import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -52,6 +51,10 @@ import com.jaspersoft.studio.property.itemproperty.desc.NumberPropertyDescriptio
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.IDisposeListener;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
+import net.sf.jasperreports.components.items.ItemProperty;
+import net.sf.jasperreports.components.items.StandardItemProperty;
+import net.sf.jasperreports.eclipse.util.FileUtils;
 
 public class UIManager {
 	private static Map<String, ComponentDescriptor> cachePlugin;
@@ -292,15 +295,17 @@ public class UIManager {
 	private static ComponentDescriptor readURL(URL url) {
 		ObjectMapper mapper = new ObjectMapper();
 		try {
-			return mapper.readValue(url, ComponentDescriptor.class);
+			BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream(), "UTF-8"));
+			mapper.configure(JsonGenerator.Feature.ESCAPE_NON_ASCII, true);
+			return mapper.readValue(in, ComponentDescriptor.class);
 		} catch (JsonParseException e) {
-			e.printStackTrace();
+			CustomVisualizationActivator.getDefault().logError(e);
 		} catch (JsonMappingException e) {
-			e.printStackTrace();
+			CustomVisualizationActivator.getDefault().logError(e);
 		} catch (IOException e) {
-			e.printStackTrace();
+			CustomVisualizationActivator.getDefault().logError(e);
 		} catch (Throwable e) {
-			e.printStackTrace();
+			CustomVisualizationActivator.getDefault().logError(e);
 		}
 		return null;
 	}
