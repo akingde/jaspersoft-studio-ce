@@ -9,9 +9,7 @@
 package com.jaspersoft.studio.editor;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -53,6 +51,8 @@ import org.eclipse.ui.IWorkbenchPartReference;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.contexts.IContextActivation;
+import org.eclipse.ui.contexts.IContextService;
 import org.eclipse.ui.dialogs.SaveAsDialog;
 import org.eclipse.ui.editors.text.IStorageDocumentProvider;
 import org.eclipse.ui.ide.IDE;
@@ -63,9 +63,7 @@ import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.IElementStateListener;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
-import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 
 import com.jaspersoft.studio.ExternalStylesManager;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
@@ -94,7 +92,6 @@ import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.xml.JRXmlDigester;
 import net.sf.jasperreports.engine.xml.JRXmlDigesterFactory;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
@@ -756,6 +753,8 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart
 		return true;
 	}
 
+	protected IContextActivation context;
+
 	@Override
 	protected void pageChange(final int newPageIndex) {
 		if (newPageIndex == PAGE_DESIGNER || newPageIndex == PAGE_SOURCEEDITOR || newPageIndex == PAGE_PREVIEW) {
@@ -767,6 +766,7 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart
 				}
 			}
 			String ver = JRXmlWriterHelper.getVersion(getCurrentFile(), jrContext, false);
+			IContextService service = getSite().getService(IContextService.class);
 			switch (newPageIndex) {
 			case PAGE_DESIGNER:
 				if (activePage == PAGE_SOURCEEDITOR && !xmlFresh) {
@@ -794,6 +794,7 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart
 						}
 					}
 				});
+				context = service.activateContext("com.jaspersoft.studio.context");
 				break;
 			case PAGE_SOURCEEDITOR:
 				if (toXML)
@@ -805,8 +806,11 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart
 					model2xml(ver);
 					isRefreshing = false;
 				}
+				if (context != null)
+					service.deactivateContext(context);
 				break;
 			case PAGE_PREVIEW:
+				context = service.activateContext("com.jaspersoft.studio.context");
 				if (activePage == PAGE_SOURCEEDITOR && !xmlFresh)
 					try {
 						xml2model();
@@ -1069,6 +1073,10 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart
 		if (jrContext != null)
 			jrContext.dispose();
 		super.dispose();
+		if (context != null) {
+			IContextService service = getSite().getService(IContextService.class);
+			service.deactivateContext(context);
+		}
 	}
 
 	/**

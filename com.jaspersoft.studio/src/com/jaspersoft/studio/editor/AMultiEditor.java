@@ -16,11 +16,6 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.eclipse.util.FileUtils;
-import net.sf.jasperreports.engine.DefaultJasperReportsContext;
-import net.sf.jasperreports.engine.JasperReportsContext;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
@@ -48,6 +43,8 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.contexts.IContextActivation;
+import org.eclipse.ui.contexts.IContextService;
 import org.eclipse.ui.dialogs.SaveAsDialog;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.part.MultiPageEditorPart;
@@ -64,6 +61,11 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.engine.DefaultJasperReportsContext;
+import net.sf.jasperreports.engine.JasperReportsContext;
+
 public abstract class AMultiEditor extends MultiPageEditorPart implements IResourceChangeListener, IMultiEditor {
 	protected JasperReportsConfiguration jrContext;
 
@@ -73,8 +75,11 @@ public abstract class AMultiEditor extends MultiPageEditorPart implements IResou
 				IResourceChangeEvent.PRE_CLOSE | IResourceChangeEvent.PRE_DELETE | IResourceChangeEvent.POST_CHANGE);
 	}
 
+	protected IContextActivation context;
+
 	@Override
 	protected void pageChange(int newPageIndex) {
+		IContextService service = getSite().getService(IContextService.class);
 		if (activePage == 0) {
 			if (outlinePage != null)
 				tmpselection = outlinePage.getSite().getSelectionProvider().getSelection();
@@ -100,8 +105,11 @@ public abstract class AMultiEditor extends MultiPageEditorPart implements IResou
 					sp.setSelection(tmpselection);
 				}
 			});
+			context = service.activateContext("com.jaspersoft.studio.context");
 			break;
 		case 1:
+			if (context != null)
+				service.deactivateContext(context);
 			if (isDirty()) {
 				model2xml();
 			}
@@ -131,7 +139,8 @@ public abstract class AMultiEditor extends MultiPageEditorPart implements IResou
 			try {
 				IFile f = getCurrentFile();
 				if (f != null)
-					f.setContents(new ByteArrayInputStream(xml.getBytes(FileUtils.UTF8_ENCODING)), IFile.KEEP_HISTORY | IFile.FORCE, monitor);
+					f.setContents(new ByteArrayInputStream(xml.getBytes(FileUtils.UTF8_ENCODING)),
+							IFile.KEEP_HISTORY | IFile.FORCE, monitor);
 			} catch (Throwable e) {
 				UIUtils.showError(e);
 			}
@@ -259,6 +268,10 @@ public abstract class AMultiEditor extends MultiPageEditorPart implements IResou
 		if (jrContext != null)
 			jrContext.dispose();
 		super.dispose();
+		if (context != null) {
+			IContextService service = getSite().getService(IContextService.class);
+			service.deactivateContext(context);
+		}
 	}
 
 	protected boolean isRefresh = false;

@@ -55,6 +55,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.actions.ActionFactory;
+import org.eclipse.ui.contexts.IContextService;
 import org.eclipse.ui.part.IPageSite;
 import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.part.ResourceTransfer;
@@ -167,8 +168,8 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  * 
  * @author Chicu Veaceslav
  */
-public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutPalette implements IAdaptable,
-		IGraphicalEditor, CachedSelectionProvider {
+public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutPalette
+		implements IAdaptable, IGraphicalEditor, CachedSelectionProvider {
 
 	private Image partImage = JaspersoftStudioPlugin.getInstance().getImage(MReport.getIconDescriptor().getIcon16());
 
@@ -190,7 +191,7 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 	public AbstractVisualEditor(JasperReportsConfiguration jrContext) {
 		this.jrContext = jrContext;
 		ScrollEditDomain ed = new ScrollEditDomain(this);
-		setEditDomain(ed); 
+		setEditDomain(ed);
 	}
 
 	@Override
@@ -265,9 +266,8 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.jaspersoft.studio.editor.java2d.J2DGraphicalEditorWithFlyoutPalette#createGraphicalViewer(org.eclipse.swt.widgets
-	 * .Composite)
+	 * @see com.jaspersoft.studio.editor.java2d.J2DGraphicalEditorWithFlyoutPalette#createGraphicalViewer(org.eclipse.swt.
+	 * widgets .Composite)
 	 */
 	@Override
 	protected void createGraphicalViewer(Composite parent) {
@@ -517,12 +517,12 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		GraphicalViewer graphicalViewer = getGraphicalViewer();
 		graphicalViewer.addDropTargetListener(new JSSTemplateTransferDropTargetListener(graphicalViewer));
 		graphicalViewer.addDropTargetListener(new ReportUnitDropTargetListener(graphicalViewer));
-		graphicalViewer.addDropTargetListener(new ImageResourceDropTargetListener(graphicalViewer, ResourceTransfer
-				.getInstance()));
-		graphicalViewer.addDropTargetListener(new ImageResourceDropTargetListener(graphicalViewer, FileTransfer
-				.getInstance()));
-		graphicalViewer.addDropTargetListener(new ImageResourceDropTargetListener(graphicalViewer, ImageURLTransfer
-				.getInstance()));
+		graphicalViewer
+				.addDropTargetListener(new ImageResourceDropTargetListener(graphicalViewer, ResourceTransfer.getInstance()));
+		graphicalViewer
+				.addDropTargetListener(new ImageResourceDropTargetListener(graphicalViewer, FileTransfer.getInstance()));
+		graphicalViewer
+				.addDropTargetListener(new ImageResourceDropTargetListener(graphicalViewer, ImageURLTransfer.getInstance()));
 
 		// Load the contributed drop providers for the contributed template styles
 		List<TemplateViewProvider> dropProviders = JaspersoftStudioPlugin.getExtensionManager().getStylesViewProvider();
@@ -972,7 +972,7 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		action = new EncloseIntoFrameAction(this);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
-		
+
 		action = new CreateCompositeElementAction(this);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
@@ -1046,7 +1046,7 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 	protected void createEditorActions(ActionRegistry registry) {
 
 	}
-	
+
 	protected RZoomComboContributionItem zoomItem = null;
 
 	/**
@@ -1076,7 +1076,7 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		}
 		GraphicalViewer graphicalViewer = getGraphicalViewer();
 		ZoomManager property = (ZoomManager) graphicalViewer.getProperty(ZoomManager.class.toString());
-		if (property != null){
+		if (property != null) {
 			zoomItem = new RZoomComboContributionItem(property);
 			toolbarManager.add(zoomItem);
 		}

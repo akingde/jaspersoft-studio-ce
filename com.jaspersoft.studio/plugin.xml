@@ -2074,10 +2074,19 @@
        </actionProvider>
     </extension>
     <extension
+          point="org.eclipse.ui.contexts">
+       <context
+             description="%context.jss.description"
+             id="com.jaspersoft.studio.context"
+             name="%context.jss.name"
+             parentId="org.eclipse.ui.contexts.window">
+       </context>
+    </extension>
+    <extension
           point="org.eclipse.ui.bindings">
        <key
              commandId="org.eclipse.ui.edit.delete"
-             contextId="org.eclipse.ui.contexts.window"
+             contextId="com.jaspersoft.studio.context"
              schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
              sequence="BS">
        </key>
