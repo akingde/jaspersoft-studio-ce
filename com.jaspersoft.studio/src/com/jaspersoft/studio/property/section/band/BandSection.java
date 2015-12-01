@@ -8,15 +8,17 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.section.band;
 
-import net.sf.jasperreports.engine.design.JRDesignBand;
-
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.Section;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
+
+import net.sf.jasperreports.engine.design.JRDesignBand;
 
 /*
  * The location section on the location tab.
@@ -33,8 +35,17 @@ public class BandSection extends AbstractSection {
 	 */
 	public void createControls(Composite parent, TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
-		section = getWidgetFactory().createAndGetSection(parent, Messages.BandSection_title, false, 2);
-		Composite container = (Composite) section.getClient();
+		section = getWidgetFactory().createAndGetSection(parent, Messages.BandSection_title, false, 1);
+		Composite container = new Composite((Composite)section.getClient(), SWT.NONE);
+		GridLayout containerLayout = new GridLayout(2, false);
+		containerLayout.marginWidth = 0;
+		containerLayout.marginHeight = 0;
+		container.setLayout(containerLayout);
+		GridData containerData = new GridData(GridData.FILL_HORIZONTAL);
+		containerData.heightHint = 150;
+		containerData.minimumHeight = 150;
+		container.setLayoutData(containerData);
+		
 		createWidget4Property(container, JRDesignBand.PROPERTY_HEIGHT);
 		createWidget4Property(container, JRDesignBand.PROPERTY_SPLIT_TYPE);
 		createWidget4Property(container, JRDesignBand.PROPERTY_PRINT_WHEN_EXPRESSION);

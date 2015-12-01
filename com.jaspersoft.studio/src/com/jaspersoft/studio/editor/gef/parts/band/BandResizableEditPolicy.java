@@ -19,8 +19,6 @@ import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.jasperreports.engine.design.JRDesignElement;
-
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
@@ -30,6 +28,7 @@ import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.PrecisionRectangle;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.GraphicalEditPart;
+import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editpolicies.ResizableEditPolicy;
 import org.eclipse.gef.handles.AbstractHandle;
 import org.eclipse.gef.handles.MoveHandle;
@@ -38,6 +37,11 @@ import org.eclipse.gef.requests.ChangeBoundsRequest;
 import com.jaspersoft.studio.editor.java2d.J2DGraphics;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.IGraphicElement;
+import com.jaspersoft.studio.model.band.MBand;
+import com.jaspersoft.studio.property.SetValueCommand;
+
+import net.sf.jasperreports.engine.design.JRDesignBand;
+import net.sf.jasperreports.engine.design.JRDesignElement;
 
 /*
  * The Class BandResizableEditPolicy.
@@ -221,4 +225,18 @@ public class BandResizableEditPolicy extends ResizableEditPolicy {
 		return feedbackText;
 	}
 
+	/**
+	 * Resize command used when the band is drag and dropped
+	 */
+	@Override
+	protected Command getResizeCommand(ChangeBoundsRequest request) {
+		SetValueCommand resizeCommand = new SetValueCommand();
+		resizeCommand.setLabel("Resize Band");
+		resizeCommand.setPropertyId(JRDesignBand.PROPERTY_HEIGHT);
+		MBand band = (MBand) getHost().getModel();
+		resizeCommand.setTarget(band);
+		resizeCommand.setPropertyValue(band.getValue().getHeight() + request.getSizeDelta().height);
+		return resizeCommand;
+	}
+	
 }
