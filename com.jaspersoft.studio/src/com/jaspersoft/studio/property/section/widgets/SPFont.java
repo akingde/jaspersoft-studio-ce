@@ -8,12 +8,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.section.widgets;
 
-import net.sf.jasperreports.engine.JRFont;
-import net.sf.jasperreports.engine.base.JRBaseFont;
-import net.sf.jasperreports.engine.base.JRBaseStyle;
-import net.sf.jasperreports.engine.design.JRDesignFont;
-import net.sf.jasperreports.engine.util.JRStyleResolver;
-
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -39,6 +33,13 @@ import com.jaspersoft.studio.preferences.fonts.utils.FontUtils;
 import com.jaspersoft.studio.property.descriptor.combo.FontNamePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.section.AbstractSection;
+
+import net.sf.jasperreports.engine.JRCloneable;
+import net.sf.jasperreports.engine.JRFont;
+import net.sf.jasperreports.engine.base.JRBaseFont;
+import net.sf.jasperreports.engine.base.JRBaseStyle;
+import net.sf.jasperreports.engine.design.JRDesignFont;
+import net.sf.jasperreports.engine.util.JRStyleResolver;
 
 /**
  * This class implement the subsection into the cart property tab, for the font name is used a standard combo.
@@ -172,7 +173,8 @@ public class SPFont extends ASPropertyWidget<IPropertyDescriptor> {
 				else if ((newValue + plus) > 0)
 					newValue += plus;
 				section.changePropertyOn(JRBaseFont.PROPERTY_FONT_SIZE, newValue.toString(), mfont);
-				section.changePropertyOn(fontNameProperty, new MFont((JRFont) mfont.getValue().clone()), parentNode);
+				section.changePropertyOn(fontNameProperty, new MFont((JRFont) ((JRCloneable) mfont.getValue()).clone()),
+						parentNode);
 			}
 		}
 	}
