@@ -13,12 +13,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.jasperreports.engine.JRConstants;
-import net.sf.jasperreports.engine.JRFont;
-import net.sf.jasperreports.engine.base.JRBaseFont;
-import net.sf.jasperreports.engine.design.JRDesignFont;
-import net.sf.jasperreports.engine.design.JRDesignStyle;
-
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
@@ -29,14 +23,19 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptor.combo.FontSizeButtonPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.FontNamePropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.combo.FontSizeButtonPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RWFloatComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 import com.jaspersoft.studio.property.section.widgets.SPBooleanToggle;
 import com.jaspersoft.studio.utils.ModelUtils;
+
+import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRFont;
+import net.sf.jasperreports.engine.base.JRBaseFont;
+import net.sf.jasperreports.engine.design.JRDesignStyle;
 
 public class MFont extends APropertyNode {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
@@ -194,8 +193,8 @@ public class MFont extends APropertyNode {
 	}
 
 	@Override
-	public JRDesignFont getValue() {
-		return (JRDesignFont) super.getValue();
+	public JRFont getValue() {
+		return (JRFont) super.getValue();
 	}
 
 	public Object getPropertyActualValue(Object id) {
