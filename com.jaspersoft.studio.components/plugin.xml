@@ -998,4 +998,27 @@
             ClassFactory="com.jaspersoft.studio.components.table.decorator.PDF508TableElementDecorator">
       </decorator>
    </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="com.jaspersoft.studio.preferences.StudioPreferencePage"
+            class="com.jaspersoft.studio.components.map.pref.KeysPreferencePage"
+            id="com.jaspersoft.studio.components.map.pref.KeysPreferencePage"
+            name="Map Component Keys">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.ui.propertyPages">
+      <page
+            category="com.jaspersoft.studio.preferences.StudioPreferencePage.property"
+            class="com.jaspersoft.studio.components.map.pref.KeysPreferencePage"
+            id="com.jaspersoft.studio.components.map.pref.KeysPreferencePage.property"
+            name="Map Component Keys">
+         <enabledWhen>
+            <reference
+                  definitionId="com.jaspersoft.studio.projectorjrxml">
+            </reference>
+         </enabledWhen>
+      </page>
+   </extension>
 </plugin>
