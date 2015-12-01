@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.property.section.widgets;
 
@@ -150,8 +146,8 @@ public class SPFont extends ASPropertyWidget<IPropertyDescriptor> {
 		 */
 		private String fontNameProperty;
 
-		public SPChartButtom(Composite parent, AbstractSection section, T pDescriptor,
-				APropertyNode fontValue, String fontNameProperty) {
+		public SPChartButtom(Composite parent, AbstractSection section, T pDescriptor, APropertyNode fontValue,
+				String fontNameProperty) {
 			super(parent, section, pDescriptor, fontValue);
 			this.fontNameProperty = fontNameProperty;
 		}
@@ -163,20 +159,20 @@ public class SPFont extends ASPropertyWidget<IPropertyDescriptor> {
 		@Override
 		protected void createCommand(boolean increment) {
 			Object fontSizeString = fontSize.getText();
-			Integer newValue = 2;
+			Float newValue = 2f;
 			if (fontSizeString != null && fontSizeString.toString().length() > 0) {
-				newValue = Integer.valueOf(fontSizeString.toString());
-				Integer plus = null;
+				newValue = Float.valueOf(fontSizeString.toString());
+				Float plus = null;
 				if (increment)
-					plus = Math.round((new Float(newValue) / 100) * SPButton.factor) + 1;
+					plus = (float) (Math.round((new Float(newValue) / 100) * SPButton.factor) + 1);
 				else
-					plus = Math.round((new Float(newValue) / 100) * -SPButton.factor) - 1;
+					plus = (float) (Math.round((new Float(newValue) / 100) * -SPButton.factor) - 1);
 				if ((newValue + plus) > 99)
-					newValue = 99;
+					newValue = 99f;
 				else if ((newValue + plus) > 0)
 					newValue += plus;
 				section.changePropertyOn(JRBaseFont.PROPERTY_FONT_SIZE, newValue.toString(), mfont);
-				section.changePropertyOn(fontNameProperty, new MFont((JRFont) mfont.getValue()), parentNode);
+				section.changePropertyOn(fontNameProperty, new MFont((JRFont) mfont.getValue().clone()), parentNode);
 			}
 		}
 	}
@@ -292,7 +288,7 @@ public class SPFont extends ASPropertyWidget<IPropertyDescriptor> {
 				changeProperty(section, pDescriptor.getId(), ipd.getId(), new Boolean(item.getSelection()));
 			}
 		});
-		item.setImage(JaspersoftStudioPlugin.getInstance().getImage(image)); //$NON-NLS-1$
+		item.setImage(JaspersoftStudioPlugin.getInstance().getImage(image)); // $NON-NLS-1$
 		item.setToolTipText(ipd.getDescription());
 		return item;
 	}

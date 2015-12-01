@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.model.text;
 
@@ -20,6 +16,7 @@ import java.util.Map;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRFont;
 import net.sf.jasperreports.engine.base.JRBaseFont;
+import net.sf.jasperreports.engine.design.JRDesignFont;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
 
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -85,7 +82,7 @@ public class MFont extends APropertyNode {
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		FontNamePropertyDescriptor fontNameD = new FontNamePropertyDescriptor(JRBaseFont.PROPERTY_FONT_NAME,
-				Messages.common_font_name,getJasperConfiguration().getFontList(),NullEnum.INHERITED);
+				Messages.common_font_name, getJasperConfiguration().getFontList(), NullEnum.INHERITED);
 		fontNameD.setDescription(Messages.MFont_font_name_description);
 		desc.add(fontNameD);
 
@@ -114,8 +111,8 @@ public class MFont extends APropertyNode {
 				NullEnum.INHERITED) {
 			@Override
 			public ASPropertyWidget<CheckBoxPropertyDescriptor> createWidget(Composite parent, AbstractSection section) {
-				return new SPBooleanToggle(parent, section, this, JaspersoftStudioPlugin.getInstance().getImage(
-						"icons/resources/edit-bold.png"));
+				return new SPBooleanToggle(parent, section, this,
+						JaspersoftStudioPlugin.getInstance().getImage("icons/resources/edit-bold.png"));
 			}
 		};
 		boldD.setDescription(Messages.MFont_bold_description);
@@ -125,8 +122,8 @@ public class MFont extends APropertyNode {
 				Messages.common_italic, NullEnum.INHERITED) {
 			@Override
 			public ASPropertyWidget<CheckBoxPropertyDescriptor> createWidget(Composite parent, AbstractSection section) {
-				return new SPBooleanToggle(parent, section, this, JaspersoftStudioPlugin.getInstance().getImage(
-						"icons/resources/edit-italic.png"));
+				return new SPBooleanToggle(parent, section, this,
+						JaspersoftStudioPlugin.getInstance().getImage("icons/resources/edit-italic.png"));
 			}
 		};
 		italicD.setDescription(Messages.MFont_italic_description);
@@ -136,8 +133,8 @@ public class MFont extends APropertyNode {
 				Messages.common_underline, NullEnum.INHERITED) {
 			@Override
 			public ASPropertyWidget<CheckBoxPropertyDescriptor> createWidget(Composite parent, AbstractSection section) {
-				return new SPBooleanToggle(parent, section, this, JaspersoftStudioPlugin.getInstance().getImage(
-						"icons/resources/edit-underline.png"));
+				return new SPBooleanToggle(parent, section, this,
+						JaspersoftStudioPlugin.getInstance().getImage("icons/resources/edit-underline.png"));
 			}
 		};
 		underlineD.setDescription(Messages.MFont_underline_description);
@@ -147,8 +144,8 @@ public class MFont extends APropertyNode {
 				Messages.common_strike_trough, NullEnum.INHERITED) {
 			@Override
 			public ASPropertyWidget<CheckBoxPropertyDescriptor> createWidget(Composite parent, AbstractSection section) {
-				return new SPBooleanToggle(parent, section, this, JaspersoftStudioPlugin.getInstance().getImage(
-						"icons/resources/edit-strike.png"));
+				return new SPBooleanToggle(parent, section, this,
+						JaspersoftStudioPlugin.getInstance().getImage("icons/resources/edit-strike.png"));
 			}
 		};
 		strikeTroughD.setDescription(Messages.MFont_strike_trough_description);
@@ -196,8 +193,13 @@ public class MFont extends APropertyNode {
 		defaultsMap = defaultsMap1;
 	}
 
+	@Override
+	public JRDesignFont getValue() {
+		return (JRDesignFont) super.getValue();
+	}
+
 	public Object getPropertyActualValue(Object id) {
-		JRFont jrElement = (JRFont) getValue();
+		JRFont jrElement = getValue();
 		if (id.equals(JRBaseFont.PROPERTY_BOLD))
 			return jrElement.isBold();
 		if (id.equals(JRBaseFont.PROPERTY_UNDERLINE))
@@ -215,7 +217,7 @@ public class MFont extends APropertyNode {
 		if (id.equals(JRBaseFont.PROPERTY_PDF_ENCODING))
 			return ModelUtils.getKey4PDFEncoding(jrElement.getPdfEncoding());
 		if (id.equals(JRBaseFont.PROPERTY_FONT_SIZE))
-			return Float.toString(jrElement.getFontsize()); //$NON-NLS-1$
+			return Float.toString(jrElement.getFontsize()); // $NON-NLS-1$
 		return null;
 	}
 
@@ -225,7 +227,7 @@ public class MFont extends APropertyNode {
 	 * @see org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java.lang.Object)
 	 */
 	public Object getPropertyValue(Object id) {
-		JRFont jrElement = (JRFont) getValue();
+		JRFont jrElement = getValue();
 		if (id.equals(JRBaseFont.PROPERTY_BOLD))
 			return jrElement.isOwnBold();
 		if (id.equals(JRBaseFont.PROPERTY_UNDERLINE))
@@ -243,7 +245,7 @@ public class MFont extends APropertyNode {
 		if (id.equals(JRBaseFont.PROPERTY_PDF_ENCODING))
 			return ModelUtils.getKey4PDFEncoding(jrElement.getOwnPdfEncoding());
 		if (id.equals(JRBaseFont.PROPERTY_FONT_SIZE))
-			return jrElement.getOwnFontsize()!= null ? jrElement.getOwnFontsize().toString() : ""; //$NON-NLS-1$
+			return jrElement.getOwnFontsize() != null ? jrElement.getOwnFontsize().toString() : ""; //$NON-NLS-1$
 		return null;
 	}
 
@@ -253,7 +255,7 @@ public class MFont extends APropertyNode {
 	 * @see org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java.lang.Object, java.lang.Object)
 	 */
 	public void setPropertyValue(Object id, Object value) {
-		JRFont jrElement = (JRFont) getValue();
+		JRFont jrElement = getValue();
 		if (id.equals(JRBaseFont.PROPERTY_BOLD))
 			jrElement.setBold((Boolean) value);
 		else if (id.equals(JRBaseFont.PROPERTY_UNDERLINE))
