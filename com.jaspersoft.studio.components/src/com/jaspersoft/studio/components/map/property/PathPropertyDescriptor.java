@@ -14,16 +14,8 @@ package com.jaspersoft.studio.components.map.property;
 
 import java.util.List;
 
-import net.sf.jasperreports.components.items.Item;
-import net.sf.jasperreports.components.items.ItemProperty;
-import net.sf.jasperreports.components.map.MapComponent;
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.engine.JRExpression;
-
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerComparator;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
@@ -36,6 +28,12 @@ import com.jaspersoft.studio.property.itemproperty.sp.SPItemDataList;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
+import net.sf.jasperreports.components.items.Item;
+import net.sf.jasperreports.components.items.ItemProperty;
+import net.sf.jasperreports.components.map.MapComponent;
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.engine.JRExpression;
 
 /**
  * 
@@ -59,10 +57,7 @@ public class PathPropertyDescriptor extends AItemDataListPropertyDescriptor {
 					protected void createValues(Composite cmp) {
 						createItemProperty(cmp, MapComponent.ITEM_PROPERTY_name);
 
-						Label lbl = new Label(cmp, SWT.NONE);
-						GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-						gd.horizontalSpan = 2;
-						lbl.setLayoutData(gd);
+						Label lbl = createCenteredLabel(cmp);
 						lbl.setText(com.jaspersoft.studio.messages.Messages.MapSection_1);
 
 						createItemProperty(cmp, MapComponent.ITEM_PROPERTY_latitude);

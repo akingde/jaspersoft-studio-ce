@@ -14,9 +14,7 @@ package com.jaspersoft.studio.components.map.property;
 
 import java.util.List;
 
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
@@ -300,10 +298,7 @@ public class MarkersPropertyDescriptor extends AItemDataListPropertyDescriptor {
 
 				@Override
 				protected void createValues(Composite cmp) {
-					Label lbl = new Label(cmp, SWT.NONE);
-					GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-					gd.horizontalSpan = 2;
-					lbl.setLayoutData(gd);
+					Label lbl = createCenteredLabel(cmp);
 					lbl.setText(com.jaspersoft.studio.messages.Messages.MapSection_1);
 
 					createItemProperty(cmp, MapComponent.ITEM_PROPERTY_latitude);

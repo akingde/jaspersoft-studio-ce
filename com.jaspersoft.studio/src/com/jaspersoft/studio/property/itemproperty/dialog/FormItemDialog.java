@@ -120,7 +120,8 @@ public abstract class FormItemDialog extends AItemDialog {
 		lbl.setToolTipText(ipd.getToolTip());
 
 		final WItemProperty expr = new WItemProperty(cmp, SWT.NONE, 1, descriptor, ipd);
-		expr.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		expr.setLayoutData(gd);
 		expr.addModifyListener(new ItemPropertyModifiedListener() {
 
 			@Override
@@ -234,5 +235,31 @@ public abstract class FormItemDialog extends AItemDialog {
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		new Label(cmp, SWT.SEPARATOR | SWT.HORIZONTAL).setLayoutData(gd);
+	}
+
+	public Label createCenteredLabel(final Composite cmp) {
+		Label lbl = new Label(cmp, SWT.WRAP);
+		final GridData gd = new GridData(GridData.HORIZONTAL_ALIGN_CENTER);
+		gd.horizontalSpan = 2;
+		gd.widthHint = 300;
+		lbl.setLayoutData(gd);
+
+		if (sc != null)
+			sc.addControlListener(new ControlAdapter() {
+				@Override
+				public void controlResized(ControlEvent e) {
+					gd.widthHint = Math.max(200, sc.getSize().x - 20);
+				}
+			});
+		else
+			cmp.addControlListener(new ControlAdapter() {
+				@Override
+				public void controlResized(ControlEvent e) {
+					gd.widthHint = Math.max(200, cmp.getSize().x - 10);
+					if (sc != null)
+						gd.widthHint = Math.min(gd.widthHint, sc.getSize().x);
+				}
+			});
+		return lbl;
 	}
 }
