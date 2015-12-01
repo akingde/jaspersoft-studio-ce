@@ -12,14 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.jasperreports.engine.JRAbstractScriptlet;
-import net.sf.jasperreports.engine.JRConstants;
-import net.sf.jasperreports.engine.JRDefaultScriptlet;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JRScriptlet;
-import net.sf.jasperreports.engine.design.JRDesignDataset;
-import net.sf.jasperreports.engine.design.JRDesignScriptlet;
-
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
@@ -34,6 +26,15 @@ import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.classname.NClassTypePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 import com.jaspersoft.studio.utils.ModelUtils;
+
+import net.sf.jasperreports.engine.JRAbstractScriptlet;
+import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRDefaultScriptlet;
+import net.sf.jasperreports.engine.JRParameter;
+import net.sf.jasperreports.engine.JRScriptlet;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
+import net.sf.jasperreports.engine.design.JRDesignParameter;
+import net.sf.jasperreports.engine.design.JRDesignScriptlet;
 
 /*
  * The Class MScriptlet.
@@ -182,28 +183,34 @@ public class MScriptlet extends APropertyNode implements ICopyable, IDragable {
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignScriptlet jrField = (JRDesignScriptlet) getValue();
 		if (id.equals(JRDesignScriptlet.PROPERTY_NAME)) {
-			if (!value.equals("")) {
+			if (value instanceof String && !((String) value).isEmpty()) {
+				String newName = (String) value;
+				String oldName = jrField.getName();
 				JRDesignDataset d = ModelUtils.getDataset(this);
-				d.removeScriptlet(jrField);
-				jrField.setName((String) value);
-				try {
-					d.addScriptlet(jrField);
-				} catch (JRException e) {
-					e.printStackTrace();
-					return;
+				if (d != null) {
+					Map<String, JRParameter> pmap = d.getParametersMap();
+					JRDesignParameter p = (JRDesignParameter) pmap.get(oldName + JRScriptlet.SCRIPTLET_PARAMETER_NAME_SUFFIX);
+					if (p != null) {
+						p.setName(newName + JRScriptlet.SCRIPTLET_PARAMETER_NAME_SUFFIX);
+						pmap.remove(oldName + JRScriptlet.SCRIPTLET_PARAMETER_NAME_SUFFIX);
+						pmap.put(newName + JRScriptlet.SCRIPTLET_PARAMETER_NAME_SUFFIX, p);
+					}
+					jrField.setName(newName);
 				}
 			}
 		} else if (id.equals(JRDesignScriptlet.PROPERTY_VALUE_CLASS_NAME)) {
-			if (((String) value).isEmpty())
-				value = null;
-			jrField.setValueClassName((String) value);
-			JRDesignDataset d = ModelUtils.getDataset(this);
-			d.removeScriptlet(jrField);
-			try {
-				d.addScriptlet(jrField);
-			} catch (JRException e) {
-				e.printStackTrace();
-				return;
+			if (value instanceof String) {
+				if (((String) value).isEmpty())
+					value = null;
+				jrField.setValueClassName((String) value);
+				JRDesignDataset d = ModelUtils.getDataset(this);
+				if (d != null) {
+					Map<String, JRParameter> pmap = d.getParametersMap();
+					JRDesignParameter p = (JRDesignParameter) pmap
+							.get(jrField.getName() + JRScriptlet.SCRIPTLET_PARAMETER_NAME_SUFFIX);
+					if (p != null)
+						p.setValueClassName(jrField.getValueClassName());
+				}
 			}
 		} else if (id.equals(JRDesignScriptlet.PROPERTY_DESCRIPTION))
 			jrField.setDescription((String) value);
