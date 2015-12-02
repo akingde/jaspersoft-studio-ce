@@ -133,7 +133,11 @@ public class TabbedPropertyRegistryClassSectionFilter {
 		List<InputType> sectionInputTypes = descriptor.getInputTypes();
 		for (InputType type : sectionInputTypes) {
 			if (type.isExcludeSubtype()){
-				return inputClass.getName().equals(type.getType());
+				if (inputClass.getName().equals(type.getType())){
+					//found a match, return true. It shouldn't return false if it 
+					//is different because on of the following types could match
+					return true;
+				}
 			} else {
 				//Initialize the class types only when needed
 				if (classTypes == null){

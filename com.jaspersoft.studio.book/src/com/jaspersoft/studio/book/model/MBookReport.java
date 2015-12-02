@@ -4,22 +4,19 @@ import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.jasperreports.engine.JRConstants;
-import net.sf.jasperreports.engine.JRDataset;
-import net.sf.jasperreports.engine.JROrigin;
-import net.sf.jasperreports.engine.JRPart;
-import net.sf.jasperreports.engine.JRSection;
-import net.sf.jasperreports.engine.design.JRDesignGroup;
-import net.sf.jasperreports.engine.design.JRDesignSection;
-import net.sf.jasperreports.engine.design.events.CollectionElementAddedEvent;
-import net.sf.jasperreports.engine.type.BandTypeEnum;
-
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.ExpressionEditorSupportUtil;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
+import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRDataset;
+import net.sf.jasperreports.engine.JRPart;
+import net.sf.jasperreports.engine.JRSection;
+import net.sf.jasperreports.engine.design.JRDesignGroup;
+import net.sf.jasperreports.engine.design.events.CollectionElementAddedEvent;
 
 public class MBookReport extends MReport {
 
@@ -101,6 +98,4 @@ public class MBookReport extends MReport {
 		}
 		return super.getAdapter(adapter);
 	}
-
-
 }

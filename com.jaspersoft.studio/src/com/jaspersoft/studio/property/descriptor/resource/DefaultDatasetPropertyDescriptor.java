@@ -12,8 +12,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.descriptor.resource;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.jface.wizard.WizardDialog;
@@ -30,6 +28,8 @@ import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 import com.jaspersoft.studio.property.section.widgets.SPResourceType;
+
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 /**
  * 
@@ -89,7 +89,16 @@ public class DefaultDatasetPropertyDescriptor extends NTextPropertyDescriptor {
 	}
 
 	public CellEditor createPropertyEditor(Composite parent) {
-		CellEditor editor =  new TextCellEditor(parent);
+		CellEditor editor =  new TextCellEditor(parent){
+			protected void doSetValue(Object value) {
+				//null is a valid value for the default data adapter
+				if (value == null)
+					super.doSetValue(""); //$NON-NLS-1$
+				else {
+					super.doSetValue(value);
+				}
+			}
+		};
 		HelpSystem.bindToHelp(this, editor.getControl());
 		return editor;
 	}

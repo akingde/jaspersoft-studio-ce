@@ -232,11 +232,10 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 		desc.add(formatFactoryClassD);
 
 		// main dataset
-		PropertyDescriptor datasetD = new PropertyDescriptor(JasperDesign.PROPERTY_MAIN_DATASET,
-				Messages.MReport_main_dataset);
+		PropertyDescriptor datasetD = new PropertyDescriptor(JasperDesign.PROPERTY_MAIN_DATASET, Messages.MReport_main_dataset);
 		datasetD.setDescription(Messages.MReport_main_dataset_description);
 		desc.add(datasetD);
-
+		
 		// -------------------
 		PixelPropertyDescriptor heightD = new PixelPropertyDescriptor(JasperDesign.PROPERTY_PAGE_HEIGHT,
 				Messages.MReport_page_height);
