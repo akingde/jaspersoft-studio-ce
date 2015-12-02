@@ -372,9 +372,11 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 		reportControler.viewerChanged(view);
 		return super.switchRightView(view, stats, container);
 	}
+
 	public void runReport(final DataAdapterDescriptor myDataAdapter) {
 		runReport(myDataAdapter, isParameterDirty);
 	}
+
 	public void runReport(final DataAdapterDescriptor myDataAdapter, boolean prmDirty) {
 		if (isNotRunning()) {
 			// check if we can run the report
@@ -388,10 +390,10 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 			if (myDataAdapter != null) {
 				// TODO should we save the reference in the JRXML ?
 				dataAdapterDesc = myDataAdapter;
- 				setParameterDirty(prmDirty);
+				setParameterDirty(prmDirty);
 			} else {
 				DataAdapterAction daWidget = ((PreviewTopToolBarManager) topToolBarManager1).getDataSourceWidget();
-				dataAdapterDesc = daWidget.isDefaultDASelected() ? null : daWidget.getSelected(); 
+				dataAdapterDesc = daWidget.isDefaultDASelected() ? null : daWidget.getSelected();
 			}
 
 			addPreviewModeContributeProperties();
@@ -537,7 +539,7 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 				if (defaultDA != null) {
 					pt.setDataAdapters(defaultDA.getName());
 				} else {
-					//If no data adapter is available select the default one
+					// If no data adapter is available select the default one
 					pt.setDataAdapters(EmptyDataAdapterDescriptor.EMPTY_ADAPTER_NAME);
 				}
 			}
@@ -573,8 +575,8 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 	@Override
 	public void runReport() {
 		DataAdapterAction daWidget = ((PreviewTopToolBarManager) topToolBarManager1).getDataSourceWidget();
-		dataAdapterDesc = daWidget.isDefaultDASelected() ? null : daWidget.getSelected(); 
-		runReport(dataAdapterDesc);
+		dataAdapterDesc = daWidget.isDefaultDASelected() ? null : daWidget.getSelected();
+		runReport(dataAdapterDesc, false);
 	}
 
 	/**
