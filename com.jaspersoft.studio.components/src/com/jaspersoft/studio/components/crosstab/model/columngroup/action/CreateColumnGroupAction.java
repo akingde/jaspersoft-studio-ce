@@ -13,8 +13,7 @@
 package com.jaspersoft.studio.components.crosstab.model.columngroup.action;
 
 import java.util.ArrayList;
-
-import net.sf.jasperreports.engine.design.JRDesignStyle;
+import java.util.List;
 
 import org.eclipse.gef.EditPart;
 import org.eclipse.ui.IWorkbenchPart;
@@ -29,6 +28,8 @@ import com.jaspersoft.studio.editor.outline.actions.ACreateAction;
 import com.jaspersoft.studio.editor.palette.JDPaletteCreationFactory;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MRoot;
+
+import net.sf.jasperreports.engine.design.JRDesignStyle;
 /*
  * The Class CreateGroupAction.
  */
@@ -91,9 +92,10 @@ public class CreateColumnGroupAction extends ACreateAction {
 	
 	@Override
 	public boolean isEnabled() {
-		if (getSelectedObjects().size() == 1){
-			return (((EditPart)getSelectedObjects().get(0)).getModel() instanceof MColumnGroups);
-		}
+		List<Object> elements = editor.getSelectionCache().getSelectionModelForType(MCrosstab.class);
+		if (elements.size() == 1) return true;
+		elements = editor.getSelectionCache().getSelectionModelForType(MColumnGroups.class);
+		if (elements.size() == 1) return true;
 		return false;
 	}
 }

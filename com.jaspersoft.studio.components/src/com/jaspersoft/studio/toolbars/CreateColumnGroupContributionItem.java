@@ -12,6 +12,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.toolbars;
 
+import java.util.List;
+
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -23,11 +25,14 @@ import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.wb.swt.ResourceManager;
 
 import com.jaspersoft.studio.components.crosstab.model.MCrosstab;
+import com.jaspersoft.studio.components.crosstab.model.columngroup.MColumnGroups;
 import com.jaspersoft.studio.components.crosstab.model.columngroup.action.CreateColumnGroupAction;
 import com.jaspersoft.studio.editor.action.SetWorkbenchAction;
+import com.jaspersoft.studio.model.MPage;
 
 /**
- * Toolbar button to create a column group on the selected crosstab
+ * Toolbar button to create a column group on the selected crosstab. The action is
+ * visible only on the main editor and only when a crosstab or a column groups
  * 
  * @author Orlandin Marco
  *
@@ -77,7 +82,19 @@ public class CreateColumnGroupContributionItem extends CommonToolbarHandler{
 	@Override
 	public boolean isVisible() {
 		if (!super.isVisible()) return false;
-		if (getSelectionForType(MCrosstab.class).size() == 1){
+		
+		List<Object> selection = getSelectionForType(MCrosstab.class);
+		if (selection.size() == 1){
+			MCrosstab crosstab = (MCrosstab)selection.get(0);
+			if (crosstab.getParent() instanceof MPage){
+				setEnablement();
+				return true;
+			} else return false;
+		}
+		selection = getSelectionForType(MColumnGroups.class);
+		if (selection.size() == 1){
+			//don't need to check if it is in the subeditor since this nodes are selectable
+			//only in the crosstab subeditor 
 			setEnablement();
 			return true;
 		}

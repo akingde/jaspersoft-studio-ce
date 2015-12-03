@@ -13,8 +13,7 @@
 package com.jaspersoft.studio.components.crosstab.model.rowgroup.action;
 
 import java.util.ArrayList;
-
-import net.sf.jasperreports.engine.design.JRDesignStyle;
+import java.util.List;
 
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
@@ -34,6 +33,8 @@ import com.jaspersoft.studio.editor.palette.JDPaletteCreationFactory;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MRoot;
+
+import net.sf.jasperreports.engine.design.JRDesignStyle;
 /*
  * The Class CreateGroupAction.
  */
@@ -100,12 +101,13 @@ public class CreateRowGroupAction extends ACreateAction {
 	
 	@Override
 	public boolean isEnabled() {
-		if (getSelectedObjects().size() == 1){
-			return (((EditPart)getSelectedObjects().get(0)).getModel() instanceof MRowGroups);
-		}
+		List<Object> elements = editor.getSelectionCache().getSelectionModelForType(MCrosstab.class);
+		if (elements.size() == 1) return true;
+		elements = editor.getSelectionCache().getSelectionModelForType(MRowGroups.class);
+		if (elements.size() == 1) return true;
 		return false;
 	}
-	
+
 	/**
 	 * Create a command to layout the current node if it is a cell, otherwise it 
 	 * will search recursively a cell in every child of the node
