@@ -76,16 +76,6 @@
                    type="com.jaspersoft.studio.book.model.MBookReport">
              </input>
           </propertySection>
-          <propertySection
-                afterSection="com.jaspersoft.studio.book.editor.BookEditor.report.MainDatasetSection"
-                class="com.jaspersoft.studio.property.section.report.PageFormatSection"
-                id="com.jaspersoft.studio.editor.JrxmlEditor.report.BookPageFormatSection"
-                tab="com.jaspersoft.studio.propertyTab.report">
-             <input
-                   excludeSubtypes="false"
-                   type="com.jaspersoft.studio.book.model.MBookReport">
-             </input>
-          </propertySection>
        </propertySections>
     </extension>
     <extension
