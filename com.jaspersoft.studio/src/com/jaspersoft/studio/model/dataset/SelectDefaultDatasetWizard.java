@@ -12,13 +12,15 @@
  ******************************************************************************/
 package com.jaspersoft.studio.model.dataset;
 
-import net.sf.jasperreports.data.DataAdapterParameterContributorFactory;
-import net.sf.jasperreports.engine.JRDataset;
-
+import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.wizard.Wizard;
 
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
+import net.sf.jasperreports.data.DataAdapterParameterContributorFactory;
+import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.engine.JRDataset;
 
 /**
  * 
@@ -33,12 +35,13 @@ public class SelectDefaultDatasetWizard extends Wizard {
 	/**
 	 * The current dataset
 	 */
-	private JRDataset dataset;
+	private String location;
 	
 	/**
-	 * The current JasperReportsConfiguration
+	 * File of the opened report used as context to resolve the workspace
+	 * paths
 	 */
-	private JasperReportsConfiguration jConfig;
+	private IFile context;
 	
 	/**
 	 * The page with the controls
@@ -53,11 +56,12 @@ public class SelectDefaultDatasetWizard extends Wizard {
 	 * 
 	 * @param node The current report, the default data adapter property will be set on the main dataset, 
 	 * must be not null
-	 * @param section The section where the command to set the property is executed, must be not null
 	 */
 	public SelectDefaultDatasetWizard(MReport node){
-		dataset = node.getJasperDesign().getMainDataset(); 
-		jConfig = node.getJasperConfiguration();
+		JRDataset dataset = node.getJasperDesign().getMainDataset(); 
+		location = dataset.getPropertiesMap().getProperty(DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION);
+		JasperReportsConfiguration jConfig = node.getJasperConfiguration();
+		context = (IFile) jConfig.get(FileUtils.KEY_FILE);
 	}
 	
 	/**
@@ -65,18 +69,30 @@ public class SelectDefaultDatasetWizard extends Wizard {
 	 * 
 	 * @param node The current dataset, the default data adapter property will be set on this dataset, 
 	 * must be not null
-	 * @param section The section where the command to set the property is executed, must be not null
 	 */
 	public SelectDefaultDatasetWizard(MDataset node){
-		dataset = node.getValue();
-		jConfig = node.getJasperConfiguration();
+		JRDataset dataset = node.getValue();
+		location = dataset.getPropertiesMap().getProperty(DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION);
+		JasperReportsConfiguration jConfig = node.getJasperConfiguration();
+		context = (IFile) jConfig.get(FileUtils.KEY_FILE);
+	}
+	
+	/**
+	 * Create the wizard 
+	 * 
+	 * @param location current value of the jr default data adapter property
+	 * @param context File of the opened report used as context to resolve the workspace
+	 * paths
+	 */
+	public SelectDefaultDatasetWizard(String location, IFile context) {
+		this.location = location;
+		this.context = context;
 	}
 	
 	@Override
 	public void addPages() {
-		String location = dataset.getPropertiesMap().getProperty(DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION);
 		newValue = location;
-		page0 = new SelectDefaultDatasetPage(jConfig, location);
+		page0 = new SelectDefaultDatasetPage(context, location);
 		addPage(page0);
 	}
 	

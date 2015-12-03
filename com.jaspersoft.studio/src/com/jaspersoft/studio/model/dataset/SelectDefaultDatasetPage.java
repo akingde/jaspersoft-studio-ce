@@ -14,8 +14,6 @@ package com.jaspersoft.studio.model.dataset;
 
 import java.io.File;
 
-import net.sf.jasperreports.eclipse.util.FileUtils;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
@@ -40,9 +38,10 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.dialogs.FilteredResourcesSelectionDialog;
 
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.wizards.ContextHelpIDs;
 import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
+
+import net.sf.jasperreports.eclipse.util.FileUtils;
 
 /**
  * Controls shown when a Data Adapter to use as default needs to be selected.
@@ -65,18 +64,24 @@ public class SelectDefaultDatasetPage extends JSSHelpWizardPage {
 	private String path = null;
 	private Label descriptionLabel;
 
-	private JasperReportsConfiguration jConfig;
+	/**
+	 * File of the opened report used as context to resolve the workspace
+	 * paths
+	 */
+	private IFile context;
 
 	/**
-	 * Create the dialog.
+	 * Create the page
 	 * 
-	 * @param parentShell
+	 * @param context File of the opened report used as context to resolve the workspace
+	 * paths
+	 * @param initialPath initial path the text area
 	 */
-	public SelectDefaultDatasetPage(JasperReportsConfiguration jConfig, String intialPath) {
+	public SelectDefaultDatasetPage(IFile context, String intialPath) {
 		super("defaultDAPage"); //$NON-NLS-1$
 		setTitle(getDialogTitle());
 		setDescription(Messages.SelectDefaultDatasetDialog_dialogDescription);
-		this.jConfig = jConfig;
+		this.context = context;
 		if (intialPath != null){
 			path = intialPath;
 		}
@@ -361,10 +366,9 @@ public class SelectDefaultDatasetPage extends JSSHelpWizardPage {
 		fd.setInitialPattern("*.xml");//$NON-NLS-1$
 		if (fd.open() == Dialog.OK) {
 			IFile file = (IFile) fd.getFirstResult();
-			IFile contextfile = (IFile) jConfig.get(FileUtils.KEY_FILE);
 			String filepath = null;
-			if (contextfile != null){
-				filepath = FileUtils.getFileRelativePath(contextfile, file);
+			if (context != null){
+				filepath = FileUtils.getFileRelativePath(context, file);
 			} else {
 				filepath = file.getLocation().toPortableString().replaceAll(file.getProject().getName() + "/", ""); //$NON-NLS-1$ //$NON-NLS-2$
 			}
@@ -385,10 +389,9 @@ public class SelectDefaultDatasetPage extends JSSHelpWizardPage {
 	 */
 	private boolean isInWorkspace(String location){
 		IPath path = new Path(location);
-		IFile report = (IFile) jConfig.get(FileUtils.KEY_FILE);
 		//Check if it is relative to the folder
 		try{ 
-			IFile folderFile = report.getParent().getFile(path);
+			IFile folderFile = context.getParent().getFile(path);
 			if (folderFile.exists()){
 				return true;
 			} 
@@ -397,7 +400,7 @@ public class SelectDefaultDatasetPage extends JSSHelpWizardPage {
 		}
 		//check if it is relative to the project
 		try{ 
-			IFile folderFile = report.getProject().getFile(path);
+			IFile folderFile = context.getProject().getFile(path);
 			if (folderFile.exists()){
 				return true;
 			} 

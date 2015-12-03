@@ -261,8 +261,7 @@ public class MList extends MGraphicElement implements IPastable,
 		else if (id.equals(PREFIX + DesignListContents.PROPERTY_WIDTH))
 			((DesignListContents) jrList.getContents())
 					.setWidth((Integer) value);
-		else if (id
-				.equals(PREFIX + JRDesignElementDataset.PROPERTY_DATASET_RUN)) {
+		else if (id.equals(PREFIX + JRDesignElementDataset.PROPERTY_DATASET_RUN)) {
 			if (value == null) {
 				jrList.setDatasetRun(null);
 			} else {
@@ -273,8 +272,11 @@ public class MList extends MGraphicElement implements IPastable,
 				else
 					jrList.setDatasetRun(null);
 			}
-		} else
+		} else if (id.equals(PROPERTY_MAP) || id.equals(JRDesignElement.PROPERTY_PROPERTY_EXPRESSIONS)) {
 			super.setPropertyValue(id, value);
+			//fire the event to update the editor name, because the property of the name could be changed
+			firePropertyChange(new PropertyChangeEvent(getValue(), ReportContainer.RENAME_EDITOR_PROPERTY, false, true));
+		} else super.setPropertyValue(id, value);
 	}
 
 	public Dimension getContainerSize() {
@@ -400,10 +402,7 @@ public class MList extends MGraphicElement implements IPastable,
 			}
 		}
 	
-		if(evt.getPropertyName().equals(PROPERTY_MAP)){
-			//fire the event to update the editor name, because the property of the name could be changed
-			firePropertyChange(new PropertyChangeEvent(getValue(), ReportContainer.RENAME_EDITOR_PROPERTY, evt.getOldValue(), evt.getNewValue()));
-		} else if (evt.getPropertyName().equals(JRDesignElementGroup.PROPERTY_CHILDREN) && getParent() instanceof MPage) {
+		if (evt.getPropertyName().equals(JRDesignElementGroup.PROPERTY_CHILDREN) && getParent() instanceof MPage) {
 			// Add the children at the model only if the list is opened into a separate editor
 			if (evt.getSource() == getJRElementGroup()) {
 				if (evt.getOldValue() == null && evt.getNewValue() != null) {

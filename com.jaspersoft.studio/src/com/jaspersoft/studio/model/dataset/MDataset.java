@@ -346,15 +346,19 @@ public class MDataset extends APropertyNode implements ICopyable {
 			jrDataset.setFilterExpression(ExprUtil.setValues(jrDataset.getFilterExpression(), value));
 		else if (id.equals(PROPERTY_MAP)) {
 			// to avoid duplication I remove it first
+			JRPropertiesMap originalMap = jrDataset.getPropertiesMap().cloneProperties();
 			JRPropertiesMap v = (JRPropertiesMap) value;
 			String[] names = jrDataset.getPropertiesMap().getPropertyNames();
 			for (int i = 0; i < names.length; i++) {
 				jrDataset.getPropertiesMap().removeProperty(names[i]);
 			}
 			names = v.getPropertyNames();
-			for (int i = 0; i < names.length; i++)
+			for (int i = 0; i < names.length; i++){
 				jrDataset.setProperty(names[i], v.getProperty(names[i]));
-			this.getPropertyChangeSupport().firePropertyChange(PROPERTY_MAP, false, true);
+			}
+			//really important to trigger the property with source the JR object and not the node
+			//using the node could cause problem with the refresh of the advanced properties view
+			firePropertyChange(new PropertyChangeEvent(jrDataset, PROPERTY_MAP, originalMap, jrDataset.getPropertiesMap()));
 		} else if (id.equals(JRDesignDataset.PROPERTY_WHEN_RESOURCE_MISSING_TYPE)){
 			jrDataset.setWhenResourceMissingType(whenResMissTypeD.getEnumValue(value));
 		} else if (id.equals(JRDesignDataset.PROPERTY_QUERY)) {
@@ -371,7 +375,9 @@ public class MDataset extends APropertyNode implements ICopyable {
 			} else {
 				jrDataset.getPropertiesMap().setProperty(DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION, value.toString());
 			}
-			propertyChange(new PropertyChangeEvent(this, DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION, null, value));
+			//really important to trigger the property with source the JR object and not the node
+			//using the node could cause problem with the refresh of the advanced properties view
+			firePropertyChange(new PropertyChangeEvent(jrDataset, DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION, null, value));
 		}
 	}
 

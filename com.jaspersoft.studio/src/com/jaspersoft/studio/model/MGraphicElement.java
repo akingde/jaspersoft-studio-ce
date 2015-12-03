@@ -726,7 +726,9 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 						jrElement.getPropertiesMap().setProperty(p.getName(), p.getValue());
 					}
 				}
-				propertyChange(new PropertyChangeEvent(jrElement, PROPERTY_MAP, originalMap, jrElement.getPropertiesMap()));
+				//really important to trigger the property with source the JR object and not the node
+				//using the node could cause problem with the refresh of the advanced properties view
+				firePropertyChange(new PropertyChangeEvent(jrElement, PROPERTY_MAP, originalMap, jrElement.getPropertiesMap()));
 			}
 		} else if (id.equals(JRDesignElement.PROPERTY_HEIGHT)) {
 			jrElement.setHeight((Integer) Misc.nvl(value, Integer.valueOf(0)));
@@ -778,7 +780,9 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 			for (int i = 0; i < names.length; i++){
 				jrElement.getPropertiesMap().setProperty(names[i], v.getProperty(names[i]));
 			}
-			propertyChange(new PropertyChangeEvent(jrElement, PROPERTY_MAP, originalMap, jrElement.getPropertiesMap()));
+			//really important to trigger the property with source the JR object and not the node
+			//using the node could cause problem with the refresh of the advanced properties view
+			firePropertyChange(new PropertyChangeEvent(jrElement, PROPERTY_MAP, originalMap, jrElement.getPropertiesMap()));
 		}
 	}
 

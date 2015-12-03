@@ -13,7 +13,6 @@
 package com.jaspersoft.studio.property.descriptor.resource;
 
 import org.eclipse.jface.viewers.CellEditor;
-import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -89,16 +88,7 @@ public class DefaultDatasetPropertyDescriptor extends NTextPropertyDescriptor {
 	}
 
 	public CellEditor createPropertyEditor(Composite parent) {
-		CellEditor editor =  new TextCellEditor(parent){
-			protected void doSetValue(Object value) {
-				//null is a valid value for the default data adapter
-				if (value == null)
-					super.doSetValue(""); //$NON-NLS-1$
-				else {
-					super.doSetValue(value);
-				}
-			}
-		};
+		CellEditor editor = new DefaultDatasetCellEditor(parent);
 		HelpSystem.bindToHelp(this, editor.getControl());
 		return editor;
 	}

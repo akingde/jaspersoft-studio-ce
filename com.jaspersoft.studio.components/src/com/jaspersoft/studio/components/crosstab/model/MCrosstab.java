@@ -315,12 +315,13 @@ public class MCrosstab extends MGraphicElementLineBox implements IContainer,
 							new PropertyChangeEvent(this,
 									JRBaseCrosstab.PROPERTY_RUN_DIRECTION,
 									null, value));
-		} else if (id
-				.equals(JRDesignCrosstab.PROPERTY_PARAMETERS_MAP_EXPRESSION))
-			jrElement.setParametersMapExpression(ExprUtil.setValues(
-					jrElement.getParametersMapExpression(), value));
-		else
+		} else if (id.equals(JRDesignCrosstab.PROPERTY_PARAMETERS_MAP_EXPRESSION)){ 
+			jrElement.setParametersMapExpression(ExprUtil.setValues(jrElement.getParametersMapExpression(), value));
+		} else if (id.equals(PROPERTY_MAP) || id.equals(JRDesignElement.PROPERTY_PROPERTY_EXPRESSIONS)) {
 			super.setPropertyValue(id, value);
+			//fire the event to update the editor name, because the property of the name could be changed
+			firePropertyChange(new PropertyChangeEvent(getValue(), ReportContainer.RENAME_EDITOR_PROPERTY, false, true));
+		} else super.setPropertyValue(id, value);
 	}
 
 	@Override
@@ -437,10 +438,7 @@ public class MCrosstab extends MGraphicElementLineBox implements IContainer,
 		String pname = evt.getPropertyName();
 		Object newValue = evt.getNewValue();
 		Object oldValue = evt.getOldValue();
-		if(pname.equals(PROPERTY_MAP)){
-			//fire the event to update the editor name, because the property of the name could be changed
-			 firePropertyChange(new PropertyChangeEvent(getValue(), ReportContainer.RENAME_EDITOR_PROPERTY, oldValue, newValue));
-		} if (pname.equals(JRDesignElement.PROPERTY_WIDTH) || pname.equals(JRDesignElement.PROPERTY_HEIGHT)) {
+		if (pname.equals(JRDesignElement.PROPERTY_WIDTH) || pname.equals(JRDesignElement.PROPERTY_HEIGHT)) {
 			getValue().preprocess();
 			getCrosstabManager().init(getValue());
 		} else if (pname.equals(JRDesignCrosstab.PROPERTY_HEADER_CELL)) {

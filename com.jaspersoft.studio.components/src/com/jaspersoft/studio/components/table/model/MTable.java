@@ -325,7 +325,12 @@ public class MTable extends MGraphicElement implements IContainer,
 				newValue = value;
 			}
 			propertyChange(new PropertyChangeEvent(this, PROPERTY_COLUMNS_AUTORESIZE_PROPORTIONAL, oldValue, newValue));
-		} else super.setPropertyValue(id, value);
+		} else if (id.equals(PROPERTY_MAP) || id.equals(JRDesignElement.PROPERTY_PROPERTY_EXPRESSIONS)) {
+			super.setPropertyValue(id, value);
+			//fire the event to update the editor name, because the property of the name could be changed
+			firePropertyChange(new PropertyChangeEvent(getValue(), ReportContainer.RENAME_EDITOR_PROPERTY, false, true));
+		}
+		else super.setPropertyValue(id, value);
 	}
 
 	/**
@@ -441,11 +446,8 @@ public class MTable extends MGraphicElement implements IContainer,
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-
-		if(evt.getPropertyName().equals(PROPERTY_MAP)){
-			//fire the event to update the editor name, because the property of the name could be changed
-			firePropertyChange(new PropertyChangeEvent(getValue(), ReportContainer.RENAME_EDITOR_PROPERTY, evt.getOldValue(), evt.getNewValue()));
-		} else if (evt.getPropertyName().equals(StandardTable.PROPERTY_DATASET_RUN)) {
+		
+		if (evt.getPropertyName().equals(StandardTable.PROPERTY_DATASET_RUN)) {
 			addDatasetGroupListener();
 		} else if (evt.getPropertyName().equals(MGraphicElement.FORCE_GRAPHICAL_REFRESH)) {
 			ANode parent = getParent();
