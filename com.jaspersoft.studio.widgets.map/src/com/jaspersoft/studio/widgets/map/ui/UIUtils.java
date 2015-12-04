@@ -26,7 +26,7 @@ import com.jaspersoft.studio.widgets.map.MapActivator;
  *
  */
 public class UIUtils {
-	
+
 	/**
 	 * Gets a valid {@link Display} instance trying the following steps:
 	 * <ol>
@@ -52,7 +52,7 @@ public class UIUtils {
 		// and the workbench is not created.
 		throw new SWTError(SWT.ERROR_THREAD_INVALID_ACCESS);
 	}
-	
+
 	/**
 	 * Gets a valid {@link Shell} instance trying the following steps:
 	 * <ol>
@@ -76,4 +76,5 @@ public class UIUtils {
 
 		return shell;
 	}
+
 }

@@ -13,6 +13,8 @@ package com.jaspersoft.studio.widgets.map.ui;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.print.attribute.HashPrintJobAttributeSet;
+
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.widgets.Composite;
 
@@ -43,7 +45,8 @@ import com.jaspersoft.studio.widgets.map.support.JavaMapSupport;
  * <ol>
  * <li>constructor (object creation);</li>
  * <li>{@link #configureJavaSupport(BaseJavaMapSupport)} (not mandatory);</li>
- * <li>{@link #configureJavascriptSupport(BaseJSMapSupport)} (not mandatory);</li>
+ * <li>{@link #configureJavascriptSupport(BaseJSMapSupport)} (not mandatory);
+ * </li>
  * <li>{@link #configureFunctions(List)} (not mandatory);</li>
  * <li>{@link #activateMapTile()}.</li>
  * </ol>
@@ -54,17 +57,17 @@ import com.jaspersoft.studio.widgets.map.support.JavaMapSupport;
  * 
  */
 public class MapTile {
-  
+
 	private List<GMapEnabledFunction> functions;
 	private JSMapSupport jsMapSupp;
 	private JavaMapSupport javaMapSupp;
 	private Browser mapControl;
 	private String mapURL;
-	
+
 	public MapTile(Composite parent, int style) {
 		this(parent, style, MapActivator.getFileLocation("mapfiles/gmaps_library/map.html")); //$NON-NLS-1$
 	}
-	
+
 	public MapTile(Composite parent, int style, String mapURL) {
 		mapControl = new Browser(parent, style);
 		addListeners();
@@ -76,55 +79,61 @@ public class MapTile {
 	 */
 	protected void addListeners() {
 	}
-	
+
 	public void configureJavaSupport(BaseJavaMapSupport javaSupport) {
-		if(javaMapSupp==null){
-			javaMapSupp=javaSupport;	
-		}
-		else {
+		if (javaMapSupp == null) {
+			javaMapSupp = javaSupport;
+		} else {
 			throw new RuntimeException(Messages.MapTile_JavaSupportAlreadyDefinedError);
 		}
-	    
+
 	}
-	
+
 	public void configureJavascriptSupport(BaseJSMapSupport jsSupport) {
-		if(jsMapSupp==null){
-			jsMapSupp=jsSupport;
-		}
-		else {
+		if (jsMapSupp == null) {
+			jsMapSupp = jsSupport;
+		} else {
 			throw new RuntimeException(Messages.MapTile_JavascriptSupportAlreadyDefined);
 		}
 	}
-	
+
 	public void configureFunctions(List<GMapEnabledFunction> functs) {
-		functions=new ArrayList<GMapEnabledFunction>(functs);
+		functions = new ArrayList<GMapEnabledFunction>(functs);
 	}
 
 	public void setLayoutData(Object layoutData) {
 		mapControl.setLayoutData(layoutData);
 	}
-	
+
 	public JSMapSupport getJavascriptMapSupport() {
-		if(this.jsMapSupp==null){
-			this.jsMapSupp=new BaseJSMapSupport(mapControl);
+		if (this.jsMapSupp == null) {
+			this.jsMapSupp = new BaseJSMapSupport(mapControl);
 		}
 		return this.jsMapSupp;
 	}
-	
+
+	public boolean hasJavaMapSupport() {
+		return javaMapSupp != null;
+	}
+
 	public JavaMapSupport getJavaMapSupport() {
-		if(this.javaMapSupp==null){
-			this.javaMapSupp=new BaseJavaMapSupport(mapControl);
+		if (this.javaMapSupp == null) {
+			this.javaMapSupp = new BaseJavaMapSupport(mapControl);
 		}
 		return this.javaMapSupp;
 	}
-	
+
 	public List<GMapEnabledFunction> getFunctions() {
-		if(this.functions==null){
-			functions=new ArrayList<GMapEnabledFunction>(4);
-		    functions.add(new TestJavaCallSupport(mapControl, MapWidgetConstants.BROWSER_FUNCTION_TEST_JAVACALL_SUPPORT, getJavaMapSupport()));
-		    functions.add(new UpdateZoomLevel(mapControl, MapWidgetConstants.BROWSER_FUNCTION_UPDATE_ZOOM_LEVEL, getJavaMapSupport()));
-		    functions.add(new UpdateMapCenter(mapControl, MapWidgetConstants.BROWSER_FUNCTION_UPDATE_MAP_CENTER, getJavaMapSupport()));
-		    functions.add(new UpdateMapType(mapControl, MapWidgetConstants.BROWSER_FUNCTION_UPDATE_MAP_TYPE, getJavaMapSupport()));			
+		if (this.functions == null) {
+			functions = new ArrayList<GMapEnabledFunction>(4);
+			functions.add(new TestJavaCallSupport(mapControl, MapWidgetConstants.BROWSER_FUNCTION_TEST_JAVACALL_SUPPORT,
+					getJavaMapSupport()));
+			functions.add(new UpdateZoomLevel(mapControl, MapWidgetConstants.BROWSER_FUNCTION_UPDATE_ZOOM_LEVEL,
+					getJavaMapSupport()));
+			functions.add(new UpdateMapCenter(mapControl, MapWidgetConstants.BROWSER_FUNCTION_UPDATE_MAP_CENTER,
+					getJavaMapSupport()));
+			functions.add(new UpdateMapType(mapControl, MapWidgetConstants.BROWSER_FUNCTION_UPDATE_MAP_TYPE,
+					getJavaMapSupport()));
 		}
 		return this.functions;
 	}
@@ -132,7 +141,7 @@ public class MapTile {
 	public Browser getMapControl() {
 		return this.mapControl;
 	}
-	
+
 	public void activateMapTile() {
 		// Safe check for default initialization
 		getJavaMapSupport();

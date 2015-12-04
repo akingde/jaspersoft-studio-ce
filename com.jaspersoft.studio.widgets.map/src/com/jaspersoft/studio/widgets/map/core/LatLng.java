@@ -14,7 +14,8 @@ import java.io.Serializable;
 
 /**
  * A {@link LatLng} is a point in geographical coordinates: latitude and
- * longitude. It's a representation of the <code>google.maps.LatLng</code> class.
+ * longitude. It's a representation of the <code>google.maps.LatLng</code>
+ * class.
  * 
  * 
  * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
@@ -29,34 +30,43 @@ public class LatLng implements Serializable {
 	private Double lng;
 
 	/**
-	 * Creates a {@link LatLng} object representing a geographic point. 
+	 * Creates a {@link LatLng} object representing a geographic point.
 	 * 
-	 * @param lat the latitude
-	 * @param lng the longitude
+	 * @param lat
+	 *            the latitude
+	 * @param lng
+	 *            the longitude
 	 */
 	public LatLng(Double lat, Double lng) {
 		this(lat, lng, false);
 	}
 
 	/**
-	 * Creates a {@link LatLng} object representing a geographic point. 
-	 * Set <code>noWrap</code> to true to enable values outside of this range.
+	 * Creates a {@link LatLng} object representing a geographic point. Set
+	 * <code>noWrap</code> to true to enable values outside of this range.
 	 * 
-	 * @param lat the latitude
-	 * @param lng the longitude
-	 * @param noWrap flag to allow values outside the ranges
+	 * @param lat
+	 *            the latitude
+	 * @param lng
+	 *            the longitude
+	 * @param noWrap
+	 *            flag to allow values outside the ranges
 	 */
 	public LatLng(Double lat, Double lng, boolean noWrap) {
 		this.lat = lat;
 		this.lng = lng;
-		if(!noWrap){
-			if (Math.abs(lat) > 90) {
-				throw new RuntimeException(
-						"You must specify the \'noWrap\' setting to true in order to allow latitude values outside the range");
+		if (!noWrap) {
+			if (Math.abs(lat) >= 85.05115) {
+				lat = lat % 85.05115;
+				// throw new RuntimeException(
+				// "You must specify the \'noWrap\' setting to true in order to
+				// allow latitude values outside the range");
 			}
-			if (Math.abs(lng) > 180) {
-				throw new RuntimeException(
-						"You must specify the \'noWrap\' setting to true in order to allow longitude values outside the range");
+			if (Math.abs(lng) >= 180) {
+				lng = lng % 180;
+				// throw new RuntimeException(
+				// "You must specify the \'noWrap\' setting to true in order to
+				// allow longitude values outside the range");
 			}
 		}
 	}
@@ -98,5 +108,7 @@ public class LatLng implements Serializable {
 		return false;
 	}
 
-	
+	public String toJsString() {
+		return String.format("new google.maps.LatLng(%.7f,%.7f,true)", lat, lng);
+	}
 }

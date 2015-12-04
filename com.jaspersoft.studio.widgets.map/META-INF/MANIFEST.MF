@@ -24,3 +24,4 @@ Export-Package: com.jaspersoft.studio.widgets.map;uses:="org.eclipse.ui.plugin,o
    org.eclipse.swt.widgets,
    org.eclipse.swt.browser"
 Bundle-ClassPath: .
+Import-Package: com.jaspersoft.studio.utils
