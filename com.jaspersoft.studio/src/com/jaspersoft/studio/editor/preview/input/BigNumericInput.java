@@ -68,8 +68,8 @@ public class BigNumericInput extends ADataInput {
 						if (e.start != e.end)
 							oldText = oldText.substring(0, e.start) + oldText.substring(e.end);
 						number = oldText.substring(0, e.start) + e.text;
-						if (oldText.length() - 1 > e.start + 1)
-							number += oldText.substring(e.start + 1);
+						if (oldText.length() - 1 > e.start)
+							number += oldText.substring(e.start);
 
 						if (number.equals("-")) //$NON-NLS-1$
 							number = "-0";//$NON-NLS-1$
@@ -200,7 +200,7 @@ public class BigNumericInput extends ADataInput {
 	}
 
 	public static Number getNumber(String number, String type) {
-	
+
 		try {
 			Class<?> clazz = Class.forName(type);
 			if (clazz.isAssignableFrom(Integer.class))
@@ -211,7 +211,7 @@ public class BigNumericInput extends ADataInput {
 				return new Byte(number);
 			if (clazz.isAssignableFrom(Long.class))
 				return new Long(number);
-	
+
 			if (clazz.isAssignableFrom(BigDecimal.class))
 				return new BigDecimal(number);
 			if (clazz.isAssignableFrom(Double.class))

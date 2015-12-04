@@ -16,10 +16,13 @@ import net.sf.jasperreports.chartthemes.simple.ChartThemeSettings;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 import com.jaspersoft.studio.model.MRoot;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class ChartSettingsFactory {
-	public static MRoot createModel(ChartThemeSettings cts) {
-		MRoot root = new MRoot(null, new JasperDesign());
+	public static MRoot createModel(ChartThemeSettings cts, JasperReportsConfiguration jrContext) {
+		JasperDesign jd = new JasperDesign();
+		jd.setJasperReportsContext(jrContext);
+		MRoot root = new MRoot(null, jd);
 		MChartThemeSettings n = new MChartThemeSettings(root, cts);
 		new MChartSettings(n, cts.getChartSettings());
 		new MTitleSettings(n, cts.getTitleSettings(), "Title");

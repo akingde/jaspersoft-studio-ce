@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.editor;
 
@@ -38,14 +34,13 @@ import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.style.MStylesTemplate;
 import com.jaspersoft.studio.model.style.StyleTemplateFactory;
 
-public class JRtxEditor extends AMultiEditor implements CachedSelectionProvider{
+public class JRtxEditor extends AMultiEditor implements CachedSelectionProvider {
 
-	
 	/**
 	 * The selection cache
 	 */
 	private CommonSelectionCacheProvider selectionCache;
-	
+
 	public JRtxEditor() {
 		super();
 		selectionCache = new CommonSelectionCacheProvider();
@@ -59,13 +54,14 @@ public class JRtxEditor extends AMultiEditor implements CachedSelectionProvider{
 	protected void xml2model(InputStream in) {
 		JRTemplate template = JRXmlTemplateLoader.load(in);
 		JasperDesign jd = new JasperDesign();
+		jd.setJasperReportsContext(jrContext);
 		ANode m = new MRoot(null, jd);
 		IFile file = ((IFileEditorInput) getEditorInput()).getFile();
 		MStylesTemplate ms = new MStylesTemplate(m, file);
 		ms.setValue(template);
 		ms.setJasperConfiguration(jrContext);
 		jrContext.setJasperDesign(jd);
-		StyleTemplateFactory.createTemplateRoot(ms, new HashSet<String>(), file,(JRSimpleTemplate) template);
+		StyleTemplateFactory.createTemplateRoot(ms, new HashSet<String>(), file, (JRSimpleTemplate) template);
 		setModel(m);
 	}
 
@@ -83,10 +79,10 @@ public class JRtxEditor extends AMultiEditor implements CachedSelectionProvider{
 			styleEditor.setModel(model);
 	}
 
-	public INode getModel(){
+	public INode getModel() {
 		return model;
 	}
-	
+
 	@Override
 	protected void createPages() {
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(getContainer(), "com.jaspersoft.studio.doc.editor_jrtx");

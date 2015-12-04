@@ -9,8 +9,11 @@
 package com.jaspersoft.studio.property.itemproperty.sp;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.DoubleClickEvent;
@@ -215,12 +218,19 @@ public class SPItemDataList extends ASPropertyWidget<AItemDataListPropertyDescri
 			StandardItemData itemDataClone = (StandardItemData) getStandardItemData(false, tviewer, clones);
 
 			ItemDataDialog dialog = createItemDataDialog(clones, itemDataClone);
-			if (dialog.open() == Dialog.OK) {
-				int ind = itemDatas.indexOf((StandardItemData) obj);
-				itemDatas.set(ind, itemDataClone);
-				dsTViewer.refresh();
-			}
+			if (dialog.open() == Dialog.OK)
+				postCreateItemDialog(new ArrayList<ItemData>(clones));
 		}
+	}
+
+	protected Map<String, Object> postCreateMap = new HashMap<String, Object>();
+
+	protected void postCreateItemDialog(List<ItemData> clones) {
+		List<Command> cmds = new ArrayList<Command>();
+		for (String key : postCreateMap.keySet())
+			cmds.add(section.getChangePropertyCommand(key, postCreateMap.get(key), pnode));
+		postCreateMap.clear();
+		section.changeProperty(pDescriptor.getId(), new ArrayList<ItemData>(clones), cmds);
 	}
 
 	private void handleDeleteElement(TreeViewer tviewer) {
@@ -255,7 +265,7 @@ public class SPItemDataList extends ASPropertyWidget<AItemDataListPropertyDescri
 		StandardItemData itemData = new StandardItemData();
 		clones.add(itemData);
 		if (createItemDataDialog(clones, itemData).open() == Dialog.OK)
-			section.changeProperty(pDescriptor.getId(), new ArrayList<ItemData>(clones));
+			postCreateItemDialog(new ArrayList<ItemData>(clones));
 
 		// List<ItemData> clones = JRCloneUtils.cloneList(itemDatas);
 		// StandardItemData itemData = (StandardItemData) getStandardItemData(true, tviewer, clones);

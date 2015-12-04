@@ -62,13 +62,13 @@ public class MarkersDescriptor extends ADescriptor {
 	protected void initItemPropertyDescriptors() {
 		itemProperties = new ItemPropertyDescription[] {
 				new ItemPropertyDescription<String>(MapComponent.ITEM_PROPERTY_MARKER_title,
-						Messages.MarkersDescriptor_1, "", false, "Marker"), //$NON-NLS-1$
+						Messages.MarkersDescriptor_1, "", false, Messages.MarkersDescriptor_0), //$NON-NLS-1$
 
 				new NumberPropertyDescription<Float>(MapComponent.ITEM_PROPERTY_latitude,
-						Messages.MarkerPage_LatitudeColumn, "", false, new Float("37.7833"), new Float("-85f"), //$NON-NLS-3$
-						new Float("85f")),
+						Messages.MarkerPage_LatitudeColumn, "", false, new Float("37.7833f"), new Float("-85f"),  //$NON-NLS-1$ //$NON-NLS-2$//$NON-NLS-3$
+						new Float("85f")), //$NON-NLS-1$
 				new NumberPropertyDescription<Float>(MapComponent.ITEM_PROPERTY_longitude,
-						Messages.MarkerPage_LongitudeColumn, "", false, new Float("-122.4167"), new Float("-180"),
+						Messages.MarkerPage_LongitudeColumn, "", false, new Float("-122.4167f"), new Float("-180"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 						new Float("180")), //$NON-NLS-1$
 
 				new ItemPropertyDescription<String>(MapComponent.ITEM_PROPERTY_address, Messages.MarkersDescriptor_3,
@@ -137,21 +137,21 @@ public class MarkersDescriptor extends ADescriptor {
 				new ItemPropertyDescription<String>(MapComponent.ITEM_PROPERTY_MARKER_label,
 						Messages.MarkerPage_LabelColumn, Messages.MarkersDescriptor_54, false),
 				new ItemPropertyDescription<String>(MapComponent.ITEM_PROPERTY_MARKER_cursor,
-						Messages.MarkersDescriptor_55, "", false),
+						Messages.MarkersDescriptor_55, "", false), //$NON-NLS-1$
 				new NumberPropertyDescription<Integer>(MapComponent.ITEM_PROPERTY_MARKER_zIndex,
-						Messages.MarkersDescriptor_56, "", false, new Integer(0), null),
+						Messages.MarkersDescriptor_56, "", false, new Integer(0), null), //$NON-NLS-1$
 				new ComboItemPropertyDescription<Boolean>(MapComponent.ITEM_PROPERTY_clickable,
-						Messages.MarkersDescriptor_57, "", false, Boolean.FALSE, new String[] { "", "true", "false" }), //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+						Messages.MarkersDescriptor_57, "", false, Boolean.FALSE, new String[] { "", "true", "false" }),  //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 				new ComboItemPropertyDescription<Boolean>(MapComponent.ITEM_PROPERTY_draggable,
-						Messages.MarkersDescriptor_58, "", false, Boolean.FALSE, new String[] { "", "true", "false" }), //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+						Messages.MarkersDescriptor_58, "", false, Boolean.FALSE, new String[] { "", "true", "false" }),  //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 				new ComboItemPropertyDescription<Boolean>(MapComponent.ITEM_PROPERTY_MARKER_flat,
-						Messages.MarkersDescriptor_59, "", false, Boolean.FALSE, new String[] { "", "true", "false" }), //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+						Messages.MarkersDescriptor_59, "", false, Boolean.FALSE, new String[] { "", "true", "false" }),  //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 				new ComboItemPropertyDescription<Boolean>(MapComponent.ITEM_PROPERTY_MARKER_optimized,
-						Messages.MarkersDescriptor_60, "", false, Boolean.FALSE, new String[] { "", "true", "false" }), //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+						Messages.MarkersDescriptor_60, "", false, Boolean.FALSE, new String[] { "", "true", "false" }),  //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 				new ComboItemPropertyDescription<Boolean>(MapComponent.ITEM_PROPERTY_MARKER_raiseOnDrag,
-						Messages.MarkersDescriptor_61, "", false, Boolean.FALSE, new String[] { "", "true", "false" }), //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+						Messages.MarkersDescriptor_61, "", false, Boolean.FALSE, new String[] { "", "true", "false" }),  //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 				new ComboItemPropertyDescription<Boolean>(MapComponent.ITEM_PROPERTY_visible,
-						Messages.MarkersDescriptor_62, "", false, Boolean.FALSE, new String[] { "", "true", "false" }), //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+						Messages.MarkersDescriptor_62, "", false, Boolean.FALSE, new String[] { "", "true", "false" }),  //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 				new ComboItemPropertyDescription<String>(MapComponent.ITEM_PROPERTY_MARKER_size,
 						Messages.MarkersDescriptor_63, Messages.MarkersDescriptor_64, false,
 						new String[] { "", "mid", "tiny", "small" }) //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
@@ -177,7 +177,7 @@ public class MarkersDescriptor extends ADescriptor {
 					continue;
 				for (Item it : id.getItems()) {
 					if (Misc.isNullOrEmpty(it.getProperties()))
-						throw new Exception("You must have Address or Latitude/Longitude");
+						throw new Exception(Messages.MarkersDescriptor_75);
 					boolean address = false;
 					boolean lon = false;
 					boolean lat = false;
@@ -188,7 +188,7 @@ public class MarkersDescriptor extends ADescriptor {
 					if (ItemPropertyUtil.hasValue(it.getProperties(), MapComponent.ITEM_PROPERTY_address))
 						continue;
 					if (!address && !(lon && lat))
-						throw new Exception("You must have Address or Latitude/Longitude");
+						throw new Exception(Messages.MarkersDescriptor_76);
 				}
 			}
 	}

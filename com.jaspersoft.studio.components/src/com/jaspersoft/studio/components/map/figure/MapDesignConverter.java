@@ -48,8 +48,8 @@ public class MapDesignConverter extends AComponentDesignConverter {
 		return ComponentsExtensionsRegistryFactory.MAP_COMPONENT_NAME;
 	}
 
-	public static final Float DEFAULT_LONGITUDE = new Float(12.337967);
-	public static final Float DEFAULT_LATITUDE = new Float(45.433967);
+	public static final Number DEFAULT_LONGITUDE = new Float(12.337967);
+	public static final Number DEFAULT_LATITUDE = new Float(45.433967);
 
 	/**
 	 *
@@ -114,9 +114,9 @@ public class MapDesignConverter extends AComponentDesignConverter {
 			if (dname != null)
 				jrd = jd.getDatasetMap().get(dname);
 		}
-		Float latitude = evaluate(map.getLatitudeExpression(), jrd, jrContext,
+		Number latitude = evaluate(map.getLatitudeExpression(), jrd, jrContext,
 				DEFAULT_LATITUDE);
-		Float longitude = evaluate(map.getLongitudeExpression(), jrd,
+		Number longitude = evaluate(map.getLongitudeExpression(), jrd,
 				jrContext, DEFAULT_LONGITUDE);
 
 		Integer zoom = evaluate(map.getZoomExpression(), jrd, jrContext,
@@ -132,9 +132,9 @@ public class MapDesignConverter extends AComponentDesignConverter {
 		String markers = "";
 
 		String imageLocation = "http://maps.google.com/maps/api/staticmap?center="
-				+ (latitude % 90)
+				+ (latitude.floatValue() % 90)
 				+ ","
-				+ (longitude % 180)
+				+ (longitude.floatValue() % 180)
 				+ "&size="
 				+ element.getWidth()
 				+ "x"

@@ -136,6 +136,8 @@ public class Messages extends NLS {
 	public static String MarkersDescriptor_64;
 	public static String MarkersDescriptor_7;
 	public static String MarkersDescriptor_70;
+	public static String MarkersDescriptor_75;
+	public static String MarkersDescriptor_76;
 	public static String MarkersDescriptor_8;
 	public static String MarkersPropertyDescriptor_0;
 	public static String MarkersPropertyDescriptor_1;

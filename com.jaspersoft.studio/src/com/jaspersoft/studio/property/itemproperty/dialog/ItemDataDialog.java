@@ -10,15 +10,6 @@ package com.jaspersoft.studio.property.itemproperty.dialog;
 
 import java.util.List;
 
-import net.sf.jasperreports.components.items.Item;
-import net.sf.jasperreports.components.items.ItemData;
-import net.sf.jasperreports.components.items.StandardItem;
-import net.sf.jasperreports.components.items.StandardItemData;
-import net.sf.jasperreports.components.items.StandardItemProperty;
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.engine.JRElementDataset;
-import net.sf.jasperreports.engine.util.JRCloneUtils;
-
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -48,6 +39,15 @@ import com.jaspersoft.studio.swt.widgets.table.ListOrderButtons;
 import com.jaspersoft.studio.swt.widgets.table.NewButton;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
+import net.sf.jasperreports.components.items.Item;
+import net.sf.jasperreports.components.items.ItemData;
+import net.sf.jasperreports.components.items.StandardItem;
+import net.sf.jasperreports.components.items.StandardItemData;
+import net.sf.jasperreports.components.items.StandardItemProperty;
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.engine.JRElementDataset;
+import net.sf.jasperreports.engine.util.JRCloneUtils;
+
 public abstract class ItemDataDialog extends ElementDatasetDialog {
 	protected StandardItemData itemData;
 	private Button bhasds;
@@ -56,6 +56,8 @@ public abstract class ItemDataDialog extends ElementDatasetDialog {
 	protected List<ItemData> itemDatas;
 	private ExpressionContext expContext;
 	private APropertyNode pnode;
+	protected IEditElement<Item> editElement;
+	protected TableViewer itemsViewer;
 
 	public ItemDataDialog(Shell parentShell, String title, String message, List<ItemData> itemDatas,
 			StandardItemData itemData, JasperReportsConfiguration jConfig, ADescriptor descriptor,
@@ -123,10 +125,10 @@ public abstract class ItemDataDialog extends ElementDatasetDialog {
 		Composite cmp = new Composite(tabFolder, SWT.NONE);
 		cmp.setLayout(new GridLayout(2, false));
 
-		final TableViewer viewer = new TableViewer(cmp,
+		itemsViewer = new TableViewer(cmp,
 				SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.BORDER);
-		viewer.setContentProvider(ArrayContentProvider.getInstance());
-		viewer.setLabelProvider(new ItemLabelProvider(descriptor) {
+		itemsViewer.setContentProvider(ArrayContentProvider.getInstance());
+		itemsViewer.setLabelProvider(new ItemLabelProvider(descriptor) {
 			@Override
 			public String getColumnText(Object element, int columnIndex) {
 				return getText(element);
@@ -134,12 +136,12 @@ public abstract class ItemDataDialog extends ElementDatasetDialog {
 		});
 		GridData gd = new GridData(GridData.FILL_BOTH);
 		gd.widthHint = 600;
-		viewer.getTable().setLayoutData(gd);
+		itemsViewer.getTable().setLayoutData(gd);
 
 		Composite c = new Composite(cmp, SWT.NONE);
 		c.setLayout(new GridLayout());
 		c.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
-		new NewButton().createNewButtons(c, viewer, new INewElement() {
+		new NewButton().createNewButtons(c, itemsViewer, new INewElement() {
 
 			@Override
 			public Object newElement(List<?> input, int pos) {
@@ -151,7 +153,7 @@ public abstract class ItemDataDialog extends ElementDatasetDialog {
 					if (ipd.isMandatory()) {
 						StandardItemProperty p = new StandardItemProperty(ipd.getName(), ipd.getDefaultValueString(), null);
 						item.addItemProperty(p);
-						StructuredSelection s = (StructuredSelection) viewer.getSelection();
+						StructuredSelection s = (StructuredSelection) itemsViewer.getSelection();
 						if (s != null) {
 							Object obj = s.getFirstElement();
 							if (obj != null && obj instanceof Item)
@@ -182,11 +184,11 @@ public abstract class ItemDataDialog extends ElementDatasetDialog {
 				return item;
 			}
 		});
-		EditButton<StandardItem> eb = new EditButton<StandardItem>();
-		eb.createEditButtons(c, viewer, new IEditElement<StandardItem>() {
+		EditButton<Item> eb = new EditButton<Item>();
+		editElement = new IEditElement<Item>() {
 
 			@Override
-			public void editElement(List<StandardItem> input, int pos) {
+			public void editElement(List<Item> input, int pos) {
 				int indx = itemDatas.indexOf(itemData);
 				List<ItemData> clones = JRCloneUtils.cloneList(itemDatas);
 				StandardItemData idClone = (StandardItemData) clones.get(indx);
@@ -211,14 +213,15 @@ public abstract class ItemDataDialog extends ElementDatasetDialog {
 					descriptor.setItemDatas(itemDatas, pnode);
 				}
 			}
-		});
+		};
+		eb.createEditButtons(c, itemsViewer, editElement);
 		eb.editOnDoubleClick();
-		new DeleteButton().createDeleteButton(c, viewer);
-		new ListOrderButtons().createOrderButtons(c, viewer);
+		new DeleteButton().createDeleteButton(c, itemsViewer);
+		new ListOrderButtons().createOrderButtons(c, itemsViewer);
 
 		tabItem.setControl(cmp);
 
-		viewer.setInput(itemData.getItems());
+		itemsViewer.setInput(itemData.getItems());
 	}
 
 	protected String getItemName() {

@@ -46,7 +46,7 @@ public class JRctxEditor extends AMultiEditor {
 
 	protected void xml2model(InputStream in) {
 		ChartThemeSettings cts = XmlChartTheme.loadSettings(in);
-		MRoot root = ChartSettingsFactory.createModel(cts);
+		MRoot root = ChartSettingsFactory.createModel(cts, jrContext);
 		root.setJasperConfiguration(jrContext);
 		List<ChartThemeBundle> lst = new ArrayList<ChartThemeBundle>();
 		lst.add(new JRCTXExtensionsRegistryFactory(cts));

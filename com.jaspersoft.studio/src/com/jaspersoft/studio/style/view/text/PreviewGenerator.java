@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.style.view.text;
 
@@ -33,8 +29,7 @@ import com.jaspersoft.studio.utils.ImageUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /**
- * Class that offer the static methods to generate a JR static text image starting
- * from a TextStyle
+ * Class that offer the static methods to generate a JR static text image starting from a TextStyle
  * 
  * @author Orlandin Marco
  *
@@ -42,34 +37,37 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 public class PreviewGenerator {
 
 	/**
-	 * Buffered image where the  preview is painted
+	 * Buffered image where the preview is painted
 	 */
 	private static BufferedImage bi = null;
-	
+
 	/**
 	 * Visitor used to print the jr element
 	 */
 	private static JSSDrawVisitor visitor = null;
-	
+
 	/**
 	 * Design where the printed static text element is placed
 	 */
 	private static JasperDesign jasperDesign = null;
-	
+
 	/**
 	 * The static text element
 	 */
 	private static JRDesignStaticText textElement = null;
-	
+
 	/**
-	 * Generate an swt image data as preview of a text style.
-	 * It show how a text element should appear when the style 
-	 * is applied 
+	 * Generate an swt image data as preview of a text style. It show how a text element should appear when the style is
+	 * applied
 	 * 
-	 * @param style The style used to generate the preview
-	 * @param width the width of the preview area
-	 * @param height the eight of the preview area
-	 * @param containerBackground the background used then the style has a transparent background
+	 * @param style
+	 *          The style used to generate the preview
+	 * @param width
+	 *          the width of the preview area
+	 * @param height
+	 *          the eight of the preview area
+	 * @param containerBackground
+	 *          the background used then the style has a transparent background
 	 * @return and swt image data
 	 */
 	public static ImageData generatePreview(TextStyle style, int width, int height, RGB containerBackground) {
@@ -84,55 +82,60 @@ public class PreviewGenerator {
 		visitor.visitStaticText(textElement);
 		return ImageUtils.convertToSWT(bi);
 	}
-	
+
 	/**
-	 * Create a very minimal jasperdesign where the static text is placed. It is cached
-	 * since we don't need to create it everytime
+	 * Create a very minimal jasperdesign where the static text is placed. It is cached since we don't need to create it
+	 * everytime
 	 */
-	private static void createDesign()
-  {
-       jasperDesign = new JasperDesign();
-       JRDesignBand jrBand = new JRDesignBand();
-   		 jasperDesign.setTitle(jrBand);
-       textElement = new JRDesignStaticText();
-       jasperDesign.setLeftMargin(0);
-       jasperDesign.setRightMargin(0);
-       jasperDesign.setTopMargin(0);
-       jasperDesign.setBottomMargin(0);
-       jrBand.addElement(textElement);
-       jrBand.setSplitType(SplitTypeEnum.STRETCH);
-       textElement.setStretchType(StretchTypeEnum.NO_STRETCH);
-       textElement.setPrintRepeatedValues(false);
-       textElement.setPrintWhenDetailOverflows(true);
-   }
-	 
-	 /**
-	  * Set the static text element to have the appearance described in the text style
-	  * 
-	  * @param style text style
-	  * @param width width of the static text element
-	  * @param height height of the static text element 
-	  * @param containerBackground the background used then the style has a transparent background
-	  */
-	 private static void setDesignElement(TextStyle style, int width, int height, RGB containerBackground) {
-      textElement.setWidth(width-1);
-      textElement.setHeight(height-1);
-      textElement.setText(style.getDescription());
-      UpdateStyleCommand.applayStyleToTextElement(style,textElement);
-      if (style.isTransparent()) {
-      	textElement.setMode(ModeEnum.OPAQUE);
-      	textElement.setBackcolor(new Color(containerBackground.red, containerBackground.green, containerBackground.blue));
-      }
-  }
-	 
-	 /**
-	  * Create a buffered image of the same size of the text element and cache it
-	  */
-	 private static void createBufferedImage(){
-     bi = new BufferedImage(textElement.getWidth(), textElement.getHeight(), BufferedImage.TYPE_INT_ARGB);
-     Graphics2D g2d = bi.createGraphics();
-     g2d.setRenderingHint( RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-     g2d.setRenderingHint( RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-     visitor = new JSSDrawVisitor(new ReportConverter(JasperReportsConfiguration.getDefaultInstance(), jasperDesign, true), g2d);
-	 }
+	private static void createDesign() {
+		jasperDesign = new JasperDesign();
+		jasperDesign.setJasperReportsContext(JasperReportsConfiguration.getDefaultInstance());
+		JRDesignBand jrBand = new JRDesignBand();
+		jasperDesign.setTitle(jrBand);
+		textElement = new JRDesignStaticText();
+		jasperDesign.setLeftMargin(0);
+		jasperDesign.setRightMargin(0);
+		jasperDesign.setTopMargin(0);
+		jasperDesign.setBottomMargin(0);
+		jrBand.addElement(textElement);
+		jrBand.setSplitType(SplitTypeEnum.STRETCH);
+		textElement.setStretchType(StretchTypeEnum.NO_STRETCH);
+		textElement.setPrintRepeatedValues(false);
+		textElement.setPrintWhenDetailOverflows(true);
+	}
+
+	/**
+	 * Set the static text element to have the appearance described in the text style
+	 * 
+	 * @param style
+	 *          text style
+	 * @param width
+	 *          width of the static text element
+	 * @param height
+	 *          height of the static text element
+	 * @param containerBackground
+	 *          the background used then the style has a transparent background
+	 */
+	private static void setDesignElement(TextStyle style, int width, int height, RGB containerBackground) {
+		textElement.setWidth(width - 1);
+		textElement.setHeight(height - 1);
+		textElement.setText(style.getDescription());
+		UpdateStyleCommand.applayStyleToTextElement(style, textElement);
+		if (style.isTransparent()) {
+			textElement.setMode(ModeEnum.OPAQUE);
+			textElement.setBackcolor(new Color(containerBackground.red, containerBackground.green, containerBackground.blue));
+		}
+	}
+
+	/**
+	 * Create a buffered image of the same size of the text element and cache it
+	 */
+	private static void createBufferedImage() {
+		bi = new BufferedImage(textElement.getWidth(), textElement.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g2d = bi.createGraphics();
+		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+		visitor = new JSSDrawVisitor(
+				new ReportConverter(JasperReportsConfiguration.getDefaultInstance(), jasperDesign, true), g2d);
+	}
 }
