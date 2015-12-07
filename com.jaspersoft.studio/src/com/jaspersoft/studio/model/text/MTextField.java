@@ -200,8 +200,8 @@ public class MTextField extends MTextElement {
 				Messages.common_expression);
 		exprD.setDescription(Messages.MTextField_expression_description);
 		desc.add(exprD);
-		exprD.setHelpRefBuilder(new HelpReferenceBuilder(
-				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#textFieldExpression")); //$NON-NLS-1$
+		exprD.setHelpRefBuilder(
+				new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#textFieldExpression")); //$NON-NLS-1$
 
 		JRExpressionPropertyDescriptor anchorNameExp = new JRExpressionPropertyDescriptor(
 				JRDesignTextField.PROPERTY_ANCHOR_NAME_EXPRESSION, Messages.MTextField_anchorNameLabel);
@@ -211,8 +211,8 @@ public class MTextField extends MTextElement {
 		SpinnerPropertyDescriptor bookmarkLevel = new SpinnerPropertyDescriptor(JRDesignTextField.PROPERTY_BOOKMARK_LEVEL,
 				Messages.MTextField_bookmarkLevelLabel);
 		bookmarkLevel.setDescription(Messages.MTextField_bookmarkLevelDescription);
-		bookmarkLevel.setHelpRefBuilder(new HelpReferenceBuilder(
-				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#chart_bookmarkLevel")); //$NON-NLS-1$
+		bookmarkLevel.setHelpRefBuilder(
+				new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#chart_bookmarkLevel")); //$NON-NLS-1$
 		desc.add(bookmarkLevel);
 
 		PatternPropertyDescriptor patternD = new PatternPropertyDescriptor(JRDesignStyle.PROPERTY_PATTERN,
@@ -225,8 +225,8 @@ public class MTextField extends MTextElement {
 		pexprD.setDescription("Pattern expression"); //$NON-NLS-1$
 		desc.add(pexprD);
 
-		pexprD.setHelpRefBuilder(new HelpReferenceBuilder(
-				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#patternExpression")); //$NON-NLS-1$
+		pexprD.setHelpRefBuilder(
+				new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#patternExpression")); //$NON-NLS-1$
 
 		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#textField"); //$NON-NLS-1$
 
@@ -322,13 +322,11 @@ public class MTextField extends MTextElement {
 		if (id.equals(JRDesignTextField.PROPERTY_EVALUATION_TIME)) {
 			EvaluationTimeEnum evalTime = EnumHelper.getEnumByObjectValue(EvaluationTimeEnum.values(), value);
 			jrElement.setEvaluationTime(evalTime);
-			if(evalTime != null && !evalTime.equals(EvaluationTimeEnum.GROUP)) {
+			if (evalTime != null && !evalTime.equals(EvaluationTimeEnum.GROUP)) {
 				jrElement.setEvaluationGroup(null);
-			}		
-		}
-		else if (id.equals(JRDesignTextField.PROPERTY_EVALUATION_GROUP)) {
-			jrElement.setEvaluationGroup(
-					ModelUtils.getGroupForProperty(value, (JRDesignDataset) getElementDataset()));
+			}
+		} else if (id.equals(JRDesignTextField.PROPERTY_EVALUATION_GROUP)) {
+			jrElement.setEvaluationGroup(ModelUtils.getGroupForProperty(value, (JRDesignDataset) getElementDataset()));
 		} else if (id.equals(JRDesignTextField.PROPERTY_EXPRESSION)) {
 			jrElement.setExpression(ExprUtil.setValues(jrElement.getExpression(), value));
 			JRDesignExpression expression = (JRDesignExpression) jrElement.getExpression();
@@ -417,8 +415,8 @@ public class MTextField extends MTextElement {
 				}
 				// Notify the change to the element, no need to set the the refresh to true, it will be done by
 				// the property change since the PROPERTY_EXPRESSION is a graphical property
-				element.getValue().getEventSupport()
-						.firePropertyChange(JRDesignTextField.PROPERTY_EXPRESSION, evt.getOldValue(), evt.getNewValue());
+				element.getValue().getEventSupport().firePropertyChange(JRDesignTextField.PROPERTY_EXPRESSION,
+						evt.getOldValue(), evt.getNewValue());
 			}
 		}
 	};
@@ -464,11 +462,11 @@ public class MTextField extends MTextElement {
 	 */
 	@Override
 	public JRDesignTextField createJRElement(JasperDesign jasperDesign) {
-		JRDesignTextField jrDesignTextField = new JRDesignTextField();
+		JRDesignTextField jrDesignTextField = new JRDesignTextField(jasperDesign);
 		jrDesignTextField.setX(0);
 		jrDesignTextField.setY(0);
-		jrDesignTextField.setExpression(new JRDesignExpression(
-				"\"".concat(Messages.MTextField_common_text_field).concat("\""))); //$NON-NLS-1$
+		jrDesignTextField
+				.setExpression(new JRDesignExpression("\"".concat(Messages.MTextField_common_text_field).concat("\""))); //$NON-NLS-1$
 
 		DefaultManager.INSTANCE.applyDefault(this.getClass(), jrDesignTextField);
 		return jrDesignTextField;
@@ -533,7 +531,7 @@ public class MTextField extends MTextElement {
 		jrTarget.setPattern(getStringClone(jrSource.getOwnPattern()));
 		jrTarget.setStretchWithOverflow(jrSource.isStretchWithOverflow());
 	}
-	
+
 	@Override
 	public HashMap<String, Object> getStylesDescriptors() {
 		HashMap<String, Object> result = super.getStylesDescriptors();
@@ -542,5 +540,5 @@ public class MTextField extends MTextElement {
 		JRDesignTextField jrElement = (JRDesignTextField) getValue();
 		result.put(JRDesignStyle.PROPERTY_PATTERN, jrElement.getOwnPattern());
 		return result;
-	}	
+	}
 }

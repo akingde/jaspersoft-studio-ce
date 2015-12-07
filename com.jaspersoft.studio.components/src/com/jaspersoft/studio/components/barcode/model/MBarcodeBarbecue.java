@@ -90,7 +90,7 @@ public class MBarcodeBarbecue extends MBarcode implements IRotatable {
 
 	@Override
 	public JRDesignComponentElement createJRElement(JasperDesign jasperDesign) {
-		JRDesignComponentElement el = new JRDesignComponentElement();
+		JRDesignComponentElement el = new JRDesignComponentElement(jasperDesign);
 		StandardBarbecueComponent component = new StandardBarbecueComponent();
 		JRDesignExpression exp = new JRDesignExpression();
 		exp.setText("\"1234\""); //$NON-NLS-1$

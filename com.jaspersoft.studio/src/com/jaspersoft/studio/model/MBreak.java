@@ -150,7 +150,7 @@ public class MBreak extends MGraphicElement {
 	 */
 	@Override
 	public JRDesignElement createJRElement(JasperDesign jasperDesign) {
-		JRDesignBreak brk = new JRDesignBreak();
+		JRDesignBreak brk = new JRDesignBreak(jasperDesign);
 		brk.setWidth(getDefaultWidth());
 		brk.setHeight(getDefaultHeight());
 

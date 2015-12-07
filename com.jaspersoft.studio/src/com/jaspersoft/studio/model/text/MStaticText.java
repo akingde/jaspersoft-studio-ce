@@ -138,7 +138,7 @@ public class MStaticText extends MTextElement {
 	 */
 	@Override
 	public JRDesignElement createJRElement(JasperDesign jasperDesign) {
-		JRDesignStaticText jrDesignStaticText = new JRDesignStaticText();
+		JRDesignStaticText jrDesignStaticText = new JRDesignStaticText(jasperDesign);
 		jrDesignStaticText.setText(Messages.common_static_text);
 
 		DefaultManager.INSTANCE.applyDefault(this.getClass(), jrDesignStaticText);

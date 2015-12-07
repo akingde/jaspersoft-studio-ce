@@ -99,7 +99,7 @@ public class MHtml extends MGraphicElement {
 
 	@Override
 	public JRDesignElement createJRElement(JasperDesign jasperDesign) {
-		JRDesignComponentElement el = new JRDesignComponentElement();
+		JRDesignComponentElement el = new JRDesignComponentElement(jasperDesign);
 		HtmlComponent component = new HtmlComponent();
 		JRDesignExpression exp = new JRDesignExpression();
 		exp.setValueClassName("java.lang.String"); //$NON-NLS-1$

@@ -391,7 +391,7 @@ public class MTable extends MGraphicElement implements IContainer,
 
 	@Override
 	public JRDesignElement createJRElement(JasperDesign jasperDesign) {
-		JRDesignComponentElement jrElement = new JRDesignComponentElement();
+		JRDesignComponentElement jrElement = new JRDesignComponentElement(jasperDesign);
 		StandardTable component = new StandardTable();
 
 		((JRDesignComponentElement) jrElement).setComponent(component);

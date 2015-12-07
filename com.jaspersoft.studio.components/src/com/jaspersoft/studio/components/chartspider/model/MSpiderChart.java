@@ -737,7 +737,7 @@ public class MSpiderChart extends MGraphicElement implements IDatasetContainer {
 
 	@Override
 	public JRDesignComponentElement createJRElement(JasperDesign jasperDesign) {
-		JRDesignComponentElement jrcomponent = new JRDesignComponentElement();
+		JRDesignComponentElement jrcomponent = new JRDesignComponentElement(jasperDesign);
 		jrcomponent.setWidth(getDefaultWidth());
 		jrcomponent.setHeight(getDefaultHeight());
 
