@@ -128,7 +128,8 @@ Export-Package: com.jaspersoft.studio;
    org.eclipse.swt.events,
    org.eclipse.jface.viewers,
    com.jaspersoft.studio.data,
-   org.eclipse.swt.widgets",
+   org.eclipse.swt.widgets,
+   net.sf.jasperreports.engine.data",
  com.jaspersoft.studio.data.wizard.pages;
   uses:="org.eclipse.jface.wizard,
    com.jaspersoft.studio.data.storage,
