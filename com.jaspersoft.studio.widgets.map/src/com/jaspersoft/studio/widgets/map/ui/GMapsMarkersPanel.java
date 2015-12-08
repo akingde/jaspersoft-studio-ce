@@ -17,6 +17,8 @@ import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.MenuAdapter;
+import org.eclipse.swt.events.MenuEvent;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -26,6 +28,8 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 
 import com.jaspersoft.studio.widgets.map.MapActivator;
 import com.jaspersoft.studio.widgets.map.MapWidgetConstants;
@@ -133,15 +137,8 @@ public class GMapsMarkersPanel extends GMapsCenterPanel {
 		markersList.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
-				if (e.keyCode == SWT.DEL || e.keyCode == SWT.BS) {
-					if (markersList.getSelectionCount() <= 0)
-						return;
-					MessageDialog dialog = new MessageDialog(UIUtils.getShell(), "Delete", null,
-							"Are you sure you want to delete selected items?", MessageDialog.QUESTION,
-							new String[] { "Yes", "No" }, 1);
-					if (dialog.open() == Dialog.OK)
-						handleRemoveMarker(markersList.getSelectionIndices());
-				}
+				if (e.keyCode == SWT.DEL || e.keyCode == SWT.BS)
+					deleteMarker();
 			}
 		});
 		markersList.addMouseListener(new MouseAdapter() {
@@ -150,6 +147,29 @@ public class GMapsMarkersPanel extends GMapsCenterPanel {
 				if (markersList.getSelectionCount() <= 0)
 					return;
 				handleMarkerDoubleClick(markersList.getSelectionIndex());
+			}
+		});
+		final Menu menu = new Menu(markersList);
+		markersList.setMenu(menu);
+		menu.addMenuListener(new MenuAdapter() {
+			public void menuShown(MenuEvent e) {
+				int selected = markersList.getSelectionIndex();
+
+				if (selected < 0 || selected >= markersList.getItemCount())
+					return;
+
+				MenuItem[] items = menu.getItems();
+				for (int i = 0; i < items.length; i++) {
+					items[i].dispose();
+				}
+				MenuItem newItem = new MenuItem(menu, SWT.NONE);
+				newItem.setText("Delete");
+				newItem.addSelectionListener(new SelectionAdapter() {
+					@Override
+					public void widgetSelected(SelectionEvent e) {
+						deleteMarker();
+					}
+				});
 			}
 		});
 	}
@@ -264,5 +284,15 @@ public class GMapsMarkersPanel extends GMapsCenterPanel {
 
 	protected void postInitMap() {
 		map.getJavascriptMapSupport().evaluateJavascript("MENU_KIND=_MENU_COMPLETE");
+	}
+
+	protected void deleteMarker() {
+		if (markersList.getSelectionCount() <= 0)
+			return;
+		MessageDialog dialog = new MessageDialog(UIUtils.getShell(), "Delete", null,
+				"Are you sure you want to delete selected items?", MessageDialog.QUESTION, new String[] { "Yes", "No" },
+				1);
+		if (dialog.open() == Dialog.OK)
+			handleRemoveMarker(markersList.getSelectionIndices());
 	}
 }
