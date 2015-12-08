@@ -10,37 +10,24 @@
  ******************************************************************************/
 package com.jaspersoft.studio.widgets.map.ui;
 
-import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
-import org.eclipse.swt.custom.SashForm;
-import org.eclipse.swt.events.KeyAdapter;
-import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.MouseAdapter;
-import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.utils.NumberValidator;
+import com.jaspersoft.studio.widgets.map.MapActivator;
 import com.jaspersoft.studio.widgets.map.MapWidgetConstants;
-import com.jaspersoft.studio.widgets.map.browserfunctions.AddNewMarker;
-import com.jaspersoft.studio.widgets.map.browserfunctions.ClearMarkersList;
 import com.jaspersoft.studio.widgets.map.browserfunctions.GMapEnabledFunction;
-import com.jaspersoft.studio.widgets.map.browserfunctions.RemoveMarker;
-import com.jaspersoft.studio.widgets.map.browserfunctions.UpdateMarkerPosition;
 import com.jaspersoft.studio.widgets.map.core.LatLng;
 import com.jaspersoft.studio.widgets.map.core.MapType;
-import com.jaspersoft.studio.widgets.map.core.Marker;
-import com.jaspersoft.studio.widgets.map.messages.Messages;
 import com.jaspersoft.studio.widgets.map.support.BaseJavaMapSupport;
 import com.jaspersoft.studio.widgets.map.support.GMapUtils;
 import com.jaspersoft.studio.widgets.map.support.JavaMapSupport;
@@ -56,14 +43,13 @@ import com.jaspersoft.studio.widgets.map.support.JavaMapSupport;
  * 
  * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
  */
-public class GMapsDetailsPanel2 {
+public class GMapsCenterPanel {
 
-	protected List markersList;
 	protected MapTile map;
 
-	protected LatLng mapCenter;
-	protected int zoomLevel;
-	protected MapType mapType;
+	protected LatLng mapCenter = new LatLng(45.439722, 12.331944);
+	protected int zoomLevel = 12;
+	protected MapType mapType = MapType.ROADMAP;
 	protected String address;
 	protected Text addressBar;
 
@@ -77,38 +63,29 @@ public class GMapsDetailsPanel2 {
 	 * @param style
 	 *            the style of widget to construct
 	 */
-	public GMapsDetailsPanel2(Composite parent, int style) {
+	public GMapsCenterPanel(Composite parent, int style) {
+		createContent(parent, style);
+	}
+
+	protected void createContent(Composite parent, int style) {
 		createTop(parent);
 
-		SashForm sash = new SashForm(parent, style | SWT.HORIZONTAL);
-		if (parent.getLayout() instanceof GridLayout)
-			sash.setLayoutData(new GridData(GridData.FILL_BOTH));
+		createMap(parent);
 
-		map = new MapTile(sash, SWT.NONE);
+		UIUtils.getDisplay().asyncExec(new Runnable() {
+			public void run() {
+				map.activateMapTile();
+			}
+		});
+	}
+
+	protected void createMap(Composite parent) {
+		map = new MapTile(parent, SWT.NONE, MapActivator.getFileLocation("mapfiles/gmaps_library/map2.html"));
 		map.configureJavaSupport(new DetailsPanelMapSupport(map.getMapControl()));
-
-		map.getFunctions().add(new AddNewMarker(map.getMapControl(), MapWidgetConstants.BROWSER_FUNCTION_ADD_MARKER,
-				map.getJavaMapSupport()));
-		map.getFunctions().add(new ClearMarkersList(map.getMapControl(),
-				MapWidgetConstants.BROWSER_FUNCTION_CLEAR_MARKERS, map.getJavaMapSupport()));
-		map.getFunctions().add(new RemoveMarker(map.getMapControl(), MapWidgetConstants.BROWSER_FUNCTION_REMOVE_MARKER,
-				map.getJavaMapSupport()));
-		map.getFunctions().add(new UpdateMarkerPosition(map.getMapControl(),
-				MapWidgetConstants.BROWSER_FUCTION_UPDATE_MARKER_POSITION, map.getJavaMapSupport()));
 		map.getFunctions().add(new InitialConfigurationFunction(map.getMapControl(),
 				MapWidgetConstants.BROWSER_FUNCTION_INITIAL_CONFIGURATION, map.getJavaMapSupport()));
-
-		Composite containerCmp = new Composite(sash, SWT.NONE);
-		GridLayout layout = new GridLayout();
-		layout.marginWidth = 0;
-		layout.marginHeight = 0;
-		containerCmp.setLayout(layout);
-
-		createRightPanel(containerCmp);
-
-		map.activateMapTile();
-
-		sash.setWeights(new int[] { 4, 1 });
+		if (parent.getLayout() instanceof GridLayout)
+			map.setLayoutData(new GridData(GridData.FILL_BOTH));
 	}
 
 	protected void createTop(Composite parent) {
@@ -146,6 +123,8 @@ public class GMapsDetailsPanel2 {
 
 			@Override
 			public void modifyText(ModifyEvent e) {
+				if (centering)
+					return;
 				String txt = tadr.getText();
 				if (txt.isEmpty())
 					return;
@@ -175,7 +154,7 @@ public class GMapsDetailsPanel2 {
 
 			@Override
 			public void modifyText(ModifyEvent e) {
-				if (refreshing)
+				if (refreshing || centering)
 					return;
 				String txt = tlat.getText();
 				if (txt.isEmpty())
@@ -204,7 +183,7 @@ public class GMapsDetailsPanel2 {
 
 			@Override
 			public void modifyText(ModifyEvent e) {
-				if (refreshing)
+				if (refreshing || centering)
 					return;
 				String txt = tlon.getText();
 				if (txt.isEmpty())
@@ -225,48 +204,6 @@ public class GMapsDetailsPanel2 {
 	public void initMap() {
 	}
 
-	public void initMarkers() {
-	}
-
-	protected void createRightPanel(Composite containerCmp) {
-		Label markersLbl = new Label(containerCmp, SWT.NONE);
-		markersLbl.setText(Messages.GMapsDetailsPanel_MarkersLbl);
-		markersLbl.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
-
-		markersList = new List(containerCmp, SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL | SWT.MULTI);
-		markersList.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-
-		markersList.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				int markerIdx = markersList.getSelectionIndex();
-				map.getJavascriptMapSupport().highlightMarker(markerIdx);
-			}
-		});
-		markersList.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent e) {
-				if (e.keyCode == SWT.DEL || e.keyCode == SWT.BS) {
-					if (markersList.getSelectionCount() <= 0)
-						return;
-					MessageDialog dialog = new MessageDialog(UIUtils.getShell(), "Delete", null,
-							"Are you sure you want to delete selected items?", MessageDialog.QUESTION,
-							new String[] { "Yes", "No" }, 1);
-					if (dialog.open() == Dialog.OK)
-						handleRemoveMarker(markersList.getSelectionIndices());
-				}
-			}
-		});
-		markersList.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseDoubleClick(MouseEvent e) {
-				if (markersList.getSelectionCount() <= 0)
-					return;
-				handleMarkerDoubleClick(markersList.getSelectionIndex());
-			}
-		});
-	}
-
 	/**
 	 * Browser function for correctly configuring the initial settings of the
 	 * map.
@@ -282,24 +219,7 @@ public class GMapsDetailsPanel2 {
 
 		@Override
 		public Object function(Object[] arguments) {
-			initMap();
-			initMarkers = true;
-			try {
-				map.getJavascriptMapSupport().setZoomLevel(getZoomLevel());
-				map.getJavascriptMapSupport().setMapType(mapType != null ? mapType : MapType.ROADMAP);
-				if ((mapCenter == null || mapCenter.getLat() == null || mapCenter.getLat() == null)) {
-					if (address != null && !address.isEmpty()) {
-						LatLng coords = GMapUtils.getAddressCoordinates(address);
-						if (coords != null)
-							centerMap(coords);
-					}
-				} else
-					centerMap(mapCenter);
-				initMarkers();
-				map.getJavascriptMapSupport().evaluateJavascript("MENU_KIND=_MENU_COMPLETE");
-			} finally {
-				initMarkers = false;
-			}
+			refresh();
 			return null;
 		}
 
@@ -318,6 +238,10 @@ public class GMapsDetailsPanel2 {
 		try {
 			setMapCenter(lastCoords);
 			lastCoords = null;
+			System.out.println(mapCenter.toJsString());
+			tlon.setText(String.format("%.7f", mapCenter.getLng()));
+			tlat.setText(String.format("%.7f", mapCenter.getLat()));
+
 			map.getJavascriptMapSupport().evaluateJavascript("myMap.panTo(" + mapCenter.toJsString() + "); ");
 			// addCenterMarker(coords);
 		} finally {
@@ -331,62 +255,10 @@ public class GMapsDetailsPanel2 {
 	protected Text tlat;
 	protected boolean refreshing = false;
 
-	class DetailsPanelMapSupport extends BaseJavaMapSupport {
+	protected class DetailsPanelMapSupport extends BaseJavaMapSupport {
 
 		DetailsPanelMapSupport(Browser browser) {
 			super(browser);
-		}
-
-		@Override
-		public void removeMarker(int markerIndex) {
-			if (initMarkers)
-				return;
-			super.removeMarker(markerIndex);
-			handleRemoveMarker(markerIndex);
-		}
-
-		@Override
-		public void removeMarker(Marker oldMarker) {
-			if (initMarkers)
-				return;
-			int mIdx = getMarkers().indexOf(oldMarker);
-			if (mIdx > 0) {
-				removeMarker(mIdx);
-			} else {
-				// FIXME do nothing or raise error (at least log)?!
-			}
-		}
-
-		@Override
-		public void highlightMarker(int markerIdx) {
-			if (initMarkers)
-				return;
-			super.highlightMarker(markerIdx);
-			handleHighlightMarker(markerIdx);
-		}
-
-		@Override
-		public void updateMarkerPosition(int markerIdx, LatLng newPosition) {
-			if (initMarkers)
-				return;
-			super.updateMarkerPosition(markerIdx, newPosition);
-			handleUpdateMarkerPosition(markerIdx, getMarkers().get(markerIdx));
-		}
-
-		@Override
-		public void clearMarkers() {
-			if (initMarkers)
-				return;
-			super.clearMarkers();
-			handleClearMarkers();
-		}
-
-		@Override
-		public void addNewMarker(Marker newMarker) {
-			if (initMarkers)
-				return;
-			super.addNewMarker(newMarker);
-			handleNewMarker(newMarker);
 		}
 
 		@Override
@@ -414,32 +286,6 @@ public class GMapsDetailsPanel2 {
 		}
 	}
 
-	protected void handleHighlightMarker(int markerIdx) {
-		markersList.setSelection(markerIdx);
-	}
-
-	protected void handleUpdateMarkerPosition(int markerIdx, Marker m) {
-		markersList.setItem(markerIdx, formatMarker(m));
-	}
-
-	protected void handleRemoveMarker(int markerIndex) {
-		markersList.remove(markerIndex);
-	}
-
-	protected void handleRemoveMarker(int[] mIndxs) {
-
-	}
-
-	protected void handleClearMarkers() {
-		markersList.removeAll();
-	}
-
-	protected void handleNewMarker(Marker newMarker) {
-		if (initMarkers)
-			return;
-		markersList.add(formatMarker(newMarker));
-	}
-
 	protected void handleMapTypeChanged(MapType mapType) {
 
 	}
@@ -461,10 +307,6 @@ public class GMapsDetailsPanel2 {
 	}
 
 	protected void handleAddressChanged(String address) {
-
-	}
-
-	protected void handleMarkerDoubleClick(int ind) {
 
 	}
 
@@ -502,21 +344,27 @@ public class GMapsDetailsPanel2 {
 		this.zoomLevel = zoomLevel;
 	}
 
-	public void addNewMarker(Marker m) {
-		LatLng p = m.getPosition();
-		if (p != null) {
-			markersList.add(p.getLat() + " : " + p.getLng());
-			map.getJavascriptMapSupport().addNewMarker(m);
+	public void refresh() {
+		initMap();
+		initMarkers = true;
+		try {
+			map.getJavascriptMapSupport().setZoomLevel(getZoomLevel());
+			map.getJavascriptMapSupport().setMapType(mapType != null ? mapType : MapType.ROADMAP);
+			if ((mapCenter == null || mapCenter.getLat() == null || mapCenter.getLat() == null)) {
+				if (address != null && !address.isEmpty()) {
+					LatLng coords = GMapUtils.getAddressCoordinates(address);
+					if (coords != null)
+						centerMap(coords);
+				}
+			} else
+				centerMap(mapCenter);
+			postInitMap();
+		} finally {
+			initMarkers = false;
 		}
 	}
 
-	public void clearMarkers() {
-		map.getJavascriptMapSupport().clearMarkers();
-		markersList.removeAll();
-	}
-
-	protected String formatMarker(Marker m) {
-		LatLng p = m.getPosition();
-		return String.format("%.7f : %.7f", p.getLat(), p.getLng());
+	protected void postInitMap() {
+		map.getJavascriptMapSupport().evaluateJavascript("MENU_KIND=_MENU_MINIMAL");
 	}
 }

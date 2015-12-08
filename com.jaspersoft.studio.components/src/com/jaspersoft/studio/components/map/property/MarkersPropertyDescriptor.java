@@ -43,7 +43,7 @@ import com.jaspersoft.studio.widgets.map.core.LatLng;
 import com.jaspersoft.studio.widgets.map.core.MapType;
 import com.jaspersoft.studio.widgets.map.core.Marker;
 import com.jaspersoft.studio.widgets.map.support.GMapUtils;
-import com.jaspersoft.studio.widgets.map.ui.GMapsDetailsPanel2;
+import com.jaspersoft.studio.widgets.map.ui.GMapsMarkersPanel;
 
 import net.sf.jasperreports.components.items.Item;
 import net.sf.jasperreports.components.items.ItemData;
@@ -87,20 +87,23 @@ public class MarkersPropertyDescriptor extends AItemDataListPropertyDescriptor {
 					return Messages.MMap_markersDescription;
 				}
 
-				private GMapsDetailsPanel2 pmap;
+				private GMapsMarkersPanel pmap;
 
 				@Override
 				protected void createItems(final CTabFolder tabFolder) {
 					super.createItems(tabFolder);
 
 					final CTabItem tabItem = new CTabItem(tabFolder, SWT.NONE);
-					tabItem.setText("Map");
+					tabItem.setText(Messages.MarkersPropertyDescriptor_3);
 					tabFolder.addSelectionListener(new SelectionAdapter() {
 						@Override
 						public void widgetSelected(SelectionEvent e) {
 							if (tabFolder.getSelection() == tabItem) {
-								pmap.initMap();
-								pmap.initMarkers();
+								UIUtils.getDisplay().asyncExec(new Runnable() {
+									public void run() {
+										pmap.refresh();
+									}
+								});
 							}
 							itemsViewer.refresh();
 						}
@@ -112,7 +115,7 @@ public class MarkersPropertyDescriptor extends AItemDataListPropertyDescriptor {
 					layout.marginRight = -5;
 					cmp.setLayout(layout);
 
-					pmap = new GMapsDetailsPanel2(cmp, SWT.NONE) {
+					pmap = new GMapsMarkersPanel(cmp, SWT.NONE) {
 
 						private MMap mmap;
 
@@ -124,20 +127,30 @@ public class MarkersPropertyDescriptor extends AItemDataListPropertyDescriptor {
 								BasicMapInfoData mapInfo = mmap.getBasicMapInformation();
 								if (mapInfo.getLatitude() != null && mapInfo.getLongitude() != null)
 									setMapCenter(new LatLng(mapInfo.getLatitude(), mapInfo.getLongitude(), true));
-								if (mapInfo.getAddress() != null)
+								else if (mapInfo.getAddress() != null)
 									setAddress(mapInfo.getAddress());
+								else {
+									postCreateMap.put(StandardMapComponent.PROPERTY_LATITUDE_EXPRESSION,
+											getMapCenter().getLat());
+									postCreateMap.put(StandardMapComponent.PROPERTY_LONGITUDE_EXPRESSION,
+											getMapCenter().getLng());
+								}
 								if (mapInfo.getMapType() != null)
 									setMapType(MapType.fromStringID(mapInfo.getMapType().getName()));
+								else
+									postCreateMap.put(StandardMapComponent.PROPERTY_MAP_TYPE, getMapType());
 								if (mapInfo.getZoom() != 0)
 									setZoomLevel(mapInfo.getZoom());
-
+								else
+									postCreateMap.put(StandardMapComponent.PROPERTY_ZOOM_EXPRESSION, getZoomLevel());
 							} finally {
 								initMarkers = false;
 							}
 						}
 
 						@Override
-						public void initMarkers() {
+						public void postInitMap() {
+							super.postInitMap();
 							initMarkers = true;
 							try {
 								JasperDesign jd = mmap.getJasperDesign();
@@ -236,9 +249,9 @@ public class MarkersPropertyDescriptor extends AItemDataListPropertyDescriptor {
 							StandardItem si = new StandardItem();
 							LatLng p = newMarker.getPosition();
 							si.addItemProperty(new StandardItemProperty(MapComponent.ITEM_PROPERTY_latitude,
-									String.format("%.7f", p.getLat()), null));
+									String.format("%.7f", p.getLat()), null)); //$NON-NLS-1$
 							si.addItemProperty(new StandardItemProperty(MapComponent.ITEM_PROPERTY_longitude,
-									String.format("%.7f", p.getLng()), null));
+									String.format("%.7f", p.getLng()), null)); //$NON-NLS-1$
 							itemData.addItem(si);
 						}
 
@@ -251,16 +264,16 @@ public class MarkersPropertyDescriptor extends AItemDataListPropertyDescriptor {
 										.getProperty(si.getProperties(), MapComponent.ITEM_PROPERTY_latitude);
 								LatLng p = m.getPosition();
 								if (ip.getValueExpression() != null)
-									ip.setValueExpression(new JRDesignExpression(String.format("%.7f", p.getLat())));
+									ip.setValueExpression(new JRDesignExpression(String.format("%.7f", p.getLat()))); //$NON-NLS-1$
 								else
-									ip.setValue(String.format("%.7f", p.getLat()));
+									ip.setValue(String.format("%.7f", p.getLat())); //$NON-NLS-1$
 
 								ip = (StandardItemProperty) ItemPropertyUtil.getProperty(si.getProperties(),
 										MapComponent.ITEM_PROPERTY_longitude);
 								if (ip.getValueExpression() != null)
-									ip.setValueExpression(new JRDesignExpression(String.format("%.7f", p.getLng())));
+									ip.setValueExpression(new JRDesignExpression(String.format("%.7f", p.getLng()))); //$NON-NLS-1$
 								else
-									ip.setValue(String.format("%.7f", p.getLng()));
+									ip.setValue(String.format("%.7f", p.getLng())); //$NON-NLS-1$
 							}
 						}
 
@@ -280,10 +293,17 @@ public class MarkersPropertyDescriptor extends AItemDataListPropertyDescriptor {
 							super.handleRemoveMarker(mIndxs);
 							initMarkers = true;
 							try {
-								initMarkers();
+								postInitMap();
 							} finally {
 								initMarkers = false;
 							}
+						}
+
+						@Override
+						protected void handleAddressChanged(String address) {
+							postCreateMap.put(StandardMapComponent.PROPERTY_ADDRESS_EXPRESSION, address);
+							postCreateMap.put(StandardMapComponent.PROPERTY_LATITUDE_EXPRESSION, null);
+							postCreateMap.put(StandardMapComponent.PROPERTY_LONGITUDE_EXPRESSION, null);
 						}
 
 						@Override
@@ -301,13 +321,6 @@ public class MarkersPropertyDescriptor extends AItemDataListPropertyDescriptor {
 						}
 
 						@Override
-						protected void handleAddressChanged(String address) {
-							postCreateMap.put(StandardMapComponent.PROPERTY_ADDRESS_EXPRESSION, address);
-							postCreateMap.put(StandardMapComponent.PROPERTY_LATITUDE_EXPRESSION, null);
-							postCreateMap.put(StandardMapComponent.PROPERTY_LONGITUDE_EXPRESSION, null);
-						}
-
-						@Override
 						protected void handleMapCenterChanged(LatLng position) {
 							if (initMarkers)
 								return;
@@ -315,9 +328,9 @@ public class MarkersPropertyDescriptor extends AItemDataListPropertyDescriptor {
 							if (Misc.isNullOrEmpty(getAddress())) {
 								postCreateMap.put(StandardMapComponent.PROPERTY_ADDRESS_EXPRESSION, null);
 								postCreateMap.put(StandardMapComponent.PROPERTY_LATITUDE_EXPRESSION,
-										String.format("%.7f", position.getLat()));
+										String.format("%.7f", position.getLat())); //$NON-NLS-1$
 								postCreateMap.put(StandardMapComponent.PROPERTY_LONGITUDE_EXPRESSION,
-										String.format("%.7f", position.getLng()));
+										String.format("%.7f", position.getLng())); //$NON-NLS-1$
 							}
 						}
 
@@ -327,7 +340,7 @@ public class MarkersPropertyDescriptor extends AItemDataListPropertyDescriptor {
 							// update marker?
 							initMarkers = true;
 							try {
-								initMarkers();
+								postInitMap();
 							} finally {
 								initMarkers = false;
 							}

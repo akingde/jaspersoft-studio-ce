@@ -61,7 +61,7 @@ public class MapTile {
 	private List<GMapEnabledFunction> functions;
 	private JSMapSupport jsMapSupp;
 	private JavaMapSupport javaMapSupp;
-	private Browser mapControl;
+	protected Browser mapControl;
 	private String mapURL;
 
 	public MapTile(Composite parent, int style) {
@@ -69,9 +69,13 @@ public class MapTile {
 	}
 
 	public MapTile(Composite parent, int style, String mapURL) {
-		mapControl = new Browser(parent, style);
+		createBrowser(parent, style);
 		addListeners();
 		this.mapURL = mapURL;
+	}
+
+	protected void createBrowser(Composite parent, int style) {
+		mapControl = new Browser(parent, style);
 	}
 
 	/**

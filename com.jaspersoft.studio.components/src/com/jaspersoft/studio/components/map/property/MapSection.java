@@ -12,11 +12,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.map.property;
 
-import net.sf.jasperreports.components.map.StandardMapComponent;
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.eclipse.util.BasicMapInfoData;
-import net.sf.jasperreports.engine.design.JRDesignExpression;
-
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -36,7 +31,12 @@ import com.jaspersoft.studio.property.section.widgets.SPEvaluationTime;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.widgets.map.core.LatLng;
 import com.jaspersoft.studio.widgets.map.core.MapType;
-import com.jaspersoft.studio.widgets.map.ui.BasicInfoMapDialog;
+import com.jaspersoft.studio.widgets.map.ui.GMapCenterDialog;
+
+import net.sf.jasperreports.components.map.StandardMapComponent;
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.BasicMapInfoData;
+import net.sf.jasperreports.engine.design.JRDesignExpression;
 
 /*
  * The location section on the location tab.
@@ -65,7 +65,7 @@ public class MapSection extends AbstractSection {
 			@Override
 			public void linkActivated(HyperlinkEvent e) {
 				MMap mmap = (MMap) getElement();
-				BasicInfoMapDialog d = new BasicInfoMapDialog(UIUtils.getShell()) {
+				GMapCenterDialog d = new GMapCenterDialog(UIUtils.getShell()) {
 					@Override
 					protected void configureShell(Shell newShell) {
 						super.configureShell(newShell);
@@ -82,20 +82,20 @@ public class MapSection extends AbstractSection {
 				if (mapInfo.getZoom() != 0)
 					d.setZoomLevel(mapInfo.getZoom());
 				if (d.open() == Dialog.OK) {
-					LatLng center = d.getMapCenter();
+					LatLng center = d.getMapPanel().getMapCenter();
 					changeProperty(StandardMapComponent.PROPERTY_LATITUDE_EXPRESSION,
 							new JRDesignExpression(center.getLat() + "f"));
 					changeProperty(StandardMapComponent.PROPERTY_LONGITUDE_EXPRESSION,
 							new JRDesignExpression(center.getLng() + "f"));
 					changeProperty(StandardMapComponent.PROPERTY_ZOOM_EXPRESSION,
-							new JRDesignExpression(String.valueOf(d.getZoomLevel())));
-					String adr = d.getAddress();
+							new JRDesignExpression(String.valueOf(d.getMapPanel().getZoomLevel())));
+					String adr = d.getMapPanel().getAddress();
 					if (Misc.isNullOrEmpty(adr))
 						changeProperty(StandardMapComponent.PROPERTY_ADDRESS_EXPRESSION, null);
 					else
 						changeProperty(StandardMapComponent.PROPERTY_ADDRESS_EXPRESSION,
 								new JRDesignExpression("\"" + adr + "\""));
-					changeProperty(StandardMapComponent.PROPERTY_MAP_TYPE, d.getMapType().ordinal());
+					changeProperty(StandardMapComponent.PROPERTY_MAP_TYPE, d.getMapPanel().getMapType().ordinal());
 				}
 			}
 		});
