@@ -11,6 +11,8 @@
 package com.jaspersoft.studio.widgets.map.ui;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -67,11 +69,20 @@ public class GMapsPathsPanel extends GMapsMarkersPanel {
 				handlePathChanged();
 			}
 		});
+		cPaths.addModifyListener(new ModifyListener() {
+
+			@Override
+			public void modifyText(ModifyEvent e) {
+				if (initMarkers)
+					return;
+				handlePathChanged();
+			}
+		});
 
 		super.createRightPanel(containerCmp);
 	}
 
-	private void drawPolyline() {
+	protected void drawPolyline() {
 		String snippet = "var pathCoordinates = [\n";
 
 		int cnt = markersList.getItemCount();
@@ -92,7 +103,7 @@ public class GMapsPathsPanel extends GMapsMarkersPanel {
 		snippet += " });\n";
 		snippet += "mypath.setMap(myMap.map);\n";
 
-		System.out.println(snippet);
+		// System.out.println(snippet);
 		map.getJavascriptMapSupport().evaluateJavascript(snippet);
 	}
 
@@ -101,7 +112,7 @@ public class GMapsPathsPanel extends GMapsMarkersPanel {
 	}
 
 	protected void fillPaths() {
-		drawPolyline();
+
 	}
 
 	@Override
@@ -114,12 +125,17 @@ public class GMapsPathsPanel extends GMapsMarkersPanel {
 	protected void handleRemoveMarker(int markerIndex) {
 		super.handleRemoveMarker(markerIndex);
 		drawPolyline();
+		fillPaths();
 	}
 
 	@Override
 	protected void handleNewMarker(Marker newMarker) {
 		super.handleNewMarker(newMarker);
 		drawPolyline();
+		fillPaths();
 	}
 
+	public void initMarkers() {
+
+	}
 }
