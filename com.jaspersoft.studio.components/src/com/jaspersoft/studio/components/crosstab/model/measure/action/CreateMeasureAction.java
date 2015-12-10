@@ -12,12 +12,14 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.crosstab.model.measure.action;
 
-import org.eclipse.gef.EditPart;
+import java.util.List;
+
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 
 import com.jaspersoft.studio.components.crosstab.messages.Messages;
+import com.jaspersoft.studio.components.crosstab.model.MCrosstab;
 import com.jaspersoft.studio.components.crosstab.model.measure.MMeasure;
 import com.jaspersoft.studio.components.crosstab.model.measure.MMeasures;
 import com.jaspersoft.studio.editor.outline.actions.ACreateAction;
@@ -58,9 +60,10 @@ public class CreateMeasureAction extends ACreateAction {
 	
 	@Override
 	public boolean isEnabled() {
-		if (getSelectedObjects().size() == 1){
-			return (((EditPart)getSelectedObjects().get(0)).getModel() instanceof MMeasures);
-		}
+		List<Object> elements = editor.getSelectionCache().getSelectionModelForType(MCrosstab.class);
+		if (elements.size() == 1) return true;
+		elements = editor.getSelectionCache().getSelectionModelForType(MMeasures.class);
+		if (elements.size() == 1) return true;
 		return false;
 	}
 }

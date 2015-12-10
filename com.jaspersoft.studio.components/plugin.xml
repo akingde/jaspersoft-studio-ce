@@ -981,6 +981,10 @@
                class="com.jaspersoft.studio.toolbars.CreateColumnGroupContributionItem"
                id="com.jaspersoft.studio.editor.action.createcolumngroup">
          </toolitem>
+         <toolitem
+               class="com.jaspersoft.studio.toolbars.CreateMeasureContributionItem"
+               id="com.jaspersoft.studio.editor.action.createmeasure">
+         </toolitem>
       </toolitemsets>
    </extension>
    <extension
