@@ -71,6 +71,7 @@ import org.xml.sax.InputSource;
 import com.jaspersoft.studio.ConfigurationManager;
 import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.callout.MCallout;
 import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
 import com.jaspersoft.studio.editor.defaults.CustomStyleResolver;
 import com.jaspersoft.studio.editor.defaults.DefaultManager;
@@ -549,7 +550,7 @@ public class CompositeElementManager {
 		band.setHeight(maxHeight);
 		jd.setPageWidth(maxWidth);
 		String noteValue = MessageFormat.format(NOTE_TEMPLATE, new Object[]{Messages.ToolManager_noteText, maxWidth+5});
-		jd.setProperty("ireport.callouts", noteValue); //$NON-NLS-1$
+		jd.setProperty(MCallout.PROP_CALLOUT, noteValue); //$NON-NLS-1$
 		
 		return jd;
 	}

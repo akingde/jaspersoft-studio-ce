@@ -42,6 +42,7 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.callout.pin.IPinContainer;
 import com.jaspersoft.studio.components.section.name.NameSection;
 import com.jaspersoft.studio.components.table.TableComponentFactory;
 import com.jaspersoft.studio.components.table.TableDatasetRunProperyDescriptor;
@@ -73,7 +74,7 @@ import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 import com.jaspersoft.studio.utils.Misc;
 
 public class MTable extends MGraphicElement implements IContainer,
-		IContainerEditPart, IGroupElement, IContainerLayout, IDatasetContainer {
+		IContainerEditPart, IGroupElement, IContainerLayout, IDatasetContainer, IPinContainer{
 
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	

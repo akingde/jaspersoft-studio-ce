@@ -10,19 +10,17 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
-package com.jaspersoft.studio.model;
-
-import com.jaspersoft.studio.editor.layout.ILayout;
+package com.jaspersoft.studio.callout.pin;
 
 import net.sf.jasperreports.engine.JRPropertiesHolder;
 
 /**
- * Interface implemented for the containers that can have a layout for the children inside
- *
+ * Interface that a node must implement to specify that on it the property
+ * of a callout can be stored
+ * 
  * @author Orlandin Marco
- *
  */
-public interface IContainerLayout {
+public interface IPinContainer {
 	
 	/**
 	 * Get the properties holder of the current element
@@ -31,12 +29,4 @@ public interface IContainerLayout {
 	 */
 	public JRPropertiesHolder[] getPropertyHolder();
 	
-	/**
-	 * Return the default layout used for this element when no other
-	 * layout is defined
-	 * 
-	 * @return the layout to be used by default, if it return null then 
-	 * the FreeLayout is used
-	 */
-	public ILayout getDefaultLayout();
 }

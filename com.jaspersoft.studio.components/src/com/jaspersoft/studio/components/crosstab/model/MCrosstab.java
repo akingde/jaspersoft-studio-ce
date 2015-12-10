@@ -43,6 +43,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.callout.pin.IPinContainer;
 import com.jaspersoft.studio.components.crosstab.CrosstabComponentFactory;
 import com.jaspersoft.studio.components.crosstab.CrosstabManager;
 import com.jaspersoft.studio.components.crosstab.CrosstabNodeIconDescriptor;
@@ -84,7 +85,7 @@ import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 import com.jaspersoft.studio.utils.Misc;
 
 public class MCrosstab extends MGraphicElementLineBox implements IContainer,
-		IContainerEditPart, IGroupElement, IContainerLayout, IDatasetContainer {
+		IContainerEditPart, IGroupElement, IContainerLayout, IDatasetContainer, IPinContainer {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;

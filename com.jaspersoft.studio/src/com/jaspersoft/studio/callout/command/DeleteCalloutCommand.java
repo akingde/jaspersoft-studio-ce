@@ -26,7 +26,7 @@ public class DeleteCalloutCommand extends Command {
 
 	public DeleteCalloutCommand(ANode parent, MCallout child) {
 		super("Delete Callout");
-		this.parent = CreateCalloutCommand.getPropertyHolder((ANode) parent.getRoot());
+		this.parent = (ANode)MCallout.getPinPropertyHolderNode(parent);
 		this.mcallout = child;
 	}
 

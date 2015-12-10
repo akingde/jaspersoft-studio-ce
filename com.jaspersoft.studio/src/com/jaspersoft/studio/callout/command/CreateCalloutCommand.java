@@ -12,18 +12,14 @@
  ******************************************************************************/
 package com.jaspersoft.studio.callout.command;
 
-import java.util.List;
-
-import net.sf.jasperreports.engine.design.JRDesignElement;
-
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.callout.MCallout;
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.model.IContainerLayout;
 import com.jaspersoft.studio.model.IGraphicElement;
-import com.jaspersoft.studio.model.INode;
+
+import net.sf.jasperreports.engine.design.JRDesignElement;
 
 public class CreateCalloutCommand extends Command {
 	private Rectangle location;
@@ -35,21 +31,7 @@ public class CreateCalloutCommand extends Command {
 		super("Create Callout");
 		this.location = location;
 		this.originalTarget = parent;
-		this.parent = getPropertyHolder((ANode) parent.getRoot());
-	}
-
-	public static ANode getPropertyHolder(ANode parent) {
-		if (parent instanceof IContainerLayout)
-			return parent;
-		List<INode> children = parent.getChildren();
-		if (children != null && !children.isEmpty()) {
-			for (INode n : children) {
-				ANode p = getPropertyHolder((ANode) n);
-				if (p != null)
-					return p;
-			}
-		}
-		return null;
+		this.parent = (ANode)MCallout.getPinPropertyHolderNode(parent);
 	}
 
 	@Override

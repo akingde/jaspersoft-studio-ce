@@ -27,6 +27,7 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 
 public class MPin extends APropertyNode {
+
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	public MPin(ANode parent, Point p) {

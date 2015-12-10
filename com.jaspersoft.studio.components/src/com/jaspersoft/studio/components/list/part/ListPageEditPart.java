@@ -26,15 +26,14 @@ import com.jaspersoft.studio.property.dataset.dialog.IDatasetDialogSupport;
 public class ListPageEditPart extends PageEditPart implements
 		IDatasetDialogSupport {
 
-
+	private Dimension containerSize;
+	
 	@Override
 	protected void setupPageFigure(APageFigure figure2) {
 		updateContainerSize();
 		((ContainerPageFigure) figure2).setContainerSize(getContaierSize());
 		setupPagePreferences(figure2);
 	}
-
-	private Dimension containerSize;
 
 	public Dimension getContaierSize() {
 		return containerSize;

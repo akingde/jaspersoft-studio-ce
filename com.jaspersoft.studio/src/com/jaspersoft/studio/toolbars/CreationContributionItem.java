@@ -14,6 +14,7 @@ package com.jaspersoft.studio.toolbars;
 
 import java.util.List;
 
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -25,10 +26,12 @@ import org.eclipse.swt.widgets.ToolItem;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.callout.MCallout;
-import com.jaspersoft.studio.callout.action.CreatePinAction;
+import com.jaspersoft.studio.callout.pin.command.CreatePinCommand;
+
+import net.sf.jasperreports.engine.design.JRDesignElement;
 
 /**
- * Create the toolbar button to create a ping
+ * Create the toolbar button to create a pin
  * 
  * @author Orlandin Marco
  *
@@ -47,9 +50,13 @@ public class CreationContributionItem extends CommonToolbarHandler {
 			public void widgetSelected(SelectionEvent e) {
 				List<Object> selection = getSelectionForType(MCallout.class);
 				if (selection.size() == 1){
-					Command cmd = CreatePinAction.getCreationCommand((MCallout)selection.get(0));
+					Rectangle location = new Rectangle();
+					MCallout mcallout = (MCallout)selection.get(0);
+					location.x = 20 + (Integer) mcallout.getPropertyValue(JRDesignElement.PROPERTY_X);
+					location.y = -24 + (Integer) mcallout.getPropertyValue(JRDesignElement.PROPERTY_Y);
+					Command cmd = new CreatePinCommand(mcallout, location);
 					if (cmd != null){
-						getCommandStack().execute(cmd);;
+						getCommandStack().execute(cmd);
 					}
 				}
 			}
@@ -68,7 +75,11 @@ public class CreationContributionItem extends CommonToolbarHandler {
 			public void widgetSelected(SelectionEvent e) {
 				List<Object> selection = getSelectionForType(MCallout.class);
 				if (selection.size() == 1){
-					Command cmd = CreatePinAction.getCreationCommand((MCallout)selection.get(0));
+					Rectangle location = new Rectangle();
+					MCallout mcallout = (MCallout)selection.get(0);
+					location.x = 20 + (Integer) mcallout.getPropertyValue(JRDesignElement.PROPERTY_X);
+					location.y = -24 + (Integer) mcallout.getPropertyValue(JRDesignElement.PROPERTY_Y);
+					Command cmd = new CreatePinCommand(mcallout, location);
 					if (cmd != null){
 						getCommandStack().execute(cmd);;
 					}

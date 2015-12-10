@@ -16,11 +16,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.jasperreports.eclipse.classpath.ClassLoaderUtil;
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.engine.design.JRDesignElement;
-import net.sf.jasperreports.engine.util.FileResolver;
-
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.resources.IFile;
@@ -29,14 +24,20 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IStorage;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.geometry.PrecisionRectangle;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
+import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IFileEditorInput;
@@ -55,12 +56,21 @@ import com.jaspersoft.studio.background.MBackgrounImage;
 import com.jaspersoft.studio.editor.AbstractJRXMLEditor;
 import com.jaspersoft.studio.editor.IMultiEditor;
 import com.jaspersoft.studio.editor.JrxmlEditor;
+import com.jaspersoft.studio.editor.gef.figures.ReportPageFigure;
+import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
+import com.jaspersoft.studio.editor.report.ReportContainer;
 import com.jaspersoft.studio.editor.util.StringInput;
 import com.jaspersoft.studio.editor.util.StringStorage;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.MRoot;
+
+import net.sf.jasperreports.eclipse.JasperReportsPlugin;
+import net.sf.jasperreports.eclipse.classpath.ClassLoaderUtil;
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.util.FileResolver;
 
 public class SelectionHelper {
 
@@ -169,7 +179,24 @@ public class SelectionHelper {
 				ep.getViewer().reveal(ep);
 			}
 		}
-
+	}
+	
+	/**
+	 * Deselect every element in the current editor
+	 */
+	public static void deselectAll(){
+		AbstractJRXMLEditor jrxmlEditor = (AbstractJRXMLEditor)SelectionHelper.getActiveJRXMLEditor();
+		if (jrxmlEditor != null){
+			IEditorPart editor = jrxmlEditor.getActiveEditor();
+			if (editor instanceof ReportContainer){
+				ReportContainer reportEditor = (ReportContainer)editor;
+				IEditorPart activeReportEditor = reportEditor.getActiveEditor();
+				if (activeReportEditor instanceof AbstractVisualEditor){
+						GraphicalViewer viewer = ((AbstractVisualEditor)activeReportEditor).getGraphicalViewer();
+					 	viewer.deselectAll();
+				}
+			}
+		}
 	}
 
 	/**
@@ -411,4 +438,73 @@ public class SelectionHelper {
 		return editors;
 	}
 
+	/**
+	 * Return the main part of the current editor. Typically this is a PageEditPart. This
+	 * is the part that has every other element as child
+	 * 
+	 * @return a PageEditPart or null if it can't be found
+	 */
+	private static EditPart getMainEditPart(){
+		AbstractJRXMLEditor jrxmlEditor = (AbstractJRXMLEditor)SelectionHelper.getActiveJRXMLEditor();
+		if (jrxmlEditor != null){
+			IEditorPart editor = jrxmlEditor.getActiveEditor();
+			if (editor instanceof ReportContainer){
+				ReportContainer reportEditor = (ReportContainer)editor;
+				IEditorPart activeReportEditor = reportEditor.getActiveEditor();
+				if (activeReportEditor instanceof AbstractVisualEditor){
+						GraphicalViewer viewer = ((AbstractVisualEditor)activeReportEditor).getGraphicalViewer();
+					 	return (EditPart)viewer.getRootEditPart().getChildren().get(0);
+				}
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Return the mouse position in the current editor, the position is 
+	 * relative to the current ReportPageEditPart or a PageEditPart of a subeditor
+	 * if it is opened
+	 * 
+	 * @return the position of the pointer in the current page or null if it can't be found
+	 */
+	public static Point getCursorCurrentRelativePosition() {
+		GraphicalEditPart part = (GraphicalEditPart)getMainEditPart();
+		if (part != null){
+			Display display = Display.getDefault();
+			Point point = part.getViewer().getControl().toControl(display.getCursorLocation());
+			IFigure figure = part.getFigure();
+			PrecisionRectangle t = new PrecisionRectangle(point.x, point.y, 0, 0);
+			figure.translateToRelative(t);
+			figure.translateFromParent(t);
+			Rectangle result = t.getTranslated(-ReportPageFigure.PAGE_BORDER.left, -ReportPageFigure.PAGE_BORDER.right);
+			return new Point(result.x, result.y);
+		}
+		return null;
+	}
+
+	/**
+	 * Return the mouse position in the current editor the last time a specific mouse button 
+	 * was pressed. The position is relative to the current ReportPageEditPart or a 
+	 * PageEditPart of a subeditor if it is opened
+	 * 
+	 * @param mouseButton the index of the mouse button
+	 * @return the position of the pointer in the current page when the button was pressed 
+	 * or null if it can't be found
+	 */
+	public static Point getCursorRelativePositionOnClick(int mouseButton) {
+		Point cursorPosition = JasperReportsPlugin.getLastClickLocation(mouseButton);
+		if (cursorPosition != null){
+			GraphicalEditPart part = (GraphicalEditPart)getMainEditPart();
+			if (part != null){
+				Point point = part.getViewer().getControl().toControl(cursorPosition);
+				IFigure figure = part.getFigure();
+				PrecisionRectangle t = new PrecisionRectangle(point.x, point.y, 0, 0);
+				figure.translateToRelative(t);
+				figure.translateFromParent(t);
+				Rectangle result = t.getTranslated(-ReportPageFigure.PAGE_BORDER.left, -ReportPageFigure.PAGE_BORDER.right);
+				return new Point(result.x, result.y);
+			}
+ 		}
+		return null;
+	}	
 }

@@ -578,5 +578,4 @@ public class MColumn extends APropertyNode implements IPastable, IContainer,ICon
 			return (MTable) node;
 		return null;
 	}
-
 }
