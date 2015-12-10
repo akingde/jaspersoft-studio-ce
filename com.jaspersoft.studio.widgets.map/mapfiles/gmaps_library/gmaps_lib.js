@@ -172,6 +172,8 @@ function GMapsMap(mapDIV,mapOptions) {
 
 	var $this=this;
 	google.maps.event.addListener($this.map, 'zoom_changed', function() {
+		$this.selectedMarker = null;  
+		google.maps.event.trigger($this.map, 'hideMenus', null);
 		if(!JAVA_TO_JAVASCRIPT_CALLED) {
 	    	if(typeof javaCall_UpdateZoomLevel != 'undefined') javaCall_UpdateZoomLevel($this.getZoom());
 	    }
@@ -179,6 +181,8 @@ function GMapsMap(mapDIV,mapOptions) {
 	});
 	
 	google.maps.event.addListener($this.map, 'center_changed', function() {
+		$this.selectedMarker = null;  
+		google.maps.event.trigger($this.map, 'hideMenus', null);
 		if(!JAVA_TO_JAVASCRIPT_CALLED) {
     		if(typeof javaCall_UpdateMapCenter != 'undefined') javaCall_UpdateMapCenter($this.getCenter().lat(),$this.getCenter().lng());
     	}
@@ -186,6 +190,8 @@ function GMapsMap(mapDIV,mapOptions) {
   	});	
 
 	google.maps.event.addListener($this.map, 'maptypeid_changed', function() {
+		$this.selectedMarker = null;  
+		google.maps.event.trigger($this.map, 'hideMenus', null);
 		if(!JAVA_TO_JAVASCRIPT_CALLED) {
     		if(typeof javaCall_UpdateMapType != 'undefined') javaCall_UpdateMapType($this.getMapType());
     	}

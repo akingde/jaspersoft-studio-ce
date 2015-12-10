@@ -76,8 +76,11 @@
 			            break;
 			        }
 			    });
-		    }		    
-		    
+		    }		     
+	        google.maps.event.addListener(myMap.map, 'hideMenus', function (mouseEvent) { 
+	           		markerContextMenu.hide();
+	                mapContextMenu.hide(); 
+	        });
 		    // enable the context menu(s) showing on right click
 	        google.maps.event.addListener(myMap.map, 'rightclick', function (mouseEvent) { 
 	           		markerContextMenu.hide();
