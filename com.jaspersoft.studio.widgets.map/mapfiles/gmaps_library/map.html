@@ -87,12 +87,13 @@
 		    }		    
 		    
 		    // enable the context menu(s) showing on right click
-	        google.maps.event.addListener(myMap.map, 'rightclick', function (mouseEvent) {
-	            if (myMap.selectedMarker!==null) {
-	                markerContextMenu.show(mouseEvent.latLng);
-	            } else {
-	                mapContextMenu.show(mouseEvent.latLng);
-	            }
+	        google.maps.event.addListener(myMap.map, 'rightclick', function (mouseEvent) { 
+	           		markerContextMenu.hide();
+	                mapContextMenu.show(mouseEvent.latLng); 
+	        });
+	        google.maps.event.addListener(myMap.map, 'rightclickMarker', function (mouseEvent) { 
+	            	mapContextMenu.hide(); 
+	                markerContextMenu.show(mouseEvent.latLng); 
 	        });
         }
 	}

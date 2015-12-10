@@ -120,9 +120,7 @@ public class GMapsMarkersPanel extends GMapsCenterPanel {
 	}
 
 	protected void createRightPanel(Composite containerCmp) {
-		Label markersLbl = new Label(containerCmp, SWT.NONE);
-		markersLbl.setText(Messages.GMapsDetailsPanel_MarkersLbl);
-		markersLbl.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
+		createMarkersLabel(containerCmp);
 
 		markersList = new List(containerCmp, SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL | SWT.MULTI);
 		markersList.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
@@ -172,6 +170,12 @@ public class GMapsMarkersPanel extends GMapsCenterPanel {
 				});
 			}
 		});
+	}
+
+	protected void createMarkersLabel(Composite containerCmp) {
+		Label markersLbl = new Label(containerCmp, SWT.NONE);
+		markersLbl.setText(Messages.GMapsDetailsPanel_MarkersLbl);
+		markersLbl.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 	}
 
 	class DetailsPanelMapSupportMarker extends DetailsPanelMapSupport {

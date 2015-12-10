@@ -94,7 +94,7 @@ GMapsContextMenu.prototype.onAdd=function() {
 	this.menu=menuDIV;
 	this.position=new google.maps.LatLng(0, 0);
 	
-	google.maps.event.addListener(this.map, 'click', function(mouseEvent){
+	google.maps.event.addListener(this.map, 'click', function(mouseEvent){ 
 		$this.hide();
 	});
 	
@@ -206,8 +206,8 @@ GMapsMap.prototype.addMarker=function(latLng,markerOptions){
     	if(typeof javaCall_UpdateMarkerPosition != 'undefined') javaCall_UpdateMarkerPosition(marker.getPosition().lat(), marker.getPosition().lng(),markerIdx);
 	});
 	google.maps.event.addListener(marker, 'rightclick', function(mouseEvent){
-		$this.selectedMarker = marker;
-		google.maps.event.trigger($this.map, 'rightclick', mouseEvent);
+		$this.selectedMarker = marker;  
+		google.maps.event.trigger($this.map, 'rightclickMarker', mouseEvent);
 	});
 	$this.mapMarkers.push(marker);
 	
