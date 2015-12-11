@@ -620,6 +620,7 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 			public void run() {
 				if (drvtab != null)
 					drvtab.dispose();
+				sprofile.getWsClient().getServerProfile().setClientUser(null);
 			}
 		});
 	}
