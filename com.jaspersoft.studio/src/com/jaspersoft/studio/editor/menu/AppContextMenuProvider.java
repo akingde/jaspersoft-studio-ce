@@ -362,10 +362,6 @@ public class AppContextMenuProvider extends AContextMenuProvider {
 		if (action != null && action.isEnabled())
 			menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
 
-		action = getActionRegistry().getAction(GEFActionConstants.DIRECT_EDIT);
-		if (action.isEnabled())
-			menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
-
 		// position actions
 		MenuManager submenu = new MenuManager(Messages.AppContextMenuProvider_order, JaspersoftStudioPlugin.getInstance()
 				.getImageDescriptor("icons/eclipseapps/elcl16/bring_to_front.gif"), BringToFrontAction.ID); //$NON-NLS-1$
