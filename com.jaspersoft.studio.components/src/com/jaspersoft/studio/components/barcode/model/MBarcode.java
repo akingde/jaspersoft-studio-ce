@@ -16,12 +16,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.jasperreports.components.barbecue.StandardBarbecueComponent;
-import net.sf.jasperreports.engine.JRConstants;
-import net.sf.jasperreports.engine.design.JRDesignComponentElement;
-import net.sf.jasperreports.engine.design.events.JRChangeEventsSupport;
-import net.sf.jasperreports.engine.type.EvaluationTimeEnum;
-
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.barcode.messages.Messages;
@@ -32,9 +26,20 @@ import com.jaspersoft.studio.property.descriptor.combo.RComboBoxPropertyDescript
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 
+import net.sf.jasperreports.components.barbecue.StandardBarbecueComponent;
+import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.design.JRDesignComponentElement;
+import net.sf.jasperreports.engine.design.events.JRChangeEventsSupport;
+import net.sf.jasperreports.engine.type.EvaluationTimeEnum;
+
 public abstract class MBarcode extends MGraphicElement {
+
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
+	private IPropertyDescriptor[] descriptors;
+	
+	private static Map<String, Object> defaultsMap;
+	
 	public MBarcode() {
 		super();
 	}
@@ -42,9 +47,6 @@ public abstract class MBarcode extends MGraphicElement {
 	public MBarcode(ANode parent, int newIndex) {
 		super(parent, newIndex);
 	}
-
-	private IPropertyDescriptor[] descriptors;
-	private static Map<String, Object> defaultsMap;
 
 	@Override
 	public Map<String, Object> getDefaultsMap() {
