@@ -16,7 +16,6 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -24,6 +23,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -43,6 +43,7 @@ import org.glassfish.jersey.SslConfigurator;
 import org.glassfish.jersey.apache.connector.ApacheClientProperties;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.ClientProperties;
+import org.glassfish.jersey.client.RequestEntityProcessing;
 import org.glassfish.jersey.client.spi.Connector;
 import org.glassfish.jersey.media.multipart.Boundary;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
@@ -120,6 +121,8 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 		clientConfig.property(ClientProperties.CONNECT_TIMEOUT, sp.getTimeout());
 		if (sp.isChunked())
 			clientConfig.property(ClientProperties.CHUNKED_ENCODING_SIZE, 1024);
+		else
+			clientConfig.property(ClientProperties.CHUNKED_ENCODING_SIZE, null);
 		clientConfig.property(ApacheClientProperties.PREEMPTIVE_BASIC_AUTHENTICATION, true);
 
 		// config your ssl for apache connector
@@ -144,9 +147,12 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 		// clientConfig.connector(connector);
 		HttpUtils.setupProxy(clientConfig, HttpUtils.toSafeUri(sp.getURL()));
 
+		clientConfig.property(ClientProperties.REQUEST_ENTITY_PROCESSING, RequestEntityProcessing.BUFFERED);
+
 		Client client = ClientBuilder.newBuilder().withConfig(clientConfig).build();
 		client.register(MultiPartFeature.class);
-		// client.register(new org.glassfish.jersey.filter.LoggingFilter());
+		// client.register(new org.glassfish.jersey.filter.LoggingFilter(
+		// java.util.logging.Logger.getLogger(Logger.GLOBAL_LOGGER_NAME), true));
 		// client.register(JacksonFeature.class);
 		// String user = sp.getUser();
 		// if (!Misc.isNullOrEmpty(sp.getOrganisation()))
@@ -159,7 +165,7 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 		else if (url.endsWith("services/repository")) //$NON-NLS-1$
 			url = url.substring(0, url.lastIndexOf("/services/repository")); //$NON-NLS-1$
 		if (!url.endsWith("/")) //$NON-NLS-1$
-			url += "/"; //$NON-NLS-1$ 
+			url += "/"; //$NON-NLS-1$
 		try {
 			target = client.target(url + "j_spring_security_check"); //$NON-NLS-1$
 			target = target.queryParam("forceDefaultRedirect", "false"); //$NON-NLS-1$ //$NON-NLS-2$

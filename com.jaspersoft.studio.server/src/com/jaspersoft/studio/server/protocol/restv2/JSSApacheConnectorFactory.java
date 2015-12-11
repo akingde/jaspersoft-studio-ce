@@ -55,7 +55,7 @@ public class JSSApacheConnectorFactory extends ApacheConnectorProvider {
 	}
 
 	public Response put(Builder builder, Entity<?> entity,
-			IProgressMonitor monitor) throws Exception {
+			IProgressMonitor monitor) throws Exception { 
 		// builder.header("Content-Lenght", 0);
 		builder.header("X-HTTP-Method-Override", "PUT");
 		return doWait(builder.async().post(entity), monitor);
