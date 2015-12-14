@@ -146,6 +146,15 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 
 		Text turl = new Text(composite, SWT.BORDER);
 		turl.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		turl.addModifyListener(new ModifyListener() {
+
+			@Override
+			public void modifyText(ModifyEvent e) {
+				sprofile.setWsClient(null);
+				if (drvtab != null)
+					drvtab.dispose();
+			}
+		});
 
 		new Label(composite, SWT.NONE);
 		new Label(composite, SWT.NONE);
@@ -160,6 +169,15 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 		new Label(gr, SWT.NONE).setText(Messages.ServerProfilePage_9);
 		Text torg = new Text(gr, SWT.BORDER);
 		torg.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		torg.addModifyListener(new ModifyListener() {
+
+			@Override
+			public void modifyText(ModifyEvent e) {
+				sprofile.setWsClient(null);
+				if (drvtab != null)
+					drvtab.dispose();
+			}
+		});
 
 		createCredentials(gr);
 
@@ -254,6 +272,15 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 		tuser = new Text(cmpUP, SWT.BORDER);
 		tuser.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		tuser.setTextLimit(100);
+		tuser.addModifyListener(new ModifyListener() {
+
+			@Override
+			public void modifyText(ModifyEvent e) {
+				sprofile.setWsClient(null);
+				if (drvtab != null)
+					drvtab.dispose();
+			}
+		});
 
 		new Label(cmpUP, SWT.NONE).setText(Messages.ServerProfilePage_11);
 		tpass = new WSecretText(cmpUP, SWT.BORDER | SWT.PASSWORD);
@@ -396,7 +423,9 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 					bUseSoap.setEnabled(true);
 				}
 				cmpCredential.layout();
-
+				sprofile.setWsClient(null);
+				if (drvtab != null)
+					drvtab.dispose();
 			}
 		});
 
