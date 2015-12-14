@@ -14,9 +14,6 @@ package com.jaspersoft.studio.server.publish.wizard.page;
 
 import java.util.List;
 
-import net.sf.jasperreports.engine.design.JRDesignExpression;
-import net.sf.jasperreports.engine.design.JasperDesign;
-
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -46,7 +43,6 @@ import org.eclipse.wb.swt.ResourceManager;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
-import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionCellEditor;
 import com.jaspersoft.studio.server.Activator;
 import com.jaspersoft.studio.server.messages.Messages;
@@ -55,6 +51,7 @@ import com.jaspersoft.studio.server.model.AMJrxmlContainer;
 import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.model.MInputControl;
 import com.jaspersoft.studio.server.model.MReportUnit;
+import com.jaspersoft.studio.server.preferences.JRSPreferencesPage;
 import com.jaspersoft.studio.server.publish.OverwriteEnum;
 import com.jaspersoft.studio.server.publish.PublishOptions;
 import com.jaspersoft.studio.server.publish.PublishUtil;
@@ -68,6 +65,8 @@ import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.wizards.ContextHelpIDs;
 import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
+
+import net.sf.jasperreports.engine.design.JRDesignExpression;
 
 public class ResourcesPage extends JSSHelpWizardPage {
 	private JasperReportsConfiguration jConfig;
@@ -103,16 +102,15 @@ public class ResourcesPage extends JSSHelpWizardPage {
 		setControl(composite);
 		composite.setLayout(new GridLayout());
 
-		tableViewer = new TableViewer(composite, SWT.SINGLE | SWT.H_SCROLL
-				| SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.BORDER);
+		tableViewer = new TableViewer(composite,
+				SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.BORDER);
 		tableViewer.setContentProvider(new ListContentProvider());
 		ColumnViewerToolTipSupport.enableFor(tableViewer);
 		Table table = (Table) tableViewer.getControl();
 		table.setHeaderVisible(true);
 		table.setLayoutData(new GridData(GridData.FILL_BOTH));
 
-		TableViewerColumn viewerColumn = new TableViewerColumn(tableViewer,
-				SWT.NONE);
+		TableViewerColumn viewerColumn = new TableViewerColumn(tableViewer, SWT.NONE);
 		TableColumn column = viewerColumn.getColumn();
 		column.setText(Messages.ResourcesPage_table_resource);
 		column.setWidth(300);
@@ -130,21 +128,16 @@ public class ResourcesPage extends JSSHelpWizardPage {
 				AMResource fr = (AMResource) element;
 				ImageDescriptor id = fr.getThisIconDescriptor().getIcon16();
 				PublishOptions popt = fr.getPublishOptions();
-				if (popt.getPublishMethod() != ResourcePublishMethod.LOCAL
-						&& popt.getReferencedResource() == null) {
+				if (popt.getPublishMethod() != ResourcePublishMethod.LOCAL && popt.getReferencedResource() == null) {
 					FieldDecoration fd = FieldDecorationRegistry.getDefault()
-							.getFieldDecoration(
-									FieldDecorationRegistry.DEC_ERROR);
+							.getFieldDecoration(FieldDecorationRegistry.DEC_ERROR);
 					setErrorMessage(Messages.ResourcesPage_0);
 					ResourcesPage.this.setPageComplete(false);
-					return ResourceManager.decorateImage(id.createImage(),
-							fd.getImage(), ResourceManager.BOTTOM_LEFT);
+					return ResourceManager.decorateImage(id.createImage(), fd.getImage(), ResourceManager.BOTTOM_LEFT);
 				}
 				if (popt.getPublishMethod() == ResourcePublishMethod.REFERENCE)
 					return Activator.getDefault().getImage(
-							ResourceManager.decorateImage(id,
-									AMResource.LINK_DECORATOR,
-									ResourceManager.BOTTOM_LEFT));
+							ResourceManager.decorateImage(id, AMResource.LINK_DECORATOR, ResourceManager.BOTTOM_LEFT));
 				return Activator.getDefault().getImage(id);
 			}
 		});
@@ -158,8 +151,7 @@ public class ResourcesPage extends JSSHelpWizardPage {
 			@Override
 			public String getText(Object element) {
 				AMResource fr = (AMResource) element;
-				OverwriteEnum ovw = fr.getPublishOptions().getOverwrite(
-						OverwriteEnum.IGNORE);
+				OverwriteEnum ovw = fr.getPublishOptions().getOverwrite(OverwriteEnum.IGNORE);
 				if (ovw.equals(OverwriteEnum.OVERWRITE))
 					return Messages.ResourcesPage_3;
 				if (ovw.equals(OverwriteEnum.IGNORE))
@@ -250,18 +242,14 @@ public class ResourcesPage extends JSSHelpWizardPage {
 		MenuManager menuMgr = new MenuManager();
 		menuMgr.setRemoveAllWhenShown(true);
 		menuMgr.addMenuListener(new IMenuListener() {
-			private ResourceExpressionAction rexp = new ResourceExpressionAction(
-					tableViewer);
+			private ResourceExpressionAction rexp = new ResourceExpressionAction(tableViewer);
 
 			public void menuAboutToShow(IMenuManager menu) {
-				StructuredSelection s = (StructuredSelection) tableViewer
-						.getSelection();
+				StructuredSelection s = (StructuredSelection) tableViewer.getSelection();
 				if (s != null) {
 					AMResource mres = (AMResource) s.getFirstElement();
-					if (mres != null
-							&& mres.getPublishOptions()
-									.getOverwrite(OverwriteEnum.OVERWRITE)
-									.equals(OverwriteEnum.OVERWRITE)) {
+					if (mres != null && mres.getPublishOptions().getOverwrite(OverwriteEnum.OVERWRITE)
+							.equals(OverwriteEnum.OVERWRITE)) {
 						if (sresource.calculateEnabled(mres))
 							menu.add(sresource);
 						if (sres.calculateEnabled(mres))
@@ -294,8 +282,7 @@ public class ResourcesPage extends JSSHelpWizardPage {
 				if (property.equals("VALUE")) //$NON-NLS-1$
 					return true;
 				if (property.equals("EXPRESSION") //$NON-NLS-1$
-						&& po.getjExpression() != null
-						&& !po.getOverwrite().equals(OverwriteEnum.IGNORE))
+						&& po.getjExpression() != null && !po.getOverwrite().equals(OverwriteEnum.IGNORE))
 					return true;
 				if (property.equals("TYPE") && po.getOverwrite().equals(OverwriteEnum.OVERWRITE)) //$NON-NLS-1$
 					return true;
@@ -307,14 +294,10 @@ public class ResourcesPage extends JSSHelpWizardPage {
 				PublishOptions po = prop.getPublishOptions();
 				if ("VALUE".equals(property)) { //$NON-NLS-1$
 					if (prop instanceof AFileResource) {
-						cOverwrite.setItems(new String[] {
-								Messages.ResourcesPage_3,
-								Messages.ResourcesPage_5,
+						cOverwrite.setItems(new String[] { Messages.ResourcesPage_3, Messages.ResourcesPage_5,
 								Messages.ResourcesPage_6 });
 					} else {
-						cOverwrite.setItems(new String[] {
-								Messages.ResourcesPage_3,
-								Messages.ResourcesPage_5 });
+						cOverwrite.setItems(new String[] { Messages.ResourcesPage_3, Messages.ResourcesPage_5 });
 					}
 
 					OverwriteEnum ovw = po.getOverwrite();
@@ -332,15 +315,14 @@ public class ResourcesPage extends JSSHelpWizardPage {
 					if (prop instanceof AFileResource)
 						return ((AFileResource) element).getHFFileSize();
 				}
-				if (po.getOverwrite(OverwriteEnum.IGNORE).equals(
-						OverwriteEnum.IGNORE))
+				if (po.getOverwrite(OverwriteEnum.IGNORE).equals(OverwriteEnum.IGNORE))
 					return ""; //$NON-NLS-1$
-				if ("EXPRESSION".equals(property)) { //$NON-NLS-1$ 
+				if ("EXPRESSION".equals(property)) { //$NON-NLS-1$
 					JRDesignExpression jd = new JRDesignExpression();
 					jd.setText(prop.getPublishOptions().getExpression());
 					return jd;
 				}
-				if ("TYPE".equals(property)) { //$NON-NLS-1$ 
+				if ("TYPE".equals(property)) { //$NON-NLS-1$
 					if (prop instanceof AFileResource) {
 						AFileResource mres = (AFileResource) element;
 						if (mres.getPublishOptions().getPublishMethod() == ResourcePublishMethod.RESOURCE)
@@ -373,8 +355,7 @@ public class ResourcesPage extends JSSHelpWizardPage {
 						break;
 					}
 				} else if ("EXPRESSION".equals(property)) //$NON-NLS-1$
-					po.setExpression(value == null ? null
-							: ((JRDesignExpression) value).getText());
+					po.setExpression(value == null ? null : ((JRDesignExpression) value).getText());
 				else if ("TYPE".equals(property)) { //$NON-NLS-1$
 					if (value instanceof Integer) {
 						int intValue = ((Integer) value).intValue();
@@ -399,43 +380,35 @@ public class ResourcesPage extends JSSHelpWizardPage {
 			}
 		});
 
-		JRExpressionCellEditor expEditor = new JRExpressionCellEditor(parent,
-				new ExpressionContext(jConfig));
-		cOverwrite = new ComboBoxCellEditor(parent, new String[] {
-				Messages.ResourcesPage_3, Messages.ResourcesPage_5,
-				Messages.ResourcesPage_6 });
-		viewer.setCellEditors(new CellEditor[] {
-				new TextCellEditor(parent),
-				cOverwrite,
-				expEditor,
-				new TextCellEditor(parent, SWT.RIGHT),
-				new ComboBoxCellEditor(parent, new String[] { sres.getText(),
-						sresource.getText(), slocal.getText() }) });
-		viewer.setColumnProperties(new String[] {
-				"NAME", "VALUE", "EXPRESSION", "FILESIZE", "TYPE" }); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+		JRExpressionCellEditor expEditor = new JRExpressionCellEditor(parent, new ExpressionContext(jConfig));
+		cOverwrite = new ComboBoxCellEditor(parent,
+				new String[] { Messages.ResourcesPage_3, Messages.ResourcesPage_5, Messages.ResourcesPage_6 });
+		viewer.setCellEditors(new CellEditor[] { new TextCellEditor(parent), cOverwrite, expEditor,
+				new TextCellEditor(parent, SWT.RIGHT), new ComboBoxCellEditor(parent,
+						new String[] { sres.getText(), sresource.getText(), slocal.getText() }) });
+		viewer.setColumnProperties(new String[] { "NAME", "VALUE", "EXPRESSION", "FILESIZE", "TYPE" }); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 	}
 
 	public void fillData(boolean isNew) {
-		List<AMResource> res = PublishUtil.getResources(pres,
-				new NullProgressMonitor(), jConfig);
+		List<AMResource> res = PublishUtil.getResources(pres, new NullProgressMonitor(), jConfig);
 		if (isNew)
 			for (AMResource r : res) {
 				if (r instanceof AFileResource)
 					continue;
-				r.getPublishOptions().setOverwrite(OverwriteEnum.OVERWRITE);
+				Boolean b = jConfig.getPropertyBoolean(JRSPreferencesPage.PUBLISH_REPORT_OVERRIDEBYDEFAULT, true);
+				if (!b)
+					r.getPublishOptions().setOverwrite(OverwriteEnum.IGNORE);
+				else
+					r.getPublishOptions().setOverwrite(OverwriteEnum.OVERWRITE);
 			}
 		else {
 			if (pres instanceof MReportUnit && !pres.getValue().getIsNew()) {
 				for (ResourceDescriptor n : pres.getValue().getChildren()) {
-					if (n.getWsType() != null
-							&& n.getWsType().equals(
-									ResourceDescriptor.TYPE_INPUT_CONTROL)) {
+					if (n.getWsType() != null && n.getWsType().equals(ResourceDescriptor.TYPE_INPUT_CONTROL)) {
 						String icname = n.getName();
 						for (AMResource r : res) {
-							if (r instanceof MInputControl
-									&& r.getValue().getName().equals(icname)) {
-								r.getPublishOptions().setOverwrite(
-										OverwriteEnum.IGNORE);
+							if (r instanceof MInputControl && r.getValue().getName().equals(icname)) {
+								r.getPublishOptions().setOverwrite(OverwriteEnum.IGNORE);
 								break;
 							}
 						}
@@ -463,21 +436,17 @@ public class ResourcesPage extends JSSHelpWizardPage {
 				tt += "\nURI: " + mres.getValue().getUriString(); //$NON-NLS-1$
 				if (mres.getPublishOptions().getReferencedResource() != null)
 					tt += "\nReference To: " //$NON-NLS-1$
-							+ mres.getPublishOptions().getReferencedResource()
-									.getUriString();
+							+ mres.getPublishOptions().getReferencedResource().getUriString();
 			} else if (mres.getPublishOptions().getPublishMethod() == ResourcePublishMethod.RESOURCE) {
 				if (mres.getPublishOptions().getReferencedResource() != null)
 					tt += "\nURI: " //$NON-NLS-1$
-							+ mres.getPublishOptions().getReferencedResource()
-									.getUriString();
+							+ mres.getPublishOptions().getReferencedResource().getUriString();
 			} else if (mres.getPublishOptions().getPublishMethod() == ResourcePublishMethod.REWRITEEXPRESSION)
 				if (mres.getPublishOptions().getReferencedResource() != null)
 					tt += "\nURI: " //$NON-NLS-1$
-							+ mres.getPublishOptions().getReferencedResource()
-									.getUriString();
+							+ mres.getPublishOptions().getReferencedResource().getUriString();
 
-			if (element instanceof AFileResource
-					&& ((AFileResource) element).getFile() != null)
+			if (element instanceof AFileResource && ((AFileResource) element).getFile() != null)
 				tt += "\nFile: " //$NON-NLS-1$
 						+ ((AFileResource) element).getFile().getAbsolutePath();
 			return tt;
