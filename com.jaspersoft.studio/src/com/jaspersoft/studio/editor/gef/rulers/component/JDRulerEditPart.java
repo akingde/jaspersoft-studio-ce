@@ -16,9 +16,11 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.List;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.MouseEvent;
+import org.eclipse.draw2d.MouseMotionListener;
+import org.eclipse.draw2d.geometry.PrecisionRectangle;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.AccessibleEditPart;
 import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditPart;
@@ -34,15 +36,63 @@ import org.eclipse.gef.requests.SelectionRequest;
 import org.eclipse.gef.rulers.RulerChangeListener;
 import org.eclipse.gef.rulers.RulerProvider;
 import org.eclipse.swt.accessibility.AccessibleEvent;
+import org.eclipse.swt.graphics.Point;
 
 import com.jaspersoft.studio.editor.gef.rulers.ReportRuler;
+
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 public class JDRulerEditPart extends AbstractGraphicalEditPart {
 
 	protected GraphicalViewer diagramViewer;
+	
 	private AccessibleEditPart accPart;
+	
 	private RulerProvider rulerProvider;
+	
 	private boolean horizontal;
+	
+	/**
+	 * Last position of the pointer on the ruler, -1 -1 means that the pointer
+	 * is outside the edit part
+	 */
+	private Point lastMousePosition = new Point(-1, -1);
+	
+	/**
+	 * Listener to keep track of the mouse pointer on the ruler
+	 */
+	private MouseMotionListener mouseListener = new MouseMotionListener() {
+		
+		@Override
+		public void mouseMoved(MouseEvent me) {
+			lastMousePosition.x = me.x;
+			lastMousePosition.y = me.y;
+		}
+		
+		@Override
+		public void mouseHover(MouseEvent me) {
+			lastMousePosition.x = me.x;
+			lastMousePosition.y = me.y;
+		}
+		
+		@Override
+		public void mouseExited(MouseEvent me) {
+			lastMousePosition.x = -1;
+			lastMousePosition.y = -1;
+		}
+		
+		@Override
+		public void mouseEntered(MouseEvent me) {
+			lastMousePosition.x = me.x;
+			lastMousePosition.y = me.y;
+		}
+		
+		@Override
+		public void mouseDragged(MouseEvent me) {
+		}
+	};
+
+	
 	private RulerChangeListener listener = new RulerChangeListener.Stub() {
 
 		public void notifyGuideReparented(Object guide) {
@@ -101,6 +151,7 @@ public class JDRulerEditPart extends AbstractGraphicalEditPart {
 		ruler.setHoffset(((ReportRuler) getRulerProvider().getRuler()).getHoffset());
 		ruler.setVend(((ReportRuler) getRulerProvider().getRuler()).getVend());
 		ruler.setVoffset(((ReportRuler) getRulerProvider().getRuler()).getVoffset());
+		ruler.addMouseMotionListener(mouseListener);
 		return ruler;
 	}
 
@@ -269,4 +320,23 @@ public class JDRulerEditPart extends AbstractGraphicalEditPart {
 		}
 	}
 
+	/**
+	 * Return the current position of the pointer on the ruler 
+	 * 
+	 * @return the pixel position of the pointer on the ruler in pixel, starting
+	 * from the zero value of the ruler. It return -1 if the pointer is actually
+	 * not on the ruler
+	 */
+	public int getMousePosition(){
+		if (lastMousePosition.x == -1 && lastMousePosition.y == -1) return -1;
+		JDRulerFigure figure = (JDRulerFigure)getFigure();
+		PrecisionRectangle t = new PrecisionRectangle(lastMousePosition.x, lastMousePosition.y, 0, 0);
+		ZoomManager zoomManager = getZoomManager();
+		Rectangle result = t.getTranslated(-(figure.getHoffset()* zoomManager.getZoom()), -(figure.getVoffset()* zoomManager.getZoom()));
+		int position = isHorizontal() ? result.x : result.y;
+		if (zoomManager != null) {
+			position = (int) Math.round(position / zoomManager.getZoom());
+		}
+		return position;
+	}
 }

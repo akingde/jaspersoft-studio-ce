@@ -67,17 +67,23 @@ public class CreateGuideAction extends Action {
 		Arrays.sort(positions);
 		int index = 0;
 		int newPosition = MIN_DISTANCE_BW_GUIDES + 1;
-		int desiredDifference = (MIN_DISTANCE_BW_GUIDES * 2) + 1;
-		boolean found = positions.length > 0 && positions[0] > desiredDifference;
-		while (index < positions.length - 1 && !found) {
-			if (positions[index + 1] - positions[index] > desiredDifference) {
-				newPosition += positions[index];
-				found = true;
+		//get the position from the pointer on the ruler
+		if (rulerEditPart.getMousePosition() != -1){
+			newPosition = rulerEditPart.getMousePosition();
+		} else {
+			int desiredDifference = (MIN_DISTANCE_BW_GUIDES * 2) + 1;
+			boolean found = positions.length > 0 && positions[0] > desiredDifference;
+			while (index < positions.length - 1 && !found) {
+				if (positions[index + 1] - positions[index] > desiredDifference) {
+					newPosition += positions[index];
+					found = true;
+				}
+				index++;
 			}
-			index++;
+			if (!found && positions.length > 0){
+				newPosition += positions[positions.length - 1];
+			}
 		}
-		if (!found && positions.length > 0)
-			newPosition += positions[positions.length - 1];
 		PositionDialog dlg = new PositionDialog(UIUtils.getShell(), newPosition, provider.getUnit(), ruler.isHorizontal());
 		if (dlg.open() == Window.OK){
 			newPosition = dlg.getPixelPosition();

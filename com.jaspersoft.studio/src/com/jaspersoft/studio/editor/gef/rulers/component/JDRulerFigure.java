@@ -300,8 +300,7 @@ public class JDRulerFigure extends Figure {
 					// graphics.drawLine(y, clippedBounds.x, y, clippedBounds.x + clippedBounds.width);
 					graphics.drawText(num, textLocation);
 				} else {
-					Image numImage = ImageUtilities.createRotatedImageOfString(num, getFont(), getForegroundColor(),
-							getBackgroundColor());
+					Image numImage = ImageUtilities.createRotatedImageOfString(num, getFont(), getForegroundColor(), getBackgroundColor());
 					Point textLocation = new Point(clippedBounds.x + textMargin, y - (numImage.getBounds().height / 2));
 					forbiddenZone.setLocation(textLocation);
 					forbiddenZone.setSize(numImage.getBounds().width, numImage.getBounds().height);
@@ -436,5 +435,4 @@ public class JDRulerFigure extends Figure {
 			}
 		}
 	}
-
 }
