@@ -7,12 +7,12 @@ package com.jaspersoft.studio.components.customvisualization;
 
 import java.io.IOException;
 
-import net.sf.jasperreports.eclipse.AbstractJRUIPlugin;
-
 import org.osgi.framework.BundleContext;
 
 import com.jaspersoft.jasperreports.customvisualization.CVConstants;
 import com.jaspersoft.studio.preferences.util.PreferencesUtils;
+
+import net.sf.jasperreports.eclipse.AbstractJRUIPlugin;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -41,7 +41,6 @@ public class CustomVisualizationActivator extends AbstractJRUIPlugin {
 	 */
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
-		initCustomVisualizationComponentProperties();
 		plugin = this;
 	}
 
@@ -68,6 +67,14 @@ public class CustomVisualizationActivator extends AbstractJRUIPlugin {
 		return PLUGIN_ID;
 	}
 
+	@Override
+	protected void postStartOperations() {
+		try {
+			initCustomVisualizationComponentProperties();
+		} catch (IOException e) {
+			logError(e);
+		}
+	}
 	
 	/*
 	 * Initializes the mandatory properties related to RequireJS.
