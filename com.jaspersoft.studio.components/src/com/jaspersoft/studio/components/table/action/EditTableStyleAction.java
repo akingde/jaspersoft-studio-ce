@@ -30,10 +30,13 @@ import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.components.Activator;
 import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.components.table.model.MTable;
+import com.jaspersoft.studio.components.table.model.dialog.ApplyTableStyleAction;
 import com.jaspersoft.studio.components.table.model.dialog.TableStyle;
 import com.jaspersoft.studio.components.table.model.table.command.UpdateStyleCommand;
 import com.jaspersoft.studio.components.table.model.table.command.wizard.TableStyleWizard;
 import com.jaspersoft.studio.editor.action.ACachedSelectionAction;
+
+import net.sf.jasperreports.engine.design.JRDesignStyle;
 
 /**
  * Action to open the Style dialog and use it to change the style of a table
@@ -84,19 +87,38 @@ public class EditTableStyleAction extends ACachedSelectionAction {
 		if (dialog.open() == Dialog.OK){
 			//If the user close the dialog with ok then a message box is shown to ask how to edit the styles
 			Shell shell = PlatformUI.getWorkbench().getDisplay().getActiveShell();
-			MessageDialog question = new MessageDialog(shell, Messages.EditStyleAction_dialogTitle, null, Messages.EditStyleAction_dialogText, MessageDialog.QUESTION, 
-														new String[]{Messages.EditStyleAction_dialogUpdateButton, Messages.EditStyleAction_dialogNewButton, Messages.EditStyleAction_dialogCancelButton}, 0);
-			int response = question.open();
-			//response == 0 update the old styles, response == 1 create new styles, response == 2 cancel the operation
-			if (response == 0 || response == 1){
+			List<Object> tables = editor.getSelectionCache().getSelectionModelForType(MTable.class);
+			MTable tableModel = (MTable)tables.get(0);
+			if (hasStyles(tableModel)){
+				MessageDialog question = new MessageDialog(shell, Messages.EditStyleAction_dialogTitle, null, Messages.EditStyleAction_dialogText, MessageDialog.QUESTION, 
+						new String[]{Messages.EditStyleAction_dialogUpdateButton, Messages.EditStyleAction_dialogNewButton, Messages.EditStyleAction_dialogCancelButton}, 0);
+				int response = question.open();
+				//response == 0 update the old styles, response == 1 create new styles, response == 2 cancel the operation
+				if (response == 0 || response == 1){
+					TableStyle selectedStyle = wizard.getTableStyle();
+					execute(changeStyleCommand(tableModel, selectedStyle,response == 0));
+				} 
+			} else {
+				//Don't prompt question if the table is not using styles
 				TableStyle selectedStyle = wizard.getTableStyle();
-				List<Object> tables = editor.getSelectionCache().getSelectionModelForType(MTable.class);
-				MTable tableModel = (MTable)tables.get(0);
-				execute(changeStyleCommand(tableModel, selectedStyle,response == 0));
-			} 
+				execute(changeStyleCommand(tableModel, selectedStyle, false));
+			}
 		}
 	}
 
+	/**
+	 * Check if the passed table is using styles in its cells
+	 * 
+	 * @param tableModel a not null table model
+	 * @return table if at least once cell of the table is using a style, false otherwise
+	 */
+	private boolean hasStyles(MTable tableModel){
+		JRDesignStyle[] currentStyles = ApplyTableStyleAction.getStylesFromTable(tableModel.getStandardTable());
+		for(int i=0; i< currentStyles.length; i++){
+			if (currentStyles[i] != null) return true;
+		}
+		return false;
+	}
 	
 	/**
 	 * 

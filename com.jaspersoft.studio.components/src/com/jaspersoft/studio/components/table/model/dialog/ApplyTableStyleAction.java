@@ -163,7 +163,6 @@ public class ApplyTableStyleAction extends ApplyStyleAction {
 		// Style set
 	}
 	
-	
 	/**
 	 * Extract the list of styles actually used on the table 
 	 * 
@@ -172,12 +171,23 @@ public class ApplyTableStyleAction extends ApplyStyleAction {
 	 */
 	public JRDesignStyle[] getStylesFromTable(){
 		StandardTable jrTable = getStandardTable(getElement());
+		return getStylesFromTable(jrTable);
+	}
+	
+	/**
+	 * Extract the list of styles actually used on the table 
+	 * 
+	 * @param jrTable a not null table from where the styles are extracted
+	 * @return the list of styles actually used in the cells of the table in this order 
+	 * null (for retrocompatibility), Table Header, Column Header and Detail.
+	 */
+	public static JRDesignStyle[] getStylesFromTable(StandardTable jrTable){
 		List<BaseColumn> columns = TableUtil.getAllColumns(jrTable);
     	JRDesignStyle[] stylesArray = new JRDesignStyle[4];
     	if (columns.size()>0){
     		BaseColumn standardCol = columns.get(0);
     		if (standardCol.getColumnFooter() != null) stylesArray[2] = (JRDesignStyle)standardCol.getColumnFooter().getStyle();
-    		if (standardCol.getColumnHeader() != null) stylesArray[2] = (JRDesignStyle)standardCol.getColumnFooter().getStyle();
+    		if (standardCol.getColumnHeader() != null) stylesArray[2] = (JRDesignStyle)standardCol.getColumnHeader().getStyle();
     		if (standardCol.getTableHeader() != null) stylesArray[1] = (JRDesignStyle)standardCol.getTableHeader().getStyle();
     		if (standardCol.getTableFooter() != null) stylesArray[1] = (JRDesignStyle)standardCol.getTableFooter().getStyle();
     		if (standardCol instanceof StandardColumn){
@@ -233,20 +243,23 @@ public class ApplyTableStyleAction extends ApplyStyleAction {
 	 * @param removeOldStyles if updateOldStyles is false, after the new styles are created the old one are deleted
 	 */
 	public void updateStyle(JasperDesign design, List<JRDesignStyle> newStyles, boolean updatOldStyles, boolean removeOldStyles){
+		List<JRDesignStyle> stylesToApply = new ArrayList<JRDesignStyle>(newStyles);
 		JSSCompoundCommand commands = new JSSCompoundCommand(null);
 		if (updatOldStyles){
 			JRDesignStyle[] actualStyles = getStylesFromTable();
 			for(int i=0; i<actualStyles.length; i++){
 				JRDesignStyle style = actualStyles[i];
 				if (style != null){
-					JRDesignStyle updatedStyle = newStyles.get(i);
+					JRDesignStyle updatedStyle = stylesToApply.get(i);
 					updatedStyle.setName(style.getName());
 					design.removeStyle(style.getName());
 					commands.add(new CreateStyleCommand(design, updatedStyle));
+				} else {
+					stylesToApply.set(i, null);
 				}
 			}
 		} else {
-			styles = newStyles;
+			styles = stylesToApply;
 			Map<String,JRStyle> stylesMap = design.getStylesMap();
 			if (removeOldStyles){
 				JRDesignStyle[] oldStyles = getStylesFromTable();
@@ -254,12 +267,12 @@ public class ApplyTableStyleAction extends ApplyStyleAction {
 					if (style != null) design.removeStyle(style);
 				}
 			}
-			for(JRDesignStyle style : newStyles){
+			for(JRDesignStyle style : stylesToApply){
 				if (style != null && !stylesMap.containsKey(style.getName())) commands.add(new CreateStyleCommand(design, style));
 			}
 		}
 		commands.execute();
-		setCellStyles(newStyles);
+		setCellStyles(stylesToApply);
 	}
 		
 	/**
