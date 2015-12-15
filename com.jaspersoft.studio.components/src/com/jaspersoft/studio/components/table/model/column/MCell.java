@@ -29,6 +29,7 @@ import com.jaspersoft.studio.components.table.model.MTable;
 import com.jaspersoft.studio.components.table.model.MTableGroupFooter;
 import com.jaspersoft.studio.components.table.model.MTableGroupHeader;
 import com.jaspersoft.studio.components.table.util.TableColumnSize;
+import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.model.IGraphicElementContainer;
@@ -43,7 +44,7 @@ import com.jaspersoft.studio.model.MLineBox;
 import com.jaspersoft.studio.model.util.ReportFactory;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.box.BoxPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.combo.RWStyleComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.IntegerPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.PixelPropertyDescriptor;
 
@@ -64,8 +65,15 @@ import net.sf.jasperreports.engine.design.events.CollectionElementAddedEvent;
 public class MCell extends MColumn implements IGraphicElement,
 		IPastableGraphic, ILineBox, IGraphicElementContainer, IPastable,
 		IGroupElement, IGraphicalPropertiesHandler {
+	
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
+	private static Map<String, Object> defaultsMap;
+	
+	private static IPropertyDescriptor[] descriptors;
+
+	private DesignCell cell;
+	
 	/**
 	 * Instantiates a new m field.
 	 */
@@ -90,15 +98,12 @@ public class MCell extends MColumn implements IGraphicElement,
 		this.cell.getEventSupport().addPropertyChangeListener(this);
 	}
 
-	private DesignCell cell;
+
 
 	public DesignCell getCell() {
 		return cell;
 	}
-
-	private static IPropertyDescriptor[] descriptors;
-	private static Map<String, Object> defaultsMap;
-
+	
 	@Override
 	public Map<String, Object> getDefaultsMap() {
 		return defaultsMap;
@@ -110,31 +115,10 @@ public class MCell extends MColumn implements IGraphicElement,
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1,
-			Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1,Map<String, Object> defaultsMap1) {
 		descriptors = descriptors1;
 		defaultsMap = defaultsMap1;
 	}
-
-	@Override
-	protected void postDescriptors(IPropertyDescriptor[] descriptors) {
-		super.postDescriptors(descriptors);
-		JasperDesign jasperDesign = getJasperDesign();
-		if (jasperDesign != null) {
-			if (styleD != null && cell != null) {
-				JRStyle[] styles = jasperDesign.getStyles();
-				String[] items = new String[styles.length + 1];
-				items[0] = cell.getStyleNameReference() != null ? cell
-						.getStyleNameReference() : ""; //$NON-NLS-1$
-				for (int j = 0; j < styles.length; j++) {
-					items[j + 1] = styles[j].getName();
-				}
-				styleD.setItems(items);
-			}
-		}
-	}
-
-	private RWComboBoxPropertyDescriptor styleD;
 
 	/**
 	 * Creates the property descriptors.
@@ -147,11 +131,13 @@ public class MCell extends MColumn implements IGraphicElement,
 			Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		styleD = new RWComboBoxPropertyDescriptor(DesignCell.PROPERTY_STYLE,
-				Messages.MCell_parent_style, new String[] { "" }, //$NON-NLS-1$
-				NullEnum.NULL);
+		RWStyleComboBoxPropertyDescriptor styleD = new RWStyleComboBoxPropertyDescriptor(DesignCell.PROPERTY_STYLE,
+														Messages.MCell_parent_style, new String[] { "" }, //$NON-NLS-1$
+														NullEnum.NULL);
 		styleD.setDescription(Messages.MCell_parent_style_description);
 		desc.add(styleD);
+		styleD.setHelpRefBuilder(new HelpReferenceBuilder(
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#reportElement_style"));
 
 		PixelPropertyDescriptor hD = new PixelPropertyDescriptor(
 				DesignCell.PROPERTY_HEIGHT, Messages.MCell_height);
@@ -187,11 +173,11 @@ public class MCell extends MColumn implements IGraphicElement,
 	public Object getPropertyValue(Object id) {
 		if (cell != null) {
 			if (id.equals(DesignCell.PROPERTY_STYLE)) {
-				if (cell.getStyleNameReference() != null)
+				if (cell.getStyleNameReference() != null){
 					return cell.getStyleNameReference();
-				if (cell.getStyle() != null)
-					return cell.getStyle().getName();
-				return ""; //$NON-NLS-1$
+				}
+				JRStyle actualStyle = getActualStyle();
+				return actualStyle != null ? actualStyle.getName() : ""; //$NON-NLS-1$
 			}
 
 			if (id.equals(DesignCell.PROPERTY_HEIGHT))
@@ -226,19 +212,23 @@ public class MCell extends MColumn implements IGraphicElement,
 	public void setPropertyValue(Object id, Object value) {
 		if (cell != null) {
 			if (id.equals(DesignCell.PROPERTY_STYLE)) {
-				if (!value.equals("") && value != null) { //$NON-NLS-1$
-					JRStyle style = (JRStyle) getJasperDesign().getStylesMap()
-							.get(value);
-					if (style != null) {
-						cell.setStyle(style);
-						cell.setStyleNameReference(null);
-					} else {
-						cell.setStyleNameReference((String) value);
-						cell.setStyle(null);
+				if (value != null && !((String) value).trim().isEmpty()) {
+					if (!value.equals("")) { //$NON-NLS-1$
+						JRStyle style = (JRStyle) getJasperDesign().getStylesMap().get(value);
+						if (style != null) {
+							// FIXME: It is important to set a null first the external style, because it is returned first on the
+							// getPropertyValue and this raise a lot of events
+							cell.setStyleNameReference(null);
+							cell.setStyle(style);
+						} else {
+							cell.setStyleNameReference((String) value);
+							// The local style is set to null so the external one will be used
+							cell.setStyle(null);
+						}
 					}
 				} else {
-					cell.setStyle(null);
 					cell.setStyleNameReference(null);
+					cell.setStyle(null);
 				}
 			} else if (id.equals(DesignCell.PROPERTY_ROW_SPAN)) {
 				cell.setRowSpan((Integer) value);
@@ -453,34 +443,6 @@ public class MCell extends MColumn implements IGraphicElement,
 	 */
 	@Override
 	public HashMap<String, List<ANode>> getUsedStyles() {
-		/*StandardBaseColumn standardCol = getValue();
-		HashSet<String> result = new HashSet<String>();
-		if (standardCol.getColumnFooter() != null)
-			addStyle(result, standardCol.getColumnFooter().getStyle());
-		if (standardCol.getColumnHeader() != null)
-			addStyle(result, standardCol.getColumnHeader().getStyle());
-		if (standardCol.getTableHeader() != null)
-			addStyle(result, standardCol.getTableHeader().getStyle());
-		if (standardCol.getTableFooter() != null)
-			addStyle(result, standardCol.getTableFooter().getStyle());
-		if (standardCol instanceof StandardColumn) {
-			DesignCell detCell = (DesignCell) ((StandardColumn) standardCol)
-					.getDetailCell();
-			if (detCell != null)
-				addStyle(result, detCell.getStyle());
-		}
-		for (GroupCell gc : standardCol.getGroupHeaders())
-			if (gc.getCell() != null)
-				addStyle(result, gc.getCell().getStyle());
-		for (GroupCell gc : standardCol.getGroupFooters())
-			if (gc.getCell() != null)
-				addStyle(result, gc.getCell().getStyle());
-		for (INode node : getChildren()) {
-			if (node instanceof ANode) {
-				result.addAll(((ANode) node).getUsedStyles());
-			}
-		}
-		return result;*/
 		HashMap<String, List<ANode>> result = super.getUsedStyles();
 		if (cell != null){
 			addElementStyle(cell.getStyle(), result);
@@ -498,5 +460,22 @@ public class MCell extends MColumn implements IGraphicElement,
 	@Override
 	public void setStyle(JRStyle style) {
 		cell.setStyle(style);
+	}
+	
+	/**
+	 * Return the internal style used. If the internal style is a reference to a removed style then it is also removed
+	 * from the element
+	 */
+	public JRStyle getActualStyle() {
+		if (cell != null){
+			// Check if the used style is valid otherwise set it to null
+			if (cell.getStyle() != null && !getJasperDesign().getStylesMap().containsKey(cell.getStyle().getName())) {
+				setPropertyValue(DesignCell.PROPERTY_STYLE, null);
+			}
+			if (cell.getStyle() != null) {
+				return cell.getStyle();
+			}
+		}
+		return null;
 	}
 }

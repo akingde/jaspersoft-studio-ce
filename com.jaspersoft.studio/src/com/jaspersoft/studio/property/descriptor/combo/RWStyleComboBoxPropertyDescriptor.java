@@ -72,6 +72,8 @@ public class RWStyleComboBoxPropertyDescriptor extends RWComboBoxPropertyDescrip
 						 newitems = StyleTemplateFactory.getAllStyles(element.getJasperConfiguration(), (JRBaseStyle)element.getValue());
 						} else if (element.getValue() instanceof JRDesignElement){
 							newitems = StyleTemplateFactory.getAllStyles(element.getJasperConfiguration(), (JRDesignElement)element.getValue());
+						} else {
+							newitems = StyleTemplateFactory.getAllStyles(element.getJasperConfiguration(), (JRDesignElement)null);
 						}
 						((RWComboBoxPropertyDescriptor)pDescriptor).setItems(newitems);
 					}

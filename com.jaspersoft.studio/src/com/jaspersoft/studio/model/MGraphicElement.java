@@ -16,6 +16,40 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.ui.views.properties.IPropertyDescriptor;
+
+import com.jaspersoft.studio.editor.defaults.DefaultManager;
+import com.jaspersoft.studio.editor.gef.rulers.ReportRulerGuide;
+import com.jaspersoft.studio.help.HelpReferenceBuilder;
+import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.model.band.MBand;
+import com.jaspersoft.studio.model.frame.MFrame;
+import com.jaspersoft.studio.model.util.IIconDescriptor;
+import com.jaspersoft.studio.model.util.NodeIconDescriptor;
+import com.jaspersoft.studio.property.SetValueCommand;
+import com.jaspersoft.studio.property.descriptor.NullEnum;
+import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.checkbox.NullCheckBoxPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.color.ColorPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.combo.RComboBoxPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.combo.RWStyleComboBoxPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
+import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.propexpr.JPropertyExpressionsDescriptor;
+import com.jaspersoft.studio.property.descriptor.propexpr.PropertyExpressionDTO;
+import com.jaspersoft.studio.property.descriptor.propexpr.PropertyExpressionsDTO;
+import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.AbstractJSSCellEditorValidator;
+import com.jaspersoft.studio.property.descriptors.JSSPixelLocationValidator;
+import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.PixelPropertyDescriptor;
+import com.jaspersoft.studio.utils.AlfaRGB;
+import com.jaspersoft.studio.utils.Colors;
+import com.jaspersoft.studio.utils.Misc;
+import com.jaspersoft.studio.utils.ModelUtils;
+
 import net.sf.jasperreports.engine.JRBand;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRDataset;
@@ -43,47 +77,22 @@ import net.sf.jasperreports.engine.type.ModeEnum;
 import net.sf.jasperreports.engine.type.PositionTypeEnum;
 import net.sf.jasperreports.engine.type.StretchTypeEnum;
 
-import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.ui.views.properties.IPropertyDescriptor;
-
-import com.jaspersoft.studio.editor.defaults.DefaultManager;
-import com.jaspersoft.studio.editor.gef.rulers.ReportRulerGuide;
-import com.jaspersoft.studio.help.HelpReferenceBuilder;
-import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.model.band.MBand;
-import com.jaspersoft.studio.model.frame.MFrame;
-import com.jaspersoft.studio.model.util.IIconDescriptor;
-import com.jaspersoft.studio.model.util.NodeIconDescriptor;
-import com.jaspersoft.studio.property.SetValueCommand;
-import com.jaspersoft.studio.property.descriptor.NullEnum;
-import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptor.checkbox.NullCheckBoxPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptor.color.ColorPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptor.combo.RComboBoxPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptor.combo.RWStyleComboBoxPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
-import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptor.propexpr.JPropertyExpressionsDescriptor;
-import com.jaspersoft.studio.property.descriptor.propexpr.PropertyExpressionDTO;
-import com.jaspersoft.studio.property.descriptor.propexpr.PropertyExpressionsDTO;
-import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptors.AbstractJSSCellEditorValidator;
-import com.jaspersoft.studio.property.descriptors.JSSPixelLocationValidator;
-import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptors.PixelPropertyDescriptor;
-import com.jaspersoft.studio.utils.AlfaRGB;
-import com.jaspersoft.studio.utils.Colors;
-import com.jaspersoft.studio.utils.Misc;
-import com.jaspersoft.studio.utils.ModelUtils;
-
 /*
  * The Class MGeneric.
  */
 public class MGraphicElement extends APropertyNode implements IGraphicElement, ICopyable, IGuidebleElement, IDragable, IDesignDragable,IGraphicalPropertiesHandler {
 	
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+	
+	private static RComboBoxPropertyDescriptor groupChangesD;
+	
+	private static NamedEnumPropertyDescriptor<PositionTypeEnum> positionTypeD;
+	
+	private static NamedEnumPropertyDescriptor<StretchTypeEnum> stretchTypeD;
+	
+	private static Map<String, Object> defaultsMap;
+	
+	private IPropertyDescriptor[] descriptors;
 	
 	private ReportRulerGuide verticalGuide, horizontalGuide;
 	
@@ -314,9 +323,6 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		return new Rectangle(jr.getX(), jr.getY(), jr.getWidth(), jr.getHeight());
 	}
 
-	private IPropertyDescriptor[] descriptors;
-	private static Map<String, Object> defaultsMap;
-
 	@Override
 	public Map<String, Object> getDefaultsMap() {
 		return defaultsMap;
@@ -395,7 +401,7 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 	 */
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		styleD = new RWStyleComboBoxPropertyDescriptor(JRDesignElement.PROPERTY_PARENT_STYLE, Messages.common_parent_style,
+		RWStyleComboBoxPropertyDescriptor styleD = new RWStyleComboBoxPropertyDescriptor(JRDesignElement.PROPERTY_PARENT_STYLE, Messages.common_parent_style,
 				new String[] { "" }, NullEnum.NULL); //$NON-NLS-1$
 		styleD.setDescription(Messages.MGraphicElement_parent_style_description);
 		desc.add(styleD);
@@ -545,12 +551,6 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		defaultsMap.put(JRDesignElement.PROPERTY_PRINT_WHEN_EXPRESSION, null);
 
 	}
-
-	private RWComboBoxPropertyDescriptor styleD;
-	private static RComboBoxPropertyDescriptor groupChangesD;
-	private static NamedEnumPropertyDescriptor<PositionTypeEnum> positionTypeD;
-	// private static JSSEnumPropertyDescriptor opaqueD;
-	private static NamedEnumPropertyDescriptor<StretchTypeEnum> stretchTypeD;
 
 	/**
 	 * Return the internal style used. If the internal style is a reference to a removed style then it is also removed
