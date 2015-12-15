@@ -110,8 +110,8 @@ public class PathPropertyDescriptor extends AItemDataListPropertyDescriptor {
 										pmap.initMarkers();
 									}
 								});
-							}
-							itemsViewer.refresh();
+							} else if (tabFolder.getSelection() == dsTabItem)
+								itemsViewer.refresh();
 						}
 					});
 

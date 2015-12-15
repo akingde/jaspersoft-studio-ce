@@ -104,8 +104,8 @@ public class MarkersPropertyDescriptor extends AItemDataListPropertyDescriptor {
 										pmap.refresh();
 									}
 								});
-							}
-							itemsViewer.refresh();
+							} else if (tabFolder.getSelection() == dsTabItem)
+								itemsViewer.refresh();
 						}
 					});
 
