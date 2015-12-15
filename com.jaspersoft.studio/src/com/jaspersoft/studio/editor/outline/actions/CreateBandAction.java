@@ -10,8 +10,6 @@ package com.jaspersoft.studio.editor.outline.actions;
 
 import java.util.List;
 
-import net.sf.jasperreports.engine.type.BandTypeEnum;
-
 import org.eclipse.gef.EditPart;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -22,6 +20,8 @@ import org.eclipse.ui.PlatformUI;
 import com.jaspersoft.studio.editor.palette.JDPaletteCreationFactory;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.band.MBand;
+
+import net.sf.jasperreports.engine.type.BandTypeEnum;
 
 /*
  * /* The Class CreateBandAction.
@@ -54,7 +54,12 @@ public class CreateBandAction extends ACreateAndSelectAction {
 					return false;
 				if (((MBand) obj).getValue() != null)
 					return false;
+				//Group header, footer and detail have their own action to create the band
 				if (((MBand) obj).getBandType() == BandTypeEnum.DETAIL)
+					return false;
+				if (((MBand) obj).getBandType() == BandTypeEnum.GROUP_HEADER)
+					return false;
+				if (((MBand) obj).getBandType() == BandTypeEnum.GROUP_FOOTER)
 					return false;
 			}
 			command = createCommand();

@@ -84,14 +84,16 @@ public class MoveDetailUpAction extends ACachedSelectionAction implements IGloba
 		for(Object obj : bands){
 			MBand bandNode = (MBand)obj;
 			ANode parent = bandNode.getParent();
-			int index = parent.getChildren().indexOf(bandNode);
-			//check that it is not the first children
-			if (index == 0) return null;
-			INode previousItem = parent.getChildren().get(index-1);
-			if (previousItem instanceof MBand && bandNode.isSameBandType((MBand)previousItem)){
-				bandsToMove.add(new Pair<Integer, MBand>(index, bandNode));
-			} else {
-				return null;
+			if (parent != null){
+				int index = parent.getChildren().indexOf(bandNode);
+				//check that it is not the first children
+				if (index == 0) return null;
+				INode previousItem = parent.getChildren().get(index-1);
+				if (previousItem instanceof MBand && bandNode.isSameBandType((MBand)previousItem)){
+					bandsToMove.add(new Pair<Integer, MBand>(index, bandNode));
+				} else {
+					return null;
+				}
 			}
 		}
 		if (bandsToMove.size() > 0){

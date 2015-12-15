@@ -67,6 +67,8 @@ import com.jaspersoft.studio.editor.outline.actions.CreateDetailBandAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateDetailBandActionOnDetail;
 import com.jaspersoft.studio.editor.outline.actions.CreateFieldAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateGroupAction;
+import com.jaspersoft.studio.editor.outline.actions.CreateGroupFooterAction;
+import com.jaspersoft.studio.editor.outline.actions.CreateGroupHeaderAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateParameterAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateParameterSetAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateScriptletAction;
@@ -355,6 +357,14 @@ public class AppContextMenuProvider extends AContextMenuProvider {
 			menu.add(action);
 
 		action = getActionRegistry().getAction(CreateDetailBandActionOnDetail.ID);
+		if (action != null && action.isEnabled())
+			menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
+		
+		action = getActionRegistry().getAction(CreateGroupHeaderAction.ID);
+		if (action != null && action.isEnabled())
+			menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
+		
+		action = getActionRegistry().getAction(CreateGroupFooterAction.ID);
 		if (action != null && action.isEnabled())
 			menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
 		

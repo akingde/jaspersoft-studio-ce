@@ -45,6 +45,8 @@ import com.jaspersoft.studio.editor.outline.actions.CreateDetailBandAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateDetailBandActionOnDetail;
 import com.jaspersoft.studio.editor.outline.actions.CreateFieldAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateGroupAction;
+import com.jaspersoft.studio.editor.outline.actions.CreateGroupFooterAction;
+import com.jaspersoft.studio.editor.outline.actions.CreateGroupHeaderAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateParameterAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateParameterSetAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateScriptletAction;
@@ -220,6 +222,14 @@ public class ReportEditor extends AbstractVisualEditor {
 		action = new CreateDetailBandActionOnDetail(this);
 		registry.registerAction(action);
 		selectionActions.add(CreateDetailBandActionOnDetail.ID);
+		
+		action = new CreateGroupHeaderAction(this);
+		registry.registerAction(action);
+		selectionActions.add(CreateGroupHeaderAction.ID);
+
+		action = new CreateGroupFooterAction(this);
+		registry.registerAction(action);
+		selectionActions.add(CreateGroupFooterAction.ID);
 		
 		ExtensionManager m = JaspersoftStudioPlugin.getExtensionManager();
 		List<Action> lst = m.getActions(this);

@@ -12,12 +12,13 @@
  ******************************************************************************/
 package com.jaspersoft.studio.model.band.command;
 
-import net.sf.jasperreports.engine.design.JRDesignBand;
-import net.sf.jasperreports.engine.design.JRDesignSection;
-
 import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.model.band.MBandGroupHeader;
+
+import net.sf.jasperreports.engine.JRChild;
+import net.sf.jasperreports.engine.design.JRDesignBand;
+import net.sf.jasperreports.engine.design.JRDesignSection;
 /*
  * creates a band in a Group.
  * 
@@ -90,4 +91,12 @@ public class CreateBandGroupHeaderCommand extends Command {
 		}
 	}
 
+	/**
+	 * Return the element created on the execution of the command
+	 * 
+	 * @return the jr element created when the command is executed or null
+	 */
+	public JRChild getCreatedElement(){
+		return jrBand;
+	}
 }

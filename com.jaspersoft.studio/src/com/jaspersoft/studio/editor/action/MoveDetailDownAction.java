@@ -85,14 +85,16 @@ public class MoveDetailDownAction extends ACachedSelectionAction implements IGlo
 		for(Object obj : bands){
 			MBand bandNode = (MBand)obj;
 			ANode parent = bandNode.getParent();
-			int index = parent.getChildren().indexOf(bandNode);
-			//check that it is not the last children
-			if (parent.getChildren().size()-1 == index) return null;
-			INode nextItem = parent.getChildren().get(index+1);
-			if (nextItem instanceof MBand && bandNode.isSameBandType((MBand)nextItem)){
-				bandsToMove.add(new Pair<Integer, MBand>(index, bandNode));
-			} else {
-				return null;
+			if (parent != null){
+				int index = parent.getChildren().indexOf(bandNode);
+				//check that it is not the last children
+				if (parent.getChildren().size()-1 == index) return null;
+				INode nextItem = parent.getChildren().get(index+1);
+				if (nextItem instanceof MBand && bandNode.isSameBandType((MBand)nextItem)){
+					bandsToMove.add(new Pair<Integer, MBand>(index, bandNode));
+				} else {
+					return null;
+				}
 			}
 		}
 		if (!bandsToMove.isEmpty()){

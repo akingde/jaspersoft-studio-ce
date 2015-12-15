@@ -89,12 +89,14 @@ public class DeleteGroupReportAction extends DeleteAction {
 			Command cmd = null;
 			if (part instanceof TreeEditPart || part instanceof BandEditPart) {
 				ANode node = (ANode) part.getModel();
-				compoundCmd.setReferenceNodeIfNull(node);
-				if (node instanceof MBandGroupHeader) {
-					cmd = new DeleteGroupCommand((MReport) node.getParent(), (MBandGroupHeader) node);
-				}
-				if (node instanceof MBandGroupFooter) {
-					cmd = new DeleteGroupCommand((MReport) node.getParent(), (MBandGroupFooter) node);
+				if (node.getParent() != null){
+					compoundCmd.setReferenceNodeIfNull(node);
+					if (node instanceof MBandGroupHeader) {
+						cmd = new DeleteGroupCommand((MReport) node.getParent(), (MBandGroupHeader) node);
+					}
+					if (node instanceof MBandGroupFooter) {
+						cmd = new DeleteGroupCommand((MReport) node.getParent(), (MBandGroupFooter) node);
+					}
 				}
 			}
 			if (cmd != null)
