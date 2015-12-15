@@ -12,16 +12,19 @@ package com.jaspersoft.studio.widgets.map.ui;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.FocusAdapter;
+import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.TraverseEvent;
+import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
+import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.NumberValidator;
 import com.jaspersoft.studio.widgets.map.MapActivator;
 import com.jaspersoft.studio.widgets.map.MapWidgetConstants;
@@ -109,38 +112,49 @@ public class GMapsCenterPanel {
 		tadr.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
-				refreshing = true;
-				try {
-					LatLng coords = GMapUtils.getAddressCoordinates(tadr.getText());
-					if (coords != null)
-						centerMap(coords);
-				} finally {
-					refreshing = false;
-				}
+				doAddressChanged(tadr);
 			}
 		});
-		tadr.addModifyListener(new ModifyListener() {
+		tadr.addTraverseListener(new TraverseListener() {
 
 			@Override
-			public void modifyText(ModifyEvent e) {
-				if (centering)
-					return;
-				String txt = tadr.getText();
-				if (txt.isEmpty())
-					return;
-				refreshing = true;
-				try {
-					address = txt;
-					LatLng coords = GMapUtils.getAddressCoordinates(txt);
-					if (coords != null) {
-						centerMap(coords);
-						handleAddressChanged(txt);
-					}
-				} finally {
-					refreshing = false;
+			public void keyTraversed(TraverseEvent e) {
+				if (e.detail == SWT.TRAVERSE_RETURN || e.keyCode == SWT.CR) {
+					doAddressChanged(tadr);
+					e.doit = false;
 				}
 			}
 		});
+		tadr.addFocusListener(new FocusAdapter() {
+			public void focusLost(FocusEvent e) {
+				String txt = tadr.getText();
+				if (!Misc.isNullOrEmpty(txt) && !txt.equals(address))
+					doAddressChanged(tadr);
+			}
+		});
+		// tadr.addModifyListener(new ModifyListener() {
+		//
+		// @Override
+		// public void modifyText(ModifyEvent e) {
+		// if (centering)
+		// return;
+		// String txt = tadr.getText();
+		// if (txt.isEmpty())
+		// return;
+		// refreshing = true;
+		// try {
+		// System.out.println(txt);
+		// address = txt;
+		// LatLng coords = GMapUtils.getAddressCoordinates(txt);
+		// if (coords != null) {
+		// centerMap(coords);
+		// handleAddressChanged(txt);
+		// }
+		// } finally {
+		// refreshing = false;
+		// }
+		// }
+		// });
 
 		Label lbl = new Label(cmp, SWT.NONE);
 		lbl.setText("Latitude");
@@ -150,25 +164,33 @@ public class GMapsCenterPanel {
 		gd.widthHint = 100;
 		tlat.setLayoutData(gd);
 		tlat.addVerifyListener(new NumberValidator(new Float("-85"), new Float("85"), Float.class));
-		tlat.addModifyListener(new ModifyListener() {
+		// tlat.addModifyListener(new ModifyListener() {
+		//
+		// @Override
+		// public void modifyText(ModifyEvent e) {
+		// doLatChange(tadr);
+		// }
+		// });
+		tlat.addTraverseListener(new TraverseListener() {
 
 			@Override
-			public void modifyText(ModifyEvent e) {
-				if (refreshing || centering)
-					return;
-				String txt = tlat.getText();
-				if (txt.isEmpty())
-					return;
-				refreshing = true;
-				try {
-					Double d = Double.valueOf(txt);
-					centerMap(new LatLng(d, mapCenter.getLng()));
-					address = null;
-					tadr.setText("");
-				} finally {
-					refreshing = false;
+			public void keyTraversed(TraverseEvent e) {
+				if (e.detail == SWT.TRAVERSE_RETURN || e.keyCode == SWT.CR) {
+					doLatChange(tadr);
+					e.doit = false;
 				}
 			}
+		});
+		tlat.addFocusListener(new FocusAdapter() {
+
+			@Override
+			public void focusLost(FocusEvent e) {
+				String txt = tlat.getText();
+				if (!Misc.isNullOrEmpty(txt) && mapCenter != null && mapCenter.getLat() != null
+						&& !txt.equals(String.format("%.7f", mapCenter.getLat())))
+					doLatChange(tadr);
+			}
+
 		});
 
 		lbl = new Label(cmp, SWT.NONE);
@@ -179,25 +201,33 @@ public class GMapsCenterPanel {
 		gd.widthHint = 100;
 		tlon.setLayoutData(gd);
 		tlon.addVerifyListener(new NumberValidator(new Float("-180"), new Float("180"), Float.class));
-		tlon.addModifyListener(new ModifyListener() {
+		// tlon.addModifyListener(new ModifyListener() {
+		//
+		// @Override
+		// public void modifyText(ModifyEvent e) {
+		// doLonChange(tadr);
+		// }
+		// });
+		tlon.addTraverseListener(new TraverseListener() {
 
 			@Override
-			public void modifyText(ModifyEvent e) {
-				if (refreshing || centering)
-					return;
-				String txt = tlon.getText();
-				if (txt.isEmpty())
-					return;
-				refreshing = true;
-				try {
-					Double d = Double.valueOf(txt);
-					centerMap(new LatLng(mapCenter.getLat(), d));
-					address = null;
-					tadr.setText("");
-				} finally {
-					refreshing = false;
+			public void keyTraversed(TraverseEvent e) {
+				if (e.detail == SWT.TRAVERSE_RETURN || e.keyCode == SWT.CR) {
+					doLonChange(tadr);
+					e.doit = false;
 				}
 			}
+		});
+		tlon.addFocusListener(new FocusAdapter() {
+
+			@Override
+			public void focusLost(FocusEvent e) {
+				String txt = tlon.getText();
+				if (!Misc.isNullOrEmpty(txt) && mapCenter != null && mapCenter.getLng() != null
+						&& !txt.equals(String.format("%.7f", mapCenter.getLng())))
+					doLonChange(tadr);
+			}
+
 		});
 	}
 
@@ -366,5 +396,50 @@ public class GMapsCenterPanel {
 
 	protected void postInitMap() {
 		map.getJavascriptMapSupport().evaluateJavascript("MENU_KIND=_MENU_MINIMAL");
+	}
+
+	protected void doAddressChanged(final Text tadr) {
+		refreshing = true;
+		try {
+			LatLng coords = GMapUtils.getAddressCoordinates(tadr.getText());
+			if (coords != null)
+				centerMap(coords);
+		} finally {
+			refreshing = false;
+		}
+	}
+
+	protected void doLatChange(final Text tadr) {
+		if (refreshing || centering)
+			return;
+		String txt = tlat.getText();
+		if (txt.isEmpty())
+			return;
+		refreshing = true;
+		try {
+			Double d = Double.valueOf(txt);
+			centerMap(new LatLng(d, mapCenter.getLng()));
+			address = null;
+			tadr.setText("");
+		} finally {
+			refreshing = false;
+		}
+	}
+
+	protected void doLonChange(final Text tadr) {
+		if (refreshing || centering)
+			return;
+		String txt = tlon.getText();
+		if (txt.isEmpty())
+			return;
+		refreshing = true;
+		try {
+			Double d = Double.valueOf(txt);
+			centerMap(new LatLng(mapCenter.getLat(), d));
+			address = null;
+			tadr.setText("");
+		} finally {
+			refreshing = false;
+		}
 	}
 }
