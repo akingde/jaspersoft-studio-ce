@@ -47,7 +47,7 @@ public class PostSetSizeCell implements IPostSetValue {
 	 * Create a command to layout the current node if it is a cell, otherwise it 
 	 * will search recursively a cell in every child of the node
 	 */
-	public void createLayoutCommand(INode node, JSSCompoundCommand c){
+	public static void createLayoutCommand(INode node, JSSCompoundCommand c){
 		if (node == null) return;
 		if (node instanceof MCell && node.getValue() != null){
 			Command cmd = LayoutManager.createRelayoutCommand((ANode)node);

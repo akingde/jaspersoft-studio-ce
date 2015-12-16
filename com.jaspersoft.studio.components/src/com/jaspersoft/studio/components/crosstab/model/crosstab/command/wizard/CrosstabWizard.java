@@ -15,6 +15,24 @@ package com.jaspersoft.studio.components.crosstab.model.crosstab.command.wizard;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jface.wizard.IWizardPage;
+
+import com.jaspersoft.studio.components.crosstab.CrosstabManager;
+import com.jaspersoft.studio.components.crosstab.messages.Messages;
+import com.jaspersoft.studio.components.crosstab.model.CrosstabUtil;
+import com.jaspersoft.studio.components.crosstab.model.MCrosstab;
+import com.jaspersoft.studio.components.crosstab.model.columngroup.command.CreateColumnCommand;
+import com.jaspersoft.studio.components.crosstab.model.dialog.ApplyCrosstabStyleAction;
+import com.jaspersoft.studio.components.crosstab.model.measure.command.CreateMeasureCommand;
+import com.jaspersoft.studio.model.text.MTextField;
+import com.jaspersoft.studio.property.dataset.wizard.WizardDatasetPage;
+import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
+import com.jaspersoft.studio.utils.ModelUtils;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+import com.jaspersoft.studio.wizards.JSSWizard;
+import com.jaspersoft.studio.wizards.JSSWizardPageChangeEvent;
+import com.jaspersoft.studio.wizards.fields.StaticWizardFieldsPage;
+
 import net.sf.jasperreports.crosstabs.JRCrosstabCell;
 import net.sf.jasperreports.crosstabs.JRCrosstabColumnGroup;
 import net.sf.jasperreports.crosstabs.JRCrosstabMeasure;
@@ -39,24 +57,6 @@ import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignTextField;
 import net.sf.jasperreports.engine.type.CalculationEnum;
-
-import org.eclipse.jface.wizard.IWizardPage;
-
-import com.jaspersoft.studio.components.crosstab.CrosstabManager;
-import com.jaspersoft.studio.components.crosstab.messages.Messages;
-import com.jaspersoft.studio.components.crosstab.model.MCrosstab;
-import com.jaspersoft.studio.components.crosstab.model.columngroup.command.CreateColumnCommand;
-import com.jaspersoft.studio.components.crosstab.model.dialog.ApplyCrosstabStyleAction;
-import com.jaspersoft.studio.components.crosstab.model.measure.command.CreateMeasureCommand;
-import com.jaspersoft.studio.components.crosstab.model.rowgroup.command.CreateRowCommand;
-import com.jaspersoft.studio.model.text.MTextField;
-import com.jaspersoft.studio.property.dataset.wizard.WizardDatasetPage;
-import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
-import com.jaspersoft.studio.utils.ModelUtils;
-import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
-import com.jaspersoft.studio.wizards.JSSWizard;
-import com.jaspersoft.studio.wizards.JSSWizardPageChangeEvent;
-import com.jaspersoft.studio.wizards.fields.StaticWizardFieldsPage;
 
 public class CrosstabWizard extends JSSWizard {
 
@@ -253,7 +253,7 @@ public class CrosstabWizard extends JSSWizard {
 				try {
 					JRDesignCrosstabRowGroup r = (JRDesignCrosstabRowGroup) obj;
 					// r.setName(ModelUtils.getDefaultName(jdc, r.getName()));
-					CreateRowCommand.addRowGroup(jdc, r, -1);
+					CrosstabUtil.addRowGroup(jdc, r, -1);
 				} catch (JRException e) {
 					e.printStackTrace();
 				}
@@ -357,8 +357,7 @@ public class CrosstabWizard extends JSSWizard {
 		CrosstabTotalPositionEnum total = step5.isAddRowTotal() ? CrosstabTotalPositionEnum.END
 				: CrosstabTotalPositionEnum.NONE;
 
-		JRDesignCrosstabRowGroup rowGroup = CreateRowCommand.createRowGroup(
-				getConfig().getJasperDesign(), jdc, name, total);
+		JRDesignCrosstabRowGroup rowGroup = CrosstabUtil.createRowGroup(getConfig().getJasperDesign(), jdc, name, total);
 
 		((JRDesignExpression) rowGroup.getBucket().getExpression())
 				.setText(txt);

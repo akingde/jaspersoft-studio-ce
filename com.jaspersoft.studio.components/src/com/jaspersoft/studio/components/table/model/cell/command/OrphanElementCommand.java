@@ -58,7 +58,7 @@ public class OrphanElementCommand extends Command {
 		index = jrCell.getChildren().indexOf(jrElement);
 		oldBounds = new Rectangle(jrElement.getX(), jrElement.getY(), jrElement.getWidth(), jrElement.getHeight());
 		jrCell.removeElement(jrElement);
-		LayoutManager.createRelayoutCommand(parent).execute();
+		LayoutManager.layoutContainer(parent);
 	}
 
 	/*

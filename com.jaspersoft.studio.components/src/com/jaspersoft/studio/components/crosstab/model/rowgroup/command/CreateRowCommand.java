@@ -19,30 +19,20 @@ import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.swt.widgets.Display;
 
 import com.jaspersoft.studio.components.crosstab.messages.Messages;
+import com.jaspersoft.studio.components.crosstab.model.CrosstabUtil;
 import com.jaspersoft.studio.components.crosstab.model.MCrosstab;
 import com.jaspersoft.studio.components.crosstab.model.cell.MCell;
 import com.jaspersoft.studio.components.crosstab.model.rowgroup.MRowGroup;
 import com.jaspersoft.studio.components.crosstab.model.rowgroup.MRowGroups;
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.model.text.MTextField;
 import com.jaspersoft.studio.utils.ModelUtils;
 
-import net.sf.jasperreports.crosstabs.JRCrosstabCell;
-import net.sf.jasperreports.crosstabs.JRCrosstabColumnGroup;
-import net.sf.jasperreports.crosstabs.JRCrosstabRowGroup;
-import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
-import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabBucket;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabCell;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabRowGroup;
 import net.sf.jasperreports.crosstabs.type.CrosstabTotalPositionEnum;
 import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JRStyle;
-import net.sf.jasperreports.engine.design.JRDesignExpression;
-import net.sf.jasperreports.engine.design.JRDesignStaticText;
-import net.sf.jasperreports.engine.design.JRDesignTextField;
 import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.util.Pair;
 
 /*
  * link nodes & together.
@@ -102,13 +92,13 @@ public class CreateRowCommand extends Command {
 	@Override
 	public void execute() {
 		if (jrGroup == null) {
-			jrGroup = createRowGroup(jasperDesign, jrCrosstab,
+			jrGroup = CrosstabUtil.createRowGroup(jasperDesign, jrCrosstab,
 					Messages.CreateRowGroupCommand_row_group,
 					CrosstabTotalPositionEnum.END);
 		}
 		if (jrGroup != null) {
 			try {
-				addRowGroup(jrCrosstab, jrGroup, index);
+				CrosstabUtil.addRowGroup(jrCrosstab, jrGroup, index);
 			} catch (JRException e) {
 				e.printStackTrace();
 				if (e.getMessage()
@@ -131,115 +121,6 @@ public class CreateRowCommand extends Command {
 		}
 	}
 
-	public static JRDesignCrosstabRowGroup createRowGroup(JasperDesign jasperDesign, JRDesignCrosstab jrCrosstab,String name, CrosstabTotalPositionEnum total) {
-			
-		int width = 60;
-		for(JRCrosstabRowGroup group : jrCrosstab.getRowGroups()){
-			width = group.getWidth();
-			break;
-		}
-		
-		JRDesignCrosstabRowGroup jrGroup = new JRDesignCrosstabRowGroup();
-		jrGroup.setTotalPosition(total);
-		jrGroup.setName(ModelUtils.getDefaultName(jrCrosstab, name));
-		jrGroup.setWidth(width);
-		
-		
-
-		JRDesignExpression exp = new JRDesignExpression();
-		exp.setText(""); //$NON-NLS-1$
-		exp.setValueClass(String.class);
-		JRDesignCrosstabBucket bucket = new JRDesignCrosstabBucket();
-		bucket.setExpression(exp);
-		jrGroup.setBucket(bucket);
-
-		JRDesignCellContents headerCell = new JRDesignCellContents();
-		jrGroup.setHeader(headerCell);
-
-		exp = new JRDesignExpression();
-		exp.setText("$V{" + jrGroup.getName() + "}"); //$NON-NLS-1$ //$NON-NLS-2$
-
-		JRDesignTextField tf = (JRDesignTextField) new MTextField()
-				.createJRElement(jasperDesign);
-		tf.setX(0);
-		tf.setY(0);
-		tf.setWidth(jrGroup.getWidth());
-		tf.setHeight(20);
-		if ("Crosstab Data Text" != null && jasperDesign.getStylesMap().containsKey("Crosstab Data Text")) { //$NON-NLS-1$ //$NON-NLS-2$
-			tf.setStyle((JRStyle) jasperDesign.getStylesMap().get(
-					"Crosstab Data Text")); //$NON-NLS-1$
-		}
-		tf.setExpression(exp);
-
-		headerCell.addElement(tf); // NOI18N
-		JRDesignCellContents totalCell = new JRDesignCellContents();
-		JRDesignStaticText stext = new JRDesignStaticText();
-		stext.setX(0);
-		stext.setY(0);
-		stext.setWidth(jrGroup.getWidth());
-		stext.setHeight(20);
-		stext.setText(Messages.common_total + " " + jrGroup.getName()); //$NON-NLS-1$
-		totalCell.addElement(stext);
-		jrGroup.setTotalHeader(totalCell);
-		return jrGroup;
-	}
-
-	public static void addRowGroup(JRDesignCrosstab jrCross,
-			JRDesignCrosstabRowGroup jrRowGr, int index) throws JRException {
-		
-		
-		JRCrosstabRowGroup lastGroup = null; 
-		if (!jrCross.getRowGroupsList().isEmpty()){
-			lastGroup = jrCross.getRowGroupsList().get(jrCross.getRowGroupsList().size()-1);
-		}
-		
-		if (index >= 0 && index < jrCross.getRowGroupsList().size())
-			jrCross.addRowGroup(index, jrRowGr);
-		else
-			jrCross.addRowGroup(jrRowGr);
-
-		if (!jrCross.getCellsMap().containsKey(new Pair<String, String>(null, null))) {
-			JRDesignCrosstabCell dT = new JRDesignCrosstabCell();
-			dT.setColumnTotalGroup(null);
-			dT.setRowTotalGroup(null);
-			jrCross.addCell(dT);
-			dT.setHeight(20);
-			dT.setWidth(jrRowGr.getWidth());
-		}
-
-		JRDesignCrosstabCell dT = new JRDesignCrosstabCell();
-		dT.setRowTotalGroup(jrRowGr.getName());
-		jrCross.addCell(dT);
-		dT.setHeight(20);
-		if (lastGroup != null){
-			Pair<String, String> key = new Pair<String,String>(lastGroup.getName(), dT.getColumnTotalGroup());
-			JRCrosstabCell cell = jrCross.getCellsMap().get(key);
-			dT.setWidth(cell.getWidth());
-		} else {
-			dT.setWidth(jrRowGr.getWidth());
-		}
-		
-		List<JRCrosstabColumnGroup> columns = jrCross.getColumnGroupsList();
-		if (columns != null)
-			for (JRCrosstabColumnGroup c : columns) {
-				JRDesignCrosstabCell cell = new JRDesignCrosstabCell();
-				cell.setRowTotalGroup(jrRowGr.getName());
-				cell.setColumnTotalGroup(c.getName());
-				jrCross.addCell(cell);
-				cell.setHeight(c.getHeight());
-				
-				if (lastGroup != null){
-					Pair<String, String> key = new Pair<String,String>(lastGroup.getName(), c.getName());
-					JRCrosstabCell otherCell = jrCross.getCellsMap().get(key);
-					cell.setWidth(otherCell.getWidth());
-				} else {
-					cell.setWidth(jrRowGr.getWidth());
-				}
-			}
-
-		jrCross.preprocess();
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -257,6 +138,19 @@ public class CreateRowCommand extends Command {
 	 */
 	@Override
 	public void undo() {
-		DeleteRowGroupCommand.removeRowGroup(jrCrosstab, jrGroup);
+		String name = jrGroup.getName();
+		List<?> cells = jrCrosstab.getCellsList();
+		jrCrosstab.removeRowGroup(jrGroup);
+		for (int i = 0; i < cells.size(); ++i) {
+			JRDesignCrosstabCell cell = (JRDesignCrosstabCell) cells.get(i);
+			if (cell != null) {
+				String totalGroup = cell.getColumnTotalGroup();
+				if (totalGroup != null && totalGroup.equals(name)) {
+					jrCrosstab.removeCell(cell);
+					i--;
+				}
+			}
+		}
+		jrCrosstab.preprocess();
 	}
 }

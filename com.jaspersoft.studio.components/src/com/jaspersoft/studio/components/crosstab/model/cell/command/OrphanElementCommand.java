@@ -68,7 +68,7 @@ public class OrphanElementCommand extends Command {
 			jrCell.addElement(index, jrElement);
 		else
 			jrCell.addElement(jrElement);
-		LayoutManager.layoutContainer(parent);;
+		LayoutManager.layoutContainer(parent);
 	}
 
 }

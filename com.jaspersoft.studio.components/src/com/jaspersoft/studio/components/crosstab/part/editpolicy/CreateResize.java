@@ -37,6 +37,7 @@ import com.jaspersoft.studio.components.crosstab.model.nodata.MCrosstabWhenNoDat
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.util.ModelVisitor;
 import com.jaspersoft.studio.property.SetValueCommand;
+import com.jaspersoft.studio.utils.ModelUtils;
 
 public class CreateResize {
 	public static Command createResizeCommand(ChangeBoundsRequest request,
@@ -130,7 +131,7 @@ public class CreateResize {
 				public boolean visit(INode n) {
 					if (n instanceof MCell) {
 						MCell mcell = (MCell) n;
-						if (mcell.getValue().equals(cell)) {
+						if (ModelUtils.safeEquals(mcell.getValue(),cell)) {
 							setObject(mcell);
 							return false;
 						}

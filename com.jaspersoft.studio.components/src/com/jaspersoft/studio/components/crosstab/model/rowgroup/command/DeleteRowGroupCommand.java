@@ -12,18 +12,25 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.crosstab.model.rowgroup.command;
 
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
+import org.eclipse.gef.commands.Command;
+
+import com.jaspersoft.studio.JSSCompoundCommand;
+import com.jaspersoft.studio.components.crosstab.model.CrosstabUtil;
+import com.jaspersoft.studio.components.crosstab.model.MCrosstab;
+import com.jaspersoft.studio.components.crosstab.model.cell.command.PostSetSizeCell;
+import com.jaspersoft.studio.components.crosstab.model.rowgroup.MRowGroup;
+import com.jaspersoft.studio.components.crosstab.model.rowgroup.MRowGroups;
+
+import net.sf.jasperreports.crosstabs.JRCrosstabCell;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabCell;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabRowGroup;
 import net.sf.jasperreports.engine.JRException;
-
-import org.eclipse.gef.commands.Command;
-
-import com.jaspersoft.studio.components.crosstab.model.MCrosstab;
-import com.jaspersoft.studio.components.crosstab.model.rowgroup.MRowGroup;
-import com.jaspersoft.studio.components.crosstab.model.rowgroup.MRowGroups;
 
 /*
  * link nodes & together.
@@ -33,7 +40,12 @@ import com.jaspersoft.studio.components.crosstab.model.rowgroup.MRowGroups;
 public class DeleteRowGroupCommand extends Command {
 
 	private JRDesignCrosstab jrCrosstab;
+	
 	private JRDesignCrosstabRowGroup jrRowGroup;
+	
+	private MCrosstab crosstabNode;
+	
+	private Map<String, JRCrosstabCell> removedCells = null;
 
 	/** The element position. */
 	private int elementPosition = 0;
@@ -49,12 +61,14 @@ public class DeleteRowGroupCommand extends Command {
 	public DeleteRowGroupCommand(MRowGroups destNode, MRowGroup srcNode) {
 		super();
 		this.jrCrosstab = (JRDesignCrosstab) destNode.getValue();
+		this.crosstabNode = (MCrosstab)destNode.getParent();
 		this.jrRowGroup = (JRDesignCrosstabRowGroup) srcNode.getValue();
 	}
 
 	public DeleteRowGroupCommand(MCrosstab destNode, MRowGroup srcNode) {
 		super();
 		this.jrCrosstab = destNode.getValue();
+		this.crosstabNode = destNode;
 		this.jrRowGroup = (JRDesignCrosstabRowGroup) srcNode.getValue();
 	}
 
@@ -67,16 +81,24 @@ public class DeleteRowGroupCommand extends Command {
 	public void execute() {
 		elementPosition = jrCrosstab.getRowGroupsList().indexOf(jrRowGroup);
 		removeRowGroup(jrCrosstab, jrRowGroup);
-
+		JSSCompoundCommand c = new JSSCompoundCommand("Resize Crosstab Cell", crosstabNode);
+		PostSetSizeCell.createLayoutCommand(crosstabNode, c);
+		c.execute();
 	}
-
-	public static void removeRowGroup(JRDesignCrosstab jrCross,
-			JRDesignCrosstabRowGroup jrRowGr) {
+	
+	protected void removeRowGroup(JRDesignCrosstab jrCross, JRDesignCrosstabRowGroup jrRowGr) {
+		removedCells = new HashMap<String, JRCrosstabCell>();
 		String name = jrRowGr.getName();
-
-		List<?> cells = jrCross.getCellsList();
-		jrCross.removeRowGroup(jrRowGr);
-
+		List<JRCrosstabCell> cells = jrCross.getCellsList();
+		for (Iterator<JRCrosstabCell> it = cells.iterator(); it.hasNext();)
+		{
+			JRCrosstabCell cell = it.next();
+			String rowTotalGroup = cell.getRowTotalGroup();
+			if (rowTotalGroup != null && rowTotalGroup.equals(name))
+			{
+				removedCells.put(cell.getColumnTotalGroup(), cell);
+			}
+		}
 		for (int i = 0; i < cells.size(); ++i) {
 			JRDesignCrosstabCell cell = (JRDesignCrosstabCell) cells.get(i);
 			if (cell != null) {
@@ -87,7 +109,7 @@ public class DeleteRowGroupCommand extends Command {
 				}
 			}
 		}
-
+		jrCross.removeRowGroup(jrRowGr);
 		jrCross.preprocess();
 	}
 
@@ -111,8 +133,10 @@ public class DeleteRowGroupCommand extends Command {
 	@Override
 	public void undo() {
 		try {
-			CreateRowCommand.addRowGroup(jrCrosstab, jrRowGroup,
-					elementPosition);
+			CrosstabUtil.addRowGroup(jrCrosstab, jrRowGroup, elementPosition, removedCells);
+			JSSCompoundCommand c = new JSSCompoundCommand("Resize Crosstab Cell", crosstabNode);
+			PostSetSizeCell.createLayoutCommand(crosstabNode, c);
+			c.execute();
 		} catch (JRException e) {
 			e.printStackTrace();
 		}

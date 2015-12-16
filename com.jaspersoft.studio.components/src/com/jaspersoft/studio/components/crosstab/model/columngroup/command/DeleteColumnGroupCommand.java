@@ -14,16 +14,18 @@ package com.jaspersoft.studio.components.crosstab.model.columngroup.command;
 
 import java.util.List;
 
+import org.eclipse.gef.commands.Command;
+
+import com.jaspersoft.studio.JSSCompoundCommand;
+import com.jaspersoft.studio.components.crosstab.model.MCrosstab;
+import com.jaspersoft.studio.components.crosstab.model.cell.command.PostSetSizeCell;
+import com.jaspersoft.studio.components.crosstab.model.columngroup.MColumnGroup;
+import com.jaspersoft.studio.components.crosstab.model.columngroup.MColumnGroups;
+
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabCell;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabColumnGroup;
 import net.sf.jasperreports.engine.JRException;
-
-import org.eclipse.gef.commands.Command;
-
-import com.jaspersoft.studio.components.crosstab.model.MCrosstab;
-import com.jaspersoft.studio.components.crosstab.model.columngroup.MColumnGroup;
-import com.jaspersoft.studio.components.crosstab.model.columngroup.MColumnGroups;
 
 /*
  * link nodes & together.
@@ -33,7 +35,10 @@ import com.jaspersoft.studio.components.crosstab.model.columngroup.MColumnGroups
 public class DeleteColumnGroupCommand extends Command {
 
 	private JRDesignCrosstab jrCrosstab;
+	
 	private JRDesignCrosstabColumnGroup jrColumnGroup;
+	
+	private MCrosstab crosstabNode;
 
 	/** The element position. */
 	private int index = 0;
@@ -49,12 +54,14 @@ public class DeleteColumnGroupCommand extends Command {
 	public DeleteColumnGroupCommand(MColumnGroups destNode, MColumnGroup srcNode) {
 		super();
 		this.jrCrosstab = (JRDesignCrosstab) destNode.getValue();
+		this.crosstabNode = (MCrosstab)destNode.getParent();
 		this.jrColumnGroup = (JRDesignCrosstabColumnGroup) srcNode.getValue();
 	}
 
 	public DeleteColumnGroupCommand(MCrosstab destNode, MColumnGroup srcNode) {
 		super();
 		this.jrCrosstab = destNode.getValue();
+		this.crosstabNode = destNode;
 		this.jrColumnGroup = (JRDesignCrosstabColumnGroup) srcNode.getValue();
 	}
 
@@ -67,6 +74,9 @@ public class DeleteColumnGroupCommand extends Command {
 	public void execute() {
 		index = jrCrosstab.getColumnGroupsList().indexOf(jrColumnGroup);
 		removeColumnGroup(jrCrosstab, jrColumnGroup);
+		JSSCompoundCommand c = new JSSCompoundCommand("Resize Crosstab Cell", crosstabNode);
+		PostSetSizeCell.createLayoutCommand(crosstabNode, c);
+		c.execute();
 	}
 
 	/*
@@ -89,11 +99,14 @@ public class DeleteColumnGroupCommand extends Command {
 	@Override
 	public void undo() {
 		try {
-			if (index >= 0 && index < jrCrosstab.getColumnGroupsList().size())
+			if (index >= 0 && index < jrCrosstab.getColumnGroupsList().size()){
 				jrCrosstab.addColumnGroup(index, jrColumnGroup);
-			else
+			} else {
 				jrCrosstab.addColumnGroup(jrColumnGroup);
-			// jrCrosstab.addParameter(elementPosition, jrParameter);
+			}
+			JSSCompoundCommand c = new JSSCompoundCommand("Resize Crosstab Cell", crosstabNode);
+			PostSetSizeCell.createLayoutCommand(crosstabNode, c);
+			c.execute();
 		} catch (JRException e) {
 			e.printStackTrace();
 		}
