@@ -9,6 +9,9 @@ package com.jaspersoft.studio.components.customvisualization.ui;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class ComponentSectionDescriptor {
 	private String name;
 	private boolean expandable = false;

@@ -7,6 +7,9 @@ package com.jaspersoft.studio.components.customvisualization.ui;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class ComponentDatasetDescriptor {
 	private String label;
 	private int cardinality;

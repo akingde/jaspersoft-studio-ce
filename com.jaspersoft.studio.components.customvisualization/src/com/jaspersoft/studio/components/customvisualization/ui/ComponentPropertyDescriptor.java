@@ -8,13 +8,16 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.customvisualization.ui;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class ComponentPropertyDescriptor {
 	private String name;
 	private String label;
 	private String description;
 	private boolean mandatory;
 	private String defaultValue;
-	private boolean readOnly=false;
+	private boolean readOnly = false;
 	private String min;
 	private String max;
 	private String type;
