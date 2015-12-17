@@ -45,6 +45,7 @@ import com.jaspersoft.studio.editor.preview.actions.RunStopAction;
 import com.jaspersoft.studio.editor.preview.input.BigNumericInput;
 import com.jaspersoft.studio.editor.preview.input.BooleanInput;
 import com.jaspersoft.studio.editor.preview.input.DateInput;
+import com.jaspersoft.studio.editor.preview.input.EnumInput;
 import com.jaspersoft.studio.editor.preview.input.IDataInput;
 import com.jaspersoft.studio.editor.preview.input.ImageInput;
 import com.jaspersoft.studio.editor.preview.input.LocaleInput;
@@ -112,6 +113,7 @@ public class ReportControler {
 		inputs.add(new ImageInput());
 		inputs.add(new CollectionInput());
 		inputs.add(new MapInput());
+		inputs.add(new EnumInput());
 		List<IDataInput> ict = JaspersoftStudioPlugin.getInputControlTypeManager().getInputControlTypes();
 		if (ict != null && !ict.isEmpty())
 			inputs.addAll(ict);
