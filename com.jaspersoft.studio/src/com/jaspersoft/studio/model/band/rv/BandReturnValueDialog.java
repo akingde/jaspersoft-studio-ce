@@ -11,13 +11,6 @@ package com.jaspersoft.studio.model.band.rv;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import net.sf.jasperreports.eclipse.ui.ATitledDialog;
-import net.sf.jasperreports.eclipse.util.FileUtils;
-import net.sf.jasperreports.engine.design.DesignExpressionReturnValue;
-import net.sf.jasperreports.engine.design.JRDesignExpression;
-import net.sf.jasperreports.engine.fill.JRIncrementerFactory;
-import net.sf.jasperreports.engine.type.CalculationEnum;
-
 import org.apache.commons.lang.ArrayUtils;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -57,6 +50,13 @@ import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.utils.EnumHelper;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
+import net.sf.jasperreports.eclipse.ui.ATitledDialog;
+import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.engine.design.DesignExpressionReturnValue;
+import net.sf.jasperreports.engine.design.JRDesignExpression;
+import net.sf.jasperreports.engine.fill.JRIncrementerFactory;
+import net.sf.jasperreports.engine.type.CalculationEnum;
 
 /**
  * Dialog to provide the configuration of a band run return value
@@ -167,7 +167,7 @@ public class BandReturnValueDialog extends ATitledDialog implements IExpressionC
 				SelectionDialog dialog;
 				try {
 					dialog = JavaUI.createTypeDialog(getShell(), new ProgressMonitorDialog(getShell()), getIncrementContext(),
-							IJavaElementSearchConstants.CONSIDER_CLASSES_AND_INTERFACES, false);
+							IJavaElementSearchConstants.CONSIDER_ALL_TYPES, false);
 					dialog.setTitle(Messages.ClassTypeCellEditor_open_type);
 					dialog.setMessage(Messages.ClassTypeCellEditor_dialog_message);
 					if (dialog.open() == Window.OK) {

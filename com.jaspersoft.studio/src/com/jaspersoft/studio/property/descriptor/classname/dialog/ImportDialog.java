@@ -121,7 +121,7 @@ public class ImportDialog extends Dialog {
 					String[] results = null;
 					IJavaSearchScope searchScope = SearchEngine.createWorkspaceScope();
 					SelectionDialog dialog = JavaUI.createTypeDialog(getShell(), new ProgressMonitorDialog(getShell()),
-							searchScope, IJavaElementSearchConstants.CONSIDER_CLASSES_AND_INTERFACES, true);
+							searchScope, IJavaElementSearchConstants.CONSIDER_ALL_TYPES, true);
 					dialog.setTitle(Messages.ClassTypeCellEditor_open_type);
 					dialog.setMessage(Messages.ClassTypeCellEditor_dialog_message);
 					if (dialog.open() == Window.OK) {

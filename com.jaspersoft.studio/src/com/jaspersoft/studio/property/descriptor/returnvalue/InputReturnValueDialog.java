@@ -220,7 +220,7 @@ public class InputReturnValueDialog extends Dialog {
 			public void widgetSelected(SelectionEvent e) {
 				SelectionDialog dialog;
 				try {
-					dialog = JavaUI.createTypeDialog(getShell(), new ProgressMonitorDialog(getShell()), getIncrementContext(), IJavaElementSearchConstants.CONSIDER_CLASSES_AND_INTERFACES, false);
+					dialog = JavaUI.createTypeDialog(getShell(), new ProgressMonitorDialog(getShell()), getIncrementContext(), IJavaElementSearchConstants.CONSIDER_ALL_TYPES, false);
 					dialog.setTitle(Messages.ClassTypeCellEditor_open_type);
 					dialog.setMessage(Messages.ClassTypeCellEditor_dialog_message);
 					if (dialog.open() == Window.OK) {
