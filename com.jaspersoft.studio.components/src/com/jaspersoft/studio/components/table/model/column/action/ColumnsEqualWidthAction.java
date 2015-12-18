@@ -80,13 +80,15 @@ public class ColumnsEqualWidthAction extends ACachedSelectionAction {
 	private List<MColumn> getSelectionSet(ISelection selection){
 		HashMap<StandardBaseColumn, MColumn> result = new HashMap<StandardBaseColumn, MColumn>();
 		StructuredSelection structSelection = (StructuredSelection)selection;
-		for(Object element : structSelection.toList()){
-			if (element instanceof EditPart){
-				EditPart part = (EditPart)element;
-				if (part.getModel() instanceof MColumn){
-					MColumn colModel = (MColumn)part.getModel();
-					if (colModel.getValue() != null && !result.containsKey(colModel.getValue())){
-						result.put(colModel.getValue(), colModel);
+		if (structSelection != null) {
+			for(Object element : structSelection.toList()){
+				if (element instanceof EditPart){
+					EditPart part = (EditPart)element;
+					if (part.getModel() instanceof MColumn){
+						MColumn colModel = (MColumn)part.getModel();
+						if (colModel.getValue() != null && !result.containsKey(colModel.getValue())){
+							result.put(colModel.getValue(), colModel);
+						}
 					}
 				}
 			}
