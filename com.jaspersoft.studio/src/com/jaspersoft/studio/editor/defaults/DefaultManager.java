@@ -131,12 +131,15 @@ public class DefaultManager {
 			if (event.getType() == IResourceChangeEvent.POST_CHANGE){
 				iterateResourceDelta(event.getDelta(), resourcesDeleted);
 				for(IFile resource : resourcesDeleted){
-					String resourceString = resource.getRawLocation().toOSString();
-					availableDefaults.remove(resourceString);
-					if (resourceString.equals(actualDefault)){
-						actualDefault = null;
-						defaultReport = null;
-						defaultConfig = null;
+					IPath resourceLocation = resource.getRawLocation();
+					if (resourceLocation != null){
+						String resourceString = resourceLocation.toOSString();
+						availableDefaults.remove(resourceString);
+						if (resourceString.equals(actualDefault)){
+							actualDefault = null;
+							defaultReport = null;
+							defaultConfig = null;
+						}
 					}
 				}
 				savePreferences();
