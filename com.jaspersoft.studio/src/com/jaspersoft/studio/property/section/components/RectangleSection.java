@@ -26,8 +26,7 @@ public class RectangleSection extends AbstractSection {
 		super.createControls(parent, tabbedPropertySheetPage);
 
 		parent.setLayout(new GridLayout(2, false));
-
-		createWidget4Property(parent, JRBaseStyle.PROPERTY_FILL);
+		
 		createWidget4Property(parent, JRBaseStyle.PROPERTY_RADIUS);
 	}
 	

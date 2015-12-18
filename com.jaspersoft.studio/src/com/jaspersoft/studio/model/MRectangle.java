@@ -12,15 +12,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.jasperreports.engine.JRConstants;
-import net.sf.jasperreports.engine.JRElement;
-import net.sf.jasperreports.engine.JRRectangle;
-import net.sf.jasperreports.engine.base.JRBaseStyle;
-import net.sf.jasperreports.engine.design.JRDesignElement;
-import net.sf.jasperreports.engine.design.JRDesignRectangle;
-import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.type.FillEnum;
-
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
@@ -28,9 +19,15 @@ import com.jaspersoft.studio.editor.defaults.DefaultManager;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
-import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptors.IntegerPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
+
+import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRElement;
+import net.sf.jasperreports.engine.JRRectangle;
+import net.sf.jasperreports.engine.base.JRBaseStyle;
+import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.design.JRDesignRectangle;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 /*
  * The Class MRectangle.
@@ -75,8 +72,7 @@ public class MRectangle extends MGraphicElementLinePen {
 
 	private static IPropertyDescriptor[] descriptors;
 	private static Map<String, Object> defaultsMap;
-	private static NamedEnumPropertyDescriptor<FillEnum> fillD;
-
+	
 	@Override
 	public Map<String, Object> getDefaultsMap() {
 		return defaultsMap;
@@ -103,11 +99,6 @@ public class MRectangle extends MGraphicElementLinePen {
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		fillD = new NamedEnumPropertyDescriptor<FillEnum>(JRBaseStyle.PROPERTY_FILL, Messages.common_fill, FillEnum.SOLID,
-				NullEnum.INHERITED);
-		fillD.setDescription(Messages.MRectangle_fill_description);
-		desc.add(fillD);
-
 		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#graphicElement");
 
 		IntegerPropertyDescriptor rD = new IntegerPropertyDescriptor(JRBaseStyle.PROPERTY_RADIUS, Messages.common_radius);
@@ -125,17 +116,13 @@ public class MRectangle extends MGraphicElementLinePen {
 		JRDesignRectangle jrElement = (JRDesignRectangle) getValue();
 		if (id.equals(JRBaseStyle.PROPERTY_RADIUS))
 			return jrElement.getOwnRadius();
-		if (id.equals(JRBaseStyle.PROPERTY_FILL))
-			return fillD.getIntValue(jrElement.getFillValue());
 		return super.getPropertyValue(id);
 	}
 
 	@Override
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignRectangle jrElement = (JRDesignRectangle) getValue();
-		if (id.equals(JRBaseStyle.PROPERTY_FILL))
-			jrElement.setFill(fillD.getEnumValue(value));
-		else if (id.equals(JRBaseStyle.PROPERTY_RADIUS)) {
+		if (id.equals(JRBaseStyle.PROPERTY_RADIUS)) {
 			Integer intv = (Integer) value;
 			if (intv != null)
 				intv = Math.abs(intv.intValue());
