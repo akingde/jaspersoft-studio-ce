@@ -16,10 +16,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import net.sf.jasperreports.components.table.BaseColumn;
-import net.sf.jasperreports.components.table.StandardBaseColumn;
-import net.sf.jasperreports.engine.design.JRDesignElement;
-
 import org.eclipse.gef.EditPart;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -27,13 +23,16 @@ import org.eclipse.ui.IWorkbenchPart;
 
 import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.components.Activator;
-import com.jaspersoft.studio.components.crosstab.model.cell.MCell;
 import com.jaspersoft.studio.components.table.TableManager;
 import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.components.table.model.MTable;
 import com.jaspersoft.studio.components.table.model.column.MColumn;
 import com.jaspersoft.studio.editor.action.ACachedSelectionAction;
 import com.jaspersoft.studio.property.SetValueCommand;
+
+import net.sf.jasperreports.components.table.BaseColumn;
+import net.sf.jasperreports.components.table.StandardBaseColumn;
+import net.sf.jasperreports.engine.design.JRDesignElement;
 
 /**
  * Make the selected columns to fill a table. The action is visible only if there is space to
@@ -108,7 +107,7 @@ public class ColumnsStretchToTableAction extends ACachedSelectionAction {
 		for(Object element : structSelection.toList()){
 			if (element instanceof EditPart){
 				EditPart part = (EditPart)element;
-				if (part.getModel() instanceof MColumn && !(part.getModel() instanceof MCell)){
+				if (part.getModel() instanceof MColumn){
 					MColumn colModel = (MColumn)part.getModel();
 					if (colModel.getValue() != null && !result.containsKey(colModel.getValue())){
 						result.put(colModel.getValue(), colModel);
