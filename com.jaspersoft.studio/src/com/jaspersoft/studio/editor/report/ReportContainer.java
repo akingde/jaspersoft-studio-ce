@@ -17,21 +17,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.engine.JRConditionalStyle;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JRSimpleTemplate;
-import net.sf.jasperreports.engine.JRStyle;
-import net.sf.jasperreports.engine.JRTemplateReference;
-import net.sf.jasperreports.engine.design.JRDesignExpression;
-import net.sf.jasperreports.engine.design.JRDesignImage;
-import net.sf.jasperreports.engine.design.JRDesignParameter;
-import net.sf.jasperreports.engine.design.JRDesignReportTemplate;
-import net.sf.jasperreports.engine.design.JRDesignScriptlet;
-import net.sf.jasperreports.engine.design.JRDesignSubreport;
-import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.repo.RepositoryUtil;
-
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.core.IJavaProject;
@@ -62,8 +47,8 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.IJROBjectEditor;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.ExpressionContext.Visibility;
-import com.jaspersoft.studio.editor.name.NamedSubeditor;
 import com.jaspersoft.studio.editor.expression.ExpressionEditorSupportUtil;
+import com.jaspersoft.studio.editor.name.NamedSubeditor;
 import com.jaspersoft.studio.editor.part.MultiPageToolbarEditorPart;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
@@ -81,6 +66,21 @@ import com.jaspersoft.studio.property.descriptor.expression.dialog.JRExpressionE
 import com.jaspersoft.studio.utils.ExpressionUtil;
 import com.jaspersoft.studio.utils.SelectionHelper;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.engine.JRConditionalStyle;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRSimpleTemplate;
+import net.sf.jasperreports.engine.JRStyle;
+import net.sf.jasperreports.engine.JRTemplateReference;
+import net.sf.jasperreports.engine.design.JRDesignExpression;
+import net.sf.jasperreports.engine.design.JRDesignImage;
+import net.sf.jasperreports.engine.design.JRDesignParameter;
+import net.sf.jasperreports.engine.design.JRDesignReportTemplate;
+import net.sf.jasperreports.engine.design.JRDesignScriptlet;
+import net.sf.jasperreports.engine.design.JRDesignSubreport;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.repo.RepositoryUtil;
 
 /*
  * The Class ReportContainer.
@@ -499,8 +499,8 @@ public class ReportContainer extends MultiPageToolbarEditorPart implements ITabb
 		// }
 		IEditorActionBarContributor contributor = parent.getEditorSite().getActionBarContributor();
 		if (contributor != null && contributor instanceof MultiPageEditorActionBarContributor) {
-
-			((MultiPageEditorActionBarContributor) contributor).setActivePage(activeEditor);
+			MultiPageEditorActionBarContributor toolbarContributor = (MultiPageEditorActionBarContributor) contributor;
+			toolbarContributor.setActivePage(activeEditor);
 		}
 	}
 

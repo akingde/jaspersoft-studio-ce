@@ -224,7 +224,14 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 	 *          The active editor
 	 */
 	public void setActivePage(IEditorPart activeEditor) {
-		CommonToolbarHandler.clearToolbars(getActionBars());
+		//Need to check if the editor is the ReportContainer, otherwise the clear
+		//would clear the toolbar also when giving focus to the properties view.
+		if (!(activeEditor instanceof ReportContainer)) {
+			CommonToolbarHandler.clearToolbars(getActionBars());
+		} else {
+			//will refresh the toolbar when switching back from preview/code to report editor
+			CommonToolbarHandler.updateSelection(activeEditor, getActionBars());
+		}
 		if (lastEditor instanceof CachedSelectionProvider && selectionListener != null) {
 			((CachedSelectionProvider)lastEditor).getSelectionCache().removeSelectionChangeListener(selectionListener);
 		}
