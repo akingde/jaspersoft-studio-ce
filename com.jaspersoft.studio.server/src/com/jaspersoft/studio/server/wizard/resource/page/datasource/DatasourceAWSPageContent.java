@@ -90,7 +90,8 @@ public class DatasourceAWSPageContent extends DatasourceJDBCPageContent {
 		});
 
 		awsCred = new Button(composite, SWT.RADIO);
-		awsCred.setText("Use AWS Credentials (Click here to generate using CloudFormation, see Outputs for keys after stack completes).");
+		awsCred.setText(
+				"Use AWS Credentials (Click here to generate using CloudFormation, see Outputs for keys after stack completes).");
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		awsCred.setLayoutData(gd);
@@ -159,24 +160,41 @@ public class DatasourceAWSPageContent extends DatasourceJDBCPageContent {
 		List<ResourceProperty> props = res.getValue().getProperties();
 
 		bindAWS();
-		ResourceProperty resprop = ResourceDescriptorUtil.getProperty(MRDatasourceAWS.PROP_DATASOURCE_AWS_ACCESS_KEY, props);
+		ResourceProperty resprop = ResourceDescriptorUtil.getProperty(MRDatasourceAWS.PROP_DATASOURCE_AWS_ACCESS_KEY,
+				props);
 		setEC2Settings(resprop == null);
 
 		resprop = ResourceDescriptorUtil.getProperty(MRDatasourceAWS.PROP_DATASOURCE_AWS_REGION, props);
-
-		bindingContext.bindValue(SWTObservables.observeText(awsRegion, SWT.Modify), PojoObservables.observeValue(resprop, "value")); //$NON-NLS-1$
+		if (resprop == null) {
+			resprop = new ResourceProperty(MRDatasourceAWS.PROP_DATASOURCE_AWS_REGION, "");
+			props.add(resprop);
+		}
+		bindingContext.bindValue(SWTObservables.observeText(awsRegion, SWT.Modify),
+				PojoObservables.observeValue(resprop, "value")); //$NON-NLS-1$
 
 		resprop = ResourceDescriptorUtil.getProperty(MRDatasourceAWS.PROP_DATASOURCE_AWS_DB_SERVICE, props);
-
-		bindingContext.bindValue(SWTObservables.observeText(awsService, SWT.Modify), PojoObservables.observeValue(resprop, "value")); //$NON-NLS-1$
+		if (resprop == null) {
+			resprop = new ResourceProperty(MRDatasourceAWS.PROP_DATASOURCE_AWS_DB_SERVICE, "");
+			props.add(resprop);
+		}
+		bindingContext.bindValue(SWTObservables.observeText(awsService, SWT.Modify),
+				PojoObservables.observeValue(resprop, "value")); //$NON-NLS-1$
 
 		resprop = ResourceDescriptorUtil.getProperty(MRDatasourceAWS.PROP_DATASOURCE_AWS_DB_INSTANCE_IDENTIFIER, props);
-
-		bindingContext.bindValue(SWTObservables.observeText(awsDBInstance, SWT.Modify), PojoObservables.observeValue(resprop, "value")); //$NON-NLS-1$
+		if (resprop == null) {
+			resprop = new ResourceProperty(MRDatasourceAWS.PROP_DATASOURCE_AWS_DB_INSTANCE_IDENTIFIER, "");
+			props.add(resprop);
+		}
+		bindingContext.bindValue(SWTObservables.observeText(awsDBInstance, SWT.Modify),
+				PojoObservables.observeValue(resprop, "value")); //$NON-NLS-1$
 
 		resprop = ResourceDescriptorUtil.getProperty(MRDatasourceAWS.PROP_DATASOURCE_AWS_DB_NAME, props);
-
-		bindingContext.bindValue(SWTObservables.observeText(awsDSDBName, SWT.Modify), PojoObservables.observeValue(resprop, "value")); //$NON-NLS-1$
+		if (resprop == null) {
+			resprop = new ResourceProperty(MRDatasourceAWS.PROP_DATASOURCE_AWS_DB_NAME, "");
+			props.add(resprop);
+		}
+		bindingContext.bindValue(SWTObservables.observeText(awsDSDBName, SWT.Modify),
+				PojoObservables.observeValue(resprop, "value")); //$NON-NLS-1$
 		return composite;
 	}
 
@@ -192,18 +210,22 @@ public class DatasourceAWSPageContent extends DatasourceJDBCPageContent {
 	private void bindAWS() {
 		List<ResourceProperty> props = res.getValue().getProperties();
 
-		ResourceProperty resprop = ResourceDescriptorUtil.getProperty(MRDatasourceAWS.PROP_DATASOURCE_AWS_ACCESS_KEY, props);
+		ResourceProperty resprop = ResourceDescriptorUtil.getProperty(MRDatasourceAWS.PROP_DATASOURCE_AWS_ACCESS_KEY,
+				props);
 		if (resprop != null)
-			bAccessKey = bindingContext.bindValue(SWTObservables.observeText(awsAccessKey, SWT.Modify), PojoObservables.observeValue(resprop, "value"));
+			bAccessKey = bindingContext.bindValue(SWTObservables.observeText(awsAccessKey, SWT.Modify),
+					PojoObservables.observeValue(resprop, "value"));
 
 		resprop = ResourceDescriptorUtil.getProperty(MRDatasourceAWS.PROP_DATASOURCE_AWS_SECRET_KEY, props);
 		if (resprop != null)
-			bSecretKey = bindingContext.bindValue(SWTObservables.observeText(awsSecretKey, SWT.Modify), PojoObservables.observeValue(resprop, "value"));
+			bSecretKey = bindingContext.bindValue(SWTObservables.observeText(awsSecretKey, SWT.Modify),
+					PojoObservables.observeValue(resprop, "value"));
 
 		resprop = ResourceDescriptorUtil.getProperty(MRDatasourceAWS.PROP_DATASOURCE_AWS_ROLE_ARN, props);
 
 		if (resprop != null)
-			bArn = bindingContext.bindValue(SWTObservables.observeText(awsArn, SWT.Modify), PojoObservables.observeValue(resprop, "value"));
+			bArn = bindingContext.bindValue(SWTObservables.observeText(awsArn, SWT.Modify),
+					PojoObservables.observeValue(resprop, "value"));
 	}
 
 	private void unbindAWS() {
