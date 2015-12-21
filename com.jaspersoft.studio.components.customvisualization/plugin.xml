@@ -62,7 +62,7 @@
        <image
              icon="icons/cvcomponent-16.png"
              id="com.jaspersoft.studio.javascript.image.CustomComponentNature"
-             natureId="com.jaspersoft.studio.components.customvisualization.customcomponentnature">
+             natureId="com.jasspersoft.studio.cvc.nature">
        </image>
     </extension>
    	<extension point="org.eclipse.ui.commands">
