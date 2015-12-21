@@ -180,6 +180,44 @@ public class CustomVisualizationComponentListPage extends JSSWizardPage {
 			}
 		});
 
+		// CREATE THE TABLE AREA
+
+		lbl = new Label(container, SWT.NONE);
+		lbl.setText("Javascript Library");
+		gd = new GridData();
+		gd.horizontalSpan = 2;
+		lbl.setLayoutData(gd);
+
+		viewer = new TableViewer(container, SWT.BORDER);
+		viewer.setLabelProvider(labelProvider);
+		viewer.setContentProvider(new ListContentProvider());
+		list = viewer.getTable();
+		GridData tableData = new GridData(GridData.FILL_BOTH);
+		tableData.widthHint = 250;
+		tableData.horizontalSpan = 2;
+		list.setLayoutData(tableData);
+		TableLayout tlayout = new TableLayout();
+		tlayout.addColumnData(new ColumnWeightData(100, 250, false));
+		list.setLayout(tlayout);
+		list.setHeaderVisible(false);
+		TableColumn[] column = new TableColumn[1];
+		column[0] = new TableColumn(list, SWT.NONE);
+		column[0].setText(Messages.CustomVisualizationComponentTablePage_nameCol);
+
+		for (int i = 0, n = column.length; i < n; i++)
+			column[i].pack();
+
+		attachCellEditors();
+		List<ModuleDefinition> modules = ModuleManager.getModules();
+		viewer.setInput(modules);
+		if (!modules.isEmpty())
+			viewer.setSelection(new StructuredSelection(modules.get(0)), true);
+
+		lbl = new Label(container, SWT.HORIZONTAL | SWT.SEPARATOR);
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 2;
+		lbl.setLayoutData(gd);
+
 		final Button bUI = new Button(container, SWT.CHECK);
 		bUI.setText("Create Custom UI Files");
 		gd = new GridData();
@@ -265,39 +303,6 @@ public class CustomVisualizationComponentListPage extends JSSWizardPage {
 				getContainer().updateButtons();
 			}
 		});
-
-		// CREATE THE TABLE AREA
-
-		lbl = new Label(container, SWT.NONE);
-		lbl.setText("Javascript Library");
-		gd = new GridData();
-		gd.horizontalSpan = 2;
-		lbl.setLayoutData(gd);
-
-		viewer = new TableViewer(container, SWT.BORDER);
-		viewer.setLabelProvider(labelProvider);
-		viewer.setContentProvider(new ListContentProvider());
-		list = viewer.getTable();
-		GridData tableData = new GridData(GridData.FILL_BOTH);
-		tableData.widthHint = 250;
-		tableData.horizontalSpan = 2;
-		list.setLayoutData(tableData);
-		TableLayout tlayout = new TableLayout();
-		tlayout.addColumnData(new ColumnWeightData(100, 250, false));
-		list.setLayout(tlayout);
-		list.setHeaderVisible(false);
-		TableColumn[] column = new TableColumn[1];
-		column[0] = new TableColumn(list, SWT.NONE);
-		column[0].setText(Messages.CustomVisualizationComponentTablePage_nameCol);
-
-		for (int i = 0, n = column.length; i < n; i++)
-			column[i].pack();
-
-		attachCellEditors();
-		List<ModuleDefinition> modules = ModuleManager.getModules();
-		viewer.setInput(modules);
-		if (!modules.isEmpty())
-			viewer.setSelection(new StructuredSelection(modules.get(0)), true);
 
 		setControl(container);
 	}
@@ -388,6 +393,10 @@ public class CustomVisualizationComponentListPage extends JSSWizardPage {
 			setErrorMessage("The module name could not be empty.");
 			return false;
 		}
+		if (!isValidJavaIdentifier(module)) {
+			setErrorMessage("The module name should be a valid java identifier.");
+			return false;
+		}
 		if (createUI) {
 			if (Misc.isNullOrEmpty(uiLabel)) {
 				setErrorMessage("The Label could not be empty.");
@@ -397,21 +406,28 @@ public class CustomVisualizationComponentListPage extends JSSWizardPage {
 				setErrorMessage("The Description could not be empty.");
 				return false;
 			}
-			if (Misc.isNullOrEmpty(uiIconPath)) {
-				setErrorMessage("The Icon Path could not be empty.");
-				return false;
-			}
-			if (!new File(uiIconPath).exists()) {
+			if (!Misc.isNullOrEmpty(uiIconPath) && !new File(uiIconPath).exists()) {
 				setErrorMessage("Thumnail file does not exists.");
 				return false;
 			}
-
 		}
 		if (getSelectedModule() == null) {
 			setErrorMessage(Messages.CustomVisualizationComponentTablePage_noLibraryError);
 			return false;
 		}
+		setMessage(getDescription());
 		setErrorMessage(null);
+		if (createUI && Misc.isNullOrEmpty(uiIconPath))
+			setMessage("The thumbnail path is empty, we'll use the default image", WARNING);
+		return true;
+	}
+
+	public static boolean isValidJavaIdentifier(String s) {
+		if (!Character.isJavaIdentifierStart(s.charAt(0)))
+			return false;
+		for (int i = 1; i < s.length(); i++)
+			if (!Character.isJavaIdentifierPart(s.charAt(i)))
+				return false;
 		return true;
 	}
 

@@ -1,4 +1,4 @@
-define('RaphaelMap',['Raphael'], function (Raphael) {
+define('${modulename}',['Raphael'], function (Raphael) {
 
 	 return function (instanceData) {	
 		

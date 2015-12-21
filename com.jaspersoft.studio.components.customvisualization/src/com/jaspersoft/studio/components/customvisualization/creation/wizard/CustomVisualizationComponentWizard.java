@@ -18,13 +18,17 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.lang.reflect.InvocationTargetException;
+import java.net.URL;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
+import org.apache.velocity.app.Velocity;
 import org.apache.velocity.app.VelocityEngine;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
@@ -32,12 +36,13 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
@@ -45,7 +50,8 @@ import org.eclipse.ui.IWorkbench;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
-import com.jaspersoft.studio.components.customvisualization.creation.CustomComponentNature;
+import com.jaspersoft.studio.components.customvisualization.CustomVisualizationActivator;
+import com.jaspersoft.studio.components.customvisualization.creation.CVCNature;
 import com.jaspersoft.studio.components.customvisualization.creation.ModuleDefinition;
 import com.jaspersoft.studio.components.customvisualization.creation.ModuleManager;
 import com.jaspersoft.studio.components.customvisualization.creation.VelocityLibrary;
@@ -54,6 +60,7 @@ import com.jaspersoft.studio.components.customvisualization.messages.Messages;
 import com.jaspersoft.studio.components.customvisualization.ui.ComponentDescriptor;
 import com.jaspersoft.studio.components.customvisualization.ui.ComponentPropertyDescriptor;
 import com.jaspersoft.studio.components.customvisualization.ui.ComponentSectionDescriptor;
+import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.VelocityUtils;
 import com.jaspersoft.studio.wizards.JSSWizard;
 
@@ -119,63 +126,100 @@ public class CustomVisualizationComponentWizard extends JSSWizard implements INe
 	 */
 	@Override
 	public boolean performFinish() {
-		IProgressMonitor monitor = new NullProgressMonitor();
-		String projectName = page0.getProjectName();
-		ModuleDefinition selected = page0.getSelectedModule();
-		boolean result = createProject(projectName, monitor);
-		if (result) {
-			IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-			IProject project = root.getProject(projectName);
-			File dest = new File(root.getRawLocation().toFile(), projectName);
-			List<VelocityLibrary> libraries = new ArrayList<VelocityLibrary>();
-			List<VelocityShimLibrary> shimLibraries = new ArrayList<VelocityShimLibrary>();
+		try {
+			final String projectName = page0.getProjectName();
+			final ModuleDefinition selected = page0.getSelectedModule();
+			final String mName = page0.getModule();
+			getContainer().run(true, true, new IRunnableWithProgress() {
 
-			try {
-				String outputScriptName = projectName + ".min.js";
-				// Add the main module and all it's dependencies
-				addModule(selected, shimLibraries, libraries, dest);
-				for (ModuleDefinition requiredLibrary : selected.getRequiredLibraries()) {
-					addModule(requiredLibrary, shimLibraries, libraries, dest);
-				}
+				@Override
+				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+					monitor.beginTask("Creating CVC Component Project", IProgressMonitor.UNKNOWN);
+					try {
 
-				String cssFileName = generateCSS(project, monitor, selected);
-				String renderFileName = generateRender(project, monitor, selected);
-				String mName = page0.getModule();
-				libraries.add(new VelocityLibrary(mName, removeJsExtension(renderFileName)));
-				String buildFile = generateBuildFile(libraries, shimLibraries, mName, outputScriptName);
-				createFile("build.js", project, buildFile, monitor); //$NON-NLS-1$
-				try {
-					createUIFiles(monitor, project, mName, cssFileName, selected.getLibraryURL());
-				} catch (IOException e1) {
-					e1.printStackTrace();
+						boolean result = createProject(projectName, monitor);
+						if (result) {
+
+							String oldModule = selected.getModuleName();
+							try {
+								selected.setModuleName(mName);
+								IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+								IProject project = root.getProject(projectName);
+								File dest = new File(root.getRawLocation().toFile(), projectName);
+								List<VelocityLibrary> libraries = new ArrayList<VelocityLibrary>();
+								List<VelocityShimLibrary> shimLibraries = new ArrayList<VelocityShimLibrary>();
+
+								try {
+									String outputScriptName = projectName + ".min.js";
+									// Add the main module and all it's
+									// dependencies
+									addModule(selected, shimLibraries, libraries, dest);
+									for (ModuleDefinition requiredLibrary : selected.getRequiredLibraries()) {
+										addModule(requiredLibrary, shimLibraries, libraries, dest);
+									}
+
+									String cssFileName = generateCSS(project, monitor, selected);
+									String renderFileName = generateRender(project, monitor, selected);
+
+									libraries.add(new VelocityLibrary(mName, removeJsExtension(renderFileName)));
+									String buildFile = generateBuildFile(libraries, shimLibraries, mName,
+											outputScriptName);
+									createFile("build.js", project, buildFile, monitor); //$NON-NLS-1$
+									try {
+										createUIFiles(monitor, project, mName, cssFileName, selected.getLibraryURL());
+									} catch (IOException e1) {
+										e1.printStackTrace();
+									}
+									// Eventually create a sample for the
+									// current project
+									createSample(selected, outputScriptName, cssFileName, project, monitor);
+									try {
+										project.refreshLocal(IProject.DEPTH_INFINITE, monitor);
+										project.build(IncrementalProjectBuilder.FULL_BUILD, monitor);
+										project.refreshLocal(IProject.DEPTH_INFINITE, monitor);
+									} catch (CoreException e) {
+										e.printStackTrace();
+									}
+								} catch (FileNotFoundException ex) {
+									MessageDialog.openError(UIUtils.getShell(),
+											Messages.CustomVisualizationComponentWizard_errorTitle, ex.getMessage());
+								}
+							} finally {
+								selected.setModuleName(oldModule);
+							}
+						}
+					} finally {
+						monitor.done();
+					}
 				}
-				// Eventually create a sample for the current project
-				createSample(selected, outputScriptName, cssFileName, project, monitor);
-				try {
-					project.refreshLocal(IProject.DEPTH_INFINITE, new NullProgressMonitor());
-				} catch (CoreException e) {
-					e.printStackTrace();
-				}
-			} catch (FileNotFoundException ex) {
-				MessageDialog.openError(UIUtils.getShell(), Messages.CustomVisualizationComponentWizard_errorTitle,
-						ex.getMessage());
-				return false;
-			}
+			});
+		} catch (InvocationTargetException e) {
+			UIUtils.showError(e.getCause());
+		} catch (InterruptedException e) {
+			UIUtils.showError(e);
 		}
-		return result;
+		return true;
 	}
 
 	protected void createUIFiles(IProgressMonitor monitor, IProject project, String mName, String cssFName,
 			String jsFName) throws IOException {
 		if (page0.isCreateUI()) {
-			File f = new File(page0.getUiIconPath());
 
-			createFile(f.getName(), project, f.toURI().toURL().openStream(), monitor);
-
+			String uiIconPath = page0.getUiIconPath();
+			String thName = null;
+			if (Misc.isNullOrEmpty(uiIconPath)) {
+				URL img = CustomVisualizationActivator.getDefault().getBundle().getResource("icons/blank_a4.png");
+				thName = FilenameUtils.getName(img.toString());
+				createFile(thName, project, img.openStream(), monitor);
+			} else {
+				File f = new File(uiIconPath);
+				thName = f.getName();
+				createFile(thName, project, f.toURI().toURL().openStream(), monitor);
+			}
 			ComponentDescriptor cd = new ComponentDescriptor();
 			cd.setLabel(page0.getUiLabel());
 			cd.setDescription(page0.getUiDescription());
-			cd.setThumbnail(f.getName());
+			cd.setThumbnail(thName);
 			cd.setModule(mName);
 
 			List<ComponentSectionDescriptor> sections = new ArrayList<ComponentSectionDescriptor>();
@@ -194,15 +238,17 @@ public class CustomVisualizationComponentWizard extends JSSWizard implements INe
 			cpd.setMandatory(true);
 			props.add(cpd);
 
-			cpd = new ComponentPropertyDescriptor();
-			cpd.setType("PATH");
-			cpd.setName("css");
-			cpd.setLabel("CSS Path");
-			cpd.setDescription("CSS Path");
-			cpd.setDefaultValue(cssFName);
-			cpd.setReadOnly(false);
-			cpd.setMandatory(true);
-			props.add(cpd);
+			if (cssFName != null) {
+				cpd = new ComponentPropertyDescriptor();
+				cpd.setType("PATH");
+				cpd.setName("css");
+				cpd.setLabel("CSS Path");
+				cpd.setDescription("CSS Path");
+				cpd.setDefaultValue(cssFName);
+				cpd.setReadOnly(false);
+				cpd.setMandatory(true);
+				props.add(cpd);
+			}
 
 			cpd = new ComponentPropertyDescriptor();
 			cpd.setType("PATH");
@@ -263,7 +309,8 @@ public class CustomVisualizationComponentWizard extends JSSWizard implements INe
 					if (resourceName.toLowerCase().endsWith(".jrxml")) {
 						// It's a jrxml, call the generate method to provide
 						// some project dependent informations
-						String jrxmlContent = generateJRXML(resourcePath, scriptName, cssName);
+						String jrxmlContent = generateJRXML(resourcePath, scriptName, cssName,
+								selectedModule.getModuleName());
 						createFile(resourceName, project, jrxmlContent, monitor);
 					} else {
 						// It's another resource file (maybe required from the
@@ -290,10 +337,11 @@ public class CustomVisualizationComponentWizard extends JSSWizard implements INe
 	 *            provided
 	 * @return the content of the sample jrxml
 	 */
-	private String generateJRXML(String jrxmlPath, String scriptName, String cssName) {
+	private String generateJRXML(String jrxmlPath, String scriptName, String cssName, String moduleName) {
 		VelocityContext functionContext = new VelocityContext();
 		functionContext.put("scriptname", scriptName); //$NON-NLS-1$
 		functionContext.put("cssname", cssName); //$NON-NLS-1$
+		functionContext.put("modulename", moduleName); //$NON-NLS-1$
 
 		Template functionTemplate = ve.getTemplate(jrxmlPath);
 		StringWriter fsw = new StringWriter();
@@ -422,10 +470,22 @@ public class CustomVisualizationComponentWizard extends JSSWizard implements INe
 		String renderContent = library.getRenderResource();
 		if (renderContent != null) {
 			String renderFileName = container.getName() + ".js";
-			createFile(renderFileName, container, renderContent, monitor); // $NON-NLS-1$
+			createFile(renderFileName, container, generateJsResource(renderContent, library.getModuleName()), monitor); // $NON-NLS-1$
 			return renderFileName;
 		}
 		return null;
+	}
+
+	private String generateJsResource(String content, String moduleName) {
+		VelocityContext functionContext = new VelocityContext();
+		functionContext.put("modulename", moduleName); //$NON-NLS-1$
+
+		// Template functionTemplate = ve.getTemplate(jrxmlPath);
+		StringWriter fsw = new StringWriter();
+		Velocity.evaluate(functionContext, fsw, "", content);
+
+		// functionTemplate.merge(functionContext, fsw);
+		return fsw.toString();
 	}
 
 	/**
@@ -529,7 +589,7 @@ public class CustomVisualizationComponentWizard extends JSSWizard implements INe
 				project.create(monitor);
 				project.open(monitor);
 
-				ProjectUtil.addNature(project, CustomComponentNature.NATURE_ID, monitor);
+				ProjectUtil.addNature(project, CVCNature.NATURE_ID, monitor);
 
 				// IFolder folder =
 				// project.getFolder(PreferenceConstants.getPreferenceStore().getString(PreferenceConstants.SRCBIN_BINNAME));

@@ -1,4 +1,4 @@
-define('d3Circle',['d3'], function (d3) {
+define('${modulename}',['d3'], function (d3) {
 
 	 return function (instanceData) {	
 		

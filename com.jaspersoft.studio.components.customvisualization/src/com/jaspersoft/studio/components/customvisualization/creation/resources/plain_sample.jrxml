@@ -19,7 +19,7 @@
 				<reportElement x="102" y="40" width="350" height="150" uuid="89458bf2-6ab9-4bf0-ab6c-010c66cdac6b"/>
 				<cvc:customvisualization xmlns:cvc="http://www.jaspersoft.com/cvcomponent" xsi:schemaLocation="http://www.jaspersoft.com/cvcomponent http://www.jaspersoft.com/cvcomponent/component.xsd"  evaluationTime="Report">
 					<cvc:itemProperty name="script" value="${scriptname}"/>
-					<cvc:itemProperty name="module" value="plain"/>
+					<cvc:itemProperty name="module" value="${modulename}"/>
 				</cvc:customvisualization>
 			</componentElement>
 		</band>

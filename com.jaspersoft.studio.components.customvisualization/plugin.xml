@@ -58,16 +58,6 @@
        </propertyTester>
     </extension>
     <extension
-          id="customcomponentnature"
-          name="Custom Component Nature"
-          point="org.eclipse.core.resources.natures">
-       <runtime>
-          <run
-                class="com.jaspersoft.studio.components.customvisualization.creation.CustomComponentNature">
-          </run>
-       </runtime>
-    </extension>
-    <extension
           point="org.eclipse.ui.ide.projectNatureImages">
        <image
              icon="icons/cvcomponent-16.png"
@@ -167,6 +157,33 @@
             id="com.jaspersoft.studio.cvc.preferences.templates.descriptors.property"
             name="%ComponentDescriptors">
       </page>
+   </extension>
+   <extension
+         id="com.jasspersoft.studio.cvc.nature"
+         name="CVC Nature"
+         point="org.eclipse.core.resources.natures">
+      <runtime>
+         <run
+               class="com.jaspersoft.studio.components.customvisualization.creation.CVCNature">
+         </run>
+      </runtime>
+      <builder
+            id="com.jaspersoft.studio.cvc.builder">
+      </builder>
+   </extension>
+   <extension
+         id="com.jaspersoft.studio.cvc.builder"
+         name="CVC Builder"
+         point="org.eclipse.core.resources.builders">
+      <builder
+            callOnEmptyDelta="false"
+            hasNature="true"
+            isConfigurable="false"
+            supportsConfigurations="false">
+         <run
+               class="com.jaspersoft.studio.components.customvisualization.creation.CVCBuilder">
+         </run>
+      </builder>
    </extension>
     
 </plugin>
