@@ -13,6 +13,7 @@ import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.SubMonitor;
 
 import net.sf.jasperreports.eclipse.builder.Markers;
 
@@ -79,8 +80,8 @@ public class CVCBuilder extends IncrementalProjectBuilder {
 			if (resource.exists()) {
 				if (resource.getName().equals(ConsoleExecuter.BUILD_FILE_NAME))
 					Markers.deleteMarkers(resource);
-				// else if (resource.isDerived())
-				// resource.delete(false, SubMonitor.convert(monitor));
+				else if (resource.getName().equals("min.js"))
+					resource.delete(false, SubMonitor.convert(monitor));
 			}
 			return true;
 		}
