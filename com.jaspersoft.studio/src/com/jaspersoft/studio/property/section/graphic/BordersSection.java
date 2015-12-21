@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.property.section.graphic;
 
@@ -79,101 +75,100 @@ public class BordersSection extends AbstractSection {
 	 * Toolbutton to set all the borders
 	 */
 	private ToolItem allBorder;
-	
+
 	/**
 	 * Toolbutton to remove all the borders
 	 */
 	private ToolItem noneBorder;
-	
+
 	/**
 	 * Toolbutton to set the up and bottom borders
 	 */
 	private ToolItem upDownBorder;
-	
+
 	/**
 	 * Toolbutton to set the left and right borders
 	 */
 	private ToolItem leftRightBorder;
-	
+
 	/**
 	 * Drawer for the borders linebox
 	 */
 	private LineBoxDrawer bd;
-	
+
 	/**
 	 * The filed used to set\show the lineWidth
 	 */
 	private Spinner lineWidth;
-	
+
 	/**
 	 * The Combo popup used to set\show the linestyle
 	 */
 	private SPLineStyleEnum lineStyle;
-	
+
 	/**
 	 * Checkbox to know if all the padding are at the same value
 	 */
 	private Button checkBoxPadding;
-	
+
 	/**
-	 * Spinner for the left padding or for the general padding when 
-	 * the checkbox is selected
+	 * Spinner for the left padding or for the general padding when the checkbox is selected
 	 */
 	private Spinner paddingLeft;
-	
+
 	/**
 	 * Spinner for the right padding
 	 */
 	private Spinner paddingRight;
-	
+
 	/**
 	 * Spinner for the bottom padding
 	 */
 	private Spinner paddingBottom;
-	
+
 	/**
 	 * Spinner for the top padding
 	 */
 	private Spinner paddingTop;
-	
+
 	/**
 	 * Border figure rectangle
 	 */
 	private RectangleFigure borderPreview;
-	
+
 	/**
 	 * Border figure canvas
 	 */
 	private Canvas square;
-	
+
 	/**
 	 * Group section where the controls regarding the border are placed
 	 */
 	private Group rightPanel;
-	
+
 	/**
 	 * The widget used to set\show the line color
 	 */
 	private ColorStyledText lineColor;
-	
+
 	private static final String PREFIX = "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1";
-	
+
 	private static final String PADDING_GENERAL = PREFIX.concat("#box_padding");
-	
+
 	private static final String PADDING_TOP = PREFIX.concat("#box_topPadding");
 
 	private static final String PADDING_BOTTOM = PREFIX.concat("#box_bottomPadding");
-	
+
 	private static final String PADDING_LEFT = PREFIX.concat("#box_leftPadding");
-	
+
 	private static final String PADDING_RIGHT = PREFIX.concat("#box_rightPadding");
-	
+
 	private static final String LINE_COLOR = PREFIX.concat("#pen_lineColor");
-	
+
 	private static final String LINE_WIDTH = PREFIX.concat("#pen_lineWidth");
-	
+
 	private static final String LINE_STYLE = PREFIX.concat("#pen_lineStyle");
-	
+
 	private static final String BOX = PREFIX.concat("#box");
 
 	/**
@@ -182,30 +177,30 @@ public class BordersSection extends AbstractSection {
 	 */
 	public void createControls(Composite parent, TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
-		
+
 		Composite mainLayout = new Composite(parent, SWT.NONE);
-		mainLayout.setLayout(new GridLayout(1,true));
+		mainLayout.setLayout(new GridLayout(1, true));
 		mainLayout.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
-				
+
 		createPaddingPanel(mainLayout);
-		
+
 		rightPanel = new Group(mainLayout, SWT.NONE);
 		rightPanel.setText(Messages.common_borders);
 		rightPanel.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
-		rightPanel.setLayout(new GridLayout(2,false));
-				
+		rightPanel.setLayout(new GridLayout(2, false));
+
 		createBorderPreview(rightPanel);
-		
+
 		createStyle(rightPanel, JRBaseLineBox.PROPERTY_PADDING);
-		
+
 		Composite toolBarLayout = new Composite(rightPanel, SWT.NONE);
-		toolBarLayout.setLayout(new GridLayout(1,false));
+		toolBarLayout.setLayout(new GridLayout(1, false));
 		GridData toolBardGridData = new GridData(SWT.BEGINNING, SWT.BEGINNING, true, false);
 		toolBardGridData.horizontalSpan = 2;
 		toolBardGridData.widthHint = 200;
 		toolBardGridData.horizontalIndent = 5;
 		toolBarLayout.setLayoutData(toolBardGridData);
-		Label textLabel = new Label(toolBarLayout,SWT.NONE);
+		Label textLabel = new Label(toolBarLayout, SWT.NONE);
 		textLabel.setText(Messages.BordersSection_Default_Label);
 		ToolBar toolBar = new ToolBar(toolBarLayout, SWT.FLAT | SWT.WRAP);
 		createButtons(toolBar);
@@ -218,29 +213,33 @@ public class BordersSection extends AbstractSection {
 
 	/**
 	 * Create the canvas box where the borders will be represented and could be edited
-	 * @param composite the composite where the canvas will be placed
+	 * 
+	 * @param composite
+	 *          the composite where the canvas will be placed
 	 */
 	private void createBorderPreview(Composite composite) {
 		square = new Canvas(composite, SWT.BORDER | SWT.NO_REDRAW_RESIZE);
 		square.setBackground(ColorConstants.white);
 		HelpSystem.setHelp(square, BOX);
-		//The mouse down may select a border and the mouse up refresh the painting area
+		// The mouse down may select a border and the mouse up refresh the painting area
 		square.addMouseListener(new MouseListener() {
-			
+
 			@Override
 			public void mouseUp(MouseEvent e) {
 				updateRightPanel();
 			}
-			
+
 			@Override
-			public void mouseDown(MouseEvent e) {}
-			
+			public void mouseDown(MouseEvent e) {
+			}
+
 			@Override
-			public void mouseDoubleClick(MouseEvent e) {}
+			public void mouseDoubleClick(MouseEvent e) {
+			}
 		});
-		
-		GridData gd = new GridData(GridData.FILL_VERTICAL | GridData.HORIZONTAL_ALIGN_CENTER
-				| GridData.VERTICAL_ALIGN_CENTER);
+
+		GridData gd = new GridData(
+				GridData.FILL_VERTICAL | GridData.HORIZONTAL_ALIGN_CENTER | GridData.VERTICAL_ALIGN_CENTER);
 		gd.widthHint = 120;
 		gd.heightHint = 120;
 		square.setLayoutData(gd);
@@ -248,74 +247,77 @@ public class BordersSection extends AbstractSection {
 		LightweightSystem lws = new J2DLightweightSystem();
 		lws.setControl(square);
 		bd = new LineBoxDrawer(jasperReportsContext, square);
-		borderPreview = new LineBoxRectangle(bd,this);
+		borderPreview = new LineBoxRectangle(bd, this);
 		square.setToolTipText(Messages.BordersSection_preview_ToolTip);
 		lws.setContents(borderPreview);
 	}
-	
+
 	/**
-	 * Enable or disable the spinner for the directional padding when the checkbox 
-	 * to set the same value in every spinner is selected
+	 * Enable or disable the spinner for the directional padding when the checkbox to set the same value in every spinner
+	 * is selected
 	 */
-	private void checkBoxValueChange(){
-		if (checkBoxPadding.getSelection()){
+	private void checkBoxValueChange() {
+		if (checkBoxPadding.getSelection()) {
 			paddingRight.setEnabled(false);
 			paddingTop.setEnabled(false);
 			paddingBottom.setEnabled(false);
 		} else {
 			paddingRight.setEnabled(true);
 			paddingTop.setEnabled(true);
-			paddingBottom.setEnabled(true);						
+			paddingBottom.setEnabled(true);
 		}
 	}
-	
+
 	/**
-	 * When the checkbox is selected or deselected this method perform immediately an action to set 
-	 * the general padding to a value or null respectively
+	 * When the checkbox is selected or deselected this method perform immediately an action to set the general padding to
+	 * a value or null respectively
 	 */
-	private void uniformAfterCheck(){
-		JSSCompoundCommand cc = new JSSCompoundCommand("Change padding", null);  //$NON-NLS-1$
-		if (checkBoxPadding.getSelection()){
-			//I've selected to use the same value in all the padding area
-			//so i generate immediately the command
+	private void uniformAfterCheck() {
+		JSSCompoundCommand cc = new JSSCompoundCommand("Change padding", null); //$NON-NLS-1$
+		if (checkBoxPadding.getSelection()) {
+			// I've selected to use the same value in all the padding area
+			// so i generate immediately the command
 			for (APropertyNode m : getElements()) {
 				cc.setReferenceNodeIfNull(m);
 				Command c = null;
 				MLineBox lb = (MLineBox) m.getPropertyValue(MGraphicElementLineBox.LINE_BOX);
 				c = getChangePropertyCommand(JRBaseLineBox.PROPERTY_PADDING, new Integer(paddingLeft.getSelection()), lb);
 				if (c != null)
-							cc.add(c);
+					cc.add(c);
 			}
 		} else {
-			//The box was deselected so i need to set immediately the padding for all to null
+			// The box was deselected so i need to set immediately the padding for all to null
 			for (APropertyNode m : getElements()) {
 				cc.setReferenceNodeIfNull(m);
 				Command c = null;
 				MLineBox lb = (MLineBox) m.getPropertyValue(MGraphicElementLineBox.LINE_BOX);
 				c = getChangePropertyCommand(JRBaseLineBox.PROPERTY_PADDING, null, lb);
 				if (c != null)
-							cc.add(c);
+					cc.add(c);
 			}
 		}
 		CommandStack cs = getEditDomain().getCommandStack();
 		cs.execute(cc);
 	}
-	
+
 	/**
 	 * Create the padding group and the control in it
-	 * @param parent the composite where the group will be placed
+	 * 
+	 * @param parent
+	 *          the composite where the group will be placed
 	 */
-	private void createPaddingPanel(Composite parent){
+	private void createPaddingPanel(Composite parent) {
 		Group composite = new Group(parent, SWT.NONE);
 		composite.setText(Messages.BordersSection_Padding_Box_Title);
-		
+
 		GridLayout layout = new GridLayout(4, false);
 		composite.setLayout(layout);
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 		GridData gd = new GridData();
 		gd.horizontalSpan = 4;
-		
-		checkBoxPadding = getWidgetFactory().createButton(composite, Messages.BordersSection_Same_Padding_Value_Check, SWT.CHECK);
+
+		checkBoxPadding = getWidgetFactory().createButton(composite, Messages.BordersSection_Same_Padding_Value_Check,
+				SWT.CHECK);
 		checkBoxPadding.setLayoutData(gd);
 		HelpSystem.setHelp(checkBoxPadding, PADDING_GENERAL);
 		checkBoxPadding.addSelectionListener(new SelectionAdapter() {
@@ -324,9 +326,9 @@ public class BordersSection extends AbstractSection {
 				uniformAfterCheck();
 			}
 		});
-		
-		getWidgetFactory().createCLabel(composite, Messages.BordersSection_Left_Label, SWT.RIGHT); 
-		
+
+		getWidgetFactory().createCLabel(composite, Messages.BordersSection_Left_Label, SWT.RIGHT);
+
 		paddingLeft = new Spinner(composite, SWT.BORDER | SWT.FLAT);
 		paddingLeft.setValues(0, 0, Integer.MAX_VALUE, 0, 1, 10);
 		paddingLeft.setToolTipText(Messages.BordersSection_padding_tool_tip);
@@ -336,9 +338,9 @@ public class BordersSection extends AbstractSection {
 				changePropertyPadding(JRBaseLineBox.PROPERTY_LEFT_PADDING, new Integer(paddingLeft.getSelection()));
 			}
 		});
-		
-		getWidgetFactory().createCLabel(composite, Messages.common_right, SWT.RIGHT); 
-		
+
+		getWidgetFactory().createCLabel(composite, Messages.common_right, SWT.RIGHT);
+
 		paddingRight = new Spinner(composite, SWT.BORDER | SWT.FLAT);
 		paddingRight.setValues(0, 0, Integer.MAX_VALUE, 0, 1, 10);
 		paddingRight.setToolTipText(Messages.BordersSection_padding_tool_tip);
@@ -348,9 +350,9 @@ public class BordersSection extends AbstractSection {
 				changePropertyPadding(JRBaseLineBox.PROPERTY_RIGHT_PADDING, new Integer(paddingRight.getSelection()));
 			}
 		});
-		
-		getWidgetFactory().createCLabel(composite, Messages.BordersSection_Top_Label, SWT.RIGHT); 
-		
+
+		getWidgetFactory().createCLabel(composite, Messages.BordersSection_Top_Label, SWT.RIGHT);
+
 		paddingTop = new Spinner(composite, SWT.BORDER | SWT.FLAT);
 		paddingTop.setValues(0, 0, Integer.MAX_VALUE, 0, 1, 10);
 		paddingTop.setToolTipText(Messages.BordersSection_padding_tool_tip);
@@ -360,9 +362,9 @@ public class BordersSection extends AbstractSection {
 				changePropertyPadding(JRBaseLineBox.PROPERTY_TOP_PADDING, new Integer(paddingTop.getSelection()));
 			}
 		});
-		
-		getWidgetFactory().createCLabel(composite, Messages.common_bottom, SWT.RIGHT); 
-		
+
+		getWidgetFactory().createCLabel(composite, Messages.common_bottom, SWT.RIGHT);
+
 		paddingBottom = new Spinner(composite, SWT.BORDER | SWT.FLAT);
 		paddingBottom.setValues(0, 0, Integer.MAX_VALUE, 0, 1, 10);
 		paddingBottom.setToolTipText(Messages.BordersSection_padding_tool_tip);
@@ -386,7 +388,7 @@ public class BordersSection extends AbstractSection {
 		lineColor.addListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
-				changeProperty(JRBasePen.PROPERTY_LINE_COLOR, lineColor.getColor());	
+				changeProperty(JRBasePen.PROPERTY_LINE_COLOR, lineColor.getColor());
 			}
 		});
 
@@ -408,16 +410,17 @@ public class BordersSection extends AbstractSection {
 				changeProperty(JRBasePen.PROPERTY_LINE_WIDTH, newValue);
 			}
 		});
-		
 
 		return composite;
 	}
-	
 
 	/**
 	 * Create the line style combo popup
-	 * @param prop properties associated to the combo popup
-	 * @param composite parent where the combo will be placed
+	 * 
+	 * @param prop
+	 *          properties associated to the combo popup
+	 * @param composite
+	 *          parent where the combo will be placed
 	 */
 	private void createLineStyle(final String prop, final Composite composite) {
 		lineStyle = new SPLineStyleEnum(composite, this, prop) {
@@ -432,10 +435,11 @@ public class BordersSection extends AbstractSection {
 
 	/**
 	 * Print the toolbar button and add the listener to them
+	 * 
 	 * @param toolBar
 	 */
 	private void createButtons(ToolBar toolBar) {
-		
+
 		noneBorder = new ToolItem(toolBar, SWT.PUSH);
 		noneBorder.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
@@ -446,21 +450,21 @@ public class BordersSection extends AbstractSection {
 				bd.setBorderSelected(Location.RIGHT);
 				bd.setBorderSelected(Location.TOP);
 				bd.setBorderSelected(Location.BOTTOM);
-				AlfaRGB color = AlfaRGB.getFullyOpaque(new RGB(0,0,0));
+				AlfaRGB color = AlfaRGB.getFullyOpaque(new RGB(0, 0, 0));
 				Float newValue = new Float(0);
 				changeProperty(JRBasePen.PROPERTY_LINE_STYLE, 1);
 				changeProperty(JRBasePen.PROPERTY_LINE_COLOR, color);
 				changeProperty(JRBasePen.PROPERTY_LINE_WIDTH, newValue);
 				bd.unselectAll();
-				//The selection action change the displayed values, so i need to restore them after the unselect
-				lineStyle.setData((Integer)beforeSelectionStyle);
+				// The selection action change the displayed values, so i need to restore them after the unselect
+				lineStyle.setData((LineStyleEnum) beforeSelectionStyle);
 				lineWidth.setSelection(selection);
 				lineColor.setColor(beforeSelectionColor);
 			}
 		});
 		noneBorder.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/border.png")); //$NON-NLS-1$
 		noneBorder.setToolTipText(Messages.BordersSection_No_Borders);
-		
+
 		allBorder = new ToolItem(toolBar, SWT.PUSH);
 		allBorder.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
@@ -481,7 +485,7 @@ public class BordersSection extends AbstractSection {
 		});
 		allBorder.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/border-outside.png")); //$NON-NLS-1$
 		allBorder.setToolTipText(Messages.BordersSection_all_borders_tool_tip);
-		
+
 		leftRightBorder = new ToolItem(toolBar, SWT.PUSH);
 		leftRightBorder.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
@@ -490,30 +494,30 @@ public class BordersSection extends AbstractSection {
 				int digits = lineWidth.getDigits();
 				Float beforeSelectionWidth = new Float(selection / Math.pow(10, digits));
 				Object beforeSelectionStyle = lineStyle.getSelectedValue();
-				bd.setBorderSelected(Location.LEFT,false);
-				bd.setBorderSelected(Location.RIGHT,false);
+				bd.setBorderSelected(Location.LEFT, false);
+				bd.setBorderSelected(Location.RIGHT, false);
 				bd.setBorderSelected(Location.TOP);
 				bd.setBorderSelected(Location.BOTTOM);
 				Float newValue = new Float(0);
 				changeProperty(JRBasePen.PROPERTY_LINE_STYLE, 1);
-				changeProperty(JRBasePen.PROPERTY_LINE_COLOR, new AlfaRGB(new RGB(0,0,0),255));
+				changeProperty(JRBasePen.PROPERTY_LINE_COLOR, new AlfaRGB(new RGB(0, 0, 0), 255));
 				changeProperty(JRBasePen.PROPERTY_LINE_WIDTH, newValue);
 				bd.setBorderSelected(Location.LEFT);
 				bd.setBorderSelected(Location.RIGHT);
-				bd.setBorderSelected(Location.TOP,false);
-				bd.setBorderSelected(Location.BOTTOM,false);
+				bd.setBorderSelected(Location.TOP, false);
+				bd.setBorderSelected(Location.BOTTOM, false);
 				changeProperty(JRBasePen.PROPERTY_LINE_STYLE, beforeSelectionStyle);
 				changeProperty(JRBasePen.PROPERTY_LINE_COLOR, beforeSelectionColor);
 				changeProperty(JRBasePen.PROPERTY_LINE_WIDTH, beforeSelectionWidth);
 				bd.unselectAll();
 				lineColor.setColor(beforeSelectionColor);
 				lineWidth.setSelection(selection);
-				lineStyle.setData((Integer)beforeSelectionStyle);
+				lineStyle.setData((LineStyleEnum) beforeSelectionStyle);
 			}
 		});
 		leftRightBorder.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/border-right-left.png")); //$NON-NLS-1$
 		leftRightBorder.setToolTipText(Messages.BordersSection_Left_Right_Borders);
-		
+
 		upDownBorder = new ToolItem(toolBar, SWT.PUSH);
 		upDownBorder.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
@@ -524,43 +528,47 @@ public class BordersSection extends AbstractSection {
 				Object beforeSelectionStyle = lineStyle.getSelectedValue();
 				bd.setBorderSelected(Location.LEFT);
 				bd.setBorderSelected(Location.RIGHT);
-				bd.setBorderSelected(Location.TOP,false);
-				bd.setBorderSelected(Location.BOTTOM,false);
+				bd.setBorderSelected(Location.TOP, false);
+				bd.setBorderSelected(Location.BOTTOM, false);
 				Float newValue = new Float(0);
 				changeProperty(JRBasePen.PROPERTY_LINE_STYLE, 1);
-				changeProperty(JRBasePen.PROPERTY_LINE_COLOR, new AlfaRGB(new RGB(0,0,0), 255));
+				changeProperty(JRBasePen.PROPERTY_LINE_COLOR, new AlfaRGB(new RGB(0, 0, 0), 255));
 				changeProperty(JRBasePen.PROPERTY_LINE_WIDTH, newValue);
-				bd.setBorderSelected(Location.LEFT,false);
-				bd.setBorderSelected(Location.RIGHT,false);
+				bd.setBorderSelected(Location.LEFT, false);
+				bd.setBorderSelected(Location.RIGHT, false);
 				bd.setBorderSelected(Location.TOP);
-				bd.setBorderSelected(Location.BOTTOM);;
+				bd.setBorderSelected(Location.BOTTOM);
+				;
 				changeProperty(JRBasePen.PROPERTY_LINE_STYLE, beforeSelectionStyle);
 				changeProperty(JRBasePen.PROPERTY_LINE_COLOR, beforeSelectionColor);
 				changeProperty(JRBasePen.PROPERTY_LINE_WIDTH, beforeSelectionWidth);
 				bd.unselectAll();
 				lineColor.setColor(beforeSelectionColor);
 				lineWidth.setSelection(selection);
-				lineStyle.setData((Integer)beforeSelectionStyle);
+				lineStyle.setData((LineStyleEnum) beforeSelectionStyle);
 			}
 		});
 		upDownBorder.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/border-top-bottom.png")); //$NON-NLS-1$
 		upDownBorder.setToolTipText(Messages.BordersSection_Top_Bottom_Borders);
 	}
-	
+
 	/**
 	 * Change the padding property of a linebox
-	 * @param property the property name
-	 * @param newValue the new value
+	 * 
+	 * @param property
+	 *          the property name
+	 * @param newValue
+	 *          the new value
 	 */
-	public void changePropertyPadding(String property, Object newValue){
+	public void changePropertyPadding(String property, Object newValue) {
 		if (!isRefreshing()) {
 			JSSCompoundCommand cc = new JSSCompoundCommand("Change padding", null); //$NON-NLS-1$
 			for (APropertyNode m : getElements()) {
 				cc.setReferenceNodeIfNull(m);
 				Command c = null;
 				MLineBox lb = (MLineBox) m.getPropertyValue(MGraphicElementLineBox.LINE_BOX);
-				//If the checkbox is set i need to set the general padding, otherwise it must be null
-				if (checkBoxPadding.getSelection()){
+				// If the checkbox is set i need to set the general padding, otherwise it must be null
+				if (checkBoxPadding.getSelection()) {
 					c = getChangePropertyCommand(JRBaseLineBox.PROPERTY_PADDING, newValue, lb);
 				} else {
 					c = getChangePropertyCommand(JRBaseLineBox.PROPERTY_PADDING, null, lb);
@@ -576,11 +584,13 @@ public class BordersSection extends AbstractSection {
 		}
 	}
 
-	
 	/**
 	 * Change the property of a linepen
-	 * @param property the property name
-	 * @param newValue the new value
+	 * 
+	 * @param property
+	 *          the property name
+	 * @param newValue
+	 *          the new value
 	 */
 	public void changeProperty(String property, Object newValue) {
 		if (!isRefreshing()) {
@@ -589,27 +599,27 @@ public class BordersSection extends AbstractSection {
 				cc.setReferenceNodeIfNull(m);
 				Command c = null;
 				MLineBox lb = (MLineBox) m.getPropertyValue(MGraphicElementLineBox.LINE_BOX);
-				//it's a change of a border attribute
-				boolean areAllUnselected = bd.areAllUnslected(); 
-				if (areAllUnselected || bd.isBottomSelected()){
+				// it's a change of a border attribute
+				boolean areAllUnselected = bd.areAllUnslected();
+				if (areAllUnselected || bd.isBottomSelected()) {
 					MLinePen lp = (MLinePen) lb.getPropertyValue(MLineBox.LINE_PEN_BOTTOM);
 					c = getChangePropertyCommand(property, newValue, lp);
 					if (c != null)
 						cc.add(c);
 				}
-				if(areAllUnselected || bd.isTopSelected()){
+				if (areAllUnselected || bd.isTopSelected()) {
 					MLinePen lp = (MLinePen) lb.getPropertyValue(MLineBox.LINE_PEN_TOP);
 					c = getChangePropertyCommand(property, newValue, lp);
 					if (c != null)
 						cc.add(c);
 				}
-				if(areAllUnselected || bd.isLeftSelected()){
+				if (areAllUnselected || bd.isLeftSelected()) {
 					MLinePen lp = (MLinePen) lb.getPropertyValue(MLineBox.LINE_PEN_LEFT);
 					c = getChangePropertyCommand(property, newValue, lp);
 					if (c != null)
 						cc.add(c);
 				}
-				if(areAllUnselected || bd.isRightSelected()){
+				if (areAllUnselected || bd.isRightSelected()) {
 					MLinePen lp = (MLinePen) lb.getPropertyValue(MLineBox.LINE_PEN_RIGHT);
 					c = getChangePropertyCommand(property, newValue, lp);
 					if (c != null)
@@ -621,48 +631,48 @@ public class BordersSection extends AbstractSection {
 			bd.refresh();
 		}
 	}
-	
-	
+
 	/**
 	 * Convert a border location to the corresponding line pen location
-	 * @param loc location of a border
+	 * 
+	 * @param loc
+	 *          location of a border
 	 * @return a line pen location
 	 */
-	private String locationToLine(Location loc){
-		if (loc == Location.TOP) return MLineBox.LINE_PEN_TOP;
-		else if (loc == Location.BOTTOM) return MLineBox.LINE_PEN_BOTTOM;
-		else if (loc == Location.RIGHT) return MLineBox.LINE_PEN_RIGHT;
-		else return MLineBox.LINE_PEN_LEFT;
+	private String locationToLine(Location loc) {
+		if (loc == Location.TOP)
+			return MLineBox.LINE_PEN_TOP;
+		else if (loc == Location.BOTTOM)
+			return MLineBox.LINE_PEN_BOTTOM;
+		else if (loc == Location.RIGHT)
+			return MLineBox.LINE_PEN_RIGHT;
+		else
+			return MLineBox.LINE_PEN_LEFT;
 	}
-	
+
 	/**
 	 * Update the value on the right panel with the selected line data
 	 */
-	private void updateRightPanel(){
+	private void updateRightPanel() {
 		APropertyNode m = getElement();
 		if (m != null) {
 			MLineBox lb = (MLineBox) m.getPropertyActualValue(MGraphicElementLineBox.LINE_BOX);
 			if (bd.getLastSelected() != null && bd.getLastSelected().getSelected()) {
 				refreshLinePen(lb, locationToLine(bd.getLastSelected().getLocation()));
-			}
-			else if (bd.isTopSelected()) {
+			} else if (bd.isTopSelected()) {
 				refreshLinePen(lb, MLineBox.LINE_PEN_TOP);
-			}
-			else if (bd.isBottomSelected()) {
+			} else if (bd.isBottomSelected()) {
 				refreshLinePen(lb, MLineBox.LINE_PEN_BOTTOM);
-			}
-			else if (bd.isLeftSelected()) {
+			} else if (bd.isLeftSelected()) {
 				refreshLinePen(lb, MLineBox.LINE_PEN_LEFT);
-			}
-			else if (bd.isRightSelected()) {
+			} else if (bd.isRightSelected()) {
 				refreshLinePen(lb, MLineBox.LINE_PEN_RIGHT);
-			}
-			else {
-				//No border is selected, set the control to the default value
+			} else {
+				// No border is selected, set the control to the default value
 				JRBoxPen pen = getIntesectionValues(lb);
-				if (pen != null){
+				if (pen != null) {
 					refreshLinePen(pen);
-				} else {	
+				} else {
 					lineColor.setColor(AlfaRGB.getFullyOpaque(new RGB(0, 0, 0)));
 					lineWidth.setValues(0, 0, 5000, 1, 1, 1);
 					lineStyle.setData(1);
@@ -670,16 +680,17 @@ public class BordersSection extends AbstractSection {
 			}
 		}
 	}
-	
+
 	/**
 	 * Used when no border is selected to fined an intersection of the value of the borders
 	 * 
-	 * @param lb the linebox
+	 * @param lb
+	 *          the linebox
 	 * @return a pen with the intersection values
 	 */
-	private JRBoxPen getIntesectionValues(MLineBox lb){
-		if (lb != null && lb.getValue() != null){
-			JRLineBox jrLineBox = (JRLineBox)lb.getValue();
+	private JRBoxPen getIntesectionValues(MLineBox lb) {
+		if (lb != null && lb.getValue() != null) {
+			JRLineBox jrLineBox = (JRLineBox) lb.getValue();
 			List<JRBoxPen> edgePen = new ArrayList<JRBoxPen>();
 			edgePen.add(jrLineBox.getLeftPen());
 			edgePen.add(jrLineBox.getRightPen());
@@ -689,18 +700,18 @@ public class BordersSection extends AbstractSection {
 			LineStyleEnum intersectionLineStyle = null;
 			Float intersectionLineWidth = null;
 			JRBoxPen resultPen = null;
-			for(JRBoxPen pen : edgePen){
-				if (pen != null){
+			for (JRBoxPen pen : edgePen) {
+				if (pen != null) {
 					resultPen = pen;
-					if (intersectionLineColor != null && !intersectionLineColor.equals(pen.getLineColor())){
+					if (intersectionLineColor != null && !intersectionLineColor.equals(pen.getLineColor())) {
 						resultPen = null;
 						break;
 					}
-					if (intersectionLineStyle != null && !intersectionLineStyle.equals(pen.getLineStyleValue())){
+					if (intersectionLineStyle != null && !intersectionLineStyle.equals(pen.getLineStyleValue())) {
 						resultPen = null;
 						break;
 					}
-					if (intersectionLineWidth != null && !intersectionLineWidth.equals(pen.getLineWidth())){
+					if (intersectionLineWidth != null && !intersectionLineWidth.equals(pen.getLineWidth())) {
 						resultPen = null;
 						break;
 					}
@@ -709,19 +720,18 @@ public class BordersSection extends AbstractSection {
 					intersectionLineWidth = pen.getLineWidth();
 				}
 			}
-			if (resultPen == null && jrLineBox.getPen() != null) return jrLineBox.getPen();
+			if (resultPen == null && jrLineBox.getPen() != null)
+				return jrLineBox.getPen();
 			return resultPen;
-		} 
+		}
 		return null;
 	}
-	
+
 	/**
-	 * Refresh the right panel with the values of the selected border. If more than one border is selected 
-	 * will be shown the values of one of them, choose as follow:
-	 * -The last border selected
-	 * -If the last border selected was deselected the first from the other SELECTED borders will be choose. The border
-	 * examination order is TOP,BOTTOM,LEFT,RIGHT
-	 * -If no border is selected will default values will be used
+	 * Refresh the right panel with the values of the selected border. If more than one border is selected will be shown
+	 * the values of one of them, choose as follow: -The last border selected -If the last border selected was deselected
+	 * the first from the other SELECTED borders will be choose. The border examination order is TOP,BOTTOM,LEFT,RIGHT -If
+	 * no border is selected will default values will be used
 	 */
 	public void refresh() {
 		setRefreshing(true);
@@ -737,8 +747,8 @@ public class BordersSection extends AbstractSection {
 			square.redraw();
 		setRefreshing(false);
 	}
-	
-	private void enableControls(boolean enable){
+
+	private void enableControls(boolean enable) {
 		lineColor.setEnabled(enable);
 		lineStyle.getControl().setEnabled(enable);
 		lineWidth.setEnabled(enable);
@@ -755,22 +765,24 @@ public class BordersSection extends AbstractSection {
 
 	/**
 	 * Return the padding value
-	 * @param padding and object representing the padding value, could be null
-	 * @return and integer version  of the padding value if it isn't null, otherwise false
+	 * 
+	 * @param padding
+	 *          and object representing the padding value, could be null
+	 * @return and integer version of the padding value if it isn't null, otherwise false
 	 */
-	private Integer getPaddingValue(Object padding){
-		return (padding != null ? (Integer)padding : 0);
+	private Integer getPaddingValue(Object padding) {
+		return (padding != null ? (Integer) padding : 0);
 	}
-	
+
 	/**
 	 * Refresh the padding information, actually it's not used
 	 */
 	public void refreshPadding(MLineBox lb) {
 		if (lb != null) {
 			Object propertyPadding = lb.getPropertyValue(JRBaseLineBox.PROPERTY_PADDING);
-			if (propertyPadding != null){
+			if (propertyPadding != null) {
 				checkBoxPadding.setSelection(true);
-				Integer value = (Integer)propertyPadding;
+				Integer value = (Integer) propertyPadding;
 				paddingTop.setSelection(value);
 				paddingBottom.setSelection(value);
 				paddingLeft.setSelection(value);
@@ -786,9 +798,9 @@ public class BordersSection extends AbstractSection {
 		}
 	}
 
-
 	/**
 	 * Update the right panel with the value of a linepen, but only if it's visible
+	 * 
 	 * @param lb
 	 * @param property
 	 */
@@ -796,25 +808,26 @@ public class BordersSection extends AbstractSection {
 		if (lb != null) {
 			MLinePen lp = (MLinePen) lb.getPropertyActualValue(property);
 			Float propertyValue = (Float) lp.getPropertyActualValue(JRBasePen.PROPERTY_LINE_WIDTH);
-			if (propertyValue>0){
-				//Set the border data only if it is visible
+			if (propertyValue > 0) {
+				// Set the border data only if it is visible
 				if (lineWidth != null && !lineWidth.isDisposed()) {
-					UIUtil.setSpinnerSelection(lineWidth, null, (int) ((propertyValue == null) ? 0 : propertyValue.doubleValue()* Math.pow(10, 1)));
+					UIUtil.setSpinnerSelection(lineWidth, null,
+							(int) ((propertyValue == null) ? 0 : propertyValue.doubleValue() * Math.pow(10, 1)));
 				}
-	
+
 				if (lineStyle != null && !isDisposed()) {
 					int ls = ((Integer) lp.getPropertyActualValue(JRBasePen.PROPERTY_LINE_STYLE)).intValue();
 					lineStyle.setData(ls);
 				}
-	
+
 				AlfaRGB backcolor = (AlfaRGB) lp.getPropertyActualValue(JRBasePen.PROPERTY_LINE_COLOR);
-				if (lineColor != null){
+				if (lineColor != null) {
 					lineColor.setColor(backcolor);
 				}
 			}
 		}
 	}
-	
+
 	public void refreshLinePen(JRBoxPen pen) {
 		if (pen != null) {
 			Float width = pen.getLineWidth();
@@ -835,7 +848,7 @@ public class BordersSection extends AbstractSection {
 					lineStyle.setData(ls);
 				}
 			}
-			
+
 			if (lineColor != null && !lineColor.getPaintArea().isDisposed()) {
 				if (pen.getLineColor() == null) {
 					lineColor.setColor(AlfaRGB.getFullyOpaque(new RGB(0, 0, 0)));
@@ -846,7 +859,7 @@ public class BordersSection extends AbstractSection {
 			}
 		}
 	}
-	
+
 	@Override
 	protected void initializeProvidedProperties() {
 		super.initializeProvidedProperties();
@@ -860,17 +873,27 @@ public class BordersSection extends AbstractSection {
 		addProvidedProperties(JRBasePen.PROPERTY_LINE_STYLE, Messages.common_pen_style);
 		addProvidedProperties("BordersDefinitionGroup", Messages.common_borders);
 	}
-	
-	public IHighlightPropertyWidget getWidgetForProperty(Object propertyId){
-		if (propertyId.equals(JRBaseLineBox.PROPERTY_PADDING)) return new ASHighlightControl(checkBoxPadding.getParent(), new BorderHightLight(checkBoxPadding.getParent(), Composite.class));
-		else if (propertyId.equals(JRBaseLineBox.PROPERTY_LEFT_PADDING)) return new ASHighlightControl(paddingLeft, new BackgroundHighlight(paddingLeft));
-		else if (propertyId.equals(JRBaseLineBox.PROPERTY_RIGHT_PADDING)) return new ASHighlightControl(paddingRight, new BackgroundHighlight(paddingRight));
-		else if (propertyId.equals(JRBaseLineBox.PROPERTY_TOP_PADDING)) return new ASHighlightControl(paddingTop, new BackgroundHighlight(paddingTop));
-		else if (propertyId.equals(JRBaseLineBox.PROPERTY_BOTTOM_PADDING)) return new ASHighlightControl(paddingBottom, new BackgroundHighlight(paddingBottom));
-		else if (propertyId.equals(JRBasePen.PROPERTY_LINE_COLOR)) return new ASHighlightControl(lineColor.getPaintArea(), new BackgroundHighlight(lineColor.getPaintArea()));
-		else if (propertyId.equals(JRBasePen.PROPERTY_LINE_WIDTH)) return new ASHighlightControl(lineWidth, new BackgroundHighlight(lineWidth));
-		else if (propertyId.equals(JRBasePen.PROPERTY_LINE_STYLE)) return new ASHighlightControl(lineStyle.getControl(), new BackgroundHighlight(lineStyle.getControl()));
-		else if (propertyId.equals("BordersDefinitionGroup")) return new ASHighlightControl(rightPanel, new BorderHightLight(rightPanel, Composite.class));
+
+	public IHighlightPropertyWidget getWidgetForProperty(Object propertyId) {
+		if (propertyId.equals(JRBaseLineBox.PROPERTY_PADDING))
+			return new ASHighlightControl(checkBoxPadding.getParent(),
+					new BorderHightLight(checkBoxPadding.getParent(), Composite.class));
+		else if (propertyId.equals(JRBaseLineBox.PROPERTY_LEFT_PADDING))
+			return new ASHighlightControl(paddingLeft, new BackgroundHighlight(paddingLeft));
+		else if (propertyId.equals(JRBaseLineBox.PROPERTY_RIGHT_PADDING))
+			return new ASHighlightControl(paddingRight, new BackgroundHighlight(paddingRight));
+		else if (propertyId.equals(JRBaseLineBox.PROPERTY_TOP_PADDING))
+			return new ASHighlightControl(paddingTop, new BackgroundHighlight(paddingTop));
+		else if (propertyId.equals(JRBaseLineBox.PROPERTY_BOTTOM_PADDING))
+			return new ASHighlightControl(paddingBottom, new BackgroundHighlight(paddingBottom));
+		else if (propertyId.equals(JRBasePen.PROPERTY_LINE_COLOR))
+			return new ASHighlightControl(lineColor.getPaintArea(), new BackgroundHighlight(lineColor.getPaintArea()));
+		else if (propertyId.equals(JRBasePen.PROPERTY_LINE_WIDTH))
+			return new ASHighlightControl(lineWidth, new BackgroundHighlight(lineWidth));
+		else if (propertyId.equals(JRBasePen.PROPERTY_LINE_STYLE))
+			return new ASHighlightControl(lineStyle.getControl(), new BackgroundHighlight(lineStyle.getControl()));
+		else if (propertyId.equals("BordersDefinitionGroup"))
+			return new ASHighlightControl(rightPanel, new BorderHightLight(rightPanel, Composite.class));
 		return null;
 	}
 
