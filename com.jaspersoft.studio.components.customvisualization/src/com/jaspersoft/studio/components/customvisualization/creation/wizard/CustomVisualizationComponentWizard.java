@@ -126,10 +126,12 @@ public class CustomVisualizationComponentWizard extends JSSWizard implements INe
 	 */
 	@Override
 	public boolean performFinish() {
+		final String projectName = page0.getProjectName();
+		final ModuleDefinition selected = page0.getSelectedModule();
+		final String mName = page0.getModule();
+		final String oldModule = selected.getModuleName();
 		try {
-			final String projectName = page0.getProjectName();
-			final ModuleDefinition selected = page0.getSelectedModule();
-			final String mName = page0.getModule();
+			selected.setModuleName(mName);
 			getContainer().run(true, true, new IRunnableWithProgress() {
 
 				@Override
@@ -139,57 +141,50 @@ public class CustomVisualizationComponentWizard extends JSSWizard implements INe
 
 						boolean result = createProject(projectName, monitor);
 						if (result) {
+							IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+							IProject project = root.getProject(projectName);
+							File dest = new File(root.getRawLocation().toFile(), projectName);
+							List<VelocityLibrary> libraries = new ArrayList<VelocityLibrary>();
+							List<VelocityShimLibrary> shimLibraries = new ArrayList<VelocityShimLibrary>();
 
-							String oldModule = selected.getModuleName();
 							try {
-								selected.setModuleName(mName);
-								IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-								IProject project = root.getProject(projectName);
-								File dest = new File(root.getRawLocation().toFile(), projectName);
-								List<VelocityLibrary> libraries = new ArrayList<VelocityLibrary>();
-								List<VelocityShimLibrary> shimLibraries = new ArrayList<VelocityShimLibrary>();
-
-								try {
-									String outputScriptName = projectName + ".min.js";
-									// Add the main module and all it's
-									// dependencies
-									addModule(selected, shimLibraries, libraries, dest);
-									for (ModuleDefinition requiredLibrary : selected.getRequiredLibraries()) {
-										addModule(requiredLibrary, shimLibraries, libraries, dest);
-									}
-
-									String cssFileName = generateCSS(project, monitor, selected);
-									String renderFileName = generateRender(project, monitor, selected);
-
-									libraries.add(new VelocityLibrary(mName, removeJsExtension(renderFileName)));
-									String buildFile = generateBuildFile(libraries, shimLibraries, mName,
-											outputScriptName);
-									createFile("build.js", project, buildFile, monitor); //$NON-NLS-1$
-									try {
-										createUIFiles(monitor, project, mName, cssFileName, selected.getLibraryURL());
-									} catch (IOException e1) {
-										e1.printStackTrace();
-									}
-									// Eventually create a sample for the
-									// current project
-									createSample(selected, outputScriptName, cssFileName, project, monitor);
-									try {
-										project.refreshLocal(IProject.DEPTH_INFINITE, monitor);
-										project.build(IncrementalProjectBuilder.FULL_BUILD, monitor);
-										project.refreshLocal(IProject.DEPTH_INFINITE, monitor);
-									} catch (CoreException e) {
-										e.printStackTrace();
-									}
-								} catch (FileNotFoundException ex) {
-									MessageDialog.openError(UIUtils.getShell(),
-											Messages.CustomVisualizationComponentWizard_errorTitle, ex.getMessage());
+								String outputScriptName = projectName + ".min.js";
+								// Add the main module and all it's
+								// dependencies
+								addModule(selected, shimLibraries, libraries, dest);
+								for (ModuleDefinition requiredLibrary : selected.getRequiredLibraries()) {
+									addModule(requiredLibrary, shimLibraries, libraries, dest);
 								}
-							} finally {
-								selected.setModuleName(oldModule);
+
+								String cssFileName = generateCSS(project, monitor, selected);
+								String renderFileName = generateRender(project, monitor, selected);
+
+								libraries.add(new VelocityLibrary(mName, removeJsExtension(renderFileName)));
+								String buildFile = generateBuildFile(libraries, shimLibraries, mName, outputScriptName);
+								createFile("build.js", project, buildFile, monitor); //$NON-NLS-1$
+								try {
+									createUIFiles(monitor, project, mName, cssFileName, selected.getLibraryURL());
+								} catch (IOException e1) {
+									e1.printStackTrace();
+								}
+								// Eventually create a sample for the
+								// current project
+								createSample(selected, outputScriptName, cssFileName, project, monitor);
+								try {
+									project.refreshLocal(IProject.DEPTH_INFINITE, monitor);
+									project.build(IncrementalProjectBuilder.FULL_BUILD, monitor);
+									project.refreshLocal(IProject.DEPTH_INFINITE, monitor);
+								} catch (CoreException e) {
+									e.printStackTrace();
+								}
+							} catch (FileNotFoundException ex) {
+								MessageDialog.openError(UIUtils.getShell(),
+										Messages.CustomVisualizationComponentWizard_errorTitle, ex.getMessage());
 							}
 						}
 					} finally {
 						monitor.done();
+						selected.setModuleName(oldModule);
 					}
 				}
 			});
@@ -311,7 +306,7 @@ public class CustomVisualizationComponentWizard extends JSSWizard implements INe
 						// some project dependent informations
 						String jrxmlContent = generateJRXML(resourcePath, scriptName, cssName,
 								selectedModule.getModuleName());
-						createFile(resourceName, project, jrxmlContent, monitor);
+						createFile(selectedModule.getModuleName() + "_sample.jrxml", project, jrxmlContent, monitor);
 					} else {
 						// It's another resource file (maybe required from the
 						// jrxml), simply create it in the folder
