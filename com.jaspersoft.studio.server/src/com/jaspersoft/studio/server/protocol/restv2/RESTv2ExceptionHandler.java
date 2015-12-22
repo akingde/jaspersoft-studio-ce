@@ -47,8 +47,7 @@ public class RESTv2ExceptionHandler {
 		return map;
 	}
 
-	public void handleException(Response res, IProgressMonitor monitor)
-			throws ClientProtocolException {
+	public void handleException(Response res, IProgressMonitor monitor) throws ClientProtocolException {
 		String msg = "";
 		int status = res.getStatus();
 		switch (status) {
@@ -58,8 +57,7 @@ public class RESTv2ExceptionHandler {
 			else if (res.getHeaderString("Content-Type").equals("application/json"))
 				handleErrorDescriptor(res, monitor, status);
 		case 401:
-			throw new HttpResponseException(status, res.getStatusInfo()
-					.getReasonPhrase());
+			throw new HttpResponseException(status, res.getStatusInfo().getReasonPhrase());
 		case 403:
 		case 409:
 		case 404:
@@ -80,29 +78,26 @@ public class RESTv2ExceptionHandler {
 		}
 	}
 
-	protected void handleErrorDescriptorList(Response res,
-			IProgressMonitor monitor, int status) throws HttpResponseException {
+	protected void handleErrorDescriptorList(Response res, IProgressMonitor monitor, int status)
+			throws HttpResponseException {
 		String msg;
-		List<ErrorDescriptor> list = res
-				.readEntity(new GenericType<List<ErrorDescriptor>>() {
-				});
+		List<ErrorDescriptor> list = res.readEntity(new GenericType<List<ErrorDescriptor>>() {
+		});
 		if (list != null) {
 			msg = "";
 			for (ErrorDescriptor ed : list)
-				msg += buildMessage(monitor, msg, ed);
+				msg = buildMessage(monitor, msg, ed) + "\n";
 			throw new HttpResponseException(status, msg);
 		}
 	}
 
-	protected void handleErrorDescriptor(Response res,
-			IProgressMonitor monitor, int status) throws HttpResponseException {
+	protected void handleErrorDescriptor(Response res, IProgressMonitor monitor, int status)
+			throws HttpResponseException {
 		res.bufferEntity();
 		try {
 			ErrorDescriptor ed = res.readEntity(ErrorDescriptor.class);
-			String msg = ed.getErrorCode() + "\n"
-					+ buildMessage(monitor, "", ed);
-			if (!ed.getErrorCode().contains("{0}")
-					&& ed.getParameters() != null)
+			String msg = ed.getErrorCode() + "\n" + buildMessage(monitor, "", ed);
+			if (!ed.getErrorCode().contains("{0}") && ed.getParameters() != null)
 				for (String str : ed.getParameters())
 					msg += "\n" + str;
 			throw new HttpResponseException(status, msg);
@@ -116,14 +111,12 @@ public class RESTv2ExceptionHandler {
 		}
 	}
 
-	public String buildMessage(IProgressMonitor monitor, String msg,
-			ErrorDescriptor ed) {
+	public String buildMessage(IProgressMonitor monitor, String msg, ErrorDescriptor ed) {
 		if (!msg.isEmpty())
 			msg += "\n";
 		if (ed.getMessage() != null) {
 			if (ed.getParameters() != null)
-				msg += MessageFormat.format(ed.getMessage(),
-						(Object[]) ed.getParameters());
+				msg += MessageFormat.format(ed.getMessage(), (Object[]) ed.getParameters());
 			else
 				msg += ed.getMessage();
 		} else {

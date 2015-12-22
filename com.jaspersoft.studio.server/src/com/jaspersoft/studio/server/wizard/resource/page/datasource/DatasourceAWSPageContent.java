@@ -44,11 +44,13 @@ public class DatasourceAWSPageContent extends DatasourceJDBCPageContent {
 	private Binding bAccessKey;
 	private Binding bSecretKey;
 	private Binding bArn;
-	private ResourceProperty pAccessKey;
-	private ResourceProperty pSecretKey;
-	private ResourceProperty pArn;
 	private Button ec2Cred;
 	private Button awsCred;
+	private Proxy p;
+	private Text awsRegion;
+	private Text awsService;
+	private Text awsDBInstance;
+	private Text awsDSDBName;
 
 	public DatasourceAWSPageContent(ANode parent, AMResource resource, DataBindingContext bindingContext) {
 		super(parent, resource, bindingContext);
@@ -77,12 +79,10 @@ public class DatasourceAWSPageContent extends DatasourceJDBCPageContent {
 			public void widgetSelected(SelectionEvent e) {
 				if (ec2Cred.getSelection()) {
 					ResourceDescriptor rd = res.getValue();
-					if (pAccessKey != null)
-						rd.getProperties().remove(pAccessKey);
-					if (pSecretKey != null)
-						rd.getProperties().remove(pSecretKey);
-					if (pArn != null)
-						rd.getProperties().remove(pArn);
+					rd.setResourceProperty(MRDatasourceAWS.PROP_DATASOURCE_AWS_ACCESS_KEY, null);
+					rd.setResourceProperty(MRDatasourceAWS.PROP_DATASOURCE_AWS_SECRET_KEY, null);
+					rd.setResourceProperty(MRDatasourceAWS.PROP_DATASOURCE_AWS_ROLE_ARN, null);
+
 					unbindAWS();
 					setEC2Settings(true);
 				}
@@ -100,17 +100,6 @@ public class DatasourceAWSPageContent extends DatasourceJDBCPageContent {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				if (awsCred.getSelection()) {
-					ResourceDescriptor rd = res.getValue();
-					if (pAccessKey == null)
-						pAccessKey = new ResourceProperty(MRDatasourceAWS.PROP_DATASOURCE_AWS_ACCESS_KEY, "");
-					rd.getProperties().add(pAccessKey);
-					if (pSecretKey == null)
-						pSecretKey = new ResourceProperty(MRDatasourceAWS.PROP_DATASOURCE_AWS_SECRET_KEY, "");
-					rd.getProperties().add(pSecretKey);
-					if (pArn == null)
-						pArn = new ResourceProperty(MRDatasourceAWS.PROP_DATASOURCE_AWS_ROLE_ARN, "");
-					rd.getProperties().add(pArn);
-
 					bindAWS();
 					setEC2Settings(false);
 				}
@@ -134,68 +123,55 @@ public class DatasourceAWSPageContent extends DatasourceJDBCPageContent {
 
 		UIUtil.createLabel(composite, "AWS Region");
 
-		Text awsRegion = new Text(composite, SWT.BORDER);
+		awsRegion = new Text(composite, SWT.BORDER);
 		awsRegion.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		UIUtil.createLabel(composite, "AWS Datasource");
 
-		Text awsService = new Text(composite, SWT.BORDER);
+		awsService = new Text(composite, SWT.BORDER);
 		awsService.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		UIUtil.createLabel(composite, "AWS Instance DB Identifier");
 
-		Text awsDBInstance = new Text(composite, SWT.BORDER);
+		awsDBInstance = new Text(composite, SWT.BORDER);
 		awsDBInstance.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		UIUtil.createLabel(composite, "Data Source DB Name");
 
-		Text awsDSDBName = new Text(composite, SWT.BORDER);
+		awsDSDBName = new Text(composite, SWT.BORDER);
 		awsDSDBName.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		Control c = super.createContent(composite);
+		Control c = super.createContent(composite, false, false);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		c.setLayoutData(gd);
 
-		List<ResourceProperty> props = res.getValue().getProperties();
+		rebind();
 
-		bindAWS();
-		ResourceProperty resprop = ResourceDescriptorUtil.getProperty(MRDatasourceAWS.PROP_DATASOURCE_AWS_ACCESS_KEY,
-				props);
-		setEC2Settings(resprop == null);
-
-		resprop = ResourceDescriptorUtil.getProperty(MRDatasourceAWS.PROP_DATASOURCE_AWS_REGION, props);
-		if (resprop == null) {
-			resprop = new ResourceProperty(MRDatasourceAWS.PROP_DATASOURCE_AWS_REGION, "");
-			props.add(resprop);
-		}
-		bindingContext.bindValue(SWTObservables.observeText(awsRegion, SWT.Modify),
-				PojoObservables.observeValue(resprop, "value")); //$NON-NLS-1$
-
-		resprop = ResourceDescriptorUtil.getProperty(MRDatasourceAWS.PROP_DATASOURCE_AWS_DB_SERVICE, props);
-		if (resprop == null) {
-			resprop = new ResourceProperty(MRDatasourceAWS.PROP_DATASOURCE_AWS_DB_SERVICE, "");
-			props.add(resprop);
-		}
-		bindingContext.bindValue(SWTObservables.observeText(awsService, SWT.Modify),
-				PojoObservables.observeValue(resprop, "value")); //$NON-NLS-1$
-
-		resprop = ResourceDescriptorUtil.getProperty(MRDatasourceAWS.PROP_DATASOURCE_AWS_DB_INSTANCE_IDENTIFIER, props);
-		if (resprop == null) {
-			resprop = new ResourceProperty(MRDatasourceAWS.PROP_DATASOURCE_AWS_DB_INSTANCE_IDENTIFIER, "");
-			props.add(resprop);
-		}
-		bindingContext.bindValue(SWTObservables.observeText(awsDBInstance, SWT.Modify),
-				PojoObservables.observeValue(resprop, "value")); //$NON-NLS-1$
-
-		resprop = ResourceDescriptorUtil.getProperty(MRDatasourceAWS.PROP_DATASOURCE_AWS_DB_NAME, props);
-		if (resprop == null) {
-			resprop = new ResourceProperty(MRDatasourceAWS.PROP_DATASOURCE_AWS_DB_NAME, "");
-			props.add(resprop);
-		}
-		bindingContext.bindValue(SWTObservables.observeText(awsDSDBName, SWT.Modify),
-				PojoObservables.observeValue(resprop, "value")); //$NON-NLS-1$
 		return composite;
+	}
+
+	@Override
+	protected void rebind() {
+		super.rebind();
+		ResourceDescriptor rd = res.getValue();
+
+		p = new Proxy(rd);
+
+		List<ResourceProperty> props = rd.getProperties();
+		boolean ec2 = ResourceDescriptorUtil.getProperty(MRDatasourceAWS.PROP_DATASOURCE_AWS_ACCESS_KEY, props) == null;
+		setEC2Settings(ec2);
+		if (!ec2)
+			bindAWS();
+
+		bindingContext.bindValue(SWTObservables.observeText(awsRegion, SWT.Modify),
+				PojoObservables.observeValue(p, "datasourceAwsRegion")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeText(awsService, SWT.Modify),
+				PojoObservables.observeValue(p, "datasourceAwsDbService")); // $NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeText(awsDBInstance, SWT.Modify),
+				PojoObservables.observeValue(p, "datasourceAwsDbInstanceIdentifier")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeText(awsDSDBName, SWT.Modify),
+				PojoObservables.observeValue(p, "datasourceAwsDbName")); //$NON-NLS-1$
 	}
 
 	private void setEC2Settings(boolean ec2) {
@@ -207,25 +183,14 @@ public class DatasourceAWSPageContent extends DatasourceJDBCPageContent {
 		awsArn.setEnabled(!ec2);
 	}
 
+	@SuppressWarnings("deprecation")
 	private void bindAWS() {
-		List<ResourceProperty> props = res.getValue().getProperties();
-
-		ResourceProperty resprop = ResourceDescriptorUtil.getProperty(MRDatasourceAWS.PROP_DATASOURCE_AWS_ACCESS_KEY,
-				props);
-		if (resprop != null)
-			bAccessKey = bindingContext.bindValue(SWTObservables.observeText(awsAccessKey, SWT.Modify),
-					PojoObservables.observeValue(resprop, "value"));
-
-		resprop = ResourceDescriptorUtil.getProperty(MRDatasourceAWS.PROP_DATASOURCE_AWS_SECRET_KEY, props);
-		if (resprop != null)
-			bSecretKey = bindingContext.bindValue(SWTObservables.observeText(awsSecretKey, SWT.Modify),
-					PojoObservables.observeValue(resprop, "value"));
-
-		resprop = ResourceDescriptorUtil.getProperty(MRDatasourceAWS.PROP_DATASOURCE_AWS_ROLE_ARN, props);
-
-		if (resprop != null)
-			bArn = bindingContext.bindValue(SWTObservables.observeText(awsArn, SWT.Modify),
-					PojoObservables.observeValue(resprop, "value"));
+		bAccessKey = bindingContext.bindValue(SWTObservables.observeText(awsAccessKey, SWT.Modify),
+				PojoObservables.observeValue(p, "datasourceAwsAccessKey"));
+		bSecretKey = bindingContext.bindValue(SWTObservables.observeText(awsSecretKey, SWT.Modify),
+				PojoObservables.observeValue(p, "datasourceAwsSecretKey"));
+		bArn = bindingContext.bindValue(SWTObservables.observeText(awsArn, SWT.Modify),
+				PojoObservables.observeValue(p, "datasourceAwsRoleArn"));
 	}
 
 	private void unbindAWS() {
@@ -237,7 +202,67 @@ public class DatasourceAWSPageContent extends DatasourceJDBCPageContent {
 			bindingContext.removeBinding(bArn);
 	}
 
-	@Override
-	protected void createImportButton(Composite composite, Text tdriver, Text turl, Text tuser, Text tpass) {
+	protected class Proxy {
+		private ResourceDescriptor rd;
+
+		public Proxy(ResourceDescriptor rd) {
+			this.rd = rd;
+		}
+
+		public void setDatasourceAwsRegion(String v) {
+			rd.setResourceProperty(MRDatasourceAWS.PROP_DATASOURCE_AWS_REGION, v);
+		}
+
+		public String getDatasourceAwsRegion() {
+			return rd.getResourcePropertyValue(MRDatasourceAWS.PROP_DATASOURCE_AWS_REGION);
+		}
+
+		public void setDatasourceAwsDbService(String v) {
+			rd.setResourceProperty(MRDatasourceAWS.PROP_DATASOURCE_AWS_DB_SERVICE, v);
+		}
+
+		public String getDatasourceAwsDbService() {
+			return rd.getResourcePropertyValue(MRDatasourceAWS.PROP_DATASOURCE_AWS_DB_SERVICE);
+		}
+
+		public void setDatasourceAwsDbInstanceIdentifier(String v) {
+			rd.setResourceProperty(MRDatasourceAWS.PROP_DATASOURCE_AWS_DB_INSTANCE_IDENTIFIER, v);
+		}
+
+		public String getDatasourceAwsDbInstanceIdentifier() {
+			return rd.getResourcePropertyValue(MRDatasourceAWS.PROP_DATASOURCE_AWS_DB_INSTANCE_IDENTIFIER);
+		}
+
+		public void setDatasourceAwsDbName(String v) {
+			rd.setResourceProperty(MRDatasourceAWS.PROP_DATASOURCE_AWS_DB_NAME, v);
+		}
+
+		public String getDatasourceAwsDbName() {
+			return rd.getResourcePropertyValue(MRDatasourceAWS.PROP_DATASOURCE_AWS_DB_NAME);
+		}
+
+		public void setDatasourceAwsAccessKey(String v) {
+			rd.setResourceProperty(MRDatasourceAWS.PROP_DATASOURCE_AWS_ACCESS_KEY, v);
+		}
+
+		public String getDatasourceAwsAccessKey() {
+			return rd.getResourcePropertyValue(MRDatasourceAWS.PROP_DATASOURCE_AWS_ACCESS_KEY);
+		}
+
+		public void setDatasourceAwsSecretKey(String v) {
+			rd.setResourceProperty(MRDatasourceAWS.PROP_DATASOURCE_AWS_SECRET_KEY, v);
+		}
+
+		public String getDatasourceAwsSecretKey() {
+			return rd.getResourcePropertyValue(MRDatasourceAWS.PROP_DATASOURCE_AWS_SECRET_KEY);
+		}
+
+		public void setDatasourceAwsRoleArn(String v) {
+			rd.setResourceProperty(MRDatasourceAWS.PROP_DATASOURCE_AWS_ROLE_ARN, v);
+		}
+
+		public String getDatasourceAwsRoleArn() {
+			return rd.getResourcePropertyValue(MRDatasourceAWS.PROP_DATASOURCE_AWS_ROLE_ARN);
+		}
 	}
 }
