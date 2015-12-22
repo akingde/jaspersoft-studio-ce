@@ -22,6 +22,7 @@ import java.util.Map;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ListItem;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceProperty;
+import com.jaspersoft.jasperserver.dto.resources.AbstractClientJdbcDataSource;
 import com.jaspersoft.jasperserver.dto.resources.AbstractClientReportUnit;
 import com.jaspersoft.jasperserver.dto.resources.AbstractClientReportUnit.ControlsLayoutType;
 import com.jaspersoft.jasperserver.dto.resources.ClientAdhocDataView;
@@ -297,8 +298,8 @@ public class Soap2Rest {
 		cr.setBeanMethod(rd.getBeanMethod());
 	}
 
-	private static void getJdbcDataSource(ARestV2Connection rc,
-			ClientJdbcDataSource cr, ResourceDescriptor rd) {
+	public static void getJdbcDataSource(ARestV2Connection rc,
+			AbstractClientJdbcDataSource<?> cr, ResourceDescriptor rd) {
 		cr.setDriverClass(rd.getDriverClass());
 		cr.setPassword(Misc.nullValue(rd.getPassword()));
 		cr.setUsername(rd.getUsername());

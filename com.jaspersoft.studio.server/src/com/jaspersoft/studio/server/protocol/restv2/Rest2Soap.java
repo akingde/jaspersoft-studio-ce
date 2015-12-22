@@ -22,14 +22,15 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ListItem;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceProperty;
 import com.jaspersoft.jasperserver.dto.reports.inputcontrols.ReportInputControl;
+import com.jaspersoft.jasperserver.dto.resources.AbstractClientJdbcDataSource;
 import com.jaspersoft.jasperserver.dto.resources.AbstractClientReportUnit;
 import com.jaspersoft.jasperserver.dto.resources.AbstractClientReportUnit.ControlsLayoutType;
-import com.jaspersoft.jasperserver.dto.resources.ClientDataType.TypeOfDataType;
 import com.jaspersoft.jasperserver.dto.resources.ClientAdhocDataView;
 import com.jaspersoft.jasperserver.dto.resources.ClientAwsDataSource;
 import com.jaspersoft.jasperserver.dto.resources.ClientBeanDataSource;
 import com.jaspersoft.jasperserver.dto.resources.ClientCustomDataSource;
 import com.jaspersoft.jasperserver.dto.resources.ClientDataType;
+import com.jaspersoft.jasperserver.dto.resources.ClientDataType.TypeOfDataType;
 import com.jaspersoft.jasperserver.dto.resources.ClientFile;
 import com.jaspersoft.jasperserver.dto.resources.ClientInputControl;
 import com.jaspersoft.jasperserver.dto.resources.ClientJdbcDataSource;
@@ -302,8 +303,8 @@ public class Rest2Soap {
 				cr.getDataSourceName());
 	}
 
-	private static void getJdbcDataSource(ARestV2Connection rc,
-			ClientJdbcDataSource cr, ResourceDescriptor rd)
+	public static void getJdbcDataSource(ARestV2Connection rc,
+			AbstractClientJdbcDataSource<?> cr, ResourceDescriptor rd)
 			throws ParseException {
 		rd.setDriverClass(cr.getDriverClass());
 		rd.setPassword(cr.getPassword());

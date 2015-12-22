@@ -69,6 +69,10 @@ public class DatasourceJDBCPageContent extends APageContent {
 	}
 
 	public Control createContent(Composite parent) {
+		return createContent(parent, true, true);
+	}
+
+	public Control createContent(Composite parent, boolean rebind, boolean importButton) {
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout(2, false));
 
@@ -93,7 +97,8 @@ public class DatasourceJDBCPageContent extends APageContent {
 		tpass.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		TimeZoneProperty.addTimeZone(res, composite);
-		createImportButton(composite, tdriver, turl, tuser, tpass);
+		if (importButton)
+			createImportButton(composite, tdriver, turl, tuser, tpass);
 		// try {
 		// if (res.getWsClient().isSupported(Feature.SEARCHREPOSITORY)) {
 		// Label lbl = new Label(composite, SWT.SEPARATOR | SWT.HORIZONTAL);
@@ -125,8 +130,8 @@ public class DatasourceJDBCPageContent extends APageContent {
 		// } catch (Exception e) {
 		// e.printStackTrace();
 		// }
-
-		rebind();
+		if (rebind)
+			rebind();
 		return composite;
 	}
 
