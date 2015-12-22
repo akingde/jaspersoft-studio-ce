@@ -48,6 +48,7 @@ import com.jaspersoft.studio.components.customvisualization.creation.ModuleManag
 import com.jaspersoft.studio.components.customvisualization.messages.Messages;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.utils.Misc;
+import com.jaspersoft.studio.utils.UIUtil;
 import com.jaspersoft.studio.wizards.JSSWizardPage;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
@@ -167,7 +168,7 @@ public class CustomVisualizationComponentListPage extends JSSWizardPage {
 		lbl.setLayoutData(gd);
 
 		lbl = new Label(container, SWT.NONE);
-		lbl.setText("Module Name");
+		lbl.setText(Messages.CustomVisualizationComponentListPage_0);
 
 		tmodule = new Text(container, SWT.BORDER);
 		tmodule.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -183,7 +184,7 @@ public class CustomVisualizationComponentListPage extends JSSWizardPage {
 		// CREATE THE TABLE AREA
 
 		lbl = new Label(container, SWT.NONE);
-		lbl.setText("Javascript Library");
+		lbl.setText(Messages.CustomVisualizationComponentListPage_1);
 		gd = new GridData();
 		gd.horizontalSpan = 2;
 		lbl.setLayoutData(gd);
@@ -213,13 +214,10 @@ public class CustomVisualizationComponentListPage extends JSSWizardPage {
 		if (!modules.isEmpty())
 			viewer.setSelection(new StructuredSelection(modules.get(0)), true);
 
-		lbl = new Label(container, SWT.HORIZONTAL | SWT.SEPARATOR);
-		gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 2;
-		lbl.setLayoutData(gd);
+		UIUtil.createSeparator(container, 2);
 
 		final Button bUI = new Button(container, SWT.CHECK);
-		bUI.setText("Create Custom UI Files");
+		bUI.setText(Messages.CustomVisualizationComponentListPage_2);
 		gd = new GridData();
 		gd.horizontalSpan = 2;
 		bUI.setLayoutData(gd);
@@ -232,7 +230,7 @@ public class CustomVisualizationComponentListPage extends JSSWizardPage {
 		cmp.setLayoutData(gd);
 
 		lbl = new Label(cmp, SWT.NONE);
-		lbl.setText("Label");
+		lbl.setText(Messages.CustomVisualizationComponentListPage_3);
 
 		final Text tLabel = new Text(cmp, SWT.BORDER);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -249,7 +247,7 @@ public class CustomVisualizationComponentListPage extends JSSWizardPage {
 		});
 
 		lbl = new Label(cmp, SWT.NONE);
-		lbl.setText("Description");
+		lbl.setText(Messages.CustomVisualizationComponentListPage_4);
 
 		final Text tdesc = new Text(cmp, SWT.BORDER);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -265,7 +263,7 @@ public class CustomVisualizationComponentListPage extends JSSWizardPage {
 		});
 
 		lbl = new Label(cmp, SWT.NONE);
-		lbl.setText("Thumbnail");
+		lbl.setText(Messages.CustomVisualizationComponentListPage_5);
 
 		final Text ticon = new Text(cmp, SWT.BORDER);
 		ticon.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -279,7 +277,7 @@ public class CustomVisualizationComponentListPage extends JSSWizardPage {
 		});
 
 		Button btnBrowse = new Button(cmp, SWT.PUSH);
-		btnBrowse.setText("...");
+		btnBrowse.setText("..."); //$NON-NLS-1$
 		btnBrowse.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -287,7 +285,7 @@ public class CustomVisualizationComponentListPage extends JSSWizardPage {
 				FileDialog fd = new FileDialog(UIUtils.getShell());
 				fd.setFileName(ticon.getText());
 				fd.setFilterPath(root.getLocation().toOSString());
-				fd.setFilterExtensions(new String[] { "png", "jpeg", "JPG", "*.*" }); // $NON-NLS-1$ //$NON-NLS-2$
+				fd.setFilterExtensions(new String[] { "png", "jpeg", "JPG", "*.*" }); // $NON-NLS-1$  //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 
 				String selection = fd.open();
 				if (selection != null)
@@ -390,24 +388,24 @@ public class CustomVisualizationComponentListPage extends JSSWizardPage {
 			return false;
 		}
 		if (Misc.isNullOrEmpty(module)) {
-			setErrorMessage("The module name could not be empty.");
+			setErrorMessage(Messages.CustomVisualizationComponentListPage_10);
 			return false;
 		}
 		if (!isValidJavaIdentifier(module)) {
-			setErrorMessage("The module name should be a valid java identifier.");
+			setErrorMessage(Messages.CustomVisualizationComponentListPage_11);
 			return false;
 		}
 		if (createUI) {
 			if (Misc.isNullOrEmpty(uiLabel)) {
-				setErrorMessage("The Label could not be empty.");
+				setErrorMessage(Messages.CustomVisualizationComponentListPage_12);
 				return false;
 			}
 			if (Misc.isNullOrEmpty(uiDescription)) {
-				setErrorMessage("The Description could not be empty.");
+				setErrorMessage(Messages.CustomVisualizationComponentListPage_13);
 				return false;
 			}
 			if (!Misc.isNullOrEmpty(uiIconPath) && !new File(uiIconPath).exists()) {
-				setErrorMessage("Thumnail file does not exists.");
+				setErrorMessage(Messages.CustomVisualizationComponentListPage_14);
 				return false;
 			}
 		}
@@ -418,7 +416,7 @@ public class CustomVisualizationComponentListPage extends JSSWizardPage {
 		setMessage(getDescription());
 		setErrorMessage(null);
 		if (createUI && Misc.isNullOrEmpty(uiIconPath))
-			setMessage("The thumbnail path is empty, we'll use the default image", WARNING);
+			setMessage(Messages.CustomVisualizationComponentListPage_15, WARNING);
 		return true;
 	}
 

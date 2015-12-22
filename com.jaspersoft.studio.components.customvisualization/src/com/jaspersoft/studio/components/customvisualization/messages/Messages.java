@@ -80,6 +80,18 @@ public class Messages extends NLS {
 	public static String CustomVisualizationComponentLicensePage_downloadLabel;
 	public static String CustomVisualizationComponentLicensePage_pageDescription;
 	public static String CustomVisualizationComponentLicensePage_pageTitle;
+	public static String CustomVisualizationComponentListPage_0;
+	public static String CustomVisualizationComponentListPage_1;
+	public static String CustomVisualizationComponentListPage_10;
+	public static String CustomVisualizationComponentListPage_11;
+	public static String CustomVisualizationComponentListPage_12;
+	public static String CustomVisualizationComponentListPage_13;
+	public static String CustomVisualizationComponentListPage_14;
+	public static String CustomVisualizationComponentListPage_15;
+	public static String CustomVisualizationComponentListPage_2;
+	public static String CustomVisualizationComponentListPage_3;
+	public static String CustomVisualizationComponentListPage_4;
+	public static String CustomVisualizationComponentListPage_5;
 	public static String CustomVisualizationComponentSummaryPage_description;
 	public static String CustomVisualizationComponentSummaryPage_footerLabel;
 	public static String CustomVisualizationComponentSummaryPage_headerLabel;
