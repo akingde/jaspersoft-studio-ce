@@ -45,7 +45,11 @@ import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.model.IInputControlsContainer;
 import com.jaspersoft.studio.server.model.MFolder;
+import com.jaspersoft.studio.server.model.MInputControl;
+import com.jaspersoft.studio.server.model.MRQuery;
+import com.jaspersoft.studio.server.model.MReference;
 import com.jaspersoft.studio.server.model.MReportUnit;
+import com.jaspersoft.studio.server.model.datasource.AMRDatasource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.protocol.IConnection;
 
@@ -79,8 +83,12 @@ public class PasteResourceAction extends Action {
 			res = false;
 			for (Object obj : list)
 				if (obj instanceof AMResource && obj instanceof ICopyable) {
-					if (!isSameServer(parent, (AMResource) obj)
-							&& (obj instanceof IInputControlsContainer || obj instanceof MFolder)) {
+					if (!isSameServer(parent, (AMResource) obj) && (obj instanceof IInputControlsContainer
+							|| obj instanceof MFolder || obj instanceof AMRDatasource || obj instanceof MReference
+							|| obj instanceof MRQuery || obj instanceof MInputControl
+							|| obj.getClass().getName().contains("Dashboard")
+							|| obj.getClass().getName().contains("Olap")
+							|| obj.getClass().getName().contains("Mondrian"))) {
 						return false;
 					}
 					ICopyable c = (ICopyable) obj;
