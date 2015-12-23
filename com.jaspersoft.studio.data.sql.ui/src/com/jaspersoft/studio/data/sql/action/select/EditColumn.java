@@ -50,6 +50,8 @@ public class EditColumn extends AAction {
 			setText(Messages.EditColumn_0);
 		else if (element instanceof MSelectExpression)
 			setText(Messages.EditColumn_2);
+		else if(element instanceof MSelectColumn)
+			setText(Messages.EditColumn_0);
 		return element instanceof MSelectColumn
 				|| element instanceof MSelectExpression
 				|| element instanceof MSelectSubQuery;
