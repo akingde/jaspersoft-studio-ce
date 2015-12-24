@@ -15,6 +15,8 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.custom.SashForm;
+import org.eclipse.swt.events.FocusAdapter;
+import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.MenuAdapter;
@@ -23,11 +25,15 @@ import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.TraverseEvent;
+import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 
@@ -117,6 +123,15 @@ public class GMapsMarkersPanel extends GMapsCenterPanel {
 				MapWidgetConstants.BROWSER_FUCTION_UPDATE_MARKER_POSITION, map.getJavaMapSupport()));
 		map.getFunctions().add(new InitialConfigurationFunction(map.getMapControl(),
 				MapWidgetConstants.BROWSER_FUNCTION_INITIAL_CONFIGURATION, map.getJavaMapSupport()));
+
+		map.getMapControl().addListener(SWT.Deactivate, new Listener() {
+
+			@Override
+			public void handleEvent(Event event) {
+				map.getJavascriptMapSupport().evaluateJavascript("myMap.hideMenus();");
+				// refresh();
+			}
+		});
 	}
 
 	protected void createRightPanel(Composite containerCmp) {

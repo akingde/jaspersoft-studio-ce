@@ -200,6 +200,11 @@ function GMapsMap(mapDIV,mapOptions) {
 }
 GMapsMap.prototype.constructor=GMapsMap;
 
+GMapsMap.prototype.hideMenus=function(){
+	var $this = this;
+	google.maps.event.trigger($this.map, 'hideMenus', null);
+};
+
 // Adds a new marker to the map
 GMapsMap.prototype.addMarker=function(latLng,markerOptions){
 	var $this = this;

@@ -13,8 +13,6 @@ package com.jaspersoft.studio.widgets.map.ui;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.print.attribute.HashPrintJobAttributeSet;
-
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.widgets.Composite;
 
