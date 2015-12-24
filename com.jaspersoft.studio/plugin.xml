@@ -2042,12 +2042,6 @@
        </toolitemsets>
     </extension>
     <extension
-          point="net.sf.jasperreports.samples.samples">
-       <resources
-             resources="com.jaspersoft.studio.SamplesProvider">
-       </resources>
-    </extension>
-    <extension
           point="org.eclipse.core.expressions.propertyTesters">
        <propertyTester
              class="com.jaspersoft.translation.action.NatureTranslationTester"
