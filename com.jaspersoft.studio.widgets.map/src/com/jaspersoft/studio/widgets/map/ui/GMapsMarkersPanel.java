@@ -152,14 +152,13 @@ public class GMapsMarkersPanel extends GMapsCenterPanel {
 		menu.addMenuListener(new MenuAdapter() {
 			public void menuShown(MenuEvent e) {
 				int selected = markersList.getSelectionIndex();
-
-				if (selected < 0 || selected >= markersList.getItemCount())
-					return;
-
 				MenuItem[] items = menu.getItems();
 				for (int i = 0; i < items.length; i++) {
 					items[i].dispose();
 				}
+				if (selected < 0 || selected >= markersList.getItemCount() || markersList.getItemCount() == 0)
+					return;
+
 				MenuItem newItem = new MenuItem(menu, SWT.NONE);
 				newItem.setText("Delete");
 				newItem.addSelectionListener(new SelectionAdapter() {
