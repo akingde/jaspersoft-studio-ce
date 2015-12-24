@@ -220,6 +220,9 @@ GMapsMap.prototype.addMarker=function(latLng,markerOptions){
 		$this.selectedMarker = marker;  
 		google.maps.event.trigger($this.map, 'rightclickMarker', mouseEvent);
 	});
+	google.maps.event.addListener(marker, 'click', function(mouseEvent){
+		hideMenus();
+	});
 	$this.mapMarkers.push(marker);
 	
 	if(typeof javaCall_AddMarker != 'undefined') javaCall_AddMarker(latLng.lat(), latLng.lng(),true,google.maps.Animation.DROP,true,true);
