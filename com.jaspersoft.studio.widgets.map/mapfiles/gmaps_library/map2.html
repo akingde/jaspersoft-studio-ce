@@ -76,20 +76,29 @@
 			            break;
 			        }
 			    });
-		    }		     
-	        google.maps.event.addListener(myMap.map, 'hideMenus', function (mouseEvent) { 
+			    google.maps.event.addListener(myMap.map, 'hideMenus', function (mouseEvent) { 
 	           		markerContextMenu.hide();
 	                mapContextMenu.hide(); 
-	        });
-		    // enable the context menu(s) showing on right click
-	        google.maps.event.addListener(myMap.map, 'rightclick', function (mouseEvent) { 
-	           		markerContextMenu.hide();
-	                mapContextMenu.show(mouseEvent.latLng); 
-	        });
-	        google.maps.event.addListener(myMap.map, 'rightclickMarker', function (mouseEvent) { 
-	            	mapContextMenu.hide(); 
-	                markerContextMenu.show(mouseEvent.latLng); 
-	        });
+		        });
+			    // enable the context menu(s) showing on right click
+		        google.maps.event.addListener(myMap.map, 'rightclick', function (mouseEvent) { 
+		           		markerContextMenu.hide();
+		                mapContextMenu.show(mouseEvent.latLng); 
+		        });
+		        google.maps.event.addListener(myMap.map, 'rightclickMarker', function (mouseEvent) { 
+		            	mapContextMenu.hide(); 
+		                markerContextMenu.show(mouseEvent.latLng); 
+		        });
+		    }else{
+			    google.maps.event.addListener(myMap.map, 'hideMenus', function (mouseEvent) {  
+		                mapContextMenu.hide(); 
+		        });
+			    // enable the context menu(s) showing on right click
+		        google.maps.event.addListener(myMap.map, 'rightclick', function (mouseEvent) {  
+		                mapContextMenu.show(mouseEvent.latLng); 
+		        }); 
+		    }		     
+	        
         }
 	}
 </script>
