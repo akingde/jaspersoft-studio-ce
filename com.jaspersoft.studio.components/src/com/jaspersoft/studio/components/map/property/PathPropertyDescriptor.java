@@ -360,6 +360,7 @@ public class PathPropertyDescriptor extends AItemDataListPropertyDescriptor {
 							initMarkers = true;
 							try {
 								postInitMap();
+								initMarkers();
 							} finally {
 								initMarkers = false;
 							}

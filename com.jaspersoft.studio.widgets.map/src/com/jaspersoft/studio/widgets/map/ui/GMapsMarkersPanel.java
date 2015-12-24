@@ -265,7 +265,7 @@ public class GMapsMarkersPanel extends GMapsCenterPanel {
 	}
 
 	protected void handleRemoveMarker(int[] mIndxs) {
-
+		markersList.remove(mIndxs);
 	}
 
 	protected void handleClearMarkers() {

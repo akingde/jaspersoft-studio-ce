@@ -34,7 +34,7 @@
 			}
 		    mapMenuItems.push(new GMapsMenuItemSeparator());
 		    
-		    mapMenuItems.push(new GMapsMenuItem('Center map here', 'center_map_click', 'gmaps_context_menu_item menu_item_centermap'));
+		   // mapMenuItems.push(new GMapsMenuItem('Center map here', 'center_map_click', 'gmaps_context_menu_item menu_item_centermap'));
 		    var mapContextMenu = new GMapsContextMenu(myMap, mapMenuItems);
 		    // map context menu behavior
 		    google.maps.event.addListener(mapContextMenu, 'menu_item_selected', function (latLng, eventName) {
