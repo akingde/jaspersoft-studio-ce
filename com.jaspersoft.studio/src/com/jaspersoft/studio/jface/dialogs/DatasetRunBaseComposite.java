@@ -327,7 +327,7 @@ public class DatasetRunBaseComposite extends Composite implements IExpressionCon
 
 		// CREATE THE DATASET RUN RETURN VALUES PAGE
 		createDatasetRunReturnTab();
-
+		tabFolderDataSetRun.setSelection(0);
 		initWidgets();
 	}
 
