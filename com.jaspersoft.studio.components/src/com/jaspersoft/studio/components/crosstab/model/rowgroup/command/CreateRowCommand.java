@@ -24,6 +24,7 @@ import com.jaspersoft.studio.components.crosstab.model.MCrosstab;
 import com.jaspersoft.studio.components.crosstab.model.cell.MCell;
 import com.jaspersoft.studio.components.crosstab.model.rowgroup.MRowGroup;
 import com.jaspersoft.studio.components.crosstab.model.rowgroup.MRowGroups;
+import com.jaspersoft.studio.components.table.model.MTable;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.utils.ModelUtils;
 
@@ -119,6 +120,8 @@ public class CreateRowCommand extends Command {
 				}
 			}
 		}
+		//Fire the event to eventually update the crosstab columns size
+		jrCrosstab.getEventSupport().firePropertyChange(MTable.PROPERTY_COLUMNS_AUTORESIZE_PROPORTIONAL, null, jrGroup);
 	}
 
 	/*
@@ -152,5 +155,7 @@ public class CreateRowCommand extends Command {
 			}
 		}
 		jrCrosstab.preprocess();
+		//Fire the event to eventually update the crosstab columns size
+		jrCrosstab.getEventSupport().firePropertyChange(MTable.PROPERTY_COLUMNS_AUTORESIZE_PROPORTIONAL, null, jrGroup);
 	}
 }

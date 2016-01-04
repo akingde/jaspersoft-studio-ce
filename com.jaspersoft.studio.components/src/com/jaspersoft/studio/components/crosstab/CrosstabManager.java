@@ -12,10 +12,25 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.crosstab;
 
+import java.beans.PropertyChangeEvent;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.draw2d.geometry.Rectangle;
+
+import com.jaspersoft.studio.editor.layout.ILayout;
+import com.jaspersoft.studio.editor.layout.LayoutManager;
+import com.jaspersoft.studio.editor.layout.VerticalRowLayout;
+import com.jaspersoft.studio.utils.ModelUtils;
+
+import net.sf.jasperreports.crosstabs.JRCellContents;
 import net.sf.jasperreports.crosstabs.JRCrosstabCell;
+import net.sf.jasperreports.crosstabs.JRCrosstabColumnGroup;
+import net.sf.jasperreports.crosstabs.JRCrosstabRowGroup;
 import net.sf.jasperreports.crosstabs.design.JRCrosstabOrigin;
 import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
@@ -24,12 +39,7 @@ import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabColumnGroup;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabRowGroup;
 import net.sf.jasperreports.crosstabs.type.CrosstabTotalPositionEnum;
 import net.sf.jasperreports.engine.JRChild;
-
-import org.eclipse.draw2d.geometry.Dimension;
-import org.eclipse.draw2d.geometry.Point;
-import org.eclipse.draw2d.geometry.Rectangle;
-
-import com.jaspersoft.studio.utils.ModelUtils;
+import net.sf.jasperreports.engine.JRPropertiesHolder;
 
 public class CrosstabManager {
 
@@ -195,7 +205,7 @@ public class CrosstabManager {
 					JRDesignCrosstabCell jrCrosstabCell = (JRDesignCrosstabCell) cells[i][j];
 					if (jrCrosstabCell.getColumnTotalGroup() != null && colGroupName != null && jrCrosstabCell.getColumnTotalGroup().equals(colGroupName)) {
 						if (!calculated) {
-							width = jrCrosstabCell.getWidth() + width - cell.getWidth();
+							width = getCellWidth(jrCrosstabCell) + width - cell.getWidth();
 							calculated = true;
 						}
 						if (width >= 0)
@@ -217,12 +227,18 @@ public class CrosstabManager {
 
 					} else {
 						int delta = width - cell.getWidth();
-						JRDesignCrosstabColumnGroup rgNext = (JRDesignCrosstabColumnGroup) colGroupsList.get(i + 1);
-						if (rgNext.getTotalPositionValue().equals(CrosstabTotalPositionEnum.END)) {
-							JRDesignCellContents totalHeader = (JRDesignCellContents) rgNext.getTotalHeader();
+						JRDesignCrosstabColumnGroup cgNext = (JRDesignCrosstabColumnGroup) colGroupsList.get(i + 1);
+						if (cgNext.getHeader() != null && cgNext.getTotalHeader() != null){
+							int cgNextWidth = getCellWidth(cgNext.getHeader()) + getCellWidth(cgNext.getTotalHeader());
+							int cgNextNewWidth = cgNextWidth + delta;
+							int[] proprtionalWidth = getColumnsProportionalWidth(cgNext, cgNextNewWidth);
+							setWidth((JRDesignCellContents)cgNext.getHeader(), proprtionalWidth[0]);
+							setWidth((JRDesignCellContents)cgNext.getTotalHeader(), proprtionalWidth[1]);
+						} else if (rg.getTotalHeader() != null) {
+							JRDesignCellContents totalHeader = (JRDesignCellContents) cgNext.getTotalHeader();
 							setWidth(totalHeader, totalHeader.getWidth() + delta);
 						} else {
-							JRDesignCellContents header = (JRDesignCellContents) rgNext.getHeader();
+							JRDesignCellContents header = (JRDesignCellContents) cgNext.getHeader();
 							setWidth(header, header.getWidth() + delta);
 						}
 						break;
@@ -333,15 +349,19 @@ public class CrosstabManager {
 	private void setCellHeight(JRDesignCrosstabColumnGroup p, int oldValue, int height) {
 		if (height >= 0) {
 			p.setHeight(height);
-			p.getEventSupport().firePropertyChange(JRDesignCrosstabColumnGroup.PROPERTY_HEIGHT, oldValue, height);
+		} else {
+			p.setHeight(0);
 		}
+		p.getEventSupport().firePropertyChange(JRDesignCrosstabColumnGroup.PROPERTY_HEIGHT, oldValue, height);
 	}
 
 	private void setCellWidth(JRDesignCrosstabRowGroup p, int oldValue, int width) {
 		if (width > 0) {
 			p.setWidth(width);
-			p.getEventSupport().firePropertyChange(JRDesignCrosstabRowGroup.PROPERTY_WIDTH, oldValue, width);
+		} else {
+			p.setWidth(0);			
 		}
+		p.getEventSupport().firePropertyChange(JRDesignCrosstabRowGroup.PROPERTY_WIDTH, oldValue, width);
 	}
 
 	public Dimension getCellPackSize(CrosstabCell cc) {
@@ -402,5 +422,289 @@ public class CrosstabManager {
 		cell = matrix.getCrosstabCell(cell);
 		Guide g = cell.getEast();
 		return g.getPrev();
+	}
+	
+	/**
+	 * Get the width of every cell in the crosstab
+	 * 
+	 * @return a not null hashmap where the key is every cell of the crosstab and the value is 
+	 * its width
+	 */
+	private HashMap<JRCellContents, Integer> getCellsWidth(){
+		HashMap<JRCellContents, Integer> originalWidth = new HashMap<JRCellContents, Integer>();
+		for(JRCrosstabColumnGroup group : crosstab.getColumnGroups()){
+			if (group.getHeader() != null){
+				originalWidth.put(group.getHeader(), group.getHeader().getWidth());
+			}
+			if (group.getTotalHeader() != null){
+				originalWidth.put(group.getTotalHeader(), group.getTotalHeader().getWidth());
+			}
+			if (group.getCrosstabHeader() != null){
+				originalWidth.put(group.getCrosstabHeader(), group.getCrosstabHeader().getWidth());
+			}
+		}
+		for(JRCrosstabRowGroup group : crosstab.getRowGroups()){
+			if (group.getHeader() != null){
+				originalWidth.put(group.getHeader(), group.getHeader().getWidth());
+			}
+			if (group.getTotalHeader() != null){
+				originalWidth.put(group.getTotalHeader(), group.getTotalHeader().getWidth());
+			}
+		}
+		for(JRCrosstabCell cell : crosstab.getCellsList()){
+			if (cell.getContents() != null){
+				originalWidth.put(cell.getContents(), cell.getWidth());
+			}
+		}
+		return originalWidth;
+	}
+	
+	private void relayoutChangedCells(HashMap<JRCellContents, Integer> originalWidth){
+		List<JRCellContents> cellsToLayout = new ArrayList<JRCellContents>();
+	
+		for(JRCrosstabColumnGroup group : crosstab.getColumnGroups()){
+			
+			if (group.getHeader() != null){
+				Integer size = originalWidth.get(group.getHeader());
+				if (!group.getHeader().equals(size)){
+					cellsToLayout.add(group.getHeader());
+				}
+			}
+			
+			if (group.getTotalHeader() != null){
+				Integer size = originalWidth.get(group.getTotalHeader());
+				if (!group.getTotalHeader().equals(size)){
+					cellsToLayout.add(group.getTotalHeader());
+				}
+			}
+			
+			if (group.getCrosstabHeader() != null){
+				Integer size = originalWidth.get(group.getCrosstabHeader());
+				if (!group.getCrosstabHeader().equals(size)){
+					cellsToLayout.add(group.getCrosstabHeader());
+				}
+			}
+		}
+		
+		for(JRCrosstabRowGroup group : crosstab.getRowGroups()){
+			
+			if (group.getHeader() != null){
+				Integer size = originalWidth.get(group.getHeader());
+				if (!group.getHeader().equals(size)){
+					cellsToLayout.add(group.getHeader());
+				}
+			}
+			
+			if (group.getTotalHeader() != null){
+				Integer size = originalWidth.get(group.getTotalHeader());
+				if (!group.getTotalHeader().equals(size)){
+					cellsToLayout.add(group.getTotalHeader());
+				}
+			}
+		}
+		
+		for(JRCrosstabCell cell : crosstab.getCellsList()){
+			if (cell.getContents() != null){
+				Integer size = originalWidth.get(cell.getContents());
+				if (!cell.getContents().equals(size)){
+					cellsToLayout.add(cell.getContents());
+				}
+			}
+		}
+
+		ILayout defaultLayout = new VerticalRowLayout();
+		for(JRCellContents cell : cellsToLayout){
+			ILayout layout = LayoutManager.getLayout(new JRPropertiesHolder[] { cell }, null, null, defaultLayout);
+			layout.layout(cell.getElements(), new Dimension(cell.getWidth(), cell.getHeight()));
+		}
+	}
+	
+	/**
+	 * Resize all the columns in the table to match the passed width
+	 * 
+	 * 
+	 * @param newWidth the width that all the columns should have
+	 * @param isProportional if the columns are resized proportionally or they all will have the same width
+	 */
+	public void fillSpace(int newWidth, boolean isProportional){
+		//Only one of this operation allowed on the at the same time
+		synchronized (crosstab) {
+			
+			//Calculate the current size of the column
+			int rowGroupsHeaderSize = 0;
+			int columnGroupHeaderSize = 0;
+			int columnGroupTotalHeaderSize = 0;
+			
+			if (crosstab.getRowGroups().length > 0){
+				rowGroupsHeaderSize = crosstab.getRowGroups()[0].getTotalHeader().getWidth();
+			}
+			
+			if (crosstab.getColumnGroups().length > 0){
+				JRCrosstabColumnGroup firstColGroup = crosstab.getColumnGroups()[0];
+				columnGroupHeaderSize = getCellWidth(firstColGroup.getHeader());
+				columnGroupTotalHeaderSize = getCellWidth(firstColGroup.getTotalHeader());
+			}
+			
+			int currentColumnsWidth = rowGroupsHeaderSize + columnGroupHeaderSize + columnGroupTotalHeaderSize;
+			
+			if (currentColumnsWidth == newWidth) {
+				return;
+			} else if(isProportional) {
+				
+				HashMap<JRCellContents, Integer> originalSize = getCellsWidth();
+				int[] proportionalWidths = getColumnsProportionalWidth(newWidth);
+				
+				if (crosstab.getRowGroups().length > 0){
+					setWidth((JRDesignCellContents)crosstab.getRowGroups()[0].getTotalHeader(), proportionalWidths[2]);
+				}
+				
+				if (crosstab.getColumnGroups().length > 0){
+					JRCrosstabColumnGroup group = crosstab.getColumnGroups()[0];
+					if(group.getHeader() != null){
+						setWidth((JRDesignCellContents)group.getHeader(), proportionalWidths[0]);
+					}
+					if(group.getTotalHeader() != null){
+						setWidth((JRDesignCellContents)group.getTotalHeader(), proportionalWidths[1]);
+					}	
+				}
+				refresh();
+				crosstab.getEventSupport().firePropertyChange(new PropertyChangeEvent(crosstab, JRDesignCrosstabCell.PROPERTY_WIDTH, null, null));
+				relayoutChangedCells(originalSize);
+			} else {
+				/*int columnsSize = newWidth / table.getColumns().size();
+				int extraSpace = newWidth % table.getColumns().size();
+				ILayout defaultLayout = new VerticalRowLayout();
+				for(BaseColumn col : table.getColumns()){
+					int additionalSpace = 0;
+					if (extraSpace > 0){
+						additionalSpace = 1;
+						extraSpace--;
+					}
+					int newColumnWidth = col.getWidth() + additionalSpace + columnsSize;
+					if (newColumnWidth != col.getWidth()){
+						setWidth((StandardBaseColumn)col, newColumnWidth);
+						for(Entry<Cell, Integer> cell : getColumnCell(col).entrySet()){
+							ILayout layout = LayoutManager.getLayout(new JRPropertiesHolder[] { cell.getKey() }, null, null, defaultLayout);
+							layout.layout(cell.getKey().getElements(), new Dimension(cell.getValue(), ((DesignCell)cell.getKey()).getHeight()));
+						}
+					}
+				}*/
+			}
+		}
+	}
+	
+	private static int getCellWidth(JRCellContents cell){
+		if (cell != null) return cell.getWidth();
+		else return 0;
+	}
+
+	private static int getCellWidth(JRCrosstabCell cell){
+		if (cell != null && cell.getWidth() != null) return cell.getWidth();
+		else return 0;
+	}
+	
+	
+	/**
+	 * Return the proportional size of a crosstab column group header cells
+	 * 
+	 * @param newWidth the new width of the columns
+	 * @return an array containing in the first position the proportional new size of the header cell and in 
+	 * the second position the proportional new size of the total header cell and in the third posizion
+	 * the size of the first row group header
+	 */
+	private int[] getColumnsProportionalWidth(int newWidth){
+		int[] result = {0, 0, 0};
+		//Phase 1: change proportionally the width of each column
+		int columnsTotalWidth = 0;		
+		
+		int rowGroupsHeaderSize = 0;
+		int columnGroupHeaderSize = 0;
+		int columnGroupTotalHeaderSize = 0;
+		
+		if (crosstab.getRowGroups().length > 0){
+			rowGroupsHeaderSize = crosstab.getRowGroups()[0].getTotalHeader().getWidth();
+		}
+		 
+		if (crosstab.getColumnGroups().length > 0){
+			JRCrosstabColumnGroup firstColGroup = crosstab.getColumnGroups()[0];
+			columnGroupHeaderSize = getCellWidth(firstColGroup.getHeader());
+			columnGroupTotalHeaderSize = getCellWidth(firstColGroup.getTotalHeader());
+		}
+		
+		int currentColumnsWidth =  columnGroupHeaderSize + columnGroupTotalHeaderSize + rowGroupsHeaderSize;
+
+		float proportionalFactor = (float)columnGroupHeaderSize / (float)currentColumnsWidth;
+		//casting to int is the same to do the floor operation, since it drop the decimal
+		int proportionalWidth = (int)(proportionalFactor * newWidth);
+		result[0] = proportionalWidth;
+		columnsTotalWidth += proportionalWidth;
+		
+		proportionalFactor = (float)columnGroupTotalHeaderSize / (float)currentColumnsWidth;
+		//casting to int is the same to do the floor operation, since it drop the decimal
+		proportionalWidth = (int)(proportionalFactor * newWidth);
+		result[1] = proportionalWidth;
+		columnsTotalWidth += proportionalWidth;
+		
+		proportionalFactor = (float)rowGroupsHeaderSize / (float)currentColumnsWidth;
+		//casting to int is the same to do the floor operation, since it drop the decimal
+		proportionalWidth = (int)(proportionalFactor * newWidth);
+		result[2] = proportionalWidth;
+		columnsTotalWidth += proportionalWidth;
+		
+		//Phase 2: reassign what remains
+		int remains = newWidth - columnsTotalWidth;
+		int index = 0;
+		while (remains > 0){
+			result[index]++;
+			index++;
+			remains--;
+			if (index == result.length){
+				index = 0;
+			}
+		}
+		return result;
+	}
+	
+	/**
+	 * Return the proportional size of a crosstab column group header cells
+	 * 
+	 * @param group the group to calculate the relative size
+	 * @param newWidth the new width the group must fit
+	 * @return an array containing in the first position the proportional new size of the header cell and in 
+	 * the second position the proportional new size of the total header cell
+	 */
+	private int[] getColumnsProportionalWidth(JRCrosstabColumnGroup group, int newWidth){
+		int[] result = {0, 0};
+		//Phase 1: change proportionally the width of each column
+		int columnsTotalWidth = 0;		
+		int currentColumnsWidth = getCellWidth(group.getHeader()) + getCellWidth(group.getTotalHeader());
+		if (group.getHeader() != null){
+			float proportionalFactor = (float)group.getHeader().getWidth() / (float)currentColumnsWidth;
+			//casting to int is the same to do the floor operation, since it drop the decimal
+			int proportionalWidth = (int)(proportionalFactor * newWidth);
+			result[0] = proportionalWidth;
+			columnsTotalWidth += proportionalWidth;
+		}
+		if (group.getTotalHeader() != null){
+			float proportionalFactor = (float)group.getTotalHeader().getWidth() / (float)currentColumnsWidth;
+			//casting to int is the same to do the floor operation, since it drop the decimal
+			int proportionalWidth = (int)(proportionalFactor * newWidth);
+			result[1] = proportionalWidth;
+			columnsTotalWidth += proportionalWidth;
+		}
+		
+		//Phase 2: reassign what remains
+		int remains = newWidth - columnsTotalWidth;
+		int index = 0;
+		while (remains > 0){
+			result[index]++;
+			index++;
+			remains--;
+			if (index == result.length){
+				index = 0;
+			}
+		}
+		
+		return result;
 	}
 }

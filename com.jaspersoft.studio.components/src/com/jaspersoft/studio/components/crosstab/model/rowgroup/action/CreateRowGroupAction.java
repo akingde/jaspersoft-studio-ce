@@ -16,21 +16,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.gef.EditPart;
-import org.eclipse.gef.commands.Command;
 import org.eclipse.ui.IWorkbenchPart;
 
 import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.components.Activator;
 import com.jaspersoft.studio.components.crosstab.messages.Messages;
 import com.jaspersoft.studio.components.crosstab.model.MCrosstab;
-import com.jaspersoft.studio.components.crosstab.model.cell.MCell;
+import com.jaspersoft.studio.components.crosstab.model.crosstab.command.LazyCrosstabLayoutCommand;
 import com.jaspersoft.studio.components.crosstab.model.dialog.ApplyCrosstabStyleAction;
 import com.jaspersoft.studio.components.crosstab.model.rowgroup.MRowGroup;
 import com.jaspersoft.studio.components.crosstab.model.rowgroup.MRowGroups;
-import com.jaspersoft.studio.editor.layout.LayoutManager;
 import com.jaspersoft.studio.editor.outline.actions.ACreateAction;
 import com.jaspersoft.studio.editor.palette.JDPaletteCreationFactory;
-import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MRoot;
 
@@ -56,21 +53,22 @@ public class CreateRowGroupAction extends ACreateAction {
 	
 	@Override
 	public void run() {
-		super.run();
+		JSSCompoundCommand cmd = new JSSCompoundCommand("Create Row Group", null);
+		cmd.add(createCommand());
 		MCrosstab crosstab = null;
 		Object selected = getSelectedObjects().get(0);
 		if (selected instanceof EditPart) {
 			EditPart part = (EditPart) selected;
 			if (part.getModel() instanceof INode) crosstab = getCrosstab((INode)part.getModel());
 		} 
+		cmd.setReferenceNodeIfNull(crosstab);
+		cmd.add(new LazyCrosstabLayoutCommand(crosstab));
+		execute(cmd);
+		
 		if (crosstab != null){
 			ApplyCrosstabStyleAction applyStyle = new ApplyCrosstabStyleAction(new ArrayList<JRDesignStyle>(), crosstab.getValue());
 			applyStyle.rebuildStylesFromCrosstab();
 			applyStyle.applayStyle(crosstab.getJasperDesign());
-			
-			JSSCompoundCommand relayoutContentCommands = new JSSCompoundCommand(crosstab);
-			createLayoutCommand(crosstab, relayoutContentCommands);
-			execute(relayoutContentCommands);
 		}
 	}
 	
@@ -106,22 +104,6 @@ public class CreateRowGroupAction extends ACreateAction {
 		elements = editor.getSelectionCache().getSelectionModelForType(MRowGroups.class);
 		if (elements.size() == 1) return true;
 		return false;
-	}
-
-	/**
-	 * Create a command to layout the current node if it is a cell, otherwise it 
-	 * will search recursively a cell in every child of the node
-	 */
-	public void createLayoutCommand(INode node, JSSCompoundCommand c){
-		if (node == null) return;
-		if (node instanceof MCell && node.getValue() != null){
-			Command cmd = LayoutManager.createRelayoutCommand((ANode)node);
-			if (cmd != null) c.add(cmd);
-		} else {
-			for(INode child : node.getChildren()){
-				createLayoutCommand(child, c);
-			}
-		}
 	}
 
 }

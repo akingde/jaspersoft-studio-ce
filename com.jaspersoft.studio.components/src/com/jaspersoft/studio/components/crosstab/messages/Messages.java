@@ -106,6 +106,8 @@ public class Messages extends NLS {
 	public static String MColumnGroup_height_description;
 	public static String MCrosstab_column_break_offset;
 	public static String MCrosstab_column_break_offset_description;
+	public static String MCrosstab_columnFitDescription;
+	public static String MCrosstab_columnFitName;
 	public static String MCrosstab_crosstab_properties_category;
 	public static String MCrosstab_dataset;
 	public static String MCrosstab_dataset_description;

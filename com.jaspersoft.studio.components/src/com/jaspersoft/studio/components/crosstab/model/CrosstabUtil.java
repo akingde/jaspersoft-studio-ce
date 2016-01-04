@@ -54,8 +54,6 @@ public class CrosstabUtil {
 		jrGroup.setName(ModelUtils.getDefaultName(jrCrosstab, name));
 		jrGroup.setWidth(width);
 		
-		
-
 		JRDesignExpression exp = new JRDesignExpression();
 		exp.setText(""); //$NON-NLS-1$
 		exp.setValueClass(String.class);

@@ -18,11 +18,13 @@ import java.util.List;
 import org.eclipse.gef.EditPart;
 import org.eclipse.ui.IWorkbenchPart;
 
+import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.components.Activator;
 import com.jaspersoft.studio.components.crosstab.messages.Messages;
 import com.jaspersoft.studio.components.crosstab.model.MCrosstab;
 import com.jaspersoft.studio.components.crosstab.model.columngroup.MColumnGroup;
 import com.jaspersoft.studio.components.crosstab.model.columngroup.MColumnGroups;
+import com.jaspersoft.studio.components.crosstab.model.crosstab.command.LazyCrosstabLayoutCommand;
 import com.jaspersoft.studio.components.crosstab.model.dialog.ApplyCrosstabStyleAction;
 import com.jaspersoft.studio.editor.outline.actions.ACreateAction;
 import com.jaspersoft.studio.editor.palette.JDPaletteCreationFactory;
@@ -51,13 +53,18 @@ public class CreateColumnGroupAction extends ACreateAction {
 	
 	@Override
 	public void run() {
-		super.run();
+		JSSCompoundCommand cmd = new JSSCompoundCommand("Create Column Group", null);
+		cmd.add(createCommand());
 		MCrosstab crosstab = null;
 		Object selected = getSelectedObjects().get(0);
 		if (selected instanceof EditPart) {
 			EditPart part = (EditPart) selected;
-			if (part.getModel() instanceof INode) crosstab = getCrosstab((INode)part.getModel());;
+			if (part.getModel() instanceof INode) crosstab = getCrosstab((INode)part.getModel());
 		} 
+		cmd.setReferenceNodeIfNull(crosstab);
+		cmd.add(new LazyCrosstabLayoutCommand(crosstab));
+		execute(cmd);
+		
 		if (crosstab != null){
 			ApplyCrosstabStyleAction applyStyle = new ApplyCrosstabStyleAction(new ArrayList<JRDesignStyle>(), crosstab.getValue());
 			applyStyle.rebuildStylesFromCrosstab();

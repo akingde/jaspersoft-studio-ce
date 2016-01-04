@@ -19,26 +19,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.jasperreports.crosstabs.CrosstabColumnCell;
-import net.sf.jasperreports.crosstabs.JRCellContents;
-import net.sf.jasperreports.crosstabs.JRCrosstab;
-import net.sf.jasperreports.crosstabs.base.JRBaseCrosstab;
-import net.sf.jasperreports.crosstabs.design.DesignCrosstabColumnCell;
-import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
-import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
-import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabCell;
-import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabDataset;
-import net.sf.jasperreports.engine.JRConstants;
-import net.sf.jasperreports.engine.JRElement;
-import net.sf.jasperreports.engine.JRElementGroup;
-import net.sf.jasperreports.engine.JRPropertiesHolder;
-import net.sf.jasperreports.engine.base.JRBaseStyle;
-import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
-import net.sf.jasperreports.engine.design.JRDesignElement;
-import net.sf.jasperreports.engine.design.JRDesignElementDataset;
-import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.type.RunDirectionEnum;
-
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
@@ -55,6 +35,7 @@ import com.jaspersoft.studio.components.crosstab.model.nodata.MCrosstabWhenNoDat
 import com.jaspersoft.studio.components.crosstab.model.title.MTitle;
 import com.jaspersoft.studio.components.crosstab.model.title.MTitleCell;
 import com.jaspersoft.studio.components.section.name.NameSection;
+import com.jaspersoft.studio.components.table.model.MTable;
 import com.jaspersoft.studio.editor.defaults.DefaultManager;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.layout.FreeLayout;
@@ -84,12 +65,36 @@ import com.jaspersoft.studio.property.descriptors.JSSComboPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 import com.jaspersoft.studio.utils.Misc;
 
+import net.sf.jasperreports.crosstabs.CrosstabColumnCell;
+import net.sf.jasperreports.crosstabs.JRCellContents;
+import net.sf.jasperreports.crosstabs.JRCrosstab;
+import net.sf.jasperreports.crosstabs.base.JRBaseCrosstab;
+import net.sf.jasperreports.crosstabs.design.DesignCrosstabColumnCell;
+import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
+import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
+import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabCell;
+import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabDataset;
+import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabGroup;
+import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRElement;
+import net.sf.jasperreports.engine.JRElementGroup;
+import net.sf.jasperreports.engine.JRPropertiesHolder;
+import net.sf.jasperreports.engine.JRPropertiesMap;
+import net.sf.jasperreports.engine.base.JRBaseStyle;
+import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
+import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.design.JRDesignElementDataset;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.type.RunDirectionEnum;
+
 public class MCrosstab extends MGraphicElementLineBox implements IContainer,
 		IContainerEditPart, IGroupElement, IContainerLayout, IDatasetContainer, IPinContainer {
+	
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+	
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
-
+	
 	/**
 	 * Gets the icon descriptor.
 	 * 
@@ -227,25 +232,23 @@ public class MCrosstab extends MGraphicElementLineBox implements IContainer,
 				JRBaseCrosstab.PROPERTY_HORIZONTAL_POSITION,
 				Messages.MCrosstab_horizontalposition,
 				HorizontalPositionUtil.getItems());
-		horizongalPositionD
-				.setDescription(Messages.MCrosstab_horizontalposition);
+		horizongalPositionD.setDescription(Messages.MCrosstab_horizontalposition);
 		desc.add(horizongalPositionD);
-		horizongalPositionD
-				.setCategory(Messages.MCrosstab_crosstab_properties_category);
+		
+		CheckBoxPropertyDescriptor columnsFillDescriptor = new CheckBoxPropertyDescriptor(MTable.PROPERTY_COLUMNS_AUTORESIZE_PROPORTIONAL, Messages.MCrosstab_columnFitName);
+		columnsFillDescriptor.setDescription(Messages.MCrosstab_columnFitDescription);
+		desc.add(columnsFillDescriptor);
+		defaultsMap.put(MTable.PROPERTY_COLUMNS_AUTORESIZE_PROPORTIONAL, Boolean.FALSE);
 
+		horizongalPositionD.setCategory(Messages.MCrosstab_crosstab_properties_category);
 		datasetD.setCategory(Messages.MCrosstab_crosstab_properties_category);
-		repeatColumnHeadersD
-				.setCategory(Messages.MCrosstab_crosstab_properties_category);
-		repeatRowHeadersD
-				.setCategory(Messages.MCrosstab_crosstab_properties_category);
-		ignoreWidthD
-				.setCategory(Messages.MCrosstab_crosstab_properties_category);
-		columnBreakOffsetD
-				.setCategory(Messages.MCrosstab_crosstab_properties_category);
-		runDirectionD
-				.setCategory(Messages.MCrosstab_crosstab_properties_category);
-		paramMapExprD
-				.setCategory(Messages.MCrosstab_crosstab_properties_category);
+		repeatColumnHeadersD.setCategory(Messages.MCrosstab_crosstab_properties_category);
+		repeatRowHeadersD.setCategory(Messages.MCrosstab_crosstab_properties_category);
+		ignoreWidthD.setCategory(Messages.MCrosstab_crosstab_properties_category);
+		columnBreakOffsetD.setCategory(Messages.MCrosstab_crosstab_properties_category);
+		runDirectionD.setCategory(Messages.MCrosstab_crosstab_properties_category);
+		paramMapExprD.setCategory(Messages.MCrosstab_crosstab_properties_category);
+		columnsFillDescriptor.setCategory(Messages.MCrosstab_crosstab_properties_category);	
 
 		setHelpPrefix(desc,
 				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#crosstab"); //$NON-NLS-1$
@@ -289,6 +292,10 @@ public class MCrosstab extends MGraphicElementLineBox implements IContainer,
 			return mCrosstabDataset;
 		}
 
+		if (id.equals(MTable.PROPERTY_COLUMNS_AUTORESIZE_PROPORTIONAL)){
+			return hasColumnsAutoresizeProportional();
+		}
+		
 		return super.getPropertyValue(id);
 	}
 
@@ -318,6 +325,16 @@ public class MCrosstab extends MGraphicElementLineBox implements IContainer,
 									null, value));
 		} else if (id.equals(JRDesignCrosstab.PROPERTY_PARAMETERS_MAP_EXPRESSION)){ 
 			jrElement.setParametersMapExpression(ExprUtil.setValues(jrElement.getParametersMapExpression(), value));
+		} else if (id.equals(MTable.PROPERTY_COLUMNS_AUTORESIZE_PROPORTIONAL)){
+			Object oldValue = getValue().getPropertiesMap().getProperty(MTable.PROPERTY_COLUMNS_AUTORESIZE_PROPORTIONAL);
+			Object newValue = null;
+			if (value == null || !Boolean.parseBoolean(value.toString())){
+				getValue().getPropertiesMap().removeProperty(MTable.PROPERTY_COLUMNS_AUTORESIZE_PROPORTIONAL);
+			} else {
+				getValue().getPropertiesMap().setProperty(MTable.PROPERTY_COLUMNS_AUTORESIZE_PROPORTIONAL, value.toString());
+				newValue = value;
+			}
+			propertyChange(new PropertyChangeEvent(this, MTable.PROPERTY_COLUMNS_AUTORESIZE_PROPORTIONAL, oldValue, newValue));
 		} else if (id.equals(PROPERTY_MAP) || id.equals(JRDesignElement.PROPERTY_PROPERTY_EXPRESSIONS)) {
 			super.setPropertyValue(id, value);
 			//fire the event to update the editor name, because the property of the name could be changed
@@ -363,7 +380,7 @@ public class MCrosstab extends MGraphicElementLineBox implements IContainer,
 	public String getDisplayText() {
 		String name = getPropertiesMap().getProperty(
 				NameSection.getNamePropertyId(this));
-		return getIconDescriptor().getTitle() + " " + Misc.nvl(name);
+		return getIconDescriptor().getTitle() + " " + Misc.nvl(name); //$NON-NLS-1$
 	}
 
 	/*
@@ -540,8 +557,16 @@ public class MCrosstab extends MGraphicElementLineBox implements IContainer,
 				}
 			} else if (pname.equals(JRDesignCrosstab.PROPERTY_MEASURES)) {
 				getCrosstabManager().refresh();
-			}
+			} 
 		}
+		if (getCrosstabManager() != null){
+			if (hasColumnsAutoresizeProportional() && isColumnsResizeEvent(evt)){
+				String oldAutoresizeValue = getValue().getPropertiesMap().getProperty(MTable.PROPERTY_COLUMNS_AUTORESIZE_PROPORTIONAL);
+				getValue().getPropertiesMap().removeProperty(MTable.PROPERTY_COLUMNS_AUTORESIZE_PROPORTIONAL);
+				getCrosstabManager().fillSpace(getValue().getWidth(), true);
+				getValue().getPropertiesMap().setProperty(MTable.PROPERTY_COLUMNS_AUTORESIZE_PROPORTIONAL, oldAutoresizeValue);
+			}
+		} 
 		super.propertyChange(evt);
 	}
 
@@ -549,7 +574,6 @@ public class MCrosstab extends MGraphicElementLineBox implements IContainer,
 	private static NamedEnumPropertyDescriptor<RunDirectionEnum> runDirectionD;
 
 	public JRElementGroup getJRElementGroup() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -574,6 +598,7 @@ public class MCrosstab extends MGraphicElementLineBox implements IContainer,
 		result.add(JRDesignCrosstab.PROPERTY_TITLE_CELL);
 		result.add(JRDesignCrosstab.PROPERTY_HEADER_CELL);
 		result.add(JRDesignCrosstab.PROPERTY_CELLS);
+		result.add(JRDesignCrosstabGroup.PROPERTY_TOTAL_POSITION);
 		return result;
 	}
 
@@ -635,5 +660,39 @@ public class MCrosstab extends MGraphicElementLineBox implements IContainer,
 	@Override
 	public ILayout getDefaultLayout() {
 		return LayoutManager.getLayout(FreeLayout.class.getName());
+	}
+	
+	/**
+	 * Check if in the current crosstab is set the flag to autoresize the columns taking the 
+	 * space from the next one when it is drag and dropped
+	 * 
+	 * @return true if the resize of a column should take the space from the next one, false otherwise
+	 */
+	public boolean hasColumnsAutoresizeProportional(){
+		if (getValue() != null){
+			JRPropertiesMap map = getValue().getPropertiesMap();
+			Object value = map.getProperty(MTable.PROPERTY_COLUMNS_AUTORESIZE_PROPORTIONAL);
+			if (value != null){
+				return Boolean.parseBoolean(value.toString());
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Check if the passed event is a resize event of the column or of the crosstab
+	 * 
+	 * @param evt a not null event
+	 * @return true if the event has changed the width of the crosstab or of something inside,
+	 * or if it is the change of the column enablement status
+	 */
+	private boolean isColumnsResizeEvent(PropertyChangeEvent evt){
+		if (evt.getPropertyName().equals(JRDesignElement.PROPERTY_WIDTH)){
+			return true;
+		}
+		if (evt.getPropertyName().equals(MTable.PROPERTY_COLUMNS_AUTORESIZE_PROPORTIONAL)){
+			return true;
+		}
+		return false;
 	}
 }
