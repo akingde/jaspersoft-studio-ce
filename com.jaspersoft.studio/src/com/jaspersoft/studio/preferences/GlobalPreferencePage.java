@@ -157,8 +157,8 @@ public class GlobalPreferencePage extends FieldEditorPreferencePage implements I
 
 		BooleanFieldEditor enableJSSConsole = new BooleanFieldEditor(JSS_ENABLE_INTERNAL_CONSOLE,
 				Messages.GlobalPreferencePage_JSSConsoleFieldLabel, getFieldEditorParent());
-		enableJSSConsole.getDescriptionControl(getFieldEditorParent()).setToolTipText(
-				Messages.GlobalPreferencePage_JSSConsoleFieldTooltip);
+		enableJSSConsole.getDescriptionControl(getFieldEditorParent())
+				.setToolTipText(Messages.GlobalPreferencePage_JSSConsoleFieldTooltip);
 		addField(enableJSSConsole);
 
 		enableLoggers = new BooleanFieldEditor(LOG_ENABLE, Messages.GlobalPreferencePage_5, getFieldEditorParent()) {
@@ -205,6 +205,15 @@ public class GlobalPreferencePage extends FieldEditorPreferencePage implements I
 					try {
 						File f = new File(fname);
 						FileUtils.writeStringToFile(f, tLogPreview.getText());
+						LogManager.getLogManager().readConfiguration(FileUtils.openInputStream(f));
+					} catch (SecurityException e) {
+						UIUtils.showError(e);
+					} catch (IOException e) {
+						UIUtils.showError(e);
+					}
+					try {
+						File f = new File(fLog4jName);
+						FileUtils.writeStringToFile(f, tLog4jPreview.getText());
 						LogManager.getLogManager().readConfiguration(FileUtils.openInputStream(f));
 					} catch (SecurityException e) {
 						UIUtils.showError(e);
