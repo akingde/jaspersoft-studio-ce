@@ -19,6 +19,10 @@ public class Messages extends NLS {
 	public static String GMapsDetailsPanel_NoCoordinates;
 	public static String GMapsDetailsPanel_ZoomLbl1;
 	public static String GMapsDetailsPanel_ZoomLbl2;
+	public static String GMapsMarkersPanel_2;
+	public static String GMapsMarkersPanel_7;
+	public static String GMapsMarkersPanel_8;
+	public static String GMapsMarkersPanel_9;
 	public static String MapActivator_FileError;
 	public static String MapTile_JavascriptSupportAlreadyDefined;
 	public static String MapTile_JavaSupportAlreadyDefinedError;

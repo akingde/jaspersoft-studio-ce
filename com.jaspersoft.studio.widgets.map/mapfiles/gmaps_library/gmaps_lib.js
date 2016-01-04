@@ -278,8 +278,11 @@ GMapsMap.prototype.removeMarker=function(marker){
 // Removes the currently selected marker
 GMapsMap.prototype.removeSelectedMarker=function(){
 	if(this.selectedMarker!==null) {
-		this.removeMarker(this.selectedMarker);
-		this.selectedMarker = null;
+		var r = confirm("Are you sure you want to delete selected marker?");
+		if (r == true) { 
+			this.removeMarker(this.selectedMarker);
+			this.selectedMarker = null;
+		}
 	}
 };
 

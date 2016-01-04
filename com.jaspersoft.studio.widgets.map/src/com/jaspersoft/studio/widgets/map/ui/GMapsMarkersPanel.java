@@ -111,7 +111,7 @@ public class GMapsMarkersPanel extends GMapsCenterPanel {
 
 	@Override
 	protected void createMap(Composite parent) {
-		map = new MapTile(parent, SWT.NONE, MapActivator.getFileLocation("mapfiles/gmaps_library/map2.html"));
+		map = new MapTile(parent, SWT.NONE, MapActivator.getFileLocation("mapfiles/gmaps_library/map2.html")); //$NON-NLS-1$
 		map.configureJavaSupport(new DetailsPanelMapSupportMarker(map.getMapControl()));
 		map.getFunctions().add(new AddNewMarker(map.getMapControl(), MapWidgetConstants.BROWSER_FUNCTION_ADD_MARKER,
 				map.getJavaMapSupport()));
@@ -128,7 +128,7 @@ public class GMapsMarkersPanel extends GMapsCenterPanel {
 
 			@Override
 			public void handleEvent(Event event) {
-				map.getJavascriptMapSupport().evaluateJavascript("myMap.hideMenus();");
+				map.getJavascriptMapSupport().evaluateJavascript("myMap.hideMenus();"); //$NON-NLS-1$
 				// refresh();
 			}
 		});
@@ -175,7 +175,7 @@ public class GMapsMarkersPanel extends GMapsCenterPanel {
 					return;
 
 				MenuItem newItem = new MenuItem(menu, SWT.NONE);
-				newItem.setText("Delete");
+				newItem.setText(Messages.GMapsMarkersPanel_2 );
 				newItem.addSelectionListener(new SelectionAdapter() {
 					@Override
 					public void widgetSelected(SelectionEvent e) {
@@ -285,7 +285,7 @@ public class GMapsMarkersPanel extends GMapsCenterPanel {
 	public void addNewMarker(Marker m) {
 		LatLng p = m.getPosition();
 		if (p != null) {
-			markersList.add(p.getLat() + " : " + p.getLng());
+			markersList.add(p.getLat() + " : " + p.getLng()); //$NON-NLS-1$
 			map.getJavascriptMapSupport().addNewMarker(m);
 			map.getJavaMapSupport().addNewMarker(m);
 		}
@@ -298,18 +298,18 @@ public class GMapsMarkersPanel extends GMapsCenterPanel {
 
 	protected String formatMarker(Marker m) {
 		LatLng p = m.getPosition();
-		return String.format("%.7f : %.7f", p.getLat(), p.getLng());
+		return String.format("%.7f : %.7f", p.getLat(), p.getLng()); //$NON-NLS-1$
 	}
 
 	protected void postInitMap() {
-		map.getJavascriptMapSupport().evaluateJavascript("MENU_KIND=_MENU_COMPLETE");
+		map.getJavascriptMapSupport().evaluateJavascript("MENU_KIND=_MENU_COMPLETE"); //$NON-NLS-1$
 	}
 
 	protected void deleteMarker() {
 		if (markersList.getSelectionCount() <= 0)
 			return;
-		MessageDialog dialog = new MessageDialog(UIUtils.getShell(), "Delete", null,
-				"Are you sure you want to delete selected items?", MessageDialog.QUESTION, new String[] { "Yes", "No" },
+		MessageDialog dialog = new MessageDialog(UIUtils.getShell(), Messages.GMapsMarkersPanel_2, null,
+				Messages.GMapsMarkersPanel_7, MessageDialog.QUESTION, new String[] { Messages.GMapsMarkersPanel_8, Messages.GMapsMarkersPanel_9 },
 				1);
 		if (dialog.open() == Dialog.OK)
 			handleRemoveMarker(markersList.getSelectionIndices());
