@@ -374,20 +374,25 @@ public class GMapsCenterPanel {
 		this.zoomLevel = zoomLevel;
 	}
 
+	private boolean initialised = false;
+
 	public void refresh() {
 		initMap();
 		initMarkers = true;
 		try {
-			map.getJavascriptMapSupport().setZoomLevel(getZoomLevel());
-			map.getJavascriptMapSupport().setMapType(mapType != null ? mapType : MapType.ROADMAP);
-			if ((mapCenter == null || mapCenter.getLat() == null || mapCenter.getLat() == null)) {
-				if (address != null && !address.isEmpty()) {
-					LatLng coords = GMapUtils.getAddressCoordinates(address);
-					if (coords != null)
-						centerMap(coords);
-				}
-			} else
-				centerMap(mapCenter);
+			if (!initialised) {
+				map.getJavascriptMapSupport().setZoomLevel(getZoomLevel());
+				map.getJavascriptMapSupport().setMapType(mapType != null ? mapType : MapType.ROADMAP);
+				if ((mapCenter == null || mapCenter.getLat() == null || mapCenter.getLat() == null)) {
+					if (address != null && !address.isEmpty()) {
+						LatLng coords = GMapUtils.getAddressCoordinates(address);
+						if (coords != null)
+							centerMap(coords);
+					}
+				} else
+					centerMap(mapCenter);
+				initialised = true;
+			}
 			postInitMap();
 		} finally {
 			initMarkers = false;

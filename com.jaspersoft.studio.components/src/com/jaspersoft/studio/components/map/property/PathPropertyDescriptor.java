@@ -89,7 +89,7 @@ public class PathPropertyDescriptor extends AItemDataListPropertyDescriptor {
 
 				@Override
 				protected String getItemName() {
-					return Messages.MMap_MapPaths ;
+					return Messages.MMap_MapPaths;
 				}
 
 				private GMapsPathsPanel pmap;
@@ -124,31 +124,35 @@ public class PathPropertyDescriptor extends AItemDataListPropertyDescriptor {
 					pmap = new GMapsPathsPanel(cmp, SWT.NONE) {
 
 						private MMap mmap;
+						private BasicMapInfoData mapInfo;
 
 						@Override
 						public void initMap() {
 							initMarkers = true;
 							try {
 								mmap = (MMap) pnode;
-								BasicMapInfoData mapInfo = mmap.getBasicMapInformation();
-								if (mapInfo.getLatitude() != null && mapInfo.getLongitude() != null)
-									setMapCenter(new LatLng(mapInfo.getLatitude(), mapInfo.getLongitude(), true));
-								else if (mapInfo.getAddress() != null)
-									setAddress(mapInfo.getAddress());
-								else {
-									postCreateMap.put(StandardMapComponent.PROPERTY_LATITUDE_EXPRESSION,
-											getMapCenter().getLat());
-									postCreateMap.put(StandardMapComponent.PROPERTY_LONGITUDE_EXPRESSION,
-											getMapCenter().getLng());
+								if (mapInfo == null) {
+									mapInfo = mmap.getBasicMapInformation();
+									if (mapInfo.getLatitude() != null && mapInfo.getLongitude() != null)
+										setMapCenter(new LatLng(mapInfo.getLatitude(), mapInfo.getLongitude(), true));
+									else if (mapInfo.getAddress() != null)
+										setAddress(mapInfo.getAddress());
+									else {
+										postCreateMap.put(StandardMapComponent.PROPERTY_LATITUDE_EXPRESSION,
+												getMapCenter().getLat());
+										postCreateMap.put(StandardMapComponent.PROPERTY_LONGITUDE_EXPRESSION,
+												getMapCenter().getLng());
+									}
+									if (mapInfo.getMapType() != null)
+										setMapType(MapType.fromStringID(mapInfo.getMapType().getName()));
+									else
+										postCreateMap.put(StandardMapComponent.PROPERTY_MAP_TYPE, getMapType());
+									if (mapInfo.getZoom() != 0)
+										setZoomLevel(mapInfo.getZoom());
+									else
+										postCreateMap.put(StandardMapComponent.PROPERTY_ZOOM_EXPRESSION,
+												getZoomLevel());
 								}
-								if (mapInfo.getMapType() != null)
-									setMapType(MapType.fromStringID(mapInfo.getMapType().getName()));
-								else
-									postCreateMap.put(StandardMapComponent.PROPERTY_MAP_TYPE, getMapType());
-								if (mapInfo.getZoom() != 0)
-									setZoomLevel(mapInfo.getZoom());
-								else
-									postCreateMap.put(StandardMapComponent.PROPERTY_ZOOM_EXPRESSION, getZoomLevel());
 							} finally {
 								initMarkers = false;
 							}
