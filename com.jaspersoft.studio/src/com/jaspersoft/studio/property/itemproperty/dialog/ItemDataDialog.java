@@ -59,6 +59,7 @@ public abstract class ItemDataDialog extends ElementDatasetDialog {
 	protected IEditElement<Item> editElement;
 	protected TableViewer itemsViewer;
 	protected CTabItem dsTabItem;
+	protected CTabItem itTabItem;
 
 	public ItemDataDialog(Shell parentShell, String title, String message, List<ItemData> itemDatas,
 			StandardItemData itemData, JasperReportsConfiguration jConfig, ADescriptor descriptor,
@@ -120,8 +121,8 @@ public abstract class ItemDataDialog extends ElementDatasetDialog {
 	}
 
 	protected void createItems(CTabFolder tabFolder) {
-		CTabItem tabItem = new CTabItem(tabFolder, SWT.NONE);
-		tabItem.setText(getItemName());
+		itTabItem = new CTabItem(tabFolder, SWT.NONE);
+		itTabItem.setText(getItemName());
 
 		Composite cmp = new Composite(tabFolder, SWT.NONE);
 		cmp.setLayout(new GridLayout(2, false));
@@ -220,7 +221,7 @@ public abstract class ItemDataDialog extends ElementDatasetDialog {
 		new DeleteButton().createDeleteButton(c, itemsViewer);
 		new ListOrderButtons().createOrderButtons(c, itemsViewer);
 
-		tabItem.setControl(cmp);
+		itTabItem.setControl(cmp);
 
 		itemsViewer.setInput(itemData.getItems());
 	}
