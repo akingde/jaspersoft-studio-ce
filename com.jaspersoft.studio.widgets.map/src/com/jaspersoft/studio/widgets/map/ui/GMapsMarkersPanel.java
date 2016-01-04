@@ -200,9 +200,9 @@ public class GMapsMarkersPanel extends GMapsCenterPanel {
 
 		@Override
 		public void removeMarker(int markerIndex) {
+			super.removeMarker(markerIndex);
 			if (initMarkers)
 				return;
-			super.removeMarker(markerIndex);
 			handleRemoveMarker(markerIndex);
 		}
 
@@ -228,25 +228,25 @@ public class GMapsMarkersPanel extends GMapsCenterPanel {
 
 		@Override
 		public void updateMarkerPosition(int markerIdx, LatLng newPosition) {
+			super.updateMarkerPosition(markerIdx, newPosition);
 			if (initMarkers)
 				return;
-			super.updateMarkerPosition(markerIdx, newPosition);
 			handleUpdateMarkerPosition(markerIdx, getMarkers().get(markerIdx));
 		}
 
 		@Override
 		public void clearMarkers() {
+			super.clearMarkers();
 			if (initMarkers)
 				return;
-			super.clearMarkers();
 			handleClearMarkers();
 		}
 
 		@Override
 		public void addNewMarker(Marker newMarker) {
+			super.addNewMarker(newMarker);
 			if (initMarkers)
 				return;
-			super.addNewMarker(newMarker);
 			handleNewMarker(newMarker);
 		}
 
@@ -287,6 +287,7 @@ public class GMapsMarkersPanel extends GMapsCenterPanel {
 		if (p != null) {
 			markersList.add(p.getLat() + " : " + p.getLng());
 			map.getJavascriptMapSupport().addNewMarker(m);
+			map.getJavaMapSupport().addNewMarker(m);
 		}
 	}
 
