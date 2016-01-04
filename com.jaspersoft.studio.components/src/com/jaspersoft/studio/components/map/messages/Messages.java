@@ -220,6 +220,7 @@ public class Messages extends NLS {
 	public static String PathDescriptor_7;
 	public static String PathDescriptor_8;
 	public static String PathDescriptor_9;
+	public static String PathPropertyDescriptor_0;
 	public static String PathsLabelProvider_ItemAt;
 	public static String PathsLabelProvider_PathPrefix;
 	public static String SPMapDataElementsList_AddDatasetDialogInfoMsg;

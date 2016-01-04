@@ -77,8 +77,8 @@ public class PathPropertyDescriptor extends AItemDataListPropertyDescriptor {
 		}
 
 		protected ItemDataDialog createItemDataDialog(List<ItemData> clones, StandardItemData itemData) {
-			ItemDataDialog dialog = new ItemDataDialog(UIUtils.getShell(), Messages.MMap_markersDescription,
-					Messages.SPMarker_MarkersListBtn, clones, itemData,
+			ItemDataDialog dialog = new ItemDataDialog(UIUtils.getShell(), Messages.MMap_MapPaths,
+					Messages.PathPropertyDescriptor_0, clones, itemData,
 					(JasperReportsConfiguration) section.getJasperReportsContext(), getDescriptor(), expContext,
 					pnode) {
 
@@ -89,7 +89,7 @@ public class PathPropertyDescriptor extends AItemDataListPropertyDescriptor {
 
 				@Override
 				protected String getItemName() {
-					return Messages.MMap_markersDescription;
+					return Messages.MMap_MapPaths ;
 				}
 
 				private GMapsPathsPanel pmap;
