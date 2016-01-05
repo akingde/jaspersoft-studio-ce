@@ -263,9 +263,13 @@ public class Publish {
 			}
 		}
 		for (MJrxml mjrxml : toSave) {
-			String rp = JRXmlWriterHelper.writeReport(jrConfig, mjrxml.getJd(), version);
-			mjrxml.getValue().setData(Base64.encodeBase64(rp.getBytes()));
-			FileUtils.writeFile(mjrxml.getFile(), rp);
+			if (mjrxml.getJd() != null) {
+				String rp = JRXmlWriterHelper.writeReport(jrConfig, mjrxml.getJd(), version);
+				if (rp != null) {
+					mjrxml.getValue().setData(Base64.encodeBase64(rp.getBytes()));
+					FileUtils.writeFile(mjrxml.getFile(), rp);
+				}
+			}
 		}
 	}
 

@@ -469,6 +469,50 @@ public class ServerManager {
 		return sp;
 	}
 
+	public static List<MServerProfile> getServerProfiles(JasperDesign jd, JasperReportsConfiguration jConfig,
+			IProgressMonitor monitor) {
+		final MRoot root = new MRoot(null, null);
+		root.setJasperConfiguration(jConfig);
+		List<MServerProfile> profiles = new ArrayList<MServerProfile>();
+
+		String[] prop = JRSEditorContributor.getServerURL(jd, (IFile) jConfig.get(FileUtils.KEY_FILE), monitor);
+		if (prop != null && !Misc.isNullOrEmpty(prop[0])) {
+			for (INode n : root.getChildren()) {
+				if (n instanceof MServerProfile) {
+					MServerProfile msp = (MServerProfile) n;
+					ServerProfile serv = msp.getValue();
+					try {
+						if (serv.getUrl().equals(prop[0])) {
+							if (Misc.isNullOrEmpty(prop[1])) {
+								profiles.add(createServerProfile(root, serv, jConfig));
+								continue;
+							}
+							String usr = serv.getUser();
+							if (!Misc.isNullOrEmpty(serv.getOrganisation()))
+								usr += "|" + serv.getOrganisation();
+							if (usr.equals(prop[1])) {
+								profiles.add(createServerProfile(root, serv, jConfig));
+								continue;
+							}
+						}
+					} catch (MalformedURLException e) {
+						e.printStackTrace();
+					} catch (URISyntaxException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+		return profiles;
+	}
+
+	private static MServerProfile createServerProfile(MRoot root, ServerProfile s, JasperReportsConfiguration jConfig) {
+		MServerProfile sp = new MServerProfile(root, s);
+		sp.setJasperConfiguration(jConfig);
+		new MDummy(sp);
+		return sp;
+	}
+
 	public static void selectIfExists(final IProgressMonitor monitor, AMResource mres) {
 		MServerProfile sp = (MServerProfile) mres.getRoot();
 		try {

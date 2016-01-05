@@ -27,9 +27,6 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
-import net.sf.jasperreports.eclipse.util.CastorHelper;
-import net.sf.jasperreports.eclipse.util.FileUtils;
-
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
@@ -61,6 +58,9 @@ import com.jaspersoft.studio.server.protocol.ConnectionManager;
 import com.jaspersoft.studio.server.utils.HttpUtils;
 import com.jaspersoft.studio.server.utils.Pass;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
+import net.sf.jasperreports.eclipse.util.CastorHelper;
+import net.sf.jasperreports.eclipse.util.FileUtils;
 
 public class CASUtil {
 	public static String getToken(ServerProfile sp, IProgressMonitor monitor)

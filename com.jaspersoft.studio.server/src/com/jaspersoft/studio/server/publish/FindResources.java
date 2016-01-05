@@ -40,17 +40,15 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class FindResources {
 
-	public static boolean find(IProgressMonitor monitor, AMJrxmlContainer mres,
-			JasperDesign jd) throws Exception {
+	public static boolean find(IProgressMonitor monitor, AMJrxmlContainer mres, JasperDesign jd) throws Exception {
 		List<?> r = findResources(monitor, mres, jd);
 		return !Misc.isNullOrEmpty(r);
 	}
 
-	public static List<?> findResources(IProgressMonitor monitor,
-			AMJrxmlContainer mres, JasperDesign jd) throws Exception {
+	public static List<?> findResources(IProgressMonitor monitor, AMJrxmlContainer mres, JasperDesign jd)
+			throws Exception {
 		JasperReportsConfiguration jrConfig = mres.getJasperConfiguration();
-		jrConfig.put(PublishUtil.KEY_PUBLISH2JSS_DATA,
-				new ArrayList<AFileResource>());
+		jrConfig.put(PublishUtil.KEY_PUBLISH2JSS_DATA, new ArrayList<AFileResource>());
 
 		String version = ServerManager.getVersion(mres);
 		HashSet<String> fileset = new HashSet<String>();
@@ -58,8 +56,7 @@ public class FindResources {
 
 		mres.removeChildren();
 
-		new JrxmlPublishContributor().publishJrxml(mres, monitor, jd, fileset,
-				file, version);
+		new JrxmlPublishContributor().publishJrxml(mres, monitor, jd, fileset, file, version);
 
 		Object r = jrConfig.get(PublishUtil.KEY_PUBLISH2JSS_DATA);
 		if (r != null && r instanceof List) {
@@ -81,8 +78,7 @@ public class FindResources {
 								rd.setName(rd.getName() + "_" + i);
 								rd.setLabel(rd.getLabel() + "_" + i);
 								rd.setUriString(rd.getUriString() + "_" + i);
-							} while (names.containsKey(rd.getUriString())
-									&& i < 10000);
+							} while (names.containsKey(rd.getUriString()) && i < 10000);
 						}
 					}
 					names.put(rd.getUriString(), rd);
@@ -96,37 +92,52 @@ public class FindResources {
 		return null;
 	}
 
-	public static ANode findReportUnit(MServerProfile mserv,
-			IProgressMonitor monitor, JasperDesign jd, IFile file) {
+	public static ANode findReportUnit(MServerProfile mserv, IProgressMonitor monitor, JasperDesign jd, IFile file) {
 		try {
 			if (mserv != null) {
 				String prunit = jd.getProperty(AExporter.PROP_REPORTUNIT);
 				if (prunit == null)
 					prunit = jd.getProperty(AExporter.PROP_REPORTRESOURCE);
 				if (prunit == null)
-					prunit = file
-							.getPersistentProperty(new QualifiedName(
-									Activator.PLUGIN_ID,
-									AExporter.PROP_REPORTRESOURCE));
+					prunit = file.getPersistentProperty(
+							new QualifiedName(Activator.PLUGIN_ID, AExporter.PROP_REPORTRESOURCE));
 
 				String srvURL = jd.getProperty(AExporter.PROP_SERVERURL);
 				if (srvURL == null)
-					srvURL = file.getPersistentProperty(new QualifiedName(
-							Activator.PLUGIN_ID, AExporter.PROP_SERVERURL));
+					srvURL = file
+							.getPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, AExporter.PROP_SERVERURL));
 				// String srvUSER = jd.getProperty(AExporter.PROP_USER);
 				// if (srvUSER == null)
 				// srvUSER = file.getPersistentProperty(new
 				// QualifiedName(Activator.PLUGIN_ID, AExporter.PROP_USER));
 
-				if (prunit != null && srvURL != null
-						&& mserv.getValue().getUrl().equals(srvURL)) {
-					WSClientHelper.connect(mserv, monitor);
-					WSClientHelper.connectGetData(mserv, monitor);
+				if (prunit != null && srvURL != null && mserv.getValue().getUrl().equals(srvURL)) {
+					try {
+						WSClientHelper.connect(mserv, monitor);
+						WSClientHelper.connectGetData(mserv, monitor);
+					} catch (Exception e) {
+						List<MServerProfile> m = ServerManager.getServerProfiles(jd, mserv.getJasperConfiguration(),
+								monitor);
+						boolean first = true;
+						for (MServerProfile sp : m) {
+							if (first) {
+								first = false;
+								continue;
+							}
+							try {
+								WSClientHelper.connect(sp, monitor);
+								WSClientHelper.connectGetData(sp, monitor);
+								mserv = sp;
+								break;
+							} catch (Exception e1) {
+
+							}
+						}
+					}
 					// We can try to locate a previous existing Report Unit.
 					// If not possible we will popup the selection tree as
 					// usual.
-					AMResource selectedRepoUnit = WSClientHelper.findSelected(
-							mserv.getChildren(), monitor, prunit,
+					AMResource selectedRepoUnit = WSClientHelper.findSelected(mserv.getChildren(), monitor, prunit,
 							mserv.getWsClient(monitor));
 					if (selectedRepoUnit != null)
 						return selectedRepoUnit;

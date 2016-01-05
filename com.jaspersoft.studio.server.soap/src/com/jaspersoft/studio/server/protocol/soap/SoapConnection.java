@@ -21,6 +21,8 @@ import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -50,6 +52,7 @@ import com.jaspersoft.jasperserver.jaxrs.client.dto.importexport.StateDto;
 import com.jaspersoft.studio.server.AFinderUI;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.editor.input.InputControlsManager;
+import com.jaspersoft.studio.server.model.datasource.filter.DatasourcesAllFilter;
 import com.jaspersoft.studio.server.model.datasource.filter.IDatasourceFilter;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
 import com.jaspersoft.studio.server.protocol.Feature;
@@ -69,8 +72,7 @@ import net.sf.jasperreports.engine.design.JRDesignQuery;
 
 public class SoapConnection implements IConnection {
 	protected DateFormat dateFormat = SimpleDateFormat.getDateInstance();
-	protected DateFormat timestampFormat = SimpleDateFormat
-			.getDateTimeInstance();
+	protected DateFormat timestampFormat = SimpleDateFormat.getDateTimeInstance();
 	protected DateFormat timeFormat = new SimpleDateFormat("h:mm:ss");
 	protected NumberFormat numberFormat = NumberFormat.getInstance();
 	private ServerProfile sp;
@@ -115,20 +117,15 @@ public class SoapConnection implements IConnection {
 			// serverInfo
 			// .setTimeFormatPattern(((SimpleDateFormat) getTimeFormat())
 			// .toPattern());
-			serverInfo
-					.setDateFormatPattern(((SimpleDateFormat) getDateFormat())
-							.toPattern());
-			serverInfo
-					.setDatetimeFormatPattern(((SimpleDateFormat) getTimestampFormat())
-							.toPattern());
+			serverInfo.setDateFormatPattern(((SimpleDateFormat) getDateFormat()).toPattern());
+			serverInfo.setDatetimeFormatPattern(((SimpleDateFormat) getTimestampFormat()).toPattern());
 			// serverInfo.setVersion(client.getVersion());
 		}
 		return serverInfo;
 	}
 
 	@Override
-	public boolean connect(IProgressMonitor monitor, ServerProfile sp)
-			throws Exception {
+	public boolean connect(IProgressMonitor monitor, ServerProfile sp) throws Exception {
 		monitor.subTask("Trying SOAP");
 		JServer server = new JServer();
 		this.sp = sp;
@@ -140,11 +137,8 @@ public class SoapConnection implements IConnection {
 		return true;
 	}
 
-	private static void setupJServer(JServer server, ServerProfile sp) throws Exception{
-		AxisProperties
-				.setProperty(
-						DefaultCommonsHTTPClientProperties.MAXIMUM_CONNECTIONS_PER_HOST_PROPERTY_KEY,
-						"4");
+	private static void setupJServer(JServer server, ServerProfile sp) throws Exception {
+		AxisProperties.setProperty(DefaultCommonsHTTPClientProperties.MAXIMUM_CONNECTIONS_PER_HOST_PROPERTY_KEY, "4");
 		server.setName(sp.getName());
 		String rurl = sp.getUrl();
 		if (rurl.endsWith("services/repository/"))
@@ -153,8 +147,7 @@ public class SoapConnection implements IConnection {
 			rurl += "services/repository";
 		server.setUrl(rurl);
 		String username = sp.getUser();
-		if (sp.getOrganisation() != null
-				&& !sp.getOrganisation().trim().isEmpty())
+		if (sp.getOrganisation() != null && !sp.getOrganisation().trim().isEmpty())
 			username += "|" + sp.getOrganisation();
 		server.setUsername(username);
 		server.setPassword(sp.getPass());
@@ -164,22 +157,75 @@ public class SoapConnection implements IConnection {
 	}
 
 	@Override
-	public ResourceDescriptor get(IProgressMonitor monitor,
-			ResourceDescriptor rd, File f) throws Exception {
+	public ResourceDescriptor get(IProgressMonitor monitor, ResourceDescriptor rd, File f) throws Exception {
 		if (rd.getUriString() == null || rd.getUriString().contains("<"))
 			throw new Exception("wrong url");
-		return client.get(rd, f);
+		rd = client.get(rd, f);
+		sortReportUnit(rd, rd.getChildren());
+		return rd;
+	}
+
+	protected void sortReportUnit(ResourceDescriptor rd, List<ResourceDescriptor> children) {
+		if (rd.getWsType().equals(ResourceDescriptor.TYPE_REPORTUNIT)
+				|| rd.getWsType().equals(ResourceDescriptor.TYPE_ADHOC_DATA_VIEW)
+				|| rd.getWsType().equals(ResourceDescriptor.TYPE_DOMAIN_TOPICS)
+				|| rd.getWsType().equals(ResourceDescriptor.TYPE_REPORT_OPTIONS))
+			Collections.sort(children, new Comparator<ResourceDescriptor>() {
+
+				@Override
+				public int compare(ResourceDescriptor arg0, ResourceDescriptor arg1) {
+					if (arg0.getLabel() == arg1.getLabel())
+						return 0;
+					if (arg0.getLabel() == null)
+						return -1;
+					if (arg1.getLabel() == null)
+						return 1;
+					String wsType0 = arg0.getWsType();
+					String wsType1 = arg1.getWsType();
+					if (wsType0.equals(wsType1)) {
+						if (wsType0.equals(ResourceDescriptor.TYPE_JRXML)) {
+							if (arg0.isMainReport())
+								return -1;
+							if (arg1.isMainReport())
+								return 1;
+							return arg0.getLabel().compareToIgnoreCase(arg1.getLabel());
+						} else if (wsType0.equals(ResourceDescriptor.TYPE_INPUT_CONTROL))
+							// ignore input controls
+							return 0;
+						return arg0.getLabel().compareToIgnoreCase(arg1.getLabel());
+					}
+					if (DatasourcesAllFilter.getTypes().contains(wsType0))
+						return -1;
+					if (DatasourcesAllFilter.getTypes().contains(wsType1))
+						return 1;
+					if (wsType0.equals(ResourceDescriptor.TYPE_JRXML))
+						return -1;
+					if (wsType1.equals(ResourceDescriptor.TYPE_JRXML))
+						return 1;
+					if (wsType0.equals(ResourceDescriptor.TYPE_QUERY))
+						return -1;
+					if (wsType1.equals(ResourceDescriptor.TYPE_QUERY))
+						return 1;
+					if (wsType0.equals(ResourceDescriptor.TYPE_INPUT_CONTROL))
+						return -1;
+					if (wsType1.equals(ResourceDescriptor.TYPE_INPUT_CONTROL))
+						return 1;
+
+					return wsType0.compareTo(wsType1);
+				}
+			});
 	}
 
 	@Override
-	public List<ResourceDescriptor> list(IProgressMonitor monitor,
-			ResourceDescriptor rd) throws Exception {
-		return client.list(rd);
+	public List<ResourceDescriptor> list(IProgressMonitor monitor, ResourceDescriptor rd) throws Exception {
+		List<ResourceDescriptor> list = client.list(rd);
+		sortReportUnit(rd, list);
+		return list;
 	}
 
 	@Override
-	public ResourceDescriptor move(IProgressMonitor monitor,
-			ResourceDescriptor rd, String destFolderURI) throws Exception {
+	public ResourceDescriptor move(IProgressMonitor monitor, ResourceDescriptor rd, String destFolderURI)
+			throws Exception {
 		client.move(rd, destFolderURI);
 		ResourceDescriptor nrd = new ResourceDescriptor();
 		nrd.setWsType(rd.getWsType());
@@ -188,15 +234,15 @@ public class SoapConnection implements IConnection {
 	}
 
 	@Override
-	public ResourceDescriptor copy(IProgressMonitor monitor,
-			ResourceDescriptor rd, String destFolderURI) throws Exception {
+	public ResourceDescriptor copy(IProgressMonitor monitor, ResourceDescriptor rd, String destFolderURI)
+			throws Exception {
 		destFolderURI = destFolderURI + "/" + rd.getName();
 		return client.copy(rd, destFolderURI);
 	}
 
 	@Override
-	public ResourceDescriptor addOrModifyResource(IProgressMonitor monitor,
-			ResourceDescriptor rd, File inputFile) throws Exception {
+	public ResourceDescriptor addOrModifyResource(IProgressMonitor monitor, ResourceDescriptor rd, File inputFile)
+			throws Exception {
 		rd.fixStructure();
 		if (rd.getIsReference())
 			rd.setWsType(ResourceDescriptor.TYPE_REFERENCE);
@@ -207,19 +253,16 @@ public class SoapConnection implements IConnection {
 				if (rd.getIsNew() && SelectorDatasource.isDatasource(r))
 					mainDs = r;
 				if (r.isMainReport()
-						|| (r.getWsType().equals(ResourceDescriptor.TYPE_JRXML) && r
-								.getName().equals("main_jrxml"))) {
+						|| (r.getWsType().equals(ResourceDescriptor.TYPE_JRXML) && r.getName().equals("main_jrxml"))) {
 					if (r.getHasData() && r.getData() != null) {
 						inputFile = writeToTemp(r.getData());
 						r.setData(null);
-					} else if (inputFile == null && !rd.getIsNew()
-							&& !r.getIsReference()) {
+					} else if (inputFile == null && !rd.getIsNew() && !r.getIsReference()) {
 						inputFile = FileUtils.createTempFile("res", "jrxml");
 						int ind = children.indexOf(r);
 						r = get(monitor, r, inputFile);
 						r.setHasData(true);
-						r.setData(FileUtils.readFileAsAString(inputFile)
-								.getBytes());
+						r.setData(FileUtils.readFileAsAString(inputFile).getBytes());
 						children.set(ind, r);
 					}
 					r.setMainReport(true);
@@ -237,15 +280,13 @@ public class SoapConnection implements IConnection {
 			for (ResourceDescriptor newr : children) {
 				if (newr.getUriString() == null || r.getUriString() == null)
 					continue;
-				if (r.getWsType().equals(newr.getWsType())
-						&& r.getUriString().equals(newr.getUriString())) {
+				if (r.getWsType().equals(newr.getWsType()) && r.getUriString().equals(newr.getUriString())) {
 					newr.setIsNew(false);
 					exists = true;
 					break;
 				}
 			}
-			if (!exists && r.getWsType() != null
-					&& !SelectorDatasource.isDatasource(r))
+			if (!exists && r.getWsType() != null && !SelectorDatasource.isDatasource(r))
 				toDel.add(r);
 		}
 		for (ResourceDescriptor r : toDel) {
@@ -263,13 +304,11 @@ public class SoapConnection implements IConnection {
 					continue;
 				if (r.getWsType().equals(ResourceDescriptor.TYPE_INPUT_CONTROL)) {
 					if (r.getIsReference())
-						r.setUriString(rd.getUriString() + "_files/"
-								+ r.getName());
+						r.setUriString(rd.getUriString() + "_files/" + r.getName());
 					if (!r.getIsNew())
 						r = client.addOrModifyResource(r, null);
 					else
-						client.modifyReportUnitResource(rd.getUriString(), r,
-								null);
+						client.modifyReportUnitResource(rd.getUriString(), r, null);
 				} else {
 					if (r.isMainReport())
 						continue;
@@ -278,8 +317,7 @@ public class SoapConnection implements IConnection {
 						f = writeToTemp(r.getData());
 						r.setData(null);
 					}
-					r = client
-							.modifyReportUnitResource(rd.getUriString(), r, f);
+					r = client.modifyReportUnitResource(rd.getUriString(), r, f);
 				}
 				rd.getChildren().add(r);
 			}
@@ -288,8 +326,7 @@ public class SoapConnection implements IConnection {
 				mainDs.setIsNew(false);
 				rd.getChildren().add(0, mainDs);
 				for (ResourceDescriptor r : rd.getChildren()) {
-					if (r.getWsType().equals(ResourceDescriptor.TYPE_JRXML)
-							&& r.isMainReport())
+					if (r.getWsType().equals(ResourceDescriptor.TYPE_JRXML) && r.isMainReport())
 						r.setHasData(true);
 				}
 				client.addOrModifyResource(rd, inputFile);
@@ -311,8 +348,7 @@ public class SoapConnection implements IConnection {
 	}
 
 	@Override
-	public ResourceDescriptor modifyReportUnitResource(
-			IProgressMonitor monitor, ResourceDescriptor runit,
+	public ResourceDescriptor modifyReportUnitResource(IProgressMonitor monitor, ResourceDescriptor runit,
 			ResourceDescriptor rd, File inFile) throws Exception {
 		rd.fixStructure();
 		if (rd.getIsReference()) {
@@ -321,41 +357,35 @@ public class SoapConnection implements IConnection {
 				return client.addOrModifyResource(rd, inFile);
 			}
 		}
-		return client
-				.modifyReportUnitResource(runit.getUriString(), rd, inFile);
+		return client.modifyReportUnitResource(runit.getUriString(), rd, inFile);
 	}
 
 	@Override
-	public void delete(IProgressMonitor monitor, ResourceDescriptor rd)
-			throws Exception {
+	public void delete(IProgressMonitor monitor, ResourceDescriptor rd) throws Exception {
 		client.delete(rd);
 	}
 
 	@Override
-	public ResourceDescriptor delete(IProgressMonitor monitor,
-			ResourceDescriptor rd, ResourceDescriptor runit) throws Exception {
+	public ResourceDescriptor delete(IProgressMonitor monitor, ResourceDescriptor rd, ResourceDescriptor runit)
+			throws Exception {
 		client.delete(rd, runit.getUriString());
 		return runit;
 	}
 
 	@Override
-	public ReportExecution runReport(IProgressMonitor monitor,
-			ReportExecution repExec) throws Exception {
+	public ReportExecution runReport(IProgressMonitor monitor, ReportExecution repExec) throws Exception {
 		repExec.setStatus("ready");
 		repExec.setFiles(new HashMap<String, FileContent>());
-		repExec.setFiles(client.runReport(repExec.getResourceDescriptor(),
-				repExec.getPrm(), repExec.getArgs()));
+		repExec.setFiles(client.runReport(repExec.getResourceDescriptor(), repExec.getPrm(), repExec.getArgs()));
 		return repExec;
 	}
 
 	@Override
-	public void cancelReport(IProgressMonitor monitor, ReportExecution repExec)
-			throws Exception {
+	public void cancelReport(IProgressMonitor monitor, ReportExecution repExec) throws Exception {
 	}
 
 	@Override
-	public List<ResourceDescriptor> listDatasources(IProgressMonitor monitor,
-			IDatasourceFilter f) throws Exception {
+	public List<ResourceDescriptor> listDatasources(IProgressMonitor monitor, IDatasourceFilter f) throws Exception {
 		List<ResourceDescriptor> list = client.listDatasources();
 		if (f != null) {
 			List<ResourceDescriptor> toremove = new ArrayList<ResourceDescriptor>();
@@ -383,10 +413,8 @@ public class SoapConnection implements IConnection {
 	}
 
 	@Override
-	public void findResources(IProgressMonitor monitor, AFinderUI callback)
-			throws Exception {
-		throw new UnsupportedOperationException(
-				"Search not implemented for SOAP protocol.");
+	public void findResources(IProgressMonitor monitor, AFinderUI callback) throws Exception {
+		throw new UnsupportedOperationException("Search not implemented for SOAP protocol.");
 	}
 
 	@Override
@@ -400,8 +428,8 @@ public class SoapConnection implements IConnection {
 	}
 
 	@Override
-	public void reorderInputControls(String uri, List<ResourceDescriptor> rds,
-			IProgressMonitor monitor) throws Exception {
+	public void reorderInputControls(String uri, List<ResourceDescriptor> rds, IProgressMonitor monitor)
+			throws Exception {
 		ResourceDescriptor runit = new ResourceDescriptor();
 		runit.setUriString(uri);
 		runit = get(monitor, runit, null);
@@ -428,10 +456,8 @@ public class SoapConnection implements IConnection {
 	}
 
 	@Override
-	public ResourceDescriptor initInputControls(String uri, String type,
-			IProgressMonitor monitor) throws Exception {
-		ResourceDescriptor rdrepunit = WSClientHelper.getReportUnit(monitor,
-				uri);
+	public ResourceDescriptor initInputControls(String uri, String type, IProgressMonitor monitor) throws Exception {
+		ResourceDescriptor rdrepunit = WSClientHelper.getReportUnit(monitor, uri);
 		// List<ResourceDescriptor> list = list(monitor, rdrepunit);
 		List<ResourceDescriptor> inputcontrols = new ArrayList<ResourceDescriptor>();
 		Set<String> icNames = new HashSet<String>();
@@ -441,8 +467,7 @@ public class SoapConnection implements IConnection {
 			if (wsType.equals(ResourceDescriptor.TYPE_INPUT_CONTROL)) {
 				inputcontrols.add(sub_rd);
 				icNames.add(sub_rd.getName());
-			} else if (SelectorDatasource.isDatasource(sub_rd)
-					&& sub_rd.getIsReference())
+			} else if (SelectorDatasource.isDatasource(sub_rd) && sub_rd.getIsReference())
 				dsUri = sub_rd.getReferenceUri();
 			else if (SelectorDatasource.isDatasource(sub_rd))
 				dsUri = sub_rd.getUriString();
@@ -459,10 +484,8 @@ public class SoapConnection implements IConnection {
 				args.add(new Argument(Argument.RU_REF_URI, uri));
 				ic = client.get(ic, null, args);
 				cascadingDependencies(ic, icNames);
-			} else if (InputControlsManager.isICListOfValues(ic)
-					&& !ic.getChildren().isEmpty()) {
-				ResourceDescriptor rd2 = (ResourceDescriptor) ic.getChildren()
-						.get(0);
+			} else if (InputControlsManager.isICListOfValues(ic) && !ic.getChildren().isEmpty()) {
+				ResourceDescriptor rd2 = (ResourceDescriptor) ic.getChildren().get(0);
 				if (rd2.getWsType().equals(ResourceDescriptor.TYPE_REFERENCE)) {
 					ResourceDescriptor tmpRd = new ResourceDescriptor();
 					tmpRd.setUriString(rd2.getReferenceUri());
@@ -480,15 +503,13 @@ public class SoapConnection implements IConnection {
 		return rdrepunit;
 	}
 
-	private void cascadingDependencies(ResourceDescriptor ic,
-			Set<String> icNames) {
+	private void cascadingDependencies(ResourceDescriptor ic, Set<String> icNames) {
 		List<ResourceDescriptor> children = ic.getChildren();
 		for (ResourceDescriptor sub_ic : children) {
 			if (!InputControlsManager.isRDQuery(sub_ic))
 				continue;
 			String queryString = sub_ic.getSql();
-			String lang = sub_ic.getResourceProperty(
-					ResourceDescriptor.PROP_QUERY_LANGUAGE).getValue();
+			String lang = sub_ic.getResourceProperty(ResourceDescriptor.PROP_QUERY_LANGUAGE).getValue();
 			if (!Misc.isNullOrEmpty(queryString)) {
 				List<String> parameters = new ArrayList<String>();
 				JRDesignQuery query = new JRDesignQuery();
@@ -502,8 +523,7 @@ public class SoapConnection implements IConnection {
 					case JRQueryChunk.TYPE_PARAMETER_CLAUSE:
 					case JRQueryChunk.TYPE_PARAMETER:
 						String paramName = chunk.getText().trim();
-						if (!parameters.contains(paramName)
-								&& icNames.contains(paramName))
+						if (!parameters.contains(paramName) && icNames.contains(paramName))
 							parameters.add(paramName);
 						break;
 					case JRQueryChunk.TYPE_CLAUSE_TOKENS:
@@ -511,8 +531,7 @@ public class SoapConnection implements IConnection {
 						if (tokens.length > 2) {
 							for (String t : tokens) {
 								t = t.trim();
-								if (!parameters.contains(t)
-										&& icNames.contains(t))
+								if (!parameters.contains(t) && icNames.contains(t))
 									parameters.add(t);
 							}
 						}
@@ -527,13 +546,11 @@ public class SoapConnection implements IConnection {
 	}
 
 	@Override
-	public List<ResourceDescriptor> cascadeInputControls(
-			ResourceDescriptor runit, List<ResourceDescriptor> ics,
+	public List<ResourceDescriptor> cascadeInputControls(ResourceDescriptor runit, List<ResourceDescriptor> ics,
 			IProgressMonitor monitor) throws Exception {
 		String dsUri = null;
 		for (ResourceDescriptor sub_rd : runit.getChildren()) {
-			if (SelectorDatasource.isDatasource(sub_rd)
-					&& sub_rd.getIsReference())
+			if (SelectorDatasource.isDatasource(sub_rd) && sub_rd.getIsReference())
 				dsUri = sub_rd.getReferenceUri();
 			else if (SelectorDatasource.isDatasource(sub_rd))
 				dsUri = sub_rd.getUriString();
@@ -545,12 +562,11 @@ public class SoapConnection implements IConnection {
 		return res;
 	}
 
-	private ResourceDescriptor updateControl(String runit, String dsUri,
-			ResourceDescriptor rd, IProgressMonitor monitor) throws Exception {
+	private ResourceDescriptor updateControl(String runit, String dsUri, ResourceDescriptor rd,
+			IProgressMonitor monitor) throws Exception {
 		List<Argument> args = new ArrayList<Argument>();
 
-		args.add(new Argument(Argument.IC_GET_QUERY_DATA,
-				getDataSourceQueryURI(dsUri, rd)));
+		args.add(new Argument(Argument.IC_GET_QUERY_DATA, getDataSourceQueryURI(dsUri, rd)));
 		args.add(new Argument(Argument.RU_REF_URI, runit));
 
 		rd.getParameters().clear();
@@ -572,18 +588,15 @@ public class SoapConnection implements IConnection {
 		return client.get(rd, null, args);
 	}
 
-	private static String getDataSourceQueryURI(String dsUri,
-			ResourceDescriptor ic) {
+	private static String getDataSourceQueryURI(String dsUri, ResourceDescriptor ic) {
 		String dsUriQuery = null;
 		// reset query data...
 		// Look if this query has a specific datasource...
 		for (int k = 0; dsUriQuery == null && k < ic.getChildren().size(); ++k) {
-			ResourceDescriptor sub_ic = (ResourceDescriptor) ic.getChildren()
-					.get(k);
+			ResourceDescriptor sub_ic = (ResourceDescriptor) ic.getChildren().get(k);
 			if (InputControlsManager.isRDQuery(sub_ic))
 				for (int k2 = 0; k2 < sub_ic.getChildren().size(); ++k2) {
-					ResourceDescriptor sub_sub_ic = (ResourceDescriptor) sub_ic
-							.getChildren().get(k2);
+					ResourceDescriptor sub_sub_ic = (ResourceDescriptor) sub_ic.getChildren().get(k2);
 					if (SelectorDatasource.isDatasource(sub_sub_ic)) {
 						dsUriQuery = sub_sub_ic.getUriString();
 						break;
@@ -617,20 +630,17 @@ public class SoapConnection implements IConnection {
 	}
 
 	@Override
-	public StateDto importMetaData(ImportOptions options,
-			IProgressMonitor monitor) throws Exception {
+	public StateDto importMetaData(ImportOptions options, IProgressMonitor monitor) throws Exception {
 		return null;
 	}
 
 	@Override
-	public StateDto exportMetaData(ExportOptions options,
-			IProgressMonitor monitor) throws Exception {
+	public StateDto exportMetaData(ExportOptions options, IProgressMonitor monitor) throws Exception {
 		return null;
 	}
 
 	@Override
-	public Integer getPermissionMask(ResourceDescriptor rd,
-			IProgressMonitor monitor) throws Exception {
+	public Integer getPermissionMask(ResourceDescriptor rd, IProgressMonitor monitor) throws Exception {
 		return 1;
 
 		// FIXME, we could claculate manually the effective permission for a
@@ -655,11 +665,9 @@ public class SoapConnection implements IConnection {
 	}
 
 	@Override
-	public List<RepositoryPermission> getPermissions(ResourceDescriptor rd,
-			IProgressMonitor monitor, PermissionOptions options)
-			throws Exception {
-		WSObjectPermission[] m = client.getPermissionsManagement()
-				.getPermissionsForObject("repo:" + rd.getUriString());
+	public List<RepositoryPermission> getPermissions(ResourceDescriptor rd, IProgressMonitor monitor,
+			PermissionOptions options) throws Exception {
+		WSObjectPermission[] m = client.getPermissionsManagement().getPermissionsForObject("repo:" + rd.getUriString());
 		List<RepositoryPermission> perms = new ArrayList<RepositoryPermission>();
 		for (WSObjectPermission p : m) {
 			String uri = p.getUri();
@@ -667,11 +675,9 @@ public class SoapConnection implements IConnection {
 				uri = uri.replaceAll("repo:", "");
 			Object prec = p.getPermissionRecipient();
 			if (prec instanceof WSRole && !options.isRecipientTypeUser())
-				perms.add(new RepositoryPermission(uri, ((WSRole) prec)
-						.getRoleName(), p.getPermissionMask()));
+				perms.add(new RepositoryPermission(uri, ((WSRole) prec).getRoleName(), p.getPermissionMask()));
 			else if (prec instanceof WSUser && options.isRecipientTypeUser())
-				perms.add(new RepositoryPermission(uri, ((WSUser) prec)
-						.getUsername(), p.getPermissionMask()));
+				perms.add(new RepositoryPermission(uri, ((WSUser) prec).getUsername(), p.getPermissionMask()));
 		}
 		return perms;
 	}
@@ -682,16 +688,15 @@ public class SoapConnection implements IConnection {
 	}
 
 	@Override
-	public List<RepositoryPermission> setPermissions(ResourceDescriptor rd,
-			List<RepositoryPermission> perms, PermissionOptions options,
-			IProgressMonitor monitor) throws Exception {
+	public List<RepositoryPermission> setPermissions(ResourceDescriptor rd, List<RepositoryPermission> perms,
+			PermissionOptions options, IProgressMonitor monitor) throws Exception {
 		return perms;
 	}
 
 	@Override
 	public void uploadJdbcDrivers(JdbcDriver driver, IProgressMonitor monitor) throws Exception {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
