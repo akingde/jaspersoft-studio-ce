@@ -48,6 +48,7 @@ import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
+import com.jaspersoft.studio.server.protocol.Feature;
 import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorDatasource;
 import com.jaspersoft.studio.statistics.UsageStatisticsIDs;
 import com.jaspersoft.studio.utils.Misc;
@@ -183,7 +184,10 @@ public class Publish {
 						PublishUtil.setChild(r, rd);
 				}
 			}
-			mrunit.getWsClient().addOrModifyResource(monitor, r, file);
+			if (!mrunit.getWsClient().isSupported(Feature.SEARCHREPOSITORY) && !isMain) {
+				mrunit.getWsClient().modifyReportUnitResource(monitor, r, rdjrxml, file);
+			} else
+				mrunit.getWsClient().addOrModifyResource(monitor, r, file);
 			this.resources.add(r.getUriString());
 			for (AMResource res : resources)
 				if (res.getPublishOptions().getOverwrite(OverwriteEnum.IGNORE).equals(OverwriteEnum.OVERWRITE)) {
