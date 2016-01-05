@@ -477,29 +477,25 @@ public class ServerManager {
 
 		String[] prop = JRSEditorContributor.getServerURL(jd, (IFile) jConfig.get(FileUtils.KEY_FILE), monitor);
 		if (prop != null && !Misc.isNullOrEmpty(prop[0])) {
-			for (INode n : root.getChildren()) {
-				if (n instanceof MServerProfile) {
-					MServerProfile msp = (MServerProfile) n;
-					ServerProfile serv = msp.getValue();
-					try {
-						if (serv.getUrl().equals(prop[0])) {
-							if (Misc.isNullOrEmpty(prop[1])) {
-								profiles.add(createServerProfile(root, serv, jConfig));
-								continue;
-							}
-							String usr = serv.getUser();
-							if (!Misc.isNullOrEmpty(serv.getOrganisation()))
-								usr += "|" + serv.getOrganisation();
-							if (usr.equals(prop[1])) {
-								profiles.add(createServerProfile(root, serv, jConfig));
-								continue;
-							}
+			for (ServerProfile serv : getServerList()) {
+				try {
+					if (serv.getUrl().equals(prop[0])) {
+						if (Misc.isNullOrEmpty(prop[1])) {
+							profiles.add(createServerProfile(root, serv, jConfig));
+							continue;
 						}
-					} catch (MalformedURLException e) {
-						e.printStackTrace();
-					} catch (URISyntaxException e) {
-						e.printStackTrace();
+						String usr = serv.getUser();
+						if (!Misc.isNullOrEmpty(serv.getOrganisation()))
+							usr += "|" + serv.getOrganisation();
+						if (usr.equals(prop[1])) {
+							profiles.add(createServerProfile(root, serv, jConfig));
+							continue;
+						}
 					}
+				} catch (MalformedURLException e) {
+					e.printStackTrace();
+				} catch (URISyntaxException e) {
+					e.printStackTrace();
 				}
 			}
 		}
