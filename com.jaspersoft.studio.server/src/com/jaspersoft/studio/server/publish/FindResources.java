@@ -28,12 +28,14 @@ import org.eclipse.core.runtime.QualifiedName;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.Activator;
+import com.jaspersoft.studio.server.ResourceFactory;
 import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.export.AExporter;
 import com.jaspersoft.studio.server.model.AFileResource;
 import com.jaspersoft.studio.server.model.AMJrxmlContainer;
 import com.jaspersoft.studio.server.model.AMResource;
+import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
@@ -96,8 +98,9 @@ public class FindResources {
 		try {
 			if (mserv != null) {
 				String prunit = jd.getProperty(AExporter.PROP_REPORTUNIT);
+				String pres = jd.getProperty(AExporter.PROP_REPORTRESOURCE);
 				if (prunit == null)
-					prunit = jd.getProperty(AExporter.PROP_REPORTRESOURCE);
+					prunit = pres;
 				if (prunit == null)
 					prunit = file.getPersistentProperty(
 							new QualifiedName(Activator.PLUGIN_ID, AExporter.PROP_REPORTRESOURCE));
@@ -139,8 +142,18 @@ public class FindResources {
 					// usual.
 					AMResource selectedRepoUnit = WSClientHelper.findSelected(mserv.getChildren(), monitor, prunit,
 							mserv.getWsClient(monitor));
-					if (selectedRepoUnit != null)
+					if (selectedRepoUnit != null) {
+						if (pres != null && !pres.equals(prunit) && selectedRepoUnit instanceof MReportUnit) {
+							selectedRepoUnit.removeChildren();
+							ANode parent = selectedRepoUnit;
+							for (ResourceDescriptor r : selectedRepoUnit.getValue().getChildren()) {
+								AMResource mr = ResourceFactory.getResource(parent, r, -1);
+								if (r.getUriString() != null && r.getUriString().equals(pres))
+									selectedRepoUnit = mr;
+							}
+						}
 						return selectedRepoUnit;
+					}
 				}
 			}
 		} catch (Exception e) {
