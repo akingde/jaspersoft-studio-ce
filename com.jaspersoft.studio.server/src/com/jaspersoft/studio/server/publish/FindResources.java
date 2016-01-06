@@ -21,6 +21,7 @@ import java.util.Map;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
+import org.apache.commons.io.FilenameUtils;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.QualifiedName;
@@ -94,16 +95,26 @@ public class FindResources {
 		return null;
 	}
 
+	private static String getReportUnit(String pres) {
+		if (Misc.isNullOrEmpty(pres))
+			return null;
+		String path = FilenameUtils.getFullPath(pres);
+		path = path.replaceAll("_files/$", "");
+		return path;
+	}
+
 	public static ANode findReportUnit(MServerProfile mserv, IProgressMonitor monitor, JasperDesign jd, IFile file) {
 		try {
 			if (mserv != null) {
 				String prunit = jd.getProperty(AExporter.PROP_REPORTUNIT);
 				String pres = jd.getProperty(AExporter.PROP_REPORTRESOURCE);
-				if (prunit == null)
-					prunit = pres;
-				if (prunit == null)
-					prunit = file.getPersistentProperty(
+				if (prunit == null && pres != null)
+					prunit = getReportUnit(pres);
+				if (prunit == null) {
+					pres = file.getPersistentProperty(
 							new QualifiedName(Activator.PLUGIN_ID, AExporter.PROP_REPORTRESOURCE));
+					prunit = getReportUnit(pres);
+				}
 
 				String srvURL = jd.getProperty(AExporter.PROP_SERVERURL);
 				if (srvURL == null)
@@ -148,7 +159,7 @@ public class FindResources {
 							ANode parent = selectedRepoUnit;
 							for (ResourceDescriptor r : selectedRepoUnit.getValue().getChildren()) {
 								AMResource mr = ResourceFactory.getResource(parent, r, -1);
-								if (r.getUriString() != null && r.getUriString().equals(pres))
+								if (r.getUriString() != null && r.getUriString().equals(pres) && !r.isMainReport())
 									selectedRepoUnit = mr;
 							}
 						}
