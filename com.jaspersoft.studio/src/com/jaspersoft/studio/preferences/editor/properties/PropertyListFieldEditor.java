@@ -26,6 +26,8 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.FieldEditor;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.ColumnWeightData;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -408,8 +410,8 @@ public class PropertyListFieldEditor extends FieldEditor {
 		if (getTable() != null) {
 			getTable().removeAll();
 			try {
-				Properties props = FileUtils.load(getPreferenceStore().getDefaultString(
-						FilePrefUtil.NET_SF_JASPERREPORTS_JRPROPERTIES));
+				Properties props = FileUtils
+						.load(getPreferenceStore().getDefaultString(FilePrefUtil.NET_SF_JASPERREPORTS_JRPROPERTIES));
 				List<String> keys = new ArrayList<String>();
 				for (Object key : props.keySet())
 					keys.add((String) key);
@@ -683,6 +685,14 @@ public class PropertyListFieldEditor extends FieldEditor {
 			viewer = new TableViewer(table);
 			viewer.setLabelProvider(new PairLableProvider());
 			viewer.setContentProvider(new ListContentProvider());
+
+			viewer.addDoubleClickListener(new IDoubleClickListener() {
+
+				@Override
+				public void doubleClick(DoubleClickEvent event) {
+					editPressed();
+				}
+			});
 		}
 		return table;
 	}
