@@ -20,13 +20,6 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import net.sf.jasperreports.data.DataAdapter;
-import net.sf.jasperreports.data.csv.CsvDataAdapter;
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.eclipse.util.StringUtils;
-import net.sf.jasperreports.engine.JasperReportsContext;
-import net.sf.jasperreports.engine.data.JRCsvDataSource;
-
 import org.eclipse.core.databinding.beans.PojoObservables;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.viewers.CellEditor;
@@ -66,6 +59,13 @@ import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.swt.widgets.table.ListOrderButtons;
 import com.jaspersoft.studio.utils.Misc;
 
+import net.sf.jasperreports.data.DataAdapter;
+import net.sf.jasperreports.data.csv.CsvDataAdapter;
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.StringUtils;
+import net.sf.jasperreports.engine.JasperReportsContext;
+import net.sf.jasperreports.engine.data.JRCsvDataSource;
+
 public class CSVDataAdapterComposite extends AFileDataAdapterComposite {
 
 	private Button btnCheckQEMode;
@@ -103,8 +103,7 @@ public class CSVDataAdapterComposite extends AFileDataAdapterComposite {
 	 * @param parent
 	 * @param style
 	 */
-	public CSVDataAdapterComposite(Composite parent, int style,
-			JasperReportsContext jrContext) {
+	public CSVDataAdapterComposite(Composite parent, int style, JasperReportsContext jrContext) {
 
 		/*
 		 * UI ELEMENTS
@@ -119,14 +118,12 @@ public class CSVDataAdapterComposite extends AFileDataAdapterComposite {
 		GridLayout gl_composite = new GridLayout(3, false);
 		gl_composite.marginHeight = 0;
 		composite.setLayout(gl_composite);
-		composite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false,
-				1, 1));
+		composite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 
 		createFileNameWidgets(composite);
 
 		btnCheckQEMode = new Button(this, SWT.CHECK);
-		btnCheckQEMode.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false,
-				false, 1, 1));
+		btnCheckQEMode.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		btnCheckQEMode.setText(Messages.CSVDataAdapterComposite_2);
 
 		Composite composite_1 = new Composite(this, SWT.NONE);
@@ -134,14 +131,12 @@ public class CSVDataAdapterComposite extends AFileDataAdapterComposite {
 		gl_composite_1.marginWidth = 0;
 		gl_composite_1.marginHeight = 0;
 		composite_1.setLayout(gl_composite_1);
-		composite_1.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true,
-				1, 1));
+		composite_1.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 
 		CTabFolder tabFolder = new CTabFolder(composite_1, SWT.NONE);
-		tabFolder.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1,
-				1));
-		tabFolder.setSelectionBackground(Display.getDefault().getSystemColor(
-				SWT.COLOR_TITLE_INACTIVE_BACKGROUND_GRADIENT));
+		tabFolder.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		tabFolder.setSelectionBackground(
+				Display.getDefault().getSystemColor(SWT.COLOR_TITLE_INACTIVE_BACKGROUND_GRADIENT));
 
 		CTabItem tbtmColumns = new CTabItem(tabFolder, SWT.NONE);
 		tbtmColumns.setText(Messages.CSVDataAdapterComposite_3);
@@ -154,12 +149,10 @@ public class CSVDataAdapterComposite extends AFileDataAdapterComposite {
 		Group grpColumnNames = new Group(composite_2, SWT.NONE);
 		grpColumnNames.setText(Messages.CSVDataAdapterComposite_4);
 		grpColumnNames.setLayout(new GridLayout(1, false));
-		grpColumnNames.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
-				true, 1, 1));
+		grpColumnNames.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 
 		Button btnGetCSVColumnsName = new Button(grpColumnNames, SWT.NONE);
-		btnGetCSVColumnsName.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
-				true, false, 1, 1));
+		btnGetCSVColumnsName.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		btnGetCSVColumnsName.setText(Messages.CSVDataAdapterComposite_5);
 
 		Composite composite_3 = new Composite(grpColumnNames, SWT.NONE);
@@ -172,8 +165,7 @@ public class CSVDataAdapterComposite extends AFileDataAdapterComposite {
 		composite_3.setLayoutData(gdComposite3);
 		composite_3.setBounds(0, 0, 64, 64);
 
-		table = new Table(composite_3, SWT.V_SCROLL | SWT.MULTI
-				| SWT.FULL_SELECTION | SWT.BORDER);
+		table = new Table(composite_3, SWT.V_SCROLL | SWT.MULTI | SWT.FULL_SELECTION | SWT.BORDER);
 		GridData gd = new GridData(GridData.FILL_BOTH);
 		gd.widthHint = 100;
 		table.setLayoutData(gd);
@@ -213,7 +205,8 @@ public class CSVDataAdapterComposite extends AFileDataAdapterComposite {
 			protected void setValue(Object element, Object value) {
 				int s = table.getSelectionIndex();
 				List<String> lstr = (List<String>) tableViewer.getInput();
-				lstr.set(s, (String) value);
+				if (s >= 0 && s < lstr.size())
+					lstr.set(s, (String) value);
 				tableViewer.refresh(true);
 			}
 
@@ -226,9 +219,9 @@ public class CSVDataAdapterComposite extends AFileDataAdapterComposite {
 		//
 		// public Object getValue(Object element, String property) {
 		// String prop = (String) element;
-		//				if ("NAME".equals(property)) //$NON-NLS-1$
+		// if ("NAME".equals(property)) //$NON-NLS-1$
 		// return prop;
-		//				return ""; //$NON-NLS-1$
+		// return ""; //$NON-NLS-1$
 		// }
 		//
 		// public void modify(Object element, String property, Object value) {
@@ -242,7 +235,8 @@ public class CSVDataAdapterComposite extends AFileDataAdapterComposite {
 		//
 		// tableViewer
 		// .setCellEditors(new CellEditor[] { new TextCellEditor(table) });
-		//		tableViewer.setColumnProperties(new String[] { "NAME" }); //$NON-NLS-1$ //$NON-NLS-2$
+		// tableViewer.setColumnProperties(new String[] { "NAME" });
+		// //$NON-NLS-1$ //$NON-NLS-2$
 
 		tableViewer.setInput(rows);
 
@@ -251,19 +245,16 @@ public class CSVDataAdapterComposite extends AFileDataAdapterComposite {
 		gl_composite_4.marginWidth = 0;
 		gl_composite_4.marginHeight = 0;
 		composite_4.setLayout(gl_composite_4);
-		composite_4.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true,
-				1, 1));
+		composite_4.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
 
 		Button btnAdd = new Button(composite_4, SWT.NONE);
-		GridData gd_btnAdd = new GridData(SWT.FILL, SWT.CENTER, false, false,
-				1, 1);
+		GridData gd_btnAdd = new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1);
 		gd_btnAdd.widthHint = 100;
 		btnAdd.setLayoutData(gd_btnAdd);
 		btnAdd.setText(Messages.CSVDataAdapterComposite_7);
 
 		btnDelete = new Button(composite_4, SWT.NONE);
-		GridData gd_btnDelete = new GridData(SWT.FILL, SWT.CENTER, false,
-				false, 1, 1);
+		GridData gd_btnDelete = new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1);
 		gd_btnDelete.widthHint = 100;
 		btnDelete.setLayoutData(gd_btnDelete);
 		btnDelete.setText(Messages.CSVDataAdapterComposite_8);
@@ -274,8 +265,7 @@ public class CSVDataAdapterComposite extends AFileDataAdapterComposite {
 		Group grpOther = new Group(composite_2, SWT.NONE);
 		grpOther.setText(Messages.CSVDataAdapterComposite_9);
 		grpOther.setLayout(new GridLayout(3, false));
-		grpOther.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1,
-				1));
+		grpOther.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
 
 		dnf = new DateNumberFormatWidget(grpOther);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -283,8 +273,7 @@ public class CSVDataAdapterComposite extends AFileDataAdapterComposite {
 		dnf.setLayoutData(gd);
 
 		btnCheckSkipFirstLine = new Button(grpOther, SWT.CHECK);
-		btnCheckSkipFirstLine.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
-				false, false, 3, 1));
+		btnCheckSkipFirstLine.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 3, 1));
 		btnCheckSkipFirstLine.setText(Messages.CSVDataAdapterComposite_14);
 
 		Label lbl = new Label(grpOther, SWT.NONE);
@@ -307,45 +296,37 @@ public class CSVDataAdapterComposite extends AFileDataAdapterComposite {
 		grpFieldSeparator = new Group(composite_5, SWT.NONE);
 		grpFieldSeparator.setText(Messages.CSVDataAdapterComposite_16);
 		grpFieldSeparator.setLayout(new GridLayout(3, true));
-		grpFieldSeparator.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
-				true, false, 1, 1));
+		grpFieldSeparator.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		grpFieldSeparator.setBounds(0, 0, 70, 82);
 
 		btnRadioFieldComma = new Button(grpFieldSeparator, SWT.RADIO);
-		btnRadioFieldComma.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
-				true, false, 1, 1));
+		btnRadioFieldComma.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		btnRadioFieldComma.setText(Messages.CSVDataAdapterComposite_17);
 
 		btnRadioFieldTab = new Button(grpFieldSeparator, SWT.RADIO);
-		btnRadioFieldTab.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
-				false, 1, 1));
+		btnRadioFieldTab.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		btnRadioFieldTab.setText(Messages.CSVDataAdapterComposite_18);
 
 		btnRadioFieldNewLineUnix = new Button(grpFieldSeparator, SWT.RADIO);
-		btnRadioFieldNewLineUnix.setLayoutData(new GridData(SWT.FILL,
-				SWT.CENTER, true, false, 1, 1));
+		btnRadioFieldNewLineUnix.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		btnRadioFieldNewLineUnix.setText(Messages.CSVDataAdapterComposite_19);
 
 		btnRadioFieldSpace = new Button(grpFieldSeparator, SWT.RADIO);
-		btnRadioFieldSpace.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
-				true, false, 1, 1));
+		btnRadioFieldSpace.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		btnRadioFieldSpace.setText(Messages.CSVDataAdapterComposite_20);
 
 		btnRadioFieldSemicolon = new Button(grpFieldSeparator, SWT.RADIO);
-		btnRadioFieldSemicolon.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
-				true, false, 1, 1));
+		btnRadioFieldSemicolon.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		btnRadioFieldSemicolon.setText(Messages.CSVDataAdapterComposite_21);
 
 		Composite fieldComposite = new Composite(grpFieldSeparator, SWT.NONE);
-		fieldComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
-				false, 1, 1));
+		fieldComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		GridLayout gl_composite_6 = new GridLayout(2, false);
 		gl_composite_6.marginWidth = 0;
 		gl_composite_6.marginHeight = 0;
 		fieldComposite.setLayout(gl_composite_6);
 		btnRadioFieldOther = new Button(fieldComposite, SWT.RADIO);
-		btnRadioFieldOther.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
-				false, false, 1, 1));
+		btnRadioFieldOther.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		btnRadioFieldOther.setText(Messages.CSVDataAdapterComposite_22);
 
 		textFieldOther = new Text(fieldComposite, SWT.BORDER);
@@ -356,49 +337,40 @@ public class CSVDataAdapterComposite extends AFileDataAdapterComposite {
 		grpRowSeparator = new Group(composite_5, SWT.NONE);
 		grpRowSeparator.setText(Messages.CSVDataAdapterComposite_23);
 		grpRowSeparator.setLayout(new GridLayout(3, true));
-		grpRowSeparator.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
-				false, 1, 1));
+		grpRowSeparator.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 
 		btnRadioRowComma = new Button(grpRowSeparator, SWT.RADIO);
-		btnRadioRowComma.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
-				false, 1, 1));
+		btnRadioRowComma.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		btnRadioRowComma.setText(Messages.CSVDataAdapterComposite_24);
 
 		btnRadioRowTab = new Button(grpRowSeparator, SWT.RADIO);
-		btnRadioRowTab.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
-				false, 1, 1));
+		btnRadioRowTab.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		btnRadioRowTab.setText(Messages.CSVDataAdapterComposite_25);
 
 		btnRadioRowNewLineUnix = new Button(grpRowSeparator, SWT.RADIO);
-		btnRadioRowNewLineUnix.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
-				true, false, 1, 1));
+		btnRadioRowNewLineUnix.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		btnRadioRowNewLineUnix.setText(Messages.CSVDataAdapterComposite_26);
 
 		btnRadioRowNewLineWin = new Button(grpRowSeparator, SWT.RADIO);
-		btnRadioRowNewLineWin.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
-				true, false, 1, 1));
+		btnRadioRowNewLineWin.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		btnRadioRowNewLineWin.setText(Messages.CSVDataAdapterComposite_27);
 
 		btnRadioRowSpace = new Button(grpRowSeparator, SWT.RADIO);
-		btnRadioRowSpace.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
-				false, 1, 1));
+		btnRadioRowSpace.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		btnRadioRowSpace.setText(Messages.CSVDataAdapterComposite_28);
 
 		btnRadioRowSemicolon = new Button(grpRowSeparator, SWT.RADIO);
-		btnRadioRowSemicolon.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
-				true, false, 1, 1));
+		btnRadioRowSemicolon.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		btnRadioRowSemicolon.setText(Messages.CSVDataAdapterComposite_29);
 
 		Composite rowComposite = new Composite(grpRowSeparator, SWT.NONE);
-		rowComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
-				false, 1, 1));
+		rowComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		GridLayout gl_composite_7 = new GridLayout(2, false);
 		gl_composite_7.marginWidth = 0;
 		gl_composite_7.marginHeight = 0;
 		rowComposite.setLayout(gl_composite_7);
 		btnRadioRowOther = new Button(rowComposite, SWT.RADIO);
-		btnRadioRowOther.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
-				false, false, 1, 1));
+		btnRadioRowOther.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		btnRadioRowOther.setText(Messages.CSVDataAdapterComposite_30);
 
 		textRowOther = new Text(rowComposite, SWT.BORDER);
@@ -418,8 +390,7 @@ public class CSVDataAdapterComposite extends AFileDataAdapterComposite {
 		lbl.setText("\\n"); //$NON-NLS-1$
 		com.jaspersoft.studio.utils.UIUtil.setBold(lbl);
 
-		new Label(grpSpecialCharacters, SWT.NONE)
-				.setText(Messages.CSVDataAdapterComposite_32);
+		new Label(grpSpecialCharacters, SWT.NONE).setText(Messages.CSVDataAdapterComposite_32);
 
 		lbl = new Label(grpSpecialCharacters, SWT.NONE | SWT.BOLD);
 		lbl.setText("\\r"); //$NON-NLS-1$
@@ -516,25 +487,21 @@ public class CSVDataAdapterComposite extends AFileDataAdapterComposite {
 		// When no table items,
 		// turns disabled the delete button
 		// and set unchecked the skip first line button
-		tableViewer
-				.addPostSelectionChangedListener(new ISelectionChangedListener() {
+		tableViewer.addPostSelectionChangedListener(new ISelectionChangedListener() {
 
-					public void selectionChanged(SelectionChangedEvent event) {
-						if (rows.size() <= 0) {
-							btnDelete.setEnabled(false);
-							btnCheckSkipFirstLine.setSelection(false);
-						} else {
-							btnDelete.setEnabled(true);
-						}
-					}
-				});
+			public void selectionChanged(SelectionChangedEvent event) {
+				if (rows.size() <= 0) {
+					btnDelete.setEnabled(false);
+					btnCheckSkipFirstLine.setSelection(false);
+				} else {
+					btnDelete.setEnabled(true);
+				}
+			}
+		});
 
-		Button[] buttons = new Button[] { btnRadioFieldComma,
-				btnRadioFieldNewLineUnix, btnRadioFieldSemicolon,
-				btnRadioFieldSpace, btnRadioFieldTab, btnRadioFieldOther,
-				btnRadioRowComma, btnRadioRowNewLineUnix,
-				btnRadioRowNewLineWin, btnRadioRowSemicolon, btnRadioRowSpace,
-				btnRadioRowTab, btnRadioRowOther };
+		Button[] buttons = new Button[] { btnRadioFieldComma, btnRadioFieldNewLineUnix, btnRadioFieldSemicolon,
+				btnRadioFieldSpace, btnRadioFieldTab, btnRadioFieldOther, btnRadioRowComma, btnRadioRowNewLineUnix,
+				btnRadioRowNewLineWin, btnRadioRowSemicolon, btnRadioRowSpace, btnRadioRowTab, btnRadioRowOther };
 		for (Button button : buttons) {
 
 			button.addSelectionListener(new SelectionAdapter() {
@@ -549,12 +516,10 @@ public class CSVDataAdapterComposite extends AFileDataAdapterComposite {
 	@Override
 	protected void bindWidgets(DataAdapter dataAdapter) {
 		doBindFileNameWidget(dataAdapter);
-		bindingContext.bindValue(
-				SWTObservables.observeSelection(btnCheckQEMode),
+		bindingContext.bindValue(SWTObservables.observeSelection(btnCheckQEMode),
 				PojoObservables.observeValue(dataAdapter, "queryExecuterMode")); //$NON-NLS-1$
-		bindingContext.bindValue(SWTObservables
-				.observeSelection(btnCheckSkipFirstLine), PojoObservables
-				.observeValue(dataAdapter, "useFirstRowAsHeader")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeSelection(btnCheckSkipFirstLine),
+				PojoObservables.observeValue(dataAdapter, "useFirstRowAsHeader")); //$NON-NLS-1$
 
 		bindingContext.bindValue(SWTObservables.observeText(cEncoding),
 				PojoObservables.observeValue(dataAdapter, "encoding")); //$NON-NLS-1$
@@ -570,28 +535,21 @@ public class CSVDataAdapterComposite extends AFileDataAdapterComposite {
 			btnDelete.setEnabled(true);
 		}
 
-		dnf.bindWidgets(csvDataAdapter, bindingContext,
-				csvDataAdapter.getLocale(), csvDataAdapter.getTimeZone());
+		dnf.bindWidgets(csvDataAdapter, bindingContext, csvDataAdapter.getLocale(), csvDataAdapter.getTimeZone());
 
 		Proxy proxy = new Proxy(csvDataAdapter);
-		bindingContext.bindValue(
-				SWTObservables.observeSelection(btnRadioFieldComma),
+		bindingContext.bindValue(SWTObservables.observeSelection(btnRadioFieldComma),
 				PojoObservables.observeValue(proxy, "fieldComma")); //$NON-NLS-1$
-		bindingContext.bindValue(
-				SWTObservables.observeSelection(btnRadioFieldTab),
+		bindingContext.bindValue(SWTObservables.observeSelection(btnRadioFieldTab),
 				PojoObservables.observeValue(proxy, "fieldTab")); //$NON-NLS-1$
-		bindingContext.bindValue(
-				SWTObservables.observeSelection(btnRadioFieldSpace),
+		bindingContext.bindValue(SWTObservables.observeSelection(btnRadioFieldSpace),
 				PojoObservables.observeValue(proxy, "fieldSpace")); //$NON-NLS-1$
-		bindingContext.bindValue(
-				SWTObservables.observeSelection(btnRadioFieldSemicolon),
+		bindingContext.bindValue(SWTObservables.observeSelection(btnRadioFieldSemicolon),
 				PojoObservables.observeValue(proxy, "fieldSemicolon")); //$NON-NLS-1$
-		bindingContext.bindValue(
-				SWTObservables.observeSelection(btnRadioFieldNewLineUnix),
+		bindingContext.bindValue(SWTObservables.observeSelection(btnRadioFieldNewLineUnix),
 				PojoObservables.observeValue(proxy, "fieldNewLineUnix")); //$NON-NLS-1$
 
-		bindingContext.bindValue(
-				SWTObservables.observeText(textFieldOther, SWT.Modify),
+		bindingContext.bindValue(SWTObservables.observeText(textFieldOther, SWT.Modify),
 				PojoObservables.observeValue(dataAdapter, "fieldDelimiter")); //$NON-NLS-1$
 
 		String fieldDelimiter = csvDataAdapter.getFieldDelimiter();
@@ -613,27 +571,20 @@ public class CSVDataAdapterComposite extends AFileDataAdapterComposite {
 			}
 		}
 
-		bindingContext.bindValue(
-				SWTObservables.observeSelection(btnRadioRowComma),
+		bindingContext.bindValue(SWTObservables.observeSelection(btnRadioRowComma),
 				PojoObservables.observeValue(proxy, "rowComma")); //$NON-NLS-1$
-		bindingContext.bindValue(
-				SWTObservables.observeSelection(btnRadioRowTab),
+		bindingContext.bindValue(SWTObservables.observeSelection(btnRadioRowTab),
 				PojoObservables.observeValue(proxy, "rowTab")); //$NON-NLS-1$
-		bindingContext.bindValue(
-				SWTObservables.observeSelection(btnRadioRowSpace),
+		bindingContext.bindValue(SWTObservables.observeSelection(btnRadioRowSpace),
 				PojoObservables.observeValue(proxy, "rowSpace")); //$NON-NLS-1$
-		bindingContext.bindValue(
-				SWTObservables.observeSelection(btnRadioRowSemicolon),
+		bindingContext.bindValue(SWTObservables.observeSelection(btnRadioRowSemicolon),
 				PojoObservables.observeValue(proxy, "rowSemicolon")); //$NON-NLS-1$
-		bindingContext.bindValue(
-				SWTObservables.observeSelection(btnRadioRowNewLineUnix),
+		bindingContext.bindValue(SWTObservables.observeSelection(btnRadioRowNewLineUnix),
 				PojoObservables.observeValue(proxy, "rowNewLineUnix")); //$NON-NLS-1$
-		bindingContext.bindValue(
-				SWTObservables.observeSelection(btnRadioRowNewLineWin),
+		bindingContext.bindValue(SWTObservables.observeSelection(btnRadioRowNewLineWin),
 				PojoObservables.observeValue(proxy, "rowNewLineWin")); //$NON-NLS-1$
 
-		bindingContext.bindValue(
-				SWTObservables.observeText(textRowOther, SWT.Modify),
+		bindingContext.bindValue(SWTObservables.observeText(textRowOther, SWT.Modify),
 				PojoObservables.observeValue(dataAdapter, "recordDelimiter")); //$NON-NLS-1$
 
 		String recordDelimitier = csvDataAdapter.getRecordDelimiter();
@@ -666,8 +617,7 @@ public class CSVDataAdapterComposite extends AFileDataAdapterComposite {
 		}
 
 		public boolean isFieldComma() {
-			return da.getFieldDelimiter() != null
-					&& da.getFieldDelimiter().equals(","); //$NON-NLS-1$
+			return da.getFieldDelimiter() != null && da.getFieldDelimiter().equals(","); //$NON-NLS-1$
 		}
 
 		public void setFieldComma(boolean b) {
@@ -675,8 +625,7 @@ public class CSVDataAdapterComposite extends AFileDataAdapterComposite {
 		}
 
 		public boolean isFieldTab() {
-			return da.getFieldDelimiter() != null
-					&& da.getFieldDelimiter().equals("\t"); //$NON-NLS-1$
+			return da.getFieldDelimiter() != null && da.getFieldDelimiter().equals("\t"); //$NON-NLS-1$
 		}
 
 		public void setFieldTab(boolean b) {
@@ -684,8 +633,7 @@ public class CSVDataAdapterComposite extends AFileDataAdapterComposite {
 		}
 
 		public boolean isFieldSpace() {
-			return da.getFieldDelimiter() != null
-					&& da.getFieldDelimiter().equals(" "); //$NON-NLS-1$
+			return da.getFieldDelimiter() != null && da.getFieldDelimiter().equals(" "); //$NON-NLS-1$
 		}
 
 		public void setFieldSpace(boolean b) {
@@ -693,8 +641,7 @@ public class CSVDataAdapterComposite extends AFileDataAdapterComposite {
 		}
 
 		public boolean isFieldSemicolon() {
-			return da.getFieldDelimiter() != null
-					&& da.getFieldDelimiter().equals(";"); //$NON-NLS-1$
+			return da.getFieldDelimiter() != null && da.getFieldDelimiter().equals(";"); //$NON-NLS-1$
 		}
 
 		public void setFieldSemicolon(boolean b) {
@@ -702,8 +649,7 @@ public class CSVDataAdapterComposite extends AFileDataAdapterComposite {
 		}
 
 		public boolean isFieldNewLineUnix() {
-			return da.getFieldDelimiter() != null
-					&& da.getFieldDelimiter().equals("\n"); //$NON-NLS-1$
+			return da.getFieldDelimiter() != null && da.getFieldDelimiter().equals("\n"); //$NON-NLS-1$
 		}
 
 		public void setFieldNewLineUnix(boolean b) {
@@ -711,8 +657,7 @@ public class CSVDataAdapterComposite extends AFileDataAdapterComposite {
 		}
 
 		public boolean isRowComma() {
-			return da.getRecordDelimiter() != null
-					&& da.getRecordDelimiter().equals(","); //$NON-NLS-1$
+			return da.getRecordDelimiter() != null && da.getRecordDelimiter().equals(","); //$NON-NLS-1$
 		}
 
 		public void setRowComma(boolean b) {
@@ -720,8 +665,7 @@ public class CSVDataAdapterComposite extends AFileDataAdapterComposite {
 		}
 
 		public boolean isRowTab() {
-			return da.getRecordDelimiter() != null
-					&& da.getRecordDelimiter().equals("\t"); //$NON-NLS-1$
+			return da.getRecordDelimiter() != null && da.getRecordDelimiter().equals("\t"); //$NON-NLS-1$
 		}
 
 		public void setRowTab(boolean b) {
@@ -729,8 +673,7 @@ public class CSVDataAdapterComposite extends AFileDataAdapterComposite {
 		}
 
 		public boolean isRowSpace() {
-			return da.getRecordDelimiter() != null
-					&& da.getRecordDelimiter().equals(" "); //$NON-NLS-1$
+			return da.getRecordDelimiter() != null && da.getRecordDelimiter().equals(" "); //$NON-NLS-1$
 		}
 
 		public void setRowSpace(boolean b) {
@@ -738,8 +681,7 @@ public class CSVDataAdapterComposite extends AFileDataAdapterComposite {
 		}
 
 		public boolean isRowSemicolon() {
-			return da.getRecordDelimiter() != null
-					&& da.getRecordDelimiter().equals(";"); //$NON-NLS-1$
+			return da.getRecordDelimiter() != null && da.getRecordDelimiter().equals(";"); //$NON-NLS-1$
 		}
 
 		public void setRowSemicolon(boolean b) {
@@ -747,8 +689,7 @@ public class CSVDataAdapterComposite extends AFileDataAdapterComposite {
 		}
 
 		public boolean isRowNewLineUnix() {
-			return da.getRecordDelimiter() != null
-					&& da.getRecordDelimiter().equals("\n"); //$NON-NLS-1$
+			return da.getRecordDelimiter() != null && da.getRecordDelimiter().equals("\n"); //$NON-NLS-1$
 		}
 
 		public void setRowNewLineUnix(boolean b) {
@@ -756,8 +697,7 @@ public class CSVDataAdapterComposite extends AFileDataAdapterComposite {
 		}
 
 		public boolean isRowNewLineWin() {
-			return da.getRecordDelimiter() != null
-					&& da.getRecordDelimiter().equals("\r\n"); //$NON-NLS-1$
+			return da.getRecordDelimiter() != null && da.getRecordDelimiter().equals("\r\n"); //$NON-NLS-1$
 		}
 
 		public void setRowNewLineWin(boolean b) {
@@ -775,8 +715,7 @@ public class CSVDataAdapterComposite extends AFileDataAdapterComposite {
 		if (dataAdapterDesc == null)
 			dataAdapterDesc = new CSVDataAdapterDescriptor();
 
-		CsvDataAdapter csvDataAdapter = (CsvDataAdapter) dataAdapterDesc
-				.getDataAdapter();
+		CsvDataAdapter csvDataAdapter = (CsvDataAdapter) dataAdapterDesc.getDataAdapter();
 
 		csvDataAdapter.setQueryExecuterMode(btnCheckQEMode.getSelection());
 
@@ -798,10 +737,8 @@ public class CSVDataAdapterComposite extends AFileDataAdapterComposite {
 		else if (btnRadioFieldNewLineUnix.getSelection())
 			csvDataAdapter.setFieldDelimiter("\n"); //$NON-NLS-1$
 		else if (btnRadioFieldOther.getSelection())
-			csvDataAdapter.setFieldDelimiter(Misc
-					.removeSlashesString(textFieldOther.getText() + " ")); //$NON-NLS-1$
-		if (csvDataAdapter.getFieldDelimiter() == null
-				|| csvDataAdapter.getFieldDelimiter().isEmpty())
+			csvDataAdapter.setFieldDelimiter(Misc.removeSlashesString(textFieldOther.getText() + " ")); //$NON-NLS-1$
+		if (csvDataAdapter.getFieldDelimiter() == null || csvDataAdapter.getFieldDelimiter().isEmpty())
 			csvDataAdapter.setFieldDelimiter(";"); //$NON-NLS-1$
 
 		if (btnRadioRowComma.getSelection())
@@ -817,8 +754,7 @@ public class CSVDataAdapterComposite extends AFileDataAdapterComposite {
 		else if (btnRadioRowNewLineWin.getSelection())
 			csvDataAdapter.setRecordDelimiter("\r\n"); //$NON-NLS-1$
 		else if (btnRadioRowOther.getSelection())
-			csvDataAdapter.setRecordDelimiter(Misc
-					.removeSlashesString(textRowOther.getText()));
+			csvDataAdapter.setRecordDelimiter(Misc.removeSlashesString(textRowOther.getText()));
 
 		return dataAdapterDesc;
 	}
@@ -999,8 +935,7 @@ public class CSVDataAdapterComposite extends AFileDataAdapterComposite {
 	 *             , Exception
 	 */
 	private void getCSVColumns() throws IOException, Exception {
-		JRCsvDataSource ds = new JRCsvDataSource(getJrContext(),
-				textFileName.getText());
+		JRCsvDataSource ds = new JRCsvDataSource(getJrContext(), textFileName.getText());
 		ds.setUseFirstRowAsHeader(true);
 
 		if (btnRadioFieldComma.getSelection())
@@ -1014,8 +949,7 @@ public class CSVDataAdapterComposite extends AFileDataAdapterComposite {
 		else if (btnRadioFieldNewLineUnix.getSelection())
 			ds.setFieldDelimiter('\n');
 		else if (btnRadioFieldOther.getSelection())
-			ds.setFieldDelimiter(Misc.removeSlashesString(
-					textFieldOther.getText() + " ").charAt(0)); //$NON-NLS-1$
+			ds.setFieldDelimiter(Misc.removeSlashesString(textFieldOther.getText() + " ").charAt(0)); //$NON-NLS-1$
 		else if (ds.getFieldDelimiter() == ' ')
 			ds.setFieldDelimiter(';');
 
@@ -1032,8 +966,7 @@ public class CSVDataAdapterComposite extends AFileDataAdapterComposite {
 		else if (btnRadioRowNewLineWin.getSelection())
 			ds.setRecordDelimiter("\r\n"); //$NON-NLS-1$
 		else if (btnRadioRowOther.getSelection())
-			ds.setRecordDelimiter(Misc.removeSlashesString(textRowOther
-					.getText()));
+			ds.setRecordDelimiter(Misc.removeSlashesString(textRowOther.getText()));
 		else if (ds.getRecordDelimiter().equals("")) //$NON-NLS-1$
 			ds.setRecordDelimiter("\n"); //$NON-NLS-1$
 
