@@ -114,6 +114,8 @@ public class PasteResourceAction extends Action {
 					}
 					int pmask = mres.getValue().getPermissionMask(mres.getWsClient());
 					res = res && (pmask == 1 || (pmask & 4) == 4);
+					if (AddResourceAction.isOrganizations(mres))
+						return false;
 				}
 			}
 		}

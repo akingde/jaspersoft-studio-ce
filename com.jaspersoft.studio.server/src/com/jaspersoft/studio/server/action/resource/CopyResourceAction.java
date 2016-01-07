@@ -49,6 +49,8 @@ public class CopyResourceAction extends Action {
 			AMResource mres = (AMResource) firstElement;
 			int pmask = mres.getValue().getPermissionMask(mres.getWsClient());
 			b = b && (pmask == 1 || (pmask & 2) == 2);
+			if (AddResourceAction.isSpecialFolder(mres))
+				return false;
 		}
 		return b;
 	}

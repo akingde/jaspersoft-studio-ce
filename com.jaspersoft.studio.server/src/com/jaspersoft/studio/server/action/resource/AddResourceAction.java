@@ -51,9 +51,25 @@ public class AddResourceAction extends Action {
 				AMResource mres = (AMResource) firstElement;
 				int pmask = mres.getValue().getPermissionMask(mres.getWsClient());
 				b = b && (pmask == 1 || (pmask & 4) == 4);
+				if (isOrganizations(mres))
+					return false;
 			}
 		}
 		return b;
+	}
+
+	public static boolean isSpecialFolder(AMResource mres) {
+		if (isOrganizations(mres))
+			return true;
+		if (mres.getParent() instanceof AMResource && isOrganizations((AMResource) mres.getParent()))
+			return true;
+		return false;
+	}
+
+	public static boolean isOrganizations(AMResource mres) {
+		if (mres.getValue().getUriString().equals("/organizations"))
+			return true;
+		return false;
 	}
 
 	@Override

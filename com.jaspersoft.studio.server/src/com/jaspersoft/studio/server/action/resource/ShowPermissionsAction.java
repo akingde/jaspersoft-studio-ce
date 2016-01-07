@@ -38,6 +38,18 @@ public class ShowPermissionsAction extends Action {
 	}
 
 	@Override
+	public boolean isEnabled() {
+		final TreeSelection s = (TreeSelection) treeViewer.getSelection();
+		TreePath[] p = s.getPaths();
+		for (int i = 0; i < p.length; i++) {
+			final Object obj = p[i].getLastSegment();
+			if (obj instanceof AMResource && AddResourceAction.isSpecialFolder((AMResource) obj))
+				return false;
+		}
+		return super.isEnabled();
+	}
+
+	@Override
 	public void run() {
 		final TreeSelection s = (TreeSelection) treeViewer.getSelection();
 		TreePath[] p = s.getPaths();
