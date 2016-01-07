@@ -5,10 +5,12 @@ Bundle-Vendor: TIBCO Software Inc.
 Bundle-Version: 6.2.1.qualifier
 Bundle-SymbolicName: com.jaspersoft.studio.editor.jrexpressions; singleton:=true
 Bundle-ActivationPolicy: lazy
-Require-Bundle: org.eclipse.xtext.xbase;bundle-version="2.3.1";resolution:=optional;visibility:=reexport,
+Require-Bundle: com.jaspersoft.studio;bundle-version="6.2.1";visibility:=reexport,
+ org.eclipse.xtext.ui;bundle-version="2.3.1",
+ org.eclipse.xtext.common.types;bundle-version="2.3.1",
  org.eclipse.xtext.generator;bundle-version="2.3.1";resolution:=optional,
- org.eclipse.emf.mwe2.launch;bundle-version="2.3.0";resolution:=optional,
- com.jaspersoft.studio;bundle-version="6.2.1";visibility:=reexport
+ org.eclipse.emf.mwe2.launch;bundle-version="2.3.1";resolution:=optional,
+ org.eclipse.xtext.xbase;bundle-version="2.3.1";resolution:=optional
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6,
  JavaSE-1.7
 Export-Package: com.jaspersoft.studio.editor.jrexpressions,
