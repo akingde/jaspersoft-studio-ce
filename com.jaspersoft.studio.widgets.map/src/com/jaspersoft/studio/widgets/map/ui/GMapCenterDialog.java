@@ -63,6 +63,26 @@ public class GMapCenterDialog extends Dialog {
 				super.setAddress(address);
 				GMapCenterDialog.this.address = address;
 			}
+
+			@Override
+			protected void handleMapCenterChanged(LatLng position) {
+				setMapCenter(position);
+			}
+
+			@Override
+			protected void handleMapZoomChanged(int newZoomLevel) {
+				setZoomLevel(newZoomLevel);
+			}
+
+			@Override
+			protected void handleAddressChanged(String address) {
+				setAddress(address);
+			}
+
+			@Override
+			protected void handleMapTypeChanged(MapType mapType) {
+				setMapType(mapType);
+			}
 		};
 		mapPanel.setAddress(address);
 		mapPanel.setMapCenter(mapCenter);

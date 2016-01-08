@@ -17,6 +17,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.forms.events.HyperlinkAdapter;
 import org.eclipse.ui.forms.events.HyperlinkEvent;
@@ -54,6 +56,11 @@ public class MapSection extends AbstractSection {
 		parent.setLayout(new GridLayout(2, false));
 
 		FormText mapPickSuggestion = new FormText(parent, SWT.NONE);
+		mapPickSuggestion.addListener(SWT.MenuDetect, new Listener() {
+			public void handleEvent(Event event) {
+				event.doit = false;
+			}
+		});
 		mapPickSuggestion.setText(Messages.MapSection_0, true, false);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;

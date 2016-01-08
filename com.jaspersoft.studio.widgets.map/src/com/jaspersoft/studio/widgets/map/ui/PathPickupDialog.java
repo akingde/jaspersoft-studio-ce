@@ -191,7 +191,7 @@ public class PathPickupDialog extends BasicInfoMapDialog {
 		map.getFunctions()
 				.add(new UpdateMarkerPosition(
 						map.getMapControl(),
-						MapWidgetConstants.BROWSER_FUCTION_UPDATE_MARKER_POSITION,
+						MapWidgetConstants.BROWSER_FUNCTION_UPDATE_MARKER_POSITION,
 						map.getJavaMapSupport()));
 		map.getFunctions()
 				.add(new InitialConfigurationFunction(

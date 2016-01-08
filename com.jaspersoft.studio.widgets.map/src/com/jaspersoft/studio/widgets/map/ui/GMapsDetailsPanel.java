@@ -90,7 +90,7 @@ public class GMapsDetailsPanel {
 		map.getFunctions().add(new RemoveMarker(map.getMapControl(), MapWidgetConstants.BROWSER_FUNCTION_REMOVE_MARKER,
 				map.getJavaMapSupport()));
 		map.getFunctions().add(new UpdateMarkerPosition(map.getMapControl(),
-				MapWidgetConstants.BROWSER_FUCTION_UPDATE_MARKER_POSITION, map.getJavaMapSupport()));
+				MapWidgetConstants.BROWSER_FUNCTION_UPDATE_MARKER_POSITION, map.getJavaMapSupport()));
 		map.getFunctions().add(new InitialConfigurationFunction(map.getMapControl(),
 				MapWidgetConstants.BROWSER_FUNCTION_INITIAL_CONFIGURATION, map.getJavaMapSupport()));
 

@@ -223,6 +223,10 @@ GMapsMap.prototype.addMarker=function(latLng,markerOptions){
 	google.maps.event.addListener(marker, 'click', function(mouseEvent){
 		hideMenus();
 	});
+	marker.addListener('dblclick', function(){ 
+		var markerIdx = $this.mapMarkers.indexOf(marker);
+		if(typeof javaCall_MarkerDoubleClick != 'undefined') javaCall_MarkerDoubleClick(markerIdx);
+	});
 	$this.mapMarkers.push(marker);
 	
 	if(typeof javaCall_AddMarker != 'undefined') javaCall_AddMarker(latLng.lat(), latLng.lng(),true,google.maps.Animation.DROP,true,true);

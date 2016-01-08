@@ -15,8 +15,6 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.custom.SashForm;
-import org.eclipse.swt.events.FocusAdapter;
-import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.MenuAdapter;
@@ -25,8 +23,6 @@ import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.TraverseEvent;
-import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -41,6 +37,7 @@ import com.jaspersoft.studio.widgets.map.MapActivator;
 import com.jaspersoft.studio.widgets.map.MapWidgetConstants;
 import com.jaspersoft.studio.widgets.map.browserfunctions.AddNewMarker;
 import com.jaspersoft.studio.widgets.map.browserfunctions.ClearMarkersList;
+import com.jaspersoft.studio.widgets.map.browserfunctions.GMapEnabledFunction;
 import com.jaspersoft.studio.widgets.map.browserfunctions.RemoveMarker;
 import com.jaspersoft.studio.widgets.map.browserfunctions.UpdateMarkerPosition;
 import com.jaspersoft.studio.widgets.map.core.LatLng;
@@ -120,7 +117,16 @@ public class GMapsMarkersPanel extends GMapsCenterPanel {
 		map.getFunctions().add(new RemoveMarker(map.getMapControl(), MapWidgetConstants.BROWSER_FUNCTION_REMOVE_MARKER,
 				map.getJavaMapSupport()));
 		map.getFunctions().add(new UpdateMarkerPosition(map.getMapControl(),
-				MapWidgetConstants.BROWSER_FUCTION_UPDATE_MARKER_POSITION, map.getJavaMapSupport()));
+				MapWidgetConstants.BROWSER_FUNCTION_UPDATE_MARKER_POSITION, map.getJavaMapSupport()));
+		map.getFunctions().add(new GMapEnabledFunction(map.getMapControl(),
+				MapWidgetConstants.BROWSER_FUNCTION_MARKER_DOUBLE_CLICK, map.getJavaMapSupport()) {
+			@Override
+			public Object function(Object[] arguments) {
+				handleMarkerDoubleClick(((Double) arguments[0]).intValue());
+				return null;
+			}
+
+		});
 		map.getFunctions().add(new InitialConfigurationFunction(map.getMapControl(),
 				MapWidgetConstants.BROWSER_FUNCTION_INITIAL_CONFIGURATION, map.getJavaMapSupport()));
 
@@ -175,7 +181,7 @@ public class GMapsMarkersPanel extends GMapsCenterPanel {
 					return;
 
 				MenuItem newItem = new MenuItem(menu, SWT.NONE);
-				newItem.setText(Messages.GMapsMarkersPanel_2 );
+				newItem.setText(Messages.GMapsMarkersPanel_2);
 				newItem.addSelectionListener(new SelectionAdapter() {
 					@Override
 					public void widgetSelected(SelectionEvent e) {
@@ -309,8 +315,8 @@ public class GMapsMarkersPanel extends GMapsCenterPanel {
 		if (markersList.getSelectionCount() <= 0)
 			return;
 		MessageDialog dialog = new MessageDialog(UIUtils.getShell(), Messages.GMapsMarkersPanel_2, null,
-				Messages.GMapsMarkersPanel_7, MessageDialog.QUESTION, new String[] { Messages.GMapsMarkersPanel_8, Messages.GMapsMarkersPanel_9 },
-				1);
+				Messages.GMapsMarkersPanel_7, MessageDialog.QUESTION,
+				new String[] { Messages.GMapsMarkersPanel_8, Messages.GMapsMarkersPanel_9 }, 1);
 		if (dialog.open() == Dialog.OK)
 			handleRemoveMarker(markersList.getSelectionIndices());
 	}
