@@ -89,7 +89,7 @@ public class PreviewGenerator {
 	 */
 	private static void createDesign() {
 		jasperDesign = new JasperDesign();
-		jasperDesign.setJasperReportsContext(JasperReportsConfiguration.getDefaultInstance());
+//		jasperDesign.setJasperReportsContext(JasperReportsConfiguration.getDefaultInstance());
 		JRDesignBand jrBand = new JRDesignBand();
 		jasperDesign.setTitle(jrBand);
 		textElement = new JRDesignStaticText();

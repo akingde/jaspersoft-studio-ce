@@ -587,7 +587,7 @@ public class ExcelDataAdapterComposite extends AFileDataAdapterComposite {
 			DataAdapterService das = DataAdapterServiceUtil.getInstance(jConfig).getService(da.getDataAdapter());
 			((AbstractDataAdapterService) das).getDataAdapter();
 			JasperDesign jd = new JasperDesign();
-			jd.setJasperReportsContext(jConfig);
+//			jd.setJasperReportsContext(jConfig);
 			jConfig.setJasperDesign(jd);
 
 			// The get fields method call once a next on the data adapter to get

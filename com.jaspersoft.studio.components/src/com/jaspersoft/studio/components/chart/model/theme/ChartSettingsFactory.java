@@ -21,7 +21,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 public class ChartSettingsFactory {
 	public static MRoot createModel(ChartThemeSettings cts, JasperReportsConfiguration jrContext) {
 		JasperDesign jd = new JasperDesign();
-		jd.setJasperReportsContext(jrContext);
+//		jd.setJasperReportsContext(jrContext);
 		MRoot root = new MRoot(null, jd);
 		MChartThemeSettings n = new MChartThemeSettings(root, cts);
 		new MChartSettings(n, cts.getChartSettings());

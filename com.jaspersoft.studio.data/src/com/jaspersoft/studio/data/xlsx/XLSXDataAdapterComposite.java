@@ -504,7 +504,7 @@ public class XLSXDataAdapterComposite extends AFileDataAdapterComposite {
 				jConfig = JasperReportsConfiguration.getDefaultInstance();
 			DataAdapterService das = DataAdapterServiceUtil.getInstance(jConfig).getService(da.getDataAdapter());
 			JasperDesign jd = new JasperDesign();
-			jd.setJasperReportsContext(jConfig);
+//			jd.setJasperReportsContext(jConfig);
 			jConfig.setJasperDesign(jd);
 
 			// The get fields method call once a next on the data adapter to get

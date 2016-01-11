@@ -503,7 +503,7 @@ public class CompositeElementManager {
 			} 
 		}
 		JasperDesign jd = new JasperDesign();
-		jd.setJasperReportsContext(JasperReportsConfiguration.getDefaultInstance());
+//		jd.setJasperReportsContext(JasperReportsConfiguration.getDefaultInstance());
 	
 		jd.setName(name);
 		jd.setColumnFooter(null);
