@@ -338,7 +338,7 @@ public class NewSubreportPage extends JSSWizardSelectionPage implements IExpress
 	 * file.getProjectRelativePath().toPortableString().replaceAll(file.getProject().getName() + "/", ""); } else {
 	 * filepath = file.getRawLocationURI().toASCIIString(); }
 	 * 
-	 * filepath = filepath.replaceAll(".jrxml", ".jasper"); jre.setText("\"" + filepath + "\"");//$NON-NLS-1$
+	 * filepath = filepath.replaceAll("\\.jrxml$", ".jasper"); jre.setText("\"" + filepath + "\"");//$NON-NLS-1$
 	 * //$NON-NLS-2$ subreport.setPropertyValue(JRDesignSubreport.PROPERTY_EXPRESSION, jre);
 	 * 
 	 * JRDesignSubreport s = (JRDesignSubreport) subreport.getValue(); if (newjd == null) { InputStream in = null; try {

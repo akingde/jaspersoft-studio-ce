@@ -94,7 +94,7 @@ public class SubreportRVPropertyPage extends RVPropertyPage {
 			String path = sr.getExpression().getText();
 			path = path.replace("\"", ""); //$NON-NLS-1$ //$NON-NLS-2$
 
-			JRBaseReport jd = getFromJRXML(path.replaceAll(".jasper", ".jrxml"));
+			JRBaseReport jd = getFromJRXML(path.replaceAll("\\.jasper$", ".jrxml"));
 			if (jd == null)
 				jd = getFromJasper(path);
 		}

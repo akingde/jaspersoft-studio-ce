@@ -517,10 +517,9 @@ public class ReportContainer extends MultiPageToolbarEditorPart implements ITabb
 					if (s.getExpression() != null) {
 						String path = ExpressionUtil.cachedExpressionEvaluationString(s.getExpression(), jrContext);
 						if (path != null) {
-							String fpath = path.replaceAll(".jasper", ".jrxml");
+							String fpath = path.replaceAll("\\.jasper$", ".jrxml");
 							try {
-								RepositoryUtil.getInstance(jrContext).getBytesFromLocation(path.replaceAll(".jasper", ".jrxml"));
-
+								RepositoryUtil.getInstance(jrContext).getBytesFromLocation(fpath);
 							} catch (JRException e) {
 								e.printStackTrace();
 								try {
