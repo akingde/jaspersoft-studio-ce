@@ -52,7 +52,7 @@ public class FloatPropertyDescriptor extends TextPropertyDescriptor implements I
 	/**
 	 * Number of decimal digits accepted
 	 */
-	private int digitsNumber = 2;
+	private int digitsNumber = 6;
 	
 	private IHelpRefBuilder refBuilder;
 	

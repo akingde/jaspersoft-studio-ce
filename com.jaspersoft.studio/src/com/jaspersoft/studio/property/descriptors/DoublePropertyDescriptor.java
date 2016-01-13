@@ -52,7 +52,7 @@ public class DoublePropertyDescriptor extends TextPropertyDescriptor implements 
 	/**
 	 * Number of decimal digits accepted
 	 */
-	private int digitsNumber = 2;
+	private int digitsNumber = 6;
 	
 	/**
 	 * Instantiates a new float property descriptor.

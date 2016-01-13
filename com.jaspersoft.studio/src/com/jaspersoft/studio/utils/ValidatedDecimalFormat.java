@@ -50,7 +50,11 @@ public class ValidatedDecimalFormat extends DecimalFormat{
 		if (decimalDigits > 0){
 			pattern = "#####0.";
 			for(int i = 0; i < decimalDigits; i++){
-				pattern += "0";
+				if (i < 2) {
+					pattern += "0";
+				} else {
+					pattern += "#";
+				}
 			} 
 		} else {
 			pattern = "######";
@@ -63,7 +67,7 @@ public class ValidatedDecimalFormat extends DecimalFormat{
 		if (digits == 0){
 			patternToMatch = Pattern.compile("[0-9]+");
 		} else {
-			patternToMatch = Pattern.compile("[0-9]+([" + decimalSeparator + "]{0,1}[0-9]{0," + decimalDigits + "})?");
+			patternToMatch = Pattern.compile("[0-9]+([" + decimalSeparator + "]{0,1}[0-9]{0,6})?");
 		}
 		applyPattern(pattern);
 	}
