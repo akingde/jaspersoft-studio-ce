@@ -12,16 +12,16 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.section.components;
 
-import net.sf.jasperreports.engine.base.JRBaseStyle;
-
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
-import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.property.section.AbstractRealValueSection;
 
-public class RectangleSection extends AbstractSection {
+import net.sf.jasperreports.engine.base.JRBaseStyle;
+
+public class RectangleSection extends AbstractRealValueSection {
 	public void createControls(Composite parent, TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
 

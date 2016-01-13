@@ -13,6 +13,7 @@
 package com.jaspersoft.studio.property.descriptors;
 
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
@@ -37,10 +38,10 @@ public class TransparencyPropertyDescriptor extends FloatPropertyDescriptor {
 		super(id, displayName);
 	}
 
-	public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
+	public ASPropertyWidget<IPropertyDescriptor> createWidget(Composite parent, AbstractSection section) {
 		SPTransparency spTransparency = new SPTransparency(parent, section, this);
-		spTransparency.setBorders(new Float(0), new Float(1));
-		spTransparency.setNumType(Float.class);
+		spTransparency.setBounds(0, 1);
+		spTransparency.setDigits(2);
 		return spTransparency;
 	}
 }

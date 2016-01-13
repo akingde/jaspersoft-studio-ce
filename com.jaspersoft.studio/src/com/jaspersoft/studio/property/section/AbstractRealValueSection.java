@@ -29,7 +29,10 @@ import com.jaspersoft.studio.model.APropertyNode;
 			if (element != null) {
 				element.getPropertyDescriptors();
 				for (Object key : widgets.keySet()) {
-					widgets.get(key).setData(element, element.getPropertyActualValue(key));
+					//Use actual and current value to check if a value is inherited or not
+					Object currentValue = element.getPropertyActualValue(key);
+					Object ownValue = element.getPropertyValue(key);
+					widgets.get(key).setData(element, currentValue, ownValue != currentValue);
 				}
 			}
 			setRefreshing(false);

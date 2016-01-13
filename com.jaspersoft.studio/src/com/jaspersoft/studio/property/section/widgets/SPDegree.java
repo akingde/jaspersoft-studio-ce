@@ -30,8 +30,11 @@ import org.mihalis.opal.angles.AngleSlider;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
 public class SPDegree extends SPNumber {
+	
 	private AngleSlider angleSlider;
 
+	private Composite composite;
+	
 	public SPDegree(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
 		super(parent, section, pDescriptor);
 	}
@@ -94,19 +97,17 @@ public class SPDegree extends SPNumber {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				if (!isRefresh)
-					ftext.setText("" + angleSlider.getSelection());
+					ftext.setValue(angleSlider.getSelection());
 			}
 		});
-
+		
+		setDigits(2);
 		super.createComponent(composite);
 	}
 
-	private Composite composite;
-
-	public void setDataNumber(Number f) {
-		if (numType == null)
-			numType = Double.class;
-		super.setDataNumber(f);
+	@Override
+	public void setDataNumber(Number f, boolean isInherited) {
+		super.setDataNumber(f, isInherited);
 		if (f != null) {
 			int degree = Math.abs(f.intValue());
 			if (degree > 360)

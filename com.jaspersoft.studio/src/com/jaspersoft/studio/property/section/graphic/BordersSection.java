@@ -12,12 +12,6 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.jasperreports.engine.JRLineBox;
-import net.sf.jasperreports.engine.base.JRBaseLineBox;
-import net.sf.jasperreports.engine.base.JRBasePen;
-import net.sf.jasperreports.engine.base.JRBoxPen;
-import net.sf.jasperreports.engine.type.LineStyleEnum;
-
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.LightweightSystem;
 import org.eclipse.draw2d.RectangleFigure;
@@ -60,9 +54,15 @@ import com.jaspersoft.studio.property.section.widgets.BackgroundHighlight;
 import com.jaspersoft.studio.property.section.widgets.BorderHightLight;
 import com.jaspersoft.studio.property.section.widgets.SPLineStyleEnum;
 import com.jaspersoft.studio.swt.widgets.ColorStyledText;
+import com.jaspersoft.studio.swt.widgets.NullableSpinner;
 import com.jaspersoft.studio.utils.AlfaRGB;
 import com.jaspersoft.studio.utils.Colors;
-import com.jaspersoft.studio.utils.UIUtil;
+
+import net.sf.jasperreports.engine.JRLineBox;
+import net.sf.jasperreports.engine.base.JRBaseLineBox;
+import net.sf.jasperreports.engine.base.JRBasePen;
+import net.sf.jasperreports.engine.base.JRBoxPen;
+import net.sf.jasperreports.engine.type.LineStyleEnum;
 
 /**
  * The location section on the location tab.
@@ -99,7 +99,7 @@ public class BordersSection extends AbstractSection {
 	/**
 	 * The filed used to set\show the lineWidth
 	 */
-	private Spinner lineWidth;
+	private NullableSpinner lineWidth;
 
 	/**
 	 * The Combo popup used to set\show the linestyle
@@ -398,16 +398,17 @@ public class BordersSection extends AbstractSection {
 
 		getWidgetFactory().createCLabel(composite, Messages.common_pen_width + ":", SWT.RIGHT); //$NON-NLS-1$
 
-		lineWidth = new Spinner(composite, SWT.BORDER | SWT.FLAT);
-		lineWidth.setValues(0, 0, 5000, 1, 1, 1);
+		lineWidth = new NullableSpinner(composite, SWT.BORDER | SWT.CENTER, 2);
+		GridData lineWidthData = new GridData();
+		lineWidthData.widthHint = 50;
+		lineWidth.setLayoutData(lineWidthData);
+		lineWidth.setValues(null, 0, 500);
+		lineWidth.setNullable(true);
 		lineWidth.setToolTipText(Messages.BordersSection_width_tool_tip);
 		HelpSystem.setHelp(lineWidth, LINE_WIDTH);
 		lineWidth.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				int selection = lineWidth.getSelection();
-				int digits = lineWidth.getDigits();
-				Float newValue = new Float(selection / Math.pow(10, digits));
-				changeProperty(JRBasePen.PROPERTY_LINE_WIDTH, newValue);
+				changeProperty(JRBasePen.PROPERTY_LINE_WIDTH, lineWidth.getValueAsFloat());
 			}
 		});
 
@@ -444,7 +445,7 @@ public class BordersSection extends AbstractSection {
 		noneBorder.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				AlfaRGB beforeSelectionColor = lineColor.getColor();// lastColorSelected;
-				int selection = lineWidth.getSelection();
+				Float selection = lineWidth.getValueAsFloat();
 				Object beforeSelectionStyle = lineStyle.getSelectedValue();
 				bd.setBorderSelected(Location.LEFT);
 				bd.setBorderSelected(Location.RIGHT);
@@ -458,7 +459,7 @@ public class BordersSection extends AbstractSection {
 				bd.unselectAll();
 				// The selection action change the displayed values, so i need to restore them after the unselect
 				lineStyle.setData((LineStyleEnum) beforeSelectionStyle);
-				lineWidth.setSelection(selection);
+				lineWidth.setValue(selection);
 				lineColor.setColor(beforeSelectionColor);
 			}
 		});
@@ -472,9 +473,7 @@ public class BordersSection extends AbstractSection {
 				bd.setBorderSelected(Location.RIGHT);
 				bd.setBorderSelected(Location.TOP);
 				bd.setBorderSelected(Location.BOTTOM);
-				int selection = lineWidth.getSelection();
-				int digits = lineWidth.getDigits();
-				Float newValue = new Float(selection / Math.pow(10, digits));
+				Float newValue = lineWidth.getValueAsFloat();
 				AlfaRGB color = lineColor.getColor();
 				Object style = lineStyle.getSelectedValue();
 				changeProperty(JRBasePen.PROPERTY_LINE_STYLE, style);
@@ -490,9 +489,7 @@ public class BordersSection extends AbstractSection {
 		leftRightBorder.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				AlfaRGB beforeSelectionColor = lineColor.getColor();
-				int selection = lineWidth.getSelection();
-				int digits = lineWidth.getDigits();
-				Float beforeSelectionWidth = new Float(selection / Math.pow(10, digits));
+				Float beforeSelectionWidth = lineWidth.getValueAsFloat();
 				Object beforeSelectionStyle = lineStyle.getSelectedValue();
 				bd.setBorderSelected(Location.LEFT, false);
 				bd.setBorderSelected(Location.RIGHT, false);
@@ -511,7 +508,7 @@ public class BordersSection extends AbstractSection {
 				changeProperty(JRBasePen.PROPERTY_LINE_WIDTH, beforeSelectionWidth);
 				bd.unselectAll();
 				lineColor.setColor(beforeSelectionColor);
-				lineWidth.setSelection(selection);
+				lineWidth.setValue(beforeSelectionWidth);
 				lineStyle.setData((LineStyleEnum) beforeSelectionStyle);
 			}
 		});
@@ -522,9 +519,7 @@ public class BordersSection extends AbstractSection {
 		upDownBorder.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				AlfaRGB beforeSelectionColor = lineColor.getColor();
-				int selection = lineWidth.getSelection();
-				int digits = lineWidth.getDigits();
-				Float beforeSelectionWidth = new Float(selection / Math.pow(10, digits));
+				Float beforeSelectionWidth = lineWidth.getValueAsFloat();
 				Object beforeSelectionStyle = lineStyle.getSelectedValue();
 				bd.setBorderSelected(Location.LEFT);
 				bd.setBorderSelected(Location.RIGHT);
@@ -544,7 +539,7 @@ public class BordersSection extends AbstractSection {
 				changeProperty(JRBasePen.PROPERTY_LINE_WIDTH, beforeSelectionWidth);
 				bd.unselectAll();
 				lineColor.setColor(beforeSelectionColor);
-				lineWidth.setSelection(selection);
+				lineWidth.setValue(beforeSelectionWidth);
 				lineStyle.setData((LineStyleEnum) beforeSelectionStyle);
 			}
 		});
@@ -674,7 +669,7 @@ public class BordersSection extends AbstractSection {
 					refreshLinePen(pen);
 				} else {
 					lineColor.setColor(AlfaRGB.getFullyOpaque(new RGB(0, 0, 0)));
-					lineWidth.setValues(0, 0, 5000, 1, 1, 1);
+					lineWidth.setValues(null, 0, 500);
 					lineStyle.setData(1);
 				}
 			}
@@ -811,8 +806,7 @@ public class BordersSection extends AbstractSection {
 			if (propertyValue > 0) {
 				// Set the border data only if it is visible
 				if (lineWidth != null && !lineWidth.isDisposed()) {
-					UIUtil.setSpinnerSelection(lineWidth, null,
-							(int) ((propertyValue == null) ? 0 : propertyValue.doubleValue() * Math.pow(10, 1)));
+					lineWidth.setValue(propertyValue);
 				}
 
 				if (lineStyle != null && !isDisposed()) {
@@ -834,9 +828,10 @@ public class BordersSection extends AbstractSection {
 			// Set the border data only if it is visible
 			if (lineWidth != null && !lineWidth.isDisposed()) {
 				if (width == null) {
-					lineWidth.setValues(0, 0, 5000, 1, 1, 1);
+					lineWidth.setValues(null, 0, 500);
 				} else {
-					UIUtil.setSpinnerSelection(lineWidth, null, (int) (width.doubleValue() * Math.pow(10, 1)));
+					lineWidth.setValue(width);
+					lineWidth.setInherited(pen.getLineWidth() != pen.getOwnLineWidth());
 				}
 			}
 

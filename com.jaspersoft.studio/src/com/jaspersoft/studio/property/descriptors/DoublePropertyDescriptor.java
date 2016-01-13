@@ -35,6 +35,26 @@ import com.jaspersoft.studio.property.section.widgets.SPNumber;
 public class DoublePropertyDescriptor extends TextPropertyDescriptor implements IPropertyDescriptorWidget, IHelp {
 
 	/**
+	 * Flag used to set the widget to accept the null value
+	 */
+	private boolean isNullable = true;
+
+	/**
+	 * The minimum value accepted
+	 */
+	private double minValue = 0;
+
+	/**
+	 * The maximum value accepted
+	 */
+	private double maxValue = Double.MAX_VALUE;
+	
+	/**
+	 * Number of decimal digits accepted
+	 */
+	private int digitsNumber = 2;
+	
+	/**
 	 * Instantiates a new float property descriptor.
 	 * 
 	 * @param id
@@ -85,7 +105,9 @@ public class DoublePropertyDescriptor extends TextPropertyDescriptor implements 
 
 	public ASPropertyWidget<?> createWidget(Composite parent, AbstractSection section) {
 		SPNumber spNumber = new SPNumber(parent, section, this);
-		spNumber.setNumType(Double.class);
+		spNumber.setNullable(isNullable);
+		spNumber.setDigits(digitsNumber);
+		spNumber.setBounds(minValue, maxValue);
 		return spNumber;
 	}
 
@@ -101,5 +123,35 @@ public class DoublePropertyDescriptor extends TextPropertyDescriptor implements 
 		if (refBuilder != null)
 			return refBuilder.getHelpReference();
 		return null;
+	}
+	
+	/**
+	 * Set the flag to enable or disable the acceptance of empty null value
+	 * 
+	 * @param value true if the null value is accepted, false otherwise
+	 */
+	public void setNullable(boolean value){
+		this.isNullable = value;
+	}
+
+	/**
+	 * Set the minimum and maximum value accepted by the widget
+	 * 
+	 * @param min the lower bound
+	 * @param max the upper bound
+	 */
+	public void setBounds(double min, double max) {
+		this.minValue = min;
+		this.maxValue = max;
+	}
+	
+	/**
+	 * Set the number of decimal digits accepted
+	 * 
+	 * @param digits the number of digits, must be greter than 0
+	 */
+	public void setDigits(int digits){
+		Assert.isTrue(digits > 0, "On a double descriptor the accepted digits must be greater than 0");
+		this.digitsNumber = digits;
 	}
 }

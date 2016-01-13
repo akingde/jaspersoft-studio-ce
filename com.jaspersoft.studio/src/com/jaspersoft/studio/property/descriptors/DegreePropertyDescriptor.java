@@ -13,6 +13,7 @@
 package com.jaspersoft.studio.property.descriptors;
 
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
@@ -37,10 +38,10 @@ public class DegreePropertyDescriptor extends DoublePropertyDescriptor {
 		super(id, displayName);
 	}
 
-	public ASPropertyWidget<?> createWidget(Composite parent, AbstractSection section) {
+	public ASPropertyWidget<IPropertyDescriptor> createWidget(Composite parent, AbstractSection section) {
 		SPDegree spDegree = new SPDegree(parent, section, this);
-		spDegree.setNumType(Double.class);
-		spDegree.setBorders(new Double(-360), new Double(360));
+		spDegree.setDigits(2);
+		spDegree.setBounds(-360, 360);
 		return spDegree;
 	}
 }

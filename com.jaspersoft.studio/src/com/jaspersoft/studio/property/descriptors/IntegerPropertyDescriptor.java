@@ -35,6 +35,23 @@ import com.jaspersoft.studio.property.section.widgets.SPNumber;
 public class IntegerPropertyDescriptor extends TextPropertyDescriptor implements IPropertyDescriptorWidget, IHelp {
 
 	/**
+	 * Flag used to set the widget to accept the null value
+	 */
+	private boolean isNullable = true;
+
+	/**
+	 * The minimum value accepted
+	 */
+	private int minValue = 0;
+
+	/**
+	 * The maximum value accepted
+	 */
+	private int maxValue = Integer.MAX_VALUE;
+	
+	private IHelpRefBuilder refBuilder;
+	
+	/**
 	 * Instantiates a new integer property descriptor.
 	 * 
 	 * @param id
@@ -86,13 +103,12 @@ public class IntegerPropertyDescriptor extends TextPropertyDescriptor implements
 
 	public ASPropertyWidget<?> createWidget(Composite parent, AbstractSection section) {
 		SPNumber spNumber = new SPNumber(parent, section, this);
-		spNumber.setNumType(Integer.class);
+		spNumber.setNullable(isNullable);
+		spNumber.setDigits(0);
+		spNumber.setBounds(minValue, maxValue);
 		return spNumber;
-		// TextMisureUnit spNumber = new TextMisureUnit(parent, section, this);
-		// return spNumber;
 	}
-
-	private IHelpRefBuilder refBuilder;
+	
 
 	@Override
 	public void setHelpRefBuilder(IHelpRefBuilder refBuilder) {
@@ -104,5 +120,25 @@ public class IntegerPropertyDescriptor extends TextPropertyDescriptor implements
 		if (refBuilder != null)
 			return refBuilder.getHelpReference();
 		return null;
+	}
+	
+	/**
+	 * Set the flag to enable or disable the acceptance of empty null value
+	 * 
+	 * @param value true if the null value is accepted, false otherwise
+	 */
+	public void setNullable(boolean value){
+		this.isNullable = value;
+	}
+
+	/**
+	 * Set the minimum and maximum value accepted by the widget
+	 * 
+	 * @param min the lower bound
+	 * @param max the upper bound
+	 */
+	public void setBounds(int min, int max) {
+		this.minValue = min;
+		this.maxValue = max;
 	}
 }

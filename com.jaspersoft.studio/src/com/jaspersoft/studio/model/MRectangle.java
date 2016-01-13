@@ -118,18 +118,25 @@ public class MRectangle extends MGraphicElementLinePen {
 			return jrElement.getOwnRadius();
 		return super.getPropertyValue(id);
 	}
+	
+	@Override
+	public Object getPropertyActualValue(Object id) {
+		JRDesignRectangle jrElement = (JRDesignRectangle) getValue();
+		if (id.equals(JRBaseStyle.PROPERTY_RADIUS))
+			return jrElement.getRadius();
+		return super.getPropertyActualValue(id);
+	}
 
 	@Override
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignRectangle jrElement = (JRDesignRectangle) getValue();
 		if (id.equals(JRBaseStyle.PROPERTY_RADIUS)) {
 			Integer intv = (Integer) value;
-			if (intv != null)
-				intv = Math.abs(intv.intValue());
-			else
-				intv = 0;
-			jrElement.setRadius(intv);
-
+			if (intv != null) {
+				jrElement.setRadius(Math.abs(intv.intValue()));
+			} else {
+				jrElement.setRadius(null);
+			}
 		} else
 			super.setPropertyValue(id, value);
 	}

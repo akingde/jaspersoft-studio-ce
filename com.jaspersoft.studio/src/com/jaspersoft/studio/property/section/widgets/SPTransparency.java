@@ -26,6 +26,10 @@ import com.jaspersoft.studio.property.section.AbstractSection;
 
 public class SPTransparency extends SPNumber {
 
+	private Composite composite;
+	
+	private Scale scale;
+	
 	public SPTransparency(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
 		super(parent, section, pDescriptor);
 	}
@@ -57,21 +61,17 @@ public class SPTransparency extends SPNumber {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				if (!isRefresh)
-					ftext.setText("" + (scale.getSelection() / 100f));
+					ftext.setValue(scale.getSelection() / 100f);
 			}
 		});
 
+		setDigits(2);
 		super.createComponent(composite);
 	}
 
-	private Composite composite;
-	private Scale scale;
-
-	public void setDataNumber(Number f) {
-		if (numType == null)
-			numType = Float.class;
-
-		super.setDataNumber(f);
+	@Override
+	public void setDataNumber(Number f, boolean isInherited) {
+		super.setDataNumber(f, isInherited);
 		if (f != null) {
 			int alfa = Math.round(100 * f.floatValue());
 

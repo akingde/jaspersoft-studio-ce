@@ -35,6 +35,28 @@ import com.jaspersoft.studio.property.section.widgets.SPNumber;
 public class FloatPropertyDescriptor extends TextPropertyDescriptor implements IPropertyDescriptorWidget, IHelp {
 
 	/**
+	 * Flag used to set the widget to accept the null value
+	 */
+	private boolean isNullable = true;
+
+	/**
+	 * The minimum value accepted
+	 */
+	private float minValue = 0;
+
+	/**
+	 * The maximum value accepted
+	 */
+	private float maxValue = Float.MAX_VALUE;
+	
+	/**
+	 * Number of decimal digits accepted
+	 */
+	private int digitsNumber = 2;
+	
+	private IHelpRefBuilder refBuilder;
+	
+	/**
 	 * Instantiates a new float property descriptor.
 	 * 
 	 * @param id
@@ -85,11 +107,11 @@ public class FloatPropertyDescriptor extends TextPropertyDescriptor implements I
 
 	public ASPropertyWidget<?> createWidget(Composite parent, AbstractSection section) {
 		SPNumber spNumber = new SPNumber(parent, section, this);
-		spNumber.setNumType(Float.class);
+		spNumber.setNullable(isNullable);
+		spNumber.setDigits(digitsNumber);
+		spNumber.setBounds(minValue, maxValue);
 		return spNumber;
 	}
-
-	private IHelpRefBuilder refBuilder;
 
 	@Override
 	public void setHelpRefBuilder(IHelpRefBuilder refBuilder) {
@@ -101,5 +123,35 @@ public class FloatPropertyDescriptor extends TextPropertyDescriptor implements I
 		if (refBuilder != null)
 			return refBuilder.getHelpReference();
 		return null;
+	}
+	
+	/**
+	 * Set the flag to enable or disable the acceptance of empty null value
+	 * 
+	 * @param value true if the null value is accepted, false otherwise
+	 */
+	public void setNullable(boolean value){
+		this.isNullable = value;
+	}
+
+	/**
+	 * Set the minimum and maximum value accepted by the widget
+	 * 
+	 * @param min the lower bound
+	 * @param max the upper bound
+	 */
+	public void setBounds(float min, float max) {
+		this.minValue = min;
+		this.maxValue = max;
+	}
+	
+	/**
+	 * Set the number of decimal digits accepted
+	 * 
+	 * @param digits the number of digits, must be greater than 0
+	 */
+	public void setDigits(int digits){
+		Assert.isTrue(digits > 0, "On a double descriptor the accepted digits must be greater than 0");
+		this.digitsNumber = digits;
 	}
 }

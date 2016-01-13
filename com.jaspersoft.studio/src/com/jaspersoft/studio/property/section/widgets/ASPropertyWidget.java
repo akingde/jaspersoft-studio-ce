@@ -75,6 +75,15 @@ public abstract class ASPropertyWidget<T extends IPropertyDescriptor> implements
 	protected abstract void createComponent(Composite parent);
 
 	public abstract void setData(APropertyNode pnode, Object value);
+	
+	/**
+	 * Set the data of the widget with a flag also indicating if the set 
+	 * value is inherited or not. If not reimplemented this is the same of setData with
+	 * two parameters
+	 */
+	public void setData(APropertyNode pnode, Object b, boolean isInherited) {
+		setData(pnode, b);
+	}
 
 	public String getId() {
 		return pDescriptor.getId().toString();

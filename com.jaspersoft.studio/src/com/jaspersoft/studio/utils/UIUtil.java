@@ -52,6 +52,7 @@ import org.osgi.framework.Version;
 
 import com.jaspersoft.studio.swt.events.ExpressionModifiedEvent;
 import com.jaspersoft.studio.swt.events.ExpressionModifiedListener;
+import com.jaspersoft.studio.swt.widgets.NullableSpinner;
 import com.jaspersoft.studio.swt.widgets.WTextExpression;
 import com.jaspersoft.studio.utils.SWTImageEffects.Glow;
 
@@ -97,6 +98,25 @@ public class UIUtil {
 		}
 	}
 
+	/**
+	 * Set the value of a spinner. For convenience this method takes an object as value, but if the obj is null, or if it
+	 * is not an Integer the method uses the defValue. If the displayed value is the same as the one provided, nothing is
+	 * done (preventing on windows the whole selection of the number).
+	 * 
+	 * @param spinner
+	 * @param obj
+	 */
+	public static void setSpinnerSelection(NullableSpinner spinner, Object obj, Number defValue) {
+		Number num = defValue;
+		if (obj != null && obj instanceof Number) {
+			num = (Number) obj;
+		}
+
+		if (!spinner.isDisposed() && spinner.getValue() != num) {
+			spinner.setValue(num);
+		}
+	}
+	
 	public static Label createLabel(Composite parent, String txt) {
 		return createLabel(parent, txt, -1);
 	}
