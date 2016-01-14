@@ -16,24 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.jasperreports.charts.type.EdgeEnum;
-import net.sf.jasperreports.components.spiderchart.SpiderChartComponent;
-import net.sf.jasperreports.components.spiderchart.StandardChartSettings;
-import net.sf.jasperreports.components.spiderchart.StandardSpiderDataset;
-import net.sf.jasperreports.components.spiderchart.StandardSpiderPlot;
-import net.sf.jasperreports.components.spiderchart.type.SpiderRotationEnum;
-import net.sf.jasperreports.components.spiderchart.type.TableOrderEnum;
-import net.sf.jasperreports.engine.JRConstants;
-import net.sf.jasperreports.engine.JRElement;
-import net.sf.jasperreports.engine.JRHyperlinkParameter;
-import net.sf.jasperreports.engine.component.ComponentKey;
-import net.sf.jasperreports.engine.design.JRDesignComponentElement;
-import net.sf.jasperreports.engine.design.JRDesignElement;
-import net.sf.jasperreports.engine.design.JRDesignHyperlink;
-import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.design.events.JRChangeEventsSupport;
-import net.sf.jasperreports.engine.type.EvaluationTimeEnum;
-
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
@@ -58,9 +40,9 @@ import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescrip
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.text.FontPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.DoublePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.EdgePropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.FloatPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.SpinnerPropertyDescriptor;
 import com.jaspersoft.studio.utils.AlfaRGB;
@@ -68,6 +50,24 @@ import com.jaspersoft.studio.utils.Colors;
 import com.jaspersoft.studio.utils.EnumHelper;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ModelUtils;
+
+import net.sf.jasperreports.charts.type.EdgeEnum;
+import net.sf.jasperreports.components.spiderchart.SpiderChartComponent;
+import net.sf.jasperreports.components.spiderchart.StandardChartSettings;
+import net.sf.jasperreports.components.spiderchart.StandardSpiderDataset;
+import net.sf.jasperreports.components.spiderchart.StandardSpiderPlot;
+import net.sf.jasperreports.components.spiderchart.type.SpiderRotationEnum;
+import net.sf.jasperreports.components.spiderchart.type.TableOrderEnum;
+import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRElement;
+import net.sf.jasperreports.engine.JRHyperlinkParameter;
+import net.sf.jasperreports.engine.component.ComponentKey;
+import net.sf.jasperreports.engine.design.JRDesignComponentElement;
+import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.design.JRDesignHyperlink;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.design.events.JRChangeEventsSupport;
+import net.sf.jasperreports.engine.type.EvaluationTimeEnum;
 
 /**
  * 
@@ -292,11 +292,9 @@ public class MSpiderChart extends MGraphicElement implements IDatasetContainer {
 		desc.add(axLineColorD);
 		axLineColorD.setCategory(Messages.MChart_plot);
 
-		NTextPropertyDescriptor axLineWidthD = new NTextPropertyDescriptor(
-				StandardSpiderPlot.PROPERTY_AXIS_LINE_WIDTH,
-				Messages.MSpiderChart_axisLineWidthTitle);
-		axLineWidthD
-				.setDescription(Messages.MSpiderChart_axisLineWidthDescription);
+		FloatPropertyDescriptor axLineWidthD = new FloatPropertyDescriptor(StandardSpiderPlot.PROPERTY_AXIS_LINE_WIDTH,Messages.MSpiderChart_axisLineWidthTitle);
+		axLineWidthD.setBounds(0, 9999999);
+		axLineWidthD.setDescription(Messages.MSpiderChart_axisLineWidthDescription);
 		desc.add(axLineWidthD);
 		axLineWidthD.setCategory(Messages.MChart_plot);
 
@@ -327,24 +325,17 @@ public class MSpiderChart extends MGraphicElement implements IDatasetContainer {
 		webFilled.setDescription(Messages.MSpiderChart_webFilledDescription);
 		desc.add(webFilled);
 
-		DoublePropertyDescriptor startAngle = new DoublePropertyDescriptor(
-				StandardSpiderPlot.PROPERTY_START_ANGLE,
-				Messages.MSpiderChart_startAngleTitle);
+		DoublePropertyDescriptor startAngle = new DoublePropertyDescriptor(StandardSpiderPlot.PROPERTY_START_ANGLE, Messages.MSpiderChart_startAngleTitle);
 		startAngle.setDescription(Messages.MSpiderChart_startAngleDescription);
 		desc.add(startAngle);
 
-		DoublePropertyDescriptor headPercent = new DoublePropertyDescriptor(
-				StandardSpiderPlot.PROPERTY_HEAD_PERCENT,
-				Messages.MSpiderChart_headPercentTitle);
-		headPercent
-				.setDescription(Messages.MSpiderChart_headPercentDescription);
+		DoublePropertyDescriptor headPercent = new DoublePropertyDescriptor(StandardSpiderPlot.PROPERTY_HEAD_PERCENT, Messages.MSpiderChart_headPercentTitle);
+		headPercent.setDescription(Messages.MSpiderChart_headPercentDescription);
+		headPercent.setBounds(0, 100);
 		desc.add(headPercent);
 
-		DoublePropertyDescriptor interiorGap = new DoublePropertyDescriptor(
-				StandardSpiderPlot.PROPERTY_INTERIOR_GAP,
-				Messages.MSpiderChart_interiorGapTitle);
-		interiorGap
-				.setDescription(Messages.MSpiderChart_interiorGapDescription);
+		DoublePropertyDescriptor interiorGap = new DoublePropertyDescriptor(StandardSpiderPlot.PROPERTY_INTERIOR_GAP,Messages.MSpiderChart_interiorGapTitle);
+		interiorGap.setDescription(Messages.MSpiderChart_interiorGapDescription);
 		desc.add(interiorGap);
 
 		startAngle.setCategory(Messages.MChart_chart_title_category);
