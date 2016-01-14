@@ -100,8 +100,6 @@ public class SPDegree extends SPNumber {
 					ftext.setValue(angleSlider.getSelection());
 			}
 		});
-		
-		setDigits(2);
 		super.createComponent(composite);
 	}
 

@@ -105,16 +105,10 @@ public class MLine extends MGraphicElementLinePen {
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		directionD = new NamedEnumPropertyDescriptor<LineDirectionEnum>(JRBaseLine.PROPERTY_DIRECTION,
-				Messages.MLine_direction, LineDirectionEnum.BOTTOM_UP, NullEnum.NULL);
+		directionD = new NamedEnumPropertyDescriptor<LineDirectionEnum>(JRBaseLine.PROPERTY_DIRECTION, Messages.MLine_direction, LineDirectionEnum.BOTTOM_UP, NullEnum.NULL);
 		directionD.setDescription(Messages.MLine_direction_description);
 		directionD.setCategory(Messages.MLine_line_category);
 		desc.add(directionD);
-
-		/*
-		 * fillD = new JSSEnumPropertyDescriptor(JRBaseStyle.PROPERTY_FILL, Messages.common_fill, FillEnum.class,
-		 * NullEnum.INHERITED); fillD.setDescription(Messages.MLine_fill_description); desc.add(fillD);
-		 */
 
 		defaultsMap.put(JRBaseLine.PROPERTY_DIRECTION,directionD.getIntValue(LineDirectionEnum.TOP_DOWN ));
 		defaultsMap.put(JRBaseStyle.PROPERTY_FILL, null);

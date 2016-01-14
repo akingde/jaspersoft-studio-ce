@@ -86,11 +86,10 @@ public class MLinePen extends APropertyNode implements IPropertySource {
 				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#pen_lineColor"));
 		desc.add(penLineColorD);
 
-		FloatPropertyDescriptor penLineWidthD = new FloatPropertyDescriptor(JRBasePen.PROPERTY_LINE_WIDTH,
-				Messages.MLinePen_line_width);
+		FloatPropertyDescriptor penLineWidthD = new FloatPropertyDescriptor(JRBasePen.PROPERTY_LINE_WIDTH, Messages.MLinePen_line_width);
 		penLineWidthD.setDescription(Messages.MLinePen_line_width_description);
-		penLineWidthD.setHelpRefBuilder(new HelpReferenceBuilder(
-				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#pen_lineWidth"));
+		penLineWidthD.setHelpRefBuilder(new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#pen_lineWidth"));
+		penLineWidthD.setBounds(0, 9999999);
 		desc.add(penLineWidthD);
 
 		penLineStyleD = new JSSPopupPropertyDescriptor(JRBasePen.PROPERTY_LINE_STYLE, Messages.common_line_style,

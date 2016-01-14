@@ -104,6 +104,7 @@ public class MRectangle extends MGraphicElementLinePen {
 		IntegerPropertyDescriptor rD = new IntegerPropertyDescriptor(JRBaseStyle.PROPERTY_RADIUS, Messages.common_radius);
 		rD.setCategory(Messages.MRectangle_rectangle_properties_category);
 		rD.setDescription(Messages.MRectangle_radius_description);
+		rD.setBounds(0, Integer.MAX_VALUE);
 		desc.add(rD);
 
 		defaultsMap.put(JRBaseStyle.PROPERTY_FILL, null);

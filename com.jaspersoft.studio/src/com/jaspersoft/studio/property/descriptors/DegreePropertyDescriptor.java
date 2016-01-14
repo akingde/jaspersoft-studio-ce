@@ -40,7 +40,7 @@ public class DegreePropertyDescriptor extends DoublePropertyDescriptor {
 
 	public ASPropertyWidget<IPropertyDescriptor> createWidget(Composite parent, AbstractSection section) {
 		SPDegree spDegree = new SPDegree(parent, section, this);
-		spDegree.setDigits(2);
+		spDegree.setDigits(2, Double.class);
 		spDegree.setBounds(-360, 360);
 		return spDegree;
 	}

@@ -104,7 +104,7 @@ public class IntegerPropertyDescriptor extends TextPropertyDescriptor implements
 	public ASPropertyWidget<?> createWidget(Composite parent, AbstractSection section) {
 		SPNumber spNumber = new SPNumber(parent, section, this);
 		spNumber.setNullable(isNullable);
-		spNumber.setDigits(0);
+		spNumber.setDigits(0, Integer.class);
 		spNumber.setBounds(minValue, maxValue);
 		return spNumber;
 	}

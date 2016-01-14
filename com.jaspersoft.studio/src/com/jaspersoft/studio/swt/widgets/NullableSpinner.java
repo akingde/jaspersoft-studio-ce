@@ -116,6 +116,8 @@ public class NullableSpinner extends Composite {
 		buttonContainer.setLayout(gd);
 		GridData buttonsData = new GridData(SWT.FILL, SWT.FILL, false, true);
 		buttonsData.widthHint = 15;
+		buttonsData.minimumWidth =15;
+		buttonsData.heightHint = 18;
 		buttonContainer.setLayoutData(buttonsData);
 		//Listener to paint the spinner buttons
 		buttonContainer.addPaintListener(new PaintListener() {
@@ -196,7 +198,8 @@ public class NullableSpinner extends Composite {
 	private void createText(int style, int digits) {
 		this.text = new NumericText(this, style, digits);
 		final GridData gd = new GridData(GridData.FILL, GridData.FILL, true, true);
-		gd.minimumWidth = 40;
+		gd.minimumWidth = 30;
+		gd.widthHint = 30;
 		gd.heightHint = 18;
 		this.text.setLayoutData(gd);
 	}
@@ -311,6 +314,18 @@ public class NullableSpinner extends Composite {
 		Number value = getValue();
 		if (value == null) return null;
 		else return value.doubleValue();
+	}
+	
+	/**
+	 * Returns the numeric value stored inside the control, as a long
+	 * 
+	 * @return the numeric value, could be null
+	 */
+	public Long getValueAsLong(){
+		this.checkWidget();
+		Number value = getValue();
+		if (value == null) return null;
+		else return value.longValue();
 	}
 	
 	/**

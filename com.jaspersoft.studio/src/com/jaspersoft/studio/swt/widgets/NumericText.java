@@ -371,6 +371,16 @@ public class NumericText extends Text {
 	}
 	
 	/**
+	 * Returns the numeric value stored inside the control, as a long
+	 * 
+	 * @return the numeric value, could be null
+	 */
+	public Long getValueAsLong(){
+		if (storedValue == null) return null;
+		else return storedValue.longValue();
+	}
+	
+	/**
 	 * Returns the numeric value stored inside the control, as a double
 	 * 
 	 * @return the numeric value, could be null
@@ -449,10 +459,12 @@ public class NumericText extends Text {
 	 */
 	public void decrement(){
 		if (storedValue == null){
-			storedValue = new Double(maximum);
+			storedValue = new Double(minimum);
+			setValue(storedValue, true);
+		} else {
+			double newValue = storedValue.doubleValue() - increamentStep;	
+			setValue(newValue, true);
 		}
-		double newValue = storedValue.doubleValue() - increamentStep;	
-		setValue(newValue, true);
 		fireListeners();
 	}
 	

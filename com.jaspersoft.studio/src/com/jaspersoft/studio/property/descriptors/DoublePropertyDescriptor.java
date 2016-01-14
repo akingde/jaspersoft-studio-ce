@@ -106,7 +106,7 @@ public class DoublePropertyDescriptor extends TextPropertyDescriptor implements 
 	public ASPropertyWidget<?> createWidget(Composite parent, AbstractSection section) {
 		SPNumber spNumber = new SPNumber(parent, section, this);
 		spNumber.setNullable(isNullable);
-		spNumber.setDigits(digitsNumber);
+		spNumber.setDigits(digitsNumber, Double.class);
 		spNumber.setBounds(minValue, maxValue);
 		return spNumber;
 	}

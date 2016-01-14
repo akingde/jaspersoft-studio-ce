@@ -53,6 +53,8 @@ public class SPNumber extends AHistorySPropertyWidget<IPropertyDescriptor> {
 	 */
 	private int digits = 0;
 	
+	private Class<? extends Number> outputType = Integer.class;
+	
 	boolean isRefresh = false;
 
 	public SPNumber(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
@@ -84,13 +86,9 @@ public class SPNumber extends AHistorySPropertyWidget<IPropertyDescriptor> {
 		ftext.addSelectionListener(new SelectionAdapter(){
 		
 			public void widgetSelected(SelectionEvent e) {
+				isRefresh = false;
 				if (!isRefresh) {
-					Number newValue = null;
-					if (digits == 0){
-						newValue = ftext.getValueAsInteger();
-					} else {
-						newValue = ftext.getValueAsFloat();
-					}
+					Number newValue = getValue();
 					if (!section.changeProperty(pDescriptor.getId(), newValue)) {
 						setData(section.getElement(), newValue);
 					}
@@ -100,6 +98,20 @@ public class SPNumber extends AHistorySPropertyWidget<IPropertyDescriptor> {
 		
 		ftext.setToolTipText(pDescriptor.getDescription());
 		setWidth(parent, 6);
+	}
+	
+	protected Number getValue(){
+		if (outputType == Integer.class){
+			return ftext.getValueAsInteger();
+		} else if (outputType == Long.class){
+			return ftext.getValueAsLong();
+		} else if (outputType == Float.class){
+			return ftext.getValueAsFloat();
+		} else if (outputType == Double.class){
+			return ftext.getValueAsDouble();
+		} else {
+			throw new RuntimeException("Format " + outputType.getName() + " not supported by the SPNumber conversion");
+		}
 	}
 
 	protected void setWidth(Composite parent, int chars) {
@@ -161,7 +173,8 @@ public class SPNumber extends AHistorySPropertyWidget<IPropertyDescriptor> {
 	 * 
 	 * @param digits a not negative number of digits
 	 */
-	public void setDigits(int digits){
+	public void setDigits(int digits, Class<? extends Number> outputType){
+		this.outputType = outputType;
 		if (this.digits != digits){
 			this.digits = digits;
 			if (ftext != null){

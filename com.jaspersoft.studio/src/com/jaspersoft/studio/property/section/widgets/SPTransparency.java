@@ -64,8 +64,6 @@ public class SPTransparency extends SPNumber {
 					ftext.setValue(scale.getSelection() / 100f);
 			}
 		});
-
-		setDigits(2);
 		super.createComponent(composite);
 	}
 
