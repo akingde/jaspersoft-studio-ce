@@ -20,20 +20,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import net.sf.jasperreports.crosstabs.JRCrosstab;
-import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.engine.JRDataset;
-import net.sf.jasperreports.engine.JRExpression;
-import net.sf.jasperreports.engine.JRExpressionCollector;
-import net.sf.jasperreports.engine.design.JRDesignDataset;
-import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.expressions.annotations.JRExprFunctionBean;
-
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardDialog;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorPart;
 
@@ -48,6 +40,16 @@ import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.SelectionHelper;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
+import net.sf.jasperreports.crosstabs.JRCrosstab;
+import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.engine.JRDataset;
+import net.sf.jasperreports.engine.JRExpression;
+import net.sf.jasperreports.engine.JRExpressionCollector;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.expressions.annotations.JRExprFunctionBean;
+
 /**
  * Utility methods that allow the user to work with the expression editor "world".
  * 
@@ -55,7 +57,9 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  * 
  */
 public class ExpressionEditorSupportUtil {
-
+	
+	public static final int EXPEDITOR_INITIAL_HEIGHT = 680;
+	public static final int EXPEDITOR_INITIAL_WIDTH = 750;
 	private static final IExpressionEditorSupportFactory supportFactory;
 	private static final Map<String, ExpressionEditorSupport> editorSupports;
 	private static ExpressionContext currentContext;
@@ -495,4 +499,103 @@ public class ExpressionEditorSupportUtil {
 			throw new RuntimeException("The specified expession object type is invalid!");
 		}
 	}
+	
+	/**
+	 * Checks if the flag for remembering expression editor window size is set. 
+	 * 
+	 * @return <code>true</code> if the flag is set, <code>false</code> otherwise
+	 */
+	public static boolean shouldRememberExpEditorDialogSize() {
+		return JaspersoftStudioPlugin.getInstance().getPreferenceStore().getBoolean(ExpressionEditorPreferencePage.P_REMEMBER_EXPEDITOR_SIZE);
+	}
+
+	/**
+	 * Checks if the flag for remembering expression editor window location is set. 
+	 * 
+	 * @return <code>true</code> if the flag is set, <code>false</code> otherwise
+	 */
+	public static boolean shouldRememberExpEditorDialogLocation() {
+		return JaspersoftStudioPlugin.getInstance().getPreferenceStore().getBoolean(ExpressionEditorPreferencePage.P_REMEMBER_EXPEDITOR_LOCATION);
+	}
+	
+	/**
+	 * Stores the details about the size of the expression editor dialog.
+	 *  
+	 * @param width dialog width
+	 * @param height dialog height
+	 */
+	public static void saveExpEditorDialogSize(int width, int height) {
+		JaspersoftStudioPlugin.getInstance().getPreferenceStore().setValue(ExpressionEditorPreferencePage.V_EXPEDITOR_SIZE_WIDTH, width);
+		JaspersoftStudioPlugin.getInstance().getPreferenceStore().setValue(ExpressionEditorPreferencePage.V_EXPEDITOR_SIZE_HEIGHT, height);
+	}
+	
+	/**
+	 * Stores the details about the location of the expression editor dialog.
+	 *  
+	 * @param x dialog X location
+	 * @param y dialog Y location
+	 */
+	public static void saveExpEditorDialogLocation(int x, int y) {
+		JaspersoftStudioPlugin.getInstance().getPreferenceStore().setValue(ExpressionEditorPreferencePage.V_EXPEDITOR_LOCATION_X, x);
+		JaspersoftStudioPlugin.getInstance().getPreferenceStore().setValue(ExpressionEditorPreferencePage.V_EXPEDITOR_LOCATION_Y, y);
+	}
+	
+	/**
+	 * Calculates the initial size for the expression editor dialog being created.
+	 * A default size is returned if no previous information is stored.
+	 * 
+	 * @param shell the shell holding the expression editor
+	 * 
+	 * @return the initial size for the expression editor being created
+	 * @see #EXPEDITOR_INITIAL_WIDTH
+	 * @see #EXPEDITOR_INITIAL_HEIGHT 
+	 */
+	public static Point getExpEditorDialogSize(Shell shell) {
+		int width = -1;
+		int height = -1;
+		if(shouldRememberExpEditorDialogSize()) {
+			IPreferenceStore prefstore = JaspersoftStudioPlugin.getInstance().getPreferenceStore();
+			if(prefstore.contains(ExpressionEditorPreferencePage.V_EXPEDITOR_SIZE_WIDTH)) {
+				width = prefstore.getInt(ExpressionEditorPreferencePage.V_EXPEDITOR_SIZE_WIDTH);
+			}
+			if(prefstore.contains(ExpressionEditorPreferencePage.V_EXPEDITOR_SIZE_HEIGHT)) {
+				height = prefstore.getInt(ExpressionEditorPreferencePage.V_EXPEDITOR_SIZE_HEIGHT);				
+			}
+		}
+		if(width==-1 || height == -1){
+			return new Point(EXPEDITOR_INITIAL_WIDTH,EXPEDITOR_INITIAL_HEIGHT); 
+		}
+		else {
+			return new Point(width, height);
+		}
+	}
+	
+	/**
+	 * Calculates the initial location for the expression editor dialog being created.
+	 * A default centered location is returned if no previous information is stored.
+	 *
+	 * @param shell the shell holding the expression editor
+	 * 
+	 * @return the initial location for the expression editor being created
+	 */
+	public static Point getExpEditorDialogLocation(Shell shell) {
+		int x = -1;
+		int y = -1;
+		if(shouldRememberExpEditorDialogLocation()) {
+			IPreferenceStore prefstore = JaspersoftStudioPlugin.getInstance().getPreferenceStore();
+			if(prefstore.contains(ExpressionEditorPreferencePage.V_EXPEDITOR_LOCATION_X)) {
+				x = prefstore.getInt(ExpressionEditorPreferencePage.V_EXPEDITOR_LOCATION_X);
+			}
+			if(prefstore.contains(ExpressionEditorPreferencePage.V_EXPEDITOR_LOCATION_Y)){
+				y = prefstore.getInt(ExpressionEditorPreferencePage.V_EXPEDITOR_LOCATION_Y);
+			}
+		}
+		if(x==-1 || y==-1){
+			return UIUtils.getShellCenterLocation(shell);
+		}
+		else {
+			return new Point(x, y);
+		}
+	}
+
 }

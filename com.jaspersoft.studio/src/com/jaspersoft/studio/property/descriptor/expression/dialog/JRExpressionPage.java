@@ -12,9 +12,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.descriptor.expression.dialog;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.engine.design.JRDesignExpression;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.ModifyEvent;
@@ -37,9 +34,10 @@ import com.jaspersoft.studio.utils.RecentExpressions;
 import com.jaspersoft.studio.wizards.ContextHelpIDs;
 import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
 
+import net.sf.jasperreports.engine.design.JRDesignExpression;
+
 public class JRExpressionPage extends JSSHelpWizardPage {
-	private static final int SHELL_INITIAL_HEIGHT = 680;
-	private static final int SHELL_INITIAL_WIDTH = 750;
+
 	private JRDesignExpression value;
 	private StyledText queryText;
 	private ClassType valueType;
@@ -104,8 +102,9 @@ public class JRExpressionPage extends JSSHelpWizardPage {
 			});
 			contributedComposite.setExpression(this.value);
 			setControl(contributedComposite);
-			// Resize and center shell
-			UIUtils.resizeAndCenterShell(getShell(), SHELL_INITIAL_WIDTH, SHELL_INITIAL_HEIGHT);
+			// Resize and position the shell
+			getShell().setSize(ExpressionEditorSupportUtil.getExpEditorDialogSize(getShell()));
+			getShell().setLocation(ExpressionEditorSupportUtil.getExpEditorDialogLocation(getShell()));
 		}
 		// Otherwise fallback to a generic composite
 		else{

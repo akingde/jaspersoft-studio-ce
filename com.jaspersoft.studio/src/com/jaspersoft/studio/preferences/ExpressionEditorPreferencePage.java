@@ -39,6 +39,12 @@ public class ExpressionEditorPreferencePage extends FieldEditorOverlayPage {
 	@Deprecated
 	public static final String P_INCLUDE_FUCTIONS_LIBRARY_IMPORTS = "includeFunctionsLibraryImports";//$NON-NLS-1$
 	public static final String P_CONFIRMATION_ON_CLOSE = "askConfirmationOnEditorClose"; //$NON-NLS-1$ 
+	public static final String P_REMEMBER_EXPEDITOR_SIZE = "rememberExpEditorSize"; //$NON-NLS-1$
+	public static final String P_REMEMBER_EXPEDITOR_LOCATION = "rememberExpEditorLocation"; //$NON-NLS-1$
+	public static final String V_EXPEDITOR_SIZE_WIDTH = "expressionEditorWidth"; //$NON-NLS-1$
+	public static final String V_EXPEDITOR_SIZE_HEIGHT = "expressionEditorHeight"; //$NON-NLS-1$
+	public static final String V_EXPEDITOR_LOCATION_X = "expressionEditorLocationX"; //$NON-NLS-1$
+	public static final String V_EXPEDITOR_LOCATION_Y = "expressionEditorLocationY"; //$NON-NLS-1$
 
 	public ExpressionEditorPreferencePage() {
 		super(GRID);
@@ -51,6 +57,8 @@ public class ExpressionEditorPreferencePage extends FieldEditorOverlayPage {
 		addField(new ExpressionListFieldEditor(P_USER_DEFINED_EXPRESSIONS, Messages.ExpressionEditorPreferencePage_userDefinedExpressions,
 				getFieldEditorParent()));
 		addField(new BooleanFieldEditor(P_CONFIRMATION_ON_CLOSE, "Ask for confirmation before closing the Expression Editor", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(P_REMEMBER_EXPEDITOR_SIZE, "Remember the size of the Expression Editor window", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(P_REMEMBER_EXPEDITOR_LOCATION, "Remember the location of the Expression Editor window", getFieldEditorParent()));
 	}
 
 	/*
@@ -85,6 +93,8 @@ public class ExpressionEditorPreferencePage extends FieldEditorOverlayPage {
 	 */
 	public static void getDefaults(IPreferenceStore store) {
 		store.setDefault(P_CONFIRMATION_ON_CLOSE, false);
+		store.setDefault(P_REMEMBER_EXPEDITOR_SIZE, false);
+		store.setDefault(P_REMEMBER_EXPEDITOR_LOCATION, false);
 	}
 
 	@Override
