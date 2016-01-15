@@ -15,6 +15,7 @@ package com.jaspersoft.studio.property.section.widgets;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.RowData;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -29,6 +30,8 @@ public class SPTransparency extends SPNumber {
 	private Composite composite;
 	
 	private Scale scale;
+	
+	private SelectionListener transparencyChangeListener;
 	
 	public SPTransparency(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
 		super(parent, section, pDescriptor);
@@ -57,25 +60,29 @@ public class SPTransparency extends SPNumber {
 		rd.width = 100;
 		scale.setLayoutData(rd);
 		scale.setToolTipText(pDescriptor.getDescription());
-		scale.addSelectionListener(new SelectionAdapter() {
+		transparencyChangeListener = new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				if (!isRefresh)
-					ftext.setValue(scale.getSelection() / 100f);
+				ftext.setValue(scale.getSelection() / 100f);
+				changeValue();
 			}
-		});
+		};
+		scale.addSelectionListener(transparencyChangeListener);
 		super.createComponent(composite);
 	}
 
 	@Override
 	public void setDataNumber(Number f, boolean isInherited) {
 		super.setDataNumber(f, isInherited);
+		//remove the listener to avoid the setSelection trigger it another time
+		scale.removeSelectionListener(transparencyChangeListener);
 		if (f != null) {
 			int alfa = Math.round(100 * f.floatValue());
-
 			scale.setSelection(alfa);
-		} else
+		} else { 
 			scale.setSelection(0);
+		}
+		scale.addSelectionListener(transparencyChangeListener);
 	}
 
 }

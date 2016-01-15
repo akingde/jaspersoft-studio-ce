@@ -12,39 +12,28 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.chart.property.section.plot;
 
-import net.sf.jasperreports.charts.design.JRDesignPie3DPlot;
-
 import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
-import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.property.section.AbstractRealValueSection;
 
-public class Pie3dPlot extends APlot {
+import net.sf.jasperreports.charts.design.JRDesignPie3DPlot;
+
+public class Pie3dPlot extends AbstractRealValueSection {
 
 	@Override
-	public void createControls(AbstractSection section, Composite parent,
-			TabbedPropertySheetPage tabbedPropertySheetPage) {
-		section.createWidget4Property(parent,
-				JRDesignPie3DPlot.PROPERTY_SHOW_LABELS);
+	public void createControls(Composite parent, TabbedPropertySheetPage tabbedPropertySheetPage) {
+		super.createControls(parent, tabbedPropertySheetPage);
+		createWidget4Property(parent, JRDesignPie3DPlot.PROPERTY_SHOW_LABELS);
+		createWidget4Property(parent, JRDesignPie3DPlot.PROPERTY_CIRCULAR);
+ 
+		createWidget4Property(parent, JRDesignPie3DPlot.PROPERTY_LABEL_FORMAT);
+		createWidget4Property(parent, JRDesignPie3DPlot.PROPERTY_LEGEND_LABEL_FORMAT);
+		createWidget4Property(parent, JRDesignPie3DPlot.PROPERTY_DEPTH_FACTOR);
 
-		section.createWidget4Property(parent,
-				JRDesignPie3DPlot.PROPERTY_CIRCULAR);
-
-		section.createWidget4Property(parent,
-				JRDesignPie3DPlot.PROPERTY_LABEL_FORMAT);
-
-		section.createWidget4Property(parent,
-				JRDesignPie3DPlot.PROPERTY_LEGEND_LABEL_FORMAT);
-
-		section.createWidget4Property(parent,
-				JRDesignPie3DPlot.PROPERTY_DEPTH_FACTOR);
-
-		parent = section.getWidgetFactory().createSection(parent, Messages.common_item_label,
-				true, 4, 2);
-
-		section.createWidget4Property(parent,
-				JRDesignPie3DPlot.PROPERTY_ITEM_LABEL, false);
+		parent = getWidgetFactory().createSection(parent, Messages.common_item_label,true, 4, 2);
+		createWidget4Property(parent,JRDesignPie3DPlot.PROPERTY_ITEM_LABEL, false);
 	}
 
 }

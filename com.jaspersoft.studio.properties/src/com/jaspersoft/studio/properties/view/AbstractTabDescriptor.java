@@ -28,8 +28,7 @@ import com.jaspersoft.studio.properties.Activator;
  * @author Anthony Hunter
  * @since 3.4
  */
-public abstract class AbstractTabDescriptor implements ITabDescriptor,
-		Cloneable {
+public abstract class AbstractTabDescriptor implements ITabDescriptor, Cloneable {
 
 	private List<ISectionDescriptor> sectionDescriptors;
 

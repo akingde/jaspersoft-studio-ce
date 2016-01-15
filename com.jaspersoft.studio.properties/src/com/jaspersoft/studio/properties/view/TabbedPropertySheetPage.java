@@ -142,13 +142,13 @@ public class TabbedPropertySheetPage extends Page implements IPropertySheetPage 
 					if (tabbedPropertyViewer != null && tabbedPropertyViewer.getInput() != null) {
 						// force widgets to be resized
 						tab.setInput(tabbedPropertyViewer.getWorkbenchPart(), (ISelection) tabbedPropertyViewer.getInput());
-						TabState state = tabbedPropertyComposite.showTabContents(descriptor);
+						TabState state = tabbedPropertyComposite.showTabContents(descriptor, tab);
 						if (state == TabState.TAB_NOT_DEFINED){
 							//Tab not defined, it need to be created
 							Composite tabComposite = createTabComposite(descriptor);
 							tabToComposite.put(tab, tabComposite);
 							tab.createControls(tabComposite, TabbedPropertySheetPage.this);
-							tabbedPropertyComposite.showTabContents(descriptor);
+							tabbedPropertyComposite.showTabContents(descriptor, tab);
 						}
 						
 						// store tab selection

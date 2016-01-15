@@ -39,8 +39,7 @@ public class SubTitleSection extends AbstractSection {
 			TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
 
-		Composite group = getWidgetFactory().createSectionTitle(parent,
-				Messages.SubTitleSection_0, true, 2, 1);
+		Composite group = getWidgetFactory().createSection(parent,Messages.SubTitleSection_0, true, 2, 1);
 		section = (ExpandableComposite)group.getParent();
 
 		getWidgetFactory().createCLabel(group, Messages.SubTitleSection_1);

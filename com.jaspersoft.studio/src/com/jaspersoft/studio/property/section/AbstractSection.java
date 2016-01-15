@@ -406,6 +406,10 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 	public List<APropertyNode> getElements() {
 		return elements;
 	}
+	
+	public void setElements(List<APropertyNode> elements) {
+		this.elements = elements;
+	}
 
 	public static Composite createNewRow(Composite parent) {
 		Composite cmp = new Composite(parent, SWT.NONE);

@@ -154,4 +154,18 @@ public abstract class AbstractPropertySection implements ISection {
 		this.selection = selection;
 	}
 	
+	/**
+	 * Return if the current section provide dynamic content. This
+	 * will disable some optimization since even if the showed section
+	 * is the same, since the content is dynamic the size of the page must 
+	 * be recalculated
+	 * 
+	 * @return true if the content shown in the section can change after its creation
+	 * false otherwise
+	 */
+	@Override
+	public boolean hasDynamicContent() {
+		return false;
+	}
+	
 }

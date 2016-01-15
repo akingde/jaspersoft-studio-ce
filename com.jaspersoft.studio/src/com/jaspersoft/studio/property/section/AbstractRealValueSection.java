@@ -23,6 +23,7 @@ import com.jaspersoft.studio.model.APropertyNode;
 	 *
 	 */
 	abstract public class AbstractRealValueSection extends AbstractSection {
+		
 		public void refresh() {
 			setRefreshing(true);
 			APropertyNode element = getElement();

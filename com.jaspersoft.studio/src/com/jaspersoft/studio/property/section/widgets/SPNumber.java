@@ -54,8 +54,6 @@ public class SPNumber extends AHistorySPropertyWidget<IPropertyDescriptor> {
 	private int digits = 0;
 	
 	private Class<? extends Number> outputType = Integer.class;
-	
-	boolean isRefresh = false;
 
 	public SPNumber(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
 		super(parent, section, pDescriptor);
@@ -86,18 +84,18 @@ public class SPNumber extends AHistorySPropertyWidget<IPropertyDescriptor> {
 		ftext.addSelectionListener(new SelectionAdapter(){
 		
 			public void widgetSelected(SelectionEvent e) {
-				isRefresh = false;
-				if (!isRefresh) {
-					Number newValue = getValue();
-					if (!section.changeProperty(pDescriptor.getId(), newValue)) {
-						setData(section.getElement(), newValue);
-					}
-				}
+				changeValue();
 			}
 		});
 		
 		ftext.setToolTipText(pDescriptor.getDescription());
 		setWidth(parent, 6);
+	}
+	
+	protected void changeValue(){
+		Number newValue = getValue();
+		section.changeProperty(pDescriptor.getId(), newValue);
+		setData(section.getElement(), newValue);
 	}
 	
 	protected Number getValue(){
@@ -139,9 +137,7 @@ public class SPNumber extends AHistorySPropertyWidget<IPropertyDescriptor> {
 	public void setData(APropertyNode pnode, Object b, boolean isInherited) {
 		ftext.setEnabled(pnode.isEditable());
 		Number n = (Number) b;
-		isRefresh = true;
 		setDataNumber(n, isInherited);
-		isRefresh = false;
 	}
 	
 	public void setDataNumber(Number f, boolean isInherited) {

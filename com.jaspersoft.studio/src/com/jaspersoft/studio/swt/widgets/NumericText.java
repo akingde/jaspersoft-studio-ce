@@ -446,7 +446,10 @@ public class NumericText extends Text {
 	 */
 	public void increment(){
 		if (storedValue == null){
-			storedValue = new Double(minimum);
+			//if the minimum is < 0 start from zero as default
+			double defaultMin = 0;
+			if (minimum > 0) defaultMin = minimum;
+			storedValue = new Double(defaultMin);
 		}
 		double newValue = storedValue.doubleValue() + increamentStep;
 		setValue(newValue, true);
@@ -459,7 +462,10 @@ public class NumericText extends Text {
 	 */
 	public void decrement(){
 		if (storedValue == null){
-			storedValue = new Double(minimum);
+			//if the minimum is < 0 start from zero as default
+			double defaultMin = 0;
+			if (minimum > 0) defaultMin = minimum;
+			storedValue = new Double(defaultMin);
 			setValue(storedValue, true);
 		} else {
 			double newValue = storedValue.doubleValue() - increamentStep;	

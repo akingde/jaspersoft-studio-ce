@@ -42,10 +42,8 @@ public class ChartSection extends AbstractSection {
 		parent.setLayout(new GridLayout(2, false));
 
 		createWidget4Property(parent, StandardChartSettings.PROPERTY_BACKCOLOR);
-		createWidget4Property(parent,
-				StandardChartSettings.PROPERTY_CUSTOMIZER_CLASS);
-		createWidget4Property(parent,
-				StandardChartSettings.PROPERTY_RENDER_TYPE);
+		createWidget4Property(parent,StandardChartSettings.PROPERTY_CUSTOMIZER_CLASS);
+		createWidget4Property(parent,StandardChartSettings.PROPERTY_RENDER_TYPE);
 
 		IPropertyDescriptor pd = getPropertyDesriptor(SpiderChartComponent.PROPERTY_EVALUATION_TIME);
 		IPropertyDescriptor gpd = getPropertyDesriptor(SpiderChartComponent.PROPERTY_EVALUATION_GROUP);

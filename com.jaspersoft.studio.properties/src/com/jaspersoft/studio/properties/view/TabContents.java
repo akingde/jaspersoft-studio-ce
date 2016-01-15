@@ -36,6 +36,12 @@ public final class TabContents {
 	private boolean controlsCreated;
 
 	/**
+	 * Flag used to store if the current tab has at least a section
+	 * with dynamic contents
+	 */
+	private boolean dynamicContent = false;
+	
+	/**
      * 
      */
 	public TabContents() {
@@ -225,6 +231,14 @@ public final class TabContents {
 	 */
 	public void setSections(ISection[] sections) {
 		this.sections = sections;
+		if (sections != null){
+			for(ISection section : sections){
+				if (section.hasDynamicContent()){
+					dynamicContent = true;
+					break;
+				}
+			}
+		}
 	}
 
 	/**
@@ -252,5 +266,15 @@ public final class TabContents {
 				SafeRunnable.run(runnable);
 			}
 		}
+	}
+	
+	/**
+	 * Return if a section of the current tab has some dynamic content
+	 * 
+	 * @return true if in the tab there is content that could change dynamically (even if
+	 * the tab is the same), false otherwise
+	 */
+	public boolean hasDynamicContent(){
+		return dynamicContent;
 	}
 }

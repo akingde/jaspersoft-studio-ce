@@ -39,8 +39,7 @@ public class LegendSection extends AbstractSection {
 			TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
 
-		Composite group = getWidgetFactory().createSectionTitle(parent,
-				Messages.LegendSection_0, true, 6, 1);
+		Composite group = getWidgetFactory().createSection(parent, Messages.LegendSection_0, true, 6, 1);
 		section = (ExpandableComposite)group.getParent();
 
 		GridData gd = new GridData();

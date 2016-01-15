@@ -27,6 +27,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 
 import com.jaspersoft.studio.properties.view.ITabDescriptor;
+import com.jaspersoft.studio.properties.view.TabContents;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetWidgetFactory;
 
@@ -41,7 +42,7 @@ public class TabbedPropertyComposite extends Composite {
 	 * State of a tab
 	 */
 	public enum TabState {
-		TAB_NOT_DEFINED, TAB_ALREADY_VISIBLE, TAB_SET_VISIBLE
+		TAB_NOT_DEFINED, TAB_ALREADY_VISIBLE, TAB_SET_VISIBLE, TAB_DYNAMIC_VISIBLE
 	};
 
 	/**
@@ -196,13 +197,17 @@ public class TabbedPropertyComposite extends Composite {
 	 * 
 	 * @param tab
 	 *          descriptor of the tab to show
+	 * @param contents
+	 * 			the contents of the tab to show
 	 * @return the state of a tab, it can be TabState.TAB_NOT_DEFINED if the tab
 	 *         was still undefined and must be created TabState.TAB_SET_VISIBLE
 	 *         the tab was created before but it was not visible, now it is
 	 *         visible TabState.TAB_ALREADY_VISIBLE the tab was created before and
-	 *         it is already visible
+	 *         it is already visible. TAB_DYNAMIC_VISIBLE is similar to TAB_ALREADY_VISIBLE
+	 *         but remark that the content inside the tab are shown dynamically, so it need
+	 *         to be layouted every time  
 	 */
-	public TabState showTabContents(ITabDescriptor tab) {
+	public TabState showTabContents(ITabDescriptor tab, TabContents contents) {
 		if (tab == null)
 			showEmptyPage(true);
 		Control control = cacheMap.get(tab);
@@ -213,7 +218,8 @@ public class TabbedPropertyComposite extends Composite {
 				cachedLayout.topControl = control;
 				return TabState.TAB_SET_VISIBLE;
 			}
-			return TabState.TAB_ALREADY_VISIBLE;
+			if (contents.hasDynamicContent()) return TabState.TAB_DYNAMIC_VISIBLE;
+			else return TabState.TAB_ALREADY_VISIBLE;
 		}
 	}
 
@@ -245,17 +251,11 @@ public class TabbedPropertyComposite extends Composite {
 			int height = 0;
 			int width = getBounds().width;
 			ScrolledComposite scrolledComposite = (ScrolledComposite) topControl;
-			// When i calculate the height it is really important to give the real
-			// width
+			// When i calculate the height it is really important to give the real width
 			// of the composite, since it is used to calculate the number of columns
 			Point compositeSize = scrolledComposite.getContent().computeSize(width, SWT.DEFAULT);
 			height = compositeSize.y;
-			int actualMinheight = scrolledComposite.getMinHeight();
-			boolean barVisible = scrolledComposite.getVerticalBar().isVisible();
-			if (barVisible || height > actualMinheight) {
-				scrolledComposite.setMinHeight(height);
-			}
-
+			scrolledComposite.setMinHeight(height);
 			scrolledComposite.setMinWidth(minimumWidth);
 		}
 	}

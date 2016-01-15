@@ -16,8 +16,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.HashMap;
 
-import net.sf.jasperreports.engine.JRPropertiesMap;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.layout.GridData;
@@ -36,6 +34,9 @@ import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.descriptors.JSSComboPropertyDescriptor;
 import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.swt.widgets.RealSizeStackLayout;
+
+import net.sf.jasperreports.engine.JRPropertiesMap;
 
 /**
  * Layout section, can be used to display dynamically configuration controls
@@ -125,7 +126,7 @@ public class LayoutSection extends AbstractSection {
 		
 		//Create the are where the layout additional controls are created
 		layoutConfigurationPanel = new Composite(container, SWT.NONE);
-		layoutConfigurationPanel.setLayout(new StackLayout());
+		layoutConfigurationPanel.setLayout(new RealSizeStackLayout());
 		setLayoutAreaVisible(false);
 		widgets.put(pd.getId(), layoutCombo); 
 			
@@ -261,4 +262,8 @@ public class LayoutSection extends AbstractSection {
 		}
 	}
 	
+	@Override
+	public boolean hasDynamicContent() {
+		return true;
+	}
 }

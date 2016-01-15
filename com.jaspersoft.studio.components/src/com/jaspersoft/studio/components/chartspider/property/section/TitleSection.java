@@ -39,26 +39,21 @@ public class TitleSection extends AbstractSection {
 			TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
 
-		Composite group = getWidgetFactory().createSectionTitle(parent, Messages.TitleSection_0,
-				true, 4, 1);
+		Composite group = getWidgetFactory().createSection(parent, Messages.TitleSection_0,true, 4, 1);
 		section = (ExpandableComposite)group.getParent();
 
 		getWidgetFactory().createCLabel(group, Messages.TitleSection_1);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 3;
-		createWidget4Property(group,
-				StandardChartSettings.PROPERTY_TITLE_EXPRESSION, false)
-				.getControl().setLayoutData(gd);
+		createWidget4Property(group,StandardChartSettings.PROPERTY_TITLE_EXPRESSION, false).getControl().setLayoutData(gd);
 
-		createWidget4Property(group,
-				StandardChartSettings.PROPERTY_TITLE_POSITION);
+		createWidget4Property(group,StandardChartSettings.PROPERTY_TITLE_POSITION);
 
 		createWidget4Property(group, StandardChartSettings.PROPERTY_TITLE_COLOR);
 
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 4;
-		createWidget4Property(group, StandardChartSettings.PROPERTY_TITLE_FONT,
-				false).getControl().setLayoutData(gd);
+		createWidget4Property(group, StandardChartSettings.PROPERTY_TITLE_FONT,false).getControl().setLayoutData(gd);
 	}
 	
 	@Override

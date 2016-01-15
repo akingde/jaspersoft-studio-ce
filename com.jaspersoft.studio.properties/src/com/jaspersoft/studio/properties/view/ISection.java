@@ -129,11 +129,27 @@ public interface ISection {
 	 * @return <code>true</code> if this section would like extra height space.
 	 */
 	public boolean shouldUseExtraSpace();
+	
+	/**
+	 * Return if the current section provide dynamic content. This
+	 * will disable some optimization since even if the showed section
+	 * is the same, since the content is dynamic the size of the page must 
+	 * be recalculated
+	 * 
+	 * @return true if the content shown in the section can change after its creation
+	 * false otherwise
+	 */
+	public boolean hasDynamicContent();
 
 	/**
 	 * Refresh the contents of the controls displayed in this section.
 	 */
 	public void refresh();
 
+	/**
+	 * Return  the current element selected in the section
+	 * 
+	 * @return the selected element, can be null
+	 */
 	public Object getElement();
 }

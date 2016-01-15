@@ -12,37 +12,27 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.chart.property.section.plot;
 
-import net.sf.jasperreports.charts.design.JRDesignPiePlot;
-
 import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
-import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.property.section.AbstractRealValueSection;
 
-public class PiePlot extends APlot {
+import net.sf.jasperreports.charts.design.JRDesignPiePlot;
+
+public class PiePlot extends AbstractRealValueSection {
 
 	@Override
-	public void createControls(AbstractSection section, Composite parent,
-			TabbedPropertySheetPage tabbedPropertySheetPage) {
+	public void createControls(Composite parent, TabbedPropertySheetPage tabbedPropertySheetPage) {
+		super.createControls(parent, tabbedPropertySheetPage);
+		parent = getWidgetFactory().createSection(parent, "Labels",true, 2, 3);
 		
-		parent = section.getWidgetFactory().createSection(parent, "Labels",true, 2, 3);
-		
-		section.createWidget4Property(parent,
-				JRDesignPiePlot.PROPERTY_SHOW_LABELS);
+		createWidget4Property(parent,JRDesignPiePlot.PROPERTY_SHOW_LABELS);
+		createWidget4Property(parent, JRDesignPiePlot.PROPERTY_CIRCULAR);
+		createWidget4Property(parent,JRDesignPiePlot.PROPERTY_LABEL_FORMAT);
+		createWidget4Property(parent, JRDesignPiePlot.PROPERTY_LEGEND_LABEL_FORMAT);
 
-		section.createWidget4Property(parent, JRDesignPiePlot.PROPERTY_CIRCULAR);
-
-		section.createWidget4Property(parent,
-				JRDesignPiePlot.PROPERTY_LABEL_FORMAT);
-
-		section.createWidget4Property(parent,
-				JRDesignPiePlot.PROPERTY_LEGEND_LABEL_FORMAT);
-
-		parent = section.getWidgetFactory().createSection(parent, "Font color",
-				true, 4, 2);
-
-		section.createWidget4Property(parent,
-				JRDesignPiePlot.PROPERTY_ITEM_LABEL, false);
+		parent = getWidgetFactory().createSection(parent, "Font color",true, 4, 2);
+		createWidget4Property(parent, JRDesignPiePlot.PROPERTY_ITEM_LABEL, false);
 	}
 
 }
