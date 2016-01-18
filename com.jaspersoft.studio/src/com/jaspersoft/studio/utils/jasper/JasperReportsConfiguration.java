@@ -52,6 +52,7 @@ import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ModelUtils;
 
 import net.sf.jasperreports.data.AbstractClasspathAwareDataAdapterService;
+import net.sf.jasperreports.eclipse.IDisposeListener;
 import net.sf.jasperreports.eclipse.MScopedPreferenceStore;
 import net.sf.jasperreports.eclipse.classpath.JavaProjectClassLoader;
 import net.sf.jasperreports.eclipse.util.FilePrefUtil;
@@ -126,6 +127,9 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 				qExecutors = null;
 			} else if (prmProvider != null && property.startsWith(ParameterSet.PARAMETER_SET)) {
 				prmProvider.reset();
+			} else if (property.startsWith("com.jaspersoft.studio.")) {
+				isPropsCached = false;
+				getProperties();
 			}
 			propertyChangeSupport.firePropertyChange(new PropertyChangeEvent(this, "preferences", null, event));
 		}
@@ -786,11 +790,11 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 								} catch (URISyntaxException e) {
 									e.printStackTrace();
 								} catch (ClientProtocolException e) {
-									new JRException(JRLoader.EXCEPTION_MESSAGE_KEY_INPUT_STREAM_FROM_URL_OPEN_ERROR,
-											new Object[] { url }, e);
+									new JRException(JRLoader.EXCEPTION_MESSAGE_KEY_INPUT_STREAM_FROM_URL_OPEN_ERROR, new Object[] { url },
+											e);
 								} catch (IOException e) {
-									new JRException(JRLoader.EXCEPTION_MESSAGE_KEY_INPUT_STREAM_FROM_URL_OPEN_ERROR,
-											new Object[] { url }, e);
+									new JRException(JRLoader.EXCEPTION_MESSAGE_KEY_INPUT_STREAM_FROM_URL_OPEN_ERROR, new Object[] { url },
+											e);
 								}
 
 							}
@@ -823,4 +827,5 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 	public IFile getAssociatedReportFile() {
 		return (IFile) get(FileUtils.KEY_FILE);
 	}
+
 }

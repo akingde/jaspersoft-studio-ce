@@ -11,6 +11,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import org.eclipse.jface.resource.ImageDescriptor;
+
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.backward.JRVersionPreferencesPages;
+import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
+import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.templates.DefaultTemplateProvider;
+import com.jaspersoft.studio.templates.IconedTemplateBundle;
+import com.jaspersoft.studio.templates.engine.DefaultTemplateEngine;
+import com.jaspersoft.studio.utils.ModelUtils;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+import com.jaspersoft.studio.wizards.BuiltInCategories;
+
 import net.sf.jasperreports.eclipse.util.FileExtension;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.JRExpression;
@@ -21,19 +34,6 @@ import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
-
-import org.eclipse.jface.resource.ImageDescriptor;
-
-import com.jaspersoft.studio.JaspersoftStudioPlugin;
-import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
-import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.preferences.StudioPreferencePage;
-import com.jaspersoft.studio.templates.DefaultTemplateProvider;
-import com.jaspersoft.studio.templates.IconedTemplateBundle;
-import com.jaspersoft.studio.templates.engine.DefaultTemplateEngine;
-import com.jaspersoft.studio.utils.ModelUtils;
-import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
-import com.jaspersoft.studio.wizards.BuiltInCategories;
 
 /**
  * This is a generic template bundle able to load info from a JRXML file. The Jrxml location is provided via URL, so the
@@ -443,7 +443,7 @@ public class GenericTemplateBundle implements IconedTemplateBundle, ValidatedTem
 	 */
 	private String getCurrentVersion() {
 		// assume last version as safe fall-back
-		String ver = JaspersoftStudioPlugin.getInstance().getPreferenceStore().getString(StudioPreferencePage.JSS_COMPATIBILITY_VERSION);
+		String ver = JaspersoftStudioPlugin.getInstance().getPreferenceStore().getString(JRVersionPreferencesPages.JSS_COMPATIBILITY_VERSION);
 		if (JRXmlWriterHelper.LAST_VERSION.equals(ver)) {
 			return net.sf.jasperreports.engine.JasperCompileManager.class.getPackage().getImplementationVersion();
 		} else {

@@ -20,21 +20,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
-import net.sf.jasperreports.eclipse.JasperReportsPlugin;
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.engine.DefaultJasperReportsContext;
-import net.sf.jasperreports.engine.JRExpression;
-import net.sf.jasperreports.engine.JRImage;
-import net.sf.jasperreports.engine.JRReportTemplate;
-import net.sf.jasperreports.engine.JRSubreport;
-import net.sf.jasperreports.engine.design.JRDesignElement;
-import net.sf.jasperreports.engine.design.JRDesignExpression;
-import net.sf.jasperreports.engine.design.JRDesignImage;
-import net.sf.jasperreports.engine.design.JRDesignReportTemplate;
-import net.sf.jasperreports.engine.design.JRDesignSubreport;
-import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.util.SimpleFileResolver;
-
 import org.apache.commons.io.FileUtils;
 import org.eclipse.core.commands.operations.OperationStatus;
 import org.eclipse.core.resources.IFile;
@@ -61,9 +46,9 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 
+import com.jaspersoft.studio.backward.JRVersionPreferencesPages;
 import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.preferences.StudioPreferencePage;
 import com.jaspersoft.studio.property.dataset.dialog.DataQueryAdapters;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.templates.JrxmlTemplateBundle;
@@ -73,6 +58,21 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.wizards.ContextHelpIDs;
 import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
 import com.jaspersoft.templates.TemplateBundle;
+
+import net.sf.jasperreports.eclipse.JasperReportsPlugin;
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.engine.DefaultJasperReportsContext;
+import net.sf.jasperreports.engine.JRExpression;
+import net.sf.jasperreports.engine.JRImage;
+import net.sf.jasperreports.engine.JRReportTemplate;
+import net.sf.jasperreports.engine.JRSubreport;
+import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.design.JRDesignExpression;
+import net.sf.jasperreports.engine.design.JRDesignImage;
+import net.sf.jasperreports.engine.design.JRDesignReportTemplate;
+import net.sf.jasperreports.engine.design.JRDesignSubreport;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.util.SimpleFileResolver;
 
 /**
  * 
@@ -381,7 +381,7 @@ public class ResourcePage extends JSSHelpWizardPage {
 		try {
 			JasperDesign report = bundle.getJasperDesign();
 			report.removeProperty(DataQueryAdapters.DEFAULT_DATAADAPTER);
-			String version = jrContext.getProperty(StudioPreferencePage.JSS_COMPATIBILITY_VERSION, JRXmlWriterHelper.LAST_VERSION);
+			String version = jrContext.getProperty(JRVersionPreferencesPages.JSS_COMPATIBILITY_VERSION, JRXmlWriterHelper.LAST_VERSION);
 			xml = JRXmlWriterHelper.writeReport(jrContext, report, net.sf.jasperreports.eclipse.util.FileUtils.UTF8_ENCODING, version); //$NON-NLS-1$
 		} catch (Throwable e) {
 			UIUtils.showError(e);

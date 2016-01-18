@@ -16,6 +16,8 @@ import java.util.List;
 
 import org.eclipse.jface.wizard.Wizard;
 
+import net.sf.jasperreports.eclipse.builder.JRDefinition;
+
 /**
  * Wizard used to edit or add a new link to download a specific version of JasperReports
  * 

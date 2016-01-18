@@ -350,6 +350,12 @@
             id="com.jaspersoft.studio.preferences.templates"
             name="%Templates">
       </page>
+      <page
+            category="com.jaspersoft.studio.preferences.StudioPreferencePage"
+            class="com.jaspersoft.studio.backward.JRVersionPreferencesPages"
+            id="com.jaspersoft.studio.backward.JRVersionPreferencesPages"
+            name="%jrversion">
+      </page>
    </extension>
    <extension
          id=""
@@ -597,6 +603,17 @@
             class="com.jaspersoft.studio.preferences.templates.PathsPreferencePage"
             id="com.jaspersoft.studio.preferences.templates.property"
             name="%Templates">
+      </page>
+      <page
+            category="com.jaspersoft.studio.preferences.StudioPreferencePage.property"
+            class="com.jaspersoft.studio.backward.JRVersionPreferencesPages"
+            id="com.jaspersoft.studio.backward.JRVersionPreferencesPages.property"
+            name="%jrversion">
+         <enabledWhen>
+            <reference
+                  definitionId="com.jaspersoft.studio.projectorjrxml">
+            </reference>
+         </enabledWhen>
       </page>
    </extension>
    <extension

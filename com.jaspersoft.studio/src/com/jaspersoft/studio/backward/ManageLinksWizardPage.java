@@ -15,8 +15,6 @@ package com.jaspersoft.studio.backward;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
@@ -41,6 +39,9 @@ import org.eclipse.swt.widgets.TableColumn;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
+
+import net.sf.jasperreports.eclipse.builder.JRDefinition;
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 /**
  * 

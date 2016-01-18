@@ -315,9 +315,7 @@ public class Messages extends NLS {
 	public static String ConnectToDatasetWizardPage_removedFromDataset;
 	public static String ConnectToDatasetWizardPage_removedFromDatasetRun1;
 	public static String ConnectToDatasetWizardPage_removedFromDatasetRun2;
-	public static String ConsoleExecuter_endCompilation;
-	public static String ConsoleExecuter_fileNotFound;
-	public static String ConsoleExecuter_startCompilation;
+	
 	public static String ConvertStaticIntoText_actionName;
 	public static String ConvertStaticIntoText_actionTooltip;
 	public static String ConvertTextIntoStatic_actionName;
@@ -1002,6 +1000,10 @@ public class Messages extends NLS {
 	public static String JRPropertyPage_description;
 	public static String JRPropertyPage_value;
 	public static String JRQueryPage_description;
+	public static String JRVersionPreferencesPages_3;
+	public static String JRVersionPreferencesPages_4;
+	public static String JRVersionPreferencesPages_5;
+	public static String JRVersionPreferencesPages_6;
 	public static String JRXmlWriterHelper_0;
 	public static String JRXmlWriterHelper_1;
 	public static String JRXmlWriterHelper_4;
@@ -1878,6 +1880,7 @@ public class Messages extends NLS {
 	public static String SetDefaultsAction_tooltip;
 	public static String SetValueCommand_set_zero_property;
 	public static String ShowGridAction_show_grid_tool_tip;
+	public static String ShowInstallationsWizardPage_0;
 	public static String ShowInstallationsWizardPage_jrLabel;
 	public static String ShowInstallationsWizardPage_labelText;
 	public static String ShowInstallationsWizardPage_pageDescription;

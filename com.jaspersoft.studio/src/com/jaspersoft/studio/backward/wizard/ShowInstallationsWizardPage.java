@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.backward.wizard;
 
@@ -17,23 +13,28 @@ import java.util.HashMap;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.events.ControlAdapter;
+import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Link;
 
 import com.jaspersoft.studio.backward.JRBackwardManager;
-import com.jaspersoft.studio.backward.JRDefinition;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.wizards.ContextHelpIDs;
 import com.jaspersoft.studio.wizards.JSSWizardPage;
 
+import net.sf.jasperreports.eclipse.builder.JRDefinition;
+
 /**
- * Wizard page were all the older supported version of JR are listed. They
- * can be downloaded or deleted if downloaded previously
+ * Wizard page were all the older supported version of JR are listed. They can be downloaded or deleted if downloaded
+ * previously
  * 
  * @author Orlandin Marco
  *
@@ -41,24 +42,23 @@ import com.jaspersoft.studio.wizards.JSSWizardPage;
 public class ShowInstallationsWizardPage extends JSSWizardPage {
 
 	/**
-	 * The map of all the jrdefinition shown in the page associated with a flag that means if they 
-	 * must be or not in the storage
+	 * The map of all the jrdefinition shown in the page associated with a flag that means if they must be or not in the
+	 * storage
 	 */
 	private HashMap<JRDefinition, Boolean> selectionMap = new HashMap<JRDefinition, Boolean>();
-	
+
 	/**
-	 * Adapter on the checkbox used to show the available jr, when a checkbox change state the map
-	 * is upaded
+	 * Adapter on the checkbox used to show the available jr, when a checkbox change state the map is upaded
 	 */
-	private SelectionAdapter checkSelected = new SelectionAdapter(){
-		
+	private SelectionAdapter checkSelected = new SelectionAdapter() {
+
 		public void widgetSelected(SelectionEvent e) {
-			JRDefinition def = (JRDefinition)e.widget.getData();
-			Button btn = (Button)e.widget;
+			JRDefinition def = (JRDefinition) e.widget.getData();
+			Button btn = (Button) e.widget;
 			selectionMap.put(def, btn.getSelection());
 		};
 	};
-	
+
 	/**
 	 * Create the page
 	 */
@@ -69,42 +69,75 @@ public class ShowInstallationsWizardPage extends JSSWizardPage {
 	}
 
 	@Override
-	public void createControl(Composite parent) {
-		ScrolledComposite sc = new ScrolledComposite(		parent, SWT.V_SCROLL);
-		Composite child = new Composite(sc, SWT.NONE);
-		child.setLayout(new GridLayout(1, false));
-	
-		Label informationLabel = new Label(child, SWT.WRAP);
+	public void createControl(final Composite parent) {
+		final Composite cmp = new Composite(parent, SWT.NONE);
+		cmp.setLayout(new GridLayout());
+
+		Label informationLabel = new Label(cmp, SWT.WRAP);
 		informationLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		informationLabel.setText(Messages.ShowInstallationsWizardPage_labelText);
-		
-		for(JRDefinition definition : JRBackwardManager.INSTANCE.getDefinitions()){
+
+		final ScrolledComposite sc = new ScrolledComposite(cmp, SWT.V_SCROLL);
+		final Composite child = new Composite(sc, SWT.NONE);
+		child.setLayout(new GridLayout(1, false));
+
+		fillVersions(child);
+		sc.setContent(child);
+		sc.setExpandHorizontal(true);
+		sc.setExpandVertical(true);
+		sc.setAlwaysShowScrollBars(true);
+		GridData gd = new GridData(GridData.FILL_BOTH);
+		gd.widthHint = 300;
+		gd.heightHint = 400;
+		sc.setLayoutData(gd);
+		sc.setMinSize(cmp.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+		sc.addControlListener(new ControlAdapter() {
+			public void controlResized(ControlEvent e) {
+				sc.setMinSize(child.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+			}
+		});
+
+		Link links = new Link(cmp, SWT.NONE);
+		links.setText(Messages.ShowInstallationsWizardPage_0);
+		links.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
+		links.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				if (JRBackwardManager.INSTANCE.openLinksDialog()) {
+					selectionMap.clear();
+					for (Control c : child.getChildren())
+						c.dispose();
+					fillVersions(child);
+					child.layout(true);
+				}
+			}
+		});
+
+		setControl(cmp);
+	}
+
+	protected void fillVersions(Composite child) {
+		for (JRDefinition definition : JRBackwardManager.INSTANCE.getDefinitions()) {
 			Button selectionButton = new Button(child, SWT.CHECK);
 			selectionButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-			selectionButton.setText(MessageFormat.format(Messages.ShowInstallationsWizardPage_jrLabel, new Object[]{definition.getVersion()}));
+			selectionButton.setText(
+					MessageFormat.format(Messages.ShowInstallationsWizardPage_jrLabel, new Object[] { definition.getVersion() }));
 			selectionButton.setData(definition);
 			Boolean alreadyPresent = JRBackwardManager.INSTANCE.checkJRInstallation(definition);
 			selectionButton.setSelection(alreadyPresent);
 			selectionButton.addSelectionListener(checkSelected);
-			selectionMap.put(definition, alreadyPresent);	
+			selectionMap.put(definition, alreadyPresent);
 		}
-		sc.setContent(child);
-		// Set the minimum size
-	  sc.setMinSize(400, child.computeSize(400, SWT.DEFAULT).y);
-	  // Expand both horizontally and vertically
-	  sc.setExpandHorizontal(true);
-	  sc.setExpandVertical(true);
-	  setControl(sc);
 	}
-	
+
 	/**
-	 * Get the elements in the page with the selection flag, to know
-	 * which element should be deleted and which one must be donwloaded
+	 * Get the elements in the page with the selection flag, to know which element should be deleted and which one must be
+	 * donwloaded
 	 * 
-	 * @return a not null hash map. The key is a jrdefinition and the value
-	 * is to indicate if the definition should be or not in the storage
+	 * @return a not null hash map. The key is a jrdefinition and the value is to indicate if the definition should be or
+	 *         not in the storage
 	 */
-	protected HashMap<JRDefinition, Boolean> getSelection(){
+	protected HashMap<JRDefinition, Boolean> getSelection() {
 		return selectionMap;
 	}
 

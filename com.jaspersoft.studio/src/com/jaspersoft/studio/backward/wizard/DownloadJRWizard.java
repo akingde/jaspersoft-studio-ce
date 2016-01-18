@@ -17,6 +17,7 @@ import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import net.sf.jasperreports.eclipse.builder.JRDefinition;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -24,7 +25,6 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.backward.JRBackwardManager;
-import com.jaspersoft.studio.backward.JRDefinition;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.wizards.JSSWizard;
 

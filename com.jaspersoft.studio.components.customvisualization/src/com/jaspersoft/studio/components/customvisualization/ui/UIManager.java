@@ -49,11 +49,11 @@ import com.jaspersoft.studio.property.itemproperty.desc.ComboItemPropertyDescrip
 import com.jaspersoft.studio.property.itemproperty.desc.ItemPropertyDescription;
 import com.jaspersoft.studio.property.itemproperty.desc.NumberPropertyDescription;
 import com.jaspersoft.studio.utils.Misc;
-import com.jaspersoft.studio.utils.jasper.IDisposeListener;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 import net.sf.jasperreports.components.items.ItemProperty;
 import net.sf.jasperreports.components.items.StandardItemProperty;
+import net.sf.jasperreports.eclipse.IDisposeListener;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 
 public class UIManager {
