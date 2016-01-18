@@ -75,7 +75,7 @@ public class DeleteServerAction extends Action {
 						Object obj = p[i].getLastSegment();
 						if (obj instanceof MServerProfile) {
 							final MServerProfile msrv = (MServerProfile) obj;
-							if (delDir) {
+							if (delDir && msrv.getValue().getProjectPath() != null) {
 								IResource r = root.findMember(msrv.getValue().getProjectPath());
 								if (r instanceof IFolder) {
 									try {
