@@ -25,7 +25,6 @@ import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
-import com.jaspersoft.studio.jface.IntegerCellEditorValidator;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.text.MFont;
 import com.jaspersoft.studio.preferences.fonts.FontsPreferencePage;
@@ -33,6 +32,7 @@ import com.jaspersoft.studio.preferences.fonts.utils.FontUtils;
 import com.jaspersoft.studio.property.descriptor.combo.FontNamePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.swt.widgets.NumericCombo;
 
 import net.sf.jasperreports.engine.JRCloneable;
 import net.sf.jasperreports.engine.JRFont;
@@ -68,7 +68,7 @@ public class SPFont extends ASPropertyWidget<IPropertyDescriptor> {
 	/**
 	 * The combo with the font size
 	 */
-	private Combo fontSize;
+	private NumericCombo fontSize;
 
 	/**
 	 * Buttom for the attribute bold
@@ -232,22 +232,23 @@ public class SPFont extends ASPropertyWidget<IPropertyDescriptor> {
 		fontSizeData.minimumWidth = 65;
 		fontSizeLayout.setLayout(new GridLayout(1, false));
 		fontSizeLayout.setLayoutData(fontSizeData);
-		fontSize = section.getWidgetFactory().createCombo(fontSizeLayout, SWT.FLAT);
+		fontSize = new NumericCombo(fontSizeLayout, SWT.FLAT, 1);
 		fontSize.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		fontSize.setItems(pd1.getItems());
-		fontSize.addModifyListener(new ModifyListener() {
+		fontSize.addSelectionListener(new SelectionAdapter() {
+			
 			private int time = 0;
-
-			public void modifyText(ModifyEvent e) {
+			
+			public void widgetSelected(SelectionEvent e) {
 				if (e.time - time > 100) {
-					String value = fontSize.getText();
-					if (IntegerCellEditorValidator.instance().isValid(value) == null)
-						changeProperty(section, pDescriptor.getId(), pd1.getId(), value);
+					String value = fontSize.getValueAsFloat().toString();
+					changeProperty(section, pDescriptor.getId(), pd1.getId(), value);
 					int stringLength = fontSize.getText().length();
 					fontSize.setSelection(new Point(stringLength, stringLength));
 				}
 				time = e.time;
-			}
+			};
+		
 		});
 		fontSize.setToolTipText(pd1.getDescription());
 
@@ -318,8 +319,7 @@ public class SPFont extends ASPropertyWidget<IPropertyDescriptor> {
 			String strfontname = JRStyleResolver.getFontName(fontValue);
 			fontName.setText(strfontname);
 
-			String strfontsize = Float.toString(JRStyleResolver.getFontsize(fontValue));
-			fontSize.setText(strfontsize != null ? strfontsize : "");
+			fontSize.setValue(JRStyleResolver.getFontsize(fontValue)); 
 
 			Boolean b = JRStyleResolver.isBold(fontValue);
 			boldButton.setSelection(b != null ? b.booleanValue() : false);

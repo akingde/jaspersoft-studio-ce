@@ -24,15 +24,16 @@ import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Text;
 import org.mihalis.opal.utils.StringUtil;
 
 import com.jaspersoft.studio.utils.ModelUtils;
@@ -44,7 +45,7 @@ import com.jaspersoft.studio.utils.ValidatedDecimalFormat;
  * @author Orlandin Marco
  *
  */
-public class NumericText extends Text {
+public class NumericCombo extends Combo {
 	
 	/**
 	 * The listeners on this widget
@@ -114,13 +115,25 @@ public class NumericText extends Text {
 	};
 	
 	/**
-	 * Create the textual control
+	 * Selection listeners called when the value in the text area change, fire all the attached
+	 * selection listeners
+	 */
+	private SelectionListener selectionNotifier = new SelectionAdapter() {
+		
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			fireListeners();
+		}
+	};
+	
+	/**
+	 * Create the combo control
 	 * 
 	 * @param parent the parent
 	 * @param style the style bits, the supported ones are the same of a standard SWT text widget
 	 * @param decimalDigits the number of decimal digits shown in the widget
 	 */
-	public NumericText(Composite parent, int style, int decimalDigits){
+	public NumericCombo(Composite parent, int style, int decimalDigits){
 		super(parent, style);
 		currentColor = getForeground();
 		this.formatter = new ValidatedDecimalFormat(decimalDigits);
@@ -128,13 +141,13 @@ public class NumericText extends Text {
 	}
 	
 	/**
-	 * Create the textual control to handle integer numbers
+	 * Create the combo control to handle the numbers accepter by the passed NumberFormat
 	 * 
 	 * @param parent the parent
 	 * @param formatter the formatter for this control
 	 * @param style the style bits, the supported ones are the same of a standard SWT text widget
 	 */
-	public NumericText(Composite parent, NumberFormat formatter, int style) {
+	public NumericCombo(Composite parent, NumberFormat formatter, int style) {
 		super(parent, style);
 		currentColor = getForeground();
 		addListeners();
@@ -148,6 +161,7 @@ public class NumericText extends Text {
 	protected void addListeners(){
 		addVerifyListener(inputVerifier);
 		addModifyListener(inputNotifier);
+		super.addSelectionListener(selectionNotifier);
 		addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(final FocusEvent e) {
@@ -295,13 +309,13 @@ public class NumericText extends Text {
 			} else {
 				setText(selection.toString());
 			}
-			selectAll();
+			setSelection(new Point(0, getText().length()));
 			setFocus();
 		} else {
 			if (isNullable){
 				storedValue = null;
 				setText("");
-				selectAll();
+				setSelection(new Point(0, getText().length()));
 				setFocus();
 			} else {
 				throw new IllegalArgumentException("The widget can not accept null values when the isNullable property is false");
@@ -334,7 +348,7 @@ public class NumericText extends Text {
 		} else {
 			Point cursorSelection = getSelection();
 			if (cursorSelection.x == cursorSelection.y){
-				work = StringUtil.insertString(getText(), entry, getCaretPosition());
+				work = StringUtil.insertString(getText(), entry, cursorSelection.x);
 			} else if (cursorSelection.x != cursorSelection.y) {
 				String text = getText();
 				work = text.substring(0, cursorSelection.x) + entry + text.substring(cursorSelection.y, text.length());

@@ -30,21 +30,22 @@ import org.eclipse.core.runtime.Assert;
 public class ValidatedDecimalFormat extends DecimalFormat{
 
 	private static final long serialVersionUID = -8953035800738294624L;
-
-	/**
-	 * Digits shown by the widget
-	 */
-	private int digits = 0;
 	
 	/**
 	 * Compiled pattern to match to be valid
 	 */
 	private Pattern patternToMatch;
 	
-	public ValidatedDecimalFormat(int decimalDigits){
+	/**
+	 * Create a number format used to handle numbers with 0 or more decimals
+	 * 
+	 * @param decimalDigits the minimum number of decimal digits displayed
+	 * @param maxAcceptedDigits maximum number of decimal digits accepted
+	 */
+	public ValidatedDecimalFormat(int decimalDigits, int maxAcceptedDigits){
 		super();
 		Assert.isTrue(decimalDigits >= 0, "Digits number can't be negative");
-		this.digits = decimalDigits;
+		Assert.isTrue(maxAcceptedDigits >= decimalDigits, "The max accepted digits must be less or equal of the number of digits");
 		String pattern = null;
 		//Create the pattern using the number of digits
 		if (decimalDigits > 0){
@@ -55,7 +56,10 @@ public class ValidatedDecimalFormat extends DecimalFormat{
 				} else {
 					pattern += "#";
 				}
-			} 
+			}  
+			for(int i=decimalDigits; i < maxAcceptedDigits; i++){
+				pattern += "#";
+			}
 		} else {
 			pattern = "######";
 		}
@@ -64,12 +68,16 @@ public class ValidatedDecimalFormat extends DecimalFormat{
 		DecimalFormatSymbols symbols=format.getDecimalFormatSymbols();
 		char decimalSeparator=symbols.getDecimalSeparator();
 		
-		if (digits == 0){
+		if (decimalDigits == 0){
 			patternToMatch = Pattern.compile("[0-9]+");
 		} else {
-			patternToMatch = Pattern.compile("[0-9]+([" + decimalSeparator + "]{0,1}[0-9]{0,6})?");
+			patternToMatch = Pattern.compile("[0-9]+([" + decimalSeparator + "]{0,1}[0-9]{0," + maxAcceptedDigits + "})?");
 		}
 		applyPattern(pattern);
+	}
+	
+	public ValidatedDecimalFormat(int decimalDigits){
+		this(decimalDigits, 6);
 	}
 	
 	/**
@@ -81,7 +89,9 @@ public class ValidatedDecimalFormat extends DecimalFormat{
     //remove the grouping separator
     String valueToParse = source;//source.replace(String.valueOf(groupSeparator), "");
     Matcher matcher = patternToMatch.matcher(valueToParse);
-		if (!matcher.matches()) throw new ParseException(valueToParse, pp.getIndex());
+		if (!matcher.matches()) {
+			throw new ParseException(valueToParse, pp.getIndex());
+		}
     Number result = super.parse(valueToParse, pp);
     if (pp.getIndex() == valueToParse.length())  {
     	 return result;
