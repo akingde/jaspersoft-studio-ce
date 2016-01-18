@@ -15,13 +15,6 @@ package com.jaspersoft.studio.server.publish.wizard;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.eclipse.util.FileExtension;
-import net.sf.jasperreports.engine.DefaultJasperReportsContext;
-import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.xml.JRXmlDigesterFactory;
-import net.sf.jasperreports.engine.xml.JRXmlLoader;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -63,6 +56,14 @@ import com.jaspersoft.studio.server.publish.wizard.page.ResourcesPage;
 import com.jaspersoft.studio.utils.SelectionHelper;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
+import net.sf.jasperreports.eclipse.builder.jdt.JDTUtils;
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.FileExtension;
+import net.sf.jasperreports.engine.DefaultJasperReportsContext;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.xml.JRXmlDigesterFactory;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
+
 public class Publish2ServerWizard extends Wizard implements IExportWizard {
 	private JasperDesign jDesign;
 	private FileSelectionPage page_1;
@@ -78,6 +79,7 @@ public class Publish2ServerWizard extends Wizard implements IExportWizard {
 		super();
 		setWindowTitle(Messages.Publish2ServerWizard_Title);
 		setNeedsProgressMonitor(true);
+		JDTUtils.activateLinkedResourcesSupport();
 	}
 
 	public Publish2ServerWizard(JasperDesign jDesign,
@@ -288,6 +290,7 @@ public class Publish2ServerWizard extends Wizard implements IExportWizard {
 
 	@Override
 	public boolean performFinish() {
+		JDTUtils.restoreLinkedResourcesSupport();
 		try {
 			getContainer().run(true, true, new IRunnableWithProgress() {
 
@@ -313,6 +316,12 @@ public class Publish2ServerWizard extends Wizard implements IExportWizard {
 		}
 
 		return true;
+	}
+	
+	@Override
+	public boolean performCancel() {
+		JDTUtils.restoreLinkedResourcesSupport();
+		return super.performCancel();
 	}
 
 	@Override
