@@ -131,12 +131,14 @@ public class NumericCombo extends Combo {
 	 * 
 	 * @param parent the parent
 	 * @param style the style bits, the supported ones are the same of a standard SWT text widget
-	 * @param decimalDigits the number of decimal digits shown in the widget
+	 * @param decimalDigitsShown the minimum number of decimal digits displayed when formatting the value, must be not negative
+	 * @param decimalDigitsAccepted maximum number of decimal digits accepted. Set this to 0 mean no decimal digits, must be greater or equal of 
+	 * decimalDigitsShown	 
 	 */
-	public NumericCombo(Composite parent, int style, int decimalDigits){
+	public NumericCombo(Composite parent, int style, int decimalDigitsShown, int decimalDigitsAccepted){
 		super(parent, style);
 		currentColor = getForeground();
-		this.formatter = new ValidatedDecimalFormat(decimalDigits);
+		this.formatter = new ValidatedDecimalFormat(decimalDigitsShown, decimalDigitsAccepted);
 		addListeners();
 	}
 	

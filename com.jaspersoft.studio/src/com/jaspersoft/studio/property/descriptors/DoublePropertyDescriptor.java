@@ -50,7 +50,7 @@ public class DoublePropertyDescriptor extends TextPropertyDescriptor implements 
 	private double maxValue = Double.MAX_VALUE;
 	
 	/**
-	 * Number of decimal digits accepted
+	 * Number of decimal digits shwon and accepted
 	 */
 	private int digitsNumber = 6;
 	
@@ -106,7 +106,7 @@ public class DoublePropertyDescriptor extends TextPropertyDescriptor implements 
 	public ASPropertyWidget<?> createWidget(Composite parent, AbstractSection section) {
 		SPNumber spNumber = new SPNumber(parent, section, this);
 		spNumber.setNullable(isNullable);
-		spNumber.setDigits(digitsNumber, Double.class);
+		spNumber.setDigits(2, digitsNumber, Double.class);
 		spNumber.setBounds(minValue, maxValue);
 		return spNumber;
 	}

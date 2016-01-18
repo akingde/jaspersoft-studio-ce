@@ -108,7 +108,7 @@ public class FloatPropertyDescriptor extends TextPropertyDescriptor implements I
 	public ASPropertyWidget<?> createWidget(Composite parent, AbstractSection section) {
 		SPNumber spNumber = new SPNumber(parent, section, this);
 		spNumber.setNullable(isNullable);
-		spNumber.setDigits(digitsNumber, Float.class);
+		spNumber.setDigits(2, digitsNumber, Float.class);
 		spNumber.setBounds(minValue, maxValue);
 		return spNumber;
 	}

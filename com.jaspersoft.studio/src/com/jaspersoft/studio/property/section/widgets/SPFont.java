@@ -232,7 +232,7 @@ public class SPFont extends ASPropertyWidget<IPropertyDescriptor> {
 		fontSizeData.minimumWidth = 65;
 		fontSizeLayout.setLayout(new GridLayout(1, false));
 		fontSizeLayout.setLayoutData(fontSizeData);
-		fontSize = new NumericCombo(fontSizeLayout, SWT.FLAT, 1);
+		fontSize = new NumericCombo(fontSizeLayout, SWT.FLAT, 0, 6);
 		fontSize.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		fontSize.setItems(pd1.getItems());
 		fontSize.addSelectionListener(new SelectionAdapter() {

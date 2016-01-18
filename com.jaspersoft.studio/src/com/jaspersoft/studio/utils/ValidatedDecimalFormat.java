@@ -39,27 +39,24 @@ public class ValidatedDecimalFormat extends DecimalFormat{
 	/**
 	 * Create a number format used to handle numbers with 0 or more decimals
 	 * 
-	 * @param decimalDigits the minimum number of decimal digits displayed
-	 * @param maxAcceptedDigits maximum number of decimal digits accepted
+	 * @param minAcceptedDigits the minimum number of decimal digits displayed when formatting the value
+	 * @param maxAcceptedDigits maximum number of decimal digits accepted. Set this to 0 mean no decimal digits
 	 */
-	public ValidatedDecimalFormat(int decimalDigits, int maxAcceptedDigits){
+	public ValidatedDecimalFormat(int minAcceptedDigits, int maxAcceptedDigits){
 		super();
-		Assert.isTrue(decimalDigits >= 0, "Digits number can't be negative");
-		Assert.isTrue(maxAcceptedDigits >= decimalDigits, "The max accepted digits must be less or equal of the number of digits");
+		Assert.isTrue(minAcceptedDigits >= 0, "Digits number can't be negative");
+		Assert.isTrue(maxAcceptedDigits >= minAcceptedDigits, "The max accepted digits must be less or equal of the number of digits");
 		String pattern = null;
 		//Create the pattern using the number of digits
-		if (decimalDigits > 0){
+		if (maxAcceptedDigits > 0){
 			pattern = "#####0.";
-			for(int i = 0; i < decimalDigits; i++){
-				if (i < 2) {
+			for(int i = 0; i < maxAcceptedDigits; i++){
+				if (i < minAcceptedDigits) {
 					pattern += "0";
 				} else {
 					pattern += "#";
 				}
 			}  
-			for(int i=decimalDigits; i < maxAcceptedDigits; i++){
-				pattern += "#";
-			}
 		} else {
 			pattern = "######";
 		}
@@ -68,16 +65,12 @@ public class ValidatedDecimalFormat extends DecimalFormat{
 		DecimalFormatSymbols symbols=format.getDecimalFormatSymbols();
 		char decimalSeparator=symbols.getDecimalSeparator();
 		
-		if (decimalDigits == 0){
+		if (maxAcceptedDigits == 0){
 			patternToMatch = Pattern.compile("[0-9]+");
 		} else {
 			patternToMatch = Pattern.compile("[0-9]+([" + decimalSeparator + "]{0,1}[0-9]{0," + maxAcceptedDigits + "})?");
 		}
 		applyPattern(pattern);
-	}
-	
-	public ValidatedDecimalFormat(int decimalDigits){
-		this(decimalDigits, 6);
 	}
 	
 	/**

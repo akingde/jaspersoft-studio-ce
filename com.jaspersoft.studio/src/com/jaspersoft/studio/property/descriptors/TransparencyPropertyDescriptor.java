@@ -40,8 +40,7 @@ public class TransparencyPropertyDescriptor extends FloatPropertyDescriptor {
 
 	public ASPropertyWidget<IPropertyDescriptor> createWidget(Composite parent, AbstractSection section) {
 		SPTransparency spTransparency = new SPTransparency(parent, section, this);
-		spTransparency.setBounds(0, 1);
-		spTransparency.setDigits(2, Float.class);
+		spTransparency.setDigits(2, 2, Float.class);
 		return spTransparency;
 	}
 }

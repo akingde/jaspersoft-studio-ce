@@ -49,9 +49,14 @@ public class SPNumber extends AHistorySPropertyWidget<IPropertyDescriptor> {
 	private Number max = null;
 	
 	/**
-	 * The number of digits in the value
+	 * The number of digits always shown in the value
 	 */
-	private int digits = 0;
+	private int minDigitsShown = 0;
+	
+	/**
+	 * The number of digits accepted in the value
+	 */
+	private int maxDigitsAccepted = 0;
 	
 	private Class<? extends Number> outputType = Integer.class;
 
@@ -72,7 +77,7 @@ public class SPNumber extends AHistorySPropertyWidget<IPropertyDescriptor> {
 	@Override
 	protected void createComponent(Composite parent) {
 		//Create the widget and set the bounds
-		ftext = new NullableSpinner(parent, SWT.BORDER | SWT.RIGHT, 0);
+		ftext = new NullableSpinner(parent, SWT.BORDER | SWT.RIGHT, 0, 0);
 		if (min != null){
 			ftext.setMinimum(min.intValue());
 		}
@@ -167,15 +172,18 @@ public class SPNumber extends AHistorySPropertyWidget<IPropertyDescriptor> {
 	/**
 	 * Set the number of decimal digits accepted in the widget
 	 * 
-	 * @param digits a not negative number of digits
+	 * @param minDigitsShown the minimum number of decimal digits displayed when formatting the value, must be not negative
+	 * @param maxDigitsAccepted maximum number of decimal digits accepted. Set this to 0 mean no decimal digits, must be greater or equal of 
+	 * minDigitsShown
 	 */
-	public void setDigits(int digits, Class<? extends Number> outputType){
+	public void setDigits(int minDigitsShown, int maxDigitsAccepted, Class<? extends Number> outputType){
 		this.outputType = outputType;
-		if (this.digits != digits){
-			this.digits = digits;
+		if (this.minDigitsShown != minDigitsShown || this.maxDigitsAccepted != maxDigitsAccepted){
+			this.minDigitsShown = minDigitsShown;
+			this.maxDigitsAccepted = maxDigitsAccepted;
 			if (ftext != null){
 				//regenerate the validator
-				ftext.setFormat(new ValidatedDecimalFormat(digits));
+				ftext.setFormat(new ValidatedDecimalFormat(minDigitsShown, maxDigitsAccepted));
 			}
 		}
 	}

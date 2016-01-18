@@ -63,24 +63,34 @@ public class SPTransparency extends SPNumber {
 		transparencyChangeListener = new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				ftext.setValue(scale.getSelection() / 100f);
+				ftext.setValue(scale.getSelection());
 				changeValue();
 			}
 		};
 		scale.addSelectionListener(transparencyChangeListener);
 		super.createComponent(composite);
+		setBounds(0, 100);
+	}
+	
+	@Override
+	protected void changeValue(){
+		Number newValue = getValue();
+		if (newValue != null) newValue = newValue.floatValue() / 100f;
+		section.changeProperty(pDescriptor.getId(), newValue);
+		setData(section.getElement(), newValue);
 	}
 
 	@Override
 	public void setDataNumber(Number f, boolean isInherited) {
-		super.setDataNumber(f, isInherited);
 		//remove the listener to avoid the setSelection trigger it another time
 		scale.removeSelectionListener(transparencyChangeListener);
 		if (f != null) {
 			int alfa = Math.round(100 * f.floatValue());
+			super.setDataNumber(100 * f.floatValue(), isInherited);
 			scale.setSelection(alfa);
 		} else { 
 			scale.setSelection(0);
+			super.setDataNumber(null, isInherited);
 		}
 		scale.addSelectionListener(transparencyChangeListener);
 	}

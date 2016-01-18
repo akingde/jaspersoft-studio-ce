@@ -398,7 +398,7 @@ public class BordersSection extends AbstractSection {
 
 		getWidgetFactory().createCLabel(composite, Messages.common_pen_width + ":", SWT.RIGHT); //$NON-NLS-1$
 
-		lineWidth = new NullableSpinner(composite, SWT.BORDER | SWT.CENTER, 2);
+		lineWidth = new NullableSpinner(composite, SWT.BORDER | SWT.CENTER, 2, 6);
 		GridData lineWidthData = new GridData();
 		lineWidthData.widthHint = 50 ;
 		lineWidth.setLayoutData(lineWidthData);

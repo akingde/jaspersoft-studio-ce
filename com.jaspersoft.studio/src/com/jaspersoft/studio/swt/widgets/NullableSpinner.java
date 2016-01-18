@@ -61,9 +61,11 @@ public class NullableSpinner extends Composite {
 	 * 
 	 * @param parent the parent composite
 	 * @param style the stylebit used for the text control
-	 * @param digits the number of digits handled by the control. Must be not negative.
+	 * @param decimalDigitsShown the minimum number of decimal digits displayed when formatting the value, must be not negative
+	 * @param decimalDigitsAccepted maximum number of decimal digits accepted. Set this to 0 mean no decimal digits, must be greater or equal of 
+	 * decimalDigitsShown
 	 */
-	public NullableSpinner(Composite parent, int style, int digits) {
+	public NullableSpinner(Composite parent, int style, int decimalDigitsShown, int decimalDigitsAccepted) {
 		super(parent, style);
 
 		final GridLayout gd = new GridLayout(2, false);
@@ -71,7 +73,7 @@ public class NullableSpinner extends Composite {
 		gd.marginWidth = gd.marginHeight = 0;
 		setLayout(gd);
 
-		createContent(style, digits);
+		createContent(style, decimalDigitsShown, decimalDigitsAccepted);
 		addTextListeners();
 
 		//Add a listener to paint an inside border on the text
@@ -96,17 +98,19 @@ public class NullableSpinner extends Composite {
 	 * @param style the stylebit used for the text control
 	 */
 	public NullableSpinner(Composite parent, int style) {
-		this(parent, style, 0);
+		this(parent, style, 0, 0);
 	}
 
 	/**
 	 * Create the content of the widget
 	 * 
 	 * @param style style of the widget
-	 * @param digits the number of decimal digits handled by the text control
+	 * @param decimalDigitsShown the minimum number of decimal digits displayed when formatting the value, must be not negative
+	 * @param decimalDigitsAccepted maximum number of decimal digits accepted. Set this to 0 mean no decimal digits, must be greater or equal of 
+	 * decimalDigitsShown	 
 	 */
-	private void createContent(int style, int digits) {
-		createText(style ^ SWT.BORDER, digits);
+	private void createContent(int style, int decimalDigitsShown, int decimalDigitsAccepted) {
+		createText(style ^ SWT.BORDER, decimalDigitsShown, decimalDigitsAccepted);
 		
 		GridLayout gd = new GridLayout(1, false);
 		gd.horizontalSpacing = gd.verticalSpacing = 0;
@@ -193,10 +197,12 @@ public class NullableSpinner extends Composite {
 	 * Create the text zone
 	 * 
 	 * @param style style of the widget
-	 * @param digits the number of decimal digits handled by the text control
+	 * @param decimalDigitsShown the minimum number of decimal digits displayed when formatting the value, must be not negative
+	 * @param decimalDigitsAccepted maximum number of decimal digits accepted. Set this to 0 mean no decimal digits, must be greater or equal of 
+	 * decimalDigitsShown 
 	 */
-	private void createText(int style, int digits) {
-		this.text = new NumericText(this, style, digits);
+	private void createText(int style, int decimalDigitsShown, int decimalDigitsAccepted) {
+		this.text = new NumericText(this, style, decimalDigitsShown, decimalDigitsAccepted);
 		final GridData gd = new GridData(GridData.FILL, GridData.FILL, true, true);
 		gd.minimumWidth = 30;
 		gd.widthHint = 30;

@@ -55,6 +55,7 @@ import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractRealValueSection;
 import com.jaspersoft.studio.swt.widgets.RealSizeStackLayout;
+import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.Pair;
 
 import net.sf.jasperreports.charts.design.JRDesignChartAxis;
@@ -245,7 +246,7 @@ public class ChartPlotSection extends AbstractRealValueSection {
 				//Use actual and current value to check if a value is inherited or not
 				Object currentValue = plot.getPropertyActualValue(key);
 				Object ownValue = plot.getPropertyValue(key);
-				widgets.get(key).setData(plot, currentValue, ownValue != currentValue);
+				widgets.get(key).setData(plot, currentValue, !ModelUtils.safeEquals(ownValue, currentValue));
 			}
 			
 			//Refresh the chart specific properties
