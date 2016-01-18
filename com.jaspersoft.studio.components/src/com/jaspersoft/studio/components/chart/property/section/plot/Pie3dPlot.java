@@ -32,7 +32,7 @@ public class Pie3dPlot extends AbstractRealValueSection {
 		createWidget4Property(parent, JRDesignPie3DPlot.PROPERTY_LEGEND_LABEL_FORMAT);
 		createWidget4Property(parent, JRDesignPie3DPlot.PROPERTY_DEPTH_FACTOR);
 
-		parent = getWidgetFactory().createSection(parent, Messages.common_item_label,true, 4, 2);
+		parent = getWidgetFactory().createSectionTitle(parent, Messages.common_item_label,true, 4, 2);
 		createWidget4Property(parent,JRDesignPie3DPlot.PROPERTY_ITEM_LABEL, false);
 	}
 

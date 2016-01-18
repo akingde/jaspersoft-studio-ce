@@ -148,7 +148,7 @@ public class Bar3dPlot extends AbstractRealValueSection {
 
 	private void createItemLabel(Composite parent,
 			TabbedPropertySheetPage tabbedPropertySheetPage) {
-		parent = getWidgetFactory().createSection(parent, Messages.common_item_label, 
+		parent = getWidgetFactory().createSectionTitle(parent, Messages.common_item_label, 
 				true, 4, 2);
 
 		createWidget4Property(parent,

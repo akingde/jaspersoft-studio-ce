@@ -14,6 +14,7 @@ package com.jaspersoft.studio.components.crosstab.part.editpolicy;
 
 import java.util.List;
 
+import net.sf.jasperreports.components.table.StandardBaseColumn;
 import net.sf.jasperreports.crosstabs.design.JRCrosstabOrigin;
 import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabCell;
@@ -34,6 +35,7 @@ import com.jaspersoft.studio.components.crosstab.model.cell.MCell;
 import com.jaspersoft.studio.components.crosstab.model.header.MCrosstabHeader;
 import com.jaspersoft.studio.components.crosstab.model.header.MCrosstabHeaderCell;
 import com.jaspersoft.studio.components.crosstab.model.nodata.MCrosstabWhenNoDataCell;
+import com.jaspersoft.studio.components.table.model.column.MColumn;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.util.ModelVisitor;
 import com.jaspersoft.studio.property.SetValueCommand;
@@ -49,10 +51,11 @@ public class CreateResize {
 			MCrosstab crosstab = chmodel.getCrosstab();
 			CrosstabManager cManager = crosstab.getCrosstabManager();
 			List<CrosstabCell> cells = null;
-			if (request.getResizeDirection() == PositionConstants.SOUTH)
+			if (request.getResizeDirection() == PositionConstants.SOUTH){
 				cells = cManager.getBottomOf(MCrosstabHeader.cell);
-			else if (request.getResizeDirection() == PositionConstants.EAST)
+			} else if (request.getResizeDirection() == PositionConstants.EAST) {
 				cells = cManager.getRightOf(MCrosstabHeader.cell);
+			}
 			model = getNearHeader(model, crosstab, cells);
 		} else if (emodel instanceof MCell)
 			model = (MCell) emodel;
@@ -62,36 +65,62 @@ public class CreateResize {
 		CrosstabManager cManager = model.getMCrosstab().getCrosstabManager();
 		if (request.getResizeDirection() == PositionConstants.WEST) {
 			// find the cell on the left
-			List<CrosstabCell> cells = cManager
-					.getLeftOf(getCrosstabCell(model));
+			List<CrosstabCell> cells = cManager.getLeftOf(getCrosstabCell(model));
 			model = getNearCellModel(model, cells);
-			if (model == null)
+			if (model == null){
 				return null;
+			}
 		}
 		if (request.getResizeDirection() == PositionConstants.NORTH) {
-			List<CrosstabCell> cells = cManager
-					.getTopOf(getCrosstabCell(model));
+			List<CrosstabCell> cells = cManager.getTopOf(getCrosstabCell(model));
 			model = getNearCellModel(model, cells);
-			if (model == null)
+			if (model == null){
 				return null;
+			}
 		}
 
 		JSSCompoundCommand c = new JSSCompoundCommand("Change Cell Size", model); //$NON-NLS-1$
 
-		PrecisionRectangle deltaRect = new PrecisionRectangle(new Rectangle(0,
-				0, sizeDelta.width, sizeDelta.height));
+		PrecisionRectangle deltaRect = new PrecisionRectangle(new Rectangle(0,0, sizeDelta.width, sizeDelta.height));
 		editPart.getFigure().translateToRelative(deltaRect);
 
 		JRDesignCellContents jrdesign = (JRDesignCellContents) model.getValue();
 
 		if (request.getSizeDelta().width != 0) {
 			int w = deltaRect.width;
-			if (request.getResizeDirection() == PositionConstants.WEST)
+			if (request.getResizeDirection() == PositionConstants.WEST){
 				w = -w;
+			} else if (request.getResizeDirection() == PositionConstants.EAST){
+				//If the request is a drag to east and the flag is enabled take the space from the next column
+				MCrosstab crosstab = model.getCrosstab();
+				if (crosstab != null){
+					/*	if (crosstab.hasColumnsAutoresizeProportional()){
+						MColumn next = model.getNextColumn();
+						if (next != null){
+							StandardBaseColumn nextCol = next.getValue();
+							int newWidth = nextCol.getWidth() - deltaRect.width;
+							if (newWidth < 0) newWidth = 0;;
+							c.setWidth(next, newWidth);
+						}
+					} else if (crosstab.hasColumnsAutoresizeNext()){
+						MColumn next = model.getNextColumn();
+						if (next != null){
+							StandardBaseColumn nextCol = next.getValue();
+							int newWidth = nextCol.getWidth() - deltaRect.width;
+							if (newWidth < 0){
+								//newWidth = 0;
+								return null;
+							}
+							c.setWidth(next, newWidth);
+						} 
+					}*/
+				} 
+			}
 			int width = jrdesign.getWidth() + w;
-			if (width < 0)
+			if (width < 0){
 				return null;
-
+			}
+			
 			SetValueCommand setCommand = new SetValueCommand();
 			setCommand.setTarget(model);
 			setCommand.setPropertyId(JRDesignCrosstabCell.PROPERTY_WIDTH);
