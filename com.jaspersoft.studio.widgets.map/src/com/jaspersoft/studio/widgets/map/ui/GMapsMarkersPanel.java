@@ -15,6 +15,8 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.custom.SashForm;
+import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.MenuAdapter;
@@ -137,6 +139,27 @@ public class GMapsMarkersPanel extends GMapsCenterPanel {
 				map.getJavascriptMapSupport().evaluateJavascript("myMap.hideMenus();"); //$NON-NLS-1$
 				// refresh();
 			}
+		});
+		map.getMapControl().addControlListener(new ControlListener() {
+			private boolean first = true;
+
+			@Override
+			public void controlResized(ControlEvent e) {
+				if (first) {
+					UIUtils.getDisplay().asyncExec(new Runnable() {
+						public void run() {
+							centerMap(getMapCenter());
+						}
+					});
+
+				}
+				first = false;
+			}
+
+			@Override
+			public void controlMoved(ControlEvent e) {
+			}
+
 		});
 	}
 

@@ -271,7 +271,6 @@ public class GMapsCenterPanel {
 			System.out.println(mapCenter.toJsString());
 			tlon.setText(String.format("%.7f", mapCenter.getLng()));
 			tlat.setText(String.format("%.7f", mapCenter.getLat()));
-
 			map.getJavascriptMapSupport().evaluateJavascript("myMap.panTo(" + mapCenter.toJsString() + "); ");
 			// addCenterMarker(coords);
 		} finally {
