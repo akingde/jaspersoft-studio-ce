@@ -179,10 +179,10 @@ public class TableWizard extends JSSWizard {
 			if (lst.size() > 0){
 				colWidth = tableWidth / lst.size();
 				for (Object f : lst) {
-					StandardColumn col = CreateColumnCommand.addColumn(jd, tbl,
-							step4.isTableHeader(), step4.isTableFooter(),
-							step4.isColumnHeader(), step4.isColumnFooter(),
-							step4.isGroupHeader(), step4.isGroupFooter(), -1);
+					StandardColumn col = CreateColumnCommand.addColumnWithStyle(jd, tbl, table.getPropertiesMap(),
+																		step4.isTableHeader(), step4.isTableFooter(),
+																		step4.isColumnHeader(), step4.isColumnFooter(),
+																		step4.isGroupHeader(), step4.isGroupFooter());
 					col.setWidth(colWidth);
 					DesignCell colHeadCell = (DesignCell) col.getColumnHeader();
 					DesignCell detCell = (DesignCell) col.getDetailCell();
@@ -205,10 +205,10 @@ public class TableWizard extends JSSWizard {
 					tbl.addColumn(col);
 				}
 			} else {
-				StandardColumn col = CreateColumnCommand.addColumn(jd, tbl,
-						step4.isTableHeader(), step4.isTableFooter(),
-						step4.isColumnHeader(), step4.isColumnFooter(),
-						step4.isGroupHeader(), step4.isGroupFooter(), -1);
+				StandardColumn col = CreateColumnCommand.addColumnWithStyle(jd, tbl, table.getPropertiesMap(),
+																			step4.isTableHeader(), step4.isTableFooter(),
+																			step4.isColumnHeader(), step4.isColumnFooter(),
+																			step4.isGroupHeader(), step4.isGroupFooter());
 				col.setWidth(colWidth);
 				tbl.addColumn(col);
 			}

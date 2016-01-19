@@ -25,6 +25,7 @@ import net.sf.jasperreports.components.table.StandardColumnGroup;
 import net.sf.jasperreports.components.table.StandardTable;
 import net.sf.jasperreports.components.table.util.TableUtil;
 import net.sf.jasperreports.engine.JRElement;
+import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignConditionalStyle;
@@ -45,6 +46,25 @@ import com.jaspersoft.studio.utils.ModelUtils;
  *
  */
 public class ApplyTableStyleAction extends ApplyStyleAction {
+	
+	/**
+	 * Property store in the properties map of the table where the value is the default style
+	 * name of the style to be used in the table header/ footer
+	 */
+	public static final String TABLE_HEADER_PROPERTY = "com.jaspersoft.studio.table.style.table_header";
+
+	/**
+	 * Property store in the properties map of the table where the value is the default style
+	 * name of the style to be used in the column header/ footer
+	 */
+	public static final String COLUMN_HEADER_PROPERTY = "com.jaspersoft.studio.table.style.column_header";
+	
+	/**
+	 * Property store in the properties map of the table where the value is the default style
+	 * name of the style to be used in the detail
+	 */
+	public static final String DETAIL_PROPERTY = "com.jaspersoft.studio.table.style.detail";
+	
 	
 	/**
 	 * Styles that will be applied to the table
@@ -96,6 +116,13 @@ public class ApplyTableStyleAction extends ApplyStyleAction {
 	 */
 	private void setCellStyles(List<JRDesignStyle> styleList){
 		StandardTable table = getStandardTable(getElement());
+		
+		//Bind the styles to the table properties
+		JRPropertiesMap tableMap = getElement().getPropertiesMap();
+		tableMap.setProperty(TABLE_HEADER_PROPERTY, styleList.get(1).getName());
+		tableMap.setProperty(COLUMN_HEADER_PROPERTY, styleList.get(2).getName());
+		tableMap.setProperty(DETAIL_PROPERTY, styleList.get(3).getName());
+		
 		List<BaseColumn> columns = TableUtil.getAllColumns(table);
 		for(BaseColumn col : columns){
 			setColumnStyles(col, styleList);

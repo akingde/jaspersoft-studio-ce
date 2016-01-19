@@ -201,11 +201,11 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 	 * @param fieldValue the field value
 	 * @param colWidth the column width
 	 */
-	private StandardColumn generateColumn(StandardTable tbl, JasperDesign jd, String fieldName, String fieldValue, int colWidth){
-		StandardColumn col = CreateColumnCommand.addColumn(jd, tbl,
-				sections.isTableHeader(), sections.isTableFooter(),
-				sections.isColumnHeader(), sections.isColumnFooter(),
-				sections.isGroupHeader(), sections.isGroupFooter(), -1);
+	private StandardColumn generateColumn(StandardTable tbl, JRPropertiesMap tableMap, JasperDesign jd, String fieldName, String fieldValue, int colWidth){
+		StandardColumn col = CreateColumnCommand.addColumnWithStyle(jd, tbl, tableMap,
+									sections.isTableHeader(), sections.isTableFooter(),
+									sections.isColumnHeader(), sections.isColumnFooter(),
+									sections.isGroupHeader(), sections.isGroupFooter());
 		col.setWidth(colWidth);
 		
 		
@@ -418,8 +418,8 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 	 * @param colWidth the column width
 	 * @param parentCol the group where the column will be add
 	 */
-	protected void createGroupColumn(StandardTable tbl, JasperDesign jd, String fieldName, String fieldValue, int colWidth, StandardColumnGroup parentCol){
-		parentCol.addColumn(generateColumn(tbl, jd, fieldName, fieldValue, colWidth));
+	protected void createGroupColumn(StandardTable tbl, JRPropertiesMap tableMap, JasperDesign jd, String fieldName, String fieldValue, int colWidth, StandardColumnGroup parentCol){
+		parentCol.addColumn(generateColumn(tbl, tableMap, jd, fieldName, fieldValue, colWidth));
 	}
 	
 	/**
@@ -431,8 +431,8 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 	 * @param fieldValue the field value
 	 * @param colWidth the column width
 	 */
-	private void createColumn(StandardTable tbl, JasperDesign jd, String fieldName, String fieldValue, int colWidth){
-		tbl.addColumn(generateColumn(tbl, jd, fieldName, fieldValue, colWidth));
+	private void createColumn(StandardTable tbl, JRPropertiesMap tableMap, JasperDesign jd, String fieldName, String fieldValue, int colWidth){
+		tbl.addColumn(generateColumn(tbl, tableMap, jd, fieldName, fieldValue, colWidth));
 	}
 	
 	
@@ -481,7 +481,7 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 		((JRDesignComponentElement) jrElement).setComponent(tbl);
 		((JRDesignComponentElement) jrElement).setComponentKey(new ComponentKey("http://jasperreports.sourceforge.net/jasperreports/components", "jr", "table")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		tbl.setDatasetRun(datasetRun);
-		
+		JRPropertiesMap tableMap = jrElement.getPropertiesMap();
 		
 		if (tableFields != null && tableFields.size()>0) {
 			int colWidth = columnWidth;
@@ -497,7 +497,7 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 				parentCol.setWidth(groupColWidth);
 				//Create the column for the group column
 				for (Object f : tableFields) {
-					createGroupColumn(tbl,jd,((JRField) f).getName(),"$F{" + ((JRField) f).getName() + "}",colWidth,parentCol); //$NON-NLS-1$ //$NON-NLS-2$
+					createGroupColumn(tbl, tableMap, jd,((JRField) f).getName(),"$F{" + ((JRField) f).getName() + "}",colWidth,parentCol); //$NON-NLS-1$ //$NON-NLS-2$
 				}
 				int height = sections.getGroupHeaderHeight();
 				//Create a spanned cell inside the column group, that take the field with the name of the group
@@ -517,14 +517,14 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 			} else {
 				//There are no groups, so will not be created group columns
 				for (Object f : tableFields) {
-					createColumn(tbl,jd,((JRField) f).getName(),"$F{" + ((JRField) f).getName() + "}",colWidth); //$NON-NLS-1$ //$NON-NLS-2$
+					createColumn(tbl, tableMap, jd,((JRField) f).getName(),"$F{" + ((JRField) f).getName() + "}",colWidth); //$NON-NLS-1$ //$NON-NLS-2$
 				}
 				int minimumHeight = getTableHeight((StandardColumn)tbl.getColumns().get(0));
 				if (tableHeight < minimumHeight) tableHeight = minimumHeight;
 			}
 		} else {
 			//If there are no fields defined create an empty column
-			createColumn(tbl,jd,"","\"\"",160); //$NON-NLS-1$ //$NON-NLS-2$
+			createColumn(tbl, tableMap, jd,"","\"\"",160); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 				
 		//Create and apply the styles to the table. The styles should be read from the template report

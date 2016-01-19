@@ -22,6 +22,7 @@ import net.sf.jasperreports.components.table.GroupCell;
 import net.sf.jasperreports.components.table.StandardColumn;
 import net.sf.jasperreports.components.table.StandardColumnGroup;
 import net.sf.jasperreports.components.table.StandardTable;
+import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
@@ -36,10 +37,12 @@ import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.components.Activator;
 import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.components.table.model.MTable;
+import com.jaspersoft.studio.components.table.model.dialog.ApplyTableStyleAction;
 import com.jaspersoft.studio.editor.action.ACachedSelectionAction;
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
 import com.jaspersoft.studio.model.command.ForceRefreshCommand;
 import com.jaspersoft.studio.model.style.command.DeleteStyleCommand;
+import com.jaspersoft.studio.property.SetPropertyValueCommand;
 
 /**
  * Action to delete all the styles from a table element
@@ -238,6 +241,11 @@ public class RemoveTableStylesAction extends ACachedSelectionAction {
 			//refresh when the other commands are executed ore undone
 			command.add(new ForceRefreshCommand(table));
 			createCommandForColumns(jrTable.getColumns(), command);
+			//Remove the styles property if any
+			JRPropertiesMap tableMap = table.getPropertiesMap();
+			command.add(new SetPropertyValueCommand(tableMap, ApplyTableStyleAction.TABLE_HEADER_PROPERTY, null));
+			command.add(new SetPropertyValueCommand(tableMap, ApplyTableStyleAction.COLUMN_HEADER_PROPERTY, null));
+			command.add(new SetPropertyValueCommand(tableMap, ApplyTableStyleAction.DETAIL_PROPERTY, null));
 			command.add(new ForceRefreshCommand(table));
 		}
 		return command;

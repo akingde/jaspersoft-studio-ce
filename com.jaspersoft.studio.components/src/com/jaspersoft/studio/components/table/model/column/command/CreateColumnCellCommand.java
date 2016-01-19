@@ -18,18 +18,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
-import net.sf.jasperreports.components.table.Cell;
-import net.sf.jasperreports.components.table.DesignCell;
-import net.sf.jasperreports.components.table.StandardBaseColumn;
-import net.sf.jasperreports.engine.JRStyle;
-import net.sf.jasperreports.engine.design.JasperDesign;
-
 import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.components.table.TableManager;
 import com.jaspersoft.studio.components.table.model.AMCollection;
+import com.jaspersoft.studio.components.table.model.MTable;
 import com.jaspersoft.studio.components.table.model.MTableColumnFooter;
 import com.jaspersoft.studio.components.table.model.MTableColumnHeader;
+import com.jaspersoft.studio.components.table.model.MTableDetail;
 import com.jaspersoft.studio.components.table.model.MTableFooter;
 import com.jaspersoft.studio.components.table.model.MTableGroupFooter;
 import com.jaspersoft.studio.components.table.model.MTableGroupHeader;
@@ -37,9 +33,17 @@ import com.jaspersoft.studio.components.table.model.MTableHeader;
 import com.jaspersoft.studio.components.table.model.column.MColumn;
 import com.jaspersoft.studio.components.table.model.columngroup.MColumnGroup;
 import com.jaspersoft.studio.components.table.model.columngroup.MColumnGroupCell;
+import com.jaspersoft.studio.components.table.model.dialog.ApplyTableStyleAction;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.INode;
+
+import net.sf.jasperreports.components.table.Cell;
+import net.sf.jasperreports.components.table.DesignCell;
+import net.sf.jasperreports.components.table.StandardBaseColumn;
+import net.sf.jasperreports.engine.JRPropertiesMap;
+import net.sf.jasperreports.engine.JRStyle;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 /*
  * link nodes & together.
@@ -49,23 +53,29 @@ import com.jaspersoft.studio.model.INode;
 public class CreateColumnCellCommand extends Command {
 
 	private StandardBaseColumn jrColumn;
+	
 	private Class<AMCollection> type;
+	
 	private String groupName;
+	
 	private Cell jrCell;
+	
 	private int height = 0;
+	
 	private ANode column;
+	
 	private HashMap<Cell, Integer> oldSpans = new HashMap<Cell, Integer>();
 
 	@SuppressWarnings("unchecked")
 	public CreateColumnCellCommand(AMCollection parent, MColumn srcNode) {
 		super();
 		type = (Class<AMCollection>) parent.getClass();
-		if (parent instanceof MTableGroupHeader)
-			groupName = ((MTableGroupHeader) parent).getJrDesignGroup()
-					.getName();
-		if (parent instanceof MTableGroupFooter)
-			groupName = ((MTableGroupFooter) parent).getJrDesignGroup()
-					.getName();
+		if (parent instanceof MTableGroupHeader){
+			groupName = ((MTableGroupHeader) parent).getJrDesignGroup().getName();
+		}
+		if (parent instanceof MTableGroupFooter){
+			groupName = ((MTableGroupFooter) parent).getJrDesignGroup().getName();
+		}
 		this.jrColumn = (StandardBaseColumn) srcNode.getValue();
 		this.column = srcNode;
 		height = srcNode.getBounds().height;
@@ -148,6 +158,45 @@ public class CreateColumnCellCommand extends Command {
 		}
 		return null;
 	}
+	
+
+	/**
+	 * Check if the passed map has one of the properties that bind the table to
+	 * its default styles
+	 * 
+	 * @param tableMap
+	 *            the properties map of the table
+	 * @return true if the table map has one of the properties that reference
+	 *         the default style, fasle otherwise
+	 */
+	protected boolean hasStyleProperties(JRPropertiesMap tableMap) {
+		return (tableMap.containsProperty(ApplyTableStyleAction.COLUMN_HEADER_PROPERTY)
+				|| tableMap.containsProperty(ApplyTableStyleAction.TABLE_HEADER_PROPERTY)
+				|| tableMap.containsProperty(ApplyTableStyleAction.DETAIL_PROPERTY));
+	}
+
+	/**
+	 * Return the style name of the style that will be used in the new cell
+	 * 
+	 * @param tableMap the map from where the default styles properties are read
+	 * @return the name of the style or null if a style can not be resolved
+	 */
+	protected String getStyleName(JRPropertiesMap tableMap){
+		if (hasStyleProperties(tableMap)){
+			if (type.isAssignableFrom(MTableHeader.class) || type.isAssignableFrom(MTableFooter.class)){
+				return tableMap.getProperty(ApplyTableStyleAction.TABLE_HEADER_PROPERTY);
+			} else if (type.isAssignableFrom(MTableColumnHeader.class) || type.isAssignableFrom(MTableColumnFooter.class)
+						|| (type.isAssignableFrom(MTableGroupHeader.class) || (type.isAssignableFrom(MTableGroupFooter.class)))){
+				return tableMap.getProperty(ApplyTableStyleAction.COLUMN_HEADER_PROPERTY);
+			} else if (type.isAssignableFrom(MTableDetail.class)){
+				return tableMap.getProperty(ApplyTableStyleAction.DETAIL_PROPERTY);
+			} else {
+				return null;
+			}
+		} else {
+			return getSiblingStyle(column.getParent(), column);
+		}
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -156,9 +205,11 @@ public class CreateColumnCellCommand extends Command {
 	 */
 	@Override
 	public void execute() {
-		TableManager manager = ((MColumn)column).getMTable().getTableManager();
+		MTable table = ((MColumn)column).getMTable();
+		TableManager manager = table.getTableManager();
 		if (jrCell == null) {
-			jrCell = createCell();
+			String styleName = getStyleName(table.getPropertiesMap());
+			jrCell = createCell(styleName);
 		}
 		HashMap<Cell, Integer> spans = null;
 		if (type.isAssignableFrom(MTableHeader.class)){
@@ -192,17 +243,22 @@ public class CreateColumnCellCommand extends Command {
 		}
 	}
 
-	protected Cell createCell() {
+	/**
+	 * Create the new cell
+	 * 
+	 * @param styleName the style for the new cell, can be null
+	 * @return the cell to add to the column
+	 */
+	protected Cell createCell(String styleName) {
 		DesignCell cell = new DesignCell();
 		cell.setHeight(height);
-		String siblingStyle = getSiblingStyle(column.getParent(), column);
-		if (siblingStyle != null){
+		if (styleName != null){
 			JasperDesign jd = column.getJasperDesign();
-			JRStyle internalStyle = jd.getStylesMap().get(siblingStyle);
+			JRStyle internalStyle = jd.getStylesMap().get(styleName);
 			if (internalStyle != null){
 				cell.setStyle(internalStyle);
 			} else {
-				cell.setStyleNameReference(siblingStyle);
+				cell.setStyleNameReference(styleName);
 			}
 		}
 		return cell;

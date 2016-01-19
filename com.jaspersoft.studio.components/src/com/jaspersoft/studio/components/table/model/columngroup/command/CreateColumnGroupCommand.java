@@ -25,6 +25,7 @@ import net.sf.jasperreports.components.table.StandardBaseColumn;
 import net.sf.jasperreports.components.table.StandardColumnGroup;
 import net.sf.jasperreports.components.table.StandardTable;
 import net.sf.jasperreports.components.table.util.TableUtil;
+import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
@@ -53,8 +54,7 @@ public class CreateColumnGroupCommand extends CreateColumnCommand {
 	}
 
 	@Override
-	public StandardBaseColumn createColumn(JasperDesign jrDesign,
-			StandardTable jrTable) {
+	public StandardBaseColumn createColumn(JasperDesign jrDesign, StandardTable jrTable, JRPropertiesMap tableMap) {
 		StandardBaseColumn col = new StandardColumnGroup();
 		col.setWidth(0);
 

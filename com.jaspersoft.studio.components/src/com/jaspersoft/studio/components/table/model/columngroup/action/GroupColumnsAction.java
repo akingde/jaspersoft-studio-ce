@@ -158,7 +158,8 @@ public class GroupColumnsAction extends ACachedSelectionAction {
 		MColumnGroup mcolgr = new MColumnGroup();
 		int index = mparent.getChildren().indexOf(fmc);
 		CreateColumnGroupCommand cmd = createGroup(index, mparent, mcolgr);
-		StandardColumnGroup newGroup = (StandardColumnGroup)cmd.createColumn(fmc.getJasperDesign(), fmc.getMTable().getStandardTable());
+		MTable table = fmc.getMTable();
+		StandardColumnGroup newGroup = (StandardColumnGroup)cmd.createColumn(fmc.getJasperDesign(), table.getStandardTable(), table.getPropertiesMap());
 		mcolgr.setValue(newGroup);
 
 		c.add(new RefreshColumnNamesCommand(mparent, false, true));
