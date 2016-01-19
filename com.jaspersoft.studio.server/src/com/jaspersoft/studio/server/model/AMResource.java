@@ -197,7 +197,7 @@ public abstract class AMResource extends APropertyNode implements ICopyable {
 		this.mroot = mroot;
 	}
 
-	private IConnection wsClient;
+	private transient IConnection wsClient;
 
 	public IConnection getWsClient() {
 		Object obj = getRoot();
