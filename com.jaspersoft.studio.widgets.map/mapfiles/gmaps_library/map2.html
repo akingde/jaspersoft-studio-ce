@@ -67,7 +67,7 @@
 			    var markerContextMenu = new GMapsContextMenu(myMap, markerMenuItems);
 			    markerContextMenu.hide = function () {
 			        GMapsContextMenu.prototype.hide.call(this);
-			        myMap.selectedMarker = null;
+			        //myMap.selectedMarker = null;
 			    }
 			    // marker context menu behavior
 			    google.maps.event.addListener(markerContextMenu, 'menu_item_selected', function (latLng, eventName) {

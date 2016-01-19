@@ -226,14 +226,14 @@ GMapsMap.prototype.addMarker=function(latLng,markerOptions){
 	marker.addListener('dblclick', function(){ 
 		var markerIdx = $this.mapMarkers.indexOf(marker);
 		if(typeof javaCall_MarkerDoubleClick != 'undefined') javaCall_MarkerDoubleClick(markerIdx);
-	});
+	}); 
 	$this.mapMarkers.push(marker);
 	
 	if(typeof javaCall_AddMarker != 'undefined') javaCall_AddMarker(latLng.lat(), latLng.lng(),true,google.maps.Animation.DROP,true,true);
 };
 
 // Clears all the markers from the map
-GMapsMap.prototype.clearAllMarkers=function(){
+GMapsMap.prototype.clearAllMarkers=function(){ 
 	for (var i = 0; i < this.mapMarkers.length; i++) {
         this.mapMarkers[i].setMap(null);
 	}
@@ -262,11 +262,12 @@ GMapsMap.prototype.stopMarkerAnimation=function(marker,delay){
 };
 
 // Removes from the map the marker specified by the indexing position
-GMapsMap.prototype.removeMarkerByIndex=function(markerIdx){
-	this.mapMarkers[markerIdx].setMap(null);
+GMapsMap.prototype.removeMarkerByIndex=function(markerIdx){ 
+	var $this = this;
+	$this.mapMarkers[markerIdx].setMap(null); 
    	if(markerIdx != -1) {
-		this.mapMarkers.splice(markerIdx, 1);
-	}
+		$this.mapMarkers.splice(markerIdx, 1);
+	} 
 	if(!JAVA_TO_JAVASCRIPT_CALLED) {
 	   	if(typeof javaCall_DelMarker != 'undefined') javaCall_DelMarker(markerIdx);
 	}
@@ -275,17 +276,19 @@ GMapsMap.prototype.removeMarkerByIndex=function(markerIdx){
 
 // Removes the specified marker from the map
 GMapsMap.prototype.removeMarker=function(marker){
-	var markerIdx = this.mapMarkers.indexOf(marker);
-	this.removeMarkerByIndex(markerIdx);
+	var $this = this;
+	var markerIdx = $this.mapMarkers.indexOf(marker); 
+	$this.removeMarkerByIndex(markerIdx); 
 };
 
 // Removes the currently selected marker
 GMapsMap.prototype.removeSelectedMarker=function(){
-	if(this.selectedMarker!==null) {
-		var r = confirm("Are you sure you want to delete selected marker?");
+	var $this = this;
+	if($this.selectedMarker!==null) {
+		var r = confirm("Are you sure you want to delete selected marker?" );
 		if (r == true) { 
-			this.removeMarker(this.selectedMarker);
-			this.selectedMarker = null;
+			$this.removeMarker($this.selectedMarker);
+			$this.selectedMarker = null;
 		}
 	}
 };
