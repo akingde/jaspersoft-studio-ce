@@ -12,10 +12,13 @@
  ******************************************************************************/
 package com.jaspersoft.studio.rcp;
 
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.equinox.p2.ui.Policy;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
@@ -60,13 +63,17 @@ public class Activator extends AbstractJRUIPlugin {
 		// Register the p2 UI policy
 		registerP2Policy(context);
 		getPreferenceStore().addPropertyChangeListener(getPreferenceListener());
-		// FIXME - Temporary workaround for Bugzilla #44286
-		// See also Eclipse bug: https://bugs.eclipse.org/bugs/show_bug.cgi?id=475578
 		Job prefSettings = new Job("Preferences setting"){
 
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
+				// FIXME - Temporary workaround for Bugzilla #44286
+				// See also Eclipse bug: https://bugs.eclipse.org/bugs/show_bug.cgi?id=475578
 				PrefUtil.getAPIPreferenceStore().putValue(IWorkbenchPreferenceConstants.PROMPT_WHEN_SAVEABLE_STILL_OPEN,"false"); //$NON-NLS-1$
+				// FIXME - Workaround for Bugzilla #44980
+				// We extensively need the support for linked resources in JSS. Just an additional check.
+				IEclipsePreferences preferences = InstanceScope.INSTANCE.getNode(ResourcesPlugin.PI_RESOURCES);
+				preferences.putBoolean(ResourcesPlugin.PREF_DISABLE_LINKING,false);
 				return Status.OK_STATUS;
 			}
 			
