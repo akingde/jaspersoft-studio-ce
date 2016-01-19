@@ -11,12 +11,13 @@ import org.eclipse.emf.ecore.EObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.jaspersoft.studio.data.sql.FromTableJoin#getJoin <em>Join</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.FromTableJoin#getOnTable <em>On Table</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.FromTableJoin#getJoinExpr <em>Join Expr</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.FromTableJoin#getJoinCond <em>Join Cond</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.jaspersoft.studio.data.sql.SqlPackage#getFromTableJoin()
  * @model
@@ -101,5 +102,31 @@ public interface FromTableJoin extends EObject
    * @generated
    */
   void setJoinExpr(OrExpr value);
+
+  /**
+   * Returns the value of the '<em><b>Join Cond</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Join Cond</em>' containment reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Join Cond</em>' containment reference.
+   * @see #setJoinCond(JoinCondition)
+   * @see com.jaspersoft.studio.data.sql.SqlPackage#getFromTableJoin_JoinCond()
+   * @model containment="true"
+   * @generated
+   */
+  JoinCondition getJoinCond();
+
+  /**
+   * Sets the value of the '{@link com.jaspersoft.studio.data.sql.FromTableJoin#getJoinCond <em>Join Cond</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Join Cond</em>' containment reference.
+   * @see #getJoinCond()
+   * @generated
+   */
+  void setJoinCond(JoinCondition value);
 
 } // FromTableJoin

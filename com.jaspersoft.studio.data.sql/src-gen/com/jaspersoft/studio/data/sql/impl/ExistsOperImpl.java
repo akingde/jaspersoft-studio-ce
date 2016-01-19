@@ -22,12 +22,12 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.ExistsOperImpl#getOp <em>Op</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.ExistsOperImpl#getSubquery <em>Subquery</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.ExistsOperImpl#getOpList <em>Op List</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

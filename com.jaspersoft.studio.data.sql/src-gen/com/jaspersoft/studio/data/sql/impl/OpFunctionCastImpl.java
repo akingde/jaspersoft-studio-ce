@@ -21,13 +21,13 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.OpFunctionCastImpl#getOp <em>Op</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.OpFunctionCastImpl#getType <em>Type</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.OpFunctionCastImpl#getP <em>P</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.OpFunctionCastImpl#getP2 <em>P2</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

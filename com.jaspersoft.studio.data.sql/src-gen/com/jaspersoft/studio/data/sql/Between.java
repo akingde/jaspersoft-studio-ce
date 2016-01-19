@@ -11,12 +11,12 @@ import org.eclipse.emf.ecore.EObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.jaspersoft.studio.data.sql.Between#getOpBetween <em>Op Between</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.Between#getOp2 <em>Op2</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.Between#getOp3 <em>Op3</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.jaspersoft.studio.data.sql.SqlPackage#getBetween()
  * @model

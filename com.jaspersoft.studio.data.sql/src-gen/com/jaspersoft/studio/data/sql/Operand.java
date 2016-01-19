@@ -11,6 +11,7 @@ import org.eclipse.emf.ecore.EObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.jaspersoft.studio.data.sql.Operand#getColumn <em>Column</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.Operand#getXop <em>Xop</em>}</li>
@@ -23,7 +24,6 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.jaspersoft.studio.data.sql.Operand#getEparam <em>Eparam</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.Operand#getScalar <em>Scalar</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.jaspersoft.studio.data.sql.SqlPackage#getOperand()
  * @model

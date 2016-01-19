@@ -11,11 +11,11 @@ import org.eclipse.emf.ecore.EObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.jaspersoft.studio.data.sql.Limit#getL1 <em>L1</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.Limit#getL2 <em>L2</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.jaspersoft.studio.data.sql.SqlPackage#getLimit()
  * @model

@@ -11,12 +11,12 @@ import org.eclipse.emf.ecore.EObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.jaspersoft.studio.data.sql.Comparison#getOperator <em>Operator</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.Comparison#getSubOperator <em>Sub Operator</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.Comparison#getOp2 <em>Op2</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.jaspersoft.studio.data.sql.SqlPackage#getComparison()
  * @model

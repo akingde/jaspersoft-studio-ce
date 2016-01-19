@@ -29,6 +29,7 @@ import com.jaspersoft.studio.data.sql.GroupByColumnFull;
 import com.jaspersoft.studio.data.sql.InOper;
 import com.jaspersoft.studio.data.sql.IntegerValue;
 import com.jaspersoft.studio.data.sql.JRParameter;
+import com.jaspersoft.studio.data.sql.JoinCondition;
 import com.jaspersoft.studio.data.sql.Like;
 import com.jaspersoft.studio.data.sql.LikeOperand;
 import com.jaspersoft.studio.data.sql.Limit;
@@ -86,6 +87,7 @@ import com.jaspersoft.studio.data.sql.UnpivotInClause;
 import com.jaspersoft.studio.data.sql.UnpivotInClauseArg;
 import com.jaspersoft.studio.data.sql.UnpivotInClauseArgs;
 import com.jaspersoft.studio.data.sql.UnpivotTable;
+import com.jaspersoft.studio.data.sql.UsingCols;
 import com.jaspersoft.studio.data.sql.WhenList;
 import com.jaspersoft.studio.data.sql.WindowingClause;
 import com.jaspersoft.studio.data.sql.WindowingClauseBetween;
@@ -204,6 +206,20 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * @generated
    */
   private EClass fromTableJoinEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass joinConditionEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass usingColsEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -1283,6 +1299,56 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
   public EReference getFromTableJoin_JoinExpr()
   {
     return (EReference)fromTableJoinEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getFromTableJoin_JoinCond()
+  {
+    return (EReference)fromTableJoinEClass.getEStructuralFeatures().get(3);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getJoinCondition()
+  {
+    return joinConditionEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getJoinCondition_UseCols()
+  {
+    return (EReference)joinConditionEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getUsingCols()
+  {
+    return usingColsEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getUsingCols_Entries()
+  {
+    return (EReference)usingColsEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -3532,6 +3598,13 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
     createEAttribute(fromTableJoinEClass, FROM_TABLE_JOIN__JOIN);
     createEReference(fromTableJoinEClass, FROM_TABLE_JOIN__ON_TABLE);
     createEReference(fromTableJoinEClass, FROM_TABLE_JOIN__JOIN_EXPR);
+    createEReference(fromTableJoinEClass, FROM_TABLE_JOIN__JOIN_COND);
+
+    joinConditionEClass = createEClass(JOIN_CONDITION);
+    createEReference(joinConditionEClass, JOIN_CONDITION__USE_COLS);
+
+    usingColsEClass = createEClass(USING_COLS);
+    createEReference(usingColsEClass, USING_COLS__ENTRIES);
 
     tableOrAliasEClass = createEClass(TABLE_OR_ALIAS);
     createEReference(tableOrAliasEClass, TABLE_OR_ALIAS__TFULL);
@@ -3871,6 +3944,7 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
     pivotColEClass.getESuperTypes().add(this.getPivotColumns());
     pivotColEClass.getESuperTypes().add(this.getPivots());
     dbObjectNameEClass.getESuperTypes().add(this.getColumnFull());
+    dbObjectNameEClass.getESuperTypes().add(this.getUsingCols());
     dbObjectNameEClass.getESuperTypes().add(this.getPivotCol());
     dbObjectNameEClass.getESuperTypes().add(this.getTableFull());
     orderByColumnFullEClass.getESuperTypes().add(this.getOrOrderByColumn());
@@ -3961,6 +4035,13 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
     initEAttribute(getFromTableJoin_Join(), ecorePackage.getEString(), "join", null, 0, 1, FromTableJoin.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getFromTableJoin_OnTable(), this.getTableOrAlias(), null, "onTable", null, 0, 1, FromTableJoin.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getFromTableJoin_JoinExpr(), this.getOrExpr(), null, "joinExpr", null, 0, 1, FromTableJoin.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getFromTableJoin_JoinCond(), this.getJoinCondition(), null, "joinCond", null, 0, 1, FromTableJoin.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(joinConditionEClass, JoinCondition.class, "JoinCondition", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getJoinCondition_UseCols(), this.getUsingCols(), null, "useCols", null, 0, 1, JoinCondition.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(usingColsEClass, UsingCols.class, "UsingCols", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getUsingCols_Entries(), this.getDbObjectName(), null, "entries", null, 0, -1, UsingCols.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(tableOrAliasEClass, TableOrAlias.class, "TableOrAlias", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getTableOrAlias_Tfull(), this.getTableFull(), null, "tfull", null, 0, 1, TableOrAlias.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

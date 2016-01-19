@@ -21,11 +21,11 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.AnalyticExprArgImpl#getCe <em>Ce</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.AnalyticExprArgImpl#getColAlias <em>Col Alias</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

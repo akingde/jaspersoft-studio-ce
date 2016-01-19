@@ -11,6 +11,7 @@ import org.eclipse.emf.common.util.EList;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.jaspersoft.studio.data.sql.Select#getOp <em>Op</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.Select#getSelect <em>Select</em>}</li>
@@ -24,7 +25,6 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link com.jaspersoft.studio.data.sql.Select#getOffset <em>Offset</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.Select#getFetchFirst <em>Fetch First</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.jaspersoft.studio.data.sql.SqlPackage#getSelect()
  * @model

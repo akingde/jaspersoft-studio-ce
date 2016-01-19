@@ -17,10 +17,10 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.JRParameterImpl#getJrprm <em>Jrprm</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

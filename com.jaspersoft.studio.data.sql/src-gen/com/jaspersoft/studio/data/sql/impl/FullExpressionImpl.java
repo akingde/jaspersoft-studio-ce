@@ -27,6 +27,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.FullExpressionImpl#getC <em>C</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.FullExpressionImpl#getEfrag <em>Efrag</em>}</li>
@@ -42,7 +43,6 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.FullExpressionImpl#getLike <em>Like</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.FullExpressionImpl#getComp <em>Comp</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

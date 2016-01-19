@@ -10,12 +10,12 @@ package com.jaspersoft.studio.data.sql;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.jaspersoft.studio.data.sql.OrderByColumnFull#getColOrder <em>Col Order</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.OrderByColumnFull#getColOrderInt <em>Col Order Int</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.OrderByColumnFull#getDirection <em>Direction</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.jaspersoft.studio.data.sql.SqlPackage#getOrderByColumnFull()
  * @model

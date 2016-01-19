@@ -47,7 +47,13 @@ FromTable:
 	table=TableOrAlias (fjoin+=FromTableJoin)*;
 
 FromTableJoin:
-	join=JoinType onTable=TableOrAlias 'ON' joinExpr=FullExpression;
+	join=JoinType onTable=TableOrAlias (('ON' joinExpr=FullExpression) | joinCond=JoinCondition) ;
+	
+JoinCondition:
+	'USING' '(' useCols=UsingCols ')';
+	
+UsingCols returns UsingCols:
+	DbObjectName ({UsingCols.entries+=current} ("," entries+=DbObjectName)+)?;
 
 TableOrAlias:
 	(tfull=TableFull | sq=SubQueryOperand) (pivot=PivotTable | unpivot=UnpivotTable)? alias=('AS')?

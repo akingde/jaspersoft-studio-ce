@@ -19,6 +19,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.ScalarOperandImpl#getSostr <em>Sostr</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.ScalarOperandImpl#getSodbl <em>Sodbl</em>}</li>
@@ -28,7 +29,6 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.ScalarOperandImpl#getSoUInt <em>So UInt</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.ScalarOperandImpl#getSoint <em>Soint</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

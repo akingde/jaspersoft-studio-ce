@@ -10,11 +10,11 @@ package com.jaspersoft.studio.data.sql;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.jaspersoft.studio.data.sql.WindowingClauseBetween#getWcoP <em>Wco P</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.WindowingClauseBetween#getWcoF <em>Wco F</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.jaspersoft.studio.data.sql.SqlPackage#getWindowingClauseBetween()
  * @model

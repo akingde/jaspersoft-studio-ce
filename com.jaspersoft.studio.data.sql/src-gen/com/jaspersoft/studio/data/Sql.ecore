@@ -77,6 +77,16 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="joinExpr" eType="#//OrExpr"
         containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="joinCond" eType="#//JoinCondition"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="JoinCondition">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="useCols" eType="#//UsingCols"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="UsingCols">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"
+        eType="#//DbObjectName" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="TableOrAlias">
     <eStructuralFeatures xsi:type="ecore:EReference" name="tfull" eType="#//TableFull"
@@ -134,7 +144,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="DbObjectNameAll">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="dbname" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="DbObjectName" eSuperTypes="#//ColumnFull #//PivotCol #//TableFull">
+  <eClassifiers xsi:type="ecore:EClass" name="DbObjectName" eSuperTypes="#//ColumnFull #//UsingCols #//PivotCol #//TableFull">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="dbname" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="OrOrderByColumn">

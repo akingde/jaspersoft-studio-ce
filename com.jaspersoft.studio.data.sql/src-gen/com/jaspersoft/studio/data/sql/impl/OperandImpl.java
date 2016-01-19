@@ -29,6 +29,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.OperandImpl#getColumn <em>Column</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.OperandImpl#getXop <em>Xop</em>}</li>
@@ -41,7 +42,6 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.OperandImpl#getEparam <em>Eparam</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.OperandImpl#getScalar <em>Scalar</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

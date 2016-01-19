@@ -354,6 +354,8 @@ public enum XFunction implements Enumerator
    * Returns the '<em><b>XFunction</b></em>' literal with the specified literal value.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   * @param literal the literal.
+   * @return the matching enumerator or <code>null</code>.
    * @generated
    */
   public static XFunction get(String literal)
@@ -373,6 +375,8 @@ public enum XFunction implements Enumerator
    * Returns the '<em><b>XFunction</b></em>' literal with the specified name.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   * @param name the name.
+   * @return the matching enumerator or <code>null</code>.
    * @generated
    */
   public static XFunction getByName(String name)
@@ -392,6 +396,8 @@ public enum XFunction implements Enumerator
    * Returns the '<em><b>XFunction</b></em>' literal with the specified integer value.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   * @param value the integer value.
+   * @return the matching enumerator or <code>null</code>.
    * @generated
    */
   public static XFunction get(int value)

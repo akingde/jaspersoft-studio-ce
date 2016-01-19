@@ -53,8 +53,7 @@ public class RelationshipDetailPart extends AbstractConnectionEditPart {
 	 * @see org.eclipse.gef.editparts.AbstractEditPart#createEditPolicies()
 	 */
 	protected void createEditPolicies() {
-		installEditPolicy(EditPolicy.CONNECTION_ENDPOINTS_ROLE,
-				new ConnectionEndpointEditPolicy());
+		installEditPolicy(EditPolicy.CONNECTION_ENDPOINTS_ROLE, new ConnectionEndpointEditPolicy());
 	}
 
 	@Override
@@ -65,10 +64,8 @@ public class RelationshipDetailPart extends AbstractConnectionEditPart {
 	@Override
 	public void performRequest(Request req) {
 		if (RequestConstants.REQ_OPEN.equals(req.getType())) {
-			SQLQueryDesigner designer = (SQLQueryDesigner) getViewer()
-					.getProperty(SQLQueryDiagram.SQLQUERYDIAGRAM);
-			EditTableJoin ct = designer.getOutline().getAfactory()
-					.getAction(EditTableJoin.class);
+			SQLQueryDesigner designer = (SQLQueryDesigner) getViewer().getProperty(SQLQueryDiagram.SQLQUERYDIAGRAM);
+			EditTableJoin ct = designer.getOutline().getAfactory().getAction(EditTableJoin.class);
 			MFromTableJoin tJoin = getModel().getMFromTableJoin();
 			if (ct.calculateEnabled(new Object[] { tJoin }))
 				ct.run();
@@ -107,14 +104,17 @@ public class RelationshipDetailPart extends AbstractConnectionEditPart {
 			f.setTargetDecoration(getCrossDecoration());
 			f.setSourceDecoration(getCrossDecoration());
 		}
-
-		List<AOperand> ops = m.getExpr().getOperands();
-		IFigure fcol = getColumnFigure(getSource(), ops);
-		if (fcol != null)
-			f.setSourceAnchor(new LateralAnchor(fcol));
-		fcol = getColumnFigure(getTarget(), ops);
-		if (fcol != null)
-			f.setTargetAnchor(new LateralAnchor(fcol));
+		if (m.getExpr() != null) {
+			List<AOperand> ops = m.getExpr().getOperands();
+			IFigure fcol = getColumnFigure(getSource(), ops);
+			if (fcol != null)
+				f.setSourceAnchor(new LateralAnchor(fcol));
+			fcol = getColumnFigure(getTarget(), ops);
+			if (fcol != null)
+				f.setTargetAnchor(new LateralAnchor(fcol));
+		}else{
+			
+		}
 	}
 
 	private void setupToolTip(MFromTableJoin tJoin, PolylineConnection f) {
@@ -127,8 +127,7 @@ public class RelationshipDetailPart extends AbstractConnectionEditPart {
 
 				@Override
 				public boolean visit(INode n) {
-					if (n instanceof MExpression
-							|| n instanceof MExpressionGroup) {
+					if (n instanceof MExpression || n instanceof MExpressionGroup) {
 						tt.append(((IQueryString) n).toSQLString());
 						return true;
 					}
@@ -146,9 +145,7 @@ public class RelationshipDetailPart extends AbstractConnectionEditPart {
 				if (p instanceof ColumnEditPart) {
 					ColumnEditPart fo = (ColumnEditPart) p;
 					for (AOperand o : ops)
-						if (o instanceof FieldOperand
-								&& ((FieldOperand) o).getMColumn().equals(
-										fo.getModel())) {
+						if (o instanceof FieldOperand && ((FieldOperand) o).getMColumn().equals(fo.getModel())) {
 							return fo.getFigure();
 						}
 				}
@@ -174,8 +171,7 @@ public class RelationshipDetailPart extends AbstractConnectionEditPart {
 		return srcpd;
 	}
 
-	public static class CircleDecoration extends Ellipse implements
-			RotatableDecoration {
+	public static class CircleDecoration extends Ellipse implements RotatableDecoration {
 		private static final int RADIUS = 3;
 		private Point location = new Point();
 
@@ -187,15 +183,13 @@ public class RelationshipDetailPart extends AbstractConnectionEditPart {
 		public void setLocation(Point p) {
 			location = p;
 			int d = RADIUS * 2;
-			Rectangle bounds = new Rectangle(location.x - RADIUS, location.y
-					- RADIUS, d, d);
+			Rectangle bounds = new Rectangle(location.x - RADIUS, location.y - RADIUS, d, d);
 			setBounds(bounds);
 		}
 
 		@Override
 		public void setReferencePoint(Point p) {
-			double d = Math.sqrt(Math.pow((location.x - p.x), 2)
-					+ Math.pow(location.y - p.y, 2));
+			double d = Math.sqrt(Math.pow((location.x - p.x), 2) + Math.pow(location.y - p.y, 2));
 			if (d < RADIUS)
 				return;
 
@@ -204,8 +198,7 @@ public class RelationshipDetailPart extends AbstractConnectionEditPart {
 			int y = (int) (k * Math.abs(p.y - location.y));
 			int rx = location.x < p.x ? p.x - x : p.x + x;
 			int ry = location.y > p.y ? p.y + y : p.y - y;
-			setBounds(new Rectangle(rx - RADIUS, ry - RADIUS,
-					(int) (RADIUS * 2.5), (int) (RADIUS * 2.5)));
+			setBounds(new Rectangle(rx - RADIUS, ry - RADIUS, (int) (RADIUS * 2.5), (int) (RADIUS * 2.5)));
 		}
 	}
 }

@@ -3,6 +3,7 @@
 package com.jaspersoft.studio.data.sql.impl;
 
 import com.jaspersoft.studio.data.sql.FromTableJoin;
+import com.jaspersoft.studio.data.sql.JoinCondition;
 import com.jaspersoft.studio.data.sql.OrExpr;
 import com.jaspersoft.studio.data.sql.SqlPackage;
 import com.jaspersoft.studio.data.sql.TableOrAlias;
@@ -22,12 +23,13 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.FromTableJoinImpl#getJoin <em>Join</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.FromTableJoinImpl#getOnTable <em>On Table</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.FromTableJoinImpl#getJoinExpr <em>Join Expr</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.impl.FromTableJoinImpl#getJoinCond <em>Join Cond</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */
@@ -72,6 +74,16 @@ public class FromTableJoinImpl extends MinimalEObjectImpl.Container implements F
    * @ordered
    */
   protected OrExpr joinExpr;
+
+  /**
+   * The cached value of the '{@link #getJoinCond() <em>Join Cond</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getJoinCond()
+   * @generated
+   * @ordered
+   */
+  protected JoinCondition joinCond;
 
   /**
    * <!-- begin-user-doc -->
@@ -218,6 +230,54 @@ public class FromTableJoinImpl extends MinimalEObjectImpl.Container implements F
    * <!-- end-user-doc -->
    * @generated
    */
+  public JoinCondition getJoinCond()
+  {
+    return joinCond;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public NotificationChain basicSetJoinCond(JoinCondition newJoinCond, NotificationChain msgs)
+  {
+    JoinCondition oldJoinCond = joinCond;
+    joinCond = newJoinCond;
+    if (eNotificationRequired())
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SqlPackage.FROM_TABLE_JOIN__JOIN_COND, oldJoinCond, newJoinCond);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setJoinCond(JoinCondition newJoinCond)
+  {
+    if (newJoinCond != joinCond)
+    {
+      NotificationChain msgs = null;
+      if (joinCond != null)
+        msgs = ((InternalEObject)joinCond).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SqlPackage.FROM_TABLE_JOIN__JOIN_COND, null, msgs);
+      if (newJoinCond != null)
+        msgs = ((InternalEObject)newJoinCond).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SqlPackage.FROM_TABLE_JOIN__JOIN_COND, null, msgs);
+      msgs = basicSetJoinCond(newJoinCond, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.FROM_TABLE_JOIN__JOIN_COND, newJoinCond, newJoinCond));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   @Override
   public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
   {
@@ -227,6 +287,8 @@ public class FromTableJoinImpl extends MinimalEObjectImpl.Container implements F
         return basicSetOnTable(null, msgs);
       case SqlPackage.FROM_TABLE_JOIN__JOIN_EXPR:
         return basicSetJoinExpr(null, msgs);
+      case SqlPackage.FROM_TABLE_JOIN__JOIN_COND:
+        return basicSetJoinCond(null, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -247,6 +309,8 @@ public class FromTableJoinImpl extends MinimalEObjectImpl.Container implements F
         return getOnTable();
       case SqlPackage.FROM_TABLE_JOIN__JOIN_EXPR:
         return getJoinExpr();
+      case SqlPackage.FROM_TABLE_JOIN__JOIN_COND:
+        return getJoinCond();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -269,6 +333,9 @@ public class FromTableJoinImpl extends MinimalEObjectImpl.Container implements F
         return;
       case SqlPackage.FROM_TABLE_JOIN__JOIN_EXPR:
         setJoinExpr((OrExpr)newValue);
+        return;
+      case SqlPackage.FROM_TABLE_JOIN__JOIN_COND:
+        setJoinCond((JoinCondition)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -293,6 +360,9 @@ public class FromTableJoinImpl extends MinimalEObjectImpl.Container implements F
       case SqlPackage.FROM_TABLE_JOIN__JOIN_EXPR:
         setJoinExpr((OrExpr)null);
         return;
+      case SqlPackage.FROM_TABLE_JOIN__JOIN_COND:
+        setJoinCond((JoinCondition)null);
+        return;
     }
     super.eUnset(featureID);
   }
@@ -313,6 +383,8 @@ public class FromTableJoinImpl extends MinimalEObjectImpl.Container implements F
         return onTable != null;
       case SqlPackage.FROM_TABLE_JOIN__JOIN_EXPR:
         return joinExpr != null;
+      case SqlPackage.FROM_TABLE_JOIN__JOIN_COND:
+        return joinCond != null;
     }
     return super.eIsSet(featureID);
   }

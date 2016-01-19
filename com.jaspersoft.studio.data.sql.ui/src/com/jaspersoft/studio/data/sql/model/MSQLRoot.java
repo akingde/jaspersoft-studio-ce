@@ -23,6 +23,7 @@ import com.jaspersoft.studio.data.sql.model.query.MUnion;
 import com.jaspersoft.studio.data.sql.model.query.MWhere;
 import com.jaspersoft.studio.data.sql.model.query.expression.MExpression;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
+import com.jaspersoft.studio.data.sql.model.query.from.MFromTableJoin;
 import com.jaspersoft.studio.data.sql.model.query.from.TableJoinDetail;
 import com.jaspersoft.studio.data.sql.model.query.groupby.MGroupBy;
 import com.jaspersoft.studio.data.sql.model.query.operand.AOperand;
@@ -93,10 +94,11 @@ public class MSQLRoot extends MRoot {
 					return false;
 				if (n instanceof MUnion)
 					return false;
-				if (n instanceof MFromTable
-						&& n.getValue() instanceof MQueryTable)
+				if (n instanceof MFromTable && n.getValue() instanceof MQueryTable)
 					visit(((MQueryTable) n.getValue()).getSubquery());
-				else if (n instanceof MExpression) {
+				if (n instanceof MFromTableJoin && !((MFromTableJoin) n).getJoinKey().equals("ON")) {
+					joins.add(new TableJoinDetail((MFromTable) n, (MFromTable) n.getParent(), null));
+				} else if (n instanceof MExpression) {
 					MExpression mexp = (MExpression) n;
 					MFromTable src = null;
 					MFromTable dest = null;

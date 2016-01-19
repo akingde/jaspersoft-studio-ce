@@ -23,12 +23,12 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.XExprImpl#getXf <em>Xf</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.XExprImpl#getCol <em>Col</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.XExprImpl#getPrm <em>Prm</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

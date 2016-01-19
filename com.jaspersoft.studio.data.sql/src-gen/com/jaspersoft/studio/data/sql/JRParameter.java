@@ -10,10 +10,10 @@ package com.jaspersoft.studio.data.sql;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.jaspersoft.studio.data.sql.JRParameter#getJrprm <em>Jrprm</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.jaspersoft.studio.data.sql.SqlPackage#getJRParameter()
  * @model

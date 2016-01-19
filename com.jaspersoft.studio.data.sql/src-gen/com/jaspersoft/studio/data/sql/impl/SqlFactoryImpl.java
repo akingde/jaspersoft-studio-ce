@@ -78,6 +78,8 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
       case SqlPackage.OR_TABLE: return createOrTable();
       case SqlPackage.FROM_TABLE: return createFromTable();
       case SqlPackage.FROM_TABLE_JOIN: return createFromTableJoin();
+      case SqlPackage.JOIN_CONDITION: return createJoinCondition();
+      case SqlPackage.USING_COLS: return createUsingCols();
       case SqlPackage.TABLE_OR_ALIAS: return createTableOrAlias();
       case SqlPackage.PIVOT_TABLE: return createPivotTable();
       case SqlPackage.PIVOT_FUNCTIONS: return createPivotFunctions();
@@ -341,6 +343,28 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
   {
     FromTableJoinImpl fromTableJoin = new FromTableJoinImpl();
     return fromTableJoin;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public JoinCondition createJoinCondition()
+  {
+    JoinConditionImpl joinCondition = new JoinConditionImpl();
+    return joinCondition;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public UsingCols createUsingCols()
+  {
+    UsingColsImpl usingCols = new UsingColsImpl();
+    return usingCols;
   }
 
   /**

@@ -23,12 +23,12 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.UnpivotTableImpl#getPcols <em>Pcols</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.UnpivotTableImpl#getPfor <em>Pfor</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.UnpivotTableImpl#getInop <em>Inop</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

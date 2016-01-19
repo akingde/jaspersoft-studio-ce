@@ -10,11 +10,11 @@ package com.jaspersoft.studio.data.sql;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.jaspersoft.studio.data.sql.UnipivotInClause#getOp <em>Op</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.UnipivotInClause#getArgs <em>Args</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.jaspersoft.studio.data.sql.SqlPackage#getUnipivotInClause()
  * @model

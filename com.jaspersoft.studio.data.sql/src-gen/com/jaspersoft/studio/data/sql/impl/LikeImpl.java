@@ -21,11 +21,11 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.LikeImpl#getOpLike <em>Op Like</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.LikeImpl#getOp2 <em>Op2</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

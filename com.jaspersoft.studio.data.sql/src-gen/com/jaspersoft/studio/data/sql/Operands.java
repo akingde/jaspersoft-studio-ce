@@ -10,12 +10,12 @@ package com.jaspersoft.studio.data.sql;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.jaspersoft.studio.data.sql.Operands#getOp1 <em>Op1</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.Operands#getLeft <em>Left</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.Operands#getRight <em>Right</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.jaspersoft.studio.data.sql.SqlPackage#getOperands()
  * @model

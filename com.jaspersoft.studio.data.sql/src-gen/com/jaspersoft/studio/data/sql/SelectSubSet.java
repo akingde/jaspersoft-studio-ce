@@ -11,12 +11,12 @@ import org.eclipse.emf.ecore.EObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.jaspersoft.studio.data.sql.SelectSubSet#getOp <em>Op</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.SelectSubSet#getAll <em>All</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.SelectSubSet#getQuery <em>Query</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.jaspersoft.studio.data.sql.SqlPackage#getSelectSubSet()
  * @model

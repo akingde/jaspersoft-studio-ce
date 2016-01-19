@@ -11,11 +11,11 @@ import org.eclipse.emf.ecore.EObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.jaspersoft.studio.data.sql.FetchFirst#getFetchFirst <em>Fetch First</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.FetchFirst#getRow <em>Row</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.jaspersoft.studio.data.sql.SqlPackage#getFetchFirst()
  * @model

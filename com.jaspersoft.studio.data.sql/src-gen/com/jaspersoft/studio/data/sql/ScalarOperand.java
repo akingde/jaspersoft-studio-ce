@@ -11,6 +11,7 @@ import java.math.BigDecimal;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.jaspersoft.studio.data.sql.ScalarOperand#getSostr <em>Sostr</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.ScalarOperand#getSodbl <em>Sodbl</em>}</li>
@@ -20,7 +21,6 @@ import java.math.BigDecimal;
  *   <li>{@link com.jaspersoft.studio.data.sql.ScalarOperand#getSoUInt <em>So UInt</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.ScalarOperand#getSoint <em>Soint</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.jaspersoft.studio.data.sql.SqlPackage#getScalarOperand()
  * @model

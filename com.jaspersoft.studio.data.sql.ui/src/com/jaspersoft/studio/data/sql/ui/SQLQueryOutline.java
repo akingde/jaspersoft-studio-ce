@@ -178,6 +178,8 @@ public class SQLQueryOutline {
 				Object target = getCurrentTarget();
 				if (target instanceof ANode && ((ANode) target).getParent() == null)
 					return false;
+				if (target instanceof MFromTableJoin && !((MFromTableJoin) target).getJoinKey().equals("ON"))
+					return false;
 				doDropObjects((ANode) target, objects);
 				return doDrop((ANode) target, Util.getAllNodes(data));
 			}

@@ -11,11 +11,11 @@ import org.eclipse.emf.ecore.EObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.jaspersoft.studio.data.sql.FunctionExtract#getV <em>V</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.FunctionExtract#getOperand <em>Operand</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.jaspersoft.studio.data.sql.SqlPackage#getFunctionExtract()
  * @model

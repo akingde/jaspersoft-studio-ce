@@ -140,6 +140,24 @@ public interface SqlFactory extends EFactory
   FromTableJoin createFromTableJoin();
 
   /**
+   * Returns a new object of class '<em>Join Condition</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Join Condition</em>'.
+   * @generated
+   */
+  JoinCondition createJoinCondition();
+
+  /**
+   * Returns a new object of class '<em>Using Cols</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Using Cols</em>'.
+   * @generated
+   */
+  UsingCols createUsingCols();
+
+  /**
    * Returns a new object of class '<em>Table Or Alias</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->

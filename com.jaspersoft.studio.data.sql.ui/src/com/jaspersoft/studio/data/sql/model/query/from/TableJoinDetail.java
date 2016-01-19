@@ -21,8 +21,7 @@ public class TableJoinDetail {
 	private MFromTable destTbl;
 	private MExpression expr;
 
-	public TableJoinDetail(MFromTable srcTbl, MFromTable destTbl,
-			MExpression expr) {
+	public TableJoinDetail(MFromTable srcTbl, MFromTable destTbl, MExpression expr) {
 		this.srcTbl = srcTbl;
 		this.destTbl = destTbl;
 		this.expr = expr;
@@ -41,19 +40,20 @@ public class TableJoinDetail {
 	}
 
 	public FieldOperand getSrcColumn() {
-		if (!expr.getOperands().isEmpty())
+		if (expr == null) {
+
+		} else if (!expr.getOperands().isEmpty())
 			for (AOperand op : expr.getOperands())
-				if (op instanceof FieldOperand
-						&& ((FieldOperand) op).getFromTable() == srcTbl)
+				if (op instanceof FieldOperand && ((FieldOperand) op).getFromTable() == srcTbl)
 					return (FieldOperand) op;
 		return null;
 	}
 
 	public FieldOperand getTgtColumn() {
-		if (!expr.getOperands().isEmpty())
+		if (expr == null) {
+		} else if (!expr.getOperands().isEmpty())
 			for (AOperand op : expr.getOperands())
-				if (op instanceof FieldOperand
-						&& ((FieldOperand) op).getFromTable() == destTbl)
+				if (op instanceof FieldOperand && ((FieldOperand) op).getFromTable() == destTbl)
 					return (FieldOperand) op;
 		return null;
 	}

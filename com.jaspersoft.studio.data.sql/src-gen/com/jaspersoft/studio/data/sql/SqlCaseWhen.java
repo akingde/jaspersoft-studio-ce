@@ -10,12 +10,12 @@ package com.jaspersoft.studio.data.sql;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.jaspersoft.studio.data.sql.SqlCaseWhen#getExpr <em>Expr</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.SqlCaseWhen#getTexp <em>Texp</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.SqlCaseWhen#getEexp <em>Eexp</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.jaspersoft.studio.data.sql.SqlPackage#getSqlCaseWhen()
  * @model

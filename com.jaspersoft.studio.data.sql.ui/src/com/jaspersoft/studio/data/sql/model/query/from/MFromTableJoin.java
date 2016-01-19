@@ -52,6 +52,7 @@ public class MFromTableJoin extends MFromTable {
 		return (MSqlTable) super.getValue();
 	}
 
+	private String joinKey = "ON";
 	private String join = AMKeyword.INNER_JOIN;
 
 	public String getJoin() {
@@ -62,9 +63,17 @@ public class MFromTableJoin extends MFromTable {
 		this.join = join;
 	}
 
+	public void setJoinKey(String joinKey) {
+		this.joinKey = joinKey;
+	}
+
+	public String getJoinKey() {
+		return joinKey;
+	}
+
 	@Override
 	public String getToolTip() {
-		return join + " " + super.getToolTip() + " ON ";
+		return join + " " + super.getToolTip() + " " + joinKey + " ";
 	}
 
 	@Override
@@ -72,13 +81,12 @@ public class MFromTableJoin extends MFromTable {
 		String s = " " + join + " ";
 		if (getValue() instanceof MQueryTable)
 			return s + "(";
-		return s + super.getDisplayText() + " ON ";
+		return s + super.getDisplayText() + " " + joinKey + " ";
 	}
 
 	@Override
 	public StyledString getStyledDisplayText() {
-		StyledString dt = new StyledString(join + " ",
-				FontUtils.KEYWORDS_STYLER);
+		StyledString dt = new StyledString(join + " ", FontUtils.KEYWORDS_STYLER);
 		String tbltext = super.getDisplayText();
 		if (getValue() instanceof MQueryTable)
 			return dt.append("(");
@@ -86,7 +94,7 @@ public class MFromTableJoin extends MFromTable {
 		dt.append(tbltext);
 		if (ind >= 0)
 			dt.setStyle(ind, " AS ".length(), FontUtils.KEYWORDS_STYLER);
-		dt.append(" ON ", FontUtils.KEYWORDS_STYLER);
+		dt.append(" " + joinKey + " ", FontUtils.KEYWORDS_STYLER);
 		return dt;
 	}
 
@@ -108,7 +116,7 @@ public class MFromTableJoin extends MFromTable {
 		}
 		sql += getValue().toSQLString();
 		sql += addAlias();
-		return "\n\t" + join + " " + sql + " ON ";
+		return "\n\t" + join + " " + sql + " " + joinKey + " ";
 	}
 
 }

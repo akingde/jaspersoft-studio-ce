@@ -11,12 +11,12 @@ import org.eclipse.emf.ecore.EObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.jaspersoft.studio.data.sql.XExpr#getXf <em>Xf</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.XExpr#getCol <em>Col</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.XExpr#getPrm <em>Prm</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.jaspersoft.studio.data.sql.SqlPackage#getXExpr()
  * @model

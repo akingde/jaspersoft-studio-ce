@@ -140,6 +140,16 @@ public class SqlAdapterFactory extends AdapterFactoryImpl
         return createFromTableJoinAdapter();
       }
       @Override
+      public Adapter caseJoinCondition(JoinCondition object)
+      {
+        return createJoinConditionAdapter();
+      }
+      @Override
+      public Adapter caseUsingCols(UsingCols object)
+      {
+        return createUsingColsAdapter();
+      }
+      @Override
       public Adapter caseTableOrAlias(TableOrAlias object)
       {
         return createTableOrAliasAdapter();
@@ -747,6 +757,36 @@ public class SqlAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createFromTableJoinAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.JoinCondition <em>Join Condition</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.JoinCondition
+   * @generated
+   */
+  public Adapter createJoinConditionAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.UsingCols <em>Using Cols</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.UsingCols
+   * @generated
+   */
+  public Adapter createUsingColsAdapter()
   {
     return null;
   }

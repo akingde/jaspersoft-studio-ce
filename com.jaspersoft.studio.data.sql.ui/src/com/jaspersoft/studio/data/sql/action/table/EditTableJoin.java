@@ -37,18 +37,16 @@ public class EditTableJoin extends AAction {
 	@Override
 	public boolean calculateEnabled(Object[] selection) {
 		super.calculateEnabled(selection);
-		return selection != null && selection.length == 1
-				&& selection[0] instanceof ANode
+		return selection != null && selection.length == 1 && selection[0] instanceof ANode
 				&& isColumn((ANode) selection[0]);
 	}
 
 	protected boolean isColumn(ANode element) {
-		if (element instanceof MFromTable
-				&& element.getValue() instanceof MQueryTable)
+		if (element instanceof MFromTable && element.getValue() instanceof MQueryTable)
 			setText(Messages.EditTableJoin_1);
 		else
 			setText(Messages.EditTableJoin_0);
-		return element instanceof MFromTableJoin;
+		return element instanceof MFromTableJoin && ((MFromTableJoin) element).getJoinKey().equals("ON");
 	}
 
 	@Override
@@ -60,8 +58,7 @@ public class EditTableJoin extends AAction {
 				break;
 			}
 		}
-		JoinFromTableDialog dialog = new JoinFromTableDialog(
-				UIUtils.getShell(), designer);
+		JoinFromTableDialog dialog = new JoinFromTableDialog(UIUtils.getShell(), designer);
 		MFromTableJoin clone = (MFromTableJoin) mcol.clone();
 		ANode parent = mcol.getParent();
 		int indx = parent.getChildren().indexOf(mcol);

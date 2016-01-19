@@ -3,8 +3,8 @@
     xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/com.jaspersoft.studio.data.sql/src-gen" editDirectory="/com.jaspersoft.studio.data.sql.edit/src"
     editorDirectory="/com.jaspersoft.studio.data.sql.editor/src" modelPluginID="com.jaspersoft.studio.data.sql"
     forceOverwrite="true" modelName="Sql" updateClasspath="false" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
-    complianceLevel="5.0" copyrightFields="false" editPluginID="com.jaspersoft.studio.data.sql.edit"
-    editorPluginID="com.jaspersoft.studio.data.sql.editor" runtimeVersion="2.10">
+    complianceLevel="6.0" copyrightFields="false" editPluginID="com.jaspersoft.studio.data.sql.edit"
+    editorPluginID="com.jaspersoft.studio.data.sql.editor" runtimeVersion="2.11">
   <genPackages prefix="Sql" basePackage="com.jaspersoft.studio.data" disposableProviderFactory="true"
       ecorePackage="Sql.ecore#/">
     <genEnums typeSafeEnumCompatible="false" ecoreEnum="Sql.ecore#//EXTRACT_VALUES">
@@ -98,6 +98,13 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//FromTableJoin/join"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//FromTableJoin/onTable"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//FromTableJoin/joinExpr"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//FromTableJoin/joinCond"/>
+    </genClasses>
+    <genClasses ecoreClass="Sql.ecore#//JoinCondition">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//JoinCondition/useCols"/>
+    </genClasses>
+    <genClasses ecoreClass="Sql.ecore#//UsingCols">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//UsingCols/entries"/>
     </genClasses>
     <genClasses ecoreClass="Sql.ecore#//TableOrAlias">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//TableOrAlias/tfull"/>

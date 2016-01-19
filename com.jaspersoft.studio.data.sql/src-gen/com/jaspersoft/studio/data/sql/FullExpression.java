@@ -10,6 +10,7 @@ package com.jaspersoft.studio.data.sql;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.jaspersoft.studio.data.sql.FullExpression#getC <em>C</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.FullExpression#getEfrag <em>Efrag</em>}</li>
@@ -25,7 +26,6 @@ package com.jaspersoft.studio.data.sql;
  *   <li>{@link com.jaspersoft.studio.data.sql.FullExpression#getLike <em>Like</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.FullExpression#getComp <em>Comp</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.jaspersoft.studio.data.sql.SqlPackage#getFullExpression()
  * @model

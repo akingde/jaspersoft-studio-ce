@@ -59,14 +59,12 @@ public class CreateExpression extends AAction {
 	@Override
 	public boolean calculateEnabled(Object[] selection) {
 		super.calculateEnabled(selection);
-		return selection != null && selection.length == 1
-				&& isInSelect(selection[0]);
+		return selection != null && selection.length == 1 && isInSelect(selection[0]);
 	}
 
 	public static boolean isInSelect(Object element) {
-		return element instanceof MWhere || element instanceof MHaving
-				|| element instanceof AMExpression
-				|| element instanceof MFromTableJoin
+		return element instanceof MWhere || element instanceof MHaving || element instanceof AMExpression
+				|| (element instanceof MFromTableJoin && ((MFromTableJoin) element).getJoinKey().equals("ON"))
 				|| element instanceof MExpressionGroup;
 	}
 
@@ -138,16 +136,13 @@ public class CreateExpression extends AAction {
 
 	public void run(ANode node, MSelectColumn selcol) {
 		MExpression mexpr = run(selcol.getValue(), node, -1);
-		mexpr.getOperands().add(
-				new FieldOperand(selcol.getValue(), selcol.getMFromTable(),
-						mexpr));
+		mexpr.getOperands().add(new FieldOperand(selcol.getValue(), selcol.getMFromTable(), mexpr));
 		mexpr.getOperands().add(Factory.getDefaultOperand(mexpr));
 		showDialog(mexpr);
 	}
 
 	protected void showDialog(MExpression mexpr) {
-		EditExpressionDialog dialog = new EditExpressionDialog(
-				UIUtils.getShell());
+		EditExpressionDialog dialog = new EditExpressionDialog(UIUtils.getShell());
 		dialog.setValue(mexpr);
 		if (dialog.open() == Dialog.OK) {
 			mexpr.setOperator(Operator.getOperator((dialog.getOperator())));

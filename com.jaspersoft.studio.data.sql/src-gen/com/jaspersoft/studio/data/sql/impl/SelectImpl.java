@@ -35,6 +35,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.SelectImpl#getOp <em>Op</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.SelectImpl#getSelect <em>Select</em>}</li>
@@ -48,7 +49,6 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.SelectImpl#getOffset <em>Offset</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.SelectImpl#getFetchFirst <em>Fetch First</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

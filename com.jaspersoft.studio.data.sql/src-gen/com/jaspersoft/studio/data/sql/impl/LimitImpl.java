@@ -18,11 +18,11 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.LimitImpl#getL1 <em>L1</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.LimitImpl#getL2 <em>L2</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

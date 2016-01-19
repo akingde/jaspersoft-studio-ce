@@ -11,12 +11,12 @@ import org.eclipse.emf.ecore.EObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.jaspersoft.studio.data.sql.InOper#getOp <em>Op</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.InOper#getSubquery <em>Subquery</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.InOper#getOpList <em>Op List</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.jaspersoft.studio.data.sql.SqlPackage#getInOper()
  * @model

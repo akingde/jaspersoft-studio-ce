@@ -10,11 +10,11 @@ package com.jaspersoft.studio.data.sql;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.jaspersoft.studio.data.sql.AnalyticExprArg#getCe <em>Ce</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.AnalyticExprArg#getColAlias <em>Col Alias</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.jaspersoft.studio.data.sql.SqlPackage#getAnalyticExprArg()
  * @model

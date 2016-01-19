@@ -58,7 +58,9 @@ public class CreateXExpression extends AAction {
 	}
 
 	public static boolean isInSelect(Object element) {
-		return element instanceof MWhere || element instanceof MHaving || element instanceof AMExpression || element instanceof MFromTableJoin || element instanceof MExpressionGroup;
+		return element instanceof MWhere || element instanceof MHaving || element instanceof AMExpression
+				|| (element instanceof MFromTableJoin && ((MFromTableJoin) element).getJoinKey().equals("ON"))
+				|| element instanceof MExpressionGroup;
 	}
 
 	@Override

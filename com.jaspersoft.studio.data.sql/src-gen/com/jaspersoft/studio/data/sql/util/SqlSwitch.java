@@ -50,7 +50,7 @@ public class SqlSwitch<T> extends Switch<T>
    * Checks whether this is a switch for the given package.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @parameter ePackage the package in question.
+   * @param ePackage the package in question.
    * @return whether this is a switch for the given package.
    * @generated
    */
@@ -169,6 +169,20 @@ public class SqlSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
+      case SqlPackage.JOIN_CONDITION:
+      {
+        JoinCondition joinCondition = (JoinCondition)theEObject;
+        T result = caseJoinCondition(joinCondition);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.USING_COLS:
+      {
+        UsingCols usingCols = (UsingCols)theEObject;
+        T result = caseUsingCols(usingCols);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
       case SqlPackage.TABLE_OR_ALIAS:
       {
         TableOrAlias tableOrAlias = (TableOrAlias)theEObject;
@@ -284,6 +298,7 @@ public class SqlSwitch<T> extends Switch<T>
         DbObjectName dbObjectName = (DbObjectName)theEObject;
         T result = caseDbObjectName(dbObjectName);
         if (result == null) result = caseColumnFull(dbObjectName);
+        if (result == null) result = caseUsingCols(dbObjectName);
         if (result == null) result = casePivotCol(dbObjectName);
         if (result == null) result = caseTableFull(dbObjectName);
         if (result == null) result = casePivotForClause(dbObjectName);
@@ -983,6 +998,38 @@ public class SqlSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseFromTableJoin(FromTableJoin object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Join Condition</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Join Condition</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseJoinCondition(JoinCondition object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Using Cols</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Using Cols</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseUsingCols(UsingCols object)
   {
     return null;
   }

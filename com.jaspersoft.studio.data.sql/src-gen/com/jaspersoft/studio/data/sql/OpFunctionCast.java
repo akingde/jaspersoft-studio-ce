@@ -11,13 +11,13 @@ import org.eclipse.emf.ecore.EObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.jaspersoft.studio.data.sql.OpFunctionCast#getOp <em>Op</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.OpFunctionCast#getType <em>Type</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.OpFunctionCast#getP <em>P</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.OpFunctionCast#getP2 <em>P2</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.jaspersoft.studio.data.sql.SqlPackage#getOpFunctionCast()
  * @model

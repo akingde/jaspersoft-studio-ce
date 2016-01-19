@@ -11,13 +11,13 @@ import org.eclipse.emf.ecore.EObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.jaspersoft.studio.data.sql.LikeOperand#getOp2 <em>Op2</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.LikeOperand#getFop2 <em>Fop2</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.LikeOperand#getFcast <em>Fcast</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.LikeOperand#getFparam <em>Fparam</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.jaspersoft.studio.data.sql.SqlPackage#getLikeOperand()
  * @model
