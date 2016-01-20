@@ -173,6 +173,10 @@ public class Messages extends NLS {
 	public static String AExportAction_overwriteCheckbox;
 	public static String AExportAction_overwriteMessage;
 	public static String AExportAction_overwriteTitle;
+	public static String AItemDialog_0;
+	public static String AItemDialog_1;
+	public static String AItemDialog_3;
+	public static String AItemDialog_4;
 	public static String Align2BorderAction_align_to_bottom;
 	public static String Align2BorderAction_align_to_bottom_tool_tip;
 	public static String Align2BorderAction_align_to_center;

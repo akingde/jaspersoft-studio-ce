@@ -140,11 +140,11 @@ public abstract class AItemDialog extends ATitledDialog implements IExpressionCo
 			ItemData id = itemDatas.get(i);
 			JRElementDataset ed = id.getDataset();
 			if (ed == null)
-				items[i] = "No Dataset";
+				items[i] = Messages.AItemDialog_0;
 			else
-				items[i] = ed.getDatasetRun() != null ? ed.getDatasetRun().getDatasetName() : "Main Dataset";
+				items[i] = ed.getDatasetRun() != null ? ed.getDatasetRun().getDatasetName() : Messages.AItemDialog_1;
 			if (id.getItems() != null)
-				items[i] += " ; " + id.getItems().size() + " Items";
+				items[i] += " ; " + id.getItems().size() + Messages.AItemDialog_3; //$NON-NLS-1$
 		}
 		dsviewer.setItems(items);
 		dsviewer.select(itemDatas.indexOf(itemData));
@@ -237,7 +237,7 @@ public abstract class AItemDialog extends ATitledDialog implements IExpressionCo
 	}
 
 	protected void createDataItemSelector(Composite cmp) {
-		new Label(cmp, SWT.NONE).setText("Item Data");
+		new Label(cmp, SWT.NONE).setText(Messages.AItemDialog_4);
 
 		dsviewer = new Combo(cmp, SWT.READ_ONLY);
 		GridData gd = new GridData();
