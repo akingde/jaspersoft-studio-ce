@@ -218,7 +218,7 @@ public abstract class ItemDataDialog extends ElementDatasetDialog {
 		};
 		eb.createEditButtons(c, itemsViewer, editElement);
 		eb.editOnDoubleClick();
-		new DeleteButton().createDeleteButton(c, itemsViewer);
+		new DeleteButton().createDeleteButton(c, itemsViewer, true);
 		new ListOrderButtons().createOrderButtons(c, itemsViewer);
 
 		itTabItem.setControl(cmp);

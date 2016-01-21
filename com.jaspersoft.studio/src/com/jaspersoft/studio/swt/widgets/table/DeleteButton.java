@@ -25,8 +25,10 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.messages.Messages;
 
-public class DeleteButton {
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
+public class DeleteButton {
+	private boolean confirm = false;
 	private Button delB;
 
 	private final class DeleteListener extends SelectionAdapter {
@@ -61,11 +63,18 @@ public class DeleteButton {
 	}
 
 	protected boolean confirmDelete(Object obj) {
+		if (confirm && !UIUtils.showDeleteConfirmation(net.sf.jasperreports.eclipse.messages.Messages.UIUtils_3))
+			return false;
 		return canRemove(obj);
 	}
 
 	protected boolean canRemove(Object obj) {
 		return true;
+	}
+
+	public void createDeleteButton(Composite composite, final TableViewer tableViewer, boolean confirm) {
+		this.confirm = confirm;
+		createDeleteButton(composite, tableViewer);
 	}
 
 	public void createDeleteButton(Composite composite, final TableViewer tableViewer) {
