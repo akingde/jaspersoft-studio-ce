@@ -278,6 +278,21 @@ public class JRBackwardManager {
 		definitions = new HashMap<String, JRDefinition>();
 		orderedDefinitions = new ArrayList<JRDefinition>();
 		addDefinition(new JRDefinition(
+				"http://netcologne.dl.sourceforge.net/project/jasperreports/jasperreports/JasperReports%206.2.0/jasperreports-6.2.0-project.zip", //$NON-NLS-1$
+				"6.2.0")); //$NON-NLS-1$
+		addDefinition(new JRDefinition(
+				"http://netix.dl.sourceforge.net/project/jasperreports/jasperreports/JasperReports%206.1.1/jasperreports-6.1.1-project.zip", //$NON-NLS-1$
+				"6.1.1")); //$NON-NLS-1$
+		addDefinition(new JRDefinition(
+				"http://skylink.dl.sourceforge.net/project/jasperreports/jasperreports/JasperReports%206.1.0/jasperreports-6.1.0-project.zip", //$NON-NLS-1$
+				"6.1.0")); //$NON-NLS-1$
+		addDefinition(new JRDefinition(
+				"http://freefr.dl.sourceforge.net/project/jasperreports/jasperreports/JasperReports%206.0.4/jasperreports-6.0.4-project.zip", //$NON-NLS-1$
+				"6.0.4")); //$NON-NLS-1$
+		addDefinition(new JRDefinition(
+				"http://netassist.dl.sourceforge.net/project/jasperreports/jasperreports/JasperReports%206.0.3/jasperreports-6.0.3-project.zip", //$NON-NLS-1$
+				"6.0.3")); //$NON-NLS-1$
+		addDefinition(new JRDefinition(
 				"http://downloads.sourceforge.net/project/jasperreports/jasperreports/JasperReports%206.0.2/jasperreports-6.0.2-project.zip?r=&ts=1425379686&use_mirror=switch", //$NON-NLS-1$
 				"6.0.2")); //$NON-NLS-1$
 		addDefinition(new JRDefinition(
