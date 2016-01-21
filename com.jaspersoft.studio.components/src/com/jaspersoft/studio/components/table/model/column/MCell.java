@@ -13,6 +13,7 @@
 package com.jaspersoft.studio.components.table.model.column;
 
 import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -419,6 +420,31 @@ public class MCell extends MColumn implements IGraphicElement,
 				}
 			}
 			visualPropertyChanged = value;
+		}
+	}
+	
+	/**
+	 * When the style changes a refresh is sent not only to the current node, but
+	 * also to the node that are listening on the same JR element. This is done 
+	 * to propagate the change to every editor where the element is displayed
+	 */
+	@Override
+	public void setStyleChangedProperty() {
+		//Performance improvement, avoid to send the event more than one time for each editor
+		HashSet<ANode> refreshedParents = new HashSet<ANode>();
+		for(PropertyChangeListener listener : getValue().getEventSupport().getPropertyChangeListeners()){
+			if (listener instanceof MCell){
+				MCell listenerCell = (MCell)listener;
+				MTable table = listenerCell.getMTable();
+				if (table != null){
+					ANode tableParent = table.getParent();
+					if (tableParent != null && !refreshedParents.contains(tableParent)){
+						refreshedParents.add(tableParent);
+						listenerCell.setChangedProperty(true);
+						
+					}
+				}
+			}
 		}
 	}
 

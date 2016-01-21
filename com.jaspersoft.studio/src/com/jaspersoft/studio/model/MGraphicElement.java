@@ -304,6 +304,8 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 					// FIXME - Need to be verified, temporary solve the issue reported here:
 					// http://community.jaspersoft.com/questions/826441/javalangnullpointerexception-crosstabs
 					return new Rectangle(jr.getX(), jr.getY(), jr.getWidth(), jr.getHeight());
+				} else {
+					b = new Rectangle(((IGraphicElement) node).getBounds());
 				}
 				if (node instanceof IGraphicElementContainer) {
 					int x = ((IGraphicElementContainer) node).getLeftPadding();
@@ -846,6 +848,15 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		synchronized (this) {
 			return visualPropertyChanged;
 		}
+	}
+	
+	/**
+	 * The style requested refresh is the same to set the changed property 
+	 * to true in the standard elements
+	 */
+	@Override
+	public void setStyleChangedProperty() {
+		setChangedProperty(true);
 	}
 
 	/**

@@ -13,24 +13,11 @@
 package com.jaspersoft.studio.components.crosstab.model.cell;
 
 import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-
-import net.sf.jasperreports.crosstabs.JRCellContents;
-import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
-import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabCell;
-import net.sf.jasperreports.engine.JRBoxContainer;
-import net.sf.jasperreports.engine.JRConstants;
-import net.sf.jasperreports.engine.JRElementGroup;
-import net.sf.jasperreports.engine.JRPropertiesHolder;
-import net.sf.jasperreports.engine.JRPropertiesMap;
-import net.sf.jasperreports.engine.JRStyle;
-import net.sf.jasperreports.engine.base.JRBaseStyle;
-import net.sf.jasperreports.engine.design.JRDesignElement;
-import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.type.ModeEnum;
 
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
@@ -70,6 +57,20 @@ import com.jaspersoft.studio.property.descriptors.OpaqueModePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.PixelPropertyDescriptor;
 import com.jaspersoft.studio.utils.AlfaRGB;
 import com.jaspersoft.studio.utils.Colors;
+
+import net.sf.jasperreports.crosstabs.JRCellContents;
+import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
+import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabCell;
+import net.sf.jasperreports.engine.JRBoxContainer;
+import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRElementGroup;
+import net.sf.jasperreports.engine.JRPropertiesHolder;
+import net.sf.jasperreports.engine.JRPropertiesMap;
+import net.sf.jasperreports.engine.JRStyle;
+import net.sf.jasperreports.engine.base.JRBaseStyle;
+import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.type.ModeEnum;
 
 public class MCell extends APropertyNode implements IGraphicElement, IPastable,
 		IContainerLayout, IPastableGraphic, IContainer, IContainerEditPart,
@@ -465,6 +466,31 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable,
 		}
 	}
 
+	/**
+	 * When the style changes a refresh is sent not only to the current node, but
+	 * also to the node that are listening on the same JR element. This is done 
+	 * to propagate the change to every editor where the element is displayed
+	 */
+	@Override
+	public void setStyleChangedProperty() {
+		//Performance improvement, avoid to send the event more than one time for each editor
+		HashSet<ANode> refreshedParents = new HashSet<ANode>();
+		for(PropertyChangeListener listener : getValue().getEventSupport().getPropertyChangeListeners()){
+			if (listener instanceof MCell){
+				MCell listenerCell = (MCell)listener;
+				MCrosstab crosstab = listenerCell.getMCrosstab();
+				if (crosstab != null){
+					ANode tableParent = crosstab.getParent();
+					if (tableParent != null && !refreshedParents.contains(tableParent)){
+						refreshedParents.add(tableParent);
+						listenerCell.setChangedProperty(true);
+						
+					}
+				}
+			}
+		}
+	}
+	
 	/**
 	 * Set the actual state of the property change flag
 	 */

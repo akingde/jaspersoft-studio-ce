@@ -14,11 +14,11 @@ package com.jaspersoft.studio.editor.gef.figures;
 
 import java.awt.Graphics2D;
 
-import net.sf.jasperreports.engine.JRElement;
-import net.sf.jasperreports.engine.JRStaticText;
-
 import com.jaspersoft.studio.jasper.JSSDrawVisitor;
 import com.jaspersoft.studio.model.text.MStaticText;
+
+import net.sf.jasperreports.engine.JRElement;
+import net.sf.jasperreports.engine.JRStaticText;
 /*
  * The Class StaticTextFigure.
  */
@@ -54,5 +54,4 @@ public class StaticTextFigure extends FrameFigure {
 			drawVisitor.visitStaticText((JRStaticText) jrElement);
 		}	
 	}
-
 }

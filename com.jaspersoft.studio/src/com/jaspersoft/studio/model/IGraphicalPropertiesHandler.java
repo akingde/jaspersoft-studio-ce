@@ -29,6 +29,13 @@ public interface IGraphicalPropertiesHandler {
 	 * Set the actual state of the property change flag
 	 */
 	public void setChangedProperty(boolean value);
+
+	/**
+	 * Set the actual state of the property change flag, but the changes was requested by the style.
+	 * When something change in a style it notify to all the elements using it that it is changed.
+	 * This elements then could do the correct action to refresh
+	 */
+	public void setStyleChangedProperty();
 	
 	/**
 	 * True if some graphical property is changed for the element, false otherwise
