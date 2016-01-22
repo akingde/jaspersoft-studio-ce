@@ -77,8 +77,11 @@ public class JDRulerEditPart extends AbstractGraphicalEditPart {
 		
 		@Override
 		public void mouseExited(MouseEvent me) {
-			lastMousePosition.x = -1;
-			lastMousePosition.y = -1;
+			//In windows this is called even with the popup menu is already opened
+			//so the coordinates must not be reset on exit otherwise on windows would
+			//be not possible to get the position
+			//lastMousePosition.x = -1;
+			//lastMousePosition.y = -1;
 		}
 		
 		@Override
