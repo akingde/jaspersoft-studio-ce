@@ -14,8 +14,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.gef.DefaultEditDomain;
@@ -24,6 +22,7 @@ import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.editparts.AbstractTreeEditPart;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
@@ -49,6 +48,8 @@ import com.jaspersoft.studio.model.variable.MVariableSystem;
 import com.jaspersoft.studio.preferences.DesignerPreferencePage;
 import com.jaspersoft.studio.utils.SelectionHelper;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 /*
  * The Class ATreeEditPart.
@@ -190,10 +191,13 @@ public class TreeEditPart extends AbstractTreeEditPart implements PropertyChange
 				}
 			}
 			if (item != null) {
-				if (node.getBackground() != null)
-					item.setBackground(node.getBackground());
-				if (node.getForeground() != null)
-					item.setForeground(node.getForeground());
+				Color backGround = node.getBackground();
+				if (backGround != null){
+					item.setBackground(backGround);
+				}
+				Color foreGround = node.getForeground();
+				if (foreGround != null)
+					item.setForeground(foreGround);
 			}
 			String displayText = node.getDisplayText();
 			if (displayText != null) {

@@ -99,4 +99,10 @@ public class DeleteRowAction extends DeleteAction {
 		}
 		return compoundCmd;
 	}
+	
+	@Override
+	public void run() {
+		super.run();
+		handleSelectionChanged();
+	}
 }

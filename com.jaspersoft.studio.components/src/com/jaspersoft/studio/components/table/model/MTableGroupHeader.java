@@ -13,18 +13,23 @@
 package com.jaspersoft.studio.components.table.model;
 
 import net.sf.jasperreports.components.table.BaseColumn;
+import net.sf.jasperreports.components.table.Cell;
 import net.sf.jasperreports.components.table.StandardBaseColumn;
+import net.sf.jasperreports.components.table.StandardColumn;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
 
+import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.table.TableComponentFactory;
 import com.jaspersoft.studio.components.table.TableNodeIconDescriptor;
 import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 
 public class MTableGroupHeader extends AMFooterHeaderCollection {
@@ -81,4 +86,15 @@ public class MTableGroupHeader extends AMFooterHeaderCollection {
 		TableComponentFactory.createCellGroupHeader(mth, bc, i, jrDesignGroup.getName(), index);
 	}
 
+	@Override
+	public Color getForeground() {
+		for(INode child : getChildren()){
+			if (child.getValue() != null){
+				StandardColumn currentCol = (StandardColumn)child.getValue();
+				Cell headerCell = currentCol.getGroupHeader(jrDesignGroup.getName());
+				if (headerCell != null) return ColorConstants.black;
+			}
+		}
+		return ColorConstants.gray;
+	}
 }
