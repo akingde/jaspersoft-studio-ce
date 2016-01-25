@@ -889,6 +889,9 @@
       <postsetvalue
             ClassFactory="com.jaspersoft.studio.components.PostSetStyleName">
       </postsetvalue>
+      <postsetvalue
+            ClassFactory="com.jaspersoft.studio.components.crosstab.model.PostSetGroupName">
+      </postsetvalue>
    </extension>
    <extension
          point="org.eclipse.ui.editors">

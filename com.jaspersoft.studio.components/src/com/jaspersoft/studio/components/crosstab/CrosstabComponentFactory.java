@@ -15,25 +15,6 @@ package com.jaspersoft.studio.components.crosstab;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.jasperreports.components.table.DesignCell;
-import net.sf.jasperreports.components.table.StandardColumn;
-import net.sf.jasperreports.crosstabs.JRCrosstab;
-import net.sf.jasperreports.crosstabs.JRCrosstabCell;
-import net.sf.jasperreports.crosstabs.JRCrosstabColumnGroup;
-import net.sf.jasperreports.crosstabs.JRCrosstabMeasure;
-import net.sf.jasperreports.crosstabs.JRCrosstabParameter;
-import net.sf.jasperreports.crosstabs.JRCrosstabRowGroup;
-import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
-import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
-import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabDataset;
-import net.sf.jasperreports.crosstabs.type.CrosstabTotalPositionEnum;
-import net.sf.jasperreports.eclipse.util.StringUtils;
-import net.sf.jasperreports.engine.JRStyle;
-import net.sf.jasperreports.engine.design.JRDesignDataset;
-import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
-import net.sf.jasperreports.engine.design.JRDesignElement;
-import net.sf.jasperreports.engine.design.JasperDesign;
-
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
@@ -55,7 +36,11 @@ import com.jaspersoft.studio.components.crosstab.figure.WhenNoDataCellFigure;
 import com.jaspersoft.studio.components.crosstab.messages.Messages;
 import com.jaspersoft.studio.components.crosstab.model.MCrosstab;
 import com.jaspersoft.studio.components.crosstab.model.cell.MCell;
+import com.jaspersoft.studio.components.crosstab.model.cell.MColumnGroupHeaderCell;
+import com.jaspersoft.studio.components.crosstab.model.cell.MColumnGroupTotalCell;
 import com.jaspersoft.studio.components.crosstab.model.cell.MGroupCell;
+import com.jaspersoft.studio.components.crosstab.model.cell.MRowGroupHeaderCell;
+import com.jaspersoft.studio.components.crosstab.model.cell.MRowGroupTotalCell;
 import com.jaspersoft.studio.components.crosstab.model.cell.action.CreateColumnCrosstabHeaderAction;
 import com.jaspersoft.studio.components.crosstab.model.cell.command.CreateColumnCrosstabHeaderCommand;
 import com.jaspersoft.studio.components.crosstab.model.cell.command.CreateCrosstabElement4ObjectCommand;
@@ -145,6 +130,24 @@ import com.jaspersoft.studio.plugin.PaletteContributor;
 import com.jaspersoft.studio.property.SetValueCommand;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
+import net.sf.jasperreports.components.table.DesignCell;
+import net.sf.jasperreports.components.table.StandardColumn;
+import net.sf.jasperreports.crosstabs.JRCrosstab;
+import net.sf.jasperreports.crosstabs.JRCrosstabCell;
+import net.sf.jasperreports.crosstabs.JRCrosstabColumnGroup;
+import net.sf.jasperreports.crosstabs.JRCrosstabMeasure;
+import net.sf.jasperreports.crosstabs.JRCrosstabParameter;
+import net.sf.jasperreports.crosstabs.JRCrosstabRowGroup;
+import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
+import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
+import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabDataset;
+import net.sf.jasperreports.crosstabs.type.CrosstabTotalPositionEnum;
+import net.sf.jasperreports.engine.JRStyle;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
+import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
+import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 public class CrosstabComponentFactory implements IComponentFactory {
 	
@@ -245,7 +248,7 @@ public class CrosstabComponentFactory implements IComponentFactory {
 	}
 
 	public static void createColumnGroupCells(MColumnGroup rg, JRCrosstabColumnGroup p) {
-		MCell mc = new MCell(rg, p.getHeader(), Messages.CrosstabComponentFactory_header + StringUtils.SPACE + p.getName());
+		MCell mc = new MColumnGroupHeaderCell(rg, p.getHeader(), p.getName());
 		ReportFactory.createElementsForBand(mc, p.getHeader().getChildren());
 
 		mc = new MColumnCrosstabHeaderCell(rg, p.getCrosstabHeader(), -1);
@@ -253,7 +256,7 @@ public class CrosstabComponentFactory implements IComponentFactory {
 			ReportFactory.createElementsForBand(mc, p.getCrosstabHeader().getChildren());
 
 		if (!p.getTotalPositionValue().equals(CrosstabTotalPositionEnum.NONE)) {
-			mc = new MCell(rg, p.getTotalHeader(), Messages.common_total + StringUtils.SPACE + p.getName());
+			mc = new MColumnGroupTotalCell(rg, p.getTotalHeader(), p.getName());
 			ReportFactory.createElementsForBand(mc, p.getTotalHeader().getChildren());
 		}
 
@@ -267,11 +270,11 @@ public class CrosstabComponentFactory implements IComponentFactory {
 	}
 
 	public static void createRowGroupCells(MRowGroup rg, JRCrosstabRowGroup p) {
-		MCell mc = new MCell(rg, p.getHeader(), Messages.CrosstabComponentFactory_header + StringUtils.SPACE + p.getName());
+		MCell mc = new MRowGroupHeaderCell(rg, p.getHeader(), p.getName());
 		ReportFactory.createElementsForBand(mc, p.getHeader().getChildren());
 
 		if (!p.getTotalPositionValue().equals(CrosstabTotalPositionEnum.NONE)) {
-			mc = new MCell(rg, p.getTotalHeader(), Messages.common_total + StringUtils.SPACE + p.getName());
+			mc = new MRowGroupTotalCell(rg, p.getTotalHeader(), p.getName());
 			ReportFactory.createElementsForBand(mc, p.getTotalHeader().getChildren());
 		}
 	}

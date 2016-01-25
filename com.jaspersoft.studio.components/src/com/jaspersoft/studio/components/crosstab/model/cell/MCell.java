@@ -571,4 +571,13 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable,
 	public ILayout getDefaultLayout() {
 		return LayoutManager.getLayout(VerticalRowLayout.class.getName());
 	}
+	
+	/**
+	 * Override this to update the node name on some events (group name changed for example).
+	 * By default this doesn't to anything, trigger only an event to force the UI to refresh, so
+	 * it can be called by the override of this method
+	 */
+	public void updateName(){
+		propertyChange(new PropertyChangeEvent(getValue(), MGraphicElement.FORCE_GRAPHICAL_REFRESH, null, null));
+	}
 }
