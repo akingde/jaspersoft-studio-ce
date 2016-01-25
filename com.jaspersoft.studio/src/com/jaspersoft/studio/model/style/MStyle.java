@@ -841,7 +841,8 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 			for (ANode aNode : nodes) {
 				if (aNode.getUsedStyles().containsKey(getValue().getName()) && aNode instanceof IGraphicalPropertiesHandler) {
 					IGraphicalPropertiesHandler graphicalElement = (IGraphicalPropertiesHandler)aNode;
-					graphicalElement.setChangedProperty(true);
+					//ask the refresh of the element
+					graphicalElement.setStyleChangedProperty();
 					//Since a style change can change the presence of an error decorator (the fault property can be inherited)
 					//we need to refresh also the elements depending on this style
 					((ANode)aNode).revalidateChildren();
