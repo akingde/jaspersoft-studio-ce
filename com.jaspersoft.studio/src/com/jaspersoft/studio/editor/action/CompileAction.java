@@ -372,23 +372,23 @@ public class CompileAction extends SelectionAction implements IMenuCreator {
 		}
 		menu = new Menu(parent);
 		// Populate the list of the available backward JR compiler
-		List<JRDefinition> definitions = JRBackwardManager.INSTANCE.getInstallerJRs();
-		for (JRDefinition def : definitions) {
-			MenuItem item = new MenuItem(menu, SWT.PUSH);
-			item.setText(MessageFormat.format(Messages.CompileAction_compile, new Object[] { def.getVersion() }));
-			item.setData(def);
-			item.addSelectionListener(compileSelected);
-		}
+		// List<JRDefinition> definitions = JRBackwardManager.INSTANCE.getInstallerJRs();
+		// for (JRDefinition def : definitions) {
+		// MenuItem item = new MenuItem(menu, SWT.PUSH);
+		// item.setText(MessageFormat.format(Messages.CompileAction_compile, new Object[] { def.getVersion() }));
+		// item.setData(def);
+		// item.addSelectionListener(compileSelected);
+		// }
 		// If there are no older version of JR show an empty informative element
-		if (definitions.isEmpty()) {
-			MenuItem fakeItem = new MenuItem(menu, SWT.PUSH);
-			fakeItem.setEnabled(false);
-			fakeItem.setText(Messages.CompileAction_noJRInstalled);
-		}
+		// if (definitions.isEmpty()) {
+		// MenuItem fakeItem = new MenuItem(menu, SWT.PUSH);
+		// fakeItem.setEnabled(false);
+		// fakeItem.setText(Messages.CompileAction_noJRInstalled);
+		// }
 
 		// create the path submenu
-		new MenuItem(menu, SWT.SEPARATOR);
-		createDestinationSubmenu(menu);
+		// new MenuItem(menu, SWT.SEPARATOR);
+		// createDestinationSubmenu(menu);
 		// Create the option to manage the installed JR
 		MenuItem manage = new MenuItem(menu, SWT.PUSH);
 		manage.setText(Messages.CompileAction_manage);
@@ -396,10 +396,13 @@ public class CompileAction extends SelectionAction implements IMenuCreator {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				final JasperReportsConfiguration jConfig = getMDatasetToShow();
-				PreferenceDialog pref = PreferencesUtil.createPropertyDialogOn(UIUtils.getShell(),
-						(IFile) jConfig.get(FileUtils.KEY_FILE), JRVersionPreferencesPages.PAGE_ID, null, null);
-				if (pref != null)
-					pref.open();
+				IFile f = (IFile) jConfig.get(FileUtils.KEY_FILE);
+				if (f != null) {
+					PreferenceDialog pref = PreferencesUtil.createPropertyDialogOn(UIUtils.getShell(), f.getProject(),
+							JRVersionPreferencesPages.PAGE_ID, null, null);
+					if (pref != null)
+						pref.open();
+				}
 			}
 		});
 		return menu;
