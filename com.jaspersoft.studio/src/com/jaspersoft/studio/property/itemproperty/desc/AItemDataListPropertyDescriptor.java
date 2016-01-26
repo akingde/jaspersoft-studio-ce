@@ -14,6 +14,7 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
+import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 import com.jaspersoft.studio.property.itemproperty.celleditor.ItemListCellEditor;
 import com.jaspersoft.studio.property.itemproperty.label.ItemLabelProvider;
@@ -21,16 +22,18 @@ import com.jaspersoft.studio.property.itemproperty.sp.SPItemDataList;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 
-public abstract class AItemDataListPropertyDescriptor extends NTextPropertyDescriptor implements
-		IExpressionContextSetter {
+public abstract class AItemDataListPropertyDescriptor extends NTextPropertyDescriptor
+		implements IExpressionContextSetter {
+	private APropertyNode pNode;
 
-	public AItemDataListPropertyDescriptor(Object id, String displayName) {
+	public AItemDataListPropertyDescriptor(Object id, String displayName, APropertyNode pNode) {
 		super(id, displayName);
+		this.pNode = pNode;
 	}
 
 	@Override
 	public CellEditor createPropertyEditor(Composite parent) {
-		return new ItemListCellEditor(parent, descriptor);
+		return new ItemListCellEditor(parent, expContext, getDescriptor(), this, pNode);
 	}
 
 	@Override
@@ -45,7 +48,8 @@ public abstract class AItemDataListPropertyDescriptor extends NTextPropertyDescr
 		return sp;
 	}
 
-	protected ASPropertyWidget<AItemDataListPropertyDescriptor> createSPWidget(Composite parent, AbstractSection section) {
+	protected ASPropertyWidget<AItemDataListPropertyDescriptor> createSPWidget(Composite parent,
+			AbstractSection section) {
 		return new SPItemDataList(parent, section, this);
 	}
 

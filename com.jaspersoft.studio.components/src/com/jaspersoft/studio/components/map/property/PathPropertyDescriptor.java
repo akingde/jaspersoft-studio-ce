@@ -31,6 +31,7 @@ import org.eclipse.swt.widgets.Label;
 import com.jaspersoft.studio.components.map.messages.Messages;
 import com.jaspersoft.studio.components.map.model.MMap;
 import com.jaspersoft.studio.components.map.property.desc.PathDescriptor;
+import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.util.ItemPropertyUtil;
 import com.jaspersoft.studio.property.itemproperty.desc.AItemDataListPropertyDescriptor;
 import com.jaspersoft.studio.property.itemproperty.dialog.AItemDialog;
@@ -511,8 +512,8 @@ public class PathPropertyDescriptor extends AItemDataListPropertyDescriptor {
 		}
 	};
 
-	public PathPropertyDescriptor(Object id, String displayName) {
-		super(id, displayName);
+	public PathPropertyDescriptor(Object id, String displayName, APropertyNode pNode) {
+		super(id, displayName, pNode);
 	}
 
 	@Override

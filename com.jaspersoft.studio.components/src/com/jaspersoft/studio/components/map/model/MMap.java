@@ -173,19 +173,19 @@ public class MMap extends MGraphicElement implements IDatasetContainer {
 		desc.add(onErrorTypeD);
 
 		MarkersPropertyDescriptor markerD = new MarkersPropertyDescriptor(
-				StandardMapComponent.PROPERTY_MARKER_DATA_LIST, Messages.MMap_markersDescription);
+				StandardMapComponent.PROPERTY_MARKER_DATA_LIST, Messages.MMap_markersDescription, this);
 		markerD.setDescription(Messages.MMap_markersDescription);
 		markerD.setCategory(Messages.MMap_common_map_properties); // $NON-NLS-1$
 		desc.add(markerD);
 
 		PathPropertyDescriptor mapPathsD = new PathPropertyDescriptor(StandardMapComponent.PROPERTY_PATH_DATA_LIST,
-				Messages.MMap_MapPaths);
+				Messages.MMap_MapPaths, this);
 		mapPathsD.setDescription(Messages.MMap_MapPaths);
 		mapPathsD.setCategory(Messages.MMap_common_map_properties); // $NON-NLS-1$
 		desc.add(mapPathsD);
 
 		StylePropertyDescriptor mapPathStylesD = new StylePropertyDescriptor(
-				StandardMapComponent.PROPERTY_PATH_STYLE_LIST, Messages.MMap_MapStyles);
+				StandardMapComponent.PROPERTY_PATH_STYLE_LIST, Messages.MMap_MapStyles, this);
 		mapPathStylesD.setDescription(Messages.MMap_MapStyles);
 		mapPathStylesD.setCategory(Messages.MMap_common_map_properties); // $NON-NLS-1$
 		desc.add(mapPathStylesD);

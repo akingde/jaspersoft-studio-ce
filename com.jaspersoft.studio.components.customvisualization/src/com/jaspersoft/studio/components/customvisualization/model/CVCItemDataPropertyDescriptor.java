@@ -15,6 +15,7 @@ package com.jaspersoft.studio.components.customvisualization.model;
 import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.components.customvisualization.properties.SPCVCItemDataList;
+import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.itemproperty.desc.AItemDataListPropertyDescriptor;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
@@ -26,8 +27,8 @@ import com.jaspersoft.studio.property.section.AbstractSection;
 public class CVCItemDataPropertyDescriptor extends
 		AItemDataListPropertyDescriptor {
 
-	public CVCItemDataPropertyDescriptor(Object id, String displayName) {
-		super(id, displayName);
+	public CVCItemDataPropertyDescriptor(Object id, String displayName, APropertyNode pNode) {
+		super(id, displayName, pNode);
 	}
 
 	@Override

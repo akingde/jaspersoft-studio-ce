@@ -168,7 +168,7 @@ public class MCustomVisualization extends MGraphicElement implements IDatasetCon
 		desc.add(bItemPropsD);
 
 		CVCItemDataPropertyDescriptor bItemDataD = new CVCItemDataPropertyDescriptor(
-				CVDesignComponent.PROPERTY_ITEM_DATA, Messages.MCustomVisualization_ItemData);
+				CVDesignComponent.PROPERTY_ITEM_DATA, Messages.MCustomVisualization_ItemData, this);
 		bItemDataD.setDescription(Messages.MCustomVisualization_ItemDataDesc);
 		desc.add(bItemDataD);
 

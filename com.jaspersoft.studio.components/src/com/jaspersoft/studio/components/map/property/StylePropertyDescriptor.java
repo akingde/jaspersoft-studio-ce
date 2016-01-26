@@ -18,6 +18,7 @@ import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.components.map.property.desc.StyleDescriptor;
+import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.itemproperty.desc.AItemDataListPropertyDescriptor;
 import com.jaspersoft.studio.property.itemproperty.dialog.AItemDialog;
 import com.jaspersoft.studio.property.itemproperty.dialog.FormItemDialog;
@@ -32,8 +33,8 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  */
 public class StylePropertyDescriptor extends AItemDataListPropertyDescriptor {
 
-	public StylePropertyDescriptor(Object id, String displayName) {
-		super(id, displayName);
+	public StylePropertyDescriptor(Object id, String displayName, APropertyNode pNode) {
+		super(id, displayName, pNode);
 	}
 
 	@Override

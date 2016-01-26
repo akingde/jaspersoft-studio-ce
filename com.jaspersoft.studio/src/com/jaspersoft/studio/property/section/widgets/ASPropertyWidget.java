@@ -192,6 +192,7 @@ public abstract class ASPropertyWidget<T extends IPropertyDescriptor> implements
 		if (highLight == null) return;
 		//highlight the control
 		highLight.highLightControl();
+		getControlToBorder().forceFocus();
 		final long sleepTime = ms;
 		// Create a thread to remove the paint listener after specified time
 		new Thread(new Runnable() {
