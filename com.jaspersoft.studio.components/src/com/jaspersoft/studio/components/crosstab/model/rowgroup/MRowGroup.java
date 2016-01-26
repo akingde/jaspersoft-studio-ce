@@ -17,13 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.jasperreports.crosstabs.JRCrosstabRowGroup;
-import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
-import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabGroup;
-import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabRowGroup;
-import net.sf.jasperreports.crosstabs.type.CrosstabRowPositionEnum;
-import net.sf.jasperreports.engine.JRConstants;
-
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
@@ -41,6 +34,18 @@ import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.PixelPropertyDescriptor;
+import com.jaspersoft.studio.utils.ModelUtils;
+
+import net.sf.jasperreports.crosstabs.JRCrosstabCell;
+import net.sf.jasperreports.crosstabs.JRCrosstabRowGroup;
+import net.sf.jasperreports.crosstabs.design.JRCrosstabOrigin;
+import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
+import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
+import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabGroup;
+import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabRowGroup;
+import net.sf.jasperreports.crosstabs.type.CrosstabRowPositionEnum;
+import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.util.Pair;
 
 public class MRowGroup extends MCrosstabGroup implements ICopyable {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
@@ -172,7 +177,7 @@ public class MRowGroup extends MCrosstabGroup implements ICopyable {
 	 */
 	@Override
 	protected void updateGroups(String oldName, String newName) {
-		ANode crosstab = getParent().getParent();
+		MCrosstab crosstab = getMCrosstab();
 		List<MGroupCell> cellsToRefresh = new ArrayList<MGroupCell>();
 		for (INode child : crosstab.getChildren()) {
 			if (child instanceof MGroupCell) {
@@ -184,6 +189,32 @@ public class MRowGroup extends MCrosstabGroup implements ICopyable {
 				}
 			}
 		}
+		
+		//Update the cell origins
+		List<JRDesignCellContents> contents = ModelUtils.getAllCells(crosstab.getValue());
+	    for (JRDesignCellContents content : contents)
+	    {
+	    	if (content != null){
+		    	JRCrosstabOrigin origin = content.getOrigin();
+		    	if (ModelUtils.safeEquals(origin.getRowGroupName(), oldName)){
+		    		JRCrosstabOrigin newOrigin = new JRCrosstabOrigin(crosstab.getValue(), origin.getType(), newName, origin.getColumnGroupName());
+		    		content.setOrigin(newOrigin);
+		    	}
+	    	}
+	    }
+		
+	    //Update the cells map
+	    Map<Pair<String, String>, JRCrosstabCell> cellsMap = crosstab.getValue().getCellsMap();
+	    //need to create a new array list to avoid the concurrent modification exception
+	    for(Pair<String, String> key : new ArrayList<Pair<String,String>>(cellsMap.keySet())){
+	    	//The pair are row name and column name
+	    	if (ModelUtils.safeEquals(oldName, key.first())){
+	    		JRCrosstabCell value = cellsMap.remove(key);
+	    		cellsMap.put(new Pair<String, String>(newName, key.second()), value);
+	    	}
+	    }
+		
+		//Update the indexes map
 		JRDesignCrosstab jrCrosstab = (JRDesignCrosstab) crosstab.getValue();
 		Map<String, Integer> groupMap = jrCrosstab.getRowGroupIndicesMap();
 		if (groupMap.containsKey(oldName)) {

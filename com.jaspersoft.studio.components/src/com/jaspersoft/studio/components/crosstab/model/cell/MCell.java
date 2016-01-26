@@ -578,6 +578,8 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable,
 	 * it can be called by the override of this method
 	 */
 	public void updateName(){
-		propertyChange(new PropertyChangeEvent(getValue(), MGraphicElement.FORCE_GRAPHICAL_REFRESH, null, null));
+		if (getValue() != null) {
+			propertyChange(new PropertyChangeEvent(getValue(), MGraphicElement.FORCE_GRAPHICAL_REFRESH, null, null));
+		}
 	}
 }

@@ -26,6 +26,7 @@ import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabBucket;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabCell;
+import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabColumnGroup;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabRowGroup;
 import net.sf.jasperreports.crosstabs.type.CrosstabTotalPositionEnum;
 import net.sf.jasperreports.engine.JRException;
@@ -34,6 +35,7 @@ import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignStaticText;
 import net.sf.jasperreports.engine.design.JRDesignTextField;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.type.SortOrderEnum;
 import net.sf.jasperreports.engine.util.Pair;
 
 /**
@@ -210,6 +212,94 @@ public class CrosstabUtil {
 				}
 			}
 
+		jrCross.preprocess();
+	}
+	
+	public static JRDesignCrosstabColumnGroup createColumnGroup(
+			JasperDesign jasperDesign, JRDesignCrosstab jrCrosstab,
+			String name, CrosstabTotalPositionEnum total) {
+		JRDesignCrosstabColumnGroup jrGroup = new JRDesignCrosstabColumnGroup();
+		jrGroup.setTotalPosition(total);
+		jrGroup.setName(ModelUtils.getDefaultName(jrCrosstab, name));
+		jrGroup.setHeight(20);
+
+		JRDesignExpression exp = new JRDesignExpression();
+		exp.setText(""); //$NON-NLS-1$
+		exp.setValueClass(String.class);
+		JRDesignCrosstabBucket bucket = new JRDesignCrosstabBucket();
+		bucket.setExpression(exp);
+		bucket.setOrder(SortOrderEnum.ASCENDING);
+		jrGroup.setBucket(bucket);
+
+		JRDesignCellContents headerCell = new JRDesignCellContents();
+		jrGroup.setHeader(headerCell);
+
+		exp = new JRDesignExpression();
+		exp.setText("$V{" + jrGroup.getName() + "}"); //$NON-NLS-1$ //$NON-NLS-2$
+
+		JRDesignTextField tf = (JRDesignTextField) new MTextField()
+				.createJRElement(jasperDesign);
+		tf.setX(0);
+		tf.setY(0);
+		tf.setWidth(60);
+		tf.setHeight(jrGroup.getHeight());
+		if ("Crosstab Data Text" != null && jasperDesign.getStylesMap().containsKey("Crosstab Data Text")) { //$NON-NLS-1$ //$NON-NLS-2$
+			tf.setStyle((JRStyle) jasperDesign.getStylesMap().get(
+					"Crosstab Data Text")); //$NON-NLS-1$
+		}
+		tf.setExpression(exp);
+
+		headerCell.addElement(tf); // NOI18N
+
+		JRDesignCellContents totalCell = new JRDesignCellContents();
+		JRDesignStaticText stext = new JRDesignStaticText();
+		stext.setX(0);
+		stext.setY(0);
+		stext.setWidth(60);
+		stext.setHeight(jrGroup.getHeight());
+		stext.setText(Messages.common_total + " " + jrGroup.getName()); //$NON-NLS-1$
+		totalCell.addElement(stext);
+		jrGroup.setTotalHeader(totalCell);
+		return jrGroup;
+	}
+
+	public static void addColumnGroup(JRDesignCrosstab jrCross,
+			JRDesignCrosstabColumnGroup jrRowGr, int index) throws JRException {
+		if (index >= 0 && index <= jrCross.getColumnGroupsList().size())
+			jrCross.addColumnGroup(index, jrRowGr);
+		else
+			jrCross.addColumnGroup(jrRowGr);
+
+		// I need to add the extra cells...
+
+		if (!jrCross.getCellsMap().containsKey(
+				new Pair<String, String>(null, null))) {
+			JRDesignCrosstabCell dT = new JRDesignCrosstabCell();
+			dT.setColumnTotalGroup(null);
+			dT.setRowTotalGroup(null);
+			jrCross.addCell(dT);
+			dT.setHeight(jrRowGr.getHeight());
+			dT.setWidth(60);
+		}
+
+		JRDesignCrosstabCell dT = new JRDesignCrosstabCell();
+		dT.setColumnTotalGroup(jrRowGr.getName());
+		jrCross.addCell(dT);
+		dT.setHeight(jrRowGr.getHeight());
+		dT.setWidth(60);
+		// for each column, we need to add the total...
+		List<JRCrosstabRowGroup> rows = jrCross.getRowGroupsList();
+		if (rows != null)
+			for (JRCrosstabRowGroup r : rows) {
+				JRDesignCrosstabCell cell = new JRDesignCrosstabCell();
+				cell.setColumnTotalGroup(jrRowGr.getName());
+				cell.setRowTotalGroup(r.getName());
+				jrCross.addCell(cell);
+				cell.setHeight(jrRowGr.getHeight());
+				cell.setWidth(60);
+				// Add some cells...
+
+			}
 		jrCross.preprocess();
 	}
 

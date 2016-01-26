@@ -85,6 +85,15 @@ public class CreateRowCommand extends Command {
 		jasperDesign = destNode.getJasperDesign();
 	}
 
+	public CreateRowCommand(ANode destNode, JRDesignCrosstabRowGroup jrGroup, int index) {
+		super();
+		this.jrCrosstab = (JRDesignCrosstab) destNode.getValue();
+		this.index = index;
+		this.jrGroup = jrGroup;
+		jasperDesign = destNode.getJasperDesign();
+	}
+
+	
 	/*
 	 * (non-Javadoc)
 	 * 

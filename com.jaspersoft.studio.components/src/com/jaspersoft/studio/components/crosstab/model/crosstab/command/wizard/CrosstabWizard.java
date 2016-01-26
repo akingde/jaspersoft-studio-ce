@@ -21,7 +21,6 @@ import com.jaspersoft.studio.components.crosstab.CrosstabManager;
 import com.jaspersoft.studio.components.crosstab.messages.Messages;
 import com.jaspersoft.studio.components.crosstab.model.CrosstabUtil;
 import com.jaspersoft.studio.components.crosstab.model.MCrosstab;
-import com.jaspersoft.studio.components.crosstab.model.columngroup.command.CreateColumnCommand;
 import com.jaspersoft.studio.components.crosstab.model.dialog.ApplyCrosstabStyleAction;
 import com.jaspersoft.studio.components.crosstab.model.measure.command.CreateMeasureCommand;
 import com.jaspersoft.studio.model.text.MTextField;
@@ -238,7 +237,7 @@ public class CrosstabWizard extends JSSWizard {
 				try {
 					JRDesignCrosstabColumnGroup c = (JRDesignCrosstabColumnGroup) obj;
 					// c.setName(ModelUtils.getDefaultName(jdc, c.getName()));
-					CreateColumnCommand.addColumnGroup(jdc, c, -1);
+					CrosstabUtil.addColumnGroup(jdc, c, -1);
 				} catch (JRException e) {
 					e.printStackTrace();
 				}
@@ -391,9 +390,7 @@ public class CrosstabWizard extends JSSWizard {
 		CrosstabTotalPositionEnum total = step5.isAddColTotal() ? CrosstabTotalPositionEnum.END
 				: CrosstabTotalPositionEnum.NONE;
 
-		JRDesignCrosstabColumnGroup colGroup = CreateColumnCommand
-				.createColumnGroup(getConfig().getJasperDesign(), jdc, name,
-						total);
+		JRDesignCrosstabColumnGroup colGroup =  CrosstabUtil.createColumnGroup(getConfig().getJasperDesign(), jdc, name, total);
 
 		((JRDesignExpression) colGroup.getBucket().getExpression())
 				.setText(txt);

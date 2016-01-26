@@ -56,7 +56,6 @@ public class PostSetGroupName implements IPostSetValue {
 			String newVarReference = "\\$V\\{" + newValue + "}";
 			for(JRExpression exp : crosstabExpressions){
 				String text = exp.getText();
-				System.out.println(text);
 				if (text != null && text.length() > 4 && text.contains("$V{" + oldValue + "}")) {
 					text = text.replaceAll(oldVarReference, newVarReference);
 					c.add(new SetExpressionTextCommand(exp, text));

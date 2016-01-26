@@ -1023,6 +1023,11 @@ public class ModelUtils {
 	}
 
 	public static String getDefaultName(JRDesignCrosstab c, String name) {
+		//Check the base name, if it is good return it
+		if (!c.getMeasureIndicesMap().containsKey(name) && !c.getColumnGroupIndicesMap().containsKey(name)
+				&& !c.getRowGroupIndicesMap().containsKey(name)){
+			return name;
+		}
 		int i = 1;
 		while (i < 100000) {
 			String iname = name + i;
