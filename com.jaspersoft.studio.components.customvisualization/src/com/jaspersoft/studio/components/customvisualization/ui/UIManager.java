@@ -28,6 +28,10 @@ import java.util.StringTokenizer;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResourceChangeEvent;
+import org.eclipse.core.resources.IResourceChangeListener;
+import org.eclipse.core.resources.IResourceDelta;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -61,6 +65,44 @@ public class UIManager {
 	private static Map<JasperReportsConfiguration, Map<String, ComponentDescriptor>> cache = new HashMap<JasperReportsConfiguration, Map<String, ComponentDescriptor>>();
 	private static Map<ComponentDescriptor, Image> imageCache = new HashMap<ComponentDescriptor, Image>();
 	private static Map<ComponentDescriptor, String> parentsPath = new HashMap<ComponentDescriptor, String>();
+	private static IResourceChangeListener listener = new ResourceChangeReporter();
+
+	static {
+		ResourcesPlugin.getWorkspace().addResourceChangeListener(listener,
+				IResourceChangeEvent.PRE_CLOSE | IResourceChangeEvent.PRE_DELETE | IResourceChangeEvent.POST_CHANGE);
+	}
+
+	public static class ResourceChangeReporter implements IResourceChangeListener {
+		private boolean checkInPaths(IResourceDelta rd) {
+			if (rd.getFullPath() != null) {
+				String rpath = rd.getResource().getRawLocation().toPortableString() ;
+				for (String path : parentsPath.values())
+					if (!rpath.startsWith(path))
+						return false;
+				imageCache.clear();
+				parentsPath.clear();
+				cache.clear();
+				cachePlugin.clear();
+				initCachePlugin();
+			}
+			return true;
+		}
+
+		private void checkResource(IResourceDelta[] children) {
+			for (IResourceDelta rd : children) {
+				if (!Misc.isNullOrEmpty(rd.getAffectedChildren()))
+					checkResource(rd.getAffectedChildren());
+				else if (checkInPaths(rd))
+					return;
+			}
+		}
+
+		public void resourceChanged(IResourceChangeEvent event) {
+			final IResourceDelta delta = event.getDelta();
+			if (delta != null)
+				checkResource(delta.getAffectedChildren());
+		}
+	}
 
 	public static ComponentDescriptor getComponentDescriptor(MCustomVisualization model) {
 		List<ItemProperty> props = model.getComponent().getItemProperties();
@@ -350,6 +392,7 @@ public class UIManager {
 				def = new Integer(cpd.getDefaultValue());
 			desc = new NumberPropertyDescription<Integer>(cpd.getName(), cpd.getLabel(), cpd.getDescription(),
 					cpd.isMandatory(), (Integer) def, min, max) {
+
 				@Override
 				public Class<?> getType() {
 					if (defaultValue != null)
@@ -373,7 +416,9 @@ public class UIManager {
 					return Double.class;
 				}
 			};
-		} else {
+		} else
+
+		{
 			desc = new ItemPropertyDescription<String>(cpd.getName(), cpd.getLabel(), cpd.getDescription(),
 					cpd.isMandatory(), cpd.getDefaultValue());
 		}
