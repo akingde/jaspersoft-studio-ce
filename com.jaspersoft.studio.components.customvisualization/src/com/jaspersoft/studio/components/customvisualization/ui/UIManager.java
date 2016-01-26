@@ -75,7 +75,7 @@ public class UIManager {
 	public static class ResourceChangeReporter implements IResourceChangeListener {
 		private boolean checkInPaths(IResourceDelta rd) {
 			if (rd.getFullPath() != null) {
-				String rpath = rd.getResource().getRawLocation().toPortableString();
+				String rpath = rd.getResource().getRawLocationURI().toASCIIString();
 				for (String path : parentsPath.values()) {
 					if (path.startsWith("bundle"))
 						continue;
