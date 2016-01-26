@@ -75,10 +75,13 @@ public class UIManager {
 	public static class ResourceChangeReporter implements IResourceChangeListener {
 		private boolean checkInPaths(IResourceDelta rd) {
 			if (rd.getFullPath() != null) {
-				String rpath = rd.getResource().getRawLocation().toPortableString() ;
-				for (String path : parentsPath.values())
+				String rpath = rd.getResource().getRawLocation().toPortableString();
+				for (String path : parentsPath.values()) {
+					if (path.startsWith("bundle"))
+						continue;
 					if (!rpath.startsWith(path))
 						return false;
+				}
 				imageCache.clear();
 				parentsPath.clear();
 				cache.clear();
