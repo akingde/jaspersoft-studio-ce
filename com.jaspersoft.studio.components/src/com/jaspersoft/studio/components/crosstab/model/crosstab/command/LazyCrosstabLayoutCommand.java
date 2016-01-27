@@ -12,16 +12,26 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.crosstab.model.crosstab.command;
 
+import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.JSSCompoundCommand;
-import com.jaspersoft.studio.components.crosstab.model.cell.MCell;
+import com.jaspersoft.studio.components.crosstab.model.MCrosstab;
+import com.jaspersoft.studio.editor.layout.ILayout;
+import com.jaspersoft.studio.editor.layout.LayoutCommand;
 import com.jaspersoft.studio.editor.layout.LayoutManager;
-import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.editor.layout.VerticalRowLayout;
+
+import net.sf.jasperreports.crosstabs.JRCellContents;
+import net.sf.jasperreports.crosstabs.JRCrosstabCell;
+import net.sf.jasperreports.crosstabs.JRCrosstabColumnGroup;
+import net.sf.jasperreports.crosstabs.JRCrosstabRowGroup;
+import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
+import net.sf.jasperreports.engine.JRElementGroup;
+import net.sf.jasperreports.engine.JRPropertiesMap;
 
 /**
- * Crearte and execute a layout command on the whole crosstab. The command
+ * Create and execute a layout command on the whole crosstab. The command
  * to layout the crosstab is created and executed at execution time.
  * 
  * 
@@ -37,7 +47,7 @@ public class LazyCrosstabLayoutCommand extends Command{
 	/**
 	 * The container to layout
 	 */
-	private ANode container;
+	private MCrosstab container;
 	
 	/**
 	 * Create the command
@@ -45,7 +55,7 @@ public class LazyCrosstabLayoutCommand extends Command{
 	 * @param container the container to layout, if 
 	 * null the command can`t not be executed
 	 */
-	public LazyCrosstabLayoutCommand(ANode container) {
+	public LazyCrosstabLayoutCommand(MCrosstab container) {
 		this.container = container;
 	}
 	
@@ -57,7 +67,7 @@ public class LazyCrosstabLayoutCommand extends Command{
 	@Override
 	public void execute() {
 		cmd = new JSSCompoundCommand(container);
-		createLayoutCommand(container, cmd);
+		createLayoutCommand(cmd);
 		if (cmd != null){
 			cmd.execute();
 		}
@@ -71,18 +81,66 @@ public class LazyCrosstabLayoutCommand extends Command{
 	}
 	
 	/**
-	 * Create a command to layout the current node if it is a cell, otherwise it 
-	 * will search recursively a cell in every child of the node
+	 * Add to the passed command the commands to layout all the cells
+	 * of the crosstab
+	 * 
+	 * @param c a not null compound command where all the single commands
+	 * to layout a cell are added
 	 */
-	public void createLayoutCommand(INode node, JSSCompoundCommand c){
-		if (node == null) return;
-		if (node instanceof MCell && node.getValue() != null){
-			Command cmd = LayoutManager.createRelayoutCommand((ANode)node);
-			if (cmd != null) c.add(cmd);
-		} else {
-			for(INode child : node.getChildren()){
-				createLayoutCommand(child, c);
-			}
+	public void createLayoutCommand(JSSCompoundCommand c){
+		if (container == null) return;
+		JRDesignCrosstab crosstab = container.getValue();
+		for(JRCrosstabRowGroup rowGroup : crosstab.getRowGroups()){
+			createRelayoutCommand(rowGroup.getTotalHeader(), c);
+			createRelayoutCommand(rowGroup.getHeader(), c);
+		}
+		for(JRCrosstabColumnGroup colGroup : crosstab.getColumnGroups()){
+			createRelayoutCommand(colGroup.getTotalHeader(), c);
+			createRelayoutCommand(colGroup.getHeader(), c);
+			createRelayoutCommand(colGroup.getCrosstabHeader(), c);
+		}
+		for(JRCrosstabCell cell : crosstab.getCellsList()){
+			createRelayoutCommand(cell, c);
 		}
 	}
+	
+	/**
+	 * Create a layout command to layout the container passed as parameter
+	 * 
+	 * @param jrElement the cell contents to layout
+	 * @param c a not null compound command where all the single commands
+	 * to layout a cell are added
+	 */
+	private void createRelayoutCommand(JRCellContents jrElement, JSSCompoundCommand c){	
+		if (jrElement != null){
+			//Search the parent group
+			JRElementGroup jrGroup = (JRElementGroup) jrElement;
+			//search the size of the parent
+			Dimension d = new Dimension();
+			d.setSize(new Dimension(jrElement.getWidth(), jrElement.getHeight()));
+			
+			//get the properties of the parent
+			JRPropertiesMap map = jrElement.getPropertiesMap();
+			String str = map.getProperty(ILayout.KEY);
+			if (str == null){
+				str = VerticalRowLayout.class.getName();
+			}
+			ILayout parentLayout = LayoutManager.getLayout(str);		
+			c.add(new LayoutCommand(jrGroup, parentLayout, d));
+		}
+	}
+	
+	/**
+	 * Create a layout command to layout the container passed as parameter
+	 * 
+	 * @param jrElement the cell contents to layout
+	 * @param c a not null compound command where all the single commands
+	 * to layout a cell are added
+	 */
+	private void createRelayoutCommand(JRCrosstabCell jrElement, JSSCompoundCommand c){	
+		if (jrElement != null) {
+			createRelayoutCommand(jrElement.getContents(), c);
+		}
+	}
+	
 }

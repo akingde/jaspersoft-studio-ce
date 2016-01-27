@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.callout.pin.IPinContainer;
@@ -545,14 +544,10 @@ public class MCrosstab extends MGraphicElementLineBox implements IContainer,
 				if (evt.getSource() == getValue() && getValue() != null && !flagRefreshCells) {
 					flagRefreshCells = true;
 					CrosstabComponentFactory.deleteCellNodes(MCrosstab.this);
-					Display.getDefault().asyncExec(new Runnable() {
-						public void run() {
-							CrosstabComponentFactory.createCellNodes((JRDesignCrosstab) getValue(), MCrosstab.this);
-							getCrosstabManager().refresh();
-							flagRefreshCells = false;
-							MCrosstab.super.propertyChange(evt);
-						}
-					});
+					CrosstabComponentFactory.createCellNodes((JRDesignCrosstab) getValue(), MCrosstab.this);
+					getCrosstabManager().refresh();
+					flagRefreshCells = false;
+					MCrosstab.super.propertyChange(evt);
 					return;
 				}
 			} else if (pname.equals(JRDesignCrosstab.PROPERTY_MEASURES)) {

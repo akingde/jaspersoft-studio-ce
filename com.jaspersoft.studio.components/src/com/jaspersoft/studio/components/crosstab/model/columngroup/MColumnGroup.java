@@ -29,6 +29,7 @@ import com.jaspersoft.studio.components.crosstab.model.MCrosstabGroup;
 import com.jaspersoft.studio.components.crosstab.model.cell.MGroupCell;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.ICopyable;
+import com.jaspersoft.studio.model.IDragable;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
@@ -48,7 +49,7 @@ import net.sf.jasperreports.crosstabs.type.CrosstabColumnPositionEnum;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.util.Pair;
 
-public class MColumnGroup extends MCrosstabGroup implements ICopyable {
+public class MColumnGroup extends MCrosstabGroup implements ICopyable, IDragable{
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;

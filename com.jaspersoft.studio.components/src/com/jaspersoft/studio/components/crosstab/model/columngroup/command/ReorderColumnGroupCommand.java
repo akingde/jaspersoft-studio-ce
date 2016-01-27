@@ -23,6 +23,7 @@ import org.eclipse.gef.commands.Command;
 import com.jaspersoft.studio.components.crosstab.messages.Messages;
 import com.jaspersoft.studio.components.crosstab.model.columngroup.MColumnGroup;
 import com.jaspersoft.studio.components.crosstab.model.columngroup.MColumnGroups;
+import com.jaspersoft.studio.components.crosstab.model.crosstab.command.LazyCrosstabLayoutCommand;
 
 /*
  * The Class ReorderParameterCommand.
@@ -34,6 +35,8 @@ public class ReorderColumnGroupCommand extends Command {
 	private JRDesignCrosstabColumnGroup jrColumnGroup;
 
 	private JRDesignCrosstab jrCrosstab;
+
+	private LazyCrosstabLayoutCommand layoutCommand;
 
 	/**
 	 * Instantiates a new reorder parameter command.
@@ -48,10 +51,10 @@ public class ReorderColumnGroupCommand extends Command {
 	public ReorderColumnGroupCommand(MColumnGroup child, MColumnGroups parent,
 			int newIndex) {
 		super(Messages.common_reorder_elements);
-
 		this.newIndex = Math.max(0, newIndex);
 		this.jrCrosstab = (JRDesignCrosstab) parent.getValue();
 		this.jrColumnGroup = (JRDesignCrosstabColumnGroup) child.getValue();
+		this.layoutCommand = new LazyCrosstabLayoutCommand(child.getMCrosstab());
 	}
 
 	/*
@@ -68,13 +71,13 @@ public class ReorderColumnGroupCommand extends Command {
 		jrCrosstab.getEventSupport().fireCollectionElementRemovedEvent(
 				JRDesignCrosstab.PROPERTY_COLUMN_GROUPS, jrColumnGroup,
 				oldIndex);
-		if (newIndex >= 0 && newIndex < columns.size())
+		if (newIndex >= 0 && newIndex < columns.size()){
 			columns.add(newIndex, jrColumnGroup);
-		else
+		} else {
 			columns.add(jrColumnGroup);
-		jrCrosstab.getEventSupport().fireCollectionElementAddedEvent(
-				JRDesignCrosstab.PROPERTY_COLUMN_GROUPS, jrColumnGroup,
-				newIndex);
+		}	
+		jrCrosstab.getEventSupport().fireCollectionElementAddedEvent(JRDesignCrosstab.PROPERTY_COLUMN_GROUPS, jrColumnGroup,newIndex);
+		layoutCommand.execute();
 	}
 
 	/*
@@ -86,15 +89,18 @@ public class ReorderColumnGroupCommand extends Command {
 	public void undo() {
 		List<JRCrosstabColumnGroup> columns = jrCrosstab.getColumnGroupsList();
 		columns.remove(jrColumnGroup);
-		jrCrosstab.getEventSupport().fireCollectionElementRemovedEvent(
-				JRDesignCrosstab.PROPERTY_COLUMN_GROUPS, jrColumnGroup,
-				newIndex);
-		if (oldIndex >= 0 && oldIndex < columns.size())
+		jrCrosstab.getEventSupport().fireCollectionElementRemovedEvent(JRDesignCrosstab.PROPERTY_COLUMN_GROUPS, jrColumnGroup,newIndex);
+		if (oldIndex >= 0 && oldIndex < columns.size()){
 			columns.add(oldIndex, jrColumnGroup);
-		else
+		} else {
 			columns.add(jrColumnGroup);
-		jrCrosstab.getEventSupport().fireCollectionElementAddedEvent(
-				JRDesignCrosstab.PROPERTY_COLUMN_GROUPS, jrColumnGroup,
-				oldIndex);
+		}
+		jrCrosstab.getEventSupport().fireCollectionElementAddedEvent(JRDesignCrosstab.PROPERTY_COLUMN_GROUPS, jrColumnGroup,oldIndex);
+		layoutCommand.undo();
+	}
+	
+	@Override
+	public boolean canExecute() {
+		return newIndex != -1;
 	}
 }

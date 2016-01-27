@@ -18,6 +18,7 @@ import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabRowGroup;
 import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.components.crosstab.messages.Messages;
+import com.jaspersoft.studio.components.crosstab.model.crosstab.command.LazyCrosstabLayoutCommand;
 import com.jaspersoft.studio.components.crosstab.model.rowgroup.MRowGroup;
 import com.jaspersoft.studio.components.crosstab.model.rowgroup.MRowGroups;
 /*
@@ -33,6 +34,8 @@ public class ReorderRowGroupCommand extends Command {
 
 	/** The jr dataset. */
 	private JRDesignCrosstab jrCrosstab;
+	
+	private LazyCrosstabLayoutCommand layoutCommand;
 
 	/**
 	 * Instantiates a new reorder parameter command.
@@ -46,10 +49,10 @@ public class ReorderRowGroupCommand extends Command {
 	 */
 	public ReorderRowGroupCommand(MRowGroup child, MRowGroups parent, int newIndex) {
 		super(Messages.common_reorder_elements);
-
 		this.newIndex = newIndex;
 		this.jrCrosstab = (JRDesignCrosstab) parent.getValue();
 		this.jrRowGroup = (JRDesignCrosstabRowGroup) child.getValue();
+		this.layoutCommand = new LazyCrosstabLayoutCommand(child.getMCrosstab());
 	}
 
 	/*
@@ -60,16 +63,15 @@ public class ReorderRowGroupCommand extends Command {
 	@Override
 	public void execute() {
 		oldIndex = jrCrosstab.getRowGroupsList().indexOf(jrRowGroup);
-
 		jrCrosstab.getRowGroupsList().remove(jrRowGroup);
-		jrCrosstab.getEventSupport().fireCollectionElementRemovedEvent(JRDesignCrosstab.PROPERTY_ROW_GROUPS, jrRowGroup,
-				oldIndex);
-		if (newIndex >= 0 && newIndex < jrCrosstab.getRowGroupsList().size())
+		jrCrosstab.getEventSupport().fireCollectionElementRemovedEvent(JRDesignCrosstab.PROPERTY_ROW_GROUPS, jrRowGroup,oldIndex);
+		if (newIndex >= 0 && newIndex < jrCrosstab.getRowGroupsList().size()){
 			jrCrosstab.getRowGroupsList().add(newIndex, jrRowGroup);
-		else
+		} else {
 			jrCrosstab.getRowGroupsList().add(jrRowGroup);
-		jrCrosstab.getEventSupport().fireCollectionElementAddedEvent(JRDesignCrosstab.PROPERTY_ROW_GROUPS, jrRowGroup,
-				newIndex);
+		}
+		jrCrosstab.getEventSupport().fireCollectionElementAddedEvent(JRDesignCrosstab.PROPERTY_ROW_GROUPS, jrRowGroup, newIndex);
+		layoutCommand.execute();
 	}
 
 	/*
@@ -83,11 +85,17 @@ public class ReorderRowGroupCommand extends Command {
 		jrCrosstab.getRowGroupsList().remove(jrRowGroup);
 		jrCrosstab.getEventSupport().fireCollectionElementRemovedEvent(JRDesignCrosstab.PROPERTY_ROW_GROUPS, jrRowGroup,
 				newIndex);
-		if (oldIndex >= 0 && oldIndex < jrCrosstab.getRowGroupsList().size())
+		if (oldIndex >= 0 && oldIndex < jrCrosstab.getRowGroupsList().size()) {
 			jrCrosstab.getRowGroupsList().add(oldIndex, jrRowGroup);
-		else
+		} else {
 			jrCrosstab.getRowGroupsList().add(jrRowGroup);
-		jrCrosstab.getEventSupport().fireCollectionElementAddedEvent(JRDesignCrosstab.PROPERTY_ROW_GROUPS, jrRowGroup,
-				oldIndex);
+		}
+		jrCrosstab.getEventSupport().fireCollectionElementAddedEvent(JRDesignCrosstab.PROPERTY_ROW_GROUPS, jrRowGroup,oldIndex);
+		layoutCommand.undo();
+	}
+	
+	@Override
+	public boolean canExecute() {
+		return newIndex != -1;
 	}
 }
