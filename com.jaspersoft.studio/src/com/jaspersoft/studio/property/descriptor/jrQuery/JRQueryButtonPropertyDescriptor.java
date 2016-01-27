@@ -24,7 +24,7 @@ import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 import com.jaspersoft.studio.property.section.widgets.IPropertyDescriptorWidget;
-import com.jaspersoft.studio.property.section.widgets.SPQueryButton;
+import com.jaspersoft.studio.property.section.widgets.SPQueryLink;
 
 /**
  * Descriptor for a button to edit a query of a data adapter
@@ -62,8 +62,8 @@ public class JRQueryButtonPropertyDescriptor extends PropertyDescriptor implemen
 		return new JRQueryLabelProvider(canBeNull);
 	}
 
-	public ASPropertyWidget<?> createWidget(Composite parent, AbstractSection section) {
-		return new SPQueryButton(parent, section, this, buttonText);
+	public ASPropertyWidget<JRQueryButtonPropertyDescriptor> createWidget(Composite parent, AbstractSection section) {
+		return new SPQueryLink<JRQueryButtonPropertyDescriptor>(parent, section, this, buttonText);
 	}
 
 	private IHelpRefBuilder refBuilder;
