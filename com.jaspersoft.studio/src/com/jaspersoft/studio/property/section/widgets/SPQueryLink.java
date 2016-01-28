@@ -12,18 +12,10 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.section.widgets;
 
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.GC;
-import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Listener;
-import org.eclipse.ui.forms.events.HyperlinkAdapter;
-import org.eclipse.ui.forms.events.HyperlinkEvent;
-import org.eclipse.ui.forms.widgets.FormText;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.editor.SimpleJRXMLEditor;
@@ -35,6 +27,7 @@ import com.jaspersoft.studio.model.dataset.MDataset;
 import com.jaspersoft.studio.property.dataset.dialog.DatasetDialog;
 import com.jaspersoft.studio.property.descriptor.pattern.dialog.PatternEditor;
 import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.swt.widgets.LinkButton;
 import com.jaspersoft.studio.utils.SelectionHelper;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
@@ -50,8 +43,8 @@ import net.sf.jasperreports.engine.design.JasperDesign;
  */
 public class SPQueryLink<T extends IPropertyDescriptor> extends ASPropertyWidget<T> {
 
-	private FormText editQueryLink = null;
-
+	private LinkButton button;
+	
 	/**
 	 * The query of the report
 	 */
@@ -61,10 +54,6 @@ public class SPQueryLink<T extends IPropertyDescriptor> extends ASPropertyWidget
 	 * The main dataset of the report
 	 */
 	private MDataset mdataset;
-	
-	private Composite container;
-	
-	private String unformattedText;
 
 	/**
 	 * 
@@ -83,17 +72,6 @@ public class SPQueryLink<T extends IPropertyDescriptor> extends ASPropertyWidget
 	protected void createComponent(Composite parent) {
 	}
 
-  private int getWidthInChars() {
-    GC gc = null;
-    if (editQueryLink != null) {
-    	gc = new GC(editQueryLink);
-    } else {
-    	gc = new GC(container);
-    }
-    Point extent = gc.textExtent(unformattedText);//$NON-NLS-1$
-    gc.dispose();
-    return extent.x;
-  }
 	
 	/**
 	 * Build the button
@@ -104,57 +82,21 @@ public class SPQueryLink<T extends IPropertyDescriptor> extends ASPropertyWidget
 	 *          text on the button
 	 */
 	protected void createLink(Composite parent, String linkText) {
-		unformattedText = new String(linkText);
-		if (!linkText.contains("<form>")){
-			linkText = "<form><p><a href=\"\">" + linkText + "</a></p></form>"; 
-		}
-		container = new Composite(parent, SWT.NONE){
-			@Override
-			public Point computeSize(int wHint, int hHint, boolean changed) {
-				Point size = super.computeSize(wHint, hHint, changed);
-				size.x = getWidthInChars() + 10;
-				return size;
-			}
-			
-		};
-		GridLayout containerLayout = new GridLayout(1, false);
-		containerLayout.horizontalSpacing = 0;
-		containerLayout.verticalSpacing = 0;
-		containerLayout.marginWidth = 0;
-		containerLayout.marginHeight = 0;
-		container.setLayout(containerLayout);
-	
-		editQueryLink = new FormText(container, SWT.NONE);
-		editQueryLink.setText(linkText, true, false);
-		editQueryLink.addListener(SWT.MenuDetect, new Listener() {
-			public void handleEvent(Event event) {
-				event.doit = false;
-			}
-		});
-		
-		editQueryLink.setWhitespaceNormalized(true);
-		editQueryLink.addHyperlinkListener(new HyperlinkAdapter() {
+		button = new LinkButton(parent, linkText);
+		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
-			public void linkActivated(HyperlinkEvent e) {
-				container.forceFocus();
+			public void widgetSelected(SelectionEvent e) {
 				if (SelectionHelper.getActiveJRXMLEditor() instanceof SimpleJRXMLEditor){
 					UIUtils.showInformation(Messages.SPQueryButton_editorNotSuppoertedMessage);
 				} else {
 					PatternEditor wizard = new PatternEditor();
 					Object queryText = mquery.getPropertyValue(JRDesignQuery.PROPERTY_TEXT);
 					wizard.setValue(queryText != null ? queryText.toString() : ""); //$NON-NLS-1$
-					new DatasetDialog(editQueryLink.getShell(), mdataset, mquery.getJasperConfiguration(), section
-							.getEditDomain().getCommandStack()).open();
+					new DatasetDialog(button.getShell(), mdataset, mquery.getJasperConfiguration(), section.getEditDomain().getCommandStack()).open();
 				}
-				editQueryLink.redraw();
 			}
 		});
-			
-		GridData data = new GridData(GridData.FILL_BOTH);
-		data.widthHint = getWidthInChars();
-		editQueryLink.setLayoutData(data);
-		container.layout();
 	}
 
 	@Override
@@ -168,7 +110,6 @@ public class SPQueryLink<T extends IPropertyDescriptor> extends ASPropertyWidget
 
 	@Override
 	public Control getControl() {
-		return container;
+		return button;
 	}
-
 }

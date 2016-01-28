@@ -27,11 +27,11 @@ import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.descriptor.pattern.dialog.PatternEditor;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
-public class SPPattern extends SPText {
+public class SPPattern<T extends IPropertyDescriptor> extends SPText<T> {
 
 	private Button btn;
 	
-	public SPPattern(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
+	public SPPattern(Composite parent, AbstractSection section, T pDescriptor) {
 		super(parent, section, pDescriptor);
 	}
 

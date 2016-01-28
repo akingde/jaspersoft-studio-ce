@@ -23,11 +23,11 @@ import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.descriptor.classname.ClassTypeCellEditor;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
-public class SPClassType extends SPText {
+public class SPClassType<T extends IPropertyDescriptor> extends SPText<T> {
 
 	private Button btn;
 
-	public SPClassType(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
+	public SPClassType(Composite parent, AbstractSection section, T pDescriptor) {
 		super(parent, section, pDescriptor);
 	}
 

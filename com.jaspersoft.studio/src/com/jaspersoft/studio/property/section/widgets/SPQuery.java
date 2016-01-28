@@ -28,9 +28,9 @@ import com.jaspersoft.studio.property.dataset.dialog.DatasetDialog;
 import com.jaspersoft.studio.property.descriptor.pattern.dialog.PatternEditor;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
-public class SPQuery extends SPText {
+public class SPQuery<T extends IPropertyDescriptor> extends SPText<T> {
 
-	public SPQuery(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
+	public SPQuery(Composite parent, AbstractSection section, T pDescriptor) {
 		super(parent, section, pDescriptor);
 	}
 

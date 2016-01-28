@@ -1441,7 +1441,9 @@ public class Messages extends NLS {
 	public static String MSubreport_expression_description;
 	public static String MSubreport_parameters_description;
 	public static String MSubreport_parameters_map_expression_description;
+	public static String MSubreport_parametersName;
 	public static String MSubreport_return_values_description;
+	public static String MSubreport_returnValuesName;
 	public static String MSubreport_run_to_bottom;
 	public static String MSubreport_run_to_bottom_description;
 	public static String MSubreport_subreport_properties_category;

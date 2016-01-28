@@ -30,13 +30,13 @@ import com.jaspersoft.studio.property.descriptor.parameter.dialog.GenericJSSPara
 import com.jaspersoft.studio.property.descriptor.parameter.dialog.ParameterEditor;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
-public class SPHyperlinkParameter extends SPText {
+public class SPHyperlinkParameter<T extends IPropertyDescriptor> extends SPText<T> {
 
 	private Button btn;
 	
 	private JRHyperlinkParameter[] parameters;
 	
-	public SPHyperlinkParameter(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
+	public SPHyperlinkParameter(Composite parent, AbstractSection section, T pDescriptor) {
 		super(parent, section, pDescriptor);
 	}
 

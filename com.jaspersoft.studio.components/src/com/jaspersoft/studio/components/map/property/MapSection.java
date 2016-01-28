@@ -14,15 +14,14 @@ package com.jaspersoft.studio.components.map.property;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.forms.events.HyperlinkAdapter;
-import org.eclipse.ui.forms.events.HyperlinkEvent;
-import org.eclipse.ui.forms.widgets.FormText;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.map.messages.Messages;
@@ -30,6 +29,7 @@ import com.jaspersoft.studio.components.map.model.MMap;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.SPEvaluationTime;
+import com.jaspersoft.studio.swt.widgets.LinkButton;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.widgets.map.core.LatLng;
 import com.jaspersoft.studio.widgets.map.core.MapType;
@@ -55,22 +55,20 @@ public class MapSection extends AbstractSection {
 		super.createControls(parent, tabbedPropertySheetPage);
 		parent.setLayout(new GridLayout(2, false));
 
-		FormText mapPickSuggestion = new FormText(parent, SWT.NONE);
+		LinkButton mapPickSuggestion = new LinkButton(parent, Messages.MapSection_0);
 		mapPickSuggestion.addListener(SWT.MenuDetect, new Listener() {
 			public void handleEvent(Event event) {
 				event.doit = false;
 			}
 		});
-		mapPickSuggestion.setText(Messages.MapSection_0, true, false);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		gd.horizontalIndent = 5;
 		mapPickSuggestion.setLayoutData(gd);
-		mapPickSuggestion.setWhitespaceNormalized(true);
-		mapPickSuggestion.addHyperlinkListener(new HyperlinkAdapter() {
+		mapPickSuggestion.addSelectionListener(new SelectionAdapter() {
 
 			@Override
-			public void linkActivated(HyperlinkEvent e) {
+			public void widgetSelected(SelectionEvent e) {
 				MMap mmap = (MMap) getElement();
 				GMapCenterDialog d = new GMapCenterDialog(UIUtils.getShell()) {
 					@Override

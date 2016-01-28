@@ -52,7 +52,7 @@ public class SubreportPropertiesPropertyDescriptor extends NTextPropertyDescript
 	}
 
 	@Override
-	public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
-		return new SPSubreportParametersButton(parent, section, this, getDisplayName());
+	public ASPropertyWidget<SubreportPropertiesPropertyDescriptor> createWidget(Composite parent, AbstractSection section) {
+		return new SPSubreportParametersButton<SubreportPropertiesPropertyDescriptor>(parent, section, this, getDisplayName());
 	}
 }

@@ -24,9 +24,9 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.classname.dialog.ImportDialog;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
-public class SPImport extends SPText {
+public class SPImport<T extends IPropertyDescriptor> extends SPText<T> {
 
-	public SPImport(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
+	public SPImport(Composite parent, AbstractSection section, T pDescriptor) {
 		super(parent, section, pDescriptor);
 	}
 

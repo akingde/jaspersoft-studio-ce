@@ -30,7 +30,7 @@ import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.UIUtil;
 import com.jaspersoft.studio.utils.inputhistory.InputHistoryCache;
 
-public class SPText extends AHistorySPropertyWidget {
+public class SPText<T extends IPropertyDescriptor> extends AHistorySPropertyWidget<T> {
 	protected Text ftext;
 	protected APropertyNode pnode;
 	protected String savedValue;
@@ -47,7 +47,7 @@ public class SPText extends AHistorySPropertyWidget {
 	 */
 	protected boolean disableFocusLost = false;
 
-	public SPText(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
+	public SPText(Composite parent, AbstractSection section, T pDescriptor) {
 		super(parent, section, pDescriptor);
 	}
 

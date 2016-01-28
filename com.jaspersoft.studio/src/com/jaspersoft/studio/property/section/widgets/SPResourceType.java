@@ -27,11 +27,11 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
-public class SPResourceType extends SPText {
+public class SPResourceType<T extends IPropertyDescriptor> extends SPText<T> {
 
 	private Button btn;
 
-	public SPResourceType(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
+	public SPResourceType(Composite parent, AbstractSection section, T pDescriptor) {
 		super(parent, section, pDescriptor);
 	}
 

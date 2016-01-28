@@ -40,7 +40,7 @@ public class RVPropertyDescriptor extends NTextPropertyDescriptor implements IPr
 	}
 
 	@Override
-	public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
-		return new SPSubreportReturnValuesButton(parent, section, this, getDisplayName());
+	public ASPropertyWidget<RVPropertyDescriptor> createWidget(Composite parent, AbstractSection section) {
+		return new SPSubreportReturnValuesButton<RVPropertyDescriptor>(parent, section, this, getDisplayName());
 	}
 }

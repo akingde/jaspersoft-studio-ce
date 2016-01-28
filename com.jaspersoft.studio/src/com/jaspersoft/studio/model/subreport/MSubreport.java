@@ -153,16 +153,14 @@ public class MSubreport extends MGraphicElement {
 		dsExprD.setHelpRefBuilder(new HelpReferenceBuilder(
 				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#dataSourceExpression")); //$NON-NLS-1$
 
-		SubreportPropertiesPropertyDescriptor propertiesD = new SubreportPropertiesPropertyDescriptor(
-				JRDesignSubreport.PROPERTY_PARAMETERS, Messages.common_parameters);
+		SubreportPropertiesPropertyDescriptor propertiesD = new SubreportPropertiesPropertyDescriptor(JRDesignSubreport.PROPERTY_PARAMETERS, Messages.MSubreport_parametersName);
 		propertiesD.setDescription(Messages.MSubreport_parameters_description);
 		desc.add(propertiesD);
 		propertiesD.setHelpRefBuilder(new HelpReferenceBuilder(
 				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#subreportParameter")); //$NON-NLS-1$
 		propertiesD.init(this);
 
-		RVPropertyDescriptor returnValuesD = new RVPropertyDescriptor(JRDesignSubreport.PROPERTY_RETURN_VALUES,
-				Messages.common_return_values);
+		RVPropertyDescriptor returnValuesD = new RVPropertyDescriptor(JRDesignSubreport.PROPERTY_RETURN_VALUES, Messages.MSubreport_returnValuesName);
 		returnValuesD.setDescription(Messages.MSubreport_return_values_description);
 		desc.add(returnValuesD);
 		returnValuesD.setHelpRefBuilder(new HelpReferenceBuilder(
