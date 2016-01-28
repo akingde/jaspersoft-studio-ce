@@ -15,7 +15,6 @@ Require-Bundle: org.eclipse.ui.cheatsheets;bundle-version="3.4.0";visibility:=re
  net.sf.jasperreports;bundle-version="6.2.1";visibility:=reexport,
  com.jaspersoft.studio.properties;bundle-version="6.2.1";visibility:=reexport,
  org.eclipse.help.ui;bundle-version="3.5.0";visibility:=reexport,
- org.eclipse.ui.console;bundle-version="3.5.0",
  org.eclipse.ui.forms;bundle-version="3.5.0",
  javax.servlet;bundle-version="3.0.0",
  org.apache.log4j;bundle-version="1.2.15";visibility:=reexport,

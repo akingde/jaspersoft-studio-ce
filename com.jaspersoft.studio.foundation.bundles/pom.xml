@@ -12,5 +12,5 @@
 	<groupId>com.jaspersoft.studio.community-edition</groupId>
 	<artifactId>com.jaspersoft.studio.foundation.bundles</artifactId>
 	<packaging>eclipse-feature</packaging>
-	<version>1.0.5</version>
+	<version>1.0.6</version>
 </project> 
