@@ -1,4 +1,5 @@
 Manifest-Version: 1.0
+Eclipse-ExtensibleAPI: true
 Bundle-ManifestVersion: 2
 Bundle-Name: JasperReport Components
 Bundle-SymbolicName: com.jaspersoft.studio.components; singleton:=true
@@ -12,6 +13,7 @@ Eclipse-RegisterBuddy: com.jaspersoft.studio
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6,
  JavaSE-1.7
 Bundle-ActivationPolicy: lazy
-Bundle-ClassPath: .
+Bundle-ClassPath: patch-library.jar,
+ .
 Export-Package: com.jaspersoft.studio.components.map.model.marker,
  com.jaspersoft.studio.components.map.model.marker.dialog

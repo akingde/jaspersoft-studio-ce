@@ -1,4 +1,5 @@
 Manifest-Version: 1.0
+Eclipse-ExtensibleAPI: true
 Bundle-ManifestVersion: 2
 Bundle-Name: SQL Query Editor
 Bundle-Vendor: TIBCO Software Inc.
@@ -36,3 +37,5 @@ Export-Package: com.jaspersoft.studio.data.sql.model,
  com.jaspersoft.studio.data.ui.contentassist.antlr
 Import-Package: org.apache.log4j,
  org.eclipse.xtext.xbase.lib
+Bundle-ClassPath: patch-library.jar,
+ .

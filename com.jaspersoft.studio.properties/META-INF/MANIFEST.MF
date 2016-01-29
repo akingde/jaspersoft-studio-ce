@@ -1,4 +1,5 @@
 Manifest-Version: 1.0
+Eclipse-ExtensibleAPI: true
 Bundle-ManifestVersion: 2
 Bundle-Name: Jaspersoft Studio Properties
 Bundle-SymbolicName: com.jaspersoft.studio.properties;singleton:=true
@@ -34,3 +35,5 @@ Export-Package: com.jaspersoft.studio.properties;uses:="org.eclipse.ui.plugin,or
    org.eclipse.swt.widgets,
    org.eclipse.ui.forms.widgets"
 Import-Package: org.eclipse.wb.swt
+Bundle-ClassPath: patch-library.jar,
+ .

@@ -1,4 +1,5 @@
 Manifest-Version: 1.0
+Eclipse-ExtensibleAPI: true
 Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name
 Bundle-SymbolicName: com.jaspersoft.studio.rcp; singleton:=true
@@ -23,3 +24,5 @@ Export-Package: com.jaspersoft.studio.rcp,
  com.jaspersoft.studio.rcp.intro,
  com.jaspersoft.studio.rcp.p2,
  com.jaspersoft.studio.rcp.workspace
+Bundle-ClassPath: patch-library.jar,
+ .

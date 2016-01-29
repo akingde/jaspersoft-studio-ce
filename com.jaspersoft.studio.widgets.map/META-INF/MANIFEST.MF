@@ -1,4 +1,5 @@
 Manifest-Version: 1.0
+Eclipse-ExtensibleAPI: true
 Bundle-ManifestVersion: 2
 Bundle-Name: Google Map Widget
 Bundle-SymbolicName: com.jaspersoft.studio.widgets.map
@@ -23,5 +24,6 @@ Export-Package: com.jaspersoft.studio.widgets.map;uses:="org.eclipse.ui.plugin,o
    com.jaspersoft.studio.widgets.map.core,
    org.eclipse.swt.widgets,
    org.eclipse.swt.browser"
-Bundle-ClassPath: .
+Bundle-ClassPath: patch-library.jar,
+ .
 Import-Package: com.jaspersoft.studio.utils

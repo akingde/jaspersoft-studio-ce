@@ -1,4 +1,5 @@
 Manifest-Version: 1.0
+Eclipse-ExtensibleAPI: true
 Bundle-ManifestVersion: 2
 Bundle-Name: Drivers
 Bundle-SymbolicName: com.jaspersoft.studio.data.drivers;singleton:=true
@@ -10,4 +11,5 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6,
  JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Eclipse-RegisterBuddy: com.jaspersoft.studio.data
-Bundle-ClassPath: .
+Bundle-ClassPath: patch-library.jar,
+ .

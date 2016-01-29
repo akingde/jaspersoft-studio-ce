@@ -1,4 +1,5 @@
 Manifest-Version: 1.0
+Eclipse-ExtensibleAPI: true
 Bundle-ManifestVersion: 2
 Bundle-Name: SQL Query Editor Grammar
 Bundle-Vendor: TIBCO Software Inc.
@@ -28,3 +29,5 @@ Export-Package: com.jaspersoft.studio.data, com.jaspersoft.studio.data.scoping,
  com.jaspersoft.studio.data.parser.antlr.lexer,
  com.jaspersoft.studio.data.scoping
 Import-Package: org.apache.log4j
+Bundle-ClassPath: patch-library.jar,
+ .

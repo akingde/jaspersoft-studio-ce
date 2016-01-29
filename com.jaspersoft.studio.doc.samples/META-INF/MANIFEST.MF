@@ -1,4 +1,5 @@
 Manifest-Version: 1.0
+Eclipse-ExtensibleAPI: true
 Bundle-ManifestVersion: 2
 Bundle-Name: Jaspersoft Studio Samples
 Bundle-SymbolicName: com.jaspersoft.studio.doc.samples;singleton:=true
@@ -10,3 +11,5 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6,
 Require-Bundle: net.sf.jasperreports.samples;bundle-version="6.2.1",
  net.sf.jasperreports.doc;bundle-version="6.2.1",
  org.eclipse.ui.navigator.resources;bundle-version="3.4.200"
+Bundle-ClassPath: patch-library.jar,
+ .

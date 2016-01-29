@@ -1,4 +1,5 @@
 Manifest-Version: 1.0
+Eclipse-ExtensibleAPI: true
 Bundle-ManifestVersion: 2
 Bundle-Name: Xtext JFace Integration
 Bundle-SymbolicName: com.jaspersoft.studio.xtext.jface;singleton:=true
@@ -22,4 +23,5 @@ Export-Package: de.itemis.utils.jface.viewers,
  de.itemis.xtext.utils.jface.viewers,
  de.itemis.xtext.utils.jface.viewers.context,
  de.itemis.xtext.utils.jface.viewers.util
-Bundle-ClassPath: .
+Bundle-ClassPath: patch-library.jar,
+ .

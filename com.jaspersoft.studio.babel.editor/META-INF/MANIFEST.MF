@@ -1,4 +1,5 @@
 Manifest-Version: 1.0
+Eclipse-ExtensibleAPI: true
 Bundle-ManifestVersion: 2
 Bundle-Name: %plugin.name
 Bundle-SymbolicName: com.jaspersoft.studio.babel.editor;singleton:=true
@@ -35,4 +36,5 @@ Import-Package: org.eclipse.core.expressions,
  org.eclipse.ui.forms,
  org.eclipse.ui.forms.widgets
 Bundle-ActivationPolicy: lazy
-Bundle-ClassPath: .
+Bundle-ClassPath: patch-library.jar,
+ .

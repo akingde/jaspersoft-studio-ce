@@ -1,4 +1,5 @@
 Manifest-Version: 1.0
+Eclipse-ExtensibleAPI: true
 Bundle-ManifestVersion: 2
 Bundle-Name: com.jaspersoft.studio.editor.jrexpressions.ui
 Bundle-Vendor: TIBCO Software Inc.
@@ -20,4 +21,5 @@ Export-Package: com.jaspersoft.studio.editor.jrexpressions.ui.contentassist,
  com.jaspersoft.studio.editor.jrexpressions.ui.contentassist.antlr,
  com.jaspersoft.studio.editor.jrexpressions.ui
 Bundle-Activator: com.jaspersoft.studio.editor.jrexpressions.ui.JRExpressionsUIPlugin
-Bundle-ClassPath: .
+Bundle-ClassPath: patch-library.jar,
+ .

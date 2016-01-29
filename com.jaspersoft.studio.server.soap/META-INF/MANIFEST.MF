@@ -1,4 +1,5 @@
 Manifest-Version: 1.0
+Eclipse-ExtensibleAPI: true
 Bundle-ManifestVersion: 2
 Bundle-Name: JasperReports Server Integration with SOAP
 Bundle-SymbolicName: com.jaspersoft.studio.server.soap;singleton:=true
@@ -17,7 +18,8 @@ Eclipse-BuddyPolicy: registered
 Export-Package: com.jaspersoft.ireport.jasperserver.ws,
  javax.xml.rpc,
  javax.xml.rpc.encoding 
-Bundle-ClassPath: lib/js_activation-1.1.jar,
+Bundle-ClassPath: patch-library.jar,
+ lib/js_activation-1.1.jar,
  lib/js_jaxrpc.jar,
  lib/js_mail-1.4.jar,
  lib/js_saaj-api-1.3.jar,

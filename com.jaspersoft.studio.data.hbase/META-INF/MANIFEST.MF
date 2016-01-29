@@ -1,4 +1,5 @@
 Manifest-Version: 1.0
+Eclipse-ExtensibleAPI: true
 Bundle-ManifestVersion: 2
 Bundle-Name: HBase driver
 Bundle-SymbolicName: com.jaspersoft.studio.data.hbase;singleton:=true
@@ -12,7 +13,8 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6,
 Bundle-ActivationPolicy: lazy
 Eclipse-BuddyPolicy: registered
 Eclipse-RegisterBuddy: com.jaspersoft.studio.data
-Bundle-ClassPath: lib/hadoop-core-1.0.1.jar,
+Bundle-ClassPath: patch-library.jar,
+ lib/hadoop-core-1.0.1.jar,
  lib/libthrift-0.9.0-snapshot-test.jar,
  lib/libthrift-0.9.0-snapshot.jar,
  lib/hbase-0.94.12.jar,

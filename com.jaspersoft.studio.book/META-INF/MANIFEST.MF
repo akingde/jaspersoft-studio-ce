@@ -1,4 +1,5 @@
 Manifest-Version: 1.0
+Eclipse-ExtensibleAPI: true
 Bundle-ManifestVersion: 2
 Bundle-Name: JasperReports Book
 Bundle-SymbolicName: com.jaspersoft.studio.book;singleton:=true
@@ -10,3 +11,5 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6,
  JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Export-Package: com.jaspersoft.studio.book
+Bundle-ClassPath: patch-library.jar,
+ .

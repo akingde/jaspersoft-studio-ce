@@ -1,4 +1,5 @@
 Manifest-Version: 1.0
+Eclipse-ExtensibleAPI: true
 Bundle-ManifestVersion: 2
 Bundle-Name: Html Component
 Bundle-SymbolicName: com.jaspersoft.studio.html;singleton:=true
@@ -10,7 +11,8 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6,
  JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Eclipse-RegisterBuddy: net.sf.jasperreports, com.jaspersoft.studio
-Bundle-ClassPath: .,
+Bundle-ClassPath: patch-library.jar,
+ .,
  lib/htmlcomponent.jar,
  lib/jtidy-r938.jar,
  lib/core-renderer.jar
