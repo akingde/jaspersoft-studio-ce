@@ -52,7 +52,6 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.StudioPreferencePage;
 import com.jaspersoft.studio.preferences.util.JSSPropertiesHelper;
 import com.jaspersoft.studio.statistics.heartbeat.VersionUpdateDialog;
-import com.jaspersoft.studio.utils.ModelUtils;
 
 import net.sf.jasperreports.eclipse.util.HttpUtils;
 
@@ -524,7 +523,7 @@ public class UsageManager {
 				}		
 						
 				// Update the upload time
-				if (responseCode == 200 && ModelUtils.safeEquals(textResponse.toString(), "ok")) {
+				if (responseCode == 200 && safeEquals(textResponse.toString(), "ok")) {
 					setInstallationInfo(TIMESTAMP_INFO, String.valueOf(getCurrentTime()));
 				} else {
 					// print result
@@ -818,5 +817,17 @@ public class UsageManager {
 			JaspersoftStudioPlugin.getInstance().logError(Messages.UsageManager_errorUpdateCheck, ex);
 		}
 		return new VersionCheckResult();
+	}
+	
+	/**
+	 * Determines whether two objects are equal, including <code>null</code> values.
+	 * 
+	 * @param o1
+	 * @param o2
+	 * @return whether the two objects are equal
+	 */
+	private boolean safeEquals(Object o1, Object o2)
+	{
+		return (o1 == null) ? (o2 == null) : (o2 != null && o1.equals(o2));
 	}
 }
