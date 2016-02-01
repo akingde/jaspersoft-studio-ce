@@ -9,30 +9,23 @@
 package com.jaspersoft.studio.statistics;
 
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStreamReader;
-import java.io.StringReader;
+import java.net.HttpURLConnection;
 import java.net.InetAddress;
-import java.net.URI;
+import java.net.URL;
+import java.net.URLConnection;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Properties;
 import java.util.regex.Pattern;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.net.ntp.NTPUDPClient;
 import org.apache.commons.net.ntp.TimeInfo;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpHost;
-import org.apache.http.HttpResponse;
-import org.apache.http.StatusLine;
-import org.apache.http.client.fluent.Executor;
-import org.apache.http.client.fluent.Form;
-import org.apache.http.client.fluent.Request;
-import org.apache.http.client.fluent.Response;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -53,7 +46,7 @@ import com.jaspersoft.studio.preferences.StudioPreferencePage;
 import com.jaspersoft.studio.preferences.util.JSSPropertiesHelper;
 import com.jaspersoft.studio.statistics.heartbeat.VersionUpdateDialog;
 
-import net.sf.jasperreports.eclipse.util.HttpUtils;
+
 
 /**
  * Manager used to handle, track and send to the server informations about an installation of jaspersoft studio, like
@@ -449,9 +442,12 @@ public class UsageManager {
 	 */
 	protected void sendStatistics() {
 		BufferedReader responseReader = null;
+		DataOutputStream postWriter = null;
 		try {
 			if (!STATISTICS_SERVER_URL.trim().isEmpty()) {
 				//Set the proxy information if any
+				
+				/*
 				Executor exec = Executor.newInstance();
 				URI fullURI = new URI(STATISTICS_SERVER_URL);
 				HttpUtils.setupProxy(exec, fullURI);
@@ -460,8 +456,16 @@ public class UsageManager {
 				req.addHeader("User-Agent", "Mozilla/5.0");
 				req.addHeader("Accept-Language", "en-US,en;q=0.5");
 				if (proxy != null)
-					req.viaProxy(proxy);
+					req.viaProxy(proxy);*/
 
+				URL obj = new URL(STATISTICS_SERVER_URL);
+				HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+
+				// add request header
+				con.setRequestMethod("POST"); //$NON-NLS-1$
+				con.setRequestProperty("User-Agent", "Mozilla/5.0"); //$NON-NLS-1$ //$NON-NLS-2$
+				con.setRequestProperty("Accept-Language", "en-US,en;q=0.5"); //$NON-NLS-1$ //$NON-NLS-2$
+				
 				// Read and convert the statistics into a JSON string
 				UsagesContainer container = new UsagesContainer(ConfigurationManager.getInstallationUUID());
 				boolean fileChanged = false;
@@ -505,22 +509,34 @@ public class UsageManager {
 				ObjectMapper mapper = new ObjectMapper();
 				String serializedData = mapper.writeValueAsString(container);
 
-				// Send post request with the JSON string as the data parameter
-				req.bodyForm(Form.form().add("data", serializedData).build());//$NON-NLS-1$
-				
+				// Send post request with the JSON string as the data parameter - code with httputils
+				/*req.bodyForm(Form.form().add("data", serializedData).build());//$NON-NLS-1$
 				Response resp = req.execute();
 				
 				HttpResponse response = resp.returnResponse();
 				StatusLine statusLine = response.getStatusLine();
 				HttpEntity entity = response.getEntity();
 				int responseCode = statusLine.getStatusCode();
-
 				responseReader = new BufferedReader(new InputStreamReader(entity.getContent()));
 				String inputLine;
 				StringBuffer textResponse = new StringBuffer();
 				while ((inputLine = responseReader.readLine()) != null) {
 					textResponse.append(inputLine);
-				}		
+				}*/
+				
+				// Send post request with the JSON string as the data parameter - code without http utils
+				String urlParameters = "data=" + serializedData; //$NON-NLS-1$
+				con.setDoOutput(true);
+				postWriter = new DataOutputStream(con.getOutputStream());
+				postWriter.writeBytes(urlParameters);
+				postWriter.flush();
+				int responseCode = con.getResponseCode();
+				responseReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+				String inputLine;
+				StringBuffer textResponse = new StringBuffer();
+				while ((inputLine = responseReader.readLine()) != null) {
+					textResponse.append(inputLine);
+				}
 						
 				// Update the upload time
 				if (responseCode == 200 && safeEquals(textResponse.toString(), "ok")) {
@@ -534,6 +550,7 @@ public class UsageManager {
 			ex.printStackTrace();
 			JaspersoftStudioPlugin.getInstance().logError(Messages.UsageManager_errorStatUpload, ex);
 		} finally {
+			ConfigurationManager.closeStream(postWriter);
 			ConfigurationManager.closeStream(responseReader);
 		}
 	}
@@ -782,8 +799,11 @@ public class UsageManager {
 		}
 
 		String urlstr = urlBuilder.toString();
+		BufferedReader in = null;
 		System.out.println("Invoking URL: " + urlstr); //$NON-NLS-1$  
-		try {
+		try {		
+			//Code with http utils
+			/*
 			Executor exec = Executor.newInstance();
 			URI fullURI = new URI(urlstr);
 			HttpUtils.setupProxy(exec, fullURI);
@@ -792,7 +812,7 @@ public class UsageManager {
 			if (proxy != null)
 				req.viaProxy(proxy);
 			HttpResponse resp = exec.execute(req).returnResponse();
-			if (resp.getStatusLine().getStatusCode() == 200) {
+						if (resp.getStatusLine().getStatusCode() == 200) {
 				String response = IOUtils.toString(resp.getEntity().getContent());
 
 				String serverVersion = null;
@@ -812,8 +832,35 @@ public class UsageManager {
 				}
 				return new VersionCheckResult(serverVersion, optmsg, getVersion());
 			}
+			*/
+			URL url = new URL(urlstr);
+			URLConnection yc = url.openConnection();
+			in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
+			int connectionCode = ((HttpURLConnection)yc).getResponseCode();
+			if (connectionCode == 200){
+				String serverVersion = null;
+				String optmsg = ""; //$NON-NLS-1$
+				String inputLine;
+				while ((inputLine = in.readLine()) != null) {
+					if (serverVersion == null){	
+						serverVersion = inputLine.trim();
+					}
+					else {
+						optmsg += inputLine;
+					}
+				}
+
+				// Update the installation info only if the informations was given correctly to the server
+				setInstallationInfo(VERSION_INFO, getVersion());
+				// Remove the old backward compatibility value if present to switch to the new system
+				if (backward_uuid != null) {
+					ph.removeString(BACKWARD_UUID_PROPERTY, InstanceScope.SCOPE);
+				}
+				return new VersionCheckResult(serverVersion, optmsg, getVersion());
+			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
+			ConfigurationManager.closeStream(in);
 			JaspersoftStudioPlugin.getInstance().logError(Messages.UsageManager_errorUpdateCheck, ex);
 		}
 		return new VersionCheckResult();
