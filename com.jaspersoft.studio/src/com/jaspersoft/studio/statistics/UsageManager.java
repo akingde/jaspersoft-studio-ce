@@ -51,7 +51,6 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.StudioPreferencePage;
 import com.jaspersoft.studio.preferences.util.JSSPropertiesHelper;
-import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 import com.jaspersoft.studio.statistics.heartbeat.VersionUpdateDialog;
 import com.jaspersoft.studio.utils.ModelUtils;
 
@@ -739,7 +738,7 @@ public class UsageManager {
 		String versionKnownByTheStats = getInstallationInfoContainer().getProperty(VERSION_INFO);
 		int newInstallation = 0;
 		// Read if there is an UUID in the preferences used to track the older versions
-		PropertiesHelper ph = PropertiesHelper.getInstance();
+		JSSPropertiesHelper ph = JSSPropertiesHelper.getInstance();
 		String backward_uuid = ph.getString(BACKWARD_UUID_PROPERTY, null);
 		if (backward_uuid == null) {
 			// If the backward value is null then i'm already using the new system, check if it
