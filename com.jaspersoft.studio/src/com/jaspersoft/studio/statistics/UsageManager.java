@@ -22,8 +22,8 @@ import java.util.Date;
 import java.util.Properties;
 import java.util.regex.Pattern;
 
-import net.sf.jasperreports.eclipse.util.FileUtils;
-import net.sf.jasperreports.eclipse.util.HttpUtils;
+//import net.sf.jasperreports.eclipse.util.FileUtils;
+//import net.sf.jasperreports.eclipse.util.HttpUtils;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.net.ntp.NTPUDPClient;
@@ -43,7 +43,9 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.swt.widgets.Display;
 import org.osgi.framework.Bundle;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -51,9 +53,13 @@ import com.jaspersoft.studio.ConfigurationManager;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.StudioPreferencePage;
+import com.jaspersoft.studio.preferences.util.JSSPropertiesHelper;
 import com.jaspersoft.studio.preferences.util.PropertiesHelper;
-import com.jaspersoft.studio.statistics.heartbeat.Heartbeat;
+import com.jaspersoft.studio.statistics.heartbeat.VersionUpdateDialog;
 import com.jaspersoft.studio.utils.ModelUtils;
+
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.HttpUtils;
 
 /**
  * Manager used to handle, track and send to the server informations about an installation of jaspersoft studio, like
@@ -240,7 +246,7 @@ public class UsageManager {
 				ex.printStackTrace();
 				JaspersoftStudioPlugin.getInstance().logError(Messages.UsageManager_errorWriteStatProperties, ex);
 			} finally {
-				FileUtils.closeStream(out);
+				ConfigurationManager.closeStream(out);
 			}
 		}
 	}
@@ -367,7 +373,7 @@ public class UsageManager {
 						e.printStackTrace();
 						JaspersoftStudioPlugin.getInstance().logError(Messages.UsageManager_errorReadStatProperties, e);
 					} finally {
-						FileUtils.closeStream(input);
+						 ConfigurationManager.closeStream(input);
 					}
 				} else {
 					usageStats = new Properties();
@@ -398,7 +404,7 @@ public class UsageManager {
 						e.printStackTrace();
 						JaspersoftStudioPlugin.getInstance().logError(Messages.UsageManager_errorReadInfoProperties, e);
 					} finally {
-						FileUtils.closeStream(input);
+						ConfigurationManager.closeStream(input);
 					}
 				} else {
 					installationInfo = new Properties();
@@ -437,7 +443,7 @@ public class UsageManager {
 					ex.printStackTrace();
 					JaspersoftStudioPlugin.getInstance().logError(Messages.UsageManager_errorWriteInfoProperties, ex);
 				} finally {
-					FileUtils.closeStream(out);
+					ConfigurationManager.closeStream(out);
 				}
 			}
 		}
@@ -534,7 +540,7 @@ public class UsageManager {
 			ex.printStackTrace();
 			JaspersoftStudioPlugin.getInstance().logError(Messages.UsageManager_errorStatUpload, ex);
 		} finally {
-			FileUtils.closeStream(responseReader);
+			ConfigurationManager.closeStream(responseReader);
 		}
 	}
 
@@ -618,7 +624,27 @@ public class UsageManager {
 			Job job = new Job(Messages.UsageManager_checkVersionJobName) {
 				@Override
 				protected IStatus run(IProgressMonitor monitor) {
-					Heartbeat.run();
+					final JSSPropertiesHelper ph = JSSPropertiesHelper.getInstance();
+					if (ph.getBoolean(StudioPreferencePage.CHECK_FOR_UPDATE, true)) {
+						final VersionCheckResult versionCheck = checkVersion();
+						if (versionCheck.canUpdate()) {
+							UIUtils.getDisplay().asyncExec(new Runnable() {
+
+								public void run() {
+									String version = versionCheck.getServerVersion();
+									String optmsg = versionCheck.getOptionalMessage();
+									VersionUpdateDialog ud = new VersionUpdateDialog(Display.getDefault().getActiveShell());
+									ud.setNewVersion(version);
+									ud.setOptionalMessage(optmsg);
+									if (ud.open() == Dialog.OK) {
+										if (ud.isNotShowAgain()) {
+											ph.setBoolean(StudioPreferencePage.CHECK_FOR_UPDATE, false, InstanceScope.SCOPE);
+										}
+									}
+								}
+							});
+						}
+					}
 					return Status.OK_STATUS;
 				}
 
