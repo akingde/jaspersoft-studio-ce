@@ -9,23 +9,33 @@
 package com.jaspersoft.studio.statistics;
 
 import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
+import java.io.StringReader;
 import java.net.InetAddress;
-import java.net.URL;
-import java.net.URLConnection;
+import java.net.URI;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Properties;
 import java.util.regex.Pattern;
 
+import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.eclipse.util.HttpUtils;
+
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.net.ntp.NTPUDPClient;
 import org.apache.commons.net.ntp.TimeInfo;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpHost;
+import org.apache.http.HttpResponse;
+import org.apache.http.StatusLine;
+import org.apache.http.client.fluent.Executor;
+import org.apache.http.client.fluent.Form;
+import org.apache.http.client.fluent.Request;
+import org.apache.http.client.fluent.Response;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -33,9 +43,7 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.core.runtime.preferences.InstanceScope;
-import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.util.IPropertyChangeListener;
-import org.eclipse.swt.widgets.Display;
 import org.osgi.framework.Bundle;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -43,10 +51,9 @@ import com.jaspersoft.studio.ConfigurationManager;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.StudioPreferencePage;
-import com.jaspersoft.studio.preferences.util.JSSPropertiesHelper;
-import com.jaspersoft.studio.statistics.heartbeat.VersionUpdateDialog;
-
-
+import com.jaspersoft.studio.preferences.util.PropertiesHelper;
+import com.jaspersoft.studio.statistics.heartbeat.Heartbeat;
+import com.jaspersoft.studio.utils.ModelUtils;
 
 /**
  * Manager used to handle, track and send to the server informations about an installation of jaspersoft studio, like
@@ -233,7 +240,7 @@ public class UsageManager {
 				ex.printStackTrace();
 				JaspersoftStudioPlugin.getInstance().logError(Messages.UsageManager_errorWriteStatProperties, ex);
 			} finally {
-				ConfigurationManager.closeStream(out);
+				FileUtils.closeStream(out);
 			}
 		}
 	}
@@ -360,7 +367,7 @@ public class UsageManager {
 						e.printStackTrace();
 						JaspersoftStudioPlugin.getInstance().logError(Messages.UsageManager_errorReadStatProperties, e);
 					} finally {
-						 ConfigurationManager.closeStream(input);
+						FileUtils.closeStream(input);
 					}
 				} else {
 					usageStats = new Properties();
@@ -391,7 +398,7 @@ public class UsageManager {
 						e.printStackTrace();
 						JaspersoftStudioPlugin.getInstance().logError(Messages.UsageManager_errorReadInfoProperties, e);
 					} finally {
-						ConfigurationManager.closeStream(input);
+						FileUtils.closeStream(input);
 					}
 				} else {
 					installationInfo = new Properties();
@@ -430,7 +437,7 @@ public class UsageManager {
 					ex.printStackTrace();
 					JaspersoftStudioPlugin.getInstance().logError(Messages.UsageManager_errorWriteInfoProperties, ex);
 				} finally {
-					ConfigurationManager.closeStream(out);
+					FileUtils.closeStream(out);
 				}
 			}
 		}
@@ -442,12 +449,9 @@ public class UsageManager {
 	 */
 	protected void sendStatistics() {
 		BufferedReader responseReader = null;
-		DataOutputStream postWriter = null;
 		try {
 			if (!STATISTICS_SERVER_URL.trim().isEmpty()) {
 				//Set the proxy information if any
-				
-				/*
 				Executor exec = Executor.newInstance();
 				URI fullURI = new URI(STATISTICS_SERVER_URL);
 				HttpUtils.setupProxy(exec, fullURI);
@@ -456,16 +460,8 @@ public class UsageManager {
 				req.addHeader("User-Agent", "Mozilla/5.0");
 				req.addHeader("Accept-Language", "en-US,en;q=0.5");
 				if (proxy != null)
-					req.viaProxy(proxy);*/
+					req.viaProxy(proxy);
 
-				URL obj = new URL(STATISTICS_SERVER_URL);
-				HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-
-				// add request header
-				con.setRequestMethod("POST"); //$NON-NLS-1$
-				con.setRequestProperty("User-Agent", "Mozilla/5.0"); //$NON-NLS-1$ //$NON-NLS-2$
-				con.setRequestProperty("Accept-Language", "en-US,en;q=0.5"); //$NON-NLS-1$ //$NON-NLS-2$
-				
 				// Read and convert the statistics into a JSON string
 				UsagesContainer container = new UsagesContainer(ConfigurationManager.getInstallationUUID());
 				boolean fileChanged = false;
@@ -509,37 +505,25 @@ public class UsageManager {
 				ObjectMapper mapper = new ObjectMapper();
 				String serializedData = mapper.writeValueAsString(container);
 
-				// Send post request with the JSON string as the data parameter - code with httputils
-				/*req.bodyForm(Form.form().add("data", serializedData).build());//$NON-NLS-1$
+				// Send post request with the JSON string as the data parameter
+				req.bodyForm(Form.form().add("data", serializedData).build());//$NON-NLS-1$
+				
 				Response resp = req.execute();
 				
 				HttpResponse response = resp.returnResponse();
 				StatusLine statusLine = response.getStatusLine();
 				HttpEntity entity = response.getEntity();
 				int responseCode = statusLine.getStatusCode();
+
 				responseReader = new BufferedReader(new InputStreamReader(entity.getContent()));
 				String inputLine;
 				StringBuffer textResponse = new StringBuffer();
 				while ((inputLine = responseReader.readLine()) != null) {
 					textResponse.append(inputLine);
-				}*/
-				
-				// Send post request with the JSON string as the data parameter - code without http utils
-				String urlParameters = "data=" + serializedData; //$NON-NLS-1$
-				con.setDoOutput(true);
-				postWriter = new DataOutputStream(con.getOutputStream());
-				postWriter.writeBytes(urlParameters);
-				postWriter.flush();
-				int responseCode = con.getResponseCode();
-				responseReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
-				String inputLine;
-				StringBuffer textResponse = new StringBuffer();
-				while ((inputLine = responseReader.readLine()) != null) {
-					textResponse.append(inputLine);
-				}
+				}		
 						
 				// Update the upload time
-				if (responseCode == 200 && safeEquals(textResponse.toString(), "ok")) {
+				if (responseCode == 200 && ModelUtils.safeEquals(textResponse.toString(), "ok")) {
 					setInstallationInfo(TIMESTAMP_INFO, String.valueOf(getCurrentTime()));
 				} else {
 					// print result
@@ -550,8 +534,7 @@ public class UsageManager {
 			ex.printStackTrace();
 			JaspersoftStudioPlugin.getInstance().logError(Messages.UsageManager_errorStatUpload, ex);
 		} finally {
-			ConfigurationManager.closeStream(postWriter);
-			ConfigurationManager.closeStream(responseReader);
+			FileUtils.closeStream(responseReader);
 		}
 	}
 
@@ -635,27 +618,7 @@ public class UsageManager {
 			Job job = new Job(Messages.UsageManager_checkVersionJobName) {
 				@Override
 				protected IStatus run(IProgressMonitor monitor) {
-					final JSSPropertiesHelper ph = JSSPropertiesHelper.getInstance();
-					if (ph.getBoolean(StudioPreferencePage.CHECK_FOR_UPDATE, true)) {
-						final VersionCheckResult versionCheck = checkVersion();
-						if (versionCheck.canUpdate()) {
-							Display.getCurrent().asyncExec(new Runnable() {
-
-								public void run() {
-									String version = versionCheck.getServerVersion();
-									String optmsg = versionCheck.getOptionalMessage();
-									VersionUpdateDialog ud = new VersionUpdateDialog(Display.getDefault().getActiveShell());
-									ud.setNewVersion(version);
-									ud.setOptionalMessage(optmsg);
-									if (ud.open() == Dialog.OK) {
-										if (ud.isNotShowAgain()) {
-											ph.setBoolean(StudioPreferencePage.CHECK_FOR_UPDATE, false, InstanceScope.SCOPE);
-										}
-									}
-								}
-							});
-						}
-					}
+					Heartbeat.run();
 					return Status.OK_STATUS;
 				}
 
@@ -754,7 +717,7 @@ public class UsageManager {
 		String versionKnownByTheStats = getInstallationInfoContainer().getProperty(VERSION_INFO);
 		int newInstallation = 0;
 		// Read if there is an UUID in the preferences used to track the older versions
-		JSSPropertiesHelper ph = JSSPropertiesHelper.getInstance();
+		PropertiesHelper ph = PropertiesHelper.getInstance();
 		String backward_uuid = ph.getString(BACKWARD_UUID_PROPERTY, null);
 		if (backward_uuid == null) {
 			// If the backward value is null then i'm already using the new system, check if it
@@ -799,11 +762,8 @@ public class UsageManager {
 		}
 
 		String urlstr = urlBuilder.toString();
-		BufferedReader in = null;
 		System.out.println("Invoking URL: " + urlstr); //$NON-NLS-1$  
-		try {		
-			//Code with http utils
-			/*
+		try {
 			Executor exec = Executor.newInstance();
 			URI fullURI = new URI(urlstr);
 			HttpUtils.setupProxy(exec, fullURI);
@@ -812,7 +772,7 @@ public class UsageManager {
 			if (proxy != null)
 				req.viaProxy(proxy);
 			HttpResponse resp = exec.execute(req).returnResponse();
-						if (resp.getStatusLine().getStatusCode() == 200) {
+			if (resp.getStatusLine().getStatusCode() == 200) {
 				String response = IOUtils.toString(resp.getEntity().getContent());
 
 				String serverVersion = null;
@@ -832,49 +792,10 @@ public class UsageManager {
 				}
 				return new VersionCheckResult(serverVersion, optmsg, getVersion());
 			}
-			*/
-			URL url = new URL(urlstr);
-			URLConnection yc = url.openConnection();
-			in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
-			int connectionCode = ((HttpURLConnection)yc).getResponseCode();
-			if (connectionCode == 200){
-				String serverVersion = null;
-				String optmsg = ""; //$NON-NLS-1$
-				String inputLine;
-				while ((inputLine = in.readLine()) != null) {
-					if (serverVersion == null){	
-						serverVersion = inputLine.trim();
-					}
-					else {
-						optmsg += inputLine;
-					}
-				}
-
-				// Update the installation info only if the informations was given correctly to the server
-				setInstallationInfo(VERSION_INFO, getVersion());
-				// Remove the old backward compatibility value if present to switch to the new system
-				if (backward_uuid != null) {
-					ph.removeString(BACKWARD_UUID_PROPERTY, InstanceScope.SCOPE);
-				}
-				return new VersionCheckResult(serverVersion, optmsg, getVersion());
-			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			ConfigurationManager.closeStream(in);
 			JaspersoftStudioPlugin.getInstance().logError(Messages.UsageManager_errorUpdateCheck, ex);
 		}
 		return new VersionCheckResult();
-	}
-	
-	/**
-	 * Determines whether two objects are equal, including <code>null</code> values.
-	 * 
-	 * @param o1
-	 * @param o2
-	 * @return whether the two objects are equal
-	 */
-	private boolean safeEquals(Object o1, Object o2)
-	{
-		return (o1 == null) ? (o2 == null) : (o2 != null && o1.equals(o2));
 	}
 }

@@ -50,7 +50,6 @@ import org.xml.sax.InputSource;
 import com.jaspersoft.studio.ConfigurationManager;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
-import com.jaspersoft.studio.data.storage.PreferencesDataAdapterStorage;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MDummy;
@@ -194,7 +193,7 @@ public class ServerManager {
 		serverProfiles.clear();
 
 		// Convert the old configuration
-		PreferencesDataAdapterStorage.convertPropertyToStorage(PREF_TAG, PREF_TAG, new ServerNameProvider());
+		ConfigurationManager.convertPropertyToStorage(PREF_TAG, PREF_TAG, new ServerNameProvider());
 
 		// Read the configuration from the file storage
 		File[] storageContent = ConfigurationManager.getStorageContent(PREF_TAG);

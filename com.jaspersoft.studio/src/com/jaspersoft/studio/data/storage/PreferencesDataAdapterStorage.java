@@ -17,10 +17,8 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -29,29 +27,25 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import net.sf.jasperreports.data.DataAdapter;
+import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.engine.util.JRXmlUtils;
+import net.sf.jasperreports.util.CastorUtil;
+
 import org.eclipse.core.runtime.Status;
 import org.osgi.framework.Bundle;
-import org.osgi.service.prefs.Preferences;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
 import com.jaspersoft.studio.ConfigurationManager;
-import com.jaspersoft.studio.IConversionFilenameProvider;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterFactory;
 import com.jaspersoft.studio.data.DataAdapterManager;
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
-
-import net.sf.jasperreports.data.DataAdapter;
-import net.sf.jasperreports.eclipse.util.FileUtils;
-import net.sf.jasperreports.engine.util.JRXmlUtils;
-import net.sf.jasperreports.util.CastorUtil;
 
 public class PreferencesDataAdapterStorage extends ADataAdapterStorage {
 
@@ -70,7 +64,8 @@ public class PreferencesDataAdapterStorage extends ADataAdapterStorage {
 	@Override
 	public void findAll() {
 		// Do the silent conversion to the new storage system
-		convertPropertyToStorage(PREF_KEYS_DATA_ADAPTERS, PREF_KEYS_DATA_ADAPTERS, convertDataAdapterName);
+		ConfigurationManager.convertPropertyToStorage(PREF_KEYS_DATA_ADAPTERS, PREF_KEYS_DATA_ADAPTERS,
+				convertDataAdapterName);
 		// Read the configuration from the file storage
 		File[] storageContent = ConfigurationManager.getStorageContent(PREF_KEYS_DATA_ADAPTERS);
 		for (File storageElement : storageContent) {
@@ -230,63 +225,5 @@ public class PreferencesDataAdapterStorage extends ADataAdapterStorage {
 	@Override
 	public String getStorageName() {
 		return Messages.PreferencesDataAdapterStorage_3;
-	}
-	
-	/**
-	 * Utility method used to convert the old setting storage based on the preferences on the setting storage based on
-	 * file, this is done silently to migrate the old settings to the new storage system
-	 * 
-	 * @param preferenceKey
-	 *          the key of properties that contains the configuration that must be converted
-	 * @param storageName
-	 *          the storage where the new configuration is placed
-	 * @param nameProvider
-	 *          the provider for the name of the new storage files.
-	 */
-	public static void convertPropertyToStorage(String preferenceKey, String storageName,
-			IConversionFilenameProvider nameProvider) {
-		Preferences prefs = PropertiesHelper.INSTANCE_SCOPE.getNode(JaspersoftStudioPlugin.getUniqueIdentifier());
-		String xml = prefs.get(preferenceKey, null);
-		if (xml == null)
-			return;
-		List<File> createtElements = new ArrayList<File>();
-		StringReader sr = new StringReader(xml);
-		try {
-			Document document = JRXmlUtils.parse(new InputSource(sr));
-			NodeList configurationNodes = document.getDocumentElement().getChildNodes();
-			File storage = ConfigurationManager.getStorage(storageName);
-			TransformerFactory transformerFactory = TransformerFactory.newInstance();
-			Transformer transformer = transformerFactory.newTransformer();
-			for (int i = 0; i < configurationNodes.getLength(); ++i) {
-				Node configurationNode = configurationNodes.item(i);
-				if (configurationNode.getNodeType() == Node.ELEMENT_NODE) {
-					DOMSource source = new DOMSource(configurationNode);
-					String name = nameProvider.getFileName(configurationNode);
-					if (name != null) {
-						File xmlTargetFile = new File(storage, name);
-						if (!xmlTargetFile.exists()) {
-							createtElements.add(xmlTargetFile);
-							FileOutputStream stream = new FileOutputStream(xmlTargetFile);
-							try {
-								StreamResult result = new StreamResult(stream);
-								transformer.transform(source, result);
-							} finally {
-								FileUtils.closeStream(stream);
-							}
-						} else
-							throw new Exception("File " + xmlTargetFile.getAbsolutePath() + " already exist");
-					}
-				}
-			}
-			prefs.remove(preferenceKey);
-		} catch (Exception e) {
-			FileUtils.closeStream(sr);
-			JaspersoftStudioPlugin.getInstance().logError("Error converting the element", e);
-			// Do the revert of the created files
-			for (File createdElement : createtElements)
-				if (createdElement.exists())
-					createdElement.delete();
-			throw new RuntimeException(e);
-		}
 	}
 }

@@ -10,11 +10,12 @@ package com.jaspersoft.studio;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.Closeable;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.StringReader;
 import java.net.URL;
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -22,16 +23,29 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.engine.util.JRXmlUtils;
+
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.util.Util;
 import org.eclipse.osgi.service.datalocation.Location;
-import org.eclipse.swt.widgets.Display;
+import org.osgi.service.prefs.Preferences;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.util.KeyValue;
-import com.jaspersoft.studio.preferences.util.JSSPropertiesHelper;
+import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 import com.jaspersoft.studio.statistics.IFirstStartupAction;
 
 /**
@@ -137,10 +151,8 @@ public class ConfigurationManager {
 		boolean accessible = isConfigurationAccessible();
 		if (!accessible) {
 			String configurationPath = getApplicationConfigurationFile().getAbsolutePath();
-			MessageDialog.openWarning(Display.getCurrent().getActiveShell(), Messages.ConfigurationManager_notAccessibleTitle, 
-																	MessageFormat.format(Messages.ConfigurationManager_notAccessibleMessage, new Object[] { configurationPath }));
-			//UIUtils.showWarning(Messages.ConfigurationManager_notAccessibleTitle,
-					//MessageFormat.format(Messages.ConfigurationManager_notAccessibleMessage, new Object[] { configurationPath }));
+			UIUtils.showWarning(Messages.ConfigurationManager_notAccessibleTitle,
+					MessageFormat.format(Messages.ConfigurationManager_notAccessibleMessage, new Object[] { configurationPath }));
 		}
 		return accessible;
 	}
@@ -223,7 +235,7 @@ public class ConfigurationManager {
 				// If the appDataFolder is null a new one is created
 				if (appDataFolder == null) {
 					// For backward compatibility try to used the original UUID if available
-					JSSPropertiesHelper ph = JSSPropertiesHelper.getInstance();
+					PropertiesHelper ph = PropertiesHelper.getInstance();
 					String startingUUID = ph.getString("UUID", null); //$NON-NLS-1$
 					if (startingUUID == null) {
 						// In the old version JSS stored an unique UUID in the preferences, now this is not
@@ -291,7 +303,7 @@ public class ConfigurationManager {
 				e.printStackTrace();
 				JaspersoftStudioPlugin.getInstance().logError(Messages.UsageManager_errorPathFile, e);
 			} finally {
-				closeStream(reader);
+				FileUtils.closeStream(reader);
 			}
 		}
 		return null;
@@ -318,7 +330,7 @@ public class ConfigurationManager {
 			e.printStackTrace();
 			JaspersoftStudioPlugin.getInstance().logError(Messages.UsageManager_errorPathFile, e);
 		} finally {
-			closeStream(writer);
+			FileUtils.closeStream(writer);
 		}
 	}
 
@@ -411,6 +423,64 @@ public class ConfigurationManager {
 		return null;
 	}
 
+	/**
+	 * Utility method used to convert the old setting storage based on the preferences on the setting storage based on
+	 * file, this is done silently to migrate the old settings to the new storage system
+	 * 
+	 * @param preferenceKey
+	 *          the key of properties that contains the configuration that must be converted
+	 * @param storageName
+	 *          the storage where the new configuration is placed
+	 * @param nameProvider
+	 *          the provider for the name of the new storage files.
+	 */
+	public static void convertPropertyToStorage(String preferenceKey, String storageName,
+			IConversionFilenameProvider nameProvider) {
+		Preferences prefs = PropertiesHelper.INSTANCE_SCOPE.getNode(JaspersoftStudioPlugin.getUniqueIdentifier());
+		String xml = prefs.get(preferenceKey, null);
+		if (xml == null)
+			return;
+		List<File> createtElements = new ArrayList<File>();
+		StringReader sr = new StringReader(xml);
+		try {
+			Document document = JRXmlUtils.parse(new InputSource(sr));
+			NodeList configurationNodes = document.getDocumentElement().getChildNodes();
+			File storage = getStorage(storageName);
+			TransformerFactory transformerFactory = TransformerFactory.newInstance();
+			Transformer transformer = transformerFactory.newTransformer();
+			for (int i = 0; i < configurationNodes.getLength(); ++i) {
+				Node configurationNode = configurationNodes.item(i);
+				if (configurationNode.getNodeType() == Node.ELEMENT_NODE) {
+					DOMSource source = new DOMSource(configurationNode);
+					String name = nameProvider.getFileName(configurationNode);
+					if (name != null) {
+						File xmlTargetFile = new File(storage, name);
+						if (!xmlTargetFile.exists()) {
+							createtElements.add(xmlTargetFile);
+							FileOutputStream stream = new FileOutputStream(xmlTargetFile);
+							try {
+								StreamResult result = new StreamResult(stream);
+								transformer.transform(source, result);
+							} finally {
+								FileUtils.closeStream(stream);
+							}
+						} else
+							throw new Exception("File " + xmlTargetFile.getAbsolutePath() + " already exist");
+					}
+				}
+			}
+			prefs.remove(preferenceKey);
+		} catch (Exception e) {
+			FileUtils.closeStream(sr);
+			JaspersoftStudioPlugin.getInstance().logError("Error converting the element", e);
+			// Do the revert of the created files
+			for (File createdElement : createtElements)
+				if (createdElement.exists())
+					createdElement.delete();
+			throw new RuntimeException(e);
+		}
+	}
+
 	// Methods to get the configuration file and change it
 	
 	private static final String CMD_VMARGS = "-vmargs"; //$NON-NLS-1$
@@ -486,8 +556,8 @@ public class ConfigurationManager {
 				}
 				if (localePosition != -1) {
 					if (configLines.get(localePosition).equals(locale)) {
-						closeStream(in);
-						closeStream(out);
+						FileUtils.closeStream(in);
+						FileUtils.closeStream(out);
 						// The file has already the right regional code, there
 						// is no need to restart eclipse
 						return false;
@@ -504,14 +574,14 @@ public class ConfigurationManager {
 				ex.printStackTrace();
 				JaspersoftStudioPlugin.getInstance().logError(ex);
 				// Configuration file not found, show an error message
-				MessageDialog.openWarning(Display.getDefault().getActiveShell(),
+				MessageDialog.openWarning(UIUtils.getShell(),
 						Messages.SwitchLanguageHandler_errorTitle,
 						MessageFormat.format(
 								Messages.SwitchLanguageHandler_errorMessage,
 								new Object[] { configurationFile.getAbsolutePath() }));
 			} finally {
-				closeStream(in);
-				closeStream(out);
+				FileUtils.closeStream(in);
+				FileUtils.closeStream(out);
 				
 			}
 		}
@@ -583,14 +653,14 @@ public class ConfigurationManager {
 				ex.printStackTrace();
 				JaspersoftStudioPlugin.getInstance().logError(ex);
 				// Configuration file not found, show an error message
-				MessageDialog.openWarning(Display.getCurrent().getActiveShell(),
+				MessageDialog.openWarning(UIUtils.getShell(),
 						Messages.SwitchLanguageHandler_errorTitle,
 						MessageFormat.format(
 								Messages.SwitchLanguageHandler_errorMessage,
 								new Object[] { configurationFile.getAbsolutePath() }));
 			} finally {
-				closeStream(in);
-				closeStream(out);
+				FileUtils.closeStream(in);
+				FileUtils.closeStream(out);
 				
 			}
 		}
@@ -624,20 +694,9 @@ public class ConfigurationManager {
 				org.apache.commons.io.FileUtils.writeStringToFile(fini, configurationContent);
 				return true;
 			} catch (IOException e) {
-				MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error", e.getMessage());
-			//	UIUtils.showError(e);
+				UIUtils.showError(e);
 			}
 		}
 		return false;
 	}
-	
-	public static void closeStream(Closeable stream) {
-		if (stream != null)
-			try {
-				stream.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-	}
-
 }
