@@ -16,20 +16,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.engine.JRDataset;
-import net.sf.jasperreports.engine.JRDatasetParameter;
-import net.sf.jasperreports.engine.JRDatasetRun;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JRGroup;
-import net.sf.jasperreports.engine.design.JRDesignDataset;
-import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
-import net.sf.jasperreports.engine.design.JRDesignElementDataset;
-import net.sf.jasperreports.engine.design.JRDesignExpression;
-import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.type.IncrementTypeEnum;
-import net.sf.jasperreports.engine.type.ResetTypeEnum;
-
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
@@ -44,8 +30,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.ToolBar;
-import org.eclipse.swt.widgets.ToolItem;
 
 import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
@@ -59,7 +43,22 @@ import com.jaspersoft.studio.property.descriptor.expression.dialog.JRExpressionE
 import com.jaspersoft.studio.property.descriptor.parameter.dialog.ComboParameterEditor;
 import com.jaspersoft.studio.property.descriptor.parameter.dialog.GenericJSSParameter;
 import com.jaspersoft.studio.property.descriptor.returnvalue.RVPropertyPage;
+import com.jaspersoft.studio.swt.widgets.LinkButton;
 import com.jaspersoft.studio.utils.ModelUtils;
+
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.engine.JRDataset;
+import net.sf.jasperreports.engine.JRDatasetParameter;
+import net.sf.jasperreports.engine.JRDatasetRun;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRGroup;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
+import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
+import net.sf.jasperreports.engine.design.JRDesignElementDataset;
+import net.sf.jasperreports.engine.design.JRDesignExpression;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.type.IncrementTypeEnum;
+import net.sf.jasperreports.engine.type.ResetTypeEnum;
 
 public class ElementDatasetWidget implements IExpressionContextSetter {
 	private static final String GROUPPREFIX = "[Group] "; //$NON-NLS-1$
@@ -69,9 +68,9 @@ public class ElementDatasetWidget implements IExpressionContextSetter {
 	private Combo cbIncrement;
 	private Combo cbReset;
 	private Button btnIncrement;
-	private ToolItem prmItem;
-	private ToolItem prmMapItem;
-	private ToolItem returnValue;
+	private LinkButton prmItem;
+	private LinkButton prmMapItem;
+	private LinkButton returnValue;
 	private DatasetRunWidget dsRun;
 	private ExpressionContext expContext;
 	private List<DatasetRunSelectionListener> dsRunSelectionListeners;
@@ -285,9 +284,9 @@ public class ElementDatasetWidget implements IExpressionContextSetter {
 
 	private void enableMainDatasetRun() {
 		boolean en = dsCombo.getSelectionIndex() != 0;
-		prmItem.setEnabled(en);
-		prmMapItem.setEnabled(en);
-		returnValue.setEnabled(en);
+		prmItem.setVisible(en);
+		prmMapItem.setVisible(en);
+		returnValue.setVisible(en);
 		dsRun.setEnabled(en);
 	}
 
@@ -452,16 +451,18 @@ public class ElementDatasetWidget implements IExpressionContextSetter {
 		dsCombo = new Combo(composite, SWT.BORDER | SWT.READ_ONLY | SWT.SINGLE);
 		dsCombo.setItems(new String[] { "main dataset" }); //$NON-NLS-1$
 
-		ToolBar toolBar = new ToolBar(composite, SWT.FLAT | SWT.HORIZONTAL | SWT.WRAP | SWT.RIGHT);
+		Composite linksContainer = new Composite(composite, SWT.NONE);
+		GridLayout linksLayout = new GridLayout(3, false);
+		layout.horizontalSpacing = 0;
+		layout.marginWidth = 0;
+		layout.marginHeight = 0;
+		linksContainer.setLayout(linksLayout);
 		
-		returnValue = new ToolItem(toolBar, SWT.PUSH);
-		returnValue.setText(com.jaspersoft.studio.messages.Messages.common_return_values);
+		returnValue = new LinkButton(linksContainer, com.jaspersoft.studio.messages.Messages.common_return_values);
 		
-		prmItem = new ToolItem(toolBar, SWT.PUSH);
-		prmItem.setText(Messages.ElementDatasetWidget_parametersLabel);
+		prmItem = new LinkButton(linksContainer, Messages.ElementDatasetWidget_parametersLabel);
 
-		prmMapItem = new ToolItem(toolBar, SWT.PUSH);
-		prmMapItem.setText(Messages.ElementDatasetWidget_parametersMapLabel);
+		prmMapItem = new LinkButton(linksContainer, Messages.ElementDatasetWidget_parametersMapLabel);
 
 		int tabHeight = composite.computeSize(SWT.DEFAULT, SWT.DEFAULT).y;
 		tabHeight = Math.max(tabHeight, ctfolder.getTabHeight());
