@@ -50,14 +50,14 @@ public class DatasetSection extends AbstractSection {
 		IPropertyDescriptor pd = getPropertyDesriptor(JRDesignElementDataset.PROPERTY_INCREMENT_TYPE);
 		IPropertyDescriptor gpd = getPropertyDesriptor(JRDesignElementDataset.PROPERTY_INCREMENT_GROUP);
 		getWidgetFactory().createCLabel(parent, pd.getDisplayName());
-		widgets.put(pd.getId(), new SPIncrementType(parent, this, pd, gpd));
+		widgets.put(pd.getId(), new SPIncrementType<IPropertyDescriptor>(parent, this, pd, gpd));
 
 		createWidget4Property(parent, JRDesignElementDataset.PROPERTY_INCREMENT_WHEN_EXPRESSION);
 
 		pd = getPropertyDesriptor(JRDesignElementDataset.PROPERTY_RESET_TYPE);
 		gpd = getPropertyDesriptor(JRDesignElementDataset.PROPERTY_RESET_GROUP);
 		getWidgetFactory().createCLabel(parent, pd.getDisplayName());
-		widgets.put(pd.getId(), new SPResetType(parent, this, pd, gpd));
+		widgets.put(pd.getId(), new SPResetType<IPropertyDescriptor>(parent, this, pd, gpd));
 
 		Composite group = getWidgetFactory().createSection(parent, "Dataset Run", true, 2, 2);
 		datasetRunSection = (ExpandableComposite) group.getParent();

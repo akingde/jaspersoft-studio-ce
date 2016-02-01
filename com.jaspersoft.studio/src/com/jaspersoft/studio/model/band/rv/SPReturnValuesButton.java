@@ -8,14 +8,10 @@
  ******************************************************************************/
 package com.jaspersoft.studio.model.band.rv;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.wizard.WizardDialog;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
@@ -25,6 +21,9 @@ import com.jaspersoft.studio.model.band.JRBandDTO;
 import com.jaspersoft.studio.property.descriptor.returnvalue.RVPropertyPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
+import com.jaspersoft.studio.swt.widgets.LinkButton;
+
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 /**
  * A button that when clicked open the subreport return values dialog
@@ -37,7 +36,7 @@ public class SPReturnValuesButton<T extends IPropertyDescriptor> extends ASPrope
 	/**
 	 * The button control
 	 */
-	private Button button;
+	private LinkButton button;
 
 	/**
 	 * The query of the report
@@ -70,7 +69,7 @@ public class SPReturnValuesButton<T extends IPropertyDescriptor> extends ASPrope
 	 *          text on the button
 	 */
 	protected void createButton(Composite parent, String buttonText) {
-		button = section.getWidgetFactory().createButton(parent, buttonText, SWT.PUSH);
+		button = new LinkButton(parent, buttonText);
 		button.setToolTipText(pDescriptor.getDescription());
 		button.addSelectionListener(new SelectionAdapter() {
 			@Override

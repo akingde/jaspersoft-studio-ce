@@ -8,14 +8,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.model.dataset.descriptor;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.engine.JRDataset;
-import net.sf.jasperreports.engine.JRDatasetParameter;
-import net.sf.jasperreports.engine.design.JRDesignDataset;
-import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
-import net.sf.jasperreports.engine.design.JRDesignExpression;
-import net.sf.jasperreports.engine.design.JasperDesign;
-
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
@@ -23,7 +15,6 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -41,18 +32,27 @@ import com.jaspersoft.studio.property.descriptor.parameter.dialog.GenericJSSPara
 import com.jaspersoft.studio.property.descriptor.returnvalue.RVPropertyPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
+import com.jaspersoft.studio.swt.widgets.LinkButton;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
-public class SPDatasetRun extends ASPropertyWidget {
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.engine.JRDataset;
+import net.sf.jasperreports.engine.JRDatasetParameter;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
+import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
+import net.sf.jasperreports.engine.design.JRDesignExpression;
+import net.sf.jasperreports.engine.design.JasperDesign;
+
+public class SPDatasetRun<T extends IPropertyDescriptor> extends ASPropertyWidget<T> {
 
 	private Combo dsetCombo;
 
-	private Button returns;
+	private LinkButton returns;
 
-	private Button params;
+	private LinkButton params;
 
-	private Button paramMap;
+	private LinkButton paramMap;
 
 	private boolean alldatasets = true;
 
@@ -62,12 +62,12 @@ public class SPDatasetRun extends ASPropertyWidget {
 
 	protected DatasetRunWidgetRadio dsRunWidget;
 
-	public SPDatasetRun(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor, boolean alldatasets) {
+	public SPDatasetRun(Composite parent, AbstractSection section, T pDescriptor, boolean alldatasets) {
 		this(parent, section, pDescriptor);
 		this.alldatasets = alldatasets;
 	}
 
-	public SPDatasetRun(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
+	public SPDatasetRun(Composite parent, AbstractSection section, T pDescriptor) {
 		super(parent, section, pDescriptor);
 	}
 
@@ -124,7 +124,7 @@ public class SPDatasetRun extends ASPropertyWidget {
 		c.setLayoutData(gd);
 
 		// Create the button to edit the return parameters
-		returns = section.getWidgetFactory().createButton(c, Messages.common_return_values, SWT.PUSH | SWT.FLAT);
+		returns = new LinkButton(c, Messages.common_return_values);
 		returns.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -140,7 +140,7 @@ public class SPDatasetRun extends ASPropertyWidget {
 
 		});
 
-		params = section.getWidgetFactory().createButton(c, Messages.SPDatasetRun_2, SWT.PUSH | SWT.FLAT);
+		params = new LinkButton(c, Messages.SPDatasetRun_2);
 		params.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -164,7 +164,7 @@ public class SPDatasetRun extends ASPropertyWidget {
 
 		});
 
-		paramMap = section.getWidgetFactory().createButton(c, Messages.SPDatasetRun_3, SWT.PUSH | SWT.FLAT);
+		paramMap =  new LinkButton(c, Messages.SPDatasetRun_3);
 		paramMap.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -251,9 +251,9 @@ public class SPDatasetRun extends ASPropertyWidget {
 	}
 
 	private void setDatasetEnabled(boolean enabled) {
-		returns.setEnabled(enabled);
-		paramMap.setEnabled(enabled);
-		params.setEnabled(enabled);
+		returns.setVisible(enabled);
+		paramMap.setVisible(enabled);
+		params.setVisible(enabled);
 		if (!enabled)
 			dsRunWidget.setData(null);
 		else

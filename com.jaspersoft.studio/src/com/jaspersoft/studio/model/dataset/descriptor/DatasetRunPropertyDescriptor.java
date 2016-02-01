@@ -50,7 +50,7 @@ public class DatasetRunPropertyDescriptor extends PropertyDescriptor implements 
 	}
 
 	public ASPropertyWidget<?> createWidget(Composite parent, AbstractSection section) {
-		return new SPDatasetRun(parent, section, this, alldataset);
+		return new SPDatasetRun<DatasetRunPropertyDescriptor>(parent, section, this, alldataset);
 	}
 
 	private IHelpRefBuilder refBuilder;

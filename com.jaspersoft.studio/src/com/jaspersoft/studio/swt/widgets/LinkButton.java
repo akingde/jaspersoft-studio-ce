@@ -231,4 +231,10 @@ public class LinkButton extends Composite {
 	@Override
 	public void setLayout(Layout layout) {
 	}
+	
+	@Override
+	public void setEnabled(boolean enabled) {
+		super.setEnabled(enabled);
+		editQueryLink.setEnabled(enabled);
+	}
 }
