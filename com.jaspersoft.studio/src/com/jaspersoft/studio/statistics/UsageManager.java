@@ -22,9 +22,6 @@ import java.util.Date;
 import java.util.Properties;
 import java.util.regex.Pattern;
 
-//import net.sf.jasperreports.eclipse.util.FileUtils;
-//import net.sf.jasperreports.eclipse.util.HttpUtils;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.net.ntp.NTPUDPClient;
 import org.apache.commons.net.ntp.TimeInfo;
@@ -58,7 +55,6 @@ import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 import com.jaspersoft.studio.statistics.heartbeat.VersionUpdateDialog;
 import com.jaspersoft.studio.utils.ModelUtils;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.HttpUtils;
 
 /**
@@ -628,7 +624,7 @@ public class UsageManager {
 					if (ph.getBoolean(StudioPreferencePage.CHECK_FOR_UPDATE, true)) {
 						final VersionCheckResult versionCheck = checkVersion();
 						if (versionCheck.canUpdate()) {
-							UIUtils.getDisplay().asyncExec(new Runnable() {
+							Display.getCurrent().asyncExec(new Runnable() {
 
 								public void run() {
 									String version = versionCheck.getServerVersion();
