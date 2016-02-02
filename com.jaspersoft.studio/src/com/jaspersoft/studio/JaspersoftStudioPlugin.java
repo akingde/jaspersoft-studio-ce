@@ -178,15 +178,15 @@ public class JaspersoftStudioPlugin extends AbstractJRUIPlugin {
 		precacheImagesJob.schedule();
 
 		// Force the initialization of some JR extensions
-		Job extensionsPreloadingJob = new Job(Messages.JaspersoftStudioPlugin_CachingJRExtensionsJob) {
-			@Override
-			protected IStatus run(IProgressMonitor monitor) {
-				ExtensionLoader.initializeJRExtensions(monitor);
-				return Status.OK_STATUS;
-			}
-		};
-		extensionsPreloadingJob.setPriority(Job.LONG);
-		extensionsPreloadingJob.schedule();
+//		Job extensionsPreloadingJob = new Job(Messages.JaspersoftStudioPlugin_CachingJRExtensionsJob) {
+//			@Override
+//			protected IStatus run(IProgressMonitor monitor) {
+//				ExtensionLoader.initializeJRExtensions(monitor);
+//				return Status.OK_STATUS;
+//			}
+//		};
+//		extensionsPreloadingJob.setPriority(Job.LONG);
+//		extensionsPreloadingJob.schedule();
 
 		// JSS console activation (if requested)
 		if (getInstance().getPreferenceStore().getBoolean(GlobalPreferencePage.JSS_ENABLE_INTERNAL_CONSOLE)) {
