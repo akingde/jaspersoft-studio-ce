@@ -1004,6 +1004,18 @@ public class Messages extends NLS {
 	public static String JRPropertyPage_description;
 	public static String JRPropertyPage_value;
 	public static String JRQueryPage_description;
+	public static String JRRuntimeDialog_2;
+	public static String JRRuntimeURLPage_1;
+	public static String JRRuntimeURLPage_2;
+	public static String JRRuntimeURLPage_3;
+	public static String JRRuntimeURLPage_4;
+	public static String JRRuntimeURLWizard_0;
+	public static String JRRuntimeURLWizard_1;
+	public static String JRVersionPage_1;
+	public static String JRVersionPage_2;
+	public static String JRVersionPage_3;
+	public static String JRVersionPage_4;
+	public static String JRVersionPage_5;
 	public static String JRVersionPreferencesPages_3;
 	public static String JRVersionPreferencesPages_4;
 	public static String JRVersionPreferencesPages_5;

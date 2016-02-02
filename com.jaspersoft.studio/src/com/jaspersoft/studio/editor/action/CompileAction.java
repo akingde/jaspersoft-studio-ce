@@ -10,8 +10,6 @@ package com.jaspersoft.studio.editor.action;
 
 import java.io.File;
 import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
@@ -27,12 +25,9 @@ import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.MenuAdapter;
-import org.eclipse.swt.events.MenuEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
@@ -41,7 +36,6 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.dialogs.PreferencesUtil;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
-import com.jaspersoft.studio.backward.JRBackwardManager;
 import com.jaspersoft.studio.backward.JRVersionPreferencesPages;
 import com.jaspersoft.studio.editor.AbstractJRXMLEditor;
 import com.jaspersoft.studio.editor.JrxmlEditor;
@@ -56,8 +50,6 @@ import com.jaspersoft.studio.utils.SelectionHelper;
 import com.jaspersoft.studio.utils.SubreportsUtil;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
-import net.sf.jasperreports.eclipse.builder.ConsoleExecuter;
-import net.sf.jasperreports.eclipse.builder.JRDefinition;
 import net.sf.jasperreports.eclipse.builder.JasperReportErrorHandler;
 import net.sf.jasperreports.eclipse.builder.JasperReportsBuilder;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
@@ -74,35 +66,6 @@ public class CompileAction extends SelectionAction implements IMenuCreator {
 	 * Drop down menu of the action, where the backward compatibility options are shown
 	 */
 	private Menu menu;
-
-	/**
-	 * Listener called when the compilation with an older version of JR is requested
-	 */
-	private SelectionAdapter compileSelected = new SelectionAdapter() {
-
-		public void widgetSelected(SelectionEvent e) {
-			JRDefinition def = (JRDefinition) e.widget.getData();
-			String jrPath = JRBackwardManager.INSTANCE.getJRPath(def);
-			JasperReportsConfiguration jConfig = getMDatasetToShow();
-			IFile mfile = (IFile) jConfig.get(FileUtils.KEY_FILE);
-			if (jrPath != null && mfile != null) {
-				new ConsoleExecuter(mfile, jrPath, JRBackwardManager.INSTANCE.getDestinationFolder());
-			}
-		};
-	};
-
-	/**
-	 * Listener called when the option to change the destination path for the backward compiled file is selected
-	 */
-	private SelectionAdapter setSelectionPath = new SelectionAdapter() {
-		public void widgetSelected(SelectionEvent e) {
-			if (e.widget.getData() == null)
-				JRBackwardManager.INSTANCE.setDestinationPath(null);
-			else
-				JRBackwardManager.INSTANCE.setDestinationPath((String) e.widget.getData());
-		};
-
-	};
 
 	public CompileAction(IWorkbenchPart part) {
 		super(part);
@@ -296,73 +259,6 @@ public class CompileAction extends SelectionAction implements IMenuCreator {
 	}
 
 	/**
-	 * Create the submenu for the handling of the destination of the backward compiled file
-	 * 
-	 * @param parentMenu
-	 *          menu where the entry is placed
-	 */
-	private void createDestinationSubmenu(Menu parentMenu) {
-		MenuItem managePaths = new MenuItem(parentMenu, SWT.CASCADE);
-		managePaths.setText(Messages.CompileAction_binaryDestination);
-		final Menu managePathsMenu = new Menu(menu);
-		managePaths.setMenu(managePathsMenu);
-		final List<MenuItem> selectableItems = new ArrayList<MenuItem>();
-
-		// Default destination path path (same as source)
-		MenuItem sourceLocation = new MenuItem(managePathsMenu, SWT.CHECK);
-		sourceLocation.setText(Messages.CompileAction_asSource);
-		sourceLocation.addSelectionListener(setSelectionPath);
-		selectableItems.add(sourceLocation);
-		// Custom destination paths
-		for (String path : JRBackwardManager.INSTANCE.getDestinationFolders()) {
-			final String elementPath = path;
-			MenuItem item = new MenuItem(managePathsMenu, SWT.CHECK);
-			item.setData(elementPath);
-			item.setText(elementPath);
-			item.addSelectionListener(setSelectionPath);
-			selectableItems.add(item);
-		}
-
-		// Item to add a new path
-		new MenuItem(managePathsMenu, SWT.SEPARATOR);
-		MenuItem addPath = new MenuItem(managePathsMenu, SWT.PUSH);
-		addPath.setText(Messages.CompileAction_addPath);
-		addPath.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				DirectoryDialog dialog = new DirectoryDialog(UIUtils.getShell());
-				dialog.setFilterPath(System.getProperty("user.home")); //$NON-NLS-1$
-				String result = dialog.open();
-				if (result != null) {
-					JRBackwardManager.INSTANCE.addDestinationPath(result, true);
-				}
-			}
-
-		});
-
-		// Adapter used when the menu is shown to select the item associated
-		// with the currently selected destination path
-		managePathsMenu.addMenuListener(new MenuAdapter() {
-
-			@Override
-			public void menuShown(MenuEvent e) {
-				String destination = JRBackwardManager.INSTANCE.getDestinationFolder();
-				if (destination == null) {
-					for (MenuItem item : selectableItems) {
-						item.setSelection(false);
-					}
-					selectableItems.get(0).setSelection(true);
-				} else {
-					for (MenuItem item : selectableItems) {
-						item.setSelection(destination.equals(item.getData()));
-					}
-				}
-			}
-		});
-	}
-
-	/**
 	 * Return the menu used to handle the backward compatibility
 	 */
 	@Override
@@ -371,25 +267,7 @@ public class CompileAction extends SelectionAction implements IMenuCreator {
 			menu.dispose();
 		}
 		menu = new Menu(parent);
-		// Populate the list of the available backward JR compiler
-		// List<JRDefinition> definitions = JRBackwardManager.INSTANCE.getInstallerJRs();
-		// for (JRDefinition def : definitions) {
-		// MenuItem item = new MenuItem(menu, SWT.PUSH);
-		// item.setText(MessageFormat.format(Messages.CompileAction_compile, new Object[] { def.getVersion() }));
-		// item.setData(def);
-		// item.addSelectionListener(compileSelected);
-		// }
-		// If there are no older version of JR show an empty informative element
-		// if (definitions.isEmpty()) {
-		// MenuItem fakeItem = new MenuItem(menu, SWT.PUSH);
-		// fakeItem.setEnabled(false);
-		// fakeItem.setText(Messages.CompileAction_noJRInstalled);
-		// }
 
-		// create the path submenu
-		// new MenuItem(menu, SWT.SEPARATOR);
-		// createDestinationSubmenu(menu);
-		// Create the option to manage the installed JR
 		MenuItem manage = new MenuItem(menu, SWT.PUSH);
 		manage.setText(Messages.CompileAction_manage);
 		manage.addSelectionListener(new SelectionAdapter() {

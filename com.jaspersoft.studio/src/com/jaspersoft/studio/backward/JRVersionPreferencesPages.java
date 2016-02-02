@@ -14,6 +14,16 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IncrementalProjectBuilder;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.ComboFieldEditor;
@@ -32,13 +42,12 @@ import org.eclipse.swt.widgets.Link;
 import org.eclipse.ui.IWorkbench;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
-import com.jaspersoft.studio.backward.wizard.DownloadJRWizardDialog;
+import com.jaspersoft.studio.backward.wizard.JRRuntimeDialog;
 import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.util.FieldEditorOverlayPage;
 import com.jaspersoft.studio.utils.Misc;
 
-import net.sf.jasperreports.eclipse.builder.CompatibilityManager;
 import net.sf.jasperreports.eclipse.builder.JRDefinition;
 import net.sf.jasperreports.eclipse.builder.JasperReportCompiler;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
@@ -85,12 +94,13 @@ public class JRVersionPreferencesPages extends FieldEditorOverlayPage {
 		String[][] v = getJasperValues();
 		// set fEntryNamesAndValues
 		try {
-			Field f = cfeVersion.getClass().getDeclaredField("fEntryNamesAndValues"); //$NON-NLS-1$
+			Class<?> cver = cfeVersion.getClass().getSuperclass();
+			Field f = cver.getDeclaredField("fEntryNamesAndValues"); //$NON-NLS-1$
 			if (f != null) {
 				f.setAccessible(true);
 				String[][] old = (String[][]) f.get(cfeVersion);
 				f.set(cfeVersion, v);
-				f = cfeVersion.getClass().getDeclaredField("fCombo"); //$NON-NLS-1$
+				f = cfeVersion.getClass().getSuperclass().getDeclaredField("fCombo"); //$NON-NLS-1$
 				f.setAccessible(true);
 				if (f != null) {
 					Combo c = (Combo) f.get(cfeVersion);
@@ -121,12 +131,8 @@ public class JRVersionPreferencesPages extends FieldEditorOverlayPage {
 		}
 	}
 
-	private JRBackwardManager jrBM;
-
 	protected String[][] getJasperValues() {
-		if (jrBM == null)
-			jrBM = new JRBackwardManager();
-		List<JRDefinition> jrs = jrBM.getInstallerJRs();
+		List<JRDefinition> jrs = JRRuntimeDialog.getJRDefinitions();
 		Collections.reverse(jrs);
 		String[][] v = new String[jrs.size() + 2][2];
 		v[0] = new String[] { Messages.JRXmlWriterHelper_1, "last" }; //$NON-NLS-1$
@@ -148,7 +154,45 @@ public class JRVersionPreferencesPages extends FieldEditorOverlayPage {
 		gr.setBackgroundMode(SWT.INHERIT_FORCE);
 
 		cfeVersion = new ComboFieldEditor(JasperReportCompiler.JSS_COMPATIBILITY_COMPILER_VERSION,
-				Messages.StudioPreferencePage_versionLabel, getJasperValues(), gr);
+				Messages.StudioPreferencePage_versionLabel, getJasperValues(), gr) {
+			@Override
+			protected void doStore() {
+				String oldValue = getPreferenceStore().getString(JasperReportCompiler.JSS_COMPATIBILITY_COMPILER_VERSION);
+				super.doStore();
+				String newValue = getPreferenceStore().getString(JasperReportCompiler.JSS_COMPATIBILITY_COMPILER_VERSION);
+				if ((oldValue == null && newValue == null) || (oldValue != null && oldValue.equals(newValue)))
+					return;
+				Job job = new Job("Cleaning project") {
+					protected IStatus run(IProgressMonitor monitor) {
+						monitor.beginTask("Cleaning project", IProgressMonitor.UNKNOWN);
+						IResource r = getResource();
+						if (r instanceof IFile)
+							r = r.getProject();
+						if (r instanceof IProject)
+							buildProject((IProject) r, monitor);
+						else
+							for (IProject p : ResourcesPlugin.getWorkspace().getRoot().getProjects()) {
+								if (p.isOpen())
+									buildProject(p, monitor);
+							}
+						return Status.OK_STATUS;
+					}
+
+					private void buildProject(IProject p, IProgressMonitor monitor) {
+						try {
+							p.build(IncrementalProjectBuilder.CLEAN_BUILD, monitor);
+							p.build(IncrementalProjectBuilder.FULL_BUILD, monitor);
+						} catch (CoreException e) {
+							e.printStackTrace();
+						}
+					}
+				};
+				job.setUser(true);
+				job.setPriority(Job.BUILD);
+				job.schedule();
+
+			}
+		};
 		addField(cfeVersion);
 
 		new Label(gr, SWT.NONE);
@@ -160,52 +204,11 @@ public class JRVersionPreferencesPages extends FieldEditorOverlayPage {
 		link.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				DownloadJRWizardDialog dialog = new DownloadJRWizardDialog(UIUtils.getShell());
-				if (dialog.open() == Dialog.OK) {
+				JRRuntimeDialog d = new JRRuntimeDialog(UIUtils.getShell());
+				if (d.open() == Dialog.OK)
 					fillJasperVersions();
-					CompatibilityManager.getInstance().loadJRVersions();
-				}
 			}
 		});
-
-		// Composite cmp = new Composite(gr, SWT.NONE);
-		// cmp.setLayout(new GridLayout(2, false));
-		// GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-		// gd.horizontalSpan = 2;
-		// cmp.setLayoutData(gd);
-		//
-		// Label lbl = new Label(cmp, SWT.NONE);
-		// lbl.setText("Output folder settings");
-		// gd = new GridData();
-		// gd.horizontalSpan = 2;
-		// lbl.setLayoutData(gd);
-		//
-		// Button bSame = new Button(cmp, SWT.RADIO);
-		// bSame.setText("Same folder with the report.");
-		// gd = new GridData();
-		// gd.horizontalSpan = 2;
-		// bSame.setLayoutData(gd);
-		// bSame.setSelection(true);
-		//
-		// Button bBin = new Button(cmp, SWT.RADIO);
-		// bBin.setText("To the java output folder.");
-		// gd = new GridData();
-		// gd.horizontalSpan = 2;
-		// bBin.setLayoutData(gd);
-		//
-		// Button bC = new Button(cmp, SWT.RADIO);
-		// bC.setText("To the folder.");
-		// gd = new GridData();
-		// gd.horizontalSpan = 2;
-		// bC.setLayoutData(gd);
-		//
-		// Text tpath = new Text(cmp, SWT.BORDER);
-		// gd = new GridData(GridData.FILL_HORIZONTAL);
-		// gd.horizontalIndent = 16;
-		// tpath.setLayoutData(gd);
-		//
-		// Button b = new Button(cmp, SWT.PUSH);
-		// b.setText("...");
 
 		gr.setLayout(new GridLayout(2, false));
 	}

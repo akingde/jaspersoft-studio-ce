@@ -33,7 +33,7 @@ public class EditButton<T> {
 
 	private final class EditListener extends SelectionAdapter {
 
-		private TableViewer tableViewer;
+		protected TableViewer tableViewer;
 		private IEditElement<T> editElement;
 
 		private EditListener(TableViewer tableViewer, IEditElement<T> newElement) {
@@ -81,7 +81,8 @@ public class EditButton<T> {
 
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
-				editB.setEnabled(!tableViewer.getSelection().isEmpty());
+				StructuredSelection s = (StructuredSelection) tableViewer.getSelection();
+				setEnabled(!s.isEmpty() && s.size() == 1);
 			}
 		});
 	}
@@ -97,7 +98,8 @@ public class EditButton<T> {
 	}
 
 	public void push() {
-		listener.widgetSelected(null);
+		if (editB.isEnabled())
+			listener.widgetSelected(null);
 	}
 
 	public void setButtonText(String text) {

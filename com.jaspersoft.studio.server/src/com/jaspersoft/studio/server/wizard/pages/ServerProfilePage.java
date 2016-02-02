@@ -118,6 +118,7 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 	private WTimeZone tz;
 	private Button bSSO;
 	private Combo ccas;
+	private boolean refreshing = false;
 
 	public ServerProfilePage(MServerProfile sprofile) {
 		super("serverprofilepage"); //$NON-NLS-1$
@@ -150,14 +151,13 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 
 			@Override
 			public void modifyText(ModifyEvent e) {
-				sprofile.setWsClient(null);
-				if (drvtab != null)
-					drvtab.dispose();
+				closeConnection();
 			}
 		});
 
-		new Label(composite, SWT.NONE);
-		new Label(composite, SWT.NONE);
+		new Label(composite, SWT.RIGHT);
+		cstatus = new Label(composite, SWT.NONE);
+		cstatus.setLayoutData(new GridData(GridData.FILL_HORIZONTAL | GridData.HORIZONTAL_ALIGN_END));
 
 		Group gr = new Group(composite, SWT.NONE);
 		gr.setText(Messages.ServerProfilePage_8);
@@ -173,9 +173,7 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 
 			@Override
 			public void modifyText(ModifyEvent e) {
-				sprofile.setWsClient(null);
-				if (drvtab != null)
-					drvtab.dispose();
+				closeConnection();
 			}
 		});
 
@@ -211,46 +209,53 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 			}
 		});
 		ServerProfile value = sprofile.getValue();
-		Proxy proxy = new Proxy(value);
-		dbc.bindValue(SWTObservables.observeText(tname, SWT.Modify), PojoObservables.observeValue(value, "name"), //$NON-NLS-1$
-				new UpdateValueStrategy().setAfterConvertValidator(new EmptyStringValidator() {
-					@Override
-					public IStatus validate(Object value) {
-						IStatus s = super.validate(value);
-						if (s.equals(Status.OK_STATUS) && !ServerManager.isUniqueName(sprofile, (String) value)) {
-							return ValidationStatus.warning(Messages.ServerProfilePage_13);
+		try {
+			refreshing = true;
+			Proxy proxy = new Proxy(value);
+			dbc.bindValue(SWTObservables.observeText(tname, SWT.Modify), PojoObservables.observeValue(value, "name"), //$NON-NLS-1$
+					new UpdateValueStrategy().setAfterConvertValidator(new EmptyStringValidator() {
+						@Override
+						public IStatus validate(Object value) {
+							IStatus s = super.validate(value);
+							if (s.equals(Status.OK_STATUS) && !ServerManager.isUniqueName(sprofile, (String) value)) {
+								return ValidationStatus.warning(Messages.ServerProfilePage_13);
+							}
+							return s;
 						}
-						return s;
-					}
-				}), null);
-		dbc.bindValue(SWTObservables.observeText(turl, SWT.Modify), PojoObservables.observeValue(proxy, "url"), //$NON-NLS-1$
-				new UpdateValueStrategy().setAfterConvertValidator(new URLValidator()), null);
-		dbc.bindValue(SWTObservables.observeText(lpath, SWT.Modify), PojoObservables.observeValue(proxy, "projectPath"), //$NON-NLS-1$
-				new UpdateValueStrategy().setAfterConvertValidator(new NotEmptyIFolderValidator()), null);
-		dbc.bindValue(SWTObservables.observeText(torg, SWT.Modify),
-				PojoObservables.observeValue(value, "organisation")); //$NON-NLS-1$
-		dbc.bindValue(SWTObservables.observeText(tuser, SWT.Modify), PojoObservables.observeValue(value, "user"), //$NON-NLS-1$
-				new UpdateValueStrategy().setAfterConvertValidator(new UsernameValidator()), null);
-		dbc.bindValue(SWTObservables.observeText(tpass, SWT.Modify), PojoObservables.observeValue(value, "pass")); //$NON-NLS-1$
+					}), null);
+			dbc.bindValue(SWTObservables.observeText(turl, SWT.Modify), PojoObservables.observeValue(proxy, "url"), //$NON-NLS-1$
+					new UpdateValueStrategy().setAfterConvertValidator(new URLValidator()), null);
+			dbc.bindValue(SWTObservables.observeText(lpath, SWT.Modify),
+					PojoObservables.observeValue(proxy, "projectPath"), //$NON-NLS-1$
+					new UpdateValueStrategy().setAfterConvertValidator(new NotEmptyIFolderValidator()), null);
+			dbc.bindValue(SWTObservables.observeText(torg, SWT.Modify),
+					PojoObservables.observeValue(value, "organisation")); //$NON-NLS-1$
+			dbc.bindValue(SWTObservables.observeText(tuser, SWT.Modify), PojoObservables.observeValue(value, "user"), //$NON-NLS-1$
+					new UpdateValueStrategy().setAfterConvertValidator(new UsernameValidator()), null);
+			dbc.bindValue(SWTObservables.observeText(tpass, SWT.Modify), PojoObservables.observeValue(value, "pass")); //$NON-NLS-1$
 
-		dbc.bindValue(SWTObservables.observeText(ttimeout, SWT.Modify), PojoObservables.observeValue(value, "timeout")); //$NON-NLS-1$
+			dbc.bindValue(SWTObservables.observeText(ttimeout, SWT.Modify),
+					PojoObservables.observeValue(value, "timeout")); //$NON-NLS-1$
 
-		dbc.bindValue(SWTObservables.observeSelection(bchunked), PojoObservables.observeValue(value, "chunked")); //$NON-NLS-1$
-		dbc.bindValue(SWTObservables.observeText(bmime), PojoObservables.observeValue(proxy, "mime")); //$NON-NLS-1$
-		dbc.bindValue(SWTObservables.observeText(loc.getCombo()), PojoObservables.observeValue(value, "locale")); //$NON-NLS-1$
-		dbc.bindValue(SWTObservables.observeText(tz.getCombo()), PojoObservables.observeValue(value, "timeZone")); //$NON-NLS-1$
+			dbc.bindValue(SWTObservables.observeSelection(bchunked), PojoObservables.observeValue(value, "chunked")); //$NON-NLS-1$
+			dbc.bindValue(SWTObservables.observeText(bmime), PojoObservables.observeValue(proxy, "mime")); //$NON-NLS-1$
+			dbc.bindValue(SWTObservables.observeText(loc.getCombo()), PojoObservables.observeValue(value, "locale")); //$NON-NLS-1$
+			dbc.bindValue(SWTObservables.observeText(tz.getCombo()), PojoObservables.observeValue(value, "timeZone")); //$NON-NLS-1$
 
-		dbc.bindValue(SWTObservables.observeSelection(bdaterange),
-				PojoObservables.observeValue(value, "supportsDateRanges")); //$NON-NLS-1$
-		dbc.bindValue(SWTObservables.observeSelection(bUseSoap), PojoObservables.observeValue(value, "useOnlySOAP")); //$NON-NLS-1$
-		dbc.bindValue(SWTObservables.observeSelection(bSyncDA), PojoObservables.observeValue(value, "syncDA")); //$NON-NLS-1$
-		dbc.bindValue(SWTObservables.observeSelection(bSSO), PojoObservables.observeValue(value, "useSSO")); //$NON-NLS-1$
+			dbc.bindValue(SWTObservables.observeSelection(bdaterange),
+					PojoObservables.observeValue(value, "supportsDateRanges")); //$NON-NLS-1$
+			dbc.bindValue(SWTObservables.observeSelection(bUseSoap),
+					PojoObservables.observeValue(value, "useOnlySOAP")); //$NON-NLS-1$
+			dbc.bindValue(SWTObservables.observeSelection(bSyncDA), PojoObservables.observeValue(value, "syncDA")); //$NON-NLS-1$
+			dbc.bindValue(SWTObservables.observeSelection(bSSO), PojoObservables.observeValue(value, "useSSO")); //$NON-NLS-1$
 
-		dbc.bindValue(SWTObservables.observeText(cversion.getControl()),
-				PojoObservables.observeValue(proxy, "jrVersion")); //$NON-NLS-1$
+			dbc.bindValue(SWTObservables.observeText(cversion.getControl()),
+					PojoObservables.observeValue(proxy, "jrVersion")); //$NON-NLS-1$
 
-		tpass.loadSecret(JRServerSecretsProvider.SECRET_NODE_ID, Misc.nvl(sprofile.getValue().getPass()));
-
+			tpass.loadSecret(JRServerSecretsProvider.SECRET_NODE_ID, Misc.nvl(sprofile.getValue().getPass()));
+		} finally {
+			refreshing = false;
+		}
 		showServerInfo();
 	}
 
@@ -276,9 +281,7 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 
 			@Override
 			public void modifyText(ModifyEvent e) {
-				sprofile.setWsClient(null);
-				if (drvtab != null)
-					drvtab.dispose();
+				closeConnection();
 			}
 		});
 
@@ -343,6 +346,7 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 	private CTabItem drvtab;
 	private CTabFolder tabFolder;
 	private Button bUpld;
+	private Label cstatus;
 
 	private Composite createAdvancedSettings(Composite parent) {
 		Composite cmp = new Composite(parent, SWT.NONE);
@@ -423,9 +427,7 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 					bUseSoap.setEnabled(true);
 				}
 				cmpCredential.layout();
-				sprofile.setWsClient(null);
-				if (drvtab != null)
-					drvtab.dispose();
+				closeConnection();
 			}
 		});
 
@@ -469,12 +471,12 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 						IContainer c = null;
 						for (IProject p : ResourcesPlugin.getWorkspace().getRoot().getProjects())
 							if (p.isOpen()) {
-								String prjName = "/" + p.getName();
+								String prjName = "/" + p.getName(); //$NON-NLS-1$
 								if (ppath.equals(prjName)) {
 									c = p;
 									break;
 								}
-								prjName += "/";
+								prjName += "/"; //$NON-NLS-1$
 								if (ppath.startsWith(prjName)) {
 									IFolder f = p.getFolder(ppath.substring(prjName.length()));
 									if (f.exists())
@@ -495,7 +497,7 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 					try {
 						IProject prj = FileUtils.getProject(new NullProgressMonitor());
 						if (prj != null)
-							root = prj.getFolder(sp.getName().replace(" ", "") + "-" + System.currentTimeMillis());
+							root = prj.getFolder(sp.getName().replace(" ", "") + "-" + System.currentTimeMillis()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 					} catch (JavaModelException e1) {
 						UIUtils.showError(e1);
 					} catch (CoreException e1) {
@@ -513,7 +515,7 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 							for (IProject p : ResourcesPlugin.getWorkspace().getRoot().getProjects())
 								if (p.isOpen() && s0.equals(p.getName()))
 									return null;
-							return "Please select a folder from a project";
+							return Messages.ServerProfilePage_37;
 						}
 						return null;
 					}
@@ -576,7 +578,9 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 				ServerInfo si = c.getServerInfo(null);
 				// cversion.getControl().setEnabled(Version.isEstimated(si));
 				bdaterange.setEnabled(!Version.isDateRangeSupported(si));
-			}
+				cstatus.setText(Messages.ServerProfilePage_32);
+			} else
+				cstatus.setText(Messages.ServerProfilePage_33);
 			bUseSoap.setEnabled(!bSSO.getSelection());
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -675,7 +679,7 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 			return;
 		boolean hasPermission = false;
 		for (ClientRole r : sprofile.getWsClient().getServerProfile().getClientUser().getRoleSet())
-			if (r.getName().equals("ROLE_SUPERUSER")) {
+			if (r.getName().equals("ROLE_SUPERUSER")) { //$NON-NLS-1$
 				hasPermission = true;
 				break;
 			}
@@ -683,20 +687,19 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 			return;
 
 		drvtab = new CTabItem(tabFolder, SWT.NONE);
-		drvtab.setText("JDBC Drivers");
+		drvtab.setText(Messages.ServerProfilePage_39);
 
 		Composite cmp = new Composite(tabFolder, SWT.NONE);
 		cmp.setLayout(new GridLayout(2, false));
 
 		Label lbl = new Label(cmp, SWT.NONE | SWT.WRAP);
-		lbl.setText(
-				"You can upload jdbc drivers to the server. Warning, drivers are global on the server, please be careful.");
+		lbl.setText(Messages.ServerProfilePage_40);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.widthHint = 300;
 		gd.horizontalSpan = 2;
 		lbl.setLayoutData(gd);
 
-		new Label(cmp, SWT.NONE).setText("Driver Class Name");
+		new Label(cmp, SWT.NONE).setText(Messages.ServerProfilePage_41);
 		final Text dname = new Text(cmp, SWT.BORDER);
 		dname.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
@@ -711,7 +714,7 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 		cpath.getControl().setLayoutData(gd);
 
 		bUpld = new Button(cmp, SWT.PUSH);
-		bUpld.setText("Upload");
+		bUpld.setText(Messages.ServerProfilePage_42);
 		gd = new GridData(GridData.HORIZONTAL_ALIGN_CENTER);
 		gd.horizontalSpan = 2;
 		bUpld.setLayoutData(gd);
@@ -724,14 +727,14 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 						@Override
 						public void run(IProgressMonitor monitor)
 								throws InvocationTargetException, InterruptedException {
-							monitor.beginTask("Uploading JDBC", IProgressMonitor.UNKNOWN);
+							monitor.beginTask(Messages.ServerProfilePage_43, IProgressMonitor.UNKNOWN);
 							JdbcDriver driver = new JdbcDriver();
 							driver.setClassname(dname.getText());
 							driver.setPaths(cpath.getClasspaths());
 							try {
 								sprofile.getWsClient().uploadJdbcDrivers(driver, monitor);
 
-								UIUtils.showInformation("Drivers uploaded successfully.");
+								UIUtils.showInformation(Messages.ServerProfilePage_44);
 							} catch (Exception e) {
 								UIUtils.showError(e);
 							}
@@ -755,5 +758,15 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 		});
 
 		drvtab.setControl(cmp);
+	}
+
+	protected void closeConnection() {
+		if (refreshing)
+			return;
+		sprofile.setWsClient(null);
+		if (drvtab != null) {
+			drvtab.dispose();
+			showServerInfo();
+		}
 	}
 }

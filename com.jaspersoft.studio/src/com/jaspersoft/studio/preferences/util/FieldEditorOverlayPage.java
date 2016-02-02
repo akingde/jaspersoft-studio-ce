@@ -198,7 +198,7 @@ public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage i
 			resource = (IResource) getElement();
 		else if (getElement() instanceof IFileEditorInput)
 			resource = ((IFileEditorInput) getElement()).getFile();
-		else
+		else if(getElement() != null)
 			resource = (IResource) getElement().getAdapter(IResource.class);
 		return resource;
 	}
