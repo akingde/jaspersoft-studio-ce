@@ -74,7 +74,7 @@ public class ConfigurationManager {
 		String product = Platform.getProduct().getProperty("appName"); //$NON-NLS-1$ 
 		if (configArea != null) {
 			if (Util.isMac()) {
-				path = configArea.getURL().toExternalForm() + "/" + product + ".app/Contents/MacOS/"; //$NON-NLS-1$ //$NON-NLS-2$
+				path = configArea.getURL().toExternalForm() + "/"; //$NON-NLS-1$ //$NON-NLS-2$
 				path = path + product + ".ini"; //$NON-NLS-1$
 			} else
 				path = configArea.getURL().toExternalForm() + product + ".ini"; //$NON-NLS-1$
