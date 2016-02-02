@@ -58,6 +58,8 @@ import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.JRPropertiesHolder;
 import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.JRStyle;
+import net.sf.jasperreports.engine.base.JRBaseLineBox;
+import net.sf.jasperreports.engine.base.JRBasePen;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignElementGroup;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -460,6 +462,14 @@ public class MCell extends MColumn implements IGraphicElement,
 			cachedGraphicalProperties.add(DesignCell.PROPERTY_STYLE);
 			cachedGraphicalProperties.add(DesignCell.PROPERTY_ROW_SPAN);
 			cachedGraphicalProperties.add(DesignCell.PROPERTY_HEIGHT);
+			cachedGraphicalProperties.add(JRBaseLineBox.PROPERTY_BOTTOM_PADDING);
+			cachedGraphicalProperties.add(JRBaseLineBox.PROPERTY_LEFT_PADDING);
+			cachedGraphicalProperties.add(JRBaseLineBox.PROPERTY_PADDING);
+			cachedGraphicalProperties.add(JRBaseLineBox.PROPERTY_RIGHT_PADDING);
+			cachedGraphicalProperties.add(JRBaseLineBox.PROPERTY_TOP_PADDING);
+			cachedGraphicalProperties.add(JRBasePen.PROPERTY_LINE_COLOR);
+			cachedGraphicalProperties.add(JRBasePen.PROPERTY_LINE_STYLE);
+			cachedGraphicalProperties.add(JRBasePen.PROPERTY_LINE_WIDTH);
 		}
 		return cachedGraphicalProperties;
 	}

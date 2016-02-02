@@ -12,14 +12,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.table.model;
 
-import net.sf.jasperreports.components.table.BaseColumn;
-import net.sf.jasperreports.components.table.Cell;
-import net.sf.jasperreports.components.table.StandardBaseColumn;
-import net.sf.jasperreports.components.table.StandardColumn;
-import net.sf.jasperreports.engine.JRConstants;
-import net.sf.jasperreports.engine.design.JRDesignComponentElement;
-import net.sf.jasperreports.engine.design.JRDesignGroup;
-
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Color;
@@ -31,6 +23,13 @@ import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
+
+import net.sf.jasperreports.components.table.BaseColumn;
+import net.sf.jasperreports.components.table.Cell;
+import net.sf.jasperreports.components.table.StandardBaseColumn;
+import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.design.JRDesignComponentElement;
+import net.sf.jasperreports.engine.design.JRDesignGroup;
 
 public class MTableGroupHeader extends AMFooterHeaderCollection {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
@@ -90,7 +89,7 @@ public class MTableGroupHeader extends AMFooterHeaderCollection {
 	public Color getForeground() {
 		for(INode child : getChildren()){
 			if (child.getValue() != null){
-				StandardColumn currentCol = (StandardColumn)child.getValue();
+				StandardBaseColumn currentCol = (StandardBaseColumn)child.getValue();
 				Cell headerCell = currentCol.getGroupHeader(jrDesignGroup.getName());
 				if (headerCell != null) return ColorConstants.black;
 			}

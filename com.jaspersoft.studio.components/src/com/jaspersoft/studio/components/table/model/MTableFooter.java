@@ -12,12 +12,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.table.model;
 
-import net.sf.jasperreports.components.table.BaseColumn;
-import net.sf.jasperreports.components.table.StandardBaseColumn;
-import net.sf.jasperreports.components.table.StandardColumn;
-import net.sf.jasperreports.engine.JRConstants;
-import net.sf.jasperreports.engine.design.JRDesignComponentElement;
-
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Color;
@@ -28,6 +22,11 @@ import com.jaspersoft.studio.components.table.TableNodeIconDescriptor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
+
+import net.sf.jasperreports.components.table.BaseColumn;
+import net.sf.jasperreports.components.table.StandardBaseColumn;
+import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 
 public class MTableFooter extends AMFooterHeaderCollection {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
@@ -83,7 +82,7 @@ public class MTableFooter extends AMFooterHeaderCollection {
 	@Override
 	public Color getForeground() {
 		for(INode child : getChildren()){
-			if (child.getValue() != null && ((StandardColumn)child.getValue()).getTableFooter() != null) return ColorConstants.black;
+			if (child.getValue() != null && ((StandardBaseColumn)child.getValue()).getTableFooter() != null) return ColorConstants.black;
 		}
 		return ColorConstants.gray;
 	}

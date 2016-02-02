@@ -27,7 +27,6 @@ import com.jaspersoft.studio.model.util.IIconDescriptor;
 
 import net.sf.jasperreports.components.table.BaseColumn;
 import net.sf.jasperreports.components.table.StandardBaseColumn;
-import net.sf.jasperreports.components.table.StandardColumn;
 import net.sf.jasperreports.components.table.StandardColumnGroup;
 import net.sf.jasperreports.components.table.StandardTable;
 import net.sf.jasperreports.engine.JRConstants;
@@ -106,7 +105,7 @@ public class MTableHeader extends AMFooterHeaderCollection {
 	@Override
 	public Color getForeground() {
 		for(INode child : getChildren()){
-			if (child.getValue() != null && ((StandardColumn)child.getValue()).getTableHeader() != null) return ColorConstants.black;
+			if (child.getValue() != null && ((StandardBaseColumn)child.getValue()).getTableHeader() != null) return ColorConstants.black;
 		}
 		return ColorConstants.gray;
 	}
