@@ -87,7 +87,7 @@ public class ColumnEditPart extends AbstractGraphicalEditPart {
 						MSelectExpression todel = null;
 						for (INode n : mselect.getChildren()) {
 							if (n instanceof MSelectExpression
-									&& n.getValue().equals("*")) {
+									&& n.getValue().equals("*")) { //$NON-NLS-1$
 								todel = (MSelectExpression) n;
 								break;
 							}
@@ -132,7 +132,7 @@ public class ColumnEditPart extends AbstractGraphicalEditPart {
 					List<ANode> todel = new ArrayList<ANode>();
 					todel.add(mSelCol);
 					if (!DeleteColumn.showConfirmation(designer,
-							Messages.DeleteColumn_0, todel))
+							Messages.ColumnEditPart_1, todel))
 						return;
 
 					if (mSelCol == null) {

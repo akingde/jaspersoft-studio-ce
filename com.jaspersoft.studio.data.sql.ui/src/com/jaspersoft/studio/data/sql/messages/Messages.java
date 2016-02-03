@@ -29,6 +29,7 @@ public class Messages extends NLS {
 	public static String ChangeOperator_0;
 	public static String ChangeOperator_1;
 	public static String ChangeSetOperator_0;
+	public static String ColumnEditPart_1;
 	public static String ColumnsDialog_0;
 	public static String CreateColumn_0;
 	public static String CreateExpression_0;

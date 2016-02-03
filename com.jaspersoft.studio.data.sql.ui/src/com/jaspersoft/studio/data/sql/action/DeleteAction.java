@@ -31,8 +31,7 @@ public class DeleteAction<T extends ANode> extends AMultiSelectionAction {
 	protected Class<T> type;
 	protected SQLQueryDesigner designer;
 
-	public DeleteAction(SQLQueryDesigner designer, TreeViewer treeViewer,
-			String name, Class<T> type) {
+	public DeleteAction(SQLQueryDesigner designer, TreeViewer treeViewer, String name, Class<T> type) {
 		super(Messages.DeleteAction_0 + name, treeViewer);
 		this.name = name;
 		this.type = type;
@@ -53,17 +52,11 @@ public class DeleteAction<T extends ANode> extends AMultiSelectionAction {
 			doDelete(lst);
 	}
 
-	public static boolean showConfirmation(SQLQueryDesigner designer,
-			String name, List<?> lst) {
-		boolean showConf = designer.getjConfig().getPropertyBoolean(
-				SQLEditorPreferencesPage.P_DEL_SHOWCONFIRMATION, false);
-		return !showConf
-				|| UIUtils.showConfirmation(
-						Messages.DeleteAction_1 + name,
-						Messages.DeleteAction_2
-								+ name.toLowerCase()
-								+ (lst.size() == 1 ? "?"
-										: Messages.DeleteAction_3));
+	public static boolean showConfirmation(SQLQueryDesigner designer, String name, List<?> lst) {
+		boolean showConf = designer.getjConfig().getPropertyBoolean(SQLEditorPreferencesPage.P_DEL_SHOWCONFIRMATION,
+				false);
+		return !showConf || UIUtils.showDeleteConfirmation(
+				Messages.DeleteAction_2 + name.toLowerCase() + (lst.size() == 1 ? "?" : Messages.DeleteAction_3));
 	}
 
 	protected boolean isObjectToDelete(Object obj) {
@@ -80,19 +73,16 @@ public class DeleteAction<T extends ANode> extends AMultiSelectionAction {
 			indx = mfrom.getChildren().indexOf(ftbl);
 			toRemove.add(ftbl);
 
-			List<ANode> delMore = doDeleteMore(mfrom,
-					type.isAssignableFrom(ftbl.getClass()) ? ftbl : null);
+			List<ANode> delMore = doDeleteMore(mfrom, type.isAssignableFrom(ftbl.getClass()) ? ftbl : null);
 			if (!Misc.isNullOrEmpty(delMore))
 				toRemove.addAll(delMore);
 		}
 		DeleteObjectCommand c = new DeleteObjectCommand(toRemove);
-		designer.getDiagram().getViewer().getEditDomain().getCommandStack()
-				.execute(c);
+		designer.getDiagram().getViewer().getEditDomain().getCommandStack().execute(c);
 
 		ANode toSelect = mfrom;
 		if (indx - 1 > 0 && !mfrom.getChildren().isEmpty())
-			toSelect = (ANode) mfrom.getChildren().get(
-					Math.min(mfrom.getChildren().size() - 1, indx));
+			toSelect = (ANode) mfrom.getChildren().get(Math.min(mfrom.getChildren().size() - 1, indx));
 		if (toSelect != null)
 			selectInTree(toSelect);
 		designer.refreshQueryText();
