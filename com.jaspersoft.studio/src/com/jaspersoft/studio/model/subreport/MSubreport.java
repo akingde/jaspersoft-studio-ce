@@ -225,6 +225,8 @@ public class MSubreport extends MGraphicElement {
 		JRDesignSubreport jrElement = (JRDesignSubreport) getValue();
 		if (id.equals(JRBaseSubreport.PROPERTY_RUN_TO_BOTTOM))
 			jrElement.setRunToBottom((Boolean) value);
+		if (id.equals(JRBaseSubreport.PROPERTY_USING_CACHE))
+			jrElement.setUsingCache((Boolean)value);
 		else if (id.equals(JRBaseSubreport.PROPERTY_OVERFLOW_TYPE))
 			jrElement.setOverflowType(overflowTypeD.getEnumValue(value));
 		else if (id.equals(JRBaseSubreport.PROPERTY_RUN_TO_BOTTOM))
