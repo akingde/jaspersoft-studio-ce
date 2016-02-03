@@ -81,7 +81,9 @@ public class PasteResourceAction extends Action {
 		if (res && contents != null && contents instanceof List<?>) {
 			List<?> list = (List<?>) contents;
 			res = false;
-			for (Object obj : list)
+			for (Object obj : list) {
+				if (obj instanceof AMResource && AddResourceAction.isSpecialFolder((AMResource) obj))
+					return false;
 				if (obj instanceof AMResource && obj instanceof ICopyable) {
 					if (!isSameServer(parent, (AMResource) obj) && (obj instanceof IInputControlsContainer
 							|| obj instanceof MFolder || obj instanceof AMRDatasource || obj instanceof MReference
@@ -98,12 +100,15 @@ public class PasteResourceAction extends Action {
 						break;
 					}
 				}
+			}
 			return true;
 		}
 		if (contents == null)
 			return false;
 		if (res) {
 			Object firstElement = ((TreeSelection) treeViewer.getSelection()).getFirstElement();
+			if (firstElement instanceof AMResource && AddResourceAction.isSpecialFolder((AMResource) firstElement))
+				return false;
 			res = firstElement != null;
 			if (res) {
 				if (firstElement instanceof AMResource) {
