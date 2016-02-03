@@ -66,6 +66,7 @@ public class GMapCenterDialog extends Dialog {
 
 			@Override
 			protected void handleMapCenterChanged(LatLng position) {
+				super.handleMapCenterChanged(position);
 				setMapCenter(position);
 			}
 
