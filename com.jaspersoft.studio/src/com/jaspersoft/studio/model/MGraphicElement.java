@@ -73,6 +73,7 @@ import net.sf.jasperreports.engine.design.JRDesignGraphicElement;
 import net.sf.jasperreports.engine.design.JRDesignPropertyExpression;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.design.events.JRChangeEventsSupport;
 import net.sf.jasperreports.engine.type.ModeEnum;
 import net.sf.jasperreports.engine.type.PositionTypeEnum;
 import net.sf.jasperreports.engine.type.StretchTypeEnum;
@@ -868,9 +869,14 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 			if (value) {
 				ANode parent = getParent();
 				while (parent != null) {
-					if (parent instanceof IGraphicalPropertiesHandler) {
-						IGraphicalPropertiesHandler handler = (IGraphicalPropertiesHandler) parent;
-						handler.setChangedProperty(true);
+					if (parent.getValue() != null && parent.getValue() instanceof JRChangeEventsSupport) {
+						//We can't  set the property on the element directly because even if it follow the hierarchy 
+						//there will be problem with elements inside the subeditors. Firing an event on the jr object 
+						//instead will end to propagate the update to every model binded to the jr object
+						JRChangeEventsSupport parentEvents = (JRChangeEventsSupport)parent.getValue();
+						parentEvents.getEventSupport().firePropertyChange(MGraphicElement.FORCE_GRAPHICAL_REFRESH, null, null);
+						//IGraphicalPropertiesHandler handler = (IGraphicalPropertiesHandler) parent;
+						//handler.setChangedProperty(true);
 						// We can exit the cycle since the setChangedProperty on the parent will propagate the
 						// refresh on the upper levels
 						break;
