@@ -12,13 +12,13 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.table.properties;
 
-import net.sf.jasperreports.components.table.DesignCell;
-
 import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
+
+import net.sf.jasperreports.components.table.DesignCell;
 
 public class TableCellSection extends AbstractSection {
 	@Override

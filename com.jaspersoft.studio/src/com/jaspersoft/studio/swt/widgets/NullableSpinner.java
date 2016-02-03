@@ -144,7 +144,11 @@ public class NullableSpinner extends Composite {
 				
 				//draw the arrows
 				
-				gc.setBackground(ColorConstants.black);
+				if (isEnabled()) {
+					gc.setBackground(ColorConstants.black);
+				}	else {
+					gc.setBackground(ColorConstants.lightGray);
+				}
 				int arrowHeight = 3;
 				int arrowWidth = 3;
 				int heightSpan = (middleButtonHeight - arrowHeight) / 2;
@@ -679,6 +683,7 @@ public class NullableSpinner extends Composite {
 		super.setEnabled(enabled);
 		text.setEnabled(enabled);
 		buttonContainer.setEnabled(enabled);
+		redraw();
 	}
 
 	/**
@@ -850,5 +855,16 @@ public class NullableSpinner extends Composite {
 	 */
 	public void setSelection(int start, int end){
 		text.setSelection(start, end);
+	}
+	
+	/**
+	 * Set the default value. The default value is shown when the current
+	 * value is null, and it is shown into a different font. A default value
+	 * is not returned by the method getValue
+	 * 
+	 * @param value the new default value, or null if there are no default values
+	 */
+	public void setDefaultValue(Number value){
+		text.setDefaultValue(value);
 	}
 }

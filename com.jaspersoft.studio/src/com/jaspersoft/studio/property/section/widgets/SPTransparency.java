@@ -76,21 +76,30 @@ public class SPTransparency extends SPNumber {
 	protected void changeValue(){
 		Number newValue = getValue();
 		if (newValue != null) newValue = newValue.floatValue() / 100f;
-		section.changeProperty(pDescriptor.getId(), newValue);
-		setData(section.getElement(), newValue);
+		boolean valueChanged = section.changeProperty(pDescriptor.getId(), newValue);
+		if (valueChanged){
+			setData(section.getElement(), section.getElement().getPropertyActualValue(pDescriptor.getId()), newValue);
+		}
 	}
 
 	@Override
-	public void setDataNumber(Number f, boolean isInherited) {
+	public void setDataNumber(Number resolvedNumber, Number ownNumber) {
 		//remove the listener to avoid the setSelection trigger it another time
 		scale.removeSelectionListener(transparencyChangeListener);
-		if (f != null) {
-			int alfa = Math.round(100 * f.floatValue());
-			super.setDataNumber(100 * f.floatValue(), isInherited);
-			scale.setSelection(alfa);
-		} else { 
+		Integer ownAlfa = null;
+		if (ownNumber != null){
+			ownAlfa = Math.round(100 * ownNumber.floatValue());
+		}
+		if (resolvedNumber != null) {
+			int resolvedAlfa = Math.round(100 * resolvedNumber.floatValue());
+			super.setDataNumber(resolvedAlfa, ownAlfa);
+			scale.setSelection(resolvedAlfa);
+		} else if (ownNumber != null){ 
+			super.setDataNumber(null, ownAlfa);
+			scale.setSelection(ownAlfa);
+		} else {
 			scale.setSelection(0);
-			super.setDataNumber(null, isInherited);
+			super.setDataNumber(null, null);
 		}
 		scale.addSelectionListener(transparencyChangeListener);
 	}

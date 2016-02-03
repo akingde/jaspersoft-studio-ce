@@ -67,12 +67,19 @@ public class SPDegree extends SPNumber {
 	}
 
 	@Override
-	public void setDataNumber(Number f, boolean isInherited) {
-		super.setDataNumber(f, isInherited);
+	public void setDataNumber(Number resolvedNumber, Number ownNumber) {
+		super.setDataNumber(resolvedNumber, ownNumber);
 		//remove the listener to avoid the setSelection trigger it another time
 		angleSlider.removeSelectionListener(degreeSelectionListener);
-		if (f != null) {
-			int degree = Math.abs(f.intValue());
+		
+		if (resolvedNumber != null) {
+			int degree = Math.abs(resolvedNumber.intValue());
+			if (degree > 360){
+				degree = BigDecimal.valueOf(degree).remainder(BigDecimal.valueOf(360)).intValue();
+			}
+			angleSlider.setSelection(degree);
+		} else if (ownNumber !=null){
+			int degree = Math.abs(ownNumber.intValue());
 			if (degree > 360){
 				degree = BigDecimal.valueOf(degree).remainder(BigDecimal.valueOf(360)).intValue();
 			}

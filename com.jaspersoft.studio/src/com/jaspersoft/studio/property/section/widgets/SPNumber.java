@@ -99,8 +99,10 @@ public class SPNumber extends AHistorySPropertyWidget<IPropertyDescriptor> {
 	
 	protected void changeValue(){
 		Number newValue = getValue();
-		section.changeProperty(pDescriptor.getId(), newValue);
-		setData(section.getElement(), newValue);
+		boolean valueChanged = section.changeProperty(pDescriptor.getId(), newValue);
+		if (valueChanged){
+			setData(section.getElement(), section.getElement().getPropertyActualValue(pDescriptor.getId()), newValue);
+		}
 	}
 	
 	protected Number getValue(){
@@ -131,7 +133,7 @@ public class SPNumber extends AHistorySPropertyWidget<IPropertyDescriptor> {
 	}
 
 	public void setData(APropertyNode pnode, Object b) {
-		setData(pnode, b, false); 
+		setData(pnode, b, b); 
 	}
 
 	/**
@@ -139,17 +141,26 @@ public class SPNumber extends AHistorySPropertyWidget<IPropertyDescriptor> {
 	 * values
 	 */
 	@Override
-	public void setData(APropertyNode pnode, Object b, boolean isInherited) {
+	public void setData(APropertyNode pnode, Object resolvedValue, Object elementValue) {
 		ftext.setEnabled(pnode.isEditable());
-		Number n = (Number) b;
-		setDataNumber(n, isInherited);
+		Number resolvedNumber = (Number) resolvedValue;
+		Number ownNumber = (Number)elementValue;
+		setDataNumber(resolvedNumber, ownNumber);
 	}
 	
-	public void setDataNumber(Number f, boolean isInherited) {
-		if (f != null) {
+	public void setDataNumber(Number resolvedNumber, Number ownNumber) {
+		if (resolvedNumber != null) {
 			int oldpos = ftext.getCaretPosition();
-			ftext.setInherited(isInherited);
-			ftext.setValue(f);
+			if (ownNumber == null) {
+				ftext.setDefaultValue(resolvedNumber);
+			}
+			ftext.setValue(ownNumber);
+			if (ftext.getText().length() >= oldpos){
+				ftext.setSelection(oldpos, oldpos);
+			}
+		} else if (ownNumber != null){
+			int oldpos = ftext.getCaretPosition();
+			ftext.setValue(ownNumber);
 			if (ftext.getText().length() >= oldpos){
 				ftext.setSelection(oldpos, oldpos);
 			}

@@ -43,7 +43,7 @@ public class SPBoolean<T extends IPropertyDescriptor> extends ASPropertyWidget<T
 		cmb3Bool.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				section.changeProperty(pDescriptor.getId(), cmb3Bool.getSelection());
+				checkboxSelected();
 			}
 		});
 		cmb3Bool.setToolTipText(pDescriptor.getDescription());
@@ -52,5 +52,9 @@ public class SPBoolean<T extends IPropertyDescriptor> extends ASPropertyWidget<T
 	public void setData(APropertyNode pnode, Object b) {
 		cmb3Bool.setEnabled(pnode.isEditable());
 		cmb3Bool.setSelection(b != null ? (Boolean) b : false);
+	}
+	
+	protected void checkboxSelected(){
+		section.changeProperty(pDescriptor.getId(), cmb3Bool.getSelection());
 	}
 }

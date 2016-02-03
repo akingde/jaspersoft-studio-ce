@@ -92,6 +92,17 @@ public class NumericText extends Text {
 	private int increamentStep = 1;
 	
 	/**
+	 * Flag used to avoid to fire the listener when the focus is lost but the value
+	 * was not modified
+	 */
+	private boolean changedAfterFocus = false;
+	
+	/**
+	 * The default value shown in the text area when the value is null
+	 */
+	private Number defaultValue = null;
+	
+	/**
 	 * Verify listener used to check if the typed value is valid or not
 	 */
 	private VerifyListener inputVerifier = new VerifyListener() {
@@ -110,6 +121,8 @@ public class NumericText extends Text {
 		@Override
 		public void modifyText(ModifyEvent e) {
 			fireListeners();
+			//open the flag to fire the listeners
+			changedAfterFocus = true;
 		}
 	};
 	
@@ -153,8 +166,20 @@ public class NumericText extends Text {
 		addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(final FocusEvent e) {
+				//The set value on focus lost is done always to avoid
+				//the mac text reset bug
 				setValue(storedValue, true);
-				fireListeners();
+				if (changedAfterFocus){
+					//The listener are fired instead only if the value changed
+					//after the focus gain
+					fireListeners();
+				}
+				changedAfterFocus = false;
+			}
+			
+			@Override
+			public void focusGained(FocusEvent e) {
+				changedAfterFocus = false;
 			}
 		});
 		
@@ -267,8 +292,19 @@ public class NumericText extends Text {
 	 * 
 	 */
 	public void setValue(Number selection) {
-		if (!hasSameValue(selection, storedValue)){
-			setValue(selection, true);
+		if (selection != null){
+			setInherited(false);
+			if (!hasSameValue(selection, storedValue)){
+				setValue(selection, true);
+			}
+		} else if (defaultValue != null){
+			setInherited(true);
+			if (!hasSameValue(defaultValue, storedValue)){
+				setValue(null, true);
+			}
+		} else if (storedValue != null){
+			setInherited(false);
+			setValue(null, false);
 		}
 	}
 	
@@ -302,7 +338,15 @@ public class NumericText extends Text {
 		} else {
 			if (isNullable){
 				storedValue = null;
-				setText("");
+				if (defaultValue != null){
+					if (formatText) {
+						setText(formatter.format(defaultValue));
+					} else {
+						setText(defaultValue.toString());
+					}
+				} else {
+					setText("");
+				}
 				selectAll();
 				setFocus();
 			} else {
@@ -450,7 +494,10 @@ public class NumericText extends Text {
 		if (storedValue == null){
 			//if the minimum is < 0 start from zero as default
 			double defaultMin = 0;
-			if (minimum > 0) defaultMin = minimum;
+			if (defaultValue != null){
+				defaultMin = defaultValue.intValue();
+			}
+			if (minimum > defaultMin) defaultMin = minimum;
 			storedValue = new Double(defaultMin);
 		}
 		double newValue = storedValue.doubleValue() + increamentStep;
@@ -466,7 +513,10 @@ public class NumericText extends Text {
 		if (storedValue == null){
 			//if the minimum is < 0 start from zero as default
 			double defaultMin = 0;
-			if (minimum > 0) defaultMin = minimum;
+			if (defaultValue != null){
+				defaultMin = defaultValue.intValue();
+			}
+			if (minimum > defaultMin) defaultMin = minimum;
 			storedValue = new Double(defaultMin);
 			setValue(storedValue, true);
 		} else {
@@ -556,5 +606,16 @@ public class NumericText extends Text {
 		for (final SelectionListener s : selectionListeners) {
 			s.widgetSelected(selectionEvent);
 		}
+	}
+	
+	/**
+	 * Set the default value. The default value is shown when the current
+	 * value is null, and it is shown into a different font. A default value
+	 * is not returned by the method getValue
+	 * 
+	 * @param value the new default value, or null if there are no default values
+	 */
+	public void setDefaultValue(Number value){
+		this.defaultValue = value;
 	}
 }

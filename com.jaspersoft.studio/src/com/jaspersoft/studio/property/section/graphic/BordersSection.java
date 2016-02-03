@@ -33,7 +33,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
@@ -114,22 +113,22 @@ public class BordersSection extends AbstractSection {
 	/**
 	 * Spinner for the left padding or for the general padding when the checkbox is selected
 	 */
-	private Spinner paddingLeft;
+	private NullableSpinner paddingLeft;
 
 	/**
 	 * Spinner for the right padding
 	 */
-	private Spinner paddingRight;
+	private NullableSpinner paddingRight;
 
 	/**
 	 * Spinner for the bottom padding
 	 */
-	private Spinner paddingBottom;
+	private NullableSpinner paddingBottom;
 
 	/**
 	 * Spinner for the top padding
 	 */
-	private Spinner paddingTop;
+	private NullableSpinner paddingTop;
 
 	/**
 	 * Border figure rectangle
@@ -261,7 +260,16 @@ public class BordersSection extends AbstractSection {
 			paddingRight.setEnabled(false);
 			paddingTop.setEnabled(false);
 			paddingBottom.setEnabled(false);
+			paddingRight.setDefaultValue(null);
+			paddingTop.setDefaultValue(null);
+			paddingBottom.setDefaultValue(null);
+			paddingRight.setValue(null);
+			paddingTop.setValue(null);
+			paddingBottom.setValue(null);
 		} else {
+			paddingRight.setDefaultValue(0);
+			paddingTop.setDefaultValue(0);
+			paddingBottom.setDefaultValue(0);
 			paddingRight.setEnabled(true);
 			paddingTop.setEnabled(true);
 			paddingBottom.setEnabled(true);
@@ -281,9 +289,16 @@ public class BordersSection extends AbstractSection {
 				cc.setReferenceNodeIfNull(m);
 				Command c = null;
 				MLineBox lb = (MLineBox) m.getPropertyValue(MGraphicElementLineBox.LINE_BOX);
-				c = getChangePropertyCommand(JRBaseLineBox.PROPERTY_PADDING, new Integer(paddingLeft.getSelection()), lb);
-				if (c != null)
-					cc.add(c);
+				c = getChangePropertyCommand(JRBaseLineBox.PROPERTY_PADDING, new Integer(paddingLeft.getValueAsInteger()), lb);
+				if (c != null) cc.add(c);
+				c = getChangePropertyCommand(JRBaseLineBox.PROPERTY_BOTTOM_PADDING, null, lb);
+				if (c != null) cc.add(c);
+				c = getChangePropertyCommand(JRBaseLineBox.PROPERTY_TOP_PADDING, null, lb);
+				if (c != null) cc.add(c);
+				c = getChangePropertyCommand(JRBaseLineBox.PROPERTY_LEFT_PADDING, null, lb);
+				if (c != null) cc.add(c);
+				c = getChangePropertyCommand(JRBaseLineBox.PROPERTY_RIGHT_PADDING, null, lb);
+				if (c != null) cc.add(c);
 			}
 		} else {
 			// The box was deselected so i need to set immediately the padding for all to null
@@ -291,13 +306,24 @@ public class BordersSection extends AbstractSection {
 				cc.setReferenceNodeIfNull(m);
 				Command c = null;
 				MLineBox lb = (MLineBox) m.getPropertyValue(MGraphicElementLineBox.LINE_BOX);
+				Integer oldValue = getPaddingValue(lb.getPropertyValue(JRBaseLineBox.PROPERTY_PADDING));
 				c = getChangePropertyCommand(JRBaseLineBox.PROPERTY_PADDING, null, lb);
-				if (c != null)
-					cc.add(c);
+				if (c != null) cc.add(c);
+				
+				c = getChangePropertyCommand(JRBaseLineBox.PROPERTY_BOTTOM_PADDING, oldValue, lb);
+				if (c != null) cc.add(c);
+				c = getChangePropertyCommand(JRBaseLineBox.PROPERTY_TOP_PADDING, oldValue, lb);
+				if (c != null) cc.add(c);
+				c = getChangePropertyCommand(JRBaseLineBox.PROPERTY_RIGHT_PADDING, oldValue, lb);
+				if (c != null) cc.add(c);
+				c = getChangePropertyCommand(JRBaseLineBox.PROPERTY_LEFT_PADDING, oldValue, lb);
+				if (c != null) cc.add(c);
 			}
 		}
 		CommandStack cs = getEditDomain().getCommandStack();
 		cs.execute(cc);
+		refresh();
+		paddingLeft.forceFocus();
 	}
 
 	/**
@@ -329,49 +355,57 @@ public class BordersSection extends AbstractSection {
 
 		getWidgetFactory().createCLabel(composite, Messages.BordersSection_Left_Label, SWT.RIGHT);
 
-		paddingLeft = new Spinner(composite, SWT.BORDER | SWT.FLAT);
-		paddingLeft.setValues(0, 0, Integer.MAX_VALUE, 0, 1, 10);
+		paddingLeft = new NullableSpinner(composite, SWT.BORDER);
+		paddingLeft.setDefaultValue(0);
+		paddingLeft.setValues(0, 0, 999);
 		paddingLeft.setToolTipText(Messages.BordersSection_padding_tool_tip);
 		HelpSystem.setHelp(paddingLeft, PADDING_LEFT);
 		paddingLeft.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				changePropertyPadding(JRBaseLineBox.PROPERTY_LEFT_PADDING, new Integer(paddingLeft.getSelection()));
+				changePropertyPadding(JRBaseLineBox.PROPERTY_LEFT_PADDING, paddingLeft.getValueAsInteger());
+				paddingLeft.setInherited(paddingLeft.getValueAsInteger() == null);
 			}
 		});
 
 		getWidgetFactory().createCLabel(composite, Messages.common_right, SWT.RIGHT);
 
-		paddingRight = new Spinner(composite, SWT.BORDER | SWT.FLAT);
-		paddingRight.setValues(0, 0, Integer.MAX_VALUE, 0, 1, 10);
+		paddingRight = new NullableSpinner(composite, SWT.BORDER);
+		paddingRight.setDefaultValue(0);
+		paddingRight.setValues(0, 0, 999);
 		paddingRight.setToolTipText(Messages.BordersSection_padding_tool_tip);
 		HelpSystem.setHelp(paddingRight, PADDING_RIGHT);
 		paddingRight.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				changePropertyPadding(JRBaseLineBox.PROPERTY_RIGHT_PADDING, new Integer(paddingRight.getSelection()));
+				changePropertyPadding(JRBaseLineBox.PROPERTY_RIGHT_PADDING, paddingRight.getValueAsInteger());
+				paddingRight.setInherited(paddingRight.getValueAsInteger() == null);
 			}
 		});
 
 		getWidgetFactory().createCLabel(composite, Messages.BordersSection_Top_Label, SWT.RIGHT);
 
-		paddingTop = new Spinner(composite, SWT.BORDER | SWT.FLAT);
-		paddingTop.setValues(0, 0, Integer.MAX_VALUE, 0, 1, 10);
+		paddingTop = new NullableSpinner(composite, SWT.BORDER);
+		paddingTop.setDefaultValue(0);
+		paddingTop.setValues(0, 0, 999);
 		paddingTop.setToolTipText(Messages.BordersSection_padding_tool_tip);
 		HelpSystem.setHelp(paddingTop, PADDING_TOP);
 		paddingTop.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				changePropertyPadding(JRBaseLineBox.PROPERTY_TOP_PADDING, new Integer(paddingTop.getSelection()));
+				changePropertyPadding(JRBaseLineBox.PROPERTY_TOP_PADDING, paddingTop.getValueAsInteger());
+				paddingTop.setInherited(paddingTop.getValueAsInteger() == null);
 			}
 		});
 
 		getWidgetFactory().createCLabel(composite, Messages.common_bottom, SWT.RIGHT);
 
-		paddingBottom = new Spinner(composite, SWT.BORDER | SWT.FLAT);
-		paddingBottom.setValues(0, 0, Integer.MAX_VALUE, 0, 1, 10);
+		paddingBottom = new NullableSpinner(composite, SWT.BORDER);
+		paddingBottom.setDefaultValue(0);
+		paddingBottom.setValues(0, 0, 999);
 		paddingBottom.setToolTipText(Messages.BordersSection_padding_tool_tip);
 		HelpSystem.setHelp(paddingBottom, PADDING_BOTTOM);
 		paddingBottom.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				changePropertyPadding(JRBaseLineBox.PROPERTY_BOTTOM_PADDING, new Integer(paddingBottom.getSelection()));
+				changePropertyPadding(JRBaseLineBox.PROPERTY_BOTTOM_PADDING, paddingBottom.getValueAsInteger());
+				paddingBottom.setInherited(paddingBottom.getValueAsInteger() == null);
 			}
 		});
 	}
@@ -399,16 +433,18 @@ public class BordersSection extends AbstractSection {
 		getWidgetFactory().createCLabel(composite, Messages.common_pen_width + ":", SWT.RIGHT); //$NON-NLS-1$
 
 		lineWidth = new NullableSpinner(composite, SWT.BORDER | SWT.CENTER, 2, 6);
+		lineWidth.setDefaultValue(0f);
 		GridData lineWidthData = new GridData();
 		lineWidthData.widthHint = 50 ;
 		lineWidth.setLayoutData(lineWidthData);
-		lineWidth.setValues(null, 0, 500);
+		lineWidth.setValues(null, 0, 999);
 		lineWidth.setNullable(true);
 		lineWidth.setToolTipText(Messages.BordersSection_width_tool_tip);
 		HelpSystem.setHelp(lineWidth, LINE_WIDTH);
 		lineWidth.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				changeProperty(JRBasePen.PROPERTY_LINE_WIDTH, lineWidth.getValueAsFloat());
+				lineWidth.setInherited(lineWidth.getValueAsFloat() == null);
 			}
 		});
 
@@ -428,6 +464,11 @@ public class BordersSection extends AbstractSection {
 			@Override
 			public void propertyChange(AbstractSection section, String property, Object value) {
 				((BordersSection) section).changeProperty(property, value);
+				Float beforeSelectionWidth = lineWidth.getValueAsFloat();
+				if (beforeSelectionWidth == null || beforeSelectionWidth.equals(0f)){
+					changeProperty(JRBasePen.PROPERTY_LINE_WIDTH, 1f);	
+					refresh();
+				}
 			}
 		};
 		lineStyle.setData(1);
@@ -469,16 +510,20 @@ public class BordersSection extends AbstractSection {
 		allBorder = new ToolItem(toolBar, SWT.PUSH);
 		allBorder.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
+				Float beforeSelectionWidth = lineWidth.getValueAsFloat();
+				if (beforeSelectionWidth == null || beforeSelectionWidth.equals(0f)){
+					beforeSelectionWidth = 1f;
+				}
 				bd.setBorderSelected(Location.LEFT);
 				bd.setBorderSelected(Location.RIGHT);
 				bd.setBorderSelected(Location.TOP);
 				bd.setBorderSelected(Location.BOTTOM);
-				Float newValue = lineWidth.getValueAsFloat();
 				AlfaRGB color = lineColor.getColor();
 				Object style = lineStyle.getSelectedValue();
 				changeProperty(JRBasePen.PROPERTY_LINE_STYLE, style);
 				changeProperty(JRBasePen.PROPERTY_LINE_COLOR, color);
-				changeProperty(JRBasePen.PROPERTY_LINE_WIDTH, newValue);
+				changeProperty(JRBasePen.PROPERTY_LINE_WIDTH, beforeSelectionWidth);
+				lineWidth.setValue(beforeSelectionWidth);
 				bd.unselectAll();
 			}
 		});
@@ -491,6 +536,9 @@ public class BordersSection extends AbstractSection {
 				AlfaRGB beforeSelectionColor = lineColor.getColor();
 				Float beforeSelectionWidth = lineWidth.getValueAsFloat();
 				Object beforeSelectionStyle = lineStyle.getSelectedValue();
+				if (beforeSelectionWidth == null || beforeSelectionWidth.equals(0f)){
+					beforeSelectionWidth = 1f;
+				}
 				bd.setBorderSelected(Location.LEFT, false);
 				bd.setBorderSelected(Location.RIGHT, false);
 				bd.setBorderSelected(Location.TOP);
@@ -519,8 +567,11 @@ public class BordersSection extends AbstractSection {
 		upDownBorder.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				AlfaRGB beforeSelectionColor = lineColor.getColor();
-				Float beforeSelectionWidth = lineWidth.getValueAsFloat();
 				Object beforeSelectionStyle = lineStyle.getSelectedValue();
+				Float beforeSelectionWidth = lineWidth.getValueAsFloat();
+				if (beforeSelectionWidth == null || beforeSelectionWidth.equals(0f)){
+					beforeSelectionWidth = 1f;
+				}
 				bd.setBorderSelected(Location.LEFT);
 				bd.setBorderSelected(Location.RIGHT);
 				bd.setBorderSelected(Location.TOP, false);
@@ -533,7 +584,7 @@ public class BordersSection extends AbstractSection {
 				bd.setBorderSelected(Location.RIGHT, false);
 				bd.setBorderSelected(Location.TOP);
 				bd.setBorderSelected(Location.BOTTOM);
-				;
+				
 				changeProperty(JRBasePen.PROPERTY_LINE_STYLE, beforeSelectionStyle);
 				changeProperty(JRBasePen.PROPERTY_LINE_COLOR, beforeSelectionColor);
 				changeProperty(JRBasePen.PROPERTY_LINE_WIDTH, beforeSelectionWidth);
@@ -669,7 +720,7 @@ public class BordersSection extends AbstractSection {
 					refreshLinePen(pen);
 				} else {
 					lineColor.setColor(AlfaRGB.getFullyOpaque(new RGB(0, 0, 0)));
-					lineWidth.setValues(null, 0, 500);
+					lineWidth.setValues(null, 0, 999);
 					lineStyle.setData(1);
 				}
 			}
@@ -733,10 +784,14 @@ public class BordersSection extends AbstractSection {
 		APropertyNode m = getElement();
 		if (m != null) {
 			MLineBox lb = (MLineBox) m.getPropertyActualValue(MGraphicElementLineBox.LINE_BOX);
-			refreshPadding(lb);
 			bd.unselectAll();
 			updateRightPanel();
-			enableControls(m.isEditable());
+			if (!m.isEditable()){ 
+				enableControls(false);
+			} else {
+				enableControls(true);
+				refreshPadding(lb);
+			}
 		}
 		if (square != null)
 			square.redraw();
@@ -774,20 +829,28 @@ public class BordersSection extends AbstractSection {
 	 */
 	public void refreshPadding(MLineBox lb) {
 		if (lb != null) {
+			paddingBottom.setValue(null);
+			paddingLeft.setValue(null);
+			paddingRight.setValue(null);
+			paddingTop.setValue(null);
 			Object propertyPadding = lb.getPropertyValue(JRBaseLineBox.PROPERTY_PADDING);
 			if (propertyPadding != null) {
 				checkBoxPadding.setSelection(true);
 				Integer value = (Integer) propertyPadding;
-				paddingTop.setSelection(value);
-				paddingBottom.setSelection(value);
-				paddingLeft.setSelection(value);
-				paddingRight.setSelection(value);
+				//paddingTop.setValue(value);
+				//paddingBottom.setValue(value);
+				paddingLeft.setValue(value);
+				//paddingRight.setValue(value);
 			} else {
 				checkBoxPadding.setSelection(false);
-				paddingTop.setSelection(getPaddingValue(lb.getPropertyValue(JRBaseLineBox.PROPERTY_TOP_PADDING)));
-				paddingBottom.setSelection(getPaddingValue(lb.getPropertyValue(JRBaseLineBox.PROPERTY_BOTTOM_PADDING)));
-				paddingLeft.setSelection(getPaddingValue(lb.getPropertyValue(JRBaseLineBox.PROPERTY_LEFT_PADDING)));
-				paddingRight.setSelection(getPaddingValue(lb.getPropertyValue(JRBaseLineBox.PROPERTY_RIGHT_PADDING)));
+				paddingTop.setValue(getPaddingValue(lb.getPropertyActualValue(JRBaseLineBox.PROPERTY_TOP_PADDING)));
+				paddingBottom.setValue(getPaddingValue(lb.getPropertyActualValue(JRBaseLineBox.PROPERTY_BOTTOM_PADDING)));
+				paddingLeft.setValue(getPaddingValue(lb.getPropertyActualValue(JRBaseLineBox.PROPERTY_LEFT_PADDING)));
+				paddingRight.setValue(getPaddingValue(lb.getPropertyActualValue(JRBaseLineBox.PROPERTY_RIGHT_PADDING)));
+				paddingTop.setInherited(lb.getPropertyValue(JRBaseLineBox.PROPERTY_TOP_PADDING) == null);
+				paddingBottom.setInherited(lb.getPropertyValue(JRBaseLineBox.PROPERTY_BOTTOM_PADDING) == null);
+				paddingLeft.setInherited(lb.getPropertyValue(JRBaseLineBox.PROPERTY_LEFT_PADDING) == null);
+				paddingRight.setInherited(lb.getPropertyValue(JRBaseLineBox.PROPERTY_RIGHT_PADDING) == null);
 			}
 			checkBoxValueChange();
 		}
@@ -828,11 +891,11 @@ public class BordersSection extends AbstractSection {
 			// Set the border data only if it is visible
 			if (lineWidth != null && !lineWidth.isDisposed()) {
 				if (width == null) {
-					lineWidth.setValues(null, 0, 500);
+					lineWidth.setValues(null, 0, 999);
 				} else {
 					lineWidth.setValue(width);
-					lineWidth.setInherited(pen.getLineWidth() != pen.getOwnLineWidth());
 				}
+				lineWidth.setInherited(pen.getOwnLineWidth() == null);
 			}
 
 			if (lineStyle != null && !isDisposed()) {

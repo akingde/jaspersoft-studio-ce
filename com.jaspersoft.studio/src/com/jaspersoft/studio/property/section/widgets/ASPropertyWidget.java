@@ -80,9 +80,15 @@ public abstract class ASPropertyWidget<T extends IPropertyDescriptor> implements
 	 * Set the data of the widget with a flag also indicating if the set 
 	 * value is inherited or not. If not reimplemented this is the same of setData with
 	 * two parameters
+	 * 
+	 * @param pnode the current node
+	 * @param resolvedValue the current value of the property used by the node, resolved by JR
+	 * @param elementValue the value of the property own by the elements, when this is different
+	 * from null probably it will be the same of the resolvedValue, otherwise if this is null then 
+	 * the resolvedValue was inherited
 	 */
-	public void setData(APropertyNode pnode, Object b, boolean isInherited) {
-		setData(pnode, b);
+	public void setData(APropertyNode pnode, Object resolvedValue, Object elementValue) {
+		setData(pnode, resolvedValue);
 	}
 
 	public String getId() {

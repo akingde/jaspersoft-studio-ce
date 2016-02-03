@@ -212,8 +212,7 @@ public class MBarPlot extends MChartPlot {
 			return Colors.getSWTRGB4AWTGBColor(jrElement.getValueAxisTickLabelColor());
 		if (id.equals(JRDesignBarPlot.PROPERTY_VALUE_AXIS_LINE_COLOR))
 			return Colors.getSWTRGB4AWTGBColor(jrElement.getValueAxisLineColor());
-		else
-			return super.getPropertyActualValue(id);
+		return super.getPropertyActualValue(id);
 	};
 
 	/*
