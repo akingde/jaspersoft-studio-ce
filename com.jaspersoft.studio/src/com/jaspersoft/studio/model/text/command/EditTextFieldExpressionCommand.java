@@ -78,6 +78,10 @@ public class EditTextFieldExpressionCommand extends Command {
 		return Window.CANCEL;
 	}
 	
+	public boolean canRedo() {
+		return isExpressionChanged;
+	}
+	
 	@Override
 	public boolean canUndo() {
 		// we can not simply rely on the original and new expression
