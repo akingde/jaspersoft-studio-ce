@@ -45,15 +45,22 @@ public class DeleteButton {
 			Object selement = null;
 			if (!s.isEmpty()) {
 				List<?> inlist = (List<?>) tableViewer.getInput();
-				for (Object obj : s.toArray()) {
-					if (!confirmDelete(obj))
-						continue;
-					int ind = inlist.indexOf(obj);
-					inlist.remove(obj);
-					afterElementDeleted(obj);
-					if (ind < inlist.size()) {
-						selement = inlist.get(ind);
+				boolean c = confirm;
+				try {
+					for (Object obj : s.toArray()) {
+						boolean confirmDelete = confirmDelete(obj);
+						confirm = false;
+						if (!confirmDelete)
+							continue;
+						int ind = inlist.indexOf(obj);
+						inlist.remove(obj);
+						afterElementDeleted(obj);
+						if (ind < inlist.size()) {
+							selement = inlist.get(ind);
+						}
 					}
+				} finally {
+					confirm = c;
 				}
 				tableViewer.refresh();
 				if (selement != null)
