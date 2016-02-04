@@ -196,7 +196,7 @@ public class DatasetReader {
 					dataJD.addVariable(v);
 				} catch (JRException e) {
 					// it's possible we'll have some duplicates from groups
-					if (!e.getMessage().equals(JRDesignDataset.EXCEPTION_MESSAGE_KEY_DUPLICATE_VARIABLE))
+					if (!e.getMessageKey().equals(JRDesignDataset.EXCEPTION_MESSAGE_KEY_DUPLICATE_VARIABLE))
 						e.printStackTrace();
 				}
 
