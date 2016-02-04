@@ -67,21 +67,21 @@ public class ExtensionLoader {
 	 * The extensions loaded for the general context and cached in the sharedExtension Map
 	 */
 	private static Class<?>[] commonExensionKeys = {
-		PersistenceServiceFactory.class,
-		QueryExecuterFactoryBundle.class,
-		//JRQueryExecuterFactoryBundle.class,
-		MatcherExportFilterMapping.class,
-		StyleProviderFactory.class,
-		DataAdapterServiceFactory.class,
-		ScriptletFactory.class,
-		ParameterContributorFactory.class,
-		SecretsProviderFactory.class,
-		FunctionsBundle.class,
-		FontFamily.class,
-		RepositoryService.class,
-		ComponentsBundle.class,
-		GenericElementHandlerBundle.class,
-		MessageProviderFactory.class
+//		PersistenceServiceFactory.class,
+//		QueryExecuterFactoryBundle.class,
+//		//JRQueryExecuterFactoryBundle.class,
+//		MatcherExportFilterMapping.class,
+//		StyleProviderFactory.class,
+//		DataAdapterServiceFactory.class,
+//		ScriptletFactory.class,
+//		ParameterContributorFactory.class,
+//		SecretsProviderFactory.class,
+//		FunctionsBundle.class,
+//		FontFamily.class,
+//		RepositoryService.class,
+//		ComponentsBundle.class,
+//		GenericElementHandlerBundle.class,
+//		MessageProviderFactory.class
 	};
 	
 	/**
