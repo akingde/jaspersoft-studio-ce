@@ -18,8 +18,34 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.ui.views.properties.IPropertyDescriptor;
+
+import com.jaspersoft.studio.components.map.MapNodeIconDescriptor;
+import com.jaspersoft.studio.components.map.figure.MapDesignConverter;
+import com.jaspersoft.studio.components.map.messages.Messages;
+import com.jaspersoft.studio.components.map.property.MarkersPropertyDescriptor;
+import com.jaspersoft.studio.components.map.property.PathPropertyDescriptor;
+import com.jaspersoft.studio.components.map.property.StylePropertyDescriptor;
+import com.jaspersoft.studio.editor.defaults.DefaultManager;
+import com.jaspersoft.studio.help.HelpReferenceBuilder;
+import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.IDatasetContainer;
+import com.jaspersoft.studio.model.MGraphicElement;
+import com.jaspersoft.studio.model.dataset.MDatasetRun;
+import com.jaspersoft.studio.model.util.IIconDescriptor;
+import com.jaspersoft.studio.property.descriptor.NullEnum;
+import com.jaspersoft.studio.property.descriptor.combo.RComboBoxPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
+import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
+import com.jaspersoft.studio.utils.EnumHelper;
+import com.jaspersoft.studio.utils.ExpressionInterpreter;
+import com.jaspersoft.studio.utils.Misc;
+import com.jaspersoft.studio.utils.ModelUtils;
+
 import net.sf.jasperreports.components.items.ItemData;
-import net.sf.jasperreports.components.items.StandardItemData;
 import net.sf.jasperreports.components.map.MapComponent;
 import net.sf.jasperreports.components.map.StandardMapComponent;
 import net.sf.jasperreports.components.map.type.MapImageTypeEnum;
@@ -37,34 +63,6 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.design.events.JRChangeEventsSupport;
 import net.sf.jasperreports.engine.type.EvaluationTimeEnum;
 import net.sf.jasperreports.engine.type.OnErrorTypeEnum;
-
-import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.ui.views.properties.IPropertyDescriptor;
-
-import com.jaspersoft.studio.components.map.MapNodeIconDescriptor;
-import com.jaspersoft.studio.components.map.figure.MapDesignConverter;
-import com.jaspersoft.studio.components.map.messages.Messages;
-import com.jaspersoft.studio.components.map.property.MarkersPropertyDescriptor;
-import com.jaspersoft.studio.components.map.property.PathPropertyDescriptor;
-import com.jaspersoft.studio.components.map.property.StylePropertyDescriptor;
-import com.jaspersoft.studio.editor.defaults.DefaultManager;
-import com.jaspersoft.studio.help.HelpReferenceBuilder;
-import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.model.IDatasetContainer;
-import com.jaspersoft.studio.model.MGraphicElement;
-import com.jaspersoft.studio.model.dataset.MDatasetRun;
-import com.jaspersoft.studio.model.dataset.descriptor.DatasetRunPropertyDescriptor;
-import com.jaspersoft.studio.model.util.IIconDescriptor;
-import com.jaspersoft.studio.property.descriptor.NullEnum;
-import com.jaspersoft.studio.property.descriptor.combo.RComboBoxPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
-import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
-import com.jaspersoft.studio.utils.EnumHelper;
-import com.jaspersoft.studio.utils.ExpressionInterpreter;
-import com.jaspersoft.studio.utils.Misc;
-import com.jaspersoft.studio.utils.ModelUtils;
 
 /**
  * 
@@ -190,12 +188,6 @@ public class MMap extends MGraphicElement implements IDatasetContainer {
 		mapPathStylesD.setCategory(Messages.MMap_common_map_properties); // $NON-NLS-1$
 		desc.add(mapPathStylesD);
 
-		DatasetRunPropertyDescriptor datasetRunD = new DatasetRunPropertyDescriptor(StandardItemData.PROPERTY_DATASET,
-				com.jaspersoft.studio.messages.Messages.MElementDataset_dataset_run, true);
-		datasetRunD.setDescription(com.jaspersoft.studio.messages.Messages.MElementDataset_dataset_run_description);
-		datasetRunD.setCategory(Messages.MMap_common_map_properties); // $NON-NLS-1$
-		desc.add(datasetRunD);
-
 		JRExpressionPropertyDescriptor latitudeExprD = new JRExpressionPropertyDescriptor(
 				StandardMapComponent.PROPERTY_LATITUDE_EXPRESSION, Messages.MMap_latitude);
 		latitudeExprD.setDescription(Messages.MMap_latitude_description);
@@ -267,7 +259,6 @@ public class MMap extends MGraphicElement implements IDatasetContainer {
 		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/components.schema.reference.html#"); //$NON-NLS-1$
 
 		langExprD.setCategory(Messages.MMap_common_map_properties);
-		datasetRunD.setCategory(Messages.MMap_common_map_properties);
 		mapTypeD.setCategory(Messages.MMap_common_map_properties);
 		mapScaleD.setCategory(Messages.MMap_common_map_properties);
 		imageTypeD.setCategory(Messages.MMap_common_map_properties);
