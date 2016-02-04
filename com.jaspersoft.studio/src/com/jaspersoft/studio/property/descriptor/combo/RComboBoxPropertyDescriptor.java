@@ -8,6 +8,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.descriptor.combo;
 
+import java.util.Arrays;
+
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.ILabelProvider;
@@ -23,7 +25,8 @@ import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 import com.jaspersoft.studio.property.section.widgets.IPropertyDescriptorWidget;
 import com.jaspersoft.studio.property.section.widgets.SPRCombo;
 
-public class RComboBoxPropertyDescriptor extends ComboBoxPropertyDescriptor implements IPropertyDescriptorWidget, IHelp {
+public class RComboBoxPropertyDescriptor extends ComboBoxPropertyDescriptor
+		implements IPropertyDescriptorWidget, IHelp {
 	private String[] labels;
 	private ComboBoxCellEditor cellEditor;
 	private boolean isReadOnly = true;
@@ -57,6 +60,8 @@ public class RComboBoxPropertyDescriptor extends ComboBoxPropertyDescriptor impl
 	}
 
 	public void setItems(String[] items) {
+		if (Arrays.equals(items, labels))
+			return;
 		labels = items;
 		if (cellEditor != null && cellEditor.getControl() != null && !cellEditor.getControl().isDisposed())
 			cellEditor.setItems(items);

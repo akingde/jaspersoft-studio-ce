@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.property.descriptor.combo;
 
@@ -17,12 +13,10 @@ import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+
 /*
  * A cell editor that presents a list of items in a combo box. The cell editor's value is the zero-based index of the
- * selected item.
- * <p>
- * This class may be instantiated; it is not intended to be subclassed.
- * </p>
+ * selected item. <p> This class may be instantiated; it is not intended to be subclassed. </p>
  * 
  * @noextend This class is not intended to be subclassed by clients.
  */
@@ -94,7 +88,7 @@ public class RWComboBoxCellEditor extends ComboBoxCellEditor {
 	 */
 	@Override
 	protected Object doGetValue() {
-		if (getItems().length > 0){
+		if (getItems().length > 0) {
 			int selectionIndex = comboBox.getSelectionIndex();
 			if (selectionIndex < 0) {
 				getItems()[0] = comboBox.getText().trim();
@@ -106,7 +100,7 @@ public class RWComboBoxCellEditor extends ComboBoxCellEditor {
 		}
 		return null;
 	}
-	
+
 	public CCombo getComboBox() {
 		return comboBox;
 	}
@@ -131,7 +125,7 @@ public class RWComboBoxCellEditor extends ComboBoxCellEditor {
 			// No element found
 			String[] newListItems = new String[items.length + 1];
 			System.arraycopy(items, 0, newListItems, 0, items.length);
-			
+
 			newListItems[items.length] = (String) value;
 			setItems(newListItems);
 			super.doSetValue(items.length);
@@ -139,4 +133,14 @@ public class RWComboBoxCellEditor extends ComboBoxCellEditor {
 
 	}
 
+	@Override
+	public void setItems(String[] items) {
+		String old = comboBox.getText();
+		super.setItems(items);
+		for (String s : items)
+			if (s.equals(old)) {
+				comboBox.setText(old);
+				break;
+			}
+	}
 }
