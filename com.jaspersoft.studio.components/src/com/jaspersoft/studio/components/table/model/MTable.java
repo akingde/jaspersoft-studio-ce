@@ -20,25 +20,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.jasperreports.components.table.BaseColumn;
-import net.sf.jasperreports.components.table.DesignCell;
-import net.sf.jasperreports.components.table.StandardBaseColumn;
-import net.sf.jasperreports.components.table.StandardColumn;
-import net.sf.jasperreports.components.table.StandardTable;
-import net.sf.jasperreports.components.table.WhenNoDataTypeTableEnum;
-import net.sf.jasperreports.engine.JRConstants;
-import net.sf.jasperreports.engine.JRDatasetRun;
-import net.sf.jasperreports.engine.JRElementGroup;
-import net.sf.jasperreports.engine.JRPropertiesHolder;
-import net.sf.jasperreports.engine.JRPropertiesMap;
-import net.sf.jasperreports.engine.component.ComponentKey;
-import net.sf.jasperreports.engine.design.JRDesignComponentElement;
-import net.sf.jasperreports.engine.design.JRDesignDataset;
-import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
-import net.sf.jasperreports.engine.design.JRDesignElement;
-import net.sf.jasperreports.engine.design.JRDesignGroup;
-import net.sf.jasperreports.engine.design.JasperDesign;
-
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
@@ -48,6 +29,8 @@ import com.jaspersoft.studio.components.table.TableComponentFactory;
 import com.jaspersoft.studio.components.table.TableDatasetRunProperyDescriptor;
 import com.jaspersoft.studio.components.table.TableManager;
 import com.jaspersoft.studio.components.table.TableNodeIconDescriptor;
+import com.jaspersoft.studio.components.table.descriptor.FillContentPropertyDescriptor;
+import com.jaspersoft.studio.components.table.descriptor.NextColumnPropertyDescriptor;
 import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.components.table.model.column.MColumn;
 import com.jaspersoft.studio.editor.defaults.DefaultManager;
@@ -69,9 +52,27 @@ import com.jaspersoft.studio.model.MPage;
 import com.jaspersoft.studio.model.dataset.MDatasetRun;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
-import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 import com.jaspersoft.studio.utils.Misc;
+
+import net.sf.jasperreports.components.table.BaseColumn;
+import net.sf.jasperreports.components.table.DesignCell;
+import net.sf.jasperreports.components.table.StandardBaseColumn;
+import net.sf.jasperreports.components.table.StandardColumn;
+import net.sf.jasperreports.components.table.StandardTable;
+import net.sf.jasperreports.components.table.WhenNoDataTypeTableEnum;
+import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRDatasetRun;
+import net.sf.jasperreports.engine.JRElementGroup;
+import net.sf.jasperreports.engine.JRPropertiesHolder;
+import net.sf.jasperreports.engine.JRPropertiesMap;
+import net.sf.jasperreports.engine.component.ComponentKey;
+import net.sf.jasperreports.engine.design.JRDesignComponentElement;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
+import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
+import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.design.JRDesignGroup;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 public class MTable extends MGraphicElement implements IContainer,
 		IContainerEditPart, IGroupElement, IContainerLayout, IDatasetContainer, IPinContainer{
@@ -239,12 +240,12 @@ public class MTable extends MGraphicElement implements IContainer,
 		whennodataD.setCategory(Messages.MTable_table_properties_category);
 		
 		
-		CheckBoxPropertyDescriptor columnsIncreaseDescriptor = new CheckBoxPropertyDescriptor(PROPERTY_COLUMNS_AUTORESIZE_NEXT, Messages.MTable_autoresizeNext);
+		NextColumnPropertyDescriptor columnsIncreaseDescriptor = new NextColumnPropertyDescriptor(Messages.MTable_autoresizeNext);
 		columnsIncreaseDescriptor.setDescription(Messages.MTable_autoresizeNextDescription);
 		desc.add(columnsIncreaseDescriptor);
 		columnsIncreaseDescriptor.setCategory(Messages.MTable_table_properties_category);
 		
-		CheckBoxPropertyDescriptor columnsFillDescriptor = new CheckBoxPropertyDescriptor(PROPERTY_COLUMNS_AUTORESIZE_PROPORTIONAL, Messages.MTable_propertyForceFill);
+		FillContentPropertyDescriptor columnsFillDescriptor = new FillContentPropertyDescriptor(Messages.MTable_propertyForceFill);
 		columnsFillDescriptor.setDescription(Messages.MTable_propertyForceFillDescription);
 		desc.add(columnsFillDescriptor);
 		columnsFillDescriptor.setCategory(Messages.MTable_table_properties_category);
@@ -311,11 +312,16 @@ public class MTable extends MGraphicElement implements IContainer,
 			else
 				jrTable.setDatasetRun(null);
 		} else if (id.equals(PROPERTY_COLUMNS_AUTORESIZE_NEXT)){
+			Object oldValue = getValue().getPropertiesMap().getProperty(PROPERTY_COLUMNS_AUTORESIZE_NEXT);
+			Object newValue = null;
 			if (value == null || !Boolean.parseBoolean(value.toString())){
 				getValue().getPropertiesMap().removeProperty(PROPERTY_COLUMNS_AUTORESIZE_NEXT);
 			} else {
 				getValue().getPropertiesMap().setProperty(PROPERTY_COLUMNS_AUTORESIZE_NEXT, value.toString());
+				newValue = value;
 			}
+			//Triggering the event will refresh the UI
+			propertyChange(new PropertyChangeEvent(this, PROPERTY_COLUMNS_AUTORESIZE_NEXT, oldValue, newValue));
 		} else if (id.equals(PROPERTY_COLUMNS_AUTORESIZE_PROPORTIONAL)){
 			Object oldValue = getValue().getPropertiesMap().getProperty(PROPERTY_COLUMNS_AUTORESIZE_PROPORTIONAL);
 			Object newValue = null;
@@ -325,6 +331,7 @@ public class MTable extends MGraphicElement implements IContainer,
 				getValue().getPropertiesMap().setProperty(PROPERTY_COLUMNS_AUTORESIZE_PROPORTIONAL, value.toString());
 				newValue = value;
 			}
+			//Triggering the event will refresh the UI
 			propertyChange(new PropertyChangeEvent(this, PROPERTY_COLUMNS_AUTORESIZE_PROPORTIONAL, oldValue, newValue));
 		} else if (id.equals(PROPERTY_MAP) || id.equals(JRDesignElement.PROPERTY_PROPERTY_EXPRESSIONS)) {
 			super.setPropertyValue(id, value);
@@ -465,12 +472,6 @@ public class MTable extends MGraphicElement implements IContainer,
 		}
 
 		if (getTableManager() != null){
-			if (hasColumnsAutoresizeProportional() && isColumnsResizeEvent(evt)){
-				String oldValue = getValue().getPropertiesMap().getProperty(PROPERTY_COLUMNS_AUTORESIZE_PROPORTIONAL);
-				getValue().getPropertiesMap().removeProperty(PROPERTY_COLUMNS_AUTORESIZE_PROPORTIONAL);
-				getTableManager().fillSpace(getValue().getWidth(), true);
-				getValue().getPropertiesMap().setProperty(PROPERTY_COLUMNS_AUTORESIZE_PROPORTIONAL, oldValue);
-			}
 			getTableManager().update();
 		}
 	
@@ -491,19 +492,6 @@ public class MTable extends MGraphicElement implements IContainer,
 		}
 	}
 	
-	private boolean isColumnsResizeEvent(PropertyChangeEvent evt){
-		if (evt.getPropertyName().equals(JRDesignElement.PROPERTY_WIDTH)){
-			return true;
-		}
-		if (evt.getPropertyName().equals(StandardTable.PROPERTY_COLUMNS)){
-			return true;
-		}
-		if (evt.getPropertyName().equals(PROPERTY_COLUMNS_AUTORESIZE_PROPORTIONAL)){
-			return true;
-		}
-		return false;
-	}
-
 	@Override
 	public JRPropertiesHolder[] getPropertyHolder() {
 		return new JRPropertiesHolder[] { getValue() };

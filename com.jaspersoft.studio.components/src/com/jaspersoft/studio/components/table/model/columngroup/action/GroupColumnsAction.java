@@ -34,7 +34,7 @@ import com.jaspersoft.studio.components.table.model.column.command.MoveColumnCom
 import com.jaspersoft.studio.components.table.model.column.command.RefreshColumnNamesCommand;
 import com.jaspersoft.studio.components.table.model.columngroup.MColumnGroup;
 import com.jaspersoft.studio.components.table.model.columngroup.command.CreateColumnGroupCommand;
-import com.jaspersoft.studio.components.table.part.editpolicy.JSSCompundTableCommand;
+import com.jaspersoft.studio.components.table.part.editpolicy.JSSCompoundTableCommand;
 import com.jaspersoft.studio.editor.action.ACachedSelectionAction;
 import com.jaspersoft.studio.model.ANode;
 
@@ -154,7 +154,7 @@ public class GroupColumnsAction extends ACachedSelectionAction {
 		ANode mparent = fmc.getParent();
 		if (mparent == null)
 			return null;
-		JSSCompundTableCommand c = new JSSCompundTableCommand(Messages.CreateColumnAction_create_column_group, fmc.getMTable(), true);
+		JSSCompoundTableCommand c = new JSSCompoundTableCommand(Messages.CreateColumnAction_create_column_group, fmc.getMTable(), true);
 		MColumnGroup mcolgr = new MColumnGroup();
 		int index = mparent.getChildren().indexOf(fmc);
 		CreateColumnGroupCommand cmd = createGroup(index, mparent, mcolgr);

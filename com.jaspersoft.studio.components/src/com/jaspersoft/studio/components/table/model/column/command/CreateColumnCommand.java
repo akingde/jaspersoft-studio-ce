@@ -105,13 +105,7 @@ public class CreateColumnCommand extends Command {
 	 */
 	@Override
 	public void execute() {
-		if (tableNode.hasColumnsAutoresizeProportional()) {
-			tableNode.setPropertyValue(MTable.PROPERTY_COLUMNS_AUTORESIZE_PROPORTIONAL, false);
-			createAndAddColumn();
-			tableNode.setPropertyValue(MTable.PROPERTY_COLUMNS_AUTORESIZE_PROPORTIONAL, true);
-		} else {
-			createAndAddColumn();
-		}
+		createAndAddColumn();
 	}
 
 	@Override
@@ -488,13 +482,6 @@ public class CreateColumnCommand extends Command {
 
 	@Override
 	public void undo() {
-		// when the operaiton is undone refresh the size
-		if (tableNode.hasColumnsAutoresizeProportional()) {
-			tableNode.setPropertyValue(MTable.PROPERTY_COLUMNS_AUTORESIZE_PROPORTIONAL, false);
-			removeAddedColumn();
-			tableNode.setPropertyValue(MTable.PROPERTY_COLUMNS_AUTORESIZE_PROPORTIONAL, true);
-		} else {
-			removeAddedColumn();
-		}
+		removeAddedColumn();
 	}
 }

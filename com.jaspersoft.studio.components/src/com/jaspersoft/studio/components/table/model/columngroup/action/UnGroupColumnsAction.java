@@ -35,7 +35,7 @@ import com.jaspersoft.studio.components.table.model.column.command.RefreshColumn
 import com.jaspersoft.studio.components.table.model.columngroup.MColumnGroup;
 import com.jaspersoft.studio.components.table.model.columngroup.MColumnGroupCell;
 import com.jaspersoft.studio.components.table.part.TableCellEditPart;
-import com.jaspersoft.studio.components.table.part.editpolicy.JSSCompundTableCommand;
+import com.jaspersoft.studio.components.table.part.editpolicy.JSSCompoundTableCommand;
 import com.jaspersoft.studio.editor.outline.part.TreeEditPart;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
@@ -79,7 +79,7 @@ public class UnGroupColumnsAction extends SelectionAction {
 			if (sel instanceof TableCellEditPart || sel instanceof TreeEditPart)
 				sel = ((AbstractEditPart) sel).getModel();
 			if (sel instanceof MColumn) {
-				JSSCompundTableCommand c = new JSSCompundTableCommand(Messages.UnGroupColumnsAction_title, ((MColumn)sel).getMTable(), true); 
+				JSSCompoundTableCommand c = new JSSCompoundTableCommand(Messages.UnGroupColumnsAction_title, ((MColumn)sel).getMTable(), true); 
 
 				MColumn fmc = (MColumn) sel;
 				ANode mparent = fmc.getParent();

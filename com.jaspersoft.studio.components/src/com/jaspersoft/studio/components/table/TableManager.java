@@ -24,10 +24,12 @@ import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 
+import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.components.table.model.MTable;
 import com.jaspersoft.studio.components.table.model.column.MColumn;
 import com.jaspersoft.studio.components.table.util.TableColumnSize;
 import com.jaspersoft.studio.editor.layout.ILayout;
+import com.jaspersoft.studio.editor.layout.LayoutCommand;
 import com.jaspersoft.studio.editor.layout.LayoutManager;
 import com.jaspersoft.studio.editor.layout.VerticalRowLayout;
 import com.jaspersoft.studio.model.ANode;
@@ -40,6 +42,7 @@ import net.sf.jasperreports.components.table.Column;
 import net.sf.jasperreports.components.table.ColumnGroup;
 import net.sf.jasperreports.components.table.ColumnVisitor;
 import net.sf.jasperreports.components.table.DesignCell;
+import net.sf.jasperreports.components.table.GroupCell;
 import net.sf.jasperreports.components.table.StandardBaseColumn;
 import net.sf.jasperreports.components.table.StandardColumn;
 import net.sf.jasperreports.components.table.StandardColumnGroup;
@@ -148,6 +151,40 @@ public class TableManager {
 		}
 		return new ArrayList<BaseColumn>(0);
 	}
+	
+	public static List<Cell> getAllCells(List<BaseColumn> columns){
+		List<Cell> result = new ArrayList<Cell>();
+		for(BaseColumn column : columns){
+			if (column.getTableFooter() != null){
+				result.add(column.getTableFooter());
+			}
+			if (column.getTableHeader() != null){
+				result.add(column.getTableHeader());
+			}
+			if (column.getColumnFooter() != null){
+				result.add(column.getColumnFooter());
+			}
+			if (column.getColumnHeader() != null){
+				result.add(column.getColumnHeader());
+			}
+			for(GroupCell groupHeader : column.getGroupHeaders()){
+				if (groupHeader.getCell() != null) result.add(groupHeader.getCell());
+			}
+			for(GroupCell groupFooter : column.getGroupFooters()){
+				if (groupFooter.getCell() != null) result.add(groupFooter.getCell());
+			}
+			if (column instanceof StandardColumnGroup){
+				StandardColumnGroup groupColumn = (StandardColumnGroup)column;
+				result.addAll(getAllCells(groupColumn.getColumns()));
+			} else if (column instanceof StandardColumn){
+				StandardColumn standardCol = (StandardColumn)column;
+				if (standardCol.getDetailCell() != null){
+					result.add(standardCol.getDetailCell());
+				}
+			}
+		}
+		return result;
+	}
 
 	public Rectangle getBounds(StandardBaseColumn col, int type, String grName) {
 		Rectangle p = mh.getYHColumn(col, type, grName);
@@ -242,8 +279,9 @@ public class TableManager {
 	 * 
 	 * @param newWidth the width that all the columns should have
 	 * @param isProportional if the columns are resized proportionally or they all will have the same width
+	 * @return true if some changes were done to the table, false if it was already of the right size
 	 */
-	public void fillSpace(int newWidth, boolean isProportional){
+	public boolean fillSpace(int newWidth, boolean isProportional){
 		//Only one of this operation allowed on the at the same time
 		synchronized (table) {
 			int currentColumnsWidth = 0;
@@ -251,7 +289,7 @@ public class TableManager {
 				currentColumnsWidth += col.getWidth();
 			}
 			if (currentColumnsWidth == newWidth) {
-				return;
+				return false;
 			} else if(isProportional) {
 				
 				int[] proportionalWidths = getColumnsProportionalWidth(table.getColumns(), newWidth);
@@ -290,6 +328,7 @@ public class TableManager {
 				}
 			}
 		}
+		return true;
 	}
 	
 	/**
@@ -319,6 +358,20 @@ public class TableManager {
 			}
 		}
 		return result;
+	}
+	
+	public JSSCompoundCommand getLayoutCommand(){
+		ILayout defaultLayout = new VerticalRowLayout();
+		JSSCompoundCommand layoutCommands = new JSSCompoundCommand(null);
+		for(BaseColumn col : table.getColumns()){
+			for(Entry<Cell, Integer> cell : getColumnCell(col).entrySet()){
+				ILayout layout = LayoutManager.getLayout(new JRPropertiesHolder[] { cell.getKey() }, null, null, defaultLayout);
+				Dimension size = new Dimension(cell.getValue(), ((DesignCell)cell.getKey()).getHeight());
+				LayoutCommand layoutCommand = new LayoutCommand(cell.getKey(), layout, size);
+				layoutCommands.add(layoutCommand);
+			}
+		}
+		return layoutCommands;
 	}
 
 	private boolean setColumnGroupWidth(StandardColumnGroup cell, int delta) {

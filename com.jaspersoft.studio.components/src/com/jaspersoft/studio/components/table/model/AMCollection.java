@@ -83,4 +83,8 @@ public abstract class AMCollection extends MCollection {
 		}
 		return result;
 	}
+	
+	public MTable getMTable(){
+		return (MTable)getParent();
+	}
 }

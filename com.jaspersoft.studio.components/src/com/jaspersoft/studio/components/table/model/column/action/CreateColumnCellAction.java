@@ -25,7 +25,7 @@ import com.jaspersoft.studio.components.table.model.column.MCell;
 import com.jaspersoft.studio.components.table.model.column.MColumn;
 import com.jaspersoft.studio.components.table.model.column.command.CreateColumnCellCommand;
 import com.jaspersoft.studio.components.table.model.columngroup.MColumnGroup;
-import com.jaspersoft.studio.components.table.part.editpolicy.JSSCompundTableCommand;
+import com.jaspersoft.studio.components.table.part.editpolicy.JSSCompoundTableCommand;
 import com.jaspersoft.studio.editor.action.ACachedSelectionAction;
 
 /**
@@ -72,7 +72,7 @@ public class CreateColumnCellAction extends ACachedSelectionAction{
 		List<Object> cells = editor.getSelectionCache().getSelectionModelForType(MColumn.class);
 		if (!cells.isEmpty()){
 			MTable table = ((MColumn)cells.get(0)).getTable();
-			JSSCompundTableCommand compundTableCommand = new JSSCompundTableCommand(table);	
+			JSSCompoundTableCommand compundTableCommand = new JSSCompoundTableCommand(table);	
 			for(Object rawCell : cells){
 				MColumn col = (MColumn)rawCell;
 				if (!(col instanceof MCell) && !(col instanceof MColumnGroup)){
