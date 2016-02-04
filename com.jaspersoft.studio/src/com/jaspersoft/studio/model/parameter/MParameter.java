@@ -49,7 +49,17 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  * @author Chicu Veaceslav
  */
 public class MParameter extends MParameterSystem implements ICopyable {
+	
+	private static final String PROPERTY_MAP = "PROPERTY_MAP"; //$NON-NLS-1$
+	
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+	
+	//Must use its own descriptors since they are different from the ones of the superclass
+	
+	private static IPropertyDescriptor[] descriptors;
+	
+	private static Map<String, Object> defaultsMap;
+	
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
 
@@ -69,16 +79,6 @@ public class MParameter extends MParameterSystem implements ICopyable {
 	 */
 	public MParameter() {
 		super();
-	}
-
-	public boolean isMainDataset() {
-		if (getParent() instanceof MParameters) {
-			MParameters<?> prms = (MParameters<?>) getParent();
-			if (prms.getValue() instanceof JRDesignDataset)
-				if (getJasperDesign().getMainDataset() == prms.getValue())
-					return true;
-		}
-		return false;
 	}
 
 	/**
@@ -104,25 +104,6 @@ public class MParameter extends MParameterSystem implements ICopyable {
 	@Override
 	public Color getForeground() {
 		return null;
-	}
-
-	private static IPropertyDescriptor[] descriptors;
-	private static Map<String, Object> defaultsMap;
-
-	@Override
-	public Map<String, Object> getDefaultsMap() {
-		return defaultsMap;
-	}
-
-	@Override
-	public IPropertyDescriptor[] getDescriptors() {
-		return descriptors;
-	}
-
-	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
-		descriptors = descriptors1;
-		defaultsMap = defaultsMap1;
 	}
 
 	/**
@@ -171,8 +152,6 @@ public class MParameter extends MParameterSystem implements ICopyable {
 
 		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#parameter");
 	}
-
-	private static final String PROPERTY_MAP = "PROPERTY_MAP"; //$NON-NLS-1$
 
 	/*
 	 * (non-Javadoc)
@@ -281,5 +260,31 @@ public class MParameter extends MParameterSystem implements ICopyable {
 			return getExpressionContext();
 		}
 		return super.getAdapter(adapter);
+	}
+	
+	public boolean isMainDataset() {
+		if (getParent() instanceof MParameters) {
+			MParameters<?> prms = (MParameters<?>) getParent();
+			if (prms.getValue() instanceof JRDesignDataset)
+				if (getJasperDesign().getMainDataset() == prms.getValue())
+					return true;
+		}
+		return false;
+	}
+	
+	@Override
+	public Map<String, Object> getDefaultsMap() {
+		return defaultsMap;
+	}
+
+	@Override
+	public IPropertyDescriptor[] getDescriptors() {
+		return descriptors;
+	}
+
+	@Override
+	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+		descriptors = descriptors1;
+		defaultsMap = defaultsMap1;
 	}
 }

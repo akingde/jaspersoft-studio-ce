@@ -39,10 +39,18 @@ import com.jaspersoft.studio.utils.ModelUtils;
  * @author Chicu Veaceslav
  */
 public class MParameterSystem extends APropertyNode implements IDragable {
+	
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+	
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
 
+	private static IPropertyDescriptor[] descriptors;
+	
+	private static Map<String, Object> defaultsMap;
+	
+	private static ParameterNameValidator validator;
+	
 	/**
 	 * Gets the icon descriptor.
 	 * 
@@ -113,10 +121,6 @@ public class MParameterSystem extends APropertyNode implements IDragable {
 	public String getToolTip() {
 		return getIconDescriptor().getToolTip();
 	}
-
-	private static IPropertyDescriptor[] descriptors;
-	private static Map<String, Object> defaultsMap;
-	private static ParameterNameValidator validator;
 
 	@Override
 	public Map<String, Object> getDefaultsMap() {

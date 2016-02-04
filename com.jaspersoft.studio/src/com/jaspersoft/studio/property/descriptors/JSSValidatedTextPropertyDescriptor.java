@@ -39,9 +39,9 @@ public class JSSValidatedTextPropertyDescriptor extends JSSTextPropertyDescripto
 	 * @author Orlandin Marco
 	 * 
 	 */
-	private class SPValidatedText extends SPText {
+	private class SPValidatedText<T extends IPropertyDescriptor> extends SPText<T> {
 
-		public SPValidatedText(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
+		public SPValidatedText(Composite parent, AbstractSection section, T pDescriptor) {
 			super(parent, section, pDescriptor);
 		}
 
@@ -99,13 +99,13 @@ public class JSSValidatedTextPropertyDescriptor extends JSSTextPropertyDescripto
 	 * the target of the validator is set to the same element edited by the widget
 	 */
 	@Override
-	public ASPropertyWidget<?> createWidget(Composite parent, AbstractSection section) {
+	public ASPropertyWidget<JSSValidatedTextPropertyDescriptor> createWidget(Composite parent, AbstractSection section) {
 		ICellEditorValidator validator = getValidator();
 		if (validator instanceof AbstractJSSCellEditorValidator) {
 			AbstractJSSCellEditorValidator extendedValidator = (AbstractJSSCellEditorValidator) validator;
 			extendedValidator.setTargetNode(section.getElement());
 		}
-		ASPropertyWidget<?> textWidget = new SPValidatedText(parent, section, this);
+		ASPropertyWidget<JSSValidatedTextPropertyDescriptor> textWidget = new SPValidatedText<JSSValidatedTextPropertyDescriptor>(parent, section, this);
 		textWidget.setReadOnly(readOnly);
 		return textWidget;
 	}

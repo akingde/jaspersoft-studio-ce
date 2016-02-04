@@ -131,6 +131,8 @@ public class Messages extends NLS {
 	public static String MCrosstabGroup_total_position_description;
 	public static String MCrosstabHeader_header_cell;
 	public static String MCrosstabHeaderCell_crosstab_header;
+	public static String MCrosstabParameter_valueDescription;
+	public static String MCrosstabParameter_valueLabel;
 	public static String MCrosstabWhenNoData_when_no_data;
 	public static String MCrosstabWhenNoDataCell_when_no_data_cell;
 	public static String MMeasure_calculation_description;

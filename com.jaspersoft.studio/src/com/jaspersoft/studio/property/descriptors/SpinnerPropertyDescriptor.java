@@ -53,8 +53,8 @@ public class SpinnerPropertyDescriptor extends PropertyDescriptor  implements IP
 	 * 
 	 */
 	@Override
-	public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
-		return new SPSpinner(parent,section, this);
+	public ASPropertyWidget<SpinnerPropertyDescriptor> createWidget(Composite parent, AbstractSection section) {
+		return new SPSpinner<SpinnerPropertyDescriptor>(parent,section, this);
 	} 
 
 }

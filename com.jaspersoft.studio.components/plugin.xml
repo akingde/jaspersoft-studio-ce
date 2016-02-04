@@ -743,6 +743,15 @@
                   type="com.jaspersoft.studio.components.barcode.model.barcode4j.MQRCode">
             </input>
          </propertySection>
+         <propertySection
+               afterSection="com.jaspersoft.studio.property.section.obj.ParameterSystemSection"
+               class="com.jaspersoft.studio.components.crosstab.property.CrosstabParameterSection"
+               id="com.jaspersoft.studio.property.section.obj.CrosstabParameterSection"
+               tab="com.jaspersoft.studio.editor.JrxmlEditor.Element">
+            <input
+                  type="com.jaspersoft.studio.components.crosstab.model.parameter.MCrosstabParameter">
+            </input>
+         </propertySection>
       </propertySections>
    </extension>
    <extension
@@ -891,6 +900,9 @@
       </postsetvalue>
       <postsetvalue
             ClassFactory="com.jaspersoft.studio.components.crosstab.model.PostSetGroupName">
+      </postsetvalue>
+      <postsetvalue
+            ClassFactory="com.jaspersoft.studio.components.crosstab.model.PostSetCrosstabParameterName">
       </postsetvalue>
    </extension>
    <extension

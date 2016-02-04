@@ -98,28 +98,30 @@ public class RenameDatasetObjectNameCommand extends Command {
 	@Override
 	public void execute() {
 		cexpr.clear();
-		JRExpressionCollector reportCollector = JRExpressionCollector.collector(jContext, jd);
-		JRExpressionCollector datasetCollector = reportCollector.getCollector(dataset);
-		List<JRExpression> datasetExpressions = datasetCollector.getExpressions();
-		// update expressions
-		boolean modelAlreadyInitialized = false;
-		for (JRExpression expr : datasetExpressions) {
-			String s = expr.getText();
-			if (s != null && s.length() > 4 && s.contains(type1 + oldvalue + "}")) {
-				//If there are changes this will assure that the model of all the elements
-				//is initialized, so the elements inside containers can be refreshed
-				if (!modelAlreadyInitialized) {
-					setModelRefresh(node.getRoot().getChildren());
-					modelAlreadyInitialized = true;
+		if (dataset != null){
+			JRExpressionCollector reportCollector = JRExpressionCollector.collector(jContext, jd);
+			JRExpressionCollector datasetCollector = reportCollector.getCollector(dataset);
+			List<JRExpression> datasetExpressions = datasetCollector.getExpressions();
+			// update expressions
+			boolean modelAlreadyInitialized = false;
+			for (JRExpression expr : datasetExpressions) {
+				String s = expr.getText();
+				if (s != null && s.length() > 4 && s.contains(type1 + oldvalue + "}")) {
+					//If there are changes this will assure that the model of all the elements
+					//is initialized, so the elements inside containers can be refreshed
+					if (!modelAlreadyInitialized) {
+						setModelRefresh(node.getRoot().getChildren());
+						modelAlreadyInitialized = true;
+					}
+					
+					s = s.replaceAll(type + oldvalue + "}", type + newvalue + "}");
+					JRDesignExpression dexpr = (JRDesignExpression) expr;
+					dexpr.setText(s);
+					cexpr.add((JRDesignExpression) expr);
 				}
-				
-				s = s.replaceAll(type + oldvalue + "}", type + newvalue + "}");
-				JRDesignExpression dexpr = (JRDesignExpression) expr;
-				dexpr.setText(s);
-				cexpr.add((JRDesignExpression) expr);
 			}
+			doSetQuery(oldvalue, newvalue);
 		}
-		doSetQuery(oldvalue, newvalue);
 	}
 
 	protected void doSetQuery(String oldVal, String newVal) {
@@ -140,9 +142,11 @@ public class RenameDatasetObjectNameCommand extends Command {
 
 	@Override
 	public void undo() {
-		for (JRDesignExpression de : cexpr) {
-			de.setText(de.getText().replaceAll(newvalue, oldvalue));
+		if (dataset != null){
+			for (JRDesignExpression de : cexpr) {
+				de.setText(de.getText().replaceAll(newvalue, oldvalue));
+			}
+			doSetQuery(newvalue, oldvalue);
 		}
-		doSetQuery(newvalue, oldvalue);
 	}
 }

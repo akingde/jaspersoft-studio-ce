@@ -14,11 +14,6 @@ package com.jaspersoft.studio.components.table.model.cell.command;
 
 import java.util.List;
 
-import net.sf.jasperreports.components.table.DesignCell;
-import net.sf.jasperreports.components.table.StandardBaseColumn;
-import net.sf.jasperreports.engine.JRPropertiesHolder;
-import net.sf.jasperreports.engine.design.JasperDesign;
-
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.commands.Command;
@@ -29,24 +24,25 @@ import com.jaspersoft.studio.components.table.ColumnCell;
 import com.jaspersoft.studio.components.table.Guide;
 import com.jaspersoft.studio.components.table.TableManager;
 import com.jaspersoft.studio.components.table.model.MTable;
-import com.jaspersoft.studio.components.table.model.column.MCell;
 import com.jaspersoft.studio.components.table.model.column.MColumn;
+import com.jaspersoft.studio.components.table.part.editpolicy.JSSCompoundTableCommand;
 import com.jaspersoft.studio.editor.layout.ILayout;
 import com.jaspersoft.studio.editor.layout.LayoutCommand;
 import com.jaspersoft.studio.editor.layout.LayoutManager;
 import com.jaspersoft.studio.editor.layout.VerticalRowLayout;
-import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.property.IPostSetValue;
+
+import net.sf.jasperreports.components.table.DesignCell;
+import net.sf.jasperreports.components.table.StandardBaseColumn;
+import net.sf.jasperreports.engine.JRPropertiesHolder;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 public class PostSetSizeCell implements IPostSetValue {
 
 	@Override
 	public Command postSetValue(IPropertySource target, Object prop,
 			Object newValue, Object oldValue) {
-		if (target instanceof MColumn
-				&& (prop.equals(StandardBaseColumn.PROPERTY_WIDTH) || prop
-						.equals(DesignCell.PROPERTY_HEIGHT))) {
+		if (target instanceof MColumn && (prop.equals(StandardBaseColumn.PROPERTY_WIDTH) || prop.equals(DesignCell.PROPERTY_HEIGHT))) {
 			MColumn mband = (MColumn) target;
 			JasperDesign jDesign = mband.getJasperDesign();
 			return getResizeCommand(mband, jDesign, prop);
@@ -57,11 +53,11 @@ public class PostSetSizeCell implements IPostSetValue {
 	public Command getResizeCommand(MColumn mcell, JasperDesign jDesign,
 			Object prop) {
 		MTable mTable = mcell.getMTable();
-		JSSCompoundCommand c = new JSSCompoundCommand("Resize Table Cell", mTable);
+		JSSCompoundTableCommand c = new JSSCompoundTableCommand("Resize Table Cell", mTable, false);
 		if (prop.equals(StandardBaseColumn.PROPERTY_WIDTH)){
 			//a width change can affect many columns other then the one resized, so we need to refresh the 
 			//layout of all the table
-			createLayoutCommand(mTable, c);
+			c.setLayoutTableContent(true);
 		} else if (prop.equals(DesignCell.PROPERTY_HEIGHT)){
 			JRPropertiesHolder[] pholder = new JRPropertiesHolder[3];
 			pholder[2] = mTable.getValue();
@@ -82,21 +78,6 @@ public class PostSetSizeCell implements IPostSetValue {
 		return c;
 	}
 
-	/**
-	 * Create a command to layout the current node if it is a cell, otherwise it 
-	 * will search recursively a cell in every child of the node
-	 */
-	public void createLayoutCommand(INode node, JSSCompoundCommand c){
-		if (node == null) return;
-		if (node instanceof MCell){
-			Command cmd = LayoutManager.createRelayoutCommand((ANode)node);
-			if (cmd != null) c.add(cmd);
-		} else {
-			for(INode child : node.getChildren()){
-				createLayoutCommand(child, c);
-			}
-		}
-	}
 	
 	public void createCommands(JasperDesign jDesign, JRPropertiesHolder[] pholder, JSSCompoundCommand c, List<ColumnCell> cells) {
 		for (ColumnCell ccell : cells) {
