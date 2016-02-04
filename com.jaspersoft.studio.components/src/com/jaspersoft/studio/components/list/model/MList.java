@@ -284,8 +284,10 @@ public class MList extends MGraphicElement implements IPastable,
 		JRDesignComponentElement jrElement = (JRDesignComponentElement) getValue();
 		StandardListComponent jrList = (StandardListComponent) jrElement
 				.getComponent();
-		return new Dimension(jrList.getContents().getWidth(), jrList
-				.getContents().getHeight());
+		// ListContents can have null dimensions, let's provide a default
+		return new Dimension(
+				Misc.nvl(jrList.getContents().getWidth(),0), 
+				Misc.nvl(jrList.getContents().getHeight(),0));
 	}
 
 	/*
