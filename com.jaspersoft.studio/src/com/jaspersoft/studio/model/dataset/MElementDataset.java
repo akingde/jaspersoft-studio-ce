@@ -120,8 +120,8 @@ public class MElementDataset extends APropertyNode implements IContainer, IConta
 				JRDesignElementDataset.PROPERTY_INCREMENT_WHEN_EXPRESSION, Messages.MElementDataset_increment_when_expression);
 		incWhenExprD.setDescription(Messages.MElementDataset_increment_when_expression_description);
 		desc.add(incWhenExprD);
-		incWhenExprD.setHelpRefBuilder(new HelpReferenceBuilder(
-				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#incrementWhenExpression"));
+		incWhenExprD.setHelpRefBuilder(
+				new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#incrementWhenExpression"));
 
 		resetGroupD = new RComboBoxPropertyDescriptor(JRDesignElementDataset.PROPERTY_RESET_GROUP,
 				Messages.common_reset_group, new String[] { "" }); //$NON-NLS-1$
@@ -137,8 +137,8 @@ public class MElementDataset extends APropertyNode implements IContainer, IConta
 				JRDesignElementDataset.PROPERTY_DATASET_RUN, Messages.MElementDataset_dataset_run);
 		datasetRunD.setDescription(Messages.MElementDataset_dataset_run_description);
 		desc.add(datasetRunD);
-		datasetRunD.setHelpRefBuilder(new HelpReferenceBuilder(
-				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#datasetRun"));
+		datasetRunD.setHelpRefBuilder(
+				new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#datasetRun"));
 
 		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#dataset");
 	}
@@ -209,12 +209,12 @@ public class MElementDataset extends APropertyNode implements IContainer, IConta
 	 */
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignElementDataset jrElement = (JRDesignElementDataset) getValue();
+		if (jrElement == null)
+			return;
 		if (id.equals(JRDesignElementDataset.PROPERTY_INCREMENT_TYPE))
-			jrElement.setIncrementType(
-					EnumHelper.getEnumByObjectValue(IncrementTypeEnum.values(),value));
+			jrElement.setIncrementType(EnumHelper.getEnumByObjectValue(IncrementTypeEnum.values(), value));
 		else if (id.equals(JRDesignElementDataset.PROPERTY_RESET_TYPE))
-			jrElement.setResetType(
-					EnumHelper.getEnumByObjectValue(ResetTypeEnum.values(), value));
+			jrElement.setResetType(EnumHelper.getEnumByObjectValue(ResetTypeEnum.values(), value));
 		else if (id.equals(JRDesignElementDataset.PROPERTY_INCREMENT_WHEN_EXPRESSION))
 			jrElement.setIncrementWhenExpression(ExprUtil.setValues(jrElement.getIncrementWhenExpression(), value));
 		else if (id.equals(JRDesignElementDataset.PROPERTY_INCREMENT_GROUP)) {

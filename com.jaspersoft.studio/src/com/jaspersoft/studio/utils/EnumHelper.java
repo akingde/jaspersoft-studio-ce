@@ -82,7 +82,7 @@ public class EnumHelper {
 	public static <T extends NamedEnum> T getEnumByObjectValue(T[] enums, Object objValue) {
 		return getEnumByObjectValue(enums, objValue, false);
 	}
-	
+
 	/**
 	 * Retrieves the correct {@link NamedEnum} instance which name translation matches the specified one.
 	 * 
@@ -95,69 +95,67 @@ public class EnumHelper {
 	 * @return the correct enum, <code>null</code> otherwise
 	 */
 	public static <T extends NamedEnum> T getEnumByObjectValue(T[] enums, Object objValue, boolean isNullable) {
-		if(objValue == null) {
+		if (objValue == null) {
 			return null;
-		}
-		else if(objValue instanceof NamedEnum) {
+		} else if (objValue instanceof NamedEnum) {
 			@SuppressWarnings("unchecked")
 			T foundEnum = (T) objValue;
 			return foundEnum;
-		}
-		else if(objValue instanceof String) {
+		} else if (objValue instanceof String) {
 			for (T e : enums) {
 				if (objValue.equals(MessagesByKeys.getString(e.getName()))) {
 					return e;
 				}
 			}
 			return null;
-		}
-		else if(objValue instanceof Number) {
+		} else if (objValue instanceof Number) {
 			Integer val = ((Number) objValue).intValue();
-			if(isNullable) {
-				if(val==0) {
+			if (0 >= val.intValue() || val > enums.length)
+				return null;
+			if (isNullable) {
+				if (val == 0) {
 					return null;
+				} else {
+					return enums[val - 1];
 				}
-				else {
-					return enums[val-1];
-				}
-			}
-			else {
+			} else {
 				return enums[val];
 			}
-		}
-		else {
+		} else {
 			throw new UnsupportedOperationException(
 					NLS.bind("Cannot convert the object of type {0} to a valid instance of NamedEnum.",
 							objValue.getClass().getCanonicalName()));
 		}
 	}
-	
+
 	/**
 	 * Retrieve the position index of the specified enum into an array of readable enum names.
 	 * 
-	 * @param enumNames the array of enun names
-	 * @param namedEnum the enumeration object
+	 * @param enumNames
+	 *          the array of enun names
+	 * @param namedEnum
+	 *          the enumeration object
 	 * @return the position index
 	 */
 	public static int getEnumIndexByTranslatedName(String[] enumNames, NamedEnum namedEnum) {
-		if(namedEnum==null) {
+		if (namedEnum == null) {
 			return 0;
-		}
-		else {
+		} else {
 			String translation = getEnumTranslation(namedEnum);
-			for(int i=0;i<enumNames.length;i++){
-				if(enumNames[i].equals(translation)) {
+			for (int i = 0; i < enumNames.length; i++) {
+				if (enumNames[i].equals(translation)) {
 					return i;
 				}
 			}
 			return 0;
 		}
 	}
-	
+
 	/**
 	 * Gets the translation of the specified enumeration instance.
 	 * 
-	 * @param nameEnum the enumeration
+	 * @param nameEnum
+	 *          the enumeration
 	 * @return the human readable translation
 	 */
 	public static String getEnumTranslation(NamedEnum nameEnum) {
