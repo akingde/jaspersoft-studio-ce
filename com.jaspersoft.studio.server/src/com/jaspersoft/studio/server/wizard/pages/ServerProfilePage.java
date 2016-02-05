@@ -672,6 +672,8 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 		});
 	}
 
+	private JdbcDriver driver = new JdbcDriver();
+
 	private void createJdbcDrivers(CTabFolder tabFolder) {
 		if (sprofile.getWsClient() == null || !sprofile.getWsClient().isSupported(Feature.EXPORTMETADATA)
 				|| sprofile.getWsClient().getServerProfile() == null
@@ -702,16 +704,20 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 		new Label(cmp, SWT.NONE).setText(Messages.ServerProfilePage_41);
 		final Text dname = new Text(cmp, SWT.BORDER);
 		dname.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		dname.setText(Misc.nvl(driver.getClassname()));
 
 		final ClasspathComponent cpath = new ClasspathComponent(cmp) {
 			@Override
 			protected void handleClasspathChanged() {
+				driver.setPaths(getClasspaths());
 				bUpld.setEnabled(!Misc.isNullOrEmpty(getClasspaths()) && !Misc.isNullOrEmpty(dname.getText()));
 			}
 		};
 		gd = new GridData(GridData.FILL_BOTH);
 		gd.horizontalSpan = 2;
 		cpath.getControl().setLayoutData(gd);
+		if (!Misc.isNullOrEmpty(driver.getPaths()))
+			cpath.setClasspaths(driver.getPaths());
 
 		bUpld = new Button(cmp, SWT.PUSH);
 		bUpld.setText(Messages.ServerProfilePage_42);
@@ -728,7 +734,6 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 						public void run(IProgressMonitor monitor)
 								throws InvocationTargetException, InterruptedException {
 							monitor.beginTask(Messages.ServerProfilePage_43, IProgressMonitor.UNKNOWN);
-							JdbcDriver driver = new JdbcDriver();
 							driver.setClassname(dname.getText());
 							driver.setPaths(cpath.getClasspaths());
 							try {
@@ -753,6 +758,7 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 
 			@Override
 			public void modifyText(ModifyEvent e) {
+				driver.setClassname(dname.getText());
 				bUpld.setEnabled(!Misc.isNullOrEmpty(cpath.getClasspaths()) && !Misc.isNullOrEmpty(dname.getText()));
 			}
 		});
