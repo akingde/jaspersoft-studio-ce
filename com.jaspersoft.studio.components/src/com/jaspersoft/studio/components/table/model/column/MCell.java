@@ -32,6 +32,7 @@ import com.jaspersoft.studio.components.table.model.MTableGroupHeader;
 import com.jaspersoft.studio.components.table.util.TableColumnSize;
 import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.IDragable;
 import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.model.IGraphicElementContainer;
 import com.jaspersoft.studio.model.IGraphicalPropertiesHandler;
@@ -67,7 +68,7 @@ import net.sf.jasperreports.engine.design.events.CollectionElementAddedEvent;
 
 public class MCell extends MColumn implements IGraphicElement,
 		IPastableGraphic, ILineBox, IGraphicElementContainer, IPastable,
-		IGroupElement, IGraphicalPropertiesHandler {
+		IGroupElement, IGraphicalPropertiesHandler, IDragable {
 	
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
