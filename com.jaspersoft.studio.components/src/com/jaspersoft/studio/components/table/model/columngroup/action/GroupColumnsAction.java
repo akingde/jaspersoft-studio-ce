@@ -26,6 +26,7 @@ import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.components.table.model.AMCollection;
 import com.jaspersoft.studio.components.table.model.MTable;
 import com.jaspersoft.studio.components.table.model.MTableDetail;
+import com.jaspersoft.studio.components.table.model.column.MCell;
 import com.jaspersoft.studio.components.table.model.column.MColumn;
 import com.jaspersoft.studio.components.table.model.column.command.CheckColumnsOrder;
 import com.jaspersoft.studio.components.table.model.column.command.CreateColumnGroupCellCommand;
@@ -83,20 +84,20 @@ public class GroupColumnsAction extends ACachedSelectionAction {
 	private List<MColumn> getSelectedColumns(){
 		List<MColumn> columns = new ArrayList<MColumn>();
 		List<Object> objects = getSelectedObjects();
-		AMCollection currentParent = null;
+		ANode currentParent = null;
 		for (Object obj : objects) {
 			if (obj instanceof EditPart)
 				obj = ((EditPart)obj).getModel();
-			if (obj instanceof MColumn){
+			if (obj instanceof MCell || obj instanceof MColumnGroup){
 				MColumn col = (MColumn)obj;
 				if (!isTableDetail(col)){
 					//Check if has the same parent
 					if (currentParent != null){
-						if (currentParent != getColumnCollection(col)){
+						if (currentParent != col.getParent()){
 							return null;
 						}
 					} else {
-						currentParent = getColumnCollection(col);
+						currentParent = col.getParent();
 					}
 					columns.add(col);
 				}
@@ -122,13 +123,13 @@ public class GroupColumnsAction extends ACachedSelectionAction {
 		return columns;
 	}
 	
-	private AMCollection getColumnCollection(MColumn col){
+	/*private AMCollection getColumnCollection(MColumn col){
 		ANode parent = col.getParent();
 		while(parent != null && !(parent instanceof AMCollection)){
 			parent = parent.getParent();
 		}
 		return (AMCollection)parent;
-	}
+	}*/
 
 	/**
 	 * Check if a column is a descendant of the table detail 
