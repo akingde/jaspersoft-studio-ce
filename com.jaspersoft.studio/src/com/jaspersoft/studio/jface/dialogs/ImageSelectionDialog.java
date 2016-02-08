@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.jface.dialogs;
 
@@ -310,8 +306,8 @@ public class ImageSelectionDialog extends Dialog {
 		GridLayout cmpCustomExpressionlayout = new GridLayout();
 		cmpCustomExpression.setLayout(cmpCustomExpressionlayout);
 
-		customExpression = new WTextExpression(cmpCustomExpression, SWT.NONE,
-				Messages.ImageSelectionDialog_EnterExpression, WTextExpression.LABEL_ON_TOP) {
+		customExpression = new WTextExpression(cmpCustomExpression, SWT.NONE, Messages.ImageSelectionDialog_EnterExpression,
+				WTextExpression.LABEL_ON_TOP) {
 			@Override
 			public void setExpression(JRDesignExpression exp) {
 				super.setExpression(exp);
@@ -419,8 +415,7 @@ public class ImageSelectionDialog extends Dialog {
 				IFileStore imgFileStore = EFS.getStore(file.getLocationURI());
 				loadImagePreview(file.getLocation().toOSString(), imgFileStore);
 				// Change the standard separator with an universal one
-				imageExpressionText = file.getLocation().toOSString()
-						.replace(System.getProperty("file.separator").charAt(0), '/');
+				imageExpressionText = filepath.replace(System.getProperty("file.separator").charAt(0), '/');
 			} catch (CoreException e) {
 				UIUtils.showError(e);
 			}
@@ -584,7 +579,8 @@ public class ImageSelectionDialog extends Dialog {
 
 		@Override
 		public IStatus runInUIThread(IProgressMonitor monitor) {
-			if (ImageSelectionDialog.this.getDialogArea() != null && !ImageSelectionDialog.this.getDialogArea().isDisposed()) {
+			if (ImageSelectionDialog.this.getDialogArea() != null
+					&& !ImageSelectionDialog.this.getDialogArea().isDisposed()) {
 				monitor.beginTask(Messages.ImageSelectionDialog_JobImgPreviewRetrieving, IProgressMonitor.UNKNOWN);
 				if (btnAbsolutePath.getSelection()) {
 					// filesystem path...
@@ -626,8 +622,9 @@ public class ImageSelectionDialog extends Dialog {
 			if (imageExpressionText != null) {
 				jrImgExpression = new JRDesignExpression();
 				if (imageExpressionText.endsWith(".svg")) //$NON-NLS-1$
-					jrImgExpression
-							.setText("net.sf.jasperreports.renderers.BatikRenderer.getInstanceFromLocation($P{JASPER_REPORTS_CONTEXT}, \"" + imageExpressionText + "\")");//$NON-NLS-1$ //$NON-NLS-2$
+					jrImgExpression.setText(
+							"net.sf.jasperreports.renderers.BatikRenderer.getInstanceFromLocation($P{JASPER_REPORTS_CONTEXT}, \"" //$NON-NLS-1$
+									+ imageExpressionText + "\")");//$NON-NLS-1$
 				else
 					jrImgExpression.setText("\"" + imageExpressionText + "\"");//$NON-NLS-1$ //$NON-NLS-2$
 			} else {
