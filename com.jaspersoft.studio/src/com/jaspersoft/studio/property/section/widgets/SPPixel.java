@@ -499,6 +499,58 @@ public class SPPixel extends ASPropertyWidget<PixelPropertyDescriptor> {
 	}
 	
 	/**
+	 * Validate the content of the text area and return the first error message
+	 * 
+	 * @return the error message or null if there aren't errors
+	 */
+	private String getErrorMessages(){
+		String text = insertField.getText().trim().toLowerCase();
+		String key = getMeasureUnit(text);
+		String value;
+		MeasureUnit unit;
+		if (key == null) {
+			//A unit is not specified, so use the element or default one
+			unit = getDefaultMeasure(); 
+			value = text;
+		} else {
+			unit = unitsMap.get(Unit.getKeyFromAlias(key));
+			value = text.substring(0, text.indexOf(key));
+		}
+		if (unit != null) {
+			try {
+				//Convert the value into pixel, internally JR work always with pixels
+				String convertedValue = unit.doConversionFromThis(unitsMap.get(Unit.PX), value);
+
+				//check if the resize must be done
+				AbstractJSSCellEditorValidator validator = pDescriptor.getValidator();
+				if (validator != null){
+					//A validator is provided, so validate the property
+					Integer newValue = getIntegerValue(convertedValue);
+					String errorMessage = null;
+					for (APropertyNode pnode : section.getElements()) {
+						validator.setTargetNode(pnode);
+						errorMessage = validator.isValid(newValue);
+						if (errorMessage != null){
+							//there is an error message , break the cycle
+							return errorMessage;
+						}
+					}
+				} 
+			} catch (NumberFormatException ex) {
+				//The value can not be converted into a number
+				return Messages.common_this_is_not_an_integer_number;
+			} catch (PixelConversionException ex){
+				//The value can be converted into a number but not into an integer
+				return ex.getMessage();
+			}
+		} else {
+			//Measure unit not found
+			return Messages.SPPixel_errorMeasureUnit;
+		}
+		return null;
+	}
+	
+	/**
 	 * Read the value in the textfield and update it in the model, but before the value is converted to pixel, and in the
 	 * textbox is displayed as default type. If a validator is provided then the value is first validated
 	 */
@@ -604,11 +656,17 @@ public class SPPixel extends ASPropertyWidget<PixelPropertyDescriptor> {
 	 * and a tooltip that describe the error
 	 * 
 	 * @param message the error message, it will be used as tooltip, can be null
-	 * for no error message
+	 * for no error message (with null erase the old errors from the tooltip and 
+	 * restore the default ones)
 	 */
 	protected void setErrorStatus(String message){
-		insertField.setBackground(ColorConstants.red);
-		insertField.setToolTipText(message);
+		if (message != null){
+			insertField.setBackground(ColorConstants.red);
+			insertField.setToolTipText(message);
+		} else {
+			insertField.setBackground(null);
+			insertField.setToolTipText(pDescriptor.getDescription());
+		}
 	}
 	
 	/**
@@ -878,6 +936,8 @@ public class SPPixel extends ASPropertyWidget<PixelPropertyDescriptor> {
 		}
 		Number n = (Number) value;
 		setDataNumber(n);
+		String errorMessage = getErrorMessages();
+		setErrorStatus(errorMessage);
 	}
 	
 	/**
