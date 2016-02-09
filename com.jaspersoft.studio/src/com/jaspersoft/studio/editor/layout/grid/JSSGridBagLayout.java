@@ -133,7 +133,7 @@ public class JSSGridBagLayout extends AbstractLayout {
 
 	@Override
 	public String getIcon() {
-		return "icons/layout.png"; //$NON-NLS-1$
+		return "icons/layout-6.png"; //$NON-NLS-1$
 	}
 
 	@Override

@@ -66,10 +66,8 @@ public class LayoutAction extends SelectionAction {
 		setText(layout.getName());
 		setToolTipText(layout.getToolTip());
 		setId(type.getName());
-		setImageDescriptor(
-				JaspersoftStudioPlugin.getInstance().getImageDescriptor(layout.getIcon()));
-		setDisabledImageDescriptor(
-				JaspersoftStudioPlugin.getInstance().getImageDescriptor(layout.getIcon()));
+		setImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor(layout.getIcon()));
+		setDisabledImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor(layout.getIcon()));
 		setEnabled(false);
 	}
 

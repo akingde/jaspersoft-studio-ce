@@ -80,16 +80,24 @@ public class LayoutManager {
 	private static Map<String, ILayout> layoutsMap;
 	
 	public static void addActions(ActionRegistry registry, IWorkbenchPart part, List<String> selectionActions) {
+		//Add the free layout
+		IAction action = new LayoutAction(part, FreeLayout.class);
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
 		for (Class<?> id : layouts) {
-			IAction action = new LayoutAction(part, id);
+			action = new LayoutAction(part, id);
 			registry.registerAction(action);
 			selectionActions.add(action.getId());
 		}
 	}
 
 	public static void addMenu(MenuManager submenu, ActionRegistry actionRegistry) {
+		//Add the free layout
+		IAction action = actionRegistry.getAction(FreeLayout.class.getName());
+		if (action.isEnabled())
+			submenu.add(action);
 		for (Class<?> id : layouts) {
-			IAction action = actionRegistry.getAction(id.getName());
+			action = actionRegistry.getAction(id.getName());
 			if (action.isEnabled())
 				submenu.add(action);
 		}
