@@ -1061,6 +1061,7 @@ public class Messages extends NLS {
 	public static String JSSPixelEditorValidator_errorExceed;
 	public static String JSSPixelEditorValidator_errorNegative;
 	public static String JSSPixelEditorValidator_errorNull;
+	public static String JSSPixelLocationValidator_errorLayout;
 	public static String JSSTemplateTransferDropTargetListener_createLabelMessage1;
 	public static String JSSTemplateTransferDropTargetListener_createLabelMessage2;
 	public static String JSSTemplateTransferDropTargetListener_createLabelTitle;

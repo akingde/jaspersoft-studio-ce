@@ -23,6 +23,7 @@ import org.eclipse.draw2d.geometry.Rectangle;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.utils.ModelUtils;
 
 public class VerticalRowLayout extends AbstractLayout {
 	
@@ -66,7 +67,7 @@ public class VerticalRowLayout extends AbstractLayout {
 	
 	@Override
 	public boolean allowChildBoundChange(ANode resizedNode, Rectangle oldBounds, Rectangle newBounds) {
-		return false;
+		return ModelUtils.safeEquals(oldBounds, newBounds);
 	}
 
 	@Override

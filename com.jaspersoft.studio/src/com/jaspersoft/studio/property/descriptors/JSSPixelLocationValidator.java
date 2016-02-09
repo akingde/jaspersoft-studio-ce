@@ -14,13 +14,17 @@ package com.jaspersoft.studio.property.descriptors;
 
 import java.text.MessageFormat;
 
-import net.sf.jasperreports.engine.design.JRDesignElement;
-
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.swt.graphics.Point;
 
+import com.jaspersoft.studio.editor.layout.FreeLayout;
+import com.jaspersoft.studio.editor.layout.ILayout;
+import com.jaspersoft.studio.editor.layout.LayoutManager;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MGraphicElement;
+
+import net.sf.jasperreports.engine.design.JRDesignElement;
 
 /**
  * Validator for the size and position of an element. It check to 
@@ -58,15 +62,54 @@ public class JSSPixelLocationValidator extends AbstractJSSCellEditorValidator {
 			if (isSizeNegative(value, propertyID)){
 				return Messages.JSSPixelEditorValidator_errorNegative;
 			}
+				
 			//Check the size
 			Object newValue = checkValid(getTarget(), value, propertyID);
 			if (newValue != value){
 				return MessageFormat.format(Messages.JSSPixelEditorValidator_errorExceed, new Object[]{newValue});
 			}
+			
+			//check the layout
+			if (!checkLayoutValidity(value)){
+				return Messages.JSSPixelLocationValidator_errorLayout;
+			}
 		} catch (NumberFormatException exc) {
 			return Messages.common_this_is_not_an_integer_number; 
 		}
 		return null;
+	}
+	
+	/**
+	 * Check if the new value is valid according to the layout of the parent
+	 * 
+	 * @param value the new value
+	 * @return true if the operation is allowed by the layout, false otherwise
+	 */
+	private boolean checkLayoutValidity(Object value){
+		ANode parent = getTarget().getParent();
+		JRDesignElement jrElement = (JRDesignElement)getTarget().getValue();
+		Class<? extends ILayout> currentLayout = LayoutManager.getContainerLayout(parent);
+		//Avoid further calculation when using the free layout
+		if (currentLayout == FreeLayout.class) return true;
+		
+		int currentHeight = jrElement.getHeight();
+		int currentWidth = jrElement.getWidth();
+		int currentX = jrElement.getX();
+		int currentY = jrElement.getY();
+		Rectangle oldBounds = new Rectangle(currentX, currentY, currentWidth, currentHeight);
+		
+		if (JRDesignElement.PROPERTY_HEIGHT.equals(propertyID)){
+			currentHeight = (Integer)value;
+		} else if (JRDesignElement.PROPERTY_WIDTH.equals(propertyID)){
+			currentWidth= (Integer)value;
+		} else if (JRDesignElement.PROPERTY_X.equals(propertyID)){
+			currentX = (Integer)value;
+		} else if (JRDesignElement.PROPERTY_Y.equals(propertyID)){
+			currentY = (Integer)value;
+		}
+		
+		Rectangle newBounds = new Rectangle(currentX, currentY, currentWidth, currentHeight);
+		return LayoutManager.getLayout(currentLayout.getName()).allowChildBoundChange(getTarget(), oldBounds, newBounds);
 	}
 	
 	/**

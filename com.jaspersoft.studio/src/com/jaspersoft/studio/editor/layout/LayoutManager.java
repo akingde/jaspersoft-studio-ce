@@ -176,6 +176,37 @@ public class LayoutManager {
 	}
 	
 	/**
+	 * Return the layout class type of the container node
+	 * 
+	 * @param container the container node
+	 * @return the layout class type. If a layout can't be found it return the free layout
+	 * type
+	 */
+	public static Class<? extends ILayout> getContainerLayout(ANode container){
+		if (container == null) {
+			return FreeLayout.class;
+		} else {
+			//get the properties of the parent
+			JRPropertiesMap map = getPropertyMap(container);
+			if (map != null) {
+				String str = map.getProperty(ILayout.KEY);
+				if (str == null){
+					if (container instanceof IContainerLayout){
+						ILayout defLayout = ((IContainerLayout)container).getDefaultLayout();
+						if (defLayout != null){
+							str = defLayout.getClass().getName();
+						}
+					}
+					if (str == null) str = FreeLayout.class.getName();
+				}
+				return LayoutManager.getLayout(str).getClass();	
+			} else {
+				return FreeLayout.class;
+			}
+		}
+	}
+	
+	/**
 	 * Create a layout command to layout the container passed as parameter
 	 * 
 	 * @param containerToLayout the container to layout, if null the result will be null
