@@ -31,6 +31,7 @@ import net.sf.jasperreports.engine.type.ModeEnum;
 import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.editor.style.ApplyStyleAction;
 import com.jaspersoft.studio.model.style.command.CreateStyleCommand;
+import com.jaspersoft.studio.model.style.command.UpdateStyleCommand;
 import com.jaspersoft.studio.utils.ModelUtils;
 
 /**
@@ -280,19 +281,28 @@ public class ApplyCrosstabStyleAction extends ApplyStyleAction {
 	 * @param removeOldStyles if updateOldStyles is false, after the new styles are created the old one are deleted
 	 */
 	public void updateStyle(JasperDesign design, List<JRDesignStyle> newStyles, boolean updatOldStyles, boolean removeOldStyles){
-		JSSCompoundCommand commands = new JSSCompoundCommand(null);
 		if (updatOldStyles){
+			JSSCompoundCommand commands = new JSSCompoundCommand(null);
+			List<JRDesignStyle> stylesToApply = new ArrayList<JRDesignStyle>(newStyles);
 			JRDesignStyle[] actualStyles = getStylesFromCrosstab();
 			for(int i=0; i<actualStyles.length; i++){
 				JRDesignStyle style = actualStyles[i];
 				if (style != null){
-					JRDesignStyle updatedStyle = newStyles.get(i);
+					JRDesignStyle updatedStyle = stylesToApply.get(i);
 					updatedStyle.setName(style.getName());
-					design.removeStyle(style.getName());
-					commands.add(new CreateStyleCommand(design, updatedStyle));
+					JRDesignStyle styleToUpdate = (JRDesignStyle)design.getStylesMap().get(style.getName());
+					stylesToApply.set(i, styleToUpdate);
+					if (styleToUpdate != null){
+						commands.add(new UpdateStyleCommand(updatedStyle, styleToUpdate));
+					} else {
+						stylesToApply.set(i, null);
+					}
 				}
 			}
+			commands.execute();
+			setCellStyles(stylesToApply);
 		} else {
+			JSSCompoundCommand commands = new JSSCompoundCommand(null);
 			styles = newStyles;
 			Map<String,JRStyle> stylesMap = design.getStylesMap();
 			if (removeOldStyles){
@@ -304,9 +314,9 @@ public class ApplyCrosstabStyleAction extends ApplyStyleAction {
 			for(JRDesignStyle style : newStyles){
 				if (style != null && !stylesMap.containsKey(style.getName())) commands.add(new CreateStyleCommand(design, style));
 			}
+			commands.execute();
+			setCellStyles(newStyles);
 		}
-		commands.execute();
-		setCellStyles(newStyles);
 	}
 	
 	

@@ -14,15 +14,16 @@ package com.jaspersoft.studio.model.style.command;
 
 import java.util.List;
 
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.design.JRDesignStyle;
-import net.sf.jasperreports.engine.design.JasperDesign;
-
 import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.model.style.MStyle;
+import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.style.MStyles;
+import com.jaspersoft.studio.utils.ModelUtils;
+
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.design.JRDesignStyle;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 /**
  * Remove a style and update the reference to the node that
@@ -41,7 +42,10 @@ public class DeleteStyleCommand extends Command {
 	/** The element position. */
 	private int elementPosition = 0;
 
-	private MStyles destNode;
+	/**
+	 * The node of the current report
+	 */
+	private MReport reportNode;
 
 	/**
 	 * The list of nodes from where the removed style reference
@@ -50,33 +54,32 @@ public class DeleteStyleCommand extends Command {
 	private List<ANode> elementsUsingStyle = null;
 	
 	/**
-	 * Instantiates a new delete style command. This 
-	 * constructor support the update of the node to not point
-	 * anymore to the removed style
+	 * Instantiates a new delete style command.
 	 * 
-	 * @param destNode the styles parent node
-	 * @param srcNode the style to remove
+	 * @param reportNode the report where the style is contained
+	 * @param style the style to delete
 	 */
-	public DeleteStyleCommand(MStyles destNode, MStyle srcNode) {
+	public DeleteStyleCommand(MReport reportNode, JRDesignStyle style) {
 		super();
-		this.jrDesign = srcNode.getJasperDesign();
-		this.jrStyle = (JRDesignStyle) srcNode.getValue();
-		this.destNode = destNode;
-	}
-
-	/**
-	 * Instantiates a new delete style command. This 
-	 * constructor NOT support the update of the node to not point
-	 * anymore to the removed style
-	 * 
-	 * @param design the JasperDesign of the report
-	 * @param style the style to remove
-	 */
-	public DeleteStyleCommand(JasperDesign design, JRDesignStyle style) {
-		this.jrDesign = design;
+		this.jrDesign = reportNode.getJasperDesign();
 		this.jrStyle = style;
+		this.reportNode = reportNode;
 	}
-
+	
+	
+	/**
+	 * Instantiates a new delete style command. 
+	 * 
+	 * @param styleNode a node that is used to get the report where this style is contained
+	 * @param style the style to delete
+	 */
+	public DeleteStyleCommand(MStyles styleNode, JRDesignStyle style) {
+		super();
+		this.jrDesign = styleNode.getJasperDesign();
+		this.jrStyle = style;
+		reportNode = ModelUtils.getReport(styleNode);
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -84,11 +87,9 @@ public class DeleteStyleCommand extends Command {
 	 */
 	@Override
 	public void execute() {
-		//if it was created with the first constructor check the element using the style
-		if (destNode != null){
-			elementsUsingStyle = ((ANode)destNode.getRoot()).getUsedStyles().get(jrStyle.getName());
+		if (reportNode != null){
+			elementsUsingStyle = reportNode.getUsedStyles().get(jrStyle.getName());
 		}
-			
 		elementPosition = jrDesign.getStylesList().indexOf(jrStyle);
 		jrDesign.removeStyle(jrStyle);
 

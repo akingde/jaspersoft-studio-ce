@@ -15,18 +15,6 @@ package com.jaspersoft.studio.components.crosstab.action;
 import java.util.HashSet;
 import java.util.List;
 
-import net.sf.jasperreports.crosstabs.JRCellContents;
-import net.sf.jasperreports.crosstabs.JRCrosstabCell;
-import net.sf.jasperreports.crosstabs.JRCrosstabColumnGroup;
-import net.sf.jasperreports.crosstabs.JRCrosstabRowGroup;
-import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
-import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
-import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabColumnGroup;
-import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabRowGroup;
-import net.sf.jasperreports.engine.JRStyle;
-import net.sf.jasperreports.engine.design.JRDesignStyle;
-import net.sf.jasperreports.engine.design.JasperDesign;
-
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -38,8 +26,21 @@ import com.jaspersoft.studio.components.crosstab.model.MCrosstab;
 import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.editor.action.ACachedSelectionAction;
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
+import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.command.ForceRefreshCommand;
 import com.jaspersoft.studio.model.style.command.DeleteStyleCommand;
+import com.jaspersoft.studio.utils.ModelUtils;
+
+import net.sf.jasperreports.crosstabs.JRCellContents;
+import net.sf.jasperreports.crosstabs.JRCrosstabCell;
+import net.sf.jasperreports.crosstabs.JRCrosstabColumnGroup;
+import net.sf.jasperreports.crosstabs.JRCrosstabRowGroup;
+import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
+import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
+import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabColumnGroup;
+import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabRowGroup;
+import net.sf.jasperreports.engine.JRStyle;
+import net.sf.jasperreports.engine.design.JRDesignStyle;
 
 /**
  * Action to delete all the styles from a crosstab element
@@ -58,11 +59,6 @@ public class RemoveCrosstabStylesAction extends ACachedSelectionAction {
 	 * hashmap used internally to keep trace of the deleted styles
 	 */
 	private HashSet<String> deletedStyles;
-	
-	/**
-	 * Jasperdesign of the actually handled table
-	 */
-	private JasperDesign design;
 	
 	/**
 	 * The id of the action
@@ -123,14 +119,14 @@ public class RemoveCrosstabStylesAction extends ACachedSelectionAction {
 	 * @param cell the cell from where the style must be removed 
 	 * @param container compound command where the new commands will be stored
 	 */
-	protected void createCommand(JRCellContents cell, JSSCompoundCommand container){
+	protected void createCommand(JRCellContents cell, JSSCompoundCommand container, MReport report){
 		if (cell != null && cell instanceof JRDesignCellContents){
 			container.add(new RemoveStyleCommand((JRDesignCellContents)cell));
 			if (deleteStyles && cell.getStyle() != null){
 				JRStyle style = cell.getStyle();
 				if (!deletedStyles.contains(style.getName())){
 					deletedStyles.add(style.getName());
-					container.add(new DeleteStyleCommand(design, (JRDesignStyle)style));
+					container.add(new DeleteStyleCommand(report, (JRDesignStyle)style));
 				}
 			}
 		}
@@ -151,24 +147,24 @@ public class RemoveCrosstabStylesAction extends ACachedSelectionAction {
 		deletedStyles = new HashSet<String>();
 		for(EditPart editPart : editParts){
 			MCrosstab crosstabModel = (MCrosstab)editPart.getModel();
+			MReport report = ModelUtils.getReport(crosstabModel);
 			command.setReferenceNodeIfNull(crosstabModel);
-			design = crosstabModel.getJasperDesign();
 			JRDesignCrosstab crosstab = (JRDesignCrosstab)crosstabModel.getValue();
 			//This command is added before and after all the other commands to force its
 			//refresh when the other commands are executed ore undone
 			command.add(new ForceRefreshCommand(crosstabModel));
 			for (JRCrosstabRowGroup rowGroup : crosstab.getRowGroupsList()){
 				JRDesignCrosstabRowGroup designGroup = (JRDesignCrosstabRowGroup)rowGroup;
-				createCommand(designGroup.getTotalHeader(), command);
-				createCommand(designGroup.getHeader(), command);
+				createCommand(designGroup.getTotalHeader(), command, report);
+				createCommand(designGroup.getHeader(), command, report);
 			}
 			for (JRCrosstabColumnGroup colGroup : crosstab.getColumnGroupsList()){
 				JRDesignCrosstabColumnGroup designGroup = (JRDesignCrosstabColumnGroup)colGroup;
-				createCommand(designGroup.getTotalHeader(), command);
-				createCommand(designGroup.getHeader(), command);
+				createCommand(designGroup.getTotalHeader(), command, report);
+				createCommand(designGroup.getHeader(), command, report);
 			}
 			for(JRCrosstabCell dataCell : crosstab.getCellsList()){
-				createCommand(dataCell.getContents(), command);
+				createCommand(dataCell.getContents(), command, report);
 			}
 			command.add(new ForceRefreshCommand(crosstabModel));
 		}

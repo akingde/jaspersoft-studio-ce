@@ -23,6 +23,35 @@ import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang.ObjectUtils;
+import org.eclipse.core.runtime.Assert;
+import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.gef.EditPart;
+import org.eclipse.jface.resource.ImageDescriptor;
+
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
+import com.jaspersoft.studio.editor.expression.ExpressionEditorSupportUtil;
+import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.model.IDatasetContainer;
+import com.jaspersoft.studio.model.IGraphicElement;
+import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.model.MDummy;
+import com.jaspersoft.studio.model.MGraphicElement;
+import com.jaspersoft.studio.model.MPage;
+import com.jaspersoft.studio.model.MReport;
+import com.jaspersoft.studio.model.band.MBand;
+import com.jaspersoft.studio.model.dataset.MDataset;
+import com.jaspersoft.studio.model.dataset.MDatasetRun;
+import com.jaspersoft.studio.model.dataset.MElementDataset;
+import com.jaspersoft.studio.model.sortfield.MSortFields;
+import com.jaspersoft.studio.model.util.ModelVisitor;
+import com.jaspersoft.studio.plugin.IComponentFactory;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
 import net.sf.jasperreports.components.items.ItemData;
 import net.sf.jasperreports.components.items.StandardItemData;
 import net.sf.jasperreports.components.map.MapComponent;
@@ -80,35 +109,6 @@ import net.sf.jasperreports.engine.type.HyperlinkTypeEnum;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.engine.util.JRSaver;
 import net.sf.jasperreports.engine.util.MarkupProcessorFactory;
-
-import org.apache.commons.lang.ObjectUtils;
-import org.eclipse.core.runtime.Assert;
-import org.eclipse.draw2d.geometry.Dimension;
-import org.eclipse.draw2d.geometry.Point;
-import org.eclipse.gef.EditPart;
-import org.eclipse.jface.resource.ImageDescriptor;
-
-import com.jaspersoft.studio.JaspersoftStudioPlugin;
-import com.jaspersoft.studio.editor.expression.ExpressionContext;
-import com.jaspersoft.studio.editor.expression.ExpressionEditorSupportUtil;
-import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.model.APropertyNode;
-import com.jaspersoft.studio.model.IDatasetContainer;
-import com.jaspersoft.studio.model.IGraphicElement;
-import com.jaspersoft.studio.model.INode;
-import com.jaspersoft.studio.model.MDummy;
-import com.jaspersoft.studio.model.MGraphicElement;
-import com.jaspersoft.studio.model.MPage;
-import com.jaspersoft.studio.model.MReport;
-import com.jaspersoft.studio.model.band.MBand;
-import com.jaspersoft.studio.model.dataset.MDataset;
-import com.jaspersoft.studio.model.dataset.MDatasetRun;
-import com.jaspersoft.studio.model.dataset.MElementDataset;
-import com.jaspersoft.studio.model.sortfield.MSortFields;
-import com.jaspersoft.studio.model.util.ModelVisitor;
-import com.jaspersoft.studio.plugin.IComponentFactory;
-import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /*
  * The Class ModelUtils.
@@ -1293,6 +1293,28 @@ public class ModelUtils {
 			}
 		}
 		return key;
+	}
+	
+	/**
+	 * Starting from a node go up in the hierarchy until an MReport is found
+	 * 
+	 * @param node the starting node
+	 * @return the MReport where the starting node is contained, or null
+	 * if it can't be found
+	 */
+	public static MReport getReport(ANode node){
+		ANode parent = node.getParent();
+		MReport reportNode = null;
+		while(reportNode == null && parent != null){
+			if (parent instanceof MReport){
+				reportNode = (MReport)parent;
+			} else if (parent instanceof MPage){
+				parent = ((MPage)parent).getRealParent();
+			} else {
+				parent = parent.getParent();
+			}
+		}
+		return reportNode;
 	}
 
 	/**

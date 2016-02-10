@@ -71,8 +71,15 @@ public class UpdateStyleCommand extends Command{
 	@Override
 	public void execute() {
 		ApplyTableStyleAction applyAction = new ApplyTableStyleAction(newStyleTemplate, table.getValue()); 
-		//Save the old style
-		oldStyles = applyAction.getStylesFromTable();
+		//Save the old styles for the undo
+		JRDesignStyle[] tableStyles = applyAction.getStylesFromTable(table.getJasperDesign());
+		oldStyles = new JRDesignStyle[tableStyles.length];
+		for(int i = 0; i < tableStyles.length; i++){
+			JRDesignStyle currentStyle = tableStyles[i];
+			if (currentStyle != null){
+				oldStyles[i] = (JRDesignStyle)currentStyle.clone();
+			}
+		}
 		//Apply the new style, the old one if not overwritten are not removed
 		applyAction.updateStyle(table.getJasperDesign(), newStyleTemplate, updateOldStyles, false);
 		table.setChangedProperty(true);
@@ -83,7 +90,7 @@ public class UpdateStyleCommand extends Command{
 		ArrayList<JRDesignStyle> styles =  new ArrayList<JRDesignStyle>(Arrays.asList(oldStyles));
 		ApplyTableStyleAction applyAction = new ApplyTableStyleAction(styles, table.getValue()); 
 		//Restore the new style, if the update has created new styles they will be also removed
-		applyAction.updateStyle(table.getJasperDesign(), styles, false, true);
+		applyAction.updateStyle(table.getJasperDesign(), styles, updateOldStyles, true);
 		oldStyles = null;
 		table.setChangedProperty(true);
 	}

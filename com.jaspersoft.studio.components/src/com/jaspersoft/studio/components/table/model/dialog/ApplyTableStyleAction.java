@@ -13,9 +13,15 @@
 package com.jaspersoft.studio.components.table.model.dialog;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+
+import com.jaspersoft.studio.JSSCompoundCommand;
+import com.jaspersoft.studio.components.table.model.dialog.TableStyle.BorderStyleEnum;
+import com.jaspersoft.studio.editor.style.ApplyStyleAction;
+import com.jaspersoft.studio.model.style.command.CreateStyleCommand;
+import com.jaspersoft.studio.model.style.command.UpdateStyleCommand;
+import com.jaspersoft.studio.utils.ModelUtils;
 
 import net.sf.jasperreports.components.table.BaseColumn;
 import net.sf.jasperreports.components.table.DesignCell;
@@ -32,12 +38,6 @@ import net.sf.jasperreports.engine.design.JRDesignConditionalStyle;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.ModeEnum;
-
-import com.jaspersoft.studio.JSSCompoundCommand;
-import com.jaspersoft.studio.components.table.model.dialog.TableStyle.BorderStyleEnum;
-import com.jaspersoft.studio.editor.style.ApplyStyleAction;
-import com.jaspersoft.studio.model.style.command.CreateStyleCommand;
-import com.jaspersoft.studio.utils.ModelUtils;
 
 /**
  * class to apply a TemplateStyle (with type TableStyle) to a Table or to update it 
@@ -196,42 +196,62 @@ public class ApplyTableStyleAction extends ApplyStyleAction {
 	 * @return the list of styles actually used in the cells of the table in this order 
 	 * null (for retrocompatibility), Table Header, Column Header and Detail.
 	 */
-	public JRDesignStyle[] getStylesFromTable(){
+	public JRDesignStyle[] getStylesFromTable(JasperDesign jd){
 		StandardTable jrTable = getStandardTable(getElement());
-		return getStylesFromTable(jrTable);
+		return getStylesFromTable(jrTable, getElement().getPropertiesMap(), jd);
+	}
+	
+	
+	/**
+	 * Check if the passed map has one of the properties that bind the table to
+	 * its default styles
+	 * 
+	 * @param tableMap
+	 *            the properties map of the table
+	 * @return true if the table map has one of the properties that reference
+	 *         the default style, false otherwise
+	 */
+	protected static boolean hasStyleProperties(JRPropertiesMap tableMap) {
+		return (tableMap.containsProperty(ApplyTableStyleAction.COLUMN_HEADER_PROPERTY)
+				|| tableMap.containsProperty(ApplyTableStyleAction.TABLE_HEADER_PROPERTY)
+				|| tableMap.containsProperty(ApplyTableStyleAction.DETAIL_PROPERTY));
 	}
 	
 	/**
 	 * Extract the list of styles actually used on the table 
 	 * 
 	 * @param jrTable a not null table from where the styles are extracted
+	 * @param tableMap the properties map of the current table
+	 * @param the JasperDesign of the current report
 	 * @return the list of styles actually used in the cells of the table in this order 
 	 * null (for retrocompatibility), Table Header, Column Header and Detail.
+	 * 
 	 */
-	public static JRDesignStyle[] getStylesFromTable(StandardTable jrTable){
-		List<BaseColumn> columns = TableUtil.getAllColumns(jrTable);
-    	JRDesignStyle[] stylesArray = new JRDesignStyle[4];
-    	if (columns.size()>0){
-    		BaseColumn standardCol = columns.get(0);
-    		if (standardCol.getColumnFooter() != null) stylesArray[2] = (JRDesignStyle)standardCol.getColumnFooter().getStyle();
-    		if (standardCol.getColumnHeader() != null) stylesArray[2] = (JRDesignStyle)standardCol.getColumnHeader().getStyle();
-    		if (standardCol.getTableHeader() != null) stylesArray[1] = (JRDesignStyle)standardCol.getTableHeader().getStyle();
-    		if (standardCol.getTableFooter() != null) stylesArray[1] = (JRDesignStyle)standardCol.getTableFooter().getStyle();
-    		if (standardCol instanceof StandardColumn){
-				DesignCell detCell = (DesignCell) ((StandardColumn)standardCol).getDetailCell();
-				if (detCell != null)  stylesArray[3] = (JRDesignStyle)detCell.getStyle();
-    		}
+	public static JRDesignStyle[] getStylesFromTable(StandardTable jrTable, JRPropertiesMap tableMap, JasperDesign jd){
+		JRDesignStyle[] stylesArray = new JRDesignStyle[4];
+		if (hasStyleProperties(tableMap)){
+			String tableHeaderStyle = tableMap.getProperty(TABLE_HEADER_PROPERTY);
+			stylesArray[1] = (JRDesignStyle)jd.getStylesMap().get(tableHeaderStyle);
+			String columnHeaderStyle = tableMap.getProperty(COLUMN_HEADER_PROPERTY);
+			stylesArray[2] = (JRDesignStyle)jd.getStylesMap().get(columnHeaderStyle);
+			String detailStyle = tableMap.getProperty(DETAIL_PROPERTY);
+			stylesArray[3] = (JRDesignStyle)jd.getStylesMap().get(detailStyle);
+		} else {
+			List<BaseColumn> columns = TableUtil.getAllColumns(jrTable);
+	    	if (columns.size()>0){
+	    		BaseColumn standardCol = columns.get(0);
+	    		if (standardCol.getColumnFooter() != null) stylesArray[2] = (JRDesignStyle)standardCol.getColumnFooter().getStyle();
+	    		if (standardCol.getColumnHeader() != null) stylesArray[2] = (JRDesignStyle)standardCol.getColumnHeader().getStyle();
+	    		if (standardCol.getTableHeader() != null) stylesArray[1] = (JRDesignStyle)standardCol.getTableHeader().getStyle();
+	    		if (standardCol.getTableFooter() != null) stylesArray[1] = (JRDesignStyle)standardCol.getTableFooter().getStyle();
+	    		if (standardCol instanceof StandardColumn){
+					DesignCell detCell = (DesignCell) ((StandardColumn)standardCol).getDetailCell();
+					if (detCell != null)  stylesArray[3] = (JRDesignStyle)detCell.getStyle();
+	    		}
+	    	}
     	}
 	    return stylesArray;
 	}
-	
-	/**
-	 * Use the table to rebuild the styles list from it
-	 */
-    public void rebuildStylesFromTable()
-    {
-    	styles =  new ArrayList<JRDesignStyle>(Arrays.asList(getStylesFromTable()));
-    }
 	
     /**
      * Extract the standard table from a JRDesignComponentElement
@@ -259,6 +279,7 @@ public class ApplyTableStyleAction extends ApplyStyleAction {
 		updateStyle(design, createStyles(design, false), updatOldStyles, removeOldStyles);
 	}
 	
+
 	/**
 	 * Update the style of the table with a new list of styles
 	 * 
@@ -270,26 +291,33 @@ public class ApplyTableStyleAction extends ApplyStyleAction {
 	 * @param removeOldStyles if updateOldStyles is false, after the new styles are created the old one are deleted
 	 */
 	public void updateStyle(JasperDesign design, List<JRDesignStyle> newStyles, boolean updatOldStyles, boolean removeOldStyles){
-		List<JRDesignStyle> stylesToApply = new ArrayList<JRDesignStyle>(newStyles);
-		JSSCompoundCommand commands = new JSSCompoundCommand(null);
 		if (updatOldStyles){
-			JRDesignStyle[] actualStyles = getStylesFromTable();
+			JSSCompoundCommand commands = new JSSCompoundCommand(null);
+			List<JRDesignStyle> stylesToApply = new ArrayList<JRDesignStyle>(newStyles);
+			JRDesignStyle[] actualStyles = getStylesFromTable(design);
 			for(int i=0; i<actualStyles.length; i++){
 				JRDesignStyle style = actualStyles[i];
 				if (style != null){
 					JRDesignStyle updatedStyle = stylesToApply.get(i);
 					updatedStyle.setName(style.getName());
-					design.removeStyle(style.getName());
-					commands.add(new CreateStyleCommand(design, updatedStyle));
+					JRDesignStyle styleToUpdate = (JRDesignStyle)design.getStylesMap().get(style.getName());
+					stylesToApply.set(i, styleToUpdate);
+					if (styleToUpdate != null){
+						commands.add(new UpdateStyleCommand(updatedStyle, styleToUpdate));
+					}
 				} else {
 					stylesToApply.set(i, null);
 				}
 			}
+			commands.execute();
+			setCellStyles(stylesToApply);
 		} else {
+			JSSCompoundCommand commands = new JSSCompoundCommand(null);
+			List<JRDesignStyle> stylesToApply = new ArrayList<JRDesignStyle>(newStyles);
 			styles = stylesToApply;
 			Map<String,JRStyle> stylesMap = design.getStylesMap();
 			if (removeOldStyles){
-				JRDesignStyle[] oldStyles = getStylesFromTable();
+				JRDesignStyle[] oldStyles = getStylesFromTable(design);
 				for(JRDesignStyle style : oldStyles){
 					if (style != null) design.removeStyle(style);
 				}
@@ -297,9 +325,9 @@ public class ApplyTableStyleAction extends ApplyStyleAction {
 			for(JRDesignStyle style : stylesToApply){
 				if (style != null && !stylesMap.containsKey(style.getName())) commands.add(new CreateStyleCommand(design, style));
 			}
+			commands.execute();
+			setCellStyles(stylesToApply);
 		}
-		commands.execute();
-		setCellStyles(stylesToApply);
 	}
 		
 	/**

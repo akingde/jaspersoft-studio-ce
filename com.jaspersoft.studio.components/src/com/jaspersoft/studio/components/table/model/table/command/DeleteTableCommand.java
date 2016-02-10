@@ -18,19 +18,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
-import net.sf.jasperreports.eclipse.ui.util.RunnableCancelQuestion.RESPONSE_TYPE;
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.engine.JRStyle;
-import net.sf.jasperreports.engine.design.JRDesignStyle;
-
 import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.components.table.model.MTable;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MPage;
+import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.command.DeleteElementCommand;
 import com.jaspersoft.studio.model.style.command.DeleteStyleCommand;
+import com.jaspersoft.studio.utils.ModelUtils;
+
+import net.sf.jasperreports.eclipse.ui.util.RunnableCancelQuestion.RESPONSE_TYPE;
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.engine.JRStyle;
+import net.sf.jasperreports.engine.design.JRDesignStyle;
 
 /**
  * Delete the element and also the styles that where used inside and 
@@ -89,9 +91,9 @@ public class DeleteTableCommand extends DeleteElementCommand {
 	@Override
 	public void execute() {
 		delteStylesCommand.clear();
-		ANode root = (ANode)table.getParent().getRoot();
+		MReport report = ModelUtils.getReport(table);
 		//get the list of styles used in the element
-		HashMap<String, List<ANode>> reportStyles = root.getUsedStyles();
+		HashMap<String, List<ANode>> reportStyles = report.getUsedStyles();
 		HashMap<String, List<ANode>> tableStyles = table.getUsedStyles();
 		
 		//check which styles were used in the element but not in the rest of the report
@@ -118,7 +120,7 @@ public class DeleteTableCommand extends DeleteElementCommand {
 			if (response == RESPONSE_TYPE.YES){
 				for(String style : unusedStyles){
 					JRStyle styleObject = jDesign.getStylesMap().get(style);
-					DeleteStyleCommand command = new DeleteStyleCommand(jDesign, (JRDesignStyle)styleObject);
+					DeleteStyleCommand command = new DeleteStyleCommand(report, (JRDesignStyle)styleObject);
 					delteStylesCommand.add(command);
 				}
 			} else if (response == RESPONSE_TYPE.CANCEL) {

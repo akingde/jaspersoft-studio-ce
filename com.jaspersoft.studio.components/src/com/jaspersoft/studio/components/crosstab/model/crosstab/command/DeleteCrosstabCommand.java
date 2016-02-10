@@ -18,18 +18,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
-import net.sf.jasperreports.eclipse.ui.util.RunnableCancelQuestion.RESPONSE_TYPE;
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.engine.JRStyle;
-import net.sf.jasperreports.engine.design.JRDesignStyle;
-
 import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.components.crosstab.model.MCrosstab;
 import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.command.DeleteElementCommand;
 import com.jaspersoft.studio.model.style.command.DeleteStyleCommand;
+import com.jaspersoft.studio.utils.ModelUtils;
+
+import net.sf.jasperreports.eclipse.ui.util.RunnableCancelQuestion.RESPONSE_TYPE;
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.engine.JRStyle;
+import net.sf.jasperreports.engine.design.JRDesignStyle;
 
 /**
  * Delete the element and also the styles that where used inside and 
@@ -88,9 +90,9 @@ public class DeleteCrosstabCommand extends DeleteElementCommand {
 	@Override
 	public void execute() {
 		delteStylesCommand.clear();
-		ANode root = (ANode)crosstab.getParent().getRoot();
+		MReport report = ModelUtils.getReport(crosstab);
 		//get the list of styles used in the element
-		HashMap<String, List<ANode>> reportStyles = root.getUsedStyles();
+		HashMap<String, List<ANode>> reportStyles = report.getUsedStyles();
 		HashMap<String, List<ANode>> crosstabStyles = crosstab.getUsedStyles();
 		
 		//check which styles were used in the element but not in the rest of the report
@@ -98,8 +100,7 @@ public class DeleteCrosstabCommand extends DeleteElementCommand {
 		
 		for(Entry<String, List<ANode>> entry : crosstabStyles.entrySet()){
 			List<ANode> nodesUsingOutsideTable = reportStyles.get(entry.getKey());
-			if (jDesign.getStylesMap().containsKey(entry.getKey()) && 
-					isUsedOnlyByCrosstab(entry.getValue(), nodesUsingOutsideTable)){
+			if (jDesign.getStylesMap().containsKey(entry.getKey()) &&  isUsedOnlyByCrosstab(entry.getValue(), nodesUsingOutsideTable)){
 				unusedStyles.add(entry.getKey());
 			}
 		}
@@ -117,7 +118,7 @@ public class DeleteCrosstabCommand extends DeleteElementCommand {
 			if (response == RESPONSE_TYPE.YES){
 				for(String style : unusedStyles){
 					JRStyle styleObject = jDesign.getStylesMap().get(style);
-					DeleteStyleCommand command = new DeleteStyleCommand(jDesign, (JRDesignStyle)styleObject);
+					DeleteStyleCommand command = new DeleteStyleCommand(report, (JRDesignStyle)styleObject);
 					delteStylesCommand.add(command);
 				}
 			} else if (response == RESPONSE_TYPE.CANCEL) {

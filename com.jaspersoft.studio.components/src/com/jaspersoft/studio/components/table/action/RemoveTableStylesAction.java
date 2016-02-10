@@ -15,19 +15,6 @@ package com.jaspersoft.studio.components.table.action;
 import java.util.HashSet;
 import java.util.List;
 
-import net.sf.jasperreports.components.table.BaseColumn;
-import net.sf.jasperreports.components.table.Cell;
-import net.sf.jasperreports.components.table.DesignCell;
-import net.sf.jasperreports.components.table.GroupCell;
-import net.sf.jasperreports.components.table.StandardColumn;
-import net.sf.jasperreports.components.table.StandardColumnGroup;
-import net.sf.jasperreports.components.table.StandardTable;
-import net.sf.jasperreports.engine.JRPropertiesMap;
-import net.sf.jasperreports.engine.JRStyle;
-import net.sf.jasperreports.engine.design.JRDesignComponentElement;
-import net.sf.jasperreports.engine.design.JRDesignStyle;
-import net.sf.jasperreports.engine.design.JasperDesign;
-
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -40,9 +27,23 @@ import com.jaspersoft.studio.components.table.model.MTable;
 import com.jaspersoft.studio.components.table.model.dialog.ApplyTableStyleAction;
 import com.jaspersoft.studio.editor.action.ACachedSelectionAction;
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
+import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.command.ForceRefreshCommand;
 import com.jaspersoft.studio.model.style.command.DeleteStyleCommand;
 import com.jaspersoft.studio.property.SetPropertyValueCommand;
+import com.jaspersoft.studio.utils.ModelUtils;
+
+import net.sf.jasperreports.components.table.BaseColumn;
+import net.sf.jasperreports.components.table.Cell;
+import net.sf.jasperreports.components.table.DesignCell;
+import net.sf.jasperreports.components.table.GroupCell;
+import net.sf.jasperreports.components.table.StandardColumn;
+import net.sf.jasperreports.components.table.StandardColumnGroup;
+import net.sf.jasperreports.components.table.StandardTable;
+import net.sf.jasperreports.engine.JRPropertiesMap;
+import net.sf.jasperreports.engine.JRStyle;
+import net.sf.jasperreports.engine.design.JRDesignComponentElement;
+import net.sf.jasperreports.engine.design.JRDesignStyle;
 
 /**
  * Action to delete all the styles from a table element
@@ -67,10 +68,6 @@ public class RemoveTableStylesAction extends ACachedSelectionAction {
 	 */
 	private HashSet<String> deletedStyles;
 	
-	/**
-	 * Jasperdesign of the actually handled table
-	 */
-	private JasperDesign design;
 	
 	public RemoveTableStylesAction(IWorkbenchPart part) {
 		super(part);
@@ -132,15 +129,16 @@ public class RemoveTableStylesAction extends ACachedSelectionAction {
 	 * 
 	 * @param cell the cell from where the style must be removed 
 	 * @param container compound command where the new commands will be stored
+	 * @param report the report where the table is contained
 	 */
-	protected void createCommand(Cell cell, JSSCompoundCommand container){
+	protected void createCommand(Cell cell, JSSCompoundCommand container, MReport report){
 		if (cell != null && cell instanceof DesignCell){
 			container.add(new RemoveStyleCommand((DesignCell)cell));
 			if (deleteStyles && cell.getStyle() != null){
 				JRStyle style = cell.getStyle();
 				if (!deletedStyles.contains(style.getName())){
 					deletedStyles.add(style.getName());
-					container.add(new DeleteStyleCommand(design, (JRDesignStyle)style));
+					container.add(new DeleteStyleCommand(report, (JRDesignStyle)style));
 				}
 			}
 		}
@@ -151,30 +149,31 @@ public class RemoveTableStylesAction extends ACachedSelectionAction {
 	 * 
 	 * @param columns not null list of columns
 	 * @param container compound command where the new commands will be stored
+	 * @param report the report where the table is contained
 	 */
-	protected void createCommandForColumns(List<BaseColumn> columns, JSSCompoundCommand command){
+	protected void createCommandForColumns(List<BaseColumn> columns, JSSCompoundCommand command, MReport report){
 		for (BaseColumn col : columns){
-			createCommand(col.getColumnFooter(),command);
-			createCommand(col.getColumnHeader(),command);
-			createCommand(col.getTableFooter(),command);
-			createCommand(col.getTableHeader(),command);
+			createCommand(col.getColumnFooter(), command, report);
+			createCommand(col.getColumnHeader(), command, report);
+			createCommand(col.getTableFooter(), command, report);
+			createCommand(col.getTableHeader(), command, report);
 			
 			for(GroupCell cell : col.getGroupFooters()){
-				createCommand(cell.getCell(),command);
+				createCommand(cell.getCell(), command, report);
 			}
 			
 			for(GroupCell cell : col.getGroupHeaders()){
-				createCommand(cell.getCell(),command);
+				createCommand(cell.getCell(), command, report);
 			}
 			
 			if (col instanceof StandardColumn){
 				StandardColumn baseCol = (StandardColumn)col;
-				createCommand(baseCol.getDetailCell(),command);
+				createCommand(baseCol.getDetailCell(), command, report);
 			}
 			
 			if (col instanceof StandardColumnGroup){
 				StandardColumnGroup colGroup = (StandardColumnGroup)col;
-				createCommandForColumns(colGroup.getColumns(), command);
+				createCommandForColumns(colGroup.getColumns(), command, report);
 			}
 		}
 	}
@@ -234,13 +233,13 @@ public class RemoveTableStylesAction extends ACachedSelectionAction {
 		deletedStyles = new HashSet<String>();
 		for(EditPart part : parts){
 			MTable table = (MTable)part.getModel();
+			MReport report = ModelUtils.getReport(table);
 			command.setReferenceNodeIfNull(table);
-			design = table.getJasperDesign();
 			StandardTable jrTable = (StandardTable)((JRDesignComponentElement)table.getValue()).getComponent();
 			//This command is added before and after all the other commands to force its
 			//refresh when the other commands are executed ore undone
 			command.add(new ForceRefreshCommand(table));
-			createCommandForColumns(jrTable.getColumns(), command);
+			createCommandForColumns(jrTable.getColumns(), command, report);
 			//Remove the styles property if any
 			JRPropertiesMap tableMap = table.getPropertiesMap();
 			command.add(new SetPropertyValueCommand(tableMap, ApplyTableStyleAction.TABLE_HEADER_PROPERTY, null));

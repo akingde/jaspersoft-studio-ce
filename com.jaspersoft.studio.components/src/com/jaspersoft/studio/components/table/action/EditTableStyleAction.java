@@ -36,7 +36,10 @@ import com.jaspersoft.studio.components.table.model.table.command.UpdateStyleCom
 import com.jaspersoft.studio.components.table.model.table.command.wizard.TableStyleWizard;
 import com.jaspersoft.studio.editor.action.ACachedSelectionAction;
 
+import net.sf.jasperreports.components.table.StandardTable;
+import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 /**
  * Action to open the Style dialog and use it to change the style of a table
@@ -110,10 +113,13 @@ public class EditTableStyleAction extends ACachedSelectionAction {
 	 * Check if the passed table is using styles in its cells
 	 * 
 	 * @param tableModel a not null table model
-	 * @return table if at least once cell of the table is using a style, false otherwise
+	 * @return true if at least once cell of the table is using a style, false otherwise
 	 */
 	private boolean hasStyles(MTable tableModel){
-		JRDesignStyle[] currentStyles = ApplyTableStyleAction.getStylesFromTable(tableModel.getStandardTable());
+		StandardTable table = tableModel.getStandardTable();
+		JRPropertiesMap tableMap = tableModel.getValue().getPropertiesMap();
+		JasperDesign jd = tableModel.getJasperDesign();
+		JRDesignStyle[] currentStyles = ApplyTableStyleAction.getStylesFromTable(table, tableMap, jd);
 		for(int i=0; i< currentStyles.length; i++){
 			if (currentStyles[i] != null) return true;
 		}

@@ -14,16 +14,6 @@ package com.jaspersoft.studio.editor.outline;
 
 import java.util.List;
 
-import net.sf.jasperreports.engine.JRReportTemplate;
-import net.sf.jasperreports.engine.JRStyle;
-import net.sf.jasperreports.engine.design.JRDesignDataset;
-import net.sf.jasperreports.engine.design.JRDesignElement;
-import net.sf.jasperreports.engine.design.JRDesignGroup;
-import net.sf.jasperreports.engine.design.JRDesignParameter;
-import net.sf.jasperreports.engine.design.JRDesignStyle;
-import net.sf.jasperreports.engine.design.JRDesignVariable;
-import net.sf.jasperreports.engine.type.BandTypeEnum;
-
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
@@ -42,8 +32,8 @@ import com.jaspersoft.studio.editor.outline.part.ContainerTreeEditPart;
 import com.jaspersoft.studio.editor.outline.part.NotDragableContainerTreeEditPart;
 import com.jaspersoft.studio.editor.outline.part.NotDragableTreeEditPart;
 import com.jaspersoft.studio.editor.outline.part.TreeEditPart;
-import com.jaspersoft.studio.editor.tools.MCompositeElement;
 import com.jaspersoft.studio.editor.tools.CompositeElementManager;
+import com.jaspersoft.studio.editor.tools.MCompositeElement;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.IContainer;
@@ -141,6 +131,16 @@ import com.jaspersoft.studio.property.SetValueCommand;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
+import net.sf.jasperreports.engine.JRReportTemplate;
+import net.sf.jasperreports.engine.JRStyle;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
+import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.design.JRDesignGroup;
+import net.sf.jasperreports.engine.design.JRDesignParameter;
+import net.sf.jasperreports.engine.design.JRDesignStyle;
+import net.sf.jasperreports.engine.design.JRDesignVariable;
+import net.sf.jasperreports.engine.type.BandTypeEnum;
+
 /*
  * A factory for creating OutlineTreeEditPart objects.
  */
@@ -207,7 +207,7 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 				return new DeleteStyleTemplateCommand((MStyles) parent, (MStyleTemplate) child);
 		} else if (child instanceof MStyle) {
 			if (parent instanceof MStyles)
-				return new DeleteStyleCommand((MStyles) parent, (MStyle) child);
+				return new DeleteStyleCommand((MStyles) parent, (JRDesignStyle)child.getValue());
 		} else if (child instanceof MParameter) {
 			JRDesignParameter p = (JRDesignParameter) child.getValue();
 			if (!p.isSystemDefined()){

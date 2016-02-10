@@ -70,8 +70,15 @@ public class UpdateCrosstabStyleCommand extends Command{
 	@Override
 	public void execute() {
 		ApplyCrosstabStyleAction applyAction = new ApplyCrosstabStyleAction(newStyleTemplate, crosstab.getValue()); 
-		//Save the old style
-		oldStyles = applyAction.getStylesFromCrosstab();
+		//Save the old styles for the undo
+		JRDesignStyle[] tableStyles  = applyAction.getStylesFromCrosstab();
+		oldStyles = new JRDesignStyle[tableStyles.length];
+		for(int i = 0; i < tableStyles.length; i++){
+			JRDesignStyle currentStyle = tableStyles[i];
+			if (currentStyle != null){
+				oldStyles[i] = (JRDesignStyle)currentStyle.clone();
+			}
+		}
 		//Apply the new style, the old one if not overwritten are not removed
 		applyAction.updateStyle(crosstab.getJasperDesign(), newStyleTemplate, updateOldStyles, false);
 		crosstab.setChangedProperty(true);
@@ -82,7 +89,7 @@ public class UpdateCrosstabStyleCommand extends Command{
 		ArrayList<JRDesignStyle> styles =  new ArrayList<JRDesignStyle>(Arrays.asList(oldStyles));
 		ApplyCrosstabStyleAction applyAction = new ApplyCrosstabStyleAction(styles, crosstab.getValue()); 
 		//Restore the new style, if the update has created new styles they will be also removed
-		applyAction.updateStyle(crosstab.getJasperDesign(), styles, false, true);
+		applyAction.updateStyle(crosstab.getJasperDesign(), styles, updateOldStyles, true);
 		oldStyles = null;
 		crosstab.setChangedProperty(true);
 	}
