@@ -143,12 +143,6 @@ public class ExcelExporterPreferencePage extends FieldEditorOverlayPage {
 		addField(se);
 		HelpSystem.setHelp(se.getTextControl(sc), StudioPreferencePage.REFERENCE_PREFIX + se.getPreferenceName());
 
-		JSSComboFieldEditor cfe = new JSSComboFieldEditor(NSF_EXPORT_XLS_AUTO_FILTER,
-				Messages.ExcelExporterPreferencePage_autoFilter, new String[][] {
-						{ "", "" }, { "Start", "Start" }, { "Stop", "Stop" } }, sc); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
-		addField(cfe);
-		HelpSystem.setHelp(cfe.getComboBoxControl(sc), StudioPreferencePage.REFERENCE_PREFIX + cfe.getPreferenceName());
-
 		IntegerFieldEditor iedit = new IntegerFieldEditor(NSF_EXPORT_XLS_FREEZ_ROW,
 				Messages.ExcelExporterPreferencePage_freezeOnRow, sc);
 		iedit.setValidRange(0, 65536);

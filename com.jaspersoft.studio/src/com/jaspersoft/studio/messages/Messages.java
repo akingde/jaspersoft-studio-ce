@@ -653,7 +653,6 @@ public class Messages extends NLS {
 	public static String ExcelExporterPreferencePage_61;
 	public static String ExcelExporterPreferencePage_62;
 	public static String ExcelExporterPreferencePage_63;
-	public static String ExcelExporterPreferencePage_autoFilter;
 	public static String ExcelExporterPreferencePage_freezeonCol;
 	public static String ExcelExporterPreferencePage_freezeOnRow;
 	public static String ExcelExporterPreferencePage_freezeRatio;

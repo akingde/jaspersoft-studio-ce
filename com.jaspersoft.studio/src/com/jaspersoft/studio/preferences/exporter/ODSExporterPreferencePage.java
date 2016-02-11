@@ -78,7 +78,7 @@ public class ODSExporterPreferencePage extends FieldEditorOverlayPage {
 	public ODSExporterPreferencePage() {
 		super(GRID);
 		setPreferenceStore(JaspersoftStudioPlugin.getInstance().getPreferenceStore());
-		setDescription("ODS Exporter Parameters");
+		setDescription("ODS Export Options");
 	}
 
 	/**
@@ -141,11 +141,6 @@ public class ODSExporterPreferencePage extends FieldEditorOverlayPage {
 		((Text) se.getTextControl(sc)).setEchoChar('*');
 		addField(se);
 		HelpSystem.setHelp(se.getTextControl(sc), StudioPreferencePage.REFERENCE_PREFIX + se.getPreferenceName());
-
-		JSSComboFieldEditor cfe = new JSSComboFieldEditor(NSF_EXPORT_XLS_AUTO_FILTER, "Auto Filter", new String[][] {
-				{ "", "" }, { "Start", "Start" }, { "Stop", "Stop" } }, sc);
-		addField(cfe);
-		HelpSystem.setHelp(cfe.getComboBoxControl(sc), StudioPreferencePage.REFERENCE_PREFIX + cfe.getPreferenceName());
 
 		IntegerFieldEditor iedit = new IntegerFieldEditor(NSF_EXPORT_XLS_FREEZ_ROW, "Freez On Row", sc);
 		iedit.setValidRange(0, 65536);
