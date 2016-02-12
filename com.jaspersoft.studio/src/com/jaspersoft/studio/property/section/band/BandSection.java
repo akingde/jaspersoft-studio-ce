@@ -53,6 +53,8 @@ public class BandSection extends AbstractSection {
 		GridData gd = new GridData(GridData.HORIZONTAL_ALIGN_CENTER);
 		gd.horizontalSpan = 2;
 		createWidget4Property(container, JRDesignBand.PROPERTY_RETURN_VALUES, false).getControl().setLayoutData(gd);
+		
+		getWidgetFactory().paintBordersFor(container);
 	}
 
 	@Override
