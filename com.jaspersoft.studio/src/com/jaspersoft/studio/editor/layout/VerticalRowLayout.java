@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JRElement;
+import net.sf.jasperreports.engine.design.JRDesignBreak;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 
 import org.eclipse.draw2d.geometry.Dimension;
@@ -32,20 +33,36 @@ public class VerticalRowLayout extends AbstractLayout {
 		int x = 0;
 		int y = 0;
 		int w = c.width;
-		int h = (int) Math.floor((float) c.height / elements.length);
-		int rest = c.height - h * elements.length;
+		
+		//The breaks can't grow in height so cosider this when layouting
+		int breakNumbers = 0;
+		for (JRElement el : elements) {
+			if (el instanceof JRDesignBreak){
+				breakNumbers++;
+			}
+		}
+		int h = ((int) Math.floor((float) c.height / (elements.length - breakNumbers))) - breakNumbers;
+		int rest = c.height - h * (elements.length - breakNumbers) - breakNumbers;
+		
 		for (JRElement el : elements) {
 			JRDesignElement del = (JRDesignElement) el;
 			map.put(el, new Rectangle(el.getX(), el.getY(), el.getWidth(), el.getHeight()));
-			del.setX(x);
-			del.setY(y);
-			del.setWidth(w);
-			del.setHeight(h + rest);
-			// if last grab free pixels
-			y += h + rest;
-			if (rest > 0)
-				rest = 0;
-			LayoutManager.layout(map, el);
+			if (del instanceof JRDesignBreak){
+				del.setX(x);
+				del.setY(y);
+				del.setWidth(w);
+				y++;
+			} else {
+				del.setX(x);
+				del.setY(y);
+				del.setWidth(w);
+				del.setHeight(h + rest);
+				// if last grab free pixels
+				y += h + rest;
+				if (rest > 0)
+					rest = 0;
+				LayoutManager.layout(map, el);
+			}
 		}
 		return map;
 	}
