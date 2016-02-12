@@ -191,7 +191,7 @@ public class MCell extends MColumn implements IGraphicElement,
 			if (id.equals(LINE_BOX)) {
 				JRBoxContainer jrGraphicElement = (JRBoxContainer) cell;
 				if (lineBox == null) {
-					lineBox = new MLineBox(jrGraphicElement.getLineBox());
+					lineBox = new MLineBox(jrGraphicElement.getLineBox(), this);
 					setChildListener(lineBox);
 				}
 				return lineBox;
@@ -359,14 +359,26 @@ public class MCell extends MColumn implements IGraphicElement,
 		return cell;
 	}
 
-	public int getTopPadding() {
+	public Integer getTopPadding() {
 		return cell.getLineBox().getTopPadding();
 	}
 
-	public int getLeftPadding() {
+	public Integer getLeftPadding() {
 		return cell.getLineBox().getLeftPadding();
 	}
 
+	public Integer getBottomPadding() {
+		return cell.getLineBox().getBottomPadding();
+	}
+
+	public Integer getRightPadding() {
+		return cell.getLineBox().getRightPadding();
+	}
+
+	public Integer getPadding() {
+		return cell.getLineBox().getPadding();
+	}
+	
 	@Override
 	public Dimension getSize() {
 		return new Dimension(getValue().getWidth(), getCell().getHeight());

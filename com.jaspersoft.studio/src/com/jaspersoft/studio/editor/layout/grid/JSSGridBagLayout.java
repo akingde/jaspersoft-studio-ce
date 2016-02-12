@@ -29,6 +29,7 @@ import com.jaspersoft.studio.editor.layout.ILayoutUIProvider;
 import com.jaspersoft.studio.editor.layout.LayoutManager;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.utils.ModelUtils;
 
 /**
  * GridBagLayout for the elements inside a container in JSS.
@@ -91,6 +92,7 @@ public class JSSGridBagLayout extends AbstractLayout {
 	
 	@Override
 	public boolean allowChildBoundChange(ANode resizedNode, Rectangle oldBounds, Rectangle newBounds) {
+		if (ModelUtils.safeEquals(oldBounds, newBounds)) return true;
 		JRPropertiesHolder currentElement = LayoutManager.getPropertyHolder(resizedNode);
 		if (currentElement != null){
 			Object value = currentElement.getPropertiesMap().getProperty(PROPERTY_IS_FIXED);

@@ -88,7 +88,7 @@ public class PostSetSizeCell implements IPostSetValue {
 			ILayout layout = LayoutManager.getLayout(pholder, jDesign, null, new VerticalRowLayout());
 			Rectangle r = ccell.getBounds();
 			Dimension d = new Dimension(r.width, r.height);
-
+			d = LayoutManager.getPaddedSize(ccell.cell.getLineBox(), d);
 			c.add(new LayoutCommand(ccell.cell, layout, d));
 		}
 	}

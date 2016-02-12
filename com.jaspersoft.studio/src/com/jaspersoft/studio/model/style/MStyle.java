@@ -538,7 +538,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		}
 		if (id.equals(LINE_BOX)) {
 			if (lineBox == null) {
-				lineBox = new MLineBox(jrstyle.getLineBox());
+				lineBox = new MLineBox(jrstyle.getLineBox(), this);
 				setChildListener(lineBox);
 			}
 			return lineBox;

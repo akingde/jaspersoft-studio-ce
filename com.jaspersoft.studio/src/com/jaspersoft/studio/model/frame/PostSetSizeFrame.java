@@ -38,11 +38,12 @@ public class PostSetSizeFrame implements IPostSetValue {
 		return null;
 	}
 
-	public Command getResizeCommand(MFrame mband, JasperDesign jDesign) {
-		JRDesignFrame band = mband.getValue();
-		Dimension d = new Dimension(band.getWidth(), band.getHeight());
-		ILayout layout = LayoutManager.getLayout(mband.getPropertyHolder(), jDesign, null);
-		return new LayoutCommand(band, layout, d);
+	public Command getResizeCommand(MFrame frame, JasperDesign jDesign) {
+		JRDesignFrame jrFrame = frame.getValue();
+		Dimension d = new Dimension(jrFrame.getWidth(), jrFrame.getHeight());
+		d = LayoutManager.getPaddedSize(jrFrame, d);
+		ILayout layout = LayoutManager.getLayout(frame.getPropertyHolder(), jDesign, null);
+		return new LayoutCommand(jrFrame, layout, d);
 	}
 
 }

@@ -294,7 +294,7 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable,
 			if (id.equals(LINE_BOX)) {
 				JRBoxContainer jrGraphicElement = (JRBoxContainer) getValue();
 				if (lineBox == null) {
-					lineBox = new MLineBox(jrGraphicElement.getLineBox());
+					lineBox = new MLineBox(jrGraphicElement.getLineBox(), this);
 					lineBox.getPropertyChangeSupport()
 							.addPropertyChangeListener(this);
 				}
@@ -401,7 +401,7 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable,
 		return (JRBoxContainer) getValue();
 	}
 
-	public int getTopPadding() {
+	public Integer getTopPadding() {
 		JRDesignCellContents c = null;
 		if (getValue() != null) {
 			c = (JRDesignCellContents) getValue();
@@ -410,7 +410,7 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable,
 		return 0;
 	}
 
-	public int getLeftPadding() {
+	public Integer getLeftPadding() {
 		JRDesignCellContents c = null;
 		if (getValue() != null) {
 			c = (JRDesignCellContents) getValue();
@@ -418,7 +418,34 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable,
 		}
 		return 0;
 	}
+	
+	public Integer getBottomPadding() {
+		JRDesignCellContents c = null;
+		if (getValue() != null) {
+			c = (JRDesignCellContents) getValue();
+			return c.getLineBox().getBottomPadding();
+		}
+		return 0;
+	}
 
+	public Integer getRightPadding() {
+		JRDesignCellContents c = null;
+		if (getValue() != null) {
+			c = (JRDesignCellContents) getValue();
+			return c.getLineBox().getRightPadding();
+		}
+		return 0;
+	}
+
+	public Integer getPadding() {
+		JRDesignCellContents c = null;
+		if (getValue() != null) {
+			c = (JRDesignCellContents) getValue();
+			return c.getLineBox().getPadding();
+		}
+		return 0;
+	}
+	
 	public MCrosstab getCrosstab() {
 		INode node = this;
 		while (node != null && node.getParent() != null

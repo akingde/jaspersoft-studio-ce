@@ -124,6 +124,7 @@ public class CreateElementCommand extends Command {
 		}
 
 		Dimension d = new Dimension(jrColumn.getWidth(), jrCell.getHeight());
+		d = LayoutManager.getPaddedSize(jrCell, d);
 		if (lCmd == null) {
 			ILayout layout = LayoutManager.getLayout(pholder, jDesign, null, new VerticalRowLayout());
 			lCmd = new LayoutCommand(jrCell, layout, d);

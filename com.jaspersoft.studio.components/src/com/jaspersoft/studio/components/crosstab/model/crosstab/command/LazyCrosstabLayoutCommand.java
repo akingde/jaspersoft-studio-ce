@@ -125,7 +125,8 @@ public class LazyCrosstabLayoutCommand extends Command{
 			if (str == null){
 				str = VerticalRowLayout.class.getName();
 			}
-			ILayout parentLayout = LayoutManager.getLayout(str);		
+			ILayout parentLayout = LayoutManager.getLayout(str);
+			d = LayoutManager.getPaddedSize(jrElement, d);
 			c.add(new LayoutCommand(jrGroup, parentLayout, d));
 		}
 	}

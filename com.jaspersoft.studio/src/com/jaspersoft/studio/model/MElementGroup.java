@@ -113,7 +113,7 @@ public class MElementGroup extends ANode implements IContainerEditPart, IContain
 	}
 
 	@Override
-	public int getTopPadding() {
+	public Integer getTopPadding() {
 		ANode parent = getParent();
 		if (parent instanceof IGraphicElementContainer) {
 			return ((IGraphicElementContainer) parent).getTopPadding();
@@ -122,10 +122,37 @@ public class MElementGroup extends ANode implements IContainerEditPart, IContain
 	}
 
 	@Override
-	public int getLeftPadding() {
+	public Integer getLeftPadding() {
 		ANode parent = getParent();
 		if (parent instanceof IGraphicElementContainer) {
 			return ((IGraphicElementContainer) parent).getLeftPadding();
+		}
+		return 0;
+	}
+	
+	@Override
+	public Integer getBottomPadding() {
+		ANode parent = getParent();
+		if (parent instanceof IGraphicElementContainer) {
+			return ((IGraphicElementContainer) parent).getBottomPadding();
+		}
+		return 0;
+	}
+
+	@Override
+	public Integer getRightPadding() {
+		ANode parent = getParent();
+		if (parent instanceof IGraphicElementContainer) {
+			return ((IGraphicElementContainer) parent).getRightPadding();
+		}
+		return 0;
+	}
+	
+	@Override
+	public Integer getPadding() {
+		ANode parent = getParent();
+		if (parent instanceof IGraphicElementContainer) {
+			return ((IGraphicElementContainer) parent).getPadding();
 		}
 		return 0;
 	}

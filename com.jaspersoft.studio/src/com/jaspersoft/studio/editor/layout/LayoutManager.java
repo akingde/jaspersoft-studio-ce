@@ -17,14 +17,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.jasperreports.engine.JRCommonElement;
-import net.sf.jasperreports.engine.JRElement;
-import net.sf.jasperreports.engine.JRElementGroup;
-import net.sf.jasperreports.engine.JRPropertiesHolder;
-import net.sf.jasperreports.engine.JRPropertiesMap;
-import net.sf.jasperreports.engine.design.JRDesignBand;
-import net.sf.jasperreports.engine.design.JasperDesign;
-
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.ui.actions.ActionRegistry;
@@ -40,6 +32,18 @@ import com.jaspersoft.studio.model.IContainerLayout;
 import com.jaspersoft.studio.model.IGraphicElementContainer;
 import com.jaspersoft.studio.model.IGroupElement;
 import com.jaspersoft.studio.model.MGraphicElement;
+import com.jaspersoft.studio.utils.Misc;
+import com.jaspersoft.studio.utils.Pair;
+
+import net.sf.jasperreports.engine.JRBoxContainer;
+import net.sf.jasperreports.engine.JRCommonElement;
+import net.sf.jasperreports.engine.JRElement;
+import net.sf.jasperreports.engine.JRElementGroup;
+import net.sf.jasperreports.engine.JRLineBox;
+import net.sf.jasperreports.engine.JRPropertiesHolder;
+import net.sf.jasperreports.engine.JRPropertiesMap;
+import net.sf.jasperreports.engine.design.JRDesignBand;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 public class LayoutManager {
 	
@@ -207,6 +211,91 @@ public class LayoutManager {
 	}
 	
 	/**
+	 * Return the size of the container considering also the padding size
+	 * 
+	 * @param containerToLayout the container to layout
+	 * @return a not null dimension that the elements can occupy inside the container
+	 */
+	public static Dimension getPaddedSize(IGraphicElementContainer containerToLayout){
+		Dimension d = containerToLayout.getSize();
+		int width = d.width - Misc.nvl(containerToLayout.getLeftPadding(), 0) - Misc.nvl(containerToLayout.getRightPadding(), 0);
+		if (width < 0) width = 0;
+		int height = d.height - Misc.nvl(containerToLayout.getTopPadding(), 0) - Misc.nvl(containerToLayout.getBottomPadding(), 0);
+		if (height < 0) height = 0;
+		return new Dimension(width, height);
+	}
+
+	/**
+	 * Return the size of the container considering also the padding size
+	 * 
+	 * @param jce the container to layout
+	 * @return a not null dimension that the elements can occupy inside the container
+	 */
+	public static Dimension getPaddedSize(JRCommonElement jce){
+		if (jce instanceof JRLineBox){
+			Dimension d = new Dimension(jce.getWidth(), jce.getHeight());
+			return getPaddedSize((JRLineBox)jce, d);
+		} else if (jce instanceof JRBoxContainer){
+			Dimension d = new Dimension(jce.getWidth(), jce.getHeight());
+			return getPaddedSize((JRBoxContainer)jce, d);
+		} else {
+			return new Dimension(jce.getWidth(), jce.getHeight());
+		}
+	}
+	
+	/**
+	 * Return the size of the container considering also the padding size and also
+	 * its padding information
+	 * 
+	 * @param jce the container to layout
+	 * @return a Pair where the key is a not null dimension that the elements can occupy 
+	 * inside the container, and the value is the padding information of the container. This
+	 * can be null if the container doesn't support the padding
+	 */
+	public static Pair<Dimension, JRLineBox> getPaddedSizeAndBox(JRCommonElement jce){
+		if (jce instanceof JRLineBox){
+			Dimension d = new Dimension(jce.getWidth(), jce.getHeight());
+			return new Pair<Dimension,JRLineBox>(getPaddedSize((JRLineBox)jce, d), (JRLineBox)jce);
+		} else if (jce instanceof JRBoxContainer){
+			JRBoxContainer boxContainer =  (JRBoxContainer)jce;
+			Dimension d = new Dimension(jce.getWidth(), jce.getHeight());
+			return new Pair<Dimension,JRLineBox>(getPaddedSize(boxContainer, d), boxContainer.getLineBox());
+		} else {
+			return new Pair<Dimension,JRLineBox>(new Dimension(jce.getWidth(), jce.getHeight()), null);
+		}
+	}
+	
+	/**
+	 * Reduce the size of a container considering the padding values
+	 * 
+	 * @param lineBox the box of the container where the padding informations are stored, if 
+	 * null the size of the container is the baseSize since there are no paddings
+	 * @param baseSize the full size of the container, must be not null
+	 * @return a not null dimension that the elements can occupy inside the container
+	 */
+	public static Dimension getPaddedSize(JRLineBox lineBox, Dimension baseSize){
+		if (lineBox == null) return baseSize;
+		int width = baseSize.width - Misc.nvl(lineBox.getLeftPadding(), 0) - Misc.nvl(lineBox.getRightPadding(), 0);
+		if (width < 0) width = 0;
+		int height = baseSize.height - Misc.nvl(lineBox.getTopPadding(), 0) - Misc.nvl(lineBox.getBottomPadding(), 0);
+		if (height < 0) height = 0;
+		return new Dimension(width, height);
+	}
+	
+	/**
+	 * Reduce the size of a container considering the padding values
+	 * 
+	 * @param boxContainer the box of the container where the padding informations are stored, if 
+	 * null the size of the container is the baseSize since there are no paddings
+	 * @param baseSize the full size of the container, must be not null
+	 * @return a not null dimension that the elements can occupy inside the container
+	 */
+	public static Dimension getPaddedSize(JRBoxContainer boxContainer, Dimension baseSize){
+		if (boxContainer == null) return baseSize;
+		return getPaddedSize(boxContainer.getLineBox(), baseSize);
+	}
+	
+	/**
 	 * Create a layout command to layout the container passed as parameter
 	 * 
 	 * @param containerToLayout the container to layout, if null the result will be null
@@ -227,11 +316,13 @@ public class LayoutManager {
 		//search the size of the parent
 		Dimension d = new Dimension();
 		if (containerToLayout instanceof IGraphicElementContainer){
-			d = ((IGraphicElementContainer) containerToLayout).getSize();
+			//d = ((IGraphicElementContainer) containerToLayout).getSize();
+			d = getPaddedSize((IGraphicElementContainer)containerToLayout);
 		}
 		if (jrElement instanceof JRCommonElement) {
-			JRCommonElement jce = (JRCommonElement) jrElement;
-			d.setSize(new Dimension(jce.getWidth(), jce.getHeight()));
+			d = getPaddedSize((JRCommonElement)jrElement);
+			//JRCommonElement jce = (JRCommonElement) jrElement;
+			//d.setSize(new Dimension(jce.getWidth(), jce.getHeight()));
 		} else if (jrElement instanceof JRDesignBand) {
 			JasperDesign jDesign = containerToLayout.getJasperDesign();
 			int w = jDesign.getPageWidth() - jDesign.getLeftMargin() - jDesign.getRightMargin();
@@ -293,12 +384,24 @@ public class LayoutManager {
 		
 		//search the size of the parent
 		Dimension d = new Dimension();
+		int topPadding = 0;
+		int leftPadding = 0;
 		if (containerToLayout instanceof IGraphicElementContainer){
-			d = ((IGraphicElementContainer) containerToLayout).getSize();
+			//d = ((IGraphicElementContainer) containerToLayout).getSize();
+			IGraphicElementContainer graphContainer = (IGraphicElementContainer)containerToLayout;
+			d = getPaddedSize(graphContainer);
+			topPadding = Misc.nvl(graphContainer.getTopPadding(), 0);
+			leftPadding = Misc.nvl(graphContainer.getLeftPadding(), 0);
 		}
 		if (jrElement instanceof JRCommonElement) {
-			JRCommonElement jce = (JRCommonElement) jrElement;
-			d.setSize(new Dimension(jce.getWidth(), jce.getHeight()));
+			Pair<Dimension, JRLineBox> sizeAndBox = getPaddedSizeAndBox((JRCommonElement)jrElement);
+			d = sizeAndBox.getKey();
+			if (sizeAndBox.getValue() != null){
+				topPadding = Misc.nvl(sizeAndBox.getValue().getTopPadding(), 0);
+				leftPadding = Misc.nvl(sizeAndBox.getValue().getLeftPadding(), 0);
+			}
+			//JRCommonElement jce = (JRCommonElement) jrElement;
+			//d.setSize(new Dimension(jce.getWidth(), jce.getHeight()));
 		} else if (jrElement instanceof JRDesignBand) {
 			JasperDesign jDesign = containerToLayout.getJasperDesign();
 			int w = jDesign.getPageWidth() - jDesign.getLeftMargin() - jDesign.getRightMargin();
@@ -324,7 +427,16 @@ public class LayoutManager {
 				elements.add(element);
 			}
 			elements.addAll(additionalElements);
-			return parentLayout.getLayoutPosition(elements.toArray(new JRElement[elements.size()]), d);
+			
+			Map<JRElement, Rectangle> result = parentLayout.getLayoutPosition(elements.toArray(new JRElement[elements.size()]), d);
+			if (topPadding != 0 || leftPadding != 0){
+				for(Rectangle rect : result.values()){
+					rect.setX(rect.x + leftPadding);
+					rect.setY(rect.y + topPadding);
+				}
+			}
+			
+			return result;
 		}
 		return null;
 	}

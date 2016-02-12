@@ -367,6 +367,7 @@ public class TableManager {
 			for(Entry<Cell, Integer> cell : getColumnCell(col).entrySet()){
 				ILayout layout = LayoutManager.getLayout(new JRPropertiesHolder[] { cell.getKey() }, null, null, defaultLayout);
 				Dimension size = new Dimension(cell.getValue(), ((DesignCell)cell.getKey()).getHeight());
+				size = LayoutManager.getPaddedSize(cell.getKey(), size);
 				LayoutCommand layoutCommand = new LayoutCommand(cell.getKey(), layout, size);
 				layoutCommands.add(layoutCommand);
 			}

@@ -225,20 +225,42 @@ public class MFrame extends MGraphicElementLineBox implements IPastable, IPastab
 		return getIconDescriptor().getToolTip();
 	}
 
-	public int getTopPadding() {
+	public Integer getTopPadding() {
 		JRDesignFrame frame = (JRDesignFrame) getValue();
 		if (frame != null)
 			return frame.getLineBox().getTopPadding();
 		return 0;
 	}
 
-	public int getLeftPadding() {
+	public Integer getLeftPadding() {
 		JRDesignFrame frame = (JRDesignFrame) getValue();
 		if (frame != null)
 			return frame.getLineBox().getLeftPadding();
 		return 0;
 	}
 
+	public Integer getBottomPadding() {
+		JRDesignFrame frame = (JRDesignFrame) getValue();
+		if (frame != null)
+			return frame.getLineBox().getBottomPadding();
+		return 0;
+	}
+
+	public Integer getRightPadding() {
+		JRDesignFrame frame = (JRDesignFrame) getValue();
+		if (frame != null)
+			return frame.getLineBox().getRightPadding();
+		return 0;
+	}
+	
+	public Integer getPadding() {
+		JRDesignFrame frame = (JRDesignFrame) getValue();
+		if (frame != null)
+			return frame.getLineBox().getPadding();
+		return 0;
+	}
+
+	
 	@Override
 	public JRDesignFrame getValue() {
 		return (JRDesignFrame) super.getValue();

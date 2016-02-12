@@ -83,14 +83,16 @@ public class SPLayoutCombo extends SPReadCombo<IPropertyDescriptor> {
 			destValue = ((IGroupElement) pnode).getJRElementGroup();
 		if (destValue instanceof JRElementGroup) {
 			Dimension d = new Dimension(0, 0);
-			if (pnode instanceof IGraphicElementContainer)
-				d = ((IGraphicElementContainer) pnode).getSize();
-			if (destValue instanceof JRCommonElement) {
-				JRCommonElement jce = (JRCommonElement) destValue;
+			if (pnode instanceof IGraphicElementContainer){
+				//d = ((IGraphicElementContainer) pnode).getSize();
+				d = LayoutManager.getPaddedSize((IGraphicElementContainer)pnode);
+			}if (destValue instanceof JRCommonElement) {
+				//JRCommonElement jce = (JRCommonElement) destValue;
 				// Commented for back-compatibility in 3.6.
 				// Replaced with the following line.
 				// d.setSize(jce.getWidth(), jce.getHeight());
-				d.setSize(new Dimension(jce.getWidth(), jce.getHeight()));
+				//d.setSize(new Dimension(jce.getWidth(), jce.getHeight()));
+				d = LayoutManager.getPaddedSize((JRCommonElement)destValue);
 			}
 			if (destValue instanceof JRDesignBand) {
 				JasperDesign jDesign = pnode.getJasperDesign();

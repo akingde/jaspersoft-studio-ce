@@ -441,15 +441,29 @@ public class MList extends MGraphicElement implements IPastable,
 	}
 
 	@Override
-	public int getTopPadding() {
-		return 0;
+	public Integer getTopPadding() {
+		return getTopPadding();
 	}
 
 	@Override
-	public int getLeftPadding() {
-		return 0;
+	public Integer getLeftPadding() {
+		return getLeftPadding();
 	}
 
+	@Override
+	public Integer getRightPadding() {
+		return getRightPadding();
+	}
+
+	@Override
+	public Integer getBottomPadding() {
+		return getBottomPadding();
+	}
+
+	@Override
+	public Integer getPadding() {
+		return getPadding();
+	}
 	@Override
 	public Dimension getSize() {
 		JRDesignComponentElement v = getValue();

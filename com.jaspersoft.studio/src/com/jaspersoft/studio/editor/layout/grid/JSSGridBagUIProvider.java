@@ -476,11 +476,13 @@ public class JSSGridBagUIProvider implements ILayoutUIProvider{
 		//search the size of the parent
 		Dimension d = new Dimension();
 		if (parent instanceof IGraphicElementContainer){
-			d = ((IGraphicElementContainer) parent).getSize();
+			//d = ((IGraphicElementContainer) parent).getSize();
+			d = LayoutManager.getPaddedSize((IGraphicElementContainer)parent);
 		}
 		if (jrElement instanceof JRCommonElement) {
-			JRCommonElement jce = (JRCommonElement) jrElement;
-			d.setSize(new Dimension(jce.getWidth(), jce.getHeight()));
+			//JRCommonElement jce = (JRCommonElement) jrElement;
+			//d.setSize(new Dimension(jce.getWidth(), jce.getHeight()));
+			d = LayoutManager.getPaddedSize((JRCommonElement)jrElement);
 		} else if (jrElement instanceof JRDesignBand) {
 			JasperDesign jDesign = parent.getJasperDesign();
 			int w = jDesign.getPageWidth() - jDesign.getLeftMargin() - jDesign.getRightMargin();

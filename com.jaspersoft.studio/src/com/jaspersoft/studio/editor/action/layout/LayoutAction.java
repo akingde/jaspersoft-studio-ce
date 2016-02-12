@@ -114,20 +114,22 @@ public class LayoutAction extends SelectionAction {
 
 			Dimension size = null;
 			if (container instanceof JRDesignElement) {
-				JRDesignElement c = (JRDesignElement) container;
-				size = new Dimension(c.getWidth(), c.getHeight());
+				//JRDesignElement c = (JRDesignElement) container;
+				//size = new Dimension(c.getWidth(), c.getHeight());
+				size = LayoutManager.getPaddedSize((JRDesignElement) container);
 			} else if (container instanceof JRDesignBand) {
 				int h = ((JRDesignBand) container).getHeight();
 				JasperDesign jDesign = n.getJasperDesign();
 				int w = jDesign.getPageWidth() - jDesign.getLeftMargin() - jDesign.getRightMargin();
 				size = new Dimension(w, h);
 			} else if (n instanceof IGraphicElementContainer) {
-				size = ((IGraphicElementContainer) n).getSize();
-				size.expand(((IGraphicElementContainer) n).getLeftPadding(), ((IGraphicElementContainer) n).getTopPadding());
+				size = LayoutManager.getPaddedSize((IGraphicElementContainer) n);
+				//size.expand(((IGraphicElementContainer) n).getLeftPadding(), ((IGraphicElementContainer) n).getTopPadding());
 			} else if (n.getParent() instanceof IGraphicElementContainer) {
 				IGraphicElementContainer prnt = (IGraphicElementContainer) n.getParent();
-				size = prnt.getSize();
-				size.expand(prnt.getLeftPadding(), prnt.getTopPadding());
+				size = LayoutManager.getPaddedSize(prnt);
+				//size = prnt.getSize();
+				//size.expand(prnt.getLeftPadding(), prnt.getTopPadding());
 			}
 			APropertyNode mcontainer = getContainerNode(n);
 			JSSCompoundCommand cc = new JSSCompoundCommand(getText(), mcontainer);

@@ -41,10 +41,13 @@ public class MLineBox extends APropertyNode implements IPropertySource {
 	public static final String LINE_PEN_RIGHT = "LinePen_RIGHT"; //$NON-NLS-1$
 	
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+	
+	private ANode container;
 
-	public MLineBox(JRLineBox lineBox) {
+	public MLineBox(JRLineBox lineBox, ANode container) {
 		super();
 		setValue(lineBox);
+		this.container = container;
 	}
 
 	@Override
@@ -330,6 +333,10 @@ public class MLineBox extends APropertyNode implements IPropertySource {
 
 	public ImageDescriptor getImagePath() {
 		return null;
+	}
+	
+	public ANode getContainer(){
+		return container;
 	}
 
 }
