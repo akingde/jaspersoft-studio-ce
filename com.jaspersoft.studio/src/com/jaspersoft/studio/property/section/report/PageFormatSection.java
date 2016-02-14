@@ -19,6 +19,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
@@ -27,7 +28,6 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
-import com.jaspersoft.studio.swt.widgets.LinkButton;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -174,7 +174,7 @@ public class PageFormatSection extends AbstractSection {
 		valuesLabel = new StyledText(textualInfo, SWT.READ_ONLY);
 		valuesLabel.setEnabled(false);
 		// Add the button
-		LinkButton editLayoutButton = new LinkButton(pageFormatPanel, Messages.PageFormatSection_buttonText);
+		Button editLayoutButton = getWidgetFactory().createButton(pageFormatPanel, Messages.PageFormatSection_buttonText, SWT.PUSH);
 		gd = new GridData();
 		gd.horizontalAlignment = SWT.CENTER;
 		editLayoutButton.setLayoutData(gd);

@@ -14,8 +14,10 @@ package com.jaspersoft.studio.property.section.widgets;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.wizard.WizardDialog;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
@@ -25,7 +27,6 @@ import com.jaspersoft.studio.model.subreport.MSubreport;
 import com.jaspersoft.studio.property.descriptor.parameter.dialog.GenericJSSParameter;
 import com.jaspersoft.studio.property.descriptor.subreport.parameter.dialog.SubreportParameterEditor;
 import com.jaspersoft.studio.property.section.AbstractSection;
-import com.jaspersoft.studio.swt.widgets.LinkButton;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.JRSubreportParameter;
@@ -41,7 +42,7 @@ public class SPSubreportParametersButton<T extends IPropertyDescriptor> extends 
 	/**
 	 * The button control
 	 */
-	private LinkButton button;
+	private Button button;
 
 	/**
 	 * The query of the report
@@ -80,7 +81,7 @@ public class SPSubreportParametersButton<T extends IPropertyDescriptor> extends 
 	 *          text on the button
 	 */
 	protected void createButton(Composite parent, String buttonText) {
-		button = new LinkButton(parent, buttonText);
+		button = section.getWidgetFactory().createButton(parent, buttonText, SWT.PUSH);
 		button.setToolTipText(pDescriptor.getDescription());
 		button.addSelectionListener(new SelectionAdapter() {
 			@Override

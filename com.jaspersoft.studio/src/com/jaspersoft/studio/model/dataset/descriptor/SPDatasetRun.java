@@ -15,6 +15,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -32,7 +33,6 @@ import com.jaspersoft.studio.property.descriptor.parameter.dialog.GenericJSSPara
 import com.jaspersoft.studio.property.descriptor.returnvalue.RVPropertyPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
-import com.jaspersoft.studio.swt.widgets.LinkButton;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -48,11 +48,11 @@ public class SPDatasetRun<T extends IPropertyDescriptor> extends ASPropertyWidge
 
 	private Combo dsetCombo;
 
-	private LinkButton returns;
+	private Button returns;
 
-	private LinkButton params;
+	private Button params;
 
-	private LinkButton paramMap;
+	private Button paramMap;
 
 	private boolean alldatasets = true;
 
@@ -124,7 +124,7 @@ public class SPDatasetRun<T extends IPropertyDescriptor> extends ASPropertyWidge
 		c.setLayoutData(gd);
 
 		// Create the button to edit the return parameters
-		returns = new LinkButton(c, Messages.common_return_values);
+		returns =  section.getWidgetFactory().createButton(c, Messages.common_return_values, SWT.PUSH | SWT.FLAT);
 		returns.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -140,7 +140,7 @@ public class SPDatasetRun<T extends IPropertyDescriptor> extends ASPropertyWidge
 
 		});
 
-		params = new LinkButton(c, Messages.SPDatasetRun_2);
+		params = section.getWidgetFactory().createButton(c, Messages.SPDatasetRun_2, SWT.PUSH | SWT.FLAT);
 		params.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -164,7 +164,7 @@ public class SPDatasetRun<T extends IPropertyDescriptor> extends ASPropertyWidge
 
 		});
 
-		paramMap =  new LinkButton(c, Messages.SPDatasetRun_3);
+		paramMap =  section.getWidgetFactory().createButton(c, Messages.SPDatasetRun_3, SWT.PUSH | SWT.FLAT);
 		paramMap.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -251,13 +251,14 @@ public class SPDatasetRun<T extends IPropertyDescriptor> extends ASPropertyWidge
 	}
 
 	private void setDatasetEnabled(boolean enabled) {
-		returns.setVisible(enabled);
-		paramMap.setVisible(enabled);
-		params.setVisible(enabled);
-		if (!enabled)
+		returns.setEnabled(enabled);
+		paramMap.setEnabled(enabled);
+		params.setEnabled(enabled);
+		if (!enabled) {
 			dsRunWidget.setData(null);
-		else
+		} else {
 			dsRunWidget.setData(mDataSet.getValue());
+		}
 		dsRunWidget.setEnabled(enabled);
 	}
 

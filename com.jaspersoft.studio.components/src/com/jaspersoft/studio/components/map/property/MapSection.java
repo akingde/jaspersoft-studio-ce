@@ -18,9 +18,8 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
@@ -29,7 +28,6 @@ import com.jaspersoft.studio.components.map.model.MMap;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.SPEvaluationTime;
-import com.jaspersoft.studio.swt.widgets.LinkButton;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.widgets.map.core.LatLng;
 import com.jaspersoft.studio.widgets.map.core.MapType;
@@ -55,15 +53,36 @@ public class MapSection extends AbstractSection {
 		super.createControls(parent, tabbedPropertySheetPage);
 		parent.setLayout(new GridLayout(2, false));
 
-		LinkButton mapPickSuggestion = new LinkButton(parent, Messages.MapSection_0);
-		mapPickSuggestion.addListener(SWT.MenuDetect, new Listener() {
-			public void handleEvent(Event event) {
-				event.doit = false;
-			}
-		});
+		createWidget4Property(parent, StandardMapComponent.PROPERTY_LATITUDE_EXPRESSION);
+		createWidget4Property(parent, StandardMapComponent.PROPERTY_LONGITUDE_EXPRESSION);
+		createWidget4Property(parent, StandardMapComponent.PROPERTY_ADDRESS_EXPRESSION);
+		createWidget4Property(parent, StandardMapComponent.PROPERTY_ZOOM_EXPRESSION);
+		createWidget4Property(parent, StandardMapComponent.PROPERTY_MAP_TYPE);
+		createWidget4Property(parent, StandardMapComponent.PROPERTY_LANGUAGE_EXPRESSION);
+		createWidget4Property(parent, StandardMapComponent.PROPERTY_MAP_SCALE);
+		IPropertyDescriptor pd = getPropertyDesriptor(StandardMapComponent.PROPERTY_EVALUATION_TIME);
+		IPropertyDescriptor gpd = getPropertyDesriptor(StandardMapComponent.PROPERTY_EVALUATION_GROUP);
+		getWidgetFactory().createCLabel(parent, pd.getDisplayName());
+		widgets.put(pd.getId(), new SPEvaluationTime(parent, this, pd, gpd));
+		createWidget4Property(parent, StandardMapComponent.PROPERTY_IMAGE_TYPE);
+		createWidget4Property(parent, StandardMapComponent.PROPERTY_ON_ERROR_TYPE);
+		
+		createEditButton(parent);
+	}
+	
+	/**
+	 * Create the button to open the map preview area
+	 * 
+	 * @param parent the parent where the button is placed, must have a grid layout
+	 * with two columns
+	 */
+	protected void createEditButton(Composite parent){
+		Button mapPickSuggestion = new Button(parent, SWT.BORDER);
+		mapPickSuggestion.setText(Messages.MapSection_buttonText);
+		mapPickSuggestion.setToolTipText(Messages.MapSection_buttonTooltip);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
-		gd.horizontalIndent = 5;
+		gd.horizontalAlignment = SWT.CENTER;
 		mapPickSuggestion.setLayoutData(gd);
 		mapPickSuggestion.addSelectionListener(new SelectionAdapter() {
 
@@ -104,20 +123,6 @@ public class MapSection extends AbstractSection {
 				}
 			}
 		});
-		createWidget4Property(parent, StandardMapComponent.PROPERTY_MAP_TYPE);
-		createWidget4Property(parent, StandardMapComponent.PROPERTY_LATITUDE_EXPRESSION);
-		createWidget4Property(parent, StandardMapComponent.PROPERTY_LONGITUDE_EXPRESSION);
-		createWidget4Property(parent, StandardMapComponent.PROPERTY_ADDRESS_EXPRESSION);
-		createWidget4Property(parent, StandardMapComponent.PROPERTY_ZOOM_EXPRESSION);
-
-		createWidget4Property(parent, StandardMapComponent.PROPERTY_LANGUAGE_EXPRESSION);
-		createWidget4Property(parent, StandardMapComponent.PROPERTY_MAP_SCALE);
-		IPropertyDescriptor pd = getPropertyDesriptor(StandardMapComponent.PROPERTY_EVALUATION_TIME);
-		IPropertyDescriptor gpd = getPropertyDesriptor(StandardMapComponent.PROPERTY_EVALUATION_GROUP);
-		getWidgetFactory().createCLabel(parent, pd.getDisplayName());
-		widgets.put(pd.getId(), new SPEvaluationTime(parent, this, pd, gpd));
-		createWidget4Property(parent, StandardMapComponent.PROPERTY_IMAGE_TYPE);
-		createWidget4Property(parent, StandardMapComponent.PROPERTY_ON_ERROR_TYPE);
 	}
 
 	@Override

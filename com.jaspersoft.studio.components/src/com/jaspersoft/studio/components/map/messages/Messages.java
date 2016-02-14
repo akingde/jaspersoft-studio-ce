@@ -54,7 +54,8 @@ public class Messages extends NLS {
 	public static String MapPathsDescriptor_Paths;
 	public static String MapPathsWidgetConfiguration_MapPaths;
 	public static String MapPathsWidgetConfiguration_Path;
-	public static String MapSection_0;
+	public static String MapSection_buttonText;
+	public static String MapSection_buttonTooltip;
 	public static String MapSection_1;
 	public static String MapStylesDescriptor_Styles;
 	public static String MapStylesWidgetConfiguration_MapStyles;

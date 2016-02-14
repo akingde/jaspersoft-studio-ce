@@ -10,8 +10,10 @@ package com.jaspersoft.studio.property.section.widgets;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.wizard.WizardDialog;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
@@ -21,7 +23,6 @@ import com.jaspersoft.studio.property.descriptor.propexpr.JPropertyExpressionsDe
 import com.jaspersoft.studio.property.descriptor.propexpr.PropertyExpressionsDTO;
 import com.jaspersoft.studio.property.descriptor.propexpr.dialog.JRPropertyExpressionEditor;
 import com.jaspersoft.studio.property.section.AbstractSection;
-import com.jaspersoft.studio.swt.widgets.LinkButton;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.design.JRDesignElement;
@@ -34,7 +35,7 @@ import net.sf.jasperreports.engine.design.JRDesignElement;
  */
 public class SPPropertyExpressionButton extends ASPropertyWidget<JPropertyExpressionsDescriptor> {
 
-	private LinkButton button;
+	private Button button;
 	private MGraphicElement model;
 
 	/**
@@ -64,7 +65,7 @@ public class SPPropertyExpressionButton extends ASPropertyWidget<JPropertyExpres
 	 *          text on the button
 	 */
 	protected void createButton(Composite parent, String buttonText) {
-		button = new LinkButton(parent, buttonText);
+		button = section.getWidgetFactory().createButton(parent, buttonText, SWT.PUSH);
 		button.setToolTipText(pDescriptor.getDescription());
 		button.addSelectionListener(new SelectionAdapter() {
 			@Override

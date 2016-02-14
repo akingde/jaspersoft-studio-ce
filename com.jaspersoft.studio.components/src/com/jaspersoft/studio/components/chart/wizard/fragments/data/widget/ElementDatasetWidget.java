@@ -30,6 +30,8 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.ToolBar;
+import org.eclipse.swt.widgets.ToolItem;
 
 import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
@@ -43,7 +45,6 @@ import com.jaspersoft.studio.property.descriptor.expression.dialog.JRExpressionE
 import com.jaspersoft.studio.property.descriptor.parameter.dialog.ComboParameterEditor;
 import com.jaspersoft.studio.property.descriptor.parameter.dialog.GenericJSSParameter;
 import com.jaspersoft.studio.property.descriptor.returnvalue.RVPropertyPage;
-import com.jaspersoft.studio.swt.widgets.LinkButton;
 import com.jaspersoft.studio.utils.ModelUtils;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
@@ -68,9 +69,9 @@ public class ElementDatasetWidget implements IExpressionContextSetter {
 	private Combo cbIncrement;
 	private Combo cbReset;
 	private Button btnIncrement;
-	private LinkButton prmItem;
-	private LinkButton prmMapItem;
-	private LinkButton returnValue;
+	private ToolItem prmItem;
+	private ToolItem prmMapItem;
+	private ToolItem returnValue;
 	private DatasetRunWidget dsRun;
 	private ExpressionContext expContext;
 	private List<DatasetRunSelectionListener> dsRunSelectionListeners;
@@ -284,9 +285,9 @@ public class ElementDatasetWidget implements IExpressionContextSetter {
 
 	private void enableMainDatasetRun() {
 		boolean en = dsCombo.getSelectionIndex() != 0;
-		prmItem.setVisible(en);
-		prmMapItem.setVisible(en);
-		returnValue.setVisible(en);
+		prmItem.setEnabled(en);
+		prmMapItem.setEnabled(en);
+		returnValue.setEnabled(en);
 		dsRun.setEnabled(en);
 	}
 
@@ -451,18 +452,16 @@ public class ElementDatasetWidget implements IExpressionContextSetter {
 		dsCombo = new Combo(composite, SWT.BORDER | SWT.READ_ONLY | SWT.SINGLE);
 		dsCombo.setItems(new String[] { "main dataset" }); //$NON-NLS-1$
 
-		Composite linksContainer = new Composite(composite, SWT.NONE);
-		GridLayout linksLayout = new GridLayout(3, false);
-		layout.horizontalSpacing = 0;
-		layout.marginWidth = 0;
-		layout.marginHeight = 0;
-		linksContainer.setLayout(linksLayout);
+		ToolBar toolBar = new ToolBar(composite, SWT.FLAT | SWT.HORIZONTAL | SWT.WRAP | SWT.RIGHT);
 		
-		returnValue = new LinkButton(linksContainer, com.jaspersoft.studio.messages.Messages.common_return_values);
+		returnValue = new ToolItem(toolBar, SWT.PUSH);
+		returnValue.setText(com.jaspersoft.studio.messages.Messages.common_return_values);
 		
-		prmItem = new LinkButton(linksContainer, Messages.ElementDatasetWidget_parametersLabel);
+		prmItem = new ToolItem(toolBar, SWT.PUSH);
+		prmItem.setText(Messages.ElementDatasetWidget_parametersLabel);
 
-		prmMapItem = new LinkButton(linksContainer, Messages.ElementDatasetWidget_parametersMapLabel);
+		prmMapItem = new ToolItem(toolBar, SWT.PUSH);
+		prmMapItem.setText(Messages.ElementDatasetWidget_parametersMapLabel);
 
 		int tabHeight = composite.computeSize(SWT.DEFAULT, SWT.DEFAULT).y;
 		tabHeight = Math.max(tabHeight, ctfolder.getTabHeight());
