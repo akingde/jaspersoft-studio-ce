@@ -25,6 +25,7 @@ import com.jaspersoft.studio.property.itemproperty.label.ItemLabelProvider;
 
 import net.sf.jasperreports.components.items.ItemData;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.engine.util.JRCloneUtils;
 
 /**
  * Cell Editor for the <code>ItemDataList</code> property
@@ -55,7 +56,7 @@ public class ItemListCellEditor extends DialogCellEditor {
 
 	@Override
 	protected Object openDialogBox(Control cellEditorWindow) {
-		List<ItemData> v = (List<ItemData>) getValue();
+		List<ItemData> v = JRCloneUtils.cloneList((List<ItemData>) getValue());
 		if (v == null)
 			v = new ArrayList<ItemData>();
 		ItemDataListDialog dialog = new ItemDataListDialog(UIUtils.getShell(), descriptor, v, pd, pNode);

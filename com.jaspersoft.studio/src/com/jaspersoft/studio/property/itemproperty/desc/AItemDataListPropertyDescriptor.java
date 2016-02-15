@@ -58,6 +58,7 @@ public abstract class AItemDataListPropertyDescriptor extends NTextPropertyDescr
 	public ADescriptor getDescriptor() {
 		if (descriptor == null)
 			initShowColumns();
+		setLabelProvider(new ItemLabelProvider(descriptor));
 		return descriptor;
 	}
 
