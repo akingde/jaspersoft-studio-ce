@@ -62,7 +62,14 @@ public class EditServerAction extends Action {
 		if (obj instanceof MServerProfile) {
 			MServerProfile mspold = (MServerProfile) obj;
 
-			ServerProfileWizard wizard = new ServerProfileWizard(ServerManager.getMServerProfileCopy(mspold));
+			MServerProfile mspCopy = ServerManager.getMServerProfileCopy(mspold);
+			try {
+				mspCopy.setValue(mspCopy.getValue().clone());
+			} catch (CloneNotSupportedException e) {
+				UIUtils.showError(e);
+			}
+
+			ServerProfileWizard wizard = new ServerProfileWizard(mspCopy);
 			ServerProfileWizardDialog dialog = new ServerProfileWizardDialog(UIUtils.getShell(), wizard);
 			wizard.bindTestButton(dialog);
 			dialog.create();
@@ -73,7 +80,6 @@ public class EditServerAction extends Action {
 
 				ServerManager.saveServerProfile(mspold);
 				fillServerProfile(mspold, treeViewer);
-
 			}
 
 		}
