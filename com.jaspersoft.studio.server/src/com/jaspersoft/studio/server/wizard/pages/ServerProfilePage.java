@@ -156,8 +156,10 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 		});
 
 		new Label(composite, SWT.RIGHT);
-		cstatus = new Label(composite, SWT.NONE);
-		cstatus.setLayoutData(new GridData(GridData.FILL_HORIZONTAL | GridData.HORIZONTAL_ALIGN_END));
+		cstatus = new Label(composite, SWT.RIGHT);
+		gd = new GridData(GridData.FILL_HORIZONTAL | GridData.HORIZONTAL_ALIGN_END);
+		gd.widthHint = 200;
+		cstatus.setLayoutData(gd);
 
 		Group gr = new Group(composite, SWT.NONE);
 		gr.setText(Messages.ServerProfilePage_8);
