@@ -75,6 +75,10 @@ public class MCell extends MColumn implements IGraphicElement,
 	private static Map<String, Object> defaultsMap;
 	
 	private static IPropertyDescriptor[] descriptors;
+	
+	public static final String LINE_BOX = "LineBox"; //$NON-NLS-1$
+	
+	private MLineBox lineBox;
 
 	private DesignCell cell;
 	
@@ -162,9 +166,6 @@ public class MCell extends MColumn implements IGraphicElement,
 
 		defaultsMap.put(DesignCell.PROPERTY_STYLE, null);
 	}
-
-	public static final String LINE_BOX = "LineBox"; //$NON-NLS-1$
-	private MLineBox lineBox;
 
 	/*
 	 * (non-Javadoc)
@@ -526,5 +527,18 @@ public class MCell extends MColumn implements IGraphicElement,
 			}
 		}
 		return null;
+	}
+	
+	/**
+	 * Style descriptor used by the inheritance view section
+	 */
+	@Override
+	public HashMap<String, Object> getStylesDescriptors() {
+		HashMap<String, Object> result = super.getStylesDescriptors();
+		if (getValue() == null)
+			return result;
+		MLineBox element = (MLineBox) getPropertyValue(LINE_BOX);
+		result.put(LINE_BOX, element);
+		return result;
 	}
 }

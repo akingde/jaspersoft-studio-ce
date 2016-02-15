@@ -752,6 +752,17 @@
                   type="com.jaspersoft.studio.components.crosstab.model.parameter.MCrosstabParameter">
             </input>
          </propertySection>
+         <propertySection
+               class="com.jaspersoft.studio.components.CellStylesListSection"
+               id="com.jaspersoft.studio.components.cellStylesListSection"
+               tab="com.jaspersoft.studio.editor.propertyTab.style">
+            <input
+                  type="com.jaspersoft.studio.components.crosstab.model.cell.MCell">
+            </input>
+            <input
+                  type="com.jaspersoft.studio.components.table.model.column.MCell">
+            </input>
+         </propertySection>
       </propertySections>
    </extension>
    <extension

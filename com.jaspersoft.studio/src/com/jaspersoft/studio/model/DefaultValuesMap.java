@@ -65,7 +65,7 @@ public class DefaultValuesMap {
 		result.put(widthKey, JRPen.LINE_WIDTH_0);
 	}
 
-	private static void createBaseLineBox(HashMap<String, Object> result, String baseProperty) {
+	public static void createBaseLineBox(HashMap<String, Object> result, String baseProperty) {
 		String paddingKey = concatenateProperties(baseProperty, JRBaseLineBox.PROPERTY_PADDING);
 		String paddingLeftKey = concatenateProperties(baseProperty, JRBaseLineBox.PROPERTY_LEFT_PADDING);
 		String paddingRightKey = concatenateProperties(baseProperty, JRBaseLineBox.PROPERTY_RIGHT_PADDING);
@@ -122,7 +122,7 @@ public class DefaultValuesMap {
 	private static HashMap<String, Object> initializeType(APropertyNode type) {
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		JRPropertiesUtil prop = JRPropertiesUtil.getInstance(DefaultJasperReportsContext.getInstance());
-		 result.put(JRDesignStyle.PROPERTY_FONT_NAME, prop.getProperty(JRFont.DEFAULT_FONT_NAME));
+		result.put(JRDesignStyle.PROPERTY_FONT_NAME, prop.getProperty(JRFont.DEFAULT_FONT_NAME));
 		result.put(JRDesignStyle.PROPERTY_PATTERN, null);
 		result.put(JRDesignStyle.PROPERTY_MARKUP, JRCommonText.MARKUP_NONE);
 
@@ -146,9 +146,9 @@ public class DefaultValuesMap {
 			result.put(JRDesignStyle.PROPERTY_FORECOLOR, null);
 			result.put(JRDesignStyle.PROPERTY_FILL, null);
 			result.put(JRDesignStyle.PROPERTY_MODE, ModeEnum.OPAQUE.getName());
-			 result.put(JRDesignStyle.PROPERTY_PDF_FONT_NAME, prop.getProperty(JRFont.DEFAULT_PDF_FONT_NAME));
-			 result.put(JRDesignStyle.PROPERTY_PDF_ENCODING, prop.getProperty(JRFont.DEFAULT_PDF_ENCODING));
-			 result.put(JRDesignStyle.PROPERTY_PDF_EMBEDDED, prop.getBooleanProperty(JRFont.DEFAULT_PDF_EMBEDDED));
+			result.put(JRDesignStyle.PROPERTY_PDF_FONT_NAME, prop.getProperty(JRFont.DEFAULT_PDF_FONT_NAME));
+			result.put(JRDesignStyle.PROPERTY_PDF_ENCODING, prop.getProperty(JRFont.DEFAULT_PDF_ENCODING));
+			result.put(JRDesignStyle.PROPERTY_PDF_EMBEDDED, prop.getBooleanProperty(JRFont.DEFAULT_PDF_EMBEDDED));
 			createBaseLinePen(result, MLineBox.LINE_PEN);
 			createBaseLineBox(result, MGraphicElementLineBox.LINE_BOX);
 			createBaseParagraph(result, MStyle.PARAGRAPH);
@@ -164,7 +164,7 @@ public class DefaultValuesMap {
 			}
 
 			if (type instanceof MTextElement) {
-				 result.put(JRDesignStyle.PROPERTY_FONT_SIZE, prop.getIntegerProperty(JRFont.DEFAULT_FONT_SIZE));
+				result.put(JRDesignStyle.PROPERTY_FONT_SIZE, prop.getIntegerProperty(JRFont.DEFAULT_FONT_SIZE));
 				result.put(JRDesignStyle.PROPERTY_BOLD, false);
 				result.put(JRDesignStyle.PROPERTY_ITALIC, false);
 				result.put(JRDesignStyle.PROPERTY_UNDERLINE, false);

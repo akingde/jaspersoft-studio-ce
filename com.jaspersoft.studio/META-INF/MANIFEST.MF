@@ -771,6 +771,7 @@ Export-Package: com.jaspersoft.studio;
    org.eclipse.swt.widgets,
    org.eclipse.ui.forms",
  com.jaspersoft.studio.property.section.report.util;uses:="org.eclipse.swt.events,org.eclipse.swt.graphics,org.eclipse.swt.widgets",
+ com.jaspersoft.studio.property.section.style.inerithance,
  com.jaspersoft.studio.property.section.text;uses:="com.jaspersoft.studio.property.section,com.jaspersoft.studio.properties.view,org.eclipse.swt.widgets",
  com.jaspersoft.studio.property.section.widgets;
   uses:="com.jaspersoft.studio.editor.expression,

@@ -45,7 +45,7 @@ public class CrosstabCellSection extends AbstractSection {
 	@Override
 	protected void initializeProvidedProperties() {
 		super.initializeProvidedProperties();
-		addProvidedProperties(JRBaseStyle.PROPERTY_MODE, Messages.MCell_opaque);
+		addProvidedProperties(JRBaseStyle.PROPERTY_MODE, Messages.MCell_transparent);
 		addProvidedProperties(JRBaseStyle.PROPERTY_BACKCOLOR, Messages.MCell_backcolor);
 		addProvidedProperties(JRDesignCellContents.PROPERTY_STYLE, Messages.MCell_parent_style);
 		addProvidedProperties(JRDesignCrosstabCell.PROPERTY_WIDTH, Messages.common_width);

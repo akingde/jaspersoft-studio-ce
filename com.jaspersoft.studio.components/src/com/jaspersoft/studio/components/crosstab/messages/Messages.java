@@ -97,8 +97,8 @@ public class Messages extends NLS {
 	public static String MCell_backcolor_description;
 	public static String MCell_line_box;
 	public static String MCell_line_box_description;
-	public static String MCell_opaque;
-	public static String MCell_opaque_description;
+	public static String MCell_transparent;
+	public static String MCell_transparent_description;
 	public static String MCell_parent_style;
 	public static String MCell_parent_style_description;
 	public static String MColumnGroup_column_position;

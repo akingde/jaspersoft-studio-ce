@@ -78,10 +78,22 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable,
 		IContainerLayout, IPastableGraphic, IContainer, IContainerEditPart,
 		ILineBox, IGroupElement, IGraphicElementContainer,
 		IGraphicalPropertiesHandler {
+	
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+	
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
 
+	public static final String LINE_BOX = "LineBox"; //$NON-NLS-1$
+	
+	private static OpaqueModePropertyDescriptor opaqueD;
+	
+	private static RWComboBoxPropertyDescriptor styleD;
+	
+	private MLineBox lineBox;
+	
+	private String name;
+	
 	/**
 	 * Gets the icon descriptor.
 	 * 
@@ -126,8 +138,6 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable,
 	public JRDesignCellContents getValue() {
 		return (JRDesignCellContents) super.getValue();
 	}
-
-	private String name;
 
 	/*
 	 * (non-Javadoc)
@@ -204,8 +214,6 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable,
 		}
 	}
 
-	private static RWComboBoxPropertyDescriptor styleD;
-
 	/**
 	 * Creates the property descriptors.
 	 * 
@@ -216,8 +224,8 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable,
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc,
 			Map<String, Object> defaultsMap) {
 		opaqueD = new OpaqueModePropertyDescriptor(JRBaseStyle.PROPERTY_MODE,
-				Messages.MCell_opaque, NullEnum.NOTNULL);
-		opaqueD.setDescription(Messages.MCell_opaque_description);
+				Messages.MCell_transparent, NullEnum.NOTNULL);
+		opaqueD.setDescription(Messages.MCell_transparent_description);
 		desc.add(opaqueD);
 
 		ColorPropertyDescriptor backcolorD = new ColorPropertyDescriptor(
@@ -261,10 +269,6 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable,
 		setHelpPrefix(desc,
 				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#crosstabCell");
 	}
-
-	public static final String LINE_BOX = "LineBox"; //$NON-NLS-1$
-	private MLineBox lineBox;
-	private static OpaqueModePropertyDescriptor opaqueD;
 
 	/*
 	 * (non-Javadoc)
@@ -618,5 +622,18 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable,
 		if (getValue() != null) {
 			propertyChange(new PropertyChangeEvent(getValue(), MGraphicElement.FORCE_GRAPHICAL_REFRESH, null, null));
 		}
+	}
+	
+	/**
+	 * Style descriptor used by the inheritance view section
+	 */
+	@Override
+	public HashMap<String, Object> getStylesDescriptors() {
+		HashMap<String, Object> result = super.getStylesDescriptors();
+		if (getValue() == null)
+			return result;
+		MLineBox element = (MLineBox) getPropertyValue(LINE_BOX);
+		result.put(LINE_BOX, element);
+		return result;
 	}
 }
