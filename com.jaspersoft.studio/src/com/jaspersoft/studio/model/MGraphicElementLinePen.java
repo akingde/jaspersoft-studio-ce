@@ -17,17 +17,17 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.ui.views.properties.IPropertyDescriptor;
+
+import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.property.descriptor.pen.PenPropertyDescriptor;
+
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRPen;
 import net.sf.jasperreports.engine.base.JRBasePen;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignGraphicElement;
-
-import org.eclipse.ui.views.properties.IPropertyDescriptor;
-
-import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.property.descriptor.pen.PenPropertyDescriptor;
 
 /*
  * The Class MGeneric.
@@ -121,4 +121,13 @@ public abstract class MGraphicElementLinePen extends MGraphicElement implements 
 		result.add(JRBasePen.PROPERTY_LINE_WIDTH);
 		return result;
 	}
+	
+	
+	@Override
+	public void setEditable(boolean editable) {
+		super.setEditable(editable);
+		MLinePen linePen = (MLinePen)getPropertyValue(LINE_PEN);
+		linePen.setEditable(editable);
+	}
+
 }

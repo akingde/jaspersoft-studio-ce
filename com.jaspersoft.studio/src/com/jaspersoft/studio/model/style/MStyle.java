@@ -945,5 +945,16 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 			return true;
 		return false;
 	}
+	
+	@Override
+	public void setEditable(boolean editable) {
+		super.setEditable(editable);
+		MLineBox lineBox = (MLineBox)getPropertyValue(LINE_BOX);
+		lineBox.setEditable(editable);
+		MLinePen linePen = (MLinePen)getPropertyValue(LINE_PEN);
+		linePen.setEditable(editable);
+		MParagraph paragraph = (MParagraph)getPropertyValue(PARAGRAPH);
+		paragraph.setEditable(editable);
+	}
 
 }

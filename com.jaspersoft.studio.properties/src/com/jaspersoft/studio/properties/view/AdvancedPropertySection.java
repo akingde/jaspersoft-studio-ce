@@ -14,13 +14,16 @@ package com.jaspersoft.studio.properties.view;
 
 import java.util.List;
 
+import org.eclipse.gef.EditPart;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.properties.PropertySheetPage;
 
+import com.jaspersoft.studio.properties.IEditablePropertySource;
 import com.jaspersoft.studio.properties.view.validation.ValidationError;
 
 /**
@@ -53,6 +56,7 @@ public class AdvancedPropertySection extends AbstractPropertySection {
 	 */
 	public void aboutToBeShown() {
 		super.aboutToBeShown();
+		page.getControl().setEnabled(isEditEnabled());
 		TabbedPropertySheetPage tp = getTabbedPropertySheetPage();
 		if (tp != null && tp.getSite() != null) {
 			IActionBars actionBars = tp.getSite().getActionBars();
@@ -62,6 +66,26 @@ public class AdvancedPropertySection extends AbstractPropertySection {
 					actionBars.getStatusLineManager());
 			actionBars.updateActionBars();
 		}
+	}
+	
+	/**
+	 * Check if the selected models are all editable
+	 * 
+	 * @return true if all the selected models are editable, false otherwise
+	 */
+	protected boolean isEditEnabled(){
+		IStructuredSelection currentSelection = (IStructuredSelection)getSelection();
+		for(Object selectedElement : currentSelection.toArray()){
+			if (selectedElement instanceof EditPart){
+				Object model = ((EditPart)selectedElement).getModel();
+				if (model instanceof IEditablePropertySource){
+					if (!((IEditablePropertySource)model).isEditable()){
+						return false;
+					}
+				}
+			}
+		}
+		return true;
 	}
 
 	/**
@@ -84,8 +108,9 @@ public class AdvancedPropertySection extends AbstractPropertySection {
 	 */
 	public void setInput(IWorkbenchPart part, ISelection selection) {
 		super.setInput(part, selection);
-		if (page != null)
+		if (page != null){
 			page.selectionChanged(part, selection);
+		}
 	}
 
 	@Override

@@ -72,12 +72,16 @@ public class ResetStyleAction extends ACachedSelectionAction {
 	}
 	
 	/**
-	 * Only work if the selected elements are MSytle
+	 * Only work if the selected elements are MSytle and are editable
 	 */
 	@Override
 	protected boolean calculateEnabled() {
 		List<Object> styles = editor.getSelectionCache().getSelectionModelForType(MStyle.class);
-		return (styles.size() > 0 && styles.size() == getSelectedObjects().size());
+		if (!(styles.size() > 0 && styles.size() == getSelectedObjects().size())) return false;
+		for(Object style : styles){
+			if (!((MStyle)style).isEditable()) return false;
+		}
+		return true;
 	}
 
 }

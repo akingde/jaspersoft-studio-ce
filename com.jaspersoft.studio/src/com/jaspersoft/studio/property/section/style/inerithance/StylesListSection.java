@@ -635,13 +635,18 @@ public class StylesListSection extends AbstractSection {
 	 */
 	private void printElementAttribute(Composite parent, APropertyNode element, String titleValue) {
 		if (titleValue != null) {
-			printTitleWithButton(parent, titleValue, new ElementContextualMenu(this));
+			//Don't print the handle to reset the attributes if it is not editable
+			if (element.isEditable()){
+				printTitleWithButton(parent, titleValue, new ElementContextualMenu(this));
+			} else {
+				printTitle(parent, titleValue);
+			}
 		}
 		for(Entry<String, Object> entry : element.getStylesDescriptors().entrySet()){
 			String attributeKey = entry.getKey();
 			Object attributeValue = entry.getValue();
 			if (attributeValue != null) {
-				printObject(attributeKey, attributeValue, parent, element, AttributeParent.ELEMENT, true); //$NON-NLS-1$
+				printObject(attributeKey, attributeValue, parent, element, AttributeParent.ELEMENT, element.isEditable()); //$NON-NLS-1$
 			}
 		}
 	}

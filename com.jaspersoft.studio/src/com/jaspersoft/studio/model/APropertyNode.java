@@ -28,10 +28,11 @@ import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
 import com.jaspersoft.studio.help.HelpPrefixBuilder;
 import com.jaspersoft.studio.help.IHelp;
+import com.jaspersoft.studio.properties.IEditablePropertySource;
 import com.jaspersoft.studio.property.ElementLabelProvider;
 import com.jaspersoft.studio.utils.ModelUtils;
 
-public abstract class APropertyNode extends ANode implements IPropertySource, IPropertySource2 {
+public abstract class APropertyNode extends ANode implements IPropertySource, IPropertySource2, IEditablePropertySource {
 	
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
@@ -54,10 +55,12 @@ public abstract class APropertyNode extends ANode implements IPropertySource, IP
 		return true;
 	}
 
+	@Override
 	public boolean isEditable() {
 		return editable;
 	}
 
+	@Override
 	public void setEditable(boolean editable) {
 		this.editable = editable;
 	}

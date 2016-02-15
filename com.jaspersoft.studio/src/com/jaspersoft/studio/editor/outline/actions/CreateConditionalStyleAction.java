@@ -12,6 +12,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.outline.actions;
 
+import java.util.List;
+
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
@@ -20,7 +22,6 @@ import com.jaspersoft.studio.editor.palette.JDPaletteCreationFactory;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.style.MConditionalStyle;
 import com.jaspersoft.studio.model.style.MStyle;
-import com.jaspersoft.studio.utils.ModelUtils;
 
 /*
  * /* The Class CreateConditionalStyleAction.
@@ -44,13 +45,12 @@ public class CreateConditionalStyleAction extends ACreateAndSelectAction {
 	
 	@Override
 	protected boolean calculateEnabled() {
-		// Strict check on MStyle. 
-		// Its subclass MConditionalStyle is not allowed.
-		if(!checkAllSelectedObjects(MStyle.class) || 
-				!ModelUtils.checkTypesForAllEditParModels(getSelectedObjects(),false,MConditionalStyle.class)) {
-			return false;
+		List<Object> elements = editor.getSelectionCache().getSelectionModelForType(MStyle.class);
+		if (elements.size() == 1){
+			MStyle style = (MStyle)elements.get(0);
+			return (style.isEditable() && !(style instanceof MConditionalStyle));
 		}
-		return super.calculateEnabled();
+		return false;
 	}
 
 	/**

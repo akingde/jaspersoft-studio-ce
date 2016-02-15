@@ -17,6 +17,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.ui.views.properties.IPropertyDescriptor;
+
+import com.jaspersoft.studio.editor.defaults.DefaultManager;
+import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.property.descriptor.box.BoxPropertyDescriptor;
+
 import net.sf.jasperreports.engine.JRBoxContainer;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRElement;
@@ -25,12 +31,6 @@ import net.sf.jasperreports.engine.JRPen;
 import net.sf.jasperreports.engine.base.JRBaseLineBox;
 import net.sf.jasperreports.engine.base.JRBasePen;
 import net.sf.jasperreports.engine.design.JRDesignElement;
-
-import org.eclipse.ui.views.properties.IPropertyDescriptor;
-
-import com.jaspersoft.studio.editor.defaults.DefaultManager;
-import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.property.descriptor.box.BoxPropertyDescriptor;
 
 /*
  * The Class MGeneric.
@@ -149,6 +149,13 @@ public abstract class MGraphicElementLineBox extends MGraphicElement implements 
 			transferLinePenProeprties(jrTargetBox.getTopPen(), jrSourceBox.getTopPen());
 			transferLinePenProeprties(jrTargetBox.getBottomPen(), jrSourceBox.getBottomPen());
 		}
+	}
+	
+	@Override
+	public void setEditable(boolean editable) {
+		super.setEditable(editable);
+		MLineBox lineBox = (MLineBox)getPropertyValue(LINE_BOX);
+		lineBox.setEditable(editable);
 	}
 	
 	protected void applyDefaultValue(){

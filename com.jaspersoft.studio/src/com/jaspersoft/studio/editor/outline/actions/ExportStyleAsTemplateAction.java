@@ -15,10 +15,7 @@ package com.jaspersoft.studio.editor.outline.actions;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.jasperreports.engine.JRStyle;
-
 import org.eclipse.gef.EditPart;
-import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.wizard.WizardDialog;
@@ -27,12 +24,14 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.editor.action.ACachedSelectionAction;
 import com.jaspersoft.studio.editor.style.wizard.StyleTemplateImportWizard;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.style.MConditionalStyle;
 import com.jaspersoft.studio.model.style.MStyle;
-import com.jaspersoft.studio.utils.ModelUtils;
+
+import net.sf.jasperreports.engine.JRStyle;
 
 /**
  * Action to open the wizard to export one or more JRStyle as an external template style file
@@ -40,7 +39,7 @@ import com.jaspersoft.studio.utils.ModelUtils;
  * @author Orlandin Marco
  * 
  */
-public class ExportStyleAsTemplateAction extends SelectionAction {
+public class ExportStyleAsTemplateAction extends ACachedSelectionAction {
 
 	/** The Constant ID. */
 	public static final String ID = "export_style_as_template"; //$NON-NLS-1$
@@ -75,8 +74,14 @@ public class ExportStyleAsTemplateAction extends SelectionAction {
 	 */
 	@Override
 	protected boolean calculateEnabled() {
-		return ModelUtils.checkTypesForAllEditParModels(
-				getSelectedObjects(), true, new Class<?>[]{MConditionalStyle.class, MStyle.class});
+		List<Object> elements = editor.getSelectionCache().getSelectionModelForType(MStyle.class);
+		if (elements.size() == getSelectedObjects().size()){
+			for(Object rawStyle : elements){
+				MStyle style = (MStyle)rawStyle;
+				if (!style.isEditable() || (style instanceof MConditionalStyle)) return false;
+			}
+		} else return false;
+		return true;
 	}
 
 	@Override
@@ -94,7 +99,7 @@ public class ExportStyleAsTemplateAction extends SelectionAction {
 	}
 
 	/**
-	 * Return the list of all the selected JRStyle. If a conditional style is selected then it is taken its parent.
+	 * Return the list of all the selected JRStyle. The conditional and external styles are not exported
 	 * 
 	 * @return a not null list of JRStyle
 	 */
@@ -106,11 +111,7 @@ public class ExportStyleAsTemplateAction extends SelectionAction {
 		for (Object obj : objects) {
 			if (obj instanceof EditPart) {
 				ANode n = (ANode) ((EditPart) obj).getModel();
-				if (n instanceof MConditionalStyle) {
-					JRStyle condStyle = (JRStyle) n.getParent().getValue();
-					if (!result.contains(condStyle))
-						result.add(condStyle);
-				} else if (n instanceof MStyle && !result.contains(n.getValue())) {
+				if (n instanceof MStyle && ((MStyle)n).isEditable() && !result.contains(n.getValue())) {
 					result.add((JRStyle) n.getValue());
 				}
 			}
