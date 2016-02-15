@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.editor.gef.figures;
 
@@ -127,7 +123,7 @@ public class ComponentFigure extends RectangleFigure {
 		return jrElement;
 	}
 
-	private void paintDecorators(Graphics graphics) {
+	protected void paintDecorators(Graphics graphics) {
 		if (decorators == null)
 			return;
 		for (IDecorator d : decorators)
@@ -157,49 +153,49 @@ public class ComponentFigure extends RectangleFigure {
 
 	/**
 	 * Remove a decorator from the element
-	 *  
-	 *  @param decorator the decorator that will be removed. The search
-	 *  of the decorator is done using the equals method from each decorator
-	 *  and the element with the passed one
+	 * 
+	 * @param decorator
+	 *          the decorator that will be removed. The search of the decorator is done using the equals method from each
+	 *          decorator and the element with the passed one
 	 */
 	public void removeDecorator(IDecorator decorator) {
 		if (decorators != null)
 			decorators.remove(decorator);
 	}
-	
+
 	/**
-	 *  Remove a decorator with a specific type from the element
-	 *  
-	 *  @param dectType the decorator that will be removed. The search
-	 *  of the decorator is done comparing the type from each decorator on the element
-	 *  with the type of the passed one. The type must be exactly the same, subtype will
-	 *  not be considered.
-	 *  @return true if a decorator was found and removed, false otherwise
+	 * Remove a decorator with a specific type from the element
+	 * 
+	 * @param dectType
+	 *          the decorator that will be removed. The search of the decorator is done comparing the type from each
+	 *          decorator on the element with the type of the passed one. The type must be exactly the same, subtype will
+	 *          not be considered.
+	 * @return true if a decorator was found and removed, false otherwise
 	 */
-	public boolean removeDecorator(Class<? extends IDecorator> dectType){
-		if (decorators != null){
-			for(IDecorator decorator : decorators){
-				if (decorator.getClass().equals(dectType)){
+	public boolean removeDecorator(Class<? extends IDecorator> dectType) {
+		if (decorators != null) {
+			for (IDecorator decorator : decorators) {
+				if (decorator.getClass().equals(dectType)) {
 					return decorators.remove(decorator);
 				}
 			}
 		}
 		return false;
 	}
-	
+
 	/**
-	 *  Search a decorator with a specific type from the element
-	 *  
-	 *  @param dectType the decorator that will be searched. The search
-	 *  of the decorator is done comparing the type from each decorator on the element
-	 *  with the type of the passed one. The type must be exactly the same, subtype will
-	 *  not be considered.
-	 *  @return a decorator exactly of the searched type if it can be found, otherwise null
+	 * Search a decorator with a specific type from the element
+	 * 
+	 * @param dectType
+	 *          the decorator that will be searched. The search of the decorator is done comparing the type from each
+	 *          decorator on the element with the type of the passed one. The type must be exactly the same, subtype will
+	 *          not be considered.
+	 * @return a decorator exactly of the searched type if it can be found, otherwise null
 	 */
-	public IDecorator getDecorator(Class<? extends IDecorator> dectType){
-		if (decorators != null){
-			for(IDecorator decorator : decorators){
-				if (decorator.getClass().equals(dectType)){
+	public IDecorator getDecorator(Class<? extends IDecorator> dectType) {
+		if (decorators != null) {
+			for (IDecorator decorator : decorators) {
+				if (decorator.getClass().equals(dectType)) {
 					return decorator;
 				}
 			}
