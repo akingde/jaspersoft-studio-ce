@@ -262,7 +262,7 @@ public class MServerProfile extends ANode {
 			String prjpath = getValue().getProjectPath();
 			if (prjpath != null && !prjpath.trim().isEmpty()) {
 				String path = prjpath.trim();
-				if (path.charAt(0) == '/')
+				if (path.startsWith("/"))
 					path = path.substring(1);
 				int indx = path.indexOf("/"); //$NON-NLS-1$
 				String ppath = indx >= 0 ? path.substring(0, indx) : path;
