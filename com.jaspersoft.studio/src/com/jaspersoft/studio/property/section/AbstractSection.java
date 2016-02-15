@@ -15,8 +15,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.jasperreports.engine.JasperReportsContext;
-
 import org.eclipse.gef.EditDomain;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
@@ -42,15 +40,18 @@ import com.jaspersoft.studio.properties.internal.WidgetDescriptor;
 import com.jaspersoft.studio.properties.view.AbstractPropertySection;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetWidgetFactory;
+import com.jaspersoft.studio.properties.view.validation.ValidationError;
 import com.jaspersoft.studio.property.SetValueCommand;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 import com.jaspersoft.studio.property.section.widgets.SPWidgetFactory;
 
+import net.sf.jasperreports.engine.JasperReportsContext;
+
 /*
  * Abstract class for a section in a tab in the properties view.
  */
-public abstract class AbstractSection extends AbstractPropertySection implements PropertyChangeListener,
-		IWidgetsProviderSection {
+public abstract class AbstractSection extends AbstractPropertySection
+		implements PropertyChangeListener, IWidgetsProviderSection {
 	protected Map<Object, ASPropertyWidget<?>> widgets = new HashMap<Object, ASPropertyWidget<?>>();
 
 	protected JasperReportsContext jasperReportsContext;
@@ -113,6 +114,24 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public void resetErrors() {
+		for (ASPropertyWidget<?> w : widgets.values())
+			w.resetErrors();
+	}
+
+	@Override
+	public void showErrors(List<ValidationError> errors) {
+		for (ValidationError ve : errors) {
+			List<String> ids = ve.getProps();
+			for (String id : ids) {
+				ASPropertyWidget<?> w = widgets.get(id);
+				if (w != null)
+					w.showErrors(ve.getMessage(), ve.isWarning());
+			}
+		}
 	}
 
 	private CLabel createLabel(Composite composite, boolean showLabel, IPropertyDescriptor pd) {
@@ -267,6 +286,7 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 						widgets.get(key).setData(element, element.getPropertyValue(key));
 				}
 			}
+			getTabbedPropertySheetPage().showErrors();
 			setRefreshing(false);
 		}
 	}
@@ -317,26 +337,28 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 					for (Command c : commands)
 						cc.add(c);
 				cs.execute(cc);
+				getTabbedPropertySheetPage().showErrors();
 				return true;
 			}
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Run in the stack of the current domain the passed command
 	 */
-	public boolean runCommand(JSSCompoundCommand cc){
+	public boolean runCommand(JSSCompoundCommand cc) {
 		if (!isRefreshing() && getEditDomain() != null) {
 			CommandStack cs = getEditDomain().getCommandStack();
 			if (!cc.getCommands().isEmpty()) {
 				cs.execute(cc);
+				getTabbedPropertySheetPage().showErrors();
 				return true;
 			}
 		}
 		return false;
 	}
-	
+
 	public boolean changePropertyOn(Object property, Object newValue, List<APropertyNode> nodes, List<Command> commands) {
 		if (!isRefreshing() && nodes != null && !nodes.isEmpty() && getEditDomain() != null) {
 			CommandStack cs = getEditDomain().getCommandStack();
@@ -354,6 +376,7 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 					for (Command c : commands)
 						cc.add(c);
 				cs.execute(cc);
+				getTabbedPropertySheetPage().showErrors();
 				return true;
 			}
 		}
@@ -377,6 +400,7 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 						for (Command c1 : commands)
 							cc.add(c1);
 					cs.execute(cc);
+					getTabbedPropertySheetPage().showErrors();
 				}
 			}
 		}
@@ -406,7 +430,7 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 	public List<APropertyNode> getElements() {
 		return elements;
 	}
-	
+
 	public void setElements(List<APropertyNode> elements) {
 		this.elements = elements;
 	}

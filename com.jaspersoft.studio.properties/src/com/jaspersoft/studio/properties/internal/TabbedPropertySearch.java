@@ -49,80 +49,83 @@ import com.jaspersoft.studio.properties.view.TabContents;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetWidgetFactory;
 
-
 /**
- * Display a search bar into the top of a property sheet page. This bar can be used 
- * to search and highlight a specific property. The bar is obtained with a text with 
- * the autocomplete function. at the right of the text there is a fake button painted
- * using a canvas. A click of this button can manually open the autocomplete dialog, event 
- * if the user is not typing anything.
+ * Display a search bar into the top of a property sheet page. This bar can be
+ * used to search and highlight a specific property. The bar is obtained with a
+ * text with the autocomplete function. at the right of the text there is a fake
+ * button painted using a canvas. A click of this button can manually open the
+ * autocomplete dialog, event if the user is not typing anything.
  * 
  * @author Orlandin Marco
  *
  */
 public class TabbedPropertySearch extends Composite {
-	
+
 	/**
-	 * Text where the name of the property can be typed or selected from the available proposed by the autocomplete
+	 * Text where the name of the property can be typed or selected from the
+	 * available proposed by the autocomplete
 	 */
 	private Text textArea;
-	
+
 	/**
 	 * The page of the property sheet
 	 */
 	private TabbedPropertySheetPage page;
-	
+
 	/**
 	 * Factory widget, used to build stuff
 	 */
 	private TabbedPropertySheetWidgetFactory factory;
-	
+
 	/**
 	 * The last element selected by the user
 	 */
 	private Object lastSelectedElement = null;
-	
+
 	/**
-	 * Keep the properties list of the last selected element, until the selection dosen't change with an element
-	 * with a different type. Maybe could be improved by storing all the created properties when they are builded
+	 * Keep the properties list of the last selected element, until the
+	 * selection dosen't change with an element with a different type. Maybe
+	 * could be improved by storing all the created properties when they are
+	 * builded
 	 */
 	private PropertiesContainer cachedProperties = null;
-	
+
 	/**
 	 * Color used for the arrow of the fake button
 	 */
-	private static final Color arrowColor = SWTResourceManager.getColor(0,0,0);
-	
+	private static final Color arrowColor = SWTResourceManager.getColor(0, 0, 0);
+
 	/**
 	 * The autocomplete object for the text element
 	 */
 	private ManualyOpenedAutocomplete autocomplete;
-	
+
 	/**
 	 * The height of the text element and of the canvas with the arrow painted
 	 */
 	private int widgetHeight = 18;
-	
+
 	/**
 	 * Action executed when an element from the autocomplete is selected
 	 */
-	private IContentProposalListener proposalListener = new IContentProposalListener(){
+	private IContentProposalListener proposalListener = new IContentProposalListener() {
 		@Override
 		public void proposalAccepted(IContentProposal proposal) {
-			if (proposal instanceof PropertyContentProposal){
-				PropertyContentProposal propertyProposal = (PropertyContentProposal)proposal;
-				selectElement(propertyProposal.getPropertyId(),propertyProposal.getSectionType());
+			if (proposal instanceof PropertyContentProposal) {
+				PropertyContentProposal propertyProposal = (PropertyContentProposal) proposal;
+				selectElement(propertyProposal.getPropertyId(), propertyProposal.getSectionType());
 			}
 		}
-		
+
 	};
-	
 
 	/**
 	 * Constructor for TabbedPropertySearch.
 	 * 
-	 * @param parent the parent composite.
-	 * @param page the page where the control is placed
+	 * @param parent
+	 *            the parent composite.
+	 * @param page
+	 *            the page where the control is placed
 	 */
 	public TabbedPropertySearch(Composite parent, TabbedPropertySheetPage page) {
 		super(parent, SWT.NO_FOCUS);
@@ -144,21 +147,21 @@ public class TabbedPropertySearch extends Composite {
 		layout.marginWidth = 1;
 		layout.marginHeight = 0;
 		setLayout(layout);
-		
-		Composite containerComp = new Composite(this,SWT.BORDER);
-		GridLayout containerLayout = new GridLayout(2,false);
+
+		Composite containerComp = new Composite(this, SWT.BORDER);
+		GridLayout containerLayout = new GridLayout(2, false);
 		containerLayout.marginWidth = 0;
 		containerLayout.marginHeight = 0;
 		containerLayout.horizontalSpacing = 0;
 		containerLayout.verticalSpacing = 0;
 		containerComp.setLayout(containerLayout);
-		
-		//Create the text area
+
+		// Create the text area
 		createTextArea(containerComp);
-		
-		//Create the arrow button 
+
+		// Create the arrow button
 		createFakeButton(containerComp);
-		
+
 		FormData data = new FormData();
 		data.left = new FormAttachment(0, 0);
 		data.top = new FormAttachment(0, 0);
@@ -166,50 +169,54 @@ public class TabbedPropertySearch extends Composite {
 		data.bottom = new FormAttachment(100, 0);
 		containerComp.setLayoutData(data);
 	}
-	
+
 	/**
-	 * Create the Text area control 
+	 * Create the Text area control
 	 * 
-	 * @param containerComp  container where the control is placed
+	 * @param containerComp
+	 *            container where the control is placed
 	 */
-	private void createTextArea(Composite containerComp){
+	private void createTextArea(Composite containerComp) {
 		textArea = new Text(containerComp, SWT.NONE);
 		textArea.setForeground(factory.getColors().getColor(IFormColors.TITLE));
 		textArea.setText(Messages.TabbedPropertySearch_searchPropertyLabel);
-		
-		//Focus listener, to populate the combo when it is selected
+
+		// Focus listener, to populate the combo when it is selected
 		textArea.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent e) {
-				if (textArea.getText().equals(Messages.TabbedPropertySearch_searchPropertyLabel)){
+				if (textArea.getText().equals(Messages.TabbedPropertySearch_searchPropertyLabel)) {
 					textArea.setText("");
 				}
 				updateAutocompleteContent();
 			}
-			
+
 			@Override
 			public void focusLost(FocusEvent e) {
-				if (textArea.getText().isEmpty()) 
-					textArea.setText(Messages.TabbedPropertySearch_searchPropertyLabel); 
+				if (textArea.getText().isEmpty())
+					textArea.setText(Messages.TabbedPropertySearch_searchPropertyLabel);
 			}
 		});
-		
+
 		textArea.addKeyListener(new KeyAdapter() {
-			
+
 			@Override
 			public void keyReleased(KeyEvent e) {
-				//when all the text is deleted then the autocomplete dialog is opened showing every choice
-				if (e.keyCode == SWT.BS && textArea.getText().isEmpty() 
-						&& !autocomplete.isProposalOpened()) autocomplete.openProposalPopup();	
-				//The down arrow open the autocomplete dialog is opened 
-				if (e.keyCode == SWT.ARROW_DOWN && !autocomplete.isProposalOpened()) autocomplete.openProposalPopup();
-				//When the return key is pressed the element with the same name of the typed one is selected without open the autocomplete
-				if (e.keyCode == SWT.CR && !autocomplete.isProposalOpened() && cachedProperties != null){
+				// when all the text is deleted then the autocomplete dialog is
+				// opened showing every choice
+				if (e.keyCode == SWT.BS && textArea.getText().isEmpty() && !autocomplete.isProposalOpened())
+					autocomplete.openProposalPopup();
+				// The down arrow open the autocomplete dialog is opened
+				if (e.keyCode == SWT.ARROW_DOWN && !autocomplete.isProposalOpened())
+					autocomplete.openProposalPopup();
+				// When the return key is pressed the element with the same name
+				// of the typed one is selected without open the autocomplete
+				if (e.keyCode == SWT.CR && !autocomplete.isProposalOpened() && cachedProperties != null) {
 					String searchedString = textArea.getText().toLowerCase();
-					for(int i=0;i<cachedProperties.getSize();i++){
+					for (int i = 0; i < cachedProperties.getSize(); i++) {
 						PropertyContainer actualContainer = cachedProperties.getPrperties()[i];
 						String actualString = actualContainer.getName().toLowerCase();
-						if (actualString.equals(searchedString)){
+						if (actualString.equals(searchedString)) {
 							checkSelection(actualContainer.getId());
 							return;
 						}
@@ -217,99 +224,104 @@ public class TabbedPropertySearch extends Composite {
 				}
 			}
 		});
-		
+
 		GridData textData = new GridData(SWT.FILL, SWT.CENTER, true, false);
 		textData.heightHint = widgetHeight;
 		textArea.setLayoutData(textData);
 	}
-	
+
 	/**
-	 * Create a fake arrow button that can be clicked to open or close 
-	 * manually the autocomplete dialog
+	 * Create a fake arrow button that can be clicked to open or close manually
+	 * the autocomplete dialog
 	 * 
-	 * @param containerComp container where the button will be placed
+	 * @param containerComp
+	 *            container where the button will be placed
 	 */
-	private void createFakeButton(Composite containerComp){
+	private void createFakeButton(Composite containerComp) {
 		Canvas openIcon = new Canvas(containerComp, SWT.NONE);
-		openIcon.setBackground(SWTResourceManager.getColor(255,255,255));
+		openIcon.setBackground(SWTResourceManager.getColor(255, 255, 255));
 		openIcon.addPaintListener(new PaintListener() {
 			@Override
 			public void paintControl(PaintEvent e) {
 				Color oldBackground = e.gc.getBackground();
-				e.gc.fillRectangle(0,0,e.width,e.height);
+				e.gc.fillRectangle(0, 0, e.width, e.height);
 				e.gc.setBackground(arrowColor);
 				e.gc.setAntialias(SWT.ON);
-				int oddX_offset = e.width % 2 == 0 ? 0 : 1;  
+				int oddX_offset = e.width % 2 == 0 ? 0 : 1;
 				int y_offset = 7;
 				int x_offset = 4;
-				int x1 = x_offset-oddX_offset;
+				int x1 = x_offset - oddX_offset;
 				int y1 = y_offset;
-				int x2 = e.width-x_offset;
+				int x2 = e.width - x_offset;
 				int y2 = y_offset;
-				int x3 = (e.width-oddX_offset)/2;
-				int y3 = e.height-y_offset;
-				e.gc.fillPolygon(new int[]{x1,y1,x2,y2,x3,y3});
+				int x3 = (e.width - oddX_offset) / 2;
+				int y3 = e.height - y_offset;
+				e.gc.fillPolygon(new int[] { x1, y1, x2, y2, x3, y3 });
 				e.gc.setAntialias(SWT.DEFAULT);
 				e.gc.setBackground(oldBackground);
 			}
 		});
-		
+
 		openIcon.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseUp(MouseEvent e) {
-				if (textArea.getText().equals(Messages.TabbedPropertySearch_searchPropertyLabel)){
+				if (textArea.getText().equals(Messages.TabbedPropertySearch_searchPropertyLabel)) {
 					textArea.setText("");
 				}
 				updateAutocompleteContent();
-				if (autocomplete.isProposalOpened()) autocomplete.closeProposalPopup();
-				else autocomplete.openProposalPopup();
+				if (autocomplete.isProposalOpened())
+					autocomplete.closeProposalPopup();
+				else
+					autocomplete.openProposalPopup();
 			}
 		});
 		GridData iconData = new GridData(SWT.LEFT, SWT.CENTER, false, false);
 		iconData.widthHint = 15;
 		iconData.heightHint = widgetHeight;
 		openIcon.setLayoutData(iconData);
-				
+
 	}
-	
+
 	/**
 	 * Method called to initialize or update the autocomplete set of elements
 	 */
-	private void updateAutocompleteContent(){
+	private void updateAutocompleteContent() {
 		if (autocomplete == null) {
 			PropertiesContainer properties = getAllProperties();
 			autocomplete = new ManualyOpenedAutocomplete(textArea, new TextContentAdapter(), properties);
 			autocomplete.addProposalSelectedListener(proposalListener);
 		} else {
 			Object actualSelectedElement = getSelectedElement();
-			if (lastSelectedElement == null || (actualSelectedElement != null && !actualSelectedElement.getClass().equals(lastSelectedElement.getClass()))){
+			if (lastSelectedElement == null || (actualSelectedElement != null
+					&& !actualSelectedElement.getClass().equals(lastSelectedElement.getClass()))) {
 				PropertiesContainer properties = getAllProperties();
 				autocomplete.setProposals(properties);
 			}
 		}
 	}
-	
+
 	/**
-	 * Return all the properties for the selected element. The property are cached and not 
-	 * recalculated until the selection maintain the same type
+	 * Return all the properties for the selected element. The property are
+	 * cached and not recalculated until the selection maintain the same type
 	 * 
-	 * @return a PropertiesContainer with all the properties name and relative ids for the 
-	 * selected element type
+	 * @return a PropertiesContainer with all the properties name and relative
+	 *         ids for the selected element type
 	 */
-	private PropertiesContainer getAllProperties(){
-		//Check if i have the properties for the element in the cache
-		if (lastSelectedElement == null || cachedProperties == null){
-			//I haven't build a cache yet, need to create it
+	private PropertiesContainer getAllProperties() {
+		// Check if i have the properties for the element in the cache
+		if (lastSelectedElement == null || cachedProperties == null) {
+			// I haven't build a cache yet, need to create it
 			cachedProperties = createElements();
 			lastSelectedElement = getSelectedElement();
 		} else {
-			//Maybe i have already the element cached
+			// Maybe i have already the element cached
 			Object actualSelectedElement = getSelectedElement();
-			if (actualSelectedElement == null){
+			if (actualSelectedElement == null) {
 				cachedProperties = new PropertiesContainer();
 				lastSelectedElement = null;
-			} else if (!actualSelectedElement.getClass().equals(lastSelectedElement.getClass())){
-				//The cache was build for an element with different type\properties, i need to rebuild it
+			} else if (!actualSelectedElement.getClass().equals(lastSelectedElement.getClass())) {
+				// The cache was build for an element with different
+				// type\properties, i need to rebuild it
 				cachedProperties = createElements();
 				lastSelectedElement = actualSelectedElement;
 			}
@@ -317,31 +329,30 @@ public class TabbedPropertySearch extends Composite {
 		textArea.setText(""); //$NON-NLS-1$
 		return cachedProperties;
 	}
-	
-	
+
 	/**
 	 * Get the element actually selected
 	 */
-	private Object getSelectedElement(){
+	private Object getSelectedElement() {
 		return page.getSelectedObject();
 	}
-	
+
 	/**
-	 * Create a PropertiesContainer containing all the selectable properties for 
-	 * the actually selected element type. The property are also ordered into 
-	 * a lexicographic way
+	 * Create a PropertiesContainer containing all the selectable properties for
+	 * the actually selected element type. The property are also ordered into a
+	 * lexicographic way
 	 * 
 	 */
-	private PropertiesContainer createElements(){
+	private PropertiesContainer createElements() {
 		List<PropertyContainer> listToOrder = new ArrayList<PropertyContainer>();
 		List<TabContents> lst = page.getCurrentTabs();
-		
-		for(TabContents actualContents : lst){
-			for(ISection section : actualContents.getSections()){
-				if (section instanceof IWidgetsProviderSection){
-					IWidgetsProviderSection attributesSection = (IWidgetsProviderSection)section;
+
+		for (TabContents actualContents : lst) {
+			for (ISection section : actualContents.getSections()) {
+				if (section instanceof IWidgetsProviderSection) {
+					IWidgetsProviderSection attributesSection = (IWidgetsProviderSection) section;
 					List<Object> providedProperties = attributesSection.getHandledProperties();
-					for(Object property : providedProperties){
+					for (Object property : providedProperties) {
 						WidgetDescriptor desc = attributesSection.getPropertyInfo(property);
 						listToOrder.add(new PropertyContainer(desc.getName(), property, attributesSection.getClass()));
 					}
@@ -351,46 +362,50 @@ public class TabbedPropertySearch extends Composite {
 		Collections.sort(listToOrder);
 		return new PropertiesContainer(listToOrder.toArray(new PropertyContainer[listToOrder.size()]));
 	}
-	
-	
+
 	/**
-	 * Method called when there is a selection event. 
+	 * Method called when there is a selection event.
 	 * 
-	 * @param id the id of the element to select
+	 * @param id
+	 *            the id of the element to select
 	 */
-	private void checkSelection(Object id){
-		if (id != null) selectElement(id);
+	private void checkSelection(Object id) {
+		if (id != null)
+			selectElement(id, page);
 	}
-	
+
 	@Override
 	public void dispose() {
 		super.dispose();
 		arrowColor.dispose();
 	}
 
-	
 	/**
 	 * Select the properties in the property sheet page with a specific id
 	 * 
-	 * @param id the id of the property
+	 * @param id
+	 *            the id of the property
 	 */
-	private void selectElement(Object id){
+	public static void selectElement(Object id, TabbedPropertySheetPage page) {
 		List<TabContents> lst = page.getCurrentTabs();
-		for(TabContents actualContents : lst){
-			for(ISection section : actualContents.getSections()){
-				if (section instanceof IWidgetsProviderSection){
-					IWidgetsProviderSection actualSection = ((IWidgetsProviderSection)section);
-					//search the section that contains the property
-					if (actualSection.getHandledProperties().contains(id)){
-						//Select the section, it will also create it
+		for (TabContents actualContents : lst) {
+			for (ISection section : actualContents.getSections()) {
+				if (section instanceof IWidgetsProviderSection) {
+					IWidgetsProviderSection actualSection = ((IWidgetsProviderSection) section);
+					// search the section that contains the property
+					if (actualSection.getHandledProperties().contains(id)) {
+						// Select the section, it will also create it
 						page.setSelection(actualContents);
-						//Expand the properties expandable composite, if it is inside one of it
+						// Expand the properties expandable composite, if it is
+						// inside one of it
 						actualSection.expandForProperty(id);
-						//Get the widget from the section and highlight it for 2000ms
+						// Get the widget from the section and highlight it for
+						// 2000ms
 						IHighlightPropertyWidget widget = actualSection.getWidgetForProperty(id);
 						if (widget != null) {
 							Control highLightedControl = widget.getControlToBorder();
-							if (highLightedControl != null) highLightedControl.forceFocus();
+							if (highLightedControl != null)
+								highLightedControl.forceFocus();
 							widget.highLightWidget(2000);
 						}
 						return;
@@ -399,60 +414,61 @@ public class TabbedPropertySearch extends Composite {
 			}
 		}
 	}
-	
+
 	/**
 	 * Select the properties in the property sheet page with a specific id
 	 * 
-	 * @param id the id of the property
+	 * @param id
+	 *            the id of the property
 	 */
-	private void selectElement(Object id, Class<?> sectionType){
+	private void selectElement(Object id, Class<?> sectionType) {
 		if (sectionType == null) {
 			checkSelection(id);
 			return;
 		}
 		List<TabContents> lst = page.getCurrentTabs();
-		for(TabContents actualContents : lst){
-			for(ISection section : actualContents.getSections()){
-				if (section instanceof IWidgetsProviderSection){
-					IWidgetsProviderSection actualSection = ((IWidgetsProviderSection)section);
-					//search the section that contains the property
-					if (actualSection.getClass().equals(sectionType) && actualSection.getHandledProperties().contains(id)){
-						//Select the section, it will also create it
+		for (TabContents actualContents : lst) {
+			for (ISection section : actualContents.getSections()) {
+				if (section instanceof IWidgetsProviderSection) {
+					IWidgetsProviderSection actualSection = ((IWidgetsProviderSection) section);
+					// search the section that contains the property
+					if (actualSection.getClass().equals(sectionType)
+							&& actualSection.getHandledProperties().contains(id)) {
+						// Select the section, it will also create it
 						page.setSelection(actualContents);
-						//Expand the properties expandable composite, if it is inside one of it
+						// Expand the properties expandable composite, if it is
+						// inside one of it
 						actualSection.expandForProperty(id);
-						//Get the widget from the section and highlight it for 2000ms
+						// Get the widget from the section and highlight it for
+						// 2000ms
 						IHighlightPropertyWidget widget = actualSection.getWidgetForProperty(id);
-						if (widget != null) widget.highLightWidget(2000);
+						if (widget != null)
+							widget.highLightWidget(2000);
 						return;
 					}
 				}
 			}
 		}
 	}
-	
+
 	/**
 	 * @param e
 	 */
 	protected void drawTitleBackground(PaintEvent e) {
-		if (factory.getColors() == null) return;
+		if (factory.getColors() == null)
+			return;
 		Rectangle bounds = getClientArea();
 		Color bg = factory.getColors().getColor(IFormColors.H_GRADIENT_END);
 		Color gbg = factory.getColors().getColor(IFormColors.H_GRADIENT_START);
 		GC gc = e.gc;
 		gc.setForeground(bg);
 		gc.setBackground(gbg);
-		gc.fillGradientRectangle(bounds.x, bounds.y, bounds.width,
-				bounds.height, true);
+		gc.fillGradientRectangle(bounds.x, bounds.y, bounds.width, bounds.height, true);
 		// background bottom separator
-		gc.setForeground(factory.getColors().getColor(
-				IFormColors.H_BOTTOM_KEYLINE1));
-		gc.drawLine(bounds.x, bounds.height - 2, bounds.x + bounds.width - 1,
-				bounds.height - 2);
-		gc.setForeground(factory.getColors().getColor(
-				IFormColors.H_BOTTOM_KEYLINE2));
-		gc.drawLine(bounds.x, bounds.height - 1, bounds.x + bounds.width - 1,
-				bounds.height - 1);
+		gc.setForeground(factory.getColors().getColor(IFormColors.H_BOTTOM_KEYLINE1));
+		gc.drawLine(bounds.x, bounds.height - 2, bounds.x + bounds.width - 1, bounds.height - 2);
+		gc.setForeground(factory.getColors().getColor(IFormColors.H_BOTTOM_KEYLINE2));
+		gc.drawLine(bounds.x, bounds.height - 1, bounds.x + bounds.width - 1, bounds.height - 1);
 	}
 
 }

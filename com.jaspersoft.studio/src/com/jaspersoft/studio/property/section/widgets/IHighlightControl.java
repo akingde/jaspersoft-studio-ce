@@ -12,6 +12,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.section.widgets;
 
+import org.eclipse.swt.graphics.Color;
+
 /**
  * Interface to declare that a class has the capability to graphically highlight
  * in some way a control
@@ -30,4 +32,6 @@ public interface IHighlightControl {
 	 * Restore the highlighted control to its original status
 	 */
 	public void deHighLightControl();
+	
+	public void deHighLightControl(Color oldColor);
 }

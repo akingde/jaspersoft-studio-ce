@@ -1,20 +1,20 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.property.section.widgets;
 
 import org.eclipse.draw2d.ColorConstants;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Text;
+import org.eclipse.wb.swt.ResourceManager;
 
 /**
  * highlight a control by changing its background color
@@ -22,45 +22,74 @@ import org.eclipse.swt.widgets.Control;
  * @author Orlandin Marco
  *
  */
-public class BackgroundHighlight implements IHighlightControl{
+public class BackgroundHighlight implements IHighlightControl {
 
 	/**
 	 * Control to highlight
 	 */
 	private Control controlToHighlight;
-	
+
 	/**
 	 * Color of the background prior the change
 	 */
 	private RGB oldBackground;
-	
+	private Color color;
+
 	/**
 	 * Create an instance of the class
 	 * 
-	 * @param control control to highlight
+	 * @param control
+	 *          control to highlight
 	 */
-	public BackgroundHighlight(Control control){
-		this.controlToHighlight = control;
+	public BackgroundHighlight(Control control) {
+		this(control, ColorConstants.orange);
 	}
-	
+
+	public BackgroundHighlight(Control control, Color color) {
+		this.controlToHighlight = control;
+		this.color = color;
+	}
+
+	public void setColor(Color color) {
+		this.color = color;
+	}
+
 	/**
 	 * Highlight the control by changing its background color
 	 */
-	public void highLightControl(){
-		if (controlToHighlight != null && !controlToHighlight.isDisposed()){
+	public void highLightControl() {
+		if (controlToHighlight != null && !controlToHighlight.isDisposed()) {
 			oldBackground = controlToHighlight.getBackground().getRGB();
-			controlToHighlight.setBackground(ColorConstants.orange);
+			controlToHighlight.setBackground(color);
 		}
 	}
-	
+
+	public void deHighLightControl() {
+		Color oldColor = null;
+		if (oldBackground != null)
+			oldColor = ResourceManager.getColor(oldBackground);
+		deHighLightControl(oldColor);
+	}
+
 	/**
 	 * Restore the control background to the default one
 	 */
-	public void deHighLightControl(){
-		if (oldBackground != null && !controlToHighlight.isDisposed()){
-			controlToHighlight.setBackground(null);
+	public void deHighLightControl(Color oldColor) {
+		if (oldBackground != null && !controlToHighlight.isDisposed()) {
+			if (controlToHighlight.isFocusControl() && System.getProperty("os.name").toLowerCase().contains("mac")) {
+				Point p = null;
+				if (controlToHighlight instanceof Text)
+					p = ((Text) controlToHighlight).getSelection();
+				controlToHighlight.setEnabled(false);
+				controlToHighlight.setBackground(oldColor);
+				controlToHighlight.setEnabled(true);
+				controlToHighlight.setFocus();
+				if (controlToHighlight instanceof Text)
+					((Text) controlToHighlight).setSelection(p);
+			} else
+				controlToHighlight.setBackground(oldColor);
 			controlToHighlight.redraw();
 		}
 	}
-	
+
 }

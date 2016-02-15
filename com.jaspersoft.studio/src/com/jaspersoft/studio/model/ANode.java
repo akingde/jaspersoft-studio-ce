@@ -34,6 +34,8 @@ import com.jaspersoft.studio.model.style.MStylesTemplate;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.model.util.ReportFactory;
+import com.jaspersoft.studio.properties.view.validation.IValidable;
+import com.jaspersoft.studio.properties.view.validation.ValidationError;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 import net.sf.jasperreports.engine.JRConstants;
@@ -51,7 +53,7 @@ import net.sf.jasperreports.engine.design.events.JRChangeEventsSupport;
  * 
  * @author Chicu Veaceslav
  */
-public abstract class ANode implements INode, Serializable, IAdaptable, Cloneable {
+public abstract class ANode implements INode, Serializable, IAdaptable, Cloneable, IValidable {
 
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
@@ -85,7 +87,7 @@ public abstract class ANode implements INode, Serializable, IAdaptable, Cloneabl
 	 * List of validation error for the current element. The error messages
 	 * can be cached using the flag redoValidation
 	 */
-	private List<String> validationErrors = null;
+	private List<ValidationError> validationErrors = null;
 	
 	/**
 	 * Flag used to know when something in the element change. If something
@@ -639,7 +641,7 @@ public abstract class ANode implements INode, Serializable, IAdaptable, Cloneabl
 	 * @return null if the validation doesn't return errors, the list of errors 
 	 * otherwise
 	 */
-	protected List<String> doValidation(){
+	protected List<ValidationError> doValidation(){
 		return null;
 	}
 	
@@ -663,7 +665,7 @@ public abstract class ANode implements INode, Serializable, IAdaptable, Cloneabl
 	 * @return null if the validation doesn't return errors, the list of errors 
 	 * otherwise
 	 */
-	public List<String> validate(){
+	public List<ValidationError> validate(){
 		if (redoValidation){
 			validationErrors = doValidation();
 			redoValidation = false;

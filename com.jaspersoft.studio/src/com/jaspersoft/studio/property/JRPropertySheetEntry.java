@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.property;
 
@@ -26,6 +22,7 @@ import org.eclipse.gef.commands.CommandStackListener;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.commands.ForwardUndoCompoundCommand;
 import org.eclipse.jface.viewers.ILabelProvider;
+import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.PropertySheetEntry;
 
@@ -55,24 +52,34 @@ public class JRPropertySheetEntry extends org.eclipse.ui.views.properties.Proper
 	/**
 	 * Instantiates a new jR property sheet entry.
 	 * 
-	 * @param stack the stack
-	 * @param model the model
+	 * @param stack
+	 *          the stack
+	 * @param model
+	 *          the model
 	 */
 	public JRPropertySheetEntry(CommandStack stack, ANode model) {
 		this(stack, model, true);
 	}
-	
+
 	/**
 	 * Instantiates a new jR property sheet entry.
 	 * 
-	 * @param stack the stack
-	 * @param model the model
-	 * @param addListener flag to add or not the listener on the command stack to refresh all the entries
+	 * @param stack
+	 *          the stack
+	 * @param model
+	 *          the model
+	 * @param addListener
+	 *          flag to add or not the listener on the command stack to refresh all the entries
 	 */
 	public JRPropertySheetEntry(CommandStack stack, ANode model, boolean addListener) {
 		super();
 		setCommandStack(stack, addListener);
 		setModel(model);
+	}
+
+	@Override
+	public IPropertyDescriptor getDescriptor() {
+		return super.getDescriptor();
 	}
 
 	/**
@@ -140,9 +147,8 @@ public class JRPropertySheetEntry extends org.eclipse.ui.views.properties.Proper
 	}
 
 	/**
-	 * The child dosen't have the listener on the stack because the listener
-	 * refresh always from root to all the children, so one listener on the root
-	 * is the only one needed
+	 * The child dosen't have the listener on the stack because the listener refresh always from root to all the children,
+	 * so one listener on the root is the only one needed
 	 */
 	protected JRPropertySheetEntry createChildEntry() {
 		return new JRPropertySheetEntry(stack, model, false);
@@ -151,18 +157,20 @@ public class JRPropertySheetEntry extends org.eclipse.ui.views.properties.Proper
 	/**
 	 * Sets the command stack.
 	 * 
-	 * @param stack the new commands stack
-	 * @param addListener flag to add or not the listener on the command stack to refresh all the entries
+	 * @param stack
+	 *          the new commands stack
+	 * @param addListener
+	 *          flag to add or not the listener on the command stack to refresh all the entries
 	 */
 	void setCommandStack(CommandStack stack, boolean addListener) {
 		this.stack = stack;
-		if (addListener){
-			//First remove any previous listener
-			if (commandStackListener != null){
+		if (addListener) {
+			// First remove any previous listener
+			if (commandStackListener != null) {
 				stack.removeCommandStackListener(commandStackListener);
 				commandStackListener = null;
 			}
-			//Then create and add the new one
+			// Then create and add the new one
 			commandStackListener = new CommandStackListener() {
 				public void commandStackChanged(EventObject e) {
 					refreshFromRoot();
@@ -310,7 +318,7 @@ public class JRPropertySheetEntry extends org.eclipse.ui.views.properties.Proper
 	public String getValueAsString() {
 		ILabelProvider provider = getDescriptor().getLabelProvider();
 		if (provider instanceof CheckBoxLabelProvider) {
-			return provider.getText(editValue);//$NON-NLS-1$
+			return provider.getText(editValue);// $NON-NLS-1$
 		}
 		if (provider == null) {
 			return editValue.toString();

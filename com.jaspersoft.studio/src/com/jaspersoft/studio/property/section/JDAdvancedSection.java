@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.property.section;
 
@@ -40,28 +36,23 @@ import com.jaspersoft.studio.properties.view.AdvancedPropertySection;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.JRPropertySheetEntry;
 
-
-
 /**
  * 
- * This class implements the IWidgetsProvider section, even if it dosen't provide any widgets, but 
- * the implementation allow to return the selected element. It's pretty important that every section
- * could return the selected element
+ * This class implements the IWidgetsProvider section, even if it dosen't provide any widgets, but the implementation
+ * allow to return the selected element. It's pretty important that every section could return the selected element
  *
  */
-public class JDAdvancedSection extends AdvancedPropertySection implements PropertyChangeListener, IWidgetsProviderSection {
-	
+public class JDAdvancedSection extends AdvancedPropertySection
+		implements PropertyChangeListener, IWidgetsProviderSection {
+
 	private EditDomain editDomain;
-	
+
 	private APropertyNode element;
-	
-	protected TabbedPropertySheetPage atabbedPropertySheetPage;
-	
+
 	/**
 	 * The last defined root entry
 	 */
 	private JRPropertySheetEntry rootEntry = null;
-	
 
 	public JDAdvancedSection() {
 		super();
@@ -72,43 +63,43 @@ public class JDAdvancedSection extends AdvancedPropertySection implements Proper
 		super.createControls(parent, atabbedPropertySheetPage);
 		UpdatePageContent(getSelectionList(getSelection()));
 	}
-	
 
-	private void UpdatePageContent(IStructuredSelection selection){
-		if (page != null && element != null && getEditDomain() != null){
+	private void UpdatePageContent(IStructuredSelection selection) {
+		if (page != null && element != null && getEditDomain() != null) {
 			page.selectionChanged(getPart(), selection);
-			//Dispose the previous root entry (if one) before to create the new one
+			// Dispose the previous root entry (if one) before to create the new one
 			disposeRootEntry();
 			rootEntry = new JRPropertySheetEntry(getEditDomain().getCommandStack(), (ANode) element);
-			page.setRootEntry(rootEntry);			
+			page.setRootEntry(rootEntry);
 		}
 	}
-	
+
 	/**
 	 * Dispose the root entry if it wasen't already disposed
 	 */
-	private void disposeRootEntry(){
-		if (rootEntry != null){
+	private void disposeRootEntry() {
+		if (rootEntry != null) {
 			rootEntry.dispose();
 			rootEntry = null;
 		}
 	}
-	
+
 	/**
 	 * Extract a selection of APropertyNode from the current selection
 	 * 
-	 * @param currentSelection a not null IStructuredSelection
+	 * @param currentSelection
+	 *          a not null IStructuredSelection
 	 * @return a not null StructuredSelection composed only of AProperyNode
 	 */
-	private IStructuredSelection getSelectionList(ISelection currentSelection){
+	private IStructuredSelection getSelectionList(ISelection currentSelection) {
 		List<APropertyNode> result = new ArrayList<APropertyNode>();
 		Assert.isTrue(currentSelection instanceof IStructuredSelection);
-		IStructuredSelection selectionList = (IStructuredSelection)currentSelection;
-		for(Object obj : selectionList.toArray()){
-			if (obj instanceof EditPart){
-				EditPart part = (EditPart)obj;
-				if (part.getModel() instanceof APropertyNode){
-					result.add((APropertyNode)part.getModel());
+		IStructuredSelection selectionList = (IStructuredSelection) currentSelection;
+		for (Object obj : selectionList.toArray()) {
+			if (obj instanceof EditPart) {
+				EditPart part = (EditPart) obj;
+				if (part.getModel() instanceof APropertyNode) {
+					result.add((APropertyNode) part.getModel());
 				}
 			}
 		}
@@ -123,10 +114,10 @@ public class JDAdvancedSection extends AdvancedPropertySection implements Proper
 			EditorContributor provider = (EditorContributor) part.getAdapter(EditorContributor.class);
 			if (provider != null)
 				setEditDomain(provider.getEditDomain());
-			
+
 			this.element = null;
-			IStructuredSelection selectionList =  getSelectionList(selection);
-			if (!selectionList.isEmpty()){
+			IStructuredSelection selectionList = getSelectionList(selection);
+			if (!selectionList.isEmpty()) {
 				this.element = (APropertyNode) selectionList.getFirstElement();
 				UpdatePageContent(selectionList);
 			}
@@ -146,11 +137,12 @@ public class JDAdvancedSection extends AdvancedPropertySection implements Proper
 	 */
 	public void aboutToBeShown() {
 		super.aboutToBeShown();
-		if (getTabbedPropertySheetPage() != null){
+		TabbedPropertySheetPage tp = getTabbedPropertySheetPage();
+		if (tp != null) {
 			if (getElement() != null)
 				getElement().getPropertyChangeSupport().addPropertyChangeListener(this);
-			if (atabbedPropertySheetPage != null && atabbedPropertySheetPage.getSite() != null) {
-				IActionBars actionBars = atabbedPropertySheetPage.getSite().getActionBars();
+			if (tp.getSite() != null) {
+				IActionBars actionBars = tp.getSite().getActionBars();
 				if (actionBars != null)
 					actionBars.getToolBarManager().removeAll();
 				page.makeContributions(actionBars.getMenuManager(), actionBars.getToolBarManager(),
@@ -164,11 +156,12 @@ public class JDAdvancedSection extends AdvancedPropertySection implements Proper
 	 * @see org.eclipse.ui.views.properties.tabbed.view.ITabbedPropertySection#aboutToBeHidden()
 	 */
 	public void aboutToBeHidden() {
-		if (getTabbedPropertySheetPage() != null){
+		TabbedPropertySheetPage tp = getTabbedPropertySheetPage();
+		if (tp != null) {
 			if (getElement() != null)
 				getElement().getPropertyChangeSupport().removePropertyChangeListener(this);
-			if (atabbedPropertySheetPage != null && atabbedPropertySheetPage.getSite() != null) {
-				IActionBars actionBars = atabbedPropertySheetPage.getSite().getActionBars();
+			if (tp.getSite() != null) {
+				IActionBars actionBars = tp.getSite().getActionBars();
 				if (actionBars != null) {
 					actionBars.getToolBarManager().removeAll();
 					actionBars.updateActionBars();
@@ -203,10 +196,10 @@ public class JDAdvancedSection extends AdvancedPropertySection implements Proper
 		if (isRefreshing)
 			return;
 		isRefreshing = true;
-		if (page != null){
-			//Must be executed inside a thread since it refresh widgets
+		if (page != null) {
+			// Must be executed inside a thread since it refresh widgets
 			UIUtils.getDisplay().syncExec(new Runnable() {
-				
+
 				@Override
 				public void run() {
 					page.refresh();
@@ -238,6 +231,7 @@ public class JDAdvancedSection extends AdvancedPropertySection implements Proper
 	}
 
 	@Override
-	public void expandForProperty(Object propertyId) {}
+	public void expandForProperty(Object propertyId) {
+	}
 
 }

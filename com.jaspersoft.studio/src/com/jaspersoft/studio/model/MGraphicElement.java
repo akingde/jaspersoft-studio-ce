@@ -28,6 +28,7 @@ import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.model.frame.MFrame;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
+import com.jaspersoft.studio.properties.view.validation.ValidationError;
 import com.jaspersoft.studio.property.SetValueCommand;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
@@ -81,26 +82,26 @@ import net.sf.jasperreports.engine.type.StretchTypeEnum;
 /*
  * The Class MGeneric.
  */
-public class MGraphicElement extends APropertyNode implements IGraphicElement, ICopyable, IGuidebleElement, IDragable, IDesignDragable,IGraphicalPropertiesHandler {
-	
+public class MGraphicElement extends APropertyNode
+		implements IGraphicElement, ICopyable, IGuidebleElement, IDragable, IDesignDragable, IGraphicalPropertiesHandler {
+
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
-	
+
 	private static RComboBoxPropertyDescriptor groupChangesD;
-	
+
 	private static NamedEnumPropertyDescriptor<PositionTypeEnum> positionTypeD;
-	
+
 	private static NamedEnumPropertyDescriptor<StretchTypeEnum> stretchTypeD;
-	
+
 	private static Map<String, Object> defaultsMap;
-	
+
 	private IPropertyDescriptor[] descriptors;
-	
+
 	private ReportRulerGuide verticalGuide, horizontalGuide;
-	
+
 	/**
-	 * Validators for the element size and position. they avoid to provide 
-	 * a negative value for the size of an element and a position too far 
-	 * from the editor
+	 * Validators for the element size and position. they avoid to provide a negative value for the size of an element and
+	 * a position too far from the editor
 	 */
 	private List<AbstractJSSCellEditorValidator> positionValidators = new ArrayList<AbstractJSSCellEditorValidator>();
 
@@ -121,9 +122,8 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.jaspersoft.studio.model.IGuidebleElement#setVerticalGuide(com.jaspersoft.studio.editor.gef.rulers.ReportRulerGuide
-	 * )
+	 * @see com.jaspersoft.studio.model.IGuidebleElement#setVerticalGuide(com.jaspersoft.studio.editor.gef.rulers.
+	 * ReportRulerGuide )
 	 */
 	public void setVerticalGuide(ReportRulerGuide verticalGuide) {
 		this.verticalGuide = verticalGuide;
@@ -231,8 +231,8 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 	@Override
 	public void setValue(Object value) {
 		if (getValue() != null && getValue() instanceof JRDesignGraphicElement)
-			((JRBasePen) ((JRDesignGraphicElement) getValue()).getLinePen()).getEventSupport().removePropertyChangeListener(
-					this);
+			((JRBasePen) ((JRDesignGraphicElement) getValue()).getLinePen()).getEventSupport()
+					.removePropertyChangeListener(this);
 		else if (value != null && value instanceof JRDesignGraphicElement)
 			((JRBasePen) ((JRDesignGraphicElement) value).getLinePen()).getEventSupport().addPropertyChangeListener(this);
 		super.setValue(value);
@@ -319,7 +319,7 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		}
 		return new Rectangle(0, 0, jr.getWidth(), jr.getHeight());
 	}
-	
+
 	@Override
 	public Rectangle getJRBounds() {
 		JRElement jr = (JRElement) getValue();
@@ -352,15 +352,15 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 			// Calculate the groups list for the current element
 			if (dataset != null) {
 				JRGroup[] groups = dataset.getGroups();
-				String[] items = new String[groups.length+1];
+				String[] items = new String[groups.length + 1];
 				items[0] = ""; // always add empty for <NULL>
 				for (int j = 0; j < groups.length; j++) {
-					items[j+1] = groups[j].getName();
+					items[j + 1] = groups[j].getName();
 				}
 				setGroupItems(items);
 			}
 		}
-		for(AbstractJSSCellEditorValidator validator : positionValidators){
+		for (AbstractJSSCellEditorValidator validator : positionValidators) {
 			validator.setTargetNode(this);
 		}
 	}
@@ -404,12 +404,12 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 	 */
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		RWStyleComboBoxPropertyDescriptor styleD = new RWStyleComboBoxPropertyDescriptor(JRDesignElement.PROPERTY_PARENT_STYLE, Messages.common_parent_style,
-				new String[] { "" }, NullEnum.NULL); //$NON-NLS-1$
+		RWStyleComboBoxPropertyDescriptor styleD = new RWStyleComboBoxPropertyDescriptor(
+				JRDesignElement.PROPERTY_PARENT_STYLE, Messages.common_parent_style, new String[] { "" }, NullEnum.NULL); //$NON-NLS-1$
 		styleD.setDescription(Messages.MGraphicElement_parent_style_description);
 		desc.add(styleD);
-		styleD.setHelpRefBuilder(new HelpReferenceBuilder(
-				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#reportElement_style"));
+		styleD.setHelpRefBuilder(
+				new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#reportElement_style"));
 
 		groupChangesD = new RComboBoxPropertyDescriptor(JRDesignElement.PROPERTY_PRINT_WHEN_GROUP_CHANGES,
 				Messages.MGraphicElement_print_when_group_changes, new String[] { "" }); //$NON-NLS-1$
@@ -424,7 +424,8 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		// bounds
 		JSSPixelLocationValidator heightValidator = new JSSPixelLocationValidator(JRDesignElement.PROPERTY_HEIGHT);
 		heightValidator.setTargetNode(this);
-		PixelPropertyDescriptor heightD = new PixelPropertyDescriptor(JRDesignElement.PROPERTY_HEIGHT,Messages.common_height);
+		PixelPropertyDescriptor heightD = new PixelPropertyDescriptor(JRDesignElement.PROPERTY_HEIGHT,
+				Messages.common_height);
 		heightD.setCategory(Messages.common_size);
 		heightD.setDescription(Messages.MGraphicElement_height_description);
 		heightD.setValidator(heightValidator);
@@ -433,7 +434,8 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 
 		JSSPixelLocationValidator widthValidator = new JSSPixelLocationValidator(JRDesignElement.PROPERTY_WIDTH);
 		widthValidator.setTargetNode(this);
-		PixelPropertyDescriptor widthD = new PixelPropertyDescriptor(JRBaseElement.PROPERTY_WIDTH,Messages.MGraphicElement_width);
+		PixelPropertyDescriptor widthD = new PixelPropertyDescriptor(JRBaseElement.PROPERTY_WIDTH,
+				Messages.MGraphicElement_width);
 		widthD.setCategory(Messages.common_size);
 		widthD.setDescription(Messages.MGraphicElement_width_description);
 		widthD.setValidator(widthValidator);
@@ -457,7 +459,7 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		yD.setValidator(yValidator);
 		desc.add(yD);
 		positionValidators.add(yValidator);
-		
+
 		// colors
 		ColorPropertyDescriptor backcolorD = new ColorPropertyDescriptor(JRBaseStyle.PROPERTY_BACKCOLOR,
 				Messages.common_backcolor, NullEnum.INHERITED);
@@ -512,8 +514,8 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		printWhenExprD.setDescription(Messages.MGraphicElement_print_when_expression_description);
 		printWhenExprD.setCategory(Messages.MGraphicElement_print_when);
 		desc.add(printWhenExprD);
-		printWhenExprD.setHelpRefBuilder(new HelpReferenceBuilder(
-				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#printWhenExpression"));
+		printWhenExprD.setHelpRefBuilder(
+				new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#printWhenExpression"));
 
 		JPropertyExpressionsDescriptor propertiesD = new JPropertyExpressionsDescriptor(
 				JRDesignElement.PROPERTY_PROPERTY_EXPRESSIONS, Messages.MGraphicElement_property_expressions);
@@ -695,8 +697,7 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 				JRDesignDataset jrDataset = (JRDesignDataset) getElementDataset();
 				JRGroup group = jrDataset.getGroupsMap().get(value);
 				jrElement.setPrintWhenGroupChanges(group);
-			}
-			else {
+			} else {
 				jrElement.setPrintWhenGroupChanges(null);
 			}
 		} else if (id.equals(JRDesignElement.PROPERTY_PROPERTY_EXPRESSIONS)) {
@@ -729,8 +730,8 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 						jrElement.getPropertiesMap().setProperty(p.getName(), p.getValue());
 					}
 				}
-				//really important to trigger the property with source the JR object and not the node
-				//using the node could cause problem with the refresh of the advanced properties view
+				// really important to trigger the property with source the JR object and not the node
+				// using the node could cause problem with the refresh of the advanced properties view
 				firePropertyChange(new PropertyChangeEvent(jrElement, PROPERTY_MAP, originalMap, jrElement.getPropertiesMap()));
 			}
 		} else if (id.equals(JRDesignElement.PROPERTY_HEIGHT)) {
@@ -756,12 +757,11 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 				jrElement.setMode(ModeEnum.TRANSPARENT);
 			else
 				jrElement.setMode(ModeEnum.OPAQUE);
-		else if (id.equals(JRDesignElement.PROPERTY_POSITION_TYPE)){
+		else if (id.equals(JRDesignElement.PROPERTY_POSITION_TYPE)) {
 			if (positionTypeD == null)
 				getPropertyDescriptors();
 			jrElement.setPositionType(positionTypeD.getEnumValue(value));
-		}
-		else if (id.equals(JRDesignElement.PROPERTY_STRETCH_TYPE))
+		} else if (id.equals(JRDesignElement.PROPERTY_STRETCH_TYPE))
 			jrElement.setStretchType(stretchTypeD.getEnumValue(value));
 
 		else if (id.equals(JRDesignElement.PROPERTY_PRINT_REPEATED_VALUES))
@@ -780,11 +780,11 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 				jrElement.getPropertiesMap().removeProperty(names[i]);
 			}
 			names = v.getPropertyNames();
-			for (int i = 0; i < names.length; i++){
+			for (int i = 0; i < names.length; i++) {
 				jrElement.getPropertiesMap().setProperty(names[i], v.getProperty(names[i]));
 			}
-			//really important to trigger the property with source the JR object and not the node
-			//using the node could cause problem with the refresh of the advanced properties view
+			// really important to trigger the property with source the JR object and not the node
+			// using the node could cause problem with the refresh of the advanced properties view
 			firePropertyChange(new PropertyChangeEvent(jrElement, PROPERTY_MAP, originalMap, jrElement.getPropertiesMap()));
 		}
 	}
@@ -850,10 +850,9 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 			return visualPropertyChanged;
 		}
 	}
-	
+
 	/**
-	 * The style requested refresh is the same to set the changed property 
-	 * to true in the standard elements
+	 * The style requested refresh is the same to set the changed property to true in the standard elements
 	 */
 	@Override
 	public void setStyleChangedProperty() {
@@ -872,13 +871,13 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 			ANode parent = getParent();
 			while (parent != null) {
 				if (parent.getValue() != null && parent.getValue() instanceof JRChangeEventsSupport) {
-					//We can't  set the property on the element directly because even if it follow the hierarchy 
-					//there will be problem with elements inside the subeditors. Firing an event on the jr object 
-					//instead will end to propagate the update to every model binded to the jr object
-					JRChangeEventsSupport parentEvents = (JRChangeEventsSupport)parent.getValue();
+					// We can't set the property on the element directly because even if it follow the hierarchy
+					// there will be problem with elements inside the subeditors. Firing an event on the jr object
+					// instead will end to propagate the update to every model binded to the jr object
+					JRChangeEventsSupport parentEvents = (JRChangeEventsSupport) parent.getValue();
 					parentEvents.getEventSupport().firePropertyChange(MGraphicElement.FORCE_GRAPHICAL_REFRESH, null, null);
-					//IGraphicalPropertiesHandler handler = (IGraphicalPropertiesHandler) parent;
-					//handler.setChangedProperty(true);
+					// IGraphicalPropertiesHandler handler = (IGraphicalPropertiesHandler) parent;
+					// handler.setChangedProperty(true);
 					// We can exit the cycle since the setChangedProperty on the parent will propagate the
 					// refresh on the upper levels
 					break;
@@ -898,8 +897,8 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 	 */
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		//check if it is already marked to be refreshed, in this case skip the check of the maps
-		if (!visualPropertyChanged){
+		// check if it is already marked to be refreshed, in this case skip the check of the maps
+		if (!visualPropertyChanged) {
 			HashSet<String> graphicalProperties = getGraphicalProperties();
 			if (graphicalProperties.contains(evt.getPropertyName())) {
 				setChangedProperty(true);
@@ -911,9 +910,8 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 	/**
 	 * Return the styles used by this element and eventually by its children.
 	 * 
-	 * @return a not null map with the names of all the styles used by this
-	 * element or one of its children. The value corresponding to each style is
-	 * the reference to the element that is using the style
+	 * @return a not null map with the names of all the styles used by this element or one of its children. The value
+	 *         corresponding to each style is the reference to the element that is using the style
 	 */
 	@Override
 	public HashMap<String, List<ANode>> getUsedStyles() {
@@ -922,17 +920,17 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		addElementStyle(style, result);
 		return result;
 	}
-	
+
 	/**
 	 * Set the style on the {@link JRDesignElement} of this node
 	 */
 	@Override
 	public void setStyle(JRStyle style) {
-		if (getValue() != null){
+		if (getValue() != null) {
 			getValue().setStyle(style);
 		}
 	}
-	
+
 	protected SetValueCommand generateSetCommand(APropertyNode target, String propertyId, Object value) {
 		SetValueCommand result = new SetValueCommand();
 		result.setTarget(target);
@@ -993,15 +991,13 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 	}
 
 	/**
-	 * Evaluate if the current element is between the bounds of the father. This 
-	 * is not done if the parent is a frame, since a frame has no constraints on the 
-	 * position of the children
+	 * Evaluate if the current element is between the bounds of the father. This is not done if the parent is a frame,
+	 * since a frame has no constraints on the position of the children
 	 * 
-	 * @return a list with an informative message if the position is not valid, null
-	 * if it is valid
+	 * @return a list with an informative message if the position is not valid, null if it is valid
 	 */
 	@Override
-	protected List<String> doValidation() {
+	protected List<ValidationError> doValidation() {
 		boolean isValidPosition = true;
 		ANode parent = getParent();
 		if (parent instanceof APropertyNode && !(parent instanceof MFrame)) {
@@ -1048,41 +1044,45 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 				isValidPosition = fh >= h + y && x >= 0 && y >= 0 && fw >= x + w;
 			}
 		}
-		if (!isValidPosition){
-			List<String> error = new ArrayList<String>();
-			error.add(Messages.ErrorDecorator_PositionErrorToolTip);
+		if (!isValidPosition) {
+			List<ValidationError> error = new ArrayList<ValidationError>();
+			List<String> lst = new ArrayList<String>();
+			lst.add(JRDesignElement.PROPERTY_HEIGHT);
+			lst.add(JRDesignElement.PROPERTY_WIDTH);
+			lst.add(JRDesignElement.PROPERTY_X);
+			lst.add(JRDesignElement.PROPERTY_Y);
+			error.add(new ValidationError(lst, Messages.ErrorDecorator_PositionErrorToolTip));
 			return error;
 		} else {
 			return null;
 		}
 	}
-	
+
 	/**
-	 * Check if the current element is inside a frame, and if that frame 
-	 * has the attribute to hide the out of bound contents check if this
-	 * element is inside or outside that bounds
+	 * Check if the current element is inside a frame, and if that frame has the attribute to hide the out of bound
+	 * contents check if this element is inside or outside that bounds
 	 * 
 	 * @return true if the element should be visible, false otherwise
 	 */
-	protected boolean checkVisibleFrame(){
+	protected boolean checkVisibleFrame() {
 		ANode parent = getParent();
 		boolean visible = true;
 		JRDesignElement currentEelement = getValue();
 		int relative_X = currentEelement.getX();
 		int relative_Y = currentEelement.getY();
-		while(parent != null && visible){
-			if (parent instanceof MFrame){
-				boolean allowOutside = (Boolean)((MFrame)parent).getPropertyValue(MFrame.PROPERTY_SHOW_OUT_OF_BOUND);
-				if (!allowOutside){
-					JRDesignElement frame = (JRDesignElement)parent.getValue();
+		while (parent != null && visible) {
+			if (parent instanceof MFrame) {
+				boolean allowOutside = (Boolean) ((MFrame) parent).getPropertyValue(MFrame.PROPERTY_SHOW_OUT_OF_BOUND);
+				if (!allowOutside) {
+					JRDesignElement frame = (JRDesignElement) parent.getValue();
 					Rectangle rect = new Rectangle(0, 0, frame.getWidth(), frame.getHeight());
-					if (!rect.contains(relative_X, relative_Y)){
-						visible = false; 
+					if (!rect.contains(relative_X, relative_Y)) {
+						visible = false;
 					}
 				}
 			}
-			if (parent.getValue() instanceof JRDesignElement){
-				JRDesignElement jrParent = (JRDesignElement)parent.getValue();
+			if (parent.getValue() instanceof JRDesignElement) {
+				JRDesignElement jrParent = (JRDesignElement) parent.getValue();
 				relative_Y += jrParent.getY();
 				relative_X += jrParent.getX();
 			}
@@ -1090,10 +1090,9 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		}
 		return visible;
 	}
-	
+
 	/**
-	 * Check also if the element is inside a frame that hide 
-	 * the content out of his bounds
+	 * Check also if the element is inside a frame that hide the content out of his bounds
 	 */
 	@Override
 	public boolean isVisible() {

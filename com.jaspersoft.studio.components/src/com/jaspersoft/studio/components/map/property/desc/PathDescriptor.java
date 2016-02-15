@@ -12,23 +12,24 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.map.property.desc;
 
-import net.sf.jasperreports.components.items.Item;
-import net.sf.jasperreports.components.items.ItemData;
-import net.sf.jasperreports.components.items.ItemProperty;
-import net.sf.jasperreports.components.items.StandardItemProperty;
-import net.sf.jasperreports.components.map.MapComponent;
-
 import org.eclipse.swt.graphics.Image;
 
 import com.jaspersoft.studio.components.Activator;
 import com.jaspersoft.studio.components.map.messages.Messages;
 import com.jaspersoft.studio.model.util.ItemPropertyUtil;
+import com.jaspersoft.studio.properties.view.validation.ValidationError;
 import com.jaspersoft.studio.property.itemproperty.desc.ADescriptor;
 import com.jaspersoft.studio.property.itemproperty.desc.ColorPropertyDescription;
 import com.jaspersoft.studio.property.itemproperty.desc.ComboItemPropertyDescription;
 import com.jaspersoft.studio.property.itemproperty.desc.ItemPropertyDescription;
 import com.jaspersoft.studio.property.itemproperty.desc.NumberPropertyDescription;
 import com.jaspersoft.studio.utils.Misc;
+
+import net.sf.jasperreports.components.items.Item;
+import net.sf.jasperreports.components.items.ItemData;
+import net.sf.jasperreports.components.items.ItemProperty;
+import net.sf.jasperreports.components.items.StandardItemProperty;
+import net.sf.jasperreports.components.map.MapComponent;
 
 /**
  * @author Veaceslav Chicu (schicu@users.sourceforge.net)
@@ -132,7 +133,7 @@ public class PathDescriptor extends ADescriptor {
 	}
 
 	@Override
-	public void validateItem(ItemProperty itemProperty) throws Exception {
+	public void validateItem(ItemProperty itemProperty) throws ValidationError {
 		super.validateItem(itemProperty);
 		if (itemProperty == null)
 			for (ItemData id : itemDatas) {
@@ -140,7 +141,7 @@ public class PathDescriptor extends ADescriptor {
 					continue;
 				for (Item it : id.getItems()) {
 					if (Misc.isNullOrEmpty(it.getProperties()))
-						throw new Exception("You must have Address or Latitude/Longitude");
+						throw new ValidationError("You must have Address or Latitude/Longitude");
 					boolean address = false;
 					boolean lon = false;
 					boolean lat = false;
@@ -151,7 +152,7 @@ public class PathDescriptor extends ADescriptor {
 					if (ItemPropertyUtil.hasValue(it.getProperties(), MapComponent.ITEM_PROPERTY_address))
 						continue;
 					if (!address && !(lon && lat))
-						throw new Exception("You must have Address or Latitude/Longitude");
+						throw new ValidationError("You must have Address or Latitude/Longitude");
 				}
 			}
 	}

@@ -41,8 +41,8 @@ public class CVFigure extends JRComponentFigure {
 		try {
 			Image image = getPreviewImage();
 			if (image != null) {
-				Rectangle figureRect = (this instanceof HandleBounds) ? ((HandleBounds) this)
-						.getHandleBounds() : this.getBounds();
+				Rectangle figureRect = (this instanceof HandleBounds) ? ((HandleBounds) this).getHandleBounds()
+						: this.getBounds();
 
 				int imgWidth = image.getWidth(null);
 				int imgHeight = image.getHeight(null);
@@ -50,15 +50,13 @@ public class CVFigure extends JRComponentFigure {
 				Graphics2D g = ComponentFigure.getG2D(graphics);
 				if (g != null) {
 					g.setColor(Color.WHITE);
-					g.fillRect(figureRect.x, figureRect.y, figureRect.x
-							+ figureRect.width, figureRect.y
-							+ figureRect.height);
-					g.drawImage(image, figureRect.x, figureRect.y, figureRect.x
-							+ figureRect.width, figureRect.y
-							+ figureRect.height, 0, 0, imgWidth, imgHeight,
-							null);
+					g.fillRect(figureRect.x, figureRect.y, figureRect.x + figureRect.width,
+							figureRect.y + figureRect.height);
+					g.drawImage(image, figureRect.x, figureRect.y, figureRect.x + figureRect.width,
+							figureRect.y + figureRect.height, 0, 0, imgWidth, imgHeight, null);
 				}
 				paintBorder(graphics);
+				paintDecorators(graphics);
 			} else
 				super.paint(graphics);
 		} catch (Exception ex) {
@@ -74,11 +72,9 @@ public class CVFigure extends JRComponentFigure {
 	private Image getPreviewImage() throws IOException {
 		if (cache != null)
 			return cache;
-		ComponentDescriptor cd = UIManager
-				.getComponentDescriptor((MCustomVisualization) model);
+		ComponentDescriptor cd = UIManager.getComponentDescriptor((MCustomVisualization) model);
 		if (cd != null) {
-			org.eclipse.swt.graphics.Image img = UIManager.getThumbnail(cd,
-					model.getJasperConfiguration());
+			org.eclipse.swt.graphics.Image img = UIManager.getThumbnail(cd, model.getJasperConfiguration());
 			if (img != null) {
 				cache = ImageUtils.convertToAWT(img.getImageData());
 				return cache;
@@ -86,7 +82,7 @@ public class CVFigure extends JRComponentFigure {
 		}
 		return null;
 	}
-	
+
 	@Override
 	protected boolean allowsFigureDrawCache() {
 		return true;

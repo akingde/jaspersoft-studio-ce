@@ -8,18 +8,19 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.itemproperty.celleditor;
 
-import net.sf.jasperreports.components.items.StandardItemProperty;
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
+import com.jaspersoft.studio.properties.view.validation.ValidationError;
 import com.jaspersoft.studio.property.descriptor.JSSDialogCellEditor;
 import com.jaspersoft.studio.property.itemproperty.desc.ADescriptor;
 import com.jaspersoft.studio.property.itemproperty.dialog.ItemPropertyElementDialog;
 import com.jaspersoft.studio.property.itemproperty.label.ItemPropertyLabelProvider;
+
+import net.sf.jasperreports.components.items.StandardItemProperty;
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 public class ItemPropertyCellEditor extends JSSDialogCellEditor {
 	private String id;
@@ -61,6 +62,14 @@ public class ItemPropertyCellEditor extends JSSDialogCellEditor {
 			labelProvider = new ItemPropertyLabelProvider(descriptor);
 		String text = labelProvider.getText(value);
 		getDefaultLabel().setText(text);
+		if (descriptor == null || id == null)
+			return;
+		try {
+			descriptor.validateItem(null);
+		} catch (ValidationError e) {
+			if (e.getProps().contains(id))
+				setErrorMessage(e.getMessage());
+		}
 	}
 
 	public void setExpressionContext(ExpressionContext expContext) {

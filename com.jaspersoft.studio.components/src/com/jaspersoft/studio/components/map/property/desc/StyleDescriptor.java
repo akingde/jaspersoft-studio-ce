@@ -20,6 +20,7 @@ import org.eclipse.swt.graphics.Image;
 import com.jaspersoft.studio.components.Activator;
 import com.jaspersoft.studio.components.map.messages.Messages;
 import com.jaspersoft.studio.model.util.ItemPropertyUtil;
+import com.jaspersoft.studio.properties.view.validation.ValidationError;
 import com.jaspersoft.studio.property.itemproperty.desc.ADescriptor;
 import com.jaspersoft.studio.property.itemproperty.desc.ColorPropertyDescription;
 import com.jaspersoft.studio.property.itemproperty.desc.ComboItemPropertyDescription;
@@ -123,7 +124,7 @@ public class StyleDescriptor extends ADescriptor {
 	 * net.sf.jasperreports.components.map.ItemProperty)
 	 */
 	@Override
-	public void validateItem(ItemProperty itemProperty) throws Exception {
+	public void validateItem(ItemProperty itemProperty) throws ValidationError {
 		super.validateItem(itemProperty);
 		if (itemProperty != null)
 			for (ItemData id : itemDatas) {
@@ -139,7 +140,8 @@ public class StyleDescriptor extends ADescriptor {
 						if (p.getValue() == null)
 							continue;
 						if (p.getValue().equals(itemProperty.getValue()))
-							throw new Exception(com.jaspersoft.studio.messages.Messages.StyleDescriptor_4);
+							throw new ValidationError(itemProperty.getName(),
+									com.jaspersoft.studio.messages.Messages.StyleDescriptor_4);
 					}
 
 				}
@@ -156,7 +158,8 @@ public class StyleDescriptor extends ADescriptor {
 					if (p == null || p.getValueExpression() != null || p.getValue() == null)
 						continue;
 					if (names.contains(p.getValue()))
-						throw new Exception(com.jaspersoft.studio.messages.Messages.StyleDescriptor_5);
+						throw new ValidationError(p.getName(),
+								com.jaspersoft.studio.messages.Messages.StyleDescriptor_5);
 					names.add(p.getValue());
 				}
 			}

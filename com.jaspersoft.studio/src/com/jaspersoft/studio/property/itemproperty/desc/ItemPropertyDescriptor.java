@@ -24,8 +24,8 @@ import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 import com.jaspersoft.studio.property.section.widgets.IPropertyDescriptorWidget;
 
-public class ItemPropertyDescriptor extends NTextPropertyDescriptor implements IPropertyDescriptorWidget,
-		IExpressionContextSetter {
+public class ItemPropertyDescriptor extends NTextPropertyDescriptor
+		implements IPropertyDescriptorWidget, IExpressionContextSetter {
 	private ExpressionContext expContext;
 	private SPItemProperty expEditor;
 	private ADescriptor descriptor;
@@ -43,6 +43,8 @@ public class ItemPropertyDescriptor extends NTextPropertyDescriptor implements I
 
 	public CellEditor createPropertyEditor(Composite parent) {
 		cellEditor = new ItemPropertyCellEditor(parent, expContext, (String) getId(), descriptor);
+		if (getValidator() != null)
+			cellEditor.setValidator(getValidator());
 		return cellEditor;
 	}
 

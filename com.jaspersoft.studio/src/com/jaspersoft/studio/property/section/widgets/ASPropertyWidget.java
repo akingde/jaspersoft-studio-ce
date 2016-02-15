@@ -1,19 +1,15 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.property.section.widgets;
 
-
 import org.eclipse.jface.action.IStatusLineManager;
+import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.events.FocusEvent;
@@ -40,6 +36,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import com.jaspersoft.studio.help.HelpSystem;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.properties.internal.IHighlightPropertyWidget;
+import com.jaspersoft.studio.properties.view.validation.ValidationError;
 import com.jaspersoft.studio.property.combomenu.ComboButton;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.utils.UIUtil;
@@ -75,17 +72,18 @@ public abstract class ASPropertyWidget<T extends IPropertyDescriptor> implements
 	protected abstract void createComponent(Composite parent);
 
 	public abstract void setData(APropertyNode pnode, Object value);
-	
+
 	/**
-	 * Set the data of the widget with a flag also indicating if the set 
-	 * value is inherited or not. If not reimplemented this is the same of setData with
-	 * two parameters
+	 * Set the data of the widget with a flag also indicating if the set value is inherited or not. If not reimplemented
+	 * this is the same of setData with two parameters
 	 * 
-	 * @param pnode the current node
-	 * @param resolvedValue the current value of the property used by the node, resolved by JR
-	 * @param elementValue the value of the property own by the elements, when this is different
-	 * from null probably it will be the same of the resolvedValue, otherwise if this is null then 
-	 * the resolvedValue was inherited
+	 * @param pnode
+	 *          the current node
+	 * @param resolvedValue
+	 *          the current value of the property used by the node, resolved by JR
+	 * @param elementValue
+	 *          the value of the property own by the elements, when this is different from null probably it will be the
+	 *          same of the resolvedValue, otherwise if this is null then the resolvedValue was inherited
 	 */
 	public void setData(APropertyNode pnode, Object resolvedValue, Object elementValue) {
 		setData(pnode, resolvedValue);
@@ -167,50 +165,64 @@ public abstract class ASPropertyWidget<T extends IPropertyDescriptor> implements
 	}
 
 	/**
-	 * According to the type of the control to highlight will be returned an object that offer 
-	 * the functionality to put a border on the widget or to set its background, to highlight it
+	 * According to the type of the control to highlight will be returned an object that offer the functionality to put a
+	 * border on the widget or to set its background, to highlight it
 	 * 
 	 * @return An object that offer the functionality to highlight the widget
 	 */
-	 public static IHighlightControl getControlHighlight(Control control) {
-		if (control.getClass().equals(Spinner.class)) return new BackgroundHighlight(control);
-		if (control.getClass().equals(Text.class)) return new BackgroundHighlight(control);
-		if (control.getClass().equals(ToolBar.class)) return new BackgroundHighlight(control);
-		if (control.getClass().equals(Combo.class) && !((control.getStyle() & SWT.READ_ONLY) == SWT.READ_ONLY)) return new BackgroundHighlight(control);
-		if (control.getClass().equals(Button.class) && ((control.getStyle() & SWT.CHECK) == SWT.CHECK)) return new BackgroundHighlight(control);
-		if (control.getClass().equals(Button.class) && ((control.getStyle() & SWT.PUSH) == SWT.PUSH)) return new BorderHightLight(control, Combo.class);
-		if (control.getClass().equals(ComboButton.GraphicButton.class)) return new BackgroundHighlight(control);
-		if (control instanceof Composite) return new BorderHightLight(control);
-		if (control instanceof Button) return new BorderHightLight(control);
+	public static IHighlightControl getControlHighlight(Control control) {
+		if (control.getClass().equals(Spinner.class))
+			return new BackgroundHighlight(control);
+		if (control.getClass().equals(Text.class))
+			return new BackgroundHighlight(control);
+		if (control.getClass().equals(ToolBar.class))
+			return new BackgroundHighlight(control);
+		if (control.getClass().equals(Combo.class) && !((control.getStyle() & SWT.READ_ONLY) == SWT.READ_ONLY))
+			return new BackgroundHighlight(control);
+		if (control.getClass().equals(Button.class) && ((control.getStyle() & SWT.CHECK) == SWT.CHECK))
+			return new BackgroundHighlight(control);
+		if (control.getClass().equals(Button.class) && ((control.getStyle() & SWT.PUSH) == SWT.PUSH))
+			return new BorderHightLight(control, Combo.class);
+		if (control.getClass().equals(ComboButton.GraphicButton.class))
+			return new BackgroundHighlight(control);
+		if (control instanceof Composite)
+			return new BorderHightLight(control);
+		if (control instanceof Button)
+			return new BorderHightLight(control);
 		return null;
 	}
 
 	/**
-	 * highlight the widget by changing its background or by drawing a border around it for a fixed (depending from the widget)
-	 * amount of time
+	 * highlight the widget by changing its background or by drawing a border around it for a fixed (depending from the
+	 * widget) amount of time
 	 * 
 	 */
 	@Override
-	public void highLightWidget(long ms) {
+	public void highLightWidget(final long ms) {
 		// if there isn't a control defined where add the border then return
-		if (getControlToBorder() == null) return;
-		final IHighlightControl highLight = getControlHighlight(getControlToBorder());
-		if (highLight == null) return;
-		//highlight the control
-		highLight.highLightControl();
-		getControlToBorder().forceFocus();
-		final long sleepTime = ms;
+		final Control ctb = getControlToBorder();
+		if (ctb == null)
+			return;
+		if (searchHighLight == null)
+			searchHighLight = getControlHighlight(ctb);
+		if (searchHighLight == null)
+			return;
+		// highlight the control
+		searchHighLight.highLightControl();
+		ctb.forceFocus();
 		// Create a thread to remove the paint listener after specified time
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
 				try {
-					Thread.sleep(sleepTime);
+					Thread.sleep(ms);
 					// It need two thread to avoid to freeze the UI during the sleep
-					getControlToBorder().getDisplay().asyncExec(new Runnable() {
+					ctb.getDisplay().asyncExec(new Runnable() {
 						@Override
 						public void run() {
-							highLight.deHighLightControl();
+							searchHighLight.deHighLightControl();
+							if (errorDeco != null)
+								errorDeco.showHoverText(errorDeco.getDescriptionText());
 						}
 					});
 				} catch (InterruptedException e) {
@@ -227,22 +239,61 @@ public abstract class ASPropertyWidget<T extends IPropertyDescriptor> implements
 			defCharWidth = UIUtil.getCharWidth(c);
 		return defCharWidth;
 	}
-	
+
 	/**
 	 * Toggle the visibility of the property widget.
 	 */
 	public void toggleVisibility(boolean show) {
 		// widget label
-		if(getLabel().getLayoutData() instanceof GridData) {
+		if (getLabel().getLayoutData() instanceof GridData) {
 			((GridData) getLabel().getLayoutData()).exclude = !show;
 		}
 		getLabel().setVisible(show);
 		getLabel().setEnabled(show);
 		// widget control
-		if(getControl().getLayoutData() instanceof GridData) {
+		if (getControl().getLayoutData() instanceof GridData) {
 			((GridData) getControl().getLayoutData()).exclude = !show;
 		}
 		getControl().setVisible(show);
 		getControl().setEnabled(show);
+	}
+
+	private IHighlightControl searchHighLight;
+	private IHighlightControl errorHighLight;
+	private ControlDecoration errorDeco;
+
+	public void resetErrors() {
+		if (errorDeco != null)
+			errorDeco.hideHover();
+		if (getControlToBorder() == null)
+			return;
+		if (errorHighLight == null)
+			return;
+		errorHighLight.deHighLightControl(null);
+	}
+
+	public void showErrors(String msg, boolean warning) {
+		if (errorDeco == null) {
+			Control c = getControlToBorder();
+			if (c == null)
+				c = getControl();
+			errorDeco = new ControlDecoration(c, SWT.TOP | SWT.LEFT);
+			errorDeco.setShowOnlyOnFocus(true);
+		}
+		errorDeco.showHoverText(msg);
+
+		if (getControlToBorder() == null)
+			return;
+		if (errorHighLight == null) {
+			errorHighLight = getControlHighlight(getControlToBorder());
+			if (errorHighLight instanceof BackgroundHighlight)
+				if (warning)
+					((BackgroundHighlight) errorHighLight).setColor(ValidationError.WARN);
+				else
+					((BackgroundHighlight) errorHighLight).setColor(ValidationError.ERROR);
+		}
+		if (errorHighLight == null)
+			return;
+		errorHighLight.highLightControl();
 	}
 }

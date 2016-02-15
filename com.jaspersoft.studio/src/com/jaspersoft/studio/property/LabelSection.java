@@ -1,16 +1,14 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.property;
+
+import java.util.List;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.jface.viewers.ISelection;
@@ -25,6 +23,7 @@ import org.eclipse.ui.IWorkbenchPart;
 
 import com.jaspersoft.studio.properties.view.AbstractPropertySection;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
+import com.jaspersoft.studio.properties.view.validation.ValidationError;
 
 /*
  * The Class LabelSection.
@@ -85,4 +84,13 @@ public class LabelSection extends AbstractPropertySection {
 		labelText.addModifyListener(listener);
 	}
 
+	@Override
+	public void resetErrors() {
+
+	}
+
+	@Override
+	public void showErrors(List<ValidationError> errors) {
+
+	}
 }

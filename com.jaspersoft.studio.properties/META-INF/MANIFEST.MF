@@ -33,7 +33,10 @@ Export-Package: com.jaspersoft.studio.properties;uses:="org.eclipse.ui.plugin,or
    org.eclipse.jface.viewers,
    org.eclipse.ui.part,
    org.eclipse.swt.widgets,
-   org.eclipse.ui.forms.widgets"
-Import-Package: org.eclipse.wb.swt
+   org.eclipse.ui.forms.widgets",
+ com.jaspersoft.studio.properties.view.validation
+Import-Package: org.eclipse.draw2d,
+ org.eclipse.gef,
+ org.eclipse.wb.swt
 Bundle-ClassPath: patch-library.jar,
  .

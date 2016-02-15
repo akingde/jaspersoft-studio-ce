@@ -8,23 +8,27 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.itemproperty.label;
 
-import net.sf.jasperreports.components.items.ItemProperty;
-
 import org.eclipse.jface.viewers.ColumnLabelProvider;
+import org.eclipse.jface.viewers.IColorProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.ViewerCell;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.properties.view.validation.ValidationError;
+import com.jaspersoft.studio.property.JRPropertySheetEntry;
 import com.jaspersoft.studio.property.itemproperty.desc.ADescriptor;
 import com.jaspersoft.studio.property.itemproperty.desc.ItemPropertyDescription;
 import com.jaspersoft.studio.utils.Misc;
 
+import net.sf.jasperreports.components.items.ItemProperty;
+
 /*
  * @author Chicu Veaceslav
  */
-public class ItemPropertyLabelProvider extends ColumnLabelProvider implements ITableLabelProvider {
+public class ItemPropertyLabelProvider extends ColumnLabelProvider implements ITableLabelProvider, IColorProvider {
 	private ADescriptor descriptor;
 
 	public ItemPropertyLabelProvider(ADescriptor descriptor) {
@@ -54,7 +58,31 @@ public class ItemPropertyLabelProvider extends ColumnLabelProvider implements IT
 
 	@Override
 	public Image getImage(Object element) {
+
 		return null;
+	}
+
+	@Override
+	public Color getBackground(Object element) {
+		if (element instanceof JRPropertySheetEntry) {
+			JRPropertySheetEntry pse = (JRPropertySheetEntry) element;
+			pse.getDescriptor().getId();
+			Object[] vals = pse.getValues();
+			if (vals.length == 1)
+				element = vals[0];
+
+			if (element == null || element instanceof ItemProperty)
+				try {
+					descriptor.validateItem((ItemProperty) element);
+				} catch (ValidationError e) {
+					if (e.getProps().contains(pse.getDescriptor().getId())) {
+						if (e.isWarning())
+							return ValidationError.WARN;
+						return ValidationError.ERROR;
+					}
+				}
+		}
+		return super.getBackground(element);
 	}
 
 	@Override
@@ -92,6 +120,21 @@ public class ItemPropertyLabelProvider extends ColumnLabelProvider implements IT
 
 	@Override
 	public String getToolTipText(Object element) {
+		if (element instanceof JRPropertySheetEntry) {
+			JRPropertySheetEntry pse = (JRPropertySheetEntry) element;
+			pse.getDescriptor().getId();
+			Object[] vals = pse.getValues();
+			if (vals.length == 1)
+				element = vals[0];
+
+			if (element == null || element instanceof ItemProperty)
+				try {
+					descriptor.validateItem((ItemProperty) element);
+				} catch (ValidationError e) {
+					if (e.getProps().contains(pse.getDescriptor().getId()))
+						return e.getMessage();
+				}
+		}
 		return getText(element);
 	}
 

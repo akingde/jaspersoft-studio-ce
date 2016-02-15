@@ -21,6 +21,7 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.util.ItemPropertyUtil;
+import com.jaspersoft.studio.properties.view.validation.ValidationError;
 import com.jaspersoft.studio.utils.Misc;
 
 /**
@@ -96,34 +97,43 @@ public abstract class ADescriptor {
 		this.pnode = pnode;
 	}
 
-	public void validateItem(ItemProperty itemProperty) throws Exception {
+	public void validateItem(ItemProperty itemProperty) throws ValidationError {
+		validateItem(itemProperty, false);
+	}
+
+	public void validateItem(ItemProperty itemProperty, boolean isNew) throws ValidationError {
 		if (itemProperty != null) {
 			if (Misc.isNullOrEmpty(itemProperty.getName()))
-				throw new Exception(Messages.ADescriptor_2);
-			for (ItemProperty ip : item.getProperties()) {
-				if (oldItemProperty == ip)
-					continue;
-				if (ip.getName().equals(itemProperty.getName()))
-					throw new Exception(Messages.ADescriptor_3);
-			}
-		} else
-			for (ItemData id : itemDatas) {
-				if (id.getItems() == null)
-					continue;
-				for (Item it : id.getItems()) {
-					if (it.getProperties() == null)
+				throw new ValidationError(Messages.ADescriptor_2);
+			if (item != null)
+				for (ItemProperty ip : item.getProperties()) {
+					if (isNew || oldItemProperty == ip || ip == itemProperty)
 						continue;
-					for (ItemPropertyDescription<?> ipd : getItemPropertyDescriptors()) {
-						if (ipd.isMandatory()) {
-							ItemProperty p = ItemPropertyUtil.getProperty(it.getProperties(), ipd.getName());
-							if (p == null
-									|| ((p.getValueExpression() == null || Misc.isNullOrEmpty(p.getValueExpression().getText())) && Misc
-											.isNullOrEmpty(p.getValue())))
-								throw new Exception(ipd.getLabel() + " is mandatory property.");
-						}
-					}
+					if (ip.getName().equals(itemProperty.getName()))
+						throw new ValidationError(itemProperty.getName(), Messages.ADescriptor_3);
+				}
+		} else if (itemDatas != null)
+			for (ItemData id : itemDatas)
+				validateItems(id, getItemPropertyDescriptors());
+		else if (itemData != null)
+			validateItems(itemData, getItemPropertyDescriptors());
+	}
+
+	public static void validateItems(ItemData id, ItemPropertyDescription<?>[] itemPropDesc) throws ValidationError {
+		if (id.getItems() == null)
+			return;
+		for (Item it : id.getItems()) {
+			if (it.getProperties() == null)
+				continue;
+			for (ItemPropertyDescription<?> ipd : itemPropDesc) {
+				if (ipd.isMandatory()) {
+					ItemProperty p = ItemPropertyUtil.getProperty(it.getProperties(), ipd.getName());
+					if (p == null || ((p.getValueExpression() == null || Misc.isNullOrEmpty(p.getValueExpression().getText()))
+							&& Misc.isNullOrEmpty(p.getValue())))
+						throw new ValidationError(ipd.getName(), ipd.getLabel() + " is mandatory property.");
 				}
 			}
+		}
 	}
 
 }

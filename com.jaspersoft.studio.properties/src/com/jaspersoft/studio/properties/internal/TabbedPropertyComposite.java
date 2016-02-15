@@ -146,6 +146,7 @@ public class TabbedPropertyComposite extends Composite {
 		layout.verticalSpacing = 0;
 		layout.marginWidth = 0;
 		layout.marginHeight = 0;
+		layout.marginBottom=1;
 		parent.setLayout(layout);
 		parent.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		if (displayTitle) {

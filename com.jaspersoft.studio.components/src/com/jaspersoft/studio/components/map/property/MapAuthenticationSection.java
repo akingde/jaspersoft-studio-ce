@@ -12,8 +12,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.map.property;
 
-import net.sf.jasperreports.components.map.MapComponent;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -27,6 +25,8 @@ import com.jaspersoft.studio.components.map.messages.Messages;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
+
+import net.sf.jasperreports.components.map.MapComponent;
 
 /**
  * Section with authentication information for Google Maps component.
@@ -43,8 +43,7 @@ public class MapAuthenticationSection extends AbstractSection {
 	private Button useBusinessAPICheck;
 	private Composite cmpContainer;
 
-	public void createControls(final Composite parent,
-			TabbedPropertySheetPage tabbedPropertySheetPage) {
+	public void createControls(final Composite parent, TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
 		cmpContainer = getWidgetFactory().createComposite(parent);
 		cmpContainer.setLayout(new GridLayout(2, false));
@@ -52,21 +51,13 @@ public class MapAuthenticationSection extends AbstractSection {
 		containerGD.minimumHeight = 150;
 		cmpContainer.setLayoutData(containerGD);
 		useBusinessAPICheck = getWidgetFactory().createButton(cmpContainer,
-				Messages.MapAuthenticationSection_UseBusinessAPICheckbox,
-				SWT.CHECK);
-		useBusinessAPICheck.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true,
-				false, 2, 1));
-		
-		
-		
-		keyWidget = createWidget4Property(cmpContainer,
-				MapComponent.PROPERTY_KEY);
-		idWidget = createWidget4Property(cmpContainer,
-				MapComponent.PROPERTY_CLIENT_ID);
-		signatureWidget = createWidget4Property(cmpContainer,
-				MapComponent.PROPERTY_SIGNATURE);
-		versionWidget = createWidget4Property(cmpContainer,
-				MapComponent.PROPERTY_VERSION);
+				Messages.MapAuthenticationSection_UseBusinessAPICheckbox, SWT.CHECK);
+		useBusinessAPICheck.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false, 2, 1));
+
+		keyWidget = createWidget4Property(cmpContainer, MapComponent.PROPERTY_KEY);
+		idWidget = createWidget4Property(cmpContainer, MapComponent.PROPERTY_CLIENT_ID);
+		signatureWidget = createWidget4Property(cmpContainer, MapComponent.PROPERTY_SIGNATURE);
+		versionWidget = createWidget4Property(cmpContainer, MapComponent.PROPERTY_VERSION);
 		useBusinessAPICheck.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -80,7 +71,7 @@ public class MapAuthenticationSection extends AbstractSection {
 		useBusinessSelected(cmpContainer, usingBusinessAPI);
 	}
 
-	private void useBusinessSelected(final Composite parent, boolean useBusiness) {		
+	private void useBusinessSelected(final Composite parent, boolean useBusiness) {
 		keyWidget.toggleVisibility(!useBusiness);
 		idWidget.toggleVisibility(useBusiness);
 		signatureWidget.toggleVisibility(useBusiness);
@@ -89,38 +80,26 @@ public class MapAuthenticationSection extends AbstractSection {
 			getElement().setPropertyValue(MapComponent.PROPERTY_KEY, null);
 		} else {
 			((Text) idWidget.getControl()).setText(""); //$NON-NLS-1$
-			getElement()
-					.setPropertyValue(MapComponent.PROPERTY_CLIENT_ID, null);
+			getElement().setPropertyValue(MapComponent.PROPERTY_CLIENT_ID, null);
 			((Text) signatureWidget.getControl()).setText(""); //$NON-NLS-1$
-			getElement()
-					.setPropertyValue(MapComponent.PROPERTY_SIGNATURE, null);
+			getElement().setPropertyValue(MapComponent.PROPERTY_SIGNATURE, null);
 		}
 		parent.update();
 		parent.layout();
 	}
 
-	@Override
-	public void refresh() {
-		super.refresh();
-	}
-
 	private boolean isUsingBusinessAPI() {
-		Object clientID = getElement().getPropertyValue(
-				MapComponent.PROPERTY_CLIENT_ID);
+		Object clientID = getElement().getPropertyValue(MapComponent.PROPERTY_CLIENT_ID);
 		return (clientID instanceof String && !((String) clientID).isEmpty());
 	}
 
 	@Override
 	protected void initializeProvidedProperties() {
 		super.initializeProvidedProperties();
-		addProvidedProperties(MapComponent.PROPERTY_KEY,
-				Messages.MapAuthenticationSection_ApiKeyText);
-		addProvidedProperties(MapComponent.PROPERTY_CLIENT_ID,
-				Messages.MapAuthenticationSection_ClientIdText);
-		addProvidedProperties(MapComponent.PROPERTY_SIGNATURE,
-				Messages.MapAuthenticationSection_SignatureText);
-		addProvidedProperties(MapComponent.PROPERTY_VERSION,
-				Messages.MapAuthenticationSection_VersionText);
+		addProvidedProperties(MapComponent.PROPERTY_KEY, Messages.MapAuthenticationSection_ApiKeyText);
+		addProvidedProperties(MapComponent.PROPERTY_CLIENT_ID, Messages.MapAuthenticationSection_ClientIdText);
+		addProvidedProperties(MapComponent.PROPERTY_SIGNATURE, Messages.MapAuthenticationSection_SignatureText);
+		addProvidedProperties(MapComponent.PROPERTY_VERSION, Messages.MapAuthenticationSection_VersionText);
 	}
 
 }
