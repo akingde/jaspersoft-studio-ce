@@ -120,7 +120,7 @@ public class ItemLabelProvider extends ColumnLabelProvider implements ITableLabe
 
 	protected String getColumnText4ItemData(int columnIndex) {
 		if (columnIndex == 0)
-			return Messages.ItemLabelProvider_7;
+			return Messages.ItemLabelProvider_7 + " " + (columnIndex + 1);
 		return "";
 	}
 
