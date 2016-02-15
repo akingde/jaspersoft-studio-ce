@@ -72,7 +72,10 @@ public class FontFaceFragment {
 
 			@Override
 			public void modifyText(ModifyEvent e) {
-				fontFace.setPdf(txtPdf.getText());
+				String fname = txtPdf.getText();
+				if(fname.trim().isEmpty())
+					fname = null;
+				fontFace.setPdf(fname);
 			}
 		});
 		return cmp;
