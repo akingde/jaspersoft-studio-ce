@@ -188,8 +188,6 @@ public class TabbedPropertySheetPage extends Page implements IPropertySheetPage 
 		IStructuredSelection selection = (IStructuredSelection) tabbedPropertyViewer.getSelection();
 		TabContents tab = null;
 		ITabDescriptor descriptor = (ITabDescriptor) selection.getFirstElement();
-		if (currentTab != null)
-			currentTab.aboutToBeHidden();
 		if (descriptor != null) {
 			tab = getTab(descriptor);
 			if (tabbedPropertyViewer != null && tabbedPropertyViewer.getInput() != null) {
