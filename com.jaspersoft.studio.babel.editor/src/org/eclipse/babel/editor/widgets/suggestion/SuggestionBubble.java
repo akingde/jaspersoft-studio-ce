@@ -25,6 +25,7 @@ import org.eclipse.babel.editor.widgets.suggestion.model.Suggestion;
 import org.eclipse.babel.editor.widgets.suggestion.provider.ISuggestionProvider;
 import org.eclipse.babel.editor.widgets.suggestion.provider.ISuggestionProviderListener;
 import org.eclipse.babel.editor.widgets.suggestion.provider.SuggestionProviderUtils;
+import org.eclipse.babel.swt.ResourceManager;
 import org.eclipse.jface.bindings.keys.KeySequence;
 import org.eclipse.jface.bindings.keys.KeyStroke;
 import org.eclipse.jface.bindings.keys.SWTKeySupport;
@@ -51,7 +52,6 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
@@ -338,8 +338,7 @@ public class SuggestionBubble implements ISuggestionProviderListener {
 							noSug = new Label(composite, SWT.NONE);
 							noSug.setText("No suggestions available");
 							noSug.moveAbove(tableViewer.getControl());
-							noSug.setBackground(new Color(shell.getDisplay(),
-									255, 255, 225));
+							noSug.setBackground(ResourceManager.getColor(255, 255, 225));
 							composite.layout();
 						}
 					} else {

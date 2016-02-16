@@ -34,6 +34,8 @@ import org.eclipse.swt.widgets.Link;
  */
 public class EntryLeftBanner extends Composite {
 
+	private static final String FONT_LINK_KEY = "linkFont";
+	
     /**
      * Constructor.
      * 
@@ -55,11 +57,8 @@ public class EntryLeftBanner extends Composite {
         final IAction foldAction = new FoldingAction(i18NEntry);
         new ActionButton(this, foldAction);
 
-        // Button commentButton = new Button(compos, SWT.TOGGLE);
-        // commentButton.setImage(UIUtils.getImage("comment.gif"));
-
         Link localeLabel = new Link(this, SWT.NONE);
-        localeLabel.setFont(UIUtils.createFont(localeLabel, SWT.BOLD));
+        localeLabel.setFont(UIUtils.createFont(FONT_LINK_KEY, localeLabel, SWT.BOLD));
 
         boolean isEditable = i18NEntry.isEditable();
         localeLabel.setText("<a>"
@@ -102,9 +101,6 @@ public class EntryLeftBanner extends Composite {
                     countryCode.toLowerCase() + ".gif"; //$NON-NLS-1$
             image = UIUtils.getImage(imageName);
         }
-        // if (image == null) {
-        //            image = UIUtils.getImage("countries/blank.gif"); //$NON-NLS-1$
-        // }
         return image;
     }
 

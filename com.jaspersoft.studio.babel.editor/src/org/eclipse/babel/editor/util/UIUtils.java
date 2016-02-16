@@ -16,9 +16,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.io.Reader;
-import java.lang.reflect.Method;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -32,6 +29,7 @@ import org.eclipse.babel.editor.compat.SwtRapCompatibilitySWT;
 import org.eclipse.babel.editor.plugin.MessagesEditorPlugin;
 import org.eclipse.babel.editor.preferences.MsgEditorPreferences;
 import org.eclipse.babel.messages.Messages;
+import org.eclipse.babel.swt.ResourceManager;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -40,21 +38,16 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.viewers.DecorationOverlayIcon;
 import org.eclipse.jface.viewers.IDecoration;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.graphics.Font;
-import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.PlatformUI;
 
 /**
  * Utility methods related to application UI.
@@ -99,18 +92,15 @@ public final class UIUtils {
     public static final String IMAGE_UNUSED_AND_MISSING_TRANSLATIONS = "unused_and_missing_translations.png"; //$NON-NLS-1$
     public static final String IMAGE_WARNED_TRANSLATION = "warned_translation.png"; //$NON-NLS-1$
     public static final String IMAGE_DUPLICATE = "duplicate.gif"; //$NON-NLS-1$
-
+    
+    public static final String IMAGE_KEY_MISSING_TRANSLATION = "MissingTranslationImageKey";
+    public static final String IMAGE_KEY_UNUSED_TRANSLATION = "UnusedTranslationImageKey";
+    public static final String IMAGE_KEY_MISSING_UNUSED_TRANSLATION = "MissingUnusedTranslationImageKey";
+    public static final String IMAGE_KEY_DUPLICATE_ENTRY_TRANSLATION = "DuplicateEntryTranslationImageKey";
+    public static final String IMAGE_KEY_UNUSED_DUPLICATE_ENTRY_TRANSLATION = "UnusedDuplicateEntryTranslationImageKey";
+    
     public static final String IMAGE_WARNING = "warning.gif"; //$NON-NLS-1$
     public static final String IMAGE_ERROR = "error_co.gif"; //$NON-NLS-1$
-
-    /** Image registry. */
-    private static ImageRegistry imageRegistry;
-    // TODO: REMOVE this comment eventually:
-    // necessary to specify the display otherwise Display.getCurrent()
-    // is called and will return null if this is not the UI-thread.
-    // this happens if the builder is called and initialize this class:
-    // the thread will not be the UI-thread.
-    // new ImageRegistry(PlatformUI.getWorkbench().getDisplay());
 
     public static final String PDE_NATURE = "org.eclipse.pde.PluginNature"; //$NON-NLS-1$
     public static final String JDT_JAVA_NATURE = "org.eclipse.jdt.core.javanature"; //$NON-NLS-1$
@@ -269,15 +259,15 @@ public final class UIUtils {
      *            style to apply to the new font
      * @return newly created font
      */
-    public static Font createFont(Control control, int style) {
-        // TODO consider dropping in favor of control-less version?
-        return createFont(control, style, 0);
+    public static Font createFont(String fontKey, Control control, int style) {
+        return createFont(fontKey, control, style, 0);
     }
 
     /**
      * Creates a font by altering the font associated with the given control and
      * applying the provided style and relative size.
      * 
+     * @param fontKey the font key for the caching system
      * @param control
      *            control we base our font data on
      * @param style
@@ -286,60 +276,8 @@ public final class UIUtils {
      *            size to add or remove from the control size
      * @return newly created font
      */
-    public static Font createFont(Control control, int style, int relSize) {
-        // TODO consider dropping in favor of control-less version?
-        FontData[] fontData = control.getFont().getFontData();
-        for (int i = 0; i < fontData.length; i++) {
-            fontData[i].setHeight(fontData[i].getHeight() + relSize);
-            fontData[i].setStyle(style);
-        }
-        return new Font(control.getDisplay(), fontData);
-    }
-
-    /**
-     * Creates a font by altering the system font and applying the provided
-     * style and relative size.
-     * 
-     * @param style
-     *            style to apply to the new font
-     * @return newly created font
-     */
-    public static Font createFont(int style) {
-        return createFont(style, 0);
-    }
-
-    /**
-     * Creates a font by altering the system font and applying the provided
-     * style and relative size.
-     * 
-     * @param style
-     *            style to apply to the new font
-     * @param relSize
-     *            size to add or remove from the control size
-     * @return newly created font
-     */
-    public static Font createFont(int style, int relSize) {
-        Display display = MessagesEditorPlugin.getDefault().getWorkbench()
-                .getDisplay();
-        FontData[] fontData = display.getSystemFont().getFontData();
-        for (int i = 0; i < fontData.length; i++) {
-            fontData[i].setHeight(fontData[i].getHeight() + relSize);
-            fontData[i].setStyle(style);
-        }
-        return new Font(display, fontData);
-    }
-
-    /**
-     * Creates a cursor matching given style.
-     * 
-     * @param style
-     *            style to apply to the new font
-     * @return newly created cursor
-     */
-    public static Cursor createCursor(int style) {
-        Display display = MessagesEditorPlugin.getDefault().getWorkbench()
-                .getDisplay();
-        return new Cursor(display, style);
+    public static Font createFont(String fontKey, Control control, int style, int relSize) {
+    	return ResourceManager.getWidgetFont(fontKey, control, style, relSize);
     }
 
     /**
@@ -350,8 +288,7 @@ public final class UIUtils {
      * @return system color
      */
     public static Color getSystemColor(int colorId) {
-        return MessagesEditorPlugin.getDefault().getWorkbench().getDisplay()
-                .getSystemColor(colorId);
+        return MessagesEditorPlugin.getDefault().getWorkbench().getDisplay().getSystemColor(colorId);
     }
 
     /**
@@ -446,16 +383,7 @@ public final class UIUtils {
      * @return image descriptor
      */
     public static ImageDescriptor getImageDescriptor(String name) {
-        String iconPath = "icons/"; //$NON-NLS-1$
-        try {
-            URL installURL = MessagesEditorPlugin.getDefault().getBundle()
-                    .getEntry("/"); //$NON-NLS-1$
-            URL url = new URL(installURL, iconPath + name);
-            return ImageDescriptor.createFromURL(url);
-        } catch (MalformedURLException e) {
-            // should not happen
-            return ImageDescriptor.getMissingImageDescriptor();
-        }
+    	return MessagesEditorPlugin.getImageDescriptor(name);
     }
 
     /**
@@ -466,48 +394,17 @@ public final class UIUtils {
      * @return image
      */
     public static Image getImage(String imageName) {
-        Image image = null;
-        try {
-            // [RAP] In RAP multiple displays could exist (multiple user),
-            // therefore image needs to be created every time with the current
-            // display
-            Method getImageRAP = Class.forName(
-                    "org.eclipse.babel.editor.util.UIUtilsRAP").getMethod(
-                    "getImage", String.class);
-            image = (Image) getImageRAP.invoke(null, imageName);
-        } catch (Exception e) {
-            // RAP fragment not running --> invoke rcp version
-            image = getImageRCP(imageName);
-        }
-
-        return image;
+    	ImageDescriptor desc = MessagesEditorPlugin.getImageDescriptor(imageName);
+    	if (desc == null) return null;
+    	else return ResourceManager.getImage(desc);
     }
 
-    /**
-     * Gets an image from image registry or creates a new one if it the first
-     * time.
-     * 
-     * @param imageName
-     *            image name
-     * @return image
-     */
-    private static Image getImageRCP(String imageName) {
-        if (imageRegistry == null)
-            imageRegistry = new ImageRegistry(PlatformUI.getWorkbench()
-                    .getDisplay());
-        Image image = imageRegistry.get(imageName);
-        if (image == null) {
-            image = getImageDescriptor(imageName).createImage();
-            imageRegistry.put(imageName, image);
-        }
-        return image;
-    }
 
     /**
      * @return Image for the icon that indicates a key with no issues
      */
     public static Image getKeyImage() {
-        Image image = UIUtils.getImage(UIUtils.IMAGE_KEY);
+        Image image = getImage(UIUtils.IMAGE_KEY);
         return image;
     }
 
@@ -516,24 +413,28 @@ public final class UIUtils {
      *         translations
      */
     public static Image getMissingTranslationImage() {
-        Image image = UIUtils.getImage(UIUtils.IMAGE_KEY);
-        ImageDescriptor missing = ImageDescriptor.createFromImage(UIUtils
-                .getImage(UIUtils.IMAGE_ERROR));
-        image = new DecorationOverlayIcon(image, missing,
-                IDecoration.BOTTOM_RIGHT).createImage();
-        return image;
+    	Image result = ResourceManager.getImage(IMAGE_KEY_MISSING_TRANSLATION);
+    	if (result == null){
+    		Image image = getImage(UIUtils.IMAGE_KEY);
+            ImageDescriptor missing = ImageDescriptor.createFromImage(UIUtils.getImage(UIUtils.IMAGE_ERROR));
+            result = new DecorationOverlayIcon(image, missing, IDecoration.BOTTOM_RIGHT).createImage();
+            ResourceManager.addImage(IMAGE_KEY_MISSING_TRANSLATION, result);
+    	}
+        return result;
     }
 
     /**
      * @return Image for the icon which indicates a key that is unused
      */
     public static Image getUnusedTranslationsImage() {
-        Image image = UIUtils.getImage(UIUtils.IMAGE_UNUSED_TRANSLATION);
-        ImageDescriptor warning = ImageDescriptor.createFromImage(UIUtils
-                .getImage(UIUtils.IMAGE_WARNING));
-        image = new DecorationOverlayIcon(image, warning,
-                IDecoration.BOTTOM_RIGHT).createImage();
-        return image;
+    	Image result = ResourceManager.getImage(IMAGE_KEY_UNUSED_TRANSLATION);
+    	if (result == null){
+    		Image image = getImage(UIUtils.IMAGE_UNUSED_TRANSLATION);
+            ImageDescriptor missing = ImageDescriptor.createFromImage(getImage(UIUtils.IMAGE_WARNING));
+            result = new DecorationOverlayIcon(image, missing, IDecoration.BOTTOM_RIGHT).createImage();
+            ResourceManager.addImage(IMAGE_KEY_UNUSED_TRANSLATION, result);
+    	}
+        return result;
     }
 
     /**
@@ -541,12 +442,14 @@ public final class UIUtils {
      *         translations and is unused
      */
     public static Image getMissingAndUnusedTranslationsImage() {
-        Image image = UIUtils.getImage(UIUtils.IMAGE_UNUSED_TRANSLATION);
-        ImageDescriptor missing = ImageDescriptor.createFromImage(UIUtils
-                .getImage(UIUtils.IMAGE_ERROR));
-        image = new DecorationOverlayIcon(image, missing,
-                IDecoration.BOTTOM_RIGHT).createImage();
-        return image;
+    	Image result = ResourceManager.getImage(IMAGE_KEY_MISSING_UNUSED_TRANSLATION);
+    	if (result == null){
+    		Image image = getImage(UIUtils.IMAGE_UNUSED_TRANSLATION);
+            ImageDescriptor missing = ImageDescriptor.createFromImage(getImage(UIUtils.IMAGE_ERROR));
+            result = new DecorationOverlayIcon(image, missing, IDecoration.BOTTOM_RIGHT).createImage();
+            ResourceManager.addImage(IMAGE_KEY_MISSING_UNUSED_TRANSLATION, result);
+    	}
+        return result;
     }
 
     /**
@@ -554,12 +457,14 @@ public final class UIUtils {
      *         entries
      */
     public static Image getDuplicateEntryImage() {
-        Image image = UIUtils.getImage(UIUtils.IMAGE_KEY);
-        ImageDescriptor missing = ImageDescriptor.createFromImage(UIUtils
-                .getImage(UIUtils.IMAGE_WARNING));
-        image = new DecorationOverlayIcon(image, missing,
-                IDecoration.BOTTOM_RIGHT).createImage();
-        return image;
+    	Image result = ResourceManager.getImage(IMAGE_KEY_DUPLICATE_ENTRY_TRANSLATION);
+    	if (result == null){
+    		Image image = getImage(UIUtils.IMAGE_KEY);
+            ImageDescriptor missing = ImageDescriptor.createFromImage(getImage(UIUtils.IMAGE_WARNING));
+            result = new DecorationOverlayIcon(image, missing, IDecoration.BOTTOM_RIGHT).createImage();
+            ResourceManager.addImage(IMAGE_KEY_DUPLICATE_ENTRY_TRANSLATION, result);
+    	}
+        return result;
     }
 
     /**
@@ -567,12 +472,14 @@ public final class UIUtils {
      *         entries and is unused
      */
     public static Image getDuplicateEntryAndUnusedTranslationsImage() {
-        Image image = UIUtils.getImage(UIUtils.IMAGE_UNUSED_TRANSLATION);
-        ImageDescriptor missing = ImageDescriptor.createFromImage(UIUtils
-                .getImage(UIUtils.IMAGE_DUPLICATE));
-        image = new DecorationOverlayIcon(image, missing,
-                IDecoration.BOTTOM_RIGHT).createImage();
-        return image;
+    	Image result = ResourceManager.getImage(IMAGE_KEY_UNUSED_DUPLICATE_ENTRY_TRANSLATION);
+    	if (result == null){
+    		Image image = getImage(UIUtils.IMAGE_UNUSED_TRANSLATION);
+            ImageDescriptor missing = ImageDescriptor.createFromImage(getImage(UIUtils.IMAGE_DUPLICATE));
+            result = new DecorationOverlayIcon(image, missing, IDecoration.BOTTOM_RIGHT).createImage();
+            ResourceManager.addImage(IMAGE_KEY_UNUSED_DUPLICATE_ENTRY_TRANSLATION, result);
+    	}
+        return result;
     }
 
     /**

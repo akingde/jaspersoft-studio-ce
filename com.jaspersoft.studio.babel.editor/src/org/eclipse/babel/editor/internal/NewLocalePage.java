@@ -21,7 +21,6 @@ import org.eclipse.babel.messages.Messages;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -34,9 +33,10 @@ import org.eclipse.swt.widgets.Label;
  */
 public class NewLocalePage extends Composite {
 
-    private Font fontBoldBig = UIUtils.createFont(this, SWT.BOLD, 5);
-    private Font fontBold = UIUtils.createFont(this, SWT.BOLD, 1);
-    
+	private static final String FONT_BOLD_BIG_KEY = "compositeFontBigBoldKey";
+	
+	private static final String FONT_BOLD_KEY = "compositeFontBoldKey";
+
     /**
      * Constructor.
      * @param parent parent component.
@@ -60,7 +60,7 @@ public class NewLocalePage extends Composite {
         // Title label
         Label label = new Label(block, SWT.NONE);
         label.setText(Messages.editor_new_title);
-        label.setFont(fontBoldBig);
+        label.setFont(UIUtils.createFont(FONT_BOLD_BIG_KEY, this, SWT.BOLD, 5));
         gridData = new GridData();
         gridData.horizontalAlignment = GridData.CENTER;
         label.setLayoutData(gridData);
@@ -75,7 +75,7 @@ public class NewLocalePage extends Composite {
         // Create button
         Button createButton = new Button(block, SWT.NULL);
         createButton.setText(Messages.editor_new_create);
-        createButton.setFont(fontBold);
+        createButton.setFont(UIUtils.createFont(FONT_BOLD_KEY, this, SWT.BOLD, 1));
         gridData = new GridData();
         gridData.horizontalAlignment = GridData.CENTER;
         createButton.setLayoutData(gridData);
@@ -107,14 +107,5 @@ public class NewLocalePage extends Composite {
 			}
 		});
 		this.layout();
-    }
-
-    /**
-     * @see org.eclipse.swt.widgets.Widget#dispose()
-     */
-    public void dispose() {
-        fontBold.dispose();
-        fontBoldBig.dispose();
-        super.dispose();
     }
 }
