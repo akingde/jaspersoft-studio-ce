@@ -228,8 +228,6 @@ public abstract class MTextElement extends MGraphicElementLineBox implements IRo
 			jrElement.setHorizontalTextAlign((HorizontalTextAlignEnum) hAlignD.getEnumValue(value));
 		else if (id.equals(JRBaseStyle.PROPERTY_VERTICAL_TEXT_ALIGNMENT)) {
 			VerticalTextAlignEnum va = (VerticalTextAlignEnum) vAlignD.getEnumValue(value);
-			if (va != null && va.equals(VerticalTextAlignEnum.JUSTIFIED))
-				va = VerticalTextAlignEnum.MIDDLE;
 			jrElement.setVerticalTextAlign(va);
 		} else if (id.equals(JRBaseStyle.PROPERTY_ROTATION))
 			jrElement.setRotation((RotationEnum) rotationD.getEnumValue(value));
