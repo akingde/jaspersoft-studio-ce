@@ -26,6 +26,7 @@ import org.eclipse.ui.actions.ActionFactory;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.server.model.AMResource;
+import com.jaspersoft.studio.server.model.MAdHocDataView;
 
 public class CutResourceAction extends Action {
 	private TreeViewer treeViewer;
@@ -45,6 +46,8 @@ public class CutResourceAction extends Action {
 	public boolean isEnabled() {
 		Object firstElement = ((TreeSelection) treeViewer.getSelection()).getFirstElement();
 		boolean b = firstElement != null && (firstElement instanceof AMResource);
+		if (firstElement instanceof MAdHocDataView)
+			return false;
 		if (b) {
 			AMResource mres = (AMResource) firstElement;
 			int pmask = mres.getValue().getPermissionMask(mres.getWsClient());

@@ -68,6 +68,7 @@ import com.jaspersoft.jasperserver.dto.reports.inputcontrols.ReportInputControls
 import com.jaspersoft.jasperserver.dto.resources.AbstractClientReportUnit;
 import com.jaspersoft.jasperserver.dto.resources.ClientFile;
 import com.jaspersoft.jasperserver.dto.resources.ClientFile.FileType;
+import com.jaspersoft.jasperserver.dto.resources.ClientReferenceableFile;
 import com.jaspersoft.jasperserver.dto.resources.ClientReportUnit;
 import com.jaspersoft.jasperserver.dto.resources.ClientResource;
 import com.jaspersoft.jasperserver.dto.resources.ClientResourceListWrapper;
@@ -151,7 +152,8 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 		Client client = ClientBuilder.newBuilder().withConfig(clientConfig).build();
 		client.register(MultiPartFeature.class);
 		// client.register(new org.glassfish.jersey.filter.LoggingFilter(
-		// java.util.logging.Logger.getLogger(Logger.GLOBAL_LOGGER_NAME), true));
+		// java.util.logging.Logger.getLogger(Logger.GLOBAL_LOGGER_NAME),
+		// true));
 		// client.register(JacksonFeature.class);
 		// String user = sp.getUser();
 		// if (!Misc.isNullOrEmpty(sp.getOrganisation()))
@@ -424,6 +426,22 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 		return null;
 	}
 
+	private void fillFiles(ClientFile cf, IProgressMonitor monitor) throws IOException, Exception {
+		if (cf.getContent() == null) {
+			WebTarget tgt = target.path("resources" + cf.getUri()); //$NON-NLS-1$
+			try {
+				Builder req = tgt.request(cf.getType().getMimeType()).header("Accept", //$NON-NLS-1$
+						cf.getType().getMimeType());
+				cf.setContent(new String(Base64.encodeBase64(readFile(connector.get(req, monitor), monitor))));
+			} catch (HttpResponseException e) {
+				if (e.getStatusCode() == 500)
+					;// jrs 5.5 returns 500 if file is not existing, a
+						// bug
+				// for newer versions, we should show the error
+			}
+		}
+	}
+
 	@Override
 	public ResourceDescriptor addOrModifyResource(IProgressMonitor monitor, ResourceDescriptor rd, File inFile)
 			throws Exception {
@@ -443,22 +461,11 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 				cr = Soap2Rest.getResource(this, newrd);
 				cru = (ClientReportUnit) cr;
 			}
-			if (cru.getJrxml() instanceof ClientFile) {
-				ClientFile cf = (ClientFile) cru.getJrxml();
-				if (cf.getContent() == null) {
-					WebTarget tgt = target.path("resources" + cf.getUri()); //$NON-NLS-1$
-					try {
-						Builder req = tgt.request(cf.getType().getMimeType()).header("Accept", //$NON-NLS-1$
-								cf.getType().getMimeType());
-						cf.setContent(new String(Base64.encodeBase64(readFile(connector.get(req, monitor), monitor))));
-					} catch (HttpResponseException e) {
-						if (e.getStatusCode() == 500)
-							;// jrs 5.5 returns 500 if file is not existing, a
-								// bug
-						// for newer versions, we should show the error
-					}
-				}
-			}
+			if (cru.getJrxml() instanceof ClientFile)
+				fillFiles((ClientFile) cru.getJrxml(), monitor);
+			for (ClientReferenceableFile crf : cru.getFiles().values())
+				if (crf instanceof ClientFile)
+					fillFiles((ClientFile) crf, monitor);
 		}
 
 		if (rd.getWsType().equals(ResourceDescriptor.TYPE_REPORT_OPTIONS)) {

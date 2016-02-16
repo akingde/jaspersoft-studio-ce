@@ -22,8 +22,7 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.server.ServerIconDescriptor;
 
-public class MAdHocDataView extends AMResource implements
-		IInputControlsContainer {
+public class MAdHocDataView extends AMResource implements IInputControlsContainer {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	public MAdHocDataView(ANode parent, ResourceDescriptor rd, int index) {
@@ -51,9 +50,12 @@ public class MAdHocDataView extends AMResource implements
 
 	@Override
 	public String getJRSUrl() throws UnsupportedEncodingException {
-		return "flow.html?_flowId=adhocFlow&resource="
-				+ URLEncoder.encode(getValue().getUriString(), "ISO-8859-1")
-				+ "&ParentFolderUri="
-				+ URLEncoder.encode(getValue().getParentFolder(), "ISO-8859-1");
+		return "flow.html?_flowId=adhocFlow&resource=" + URLEncoder.encode(getValue().getUriString(), "ISO-8859-1")
+				+ "&ParentFolderUri=" + URLEncoder.encode(getValue().getParentFolder(), "ISO-8859-1");
+	}
+
+	@Override
+	public boolean isCopyable2(Object parent) {
+		return false;
 	}
 }
