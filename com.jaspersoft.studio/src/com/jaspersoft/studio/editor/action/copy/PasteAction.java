@@ -35,6 +35,7 @@ import com.jaspersoft.studio.model.IPastable;
 import com.jaspersoft.studio.model.MPage;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.band.MBand;
+import com.jaspersoft.studio.model.style.MStyleTemplate;
 
 /**
  * Paste the elements in the clipboard
@@ -94,11 +95,19 @@ public class PasteAction extends ACachedSelectionAction {
 	 * @return the node where the elements can be pasted or null if the elements can't be at all
 	 */
 	private IPastable getParent2Paste(ANode n) {
+		 if (n instanceof ANode){
+			 ANode node = (ANode)n;
+				if (!node.isEditable()){
+					return null;
+				}
+		 }
 		while (n != null) {
 			if (n instanceof IPastable) {
 				if (n instanceof MBand && n.getValue() == null)
 					return null;
 				return (IPastable) n;
+			} else if (n instanceof MStyleTemplate){
+				return null;
 			}
 			n = (ANode) n.getParent();
 		}

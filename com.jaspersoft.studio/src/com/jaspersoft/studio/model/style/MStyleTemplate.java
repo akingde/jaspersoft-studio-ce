@@ -124,13 +124,6 @@ public class MStyleTemplate extends APropertyNode implements IPropertySource, IC
 
 	/**
 	 * Instantiates a new m style template.
-	 */
-	public MStyleTemplate() {
-		super();
-	}
-
-	/**
-	 * Instantiates a new m style template.
 	 * 
 	 * @param parent
 	 *          the parent
@@ -142,6 +135,7 @@ public class MStyleTemplate extends APropertyNode implements IPropertySource, IC
 	public MStyleTemplate(ANode parent, JRReportTemplate jrstyle, int newIndex) {
 		super(parent, newIndex);
 		setValue(jrstyle);
+		setEditable(false);
 	}
 
 	/*

@@ -24,10 +24,12 @@ import org.eclipse.ui.actions.ActionFactory;
 import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.editor.action.ACachedSelectionAction;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.ICopyable;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.command.DeleteElementCommand;
+import com.jaspersoft.studio.model.style.MStyleTemplate;
 
 /**
  * Cut the selected node. The cut consist of three parts:
@@ -96,6 +98,13 @@ public class CutAction extends ACachedSelectionAction {
 	@Override
 	protected boolean calculateEnabled() {
 		List<Object> copiableObjects = editor.getSelectionCache().getSelectionModelForType(ICopyable.class);
+		for(Object obj : copiableObjects){
+			if (obj instanceof ANode){
+				ANode node = (ANode)obj;
+				ANode parent = node.getParent();
+				if (parent instanceof MStyleTemplate) return false;
+			}
+		}
 		return !copiableObjects.isEmpty();
 	}
 	

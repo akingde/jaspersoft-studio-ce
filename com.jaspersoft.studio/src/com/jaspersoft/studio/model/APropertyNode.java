@@ -17,9 +17,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.jasperreports.engine.JRConstants;
-import net.sf.jasperreports.engine.design.JRDesignElement;
-
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.IPropertySource2;
@@ -28,20 +25,18 @@ import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
 import com.jaspersoft.studio.help.HelpPrefixBuilder;
 import com.jaspersoft.studio.help.IHelp;
-import com.jaspersoft.studio.properties.IEditablePropertySource;
 import com.jaspersoft.studio.property.ElementLabelProvider;
 import com.jaspersoft.studio.utils.ModelUtils;
 
-public abstract class APropertyNode extends ANode implements IPropertySource, IPropertySource2, IEditablePropertySource {
+import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.design.JRDesignElement;
+
+public abstract class APropertyNode extends ANode implements IPropertySource, IPropertySource2 {
 	
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	public static final String PROPERTY_MAP = "PROPERTY_MAP"; //$NON-NLS-1$
 	
-	private boolean editable = true;
-	
-	/** The descriptors. */
-
 	public APropertyNode() {
 		super();
 	}
@@ -53,16 +48,6 @@ public abstract class APropertyNode extends ANode implements IPropertySource, IP
 
 	public boolean isPropertyResettable(Object id) {
 		return true;
-	}
-
-	@Override
-	public boolean isEditable() {
-		return editable;
-	}
-
-	@Override
-	public void setEditable(boolean editable) {
-		this.editable = editable;
 	}
 
 	public abstract Map<String, Object> getDefaultsMap();

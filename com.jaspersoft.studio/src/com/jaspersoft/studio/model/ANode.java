@@ -34,6 +34,7 @@ import com.jaspersoft.studio.model.style.MStylesTemplate;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.model.util.ReportFactory;
+import com.jaspersoft.studio.properties.IEditablePropertySource;
 import com.jaspersoft.studio.properties.view.validation.IValidable;
 import com.jaspersoft.studio.properties.view.validation.ValidationError;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
@@ -53,7 +54,7 @@ import net.sf.jasperreports.engine.design.events.JRChangeEventsSupport;
  * 
  * @author Chicu Veaceslav
  */
-public abstract class ANode implements INode, Serializable, IAdaptable, Cloneable, IValidable {
+public abstract class ANode implements INode, Serializable, IAdaptable, Cloneable, IValidable, IEditablePropertySource{
 
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
@@ -95,6 +96,11 @@ public abstract class ANode implements INode, Serializable, IAdaptable, Cloneabl
 	 * regenerated
 	 */
 	private boolean redoValidation = true;
+	
+	/**
+	 * Used to know if the node is makred as editable or not
+	 */
+	private boolean editable = true;
 
 	/**
 	 * Instantiates a new a node.
@@ -754,5 +760,15 @@ public abstract class ANode implements INode, Serializable, IAdaptable, Cloneabl
 	 */
 	public void setStyle(JRStyle style){
 		
+	}	
+
+	@Override
+	public boolean isEditable() {
+		return editable;
+	}
+
+	@Override
+	public void setEditable(boolean editable) {
+		this.editable = editable;
 	}
 }
