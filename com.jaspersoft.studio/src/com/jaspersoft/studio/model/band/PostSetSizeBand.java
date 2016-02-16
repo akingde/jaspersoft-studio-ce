@@ -8,17 +8,12 @@
  ******************************************************************************/
 package com.jaspersoft.studio.model.band;
 
-import net.sf.jasperreports.engine.JRPropertiesHolder;
-import net.sf.jasperreports.engine.design.JRDesignBand;
-import net.sf.jasperreports.engine.design.JasperDesign;
-
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.ui.views.properties.IPropertySource;
 
 import com.jaspersoft.studio.JSSCompoundCommand;
-import com.jaspersoft.studio.editor.gef.parts.band.BandResizeTracker;
 import com.jaspersoft.studio.editor.layout.ILayout;
 import com.jaspersoft.studio.editor.layout.LayoutCommand;
 import com.jaspersoft.studio.editor.layout.LayoutManager;
@@ -26,6 +21,11 @@ import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.property.IPostSetValue;
 import com.jaspersoft.studio.property.SetValueCommand;
+import com.jaspersoft.studio.utils.ModelUtils;
+
+import net.sf.jasperreports.engine.JRPropertiesHolder;
+import net.sf.jasperreports.engine.design.JRDesignBand;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 public class PostSetSizeBand implements IPostSetValue {
 
@@ -58,14 +58,14 @@ public class PostSetSizeBand implements IPostSetValue {
 		int w = Math.max(0, jDesign.getPageWidth() - jDesign.getLeftMargin() - jDesign.getRightMargin());
 		// Check if the size is valid
 		if (property.equals(JRDesignBand.PROPERTY_HEIGHT)) {
-			int maxHeight = BandResizeTracker.getMaxBandHeight(band, jDesign);
+			int maxHeight = ModelUtils.getMaxBandHeight(band, jDesign);
 			if (band.getHeight() > maxHeight) {
 				cmd = new CompoundCommand();
 
 				SetValueCommand c = new SetValueCommand();
 				c.setTarget(mband);
 				c.setPropertyId(JRDesignBand.PROPERTY_HEIGHT);
-				c.setPropertyValue(Math.max(0, maxHeight - 1));
+				c.setPropertyValue(Math.max(0, maxHeight));
 
 				cmd.add(c);
 			}

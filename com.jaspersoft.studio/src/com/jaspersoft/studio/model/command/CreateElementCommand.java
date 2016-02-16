@@ -14,23 +14,12 @@ package com.jaspersoft.studio.model.command;
 
 import java.util.List;
 
-import net.sf.jasperreports.engine.JRBand;
-import net.sf.jasperreports.engine.JRElement;
-import net.sf.jasperreports.engine.JRElementGroup;
-import net.sf.jasperreports.engine.design.JRDesignBand;
-import net.sf.jasperreports.engine.design.JRDesignComponentElement;
-import net.sf.jasperreports.engine.design.JRDesignElement;
-import net.sf.jasperreports.engine.design.JRDesignElementGroup;
-import net.sf.jasperreports.engine.design.JRDesignFrame;
-import net.sf.jasperreports.engine.design.JasperDesign;
-
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.ui.views.properties.IPropertySource;
 
 import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
-import com.jaspersoft.studio.editor.gef.parts.band.BandResizeTracker;
 import com.jaspersoft.studio.editor.layout.LazyLayoutCommand;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IGroupElement;
@@ -41,8 +30,19 @@ import com.jaspersoft.studio.model.frame.MFrame;
 import com.jaspersoft.studio.preferences.DesignerPreferencePage;
 import com.jaspersoft.studio.property.SetValueCommand;
 import com.jaspersoft.studio.statistics.UsageStatisticsIDs;
+import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.SelectionHelper;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
+import net.sf.jasperreports.engine.JRBand;
+import net.sf.jasperreports.engine.JRElement;
+import net.sf.jasperreports.engine.JRElementGroup;
+import net.sf.jasperreports.engine.design.JRDesignBand;
+import net.sf.jasperreports.engine.design.JRDesignComponentElement;
+import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.design.JRDesignElementGroup;
+import net.sf.jasperreports.engine.design.JRDesignFrame;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 
 /**
@@ -300,10 +300,10 @@ public class CreateElementCommand extends Command {
 			JRDesignBand band = (JRDesignBand) jrGroup;
 			int height = jrElement.getY() + jrElement.getHeight();
 			if (band.getHeight() < height) {
-				int maxBandHeight = BandResizeTracker.getMaxBandHeight(band, jasperDesign);
+				int maxBandHeight = ModelUtils.getMaxBandHeight(band, jasperDesign);
 				// If the element is too big it will be resized to the maximum band size
 				if (maxBandHeight < height) {
-					height = maxBandHeight - 1;
+					height = maxBandHeight;
 					jrElement.setHeight(height - jrElement.getY());
 					// Commented for back-compatibility in 3.6.
 					// Replaced with the following line.

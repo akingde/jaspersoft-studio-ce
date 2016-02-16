@@ -12,17 +12,9 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.gef.commands;
 
-import net.sf.jasperreports.engine.JRElement;
-import net.sf.jasperreports.engine.JRElementGroup;
-import net.sf.jasperreports.engine.JRPropertiesMap;
-import net.sf.jasperreports.engine.design.JRDesignBand;
-import net.sf.jasperreports.engine.design.JRDesignElement;
-import net.sf.jasperreports.engine.design.JasperDesign;
-
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.commands.Command;
 
-import com.jaspersoft.studio.editor.gef.parts.band.BandResizeTracker;
 import com.jaspersoft.studio.editor.layout.ILayout;
 import com.jaspersoft.studio.editor.layout.LayoutManager;
 import com.jaspersoft.studio.model.ANode;
@@ -31,7 +23,15 @@ import com.jaspersoft.studio.model.IGroupElement;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.preferences.DesignerPreferencePage;
+import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
+import net.sf.jasperreports.engine.JRElement;
+import net.sf.jasperreports.engine.JRElementGroup;
+import net.sf.jasperreports.engine.JRPropertiesMap;
+import net.sf.jasperreports.engine.design.JRDesignBand;
+import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 /**
  * Set the size or position of an element. The command
@@ -183,7 +183,7 @@ public class SetConstraintCommand extends Command {
 			// if bottom-left corner outside the top bar, move to top band
 			if (newParent != null && newParent.getValue() != null && newParent.getValue() instanceof JRDesignBand){
 				JRDesignBand band = (JRDesignBand)newParent.getValue();
-				int maxHeight = BandResizeTracker.getMaxBandHeight(band, jrDesign);
+				int maxHeight = ModelUtils.getMaxBandHeight(band, jrDesign);
 				int elementHeight = jrElement.getHeight() + jrElement.getY() ;
 				boolean isBandResizeEnabled = jrConfig.getPropertyBoolean(DesignerPreferencePage.P_RESIZE_CONTAINER, Boolean.TRUE);
 				if (maxHeight > 1 && elementHeight > band.getHeight() && isBandResizeEnabled){

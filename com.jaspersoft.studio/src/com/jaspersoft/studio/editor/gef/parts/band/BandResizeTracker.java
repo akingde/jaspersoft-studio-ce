@@ -16,13 +16,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import net.sf.jasperreports.engine.JRBand;
-import net.sf.jasperreports.engine.JROrigin;
-import net.sf.jasperreports.engine.design.JRDesignBand;
-import net.sf.jasperreports.engine.design.JRDesignGroup;
-import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.type.BandTypeEnum;
-
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.PositionConstants;
@@ -48,6 +41,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 
 import com.jaspersoft.studio.JSSCompoundCommand;
+import com.jaspersoft.studio.utils.ModelUtils;
 
 /*
  * The Class BandResizeTracker.
@@ -336,110 +330,6 @@ public class BandResizeTracker extends SimpleDragTracker {
 		return command.unwrap();
 	}
 	
-	 /**
-   * This method summarize the JasperReports rules for bands height.
-   * The real check should be done by the JRVerifier class, probably
-   * we should move that code there providing a similar static method.
-   * 
-   * @param b
-   * @param jd
-   * @return
-   */
-  public static int getMaxBandHeight(JRDesignBand b, JasperDesign jd)
-  {
-      if (b == null || jd == null) return 0;
-      
-      JROrigin origin = b.getOrigin();
-      
-      int topBottomMargins = jd.getTopMargin() + jd.getBottomMargin();
-
-      if ( (origin.getBandTypeValue() == BandTypeEnum.TITLE && jd.isTitleNewPage()) ||
-           (origin.getBandTypeValue() == BandTypeEnum.SUMMARY) ||  // && jd.isSummaryNewPage()
-           origin.getBandTypeValue() == BandTypeEnum.BACKGROUND ||
-           origin.getBandTypeValue() == BandTypeEnum.NO_DATA)
-      {
-          return jd.getPageHeight() - topBottomMargins;
-      }
-      
-      int basicBandsHeight = 0;
-
-      basicBandsHeight += topBottomMargins;
-      basicBandsHeight += jd.getPageHeader() != null ? jd.getPageHeader().getHeight() : 0;
-      basicBandsHeight += jd.getColumnHeader() != null ? jd.getColumnHeader().getHeight() : 0;
-      basicBandsHeight += jd.getColumnFooter() != null ? jd.getColumnFooter().getHeight() : 0;
-
-      if (b.getOrigin().getBandTypeValue() == BandTypeEnum.LAST_PAGE_FOOTER)
-      {
-          return  jd.getPageHeight() - basicBandsHeight;
-      }
-
-      basicBandsHeight += jd.getPageFooter() != null ? jd.getPageFooter().getHeight() : 0;
-
-      int heighestGroupHeader = 0;
-      int heighestGroupFooter = 0;
-
-      for (int i=0; i<jd.getGroupsList().size(); ++i)
-      {
-          JRDesignGroup grp = (JRDesignGroup)jd.getGroupsList().get(i);
-          JRBand[] bands = grp.getGroupHeaderSection().getBands();
-          for (int k=0; bands != null && k<bands.length; ++k)
-          {
-              heighestGroupHeader = Math.max(heighestGroupHeader, bands[k].getHeight());
-          }
-          bands = grp.getGroupFooterSection().getBands();
-          for (int k=0; bands != null && k<bands.length; ++k)
-          {
-              heighestGroupFooter = Math.max(heighestGroupFooter, bands[k].getHeight());
-          }
-      }
-
-      if (b.getOrigin().getBandTypeValue() == BandTypeEnum.TITLE)
-      {
-          return  jd.getPageHeight() - basicBandsHeight - Math.max(heighestGroupFooter, heighestGroupHeader);
-      }
-
-      if (b.getOrigin().getBandTypeValue() == BandTypeEnum.DETAIL)
-      {
-          return jd.getPageHeight() - basicBandsHeight;
-      }
-
-      int titleHeight = jd.getTitle() != null ? jd.getTitle().getHeight() : 0;
-      if (jd.isTitleNewPage()) titleHeight = 0;
-
-      if (origin.getBandTypeValue() == BandTypeEnum.GROUP_FOOTER ||
-          origin.getBandTypeValue() == BandTypeEnum.GROUP_HEADER)
-      {
-          return jd.getPageHeight() - basicBandsHeight - titleHeight;
-      }
-
-      //int summaryHeight = jd.getSummary() != null ? jd.getSummary().getHeight() : 0;
-      //if (!jd.isSummaryNewPage()) basicBandsHeight += summaryHeight;
-
-      int detailHeight = 0;
-
-      if (jd.getDetailSection() != null)
-      {
-          JRBand[] bandsList = jd.getDetailSection().getBands();
-          for (int k=0; bandsList != null && k<bandsList.length; ++k)
-          {
-              detailHeight = Math.max(detailHeight,bandsList[k].getHeight());
-          }
-      }
-
-      int maxAlternativeSection = Math.max( detailHeight,  Math.max(heighestGroupFooter, heighestGroupHeader) + titleHeight);
-
-      basicBandsHeight += maxAlternativeSection;
-
-      int res = jd.getPageHeight() - basicBandsHeight + b.getHeight();
-      res = Math.min(res, jd.getPageHeight()-topBottomMargins);
-      res = Math.max(res, 0);
-
-      // Calcolate the design page without extra bands and the current band...
-      return res;
-  }
-	
-
-	
   /**
    * Update the request and freeze the drag when it has reached it maximum dimension
    * @return true if the drag can continue, false otherwise
@@ -450,7 +340,7 @@ public class BandResizeTracker extends SimpleDragTracker {
 		BandEditPart part = (BandEditPart) getOperationSet().get(0);
 		IFigure figure = part.getFigure();
 		int newValue = figure.getBounds().height + request.getSizeDelta().height;
-		int maxBandHeight = getMaxBandHeight(part.getBand(),part.getJasperDesign());
+		int maxBandHeight = ModelUtils.getMaxBandHeight(part.getBand(),part.getJasperDesign());
 		boolean inBoundContidion = newValue > 0 && newValue <= maxBandHeight;
 		if (d.height<0 || inBoundContidion){
 			int differences = (d.height + figure.getBounds().height) - maxBandHeight;
