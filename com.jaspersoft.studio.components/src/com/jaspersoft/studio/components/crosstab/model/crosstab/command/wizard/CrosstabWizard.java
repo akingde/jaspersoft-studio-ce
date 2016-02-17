@@ -131,62 +131,8 @@ public class CrosstabWizard extends JSSWizard {
 	 */
 	@Override
 	public IWizardPage getNextPage(IWizardPage page) {
-
-		// Nothing to do. If you change this method, please update the
-		// comment.
-
+		// Nothing to do. If you change this method, please update the comment
 		return super.getNextPage(page);
-	}
-
-	private void setupColumns() {
-		List<Object> m;
-
-		// FIXME: this stuff must be rewritten due to the way we collect the
-		// set of fields...
-		//
-		// if (step4.getFields() != null && step3.getInFields() != null) {
-		// m = new ArrayList<Object>();
-		// for (Object f : step3.getInFields()) {
-		// JRDesignCrosstabColumnGroup cg = (JRDesignCrosstabColumnGroup) f;
-		// boolean skip = false;
-		// for (Object obj : step4.getFields()) {
-		// JRDesignCrosstabRowGroup rg = (JRDesignCrosstabRowGroup) obj;
-		// if (cg.getBucket().getExpression().getText()
-		// .equals(rg.getBucket().getExpression().getText())) {
-		// skip = true;
-		// break;
-		// }
-		// }
-		// if (!skip)
-		// m.add(cg);
-		// }
-		// step3.setFields(m);
-		// }
-	}
-
-	private void setupRows() {
-		List<Object> m;
-
-		// FIXME: this stuff must be rewritten due to the way we collect the
-		// set of fields...
-		// if (step3.getFields() != null && step4.getInFields() != null) {
-		// m = new ArrayList<Object>();
-		// for (Object f : step4.getInFields()) {
-		// JRDesignCrosstabRowGroup cg = (JRDesignCrosstabRowGroup) f;
-		// boolean skip = false;
-		// for (Object obj : step3.getFields()) {
-		// JRDesignCrosstabColumnGroup rg = (JRDesignCrosstabColumnGroup) obj;
-		// if (cg.getBucket().getExpression().getText()
-		// .equals(rg.getBucket().getExpression().getText())) {
-		// skip = true;
-		// break;
-		// }
-		// }
-		// if (!skip)
-		// m.add(cg);
-		// }
-		// step4.setFields(m);
-		// }
 	}
 
 	@SuppressWarnings("unchecked")

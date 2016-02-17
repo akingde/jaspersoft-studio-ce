@@ -17,13 +17,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.jasperreports.crosstabs.JRCrosstabBucket;
-import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabBucket;
-import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabColumnGroup;
-import net.sf.jasperreports.crosstabs.type.CrosstabTotalPositionEnum;
-import net.sf.jasperreports.engine.analytics.dataset.BucketOrder;
-import net.sf.jasperreports.engine.type.SortOrderEnum;
-
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
@@ -49,6 +42,13 @@ import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.utils.EnumHelper;
 import com.jaspersoft.studio.wizards.JSSWizard;
 import com.jaspersoft.studio.wizards.fields.StaticWizardFieldsPage;
+
+import net.sf.jasperreports.crosstabs.JRCrosstabBucket;
+import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabBucket;
+import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabColumnGroup;
+import net.sf.jasperreports.crosstabs.type.CrosstabTotalPositionEnum;
+import net.sf.jasperreports.engine.analytics.dataset.BucketOrder;
+import net.sf.jasperreports.engine.type.SortOrderEnum;
 
 public class CrosstabWizardColumnPage extends StaticWizardFieldsPage {
 
@@ -246,16 +246,10 @@ public class CrosstabWizardColumnPage extends StaticWizardFieldsPage {
 
 		viewer.setCellEditors(new CellEditor[] {
 				new TextCellEditor(parent),
-				new ComboBoxCellEditor(parent, EnumHelper.getEnumNames(
-						SortOrderEnum.values(), NullEnum.NOTNULL),
-						SWT.READ_ONLY),
-				new ComboBoxCellEditor(parent, EnumHelper.getEnumNames(
-						CrosstabTotalPositionEnum.values(), NullEnum.NOTNULL),
-						SWT.READ_ONLY),
-				new ComboBoxCellEditor(parent, AgregationFunctionEnum
-						.getStringValues(), SWT.READ_ONLY) });
-		viewer.setColumnProperties(new String[] { F_NAME, F_ORDER,
-				F_TOTALPOSITION, F_CALCULATION });
+				new ComboBoxCellEditor(parent, EnumHelper.getEnumNames(SortOrderEnum.values(), NullEnum.NOTNULL),SWT.READ_ONLY),
+				new ComboBoxCellEditor(parent, EnumHelper.getEnumNames(CrosstabTotalPositionEnum.values(), NullEnum.NOTNULL),SWT.READ_ONLY),
+				new ComboBoxCellEditor(parent, AgregationFunctionEnum.getStringValues(), SWT.READ_ONLY) });
+		viewer.setColumnProperties(new String[] { F_NAME, F_ORDER, F_TOTALPOSITION, F_CALCULATION });
 	}
 
 	/**

@@ -9,6 +9,7 @@
 package com.jaspersoft.studio.utils;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import net.sf.jasperreports.engine.type.NamedEnum;
@@ -53,6 +54,23 @@ public class EnumHelper {
 		return res.toArray(new String[res.size()]);
 	}
 
+	/**
+	 * Return a map of all the enum value associated with the localized value in human language 
+	 * 
+	 * @param namedEnum the enum to convert in message
+	 * @param nullable the value of the nullable, if it is different from to Not null then also the nullable
+	 * value is added to the map
+	 * @return a not null hash map, the key is the enum value, the value is the textual representation
+	 */
+	public static LinkedHashMap<Object, String> getEnumMapNames(NamedEnum[] namedEnum, NullEnum nullable) {
+		LinkedHashMap<Object, String> res = new LinkedHashMap<Object, String>();
+		if (nullable != NullEnum.NOTNULL)
+			res.put(NullEnum.NOTNULL, nullable.getName());
+		for (int i = 0; i < namedEnum.length; i++)
+			res.put(namedEnum[i], MessagesByKeys.getString(namedEnum[i].getName()));
+		return res;
+	}
+	
 	/**
 	 * 
 	 * @param namedEnum
