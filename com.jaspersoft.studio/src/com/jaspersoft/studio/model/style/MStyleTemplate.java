@@ -121,6 +121,13 @@ public class MStyleTemplate extends APropertyNode implements IPropertySource, IC
 			iconDescriptor = new NodeIconDescriptor("styletemplate"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
+	
+	/**
+	 * Empty constructor used by the palett builder, do not remove
+	 */
+	public MStyleTemplate(){
+		
+	}
 
 	/**
 	 * Instantiates a new m style template.
