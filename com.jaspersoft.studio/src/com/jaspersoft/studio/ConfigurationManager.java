@@ -28,10 +28,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.eclipse.util.FileUtils;
-import net.sf.jasperreports.engine.util.JRXmlUtils;
-
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -47,6 +44,10 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.util.KeyValue;
 import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 import com.jaspersoft.studio.statistics.IFirstStartupAction;
+
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.engine.util.JRXmlUtils;
 
 /**
  * Provide the methods to retrieve the installation path of the application, the path is cached after the first request.
@@ -698,5 +699,12 @@ public class ConfigurationManager {
 			}
 		}
 		return false;
+	}
+	
+	/**
+	 * @return the current workspace location
+	 */
+	public static String getCurrentWorkspaceLocation() {
+		return ResourcesPlugin.getWorkspace().getRoot().getLocation().toString();
 	}
 }
