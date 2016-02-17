@@ -369,7 +369,7 @@ public class MarkersPropertyDescriptor extends AItemDataListPropertyDescriptor {
 				@Override
 				protected void createValues(Composite cmp) {
 					Label lbl = createCenteredLabel(cmp);
-					lbl.setText(com.jaspersoft.studio.messages.Messages.MapSection_1);
+					lbl.setText(Messages.MapSection_1);
 
 					createItemProperty(cmp, MapComponent.ITEM_PROPERTY_latitude);
 					createItemProperty(cmp, MapComponent.ITEM_PROPERTY_longitude);

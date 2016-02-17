@@ -437,7 +437,7 @@ public class PathPropertyDescriptor extends AItemDataListPropertyDescriptor {
 					createItemProperty(cmp, MapComponent.ITEM_PROPERTY_name);
 
 					Label lbl = createCenteredLabel(cmp);
-					lbl.setText(com.jaspersoft.studio.messages.Messages.MapSection_1);
+					lbl.setText(Messages.MapSection_1);
 
 					createItemProperty(cmp, MapComponent.ITEM_PROPERTY_latitude);
 					createItemProperty(cmp, MapComponent.ITEM_PROPERTY_longitude);

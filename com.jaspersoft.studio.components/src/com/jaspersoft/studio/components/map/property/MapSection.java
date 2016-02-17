@@ -77,7 +77,7 @@ public class MapSection extends AbstractSection {
 	 * with two columns
 	 */
 	protected void createEditButton(Composite parent){
-		Button mapPickSuggestion = new Button(parent, SWT.BORDER);
+		Button mapPickSuggestion = new Button(parent, SWT.PUSH | SWT.FLAT);
 		mapPickSuggestion.setText(Messages.MapSection_buttonText);
 		mapPickSuggestion.setToolTipText(Messages.MapSection_buttonTooltip);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
