@@ -42,6 +42,7 @@ public class Messages extends NLS {
 	public static String PickWorkspaceDialog_InfoMsg;
 	public static String PickWorkspaceDialog_NewDirectoryTitle;
 	public static String PickWorkspaceDialog_PathIsNotDirMsg;
+	public static String PickWorkspaceDialog_SameWorkspaceErrorMsg;
 	public static String PickWorkspaceDialog_SameWSMsg;
 	public static String PickWorkspaceDialog_SelectionMsg;
 	public static String PickWorkspaceDialog_SelectWSRootMsg;

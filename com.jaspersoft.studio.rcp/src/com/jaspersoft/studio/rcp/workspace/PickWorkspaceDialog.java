@@ -26,6 +26,8 @@ import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -39,7 +41,10 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 
+import com.jaspersoft.studio.ConfigurationManager;
 import com.jaspersoft.studio.rcp.messages.Messages;
+
+import net.sf.jasperreports.eclipse.util.FileUtils;
 
 /**
  * Dialog for picking the folder that will be used as workspace for Jaspersoft Studio.
@@ -152,6 +157,14 @@ public class PickWorkspaceDialog extends TitleAreaDialog {
                 wsRoot = getWorkspacePathSuggestion();
             }
             workspacePathCombo.setText(wsRoot == null ? "" : wsRoot); //$NON-NLS-1$
+            workspacePathCombo.addModifyListener(new ModifyListener() {
+				@Override
+				public void modifyText(ModifyEvent e) {
+					// no need for live check, we'll do it when hitting OK button
+					// let's be sure the status message is clean
+					setMessage(DIALOG_MSG);
+				}
+			});
 
             String lastUsed = preferences.get(E4_KEY_LAST_USED_WORKSPACES, ""); //$NON-NLS-1$
             lastUsedWorkspaces = new ArrayList<String>();
@@ -304,7 +317,12 @@ public class PickWorkspaceDialog extends TitleAreaDialog {
             setMessage(ret, IMessageProvider.ERROR);
             return;
         }
-
+        
+        if(FileUtils.isSameLocation(str,ConfigurationManager.getCurrentWorkspaceLocation())){
+        	setMessage(Messages.PickWorkspaceDialog_SameWorkspaceErrorMsg, IMessageProvider.ERROR);
+        	return;
+        }
+        
         // save it so we can show it in combo later
         lastUsedWorkspaces.remove(str);
 
