@@ -58,7 +58,6 @@ import com.jaspersoft.studio.model.APropertyNode;
 							//Use actual and current value to check if a value is inherited or not
 							Object currentValue = element.getPropertyActualValue(key);
 							Object ownValue = element.getPropertyValue(key);
-							if (ownValue != null)
 							widgets.get(key).setData(element, currentValue, ownValue);
 						}
 					}
