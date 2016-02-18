@@ -18,14 +18,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
-import net.sf.jasperreports.eclipse.util.FileUtils;
-import net.sf.jasperreports.engine.JRExpression;
-import net.sf.jasperreports.engine.JRReportTemplate;
-import net.sf.jasperreports.engine.JRStyle;
-import net.sf.jasperreports.engine.design.JRDesignReportTemplate;
-import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.design.events.JRChangeEventsSupport;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
@@ -43,6 +35,15 @@ import com.jaspersoft.studio.model.style.MStyleTemplate;
 import com.jaspersoft.studio.model.style.StyleTemplateFactory;
 import com.jaspersoft.studio.utils.ExpressionUtil;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
+import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.engine.JRExpression;
+import net.sf.jasperreports.engine.JRReportTemplate;
+import net.sf.jasperreports.engine.JRStyle;
+import net.sf.jasperreports.engine.JRTemplateReference;
+import net.sf.jasperreports.engine.design.JRDesignReportTemplate;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.design.events.JRChangeEventsSupport;
 
 /**
  * Class that caches the external styles to improve the performance when resolving their names
@@ -196,7 +197,7 @@ public class ExternalStylesManager {
 	 * @param event the text of the event, should be STYLE_NOT_FOUND_EVENT or STYLE_FOUND_EVENT
 	 * @param element JRelement of the template style
 	 */
-	private static void fireEvent(String event, JRReportTemplate element){
+	private static void fireEvent(String event, Object element){
 		if (element instanceof JRChangeEventsSupport){
 			JRChangeEventsSupport eventElement = (JRChangeEventsSupport)element;
 			eventElement.getEventSupport().firePropertyChange(event, null, null);
@@ -249,8 +250,10 @@ public class ExternalStylesManager {
 	 * 
 	 * @param template a template style element, the value inside the model must be an
 	 * instance of JRDesignReportTemplate
+	 * @param fireEvents true if the reloaded styles should be notified with an event when the load
+	 * operation ends, false otherwise
 	 */
-	public static void refreshStyle(ANode template){
+	protected static void refreshStyle(ANode template, boolean fireEvents){
 		JasperReportsConfiguration jConf = template.getJasperConfiguration();
 		IFile project = (IFile) jConf.get(FileUtils.KEY_FILE);
 		String projectPath = project.getLocation().toPortableString();
@@ -268,13 +271,51 @@ public class ExternalStylesManager {
 				List<JRStyle> cachedStyles = new ArrayList<JRStyle>();
 				StyleTemplateFactory.getStylesReference(project, evaluatedExpression, cachedStyles, new HashSet<File>());
 				externalStylesCache.put(key, cachedStyles);
-				fireEvent(STYLE_FOUND_EVENT, jrTemplate);
+				if (fireEvents) fireEvent(STYLE_FOUND_EVENT, jrTemplate);
 			} else {
 				JRExpression styleExpression = jrTemplate.getSourceExpression();
 				String expString = styleExpression != null ? styleExpression.getText() : "";
 				addNotValuableExpression(projectPath, expString);
 				fireEvent(STYLE_NOT_FOUND_EVENT, jrTemplate);
 			}
+		}
+	}
+	
+	/**
+	 * Reload a style, ignoring if it expression was already evaluated before
+	 * 
+	 * @param template a template style element, the value inside the model must be an
+	 * instance of JRDesignReportTemplate
+	 */
+	public static void refreshStyle(ANode template){
+		refreshStyle(template, true);
+	}
+	
+	/**
+	 * Reload a style reference (so doesn't need to resolve the expression) and update the styles
+	 * map
+	 * 
+	 * @param template a template style element, the value inside the model must be an
+	 * instance of JRDesignReportTemplate
+	 * @param parent the parten template style if this reference is contained into it, otherwise null
+	 */
+	public static void refreshStyleReference(ANode template, MStyleTemplate parent){
+		JasperReportsConfiguration jConf = template.getJasperConfiguration();
+		IFile project = (IFile) jConf.get(FileUtils.KEY_FILE);
+		
+		JRTemplateReference jrTemplate = (JRTemplateReference) template.getValue();
+		String location = jrTemplate.getLocation();
+		if (location != null) {
+			File styleFile = StyleTemplateFactory.getFile(location, project);
+			if (styleFile != null) {
+				List<JRStyle> cachedStyles = new ArrayList<JRStyle>();
+				StyleTemplateFactory.getStylesReference(project, location, cachedStyles, new HashSet<File>());
+				if (parent != null){
+					//if the reference is contained into a template force the reload of the cache
+					refreshStyle(parent, false);
+				}
+				fireEvent(STYLE_FOUND_EVENT, jrTemplate);
+			} 
 		}
 	}
 	

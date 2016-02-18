@@ -101,11 +101,7 @@ public class CreateStyleTemplateCommand extends Command {
 	 */
 	private String getStylePath(IFile styleFile){
 		IFile reportFile = (IFile) jConfig.get(FileUtils.KEY_FILE);
-		if (reportFile != null){
-			if (reportFile.getParent().equals(styleFile.getParent())) return styleFile.getName();
-			else if (reportFile.getProject().equals(styleFile.getProject())) return styleFile.getProjectRelativePath().toPortableString();
-		}
-	 return styleFile.getRawLocation().makeAbsolute().toOSString();
+		return FileUtils.getFileRelativePath(reportFile, styleFile);
 	}
 	
 	/**

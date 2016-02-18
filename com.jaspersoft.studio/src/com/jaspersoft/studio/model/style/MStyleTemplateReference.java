@@ -12,12 +12,13 @@
  ******************************************************************************/
 package com.jaspersoft.studio.model.style;
 
+import java.beans.PropertyChangeEvent;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.jasperreports.engine.JRConstants;
-import net.sf.jasperreports.engine.JRTemplateReference;
-
+import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource;
@@ -26,9 +27,16 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.ICopyable;
+import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRTemplateReference;
 
 /*
  * The Class MStyleTemplateReference.
@@ -173,4 +181,40 @@ public class MStyleTemplateReference extends APropertyNode implements IPropertyS
 		return false;
 	}
 
+	/**
+	 * Since the style don't see when its children are updated (because the the relation between 
+	 * style template and its inner styles is done only by our model, not by the jr structure). So
+	 * when we add children to a style JR don't fire any event. Because of this to have a graphical 
+	 * Refresh we must fire the event manually to have the update and see the children 
+	 */
+	private void fireChildrenChangeEvent(){
+		//Need to be executed inside the graphic thread
+		UIUtils.getDisplay().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				PropertyChangeEvent event = new PropertyChangeEvent(this, "refresh", null, null);
+				getPropertyChangeSupport().firePropertyChange(event);
+			}
+		});
+	}
+	
+	/**
+	 * Refresh the children of a template style by reloading them
+	 */
+	public void refreshChildren(){
+		JasperReportsConfiguration jConf = getJasperConfiguration();
+		IFile project = (IFile) jConf.get(FileUtils.KEY_FILE);
+		JRTemplateReference jrTemplate = (JRTemplateReference) getValue();
+		
+		//Clear the old children
+		for(INode child : new ArrayList<INode>(getChildren())){
+			((ANode)child).setParent(null, -1);
+		}
+		getChildren().clear();
+		
+		StyleTemplateFactory.createTemplateReference(this, jrTemplate.getLocation(), -1, new HashSet<String>(), false, project);
+		fireChildrenChangeEvent();
+	}
+	
+	
 }

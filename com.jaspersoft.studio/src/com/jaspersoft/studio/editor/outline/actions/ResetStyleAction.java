@@ -63,6 +63,7 @@ public class ResetStyleAction extends ACachedSelectionAction {
 		List<Object> styles = editor.getSelectionCache().getSelectionModelForType(MStyle.class);
 		for (Object rawStyle : styles){
 			MStyle style = (MStyle)rawStyle;
+			commands.setReferenceNodeIfNull(style);
 			Command resetCommand = null;
 			if (style.getValue() instanceof JRDesignStyle) resetCommand = new ResetStyleCommand(style);
 			else resetCommand = new ResetConditionalStyleCommand(style.getJasperDesign(), style);

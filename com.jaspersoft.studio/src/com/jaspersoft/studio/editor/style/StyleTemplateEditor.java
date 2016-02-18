@@ -27,6 +27,9 @@ import com.jaspersoft.studio.editor.AGraphicEditor;
 import com.jaspersoft.studio.editor.outline.JDReportOutlineView;
 import com.jaspersoft.studio.editor.outline.actions.CreateStyleAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateStyleTemplateReferenceAction;
+import com.jaspersoft.studio.editor.outline.actions.RefreshTemplateStyleExpression;
+import com.jaspersoft.studio.editor.outline.actions.RefreshTemplateStyleReference;
+import com.jaspersoft.studio.editor.outline.actions.ResetStyleAction;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /*
@@ -52,6 +55,15 @@ public class StyleTemplateEditor extends AGraphicEditor {
 				bars.setGlobalActionHandler(id, registry.getAction(id));
 
 				id = CreateStyleAction.ID;
+				bars.setGlobalActionHandler(id, registry.getAction(id));
+				
+				id = RefreshTemplateStyleExpression.ID;
+				bars.setGlobalActionHandler(id, registry.getAction(id));
+				
+				id = RefreshTemplateStyleReference.ID;
+				bars.setGlobalActionHandler(id, registry.getAction(id));
+				
+				id = ResetStyleAction.ID;
 				bars.setGlobalActionHandler(id, registry.getAction(id));
 			}
 
@@ -84,6 +96,18 @@ public class StyleTemplateEditor extends AGraphicEditor {
 		action = new DirectEditAction(this);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
+
+		action = new RefreshTemplateStyleExpression(this);
+		registry.registerAction(action);
+		selectionActions.add(RefreshTemplateStyleExpression.ID);
+		
+		action = new RefreshTemplateStyleReference(this);
+		registry.registerAction(action);
+		selectionActions.add(RefreshTemplateStyleReference.ID);
+		
+		action = new ResetStyleAction(this);
+		registry.registerAction(action);
+		selectionActions.add(ResetStyleAction.ID);
 
 	}
 

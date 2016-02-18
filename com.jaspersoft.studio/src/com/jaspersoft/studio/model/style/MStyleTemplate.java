@@ -13,15 +13,10 @@
 package com.jaspersoft.studio.model.style;
 
 import java.beans.PropertyChangeEvent;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.eclipse.util.FileUtils;
-import net.sf.jasperreports.engine.JRConstants;
-import net.sf.jasperreports.engine.JRReportTemplate;
-import net.sf.jasperreports.engine.JRStyle;
-import net.sf.jasperreports.engine.design.JRDesignReportTemplate;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -38,12 +33,18 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.ICopyable;
+import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
-import com.jaspersoft.studio.model.util.ReportFactory;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRReportTemplate;
+import net.sf.jasperreports.engine.design.JRDesignReportTemplate;
 
 /**
  * The Class MStyleTemplate. It will also listen on the change of the style expression to reload
@@ -231,7 +232,6 @@ public class MStyleTemplate extends APropertyNode implements IPropertySource, IC
 				getPropertyChangeSupport().firePropertyChange(event);
 			}
 		});
-
 	}
 	
 	/**
@@ -241,17 +241,17 @@ public class MStyleTemplate extends APropertyNode implements IPropertySource, IC
 		JasperReportsConfiguration jConf = getJasperConfiguration();
 		IFile project = (IFile) jConf.get(FileUtils.KEY_FILE);
 		JRDesignReportTemplate jrTemplate = (JRDesignReportTemplate) getValue();
-		getChildren().clear();
-		List<JRStyle> styles = ExternalStylesManager.getStyles(jrTemplate, project, jConf);
 		
-		for (JRStyle s : styles) {
-			APropertyNode n = (APropertyNode) ReportFactory.createNode(getActualStyle(), s, -1);
-			n.setEditable(false);
+		//Clear the old children
+		for(INode child : new ArrayList<INode>(getChildren())){
+			((ANode)child).setParent(null, -1);
 		}
+		getChildren().clear();
+		
+		String path = ExternalStylesManager.evaluateStyleExpression(jrTemplate, project, jConf);
+		StyleTemplateFactory.createTemplateReference(this, path, -1, new HashSet<String>(), false, project);
 		fireChildrenChangeEvent();
 	}
-
-
 	
 	/**
 	 * Job to update the panel UI when expression text changes or

@@ -36,6 +36,8 @@ import com.jaspersoft.studio.model.style.StyleTemplateFactory;
 
 public class JRtxEditor extends AMultiEditor implements CachedSelectionProvider {
 
+	private StyleTemplateEditor styleEditor;
+	
 	/**
 	 * The selection cache
 	 */
@@ -90,8 +92,6 @@ public class JRtxEditor extends AMultiEditor implements CachedSelectionProvider 
 		createPage0();
 		createPageXML();
 	}
-
-	private StyleTemplateEditor styleEditor;
 
 	/**
 	 * Creates page 1 of the multi-page editor, which allows you to change the font used in page 2.

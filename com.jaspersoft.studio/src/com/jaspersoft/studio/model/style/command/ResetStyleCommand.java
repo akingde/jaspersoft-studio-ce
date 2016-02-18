@@ -12,14 +12,14 @@
  ******************************************************************************/
 package com.jaspersoft.studio.model.style.command;
 
+import org.eclipse.gef.commands.Command;
+
+import com.jaspersoft.studio.model.style.MStyle;
+
 import net.sf.jasperreports.engine.JRLineBox;
 import net.sf.jasperreports.engine.JRPen;
 import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
-
-import org.eclipse.gef.commands.Command;
-
-import com.jaspersoft.studio.model.style.MStyle;
 
 /**
  * Command that set the attributes of a style to the default values. Support the undo

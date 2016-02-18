@@ -57,6 +57,7 @@ import com.jaspersoft.studio.editor.outline.actions.CreateVariableAction;
 import com.jaspersoft.studio.editor.outline.actions.DeleteGroupReportAction;
 import com.jaspersoft.studio.editor.outline.actions.ExportStyleAsTemplateAction;
 import com.jaspersoft.studio.editor.outline.actions.RefreshTemplateStyleExpression;
+import com.jaspersoft.studio.editor.outline.actions.RefreshTemplateStyleReference;
 import com.jaspersoft.studio.editor.outline.actions.ResetStyleAction;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.IContainer;
@@ -171,6 +172,9 @@ public class ReportEditor extends AbstractVisualEditor {
 					bars.setGlobalActionHandler(id, registry.getAction(id));
 					
 					id = RefreshTemplateStyleExpression.ID;
+					bars.setGlobalActionHandler(id, registry.getAction(id));
+
+					id = RefreshTemplateStyleReference.ID;
 					bars.setGlobalActionHandler(id, registry.getAction(id));
 					
 					id = ResetStyleAction.ID;

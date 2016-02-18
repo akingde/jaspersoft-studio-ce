@@ -79,6 +79,7 @@ import com.jaspersoft.studio.editor.outline.actions.CreateVariableAction;
 import com.jaspersoft.studio.editor.outline.actions.DeleteGroupReportAction;
 import com.jaspersoft.studio.editor.outline.actions.ExportStyleAsTemplateAction;
 import com.jaspersoft.studio.editor.outline.actions.RefreshTemplateStyleExpression;
+import com.jaspersoft.studio.editor.outline.actions.RefreshTemplateStyleReference;
 import com.jaspersoft.studio.editor.outline.actions.ResetStyleAction;
 import com.jaspersoft.studio.editor.report.ReportContainer;
 import com.jaspersoft.studio.editor.tools.CreateCompositeElementAction;
@@ -296,6 +297,10 @@ public class AppContextMenuProvider extends AContextMenuProvider {
 			menu.appendToGroup(GEFActionConstants.GROUP_ADD, action);
 		
 		action = getActionRegistry().getAction(RefreshTemplateStyleExpression.ID);
+		if (action != null && action.isEnabled())
+			menu.appendToGroup(GEFActionConstants.GROUP_ADD, action);
+
+		action = getActionRegistry().getAction(RefreshTemplateStyleReference.ID);
 		if (action != null && action.isEnabled())
 			menu.appendToGroup(GEFActionConstants.GROUP_ADD, action);
 		

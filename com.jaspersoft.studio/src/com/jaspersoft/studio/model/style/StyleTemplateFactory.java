@@ -87,8 +87,7 @@ public class StyleTemplateFactory {
 		return SelectionHelper.getFileResolver(file).resolveFile(location);
 	}
 
-	public static void createTemplateReference(ANode parent, String location, int newIndex, Set<String> set,
-			boolean editable, IFile file) {
+	public static void createTemplateReference(ANode parent, String location, int newIndex, Set<String> set, boolean editable, IFile file) {
 		if (file == null)
 			return;
 		File fileToBeOpened = getFile(location, file);

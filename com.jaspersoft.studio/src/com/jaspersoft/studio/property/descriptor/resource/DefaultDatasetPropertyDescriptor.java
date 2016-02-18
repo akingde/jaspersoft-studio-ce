@@ -17,7 +17,6 @@ import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.help.HelpSystem;
 import com.jaspersoft.studio.model.MReport;
@@ -48,9 +47,9 @@ public class DefaultDatasetPropertyDescriptor extends NTextPropertyDescriptor {
 	 * @author Orlandin Marco
 	 * 
 	 */
-	private class SPDatasetWidget extends SPResourceType {
+	private class SPDatasetWidget extends SPResourceType<DefaultDatasetPropertyDescriptor> {
 
-		public SPDatasetWidget(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
+		public SPDatasetWidget(Composite parent, AbstractSection section, DefaultDatasetPropertyDescriptor pDescriptor) {
 			super(parent, section, pDescriptor);
 		}
 
@@ -93,8 +92,8 @@ public class DefaultDatasetPropertyDescriptor extends NTextPropertyDescriptor {
 		return editor;
 	}
 
-	public ASPropertyWidget<?> createWidget(Composite parent, AbstractSection section) {
-		ASPropertyWidget<?> textWidget = new SPDatasetWidget(parent, section, this);
+	public ASPropertyWidget<DefaultDatasetPropertyDescriptor> createWidget(Composite parent, AbstractSection section) {
+		ASPropertyWidget<DefaultDatasetPropertyDescriptor> textWidget = new SPDatasetWidget(parent, section, this);
 		return textWidget;
 	}
 	

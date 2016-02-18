@@ -28,7 +28,7 @@ import com.jaspersoft.studio.model.style.MStylesTemplate;
 public class CreateStyleTemplateReferenceAction extends ACreateAndSelectAction {
 
 	/** The Constant ID. */
-	public static final String ID = "create_style_templ_reference"; //$NON-NLS-1$
+	public static final String ID = "create_style_template_reference"; //$NON-NLS-1$
 
 	/**
 	 * Constructs a <code>CreateAction</code> using the specified part.

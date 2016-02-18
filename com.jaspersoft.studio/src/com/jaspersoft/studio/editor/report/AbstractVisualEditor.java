@@ -132,6 +132,7 @@ import com.jaspersoft.studio.editor.outline.actions.CreateStyleTemplateAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateVariableAction;
 import com.jaspersoft.studio.editor.outline.actions.ExportStyleAsTemplateAction;
 import com.jaspersoft.studio.editor.outline.actions.RefreshTemplateStyleExpression;
+import com.jaspersoft.studio.editor.outline.actions.RefreshTemplateStyleReference;
 import com.jaspersoft.studio.editor.outline.actions.ResetStyleAction;
 import com.jaspersoft.studio.editor.outline.page.MultiOutlineView;
 import com.jaspersoft.studio.editor.palette.JDPaletteFactory;
@@ -667,6 +668,10 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		action = new RefreshTemplateStyleExpression(this);
 		registry.registerAction(action);
 		selectionActions.add(RefreshTemplateStyleExpression.ID);
+		
+		action = new RefreshTemplateStyleReference(this);
+		registry.registerAction(action);
+		selectionActions.add(RefreshTemplateStyleReference.ID);
 	}
 
 	/*
