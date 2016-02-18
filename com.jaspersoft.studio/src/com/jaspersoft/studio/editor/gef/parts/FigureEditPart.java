@@ -142,13 +142,15 @@ public class FigureEditPart extends AJDEditPart implements PropertyChangeListene
 	public void performRequest(Request req) {
 		if (RequestConstants.REQ_OPEN.equals(req.getType()) && req instanceof SelectionRequest) {
 			Point r = ((SelectionRequest) req).getLocation();
+
+			Point tr = figure.getBounds().getTopRight();
+			figure.translateToAbsolute(tr);
 			if (figure instanceof ComponentFigure && ((ComponentFigure) figure).getDecorator(ErrorDecorator.class) != null
-					&& figure.getBounds().getTopRight().getDistance(r) < 20) {
+					&& tr.getDistance(r) < 20) {
 				ErrorDecorator dec = (ErrorDecorator) ((ComponentFigure) figure).getDecorator(ErrorDecorator.class);
 
-				r = figure.getBounds().getTopRight();
 				org.eclipse.swt.graphics.Point p = getViewer().getControl()
-						.toDisplay(new org.eclipse.swt.graphics.Point(r.x, r.y));
+						.toDisplay(new org.eclipse.swt.graphics.Point(tr.x, tr.y));
 				p.y = p.y - ErrorsDialog.hof;
 				new ErrorsDialog().createDialog(null, p, dec.getErrorMessages());
 
