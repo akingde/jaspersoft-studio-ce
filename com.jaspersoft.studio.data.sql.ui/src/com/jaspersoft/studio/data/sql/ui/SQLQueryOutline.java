@@ -25,7 +25,9 @@ import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
@@ -113,6 +115,24 @@ public class SQLQueryOutline {
 				isRefresh = false;
 			}
 		};
+		treeViewer.getTree().addKeyListener(new KeyAdapter() {
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+				ISelection s = treeViewer.getSelection();
+				List<Object> lst = new ArrayList<Object>();
+				if (s instanceof TreeSelection) {
+					for (TreePath tp : ((TreeSelection) s).getPaths())
+						lst.add(tp.getLastSegment());
+				}
+				Object[] sel = lst.toArray();
+				if (e.keyCode == SWT.DEL || e.keyCode == SWT.BS)
+					for (AAction act : afactory.getActions())
+						if (act != null && DeleteAction.class.isAssignableFrom(act.getClass())
+								&& act.calculateEnabled(sel))
+							act.run();
+			}
+		});
 		treeViewer.setLabelProvider(new ReportTreeLabelProvider());
 		treeViewer.setContentProvider(new ReportTreeContetProvider());
 		treeViewer.setUseHashlookup(true);
