@@ -10,7 +10,6 @@ package com.jaspersoft.studio.backward;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 
@@ -133,7 +132,7 @@ public class JRVersionPreferencesPages extends FieldEditorOverlayPage {
 
 	protected String[][] getJasperValues() {
 		List<JRDefinition> jrs = JRRuntimeDialog.getJRDefinitions();
-		Collections.reverse(jrs);
+		// Collections.reverse(jrs);
 		String[][] v = new String[jrs.size() + 2][2];
 		v[0] = new String[] { Messages.JRXmlWriterHelper_1, "last" }; //$NON-NLS-1$
 		String lv = JasperDesign.class.getPackage().getImplementationVersion();

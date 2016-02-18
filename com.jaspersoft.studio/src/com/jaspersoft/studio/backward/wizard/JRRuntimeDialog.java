@@ -166,10 +166,14 @@ public class JRRuntimeDialog extends ATitledDialog {
 		EditButton<JRDefinition> eb = new EditButton<JRDefinition>() {
 			public void setEnabled(boolean enable) {
 				StructuredSelection s = (StructuredSelection) viewer.getSelection();
-				String rurl = ((JRDefinition) s.getFirstElement()).getResourceURL();
-				if (enable && (rurl.equals(Messages.JRVersionPage_5)
-						|| rurl.startsWith(JRBackwardManager.storage.getAbsolutePath() + "/"))) //$NON-NLS-1$
+				if (s.isEmpty())
 					enable = false;
+				else {
+					String rurl = ((JRDefinition) s.getFirstElement()).getResourceURL();
+					if (enable && (rurl.equals(Messages.JRVersionPage_5)
+							|| rurl.startsWith(JRBackwardManager.storage.getAbsolutePath() + "/"))) //$NON-NLS-1$
+						enable = false;
+				}
 				super.setEnabled(enable);
 			};
 
@@ -255,7 +259,7 @@ public class JRRuntimeDialog extends ATitledDialog {
 
 	public List<JRDefinition> getVersions() {
 		List<JRDefinition> list = new ArrayList<JRDefinition>();
-		for (int i = 0; i < viewer.getTable().getItemCount(); i++) {
+		for (int i = 0; i < ((List) viewer.getInput()).size(); i++) {
 			JRDefinition d = (JRDefinition) viewer.getElementAt(i);
 			if (d.getResourceURL().equals(Messages.JRVersionPage_5))
 				continue;
