@@ -794,7 +794,8 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart
 						}
 					}
 				});
-				context = service.activateContext("com.jaspersoft.studio.context");
+				if (context == null)
+					context = service.activateContext("com.jaspersoft.studio.context");
 				break;
 			case PAGE_SOURCEEDITOR:
 				if (toXML)
@@ -810,7 +811,8 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart
 					service.deactivateContext(context);
 				break;
 			case PAGE_PREVIEW:
-				context = service.activateContext("com.jaspersoft.studio.context");
+				if (context == null)
+					context = service.activateContext("com.jaspersoft.studio.context");
 				if (activePage == PAGE_SOURCEEDITOR && !xmlFresh)
 					try {
 						xml2model();

@@ -105,7 +105,8 @@ public abstract class AMultiEditor extends MultiPageEditorPart implements IResou
 					sp.setSelection(tmpselection);
 				}
 			});
-			context = service.activateContext("com.jaspersoft.studio.context");
+			if (context == null)
+				context = service.activateContext("com.jaspersoft.studio.context");
 			break;
 		case 1:
 			if (context != null)
