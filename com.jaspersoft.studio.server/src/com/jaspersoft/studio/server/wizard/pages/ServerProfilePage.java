@@ -527,7 +527,12 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 					Object[] selection = csd.getResult();
 					if (selection != null && selection.length > 0 && selection[0] instanceof Path) {
 						sprofile.setProjectPath(((Path) selection[0]).toPortableString());
-						dbc.updateTargets();
+						try {
+							refreshing = true;
+							dbc.updateTargets();
+						} finally {
+							refreshing = false;
+						}
 					}
 				}
 			}
@@ -772,9 +777,8 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 		if (refreshing)
 			return;
 		sprofile.setWsClient(null);
-		if (drvtab != null) {
+		if (drvtab != null)
 			drvtab.dispose();
-			showServerInfo();
-		}
+		showServerInfo();
 	}
 }
