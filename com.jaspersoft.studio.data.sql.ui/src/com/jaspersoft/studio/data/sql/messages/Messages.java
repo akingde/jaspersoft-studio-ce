@@ -62,6 +62,7 @@ public class Messages extends NLS {
 	public static String DeleteAction_3;
 	public static String DeleteColumn_0;
 	public static String DeleteColumn_1;
+	public static String DeleteColumn_2;
 	public static String DeleteCommand_2;
 	public static String DeleteCommand_3;
 	public static String DeleteTable_0;

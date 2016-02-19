@@ -33,7 +33,7 @@ import com.jaspersoft.studio.model.INode;
 public class DeleteColumn extends DeleteAction<ANode> {
 
 	public DeleteColumn(SQLQueryDesigner designer, TreeViewer treeViewer) {
-		super(designer, treeViewer, Messages.DeleteColumn_0, ANode.class);
+		super(designer, treeViewer, Messages.DeleteColumn_2, ANode.class);
 	}
 
 	@Override
