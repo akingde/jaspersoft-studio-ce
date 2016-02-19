@@ -6,7 +6,7 @@
  * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
-package com.jaspersoft.studio.property.section.graphic;
+package com.jaspersoft.studio.property.section.graphic.borders;
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -20,8 +20,6 @@ import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.RGB;
@@ -48,7 +46,8 @@ import com.jaspersoft.studio.model.MLinePen;
 import com.jaspersoft.studio.properties.internal.IHighlightPropertyWidget;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
-import com.jaspersoft.studio.property.section.graphic.LineBoxDrawer.Location;
+import com.jaspersoft.studio.property.section.graphic.ASHighlightControl;
+import com.jaspersoft.studio.property.section.graphic.borders.LineBoxDrawer.Location;
 import com.jaspersoft.studio.property.section.widgets.BackgroundHighlight;
 import com.jaspersoft.studio.property.section.widgets.BorderHightLight;
 import com.jaspersoft.studio.property.section.widgets.SPLineStyleEnum;
@@ -220,25 +219,8 @@ public class BordersSection extends AbstractSection {
 		square = new Canvas(composite, SWT.BORDER | SWT.NO_REDRAW_RESIZE);
 		square.setBackground(ColorConstants.white);
 		HelpSystem.setHelp(square, BOX);
-		// The mouse down may select a border and the mouse up refresh the painting area
-		square.addMouseListener(new MouseListener() {
 
-			@Override
-			public void mouseUp(MouseEvent e) {
-				updateRightPanel();
-			}
-
-			@Override
-			public void mouseDown(MouseEvent e) {
-			}
-
-			@Override
-			public void mouseDoubleClick(MouseEvent e) {
-			}
-		});
-
-		GridData gd = new GridData(
-				GridData.FILL_VERTICAL | GridData.HORIZONTAL_ALIGN_CENTER | GridData.VERTICAL_ALIGN_CENTER);
+		GridData gd = new GridData(GridData.FILL_VERTICAL | GridData.HORIZONTAL_ALIGN_CENTER | GridData.VERTICAL_ALIGN_CENTER);
 		gd.widthHint = 120;
 		gd.heightHint = 120;
 		square.setLayoutData(gd);
@@ -246,6 +228,17 @@ public class BordersSection extends AbstractSection {
 		LightweightSystem lws = new J2DLightweightSystem();
 		lws.setControl(square);
 		bd = new LineBoxDrawer(jasperReportsContext, square);
+		bd.addBorderSelectionListener(new BorderSelectionListener() {
+			
+			@Override
+			public void borderSelected(BorderSelectionEvent event) {;
+				Float beforeSelectionWidth = getLineWidth(event.getClickedBorder());
+				if (beforeSelectionWidth == null || beforeSelectionWidth.equals(0f)){
+					changeProperty(JRBasePen.PROPERTY_LINE_WIDTH, 1f);	
+				}
+				updateRightPanel();
+			}
+		});
 		borderPreview = new LineBoxRectangle(bd, this);
 		square.setToolTipText(Messages.BordersSection_preview_ToolTip);
 		lws.setContents(borderPreview);
@@ -703,7 +696,7 @@ public class BordersSection extends AbstractSection {
 		APropertyNode m = getElement();
 		if (m != null) {
 			MLineBox lb = (MLineBox) m.getPropertyActualValue(MGraphicElementLineBox.LINE_BOX);
-			if (bd.getLastSelected() != null && bd.getLastSelected().getSelected()) {
+			if (bd.getLastSelected() != null && bd.getLastSelected().isSelected()) {
 				refreshLinePen(lb, locationToLine(bd.getLastSelected().getLocation()));
 			} else if (bd.isTopSelected()) {
 				refreshLinePen(lb, MLineBox.LINE_PEN_TOP);
@@ -879,12 +872,37 @@ public class BordersSection extends AbstractSection {
 
 				AlfaRGB backcolor = (AlfaRGB) lp.getPropertyActualValue(JRBasePen.PROPERTY_LINE_COLOR);
 				if (lineColor != null) {
-					lineColor.setColor(backcolor);
+					if (backcolor != null) lineColor.setColor(backcolor);
+					else lineColor.setColor(AlfaRGB.getFullyOpaque(ColorConstants.black.getRGB()));
 				}
 			}
 		}
 	}
 
+	/**
+	 * Get the width of a specific line
+	 * 
+	 * @param location the line location
+	 * @return the width of the line, can be null
+	 */
+	protected Float getLineWidth(Location location){
+		MLineBox lb = (MLineBox) getElement().getPropertyValue(MGraphicElementLineBox.LINE_BOX);
+		if (location == Location.BOTTOM) {
+			MLinePen lp = (MLinePen) lb.getPropertyValue(MLineBox.LINE_PEN_BOTTOM);
+			return (Float)lp.getPropertyActualValue(JRBasePen.PROPERTY_LINE_WIDTH);
+		} else if (location == Location.TOP) {
+			MLinePen lp = (MLinePen) lb.getPropertyValue(MLineBox.LINE_PEN_TOP);
+			return (Float)lp.getPropertyActualValue(JRBasePen.PROPERTY_LINE_WIDTH);
+		} else if (location == Location.LEFT) {
+			MLinePen lp = (MLinePen) lb.getPropertyValue(MLineBox.LINE_PEN_LEFT);
+			return (Float)lp.getPropertyActualValue(JRBasePen.PROPERTY_LINE_WIDTH);
+		} else if (location == Location.RIGHT) {
+			MLinePen lp = (MLinePen) lb.getPropertyValue(MLineBox.LINE_PEN_RIGHT);
+			return (Float)lp.getPropertyActualValue(JRBasePen.PROPERTY_LINE_WIDTH);
+		}
+		return null;
+	}
+	
 	public void refreshLinePen(JRBoxPen pen) {
 		if (pen != null) {
 			Float width = pen.getLineWidth();

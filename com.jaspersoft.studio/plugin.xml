@@ -1156,7 +1156,7 @@
          </propertySection>
          <propertySection
                afterSection="com.jaspersoft.studio.editor.JrxmlEditor.graphic.LinePenSection"
-               class="com.jaspersoft.studio.property.section.graphic.BordersSection"
+               class="com.jaspersoft.studio.property.section.graphic.borders.BordersSection"
                id="com.jaspersoft.studio.editor.JrxmlEditor.graphic.BordersSection"
                tab="com.jaspersoft.studio.editor.JrxmlEditor.Borders">
             <input

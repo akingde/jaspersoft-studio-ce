@@ -10,7 +10,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
-package com.jaspersoft.studio.property.section.graphic;
+package com.jaspersoft.studio.property.section.graphic.borders;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -21,6 +21,12 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
+import org.eclipse.swt.widgets.Canvas;
+
 import net.sf.jasperreports.engine.JRLineBox;
 import net.sf.jasperreports.engine.JRPen;
 import net.sf.jasperreports.engine.JRPrintElement;
@@ -28,12 +34,6 @@ import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.export.draw.BoxDrawer;
 import net.sf.jasperreports.engine.type.LineStyleEnum;
 import net.sf.jasperreports.engine.util.JRPenUtil;
-
-import org.eclipse.draw2d.geometry.Point;
-import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseListener;
-import org.eclipse.swt.widgets.Canvas;
 
 /**
  * Paint the border of an element in the box viewer and make them selectable to easily change the property of one or more 
@@ -75,6 +75,11 @@ public class LineBoxDrawer extends BoxDrawer {
 	 * The color used for the guidelines
 	 */
 	private static Color guideColor = null;
+	
+	/**
+	 * List of the border selection listeners
+	 */
+	private List<BorderSelectionListener> listeners = new ArrayList<BorderSelectionListener>();
 	
 	/**
 	 * Describe the position of a border and store if it is or not selected
@@ -127,7 +132,7 @@ public class LineBoxDrawer extends BoxDrawer {
 			this.rect = rect;
 		}
 		
-		public boolean getSelected(){
+		public boolean isSelected(){
 			return selected;
 		}
 		
@@ -192,10 +197,11 @@ public class LineBoxDrawer extends BoxDrawer {
 			
 			@Override
 			public void mouseDown(MouseEvent e) {
-				for(Border bord : clickablesElements){
-					if (bord.isIntersecting(e.x, e.y)){
-						bord.changeSelected();
+				for(Border border : clickablesElements){
+					if (border.isIntersecting(e.x, e.y)){
+						border.changeSelected();
 						paintingSquare.redraw();
+						fireSelectionListeners(border);
 					}
 				}
 			}
@@ -219,7 +225,7 @@ public class LineBoxDrawer extends BoxDrawer {
 	 */
 	public boolean isLeftSelected(){
 		Border border = getBorder(Location.LEFT);
-		return border != null ? border.getSelected() : false;
+		return border != null ? border.isSelected() : false;
 	}
 	
 	/**
@@ -229,7 +235,7 @@ public class LineBoxDrawer extends BoxDrawer {
 	 */
 	public boolean isRightSelected(){
 		Border border = getBorder(Location.RIGHT);
-		return border != null ? border.getSelected() : false;
+		return border != null ? border.isSelected() : false;
 	}
 	
 	/**
@@ -239,7 +245,7 @@ public class LineBoxDrawer extends BoxDrawer {
 	 */
 	public boolean isTopSelected(){
 		Border border = getBorder(Location.TOP);
-		return border != null ? border.getSelected() : false;
+		return border != null ? border.isSelected() : false;
 	}
 	
 	/**
@@ -249,7 +255,7 @@ public class LineBoxDrawer extends BoxDrawer {
 	 */
 	public boolean isBottomSelected(){
 		Border border = getBorder(Location.BOTTOM);
-		return border != null ? border.getSelected() : false;
+		return border != null ? border.isSelected() : false;
 	}
 	
 	/**
@@ -283,7 +289,7 @@ public class LineBoxDrawer extends BoxDrawer {
 	 */
 	private void drawSelection(Location loc, Graphics2D grx, boolean isOffset1, boolean isOffset2){
 		Border border = getBorder(loc);
-		if (border != null && getBorder(loc).getSelected()){
+		if (border != null && getBorder(loc).isSelected()){
 			int offset1 = 0;
 			int offset2 = 0;
 			Rectangle rect = border.getRect();
@@ -680,5 +686,27 @@ public class LineBoxDrawer extends BoxDrawer {
 				grx.setTransform(oldTx);
 			}
 		}
+		
+		/**
+		 * Add a border selection listener to the widget, called when a border is selected or
+		 * deselected
+		 * @param listener the listener to add, it is added only if not null and not already in the list
+		 */
+		public void addBorderSelectionListener(BorderSelectionListener listener){
+			if (listener != null && !listeners.contains(listener)){
+				listeners.add(listener);
+			}
+		}
 	
+		/**
+		 * Call all the listeners
+		 * 
+		 * @param border the clicked border
+		 */
+		protected void fireSelectionListeners(Border border){
+			BorderSelectionEvent event = new BorderSelectionEvent(border.getLocation(), border.isSelected());
+			for(BorderSelectionListener listener : listeners){
+				listener.borderSelected(event);
+			}
+		}
 }

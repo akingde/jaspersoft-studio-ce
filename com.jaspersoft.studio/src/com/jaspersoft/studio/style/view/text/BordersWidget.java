@@ -16,12 +16,6 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.jasperreports.engine.JRLineBox;
-import net.sf.jasperreports.engine.base.JRBaseLineBox;
-import net.sf.jasperreports.engine.base.JRBasePen;
-import net.sf.jasperreports.engine.base.JRBoxPen;
-import net.sf.jasperreports.engine.type.LineStyleEnum;
-
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.LightweightSystem;
 import org.eclipse.draw2d.RectangleFigure;
@@ -57,12 +51,18 @@ import com.jaspersoft.studio.property.combomenu.ComboItem;
 import com.jaspersoft.studio.property.combomenu.ComboItemAction;
 import com.jaspersoft.studio.property.combomenu.ComboMenuViewer;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
-import com.jaspersoft.studio.property.section.graphic.LineBoxDrawer;
-import com.jaspersoft.studio.property.section.graphic.LineBoxDrawer.Location;
+import com.jaspersoft.studio.property.section.graphic.borders.LineBoxDrawer;
+import com.jaspersoft.studio.property.section.graphic.borders.LineBoxDrawer.Location;
 import com.jaspersoft.studio.property.section.widgets.SPRWPopUpCombo;
 import com.jaspersoft.studio.swt.widgets.ColorStyledText;
 import com.jaspersoft.studio.utils.AlfaRGB;
 import com.jaspersoft.studio.utils.UIUtil;
+
+import net.sf.jasperreports.engine.JRLineBox;
+import net.sf.jasperreports.engine.base.JRBaseLineBox;
+import net.sf.jasperreports.engine.base.JRBasePen;
+import net.sf.jasperreports.engine.base.JRBoxPen;
+import net.sf.jasperreports.engine.type.LineStyleEnum;
 
 /**
  * Controls to define the borders of a TextStyle element
@@ -621,7 +621,7 @@ public class BordersWidget extends Composite {
 	private void updateRightPanel(){
 		JRLineBox borders = element.getBorders();
 		if (borders != null) {
-			if (bd.getLastSelected() != null && bd.getLastSelected().getSelected()) {
+			if (bd.getLastSelected() != null && bd.getLastSelected().isSelected()) {
 				refreshLinePen(locationToLine(bd.getLastSelected().getLocation()));
 			}
 			else if (bd.isTopSelected()) {

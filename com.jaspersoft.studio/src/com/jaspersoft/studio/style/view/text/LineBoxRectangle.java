@@ -23,7 +23,7 @@ import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.draw2d.geometry.Rectangle;
 
 import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
-import com.jaspersoft.studio.property.section.graphic.LineBoxDrawer;
+import com.jaspersoft.studio.property.section.graphic.borders.LineBoxDrawer;
 
 /**
  * Widget that contains the method to represent the border of an element and permit to view or edit their properties

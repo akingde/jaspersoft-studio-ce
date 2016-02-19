@@ -10,7 +10,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
-package com.jaspersoft.studio.property.section.graphic;
+package com.jaspersoft.studio.property.section.graphic.borders;
 
 import java.awt.Graphics2D;
 
