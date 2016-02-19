@@ -14,13 +14,16 @@ import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
+import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.property.IRefreshableCellEditor;
+
 /*
  * A cell editor that presents a list of items in a combo box. The cell editor's value is the zero-based index of the
  * selected item. <p> This class may be instantiated; it is not intended to be subclassed. </p>
  * 
  * @noextend This class is not intended to be subclassed by clients.
  */
-public class RWComboBoxCellEditor extends ComboBoxCellEditor {
+public class RWComboBoxCellEditor extends ComboBoxCellEditor implements IRefreshableCellEditor{
 
 	/**
 	 * The custom combo box control.
@@ -142,5 +145,9 @@ public class RWComboBoxCellEditor extends ComboBoxCellEditor {
 				comboBox.setText(old);
 				break;
 			}
+	}
+
+	@Override
+	public void refresh(ANode selectedModel) {
 	}
 }

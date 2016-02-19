@@ -38,7 +38,7 @@ public class RWComboBoxPropertyDescriptor extends ComboBoxPropertyDescriptor imp
 
 	private NullEnum canBeNull;
 	
-	private RWComboBoxCellEditor cellEditor;
+	protected RWComboBoxCellEditor cellEditor;
 
 	private IHelpRefBuilder refBuilder;
 

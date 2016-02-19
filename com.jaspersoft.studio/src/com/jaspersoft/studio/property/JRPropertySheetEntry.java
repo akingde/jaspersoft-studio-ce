@@ -21,10 +21,10 @@ import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CommandStackListener;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.commands.ForwardUndoCompoundCommand;
+import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource;
-import org.eclipse.ui.views.properties.PropertySheetEntry;
 
 import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.model.ANode;
@@ -35,7 +35,7 @@ import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxLabelProvider;
 /*
  * /* The Class JRPropertySheetEntry.
  */
-public class JRPropertySheetEntry extends org.eclipse.ui.views.properties.PropertySheetEntry {
+public class JRPropertySheetEntry extends CustomPropertySheetEntry {
 
 	/** The listener. */
 	private PropertyChangeListener listener;
@@ -48,6 +48,10 @@ public class JRPropertySheetEntry extends org.eclipse.ui.views.properties.Proper
 
 	/** The stack. */
 	private CommandStack stack;
+	
+	private Object editValue;
+	
+	boolean isRefresh = false;
 
 	/**
 	 * Instantiates a new jR property sheet entry.
@@ -246,14 +250,9 @@ public class JRPropertySheetEntry extends org.eclipse.ui.views.properties.Proper
 	 * @see
 	 * org.eclipse.ui.views.properties.PropertySheetEntry#valueChanged(org.eclipse.ui.views.properties.PropertySheetEntry)
 	 */
-	protected void valueChanged(PropertySheetEntry child) {
-		// StructuredSelection selections =
-		// (StructuredSelection)SelectionHelper.getActiveJRXMLEditor().getSite().getSelectionProvider().getSelection();
-
+	protected void valueChanged(CustomPropertySheetEntry child) {
 		valueChanged((JRPropertySheetEntry) child, new ForwardUndoCompoundCommand(), Arrays.asList(getValues()));
 	}
-
-	boolean isRefresh = false;
 
 	/**
 	 * Value changed.
@@ -329,7 +328,18 @@ public class JRPropertySheetEntry extends org.eclipse.ui.views.properties.Proper
 		}
 		return text;
 	}
-
-	private Object editValue;
-
+	
+	/**
+	 * Method called before a value is set inside a cell editor. 
+	 * It check if the cell editor support the refresh basing its status
+	 * on the model, and in case call the appropriate method
+	 * 
+	 * @param editor the cell editor where the value was set
+	 */
+	@Override
+	protected void refreshCellEditor(CellEditor editor) {
+		if (editor instanceof IRefreshableCellEditor){
+			((IRefreshableCellEditor)editor).refresh(model);
+		}
+	}
 }
