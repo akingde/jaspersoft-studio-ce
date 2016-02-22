@@ -162,8 +162,12 @@ public class JDBCDataAdapterComposite extends ADataAdapterComposite {
 				new JDBCDriverDefinition("RedShift (TIBCO Jaspersoft)", //$NON-NLS-1$
 						"tibcosoftware.jdbc.redshift.RedshiftDriver", "jdbc:tibcosoftware:redshift://{0}:$[dbPort];databaseName={1};TransactionMode=ignore;LoginTimeout=30"), //$NON-NLS-1$ //$NON-NLS-2$
 				new JDBCDriverDefinition("SparkSQL (TIBCO Jaspersoft)", //$NON-NLS-1$
-						"tibcosoftware.jdbc.sparksql.SparkSQLDriver", "jdbc:tibcosoftware:sparksql://{0}:10000;TransactionMode=ignore") //$NON-NLS-1$ //$NON-NLS-2$
-		
+						"tibcosoftware.jdbc.sparksql.SparkSQLDriver", "jdbc:tibcosoftware:sparksql://{0}:10000;TransactionMode=ignore"), //$NON-NLS-1$ //$NON-NLS-2$
+				// Simba JDBC Drivers for Professional
+				new JDBCDriverDefinition("Impala (Simba JDBC driver)", //$NON-NLS-1$
+						"com.simba.impala.jdbc4.Driver", "jdbc:impala://{0}:21050/;auth=noSasl"), //$NON-NLS-1$ //$NON-NLS-2$
+				new JDBCDriverDefinition("Cassandra (Simba JDBC driver)", //$NON-NLS-1$
+						"com.simba.cassandra.jdbc4.Driver", "jdbc:cassandra://{0}:9042/{1}") //$NON-NLS-1$ //$NON-NLS-2$
 		};  
 		
 		Arrays.sort(jdbcDefinitions,new Comparator<JDBCDriverDefinition>() {
