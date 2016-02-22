@@ -93,6 +93,17 @@ public class NumericCombo extends Combo {
 	private int increamentStep = 1;
 	
 	/**
+	 * Flag used to avoid to fire the listener when the focus is lost but the value
+	 * was not modified
+	 */
+	private boolean changedAfterFocus = false;
+	
+	/**
+	 * The default value shown in the text area when the value is null
+	 */
+	private Number defaultValue = null;
+	
+	/**
 	 * Verify listener used to check if the typed value is valid or not
 	 */
 	private VerifyListener inputVerifier = new VerifyListener() {
@@ -111,6 +122,8 @@ public class NumericCombo extends Combo {
 		@Override
 		public void modifyText(ModifyEvent e) {
 			fireListeners();
+			//open the flag to fire the listeners
+			changedAfterFocus = true;
 		}
 	};
 	
@@ -123,6 +136,8 @@ public class NumericCombo extends Combo {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			fireListeners();
+			//open the flag to fire the listeners
+			changedAfterFocus = true;
 		}
 	};
 	
@@ -167,8 +182,20 @@ public class NumericCombo extends Combo {
 		addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(final FocusEvent e) {
+				//The set value on focus lost is done always to avoid
+				//the mac text reset bug
 				setValue(storedValue, true);
-				fireListeners();
+				if (changedAfterFocus){
+					//The listener are fired instead only if the value changed
+					//after the focus gain
+					fireListeners();
+				}
+				changedAfterFocus = false;
+			}
+			
+			@Override
+			public void focusGained(FocusEvent e) {
+				changedAfterFocus = false;
 			}
 		});
 		
@@ -281,8 +308,19 @@ public class NumericCombo extends Combo {
 	 * 
 	 */
 	public void setValue(Number selection) {
-		if (!hasSameValue(selection, storedValue)){
-			setValue(selection, true);
+		if (selection != null){
+			setInherited(false);
+			if (!hasSameValue(selection, storedValue)){
+				setValue(selection, true);
+			}
+		} else if (defaultValue != null){
+			setInherited(true);
+			if (!hasSameValue(defaultValue, storedValue)){
+				setValue(null, true);
+			}
+		} else if (storedValue != null){
+			setInherited(false);
+			setValue(null, false);
 		}
 	}
 	
@@ -312,18 +350,25 @@ public class NumericCombo extends Combo {
 				setText(selection.toString());
 			}
 			setSelection(new Point(0, getText().length()));
-			setFocus();
 		} else {
 			if (isNullable){
 				storedValue = null;
-				setText("");
+				if (defaultValue != null){
+					if (formatText) {
+						setText(formatter.format(defaultValue));
+					} else {
+						setText(defaultValue.toString());
+					}
+				} else {
+					setText("");
+				}
 				setSelection(new Point(0, getText().length()));
-				setFocus();
 			} else {
 				throw new IllegalArgumentException("The widget can not accept null values when the isNullable property is false");
 			}
 		}
 	}
+	
 	
 	/**
 	 * Verify the entry and store the value in the field storedValue
@@ -464,7 +509,10 @@ public class NumericCombo extends Combo {
 		if (storedValue == null){
 			//if the minimum is < 0 start from zero as default
 			double defaultMin = 0;
-			if (minimum > 0) defaultMin = minimum;
+			if (defaultValue != null){
+				defaultMin = defaultValue.intValue();
+			}
+			if (minimum > defaultMin) defaultMin = minimum;
 			storedValue = new Double(defaultMin);
 		}
 		double newValue = storedValue.doubleValue() + increamentStep;
@@ -480,7 +528,10 @@ public class NumericCombo extends Combo {
 		if (storedValue == null){
 			//if the minimum is < 0 start from zero as default
 			double defaultMin = 0;
-			if (minimum > 0) defaultMin = minimum;
+			if (defaultValue != null){
+				defaultMin = defaultValue.intValue();
+			}
+			if (minimum > defaultMin) defaultMin = minimum;
 			storedValue = new Double(defaultMin);
 			setValue(storedValue, true);
 		} else {
@@ -570,5 +621,37 @@ public class NumericCombo extends Combo {
 		for (final SelectionListener s : selectionListeners) {
 			s.widgetSelected(selectionEvent);
 		}
+	}
+	
+	/**
+	 * Set the default value. The default value is shown when the current
+	 * value is null, and it is shown into a different font. A default value
+	 * is not returned by the method getValue
+	 * 
+	 * @param value the new default value, or null if there are no default values
+	 */
+	public void setDefaultValue(Number value){
+		this.defaultValue = value;
+	}
+	
+	@Override
+	public void select(int index) {
+		removeSelectionListener(selectionNotifier);
+		super.select(index);
+		int count = getItemCount ();
+		if (0 <= index && index < count) {
+			if (index == getSelectionIndex()) return;
+			setValue(Double.parseDouble(getItem(index)));
+		}
+		addSelectionListener(selectionNotifier);
+	}
+	
+	@Override
+	public void setItems(String[] items) {
+		removeVerifyListener(inputVerifier);
+		removeModifyListener(inputNotifier);
+		super.setItems(items);
+		addVerifyListener(inputVerifier);
+		addModifyListener(inputNotifier);
 	}
 }

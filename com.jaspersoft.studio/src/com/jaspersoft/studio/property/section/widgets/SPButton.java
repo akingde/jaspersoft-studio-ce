@@ -94,11 +94,12 @@ public class SPButton<T extends IPropertyDescriptor> extends ASPropertyWidget<T>
 	protected void createCommand(boolean increment){
 		//Object fontSize = fontValue.getPropertyActualValue(JRBaseFont.PROPERTY_FONT_SIZE);
 		Object fontSize = section.getElement().getPropertyValue(JRBaseFont.PROPERTY_FONT_SIZE);
-		if (fontSize.equals(""))
+		if (fontSize == null){
 			fontSize = fontValue.getPropertyActualValue(JRBaseFont.PROPERTY_FONT_SIZE);
+		}
 		Float newValue = 2.0f;
-		if (fontSize != null && fontSize.toString().length()>0){
-			newValue = Float.valueOf(fontSize.toString());
+		if (fontSize != null){
+			newValue = (Float)fontSize;
 			Integer plus = null;
 			if (increment) plus = Math.round((new Float(newValue) / 100)*factor)+1;
 			else plus =  Math.round((new Float(newValue) / 100)*-factor)-1;

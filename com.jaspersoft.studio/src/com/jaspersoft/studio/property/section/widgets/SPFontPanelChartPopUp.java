@@ -15,21 +15,15 @@ package com.jaspersoft.studio.property.section.widgets;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.jasperreports.engine.JRFont;
-import net.sf.jasperreports.engine.base.JRBaseFont;
-import net.sf.jasperreports.engine.base.JRBaseStyle;
-import net.sf.jasperreports.engine.design.JRDesignFont;
-import net.sf.jasperreports.engine.util.JRStyleResolver;
-
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.ToolBar;
@@ -48,7 +42,14 @@ import com.jaspersoft.studio.property.combomenu.ComboMenuViewer;
 import com.jaspersoft.studio.property.descriptor.combo.FontNamePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.swt.widgets.NumericCombo;
 import com.jaspersoft.studio.utils.ModelUtils;
+
+import net.sf.jasperreports.engine.JRFont;
+import net.sf.jasperreports.engine.base.JRBaseFont;
+import net.sf.jasperreports.engine.base.JRBaseStyle;
+import net.sf.jasperreports.engine.design.JRDesignFont;
+import net.sf.jasperreports.engine.util.JRStyleResolver;
 
 /**
  * This class implement the subsection into the chart property tab using the font combo for the 
@@ -80,7 +81,7 @@ public class SPFontPanelChartPopUp extends ASPropertyWidget<IPropertyDescriptor>
 	/**
 	 * The combo with the font size
 	 */
-	private Combo fontSize;
+	private NumericCombo fontSize;
 	
 	/**
 	 * Buttom for the attribute bold
@@ -193,16 +194,16 @@ public class SPFontPanelChartPopUp extends ASPropertyWidget<IPropertyDescriptor>
 		 */
 		@Override
 		protected void createCommand(boolean increment){
-			Object fontSizeString = fontSize.getText(); 
-			Integer newValue = 2;
-			if (fontSizeString != null && fontSizeString.toString().length()>0){
-				newValue = Integer.valueOf(fontSizeString.toString());
+			Float fontSizeValue = fontSize.getValueAsFloat();
+			Float newValue = 2f;
+			if (fontSizeValue != null){
+				newValue = fontSizeValue;
 				Integer plus = null;
 				if (increment) plus = Math.round((new Float(newValue) / 100)*SPButton.factor)+1;
 				else plus =  Math.round((new Float(newValue) / 100)*-SPButton.factor)-1;
-				if ((newValue+plus)>99) newValue = 99;
-				else if ((newValue+plus)>0) newValue += plus;
-				section.changePropertyOn(JRBaseFont.PROPERTY_FONT_SIZE, newValue.toString(), mfont);
+				if ((newValue+plus)>99f) newValue = 99f;
+				else if ((newValue+plus)>0f) newValue += plus;
+				section.changePropertyOn(JRBaseFont.PROPERTY_FONT_SIZE, newValue, mfont);
 				section.changePropertyOn(fontNameProperty, new MFont((JRFont) mfont.getValue()), parentNode);
 			}
 		}
@@ -212,8 +213,7 @@ public class SPFontPanelChartPopUp extends ASPropertyWidget<IPropertyDescriptor>
 		mfont = new MFont(new JRDesignFont(null));
 		group = section.getWidgetFactory().createSection(parent, pDescriptor.getDisplayName(), true, 3);
 
-		final FontNamePropertyDescriptor pd = (FontNamePropertyDescriptor) mfont
-				.getPropertyDescriptor(JRBaseStyle.PROPERTY_FONT_NAME);
+		final FontNamePropertyDescriptor pd = (FontNamePropertyDescriptor) mfont.getPropertyDescriptor(JRBaseStyle.PROPERTY_FONT_NAME);
 		fontName = new ComboMenuViewer(group, ComboMenuViewer.NO_IMAGE, "SampleSampleSample");
 		fontName.setToolTipText(pd.getDescription());
 		fontName.addSelectionListener(new ComboItemAction() {
@@ -233,7 +233,7 @@ public class SPFontPanelChartPopUp extends ASPropertyWidget<IPropertyDescriptor>
 		fontSizeData.minimumWidth = 65;
 		fontSizeLayout.setLayout(new GridLayout(1,false));
 		fontSizeLayout.setLayoutData(fontSizeData);
-		fontSize = section.getWidgetFactory().createCombo(fontSizeLayout, SWT.FLAT);
+		fontSize = new NumericCombo(fontSizeLayout, SWT.FLAT, 0, 6);
 		fontSize.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		fontSize.setItems(pd1.getItems());
 		fontSize.addModifyListener(new ModifyListener() {
@@ -297,6 +297,34 @@ public class SPFontPanelChartPopUp extends ASPropertyWidget<IPropertyDescriptor>
 	}
 
 	/**
+	 * Set the font size value on the widget, setting also the information 
+	 * if it is inherited or not
+	 * 
+	 * @param resolvedNumber the font size value resolved
+	 * @param ownNumber the font size value of the element selected
+	 */
+	public void setFontSizeNumber(Number resolvedNumber, Number ownNumber) {
+		if (resolvedNumber != null) {
+			int oldpos = fontSize.getCaretPosition();
+			if (ownNumber == null) {
+				fontSize.setDefaultValue(resolvedNumber);
+			}
+			fontSize.setValue(ownNumber);
+			if (fontSize.getText().length() >= oldpos){
+				fontSize.setSelection(new Point(oldpos, oldpos));
+			}
+		} else if (ownNumber != null){
+			int oldpos = fontSize.getCaretPosition();
+			fontSize.setValue(ownNumber);
+			if (fontSize.getText().length() >= oldpos){
+				fontSize.setSelection(new Point(oldpos, oldpos));
+			}
+		} else {
+			fontSize.setValue(null);
+		}
+	}
+	
+	/**
 	 * Set the font name, the font size and the font attribute in the respective controls
 	 */
 	public void setData(APropertyNode pnode, Object value) {
@@ -313,15 +341,7 @@ public class SPFontPanelChartPopUp extends ASPropertyWidget<IPropertyDescriptor>
 			String strfontname =  JRStyleResolver.getFontName(fontValue);
 			fontName.setText(strfontname);
 			
-			String strfontsize =  Float.toString(JRStyleResolver.getFontsize(fontValue)); 
-			String[] items = fontSize.getItems();
-			fontSize.setText(strfontsize != null ? strfontsize : ""); 
-			for (int i = 0; i < items.length; i++) {
-				if (items[i].equals(strfontsize)) {
-					fontSize.select(i);
-					break;
-				}
-			}
+			setFontSizeNumber(fontValue.getFontsize(), fontValue.getOwnFontsize());
 
 			Boolean b = JRStyleResolver.isBold(fontValue); 
 			boldButton.setSelection(b != null ? b.booleanValue() : false);

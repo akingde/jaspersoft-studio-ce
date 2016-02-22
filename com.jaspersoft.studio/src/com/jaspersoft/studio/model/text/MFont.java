@@ -85,8 +85,7 @@ public class MFont extends APropertyNode {
 		fontNameD.setDescription(Messages.MFont_font_name_description);
 		desc.add(fontNameD);
 
-		RWFloatComboBoxPropertyDescriptor fontSizeD = new RWFloatComboBoxPropertyDescriptor(JRBaseFont.PROPERTY_FONT_SIZE,
-				Messages.common_font_size, ModelUtils.FONT_SIZES, NullEnum.INHERITED);
+		RWFloatComboBoxPropertyDescriptor fontSizeD = new RWFloatComboBoxPropertyDescriptor(JRBaseFont.PROPERTY_FONT_SIZE, Messages.common_font_size, ModelUtils.FONT_SIZES, NullEnum.INHERITED);
 		fontSizeD.setDescription(Messages.MFont_font_size_description);
 		fontSizeD.setValidator(new IntegerCellEditorValidator());
 		desc.add(fontSizeD);
@@ -216,7 +215,7 @@ public class MFont extends APropertyNode {
 		if (id.equals(JRBaseFont.PROPERTY_PDF_ENCODING))
 			return ModelUtils.getKey4PDFEncoding(jrElement.getPdfEncoding());
 		if (id.equals(JRBaseFont.PROPERTY_FONT_SIZE))
-			return Float.toString(jrElement.getFontsize()); // $NON-NLS-1$
+			return jrElement.getFontsize(); // $NON-NLS-1$
 		return null;
 	}
 
@@ -244,7 +243,7 @@ public class MFont extends APropertyNode {
 		if (id.equals(JRBaseFont.PROPERTY_PDF_ENCODING))
 			return ModelUtils.getKey4PDFEncoding(jrElement.getOwnPdfEncoding());
 		if (id.equals(JRBaseFont.PROPERTY_FONT_SIZE))
-			return jrElement.getOwnFontsize() != null ? jrElement.getOwnFontsize().toString() : ""; //$NON-NLS-1$
+			return jrElement.getOwnFontsize(); //$NON-NLS-1$
 		return null;
 	}
 
@@ -273,12 +272,9 @@ public class MFont extends APropertyNode {
 			} else if (value == null) {
 				jrElement.setFontName((String) value);
 			}
-		} else if (id.equals(JRBaseFont.PROPERTY_FONT_SIZE))
-			try {
-				jrElement.setFontSize(value != null ? Float.parseFloat((String) value) : null);
-			} catch (NumberFormatException e) {
-			}
-		else if (id.equals(JRBaseFont.PROPERTY_PDF_FONT_NAME))
+		} else if (id.equals(JRBaseFont.PROPERTY_FONT_SIZE)){
+			jrElement.setFontSize((Float)value);
+		} else if (id.equals(JRBaseFont.PROPERTY_PDF_FONT_NAME))
 			jrElement.setPdfFontName((String) value);
 		else if (id.equals(JRBaseFont.PROPERTY_PDF_ENCODING))
 			jrElement.setPdfEncoding(ModelUtils.getPDFEncoding2key((String) value));

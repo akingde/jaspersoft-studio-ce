@@ -152,8 +152,8 @@ public class TextEditManager extends DirectEditManager {
 			if (fontSizeValue != null) {
 				if (fontSizeValue instanceof String) {
 					fontSize = Integer.parseInt((String) fontSizeValue);
-				} else if (fontSizeValue instanceof Integer) {
-					fontSize = ((Integer) fontSizeValue).intValue();
+				} else if (fontSizeValue instanceof Number) {
+					fontSize = ((Number) fontSizeValue).intValue();
 				}
 
 			}

@@ -159,22 +159,23 @@ public class SPFont extends ASPropertyWidget<IPropertyDescriptor> {
 		 */
 		@Override
 		protected void createCommand(boolean increment) {
-			Object fontSizeString = fontSize.getText();
+			Float currentFont = fontSize.getValueAsFloat();
 			Float newValue = 2f;
-			if (fontSizeString != null && fontSizeString.toString().length() > 0) {
-				newValue = Float.valueOf(fontSizeString.toString());
+			if (currentFont != null) {
+				newValue = currentFont;
 				Float plus = null;
-				if (increment)
+				if (increment) {
 					plus = (float) (Math.round((new Float(newValue) / 100) * SPButton.factor) + 1);
-				else
+				} else {
 					plus = (float) (Math.round((new Float(newValue) / 100) * -SPButton.factor) - 1);
-				if ((newValue + plus) > 99)
+				}
+				if ((newValue + plus) > 99){
 					newValue = 99f;
-				else if ((newValue + plus) > 0)
+				} else if ((newValue + plus) > 0){
 					newValue += plus;
-				section.changePropertyOn(JRBaseFont.PROPERTY_FONT_SIZE, newValue.toString(), mfont);
-				section.changePropertyOn(fontNameProperty, new MFont((JRFont) ((JRCloneable) mfont.getValue()).clone()),
-						parentNode);
+				}
+				section.changePropertyOn(JRBaseFont.PROPERTY_FONT_SIZE, newValue, mfont);
+				section.changePropertyOn(fontNameProperty, new MFont((JRFont) ((JRCloneable) mfont.getValue()).clone()),parentNode);
 			}
 		}
 	}
@@ -301,6 +302,34 @@ public class SPFont extends ASPropertyWidget<IPropertyDescriptor> {
 		if (property != null && parentNode != null)
 			section.changePropertyOn(property, new MFont((JRFont) mfont.getValue()), parentNode);
 	}
+	
+	/**
+	 * Set the font size value on the widget, setting also the information 
+	 * if it is inherited or not
+	 * 
+	 * @param resolvedNumber the font size value resolved
+	 * @param ownNumber the font size value of the element selected
+	 */
+	public void setFontSizeNumber(Number resolvedNumber, Number ownNumber) {
+		if (resolvedNumber != null) {
+			int oldpos = fontSize.getCaretPosition();
+			if (ownNumber == null) {
+				fontSize.setDefaultValue(resolvedNumber);
+			}
+			fontSize.setValue(ownNumber);
+			if (fontSize.getText().length() >= oldpos){
+				fontSize.setSelection(new Point(oldpos, oldpos));
+			}
+		} else if (ownNumber != null){
+			int oldpos = fontSize.getCaretPosition();
+			fontSize.setValue(ownNumber);
+			if (fontSize.getText().length() >= oldpos){
+				fontSize.setSelection(new Point(oldpos, oldpos));
+			}
+		} else {
+			fontSize.setValue(null);
+		}
+	}
 
 	/**
 	 * Set the font name, the font size and the font attribute in the respective controls
@@ -319,7 +348,7 @@ public class SPFont extends ASPropertyWidget<IPropertyDescriptor> {
 			String strfontname = JRStyleResolver.getFontName(fontValue);
 			fontName.setText(strfontname);
 
-			fontSize.setValue(JRStyleResolver.getFontsize(fontValue)); 
+			setFontSizeNumber(fontValue.getFontsize(), fontValue.getOwnFontsize());
 
 			Boolean b = JRStyleResolver.isBold(fontValue);
 			boldButton.setSelection(b != null ? b.booleanValue() : false);

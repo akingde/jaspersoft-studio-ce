@@ -378,8 +378,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		fontNameD.setDescription(Messages.MStyle_font_name_description);
 		desc.add(fontNameD);
 
-		RWFloatComboBoxPropertyDescriptor fontSizeD = new RWFloatComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_FONT_SIZE,
-				Messages.common_font_size, ModelUtils.FONT_SIZES, NullEnum.INHERITED, false);
+		RWFloatComboBoxPropertyDescriptor fontSizeD = new RWFloatComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_FONT_SIZE, Messages.common_font_size, ModelUtils.FONT_SIZES, NullEnum.INHERITED, false);
 		fontSizeD.setDescription(Messages.MStyle_font_size_description);
 		fontSizeD.setValidator(new IntegerCellEditorValidator());
 		desc.add(fontSizeD);
@@ -586,7 +585,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		if (id.equals(JRBaseStyle.PROPERTY_FONT_NAME))
 			return jrstyle.getOwnFontName();
 		if (id.equals(JRBaseStyle.PROPERTY_FONT_SIZE))
-			return jrstyle.getOwnFontsize() != null ? jrstyle.getOwnFontsize().toString() : ""; //$NON-NLS-1$
+			return jrstyle.getOwnFontsize(); //$NON-NLS-1$
 		if (id.equals(JRBaseStyle.PROPERTY_PDF_FONT_NAME))
 			return jrstyle.getOwnPdfFontName();
 		if (id.equals(JRBaseStyle.PROPERTY_PDF_ENCODING))
@@ -657,7 +656,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		if (id.equals(JRBaseStyle.PROPERTY_FONT_NAME))
 			return jrstyle.getFontName();
 		if (id.equals(JRBaseStyle.PROPERTY_FONT_SIZE))
-			return jrstyle.getFontsize() != null ? jrstyle.getFontsize().toString() : ""; //$NON-NLS-1$
+			return jrstyle.getFontsize(); //$NON-NLS-1$
 		if (id.equals(JRBaseStyle.PROPERTY_PDF_FONT_NAME))
 			return jrstyle.getPdfFontName();
 		if (id.equals(JRBaseStyle.PROPERTY_PDF_ENCODING))
@@ -757,10 +756,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		else if (id.equals(JRBaseStyle.PROPERTY_FONT_NAME))
 			jrstyle.setFontName((String) value);
 		else if (id.equals(JRBaseStyle.PROPERTY_FONT_SIZE)) {
-			if ((value instanceof String && value.toString().length() == 0) || value == null)
-				jrstyle.setFontSize((Float) null);
-			else
-				jrstyle.setFontSize(new Float((String) value));
+			jrstyle.setFontSize((Float) value);
 		} else if (id.equals(JRBaseStyle.PROPERTY_PDF_FONT_NAME))
 			jrstyle.setPdfFontName((String) value);
 		else if (id.equals(JRBaseStyle.PROPERTY_PDF_ENCODING))

@@ -24,7 +24,6 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.RowData;
@@ -35,7 +34,6 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.views.properties.IPropertySource;
-import org.eclipse.wb.swt.ResourceManager;
 
 import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
@@ -43,6 +41,7 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.text.MTextElement;
 import com.jaspersoft.studio.property.SetValueCommand;
+import com.jaspersoft.studio.swt.widgets.NumericCombo;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ModelUtils;
 
@@ -80,13 +79,8 @@ public class TextualContributionItem extends CommonToolbarHandler {
 	/**
 	 * Combo with the font sizes
 	 */
-	private Combo fontSize;
-	
-	/**
-	 * The combo background default color
-	 */
-	private Color comboBackgroundDefault;
-	
+	private NumericCombo fontSize;
+
 	//Controls for the font size buttons
 	
 	/**
@@ -145,14 +139,16 @@ public class TextualContributionItem extends CommonToolbarHandler {
 				if (evt.getPropertyName().equals(JRDesignStyle.PROPERTY_FONT_NAME)) {
 					setFontNameText(node.getPropertyActualValue(JRDesignStyle.PROPERTY_FONT_NAME));
 				} else if (evt.getPropertyName().equals(JRDesignStyle.PROPERTY_FONT_SIZE)) {
-					setFontSizeComboText(node.getPropertyActualValue(JRDesignStyle.PROPERTY_FONT_SIZE));
+					Object actaulValue = node.getPropertyActualValue(JRDesignStyle.PROPERTY_FONT_SIZE);
+					Object ownValue = node.getPropertyValue(JRDesignStyle.PROPERTY_FONT_SIZE);
+					setFontSizeComboText(actaulValue, ownValue);
 				} else if (evt.getPropertyName().equals(JRDesignStyle.PROPERTY_ITALIC)) {
 					italic.setSelection((Boolean) node.getPropertyActualValue(JRDesignStyle.PROPERTY_ITALIC));
 				} else if (evt.getPropertyName().equals(JRDesignStyle.PROPERTY_BOLD)) {
 					bold.setSelection((Boolean) node.getPropertyActualValue(JRDesignStyle.PROPERTY_BOLD));
 				}
 			} else {
-				setFontSizeComboText(null);
+				setFontSizeComboText(null, null);
 				setFontNameText(null);
 				italic.setSelection(false);
 				bold.setSelection(false);
@@ -225,25 +221,16 @@ public class TextualContributionItem extends CommonToolbarHandler {
 				if (selection.isEmpty())
 					return;
 				JSSCompoundCommand cc = new JSSCompoundCommand(null);
-				String text = fontSize.getText().trim();
-				//If the string ends with the separator probably the user must still insert char, so don't set it 
-				if (!(text.endsWith(",") || text.endsWith("."))){
-					try{
-						Float realValue = Float.valueOf(text.replace(",", "."));
-						for (Object obj : selection) {
-							Command changeValueCmd = createCommand(obj, realValue.toString(), JRDesignStyle.PROPERTY_FONT_SIZE);
-							if (changeValueCmd != null) {
-								cc.add(changeValueCmd);
-								cc.setReferenceNodeIfNull(obj);
-							}
-						}
-						getCommandStack().execute(cc);
-						fontSize.setBackground(comboBackgroundDefault);
-					} catch(NumberFormatException ex){
-						//If the value is not a valid number the the background of the textarea became red
-						fontSize.setBackground(ResourceManager.getColor(255, 0, 0));
+				Float value = fontSize.getValueAsFloat();
+				for (Object obj : selection) {
+					Command changeValueCmd = createCommand(obj, value, JRDesignStyle.PROPERTY_FONT_SIZE);
+					if (changeValueCmd != null) {
+						cc.add(changeValueCmd);
+						cc.setReferenceNodeIfNull(obj);
 					}
-				}
+				}		
+				CommandStack cs = getCommandStack();
+				if (cs != null) getCommandStack().execute(cc);
 			}
 		}
 	};
@@ -320,15 +307,14 @@ public class TextualContributionItem extends CommonToolbarHandler {
 		fontName.addSelectionListener(fontNameComboSelect);
 		setAvailableFonts();
 		
-		fontSize = new Combo(controlsArea, SWT.DROP_DOWN);
+		fontSize = new NumericCombo(controlsArea, SWT.DROP_DOWN, 0, 6);
 		fontSize.setData(WIDGET_DATA_KEY, JRDesignStyle.PROPERTY_FONT_SIZE);
 		fontSize.setItems(ModelUtils.FONT_SIZES);
 		fontSize.addModifyListener(fontSizeComboModify);
 
 		RowData data = new RowData();
-		data.width = 50;
+		data.width = 80;
 		fontSize.setLayoutData(data);
-		comboBackgroundDefault = fontSize.getBackground();
 		
 		ToolBar sizeButtons = new ToolBar(controlsArea, SWT.FLAT | SWT.WRAP);
 		incrementButton = createFontSizeButton(true, sizeButtons);
@@ -413,11 +399,10 @@ public class TextualContributionItem extends CommonToolbarHandler {
 		getToolItems().add(tiFontName);
 		
 		ToolItem tiFontSizeCombo = new ToolItem(parent,SWT.SEPARATOR);
-		fontSize = new Combo(parent, SWT.DROP_DOWN);
+		fontSize = new NumericCombo(parent, SWT.DROP_DOWN, 0, 6);
 		fontSize.setData(WIDGET_DATA_KEY, JRDesignStyle.PROPERTY_FONT_SIZE);
 		fontSize.setItems(ModelUtils.FONT_SIZES);
 		fontSize.addModifyListener(fontSizeComboModify);
-		comboBackgroundDefault = fontSize.getBackground();
 		fontSize.pack();
 		tiFontSizeCombo.setWidth(fontSize.getSize().x);
 		tiFontSizeCombo.setControl(fontSize);
@@ -584,19 +569,6 @@ public class TextualContributionItem extends CommonToolbarHandler {
 	}
 	
 	/**
-	 * Remove all the decimal zeros from a string. If after the remove the remaining trail char 
-	 * is a . the it is also removed
-	 * 
-	 * @param value a string
-	 * @return a string without decimal zeros at the end
-	 */
-	private String removeUnnecessaryZeros(String value){
-		String newValue = value.replaceAll("(\\.(\\d*[1-9])?)0+", "$1");
-		if (newValue.endsWith(".")) newValue = newValue.substring(0, newValue.length()-1);
-		return newValue;
-	}
-	
-	/**
 	 * Set a string inside the font name combo
 	 * 
 	 * @param value the string
@@ -606,26 +578,33 @@ public class TextualContributionItem extends CommonToolbarHandler {
 	}
 
 	/**
-	 * When the combo text is set the unnecessary decimal zeros are removed
+	 * Set the font size on the combo. It set the value to know if the number is 
+	 * inherited or not.
+	 * 
+	 * @param resolvedValue the value of the font size resolved considering also the hirarchy
+	 * @param elementValue the font size value on the element itself
 	 */
-	protected void setFontSizeComboText(Object value) {
-		if (value == null || fontSize == null || fontSize.isDisposed())
+	protected void setFontSizeComboText(Object resolvedValue, Object elementValue) {
+		if (fontSize == null || fontSize.isDisposed())
 			return;
-		String str = removeUnnecessaryZeros((String) value);
-		String[] items = fontSize.getItems();
-		int selection = -1;
-		for (int i = 0; i < items.length; i++) {
-			if (Misc.compare(items[i], str, false)) {
-				selection = i;
-				break;
+		if (resolvedValue != null) {
+			int oldpos = fontSize.getCaretPosition();
+			if (elementValue == null) {
+				fontSize.setDefaultValue((Number)resolvedValue);
 			}
+			fontSize.setValue((Number)elementValue);
+			if (fontSize.getText().length() >= oldpos){
+				fontSize.setSelection(new Point(oldpos, oldpos));
+			}
+		} else if (elementValue != null){
+			int oldpos = fontSize.getCaretPosition();
+			fontSize.setValue((Number)elementValue);
+			if (fontSize.getText().length() >= oldpos){
+				fontSize.setSelection(new Point(oldpos, oldpos));
+			}
+		} else {
+			fontSize.setValue(null);
 		}
-		if (selection != -1) fontSize.select(selection);
-		else fontSize.setText(Misc.nvl(str, new Integer(10)).toString());
-		int stringLength = fontSize.getText().length();
-
-		fontSize.setSelection(new Point(stringLength, stringLength));
-		fontSize.getParent().layout(true);
 	}
 	
 	/**
@@ -666,7 +645,9 @@ public class TextualContributionItem extends CommonToolbarHandler {
 		List<Object> selection = getSelectionForType(MTextElement.class);
 		if (selection.size() == 1){
 			APropertyNode node = (APropertyNode)selection.get(0);
-			setFontSizeComboText(node.getPropertyActualValue(JRDesignStyle.PROPERTY_FONT_SIZE));
+			Object actaulValue = node.getPropertyActualValue(JRDesignStyle.PROPERTY_FONT_SIZE);
+			Object ownValue = node.getPropertyValue(JRDesignStyle.PROPERTY_FONT_SIZE);
+			setFontSizeComboText(actaulValue, ownValue);
 			setFontNameText(node.getPropertyActualValue(JRDesignStyle.PROPERTY_FONT_NAME));
 			italic.setSelection((Boolean) node.getPropertyActualValue(JRDesignStyle.PROPERTY_ITALIC));
 			bold.setSelection((Boolean) node.getPropertyActualValue(JRDesignStyle.PROPERTY_BOLD));
@@ -676,7 +657,7 @@ public class TextualContributionItem extends CommonToolbarHandler {
 			showedNode.getPropertyChangeSupport().addPropertyChangeListener(nodeChangeListener);
 			
 		} else {
-			setFontSizeComboText(null);
+			setFontSizeComboText(null, null);
 			setFontNameText(null);
 			italic.setSelection(false);
 			bold.setSelection(false);
@@ -698,10 +679,6 @@ public class TextualContributionItem extends CommonToolbarHandler {
 		if (controlsArea != null) {
 			controlsArea.dispose();
 			controlsArea = null;
-		}
-		if (comboBackgroundDefault != null){
-			comboBackgroundDefault.dispose();
-			comboBackgroundDefault = null;
 		}
 		fontSize = null;
 		bold = null;
