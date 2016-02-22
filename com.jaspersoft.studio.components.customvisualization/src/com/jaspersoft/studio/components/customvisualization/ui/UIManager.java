@@ -147,6 +147,7 @@ public class UIManager {
 			// if (url != null)
 			// is = url.openStream();
 			// } else {
+			getDescriptor(jConf, cd.getModule());
 			String uri = parentsPath.get(cd);
 			if (uri != null)
 				is = new URL(uri + path).openStream();

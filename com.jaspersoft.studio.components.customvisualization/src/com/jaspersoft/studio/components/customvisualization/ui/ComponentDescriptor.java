@@ -74,4 +74,19 @@ public class ComponentDescriptor {
 	public void setDatasets(List<ComponentDatasetDescriptor> datasets) {
 		this.datasets = datasets;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof ComponentDescriptor)
+			return getModule().equals(((ComponentDescriptor) obj).getModule());
+		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		if (getModule() != null)
+			return getModule().hashCode();
+		return 0;
+	}
+
 }
