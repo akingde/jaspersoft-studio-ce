@@ -13,15 +13,15 @@
 package com.jaspersoft.studio.property.section.widgets;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.swt.widgets.NullableSpinner;
 
 /**
  * 
@@ -35,7 +35,7 @@ public class SPSpinner<T extends IPropertyDescriptor> extends ASPropertyWidget<T
 	/**
 	 * The spinner control
 	 */
-	private Spinner controlSpinner;
+	private NullableSpinner controlSpinner;
 	
 	public SPSpinner(Composite parent, AbstractSection section, T pDescriptor) {
 		super(parent, section, pDescriptor);
@@ -43,12 +43,13 @@ public class SPSpinner<T extends IPropertyDescriptor> extends ASPropertyWidget<T
 	
 	@Override
 	protected void createComponent(Composite parent) {
-		controlSpinner = new Spinner(parent, SWT.BORDER);
-		controlSpinner.addModifyListener(new ModifyListener() {
+		controlSpinner = new NullableSpinner(parent, SWT.BORDER);
+		controlSpinner.setNullable(false);
+		controlSpinner.addSelectionListener(new SelectionAdapter() {
 			
 			@Override
-			public void modifyText(ModifyEvent e) {
-				section.changeProperty(pDescriptor.getId(), controlSpinner.getSelection());
+			public void widgetSelected(SelectionEvent e) {
+				section.changeProperty(pDescriptor.getId(), controlSpinner.getValueAsInteger());
 			}
 		});
 	}
@@ -61,7 +62,7 @@ public class SPSpinner<T extends IPropertyDescriptor> extends ASPropertyWidget<T
 	public void setData(APropertyNode pnode, Object value) {
 		if (value != null){
 			int intValue = Integer.parseInt(value.toString());
-			controlSpinner.setSelection(intValue);
+			controlSpinner.setValue(intValue);
 		} 
 
 	}
