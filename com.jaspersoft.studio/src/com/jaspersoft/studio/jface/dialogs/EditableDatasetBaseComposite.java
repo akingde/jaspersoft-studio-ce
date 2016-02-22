@@ -11,11 +11,6 @@ package com.jaspersoft.studio.jface.dialogs;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.jasperreports.engine.JRGroup;
-import net.sf.jasperreports.engine.design.JRDesignExpression;
-import net.sf.jasperreports.engine.type.IncrementTypeEnum;
-import net.sf.jasperreports.engine.type.ResetTypeEnum;
-
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
@@ -36,6 +31,15 @@ import com.jaspersoft.studio.property.dataset.DatasetRunSelectionListener;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.swt.widgets.WTextExpression;
 import com.jaspersoft.studio.utils.EnumHelper;
+
+import net.sf.jasperreports.engine.JRDataset;
+import net.sf.jasperreports.engine.JRDatasetRun;
+import net.sf.jasperreports.engine.JRGroup;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
+import net.sf.jasperreports.engine.design.JRDesignExpression;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.type.IncrementTypeEnum;
+import net.sf.jasperreports.engine.type.ResetTypeEnum;
 
 /**
  * This generic composite can be reused in dialogs/wizards when there is the need to edit the dataset information of a
@@ -235,12 +239,22 @@ public abstract class EditableDatasetBaseComposite extends Composite implements 
 	protected IEditableDataset getEditableDataset() {
 		return this.datasetInstance;
 	}
+	
+	protected List<JRGroup> getCurrentGroupsList(){
+		JasperDesign jd = datasetInstance.getJasperDesign();
+		JRDataset currentDataset = jd.getMainDataset();
+		JRDatasetRun darasetRun = datasetInstance.getJRElementDataset().getDatasetRun();
+		if (darasetRun != null && jd.getDatasetMap().containsKey(darasetRun.getDatasetName())){
+			currentDataset = jd.getDatasetMap().get(darasetRun.getDatasetName());
+		}
+		return ((JRDesignDataset)currentDataset).getGroupsList();
+	}
 
 	/*
 	 * Fills the a group combo box. Returns true if the combo filling operation was successful, false otherwise.
 	 */
 	private boolean fillGroupCombo(Combo widget) {
-		List<JRGroup> groupsList = datasetInstance.getJasperDesign().getGroupsList();
+		List<JRGroup> groupsList = getCurrentGroupsList();
 		if (groupsList == null || groupsList.isEmpty()) {
 			MessageDialog.openWarning(getShell(), Messages.EditableDatasetBaseComposite_NoGroupsErrTitle,
 					Messages.EditableDatasetBaseComposite_NoGroupsErrMsg);
@@ -262,7 +276,7 @@ public abstract class EditableDatasetBaseComposite extends Composite implements 
 	 * Updates the dataset information with the reset group data.
 	 */
 	private void updateResetGroupInformation(int selIndex) {
-		JRGroup jrGroup = datasetInstance.getJasperDesign().getGroupsList().get(selIndex);
+		JRGroup jrGroup = getCurrentGroupsList().get(selIndex);
 		datasetInstance.setResetGroup(jrGroup);
 	}
 
@@ -270,7 +284,7 @@ public abstract class EditableDatasetBaseComposite extends Composite implements 
 	 * Updates the dataset information with the reset type data.
 	 */
 	private void updateResetTypeInformation(int selIndex) {
-		ResetTypeEnum selectedResType = ResetTypeEnum.getByName(comboResetType.getText());
+		ResetTypeEnum selectedResType = EnumHelper.getEnumByObjectValue(ResetTypeEnum.values(), comboResetType.getText());
 		if (selectedResType == ResetTypeEnum.GROUP) {
 			if (fillGroupCombo(comboResetGroup)) {
 				// force the selection of the first group
@@ -289,15 +303,15 @@ public abstract class EditableDatasetBaseComposite extends Composite implements 
 	 * Updates the dataset information with the increment group data.
 	 */
 	private void updateIncrementGroupInformation(int selIndex) {
-		JRGroup jrGroup = datasetInstance.getJasperDesign().getGroupsList().get(selIndex);
+		JRGroup jrGroup = getCurrentGroupsList().get(selIndex);
 		datasetInstance.setIncrementGroup(jrGroup);
-	}
-
+	}	
+	
 	/*
 	 * Updates the dataset information with the increment type data.
 	 */
 	private void updateIncrementTypeInformation(int selIndex) {
-		IncrementTypeEnum selectedIncrType = IncrementTypeEnum.getByName(comboIncrementType.getText());
+		IncrementTypeEnum selectedIncrType = EnumHelper.getEnumByObjectValue(IncrementTypeEnum.values(), comboIncrementType.getText());
 		if (selectedIncrType == IncrementTypeEnum.GROUP) {
 			if (fillGroupCombo(comboIncrementGroup)) {
 				// force the selection of the first group
