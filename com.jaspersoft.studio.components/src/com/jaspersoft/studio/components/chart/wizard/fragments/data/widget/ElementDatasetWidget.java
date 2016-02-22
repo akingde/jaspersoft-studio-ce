@@ -45,6 +45,7 @@ import com.jaspersoft.studio.property.descriptor.expression.dialog.JRExpressionE
 import com.jaspersoft.studio.property.descriptor.parameter.dialog.ComboParameterEditor;
 import com.jaspersoft.studio.property.descriptor.parameter.dialog.GenericJSSParameter;
 import com.jaspersoft.studio.property.descriptor.returnvalue.RVPropertyPage;
+import com.jaspersoft.studio.utils.EnumHelper;
 import com.jaspersoft.studio.utils.ModelUtils;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
@@ -139,8 +140,7 @@ public class ElementDatasetWidget implements IExpressionContextSetter {
 			String rsttype = lsIncs.get(i);
 			if (rst.equals(IncrementTypeEnum.GROUP)) {
 				if (rsttype.startsWith(GROUPPREFIX)
-						&& grname
-								.equals(rsttype.substring(GROUPPREFIX.length()))) {
+						&& grname.equals(rsttype.substring(GROUPPREFIX.length()))) {
 					cbIncrement.select(i);
 					break;
 				}
@@ -158,20 +158,18 @@ public class ElementDatasetWidget implements IExpressionContextSetter {
 		lsRsts.add(ResetTypeEnum.COLUMN.getName());
 		lsRsts.add(ResetTypeEnum.PAGE.getName());
 
-		for (JRGroup gr : jrds.getGroups())
+		for (JRGroup gr : jrds.getGroups()){
 			lsRsts.add(GROUPPREFIX + gr.getName());
+		}
 		lsRsts.add(ResetTypeEnum.NONE.getName());
 		cbReset.setItems(lsRsts.toArray(new String[lsRsts.size()]));
 
 		ResetTypeEnum rst = eDataset.getResetTypeValue();
-		String grname = eDataset.getResetGroup() != null ? eDataset
-				.getResetGroup().getName() : null;
+		String grname = eDataset.getResetGroup() != null ? eDataset.getResetGroup().getName() : null;
 		for (int i = 0; i < lsRsts.size(); i++) {
 			String rsttype = lsRsts.get(i);
 			if (rst.equals(ResetTypeEnum.GROUP)) {
-				if (rsttype.startsWith(GROUPPREFIX)
-						&& grname
-								.equals(rsttype.substring(GROUPPREFIX.length()))) {
+				if (rsttype.startsWith(GROUPPREFIX) && grname.equals(rsttype.substring(GROUPPREFIX.length()))) {
 					cbReset.select(i);
 					break;
 				}
@@ -186,8 +184,7 @@ public class ElementDatasetWidget implements IExpressionContextSetter {
 		dsCombo.addSelectionListener(new SelectionListener() {
 
 			public void widgetSelected(SelectionEvent e) {
-				if (eDataset.getIncrementTypeValue().equals(
-						IncrementTypeEnum.GROUP)) {
+				if (eDataset.getIncrementTypeValue().equals(IncrementTypeEnum.GROUP)) {
 					eDataset.setIncrementType(IncrementTypeEnum.REPORT);
 					eDataset.setIncrementGroup(null);
 					cbIncrement.select(0);
@@ -212,6 +209,8 @@ public class ElementDatasetWidget implements IExpressionContextSetter {
 				}
 				dsRun.setData((JRDesignDatasetRun) eDataset.getDatasetRun());
 				enableMainDatasetRun();
+				fillResetGroup();
+				fillIncrement();
 				notifyDatasetRunSelectionChanged();
 			}
 
@@ -296,7 +295,7 @@ public class ElementDatasetWidget implements IExpressionContextSetter {
 
 			public void widgetSelected(SelectionEvent e) {
 				String newval = cbReset.getText();
-				ResetTypeEnum val = ResetTypeEnum.getByName(newval);
+				ResetTypeEnum val = EnumHelper.getEnumByObjectValue(ResetTypeEnum.values(), newval);
 				if (val != null) {
 					eDataset.setResetType(val);
 				} else {
@@ -324,7 +323,7 @@ public class ElementDatasetWidget implements IExpressionContextSetter {
 
 			public void widgetSelected(SelectionEvent e) {
 				String newval = cbIncrement.getText();
-				IncrementTypeEnum val = IncrementTypeEnum.getByName(newval);
+				IncrementTypeEnum val = EnumHelper.getEnumByObjectValue(IncrementTypeEnum.values(), newval);
 				if (val != null) {
 					eDataset.setIncrementType(val);
 				} else {
@@ -378,13 +377,14 @@ public class ElementDatasetWidget implements IExpressionContextSetter {
 	}
 
 	private JRDataset getJRdataset(final JRDesignElementDataset jrDataset) {
-		JRDataset jrds = jrDesign.getMainDataset();
 		if (jrDataset != null && jrDataset.getDatasetRun() != null) {
 			String dsname = jrDataset.getDatasetRun().getDatasetName();
-			jrDesign.getDatasetMap().get(dsname);
+			if (jrDesign.getDatasetMap().containsKey(dsname)){
+				return jrDesign.getDatasetMap().get(dsname);
+			}
 		}
-		final JRDataset jrdsfinal = jrds;
-		return jrdsfinal;
+		//Fallback on the main dataset
+		return jrDesign.getMainDataset();
 	}
 
 	public void createDataset(Composite composite) {

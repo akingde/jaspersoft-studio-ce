@@ -16,16 +16,6 @@ import java.awt.Graphics2D;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.sf.jasperreports.charts.design.JRDesignTimePeriodDataset;
-import net.sf.jasperreports.charts.design.JRDesignTimeSeriesDataset;
-import net.sf.jasperreports.charts.design.JRDesignXyDataset;
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.engine.JRChart;
-import net.sf.jasperreports.engine.JRChartDataset;
-import net.sf.jasperreports.engine.design.JRDesignChart;
-import net.sf.jasperreports.engine.design.JRDesignElement;
-import net.sf.jasperreports.engine.design.JRDesignElementDataset;
-
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ControlEvent;
@@ -50,6 +40,16 @@ import com.jaspersoft.studio.editor.gef.figures.JRComponentFigure;
 import com.jaspersoft.studio.editor.java2d.J2DLightweightSystem;
 import com.jaspersoft.studio.jasper.JSSDrawVisitor;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
+import net.sf.jasperreports.charts.design.JRDesignTimePeriodDataset;
+import net.sf.jasperreports.charts.design.JRDesignTimeSeriesDataset;
+import net.sf.jasperreports.charts.design.JRDesignXyDataset;
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.engine.JRChart;
+import net.sf.jasperreports.engine.JRChartDataset;
+import net.sf.jasperreports.engine.design.JRDesignChart;
+import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.design.JRDesignElementDataset;
 
 public abstract class ADSComponent implements IExpressionContextSetter {
 	private Control control;
