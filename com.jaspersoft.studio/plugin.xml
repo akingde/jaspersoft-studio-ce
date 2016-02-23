@@ -23,6 +23,7 @@
 <extension-point id="previewModeInfo" name="Preview Mode Info" schema="schema/previewModeInfo.exsd"/>
 <extension-point id="exporterFactory" name="Exporter Factory" schema="schema/exporterFactory.exsd"/>
 <extension-point id="firstStartupActions" name="Actions on the first Startup" schema="schema/firstStartupActions.exsd"/>
+<extension-point id="jdbcDriverDefinitions" name="JDBC Driver Definitions" schema="schema/jdbcDriverDefinitions.exsd"/>
 
 
    <extension

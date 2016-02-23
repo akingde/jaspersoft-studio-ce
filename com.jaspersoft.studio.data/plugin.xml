@@ -96,5 +96,12 @@
             name="XML Query Editor">
       </page>
    </extension>
-
+   
+   <!-- JDBC Driver Definitions for the Community version -->
+   <extension
+         point="com.jaspersoft.studio.jdbcDriverDefinitions">
+      <jdbcDriverDefinitions
+            class="com.jaspersoft.studio.data.jdbc.CommunityJDBCDriverDefinitions">
+      </jdbcDriverDefinitions>
+   </extension>
 </plugin>

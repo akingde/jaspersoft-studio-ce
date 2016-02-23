@@ -17,9 +17,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.design.JasperDesign;
-
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -39,6 +36,8 @@ import org.eclipse.ui.part.WorkbenchPart;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.DataAdapterFactory;
 import com.jaspersoft.studio.data.DataAdapterManager;
+import com.jaspersoft.studio.data.jdbc.JDBCDriverDefinition;
+import com.jaspersoft.studio.data.jdbc.JDBCDriverDefinitionsContainer;
 import com.jaspersoft.studio.editor.IEditorContributor;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.IExpressionEditorSupportFactory;
@@ -55,6 +54,9 @@ import com.jaspersoft.studio.swt.widgets.WHyperlink.UIElement;
 import com.jaspersoft.studio.templates.TemplateProvider;
 import com.jaspersoft.studio.utils.AContributorAction;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 public class ExtensionManager {
 
@@ -135,6 +137,33 @@ public class ExtensionManager {
 		return paletteGroup;
 	}
 
+	/**
+	 * Returns the list of {@link JDBCDriverDefinition} items contributed 
+	 * by different plug-ins through the extension-point 
+	 * <code>com.jaspersoft.studio.jdbcDriverDefinitions</code>. 
+	 * 
+	 * @return the list of JDBC driver definitions contributed
+	 */
+	public List<JDBCDriverDefinition> getJDBCDriverDefinitions() {
+		IConfigurationElement[] config = Platform.getExtensionRegistry().getConfigurationElementsFor(
+				JaspersoftStudioPlugin.PLUGIN_ID, "jdbcDriverDefinitions"); //$NON-NLS-1$ 
+		List<JDBCDriverDefinition> driverDefinitions = new ArrayList<JDBCDriverDefinition>();
+		for (IConfigurationElement el : config) {
+			JDBCDriverDefinitionsContainer container;
+			try {
+				Object clazz = el.createExecutableExtension("class");
+				if(clazz instanceof JDBCDriverDefinitionsContainer) {
+					container = (JDBCDriverDefinitionsContainer) clazz;
+					driverDefinitions.addAll(container.getJDBCDriverDefinitions());
+				}
+			} catch (CoreException e) {
+				JaspersoftStudioPlugin.getInstance().logError(e);
+			}
+		}
+		return driverDefinitions;
+	}
+	
+	
 	/**
 	 * Returns the support factory for the expression editor.
 	 * 

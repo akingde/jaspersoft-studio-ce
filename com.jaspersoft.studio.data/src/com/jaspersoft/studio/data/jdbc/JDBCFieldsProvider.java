@@ -97,7 +97,7 @@ public class JDBCFieldsProvider implements IFieldsProvider {
 						field.setName(StringUtils.xmlEncode(name, null));
 
 						field.setValueClassName(getJdbcTypeClass(metaData, i));
-						// Temporary commented for performance issues with Simba JDBC driver for Impala
+						// FIXME - Temporary commented for performance issues with Simba JDBC driver for Impala
 //						try {
 //							String catalog = metaData.getCatalogName(i);
 //							String schema = metaData.getSchemaName(i);
