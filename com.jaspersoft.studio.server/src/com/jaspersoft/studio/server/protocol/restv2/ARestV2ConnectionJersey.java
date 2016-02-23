@@ -18,6 +18,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
@@ -34,6 +36,7 @@ import com.jaspersoft.studio.server.protocol.IConnection;
 public abstract class ARestV2ConnectionJersey extends ARestV2Connection {
 	protected WebTarget target;
 	protected JSSApacheConnectorFactory connector;
+	protected Logger logger;
 
 	public JSSApacheConnectorFactory getConnector() {
 		return connector;
@@ -52,6 +55,8 @@ public abstract class ARestV2ConnectionJersey extends ARestV2Connection {
 				eh.handleException(res, monitor);
 			}
 		} catch (IOException e) {
+			if (logger != null)
+				logger.log(Level.WARNING, e.getMessage(), e);
 			e.printStackTrace();
 			throw e;
 		} finally {
@@ -90,6 +95,8 @@ public abstract class ARestV2ConnectionJersey extends ARestV2Connection {
 				eh.handleException(res, monitor);
 			}
 		} catch (IOException e) {
+			if (logger != null)
+				logger.log(Level.WARNING, e.getMessage(), e);
 			e.printStackTrace();
 			throw e;
 		} finally {
@@ -118,6 +125,8 @@ public abstract class ARestV2ConnectionJersey extends ARestV2Connection {
 				eh.handleException(res, monitor);
 			}
 		} catch (IOException e) {
+			if (logger != null)
+				logger.log(Level.WARNING, e.getMessage(), e);
 			e.printStackTrace();
 			throw e;
 		} finally {
@@ -147,6 +156,8 @@ public abstract class ARestV2ConnectionJersey extends ARestV2Connection {
 				eh.handleException(res, monitor);
 			}
 		} catch (IOException e) {
+			if (logger != null)
+				logger.log(Level.WARNING, e.getMessage(), e);
 			e.printStackTrace();
 			throw e;
 		} finally {
@@ -181,6 +192,8 @@ public abstract class ARestV2ConnectionJersey extends ARestV2Connection {
 				eh.handleException(res, monitor);
 			}
 		} catch (IOException e) {
+			if (logger != null)
+				logger.log(Level.WARNING, e.getMessage(), e);
 			e.printStackTrace();
 			throw e;
 		} finally {

@@ -270,6 +270,7 @@ public class PasteResourceAction extends Action {
 							String suf = getCopyName(parent, rd.getName());
 							rd.setUriString(dURI + "/" + rd.getName() + (copy ? suf : "")); //$NON-NLS-1$
 							rd.setLabel(origin.getLabel() + (copy ? suf : ""));
+							rd.setName(rd.getName() + suf);
 							fixUris(rd, monitor, mc);
 							ws.addOrModifyResource(monitor, rd, file);
 						} else if (parent instanceof MReportUnit)
@@ -290,6 +291,7 @@ public class PasteResourceAction extends Action {
 							rd.setIsNew(true);
 							String suf = getCopyName(parent, rd.getName());
 							rd.setUriString(dURI + "/" + rd.getName() + suf); //$NON-NLS-1$
+							rd.setName(rd.getName() + suf);
 							rd.setLabel(rd.getLabel() + suf);
 							fixUris(rd, monitor, mc);
 							if (monitor.isCanceled())
@@ -438,20 +440,23 @@ public class PasteResourceAction extends Action {
 	private void fixUris(ResourceDescriptor rd, IProgressMonitor monitor, IConnection mc) {
 		for (ResourceDescriptor r : rd.getChildren()) {
 			r.setIsNew(true);
-			if (!r.getIsReference() && r.getParentFolder().contains("_file")) {
+			if (!r.getIsReference() && r.getParentFolder().endsWith("_files")) {
 				File file;
 				try {
 					file = FileUtils.createTempFile("tmp", "file");
 					try {
-						r = mc.get(monitor, r, file);
+						mc.get(monitor, r, file);
 						r.setData(Base64.encodeBase64(net.sf.jasperreports.eclipse.util.FileUtils.getBytes(file)));
 						r.setHasData(r.getData() != null);
 					} catch (Throwable e) {
 						file = null;
 					}
+					r.setParentFolder(rd.getUriString() + "_files");
+					r.setUriString(r.getParentFolder() + "/" + r.getName());
 
-					r.setUriString(r.getUriString().replaceFirst(r.getParentFolder(), rd.getUriString() + "_file"));
-					r.setParentFolder(rd.getUriString());
+					// r.setUriString(r.getUriString().replaceFirst(r.getParentFolder(),
+					// rd.getUriString() + "_files"));
+					// r.setParentFolder(rd.getUriString()+"_files");
 					fixUris(r, monitor, mc);
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block

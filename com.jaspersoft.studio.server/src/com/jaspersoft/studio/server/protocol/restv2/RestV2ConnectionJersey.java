@@ -23,6 +23,10 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.FileHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -83,6 +87,7 @@ import com.jaspersoft.jasperserver.jaxrs.client.dto.reports.ReportExecutionDescr
 import com.jaspersoft.jasperserver.jaxrs.report.InputControlStateListWrapper;
 import com.jaspersoft.jasperserver.jaxrs.report.ReportExecutionRequest;
 import com.jaspersoft.studio.server.AFinderUI;
+import com.jaspersoft.studio.server.Activator;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.editor.input.InputControlsManager;
 import com.jaspersoft.studio.server.messages.Messages;
@@ -151,9 +156,13 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 
 		Client client = ClientBuilder.newBuilder().withConfig(clientConfig).build();
 		client.register(MultiPartFeature.class);
-		// client.register(new org.glassfish.jersey.filter.LoggingFilter(
-		// java.util.logging.Logger.getLogger(Logger.GLOBAL_LOGGER_NAME),
-		// true));
+		logger = java.util.logging.Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+		String home = System.getProperty("user.home");
+		FileHandler fh = new FileHandler(home + File.separator + "jssjrs.log", true);
+		fh.setFormatter(new SimpleFormatter());
+		logger.addHandler(fh);
+		logger.setLevel(Level.FINEST);
+		client.register(new org.glassfish.jersey.filter.LoggingFilter(logger, true));
 		// client.register(JacksonFeature.class);
 		// String user = sp.getUser();
 		// if (!Misc.isNullOrEmpty(sp.getOrganisation()))
@@ -185,6 +194,9 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 
 			Builder req = target.request();
 			toObj(connector.get(req, monitor), String.class, monitor);
+		} catch (Exception e) {
+			logger.log(Level.SEVERE, e.getMessage(), e);
+			throw e;
 		} finally {
 			// ok, now check others
 			target = client.target(url + SUFFIX);
@@ -194,7 +206,7 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 			getServerProfile().setClientUser(null);
 			getServerProfile().setClientUser(getUser(monitor));
 		} catch (Exception e) {
-			e.printStackTrace();
+			Activator.getDefault().logError(e);
 		}
 		return serverInfo != null && serverInfo.getVersion().compareTo("5.5") >= 0; //$NON-NLS-1$
 	}

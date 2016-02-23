@@ -107,6 +107,9 @@ public class ProxyConnection implements IConnection {
 				}
 				serverInfo = co.getServerInfo();
 			} catch (Exception e) {
+				Activator.getDefault().logError(e);
+				if(e.getMessage().contains("connect timed out"))
+					throw e;
 				e.printStackTrace();
 				exc = e;
 			}

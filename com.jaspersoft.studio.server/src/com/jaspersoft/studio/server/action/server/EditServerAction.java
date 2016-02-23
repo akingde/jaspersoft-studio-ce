@@ -99,9 +99,11 @@ public class EditServerAction extends Action {
 					showSelection();
 				} catch (InvocationTargetException e) {
 					UIUtils.showError(e);
+					mspold.setWsClient(null);
 					return Status.CANCEL_STATUS;
 				} catch (Exception e) {
 					UIUtils.showError(e);
+					mspold.setWsClient(null);
 					return Status.CANCEL_STATUS;
 				}
 				return Status.OK_STATUS;
