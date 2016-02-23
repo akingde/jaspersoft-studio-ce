@@ -13,14 +13,14 @@
 package com.jaspersoft.studio.property.descriptor.propexpr;
 
 import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.viewers.DialogCellEditor;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
+import com.jaspersoft.studio.property.descriptor.EditableDialogCellEditor;
 import com.jaspersoft.studio.property.descriptor.propexpr.dialog.JRPropertyExpressionEditor;
 
-public class JPropertyExpressionsCellEditor extends DialogCellEditor {
+public class JPropertyExpressionsCellEditor extends EditableDialogCellEditor {
 
 	public JPropertyExpressionsCellEditor(Composite parent) {
 		super(parent);

@@ -12,10 +12,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.descriptor.parameter;
 
-import net.sf.jasperreports.engine.JRDatasetParameter;
-
 import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.viewers.DialogCellEditor;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Composite;
@@ -23,11 +20,14 @@ import org.eclipse.swt.widgets.Control;
 
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
+import com.jaspersoft.studio.property.descriptor.EditableDialogCellEditor;
 import com.jaspersoft.studio.property.descriptor.parameter.dialog.GenericJSSParameter;
 import com.jaspersoft.studio.property.descriptor.parameter.dialog.ParameterEditor;
 
+import net.sf.jasperreports.engine.JRDatasetParameter;
 
-public class ParameterCellEditor extends DialogCellEditor implements IExpressionContextSetter{
+
+public class ParameterCellEditor extends EditableDialogCellEditor implements IExpressionContextSetter{
 	private ExpressionContext expContext;
 	
 	public ParameterCellEditor(Composite parent) {

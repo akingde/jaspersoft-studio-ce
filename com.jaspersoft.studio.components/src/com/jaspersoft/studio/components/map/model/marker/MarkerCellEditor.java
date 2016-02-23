@@ -13,14 +13,14 @@
 package com.jaspersoft.studio.components.map.model.marker;
 
 import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.viewers.DialogCellEditor;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
 import com.jaspersoft.studio.components.map.model.marker.dialog.MarkerEditor;
+import com.jaspersoft.studio.property.descriptor.EditableDialogCellEditor;
 
-public class MarkerCellEditor extends DialogCellEditor {
+public class MarkerCellEditor extends EditableDialogCellEditor {
 
 	public MarkerCellEditor(Composite parent) {
 		super(parent);

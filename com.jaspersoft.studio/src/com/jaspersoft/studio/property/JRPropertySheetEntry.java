@@ -338,7 +338,7 @@ public class JRPropertySheetEntry extends CustomPropertySheetEntry {
 	 */
 	@Override
 	protected void refreshCellEditor(CellEditor editor) {
-		if (editor instanceof IRefreshableCellEditor){
+		if (model != null && editor instanceof IRefreshableCellEditor){
 			((IRefreshableCellEditor)editor).refresh(model);
 		}
 	}

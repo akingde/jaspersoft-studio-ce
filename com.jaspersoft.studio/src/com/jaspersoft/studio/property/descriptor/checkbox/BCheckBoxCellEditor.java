@@ -15,17 +15,13 @@ package com.jaspersoft.studio.property.descriptor.checkbox;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 
 import com.jaspersoft.studio.property.descriptor.NullEnum;
+import com.jaspersoft.studio.property.descriptor.combo.EditableComboBoxCellEditor;
 
-public class BCheckBoxCellEditor extends ComboBoxCellEditor {
-	/**
-	 * The custom combo box control.
-	 */
-	CCombo comboBox;
+public class BCheckBoxCellEditor extends EditableComboBoxCellEditor {
+
 	private NullEnum canBeNull = NullEnum.NOTNULL;
 
 	/**
@@ -81,15 +77,6 @@ public class BCheckBoxCellEditor extends ComboBoxCellEditor {
 		return new String[] { NullEnum.NULL.getName(), "true", "false" };
 	}
 
-	/*
-	 * (non-Javadoc) Method declared on CellEditor.
-	 */
-	@Override
-	protected Control createControl(Composite parent) {
-		comboBox = (CCombo) super.createControl(parent);
-		return comboBox;
-	}
-
 	/**
 	 * The <code>ComboBoxCellEditor</code> implementation of this <code>CellEditor</code> framework method returns the
 	 * zero-based index of the current selection.
@@ -109,10 +96,6 @@ public class BCheckBoxCellEditor extends ComboBoxCellEditor {
 		if (selectionIndex == 0)
 			return null;
 		return selectionIndex == 1;
-	}
-
-	public CCombo getComboBox() {
-		return comboBox;
 	}
 
 	/**

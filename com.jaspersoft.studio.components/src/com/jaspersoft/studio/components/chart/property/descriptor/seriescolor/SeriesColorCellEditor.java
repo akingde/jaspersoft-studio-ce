@@ -14,18 +14,18 @@ package com.jaspersoft.studio.components.chart.property.descriptor.seriescolor;
 
 import java.util.SortedSet;
 
-import net.sf.jasperreports.engine.base.JRBaseChartPlot.JRBaseSeriesColor;
-
 import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.viewers.DialogCellEditor;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
 import com.jaspersoft.studio.components.chart.property.descriptor.seriescolor.dialog.SeriesColorEditor;
+import com.jaspersoft.studio.property.descriptor.EditableDialogCellEditor;
 
-public class SeriesColorCellEditor extends DialogCellEditor {
+import net.sf.jasperreports.engine.base.JRBaseChartPlot.JRBaseSeriesColor;
+
+public class SeriesColorCellEditor extends EditableDialogCellEditor {
 
 	public SeriesColorCellEditor(Composite parent) {
 		super(parent);

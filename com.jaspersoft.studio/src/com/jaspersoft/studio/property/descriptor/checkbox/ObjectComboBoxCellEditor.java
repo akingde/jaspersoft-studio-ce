@@ -12,12 +12,13 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.descriptor.checkbox;
 
-import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.widgets.Composite;
 
-public abstract class ObjectComboBoxCellEditor extends ComboBoxCellEditor {
+import com.jaspersoft.studio.property.descriptor.combo.EditableComboBoxCellEditor;
+
+public abstract class ObjectComboBoxCellEditor extends EditableComboBoxCellEditor {
 
 	protected static final int NO_SELECTION = -1;
 

@@ -12,10 +12,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.descriptor.text;
 
-import net.sf.jasperreports.engine.design.JRDesignQuery;
-
 import org.eclipse.jface.dialogs.IInputValidator;
-import org.eclipse.jface.viewers.DialogCellEditor;
 import org.eclipse.jface.viewers.ICellEditorValidator;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
@@ -27,7 +24,11 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Layout;
 
-public class InputDialogCellEditor extends DialogCellEditor {
+import com.jaspersoft.studio.property.descriptor.EditableDialogCellEditor;
+
+import net.sf.jasperreports.engine.design.JRDesignQuery;
+
+public class InputDialogCellEditor extends EditableDialogCellEditor {
 
 	/**
 	 * Gap between between image and text in pixels.

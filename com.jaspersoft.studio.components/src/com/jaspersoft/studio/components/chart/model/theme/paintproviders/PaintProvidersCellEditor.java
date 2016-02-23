@@ -14,15 +14,16 @@ package com.jaspersoft.studio.components.chart.model.theme.paintproviders;
 
 import java.util.List;
 
-import net.sf.jasperreports.chartthemes.simple.PaintProvider;
-
 import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.viewers.DialogCellEditor;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
-public class PaintProvidersCellEditor extends DialogCellEditor {
+import com.jaspersoft.studio.property.descriptor.EditableDialogCellEditor;
+
+import net.sf.jasperreports.chartthemes.simple.PaintProvider;
+
+public class PaintProvidersCellEditor extends EditableDialogCellEditor {
 
 	public PaintProvidersCellEditor(Composite parent) {
 		super(parent);

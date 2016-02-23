@@ -12,11 +12,12 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.descriptor.hyperlink;
 
-import org.eclipse.jface.viewers.DialogCellEditor;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
-public class HyperlinkCellEditor extends DialogCellEditor {
+import com.jaspersoft.studio.property.descriptor.EditableDialogCellEditor;
+
+public class HyperlinkCellEditor extends EditableDialogCellEditor {
 
 	public HyperlinkCellEditor(Composite parent) {
 		super(parent);

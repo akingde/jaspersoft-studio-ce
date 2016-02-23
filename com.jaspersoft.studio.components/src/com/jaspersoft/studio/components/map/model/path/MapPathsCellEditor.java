@@ -12,14 +12,14 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.map.model.path;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.viewers.DialogCellEditor;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
 import com.jaspersoft.studio.components.map.model.itemdata.MapDataElementsConfigurationLabelProvider;
+import com.jaspersoft.studio.property.descriptor.EditableDialogCellEditor;
+
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 /**
  * Cell Editor for the <code>StandardMapComponent.PROPERTY_PATH_DATA_LIST</code> property
@@ -27,7 +27,7 @@ import com.jaspersoft.studio.components.map.model.itemdata.MapDataElementsConfig
  * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
  *
  */
-public class MapPathsCellEditor extends DialogCellEditor {
+public class MapPathsCellEditor extends EditableDialogCellEditor {
 
 	private MapDataElementsConfigurationLabelProvider labelProvider;
 	

@@ -126,11 +126,12 @@ public class RWStyleComboBoxPropertyDescriptor extends RWComboBoxPropertyDescrip
 			 */
 			@Override
 			public void refresh(ANode selectedModel) {
+				super.refresh(selectedModel);
 				String[] newitems = getStyleItems(selectedModel);
 				if (newitems != null){
 					//Avoid to set the items if they are already the same
-					if (!cellEditor.getComboBox().isDisposed() && !Arrays.equals(newitems, getItems())){
-						cellEditor.setItems(newitems);
+					if (!getComboBox().isDisposed() && !Arrays.equals(newitems, getItems())){
+						setItems(newitems);
 					}
 				}
 			}

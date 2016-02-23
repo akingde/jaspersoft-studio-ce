@@ -15,7 +15,6 @@ package com.jaspersoft.studio.property.descriptors;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ICellEditorValidator;
-import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.TextPropertyDescriptor;
 
@@ -23,6 +22,7 @@ import com.jaspersoft.studio.help.HelpSystem;
 import com.jaspersoft.studio.help.IHelp;
 import com.jaspersoft.studio.help.IHelpRefBuilder;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.property.descriptor.text.EditableTextCellEditor;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 import com.jaspersoft.studio.property.section.widgets.IPropertyDescriptorWidget;
@@ -87,7 +87,7 @@ public class PixelPropertyDescriptor extends TextPropertyDescriptor implements I
 	 * @return the cell editor
 	 */
 	public CellEditor createPropertyEditor(Composite parent) {
-		CellEditor editor = new TextCellEditor(parent) {
+		CellEditor editor = new EditableTextCellEditor(parent) {
 			@Override
 			protected Object doGetValue() {
 				String value = (String) super.doGetValue();

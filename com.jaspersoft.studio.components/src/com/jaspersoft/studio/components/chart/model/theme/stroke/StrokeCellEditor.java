@@ -15,12 +15,13 @@ package com.jaspersoft.studio.components.chart.model.theme.stroke;
 import java.awt.Stroke;
 
 import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.viewers.DialogCellEditor;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
-public class StrokeCellEditor extends DialogCellEditor {
+import com.jaspersoft.studio.property.descriptor.EditableDialogCellEditor;
+
+public class StrokeCellEditor extends EditableDialogCellEditor {
 
 	public StrokeCellEditor(Composite parent) {
 		super(parent);

@@ -16,12 +16,13 @@ import java.awt.Stroke;
 import java.util.List;
 
 import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.viewers.DialogCellEditor;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
-public class StrokesCellEditor extends DialogCellEditor {
+import com.jaspersoft.studio.property.descriptor.EditableDialogCellEditor;
+
+public class StrokesCellEditor extends EditableDialogCellEditor {
 
 	public StrokesCellEditor(Composite parent) {
 		super(parent);

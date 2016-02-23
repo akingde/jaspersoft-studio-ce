@@ -15,11 +15,13 @@ package com.jaspersoft.studio.property.descriptors;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.TextPropertyDescriptor;
 
 import com.jaspersoft.studio.help.HelpSystem;
 import com.jaspersoft.studio.help.IHelp;
 import com.jaspersoft.studio.help.IHelpRefBuilder;
+import com.jaspersoft.studio.property.descriptor.text.EditableTextCellEditor;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 import com.jaspersoft.studio.property.section.widgets.IPropertyDescriptorWidget;
@@ -31,6 +33,7 @@ public class JSSTextPropertyDescriptor extends TextPropertyDescriptor implements
 	 * Field to check if the widget should be read only
 	 */
 	protected boolean readOnly;
+	
 	private int style = SWT.NONE;
 
 	public JSSTextPropertyDescriptor(Object id, String displayName) {
@@ -46,7 +49,10 @@ public class JSSTextPropertyDescriptor extends TextPropertyDescriptor implements
 
 	@Override
 	public CellEditor createPropertyEditor(Composite parent) {
-		CellEditor editor = super.createPropertyEditor(parent);
+    CellEditor editor = new EditableTextCellEditor(parent);
+    if (getValidator() != null) {
+    	editor.setValidator(getValidator());
+    }
 		HelpSystem.bindToHelp(this, editor.getControl());
 		return editor;
 	}
@@ -59,8 +65,8 @@ public class JSSTextPropertyDescriptor extends TextPropertyDescriptor implements
 		return style;
 	}
 
-	public ASPropertyWidget<?> createWidget(Composite parent, AbstractSection section) {
-		ASPropertyWidget<?> textWidget = new SPText(parent, section, this);
+	public ASPropertyWidget<? extends IPropertyDescriptor> createWidget(Composite parent, AbstractSection section) {
+		ASPropertyWidget<IPropertyDescriptor> textWidget = new SPText<IPropertyDescriptor>(parent, section, this);
 		textWidget.setReadOnly(readOnly);
 		return textWidget;
 	}

@@ -12,8 +12,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.callout;
 
-import net.sf.jasperreports.engine.base.JRBaseFont;
-
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.editparts.ZoomListener;
 import org.eclipse.gef.editparts.ZoomManager;
@@ -32,6 +30,8 @@ import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.CellEditorActionHandler;
+
+import net.sf.jasperreports.engine.base.JRBaseFont;
 
 public class CalloutEditManager extends DirectEditManager {
 	private IActionBars actionBars;

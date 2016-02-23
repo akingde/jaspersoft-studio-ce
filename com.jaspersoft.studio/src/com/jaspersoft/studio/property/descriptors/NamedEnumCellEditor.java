@@ -8,12 +8,12 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.descriptors;
 
-import net.sf.jasperreports.engine.type.JREnum;
-
-import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.property.descriptor.combo.EditableComboBoxCellEditor;
 import com.jaspersoft.studio.utils.EnumHelper;
+
+import net.sf.jasperreports.engine.type.JREnum;
 
 /**
  * Specialized cell editor for {@link NamedEnumPropertyDescriptor} elements.
@@ -21,7 +21,7 @@ import com.jaspersoft.studio.utils.EnumHelper;
  * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
  *
  */
-public class NamedEnumCellEditor extends ComboBoxCellEditor {
+public class NamedEnumCellEditor extends EditableComboBoxCellEditor {
 
 	public NamedEnumCellEditor(Composite parent, String[] items, int style) {
 		super(parent, items, style);

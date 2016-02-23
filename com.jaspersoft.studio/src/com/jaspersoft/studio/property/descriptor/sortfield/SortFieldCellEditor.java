@@ -15,14 +15,14 @@ package com.jaspersoft.studio.property.descriptor.sortfield;
 import java.util.List;
 
 import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.viewers.DialogCellEditor;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
+import com.jaspersoft.studio.property.descriptor.EditableDialogCellEditor;
 import com.jaspersoft.studio.property.descriptor.sortfield.dialog.SortFieldEditor;
 
-public class SortFieldCellEditor extends DialogCellEditor {
+public class SortFieldCellEditor extends EditableDialogCellEditor {
 
 	public SortFieldCellEditor(Composite parent) {
 		super(parent);

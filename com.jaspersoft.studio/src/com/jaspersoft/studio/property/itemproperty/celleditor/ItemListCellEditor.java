@@ -12,12 +12,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.viewers.DialogCellEditor;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.property.descriptor.EditableDialogCellEditor;
 import com.jaspersoft.studio.property.itemproperty.desc.ADescriptor;
 import com.jaspersoft.studio.property.itemproperty.desc.AItemDataListPropertyDescriptor;
 import com.jaspersoft.studio.property.itemproperty.dialog.ItemDataListDialog;
@@ -33,7 +33,7 @@ import net.sf.jasperreports.engine.util.JRCloneUtils;
  * @author Veaceslav Chicu (schicu@users.sourceforge.net)
  * 
  */
-public class ItemListCellEditor extends DialogCellEditor {
+public class ItemListCellEditor extends EditableDialogCellEditor {
 
 	private ItemLabelProvider labelProvider;
 	private ADescriptor descriptor;

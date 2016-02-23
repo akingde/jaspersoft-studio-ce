@@ -13,7 +13,6 @@
 package com.jaspersoft.studio.property.descriptor.text;
 
 import org.eclipse.jface.viewers.CellEditor;
-import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.help.HelpSystem;
@@ -35,7 +34,7 @@ public class NTextPropertyDescriptor extends JSSTextPropertyDescriptor {
 
 	@Override
 	public CellEditor createPropertyEditor(Composite parent) {
-		CellEditor editor = new TextCellEditor(parent) {
+		CellEditor editor = new EditableTextCellEditor(parent) {
 			@Override
 			protected Object doGetValue() {
 				String doGetValue = (String) super.doGetValue();

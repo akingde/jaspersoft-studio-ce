@@ -45,8 +45,8 @@ public class NClassTypePropertyDescriptor extends ClassTypePropertyDescriptor im
 		return editor;
 	}
 
-	public ASPropertyWidget<?> createWidget(Composite parent, AbstractSection section) {
-		ASPropertyWidget<?> classNameWidget = new SPClassType(parent, section, this);
+	public ASPropertyWidget<NClassTypePropertyDescriptor> createWidget(Composite parent, AbstractSection section) {
+		ASPropertyWidget<NClassTypePropertyDescriptor> classNameWidget = new SPClassType<NClassTypePropertyDescriptor>(parent, section, this);
 		classNameWidget.setReadOnly(readOnly);
 		return classNameWidget;
 	}

@@ -12,17 +12,17 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.descriptor.properties;
 
-import net.sf.jasperreports.engine.JRPropertiesMap;
-
 import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.viewers.DialogCellEditor;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
+import com.jaspersoft.studio.property.descriptor.EditableDialogCellEditor;
 import com.jaspersoft.studio.property.descriptor.properties.dialog.JRPropertyEditor;
 
-public class JPropertiesCellEditor extends DialogCellEditor {
+import net.sf.jasperreports.engine.JRPropertiesMap;
+
+public class JPropertiesCellEditor extends EditableDialogCellEditor {
 
 	public JPropertiesCellEditor(Composite parent) {
 		super(parent);

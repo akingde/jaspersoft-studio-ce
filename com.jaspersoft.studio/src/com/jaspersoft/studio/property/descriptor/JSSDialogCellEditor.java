@@ -37,6 +37,9 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Layout;
 // Not using ICU to support standalone JFace scenario
 
+import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.property.IRefreshableCellEditor;
+
 /**
  * An abstract cell editor that uses a dialog.
  * Dialog cell editors usually have a label control on the left and a button on
@@ -55,7 +58,7 @@ import org.eclipse.swt.widgets.Layout;
  * </ul>
  * </p>
  */
-public abstract class JSSDialogCellEditor extends CellEditor {
+public abstract class JSSDialogCellEditor extends CellEditor implements IRefreshableCellEditor {
 
 	/**
 	 * Image registry key for three dot image (value <code>"cell_editor_dots_button_image"</code>).
@@ -394,5 +397,15 @@ public abstract class JSSDialogCellEditor extends CellEditor {
 			text = value.toString();
 		}
 		defaultLabel.setText(text);
+	}
+	
+	@Override
+	public void refresh(ANode selectedModel) {
+		if (editor != null && !editor.isDisposed()){
+			editor.setEnabled(selectedModel.isEditable());
+		}
+		if (button != null && !button.isDisposed()){
+			button.setEnabled(selectedModel.isEditable());
+		}
 	}
 }

@@ -8,18 +8,18 @@
  ******************************************************************************/
 package com.jaspersoft.studio.model.band.rv;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-
 import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.viewers.DialogCellEditor;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
 import com.jaspersoft.studio.model.band.JRBandDTO;
+import com.jaspersoft.studio.property.descriptor.EditableDialogCellEditor;
 
-public class RVPropertiesCellEditor extends DialogCellEditor {
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+
+public class RVPropertiesCellEditor extends EditableDialogCellEditor {
 
 	public RVPropertiesCellEditor(Composite parent) {
 		super(parent);

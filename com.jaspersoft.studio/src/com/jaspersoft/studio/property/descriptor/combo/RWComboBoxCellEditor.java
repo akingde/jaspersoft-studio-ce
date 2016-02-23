@@ -10,12 +10,7 @@ package com.jaspersoft.studio.property.descriptor.combo;
 
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
-import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
-
-import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.property.IRefreshableCellEditor;
 
 /*
  * A cell editor that presents a list of items in a combo box. The cell editor's value is the zero-based index of the
@@ -23,12 +18,7 @@ import com.jaspersoft.studio.property.IRefreshableCellEditor;
  * 
  * @noextend This class is not intended to be subclassed by clients.
  */
-public class RWComboBoxCellEditor extends ComboBoxCellEditor implements IRefreshableCellEditor{
-
-	/**
-	 * The custom combo box control.
-	 */
-	CCombo comboBox;
+public class RWComboBoxCellEditor extends EditableComboBoxCellEditor {
 
 	/**
 	 * Creates a new cell editor with no control and no st of choices. Initially, the cell editor has no cell validator.
@@ -74,15 +64,6 @@ public class RWComboBoxCellEditor extends ComboBoxCellEditor implements IRefresh
 		super(parent, items, style);
 	}
 
-	/*
-	 * (non-Javadoc) Method declared on CellEditor.
-	 */
-	@Override
-	protected Control createControl(Composite parent) {
-		comboBox = (CCombo) super.createControl(parent);
-		return comboBox;
-	}
-
 	/**
 	 * The <code>ComboBoxCellEditor</code> implementation of this <code>CellEditor</code> framework method returns the
 	 * zero-based index of the current selection.
@@ -102,10 +83,6 @@ public class RWComboBoxCellEditor extends ComboBoxCellEditor implements IRefresh
 			return getItems()[selectionIndex];
 		}
 		return null;
-	}
-
-	public CCombo getComboBox() {
-		return comboBox;
 	}
 
 	/**
@@ -145,9 +122,5 @@ public class RWComboBoxCellEditor extends ComboBoxCellEditor implements IRefresh
 				comboBox.setText(old);
 				break;
 			}
-	}
-
-	@Override
-	public void refresh(ANode selectedModel) {
 	}
 }

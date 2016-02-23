@@ -12,7 +12,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.descriptor.color;
 
-import org.eclipse.jface.viewers.DialogCellEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Point;
@@ -24,9 +23,10 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Layout;
 
 import com.jaspersoft.studio.property.color.chooser.ColorDialog;
+import com.jaspersoft.studio.property.descriptor.EditableDialogCellEditor;
 import com.jaspersoft.studio.utils.AlfaRGB;
 
-public class ColorCellEditor extends DialogCellEditor {
+public class ColorCellEditor extends EditableDialogCellEditor {
 
 	/**
 	 * Gap between between image and text in pixels.

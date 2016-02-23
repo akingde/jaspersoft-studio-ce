@@ -14,17 +14,17 @@ package com.jaspersoft.studio.property.descriptor.tabstops;
 
 import java.util.List;
 
-import net.sf.jasperreports.engine.TabStop;
-
 import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.viewers.DialogCellEditor;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
+import com.jaspersoft.studio.property.descriptor.EditableDialogCellEditor;
 import com.jaspersoft.studio.property.descriptor.tabstops.dialog.TabStopsEditor;
 
-public class TabStopsCellEditor extends DialogCellEditor {
+import net.sf.jasperreports.engine.TabStop;
+
+public class TabStopsCellEditor extends EditableDialogCellEditor {
 
 	public TabStopsCellEditor(Composite parent) {
 		super(parent);

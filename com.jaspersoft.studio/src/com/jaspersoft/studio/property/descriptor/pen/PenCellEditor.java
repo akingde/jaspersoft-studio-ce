@@ -12,11 +12,12 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.descriptor.pen;
 
-import org.eclipse.jface.viewers.DialogCellEditor;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
-public class PenCellEditor extends DialogCellEditor {
+import com.jaspersoft.studio.property.descriptor.EditableDialogCellEditor;
+
+public class PenCellEditor extends EditableDialogCellEditor {
 
 	public PenCellEditor(Composite parent) {
 		super(parent);

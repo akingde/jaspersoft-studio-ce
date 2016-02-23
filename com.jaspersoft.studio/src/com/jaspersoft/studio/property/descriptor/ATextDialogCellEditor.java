@@ -14,7 +14,6 @@ package com.jaspersoft.studio.property.descriptor;
 
 import java.text.MessageFormat;
 
-import org.eclipse.jface.viewers.DialogCellEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
@@ -30,12 +29,11 @@ import org.eclipse.swt.events.TraverseEvent;
 import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
 
-public abstract class ATextDialogCellEditor extends DialogCellEditor {
+public abstract class ATextDialogCellEditor extends EditableDialogCellEditor {
 
 	/**
 	 * State information for updating action enablement
@@ -56,7 +54,6 @@ public abstract class ATextDialogCellEditor extends DialogCellEditor {
 	 */
 	// private Label textLabel;
 	protected Text text;
-	private Button button;
 
 	/**
 	 * Creates a new color cell editor parented under the given control. The cell editor value is black (
@@ -80,12 +77,6 @@ public abstract class ATextDialogCellEditor extends DialogCellEditor {
 	 */
 	public ATextDialogCellEditor(Composite parent, int style) {
 		super(parent, style);
-	}
-
-	@Override
-	protected Button createButton(Composite parent) {
-		button = super.createButton(parent);
-		return button;
 	}
 
 	@Override
