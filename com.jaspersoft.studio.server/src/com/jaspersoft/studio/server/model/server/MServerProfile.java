@@ -13,6 +13,7 @@
 package com.jaspersoft.studio.server.model.server;
 
 import java.beans.PropertyChangeEvent;
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
@@ -262,11 +263,11 @@ public class MServerProfile extends ANode {
 			String prjpath = getValue().getProjectPath();
 			if (prjpath != null && !prjpath.trim().isEmpty()) {
 				String path = prjpath.trim();
-				if (path.startsWith("/"))
+				if (path.startsWith(File.separator))
 					path = path.substring(1);
-				int indx = path.indexOf("/"); //$NON-NLS-1$
+				int indx = path.indexOf(File.separator); //$NON-NLS-1$
 				String ppath = indx >= 0 ? path.substring(0, indx) : path;
-				String fpath = indx >= 0 ? path.substring(indx) : "/"; //$NON-NLS-1$
+				String fpath = indx >= 0 ? path.substring(indx) : File.separator; //$NON-NLS-1$
 
 				IProject prj = ResourcesPlugin.getWorkspace().getRoot().getProject(ppath);
 				if (prj != null)
