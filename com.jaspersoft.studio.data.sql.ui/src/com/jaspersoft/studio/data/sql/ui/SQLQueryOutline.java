@@ -115,24 +115,6 @@ public class SQLQueryOutline {
 				isRefresh = false;
 			}
 		};
-		treeViewer.getTree().addKeyListener(new KeyAdapter() {
-
-			@Override
-			public void keyPressed(KeyEvent e) {
-				ISelection s = treeViewer.getSelection();
-				List<Object> lst = new ArrayList<Object>();
-				if (s instanceof TreeSelection) {
-					for (TreePath tp : ((TreeSelection) s).getPaths())
-						lst.add(tp.getLastSegment());
-				}
-				Object[] sel = lst.toArray();
-				if (e.keyCode == SWT.DEL || e.keyCode == SWT.BS)
-					for (AAction act : afactory.getActions())
-						if (act != null && DeleteAction.class.isAssignableFrom(act.getClass())
-								&& act.calculateEnabled(sel))
-							act.run();
-			}
-		});
 		treeViewer.setLabelProvider(new ReportTreeLabelProvider());
 		treeViewer.setContentProvider(new ReportTreeContetProvider());
 		treeViewer.setUseHashlookup(true);
@@ -382,7 +364,7 @@ public class SQLQueryOutline {
 		treeViewer.getControl().addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent event) {
-				if (event.character == SWT.DEL && event.stateMask == 0) {
+				if ((event.character == SWT.DEL && event.stateMask == 0)  || event.keyCode == SWT.BS) {
 					TreeSelection s = (TreeSelection) treeViewer.getSelection();
 
 					List<DeleteAction<?>> dactions = afactory.getDeleteActions(s != null ? s.toArray() : null);
