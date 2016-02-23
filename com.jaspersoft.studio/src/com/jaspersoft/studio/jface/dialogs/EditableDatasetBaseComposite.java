@@ -211,7 +211,7 @@ public abstract class EditableDatasetBaseComposite extends Composite implements 
 			JRGroup incrementGroup = this.datasetInstance.getJRElementDataset().getIncrementGroup();
 			if (incrementGroup != null) {
 				String currentGroupName = incrementGroup.getName();
-				for (int i = 0; i < comboResetGroup.getItemCount(); i++) {
+				for (int i = 0; i < comboIncrementGroup.getItemCount(); i++) {
 					if (comboIncrementGroup.getItem(i).equals(currentGroupName)) {
 						comboIncrementGroup.select(i);
 						break;
