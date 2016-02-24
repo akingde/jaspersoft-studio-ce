@@ -64,6 +64,7 @@ import net.sf.jasperreports.engine.JRDatasetRun;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.JRPropertiesHolder;
+import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.component.ComponentKey;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
@@ -78,10 +79,22 @@ import net.sf.jasperreports.engine.type.PrintOrderEnum;
 public class MList extends MGraphicElement implements IPastable,
 		IPastableGraphic, IContainerLayout, IContainer, IContainerEditPart,
 		IGroupElement, IGraphicElementContainer, ICopyable, IDatasetContainer, IPinContainer {
+		
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+	
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
 
+	private static IPropertyDescriptor[] descriptors;
+	
+	private static Map<String, Object> defaultsMap;
+	
+	private static NamedEnumPropertyDescriptor<PrintOrderEnum> printOrderD;
+	
+	public static final String PREFIX = "CONTENTS."; //$NON-NLS-1$
+
+	private MDatasetRun mDatasetRun;
+	
 	/**
 	 * Gets the icon descriptor.
 	 * 
@@ -119,9 +132,6 @@ public class MList extends MGraphicElement implements IPastable,
 	public JRDesignComponentElement getValue() {
 		return (JRDesignComponentElement) super.getValue();
 	}
-
-	private static IPropertyDescriptor[] descriptors;
-	private static Map<String, Object> defaultsMap;
 
 	@Override
 	public Map<String, Object> getDefaultsMap() {
@@ -212,11 +222,6 @@ public class MList extends MGraphicElement implements IPastable,
 
 	}
 
-	public static final String PREFIX = "CONTENTS."; //$NON-NLS-1$
-
-	private MDatasetRun mDatasetRun;
-	private static NamedEnumPropertyDescriptor<PrintOrderEnum> printOrderD;
-
 	@Override
 	public Object getPropertyValue(Object id) {
 		StandardListComponent jrList = getList();
@@ -282,8 +287,7 @@ public class MList extends MGraphicElement implements IPastable,
 
 	public Dimension getContainerSize() {
 		JRDesignComponentElement jrElement = (JRDesignComponentElement) getValue();
-		StandardListComponent jrList = (StandardListComponent) jrElement
-				.getComponent();
+		StandardListComponent jrList = (StandardListComponent) jrElement.getComponent();
 		// ListContents can have null dimensions, let's provide a default
 		return new Dimension(
 				Misc.nvl(jrList.getContents().getWidth(),0), 
@@ -439,31 +443,7 @@ public class MList extends MGraphicElement implements IPastable,
 		}
 		super.propertyChange(evt);
 	}
-
-	@Override
-	public Integer getTopPadding() {
-		return getTopPadding();
-	}
-
-	@Override
-	public Integer getLeftPadding() {
-		return getLeftPadding();
-	}
-
-	@Override
-	public Integer getRightPadding() {
-		return getRightPadding();
-	}
-
-	@Override
-	public Integer getBottomPadding() {
-		return getBottomPadding();
-	}
-
-	@Override
-	public Integer getPadding() {
-		return getPadding();
-	}
+	
 	@Override
 	public Dimension getSize() {
 		JRDesignComponentElement v = getValue();
@@ -547,5 +527,64 @@ public class MList extends MGraphicElement implements IPastable,
 	@Override
 	public ILayout getDefaultLayout() {
 		return LayoutManager.getLayout(FreeLayout.class.getName());
+	}
+	
+	/**
+	 * When the style changes a refresh is sent not only to the current node, but
+	 * also to the node that are listening on the same JR element. This is done 
+	 * to propagate the change to every editor where the element is displayed
+	 */
+	@Override
+	public void setStyleChangedProperty() {
+		super.setStyleChangedProperty();
+		getValue().getEventSupport().firePropertyChange(MGraphicElement.FORCE_GRAPHICAL_REFRESH, null, null);
+	}
+	
+	//Stuff for the padding, the list is not a line box, but it could support padding trough styles. For 
+	//this reason this calls try to resolve the style and return the padding provided by the style.
+	
+	@Override
+	public Integer getTopPadding() {
+		JRStyle style = getActualStyle();
+		if (style != null){
+			return style.getLineBox().getTopPadding();
+		}
+		return 0;
+	}
+
+	@Override
+	public Integer getLeftPadding() {
+		JRStyle style = getActualStyle();
+		if (style != null){
+			return style.getLineBox().getLeftPadding();
+		}
+		return 0;
+	}
+
+	@Override
+	public Integer getRightPadding() {
+		JRStyle style = getActualStyle();
+		if (style != null){
+			return style.getLineBox().getRightPadding();
+		}
+		return 0;
+	}
+
+	@Override
+	public Integer getBottomPadding() {
+		JRStyle style = getActualStyle();
+		if (style != null){
+			return style.getLineBox().getBottomPadding();
+		}
+		return 0;
+	}
+
+	@Override
+	public Integer getPadding() {
+		JRStyle style = getActualStyle();
+		if (style != null){
+			return style.getLineBox().getPadding();
+		}
+		return 0;
 	}
 }

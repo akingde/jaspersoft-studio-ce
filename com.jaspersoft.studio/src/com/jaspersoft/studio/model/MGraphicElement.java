@@ -561,7 +561,7 @@ public class MGraphicElement extends APropertyNode
 	 * Return the internal style used. If the internal style is a reference to a removed style then it is also removed
 	 * from the element
 	 */
-	public JRStyle getActualStyle() {
+	protected JRStyle getActualStyle() {
 		JRDesignElement jrElement = (JRDesignElement) getValue();
 		// Check if the used style is valid otherwise set it to null
 		if (jrElement.getStyle() != null && !getJasperDesign().getStylesMap().containsKey(jrElement.getStyle().getName())) {
