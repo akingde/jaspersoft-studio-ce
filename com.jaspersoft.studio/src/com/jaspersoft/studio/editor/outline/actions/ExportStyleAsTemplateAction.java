@@ -111,7 +111,7 @@ public class ExportStyleAsTemplateAction extends ACachedSelectionAction {
 		for (Object obj : objects) {
 			if (obj instanceof EditPart) {
 				ANode n = (ANode) ((EditPart) obj).getModel();
-				if (n instanceof MStyle && ((MStyle)n).isEditable() && !result.contains(n.getValue())) {
+				if (n instanceof MStyle && !result.contains(n.getValue())) {
 					result.add((JRStyle) n.getValue());
 				}
 			}
