@@ -85,7 +85,7 @@ public class UIManager {
 				imageCache.clear();
 				parentsPath.clear();
 				cache.clear();
-				cachePlugin.clear();
+				if (cachePlugin != null) cachePlugin.clear();
 				initCachePlugin();
 			}
 			return true;
