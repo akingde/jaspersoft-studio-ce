@@ -18,6 +18,7 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
+import net.sf.jasperreports.engine.base.JRBaseBand;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 
 /*
@@ -47,7 +48,7 @@ public class BandSection extends AbstractSection {
 		container.setLayoutData(containerData);
 		
 		createWidget4Property(container, JRDesignBand.PROPERTY_HEIGHT);
-		createWidget4Property(container, JRDesignBand.PROPERTY_SPLIT_TYPE);
+		createWidget4Property(container, JRBaseBand.PROPERTY_splitType);
 		createWidget4Property(container, JRDesignBand.PROPERTY_PRINT_WHEN_EXPRESSION);
 
 		GridData gd = new GridData(GridData.HORIZONTAL_ALIGN_CENTER);
@@ -69,7 +70,7 @@ public class BandSection extends AbstractSection {
 	protected void initializeProvidedProperties() {
 		super.initializeProvidedProperties();
 		addProvidedProperties(JRDesignBand.PROPERTY_HEIGHT, Messages.common_height);
-		addProvidedProperties(JRDesignBand.PROPERTY_SPLIT_TYPE, Messages.common_split_type);
+		addProvidedProperties(JRBaseBand.PROPERTY_splitType, Messages.common_split_type);
 		addProvidedProperties(JRDesignBand.PROPERTY_PRINT_WHEN_EXPRESSION, Messages.common_print_when_expression);
 		addProvidedProperties(JRDesignBand.PROPERTY_RETURN_VALUES, Messages.common_return_values);
 	}
