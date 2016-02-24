@@ -20,6 +20,7 @@ import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.JRPropertiesHolder;
 import net.sf.jasperreports.engine.JRPropertiesMap;
+import net.sf.jasperreports.engine.base.JRBaseBand;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignSubreport;
@@ -375,7 +376,7 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 		heightD.setDescription(Messages.MBand_height_description);
 		desc.add(heightD);
 
-		splitStyleD = new NamedEnumPropertyDescriptor<SplitTypeEnum>(JRDesignBand.PROPERTY_SPLIT_TYPE,
+		splitStyleD = new NamedEnumPropertyDescriptor<SplitTypeEnum>(JRBaseBand.PROPERTY_splitType,
 				Messages.common_split_type, SplitTypeEnum.IMMEDIATE, NullEnum.NULL);
 		splitStyleD.setDescription(Messages.MBand_split_type_dscription);
 		desc.add(splitStyleD);
@@ -421,7 +422,7 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 		if (jrband != null) {
 			if (id.equals(JRDesignBand.PROPERTY_HEIGHT))
 				return new Integer(jrband.getHeight());
-			if (id.equals(JRDesignBand.PROPERTY_SPLIT_TYPE))
+			if (id.equals(JRBaseBand.PROPERTY_splitType))
 				return splitStyleD.getIntValue(jrband.getSplitTypeValue());
 			if (id.equals(JRDesignBand.PROPERTY_PRINT_WHEN_EXPRESSION)) {
 				return ExprUtil.getExpression(jrband.getPrintWhenExpression());
@@ -454,7 +455,7 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 		if (jrband != null) {
 			if (id.equals(JRDesignBand.PROPERTY_HEIGHT)) {
 				jrband.setHeight(Math.max(0, (Integer) Misc.nvl(value, Integer.valueOf(0))));
-			} else if (id.equals(JRDesignBand.PROPERTY_SPLIT_TYPE))
+			} else if (id.equals(JRBaseBand.PROPERTY_splitType))
 				jrband.setSplitType(splitStyleD.getEnumValue(value));
 			else if (id.equals(JRDesignBand.PROPERTY_PRINT_WHEN_EXPRESSION))
 				jrband.setPrintWhenExpression(ExprUtil.setValues(jrband.getPrintWhenExpression(), value, null));
