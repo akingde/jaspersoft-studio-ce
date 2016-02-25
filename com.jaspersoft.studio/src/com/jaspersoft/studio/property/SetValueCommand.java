@@ -45,6 +45,12 @@ public class SetValueCommand extends Command {
 	protected IPropertySource target;
 
 	/**
+	 * For the post set descriptor also a JSScompound command is used,
+	 * to disable useless refresh operation 
+	 */
+	private JSSCompoundCommand commands;
+	
+	/**
 	 * Instantiates a new sets the value command.
 	 */
 	public SetValueCommand() {
@@ -139,12 +145,6 @@ public class SetValueCommand extends Command {
 		if (commands != null)
 			commands.execute();
 	}
-
-	/**
-	 * For the post set descriptor also a JSScompound command is used,
-	 * to disable useless refresh operation 
-	 */
-	private JSSCompoundCommand commands;
 
 	/*
 	 * (non-Javadoc)

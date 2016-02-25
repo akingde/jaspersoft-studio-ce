@@ -292,11 +292,19 @@ public class JRPropertySheetEntry extends CustomPropertySheetEntry {
 						if (oldval == null && newval == null)
 							continue;
 					}
-					SetValueCommand setCommand = new SetValueCommand(child.getDisplayName());
-					setCommand.setTarget(propertySource);
-					setCommand.setPropertyId(propid);
-					setCommand.setPropertyValue(newval);
-					command.add(setCommand);
+					
+					//Check if the node provide a SetValueCommand provide and use it in case, otherwise
+					//create a standard SetValueCommand
+					ISetValueCommandProvider setCmdProvider = (ISetValueCommandProvider)aNode.getAdapter(ISetValueCommandProvider.class);
+					if (setCmdProvider != null){
+						command.add(setCmdProvider.getSetValueCommand(propertySource, child.getDisplayName(), propid, newval));
+					} else {				
+						SetValueCommand setCommand = new SetValueCommand(child.getDisplayName());
+						setCommand.setTarget(propertySource);
+						setCommand.setPropertyId(propid);
+						setCommand.setPropertyValue(newval);
+						command.add(setCommand);
+					}
 					remainingSelection.remove(obj);
 				}
 			}

@@ -33,6 +33,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.editor.report.EditorContributor;
+import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.properties.internal.IHighlightPropertyWidget;
 import com.jaspersoft.studio.properties.internal.IWidgetsProviderSection;
@@ -41,6 +42,7 @@ import com.jaspersoft.studio.properties.view.AbstractPropertySection;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetWidgetFactory;
 import com.jaspersoft.studio.properties.view.validation.ValidationError;
+import com.jaspersoft.studio.property.ISetValueCommandProvider;
 import com.jaspersoft.studio.property.SetValueCommand;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 import com.jaspersoft.studio.property.section.widgets.SPWidgetFactory;
@@ -319,11 +321,22 @@ public abstract class AbstractSection extends AbstractPropertySection
 	public boolean changeProperty(Object property, Object newValue) {
 		return changeProperty(property, newValue, null);
 	}
+	
+	/**
+	 * Create the compound command where the subcommands can be added
+	 * 
+	 * @param name the name of the command
+	 * @param node the node used as reference for the compound command
+	 * @return a not null {@link JSSCompoundCommand}
+	 */
+	protected JSSCompoundCommand getCompoundCommand(String name, ANode node){
+		return new JSSCompoundCommand(name, node);
+	}
 
 	public boolean changeProperty(Object property, Object newValue, List<Command> commands) {
 		if (!isRefreshing() && elements != null && !elements.isEmpty() && getEditDomain() != null) {
 			CommandStack cs = getEditDomain().getCommandStack();
-			JSSCompoundCommand cc = new JSSCompoundCommand("Set " + property, null);
+			JSSCompoundCommand cc = getCompoundCommand("Set " + property, null);
 			for (APropertyNode n : elements) {
 				cc.setReferenceNodeIfNull(n);
 				if (isChanged(property, newValue, n)) {
@@ -362,7 +375,7 @@ public abstract class AbstractSection extends AbstractPropertySection
 	public boolean changePropertyOn(Object property, Object newValue, List<APropertyNode> nodes, List<Command> commands) {
 		if (!isRefreshing() && nodes != null && !nodes.isEmpty() && getEditDomain() != null) {
 			CommandStack cs = getEditDomain().getCommandStack();
-			JSSCompoundCommand cc = new JSSCompoundCommand("Set " + property, null);
+			JSSCompoundCommand cc = getCompoundCommand("Set " + property, null);
 			for (APropertyNode n : nodes) {
 				cc.setReferenceNodeIfNull(n);
 				if (isChanged(property, newValue, n)) {
@@ -391,7 +404,7 @@ public abstract class AbstractSection extends AbstractPropertySection
 		if (!isRefreshing() && elements != null && !elements.isEmpty() && getEditDomain() != null) {
 			CommandStack cs = getEditDomain().getCommandStack();
 			if (isChanged(property, newValue, n)) {
-				JSSCompoundCommand cc = new JSSCompoundCommand("Set " + property, n);
+				JSSCompoundCommand cc = getCompoundCommand("Set " + property, n);
 				Command c = getChangePropertyCommand(property, newValue, n);
 				if (c != null)
 					cc.add(c);
@@ -418,11 +431,18 @@ public abstract class AbstractSection extends AbstractPropertySection
 
 	public Command getChangePropertyCommand(Object property, Object newValue, APropertyNode n) {
 		if (isChanged(property, newValue, n)) {
-			SetValueCommand setCommand = new SetValueCommand(n.getDisplayText());
-			setCommand.setTarget(n);
-			setCommand.setPropertyId(property);
-			setCommand.setPropertyValue(newValue);
-			return setCommand;
+			//Check if the node provide a SetValueCommand provide and use it in case, otherwise
+			//create a standard SetValueCommand
+			ISetValueCommandProvider provider = (ISetValueCommandProvider)n.getAdapter(ISetValueCommandProvider.class);
+			if (provider != null){
+				return provider.getSetValueCommand(n, n.getDisplayText(), property, newValue);
+			} else {
+				SetValueCommand setCommand = new SetValueCommand(n.getDisplayText());
+				setCommand.setTarget(n);
+				setCommand.setPropertyId(property);
+				setCommand.setPropertyValue(newValue);
+				return setCommand;
+			}
 		}
 		return null;
 	}

@@ -29,6 +29,7 @@ import com.jaspersoft.studio.components.table.TableComponentFactory;
 import com.jaspersoft.studio.components.table.TableDatasetRunProperyDescriptor;
 import com.jaspersoft.studio.components.table.TableManager;
 import com.jaspersoft.studio.components.table.TableNodeIconDescriptor;
+import com.jaspersoft.studio.components.table.TableSetValueCommandProvider;
 import com.jaspersoft.studio.components.table.descriptor.FillContentPropertyDescriptor;
 import com.jaspersoft.studio.components.table.descriptor.NextColumnPropertyDescriptor;
 import com.jaspersoft.studio.components.table.messages.Messages;
@@ -51,6 +52,7 @@ import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.MPage;
 import com.jaspersoft.studio.model.dataset.MDatasetRun;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
+import com.jaspersoft.studio.property.ISetValueCommandProvider;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 import com.jaspersoft.studio.utils.Misc;
@@ -612,5 +614,17 @@ public class MTable extends MGraphicElement implements IContainer,
 	@Override
 	public ILayout getDefaultLayout() {
 		return LayoutManager.getLayout(FreeLayout.class.getName());
+	}
+	
+	/**
+	 * This type of node return a custom set value command provider that will allow to 
+	 * generate command that will check if the table has the autoresize and if the changed property
+	 * need to trigger its refresh
+	 */
+	@SuppressWarnings("rawtypes")
+	@Override
+	public Object getAdapter(Class adapter) {
+		if (adapter == ISetValueCommandProvider.class) return TableSetValueCommandProvider.INSTANCE;
+		else return super.getAdapter(adapter);
 	}
 }

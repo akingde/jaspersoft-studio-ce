@@ -25,6 +25,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.table.TableManager;
 import com.jaspersoft.studio.components.table.TableNodeIconDescriptor;
+import com.jaspersoft.studio.components.table.TableSetValueCommandProvider;
 import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.components.table.model.AMCollection;
 import com.jaspersoft.studio.components.table.model.MTable;
@@ -48,6 +49,7 @@ import com.jaspersoft.studio.model.IPastable;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
+import com.jaspersoft.studio.property.ISetValueCommandProvider;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.propexpr.JPropertyExpressionsDescriptor;
@@ -577,5 +579,17 @@ public class MColumn extends APropertyNode implements IPastable, IContainer,ICon
 		if (node instanceof MTable)
 			return (MTable) node;
 		return null;
+	}
+	
+	/**
+	 * This type of node return a custom set value command provider that will allow to 
+	 * generate command that will check if the table has the autoresize and if the changed property
+	 * need to trigger its refresh
+	 */
+	@SuppressWarnings("rawtypes")
+	@Override
+	public Object getAdapter(Class adapter) {
+		if (adapter == ISetValueCommandProvider.class) return TableSetValueCommandProvider.INSTANCE;
+		else return super.getAdapter(adapter);
 	}
 }

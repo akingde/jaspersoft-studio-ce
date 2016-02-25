@@ -29,10 +29,14 @@ import net.sf.jasperreports.components.table.StandardColumnGroup;
 /**
  * Command used to set the property of one or more table cells. It will do 
  * the autoresize of the table after executing the commands contained in this 
- * one, if tthe flag is enabled
+ * one, if the flag is enabled. Also it can layout the whole table if set 
+ * the flag layoutTableContent to true.
  * 
  * Allow also to update the span of all the cells in the table when the command
  * is executed, undone o redone
+ * 
+ * Before to execute the inner commands store the width of every columns of the table
+ * and restore if on the undo
  * 
  * @author Orlandin Marco
  *
@@ -79,6 +83,16 @@ public class JSSCompoundTableCommand extends JSSCompoundCommand {
 	 */
 	public JSSCompoundTableCommand(MTable table){
 		this(table, false);
+	}
+	
+	/**
+	 * Create the command for the resize
+	 * 
+	 * @param table a not null table containing the resized columns
+	 * @param table a not null table containing the resized columns
+	 */
+	public JSSCompoundTableCommand(String commandText, MTable table){
+		this(commandText, table, false);
 	}
 	
 	/**
@@ -160,8 +174,6 @@ public class JSSCompoundTableCommand extends JSSCompoundCommand {
 		} else {
 			super.undo();
 			if (layoutTableContent){
-				//The size was already right (probably because of the restoreColumnsSize) so the cells was not
-				//layouted after the undo, trigger a manual layout
 				JSSCompoundCommand layoutCommands = table.getTableManager().getLayoutCommand();
 				layoutCommands.setReferenceNodeIfNull(table);
 				layoutCommands.execute();
@@ -245,7 +257,8 @@ public class JSSCompoundTableCommand extends JSSCompoundCommand {
 	
 	/**
 	 * Set the layout table content flag. This flag allow to layout
-	 * the table content after the inner commands are executed
+	 * the table content after the inner commands are executed. By 
+	 * default this is false
 	 * 
 	 * @param value true if the contents should be layouted, false otherwise
 	 */
