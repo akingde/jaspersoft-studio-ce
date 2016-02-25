@@ -66,6 +66,10 @@ public class ItemListCellEditor extends EditableDialogCellEditor {
 		return null;
 	}
 
+	public void setLabelProvider(ItemLabelProvider labelProvider) {
+		this.labelProvider = labelProvider;
+	}
+
 	@Override
 	protected void updateContents(Object value) {
 		if (getDefaultLabel() == null)

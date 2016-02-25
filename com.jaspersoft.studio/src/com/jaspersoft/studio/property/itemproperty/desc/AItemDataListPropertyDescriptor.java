@@ -9,7 +9,6 @@
 package com.jaspersoft.studio.property.itemproperty.desc;
 
 import org.eclipse.jface.viewers.CellEditor;
-import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
@@ -33,11 +32,13 @@ public abstract class AItemDataListPropertyDescriptor extends NTextPropertyDescr
 
 	@Override
 	public CellEditor createPropertyEditor(Composite parent) {
-		return new ItemListCellEditor(parent, expContext, getDescriptor(), this, pNode);
+		ItemListCellEditor ce = new ItemListCellEditor(parent, expContext, getDescriptor(), this, pNode);
+		ce.setLabelProvider(getLabelProvider());
+		return ce;
 	}
 
 	@Override
-	public ILabelProvider getLabelProvider() {
+	public ItemLabelProvider getLabelProvider() {
 		return new ItemLabelProvider(descriptor);
 	}
 
@@ -58,7 +59,7 @@ public abstract class AItemDataListPropertyDescriptor extends NTextPropertyDescr
 	public ADescriptor getDescriptor() {
 		if (descriptor == null)
 			initShowColumns();
-		setLabelProvider(new ItemLabelProvider(descriptor));
+		setLabelProvider(getLabelProvider());
 		return descriptor;
 	}
 

@@ -104,7 +104,7 @@ public class ItemLabelProvider extends ColumnLabelProvider implements ITableLabe
 	@Override
 	public String getColumnText(Object element, int columnIndex) {
 		if (element instanceof ItemData)
-			return getColumnText4ItemData(columnIndex);
+			return getColumnText4ItemData((ItemData) element, columnIndex);
 		if (element instanceof StandardItem && descriptor.getItemPropertyDescriptors().length > columnIndex) {
 			StandardItem item = (StandardItem) element;
 			if (!Misc.isNullOrEmpty(item.getProperties())) {
@@ -118,7 +118,7 @@ public class ItemLabelProvider extends ColumnLabelProvider implements ITableLabe
 		return ""; //$NON-NLS-1$
 	}
 
-	protected String getColumnText4ItemData(int columnIndex) {
+	protected String getColumnText4ItemData(ItemData element, int columnIndex) {
 		if (columnIndex == 0)
 			return Messages.ItemLabelProvider_7 + " " + (columnIndex + 1);
 		return "";

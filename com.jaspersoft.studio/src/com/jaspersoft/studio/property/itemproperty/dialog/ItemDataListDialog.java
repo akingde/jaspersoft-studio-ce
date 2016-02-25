@@ -13,8 +13,6 @@ import java.util.List;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.ColumnWeightData;
-import org.eclipse.jface.viewers.DoubleClickEvent;
-import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
@@ -93,8 +91,13 @@ public class ItemDataListDialog extends ATitledDialog implements IExpressionCont
 			}
 
 			@Override
+			protected String getColumnText4ItemData(ItemData element, int columnIndex) {
+				return getText4ItemData(element);
+			}
+
+			@Override
 			public String getText4ItemData(ItemData element) {
-				return "Item Data " + (value.indexOf(element) + 1);
+				return Messages.ItemLabelProvider_7 + " " + (value.indexOf(element) + 1);
 			}
 		});
 
@@ -105,13 +108,6 @@ public class ItemDataListDialog extends ATitledDialog implements IExpressionCont
 		tviewer.setContentProvider(new ListContentProvider());
 		ColumnViewerToolTipSupport.enableFor(tviewer, ToolTip.NO_RECREATE);
 		UIUtil.setViewerCellEditingOnDblClick(tviewer);
-		tviewer.addDoubleClickListener(new IDoubleClickListener() {
-
-			@Override
-			public void doubleClick(DoubleClickEvent event) {
-				bpropEdit.push();
-			}
-		});
 
 		Composite bGroup = new Composite(cmp, SWT.NONE);
 		bGroup.setLayout(new GridLayout(1, false));
@@ -135,14 +131,14 @@ public class ItemDataListDialog extends ATitledDialog implements IExpressionCont
 
 			@Override
 			public void editElement(List<StandardItemData> input, int pos) {
-				StandardItemData old = input.get(pos);
 				List<ItemData> clones = JRCloneUtils.cloneList(value);
 				StandardItemData itemDataClone = (StandardItemData) getStandardItemData(clones);
 
 				if (createItemDataDialog(clones, itemDataClone).open() == Dialog.OK)
-					input.set(pos, old);
+					input.set(pos, itemDataClone);
 			}
 		});
+		bpropEdit.editOnDoubleClick();
 		new DeleteButton().createDeleteButton(bGroup, tviewer);
 
 		tviewer.setInput(value);
