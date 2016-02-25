@@ -13,7 +13,6 @@
 package com.jaspersoft.studio.server.protocol.soap;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.Format;
@@ -298,28 +297,34 @@ public class SoapConnection implements IConnection {
 			rd = get(monitor, rd, null);
 
 			for (ResourceDescriptor r : children) {
-				if (SelectorDatasource.isDatasource(r))
-					continue;
-				if (r.isMainReport())
-					continue;
-				if (r.getWsType().equals(ResourceDescriptor.TYPE_INPUT_CONTROL)) {
-					if (r.getIsReference())
-						r.setUriString(rd.getUriString() + "_files/" + r.getName());
-					if (!r.getIsNew())
-						r = client.addOrModifyResource(r, null);
-					else
-						client.modifyReportUnitResource(rd.getUriString(), r, null);
-				} else {
+				try {
+					if (SelectorDatasource.isDatasource(r))
+						continue;
 					if (r.isMainReport())
 						continue;
-					File f = null;
-					if (r.getHasData() && r.getData() != null) {
-						f = writeToTemp(r.getData());
-						r.setData(null);
+					if (r.getWsType().equals(ResourceDescriptor.TYPE_INPUT_CONTROL)) {
+						if (r.getIsReference())
+							r.setUriString(rd.getUriString() + "_files/" + r.getName());
+						if (!r.getIsNew())
+							r = client.addOrModifyResource(r, null);
+						else
+							client.modifyReportUnitResource(rd.getUriString(), r, null);
+					} else {
+						if (r.isMainReport())
+							continue;
+						File f = null;
+						if (r.getHasData() && r.getData() != null) {
+							f = writeToTemp(r.getData());
+							r.setData(null);
+							r.setHasData(true);
+						}
+						r = client.modifyReportUnitResource(rd.getUriString(), r, f);
 					}
-					r = client.modifyReportUnitResource(rd.getUriString(), r, f);
+					rd.getChildren().add(r);
+				} catch (Exception e) {
+					// not all types are working
+					e.printStackTrace();
 				}
-				rd.getChildren().add(r);
 			}
 			if (mainDs != null) {
 				rd = get(monitor, rd, null);
@@ -618,14 +623,7 @@ public class SoapConnection implements IConnection {
 	public static File writeToTemp(byte[] b64data) throws IOException {
 		File inputFile = FileUtils.createTempFile("save", "jrxml");
 		inputFile.deleteOnExit();
-		FileOutputStream out = null;
-		try {
-			out = new FileOutputStream(inputFile);
-			out.write(Base64.decodeBase64(b64data));
-			out.flush();
-		} finally {
-			FileUtils.closeStream(out);
-		}
+		org.apache.commons.io.FileUtils.write(inputFile, new String(Base64.decodeBase64(b64data)));
 		return inputFile;
 	}
 
