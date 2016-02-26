@@ -51,7 +51,7 @@ public class DeleteButton {
 						boolean confirmDelete = confirmDelete(obj);
 						confirm = false;
 						if (!confirmDelete)
-							continue;
+							return;
 						int ind = inlist.indexOf(obj);
 						inlist.remove(obj);
 						afterElementDeleted(obj);
