@@ -68,7 +68,7 @@ public class DeleteRowAction extends DeleteAction {
 			createDeleteCommands(child.getChildren(), container);
 			if (child instanceof MColumn){
 				Command cmd = new DeleteColumnCellCommand((ANode)child.getParent(), (MColumn)child);
-				if (cmd != null)
+				if (cmd != null && cmd.canExecute())
 					container.add(cmd);
 			}
 		}
