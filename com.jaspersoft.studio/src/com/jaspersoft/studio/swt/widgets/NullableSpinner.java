@@ -15,6 +15,7 @@ package com.jaspersoft.studio.swt.widgets;
 import java.text.NumberFormat;
 
 import org.eclipse.draw2d.ColorConstants;
+import org.eclipse.jface.util.Util;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.events.KeyAdapter;
@@ -29,10 +30,11 @@ import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Layout;
 import org.eclipse.swt.widgets.Menu;
 
 /**
@@ -52,9 +54,38 @@ public class NullableSpinner extends Composite {
 	private NumericText text;
 	
 	/**
-	 * Compiosite where the button are painted
+	 * Composite where the button are painted
 	 */
 	private Composite buttonContainer;
+	
+	/**
+	 * Custom layout used to place the elements inside the composite. This will remove 
+	 * every unnecessary space to have the elements completely fit the container area
+	 */
+	private Layout mainLayout = new Layout() {
+		
+		@Override
+		protected void layout(Composite parent, boolean flushCache) {
+			Control[] children = parent.getChildren();
+			Rectangle carea = parent.getClientArea();
+			for (int i = 0; i < children.length; i++) {
+				Control child = children[i];
+				if(child == text){
+					child.setBounds(0, 0, carea.width-15, carea.height);
+				} else if (child == buttonContainer){
+					child.setBounds(carea.width-15, 0, 15, carea.height);
+				}
+			}
+		}
+		
+		@Override
+		protected Point computeSize(Composite composite, int wHint, int hHint, boolean flushCache) {
+			int width = wHint == SWT.DEFAULT ? 45 : wHint;
+			if (width < 16) width = 16;
+			int height = hHint == SWT.DEFAULT ? 18 : hHint;
+			return new Point(width, height);
+		}
+	};
 
 	/**
 	 * Create an instance of the class
@@ -68,10 +99,7 @@ public class NullableSpinner extends Composite {
 	public NullableSpinner(Composite parent, int style, int decimalDigitsShown, int decimalDigitsAccepted) {
 		super(parent, style);
 
-		final GridLayout gd = new GridLayout(2, false);
-		gd.horizontalSpacing = gd.verticalSpacing = 0;
-		gd.marginWidth = gd.marginHeight = 0;
-		setLayout(gd);
+		setLayout(mainLayout);
 
 		createContent(style, decimalDigitsShown, decimalDigitsAccepted);
 		addTextListeners();
@@ -81,12 +109,14 @@ public class NullableSpinner extends Composite {
 			
 			@Override
 			public void paintControl(PaintEvent e) {
-				e.gc.setForeground(ColorConstants.lightGray);
-				Rectangle rect = text.getBounds();
-        e.gc.setLineStyle(SWT.LINE_SOLID);
-        e.gc.drawLine(0, 0, rect.width, 0);
-        e.gc.drawLine(0, -1, 0, rect.height + 1);
-        e.gc.drawLine(0, rect.height-1, rect.width, rect.height-1);
+				if (!Util.isWindows()){
+					e.gc.setForeground(ColorConstants.lightGray);
+					Rectangle rect = text.getBounds();
+	        e.gc.setLineStyle(SWT.LINE_SOLID);
+	        e.gc.drawLine(0, 0, rect.width, 0);
+	        e.gc.drawLine(0, -1, 0, rect.height + 1);
+	        e.gc.drawLine(0, rect.height-1, rect.width, rect.height-1);
+				}
 			}
 		}); 
 	}
@@ -112,18 +142,7 @@ public class NullableSpinner extends Composite {
 	private void createContent(int style, int decimalDigitsShown, int decimalDigitsAccepted) {
 		createText(style ^ SWT.BORDER, decimalDigitsShown, decimalDigitsAccepted);
 		
-		GridLayout gd = new GridLayout(1, false);
-		gd.horizontalSpacing = gd.verticalSpacing = 0;
-		gd.marginWidth = gd.marginHeight = 0;
-		
 		buttonContainer = new Composite(this, SWT.NONE);
-		buttonContainer.setLayout(gd);
-		GridData buttonsData = new GridData(SWT.FILL, SWT.FILL, false, true);
-		buttonsData.widthHint = 15;
-		buttonsData.minimumWidth =15;
-		buttonsData.heightHint = 18;
-		buttonContainer.setLayoutData(buttonsData);
-		//Listener to paint the spinner buttons
 		buttonContainer.addPaintListener(new PaintListener() {
 			
 			@Override
@@ -140,9 +159,14 @@ public class NullableSpinner extends Composite {
 				gc.fillRectangle(0, 0, bounds.width, bounds.height);
 				int middleButtonHeight = bounds.height / 2;
 				int middleButtonWidth = bounds.width / 2;
+				
+				//draw the middle line
+				
 				gc.drawLine(0, middleButtonHeight, bounds.width + 2, middleButtonHeight);
 				
 				//draw the arrows
+				
+				gc.setAntialias(SWT.ON);
 				
 				if (isEnabled()) {
 					gc.setBackground(ColorConstants.black);
@@ -207,11 +231,6 @@ public class NullableSpinner extends Composite {
 	 */
 	private void createText(int style, int decimalDigitsShown, int decimalDigitsAccepted) {
 		this.text = new NumericText(this, style, decimalDigitsShown, decimalDigitsAccepted);
-		final GridData gd = new GridData(GridData.FILL, GridData.FILL, true, true);
-		gd.minimumWidth = 30;
-		gd.widthHint = 30;
-		gd.heightHint = 18;
-		this.text.setLayoutData(gd);
 	}
 	
 
