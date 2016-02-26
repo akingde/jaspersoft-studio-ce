@@ -78,6 +78,9 @@ public class PasteResourceAction extends Action {
 		boolean iscut = false;
 		contents = Clipboard.getDefault().getContents();
 		ANode parent = getSelected();
+		Object firstElement = ((TreeSelection) treeViewer.getSelection()).getFirstElement();
+		if (firstElement instanceof AMResource && AddResourceAction.isSpecialFolder((AMResource) firstElement))
+			return false;
 		if (res && contents != null && contents instanceof List<?>) {
 			List<?> list = (List<?>) contents;
 			res = false;
@@ -106,9 +109,6 @@ public class PasteResourceAction extends Action {
 		if (contents == null)
 			return false;
 		if (res) {
-			Object firstElement = ((TreeSelection) treeViewer.getSelection()).getFirstElement();
-			if (firstElement instanceof AMResource && AddResourceAction.isSpecialFolder((AMResource) firstElement))
-				return false;
 			res = firstElement != null;
 			if (res) {
 				if (firstElement instanceof AMResource) {
