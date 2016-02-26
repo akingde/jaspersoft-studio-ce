@@ -366,7 +366,13 @@ public class NumericText extends Text {
 	private boolean verifyEntryAndStoreValue(final String entry, final int keyCode) {
 		String work = "";
 		if (keyCode == SWT.DEL) {
-			work = StringUtil.removeCharAt(getText(), getCaretPosition());
+			Point cursorSelection = getSelection();
+			String text = getText();
+			if (cursorSelection.x == cursorSelection.y && cursorSelection.x != text.length()){
+				work = StringUtil.removeCharAt(getText(), getCaretPosition());
+			} else {
+				work = text.substring(0, cursorSelection.x) + text.substring(cursorSelection.y, text.length());
+			}
 		} else if (keyCode == SWT.BS) {
 			Point cursorSelection = getSelection();
 			if (cursorSelection.x == cursorSelection.y && cursorSelection.x != 0){
