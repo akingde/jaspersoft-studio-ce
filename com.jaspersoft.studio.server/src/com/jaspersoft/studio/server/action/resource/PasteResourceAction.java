@@ -324,8 +324,9 @@ public class PasteResourceAction extends Action {
 			if (monitor.isCanceled())
 				break;
 		}
-		if (parent instanceof MReportUnit)
-			parent.setValue(ws.addOrModifyResource(monitor, (ResourceDescriptor) parent.getValue(), null));
+		// if (parent instanceof MReportUnit)
+		// parent.setValue(ws.addOrModifyResource(monitor, (ResourceDescriptor)
+		// parent.getValue(), null));
 		toRefresh.add(parent);
 		for (ANode n : toRefresh)
 			refreshNode(n, monitor);
@@ -384,6 +385,7 @@ public class PasteResourceAction extends Action {
 			}
 		}
 		prd.getChildren().add(rd);
+		ws.addOrModifyResource(monitor, prd, null);
 	}
 
 	private boolean isSameServer(ANode parent, AMResource m) {
