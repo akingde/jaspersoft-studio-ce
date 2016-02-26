@@ -322,7 +322,8 @@ public class GMapsMarkersPanel extends GMapsCenterPanel {
 
 	public void clearMarkers() {
 		map.getJavascriptMapSupport().clearMarkers();
-		markersList.removeAll();
+		if (markersList != null)
+			markersList.removeAll();
 	}
 
 	protected String formatMarker(Marker m) {

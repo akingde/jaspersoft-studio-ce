@@ -105,7 +105,7 @@ public class MarkersPropertyDescriptor extends AItemDataListPropertyDescriptor {
 										pmap.refresh();
 									}
 								});
-							} else
+							} else if (itemsViewer.getTable().isVisible())
 								itemsViewer.refresh();
 						}
 					});
@@ -159,8 +159,7 @@ public class MarkersPropertyDescriptor extends AItemDataListPropertyDescriptor {
 							initMarkers = true;
 							try {
 								JasperDesign jd = mmap.getJasperDesign();
-								if (markersList != null && markersList.getItemCount() > 0)
-									clearMarkers();
+								clearMarkers();
 								JRDesignDataset dataset = null;
 								if (itemData.getDataset() != null)
 									dataset = ModelUtils.getDesignDatasetForDatasetRun(jd,
