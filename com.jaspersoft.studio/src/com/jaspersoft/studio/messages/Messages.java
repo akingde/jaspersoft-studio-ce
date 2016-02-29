@@ -156,6 +156,12 @@ public class Messages extends NLS {
 	public static String common_xpath_select;
 	public static String common_xpath_timezone;
 	public static String ABrowserViewer_ExternalBrowserPreviewMsg;
+	public static String AbstractJRXMLEditor_1;
+	public static String AbstractJRXMLEditor_10;
+	public static String AbstractJRXMLEditor_2;
+	public static String AbstractJRXMLEditor_3;
+	public static String AbstractJRXMLEditor_8;
+	public static String AbstractJRXMLEditor_9;
 	public static String ADataInput_mandatory;
 	public static String ADataInput_removeparam;
 	public static String ADataInput_removeparam_explain;

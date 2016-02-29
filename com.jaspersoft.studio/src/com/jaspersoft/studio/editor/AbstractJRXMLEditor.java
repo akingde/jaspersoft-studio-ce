@@ -308,7 +308,7 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart
 				}
 			});
 		} catch (CoreException e) {
-			if (e.getMessage().startsWith("File not found")) {
+			if (e.getMessage().startsWith("File not found")) { //$NON-NLS-1$
 				closeEditorOnErrors();
 			} else {
 				setModel(null);
@@ -587,14 +587,14 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart
 
 			final IFile resource = getCurrentFile();
 			if (resource == null) {
-				MessageDialog.openError(UIUtils.getShell(), "Report save operation",
-						"It's not possible to save the current report. "
-								+ "If you opened from an archive please extract the file and copy it into the workspace.");
+				MessageDialog.openError(UIUtils.getShell(), Messages.AbstractJRXMLEditor_1,
+						Messages.AbstractJRXMLEditor_2
+								+ Messages.AbstractJRXMLEditor_3);
 				return;
 			}
 			try {
 				if (!resource.exists())
-					resource.create(new ByteArrayInputStream("FILE".getBytes(FileUtils.UTF8_ENCODING)), true, monitor);
+					resource.create(new ByteArrayInputStream("FILE".getBytes(FileUtils.UTF8_ENCODING)), true, monitor); //$NON-NLS-1$
 
 				resource.setCharset(FileUtils.UTF8_ENCODING, monitor);
 				((IStorageDocumentProvider) xmlEditor.getDocumentProvider()).setEncoding(getEditorInput(),
@@ -707,7 +707,7 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart
 							else
 								file.setContents(in, true, true, monitor);
 						} else if (!file.exists())
-							file.create(new ByteArrayInputStream("".getBytes(FileUtils.UTF8_ENCODING)), true, monitor);
+							file.create(new ByteArrayInputStream("".getBytes(FileUtils.UTF8_ENCODING)), true, monitor); //$NON-NLS-1$
 
 						IFileEditorInput modelFile = new FileEditorInput(file);
 						setInputWithNotify(modelFile);
@@ -795,7 +795,7 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart
 					}
 				});
 				if (context == null)
-					context = service.activateContext("com.jaspersoft.studio.context");
+					context = service.activateContext("com.jaspersoft.studio.context"); //$NON-NLS-1$
 				break;
 			case PAGE_SOURCEEDITOR:
 				if (toXML)
@@ -812,7 +812,7 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart
 				break;
 			case PAGE_PREVIEW:
 				if (context == null)
-					context = service.activateContext("com.jaspersoft.studio.context");
+					context = service.activateContext("com.jaspersoft.studio.context"); //$NON-NLS-1$
 				if (activePage == PAGE_SOURCEEDITOR && !xmlFresh)
 					try {
 						xml2model();
@@ -825,12 +825,12 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart
 					model2xml(ver);
 					isRefreshing = false;
 				}
-				Job job = new Job("Switching to Preview") {
+				Job job = new Job(Messages.AbstractJRXMLEditor_8) {
 					@Override
 					protected IStatus run(final IProgressMonitor monitor) {
-						monitor.beginTask("Compiling subreport", IProgressMonitor.UNKNOWN);
+						monitor.beginTask(Messages.AbstractJRXMLEditor_9, IProgressMonitor.UNKNOWN);
 						if (jrContext.getPropertyBoolean(DesignerPreferencePage.P_SAVE_ON_PREVIEW, Boolean.FALSE)) {
-							monitor.subTask("Saving Report");
+							monitor.subTask(Messages.AbstractJRXMLEditor_10);
 							UIUtils.getDisplay().syncExec(new Runnable() {
 
 								@Override
