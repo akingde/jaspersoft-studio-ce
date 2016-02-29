@@ -197,8 +197,10 @@ public class PackageResourceDefinition extends AbstractResourceDefinition{
 	 */
 	@Override
 	public boolean equals(Object obj) {
-		PackageResourceDefinition resource = (PackageResourceDefinition)obj;
-		return safeEquals(getPath(), resource.getPath()) && super.equals(obj);
+		if (obj instanceof PackageResourceDefinition){
+			PackageResourceDefinition resource = (PackageResourceDefinition)obj;
+			return safeEquals(getPath(), resource.getPath()) && super.equals(obj);
+		} else return false;
 	}
 	
 

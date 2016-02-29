@@ -224,6 +224,7 @@ public class ExportedResourcesWizardPage extends JSSHelpWizardPage {
 			hostPluginName.setEnabled(false);
 			hostPluginVersion.setEnabled(false);
 			pluginProducer.setEnabled(false);
+			setPageComplete(false);
 		} else {
 			pluginTable.setSelection(0);
 			TableItem selectedEntry = pluginTable.getSelection()[0];
