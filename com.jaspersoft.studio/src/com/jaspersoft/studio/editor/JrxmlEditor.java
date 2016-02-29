@@ -15,12 +15,14 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.dialogs.IPageChangedListener;
 import org.eclipse.jface.dialogs.PageChangedEvent;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.part.MultiPageEditorPart;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.preview.view.control.VErrorPreview;
 import com.jaspersoft.studio.editor.report.CachedSelectionProvider;
 import com.jaspersoft.studio.editor.report.CommonSelectionCacheProvider;
@@ -31,6 +33,7 @@ import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.util.ReportFactory;
 
 import net.sf.jasperreports.eclipse.builder.jdt.JRErrorHandler;
+import net.sf.jasperreports.eclipse.util.FileExtension;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRExpressionCollector;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
@@ -157,6 +160,15 @@ public class JrxmlEditor extends AbstractJRXMLEditor implements IJROBjectEditor,
 		 */
 	}
 
+	@Override
+	public Image getTitleImage() {
+		if(getCurrentFile()!=null && FileExtension.JRXML.equals(getCurrentFile().getFileExtension())){
+			return JaspersoftStudioPlugin.getInstance().getImage("icons/jrxml_icon.png"); //$NON-NLS-1$
+		}
+		else {
+			return super.getTitleImage();
+		}
+	}	
 	@Override
 	public CommonSelectionCacheProvider getSelectionCache() {
 		return reportContainer.getSelectionCache();

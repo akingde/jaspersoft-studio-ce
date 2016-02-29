@@ -162,6 +162,8 @@ public class Messages extends NLS {
 	public static String AbstractJRXMLEditor_3;
 	public static String AbstractJRXMLEditor_8;
 	public static String AbstractJRXMLEditor_9;
+	public static String AbstractJRXMLEditor_ConversionMessage;
+	public static String AbstractJRXMLEditor_ConversionTitle;
 	public static String ADataInput_mandatory;
 	public static String ADataInput_removeparam;
 	public static String ADataInput_removeparam_explain;
