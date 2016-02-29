@@ -48,7 +48,7 @@ public class ServerProfile implements Resource, Cloneable, Serializable, JRChang
 	private String timeZone;
 	private boolean useSSO = false;
 	private String ssoUuid;
-	private ClientUser clientUser;
+	private transient ClientUser clientUser;
 
 	private JRPropertyChangeSupport propertyChange = new JRPropertyChangeSupport(this);
 
