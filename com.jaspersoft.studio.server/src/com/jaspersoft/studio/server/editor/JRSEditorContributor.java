@@ -55,15 +55,13 @@ public class JRSEditorContributor implements IEditorContributor {
 			return;
 		AbstractJRXMLEditor jEditor = (AbstractJRXMLEditor) editor;
 		JasperReportsConfiguration jConfig = jEditor.getJrContext(null);
-		JSSFileRepositoryService repService = jConfig
-				.getFileRepositoryService();
+		JSSFileRepositoryService repService = jConfig.getFileRepositoryService();
 		List<RepositoryService> rservices = repService.getRepositoryServices();
 		List<RepositoryService> toDel = new ArrayList<RepositoryService>();
 		for (RepositoryService rs : rservices)
 			if (rs instanceof JRSRepositoryService) {
 				toDel.add(rs);
-				FileRepositoryService frs = ((JRSRepositoryService) rs)
-						.getFileRepositoryService();
+				FileRepositoryService frs = ((JRSRepositoryService) rs).getFileRepositoryService();
 				if (frs != null)
 					toDel.add(frs);
 			}
@@ -78,32 +76,25 @@ public class JRSEditorContributor implements IEditorContributor {
 		JasperReportsConfiguration jConfig = (JasperReportsConfiguration) jrConfig;
 		JasperDesign jd = jConfig.getJasperDesign();
 
-		String[] prop = getServerURL(jd,
-				(IFile) jrConfig.getValue(FileUtils.KEY_FILE), monitor);
+		String[] prop = getServerURL(jd, (IFile) jrConfig.getValue(FileUtils.KEY_FILE), monitor);
 		if (prop == null || prop[0] == null)
 			return;
-		Boolean doSave = jConfig.getPropertyBoolean(
-				JRSPreferencesPage.PUBLISH_REPORT_TOJRSONSAVE, Boolean.TRUE);
+		Boolean doSave = jConfig.getPropertyBoolean(JRSPreferencesPage.PUBLISH_REPORT_TOJRSONSAVE, Boolean.TRUE);
 		if (!doSave)
 			return;
 
-		MScopedPreferenceStore pStore = (MScopedPreferenceStore) jConfig
-				.getPrefStore();
+		MScopedPreferenceStore pStore = (MScopedPreferenceStore) jConfig.getPrefStore();
 		pStore.setWithDefault(false);
 		String sRun = Misc.nullIfEmpty(pStore.getString(KEY_PUBLISH2JSS));
-		String sAllways = Misc.nullIfEmpty(pStore
-				.getString(KEY_PUBLISH2JSS_SILENT));
+		String sAllways = Misc.nullIfEmpty(pStore.getString(KEY_PUBLISH2JSS_SILENT));
 		pStore.setWithDefault(true);
 
 		boolean run = sRun == null ? true : Boolean.parseBoolean(sRun);
-		boolean allways = sAllways == null ? true : Boolean
-				.parseBoolean(sAllways);
+		boolean allways = sAllways == null ? true : Boolean.parseBoolean(sAllways);
 		if (allways) {
-			SaveConfirmationDialog dialog = new SaveConfirmationDialog(
-					UIUtils.getShell());
+			SaveConfirmationDialog dialog = new SaveConfirmationDialog(UIUtils.getShell());
 			run = (dialog.open() == Dialog.OK);
-			pStore.setValue(KEY_PUBLISH2JSS_SILENT,
-					Boolean.toString(!dialog.getAllways()));
+			pStore.setValue(KEY_PUBLISH2JSS_SILENT, Boolean.toString(!dialog.getAllways()));
 		}
 
 		pStore.setValue(KEY_PUBLISH2JSS, Boolean.toString(run));
@@ -118,16 +109,42 @@ public class JRSEditorContributor implements IEditorContributor {
 		}
 	}
 
-	public static String[] getServerURL(JasperDesign jd, IFile f,
-			IProgressMonitor monitor) {
+	@Override
+	public void onSaveAs(IFile oldName, IFile newName, JasperReportsContext jrConfig, IProgressMonitor monitor) {
+		JasperReportsConfiguration jConfig = (JasperReportsConfiguration) jrConfig;
+		JasperDesign jd = jConfig.getJasperDesign();
+
+		if (!replaceURL(AExporter.PROP_REPORTUNIT, jd, oldName, newName))
+			replaceURL(AExporter.PROP_REPORTRESOURCE, jd, oldName, newName);
+	}
+
+	private boolean replaceURL(String prop, JasperDesign jd, IFile oldName, IFile newName) {
+		String url = jd.getProperty(prop);
+		if (url == null)
+			return false;
+		String old = "/" + oldName.getName();
+		String fext = oldName.getFileExtension();
+		if (!Misc.isNullOrEmpty(fext))
+			old = old.substring(0, oldName.getName().length() - fext.length());
+		if (url.endsWith(old)) {
+			String n = "/" + newName.getName();
+			fext = newName.getFileExtension();
+			if (!Misc.isNullOrEmpty(fext))
+				n = n.substring(0, newName.getName().length() - fext.length());
+			jd.setProperty(AExporter.PROP_SERVERURL, url.substring(0, url.length() - old.length()) + n);
+			return true;
+		}
+		return false;
+	}
+
+	public static String[] getServerURL(JasperDesign jd, IFile f, IProgressMonitor monitor) {
 		String[] urls = new String[2];
 		urls[0] = jd.getProperty(AExporter.PROP_SERVERURL);
 		urls[1] = jd.getProperty(AExporter.PROP_USER);
 		if (f != null) {
 			try {
 				if (Misc.isNullOrEmpty(urls[0]))
-					urls[0] = f.getPersistentProperty(new QualifiedName(
-							Activator.PLUGIN_ID, AExporter.PROP_SERVERURL));
+					urls[0] = f.getPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, AExporter.PROP_SERVERURL));
 				if (Misc.isNullOrEmpty(urls[1])) {
 					List<String[]> paths = PublishUtil.loadPath(monitor, f);
 					for (String[] p : paths) {
@@ -142,15 +159,13 @@ public class JRSEditorContributor implements IEditorContributor {
 		return urls;
 	}
 
-	protected static JrxmlPublishAction getAction(IProgressMonitor monitor,
-			JasperReportsConfiguration jrConfig) {
+	protected static JrxmlPublishAction getAction(IProgressMonitor monitor, JasperReportsConfiguration jrConfig) {
 		JrxmlPublishAction publishAction = new JrxmlPublishAction(1, monitor);
 		publishAction.setJrConfig(jrConfig);
 		return publishAction;
 	}
 
-	public void onRun(JasperReportsConfiguration jrConfig, JasperReport jr,
-			Map<String, Object> params) {
+	public void onRun(JasperReportsConfiguration jrConfig, JasperReport jr, Map<String, Object> params) {
 		// for (JRParameter p : jr.getParameters()) {
 		// look if there are JRS built-in parameters, set server value, for
 		// this
@@ -166,8 +181,7 @@ public class JRSEditorContributor implements IEditorContributor {
 	@Override
 	public String getTitleToolTip(JasperReportsContext jrConfig, String toolTip) {
 		String s = toolTip;
-		JasperDesign jd = ((JasperReportsConfiguration) jrConfig)
-				.getJasperDesign();
+		JasperDesign jd = ((JasperReportsConfiguration) jrConfig).getJasperDesign();
 		if (jd != null) {
 			String p = jd.getProperty(AExporter.PROP_SERVERURL);
 			if (p != null)

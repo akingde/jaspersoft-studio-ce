@@ -588,8 +588,7 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart
 			final IFile resource = getCurrentFile();
 			if (resource == null) {
 				MessageDialog.openError(UIUtils.getShell(), Messages.AbstractJRXMLEditor_1,
-						Messages.AbstractJRXMLEditor_2
-								+ Messages.AbstractJRXMLEditor_3);
+						Messages.AbstractJRXMLEditor_2 + Messages.AbstractJRXMLEditor_3);
 				return;
 			}
 			try {
@@ -688,7 +687,8 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart
 	@Override
 	public void doSaveAs() {
 		SaveAsDialog saveAsDialog = new SaveAsDialog(getSite().getShell());
-		saveAsDialog.setOriginalFile(((FileEditorInput) getEditorInput()).getFile());
+		IFile oldFile = ((FileEditorInput) getEditorInput()).getFile();
+		saveAsDialog.setOriginalFile(oldFile);
 		if (saveAsDialog.open() == Dialog.OK) {
 			IPath path = saveAsDialog.getResult();
 			if (path != null) {
@@ -696,7 +696,7 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart
 				if (file != null) {
 					IProgressMonitor monitor = getActiveEditor().getEditorSite().getActionBars().getStatusLineManager()
 							.getProgressMonitor();
-
+					JaspersoftStudioPlugin.getExtensionManager().onSaveAs(oldFile, file, jrContext, monitor);
 					try {
 						if (getActiveEditor() == xmlEditor) {
 							IDocumentProvider dp = xmlEditor.getDocumentProvider();

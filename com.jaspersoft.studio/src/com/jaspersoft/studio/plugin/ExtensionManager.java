@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -67,8 +68,8 @@ public class ExtensionManager {
 	private Map<String, List<WHyperlink.UIElement>> uiElementsIDByCustomType;
 
 	public void init() {
-		IConfigurationElement[] config = Platform.getExtensionRegistry().getConfigurationElementsFor(
-				JaspersoftStudioPlugin.PLUGIN_ID, "components"); //$NON-NLS-1$ 
+		IConfigurationElement[] config = Platform.getExtensionRegistry()
+				.getConfigurationElementsFor(JaspersoftStudioPlugin.PLUGIN_ID, "components"); //$NON-NLS-1$
 		for (IConfigurationElement e : config) {
 			try {
 				Object o = e.createExecutableExtension("ClassFactory"); //$NON-NLS-1$
@@ -86,7 +87,7 @@ public class ExtensionManager {
 
 		// List all the extensions that provide a DataAdapterFactory
 		config = Platform.getExtensionRegistry().getConfigurationElementsFor(JaspersoftStudioPlugin.PLUGIN_ID,
-				"dataAdapters"); //$NON-NLS-1$  
+				"dataAdapters"); //$NON-NLS-1$
 		for (IConfigurationElement e : config) {
 			try {
 				Object o = e.createExecutableExtension("ClassFactory"); //$NON-NLS-1$
@@ -98,7 +99,7 @@ public class ExtensionManager {
 		}
 
 		config = Platform.getExtensionRegistry().getConfigurationElementsFor(JaspersoftStudioPlugin.PLUGIN_ID,
-				"editorLifecycle"); //$NON-NLS-1$  
+				"editorLifecycle"); //$NON-NLS-1$
 		for (IConfigurationElement e : config) {
 			try {
 				Object o = e.createExecutableExtension("ClassFactory"); //$NON-NLS-1$
@@ -114,8 +115,8 @@ public class ExtensionManager {
 
 	public List<IRepositoryViewProvider> getRepositoryProviders() {
 		List<IRepositoryViewProvider> paletteGroup = new ArrayList<IRepositoryViewProvider>();
-		IConfigurationElement[] config = Platform.getExtensionRegistry().getConfigurationElementsFor(
-				JaspersoftStudioPlugin.PLUGIN_ID, "repositoryview"); //$NON-NLS-1$
+		IConfigurationElement[] config = Platform.getExtensionRegistry()
+				.getConfigurationElementsFor(JaspersoftStudioPlugin.PLUGIN_ID, "repositoryview"); //$NON-NLS-1$
 		TreeMap<String, IRepositoryViewProvider> map = new TreeMap<String, IRepositoryViewProvider>();
 		int i = 0;
 		for (IConfigurationElement e : config) {
@@ -138,21 +139,20 @@ public class ExtensionManager {
 	}
 
 	/**
-	 * Returns the list of {@link JDBCDriverDefinition} items contributed 
-	 * by different plug-ins through the extension-point 
-	 * <code>com.jaspersoft.studio.jdbcDriverDefinitions</code>. 
+	 * Returns the list of {@link JDBCDriverDefinition} items contributed by different plug-ins through the
+	 * extension-point <code>com.jaspersoft.studio.jdbcDriverDefinitions</code>.
 	 * 
 	 * @return the list of JDBC driver definitions contributed
 	 */
 	public List<JDBCDriverDefinition> getJDBCDriverDefinitions() {
-		IConfigurationElement[] config = Platform.getExtensionRegistry().getConfigurationElementsFor(
-				JaspersoftStudioPlugin.PLUGIN_ID, "jdbcDriverDefinitions"); //$NON-NLS-1$ 
+		IConfigurationElement[] config = Platform.getExtensionRegistry()
+				.getConfigurationElementsFor(JaspersoftStudioPlugin.PLUGIN_ID, "jdbcDriverDefinitions"); //$NON-NLS-1$
 		List<JDBCDriverDefinition> driverDefinitions = new ArrayList<JDBCDriverDefinition>();
 		for (IConfigurationElement el : config) {
 			JDBCDriverDefinitionsContainer container;
 			try {
 				Object clazz = el.createExecutableExtension("class");
-				if(clazz instanceof JDBCDriverDefinitionsContainer) {
+				if (clazz instanceof JDBCDriverDefinitionsContainer) {
 					container = (JDBCDriverDefinitionsContainer) clazz;
 					driverDefinitions.addAll(container.getJDBCDriverDefinitions());
 				}
@@ -162,8 +162,7 @@ public class ExtensionManager {
 		}
 		return driverDefinitions;
 	}
-	
-	
+
 	/**
 	 * Returns the support factory for the expression editor.
 	 * 
@@ -173,8 +172,8 @@ public class ExtensionManager {
 	 * @return the contributed support factory, null <code>otherwise</code>
 	 */
 	public IExpressionEditorSupportFactory getExpressionEditorSupportFactory() {
-		IConfigurationElement[] config = Platform.getExtensionRegistry().getConfigurationElementsFor(
-				JaspersoftStudioPlugin.PLUGIN_ID, "expressionEditorSupport"); //$NON-NLS-1$ 
+		IConfigurationElement[] config = Platform.getExtensionRegistry()
+				.getConfigurationElementsFor(JaspersoftStudioPlugin.PLUGIN_ID, "expressionEditorSupport"); //$NON-NLS-1$
 		IExpressionEditorSupportFactory defaultFactory = null;
 		boolean defaultFound = false;
 		boolean overrideFound = true;
@@ -187,12 +186,8 @@ public class ExtensionManager {
 						defaultFactory = (IExpressionEditorSupportFactory) defaultSupportClazz;
 					}
 				} catch (CoreException e) {
-					JaspersoftStudioPlugin
-							.getInstance()
-							.getLog()
-							.log(
-									new Status(IStatus.ERROR, JaspersoftStudioPlugin.PLUGIN_ID,
-											"An error occurred while trying to create the new class.", e));
+					JaspersoftStudioPlugin.getInstance().getLog().log(new Status(IStatus.ERROR, JaspersoftStudioPlugin.PLUGIN_ID,
+							"An error occurred while trying to create the new class.", e));
 				}
 			} else {
 				if (!overrideFound && "true".equals(el.getAttribute("override"))) {
@@ -204,12 +199,8 @@ public class ExtensionManager {
 							return (IExpressionEditorSupportFactory) overrideClazz;
 						}
 					} catch (CoreException e) {
-						JaspersoftStudioPlugin
-								.getInstance()
-								.getLog()
-								.log(
-										new Status(IStatus.ERROR, JaspersoftStudioPlugin.PLUGIN_ID,
-												"An error occurred while trying to create the new class.", e));
+						JaspersoftStudioPlugin.getInstance().getLog().log(new Status(IStatus.ERROR,
+								JaspersoftStudioPlugin.PLUGIN_ID, "An error occurred while trying to create the new class.", e));
 					}
 				}
 			}
@@ -225,8 +216,8 @@ public class ExtensionManager {
 	 */
 	public List<TemplateProvider> getTemplateProviders() {
 
-		IConfigurationElement[] config = Platform.getExtensionRegistry().getConfigurationElementsFor(
-				JaspersoftStudioPlugin.PLUGIN_ID, "templateProviderSupport"); //$NON-NLS-1$ 
+		IConfigurationElement[] config = Platform.getExtensionRegistry()
+				.getConfigurationElementsFor(JaspersoftStudioPlugin.PLUGIN_ID, "templateProviderSupport"); //$NON-NLS-1$
 
 		ArrayList<TemplateProvider> providersList = new ArrayList<TemplateProvider>();
 		for (IConfigurationElement el : config) {
@@ -238,12 +229,8 @@ public class ExtensionManager {
 					providersList.add((TemplateProvider) defaultSupportClazz);
 				}
 			} catch (CoreException e) {
-				JaspersoftStudioPlugin
-						.getInstance()
-						.getLog()
-						.log(
-								new Status(IStatus.ERROR, JaspersoftStudioPlugin.PLUGIN_ID,
-										"An error occurred while trying to create the new class.", e));
+				JaspersoftStudioPlugin.getInstance().getLog().log(new Status(IStatus.ERROR, JaspersoftStudioPlugin.PLUGIN_ID,
+						"An error occurred while trying to create the new class.", e));
 			}
 		}
 		return providersList;
@@ -262,8 +249,8 @@ public class ExtensionManager {
 	 */
 	public List<TemplateViewProvider> getStylesViewProvider() {
 		if (stylesViewList == null) {
-			IConfigurationElement[] config = Platform.getExtensionRegistry().getConfigurationElementsFor(
-					JaspersoftStudioPlugin.PLUGIN_ID, "stylesViewContributor");
+			IConfigurationElement[] config = Platform.getExtensionRegistry()
+					.getConfigurationElementsFor(JaspersoftStudioPlugin.PLUGIN_ID, "stylesViewContributor");
 			stylesViewList = new ArrayList<TemplateViewProvider>();
 			for (IConfigurationElement el : config) {
 
@@ -274,12 +261,8 @@ public class ExtensionManager {
 						stylesViewList.add((TemplateViewProvider) defaultSupportClazz);
 					}
 				} catch (CoreException e) {
-					JaspersoftStudioPlugin
-							.getInstance()
-							.getLog()
-							.log(
-									new Status(IStatus.ERROR, JaspersoftStudioPlugin.PLUGIN_ID,
-											"An error occurred while trying to create the new class.", e));
+					JaspersoftStudioPlugin.getInstance().getLog().log(new Status(IStatus.ERROR, JaspersoftStudioPlugin.PLUGIN_ID,
+							"An error occurred while trying to create the new class.", e));
 				}
 			}
 		}
@@ -299,8 +282,8 @@ public class ExtensionManager {
 	 */
 	public List<AExporterFactory> getExportersFactories() {
 		if (exportersFactories == null) {
-			IConfigurationElement[] config = Platform.getExtensionRegistry().getConfigurationElementsFor(
-					JaspersoftStudioPlugin.PLUGIN_ID, "exporterFactory");
+			IConfigurationElement[] config = Platform.getExtensionRegistry()
+					.getConfigurationElementsFor(JaspersoftStudioPlugin.PLUGIN_ID, "exporterFactory");
 			exportersFactories = new ArrayList<AExporterFactory>();
 			for (IConfigurationElement el : config) {
 				Object defaultSupportClazz;
@@ -314,12 +297,8 @@ public class ExtensionManager {
 						factory.setSeparatorPlacedBefore(separatorBeofre);
 					}
 				} catch (CoreException e) {
-					JaspersoftStudioPlugin
-							.getInstance()
-							.getLog()
-							.log(
-									new Status(IStatus.ERROR, JaspersoftStudioPlugin.PLUGIN_ID,
-											"An error occurred while trying to create the new class.", e));
+					JaspersoftStudioPlugin.getInstance().getLog().log(new Status(IStatus.ERROR, JaspersoftStudioPlugin.PLUGIN_ID,
+							"An error occurred while trying to create the new class.", e));
 				}
 			}
 		}
@@ -334,8 +313,8 @@ public class ExtensionManager {
 	 * @return a not null list of IFirstStartupAction
 	 */
 	public Collection<IFirstStartupAction> getFirstStartupActions() {
-		IConfigurationElement[] config = Platform.getExtensionRegistry().getConfigurationElementsFor(
-				JaspersoftStudioPlugin.PLUGIN_ID, "firstStartupActions");
+		IConfigurationElement[] config = Platform.getExtensionRegistry()
+				.getConfigurationElementsFor(JaspersoftStudioPlugin.PLUGIN_ID, "firstStartupActions");
 		ArrayList<String> firstStartupActions = new ArrayList<String>();
 		HashMap<String, IFirstStartupAction> actionMap = new HashMap<String, IFirstStartupAction>();
 		HashSet<String> overridenAction = new HashSet<String>();
@@ -354,12 +333,8 @@ public class ExtensionManager {
 					}
 				}
 			} catch (CoreException e) {
-				JaspersoftStudioPlugin
-						.getInstance()
-						.getLog()
-						.log(
-								new Status(IStatus.ERROR, JaspersoftStudioPlugin.PLUGIN_ID,
-										"An error occurred while trying to create the new class.", e));
+				JaspersoftStudioPlugin.getInstance().getLog().log(new Status(IStatus.ERROR, JaspersoftStudioPlugin.PLUGIN_ID,
+						"An error occurred while trying to create the new class.", e));
 			}
 		}
 		// Remove the overriden actions
@@ -372,8 +347,8 @@ public class ExtensionManager {
 
 	public List<PaletteGroup> getPaletteGroups() {
 		List<PaletteGroup> paletteGroup = new ArrayList<PaletteGroup>();
-		IConfigurationElement[] config = Platform.getExtensionRegistry().getConfigurationElementsFor(
-				JaspersoftStudioPlugin.PLUGIN_ID, "palette"); //$NON-NLS-1$ 
+		IConfigurationElement[] config = Platform.getExtensionRegistry()
+				.getConfigurationElementsFor(JaspersoftStudioPlugin.PLUGIN_ID, "palette"); //$NON-NLS-1$
 		for (IConfigurationElement e : config) {
 			PaletteGroup p = new PaletteGroup();
 			p.setId(e.getAttribute("id")); //$NON-NLS-1$
@@ -542,6 +517,11 @@ public class ExtensionManager {
 			f.onSave(jrConfig, monitor);
 	}
 
+	public void onSaveAs(IFile oldName, IFile newName, JasperReportsConfiguration jrConfig, IProgressMonitor monitor) {
+		for (IEditorContributor f : eContributor)
+			f.onSaveAs(oldName, newName, jrConfig, monitor);
+	}
+
 	public String getTitleToolTip(JasperReportsConfiguration jrConfig, String tooltip) {
 		for (IEditorContributor f : eContributor) {
 			String s = f.getTitleToolTip(jrConfig, tooltip);
@@ -583,8 +563,8 @@ public class ExtensionManager {
 	 * @return the list of contributed information
 	 */
 	public List<PreviewModeDetails> getAllPreviewModeDetails(String previewModeID) {
-		IConfigurationElement[] elements = Platform.getExtensionRegistry().getConfigurationElementsFor(
-				JaspersoftStudioPlugin.PLUGIN_ID, PreviewModeDetails.EXTENSION_POINT_ID); //$NON-NLS-1$
+		IConfigurationElement[] elements = Platform.getExtensionRegistry()
+				.getConfigurationElementsFor(JaspersoftStudioPlugin.PLUGIN_ID, PreviewModeDetails.EXTENSION_POINT_ID); // $NON-NLS-1$
 		List<PreviewModeDetails> allDetails = new ArrayList<PreviewModeDetails>();
 		for (IConfigurationElement ce : elements) {
 			if (previewModeID.equals(ce.getAttribute("modeID")) || previewModeID == null) {
@@ -620,8 +600,8 @@ public class ExtensionManager {
 	 */
 	public List<String> getContributedHyperlinkTypes() {
 		if (customHyperlinkTypes == null) {
-			IConfigurationElement[] contributedElements = Platform.getExtensionRegistry().getConfigurationElementsFor(
-					"com.jaspersoft.studio.hyperlinkTypes"); //$NON-NLS-1$
+			IConfigurationElement[] contributedElements = Platform.getExtensionRegistry()
+					.getConfigurationElementsFor("com.jaspersoft.studio.hyperlinkTypes"); //$NON-NLS-1$
 			if (contributedElements.length != 0) {
 				customHyperlinkTypes = new ArrayList<String>(contributedElements.length);
 				defaultHyperlinkParametersByCustomType = new HashMap<String, List<HyperlinkDefaultParameter>>(
@@ -655,10 +635,8 @@ public class ExtensionManager {
 							try {
 								uiElementsList.add(WHyperlink.UIElement.valueOf(id));
 							} catch (NullPointerException e1) {
-								JaspersoftStudioPlugin.getInstance()
-										.logWarning(
-												NLS.bind("Custom Hyperlink Type {0} - The attribute id for the uiElement tag can not be null",
-														type));
+								JaspersoftStudioPlugin.getInstance().logWarning(NLS
+										.bind("Custom Hyperlink Type {0} - The attribute id for the uiElement tag can not be null", type));
 							} catch (IllegalArgumentException e2) {
 								JaspersoftStudioPlugin.getInstance().logWarning(
 										NLS.bind("Custom Hyperlink Type {0} - The value {1} for the attribute id is not valid", type, id));
