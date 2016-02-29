@@ -142,6 +142,11 @@ public class DatasetRunWidgetRadio implements IExpressionContextSetter {
 
 	public void setEnabled(boolean en) {
 		composite.setEnabled(en);
+		radioUseConnectionExpression.setEnabled(en);
+		radioNoConnection.setEnabled(en);
+		radioUseDatasourceExpression.setEnabled(en);
+		radioUseEmptyDatasource.setEnabled(en);
+		radioUseParentConnection.setEnabled(en);
 	}
 
 	public void createControl(Composite parent) {
@@ -211,9 +216,9 @@ public class DatasetRunWidgetRadio implements IExpressionContextSetter {
 				else if (radioUseParentConnection.getSelection())
 					setConnection("$P{REPORT_CONNECTION}"); //$NON-NLS-1$
 				else if (radioUseDatasourceExpression.getSelection())
-					setDatasource("new net.sf.jasperreports.engine.JREmptyDataSource() ");//$NON-NLS-1$ 
+					setDatasource("new net.sf.jasperreports.engine.JREmptyDataSource() ");//$NON-NLS-1$
 				else if (radioUseEmptyDatasource.getSelection())
-					setDatasource("new net.sf.jasperreports.engine.JREmptyDataSource()");//$NON-NLS-1$ 
+					setDatasource("new net.sf.jasperreports.engine.JREmptyDataSource()");//$NON-NLS-1$
 
 				connectionExpressionBox.setEnabled(radioUseConnectionExpression.getSelection());
 				datasourceExpressionBox.setEnabled(radioUseDatasourceExpression.getSelection());

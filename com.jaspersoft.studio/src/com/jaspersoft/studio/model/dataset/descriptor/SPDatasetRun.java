@@ -8,6 +8,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.model.dataset.descriptor;
 
+import java.awt.Color;
+
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
@@ -79,8 +81,8 @@ public class SPDatasetRun<T extends IPropertyDescriptor> extends ASPropertyWidge
 			public void widgetSelected(SelectionEvent e) {
 				boolean en = !dsetCombo.getText().equals(ModelUtils.MAIN_DATASET);
 				setDatasetEnabled(en);
-				changeProperty(section, pDescriptor.getId(), JRDesignDatasetRun.PROPERTY_DATASET_NAME, en ? dsetCombo.getText()
-						: ""); //$NON-NLS-1$
+				changeProperty(section, pDescriptor.getId(), JRDesignDatasetRun.PROPERTY_DATASET_NAME,
+						en ? dsetCombo.getText() : ""); //$NON-NLS-1$
 			}
 		});
 
@@ -124,7 +126,7 @@ public class SPDatasetRun<T extends IPropertyDescriptor> extends ASPropertyWidge
 		c.setLayoutData(gd);
 
 		// Create the button to edit the return parameters
-		returns =  section.getWidgetFactory().createButton(c, Messages.common_return_values, SWT.PUSH | SWT.FLAT);
+		returns = section.getWidgetFactory().createButton(c, Messages.common_return_values, SWT.PUSH | SWT.FLAT);
 		returns.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -164,7 +166,7 @@ public class SPDatasetRun<T extends IPropertyDescriptor> extends ASPropertyWidge
 
 		});
 
-		paramMap =  section.getWidgetFactory().createButton(c, Messages.SPDatasetRun_3, SWT.PUSH | SWT.FLAT);
+		paramMap = section.getWidgetFactory().createButton(c, Messages.SPDatasetRun_3, SWT.PUSH | SWT.FLAT);
 		paramMap.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -172,7 +174,8 @@ public class SPDatasetRun<T extends IPropertyDescriptor> extends ASPropertyWidge
 					JRDesignDatasetRun datasetRun = mDataSet.getValue();
 					JRExpressionEditor wizard = new JRExpressionEditor();
 					wizard.setValue((JRDesignExpression) datasetRun.getParametersMapExpression());
-					WizardDialog dialog = ExpressionEditorSupportUtil.getExpressionEditorWizardDialog(paramMap.getShell(), wizard);
+					WizardDialog dialog = ExpressionEditorSupportUtil.getExpressionEditorWizardDialog(paramMap.getShell(),
+							wizard);
 					if (dialog.open() == Dialog.OK) {
 						changeProperty(section, pDescriptor.getId(), JRDesignDatasetRun.PROPERTY_PARAMETERS_MAP_EXPRESSION,
 								wizard.getValue());
@@ -259,7 +262,7 @@ public class SPDatasetRun<T extends IPropertyDescriptor> extends ASPropertyWidge
 		} else {
 			dsRunWidget.setData(mDataSet.getValue());
 		}
-		dsRunWidget.setEnabled(enabled);
+		dsRunWidget.setEnabled(enabled); 
 	}
 
 }
