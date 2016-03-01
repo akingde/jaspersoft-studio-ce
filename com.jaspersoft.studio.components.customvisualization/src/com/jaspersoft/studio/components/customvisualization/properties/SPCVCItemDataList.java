@@ -487,18 +487,21 @@ public class SPCVCItemDataList extends ASPropertyWidget<AItemDataListPropertyDes
 		StructuredSelection selection = (StructuredSelection) dsTViewer.getSelection();
 		btnModifyDataset.setEnabled(!selection.isEmpty());
 		btnRemoveDataset.setEnabled(!selection.isEmpty());
+		btnUpDataset.setEnabled(!selection.isEmpty());
+		btnDownDataset.setEnabled(!selection.isEmpty());
 
-		int qte = 0;
-		for (ComponentDatasetDescriptor cdd : cd.getDatasets()) {
-			if (cdd.getCardinality() < 0) {
-				qte = -1;
-				break;
+		if (cd != null) {
+			int qte = 0;
+			for (ComponentDatasetDescriptor cdd : cd.getDatasets()) {
+				if (cdd.getCardinality() < 0) {
+					qte = -1;
+					break;
+				}
+				qte += cdd.getCardinality();
 			}
-			qte += cdd.getCardinality();
+			if (qte >= 0)
+				btnAddNewDataset.setEnabled(itemDatas.size() < qte);
 		}
-		if (qte >= 0)
-			btnAddNewDataset.setEnabled(itemDatas.size() < qte);
-
 		for (Object sel : selection.toList()) {
 			if (sel instanceof Item) {
 				Item item = (Item) sel;
@@ -547,8 +550,10 @@ public class SPCVCItemDataList extends ASPropertyWidget<AItemDataListPropertyDes
 				}
 			}
 		}
-		btnUpDataset.setEnabled(false);
-		btnDownDataset.setEnabled(false);
+		if (cd != null) {
+			btnUpDataset.setEnabled(false);
+			btnDownDataset.setEnabled(false);
+		}
 	}
 
 	@Override
