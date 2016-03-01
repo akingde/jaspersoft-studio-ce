@@ -20,7 +20,6 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.ui.actions.ActionFactory;
 
 import com.jaspersoft.studio.editor.AContextMenuProvider;
-import com.jaspersoft.studio.editor.action.ShowPropertyViewAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateStyleAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateStyleTemplateReferenceAction;
 import com.jaspersoft.studio.editor.outline.actions.ExportStyleAsTemplateAction;
@@ -74,10 +73,6 @@ public class AppStyleContextMenuProvider extends AContextMenuProvider {
 		action = getActionRegistry().getAction(ExportStyleAsTemplateAction.ID);
 		if (action.isEnabled())
 			menu.appendToGroup(GEFActionConstants.GROUP_ADD, action);
-		
-		action = getActionRegistry().getAction(ShowPropertyViewAction.ID);
-		if (action.isEnabled())
-			menu.appendToGroup(GEFActionConstants.GROUP_VIEW, action);
 
 		action = getActionRegistry().getAction(ActionFactory.DELETE.getId());
 		if (action != null && action.isEnabled())
