@@ -27,9 +27,17 @@ import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.utils.AlfaRGB;
 
 public class SPColor extends ASPropertyWidget<ColorPropertyDescriptor> {
+	
 	private ToolItem foreButton;
+	
 	private ColorLabelProvider colorLabelProvider = new ColorLabelProvider(null);
+	
+	private APropertyNode parent;
+	
+	private ToolBar toolBar;
 
+	private boolean isEnabled = true;
+	
 	public SPColor(Composite parent, AbstractSection section, ColorPropertyDescriptor pDescriptor) {
 		super(parent, section, pDescriptor);
 	}
@@ -55,21 +63,23 @@ public class SPColor extends ASPropertyWidget<ColorPropertyDescriptor> {
 		if (section.getElement().isEditable()) {
 			foreButton.addSelectionListener(new SelectionAdapter() {
 				public void widgetSelected(SelectionEvent e) {
-					ColorDialog cd = new ColorDialog(toolBar.getShell());
-					cd.setText(pDescriptor.getDisplayName());
-					AlfaRGB rgb = (AlfaRGB) section.getElement().getPropertyActualValue(pDescriptor.getId());
-					cd.setRGB(rgb == null ? null : rgb);
-					boolean useTransparency = true;
-					useTransparency = pDescriptor.supportsTransparency();
-					if (useTransparency) {
-						AlfaRGB newColor = cd.openAlfaRGB();
-						if (newColor != null) {
-							changeProperty(section, pDescriptor.getId(), newColor);
-						}
-					} else {
-						RGB newColor = cd.openRGB();
-						if (newColor != null) {
-							changeProperty(section, pDescriptor.getId(), AlfaRGB.getFullyOpaque(newColor));
+					if (isEnabled){
+						ColorDialog cd = new ColorDialog(toolBar.getShell());
+						cd.setText(pDescriptor.getDisplayName());
+						AlfaRGB rgb = (AlfaRGB) section.getElement().getPropertyActualValue(pDescriptor.getId());
+						cd.setRGB(rgb == null ? null : rgb);
+						boolean useTransparency = true;
+						useTransparency = pDescriptor.supportsTransparency();
+						if (useTransparency) {
+							AlfaRGB newColor = cd.openAlfaRGB();
+							if (newColor != null) {
+								changeProperty(section, pDescriptor.getId(), newColor);
+							}
+						} else {
+							RGB newColor = cd.openRGB();
+							if (newColor != null) {
+								changeProperty(section, pDescriptor.getId(), AlfaRGB.getFullyOpaque(newColor));
+							}
 						}
 					}
 				}
@@ -79,15 +89,13 @@ public class SPColor extends ASPropertyWidget<ColorPropertyDescriptor> {
 		toolBar.pack();
 	}
 
-	private APropertyNode parent;
-	private ToolBar toolBar;
-
 	public void setData(APropertyNode parent, AlfaRGB b) {
 		this.parent = parent;
 		foreButton.setImage(colorLabelProvider.getImage(b));
 	}
 
 	public void setData(APropertyNode pnode, Object b) {
+		isEnabled = pnode.isEditable();
 		setData(null, (AlfaRGB) b);
 	}
 
