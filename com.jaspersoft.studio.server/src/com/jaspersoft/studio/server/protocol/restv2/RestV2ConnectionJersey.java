@@ -162,8 +162,8 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 		// "jssjrs.log", true);
 		// fh.setFormatter(new SimpleFormatter());
 		// logger.addHandler(fh);
-		// logger.setLevel(Level.FINEST);
-//		client.register(new org.glassfish.jersey.filter.LoggingFilter(logger, true));
+		logger.setLevel(Level.FINEST);
+		client.register(new org.glassfish.jersey.filter.LoggingFilter(logger, true));
 		// client.register(JacksonFeature.class);
 		// String user = sp.getUser();
 		// if (!Misc.isNullOrEmpty(sp.getOrganisation()))
@@ -420,6 +420,8 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 	@Override
 	public ResourceDescriptor copy(IProgressMonitor monitor, ResourceDescriptor rd, String destFolderURI)
 			throws Exception {
+		if (rd.getParentFolder().equals(destFolderURI))
+			return rd;
 		String wsType = rd.getWsType();
 		String rtype = WsTypes.INST().toRestType(wsType);
 

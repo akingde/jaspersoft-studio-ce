@@ -235,6 +235,8 @@ public class SoapConnection implements IConnection {
 	@Override
 	public ResourceDescriptor copy(IProgressMonitor monitor, ResourceDescriptor rd, String destFolderURI)
 			throws Exception {
+		if (rd.getParentFolder().equals(destFolderURI))
+			return rd;
 		destFolderURI = destFolderURI + "/" + rd.getName();
 		return client.copy(rd, destFolderURI);
 	}
