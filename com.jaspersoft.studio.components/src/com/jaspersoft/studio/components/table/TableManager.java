@@ -205,9 +205,9 @@ public class TableManager {
 	public void setWidth(StandardBaseColumn cell, int width) {
 		if (width >= 0) {
 			int delta = width - cell.getWidth();
-			if (cell instanceof StandardColumn)
+			if (cell instanceof StandardBaseColumn)
 				setGroupHeaderWidth(table.getColumns(), cell, delta);
-			else if (cell instanceof StandardColumnGroup)
+			if (cell instanceof StandardColumnGroup)
 				setColumnGroupWidth((StandardColumnGroup) cell, delta);
 			cell.setWidth(width);
 		}
@@ -218,14 +218,14 @@ public class TableManager {
 	 * columns are resized to fill the group. They are resized keeping the ratio
 	 * between them 
 	 */
-	public void setProportionalWidth(StandardBaseColumn column, int width) {
+	public void setProportionalWidth(StandardBaseColumn column, int width, List<BaseColumn> fixedColumns) {
 		if (width >= 0) {
 			int delta = width - column.getWidth();
 			//Look if it is inside a 
-			if (column instanceof StandardColumn)
+			if (column instanceof StandardBaseColumn)
 				setGroupHeaderWidth(table.getColumns(), column, delta);
 			if (column instanceof StandardColumnGroup)
-				setProportionalColumnGroupWidth((StandardColumnGroup) column, width);
+				setProportionalColumnGroupWidth((StandardColumnGroup) column, width, fixedColumns);
 			column.setWidth(width);
 		}
 	}
@@ -241,7 +241,7 @@ public class TableManager {
 		return currentColumnsWidth;
 	}
 	
-	private int[] getColumnsProportionalWidth(List<BaseColumn> columns, int newWidth){
+	private int[] getColumnsProportionalWidth(List<BaseColumn> columns, int newWidth, List<BaseColumn> fixedColumns){
 		int[] proportionalWidths = new int[columns.size()];
 		int index = 0;
 		int currentColumnsWidth = 0;
@@ -251,11 +251,16 @@ public class TableManager {
 		//Phase 1: change proportionally the width of each column
 		int columnsTotalWidth = 0;			
 		for(BaseColumn col : columns){
-			float proportionalFactor = (float)col.getWidth() / (float)currentColumnsWidth;
-			//casting to int is the same to do the floor operation, since it drop the decimal
-			int proportionalWidth = (int)(proportionalFactor * newWidth);
-			proportionalWidths[index] = proportionalWidth;
-			columnsTotalWidth += proportionalWidth;
+			if(fixedColumns.contains(col)){
+				proportionalWidths[index] = col.getWidth();
+				columnsTotalWidth += col.getWidth();		
+			} else {
+				float proportionalFactor = (float)col.getWidth() / (float)currentColumnsWidth;
+				//casting to int is the same to do the floor operation, since it drop the decimal
+				int proportionalWidth = (int)(proportionalFactor * newWidth);
+				proportionalWidths[index] = proportionalWidth;
+				columnsTotalWidth += proportionalWidth;				
+			}
 			index ++;
 		}
 		
@@ -263,14 +268,21 @@ public class TableManager {
 		int remains = newWidth - columnsTotalWidth;
 		index = 0;
 		while (remains > 0 && proportionalWidths.length > 0){
-			proportionalWidths[index]++;
+			BaseColumn currentColumn = columns.get(index);
+			if (!fixedColumns.contains(currentColumn)){
+				proportionalWidths[index]++;
+				remains--;	
+			}
 			index++;
-			remains--;
 			if (index == proportionalWidths.length){
 				index = 0;
 			}
 		}
 		return proportionalWidths;
+	}
+	
+	public boolean fillSpace(int newWidth, boolean isProportional, List<BaseColumn> fixedColumns){
+		return fillSpace(newWidth, isProportional, fixedColumns, false);
 	}
 	
 	/**
@@ -281,25 +293,27 @@ public class TableManager {
 	 * @param isProportional if the columns are resized proportionally or they all will have the same width
 	 * @return true if some changes were done to the table, false if it was already of the right size
 	 */
-	public boolean fillSpace(int newWidth, boolean isProportional){
+	public boolean fillSpace(int newWidth, boolean isProportional, List<BaseColumn> fixedColumns, boolean force){
 		//Only one of this operation allowed on the at the same time
 		synchronized (table) {
 			int currentColumnsWidth = 0;
-			for(BaseColumn col : table.getColumns()){
-				currentColumnsWidth += col.getWidth();
+			if (!force){
+				for(BaseColumn col : table.getColumns()){
+					currentColumnsWidth += col.getWidth();
+				}
 			}
-			if (currentColumnsWidth == newWidth) {
+			if (currentColumnsWidth == newWidth && !force) {
 				return false;
 			} else if(isProportional) {
 				
-				int[] proportionalWidths = getColumnsProportionalWidth(table.getColumns(), newWidth);
+				int[] proportionalWidths = getColumnsProportionalWidth(table.getColumns(), newWidth, fixedColumns);
 				
 				//Phase 3: resize the columns
 				int index = 0;
 				ILayout defaultLayout = new VerticalRowLayout();
 				for(BaseColumn col : table.getColumns()){
 					if (col.getWidth() != proportionalWidths[index]){
-						setProportionalWidth((StandardBaseColumn)col, proportionalWidths[index]);
+						setProportionalWidth((StandardBaseColumn)col, proportionalWidths[index], fixedColumns);
 						for(Entry<Cell, Integer> cell : getColumnCell(col).entrySet()){
 							ILayout layout = LayoutManager.getLayout(new JRPropertiesHolder[] { cell.getKey() }, null, null, defaultLayout);
 							layout.layout(cell.getKey().getElements(), new Dimension(cell.getValue(), ((DesignCell)cell.getKey()).getHeight()));
@@ -395,15 +409,15 @@ public class TableManager {
 		return false;
 	}
 	
-	private void setProportionalColumnGroupWidth(StandardColumnGroup columnGroup, int width) {
+	private void setProportionalColumnGroupWidth(StandardColumnGroup columnGroup, int width, List<BaseColumn> fixedColumns) {
 		List<BaseColumn> columns = columnGroup.getColumns();
-		int[] proportionalNewWidth = getColumnsProportionalWidth(columns, width);
+		int[] proportionalNewWidth = getColumnsProportionalWidth(columns, width, fixedColumns);
 		int index = 0;
 		for (BaseColumn col : columns) {
 			StandardBaseColumn bc = (StandardBaseColumn) col;
 			bc.setWidth(proportionalNewWidth[index]);
 			if (bc instanceof StandardColumnGroup){
-				setProportionalColumnGroupWidth((StandardColumnGroup) bc, proportionalNewWidth[index]);
+				setProportionalColumnGroupWidth((StandardColumnGroup) bc, proportionalNewWidth[index], fixedColumns);
 			}
 			index++;
 		}
