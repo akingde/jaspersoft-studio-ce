@@ -55,6 +55,7 @@ public abstract class ASPropertyWidget<T extends IPropertyDescriptor> implements
 
 	protected void setupFocusControl(IPropertyDescriptor pDescriptor, Control c) {
 		if (c.isEnabled()) {
+			c.removeFocusListener(focusListener);
 			c.addFocusListener(focusListener);
 			HelpSystem.bindToHelp(pDescriptor, c);
 		}

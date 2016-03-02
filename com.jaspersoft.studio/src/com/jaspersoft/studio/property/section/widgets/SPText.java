@@ -21,6 +21,7 @@ import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.contexts.IContextActivation;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.model.APropertyNode;
@@ -35,12 +36,12 @@ public class SPText<T extends IPropertyDescriptor> extends AHistorySPropertyWidg
 	protected APropertyNode pnode;
 	protected String savedValue;
 	// Flag used to overcome the problem of focus events in Mac OS X
-	// 	- JSS Bugzilla 42999
-	// 	- Eclipse Bug 383750
+	// - JSS Bugzilla 42999
+	// - Eclipse Bug 383750
 	// It makes sense only on E4 platform and Mac OS X operating systems.
 	// DO NOT USE THIS FLAG FOR OTHER PURPOSES.
 	private boolean editHappened = false;
-
+	protected IContextActivation context;
 	/**
 	 * Flag used to avoid that the handletextchanged is called twice when CR is pressed (because the CR made the control
 	 * to loose the focus)
@@ -67,11 +68,11 @@ public class SPText<T extends IPropertyDescriptor> extends AHistorySPropertyWidg
 			style = ((JSSTextPropertyDescriptor) pDescriptor).getStyle();
 		ftext = section.getWidgetFactory().createText(parent, "", style);
 		autocomplete = new CustomAutoCompleteField(ftext, new TextContentAdapter(), InputHistoryCache.get(getHistoryKey()));
-		if(UIUtil.isMacAndEclipse4()) {
+		if (UIUtil.isMacAndEclipse4()) {
 			ftext.addModifyListener(new ModifyListener() {
-				 public void modifyText(ModifyEvent e) {
-					 editHappened = true;
-				 }
+				public void modifyText(ModifyEvent e) {
+					editHappened = true;
+				}
 			});
 		}
 		ftext.addKeyListener(new KeyListener() {
@@ -83,11 +84,11 @@ public class SPText<T extends IPropertyDescriptor> extends AHistorySPropertyWidg
 					disableFocusLost = false;
 				}
 				if (e.keyCode == SWT.ESC) {
-						if(!autocomplete.isPopupJustClosed()){
-							autocomplete.setEnabled(false);
-							ftext.setText(savedValue);			
-							autocomplete.setEnabled(true);
-						}
+					if (!autocomplete.isPopupJustClosed()) {
+						autocomplete.setEnabled(false);
+						ftext.setText(savedValue);
+						autocomplete.setEnabled(true);
+					}
 				}
 				autocomplete.resetPopupJustClosed();
 			}
@@ -98,6 +99,7 @@ public class SPText<T extends IPropertyDescriptor> extends AHistorySPropertyWidg
 			}
 		});
 		ftext.setToolTipText(pDescriptor.getDescription());
+
 		setWidth(parent, 15);
 	}
 
@@ -118,7 +120,7 @@ public class SPText<T extends IPropertyDescriptor> extends AHistorySPropertyWidg
 	@Override
 	protected void handleFocusLost() {
 		String currentValue = getCurrentValue();
-		if(UIUtil.isMacAndEclipse4() && !editHappened){
+		if (UIUtil.isMacAndEclipse4() && !editHappened) {
 			ftext.setText(Misc.nvl(currentValue));
 		}
 		if (!disableFocusLost) {
@@ -126,11 +128,11 @@ public class SPText<T extends IPropertyDescriptor> extends AHistorySPropertyWidg
 				handleTextChanged(section, pDescriptor.getId(), ftext.getText());
 			super.handleFocusLost();
 		}
-		if(UIUtil.isMacAndEclipse4()) {
-			editHappened=false;
+		if (UIUtil.isMacAndEclipse4()) {
+			editHappened = false;
 		}
 	}
-	
+
 	protected String getCurrentValue() {
 		Object v = section.getElement().getPropertyValue(pDescriptor.getId());
 		if (v instanceof String)
