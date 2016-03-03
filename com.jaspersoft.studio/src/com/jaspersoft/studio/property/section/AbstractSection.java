@@ -419,7 +419,7 @@ public abstract class AbstractSection extends AbstractPropertySection
 		}
 	}
 
-	private boolean isChanged(Object property, Object newValue, APropertyNode n) {
+	protected boolean isChanged(Object property, Object newValue, APropertyNode n) {
 		Object oldValue = n.getPropertyValue(property);
 		if (oldValue == null && newValue == null)
 			return false;

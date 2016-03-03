@@ -15,11 +15,13 @@ package com.jaspersoft.studio.components.table.part.editpolicy;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 
 import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.components.table.model.MTable;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.SetValueCommand;
+import com.jaspersoft.studio.utils.ModelUtils;
 
 import net.sf.jasperreports.components.table.BaseColumn;
 import net.sf.jasperreports.components.table.ColumnGroup;
@@ -130,8 +132,16 @@ public class JSSCompoundTableCommand extends JSSCompoundCommand {
 			storeColumnsSize();
 			//execute the innter command
 			super.execute();
-			//fill the space
-			boolean changed = table.getTableManager().fillSpace(table.getValue().getWidth(), true);
+			
+			List<BaseColumn> modifiedColumn = getModifiedColumns();
+			if (modifiedColumn.size() == originalColumnsSize.size()){
+				modifiedColumn.clear();
+			}
+			boolean widthChanged = modifiedColumn.size() > 0;
+			modifiedColumn.clear();
+		
+			//fill the space		
+			boolean changed = table.getTableManager().fillSpace(table.getValue().getWidth(), true, modifiedColumn, widthChanged);
 			if (!changed){
 				//The size was already right (probably because of the restoreColumnsSize) so the cells was not
 				//layouted after the undo, trigger a manual layout
@@ -163,7 +173,7 @@ public class JSSCompoundTableCommand extends JSSCompoundCommand {
 			//Restore the original size
 			restoreColumnsSize(table.getStandardTable().getColumns());
 			//If the table still doesn't fit the width then update it
-			boolean changed = table.getTableManager().fillSpace(table.getValue().getWidth(), true);
+			boolean changed = table.getTableManager().fillSpace(table.getValue().getWidth(), true, new ArrayList<BaseColumn>());
 			if (!changed){
 				//The size was already right (probably because of the restoreColumnsSize) so the cells was not
 				//layouted after the undo, trigger a manual layout
@@ -189,7 +199,14 @@ public class JSSCompoundTableCommand extends JSSCompoundCommand {
 		if (table.hasColumnsAutoresizeProportional()){
 			storeColumnsSize();
 			super.redo();
-			table.getTableManager().fillSpace(table.getValue().getWidth(), true);
+			
+			List<BaseColumn> modifiedColumn = getModifiedColumns();
+			if (modifiedColumn.size() == originalColumnsSize.size()){
+				modifiedColumn.clear();
+			}
+		
+			
+			table.getTableManager().fillSpace(table.getValue().getWidth(), true, modifiedColumn);
 		} else {
 			super.redo();
 			if (layoutTableContent){
@@ -213,6 +230,27 @@ public class JSSCompoundTableCommand extends JSSCompoundCommand {
 		originalColumnsSize = new HashMap<BaseColumn, Integer>();
 		for(BaseColumn column : columns){
 			originalColumnsSize.put(column, column.getWidth());
+		}
+	}
+	
+	protected List<BaseColumn> getModifiedColumns(){
+		List<BaseColumn> result = new ArrayList<BaseColumn>();
+		for(Entry<BaseColumn, Integer> columnEntry : originalColumnsSize.entrySet()){
+			if (!ModelUtils.safeEquals(columnEntry.getKey().getWidth(), columnEntry.getValue())){
+				result.add(columnEntry.getKey());
+				//addColumnToList(result, columnEntry.getKey());
+			}
+		}
+		return result;
+	}
+	
+	protected void addColumnToList(List<BaseColumn> list, BaseColumn columnToAdd){
+		list.add(columnToAdd);
+		if (columnToAdd instanceof ColumnGroup){
+			ColumnGroup group = (ColumnGroup) columnToAdd;
+			for(BaseColumn groupColumn : group.getColumns()){
+				addColumnToList(list, groupColumn);
+			}
 		}
 	}
 	

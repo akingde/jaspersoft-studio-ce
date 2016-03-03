@@ -12,10 +12,18 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.table.properties;
 
+import java.util.List;
+
+import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.components.table.messages.Messages;
+import com.jaspersoft.studio.components.table.model.column.MColumn;
+import com.jaspersoft.studio.components.table.model.column.command.SetColumnWidthCommand;
+import com.jaspersoft.studio.components.table.part.editpolicy.JSSCompoundTableCommand;
+import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
@@ -38,5 +46,37 @@ public class TableColumnSection extends AbstractSection {
 		super.initializeProvidedProperties();
 		addProvidedProperties(StandardBaseColumn.PROPERTY_WIDTH, Messages.MColumn_column_width);
 		addProvidedProperties(StandardBaseColumn.PROPERTY_PRINT_WHEN_EXPRESSION, Messages.MColumn_print_when_expression);
+	}
+	
+	@Override
+	public boolean changeProperty(Object property, Object newValue, List<Command> commands) {
+		if (!isRefreshing() && getElements() != null && !getElements().isEmpty() && getEditDomain() != null) {
+			CommandStack cs = getEditDomain().getCommandStack();
+			JSSCompoundTableCommand cc = new JSSCompoundTableCommand(((MColumn)getElement()).getMTable());
+			for (APropertyNode n : getElements()) {
+				if (isChanged(property, newValue, n)) {
+					if (StandardBaseColumn.PROPERTY_WIDTH.equals(property) && n instanceof MColumn){
+						SetColumnWidthCommand setWidthCommand = new SetColumnWidthCommand((MColumn)n, (Integer)newValue);
+						cc.add(setWidthCommand);
+					} else {
+						Command c = getChangePropertyCommand(property, newValue, n);
+						if (c != null){
+							cc.add(c);
+						}
+					}
+				}
+			}
+			if (!cc.getCommands().isEmpty()) {
+				if (commands != null){
+					for (Command c : commands){
+						cc.add(c);
+					}
+				}
+				cs.execute(cc);
+				getTabbedPropertySheetPage().showErrors();
+				return true;
+			}
+		}
+		return false;
 	}
 }

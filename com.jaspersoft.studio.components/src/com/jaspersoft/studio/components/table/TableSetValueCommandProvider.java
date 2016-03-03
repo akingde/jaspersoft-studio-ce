@@ -17,6 +17,7 @@ import org.eclipse.ui.views.properties.IPropertySource;
 
 import com.jaspersoft.studio.components.table.model.MTable;
 import com.jaspersoft.studio.components.table.model.column.MColumn;
+import com.jaspersoft.studio.components.table.model.column.command.SetColumnWidthCommand;
 import com.jaspersoft.studio.components.table.part.editpolicy.JSSCompoundTableCommand;
 import com.jaspersoft.studio.property.ISetValueCommandProvider;
 import com.jaspersoft.studio.property.SetValueCommand;
@@ -41,22 +42,28 @@ public class TableSetValueCommandProvider implements ISetValueCommandProvider {
 	public static TableSetValueCommandProvider INSTANCE = new TableSetValueCommandProvider();
 	
 	@Override
-	public Command getSetValueCommand(IPropertySource source, String commandName, Object propertyId, Object newVal) {
+	public Command getSetValueCommand(IPropertySource source, String commandName, Object propertyId, Object newVal) { 
+		if (StandardBaseColumn.PROPERTY_WIDTH.equals(propertyId) ||  JRDesignElement.PROPERTY_WIDTH.equals(propertyId)){
+			if (source instanceof MColumn){
+				MColumn column = (MColumn)source;
+				JSSCompoundTableCommand compound = new JSSCompoundTableCommand(((MColumn)source).getMTable());
+				SetColumnWidthCommand setColumnWidth = new SetColumnWidthCommand(column, (Integer)newVal);
+				compound.add(setColumnWidth);
+				return compound;
+			} else if (source instanceof MTable){
+				JSSCompoundTableCommand compound = new JSSCompoundTableCommand((MTable)source);
+				SetValueCommand setCommand = new SetValueCommand(commandName);
+				setCommand.setPropertyId(propertyId);
+				setCommand.setTarget(source);
+				setCommand.setPropertyValue(newVal);
+				compound.add(setCommand);
+				return compound;	
+			}
+		} 
 		SetValueCommand setCommand = new SetValueCommand(commandName);
 		setCommand.setPropertyId(propertyId);
 		setCommand.setTarget(source);
 		setCommand.setPropertyValue(newVal);
-		if (StandardBaseColumn.PROPERTY_WIDTH.equals(propertyId) ||  JRDesignElement.PROPERTY_WIDTH.equals(propertyId)){
-			if (source instanceof MColumn){
-				JSSCompoundTableCommand compound = new JSSCompoundTableCommand(((MColumn)source).getMTable());
-				compound.add(setCommand);
-				return compound;
-			} else if (source instanceof MTable){
-				JSSCompoundTableCommand compound = new JSSCompoundTableCommand((MTable)source);
-				compound.add(setCommand);
-				return compound;	
-			}
-		}
 		return setCommand;
 	}
 

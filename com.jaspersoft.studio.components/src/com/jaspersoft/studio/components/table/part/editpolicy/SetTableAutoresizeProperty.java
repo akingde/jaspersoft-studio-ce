@@ -76,7 +76,7 @@ public class SetTableAutoresizeProperty extends Command {
 			if (setAutoresize){
 				storeColumnsSize();
 				table.setPropertyValue(MTable.PROPERTY_COLUMNS_AUTORESIZE_PROPORTIONAL, true);
-				table.getTableManager().fillSpace(table.getValue().getWidth(), true);
+				table.getTableManager().fillSpace(table.getValue().getWidth(), true, new ArrayList<BaseColumn>());
 			} else {
 				table.setPropertyValue(MTable.PROPERTY_COLUMNS_AUTORESIZE_PROPORTIONAL, false);
 			}
@@ -98,7 +98,7 @@ public class SetTableAutoresizeProperty extends Command {
 				restoreColumnsSize(table.getStandardTable().getColumns());
 				table.setPropertyValue(MTable.PROPERTY_COLUMNS_AUTORESIZE_PROPORTIONAL, true);
 				//now the flag is true, trigger and autofill
-				boolean changed = table.getTableManager().fillSpace(table.getValue().getWidth(), true);
+				boolean changed = table.getTableManager().fillSpace(table.getValue().getWidth(), true, new ArrayList<BaseColumn>());
 				if (!changed){
 					//The size was already right (probably because of the restoreColumnsSize) so the cells was not
 					//layouted after the undo, trigger a manual layout
