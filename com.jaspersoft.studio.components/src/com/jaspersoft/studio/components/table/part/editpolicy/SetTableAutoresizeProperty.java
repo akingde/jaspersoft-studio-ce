@@ -28,7 +28,8 @@ import net.sf.jasperreports.components.table.StandardBaseColumn;
 import net.sf.jasperreports.components.table.StandardColumnGroup;
 
 /**
- *
+ * Command to set the table autoresize flag. It also will trigger
+ * the atuoresize of the table itself
  *
  * @author Orlandin Marco
  *

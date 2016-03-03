@@ -202,7 +202,7 @@ public class TableManager {
 		return new Rectangle(0, 0, w, h);
 	}
 
-	public void setWidth(StandardBaseColumn cell, int width) {
+	protected void setWidth(StandardBaseColumn cell, int width) {
 		if (width >= 0) {
 			int delta = width - cell.getWidth();
 			if (cell instanceof StandardBaseColumn)
@@ -218,7 +218,7 @@ public class TableManager {
 	 * columns are resized to fill the group. They are resized keeping the ratio
 	 * between them 
 	 */
-	public void setProportionalWidth(StandardBaseColumn column, int width, List<BaseColumn> fixedColumns) {
+	protected void setProportionalWidth(StandardBaseColumn column, int width, List<BaseColumn> fixedColumns) {
 		if (width >= 0) {
 			int delta = width - column.getWidth();
 			//Look if it is inside a 
@@ -229,18 +229,18 @@ public class TableManager {
 			column.setWidth(width);
 		}
 	}
-
-	/**
-	 * Return the width of all the column in the table
-	 */
-	public int getColumnsTotalWidth(){
-		int currentColumnsWidth = 0;
-		for(BaseColumn col : table.getColumns()){
-			currentColumnsWidth += col.getWidth();
-		}
-		return currentColumnsWidth;
-	}
 	
+	/**
+	 * Calculate the new width of a set of column to fit a new width of their parent. The width of the column
+	 * resized is calculated propertionally to their original width
+	 * 
+	 * @param columns the columns to resize
+	 * @param newWidth the new width the columns should occupy
+	 * @param fixedColumns the list of columns that should not be resized in the process. However if the resize operation
+	 * because every column is marked as fixed then the last one will be resized anyway
+	 * @return and array with the same number of entry of the passed columns. Each value of the array is the size the 
+	 * corrispective column should have to fit the available space
+	 */
 	private int[] getColumnsProportionalWidth(List<BaseColumn> columns, int newWidth, List<BaseColumn> fixedColumns){
 		int[] proportionalWidths = new int[columns.size()];
 		int index = 0;
@@ -248,6 +248,18 @@ public class TableManager {
 		for(BaseColumn col : columns){
 			currentColumnsWidth += col.getWidth();
 		}
+		//Phase 0: check that at least one columns is not excluded, otherwise make the last column not excluded
+		boolean allExcluded = true;
+		for(BaseColumn col : columns){
+			if (!fixedColumns.contains(col)){
+				allExcluded = false;
+				break;
+			}
+		}
+		if (allExcluded){
+			fixedColumns.remove(columns.get(columns.size()-1));
+		}
+		
 		//Phase 1: change proportionally the width of each column
 		int columnsTotalWidth = 0;			
 		for(BaseColumn col : columns){
@@ -280,7 +292,18 @@ public class TableManager {
 		}
 		return proportionalWidths;
 	}
-	
+
+	/**
+	 * Resize all the columns in the table to match the passed width. The fill is done only if 
+	 * the table is not already filling the available space
+	 * 
+	 * @param newWidth the width that all the columns should have
+	 * @param isProportional if the columns are resized proportionally or they all will have the same width
+	 * @param fixedColumns the list of columns that will not resized by the fill space operation. If this list
+	 * of columns doesn't allow to table to fill the space (ie all the columns are ecluded) then the last column
+	 * is removed from the exlusion set and used to fill the space
+	 * @return true if some changes were done to the table, false if it was already of the right size
+	 */
 	public boolean fillSpace(int newWidth, boolean isProportional, List<BaseColumn> fixedColumns){
 		return fillSpace(newWidth, isProportional, fixedColumns, false);
 	}
@@ -288,9 +311,12 @@ public class TableManager {
 	/**
 	 * Resize all the columns in the table to match the passed width
 	 * 
-	 * 
 	 * @param newWidth the width that all the columns should have
 	 * @param isProportional if the columns are resized proportionally or they all will have the same width
+	 * @param fixedColumns the list of columns that will not resized by the fill space operation. If this list
+	 * of columns doesn't allow to table to fill the space (ie all the columns are ecluded) then the last column
+	 * is removed from the exlusion set and used to fill the space
+	 * @param force prameter used to force the table resize without any check to see if the table is already filling the space
 	 * @return true if some changes were done to the table, false if it was already of the right size
 	 */
 	public boolean fillSpace(int newWidth, boolean isProportional, List<BaseColumn> fixedColumns, boolean force){

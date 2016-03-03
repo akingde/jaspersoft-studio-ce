@@ -69,6 +69,7 @@ import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
 import net.sf.jasperreports.engine.design.JRDesignPropertyExpression;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.design.events.JRChangeEventsSupport;
 import net.sf.jasperreports.engine.design.events.JRPropertyChangeSupport;
 
 public class MColumn extends APropertyNode implements IPastable, IContainer,IContainerLayout, IGraphicElement, IContainerEditPart {
@@ -368,15 +369,11 @@ public class MColumn extends APropertyNode implements IPastable, IContainer,ICon
 		StandardBaseColumn jrElement = getValue();
 
 		if (id.equals(StandardBaseColumn.PROPERTY_WIDTH)) {
-			if ((Integer) value >= 0) {
-				//don't allow concurrent modification
-				synchronized (getValue()) {
-					containerTable.getTableManager().setWidth(jrElement, (Integer) value);
-					containerTable.getTableManager().update();
-					PropertyChangeEvent event = new PropertyChangeEvent(this, StandardBaseColumn.PROPERTY_WIDTH, null, value);
-					getPropertyChangeSupport().firePropertyChange(event);
-				}
-			}
+			//the editing of a table column width is a complex operation, that could in most case require the adjustemnt of the width of
+			//other columns. Setting it directly could be risky. Also add here the logic to set the other columns and not in an appropriate
+			//command could bring problems in the undo of the operation. For this reason the direct set of this property is discouraged
+			//and it is suggested to used the command SetColumnWidthCommand, that handle all the necessary operations
+			throw new UnsupportedOperationException("Column Width shouldn't be set directly, use the appropriate command SetColumnWidthCommand");
 		} else if (id.equals(DesignCell.PROPERTY_HEIGHT)) {
 			Integer height = (Integer) value;
 			if (containerSection != null && height.intValue() >= 0) {
@@ -486,8 +483,11 @@ public class MColumn extends APropertyNode implements IPastable, IContainer,ICon
 
 					MTable mtable = (MTable) section.getParent();
 					if (mtable == null) {
-						((JRPropertyChangeSupport) evt.getSource())
-								.removePropertyChangeListener(child);
+						if (evt.getSource() instanceof JRPropertyChangeSupport){
+							((JRPropertyChangeSupport) evt.getSource()).removePropertyChangeListener(child);
+						} else if (evt.getSource() instanceof JRChangeEventsSupport){
+							((JRChangeEventsSupport) evt.getSource()).getEventSupport().removePropertyChangeListener(child);
+						}
 					} else {
 						mtable.getTableManager().refresh();
 						TableColumnNumerator.renumerateColumnNames(mtable);

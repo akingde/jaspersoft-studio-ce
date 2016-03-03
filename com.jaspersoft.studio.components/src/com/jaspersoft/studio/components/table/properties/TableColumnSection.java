@@ -48,6 +48,12 @@ public class TableColumnSection extends AbstractSection {
 		addProvidedProperties(StandardBaseColumn.PROPERTY_PRINT_WHEN_EXPRESSION, Messages.MColumn_print_when_expression);
 	}
 	
+	/**
+	 * If the changed property is done on multiple columns then a single {@link JSSCompoundTableCommand} will be 
+	 * generated, cotaining all the command to resize every columns. Doing this the fill space operation will done
+	 * only once when changing the columns width of more columns from the property view. Commands to change other properties
+	 * will be generated as usual
+	 */
 	@Override
 	public boolean changeProperty(Object property, Object newValue, List<Command> commands) {
 		if (!isRefreshing() && getElements() != null && !getElements().isEmpty() && getEditDomain() != null) {

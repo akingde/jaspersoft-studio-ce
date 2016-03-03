@@ -15,9 +15,6 @@ package com.jaspersoft.studio.components.table.part;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.jasperreports.components.table.StandardBaseColumn;
-import net.sf.jasperreports.engine.design.JRDesignElement;
-
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.geometry.Dimension;
@@ -69,6 +66,9 @@ import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.MPage;
 
+import net.sf.jasperreports.components.table.StandardBaseColumn;
+import net.sf.jasperreports.engine.design.JRDesignElement;
+
 /*
  * BandEditPart creates the figure for the band. The figure is actually just the bottom border of the band. This allows
  * to drag this border to resize the band. The PageEditPart sets a specific contraint for the BandEditPart elements in
@@ -79,6 +79,8 @@ import com.jaspersoft.studio.model.MPage;
  * 
  */
 public class TableCellEditPart extends APrefFigureEditPart implements IContainerPart, IContainer {
+	
+	private Dimension containerSize;
 	
 	private TableCellResizableEditPolicy cellSelectionPolicy = new TableCellResizableEditPolicy() {
 		
@@ -325,8 +327,6 @@ public class TableCellEditPart extends APrefFigureEditPart implements IContainer
 		v.setProperty(SnapToGrid.PROPERTY_GRID_ORIGIN, new Point(X_OFFSET,
 				Y_OFFSET));
 	}
-
-	private Dimension containerSize;
 
 	public Dimension getContaierSize() {
 		return containerSize;

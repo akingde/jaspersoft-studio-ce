@@ -79,6 +79,7 @@ import com.jaspersoft.studio.components.table.model.column.command.DeleteColumnG
 import com.jaspersoft.studio.components.table.model.column.command.OrphanColumn4GroupCommand;
 import com.jaspersoft.studio.components.table.model.column.command.OrphanColumnCommand;
 import com.jaspersoft.studio.components.table.model.column.command.ReorderColumnCommand;
+import com.jaspersoft.studio.components.table.model.column.command.SetColumnWidthCommand;
 import com.jaspersoft.studio.components.table.model.columngroup.MColumnGroup;
 import com.jaspersoft.studio.components.table.model.columngroup.MColumnGroupCell;
 import com.jaspersoft.studio.components.table.model.columngroup.action.GroupColumnsAction;
@@ -842,18 +843,14 @@ public class TableComponentFactory implements IComponentFactory {
 					JSSCompoundTableCommand tableCommand = new JSSCompoundTableCommand(model.getMTable());
 					tableCommand.setLabel("Resize to container");
 					
-					SetValueCommand cmd = new SetValueCommand();
+					SetValueCommand heighCommand = new SetValueCommand();
+					heighCommand.setTarget(model);
+					heighCommand.setPropertyId(DesignCell.PROPERTY_HEIGHT);
+					heighCommand.setPropertyValue(d.height);
+					tableCommand.add(heighCommand);
 
-					cmd.setTarget(model);
-					cmd.setPropertyId(DesignCell.PROPERTY_HEIGHT);
-					cmd.setPropertyValue(d.height);
-					tableCommand.add(cmd);
-
-					cmd = new SetValueCommand();
-					cmd.setTarget(model);
-					cmd.setPropertyId(StandardColumn.PROPERTY_WIDTH);
-					cmd.setPropertyValue(d.width);
-					tableCommand.add(cmd);
+					SetColumnWidthCommand widthCommand = new SetColumnWidthCommand(model, d.width);
+					tableCommand.add(widthCommand);
 
 					return tableCommand;
 				}

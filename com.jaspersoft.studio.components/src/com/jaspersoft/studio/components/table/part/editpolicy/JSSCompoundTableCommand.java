@@ -19,8 +19,6 @@ import java.util.Map.Entry;
 
 import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.components.table.model.MTable;
-import com.jaspersoft.studio.model.APropertyNode;
-import com.jaspersoft.studio.property.SetValueCommand;
 import com.jaspersoft.studio.utils.ModelUtils;
 
 import net.sf.jasperreports.components.table.BaseColumn;
@@ -111,20 +109,6 @@ public class JSSCompoundTableCommand extends JSSCompoundCommand {
 		this.updateTableSpan = updateTableSpan;
 	}
 	
-	/**
-	 * Set the width of a column
-	 * 
-	 * @param model the not null model of the column
-	 * @param width the new width of the column
-	 */
-	public void setWidth(APropertyNode model, int width){
-		SetValueCommand setCommand = new SetValueCommand();
-		setCommand.setTarget(model);
-		setCommand.setPropertyId(StandardBaseColumn.PROPERTY_WIDTH);
-		setCommand.setPropertyValue(width);
-		add(setCommand);
-	}
-	
 	@Override
 	public void execute() {
 		if (table.hasColumnsAutoresizeProportional()){
@@ -134,11 +118,7 @@ public class JSSCompoundTableCommand extends JSSCompoundCommand {
 			super.execute();
 			
 			List<BaseColumn> modifiedColumn = getModifiedColumns();
-			if (modifiedColumn.size() == originalColumnsSize.size()){
-				modifiedColumn.clear();
-			}
 			boolean widthChanged = modifiedColumn.size() > 0;
-			modifiedColumn.clear();
 		
 			//fill the space		
 			boolean changed = table.getTableManager().fillSpace(table.getValue().getWidth(), true, modifiedColumn, widthChanged);

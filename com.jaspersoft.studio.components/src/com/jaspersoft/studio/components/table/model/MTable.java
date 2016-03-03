@@ -58,6 +58,7 @@ import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 import com.jaspersoft.studio.utils.Misc;
 
 import net.sf.jasperreports.components.table.BaseColumn;
+import net.sf.jasperreports.components.table.ColumnGroup;
 import net.sf.jasperreports.components.table.DesignCell;
 import net.sf.jasperreports.components.table.StandardBaseColumn;
 import net.sf.jasperreports.components.table.StandardColumn;
@@ -112,8 +113,7 @@ public class MTable extends MGraphicElement implements IContainer,
 		public void propertyChange(PropertyChangeEvent evt) {
 			if (evt.getPropertyName().equals(JRDesignDataset.PROPERTY_GROUPS)) {
 				// this need to be done only inside the table editor
-				if (evt.getNewValue() != null && evt.getOldValue() == null
-						&& getChildren().size() > 0) {
+				if (evt.getNewValue() != null && evt.getOldValue() == null && getChildren().size() > 0) {
 					MTableDetail detailNode = null;
 					for (INode child : getChildren()) {
 						if (detailNode == null && child instanceof MTableDetail) {
@@ -140,8 +140,7 @@ public class MTable extends MGraphicElement implements IContainer,
 						TableComponentFactory.createCellGroupFooter(newFooter,
 								bc, i + 1, jrGroup.getName(), i);
 					}
-				} else if (evt.getNewValue() == null
-						&& evt.getOldValue() != null) {
+				} else if (evt.getNewValue() == null && evt.getOldValue() != null) {
 					JRDesignGroup jrGroup = (JRDesignGroup) evt.getOldValue();
 					deleteGroup(jrGroup.getName());
 				}
@@ -549,6 +548,7 @@ public class MTable extends MGraphicElement implements IContainer,
 	 *            the name of the group
 	 */
 	private void deleteGroup(String groupName) {
+		//Delete the model nodes
 		MTableGroupFooter footer = null;
 		MTableGroupHeader header = null;
 		for (INode child : getChildren()) {
@@ -570,6 +570,14 @@ public class MTable extends MGraphicElement implements IContainer,
 			removeChild(footer);
 		if (header != null)
 			removeChild(header);
+		
+		//Delete the JR values
+		List<BaseColumn> allColumns = getAllColumns(getStandardTable().getColumns());
+		for(BaseColumn col : allColumns){
+			StandardBaseColumn baseCol = (StandardBaseColumn)col;
+			baseCol.setGroupFooter(groupName, null);
+			baseCol.setGroupHeader(groupName, null);
+		}
 	}
 
 	/**
@@ -614,6 +622,25 @@ public class MTable extends MGraphicElement implements IContainer,
 	@Override
 	public ILayout getDefaultLayout() {
 		return LayoutManager.getLayout(FreeLayout.class.getName());
+	}
+	
+	/**
+	 * Return a list of every columns in the table, considering also the
+	 * ColumnGroup
+	 * 
+	 * @param cols the current set of columns, it is a recursive method
+	 * @return the list of columns contained in the passed parameter (considering
+	 * also the subcolumns contained by the columns groups)
+	 */
+	protected List<BaseColumn> getAllColumns(List<BaseColumn> cols) {
+		List<BaseColumn> lst = new ArrayList<BaseColumn>();
+		for (BaseColumn bc : cols) {
+			if (bc instanceof ColumnGroup){
+				lst.addAll(getAllColumns(((ColumnGroup) bc).getColumns()));
+			} 
+			lst.add(bc);
+		}
+		return lst;
 	}
 	
 	/**

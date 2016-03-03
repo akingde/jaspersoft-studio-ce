@@ -24,6 +24,7 @@ import org.eclipse.gef.requests.ChangeBoundsRequest;
 
 import com.jaspersoft.studio.components.table.model.MTable;
 import com.jaspersoft.studio.components.table.model.column.MColumn;
+import com.jaspersoft.studio.components.table.model.column.command.SetColumnWidthCommand;
 import com.jaspersoft.studio.components.table.part.TableCellEditPart;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.property.SetValueCommand;
@@ -60,17 +61,21 @@ public class CreateResize {
 			if (request.getResizeDirection() == PositionConstants.WEST)
 				w = -w;
 			int width = jrColumn.getWidth() + w;
-			if (width < 0)
+			if (width < 0){
 				return null;
-			c.setWidth(model, width);
+			}
+			SetColumnWidthCommand setWidthCmd = new SetColumnWidthCommand(model, width);
+			c.add(setWidthCmd);
 
 			if (request.getResizeDirection() == PositionConstants.WEST) {
 				jrColumn = oldmodel.getValue();
 				w = deltaRect.width;
 				width = jrColumn.getWidth() + w;
-				if (width < 0)
+				if (width < 0){
 					return null;
-				c.setWidth(oldmodel, width);
+				}
+				setWidthCmd = new SetColumnWidthCommand(oldmodel, width);
+				c.add(setWidthCmd);
 			} else if (request.getResizeDirection() == PositionConstants.EAST){
 				//If the request is a drag to east and the flag is enabled take the space from the next column
 				
@@ -80,8 +85,9 @@ public class CreateResize {
 						if (next != null){
 							StandardBaseColumn nextCol = next.getValue();
 							int newWidth = nextCol.getWidth() - deltaRect.width;
-							if (newWidth < 0) newWidth = 0;;
-							c.setWidth(next, newWidth);
+							if (newWidth < 0) newWidth = 0;
+							setWidthCmd = new SetColumnWidthCommand(next, newWidth);
+							c.add(setWidthCmd);
 						}
 					} else if (table.hasColumnsAutoresizeNext()){
 						MColumn next = model.getNextColumn();
@@ -92,7 +98,8 @@ public class CreateResize {
 								//newWidth = 0;
 								return null;
 							}
-							c.setWidth(next, newWidth);
+							setWidthCmd = new SetColumnWidthCommand(next, newWidth);
+							c.add(setWidthCmd);
 						} 
 					}
 				} 
