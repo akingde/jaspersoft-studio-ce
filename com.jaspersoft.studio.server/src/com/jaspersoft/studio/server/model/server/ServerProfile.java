@@ -49,8 +49,17 @@ public class ServerProfile implements Resource, Cloneable, Serializable, JRChang
 	private boolean useSSO = false;
 	private String ssoUuid;
 	private transient ClientUser clientUser;
+	private boolean logging = false;
 
 	private JRPropertyChangeSupport propertyChange = new JRPropertyChangeSupport(this);
+
+	public boolean isLogging() {
+		return logging;
+	}
+
+	public void setLogging(boolean logging) {
+		this.logging = logging;
+	}
 
 	public ClientUser getClientUser() {
 		return clientUser;

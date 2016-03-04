@@ -250,6 +250,7 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 					PojoObservables.observeValue(value, "useOnlySOAP")); //$NON-NLS-1$
 			dbc.bindValue(SWTObservables.observeSelection(bSyncDA), PojoObservables.observeValue(value, "syncDA")); //$NON-NLS-1$
 			dbc.bindValue(SWTObservables.observeSelection(bSSO), PojoObservables.observeValue(value, "useSSO")); //$NON-NLS-1$
+			dbc.bindValue(SWTObservables.observeSelection(bLogging), PojoObservables.observeValue(value, "logging")); //$NON-NLS-1$
 
 			dbc.bindValue(SWTObservables.observeText(cversion.getControl()),
 					PojoObservables.observeValue(proxy, "jrVersion")); //$NON-NLS-1$
@@ -398,9 +399,6 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 
 		bUseSoap = new Button(cmp, SWT.CHECK);
 		bUseSoap.setText(Messages.ServerProfilePage_6);
-		// gd = new GridData();
-		// gd.horizontalSpan = 3;
-		// bUseSoap.setLayoutData(gd);
 		tt = Messages.ServerProfilePage_29;
 		bchunked.setToolTipText(tt);
 
@@ -414,9 +412,6 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 		bSSO = new Button(cmp, SWT.CHECK);
 		bSSO.setText(Messages.ServerProfilePage_18);
 		bSSO.setToolTipText(Messages.ServerProfilePage_20);
-		gd = new GridData();
-		gd.horizontalSpan = 3;
-		bSSO.setLayoutData(gd);
 		bSSO.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -432,6 +427,14 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 				closeConnection();
 			}
 		});
+
+		bLogging = new Button(cmp, SWT.CHECK);
+		bLogging.setText("Logging enabled");
+		tt = "Logging enabled";
+		bLogging.setToolTipText(tt);
+		gd = new GridData();
+		gd.horizontalSpan = 2;
+		bLogging.setLayoutData(gd);
 
 		String ttip = Messages.ServerProfilePage_7;
 		lbl = new Label(cmp, SWT.NONE);
@@ -680,6 +683,7 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 	}
 
 	private JdbcDriver driver = new JdbcDriver();
+	private Button bLogging;
 
 	private void createJdbcDrivers(CTabFolder tabFolder) {
 		if (sprofile.getWsClient() == null || !sprofile.getWsClient().isSupported(Feature.EXPORTMETADATA)

@@ -156,14 +156,16 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 
 		Client client = ClientBuilder.newBuilder().withConfig(clientConfig).build();
 		client.register(MultiPartFeature.class);
-		logger = java.util.logging.Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
-		// String home = System.getProperty("user.home");
-		// FileHandler fh = new FileHandler(home + File.separator +
-		// "jssjrs.log", true);
-		// fh.setFormatter(new SimpleFormatter());
-		// logger.addHandler(fh);
-		logger.setLevel(Level.FINEST);
-		client.register(new org.glassfish.jersey.filter.LoggingFilter(logger, true));
+
+		if (sp.isLogging()) {
+			logger = java.util.logging.Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+			// FileHandler fh = new FileHandler(home + File.separator +
+			// "jssjrs.log", true);
+			// fh.setFormatter(new SimpleFormatter());
+			// logger.addHandler(fh);
+			logger.setLevel(Level.FINEST);
+			client.register(new org.glassfish.jersey.filter.LoggingFilter(logger, true));
+		}
 		// client.register(JacksonFeature.class);
 		// String user = sp.getUser();
 		// if (!Misc.isNullOrEmpty(sp.getOrganisation()))

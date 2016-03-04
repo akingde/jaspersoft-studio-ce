@@ -129,6 +129,23 @@ public class SoapConnection implements IConnection {
 		JServer server = new JServer();
 		this.sp = sp;
 		setupJServer(server, sp);
+		if(sp.isLogging()){
+			System.setProperty("org.apache.commons.logging.Log","org.apache.commons.logging.impl.SimpleLog");
+			System.setProperty("org.apache.commons.logging.simplelog.showdatetime", "true");
+			System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.wire", "DEBUG");
+			System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.impl.conn", "DEBUG");
+			System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.impl.client", "DEBUG");
+			System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.client", "DEBUG");
+			System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http", "DEBUG");
+		}else{
+			System.setProperty("org.apache.commons.logging.Log","org.apache.commons.logging.impl.SimpleLog");
+			System.setProperty("org.apache.commons.logging.simplelog.showdatetime", "true");
+			System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.wire", "ERROR");
+			System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.impl.conn", "ERROR");
+			System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.impl.client", "ERROR");
+			System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.client", "ERROR");
+			System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http", "ERROR");
+		}
 
 		client = server.getWSClient();
 		if (getServerInfo(monitor) == null)
