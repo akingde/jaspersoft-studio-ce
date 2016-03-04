@@ -375,13 +375,13 @@
            category="com.jaspersoft.studio.server.preferences.JRSPreferencesPage"
            class="com.jaspersoft.studio.server.preferences.CASPreferencePage"
            id="com.jaspersoft.studio.server.preferences.CASPreferencePage.property"
-           name="Single Sign On Servers">
+           name="%ssosettings">
      </page>
      <page
            category="com.jaspersoft.studio.preferences.StudioPreferencePage"
            class="com.jaspersoft.studio.server.preferences.JRSPreferencesPage"
            id="com.jaspersoft.studio.server.preferences.JRSPreferencesPage"
-           name="Jaspersoft Server Settings">
+           name="%jrssettings">
      </page>
   </extension>
   <extension
@@ -390,7 +390,7 @@
            category="com.jaspersoft.studio.preferences.StudioPreferencePage.property"
            class="com.jaspersoft.studio.server.preferences.JRSPreferencesPage"
            id="com.jaspersoft.studio.server.preferences.JRSPreferencesPage.property"
-           name="Jaspersoft Server Settings">
+           name="%jrssettings">
         <enabledWhen>
            <reference
                  definitionId="com.jaspersoft.studio.project">
