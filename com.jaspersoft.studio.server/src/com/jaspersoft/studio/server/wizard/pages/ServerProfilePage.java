@@ -429,9 +429,8 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 		});
 
 		bLogging = new Button(cmp, SWT.CHECK);
-		bLogging.setText("Logging enabled");
-		tt = "Logging enabled";
-		bLogging.setToolTipText(tt);
+		bLogging.setText(Messages.ServerProfilePage_34); 
+		bLogging.setToolTipText(Messages.ServerProfilePage_35);
 		gd = new GridData();
 		gd.horizontalSpan = 2;
 		bLogging.setLayoutData(gd);
