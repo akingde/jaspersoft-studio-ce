@@ -67,6 +67,7 @@ public class DuplicateServerAction extends Action {
 					MServerProfile oldMSP = (MServerProfile) obj;
 					ServerProfile copy = (ServerProfile) oldMSP.getValue().clone();
 					copy.setName(DuplicateDataAdapterAction.COPY_OF + copy.getName());
+					copy.setProjectPath(null);
 
 					MServerProfile copyDataAdapter = new MServerProfile((ANode) oldMSP.getParent(), copy);
 					ServerManager.addServerProfile(copyDataAdapter);
