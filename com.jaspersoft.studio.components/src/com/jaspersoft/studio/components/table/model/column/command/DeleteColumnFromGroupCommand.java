@@ -37,6 +37,14 @@ public class DeleteColumnFromGroupCommand extends Command {
 	/** The element position. */
 	private int elementPosition = 0;
 
+	public DeleteColumnFromGroupCommand(StandardColumnGroup destNode, MColumn srcNode) {
+		super();
+		this.jrGroup = destNode;
+		this.jrColumn = (StandardBaseColumn) srcNode.getValue();
+		this.jrTable = TableManager.getTable(srcNode.getMTable());
+		elementPosition = jrGroup.getColumns().indexOf(jrColumn);
+	}
+	
 	public DeleteColumnFromGroupCommand(MColumnGroup destNode, MColumn srcNode) {
 		super();
 		this.jrGroup = (StandardColumnGroup) destNode.getValue();

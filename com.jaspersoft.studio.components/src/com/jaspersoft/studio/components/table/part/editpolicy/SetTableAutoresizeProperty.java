@@ -14,6 +14,7 @@ package com.jaspersoft.studio.components.table.part.editpolicy;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 import org.eclipse.gef.commands.Command;
@@ -77,7 +78,7 @@ public class SetTableAutoresizeProperty extends Command {
 			if (setAutoresize){
 				storeColumnsSize();
 				table.setPropertyValue(MTable.PROPERTY_COLUMNS_AUTORESIZE_PROPORTIONAL, true);
-				table.getTableManager().fillSpace(table.getValue().getWidth(), true, new ArrayList<BaseColumn>());
+				table.getTableManager().fillSpace(table.getValue().getWidth(), true, new HashSet<BaseColumn>());
 			} else {
 				table.setPropertyValue(MTable.PROPERTY_COLUMNS_AUTORESIZE_PROPORTIONAL, false);
 			}
@@ -99,7 +100,7 @@ public class SetTableAutoresizeProperty extends Command {
 				restoreColumnsSize(table.getStandardTable().getColumns());
 				table.setPropertyValue(MTable.PROPERTY_COLUMNS_AUTORESIZE_PROPORTIONAL, true);
 				//now the flag is true, trigger and autofill
-				boolean changed = table.getTableManager().fillSpace(table.getValue().getWidth(), true, new ArrayList<BaseColumn>());
+				boolean changed = table.getTableManager().fillSpace(table.getValue().getWidth(), true, new HashSet<BaseColumn>());
 				if (!changed){
 					//The size was already right (probably because of the restoreColumnsSize) so the cells was not
 					//layouted after the undo, trigger a manual layout

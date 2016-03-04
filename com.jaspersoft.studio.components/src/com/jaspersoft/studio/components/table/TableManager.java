@@ -14,6 +14,7 @@ package com.jaspersoft.studio.components.table;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
@@ -218,7 +219,7 @@ public class TableManager {
 	 * columns are resized to fill the group. They are resized keeping the ratio
 	 * between them 
 	 */
-	protected void setProportionalWidth(StandardBaseColumn column, int width, List<BaseColumn> fixedColumns) {
+	protected void setProportionalWidth(StandardBaseColumn column, int width, HashSet<BaseColumn> fixedColumns) {
 		if (width >= 0) {
 			int delta = width - column.getWidth();
 			//Look if it is inside a 
@@ -241,29 +242,43 @@ public class TableManager {
 	 * @return and array with the same number of entry of the passed columns. Each value of the array is the size the 
 	 * corrispective column should have to fit the available space
 	 */
-	private int[] getColumnsProportionalWidth(List<BaseColumn> columns, int newWidth, List<BaseColumn> fixedColumns){
+	private int[] getColumnsProportionalWidth(List<BaseColumn> columns, int newWidth, HashSet<BaseColumn> fixedColumns){
 		int[] proportionalWidths = new int[columns.size()];
 		int index = 0;
 		int currentColumnsWidth = 0;
 		for(BaseColumn col : columns){
 			currentColumnsWidth += col.getWidth();
 		}
+		
 		//Phase 0: check that at least one columns is not excluded, otherwise make the last column not excluded
+		List<BaseColumn> acceptableFixedColumns = new ArrayList<BaseColumn>();
+		int currentFixedWidth = 0;
+		for(BaseColumn col : columns){
+			if (fixedColumns.contains(col)){
+				currentFixedWidth += col.getWidth();
+				if (currentFixedWidth >  newWidth){
+					break;
+				} else {
+					acceptableFixedColumns.add(col);
+				}
+			}
+		}
+		
 		boolean allExcluded = true;
 		for(BaseColumn col : columns){
-			if (!fixedColumns.contains(col)){
+			if (!acceptableFixedColumns.contains(col)){
 				allExcluded = false;
 				break;
 			}
 		}
 		if (allExcluded){
-			fixedColumns.remove(columns.get(columns.size()-1));
+			acceptableFixedColumns.remove(columns.get(columns.size()-1));
 		}
 		
 		//Phase 1: change proportionally the width of each column
 		int columnsTotalWidth = 0;			
 		for(BaseColumn col : columns){
-			if(fixedColumns.contains(col)){
+			if(acceptableFixedColumns.contains(col)){
 				proportionalWidths[index] = col.getWidth();
 				columnsTotalWidth += col.getWidth();		
 			} else {
@@ -281,7 +296,7 @@ public class TableManager {
 		index = 0;
 		while (remains > 0 && proportionalWidths.length > 0){
 			BaseColumn currentColumn = columns.get(index);
-			if (!fixedColumns.contains(currentColumn)){
+			if (!acceptableFixedColumns.contains(currentColumn)){
 				proportionalWidths[index]++;
 				remains--;	
 			}
@@ -304,7 +319,7 @@ public class TableManager {
 	 * is removed from the exlusion set and used to fill the space
 	 * @return true if some changes were done to the table, false if it was already of the right size
 	 */
-	public boolean fillSpace(int newWidth, boolean isProportional, List<BaseColumn> fixedColumns){
+	public boolean fillSpace(int newWidth, boolean isProportional, HashSet<BaseColumn> fixedColumns){
 		return fillSpace(newWidth, isProportional, fixedColumns, false);
 	}
 	
@@ -319,7 +334,7 @@ public class TableManager {
 	 * @param force prameter used to force the table resize without any check to see if the table is already filling the space
 	 * @return true if some changes were done to the table, false if it was already of the right size
 	 */
-	public boolean fillSpace(int newWidth, boolean isProportional, List<BaseColumn> fixedColumns, boolean force){
+	public boolean fillSpace(int newWidth, boolean isProportional, HashSet<BaseColumn> fixedColumns, boolean force){
 		//Only one of this operation allowed on the at the same time
 		synchronized (table) {
 			int currentColumnsWidth = 0;
@@ -435,7 +450,7 @@ public class TableManager {
 		return false;
 	}
 	
-	private void setProportionalColumnGroupWidth(StandardColumnGroup columnGroup, int width, List<BaseColumn> fixedColumns) {
+	private void setProportionalColumnGroupWidth(StandardColumnGroup columnGroup, int width, HashSet<BaseColumn> fixedColumns) {
 		List<BaseColumn> columns = columnGroup.getColumns();
 		int[] proportionalNewWidth = getColumnsProportionalWidth(columns, width, fixedColumns);
 		int index = 0;
@@ -994,5 +1009,46 @@ public class TableManager {
 			}
 		}
 		return result;
+	}
+	
+	/**
+	 * Search in all the table the parent of a specific colum
+	 * 
+	 * @param child the searched column
+	 * @return the group containing the searched column or null if no group
+	 * is containing it (for example beause the column if child of the table)
+	 */
+	public static StandardColumnGroup getParent(StandardTable table, BaseColumn child){
+		for(BaseColumn tableChild : table.getColumns()){
+			if (tableChild == child) return null;
+		}
+		for(BaseColumn tableChild : table.getColumns()){
+			if (tableChild instanceof StandardColumnGroup){
+				StandardColumnGroup searchInGroup = getParent(child, (StandardColumnGroup)tableChild);
+				if (searchInGroup != null) return searchInGroup;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Iterate recursivley the table groups to find the parent of a specified child 
+	 * 
+	 * @param child the searched column
+	 * @param currentGroup the group (and its descendant) where the column is searched
+	 * @return the group containing the searched column or null if the passed group or its descendent doesn't 
+	 * contain the searched column
+	 */
+	private static StandardColumnGroup getParent(BaseColumn child, StandardColumnGroup currentGroup){
+		for(BaseColumn groupChild : currentGroup.getColumns()){
+			if (groupChild == child) return currentGroup;
+		}
+		for(BaseColumn groupChild : currentGroup.getColumns()){
+			if (groupChild instanceof StandardColumnGroup){
+				StandardColumnGroup searchInGroup = getParent(child, (StandardColumnGroup)groupChild);
+				if (searchInGroup != null) return searchInGroup;
+			}
+		}
+		return null;
 	}
 }

@@ -12,13 +12,13 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.table.model.column.command;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
 import org.eclipse.gef.commands.Command;
 
+import com.jaspersoft.studio.components.table.TableManager;
 import com.jaspersoft.studio.components.table.model.column.MColumn;
 
 import net.sf.jasperreports.components.table.BaseColumn;
@@ -34,11 +34,6 @@ import net.sf.jasperreports.components.table.StandardTable;
  *
  */
 public class SetColumnWidthCommand extends Command {
-	
-	/**
-	 * Static empty array used in some cases instead to istantiate an empty one
-	 */
-	private final static ArrayList<BaseColumn> EMPTY_ARRAY = new ArrayList<BaseColumn>();
 	
 	/**
 	 * The table in which the column is placed
@@ -84,16 +79,16 @@ public class SetColumnWidthCommand extends Command {
 		
 		//if the column is a group adjsut the size of every child column
 		if (column instanceof StandardColumnGroup){
-			setWidthOnChildren((StandardColumnGroup) column,  newWidth, EMPTY_ARRAY);		
+			setWidthOnChildren((StandardColumnGroup) column,  newWidth);		
 		}
 
 		//Search every ancestor of the column and adjust also their width
 		BaseColumn currentCol = column;
-		StandardColumnGroup currentParent = getParent(currentCol);
+		StandardColumnGroup currentParent = TableManager.getParent(table, currentCol);
 		while(currentParent != null){
 			setColumnWidth(currentParent, currentParent.getWidth() + delta);
 			currentCol = currentParent;
-			currentParent = getParent(currentCol);
+			currentParent = TableManager.getParent(table, currentCol);
 		}
 	}
 	
@@ -114,61 +109,19 @@ public class SetColumnWidthCommand extends Command {
 	 * 
 	 * @param group the group containing the columns to resize
 	 * @param newSize the new size of the columns 
-	 * @param excludedChildren the children exluded from the resize operations
 	 */
-	protected void setWidthOnChildren(StandardColumnGroup group, int newSize, List<BaseColumn> excludedChildren){
+	protected void setWidthOnChildren(StandardColumnGroup group, int newSize){
 		//calculate the new sizes
-		int[] childrenNewWidths = getColumnsProportionalWidth(group.getColumns(), newSize, excludedChildren);
+		int[] childrenNewWidths = getColumnsProportionalWidth(group.getColumns(), newSize);
 		int index = 0;
 		for(BaseColumn child : group.getColumns()){
 			int newChildWidth = childrenNewWidths[index];
 			if (child instanceof StandardColumnGroup){
-				setWidthOnChildren((StandardColumnGroup)child, newChildWidth, excludedChildren);
+				setWidthOnChildren((StandardColumnGroup)child, newChildWidth);
 			}
 			setColumnWidth((StandardBaseColumn)child, newChildWidth);
 			index++;
 		}
-	}
-	
-	/**
-	 * Search in all the table the parent of a specific colum
-	 * 
-	 * @param child the searched column
-	 * @return the group containing the searched column or null if no group
-	 * is containing it (for example beause the column if child of the table)
-	 */
-	private StandardColumnGroup getParent(BaseColumn child){
-		for(BaseColumn tableChild : table.getColumns()){
-			if (tableChild == child) return null;
-		}
-		for(BaseColumn tableChild : table.getColumns()){
-			if (tableChild instanceof StandardColumnGroup){
-				StandardColumnGroup searchInGroup = getParent(child, (StandardColumnGroup)tableChild);
-				if (searchInGroup != null) return searchInGroup;
-			}
-		}
-		return null;
-	}
-
-	/**
-	 * Iterate recursivley the table groups to find the parent of a specified child 
-	 * 
-	 * @param child the searched column
-	 * @param currentGroup the group (and its descendant) where the column is searched
-	 * @return the group containing the searched column or null if the passed group or its descendent doesn't 
-	 * contain the searched column
-	 */
-	private StandardColumnGroup getParent(BaseColumn child, StandardColumnGroup currentGroup){
-		for(BaseColumn groupChild : currentGroup.getColumns()){
-			if (groupChild == child) return currentGroup;
-		}
-		for(BaseColumn groupChild : currentGroup.getColumns()){
-			if (groupChild instanceof StandardColumnGroup){
-				StandardColumnGroup searchInGroup = getParent(child, (StandardColumnGroup)groupChild);
-				if (searchInGroup != null) return searchInGroup;
-			}
-		}
-		return null;
 	}
 	
 	/**
@@ -177,43 +130,25 @@ public class SetColumnWidthCommand extends Command {
 	 * 
 	 * @param columns the columns to resize
 	 * @param newWidth the new width the columns should occupy
-	 * @param fixedColumns the list of columns that should not be resized in the process. However if the resize operation
-	 * because every column is marked as fixed then the last one will be resized anyway
 	 * @return and array with the same number of entry of the passed columns. Each value of the array is the size the 
 	 * corrispective column should have to fit the available space
 	 */
-	private int[] getColumnsProportionalWidth(List<BaseColumn> columns, int newWidth, List<BaseColumn> fixedColumns){
+	private int[] getColumnsProportionalWidth(List<BaseColumn> columns, int newWidth){
 		int[] proportionalWidths = new int[columns.size()];
 		int index = 0;
 		int currentColumnsWidth = 0;
 		for(BaseColumn col : columns){
 			currentColumnsWidth += col.getWidth();
 		}
-		//Phase 0: check that at least one columns is not excluded, otherwise make the last column not excluded
-		boolean allExcluded = true;
-		for(BaseColumn col : columns){
-			if (!fixedColumns.contains(col)){
-				allExcluded = false;
-				break;
-			}
-		}
-		if (allExcluded){
-			fixedColumns.remove(columns.get(columns.size()-1));
-		}
 		
 		//Phase 1: change proportionally the width of each column
 		int columnsTotalWidth = 0;			
 		for(BaseColumn col : columns){
-			if(fixedColumns.contains(col)){
-				proportionalWidths[index] = col.getWidth();
-				columnsTotalWidth += col.getWidth();		
-			} else {
-				float proportionalFactor = (float)col.getWidth() / (float)currentColumnsWidth;
-				//casting to int is the same to do the floor operation, since it drop the decimal
-				int proportionalWidth = (int)(proportionalFactor * newWidth);
-				proportionalWidths[index] = proportionalWidth;
-				columnsTotalWidth += proportionalWidth;				
-			}
+			float proportionalFactor = (float)col.getWidth() / (float)currentColumnsWidth;
+			//casting to int is the same to do the floor operation, since it drop the decimal
+			int proportionalWidth = (int)(proportionalFactor * newWidth);
+			proportionalWidths[index] = proportionalWidth;
+			columnsTotalWidth += proportionalWidth;	
 			index ++;
 		}
 		
@@ -221,11 +156,8 @@ public class SetColumnWidthCommand extends Command {
 		int remains = newWidth - columnsTotalWidth;
 		index = 0;
 		while (remains > 0 && proportionalWidths.length > 0){
-			BaseColumn currentColumn = columns.get(index);
-			if (!fixedColumns.contains(currentColumn)){
-				proportionalWidths[index]++;
-				remains--;	
-			}
+			proportionalWidths[index]++;
+			remains--;	
 			index++;
 			if (index == proportionalWidths.length){
 				index = 0;

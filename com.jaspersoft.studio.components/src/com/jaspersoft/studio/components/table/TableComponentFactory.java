@@ -747,6 +747,19 @@ public class TableComponentFactory implements IComponentFactory {
 
 	public static Command getDeleteColumnCommand(ANode parent, ANode child) {
 		if (child instanceof MColumn) {
+			if (parent instanceof MTableDetail){
+				JSSCompoundTableCommand tableCommand = new JSSCompoundTableCommand(((MTableDetail)parent).getMTable());
+				MColumn column = (MColumn)child;
+				StandardTable table = column.getMTable().getStandardTable();
+				StandardColumnGroup colParent = TableManager.getParent(table, column.getValue());
+				if (colParent != null){
+					tableCommand.add(new DeleteColumnFromGroupCommand(colParent, (MColumn) child));	
+				} else {
+					tableCommand.add(new DeleteColumnCommand((MTableDetail) parent, (MColumn) child));
+				}
+				return tableCommand;
+			}
+			
 			if (parent instanceof MTableGroupHeader){
 				JSSCompoundTableCommand tableCommand = new JSSCompoundTableCommand(((MTableGroupHeader)parent).getMTable());
 				tableCommand.add(new DeleteColumnCommand((MTableGroupHeader) parent,(MColumn) child));

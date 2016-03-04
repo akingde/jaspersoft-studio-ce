@@ -14,6 +14,7 @@ package com.jaspersoft.studio.components.table.part.editpolicy;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -117,11 +118,12 @@ public class JSSCompoundTableCommand extends JSSCompoundCommand {
 			//execute the innter command
 			super.execute();
 			
-			List<BaseColumn> modifiedColumn = getModifiedColumns();
+			int currentTableWidth = table.getValue().getWidth();
+			HashSet<BaseColumn> modifiedColumn = getModifiedColumns();
 			boolean widthChanged = modifiedColumn.size() > 0;
 		
 			//fill the space		
-			boolean changed = table.getTableManager().fillSpace(table.getValue().getWidth(), true, modifiedColumn, widthChanged);
+			boolean changed = table.getTableManager().fillSpace(currentTableWidth, true, modifiedColumn, widthChanged);
 			if (!changed){
 				//The size was already right (probably because of the restoreColumnsSize) so the cells was not
 				//layouted after the undo, trigger a manual layout
@@ -153,7 +155,7 @@ public class JSSCompoundTableCommand extends JSSCompoundCommand {
 			//Restore the original size
 			restoreColumnsSize(table.getStandardTable().getColumns());
 			//If the table still doesn't fit the width then update it
-			boolean changed = table.getTableManager().fillSpace(table.getValue().getWidth(), true, new ArrayList<BaseColumn>());
+			boolean changed = table.getTableManager().fillSpace(table.getValue().getWidth(), true, new HashSet<BaseColumn>());
 			if (!changed){
 				//The size was already right (probably because of the restoreColumnsSize) so the cells was not
 				//layouted after the undo, trigger a manual layout
@@ -180,13 +182,10 @@ public class JSSCompoundTableCommand extends JSSCompoundCommand {
 			storeColumnsSize();
 			super.redo();
 			
-			List<BaseColumn> modifiedColumn = getModifiedColumns();
-			if (modifiedColumn.size() == originalColumnsSize.size()){
-				modifiedColumn.clear();
-			}
-		
-			
-			table.getTableManager().fillSpace(table.getValue().getWidth(), true, modifiedColumn);
+			//fill the space	
+			HashSet<BaseColumn> modifiedColumn = getModifiedColumns();
+			boolean widthChanged = modifiedColumn.size() > 0;
+			table.getTableManager().fillSpace(table.getValue().getWidth(), true, modifiedColumn, widthChanged);		
 		} else {
 			super.redo();
 			if (layoutTableContent){
@@ -213,8 +212,8 @@ public class JSSCompoundTableCommand extends JSSCompoundCommand {
 		}
 	}
 	
-	protected List<BaseColumn> getModifiedColumns(){
-		List<BaseColumn> result = new ArrayList<BaseColumn>();
+	protected HashSet<BaseColumn> getModifiedColumns(){
+		HashSet<BaseColumn> result = new HashSet<BaseColumn>();
 		for(Entry<BaseColumn, Integer> columnEntry : originalColumnsSize.entrySet()){
 			if (!ModelUtils.safeEquals(columnEntry.getKey().getWidth(), columnEntry.getValue())){
 				result.add(columnEntry.getKey());
