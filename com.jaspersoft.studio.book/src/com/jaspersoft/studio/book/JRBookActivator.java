@@ -1,13 +1,8 @@
 package com.jaspersoft.studio.book;
 
-import net.sf.jasperreports.eclipse.AbstractJRUIPlugin;
-
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.osgi.framework.BundleContext;
+
+import net.sf.jasperreports.eclipse.AbstractJRUIPlugin;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -58,21 +53,4 @@ public class JRBookActivator extends AbstractJRUIPlugin {
 		return PLUGIN_ID;
 	}
 
-	@Override
-	protected void postStartOperations() {
-		Job lookForBookReports = new Job("Book reports search") {
-			@Override
-			protected IStatus run(IProgressMonitor monitor) {
-				try {
-					BookUtils.scanWSForBookReports();
-				} catch (CoreException e) {
-					JRBookActivator.getDefault().logError(e);
-					return Status.CANCEL_STATUS;
-				}
-				return Status.OK_STATUS;
-			}
-		};
-		lookForBookReports.setPriority(Job.LONG);
-		lookForBookReports.schedule(5000);
-	}
 }

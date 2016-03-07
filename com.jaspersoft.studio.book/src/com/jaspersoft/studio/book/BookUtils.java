@@ -5,8 +5,6 @@ import java.io.InputStream;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import net.sf.jasperreports.eclipse.builder.JasperReportsNature;
-
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -14,6 +12,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.content.IContentDescription;
+import org.eclipse.core.runtime.content.ITextContentDescriber;
 import org.eclipse.ui.IEditorDescriptor;
 import org.eclipse.ui.ide.IDE;
 import org.w3c.dom.Document;
@@ -23,6 +22,8 @@ import org.xml.sax.SAXException;
 import com.jaspersoft.studio.book.editors.JRBookEditor;
 import com.jaspersoft.studio.utils.XMLUtils;
 
+import net.sf.jasperreports.eclipse.builder.JasperReportsNature;
+
 /**
  * Utility class containing generic methods for dealing with the book reports.
  * 
@@ -31,8 +32,8 @@ import com.jaspersoft.studio.utils.XMLUtils;
  */
 public class BookUtils {
 
-	public static final int BOOK_VALID = 0x01;
-	public static final int BOOK_INVALID = 0x02;
+	public static final int BOOK_VALID = ITextContentDescriber.VALID;
+	public static final int BOOK_INVALID = ITextContentDescriber.INVALID;
 	
 	/**
 	 * Scans the workspace for possible book reports and sets the 
@@ -114,7 +115,7 @@ public class BookUtils {
 	 * @param description
 	 *            the file description
 	 * @return <code>VALID</code> if the file is JasperReports Book,
-	 *         <code>false</code> otherwise
+	 *         <code>INVALID</code> otherwise
 	 * @throws IOException
 	 */
 	public static int validateBook(InputStream in, IContentDescription description) throws IOException {

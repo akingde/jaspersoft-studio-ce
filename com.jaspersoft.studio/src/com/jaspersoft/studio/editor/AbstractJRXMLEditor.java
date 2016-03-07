@@ -88,7 +88,6 @@ import net.sf.jasperreports.eclipse.JasperReportsPlugin;
 import net.sf.jasperreports.eclipse.builder.JasperReportsBuilder;
 import net.sf.jasperreports.eclipse.builder.Markers;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.eclipse.util.FileExtension;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperReportsContext;
@@ -220,7 +219,6 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart
 		// TEXT EDITOR TO AVOID 2 TIME READING THE FILE
 		NullProgressMonitor monitor = new NullProgressMonitor();
 		editorInput = FileUtils.checkAndConvertEditorInput(editorInput, monitor);
-		editorInput = checkJasperFileOpening(editorInput, monitor);
 		super.init(site, editorInput);
 		setPartName(editorInput.getName());
 		InputStream in = null;
@@ -255,53 +253,6 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart
 		}
 	}
 
-	/*
-	 * Performs initial checks on .jasper file opening.
-	 * It will lead to the original or converted .jrxml file opening.
-	 */
-	private IEditorInput checkJasperFileOpening(IEditorInput editorInput, NullProgressMonitor monitor) {
-		if(editorInput!=null) {
-			IFile adapterFile = editorInput.getAdapter(IFile.class);
-			if(adapterFile!=null && FileExtension.JASPER.equals(adapterFile.getFileExtension())) {
-				// Check for existing corresponding .jrxml file
-				IPath tmpPath = adapterFile.getFullPath().removeFileExtension();
-				tmpPath = tmpPath.addFileExtension(FileExtension.JRXML);
-				IFile jrxmlFile = ResourcesPlugin.getWorkspace().getRoot().getFile(tmpPath);
-				if(jrxmlFile.exists()){
-					boolean overwriteAnswer = MessageDialog.openQuestion(
-							UIUtils.getShell(), Messages.AbstractJRXMLEditor_ConversionTitle, 
-							Messages.AbstractJRXMLEditor_ConversionMessage);
-					if(overwriteAnswer){
-						try {
-							InputStream contents = adapterFile.getContents();
-							InputStream jrxmlInStream = JRXMLUtils.getJRXMLInputStream(jrContext, contents, FileExtension.JASPER, FileUtils.UTF8_ENCODING, version);
-							jrxmlFile.setContents(jrxmlInStream, IFile.FORCE, monitor);
-							jrxmlFile.getProject().refreshLocal(IResource.DEPTH_INFINITE, monitor);
-						} catch (CoreException e) {
-							JaspersoftStudioPlugin.getInstance().logError(e);
-						} catch (JRException e) {
-							JaspersoftStudioPlugin.getInstance().logError(e);
-						}
-					}
-				}
-				else {
-					// Open .jrxml file corresponding to the .jasper
-					try {
-						InputStream contents = adapterFile.getContents();
-						InputStream jrxmlInStream = JRXMLUtils.getJRXMLInputStream(jrContext, contents, FileExtension.JASPER, FileUtils.UTF8_ENCODING, version);
-						jrxmlFile.create(jrxmlInStream, IFile.FORCE, monitor);
-					} catch (CoreException e) {
-						JaspersoftStudioPlugin.getInstance().logError(e);
-					} catch (JRException e) {
-						JaspersoftStudioPlugin.getInstance().logError(e);
-					}
-				}
-				editorInput = new FileEditorInput(jrxmlFile);
-			}
-		}
-		return editorInput;
-	}
-	
 	/**
 	 * Returns the {@link JasperReportsContext} associated to the specified report file.
 	 * 

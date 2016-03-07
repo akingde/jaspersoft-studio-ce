@@ -6,10 +6,9 @@
       <editor
             class="com.jaspersoft.studio.book.editors.JRBookEditor"
             contributorClass="com.jaspersoft.studio.book.editors.JRBookEditorActionBarContributor"
-            extensions="jrxml"
-            default="false"
             icon="icons/book_icon.png"
             id="com.jaspersoft.studio.book.editors.JRBookEditor"
+            matchingStrategy="com.jaspersoft.studio.book.JasperBookMatchStrategy"
             name="JasperReports Book Editor">
             <contentTypeBinding
                   contentTypeId="com.jaspersoft.studio.content-types.jrbook">
@@ -19,10 +18,12 @@
     <extension
           point="org.eclipse.core.contenttype.contentTypes">
        <content-type
+       		 describer="com.jaspersoft.studio.book.JasperBookContentDescriber"
+       		 base-type="org.eclipse.core.runtime.text"
+             priority="normal"
              file-extensions="jrxml"
              id="com.jaspersoft.studio.content-types.jrbook"
-             name="JasperReports Book File"
-             priority="low">
+             name="JasperReports Book File">
        </content-type>
     </extension>
     <extension

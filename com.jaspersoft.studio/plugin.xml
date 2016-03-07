@@ -39,19 +39,31 @@
       </persistent>
    </extension>
    <extension
+         point="org.eclipse.core.contenttype.contentTypes">
+         <content-type
+         	   base-type="org.eclipse.core.runtime.text"
+               id="com.jaspersoft.studio.content-types.jrxml"
+               describer="com.jaspersoft.studio.JrxmlContentDescriber"
+               priority="normal"
+               file-extensions="jrxml"
+               name="JasperReports JRXML File">
+         </content-type>
+   </extension>
+   <extension
          point="org.eclipse.ui.editors">
       <editor
             class="com.jaspersoft.studio.editor.JrxmlEditor"
             contributorClass="com.jaspersoft.studio.editor.JrxmlEditorContributor"
-            default="true"
-            extensions="jrxml"
             icon="icons/jrxml_icon.png"
             id="com.jaspersoft.studio.editor.JrxmlEditor"
+            matchingStrategy="com.jaspersoft.studio.editor.StandardJRXMLMatchStrategy"
             name="JasperReports Designer">
+            <contentTypeBinding
+                  contentTypeId="com.jaspersoft.studio.content-types.jrxml">
+            </contentTypeBinding>
       </editor>
       <editor
-            class="com.jaspersoft.studio.editor.JrxmlEditor"
-            contributorClass="com.jaspersoft.studio.editor.JrxmlEditorContributor"
+      		launcher="com.jaspersoft.studio.editor.JasperFileEditorLauncher"
             default="true"
             extensions="jasper"
             icon="icons/resources/jasperreports_jasper.png"
@@ -101,13 +113,11 @@
       </editor>
       <editor
             class="com.jaspersoft.studio.data.DataAdapterEditorPart"
-            default="false"
-            extensions="xml"
             icon="icons/data_source.png"
             id="com.jaspersoft.studio.data.DataAdapterEditorPart"
             name="DataAdapter Editor">
          <contentTypeBinding
-               contentTypeId="com.jaspersoft.studio.data.dataAdapter">
+               contentTypeId="com.jaspersoft.studio.content-types.dataAdapter">
          </contentTypeBinding>
       </editor>
       <editor
@@ -1644,10 +1654,10 @@
           point="org.eclipse.core.contenttype.contentTypes">
        <content-type
              describer="com.jaspersoft.studio.data.DataAdapterDescriber"
+             base-type="org.eclipse.core.runtime.xml"
              file-extensions="xml"
-             id="com.jaspersoft.studio.data.dataAdapter"
-             name="DataAdapter File"
-             priority="low">
+             id="com.jaspersoft.studio.content-types.dataAdapter"
+             name="DataAdapter File">
        </content-type>
     </extension>
     <extension
