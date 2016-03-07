@@ -109,6 +109,7 @@ public class SPRWFloatCombo<T extends IPropertyDescriptor> extends ASPropertyWid
 	public void setData(APropertyNode pnode, Object resolvedValue, Object elementValue) {
 		refresh = true;
 		this.pnode = pnode;
+		combo.setEnabled(pnode.isEditable());
 		if (resolvedValue != null) {
 			int oldpos = combo.getCaretPosition();
 			if (elementValue == null) {
