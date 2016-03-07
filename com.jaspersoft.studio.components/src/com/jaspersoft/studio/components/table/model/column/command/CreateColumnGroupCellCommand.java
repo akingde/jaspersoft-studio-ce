@@ -20,6 +20,7 @@ import com.jaspersoft.studio.components.table.model.AMCollection;
 import com.jaspersoft.studio.components.table.model.MTable;
 import com.jaspersoft.studio.components.table.model.MTableColumnFooter;
 import com.jaspersoft.studio.components.table.model.MTableColumnHeader;
+import com.jaspersoft.studio.components.table.model.MTableDetail;
 import com.jaspersoft.studio.components.table.model.MTableFooter;
 import com.jaspersoft.studio.components.table.model.MTableGroupFooter;
 import com.jaspersoft.studio.components.table.model.MTableGroupHeader;
@@ -27,6 +28,7 @@ import com.jaspersoft.studio.components.table.model.MTableHeader;
 import com.jaspersoft.studio.components.table.model.column.MCell;
 import com.jaspersoft.studio.components.table.model.columngroup.MColumnGroup;
 import com.jaspersoft.studio.components.table.model.columngroup.MColumnGroupCell;
+import com.jaspersoft.studio.components.table.model.dialog.ApplyTableStyleAction;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 
@@ -37,6 +39,9 @@ import net.sf.jasperreports.components.table.GroupCell;
 import net.sf.jasperreports.components.table.StandardBaseColumn;
 import net.sf.jasperreports.components.table.StandardColumnGroup;
 import net.sf.jasperreports.components.table.StandardGroupCell;
+import net.sf.jasperreports.engine.JRPropertiesMap;
+import net.sf.jasperreports.engine.JRStyle;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 /**
  * Create a cell for a column group
@@ -360,6 +365,16 @@ public class CreateColumnGroupCellCommand extends JSSCompoundCommand {
 	protected Cell createCell() {
 		DesignCell cell = new DesignCell();
 		cell.setHeight(height);
+		String styleName = getStyleName(tableNode.getPropertiesMap());
+		if (styleName != null){
+			JasperDesign jd = tableNode.getJasperDesign();
+			JRStyle internalStyle = jd.getStylesMap().get(styleName);
+			if (internalStyle != null){
+				cell.setStyle(internalStyle);
+			} else {
+				cell.setStyleNameReference(styleName);
+			}
+		}
 		return cell;
 	}
 
@@ -381,4 +396,24 @@ public class CreateColumnGroupCellCommand extends JSSCompoundCommand {
 		super.undo();
 		tableNode.getTableManager().updateTableSpans();
 	}
+	
+	/**
+	 * Return the style name of the style that will be used in the new cell
+	 * 
+	 * @param tableMap the map from where the default styles properties are read
+	 * @return the name of the style or null if a style can not be resolved
+	 */
+	protected String getStyleName(JRPropertiesMap tableMap){
+		if (type.isAssignableFrom(MTableHeader.class) || type.isAssignableFrom(MTableFooter.class)){
+			return tableMap.getProperty(ApplyTableStyleAction.TABLE_HEADER_PROPERTY);
+		} else if (type.isAssignableFrom(MTableColumnHeader.class) || type.isAssignableFrom(MTableColumnFooter.class)
+					|| (type.isAssignableFrom(MTableGroupHeader.class) || (type.isAssignableFrom(MTableGroupFooter.class)))){
+			return tableMap.getProperty(ApplyTableStyleAction.COLUMN_HEADER_PROPERTY);
+		} else if (type.isAssignableFrom(MTableDetail.class)){
+			return tableMap.getProperty(ApplyTableStyleAction.DETAIL_PROPERTY);
+		} else {
+			return null;
+		}
+	}
+
 }

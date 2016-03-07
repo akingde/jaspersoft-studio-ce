@@ -139,6 +139,10 @@ public class ApplyTableStyleAction extends ApplyStyleAction {
 	
 	/**
 	 * Set the styles on a set of columns
+	 * 
+	 * @param col column where the style should be set
+	 * @param styleList list of styles that will be applied on the table, the order is important
+	 * and it should be: Table Style (unused), Table Header, Column Header and Detail. 
 	 */
 	private void setColumnStyles(BaseColumn col, List<JRDesignStyle> styleList)
 	{
