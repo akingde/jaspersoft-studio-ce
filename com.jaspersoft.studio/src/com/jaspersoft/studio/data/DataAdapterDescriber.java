@@ -24,6 +24,9 @@ import org.xml.sax.SAXException;
 
 import com.jaspersoft.studio.utils.XMLUtils;
 
+/**
+ * Content describer class for Data Adapter XML files.
+ */
 public class DataAdapterDescriber extends XMLContentDescriber {
 	@Override
 	public int describe(InputStream in, IContentDescription description) throws IOException {
