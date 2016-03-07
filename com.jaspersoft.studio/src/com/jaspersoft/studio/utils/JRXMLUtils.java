@@ -8,18 +8,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.utils;
 
-import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.eclipse.util.FileExtension;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.util.JRLoader;
-import net.sf.jasperreports.engine.xml.JRXmlLoader;
-import net.sf.jasperreports.engine.xml.JRXmlWriter;
 
 import org.eclipse.jdt.internal.ui.javaeditor.JarEntryEditorInput;
 import org.eclipse.ui.IEditorInput;
@@ -28,6 +18,16 @@ import org.eclipse.ui.ide.FileStoreEditorInput;
 
 import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.FileExtension;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.JasperReportsContext;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
+import net.sf.jasperreports.engine.xml.JRXmlWriter;
 
 /**
  * This class maintains a list of utilities methods to manage JRXML files and streams.
@@ -56,7 +56,7 @@ public class JRXMLUtils {
 	 * @return a valid JRXML input stream, <code>null</code> if not possible
 	 * @throws JRException
 	 */
-	public static InputStream getJRXMLInputStream(JasperReportsConfiguration jrContext, InputStream in,
+	public static InputStream getJRXMLInputStream(JasperReportsContext jrContext, InputStream in,
 			String fileExtension, String encoding, String version) throws JRException {
 		if (fileExtension.equals(FileExtension.JASPER)) {
 			// get JRXML from the .jasper
