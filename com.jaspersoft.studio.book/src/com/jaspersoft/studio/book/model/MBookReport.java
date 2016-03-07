@@ -3,12 +3,34 @@ package com.jaspersoft.studio.book.model;
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.views.properties.IPropertyDescriptor;
+import org.eclipse.ui.views.properties.PropertyDescriptor;
+
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.ExpressionEditorSupportUtil;
+import com.jaspersoft.studio.help.HelpReferenceBuilder;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.MReport;
+import com.jaspersoft.studio.property.descriptor.NullEnum;
+import com.jaspersoft.studio.property.descriptor.classname.ImportDeclarationPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.properties.JPropertiesPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.IntegerPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.JSSTextPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.PixelPropertyDescriptor;
+import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
+import com.jaspersoft.studio.property.section.widgets.SPToolBarEnum;
+import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 import net.sf.jasperreports.engine.JRConstants;
@@ -16,12 +38,20 @@ import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRPart;
 import net.sf.jasperreports.engine.JRSection;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
+import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.design.events.CollectionElementAddedEvent;
+import net.sf.jasperreports.engine.type.OrientationEnum;
+import net.sf.jasperreports.engine.type.PrintOrderEnum;
+import net.sf.jasperreports.engine.type.WhenNoDataTypeEnum;
 
 public class MBookReport extends MReport {
 
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
+	private IPropertyDescriptor[] descriptors;
+
+	private Map<String, Object> defaultsMap;
+	
 	public MBookReport(ANode parent, JasperReportsConfiguration jConfig) {
 		super(parent, jConfig);
 	}
@@ -98,4 +128,154 @@ public class MBookReport extends MReport {
 		}
 		return super.getAdapter(adapter);
 	}
+	
+	@Override
+	public Map<String, Object> getDefaultsMap() {
+		return defaultsMap;
+	}
+
+	@Override
+	public IPropertyDescriptor[] getDescriptors() {
+		return descriptors;
+	}
+
+	@Override
+	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+		descriptors = descriptors1;
+		defaultsMap = defaultsMap1;
+	}
+	
+	@Override
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
+
+		ImportDeclarationPropertyDescriptor importsD = new ImportDeclarationPropertyDescriptor(
+				JasperDesign.PROPERTY_IMPORTS, Messages.MReport_imports);
+		importsD.setDescription(Messages.MReport_imports_description);
+		desc.add(importsD);
+		importsD.setHelpRefBuilder(new HelpReferenceBuilder(
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#import")); //$NON-NLS-1$
+
+		JSSTextPropertyDescriptor nameD = new JSSTextPropertyDescriptor(JasperDesign.PROPERTY_NAME,
+				Messages.MReport_report_name);
+		nameD.setDescription(Messages.MReport_report_name_description);
+		nameD.setCategory(Messages.common_report);
+		desc.add(nameD);
+
+		// main dataset
+		PropertyDescriptor datasetD = new PropertyDescriptor(JasperDesign.PROPERTY_MAIN_DATASET, Messages.MReport_main_dataset);
+		datasetD.setDescription(Messages.MReport_main_dataset_description);
+		desc.add(datasetD);
+		
+		// -------------------
+		PixelPropertyDescriptor heightD = new PixelPropertyDescriptor(JasperDesign.PROPERTY_PAGE_HEIGHT,
+				Messages.MReport_page_height);
+		heightD.setDescription(Messages.MReport_page_height_description);
+		heightD.setCategory(Messages.MReport_report_page_category);
+		desc.add(heightD);
+
+		IntegerPropertyDescriptor widthD = new IntegerPropertyDescriptor(JasperDesign.PROPERTY_PAGE_WIDTH,
+				Messages.MReport_page_width);
+		widthD.setDescription(Messages.MReport_page_width_description);
+		widthD.setCategory(Messages.MReport_report_page_category);
+		desc.add(widthD);
+
+		IntegerPropertyDescriptor rightMarginD = new IntegerPropertyDescriptor(JasperDesign.PROPERTY_RIGHT_MARGIN,
+				Messages.MReport_right_margin);
+		rightMarginD.setDescription(Messages.MReport_right_margin_description);
+		rightMarginD.setCategory(Messages.MReport_report_page_category);
+		desc.add(rightMarginD);
+
+		IntegerPropertyDescriptor leftMarginD = new IntegerPropertyDescriptor(JasperDesign.PROPERTY_LEFT_MARGIN,
+				Messages.MReport_left_margin);
+		leftMarginD.setDescription(Messages.MReport_left_margin_description);
+		leftMarginD.setCategory(Messages.MReport_report_page_category);
+		desc.add(leftMarginD);
+
+		IntegerPropertyDescriptor topMarginD = new IntegerPropertyDescriptor(JasperDesign.PROPERTY_TOP_MARGIN,
+				Messages.MReport_top_margin);
+		topMarginD.setDescription(Messages.MReport_top_margin_description);
+		topMarginD.setCategory(Messages.MReport_report_page_category);
+		desc.add(topMarginD);
+
+		IntegerPropertyDescriptor bottomMarginD = new IntegerPropertyDescriptor(JasperDesign.PROPERTY_BOTTOM_MARGIN,
+				Messages.MReport_bottom_margin);
+		bottomMarginD.setDescription(Messages.MReport_bottom_margin_description);
+		bottomMarginD.setCategory(Messages.MReport_report_page_category);
+		desc.add(bottomMarginD);
+
+		IntegerPropertyDescriptor columnCountD = new IntegerPropertyDescriptor(JasperDesign.PROPERTY_COLUMN_COUNT,
+				Messages.MReport_column_count);
+		columnCountD.setDescription(Messages.MReport_column_count_description);
+		columnCountD.setCategory(Messages.MReport_columns_category);
+		desc.add(columnCountD);
+
+		IntegerPropertyDescriptor columnWidthD = new IntegerPropertyDescriptor(JasperDesign.PROPERTY_COLUMN_WIDTH,
+				Messages.MReport_column_width);
+		columnWidthD.setDescription(Messages.MReport_column_width_description);
+		columnWidthD.setCategory(Messages.MReport_columns_category);
+		desc.add(columnWidthD);
+
+		IntegerPropertyDescriptor columnSpaceD = new IntegerPropertyDescriptor(JasperDesign.PROPERTY_COLUMN_SPACING,
+				Messages.MReport_column_space);
+		columnSpaceD.setDescription(Messages.MReport_column_space_description);
+		columnSpaceD.setCategory(Messages.MReport_columns_category);
+		desc.add(columnSpaceD);
+
+		RWComboBoxPropertyDescriptor languageD = new RWComboBoxPropertyDescriptor(JasperDesign.PROPERTY_LANGUAGE,
+				Messages.common_language, ModelUtils.getDefaultReportLanguages(), NullEnum.NOTNULL, false);
+		languageD.setDescription(Messages.MReport_language_description);
+		languageD.setCategory(Messages.common_report);
+		desc.add(languageD);
+
+		NamedEnumPropertyDescriptor<OrientationEnum> orientationD = new NamedEnumPropertyDescriptor<OrientationEnum>(JasperDesign.PROPERTY_ORIENTATION,
+				Messages.MReport_page_orientation, OrientationEnum.LANDSCAPE, NullEnum.NOTNULL) {
+			@Override
+			public ASPropertyWidget<NamedEnumPropertyDescriptor<OrientationEnum>> createWidget(Composite parent,
+					AbstractSection section) {
+				Image[] images = new Image[] { JaspersoftStudioPlugin.getInstance().getImage("icons/resources/portrait16.png"), //$NON-NLS-1$
+						JaspersoftStudioPlugin.getInstance().getImage("icons/resources/landscape16.png") }; //$NON-NLS-1$
+				return new SPToolBarEnum<NamedEnumPropertyDescriptor<OrientationEnum>>(parent, section, this, images);
+			}
+		};
+		orientationD.setDescription(Messages.MReport_page_orientation_description);
+		orientationD.setCategory(Messages.MReport_report_page_category);
+		desc.add(orientationD);
+
+		NamedEnumPropertyDescriptor<PrintOrderEnum> printOrderD = new NamedEnumPropertyDescriptor<PrintOrderEnum>(JasperDesign.PROPERTY_PRINT_ORDER,
+				Messages.MReport_print_order, PrintOrderEnum.HORIZONTAL, NullEnum.NULL);
+		printOrderD.setDescription(Messages.MReport_print_order_description);
+		printOrderD.setCategory(Messages.MReport_columns_category);
+		desc.add(printOrderD);
+
+		NamedEnumPropertyDescriptor<WhenNoDataTypeEnum> whenNoDataD = new NamedEnumPropertyDescriptor<WhenNoDataTypeEnum>(JasperDesign.PROPERTY_WHEN_NO_DATA_TYPE,
+				Messages.MReport_when_no_data_type, WhenNoDataTypeEnum.ALL_SECTIONS_NO_DETAIL, NullEnum.NULL);
+		whenNoDataD.setDescription(Messages.MReport_when_no_data_type_description);
+		whenNoDataD.setCategory(Messages.common_report);
+		desc.add(whenNoDataD);
+
+
+		JPropertiesPropertyDescriptor propertiesMapD = new JPropertiesPropertyDescriptor(MGraphicElement.PROPERTY_MAP,
+				Messages.common_properties);
+		propertiesMapD.setDescription(Messages.common_properties);
+		desc.add(propertiesMapD);
+
+		defaultsMap.put(JasperDesign.PROPERTY_PAGE_WIDTH, new Integer(595));
+		defaultsMap.put(JasperDesign.PROPERTY_PAGE_HEIGHT, new Integer(842));
+		defaultsMap.put(JasperDesign.PROPERTY_TOP_MARGIN, new Integer(30));
+		defaultsMap.put(JasperDesign.PROPERTY_BOTTOM_MARGIN, new Integer(30));
+		defaultsMap.put(JasperDesign.PROPERTY_LEFT_MARGIN, new Integer(20));
+		defaultsMap.put(JasperDesign.PROPERTY_RIGHT_MARGIN, new Integer(20));
+
+		defaultsMap.put(JasperDesign.PROPERTY_LANGUAGE, "Java"); //$NON-NLS-1$
+
+		defaultsMap.put(JasperDesign.PROPERTY_COLUMN_COUNT, new Integer(1));
+		defaultsMap.put(JasperDesign.PROPERTY_COLUMN_WIDTH, new Integer(555));
+		defaultsMap.put(JasperDesign.PROPERTY_COLUMN_SPACING, new Integer(0));
+		defaultsMap.put(JasperDesign.PROPERTY_ORIENTATION, orientationD.getIntValue(OrientationEnum.PORTRAIT));
+		defaultsMap.put(JasperDesign.PROPERTY_PRINT_ORDER, printOrderD.getIntValue(PrintOrderEnum.VERTICAL));
+		defaultsMap.put(JasperDesign.PROPERTY_WHEN_NO_DATA_TYPE, whenNoDataD.getIntValue(WhenNoDataTypeEnum.NO_PAGES));
+
+		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#jasperReport"); //$NON-NLS-1$
+	}
+
 }

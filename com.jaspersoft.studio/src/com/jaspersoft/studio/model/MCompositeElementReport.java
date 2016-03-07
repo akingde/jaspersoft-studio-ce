@@ -53,9 +53,29 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 public class MCompositeElementReport extends MReport {
 
 	private static final long serialVersionUID = -3601244815409007973L;
+	
+	private IPropertyDescriptor[] descriptors;
+
+	private Map<String, Object> defaultsMap;
 
 	public MCompositeElementReport(ANode parent, JasperReportsConfiguration jConfig) {
 		super(parent, jConfig);
+	}
+	
+	@Override
+	public Map<String, Object> getDefaultsMap() {
+		return defaultsMap;
+	}
+
+	@Override
+	public IPropertyDescriptor[] getDescriptors() {
+		return descriptors;
+	}
+
+	@Override
+	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+		descriptors = descriptors1;
+		defaultsMap = defaultsMap1;
 	}
 
 	/**
@@ -144,7 +164,7 @@ public class MCompositeElementReport extends MReport {
 		languageD.setCategory(Messages.common_report);
 		desc.add(languageD);
 
-		orientationD = new NamedEnumPropertyDescriptor<OrientationEnum>(JasperDesign.PROPERTY_ORIENTATION,
+		NamedEnumPropertyDescriptor<OrientationEnum> orientationD = new NamedEnumPropertyDescriptor<OrientationEnum>(JasperDesign.PROPERTY_ORIENTATION,
 				Messages.MReport_page_orientation, OrientationEnum.LANDSCAPE, NullEnum.NOTNULL) {
 			@Override
 			public ASPropertyWidget<NamedEnumPropertyDescriptor<OrientationEnum>> createWidget(Composite parent,
@@ -158,13 +178,13 @@ public class MCompositeElementReport extends MReport {
 		orientationD.setCategory(Messages.MReport_report_page_category);
 		desc.add(orientationD);
 
-		printOrderD = new NamedEnumPropertyDescriptor<PrintOrderEnum>(JasperDesign.PROPERTY_PRINT_ORDER,
+		NamedEnumPropertyDescriptor<PrintOrderEnum> printOrderD = new NamedEnumPropertyDescriptor<PrintOrderEnum>(JasperDesign.PROPERTY_PRINT_ORDER,
 				Messages.MReport_print_order, PrintOrderEnum.HORIZONTAL, NullEnum.NULL);
 		printOrderD.setDescription(Messages.MReport_print_order_description);
 		printOrderD.setCategory(Messages.MReport_columns_category);
 		desc.add(printOrderD);
 
-		whenNoDataD = new NamedEnumPropertyDescriptor<WhenNoDataTypeEnum>(JasperDesign.PROPERTY_WHEN_NO_DATA_TYPE,
+		NamedEnumPropertyDescriptor<WhenNoDataTypeEnum>whenNoDataD = new NamedEnumPropertyDescriptor<WhenNoDataTypeEnum>(JasperDesign.PROPERTY_WHEN_NO_DATA_TYPE,
 				Messages.MReport_when_no_data_type, WhenNoDataTypeEnum.ALL_SECTIONS_NO_DETAIL, NullEnum.NULL);
 		whenNoDataD.setDescription(Messages.MReport_when_no_data_type_description);
 		whenNoDataD.setCategory(Messages.common_report);

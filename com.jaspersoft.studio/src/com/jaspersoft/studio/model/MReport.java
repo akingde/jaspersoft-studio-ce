@@ -22,26 +22,6 @@ import java.util.ListIterator;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-import net.sf.jasperreports.data.DataAdapterParameterContributorFactory;
-import net.sf.jasperreports.engine.JRBand;
-import net.sf.jasperreports.engine.JRConstants;
-import net.sf.jasperreports.engine.JRDataset;
-import net.sf.jasperreports.engine.JRGroup;
-import net.sf.jasperreports.engine.JROrigin;
-import net.sf.jasperreports.engine.JRPropertiesHolder;
-import net.sf.jasperreports.engine.JRPropertiesMap;
-import net.sf.jasperreports.engine.design.JRDesignBand;
-import net.sf.jasperreports.engine.design.JRDesignDataset;
-import net.sf.jasperreports.engine.design.JRDesignElement;
-import net.sf.jasperreports.engine.design.JRDesignGroup;
-import net.sf.jasperreports.engine.design.JRDesignSection;
-import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.design.events.CollectionElementAddedEvent;
-import net.sf.jasperreports.engine.type.BandTypeEnum;
-import net.sf.jasperreports.engine.type.OrientationEnum;
-import net.sf.jasperreports.engine.type.PrintOrderEnum;
-import net.sf.jasperreports.engine.type.WhenNoDataTypeEnum;
-
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
@@ -80,6 +60,26 @@ import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
+import net.sf.jasperreports.data.DataAdapterParameterContributorFactory;
+import net.sf.jasperreports.engine.JRBand;
+import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRDataset;
+import net.sf.jasperreports.engine.JRGroup;
+import net.sf.jasperreports.engine.JROrigin;
+import net.sf.jasperreports.engine.JRPropertiesHolder;
+import net.sf.jasperreports.engine.JRPropertiesMap;
+import net.sf.jasperreports.engine.design.JRDesignBand;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
+import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.design.JRDesignGroup;
+import net.sf.jasperreports.engine.design.JRDesignSection;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.design.events.CollectionElementAddedEvent;
+import net.sf.jasperreports.engine.type.BandTypeEnum;
+import net.sf.jasperreports.engine.type.OrientationEnum;
+import net.sf.jasperreports.engine.type.PrintOrderEnum;
+import net.sf.jasperreports.engine.type.WhenNoDataTypeEnum;
+
 /*
  * The Class MReport.
  * 
@@ -94,12 +94,6 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 	private static final String JR_CREATE_BOOKMARKS = "net.sf.jasperreports.print.create.bookmarks"; //$NON-NLS-1$
 
 	private Map<JRDesignBand, Integer> bandIndexMap = new HashMap<JRDesignBand, Integer>();
-
-	protected NamedEnumPropertyDescriptor<OrientationEnum> orientationD;
-
-	protected NamedEnumPropertyDescriptor<PrintOrderEnum> printOrderD;
-
-	protected NamedEnumPropertyDescriptor<WhenNoDataTypeEnum> whenNoDataD;
 
 	/**
 	 * The icon descriptor.
@@ -302,7 +296,7 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 		languageD.setCategory(Messages.common_report);
 		desc.add(languageD);
 
-		orientationD = new NamedEnumPropertyDescriptor<OrientationEnum>(JasperDesign.PROPERTY_ORIENTATION,
+		NamedEnumPropertyDescriptor<OrientationEnum> orientationD = new NamedEnumPropertyDescriptor<OrientationEnum>(JasperDesign.PROPERTY_ORIENTATION,
 				Messages.MReport_page_orientation, OrientationEnum.LANDSCAPE, NullEnum.NOTNULL) {
 			@Override
 			public ASPropertyWidget<NamedEnumPropertyDescriptor<OrientationEnum>> createWidget(Composite parent,
@@ -316,13 +310,13 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 		orientationD.setCategory(Messages.MReport_report_page_category);
 		desc.add(orientationD);
 
-		printOrderD = new NamedEnumPropertyDescriptor<PrintOrderEnum>(JasperDesign.PROPERTY_PRINT_ORDER,
+		NamedEnumPropertyDescriptor<PrintOrderEnum> printOrderD = new NamedEnumPropertyDescriptor<PrintOrderEnum>(JasperDesign.PROPERTY_PRINT_ORDER,
 				Messages.MReport_print_order, PrintOrderEnum.HORIZONTAL, NullEnum.NULL);
 		printOrderD.setDescription(Messages.MReport_print_order_description);
 		printOrderD.setCategory(Messages.MReport_columns_category);
 		desc.add(printOrderD);
 
-		whenNoDataD = new NamedEnumPropertyDescriptor<WhenNoDataTypeEnum>(JasperDesign.PROPERTY_WHEN_NO_DATA_TYPE,
+		NamedEnumPropertyDescriptor<WhenNoDataTypeEnum> whenNoDataD = new NamedEnumPropertyDescriptor<WhenNoDataTypeEnum>(JasperDesign.PROPERTY_WHEN_NO_DATA_TYPE,
 				Messages.MReport_when_no_data_type, WhenNoDataTypeEnum.ALL_SECTIONS_NO_DETAIL, NullEnum.NULL);
 		whenNoDataD.setDescription(Messages.MReport_when_no_data_type_description);
 		whenNoDataD.setCategory(Messages.common_report);
@@ -361,7 +355,7 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 
 		CheckBoxPropertyDescriptor createBookmarks = new CheckBoxPropertyDescriptor(PROPERY_CREATE_BOOKMARKS,
 				Messages.MReport_createBookmarksTitle);
-		titleNewPageD.setDescription(Messages.MReport_createBookmarksDescription);
+		createBookmarks.setDescription(Messages.MReport_createBookmarksDescription);
 		desc.add(createBookmarks);
 
 		titleNewPageD.setCategory(Messages.MReport_pagination);
@@ -369,6 +363,7 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 		summaryNewPageD.setCategory(Messages.MReport_pagination);
 		floatColumnFooterD.setCategory(Messages.MReport_pagination);
 		summaryWHFD.setCategory(Messages.MReport_pagination);
+		createBookmarks.setCategory(Messages.MReport_pagination);
 
 		defaultsMap.put(JasperDesign.PROPERTY_PAGE_WIDTH, new Integer(595));
 		defaultsMap.put(JasperDesign.PROPERTY_PAGE_HEIGHT, new Integer(842));
@@ -448,17 +443,17 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 			return new Integer(jrDesign.getColumnSpacing());
 		if (id.equals(JasperDesign.PROPERTY_COLUMN_WIDTH))
 			return new Integer(jrDesign.getColumnWidth());
-
 		if (id.equals(JasperDesign.PROPERTY_LANGUAGE))
 			return jrDesign.getLanguage();
-
-		if (id.equals(JasperDesign.PROPERTY_ORIENTATION))
-			return orientationD.getIntValue(jrDesign.getOrientationValue());
-		if (id.equals(JasperDesign.PROPERTY_PRINT_ORDER))
-			return printOrderD.getIntValue(jrDesign.getPrintOrderValue());
-		if (id.equals(JasperDesign.PROPERTY_WHEN_NO_DATA_TYPE))
-			return whenNoDataD.getIntValue(jrDesign.getWhenNoDataTypeValue());
-
+		if (id.equals(JasperDesign.PROPERTY_ORIENTATION)){
+			return NamedEnumPropertyDescriptor.getIntValue(OrientationEnum.LANDSCAPE, NullEnum.NOTNULL, jrDesign.getOrientationValue());
+		}
+		if (id.equals(JasperDesign.PROPERTY_PRINT_ORDER)){
+			return NamedEnumPropertyDescriptor.getIntValue(PrintOrderEnum.HORIZONTAL, NullEnum.NULL, jrDesign.getPrintOrderValue());
+		}
+		if (id.equals(JasperDesign.PROPERTY_WHEN_NO_DATA_TYPE)){
+			return NamedEnumPropertyDescriptor.getIntValue(WhenNoDataTypeEnum.ALL_SECTIONS_NO_DETAIL, NullEnum.NULL, jrDesign.getWhenNoDataTypeValue());
+		}
 		if (id.equals(JasperDesign.PROPERTY_TITLE_NEW_PAGE))
 			return new Boolean(jrDesign.isTitleNewPage());
 		if (id.equals(JasperDesign.PROPERTY_SUMMARY_NEW_PAGE))
@@ -545,14 +540,16 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 		else if (id.equals(JasperDesign.PROPERTY_COLUMN_WIDTH))
 			jrDesign.setColumnWidth((Integer) Misc.nvl(value, Integer.valueOf(0)));
 		// -- enums
-		else if (id.equals(JasperDesign.PROPERTY_ORIENTATION))
-			jrDesign.setOrientation((OrientationEnum) orientationD.getEnumValue(value));
-		else if (id.equals(JasperDesign.PROPERTY_PRINT_ORDER))
-			jrDesign.setPrintOrder(printOrderD.getEnumValue(value));
-		else if (id.equals(JasperDesign.PROPERTY_WHEN_NO_DATA_TYPE))
-			jrDesign.setWhenNoDataType(whenNoDataD.getEnumValue(value));
-		// -- booleans
-		else if (id.equals(JasperDesign.PROPERTY_TITLE_NEW_PAGE))
+		else if (id.equals(JasperDesign.PROPERTY_ORIENTATION)){
+			OrientationEnum enumValue = NamedEnumPropertyDescriptor.getEnumValue(OrientationEnum.LANDSCAPE, NullEnum.NOTNULL, value);
+			jrDesign.setOrientation(enumValue);
+		} else if (id.equals(JasperDesign.PROPERTY_PRINT_ORDER)){
+			PrintOrderEnum enumValue = NamedEnumPropertyDescriptor.getEnumValue(PrintOrderEnum.HORIZONTAL, NullEnum.NULL, value);
+			jrDesign.setPrintOrder(enumValue);
+		} else if (id.equals(JasperDesign.PROPERTY_WHEN_NO_DATA_TYPE)){
+			WhenNoDataTypeEnum enumValue = NamedEnumPropertyDescriptor.getEnumValue(WhenNoDataTypeEnum.ALL_SECTIONS_NO_DETAIL, NullEnum.NULL, value);
+			jrDesign.setWhenNoDataType(enumValue);
+		} else if (id.equals(JasperDesign.PROPERTY_TITLE_NEW_PAGE))
 			jrDesign.setTitleNewPage(((Boolean) value).booleanValue());
 		else if (id.equals(JasperDesign.PROPERTY_SUMMARY_NEW_PAGE))
 			jrDesign.setSummaryNewPage(((Boolean) value).booleanValue());

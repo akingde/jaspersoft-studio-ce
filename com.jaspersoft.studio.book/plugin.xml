@@ -76,6 +76,14 @@
                    type="com.jaspersoft.studio.book.model.MBookReport">
              </input>
           </propertySection>
+          <propertySection
+                class="com.jaspersoft.studio.book.sections.BookReportSection"
+                id="com.jaspersoft.studio.editor.BookEditor.report.BookReportSection"
+                tab="com.jaspersoft.studio.propertyTab.report">
+             <input
+                   type="com.jaspersoft.studio.book.model.MBookReport">
+             </input>
+          </propertySection>
        </propertySections>
     </extension>
     <extension

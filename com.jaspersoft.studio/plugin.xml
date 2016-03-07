@@ -1172,7 +1172,11 @@
                id="com.jaspersoft.studio.editor.JrxmlEditor.report.ReportSection"
                tab="com.jaspersoft.studio.propertyTab.report">
             <input
+                  excludeSubtypes="true"
                   type="com.jaspersoft.studio.model.MReport">
+            </input>
+            <input
+                  type="com.jaspersoft.studio.model.MCompositeElementReport">
             </input>
          </propertySection>
          <propertySection
