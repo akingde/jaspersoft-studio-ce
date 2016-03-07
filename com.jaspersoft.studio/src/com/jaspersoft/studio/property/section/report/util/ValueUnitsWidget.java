@@ -12,67 +12,60 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.section.report.util;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Spinner;
 
+import com.jaspersoft.studio.swt.widgets.NullableSpinner;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
-
+/**
+ * Couple of widget composed from a nullable spinner to set a numeric value
+ * and a combo to select a measure unit
+ */
 public class ValueUnitsWidget {
 
-	private final class SpinerSelectionListener implements SelectionListener {
+	private Unit unit;
+	
+	private Unit maxPixels;
+	
+	private Combo unitc;
+	
+	private NullableSpinner val;
+	
+	private SpinerSelectionListener spinerSelection;
+	
+	public ValidatedMeasureUnitFormat spinnerValidator = new ValidatedMeasureUnitFormat(Unit.PX);
+	
+	private final class SpinerSelectionListener extends SelectionAdapter {
 		public void widgetSelected(SelectionEvent e) {
-			unit.setValue(new Float(val.getSelection() / Math.pow(10, digits)).floatValue(),
-					Unit.getUnits()[unitc.getSelectionIndex()]);
-		}
-
-		public void widgetDefaultSelected(SelectionEvent e) {
-			widgetSelected(e);
-		}
-	}
-
-	private final class SpinerModifyListener implements ModifyListener {
-		@Override
-		public void modifyText(ModifyEvent e) {
-			unit.setValue(new Float(val.getSelection() / Math.pow(10, digits)).floatValue(),
-					Unit.getUnits()[unitc.getSelectionIndex()]);
+			unit.setValue(val.getValueAsFloat(), Unit.getUnits()[unitc.getSelectionIndex()]);
 		}
 	}
 
 	public ValueUnitsWidget(JasperReportsConfiguration jConfig) {
 		unit = new Unit(0, Unit.PX, jConfig);
+		maxPixels = new Unit(Integer.MAX_VALUE, Unit.PX, jConfig);
 	}
-
-	private Unit unit;
-	private int max = Integer.MAX_VALUE;
-	private int digits = 0;
-	private Combo unitc;
-	private Spinner val;
-	private SpinerSelectionListener spinerSelection;
-	private SpinerModifyListener spinerModify;
 
 	public void createComponent(Composite parent, String label, String toolTip) {
 		Label lbl = new Label(parent, SWT.NONE);
 		lbl.setText(label);
-		val = new Spinner(parent, SWT.BORDER | SWT.RIGHT);
+		val = new NullableSpinner(parent, SWT.BORDER | SWT.RIGHT);
+		val.setFormat(spinnerValidator);
 		val.setToolTipText(toolTip);
+		val.setNullable(false);
 		GridData gd = new GridData();
 		gd.widthHint = 80;
 		val.setLayoutData(gd);
 
 		unitc = new Combo(parent, SWT.BORDER | SWT.SINGLE | SWT.READ_ONLY);
 		unitc.setItems(Unit.getUnits());
-		unitc.addSelectionListener(new SelectionListener() {
+		unitc.addSelectionListener(new SelectionAdapter() {
 
 			public void widgetSelected(SelectionEvent e) {
 				String u = Unit.getUnits()[unitc.getSelectionIndex()];
@@ -80,84 +73,31 @@ public class ValueUnitsWidget {
 					setSpinerValue(u);
 				}
 			}
-
-			public void widgetDefaultSelected(SelectionEvent e) {
-				widgetSelected(e);
-			}
 		});
 
 		spinerSelection = new SpinerSelectionListener();
 		val.addSelectionListener(spinerSelection);
 
-		spinerModify = new SpinerModifyListener();
-		val.addModifyListener(spinerModify);
-
 		unitc.select(0);
 		setSpinerValue(unit.getUnit());
 	}
 
-	public void setMax(int max) {
-		removeListeners();
-		this.max = max;
-		setSpinnerMax(max);
-		addListeners();
-	}
-
-	private void setSpinnerMax(int max) {
-		val.setMaximum((int) Math.round(unit.pixel2unit(max) * Math.pow(10, digits)));
+	public void setMaxPixels(int maxPixels) {
+		this.maxPixels.setValue(maxPixels, Unit.PX);
+		String currentUnit = Unit.getUnits()[unitc.getSelectionIndex()];
+		val.setMaximum(this.maxPixels.getValue(currentUnit));
 	}
 
 	private void setSpinerValue(String u) {
-		digits = u.equals(Unit.PX) ? 0 : 4;
-
-		removeListeners();
-		val.setDigits(digits);
+		spinnerValidator.setMeasureUnit(u);
 		val.setMinimum(0);
-		setSpinnerMax(Math.max(max, unit.getPxValue()));
+		val.setMaximum(this.maxPixels.getValue(u));
 		val.setIncrement(1);
-		val.setSelection((int) Math.round(unit.getValue(u) * Math.pow(10, digits)));
-		addListeners();
+		val.setValue(unit.getValue(u));
 	}
-
-	private void removeListeners() {
-		val.removeModifyListener(spinerModify);
-		for (ModifyListener ml : mlisteners)
-			val.removeModifyListener(ml);
-		val.removeSelectionListener(spinerSelection);
-		for (SelectionListener sl : slisteners)
-			val.removeSelectionListener(sl);
-	}
-
-	private void addListeners() {
-		val.addSelectionListener(spinerSelection);
-		for (SelectionListener sl : slisteners)
-			val.addSelectionListener(sl);
-		val.addModifyListener(spinerModify);
-		for (ModifyListener ml : mlisteners)
-			val.addModifyListener(ml);
-	}
-
-	private List<SelectionListener> slisteners = new ArrayList<SelectionListener>();
-	private List<ModifyListener> mlisteners = new ArrayList<ModifyListener>();
 
 	public void addSelectionListener(SelectionListener listener) {
-		slisteners.add(listener);
 		val.addSelectionListener(listener);
-	}
-
-	public void removeSelectionListener(ModifyListener listener) {
-		slisteners.remove(listener);
-		val.removeModifyListener(listener);
-	}
-
-	public void addModifyListener(ModifyListener listener) {
-		mlisteners.add(listener);
-		val.addModifyListener(listener);
-	}
-
-	public void removeModifyListener(SelectionListener listener) {
-		mlisteners.remove(listener);
-		val.removeSelectionListener(listener);
 	}
 
 	public void setUnit(String u) {

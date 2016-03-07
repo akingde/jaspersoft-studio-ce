@@ -38,9 +38,14 @@ import net.sf.jasperreports.engine.base.JRBaseFont;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
 
 public class MFont extends APropertyNode {
+	
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	public static final String FONT_INCREMENT = "FONT_INCREMENT";
+	
+	private static IPropertyDescriptor[] descriptors;
+	
+	private static Map<String, Object> defaultsMap;
 
 	public MFont(JRFont value) {
 		super();
@@ -171,9 +176,6 @@ public class MFont extends APropertyNode {
 
 		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#font");
 	}
-
-	private static IPropertyDescriptor[] descriptors;
-	private static Map<String, Object> defaultsMap;
 
 	@Override
 	public Map<String, Object> getDefaultsMap() {
