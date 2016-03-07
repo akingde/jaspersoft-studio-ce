@@ -16,10 +16,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import net.sf.jasperreports.engine.design.JRDesignHyperlink;
-import net.sf.jasperreports.engine.type.HyperlinkTargetEnum;
-import net.sf.jasperreports.engine.type.HyperlinkTypeEnum;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -49,6 +45,10 @@ import com.jaspersoft.studio.property.section.widgets.BackgroundHighlight;
 import com.jaspersoft.studio.property.section.widgets.SPHyperlinkParameter;
 import com.jaspersoft.studio.swt.widgets.WHyperlink.UIElement;
 import com.jaspersoft.studio.utils.ModelUtils;
+
+import net.sf.jasperreports.engine.design.JRDesignHyperlink;
+import net.sf.jasperreports.engine.type.HyperlinkTargetEnum;
+import net.sf.jasperreports.engine.type.HyperlinkTypeEnum;
 
 /**
  * This class paint the controls for the hyperlink section
@@ -324,8 +324,7 @@ public class HyperlinkSection extends AbstractSection {
 	 * @param property name of the property to set
 	 */
 	private void readValueFromCombo(Combo combo, String property){
-		APropertyNode element = getElement();
-		if (element != null) {
+		for(APropertyNode element : getElements()){
 			element.setPropertyValue(property, combo.getText());
 			int stringLength = combo.getText ().length (); 
 			//Since it is called even on the combo modify it will move the cursor on the start at every call
