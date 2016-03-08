@@ -104,6 +104,7 @@ import com.jaspersoft.studio.model.style.MConditionalStyle;
 import com.jaspersoft.studio.model.style.MStyle;
 import com.jaspersoft.studio.model.style.MStyleTemplate;
 import com.jaspersoft.studio.model.style.MStyles;
+import com.jaspersoft.studio.model.style.MStylesTemplate;
 import com.jaspersoft.studio.model.style.command.CreateConditionalStyleCommand;
 import com.jaspersoft.studio.model.style.command.CreateStyleCommand;
 import com.jaspersoft.studio.model.style.command.CreateStyleTemplateCommand;
@@ -446,6 +447,9 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 					JRStyle style = (JRStyle) child.getValue();
 					cmd.setPropertyValue(style.getName());
 					return cmd;
+				}
+				if (parent instanceof MStylesTemplate && ((MStylesTemplate)parent).isEditable()){
+					return new com.jaspersoft.studio.editor.style.command.CreateStyleCommand((MStylesTemplate)parent, (MStyle)child, -1);
 				}
 				if (parent instanceof MReport && location != null) {
 					MGraphicElement element = ModelUtils.getElement4Point(parent, new Point(location.x, location.y));
