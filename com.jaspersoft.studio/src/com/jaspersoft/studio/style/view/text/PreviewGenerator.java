@@ -13,20 +13,20 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 
-import net.sf.jasperreports.engine.convert.ReportConverter;
+import org.eclipse.swt.graphics.ImageData;
+import org.eclipse.swt.graphics.RGB;
+
+import com.jaspersoft.studio.jasper.JSSDrawVisitor;
+import com.jaspersoft.studio.jasper.JSSReportConverter;
+import com.jaspersoft.studio.utils.ImageUtils;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignStaticText;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.ModeEnum;
 import net.sf.jasperreports.engine.type.SplitTypeEnum;
 import net.sf.jasperreports.engine.type.StretchTypeEnum;
-
-import org.eclipse.swt.graphics.ImageData;
-import org.eclipse.swt.graphics.RGB;
-
-import com.jaspersoft.studio.jasper.JSSDrawVisitor;
-import com.jaspersoft.studio.utils.ImageUtils;
-import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /**
  * Class that offer the static methods to generate a JR static text image starting from a TextStyle
@@ -135,7 +135,6 @@ public class PreviewGenerator {
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-		visitor = new JSSDrawVisitor(
-				new ReportConverter(JasperReportsConfiguration.getDefaultInstance(), jasperDesign, true), g2d);
+		visitor = new JSSDrawVisitor(new JSSReportConverter(JasperReportsConfiguration.getDefaultInstance(), jasperDesign, true), g2d);
 	}
 }

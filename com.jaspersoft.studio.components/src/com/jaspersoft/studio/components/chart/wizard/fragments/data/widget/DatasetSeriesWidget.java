@@ -15,21 +15,6 @@ package com.jaspersoft.studio.components.chart.wizard.fragments.data.widget;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.sf.jasperreports.charts.design.JRDesignCategoryDataset;
-import net.sf.jasperreports.charts.design.JRDesignGanttDataset;
-import net.sf.jasperreports.charts.design.JRDesignHighLowDataset;
-import net.sf.jasperreports.charts.design.JRDesignPieDataset;
-import net.sf.jasperreports.charts.design.JRDesignTimePeriodDataset;
-import net.sf.jasperreports.charts.design.JRDesignTimeSeriesDataset;
-import net.sf.jasperreports.charts.design.JRDesignValueDataset;
-import net.sf.jasperreports.charts.design.JRDesignXyDataset;
-import net.sf.jasperreports.charts.design.JRDesignXyzDataset;
-import net.sf.jasperreports.components.spiderchart.StandardSpiderDataset;
-import net.sf.jasperreports.engine.convert.ReportConverter;
-import net.sf.jasperreports.engine.design.JRDesignElement;
-import net.sf.jasperreports.engine.design.JRDesignElementDataset;
-import net.sf.jasperreports.engine.design.JasperDesign;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.layout.GridData;
@@ -49,7 +34,22 @@ import com.jaspersoft.studio.components.chartspider.wizard.action.DSSpider;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
 import com.jaspersoft.studio.jasper.JSSDrawVisitor;
+import com.jaspersoft.studio.jasper.JSSReportConverter;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
+import net.sf.jasperreports.charts.design.JRDesignCategoryDataset;
+import net.sf.jasperreports.charts.design.JRDesignGanttDataset;
+import net.sf.jasperreports.charts.design.JRDesignHighLowDataset;
+import net.sf.jasperreports.charts.design.JRDesignPieDataset;
+import net.sf.jasperreports.charts.design.JRDesignTimePeriodDataset;
+import net.sf.jasperreports.charts.design.JRDesignTimeSeriesDataset;
+import net.sf.jasperreports.charts.design.JRDesignValueDataset;
+import net.sf.jasperreports.charts.design.JRDesignXyDataset;
+import net.sf.jasperreports.charts.design.JRDesignXyzDataset;
+import net.sf.jasperreports.components.spiderchart.StandardSpiderDataset;
+import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.design.JRDesignElementDataset;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 public class DatasetSeriesWidget implements IExpressionContextSetter{
 	private JRDesignElementDataset eDataset;
@@ -116,9 +116,7 @@ public class DatasetSeriesWidget implements IExpressionContextSetter{
 		if (eDataset != null)
 			c = map.get(eDataset.getClass());
 		if (c != null) {
-			dv = new JSSDrawVisitor(
-					new ReportConverter(jrContext, jrDesign, true),
-					c.getGraphics2D());
+			dv = new JSSDrawVisitor(new JSSReportConverter(jrContext, jrDesign, true), c.getGraphics2D());
 			c.setData(dv, jrChart, eDataset, jrContext);
 			stacklayout.topControl = c.getControl();
 		} else {

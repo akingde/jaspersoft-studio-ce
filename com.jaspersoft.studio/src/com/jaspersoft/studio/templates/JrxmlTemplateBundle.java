@@ -111,6 +111,10 @@ public class JrxmlTemplateBundle extends WizardTemplateBundle {
 		TemplateEngine templateEngine = templateBundle.getTemplateEngine();
 		ByteArrayInputStream stream = null;
 		try {
+			//Save the resources of the report in the destination folder since the could be used by the engine
+			saveReportBundleResources(monitor, templateBundle, getReportContainer(mainWizard));
+			
+			//Create the target report
 			ReportBundle reportBundle = templateEngine.generateReportBundle(templateBundle, templateSettings, jConfig);
 
 			// Save the data adapter used...
@@ -123,7 +127,10 @@ public class JrxmlTemplateBundle extends WizardTemplateBundle {
 				templateEngine.setReportDataAdapter(reportBundle, step1.getDataAdapter(), pmap);
 
 			}
+			
+			//Save the target report on the disk
 			reportFile = saveBundleIntoFile(reportBundle, mainWizard, jConfig, monitor);
+			getReportContainer(mainWizard).refreshLocal(IContainer.DEPTH_ONE, monitor);
 		} catch (Exception e) {
 			UIUtils.showError(e);
 		} 

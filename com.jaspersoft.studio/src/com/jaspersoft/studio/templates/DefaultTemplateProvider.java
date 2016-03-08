@@ -21,6 +21,7 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.core.runtime.IStatus;
@@ -155,7 +156,7 @@ public class DefaultTemplateProvider implements TemplateProvider {
 	 * @return a List of founded error, the list is void if no error are found
 	 */
 	@Override
-	public List<String> validateTemplate(JasperDesign design) {
+	public List<String> validateTemplate(JasperReportsContext jrContext, JasperDesign design) {
 		return DefaultTemplateEngine.validateJasperDesig(design);
 	}
 

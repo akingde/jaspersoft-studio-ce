@@ -29,6 +29,16 @@ import java.util.Map;
 
 import javax.imageio.ImageIO;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Image;
+
+import com.jaspersoft.studio.book.model.MReportPart;
+import com.jaspersoft.studio.jasper.JSSReportConverter;
+import com.jaspersoft.studio.utils.ExpressionUtil;
+import com.jaspersoft.studio.utils.jasper.ExtensionLoader;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
@@ -37,7 +47,6 @@ import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRReport;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReportsContext;
-import net.sf.jasperreports.engine.convert.ReportConverter;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignPart;
 import net.sf.jasperreports.engine.export.JRGraphics2DExporter;
@@ -48,15 +57,6 @@ import net.sf.jasperreports.export.SimpleExporterInput;
 import net.sf.jasperreports.export.SimpleGraphics2DExporterOutput;
 import net.sf.jasperreports.export.SimpleGraphics2DReportConfiguration;
 import net.sf.jasperreports.parts.subreport.SubreportPartComponent;
-
-import org.eclipse.core.resources.IFile;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Image;
-
-import com.jaspersoft.studio.book.model.MReportPart;
-import com.jaspersoft.studio.utils.ExpressionUtil;
-import com.jaspersoft.studio.utils.jasper.ExtensionLoader;
-import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 
 /**
@@ -292,7 +292,7 @@ public class ReportThumbnailsManager {
 							// Here is where the magic happens... JasperReports will fill our image...
 							try {
 								
-								JasperPrint jasperPrint = new ReportConverter(previewContext, report, false).getJasperPrint();
+								JasperPrint jasperPrint = new JSSReportConverter(previewContext, report, false).getJasperPrint();
 								
 								JRGraphics2DExporter exporter = new JRGraphics2DExporter(previewContext);
 								exporter.setExporterInput(new SimpleExporterInput(jasperPrint));

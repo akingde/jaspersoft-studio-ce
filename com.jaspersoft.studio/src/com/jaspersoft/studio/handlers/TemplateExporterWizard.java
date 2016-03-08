@@ -201,7 +201,7 @@ public class TemplateExporterWizard extends Wizard implements IExportWizard {
 	 * @return a list of strings where every string is a validation error message
 	 */
 	public List<String> getValidationErrors(){
-		return secondPage.validateWithSelectedEngine(firstPage.getDesign());
+		return secondPage.validateWithSelectedEngine(firstPage.getJRConfiguration(), firstPage.getDesign());
 	}
 	
 	/**

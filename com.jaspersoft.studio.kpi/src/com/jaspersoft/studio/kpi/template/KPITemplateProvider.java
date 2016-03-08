@@ -21,6 +21,7 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.core.runtime.IStatus;
@@ -138,7 +139,7 @@ public class KPITemplateProvider  implements TemplateProvider {
 	 * example the requeste parameters, fileds and so on
 	 */
 	@Override
-	public List<String> validateTemplate(JasperDesign design) {
+	public List<String> validateTemplate(JasperReportsContext jrContext, JasperDesign design) {
 		return new ArrayList<String>();
 	}
 }

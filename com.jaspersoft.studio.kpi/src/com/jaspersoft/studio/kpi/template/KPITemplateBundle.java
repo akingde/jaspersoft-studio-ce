@@ -17,10 +17,6 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.eclipse.util.FileUtils;
-import net.sf.jasperreports.engine.JasperReportsContext;
-
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
@@ -38,6 +34,10 @@ import com.jaspersoft.studio.wizards.ReportNewWizard;
 import com.jaspersoft.templates.ReportBundle;
 import com.jaspersoft.templates.TemplateEngine;
 import com.jaspersoft.templates.WizardTemplateBundle;
+
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.engine.JasperReportsContext;
 
 /**
  * Bundle for a KPI template, dosen't provide any custom wizard page
@@ -92,6 +92,10 @@ public class KPITemplateBundle extends WizardTemplateBundle {
 		TemplateEngine templateEngine = getTemplateEngine();
 		ByteArrayInputStream stream = null;
 		try {
+			//Save the resources of the report in the destination folder since the could be used by the engine
+			saveReportBundleResources(monitor, this, getReportContainer(mainWizard));
+			
+			//Create the target report
 			ReportBundle reportBundle = templateEngine.generateReportBundle(this, templateSettings, jConfig);
 			reportFile = saveBundleIntoFile(reportBundle, mainWizard, jConfig, monitor);
 		} catch (Exception e) {

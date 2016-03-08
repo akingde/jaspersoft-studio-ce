@@ -533,6 +533,7 @@ public class Messages extends NLS {
 	public static String DefaultTemplateEngine_missingGroupFiledStatic;
 	public static String DefaultTemplateEngine_missingStaticTextCH;
 	public static String DefaultTemplateEngine_missingTextFieldD;
+	public static String DefaultTemplateEngine_missingStaticTextD;
 	public static String DefaultTemplateProvider_TemplateLoadingErr;
 	public static String DeleteDataAdapterAction_deleteDescription;
 	public static String DeleteDataAdapterAction_deleteName;

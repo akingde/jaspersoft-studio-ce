@@ -21,6 +21,7 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.core.runtime.IStatus;
@@ -142,11 +143,12 @@ public class ExtendedTemplateProvider implements TemplateProvider {
 	 * Get a JasperDesign and check if that JasperDesign can be used as Template and processed
 	 * by the engine used inside this provider
 	 * 
+	 * @param jrContext context of the design to check
 	 * @param design the design to check
 	 * @return a List of founded error, the list is void if no error are found
 	 */
 	@Override
-	public List<String> validateTemplate(JasperDesign design) {
-		return TableTemplateEngine.validateJasperDesig(design);
+	public List<String> validateTemplate(JasperReportsContext jrContext, JasperDesign design) {
+		return TableTemplateEngine.validateJasperDesig(jrContext, design);
 	}
 }

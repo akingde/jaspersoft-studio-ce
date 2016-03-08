@@ -165,6 +165,15 @@ public class ResourcePage extends JSSHelpWizardPage {
 	}
 	
 	/**
+	 * Return the configuration pointing at the current report file
+	 * 
+	 * @return the current configuration
+	 */
+	public JasperReportsConfiguration getJRConfiguration(){
+		return jrContext;
+	}
+	
+	/**
 	 * Return a full path that represent the destination on the filesystem of the template
 	 * 
 	 * @return a string that represent the destination of the template, it's included also the template

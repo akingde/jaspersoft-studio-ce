@@ -22,17 +22,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.eclipse.util.FileUtils;
-import net.sf.jasperreports.engine.JRImage;
-import net.sf.jasperreports.engine.JRPropertiesMap;
-import net.sf.jasperreports.engine.JRReportTemplate;
-import net.sf.jasperreports.engine.JRSubreport;
-import net.sf.jasperreports.engine.JasperReportsContext;
-import net.sf.jasperreports.engine.design.JRDesignDataset;
-import net.sf.jasperreports.engine.design.JRDesignElement;
-import net.sf.jasperreports.engine.design.JasperDesign;
-
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -61,6 +50,17 @@ import com.jaspersoft.studio.wizards.datasource.ReportWizardDataSourceDynamicPag
 import com.jaspersoft.templates.ReportBundle;
 import com.jaspersoft.templates.TemplateEngine;
 import com.jaspersoft.templates.WizardTemplateBundle;
+
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.engine.JRImage;
+import net.sf.jasperreports.engine.JRPropertiesMap;
+import net.sf.jasperreports.engine.JRReportTemplate;
+import net.sf.jasperreports.engine.JRSubreport;
+import net.sf.jasperreports.engine.JasperReportsContext;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
+import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 /**
  * Template bundle for the book template
@@ -197,6 +197,10 @@ public class BookTemplateBundle extends WizardTemplateBundle {
 		TemplateEngine templateEngine = getTemplateEngine();
 		ByteArrayInputStream stream = null;
 		try {
+			//Save the resources of the report in the destination folder since the could be used by the engine
+			saveReportBundleResources(monitor, this, getReportContainer(mainWizard));
+			
+			//Create the target report
 			ReportBundle reportBundle = templateEngine.generateReportBundle(this, templateSettings, jConfig);
 
 			// Save the data adapter used...

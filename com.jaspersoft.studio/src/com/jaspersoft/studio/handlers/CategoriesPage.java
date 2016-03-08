@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 
+import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.jface.viewers.ColumnWeightData;
@@ -285,11 +286,12 @@ public class CategoriesPage extends JSSWizardPage {
 	 * Template type
 	 * 
 	 * @param design the design to check
+	 * @param jrContext context of the design to check
 	 * @return a List of founded error, the list is void if no error are found
 	 */
-	public List<String> validateWithSelectedEngine(JasperDesign design){
+	public List<String> validateWithSelectedEngine(JasperReportsContext jrContext, JasperDesign design){
 		String engine = engineCombo != null ? engineKeys[engineCombo.getSelectionIndex()] : engineKeys[0];
-		return providersMap.get(engine).validateTemplate(design);
+		return providersMap.get(engine).validateTemplate(jrContext, design);
 	}
 	
 	protected void createColumns() {

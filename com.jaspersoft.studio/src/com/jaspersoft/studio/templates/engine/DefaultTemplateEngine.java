@@ -108,7 +108,7 @@ public class DefaultTemplateEngine implements TemplateEngine {
 			}
 		}
 
-		processTemplate(jdCopy, fields, groupFields);
+		processTemplate(jContext, jdCopy, fields, groupFields);
 
 		/*
 		 * Check if there are some extra parameters to add to the default ones, then add them
@@ -137,7 +137,7 @@ public class DefaultTemplateEngine implements TemplateEngine {
 		return reportBundle;
 	}
 
-	protected void processTemplate(JasperDesign jd, List<Object> fields, List<Object> groupFields) {
+	protected void processTemplate(JasperReportsContext jrContext, JasperDesign jd, List<Object> fields, List<Object> groupFields) {
 		String reportType = Misc.nvl(jd.getProperty("template.type"), "tabular"); //$NON-NLS-1$ //$NON-NLS-2$ $NON-NLS-2$
 
 		boolean keepExtraGroups = false;
@@ -530,14 +530,15 @@ public class DefaultTemplateEngine implements TemplateEngine {
 				labelElement = findStaticTextElement(detailBand, "Label"); //$NON-NLS-1$
 			if (labelElement == null)
 				labelElement = findStaticTextElement(detailBand, "Header"); //$NON-NLS-1$
+			
+			if (labelElement == null) {
+				errorsList.add(Messages.DefaultTemplateEngine_missingStaticTextD); 
+			}
+			
 
 			JRDesignTextField fieldElement = findTextFieldElement(detailBandField, "DetailField"); //$NON-NLS-1$
 			if (fieldElement == null)
 				fieldElement = findTextFieldElement(detailBandField, "Field"); //$NON-NLS-1$
-
-			if (labelElement == null) {
-				errorsList.add("Missing Static Text placeholder in the detail band");; //$NON-NLS-1$
-			}
 
 			if (fieldElement != null) {
 				errorsList.add(Messages.DefaultTemplateEngine_missingTextFieldD);

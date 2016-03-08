@@ -234,7 +234,6 @@ public class GenericTemplateBundle implements IconedTemplateBundle, ValidatedTem
 		if (resourceNames == null) {
 			resourceNames = new ArrayList<String>();
 			List<JRDesignElement> list = ModelUtils.getAllGElements(getJasperDesign());
-			System.out.println("Elements found: " + list); //$NON-NLS-1$
 			for (JRDesignElement el : list) {
 				// Check for images...
 				if (el instanceof JRImage) {
