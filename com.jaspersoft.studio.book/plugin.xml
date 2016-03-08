@@ -8,7 +8,6 @@
             contributorClass="com.jaspersoft.studio.book.editors.JRBookEditorActionBarContributor"
             icon="icons/book_icon.png"
             id="com.jaspersoft.studio.book.editors.JRBookEditor"
-            matchingStrategy="com.jaspersoft.studio.book.JasperBookMatchStrategy"
             extensions="jrxml"
             name="JasperReports Book Editor">
             <contentTypeBinding

@@ -56,7 +56,6 @@
             contributorClass="com.jaspersoft.studio.editor.JrxmlEditorContributor"
             icon="icons/jrxml_icon.png"
             id="com.jaspersoft.studio.editor.JrxmlEditor"
-            matchingStrategy="com.jaspersoft.studio.editor.StandardJRXMLMatchStrategy"
             extensions="jrxml"
             name="JasperReports Designer">
             <contentTypeBinding
