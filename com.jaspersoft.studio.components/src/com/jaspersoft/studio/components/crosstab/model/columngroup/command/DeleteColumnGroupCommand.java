@@ -12,6 +12,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.crosstab.model.columngroup.command;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.gef.commands.Command;
@@ -22,6 +23,7 @@ import com.jaspersoft.studio.components.crosstab.model.cell.command.PostSetSizeC
 import com.jaspersoft.studio.components.crosstab.model.columngroup.MColumnGroup;
 import com.jaspersoft.studio.components.crosstab.model.columngroup.MColumnGroups;
 
+import net.sf.jasperreports.crosstabs.JRCrosstabCell;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabCell;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabColumnGroup;
@@ -112,24 +114,21 @@ public class DeleteColumnGroupCommand extends Command {
 		}
 	}
 
-	public static void removeColumnGroup(JRDesignCrosstab jrCross,
-			JRDesignCrosstabColumnGroup jrRowGr) {
-		jrCross.removeColumnGroup(jrRowGr);
+	public static void removeColumnGroup(JRDesignCrosstab jrCross, JRDesignCrosstabColumnGroup jrColGr) {
+		List<JRCrosstabCell> cells = new ArrayList<JRCrosstabCell>(jrCross.getCellsList());
 
-		List<?> cells = jrCross.getCellsList();
+		String name = jrColGr.getName();
 
-		String name = jrRowGr.getName();
-
-		for (int i = 0; i < cells.size(); ++i) {
+		for (int i = 0; i < cells.size(); i++) {
 			JRDesignCrosstabCell cell = (JRDesignCrosstabCell) cells.get(i);
 			if (cell != null) {
-				String totalGroup = cell.getRowTotalGroup();
+				String totalGroup = cell.getColumnTotalGroup();
 				if (totalGroup != null && totalGroup.equals(name)) {
 					jrCross.removeCell(cell);
-					i--;
 				}
 			}
 		}
+		jrCross.removeColumnGroup(jrColGr);
 		jrCross.preprocess();
 	}
 }

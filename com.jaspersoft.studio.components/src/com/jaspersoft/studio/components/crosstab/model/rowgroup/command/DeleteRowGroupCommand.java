@@ -12,6 +12,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.crosstab.model.rowgroup.command;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -89,7 +90,7 @@ public class DeleteRowGroupCommand extends Command {
 	protected void removeRowGroup(JRDesignCrosstab jrCross, JRDesignCrosstabRowGroup jrRowGr) {
 		removedCells = new HashMap<String, JRCrosstabCell>();
 		String name = jrRowGr.getName();
-		List<JRCrosstabCell> cells = jrCross.getCellsList();
+		List<JRCrosstabCell> cells = new ArrayList<JRCrosstabCell>(jrCross.getCellsList());
 		for (Iterator<JRCrosstabCell> it = cells.iterator(); it.hasNext();)
 		{
 			JRCrosstabCell cell = it.next();
@@ -99,13 +100,12 @@ public class DeleteRowGroupCommand extends Command {
 				removedCells.put(cell.getColumnTotalGroup(), cell);
 			}
 		}
-		for (int i = 0; i < cells.size(); ++i) {
+		for (int i = 0; i < cells.size(); i++) {
 			JRDesignCrosstabCell cell = (JRDesignCrosstabCell) cells.get(i);
 			if (cell != null) {
-				String totalGroup = cell.getColumnTotalGroup();
+				String totalGroup = cell.getRowTotalGroup();
 				if (totalGroup != null && totalGroup.equals(name)) {
 					jrCross.removeCell(cell);
-					i--;
 				}
 			}
 		}
