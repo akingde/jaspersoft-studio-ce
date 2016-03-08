@@ -118,7 +118,7 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 	public void preStartup() {
 		super.preStartup();
 		IDE.registerAdapters();
-		//setRepositories();
+		setRepositories();
 	}
 	
 	@Override
@@ -133,11 +133,13 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 	/**
 	 * Sets the list of default repositories that will be
 	 * used for the JSS product update. 
-	 * 
-	 * @deprecated There is no more need for a custom update mechanism.
-	 * We will contribute repositories using the p2.inf dedicated touchpoint.
 	 */
 	protected void setRepositories(){
+		// It's possible to contribute repositories using the p2.inf dedicated touchpoint
+		// Example of p2.inf content in com.jaspersoft.studio.rcp.feature
+		// instructions.configure=\
+		//		  org.eclipse.equinox.p2.touchpoint.eclipse.addRepository(type:0,location:http${#58}//jasperstudio.sf.net/jssproductrepo_E4_CE/);\
+		//		  org.eclipse.equinox.p2.touchpoint.eclipse.addRepository(type:1,location:http${#58}//jasperstudio.sf.net/jssproductrepo_E4_CE/);
 		try {
 			URL siteEntry = Activator.getDefault().getBundle().getEntry("updatesite.properties"); //$NON-NLS-1$
 			InputStream propsIS = siteEntry.openStream();
