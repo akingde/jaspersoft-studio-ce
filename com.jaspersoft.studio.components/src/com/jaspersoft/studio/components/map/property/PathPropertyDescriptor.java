@@ -111,8 +111,10 @@ public class PathPropertyDescriptor extends AItemDataListPropertyDescriptor {
 										pmap.initMarkers();
 									}
 								});
-							} else
+							} else if (itemsViewer.getTable().isVisible()) {
+								itemsViewer.setInput(itemData.getItems());
 								itemsViewer.refresh();
+							}
 						}
 					});
 

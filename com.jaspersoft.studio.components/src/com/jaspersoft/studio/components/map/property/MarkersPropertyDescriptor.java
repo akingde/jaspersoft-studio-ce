@@ -105,8 +105,10 @@ public class MarkersPropertyDescriptor extends AItemDataListPropertyDescriptor {
 										pmap.refresh();
 									}
 								});
-							} else if (itemsViewer.getTable().isVisible())
+							} else if (itemsViewer.getTable().isVisible()) {
+								itemsViewer.setInput(itemData.getItems());
 								itemsViewer.refresh();
+							}
 						}
 					});
 
