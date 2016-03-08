@@ -229,10 +229,16 @@ public class GMapsMarkersPanel extends GMapsCenterPanel {
 
 		@Override
 		public void removeMarker(int markerIndex) {
-			super.removeMarker(markerIndex);
-			if (initMarkers)
-				return;
-			handleRemoveMarker(markerIndex);
+			MessageDialog dialog = new MessageDialog(UIUtils.getShell(), Messages.GMapsMarkersPanel_2, null,
+					Messages.GMapsMarkersPanel_7, MessageDialog.QUESTION,
+					new String[] { Messages.GMapsMarkersPanel_8, Messages.GMapsMarkersPanel_9 }, 1);
+			if (dialog.open() == Dialog.OK) {
+				super.removeMarker(markerIndex);
+				if (initMarkers)
+					return;
+				handleRemoveMarker(markerIndex);
+			} else
+				refresh();
 		}
 
 		@Override
