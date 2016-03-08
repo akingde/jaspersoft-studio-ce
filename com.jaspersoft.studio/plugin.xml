@@ -44,7 +44,7 @@
          	   base-type="org.eclipse.core.runtime.text"
                id="com.jaspersoft.studio.content-types.jrxml"
                describer="com.jaspersoft.studio.JrxmlContentDescriber"
-               priority="normal"
+               priority="high"
                file-extensions="jrxml"
                name="JasperReports JRXML File">
          </content-type>
@@ -57,6 +57,7 @@
             icon="icons/jrxml_icon.png"
             id="com.jaspersoft.studio.editor.JrxmlEditor"
             matchingStrategy="com.jaspersoft.studio.editor.StandardJRXMLMatchStrategy"
+            extensions="jrxml"
             name="JasperReports Designer">
             <contentTypeBinding
                   contentTypeId="com.jaspersoft.studio.content-types.jrxml">

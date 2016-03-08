@@ -9,6 +9,7 @@
             icon="icons/book_icon.png"
             id="com.jaspersoft.studio.book.editors.JRBookEditor"
             matchingStrategy="com.jaspersoft.studio.book.JasperBookMatchStrategy"
+            extensions="jrxml"
             name="JasperReports Book Editor">
             <contentTypeBinding
                   contentTypeId="com.jaspersoft.studio.content-types.jrbook">
