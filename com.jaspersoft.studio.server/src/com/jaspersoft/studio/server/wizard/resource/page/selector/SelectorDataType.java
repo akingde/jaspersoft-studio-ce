@@ -32,11 +32,6 @@ public class SelectorDataType extends ASelector {
 		return r instanceof MDataType;
 	}
 
-	@Override
-	protected boolean isResCompatible(ResourceDescriptor r) {
-		return r.getWsType().equals(ResourceDescriptor.TYPE_DATA_TYPE);
-	}
-
 	protected ResourceDescriptor getResourceDescriptor(ResourceDescriptor ru) {
 		for (Object obj : ru.getChildren()) {
 			ResourceDescriptor r = (ResourceDescriptor) obj;

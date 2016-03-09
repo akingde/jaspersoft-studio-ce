@@ -32,11 +32,6 @@ public class SelectorFile extends ASelector {
 		return r instanceof MContentResource;
 	}
 
-	@Override
-	protected boolean isResCompatible(ResourceDescriptor r) {
-		return r.getWsType().equals(ResourceDescriptor.TYPE_CONTENT_RESOURCE);
-	}
-
 	protected ResourceDescriptor getResourceDescriptor(ResourceDescriptor ru) {
 		for (Object obj : ru.getChildren()) {
 			ResourceDescriptor r = (ResourceDescriptor) obj;

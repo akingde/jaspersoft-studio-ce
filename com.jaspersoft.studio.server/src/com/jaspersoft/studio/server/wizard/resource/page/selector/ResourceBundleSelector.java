@@ -24,11 +24,6 @@ public class ResourceBundleSelector extends ASelector {
 	}
 
 	@Override
-	protected boolean isResCompatible(ResourceDescriptor r) {
-		return r.getWsType().equals(ResourceDescriptor.TYPE_RESOURCE_BUNDLE);
-	}
-
-	@Override
 	protected ResourceDescriptor createLocal(AMResource res) {
 		ResourceDescriptor rd = MResourceBundle.createDescriptor(res);
 		rd.setName(MResourceBundle.getIconDescriptor().getTitle());

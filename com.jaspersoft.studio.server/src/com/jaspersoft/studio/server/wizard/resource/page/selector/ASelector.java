@@ -178,16 +178,15 @@ public abstract class ASelector {
 		ResourceDescriptor runit = resRD;
 		try {
 			rd = WSClientHelper.getResource(new NullProgressMonitor(), pnode, rd);
-			if (isResCompatible(rd)) {
-				rd.setIsReference(true);
-				rd.setReferenceUri(rd.getUriString());
-				rd.setParentFolder(runit.getParentFolder() + "/" + runit.getName() + "_files"); //$NON-NLS-1$ //$NON-NLS-2$
-				rd.setUriString(rd.getParentFolder() + "/" + rd.getName());//$NON-NLS-1$
-				setupResource(rd);
-				replaceChildren(rd);
-				if (modifyText)
-					jsRefDS.setText(rd.getReferenceUri());
-			}
+
+			rd.setIsReference(true);
+			rd.setReferenceUri(rd.getUriString());
+			rd.setParentFolder(runit.getParentFolder() + "/" + runit.getName() + "_files"); //$NON-NLS-1$ //$NON-NLS-2$
+			rd.setUriString(rd.getParentFolder() + "/" + rd.getName());//$NON-NLS-1$
+			setupResource(rd);
+			replaceChildren(rd);
+			if (modifyText)
+				jsRefDS.setText(rd.getReferenceUri());
 		} catch (Exception e1) {
 			UIUtils.showError(e1);
 		}
@@ -216,7 +215,6 @@ public abstract class ASelector {
 	protected abstract String[] getExcludeTypes();
 
 	protected abstract boolean isResCompatible(AMResource r);
-	protected abstract boolean isResCompatible(ResourceDescriptor r);
 
 	protected void createLocal(Composite prnt) {
 		brLocal = new Button(prnt, SWT.RADIO);

@@ -255,8 +255,7 @@ public class FindResourcePage extends WizardPage {
 		CTabItem bptab = new CTabItem(tabFolder, SWT.NONE);
 		bptab.setText("Tree");
 
-		RepositoryComposite rcom = new RepositoryComposite(tabFolder, SWT.NONE,
-				finderUI.getServerProfile()) {
+		RepositoryComposite rcom = new RepositoryComposite(tabFolder, SWT.NONE, finderUI.getServerProfile()) {
 
 			@Override
 			protected void okPressed() {
@@ -275,8 +274,7 @@ public class FindResourcePage extends WizardPage {
 
 						@Override
 						public void run(IProgressMonitor monitor)
-								throws InvocationTargetException,
-								InterruptedException {
+								throws InvocationTargetException, InterruptedException {
 							doReadRepository(monitor);
 						}
 					});
@@ -291,20 +289,22 @@ public class FindResourcePage extends WizardPage {
 			public boolean isResourceCompatible(AMResource r) {
 				if (Misc.isNullOrEmpty(finderUI.getTypes()))
 					return true;
-				String type = WsTypes.INST().toRestType(
-						r.getValue().getWsType());
+				if (!finderUI.isShowHidden() && r.getValue().getParentFolder().endsWith("_files"))
+					return false;
+				String type = WsTypes.INST().toRestType(r.getValue().getWsType());
 				for (String t : finderUI.getTypes()) {
 					if (t.equals(type))
 						return true;
 				}
+
 				return false;
 			}
 
 			/*
 			 * (non-Javadoc)
 			 * 
-			 * @see
-			 * com.jaspersoft.studio.server.properties.dialog.RepositoryComposite
+			 * @see com.jaspersoft.studio.server.properties.dialog.
+			 * RepositoryComposite
 			 * #setResource(com.jaspersoft.studio.server.model.MResource)
 			 */
 			@Override
@@ -328,22 +328,18 @@ public class FindResourcePage extends WizardPage {
 
 		TableColumnLayout tableColumnLayout = new TableColumnLayout();
 		tableComposite.setLayout(tableColumnLayout);
-		viewer = new TableViewer(tableComposite, SWT.SINGLE | SWT.H_SCROLL
-				| SWT.V_SCROLL | SWT.FULL_SELECTION);
+		viewer = new TableViewer(tableComposite, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
 		viewer.setContentProvider(ArrayContentProvider.getInstance());
 		ColumnViewerToolTipSupport.enableFor(viewer, ToolTip.NO_RECREATE);
 		TableViewerColumn col = new TableViewerColumn(viewer, SWT.NONE);
 		col.setLabelProvider(new StyledCellLabelProvider() {
 			@Override
 			public void update(ViewerCell cell) {
-				ClientResourceLookup p = (ClientResourceLookup) cell
-						.getElement();
+				ClientResourceLookup p = (ClientResourceLookup) cell.getElement();
 
 				cell.setText(p.getLabel() + " : " + p.getUri()); //$NON-NLS-1$
-				StyleRange myStyledRange = new StyleRange(
-						p.getLabel().length() + 3, cell.getText().length(),
-						Display.getCurrent().getSystemColor(SWT.COLOR_GRAY),
-						null);
+				StyleRange myStyledRange = new StyleRange(p.getLabel().length() + 3, cell.getText().length(),
+						Display.getCurrent().getSystemColor(SWT.COLOR_GRAY), null);
 				StyleRange[] range = { myStyledRange };
 				cell.setStyleRanges(range);
 
@@ -371,8 +367,7 @@ public class FindResourcePage extends WizardPage {
 			}
 		});
 
-		tableColumnLayout.setColumnData(col.getColumn(), new ColumnWeightData(
-				100));
+		tableColumnLayout.setColumnData(col.getColumn(), new ColumnWeightData(100));
 		final Table table = viewer.getTable();
 		table.setHeaderVisible(false);
 		table.setLinesVisible(false);
@@ -384,9 +379,7 @@ public class FindResourcePage extends WizardPage {
 					try {
 						int[] sel = table.getSelectionIndices();
 						if (sel.length > 0)
-							value = WSClientHelper.toResourceDescriptor(
-									finderUI.getServerProfile(),
-									res.get(sel[0]));
+							value = WSClientHelper.toResourceDescriptor(finderUI.getServerProfile(), res.get(sel[0]));
 						if (value != null)
 							setPageComplete(true);
 					} catch (Exception e1) {
@@ -483,8 +476,7 @@ public class FindResourcePage extends WizardPage {
 			new Thread(new Runnable() {
 				public void run() {
 					try {
-						WSClientHelper.findResources(new NullProgressMonitor(),
-								finderUI);
+						WSClientHelper.findResources(new NullProgressMonitor(), finderUI);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -495,11 +487,8 @@ public class FindResourcePage extends WizardPage {
 				getContainer().run(true, true, new IRunnableWithProgress() {
 
 					@Override
-					public void run(IProgressMonitor monitor)
-							throws InvocationTargetException,
-							InterruptedException {
-						monitor.beginTask(Messages.FindResourcePage_19,
-								IProgressMonitor.UNKNOWN);
+					public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+						monitor.beginTask(Messages.FindResourcePage_19, IProgressMonitor.UNKNOWN);
 						try {
 							WSClientHelper.findResources(monitor, finderUI);
 						} catch (Exception e) {

@@ -14,10 +14,8 @@ package com.jaspersoft.studio.server.wizard.resource.page.selector;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.jasperserver.dto.resources.ResourceMediaType;
-import com.jaspersoft.studio.server.model.MJrxml;
-import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.model.AMResource;
-import com.jaspersoft.studio.server.model.MFolder;
+import com.jaspersoft.studio.server.model.MJrxml;
 
 public class SelectorJrxml2 extends ASelector {
 	@Override
@@ -37,12 +35,7 @@ public class SelectorJrxml2 extends ASelector {
 
 	@Override
 	protected boolean isResCompatible(AMResource r) {
-		return r instanceof MJrxml && (r.getParent() instanceof MServerProfile || r.getParent() instanceof MFolder);
-	}
-
-	@Override
-	protected boolean isResCompatible(ResourceDescriptor r) {
-		return r.getWsType().equals(ResourceDescriptor.TYPE_JRXML) && !r.getParentFolder().endsWith("_files");
+		return r instanceof MJrxml && !r.getValue().getParentFolder().endsWith("_files");
 	}
 
 	protected ResourceDescriptor getResourceDescriptor(ResourceDescriptor ru) {

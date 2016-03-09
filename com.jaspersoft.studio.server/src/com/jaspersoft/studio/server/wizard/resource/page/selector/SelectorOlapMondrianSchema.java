@@ -32,11 +32,6 @@ public class SelectorOlapMondrianSchema extends ASelector {
 		return r instanceof MRMondrianSchema;
 	}
 
-	@Override
-	protected boolean isResCompatible(ResourceDescriptor r) {
-		return r.getWsType().equals(ResourceDescriptor.TYPE_MONDRIAN_SCHEMA);
-	}
-
 	protected ResourceDescriptor getResourceDescriptor(ResourceDescriptor ru) {
 		for (Object obj : ru.getChildren()) {
 			ResourceDescriptor r = (ResourceDescriptor) obj;

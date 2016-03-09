@@ -32,11 +32,6 @@ public class SelectorAccessGrantSchema extends ASelector {
 		return r instanceof MRAccessGrantSchema;
 	}
 
-	@Override
-	protected boolean isResCompatible(ResourceDescriptor r) {
-		return r.getWsType().equals(ResourceDescriptor.TYPE_ACCESS_GRANT_SCHEMA);
-	}
-
 	protected ResourceDescriptor getResourceDescriptor(ResourceDescriptor ru) {
 		for (Object obj : ru.getChildren()) {
 			ResourceDescriptor r = (ResourceDescriptor) obj;
