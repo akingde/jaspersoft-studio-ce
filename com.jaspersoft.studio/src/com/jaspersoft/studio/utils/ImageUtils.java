@@ -176,8 +176,7 @@ public class ImageUtils {
 			gc.fillRectangle(0, 0, width, height);
 			int destX = (width - originalImage.getImageData().width) / 2;
 			int destY = (height - originalImage.getImageData().height) / 2;
-			gc.drawImage(originalImage, 0, 0, originalImage.getBounds().width, originalImage.getBounds().height, destX,
-					destY, originalHeight, originalWidth);
+			gc.drawImage(originalImage, 0, 0, originalWidth, originalHeight, destX, destY, originalHeight, originalWidth);
 		} finally {
 			gc.dispose();
 		}

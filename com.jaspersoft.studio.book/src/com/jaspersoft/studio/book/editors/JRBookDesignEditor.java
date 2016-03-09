@@ -26,11 +26,9 @@ import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
 import org.eclipse.gef.ui.parts.TreeViewer;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.layout.GridDataFactory;
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -38,7 +36,6 @@ import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.ISaveablePart;
-import org.eclipse.wb.swt.ResourceManager;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.book.dnd.ResourceTransferDropTargetListener;
@@ -63,6 +60,7 @@ import com.jaspersoft.studio.editor.outline.actions.CreateVariableAction;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.plugin.ExtensionManager;
 import com.jaspersoft.studio.repository.actions.Separator;
+import com.jaspersoft.studio.swt.widgets.ResizableToolItem;
 import com.jaspersoft.studio.utils.AContributorAction;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -96,6 +94,8 @@ public class JRBookDesignEditor extends AGraphicEditor {
 				});
 			}
 		};
+		
+		
 	}
 	
 	@Override
@@ -132,6 +132,7 @@ public class JRBookDesignEditor extends AGraphicEditor {
 		initializedToolBar();
 	}
 	
+	
 	/**
 	 * Create the editor toolbar control
 	 * 
@@ -152,7 +153,7 @@ public class JRBookDesignEditor extends AGraphicEditor {
 		//FIXME: the toolbars in SWT take the height from the highest element, padding the image
 		//at runtime brings some graphical glitches, so for the first action an image of a specific size is
 		//used to allow to have the right size of the toolbar
-		createToolBarButton(registry.getAction(BookCompileAction.ID), BookCompileAction.getToolBarImageDescriptor());
+		createToolBarButton(registry.getAction(BookCompileAction.ID));
 		createToolBarButton(registry.getAction(BookDatasetAction.ID));
 		createToolBarButton(new Separator());
 		for(AContributorAction contAction : m.getActions()){
@@ -171,33 +172,17 @@ public class JRBookDesignEditor extends AGraphicEditor {
 		if (action instanceof Separator){
 			 new ToolItem(additionalToolbar, SWT.SEPARATOR);
 		} else {
-			createToolBarButton(action, action.getImageDescriptor());
+			ResizableToolItem toolItem = new ResizableToolItem(additionalToolbar, SWT.PUSH | SWT.FLAT, action, 25);
+			toolItem.setToolTipText(action.getToolTipText());
+			toolItem.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					action.run();
+				}
+			});
 		}
 	}
 	
-	/**
-	 * Create a toolbar button to execute an action, with a custom icon
-	 * 
-	 * @param action the action to execute, must be not null
-	 * @param icon the icon that will be used for the action
-	 */
-	private void createToolBarButton(final IAction action, ImageDescriptor icon){
-		ToolItem toolItem = new ToolItem(additionalToolbar, SWT.PUSH | SWT.FLAT);
-		Image img = ResourceManager.getImage(icon);
-		if (img !=null){
-			toolItem.setImage(img);
-		} else {
-			toolItem.setText(action.getText());
-		}
-		toolItem.setToolTipText(action.getToolTipText());
-		toolItem.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				action.run();
-			}
-		});
-	}
-
 	@Override
 	protected ContextMenuProvider createContextMenuProvider(
 			EditPartViewer graphicalViewer) {
