@@ -1597,7 +1597,12 @@ public class Messages extends NLS {
 	public static String ParametersTable_name;
 	public static String PasteFormatAction_title;
 	public static String PasteResourceAction_1;
+	public static String PasteResourceAction_12;
+	public static String PasteResourceAction_13;
 	public static String PasteResourceAction_15;
+	public static String PasteResourceAction_16;
+	public static String PasteResourceAction_4;
+	public static String PasteResourceAction_7;
 	public static String PathAndDataDialog_0;
 	public static String PathAndDataDialog_1;
 	public static String PathAndDataDialog_10;
