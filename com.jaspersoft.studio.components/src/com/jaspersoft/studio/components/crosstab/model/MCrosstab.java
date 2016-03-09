@@ -91,6 +91,12 @@ public class MCrosstab extends MGraphicElementLineBox implements IContainer,
 	
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	
+	public static final String UPDATE_CROSSTAB_MODEL = "updateCrosstabModel";
+	
+	private boolean flagRefreshCells = false;
+	
+	private static NamedEnumPropertyDescriptor<RunDirectionEnum> runDirectionD;
+	
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
 	
@@ -541,18 +547,18 @@ public class MCrosstab extends MGraphicElementLineBox implements IContainer,
 			} else if (pname.equals(JRDesignCrosstab.PROPERTY_CELLS)
 					|| pname.equals(JRDesignCrosstab.PROPERTY_ROW_GROUPS)
 					|| pname.equals(JRDesignCrosstab.PROPERTY_COLUMN_GROUPS)) {
-				if (evt.getSource() == getValue() && getValue() != null && !flagRefreshCells) {
-					flagRefreshCells = true;
-					CrosstabComponentFactory.deleteCellNodes(MCrosstab.this);
-					CrosstabComponentFactory.createCellNodes((JRDesignCrosstab) getValue(), MCrosstab.this);
-					getCrosstabManager().refresh();
-					flagRefreshCells = false;
-					MCrosstab.super.propertyChange(evt);
-					return;
-				}
+				MCrosstab.super.propertyChange(evt);
+				getCrosstabManager().refresh();
 			} else if (pname.equals(JRDesignCrosstab.PROPERTY_MEASURES)) {
 				getCrosstabManager().refresh();
 			} 
+		}
+		if (evt.getPropertyName().equals(UPDATE_CROSSTAB_MODEL)){
+			getValue().preprocess();
+			CrosstabComponentFactory.deleteCellNodes(this);
+			CrosstabComponentFactory.createCellNodes(getValue(), this);
+			getCrosstabManager().refresh();
+			setChangedProperty(true);
 		}
 		if (getCrosstabManager() != null){
 			if (hasColumnsAutoresizeProportional() && isColumnsResizeEvent(evt)){
@@ -565,8 +571,7 @@ public class MCrosstab extends MGraphicElementLineBox implements IContainer,
 		super.propertyChange(evt);
 	}
 
-	private boolean flagRefreshCells = false;
-	private static NamedEnumPropertyDescriptor<RunDirectionEnum> runDirectionD;
+
 
 	public JRElementGroup getJRElementGroup() {
 		return null;

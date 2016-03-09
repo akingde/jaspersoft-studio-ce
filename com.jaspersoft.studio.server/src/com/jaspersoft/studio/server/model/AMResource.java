@@ -232,10 +232,10 @@ public abstract class AMResource extends APropertyNode implements ICopyable {
 		return null;
 	}
 
-	public boolean isCopyable2(Object parent) {
+	public ICopyable.RESULT isCopyable2(Object parent) {
 		if (parent instanceof MFolder || parent instanceof MReportUnit || parent instanceof MServerProfile)
-			return true;
-		return false;
+			return ICopyable.RESULT.COPYABLE;
+		return ICopyable.RESULT.CHECK_PARENT;
 	}
 
 	private PublishOptions publishOptions;

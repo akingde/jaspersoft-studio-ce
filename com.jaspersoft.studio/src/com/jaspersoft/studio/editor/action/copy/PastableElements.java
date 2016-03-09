@@ -226,9 +226,21 @@ public class PastableElements extends AbstractPastableObject {
 	private IPastable getParent2Paste(ANode n) {
 		while (n != null) {
 			if (n instanceof IPastable) {
-				if (n instanceof MBand && n.getValue() == null)
+				if (n instanceof MBand && n.getValue() == null){
 					return null;
-				return (IPastable) n;
+				} else {
+					boolean allPastable = true;
+					for(ICopyable copyable : list){
+						ICopyable.RESULT result = copyable.isCopyable2(n);
+						if (result == ICopyable.RESULT.CHECK_PARENT){
+							allPastable = false;
+							break;
+						} else if (result == ICopyable.RESULT.NOT_COPYABLE){
+							return null;
+						}
+					}
+					if (allPastable) return (IPastable) n;
+				}
 			}
 			n = (ANode) n.getParent();
 		}

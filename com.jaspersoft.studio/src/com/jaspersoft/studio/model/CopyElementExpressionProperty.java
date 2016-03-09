@@ -131,8 +131,12 @@ public class CopyElementExpressionProperty implements ICopyable {
 	}
 	
 	@Override
-	public boolean isCopyable2(Object parent) {
-		return (parent instanceof APropertyNode);
+	public ICopyable.RESULT isCopyable2(Object parent) {
+		if (parent instanceof APropertyNode){
+			return ICopyable.RESULT.COPYABLE;
+		} else {
+			return ICopyable.RESULT.CHECK_PARENT;
+		}
 	}
 
 	/**

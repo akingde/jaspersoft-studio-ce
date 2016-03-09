@@ -231,9 +231,9 @@ public class MScriptlet extends APropertyNode implements ICopyable, IDragable {
 
 	}
 
-	public boolean isCopyable2(Object parent) {
+	public ICopyable.RESULT isCopyable2(Object parent) {
 		if (parent instanceof MScriptlets)
-			return true;
-		return false;
+			return ICopyable.RESULT.COPYABLE;
+		return ICopyable.RESULT.CHECK_PARENT;
 	}
 }

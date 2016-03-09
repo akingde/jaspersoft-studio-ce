@@ -330,10 +330,10 @@ public class MVariable extends MVariableSystem implements ICopyable {
 		return jrDesignVariable;
 	}
 
-	public boolean isCopyable2(Object parent) {
+	public ICopyable.RESULT isCopyable2(Object parent) {
 		if (parent instanceof MVariables)
-			return true;
-		return false;
+			return ICopyable.RESULT.COPYABLE;
+		return ICopyable.RESULT.CHECK_PARENT;
 	}
 
 	@Override

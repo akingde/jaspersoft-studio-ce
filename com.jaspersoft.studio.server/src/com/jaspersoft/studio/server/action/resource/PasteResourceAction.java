@@ -113,7 +113,7 @@ public class PasteResourceAction extends Action {
 						return false;
 					}
 					ICopyable c = (ICopyable) obj;
-					if (c.isCopyable2(parent)) {
+					if (c.isCopyable2(parent) == ICopyable.RESULT.COPYABLE) {
 						iscut = ((AMResource) obj).isCut();
 						res = true;
 						break;
@@ -230,7 +230,7 @@ public class PasteResourceAction extends Action {
 				if (monitor.isCanceled())
 					return;
 				final AMResource m = (AMResource) obj;
-				if (m.isCopyable2(parent)) {
+				if (m.isCopyable2(parent) == ICopyable.RESULT.COPYABLE) {
 					ResourceDescriptor origin = m.getValue();
 					monitor.subTask(Messages.PasteResourceAction_4);
 					exists = false;

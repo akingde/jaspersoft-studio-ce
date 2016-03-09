@@ -282,10 +282,10 @@ public class MField extends APropertyNode implements ICopyable, IDragable {
 		return jrDesignField;
 	}
 
-	public boolean isCopyable2(Object parent) {
+	public ICopyable.RESULT isCopyable2(Object parent) {
 		if (parent instanceof MFields)
-			return true;
-		return false;
+			return ICopyable.RESULT.COPYABLE;
+		return ICopyable.RESULT.CHECK_PARENT;
 	}
 
 	public ExpressionContext getExpressionContext() {

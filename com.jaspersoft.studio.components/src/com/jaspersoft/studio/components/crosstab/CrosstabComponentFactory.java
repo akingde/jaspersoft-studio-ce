@@ -187,20 +187,6 @@ public class CrosstabComponentFactory implements IComponentFactory {
 				}
 			}
 				
-			MRowGroups mrg = new MRowGroups(mCrosstab, ct, JRDesignCrosstab.PROPERTY_ROW_GROUPS);
-			if (ct.getRowGroups() != null)
-				for (JRCrosstabRowGroup p : ct.getRowGroups())
-					ReportFactory.createNode(mrg, p, -1);
-
-			MColumnGroups mcg = new MColumnGroups(mCrosstab, ct, JRDesignCrosstab.PROPERTY_COLUMN_GROUPS);
-			if (ct.getColumnGroups() != null)
-				for (JRCrosstabColumnGroup p : ct.getColumnGroups())
-					ReportFactory.createNode(mcg, p, -1);
-
-			MMeasures mm = new MMeasures(mCrosstab, ct, JRDesignCrosstab.PROPERTY_MEASURES);
-			if (ct.getMeasures() != null)
-				for (JRCrosstabMeasure p : ct.getMeasures())
-					ReportFactory.createNode(mm, p, -1);
 			// ---------------------------------
 			createCellNodes(ct, mCrosstab);
 			return mCrosstab;
@@ -301,6 +287,21 @@ public class CrosstabComponentFactory implements IComponentFactory {
 	}
 
 	public static void createCellNodes(JRDesignCrosstab ct, MCrosstab mCrosstab) {
+		MRowGroups mrg = new MRowGroups(mCrosstab, ct, JRDesignCrosstab.PROPERTY_ROW_GROUPS);
+		if (ct.getRowGroups() != null)
+			for (JRCrosstabRowGroup p : ct.getRowGroups())
+				ReportFactory.createNode(mrg, p, -1);
+
+		MColumnGroups mcg = new MColumnGroups(mCrosstab, ct, JRDesignCrosstab.PROPERTY_COLUMN_GROUPS);
+		if (ct.getColumnGroups() != null)
+			for (JRCrosstabColumnGroup p : ct.getColumnGroups())
+				ReportFactory.createNode(mcg, p, -1);
+
+		MMeasures mm = new MMeasures(mCrosstab, ct, JRDesignCrosstab.PROPERTY_MEASURES);
+		if (ct.getMeasures() != null)
+			for (JRCrosstabMeasure p : ct.getMeasures())
+				ReportFactory.createNode(mm, p, -1);
+		
 		if (ct.getTitleCell() == null) {
 			new MTitle(mCrosstab, -1);
 		} else {
@@ -363,16 +364,16 @@ public class CrosstabComponentFactory implements IComponentFactory {
 	}
 
 	public static void deleteCellNodes(MCrosstab mCrosstab) {
-		List<INode> nodes = new ArrayList<INode>();
-		if (mCrosstab.getChildren() != null) {
-			for (INode n : mCrosstab.getChildren()) {
-				if (n instanceof MCell || n instanceof MCrosstabWhenNoData || n instanceof MTitle || n instanceof MCrosstabHeader)
-					nodes.add(n);
-			}
-			mCrosstab.removeChildren(nodes);
-			// if (mCrosstab.getCrosstabManager() != null)
-			// mCrosstab.getCrosstabManager().refresh();
+		for(INode node : new ArrayList<INode>(mCrosstab.getChildren())){
+			if (!(node instanceof MCrosstabParameters)) deleteChildren(node);
 		}
+	}
+	
+	protected static void deleteChildren(INode currentNode){
+		for(INode node : new ArrayList<INode>(currentNode.getChildren())){
+			deleteChildren(node);
+		}
+		((ANode)currentNode).setParent(null, -1);
 	}
 
 	public List<?> getChildren4Element(Object jrObject) {

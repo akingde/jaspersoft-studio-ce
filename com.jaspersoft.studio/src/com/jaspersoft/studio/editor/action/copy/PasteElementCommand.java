@@ -73,7 +73,7 @@ public class PasteElementCommand extends Command {
 
 	@Override
 	public boolean canExecute() {
-		return node instanceof MDataset || (node instanceof ICopyable && ((ICopyable)node).isCopyable2(parent));
+		return node instanceof MDataset || (node instanceof ICopyable && ((ICopyable)node).isCopyable2(parent) != ICopyable.RESULT.NOT_COPYABLE);
 	}
 
 	@Override

@@ -48,7 +48,7 @@ public class PasteResourceAsLinkAction extends PasteResourceAction {
 				for (Object obj : list)
 					if (obj instanceof AMResource && obj instanceof ICopyable) {
 						ICopyable c = (ICopyable) obj;
-						if (c.isCopyable2(n)) {
+						if (c.isCopyable2(n) == ICopyable.RESULT.COPYABLE) {
 							if (((AMResource) obj).isCut())
 								res = false;
 							else

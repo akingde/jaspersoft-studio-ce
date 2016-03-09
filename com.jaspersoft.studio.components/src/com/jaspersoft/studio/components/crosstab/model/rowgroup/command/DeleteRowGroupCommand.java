@@ -14,7 +14,6 @@ package com.jaspersoft.studio.components.crosstab.model.rowgroup.command;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -91,26 +90,18 @@ public class DeleteRowGroupCommand extends Command {
 		removedCells = new HashMap<String, JRCrosstabCell>();
 		String name = jrRowGr.getName();
 		List<JRCrosstabCell> cells = new ArrayList<JRCrosstabCell>(jrCross.getCellsList());
-		for (Iterator<JRCrosstabCell> it = cells.iterator(); it.hasNext();)
-		{
-			JRCrosstabCell cell = it.next();
-			String rowTotalGroup = cell.getRowTotalGroup();
-			if (rowTotalGroup != null && rowTotalGroup.equals(name))
-			{
-				removedCells.put(cell.getColumnTotalGroup(), cell);
-			}
-		}
 		for (int i = 0; i < cells.size(); i++) {
 			JRDesignCrosstabCell cell = (JRDesignCrosstabCell) cells.get(i);
 			if (cell != null) {
 				String totalGroup = cell.getRowTotalGroup();
 				if (totalGroup != null && totalGroup.equals(name)) {
+					removedCells.put(cell.getColumnTotalGroup(), cell);
 					jrCross.removeCell(cell);
 				}
 			}
 		}
 		jrCross.removeRowGroup(jrRowGr);
-		jrCross.preprocess();
+		jrCrosstab.getEventSupport().firePropertyChange(MCrosstab.UPDATE_CROSSTAB_MODEL, null, jrRowGroup);
 	}
 
 	/*
@@ -137,6 +128,7 @@ public class DeleteRowGroupCommand extends Command {
 			JSSCompoundCommand c = new JSSCompoundCommand("Resize Crosstab Cell", crosstabNode);
 			PostSetSizeCell.createLayoutCommand(crosstabNode, c);
 			c.execute();
+			jrCrosstab.getEventSupport().firePropertyChange(MCrosstab.UPDATE_CROSSTAB_MODEL, null, jrRowGroup);
 		} catch (JRException e) {
 			e.printStackTrace();
 		}

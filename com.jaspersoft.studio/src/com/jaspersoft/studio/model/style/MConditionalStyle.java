@@ -31,6 +31,7 @@ import com.jaspersoft.studio.ExternalStylesManager;
 import com.jaspersoft.studio.editor.expression.ExpressionEditorSupportUtil;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.ICopyable;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
@@ -223,9 +224,14 @@ public class MConditionalStyle extends MStyle implements IPropertySource {
 	}
 
 	@Override
-	public boolean isCopyable2(Object parent) {
-		if (parent instanceof MStyle)
-			return true;
-		return false;
+	public ICopyable.RESULT isCopyable2(Object parent) {
+		//Check if the destination node is a style of a report
+		if (parent instanceof MStyle){
+			MStyle parentStyle = (MStyle)parent;
+			if (parentStyle.getParent() instanceof MStyles){
+				return ICopyable.RESULT.COPYABLE;
+			}
+		}
+		return ICopyable.RESULT.NOT_COPYABLE;
 	}
 }

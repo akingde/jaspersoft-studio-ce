@@ -194,6 +194,6 @@ public class PasteCommand extends Command {
 	}
 
 	public boolean isPastableNode(Object node) {
-		return node instanceof MDataset || (node instanceof ICopyable && ((ICopyable) node).isCopyable2(parent));
+		return node instanceof MDataset || (node instanceof ICopyable && ((ICopyable) node).isCopyable2(parent) != ICopyable.RESULT.NOT_COPYABLE);
 	}
 }

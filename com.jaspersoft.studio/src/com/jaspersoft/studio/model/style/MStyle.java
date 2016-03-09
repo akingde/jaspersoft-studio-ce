@@ -30,8 +30,10 @@ import com.jaspersoft.studio.model.ICopyable;
 import com.jaspersoft.studio.model.IDragable;
 import com.jaspersoft.studio.model.IGraphicalPropertiesHandler;
 import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.model.IPastable;
 import com.jaspersoft.studio.model.MLineBox;
 import com.jaspersoft.studio.model.MLinePen;
+import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.text.MFont;
 import com.jaspersoft.studio.model.text.MParagraph;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
@@ -88,7 +90,7 @@ import net.sf.jasperreports.engine.type.VerticalTextAlignEnum;
  * 
  * @author Chicu Veaceslav
  */
-public class MStyle extends APropertyNode implements ICopyable, IContainerEditPart, IDragable, MNotConditionalMarker {
+public class MStyle extends APropertyNode implements ICopyable, IPastable, IContainerEditPart, IDragable, MNotConditionalMarker {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
@@ -934,15 +936,7 @@ public class MStyle extends APropertyNode implements ICopyable, IContainerEditPa
 		return (JRStyle) super.getValue();
 	}
 
-	public boolean isCopyable2(Object parent) {
-		if (parent instanceof MStyles){
-			return true;
-		} else if (parent instanceof MStylesTemplate && ((MStylesTemplate)parent).isEditable()) {
-			//make it pastable on the styles template
-			return true;
-		}
-		return false;
-	}
+
 	
 	@Override
 	public void setEditable(boolean editable) {
@@ -953,6 +947,25 @@ public class MStyle extends APropertyNode implements ICopyable, IContainerEditPa
 		linePen.setEditable(editable);
 		MParagraph paragraph = (MParagraph)getPropertyValue(PARAGRAPH);
 		paragraph.setEditable(editable);
+	}
+	
+	@Override
+	public ICopyable.RESULT isCopyable2(Object parent) {
+		//A style is copiable only to an MStyle or an MStyleReference that has
+		//the root as parent
+		if (parent instanceof MStyles){
+			return ICopyable.RESULT.COPYABLE;
+		} else if (parent instanceof MStylesTemplate){
+			MStylesTemplate template = (MStylesTemplate)parent;
+			if (template.getParent() instanceof MRoot){
+				return ICopyable.RESULT.COPYABLE;
+			} else {
+				return ICopyable.RESULT.NOT_COPYABLE;
+			}
+		} else if (parent instanceof MConditionalStyle){
+			return ICopyable.RESULT.NOT_COPYABLE;
+		}
+		return ICopyable.RESULT.CHECK_PARENT;
 	}
 
 }

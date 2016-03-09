@@ -403,10 +403,10 @@ public class MDataset extends APropertyNode implements ICopyable {
 		return jrDesignDataset;
 	}
 
-	public boolean isCopyable2(Object parent) {
+	public ICopyable.RESULT isCopyable2(Object parent) {
 		if (parent instanceof MReport)
-			return true;
-		return false;
+			return ICopyable.RESULT.COPYABLE;
+		return ICopyable.RESULT.CHECK_PARENT;
 	}
 
 	public MParameterSystem getParamater(String name) {

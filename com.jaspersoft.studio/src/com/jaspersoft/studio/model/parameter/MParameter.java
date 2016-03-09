@@ -234,10 +234,10 @@ public class MParameter extends MParameterSystem implements ICopyable {
 		}
 	}
 
-	public boolean isCopyable2(Object parent) {
+	public ICopyable.RESULT isCopyable2(Object parent) {
 		if (parent instanceof MParameters)
-			return true;
-		return false;
+			return ICopyable.RESULT.COPYABLE;
+		return ICopyable.RESULT.CHECK_PARENT;
 	}
 	
 	public ExpressionContext getExpressionContext() {

@@ -176,9 +176,10 @@ public abstract class MCrosstabGroup extends MDatasetGroupNode implements IPrope
 		} else if (id.equals(JRDesignCrosstabGroup.PROPERTY_TOTAL_POSITION)) {
 			jrField.setTotalPosition(totalPositionD.getEnumValue(value));
 			MCrosstab cross = getMCrosstab();
-			cross.getCrosstabManager().refresh();
-			getPropertyChangeSupport().firePropertyChange(
-					new PropertyChangeEvent(this, JRDesignCrosstabGroup.PROPERTY_TOTAL_POSITION, null, value));
+			if (cross != null){
+				cross.getCrosstabManager().refresh();
+				getPropertyChangeSupport().firePropertyChange(new PropertyChangeEvent(this, JRDesignCrosstabGroup.PROPERTY_TOTAL_POSITION, null, value));
+			}
 		} else if (id.equals(JRDesignCrosstabGroup.PROPERTY_MERGE_HEADER_CELLS))
 			jrField.setMergeHeaderCells(((Boolean) value).booleanValue());
 	}

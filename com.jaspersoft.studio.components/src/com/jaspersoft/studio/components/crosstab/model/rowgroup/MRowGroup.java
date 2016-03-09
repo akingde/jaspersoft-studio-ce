@@ -21,7 +21,6 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.JSSCompoundCommand;
-import com.jaspersoft.studio.components.crosstab.CrosstabComponentFactory;
 import com.jaspersoft.studio.components.crosstab.CrosstabNodeIconDescriptor;
 import com.jaspersoft.studio.components.crosstab.messages.Messages;
 import com.jaspersoft.studio.components.crosstab.model.MCrosstab;
@@ -254,23 +253,20 @@ public class MRowGroup extends MCrosstabGroup implements ICopyable, IDragable {
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		if (evt.getPropertyName().equals(
-				JRDesignCrosstabGroup.PROPERTY_TOTAL_POSITION)) {
-			this.removeChildren();
-			CrosstabComponentFactory.createRowGroupCells(this,
-					(JRCrosstabRowGroup) getValue());
-			MCrosstab mCrosstab = getMCrosstab();
-			CrosstabComponentFactory.deleteCellNodes(mCrosstab);
-			CrosstabComponentFactory.createCellNodes(
-					(JRDesignCrosstab) mCrosstab.getValue(), mCrosstab);
+		if (evt.getPropertyName().equals(JRDesignCrosstabGroup.PROPERTY_TOTAL_POSITION)) {
+			MCrosstab crosstabModel = getMCrosstab();
+			if (crosstabModel != null){
+				JRDesignCrosstab jrCrosstab = crosstabModel.getValue();
+				jrCrosstab.getEventSupport().firePropertyChange(MCrosstab.UPDATE_CROSSTAB_MODEL, null, getValue());
+			}
 		}
 		super.propertyChange(evt);
 	}
 
-	public boolean isCopyable2(Object parent) {
+	public ICopyable.RESULT isCopyable2(Object parent) {
 		if (parent instanceof MRowGroups)
-			return true;
-		return false;
+			return ICopyable.RESULT.COPYABLE;
+		return ICopyable.RESULT.CHECK_PARENT;
 	}
 
 }

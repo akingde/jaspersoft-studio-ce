@@ -19,6 +19,7 @@ import net.sf.jasperreports.engine.JRConstants;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.ICopyable;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.server.ServerIconDescriptor;
 
@@ -55,7 +56,7 @@ public class MAdHocDataView extends AMResource implements IInputControlsContaine
 	}
 
 	@Override
-	public boolean isCopyable2(Object parent) {
-		return false;
+	public ICopyable.RESULT isCopyable2(Object parent) {
+		return ICopyable.RESULT.NOT_COPYABLE;
 	}
 }

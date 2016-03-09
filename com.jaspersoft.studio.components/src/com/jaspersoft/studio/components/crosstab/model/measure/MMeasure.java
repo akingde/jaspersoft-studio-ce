@@ -238,9 +238,9 @@ public class MMeasure extends MDatasetGroupNode implements ICopyable, IDragable 
 			jrField.setPercentageCalculatorClassName((String) value);
 	}
 
-	public boolean isCopyable2(Object parent) {
+	public ICopyable.RESULT isCopyable2(Object parent) {
 		if (parent instanceof MMeasures)
-			return true;
-		return false;
+			return ICopyable.RESULT.COPYABLE;
+		return ICopyable.RESULT.CHECK_PARENT;
 	}
 }

@@ -304,10 +304,10 @@ public class MStyleTemplate extends APropertyNode implements IPropertySource, IC
 		return jrDesignReportTemplate;
 	}
 
-	public boolean isCopyable2(Object parent) {
+	public ICopyable.RESULT isCopyable2(Object parent) {
 		if (parent instanceof MStyles)
-			return true;
-		return false;
+			return ICopyable.RESULT.COPYABLE;
+		return ICopyable.RESULT.CHECK_PARENT;
 	}
 
 }

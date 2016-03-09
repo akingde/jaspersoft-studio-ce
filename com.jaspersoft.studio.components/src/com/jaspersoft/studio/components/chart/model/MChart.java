@@ -89,6 +89,7 @@ import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IContainer;
 import com.jaspersoft.studio.model.IContainerEditPart;
+import com.jaspersoft.studio.model.ICopyable;
 import com.jaspersoft.studio.model.IDatasetContainer;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.IPastable;
@@ -1048,9 +1049,9 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 	}
 
 	@Override
-	public boolean isCopyable2(Object parent) {
+	public ICopyable.RESULT isCopyable2(Object parent) {
 		if (parent instanceof MChart)
-			return true;
+			return ICopyable.RESULT.COPYABLE;
 		return super.isCopyable2(parent);
 	}
 

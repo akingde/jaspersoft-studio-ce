@@ -79,6 +79,7 @@ public class DeleteColumnGroupCommand extends Command {
 		JSSCompoundCommand c = new JSSCompoundCommand("Resize Crosstab Cell", crosstabNode);
 		PostSetSizeCell.createLayoutCommand(crosstabNode, c);
 		c.execute();
+		jrCrosstab.getEventSupport().firePropertyChange(MCrosstab.UPDATE_CROSSTAB_MODEL, null, jrColumnGroup);
 	}
 
 	/*
@@ -109,6 +110,7 @@ public class DeleteColumnGroupCommand extends Command {
 			JSSCompoundCommand c = new JSSCompoundCommand("Resize Crosstab Cell", crosstabNode);
 			PostSetSizeCell.createLayoutCommand(crosstabNode, c);
 			c.execute();
+			jrCrosstab.getEventSupport().firePropertyChange(MCrosstab.UPDATE_CROSSTAB_MODEL, null, jrColumnGroup);
 		} catch (JRException e) {
 			e.printStackTrace();
 		}

@@ -129,6 +129,7 @@ public class CreateColumnCommand extends Command {
 				}
 			}
 		}
+		jrCrosstab.getEventSupport().firePropertyChange(MCrosstab.UPDATE_CROSSTAB_MODEL, null, jrGroup);
 		//Fire the event to eventually update the crosstab columns size
 		jrCrosstab.getEventSupport().firePropertyChange(MTable.PROPERTY_COLUMNS_AUTORESIZE_PROPORTIONAL, null, jrGroup);
 	}
@@ -151,6 +152,7 @@ public class CreateColumnCommand extends Command {
 	@Override
 	public void undo() {
 		DeleteColumnGroupCommand.removeColumnGroup(jrCrosstab, jrGroup);
+		jrCrosstab.getEventSupport().firePropertyChange(MCrosstab.UPDATE_CROSSTAB_MODEL, null, jrGroup);
 		//Fire the event to eventually update the crosstab columns size
 		jrCrosstab.getEventSupport().firePropertyChange(MTable.PROPERTY_COLUMNS_AUTORESIZE_PROPORTIONAL, jrGroup, null);
 	}
