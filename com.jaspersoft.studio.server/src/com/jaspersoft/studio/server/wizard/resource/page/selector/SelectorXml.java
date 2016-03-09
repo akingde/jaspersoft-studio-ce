@@ -31,6 +31,11 @@ public class SelectorXml extends ASelector {
 		return r instanceof MXmlFile;
 	}
 
+	@Override
+	protected boolean isResCompatible(ResourceDescriptor r) {
+		return r.getWsType().equals(ResourceDescriptor.TYPE_XML_FILE);
+	}
+
 	protected ResourceDescriptor getResourceDescriptor(ResourceDescriptor ru) {
 		for (Object obj : ru.getChildren()) {
 			ResourceDescriptor r = (ResourceDescriptor) obj;

@@ -871,6 +871,8 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 		tgt = tgt.queryParam("q", callback.getText()); //$NON-NLS-1$
 		for (String type : callback.getTypes())
 			tgt = tgt.queryParam("type", type); //$NON-NLS-1$
+		if (!callback.isShowHidden())
+			tgt = tgt.queryParam("showHiddenItems", "false");
 		tgt = tgt.queryParam("sortBy", "label"); //$NON-NLS-1$ //$NON-NLS-2$
 		tgt = tgt.queryParam("limit", 0); //$NON-NLS-1$
 

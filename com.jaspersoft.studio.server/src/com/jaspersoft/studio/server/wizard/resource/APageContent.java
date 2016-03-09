@@ -18,6 +18,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.protocol.IConnection;
@@ -101,7 +102,7 @@ public abstract class APageContent implements IPageCompleteListener {
 		if (completed)
 			page.setErrorMessage(null);
 		else
-			page.setErrorMessage("There is a problem with selected Datasource which is not valid");
+			page.setErrorMessage(Messages.APageContent_0);
 		refresh = false;
 	}
 

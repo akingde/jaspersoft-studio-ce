@@ -34,6 +34,11 @@ public class SelectorQuery extends ASelector {
 		return r instanceof MRQuery;
 	}
 
+	@Override
+	protected boolean isResCompatible(ResourceDescriptor r) {
+		return r.getWsType().equals(ResourceDescriptor.TYPE_QUERY);
+	}
+
 	private static ResourceDescriptor getQuery(ResourceDescriptor ru) {
 		if (ru != null)
 			for (Object obj : ru.getChildren()) {
@@ -58,8 +63,7 @@ public class SelectorQuery extends ASelector {
 		if (b) {
 			ResourceDescriptor rd = resRD;
 			String[] qvc = rd.getQueryVisibleColumns();
-			b = qvc != null && qvc.length > 0
-					&& !Misc.isNullOrEmpty(rd.getQueryValueColumn());
+			b = qvc != null && qvc.length > 0 && !Misc.isNullOrEmpty(rd.getQueryValueColumn());
 		}
 		return b;
 	}

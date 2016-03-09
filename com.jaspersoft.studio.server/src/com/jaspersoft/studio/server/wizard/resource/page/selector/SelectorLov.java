@@ -33,6 +33,11 @@ public class SelectorLov extends ASelector {
 	}
 
 	@Override
+	protected boolean isResCompatible(ResourceDescriptor r) {
+		return r.getWsType().equals(ResourceDescriptor.TYPE_LOV);
+	}
+
+	@Override
 	protected ResourceDescriptor getResourceDescriptor(ResourceDescriptor ru) {
 		for (Object obj : ru.getChildren()) {
 			ResourceDescriptor r = (ResourceDescriptor) obj;

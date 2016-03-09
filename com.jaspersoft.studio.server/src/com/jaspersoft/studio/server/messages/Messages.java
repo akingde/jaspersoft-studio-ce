@@ -31,6 +31,7 @@ public class Messages extends NLS {
 	public static String AFileResourcePage_uploadfile;
 	public static String AFileResourcePageContent_upDownButtonTitle;
 	public static String AFileResourcePageContent_uploadFromFS;
+	public static String APageContent_0;
 	public static String AResourcePage_creationdate;
 	public static String AResourcePage_description;
 	public static String AResourcePage_id;

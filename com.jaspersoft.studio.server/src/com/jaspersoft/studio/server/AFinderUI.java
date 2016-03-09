@@ -22,9 +22,19 @@ public abstract class AFinderUI {
 	private MServerProfile serverProfile;
 	private String text;
 	private List<String> types = new ArrayList<String>();
+	private List<String> fileTypes = new ArrayList<String>();
+	private boolean showHidden = false;
 
 	public AFinderUI(MServerProfile sp) {
 		this.serverProfile = sp;
+	}
+
+	public boolean isShowHidden() {
+		return showHidden;
+	}
+
+	public List<String> getFileTypes() {
+		return fileTypes;
 	}
 
 	public void setText(String text) {

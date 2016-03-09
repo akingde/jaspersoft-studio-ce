@@ -53,10 +53,18 @@ public class SelectorOlapConnection extends ASelector {
 		return r instanceof MROlapMondrianConnection;
 	}
 
+	@Override
+	protected boolean isResCompatible(ResourceDescriptor r) {
+		return r.getWsType().equals(ResourceDescriptor.TYPE_SECURE_MONDRIAN_CONNECTION)
+				|| r.getWsType().equals(ResourceDescriptor.TYPE_OLAP_MONDRIAN_CONNECTION)
+				|| r.getWsType().equals(ResourceDescriptor.TYPE_OLAP_XMLA_CONNECTION);
+	}
+
 	protected ResourceDescriptor getResourceDescriptor(ResourceDescriptor ru) {
 		for (Object obj : ru.getChildren()) {
 			ResourceDescriptor r = (ResourceDescriptor) obj;
-			if (r.getWsType().equals(ResourceDescriptor.TYPE_SECURE_MONDRIAN_CONNECTION) || r.getWsType().equals(ResourceDescriptor.TYPE_OLAP_MONDRIAN_CONNECTION)
+			if (r.getWsType().equals(ResourceDescriptor.TYPE_SECURE_MONDRIAN_CONNECTION)
+					|| r.getWsType().equals(ResourceDescriptor.TYPE_OLAP_MONDRIAN_CONNECTION)
 					|| r.getWsType().equals(ResourceDescriptor.TYPE_OLAP_XMLA_CONNECTION))
 				return r;
 		}
@@ -65,7 +73,9 @@ public class SelectorOlapConnection extends ASelector {
 
 	@Override
 	protected String[] getIncludeTypes() {
-		return new String[] { ResourceMediaType.MONDRIAN_CONNECTION_CLIENT_TYPE, ResourceMediaType.SECURE_MONDRIAN_CONNECTION_CLIENT_TYPE, ResourceMediaType.XMLA_CONNECTION_CLIENT_TYPE };
+		return new String[] { ResourceMediaType.MONDRIAN_CONNECTION_CLIENT_TYPE,
+				ResourceMediaType.SECURE_MONDRIAN_CONNECTION_CLIENT_TYPE,
+				ResourceMediaType.XMLA_CONNECTION_CLIENT_TYPE };
 	}
 
 	@Override
