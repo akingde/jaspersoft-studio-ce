@@ -216,6 +216,7 @@ public class PasteResourceAction extends Action {
 	private PasteDialog d;
 
 	private void doWork(IProgressMonitor monitor, ANode parent, List<?> list) throws Exception {
+		existsAll = false;
 		MServerProfile sp = (MServerProfile) parent.getRoot();
 		String dURI = ((AMResource) parent).getValue().getUriString();
 		IConnection ws = sp.getWsClient(monitor);
@@ -224,7 +225,7 @@ public class PasteResourceAction extends Action {
 		monitor.beginTask(Messages.PasteResourceAction_1 + dURI, list.size());
 		if (parent instanceof MReportUnit)
 			parent.setValue(ws.get(monitor, ((AMResource) parent).getValue(), null));
-
+		boolean copy = false;
 		for (Object obj : list) {
 			if (obj instanceof AMResource && obj instanceof ICopyable) {
 				if (monitor.isCanceled())
@@ -246,7 +247,8 @@ public class PasteResourceAction extends Action {
 							exists = true;
 					} catch (Exception e) {
 					}
-					boolean copy = false;
+					if (!existsAll)
+						copy = false;
 					if (exists && !existsAll) {
 						UIUtils.getDisplay().syncExec(new Runnable() {
 
