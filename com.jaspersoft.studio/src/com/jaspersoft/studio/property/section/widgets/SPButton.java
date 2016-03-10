@@ -105,7 +105,7 @@ public class SPButton<T extends IPropertyDescriptor> extends ASPropertyWidget<T>
 			else plus =  Math.round((new Float(newValue) / 100)*-factor)-1;
 			if ((newValue+plus)>99) newValue = 99.0f;
 			else if ((newValue+plus)>0) newValue += plus;
-			section.changeProperty(JRBaseFont.PROPERTY_FONT_SIZE, newValue.toString());
+			section.changeProperty(JRBaseFont.PROPERTY_FONT_SIZE, newValue);
 		}
 	}
 	

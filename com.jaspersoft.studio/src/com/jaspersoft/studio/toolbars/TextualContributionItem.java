@@ -625,7 +625,7 @@ public class TextualContributionItem extends CommonToolbarHandler {
 				if ((newValue+plus)>99) newValue = 99.0f;
 				else if ((newValue+plus)>0) newValue += plus;
 
-				Command c = createCommand(model, newValue.toString(), JRBaseFont.PROPERTY_FONT_SIZE );
+				Command c = createCommand(model, newValue, JRBaseFont.PROPERTY_FONT_SIZE );
 				changeSizeCommands.setReferenceNodeIfNull(model);
 				if (c != null) {
 					changeSizeCommands.add(c);
