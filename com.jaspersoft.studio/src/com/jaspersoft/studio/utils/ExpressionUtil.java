@@ -10,10 +10,13 @@ package com.jaspersoft.studio.utils;
 
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRException;
@@ -32,9 +35,14 @@ import net.sf.jasperreports.engine.design.events.JRChangeEventsSupport;
 import net.sf.jasperreports.engine.fill.JRParameterDefaultValuesEvaluator;
 import net.sf.jasperreports.engine.util.JRExpressionUtil;
 
-import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
-
 public class ExpressionUtil {
+
+	/**
+	 * Cache of the expression interpreter for every dataset, the key is the reference to the dataset for whose the
+	 * interpreter was created
+	 */
+	private static Map<JRDesignDataset, ExpressionInterpreter> datasetsIntepreters = Collections.synchronizedMap(new HashMap<JRDesignDataset, ExpressionInterpreter>());
+
 
 	/**
 	 * Set the listener (only where they are not already set) to listen the changes to a dataset and discard the cached
@@ -118,12 +126,6 @@ public class ExpressionUtil {
 	}
 
 	/**
-	 * Cache of the expression interpreter for every dataset, the key is the reference to the dataset for whose the
-	 * interpreter was created
-	 */
-	private static HashMap<JRDesignDataset, ExpressionInterpreter> datasetsIntepreters = new HashMap<JRDesignDataset, ExpressionInterpreter>();
-
-	/**
 	 * Resolve an expression and return its value or null if it can not be resolve. First it will try to use a simple
 	 * evaluation since it is much faster. If this can't resolve the expression then an interpreter for the current report
 	 * is created and cached (since create and interpreter is very slow)
@@ -140,7 +142,6 @@ public class ExpressionUtil {
 	 */
 	public static Object cachedExpressionEvaluation(JRExpression exp, JasperReportsConfiguration jConfig,
 			JRDesignDataset dataset) {
-		synchronized (datasetsIntepreters) {
 			String evaluatedExpression = null;
 			String expString = exp != null ? exp.getText() : "";
 			try {
@@ -148,15 +149,22 @@ public class ExpressionUtil {
 				if (evaluatedExpression == null && dataset != null) {
 					// Unable to interpret the expression, lets try with a more advanced (and slow, so its cached) interpreter
 					JasperDesign jd = jConfig.getJasperDesign();
-					ExpressionInterpreter interpreter = datasetsIntepreters.get(dataset);
-					if (interpreter == null) {
-						if (exp != null && jd != null) {
-							interpreter = new ExpressionInterpreter(dataset, jd, jConfig);
-							datasetsIntepreters.put(dataset, interpreter);
-							// The dataset was added to the cache, check if it has the listener and add them where are needed
-							setDatasetListners(dataset);
-							setDesignListener(jd, jConfig);
+					ExpressionInterpreter interpreter = null;
+					boolean interpreterCreated = false;
+					synchronized (datasetsIntepreters) {
+						interpreter = datasetsIntepreters.get(dataset);
+						if (interpreter == null) {
+							if (exp != null && jd != null) {
+								interpreter = new ExpressionInterpreter(dataset, jd, jConfig);
+								interpreterCreated = true;
+								datasetsIntepreters.put(dataset, interpreter);
+							}
 						}
+					}
+					if(interpreterCreated) {
+						// The dataset was added to the cache, check if it has the listener and add them where are needed
+						setDatasetListners(dataset);
+						setDesignListener(jd, jConfig);
 					}
 					if (interpreter != null) {
 						return interpreter.interpretExpression(expString);
@@ -168,22 +176,28 @@ public class ExpressionUtil {
 				ex.printStackTrace();
 			}
 			return evaluatedExpression;
-		}
 	}
 
 	public static ExpressionInterpreter getCachedInterpreter(JRDesignDataset ds, JasperDesign jd,
 			JasperReportsConfiguration jConfig) {
-		ExpressionInterpreter interpreter = datasetsIntepreters.get(ds);
-		if (interpreter == null) {
-			if (jd != null) {
-				interpreter = new ExpressionInterpreter(ds, jd, jConfig);
-				datasetsIntepreters.put(ds, interpreter);
+		ExpressionInterpreter interpreter = null;
+		boolean interpreterCreated = false;
+		synchronized (datasetsIntepreters) {
+			interpreter = datasetsIntepreters.get(ds);
+			if (interpreter == null) {
+				if (jd != null) {
+					interpreter = new ExpressionInterpreter(ds, jd, jConfig);
+					interpreterCreated = true;
+					datasetsIntepreters.put(ds, interpreter);
+				}
+			}
+			if(interpreterCreated){
 				// The dataset was added to the cache, check if it has the listener and add them where are needed
 				setDatasetListners(ds);
 				setDesignListener(jd, jConfig);
 			}
+			return interpreter;
 		}
-		return interpreter;
 	}
 
 	/**
@@ -250,9 +264,7 @@ public class ExpressionUtil {
 	 *          dataset for whose the intepreter was created
 	 */
 	public static void removeCachedInterpreter(JRDesignDataset dataset) {
-		synchronized (datasetsIntepreters) {
-			datasetsIntepreters.remove(dataset);
-		}
+		datasetsIntepreters.remove(dataset);
 	}
 
 	/**
