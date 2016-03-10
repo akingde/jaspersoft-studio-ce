@@ -54,6 +54,7 @@ public class ValidatedMeasureUnitFormat extends DecimalFormat{
 		super();
 		this.measureUnit = measureUnit;
 		String pattern = "#####0.####";
+		updateStringPattern();
 		applyPattern(pattern);
 	}
 	
