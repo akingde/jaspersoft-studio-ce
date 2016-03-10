@@ -296,7 +296,6 @@ public class FindResourcePage extends WizardPage {
 					if (t.equals(type))
 						return true;
 				}
-
 				return false;
 			}
 
