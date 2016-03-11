@@ -51,22 +51,22 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  */
 public class JDPaletteFactory {
 
-	public static PaletteGroup getBaseElementsGroup(){
+	public static PaletteGroup getBaseElementsGroup() {
 		PaletteGroup pgc = new PaletteGroup();
 		pgc.setId(IPaletteContributor.KEY_COMMON_ELEMENTS);
 		pgc.setName(Messages.common_elements);
 		pgc.setImage("icons/resources/elementgroup-16.png"); //$NON-NLS-1$
 		return pgc;
 	}
-	
-	public static PaletteGroup getOtherElementsGroup(){
+
+	public static PaletteGroup getOtherElementsGroup() {
 		PaletteGroup pgc = new PaletteGroup();
 		pgc.setId(IPaletteContributor.KEY_COMMON_TOOLS);
 		pgc.setName(Messages.common_tools);
 		pgc.setImage("icons/resources/fields-16.png"); //$NON-NLS-1$
 		return pgc;
 	}
-	
+
 	/**
 	 * Creates a new JDPalette object.
 	 * 
@@ -80,17 +80,17 @@ public class JDPaletteFactory {
 		ExtensionManager m = JaspersoftStudioPlugin.getExtensionManager();
 		List<PaletteGroup> pgroups = m.getPaletteGroups();
 		Map<String, PaletteGroup> map = new TreeMap<String, PaletteGroup>();
-		
+
 		PaletteGroup baseElementsGroup = getBaseElementsGroup();
 		map.put(baseElementsGroup.getId(), baseElementsGroup);
 
 		PaletteGroup otherElementsGroup = getOtherElementsGroup();
 		map.put(otherElementsGroup.getId(), otherElementsGroup);
-		
+
 		for (PaletteGroup p : pgroups) {
 			map.put(p.getId(), p);
 		}
-		
+
 		Map<String, List<PaletteEntry>> mapEntry = m.getPaletteEntries();
 		for (String key : mapEntry.keySet()) {
 			if (!key.isEmpty() && map.get(key) == null) {
@@ -105,7 +105,7 @@ public class JDPaletteFactory {
 				String id = PalettePreferencePage.getId(pe);
 				if (ignore.contains(pe.getId()))
 					continue;
-				if (jrConfig.getPropertyBoolean(id, false) && pe instanceof CombinedTemplateCreationEntry)
+				if (jrConfig.getPropertyBooleanDef(id, false) && pe instanceof CombinedTemplateCreationEntry)
 					ignore.add(((CombinedTemplateCreationEntry) pe).getTemplate().toString());
 			}
 		}
@@ -138,7 +138,7 @@ public class JDPaletteFactory {
 		for (PaletteGroup p : ordpgrps) {
 			if (p.getId().equals(IPaletteContributor.KEY_COMMON_ELEMENTS)) {
 				PaletteDrawer drawer = createElements(paletteRoot, ignore, p, mapEntry);
-				getEntries4Key(drawer, ignore, "", mapEntry); //$NON-NLS-1$ 
+				getEntries4Key(drawer, ignore, "", mapEntry); //$NON-NLS-1$
 				handler.addPaletteGroup(p.getId(), drawer);
 				hiddenElementsHandler.addDrawer(drawer);
 			} else if (p.getId().equals(IPaletteContributor.KEY_COMMON_CONTAINER)) {
@@ -158,16 +158,15 @@ public class JDPaletteFactory {
 				hiddenElementsHandler.addDrawer(drawer);
 			}
 		}
-		//create the current composite elements entry
+		// create the current composite elements entry
 		handler.createAllCompositeElements();
-		//Add the modify listener to the tools manager to get notified when the composite elements
-		//changes
+		// Add the modify listener to the tools manager to get notified when the composite elements
+		// changes
 		CompositeElementManager.INSTANCE.addModifyListener(handler);
 		JaspersoftStudioPlugin.getInstance().getPreferenceStore().addPropertyChangeListener(hiddenElementsHandler);
 		return paletteRoot;
 	}
 
-	
 	/**
 	 * Create simple palette, with only a subset of the available elements
 	 * 
@@ -179,9 +178,9 @@ public class JDPaletteFactory {
 		PaletteRoot paletteRoot = new PaletteRoot();
 
 		CompositeElementHandler handler = new CompositeElementHandler(paletteRoot);
-		
+
 		PaletteGroup baseGroup = getBaseElementsGroup();
-		
+
 		PaletteDrawer drawer = createGroup(paletteRoot, ignore, baseGroup.getName(), baseGroup.getImage());
 		drawer.add(createJDEntry(MCallout.getIconDescriptor(), MCallout.class));
 		drawer.add(createJDEntry(MTextField.getIconDescriptor(), MTextField.class));
@@ -205,16 +204,15 @@ public class JDPaletteFactory {
 		drawer.add(createJDEntry(MPageXofY.getIconDescriptor(), MPageXofY.class));
 		handler.addPaletteGroup(otherGroup.getId(), drawer);
 
-		//create the current composite elements entry
+		// create the current composite elements entry
 		handler.createAllCompositeElements();
-		//Add the modify listener to the tools manager to get notified when the composite elements
-		//changes
+		// Add the modify listener to the tools manager to get notified when the composite elements
+		// changes
 		CompositeElementManager.INSTANCE.addModifyListener(handler);
-		
+
 		return paletteRoot;
 	}
 
-	
 	/**
 	 * Creates a new JDPalette object.
 	 * 
@@ -232,8 +230,6 @@ public class JDPaletteFactory {
 		paletteEntry.setToolClass(JDCreationTool.class);
 		return paletteEntry;
 	}
-	
-
 
 	public static PaletteDrawer createElements(PaletteRoot paletteRoot, List<String> ignore, PaletteGroup p,
 			Map<String, List<PaletteEntry>> map) {
@@ -297,7 +293,7 @@ public class JDPaletteFactory {
 		if (plist != null)
 			for (PaletteEntry entry : plist) {
 				if (ignore != null && entry instanceof CombinedTemplateCreationEntry
-						&& ignore.contains(((CombinedTemplateCreationEntry) entry).getTemplate().toString())){
+						&& ignore.contains(((CombinedTemplateCreationEntry) entry).getTemplate().toString())) {
 					entry.setVisible(false);
 				}
 				drawer.add(entry);

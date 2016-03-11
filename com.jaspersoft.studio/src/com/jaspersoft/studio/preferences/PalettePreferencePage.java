@@ -82,7 +82,6 @@ public class PalettePreferencePage extends FieldEditorOverlayPage {
 			List<PaletteEntry> lpe = me.get(key);
 			for (PaletteEntry pe : lpe) {
 				String id = getId(pe);
-
 				BooleanFieldEditor be = new BooleanFieldEditor(id, pe.getLabel(), grcmp);
 				Control c = be.getDescriptionControl(grcmp);
 				if (c instanceof Button) {
@@ -111,8 +110,14 @@ public class PalettePreferencePage extends FieldEditorOverlayPage {
 		Map<String, List<PaletteEntry>> me = m.getPaletteEntries();
 		for (String key : me.keySet()) {
 			List<PaletteEntry> lpe = me.get(key);
-			for (PaletteEntry pe : lpe)
-				store.setDefault(pe.getId(), false);
+			for (PaletteEntry pe : lpe) {
+				String id = getId(pe);
+				//FIXME: we should have an extension point for this default values
+				if (pe.getLabel().equalsIgnoreCase("html"))
+					store.setDefault(id, true);
+				else
+					store.setDefault(id, false);
+			}
 		}
 	}
 
