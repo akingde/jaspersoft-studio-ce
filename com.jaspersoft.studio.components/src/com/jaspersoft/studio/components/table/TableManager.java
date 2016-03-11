@@ -251,14 +251,14 @@ public class TableManager {
 		}
 		
 		//Phase 0: check that at least one columns is not excluded, otherwise make the last column not excluded
-		List<BaseColumn> acceptableFixedColumns = new ArrayList<BaseColumn>();
+		HashSet<BaseColumn> acceptableFixedColumns = new HashSet<BaseColumn>();
 		int currentFixedWidth = 0;
 		for(BaseColumn col : columns){
 			if (fixedColumns.contains(col)){
-				currentFixedWidth += col.getWidth();
-				if (currentFixedWidth >  newWidth){
+				if (currentFixedWidth + col.getWidth() >  newWidth){
 					break;
 				} else {
+					currentFixedWidth += col.getWidth();
 					acceptableFixedColumns.add(col);
 				}
 			}
@@ -277,6 +277,8 @@ public class TableManager {
 		
 		//Phase 1: change proportionally the width of each column
 		int columnsTotalWidth = 0;			
+		//space not used by the fixed columns that can be used by other columns
+		int dinamycWidth = newWidth - currentFixedWidth;
 		for(BaseColumn col : columns){
 			if(acceptableFixedColumns.contains(col)){
 				proportionalWidths[index] = col.getWidth();
@@ -284,7 +286,7 @@ public class TableManager {
 			} else {
 				float proportionalFactor = (float)col.getWidth() / (float)currentColumnsWidth;
 				//casting to int is the same to do the floor operation, since it drop the decimal
-				int proportionalWidth = (int)(proportionalFactor * newWidth);
+				int proportionalWidth = (int)(proportionalFactor * dinamycWidth);
 				proportionalWidths[index] = proportionalWidth;
 				columnsTotalWidth += proportionalWidth;				
 			}

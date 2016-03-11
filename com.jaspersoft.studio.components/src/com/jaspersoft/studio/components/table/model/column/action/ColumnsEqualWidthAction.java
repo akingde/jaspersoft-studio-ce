@@ -14,6 +14,7 @@ package com.jaspersoft.studio.components.table.model.column.action;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 import org.eclipse.gef.EditPart;
@@ -21,17 +22,18 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.IWorkbenchPart;
 
-import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.components.Activator;
 import com.jaspersoft.studio.components.table.TableManager;
 import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.components.table.model.MTable;
 import com.jaspersoft.studio.components.table.model.column.MColumn;
+import com.jaspersoft.studio.components.table.model.column.command.SetColumnWidthCommand;
+import com.jaspersoft.studio.components.table.part.editpolicy.JSSCompoundTableCommand;
 import com.jaspersoft.studio.editor.action.ACachedSelectionAction;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
-import com.jaspersoft.studio.property.SetValueCommand;
 
+import net.sf.jasperreports.components.table.BaseColumn;
 import net.sf.jasperreports.components.table.StandardBaseColumn;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 
@@ -114,19 +116,19 @@ public class ColumnsEqualWidthAction extends ACachedSelectionAction {
 		}
 		int selectedColumnsNewWidth = selectedColumnsWidth / columns.size();
 		int remains = selectedColumnsWidth % columns.size();
-		JSSCompoundCommand cmd = new JSSCompoundCommand(table);
-		for(Object column : columns){
+		JSSCompoundTableCommand cmd = new JSSCompoundTableCommand(table);
+		HashSet<BaseColumn> fixedColumns = new HashSet<BaseColumn>();
+		for(MColumn column : columns){
 			int newWidth = selectedColumnsNewWidth;
 			if (remains > 0){
 				newWidth++;
 				remains--;
 			}
-			SetValueCommand setCommand = new SetValueCommand();
-			setCommand.setPropertyId(JRDesignElement.PROPERTY_WIDTH);
-			setCommand.setTarget((APropertyNode)column);
-			setCommand.setPropertyValue(newWidth);
+			SetColumnWidthCommand setCommand = new SetColumnWidthCommand(column, newWidth);	
+			fixedColumns.add(column.getValue());
 			cmd.add(setCommand);
 		}
+		cmd.setFixedColumns(fixedColumns);
 		execute(cmd);
 	}
 

@@ -26,6 +26,7 @@ import net.sf.jasperreports.components.table.BaseColumn;
 import net.sf.jasperreports.components.table.ColumnGroup;
 import net.sf.jasperreports.components.table.StandardBaseColumn;
 import net.sf.jasperreports.components.table.StandardColumnGroup;
+import net.sf.jasperreports.components.table.StandardTable;
 
 /**
  * Command used to set the property of one or more table cells. It will do 
@@ -63,6 +64,8 @@ public class JSSCompoundTableCommand extends JSSCompoundCommand {
 	 * This flag allow to layout the table content after the inner commands are executed
 	 */
 	private boolean layoutTableContent = false;
+	
+	private HashSet<BaseColumn> fixedColumns = null;
 	
 	/**
 	 * Create the command for the resize
@@ -118,12 +121,22 @@ public class JSSCompoundTableCommand extends JSSCompoundCommand {
 			//execute the innter command
 			super.execute();
 			
-			int currentTableWidth = table.getValue().getWidth();
-			HashSet<BaseColumn> modifiedColumn = getModifiedColumns();
-			boolean widthChanged = modifiedColumn.size() > 0;
-		
-			//fill the space		
-			boolean changed = table.getTableManager().fillSpace(currentTableWidth, true, modifiedColumn, widthChanged);
+			boolean changed = false;
+			
+			if (fixedColumns == null){
+				int currentTableWidth = table.getValue().getWidth();
+				HashSet<BaseColumn> modifiedColumn = getModifiedColumns();
+				boolean widthChanged = modifiedColumn.size() > 0;
+				addGroup(modifiedColumn, table.getStandardTable());
+				//fill the space		
+				changed = table.getTableManager().fillSpace(currentTableWidth, true, modifiedColumn, widthChanged);
+			} else {
+				int currentTableWidth = table.getValue().getWidth();
+				//fill the space		
+				addGroup(fixedColumns, table.getStandardTable());
+				changed = table.getTableManager().fillSpace(currentTableWidth, true, fixedColumns);
+			}
+
 			if (!changed){
 				//The size was already right (probably because of the restoreColumnsSize) so the cells was not
 				//layouted after the undo, trigger a manual layout
@@ -146,6 +159,47 @@ public class JSSCompoundTableCommand extends JSSCompoundCommand {
 		}
 	}
 
+	/**
+	 * Iterate all the child recursively of the current group. If they are all
+	 * in the exclusion set add also the group in the exclusion set
+	 * 
+	 * @param excludedColumns the current set of the excluded child
+	 * @param currentGroup the current group
+	 */
+	protected void addGroup(HashSet<BaseColumn> excludedColumns, StandardColumnGroup currentGroup){
+		boolean allContained = true;
+		List<BaseColumn> currentColumns = currentGroup.getColumns();
+		for(BaseColumn col : currentColumns){
+			if (col instanceof StandardColumnGroup){
+				StandardColumnGroup childGroup = (StandardColumnGroup)col;
+				addGroup(excludedColumns, childGroup);
+			}
+			if (!excludedColumns.contains(col)){
+				allContained = false;
+				break;
+			}
+		}
+		if (allContained){
+			excludedColumns.add(currentGroup);
+		}
+	}
+	
+	/**
+	 * Add to the exluded columns the group columns if all their children are
+	 * already in the exclusion set
+	 * 
+	 * @param excludedColumns the current set of the excluded child
+	 * @param the table
+	 */
+	protected void addGroup(HashSet<BaseColumn> excludedColumns, StandardTable table){
+		if (table != null){
+			for(BaseColumn col : table.getColumns()){
+				if (col instanceof StandardColumnGroup){
+					addGroup(excludedColumns, (StandardColumnGroup)col);
+				}
+			}
+		}
+	}
 	
 	@Override
 	public void undo() {
@@ -297,5 +351,9 @@ public class JSSCompoundTableCommand extends JSSCompoundCommand {
 	@Override
 	public boolean canUndo() {
 		return table != null;
+	}
+	
+	public void setFixedColumns(HashSet<BaseColumn> fixedColumns){
+		this.fixedColumns = fixedColumns;
 	}
 }
