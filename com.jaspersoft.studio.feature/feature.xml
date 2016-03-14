@@ -37,7 +37,6 @@
       <import plugin="net.sf.jasperreports" version="6.2.1" match="greaterOrEqual"/>
       <import plugin="com.jaspersoft.studio.properties" version="6.2.1" match="greaterOrEqual"/>
       <import plugin="org.eclipse.help.ui" version="3.5.0" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.ui.console" version="3.5.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.ui.forms" version="3.5.0" match="greaterOrEqual"/>
       <import plugin="javax.servlet" version="3.0.0" match="greaterOrEqual"/>
       <import plugin="org.apache.log4j" version="1.2.15" match="greaterOrEqual"/>
@@ -103,10 +102,12 @@
       <import plugin="org.apache.commons.httpclient" version="3.1.0" match="greaterOrEqual"/>
       <import plugin="org.apache.commons.codec" version="1.3.0" match="greaterOrEqual"/>
       <import plugin="org.apache.commons.discovery" version="0.2.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui.console" version="3.5.0" match="greaterOrEqual"/>
       <import plugin="org.apache.commons.io" version="2.0.1" match="greaterOrEqual"/>
       <import plugin="com.fasterxml.jackson.core.jackson-annotations" version="2.4.3" match="greaterOrEqual"/>
       <import plugin="com.fasterxml.jackson.core.jackson-core" version="2.4.3" match="greaterOrEqual"/>
       <import plugin="com.fasterxml.jackson.core.jackson-databind" version="2.4.3" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.draw2d"/>
    </requires>
 
    <plugin

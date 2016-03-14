@@ -30,8 +30,6 @@
       <import plugin="org.apache.commons.codec" version="1.6.0" match="greaterOrEqual"/>
       <import plugin="org.apache.commons.logging" version="1.1.1" match="greaterOrEqual"/>
       <import plugin="org.w3c.dom.svg" version="1.1.0" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.osgi"/>
-      <import plugin="org.apache.xml.resolver" version="1.2.0" match="compatible"/>
    </requires>
 
    <plugin
@@ -199,34 +197,6 @@
          download-size="0"
          install-size="0"
          version="2.4.5"
-         unpack="false"/>
-
-   <plugin
-         id="org.apache.xalan"
-         download-size="0"
-         install-size="0"
-         version="2.7.2.js01"
-         unpack="false"/>
-
-   <plugin
-         id="org.apache.xerces"
-         download-size="0"
-         install-size="0"
-         version="2.11.0.js01"
-         unpack="false"/>
-
-   <plugin
-         id="javax.xml"
-         download-size="0"
-         install-size="0"
-         version="1.4.1.js01"
-         unpack="false"/>
-
-   <plugin
-         id="org.apache.xml.serializer"
-         download-size="0"
-         install-size="0"
-         version="2.7.2.js01"
          unpack="false"/>
 
 </feature>
