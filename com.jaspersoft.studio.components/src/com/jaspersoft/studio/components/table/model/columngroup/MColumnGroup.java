@@ -13,9 +13,12 @@
 package com.jaspersoft.studio.components.table.model.columngroup;
 
 import java.beans.PropertyChangeEvent;
+import java.util.HashMap;
+import java.util.List;
 
 import net.sf.jasperreports.components.table.StandardBaseColumn;
 import net.sf.jasperreports.components.table.StandardColumnGroup;
+import net.sf.jasperreports.components.table.util.TableUtil;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.design.events.CollectionElementAddedEvent;
 import net.sf.jasperreports.engine.design.events.JRChangeEventsSupport;
@@ -27,16 +30,22 @@ import com.jaspersoft.studio.components.table.TableNodeIconDescriptor;
 import com.jaspersoft.studio.components.table.model.AMCollection;
 import com.jaspersoft.studio.components.table.model.MTable;
 import com.jaspersoft.studio.components.table.model.column.MColumn;
+import com.jaspersoft.studio.components.table.util.TableColumnSize;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 
 public class MColumnGroup extends MColumn {
+	
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+	
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
 	
 	public static int DEFAULT_CELL_HEIGHT = 30;
+	
+	/** The descriptors. */
+	protected static IPropertyDescriptor[] descriptors;
 
 	public MColumnGroup() {
 		super();
@@ -52,9 +61,6 @@ public class MColumnGroup extends MColumn {
 			iconDescriptor = new TableNodeIconDescriptor("tablecolumngroup"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
-
-	/** The descriptors. */
-	protected static IPropertyDescriptor[] descriptors;
 
 	public MColumnGroup(ANode parent, StandardColumnGroup jrDataset,String name, int index) {
 		super(parent, jrDataset, name, index);
@@ -121,6 +127,35 @@ public class MColumnGroup extends MColumn {
 			} else mTable.getTableManager().refresh();
 		}
 		super.propertyChange(evt);
+	}
+	
+	@Override
+	public HashMap<String, List<ANode>> getUsedStyles() {
+		HashMap<String, List<ANode>> result = super.getUsedStyles();
+		StandardColumnGroup group = getValue();
+		if (group != null && containerSection != null){
+			@SuppressWarnings("unchecked")
+			Class<AMCollection> classType = (Class<AMCollection>) containerSection.getClass();
+			int sectionType = TableColumnSize.getType(classType);
+			if (sectionType == TableUtil.COLUMN_FOOTER && group.getColumnFooter() != null){
+				addElementStyle(group.getColumnFooter().getStyle(), result);
+			}
+			if (sectionType == TableUtil.COLUMN_HEADER && group.getColumnHeader() != null){
+				addElementStyle(group.getColumnHeader().getStyle(), result);
+			}
+			if (sectionType == TableUtil.TABLE_FOOTER && group.getTableFooter() != null){
+				addElementStyle(group.getTableFooter().getStyle(), result);
+			}
+			if (sectionType == TableUtil.TABLE_HEADER && group.getTableHeader() != null){
+				addElementStyle(group.getTableHeader().getStyle(), result);
+			}
+		}
+		for(INode child : getChildren()){
+			if (child instanceof ANode){
+				mergeElementStyle(result, ((ANode) child).getUsedStyles());
+			}
+		}
+		return result;
 	}
 
 }

@@ -359,7 +359,9 @@ public class TableManager {
 						setProportionalWidth((StandardBaseColumn)col, proportionalWidths[index], fixedColumns);
 						for(Entry<Cell, Integer> cell : getColumnCell(col).entrySet()){
 							ILayout layout = LayoutManager.getLayout(new JRPropertiesHolder[] { cell.getKey() }, null, null, defaultLayout);
-							layout.layout(cell.getKey().getElements(), new Dimension(cell.getValue(), ((DesignCell)cell.getKey()).getHeight()));
+							Dimension baseSize = new Dimension(cell.getValue(), ((DesignCell)cell.getKey()).getHeight());
+							Dimension paddedSize = LayoutManager.getPaddedSize(cell.getKey(), baseSize);
+							layout.layout(cell.getKey().getElements(), paddedSize);
 						}
 					}
 					index++;

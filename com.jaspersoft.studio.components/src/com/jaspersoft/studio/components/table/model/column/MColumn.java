@@ -94,7 +94,7 @@ public class MColumn extends APropertyNode implements IPastable, IContainer,ICon
 	 * Last valid value for the section containing this node, this reference because it could be 
 	 * need for some undo operations (SetValueCommand) even after this node was detached from the table
 	 */
-	private AMCollection containerSection;
+	protected AMCollection containerSection;
 	
 	private List<ANode> list;
 
