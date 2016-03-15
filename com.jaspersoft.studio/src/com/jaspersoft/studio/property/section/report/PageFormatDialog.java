@@ -72,18 +72,29 @@ public final class PageFormatDialog extends FormDialog {
 	private ValueUnitsWidget cwidth;
 	
 	private ValueUnitsWidget space;
+	
 	private Button portrait;
+	
 	private Button landscape;
+	
 	private NullableSpinner cols;
+	
 	private Combo pformat;
+	
 	private JSSCompoundCommand command;
+	
 	private PageFormatWidget pageFormatWidget;
+	
 	private UnitsWidget uw;
+	
 	private TabbedPropertySheetWidgetFactory toolkit;
+	
 	private boolean ignoreEvents;
 	
 	private JasperDesign jd;
+	
 	private JasperReportsConfiguration jConfig;
+	
 	private MReport jnode;
 
 	public PageFormatDialog(Shell shell, ANode node) {
@@ -152,7 +163,19 @@ public final class PageFormatDialog extends FormDialog {
 		uvWidgets.add(cwidth);
 		uvWidgets.add(space);
 
-		SelectionListener listener = new SelectionAdapter() {
+		SelectionListener spaceListener = new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				cols.setMaximum(getMaxColumnsNumber(false));
+				NumericText textControl = (NumericText)e.widget;
+				Point currentSelection = textControl.getSelection();
+				recalcColumns();
+				setTBounds();
+				textControl.setFocus();
+				textControl.setSelection(currentSelection.x, currentSelection.y);
+			}
+		};
+		SelectionListener colsListener = new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				NumericText textControl = (NumericText)e.widget;
@@ -163,15 +186,17 @@ public final class PageFormatDialog extends FormDialog {
 				textControl.setSelection(currentSelection.x, currentSelection.y);
 			}
 		};
-		cols.addSelectionListener(listener);
+		
+		cols.addSelectionListener(colsListener);
 		cwidth.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				cols.setMaximum(getMaxColumnsNumber(true));
 				setTBounds();
 			}
 		});
-		space.addSelectionListener(listener);
+		space.addSelectionListener(spaceListener);
 	}
 
 	private void recalcColumns() {
@@ -223,6 +248,7 @@ public final class PageFormatDialog extends FormDialog {
 		SelectionListener mlistner = new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				cols.setMaximum(getMaxColumnsNumber(false));
 				NumericText textControl = (NumericText)e.widget;
 				Point currentSelection = textControl.getSelection();
 				recalcColumns();
@@ -332,6 +358,7 @@ public final class PageFormatDialog extends FormDialog {
 		SelectionListener psizeMListener = new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				cols.setMaximum(getMaxColumnsNumber(false));
 				NumericText textControl = (NumericText)e.widget;
 				Point currentSelection = textControl.getSelection();
 				String format = PageSize.deductPageFormat(pwidth.getValue(), pheigh.getValue());
@@ -389,6 +416,7 @@ public final class PageFormatDialog extends FormDialog {
 		cwidth.setValue(jd.getColumnWidth());
 		space.setValue(jd.getColumnSpacing());
 		cols.setValue(jd.getColumnCount());
+		cols.setMaximum(getMaxColumnsNumber(false));
 
 		landscape.setSelection(false);
 		portrait.setSelection(false);
@@ -421,6 +449,20 @@ public final class PageFormatDialog extends FormDialog {
 
 	public JSSCompoundCommand getCommand() {
 		return command;
+	}
+	
+	/**
+	 * Return the maximum number of columns that can be set. 
+	 * 
+	 * @param realColWidth true if this is called when setting the column widht. Having
+	 * this to true make the columns number depending on the current column widht. Otherwise
+	 * will be the column width depending on the columns number (forcing the width to its minimum, 1)
+	 * @return the maximum number of columns
+	 */
+	protected int getMaxColumnsNumber(boolean realColWidth){
+		int colWidth = realColWidth ? cwidth.getValue() : 1;
+		float value = (pwidth.getValue() - lmargin.getValue() - rmargin.getValue()) / (colWidth+space.getValue());
+		return (int)Math.round(value);
 	}
 
 	public void createCommand() {

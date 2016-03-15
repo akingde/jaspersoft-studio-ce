@@ -198,6 +198,9 @@ public class NumericText extends Text {
 	public void setMinimum(double min){
 		if (min < maximum){
 			this.minimum = min;
+			if (storedValue != null && storedValue.doubleValue() < this.minimum){
+				setValue(minimum);
+			}
 		}
 	}
 	
@@ -214,6 +217,9 @@ public class NumericText extends Text {
 	public void setMaximum(double max){
 		if (max > minimum){
 			this.maximum = max;
+			if (storedValue != null && storedValue.doubleValue() > this.maximum){
+				setValue(maximum);
+			}
 		}
 	}
 
