@@ -3,7 +3,7 @@ Eclipse-ExtensibleAPI: true
 Bundle-ManifestVersion: 2
 Bundle-Name: Google Map Widget
 Bundle-SymbolicName: com.jaspersoft.studio.widgets.map
-Bundle-Version: 6.2.1.qualifier
+Bundle-Version: 6.2.1.final
 Bundle-Activator: com.jaspersoft.studio.widgets.map.MapActivator
 Bundle-Vendor: Buzzcoders.com
 Require-Bundle: org.eclipse.ui,
