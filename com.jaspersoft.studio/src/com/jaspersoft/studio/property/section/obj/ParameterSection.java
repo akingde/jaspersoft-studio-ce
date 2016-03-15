@@ -8,6 +8,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.section.obj;
 
+import java.beans.PropertyChangeEvent;
 import java.util.Collection;
 import java.util.EnumSet;
 
@@ -94,11 +95,9 @@ public class ParameterSection extends AbstractSection {
 	 * Show or hide the composite with the nested class type
 	 */
 	private void setCompVisible(Composite c, boolean visible) {
-//		if (c.isVisible() != visible) {
 			c.setVisible(visible);
 			((GridData) c.getLayoutData()).exclude = !visible;
 			rootComposite.layout(true, true);
-//		}
 	}
 
 	/**
@@ -144,5 +143,24 @@ public class ParameterSection extends AbstractSection {
 			}
 		}
 		setRefreshing(false);
+	}
+	
+	/**
+	 * Check if it is changed the type, if it is a collection show the additional field, otherwise hide it
+	 */
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		APropertyNode element = getElement();
+		if (element != null && evt.getPropertyName().equals(JRDesignVariable.PROPERTY_VALUE_CLASS_NAME)){
+			Object value = element.getPropertyValue(JRDesignVariable.PROPERTY_VALUE_CLASS_NAME);
+			String type = value != null ? value.toString() : null;
+			setCompVisible(cmp, isClassCollection(type));
+		}
+		super.propertyChange(evt);
+	}
+	
+	@Override
+	public boolean hasDynamicContent() {
+		return true;
 	}
 }
