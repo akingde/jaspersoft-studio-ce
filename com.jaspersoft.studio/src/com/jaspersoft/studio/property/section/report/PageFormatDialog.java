@@ -89,8 +89,6 @@ public final class PageFormatDialog extends FormDialog {
 	
 	private TabbedPropertySheetWidgetFactory toolkit;
 	
-	private boolean ignoreEvents;
-	
 	private JasperDesign jd;
 	
 	private JasperReportsConfiguration jConfig;
@@ -193,6 +191,7 @@ public final class PageFormatDialog extends FormDialog {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				cols.setMaximum(getMaxColumnsNumber(true));
+				
 				setTBounds();
 			}
 		});
@@ -208,14 +207,14 @@ public final class PageFormatDialog extends FormDialog {
 		if (mspace > maxspace)
 			mspace = maxspace;
 
-		if (mspace < space.getValue() && !ignoreEvents)
+		if (mspace < space.getValue())
 			space.setValue(mspace);
 		space.setMaxPixels(maxspace);
 
-		int cw = (int) Math.floor((double) (pagespace - nrcolspace * space.getValue()) / (cols.getValueAsInteger()));
-		if (!ignoreEvents)
-			cwidth.setValue(cw);
+		int cw = getMaxColumnsWidth();
+		cwidth.setValue(cw);
 
+		
 		tmargin.setMaxPixels(pheigh.getValue() - bmargin.getValue());
 		bmargin.setMaxPixels(pheigh.getValue() - tmargin.getValue());
 		lmargin.setMaxPixels(pwidth.getValue() - rmargin.getValue());
@@ -248,6 +247,7 @@ public final class PageFormatDialog extends FormDialog {
 		SelectionListener mlistner = new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				setWdithMaximum();
 				cols.setMaximum(getMaxColumnsNumber(false));
 				NumericText textControl = (NumericText)e.widget;
 				Point currentSelection = textControl.getSelection();
@@ -275,8 +275,6 @@ public final class PageFormatDialog extends FormDialog {
 		SelectionListener orientationlistner = new SelectionListener() {
 
 			public void widgetSelected(SelectionEvent e) {
-				if (ignoreEvents)
-					return;
 				// change width with height
 				int w = pwidth.getValue();
 				int h = pheigh.getValue();
@@ -358,6 +356,7 @@ public final class PageFormatDialog extends FormDialog {
 		SelectionListener psizeMListener = new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				setWdithMaximum();
 				cols.setMaximum(getMaxColumnsNumber(false));
 				NumericText textControl = (NumericText)e.widget;
 				Point currentSelection = textControl.getSelection();
@@ -402,7 +401,6 @@ public final class PageFormatDialog extends FormDialog {
 	}
 
 	private void setJasperDesign(JasperDesign jd) {
-		ignoreEvents = true;
 		pheigh.setValue(jd.getPageHeight());
 		pwidth.setValue(jd.getPageWidth());
 		String format = PageSize.deductPageFormat(jd.getPageWidth(), jd.getPageHeight());
@@ -414,7 +412,10 @@ public final class PageFormatDialog extends FormDialog {
 		rmargin.setValue(jd.getRightMargin());
 
 		cwidth.setValue(jd.getColumnWidth());
+		setWdithMaximum();
+		
 		space.setValue(jd.getColumnSpacing());
+		
 		cols.setValue(jd.getColumnCount());
 		cols.setMaximum(getMaxColumnsNumber(false));
 
@@ -424,8 +425,7 @@ public final class PageFormatDialog extends FormDialog {
 			landscape.setSelection(true);
 		else if (jd.getOrientationValue().equals(OrientationEnum.PORTRAIT))
 			portrait.setSelection(true);
-		ignoreEvents = false;
-
+		
 		String defunit = MReport.getMeasureUnit(jConfig, jd);
 		uw.setUnit(defunit);
 
@@ -441,6 +441,14 @@ public final class PageFormatDialog extends FormDialog {
 		space.setUnit(PHolderUtil.getUnit(jd, JasperDesign.PROPERTY_COLUMN_SPACING, defunit));
 	}
 
+	/**
+	 * Set the maximum number that can be set on the column width control. Used when the page width
+	 * or its margin are changed
+	 */
+	protected void setWdithMaximum(){
+		cwidth.setMaxPixels(Math.max(0, pwidth.getValue() - lmargin.getValue() - rmargin.getValue()));
+	}
+	
 	@Override
 	public boolean close() {
 		createCommand();
@@ -461,8 +469,19 @@ public final class PageFormatDialog extends FormDialog {
 	 */
 	protected int getMaxColumnsNumber(boolean realColWidth){
 		int colWidth = realColWidth ? cwidth.getValue() : 1;
-		float value = (pwidth.getValue() - lmargin.getValue() - rmargin.getValue()) / (colWidth+space.getValue());
-		return (int)Math.round(value);
+		float value = (pwidth.getValue() - lmargin.getValue() - rmargin.getValue()) / Math.max((colWidth+space.getValue()),1);
+		return (int)Math.floor(value);
+	}
+	
+	/**
+	 * Return the maximum column width that can be set with the current values
+	 * 
+	 * @return the maximum columns witdh for the current space, page width and margins
+	 */
+	protected int getMaxColumnsWidth(){
+		int colNumber = Math.max(cols.getValueAsInteger(), 1);
+		float value = ((pwidth.getValue() - lmargin.getValue() - rmargin.getValue())/colNumber) - space.getValue();
+		return (int)Math.floor(value);
 	}
 
 	public void createCommand() {
