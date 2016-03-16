@@ -268,10 +268,10 @@ public class MServerProfile extends ANode {
 				String ppath = indx >= 0 ? path.substring(0, indx) : path;
 				String fpath = indx >= 0 ? path.substring(indx) : ""; //$NON-NLS-1$
 
-				IProject prj = ResourcesPlugin.getWorkspace().getRoot().getProject(ppath); 
-				if (prj != null) { 
+				IProject prj = ResourcesPlugin.getWorkspace().getRoot().getProject(ppath);
+				if (prj != null) {
 					if (fpath.isEmpty())
-						tmpDir = ResourcesPlugin.getWorkspace().getRoot().getFolder(prj.getLocation()); 
+						tmpDir = ResourcesPlugin.getWorkspace().getRoot().getFolder(prj.getLocation());
 					else
 						tmpDir = prj.getFolder(fpath);
 				}
@@ -297,8 +297,9 @@ public class MServerProfile extends ANode {
 				} while (tmpDir.exists());
 				getValue().setProjectPath(tmpDir.getProjectRelativePath().toString());
 			}
-			if (!tmpDir.getFullPath().toFile().exists()  ) {
-				tmpDir.create(true, true, monitor);
+			if (!tmpDir.getFullPath().toFile().exists()) {
+				if (!tmpDir.exists())
+					tmpDir.create(true, true, monitor);
 				ServerManager.saveServerProfile(this);
 			}
 		}

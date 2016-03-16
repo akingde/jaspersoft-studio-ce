@@ -106,10 +106,8 @@ public class AExporter {
 			r.delete(true, monitor);
 			r = null;
 		}
-		if (r == null || !r.exists()) {
-			r = ttroot.getFolder(rd.getParentFolder());
-			FileUtils.prepareFolder((IFolder) r, monitor);
-		}
+		if (r == null || !r.exists()) 
+			r = ttroot.getFolder(rd.getParentFolder());  
 		IFolder troot = (IFolder) r;
 		String path = getNewFileName(rd, dextention);
 		r = troot.findMember(path);
