@@ -13,7 +13,6 @@
 package com.jaspersoft.studio.server.model.server;
 
 import java.beans.PropertyChangeEvent;
-import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
@@ -267,11 +266,15 @@ public class MServerProfile extends ANode {
 					path = path.substring(1);
 				int indx = path.indexOf("/"); //$NON-NLS-1$
 				String ppath = indx >= 0 ? path.substring(0, indx) : path;
-				String fpath = indx >= 0 ? path.substring(indx) : File.separator; //$NON-NLS-1$
+				String fpath = indx >= 0 ? path.substring(indx) : ""; //$NON-NLS-1$
 
-				IProject prj = ResourcesPlugin.getWorkspace().getRoot().getProject(ppath);
-				if (prj != null)
-					tmpDir = prj.getFolder(fpath);
+				IProject prj = ResourcesPlugin.getWorkspace().getRoot().getProject(ppath); 
+				if (prj != null) { 
+					if (fpath.isEmpty())
+						tmpDir = ResourcesPlugin.getWorkspace().getRoot().getFolder(prj.getLocation()); 
+					else
+						tmpDir = prj.getFolder(fpath);
+				}
 			}
 			if (tmpDir == null) {
 				// Need to enable or disable the linked resources support
@@ -292,9 +295,9 @@ public class MServerProfile extends ANode {
 					tmpDir = prj.getFolder(getValue().getName().replace(" ", "") + "-" + i);
 					i++;
 				} while (tmpDir.exists());
+				getValue().setProjectPath(tmpDir.getProjectRelativePath().toString());
 			}
-			getValue().setProjectPath(tmpDir.getFullPath().toOSString());
-			if (!tmpDir.exists()) {
+			if (!tmpDir.getFullPath().toFile().exists()  ) {
 				tmpDir.create(true, true, monitor);
 				ServerManager.saveServerProfile(this);
 			}

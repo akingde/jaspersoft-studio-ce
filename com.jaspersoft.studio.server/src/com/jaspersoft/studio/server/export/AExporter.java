@@ -12,18 +12,15 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.export;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.eclipse.util.FileUtils;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
@@ -39,6 +36,9 @@ import com.jaspersoft.studio.server.model.AFileResource;
 import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
+
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.FileUtils;
 
 public class AExporter {
 	public static Map<String, IFile> fileurimap = new HashMap<String, IFile>();
@@ -96,21 +96,21 @@ public class AExporter {
 		}
 		// if (f == null) {
 		INode root = res.getRoot();
-		IFolder troot = null;
+		IFolder ttroot = null;
 		if (root != null && root instanceof MServerProfile)
-			troot = ((MServerProfile) root).getTmpDir(monitor);
+			ttroot = ((MServerProfile) root).getTmpDir(monitor);
 		else
-			troot = FileUtils.getInProjectFolder(FileUtils.createTempDir().toURI(), monitor);
-		IResource r = troot.findMember(rd.getParentFolder());
+			ttroot = FileUtils.getInProjectFolder(FileUtils.createTempDir().toURI(), monitor);
+		IResource r = ttroot.findMember(rd.getParentFolder());
 		if (r != null && r instanceof IFile) {
 			r.delete(true, monitor);
 			r = null;
 		}
 		if (r == null || !r.exists()) {
-			r = troot.getFolder(rd.getParentFolder());
+			r = ttroot.getFolder(rd.getParentFolder());
 			FileUtils.prepareFolder((IFolder) r, monitor);
 		}
-		troot = (IFolder) r;
+		IFolder troot = (IFolder) r;
 		String path = getNewFileName(rd, dextention);
 		r = troot.findMember(path);
 		if (r != null && r instanceof IFolder) {
@@ -118,8 +118,20 @@ public class AExporter {
 			r = null;
 		}
 		if (r == null || !r.exists()) {
-			f = troot.getFile(path);
-			f.create(new ByteArrayInputStream("".getBytes("UTF-8")), true, monitor);
+			f = troot.getFile(path); 
+			File file = f.getFullPath().toFile();
+			if (f.getLocationURI() != null)
+				file = f.getLocation().toFile();
+			file.getParentFile().mkdirs();
+			file.createNewFile();
+			String ffp = file.toURI().toASCIIString();
+			for (IProject p : ResourcesPlugin.getWorkspace().getRoot().getProjects()) {
+				String ppath = p.getLocationURI().toASCIIString() + "/";
+				if (ffp.startsWith(ppath)) {
+					p.refreshLocal(IResource.DEPTH_INFINITE, monitor);
+					f = p.getFile(ffp.substring(ppath.length()));
+				}
+			}
 		} else
 			f = (IFile) r;
 		fileurimap.put(fkeyname, f);
@@ -129,7 +141,7 @@ public class AExporter {
 
 	private IFile downloadFile(AMResource res, ResourceDescriptor rd, IFile f, IProgressMonitor monitor) {
 		try {
-			WSClientHelper.getResource(monitor, res, rd, new File(f.getRawLocationURI()));
+			WSClientHelper.getResource(monitor, res, rd, f.getRawLocation().toFile());
 			f.refreshLocal(1, monitor);
 		} catch (Exception e) {
 			UIUtils.showError(e);
