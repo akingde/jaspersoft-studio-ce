@@ -18,21 +18,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.jasperreports.data.DataAdapterService;
-import net.sf.jasperreports.data.DataFile;
-import net.sf.jasperreports.data.DataFileStream;
-import net.sf.jasperreports.data.DataFileUtils;
-import net.sf.jasperreports.data.xml.XmlDataAdapterImpl;
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.engine.JRConstants;
-import net.sf.jasperreports.engine.JRDataset;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.design.JRDesignField;
-import net.sf.jasperreports.engine.util.JRXmlUtils;
-import net.sf.jasperreports.engine.util.xml.JRXPathExecuter;
-import net.sf.jasperreports.engine.util.xml.JRXPathExecuterFactory;
-import net.sf.jasperreports.engine.util.xml.JRXPathExecuterUtils;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.xerces.util.DOMUtil;
@@ -54,11 +39,26 @@ import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.XMLUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
+import net.sf.jasperreports.data.DataAdapterService;
+import net.sf.jasperreports.data.DataFile;
+import net.sf.jasperreports.data.DataFileStream;
+import net.sf.jasperreports.data.DataFileUtils;
+import net.sf.jasperreports.data.xml.XmlDataAdapterImpl;
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRDataset;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.design.JRDesignField;
+import net.sf.jasperreports.engine.util.JRXmlUtils;
+import net.sf.jasperreports.engine.util.xml.JRXPathExecuter;
+import net.sf.jasperreports.engine.util.xml.JRXPathExecuterFactory;
+import net.sf.jasperreports.engine.util.xml.JRXPathExecuterUtils;
+
 public class XMLDataAdapterDescriptor extends DataAdapterDescriptor implements
 		IFieldsProvider, IWizardDataEditorProvider {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	private boolean recursiveFind;
-	private Boolean considerEmptyNodes;
+	private boolean considerEmptyNodes;
 
 	@Override
 	public XmlDataAdapterImpl getDataAdapter() {
@@ -204,20 +204,24 @@ public class XMLDataAdapterDescriptor extends DataAdapterDescriptor implements
 		}
 	}
 
-	/*
+	/**
 	 * Verifies if the recursive retrieval of fields is expected and sets 
 	 * the proper flag for it.
+	 * 
+	 * @param jconfig the JasperReports context
 	 */
-	private void setRecursiveRetrieval(JasperReportsConfiguration jconfig) {
+	protected void setRecursiveRetrieval(JasperReportsConfiguration jconfig) {
 		recursiveFind = jconfig.getPropertyBoolean(
 				XMLQueryEditorPreferencePage.P_USE_RECURSIVE_RETRIEVAL, false);
 	}
 
-	/*
+	/**
 	 * Verifies if the empty nodes should be considered during the retrieval of fields
 	 * and sets the proper flag for it.
+	 * 
+	 * @param jconfig the JasperReports context
 	 */
-	private void setConsiderEmptyNodes(JasperReportsConfiguration jConfig) {
+	protected void setConsiderEmptyNodes(JasperReportsConfiguration jConfig) {
 		considerEmptyNodes = jConfig.getPropertyBoolean(
 				XMLQueryEditorPreferencePage.P_CONSIDER_EMPTY_NODES, false);
 	}

@@ -74,6 +74,8 @@ public class RemoteXMLDataAdapterDescriptor extends XMLDataAdapterDescriptor imp
 
 	@Override
 	public List<JRDesignField> getFields(DataAdapterService con, JasperReportsConfiguration jConfig, JRDataset jDataset) throws JRException, UnsupportedOperationException {
+		setRecursiveRetrieval(jConfig);
+		setConsiderEmptyNodes(jConfig);
 		Throwable t = null;
 		ArrayList<JRDesignField> fields = new ArrayList<JRDesignField>();
 		DataFileStream ins = null;
