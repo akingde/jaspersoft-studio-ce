@@ -25,10 +25,8 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.UnexecutableCommand;
 import org.eclipse.jface.action.Action;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.part.WorkbenchPart;
 
-import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.callout.MCallout;
 import com.jaspersoft.studio.components.table.action.EditTableStyleAction;
 import com.jaspersoft.studio.components.table.action.RemoveTableStylesAction;
@@ -95,10 +93,8 @@ import com.jaspersoft.studio.components.table.part.TableEditPart;
 import com.jaspersoft.studio.components.table.part.TablePageEditPart;
 import com.jaspersoft.studio.components.table.part.editpolicy.JSSCompoundTableCommand;
 import com.jaspersoft.studio.editor.AContextMenuProvider;
-import com.jaspersoft.studio.editor.JrxmlEditor;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
-import com.jaspersoft.studio.editor.report.ReportContainer;
 import com.jaspersoft.studio.editor.tools.CompositeElementManager;
 import com.jaspersoft.studio.editor.tools.MCompositeElement;
 import com.jaspersoft.studio.model.ANode;
@@ -637,47 +633,20 @@ public class TableComponentFactory implements IComponentFactory {
 		if (parent instanceof MTable && child instanceof MGraphicElement) {
 			MTable mt = (MTable) parent;
 			if (location != null) {
-				final Cell cell = mt.getTableManager().getCell(
-						new Point(location.x, location.y));
+				final Cell cell = mt.getTableManager().getCell(new Point(location.x, location.y));
 				if (cell != null) {
 					Rectangle r = mt.getTableManager().getCellBounds(cell);
 					int x = r != null ? r.x : 0;
 					int y = r != null ? r.y : 0;
-					location = location.setLocation(location.x - x, location.y
-							- y);
+					location = location.setLocation(location.x - x, location.y - y);
 
-					// The parent even if it is a MTable could not have the
-					// children if we are in the main editor
-					// so we must open the table editor and take the table from
-					// there to get the children
-					IEditorPart editorPart = JaspersoftStudioPlugin
-							.getInstance().getWorkbench()
-							.getActiveWorkbenchWindow().getActivePage()
-							.getActiveEditor();
-					INode tableEditorModel = null;
-					if (editorPart instanceof JrxmlEditor) {
-						JrxmlEditor jrxmlEditor = (JrxmlEditor) editorPart;
-						jrxmlEditor.openEditor(parent.getValue(), parent);
-						IEditorPart reportContainer = jrxmlEditor
-								.getActiveEditor();
-						if (reportContainer instanceof ReportContainer) {
-							ReportContainer container = (ReportContainer) reportContainer;
-							if (container.getActiveEditor() instanceof TableEditor) {
-								TableEditor tableEditor = (TableEditor) container
-										.getActiveEditor();
-								tableEditorModel = tableEditor.getModel();
-							}
-						}
-					}
-
-					ModelVisitor<MCell> mv = new ModelVisitor<MCell>(
-							tableEditorModel != null ? tableEditorModel
-									: parent) {
+					//Search the model node of the cell where the element should be placed
+					ModelVisitor<MCell> mv = new ModelVisitor<MCell>(mt != null ? mt: parent) {
 						@Override
 						public boolean visit(INode n) {
-							if (n instanceof MCell
-									&& ((MCell) n).getCell() == cell)
+							if (n instanceof MCell && ((MCell) n).getCell() == cell){
 								setObject((MCell) n);
+							}
 							return true;
 						}
 					};
