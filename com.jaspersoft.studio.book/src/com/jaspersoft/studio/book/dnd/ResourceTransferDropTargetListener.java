@@ -16,17 +16,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JRExpression;
-import net.sf.jasperreports.engine.JRSubreportParameter;
-import net.sf.jasperreports.engine.design.JRDesignExpression;
-import net.sf.jasperreports.engine.design.JRDesignPart;
-import net.sf.jasperreports.engine.design.JRDesignSubreportParameter;
-import net.sf.jasperreports.parts.subreport.StandardSubreportPartComponent;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.Request;
@@ -47,6 +39,16 @@ import com.jaspersoft.studio.book.model.MReportPart;
 import com.jaspersoft.studio.book.model.MReportPartContainer;
 import com.jaspersoft.studio.book.model.commands.CreatePartAfterCommand;
 import com.jaspersoft.studio.book.wizards.PageWizard;
+
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.FileExtension;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRExpression;
+import net.sf.jasperreports.engine.JRSubreportParameter;
+import net.sf.jasperreports.engine.design.JRDesignExpression;
+import net.sf.jasperreports.engine.design.JRDesignPart;
+import net.sf.jasperreports.engine.design.JRDesignSubreportParameter;
+import net.sf.jasperreports.parts.subreport.StandardSubreportPartComponent;
 
 /**
  * Class that handle the native swt drag and drop to allow to drag inside 
@@ -216,7 +218,7 @@ public class ResourceTransferDropTargetListener extends AbstractTransferDropTarg
 					if (resource instanceof IFile){
 						IFile file = (IFile)resource;
 						String fileName = file.getName().toLowerCase();
-						if (fileName.endsWith(".jrxml") || fileName.endsWith(".jasper")){
+						if (fileName.endsWith(FileExtension.PointJRXML) || fileName.endsWith(FileExtension.PointJASPER)){
 							return true;
 						}
 					}
@@ -243,8 +245,13 @@ public class ResourceTransferDropTargetListener extends AbstractTransferDropTarg
 			if (resource instanceof IFile){
 				IFile file = (IFile)resource;
 				String fileName = file.getName().toLowerCase();
-				if (fileName.endsWith(".jrxml") || fileName.endsWith(".jasper")){
-					readElements.add(file.getRawLocation().makeAbsolute().toPortableString());
+				if (fileName.endsWith(FileExtension.PointJRXML) || fileName.endsWith(FileExtension.PointJASPER)){
+					IPath fileLocation = file.getLocation();
+					if(FileExtension.JRXML.equals(fileLocation.getFileExtension())) {
+						fileLocation = fileLocation.removeFileExtension();
+						fileLocation = fileLocation.addFileExtension(FileExtension.JASPER);
+					}
+					readElements.add(fileLocation.toPortableString());
 				}
 			}
 		}
