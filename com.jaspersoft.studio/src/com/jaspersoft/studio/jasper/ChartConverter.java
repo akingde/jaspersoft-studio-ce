@@ -41,6 +41,17 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.SortedSet;
 
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.AxisLocation;
+import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.chart.plot.Plot;
+import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.category.CategoryItemRenderer;
+import org.jfree.chart.renderer.xy.XYItemRenderer;
+import org.jfree.data.general.Dataset;
+
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
 import net.sf.jasperreports.charts.ChartContext;
 import net.sf.jasperreports.charts.ChartTheme;
 import net.sf.jasperreports.charts.JRChartAxis;
@@ -60,24 +71,13 @@ import net.sf.jasperreports.engine.JRPrintElement;
 import net.sf.jasperreports.engine.JRPropertiesUtil;
 import net.sf.jasperreports.engine.JRRuntimeException;
 import net.sf.jasperreports.engine.JasperReportsContext;
-import net.sf.jasperreports.engine.Renderable;
 import net.sf.jasperreports.engine.base.JRBasePrintImage;
 import net.sf.jasperreports.engine.convert.ElementConverter;
 import net.sf.jasperreports.engine.convert.ReportConverter;
 import net.sf.jasperreports.engine.type.OnErrorTypeEnum;
 import net.sf.jasperreports.engine.type.ScaleImageEnum;
 import net.sf.jasperreports.engine.util.JRExpressionUtil;
-
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.axis.AxisLocation;
-import org.jfree.chart.plot.CategoryPlot;
-import org.jfree.chart.plot.Plot;
-import org.jfree.chart.plot.XYPlot;
-import org.jfree.chart.renderer.category.CategoryItemRenderer;
-import org.jfree.chart.renderer.xy.XYItemRenderer;
-import org.jfree.data.general.Dataset;
-
-import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+import net.sf.jasperreports.renderers.Renderable;
 
 /**
  * @author Teodor Danciu (teodord@users.sourceforge.net)
@@ -121,7 +121,7 @@ public final class ChartConverter extends ElementConverter {
 		printImage.setBookmarkLevel(chart.getBookmarkLevel());
 		printImage.setLinkType(chart.getLinkType());
 		printImage.setOnErrorType(OnErrorTypeEnum.ICON);
-		printImage.setRenderable(getRenderer(reportConverter, chart));
+		printImage.setRenderer(getRenderer(reportConverter, chart));
 		printImage.setScaleImage(ScaleImageEnum.CLIP);
 
 		return printImage;
