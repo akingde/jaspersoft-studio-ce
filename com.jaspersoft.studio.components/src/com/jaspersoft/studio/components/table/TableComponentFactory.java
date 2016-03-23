@@ -77,6 +77,7 @@ import com.jaspersoft.studio.components.table.model.column.command.DeleteColumnF
 import com.jaspersoft.studio.components.table.model.column.command.DeleteColumnGroupCellCommand;
 import com.jaspersoft.studio.components.table.model.column.command.OrphanColumn4GroupCommand;
 import com.jaspersoft.studio.components.table.model.column.command.OrphanColumnCommand;
+import com.jaspersoft.studio.components.table.model.column.command.RefreshColumnNamesCommand;
 import com.jaspersoft.studio.components.table.model.column.command.ReorderColumnCommand;
 import com.jaspersoft.studio.components.table.model.column.command.SetColumnWidthCommand;
 import com.jaspersoft.studio.components.table.model.columngroup.MColumnGroup;
@@ -764,17 +765,25 @@ public class TableComponentFactory implements IComponentFactory {
 		if (child instanceof MColumn) {
 			if (parent instanceof MCollection){
 				JSSCompoundTableCommand tableCommand = new JSSCompoundTableCommand((MTable) parent.getParent());
+				tableCommand.add(new RefreshColumnNamesCommand((MTable) parent.getParent(), false, true));
 				tableCommand.add(new ReorderColumnCommand((MColumn) child, (MTable) parent.getParent(), newIndex));
+				tableCommand.add(new RefreshColumnNamesCommand((MTable) parent.getParent(), true, false));
 				return tableCommand;
 			}
 			if (parent instanceof MColumnGroupCell){
-				JSSCompoundTableCommand tableCommand = new JSSCompoundTableCommand(((MColumnGroupCell)parent).getMTable());
+				MTable table = ((MColumnGroupCell)parent).getMTable();
+				JSSCompoundTableCommand tableCommand = new JSSCompoundTableCommand(table);
+				tableCommand.add(new RefreshColumnNamesCommand(table, false, true));
 				tableCommand.add(new ReorderColumnGroupCommand((MColumn) child, (MColumnGroupCell) parent, newIndex));
+				tableCommand.add(new RefreshColumnNamesCommand(table, true, false));
 				return tableCommand;
 			}
 			if (parent instanceof MColumnGroup){
-				JSSCompoundTableCommand tableCommand = new JSSCompoundTableCommand(((MColumnGroup)parent).getMTable());
+				MTable table = ((MColumnGroup)parent).getMTable();
+				JSSCompoundTableCommand tableCommand = new JSSCompoundTableCommand(table);
+				tableCommand.add(new RefreshColumnNamesCommand(table, false, true));
 				tableCommand.add(new ReorderColumnGroupCommand((MColumn) child,(MColumnGroup) parent, newIndex));
+				tableCommand.add(new RefreshColumnNamesCommand(table, true, false));
 				return tableCommand;
 			}
 
