@@ -1,0 +1,50 @@
+package $packageName;
+
+import net.sf.jasperreports.engine.JasperReportsContext;
+import net.sf.jasperreports.data.DataAdapter;
+import com.jaspersoft.studio.data.DataAdapterDescriptor;
+import com.jaspersoft.studio.data.DataAdapterDescriptor;
+
+/**
+ * An empty composite that can be personalized to edit the data adapter configuration
+ * 
+ *
+ */
+public class $adapterComposite extends ADataAdapterComposite {
+	
+	/**
+	 * The descriptor of the data adapter
+	*/
+	private $descriptorName dataAdapterDescriptor;
+	
+	public $adapterComposite(Composite parent, int style, JasperReportsContext context) {
+		super(parent, style, context);
+		initComponents();
+	}
+	
+	/**
+	 * Create the controls
+	 */
+	protected void initComponents() {
+		setLayout(new GridLayout(1,false));
+		Label info = new Label(this, SWT.WRAP);
+		info.setLayoutData(new GridData(GridData.FILL_BOTH));
+		info.setText("Edit the class $adapterComposite to define the controls necessary to edit the data adapter");
+	}
+	
+	/**
+	 * Return the current data adapter descriptor, if it is not available
+	 * it is created
+	 */
+	public DataAdapterDescriptor getDataAdapter() {
+		if (dataAdapterDescriptor == null) {
+			dataAdapterDescriptor = new $descriptorName();
+		}
+		return dataAdapterDescriptor;
+	}
+	
+	@Override
+	protected void bindWidgets(DataAdapter dataAdapter) {
+
+	}
+}

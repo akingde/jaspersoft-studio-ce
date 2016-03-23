@@ -1,0 +1,196 @@
+package $packageName;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import net.sf.jasperreports.data.DataAdapter;
+import net.sf.jasperreports.engine.JasperReportsContext;
+
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.beanutils.BeanUtilsBean;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.VerifyEvent;
+import org.eclipse.swt.events.VerifyListener;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Spinner;
+import org.eclipse.swt.widgets.Text;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.EntityResolver;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+
+import com.jaspersoft.studio.data.ADataAdapterComposite;
+import com.jaspersoft.studio.data.DataAdapterDescriptor;
+import com.jaspersoft.studio.custom.adapter.controls.PropertyListControl;
+
+/**
+ * Inside this class are defined the controls shown when the 
+ * adapter is created on edited from Jaspersoft Studio. 
+ * This controls can be used the configure the data adapter.
+ * With the example data adapter it provide the controls to define
+ * the number of record, the number of value for each record, and
+ * the range between every value is generated
+ * 
+ *
+ */
+public class $adapterComposite extends ADataAdapterComposite {
+	
+	protected static final String TYPE_KEY = "type";
+	
+	protected static final String BIND_KEY = "bind";
+	
+	protected List<Control> generatedControls = new ArrayList<Control>();
+	
+	/**
+	 * The descriptor of the data adapter
+	*/
+	private DataAdapterDescriptor dataAdapterDescriptor;
+	
+	public $adapterComposite(Composite parent, int style, JasperReportsContext context) {
+		super(parent, style, context);
+		setLayout(new GridLayout(2, false));
+	}
+	
+	/**
+	 * Create the controls
+	 */
+	protected void initComponents() {
+$controlCreationCode
+	}
+		
+	/**
+	 * Given the data adapter uses it to initialize the values of the controls to
+	 * reflect the current configuration
+	 *  
+	 * @param dataAdapter the not null data adapter
+	 */
+	protected void updateAdapterSettings(DataAdapter dataAdapter){
+		for(Control control : generatedControls){
+			String methodName = (String)control.getData(BIND_KEY);
+			String type = (String)control.getData(TYPE_KEY);
+			try {
+				if (type.equals("string")){
+					Text text = (Text)control;
+					BeanUtils.setProperty(dataAdapter, methodName, text.getText());
+				} else if (type.equals("float")){
+					Text text = (Text)control;
+					BeanUtils.setProperty(dataAdapter, methodName, text.getText());
+				} else if (type.equals("int")){
+					Spinner spinner = (Spinner)control;
+					BeanUtils.setProperty(dataAdapter, methodName, String.valueOf(spinner.getSelection()));
+				} else if (type.equals("boolean")){
+					Button button = (Button)control;
+					BeanUtils.setProperty(dataAdapter, methodName, String.valueOf(button.getSelection()));
+				} else if (type.equals("collection")){
+					try{
+						PropertyListControl list = (PropertyListControl)control;
+						String[] selection = list.getSelection();
+						BeanUtils.setProperty(dataAdapter, methodName,selection);
+					} catch (Exception ex){
+						
+					}
+				}
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			} 
+		}
+	}
+	
+	/**
+	 * Bind the data adapter to the widgets to have that every change on the
+	 * controls widgets reflected on the data adapter
+	 * 
+	 * @param dataAdapter the data adapter
+	 */
+	@Override
+	protected void bindWidgets(DataAdapter dataAdapter) {
+		final DataAdapter adapter = (DataAdapter)dataAdapter;
+		
+		//Listeners used to detect the change of the value of a control
+		ModifyListener modifyListener = new ModifyListener() {	
+			@Override
+			public void modifyText(ModifyEvent e) {
+				updateAdapterSettings(adapter);
+			}
+		};
+		SelectionAdapter selectionListener = new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				updateAdapterSettings(adapter);
+			}
+		};
+		
+		//Set the initial value on every control reading it from the data adapter
+		//and add the listener to detect the changes done by the user
+		for(Control control : generatedControls){
+			String methodName = (String)control.getData(BIND_KEY);
+			String type = (String)control.getData(TYPE_KEY);
+			try {
+				if (type.equals("string") || type.equals("float")){
+					String result = BeanUtils.getProperty(adapter, methodName);
+					Text text = (Text)control;
+					text.setText(result != null ? result : "");
+					text.addModifyListener(modifyListener);
+				} else if (type.equals("int")){
+					String result = BeanUtils.getProperty(adapter, methodName);
+					Spinner spinner = (Spinner)control;
+					if (result != null) spinner.setSelection(Integer.parseInt(result));
+					spinner.addModifyListener(modifyListener); 
+				} else if (type.equals("boolean")){
+					String result = BeanUtils.getProperty(adapter, methodName);
+					Button button = (Button)control;
+					if (result != null) button.setSelection(Boolean.parseBoolean(result));
+					button.addSelectionListener(selectionListener); 
+				} else if (type.equals("collection")){
+					@SuppressWarnings("unchecked")
+					List<Object> result = (List<Object>)BeanUtilsBean.getInstance().getPropertyUtils().getNestedProperty(adapter, methodName);
+					PropertyListControl list = (PropertyListControl)control;
+					if (result != null) list.setSelection(result);
+					list.addModifyListener(modifyListener);
+				}
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			} 
+		}
+	}
+		
+	/**
+	 * Return the current data adapter descriptor, if it is not available
+	 * it is created
+	 */
+	public DataAdapterDescriptor getDataAdapter() {
+		if (dataAdapterDescriptor == null) {
+			dataAdapterDescriptor = new $descriptorName();
+		}
+		return dataAdapterDescriptor;
+	}
+	
+	/**
+	 * Set the data adapter descriptor from outside and bind the created controls to it
+	 */
+	@Override
+	public void setDataAdapter(DataAdapterDescriptor dataAdapterDescriptor) {
+		this.dataAdapterDescriptor = dataAdapterDescriptor;
+		DataAdapter dataAdapter = dataAdapterDescriptor.getDataAdapter();
+		initComponents();
+		bindWidgets(dataAdapter);
+	}
+}
