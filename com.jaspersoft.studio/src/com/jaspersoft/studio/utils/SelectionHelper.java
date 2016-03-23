@@ -28,6 +28,7 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.PrecisionRectangle;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
+import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.jdt.core.IJavaProject;
@@ -63,6 +64,7 @@ import com.jaspersoft.studio.editor.util.StringInput;
 import com.jaspersoft.studio.editor.util.StringStorage;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.model.MPage;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.MRoot;
 
@@ -86,11 +88,31 @@ public class SelectionHelper {
 		return null;
 	}
 
+	/**
+	 * Get the node of the passed element, searching it in the current editor
+	 * 
+	 * @param jrElement the element to search
+	 * @return the node of the passed element in the current editor, or null if it 
+	 * can't be found
+	 */
 	public static ANode getNode(JRDesignElement jrElement) {
-		AbstractJRXMLEditor jrxmlEditor = (AbstractJRXMLEditor) getActiveJRXMLEditor();
-		MRoot root = (MRoot) jrxmlEditor.getModel();
-		ANode node = ((MReport) root.getChildren().get(0)).getNode(jrElement);
-		return node;
+		AbstractJRXMLEditor editor = (AbstractJRXMLEditor) getActiveJRXMLEditor();
+		if (editor != null){
+			IEditorPart designEditor = editor.getActiveInnerEditor();
+			if (designEditor instanceof AbstractVisualEditor){
+				AbstractVisualEditor visualEditor = (AbstractVisualEditor)designEditor;
+				INode model = visualEditor.getModel();
+				if (model instanceof MRoot){
+					model = model.getChildren().get(0);
+				}
+				if (model instanceof MReport){
+					return ((MReport)model).getNode(jrElement);
+				} else if (model instanceof MPage){
+					return ((MPage)model).getNode(jrElement);
+				}
+			}
+		}
+		return null;
 	}
 
 	/**
@@ -175,10 +197,49 @@ public class SelectionHelper {
 						}
 					}
 				}
-				ep.getViewer().select(ep);
+				ep.getViewer().setSelection(new StructuredSelection(s));
 				ep.getViewer().reveal(ep);
 			}
 		}
+	}
+	
+	/**
+	 * Set the selection of the current editor.
+	 * 
+	 * @param jrElements list of the jrElements to select, must be not null
+	 * @param add true if the selection should be added to the existing onem false otherwise
+	 * @return the previous selection, in a pair where the key is the selection and the value is 
+	 * the viewer where it was set
+	 */
+	public static Pair<ISelection, EditPartViewer> setSelection(List<JRDesignElement> jrElements, boolean add) {
+		ArrayList<EditPart> editParts = new ArrayList<EditPart>();
+		for (JRDesignElement jrElement : jrElements){
+			EditPart ep = getEditPart(jrElement);
+			if (ep != null){
+				editParts.add(ep);
+			}
+		} 
+		if (!editParts.isEmpty()) {
+			EditPart firstPart = editParts.get(0);
+			// The selection is set only if the refresh is enabled
+			ANode mainNode = JSSCompoundCommand.getMainNode((ANode) firstPart.getModel());
+			if (!JSSCompoundCommand.isRefreshEventsIgnored(mainNode)) {
+				ISelection oldSelection = firstPart.getViewer().getSelection();
+				List<Object> s = new ArrayList<Object>();
+				s.addAll(editParts);
+				if (add) {
+					if (oldSelection instanceof StructuredSelection) {
+						for (Object o : ((StructuredSelection) oldSelection).toList()) {
+							s.add(o);
+						}
+					}
+				}
+				firstPart.getViewer().setSelection(new StructuredSelection(s));
+				firstPart.getViewer().reveal(firstPart);
+				return new Pair<ISelection, EditPartViewer>(oldSelection, firstPart.getViewer());
+			}
+		}
+		return null;
 	}
 	
 	/**

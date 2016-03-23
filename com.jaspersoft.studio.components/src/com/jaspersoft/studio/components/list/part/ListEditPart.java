@@ -153,8 +153,7 @@ public class ListEditPart extends EditableFigureEditPart {
 					}
 
 					@Override
-					protected Command createAddCommand(EditPart child,
-							Object constraint) {
+					protected Command createAddCommand(EditPart child, Object constraint) {
 						Rectangle rect = (Rectangle) constraint;
 						if (child.getModel() instanceof MGraphicElement) {
 							MGraphicElement cmodel = (MGraphicElement) child

@@ -37,13 +37,22 @@ import com.jaspersoft.studio.model.util.NodeIconDescriptor;
  * @author Chicu Veaceslav
  */
 public class MPage extends MLockableRefresh implements IGraphicElement, IContainerEditPart {
+	
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+	
 	private Map<Object, ANode> obj2Node = new HashMap<Object, ANode>();
+	
 	private ANode realParent;
+	
 	private MDataset getDataset(JasperDesign jrDesign) {
 		MDataset mDataset = new MDataset(null, (JRDesignDataset) jrDesign.getMainDataset());
 		mDataset.setJasperConfiguration(getJasperConfiguration());
 		return mDataset;
+	}
+	
+	@Override
+	public INode getRoot() {
+		return this;
 	}
 	
 	public void register(ANode n) {

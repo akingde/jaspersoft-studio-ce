@@ -91,7 +91,7 @@ public class JrxmlEditor extends AbstractJRXMLEditor implements IJROBjectEditor,
 	 * 
 	 * @return the second level active editor
 	 */
-	public IEditorPart getActiveEditor2() {
+	public IEditorPart getActiveInnerEditor() {
 		IEditorPart iep = getActiveEditor();
 		if (iep instanceof ReportContainer)
 			return ((ReportContainer) iep).getActiveEditor();

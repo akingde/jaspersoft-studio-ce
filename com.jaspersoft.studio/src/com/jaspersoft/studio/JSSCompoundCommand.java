@@ -13,15 +13,24 @@
 package com.jaspersoft.studio;
 
 import java.beans.PropertyChangeEvent;
+import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.gef.EditPart;
+import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
+import org.eclipse.ui.IEditorPart;
 
+import com.jaspersoft.studio.editor.AbstractJRXMLEditor;
+import com.jaspersoft.studio.editor.action.copy.SelectElementCommand;
+import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MLockableRefresh;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.utils.SelectionHelper;
+
+import net.sf.jasperreports.engine.design.JRDesignElement;
 
 /**
  * Special compound command that disable the refresh of the editor and of the selection
@@ -42,6 +51,18 @@ public class JSSCompoundCommand extends CompoundCommand {
 	 * node is null this command works exactly like a compound command
 	 */
 	private ANode referenceNode = null;
+	
+	/**
+	 * Boolean flag used to know if the editor selection should be preserved
+	 * between the execution of the inner commands
+	 */
+	private boolean restoreSelection = false;
+	
+	/**
+	 * Command used to set the selection ad the end of the inner commands execution.
+	 * This is used only when the restoreSelection flag is set to true
+	 */
+	private SelectElementCommand restoreSelectionCommand = null;
 	
 	/**
 	 * Create an instance of the from a compound command. All the commands inside the compound
@@ -260,6 +281,46 @@ public class JSSCompoundCommand extends CompoundCommand {
 		return false;
 	}
 	
+	/**
+	 * If the restoreSelection flag is enable this call will backup the selection
+	 * of the current editor an create the command to restore it
+	 */
+	protected void backupSelection(){
+		if (restoreSelection ){
+			AbstractJRXMLEditor editor = (AbstractJRXMLEditor)SelectionHelper.getActiveJRXMLEditor();
+			if (editor != null){
+				IEditorPart designEditor = editor.getActiveInnerEditor();
+				if (designEditor instanceof AbstractVisualEditor){
+					AbstractVisualEditor visaulEditor = (AbstractVisualEditor)designEditor;
+					GraphicalViewer viewer = visaulEditor.getGraphicalViewer();
+					if (viewer != null){
+						List<?> selectedParts = viewer.getSelectedEditParts();
+						ArrayList<JRDesignElement> oldSelection = new ArrayList<JRDesignElement>();
+						for(Object obj : selectedParts){
+							EditPart part = (EditPart)obj;
+							if (part.getModel() instanceof ANode){
+								ANode model = (ANode)part.getModel();
+								if (model.getValue() instanceof JRDesignElement){
+									oldSelection.add((JRDesignElement)model.getValue());
+								}
+							}
+						}
+						restoreSelectionCommand = new SelectElementCommand(oldSelection);
+					}
+				}
+			}
+		}
+	}
+	
+	/**
+	 * If the command to restore the seleciton is available then it 
+	 * is executed
+	 */
+	protected void restoreSelection(){
+		if (restoreSelection && restoreSelectionCommand != null){
+			restoreSelectionCommand.execute();
+		}
+	}
 	
 	/**
 	 * Override of the execute command, disable the refresh before the first command
@@ -268,6 +329,7 @@ public class JSSCompoundCommand extends CompoundCommand {
 	@Override
 	public void execute() {
 		if (size() > 0){
+			backupSelection();
 			List<?> commands = getCommands(); 
 			setIgnoreEvents(true);
 			for (int i = 0; i < size(); i++) {
@@ -279,6 +341,7 @@ public class JSSCompoundCommand extends CompoundCommand {
 			//is not forced if the actual command is not the last lock removed. In other words the refresh
 			//is disable until the last command has finished
 			if (!isIgnoreEvents()) refreshVisuals();
+			restoreSelection();
 		}
 	}
 	
@@ -296,6 +359,10 @@ public class JSSCompoundCommand extends CompoundCommand {
 			}
 			setIgnoreEvents(false);
 			if (!isIgnoreEvents()) refreshVisuals();
+			if (restoreSelectionCommand != null){
+				restoreSelectionCommand.undo();
+				restoreSelectionCommand = null;
+			}
 		}
 	}
 	
@@ -306,6 +373,7 @@ public class JSSCompoundCommand extends CompoundCommand {
 	@Override
 	public void redo() {
 		if (size() > 0){
+			backupSelection();
 			List<?> commands = getCommands();
 			setIgnoreEvents(true);
 			for (int i = 0; i < size(); i++){
@@ -313,6 +381,7 @@ public class JSSCompoundCommand extends CompoundCommand {
 			}
 			setIgnoreEvents(false);
 			if (!isIgnoreEvents()) refreshVisuals();
+			restoreSelection();
 		}
 	}
 	
@@ -342,6 +411,20 @@ public class JSSCompoundCommand extends CompoundCommand {
 	@Override
 	public List<Command> getCommands() {
 		return (List<Command>)super.getCommands();
+	}
+	
+	/**
+	 * Set the selection restore flag. The selection restore works
+	 * by storing the selection of the current editor before the execution
+	 * of the inner commands and restoring it after the commands are executed.
+	 * By default this is not done. Also the backup and the selection of the elements
+	 * relay on their JRValue and not on the nodes
+	 * 
+	 * @param enabled true if the selection backup and restore should be enabled, 
+	 * false otherwise
+	 */
+	public void enableSelectionRestore(boolean enabled){
+		this.restoreSelection = enabled;
 	}
 }
 

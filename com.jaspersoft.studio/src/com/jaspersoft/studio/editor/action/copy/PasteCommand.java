@@ -19,16 +19,13 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.jasperreports.engine.JRCloneable;
-import net.sf.jasperreports.engine.design.JRDesignConditionalStyle;
-import net.sf.jasperreports.engine.design.JRDesignElement;
-
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.ui.actions.Clipboard;
 
 import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.editor.outline.OutlineTreeEditPartFactory;
+import com.jaspersoft.studio.editor.style.StyleTreeEditPartFactory;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.ICopyable;
 import com.jaspersoft.studio.model.INode;
@@ -41,14 +38,24 @@ import com.jaspersoft.studio.model.style.MConditionalStyle;
 import com.jaspersoft.studio.model.style.MStyle;
 import com.jaspersoft.studio.model.style.command.CreateConditionalStyleCommand;
 
+import net.sf.jasperreports.engine.JRCloneable;
+import net.sf.jasperreports.engine.design.JRDesignConditionalStyle;
+import net.sf.jasperreports.engine.design.JRDesignElement;
+
 /**
  *  Command used to paste in the editor a graphical object
  */
 public class PasteCommand extends Command {
+	
 	protected Map<ANode, Command> list;
+	
 	protected IPastable parent;
+	
 	protected int createdNodes;
+	
 	protected Collection<ICopyable> copiedNodes;
+	
+	protected SelectElementCommand selectCommand = null;
 	
 	/**
 	 * List of the graphical nodes created by the paste command
@@ -91,6 +98,7 @@ public class PasteCommand extends Command {
 			return;
 		createdNodes = 0;
 		createdElements = new ArrayList<INode>();
+		List<JRDesignElement> createdDesignElements = new ArrayList<JRDesignElement>();
 		for (ANode node : list.keySet()) {
 			JSSCompoundCommand cmd = new JSSCompoundCommand(node);
 			// create new Node put, clone into it
@@ -100,11 +108,21 @@ public class PasteCommand extends Command {
 					ANode n = node.getClass().newInstance();
 					Rectangle rect = null;
 					n.setJasperConfiguration(node.getJasperConfiguration());
-					n.setValue(((JRCloneable) value).clone());
+					Object cloneObject = ((JRCloneable) value).clone();
+					n.setValue(cloneObject);
+					if (cloneObject instanceof JRDesignElement){
+						createdDesignElements.add((JRDesignElement)cloneObject);
+					}
 					
 					if (node.isCut() && node.getParent() != null) {
 						ANode parent = (ANode) node.getParent();
 						Command deleteCommand = OutlineTreeEditPartFactory.getDeleteCommand(parent, node);
+						//Look it the style factory can resolve the command
+						//FIXME: the style factory and the outline factory should not be binded so tightly
+						//we should resolve the factory looking at the editor
+						if (deleteCommand == null){
+							deleteCommand = StyleTreeEditPartFactory.getDeleteCommand(parent, node);
+						}
 						if (deleteCommand != null){
 							Command cmdd = new CloseSubeditorsCommand(deleteCommand, node);
 							cmd.add(cmdd);
@@ -136,8 +154,13 @@ public class PasteCommand extends Command {
 						createdNodes++;
 						list.put(node, cmd);
 					}	else {
-						// create command
+						//Look it the style factory can resolve the command
+						//FIXME: the style factory and the outline factory should not be binded so tightly
+						//we should resolve the factory looking at the editor
 						Command cmdc = OutlineTreeEditPartFactory.getCreateCommand((ANode) parent, n, rect, -1);
+						if (cmdc == null){
+							cmdc = StyleTreeEditPartFactory.getCreateCommand((ANode)parent, n, rect, -1);
+						}
 						if (cmdc != null) {
 							createdElements.add(n);
 							cmd.add(cmdc);
@@ -154,15 +177,19 @@ public class PasteCommand extends Command {
 				e.printStackTrace();
 			}
 		}
-
+		
+		selectCommand = new SelectElementCommand(createdDesignElements);
 		redo();
 	}
-
+ 
 	@Override
 	public void redo() {
 		for (Command cmd : list.values())
 			if (cmd != null)
 				cmd.execute();
+		if (selectCommand != null){
+			selectCommand.execute();
+		}
 	}
 
 	public int getCreatedNodesNumber() {
@@ -191,6 +218,9 @@ public class PasteCommand extends Command {
 			cmd.undo();
 		}
 		createdNodes = 0;
+		if (selectCommand != null){
+			selectCommand.undo();
+		}
 	}
 
 	public boolean isPastableNode(Object node) {

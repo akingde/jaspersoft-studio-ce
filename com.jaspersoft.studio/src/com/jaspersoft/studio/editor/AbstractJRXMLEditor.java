@@ -1048,6 +1048,14 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart
 	public IEditorPart getActiveEditor() {
 		return super.getActiveEditor();
 	}
+	
+	/**
+	 * In case of multipage editor implementation (like the JRXML editor)
+	 * this return the internal editor currently active
+	 */
+	public IEditorPart getActiveInnerEditor() {
+		return getActiveEditor();
+	}
 
 	@Override
 	public IEditorPart getEditor(int pageIndex) {

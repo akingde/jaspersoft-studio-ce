@@ -247,7 +247,7 @@ public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
 	}
 
 	/**
-	 * Edited by Orlandin Marco: added the search of the container element in case the the parent node is not a container.
+	 * Added the search of the container element in case the the parent node is not a container.
 	 * Doing this is necessary to permit to user to placing and element up another even if the second is not a container.
 	 * 
 	 * @param parent

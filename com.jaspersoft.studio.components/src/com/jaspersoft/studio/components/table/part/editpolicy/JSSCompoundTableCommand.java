@@ -342,7 +342,7 @@ public class JSSCompoundTableCommand extends JSSCompoundCommand {
 	 */
 	@Override
 	public boolean canExecute() {
-		return table != null;
+		return table != null && super.canExecute();
 	}
 	
 	/**

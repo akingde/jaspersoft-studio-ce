@@ -58,6 +58,11 @@ public class PasteElementCommand extends Command {
 	 * The node that will be pasted
 	 */
 	private ANode createdElement;
+	
+	/**
+	 * The JRElement copied that will be pasted
+	 */
+	private JRCloneable copiedJRElement = null;
 
 	/**
 	 * Create the command 
@@ -69,6 +74,9 @@ public class PasteElementCommand extends Command {
 		super();
 		this.parent = parent;
 		this.node = node;
+		if (node != null && node.getValue() instanceof JRCloneable) {
+			copiedJRElement = (JRCloneable)((JRCloneable)node.getValue()).clone();
+		}
 	}
 
 	@Override
@@ -87,7 +95,7 @@ public class PasteElementCommand extends Command {
 				ANode n = node.getClass().newInstance();
 				Rectangle rect = null;
 				n.setJasperConfiguration(node.getJasperConfiguration());
-				n.setValue(((JRCloneable) value).clone());
+				n.setValue(copiedJRElement);
 				
 				if (node.isCut() && node.getParent() != null) {
 					ANode parent = (ANode) node.getParent();
@@ -154,6 +162,16 @@ public class PasteElementCommand extends Command {
 			cmd.undo();
 			cmd = null;
 		}
+	}
+	
+	/**
+	 * Return the element that will be pasted 
+	 * 
+	 * @return the JRElement that was cloned by the copy and that will 
+	 * be pasted
+	 */
+	public JRCloneable getPastedJRElement(){
+		return copiedJRElement;
 	}
 
 }

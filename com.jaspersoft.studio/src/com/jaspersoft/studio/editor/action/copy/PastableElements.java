@@ -21,6 +21,7 @@ import java.util.List;
 
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.viewers.StructuredSelection;
 
 import com.jaspersoft.studio.JSSCompoundCommand;
@@ -32,6 +33,8 @@ import com.jaspersoft.studio.model.MPage;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
+import net.sf.jasperreports.engine.design.JRDesignElement;
 
 /**
  * Implementation of the paste definition for the editor graphical
@@ -188,15 +191,25 @@ public class PastableElements extends AbstractPastableObject {
 	 */
 	protected Command createCommand(Collection<?> selectedObjects) {
 		if (doSpecialPaste(selectedObjects)){
+			CompoundCommand copyAndSelectElementsCommand = new CompoundCommand();
 			JSSCompoundCommand copyElementsCommand = new JSSCompoundCommand(null);
+			copyAndSelectElementsCommand.add(copyElementsCommand);
+			List<JRDesignElement> elementsToSelect = new ArrayList<JRDesignElement>();
 			for(ICopyable node : getNotNestedNodes()){
 				ANode parent = parentsMap.get(node);
 				copyElementsCommand.setReferenceNodeIfNull(parent);
 				if (parent != null && node instanceof ANode){
-					copyElementsCommand.add(new PasteElementCommand(parent, (ANode)node));
+					PasteElementCommand pasteCommand = new PasteElementCommand(parent, (ANode)node);
+					copyElementsCommand.add(pasteCommand);
+					if (pasteCommand.getPastedJRElement() instanceof JRDesignElement){
+						elementsToSelect.add((JRDesignElement)pasteCommand.getPastedJRElement());
+					}
 				}
 			}
-			return copyElementsCommand;
+			//Add the command to select the new elements
+			SelectElementCommand selectPastedCommands = new SelectElementCommand(elementsToSelect);
+			copyAndSelectElementsCommand.add(selectPastedCommands);
+			return copyAndSelectElementsCommand;
 		} else {
 			for (Object selection : selectedObjects) {
 				Command cmd = getPasteComand(selection);

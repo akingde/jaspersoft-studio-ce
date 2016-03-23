@@ -14,10 +14,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import net.sf.jasperreports.engine.design.JRDesignBand;
-import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.type.BandTypeEnum;
-
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
@@ -36,9 +32,11 @@ import org.eclipse.gef.SnapToGrid;
 import org.eclipse.gef.SnapToGuides;
 import org.eclipse.gef.SnapToHelper;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.handles.HandleBounds;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 import org.eclipse.gef.requests.CreateRequest;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.views.properties.IPropertySource;
 
@@ -73,6 +71,10 @@ import com.jaspersoft.studio.property.SetValueCommand;
 import com.jaspersoft.studio.property.dataset.dialog.IDatasetDialogSupport;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.SelectionHelper;
+
+import net.sf.jasperreports.engine.design.JRDesignBand;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.type.BandTypeEnum;
 
 /*
  * BandEditPart creates the figure for the band. The figure is actually just the bottom border of the band. This allows
@@ -226,8 +228,33 @@ public class BandEditPart extends APrefFigureEditPart implements PropertyChangeL
 		});
 		installEditPolicy(EditPolicy.LAYOUT_ROLE, new PageLayoutEditPolicy() {
 			
-
 			private ColoredLayoutPositionRectangle targetFeedback;
+			
+			/**
+			 * Overrides <code>getAddCommand()</code> to generate the proper constraint
+			 * for each child being added. Once the constraint is calculated,
+			 * {@link #createAddCommand(EditPart,Object)} is called. It will also enable
+			 * the restore of the selection so when an element is added inside a frame its
+			 * selection will be preserved
+			 */
+			protected Command getAddCommand(Request generic) {
+				ChangeBoundsRequest request = (ChangeBoundsRequest) generic;
+				List<?> editParts = request.getEditParts();
+				MBand mband = getModel();
+				JSSCompoundCommand command = new JSSCompoundCommand(mband);
+				command.enableSelectionRestore(true);
+				command.setDebugLabel("Add in Band");//$NON-NLS-1$
+				GraphicalEditPart child;
+				ISelection currentSelection = null;
+				for (int i = 0; i < editParts.size(); i++) {
+					child = (GraphicalEditPart) editParts.get(i);
+					if (currentSelection == null){
+						currentSelection = child.getViewer().getSelection();
+					}
+					command.add(createAddCommand(request, child, translateToModelConstraint(getConstraintFor(request, child))));
+				}
+				return command;
+			}
 
 			@Override
 			protected Command getCreateCommand(ANode parent, Object obj, Rectangle constraint, int index) {
@@ -250,13 +277,13 @@ public class BandEditPart extends APrefFigureEditPart implements PropertyChangeL
 					// MBand hoveredBand = ModelUtils.getBand4Point(mband.getRoot(),new Point(rect.x, rect.y));
 					// if (hoveredBand != null) mband = hoveredBand;
 					if (cmodel.getParent() instanceof MBand && cmodel.getParent() == mband) {
+						//It is a movement inside the current band
 						return super.createChangeConstraintCommand(child, rect);
 					} else {
-						JSSCompoundCommand c = new JSSCompoundCommand(mband);
-
+						//Return a CompoundCommand, because the JSSCompoundCommand will be created by the getAddCommand method
+						CompoundCommand c = new CompoundCommand();
 						c.add(OutlineTreeEditPartFactory.getOrphanCommand(cmodel.getParent(), cmodel));
-						c.add(new CreateElementCommand(mband, cmodel, CreateElementCommand.fixLocation(rect, mband,
-								cmodel.getValue()), -1));
+						c.add(new CreateElementCommand(mband, cmodel, CreateElementCommand.fixLocation(rect, mband,cmodel.getValue()), -1));
 						return c;
 					}
 				} else if (child instanceof CalloutEditPart) {

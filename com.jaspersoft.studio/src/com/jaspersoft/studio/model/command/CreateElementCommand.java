@@ -303,12 +303,19 @@ public class CreateElementCommand extends Command {
 				int maxBandHeight = ModelUtils.getMaxBandHeight(band, jasperDesign);
 				// If the element is too big it will be resized to the maximum band size
 				if (maxBandHeight < height) {
-					height = maxBandHeight;
-					jrElement.setHeight(height - jrElement.getY());
-					// Commented for back-compatibility in 3.6.
-					// Replaced with the following line.
-					// location.setHeight(height - jrElement.getY());
-					location.height = height - jrElement.getY();
+					//The band can not grow to contain the elements, check if the element can enter in the band
+					if (jrElement.getHeight() < maxBandHeight){
+						//The element can enter, place it on the end of the band
+						jrElement.setY(maxBandHeight - jrElement.getHeight());
+						location.y = jrElement.getY();
+					} else {
+						//the element can enter, resize it and place it on the end
+						height = maxBandHeight;
+						jrElement.setHeight(height);
+						jrElement.setY(maxBandHeight - jrElement.getHeight());
+						location.y = jrElement.getY();
+						location.height = jrElement.getHeight();
+					}
 				}
 				SetValueCommand cmd = new SetValueCommand();
 				cmd.setTarget((IPropertySource) destNode);

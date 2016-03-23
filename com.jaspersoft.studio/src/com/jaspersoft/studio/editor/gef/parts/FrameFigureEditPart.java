@@ -16,23 +16,24 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.jasperreports.engine.design.JRDesignElement;
-
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.PrecisionRectangle;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.CompoundSnapToHelper;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
+import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.SnapToGrid;
 import org.eclipse.gef.SnapToGuides;
 import org.eclipse.gef.SnapToHelper;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.handles.HandleBounds;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 import org.eclipse.gef.requests.CreateRequest;
+import org.eclipse.jface.viewers.ISelection;
 
 import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.editor.gef.commands.SetPageConstraintCommand;
@@ -49,6 +50,8 @@ import com.jaspersoft.studio.model.MPage;
 import com.jaspersoft.studio.model.command.CreateElementCommand;
 import com.jaspersoft.studio.model.frame.MFrame;
 import com.jaspersoft.studio.preferences.RulersGridPreferencePage;
+
+import net.sf.jasperreports.engine.design.JRDesignElement;
 
 public class FrameFigureEditPart extends FigureEditPart implements IContainer {
 
@@ -98,6 +101,32 @@ public class FrameFigureEditPart extends FigureEditPart implements IContainer {
 				constraint = new Rectangle(x, y, constraint.width, constraint.height);
 				return super.getCreateCommand(parent, obj, constraint, index);
 			}
+			
+			/**
+			 * Overrides <code>getAddCommand()</code> to generate the proper constraint
+			 * for each child being added. Once the constraint is calculated,
+			 * {@link #createAddCommand(EditPart,Object)} is called. It will also enable
+			 * the restore of the selection so when an element is added inside a frame its
+			 * selection will be preserved
+			 */
+			protected Command getAddCommand(Request generic) {
+				ChangeBoundsRequest request = (ChangeBoundsRequest) generic;
+				List<?> editParts = request.getEditParts();
+				MFrame mband = (MFrame)getModel();
+				JSSCompoundCommand command = new JSSCompoundCommand(mband);
+				command.enableSelectionRestore(true);
+				command.setDebugLabel("Add in Frame");//$NON-NLS-1$
+				GraphicalEditPart child;
+				ISelection currentSelection = null;
+				for (int i = 0; i < editParts.size(); i++) {
+					child = (GraphicalEditPart) editParts.get(i);
+					if (currentSelection == null){
+						currentSelection = child.getViewer().getSelection();
+					}
+					command.add(createAddCommand(request, child, translateToModelConstraint(getConstraintFor(request, child))));
+				}
+				return command;
+			}
 
 			@Override
 			protected Command createAddCommand(ChangeBoundsRequest request, EditPart child, Object constraint) {
@@ -119,7 +148,8 @@ public class FrameFigureEditPart extends FigureEditPart implements IContainer {
 
 						return cmd;
 					} else {
-						JSSCompoundCommand c = new JSSCompoundCommand(getModel());
+						//Return a CompoundCommand, because the JSSCompoundCommand will be created by the getAddCommand method
+						CompoundCommand c = new CompoundCommand();
 						// Without this an element it's one point up when placed into a frame
 						rect.y++;
 						c.add(OutlineTreeEditPartFactory.getOrphanCommand(cmodel.getParent(), cmodel));

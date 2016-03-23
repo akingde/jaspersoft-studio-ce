@@ -29,9 +29,11 @@ import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.SnapToGrid;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.handles.HandleBounds;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 import org.eclipse.gef.requests.CreateRequest;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.IPropertySourceProvider;
 
@@ -188,6 +190,32 @@ public class TableCellEditPart extends APrefFigureEditPart implements IContainer
 
 				return super.getCreateCommand(parent, obj, constraint, index);
 			}
+			
+			/**
+			 * Overrides <code>getAddCommand()</code> to generate the proper constraint
+			 * for each child being added. Once the constraint is calculated,
+			 * {@link #createAddCommand(EditPart,Object)} is called. It will also enable
+			 * the restore of the selection so when an element is added inside a cell its
+			 * selection will be preserved
+			 */
+			protected Command getAddCommand(Request generic) {
+				ChangeBoundsRequest request = (ChangeBoundsRequest) generic;
+				List<?> editParts = request.getEditParts();
+				MColumn mband = getModel();
+				JSSCompoundCommand command = new JSSCompoundCommand(mband);
+				command.enableSelectionRestore(true);
+				command.setDebugLabel("Add in Table Cell");//$NON-NLS-1$
+				GraphicalEditPart child;
+				ISelection currentSelection = null;
+				for (int i = 0; i < editParts.size(); i++) {
+					child = (GraphicalEditPart) editParts.get(i);
+					if (currentSelection == null){
+						currentSelection = child.getViewer().getSelection();
+					}
+					command.add(createAddCommand(request, child, translateToModelConstraint(getConstraintFor(request, child))));
+				}
+				return command;
+			}
 
 			@Override
 			protected Command createAddCommand(EditPart child, Object constraint) {
@@ -198,39 +226,30 @@ public class TableCellEditPart extends APrefFigureEditPart implements IContainer
 						MCell cparent = (MCell) cmodel.getParent();
 						if (cparent == getModel()) {
 							SetPageConstraintCommand cmd = new SetPageConstraintCommand();
-							MGraphicElement model = (MGraphicElement) child
-									.getModel();
+							MGraphicElement model = (MGraphicElement) child.getModel();
 							Rectangle r = model.getBounds();
 
-							JRDesignElement jde = (JRDesignElement) model
-									.getValue();
+							JRDesignElement jde = (JRDesignElement) model.getValue();
 							int x = r.x + rect.x - jde.getX();
 							int y = r.y + rect.y - jde.getY();
 							rect.setLocation(x, y);
-							cmd.setContext(getModel(),
-									(ANode) child.getModel(), rect);
+							cmd.setContext(getModel(),(ANode) child.getModel(), rect);
 
 							return cmd;
 						} else {
-							JSSCompoundCommand c = new JSSCompoundCommand(
-									cmodel);
-
+							//Return a CompoundCommand, because the JSSCompoundCommand will be created by the getAddCommand method
+							CompoundCommand c = new CompoundCommand();
 							c.add(new OrphanElementCommand(cparent, cmodel));
-							c.add(new CreateElementCommand((MCell) getModel(),
-									cmodel, rect, -1));
+							c.add(new CreateElementCommand((MCell) getModel(),cmodel, rect, -1));
 							return c;
 						}
 					} else {
-						return super.createChangeConstraintCommand(child,
-								constraint);
+						return super.createChangeConstraintCommand(child, constraint);
 					}
 				} else if (child instanceof CalloutEditPart) {
-					return new CalloutSetConstraintCommand(
-							((CalloutEditPart) child).getModel(),
-							adaptConstraint(constraint));
+					return new CalloutSetConstraintCommand(((CalloutEditPart) child).getModel(), adaptConstraint(constraint));
 				} else if (child instanceof PinEditPart) {
-					return new PinSetConstraintCommand(((PinEditPart) child)
-							.getModel(), adaptConstraint(constraint));
+					return new PinSetConstraintCommand(((PinEditPart) child).getModel(), adaptConstraint(constraint));
 				}
 				return null;
 			}

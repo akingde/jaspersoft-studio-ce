@@ -16,8 +16,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Map;
+
+import org.eclipse.draw2d.geometry.Rectangle;
+
+import com.jaspersoft.studio.utils.Misc;
 
 import net.sf.jasperreports.components.table.BaseColumn;
 import net.sf.jasperreports.components.table.DesignCell;
@@ -25,10 +28,6 @@ import net.sf.jasperreports.components.table.StandardColumnGroup;
 import net.sf.jasperreports.components.table.StandardTable;
 import net.sf.jasperreports.components.table.util.TableUtil;
 import net.sf.jasperreports.engine.JRGroup;
-
-import org.eclipse.draw2d.geometry.Rectangle;
-
-import com.jaspersoft.studio.utils.Misc;
 
 public class TableMatrix {
 	private List<Guide> hGuides = new ArrayList<Guide>();

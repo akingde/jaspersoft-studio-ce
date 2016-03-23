@@ -112,6 +112,8 @@ public class Messages extends NLS {
 	public static String CreateColumnBeforeAction_title;
 	public static String CreateColumnBeginAction_desc;
 	public static String CreateColumnBeginAction_title;
+	public static String CreateRowAction_createRowName;
+	public static String CreateRowAction_createRowTooltip;
 	public static String DeleteColumnAction_text;
 	public static String DeleteColumnAction_tooltip;
 	public static String DeleteColumnCellAction_name;

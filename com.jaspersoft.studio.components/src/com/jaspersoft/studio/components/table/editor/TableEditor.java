@@ -40,6 +40,7 @@ import com.jaspersoft.studio.components.table.model.column.action.CreateColumnBe
 import com.jaspersoft.studio.components.table.model.column.action.CreateColumnCellAction;
 import com.jaspersoft.studio.components.table.model.column.action.CreateColumnEndAction;
 import com.jaspersoft.studio.components.table.model.column.action.CreateColumnGroupCellAction;
+import com.jaspersoft.studio.components.table.model.column.action.CreateRowAction;
 import com.jaspersoft.studio.components.table.model.column.action.DeleteColumnAction;
 import com.jaspersoft.studio.components.table.model.column.action.DeleteColumnCellAction;
 import com.jaspersoft.studio.components.table.model.column.action.DeleteRowAction;
@@ -196,6 +197,10 @@ public class TableEditor extends NamedSubeditor {
 		registry.registerAction(action);
 		selectionActions.add(DeleteColumnCellAction.ID);
 
+		action = new CreateRowAction(this);
+		registry.registerAction(action);
+		selectionActions.add(CreateRowAction.ID);
+		
 		action = new DeleteRowAction(this);
 		registry.registerAction(action);
 		selectionActions.add(DeleteRowAction.ID);

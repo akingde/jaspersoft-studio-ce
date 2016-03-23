@@ -31,10 +31,11 @@ import com.jaspersoft.studio.editor.gef.parts.editPolicy.FigureSelectionEditPoli
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.SearchParentDragTracker;
 import com.jaspersoft.studio.editor.outline.editpolicy.CloseSubeditorDeletePolicy;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.IContainer;
 import com.jaspersoft.studio.model.MPage;
 
-public class TableEditPart extends EditableFigureEditPart {
-		
+public class TableEditPart extends EditableFigureEditPart implements IContainer {
+	
 	/*
 	 * (non-Javadoc)
 	 * 
