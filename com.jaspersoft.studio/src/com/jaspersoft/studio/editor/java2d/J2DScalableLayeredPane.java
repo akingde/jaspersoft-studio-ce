@@ -1,21 +1,18 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.editor.java2d;
 
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.ScalableLayeredPane;
-/*/*
- * The Class J2DScalableLayeredPane.
+
+/*
+ * /* The Class J2DScalableLayeredPane.
  */
 public class J2DScalableLayeredPane extends ScalableLayeredPane {
 
@@ -36,7 +33,7 @@ public class J2DScalableLayeredPane extends ScalableLayeredPane {
 
 		int i = ((getBorder() == null) || (getBorder().isOpaque())) ? 1 : 0;
 		if (i == 0) {
-			g2.clipRect(getBounds().getCropped(getInsets()));
+			g2.clipRect(getBounds().getShrinked(getInsets()));
 		}
 
 		g2.scale(d);

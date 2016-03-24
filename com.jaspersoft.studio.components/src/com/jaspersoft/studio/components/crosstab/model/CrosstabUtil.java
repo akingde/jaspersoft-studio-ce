@@ -31,11 +31,11 @@ import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabRowGroup;
 import net.sf.jasperreports.crosstabs.type.CrosstabTotalPositionEnum;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRStyle;
+import net.sf.jasperreports.engine.analytics.dataset.BucketOrder;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignStaticText;
 import net.sf.jasperreports.engine.design.JRDesignTextField;
 import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.type.SortOrderEnum;
 import net.sf.jasperreports.engine.util.Pair;
 
 /**
@@ -228,7 +228,7 @@ public class CrosstabUtil {
 		exp.setValueClass(String.class);
 		JRDesignCrosstabBucket bucket = new JRDesignCrosstabBucket();
 		bucket.setExpression(exp);
-		bucket.setOrder(SortOrderEnum.ASCENDING);
+		bucket.setOrder(BucketOrder.ASCENDING);
 		jrGroup.setBucket(bucket);
 
 		JRDesignCellContents headerCell = new JRDesignCellContents();

@@ -12,15 +12,15 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.chart.model.enums;
 
-import net.sf.jasperreports.engine.JRConstants;
-import net.sf.jasperreports.engine.type.EnumUtil;
-import net.sf.jasperreports.engine.type.JREnum;
-
 import org.jfree.chart.axis.AxisLocation;
+
+import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.type.JREnum;
 
 public enum JFreeChartAxisLocationEnum implements JREnum {
 
-	TOP_OR_LEFT((byte) 0, "Top Or Left"), TOP_OR_RIGHT((byte) 1, "Top Or Right"), BOTTOM_OR_LEFT((byte) 2, "Bottom Or Left"), BOTTOM_OR_RIGHT((byte) 3, "Bottom Or Right");
+	TOP_OR_LEFT((byte) 0, "Top Or Left"), TOP_OR_RIGHT((byte) 1, "Top Or Right"), BOTTOM_OR_LEFT((byte) 2,
+			"Bottom Or Left"), BOTTOM_OR_RIGHT((byte) 3, "Bottom Or Right");
 
 	/**
 	 *
@@ -85,14 +85,30 @@ public enum JFreeChartAxisLocationEnum implements JREnum {
 	 *
 	 */
 	public static JFreeChartAxisLocationEnum getByName(String name) {
-		return (JFreeChartAxisLocationEnum) EnumUtil.getByName(values(), name);
+		if (TOP_OR_LEFT.getName().equals(name))
+			return TOP_OR_LEFT;
+		if (TOP_OR_RIGHT.getName().equals(name))
+			return TOP_OR_RIGHT;
+		if (BOTTOM_OR_LEFT.getName().equals(name))
+			return BOTTOM_OR_LEFT;
+		if (BOTTOM_OR_RIGHT.getName().equals(name))
+			return BOTTOM_OR_RIGHT;
+		return null;
 	}
 
 	/**
 	 *
 	 */
 	public static JFreeChartAxisLocationEnum getByValue(Byte value) {
-		return (JFreeChartAxisLocationEnum) EnumUtil.getByValue(values(), value);
+		if (TOP_OR_LEFT.getValueByte().equals(value))
+			return TOP_OR_LEFT;
+		if (TOP_OR_RIGHT.getValueByte().equals(value))
+			return TOP_OR_RIGHT;
+		if (BOTTOM_OR_LEFT.getValueByte().equals(value))
+			return BOTTOM_OR_LEFT;
+		if (BOTTOM_OR_RIGHT.getValueByte().equals(value))
+			return BOTTOM_OR_RIGHT;
+		return null;
 	}
 
 	/**

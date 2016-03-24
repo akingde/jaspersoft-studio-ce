@@ -12,11 +12,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.list.model;
 
-import net.sf.jasperreports.components.list.DesignListContents;
-import net.sf.jasperreports.components.list.StandardListComponent;
-import net.sf.jasperreports.engine.JRChild;
-import net.sf.jasperreports.engine.JRElement;
-
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
@@ -24,9 +19,13 @@ import org.eclipse.ui.views.properties.PropertyDescriptor;
 import com.jaspersoft.studio.components.list.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.section.AbstractSection;
-import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 import com.jaspersoft.studio.property.section.widgets.IPropertyDescriptorWidget;
 import com.jaspersoft.studio.property.section.widgets.SPGenericToolbar;
+
+import net.sf.jasperreports.components.list.DesignListContents;
+import net.sf.jasperreports.components.list.StandardListComponent;
+import net.sf.jasperreports.engine.JRChild;
+import net.sf.jasperreports.engine.JRElement;
 
 /**
  * Property descriptor to show some button to quickset the size of the list

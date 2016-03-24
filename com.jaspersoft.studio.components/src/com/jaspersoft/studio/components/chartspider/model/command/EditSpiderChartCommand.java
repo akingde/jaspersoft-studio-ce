@@ -12,13 +12,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.chartspider.model.command;
 
-import net.sf.jasperreports.components.spiderchart.SpiderChartComponent;
-import net.sf.jasperreports.engine.JRElementGroup;
-import net.sf.jasperreports.engine.design.JRDesignComponentElement;
-import net.sf.jasperreports.engine.design.JRDesignElementDataset;
-import net.sf.jasperreports.engine.design.JRDesignElementGroup;
-import net.sf.jasperreports.engine.design.JRDesignFrame;
-
 import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.wizard.WizardDialog;
@@ -33,6 +26,13 @@ import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.model.frame.MFrame;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
+import net.sf.jasperreports.components.spiderchart.SpiderChartComponent;
+import net.sf.jasperreports.engine.JRElementGroup;
+import net.sf.jasperreports.engine.design.JRDesignComponentElement;
+import net.sf.jasperreports.engine.design.JRDesignElementDataset;
+import net.sf.jasperreports.engine.design.JRDesignElementGroup;
+import net.sf.jasperreports.engine.design.JRDesignFrame;
 
 public class EditSpiderChartCommand extends Command {
 	private JRElementGroup jrGroup;
@@ -74,7 +74,7 @@ public class EditSpiderChartCommand extends Command {
 
 			ChartWizard wizard = new ChartWizard(new MSpiderChart(null, clone,
 					-1), (JRDesignElementDataset) scc.getDataset());
-			wizard.init(jConfig);
+			wizard.setConfig(jConfig);
 			wizard.setExpressionContext(ModelUtils.getElementExpressionContext(oldChart,originalNode));
 			WizardDialog dialog = new WizardDialog(Display.getDefault()
 					.getActiveShell(), wizard);

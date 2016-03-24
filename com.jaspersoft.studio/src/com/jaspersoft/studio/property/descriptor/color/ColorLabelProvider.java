@@ -36,7 +36,7 @@ import com.jaspersoft.studio.utils.Colors;
  * @author Chicu Veaceslav
  */
 public class ColorLabelProvider extends LabelProvider {
-	private NullEnum canBeNull;
+	protected NullEnum canBeNull;
 
 	private ResourceCache imagesCache = new ResourceCache();
 

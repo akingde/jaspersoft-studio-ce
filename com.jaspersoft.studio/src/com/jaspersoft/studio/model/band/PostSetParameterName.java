@@ -29,7 +29,7 @@ public class PostSetParameterName implements IPostSetValue {
 		JSSCompoundCommand c = new JSSCompoundCommand(null);
 		// Check if the updated element is a dataset and the updated property is the name
 		if (target instanceof MGroup && prop.equals(JRDesignGroup.PROPERTY_NAME)) {
-			MGroup mprm = (MGroup) target;
+			// MGroup mprm = (MGroup) target;
 
 		}
 		return c;

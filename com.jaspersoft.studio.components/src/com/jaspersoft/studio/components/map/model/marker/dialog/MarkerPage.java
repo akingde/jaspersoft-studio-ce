@@ -15,13 +15,6 @@ package com.jaspersoft.studio.components.map.model.marker.dialog;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.jasperreports.components.items.Item;
-import net.sf.jasperreports.components.items.ItemProperty;
-import net.sf.jasperreports.components.items.StandardItem;
-import net.sf.jasperreports.components.items.StandardItemProperty;
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.eclipse.util.BasicMapInfoData;
-
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
@@ -34,7 +27,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.forms.events.HyperlinkAdapter;
@@ -52,7 +44,12 @@ import com.jaspersoft.studio.swt.widgets.table.INewElement;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.swt.widgets.table.ListOrderButtons;
 import com.jaspersoft.studio.swt.widgets.table.NewButton;
-import com.jaspersoft.studio.widgets.map.ui.MarkersPickupDialog;
+
+import net.sf.jasperreports.components.items.Item;
+import net.sf.jasperreports.components.items.ItemProperty;
+import net.sf.jasperreports.components.items.StandardItem;
+import net.sf.jasperreports.components.items.StandardItemProperty;
+import net.sf.jasperreports.eclipse.util.BasicMapInfoData;
 
 public class MarkerPage extends WizardPage {
 	private final class EditElement implements IEditElement<Item> {
@@ -62,8 +59,7 @@ public class MarkerPage extends WizardPage {
 			if (v == null)
 				return;
 			v = (Item) v.clone();
-			MarkerDialog dialog = new MarkerDialog(Display.getDefault()
-					.getActiveShell());
+			MarkerDialog dialog = new MarkerDialog(Display.getDefault().getActiveShell());
 			dialog.setValue((StandardItem) v, expContext);
 			if (dialog.open() == Window.OK)
 				input.set(pos, v);
@@ -109,23 +105,22 @@ public class MarkerPage extends WizardPage {
 
 		FormText mapPickSuggestion = new FormText(composite, SWT.NONE);
 		mapPickSuggestion.setText(Messages.MarkerPage_0, true, false);
-		mapPickSuggestion.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
-				true, false, 2, 1));
+		mapPickSuggestion.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
 		mapPickSuggestion.setWhitespaceNormalized(true);
 		mapPickSuggestion.addHyperlinkListener(new HyperlinkAdapter() {
 			@Override
 			public void linkActivated(HyperlinkEvent e) {
-				MarkersPickupDialog staticMarkersDialog = new MarkersPickupDialog(
-						getShell()) {
-					@Override
-					protected void configureShell(Shell newShell) {
-						super.configureShell(newShell);
-						UIUtils.resizeAndCenterShell(newShell, 800, 600);
-					}
-				};
+				// MarkersPickupDialog staticMarkersDialog = new
+				// MarkersPickupDialog(
+				// getShell()) {
+				// @Override
+				// protected void configureShell(Shell newShell) {
+				// super.configureShell(newShell);
+				// UIUtils.resizeAndCenterShell(newShell, 800, 600);
+				// }
+				// };
 				if (mapInfo == null) {
-					mapInfo = ((MMap) value.getPnode())
-							.getBasicMapInformation();
+					mapInfo = ((MMap) value.getPnode()).getBasicMapInformation();
 				}
 				// if (mapInfo.getLatitude() != null
 				// && mapInfo.getLongitude() != null) {
@@ -139,21 +134,25 @@ public class MarkerPage extends WizardPage {
 				// if (mapInfo.getZoom() != 0) {
 				// staticMarkersDialog.setZoom(mapInfo.getZoom());
 				// }
-//				if (staticMarkersDialog.open() == Window.OK) {
-//					List<LatLng> markersList = staticMarkersDialog
-//							.getMarkersList();
-//					for (LatLng m : markersList) {
-//						StandardItem newMarker = new StandardItem();
-//						newMarker
-//								.addItemProperty(new StandardItemProperty(
-//										"latitude", null, new JRDesignExpression(m.getLat().floatValue() + "f"))); //$NON-NLS-1$ //$NON-NLS-2$
-//						newMarker
-//								.addItemProperty(new StandardItemProperty(
-//										"longitude", null, new JRDesignExpression(m.getLng().floatValue() + "f"))); //$NON-NLS-1$ //$NON-NLS-2$
-//						value.getMarkers().add(newMarker);
-//					}
-//					tableViewer.setInput(value.getMarkers());
-//				}
+				// if (staticMarkersDialog.open() == Window.OK) {
+				// List<LatLng> markersList = staticMarkersDialog
+				// .getMarkersList();
+				// for (LatLng m : markersList) {
+				// StandardItem newMarker = new StandardItem();
+				// newMarker
+				// .addItemProperty(new StandardItemProperty(
+				// "latitude", null, new
+				// JRDesignExpression(m.getLat().floatValue() + "f")));
+				// //$NON-NLS-1$ //$NON-NLS-2$
+				// newMarker
+				// .addItemProperty(new StandardItemProperty(
+				// "longitude", null, new
+				// JRDesignExpression(m.getLng().floatValue() + "f")));
+				// //$NON-NLS-1$ //$NON-NLS-2$
+				// value.getMarkers().add(newMarker);
+				// }
+				// tableViewer.setInput(value.getMarkers());
+				// }
 			}
 		});
 
@@ -167,29 +166,23 @@ public class MarkerPage extends WizardPage {
 		bGroup.setLayout(new GridLayout(1, false));
 		bGroup.setLayoutData(new GridData(GridData.FILL_VERTICAL));
 
-		new NewButton().createNewButtons(bGroup, tableViewer,
-				new INewElement() {
+		new NewButton().createNewButtons(bGroup, tableViewer, new INewElement() {
 
-					public Object newElement(List<?> input, int pos) {
-						ArrayList<ItemProperty> props = new ArrayList<ItemProperty>();
-						props.add(new StandardItemProperty(
-								"id", "CHANGE_ME_ID", null)); //$NON-NLS-1$ //$NON-NLS-2$
-						props.add(new StandardItemProperty(
-								"label", "CHANGE_ME_LABEL", null)); //$NON-NLS-1$ //$NON-NLS-2$
-						props.add(new StandardItemProperty(
-								"latitude", "0", null)); //$NON-NLS-1$ //$NON-NLS-2$
-						props.add(new StandardItemProperty(
-								"longitude", "0", null)); //$NON-NLS-1$ //$NON-NLS-2$
+			public Object newElement(List<?> input, int pos) {
+				ArrayList<ItemProperty> props = new ArrayList<ItemProperty>();
+				props.add(new StandardItemProperty("id", "CHANGE_ME_ID", null)); //$NON-NLS-1$ //$NON-NLS-2$
+				props.add(new StandardItemProperty("label", "CHANGE_ME_LABEL", null)); //$NON-NLS-1$ //$NON-NLS-2$
+				props.add(new StandardItemProperty("latitude", "0", null)); //$NON-NLS-1$ //$NON-NLS-2$
+				props.add(new StandardItemProperty("longitude", "0", null)); //$NON-NLS-1$ //$NON-NLS-2$
 
-						StandardItem v = new StandardItem(props);
-						MarkerDialog dialog = new MarkerDialog(Display
-								.getDefault().getActiveShell());
-						dialog.setValue(v, expContext);
-						if (dialog.open() == Window.OK)
-							return v;
-						return null;
-					}
-				});
+				StandardItem v = new StandardItem(props);
+				MarkerDialog dialog = new MarkerDialog(Display.getDefault().getActiveShell());
+				dialog.setValue(v, expContext);
+				if (dialog.open() == Window.OK)
+					return v;
+				return null;
+			}
+		});
 
 		editButton = new EditButton<Item>();
 		editButton.createEditButtons(bGroup, tableViewer, new EditElement());
@@ -201,8 +194,7 @@ public class MarkerPage extends WizardPage {
 	}
 
 	private void buildTable(Composite composite) {
-		table = new Table(composite, SWT.BORDER | SWT.SINGLE
-				| SWT.FULL_SELECTION | SWT.V_SCROLL);
+		table = new Table(composite, SWT.BORDER | SWT.SINGLE | SWT.FULL_SELECTION | SWT.V_SCROLL);
 		table.setHeaderVisible(true);
 		table.addMouseListener(new MouseListener() {
 

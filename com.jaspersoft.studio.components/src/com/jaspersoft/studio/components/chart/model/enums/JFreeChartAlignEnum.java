@@ -12,16 +12,17 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.chart.model.enums;
 
-import net.sf.jasperreports.engine.JRConstants;
-import net.sf.jasperreports.engine.type.EnumUtil;
-import net.sf.jasperreports.engine.type.JREnum;
-
 import org.jfree.ui.Align;
+
+import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.type.JREnum;
 
 public enum JFreeChartAlignEnum implements JREnum {
 
-	CENTER((byte) 0, "Center"), TOP((byte) 1, "Top"), BOTTOM((byte) 2, "Bottom"), LEFT((byte) 3, "Left"), TOP_LEFT((byte) 4, "Top Left"), BOTTOM_LEFT((byte) 5, "Bottom Left"), RIGHT((byte) 6, "Right"), TOP_RIGHT(
-			(byte) 7, "Top Right"), BOTTOM_RIGHT((byte) 8, "Bottom Right"), FIT((byte) 9, "Fit"), FIT_HORIZONTAL((byte) 10, "Fit Horizontal"), FIT_VERTICAL((byte) 11, "Fit Vertical");
+	CENTER((byte) 0, "Center"), TOP((byte) 1, "Top"), BOTTOM((byte) 2, "Bottom"), LEFT((byte) 3, "Left"), TOP_LEFT(
+			(byte) 4, "Top Left"), BOTTOM_LEFT((byte) 5, "Bottom Left"), RIGHT((byte) 6, "Right"), TOP_RIGHT((byte) 7,
+					"Top Right"), BOTTOM_RIGHT((byte) 8, "Bottom Right"), FIT((byte) 9, "Fit"), FIT_HORIZONTAL(
+							(byte) 10, "Fit Horizontal"), FIT_VERTICAL((byte) 11, "Fit Vertical");
 
 	/**
 	 *
@@ -120,14 +121,54 @@ public enum JFreeChartAlignEnum implements JREnum {
 	 *
 	 */
 	public static JFreeChartAlignEnum getByName(String name) {
-		return (JFreeChartAlignEnum) EnumUtil.getByName(values(), name);
+		if (CENTER.getName().equals(name))
+			return CENTER;
+		if (TOP.getName().equals(name))
+			return TOP;
+		if (BOTTOM.getName().equals(name))
+			return BOTTOM;
+		if (LEFT.getName().equals(name))
+			return LEFT;
+		if (TOP_LEFT.getName().equals(name))
+			return TOP_LEFT;
+		if (BOTTOM_LEFT.getName().equals(name))
+			return BOTTOM_LEFT;
+		if (BOTTOM_RIGHT.getName().equals(name))
+			return BOTTOM_RIGHT;
+		if (FIT.getName().equals(name))
+			return FIT;
+		if (FIT_HORIZONTAL.getName().equals(name))
+			return FIT_HORIZONTAL;
+		if (FIT_VERTICAL.getName().equals(name))
+			return FIT_VERTICAL;
+		return null;
 	}
 
 	/**
 	 *
 	 */
 	public static JFreeChartAlignEnum getByValue(Byte value) {
-		return (JFreeChartAlignEnum) EnumUtil.getByValue(values(), value);
+		if (CENTER.getValueByte().equals(value))
+			return CENTER;
+		if (TOP.getValueByte().equals(value))
+			return TOP;
+		if (BOTTOM.getValueByte().equals(value))
+			return BOTTOM;
+		if (LEFT.getValueByte().equals(value))
+			return LEFT;
+		if (TOP_LEFT.getValueByte().equals(value))
+			return TOP_LEFT;
+		if (BOTTOM_LEFT.getValueByte().equals(value))
+			return BOTTOM_LEFT;
+		if (BOTTOM_RIGHT.getValueByte().equals(value))
+			return BOTTOM_RIGHT;
+		if (FIT.getValueByte().equals(value))
+			return FIT;
+		if (FIT_HORIZONTAL.getValueByte().equals(value))
+			return FIT_HORIZONTAL;
+		if (FIT_VERTICAL.getValueByte().equals(value))
+			return FIT_VERTICAL;
+		return null;
 	}
 
 	/**

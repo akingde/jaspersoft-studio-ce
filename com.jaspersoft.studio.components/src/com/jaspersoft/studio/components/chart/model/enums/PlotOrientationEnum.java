@@ -13,7 +13,6 @@
 package com.jaspersoft.studio.components.chart.model.enums;
 
 import net.sf.jasperreports.engine.JRConstants;
-import net.sf.jasperreports.engine.type.EnumUtil;
 import net.sf.jasperreports.engine.type.JREnum;
 
 public enum PlotOrientationEnum implements JREnum {
@@ -64,14 +63,24 @@ public enum PlotOrientationEnum implements JREnum {
 	 *
 	 */
 	public static PlotOrientationEnum getByName(String name) {
-		return (PlotOrientationEnum) EnumUtil.getByName(values(), name);
+		if (HORIZONTAL.getName().equals(name))
+			return HORIZONTAL;
+		if (VERTICAL.getName().equals(name))
+			return VERTICAL;
+		return null;
 	}
 
 	/**
 	 *
 	 */
 	public static PlotOrientationEnum getByValue(Byte value) {
-		return (PlotOrientationEnum) EnumUtil.getByValue(values(), value);
+		if (value == null)
+			return null;
+		if (value.intValue() == 1)
+			return HORIZONTAL;
+		if (value.intValue() == 2)
+			return VERTICAL;
+		return null;
 	}
 
 	/**

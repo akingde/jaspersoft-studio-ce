@@ -81,7 +81,7 @@ public class CrosstabWizardRowPage extends CrosstabWizardColumnPage {
 			case 0:
 				return w.getLabel();
 			case 1:
-				return bucket.getOrderValue().getName();
+				return bucket.getOrder().getName();
 			case 2:
 				return m.getTotalPositionValue().getName();
 			case 3:

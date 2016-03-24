@@ -12,10 +12,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.preview.view.report.system;
 
-import net.sf.jasperreports.eclipse.viewer.ReportViewer;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.export.ooxml.JRXlsxExporter;
-
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.swt.widgets.Composite;
 
@@ -23,6 +19,10 @@ import com.jaspersoft.studio.editor.preview.actions.export.AExportAction;
 import com.jaspersoft.studio.editor.preview.actions.export.xls.ExportAsXlsxAction;
 import com.jaspersoft.studio.preferences.exporter.ExcelExporterPreferencePage;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
+import net.sf.jasperreports.eclipse.viewer.ReportViewer;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.export.XlsxExporterConfiguration;
 
 public class XlsxViewer extends ASystemViewer {
 
@@ -37,7 +37,7 @@ public class XlsxViewer extends ASystemViewer {
 
 	@Override
 	protected String getExtension(JasperPrint jrprint) {
-		if (jrprint.getProperty(JRXlsxExporter.PROPERTY_MACRO_TEMPLATE) != null)
+		if (jrprint.getProperty(XlsxExporterConfiguration.PROPERTY_MACRO_TEMPLATE) != null)
 			return ".xlsm";
 		return ".xlsx";
 	}

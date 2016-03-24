@@ -106,7 +106,7 @@ public class CreateChartCommand extends CreateElementCommand {
 			JRDesignChart newchart = MChart.createJRElement(jasperDesign, JRDesignChart.CHART_TYPE_AREA);
 
 			ChartWizard wizard = new ChartWizard(new MChart(null, newchart, -1), (JRDesignElementDataset) newchart.getDataset());
-			wizard.init(jConfig);
+			wizard.setConfig(jConfig);
 			wizard.setExpressionContext(ModelUtils.getElementExpressionContext(null, destNode)); // Use
 																																														// the
 																																														// "future"

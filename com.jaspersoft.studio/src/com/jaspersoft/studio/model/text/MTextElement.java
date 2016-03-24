@@ -44,7 +44,7 @@ import net.sf.jasperreports.engine.design.JRDesignTextElement;
 import net.sf.jasperreports.engine.type.HorizontalTextAlignEnum;
 import net.sf.jasperreports.engine.type.RotationEnum;
 import net.sf.jasperreports.engine.type.VerticalTextAlignEnum;
-import net.sf.jasperreports.engine.util.JRStyleResolver;
+import net.sf.jasperreports.engine.util.StyleResolver;
 
 public abstract class MTextElement extends MGraphicElementLineBox implements IRotatable {
 
@@ -299,6 +299,8 @@ public abstract class MTextElement extends MGraphicElementLineBox implements IRo
 		}
 	}
 
+	private StyleResolver sr;
+
 	/**
 	 * A text element shouldn't provide a pdf font, since it is deprecated. So the validation return an error message (in
 	 * addition to the ones provided by the superclass) when the pdf font is used directly by the element or inherited by
@@ -316,8 +318,10 @@ public abstract class MTextElement extends MGraphicElementLineBox implements IRo
 			props.add(JRDesignFont.PROPERTY_PDF_EMBEDDED);
 			errors.add(new ValidationError(props, Messages.MTextElement_pdfError));
 		} else {
+			if (sr == null)
+				sr = new StyleResolver(getJasperConfiguration());
 			// The element is not using a pdf font, check if it is inherited from a style
-			JRStyle baseStyle = JRStyleResolver.getBaseStyle(font);
+			JRStyle baseStyle = sr.getBaseStyle(font);
 			String inheritedFromStyle = getPdfFontName(baseStyle);
 			if (inheritedFromStyle != null) {
 				if (errors == null)
@@ -345,7 +349,9 @@ public abstract class MTextElement extends MGraphicElementLineBox implements IRo
 		if (ownPdfFontName != null || (style.isOwnPdfEmbedded() != null && style.isOwnPdfEmbedded())) {
 			return style.getName();
 		}
-		JRStyle baseStyle = JRStyleResolver.getBaseStyle(style);
+		if (sr == null)
+			sr = new StyleResolver(getJasperConfiguration());
+		JRStyle baseStyle = sr.getBaseStyle(style);
 		if (baseStyle == null)
 			return null;
 		String pdfFontName = getPdfFontName(baseStyle);

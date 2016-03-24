@@ -12,11 +12,10 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.chart.model.enums;
 
-import net.sf.jasperreports.engine.JRConstants;
-import net.sf.jasperreports.engine.type.EnumUtil;
-import net.sf.jasperreports.engine.type.JREnum;
-
 import org.jfree.ui.HorizontalAlignment;
+
+import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.type.JREnum;
 
 public enum JFreeChartHorizontalAlignmentEnum implements JREnum {
 
@@ -81,14 +80,26 @@ public enum JFreeChartHorizontalAlignmentEnum implements JREnum {
 	 *
 	 */
 	public static JFreeChartHorizontalAlignmentEnum getByName(String name) {
-		return (JFreeChartHorizontalAlignmentEnum) EnumUtil.getByName(values(), name);
+		if (CENTER.getName().equals(name))
+			return CENTER;
+		if (LEFT.getName().equals(name))
+			return LEFT;
+		if (RIGHT.getName().equals(name))
+			return RIGHT;
+		return null;
 	}
 
 	/**
 	 *
 	 */
 	public static JFreeChartHorizontalAlignmentEnum getByValue(Byte value) {
-		return (JFreeChartHorizontalAlignmentEnum) EnumUtil.getByValue(values(), value);
+		if (CENTER.getValueByte().equals(value))
+			return CENTER;
+		if (LEFT.getValueByte().equals(value))
+			return LEFT;
+		if (RIGHT.getValueByte().equals(value))
+			return RIGHT;
+		return null;
 	}
 
 	/**

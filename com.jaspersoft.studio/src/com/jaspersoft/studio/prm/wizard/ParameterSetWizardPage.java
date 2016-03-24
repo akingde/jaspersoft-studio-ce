@@ -29,7 +29,6 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 public class ParameterSetWizardPage extends WizardPage {
 	private JasperReportsConfiguration jConfig;
 	private boolean override = false;
-	private ParameterSet prmSet;
 	private List lst;
 	private String selected;
 

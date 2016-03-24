@@ -12,11 +12,10 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.chart.model.enums;
 
-import net.sf.jasperreports.engine.JRConstants;
-import net.sf.jasperreports.engine.type.EnumUtil;
-import net.sf.jasperreports.engine.type.JREnum;
-
 import org.jfree.chart.plot.PlotOrientation;
+
+import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.type.JREnum;
 
 public enum JFreeChartPlotOrientationEnum implements JREnum {
 
@@ -77,14 +76,22 @@ public enum JFreeChartPlotOrientationEnum implements JREnum {
 	 *
 	 */
 	public static JFreeChartPlotOrientationEnum getByName(String name) {
-		return (JFreeChartPlotOrientationEnum) EnumUtil.getByName(values(), name);
+		if (HORIZONTAL.getName().equals(name))
+			return HORIZONTAL;
+		if (VERTICAL.getName().equals(name))
+			return VERTICAL;
+		return null;
 	}
 
 	/**
 	 *
 	 */
 	public static JFreeChartPlotOrientationEnum getByValue(Byte value) {
-		return (JFreeChartPlotOrientationEnum) EnumUtil.getByValue(values(), value);
+		if (HORIZONTAL.getValueByte().equals(value))
+			return HORIZONTAL;
+		if (VERTICAL.getValueByte().equals(value))
+			return VERTICAL;
+		return null;
 	}
 
 	/**
