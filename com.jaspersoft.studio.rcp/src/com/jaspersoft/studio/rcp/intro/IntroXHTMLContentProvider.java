@@ -13,21 +13,12 @@
 package com.jaspersoft.studio.rcp.intro;
 
 import java.io.PrintWriter;
-import java.sql.Date;
-import java.text.SimpleDateFormat;
-import java.util.Comparator;
-import java.util.PriorityQueue;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.intro.config.IIntroContentProviderSite;
 import org.eclipse.ui.intro.config.IIntroXHTMLContentProvider;
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import com.jaspersoft.studio.rcp.intro.action.OpenFileAction;

@@ -23,7 +23,6 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 
-import com.jaspersoft.studio.doc.handlers.AsyncAction;
 import com.jaspersoft.studio.doc.samples.messages.Messages;
 
 

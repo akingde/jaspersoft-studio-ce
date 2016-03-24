@@ -18,7 +18,6 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 import com.jaspersoft.studio.property.section.AbstractSection;
-import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 import com.jaspersoft.studio.property.section.widgets.SPPattern;
 
 public class PatternPropertyDescriptor extends NTextPropertyDescriptor {
@@ -41,7 +40,7 @@ public class PatternPropertyDescriptor extends NTextPropertyDescriptor {
 	}
 
 	@Override
-	public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
+	public SPPattern createWidget(Composite parent, AbstractSection section) {
 		return new SPPattern(parent, section, this);
 	}
 }

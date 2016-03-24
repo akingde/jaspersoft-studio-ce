@@ -14,22 +14,12 @@ package com.jaspersoft.studio.server.model;
 
 import java.io.UnsupportedEncodingException;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
-
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.engine.JRConstants;
-
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
-import com.jaspersoft.studio.server.ResourceFactory;
 import com.jaspersoft.studio.server.ServerIconDescriptor;
-import com.jaspersoft.studio.server.messages.Messages;
-import com.jaspersoft.studio.server.utils.ReferenceResolver;
+
+import net.sf.jasperreports.engine.JRConstants;
 
 public class MReference extends AMResource {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;

@@ -15,18 +15,17 @@ package com.jaspersoft.studio.model.sortfield.command;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.gef.commands.Command;
+
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.model.sortfield.MSortFields;
+
 import net.sf.jasperreports.eclipse.util.BundleCommonUtils;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRSortField;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignSortField;
-
-import org.eclipse.gef.commands.Command;
-
-import com.jaspersoft.studio.JaspersoftStudioPlugin;
-import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.model.field.MFields;
-import com.jaspersoft.studio.model.sortfield.MSortFields;
 
 /**
  * This command takes care of removing the all the current sort fields from a 

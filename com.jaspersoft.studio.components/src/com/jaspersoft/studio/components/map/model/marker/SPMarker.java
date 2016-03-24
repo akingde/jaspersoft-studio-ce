@@ -12,8 +12,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.map.model.marker;
 
-import net.sf.jasperreports.components.map.StandardItemData;
-
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
@@ -23,7 +21,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.map.messages.Messages;
 import com.jaspersoft.studio.components.map.model.marker.dialog.MarkerEditor;
@@ -31,11 +28,13 @@ import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 
-public class SPMarker extends ASPropertyWidget {
+import net.sf.jasperreports.components.items.StandardItemData;
+
+public class SPMarker extends ASPropertyWidget<MarkerDescriptor> {
 
 	private Button btn;
 
-	public SPMarker(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
+	public SPMarker(Composite parent, AbstractSection section, MarkerDescriptor pDescriptor) {
 		super(parent, section, pDescriptor);
 	}
 

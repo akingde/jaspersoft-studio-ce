@@ -16,12 +16,6 @@ import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.jasperreports.eclipse.ui.ATitledDialog;
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.eclipse.util.CastorHelper;
-import net.sf.jasperreports.eclipse.util.SecureStorageUtils;
-import net.sf.jasperreports.util.CastorUtil;
-
 import org.apache.commons.codec.binary.Base64;
 import org.eclipse.equinox.security.storage.StorageException;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -53,6 +47,11 @@ import com.jaspersoft.studio.server.secret.JRServerSecretsProvider;
 import com.jaspersoft.studio.swt.widgets.WSecretText;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.wizards.ContextHelpIDs;
+
+import net.sf.jasperreports.eclipse.ui.ATitledDialog;
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.CastorHelper;
+import net.sf.jasperreports.eclipse.util.SecureStorageUtils;
 
 public class CASListFieldEditor extends TableFieldEditor {
 

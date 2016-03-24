@@ -8,8 +8,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.model.dataset.descriptor;
 
-import java.awt.Color;
-
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
@@ -46,7 +44,7 @@ import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
-public class SPDatasetRun<T extends IPropertyDescriptor> extends ASPropertyWidget<T> {
+public class SPDatasetRun<T extends IPropertyDescriptor> extends ASPropertyWidget<IPropertyDescriptor> {
 
 	private Combo dsetCombo;
 

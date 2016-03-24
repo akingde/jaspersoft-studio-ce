@@ -32,7 +32,7 @@ import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 
-public class SPPaintProvider extends ASPropertyWidget {
+public class SPPaintProvider extends ASPropertyWidget<IPropertyDescriptor> {
 	protected Composite composite;
 
 	public SPPaintProvider(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {

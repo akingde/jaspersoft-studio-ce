@@ -17,7 +17,6 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 import com.jaspersoft.studio.property.section.AbstractSection;
-import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 import com.jaspersoft.studio.property.section.widgets.IPropertyDescriptorWidget;
 import com.jaspersoft.studio.property.section.widgets.SPImport;
 
@@ -32,7 +31,7 @@ public class ImportDeclarationPropertyDescriptor extends NTextPropertyDescriptor
 		return editor;
 	}
 
-	public ASPropertyWidget<?> createWidget(Composite parent, AbstractSection section) {
+	public SPImport createWidget(Composite parent, AbstractSection section) {
 		return new SPImport(parent, section, this);
 	}
 }

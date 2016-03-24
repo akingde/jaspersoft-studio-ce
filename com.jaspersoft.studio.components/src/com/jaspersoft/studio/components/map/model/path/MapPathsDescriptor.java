@@ -20,7 +20,6 @@ import com.jaspersoft.studio.components.map.messages.Messages;
 import com.jaspersoft.studio.components.map.model.itemdata.MapDataElementsConfigurationLabelProvider;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 import com.jaspersoft.studio.property.section.AbstractSection;
-import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 
 /**
  * Descriptor for the <code>StandardMapComponent.PROPERTY_PATH_DATA_LIST</code> property.
@@ -46,7 +45,7 @@ public class MapPathsDescriptor extends NTextPropertyDescriptor {
 	}
 	
 	@Override
-	public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
+	public SPMapPathsList createWidget(Composite parent, AbstractSection section) {
 		return new SPMapPathsList(parent, section, this);
 	}
 }

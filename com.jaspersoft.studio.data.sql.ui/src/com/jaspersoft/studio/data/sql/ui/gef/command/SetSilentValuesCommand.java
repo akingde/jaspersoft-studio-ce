@@ -18,7 +18,6 @@ import java.util.Map;
 import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.model.AMapElement;
-import com.jaspersoft.studio.utils.Misc;
 
 public class SetSilentValuesCommand extends Command {
 	private Map<AMapElement, Map<String, Object>> newVals;

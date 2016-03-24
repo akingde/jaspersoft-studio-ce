@@ -12,14 +12,13 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.sql.model.query.groupby;
 
-import net.sf.jasperreports.engine.JRConstants;
-
 import org.eclipse.jface.viewers.StyledString;
 
 import com.jaspersoft.studio.data.sql.model.query.AMQueryObject;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelectExpression;
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.preferences.fonts.utils.FontUtils;
+
+import net.sf.jasperreports.engine.JRConstants;
 
 public class MGroupByExpression extends AMQueryObject<String> {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;

@@ -86,7 +86,7 @@ public class NameSection extends AbstractSection {
 
 		getWidgetFactory().createCLabel(parent, "Name", SWT.RIGHT);
 
-		widgets.put(pd.getId(), new SPText(parent, this, pd) {
+		widgets.put(pd.getId(), new SPText<IPropertyDescriptor>(parent, this, pd) {
 			@Override
 			protected String getCurrentValue() {
 				JRPropertiesMap pmap = (JRPropertiesMap) section.getElement().getPropertyValue(pDescriptor.getId());

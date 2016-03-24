@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.property.section.obj;
 
@@ -53,8 +49,8 @@ public class VariableSection extends AbstractSection {
 		widgets.put(pd.getId(), winctype);
 
 		gd = new GridData(GridData.FILL_HORIZONTAL);
-		createWidget4Property(parent, JRDesignVariable.PROPERTY_INCREMENTER_FACTORY_CLASS_NAME).getControl().setLayoutData(
-				gd);
+		createWidget4Property(parent, JRDesignVariable.PROPERTY_INCREMENTER_FACTORY_CLASS_NAME).getControl()
+				.setLayoutData(gd);
 
 		pd = getPropertyDesriptor(JRDesignVariable.PROPERTY_RESET_TYPE);
 		gpd = getPropertyDesriptor(JRDesignVariable.PROPERTY_RESET_GROUP);
@@ -65,15 +61,17 @@ public class VariableSection extends AbstractSection {
 		wrestype.getControl().setLayoutData(gd);
 		widgets.put(pd.getId(), wrestype);
 	}
-	
+
 	@Override
 	protected void initializeProvidedProperties() {
 		super.initializeProvidedProperties();
 		addProvidedProperties(JRDesignVariable.PROPERTY_CALCULATION, Messages.MVariable_calculation);
 		addProvidedProperties(JRDesignVariable.PROPERTY_EXPRESSION, Messages.common_expression);
-		addProvidedProperties(JRDesignVariable.PROPERTY_INITIAL_VALUE_EXPRESSION, Messages.MVariable_initial_value_expression);
+		addProvidedProperties(JRDesignVariable.PROPERTY_INITIAL_VALUE_EXPRESSION,
+				Messages.MVariable_initial_value_expression);
 		addProvidedProperties(JRDesignVariable.PROPERTY_INCREMENT_TYPE, Messages.common_increment_type);
-		addProvidedProperties(JRDesignVariable.PROPERTY_INCREMENTER_FACTORY_CLASS_NAME, Messages.MVariable_incrementer_factory_class_name);
+		addProvidedProperties(JRDesignVariable.PROPERTY_INCREMENTER_FACTORY_CLASS_NAME,
+				Messages.MVariable_incrementer_factory_class_name);
 		addProvidedProperties(JRDesignVariable.PROPERTY_RESET_TYPE, Messages.common_reset_type);
 	}
 }

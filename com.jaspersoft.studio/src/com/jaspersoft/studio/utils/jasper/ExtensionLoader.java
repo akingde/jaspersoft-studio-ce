@@ -16,24 +16,10 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 
-import net.sf.jasperreports.data.DataAdapterServiceFactory;
-import net.sf.jasperreports.engine.DefaultJasperReportsContext;
-import net.sf.jasperreports.engine.ParameterContributorFactory;
-import net.sf.jasperreports.engine.component.ComponentsBundle;
-import net.sf.jasperreports.engine.export.GenericElementHandlerBundle;
-import net.sf.jasperreports.engine.export.MatcherExportFilterMapping;
-import net.sf.jasperreports.engine.fonts.FontFamily;
-import net.sf.jasperreports.engine.query.QueryExecuterFactoryBundle;
-import net.sf.jasperreports.engine.scriptlets.ScriptletFactory;
-import net.sf.jasperreports.engine.style.StyleProviderFactory;
-import net.sf.jasperreports.engine.util.MessageProviderFactory;
-import net.sf.jasperreports.functions.FunctionsBundle;
-import net.sf.jasperreports.repo.PersistenceServiceFactory;
-import net.sf.jasperreports.repo.RepositoryService;
-import net.sf.jasperreports.util.SecretsProviderFactory;
-
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.osgi.util.NLS;
+
+import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 
 /**
  * 

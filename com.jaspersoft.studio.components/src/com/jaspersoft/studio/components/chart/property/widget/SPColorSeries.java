@@ -15,8 +15,6 @@ package com.jaspersoft.studio.components.chart.property.widget;
 import java.util.Collection;
 import java.util.SortedSet;
 
-import net.sf.jasperreports.engine.base.JRBaseChartPlot.JRBaseSeriesColor;
-
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
@@ -38,7 +36,9 @@ import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 
-public class SPColorSeries extends ASPropertyWidget {
+import net.sf.jasperreports.engine.base.JRBaseChartPlot.JRBaseSeriesColor;
+
+public class SPColorSeries extends ASPropertyWidget<IPropertyDescriptor> {
 	protected Composite composite;
 
 	public SPColorSeries(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {

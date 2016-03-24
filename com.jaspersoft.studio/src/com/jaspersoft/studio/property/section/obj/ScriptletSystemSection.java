@@ -29,7 +29,7 @@ public class ScriptletSystemSection extends AbstractSection {
 		parent = getWidgetFactory().createSection(parent, "Scriptlet Properties", false, 3);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
-		ASPropertyWidget w = createWidget4Property(parent, JRDesignScriptlet.PROPERTY_NAME);
+		ASPropertyWidget<?> w = createWidget4Property(parent, JRDesignScriptlet.PROPERTY_NAME);
 		w.getControl().setLayoutData(gd);
 		w.setReadOnly(true);
 

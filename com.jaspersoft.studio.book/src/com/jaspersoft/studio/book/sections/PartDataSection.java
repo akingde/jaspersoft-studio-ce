@@ -50,12 +50,12 @@ public class PartDataSection extends AbstractSection {
 		buttonsData.horizontalSpan = 2;
 		buttonsComposite.setLayoutData(buttonsData);
 		
-		ASPropertyWidget returnWidget = createWidget4Property(buttonsComposite, JRDesignSubreport.PROPERTY_RETURN_VALUES, false);
+		ASPropertyWidget<?> returnWidget = createWidget4Property(buttonsComposite, JRDesignSubreport.PROPERTY_RETURN_VALUES, false);
 		GridData buttonData = new GridData();
 		buttonsData.horizontalAlignment = SWT.CENTER;
 		returnWidget.getControl().setLayoutData(buttonData);
 		
-		ASPropertyWidget parametersWidget = createWidget4Property(buttonsComposite, JRDesignSubreport.PROPERTY_PARAMETERS, false);
+		ASPropertyWidget<?> parametersWidget = createWidget4Property(buttonsComposite, JRDesignSubreport.PROPERTY_PARAMETERS, false);
 		GridData parametersData = new GridData();
 		parametersData.horizontalAlignment = SWT.CENTER;
 		parametersWidget.getControl().setLayoutData(parametersData);

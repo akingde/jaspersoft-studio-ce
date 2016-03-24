@@ -18,7 +18,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
 public class SPWidgetFactory {
-	public static ASPropertyWidget createWidget(Composite parent, AbstractSection section, IPropertyDescriptor pd) {
+	public static ASPropertyWidget<?> createWidget(Composite parent, AbstractSection section, IPropertyDescriptor pd) {
 		if (pd instanceof IPropertyDescriptorWidget)
 			return ((IPropertyDescriptorWidget) pd).createWidget(parent, section);
 

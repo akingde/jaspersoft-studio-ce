@@ -21,7 +21,6 @@ import com.jaspersoft.studio.components.chart.property.widget.SPMeterInterval;
 import com.jaspersoft.studio.help.IHelp;
 import com.jaspersoft.studio.help.IHelpRefBuilder;
 import com.jaspersoft.studio.property.section.AbstractSection;
-import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 import com.jaspersoft.studio.property.section.widgets.IPropertyDescriptorWidget;
 
 public class MeterIntervalPropertyDescriptor extends PropertyDescriptor
@@ -43,7 +42,7 @@ public class MeterIntervalPropertyDescriptor extends PropertyDescriptor
 		};
 	}
 
-	public ASPropertyWidget createWidget(Composite parent,
+	public SPMeterInterval createWidget(Composite parent,
 			AbstractSection section) {
 		return new SPMeterInterval(parent, section, this);
 	}

@@ -43,7 +43,7 @@ public class LocationSection extends AbstractSection {
 		parent = getWidgetFactory().createSection(parent, Messages.LocationSection_locationLabel, true, 4);
 		section = (ExpandableComposite)parent.getParent();
 
-		ASPropertyWidget pw = createWidget4Property(parent, JRDesignElement.PROPERTY_X);
+		ASPropertyWidget<?> pw = createWidget4Property(parent, JRDesignElement.PROPERTY_X);
 		CLabel lbl = pw.getLabel();
 		lbl.setText(Messages.LocationSection_xCoordinateLabel);
 		lbl.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
@@ -53,7 +53,7 @@ public class LocationSection extends AbstractSection {
 		lbl.setText(Messages.LocationSection_yCoordinateLabel);
 		lbl.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
 
-		ASPropertyWidget w = createWidget4Property(parent, JRDesignElement.PROPERTY_POSITION_TYPE);
+		ASPropertyWidget<?> w = createWidget4Property(parent, JRDesignElement.PROPERTY_POSITION_TYPE);
 		GridData gd = new GridData();
 		gd.horizontalSpan = 3;
 		w.getControl().setLayoutData(gd);

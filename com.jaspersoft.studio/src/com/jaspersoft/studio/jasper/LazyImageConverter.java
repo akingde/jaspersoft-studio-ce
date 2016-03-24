@@ -12,24 +12,6 @@ import java.beans.PropertyChangeEvent;
 import java.util.HashMap;
 import java.util.HashSet;
 
-import net.sf.jasperreports.engine.JRElement;
-import net.sf.jasperreports.engine.JRExpression;
-import net.sf.jasperreports.engine.JRImage;
-import net.sf.jasperreports.engine.JRPrintElement;
-import net.sf.jasperreports.engine.JRPrintImage;
-import net.sf.jasperreports.engine.JasperReportsContext;
-import net.sf.jasperreports.engine.Renderable;
-import net.sf.jasperreports.engine.RenderableUtil;
-import net.sf.jasperreports.engine.base.JRBasePrintImage;
-import net.sf.jasperreports.engine.convert.ElementConverter;
-import net.sf.jasperreports.engine.convert.ReportConverter;
-import net.sf.jasperreports.engine.design.JRDesignDataset;
-import net.sf.jasperreports.engine.design.JRDesignImage;
-import net.sf.jasperreports.engine.type.OnErrorTypeEnum;
-import net.sf.jasperreports.engine.type.ScaleImageEnum;
-import net.sf.jasperreports.engine.util.JRExpressionUtil;
-import net.sf.jasperreports.engine.util.JRImageLoader;
-
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -42,6 +24,24 @@ import com.jaspersoft.studio.model.util.KeyValue;
 import com.jaspersoft.studio.utils.ExpressionUtil;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
+import net.sf.jasperreports.engine.JRElement;
+import net.sf.jasperreports.engine.JRExpression;
+import net.sf.jasperreports.engine.JRImage;
+import net.sf.jasperreports.engine.JRPrintElement;
+import net.sf.jasperreports.engine.JRPrintImage;
+import net.sf.jasperreports.engine.JasperReportsContext;
+import net.sf.jasperreports.engine.base.JRBasePrintImage;
+import net.sf.jasperreports.engine.convert.ElementConverter;
+import net.sf.jasperreports.engine.convert.ReportConverter;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
+import net.sf.jasperreports.engine.design.JRDesignImage;
+import net.sf.jasperreports.engine.type.OnErrorTypeEnum;
+import net.sf.jasperreports.engine.type.ScaleImageEnum;
+import net.sf.jasperreports.engine.util.JRExpressionUtil;
+import net.sf.jasperreports.engine.util.JRImageLoader;
+import net.sf.jasperreports.renderers.Renderable;
+import net.sf.jasperreports.renderers.util.RendererUtil;
 
 /**
  * Special image converter used to load the images in the editor. This one allow the repaint of an element only when a
@@ -196,15 +196,14 @@ public class LazyImageConverter extends ElementConverter {
 
 		printImage.setAnchorName(JRExpressionUtil.getExpressionText(image.getAnchorNameExpression()));
 		printImage.setBookmarkLevel(image.getBookmarkLevel());
-		printImage.setHorizontalImageAlign(image.getOwnHorizontalImageAlign());
-		printImage.setLazy(image.isLazy());
+		printImage.setHorizontalImageAlign(image.getOwnHorizontalImageAlign()); 
 		printImage.setLinkType(image.getLinkType());
 		printImage.setOnErrorType(OnErrorTypeEnum.ICON);
 		printImage.setVerticalImageAlign(image.getOwnVerticalImageAlign());
 		// If it is null load the no image found element
 		if (cacheRenderer == null)
 			cacheRenderer = getRenderableNoImage(reportConverter.getJasperReportsContext(), image, printImage);
-		printImage.setRenderable(cacheRenderer);
+		printImage.setRenderer(cacheRenderer);
 		printImage.setScaleImage(image.getOwnScaleImageValue());
 
 		return printImage;
@@ -257,7 +256,8 @@ public class LazyImageConverter extends ElementConverter {
 	 *          the expression
 	 * @return the value of the expression or null if it can not be evaluated
 	 */
-	private String evaluatedExpression(JasperReportsConfiguration jConf, MGraphicElement modelElement, JRExpression expr) {
+	private String evaluatedExpression(JasperReportsConfiguration jConf, MGraphicElement modelElement,
+			JRExpression expr) {
 		JRDesignDataset jrd = ModelUtils.getFirstDatasetInHierarchy(modelElement);
 		return ExpressionUtil.cachedExpressionEvaluationString(expr, jConf, jrd);
 	}
@@ -286,8 +286,7 @@ public class LazyImageConverter extends ElementConverter {
 					try {
 						String location = evaluatedExpression((JasperReportsConfiguration) jrContext, modelElement, expr);
 						if (location != null) {
-							Renderable r = RenderableUtil.getInstance(jrContext)
-									.getRenderable(location, OnErrorTypeEnum.ERROR, false);
+							Renderable r = RendererUtil.getInstance(jrContext).getNonLazyRenderable(location, OnErrorTypeEnum.ERROR);
 							info.update(r);
 							if (modelElement != null) {
 								modelElement.setChangedProperty(true);
@@ -333,8 +332,8 @@ public class LazyImageConverter extends ElementConverter {
 		try {
 			printImage.setScaleImage(ScaleImageEnum.CLIP);
 			if (noImage == null)
-				noImage = RenderableUtil.getInstance(jasperReportsContext).getRenderable(JRImageLoader.NO_IMAGE_RESOURCE,
-						imageElement.getOnErrorTypeValue(), false);
+				noImage = RendererUtil.getInstance(jasperReportsContext).getNonLazyRenderable(JRImageLoader.NO_IMAGE_RESOURCE,
+						imageElement.getOnErrorTypeValue());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

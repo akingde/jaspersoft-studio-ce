@@ -15,14 +15,6 @@ package com.jaspersoft.studio.server.publish.imp;
 import java.io.File;
 import java.util.Set;
 
-import net.sf.jasperreports.engine.JRReportTemplate;
-import net.sf.jasperreports.engine.JRSimpleTemplate;
-import net.sf.jasperreports.engine.JRTemplateReference;
-import net.sf.jasperreports.engine.design.JRDesignElement;
-import net.sf.jasperreports.engine.design.JRDesignExpression;
-import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.xml.JRXmlTemplateLoader;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -32,8 +24,15 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescript
 import com.jaspersoft.studio.server.model.AFileResource;
 import com.jaspersoft.studio.server.model.MRStyleTemplate;
 import com.jaspersoft.studio.server.model.MReportUnit;
-import com.jaspersoft.studio.server.publish.PublishOptions;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
+import net.sf.jasperreports.engine.JRReportTemplate;
+import net.sf.jasperreports.engine.JRSimpleTemplate;
+import net.sf.jasperreports.engine.JRTemplateReference;
+import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.design.JRDesignExpression;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.xml.JRXmlTemplateLoader;
 
 public class ImpStyleTemplate extends AImpObject {
 	public ImpStyleTemplate(JasperReportsConfiguration jrConfig) {

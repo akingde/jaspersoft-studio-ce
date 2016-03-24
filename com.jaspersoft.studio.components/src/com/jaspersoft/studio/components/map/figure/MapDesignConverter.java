@@ -17,8 +17,8 @@ import net.sf.jasperreports.engine.JRComponentElement;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRElementDataset;
 import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.Renderable;
-import net.sf.jasperreports.engine.RenderableUtil;
+import net.sf.jasperreports.renderers.Renderable;
+import net.sf.jasperreports.renderers.util.RendererUtil;
 import net.sf.jasperreports.engine.component.Component;
 import net.sf.jasperreports.engine.convert.ReportConverter;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -96,9 +96,8 @@ public class MapDesignConverter extends AComponentDesignConverter {
 	}
 
 	@Override
-	protected Renderable doRenderable(ReportConverter reportConverter,
-			final JRComponentElement element, final Component cmp,
-			final String ekey, final JasperReportsConfiguration jrContext,
+	protected Renderable doRenderable(ReportConverter reportConverter, final JRComponentElement element,
+			final Component cmp, final String ekey, final JasperReportsConfiguration jrContext,
 			final KeyValue<String, Long> kv) throws JRException {
 		MapComponent map = (MapComponent) cmp;
 		System.out.println("loading map");
@@ -114,41 +113,23 @@ public class MapDesignConverter extends AComponentDesignConverter {
 			if (dname != null)
 				jrd = jd.getDatasetMap().get(dname);
 		}
-		Number latitude = evaluate(map.getLatitudeExpression(), jrd, jrContext,
-				DEFAULT_LATITUDE);
-		Number longitude = evaluate(map.getLongitudeExpression(), jrd,
-				jrContext, DEFAULT_LONGITUDE);
+		Number latitude = evaluate(map.getLatitudeExpression(), jrd, jrContext, DEFAULT_LATITUDE);
+		Number longitude = evaluate(map.getLongitudeExpression(), jrd, jrContext, DEFAULT_LONGITUDE);
 
-		Integer zoom = evaluate(map.getZoomExpression(), jrd, jrContext,
-				MapComponent.DEFAULT_ZOOM);
+		Integer zoom = evaluate(map.getZoomExpression(), jrd, jrContext, MapComponent.DEFAULT_ZOOM);
 
-		String mapType = map.getMapType() != null ? map.getMapType().getName()
-				: MapTypeEnum.ROADMAP.getName();
-		String mapScale = map.getMapScale() != null ? map.getMapScale()
-				.getName() : MapScaleEnum.ONE.getName();
+		String mapType = map.getMapType() != null ? map.getMapType().getName() : MapTypeEnum.ROADMAP.getName();
+		String mapScale = map.getMapScale() != null ? map.getMapScale().getName() : MapScaleEnum.ONE.getName();
 		String mapFormat = MapImageTypeEnum.PNG.getName();
-		String language = evaluate(map.getLanguageExpression(), jrd, jrContext,
-				"");
+		String language = evaluate(map.getLanguageExpression(), jrd, jrContext, "");
 		String markers = "";
 
-		String imageLocation = "http://maps.google.com/maps/api/staticmap?center="
-				+ (latitude.floatValue() % 90)
-				+ ","
-				+ (longitude.floatValue() % 180)
-				+ "&size="
-				+ element.getWidth()
-				+ "x"
-				+ element.getHeight()
-				+ "&zoom="
-				+ zoom
-				+ (mapType == null ? "" : "&maptype=" + mapType)
-				+ (mapFormat == null ? "" : "&format=" + mapFormat)
-				+ (mapScale == null ? "" : "&scale=" + mapScale)
-				+ markers
-				+ "&sensor=false"
-				+ (language == null ? "" : "&language=" + language);
+		String imageLocation = "http://maps.google.com/maps/api/staticmap?center=" + (latitude.floatValue() % 90) + ","
+				+ (longitude.floatValue() % 180) + "&size=" + element.getWidth() + "x" + element.getHeight() + "&zoom="
+				+ zoom + (mapType == null ? "" : "&maptype=" + mapType)
+				+ (mapFormat == null ? "" : "&format=" + mapFormat) + (mapScale == null ? "" : "&scale=" + mapScale)
+				+ markers + "&sensor=false" + (language == null ? "" : "&language=" + language);
 		kv.key = ekey;
-		return RenderableUtil.getInstance(jrContext).getRenderable(
-				imageLocation, OnErrorTypeEnum.ERROR, false);
+		return RendererUtil.getInstance(jrContext).getNonLazyRenderable(imageLocation, OnErrorTypeEnum.ERROR);
 	}
 }

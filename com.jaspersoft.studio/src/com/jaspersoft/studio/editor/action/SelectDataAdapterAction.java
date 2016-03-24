@@ -14,8 +14,6 @@ package com.jaspersoft.studio.editor.action;
 
 import java.util.ArrayList;
 
-import net.sf.jasperreports.eclipse.util.FileUtils;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuCreator;
@@ -32,11 +30,12 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterManager;
 import com.jaspersoft.studio.data.storage.ADataAdapterStorage;
-import com.jaspersoft.studio.data.storage.FileDataAdapterStorage;
 import com.jaspersoft.studio.data.storage.JRDefaultDataAdapterStorage;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.property.dataset.dialog.DataQueryAdapters;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
+import net.sf.jasperreports.eclipse.util.FileUtils;
 
 /**
  * Action to switch the main data adapter of the report. This is not a real 

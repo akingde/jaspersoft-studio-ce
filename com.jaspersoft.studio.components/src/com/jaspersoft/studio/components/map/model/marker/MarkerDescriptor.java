@@ -38,7 +38,7 @@ public class MarkerDescriptor extends NTextPropertyDescriptor {
 		return new MarkerLabelProvider();
 	}
 
-	public ASPropertyWidget createWidget(Composite parent,
+	public ASPropertyWidget<MarkerDescriptor> createWidget(Composite parent,
 			AbstractSection section) {
 		return new SPMarker(parent, section, this);
 	}

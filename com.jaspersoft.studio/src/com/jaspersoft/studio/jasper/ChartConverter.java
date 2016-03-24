@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 /*
  * JasperReports - Free Java Reporting Library. Copyright (C) 2001 - 2013 Jaspersoft Corporation. All rights reserved.
@@ -85,7 +81,6 @@ import net.sf.jasperreports.renderers.Renderable;
  */
 public final class ChartConverter extends ElementConverter {
 
-	private static final String CHART_THEME = "chart.theme_";
 	/**
 	 *
 	 */
@@ -247,8 +242,8 @@ public final class ChartConverter extends ElementConverter {
 		} finally {
 			Thread.currentThread().setContextClassLoader(oldLoader);
 		}
-		return ChartUtil.getInstance(jContext).getChartRenderableFactory(renderType)
-				.getRenderable(jContext, jfreeChart, null, rectangle);
+		return ChartUtil.getInstance(jContext).getChartRenderableFactory(renderType).getRenderable(jContext, jfreeChart,
+				null, rectangle);
 	}
 
 	private JFreeChart getJFreeChart(ReportConverter reportConverter, JRChart chart) {

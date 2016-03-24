@@ -32,7 +32,7 @@ import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 
-public class SPStroke extends ASPropertyWidget {
+public class SPStroke extends ASPropertyWidget<IPropertyDescriptor> {
 	protected Composite composite;
 
 	public SPStroke(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {

@@ -13,7 +13,6 @@
 package com.jaspersoft.studio.components.customvisualization.server;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
-import com.jaspersoft.studio.server.model.MContentResource;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.MXmlFile;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;

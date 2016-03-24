@@ -42,7 +42,7 @@ import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
  * @author Orlandin Marco
  *
  */
-public class SPMeterInterval extends ASPropertyWidget {
+public class SPMeterInterval extends ASPropertyWidget<IPropertyDescriptor> {
 	
 	/**
 	 * Text where the number of intervals on the meter chart

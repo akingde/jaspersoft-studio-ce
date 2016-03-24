@@ -1,24 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.property.section.graphic;
-
-import net.sf.jasperreports.engine.JRCommonElement;
-import net.sf.jasperreports.engine.JRElementGroup;
-import net.sf.jasperreports.engine.JRPropertiesHolder;
-import net.sf.jasperreports.engine.JRPropertiesMap;
-import net.sf.jasperreports.engine.base.JRBaseElement;
-import net.sf.jasperreports.engine.design.JRDesignBand;
-import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.gef.commands.CommandStack;
@@ -41,18 +29,26 @@ import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.property.section.widgets.SPReadCombo;
 
+import net.sf.jasperreports.engine.JRCommonElement;
+import net.sf.jasperreports.engine.JRElementGroup;
+import net.sf.jasperreports.engine.JRPropertiesHolder;
+import net.sf.jasperreports.engine.JRPropertiesMap;
+import net.sf.jasperreports.engine.base.JRBaseElement;
+import net.sf.jasperreports.engine.design.JRDesignBand;
+import net.sf.jasperreports.engine.design.JasperDesign;
+
 /**
  * Layout combo used the select the layout strategy of a container
  *
  */
-public class SPLayoutCombo extends SPReadCombo<IPropertyDescriptor> {
-	
+public class SPLayoutCombo extends SPReadCombo {
+
 	private APropertyNode pnode;
-	
+
 	private int index = 0;
 
 	private ILayout[] layouts;
-	
+
 	public SPLayoutCombo(Composite parent, LayoutSection section, IPropertyDescriptor pDescriptor) {
 		super(parent, section, pDescriptor);
 	}
@@ -83,16 +79,17 @@ public class SPLayoutCombo extends SPReadCombo<IPropertyDescriptor> {
 			destValue = ((IGroupElement) pnode).getJRElementGroup();
 		if (destValue instanceof JRElementGroup) {
 			Dimension d = new Dimension(0, 0);
-			if (pnode instanceof IGraphicElementContainer){
-				//d = ((IGraphicElementContainer) pnode).getSize();
-				d = LayoutManager.getPaddedSize((IGraphicElementContainer)pnode);
-			}if (destValue instanceof JRCommonElement) {
-				//JRCommonElement jce = (JRCommonElement) destValue;
+			if (pnode instanceof IGraphicElementContainer) {
+				// d = ((IGraphicElementContainer) pnode).getSize();
+				d = LayoutManager.getPaddedSize((IGraphicElementContainer) pnode);
+			}
+			if (destValue instanceof JRCommonElement) {
+				// JRCommonElement jce = (JRCommonElement) destValue;
 				// Commented for back-compatibility in 3.6.
 				// Replaced with the following line.
 				// d.setSize(jce.getWidth(), jce.getHeight());
-				//d.setSize(new Dimension(jce.getWidth(), jce.getHeight()));
-				d = LayoutManager.getPaddedSize((JRCommonElement)destValue);
+				// d.setSize(new Dimension(jce.getWidth(), jce.getHeight()));
+				d = LayoutManager.getPaddedSize((JRCommonElement) destValue);
 			}
 			if (destValue instanceof JRDesignBand) {
 				JasperDesign jDesign = pnode.getJasperDesign();
@@ -119,15 +116,16 @@ public class SPLayoutCombo extends SPReadCombo<IPropertyDescriptor> {
 			JasperDesign jDesign = pnode.getJasperDesign();
 			index = getIndex(jDesign, ((JRBaseElement) obj).getUUID().toString());
 		}
-		if (index == -1){
-			if (pnode != null && pnode instanceof IContainerLayout){
-				IContainerLayout layoutContainer = (IContainerLayout)pnode;
+		if (index == -1) {
+			if (pnode != null && pnode instanceof IContainerLayout) {
+				IContainerLayout layoutContainer = (IContainerLayout) pnode;
 				ILayout defaultLayout = layoutContainer.getDefaultLayout();
-				if (defaultLayout != null){
+				if (defaultLayout != null) {
 					index = getIndex(defaultLayout.getClass().getName());
-				} 
+				}
 			}
-			if (index == -1) index = 0;
+			if (index == -1)
+				index = 0;
 		}
 		combo.select(index);
 	}
@@ -143,11 +141,12 @@ public class SPLayoutCombo extends SPReadCombo<IPropertyDescriptor> {
 		String str = pmap.getProperty(key);
 		return getIndex(str);
 	}
-	
+
 	/**
 	 * Get the layout index in the combo from its classname
 	 * 
-	 * @param the classname of the layout
+	 * @param the
+	 *          classname of the layout
 	 * @return the index of the layout in the combo or -1 if it can't be found
 	 */
 	private int getIndex(String layoutName) {
@@ -160,10 +159,10 @@ public class SPLayoutCombo extends SPReadCombo<IPropertyDescriptor> {
 		}
 		return -1;
 	}
-	
+
 	@Override
-	protected void createComponent(Composite parent) {	
-		Composite container = section.getWidgetFactory().createComposite(parent);	
+	protected void createComponent(Composite parent) {
+		Composite container = section.getWidgetFactory().createComposite(parent);
 		container.setLayout(new GridLayout(1, false));
 		combo = section.getWidgetFactory().createCombo(container, SWT.READ_ONLY);
 		layouts = LayoutManager.getAllLayouts();
@@ -171,7 +170,7 @@ public class SPLayoutCombo extends SPReadCombo<IPropertyDescriptor> {
 		for (int i = 0; i < layouts.length; i++)
 			labels[i] = layouts[i].getName();
 		combo.setItems(labels);
-		
+
 		combo.addSelectionListener(new SelectionAdapter() {
 
 			@Override

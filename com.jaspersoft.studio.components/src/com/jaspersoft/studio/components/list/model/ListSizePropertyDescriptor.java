@@ -106,7 +106,7 @@ public class ListSizePropertyDescriptor extends PropertyDescriptor  implements I
 	 * Create the widget and define the button to set the cell size to the element size and to the content size
 	 */
 	@Override
-	public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
+	public SPGenericToolbar createWidget(Composite parent, AbstractSection section) {
 		this.section = section;
 		SPGenericToolbar toolbuttons = new SPGenericToolbar(parent, section, this, SPGenericToolbar.Style.buttons);
 		toolbuttons.addItem(setCellToDefaultAction, Messages.ListSizePropertyDescriptor_elementFitTooltip, Messages.ListSizePropertyDescriptor_elementFitName, null);

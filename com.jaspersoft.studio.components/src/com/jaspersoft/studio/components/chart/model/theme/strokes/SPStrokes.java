@@ -34,7 +34,7 @@ import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 
-public class SPStrokes extends ASPropertyWidget {
+public class SPStrokes extends ASPropertyWidget<IPropertyDescriptor> {
 	protected Composite composite;
 
 	public SPStrokes(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {

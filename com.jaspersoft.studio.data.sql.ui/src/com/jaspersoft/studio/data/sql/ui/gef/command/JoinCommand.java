@@ -21,7 +21,6 @@ import org.eclipse.jface.viewers.TreeViewer;
 
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.action.ActionFactory;
-import com.jaspersoft.studio.data.sql.action.table.JoinTable;
 import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
 import com.jaspersoft.studio.data.sql.model.query.expression.MExpression;
 import com.jaspersoft.studio.data.sql.model.query.from.MFrom;

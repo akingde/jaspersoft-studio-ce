@@ -15,13 +15,8 @@ package com.jaspersoft.studio.data.sql.action.expression;
 import java.util.Collection;
 import java.util.List;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.engine.JRParameter;
-import net.sf.jasperreports.engine.design.JRDesignParameter;
-
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.TreeViewer;
-import org.eclipse.swt.widgets.Display;
 
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.Util;
@@ -46,6 +41,10 @@ import com.jaspersoft.studio.data.sql.model.query.select.MSelectColumn;
 import com.jaspersoft.studio.data.sql.widgets.Factory;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
+
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.engine.JRParameter;
+import net.sf.jasperreports.engine.design.JRDesignParameter;
 
 public class CreateExpression extends AAction {
 	private CreateTable ct;

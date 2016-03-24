@@ -14,14 +14,6 @@ package com.jaspersoft.studio.components.map.model.itemdata;
 
 import java.util.List;
 
-import net.sf.jasperreports.components.items.ItemData;
-import net.sf.jasperreports.components.items.ItemProperty;
-import net.sf.jasperreports.components.items.StandardItem;
-import net.sf.jasperreports.components.items.StandardItemProperty;
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.engine.JRElementDataset;
-import net.sf.jasperreports.engine.util.JRCloneUtils;
-
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -70,13 +62,22 @@ import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
+import net.sf.jasperreports.components.items.ItemData;
+import net.sf.jasperreports.components.items.ItemProperty;
+import net.sf.jasperreports.components.items.StandardItem;
+import net.sf.jasperreports.components.items.StandardItemProperty;
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.engine.JRElementDataset;
+import net.sf.jasperreports.engine.util.JRCloneUtils;
+
 /**
- * Abstract widget that should be extended by map properties involving a list of {@link ItemData} elements.
+ * Abstract widget that should be extended by map properties involving a list of
+ * {@link ItemData} elements.
  * 
  * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
  *
  */
-public abstract class SPMapDataElementsList extends ASPropertyWidget {
+public abstract class SPMapDataElementsList extends ASPropertyWidget<IPropertyDescriptor> {
 
 	private MapDataElementsConfiguration mapElementsConfig;
 	private JasperReportsConfiguration jConfig;
@@ -97,36 +98,34 @@ public abstract class SPMapDataElementsList extends ASPropertyWidget {
 	private ElementsTreeStatus treeStatus;
 	private ElementsListWidgetConfiguration widgetConfig;
 
-	public SPMapDataElementsList(
-			Composite parent, AbstractSection section,
-			IPropertyDescriptor pDescriptor) {
+	public SPMapDataElementsList(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
 		super(parent, section, pDescriptor);
 	}
 
 	@Override
 	protected void createComponent(Composite parent) {
 		widgetConfig = getWidgetConfiguration();
-		
+
 		tabfolder = new TabFolder(parent, SWT.NONE);
 		GridData tabfolderGD = new GridData(SWT.FILL, SWT.FILL, true, false);
 		tabfolderGD.heightHint = 150;
 		tabfolder.setLayoutData(tabfolderGD);
-		
+
 		createElementsTab(tabfolder);
 		createDatasetsTab(tabfolder);
 	}
-	
+
 	protected abstract ElementsListWidgetConfiguration getWidgetConfiguration();
 
-	private void createElementsTab(TabFolder parentFolder){
+	private void createElementsTab(TabFolder parentFolder) {
 		TabItem elementsTab = new TabItem(parentFolder, SWT.NONE);
-		elementsCmp = new Composite(parentFolder,SWT.NONE);
-		elementsCmp.setLayout(new GridLayout(2,false));
+		elementsCmp = new Composite(parentFolder, SWT.NONE);
+		elementsCmp.setLayout(new GridLayout(2, false));
 		elementsTab.setControl(elementsCmp);
 		elementsTab.setText(widgetConfig.getElementsTabTitle());
-		
+
 		elementsTV = new TreeViewer(elementsCmp, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
-		elementsTV.getTree().setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true,1,3));
+		elementsTV.getTree().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 3));
 		elementsTV.setLabelProvider(getElementsViewerLabelProvider());
 		elementsTV.setContentProvider(getElementsViewerContentProvider());
 		elementsTV.addSelectionChangedListener(new ISelectionChangedListener() {
@@ -139,26 +138,26 @@ public abstract class SPMapDataElementsList extends ASPropertyWidget {
 			@Override
 			public void doubleClick(DoubleClickEvent event) {
 				Object selObj = getElementsTVSelectedObj();
-				if(selObj instanceof MapDataElementDTO) {
-					modifySelectedElement((MapDataElementDTO) selObj);	
-				}
-				else if(selObj instanceof MapDataElementItemDTO) {
+				if (selObj instanceof MapDataElementDTO) {
+					modifySelectedElement((MapDataElementDTO) selObj);
+				} else if (selObj instanceof MapDataElementItemDTO) {
 					modifySelectedElementItem((MapDataElementItemDTO) selObj);
 				}
 			}
 		});
-		
+
 		btnAddNewElement = new Button(elementsCmp, SWT.NONE);
 		btnAddNewElement.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 1, 1));
 		btnAddNewElement.setImage(widgetConfig.getAddNewElementIcon());
-		btnAddNewElement.setToolTipText(NLS.bind(Messages.SPMapDataElementsList_AddNewElement, widgetConfig.getElementTxt()));
+		btnAddNewElement
+				.setToolTipText(NLS.bind(Messages.SPMapDataElementsList_AddNewElement, widgetConfig.getElementTxt()));
 		btnAddNewElement.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				addNewElementBtnPressed();
 			}
 		});
-		
+
 		btnMoveUpItem = new Button(elementsCmp, SWT.NONE);
 		btnMoveUpItem.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 1, 1));
 		btnMoveUpItem.setImage(Activator.getDefault().getImage("/icons/pathitem-moveup-16.png")); //$NON-NLS-1$
@@ -169,7 +168,7 @@ public abstract class SPMapDataElementsList extends ASPropertyWidget {
 				moveUpItemBtnPressed();
 			}
 		});
-		
+
 		btnMoveDownItem = new Button(elementsCmp, SWT.NONE);
 		btnMoveDownItem.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 1, 1));
 		btnMoveDownItem.setImage(Activator.getDefault().getImage("/icons/pathitem-movedown-16.png")); //$NON-NLS-1$
@@ -180,182 +179,179 @@ public abstract class SPMapDataElementsList extends ASPropertyWidget {
 				moveDownItemBtnPressed();
 			}
 		});
-		
+
 		enableDefaultTreeButtons();
 		addTreeMenuManager();
 	}
-	
+
 	protected abstract IBaseLabelProvider getElementsViewerLabelProvider();
 
 	protected abstract IContentProvider getElementsViewerContentProvider();
 
 	private void addTreeMenuManager() {
 		MenuManager menuMgr = new MenuManager();
-        Menu menu = menuMgr.createContextMenu(elementsTV.getControl());
-        menuMgr.addMenuListener(new IMenuListener() {
-            @Override
-            public void menuAboutToShow(IMenuManager manager) {
-                if (elementsTV.getSelection().isEmpty()) {
-                    return;
-                }
+		Menu menu = menuMgr.createContextMenu(elementsTV.getControl());
+		menuMgr.addMenuListener(new IMenuListener() {
+			@Override
+			public void menuAboutToShow(IMenuManager manager) {
+				if (elementsTV.getSelection().isEmpty()) {
+					return;
+				}
 
-                if (elementsTV.getSelection() instanceof IStructuredSelection) {
-                    IStructuredSelection selection = (IStructuredSelection) elementsTV.getSelection();
-                    Object selObj = selection.getFirstElement();
-                    
-                    if (selObj instanceof MapDataElementItemDTO) {
-                        manager.add(new EditItemAction());
-                        manager.add(new DeleteItemAction());
-                    }
-                    else if (selObj instanceof MapDataElementDTO) {
-                    	manager.add(new AddItemAction());
-                    	manager.add(new EditElementAction());
-                    	manager.add(new DeleteElementAction());
-                    }
-                    else {
-                    	return;
-                    }
-                }
-            }
-        });
-        menuMgr.setRemoveAllWhenShown(true);
-        elementsTV.getControl().setMenu(menu);
+				if (elementsTV.getSelection() instanceof IStructuredSelection) {
+					IStructuredSelection selection = (IStructuredSelection) elementsTV.getSelection();
+					Object selObj = selection.getFirstElement();
+
+					if (selObj instanceof MapDataElementItemDTO) {
+						manager.add(new EditItemAction());
+						manager.add(new DeleteItemAction());
+					} else if (selObj instanceof MapDataElementDTO) {
+						manager.add(new AddItemAction());
+						manager.add(new EditElementAction());
+						manager.add(new DeleteElementAction());
+					} else {
+						return;
+					}
+				}
+			}
+		});
+		menuMgr.setRemoveAllWhenShown(true);
+		elementsTV.getControl().setMenu(menu);
 	}
-	
+
 	private class AddItemAction extends Action {
-		
-		private AddItemAction(){
+
+		private AddItemAction() {
 			super();
 			setText(Messages.SPMapDataElementsList_AddNewItem);
-			setToolTipText(NLS.bind(Messages.SPMapDataElementsList_AddNewItemTooltip,widgetConfig.getElementTxt()));
+			setToolTipText(NLS.bind(Messages.SPMapDataElementsList_AddNewItemTooltip, widgetConfig.getElementTxt()));
 			setImageDescriptor(Activator.getDefault().getImageDescriptor("/icons/add_element.gif")); //$NON-NLS-1$
 		}
-		
+
 		@Override
 		public void run() {
 			Object selObj = ((IStructuredSelection) elementsTV.getSelection()).getFirstElement();
-			if(selObj instanceof MapDataElementDTO) {
+			if (selObj instanceof MapDataElementDTO) {
 				ItemProperty elementName = ((MapDataElementDTO) selObj).getName();
 				MapDataElementItemDTO newItemDTO = new MapDataElementItemDTO(elementName);
 				StandardItem newItem = createStandardItem();
 				newItem.addItemProperty((ItemProperty) elementName.clone());
-				newItemDTO.setItem(newItem);				
-	        	ElementItemDialog dialog = new ElementItemDialog(
-	        			UIUtils.getShell(),newItemDTO,widgetConfig,
-	        			mapElementsConfig.getElementDatasetsMap(),jConfig);
-	        	dialog.setMandatoryPropertyNames(getMandatoryProperties());
-	        	dialog.setDefaultExpressionContext(getDefaultExpressionContext());
-	        	if(dialog.open()==Window.OK) {
-	        		((MapDataElementDTO)selObj).getDataItems().add(dialog.getItemDTO());
-	        		firePropertyChanged(LAST_OPERATION.ADD);
-	        	}
+				newItemDTO.setItem(newItem);
+				ElementItemDialog dialog = new ElementItemDialog(UIUtils.getShell(), newItemDTO, widgetConfig,
+						mapElementsConfig.getElementDatasetsMap(), jConfig);
+				dialog.setMandatoryPropertyNames(getMandatoryProperties());
+				dialog.setDefaultExpressionContext(getDefaultExpressionContext());
+				if (dialog.open() == Window.OK) {
+					((MapDataElementDTO) selObj).getDataItems().add(dialog.getItemDTO());
+					firePropertyChanged(LAST_OPERATION.ADD);
+				}
 			}
 		}
 	}
-	
+
 	private class EditElementAction extends Action {
 		private EditElementAction() {
 			super();
-			setText(NLS.bind(Messages.SPMapDataElementsList_EditElement,widgetConfig.getElementTxt()));
-			setToolTipText(NLS.bind(Messages.SPMapDataElementsList_EditElementTooltip,widgetConfig.getElementTxt()));
+			setText(NLS.bind(Messages.SPMapDataElementsList_EditElement, widgetConfig.getElementTxt()));
+			setToolTipText(NLS.bind(Messages.SPMapDataElementsList_EditElementTooltip, widgetConfig.getElementTxt()));
 			setImageDescriptor(Activator.getDefault().getImageDescriptor("/icons/edit_element.gif")); //$NON-NLS-1$
 		}
-		
+
 		@Override
 		public void run() {
 			Object selObj = getElementsTVSelectedObj();
-			if(selObj instanceof MapDataElementDTO) {
+			if (selObj instanceof MapDataElementDTO) {
 				modifySelectedElement((MapDataElementDTO) selObj);
 			}
 		}
 	}
-	
+
 	private void modifySelectedElement(MapDataElementDTO selectedElement) {
 		ItemProperty clonedElementName = JRCloneUtils.nullSafeClone(selectedElement.getName());
-		if(clonedElementName==null){
-			clonedElementName = new StandardItemProperty("name","",null); //$NON-NLS-1$ //$NON-NLS-2$
+		if (clonedElementName == null) {
+			clonedElementName = new StandardItemProperty("name", "", null); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		MapElementDialog dialog = new MapElementDialog(UIUtils.getShell(), clonedElementName, widgetConfig);
 		dialog.setExpressionContext(getDefaultExpressionContext());
-		if(dialog.open()==Window.OK) {
+		if (dialog.open() == Window.OK) {
 			selectedElement.setName(dialog.getElementName());
 			firePropertyChanged(LAST_OPERATION.EDIT);
 		}
 	}
-	
+
 	private class DeleteElementAction extends Action {
-		private DeleteElementAction(){
+		private DeleteElementAction() {
 			super();
-			setText(NLS.bind(Messages.SPMapDataElementsList_DeleteElement,widgetConfig.getElementTxt()));
-			setToolTipText(NLS.bind(Messages.SPMapDataElementsList_DeleteElementTooltip,widgetConfig.getElementTxt()));
+			setText(NLS.bind(Messages.SPMapDataElementsList_DeleteElement, widgetConfig.getElementTxt()));
+			setToolTipText(NLS.bind(Messages.SPMapDataElementsList_DeleteElementTooltip, widgetConfig.getElementTxt()));
 			setImageDescriptor(Activator.getDefault().getImageDescriptor("/icons/delete_element.gif")); //$NON-NLS-1$
 		}
-		
+
 		@Override
 		public void run() {
-			boolean deleteElement = MessageDialog.openQuestion(
-					UIUtils.getShell(), NLS.bind(Messages.SPMapDataElementsList_DeleteElement,widgetConfig.getElementTxt()), 
-					NLS.bind(Messages.SPMapDataElementsList_ConfirmElementDelete,widgetConfig.getElementTxt()));
-			if(deleteElement){
+			boolean deleteElement = MessageDialog.openQuestion(UIUtils.getShell(),
+					NLS.bind(Messages.SPMapDataElementsList_DeleteElement, widgetConfig.getElementTxt()),
+					NLS.bind(Messages.SPMapDataElementsList_ConfirmElementDelete, widgetConfig.getElementTxt()));
+			if (deleteElement) {
 				IStructuredSelection selection = (IStructuredSelection) elementsTV.getSelection();
-		        Object selObj = selection.getFirstElement();
-		        if(selObj instanceof MapDataElementDTO) {
-		        	mapElementsConfig.getElements().remove(selObj);
-		        	firePropertyChanged(LAST_OPERATION.REMOVE);
-		        }
+				Object selObj = selection.getFirstElement();
+				if (selObj instanceof MapDataElementDTO) {
+					mapElementsConfig.getElements().remove(selObj);
+					firePropertyChanged(LAST_OPERATION.REMOVE);
+				}
 			}
 		}
 	}
-	
+
 	private class EditItemAction extends Action {
-		private EditItemAction(){
+		private EditItemAction() {
 			super();
 			setText(Messages.SPMapDataElementsList_EditItem);
-			setToolTipText(NLS.bind(Messages.SPMapDataElementsList_EditItemTooltip,widgetConfig.getElementTxt()));
+			setToolTipText(NLS.bind(Messages.SPMapDataElementsList_EditItemTooltip, widgetConfig.getElementTxt()));
 			setImageDescriptor(Activator.getDefault().getImageDescriptor("/icons/edit_element.gif")); //$NON-NLS-1$
 		}
-		
+
 		@Override
 		public void run() {
 			Object selObj = getElementsTVSelectedObj();
-			if(selObj instanceof MapDataElementItemDTO) {
+			if (selObj instanceof MapDataElementItemDTO) {
 				modifySelectedElementItem((MapDataElementItemDTO) selObj);
 			}
 		}
 	}
 
 	private void modifySelectedElementItem(MapDataElementItemDTO selObj) {
-    	MapDataElementItemDTO itemDTOClone = (MapDataElementItemDTO) selObj.clone();
-    	ElementItemDialog dialog = new ElementItemDialog(
-    			UIUtils.getShell(),itemDTOClone, widgetConfig,
-    			mapElementsConfig.getElementDatasetsMap(), jConfig);
-    	dialog.setMandatoryPropertyNames(getMandatoryProperties());
-    	if(dialog.open()==Window.OK) {
-    		ElementDataHelper.updateElementDataItem(
-    				mapElementsConfig,itemDTOClone.getParentName(),selObj,dialog.getItemDTO());
-    		firePropertyChanged(LAST_OPERATION.EDIT);
-    	}
+		MapDataElementItemDTO itemDTOClone = (MapDataElementItemDTO) selObj.clone();
+		ElementItemDialog dialog = new ElementItemDialog(UIUtils.getShell(), itemDTOClone, widgetConfig,
+				mapElementsConfig.getElementDatasetsMap(), jConfig);
+		dialog.setMandatoryPropertyNames(getMandatoryProperties());
+		if (dialog.open() == Window.OK) {
+			ElementDataHelper.updateElementDataItem(mapElementsConfig, itemDTOClone.getParentName(), selObj,
+					dialog.getItemDTO());
+			firePropertyChanged(LAST_OPERATION.EDIT);
+		}
 	}
-	
+
 	protected abstract List<String> getMandatoryProperties();
-	
+
 	private class DeleteItemAction extends Action {
-		private DeleteItemAction(){
+		private DeleteItemAction() {
 			super();
 			setText(Messages.SPMapDataElementsList_DeleteItem);
 			setToolTipText(NLS.bind(Messages.SPMapDataElementsList_DeleteItemTooltip, widgetConfig.getElementTxt()));
 			setImageDescriptor(Activator.getDefault().getImageDescriptor("/icons/delete_element.gif")); //$NON-NLS-1$
 		}
-		
+
 		@Override
 		public void run() {
-			boolean delete = MessageDialog.openQuestion(
-					UIUtils.getShell(),NLS.bind(Messages.SPMapDataElementsList_RemoveQuestionTitle,widgetConfig.getElementTxt()), 
+			boolean delete = MessageDialog.openQuestion(UIUtils.getShell(),
+					NLS.bind(Messages.SPMapDataElementsList_RemoveQuestionTitle, widgetConfig.getElementTxt()),
 					NLS.bind(Messages.SPMapDataElementsList_RemoveQuestionMsg, widgetConfig.getElementTxt()));
-			if(delete){
-				MapDataElementItemDTO item = (MapDataElementItemDTO) ((IStructuredSelection) elementsTV.getSelection()).getFirstElement();
+			if (delete) {
+				MapDataElementItemDTO item = (MapDataElementItemDTO) ((IStructuredSelection) elementsTV.getSelection())
+						.getFirstElement();
 				ItemProperty parentName = item.getParentName();
-				ElementDataHelper.removeElementDataItem(mapElementsConfig,parentName,item);
+				ElementDataHelper.removeElementDataItem(mapElementsConfig, parentName, item);
 				firePropertyChanged(LAST_OPERATION.REMOVE);
 			}
 		}
@@ -363,18 +359,18 @@ public abstract class SPMapDataElementsList extends ASPropertyWidget {
 
 	private void enableDefaultTreeButtons() {
 		btnAddNewElement.setEnabled(true);
-		Object selElement = ((IStructuredSelection)elementsTV.getSelection()).getFirstElement();
+		Object selElement = ((IStructuredSelection) elementsTV.getSelection()).getFirstElement();
 		boolean enableMoveBtns = !elementsTV.getSelection().isEmpty() && selElement instanceof MapDataElementItemDTO;
 		btnMoveDownItem.setEnabled(enableMoveBtns);
 		btnMoveUpItem.setEnabled(enableMoveBtns);
 	}
-	
+
 	protected void addNewElementBtnPressed() {
 		StandardItemProperty pname = new StandardItemProperty();
 		pname.setName("name"); //$NON-NLS-1$
 		MapElementDialog dialog = new MapElementDialog(UIUtils.getShell(), pname, widgetConfig);
 		dialog.setExpressionContext(getDefaultExpressionContext());
-		if(dialog.open()==Window.OK) {
+		if (dialog.open() == Window.OK) {
 			MapDataElementDTO newElement = new MapDataElementDTO();
 			ItemProperty elementName = dialog.getElementName();
 			newElement.setName(elementName);
@@ -382,37 +378,39 @@ public abstract class SPMapDataElementsList extends ASPropertyWidget {
 			dummyElementItem.setDatasetName(null);
 			StandardItem dummyItem = new StandardItem();
 			dummyItem.addItemProperty(elementName);
-			for(String p : getMandatoryProperties()) {
+			for (String p : getMandatoryProperties()) {
 				dummyItem.addItemProperty(new StandardItemProperty(p, "CHANGE_ME", null)); //$NON-NLS-1$
 			}
 			dummyElementItem.setItem(dummyItem);
 			newElement.getDataItems().add(dummyElementItem);
-			mapElementsConfig.getElements().add(newElement);			
+			mapElementsConfig.getElements().add(newElement);
 			firePropertyChanged(LAST_OPERATION.ADD);
-		}		
+		}
 	}
 
 	protected void moveDownItemBtnPressed() {
-		MapDataElementItemDTO item = (MapDataElementItemDTO) ((IStructuredSelection) elementsTV.getSelection()).getFirstElement();
+		MapDataElementItemDTO item = (MapDataElementItemDTO) ((IStructuredSelection) elementsTV.getSelection())
+				.getFirstElement();
 		ItemProperty parentName = item.getParentName();
-		ElementDataHelper.moveDownDataItem(mapElementsConfig,parentName,item);
+		ElementDataHelper.moveDownDataItem(mapElementsConfig, parentName, item);
 		firePropertyChanged(LAST_OPERATION.MOVEDOWN);
 	}
 
 	protected void moveUpItemBtnPressed() {
-		MapDataElementItemDTO item = (MapDataElementItemDTO) ((IStructuredSelection) elementsTV.getSelection()).getFirstElement();
+		MapDataElementItemDTO item = (MapDataElementItemDTO) ((IStructuredSelection) elementsTV.getSelection())
+				.getFirstElement();
 		ItemProperty parentName = item.getParentName();
-		ElementDataHelper.moveUpDataItem(mapElementsConfig,parentName,item);
+		ElementDataHelper.moveUpDataItem(mapElementsConfig, parentName, item);
 		firePropertyChanged(LAST_OPERATION.MOVEUP);
 	}
-	
+
 	private void createDatasetsTab(TabFolder parentFolder) {
 		TabItem datasetsTab = new TabItem(parentFolder, SWT.NONE);
-		datasetsCmp = new Composite(parentFolder,SWT.NONE);
-		datasetsCmp.setLayout(new GridLayout(2,false));
+		datasetsCmp = new Composite(parentFolder, SWT.NONE);
+		datasetsCmp.setLayout(new GridLayout(2, false));
 		datasetsTab.setControl(datasetsCmp);
 		datasetsTab.setText(Messages.SPMapDataElementsList_DatasetTabTitle);
-		
+
 		datasetsTV = new TableViewer(datasetsCmp, SWT.BORDER | SWT.V_SCROLL | SWT.SINGLE);
 		datasetsTV.getTable().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 3));
 		datasetsTV.setLabelProvider(new MapDataDatasetsLabelProvider());
@@ -429,7 +427,7 @@ public abstract class SPMapDataElementsList extends ASPropertyWidget {
 				editDatasetBtnPressed();
 			}
 		});
-		
+
 		btnAddNewDataset = new Button(datasetsCmp, SWT.NONE);
 		btnAddNewDataset.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 1, 1));
 		btnAddNewDataset.setImage(Activator.getDefault().getImage("/icons/add_element.gif")); //$NON-NLS-1$
@@ -440,7 +438,7 @@ public abstract class SPMapDataElementsList extends ASPropertyWidget {
 				addNewDatasetBtnPressed();
 			}
 		});
-		
+
 		btnModifyDataset = new Button(datasetsCmp, SWT.NONE);
 		btnModifyDataset.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 1, 1));
 		btnModifyDataset.setImage(Activator.getDefault().getImage("/icons/edit_element.gif")); //$NON-NLS-1$
@@ -451,7 +449,7 @@ public abstract class SPMapDataElementsList extends ASPropertyWidget {
 				editDatasetBtnPressed();
 			}
 		});
-		
+
 		btnRemoveDataset = new Button(datasetsCmp, SWT.NONE);
 		btnRemoveDataset.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 1, 1));
 		btnRemoveDataset.setImage(Activator.getDefault().getImage("/icons/delete_element.gif")); //$NON-NLS-1$
@@ -462,7 +460,7 @@ public abstract class SPMapDataElementsList extends ASPropertyWidget {
 				removeDatasetBtnPressed();
 			}
 		});
-		
+
 		enableDefaultDatasetsButtons();
 	}
 
@@ -471,14 +469,14 @@ public abstract class SPMapDataElementsList extends ASPropertyWidget {
 		btnModifyDataset.setEnabled(!datasetsTV.getSelection().isEmpty());
 		btnRemoveDataset.setEnabled(!datasetsTV.getSelection().isEmpty());
 	}
-	
+
 	private void addNewDatasetBtnPressed() {
-		ElementDatasetDialog elementDatasetDialog = new ElementDatasetDialog(
-				UIUtils.getShell(),
-				Messages.SPMapDataElementsList_AddDatasetDialogTitle, NLS.bind(Messages.SPMapDataElementsList_AddDatasetDialogInfoMsg,widgetConfig.getElementTxt()),
-				null,jConfig);
+		ElementDatasetDialog elementDatasetDialog = new ElementDatasetDialog(UIUtils.getShell(),
+				Messages.SPMapDataElementsList_AddDatasetDialogTitle,
+				NLS.bind(Messages.SPMapDataElementsList_AddDatasetDialogInfoMsg, widgetConfig.getElementTxt()), null,
+				jConfig);
 		elementDatasetDialog.setDefaultExpressionContext(getDefaultExpressionContext());
-		if(elementDatasetDialog.open()==Window.OK){
+		if (elementDatasetDialog.open() == Window.OK) {
 			JRElementDataset newDataset = elementDatasetDialog.getDataset();
 			MapDataDatasetDTO dto = new MapDataDatasetDTO();
 			dto.setDataset(newDataset);
@@ -486,46 +484,46 @@ public abstract class SPMapDataElementsList extends ASPropertyWidget {
 			refreshDatasetsTableViewer();
 		}
 	}
-	
+
 	private void editDatasetBtnPressed() {
-		Object firstElement = ((IStructuredSelection)datasetsTV.getSelection()).getFirstElement();
-		if(firstElement instanceof MapDataDatasetDTO) {
+		Object firstElement = ((IStructuredSelection) datasetsTV.getSelection()).getFirstElement();
+		if (firstElement instanceof MapDataDatasetDTO) {
 			Object dsClone = ((MapDataDatasetDTO) firstElement).getDataset().clone();
-			ElementDatasetDialog elementDatasetDialog = new ElementDatasetDialog(
-					UIUtils.getShell(),
-					Messages.SPMapDataElementsList_EditDatasetDialogTitle, NLS.bind(Messages.SPMapDataElementsList_EditDatasetDialogInfoMsg,widgetConfig.getElementTxt()),
-					(JRElementDataset)dsClone,jConfig);
+			ElementDatasetDialog elementDatasetDialog = new ElementDatasetDialog(UIUtils.getShell(),
+					Messages.SPMapDataElementsList_EditDatasetDialogTitle,
+					NLS.bind(Messages.SPMapDataElementsList_EditDatasetDialogInfoMsg, widgetConfig.getElementTxt()),
+					(JRElementDataset) dsClone, jConfig);
 			elementDatasetDialog.setDefaultExpressionContext(getDefaultExpressionContext());
-			if(elementDatasetDialog.open()==Window.OK){
+			if (elementDatasetDialog.open() == Window.OK) {
 				JRElementDataset modifiedDataset = elementDatasetDialog.getDataset();
-				((MapDataDatasetDTO)firstElement).setDataset(modifiedDataset);
+				((MapDataDatasetDTO) firstElement).setDataset(modifiedDataset);
 				refreshDatasetsTableViewer();
 			}
 		}
 	}
-	
+
 	private void removeDatasetBtnPressed() {
-		Object firstElement = ((IStructuredSelection)datasetsTV.getSelection()).getFirstElement();
-		if(firstElement instanceof MapDataDatasetDTO) {
-			boolean confirm = MessageDialog.openQuestion(UIUtils.getShell(), Messages.SPMapDataElementsList_RemoveDatasetQuestionTitle,
+		Object firstElement = ((IStructuredSelection) datasetsTV.getSelection()).getFirstElement();
+		if (firstElement instanceof MapDataDatasetDTO) {
+			boolean confirm = MessageDialog.openQuestion(UIUtils.getShell(),
+					Messages.SPMapDataElementsList_RemoveDatasetQuestionTitle,
 					NLS.bind(Messages.SPMapDataElementsList_RemoveDatasetQuestionMsg, widgetConfig.getElementTxt()));
-			if(confirm) {
+			if (confirm) {
 				mapElementsConfig.getDatasets().remove((MapDataDatasetDTO) firstElement);
-				refreshDatasetsTableViewer();				
+				refreshDatasetsTableViewer();
 			}
 		}
 	}
-	
+
 	private void refreshDatasetsTableViewer() {
 		ElementDataHelper.fixDatasetNames(mapElementsConfig);
 		firePropertyChanged(null);
 	}
-	
+
 	private void firePropertyChanged(LAST_OPERATION lastOperation) {
-		if(lastOperation!=null) {
-			treeStatus = ElementsTreeStatus.getElementsTreeStatus(elementsTV,lastOperation);
-		}
-		else {
+		if (lastOperation != null) {
+			treeStatus = ElementsTreeStatus.getElementsTreeStatus(elementsTV, lastOperation);
+		} else {
 			treeStatus = null;
 		}
 		section.changeProperty(widgetConfig.getWidgetPropertyID(), mapElementsConfig);
@@ -537,8 +535,8 @@ public abstract class SPMapDataElementsList extends ASPropertyWidget {
 		elementsTV.setInput(mapElementsConfig.getElements());
 		datasetsTV.setInput(mapElementsConfig.getDatasets());
 		jConfig = pnode.getJasperConfiguration();
-		defaultExpressionContext=ModelUtils.getElementExpressionContext(null, pnode);
-		if(treeStatus!=null) {
+		defaultExpressionContext = ModelUtils.getElementExpressionContext(null, pnode);
+		if (treeStatus != null) {
 			Object[] expandedElements = treeStatus.findExpandedElements(mapElementsConfig.getElements());
 			elementsTV.setExpandedElements(expandedElements);
 			ISelection selection = ElementsTreeStatus.getSuggestedSelection(elementsTV, treeStatus);
@@ -551,20 +549,20 @@ public abstract class SPMapDataElementsList extends ASPropertyWidget {
 		return tabfolder;
 	}
 
-	private ExpressionContext getDefaultExpressionContext() {		
+	private ExpressionContext getDefaultExpressionContext() {
 		return this.defaultExpressionContext;
 	}
-	
+
 	private StandardItem createStandardItem() {
 		StandardItem item = new StandardItem();
-		for(String pname : getMandatoryProperties()) {
-			item.addItemProperty(new StandardItemProperty(pname,"CHANGE_ME",null)); //$NON-NLS-1$
+		for (String pname : getMandatoryProperties()) {
+			item.addItemProperty(new StandardItemProperty(pname, "CHANGE_ME", null)); //$NON-NLS-1$
 		}
 		return item;
 	}
 
 	private Object getElementsTVSelectedObj() {
 		IStructuredSelection selection = (IStructuredSelection) elementsTV.getSelection();
-        return selection.getFirstElement();
+		return selection.getFirstElement();
 	}
 }

@@ -28,7 +28,7 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.SPText;
 
-public class SPImageProvider extends SPText {
+public class SPImageProvider extends SPText<IPropertyDescriptor> {
 
 	private Button btn;
 

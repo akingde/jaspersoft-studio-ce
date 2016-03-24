@@ -19,7 +19,6 @@ import org.eclipse.swt.widgets.Composite;
 import com.jaspersoft.studio.help.HelpSystem;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 import com.jaspersoft.studio.property.section.AbstractSection;
-import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 
 public class StrokePropertyDescriptor extends NTextPropertyDescriptor {
 
@@ -41,7 +40,7 @@ public class StrokePropertyDescriptor extends NTextPropertyDescriptor {
 		return new StrokeLabelProvider();
 	}
 
-	public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
+	public SPStroke createWidget(Composite parent, AbstractSection section) {
 		return new SPStroke(parent, section, this);
 	}
 }

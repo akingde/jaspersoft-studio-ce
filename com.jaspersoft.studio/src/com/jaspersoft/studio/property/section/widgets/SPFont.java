@@ -39,7 +39,7 @@ import net.sf.jasperreports.engine.JRFont;
 import net.sf.jasperreports.engine.base.JRBaseFont;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
 import net.sf.jasperreports.engine.design.JRDesignFont;
-import net.sf.jasperreports.engine.util.JRStyleResolver;
+import net.sf.jasperreports.engine.util.StyleResolver;
 
 /**
  * This class implement the subsection into the cart property tab, for the font name is used a standard combo.
@@ -169,13 +169,14 @@ public class SPFont extends ASPropertyWidget<IPropertyDescriptor> {
 				} else {
 					plus = (float) (Math.round((new Float(newValue) / 100) * -SPButton.factor) - 1);
 				}
-				if ((newValue + plus) > 99){
+				if ((newValue + plus) > 99) {
 					newValue = 99f;
-				} else if ((newValue + plus) > 0){
+				} else if ((newValue + plus) > 0) {
 					newValue += plus;
 				}
 				section.changePropertyOn(JRBaseFont.PROPERTY_FONT_SIZE, newValue, mfont);
-				section.changePropertyOn(fontNameProperty, new MFont((JRFont) ((JRCloneable) mfont.getValue()).clone()),parentNode);
+				section.changePropertyOn(fontNameProperty, new MFont((JRFont) ((JRCloneable) mfont.getValue()).clone()),
+						parentNode);
 			}
 		}
 	}
@@ -237,9 +238,9 @@ public class SPFont extends ASPropertyWidget<IPropertyDescriptor> {
 		fontSize.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		fontSize.setItems(pd1.getItems());
 		fontSize.addSelectionListener(new SelectionAdapter() {
-			
+
 			private int time = 0;
-			
+
 			public void widgetSelected(SelectionEvent e) {
 				if (e.time - time > 100) {
 					String value = fontSize.getValueAsFloat().toString();
@@ -249,7 +250,7 @@ public class SPFont extends ASPropertyWidget<IPropertyDescriptor> {
 				}
 				time = e.time;
 			};
-		
+
 		});
 		fontSize.setToolTipText(pd1.getDescription());
 
@@ -302,13 +303,14 @@ public class SPFont extends ASPropertyWidget<IPropertyDescriptor> {
 		if (property != null && parentNode != null)
 			section.changePropertyOn(property, new MFont((JRFont) mfont.getValue()), parentNode);
 	}
-	
+
 	/**
-	 * Set the font size value on the widget, setting also the information 
-	 * if it is inherited or not
+	 * Set the font size value on the widget, setting also the information if it is inherited or not
 	 * 
-	 * @param resolvedNumber the font size value resolved
-	 * @param ownNumber the font size value of the element selected
+	 * @param resolvedNumber
+	 *          the font size value resolved
+	 * @param ownNumber
+	 *          the font size value of the element selected
 	 */
 	public void setFontSizeNumber(Number resolvedNumber, Number ownNumber) {
 		if (resolvedNumber != null) {
@@ -317,13 +319,13 @@ public class SPFont extends ASPropertyWidget<IPropertyDescriptor> {
 				fontSize.setDefaultValue(resolvedNumber);
 			}
 			fontSize.setValue(ownNumber);
-			if (fontSize.getText().length() >= oldpos){
+			if (fontSize.getText().length() >= oldpos) {
 				fontSize.setSelection(new Point(oldpos, oldpos));
 			}
-		} else if (ownNumber != null){
+		} else if (ownNumber != null) {
 			int oldpos = fontSize.getCaretPosition();
 			fontSize.setValue(ownNumber);
-			if (fontSize.getText().length() >= oldpos){
+			if (fontSize.getText().length() >= oldpos) {
 				fontSize.setSelection(new Point(oldpos, oldpos));
 			}
 		} else {
@@ -345,18 +347,18 @@ public class SPFont extends ASPropertyWidget<IPropertyDescriptor> {
 				fontName.setItems(parentNode.getJasperConfiguration().getFontList());
 				itemsSetted = true;
 			}
-			String strfontname = JRStyleResolver.getFontName(fontValue);
+			String strfontname = StyleResolver.getInstance().getFontName(fontValue);
 			fontName.setText(strfontname);
 
 			setFontSizeNumber(fontValue.getFontsize(), fontValue.getOwnFontsize());
 
-			Boolean b = JRStyleResolver.isBold(fontValue);
+			Boolean b = StyleResolver.getInstance().isBold(fontValue);
 			boldButton.setSelection(b != null ? b.booleanValue() : false);
-			b = JRStyleResolver.isItalic(fontValue);
+			b = StyleResolver.getInstance().isItalic(fontValue);
 			italicButton.setSelection(b != null ? b.booleanValue() : false);
-			b = JRStyleResolver.isUnderline(fontValue);
+			b = StyleResolver.getInstance().isUnderline(fontValue);
 			underlineButton.setSelection(b != null ? b.booleanValue() : false);
-			b = JRStyleResolver.isStrikeThrough(fontValue);
+			b = StyleResolver.getInstance().isStrikeThrough(fontValue);
 			strikeTroughtButton.setSelection(b != null ? b.booleanValue() : false);
 		}
 	}

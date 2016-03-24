@@ -1,20 +1,14 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.property.descriptor.resource;
 
 import java.util.Locale;
-
-import net.sf.jasperreports.eclipse.util.FileUtils;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jdt.core.IJavaProject;
@@ -29,11 +23,12 @@ import com.jaspersoft.studio.help.HelpSystem;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 import com.jaspersoft.studio.property.section.AbstractSection;
-import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 import com.jaspersoft.studio.property.section.widgets.SPResourceType;
 import com.jaspersoft.studio.utils.SelectionHelper;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.wizards.ResourceBundleFilterDialog;
+
+import net.sf.jasperreports.eclipse.util.FileUtils;
 
 /**
  * 
@@ -54,7 +49,7 @@ public class ResourceBundlePropertyDescriptor extends NTextPropertyDescriptor {
 	 * @author Orlandin Marco
 	 * 
 	 */
-	private class SPBundleType extends SPResourceType {
+	private class SPBundleType extends SPResourceType<IPropertyDescriptor> {
 
 		public SPBundleType(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
 			super(parent, section, pDescriptor);
@@ -115,8 +110,8 @@ public class ResourceBundlePropertyDescriptor extends NTextPropertyDescriptor {
 		return editor;
 	}
 
-	public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
-		ASPropertyWidget textWidget = new SPBundleType(parent, section, this);
+	public SPBundleType createWidget(Composite parent, AbstractSection section) {
+		SPBundleType textWidget = new SPBundleType(parent, section, this);
 		textWidget.setReadOnly(readOnly);
 		return textWidget;
 	}

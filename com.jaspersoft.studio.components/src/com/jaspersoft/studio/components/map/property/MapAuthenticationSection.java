@@ -36,10 +36,10 @@ import net.sf.jasperreports.components.map.MapComponent;
  */
 public class MapAuthenticationSection extends AbstractSection {
 
-	private ASPropertyWidget keyWidget;
-	private ASPropertyWidget signatureWidget;
-	private ASPropertyWidget idWidget;
-	private ASPropertyWidget versionWidget;
+	private ASPropertyWidget<?> keyWidget;
+	private ASPropertyWidget<?> signatureWidget;
+	private ASPropertyWidget<?> idWidget;
+	private ASPropertyWidget<?> versionWidget;
 	private Button useBusinessAPICheck;
 	private Composite cmpContainer;
 

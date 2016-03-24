@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.jasper;
 
@@ -22,14 +18,11 @@ import net.sf.jasperreports.engine.JRPropertiesUtil;
 import net.sf.jasperreports.engine.JRReport;
 import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.convert.ReportConverter;
-import net.sf.jasperreports.engine.export.AwtTextRenderer;
-import net.sf.jasperreports.engine.export.JRGraphics2DExporter;
-import net.sf.jasperreports.engine.export.draw.FrameDrawer;
 import net.sf.jasperreports.engine.export.draw.Offset;
 import net.sf.jasperreports.engine.export.draw.PrintDrawVisitor;
-import net.sf.jasperreports.engine.export.draw.TextDrawer;
 import net.sf.jasperreports.engine.util.JRStyledText;
 import net.sf.jasperreports.engine.util.UniformElementVisitor;
+import net.sf.jasperreports.export.Graphics2DReportConfiguration;
 
 public class JSSDrawVisitor extends UniformElementVisitor {
 
@@ -41,7 +34,6 @@ public class JSSDrawVisitor extends UniformElementVisitor {
 	 */
 	private Graphics2D grx;
 
-	
 	/**
 	 *
 	 */
@@ -49,21 +41,13 @@ public class JSSDrawVisitor extends UniformElementVisitor {
 		this.reportConverter = reportConverter;
 		this.convertVisitor = new JSSConvertVisitor(reportConverter);
 		final JasperReportsContext jasperReportsContext = reportConverter.getJasperReportsContext();
-		this.drawVisitor = new PrintDrawVisitor(jasperReportsContext) {
-			@Override
-			public void setTextRenderer(JRReport report) {
-				AwtTextRenderer textRenderer = new AwtTextRenderer(jasperReportsContext, JRPropertiesUtil.getInstance(
-						jasperReportsContext).getBooleanProperty(report, JRGraphics2DExporter.MINIMIZE_PRINTER_JOB_SIZE, true),
-						JRPropertiesUtil.getInstance(jasperReportsContext).getBooleanProperty(report,
-								JRStyledText.PROPERTY_AWT_IGNORE_MISSING_FONT, false));
+		JRPropertiesUtil putil = JRPropertiesUtil.getInstance(jasperReportsContext);
+		JRReport report = reportConverter.getReport();
+		boolean minPrintJobSize = putil.getBooleanProperty(report, Graphics2DReportConfiguration.MINIMIZE_PRINTER_JOB_SIZE,
+				true);
+		boolean ignoreFont = putil.getBooleanProperty(report, JRStyledText.PROPERTY_AWT_IGNORE_MISSING_FONT, false);
 
-				setTextDrawer(new TextDrawer(jasperReportsContext, textRenderer));
-				setFrameDrawer(new FrameDrawer(jasperReportsContext, null, textRenderer));
-				
-			}
-
-		};
-		setTextRenderer(reportConverter.getReport());
+		this.drawVisitor = new PrintDrawVisitor(jasperReportsContext, null, minPrintJobSize, ignoreFont);
 		this.grx = grx;
 		setGraphics2D(grx);
 		this.drawVisitor.setClip(true);
@@ -80,33 +64,27 @@ public class JSSDrawVisitor extends UniformElementVisitor {
 		this.grx = grx;
 		drawVisitor.setGraphics2D(grx);
 	}
-	
+
 	/**
 	 * Return the actually used graphics 2d
 	 * 
 	 * @return a graphics 2d, can be null
 	 */
-	public Graphics2D getGraphics2d(){
+	public Graphics2D getGraphics2d() {
 		return grx;
 	}
 
-	public ReportConverter getReportConverter(){
+	public ReportConverter getReportConverter() {
 		return reportConverter;
 	}
-	
-	public JSSConvertVisitor getConvertVisitor(){
+
+	public JSSConvertVisitor getConvertVisitor() {
 		return convertVisitor;
 	}
-	
+
 	public PrintDrawVisitor getDrawVisitor() {
 		return drawVisitor;
 	}
-
-	
-	public void setTextRenderer(JRReport report) {
-		drawVisitor.setTextRenderer(report);
-	}
-
 
 	@Override
 	public void visitBreak(JRBreak breakElement) {

@@ -18,7 +18,6 @@ import com.jaspersoft.studio.help.IHelp;
 import com.jaspersoft.studio.help.IHelpRefBuilder;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.section.AbstractSection;
-import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 import com.jaspersoft.studio.property.section.widgets.IPropertyDescriptorWidget;
 import com.jaspersoft.studio.property.section.widgets.SPQuery;
 
@@ -45,7 +44,7 @@ public class JRQueryPropertyDescriptor extends PropertyDescriptor implements IPr
 		return new JRQueryLabelProvider(canBeNull);
 	}
 
-	public ASPropertyWidget<?> createWidget(Composite parent, AbstractSection section) {
+	public SPQuery createWidget(Composite parent, AbstractSection section) {
 		return new SPQuery(parent, section, this);
 	}
 
