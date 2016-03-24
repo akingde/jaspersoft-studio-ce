@@ -122,7 +122,7 @@ public class ReportNewWizard extends JSSWizard implements INewWizard {
 		// the wizard caller, since we are forcing here a new config.
 		JasperReportsConfiguration jrConfig = JasperReportsConfiguration.getDefaultJRConfig();
 		JasperDesign jd = new JasperDesign();
-//		jd.setJasperReportsContext(jrConfig);
+		jd.setJasperReportsContext(jrConfig);
 		jrConfig.setJasperDesign(jd);
 		setConfig(jrConfig);
 		JDTUtils.deactivateLinkedResourcesSupport();

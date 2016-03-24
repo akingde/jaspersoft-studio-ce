@@ -89,7 +89,7 @@ public class PreviewGenerator {
 	 */
 	private static void createDesign() {
 		jasperDesign = new JasperDesign();
-//		jasperDesign.setJasperReportsContext(JasperReportsConfiguration.getDefaultInstance());
+		jasperDesign.setJasperReportsContext(JasperReportsConfiguration.getDefaultInstance());
 		JRDesignBand jrBand = new JRDesignBand();
 		jasperDesign.setTitle(jrBand);
 		textElement = new JRDesignStaticText();
@@ -135,6 +135,7 @@ public class PreviewGenerator {
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-		visitor = new JSSDrawVisitor(new JSSReportConverter(JasperReportsConfiguration.getDefaultInstance(), jasperDesign, true), g2d);
+		visitor = new JSSDrawVisitor(
+				new JSSReportConverter(JasperReportsConfiguration.getDefaultInstance(), jasperDesign, true), g2d);
 	}
 }

@@ -37,7 +37,7 @@ import com.jaspersoft.studio.model.style.StyleTemplateFactory;
 public class JRtxEditor extends AMultiEditor implements CachedSelectionProvider {
 
 	private StyleTemplateEditor styleEditor;
-	
+
 	/**
 	 * The selection cache
 	 */
@@ -56,7 +56,7 @@ public class JRtxEditor extends AMultiEditor implements CachedSelectionProvider 
 	protected void xml2model(InputStream in) {
 		JRTemplate template = JRXmlTemplateLoader.load(in);
 		JasperDesign jd = new JasperDesign();
-//		jd.setJasperReportsContext(jrContext);
+		jd.setJasperReportsContext(jrContext);
 		ANode m = new MRoot(null, jd);
 		IFile file = ((IFileEditorInput) getEditorInput()).getFile();
 		MStylesTemplate ms = new MStylesTemplate(m, file);
