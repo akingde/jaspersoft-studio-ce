@@ -235,7 +235,7 @@ public class ExpEditorDialog extends Dialog {
 		layout.marginWidth=0;
 		editorContainer.setLayout(layout);
 
-		boolean test= 56 > 7;
+		//boolean test= 56 > 7;
 		
 //		int test=(int) 'c';
 //		String testss=(String) "ddddd";

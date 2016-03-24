@@ -47,7 +47,7 @@ public class HandlersUtil {
 	 * @param children the list of chldren
 	 * @return an iterator to the first children, or null if the reference to the list is null
 	 */
-	private static Iterator getFirstChildrendIterator(List children){
+	private static Iterator<?> getFirstChildrendIterator(List<?> children){
 		if (children != null) return children.iterator();
 		return null;
 	}
@@ -79,8 +79,8 @@ public class HandlersUtil {
 	public static INode getRootFields(){
 		INode root =  getRootElement();
 		if (root == null) return null;
-		List children = root.getChildren();
-	 	Iterator it = getFirstChildrendIterator(children);
+		List<?> children = root.getChildren();
+	 	Iterator<?> it = getFirstChildrendIterator(children);
 	 	while(it != null && it.hasNext()){
 	 		INode actualPart = (INode)it.next();
 	 		if (actualPart instanceof MFields) return actualPart;
@@ -91,8 +91,8 @@ public class HandlersUtil {
 	public static APropertyNode getBand(){
 		INode root =  getRootElement();
 		if (root == null) return null;
-		List children = root.getChildren();
-	 	Iterator it = getFirstChildrendIterator(children);
+		List<?> children = root.getChildren();
+	 	Iterator<?> it = getFirstChildrendIterator(children);
 	 	while(it != null && it.hasNext()){
 	 		INode actualPart = (INode)it.next();
 	 		if (actualPart instanceof MBand) {
@@ -111,8 +111,8 @@ public class HandlersUtil {
 	public static APropertyNode getRootElement(){
 		INode root = getRootNode();
 		if (root == null) return null;
-		List children = root.getChildren();
-	 	Iterator it = getFirstChildrendIterator(children);
+		List<?> children = root.getChildren();
+	 	Iterator<?> it = getFirstChildrendIterator(children);
 	 	while(it != null && it.hasNext()){
 	 		INode actualPart = (INode)it.next();
 	 		if (actualPart instanceof MReport || actualPart instanceof MPage) return (APropertyNode)actualPart;;

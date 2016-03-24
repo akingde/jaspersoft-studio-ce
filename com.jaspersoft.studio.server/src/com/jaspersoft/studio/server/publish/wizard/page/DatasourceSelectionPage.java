@@ -44,7 +44,7 @@ import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
 public class DatasourceSelectionPage extends JSSHelpWizardPage implements DatasourceSelectionListener {
 
 	public static final String PAGE_NAME = "ruDatasourceSelectionPage"; //$NON-NLS-1$
-	private JasperReportsConfiguration jConfig;
+	protected JasperReportsConfiguration jConfig;
 	private DatasourceSelectionComposite datasourceCmp;
 
 	public DatasourceSelectionPage(JasperReportsConfiguration jConfig) {

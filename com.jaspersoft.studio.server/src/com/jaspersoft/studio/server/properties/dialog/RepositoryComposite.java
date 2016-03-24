@@ -12,8 +12,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.properties.dialog;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -38,10 +36,12 @@ import com.jaspersoft.studio.outline.ReportTreeLabelProvider;
 import com.jaspersoft.studio.server.ServerProvider;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.action.resource.RefreshResourcesAction;
-import com.jaspersoft.studio.server.model.MFolder;
 import com.jaspersoft.studio.server.model.AMResource;
+import com.jaspersoft.studio.server.model.MFolder;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.utils.ModelUtils;
+
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 /**
  * @author Veaceslav Chicu (schicu@users.sourceforge.net)
@@ -56,10 +56,10 @@ public class RepositoryComposite extends Composite {
 	public RepositoryComposite(Composite parent, int style, INode root) {
 		super(parent, style);
 		this.root = root;
-		createWidget();
+		createComposite();
 	}
 
-	protected void createWidget() {
+	protected void createComposite() {
 		GridLayout layout = new GridLayout();
 		layout.marginHeight = 0;
 		layout.marginWidth = 0;
@@ -104,8 +104,7 @@ public class RepositoryComposite extends Composite {
 							treeViewer.collapseToLevel(el, 1);
 						else {
 							if (refreshAction == null)
-								refreshAction = new RefreshResourcesAction(
-										treeViewer);
+								refreshAction = new RefreshResourcesAction(treeViewer);
 							if (refreshAction.isEnabled())
 								refreshAction.run();
 							treeViewer.expandToLevel(el, 1);
@@ -142,8 +141,7 @@ public class RepositoryComposite extends Composite {
 		Job job = new Job("Looking into repository") {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
-				monitor.beginTask("Looking into repository",
-						IProgressMonitor.UNKNOWN);
+				monitor.beginTask("Looking into repository", IProgressMonitor.UNKNOWN);
 				return doReadRepository(monitor);
 			}
 

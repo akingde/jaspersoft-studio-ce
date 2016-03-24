@@ -37,7 +37,7 @@ import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class ImpInputControls {
-	private JasperReportsConfiguration jrConfig;
+	protected JasperReportsConfiguration jrConfig;
 
 	public ImpInputControls(JasperReportsConfiguration jrConfig) {
 		this.jrConfig = jrConfig;

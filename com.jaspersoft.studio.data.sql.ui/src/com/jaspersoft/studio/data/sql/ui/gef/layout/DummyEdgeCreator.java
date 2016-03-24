@@ -39,7 +39,7 @@ public class DummyEdgeCreator {
 
 	/**
 	 * @param clean
-	 *          next time
+	 *            next time
 	 */
 	public void visit(DirectedGraph g) {
 		cleanNextTime = true;
@@ -98,7 +98,7 @@ public class DummyEdgeCreator {
 			candidateList = new NodeList();
 			boolean relationshipFound = false;
 			// first look for set of targets which are already in relationships
-			for (Iterator iter = nodeList.iterator(); iter.hasNext();) {
+			for (Iterator<?> iter = nodeList.iterator(); iter.hasNext();) {
 				Node element = (Node) iter.next();
 				if ((element.incoming.size() + element.outgoing.size()) >= 1) {
 					candidateList.add(element);

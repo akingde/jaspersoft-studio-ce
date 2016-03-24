@@ -404,6 +404,7 @@ public class MMap extends MGraphicElement implements IDatasetContainer {
 			}
 		} else if (id.equals(StandardMapComponent.PROPERTY_MARKER_DATA_LIST)) {
 			if (value instanceof List<?>) {
+				@SuppressWarnings("unchecked")
 				List<ItemData> itemDatas = new ArrayList<ItemData>((List<ItemData>) value);
 				Object[] existing = component.getMarkerDataList().toArray();
 				for (Object p : existing)
@@ -413,6 +414,7 @@ public class MMap extends MGraphicElement implements IDatasetContainer {
 			}
 		} else if (id.equals(StandardMapComponent.PROPERTY_PATH_DATA_LIST)) {
 			if (value instanceof List<?>) {
+				@SuppressWarnings("unchecked")
 				List<ItemData> itemDatas = (List<ItemData>) value;
 				Object[] existing = component.getPathDataList().toArray();
 				for (Object p : existing)
@@ -422,6 +424,7 @@ public class MMap extends MGraphicElement implements IDatasetContainer {
 			}
 		} else if (id.equals(StandardMapComponent.PROPERTY_PATH_STYLE_LIST)) {
 			if (value instanceof List<?>) {
+				@SuppressWarnings("unchecked")
 				List<ItemData> itemDatas = (List<ItemData>) value;
 				Object[] existing = component.getPathStyleList().toArray();
 				for (Object p : existing)

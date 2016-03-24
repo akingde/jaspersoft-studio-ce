@@ -39,7 +39,7 @@ public class RunReportUnit {
 
 	/**
 	 * @param args
-	 *          the command line arguments
+	 *            the command line arguments
 	 */
 	public static void main(String[] args) throws Exception {
 		// TODO code application logic here
@@ -68,13 +68,13 @@ public class RunReportUnit {
 		ResourceDescriptor rd = new ResourceDescriptor();
 		rd.setUriString(reportUri);
 
-		Map parameters = new HashMap();
+		Map<String, Object> parameters = new HashMap<String, Object>();
 		// parameters.put("parameter1", "A");
 
-		List arguments = new ArrayList();
+		List<Argument> arguments = new ArrayList<Argument>();
 		arguments.add(new Argument(Argument.RUN_OUTPUT_FORMAT, Argument.RUN_OUTPUT_FORMAT_PDF));
 
-		Map files = client.runReport(rd, parameters, arguments);
+		Map<String, FileContent> files = client.runReport(rd, parameters, arguments);
 
 		FileContent fc = (FileContent) files.get("report");
 
@@ -89,9 +89,9 @@ public class RunReportUnit {
 
 		files = client.runReport(rd, parameters, arguments);
 
-		Iterator iter = files.keySet().iterator();
+		Iterator<String> iter = files.keySet().iterator();
 		while (iter.hasNext()) {
-			String key = (String) iter.next();
+			String key = iter.next();
 			fc = (FileContent) files.get(key);
 
 			if (key.equals("report")) {
@@ -107,7 +107,6 @@ public class RunReportUnit {
 				imageFile.write(fc.getData());
 				imageFile.close();
 			}
-
 		}
 
 		System.out.println("Html file saved to: c:\\myreport.html");

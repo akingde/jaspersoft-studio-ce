@@ -54,7 +54,7 @@ public class JRSClasspathContainerPage extends WizardPage implements IClasspathC
 
 	@Override
 	public void initialize(IJavaProject project, IClasspathEntry[] currentEntries) {
-		JRSClasspathContainer jrcc = new JRSClasspathContainer(null, project);
+		// JRSClasspathContainer jrcc = new JRSClasspathContainer(null, project);
 		for (int i = 0; i < currentEntries.length; i++) {
 			IClasspathEntry curr = currentEntries[i];
 			if (curr.getEntryKind() == IClasspathEntry.CPE_CONTAINER) {

@@ -65,6 +65,8 @@ public abstract class ARestV2ConnectionJersey extends ARestV2Connection {
 		return r;
 	}
 
+	 
+	@SuppressWarnings("unchecked")
 	protected <T> Class<T> checkClazz(Response res, Class<T> clazz) {
 		if (clazz == null) {
 			String type = res.getHeaderString("Content-Type");

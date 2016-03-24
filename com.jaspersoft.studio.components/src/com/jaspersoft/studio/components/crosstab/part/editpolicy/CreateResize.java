@@ -14,11 +14,6 @@ package com.jaspersoft.studio.components.crosstab.part.editpolicy;
 
 import java.util.List;
 
-import net.sf.jasperreports.components.table.StandardBaseColumn;
-import net.sf.jasperreports.crosstabs.design.JRCrosstabOrigin;
-import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
-import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabCell;
-
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.PrecisionRectangle;
@@ -35,11 +30,14 @@ import com.jaspersoft.studio.components.crosstab.model.cell.MCell;
 import com.jaspersoft.studio.components.crosstab.model.header.MCrosstabHeader;
 import com.jaspersoft.studio.components.crosstab.model.header.MCrosstabHeaderCell;
 import com.jaspersoft.studio.components.crosstab.model.nodata.MCrosstabWhenNoDataCell;
-import com.jaspersoft.studio.components.table.model.column.MColumn;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.util.ModelVisitor;
 import com.jaspersoft.studio.property.SetValueCommand;
 import com.jaspersoft.studio.utils.ModelUtils;
+
+import net.sf.jasperreports.crosstabs.design.JRCrosstabOrigin;
+import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
+import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabCell;
 
 public class CreateResize {
 	public static Command createResizeCommand(ChangeBoundsRequest request,

@@ -64,7 +64,7 @@ import com.jaspersoft.studio.utils.inputhistory.InputHistoryCache;
  * 
  */
 public class DatasourceSelectionComposite extends Composite {
-	private boolean mandatory = false;
+	protected boolean mandatory = false;
 	private AMResource res;
 	private ANode parent;
 
@@ -92,8 +92,7 @@ public class DatasourceSelectionComposite extends Composite {
 	 * @param parent
 	 * @param style
 	 */
-	public DatasourceSelectionComposite(Composite parent, int style,
-			boolean mandatory, String[] excludeTypes) {
+	public DatasourceSelectionComposite(Composite parent, int style, boolean mandatory, String[] excludeTypes) {
 		super(parent, style);
 		this.mandatory = mandatory;
 		this.excludeTypes = excludeTypes;
@@ -108,15 +107,12 @@ public class DatasourceSelectionComposite extends Composite {
 				setEnabled(SelectorDatasource.SelectionType.REMOTE_DATASOURCE);
 			}
 		});
-		rbDSFromRepo.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true,
-				false, 2, 1));
-		rbDSFromRepo
-				.setText(Messages.DatasourceSelectionComposite_FromRepository);
+		rbDSFromRepo.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 2, 1));
+		rbDSFromRepo.setText(Messages.DatasourceSelectionComposite_FromRepository);
 
 		textDSFromRepo = new Text(this, SWT.BORDER);
 		textDSFromRepo.setEnabled(false);
-		textDSFromRepo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
-				false, 1, 1));
+		textDSFromRepo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
 		textDSFromRepo.addModifyListener(new ModifyListener() {
 
 			@Override
@@ -132,11 +128,8 @@ public class DatasourceSelectionComposite extends Composite {
 							try {
 								ResourceDescriptor rd = new ResourceDescriptor();
 								rd.setUriString(uri);
-								newrd = WSClientHelper.getResource(monitor,
-										res.getWsClient(), rd, null);
-								valid = newrd != null
-										&& SelectorDatasource
-												.isDatasource(newrd);
+								newrd = WSClientHelper.getResource(monitor, res.getWsClient(), rd, null);
+								valid = newrd != null && SelectorDatasource.isDatasource(newrd);
 							} catch (Exception e) {
 								valid = false;
 								e.printStackTrace();
@@ -182,15 +175,12 @@ public class DatasourceSelectionComposite extends Composite {
 				setEnabled(SelectorDatasource.SelectionType.LOCAL_DATASOURCE);
 			}
 		});
-		rbLocalDS.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false,
-				false, 2, 1));
-		rbLocalDS
-				.setText(Messages.DatasourceSelectionComposite_LocalDatasource);
+		rbLocalDS.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1));
+		rbLocalDS.setText(Messages.DatasourceSelectionComposite_LocalDatasource);
 
 		textLocalDS = new Text(this, SWT.BORDER);
 		textLocalDS.setEnabled(false);
-		textLocalDS.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false,
-				1, 1));
+		textLocalDS.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
 
 		btnSelectLocalDS = new Button(this, SWT.PUSH);
 		btnSelectLocalDS.setEnabled(false);
@@ -203,8 +193,7 @@ public class DatasourceSelectionComposite extends Composite {
 		});
 		if (!mandatory) {
 			rbNoDS = new Button(this, SWT.RADIO);
-			rbNoDS.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false,
-					false, 2, 1));
+			rbNoDS.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1));
 			rbNoDS.setSelection(true);
 			rbNoDS.setText(Messages.DatasourceSelectionComposite_NoDatasource);
 			rbNoDS.addSelectionListener(new SelectionAdapter() {
@@ -306,11 +295,8 @@ public class DatasourceSelectionComposite extends Composite {
 
 		if (ASelector.isReference(ref))
 			ref = null;
-		if (ref == null
-				&& res.getValue()
-						.getWsType()
-						.equals(WsTypes.INST().toRestType(
-								ResourceDescriptor.TYPE_DOMAIN_TOPICS))) {
+		if (ref == null && res.getValue().getWsType()
+				.equals(WsTypes.INST().toRestType(ResourceDescriptor.TYPE_DOMAIN_TOPICS))) {
 			ref = MRDatasource.createDescriptor(null);
 			ref.setName("SemanticLayerDataSource"); //$NON-NLS-1$
 			ref.setLabel("SemanticLayerDataSource"); //$NON-NLS-1$
@@ -326,15 +312,13 @@ public class DatasourceSelectionComposite extends Composite {
 			ref = wizard.getResource().getValue();
 
 			ref.setIsReference(false);
-			ref.setParentFolder(runit.getParentFolder()
-					+ "/" + runit.getName() + "_files"); //$NON-NLS-1$ //$NON-NLS-2$
+			ref.setParentFolder(runit.getParentFolder() + "/" + runit.getName() + "_files"); //$NON-NLS-1$ //$NON-NLS-2$
 			// ref.setWsType(ResourceDescriptor.TYPE_DATASOURCE);
 			ref.setUriString(ref.getParentFolder() + "/" + ref.getName());//$NON-NLS-1$
 
 			SelectorDatasource.replaceDatasource(res, ref);
 		} else {
-			AMResource r = ResourceFactory.getResource(null,
-					ASelector.cloneResource(ref), -1);
+			AMResource r = ResourceFactory.getResource(null, ASelector.cloneResource(ref), -1);
 			ResourceWizard wizard = new ResourceWizard(parent, r, true, true);
 			WizardDialog dialog = new WizardDialog(UIUtils.getShell(), wizard);
 			dialog.create();
@@ -355,14 +339,11 @@ public class DatasourceSelectionComposite extends Composite {
 		// order
 		// to avoid problem of refreshing (children/parent relationship changes)
 		// due to tree viewer node expansion...
-		MServerProfile msp = ServerManager
-				.getMServerProfileCopy((MServerProfile) parent.getRoot());
+		MServerProfile msp = ServerManager.getMServerProfileCopy((MServerProfile) parent.getRoot());
 		if (msp.isSupported(Feature.SEARCHREPOSITORY)) {
 			String[] dsArray = WsTypes.INST().getDatasourcesArray();
-			if (res.getValue().getWsType()
-					.equals(ResourceDescriptor.TYPE_DOMAIN_TOPICS))
-				dsArray = new String[] { WsTypes.INST().toRestType(
-						ResourceDescriptor.TYPE_DATASOURCE_DOMAIN) };
+			if (res.getValue().getWsType().equals(ResourceDescriptor.TYPE_DOMAIN_TOPICS))
+				dsArray = new String[] { WsTypes.INST().toRestType(ResourceDescriptor.TYPE_DATASOURCE_DOMAIN) };
 			String[] exclude = null;
 			if (excludeTypes != null && excludeTypes.length > 0) {
 				exclude = new String[excludeTypes.length];
@@ -371,8 +352,7 @@ public class DatasourceSelectionComposite extends Composite {
 			}
 			btnSelectDSFromRepo.setEnabled(false);
 			try {
-				ResourceDescriptor rd = FindResourceJob.doFindResource(msp,
-						dsArray, exclude);
+				ResourceDescriptor rd = FindResourceJob.doFindResource(msp, dsArray, exclude);
 				if (rd != null)
 					setResource(res, rd, true);
 			} finally {
@@ -399,16 +379,13 @@ public class DatasourceSelectionComposite extends Composite {
 		notifyDatasourceSelectionChanged();
 	}
 
-	private void setResource(AMResource res, ResourceDescriptor rd,
-			boolean modifyText) {
+	private void setResource(AMResource res, ResourceDescriptor rd, boolean modifyText) {
 		ResourceDescriptor runit = res.getValue();
 		try {
-			rd = WSClientHelper.getResource(new NullProgressMonitor(), parent,
-					rd);
+			rd = WSClientHelper.getResource(new NullProgressMonitor(), parent, rd);
 			rd.setIsReference(true);
 			rd.setReferenceUri(rd.getUriString());
-			rd.setParentFolder(runit.getParentFolder()
-					+ "/" + runit.getName() + "_files"); //$NON-NLS-1$ //$NON-NLS-2$
+			rd.setParentFolder(runit.getParentFolder() + "/" + runit.getName() + "_files"); //$NON-NLS-1$ //$NON-NLS-2$
 			rd.setWsType(rd.getWsType());
 			rd.setUriString(rd.getParentFolder() + "/" + rd.getName());//$NON-NLS-1$
 			SelectorDatasource.replaceDatasource(res, rd);
@@ -427,8 +404,7 @@ public class DatasourceSelectionComposite extends Composite {
 	 * specified.
 	 */
 	private void removeDatasource(final AMResource res) {
-		ResourceDescriptor rdel = SelectorDatasource.getDatasource(res
-				.getValue());
+		ResourceDescriptor rdel = SelectorDatasource.getDatasource(res.getValue());
 		if (rdel != null)
 			res.getValue().getChildren().remove(rdel);
 	}
@@ -438,8 +414,7 @@ public class DatasourceSelectionComposite extends Composite {
 	 *         is selected, <code>false</code> otherwise
 	 */
 	public boolean isDatasourceSelectionValid() {
-		return (rbNoDS != null && rbNoDS.getSelection())
-				|| (!textDSFromRepo.getText().trim().isEmpty() && valid)
+		return (rbNoDS != null && rbNoDS.getSelection()) || (!textDSFromRepo.getText().trim().isEmpty() && valid)
 				|| !textLocalDS.getText().trim().isEmpty();
 	}
 

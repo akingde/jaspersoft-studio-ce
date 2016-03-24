@@ -39,7 +39,6 @@ public class MapAuthenticationSection extends AbstractSection {
 	private ASPropertyWidget<?> keyWidget;
 	private ASPropertyWidget<?> signatureWidget;
 	private ASPropertyWidget<?> idWidget;
-	private ASPropertyWidget<?> versionWidget;
 	private Button useBusinessAPICheck;
 	private Composite cmpContainer;
 
@@ -57,7 +56,7 @@ public class MapAuthenticationSection extends AbstractSection {
 		keyWidget = createWidget4Property(cmpContainer, MapComponent.PROPERTY_KEY);
 		idWidget = createWidget4Property(cmpContainer, MapComponent.PROPERTY_CLIENT_ID);
 		signatureWidget = createWidget4Property(cmpContainer, MapComponent.PROPERTY_SIGNATURE);
-		versionWidget = createWidget4Property(cmpContainer, MapComponent.PROPERTY_VERSION);
+		createWidget4Property(cmpContainer, MapComponent.PROPERTY_VERSION);
 		useBusinessAPICheck.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {

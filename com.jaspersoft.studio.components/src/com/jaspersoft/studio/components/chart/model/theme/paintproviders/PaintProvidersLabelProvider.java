@@ -31,7 +31,7 @@ public class PaintProvidersLabelProvider extends LabelProvider {
 		if (element == null)
 			return "";
 		if (element instanceof Collection)
-			return "[Size: " + ((Collection) element).size() + "]";
+			return "[Size: " + ((Collection<?>) element).size() + "]";
 		return element.toString();
 	}
 

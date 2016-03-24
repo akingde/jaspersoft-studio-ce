@@ -20,7 +20,7 @@ import com.jaspersoft.studio.model.ANode;
 
 public class MQueryColumn extends MSQLColumn {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
-	private AMQueryAliased<?> col;
+	protected AMQueryAliased<?> col;
 
 	public MQueryColumn(ANode parent, AMQueryAliased<?> value) {
 		super(parent, value.getDisplayText(), null);

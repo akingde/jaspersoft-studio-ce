@@ -91,7 +91,6 @@ public class PasteResourceAction extends Action {
 	@Override
 	public boolean isEnabled() {
 		boolean res = super.isEnabled();
-		boolean iscut = false;
 		contents = Clipboard.getDefault().getContents();
 		ANode parent = getSelected();
 		Object firstElement = ((TreeSelection) treeViewer.getSelection()).getFirstElement();
@@ -114,7 +113,6 @@ public class PasteResourceAction extends Action {
 					}
 					ICopyable c = (ICopyable) obj;
 					if (c.isCopyable2(parent) == ICopyable.RESULT.COPYABLE) {
-						iscut = ((AMResource) obj).isCut();
 						res = true;
 						break;
 					}

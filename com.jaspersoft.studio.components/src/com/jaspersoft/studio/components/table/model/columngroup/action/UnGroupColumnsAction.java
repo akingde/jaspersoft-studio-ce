@@ -64,10 +64,8 @@ public class UnGroupColumnsAction extends SelectionAction {
 		setText(Messages.UnGroupColumnsAction_title);
 		setToolTipText(Messages.UnGroupColumnsAction_tooltip);
 		setId(UnGroupColumnsAction.ID);
-		setImageDescriptor(
-				Activator.getDefault().getImageDescriptor("icons/table-split-row.png")); //$NON-NLS-1$
-		setDisabledImageDescriptor(
-				Activator.getDefault().getImageDescriptor("icons/table-split-row.png")); //$NON-NLS-1$
+		setImageDescriptor(Activator.getDefault().getImageDescriptor("icons/table-split-row.png")); //$NON-NLS-1$
+		setDisabledImageDescriptor(Activator.getDefault().getImageDescriptor("icons/table-split-row.png")); //$NON-NLS-1$
 		setEnabled(false);
 	}
 
@@ -79,30 +77,33 @@ public class UnGroupColumnsAction extends SelectionAction {
 			if (sel instanceof TableCellEditPart || sel instanceof TreeEditPart)
 				sel = ((AbstractEditPart) sel).getModel();
 			if (sel instanceof MColumn) {
-				JSSCompoundTableCommand c = new JSSCompoundTableCommand(Messages.UnGroupColumnsAction_title, ((MColumn)sel).getMTable(), true); 
+				JSSCompoundTableCommand c = new JSSCompoundTableCommand(Messages.UnGroupColumnsAction_title,
+						((MColumn) sel).getMTable(), true);
 
 				MColumn fmc = (MColumn) sel;
 				ANode mparent = fmc.getParent();
 				c.add(new RefreshColumnNamesCommand(mparent, false, true));
-				
-				//Create the commands to fix the order on the undo
+
+				// Create the commands to fix the order on the undo
 				List<CheckColumnsOrder> fixOrderCommandList = new ArrayList<CheckColumnsOrder>();
-				for (INode src : fmc.getChildren()){
-					if (src instanceof MColumn){
-						fixOrderCommandList.add(new CheckColumnsOrder((MColumn)src));
+				for (INode src : fmc.getChildren()) {
+					if (src instanceof MColumn) {
+						fixOrderCommandList.add(new CheckColumnsOrder((MColumn) src));
 					}
 				}
 				Collections.sort(fixOrderCommandList);
-				//This commands are executed on the undo, so the list must be reversed
+				// This commands are executed on the undo, so the list must be
+				// reversed
 				Collections.reverse(fixOrderCommandList);
-				c.addAll((List)fixOrderCommandList);
-				
-				//Create the commands to move the columns
+				c.addAll((List) fixOrderCommandList);
+
+				// Create the commands to move the columns
 				int baseIndex = mparent.getChildren().indexOf(fmc);
 				for (INode src : fmc.getChildren()) {
-					if (src instanceof MColumn){
-						if (mparent instanceof MColumnGroup || mparent instanceof MColumnGroupCell){
-							MoveColumnCommand moveCommand = new MoveColumnCommand((MColumn) src, (MColumn) mparent, false);
+					if (src instanceof MColumn) {
+						if (mparent instanceof MColumnGroup || mparent instanceof MColumnGroupCell) {
+							MoveColumnCommand moveCommand = new MoveColumnCommand((MColumn) src, (MColumn) mparent,
+									false);
 							moveCommand.setNewIndex(baseIndex);
 							baseIndex++;
 							c.add(moveCommand);
@@ -141,8 +142,7 @@ public class UnGroupColumnsAction extends SelectionAction {
 			Object sel = objects.get(0);
 			if (sel instanceof EditPart)
 				sel = ((EditPart) sel).getModel();
-			return sel instanceof MColumnGroup
-					|| sel instanceof MColumnGroupCell;
+			return sel instanceof MColumnGroup || sel instanceof MColumnGroupCell;
 		}
 		return false;
 	}

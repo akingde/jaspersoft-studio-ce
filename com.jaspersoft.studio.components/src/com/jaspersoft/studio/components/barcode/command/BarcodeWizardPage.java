@@ -12,10 +12,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.barcode.command;
 
-import net.sf.jasperreports.components.barbecue.StandardBarbecueComponent;
-import net.sf.jasperreports.engine.design.JRDesignComponentElement;
-import net.sf.jasperreports.engine.design.JRDesignExpression;
-
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.swt.SWT;
@@ -50,9 +46,12 @@ import com.jaspersoft.studio.components.barcode.model.barcode4j.MRoyalMail;
 import com.jaspersoft.studio.components.barcode.model.barcode4j.MUPCA;
 import com.jaspersoft.studio.components.barcode.model.barcode4j.MUPCE;
 import com.jaspersoft.studio.components.barcode.model.barcode4j.MUSPSIntelligent;
-import com.jaspersoft.studio.utils.ExpressionUtil;
 import com.jaspersoft.studio.wizards.ContextHelpIDs;
 import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
+
+import net.sf.jasperreports.components.barbecue.StandardBarbecueComponent;
+import net.sf.jasperreports.engine.design.JRDesignComponentElement;
+import net.sf.jasperreports.engine.design.JRDesignExpression;
 
 public class BarcodeWizardPage extends JSSHelpWizardPage {
 	private MBarcode barcode = new MCodabar();
