@@ -393,13 +393,35 @@ public class BookTemplateBundle extends WizardTemplateBundle {
 	 */
 	@Override
 	public WizardPage[] getCustomWizardPages() {
-		if (step1 == null || step2 == null || step3 == null){
+		List<WizardPage> result = new ArrayList<WizardPage>();
+		if(step1 == null) {
 			step1 = new BookWizardDataSourceDynamicPage(this);
+		}
+		if(step2 == null) {
 			step2 = new BookWizardFieldsDynamicPage(this);
+		}
+		boolean showSectionsPage = shouldShowSectionsPage();
+		if(showSectionsPage || step3 == null) {
 			step3 = new BookWizardSectionsDynamicPage(this);
 		}
-		WizardPage[] result = new WizardPage[]{step1, step2, step3};
-		return result;
+		result.add(step1);
+		result.add(step2);
+		if(showSectionsPage){
+			result.add(step3);	
+		}
+		return result.toArray(new WizardPage[result.size()]);
+	}
+	
+	/*
+	 * Checks if the page allowing to select sections should be shown.
+	 */
+	private boolean shouldShowSectionsPage() {
+		Object showSectionsProperty = getProperty("template.booksections.showpage");	//$NON-NLS-1$
+		boolean showSectionsPage = true;
+		if(showSectionsProperty instanceof String){
+			showSectionsPage = Boolean.parseBoolean((String) showSectionsProperty);
+		}
+		return showSectionsPage;
 	}
 	
 	/**
@@ -426,7 +448,7 @@ public class BookTemplateBundle extends WizardTemplateBundle {
 	 * @return a not null BookWizardSectionsDynamicPage
 	 */
 	public BookWizardSectionsDynamicPage getStep3() {
-		return step3;
+		return shouldShowSectionsPage() ? step3 : null;
 	}
 	
 	/**

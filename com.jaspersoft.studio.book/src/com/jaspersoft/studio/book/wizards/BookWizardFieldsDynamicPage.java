@@ -15,6 +15,8 @@ package com.jaspersoft.studio.book.wizards;
 import org.eclipse.jface.wizard.IWizardPage;
 
 import com.jaspersoft.studio.book.bundle.BookTemplateBundle;
+import com.jaspersoft.studio.wizards.CongratulationsWizardPage;
+import com.jaspersoft.studio.wizards.ReportNewWizard;
 import com.jaspersoft.studio.wizards.fields.StaticWizardFieldsPage;
 
 /**
@@ -47,8 +49,15 @@ public class BookWizardFieldsDynamicPage extends StaticWizardFieldsPage {
 	 */
 	@Override
 	public IWizardPage getNextPage() {
-		containerBundle.getStep3().setWizard(getWizard());
-		return containerBundle.getStep3();
+		if(containerBundle.getStep3()!=null) {
+			containerBundle.getStep3().setWizard(getWizard());
+			return containerBundle.getStep3();
+		}
+		else {
+			CongratulationsWizardPage congratPage = ((ReportNewWizard)getWizard()).getCongratulationsStep();
+			congratPage.setWizard(getWizard());
+			return congratPage;
+		}
 	}
 	
 	/**
