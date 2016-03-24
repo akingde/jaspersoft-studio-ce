@@ -668,7 +668,7 @@ public class WSClient {
 			}
 
 			ResourceDescriptor copyDescriptor;
-			List resultDescriptors = or.getResourceDescriptors();
+			List<?> resultDescriptors = or.getResourceDescriptors();
 			if (resultDescriptors == null || resultDescriptors.isEmpty()) {
 				copyDescriptor = null;
 			} else {

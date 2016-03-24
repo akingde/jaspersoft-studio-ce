@@ -634,10 +634,10 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 			Connector c = ((ClientConfig) target.getConfiguration()).getConnector();
 
 			try {
-				Method m = c.getClass().getMethod("getCookieStore", null); //$NON-NLS-1$
+				Method m = c.getClass().getMethod("getCookieStore"); //$NON-NLS-1$
 				if (m != null)
 					m.setAccessible(true);
-				cookieStore = (CookieStore) m.invoke(c, null);
+				cookieStore = (CookieStore) m.invoke(c);
 			} catch (NoSuchMethodException e) {
 				e.printStackTrace();
 			} catch (SecurityException e) {

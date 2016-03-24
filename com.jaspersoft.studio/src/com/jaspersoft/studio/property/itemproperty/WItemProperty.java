@@ -90,7 +90,6 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 	public static final String BUTTON_ICON_PATH = "icons/resources/expressionedit-16.png"; //$NON-NLS-1$
 	private int customTextLinesNumber = -1;
 	private ExpressionContext expContext;
-	private int oldpos = 0;
 
 	// Widgets
 	private StandardItemProperty value;
