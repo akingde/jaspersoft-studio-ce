@@ -34,6 +34,7 @@ import com.jaspersoft.studio.model.IDatasetContainer;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.dataset.MDatasetRun;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
+import com.jaspersoft.studio.properties.view.validation.ValidationError;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.combo.RComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
@@ -42,6 +43,7 @@ import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
 import com.jaspersoft.studio.utils.ExpressionInterpreter;
+import com.jaspersoft.studio.utils.ExpressionUtil;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ModelUtils;
 
@@ -55,6 +57,7 @@ import net.sf.jasperreports.eclipse.util.BasicMapInfoData;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRDatasetRun;
 import net.sf.jasperreports.engine.JRElement;
+import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.component.ComponentKey;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
@@ -434,6 +437,53 @@ public class MMap extends MGraphicElement implements IDatasetContainer {
 			}
 		} else
 			super.setPropertyValue(id, value);
+	}
+
+	@Override
+	protected List<ValidationError> doValidation() {
+		List<ValidationError> errors = super.doValidation();
+		if (errors == null)
+			errors = new ArrayList<ValidationError>();
+
+		JRDesignComponentElement jrElement = (JRDesignComponentElement) getValue();
+		StandardMapComponent tm = (StandardMapComponent) jrElement.getComponent();
+
+		JRExpression lonExp = tm.getLongitudeExpression();
+		JRExpression latExp = tm.getLatitudeExpression();
+		JRExpression adrExp = tm.getAddressExpression();
+		if ((lonExp == null || latExp == null) && adrExp == null) {
+			List<String> ids = new ArrayList<String>();
+			if (lonExp == null)
+				ids.add(StandardMapComponent.PROPERTY_LONGITUDE_EXPRESSION);
+			if (latExp == null)
+				ids.add(StandardMapComponent.PROPERTY_LATITUDE_EXPRESSION);
+			ids.add(StandardMapComponent.PROPERTY_ADDRESS_EXPRESSION);
+			errors.add(new ValidationError(ids, Messages.MarkersDescriptor_76));
+		}
+		if (lonExp != null) {
+			Object obj = ExpressionUtil.cachedExpressionEvaluation(lonExp, getJasperConfiguration());
+			if (obj != null && obj instanceof Number) {
+				double v = ((Number) obj).doubleValue();
+				if (v < -122.4167)
+					errors.add(new ValidationError(StandardMapComponent.PROPERTY_LONGITUDE_EXPRESSION,
+							"Min value -122.4167"));
+				if (v > 180)
+					errors.add(
+							new ValidationError(StandardMapComponent.PROPERTY_LONGITUDE_EXPRESSION, "Max value 180"));
+			}
+		}
+		if (latExp != null) {
+			Object obj = ExpressionUtil.cachedExpressionEvaluation(latExp, getJasperConfiguration());
+			if (obj != null && obj instanceof Number) {
+				double v = ((Number) obj).doubleValue();
+				if (v < -85)
+					errors.add(
+							new ValidationError(StandardMapComponent.PROPERTY_LATITUDE_EXPRESSION, "Min value -85"));
+				if (v > 85)
+					errors.add(new ValidationError(StandardMapComponent.PROPERTY_LATITUDE_EXPRESSION, "Max value 85"));
+			}
+		}
+		return errors;
 	}
 
 	private StandardMapComponent getMapComponent() {
