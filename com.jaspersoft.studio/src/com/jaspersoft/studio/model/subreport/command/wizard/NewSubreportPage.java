@@ -272,8 +272,8 @@ public class NewSubreportPage extends JSSWizardSelectionPage implements IExpress
 			return;
 		}
 
-		setSelectedFile(file.getFullPath().toFile());
-
+		setSelectedFile(file.getRawLocation().toFile());
+		
 		IFile contextfile = (IFile) ((JSSWizard) getWizard()).getConfig().get(FileUtils.KEY_FILE);
 
 		String filepath = null;
@@ -443,8 +443,6 @@ public class NewSubreportPage extends JSSWizardSelectionPage implements IExpress
 			}
 
 		}
-
-		System.out.println("Set parameters to: " + getSettings().get(SUBREPORT_PARAMETERS)); //$NON-NLS-1$
 	}
 
 }
