@@ -23,6 +23,7 @@ import net.sf.jasperreports.engine.export.draw.PrintDrawVisitor;
 import net.sf.jasperreports.engine.util.JRStyledText;
 import net.sf.jasperreports.engine.util.UniformElementVisitor;
 import net.sf.jasperreports.export.Graphics2DReportConfiguration;
+import net.sf.jasperreports.renderers.RenderersCache;
 
 public class JSSDrawVisitor extends UniformElementVisitor {
 
@@ -47,7 +48,7 @@ public class JSSDrawVisitor extends UniformElementVisitor {
 				true);
 		boolean ignoreFont = putil.getBooleanProperty(report, JRStyledText.PROPERTY_AWT_IGNORE_MISSING_FONT, false);
 
-		this.drawVisitor = new PrintDrawVisitor(jasperReportsContext, null, minPrintJobSize, ignoreFont);
+		this.drawVisitor = new PrintDrawVisitor(jasperReportsContext, new RenderersCache(jasperReportsContext), minPrintJobSize, ignoreFont);
 		this.grx = grx;
 		setGraphics2D(grx);
 		this.drawVisitor.setClip(true);
