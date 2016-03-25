@@ -45,7 +45,7 @@ import net.sf.jasperreports.engine.xml.JRXmlLoader;
  * @author Giulio Toffoli & Orlandin Marco
  * 
  */
-public class GenericTemplateBundle implements IconedTemplateBundle, ValidatedTemplateBundle {
+public abstract class GenericTemplateBundle implements IconedTemplateBundle, ValidatedTemplateBundle {
 
 	public static final String MAIN_REPORT = "MAIN_REPORT"; //$NON-NLS-1$
 

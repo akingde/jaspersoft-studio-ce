@@ -171,4 +171,9 @@ public class JrxmlTemplateBundle extends WizardTemplateBundle {
 		return step3;
 	}
 
+	@Override
+	public boolean hasSupportForSubreport() {
+		return true;
+	}
+
 }

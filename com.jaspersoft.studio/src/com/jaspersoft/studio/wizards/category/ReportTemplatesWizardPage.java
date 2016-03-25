@@ -52,6 +52,7 @@ import org.eclipse.wb.swt.ResourceManager;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.messages.MessagesByKeys;
+import com.jaspersoft.studio.model.subreport.command.wizard.SubreportWizard;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.templates.StudioTemplateManager;
 import com.jaspersoft.studio.utils.SWTImageEffects;
@@ -312,7 +313,7 @@ public class ReportTemplatesWizardPage extends JSSWizardPage {
 								public void run() {
 									for (TemplateBundle b : bundles) {
 										HashSet<String> bundleCategories = categoryCache.get(b);
-										if (categoryName.equals(universalCategory) || bundleCategories.contains(categoryName)) {
+										if (canBeShown(b) && (categoryName.equals(universalCategory) || (bundleCategories!=null && bundleCategories.contains(categoryName)))) {
 											GalleryItem item = new GalleryItem(itemGroup, SWT.NONE);
 											item.setData(TEMPLATE_KEY, b);
 
@@ -500,6 +501,19 @@ public class ReportTemplatesWizardPage extends JSSWizardPage {
 		}
 	}
 
+	/*
+	 * Template bundle should be shown depending also on the wizard execution context.
+	 * For example JasperReports Book templates are not allowed to be used when the new report
+	 * being created is supposed to be a sub-report.
+	 */
+	private boolean canBeShown(TemplateBundle bundle) {
+		boolean canShow = true;
+		if(getWizard() instanceof JSSWizard && ((JSSWizard)getWizard()).getParentWizard() instanceof SubreportWizard) {
+			canShow = bundle.hasSupportForSubreport();
+		}
+		return canShow;
+	}
+	
 	/**
 	 * For every available template it build a list of all the categories and for every template the map of his categories
 	 * is build
@@ -507,27 +521,29 @@ public class ReportTemplatesWizardPage extends JSSWizardPage {
 	private void findTemplates() {
 		// Load all the available templates by invoking the template manager
 		for (TemplateBundle b : bundles) {
-			Object templateCategory = b.getProperty(BuiltInCategories.CATEGORY_KEY);
-			if (templateCategory != null) {
-				String[] strCategoryList = templateCategory.toString().split(TEMPLATE_CATEGORY_SEPARATOR); 
-				HashSet<String> categorySet = new HashSet<String>();
-
-				for (String cat : strCategoryList) {
-					if (!cat.trim().isEmpty()) {
-						if (!cachedGalleries.containsKey(cat.toLowerCase())) {
-							String categoryLocalizedName = cat;
-							if (b instanceof WizardTemplateBundle){
-								categoryLocalizedName = ((WizardTemplateBundle)b).getLocalizedString(cat);
+			if(canBeShown(b)){
+				Object templateCategory = b.getProperty(BuiltInCategories.CATEGORY_KEY);
+				if (templateCategory != null) {
+					String[] strCategoryList = templateCategory.toString().split(TEMPLATE_CATEGORY_SEPARATOR); 
+					HashSet<String> categorySet = new HashSet<String>();
+	
+					for (String cat : strCategoryList) {
+						if (!cat.trim().isEmpty()) {
+							if (!cachedGalleries.containsKey(cat.toLowerCase())) {
+								String categoryLocalizedName = cat;
+								if (b instanceof WizardTemplateBundle){
+									categoryLocalizedName = ((WizardTemplateBundle)b).getLocalizedString(cat);
+								}
+								categoryList.add(new TemplateCategory(cat, categoryLocalizedName));
+								cachedGalleries.put(cat.toLowerCase(), null);
 							}
-							categoryList.add(new TemplateCategory(cat, categoryLocalizedName));
-							cachedGalleries.put(cat.toLowerCase(), null);
+							categorySet.add(cat);
 						}
-						categorySet.add(cat);
 					}
+					categoryCache.put(b, categorySet);
+				} else {
+					categoryCache.put(b, new HashSet<String>());
 				}
-				categoryCache.put(b, categorySet);
-			} else {
-				categoryCache.put(b, new HashSet<String>());
 			}
 		}
 	}

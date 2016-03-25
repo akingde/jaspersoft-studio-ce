@@ -91,4 +91,11 @@ public interface TemplateBundle {
 	 * false
 	 */
 	public boolean isExternal();
+	
+	/**
+	 * Checks if the template bundle can be used when creating a sub-report
+	 * 
+	 * @return <code>true</code> if supports exists, <code>false</code> otherwise
+	 */
+	public boolean hasSupportForSubreport(); 
 }

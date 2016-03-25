@@ -561,4 +561,9 @@ public class BookTemplateBundle extends WizardTemplateBundle {
 			return MessagesByKeys.getString(key);
 		} else return super.getLocalizedString(key);
 	}
+
+	@Override
+	public boolean hasSupportForSubreport() {
+		return false;
+	}
 }

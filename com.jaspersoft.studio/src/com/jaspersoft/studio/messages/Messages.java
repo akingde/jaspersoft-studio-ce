@@ -2255,6 +2255,8 @@ public class Messages extends NLS {
 	public static String NewSubreportPage_newReport_text;
 	public static String NewSubreportPage_useReportB_text;
 	public static String NewSubreportPage_empty_text;
+	public static String NewSubreportPage_FileSelectionErrorMsg;
+	public static String NewSubreportPage_FileSelectionErrorTitle;
 	public static String NewSubreportPage_pageError;
 	public static String NextPageAction_actionName;
 	public static String NextPageAction_actionTooltip;
