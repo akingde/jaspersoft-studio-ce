@@ -61,6 +61,9 @@ public class BookWizardDataSourceDynamicPage extends StaticWizardDataSourcePage 
 				return containerBundle.getStep3();
 			}
 			else {
+				getSettings().put(BookTemplateBundle.COVER_SETTING,false);
+				getSettings().put(BookTemplateBundle.BACK_COVER_SETTING, false);
+				getSettings().put(BookTemplateBundle.TOC_SETTING, false);
 				CongratulationsWizardPage congratPage = ((ReportNewWizard)getWizard()).getCongratulationsStep();
 				congratPage.setWizard(getWizard());
 				return congratPage;
