@@ -310,7 +310,7 @@ public class NewSubreportPage extends JSSWizardSelectionPage implements IExpress
 		try {
 			IFile file = contextfile.getParent().getFile(new Path(fpath));
 			if (file.exists()) {
-				setSelectedFile(file.getFullPath().toFile());
+				setSelectedFile(file.getRawLocation().toFile());
 			}
 		} catch (Exception ex) {
 		}
