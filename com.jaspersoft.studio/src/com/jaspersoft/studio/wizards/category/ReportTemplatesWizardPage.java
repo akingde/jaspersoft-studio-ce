@@ -18,8 +18,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.ColumnWeightData;
@@ -60,10 +58,13 @@ import com.jaspersoft.studio.utils.SWTImageEffects;
 import com.jaspersoft.studio.utils.SWTImageEffects.Glow;
 import com.jaspersoft.studio.wizards.BuiltInCategories;
 import com.jaspersoft.studio.wizards.ContextHelpIDs;
+import com.jaspersoft.studio.wizards.JSSWizard;
 import com.jaspersoft.studio.wizards.JSSWizardPage;
 import com.jaspersoft.templates.TemplateBundle;
 import com.jaspersoft.templates.ValidatedTemplateBundle;
 import com.jaspersoft.templates.WizardTemplateBundle;
+
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 /**
  * This page is used to allow the user to select a template bundle. The selected template bundle (TemplateBundle) is
@@ -599,8 +600,17 @@ public class ReportTemplatesWizardPage extends JSSWizardPage {
 		if (gal == null)
 			return;
 
+		// Clean settings just to be sure no previous dirty 
+		// data from next/back clicks are in.
+		List<String> keyList = new ArrayList<String>(getSettings().keySet());
+		for(String k : keyList) {
+			// we need to keep the JasperReportsConfiguration instance
+			if(!(JSSWizard.JASPERREPORTS_CONFIGURATION.equals(k))) {
+				getSettings().remove(k);
+			}
+		}
+		
 		GalleryItem[] selection = gal.getSelection();
-
 		if (selection != null && selection.length > 0) {
 
 			selectedTemplate = (TemplateBundle) selection[0].getData(TEMPLATE_KEY); //$NON-NLS-1$

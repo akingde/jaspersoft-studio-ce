@@ -12,6 +12,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.book.wizards;
 
+import java.util.List;
+
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -26,6 +28,7 @@ import com.jaspersoft.studio.book.messages.Messages;
 import com.jaspersoft.studio.wizards.CongratulationsWizardPage;
 import com.jaspersoft.studio.wizards.JSSWizardPage;
 import com.jaspersoft.studio.wizards.ReportNewWizard;
+import com.jaspersoft.studio.wizards.datasource.ReportWizardDataSourceDynamicPage;
 
 /**
  * Page to choose the book sections during the creation of a book template
@@ -123,6 +126,13 @@ public class BookWizardSectionsDynamicPage extends JSSWizardPage {
 	 */
 	@Override
 	public IWizardPage getPreviousPage() {
+		if (!getSettings().containsKey(ReportWizardDataSourceDynamicPage.DISCOVERED_FIELDS) ||
+				((List<?>) getSettings().get(ReportWizardDataSourceDynamicPage.DISCOVERED_FIELDS)).isEmpty()) {
+			//no fields discovered, skip page 2
+			containerBundle.getStep1().setWizard(getWizard());
+			return containerBundle.getStep1();
+		}
+		//has discovered some fields, return the fields page
 		containerBundle.getStep2().setWizard(getWizard());
 		return containerBundle.getStep2();
 	}
