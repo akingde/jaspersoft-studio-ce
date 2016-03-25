@@ -37,6 +37,19 @@ public class ValidationError extends Exception {
 		this.props = props;
 	}
 
+	public ValidationError(String prop, String msg, boolean warning) {
+		super(msg);
+		this.props = new ArrayList<String>();
+		props.add(prop);
+		this.warning = warning;
+	}
+
+	public ValidationError(List<String> props, String msg, boolean warning) {
+		super(msg);
+		this.props = props;
+		this.warning = warning;
+	}
+
 	public void setWarning(boolean warning) {
 		this.warning = warning;
 	}

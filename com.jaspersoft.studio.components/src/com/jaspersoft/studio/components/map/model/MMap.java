@@ -458,7 +458,7 @@ public class MMap extends MGraphicElement implements IDatasetContainer {
 			if (latExp == null)
 				ids.add(StandardMapComponent.PROPERTY_LATITUDE_EXPRESSION);
 			ids.add(StandardMapComponent.PROPERTY_ADDRESS_EXPRESSION);
-			errors.add(new ValidationError(ids, Messages.MarkersDescriptor_76));
+			errors.add(new ValidationError(ids, Messages.MarkersDescriptor_76, true));
 		}
 		if (lonExp != null) {
 			Object obj = ExpressionUtil.cachedExpressionEvaluation(lonExp, getJasperConfiguration());
@@ -466,10 +466,10 @@ public class MMap extends MGraphicElement implements IDatasetContainer {
 				double v = ((Number) obj).doubleValue();
 				if (v < -122.4167)
 					errors.add(new ValidationError(StandardMapComponent.PROPERTY_LONGITUDE_EXPRESSION,
-							"Min value -122.4167"));
+							"Min value -122.4167", true));
 				if (v > 180)
-					errors.add(
-							new ValidationError(StandardMapComponent.PROPERTY_LONGITUDE_EXPRESSION, "Max value 180"));
+					errors.add(new ValidationError(StandardMapComponent.PROPERTY_LONGITUDE_EXPRESSION, "Max value 180",
+							true));
 			}
 		}
 		if (latExp != null) {
@@ -477,10 +477,11 @@ public class MMap extends MGraphicElement implements IDatasetContainer {
 			if (obj != null && obj instanceof Number) {
 				double v = ((Number) obj).doubleValue();
 				if (v < -85)
-					errors.add(
-							new ValidationError(StandardMapComponent.PROPERTY_LATITUDE_EXPRESSION, "Min value -85"));
+					errors.add(new ValidationError(StandardMapComponent.PROPERTY_LATITUDE_EXPRESSION, "Min value -85",
+							true));
 				if (v > 85)
-					errors.add(new ValidationError(StandardMapComponent.PROPERTY_LATITUDE_EXPRESSION, "Max value 85"));
+					errors.add(new ValidationError(StandardMapComponent.PROPERTY_LATITUDE_EXPRESSION, "Max value 85",
+							true));
 			}
 		}
 		return errors;
