@@ -72,7 +72,7 @@ import net.sf.jasperreports.engine.design.JRDesignQuery;
 public class SoapConnection implements IConnection {
 	protected DateFormat dateFormat = SimpleDateFormat.getDateInstance();
 	protected DateFormat timestampFormat = SimpleDateFormat.getDateTimeInstance();
-	protected DateFormat timeFormat = new SimpleDateFormat("h:mm:ss");
+	protected DateFormat timeFormat = new SimpleDateFormat("h:mm:ss"); //$NON-NLS-1$
 	protected NumberFormat numberFormat = NumberFormat.getInstance();
 	private ServerProfile sp;
 
@@ -125,26 +125,26 @@ public class SoapConnection implements IConnection {
 
 	@Override
 	public boolean connect(IProgressMonitor monitor, ServerProfile sp) throws Exception {
-		monitor.subTask("Trying SOAP");
+		monitor.subTask(Messages.SoapConnection_1);
 		JServer server = new JServer();
 		this.sp = sp;
 		setupJServer(server, sp);
 		if (sp.isLogging()) {
-			System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.SimpleLog");
-			System.setProperty("org.apache.commons.logging.simplelog.showdatetime", "true");
-			System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.wire", "DEBUG");
-			System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.impl.conn", "DEBUG");
-			System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.impl.client", "DEBUG");
-			System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.client", "DEBUG");
-			System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http", "DEBUG");
+			System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.SimpleLog"); //$NON-NLS-1$ //$NON-NLS-2$
+			System.setProperty("org.apache.commons.logging.simplelog.showdatetime", "true"); //$NON-NLS-1$ //$NON-NLS-2$
+			System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.wire", "DEBUG"); //$NON-NLS-1$ //$NON-NLS-2$
+			System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.impl.conn", "DEBUG"); //$NON-NLS-1$ //$NON-NLS-2$
+			System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.impl.client", "DEBUG"); //$NON-NLS-1$ //$NON-NLS-2$
+			System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.client", "DEBUG"); //$NON-NLS-1$ //$NON-NLS-2$
+			System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http", "DEBUG"); //$NON-NLS-1$ //$NON-NLS-2$
 		} else {
-			System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.SimpleLog");
-			System.setProperty("org.apache.commons.logging.simplelog.showdatetime", "true");
-			System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.wire", "ERROR");
-			System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.impl.conn", "ERROR");
-			System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.impl.client", "ERROR");
-			System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.client", "ERROR");
-			System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http", "ERROR");
+			System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.SimpleLog"); //$NON-NLS-1$ //$NON-NLS-2$
+			System.setProperty("org.apache.commons.logging.simplelog.showdatetime", "true"); //$NON-NLS-1$ //$NON-NLS-2$
+			System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.wire", "ERROR"); //$NON-NLS-1$ //$NON-NLS-2$
+			System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.impl.conn", "ERROR"); //$NON-NLS-1$ //$NON-NLS-2$
+			System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.impl.client", "ERROR"); //$NON-NLS-1$ //$NON-NLS-2$
+			System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.client", "ERROR"); //$NON-NLS-1$ //$NON-NLS-2$
+			System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http", "ERROR"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 
 		client = server.getWSClient();
@@ -154,17 +154,17 @@ public class SoapConnection implements IConnection {
 	}
 
 	private static void setupJServer(JServer server, ServerProfile sp) throws Exception {
-		AxisProperties.setProperty(DefaultCommonsHTTPClientProperties.MAXIMUM_CONNECTIONS_PER_HOST_PROPERTY_KEY, "4");
+		AxisProperties.setProperty(DefaultCommonsHTTPClientProperties.MAXIMUM_CONNECTIONS_PER_HOST_PROPERTY_KEY, "4"); //$NON-NLS-1$
 		server.setName(sp.getName());
 		String rurl = sp.getUrl();
-		if (rurl.endsWith("services/repository/"))
+		if (rurl.endsWith("services/repository/")) //$NON-NLS-1$
 			rurl = rurl.substring(0, rurl.length() - 1);
-		if (!rurl.endsWith("services/repository"))
-			rurl += "services/repository";
+		if (!rurl.endsWith("services/repository")) //$NON-NLS-1$
+			rurl += "services/repository"; //$NON-NLS-1$
 		server.setUrl(rurl);
 		String username = sp.getUser();
 		if (sp.getOrganisation() != null && !sp.getOrganisation().trim().isEmpty())
-			username += "|" + sp.getOrganisation();
+			username += "|" + sp.getOrganisation(); //$NON-NLS-1$
 		server.setUsername(username);
 		server.setPassword(sp.getPass());
 		server.setTimeout(sp.getTimeout());
@@ -181,14 +181,14 @@ public class SoapConnection implements IConnection {
 	@Override
 	public ResourceDescriptor get(IProgressMonitor monitor, ResourceDescriptor rd, File f) throws Exception {
 		try {
-			if (rd.getUriString() == null || rd.getUriString().contains("<"))
-				throw new Exception("wrong url");
+			if (rd.getUriString() == null || rd.getUriString().contains("<")) //$NON-NLS-1$
+				throw new Exception(Messages.SoapConnection_0);
 			rd = client.get(rd, f);
 			sortReportUnit(rd, rd.getChildren());
 		} catch (Exception e) {
 			if (wstypes.contains(rd.getWsType())) {
 				throw new Exception(String.format(
-						"The current protocol used with this server does not allow to dowload %s resources.",
+						Messages.SoapConnection_37,
 						rd.getWsType()), e);
 			}
 			throw e;
@@ -260,7 +260,7 @@ public class SoapConnection implements IConnection {
 		client.move(rd, destFolderURI);
 		ResourceDescriptor nrd = new ResourceDescriptor();
 		nrd.setWsType(rd.getWsType());
-		nrd.setUriString(destFolderURI + "/" + rd.getName());
+		nrd.setUriString(destFolderURI + "/" + rd.getName()); //$NON-NLS-1$
 		return parent.get(monitor, nrd, null);
 	}
 
@@ -269,7 +269,7 @@ public class SoapConnection implements IConnection {
 			throws Exception {
 		if (rd.getParentFolder().equals(destFolderURI))
 			return rd;
-		destFolderURI = destFolderURI + "/" + rd.getName();
+		destFolderURI = destFolderURI + "/" + rd.getName(); //$NON-NLS-1$
 		return client.copy(rd, destFolderURI);
 	}
 
@@ -286,12 +286,12 @@ public class SoapConnection implements IConnection {
 				if (rd.getIsNew() && SelectorDatasource.isDatasource(r))
 					mainDs = r;
 				if (r.isMainReport()
-						|| (r.getWsType().equals(ResourceDescriptor.TYPE_JRXML) && r.getName().equals("main_jrxml"))) {
+						|| (r.getWsType().equals(ResourceDescriptor.TYPE_JRXML) && r.getName().equals("main_jrxml"))) { //$NON-NLS-1$
 					if (r.getHasData() && r.getData() != null) {
 						inputFile = writeToTemp(r.getData());
 						r.setData(null);
 					} else if (inputFile == null && !rd.getIsNew() && !r.getIsReference()) {
-						inputFile = FileUtils.createTempFile("res", "jrxml");
+						inputFile = FileUtils.createTempFile("res", "jrxml"); //$NON-NLS-1$ //$NON-NLS-2$
 						int ind = children.indexOf(r);
 						r = get(monitor, r, inputFile);
 						r.setHasData(true);
@@ -338,7 +338,7 @@ public class SoapConnection implements IConnection {
 						continue;
 					if (r.getWsType().equals(ResourceDescriptor.TYPE_INPUT_CONTROL)) {
 						if (r.getIsReference())
-							r.setUriString(rd.getUriString() + "_files/" + r.getName());
+							r.setUriString(rd.getUriString() + "_files/" + r.getName()); //$NON-NLS-1$
 						if (!r.getIsNew())
 							r = client.addOrModifyResource(r, null);
 						else
@@ -413,7 +413,7 @@ public class SoapConnection implements IConnection {
 
 	@Override
 	public ReportExecution runReport(IProgressMonitor monitor, ReportExecution repExec) throws Exception {
-		repExec.setStatus("ready");
+		repExec.setStatus("ready"); //$NON-NLS-1$
 		repExec.setFiles(new HashMap<String, FileContent>());
 		repExec.setFiles(client.runReport(repExec.getResourceDescriptor(), repExec.getPrm(), repExec.getArgs()));
 		return repExec;
@@ -453,7 +453,7 @@ public class SoapConnection implements IConnection {
 
 	@Override
 	public void findResources(IProgressMonitor monitor, AFinderUI callback) throws Exception {
-		throw new UnsupportedOperationException("Search not implemented for SOAP protocol.");
+		throw new UnsupportedOperationException(Messages.SoapConnection_45);
 	}
 
 	@Override
@@ -483,12 +483,12 @@ public class SoapConnection implements IConnection {
 		runit.getChildren().removeAll(toDel);
 		for (ResourceDescriptor r : rds) {
 			r.setIsNew(true);
-			if (!r.getParentFolder().endsWith("_files")) {
+			if (!r.getParentFolder().endsWith("_files")) { //$NON-NLS-1$
 				r.setIsReference(true);
 				r.setReferenceUri(r.getUriString());
-				r.setParentFolder(uri + "_files");
+				r.setParentFolder(uri + "_files"); //$NON-NLS-1$
 			}
-			r.setUriString(uri + "_files/" + r.getName());
+			r.setUriString(uri + "_files/" + r.getName()); //$NON-NLS-1$
 			PublishUtil.setChild(runit, r);
 		}
 		addOrModifyResource(monitor, runit, null);
@@ -655,7 +655,7 @@ public class SoapConnection implements IConnection {
 	}
 
 	public static File writeToTemp(byte[] b64data) throws IOException {
-		File inputFile = FileUtils.createTempFile("save", "jrxml");
+		File inputFile = FileUtils.createTempFile("save", "jrxml"); //$NON-NLS-1$ //$NON-NLS-2$
 		inputFile.deleteOnExit();
 		org.apache.commons.io.FileUtils.write(inputFile, new String(Base64.decodeBase64(b64data)));
 		return inputFile;
@@ -699,12 +699,12 @@ public class SoapConnection implements IConnection {
 	@Override
 	public List<RepositoryPermission> getPermissions(ResourceDescriptor rd, IProgressMonitor monitor,
 			PermissionOptions options) throws Exception {
-		WSObjectPermission[] m = client.getPermissionsManagement().getPermissionsForObject("repo:" + rd.getUriString());
+		WSObjectPermission[] m = client.getPermissionsManagement().getPermissionsForObject("repo:" + rd.getUriString()); //$NON-NLS-1$
 		List<RepositoryPermission> perms = new ArrayList<RepositoryPermission>();
 		for (WSObjectPermission p : m) {
 			String uri = p.getUri();
 			if (uri != null)
-				uri = uri.replaceAll("repo:", "");
+				uri = uri.replaceAll("repo:", ""); //$NON-NLS-1$ //$NON-NLS-2$
 			Object prec = p.getPermissionRecipient();
 			if (prec instanceof WSRole && !options.isRecipientTypeUser())
 				perms.add(new RepositoryPermission(uri, ((WSRole) prec).getRoleName(), p.getPermissionMask()));
