@@ -20,7 +20,6 @@ import java.net.URISyntaxException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import org.apache.commons.codec.binary.Base64;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.gef.ui.actions.Clipboard;
@@ -35,9 +34,12 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
@@ -213,7 +215,7 @@ public class PasteResourceAction extends Action {
 	private boolean exists = false;
 	private PasteDialog d;
 
-	private void doWork(IProgressMonitor monitor, ANode parent, List<?> list) throws Exception {
+	private void doWork(final IProgressMonitor monitor, ANode parent, List<?> list) throws Exception {
 		existsAll = false;
 		MServerProfile sp = (MServerProfile) parent.getRoot();
 		String dURI = ((AMResource) parent).getValue().getUriString();
@@ -224,6 +226,9 @@ public class PasteResourceAction extends Action {
 		if (parent instanceof MReportUnit)
 			parent.setValue(ws.get(monitor, ((AMResource) parent).getValue(), null));
 		boolean copy = false;
+		boolean replace = false;
+		confirmNames = true;
+		firstConfirm = false;
 		for (Object obj : list) {
 			if (obj instanceof AMResource && obj instanceof ICopyable) {
 				if (monitor.isCanceled())
@@ -245,20 +250,26 @@ public class PasteResourceAction extends Action {
 							exists = true;
 					} catch (Exception e) {
 					}
-					if (!existsAll)
+					if (!existsAll) {
 						copy = false;
+						replace = false;
+					}
 					if (exists && !existsAll) {
 						UIUtils.getDisplay().syncExec(new Runnable() {
 
 							@Override
 							public void run() {
 								d = new PasteDialog(UIUtils.getShell(), m);
-								d.open();
+								if (d.open() != Dialog.OK) {
+									monitor.setCanceled(true);
+									return;
+								}
 							}
 						});
 						existsAll = d.getForAll();
 						switch (d.getChoise()) {
 						case PasteDialog.REPLACE:
+							replace = true;
 							break;
 						case PasteDialog.SKIP:
 							continue;
@@ -317,6 +328,23 @@ public class PasteResourceAction extends Action {
 							if (monitor.isCanceled())
 								return;
 							ws.addOrModifyResource(monitor, rd, null);
+						} else if (replace) {
+							IConnection mc = m.getWsClient();
+							File file = FileUtils.createTempFile("tmp", "file"); //$NON-NLS-1$ //$NON-NLS-2$
+							try {
+								rd = mc.get(monitor, origin, file);
+								rd.setData(Base64
+										.encodeBase64(net.sf.jasperreports.eclipse.util.FileUtils.getBytes(file)));
+								rd.setHasData(origin.getData() != null);
+							} catch (Throwable e) {
+								file = null;
+							}
+							rd.setParentFolder(dURI);
+							rd.setUriString(dURI + "/" + rd.getName()); //$NON-NLS-1$
+							fixUris(rd, monitor, mc);
+							if (monitor.isCanceled())
+								return;
+							ws.addOrModifyResource(monitor, rd, null);
 						} else {
 							if (m.isCut()) {
 								ws.move(monitor, origin, dURI);
@@ -357,6 +385,8 @@ public class PasteResourceAction extends Action {
 	}
 
 	private String copyName;
+	private boolean confirmNames = true;
+	private boolean firstConfirm = false;
 
 	private String getCopyName(final ANode parent, final String name, final IProgressMonitor monitor) {
 		copyName = "_COPY"; //$NON-NLS-1$
@@ -368,15 +398,19 @@ public class PasteResourceAction extends Action {
 				copyName = "_COPY" + j; //$NON-NLS-1$
 			}
 		}
-		UIUtils.getDisplay().syncExec(new Runnable() {
-			public void run() {
-				ResourceNameDialog d = new ResourceNameDialog(UIUtils.getShell(), name, name + copyName, parent);
-				if (d.open() == Dialog.OK)
-					copyName = d.getValue();
-				else
-					monitor.setCanceled(true);
-			}
-		});
+		if (confirmNames) {
+			UIUtils.getDisplay().syncExec(new Runnable() {
+				public void run() {
+					ResourceNameDialog d = new ResourceNameDialog(UIUtils.getShell(), name, name + copyName, parent);
+					if (d.open() == Dialog.OK)
+						copyName = d.getValue();
+					else
+						monitor.setCanceled(true);
+				}
+			});
+			firstConfirm = true;
+		} else
+			copyName = name + copyName;
 
 		return copyName;
 	}
@@ -388,7 +422,7 @@ public class PasteResourceAction extends Action {
 		public ResourceNameDialog(Shell shell, String name, String value, ANode p) {
 			super(shell);
 			setTitle(Messages.PasteResourceAction_12);
-			setDefaultSize(500, 160);
+			setDefaultSize(500, 200);
 			this.name = name;
 			this.value = value;
 			this.p = p;
@@ -443,6 +477,16 @@ public class PasteResourceAction extends Action {
 				}
 			});
 
+			final Button bAuto = new Button(c, SWT.CHECK);
+			bAuto.setText("Go with autogenerated suffixes for all resources.");
+			bAuto.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					confirmNames = !bAuto.getSelection();
+				}
+			});
+			bAuto.setSelection(!firstConfirm);
+			confirmNames = !bAuto.getSelection();
 			return c;
 		}
 	}

@@ -91,6 +91,7 @@ public class ServerManager {
 	 *            the element to save
 	 */
 	private static void saveIntoStrage(MServerProfile serverProfile, String fileName) {
+		FileOutputStream stream = null;
 		try {
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder builder = factory.newDocumentBuilder();
@@ -101,12 +102,13 @@ public class ServerManager {
 			DOMSource source = new DOMSource(doc);
 			File storage = ConfigurationManager.getStorage(PREF_TAG);
 			File destination = new File(storage, fileName);
-			FileOutputStream stream = new FileOutputStream(destination);
+			stream = new FileOutputStream(destination);
 			StreamResult result = new StreamResult(stream);
 			transformer.transform(source, result);
-			stream.close();
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			FileUtils.closeStream(stream);
 		}
 	}
 
