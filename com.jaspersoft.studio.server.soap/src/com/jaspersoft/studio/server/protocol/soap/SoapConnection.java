@@ -129,16 +129,16 @@ public class SoapConnection implements IConnection {
 		JServer server = new JServer();
 		this.sp = sp;
 		setupJServer(server, sp);
-		if(sp.isLogging()){
-			System.setProperty("org.apache.commons.logging.Log","org.apache.commons.logging.impl.SimpleLog");
+		if (sp.isLogging()) {
+			System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.SimpleLog");
 			System.setProperty("org.apache.commons.logging.simplelog.showdatetime", "true");
 			System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.wire", "DEBUG");
 			System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.impl.conn", "DEBUG");
 			System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.impl.client", "DEBUG");
 			System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.client", "DEBUG");
 			System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http", "DEBUG");
-		}else{
-			System.setProperty("org.apache.commons.logging.Log","org.apache.commons.logging.impl.SimpleLog");
+		} else {
+			System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.SimpleLog");
 			System.setProperty("org.apache.commons.logging.simplelog.showdatetime", "true");
 			System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.wire", "ERROR");
 			System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.impl.conn", "ERROR");
@@ -172,12 +172,27 @@ public class SoapConnection implements IConnection {
 		server.setMime(sp.isMime());
 	}
 
+	private static Set<String> wstypes = new HashSet<String>();
+	static {
+		wstypes.add(ResourceDescriptor.TYPE_CSS_FILE);
+		wstypes.add(ResourceDescriptor.TYPE_JSON_FILE);
+	}
+
 	@Override
 	public ResourceDescriptor get(IProgressMonitor monitor, ResourceDescriptor rd, File f) throws Exception {
-		if (rd.getUriString() == null || rd.getUriString().contains("<"))
-			throw new Exception("wrong url");
-		rd = client.get(rd, f);
-		sortReportUnit(rd, rd.getChildren());
+		try {
+			if (rd.getUriString() == null || rd.getUriString().contains("<"))
+				throw new Exception("wrong url");
+			rd = client.get(rd, f);
+			sortReportUnit(rd, rd.getChildren());
+		} catch (Exception e) {
+			if (wstypes.contains(rd.getWsType())) {
+				throw new Exception(String.format(
+						"The current protocol used with this server does not allow to dowload %s resources.",
+						rd.getWsType()), e);
+			}
+			throw e;
+		}
 		return rd;
 	}
 
