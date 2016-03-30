@@ -621,12 +621,7 @@ public class ImageSelectionDialog extends Dialog {
 		if (!btnCustomExpression.getSelection()) {
 			if (imageExpressionText != null) {
 				jrImgExpression = new JRDesignExpression();
-				if (imageExpressionText.endsWith(".svg")) //$NON-NLS-1$
-					jrImgExpression.setText(
-							"net.sf.jasperreports.renderers.BatikRenderer.getInstanceFromLocation($P{JASPER_REPORTS_CONTEXT}, \"" //$NON-NLS-1$
-									+ imageExpressionText + "\")");//$NON-NLS-1$
-				else
-					jrImgExpression.setText("\"" + imageExpressionText + "\"");//$NON-NLS-1$ //$NON-NLS-2$
+				jrImgExpression.setText("\"" + imageExpressionText + "\"");//$NON-NLS-1$ //$NON-NLS-2$
 			} else {
 				jrImgExpression = null;
 			}
