@@ -1602,7 +1602,9 @@ public class Messages extends NLS {
 	public static String PasteResourceAction_15;
 	public static String PasteResourceAction_16;
 	public static String PasteResourceAction_4;
+	public static String PasteResourceAction_6;
 	public static String PasteResourceAction_7;
+	public static String PasteResourceAction_8;
 	public static String PathAndDataDialog_0;
 	public static String PathAndDataDialog_1;
 	public static String PathAndDataDialog_10;
