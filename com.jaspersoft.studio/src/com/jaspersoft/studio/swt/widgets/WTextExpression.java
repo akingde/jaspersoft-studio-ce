@@ -15,8 +15,6 @@ package com.jaspersoft.studio.swt.widgets;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.jasperreports.engine.design.JRDesignExpression;
-
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
@@ -26,6 +24,8 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.events.VerifyEvent;
+import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
@@ -43,6 +43,8 @@ import com.jaspersoft.studio.swt.events.ExpressionModifiedEvent;
 import com.jaspersoft.studio.swt.events.ExpressionModifiedListener;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.UIUtil;
+
+import net.sf.jasperreports.engine.design.JRDesignExpression;
 
 /**
  * Expression widget re-usable in custom dialogs and wizards. The text of the expression is represented inside the
@@ -182,8 +184,16 @@ public class WTextExpression extends Composite implements IExpressionContextSett
 		}
 
 		textExpression = new Text(this, SWT.BORDER | SWT.WRAP | SWT.V_SCROLL);
+		textExpression.addVerifyListener(new VerifyListener() {
+			@Override
+			public void verifyText(VerifyEvent e) {
+				boolean isShift = (e.stateMask & SWT.SHIFT) > 0;
+				if(e.keyCode == SWT.CR && !isShift) {
+					e.doit = false;
+				}
+			}
+		});
 		textExpression.addModifyListener(new ModifyListener() {
-
 			public void modifyText(ModifyEvent e) {
 				if (!isRefreshing) {
 					String text = textExpression.getText();
