@@ -34,8 +34,10 @@ import com.jaspersoft.studio.editor.gef.rulers.ReportRuler;
 import com.jaspersoft.studio.editor.gef.rulers.ReportRulerProvider;
 import com.jaspersoft.studio.editor.java2d.JSSScrollingGraphicalViewer;
 import com.jaspersoft.studio.editor.name.NamedSubeditor;
+import com.jaspersoft.studio.editor.report.MarqueeSelectionOverrider;
 import com.jaspersoft.studio.editor.report.ParentSelectionOverrider;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.IContainer;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.util.ModelVisitor;
 import com.jaspersoft.studio.preferences.RulersGridPreferencePage;
@@ -95,7 +97,9 @@ public class ListEditor extends NamedSubeditor {
 		graphicalViewer.setKeyHandler(new JSSGraphicalViewerKeyHandler(
 				graphicalViewer));
 		if (graphicalViewer instanceof JSSScrollingGraphicalViewer){
-			((JSSScrollingGraphicalViewer)graphicalViewer).setSelectionOverrider(new ParentSelectionOverrider(MList.class, true));
+			JSSScrollingGraphicalViewer jssViewer = (JSSScrollingGraphicalViewer)graphicalViewer;
+			jssViewer.addSelectionOverrider(new ParentSelectionOverrider(IContainer.class, true));
+			jssViewer.addSelectionOverrider(new MarqueeSelectionOverrider());
 		}
 	}
 

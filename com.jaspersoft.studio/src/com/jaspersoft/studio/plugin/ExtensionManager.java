@@ -47,6 +47,8 @@ import com.jaspersoft.studio.editor.preview.view.report.system.AExporterFactory;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.util.HyperlinkDefaultParameter;
+import com.jaspersoft.studio.preferences.bindings.BindingElement;
+import com.jaspersoft.studio.preferences.bindings.JSSKeySequence;
 import com.jaspersoft.studio.repository.IRepositoryViewProvider;
 import com.jaspersoft.studio.statistics.IFirstStartupAction;
 import com.jaspersoft.studio.style.view.TemplateViewProvider;
@@ -54,6 +56,7 @@ import com.jaspersoft.studio.swt.widgets.WHyperlink;
 import com.jaspersoft.studio.swt.widgets.WHyperlink.UIElement;
 import com.jaspersoft.studio.templates.TemplateProvider;
 import com.jaspersoft.studio.utils.AContributorAction;
+import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 import net.sf.jasperreports.engine.JasperReport;
@@ -344,6 +347,45 @@ public class ExtensionManager {
 		}
 		return actionMap.values();
 	}
+	
+	/**
+	 * Static variable to cache the loaded binding after the first time they are
+	 * requested
+	 */
+	private static HashMap<String, BindingElement> contributedBindings = null;
+	
+	/**
+	 * Return a list of the contributed key bindings, these are the keybindings contributed to the studio keybindings manager.
+	 * The key binding of a specific action can be read from the returned map using its id
+	 * 
+	 * @return a not null list Map of binding where the key is the id of the binded key and the value is the definition of the binding
+	 * key
+	 */
+	public static HashMap<String, BindingElement> getContributedBindings() {
+		if (contributedBindings == null) {
+			IConfigurationElement[] config = Platform.getExtensionRegistry()
+					.getConfigurationElementsFor(JaspersoftStudioPlugin.PLUGIN_ID, "bindings");
+	
+			contributedBindings = new HashMap<String, BindingElement>();
+			for (IConfigurationElement el : config) {
+				try{
+					String bindingID = el.getAttribute("id");
+					String bindingSequence = el.getAttribute("sequence");
+					String bindingContext = el.getAttribute("context");
+					String bindinDescription = el.getAttribute("description");
+					String bidningName = el.getAttribute("name");
+					JSSKeySequence bindingKeySequence = JSSKeySequence.getInstance(bindingSequence);
+					BindingElement element = new BindingElement(bindingID, bidningName, Misc.nvl(bindinDescription), bindingContext, bindingKeySequence);
+					contributedBindings.put(bindingID, element);
+				} catch (Exception ex){
+					ex.printStackTrace();
+					JaspersoftStudioPlugin.getInstance().logError(ex);
+				}
+			}
+		}
+		return contributedBindings;
+	}
+
 
 	public List<PaletteGroup> getPaletteGroups() {
 		List<PaletteGroup> paletteGroup = new ArrayList<PaletteGroup>();

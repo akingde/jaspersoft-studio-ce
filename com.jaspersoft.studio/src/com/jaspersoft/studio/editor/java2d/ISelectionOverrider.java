@@ -12,6 +12,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.java2d;
 
+import java.util.List;
+
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
 
@@ -31,10 +33,11 @@ public interface ISelectionOverrider {
 	 * selected by the user. 
 	 * 
 	 * @param selectedPart the last selected part on the viewer
+	 * @param previousSelection the selection before the selectedPart element is clicked
 	 * @param currentViewer the viewer
 	 * @return true if the implementation has overridden the selection and selected something
 	 * else, false otherwise
 	 */
-	public boolean overriddenSelection(EditPart selectedPart, GraphicalViewer currentViewer);
+	public boolean overriddenSelection(EditPart selectedPart, List<?> previousSelection, GraphicalViewer currentViewer);
 	
 }

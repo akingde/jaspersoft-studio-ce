@@ -17,10 +17,9 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
-import net.sf.jasperreports.eclipse.JasperReportsPlugin;
-
 import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.Viewport;
+import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.AutoexposeHelper;
@@ -31,8 +30,8 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
+import org.eclipse.gef.tools.AbstractTool;
 import org.eclipse.gef.tools.DragEditPartsTracker;
-import org.eclipse.swt.SWT;
 
 import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
@@ -44,6 +43,7 @@ import com.jaspersoft.studio.model.IContainer;
 import com.jaspersoft.studio.model.IDesignDragable;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.frame.MFrame;
+import com.jaspersoft.studio.preferences.bindings.BindingsPreferencePersistence;
 
 /**
  * This drag tracker redefine the behavior when an element is moved or resized. Usually an element can not be moved over
@@ -53,11 +53,11 @@ import com.jaspersoft.studio.model.frame.MFrame;
  * By default if the selected elements had different parents the drag operation doesn't change their parent. Otherwise if
  * the parent is the same then the selected elements will be moved to the destination
  * 
- * It allow the hotkey SHIFT to drag the selection only vertically or horizontally
+ * It allow an hotkey to drag the selection only vertically or horizontally
  * 
- * It allow the hotkey A to force the dragged to use the target parent even if the source selection comes from different parents
+ * It allow an hotkey to force the dragged to use the target parent even if the source selection comes from different parents
  * 
- * The hotkeys can be combined
+ * The hotkeys can be combined and configured
  * 
  * @author Orlandin Marco
  * 
@@ -68,11 +68,21 @@ public class SearchParentDragTracker extends DragEditPartsTracker {
 	private static final int DEFAULT_EXPOSE_THRESHOLD = 50;
 	
 	/**
+	 * Id of the key binding action to enable the straight movement of the element
+	 */
+	private static final String STRAIGHT_DRAG_KEY_ID = "com.jaspersoft.studio.editor.straightmovment";
+	
+	/**
+	 * Id of the key binding action to disable the snap of the moved element
+	 */
+	private static final String NO_SNAPPING_DRAG_KEY_ID = "com.jaspersoft.studio.editor.straightmovment.nosnapping";
+	
+	/**
 	 * This is the modifier key (A button) that is used to modify the drag and drop
 	 * operation behavior. When this key is pressed during a drag and drop the children will
 	 * never change parent
 	 */
-	protected static final int MOVE_CHILD_KEY = 97;
+	protected static final String MOVE_CHILD_KEY_ID = "com.jaspersoft.studio.editor.enforcechangeparent";
 
 	/**
 	 * This variable contains all the hierarchy of the elements dragged, to avoid that an element is placed inside
@@ -523,7 +533,7 @@ public class SearchParentDragTracker extends DragEditPartsTracker {
 	 * the command are generated in a way to dosen't change the parent of the element
 	 */
 	protected Command getCommand() {
-		boolean useOldBheavior = JasperReportsPlugin.isPressed(MOVE_CHILD_KEY);
+		boolean useOldBheavior = BindingsPreferencePersistence.isPressed(MOVE_CHILD_KEY_ID);
 		if (useOldBheavior){
 			return super.getCommand();
 		} else if (keepParentDrag){
@@ -564,7 +574,7 @@ public class SearchParentDragTracker extends DragEditPartsTracker {
 	protected void showTargetFeedback() {
 		Command command = getCurrentCommand();
 		if (command != null && command.canExecute()){
-			boolean useOldBheavior = JasperReportsPlugin.isPressed(MOVE_CHILD_KEY);
+			boolean useOldBheavior = BindingsPreferencePersistence.isPressed(MOVE_CHILD_KEY_ID);
 			if (useOldBheavior || !keepParentDrag){
 				super.showTargetFeedback();
 			}
@@ -619,33 +629,6 @@ public class SearchParentDragTracker extends DragEditPartsTracker {
 		}
 		EditPart result= parent != null ? parent : target;
 		return result;
-	}
-	
-	/**
-	 * Modify the drag behavior when the shift key is pressed. when it is pressed if the mouse
-	 * if moved over an offset (actually ten pixel) in horizontal or in vertical then the element
-	 * will be moved only on the horizontal or vertical axis, with all the snap deactivated 
-	 */
-	@Override
-	protected void snapPoint(ChangeBoundsRequest request) {
-		boolean shiftPressed = JasperReportsPlugin.isPressed(SWT.SHIFT);
-		if (!shiftPressed) {
-			//Shift was released so use the default snap hander and reset the mouse direction
-			firstMovment = MOUSE_DIRECTION.UNDEFINED;
-			super.snapPoint(request);
-		}
-		else {
-			Point moveDelta = request.getMoveDelta();
-			int x = Math.abs(moveDelta.x);
-			int y = Math.abs(moveDelta.y);
-			//check if the offset threshold is passed
-			if (x>10 && x>y && firstMovment == MOUSE_DIRECTION.UNDEFINED) firstMovment = MOUSE_DIRECTION.HORIZONTAL;
-			if (y>10 && y>x && firstMovment == MOUSE_DIRECTION.UNDEFINED) firstMovment = MOUSE_DIRECTION.VERTICAL;
-			if (firstMovment != MOUSE_DIRECTION.UNDEFINED){
-				if (firstMovment == MOUSE_DIRECTION.VERTICAL) moveDelta.x = 0;
-				else moveDelta.y = 0;
-			}
-		}
 	}
 
 	/**
@@ -713,8 +696,59 @@ public class SearchParentDragTracker extends DragEditPartsTracker {
 				}
 			}
 		}
-
 		return request;
+	}
+	
+	/**
+	 * The JSS Drag Tracker doesn't support cloning
+	 */
+	@Override
+	protected boolean isCloneActive() {
+		return false;
+	}
+	
+	/**
+	 * Calls {@link #repairStartLocation()} in case auto scroll is being
+	 * performed. Updates the request with the current
+	 * {@link AbstractTool#getOperationSet() operation set}, move delta,
+	 * location and type.
+	 * 
+	 * Modify the drag behavior when the shift key is pressed. when it is pressed if the mouse
+	 * if moved over an offset (actually ten pixel) in horizontal or in vertical then the element
+	 * will be moved only on the horizontal or vertical axis, with all the snap deactivated 
+	 */
+	@Override
+	protected void updateTargetRequest() {
+		repairStartLocation();
+		ChangeBoundsRequest request = (ChangeBoundsRequest) getTargetRequest();
+		request.setEditParts(getOperationSet());
+		Dimension delta = getDragMoveDelta();
+
+		request.setSnapToEnabled(!BindingsPreferencePersistence.isPressed(NO_SNAPPING_DRAG_KEY_ID));
+		request.setConstrainedMove(BindingsPreferencePersistence.isPressed(STRAIGHT_DRAG_KEY_ID));
+		
+		if (request.isConstrainedMove()) {
+			int x = Math.abs(delta.width);
+			int y = Math.abs(delta.height);
+			//check if the offset threshold is passed
+			if (x>10 && x>y && firstMovment == MOUSE_DIRECTION.UNDEFINED) firstMovment = MOUSE_DIRECTION.HORIZONTAL;
+			if (y>10 && y>x && firstMovment == MOUSE_DIRECTION.UNDEFINED) firstMovment = MOUSE_DIRECTION.VERTICAL;
+			if (firstMovment != MOUSE_DIRECTION.UNDEFINED){
+				if (firstMovment == MOUSE_DIRECTION.VERTICAL) delta.width = 0;
+				else delta.height = 0;
+			}
+		} else {
+			//Shift was released so use the default snap hander and reset the mouse direction
+			firstMovment = MOUSE_DIRECTION.UNDEFINED;
+		}
+
+		Point moveDelta = new Point(delta.width, delta.height);
+		request.getExtendedData().clear();
+		request.setMoveDelta(moveDelta);
+		snapPoint(request);
+
+		request.setLocation(getLocation());
+		request.setType(getCommandName());
 	}
 	
 	/**

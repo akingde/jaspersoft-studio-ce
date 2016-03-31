@@ -508,5 +508,4 @@ public class UIUtil {
 	public static boolean shouldTrickToolbar() {
 		return isEclipse4();
 	}
-
 }

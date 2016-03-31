@@ -12,15 +12,15 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.report;
 
-import net.sf.jasperreports.eclipse.JasperReportsPlugin;
+import java.util.List;
 
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
-import org.eclipse.swt.SWT;
 
 import com.jaspersoft.studio.editor.java2d.ISelectionOverrider;
 import com.jaspersoft.studio.editor.java2d.JSSScrollingGraphicalViewer;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.preferences.bindings.BindingsPreferencePersistence;
 
 /**
  * This selection overrider allow to override the current selection and instead
@@ -33,6 +33,11 @@ import com.jaspersoft.studio.model.ANode;
  *
  */
 public class ParentSelectionOverrider implements ISelectionOverrider {
+	
+	/**
+	 * ID of the binding key associated to this action
+	 */
+	private static final String BINDING_KEY_ID = "com.jaspersoft.studio.editor.ParentSelectionOverrider";
 	
 	/**
 	 * The type of the searched parent
@@ -54,8 +59,8 @@ public class ParentSelectionOverrider implements ISelectionOverrider {
 	 * then that node will be selected, overriding the current selection, otherwise 
 	 * the selection will be not overridden
 	 */
-	public boolean overriddenSelection(EditPart selectedPart, GraphicalViewer currentViewer){
-		if (selectedPart != null && JasperReportsPlugin.isPressed(SWT.SHIFT)){
+	public boolean overriddenSelection(EditPart selectedPart, List<?> previousSelection, GraphicalViewer currentViewer){
+		if (selectedPart != null && BindingsPreferencePersistence.isPressed(BINDING_KEY_ID)){
 			Object lastItem = selectedPart.getModel();
 			if (lastItem instanceof ANode){
 				ANode currentNode = (ANode)lastItem;

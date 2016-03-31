@@ -119,7 +119,9 @@ public class ReportEditor extends AbstractVisualEditor {
 		createAdditionalActions();
 		graphicalViewer.setKeyHandler(new JSSGraphicalViewerKeyHandler(graphicalViewer));
 		if (graphicalViewer instanceof JSSScrollingGraphicalViewer){
-			((JSSScrollingGraphicalViewer)graphicalViewer).setSelectionOverrider(new ParentSelectionOverrider(IContainer.class, true));
+			JSSScrollingGraphicalViewer jssViewer = (JSSScrollingGraphicalViewer)graphicalViewer;
+			jssViewer.addSelectionOverrider(new ParentSelectionOverrider(IContainer.class, true));
+			jssViewer.addSelectionOverrider(new MarqueeSelectionOverrider());
 		}
 	}
 

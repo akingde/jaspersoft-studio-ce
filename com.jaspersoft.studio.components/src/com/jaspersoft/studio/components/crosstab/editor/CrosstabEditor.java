@@ -28,7 +28,6 @@ import com.jaspersoft.studio.components.crosstab.action.EditCrosstabStyleAction;
 import com.jaspersoft.studio.components.crosstab.action.RemoveCrosstabStylesAction;
 import com.jaspersoft.studio.components.crosstab.messages.Messages;
 import com.jaspersoft.studio.components.crosstab.model.MCrosstab;
-import com.jaspersoft.studio.components.crosstab.model.cell.MCell;
 import com.jaspersoft.studio.components.crosstab.model.cell.action.CreateColumnCrosstabHeaderAction;
 import com.jaspersoft.studio.components.crosstab.model.columngroup.action.CreateColumnGroupAction;
 import com.jaspersoft.studio.components.crosstab.model.header.action.CreateCrosstabHeaderAction;
@@ -45,8 +44,10 @@ import com.jaspersoft.studio.editor.gef.rulers.ReportRuler;
 import com.jaspersoft.studio.editor.gef.rulers.ReportRulerProvider;
 import com.jaspersoft.studio.editor.java2d.JSSScrollingGraphicalViewer;
 import com.jaspersoft.studio.editor.name.NamedSubeditor;
+import com.jaspersoft.studio.editor.report.MarqueeSelectionOverrider;
 import com.jaspersoft.studio.editor.report.ParentSelectionOverrider;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.IContainer;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.util.ModelVisitor;
 import com.jaspersoft.studio.preferences.RulersGridPreferencePage;
@@ -99,7 +100,9 @@ public class CrosstabEditor extends NamedSubeditor {
 		createAdditionalActions();
 		graphicalViewer.setKeyHandler(new JSSGraphicalViewerKeyHandler(graphicalViewer));
 		if (graphicalViewer instanceof JSSScrollingGraphicalViewer){
-			((JSSScrollingGraphicalViewer)graphicalViewer).setSelectionOverrider(new ParentSelectionOverrider(MCell.class, false));
+			JSSScrollingGraphicalViewer jssViewer = (JSSScrollingGraphicalViewer)graphicalViewer;
+			jssViewer.addSelectionOverrider(new ParentSelectionOverrider(IContainer.class, false));
+			jssViewer.addSelectionOverrider(new MarqueeSelectionOverrider());
 		}
 	}
 
