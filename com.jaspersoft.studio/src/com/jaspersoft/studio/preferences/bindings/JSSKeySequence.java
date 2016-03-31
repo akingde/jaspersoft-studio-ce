@@ -41,7 +41,7 @@ import org.eclipse.jface.util.Util;
  *
  * @author Orlandin Marco
  */
-public final class JSSKeySequence extends TriggerSequence implements Comparable<JSSKeySequence> {
+public class JSSKeySequence extends TriggerSequence implements Comparable<JSSKeySequence> {
 	
 	/**
 	 * An empty key sequence instance for use by everyone.
@@ -209,7 +209,7 @@ public final class JSSKeySequence extends TriggerSequence implements Comparable<
 	 *         empty, it is guaranteed to only contain instances of
 	 *         <code>KeyStroke</code>.
 	 */
-	public final JSSKeyStroke[] getKeyStrokes() {
+	public JSSKeyStroke[] getKeyStrokes() {
 		final int triggerLength = triggers.length;
 		JSSKeyStroke[] keyStrokes = new JSSKeyStroke[triggerLength];
 		System.arraycopy(triggers, 0, keyStrokes, 0, triggerLength);
@@ -224,7 +224,7 @@ public final class JSSKeySequence extends TriggerSequence implements Comparable<
 	 * @return a not null list of standard KeyStroke, reperesenting the current sequence into
 	 * an eclipse format
 	 */
-	public final KeyStroke[] getEclipseKeyStrokes(){
+	public KeyStroke[] getEclipseKeyStrokes(){
 		JSSKeyStroke[] strokes = getKeyStrokes();
 		int modifier = JSSKeyStroke.NO_KEY;
 		List<JSSKeyStroke> notModifierKeys = new ArrayList<JSSKeyStroke>();
@@ -243,7 +243,7 @@ public final class JSSKeySequence extends TriggerSequence implements Comparable<
 	}
 
 	@Override
-	public final TriggerSequence[] getPrefixes() {
+	public TriggerSequence[] getPrefixes() {
 		final int numberOfPrefixes = triggers.length;
 		final TriggerSequence[] prefixes = new TriggerSequence[numberOfPrefixes];
 		prefixes[0] = JSSKeySequence.getInstance();
@@ -264,7 +264,7 @@ public final class JSSKeySequence extends TriggerSequence implements Comparable<
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
-	public final String toString() {
+	public String toString() {
 		return format();
 	}
 	
@@ -326,5 +326,24 @@ public final class JSSKeySequence extends TriggerSequence implements Comparable<
 			return triggers.length;
 		}
 		return 0;
+	}
+	
+	/**
+	 * Since the superclass has a final standard equal this is a second
+	 * equal method that compare two sequences.
+	 * 
+	 * @param secondSequence the sequence to compare to this one
+	 * @return true if the sequences have the same strokes, even if in different 
+	 * orders, false otherwise
+	 */
+	public boolean isEqual(JSSKeySequence secondSequence){
+		if (secondSequence == null) return false;
+		if (strokes.size() != secondSequence.strokes.size()) return false;
+		for (JSSKeyStroke stroke : strokes){
+			if(!secondSequence.strokes.contains(stroke)){
+				return false;
+			}
+		}
+		return true;
 	}
 }

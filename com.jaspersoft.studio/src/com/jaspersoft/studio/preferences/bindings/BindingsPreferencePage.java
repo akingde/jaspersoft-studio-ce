@@ -64,6 +64,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
+import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.PlatformUI;
@@ -88,6 +89,14 @@ import com.jaspersoft.studio.plugin.ExtensionManager;
  */
 public class BindingsPreferencePage extends PreferencePage implements IWorkbenchPreferencePage {
 
+	/**
+	 * Content for the tree where the bindings are displayed. It is essentially
+	 * the same of a ListContentProvider but for a tree viewer instead of a table
+	 * viewer
+	 * 
+	 * @author Orlandin Marco
+	 *
+	 */
 	private class ModelContentProvider implements ITreeContentProvider {
 
 		@Override
@@ -129,13 +138,6 @@ public class BindingsPreferencePage extends PreferencePage implements IWorkbench
 	 */
 	protected class CategoryFilterTree extends FilteredTree {
 
-		/**
-		 * Constructor for PatternFilteredTree.
-		 *
-		 * @param parent
-		 * @param treeStyle
-		 * @param filter
-		 */
 		protected CategoryFilterTree(Composite parent, int treeStyle, PatternFilter filter) {
 			super(parent, treeStyle, filter, true);
 			setQuickSelectionMode(true);
@@ -208,6 +210,10 @@ public class BindingsPreferencePage extends PreferencePage implements IWorkbench
 
 	}
 
+	/**
+	 * Selection listener when a column is selected, will trigger the reordering
+	 * of the input basing it on the clicked column
+	 */
 	private final class ResortColumn extends SelectionAdapter {
 	
 		private final BindingModelComparator comparator;
@@ -330,7 +336,7 @@ public class BindingsPreferencePage extends PreferencePage implements IWorkbench
 
 	private StyledText fDescriptionText;
 
-	private Label fWhenCombo;
+	private Label fWhenLabel;
 	
 	private Button removeBindingButton;
 	
@@ -421,6 +427,7 @@ public class BindingsPreferencePage extends PreferencePage implements IWorkbench
 		commandDescriptionlabel.setLayoutData(gridData);
 
 		fDescriptionText = new StyledText(leftDataArea, SWT.BORDER | SWT.V_SCROLL | SWT.MULTI | SWT.WRAP | SWT.READ_ONLY);
+		fDescriptionText.setBackground(commandDescriptionlabel.getBackground());
 
 		// The binding label.
 		final Label bindingLabel = new Label(leftDataArea, SWT.NONE);
@@ -439,14 +446,17 @@ public class BindingsPreferencePage extends PreferencePage implements IWorkbench
 		fKeySequenceText.addPropertyChangeListener(new IPropertyChangeListener() {
 			@Override
 			public final void propertyChange(final PropertyChangeEvent event) {
-				if (!event.getOldValue().equals(event.getNewValue())) {
-					JSSKeySequence keySequence = fKeySequenceText.getKeySequence();
-
-					StructuredSelection selection = (StructuredSelection) fFilteredTree.getViewer().getSelection();
-					for (Object element : selection.toArray()) {
-						PreferenceBindingElement activeBinding = (PreferenceBindingElement) element;
+				boolean somethingChanged = false;
+				StructuredSelection selection = (StructuredSelection) fFilteredTree.getViewer().getSelection();
+				JSSKeySequence keySequence = fKeySequenceText.getKeySequence();
+				for (Object element : selection.toArray()) {
+					PreferenceBindingElement activeBinding = (PreferenceBindingElement) element;
+					if (!keySequence.isEqual(activeBinding.getTrigger())){
+						somethingChanged = true;
 						activeBinding.setTrigger(keySequence);
 					}
+				}
+				if (somethingChanged){
 					fFilteredTree.getViewer().refresh();
 					computeOverlappingBindings();
 					fBindingText.setSelection(fBindingText.getTextLimit());
@@ -459,12 +469,12 @@ public class BindingsPreferencePage extends PreferencePage implements IWorkbench
 		whenLabel.setText("When");
 
 		// The when combo.
-		fWhenCombo = new Label(leftDataArea, SWT.NONE);
+		fWhenLabel = new Label(leftDataArea, SWT.NONE);
 		gridData = new GridData();
 		gridData.grabExcessHorizontalSpace = true;
 		gridData.horizontalAlignment = SWT.FILL;
 		gridData.widthHint = 200;
-		fWhenCombo.setLayoutData(gridData);
+		fWhenLabel.setLayoutData(gridData);
 
 		// RIGHT DATA AREA
 		// Creates the right data area.
@@ -480,21 +490,20 @@ public class BindingsPreferencePage extends PreferencePage implements IWorkbench
 		Table table = conflictViewer.getTable();
 		table.setHeaderVisible(true);
 		TableColumn bindingStudioNameColumn = new TableColumn(table, SWT.LEAD);
-		bindingStudioNameColumn.setText("Studio Binding");
+		bindingStudioNameColumn.setText("Binding");
 		bindingStudioNameColumn.setWidth(100);
 		TableColumn bindingNameColumn = new TableColumn(table, SWT.LEAD);
-		bindingNameColumn.setText("Conflict Binding");
+		bindingNameColumn.setText("Conflicting Binding");
 		bindingNameColumn.setWidth(100);
 		TableColumn bindingContextNameColumn = new TableColumn(table, SWT.LEAD);
-		bindingContextNameColumn.setText("Is Platform Binding");
+		bindingContextNameColumn.setText("Origin");
 		bindingContextNameColumn.setWidth(100);
 		gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
-		// gridData.horizontalIndent = 10;
 		table.setLayoutData(gridData);
 		TableLayout tableLayout = new TableLayout();
-		tableLayout.addColumnData(new ColumnWeightData(40));
-		tableLayout.addColumnData(new ColumnWeightData(40));
-		tableLayout.addColumnData(new ColumnWeightData(20));
+		tableLayout.addColumnData(new ColumnWeightData(35));
+		tableLayout.addColumnData(new ColumnWeightData(35));
+		tableLayout.addColumnData(new ColumnWeightData(30));
 		table.setLayout(tableLayout);
 		conflictViewer.setContentProvider(new IStructuredContentProvider() {
 
@@ -514,6 +523,7 @@ public class BindingsPreferencePage extends PreferencePage implements IWorkbench
 			public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
 			}
 		});
+		
 		conflictViewer.setLabelProvider(new BindingElementLabelProvider() {
 			@Override
 			public String getColumnText(Object o, int index) {
@@ -523,10 +533,11 @@ public class BindingsPreferencePage extends PreferencePage implements IWorkbench
 				} else if (index == 1){
 					return conflict.bidningConflict;
 				}	else {
-					return String.valueOf(conflict.isPlatformConflict);
+					return conflict.isPlatformConflict ? "Eclipse" : "Jaspersoft Studio" ;
 				}
 			}
 		});
+		
 		conflictViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 			
 			@Override
@@ -609,6 +620,10 @@ public class BindingsPreferencePage extends PreferencePage implements IWorkbench
 		});
 	}
 	
+	/**
+	 * Update the information into the bottom area with the selected element into 
+	 * the tree viewer, or erase them if no element is selected
+	 */
 	private void updateInformationPanel(){
 		ISelection selection = fFilteredTree.getViewer().getSelection();
 		if (selection != null){
@@ -616,7 +631,7 @@ public class BindingsPreferencePage extends PreferencePage implements IWorkbench
 			if (binding != null) {
 				commandNameValueLabel.setText(binding.getName());
 				fDescriptionText.setText(binding.getDescription());
-				fWhenCombo.setText(binding.getContext());
+				fWhenLabel.setText(binding.getContext());
 				JSSKeyStroke[] keyStrokes = binding.getTrigger().getKeyStrokes();
 				fKeySequenceText.setKeySequence(JSSKeySequence.getInstance(keyStrokes));
 				removeBindingButton.setEnabled(true);
@@ -628,7 +643,7 @@ public class BindingsPreferencePage extends PreferencePage implements IWorkbench
 		//If here the selection is invalid, set the default values
 		commandNameValueLabel.setText("");
 		fDescriptionText.setText("");
-		fWhenCombo.setText("");
+		fWhenLabel.setText("");
 		fKeySequenceText.setKeySequence(JSSKeySequence.getInstance(new JSSKeyStroke[] {}));
 		removeBindingButton.setEnabled(false);
 		restoreBindingButton.setEnabled(false);
@@ -775,8 +790,9 @@ public class BindingsPreferencePage extends PreferencePage implements IWorkbench
 			input.add(new PreferenceBindingElement(binding, preferenceSequence));
 		}
 		fFilteredTree.getViewer().setInput(input);
-		if (input.size() > 0){
-			StructuredSelection firstElementSelection = new StructuredSelection(input.get(0));
+		TreeItem[] items = fFilteredTree.getViewer().getTree().getItems();
+		if (items.length > 0 && items[0].getData() != null){
+			StructuredSelection firstElementSelection = new StructuredSelection(items[0].getData());
 			fFilteredTree.getViewer().setSelection(firstElementSelection);
 		}
 		updateInformationPanel();

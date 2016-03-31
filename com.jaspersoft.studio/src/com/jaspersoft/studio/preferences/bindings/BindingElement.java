@@ -74,6 +74,11 @@ public class BindingElement {
 		return description;
 	}
 	
+	/**
+	 * Return the binding of the current element
+	 * 
+	 * @return a not string to define when this binding is active 
+	 */
 	public String getContext(){
 		return context;
 	}
@@ -81,7 +86,8 @@ public class BindingElement {
 	/**
 	 * Return the default sequence to enable the binded action
 	 * 
-	 * @return a not null sequence of Keys
+	 * @return a not null sequence of strokes, defined as default keys
+	 * for this binding
 	 */
 	public JSSKeySequence getDefault(){
 		return defaultValue;

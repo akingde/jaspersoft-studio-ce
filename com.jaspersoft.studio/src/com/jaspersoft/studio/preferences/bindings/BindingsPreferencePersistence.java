@@ -33,6 +33,8 @@ import net.sf.jasperreports.eclipse.util.FileUtils;
 /**
  * Class that handle the storage of the bindings in the preferences and the recovery.
  * It can also check if the combination associated with a specific binding is actually pressed
+ * 
+ * @author Orlandin Marco
  */
 public class BindingsPreferencePersistence {
 	
@@ -41,7 +43,6 @@ public class BindingsPreferencePersistence {
 	 */
 	private static final String TAG_KEY_BINDING = "keyBinding"; //$NON-NLS-1$
 	
-	
 	/**
 	 * The name of the key binding root element in the xml stored in the preferences
 	 */	
@@ -49,10 +50,12 @@ public class BindingsPreferencePersistence {
 	
 	/**
 	 * The name of the attribute storing the trigger sequence for a binding.
-	 * This is called a 'keySequence' for legacy reasons.
 	 */
 	private static final String ATT_KEY_SEQUENCE = "keySequence"; //$NON-NLS-1$
 	
+	/**
+	 * The name of the attribute storing the id for a binding.
+	 */
 	private static final String BINDING_ID = "id"; //$NON-NLS-1$
 	
 	/**
@@ -189,6 +192,10 @@ public class BindingsPreferencePersistence {
 	 */
 	public static boolean isPressed(String bindingID){
 		JSSKeySequence keySequence = getBinding(bindingID);
+		if (keySequence == null) return false;
+		//the sequence start as matched if there is at least an element.
+		//so in the case the sequence is empty the cycle will and and false
+		//will be returned
 		boolean sequenceMatched = (keySequence.getSize() > 0);
 		for(JSSKeyStroke keyStroke : keySequence.getKeyStrokes()){
 			int key = Character.toLowerCase(keyStroke.getNaturalKey());
@@ -197,7 +204,6 @@ public class BindingsPreferencePersistence {
 				break;
 			}
 		}
-		if (sequenceMatched) return true;
-		return false;
+		return sequenceMatched;
 	}
 }

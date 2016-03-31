@@ -30,7 +30,7 @@ import org.eclipse.swt.SWT;
  * 
  *  @author Orlandin Marco
  */
-public final class JSSKeyStroke extends Trigger {
+public class JSSKeyStroke extends Trigger {
 	
 	/**
 	 * Static variable that contains the complete list of the modifier keys with their
@@ -95,7 +95,7 @@ public final class JSSKeyStroke extends Trigger {
 	 *            always means no natural key.
 	 * @see SWTKeySupport
 	 */
-	private JSSKeyStroke(final int naturalKey) {
+	protected JSSKeyStroke(final int naturalKey) {
 		this.naturalKey = naturalKey;
 	}
 
@@ -109,7 +109,7 @@ public final class JSSKeyStroke extends Trigger {
 	}
 
 	@Override
-	public final boolean equals(final Object object) {
+	public boolean equals(final Object object) {
 		if (!(object instanceof JSSKeyStroke)) {
 			return false;
 		}
@@ -124,7 +124,7 @@ public final class JSSKeyStroke extends Trigger {
 	 * @return A string representation for this key stroke using the default
 	 *         look; never <code>null</code>.
 	 */
-	public final String format() {
+	public String format() {
 		IKeyFormatter formatter = KeyFormatterFactory.getDefault();
 		if (isModifier()){
 			String formattedKey = formatter.format(org.eclipse.jface.bindings.keys.KeyStroke.getInstance(naturalKey, NO_KEY));
@@ -154,11 +154,14 @@ public final class JSSKeyStroke extends Trigger {
 		return naturalKey;
 	}
 
+	/**
+	 * The hascode returned is the id of the key, since it is unique it 
+	 * fit the indexing for the hashmaps
+	 */
 	@Override
-	public final int hashCode() {
+	public int hashCode() {
 		return naturalKey;
 	}
-
 
 	/**
 	 * Returns the formal string representation for this key stroke.
@@ -168,7 +171,7 @@ public final class JSSKeyStroke extends Trigger {
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
-	public final String toString() {
+	public String toString() {
 		IKeyFormatter formatter = KeyFormatterFactory.getFormalKeyFormatter();
 		if (isModifier()){
 			String formattedKey = formatter.format(org.eclipse.jface.bindings.keys.KeyStroke.getInstance(naturalKey, NO_KEY));
