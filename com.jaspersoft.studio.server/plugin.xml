@@ -272,5 +272,11 @@
            ClassFactory="com.jaspersoft.studio.server.container.JRSClasspathContainerFactory">
      </classpathcontainer>
   </extension>
+  <extension
+        point="com.jaspersoft.studio.fileSelectors">
+     <fileSelectors
+           ClassFactory="com.jaspersoft.studio.server.selector.FileSelector">
+     </fileSelectors>
+  </extension>
 
 </plugin>

@@ -45,6 +45,7 @@ import com.jaspersoft.studio.editor.expression.IExpressionEditorSupportFactory;
 import com.jaspersoft.studio.editor.preview.PreviewModeDetails;
 import com.jaspersoft.studio.editor.preview.view.report.system.AExporterFactory;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
+import com.jaspersoft.studio.jface.IFileSelection;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.util.HyperlinkDefaultParameter;
 import com.jaspersoft.studio.preferences.bindings.BindingElement;
@@ -420,6 +421,23 @@ public class ExtensionManager {
 			}
 		}
 		return map;
+	}
+
+	public List<IFileSelection> getFileSelectors() {
+		List<IFileSelection> fileSelectors = new ArrayList<IFileSelection>();
+		IConfigurationElement[] config = Platform.getExtensionRegistry()
+				.getConfigurationElementsFor(JaspersoftStudioPlugin.PLUGIN_ID, "fileSelectors"); //$NON-NLS-1$
+		for (IConfigurationElement e : config)
+			try {
+				Object o = e.createExecutableExtension("ClassFactory"); //$NON-NLS-1$
+				if (o instanceof IFileSelection) {
+					IFileSelection compFactory = (IFileSelection) o;
+					fileSelectors.add(compFactory);
+				}
+			} catch (CoreException ex) {
+				System.out.println(ex.getMessage());
+			}
+		return fileSelectors;
 	}
 
 	private List<IComponentFactory> nodeFactory = new ArrayList<IComponentFactory>();

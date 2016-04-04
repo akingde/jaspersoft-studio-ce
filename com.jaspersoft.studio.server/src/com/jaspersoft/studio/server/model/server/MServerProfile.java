@@ -184,6 +184,10 @@ public class MServerProfile extends ANode {
 	private transient IConnection wsClient;
 
 	public IConnection getWsClient(final Callback<IConnection> c) {
+		return getWsClient(c, false);
+	}
+
+	public IConnection getWsClient(final Callback<IConnection> c, boolean showProgress) {
 		if (wsClient == null) {
 			Job job = new Job(Messages.MServerProfile_15) {
 				@Override
@@ -207,6 +211,8 @@ public class MServerProfile extends ANode {
 					return Status.OK_STATUS;
 				}
 			};
+			if (showProgress)
+				job.setUser(true);
 			job.setPriority(Job.LONG);
 			job.schedule();
 		}

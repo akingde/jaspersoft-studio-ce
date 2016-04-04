@@ -50,9 +50,9 @@ public class JRSEditorContributor implements IEditorContributor {
 	public void onLoad(final JasperDesign jd, final EditorPart editor) {
 		if (!(editor instanceof AbstractJRXMLEditor))
 			return;
-		String prop = jd.getProperty(AExporter.PROP_SERVERURL);
-		if (prop == null)
-			return;
+//		String prop = jd.getProperty(AExporter.PROP_SERVERURL);
+//		if (prop == null)
+//			return;
 		AbstractJRXMLEditor jEditor = (AbstractJRXMLEditor) editor;
 		JasperReportsConfiguration jConfig = jEditor.getJrContext(null);
 		JSSFileRepositoryService repService = jConfig.getFileRepositoryService();

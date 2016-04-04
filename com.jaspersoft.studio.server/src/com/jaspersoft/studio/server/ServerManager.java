@@ -76,7 +76,7 @@ public class ServerManager {
 
 	private static HashMap<MServerProfile, String> serverProfiles;
 
-	private static List<MServerProfile> getServerProfiles() {
+	public static List<MServerProfile> getServerProfiles() {
 		if (serverProfiles == null) {
 			serverProfiles = new HashMap<MServerProfile, String>();
 			loadServerProfiles(new MServers(null));

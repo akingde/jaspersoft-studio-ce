@@ -25,6 +25,7 @@ import net.sf.jasperreports.repo.RepositoryService;
 import net.sf.jasperreports.repo.Resource;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -109,7 +110,14 @@ public class JRSRepositoryService implements RepositoryService {
 	private void setupConnection(IConnection conn) {
 		c = conn;
 		try {
-			rpath = msp.getTmpDir(new NullProgressMonitor()).getRawLocation().toOSString();
+
+			IFolder tmpDir = msp.getTmpDir(new NullProgressMonitor());
+			if (tmpDir.getRawLocation() != null)
+				rpath = tmpDir.getRawLocation().toOSString();
+			else if (tmpDir.getFullPath() != null)
+				rpath = tmpDir.getFullPath().toOSString();
+			else
+				return;
 			List<RepositoryService> servs = parent.getRepositoryServices();
 			if (repService != null)
 				servs.remove(repService);
@@ -143,7 +151,7 @@ public class JRSRepositoryService implements RepositoryService {
 			if (uri.startsWith("repo:")) {
 				// it's possible to have a resource with id=repo:something (from
 				// practice)
-				K r = doGetResource("repo:" + uri, resourceType);
+				K r = doGetResource(uri.startsWith("repo:") ? uri : "repo:" + uri, resourceType);
 				if (r != null)
 					return r;
 			}
@@ -158,7 +166,7 @@ public class JRSRepositoryService implements RepositoryService {
 		negCache.put(uri, null);
 
 		String objectUri = uri;
-		if (uri.startsWith("repo:")) { //$NON-NLS-1$ 
+		if (uri.startsWith("repo:")) { //$NON-NLS-1$
 			objectUri = uri.substring(5);
 			K r = getFromParent(objectUri, resourceType);
 			if (r != null)

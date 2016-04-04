@@ -8,14 +8,13 @@
  ******************************************************************************/
 package com.jaspersoft.studio.jface.dialogs;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.DecimalFormat;
-
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.eclipse.util.FileUtils;
-import net.sf.jasperreports.engine.design.JRDesignExpression;
+import java.util.List;
 
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileStore;
@@ -38,6 +37,7 @@ import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -53,10 +53,19 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.dialogs.FilteredResourcesSelectionDialog;
 import org.eclipse.ui.progress.WorkbenchJob;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.jface.IFileSelection;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.swt.widgets.WTextExpression;
 import com.jaspersoft.studio.utils.ImageUtils;
+import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.design.JRDesignExpression;
+import net.sf.jasperreports.repo.RepositoryUtil;
 
 /**
  * Dialog proposed when an image needs to be selected.
@@ -144,6 +153,8 @@ public class ImageSelectionDialog extends Dialog {
 				"Custom expression (enter an expression for the image using the expression editor)" };
 	}
 
+	private List<IFileSelection> fselectors;
+
 	/**
 	 * Create contents of the dialog.
 	 * 
@@ -208,12 +219,17 @@ public class ImageSelectionDialog extends Dialog {
 		});
 		btnCustomExpression.setText(imageModesAndHeaderTitles[5]);
 
+		fselectors = JaspersoftStudioPlugin.getExtensionManager().getFileSelectors();
+		for (IFileSelection fs : fselectors)
+			fs.createRadioButton(grpImageSelectionMode, this, jConfig.getJasperDesign());
+
 		createOptionsPanel(container);
 
 		createImagePreviewPanel(container);
 
 		// As default no image radio button selected
 		btnNoImage.setSelection(true);
+		btnNoImage.setFocus();
 		changeImageSelectionMode(this.cmpNoImage);
 
 		return area;
@@ -233,6 +249,8 @@ public class ImageSelectionDialog extends Dialog {
 		createNoImageContainer();
 		createCustomExprContainer();
 		createURLOptionsContainer();
+		for (IFileSelection fs : fselectors)
+			fs.createFileSelectionContainer(grpOptions);
 	}
 
 	/*
@@ -376,7 +394,7 @@ public class ImageSelectionDialog extends Dialog {
 	/*
 	 * When a new image selection mode is selected, shows the dedicated options panel and hide the image preview one.
 	 */
-	private void changeImageSelectionMode(Control newTopControl) {
+	public void changeImageSelectionMode(Control newTopControl) {
 		// Resets previous info on the image expression
 		imageExpressionText = null;
 		// Resets widgets
@@ -393,6 +411,9 @@ public class ImageSelectionDialog extends Dialog {
 		// Change the top control for the options panel
 		grpOptionsLayout.topControl = newTopControl;
 		grpOptions.layout();
+
+		for (IFileSelection fs : fselectors)
+			fs.changeSelectionMode(newTopControl);
 	}
 
 	/*
@@ -525,7 +546,7 @@ public class ImageSelectionDialog extends Dialog {
 	/*
 	 * Cancels a possible existing image preview job and schedules a new one.
 	 */
-	private void loadImagePreview() {
+	public void loadImagePreview() {
 		// TODO: we should add a check for allowed image extensions.
 		imagePreviewJob.cancel();
 		imagePreviewJob.schedule(IMAGE_PREVIEW_JOB_DELAY);
@@ -594,6 +615,38 @@ public class ImageSelectionDialog extends Dialog {
 					String imageURLText = txtURL.getText();
 					imageExpressionText = imageURLText;
 					loadPreviewRemoteImage(imageURLText);
+				} else if (!Misc.isNullOrEmpty(imageExpressionText)) {
+					try {
+						byte[] imgByte = RepositoryUtil.getInstance(jConfig).getBytesFromLocation(imageExpressionText);
+						if (imgByte != null) {
+							Image oldPreviewImg = imagePreview.getImage();
+
+							BufferedInputStream inputStreamReader = new BufferedInputStream(new ByteArrayInputStream(imgByte));
+							ImageData imageData = new ImageData(inputStreamReader);
+							Image img = new Image(getDisplay(), imageData);
+
+							String sizeInfo = Messages.ImageSelectionDialog_NoSizeInfoAvailable;
+							sizeInfo = (DecimalFormat.getNumberInstance().format(imgByte.length))
+									+ Messages.ImageSelectionDialog_bytes;
+							// Gets a resized image for the preview area
+							int imgWidth = img.getImageData().width;
+							int imgHeight = img.getImageData().height;
+							Image resizedImg = ImageUtils.resize(img, Math.min(imgWidth, 200), Math.min(imgHeight, 200));
+							imagePreview.setImage(resizedImg);
+							lblImageDimension.setText(Messages.ImageSelectionDialog_Dimension + imgWidth + "x" + imgHeight + "px"); //$NON-NLS-2$ //$NON-NLS-3$
+							lblImageSize.setText(Messages.ImageSelectionDialog_Size + sizeInfo);
+							grpImagePreviewLayout.topControl = cmpImgPreview;
+							grpImagePreview.layout(true);
+
+							// Dispose unused images
+							if (img != null)
+								img.dispose();
+							if (oldPreviewImg != null)
+								oldPreviewImg.dispose();
+						}
+					} catch (JRException e) {
+						e.printStackTrace();
+					}
 				}
 				monitor.done();
 				return Status.OK_STATUS;
@@ -628,6 +681,10 @@ public class ImageSelectionDialog extends Dialog {
 		}
 
 		super.okPressed();
+	}
+
+	public void setImageExpressionText(String imageExpressionText) {
+		this.imageExpressionText = imageExpressionText;
 	}
 
 	public JRDesignExpression getImageExpression() {

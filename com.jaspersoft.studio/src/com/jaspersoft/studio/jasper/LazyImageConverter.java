@@ -196,7 +196,7 @@ public class LazyImageConverter extends ElementConverter {
 
 		printImage.setAnchorName(JRExpressionUtil.getExpressionText(image.getAnchorNameExpression()));
 		printImage.setBookmarkLevel(image.getBookmarkLevel());
-		printImage.setHorizontalImageAlign(image.getOwnHorizontalImageAlign()); 
+		printImage.setHorizontalImageAlign(image.getOwnHorizontalImageAlign());
 		printImage.setLinkType(image.getLinkType());
 		printImage.setOnErrorType(OnErrorTypeEnum.ICON);
 		printImage.setVerticalImageAlign(image.getOwnVerticalImageAlign());
@@ -286,6 +286,8 @@ public class LazyImageConverter extends ElementConverter {
 					try {
 						String location = evaluatedExpression((JasperReportsConfiguration) jrContext, modelElement, expr);
 						if (location != null) {
+//							if (location.startsWith("repo:/"))
+//								location = location.substring(5);
 							Renderable r = RendererUtil.getInstance(jrContext).getNonLazyRenderable(location, OnErrorTypeEnum.ERROR);
 							info.update(r);
 							if (modelElement != null) {
