@@ -29,35 +29,36 @@ import org.eclipse.swt.widgets.Text;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.jasperserver.dto.resources.ResourceMediaType;
 import com.jaspersoft.studio.jface.IFileSelection;
+import com.jaspersoft.studio.jface.dialogs.FileSelectionDialog;
 import com.jaspersoft.studio.jface.dialogs.ImageSelectionDialog;
+import com.jaspersoft.studio.jface.dialogs.StyleTemplateSelectionDialog;
+import com.jaspersoft.studio.jface.dialogs.SubreportSelectionDialog;
 import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.export.AExporter;
 import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.properties.dialog.RepositoryDialog;
 import com.jaspersoft.studio.server.protocol.Feature;
-import com.jaspersoft.studio.server.protocol.IConnection;
 import com.jaspersoft.studio.server.wizard.find.FindResourceJob;
-import com.jaspersoft.studio.utils.Callback;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 public class FileSelector implements IFileSelection {
 	private Composite cmpExpr;
-	private ImageSelectionDialog dialog;
+	private FileSelectionDialog dialog;
 	private Text txtURL;
 	private JasperDesign jd;
 
 	@Override
-	public void createRadioButton(Composite parent, ImageSelectionDialog d, JasperDesign jd) {
+	public void createRadioButton(Composite parent, FileSelectionDialog d, JasperDesign jd) {
 		this.dialog = d;
 		this.jd = jd;
 		Button btnExpression = new Button(parent, SWT.RADIO);
 		btnExpression.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				dialog.changeImageSelectionMode(cmpExpr);
+				dialog.changeFileSelectionMode(cmpExpr);
 			}
 		});
 		btnExpression.setText("Select a resource from JasperReports Server");
@@ -84,7 +85,8 @@ public class FileSelector implements IFileSelection {
 		txtURL.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
-				dialog.loadImagePreview();
+				dialog.handleTxtUrlChange();
+				;
 			}
 		});
 
@@ -123,11 +125,15 @@ public class FileSelector implements IFileSelection {
 			protected void showFindDialog(MServerProfile msp) {
 				if (msp.isSupported(Feature.SEARCHREPOSITORY)) {
 					String[] incl = null;
-					if (dialog instanceof ImageSelectionDialog)
+					if (dialog instanceof SubreportSelectionDialog)
+						incl = new String[] { ResourceMediaType.FILE_CLIENT_TYPE };
+					else if (dialog instanceof ImageSelectionDialog)
+						incl = new String[] { ResourceMediaType.FILE_CLIENT_TYPE };
+					else if (dialog instanceof StyleTemplateSelectionDialog)
 						incl = new String[] { ResourceMediaType.FILE_CLIENT_TYPE };
 					ResourceDescriptor rd = FindResourceJob.doFindResource(msp, incl, null);
 					if (rd != null) {
-						dialog.setImageExpressionText("repo:" + rd.getUriString());
+						dialog.setFileExpressionText("repo:" + rd.getUriString());
 						txtURL.setText(rd.getUriString());
 					}
 				} else {
@@ -135,15 +141,19 @@ public class FileSelector implements IFileSelection {
 
 						@Override
 						public boolean isResourceCompatible(AMResource r) {
-							if (dialog instanceof ImageSelectionDialog)
+							if (dialog instanceof SubreportSelectionDialog)
+								return r.getValue().getWsType().equals(ResourceDescriptor.TYPE_JRXML);
+							else if (dialog instanceof ImageSelectionDialog)
 								return r.getValue().getWsType().equals(ResourceDescriptor.TYPE_IMAGE);
+							else if (dialog instanceof StyleTemplateSelectionDialog)
+								return r.getValue().getWsType().equals(ResourceDescriptor.TYPE_STYLE_TEMPLATE);
 							return true;
 						}
 					};
 					if (rd.open() == Dialog.OK) {
 						AMResource rs = rd.getResource();
 						if (rs != null) {
-							dialog.setImageExpressionText("repo:" + rs.getValue().getUriString());
+							dialog.setFileExpressionText("repo:" + rs.getValue().getUriString());
 							txtURL.setText(rs.getValue().getUriString());
 						}
 					}

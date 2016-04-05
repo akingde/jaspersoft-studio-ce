@@ -16,14 +16,14 @@ import org.eclipse.swt.widgets.Shell;
  * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
  * 
  */
-public class ImageSelectionDialog extends FilePreviewSelectionDialog {
+public class StyleTemplateSelectionDialog extends FileSelectionDialog {
 
 	/**
 	 * Create the dialog.
 	 * 
 	 * @param parentShell
 	 */
-	public ImageSelectionDialog(Shell parentShell) {
+	public StyleTemplateSelectionDialog(Shell parentShell) {
 		super(parentShell);
 	}
 
@@ -31,7 +31,7 @@ public class ImageSelectionDialog extends FilePreviewSelectionDialog {
 	 * @return the title for the dialog
 	 */
 	protected String getDialogTitle() {
-		return "Select an image";
+		return "Select a Style Template";
 	}
 
 	/**
@@ -50,20 +50,20 @@ public class ImageSelectionDialog extends FilePreviewSelectionDialog {
 	 * @return the title and labels for the group of modes
 	 */
 	protected String[] getImageModesAndHeaderTitles() {
-		return new String[] { "Image selection mode", "Workspace resource (an element inside the workspace)",
+		return new String[] { "Style Template selection mode", "Workspace resource (an element inside the workspace)",
 				"Absolute Path in the filesystem (use only for quick testing, never use in real reports)",
-				"URL (a remote URL referring to an image, will be the expression value)",
-				"No image (no image reference will be set)",
-				"Custom expression (enter an expression for the image using the expression editor)" };
+				"URL (a remote URL referring to a Style Template, will be the expression value)",
+				"No Style Template (no Style Template reference will be set)",
+				"Custom expression (enter an expression for the Style Template using the expression editor)" };
 	}
 
 	@Override
 	protected String getFileExtension() {
-		return "*.png";
+		return "*.jrtx";
 	}
 
 	@Override
 	protected String[] getFileExtensions() {
-		return new String[] { "*.png", "*.jpeg; *.jpg", "*.gif", "*.*" };
+		return new String[] { "*.jrtx", "*.*" };
 	}
 }

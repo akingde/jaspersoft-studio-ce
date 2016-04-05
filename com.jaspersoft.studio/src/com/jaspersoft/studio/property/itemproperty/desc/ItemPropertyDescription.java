@@ -22,14 +22,17 @@ import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.inputhistory.InputHistoryCache;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class ItemPropertyDescription<T> {
-	private String name;
-	private String label;
-	private String description;
-	private boolean mandatory;
+	protected String name;
+	protected String label;
+	protected String description;
+	protected boolean mandatory;
 	protected T defaultValue;
 	protected boolean readOnly;
+	protected JasperReportsConfiguration jConfig;
+	protected Text textExpression;
 
 	public ItemPropertyDescription() {
 		super();
@@ -54,6 +57,10 @@ public class ItemPropertyDescription<T> {
 		this.description = description;
 		this.mandatory = mandatory;
 		this.defaultValue = defaultValue;
+	}
+
+	public void setjConfig(JasperReportsConfiguration jConfig) {
+		this.jConfig = jConfig;
 	}
 
 	public boolean isReadOnly() {
@@ -135,7 +142,7 @@ public class ItemPropertyDescription<T> {
 	}
 
 	public Control createControl(final IWItemProperty wiProp, Composite parent) {
-		final Text textExpression = new Text(parent, SWT.BORDER);
+		textExpression = new Text(parent, SWT.BORDER);
 		textExpression.setLayoutData(new GridData(GridData.FILL_BOTH));
 		InputHistoryCache.bindText(textExpression, name);
 		textExpression.addModifyListener(new ModifyListener() {

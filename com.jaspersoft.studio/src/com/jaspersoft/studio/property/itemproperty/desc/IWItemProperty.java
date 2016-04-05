@@ -7,7 +7,6 @@
  * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.property.itemproperty.desc;
- 
 
 import net.sf.jasperreports.components.items.StandardItemProperty;
 
@@ -16,6 +15,8 @@ import org.eclipse.swt.widgets.Control;
 import com.jaspersoft.studio.property.itemproperty.label.ItemPropertyLabelProvider;
 
 public interface IWItemProperty {
+	public void setRefresh(boolean refreshing);
+
 	public boolean isRefresh();
 
 	public StandardItemProperty getValue();

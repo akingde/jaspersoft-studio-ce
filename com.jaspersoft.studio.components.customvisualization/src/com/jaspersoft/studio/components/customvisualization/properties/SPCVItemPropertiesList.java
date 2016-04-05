@@ -291,7 +291,7 @@ public class SPCVItemPropertiesList extends ASPropertyWidget<CVItemPropertiesDes
 							}
 							first = false;
 							for (ComponentPropertyDescriptor pd : csd.getProperties()) {
-								ItemPropertyDescription<?> ipdesc = UIManager.createItemPropertyDescriptor(pd);
+								ItemPropertyDescription<?> ipdesc = UIManager.createItemPropertyDescriptor(pd, jConf);
 								descriptor.addItemPropertyDescriptor(ipdesc);
 								wIProps.add(createItemProperty(c, ipdesc, descriptor, ec));
 							}
@@ -320,7 +320,7 @@ public class SPCVItemPropertiesList extends ASPropertyWidget<CVItemPropertiesDes
 	protected WItemProperty createItemProperty(Composite cmp, final ItemPropertyDescription<?> ipd,
 			CVCPropertyDescriptor descriptor, ExpressionContext ec) {
 		Label lbl = new Label(cmp, SWT.NONE);
-		lbl.setText(ipd.getLabel());
+		lbl.setText(Misc.nvl(ipd.getLabel()));
 		lbl.setToolTipText(ipd.getToolTip());
 
 		final WItemProperty expr = new WItemProperty(cmp, SWT.NONE, 1, descriptor, ipd);

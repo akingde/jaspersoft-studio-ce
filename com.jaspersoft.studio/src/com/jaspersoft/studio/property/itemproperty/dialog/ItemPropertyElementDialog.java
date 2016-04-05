@@ -116,6 +116,11 @@ public class ItemPropertyElementDialog extends ATitledDialog implements IExpress
 	}
 
 	@Override
+	public void setRefresh(boolean refreshing) {
+		this.refresh = refreshing;
+	}
+
+	@Override
 	public boolean isRefresh() {
 		return refresh;
 	}

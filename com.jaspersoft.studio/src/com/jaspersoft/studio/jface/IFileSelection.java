@@ -11,12 +11,12 @@ package com.jaspersoft.studio.jface;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
-import com.jaspersoft.studio.jface.dialogs.ImageSelectionDialog;
+import com.jaspersoft.studio.jface.dialogs.FileSelectionDialog;
 
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 public interface IFileSelection {
-	public void createRadioButton(Composite parent, ImageSelectionDialog d, JasperDesign jd);
+	public void createRadioButton(Composite parent, FileSelectionDialog d, JasperDesign jd);
 
 	public void changeSelectionMode(Control newTopControl);
 

@@ -61,7 +61,8 @@ import com.jaspersoft.studio.utils.UIUtil;
  * 
  * <pre>
  * // ...
- * WTextExpression myExpression = new WTextExpression(container, SWT.NONE, &quot;My expression&quot;, WTextExpression.LABEL_ON_TOP) {
+ * WTextExpression myExpression = new WTextExpression(container, SWT.NONE, &quot;My expression&quot;,
+ * 		WTextExpression.LABEL_ON_TOP) {
  * 	&#064;Override
  * 	public void setExpression(JRDesignExpression exp) {
  * 		super.setExpression(exp);
@@ -123,7 +124,8 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 	 * @param number
 	 *          of text lines to show
 	 */
-	public WItemProperty(Composite parent, int style, int linesNum, ADescriptor descriptor, ItemPropertyDescription<?> ipd) {
+	public WItemProperty(Composite parent, int style, int linesNum, ADescriptor descriptor,
+			ItemPropertyDescription<?> ipd) {
 		this(parent, style, null, LABEL_NONE, linesNum, descriptor, ipd);
 	}
 
@@ -226,6 +228,11 @@ public class WItemProperty extends Composite implements IExpressionContextSetter
 			textExpression.setToolTipText(ipd.getToolTip());
 			btnEditExpression.setToolTipText(ipd.getToolTip());
 		}
+	}
+
+	@Override
+	public void setRefresh(boolean refreshing) {
+		this.isRefresh = refreshing;
 	}
 
 	public boolean isRefresh() {

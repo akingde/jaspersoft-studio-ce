@@ -66,7 +66,7 @@ public class ChangeImageExpression  extends ACachedSelectionAction implements IG
 			ImageSelectionDialog d=new ImageSelectionDialog(UIUtils.getShell());
 			d.configureDialog(imageModel.getJasperConfiguration());
 			if(d.open()==Window.OK) {
-				JRDesignExpression imageExpression = d.getImageExpression();
+				JRDesignExpression imageExpression = d.getFileExpression();
 				if(imageExpression==null){
 					// No image selected => remove property
 					imageModel.setPropertyValue(JRDesignImage.PROPERTY_EXPRESSION, "");

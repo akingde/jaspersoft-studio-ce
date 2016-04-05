@@ -39,7 +39,7 @@ public class JrxmlContentDescriber implements ITextContentDescriber {
 
 	@Override
 	public int describe(InputStream contents, IContentDescription description) throws IOException {
-		return validateStandardJRXML(contents, description);
+		return validateStandardJRXML(contents);
 	}
 
 	@Override
@@ -50,12 +50,11 @@ public class JrxmlContentDescriber implements ITextContentDescriber {
 	@Override
 	public int describe(Reader contents, IContentDescription description) throws IOException {
 		ReaderInputStream contentsIS = null;
-		try{
+		try {
 			contentsIS = new ReaderInputStream(contents, FileUtils.UTF8_ENCODING);
-			return validateStandardJRXML(contentsIS, description);
-		}
-		finally {
-			if(contentsIS!=null){
+			return validateStandardJRXML(contentsIS);
+		} finally {
+			if (contentsIS != null) {
 				contentsIS.close();
 			}
 		}
@@ -64,43 +63,57 @@ public class JrxmlContentDescriber implements ITextContentDescriber {
 	/**
 	 * Checks if the input file represents a standard JRXML file.
 	 * 
-	 * @param file the input file to check
-	 * @return <code>true</code> if the file is a standard JRXML, 
-	 * 				 <code>false</code> otherwise
+	 * @param file
+	 *          the input file to check
+	 * @return <code>true</code> if the file is a standard JRXML, <code>false</code> otherwise
 	 */
-	public static boolean isStandardJRXML(IFile file) {
+	public static boolean isStandardJRXML(InputStream contents) {
 		try {
-			IContentDescription contentDescription = file.getContentDescription();
-			InputStream contents = file.getContents();
-			int validationResult = validateStandardJRXML(contents, contentDescription);
-			contents.close();
+			int validationResult = validateStandardJRXML(contents);
 			return ITextContentDescriber.VALID == validationResult;
-		} catch (CoreException e) {
-			JaspersoftStudioPlugin.getInstance().logError(e);
-			return false;
 		} catch (IOException e) {
 			JaspersoftStudioPlugin.getInstance().logError(e);
 			return false;
+		} finally {
+			FileUtils.closeStream(contents);
 		}
 	}
-	
+
+	/**
+	 * Checks if the input file represents a standard JRXML file.
+	 * 
+	 * @param file
+	 *          the input file to check
+	 * @return <code>true</code> if the file is a standard JRXML, <code>false</code> otherwise
+	 */
+	public static boolean isStandardJRXML(IFile file) {
+		try {
+			return isStandardJRXML(file.getContents());
+		} catch (CoreException e) {
+			JaspersoftStudioPlugin.getInstance().logError(e);
+		}
+		return false;
+	}
+
 	/**
 	 * Validates the input stream and verifies it is a standard JRXML.
 	 * 
-	 * @param in the XML input stream
-	 * @param description content description
-	 * @return {@link IContentDescriber#VALID} if XML is representing a standard JRXML,
-	 * 					{@link IContentDescriber#INVALID} otherwise (i.e. JasperBook)
+	 * @param in
+	 *          the XML input stream
+	 * @param description
+	 *          content description
+	 * @return {@link IContentDescriber#VALID} if XML is representing a standard JRXML, {@link IContentDescriber#INVALID}
+	 *         otherwise (i.e. JasperBook)
 	 * @throws IOException
 	 */
-	public static int validateStandardJRXML(InputStream in, IContentDescription description) throws IOException {
+	public static int validateStandardJRXML(InputStream in) throws IOException {
 		// This piece of code is a slightly modified version of
 		// the original method com.jaspersoft.studio.book.BookUtils#validateBook()
 		try {
 			Document document = XMLUtils.parseNoValidation(in);
 			document.getDocumentElement().normalize();
 			NodeList bookParts = document.getElementsByTagName("part"); //$NON-NLS-1$
-			if(bookParts!=null && bookParts.getLength()>0){
+			if (bookParts != null && bookParts.getLength() > 0) {
 				return INVALID;
 			}
 		} catch (ParserConfigurationException e) {

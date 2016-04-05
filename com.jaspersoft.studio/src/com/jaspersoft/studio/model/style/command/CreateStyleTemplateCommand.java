@@ -1,41 +1,25 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.model.style.command;
 
-import java.io.File;
-
-import net.sf.jasperreports.eclipse.messages.Messages;
-import net.sf.jasperreports.eclipse.util.FileUtils;
-import net.sf.jasperreports.engine.design.JRDesignExpression;
-import net.sf.jasperreports.engine.design.JRDesignReportTemplate;
-import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.xml.JRXmlTemplateLoader;
-
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.dialogs.FilteredResourcesSelectionDialog;
 
+import com.jaspersoft.studio.jface.dialogs.StyleTemplateSelectionDialog;
 import com.jaspersoft.studio.model.style.MStyleTemplate;
 import com.jaspersoft.studio.model.style.MStyles;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
-import com.jaspersoft.studio.wizards.ContextHelpIDs;
-import com.jaspersoft.studio.wizards.FilteredHelpDialog;
+
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.engine.design.JRDesignReportTemplate;
+import net.sf.jasperreports.engine.design.JasperDesign;
+
 /*
  * link nodes & together.
  * 
@@ -51,7 +35,7 @@ public class CreateStyleTemplateCommand extends Command {
 
 	/** The index. */
 	private int index;
-	
+
 	/**
 	 * The configuration of the actual report
 	 */
@@ -91,49 +75,18 @@ public class CreateStyleTemplateCommand extends Command {
 				jrDesign.addTemplate(index, jrTemplate);
 		}
 	}
-	
+
 	/**
-	 * This method try to return a relative path for the style from the current opened report. If it isn't
-	 * Possible to find a relative path then the absolute one is returned
-	 * 
-	 * @param styleFile the style file resource
-	 * @return an absolute or relative path to the style resource
-	 */
-	private String getStylePath(IFile styleFile){
-		IFile reportFile = (IFile) jConfig.get(FileUtils.KEY_FILE);
-		return FileUtils.getFileRelativePath(reportFile, styleFile);
-	}
-	
-	/**
-	 * Create the container for the selected jrtx file, by selecting it from a chooser dialog.
-	 * If the selected file is not valid an error is shown
+	 * Create the container for the selected jrtx file, by selecting it from a chooser dialog. If the selected file is not
+	 * valid an error is shown
 	 */
 	private void createObject() {
 		if (jrTemplate == null) {
-			FilteredResourcesSelectionDialog fd = new FilteredHelpDialog(Display.getCurrent().getActiveShell(),false, ResourcesPlugin.getWorkspace().getRoot(), IResource.FILE, ContextHelpIDs.WIZARD_STYLE_TEMPLATE_LOAD);
-			fd.setInitialPattern("*.jrtx");//$NON-NLS-1$
-			if (fd.open() == Dialog.OK) {
-				IFile file = (IFile) fd.getFirstResult();
-				File  fileToBeOpened = file.getRawLocation().makeAbsolute().toFile();
-				boolean showErrorMessage = false;
-				//Check if the file is a valid template before add it to the model
-				if (fileToBeOpened != null && fileToBeOpened.exists() && fileToBeOpened.isFile()) {
-					try{
-						//Try to load the file to see if it is a valid template
-						JRXmlTemplateLoader.load(fileToBeOpened);
-						this.jrTemplate = MStyleTemplate.createJRTemplate();
-						JRDesignExpression jre = new JRDesignExpression();
-						jre.setText("\"" + getStylePath(file) + "\"");//$NON-NLS-1$ //$NON-NLS-2$
-						((JRDesignReportTemplate) jrTemplate).setSourceExpression(jre);
-					} catch(Exception ex){
-						showErrorMessage = true;
-					}
-				} else {
-					showErrorMessage = true;
-				}
-				if (showErrorMessage){
-					MessageDialog.open(MessageDialog.ERROR, Display.getCurrent().getActiveShell(), Messages.UIUtils_ExceptionTitle, Messages.CreateStyleTemplateCommand_loadStyleError, SWT.NONE);
-				}
+			StyleTemplateSelectionDialog fsd = new StyleTemplateSelectionDialog(UIUtils.getShell());
+			fsd.configureDialog(jConfig);
+			if (fsd.open() == Dialog.OK) {
+				jrTemplate = MStyleTemplate.createJRTemplate();
+				jrTemplate.setSourceExpression(fsd.getFileExpression());
 			}
 		}
 	}

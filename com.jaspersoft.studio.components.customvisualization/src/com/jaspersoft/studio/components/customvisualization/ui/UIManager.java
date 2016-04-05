@@ -50,6 +50,7 @@ import com.jaspersoft.studio.components.customvisualization.ui.preferences.CVCDe
 import com.jaspersoft.studio.model.util.ItemPropertyUtil;
 import com.jaspersoft.studio.property.itemproperty.desc.ColorPropertyDescription;
 import com.jaspersoft.studio.property.itemproperty.desc.ComboItemPropertyDescription;
+import com.jaspersoft.studio.property.itemproperty.desc.FilePropertyDescription;
 import com.jaspersoft.studio.property.itemproperty.desc.ItemPropertyDescription;
 import com.jaspersoft.studio.property.itemproperty.desc.NumberPropertyDescription;
 import com.jaspersoft.studio.utils.Misc;
@@ -85,7 +86,8 @@ public class UIManager {
 				imageCache.clear();
 				parentsPath.clear();
 				cache.clear();
-				if (cachePlugin != null) cachePlugin.clear();
+				if (cachePlugin != null)
+					cachePlugin.clear();
 				initCachePlugin();
 			}
 			return true;
@@ -356,15 +358,17 @@ public class UIManager {
 		return null;
 	}
 
-	public static ItemPropertyDescription<?> createItemPropertyDescriptor(ComponentPropertyDescriptor cpd) {
+	public static ItemPropertyDescription<?> createItemPropertyDescriptor(ComponentPropertyDescriptor cpd,
+			JasperReportsConfiguration jConfig) {
 		ItemPropertyDescription<?> desc = null;
 		Number min = null;
 		Number max = null;
 		Number def = null;
-		if (cpd.getType().equalsIgnoreCase("path"))
-			desc = new ItemPropertyDescription<String>(cpd.getName(), cpd.getLabel(), cpd.getDescription(),
-					cpd.isMandatory(), cpd.getDefaultValue());
-		else if (cpd.getType().equalsIgnoreCase("combo"))
+		if (cpd.getType().equalsIgnoreCase("path")) {
+			desc = new FilePropertyDescription(cpd.getName(), cpd.getLabel(), cpd.getDescription(), cpd.isMandatory(),
+					cpd.getDefaultValue());
+			desc.setjConfig(jConfig);
+		} else if (cpd.getType().equalsIgnoreCase("combo"))
 			desc = new ComboItemPropertyDescription<String>(cpd.getName(), cpd.getLabel(), cpd.getDescription(),
 					cpd.isMandatory(), cpd.getDefaultValue(), cpd.getOptions());
 		else if (cpd.getType().equalsIgnoreCase("color"))
@@ -420,9 +424,7 @@ public class UIManager {
 					return Double.class;
 				}
 			};
-		} else
-
-		{
+		} else {
 			desc = new ItemPropertyDescription<String>(cpd.getName(), cpd.getLabel(), cpd.getDescription(),
 					cpd.isMandatory(), cpd.getDefaultValue());
 		}

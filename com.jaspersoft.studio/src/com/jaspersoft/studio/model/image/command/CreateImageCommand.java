@@ -76,7 +76,7 @@ public class CreateImageCommand extends CreateElementCommand implements DialogEn
 		ImageCreationDialog d = new ImageCreationDialog(UIUtils.getShell());
 		d.configureDialog(jConfig);
 		int dialogResult = d.open();
-		imageExpression = d.getImageExpression();
+		imageExpression = d.getFileExpression();
 		return dialogResult;
 	}
 	

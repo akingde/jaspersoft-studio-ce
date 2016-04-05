@@ -74,7 +74,7 @@ public class ItemPropertyDialog extends ATitledDialog implements IExpressionCont
 		setDefaultSize(450, 400);
 		this.itemProperty = (StandardItemProperty) itemProperty;
 		if (this.itemProperty == null)
-			this.itemProperty = new StandardItemProperty("", "", null); //$NON-NLS-1$ //$NON-NLS-2$ 
+			this.itemProperty = new StandardItemProperty("", "", null); //$NON-NLS-1$ //$NON-NLS-2$
 		this.descriptor = descriptor;
 		ipDesc = descriptor.getDescription(itemProperty.getName());
 		if (ipDesc == null)
@@ -172,7 +172,7 @@ public class ItemPropertyDialog extends ATitledDialog implements IExpressionCont
 		propertyName.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
-				if(refresh)
+				if (refresh)
 					return;
 				Point p = propertyName.getSelection();
 
@@ -243,6 +243,11 @@ public class ItemPropertyDialog extends ATitledDialog implements IExpressionCont
 
 	public StandardItemProperty getValue() {
 		return this.itemProperty;
+	}
+
+	@Override
+	public void setRefresh(boolean refreshing) {
+		this.refresh = refreshing;
 	}
 
 	@Override

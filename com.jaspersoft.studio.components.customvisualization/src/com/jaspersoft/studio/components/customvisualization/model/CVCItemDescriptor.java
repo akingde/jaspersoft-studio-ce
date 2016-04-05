@@ -55,9 +55,8 @@ public class CVCItemDescriptor extends ADescriptor {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.jaspersoft.studio.property.itemproperty.desc.ADescriptor#getDisplayName
-	 * ()
+	 * @see com.jaspersoft.studio.property.itemproperty.desc.ADescriptor#
+	 * getDisplayName ()
 	 */
 	@Override
 	public String getDisplayName() {
@@ -74,8 +73,7 @@ public class CVCItemDescriptor extends ADescriptor {
 	@Override
 	public Image getIcon(Object element) {
 		if (element instanceof Item)
-			return CustomVisualizationActivator.getDefault().getImage(
-					"icons/path-icon-16.png"); //$NON-NLS-1$
+			return CustomVisualizationActivator.getDefault().getImage("icons/path-icon-16.png"); //$NON-NLS-1$
 		return super.getIcon(element);
 	}
 
@@ -105,41 +103,30 @@ public class CVCItemDescriptor extends ADescriptor {
 				// let's get our description
 				// let's get our description
 				JasperDesign jd = pnode.getJasperDesign();
-				JasperReportsConfiguration jConf = pnode
-						.getJasperConfiguration();
+				JasperReportsConfiguration jConf = pnode.getJasperConfiguration();
 				JRDesignDataset dataset = null;
 				if (dataset == null)
 					dataset = ModelUtils.getDataset(pnode);
 				if (dataset == null)
 					dataset = (JRDesignDataset) jd.getMainDataset();
 
-				ExpressionInterpreter expIntr = ExpressionUtil
-						.getCachedInterpreter(dataset, jd, jConf);
+				ExpressionInterpreter expIntr = ExpressionUtil.getCachedInterpreter(dataset, jd, jConf);
 				List<ItemPropertyDescription<?>> props = new ArrayList<ItemPropertyDescription<?>>();
 				for (ItemProperty ip : p)
 					if (ip.getName().equals("module")) {
-						String module = ItemPropertyUtil.getItemPropertyString(
-								(StandardItemProperty) ip, expIntr);
+						String module = ItemPropertyUtil.getItemPropertyString((StandardItemProperty) ip, expIntr);
 						if (!Misc.isNullOrEmpty(module)) {
-							ComponentDescriptor cd = UIManager.getDescriptor(
-									jConf, module);
-							if (cd != null
-									&& !Misc.isNullOrEmpty(cd.getDatasets())) {
-								for (ComponentDatasetDescriptor cdd : cd
-										.getDatasets()) {
+							ComponentDescriptor cd = UIManager.getDescriptor(jConf, module);
+							if (cd != null && !Misc.isNullOrEmpty(cd.getDatasets())) {
+								for (ComponentDatasetDescriptor cdd : cd.getDatasets()) {
 									if (cdd.getSections() != null)
-										for (ComponentSectionDescriptor csd : cdd
-												.getSections())
+										for (ComponentSectionDescriptor csd : cdd.getSections())
 											if (csd.getProperties() != null)
-												for (ComponentPropertyDescriptor cpd : csd
-														.getProperties())
-													props.add(UIManager
-															.createItemPropertyDescriptor(cpd));
+												for (ComponentPropertyDescriptor cpd : csd.getProperties())
+													props.add(UIManager.createItemPropertyDescriptor(cpd, jConf));
 
 								}
-								itemProperties = props
-										.toArray(new ItemPropertyDescription[props
-												.size()]);
+								itemProperties = props.toArray(new ItemPropertyDescription[props.size()]);
 								return;
 							}
 						}
