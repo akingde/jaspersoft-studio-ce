@@ -106,7 +106,7 @@ public class MarqueeSelectionOverrider implements ISelectionOverrider {
 		IFigure figure = editPart.getFigure();
 		Rectangle r = figure.getBounds().getCopy();
 		figure.translateToAbsolute(r);
-		return selectionRectangle.intersects(r);
+		return selectionRectangle.contains(r);
 	}
 
 	/**
