@@ -2138,7 +2138,7 @@
              description="%parentSelectionModifierDescription"
              id="com.jaspersoft.studio.editor.ParentSelectionOverrider"
              name="%parentSelectionModifierName"
-             sequence="SHIFT">
+             sequence="V">
        </item>
        <item
              context="Dragging"
@@ -2152,7 +2152,7 @@
              description="%marqueeSelectionModifierDescription"
              id="com.jaspersoft.studio.editor.MarqueeSelectionOverrider"
              name="%marqueeSelectionModifierName"
-             sequence="V">
+             sequence="SHIFT">
        </item>
        <item
              context="Dragging"
