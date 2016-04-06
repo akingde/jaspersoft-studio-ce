@@ -16,13 +16,18 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.List;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
+
+import com.jaspersoft.studio.messages.Messages;
+
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRSimpleTemplate;
 import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
 import net.sf.jasperreports.engine.xml.JRXmlTemplateWriter;
-
-import com.jaspersoft.studio.messages.Messages;
 
 /**
  * Wizard to export one or more JRStyle as a separate TemplateStyle file
@@ -30,7 +35,7 @@ import com.jaspersoft.studio.messages.Messages;
  * @author Orlandin Marco
  *
  */
-public class StyleTemplateImportWizard extends StyleTemplateNewWizard {
+public class StyleTemplateExportWizard extends StyleTemplateNewWizard {
 
 	/**
 	 * List of the style to export
@@ -42,7 +47,7 @@ public class StyleTemplateImportWizard extends StyleTemplateNewWizard {
 	 * 
 	 * @param stylesToImport styles to export
 	 */
-	public StyleTemplateImportWizard(List<JRStyle> stylesToImport){
+	public StyleTemplateExportWizard(List<JRStyle> stylesToImport){
 		this.stylesToImport = stylesToImport;
 	}
 	
@@ -70,12 +75,57 @@ public class StyleTemplateImportWizard extends StyleTemplateNewWizard {
 		return null;
 	}
 	
+	protected boolean hasConditionalStyles(){
+		for(JRStyle style : stylesToImport){
+			if (style.getConditionalStyles().length > 0){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	@Override
+	protected void openEditor(IFile file) {
+		//Having this empty block the editor to be opened at the end of 
+		//the wizard, so it must be called explicitly by outside
+	}
+	
+	public void openStyleEditor() {
+		if (getReportFile() != null) {
+			super.openEditor(getReportFile());
+		}
+	}
+	
+	/**
+	 * Return the WizardPage used to select the destination resource for the template reference. The override
+	 * show a warning message when at least one of the selected styles is using a conditional style
+	 * 
+	 * @return a not null {@link WizardNewFileCreationPage}
+	 */
+	@Override
+	protected WizardNewFileCreationPage getDestinationPage(){
+		WizardHelpNewFileCreationPage page = new WizardHelpNewFileCreationPage("newFilePage1", (IStructuredSelection) selection){ //$NON-NLS-1$
+			
+			@Override
+			protected boolean validatePage() {
+				boolean isValid = super.validatePage();
+				if (isValid){
+					if (hasConditionalStyles()){
+						step1.setMessage(Messages.StyleTemplateExportWizard_conditionalStyleWarning, IStatus.WARNING);
+					} else {
+						step1.setMessage(Messages.StyleTemplateImportWizard_description);
+					}
+				}
+				return isValid;
+			}
+		};
+		page.setTitle(Messages.StyleTemplateImportWizard_title);
+		page.setMessage(Messages.StyleTemplateImportWizard_description);
+		page.setFileExtension("jrtx");//$NON-NLS-1$
+		return page;
+	}
+	
 	/**
 	 * Override of add pages to set a different page title\description from the superclass
 	 */
-	public void addPages() {
-		super.addPages();
-		step1.setTitle(Messages.StyleTemplateImportWizard_title);
-		step1.setDescription(Messages.StyleTemplateImportWizard_description);
-	}
 }

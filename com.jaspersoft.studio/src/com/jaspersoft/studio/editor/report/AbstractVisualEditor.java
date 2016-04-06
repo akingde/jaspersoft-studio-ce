@@ -130,7 +130,7 @@ import com.jaspersoft.studio.editor.outline.actions.CreateSortFieldAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateStyleAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateStyleTemplateAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateVariableAction;
-import com.jaspersoft.studio.editor.outline.actions.ExportStyleAsTemplateAction;
+import com.jaspersoft.studio.editor.outline.actions.SaveStyleAsTemplateAction;
 import com.jaspersoft.studio.editor.outline.actions.RefreshTemplateStyleExpression;
 import com.jaspersoft.studio.editor.outline.actions.RefreshTemplateStyleReference;
 import com.jaspersoft.studio.editor.outline.actions.ResetStyleAction;
@@ -653,9 +653,9 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		registry.registerAction(action);
 		selectionActions.add(CreateConditionalStyleAction.ID);
 
-		action = new ExportStyleAsTemplateAction(this);
+		action = new SaveStyleAsTemplateAction(this);
 		registry.registerAction(action);
-		selectionActions.add(ExportStyleAsTemplateAction.ID);
+		selectionActions.add(SaveStyleAsTemplateAction.ID);
 
 		action = new ResetStyleAction(this);
 		registry.registerAction(action);

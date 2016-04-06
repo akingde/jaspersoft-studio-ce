@@ -26,6 +26,8 @@ public class Messages extends NLS {
 	public static String SameWidthMinAction_actionName;
 	public static String SaveConfirmationDialog_question;
 	public static String SaveConfirmationDialog_title;
+	public static String SaveStyleAsTemplateAction_replaceMessage;
+	public static String SaveStyleAsTemplateAction_replaceTitle;
 	public static String ShowAdaptersPage_description;
 	public static String ShowAdaptersPage_label;
 	public static String ShowAdaptersPage_noElementLabel;
@@ -2003,6 +2005,7 @@ public class Messages extends NLS {
 	public static String StylesListSection_Warning_Box_Message;
 	public static String StylesSectionList_Element_Attributes;
 	public static String StylesSectionList_Inherited_From_Style;
+	public static String StyleTemplateExportWizard_conditionalStyleWarning;
 	public static String StyleTemplateImportWizard_description;
 	public static String StyleTemplateImportWizard_title;
 	public static String StyleTemplateNewWizard_description;

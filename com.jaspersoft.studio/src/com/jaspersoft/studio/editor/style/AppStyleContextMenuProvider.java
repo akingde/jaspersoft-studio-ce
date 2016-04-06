@@ -22,7 +22,7 @@ import org.eclipse.ui.actions.ActionFactory;
 import com.jaspersoft.studio.editor.AContextMenuProvider;
 import com.jaspersoft.studio.editor.outline.actions.CreateStyleAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateStyleTemplateReferenceAction;
-import com.jaspersoft.studio.editor.outline.actions.ExportStyleAsTemplateAction;
+import com.jaspersoft.studio.editor.outline.actions.SaveStyleAsTemplateAction;
 import com.jaspersoft.studio.editor.outline.actions.RefreshTemplateStyleExpression;
 import com.jaspersoft.studio.editor.outline.actions.RefreshTemplateStyleReference;
 import com.jaspersoft.studio.editor.outline.actions.ResetStyleAction;
@@ -70,7 +70,7 @@ public class AppStyleContextMenuProvider extends AContextMenuProvider {
 		if (action.isEnabled())
 			menu.appendToGroup(GEFActionConstants.GROUP_ADD, action);
 
-		action = getActionRegistry().getAction(ExportStyleAsTemplateAction.ID);
+		action = getActionRegistry().getAction(SaveStyleAsTemplateAction.ID);
 		if (action.isEnabled())
 			menu.appendToGroup(GEFActionConstants.GROUP_ADD, action);
 

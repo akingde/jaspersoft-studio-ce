@@ -55,7 +55,7 @@ import com.jaspersoft.studio.editor.outline.actions.CreateStyleAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateStyleTemplateAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateVariableAction;
 import com.jaspersoft.studio.editor.outline.actions.DeleteGroupReportAction;
-import com.jaspersoft.studio.editor.outline.actions.ExportStyleAsTemplateAction;
+import com.jaspersoft.studio.editor.outline.actions.SaveStyleAsTemplateAction;
 import com.jaspersoft.studio.editor.outline.actions.RefreshTemplateStyleExpression;
 import com.jaspersoft.studio.editor.outline.actions.RefreshTemplateStyleReference;
 import com.jaspersoft.studio.editor.outline.actions.ResetStyleAction;
@@ -170,7 +170,7 @@ public class ReportEditor extends AbstractVisualEditor {
 					id = CreateConditionalStyleAction.ID;
 					bars.setGlobalActionHandler(id, registry.getAction(id));
 					
-					id = ExportStyleAsTemplateAction.ID;
+					id = SaveStyleAsTemplateAction.ID;
 					bars.setGlobalActionHandler(id, registry.getAction(id));
 					
 					id = RefreshTemplateStyleExpression.ID;

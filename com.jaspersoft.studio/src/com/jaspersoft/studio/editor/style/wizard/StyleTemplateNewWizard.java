@@ -16,14 +16,6 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 
-import net.sf.jasperreports.eclipse.builder.jdt.JDTUtils;
-import net.sf.jasperreports.eclipse.util.FileUtils;
-import net.sf.jasperreports.eclipse.wizard.project.ProjectUtil;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JRSimpleTemplate;
-import net.sf.jasperreports.engine.design.JRDesignStyle;
-import net.sf.jasperreports.engine.xml.JRXmlTemplateWriter;
-
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -48,11 +40,7 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.wizard.Wizard;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
@@ -65,8 +53,15 @@ import org.eclipse.ui.part.FileEditorInput;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.utils.SelectionHelper;
-import com.jaspersoft.studio.wizards.ContextData;
-import com.jaspersoft.studio.wizards.ContextHelpIDs;
+
+import net.sf.jasperreports.eclipse.builder.jdt.JDTUtils;
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.eclipse.wizard.project.ProjectUtil;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRSimpleTemplate;
+import net.sf.jasperreports.engine.design.JRDesignStyle;
+import net.sf.jasperreports.engine.xml.JRXmlTemplateWriter;
 
 /*
  * This is a sample new wizard. Its role is to create a new file resource in the provided container. If the container
@@ -81,7 +76,11 @@ public class StyleTemplateNewWizard extends Wizard implements INewWizard {
 	private static final String NEW_STYLE_EXT = ".jrtx";//$NON-NLS-1$
 	protected static final String NEW_STYLE_JRTX = NEW_STYLE_NAME + NEW_STYLE_EXT;
 	protected WizardNewFileCreationPage step1;
-	private ISelection selection;
+	protected ISelection selection;
+	
+	private IFile file = null;
+	
+	private IFile reportFile = null;
 
 	/**
 	 * Constructor for ReportNewWizard.
@@ -94,60 +93,10 @@ public class StyleTemplateNewWizard extends Wizard implements INewWizard {
 	}
 
 	/**
-	 * Extends the original WizardNewFileCreationPage to implements the method to have a contextual help
-	 * 
-	 * @author Orlandin Marco
-	 * 
-	 */
-	private class WizardHelpNewFileCreationPage extends WizardNewFileCreationPage implements ContextData {
-
-		public WizardHelpNewFileCreationPage(String pageName, IStructuredSelection selection) {
-			super(pageName, selection);
-		}
-
-		/**
-		 * Set and show the help data
-		 */
-		@Override
-		public void performHelp() {
-			PlatformUI.getWorkbench().getHelpSystem().displayHelp(ContextHelpIDs.WIZARD_STYLE_TEMPLATE_PATH);
-		}
-
-		/**
-		 * Set the help data that should be seen in this step
-		 */
-		@Override
-		public void setHelpData() {
-			PlatformUI.getWorkbench().getHelpSystem().setHelp(getControl(), ContextHelpIDs.WIZARD_STYLE_TEMPLATE_PATH);
-		}
-
-		@Override
-		protected void setControl(Control newControl) {
-			super.setControl(newControl);
-			newControl.addListener(SWT.Help, new Listener() {
-				@Override
-				public void handleEvent(Event event) {
-					performHelp();
-				}
-			});
-			setHelpData();
-		};
-		
-		@Override
-		public void setVisible(boolean visible) {
-			JDTUtils.deactivateLinkedResourcesSupport(visible);
-			super.setVisible(visible);
-		}
-	}
-
-	/**
 	 * Adding the page to the wizard.
 	 */
 	public void addPages() {
-		step1 = new WizardHelpNewFileCreationPage("newFilePage1", (IStructuredSelection) selection);//$NON-NLS-1$
-		step1.setTitle(Messages.StyleTemplateNewWizard_title);
-		step1.setDescription(Messages.StyleTemplateNewWizard_description);
-		step1.setFileExtension("jrtx");//$NON-NLS-1$
+		step1 = getDestinationPage();
 		setupNewFileName();
 		addPage(step1);
 	}
@@ -172,6 +121,19 @@ public class StyleTemplateNewWizard extends Wizard implements INewWizard {
 			}
 			step1.setFileName(filename);
 		}
+	}
+	
+	/**
+	 * Return the WizardPage used to select the destination resource for the template reference
+	 * 
+	 * @return a not null {@link WizardNewFileCreationPage}
+	 */
+	protected WizardNewFileCreationPage getDestinationPage(){
+		WizardHelpNewFileCreationPage page = new WizardHelpNewFileCreationPage("newFilePage1", (IStructuredSelection) selection);//$NON-NLS-1$
+		page.setTitle(Messages.StyleTemplateNewWizard_title);
+		page.setDescription(Messages.StyleTemplateNewWizard_description);
+		page.setFileExtension("jrtx");//$NON-NLS-1$
+		return page;
 	}
 
 	/**
@@ -215,13 +177,11 @@ public class StyleTemplateNewWizard extends Wizard implements INewWizard {
 	@Override
 	public boolean canFinish() {
 		if(JDTUtils.isVirtualResource(step1.getContainerFullPath())) {
-			step1.setErrorMessage(Messages.StyleTemplateNewWizard_VirtualFolderErr);
+			step1.setMessage(Messages.StyleTemplateNewWizard_VirtualFolderErr, IStatus.ERROR);
 			return false;
 		}
 		return super.canFinish();
 	}
-	
-	private IFile file;
 
 	/**
 	 * The worker method. It will find the container, create the file if missing or just replace its contents, and open
@@ -266,7 +226,7 @@ public class StyleTemplateNewWizard extends Wizard implements INewWizard {
 	}
 
 	protected void openEditor(final IFile file) {
-		getShell().getDisplay().asyncExec(new Runnable() {
+		UIUtils.getDisplay().asyncExec(new Runnable() {
 			public void run() {
 				IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 				try {
@@ -277,8 +237,6 @@ public class StyleTemplateNewWizard extends Wizard implements INewWizard {
 			}
 		});
 	}
-
-	private IFile reportFile;
 
 	public IFile getReportFile() {
 		return reportFile;

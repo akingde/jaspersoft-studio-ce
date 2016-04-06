@@ -27,10 +27,11 @@ import com.jaspersoft.studio.editor.AGraphicEditor;
 import com.jaspersoft.studio.editor.outline.JDReportOutlineView;
 import com.jaspersoft.studio.editor.outline.actions.CreateStyleAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateStyleTemplateReferenceAction;
-import com.jaspersoft.studio.editor.outline.actions.ExportStyleAsTemplateAction;
 import com.jaspersoft.studio.editor.outline.actions.RefreshTemplateStyleExpression;
 import com.jaspersoft.studio.editor.outline.actions.RefreshTemplateStyleReference;
 import com.jaspersoft.studio.editor.outline.actions.ResetStyleAction;
+import com.jaspersoft.studio.editor.outline.actions.SaveStyleAsTemplateAction;
+import com.jaspersoft.studio.editor.style.command.SaveTemplateStyleAsTemplateAction;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /*
@@ -67,7 +68,7 @@ public class StyleTemplateEditor extends AGraphicEditor {
 				id = ResetStyleAction.ID;
 				bars.setGlobalActionHandler(id, registry.getAction(id));
 				
-				id = ExportStyleAsTemplateAction.ID;
+				id = SaveStyleAsTemplateAction.ID;
 				bars.setGlobalActionHandler(id, registry.getAction(id));
 			}
 
@@ -113,9 +114,9 @@ public class StyleTemplateEditor extends AGraphicEditor {
 		registry.registerAction(action);
 		selectionActions.add(ResetStyleAction.ID);
 
-		action = new ExportStyleAsTemplateAction(this);
+		action = new SaveTemplateStyleAsTemplateAction(this);
 		registry.registerAction(action);
-		selectionActions.add(ExportStyleAsTemplateAction.ID);
+		selectionActions.add(SaveStyleAsTemplateAction.ID);
 	}
 
 }
