@@ -356,6 +356,12 @@
             name="%Palette">
       </page>
       <page
+            category="com.jaspersoft.studio.preferences.DesignerPreferencePage"
+            class="com.jaspersoft.studio.preferences.bindings.BindingsPreferencePage"
+            id="com.jaspersoft.studio.preferences.KeyBindingPreferencePage"
+            name="%keysPreferencePage">
+      </page>
+      <page
             category="com.jaspersoft.studio.preferences.StudioPreferencePage"
             class="com.jaspersoft.studio.preferences.templates.PathsPreferencePage"
             id="com.jaspersoft.studio.preferences.templates"
@@ -2124,5 +2130,43 @@
              schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
              sequence="BS">
        </key>
+    </extension>
+    <extension
+          point="com.jaspersoft.studio.bindings">
+       <item
+             context="Selecting"
+             description="%parentSelectionModifierDescription"
+             id="com.jaspersoft.studio.editor.ParentSelectionOverrider"
+             name="%parentSelectionModifierName"
+             sequence="SHIFT">
+       </item>
+       <item
+             context="Dragging"
+             description="%forceParentChangeDescription"
+             id="com.jaspersoft.studio.editor.enforcechangeparent"
+             name="%forceParentChangeName"
+             sequence="A">
+       </item>
+       <item
+             context="Selecting"
+             description="%marqueeSelectionModifierDescription"
+             id="com.jaspersoft.studio.editor.MarqueeSelectionOverrider"
+             name="%marqueeSelectionModifierName"
+             sequence="V">
+       </item>
+       <item
+             context="Dragging"
+             description="%forceStraightDirectionDescription"
+             id="com.jaspersoft.studio.editor.straightmovment"
+             name="%forceStraightDirectionName"
+             sequence="SHIFT">
+       </item>
+       <item
+             context="Dragging"
+             description="%disableSnapDescription"
+             id="com.jaspersoft.studio.editor.straightmovment.nosnapping"
+             name="%disableSnapName"
+             sequence="ALT">
+       </item>
     </extension>
 </plugin>

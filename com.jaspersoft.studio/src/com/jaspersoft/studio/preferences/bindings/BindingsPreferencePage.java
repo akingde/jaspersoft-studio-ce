@@ -731,7 +731,7 @@ public class BindingsPreferencePage extends PreferencePage implements IWorkbench
 			if(keystrokes.length > 0){
 				for(KeyStroke keystroke : keystrokes){
 					Binding searchBinding = firstTokenBindings.get(keystroke);
-					if (searchBinding != null){
+					if (searchBinding != null &&  searchBinding.getParameterizedCommand() != null){
 						try{
 							String platformName = searchBinding.getParameterizedCommand().getName();
 							String conflictSequence = searchBinding.getTriggerSequence().format();
