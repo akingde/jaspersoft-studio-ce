@@ -958,6 +958,8 @@ public class Messages extends NLS {
 	public static String InputParameterDialog_expressionLabel;
 	public static String InputParameterDialog_nameLabel;
 	public static String InputReturnValueDialog_dialogTitle;
+	public static String JasperFileEditorLauncher_ErrorExternalJasperFile;
+	public static String JasperFileEditorLauncher_ErrorWorkspaceJasperFile;
 	public static String JaspersoftStudioPlugin_BrandingInfoJSSPlugin;
 	public static String JaspersoftStudioPlugin_CachingJRExtensionsJob;
 	public static String JaspersoftStudioPlugin_CachingTemplateImagesJob;
