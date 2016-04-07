@@ -30,6 +30,8 @@
       <import plugin="org.apache.commons.codec" version="1.6.0" match="greaterOrEqual"/>
       <import plugin="org.apache.commons.logging" version="1.1.1" match="greaterOrEqual"/>
       <import plugin="org.w3c.dom.svg" version="1.1.0" match="greaterOrEqual"/>
+      <import plugin="org.w3c.dom.smil"/>
+      <import plugin="org.w3c.css.sac"/>
    </requires>
 
    <plugin
@@ -198,5 +200,11 @@
          install-size="0"
          version="2.4.5"
          unpack="false"/>
+
+   <plugin
+         id="com.jaspersoft.studio.bundles.batik"
+         download-size="0"
+         install-size="0"
+         version="1.8.0.js01"/>
 
 </feature>
