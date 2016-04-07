@@ -56,13 +56,17 @@ public class RESTv2ExceptionHandler {
 				handleErrorDescriptor(res, monitor, status);
 			else if (res.getHeaderString("Content-Type").equals("application/json"))
 				handleErrorDescriptor(res, monitor, status);
+			else if (res.getHeaderString("Content-Type").equals("application/collection.errorDescriptor+xml"))
+				handleErrorDescriptorList(res, monitor, status);
 		case 401:
 			throw new HttpResponseException(status, res.getStatusInfo().getReasonPhrase());
 		case 403:
 		case 409:
 		case 404:
 		case 500:
-			if (res.getHeaderString("Content-Type").contains("xml"))
+			if (res.getHeaderString("Content-Type").contains("application/collection.errorDescriptor+xml"))
+				handleErrorDescriptorList(res, monitor, status);
+			else if (res.getHeaderString("Content-Type").contains("xml"))
 				handleErrorDescriptor(res, monitor, status);
 			else if (res.getHeaderString("Content-Type").contains("text/html")) {
 				System.out.println(res.readEntity(String.class));
