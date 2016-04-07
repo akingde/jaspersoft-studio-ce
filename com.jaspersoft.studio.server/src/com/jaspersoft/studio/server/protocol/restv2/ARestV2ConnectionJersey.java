@@ -229,10 +229,5 @@ public abstract class ARestV2ConnectionJersey extends ARestV2Connection {
 		return target;
 	}
 
-	protected IConnection parent;
-
-	@Override
-	public void setParent(IConnection parent) {
-		this.parent = parent;
-	}
+	
 }

@@ -38,6 +38,12 @@ public abstract class ARestV2Connection implements IConnection {
 	public static final String SUFFIX = "rest_v2/";
 	public static final String FORMAT = "xml";
 	protected ServerProfile sp;
+	protected IConnection parent;
+
+	@Override
+	public void setParent(IConnection parent) {
+		this.parent = parent;
+	}
 
 	@Override
 	public ServerProfile getServerProfile() {
@@ -135,7 +141,9 @@ public abstract class ARestV2Connection implements IConnection {
 	}
 
 	@Override
-	public String getPassword() {
+	public String getPassword(IProgressMonitor monitor) throws Exception {
+		if (parent != null)
+			return getPassword(monitor);
 		return Pass.getPass(sp.getPass());
 	}
 

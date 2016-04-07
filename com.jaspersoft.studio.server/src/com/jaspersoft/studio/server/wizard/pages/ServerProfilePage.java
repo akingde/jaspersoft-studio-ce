@@ -116,7 +116,7 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 	private Text txtInfo;
 	private WLocale loc;
 	private WTimeZone tz;
-	private Button bSSO;
+	private Combo bSSO;
 	private Combo ccas;
 	private boolean refreshing = false;
 
@@ -234,6 +234,8 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 					PojoObservables.observeValue(value, "organisation")); //$NON-NLS-1$
 			dbc.bindValue(SWTObservables.observeText(tuser, SWT.Modify), PojoObservables.observeValue(value, "user"), //$NON-NLS-1$
 					new UpdateValueStrategy().setAfterConvertValidator(new UsernameValidator()), null);
+			dbc.bindValue(SWTObservables.observeText(tuserA, SWT.Modify), PojoObservables.observeValue(value, "user"), //$NON-NLS-1$
+					new UpdateValueStrategy().setAfterConvertValidator(new UsernameValidator()), null);
 			dbc.bindValue(SWTObservables.observeText(tpass, SWT.Modify), PojoObservables.observeValue(value, "pass")); //$NON-NLS-1$
 
 			dbc.bindValue(SWTObservables.observeText(ttimeout, SWT.Modify),
@@ -243,19 +245,19 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 			dbc.bindValue(SWTObservables.observeText(bmime), PojoObservables.observeValue(proxy, "mime")); //$NON-NLS-1$
 			dbc.bindValue(SWTObservables.observeText(loc.getCombo()), PojoObservables.observeValue(value, "locale")); //$NON-NLS-1$
 			dbc.bindValue(SWTObservables.observeText(tz.getCombo()), PojoObservables.observeValue(value, "timeZone")); //$NON-NLS-1$
-
+			dbc.bindValue(SWTObservables.observeSingleSelectionIndex(bSSO), PojoObservables.observeValue(proxy, "sso")); //$NON-NLS-1$
 			dbc.bindValue(SWTObservables.observeSelection(bdaterange),
 					PojoObservables.observeValue(value, "supportsDateRanges")); //$NON-NLS-1$
 			dbc.bindValue(SWTObservables.observeSelection(bUseSoap),
 					PojoObservables.observeValue(value, "useOnlySOAP")); //$NON-NLS-1$
 			dbc.bindValue(SWTObservables.observeSelection(bSyncDA), PojoObservables.observeValue(value, "syncDA")); //$NON-NLS-1$
-			dbc.bindValue(SWTObservables.observeSelection(bSSO), PojoObservables.observeValue(value, "useSSO")); //$NON-NLS-1$
 			dbc.bindValue(SWTObservables.observeSelection(bLogging), PojoObservables.observeValue(value, "logging")); //$NON-NLS-1$
 
 			dbc.bindValue(SWTObservables.observeText(cversion.getControl()),
 					PojoObservables.observeValue(proxy, "jrVersion")); //$NON-NLS-1$
 
 			tpass.loadSecret(JRServerSecretsProvider.SECRET_NODE_ID, Misc.nvl(sprofile.getValue().getPass()));
+
 		} finally {
 			refreshing = false;
 		}
@@ -335,8 +337,27 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 			}
 		});
 
+		cmpAsk = new Composite(cmpCredential, SWT.NONE);
+		layout = new GridLayout(2, false);
+		layout.marginWidth = 0;
+		cmpAsk.setLayout(layout);
+
+		new Label(cmpAsk, SWT.NONE).setText(Messages.ServerProfilePage_10);
+		tuserA = new Text(cmpAsk, SWT.BORDER);
+		tuserA.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		tuserA.setTextLimit(100);
+		tuserA.addModifyListener(new ModifyListener() {
+
+			@Override
+			public void modifyText(ModifyEvent e) {
+				closeConnection();
+			}
+		});
+
 		if (value.isUseSSO())
 			stackLayout.topControl = cmpCAS;
+		else if (value.isAskPass())
+			stackLayout.topControl = cmpAsk;
 		else
 			stackLayout.topControl = cmpUP;
 	}
@@ -356,12 +377,45 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 		cmp.setLayout(new GridLayout(3, false));
 
 		Label lbl = new Label(cmp, SWT.NONE);
+		lbl.setText("Authentication");
+
+		bSSO = new Combo(cmp, SWT.READ_ONLY);
+		bSSO.setItems(new String[] { "Password", "Ask Password", "Single Sign One" });
+		bSSO.setText(Messages.ServerProfilePage_18);
+		bSSO.setToolTipText(Messages.ServerProfilePage_20);
+		bSSO.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				switch (bSSO.getSelectionIndex()) {
+				case 0:
+					stackLayout.topControl = cmpUP;
+					bUseSoap.setEnabled(true);
+					break;
+				case 1:
+					stackLayout.topControl = cmpAsk;
+					bUseSoap.setEnabled(true);
+					break;
+				case 2:
+					stackLayout.topControl = cmpCAS;
+					bUseSoap.setSelection(false);
+					bUseSoap.setEnabled(false);
+					break;
+				}
+				cmpCredential.layout();
+				closeConnection();
+			}
+		});
+		GridData gd = new GridData();
+		gd.horizontalSpan = 2;
+		bSSO.setLayoutData(gd);
+
+		lbl = new Label(cmp, SWT.NONE);
 		lbl.setText(Messages.ServerProfilePage_jrversion);
 
 		cversion = new VersionCombo(cmp);
 		((Combo) cversion.getControl()).setItem(0, Messages.ServerProfilePage_25);
 		cversion.setVersion(JRXmlWriterHelper.LAST_VERSION);
-		GridData gd = new GridData();
+		gd = new GridData();
 		gd.horizontalSpan = 2;
 		cversion.getControl().setLayoutData(gd);
 
@@ -369,12 +423,29 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 		lbl.setToolTipText(tt);
 		cversion.getControl().setToolTipText(tt);
 
+		bdaterange = new Button(cmp, SWT.CHECK);
+		bdaterange.setText(Messages.ServerProfilePage_daterangeexpression);
+		gd = new GridData();
+		gd.horizontalSpan = 2;
+		bdaterange.setLayoutData(gd);
+
+		tt = Messages.ServerProfilePage_28;
+		bdaterange.setToolTipText(tt);
+
+		bSyncDA = new Button(cmp, SWT.CHECK);
+		bSyncDA.setText(Messages.ServerProfilePage_14);
+		bSyncDA.setToolTipText(Messages.ServerProfilePage_15);
+
+		lbl = new Label(cmp, SWT.SEPARATOR | SWT.HORIZONTAL);
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 3;
+		lbl.setLayoutData(gd);
+
 		lbl = new Label(cmp, SWT.NONE);
 		lbl.setText(Messages.ServerProfilePage_connectiontimeout);
 
 		ttimeout = new Text(cmp, SWT.BORDER);
 		gd = new GridData();
-		gd.horizontalSpan = 2;
 		gd.widthHint = 100;
 		ttimeout.setLayoutData(gd);
 
@@ -388,53 +459,6 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 		tt = Messages.ServerProfilePage_27;
 		bchunked.setToolTipText(tt);
 
-		bdaterange = new Button(cmp, SWT.CHECK);
-		bdaterange.setText(Messages.ServerProfilePage_daterangeexpression);
-		gd = new GridData();
-		gd.horizontalSpan = 2;
-		bdaterange.setLayoutData(gd);
-
-		tt = Messages.ServerProfilePage_28;
-		bchunked.setToolTipText(tt);
-
-		bUseSoap = new Button(cmp, SWT.CHECK);
-		bUseSoap.setText(Messages.ServerProfilePage_6);
-		tt = Messages.ServerProfilePage_29;
-		bchunked.setToolTipText(tt);
-
-		bSyncDA = new Button(cmp, SWT.CHECK);
-		bSyncDA.setText(Messages.ServerProfilePage_14);
-		bSyncDA.setToolTipText(Messages.ServerProfilePage_15);
-		gd = new GridData();
-		gd.horizontalSpan = 2;
-		bSyncDA.setLayoutData(gd);
-
-		bSSO = new Button(cmp, SWT.CHECK);
-		bSSO.setText(Messages.ServerProfilePage_18);
-		bSSO.setToolTipText(Messages.ServerProfilePage_20);
-		bSSO.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				if (bSSO.getSelection()) {
-					stackLayout.topControl = cmpCAS;
-					bUseSoap.setSelection(false);
-					bUseSoap.setEnabled(false);
-				} else {
-					stackLayout.topControl = cmpUP;
-					bUseSoap.setEnabled(true);
-				}
-				cmpCredential.layout();
-				closeConnection();
-			}
-		});
-
-		bLogging = new Button(cmp, SWT.CHECK);
-		bLogging.setText(Messages.ServerProfilePage_34); 
-		bLogging.setToolTipText(Messages.ServerProfilePage_35);
-		gd = new GridData();
-		gd.horizontalSpan = 2;
-		bLogging.setLayoutData(gd);
-
 		String ttip = Messages.ServerProfilePage_7;
 		lbl = new Label(cmp, SWT.NONE);
 		lbl.setText(Messages.ServerProfilePage_12);
@@ -443,9 +467,23 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 		bmime = new Combo(cmp, SWT.READ_ONLY);
 		bmime.setItems(new String[] { "MIME", "DIME" }); //$NON-NLS-1$ //$NON-NLS-2$
 		bmime.setToolTipText(ttip);
+
+		bUseSoap = new Button(cmp, SWT.CHECK);
+		bUseSoap.setText(Messages.ServerProfilePage_6);
+		tt = Messages.ServerProfilePage_29;
+		bUseSoap.setToolTipText(tt);
+
+		bLogging = new Button(cmp, SWT.CHECK);
+		bLogging.setText(Messages.ServerProfilePage_34);
+		bLogging.setToolTipText(Messages.ServerProfilePage_35);
 		gd = new GridData();
 		gd.horizontalSpan = 2;
-		bmime.setLayoutData(gd);
+		bLogging.setLayoutData(gd);
+
+		lbl = new Label(cmp, SWT.SEPARATOR | SWT.HORIZONTAL);
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 3;
+		lbl.setLayoutData(gd);
 
 		ttip = Messages.ServerProfilePage_16;
 
@@ -453,11 +491,20 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 		lbl.setText(Messages.ServerProfilePage_17);
 		lbl.setToolTipText(ttip);
 
-		lpath = new Text(cmp, SWT.BORDER | SWT.READ_ONLY);
+		Composite c = new Composite(cmp, SWT.NONE);
+		GridLayout layout = new GridLayout(2, false);
+		layout.marginHeight = 0;
+		layout.marginWidth = 0;
+		c.setLayout(layout);
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 2;
+		c.setLayoutData(gd);
+
+		lpath = new Text(c, SWT.BORDER | SWT.READ_ONLY);
 		lpath.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		lpath.setToolTipText(ttip);
 
-		blpath = new Button(cmp, SWT.PUSH);
+		blpath = new Button(c, SWT.PUSH);
 		blpath.setText("..."); //$NON-NLS-1$
 		blpath.setToolTipText(ttip);
 
@@ -590,7 +637,7 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 				cstatus.setText(Messages.ServerProfilePage_32);
 			} else
 				cstatus.setText(Messages.ServerProfilePage_33);
-			bUseSoap.setEnabled(!bSSO.getSelection());
+			bUseSoap.setEnabled(bSSO.getSelectionIndex() != 2);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -635,6 +682,30 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 			return sp.isMime() ? "MIME" : "DIME"; //$NON-NLS-1$ //$NON-NLS-2$
 		}
 
+		public int getSso() {
+			if (sp.isUseSSO())
+				return 2;
+			if (sp.isAskPass())
+				return 1;
+			return 0;
+		}
+
+		public void setSso(int indx) {
+			switch (indx) {
+			case 0:
+				sp.setUseSSO(false);
+				sp.setAskPass(false);
+				break;
+			case 1:
+				sp.setAskPass(true);
+				sp.setUseSSO(false);
+				break;
+			case 2:
+				sp.setAskPass(false);
+				sp.setUseSSO(true);
+				break;
+			}
+		}
 	}
 
 	@Override
@@ -683,6 +754,8 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 
 	private JdbcDriver driver = new JdbcDriver();
 	private Button bLogging;
+	private Composite cmpAsk;
+	private Text tuserA;
 
 	private void createJdbcDrivers(CTabFolder tabFolder) {
 		if (sprofile.getWsClient() == null || !sprofile.getWsClient().isSupported(Feature.EXPORTMETADATA)

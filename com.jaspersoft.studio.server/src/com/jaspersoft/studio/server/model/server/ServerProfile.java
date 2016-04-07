@@ -46,6 +46,7 @@ public class ServerProfile implements Resource, Cloneable, Serializable, JRChang
 	private boolean syncDA = false;
 	private String locale;
 	private String timeZone;
+	private boolean askPass = false;
 	private boolean useSSO = false;
 	private String ssoUuid;
 	private transient ClientUser clientUser;
@@ -55,6 +56,14 @@ public class ServerProfile implements Resource, Cloneable, Serializable, JRChang
 
 	public boolean isLogging() {
 		return logging;
+	}
+
+	public void setAskPass(boolean askPass) {
+		this.askPass = askPass;
+	}
+
+	public boolean isAskPass() {
+		return askPass;
 	}
 
 	public void setLogging(boolean logging) {

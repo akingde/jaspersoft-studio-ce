@@ -20,6 +20,7 @@ import java.util.List;
 import org.apache.http.client.HttpResponseException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.jface.dialogs.Dialog;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.jasperserver.dto.authority.ClientUser;
@@ -33,9 +34,13 @@ import com.jaspersoft.studio.server.Activator;
 import com.jaspersoft.studio.server.model.datasource.filter.IDatasourceFilter;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
 import com.jaspersoft.studio.server.protocol.restv2.RestV2ConnectionJersey;
+import com.jaspersoft.studio.server.publish.PasswordDialog;
+import com.jaspersoft.studio.server.utils.Pass;
 import com.jaspersoft.studio.server.wizard.exp.ExportOptions;
 import com.jaspersoft.studio.server.wizard.imp.ImportOptions;
 import com.jaspersoft.studio.server.wizard.permission.PermissionOptions;
+
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 public class ProxyConnection implements IConnection {
 	public Format getDateFormat() {
@@ -84,12 +89,16 @@ public class ProxyConnection implements IConnection {
 
 	private IConnection c;
 	private IConnection soap;
+	private String pass;
+	private ServerProfile sp;
 
 	@Override
 	public boolean connect(IProgressMonitor monitor, ServerProfile sp) throws Exception {
 		Exception exc = null;
 		c = null;
+		pass = null;
 		soap = null;
+		this.sp = sp;
 		for (IConnection co : cons) {
 			String connName = co.getClass().getName().toUpperCase();
 			if (sp.isUseOnlySOAP() && !connName.contains("SOAP"))
@@ -436,8 +445,27 @@ public class ProxyConnection implements IConnection {
 	}
 
 	@Override
-	public String getPassword() {
-		return c.getPassword();
+	public String getPassword(final IProgressMonitor monitor) throws Exception {
+		final ServerProfile sp = getServerProfile();
+		if (sp == null)
+			return null;
+		if (sp.isAskPass()) {
+			if (pass == null) {
+				UIUtils.getDisplay().syncExec(new Runnable() {
+					public void run() {
+						PasswordDialog pd = new PasswordDialog(UIUtils.getShell(), sp);
+						if (pd.open() == Dialog.OK)
+							pass = pd.getValue(); // $NON-NLS-1$
+						else
+							monitor.setCanceled(true);
+						;
+					}
+				});
+
+			}
+			return pass;
+		}
+		return Pass.getPass(sp.getPass());
 	}
 
 	@Override
@@ -493,6 +521,8 @@ public class ProxyConnection implements IConnection {
 
 	@Override
 	public ServerProfile getServerProfile() {
+		if (c == null)
+			return sp;
 		return c.getServerProfile();
 	}
 

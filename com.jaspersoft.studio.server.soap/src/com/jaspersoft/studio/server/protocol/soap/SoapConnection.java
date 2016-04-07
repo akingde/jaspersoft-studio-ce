@@ -59,6 +59,7 @@ import com.jaspersoft.studio.server.protocol.IConnection;
 import com.jaspersoft.studio.server.protocol.JdbcDriver;
 import com.jaspersoft.studio.server.protocol.ReportExecution;
 import com.jaspersoft.studio.server.publish.PublishUtil;
+import com.jaspersoft.studio.server.utils.Pass;
 import com.jaspersoft.studio.server.wizard.exp.ExportOptions;
 import com.jaspersoft.studio.server.wizard.imp.ImportOptions;
 import com.jaspersoft.studio.server.wizard.permission.PermissionOptions;
@@ -128,32 +129,34 @@ public class SoapConnection implements IConnection {
 		monitor.subTask(Messages.SoapConnection_1);
 		JServer server = new JServer();
 		this.sp = sp;
-		setupJServer(server, sp);
-		if (sp.isLogging()) {
-			System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.SimpleLog"); //$NON-NLS-1$ //$NON-NLS-2$
-			System.setProperty("org.apache.commons.logging.simplelog.showdatetime", "true"); //$NON-NLS-1$ //$NON-NLS-2$
-			System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.wire", "DEBUG"); //$NON-NLS-1$ //$NON-NLS-2$
-			System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.impl.conn", "DEBUG"); //$NON-NLS-1$ //$NON-NLS-2$
-			System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.impl.client", "DEBUG"); //$NON-NLS-1$ //$NON-NLS-2$
-			System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.client", "DEBUG"); //$NON-NLS-1$ //$NON-NLS-2$
-			System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http", "DEBUG"); //$NON-NLS-1$ //$NON-NLS-2$
-		} else {
-			System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.SimpleLog"); //$NON-NLS-1$ //$NON-NLS-2$
-			System.setProperty("org.apache.commons.logging.simplelog.showdatetime", "true"); //$NON-NLS-1$ //$NON-NLS-2$
-			System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.wire", "ERROR"); //$NON-NLS-1$ //$NON-NLS-2$
-			System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.impl.conn", "ERROR"); //$NON-NLS-1$ //$NON-NLS-2$
-			System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.impl.client", "ERROR"); //$NON-NLS-1$ //$NON-NLS-2$
-			System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.client", "ERROR"); //$NON-NLS-1$ //$NON-NLS-2$
-			System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http", "ERROR"); //$NON-NLS-1$ //$NON-NLS-2$
-		}
+		if (setupJServer(server, sp, monitor)) {
+			if (sp.isLogging()) {
+				System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.SimpleLog"); //$NON-NLS-1$ //$NON-NLS-2$
+				System.setProperty("org.apache.commons.logging.simplelog.showdatetime", "true"); //$NON-NLS-1$ //$NON-NLS-2$
+				System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.wire", "DEBUG"); //$NON-NLS-1$ //$NON-NLS-2$
+				System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.impl.conn", "DEBUG"); //$NON-NLS-1$ //$NON-NLS-2$
+				System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.impl.client", "DEBUG"); //$NON-NLS-1$ //$NON-NLS-2$
+				System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.client", "DEBUG"); //$NON-NLS-1$ //$NON-NLS-2$
+				System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http", "DEBUG"); //$NON-NLS-1$ //$NON-NLS-2$
+			} else {
+				System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.SimpleLog"); //$NON-NLS-1$ //$NON-NLS-2$
+				System.setProperty("org.apache.commons.logging.simplelog.showdatetime", "true"); //$NON-NLS-1$ //$NON-NLS-2$
+				System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.wire", "ERROR"); //$NON-NLS-1$ //$NON-NLS-2$
+				System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.impl.conn", "ERROR"); //$NON-NLS-1$ //$NON-NLS-2$
+				System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.impl.client", "ERROR"); //$NON-NLS-1$ //$NON-NLS-2$
+				System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.client", "ERROR"); //$NON-NLS-1$ //$NON-NLS-2$
+				System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http", "ERROR"); //$NON-NLS-1$ //$NON-NLS-2$
+			}
 
-		client = server.getWSClient();
-		if (getServerInfo(monitor) == null)
-			return false;
-		return true;
+			client = server.getWSClient();
+			if (getServerInfo(monitor) == null)
+				return false;
+			return true;
+		}
+		return false;
 	}
 
-	private static void setupJServer(JServer server, ServerProfile sp) throws Exception {
+	private boolean setupJServer(JServer server, ServerProfile sp, IProgressMonitor monitor) throws Exception {
 		AxisProperties.setProperty(DefaultCommonsHTTPClientProperties.MAXIMUM_CONNECTIONS_PER_HOST_PROPERTY_KEY, "4"); //$NON-NLS-1$
 		server.setName(sp.getName());
 		String rurl = sp.getUrl();
@@ -166,10 +169,11 @@ public class SoapConnection implements IConnection {
 		if (sp.getOrganisation() != null && !sp.getOrganisation().trim().isEmpty())
 			username += "|" + sp.getOrganisation(); //$NON-NLS-1$
 		server.setUsername(username);
-		server.setPassword(sp.getPass());
+		server.setPassword(parent.getPassword(monitor));
 		server.setTimeout(sp.getTimeout());
 		server.setChunked(sp.isChunked());
 		server.setMime(sp.isMime());
+		return monitor.isCanceled();
 	}
 
 	private static Set<String> wstypes = new HashSet<String>();
@@ -187,9 +191,7 @@ public class SoapConnection implements IConnection {
 			sortReportUnit(rd, rd.getChildren());
 		} catch (Exception e) {
 			if (wstypes.contains(rd.getWsType())) {
-				throw new Exception(String.format(
-						Messages.SoapConnection_37,
-						rd.getWsType()), e);
+				throw new Exception(String.format(Messages.SoapConnection_37, rd.getWsType()), e);
 			}
 			throw e;
 		}
@@ -447,8 +449,10 @@ public class SoapConnection implements IConnection {
 	}
 
 	@Override
-	public String getPassword() {
-		return client.getPassword();
+	public String getPassword(IProgressMonitor monitor) throws Exception {
+		if (parent != null)
+			return parent.getPassword(monitor);
+		return Pass.getPass(sp.getPass());
 	}
 
 	@Override

@@ -214,7 +214,16 @@ public class JRSRepositoryService implements RepositoryService {
 						r = ReferenceResolver.resolveReference(c, r, monitor);
 					if (ResourceFactory.isFileResourceType(r)) {
 						IFile file = (IFile) jConfig.get(FileUtils.KEY_FILE);
-						File f = new File(file.getParent().getRawLocation().toFile(), objectUri);
+
+						File fp = null;
+						if (file.getParent().getRawLocation() != null)
+							fp = file.getParent().getRawLocation().toFile();
+						else if (file.getParent().getLocationURI() != null)
+							fp = new File(file.getParent().getLocationURI());
+						else
+							return null;
+
+						File f = new File(fp, objectUri);
 						if (f.getParentFile() != null && !f.getParentFile().mkdirs() && f.createNewFile())
 							c.get(monitor, r, f);
 						break;

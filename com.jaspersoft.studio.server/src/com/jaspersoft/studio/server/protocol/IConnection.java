@@ -55,7 +55,7 @@ public interface IConnection {
 
 	public String getUsername();
 
-	public String getPassword();
+	public String getPassword(IProgressMonitor monitor) throws Exception;
 
 	public ResourceDescriptor get(IProgressMonitor monitor, ResourceDescriptor rd, File f) throws Exception;
 
