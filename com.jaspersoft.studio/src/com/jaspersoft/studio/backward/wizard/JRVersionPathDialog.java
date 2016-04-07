@@ -27,6 +27,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.backward.JRBackwardManager;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.utils.Misc;
 
 import net.sf.jasperreports.eclipse.builder.JRDefinition;
@@ -38,7 +39,7 @@ public class JRVersionPathDialog extends ATitledDialog {
 
 	protected JRVersionPathDialog(Shell parentShell, JRDefinition value) {
 		super(parentShell);
-		setTitle("JasperReports Runtime Path");
+		setTitle(Messages.JRVersionPathDialog_0);
 		setDefaultSize(500, 180);
 		this.value = value;
 	}
@@ -53,7 +54,7 @@ public class JRVersionPathDialog extends ATitledDialog {
 		cmp.setLayout(new GridLayout(2, false));
 
 		Label lbl = new Label(cmp, SWT.NONE);
-		lbl.setText("Path where to look for JasperReports runtime:");
+		lbl.setText(Messages.JRVersionPathDialog_1);
 		GridData gd = new GridData();
 		gd.horizontalSpan = 2;
 		lbl.setLayoutData(gd);
@@ -80,12 +81,12 @@ public class JRVersionPathDialog extends ATitledDialog {
 					}
 				}
 				okButton.setEnabled(false);
-				setError("Please select a valid path with JasperReports runtime");
+				setError(Messages.JRVersionPathDialog_2);
 			}
 		});
 
 		Button b = new Button(cmp, SWT.PUSH);
-		b.setText("Browse");
+		b.setText(Messages.JRVersionPathDialog_3);
 		b.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {

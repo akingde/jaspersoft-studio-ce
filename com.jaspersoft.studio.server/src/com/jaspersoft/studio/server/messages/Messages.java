@@ -143,6 +143,12 @@ public class Messages extends NLS {
 	public static String OpenInEditorAction_0;
 	public static String OpenInEditorAction_desc;
 	public static String OpenInEditorAction_title;
+	public static String PasswordDialog_0;
+	public static String PasswordDialog_1;
+	public static String PasswordDialog_2;
+	public static String PasswordDialog_3;
+	public static String PasswordDialog_4;
+	public static String PasswordDialog_5;
 	public static String PasteDialog_0;
 	public static String PasteDialog_1;
 	public static String PasteDialog_2;

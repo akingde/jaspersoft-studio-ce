@@ -26,6 +26,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
+import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
 
 import net.sf.jasperreports.eclipse.ui.ATitledDialog;
@@ -37,8 +38,8 @@ public class PasswordDialog extends ATitledDialog {
 
 	public PasswordDialog(Shell parentShell, ServerProfile sp) {
 		super(parentShell);
-		setTitle("Password");
-		setDescription("To access this resource password is needed.");
+		setTitle(Messages.PasswordDialog_0);
+		setDescription(Messages.PasswordDialog_1);
 		setDefaultSize(600, 250);
 		this.sp = sp;
 	}
@@ -56,7 +57,7 @@ public class PasswordDialog extends ATitledDialog {
 		} else
 			cmp.setLayout(new GridLayout(2, false));
 
-		new Label(cmp, SWT.NONE).setText("Server");
+		new Label(cmp, SWT.NONE).setText(Messages.PasswordDialog_2);
 
 		Text turl = new Text(cmp, SWT.BORDER | SWT.READ_ONLY);
 		try {
@@ -69,21 +70,21 @@ public class PasswordDialog extends ATitledDialog {
 		turl.setEnabled(false);
 		turl.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		new Label(cmp, SWT.NONE).setText("Organization");
+		new Label(cmp, SWT.NONE).setText(Messages.PasswordDialog_3);
 
 		Text torg = new Text(cmp, SWT.BORDER);
 		torg.setText(Misc.nvl(sp.getOrganisation()));
 		torg.setEnabled(false);
 		torg.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		new Label(cmp, SWT.NONE).setText("User");
+		new Label(cmp, SWT.NONE).setText(Messages.PasswordDialog_4);
 
 		Text tuser = new Text(cmp, SWT.BORDER);
 		tuser.setText(Misc.nvl(sp.getUser()));
 		tuser.setEnabled(false);
 		tuser.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		new Label(cmp, SWT.NONE).setText("Password");
+		new Label(cmp, SWT.NONE).setText(Messages.PasswordDialog_5);
 
 		final Text tpass = new Text(cmp, SWT.BORDER | SWT.PASSWORD);
 		tpass.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
