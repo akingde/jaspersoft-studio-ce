@@ -40,7 +40,6 @@ import org.apache.http.client.CookieStore;
 import org.apache.http.client.HttpResponseException;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.jface.dialogs.Dialog;
 import org.glassfish.jersey.SslConfigurator;
 import org.glassfish.jersey.apache.connector.ApacheClientProperties;
 import org.glassfish.jersey.client.ClientConfig;
@@ -97,17 +96,14 @@ import com.jaspersoft.studio.server.protocol.Feature;
 import com.jaspersoft.studio.server.protocol.JdbcDriver;
 import com.jaspersoft.studio.server.protocol.ReportExecution;
 import com.jaspersoft.studio.server.protocol.Version;
-import com.jaspersoft.studio.server.publish.PasswordDialog;
 import com.jaspersoft.studio.server.publish.PublishUtil;
 import com.jaspersoft.studio.server.utils.HttpUtils;
-import com.jaspersoft.studio.server.utils.Pass;
 import com.jaspersoft.studio.server.utils.ResourceDescriptorUtil;
 import com.jaspersoft.studio.server.wizard.exp.ExportOptions;
 import com.jaspersoft.studio.server.wizard.imp.ImportOptions;
 import com.jaspersoft.studio.server.wizard.permission.PermissionOptions;
 import com.jaspersoft.studio.utils.Misc;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileExtension;
 
 public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
@@ -201,7 +197,8 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 			Builder req = target.request();
 			toObj(connector.get(req, monitor), String.class, monitor);
 		} catch (Exception e) {
-			logger.log(Level.SEVERE, e.getMessage(), e);
+			if (logger != null)
+				logger.log(Level.SEVERE, e.getMessage(), e);
 			throw e;
 		} finally {
 			// ok, now check others
