@@ -38,6 +38,8 @@ public class Messages extends NLS {
 	public static String ShowPDFTagsAction_tooltip;
 	public static String ShowErrorsAction_title;
 	public static String ShowErrorsAction_tooltip;
+	public static String ShowExportableWizardPage_labelText;
+	public static String ShowExportableWizardPage_pageDescription;
 	public static String common_add;
 	public static String common_backcolor;
 	public static String common_band;
@@ -308,6 +310,8 @@ public class Messages extends NLS {
 	public static String CompositeElementsExportWizardPage_pageDescription;
 	public static String CompositeElementsExportWizardPage_pageTitle;
 	public static String CompositeElementsExportWizardPage_selectOneElementError;
+	public static String ConfigurationExporterWizard_fileExistMessage;
+	public static String ConfigurationExporterWizard_fileExistTitle;
 	public static String ConfigurationManager_notAccessibleMessage;
 	public static String ConfigurationManager_notAccessibleTitle;
 	public static String CongratulationsWizardPage_label1;
@@ -582,6 +586,10 @@ public class Messages extends NLS {
 	public static String DesignerPreferencePage_simple_shadow;
 	public static String DesignerPreferencePage_unit;
 	public static String DesignerPreferencePage_UseDescriptionForLabelText;
+	public static String DestinationPage_destinationLabel;
+	public static String DestinationPage_dialogTitle;
+	public static String DestinationPage_exportWizardTitle;
+	public static String DestinationPage_pageDescription;
 	public static String DOCXExporterPreferencePage_3;
 	public static String DOCXExporterPreferencePage_4;
 	public static String DOCXExporterPreferencePage_title;
@@ -737,6 +745,12 @@ public class Messages extends NLS {
 	public static String ExportDataAdapterAction_exportDescription;
 	public static String ExportDataAdapterAction_exportName;
 	public static String ExportDataAdapterAction_exportTooltip;
+	public static String ExportedAdapterHandler_overlappingMessage;
+	public static String ExportedAdapterHandler_overlappingTitle;
+	public static String ExportedCompositeElementsHandler_overlappingMessage;
+	public static String ExportedCompositeElementsHandler_overlappingTitle;
+	public static String ExportedJRPropertiesHandler_duplicatedMessage;
+	public static String ExportedJRPropertiesHandler_duplocatedTitle;
 	public static String ExportedResourcesWizardPage_dialogName;
 	public static String ExportedResourcesWizardPage_hostPlaginNameLabel;
 	public static String ExportedResourcesWizardPage_hostPluginVersion;
@@ -1928,6 +1942,8 @@ public class Messages extends NLS {
 	public static String SetDefaultsAction_tooltip;
 	public static String SetValueCommand_set_zero_property;
 	public static String ShowGridAction_show_grid_tool_tip;
+	public static String ShowImportableWizardPage_informatinLabel;
+	public static String ShowImportableWizardPage_pageDescription;
 	public static String ShowInstallationsWizardPage_0;
 	public static String ShowInstallationsWizardPage_jrLabel;
 	public static String ShowInstallationsWizardPage_labelText;
@@ -1973,6 +1989,13 @@ public class Messages extends NLS {
 	public static String SortFieldSection_sort_field;
 	public static String SortFieldSection_sort_order;
 	public static String SortFieldWizard_Title;
+	public static String SourcePage_dialogText;
+	public static String SourcePage_errorFileError;
+	public static String SourcePage_errorFileNotSelected;
+	public static String SourcePage_errorImprtableEmprty;
+	public static String SourcePage_importTitle;
+	public static String SourcePage_locatinLabel;
+	public static String SourcePage_pageDescription;
 	public static String SP3Boolean_False_Value;
 	public static String SP3Boolean_True_Value;
 	public static String SP3Boolean_Undefined_Value;
@@ -2066,6 +2089,8 @@ public class Messages extends NLS {
 	public static String TextExporterPreferencePage_8;
 	public static String TextExporterPreferencePage_9;
 	public static String TextFieldEditor_setToNullCheckbox;
+	public static String TextStyle_overlappingMEssage;
+	public static String TextStyle_overlappingTitle;
 	public static String TextStyleView_createLabel;
 	public static String TextStyleView_createToolTip;
 	public static String TextStyleView_deleteLabel;

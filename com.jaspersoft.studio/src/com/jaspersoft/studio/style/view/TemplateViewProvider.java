@@ -73,7 +73,7 @@ public interface TemplateViewProvider {
 	 * Return the a void instance of the TemplateType visualized from the extension. This void instance can be used 
 	 * with the method buildFromXML to create a real instance to visualize from a XML serialization of the file
 	 * 
-	 * @return
+	 * @return the empty item used to build the template style of a specific type
 	 */
 	public TemplateStyle getBuilder();
 	
@@ -83,5 +83,10 @@ public interface TemplateViewProvider {
 	 * @param e the event
 	 */
 	public void notifyChange(PropertyChangeEvent e);
+	
+	/**
+	 * Refresh the list of the styles in the view
+	 */
+	public void refreshStyles();
 	
 }

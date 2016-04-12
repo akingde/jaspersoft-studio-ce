@@ -14,6 +14,7 @@ package com.jaspersoft.studio.data.storage;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -36,9 +37,6 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import net.sf.jasperreports.eclipse.util.FileUtils;
-import net.sf.jasperreports.engine.util.JRXmlUtils;
-
 import org.osgi.service.prefs.Preferences;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -50,6 +48,9 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.style.TemplateStyle;
 import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 import com.jaspersoft.studio.style.view.TemplateViewProvider;
+
+import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.engine.util.JRXmlUtils;
 
 /**
  * Class to read, load and save the template styles from the file storage.
@@ -337,9 +338,13 @@ public class PreferencesTemplateStylesStorage {
 	 */
 	public List<TemplateStyle> readTemplateFromFile(String xml) {
 		List<TemplateStyle> result = new ArrayList<TemplateStyle>();
-		try {
-			if (xml != null) {
-				Document document = JRXmlUtils.parse(new InputSource(new StringReader(xml)));
+		if (xml != null) {
+			ByteArrayInputStream inputStream = null;
+			try {
+				inputStream = new ByteArrayInputStream(xml.getBytes());
+				DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();
+		    	DocumentBuilder builder = documentFactory.newDocumentBuilder();
+				Document document = builder.parse(inputStream);
 				NodeList adapterNodes = document.getDocumentElement().getChildNodes();
 				for (int i = 0; i < adapterNodes.getLength(); ++i) {
 					Node adapterNode = adapterNodes.item(i);
@@ -354,11 +359,12 @@ public class PreferencesTemplateStylesStorage {
 						}
 					}
 				}
-
-			} 
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				FileUtils.closeStream(inputStream);
+			}
+		} 
 		return result;
 	}
 

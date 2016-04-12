@@ -49,7 +49,7 @@ public class ImportCompositeElementAction extends Action {
 			File tempFolder = createTempFolder();
 			ZipUtils zipUtils = new ZipUtils();
 			zipUtils.unZipFiles(destinationPath, tempFolder.getAbsolutePath());
-			List<MCompositeElement> elementsFound = CompositeElementManager.loadCompositeElements(tempFolder);
+			List<MCompositeElement> elementsFound = CompositeElementManager.INSTANCE.loadCompositeElements(tempFolder);
 			if (!elementsFound.isEmpty()){
 				CompositeElementImportWizard wizard = new CompositeElementImportWizard(elementsFound);
 				WizardDialog dialog = new WizardDialog(UIUtils.getShell(), wizard);

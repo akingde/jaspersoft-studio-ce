@@ -11,6 +11,8 @@ package com.jaspersoft.studio.plugin;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -40,6 +42,7 @@ import com.jaspersoft.studio.data.DataAdapterManager;
 import com.jaspersoft.studio.data.jdbc.JDBCDriverDefinition;
 import com.jaspersoft.studio.data.jdbc.JDBCDriverDefinitionsContainer;
 import com.jaspersoft.studio.editor.IEditorContributor;
+import com.jaspersoft.studio.editor.action.exporter.IExportedResourceHandler;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.IExpressionEditorSupportFactory;
 import com.jaspersoft.studio.editor.preview.PreviewModeDetails;
@@ -66,10 +69,33 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 public class ExtensionManager {
 
 	private static Map<Class<?>, IComponentFactory> factoryByNodeType = new HashMap<Class<?>, IComponentFactory>();
+	
 	private List<IEditorContributor> eContributor = new ArrayList<IEditorContributor>();
+	
 	private List<String> customHyperlinkTypes;
+	
 	private Map<String, List<HyperlinkDefaultParameter>> defaultHyperlinkParametersByCustomType;
+	
 	private Map<String, List<WHyperlink.UIElement>> uiElementsIDByCustomType;
+	
+	private static final Comparator<IConfigurationElement> extensionSorter = new Comparator<IConfigurationElement>() {
+
+		@Override
+		public int compare(IConfigurationElement o1, IConfigurationElement o2) {
+			String contributor1 = o1.getContributor().getName();
+			String contributor2 = o2.getContributor().getName();
+			if (JaspersoftStudioPlugin.PLUGIN_ID.equals(contributor1)){
+				return 2;
+			} else if (JaspersoftStudioPlugin.PLUGIN_ID.equals(contributor2)){
+				return -2;
+			} else {
+				int stringCompare = contributor1.compareTo(contributor2);
+				if (stringCompare < 0) return -1;
+				else if (stringCompare > 0) return 1;
+				else return stringCompare;
+			}
+		}
+	};
 
 	public void init() {
 		IConfigurationElement[] config = Platform.getExtensionRegistry()
@@ -385,6 +411,43 @@ public class ExtensionManager {
 			}
 		}
 		return contributedBindings;
+	}
+	
+	/**
+	 * List of handler used to export or import Jaspersoft Studio resources. It is used 
+	 * as cache for the contributed items
+	 */
+	private static List<IExportedResourceHandler> contributedExporters = null;
+	
+	/**
+	 * Return the List of handler used to export or import Jaspersoft Studio resources.
+	 * 
+	 * @return A not null list of IExportedResourceHandler
+	 */
+	public static List<IExportedResourceHandler> getContributedExporters() {
+		if (contributedExporters == null) {
+			IConfigurationElement[] config = Platform.getExtensionRegistry()
+					.getConfigurationElementsFor(JaspersoftStudioPlugin.PLUGIN_ID, "resourceExporter");
+	
+			contributedExporters = new ArrayList<IExportedResourceHandler>();
+			List<IConfigurationElement> configList = new ArrayList<IConfigurationElement>(Arrays.asList(config));
+			Collections.sort(configList, extensionSorter); 
+			Collections.reverse(configList);
+			for (IConfigurationElement el : configList) {
+				Object defaultSupportClazz;
+				try {
+					defaultSupportClazz = el.createExecutableExtension("exporterClass");
+					if (defaultSupportClazz instanceof IExportedResourceHandler) {
+						IExportedResourceHandler handler = (IExportedResourceHandler) defaultSupportClazz;
+						contributedExporters.add(handler);
+					}
+				} catch (CoreException e) {
+					JaspersoftStudioPlugin.getInstance().getLog().log(new Status(IStatus.ERROR, JaspersoftStudioPlugin.PLUGIN_ID,
+							"An error occurred while trying to create the new class.", e));
+				}
+			}
+		}
+		return contributedExporters;
 	}
 
 

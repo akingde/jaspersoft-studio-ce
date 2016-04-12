@@ -278,5 +278,11 @@
            ClassFactory="com.jaspersoft.studio.server.selector.FileSelector">
      </fileSelectors>
   </extension>
+  <extension
+        point="com.jaspersoft.studio.resourceExporter">
+     <resourceExporter
+           exporterClass="com.jaspersoft.studio.server.editor.action.exporter.ExportedServersHandler">
+     </resourceExporter>
+  </extension>
 
 </plugin>

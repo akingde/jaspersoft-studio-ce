@@ -72,6 +72,8 @@ public class Messages extends NLS {
 	public static String EditServerAction_taskname;
 	public static String EditServerAction_title;
 	public static String EmptyStringValidator_EmptyError;
+	public static String ExportedServersHandler_overlappingDescription;
+	public static String ExportedServersHandler_overlappingMessage;
 	public static String ExportMetadataAction_0;
 	public static String ExportMetadataAction_1;
 	public static String ExportMetadataWizard_0;

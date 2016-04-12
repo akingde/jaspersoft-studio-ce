@@ -26,6 +26,7 @@
 <extension-point id="jdbcDriverDefinitions" name="JDBC Driver Definitions" schema="schema/jdbcDriverDefinitions.exsd"/>
 <extension-point id="fileSelectors" name="File Selectors" schema="schema/fileSelectors.exsd"/>
 <extension-point id="bindings" name="com.jaspersoft.studio.bindings" schema="schema/bindings.exsd"/>
+<extension-point id="resourceExporter" name="com.jaspersoft.studio.resourceExporter" schema="schema/resourceExporter.exsd"/>
    <extension
   
          id="xmlProblem"
@@ -1968,6 +1969,12 @@
             Import Data Adapters from another JSS Workspace
          </description>
       </wizard>
+      <wizard
+            category="com.jaspersoft.studio"
+            class="com.jaspersoft.studio.editor.action.exporter.wizard.ConfigurationImporterWizard"
+            id="com.jaspersoft.studio.importconfiguration"
+            name="%exportImportResourcesWizard">
+      </wizard>
    </extension>
     <extension
          point="org.eclipse.ui.exportWizards">
@@ -1983,6 +1990,12 @@
          <description>
             Export the report as a new Report Template
          </description>
+      </wizard>
+      <wizard
+            category="com.jaspersoft.studio"
+            class="com.jaspersoft.studio.editor.action.exporter.wizard.ConfigurationExporterWizard"
+            id="com.jaspersoft.studio.export.configuration"
+            name="%exportImportResourcesWizard">
       </wizard>
    </extension>
     <extension
@@ -2168,5 +2181,20 @@
              name="%disableSnapName"
              sequence="ALT">
        </item>
+    </extension>
+    <extension
+          point="com.jaspersoft.studio.resourceExporter">
+       <resourceExporter
+             exporterClass="com.jaspersoft.studio.editor.action.exporter.ExportedAdapterHandler">
+       </resourceExporter>
+       <resourceExporter
+             exporterClass="com.jaspersoft.studio.editor.action.exporter.ExportedCompositeElementsHandler">
+       </resourceExporter>
+       <resourceExporter
+             exporterClass="com.jaspersoft.studio.style.view.text.TextStyle">
+       </resourceExporter>
+       <resourceExporter
+             exporterClass="com.jaspersoft.studio.preferences.editor.properties.ExportedJRPropertiesHandler">
+       </resourceExporter>
     </extension>
 </plugin>

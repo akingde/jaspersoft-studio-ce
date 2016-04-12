@@ -13,15 +13,30 @@
 package com.jaspersoft.studio.components.crosstab.model.dialog;
 
 import java.awt.Color;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
 
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.swt.graphics.RGB;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
+import com.jaspersoft.studio.components.crosstab.messages.Messages;
+import com.jaspersoft.studio.editor.action.exporter.IExportedResourceHandler;
 import com.jaspersoft.studio.editor.style.TemplateStyle;
 import com.jaspersoft.studio.property.color.ColorSchemaGenerator.SCHEMAS;
+import com.jaspersoft.studio.style.view.TemplateStyleView;
 import com.jaspersoft.studio.utils.AlfaRGB;
+
+import net.sf.jasperreports.eclipse.ui.util.RunnableOverwriteQuestion;
+import net.sf.jasperreports.eclipse.ui.util.RunnableOverwriteQuestion.RESPONSE_TYPE;
+import net.sf.jasperreports.eclipse.util.FileUtils;
 
 /**
  * 
@@ -30,7 +45,7 @@ import com.jaspersoft.studio.utils.AlfaRGB;
  * @author Orlandin Marco
  *
  */
-public class CrosstabStyle extends TemplateStyle {
+public class CrosstabStyle extends TemplateStyle implements IExportedResourceHandler{
 
 	/**
 	 * The type of this template
@@ -236,5 +251,168 @@ public class CrosstabStyle extends TemplateStyle {
 	@Override
 	public String getTemplateName() {
 		return TEMPLATE_TYPE;
+	}
+	
+	/**
+	 * Return the name of the exported resource for the crosstab styles
+	 * 
+	 * @return a not null and fixed string
+	 */
+	@Override
+	public String getResourceName() {
+		return "Crosstab Styles"; //$NON-NLS-1$
+	}
+
+	/**
+	 * Backup all the styles of a specific type into a folder and return it.
+	 * All the files are stored into a single xml file
+	 * 
+	 * @return a not null folder containing the backup of the styles
+	 */
+	@Override
+	public File exportContentFolder() {
+		//Create the temp folder
+		File tempDir = new File(System.getProperty("java.io.tmpdir")); //$NON-NLS-1$
+		tempDir.deleteOnExit();
+		File destDir = new File (tempDir, CrosstabStyle.TEMPLATE_TYPE);
+		if (destDir.exists()) FileUtils.recursiveDelete(destDir);
+		destDir.mkdirs();
+
+		//Convert the styles handled by this class into a single xml
+		Collection<TemplateStyle> styles = TemplateStyleView.getTemplateStylesStorage().getStylesDescriptors(CrosstabStyle.TEMPLATE_TYPE);
+		StringBuffer xmlBuffer = new StringBuffer();
+		xmlBuffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\r\n<templateStyles>");  //$NON-NLS-1$
+		for(TemplateStyle style : styles){
+			xmlBuffer.append(style.getXMLData());
+		}
+		xmlBuffer.append("</templateStyles>"); //$NON-NLS-1$
+		
+		//Write the xml on the exportedfolder
+		try {
+			OutputStream file = new FileOutputStream(new File(destDir, "exportedStyles.xml"));  //$NON-NLS-1$
+			String xml = xmlBuffer.toString();
+			file.write(xml.getBytes("UTF-8")); //$NON-NLS-1$
+			file.flush();
+			file.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return destDir;
+	}
+
+	/**
+	 * Restore the selected styles from the content folder
+	 * 
+	 * @param exportedContainer a not null file containing all the resources exported 
+	 * by the export procedure
+	 */
+	@Override
+	public void restoreContentFolder(File exportedContainer) {
+	
+		//Load the styles from the exported folder
+		List<TemplateStyle> loadedStyles = new ArrayList<TemplateStyle>();
+		File exportedFolder = new File(exportedContainer, CrosstabStyle.TEMPLATE_TYPE);
+		for(File styleDefinition : exportedFolder.listFiles()){
+			try{
+				String xml = FileUtils.readFileAsAString(styleDefinition);
+				List<TemplateStyle> fileStyles = TemplateStyleView.getTemplateStylesStorage().readTemplateFromFile(xml);
+				loadedStyles.addAll(fileStyles);
+			} catch (Exception ex){
+				ex.printStackTrace();
+			}
+		}
+		
+		//Search the duplicated styles name
+		HashMap<String, TemplateStyle> existingStyles = getExistingStyles(CrosstabStyle.TEMPLATE_TYPE);
+		List<String> duplicatedStyles = new ArrayList<String>();
+		for(TemplateStyle style : loadedStyles){
+			if (existingStyles.containsKey(style.getDescription())){
+				duplicatedStyles.add(style.getDescription());
+			}
+		}
+		
+		//If there are duplicate ask the user how to handle them
+		RESPONSE_TYPE response = RESPONSE_TYPE.KEEP_BOTH;
+		if (duplicatedStyles.size() > 0){
+			response = askOverwrite(duplicatedStyles);
+		}
+		
+		//Restore the imported style according to the user response for the duplicated
+		for(TemplateStyle style : loadedStyles){
+			String name = style.getDescription();
+			if (existingStyles.containsKey(name)){
+				if (response == RESPONSE_TYPE.KEEP_BOTH){
+					style.setDescription(getName(existingStyles, name));
+					TemplateStyleView.getTemplateStylesStorage().addStyle(style);
+				} else if (response == RESPONSE_TYPE.OVERWRITE){
+					TemplateStyleView.getTemplateStylesStorage().removeStyle(existingStyles.get(name));
+					TemplateStyleView.getTemplateStylesStorage().addStyle(style);
+				}
+			} else {
+				TemplateStyleView.getTemplateStylesStorage().addStyle(style);
+			}
+		}
+	}
+
+	/**
+	 * Check if there are resource to import in the imported folder
+	 * 
+	 * @return true if there is something to import, false otherwise
+	 */
+	@Override
+	public boolean hasRestorableResources(File exportedContainer) {
+		File exportedFolder = new File(exportedContainer, CrosstabStyle.TEMPLATE_TYPE);
+		return (exportedFolder.exists() && exportedFolder.listFiles().length > 0);
+	}
+
+	/**
+	 * Check if there are styles of the current type 
+	 * 
+	 * @return true if there are at least one crosstab template style, false otherwise
+	 */
+	@Override
+	public boolean hasExportableResources() {
+		Collection<TemplateStyle> styles = TemplateStyleView.getTemplateStylesStorage().getStylesDescriptors(CrosstabStyle.TEMPLATE_TYPE);
+		return styles.size() > 0;
+	}
+	
+	/**
+	 * Show a question dialog with the buttons overwrite, skip and  keep both,
+	 * no and cancel. It is executed in the graphic thread so this method dosen't need to be called
+	 * inside a the display thread.
+	 *
+	 * @param stylesName the list of the overlapping names, this will be used to build the message and show
+	 * which elements are overlapping, must be not null
+	 * @return a not null enum that can be Overwrite, Skip or Keep Both
+	 */
+	private RESPONSE_TYPE askOverwrite(List<String> stylesName) {
+		String baseMessage = Messages.CrosstabStyle_overlappingMessage;
+		StringBuilder message = new StringBuilder();
+		int index = 1;
+		for(String adapter : stylesName){
+			message.append(adapter);
+			message.append(index == stylesName.size() ? "" : ","); //$NON-NLS-1$ //$NON-NLS-2$
+			index ++;
+		}
+		String composedMessage = MessageFormat.format(baseMessage, new Object[]{message.toString()});
+		return RunnableOverwriteQuestion.showQuestion(Messages.CrosstabStyle_overlappingTitle, composedMessage);
+	}
+	
+	/**
+	 * Return an unique name for the imported resource, not already used by the others
+	 * 
+	 * @param existingStyles the existing resources, the search of the name will be test against this map, must be
+	 * not null
+	 * @param baseName the base name used into the search
+	 * @return a not null unique name for the new resource
+	 */
+	private String getName(HashMap<String, TemplateStyle> existingStyles, String baseName){
+		int index = 1;
+		String newName = baseName + "_" + index; //$NON-NLS-1$
+		while(existingStyles.containsKey(newName)){
+			index++;
+			newName = baseName + "_" + index; //$NON-NLS-1$
+		}
+		return newName;
 	}
 }

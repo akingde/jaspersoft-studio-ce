@@ -11,6 +11,7 @@ package com.jaspersoft.studio.data.storage;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -161,6 +162,18 @@ public abstract class ADataAdapterStorage {
 		else if (factory != null)
 			label += " - " + factory.getLabel();
 		return label;
+	}
+	
+	/**
+	 * Return the map of all the current data adapter with their key
+	 * 
+	 * @return a not null map of data adapters
+	 */
+	public Map<String,DataAdapterDescriptor> getDescriptors(){
+		if (daDescriptors == null){
+			getDataAdapterDescriptors();
+		}
+		return new HashMap<String, DataAdapterDescriptor>(daDescriptors);
 	}
 
 	public abstract void findAll();

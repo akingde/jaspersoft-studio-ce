@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.type.HorizontalTextAlignEnum;
 import net.sf.jasperreports.engine.type.VerticalTextAlignEnum;
@@ -81,7 +82,7 @@ public class TextStyleView implements TemplateViewProvider {
 	/**
 	 * Container of the styles entries
 	 */
-	private Composite sampleComposite;
+	private Composite sampleComposite = null;
 
 	/**
 	 * Cache where the images of the style are stored and disposed at the end
@@ -135,7 +136,7 @@ public class TextStyleView implements TemplateViewProvider {
 		sampleComposite.addControlListener(new ControlAdapter() {
 			@Override
 			public void controlResized(ControlEvent e) {
-				clearAndFillContent();
+				refreshStyles();
 			}
 		});
 		 Menu popupMenu = new Menu(sampleComposite);
@@ -418,15 +419,24 @@ public class TextStyleView implements TemplateViewProvider {
 		}
 	}
 	
-	private void clearAndFillContent(){
-		clearContent();
-		fillStyles();
+	@Override
+	public void refreshStyles(){
+		//Must be executed inside the graphic thread
+		if (sampleComposite != null){
+			UIUtils.getDisplay().syncExec(new Runnable() {				
+				@Override
+				public void run() {
+					clearContent();
+					fillStyles();
+				}
+			});
+		}
 	}
 
 	@Override
 	public void notifyChange(PropertyChangeEvent e) {
 		if (e.getNewValue() instanceof TextStyle) {
-			clearAndFillContent();
+			refreshStyles();
 		}
 	}
 	

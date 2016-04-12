@@ -321,6 +321,13 @@ public class CrosstabStyleView extends CommonViewProvider {
 	@Override
 	public void notifyChange(PropertyChangeEvent e) {
 		if (e.getNewValue() instanceof CrosstabStyle) {
+			refreshStyles();
+		}
+	}
+	
+	@Override
+	public void refreshStyles() {
+		if (checkedGallery != null){
 			checkedGallery.clearAll();
 			tableGroup = new GalleryItem(checkedGallery, SWT.NONE);
 			checkedGallery.setRedraw(false);

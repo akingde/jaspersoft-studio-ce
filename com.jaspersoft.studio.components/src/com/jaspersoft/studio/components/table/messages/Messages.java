@@ -70,6 +70,8 @@ public class Messages extends NLS {
 	public static String ReorderColumnCommand_reorder_columns;
 	public static String ReorderColumnGroupCommand_reorder_column_group;
 	public static String TableEditor_table;
+	public static String TableStyle_overlappingMessage;
+	public static String TableStyle_overlappingTitle;
 	public static String TableStyleView_labelText;
 	public static String TableTemplateBunlde_tableBasedString;
 	public static String TableTemplateEngine_missingStaticText;

@@ -14,20 +14,22 @@ package com.jaspersoft.studio.editor.style;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
-
-import net.sf.jasperreports.engine.type.HorizontalTextAlignEnum;
-import net.sf.jasperreports.engine.type.LineStyleEnum;
-import net.sf.jasperreports.engine.type.RotationEnum;
-import net.sf.jasperreports.engine.type.VerticalTextAlignEnum;
 
 import org.eclipse.swt.graphics.RGB;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
 import com.jaspersoft.studio.property.color.ColorSchemaGenerator;
+import com.jaspersoft.studio.style.view.TemplateStyleView;
 import com.jaspersoft.studio.utils.AlfaRGB;
+
+import net.sf.jasperreports.engine.type.HorizontalTextAlignEnum;
+import net.sf.jasperreports.engine.type.LineStyleEnum;
+import net.sf.jasperreports.engine.type.RotationEnum;
+import net.sf.jasperreports.engine.type.VerticalTextAlignEnum;
 
 /**
  * A template style are a series of attributes that can be applied to a wide range of objects (like tables, reports, crosstabs) 
@@ -347,6 +349,22 @@ public abstract class TemplateStyle implements Serializable {
 					return en;
 		}
 		return RotationEnum.NONE;
+	}
+	
+	/**
+	 * Return an hashmap of the currently loaded styles of a specific type
+	 *
+	 * @param styleDescriptor the type of the styles
+	 * @return a not null hashmap where the key is the description of every style loaded, and the value
+	 * is the style itself
+	 */
+	protected HashMap<String, TemplateStyle> getExistingStyles(String styleDescriptor){
+		HashMap<String, TemplateStyle> result = new HashMap<String, TemplateStyle>();
+		Collection<TemplateStyle> styles = TemplateStyleView.getTemplateStylesStorage().getStylesDescriptors(styleDescriptor);
+		for(TemplateStyle style : styles){
+			result.put(style.getDescription(), style);
+		}
+		return result;
 	}
 	
 	/**

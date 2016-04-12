@@ -66,7 +66,7 @@ public abstract class CommonViewProvider implements TemplateViewProvider, ViewPr
 	/**
 	 * The gallery that show the element
 	 */
-	protected Gallery checkedGallery;
+	protected Gallery checkedGallery = null;
 	
 	/**
 	 * The common delete action

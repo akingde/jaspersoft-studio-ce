@@ -1054,4 +1054,13 @@
          </enabledWhen>
       </page>
    </extension>
+   <extension
+         point="com.jaspersoft.studio.resourceExporter">
+      <resourceExporter
+            exporterClass="com.jaspersoft.studio.components.table.model.dialog.TableStyle">
+      </resourceExporter>
+      <resourceExporter
+            exporterClass="com.jaspersoft.studio.components.crosstab.model.dialog.CrosstabStyle">
+      </resourceExporter>
+   </extension>
 </plugin>

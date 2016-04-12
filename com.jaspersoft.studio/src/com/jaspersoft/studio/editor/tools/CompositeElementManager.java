@@ -18,6 +18,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,6 +49,7 @@ import net.sf.jasperreports.engine.xml.JRXmlDigesterFactory;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.http.client.utils.URIBuilder;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
@@ -331,7 +334,7 @@ public class CompositeElementManager {
 	 *          the folder where the elements to import are contained
 	 * @return a not null list of elements found
 	 */
-	public static List<MCompositeElement> loadCompositeElements(File contentFolder) {
+	public List<MCompositeElement> loadCompositeElements(File contentFolder) {
 		File indexFile = new File(contentFolder, INDEX_FILE_NAME);
 		List<MCompositeElement> elementsFound = new ArrayList<MCompositeElement>();
 		if (indexFile != null && indexFile.exists()) {
@@ -446,8 +449,23 @@ public class CompositeElementManager {
 			JRExpression exp = ((JRDesignImage) newElement).getExpression();
 			String expression = ExpressionUtil.cachedExpressionEvaluationString(exp, jConfig, dataset);
 			if (expression != null) {
-				File source = new File(expression);
-				if (source.exists()) {
+				//Handle the case of a uri pointing to a file
+				URI resourceURI = null;
+				try{
+					resourceURI = new URI(expression);
+				} catch (Exception ex){
+					//If it is not a uuri try to build it with the file protocol
+					URIBuilder builder = new URIBuilder();
+					builder.setScheme("file");
+					builder.setPath(expression);
+					try {
+						resourceURI = builder.build();
+					} catch (URISyntaxException e) {
+					}
+				}
+	
+				if (resourceURI != null && new File(resourceURI).exists()) {
+					File source = new File(resourceURI);
 					resourcesDir.mkdir();
 					File dest = new File(resourcesDir, source.getName());
 					JRDesignImage newImage = (JRDesignImage) newElement;
