@@ -9,7 +9,6 @@
 package com.jaspersoft.studio.backward;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -19,8 +18,6 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHost;
@@ -42,6 +39,7 @@ import net.sf.jasperreports.eclipse.builder.JRDefinition;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.eclipse.util.HttpUtils;
+import net.sf.jasperreports.eclipse.util.ZipFilter;
 
 /**
  * Class that offer the utility methods to build a JRXML with an older version of JasperReports. It is a singleton class
@@ -131,83 +129,23 @@ public class JRBackwardManager {
 				if (entity == null)
 					throw new ClientProtocolException("Response contains no content");
 
-				unZip(entity.getContent(), toDir, monitor);
+				FileUtils.unZip(entity.getContent(), toDir, monitor, new ZipFilter() {
+
+					@Override
+					public boolean isNecessary(String[] pathComponents) {
+						if (pathComponents.length > 1) {
+							if (BUILD_FOLDER.equals(pathComponents[1]) || BUILD_FOLDER.equals(pathComponents[0]))
+								return true;
+							if (LIB_FOLDER.equals(pathComponents[1]) || LIB_FOLDER.equals(pathComponents[0]))
+								return true;
+						}
+						return false;
+					}
+				});
 
 				return true;
 			}
 		});
-	}
-
-	/**
-	 * Return if the file is necessary, so if in the first or second level is inside the folder dist or lib
-	 * 
-	 * @param pathComponents
-	 *          the complete path of a file inside the zip. Each segment is a folder and the last one is the file
-	 * @return true if this file of the zip must be unpacked inside the storage, false otherwise
-	 */
-	private static boolean isNecessary(String[] pathComponents) {
-		if (pathComponents.length > 1) {
-			if (BUILD_FOLDER.equals(pathComponents[1]) || BUILD_FOLDER.equals(pathComponents[0]))
-				return true;
-			if (LIB_FOLDER.equals(pathComponents[1]) || LIB_FOLDER.equals(pathComponents[0]))
-				return true;
-		}
-		return false;
-	}
-
-	/**
-	 * Unzip a JR package downloaded from the server, but only the dist and folder are unzipped and mixed togheter in the
-	 * destination
-	 * 
-	 * @param zipFile
-	 *          file to unzip
-	 * @param outputFolder
-	 *          folder where the unzipped files must be placed
-	 * @param monitor
-	 *          monitor for the operation, can be cancelled
-	 * @throws IOException
-	 */
-	public static void unZip(InputStream in, File outputFolder, IProgressMonitor monitor) throws IOException {
-		byte[] buffer = new byte[1024];
-		ZipInputStream zis = null;
-		try {
-			if (!outputFolder.exists())
-				outputFolder.mkdir();
-			// get the zip file content
-			zis = new ZipInputStream(in);
-			// get the zipped file list entry
-			ZipEntry ze = zis.getNextEntry();
-			monitor.setTaskName(Messages.JRBackwardManager_extracting);
-			if (ze == null)
-				throw new IOException("Invalid Zip");
-			while (ze != null && !monitor.isCanceled()) {
-				if (!ze.isDirectory()) {
-					String[] pathComponents = ze.getName().split("/"); //$NON-NLS-1$
-					if (isNecessary(pathComponents)) {
-						File newFile = new File(outputFolder, pathComponents[pathComponents.length - 1]);
-						monitor.setTaskName(Messages.JRBackwardManager_extracting + " " + newFile.getName());
-						File pfile = newFile.getParentFile();
-						if (!pfile.exists())
-							pfile.mkdirs();
-						FileOutputStream fos = null;
-						try {
-							fos = new FileOutputStream(newFile);
-							int len;
-							while ((len = zis.read(buffer)) > 0 && !monitor.isCanceled())
-								fos.write(buffer, 0, len);
-						} finally {
-							FileUtils.closeStream(fos);
-						}
-					}
-				}
-				ze = zis.getNextEntry();
-			}
-		} catch (IOException ex) {
-			org.apache.commons.io.FileUtils.deleteDirectory(outputFolder);
-			throw ex;
-		} finally {
-			FileUtils.closeStream(zis);
-		}
 	}
 
 	/**

@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.preferences.fonts;
 
@@ -25,18 +21,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
-
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.eclipse.util.FileUtils;
-import net.sf.jasperreports.eclipse.util.StringUtils;
-import net.sf.jasperreports.engine.JRCloneable;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JRRuntimeException;
-import net.sf.jasperreports.engine.fonts.FontFace;
-import net.sf.jasperreports.engine.fonts.FontFamily;
-import net.sf.jasperreports.engine.fonts.SimpleFontExtensionHelper;
-import net.sf.jasperreports.engine.fonts.SimpleFontFace;
-import net.sf.jasperreports.engine.fonts.SimpleFontFamily;
 
 import org.eclipse.core.commands.operations.OperationStatus;
 import org.eclipse.core.resources.IFile;
@@ -67,12 +51,26 @@ import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.eclipse.util.StringUtils;
+import net.sf.jasperreports.engine.JRCloneable;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRRuntimeException;
+import net.sf.jasperreports.engine.fonts.FontFace;
+import net.sf.jasperreports.engine.fonts.FontFamily;
+import net.sf.jasperreports.engine.fonts.SimpleFontExtensionHelper;
+import net.sf.jasperreports.engine.fonts.SimpleFontFace;
+import net.sf.jasperreports.engine.fonts.SimpleFontFamily;
+
 public class FontListFieldEditor extends TableFieldEditor {
 
 	private Button editButton;
 	private Button exportButton;
 	private List<FontFamily> fontFamilies = new ArrayList<FontFamily>();
 	private static String lastLocation;
+	private Button addURLButton;
+	private Button addPathButton;
 
 	public FontListFieldEditor() {
 		super();
@@ -89,18 +87,25 @@ public class FontListFieldEditor extends TableFieldEditor {
 
 	@Override
 	protected void removePressed() {
-		int index = table.getSelectionIndex();
-		fontFamilies.remove(index);
-		super.removePressed();
+		if (UIUtils.showDeleteConfirmation()) {
+			int[] selected = table.getSelectionIndices();
+			List<FontFamily> toDel = new ArrayList<FontFamily>();
+			for (int s : selected)
+				toDel.add(fontFamilies.get(s));
+			for (FontFamily ff : toDel)
+				fontFamilies.remove(ff);
+			table.remove(selected);
+			super.removePressed();
+		}
 	}
-	
+
 	@Override
 	protected void duplicatePressed() {
 		int index = table.getSelectionIndex();
 		FontFamily originalFontFamily = fontFamilies.get(index);
 		super.duplicatePressed();
-		SimpleFontFamily clone = (SimpleFontFamily) ((SimpleFontFamily)originalFontFamily).clone();
-		clone.setName(table.getItem(table.getItemCount()-1).getText());
+		SimpleFontFamily clone = (SimpleFontFamily) ((SimpleFontFamily) originalFontFamily).clone();
+		clone.setName(table.getItem(table.getItemCount() - 1).getText());
 		fontFamilies.add(clone);
 	}
 
@@ -235,7 +240,8 @@ public class FontListFieldEditor extends TableFieldEditor {
 
 			PrintWriter pw = new PrintWriter(zipos);
 
-			pw.println("net.sf.jasperreports.extension.registry.factory.fonts=net.sf.jasperreports.engine.fonts.SimpleFontExtensionsRegistryFactory"); //$NON-NLS-1$
+			pw.println(
+					"net.sf.jasperreports.extension.registry.factory.fonts=net.sf.jasperreports.engine.fonts.SimpleFontExtensionsRegistryFactory"); //$NON-NLS-1$
 			pw.println("net.sf.jasperreports.extension.simple.font.families.ireport" + prefix + "=fonts/" + fontXmlFile); //$NON-NLS-1$ //$NON-NLS-2$
 
 			pw.flush();
@@ -286,7 +292,7 @@ public class FontListFieldEditor extends TableFieldEditor {
 			return fontname;
 		File file = new File(fontname);
 		if (file.exists()) {
-			String name = "fonts/" + StringUtils.toPackageName(fontFamily.getName()) + "/" + file.getName(); //$NON-NLS-1$ 
+			String name = "fonts/" + StringUtils.toPackageName(fontFamily.getName()) + "/" + file.getName(); //$NON-NLS-1$
 			if (!names.contains(name)) {
 				ZipEntry ttfZipEntry = new ZipEntry(name);
 				zipos.putNextEntry(ttfZipEntry);
@@ -309,7 +315,7 @@ public class FontListFieldEditor extends TableFieldEditor {
 
 	private FontFamily runDialog(FontFamily font) {
 		FontConfigWizard wizard = new FontConfigWizard();
-		WizardDialog dialog = new WizardDialog(Display.getCurrent().getActiveShell(), wizard);
+		WizardDialog dialog = new WizardDialog(UIUtils.getShell(), wizard);
 		wizard.setFont(font);
 		dialog.create();
 		if (dialog.open() == Dialog.OK)
@@ -319,6 +325,10 @@ public class FontListFieldEditor extends TableFieldEditor {
 
 	@Override
 	protected void createButtons(Composite box) {
+		addURLButton = createPushButton(box, Messages.JRVersionPage_3);
+
+		addPathButton = createPushButton(box, Messages.JRVersionPage_4);
+
 		super.createButtons(box);
 
 		editButton = createPushButton(box, Messages.FontListFieldEditor_editButton);
@@ -330,25 +340,60 @@ public class FontListFieldEditor extends TableFieldEditor {
 		selectionListener = new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent event) {
 				Widget widget = event.widget;
-				if (widget == addButton) {
+				if (widget == addButton)
 					addPressed();
-				} else if (widget == duplicateButton) {
+				else if (widget == duplicateButton)
 					duplicatePressed();
-				} else if (widget == removeButton) {
+				else if (widget == removeButton)
 					removePressed();
-				} else if (widget == upButton) {
+				else if (widget == upButton)
 					upPressed();
-				} else if (widget == downButton) {
+				else if (widget == downButton)
 					downPressed();
-				} else if (widget == editButton) {
+				else if (widget == editButton)
 					editPressed();
-				} else if (widget == exportButton) {
+				else if (widget == exportButton)
 					exportPressed();
-				} else if (widget == table) {
+				else if (widget == table)
 					selectionChanged();
-				}
+				else if (widget == addURLButton)
+					addURLPressed();
+				else if (widget == addPathButton)
+					addPathPressed();
 			}
 		};
+	}
+
+	protected void addURLPressed() {
+		FontURLWizard wiz = new FontURLWizard(new ArrayList<FontFamily>(fontFamilies));
+		WizardDialog d = new WizardDialog(UIUtils.getShell(), wiz);
+		d.setPageSize(800, 50);
+		if (d.open() == Dialog.OK) {
+			fontFamilies.clear();
+			fontFamilies.addAll(wiz.getFonts());
+
+			table.removeAll();
+			for (FontFamily ff : fontFamilies) {
+				TableItem tableItem = new TableItem(table, SWT.NONE);
+				tableItem.setText(ff.getName());
+			}
+		}
+	}
+
+	protected void addPathPressed() {
+		FontPathWizard wiz = new FontPathWizard(new ArrayList<FontFamily>(fontFamilies));
+		WizardDialog d = new WizardDialog(UIUtils.getShell(), wiz);
+		d.setPageSize(800, 50);
+		if (d.open() == Dialog.OK) {
+			fontFamilies.clear();
+			fontFamilies.addAll(wiz.getFonts());
+
+			table.removeAll();
+			for (FontFamily ff : fontFamilies) {
+				TableItem tableItem = new TableItem(table, SWT.NONE);
+				tableItem.setText(ff.getName());
+			}
+		}
 	}
 
 	protected void selectionChanged() {

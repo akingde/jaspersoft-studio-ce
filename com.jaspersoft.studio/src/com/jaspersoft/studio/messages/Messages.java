@@ -814,7 +814,13 @@ public class Messages extends NLS {
 	public static String FontMappingPage_7;
 	public static String FontMappingPage_8;
 	public static String FontMappingPage_9;
+	public static String FontPathPage_0;
+	public static String FontPathPage_1;
+	public static String FontPathPage_2;
 	public static String FontsPreferencePage_fontListTitle;
+	public static String FontURLPage_0;
+	public static String FontURLPage_1;
+	public static String FontURLPage_2;
 	public static String FreeLayout_name;
 	public static String FreeLayout_tooltip;
 	public static String G2DExporterPreferencePage_2;
