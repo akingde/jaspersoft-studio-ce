@@ -12,9 +12,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.wizard.exp;
 
+import java.io.File;
 import java.lang.reflect.InvocationTargetException;
-
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -27,6 +26,8 @@ import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.protocol.IConnection;
 import com.jaspersoft.studio.server.protocol.restv2.ARestV2Connection;
+
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 public class ExportMetadataWizard extends Wizard {
 	private ExportMetadataPage page0;
@@ -63,6 +64,12 @@ public class ExportMetadataWizard extends Wizard {
 								conn = ((AMResource) firstElement).getWsClient();
 							if (conn != null) {
 								ExportOptions opt = page0.getValue();
+								if (new File(opt.getFile()).exists() && !UIUtils.showConfirmation("Confirmation",
+										String.format(
+												"File %s already exists.\nPlease confirm you want we overwrite it.",
+												opt.getFile()))) {
+									return;
+								}
 								for (Object obj : selection.toList()) {
 									if (obj instanceof MServerProfile)
 										opt.getPaths().add("/"); //$NON-NLS-1$
@@ -81,7 +88,8 @@ public class ExportMetadataWizard extends Wizard {
 								}
 								if (opt.getState() != null)
 									if (opt.getState().getErrorDescriptor() != null)
-										UIUtils.showInformation(((ARestV2Connection) conn).getEh().buildMessage(monitor, "", opt.getState().getErrorDescriptor())); //$NON-NLS-1$
+										UIUtils.showInformation(((ARestV2Connection) conn).getEh().buildMessage(monitor,
+												"", opt.getState().getErrorDescriptor())); //$NON-NLS-1$
 									else
 										UIUtils.showInformation(opt.getState().getMessage());
 							}
@@ -95,8 +103,10 @@ public class ExportMetadataWizard extends Wizard {
 			});
 		} catch (InvocationTargetException e) {
 			UIUtils.showError(e.getCause());
+			return false;
 		} catch (InterruptedException e) {
 			UIUtils.showError(e);
+			return false;
 		}
 		return true;
 	}

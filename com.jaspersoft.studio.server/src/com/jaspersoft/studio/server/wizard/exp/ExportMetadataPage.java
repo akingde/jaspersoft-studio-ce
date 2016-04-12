@@ -62,8 +62,7 @@ public class ExportMetadataPage extends WizardPage {
 		setDescription(Messages.ExportMetadataPage_1);
 		bindingContext = new DataBindingContext();
 		try {
-			value.setFile(SystemUtils.getUserDir().getCanonicalPath()
-					+ File.separator + "export.zip"); //$NON-NLS-1$
+			value.setFile(SystemUtils.getUserDir().getCanonicalPath() + File.separator + "export.zip"); //$NON-NLS-1$
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -90,14 +89,16 @@ public class ExportMetadataPage extends WizardPage {
 		bfile.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-				FileDialog fd = new FileDialog(Display.getDefault()
-						.getActiveShell(), SWT.SAVE);
+				FileDialog fd = new FileDialog(getShell(), SWT.SAVE);
 				fd.setFileName("export.zip"); //$NON-NLS-1$
-				fd.setFilterPath(root.getLocation().toOSString());
-				fd.setFilterExtensions(new String[] { "*.zip", "*.*" }); //$NON-NLS-1$ //$NON-NLS-2$  
+				if (Misc.isNullOrEmpty(tfile.getText()))
+					fd.setFilterPath(System.getProperty("user.home"));
+				else
+					fd.setFilterPath(new File(tfile.getText()).getParent());
+				fd.setFilterExtensions(new String[] { "*.zip", "*.*" }); //$NON-NLS-1$ //$NON-NLS-2$
 				String selection = fd.open();
-				tfile.setText(Misc.nvl(selection));
+				if (selection != null)
+					tfile.setText(Misc.nvl(selection));
 			}
 		});
 
@@ -136,14 +137,10 @@ public class ExportMetadataPage extends WizardPage {
 		bIncMonEvt.setLayoutData(gd);
 		bIncMonEvt.setSelection(true);
 
-		Binding binding = bindingContext.bindValue(
-				SWTObservables.observeText(tfile, SWT.Modify),
+		Binding binding = bindingContext.bindValue(SWTObservables.observeText(tfile, SWT.Modify),
 				PojoObservables.observeValue(value, "file"), //$NON-NLS-1$
-				new UpdateValueStrategy()
-						.setAfterConvertValidator(new EmptyStringValidator()),
-				null);
-		ControlDecorationSupport.create(binding, SWT.TOP | SWT.LEFT, null,
-				new ControlDecorationUpdater());
+				new UpdateValueStrategy().setAfterConvertValidator(new EmptyStringValidator()), null);
+		ControlDecorationSupport.create(binding, SWT.TOP | SWT.LEFT, null, new ControlDecorationUpdater());
 		bindingContext.bindValue(SWTObservables.observeSelection(bIncRepPerm),
 				PojoObservables.observeValue(value, "incRepositoryPermission")); //$NON-NLS-1$
 		bindingContext.bindValue(SWTObservables.observeSelection(bIncRepJobs),
