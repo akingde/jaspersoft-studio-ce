@@ -70,6 +70,7 @@ public class JRRuntimeURLPage extends WizardPage {
 		UIUtils.getDisplay().asyncExec(new Runnable() {
 			public void run() {
 				curl.setItems(new String[] {
+						"http://sourceforge.net/projects/jasperreports/files/jasperreports/JasperReports%206.2.1/jasperreports-6.2.1-project.zip/download", //$NON-NLS-1$
 						"http://sourceforge.net/projects/jasperreports/files/jasperreports/JasperReports%206.2.0/jasperreports-6.2.0-project.zip/download", //$NON-NLS-1$
 						"http://sourceforge.net/projects/jasperreports/files/jasperreports/JasperReports%206.1.1/jasperreports-6.1.1-project.zip/download", //$NON-NLS-1$
 						"http://sourceforge.net/projects/jasperreports/files/jasperreports/JasperReports%206.1.0/jasperreports-6.1.0-project.zip/download", //$NON-NLS-1$
