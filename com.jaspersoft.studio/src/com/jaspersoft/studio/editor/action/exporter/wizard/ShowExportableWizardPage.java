@@ -83,10 +83,11 @@ public class ShowExportableWizardPage extends JSSWizardPage {
 		
 		for(IExportedResourceHandler definition : ExtensionManager.getContributedExporters()){
 			if (definition.hasExportableResources()){
-				String name = definition.getResourceName();
 				Button selectionButton = new Button(child, SWT.CHECK);
 				selectionButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-				selectionButton.setText(name);
+				selectionButton.setText(definition.getResourceNameExport());
+				selectionButton.setSelection(true);
+				selectionList.add(definition);
 				selectionButton.setData(definition);
 				selectionButton.addSelectionListener(checkSelected);
 			}

@@ -2196,5 +2196,8 @@
        <resourceExporter
              exporterClass="com.jaspersoft.studio.preferences.editor.properties.ExportedJRPropertiesHandler">
        </resourceExporter>
+       <resourceExporter
+             exporterClass="com.jaspersoft.studio.preferences.editor.properties.ExportedStudioPropertiesHandler">
+       </resourceExporter>
     </extension>
 </plugin>

@@ -554,8 +554,26 @@ public class TextStyle extends TemplateStyle implements IExportedResourceHandler
 	 * @return a not null and fixed string
 	 */
 	@Override
-	public String getResourceName() {
-		return "Text Styles";
+	public String getResourceNameExport() {
+		Collection<TemplateStyle> styles = TemplateStyleView.getTemplateStylesStorage().getStylesDescriptors(TextStyle.TEMPLATE_TYPE);
+		return "Text Styles (" + styles.size() + ")";
+	}
+	
+	@Override
+	public String getResourceNameImport(File exportedContainer) {
+		//Load the styles from the exported folder
+		List<TemplateStyle> loadedStyles = new ArrayList<TemplateStyle>();
+		File exportedFolder = new File(exportedContainer, TextStyle.TEMPLATE_TYPE);
+		for(File styleDefinition : exportedFolder.listFiles()){
+			try{
+				String xml = FileUtils.readFileAsAString(styleDefinition);
+				List<TemplateStyle> fileStyles = TemplateStyleView.getTemplateStylesStorage().readTemplateFromFile(xml);
+				loadedStyles.addAll(fileStyles);
+			} catch (Exception ex){
+				ex.printStackTrace();
+			}
+		}
+		return "Text Styles (" + loadedStyles.size() + ")";
 	}
 
 	/**
@@ -682,11 +700,11 @@ public class TextStyle extends TemplateStyle implements IExportedResourceHandler
 	 */
 	private RESPONSE_TYPE askOverwrite(List<String> stylesName) {
 		String baseMessage = Messages.TextStyle_overlappingMEssage;
-		StringBuilder message = new StringBuilder();
+		StringBuilder message = new StringBuilder("\n");
 		int index = 1;
 		for(String adapter : stylesName){
 			message.append(adapter);
-			message.append(index == stylesName.size() ? "" : ","); //$NON-NLS-1$ //$NON-NLS-2$
+			message.append(index == stylesName.size() ? ".\n" : ",\n"); //$NON-NLS-1$ //$NON-NLS-2$
 			index ++;
 		}
 		String composedMessage = MessageFormat.format(baseMessage, new Object[]{message.toString()});

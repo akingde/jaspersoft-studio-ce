@@ -106,6 +106,7 @@ public class DestinationPage extends JSSHelpWizardPage {
 			public void widgetSelected(SelectionEvent e) {
 				FileDialog fd = new FileDialog(UIUtils.getShell(), SWT.SAVE);
 		    fd.setText(Messages.DestinationPage_dialogTitle);
+		    fd.setFileName("configuration.zip");
 		    String[] filterExt = { "*.zip" }; //$NON-NLS-1$
 		    fd.setFilterExtensions(filterExt);
 		    pathString = fd.open();

@@ -25,11 +25,20 @@ public interface IExportedResourceHandler {
 
 	/**
 	 * Return the name of the exported resource used at UI level in 
-	 * the wizards
+	 * the export wizard
 	 * 
 	 * @return a not null string
 	 */
-	public String getResourceName();
+	public String getResourceNameExport();
+	
+	/**
+	 * Return the name of the exported resource used at UI level in 
+	 * the import wizard
+	 * 
+	 * @param exportedContainer container with the exported element that need do be imported
+	 * @return a not null string
+	 */
+	public String getResourceNameImport(File exportedContainer);
 	
 	/**
 	 * Return the file pointing to a folder

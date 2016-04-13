@@ -14,6 +14,7 @@ package com.jaspersoft.studio.editor.action.exporter;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.InputStream;
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -114,10 +115,23 @@ public class ExportedCompositeElementsHandler implements IExportedResourceHandle
 	}
 
 	@Override
-	public String getResourceName() {
-		return "Composite Elements"; //$NON-NLS-1$
+	public String getResourceNameExport() {
+		int elementsNumber = CompositeElementManager.INSTANCE.getAvailableElements().size();
+		return "Composite Elements ( " + elementsNumber + ")"; //$NON-NLS-1$
 	}
 
+	@Override
+	public String getResourceNameImport(File exportedContainer) {
+		File exportedFolder = new File(exportedContainer, EXPORTED_FOLDER_NAME);
+		int elementsNumber = exportedFolder.list(new FilenameFilter() {	
+			@Override
+			public boolean accept(File dir, String name) {
+				return name.endsWith(CompositeElementManager.COMPOSITE_ELEMENT_EXTENSION);
+			}
+		}).length;
+		return "Composite Elements ( " + elementsNumber + ")"; //$NON-NLS-1$
+	}
+	
 	@Override
 	public boolean hasExportableResources() {
 		return (CompositeElementManager.INSTANCE.getAvailableElements().size() > 0);
@@ -203,11 +217,11 @@ public class ExportedCompositeElementsHandler implements IExportedResourceHandle
 	 */
 	private RESPONSE_TYPE askOverwrite(List<String> elementsName) {
 		String baseMessage = Messages.ExportedCompositeElementsHandler_overlappingMessage;
-		StringBuilder message = new StringBuilder();
+		StringBuilder message = new StringBuilder("\n");
 		int index = 1;
 		for(String elementName : elementsName){
 			message.append(elementName);
-			message.append(index == elementsName.size() ? "" : ","); //$NON-NLS-1$ //$NON-NLS-2$
+			message.append(index == elementsName.size() ? ".\n" : ",\n"); //$NON-NLS-1$ //$NON-NLS-2$
 			index ++;
 		}
 		String composedMessage = MessageFormat.format(baseMessage, new Object[]{message.toString()});

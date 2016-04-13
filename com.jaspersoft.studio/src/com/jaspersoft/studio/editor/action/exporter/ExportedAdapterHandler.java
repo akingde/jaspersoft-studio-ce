@@ -73,8 +73,15 @@ public class ExportedAdapterHandler implements IExportedResourceHandler {
 	}
 
 	@Override
-	public String getResourceName() {
-		return "Data Adapters"; //$NON-NLS-1$
+	public String getResourceNameExport() {
+		ADataAdapterStorage storage = DataAdapterManager.getPreferencesStorage();
+		return "Data Adapters (" + storage.getDataAdapterDescriptors().size() + ")" ; //$NON-NLS-1$
+	}
+	
+	@Override
+	public String getResourceNameImport(File exportedContainer) {
+		File exportedFolder = new File(exportedContainer, EXPORTED_FOLDER_NAME);
+		return "Data Adapters (" + exportedFolder.list().length + ")" ; //$NON-NLS-1$;
 	}
 
 	@Override
@@ -261,11 +268,11 @@ public class ExportedAdapterHandler implements IExportedResourceHandler {
 	 */
 	private RESPONSE_TYPE askOverwrite(List<String> adapters) {
 		String baseMessage = Messages.ExportedAdapterHandler_overlappingMessage;
-		StringBuilder message = new StringBuilder();
+		StringBuilder message = new StringBuilder("\n");
 		int index = 1;
 		for(String adapter : adapters){
 			message.append(adapter);
-			message.append(index == adapters.size() ? "" : ","); //$NON-NLS-1$ //$NON-NLS-2$
+			message.append(index == adapters.size() ? ".\n" : ",\n"); //$NON-NLS-1$ //$NON-NLS-2$
 			index ++;
 		}
 		String composedMessage = MessageFormat.format(baseMessage, new Object[]{message.toString()});

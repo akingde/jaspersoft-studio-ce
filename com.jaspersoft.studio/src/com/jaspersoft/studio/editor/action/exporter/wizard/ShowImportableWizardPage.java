@@ -117,17 +117,19 @@ public class ShowImportableWizardPage extends JSSWizardPage {
 			File importLocation = new File(parentWizard.getSelectedFile());
 			for(IExportedResourceHandler definition : ExtensionManager.getContributedExporters()){
 				if (definition.hasRestorableResources(importLocation)){
-					String name = definition.getResourceName();
 					Button selectionButton = new Button(child, SWT.CHECK);
 					selectionButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-					selectionButton.setText(name);
+					selectionButton.setText(definition.getResourceNameImport(importLocation));
 					selectionButton.setData(definition);
+					selectionButton.setSelection(true);
+					selectionSet.add(definition);
 					selectionButton.addSelectionListener(checkSelected);
 				}
 			}
 			child.layout();
 			sc.setMinSize(400, child.computeSize(400, SWT.DEFAULT).y);
 			sc.layout();
+			validate();
 		}
 		super.setVisible(visible);
 	}

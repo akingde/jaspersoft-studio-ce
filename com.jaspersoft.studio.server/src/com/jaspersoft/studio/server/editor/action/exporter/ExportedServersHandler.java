@@ -203,10 +203,18 @@ public class ExportedServersHandler implements IExportedResourceHandler {
 	}
 
 	@Override
-	public String getResourceName() {
-		return "JasperReports Server Connections"; //$NON-NLS-1$
+	public String getResourceNameExport() {
+		int serverNumbers = ServerManager.getServerProfiles().size();
+		return "JasperReports Server Connections (" + serverNumbers + ")"; //$NON-NLS-1$
 	}
 
+	@Override
+	public String getResourceNameImport(File exportedContainer) {
+		File elementsFolder = new File(exportedContainer, EXPORTED_FOLDER_NAME);
+		int serverNumbers = elementsFolder.list().length;
+		return "JasperReports Server Connections (" + serverNumbers + ")"; //$NON-NLS-1$
+	}
+	
 	@Override
 	public boolean hasExportableResources() {
 		return (ServerManager.getServerProfiles().size() > 0);
@@ -223,11 +231,11 @@ public class ExportedServersHandler implements IExportedResourceHandler {
 	 */
 	private RESPONSE_TYPE askOverwrite(List<String> connectionNames) {
 		String baseMessage = Messages.ExportedServersHandler_overlappingMessage;
-		StringBuilder message = new StringBuilder();
+		StringBuilder message = new StringBuilder("\n");
 		int index = 1;
 		for(String adapter : connectionNames){
 			message.append(adapter);
-			message.append(index == connectionNames.size() ? "" : ","); //$NON-NLS-1$ //$NON-NLS-2$
+			message.append(index == connectionNames.size() ? ".\n" : ",\n"); //$NON-NLS-1$ //$NON-NLS-2$
 			index ++;
 		}
 		String composedMessage = MessageFormat.format(baseMessage, new Object[]{message.toString()});

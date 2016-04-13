@@ -17,47 +17,78 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Map.Entry;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Properties;
 
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.jface.preference.IPreferenceStore;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.action.exporter.IExportedResourceHandler;
-import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.preferences.GlobalPreferencePage;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.MScopedPreferenceStore;
 import net.sf.jasperreports.eclipse.util.FilePrefUtil;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 
 /**
- * Exporter used to import/export the global JasperReports properties
+ * Exporter used to import/export the Jaspersoft Studio preferences
  * 
  * @author Orlandin Marco
  *
  */
-public class ExportedJRPropertiesHandler implements IExportedResourceHandler {
+public class ExportedStudioPropertiesHandler implements IExportedResourceHandler {
 
 	/**
 	 * Folder name for the exported properties
 	 */
-	private static final String CONTAINER_NAME = "jrProperties"; //$NON-NLS-1$
+	private static final String CONTAINER_NAME = "jssProperties"; //$NON-NLS-1$
 	
 	/**
 	 * File name for the exported properties
 	 */
 	private static final String FILE_NAME = "backup.properties"; //$NON-NLS-1$
 	
+	/**
+	 * The list of JSS properties that should not be exported. 
+	 */
+	private static final HashSet<String> propertiesBlackList = getPropertiesBlacklist();
+	
+	/**
+	 * Return the list of properties that should not be exported. Among this there is 
+	 * the logger properties since their change can regard the application ini file
+	 * and the JasperReport properties since they are already handled by another exporter
+	 * 
+	 * @return a not null set of properties id that should not be exported/imported
+	 */
+	private static HashSet<String> getPropertiesBlacklist(){
+		HashSet<String> result = new HashSet<String>();
+		result.add(FilePrefUtil.NET_SF_JASPERREPORTS_JRPROPERTIES);
+		result.add(GlobalPreferencePage.LOG_ENABLE);
+		result.add(GlobalPreferencePage.LOG4j_FILE);
+		result.add(GlobalPreferencePage.LOG_FILE);
+		return result;
+	}
+	
 	@Override
 	public String getResourceNameExport() {
 		try{
-			IPreferenceStore store = JaspersoftStudioPlugin.getInstance().getPreferenceStore();
-			Properties props = FileUtils.load(store.getString(FilePrefUtil.NET_SF_JASPERREPORTS_JRPROPERTIES));
-			return "JasperReports Properties (" + props.size() + ")"; //$NON-NLS-1$
+			MScopedPreferenceStore store = (MScopedPreferenceStore)JaspersoftStudioPlugin.getInstance().getPreferenceStore();
+			HashSet<String> resources = new HashSet<String>();
+			IEclipsePreferences pref = store.getQualifierStore();
+			resources.addAll(Arrays.asList(pref.keys()));
+			int size = resources.size();
+			for(String blacklistedProperty : propertiesBlackList){
+				if (resources.contains(blacklistedProperty)){
+					size --;
+				}
+			}
+			return "Jaspersoft Studio Properties (" + size + ")"; //$NON-NLS-1$
 		} catch(Exception ex){
 			ex.printStackTrace();
 		}
-		return "JasperReports Properties"; //$NON-NLS-1$
+		return "Jaspersoft Studio Properties"; //$NON-NLS-1$
 	}
 	
 	@Override
@@ -65,12 +96,12 @@ public class ExportedJRPropertiesHandler implements IExportedResourceHandler {
   	File destDir = new File (exportedContainer, CONTAINER_NAME);
   	File f = new File(destDir, FILE_NAME);
   	FileInputStream is = null;
-  	String result = "JasperReports Properties"; //$NON-NLS-1$
+  	String result = "Jaspersoft Studio Properties"; //$NON-NLS-1$
   	try{
 	    is = new FileInputStream(f);
 	    Properties loadedProperties = new Properties();
 	    loadedProperties.load(is);
-	    result = "JasperReports Properties (" + loadedProperties.size() + ")"; //$NON-NLS-1$
+	    result = "Jaspersoft Studio Properties (" + loadedProperties.size() + ")"; //$NON-NLS-1$
   	} catch (Exception ex){
   		ex.printStackTrace();
   	} finally {
@@ -84,8 +115,16 @@ public class ExportedJRPropertiesHandler implements IExportedResourceHandler {
 		OutputStream out = null;
 		File destDir = null;
 		try{
-			IPreferenceStore store = JaspersoftStudioPlugin.getInstance().getPreferenceStore();
-			Properties props = FileUtils.load(store.getString(FilePrefUtil.NET_SF_JASPERREPORTS_JRPROPERTIES));
+			MScopedPreferenceStore store = (MScopedPreferenceStore)JaspersoftStudioPlugin.getInstance().getPreferenceStore();
+			HashSet<String> resources = new HashSet<String>();
+			IEclipsePreferences pref = store.getQualifierStore();
+			resources.addAll(Arrays.asList(pref.keys()));
+			Properties props = new Properties();
+			for(String resource : resources){
+				if (!propertiesBlackList.contains(resource)){
+					props.put(resource, store.getString(resource));
+				}
+			}
 			
 			//Create the temp folder
 			File tempDir = new File(System.getProperty("java.io.tmpdir")); //$NON-NLS-1$
@@ -95,7 +134,7 @@ public class ExportedJRPropertiesHandler implements IExportedResourceHandler {
 			destDir.mkdirs();
 		
 	    out = new FileOutputStream(new File(destDir, FILE_NAME));
-	    props.store(out, "JasperReports Properties Backup"); //$NON-NLS-1$
+	    props.store(out, "Jaspersoft Studio Properties Backup"); //$NON-NLS-1$
 		} catch (Exception ex){
 			ex.printStackTrace();
 			destDir = null;
@@ -116,38 +155,35 @@ public class ExportedJRPropertiesHandler implements IExportedResourceHandler {
       Properties loadedProperties = new Properties();
       loadedProperties.load(is);
       
-      //Check if there are duplicates
-      boolean hasDuplicatedProperties = false;
-			IPreferenceStore store = JaspersoftStudioPlugin.getInstance().getPreferenceStore();
-			Properties oldProperties = FileUtils.load(store.getString(FilePrefUtil.NET_SF_JASPERREPORTS_JRPROPERTIES));
-			for(Object key : loadedProperties.keySet()){
-				if (oldProperties.getProperty(key.toString()) != null){
-					hasDuplicatedProperties = true;
-					break;
+      HashSet<String> missingProperties = new HashSet<String>();
+      for(Object key : loadedProperties.keySet()){
+      	missingProperties.add(key.toString());
+      }
+      
+      MScopedPreferenceStore store = (MScopedPreferenceStore)JaspersoftStudioPlugin.getInstance().getPreferenceStore();
+			IEclipsePreferences pref = store.getQualifierStore();
+			for(String key : pref.keys()){
+				if (!propertiesBlackList.contains(key)){
+					Object loadedValue = loadedProperties.get(key);
+					if (loadedValue != null){
+						pref.put(key, loadedValue.toString());
+						missingProperties.remove(key);
+					} else {
+						pref.remove(key);
+					}
 				}
 			}
-			
-			//If there are duplicates ask what to do
-			boolean doit = true;
-			if (hasDuplicatedProperties){
-				doit = UIUtils.showConfirmation(Messages.ExportedJRPropertiesHandler_duplocatedTitle, 
-																					Messages.ExportedJRPropertiesHandler_duplicatedMessage);
+			for(String missingProperty : missingProperties){
+				Object loadedValue = loadedProperties.get(missingProperty);
+				pref.put(missingProperty, loadedValue != null ? loadedValue.toString() : null);
 			}
-			if (doit){
-				for (Entry<Object, Object> property : loadedProperties.entrySet()) {
-					Object key = property.getKey();
-					Object value = property.getValue();
-					oldProperties.setProperty(key.toString(), value.toString());
-				}
-				store.setValue(FilePrefUtil.NET_SF_JASPERREPORTS_JRPROPERTIES, FileUtils.getPropertyAsString(oldProperties));
-			}
+			store.save();
     }
     catch (Exception e) { 
     	e.printStackTrace();
     } finally {
     	FileUtils.closeStream(is);
     }
-
 	}
 
 	@Override

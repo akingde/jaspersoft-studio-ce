@@ -259,8 +259,26 @@ public class CrosstabStyle extends TemplateStyle implements IExportedResourceHan
 	 * @return a not null and fixed string
 	 */
 	@Override
-	public String getResourceName() {
-		return "Crosstab Styles"; //$NON-NLS-1$
+	public String getResourceNameExport() {
+		Collection<TemplateStyle> styles = TemplateStyleView.getTemplateStylesStorage().getStylesDescriptors(CrosstabStyle.TEMPLATE_TYPE);
+		return "Crosstab Styles (" + styles.size() + ")";
+	}
+	
+	@Override
+	public String getResourceNameImport(File exportedContainer) {
+		//Load the styles from the exported folder
+		List<TemplateStyle> loadedStyles = new ArrayList<TemplateStyle>();
+		File exportedFolder = new File(exportedContainer, CrosstabStyle.TEMPLATE_TYPE);
+		for(File styleDefinition : exportedFolder.listFiles()){
+			try{
+				String xml = FileUtils.readFileAsAString(styleDefinition);
+				List<TemplateStyle> fileStyles = TemplateStyleView.getTemplateStylesStorage().readTemplateFromFile(xml);
+				loadedStyles.addAll(fileStyles);
+			} catch (Exception ex){
+				ex.printStackTrace();
+			}
+		}
+		return "Crosstab Styles (" + loadedStyles.size() + ")";
 	}
 
 	/**
@@ -391,7 +409,7 @@ public class CrosstabStyle extends TemplateStyle implements IExportedResourceHan
 		int index = 1;
 		for(String adapter : stylesName){
 			message.append(adapter);
-			message.append(index == stylesName.size() ? "" : ","); //$NON-NLS-1$ //$NON-NLS-2$
+			message.append(index == stylesName.size() ? "" : "\n"); //$NON-NLS-1$ //$NON-NLS-2$
 			index ++;
 		}
 		String composedMessage = MessageFormat.format(baseMessage, new Object[]{message.toString()});
