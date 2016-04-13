@@ -87,7 +87,7 @@ public class JRXmlWriterHelper {
 	public static String writeReport(JasperReportsConfiguration jrContext, JRReport report, IFile file, boolean showDialog)
 			throws Exception {
 
-		return writeReport(jrContext, report, file.getCharset(true), getVersion(file, jrContext, showDialog));
+		return writeReport(jrContext, report, fixencoding(FileUtils.UTF8_ENCODING), getVersion(file, jrContext, showDialog));
 	}
 
 	public static String writeReport(JasperReportsContext jrContext, JRReport report, String version) throws Exception {
