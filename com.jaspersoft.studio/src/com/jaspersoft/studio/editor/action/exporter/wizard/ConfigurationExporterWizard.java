@@ -79,25 +79,29 @@ public class ConfigurationExporterWizard extends Wizard implements IExportWizard
 		//Check if the file already exist
 		final File destinationFile = new File(page1.getDestinationPath());
 		if (destinationFile.exists()){
-			if (MessageDialog.openConfirm(UIUtils.getShell(), Messages.ConfigurationExporterWizard_fileExistTitle,
+			if (!MessageDialog.openConfirm(UIUtils.getShell(), Messages.ConfigurationExporterWizard_fileExistTitle,
 																			Messages.ConfigurationExporterWizard_fileExistMessage)){
-				doit = true;
+				doit = false;
+			} else {
 				FileUtils.recursiveDelete(destinationFile);
 			}
 		}
 		
 		if (doit){
 			try{
-				getContainer().run(false, false, new IRunnableWithProgress() {
+				setNeedsProgressMonitor(true);
+				getContainer().run(true, false, new IRunnableWithProgress() {
 					
 					@Override
 					public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 						List<String> elementsToCompress = new ArrayList<String>();
+						monitor.beginTask("Exporting resources", page0.getSelection().size());
 						for(IExportedResourceHandler exporter: page0.getSelection()){
 							File elementToCompress = exporter.exportContentFolder();
 							if (elementToCompress != null){
 								elementsToCompress.add(elementToCompress.getAbsolutePath());
 							}
+							monitor.worked(1);
 						}
 						ZipUtils zipUtils = new ZipUtils();
 						zipUtils.zipFiles(elementsToCompress, destinationFile.getAbsolutePath());
@@ -105,6 +109,7 @@ public class ConfigurationExporterWizard extends Wizard implements IExportWizard
 						for(String compressedFolder : elementsToCompress){
 							FileUtils.recursiveDelete(new File(compressedFolder));
 						}
+						monitor.done();
 					}
 				});
 			} catch(Exception ex){

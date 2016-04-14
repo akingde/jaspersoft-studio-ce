@@ -82,7 +82,8 @@ public class ConfigurationImporterWizard extends Wizard implements IImportWizard
 	@Override
 	public boolean performFinish() {
 		try{
-			getContainer().run(true, true, new IRunnableWithProgress() {
+			setNeedsProgressMonitor(true);
+			getContainer().run(true, false, new IRunnableWithProgress() {
 				
 				@Override
 				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
