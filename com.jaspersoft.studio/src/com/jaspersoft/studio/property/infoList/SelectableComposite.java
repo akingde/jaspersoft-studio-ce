@@ -162,19 +162,21 @@ public class SelectableComposite extends ScrolledComposite {
 					ElementDescription elementToSelect = items.get(newSelectionIndex);
 					//Search the next element
 					for(Composite comp : compositeList){
-						if (comp.getData() == elementToSelect){
-							//Element found, deselect the old one if any
-							if (selectedComposite != null) {
-								selectedComposite.setBackground(unselectedColor);
-								setChildrenColor(selectedComposite, unselectedColor);
+						if (!comp.isDisposed()){
+							if (comp.getData() == elementToSelect){
+								//Element found, deselect the old one if any
+								if (selectedComposite != null) {
+									selectedComposite.setBackground(unselectedColor);
+									setChildrenColor(selectedComposite, unselectedColor);
+								}
+								//Select the new element and exit from the for
+								selectedComposite = comp;
+								showControl(selectedComposite);
+								selectedComposite.setBackground(selectedColor);
+								setChildrenColor(selectedComposite, selectedColor);
+								setScrolledFocus();
+								break;
 							}
-							//Select the new element and exit from the for
-							selectedComposite = comp;
-							showControl(selectedComposite);
-							selectedComposite.setBackground(selectedColor);
-							setChildrenColor(selectedComposite, selectedColor);
-							setScrolledFocus();
-							break;
 						}
 					}
 				}
@@ -349,8 +351,10 @@ public class SelectableComposite extends ScrolledComposite {
 
 	@Override
 	public void dispose() {
-		super.dispose();
+		//Remove before the listener and then dispose the controls, to avoid the trigger of the listener
+		//on disposed elements
 		PlatformUI.getWorkbench().getDisplay().removeFilter(org.eclipse.swt.SWT.KeyDown, arrowListener);
+		super.dispose();
 		selectedColor.dispose();
 		unselectedColor.dispose();
 		compositeList.clear();
