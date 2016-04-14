@@ -104,7 +104,7 @@ public class InputControlsPreferencePage extends FieldEditorOverlayPage {
 	}
 
 	@Override
-	protected String getPageId() {
+	public String getPageId() {
 		return "com.jaspersoft.studio.preferences.execution.InputControlsPreferencePage.property"; //$NON-NLS-1$
 	}
 

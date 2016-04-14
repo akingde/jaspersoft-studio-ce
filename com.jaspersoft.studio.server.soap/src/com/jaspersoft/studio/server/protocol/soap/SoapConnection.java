@@ -14,6 +14,7 @@ package com.jaspersoft.studio.server.protocol.soap;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.text.DateFormat;
 import java.text.Format;
 import java.text.NumberFormat;

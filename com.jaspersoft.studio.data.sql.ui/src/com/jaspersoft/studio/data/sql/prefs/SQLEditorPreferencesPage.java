@@ -99,7 +99,7 @@ public class SQLEditorPreferencesPage extends FieldEditorOverlayPage {
 	public static final String PAGE_ID = "com.jaspersoft.studio.data.sql.prefs.SQLEditorPreferencesPage.property"; //$NON-NLS-1$
 
 	@Override
-	protected String getPageId() {
+	public String getPageId() {
 		return PAGE_ID;
 	}
 }

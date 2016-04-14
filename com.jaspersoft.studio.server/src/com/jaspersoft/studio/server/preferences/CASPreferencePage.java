@@ -60,7 +60,7 @@ public class CASPreferencePage extends FieldEditorOverlayPage {
 	}
 
 	@Override
-	protected String getPageId() {
+	public String getPageId() {
 		return "com.jaspersoft.studio.server.preferences.CASPreferencePage.property"; //$NON-NLS-1$
 	}
 

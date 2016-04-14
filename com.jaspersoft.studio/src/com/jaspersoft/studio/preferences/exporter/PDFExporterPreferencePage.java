@@ -314,7 +314,7 @@ public class PDFExporterPreferencePage extends FieldEditorOverlayPage {
 	}
 
 	@Override
-	protected String getPageId() {
+	public String getPageId() {
 		return "com.jaspersoft.studio.preferences.exporter.PDFExporterPreferencePage.property"; //$NON-NLS-1$
 	}
 

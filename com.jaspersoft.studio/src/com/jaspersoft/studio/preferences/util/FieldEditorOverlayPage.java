@@ -11,9 +11,6 @@ package com.jaspersoft.studio.preferences.util;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.jasperreports.eclipse.builder.jdt.JDTUtils;
-import net.sf.jasperreports.eclipse.util.ResourcePreferences;
-
 import org.eclipse.core.internal.resources.ProjectPreferences;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -41,6 +38,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IWorkbenchPreferencePage;
@@ -54,8 +52,11 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.PreferenceInitializer;
 import com.jaspersoft.studio.utils.Misc;
 
-public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage implements IWorkbenchPropertyPage,
-		IWorkbenchPreferencePage {
+import net.sf.jasperreports.eclipse.builder.jdt.JDTUtils;
+import net.sf.jasperreports.eclipse.util.ResourcePreferences;
+
+public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage
+		implements IWorkbenchPropertyPage, IWorkbenchPreferencePage {
 	public static final String RESOURCE = "resource";
 
 	private static final String PROJECT = "project";
@@ -125,7 +126,7 @@ public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage i
 	 * 
 	 * @return - the qualifier
 	 */
-	protected abstract String getPageId();
+	public abstract String getPageId();
 
 	/**
 	 * Receives the object that owns the properties shown in this property page.
@@ -198,7 +199,7 @@ public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage i
 			resource = (IResource) getElement();
 		else if (getElement() instanceof IFileEditorInput)
 			resource = ((IFileEditorInput) getElement()).getFile();
-		else if(getElement() != null)
+		else if (getElement() != null)
 			resource = (IResource) getElement().getAdapter(IResource.class);
 		return resource;
 	}
@@ -379,6 +380,10 @@ public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage i
 	private void enableComposite(Composite parent, boolean enabled) {
 		for (Control c : parent.getChildren()) {
 			c.setEnabled(enabled);
+			if (enabled)
+				c.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_TITLE_FOREGROUND));
+			else
+				c.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_TITLE_INACTIVE_FOREGROUND));
 			if (c instanceof Composite)
 				enableComposite((Composite) c, enabled);
 		}
@@ -487,8 +492,8 @@ public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage i
 		PreferenceManager manager = new PreferenceManager();
 		manager.addToRoot(targetNode);
 		Shell shell = getControl().getShell();
-		final PreferenceDialog dialog = project == null ? new PreferenceDialog(shell, manager) : new PropertyDialog(shell,
-				manager, new StructuredSelection(project));
+		final PreferenceDialog dialog = project == null ? new PreferenceDialog(shell, manager)
+				: new PropertyDialog(shell, manager, new StructuredSelection(project));
 		BusyIndicator.showWhile(getControl().getDisplay(), new Runnable() {
 			public void run() {
 				dialog.create();

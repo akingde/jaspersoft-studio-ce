@@ -58,7 +58,7 @@ public class FontsPreferencePage extends FieldEditorOverlayPage {
 	}
 
 	@Override
-	protected String getPageId() {
+	public String getPageId() {
 		return "com.jaspersoft.studio.preferences.fonts.FontsPreferencePage.property"; //$NON-NLS-1$
 	}
 

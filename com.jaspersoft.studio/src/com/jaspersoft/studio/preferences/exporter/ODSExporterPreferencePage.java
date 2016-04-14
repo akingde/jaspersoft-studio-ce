@@ -400,7 +400,7 @@ public class ODSExporterPreferencePage extends FieldEditorOverlayPage {
 	}
 
 	@Override
-	protected String getPageId() {
+	public String getPageId() {
 		return "com.jaspersoft.studio.preferences.exporter.ExcelExporterPreferencePage.property"; //$NON-NLS-1$
 	}
 

@@ -133,7 +133,7 @@ public class PalettePreferencePage extends FieldEditorOverlayPage {
 	private Map<String, Group> grmap;
 
 	@Override
-	protected String getPageId() {
+	public String getPageId() {
 		return PAGE_ID;
 	}
 }

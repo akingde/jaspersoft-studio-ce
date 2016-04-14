@@ -34,7 +34,7 @@ public class CVCDescriptorsPreferencePage extends FieldEditorOverlayPage {
 	}
 
 	@Override
-	protected String getPageId() {
+	public String getPageId() {
 		return PAGE_ID;
 	}
 

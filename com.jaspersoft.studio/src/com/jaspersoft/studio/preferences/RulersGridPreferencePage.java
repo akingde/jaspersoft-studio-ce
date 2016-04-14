@@ -128,7 +128,7 @@ public class RulersGridPreferencePage extends FieldEditorOverlayPage {
 	public static final String PAGE_ID = "com.jaspersoft.studio.preferences.RulersGridPreferencePage.property"; //$NON-NLS-1$
 
 	@Override
-	protected String getPageId() {
+	public String getPageId() {
 		return PAGE_ID;
 	}
 }

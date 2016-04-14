@@ -309,7 +309,7 @@ public class ThemesPreferencePage extends FieldEditorOverlayPage {
 	private Composite tcontrol;
 
 	@Override
-	protected String getPageId() {
+	public String getPageId() {
 		return PAGE_ID;
 	}
 

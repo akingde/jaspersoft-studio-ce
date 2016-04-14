@@ -67,7 +67,7 @@ public class JRSPreferencesPage extends FieldEditorOverlayPage {
 	}
 
 	@Override
-	protected String getPageId() {
+	public String getPageId() {
 		return "com.jaspersoft.studio.server.preferences.JRSPreferencesPage.property"; //$NON-NLS-1$
 	}
 

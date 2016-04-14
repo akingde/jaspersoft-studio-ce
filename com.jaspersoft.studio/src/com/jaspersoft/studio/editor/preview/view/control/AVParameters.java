@@ -70,6 +70,7 @@ public abstract class AVParameters extends APreview {
 	protected void createVerticalSeprator(boolean first) {
 		if (!first) {
 			Label lblsep = new Label(composite, SWT.SEPARATOR | SWT.HORIZONTAL | SWT.SHADOW_NONE);
+			// lblsep.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WIDGET_LIGHT_SHADOW));
 			lblsep.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		}
 	}
