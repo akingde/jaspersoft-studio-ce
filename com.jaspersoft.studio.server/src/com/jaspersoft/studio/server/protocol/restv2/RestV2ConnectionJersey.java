@@ -16,6 +16,8 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.security.KeyStore;
+import java.security.cert.X509Certificate;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -26,6 +28,10 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLException;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.SSLSocket;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
@@ -38,6 +44,15 @@ import javax.ws.rs.core.Response;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.http.client.CookieStore;
 import org.apache.http.client.HttpResponseException;
+import org.apache.http.config.Registry;
+import org.apache.http.config.RegistryBuilder;
+import org.apache.http.conn.socket.ConnectionSocketFactory;
+import org.apache.http.conn.socket.PlainConnectionSocketFactory;
+import org.apache.http.conn.ssl.BrowserCompatHostnameVerifier;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.conn.ssl.SSLContextBuilder;
+import org.apache.http.conn.ssl.SSLContexts;
+import org.apache.http.conn.ssl.X509HostnameVerifier;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.glassfish.jersey.SslConfigurator;
@@ -131,7 +146,69 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 		SslConfigurator sslConfig = SslConfigurator.newInstance(true);
 		clientConfig.property(ApacheClientProperties.SSL_CONFIG, sslConfig);
 
-		PoolingHttpClientConnectionManager cxMgr = new PoolingHttpClientConnectionManager();
+		SSLContextBuilder builder = SSLContexts.custom();
+		KeyStore trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
+		
+		builder.loadTrustMaterial(trustStore);
+
+		//
+		// builder.loadTrustMaterial(null, new TrustStrategy() {
+		// @Override
+		// public boolean isTrusted(X509Certificate[] chain, String authType)
+		// throws CertificateException {
+		// System.out.println(chain.toString() + authType);
+		// return true;
+		// }
+		// });
+		SSLContext sslContext = SSLContexts.createDefault();
+
+		// KeyStore trustStore =
+		// KeyStore.getInstance(KeyStore.getDefaultType());
+
+		SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(sslContext, new X509HostnameVerifier() {
+			private BrowserCompatHostnameVerifier hv = new BrowserCompatHostnameVerifier();
+
+			@Override
+			public boolean verify(String hostname, SSLSession session) {
+				if (!hv.verify(hostname, session)) {
+					// do something
+
+				}
+				return true;
+			}
+
+			@Override
+			public void verify(String arg0, String[] arg1, String[] arg2) throws SSLException {
+				try {
+					hv.verify(arg0, arg1, arg2);
+				} catch (SSLException e) {
+					e.printStackTrace();
+				}
+			}
+
+			@Override
+			public void verify(String arg0, X509Certificate arg1) throws SSLException {
+				try {
+					hv.verify(arg0, arg1);
+				} catch (SSLException e) {
+					e.printStackTrace();
+				}
+			}
+
+			@Override
+			public void verify(String arg0, SSLSocket arg1) throws IOException {
+				try {
+					hv.verify(arg0, arg1);
+				} catch (SSLException e) {
+					e.printStackTrace();
+				}
+			}
+		});
+
+		Registry<ConnectionSocketFactory> ssr = RegistryBuilder.<ConnectionSocketFactory> create()
+				.register("https", sslsf).register("http", new PlainConnectionSocketFactory()).build();
+
+		PoolingHttpClientConnectionManager cxMgr = new PoolingHttpClientConnectionManager(ssr);
 		cxMgr.setMaxTotal(50);
 		cxMgr.setDefaultMaxPerRoute(20);
 		clientConfig.property(ApacheClientProperties.CONNECTION_MANAGER, cxMgr);

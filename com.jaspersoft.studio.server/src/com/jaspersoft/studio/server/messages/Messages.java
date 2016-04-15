@@ -313,7 +313,9 @@ public class Messages extends NLS {
 	public static String ServerProfilePage_33;
 	public static String ServerProfilePage_34;
 	public static String ServerProfilePage_35;
+	public static String ServerProfilePage_36;
 	public static String ServerProfilePage_37;
+	public static String ServerProfilePage_38;
 	public static String ServerProfilePage_39;
 	public static String ServerProfilePage_4;
 	public static String ServerProfilePage_40;
@@ -321,6 +323,8 @@ public class Messages extends NLS {
 	public static String ServerProfilePage_42;
 	public static String ServerProfilePage_43;
 	public static String ServerProfilePage_44;
+	public static String ServerProfilePage_45;
+	public static String ServerProfilePage_46;
 	public static String ServerProfilePage_5;
 	public static String ServerProfilePage_6;
 	public static String ServerProfilePage_7;
