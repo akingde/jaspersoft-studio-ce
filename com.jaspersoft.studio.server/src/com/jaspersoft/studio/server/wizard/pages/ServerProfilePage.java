@@ -377,10 +377,10 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 		cmp.setLayout(new GridLayout(3, false));
 
 		Label lbl = new Label(cmp, SWT.NONE);
-		lbl.setText("Authentication");
+		lbl.setText(Messages.ServerProfilePage_36);
 
 		bSSO = new Combo(cmp, SWT.READ_ONLY);
-		bSSO.setItems(new String[] { "Password", "Ask Password", "Single Sign One" });
+		bSSO.setItems(new String[] { Messages.ServerProfilePage_38, Messages.ServerProfilePage_45, Messages.ServerProfilePage_46 });
 		bSSO.setText(Messages.ServerProfilePage_18);
 		bSSO.setToolTipText(Messages.ServerProfilePage_20);
 		bSSO.addSelectionListener(new SelectionAdapter() {
