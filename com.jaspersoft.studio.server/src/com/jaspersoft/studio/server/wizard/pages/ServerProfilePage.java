@@ -380,7 +380,8 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 		lbl.setText(Messages.ServerProfilePage_36);
 
 		bSSO = new Combo(cmp, SWT.READ_ONLY);
-		bSSO.setItems(new String[] { Messages.ServerProfilePage_38, Messages.ServerProfilePage_45, Messages.ServerProfilePage_46 });
+		bSSO.setItems(new String[] { Messages.ServerProfilePage_38, Messages.ServerProfilePage_45,
+				Messages.ServerProfilePage_46 });
 		bSSO.setText(Messages.ServerProfilePage_18);
 		bSSO.setToolTipText(Messages.ServerProfilePage_20);
 		bSSO.addSelectionListener(new SelectionAdapter() {
@@ -394,6 +395,7 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 				case 1:
 					stackLayout.topControl = cmpAsk;
 					bUseSoap.setEnabled(true);
+
 					break;
 				case 2:
 					stackLayout.topControl = cmpCAS;
@@ -699,10 +701,12 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 			case 1:
 				sp.setAskPass(true);
 				sp.setUseSSO(false);
+				sp.setPass(null);
 				break;
 			case 2:
 				sp.setAskPass(false);
 				sp.setUseSSO(true);
+				sp.setPass(null);
 				break;
 			}
 		}
