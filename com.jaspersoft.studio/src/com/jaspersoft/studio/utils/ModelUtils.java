@@ -1973,5 +1973,95 @@ public class ModelUtils {
 		}
 		return false;
 	}
+	
+	/**
+	 * Tries the conversion of a generic value into a Integer one.
+	 * 
+	 * @param value the value to convert
+	 * @return a converted Integer instance, <code>null</code> otherwise
+	 */	
+	public static Integer getInteger(Object value) {
+		if(value instanceof String && isInteger((String) value)){
+			return Integer.parseInt((String) value);
+		}
+		else if(value instanceof Number) {
+			return ((Number) value).intValue();
+		}
+		else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Tries the conversion of a generic value into a Long one.
+	 * 
+	 * @param value the value to convert
+	 * @return a converted Long instance, <code>null</code> otherwise
+	 */	
+	public static Long getLong(Object value) {
+		if(value instanceof String && isLong((String) value)){
+			return Long.parseLong((String) value);
+		}
+		else if(value instanceof Number) {
+			return ((Number) value).longValue();
+		}
+		else {
+			return null;
+		}
+	}	
+	
+	/**
+	 * Tries the conversion of a generic value into a Float one.
+	 * 
+	 * @param value the value to convert
+	 * @return a converted Float instance, <code>null</code> otherwise
+	 */
+	public static Float getFloat(Object value) {
+		if(value instanceof String && isFloat((String) value)){
+			return Float.parseFloat((String) value);
+		}
+		else if(value instanceof Number) {
+			return ((Number) value).floatValue();
+		}
+		else {
+			return null;
+		}
+	}
+
+	/**
+	 * Tries the conversion of a generic value into a Double one.
+	 * 
+	 * @param value the value to convert
+	 * @return a converted Double instance, <code>null</code> otherwise
+	 */
+	public static Double getDouble(Object value) {
+		if(value instanceof String && isDouble((String) value)){
+			return Double.parseDouble((String) value);
+		}
+		else if(value instanceof Number) {
+			return ((Number) value).doubleValue();
+		}
+		else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Tries the conversion of a generic value into a Boolean one.
+	 * 
+	 * @param value the value to convert
+	 * @return a converted Boolean instance, <code>null</code> otherwise
+	 */
+	public static Boolean getBoolean(Object value) {
+		if(value instanceof String && isBoolean((String) value)){
+			return Boolean.parseBoolean((String) value);
+		}
+		else if(value instanceof Boolean) {
+			return (Boolean) value;
+		}
+		else {
+			return null;
+		}
+	}
 }
 	

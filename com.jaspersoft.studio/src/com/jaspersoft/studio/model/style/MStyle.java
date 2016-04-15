@@ -21,7 +21,7 @@ import com.jaspersoft.studio.ExternalStylesManager;
 import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.help.HelpReferenceBuilder;
-import com.jaspersoft.studio.jface.IntegerCellEditorValidator;
+import com.jaspersoft.studio.jface.FloatCellEditorValidator;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
@@ -381,7 +381,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 
 		RWFloatComboBoxPropertyDescriptor fontSizeD = new RWFloatComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_FONT_SIZE, Messages.common_font_size, ModelUtils.FONT_SIZES, NullEnum.INHERITED, false);
 		fontSizeD.setDescription(Messages.MStyle_font_size_description);
-		fontSizeD.setValidator(new IntegerCellEditorValidator());
+		fontSizeD.setValidator(new FloatCellEditorValidator());
 		desc.add(fontSizeD);
 
 		FontSizeButtonPropertyDescriptor fontIncrement = new FontSizeButtonPropertyDescriptor(MFont.FONT_INCREMENT, this);
@@ -757,7 +757,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		else if (id.equals(JRBaseStyle.PROPERTY_FONT_NAME))
 			jrstyle.setFontName((String) value);
 		else if (id.equals(JRBaseStyle.PROPERTY_FONT_SIZE)) {
-			jrstyle.setFontSize((Float) value);
+			jrstyle.setFontSize(ModelUtils.getFloat(value));
 		} else if (id.equals(JRBaseStyle.PROPERTY_PDF_FONT_NAME))
 			jrstyle.setPdfFontName((String) value);
 		else if (id.equals(JRBaseStyle.PROPERTY_PDF_ENCODING))

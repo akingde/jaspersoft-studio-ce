@@ -18,7 +18,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
-import com.jaspersoft.studio.jface.IntegerCellEditorValidator;
+import com.jaspersoft.studio.jface.FloatCellEditorValidator;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
@@ -92,7 +92,7 @@ public class MFont extends APropertyNode {
 
 		RWFloatComboBoxPropertyDescriptor fontSizeD = new RWFloatComboBoxPropertyDescriptor(JRBaseFont.PROPERTY_FONT_SIZE, Messages.common_font_size, ModelUtils.FONT_SIZES, NullEnum.INHERITED);
 		fontSizeD.setDescription(Messages.MFont_font_size_description);
-		fontSizeD.setValidator(new IntegerCellEditorValidator());
+		fontSizeD.setValidator(new FloatCellEditorValidator());
 		desc.add(fontSizeD);
 
 		FontSizeButtonPropertyDescriptor fontIncrement = new FontSizeButtonPropertyDescriptor(FONT_INCREMENT, this);
@@ -275,7 +275,7 @@ public class MFont extends APropertyNode {
 				jrElement.setFontName((String) value);
 			}
 		} else if (id.equals(JRBaseFont.PROPERTY_FONT_SIZE)){
-			jrElement.setFontSize((Float)value);
+			jrElement.setFontSize(ModelUtils.getFloat(value));
 		} else if (id.equals(JRBaseFont.PROPERTY_PDF_FONT_NAME))
 			jrElement.setPdfFontName((String) value);
 		else if (id.equals(JRBaseFont.PROPERTY_PDF_ENCODING))
