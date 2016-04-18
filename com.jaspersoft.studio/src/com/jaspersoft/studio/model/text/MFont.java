@@ -18,7 +18,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
-import com.jaspersoft.studio.jface.FloatCellEditorValidator;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
@@ -92,7 +91,6 @@ public class MFont extends APropertyNode {
 
 		RWFloatComboBoxPropertyDescriptor fontSizeD = new RWFloatComboBoxPropertyDescriptor(JRBaseFont.PROPERTY_FONT_SIZE, Messages.common_font_size, ModelUtils.FONT_SIZES, NullEnum.INHERITED);
 		fontSizeD.setDescription(Messages.MFont_font_size_description);
-		fontSizeD.setValidator(new FloatCellEditorValidator());
 		desc.add(fontSizeD);
 
 		FontSizeButtonPropertyDescriptor fontIncrement = new FontSizeButtonPropertyDescriptor(FONT_INCREMENT, this);
@@ -161,7 +159,7 @@ public class MFont extends APropertyNode {
 		desc.add(pdfEmbedD);
 
 		defaultsMap.put(JRBaseFont.PROPERTY_FONT_NAME, "SansSerif"); //$NON-NLS-1$
-		defaultsMap.put(JRBaseFont.PROPERTY_FONT_SIZE, "10"); //$NON-NLS-1$
+		defaultsMap.put(JRBaseFont.PROPERTY_FONT_SIZE, 10f); //$NON-NLS-1$
 		defaultsMap.put(JRBaseFont.PROPERTY_STRIKE_THROUGH, Boolean.FALSE);
 		defaultsMap.put(JRBaseFont.PROPERTY_UNDERLINE, Boolean.FALSE);
 		defaultsMap.put(JRBaseFont.PROPERTY_ITALIC, Boolean.FALSE);
@@ -275,7 +273,7 @@ public class MFont extends APropertyNode {
 				jrElement.setFontName((String) value);
 			}
 		} else if (id.equals(JRBaseFont.PROPERTY_FONT_SIZE)){
-			jrElement.setFontSize(ModelUtils.getFloat(value));
+			jrElement.setFontSize((Float)value);
 		} else if (id.equals(JRBaseFont.PROPERTY_PDF_FONT_NAME))
 			jrElement.setPdfFontName((String) value);
 		else if (id.equals(JRBaseFont.PROPERTY_PDF_ENCODING))

@@ -21,7 +21,6 @@ import com.jaspersoft.studio.ExternalStylesManager;
 import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.help.HelpReferenceBuilder;
-import com.jaspersoft.studio.jface.FloatCellEditorValidator;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
@@ -381,7 +380,6 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 
 		RWFloatComboBoxPropertyDescriptor fontSizeD = new RWFloatComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_FONT_SIZE, Messages.common_font_size, ModelUtils.FONT_SIZES, NullEnum.INHERITED, false);
 		fontSizeD.setDescription(Messages.MStyle_font_size_description);
-		fontSizeD.setValidator(new FloatCellEditorValidator());
 		desc.add(fontSizeD);
 
 		FontSizeButtonPropertyDescriptor fontIncrement = new FontSizeButtonPropertyDescriptor(MFont.FONT_INCREMENT, this);
@@ -462,7 +460,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		defaultsMap.put(JRBaseStyle.PROPERTY_ITALIC, Boolean.FALSE);
 		defaultsMap.put(JRBaseStyle.PROPERTY_BOLD, Boolean.FALSE);
 		defaultsMap.put(JRBaseStyle.PROPERTY_FONT_NAME, "SansSerif"); //$NON-NLS-1$
-		defaultsMap.put(JRBaseStyle.PROPERTY_FONT_SIZE, "10"); //$NON-NLS-1$
+		defaultsMap.put(JRBaseStyle.PROPERTY_FONT_SIZE, 10f); //$NON-NLS-1$
 
 		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#style"); //$NON-NLS-1$
 	}
@@ -757,7 +755,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		else if (id.equals(JRBaseStyle.PROPERTY_FONT_NAME))
 			jrstyle.setFontName((String) value);
 		else if (id.equals(JRBaseStyle.PROPERTY_FONT_SIZE)) {
-			jrstyle.setFontSize(ModelUtils.getFloat(value));
+			jrstyle.setFontSize((Float) value);
 		} else if (id.equals(JRBaseStyle.PROPERTY_PDF_FONT_NAME))
 			jrstyle.setPdfFontName((String) value);
 		else if (id.equals(JRBaseStyle.PROPERTY_PDF_ENCODING))
