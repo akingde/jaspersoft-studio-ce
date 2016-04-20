@@ -23,6 +23,8 @@ import org.eclipse.jface.viewers.ColumnViewerEditorActivationStrategy;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerEditor;
+import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.viewers.TreeViewerEditor;
 import org.eclipse.nebula.widgets.gallery.GalleryItem;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -286,6 +288,22 @@ public class UIUtil {
 		};
 
 		TableViewerEditor.create(tviewer, actSupport, ColumnViewerEditor.DEFAULT);
+	}
+	
+	/**
+	 * Setups the start of cell editing on a {@link TreeViewer} when a {@link DoubleClickEvent} occurs.
+	 * 
+	 * @param tviewer
+	 *          the tree viewer
+	 */
+	public static void setViewerCellEditingOnDblClick(TreeViewer tviewer) {
+		ColumnViewerEditorActivationStrategy actSupport = new ColumnViewerEditorActivationStrategy(tviewer) {
+			protected boolean isEditorActivationEvent(ColumnViewerEditorActivationEvent event) {
+				return event.eventType == ColumnViewerEditorActivationEvent.MOUSE_DOUBLE_CLICK_SELECTION;
+			}
+		};
+
+		TreeViewerEditor.create(tviewer, actSupport, ColumnViewerEditor.DEFAULT);
 	}
 
 	/**
