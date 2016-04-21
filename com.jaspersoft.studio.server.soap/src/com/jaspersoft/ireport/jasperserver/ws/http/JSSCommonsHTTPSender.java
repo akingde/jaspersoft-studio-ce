@@ -17,16 +17,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URL;
+import java.security.KeyStore;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.zip.GZIPInputStream;
 
+import javax.net.ssl.SSLContext;
 import javax.xml.soap.MimeHeader;
 import javax.xml.soap.MimeHeaders;
-
-import net.sf.jasperreports.eclipse.util.FileUtils;
-import net.sf.jasperreports.eclipse.util.HttpUtils;
 
 import org.apache.axis.AxisFault;
 import org.apache.axis.Constants;
@@ -63,6 +62,10 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpHead;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.conn.ssl.BrowserCompatHostnameVerifier;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.conn.ssl.SSLContextBuilder;
+import org.apache.http.conn.ssl.SSLContexts;
 import org.apache.http.entity.BufferedHttpEntity;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.entity.StringEntity;
@@ -70,6 +73,12 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.LaxRedirectStrategy;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.protocol.HttpContext;
+
+import com.jaspersoft.studio.server.protocol.JSSTrustStrategy;
+import com.jaspersoft.studio.server.protocol.restv2.CertChainValidator;
+
+import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.eclipse.util.HttpUtils;
 
 public class JSSCommonsHTTPSender extends BasicHandler {
 	private static final long serialVersionUID = 8881188152022966420L;
@@ -129,32 +138,43 @@ public class JSSCommonsHTTPSender extends BasicHandler {
 						}
 					}
 				}
-				HttpClient httpClient = HttpClientBuilder.create().setRedirectStrategy(new LaxRedirectStrategy() {
 
-					public HttpUriRequest getRedirect(final HttpRequest request, final HttpResponse response,
-							final HttpContext context) throws ProtocolException {
-						URI uri = getLocationURI(request, response, context);
-						String method = request.getRequestLine().getMethod();
-						if (method.equalsIgnoreCase(HttpHead.METHOD_NAME))
-							return new HttpHead(uri);
-						else if (method.equalsIgnoreCase(HttpPost.METHOD_NAME)) {
-							HttpPost httpPost = new HttpPost(uri);
-							httpPost.addHeader(request.getFirstHeader("Authorization"));
-							httpPost.addHeader(request.getFirstHeader("SOAPAction"));
-							httpPost.addHeader(request.getFirstHeader("Content-Type"));
-							httpPost.addHeader(request.getFirstHeader("User-Agent"));
-							httpPost.addHeader(request.getFirstHeader("SOAPAction"));
-							if (request instanceof HttpEntityEnclosingRequest)
-								httpPost.setEntity(((HttpEntityEnclosingRequest) request).getEntity());
-							return httpPost;
-						} else if (method.equalsIgnoreCase(HttpGet.METHOD_NAME)) {
-							return new HttpGet(uri);
-						} else {
-							throw new IllegalStateException(
-									"Redirect called on un-redirectable http method: " + method);
-						}
-					}
-				}).build();
+				SSLContextBuilder builder = SSLContexts.custom();
+
+				final KeyStore trustStore = CertChainValidator.getDefaultTrustStore();
+
+				builder.loadTrustMaterial(trustStore, new JSSTrustStrategy(trustStore));
+				SSLContext sslContext = builder.build();
+
+				SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(sslContext,
+						new BrowserCompatHostnameVerifier());
+				HttpClient httpClient = HttpClientBuilder.create().setSSLSocketFactory(sslsf)
+						.setRedirectStrategy(new LaxRedirectStrategy() {
+
+							public HttpUriRequest getRedirect(final HttpRequest request, final HttpResponse response,
+									final HttpContext context) throws ProtocolException {
+								URI uri = getLocationURI(request, response, context);
+								String method = request.getRequestLine().getMethod();
+								if (method.equalsIgnoreCase(HttpHead.METHOD_NAME))
+									return new HttpHead(uri);
+								else if (method.equalsIgnoreCase(HttpPost.METHOD_NAME)) {
+									HttpPost httpPost = new HttpPost(uri);
+									httpPost.addHeader(request.getFirstHeader("Authorization"));
+									httpPost.addHeader(request.getFirstHeader("SOAPAction"));
+									httpPost.addHeader(request.getFirstHeader("Content-Type"));
+									httpPost.addHeader(request.getFirstHeader("User-Agent"));
+									httpPost.addHeader(request.getFirstHeader("SOAPAction"));
+									if (request instanceof HttpEntityEnclosingRequest)
+										httpPost.setEntity(((HttpEntityEnclosingRequest) request).getEntity());
+									return httpPost;
+								} else if (method.equalsIgnoreCase(HttpGet.METHOD_NAME)) {
+									return new HttpGet(uri);
+								} else {
+									throw new IllegalStateException(
+											"Redirect called on un-redirectable http method: " + method);
+								}
+							}
+						}).build();
 
 				exec = Executor.newInstance(httpClient);
 				HttpHost host = new HttpHost(targetURL.getHost(), targetURL.getPort(), targetURL.getProtocol());

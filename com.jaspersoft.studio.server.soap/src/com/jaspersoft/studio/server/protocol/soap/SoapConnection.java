@@ -148,7 +148,8 @@ public class SoapConnection implements IConnection {
 				System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.client", "ERROR"); //$NON-NLS-1$ //$NON-NLS-2$
 				System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http", "ERROR"); //$NON-NLS-1$ //$NON-NLS-2$
 			}
-
+			if (monitor.isCanceled())
+				return false;
 			client = server.getWSClient();
 			if (getServerInfo(monitor) == null)
 				return false;
@@ -174,7 +175,7 @@ public class SoapConnection implements IConnection {
 		server.setTimeout(sp.getTimeout());
 		server.setChunked(sp.isChunked());
 		server.setMime(sp.isMime());
-		return monitor.isCanceled();
+		return true;
 	}
 
 	private static Set<String> wstypes = new HashSet<String>();

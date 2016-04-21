@@ -17,7 +17,6 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.security.KeyStore;
-import java.security.cert.X509Certificate;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -29,9 +28,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLException;
-import javax.net.ssl.SSLSession;
-import javax.net.ssl.SSLSocket;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
@@ -52,7 +48,6 @@ import org.apache.http.conn.ssl.BrowserCompatHostnameVerifier;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.conn.ssl.SSLContextBuilder;
 import org.apache.http.conn.ssl.SSLContexts;
-import org.apache.http.conn.ssl.X509HostnameVerifier;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.glassfish.jersey.SslConfigurator;
@@ -108,6 +103,7 @@ import com.jaspersoft.studio.server.model.datasource.filter.DatasourcesAllFilter
 import com.jaspersoft.studio.server.model.datasource.filter.IDatasourceFilter;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
 import com.jaspersoft.studio.server.protocol.Feature;
+import com.jaspersoft.studio.server.protocol.JSSTrustStrategy;
 import com.jaspersoft.studio.server.protocol.JdbcDriver;
 import com.jaspersoft.studio.server.protocol.ReportExecution;
 import com.jaspersoft.studio.server.protocol.Version;
@@ -147,63 +143,14 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 		clientConfig.property(ApacheClientProperties.SSL_CONFIG, sslConfig);
 
 		SSLContextBuilder builder = SSLContexts.custom();
-		KeyStore trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
-		
-		builder.loadTrustMaterial(trustStore);
 
-		//
-		// builder.loadTrustMaterial(null, new TrustStrategy() {
-		// @Override
-		// public boolean isTrusted(X509Certificate[] chain, String authType)
-		// throws CertificateException {
-		// System.out.println(chain.toString() + authType);
-		// return true;
-		// }
-		// });
-		SSLContext sslContext = SSLContexts.createDefault();
+		final KeyStore trustStore = CertChainValidator.getDefaultTrustStore();
 
-		// KeyStore trustStore =
-		// KeyStore.getInstance(KeyStore.getDefaultType());
+		builder.loadTrustMaterial(trustStore, new JSSTrustStrategy(trustStore));
+		SSLContext sslContext = builder.build();
 
-		SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(sslContext, new X509HostnameVerifier() {
-			private BrowserCompatHostnameVerifier hv = new BrowserCompatHostnameVerifier();
-
-			@Override
-			public boolean verify(String hostname, SSLSession session) {
-				if (!hv.verify(hostname, session)) {
-					// do something
-
-				}
-				return true;
-			}
-
-			@Override
-			public void verify(String arg0, String[] arg1, String[] arg2) throws SSLException {
-				try {
-					hv.verify(arg0, arg1, arg2);
-				} catch (SSLException e) {
-					e.printStackTrace();
-				}
-			}
-
-			@Override
-			public void verify(String arg0, X509Certificate arg1) throws SSLException {
-				try {
-					hv.verify(arg0, arg1);
-				} catch (SSLException e) {
-					e.printStackTrace();
-				}
-			}
-
-			@Override
-			public void verify(String arg0, SSLSocket arg1) throws IOException {
-				try {
-					hv.verify(arg0, arg1);
-				} catch (SSLException e) {
-					e.printStackTrace();
-				}
-			}
-		});
+		SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(sslContext,
+				new BrowserCompatHostnameVerifier());
 
 		Registry<ConnectionSocketFactory> ssr = RegistryBuilder.<ConnectionSocketFactory> create()
 				.register("https", sslsf).register("http", new PlainConnectionSocketFactory()).build();

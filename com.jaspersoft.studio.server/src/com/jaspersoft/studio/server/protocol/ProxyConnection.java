@@ -13,6 +13,7 @@
 package com.jaspersoft.studio.server.protocol;
 
 import java.io.File;
+import java.security.cert.CertificateException;
 import java.text.Format;
 import java.util.ArrayList;
 import java.util.List;
@@ -115,7 +116,19 @@ public class ProxyConnection implements IConnection {
 						soap = co;
 				}
 				serverInfo = co.getServerInfo();
+			} catch (CertificateException e) {
+				throw e;
+			} catch (RuntimeException e) {
+				if (e.getCause() instanceof InterruptedException)
+					return connect(monitor, sp);
+				throw e;
 			} catch (Exception e) {
+				Throwable cause = e.getCause();
+				while (cause != null) {
+					if (cause instanceof CertificateException)
+						throw e;
+					cause = cause.getCause();
+				}
 				Activator.getDefault().logError(e);
 				if (e.getMessage() != null && e.getMessage().contains("connect timed out"))
 					throw e;
