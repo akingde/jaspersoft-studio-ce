@@ -125,13 +125,12 @@ public class ImageResourceDropTargetListener extends AbstractTransferDropTargetL
 		if (ResourceTransfer.getInstance().isSupportedType(getCurrentEvent().currentDataType)){
 			// Dropping an image resource from inside workspace
 			IResource imgResource = ((IResource[])getCurrentEvent().data)[0];
-			String extension = imgResource.getProjectRelativePath().getFileExtension();
-			String expression = "";
-			if (extension.equalsIgnoreCase("svg")){
-				expression = "net.sf.jasperreports.renderers.BatikRenderer.getInstanceFromLocation($P{JASPER_REPORTS_CONTEXT}, \"" + imgResource.getProjectRelativePath() + "\")";
-			} else {
-				expression = "\""+imgResource.getProjectRelativePath()+"\"";
-			}
+			
+			// Starting from JR 6.2.2 the file name is supported even to load SVG files.
+			// In previous versions the user should relay on an expression like:
+			// "net.sf.jasperreports.renderers.BatikRenderer.getInstanceFromLocation($P{JASPER_REPORTS_CONTEXT}, <file name>)";
+			String expression = "\""+imgResource.getProjectRelativePath()+"\"";
+			
 			command.setImageExpression(new JRDesignExpression(expression));
 		}
 		else if(FileTransfer.getInstance().isSupportedType(getCurrentEvent().currentDataType)){
@@ -139,14 +138,6 @@ public class ImageResourceDropTargetListener extends AbstractTransferDropTargetL
 			String filepath = ((String[])getCurrentEvent().data)[0];
 			if(filepath!=null){
 				String expression = "\""+filepath+"\"";
-				int lastIndexOfDot = filepath.lastIndexOf(".");
-				if(lastIndexOfDot!=-1){
-					String extension = filepath.substring(lastIndexOfDot+1);
-					if (extension.equalsIgnoreCase("svg")){
-						expression = "net.sf.jasperreports.renderers.BatikRenderer.getInstanceFromLocation($P{JASPER_REPORTS_CONTEXT}, \"" + filepath + "\")";
-					}
-					
-				}
 				command.setImageExpression(new JRDesignExpression(expression));
 			}
 		}
@@ -155,14 +146,6 @@ public class ImageResourceDropTargetListener extends AbstractTransferDropTargetL
 			String filepath = (String)getCurrentEvent().data;
 			if(filepath!=null){
 				String expression = "\""+filepath+"\"";
-				int lastIndexOfDot = filepath.lastIndexOf(".");
-				if(lastIndexOfDot!=-1){
-					String extension = filepath.substring(lastIndexOfDot+1);
-					if (extension.equalsIgnoreCase("svg")){
-						expression = "net.sf.jasperreports.renderers.BatikRenderer.getInstanceFromLocation($P{JASPER_REPORTS_CONTEXT}, \"" + filepath + "\")";
-					}
-					
-				}
 				command.setImageExpression(new JRDesignExpression(expression));
 			}
 		}
