@@ -25,13 +25,12 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
 
-import net.sf.jasperreports.eclipse.util.FileUtils;
-
 import org.apache.commons.io.IOUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jaspersoft.studio.server.protocol.IConnection;
+
+import net.sf.jasperreports.eclipse.util.FileUtils;
 
 public abstract class ARestV2ConnectionJersey extends ARestV2Connection {
 	protected WebTarget target;
@@ -65,7 +64,29 @@ public abstract class ARestV2ConnectionJersey extends ARestV2Connection {
 		return r;
 	}
 
-	 
+	public <T> T toObj(Response res, ClassSelector selector, IProgressMonitor monitor) throws IOException {
+		T r = null;
+		try {
+			switch (res.getStatus()) {
+			case 200:
+			case 201:
+				r = (T) res.readEntity(selector.checkClazz(res));
+			case 204:
+				break;
+			default:
+				eh.handleException(res, monitor);
+			}
+		} catch (IOException e) {
+			if (logger != null)
+				logger.log(Level.WARNING, e.getMessage(), e);
+			e.printStackTrace();
+			throw e;
+		} finally {
+			res.close();
+		}
+		return r;
+	}
+
 	@SuppressWarnings("unchecked")
 	protected <T> Class<T> checkClazz(Response res, Class<T> clazz) {
 		if (clazz == null) {
@@ -229,5 +250,4 @@ public abstract class ARestV2ConnectionJersey extends ARestV2Connection {
 		return target;
 	}
 
-	
 }

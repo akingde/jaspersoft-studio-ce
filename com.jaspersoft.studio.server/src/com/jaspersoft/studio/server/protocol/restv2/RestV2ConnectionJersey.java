@@ -56,6 +56,7 @@ import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.client.RequestEntityProcessing;
 import org.glassfish.jersey.client.spi.Connector;
+import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.media.multipart.Boundary;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
@@ -174,6 +175,7 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 		HttpUtils.setupProxy(clientConfig, HttpUtils.toSafeUri(sp.getURL()));
 
 		clientConfig.property(ClientProperties.REQUEST_ENTITY_PROCESSING, RequestEntityProcessing.BUFFERED);
+		clientConfig.register(JacksonFeature.class).register(ClientQueryMapperProvider.class);
 
 		Client client = ClientBuilder.newBuilder().withConfig(clientConfig).build();
 		client.register(MultiPartFeature.class);

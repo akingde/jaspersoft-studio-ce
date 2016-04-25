@@ -50,25 +50,36 @@ public class RESTv2ExceptionHandler {
 	public void handleException(Response res, IProgressMonitor monitor) throws ClientProtocolException {
 		String msg = "";
 		int status = res.getStatus();
+		String ct = res.getHeaderString("Content-Type");
 		switch (status) {
 		case 400:
-			if (res.getHeaderString("Content-Type").equals("application/xml"))
-				handleErrorDescriptor(res, monitor, status);
-			else if (res.getHeaderString("Content-Type").equals("application/json"))
-				handleErrorDescriptor(res, monitor, status);
-			else if (res.getHeaderString("Content-Type").equals("application/collection.errorDescriptor+xml"))
-				handleErrorDescriptorList(res, monitor, status);
+			if (ct != null) {
+				if (ct.equals("application/xml"))
+					handleErrorDescriptor(res, monitor, status);
+				else if (ct.equals("application/json"))
+					handleErrorDescriptor(res, monitor, status);
+				else if (ct.equals("application/collection.errorDescriptor+xml"))
+					handleErrorDescriptorList(res, monitor, status);
+				else 
+					handleErrorDescriptor(res, monitor, status);
+			}
 		case 401:
 			throw new HttpResponseException(status, res.getStatusInfo().getReasonPhrase());
 		case 403:
 		case 409:
 		case 404:
 		case 500:
-			if (res.getHeaderString("Content-Type").contains("application/collection.errorDescriptor+xml"))
-				handleErrorDescriptorList(res, monitor, status);
-			else if (res.getHeaderString("Content-Type").contains("xml"))
-				handleErrorDescriptor(res, monitor, status);
-			else if (res.getHeaderString("Content-Type").contains("text/html")) {
+			if (ct != null) {
+				if (ct.contains("application/collection.errorDescriptor+xml"))
+					handleErrorDescriptorList(res, monitor, status);
+				else if (ct.contains("xml"))
+					handleErrorDescriptor(res, monitor, status);
+				else if (ct.contains("text/html")) {
+					System.out.println(res.readEntity(String.class));
+					msg = res.getStatusInfo().getReasonPhrase() + "\n";
+					throw new HttpResponseException(status, msg);
+				}
+			} else {
 				System.out.println(res.readEntity(String.class));
 				msg = res.getStatusInfo().getReasonPhrase() + "\n";
 				throw new HttpResponseException(status, msg);
