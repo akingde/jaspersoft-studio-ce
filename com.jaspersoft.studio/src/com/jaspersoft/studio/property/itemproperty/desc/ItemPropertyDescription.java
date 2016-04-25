@@ -12,6 +12,8 @@ import net.sf.jasperreports.components.items.StandardItemProperty;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.FocusAdapter;
+import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.graphics.Point;
@@ -21,6 +23,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.utils.Misc;
+import com.jaspersoft.studio.utils.UIUtil;
 import com.jaspersoft.studio.utils.inputhistory.InputHistoryCache;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -141,10 +144,34 @@ public class ItemPropertyDescription<T> {
 		}
 	}
 
+	// Flag used to overcome the problem of focus events in Mac OS X
+	// - JSS Bugzilla 42999
+	// - Eclipse Bug 383750
+	// It makes sense only on E4 platform and Mac OS X operating systems.
+	// DO NOT USE THIS FLAG FOR OTHER PURPOSES.
+	private boolean editHappened = false;
+
 	public Control createControl(final IWItemProperty wiProp, Composite parent) {
 		textExpression = new Text(parent, SWT.BORDER);
 		textExpression.setLayoutData(new GridData(GridData.FILL_BOTH));
 		InputHistoryCache.bindText(textExpression, name);
+		if (UIUtil.isMacAndEclipse4()) {
+			textExpression.addModifyListener(new ModifyListener() {
+				public void modifyText(ModifyEvent e) {
+					editHappened = true;
+				}
+			});
+		}
+		textExpression.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				if (UIUtil.isMacAndEclipse4() && editHappened) {
+					setValue(textExpression, wiProp);
+					editHappened = false;
+				}
+			}
+
+		});
 		textExpression.addModifyListener(new ModifyListener() {
 
 			@Override

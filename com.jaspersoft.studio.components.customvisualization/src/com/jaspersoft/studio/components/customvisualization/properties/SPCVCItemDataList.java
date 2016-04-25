@@ -337,11 +337,6 @@ public class SPCVCItemDataList extends ASPropertyWidget<AItemDataListPropertyDes
 				return "Item Data " + (itemDatas.indexOf(element) + 1);
 			}
 
-			@Override
-			protected String getToolTipText4ItemData(Object element) {
-				// TODO Auto-generated method stub
-				return super.getToolTipText4ItemData(element);
-			}
 		};
 		dsTViewer.setLabelProvider(itemDataLabelProvider);
 	}
