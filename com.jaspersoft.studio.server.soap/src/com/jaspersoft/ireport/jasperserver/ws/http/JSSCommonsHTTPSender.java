@@ -24,6 +24,7 @@ import java.util.Map;
 import java.util.zip.GZIPInputStream;
 
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocket;
 import javax.xml.soap.MimeHeader;
 import javax.xml.soap.MimeHeaders;
 
@@ -147,7 +148,13 @@ public class JSSCommonsHTTPSender extends BasicHandler {
 				SSLContext sslContext = builder.build();
 
 				SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(sslContext,
-						new BrowserCompatHostnameVerifier());
+						new BrowserCompatHostnameVerifier()) {
+					@Override
+					protected void prepareSocket(SSLSocket socket) throws IOException {
+						super.prepareSocket(socket);
+						socket.setEnabledProtocols(new String[] { "TLSv1", "TLSv1.1", "TLSv1.2" });
+					}
+				};
 				HttpClient httpClient = HttpClientBuilder.create().setSSLSocketFactory(sslsf)
 						.setRedirectStrategy(new LaxRedirectStrategy() {
 

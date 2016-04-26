@@ -28,6 +28,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLEngine;
+import javax.net.ssl.SSLSocket;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
@@ -151,7 +153,14 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 		SSLContext sslContext = builder.build();
 
 		SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(sslContext,
-				new BrowserCompatHostnameVerifier());
+				new BrowserCompatHostnameVerifier()) {
+			@Override
+			protected void prepareSocket(SSLSocket socket) throws IOException {
+				super.prepareSocket(socket);
+				socket.setEnabledProtocols(
+						new String[] { "SSLv2Hello", "SSL", "SSLv2", "SSLv3", "TLSv1", "TLSv1.1", "TLSv1.2" });
+			}
+		};
 
 		Registry<ConnectionSocketFactory> ssr = RegistryBuilder.<ConnectionSocketFactory> create()
 				.register("https", sslsf).register("http", new PlainConnectionSocketFactory()).build();
