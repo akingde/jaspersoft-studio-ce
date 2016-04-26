@@ -43,6 +43,7 @@ import java.util.UUID;
 import org.eclipse.jface.dialogs.Dialog;
 
 import com.jaspersoft.studio.ConfigurationManager;
+import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.protocol.CRLVerifier;
 import com.jaspersoft.studio.utils.Misc;
 
@@ -50,18 +51,18 @@ import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 
 public class CertChainValidator {
-	private static String fname = System.getProperty("javax.net.ssl.trustStore");
-	private static char[] spass = Misc.nvl(System.getProperty("javax.net.ssl.trustStorePassword")).toCharArray();
-	private static String stype = System.getProperty("javax.net.ssl.trustStoreType");
+	private static String fname = System.getProperty("javax.net.ssl.trustStore"); //$NON-NLS-1$
+	private static char[] spass = Misc.nvl(System.getProperty("javax.net.ssl.trustStorePassword")).toCharArray(); //$NON-NLS-1$
+	private static String stype = System.getProperty("javax.net.ssl.trustStoreType"); //$NON-NLS-1$
 
 	public static KeyStore getDefaultTrustStore()
 			throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException {
-		stype = System.getProperty("javax.net.ssl.trustStoreType");
+		stype = System.getProperty("javax.net.ssl.trustStoreType"); //$NON-NLS-1$
 		KeyStore trustStore = KeyStore.getInstance(Misc.isNullOrEmpty(stype) ? KeyStore.getDefaultType() : stype);
-		fname = System.getProperty("javax.net.ssl.trustStore");
+		fname = System.getProperty("javax.net.ssl.trustStore"); //$NON-NLS-1$
 		File f = null;
 		if (Misc.isNullOrEmpty(fname)) {
-			f = new File(ConfigurationManager.getStorage("certificates"), "cert.ks");
+			f = new File(ConfigurationManager.getStorage("certificates"), "cert.ks"); //$NON-NLS-1$ //$NON-NLS-2$
 			fname = f.getAbsolutePath();
 		} else
 			f = new File(fname);
@@ -77,6 +78,11 @@ public class CertChainValidator {
 			}
 		}
 		return trustStore;
+	}
+
+	public static void writeTrustStore(KeyStore trustStore) throws FileNotFoundException, KeyStoreException,
+			IOException, NoSuchAlgorithmException, CertificateException {
+		writeTrustStore(fname, trustStore);
 	}
 
 	protected static void writeTrustStore(String fname, KeyStore trustStore) throws FileNotFoundException,
@@ -96,9 +102,9 @@ public class CertChainValidator {
 	public static void validateKeyChain(X509Certificate[] chain, KeyStore trustStore)
 			throws IOException, GeneralSecurityException {
 		if (cf == null)
-			cf = CertificateFactory.getInstance("X.509");
+			cf = CertificateFactory.getInstance("X.509"); //$NON-NLS-1$
 		if (validator == null)
-			validator = CertPathValidator.getInstance("PKIX");
+			validator = CertPathValidator.getInstance("PKIX"); //$NON-NLS-1$
 		Set<X509Certificate> trustCertificates = new HashSet<X509Certificate>();
 		Enumeration<String> alias = trustStore.aliases();
 		while (alias.hasMoreElements()) {
@@ -132,7 +138,7 @@ public class CertChainValidator {
 			}
 		} else
 			confirmCertificate(chain[chain.length - 1], new X509Certificate[] { chain[chain.length - 1] }, trustStore,
-					new CertificateException("CA Certificate not trusted"));
+					new CertificateException(Messages.CertChainValidator_10));
 	}
 
 	private static PKIXCertPathBuilderResult verifyCertificate(X509Certificate cert,
@@ -156,12 +162,12 @@ public class CertChainValidator {
 		pkixParams.setRevocationEnabled(false);
 
 		// Specify a list of intermediate certificates
-		CertStore intermediateCertStore = CertStore.getInstance("Collection",
+		CertStore intermediateCertStore = CertStore.getInstance("Collection", //$NON-NLS-1$
 				new CollectionCertStoreParameters(intermediateCerts));
 		pkixParams.addCertStore(intermediateCertStore);
 
 		// Build and verify the certification chain
-		CertPathBuilder builder = CertPathBuilder.getInstance("PKIX");
+		CertPathBuilder builder = CertPathBuilder.getInstance("PKIX"); //$NON-NLS-1$
 		PKIXCertPathBuilderResult result = (PKIXCertPathBuilderResult) builder.build(pkixParams);
 		return result;
 	}
@@ -190,7 +196,7 @@ public class CertChainValidator {
 		ShowDialog r = new ShowDialog(client, chain, e);
 		UIUtils.getDisplay().syncExec(r);
 		if (r.result == Dialog.OK) {
-			trustStore.setCertificateEntry(UUID.randomUUID().toString().replaceAll("-", ""), client);
+			trustStore.setCertificateEntry(UUID.randomUUID().toString().replaceAll("-", ""), client); //$NON-NLS-1$ //$NON-NLS-2$
 			writeTrustStore(fname, trustStore);
 			throw new RuntimeException(new InterruptedException());
 		}

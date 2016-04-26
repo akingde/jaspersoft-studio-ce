@@ -42,6 +42,8 @@ import org.bouncycastle.asn1.x509.GeneralName;
 import org.bouncycastle.asn1.x509.GeneralNames;
 import org.bouncycastle.asn1.x509.X509Extensions;
 
+import com.jaspersoft.studio.server.messages.Messages;
+
 import net.sf.jasperreports.eclipse.util.FileUtils;
 
 /**
@@ -57,12 +59,12 @@ public class CRLVerifier {
 			for (String crlDP : crlDistPoints) {
 				X509CRL crl = downloadCRL(crlDP);
 				if (crl.isRevoked(cert))
-					throw new CertificateException("The certificate is revoked by CRL: " + crlDP);
+					throw new CertificateException(Messages.CRLVerifier_0 + crlDP);
 			}
 		} catch (Exception ex) {
 			if (ex instanceof CertificateException)
 				throw (CertificateException) ex;
-			throw new CertificateException("Can not verify CRL for certificate: " + cert.getSubjectX500Principal());
+			throw new CertificateException(Messages.CRLVerifier_1 + cert.getSubjectX500Principal());
 		}
 	}
 
@@ -72,11 +74,11 @@ public class CRLVerifier {
 	 */
 	private static X509CRL downloadCRL(String crlURL)
 			throws IOException, CertificateException, CRLException, CertificateException, NamingException {
-		if (crlURL.startsWith("http://") || crlURL.startsWith("https://") || crlURL.startsWith("ftp://"))
+		if (crlURL.startsWith(Messages.CRLVerifier_2) || crlURL.startsWith("https://") || crlURL.startsWith("ftp://")) //$NON-NLS-2$ //$NON-NLS-3$
 			return downloadCRLFromWeb(crlURL);
-		if (crlURL.startsWith("ldap://"))
+		if (crlURL.startsWith("ldap://")) //$NON-NLS-1$
 			return downloadCRLFromLDAP(crlURL);
-		throw new CertificateException("Can not download CRL from certificate " + "distribution point: " + crlURL);
+		throw new CertificateException(Messages.CRLVerifier_6 + crlURL);
 	}
 
 	/**
@@ -86,17 +88,17 @@ public class CRLVerifier {
 	private static X509CRL downloadCRLFromLDAP(String ldapURL)
 			throws CertificateException, NamingException, CRLException, CertificateException {
 		Map<String, String> env = new Hashtable<String, String>();
-		env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
+		env.put(Context.INITIAL_CONTEXT_FACTORY, Messages.CRLVerifier_7);
 		env.put(Context.PROVIDER_URL, ldapURL);
 
 		DirContext ctx = new InitialDirContext((Hashtable<String, String>) env);
-		Attributes avals = ctx.getAttributes("");
-		Attribute aval = avals.get("certificateRevocationList;binary");
+		Attributes avals = ctx.getAttributes(""); //$NON-NLS-1$
+		Attribute aval = avals.get(Messages.CRLVerifier_9);
 		byte[] val = (byte[]) aval.get();
 		if ((val == null) || (val.length == 0))
-			throw new CertificateException("Can not download CRL from: " + ldapURL);
+			throw new CertificateException(Messages.CRLVerifier_10 + ldapURL);
 		InputStream inStream = new ByteArrayInputStream(val);
-		CertificateFactory cf = CertificateFactory.getInstance("X.509");
+		CertificateFactory cf = CertificateFactory.getInstance("X.509"); //$NON-NLS-1$
 		return (X509CRL) cf.generateCRL(inStream);
 	}
 
@@ -108,7 +110,7 @@ public class CRLVerifier {
 			throws MalformedURLException, IOException, CertificateException, CRLException {
 		InputStream crlStream = new URL(crlURL).openStream();
 		try {
-			return (X509CRL) CertificateFactory.getInstance("X.509").generateCRL(crlStream);
+			return (X509CRL) CertificateFactory.getInstance("X.509").generateCRL(crlStream); //$NON-NLS-1$
 		} finally {
 			FileUtils.closeStream(crlStream);
 		}

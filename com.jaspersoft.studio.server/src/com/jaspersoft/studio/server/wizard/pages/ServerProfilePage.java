@@ -16,10 +16,24 @@ import java.io.ByteArrayInputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
+import java.net.URL;
+import java.security.KeyStore;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.net.ssl.SSLHandshakeException;
+
 import org.apache.commons.codec.binary.Base64;
+import org.apache.http.HttpHost;
+import org.apache.http.client.fluent.Executor;
+import org.apache.http.client.fluent.Request;
+import org.apache.http.conn.ssl.BrowserCompatHostnameVerifier;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.conn.ssl.SSLContextBuilder;
+import org.apache.http.conn.ssl.SSLContexts;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.beans.PojoObservables;
@@ -47,8 +61,11 @@ import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -71,6 +88,7 @@ import com.jaspersoft.jasperserver.dto.serverinfo.ServerInfo;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
 import com.jaspersoft.studio.compatibility.dialog.VersionCombo;
+import com.jaspersoft.studio.server.Activator;
 import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
@@ -80,8 +98,10 @@ import com.jaspersoft.studio.server.preferences.CASPreferencePage;
 import com.jaspersoft.studio.server.preferences.SSOServer;
 import com.jaspersoft.studio.server.protocol.Feature;
 import com.jaspersoft.studio.server.protocol.IConnection;
+import com.jaspersoft.studio.server.protocol.JSSTrustStrategy;
 import com.jaspersoft.studio.server.protocol.JdbcDriver;
 import com.jaspersoft.studio.server.protocol.Version;
+import com.jaspersoft.studio.server.protocol.restv2.CertChainValidator;
 import com.jaspersoft.studio.server.secret.JRServerSecretsProvider;
 import com.jaspersoft.studio.server.wizard.validator.URLValidator;
 import com.jaspersoft.studio.swt.widgets.ClasspathComponent;
@@ -98,6 +118,7 @@ import net.sf.jasperreports.eclipse.ui.validator.EmptyStringValidator;
 import net.sf.jasperreports.eclipse.ui.validator.NotEmptyIFolderValidator;
 import net.sf.jasperreports.eclipse.util.CastorHelper;
 import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.eclipse.util.HttpUtils;
 
 public class ServerProfilePage extends WizardPage implements WizardEndingStateListener {
 	private MServerProfile sprofile;
@@ -143,7 +164,15 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 		gd.horizontalSpan = 2;
 		new Label(composite, SWT.SEPARATOR | SWT.HORIZONTAL).setLayoutData(gd);
 
-		new Label(composite, SWT.NONE).setText(Messages.ServerProfilePage_4);
+		Composite urlCmp = new Composite(composite, SWT.NONE);
+		GridLayout layout = new GridLayout(2, false);
+		layout.marginHeight = 0;
+		layout.marginWidth = 0;
+		urlCmp.setLayout(layout);
+
+		new Label(urlCmp, SWT.NONE).setText(Messages.ServerProfilePage_4);
+
+		ssLabel = new Label(urlCmp, SWT.BORDER);
 
 		Text turl = new Text(composite, SWT.BORDER);
 		turl.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -645,6 +674,14 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 		}
 	}
 
+	@Override
+	public void dispose() {
+		pushCursor.dispose();
+		super.dispose();
+	}
+
+	private Cursor pushCursor = new Cursor(UIUtils.getDisplay(), SWT.CURSOR_HAND);
+
 	public class Proxy {
 		private ServerProfile sp;
 
@@ -656,7 +693,58 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 			sp.setUrl(Misc.nvl(url).trim());
 		}
 
+		private MouseAdapter mlistener = new MouseAdapter() {
+			private long time1;
+
+			@Override
+			public void mouseUp(MouseEvent e) {
+				if (e.time - time1 > 1000)
+					time1 = e.time;
+				else
+					return;
+				ssLabel.removeMouseListener(mlistener);
+				try {
+					SSLContextBuilder builder = SSLContexts.custom();
+					final KeyStore trustStore = CertChainValidator.getDefaultTrustStore();
+					builder.loadTrustMaterial(trustStore, new JSSTrustStrategy(trustStore) {
+						@Override
+						public boolean isTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+							new CertificatesDialog(UIUtils.getShell(), "", chain[0], chain, trustStore).open();
+							return true;
+						}
+					});
+					SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(builder.build(),
+							new BrowserCompatHostnameVerifier());
+
+					URL targetURL = sp.getURL();
+
+					Executor exec = Executor.newInstance(HttpClientBuilder.create().setSSLSocketFactory(sslsf).build());
+					HttpUtils.setupProxy(exec, targetURL.toURI());
+					HttpHost proxy = HttpUtils.getUnauthProxy(exec, targetURL.toURI());
+					Request req = Request.Get(targetURL.toString());
+					if (proxy != null)
+						req.viaProxy(proxy);
+					exec.execute(req);
+				} catch (Exception ex) {
+					if (ex instanceof SSLHandshakeException)
+						return;
+					UIUtils.showError(ex);
+				} finally {
+					ssLabel.addMouseListener(mlistener);
+				}
+			}
+		};
+
 		public String getUrl() throws MalformedURLException, URISyntaxException {
+			if (sp.getUrl().trim().startsWith("https://")) {
+				ssLabel.addMouseListener(mlistener);
+				ssLabel.setImage(Activator.getDefault().getImage("icons/lock.png"));
+				ssLabel.setCursor(new Cursor(ssLabel.getDisplay(), SWT.CURSOR_HAND));
+			} else {
+				ssLabel.removeMouseListener(mlistener);
+				ssLabel.setImage(null);
+				ssLabel.setCursor(null);
+			}
 			return sp.getUrl();
 		}
 
@@ -760,6 +848,7 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 	private Button bLogging;
 	private Composite cmpAsk;
 	private Text tuserA;
+	private Label ssLabel;
 
 	private void createJdbcDrivers(CTabFolder tabFolder) {
 		if (sprofile.getWsClient() == null || !sprofile.getWsClient().isSupported(Feature.EXPORTMETADATA)

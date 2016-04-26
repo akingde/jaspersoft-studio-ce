@@ -37,13 +37,12 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 
+import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.utils.Misc;
 
 import jersey.repackaged.com.google.common.collect.Lists;
@@ -54,10 +53,11 @@ public class CertificateDialog extends ATitledDialog {
 	private X509Certificate client;
 	private String message;
 	private X509Certificate[] chain;
+	protected TableViewer viewer;
 
-	protected CertificateDialog(Shell parentShell, String message, X509Certificate client, X509Certificate[] chain) {
+	public CertificateDialog(Shell parentShell, String message, X509Certificate client, X509Certificate[] chain) {
 		super(parentShell);
-		setTitle("Invalid Security Certificate");
+		setTitle(Messages.CertificateDialog_0);
 		setDefaultSize(550, 500);
 		this.client = client;
 		this.message = message;
@@ -65,28 +65,18 @@ public class CertificateDialog extends ATitledDialog {
 	}
 
 	@Override
-	protected Button createButton(Composite parent, int id, String label, boolean defaultButton) {
-		Button b = super.createButton(parent, id, label, defaultButton);
-		if (id == IDialogConstants.OK_ID)
-			b.setText("Trust");
-		return b;
+	protected void createButtonsForButtonBar(Composite parent) {
+		createButton(parent, IDialogConstants.OK_ID, Messages.CertificateDialog_1, true);
+		createButton(parent, IDialogConstants.CANCEL_ID, IDialogConstants.CANCEL_LABEL, false);
 	}
 
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		Composite cmp = (Composite) super.createDialogArea(parent);
 
-		StyledText text = new StyledText(cmp, SWT.READ_ONLY | SWT.WRAP);
-		text.setLineSpacing(2);
-		text.setBackground(cmp.getBackground());
-		String msg1 = "The certificate for this server is invalid.\n\t";
-		text.setText(msg1 + message);
-		text.setStyleRanges(new StyleRange[] { new StyleRange(0, msg1.length(), null, null, SWT.BOLD),
-				new StyleRange(msg1.length(), message.length(), null, null, SWT.ITALIC) });
-		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		createLabel1(cmp);
 
-		final TableViewer viewer = new TableViewer(cmp,
-				SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.BORDER);
+		viewer = new TableViewer(cmp, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.BORDER);
 
 		TableViewerColumn col = new TableViewerColumn(viewer, SWT.NONE);
 		col.getColumn().setWidth(600);
@@ -119,11 +109,19 @@ public class CertificateDialog extends ATitledDialog {
 			}
 		});
 
-		new Label(cmp, SWT.NONE)
-				.setText("\nPush Trust button if you are trusting this certificate or Cancel to abort the connection.");
-
 		viewer.setSelection(new StructuredSelection(client), true);
 		return cmp;
+	}
+
+	protected void createLabel1(Composite cmp) {
+		StyledText lbl1 = new StyledText(cmp, SWT.READ_ONLY | SWT.WRAP);
+		lbl1.setLineSpacing(2);
+		lbl1.setBackground(cmp.getBackground());
+		String msg1 = Messages.CertificateDialog_2;
+		lbl1.setText(msg1 + message);
+		lbl1.setStyleRanges(new StyleRange[] { new StyleRange(0, msg1.length(), null, null, SWT.BOLD),
+				new StyleRange(msg1.length(), message.length(), null, null, SWT.ITALIC) });
+		lbl1.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 	}
 
 	class CertificateLabelProvider extends ColumnLabelProvider {
@@ -137,51 +135,51 @@ public class CertificateDialog extends ATitledDialog {
 
 	static StyledString getStyledToolTip(X509Certificate cert) {
 		StyledString ss = new StyledString();
+		if (cert == null)
+			return ss;
+		ss.append(Messages.CertificateDialog_4, StyledString.QUALIFIER_STYLER);
+		ss.append(" " + cert.getVersion() + "\n"); //$NON-NLS-1$ //$NON-NLS-2$
+		ss.append(Messages.CertificateDialog_7, StyledString.QUALIFIER_STYLER);
+		ss.append(" " + cert.getSerialNumber() + "\n"); //$NON-NLS-1$ //$NON-NLS-2$
+		ss.append(Messages.CertificateDialog_10, StyledString.QUALIFIER_STYLER);
+		ss.append(" " + cert.getSigAlgName() + " (" + cert.getSigAlgOID() + ")\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		ss.append(Messages.CertificateDialog_14, StyledString.QUALIFIER_STYLER);
+		ss.append(" " + Misc.nvl(cert.getSigAlgParams(), Messages.CertificateDialog_16) + "\n"); //$NON-NLS-1$ //$NON-NLS-3$
+		ss.append(Messages.CertificateDialog_18, StyledString.QUALIFIER_STYLER);
+		ss.append(" " + cert.getIssuerDN() + "\n"); //$NON-NLS-1$ //$NON-NLS-2$
+		ss.append(Messages.CertificateDialog_21, StyledString.QUALIFIER_STYLER);
+		ss.append(" " + cert.getNotBefore() + "\n"); //$NON-NLS-1$ //$NON-NLS-2$
+		ss.append(Messages.CertificateDialog_24, StyledString.QUALIFIER_STYLER);
+		ss.append(" " + cert.getNotAfter() + "\n\n"); //$NON-NLS-1$ //$NON-NLS-2$
+		ss.append(Messages.CertificateDialog_27, StyledString.QUALIFIER_STYLER);
+		ss.append(" " + cert.getSubjectDN() + "\n\n"); //$NON-NLS-1$ //$NON-NLS-2$
 
-		ss.append("Version:", StyledString.QUALIFIER_STYLER);
-		ss.append(" " + cert.getVersion() + "\n");
-		ss.append("SerialNumber:", StyledString.QUALIFIER_STYLER);
-		ss.append(" " + cert.getSerialNumber() + "\n");
-		ss.append("Signature Algorithm:", StyledString.QUALIFIER_STYLER);
-		ss.append(" " + cert.getSigAlgName() + " (" + cert.getSigAlgOID() + ")\n");
-		ss.append("Parameters:", StyledString.QUALIFIER_STYLER);
-		ss.append(" " + Misc.nvl(cert.getSigAlgParams(), "none") + "\n");
-		ss.append("IssuerDN:", StyledString.QUALIFIER_STYLER);
-		ss.append(" " + cert.getIssuerDN() + "\n");
-		ss.append("Start Date:", StyledString.QUALIFIER_STYLER);
-		ss.append(" " + cert.getNotBefore() + "\n");
-		ss.append("Final Date:", StyledString.QUALIFIER_STYLER);
-		ss.append(" " + cert.getNotAfter() + "\n\n");
-		ss.append("SubjectDN:", StyledString.QUALIFIER_STYLER);
-		ss.append(" " + cert.getSubjectDN() + "\n\n");
+		ss.append(Messages.CertificateDialog_30, StyledString.QUALIFIER_STYLER);
 
-		ss.append("Public Key:", StyledString.QUALIFIER_STYLER);
+		ss.append(" " + WordUtils.wrap(cert.getPublicKey().toString(), 50, null, true) + "\n"); //$NON-NLS-1$ //$NON-NLS-2$
 
-		ss.append(" " + WordUtils.wrap(cert.getPublicKey().toString(), 50, null, true) + "\n");
+		ss.append(Messages.CertificateDialog_33, StyledString.QUALIFIER_STYLER);
+		ss.append(" " + cert.getSigAlgName() + "\n"); //$NON-NLS-1$ //$NON-NLS-2$
+		ss.append(Messages.CertificateDialog_36, StyledString.QUALIFIER_STYLER);
+		ss.append(" " + WordUtils.wrap(Hex.encodeHexString(cert.getSignature()), 50, null, true) + "\n"); //$NON-NLS-1$ //$NON-NLS-2$
 
-		ss.append("Signature Algorithm:", StyledString.QUALIFIER_STYLER);
-		ss.append(" " + cert.getSigAlgName() + "\n");
-		ss.append("Signature:", StyledString.QUALIFIER_STYLER);
-		ss.append(" " + WordUtils.wrap(Hex.encodeHexString(cert.getSignature()), 50, null, true) + "\n");
-
-		ss.append("Extensions:\n", StyledString.QUALIFIER_STYLER);
+		ss.append(Messages.CertificateDialog_39, StyledString.QUALIFIER_STYLER);
 		for (String ext : cert.getCriticalExtensionOIDs()) {
-			ss.append("Critical: ", StyledString.QUALIFIER_STYLER);
-			ss.append("YES " + Misc.nvl(certExtensions.get(ext)) + " (" + ext + ")\n");
+			ss.append(Messages.CertificateDialog_40, StyledString.QUALIFIER_STYLER);
+			ss.append(Messages.CertificateDialog_41 + Misc.nvl(certExtensions.get(ext)) + " (" + ext + ")\n"); //$NON-NLS-2$ //$NON-NLS-3$
 			try {
-				ss.append(getExtensionValue(cert, ext) + "\n");
+				ss.append(getExtensionValue(cert, ext) + "\n"); //$NON-NLS-1$
 			} catch (IOException e) {
 			}
 		}
 		for (String ext : cert.getNonCriticalExtensionOIDs()) {
-			ss.append("Critical: ", StyledString.QUALIFIER_STYLER);
-			ss.append("NO " + Misc.nvl(certExtensions.get(ext)) + " (" + ext + ")\n");
+			ss.append(Messages.CertificateDialog_45, StyledString.QUALIFIER_STYLER);
+			ss.append(Messages.CertificateDialog_46 + Misc.nvl(certExtensions.get(ext)) + " (" + ext + ")\n"); //$NON-NLS-2$ //$NON-NLS-3$
 			try {
-				ss.append(getExtensionValue(cert, ext) + "\n");
+				ss.append(getExtensionValue(cert, ext) + "\n"); //$NON-NLS-1$
 			} catch (IOException e) {
 			}
 		}
-		System.out.println(cert.toString());
 		return ss;
 	}
 
@@ -207,7 +205,7 @@ public class CertificateDialog extends ATitledDialog {
 					return derObject.getClass().getCanonicalName();
 			}
 		}
-		return "";
+		return ""; //$NON-NLS-1$
 	}
 
 	private static DERObject toDERObject(byte[] data) throws IOException {
@@ -224,34 +222,35 @@ public class CertificateDialog extends ATitledDialog {
 	}
 
 	private static Map<String, String> certExtensions = new HashMap<String, String>();
+
 	static {
-		certExtensions.put("2.5.29.1", "old Authority Key Identifier");
-		certExtensions.put("2.5.29.2", "old Primary Key Attributes");
-		certExtensions.put("2.5.29.3", "Certificate Policies");
-		certExtensions.put("2.5.29.4", "Primary Key Usage Restriction");
-		certExtensions.put("2.5.29.9", "Subject Directory Attributes");
-		certExtensions.put("2.5.29.14", "Subject Key Identifier");
-		certExtensions.put("2.5.29.15", "Key Usage");
-		certExtensions.put("2.5.29.16", "Private Key Usage Period");
-		certExtensions.put("2.5.29.17", "Subject Alternative Name");
-		certExtensions.put("2.5.29.18", "Issuer Alternative Name");
-		certExtensions.put("2.5.29.19", "Basic Constraints");
-		certExtensions.put("2.5.29.20", "CRL Number");
-		certExtensions.put("2.5.29.21", "Reason code");
-		certExtensions.put("2.5.29.23", "Hold Instruction Code");
-		certExtensions.put("2.5.29.24", "Invalidity Date");
-		certExtensions.put("2.5.29.27", "Delta CRL indicator");
-		certExtensions.put("2.5.29.28", "Issuing Distribution Point");
-		certExtensions.put("2.5.29.29", "Certificate Issuer");
-		certExtensions.put("2.5.29.30", "Name Constraints");
-		certExtensions.put("2.5.29.31", "CRL Distribution Points");
-		certExtensions.put("2.5.29.32", "Certificate Policies");
-		certExtensions.put("2.5.29.33", "Policy Mappings");
-		certExtensions.put("2.5.29.35", "Authority Key Identifier");
-		certExtensions.put("2.5.29.36", "Policy Constraints");
-		certExtensions.put("2.5.29.37", "Extended key usage");
-		certExtensions.put("2.5.29.46", "FreshestCRL");
-		certExtensions.put("2.5.29.54", "X.509 version 3 certificate extension Inhibit Any-policy");
+		certExtensions.put("2.5.29.1", Messages.CertificateDialog_52); //$NON-NLS-1$
+		certExtensions.put("2.5.29.2", Messages.CertificateDialog_54); //$NON-NLS-1$
+		certExtensions.put("2.5.29.3", Messages.CertificateDialog_56); //$NON-NLS-1$
+		certExtensions.put("2.5.29.4", Messages.CertificateDialog_58); //$NON-NLS-1$
+		certExtensions.put("2.5.29.9", Messages.CertificateDialog_60); //$NON-NLS-1$
+		certExtensions.put("2.5.29.14", Messages.CertificateDialog_62); //$NON-NLS-1$
+		certExtensions.put("2.5.29.15", Messages.CertificateDialog_64); //$NON-NLS-1$
+		certExtensions.put("2.5.29.16", Messages.CertificateDialog_66); //$NON-NLS-1$
+		certExtensions.put("2.5.29.17", Messages.CertificateDialog_68); //$NON-NLS-1$
+		certExtensions.put("2.5.29.18", Messages.CertificateDialog_70); //$NON-NLS-1$
+		certExtensions.put("2.5.29.19", Messages.CertificateDialog_72); //$NON-NLS-1$
+		certExtensions.put("2.5.29.20", Messages.CertificateDialog_74); //$NON-NLS-1$
+		certExtensions.put("2.5.29.21", Messages.CertificateDialog_76); //$NON-NLS-1$
+		certExtensions.put("2.5.29.23", Messages.CertificateDialog_78); //$NON-NLS-1$
+		certExtensions.put("2.5.29.24", Messages.CertificateDialog_80); //$NON-NLS-1$
+		certExtensions.put("2.5.29.27", Messages.CertificateDialog_82); //$NON-NLS-1$
+		certExtensions.put("2.5.29.28", Messages.CertificateDialog_84); //$NON-NLS-1$
+		certExtensions.put("2.5.29.29", Messages.CertificateDialog_86); //$NON-NLS-1$
+		certExtensions.put("2.5.29.30", Messages.CertificateDialog_88); //$NON-NLS-1$
+		certExtensions.put("2.5.29.31", Messages.CertificateDialog_90); //$NON-NLS-1$
+		certExtensions.put("2.5.29.32", Messages.CertificateDialog_92); //$NON-NLS-1$
+		certExtensions.put("2.5.29.33", Messages.CertificateDialog_94); //$NON-NLS-1$
+		certExtensions.put("2.5.29.35", Messages.CertificateDialog_96); //$NON-NLS-1$
+		certExtensions.put("2.5.29.36", Messages.CertificateDialog_98); //$NON-NLS-1$
+		certExtensions.put("2.5.29.37", Messages.CertificateDialog_100); //$NON-NLS-1$
+		certExtensions.put("2.5.29.46", Messages.CertificateDialog_102); //$NON-NLS-1$
+		certExtensions.put("2.5.29.54", Messages.CertificateDialog_104); //$NON-NLS-1$
 
 	}
 }
