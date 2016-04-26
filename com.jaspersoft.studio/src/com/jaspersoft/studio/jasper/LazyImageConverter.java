@@ -286,8 +286,6 @@ public class LazyImageConverter extends ElementConverter {
 					try {
 						String location = evaluatedExpression((JasperReportsConfiguration) jrContext, modelElement, expr);
 						if (location != null) {
-//							if (location.startsWith("repo:/"))
-//								location = location.substring(5);
 							Renderable r = RendererUtil.getInstance(jrContext).getNonLazyRenderable(location, OnErrorTypeEnum.ERROR);
 							info.update(r);
 							if (modelElement != null) {
