@@ -5,6 +5,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.customvisualization.model.command;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.eclipse.nebula.widgets.gallery.Gallery;
@@ -59,16 +61,16 @@ public class CVCTypeWizardPage extends JSSWizardPage {
 		zoomFactor.setMaximum(50);
 		zoomFactor.setIncrement(1);
 		zoomFactor.setPageIncrement(5);
-		
-		// Set the default zoom value to 1. In order to activate it, we will force a refresh at the end of this method.
+
+		// Set the default zoom value to 1. In order to activate it, we will
+		// force a refresh at the end of this method.
 		zoomFactor.setSelection(1);
-		
+
 		GridData gd = new GridData(GridData.HORIZONTAL_ALIGN_END);
 		gd.widthHint = 150;
 		zoomFactor.setLayoutData(gd);
 
-		chartsGallery = new Gallery(composite, SWT.VIRTUAL | SWT.V_SCROLL
-				| SWT.BORDER);
+		chartsGallery = new Gallery(composite, SWT.VIRTUAL | SWT.V_SCROLL | SWT.BORDER);
 		final NoGroupRenderer gr = new NoGroupRenderer();
 		gr.setMinMargin(2);
 		gr.setItemSize(GALLERY_WIDTH, GALLERY_HEIGHT);
@@ -91,20 +93,16 @@ public class CVCTypeWizardPage extends JSSWizardPage {
 		chartsGallery.addSelectionListener(new SelectionListener() {
 
 			public void widgetSelected(SelectionEvent e) {
-				
-				
+
 				System.out.println("Selection changed..." + e.item);
-				
+
 				if (e.item != null && e.item instanceof GalleryItem) {
-					module = (ComponentDescriptor) ((GalleryItem) e.item)
-							.getData();
-				}
-				else
-				{
+					module = (ComponentDescriptor) ((GalleryItem) e.item).getData();
+				} else {
 					// Empty selection...
 					module = null;
 				}
-				
+
 				getContainer().updateButtons();
 			}
 
@@ -114,21 +112,20 @@ public class CVCTypeWizardPage extends JSSWizardPage {
 		});
 
 		setTableSelection();
-		
+
 		SelectionAdapter sa = new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				double c = 1 + 0.1 * zoomFactor.getSelection();
-				gr.setItemSize((int) (GALLERY_WIDTH * c),
-						(int) (GALLERY_HEIGHT * c));
+				gr.setItemSize((int) (GALLERY_WIDTH * c), (int) (GALLERY_HEIGHT * c));
 			}
 		};
-		
+
 		zoomFactor.addSelectionListener(sa);
-		
+
 		// Kick an immediate refresh to apply the default zoom.
 		sa.widgetSelected(null);
-		
+
 	}
 
 	private void setTableSelection() {
@@ -145,22 +142,30 @@ public class CVCTypeWizardPage extends JSSWizardPage {
 
 		GalleryItem tib = new GalleryItem(rootItem, SWT.NONE);
 		tib.setText("Blank");
-		setGallyeryItemImageInfo(tib, "icons/blank_a4.png"); //$NON-NLS-1$ 
+		setGallyeryItemImageInfo(tib, "icons/blank_a4.png"); //$NON-NLS-1$
 
 		JasperReportsConfiguration jConf = getConfig();
+		Collections.sort(modules, new Comparator<ComponentDescriptor>() {
+
+			@Override
+			public int compare(ComponentDescriptor o1, ComponentDescriptor o2) {
+				return o1.getLabel().compareTo(o2.getLabel());
+			}
+		});
+
 		for (ComponentDescriptor cd : modules) {
 			GalleryItem ti = new GalleryItem(rootItem, SWT.NONE);
 			ti.setText(cd.getLabel());
 
-			setGallyeryItemImageInfo(ti, cd, jConf); //$NON-NLS-1$
+			setGallyeryItemImageInfo(ti, cd, jConf); // $NON-NLS-1$
 
 			ti.setData(cd);
 		}
 		table.setRedraw(true);
 	}
 
-	private static void setGallyeryItemImageInfo(GalleryItem item,
-			ComponentDescriptor cd, JasperReportsConfiguration jConf) {
+	private static void setGallyeryItemImageInfo(GalleryItem item, ComponentDescriptor cd,
+			JasperReportsConfiguration jConf) {
 		if (!Misc.isNullOrEmpty(cd.getThumbnail())) {
 			Image img = UIManager.getThumbnail(cd, jConf);
 			if (img != null) {
@@ -173,10 +178,8 @@ public class CVCTypeWizardPage extends JSSWizardPage {
 		setGallyeryItemImageInfo(item, "icons/blank_a4.png");
 	}
 
-	private static void setGallyeryItemImageInfo(GalleryItem item,
-			String imagePath) {
-		Image img = CustomVisualizationActivator.getDefault().getImage(
-				imagePath);
+	private static void setGallyeryItemImageInfo(GalleryItem item, String imagePath) {
+		Image img = CustomVisualizationActivator.getDefault().getImage(imagePath);
 		if (img != null) {
 			item.setSelectedImage(img);
 			item.setStandardImage(img);
@@ -190,14 +193,12 @@ public class CVCTypeWizardPage extends JSSWizardPage {
 	}
 
 	/**
-	 * We allow the user to click finish only if at least a component has been selected.
+	 * We allow the user to click finish only if at least a component has been
+	 * selected.
 	 */
 	@Override
 	public boolean isPageComplete() {
 		return this.chartsGallery.getSelectionCount() > 0;
 	}
 
-	
-	
-	
 }
