@@ -16,6 +16,8 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import com.jaspersoft.jasperreports.customvisualization.design.CVDesignComponent;
 import com.jaspersoft.studio.components.customvisualization.CVNodeIconDescriptor;
 import com.jaspersoft.studio.components.customvisualization.messages.Messages;
+import com.jaspersoft.studio.components.customvisualization.properties.ItemPropertiesUtil;
+import com.jaspersoft.studio.components.customvisualization.ui.ComponentDescriptor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IDatasetContainer;
 import com.jaspersoft.studio.model.MGraphicElement;
@@ -26,6 +28,7 @@ import com.jaspersoft.studio.property.descriptor.classname.NClassTypePropertyDes
 import com.jaspersoft.studio.property.descriptor.combo.RComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
+import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ModelUtils;
 
 import net.sf.jasperreports.components.items.ItemData;
@@ -93,6 +96,9 @@ public class MCustomVisualization extends MGraphicElement implements IDatasetCon
 
 	@Override
 	public String getDisplayText() {
+		ComponentDescriptor cd = ItemPropertiesUtil.getComponentDescriptor(this);
+		if (cd != null)
+			return Misc.nvl(cd.getLabel(), getIconDescriptor().getTitle());
 		return getIconDescriptor().getTitle();
 	}
 
@@ -103,6 +109,9 @@ public class MCustomVisualization extends MGraphicElement implements IDatasetCon
 
 	@Override
 	public String getToolTip() {
+		ComponentDescriptor cd = ItemPropertiesUtil.getComponentDescriptor(this);
+		if (cd != null)
+			return Misc.nvl(cd.getLabel(), getIconDescriptor().getToolTip());
 		return getIconDescriptor().getToolTip();
 	}
 

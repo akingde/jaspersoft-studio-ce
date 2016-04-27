@@ -7,16 +7,6 @@ package com.jaspersoft.studio.components.customvisualization.properties;
 
 import java.util.List;
 
-import net.sf.jasperreports.components.items.Item;
-import net.sf.jasperreports.components.items.ItemData;
-import net.sf.jasperreports.components.items.ItemProperty;
-import net.sf.jasperreports.components.items.StandardItem;
-import net.sf.jasperreports.components.items.StandardItemData;
-import net.sf.jasperreports.components.items.StandardItemProperty;
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.engine.design.JRDesignDataset;
-import net.sf.jasperreports.engine.design.JasperDesign;
-
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
@@ -31,6 +21,7 @@ import com.jaspersoft.studio.components.customvisualization.ui.ComponentProperty
 import com.jaspersoft.studio.components.customvisualization.ui.ComponentSectionDescriptor;
 import com.jaspersoft.studio.components.customvisualization.ui.UIManager;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
+import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.util.ItemPropertyUtil;
 import com.jaspersoft.studio.property.itemproperty.desc.ADescriptor;
@@ -46,10 +37,19 @@ import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
+import net.sf.jasperreports.components.items.Item;
+import net.sf.jasperreports.components.items.ItemData;
+import net.sf.jasperreports.components.items.ItemProperty;
+import net.sf.jasperreports.components.items.StandardItem;
+import net.sf.jasperreports.components.items.StandardItemData;
+import net.sf.jasperreports.components.items.StandardItemProperty;
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
+import net.sf.jasperreports.engine.design.JasperDesign;
+
 public abstract class ItemPropertiesUtil extends AItemPropertiesUtil {
 
-	public ItemPropertiesUtil(AItemDataListPropertyDescriptor pDescriptor,
-			AbstractSection section) {
+	public ItemPropertiesUtil(AItemDataListPropertyDescriptor pDescriptor, AbstractSection section) {
 		super(pDescriptor, section);
 	}
 
@@ -67,12 +67,17 @@ public abstract class ItemPropertiesUtil extends AItemPropertiesUtil {
 	}
 
 	public ComponentDescriptor getComponentDescriptor() {
+		cd = getComponentDescriptor(pnode);
+		return cd;
+	}
+
+	public static ComponentDescriptor getComponentDescriptor(APropertyNode pnode) {
+		ComponentDescriptor cd = null;
 		if (pnode == null)
 			return null;
 		// let's look if we have some files with our properties
 		@SuppressWarnings("unchecked")
-		List<ItemProperty> p = (List<ItemProperty>) pnode
-				.getPropertyValue(CVDesignComponent.PROPERTY_ITEM_PROPERTIES);
+		List<ItemProperty> p = (List<ItemProperty>) pnode.getPropertyValue(CVDesignComponent.PROPERTY_ITEM_PROPERTIES);
 		if (Misc.isNullOrEmpty(p)) {
 			cd = null;
 			return null;
@@ -86,12 +91,10 @@ public abstract class ItemPropertiesUtil extends AItemPropertiesUtil {
 		if (dataset == null)
 			dataset = (JRDesignDataset) jd.getMainDataset();
 
-		ExpressionInterpreter expIntr = ExpressionUtil.getCachedInterpreter(
-				dataset, jd, jConf);
+		ExpressionInterpreter expIntr = ExpressionUtil.getCachedInterpreter(dataset, jd, jConf);
 		for (ItemProperty ip : p)
 			if (ip.getName().equals("module")) {
-				String module = ItemPropertyUtil.getItemPropertyString(
-						(StandardItemProperty) ip, expIntr);
+				String module = ItemPropertyUtil.getItemPropertyString((StandardItemProperty) ip, expIntr);
 				if (Misc.isNullOrEmpty(module))
 					break;
 				cd = UIManager.getDescriptor(jConf, module);
@@ -100,8 +103,7 @@ public abstract class ItemPropertiesUtil extends AItemPropertiesUtil {
 		return null;
 	}
 
-	public void showItemDialog(List<ItemData> citemsData,
-			StandardItemData itemData, StandardItem item,
+	public void showItemDialog(List<ItemData> citemsData, StandardItemData itemData, StandardItem item,
 			ExpressionContext expContext) {
 		getDescriptor().setItemDatas(citemsData, pnode);
 		getDescriptor().setItemData(itemData);
@@ -115,8 +117,7 @@ public abstract class ItemPropertiesUtil extends AItemPropertiesUtil {
 		}
 	}
 
-	protected abstract void setElementSelection(final ItemData itemData,
-			final Item item);
+	protected abstract void setElementSelection(final ItemData itemData, final Item item);
 
 	@Override
 	protected AItemDialog createItemDialog() {
@@ -135,8 +136,7 @@ public abstract class ItemPropertiesUtil extends AItemPropertiesUtil {
 			}
 		}
 		return new TableItemDialog(UIUtils.getShell(), getDescriptor(),
-				(JasperReportsConfiguration) section.getJasperReportsContext(),
-				false) {
+				(JasperReportsConfiguration) section.getJasperReportsContext(), false) {
 			@Override
 			protected void createDataItemSelector(Composite cmp) {
 
@@ -144,10 +144,8 @@ public abstract class ItemPropertiesUtil extends AItemPropertiesUtil {
 		};
 	}
 
-	private AItemDialog createForm(JasperReportsConfiguration jConf,
-			final ComponentDatasetDescriptor cdd) {
-		return new FormItemDialog(UIUtils.getShell(), getDescriptor(), jConf,
-				false) {
+	private AItemDialog createForm(JasperReportsConfiguration jConf, final ComponentDatasetDescriptor cdd) {
+		return new FormItemDialog(UIUtils.getShell(), getDescriptor(), jConf, false) {
 
 			@Override
 			protected void createDataItemSelector(Composite cmp) {
@@ -169,8 +167,7 @@ public abstract class ItemPropertiesUtil extends AItemPropertiesUtil {
 
 			}
 
-			protected void createProperties(
-					final ComponentDatasetDescriptor cdd, Composite cmp) {
+			protected void createProperties(final ComponentDatasetDescriptor cdd, Composite cmp) {
 				boolean first = true;
 				for (ComponentSectionDescriptor s : cdd.getSections()) {
 					Composite c = null;
