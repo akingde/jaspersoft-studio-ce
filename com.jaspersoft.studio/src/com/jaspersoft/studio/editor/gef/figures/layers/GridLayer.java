@@ -36,7 +36,7 @@ public class GridLayer extends org.eclipse.gef.editparts.GridLayer {
 			Stroke oldStroke = g.getStroke();
 
 			g.setStroke(new BasicStroke(0.1f));
-			Rectangle clip = getBounds();// g.getClip(Rectangle.SINGLETON);
+			Rectangle clip = getBounds();
 			if (gridX > 0) {
 				if (origin.x >= clip.x)
 					while (origin.x - gridX >= clip.x)
@@ -73,7 +73,7 @@ public class GridLayer extends org.eclipse.gef.editparts.GridLayer {
 						g.setStroke(new BasicStroke(0.1f));
 
 					g.setStroke(J2DUtils.getInvertedZoomedStroke(g.getStroke(), graphics.getAbsoluteScale()));
-					g.drawLine(clip.x, i, clip.x + clip.width, i);
+					graphics.drawLine(clip.x, i, clip.x + clip.width, i);
 					j++;
 				}
 			}

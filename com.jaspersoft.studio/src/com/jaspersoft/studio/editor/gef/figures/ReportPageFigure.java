@@ -122,7 +122,8 @@ public class ReportPageFigure extends APageFigure {
 			if (graphics2d != null) {
 				Stroke oldStroke = graphics2d.getStroke();
 
-				paintGrid(g, rectangle);
+				//set the size, the figure will be painted among the other children
+				setGridSize(rectangle);
 
 				graphics2d.setColor(printMarginColor);
 
@@ -141,11 +142,11 @@ public class ReportPageFigure extends APageFigure {
 	
 	/**
 	 * Override the original paintChildren to avoid to pain elements 
-	 * that are marked as not visible inside the model
+	 * that are marked as not visible inside the model. The grid is always painted
 	 */
 	protected void paintChildren(Graphics graphics) {
 		//if (!isMainEditor()) return;
-			
+		
 		for (int i = 0; i < getChildren().size(); i++) {
 			IFigure child = (IFigure) getChildren().get(i);
 			boolean modelVisible = true;
@@ -156,7 +157,7 @@ public class ReportPageFigure extends APageFigure {
 					child.setVisible(modelVisible);
 				}
 			}
-			if (child.isVisible() && modelVisible && isFigureVisible(child)) {
+			if ((child == grid) || (child.isVisible() && modelVisible && isFigureVisible(child))) {
 				// determine clipping areas for child
 				Rectangle[] clipping = null;
 				if (getClippingStrategy() != null) {
@@ -194,4 +195,5 @@ public class ReportPageFigure extends APageFigure {
 				pageWidth + insets.left + insets.right, pageHeight + insets.top + insets.bottom);
 	}
 
+	
 }

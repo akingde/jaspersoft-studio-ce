@@ -41,8 +41,13 @@ public abstract class APageFigure extends FreeformLayeredPane implements HandleB
 
 	/** The Constant PAGE_BORDER. */
 	public static final Insets PAGE_BORDER = new Insets(10, 10, 10, 10);
+	
+	protected Point origin = new Point();
 
-	private GridLayer grid = new GridLayer();
+	/**
+	 * The grid figure, it is the first figure added to the page
+	 */
+	protected GridLayer grid = new GridLayer();
 	
 	/**
 	 * The current page
@@ -70,6 +75,8 @@ public abstract class APageFigure extends FreeformLayeredPane implements HandleB
 	public APageFigure(boolean viewMargins, PageEditPart page) {
 		this.viewMargins = viewMargins;
 		this.page = page;
+		//add the figure to the page
+		add(grid);
 	}
 
 	public void setPageBackground(org.eclipse.swt.graphics.Color pageBackground) {
@@ -120,7 +127,7 @@ public abstract class APageFigure extends FreeformLayeredPane implements HandleB
 			// Stroke oldStroke = graphics2d.getStroke();
 			// graphics2d.setStroke(J2DUtils.getInvertedZoomedStroke(oldStroke, g.getAbsoluteScale()));
 
-			paintGrid(g, rectangle);
+			setGridSize(rectangle);
 		}
 		if (getBorder() != null)
 			getBorder().paint(this, g, NO_INSETS);
@@ -136,12 +143,15 @@ public abstract class APageFigure extends FreeformLayeredPane implements HandleB
 		super.primTranslate(dx, dy);
 	}
 
-	Point origin = new Point();
 
-	protected void paintGrid(Graphics g, Rectangle clip) {
+	/**
+	 * Set the size of the grid figure 
+	 * 
+	 * @param size a not null rectangle with the size of the grid figure
+	 */
+	protected void setGridSize(Rectangle size) {
 		if (grid.isVisible()) {
-			grid.setBounds(clip);
-			grid.paint(g);
+			grid.setBounds(size);
 		}
 	}
 

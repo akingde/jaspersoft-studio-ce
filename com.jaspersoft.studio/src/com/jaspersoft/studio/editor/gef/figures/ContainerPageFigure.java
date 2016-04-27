@@ -42,7 +42,7 @@ public class ContainerPageFigure extends APageFigure {
 			g.setBackgroundColor(pageBackground);
 			g.fillRectangle(rectangle);
 
-			paintGrid(g, rectangle);
+			setGridSize(rectangle);
 		}
 		if (getBorder() != null)
 			getBorder().paint(this, g, NO_INSETS);
@@ -61,12 +61,12 @@ public class ContainerPageFigure extends APageFigure {
 	
 	/**
 	 * Override the original paintChildren to avoid to pain elements 
-	 * that are marked as not visible inside the model
+	 * that are marked as not visible inside the model. The grid is always painted
 	 */
 	protected void paintChildren(Graphics graphics) {
 		for (int i = 0; i < getChildren().size(); i++) {
 			IFigure child = (IFigure) getChildren().get(i);
-			if (child.isVisible() && isFigureVisible(child)) {
+			if ((child == grid) ||child.isVisible() && isFigureVisible(child)) {
 				// determine clipping areas for child
 				Rectangle[] clipping = null;
 				if (getClippingStrategy() != null) {

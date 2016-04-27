@@ -93,7 +93,7 @@ public class JSSScrollingGraphicalViewer extends ScrollingGraphicalViewer {
 				break;
 			}
 		}
-		if (!wasOverride) super.appendSelection(editpart);
+		if (!wasOverride) super.select(editpart);
 	}
 	
 	/**
