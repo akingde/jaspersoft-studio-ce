@@ -29,6 +29,15 @@ public class GridLayer extends org.eclipse.gef.editparts.GridLayer {
 		setForegroundColor(ColorConstants.lightGray);
 	}
 
+	/**
+	 * Avoid to paint the figure if it is not visible
+	 */
+	protected void paintFigure(Graphics graphics) {
+		if (isVisible()){
+			super.paintFigure(graphics);
+		}
+	}
+	
 	@Override
 	protected void paintGrid(Graphics graphics) {
 		Graphics2D g = ComponentFigure.getG2D(graphics);
