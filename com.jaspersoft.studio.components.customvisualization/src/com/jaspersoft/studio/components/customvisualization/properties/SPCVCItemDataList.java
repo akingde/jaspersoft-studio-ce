@@ -322,15 +322,15 @@ public class SPCVCItemDataList extends ASPropertyWidget<AItemDataListPropertyDes
 							c += card;
 						else if (card <= 0) {
 							if (!cdd.getSections().isEmpty())
-								return cdd.getSections()
-										.get(Math.max(0, Math.min(indx - c, cdd.getSections().size() - 1))).getName();
-							return cdd.getLabel();
+								return cd.i18n(cdd.getSections()
+										.get(Math.max(0, Math.min(indx - c, cdd.getSections().size() - 1))).getName());
+							return cd.i18n(cdd.getLabel());
 						}
 						if (c > indx) {
 							if (!cdd.getSections().isEmpty())
-								return cdd.getSections()
-										.get(Math.max(0, Math.min(indx - c, cdd.getSections().size() - 1))).getName();
-							return cdd.getLabel();
+								return cd.i18n(cdd.getSections()
+										.get(Math.max(0, Math.min(indx - c, cdd.getSections().size() - 1))).getName());
+							return cd.i18n(cdd.getLabel());
 						}
 					}
 				}

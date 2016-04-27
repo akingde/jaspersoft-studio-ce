@@ -149,13 +149,13 @@ public class CVCTypeWizardPage extends JSSWizardPage {
 
 			@Override
 			public int compare(ComponentDescriptor o1, ComponentDescriptor o2) {
-				return o1.getLabel().compareTo(o2.getLabel());
+				return o1.i18n(o1.getLabel()).compareTo(o2.i18n(o2.getLabel()));
 			}
 		});
 
 		for (ComponentDescriptor cd : modules) {
 			GalleryItem ti = new GalleryItem(rootItem, SWT.NONE);
-			ti.setText(cd.getLabel());
+			ti.setText(cd.i18n(cd.getLabel()));
 
 			setGallyeryItemImageInfo(ti, cd, jConf); // $NON-NLS-1$
 
@@ -167,7 +167,7 @@ public class CVCTypeWizardPage extends JSSWizardPage {
 	private static void setGallyeryItemImageInfo(GalleryItem item, ComponentDescriptor cd,
 			JasperReportsConfiguration jConf) {
 		if (!Misc.isNullOrEmpty(cd.getThumbnail())) {
-			Image img = UIManager.getThumbnail(cd, jConf);
+			Image img = UIManager.getThumbnail(cd);
 			if (img != null) {
 				item.setSelectedImage(img);
 				item.setStandardImage(img);

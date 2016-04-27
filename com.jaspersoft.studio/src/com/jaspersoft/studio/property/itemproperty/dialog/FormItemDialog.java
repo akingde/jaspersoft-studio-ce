@@ -11,9 +11,6 @@ package com.jaspersoft.studio.property.itemproperty.dialog;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.sf.jasperreports.components.items.ItemProperty;
-import net.sf.jasperreports.components.items.StandardItemProperty;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
@@ -38,6 +35,9 @@ import com.jaspersoft.studio.property.itemproperty.event.ItemPropertyModifiedEve
 import com.jaspersoft.studio.property.itemproperty.event.ItemPropertyModifiedListener;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
+import net.sf.jasperreports.components.items.ItemProperty;
+import net.sf.jasperreports.components.items.StandardItemProperty;
 
 public abstract class FormItemDialog extends AItemDialog {
 	private boolean showAddDatasetButton = true;

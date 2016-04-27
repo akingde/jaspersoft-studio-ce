@@ -89,4 +89,8 @@ public class ComponentDescriptor {
 		return 0;
 	}
 
+	public String i18n(String key) {
+		return UIManager.getProperty(this, key);
+	}
+
 }

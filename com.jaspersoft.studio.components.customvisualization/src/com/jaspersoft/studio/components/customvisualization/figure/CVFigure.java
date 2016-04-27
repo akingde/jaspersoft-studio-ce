@@ -74,7 +74,7 @@ public class CVFigure extends JRComponentFigure {
 			return cache;
 		ComponentDescriptor cd = UIManager.getComponentDescriptor((MCustomVisualization) model);
 		if (cd != null) {
-			org.eclipse.swt.graphics.Image img = UIManager.getThumbnail(cd, model.getJasperConfiguration());
+			org.eclipse.swt.graphics.Image img = UIManager.getThumbnail(cd);
 			if (img != null) {
 				cache = ImageUtils.convertToAWT(img.getImageData());
 				return cache;

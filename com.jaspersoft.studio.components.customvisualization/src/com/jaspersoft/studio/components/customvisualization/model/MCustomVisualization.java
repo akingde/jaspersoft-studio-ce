@@ -98,7 +98,7 @@ public class MCustomVisualization extends MGraphicElement implements IDatasetCon
 	public String getDisplayText() {
 		ComponentDescriptor cd = ItemPropertiesUtil.getComponentDescriptor(this);
 		if (cd != null)
-			return Misc.nvl(cd.getLabel(), getIconDescriptor().getTitle());
+			return Misc.nvl(cd.i18n(cd.getLabel()), getIconDescriptor().getTitle());
 		return getIconDescriptor().getTitle();
 	}
 
@@ -111,7 +111,7 @@ public class MCustomVisualization extends MGraphicElement implements IDatasetCon
 	public String getToolTip() {
 		ComponentDescriptor cd = ItemPropertiesUtil.getComponentDescriptor(this);
 		if (cd != null)
-			return Misc.nvl(cd.getLabel(), getIconDescriptor().getToolTip());
+			return Misc.nvl(cd.i18n(cd.getLabel()), getIconDescriptor().getToolTip());
 		return getIconDescriptor().getToolTip();
 	}
 

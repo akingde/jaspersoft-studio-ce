@@ -364,7 +364,7 @@ public class SPCVItemPropertiesList extends ASPropertyWidget<CVItemPropertiesDes
 
 	protected Composite createSection(Composite parent, String text) {
 		Section ec = new Section(parent, Section.TREE_NODE);
-		ec.setText(Misc.nvl(text));
+		ec.setText(cd.i18n(Misc.nvl(text)));
 		ec.setExpanded(true);
 		ec.setFont(ResourceManager.getBoldFont(ec.getFont()));
 
@@ -388,7 +388,7 @@ public class SPCVItemPropertiesList extends ASPropertyWidget<CVItemPropertiesDes
 
 		if (!Misc.isNullOrEmpty(text)) {
 			Label lbl = new Label(ec, SWT.NONE);
-			lbl.setText(text);
+			lbl.setText(cd.i18n(text));
 			lbl.setFont(ResourceManager.getBoldFont(lbl.getFont()));
 		}
 		new Label(ec, SWT.SEPARATOR | SWT.HORIZONTAL).setLayoutData(new GridData(GridData.FILL_HORIZONTAL));

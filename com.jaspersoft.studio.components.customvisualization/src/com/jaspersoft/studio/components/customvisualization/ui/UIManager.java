@@ -15,14 +15,19 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.URLClassLoader;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.MissingResourceException;
 import java.util.Set;
 import java.util.StringTokenizer;
 
@@ -60,6 +65,7 @@ import net.sf.jasperreports.components.items.ItemProperty;
 import net.sf.jasperreports.components.items.StandardItemProperty;
 import net.sf.jasperreports.eclipse.IDisposeListener;
 import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.engine.util.ResourceBundleMessageProvider;
 
 public class UIManager {
 	private static Map<String, ComponentDescriptor> cachePlugin;
@@ -85,6 +91,7 @@ public class UIManager {
 				}
 				imageCache.clear();
 				parentsPath.clear();
+				rbMap.clear();
 				cache.clear();
 				if (cachePlugin != null)
 					cachePlugin.clear();
@@ -167,7 +174,7 @@ public class UIManager {
 		}
 	}
 
-	public static Image getThumbnail(ComponentDescriptor cd, JasperReportsConfiguration jConf) {
+	public static Image getThumbnail(ComponentDescriptor cd) {
 		Image img = imageCache.get(cd);
 		if (img == null && !Misc.isNullOrEmpty(cd.getThumbnail())) {
 			try {
@@ -190,6 +197,32 @@ public class UIManager {
 			}
 		}
 		return img;
+	}
+
+	private static Map<ComponentDescriptor, ResourceBundleMessageProvider> rbMap = new HashMap<ComponentDescriptor, ResourceBundleMessageProvider>();
+
+	public static String getProperty(ComponentDescriptor cd, String key) {
+		String uri = parentsPath.get(cd);
+		if (uri != null) {
+			try {
+				ResourceBundleMessageProvider rbmp = rbMap.get(cd);
+				if (rbmp == null && !rbMap.containsKey(cd)) {
+					ClassLoader cl = new URLClassLoader(new URL[] { new URI(uri).toURL() });
+					rbmp = new ResourceBundleMessageProvider(cd.getModule(), cl);
+					rbMap.put(cd, rbmp);
+				}
+				try {
+					key = rbmp.getMessage(key, Locale.getDefault());
+				} catch (MissingResourceException e) {
+				}
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+			} catch (URISyntaxException e) {
+				e.printStackTrace();
+			}
+		}
+		return key;
+
 	}
 
 	public static List<ComponentDescriptor> getModules(JasperReportsConfiguration jConfig) {
@@ -424,7 +457,9 @@ public class UIManager {
 					return Double.class;
 				}
 			};
-		} else {
+		} else
+
+		{
 			desc = new ItemPropertyDescription<String>(cpd.getName(), cpd.getLabel(), cpd.getDescription(),
 					cpd.isMandatory(), cpd.getDefaultValue());
 		}

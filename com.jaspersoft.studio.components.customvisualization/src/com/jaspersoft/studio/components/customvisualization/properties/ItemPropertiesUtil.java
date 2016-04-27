@@ -21,7 +21,6 @@ import com.jaspersoft.studio.components.customvisualization.ui.ComponentProperty
 import com.jaspersoft.studio.components.customvisualization.ui.ComponentSectionDescriptor;
 import com.jaspersoft.studio.components.customvisualization.ui.UIManager;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
-import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.util.ItemPropertyUtil;
 import com.jaspersoft.studio.property.itemproperty.desc.ADescriptor;
@@ -172,9 +171,9 @@ public abstract class ItemPropertiesUtil extends AItemPropertiesUtil {
 				for (ComponentSectionDescriptor s : cdd.getSections()) {
 					Composite c = null;
 					if (s.isExpandable())
-						c = createSection(cmp, s.getName());
+						c = createSection(cmp, cd.i18n(s.getName()));
 					else if (!Misc.isNullOrEmpty(s.getName()))
-						c = createGroup(cmp, s.getName());
+						c = createGroup(cmp, cd.i18n(s.getName()));
 					else {
 						c = cmp;
 						if (!first)
@@ -217,7 +216,7 @@ public abstract class ItemPropertiesUtil extends AItemPropertiesUtil {
 							break;
 						}
 					}
-					items[i] = f;
+					items[i] = cd.i18n(f);
 				}
 				if (dsviewer != null) {
 					dsviewer.setItems(items);
