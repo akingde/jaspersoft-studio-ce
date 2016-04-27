@@ -73,7 +73,10 @@
       <description>Properties view</description>
       <topic href="html/view/repository/repository.html" label="Repository View"/>
    </context>
-   
+   <context id="editor_book" title="How to create Report Books">
+      <description>Report Templates (jrxml) Editor</description>
+      <topic href="html/wizard/createbook/createbook.html" label="How to create Report Books"/>
+   </context>
    <context id="editor_jrxml" title="Report Templates (jrxml) Editor">
       <description>Report Templates (jrxml) Editor</description>
       <topic href="html/editors/jrxml/jrxml.html" label="Report Templates (jrxml) Editor"/>

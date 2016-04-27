@@ -27,7 +27,7 @@ public class JRBookEditor extends AbstractJRXMLEditor implements CachedSelection
 
 	@Override
 	protected String getEditorHelpID() {
-		return null;
+		return "com.jaspersoft.studio.doc.editor_book";
 	}
 
 	@Override
@@ -74,4 +74,5 @@ public class JRBookEditor extends AbstractJRXMLEditor implements CachedSelection
 		return null;
 	}
 
+	
 }
