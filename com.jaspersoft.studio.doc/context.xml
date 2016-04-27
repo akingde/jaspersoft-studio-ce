@@ -15,18 +15,25 @@
 		<topic
 			href="html/wizard/createreport/createreport.html"
 			label="Designing a report" />
+		<topic 
+			href="html/wizard/createbook/createbook.html"
+			label="Designing a report book" />
 	</context>
 	<context id="select_name">
 		<description>Here you can select the folder in the workspace where you want to put the report, and name for the report itself, then hit the button "Next" to proceed.</description>
 		<topic
 			href="html/wizard/createreport/createreport.html"
 			label="Designing a report" />
+		<topic 
+			href="html/wizard/createbook/createbook.html"
+			label="Designing a report book" />			
 		<topic href="html/wizard/createreport/addfolder.html" label="Create a Project Folder" />
 	</context>
 	<context id="select_dataset">
 		<description>Here you can define a datasource, the location from which the data is taken to fill the report. A datasource is composed by a data adapter, that is a connection to a resource (like and XML file or an SQL database), and eventually a query to identify fields that will be extracted from the resource.
 		</description>
 		<topic href="html/wizard/createreport/createreport.html" label="Designing a report" />
+		<topic href="html/wizard/createbook/createbook.html" label="Designing a report book" />
 		<topic href="html/wizard/xmldatasources/createxml.html" label="Using XML datasources"/>
 		<topic href="html/wizard/xmldatasources/remotexml.html" label="Using Remote XML datasources"/>
       	<topic href="html/wizard/chartanddataset/createdataset.html" label="Creation of a dataset"/>
@@ -36,10 +43,14 @@
 		<topic
 			href="html/wizard/createreport/createreport.html"
 			label="Designing a report" />
+		<topic 
+			href="html/wizard/createbook/createbook.html"
+			label="Designing a report book" />			
 	</context>
 	<context id="select_groups">
 		<description>Here you can choose which from the added fields will became groups.</description>
 		<topic href="html/wizard/createreport/createreport.html" label="Designing a report" />
+		<topic href="html/wizard/createbook/createbook.html" label="Designing a report book" />
 		<topic href="html/wizard/creategroup/creategroup.html" label="Groups in JasperSoft Studio" />
 	</context>
    <context id="view_reportstate" title="Report State View">
