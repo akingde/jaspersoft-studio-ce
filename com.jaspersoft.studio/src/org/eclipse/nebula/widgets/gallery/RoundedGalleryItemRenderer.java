@@ -31,6 +31,8 @@ import org.eclipse.wb.swt.ResourceManager;
  *
  */
 public class RoundedGalleryItemRenderer extends DefaultGalleryItemRenderer {
+	
+	private ROUNDED_SELECTION_TYPE selectionType = ROUNDED_SELECTION_TYPE.FULL_BLOCK;
 
 	public RoundedGalleryItemRenderer() {
 		// Set defaults
@@ -89,7 +91,7 @@ public class RoundedGalleryItemRenderer extends DefaultGalleryItemRenderer {
 					* this.dropShadowsSize);
 
 			xShift = RendererHelper.getShift(width, size.x);
-			yShift = Math.max(useableHeight - size.y,0);
+			yShift = RendererHelper.getShift(useableHeight, size.y);
 
 			if (dropShadows) {
 				Color c = null;
@@ -154,14 +156,23 @@ public class RoundedGalleryItemRenderer extends DefaultGalleryItemRenderer {
 				gc.drawImage(_drawImage, 0, 0, imageWidth, imageHeight, x
 						+ xShift, y + yShift, size.x, size.y);
 				drawAllOverlays(gc, item, x, y, size, xShift, yShift);
-				if(selected){
-					gc.setForeground(ResourceManager.getColor(SWT.COLOR_LIST_SELECTION));
-					gc.setLineWidth(5);
-					gc.drawRoundRectangle(x + xShift, y + yShift, size.x, size.y, 10, 10);
-				}
 			}
-
 		}
+		
+		if (selected) {
+			if(this.selectionType == ROUNDED_SELECTION_TYPE.FULL_BLOCK) {
+			gc.setForeground(ResourceManager.getColor(SWT.COLOR_LIST_SELECTION));
+			gc.setLineWidth(3);
+			gc.drawRoundRectangle(x+1, y, width-3, useableHeight-1,
+					selectionRadius, selectionRadius);
+			}
+			else {
+				gc.setForeground(ResourceManager.getColor(SWT.COLOR_LIST_SELECTION));
+				gc.setLineWidth(3);
+				gc.drawRoundRectangle(x + xShift, y + yShift, size.x, size.y, 5, 5);
+			}
+		}
+
 
 		// Draw label
 		if (item.getText() != null && !EMPTY_STRING.equals(item.getText())
@@ -210,6 +221,21 @@ public class RoundedGalleryItemRenderer extends DefaultGalleryItemRenderer {
 		
 		// If we are rendering the selected item, we return a bold version of the font...
 		return selected ? ResourceManager.getBoldFont(itemFont) : itemFont;
+	}
+	
+	/**
+	 * Sets the type of selection for the item
+	 * <p>
+	 * Default is {@link ROUNDED_SELECTION_TYPE#FULL_BLOCK}
+	 * 
+	 * @param selectionType the type of selection
+	 */
+	public void setFullBlockSelection(ROUNDED_SELECTION_TYPE selectionType) {
+		this.selectionType = selectionType;
+	}
+	
+	public enum ROUNDED_SELECTION_TYPE {
+		FULL_BLOCK, SINGLE_IMAGE
 	}
 	
 }
