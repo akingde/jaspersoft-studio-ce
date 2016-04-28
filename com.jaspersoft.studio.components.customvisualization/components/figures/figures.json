@@ -63,7 +63,7 @@
                   "description": "Male, Female, Custom",
                   "mandatory": "true",
                   "type": "combo",
-                  "options": ["Male","Female","Custom"], 
+                  "options2": [["Male", "Male"],["Female", "Female"],["Custom", "Custom"]], 
                   "defaultValue":"Male"
                 },
                 {

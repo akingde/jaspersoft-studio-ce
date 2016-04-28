@@ -291,7 +291,8 @@ public class SPCVItemPropertiesList extends ASPropertyWidget<CVItemPropertiesDes
 							}
 							first = false;
 							for (ComponentPropertyDescriptor pd : csd.getProperties()) {
-								ItemPropertyDescription<?> ipdesc = UIManager.createItemPropertyDescriptor(pd, jConf);
+								ItemPropertyDescription<?> ipdesc = UIManager.createItemPropertyDescriptor(cd, pd,
+										jConf);
 								descriptor.addItemPropertyDescriptor(ipdesc);
 								wIProps.add(createItemProperty(c, ipdesc, descriptor, ec));
 							}

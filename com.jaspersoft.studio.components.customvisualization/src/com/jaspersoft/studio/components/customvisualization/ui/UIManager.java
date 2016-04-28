@@ -391,22 +391,32 @@ public class UIManager {
 		return null;
 	}
 
-	public static ItemPropertyDescription<?> createItemPropertyDescriptor(ComponentPropertyDescriptor cpd,
-			JasperReportsConfiguration jConfig) {
+	public static ItemPropertyDescription<?> createItemPropertyDescriptor(ComponentDescriptor cd,
+			ComponentPropertyDescriptor cpd, JasperReportsConfiguration jConfig) {
 		ItemPropertyDescription<?> desc = null;
 		Number min = null;
 		Number max = null;
 		Number def = null;
 		if (cpd.getType().equalsIgnoreCase("path")) {
-			desc = new FilePropertyDescription(cpd.getName(), cpd.getLabel(), cpd.getDescription(), cpd.isMandatory(),
-					cpd.getDefaultValue());
-			desc.setjConfig(jConfig);
-		} else if (cpd.getType().equalsIgnoreCase("combo"))
-			desc = new ComboItemPropertyDescription<String>(cpd.getName(), cpd.getLabel(), cpd.getDescription(),
-					cpd.isMandatory(), cpd.getDefaultValue(), cpd.getOptions());
-		else if (cpd.getType().equalsIgnoreCase("color"))
-			desc = new ColorPropertyDescription<String>(cpd.getName(), cpd.getLabel(), cpd.getDescription(),
+			desc = new FilePropertyDescription(cpd.getName(), cd.i18n(cpd.getLabel()), cd.i18n(cpd.getDescription()),
 					cpd.isMandatory(), cpd.getDefaultValue());
+			desc.setjConfig(jConfig);
+		} else if (cpd.getType().equalsIgnoreCase("combo")) {
+			if (cpd.getOptions2() != null) {
+				String[][] opts = cpd.getOptions2();
+				String[][] i18nOpts = new String[opts.length][2];
+				for (int i = 0; i < opts.length; i++) {
+					i18nOpts[i][0] = opts[i][0];
+					i18nOpts[i][1] = cd.i18n(opts[i][1]);
+				}
+				desc = new ComboItemPropertyDescription<String>(cpd.getName(), cd.i18n(cpd.getLabel()),
+						cd.i18n(cpd.getDescription()), cpd.isMandatory(), cpd.getDefaultValue(), i18nOpts);
+			} else
+				desc = new ComboItemPropertyDescription<String>(cpd.getName(), cd.i18n(cpd.getLabel()),
+						cd.i18n(cpd.getDescription()), cpd.isMandatory(), cpd.getDefaultValue(), cpd.getOptions());
+		} else if (cpd.getType().equalsIgnoreCase("color"))
+			desc = new ColorPropertyDescription<String>(cpd.getName(), cd.i18n(cpd.getLabel()),
+					cd.i18n(cpd.getDescription()), cpd.isMandatory(), cpd.getDefaultValue());
 
 		else if (cpd.getType().equalsIgnoreCase("float")) {
 			if (cpd.getMin() != null)
@@ -415,8 +425,8 @@ public class UIManager {
 				max = new Float(cpd.getMax());
 			if (cpd.getDefaultValue() != null)
 				def = new Float(cpd.getDefaultValue());
-			desc = new NumberPropertyDescription<Float>(cpd.getName(), cpd.getLabel(), cpd.getDescription(),
-					cpd.isMandatory(), (Float) def, min, max) {
+			desc = new NumberPropertyDescription<Float>(cpd.getName(), cd.i18n(cpd.getLabel()),
+					cd.i18n(cpd.getDescription()), cpd.isMandatory(), (Float) def, min, max) {
 				@Override
 				public Class<?> getType() {
 					if (defaultValue != null)
@@ -431,8 +441,8 @@ public class UIManager {
 				max = new Integer(cpd.getMax());
 			if (cpd.getDefaultValue() != null)
 				def = new Integer(cpd.getDefaultValue());
-			desc = new NumberPropertyDescription<Integer>(cpd.getName(), cpd.getLabel(), cpd.getDescription(),
-					cpd.isMandatory(), (Integer) def, min, max) {
+			desc = new NumberPropertyDescription<Integer>(cpd.getName(), cd.i18n(cpd.getLabel()),
+					cd.i18n(cpd.getDescription()), cpd.isMandatory(), (Integer) def, min, max) {
 
 				@Override
 				public Class<?> getType() {
@@ -448,8 +458,8 @@ public class UIManager {
 				max = new BigDecimal(cpd.getMax());
 			if (cpd.getDefaultValue() != null)
 				def = new BigDecimal(cpd.getDefaultValue());
-			desc = new NumberPropertyDescription<BigDecimal>(cpd.getName(), cpd.getLabel(), cpd.getDescription(),
-					cpd.isMandatory(), (BigDecimal) def, min, max) {
+			desc = new NumberPropertyDescription<BigDecimal>(cpd.getName(), cd.i18n(cpd.getLabel()),
+					cd.i18n(cpd.getDescription()), cpd.isMandatory(), (BigDecimal) def, min, max) {
 				@Override
 				public Class<?> getType() {
 					if (defaultValue != null)
@@ -460,8 +470,8 @@ public class UIManager {
 		} else
 
 		{
-			desc = new ItemPropertyDescription<String>(cpd.getName(), cpd.getLabel(), cpd.getDescription(),
-					cpd.isMandatory(), cpd.getDefaultValue());
+			desc = new ItemPropertyDescription<String>(cpd.getName(), cd.i18n(cpd.getLabel()),
+					cd.i18n(cpd.getDescription()), cpd.isMandatory(), cpd.getDefaultValue());
 		}
 		if (desc != null)
 			desc.setReadOnly(cpd.isReadOnly());

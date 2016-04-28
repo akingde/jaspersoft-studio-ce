@@ -22,6 +22,15 @@ public class ComponentPropertyDescriptor {
 	private String max;
 	private String type;
 	private String[] options;
+	private String[][] options2;
+
+	public String[][] getOptions2() {
+		return options2;
+	}
+
+	public void setOptions2(String[][] options2) {
+		this.options2 = options2;
+	}
 
 	public String[] getOptions() {
 		return options;

@@ -123,7 +123,7 @@ public class CVCItemDescriptor extends ADescriptor {
 										for (ComponentSectionDescriptor csd : cdd.getSections())
 											if (csd.getProperties() != null)
 												for (ComponentPropertyDescriptor cpd : csd.getProperties())
-													props.add(UIManager.createItemPropertyDescriptor(cpd, jConf));
+													props.add(UIManager.createItemPropertyDescriptor(cd, cpd, jConf));
 
 								}
 								itemProperties = props.toArray(new ItemPropertyDescription[props.size()]);

@@ -1,8 +1,5 @@
 package com.jaspersoft.studio.property.itemproperty.desc;
 
-import net.sf.jasperreports.components.items.StandardItemProperty;
-import net.sf.jasperreports.engine.design.JRDesignExpression;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.ModifyEvent;
@@ -18,43 +15,104 @@ import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.utils.Misc;
 
+import net.sf.jasperreports.components.items.StandardItemProperty;
+import net.sf.jasperreports.engine.design.JRDesignExpression;
+
 public class ComboItemPropertyDescription<T> extends ItemPropertyDescription<T> {
 	private String[] values;
+	private String[][] keyValues;
 
 	public ComboItemPropertyDescription(String name, String description, boolean mandatory, String[] values) {
 		super(name, description, mandatory);
 		this.values = values;
+		keyValues = convert2KeyValue(values);
 	}
 
 	public ComboItemPropertyDescription(String name, String description, boolean mandatory, T defaultValue,
 			String[] values) {
 		super(name, description, mandatory, defaultValue);
 		this.values = values;
+		keyValues = convert2KeyValue(values);
 	}
 
 	public ComboItemPropertyDescription(String name, String label, String description, boolean mandatory, T defaultValue,
 			String[] values) {
 		super(name, label, description, mandatory, defaultValue);
 		this.values = values;
-	}
-
-	public ComboItemPropertyDescription(String name, String label, String description, boolean mandatory, String[] values) {
-		super(name, label, description, mandatory);
-		this.values = values;
+		keyValues = convert2KeyValue(values);
 	}
 
 	public ComboItemPropertyDescription(String name, String label, String description, boolean mandatory,
-			String[] values, boolean readOnly) {
+			String[] values) {
 		super(name, label, description, mandatory);
 		this.values = values;
+		keyValues = convert2KeyValue(values);
+	}
+
+	public ComboItemPropertyDescription(String name, String label, String description, boolean mandatory, String[] values,
+			boolean readOnly) {
+		super(name, label, description, mandatory);
+		this.values = values;
+		keyValues = convert2KeyValue(values);
 		this.readOnly = readOnly;
+	}
+
+	public ComboItemPropertyDescription(String name, String description, boolean mandatory, String[][] keyValues) {
+		super(name, description, mandatory);
+		this.values = convert2Value(keyValues);
+		this.keyValues = keyValues;
+	}
+
+	public ComboItemPropertyDescription(String name, String description, boolean mandatory, T defaultValue,
+			String[][] keyValues) {
+		super(name, description, mandatory, defaultValue);
+		this.values = convert2Value(keyValues);
+		this.keyValues = keyValues;
+	}
+
+	public ComboItemPropertyDescription(String name, String label, String description, boolean mandatory, T defaultValue,
+			String[][] keyValues) {
+		super(name, label, description, mandatory, defaultValue);
+		this.values = convert2Value(keyValues);
+		this.keyValues = keyValues;
+	}
+
+	public ComboItemPropertyDescription(String name, String label, String description, boolean mandatory,
+			String[][] keyValues) {
+		super(name, label, description, mandatory);
+		this.values = convert2Value(keyValues);
+		this.keyValues = keyValues;
+	}
+
+	public ComboItemPropertyDescription(String name, String label, String description, boolean mandatory,
+			String[][] keyValues, boolean readOnly) {
+		super(name, label, description, mandatory);
+		this.values = convert2Value(keyValues);
+		this.keyValues = keyValues;
+		this.readOnly = readOnly;
+	}
+
+	public static String[] convert2Value(String[][] keyValues) {
+		String[] v = new String[keyValues.length];
+		for (int i = 0; i < keyValues.length; i++)
+			v[i] = keyValues[i][1];
+		return v;
+	}
+
+	public static String[][] convert2KeyValue(String[] values) {
+		String[][] kv = new String[values.length][2];
+		for (int i = 0; i < values.length; i++) {
+			kv[i][0] = values[i];
+			kv[i][1] = values[i];
+		}
+		return kv;
 	}
 
 	public void handleEdit(Control txt, StandardItemProperty value) {
 		super.handleEdit(txt, value);
 		if (txt instanceof Combo) {
 			int indx = ((Combo) txt).getSelectionIndex();
-			String tvalue = indx >= 0 && indx < values.length ? values[indx] : null;
+			String tvalue = indx >= 0 && indx < values.length ? keyValues[indx][0] : null;
 			if (tvalue != null && tvalue.isEmpty())
 				tvalue = null;
 			if (value.getValueExpression() != null)
@@ -123,7 +181,7 @@ public class ComboItemPropertyDescription<T> extends ItemPropertyDescription<T> 
 			String v = wip.getValue().getValue();
 			if (readOnly)
 				for (int i = 0; i < values.length; i++) {
-					if (values[i].equals(v)) {
+					if (keyValues[i][0].equals(v)) {
 						combo.select(i);
 						break;
 					}
