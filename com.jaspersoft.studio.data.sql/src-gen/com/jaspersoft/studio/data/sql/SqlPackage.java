@@ -3043,6 +3043,34 @@ public interface SqlPackage extends EPackage
   int INTEGER_VALUE_FEATURE_COUNT = 1;
 
   /**
+   * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.UnsignedValueImpl <em>Unsigned Value</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see com.jaspersoft.studio.data.sql.impl.UnsignedValueImpl
+   * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getUnsignedValue()
+   * @generated
+   */
+  int UNSIGNED_VALUE = 78;
+
+  /**
+   * The feature id for the '<em><b>Integer</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int UNSIGNED_VALUE__INTEGER = 0;
+
+  /**
+   * The number of structural features of the '<em>Unsigned Value</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int UNSIGNED_VALUE_FEATURE_COUNT = 1;
+
+  /**
    * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.ColImpl <em>Col</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -3050,7 +3078,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getCol()
    * @generated
    */
-  int COL = 78;
+  int COL = 79;
 
   /**
    * The feature id for the '<em><b>Entries</b></em>' containment reference list.
@@ -3078,7 +3106,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getUnipivotInClause()
    * @generated
    */
-  int UNIPIVOT_IN_CLAUSE = 79;
+  int UNIPIVOT_IN_CLAUSE = 80;
 
   /**
    * The feature id for the '<em><b>Op</b></em>' attribute.
@@ -3115,7 +3143,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getuicargs()
    * @generated
    */
-  int UICARGS = 80;
+  int UICARGS = 81;
 
   /**
    * The feature id for the '<em><b>Entries</b></em>' containment reference list.
@@ -3143,7 +3171,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getpvcs()
    * @generated
    */
-  int PVCS = 81;
+  int PVCS = 82;
 
   /**
    * The feature id for the '<em><b>Entries</b></em>' containment reference list.
@@ -3171,7 +3199,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getpcols()
    * @generated
    */
-  int PCOLS = 82;
+  int PCOLS = 83;
 
   /**
    * The feature id for the '<em><b>Entries</b></em>' containment reference list.
@@ -3199,7 +3227,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#gettbls()
    * @generated
    */
-  int TBLS = 83;
+  int TBLS = 84;
 
   /**
    * The feature id for the '<em><b>Entries</b></em>' containment reference list.
@@ -3227,7 +3255,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getOpList()
    * @generated
    */
-  int OP_LIST = 84;
+  int OP_LIST = 85;
 
   /**
    * The feature id for the '<em><b>Entries</b></em>' containment reference list.
@@ -3255,7 +3283,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getPlus()
    * @generated
    */
-  int PLUS = 85;
+  int PLUS = 86;
 
   /**
    * The feature id for the '<em><b>Op1</b></em>' containment reference.
@@ -3301,7 +3329,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getMinus()
    * @generated
    */
-  int MINUS = 86;
+  int MINUS = 87;
 
   /**
    * The feature id for the '<em><b>Op1</b></em>' containment reference.
@@ -3347,7 +3375,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getConcat()
    * @generated
    */
-  int CONCAT = 87;
+  int CONCAT = 88;
 
   /**
    * The feature id for the '<em><b>Op1</b></em>' containment reference.
@@ -3393,7 +3421,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getMultiply()
    * @generated
    */
-  int MULTIPLY = 88;
+  int MULTIPLY = 89;
 
   /**
    * The feature id for the '<em><b>Op1</b></em>' containment reference.
@@ -3439,7 +3467,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getDivision()
    * @generated
    */
-  int DIVISION = 89;
+  int DIVISION = 90;
 
   /**
    * The feature id for the '<em><b>Op1</b></em>' containment reference.
@@ -3485,7 +3513,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getOBCArgs()
    * @generated
    */
-  int OBC_ARGS = 90;
+  int OBC_ARGS = 91;
 
   /**
    * The feature id for the '<em><b>Entries</b></em>' containment reference list.
@@ -3513,7 +3541,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getAExpArgs()
    * @generated
    */
-  int AEXP_ARGS = 91;
+  int AEXP_ARGS = 92;
 
   /**
    * The feature id for the '<em><b>Args</b></em>' containment reference.
@@ -3550,7 +3578,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getOpFList()
    * @generated
    */
-  int OP_FLIST = 92;
+  int OP_FLIST = 93;
 
   /**
    * The feature id for the '<em><b>Entries</b></em>' containment reference list.
@@ -3578,7 +3606,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getWhenList()
    * @generated
    */
-  int WHEN_LIST = 93;
+  int WHEN_LIST = 94;
 
   /**
    * The feature id for the '<em><b>Entries</b></em>' containment reference list.
@@ -3606,7 +3634,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getEXTRACT_VALUES()
    * @generated
    */
-  int EXTRACT_VALUES = 94;
+  int EXTRACT_VALUES = 95;
 
   /**
    * The meta object id for the '{@link com.jaspersoft.studio.data.sql.XFunction <em>XFunction</em>}' enum.
@@ -3616,7 +3644,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getXFunction()
    * @generated
    */
-  int XFUNCTION = 95;
+  int XFUNCTION = 96;
 
 
   /**
@@ -6138,6 +6166,27 @@ public interface SqlPackage extends EPackage
   EAttribute getIntegerValue_Integer();
 
   /**
+   * Returns the meta object for class '{@link com.jaspersoft.studio.data.sql.UnsignedValue <em>Unsigned Value</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Unsigned Value</em>'.
+   * @see com.jaspersoft.studio.data.sql.UnsignedValue
+   * @generated
+   */
+  EClass getUnsignedValue();
+
+  /**
+   * Returns the meta object for the attribute '{@link com.jaspersoft.studio.data.sql.UnsignedValue#getInteger <em>Integer</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Integer</em>'.
+   * @see com.jaspersoft.studio.data.sql.UnsignedValue#getInteger()
+   * @see #getUnsignedValue()
+   * @generated
+   */
+  EAttribute getUnsignedValue_Integer();
+
+  /**
    * Returns the meta object for class '{@link com.jaspersoft.studio.data.sql.Col <em>Col</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -8515,6 +8564,24 @@ public interface SqlPackage extends EPackage
      * @generated
      */
     EAttribute INTEGER_VALUE__INTEGER = eINSTANCE.getIntegerValue_Integer();
+
+    /**
+     * The meta object literal for the '{@link com.jaspersoft.studio.data.sql.impl.UnsignedValueImpl <em>Unsigned Value</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see com.jaspersoft.studio.data.sql.impl.UnsignedValueImpl
+     * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getUnsignedValue()
+     * @generated
+     */
+    EClass UNSIGNED_VALUE = eINSTANCE.getUnsignedValue();
+
+    /**
+     * The meta object literal for the '<em><b>Integer</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute UNSIGNED_VALUE__INTEGER = eINSTANCE.getUnsignedValue_Integer();
 
     /**
      * The meta object literal for the '{@link com.jaspersoft.studio.data.sql.impl.ColImpl <em>Col</em>}' class.

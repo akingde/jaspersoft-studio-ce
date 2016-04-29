@@ -2624,25 +2624,27 @@ finally {
 
 
 
-// Entry rule entryRuleIntegerValue
-entryRuleIntegerValue 
+
+
+// Entry rule entryRuleUnsignedValue
+entryRuleUnsignedValue 
 :
-{ before(grammarAccess.getIntegerValueRule()); }
-	 ruleIntegerValue
-{ after(grammarAccess.getIntegerValueRule()); } 
+{ before(grammarAccess.getUnsignedValueRule()); }
+	 ruleUnsignedValue
+{ after(grammarAccess.getUnsignedValueRule()); } 
 	 EOF 
 ;
 
-// Rule IntegerValue
-ruleIntegerValue 
+// Rule UnsignedValue
+ruleUnsignedValue 
     @init {
 		int stackSize = keepStackSize();
     }
     :
 (
-{ before(grammarAccess.getIntegerValueAccess().getIntegerAssignment()); }
-(rule__IntegerValue__IntegerAssignment)
-{ after(grammarAccess.getIntegerValueAccess().getIntegerAssignment()); }
+{ before(grammarAccess.getUnsignedValueAccess().getIntegerAssignment()); }
+(rule__UnsignedValue__IntegerAssignment)
+{ after(grammarAccess.getUnsignedValueAccess().getIntegerAssignment()); }
 )
 
 ;
@@ -4553,7 +4555,7 @@ rule__FetchFirst__Group__0__Impl
 :
 (
 { before(grammarAccess.getFetchFirstAccess().getFetchFirstAssignment_0()); }
-(rule__FetchFirst__FetchFirstAssignment_0)?
+(rule__FetchFirst__FetchFirstAssignment_0)
 { after(grammarAccess.getFetchFirstAccess().getFetchFirstAssignment_0()); }
 )
 
@@ -15895,8 +15897,8 @@ rule__FetchFirst__FetchFirstAssignment_0
     }
 :
 (
-{ before(grammarAccess.getFetchFirstAccess().getFetchFirstIntegerValueParserRuleCall_0_0()); }
-	ruleIntegerValue{ after(grammarAccess.getFetchFirstAccess().getFetchFirstIntegerValueParserRuleCall_0_0()); }
+{ before(grammarAccess.getFetchFirstAccess().getFetchFirstUnsignedValueParserRuleCall_0_0()); }
+	ruleUnsignedValue{ after(grammarAccess.getFetchFirstAccess().getFetchFirstUnsignedValueParserRuleCall_0_0()); }
 )
 
 ;
@@ -18576,14 +18578,15 @@ finally {
 	restoreStackSize(stackSize);
 }
 
-rule__IntegerValue__IntegerAssignment
+
+rule__UnsignedValue__IntegerAssignment
     @init {
 		int stackSize = keepStackSize();
     }
 :
 (
-{ before(grammarAccess.getIntegerValueAccess().getIntegerINTTerminalRuleCall_0()); }
-	RULE_INT{ after(grammarAccess.getIntegerValueAccess().getIntegerINTTerminalRuleCall_0()); }
+{ before(grammarAccess.getUnsignedValueAccess().getIntegerUNSIGNEDTerminalRuleCall_0()); }
+	RULE_UNSIGNED{ after(grammarAccess.getUnsignedValueAccess().getIntegerUNSIGNEDTerminalRuleCall_0()); }
 )
 
 ;

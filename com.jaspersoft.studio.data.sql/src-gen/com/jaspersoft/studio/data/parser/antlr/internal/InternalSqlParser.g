@@ -118,9 +118,9 @@ ruleFetchFirst returns [EObject current=null]
 ((
 (
 		{ 
-	        newCompositeNode(grammarAccess.getFetchFirstAccess().getFetchFirstIntegerValueParserRuleCall_0_0()); 
+	        newCompositeNode(grammarAccess.getFetchFirstAccess().getFetchFirstUnsignedValueParserRuleCall_0_0()); 
 	    }
-		lv_fetchFirst_0_0=ruleIntegerValue		{
+		lv_fetchFirst_0_0=ruleUnsignedValue		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getFetchFirstRule());
 	        }
@@ -128,12 +128,12 @@ ruleFetchFirst returns [EObject current=null]
        			$current, 
        			"fetchFirst",
         		lv_fetchFirst_0_0, 
-        		"com.jaspersoft.studio.data.Sql.IntegerValue");
+        		"com.jaspersoft.studio.data.Sql.UnsignedValue");
 	        afterParserOrEnumRuleCall();
 	    }
 
 )
-)?(
+)(
 (
 (
 		lv_row_1_1=
@@ -6640,35 +6640,37 @@ ruleFNAME returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()]
 
 
 
-// Entry rule entryRuleIntegerValue
-entryRuleIntegerValue returns [EObject current=null]
+
+
+// Entry rule entryRuleUnsignedValue
+entryRuleUnsignedValue returns [EObject current=null]
 	:
-	{ newCompositeNode(grammarAccess.getIntegerValueRule()); }
-	 iv_ruleIntegerValue=ruleIntegerValue 
-	 { $current=$iv_ruleIntegerValue.current; } 
+	{ newCompositeNode(grammarAccess.getUnsignedValueRule()); }
+	 iv_ruleUnsignedValue=ruleUnsignedValue 
+	 { $current=$iv_ruleUnsignedValue.current; } 
 	 EOF 
 ;
 
-// Rule IntegerValue
-ruleIntegerValue returns [EObject current=null] 
+// Rule UnsignedValue
+ruleUnsignedValue returns [EObject current=null] 
     @init { enterRule(); 
     }
     @after { leaveRule(); }:
 (
 (
-		lv_integer_0_0=RULE_INT
+		lv_integer_0_0=RULE_UNSIGNED
 		{
-			newLeafNode(lv_integer_0_0, grammarAccess.getIntegerValueAccess().getIntegerINTTerminalRuleCall_0()); 
+			newLeafNode(lv_integer_0_0, grammarAccess.getUnsignedValueAccess().getIntegerUNSIGNEDTerminalRuleCall_0()); 
 		}
 		{
 	        if ($current==null) {
-	            $current = createModelElement(grammarAccess.getIntegerValueRule());
+	            $current = createModelElement(grammarAccess.getUnsignedValueRule());
 	        }
        		setWithLastConsumed(
        			$current, 
        			"integer",
         		lv_integer_0_0, 
-        		"com.jaspersoft.studio.data.Sql.INT");
+        		"com.jaspersoft.studio.data.Sql.UNSIGNED");
 	    }
 
 )

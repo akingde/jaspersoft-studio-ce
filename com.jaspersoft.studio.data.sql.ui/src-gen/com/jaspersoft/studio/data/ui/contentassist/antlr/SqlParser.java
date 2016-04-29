@@ -405,6 +405,7 @@ public class SqlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getSqlCaseWhenAccess().getTexpAssignment_3(), "rule__SqlCaseWhen__TexpAssignment_3");
 					put(grammarAccess.getSqlCaseWhenAccess().getEexpAssignment_4_1(), "rule__SqlCaseWhen__EexpAssignment_4_1");
 					put(grammarAccess.getIntegerValueAccess().getIntegerAssignment(), "rule__IntegerValue__IntegerAssignment");
+					put(grammarAccess.getUnsignedValueAccess().getIntegerAssignment(), "rule__UnsignedValue__IntegerAssignment");
 				}
 			};
 		}

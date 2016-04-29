@@ -114,6 +114,7 @@ protected class ThisRootNode extends RootToken {
 			case 81: return new SQLCaseWhens_Group(this, this, 81, inst);
 			case 82: return new SqlCaseWhen_Group(this, this, 82, inst);
 			case 83: return new IntegerValue_IntegerAssignment(this, this, 83, inst);
+			case 84: return new UnsignedValue_IntegerAssignment(this, this, 84, inst);
 			default: return null;
 		}	
 	}	
@@ -208,11 +209,11 @@ protected class Model_QueryAssignment_1 extends AssignmentToken  {
 /************ begin Rule FetchFirst ****************
  *
  * FetchFirst:
- * 	fetchFirst=IntegerValue? row=('ROW' | 'ROWS') 'ONLY';
+ * 	fetchFirst=UnsignedValue row=('ROW' | 'ROWS') 'ONLY';
  *
  **/
 
-// fetchFirst=IntegerValue? row=('ROW' | 'ROWS') 'ONLY'
+// fetchFirst=UnsignedValue row=('ROW' | 'ROWS') 'ONLY'
 protected class FetchFirst_Group extends GroupToken {
 	
 	public FetchFirst_Group(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
@@ -241,7 +242,7 @@ protected class FetchFirst_Group extends GroupToken {
 
 }
 
-// fetchFirst=IntegerValue?
+// fetchFirst=UnsignedValue
 protected class FetchFirst_FetchFirstAssignment_0 extends AssignmentToken  {
 	
 	public FetchFirst_FetchFirstAssignment_0(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
@@ -256,20 +257,20 @@ protected class FetchFirst_FetchFirstAssignment_0 extends AssignmentToken  {
     @Override
 	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
 		switch(index) {
-			case 0: return new IntegerValue_IntegerAssignment(this, this, 0, inst);
+			case 0: return new UnsignedValue_IntegerAssignment(this, this, 0, inst);
 			default: return null;
 		}	
 	}
 
     @Override	
 	public IEObjectConsumer tryConsume() {
-		if((value = eObjectConsumer.getConsumable("fetchFirst",false)) == null) return null;
+		if((value = eObjectConsumer.getConsumable("fetchFirst",true)) == null) return null;
 		IEObjectConsumer obj = eObjectConsumer.cloneAndConsume("fetchFirst");
 		if(value instanceof EObject) { // org::eclipse::xtext::impl::RuleCallImpl
 			IEObjectConsumer param = createEObjectConsumer((EObject)value);
-			if(param.isInstanceOf(grammarAccess.getIntegerValueRule().getType().getClassifier())) {
+			if(param.isInstanceOf(grammarAccess.getUnsignedValueRule().getType().getClassifier())) {
 				type = AssignmentType.PARSER_RULE_CALL;
-				element = grammarAccess.getFetchFirstAccess().getFetchFirstIntegerValueParserRuleCall_0_0(); 
+				element = grammarAccess.getFetchFirstAccess().getFetchFirstUnsignedValueParserRuleCall_0_0(); 
 				consumed = obj;
 				return param;
 			}
@@ -302,7 +303,7 @@ protected class FetchFirst_RowAssignment_1 extends AssignmentToken  {
 	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
 		switch(index) {
 			case 0: return new FetchFirst_FetchFirstAssignment_0(lastRuleCallOrigin, this, 0, inst);
-			default: return lastRuleCallOrigin.createFollowerAfterReturn(this, index, index - 1, inst);
+			default: return null;
 		}	
 	}
 
@@ -17508,5 +17509,50 @@ protected class IntegerValue_IntegerAssignment extends AssignmentToken  {
 }
 
 /************ end Rule IntegerValue ****************/
+
+
+/************ begin Rule UnsignedValue ****************
+ *
+ * UnsignedValue:
+ * 	integer=UNSIGNED;
+ *
+ **/
+
+// integer=UNSIGNED
+protected class UnsignedValue_IntegerAssignment extends AssignmentToken  {
+	
+	public UnsignedValue_IntegerAssignment(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
+	}
+	
+	@Override
+	public Assignment getGrammarElement() {
+		return grammarAccess.getUnsignedValueAccess().getIntegerAssignment();
+	}
+
+    @Override
+	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
+		switch(index) {
+			default: return lastRuleCallOrigin.createFollowerAfterReturn(this, index, index, inst);
+		}	
+	}
+
+    @Override	
+	public IEObjectConsumer tryConsume() {
+		if(getEObject().eClass() != grammarAccess.getUnsignedValueRule().getType().getClassifier())
+			return null;
+		if((value = eObjectConsumer.getConsumable("integer",true)) == null) return null;
+		IEObjectConsumer obj = eObjectConsumer.cloneAndConsume("integer");
+		if(valueSerializer.isValid(obj.getEObject(), grammarAccess.getUnsignedValueAccess().getIntegerUNSIGNEDTerminalRuleCall_0(), value, null)) {
+			type = AssignmentType.TERMINAL_RULE_CALL;
+			element = grammarAccess.getUnsignedValueAccess().getIntegerUNSIGNEDTerminalRuleCall_0();
+			return obj;
+		}
+		return null;
+	}
+
+}
+
+/************ end Rule UnsignedValue ****************/
 
 }

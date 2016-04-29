@@ -32,12 +32,12 @@ public interface FetchFirst extends EObject
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Fetch First</em>' containment reference.
-   * @see #setFetchFirst(IntegerValue)
+   * @see #setFetchFirst(UnsignedValue)
    * @see com.jaspersoft.studio.data.sql.SqlPackage#getFetchFirst_FetchFirst()
    * @model containment="true"
    * @generated
    */
-  IntegerValue getFetchFirst();
+  UnsignedValue getFetchFirst();
 
   /**
    * Sets the value of the '{@link com.jaspersoft.studio.data.sql.FetchFirst#getFetchFirst <em>Fetch First</em>}' containment reference.
@@ -47,7 +47,7 @@ public interface FetchFirst extends EObject
    * @see #getFetchFirst()
    * @generated
    */
-  void setFetchFirst(IntegerValue value);
+  void setFetchFirst(UnsignedValue value);
 
   /**
    * Returns the value of the '<em><b>Row</b></em>' attribute.

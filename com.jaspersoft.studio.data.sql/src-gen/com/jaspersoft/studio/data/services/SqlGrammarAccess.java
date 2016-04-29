@@ -45,7 +45,7 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "com.jaspersoft.studio.data.Sql.FetchFirst");
 		private final Group cGroup = (Group)rule.eContents().get(1);
 		private final Assignment cFetchFirstAssignment_0 = (Assignment)cGroup.eContents().get(0);
-		private final RuleCall cFetchFirstIntegerValueParserRuleCall_0_0 = (RuleCall)cFetchFirstAssignment_0.eContents().get(0);
+		private final RuleCall cFetchFirstUnsignedValueParserRuleCall_0_0 = (RuleCall)cFetchFirstAssignment_0.eContents().get(0);
 		private final Assignment cRowAssignment_1 = (Assignment)cGroup.eContents().get(1);
 		private final Alternatives cRowAlternatives_1_0 = (Alternatives)cRowAssignment_1.eContents().get(0);
 		private final Keyword cRowROWKeyword_1_0_0 = (Keyword)cRowAlternatives_1_0.eContents().get(0);
@@ -53,17 +53,17 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Keyword cONLYKeyword_2 = (Keyword)cGroup.eContents().get(2);
 		
 		//FetchFirst:
-		//	fetchFirst=IntegerValue? row=('ROW' | 'ROWS') 'ONLY';
+		//	fetchFirst=UnsignedValue row=('ROW' | 'ROWS') 'ONLY';
 		@Override public ParserRule getRule() { return rule; }
 
-		//fetchFirst=IntegerValue? row=('ROW' | 'ROWS') 'ONLY'
+		//fetchFirst=UnsignedValue row=('ROW' | 'ROWS') 'ONLY'
 		public Group getGroup() { return cGroup; }
 
-		//fetchFirst=IntegerValue?
+		//fetchFirst=UnsignedValue
 		public Assignment getFetchFirstAssignment_0() { return cFetchFirstAssignment_0; }
 
-		//IntegerValue
-		public RuleCall getFetchFirstIntegerValueParserRuleCall_0_0() { return cFetchFirstIntegerValueParserRuleCall_0_0; }
+		//UnsignedValue
+		public RuleCall getFetchFirstUnsignedValueParserRuleCall_0_0() { return cFetchFirstUnsignedValueParserRuleCall_0_0; }
 
 		//row=('ROW' | 'ROWS')
 		public Assignment getRowAssignment_1() { return cRowAssignment_1; }
@@ -3867,6 +3867,22 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		//INT
 		public RuleCall getIntegerINTTerminalRuleCall_0() { return cIntegerINTTerminalRuleCall_0; }
 	}
+
+	public class UnsignedValueElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "com.jaspersoft.studio.data.Sql.UnsignedValue");
+		private final Assignment cIntegerAssignment = (Assignment)rule.eContents().get(1);
+		private final RuleCall cIntegerUNSIGNEDTerminalRuleCall_0 = (RuleCall)cIntegerAssignment.eContents().get(0);
+		
+		//UnsignedValue:
+		//	integer=UNSIGNED;
+		@Override public ParserRule getRule() { return rule; }
+
+		//integer=UNSIGNED
+		public Assignment getIntegerAssignment() { return cIntegerAssignment; }
+
+		//UNSIGNED
+		public RuleCall getIntegerUNSIGNEDTerminalRuleCall_0() { return cIntegerUNSIGNEDTerminalRuleCall_0; }
+	}
 	
 	
 	public class EXTRACT_VALUESElements extends AbstractEnumRuleElementFinder {
@@ -4250,6 +4266,7 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	private final StringOperandElements pStringOperand;
 	private final FNAMEElements pFNAME;
 	private final IntegerValueElements pIntegerValue;
+	private final UnsignedValueElements pUnsignedValue;
 	private final TerminalRule tJRPARAM;
 	private final TerminalRule tJRNPARAM;
 	private final TerminalRule tSTAR;
@@ -4364,6 +4381,7 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		this.pStringOperand = new StringOperandElements();
 		this.pFNAME = new FNAMEElements();
 		this.pIntegerValue = new IntegerValueElements();
+		this.pUnsignedValue = new UnsignedValueElements();
 		this.tJRPARAM = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "com.jaspersoft.studio.data.Sql.JRPARAM");
 		this.tJRNPARAM = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "com.jaspersoft.studio.data.Sql.JRNPARAM");
 		this.tSTAR = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "com.jaspersoft.studio.data.Sql.STAR");
@@ -4417,7 +4435,7 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//FetchFirst:
-	//	fetchFirst=IntegerValue? row=('ROW' | 'ROWS') 'ONLY';
+	//	fetchFirst=UnsignedValue row=('ROW' | 'ROWS') 'ONLY';
 	public FetchFirstElements getFetchFirstAccess() {
 		return pFetchFirst;
 	}
@@ -5331,6 +5349,16 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	
 	public ParserRule getIntegerValueRule() {
 		return getIntegerValueAccess().getRule();
+	}
+
+	//UnsignedValue:
+	//	integer=UNSIGNED;
+	public UnsignedValueElements getUnsignedValueAccess() {
+		return pUnsignedValue;
+	}
+	
+	public ParserRule getUnsignedValueRule() {
+		return getUnsignedValueAccess().getRule();
 	}
 
 	//terminal JRPARAM:

@@ -372,7 +372,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleFetchFirst"
-    // InternalSqlParser.g:114:1: ruleFetchFirst returns [EObject current=null] : ( ( (lv_fetchFirst_0_0= ruleIntegerValue ) )? ( ( (lv_row_1_1= ROW | lv_row_1_2= ROWS ) ) ) otherlv_2= ONLY ) ;
+    // InternalSqlParser.g:114:1: ruleFetchFirst returns [EObject current=null] : ( ( (lv_fetchFirst_0_0= ruleUnsignedValue ) ) ( ( (lv_row_1_1= ROW | lv_row_1_2= ROWS ) ) ) otherlv_2= ONLY ) ;
     public final EObject ruleFetchFirst() throws RecognitionException {
         EObject current = null;
 
@@ -385,77 +385,66 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
          enterRule(); 
             
         try {
-            // InternalSqlParser.g:117:28: ( ( ( (lv_fetchFirst_0_0= ruleIntegerValue ) )? ( ( (lv_row_1_1= ROW | lv_row_1_2= ROWS ) ) ) otherlv_2= ONLY ) )
-            // InternalSqlParser.g:118:1: ( ( (lv_fetchFirst_0_0= ruleIntegerValue ) )? ( ( (lv_row_1_1= ROW | lv_row_1_2= ROWS ) ) ) otherlv_2= ONLY )
+            // InternalSqlParser.g:117:28: ( ( ( (lv_fetchFirst_0_0= ruleUnsignedValue ) ) ( ( (lv_row_1_1= ROW | lv_row_1_2= ROWS ) ) ) otherlv_2= ONLY ) )
+            // InternalSqlParser.g:118:1: ( ( (lv_fetchFirst_0_0= ruleUnsignedValue ) ) ( ( (lv_row_1_1= ROW | lv_row_1_2= ROWS ) ) ) otherlv_2= ONLY )
             {
-            // InternalSqlParser.g:118:1: ( ( (lv_fetchFirst_0_0= ruleIntegerValue ) )? ( ( (lv_row_1_1= ROW | lv_row_1_2= ROWS ) ) ) otherlv_2= ONLY )
-            // InternalSqlParser.g:118:2: ( (lv_fetchFirst_0_0= ruleIntegerValue ) )? ( ( (lv_row_1_1= ROW | lv_row_1_2= ROWS ) ) ) otherlv_2= ONLY
+            // InternalSqlParser.g:118:1: ( ( (lv_fetchFirst_0_0= ruleUnsignedValue ) ) ( ( (lv_row_1_1= ROW | lv_row_1_2= ROWS ) ) ) otherlv_2= ONLY )
+            // InternalSqlParser.g:118:2: ( (lv_fetchFirst_0_0= ruleUnsignedValue ) ) ( ( (lv_row_1_1= ROW | lv_row_1_2= ROWS ) ) ) otherlv_2= ONLY
             {
-            // InternalSqlParser.g:118:2: ( (lv_fetchFirst_0_0= ruleIntegerValue ) )?
+            // InternalSqlParser.g:118:2: ( (lv_fetchFirst_0_0= ruleUnsignedValue ) )
+            // InternalSqlParser.g:119:1: (lv_fetchFirst_0_0= ruleUnsignedValue )
+            {
+            // InternalSqlParser.g:119:1: (lv_fetchFirst_0_0= ruleUnsignedValue )
+            // InternalSqlParser.g:120:3: lv_fetchFirst_0_0= ruleUnsignedValue
+            {
+             
+            	        newCompositeNode(grammarAccess.getFetchFirstAccess().getFetchFirstUnsignedValueParserRuleCall_0_0()); 
+            	    
+            pushFollow(FOLLOW_4);
+            lv_fetchFirst_0_0=ruleUnsignedValue();
+
+            state._fsp--;
+
+
+            	        if (current==null) {
+            	            current = createModelElementForParent(grammarAccess.getFetchFirstRule());
+            	        }
+                   		set(
+                   			current, 
+                   			"fetchFirst",
+                    		lv_fetchFirst_0_0, 
+                    		"com.jaspersoft.studio.data.Sql.UnsignedValue");
+            	        afterParserOrEnumRuleCall();
+            	    
+
+            }
+
+
+            }
+
+            // InternalSqlParser.g:136:2: ( ( (lv_row_1_1= ROW | lv_row_1_2= ROWS ) ) )
+            // InternalSqlParser.g:137:1: ( (lv_row_1_1= ROW | lv_row_1_2= ROWS ) )
+            {
+            // InternalSqlParser.g:137:1: ( (lv_row_1_1= ROW | lv_row_1_2= ROWS ) )
+            // InternalSqlParser.g:138:1: (lv_row_1_1= ROW | lv_row_1_2= ROWS )
+            {
+            // InternalSqlParser.g:138:1: (lv_row_1_1= ROW | lv_row_1_2= ROWS )
             int alt2=2;
             int LA2_0 = input.LA(1);
 
-            if ( (LA2_0==RULE_INT) ) {
+            if ( (LA2_0==ROW) ) {
                 alt2=1;
             }
-            switch (alt2) {
-                case 1 :
-                    // InternalSqlParser.g:119:1: (lv_fetchFirst_0_0= ruleIntegerValue )
-                    {
-                    // InternalSqlParser.g:119:1: (lv_fetchFirst_0_0= ruleIntegerValue )
-                    // InternalSqlParser.g:120:3: lv_fetchFirst_0_0= ruleIntegerValue
-                    {
-                     
-                    	        newCompositeNode(grammarAccess.getFetchFirstAccess().getFetchFirstIntegerValueParserRuleCall_0_0()); 
-                    	    
-                    pushFollow(FOLLOW_4);
-                    lv_fetchFirst_0_0=ruleIntegerValue();
-
-                    state._fsp--;
-
-
-                    	        if (current==null) {
-                    	            current = createModelElementForParent(grammarAccess.getFetchFirstRule());
-                    	        }
-                           		set(
-                           			current, 
-                           			"fetchFirst",
-                            		lv_fetchFirst_0_0, 
-                            		"com.jaspersoft.studio.data.Sql.IntegerValue");
-                    	        afterParserOrEnumRuleCall();
-                    	    
-
-                    }
-
-
-                    }
-                    break;
-
-            }
-
-            // InternalSqlParser.g:136:3: ( ( (lv_row_1_1= ROW | lv_row_1_2= ROWS ) ) )
-            // InternalSqlParser.g:137:1: ( (lv_row_1_1= ROW | lv_row_1_2= ROWS ) )
-            {
-            // InternalSqlParser.g:137:1: ( (lv_row_1_1= ROW | lv_row_1_2= ROWS ) )
-            // InternalSqlParser.g:138:1: (lv_row_1_1= ROW | lv_row_1_2= ROWS )
-            {
-            // InternalSqlParser.g:138:1: (lv_row_1_1= ROW | lv_row_1_2= ROWS )
-            int alt3=2;
-            int LA3_0 = input.LA(1);
-
-            if ( (LA3_0==ROW) ) {
-                alt3=1;
-            }
-            else if ( (LA3_0==ROWS) ) {
-                alt3=2;
+            else if ( (LA2_0==ROWS) ) {
+                alt2=2;
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("", 3, 0, input);
+                    new NoViableAltException("", 2, 0, input);
 
                 throw nvae;
             }
-            switch (alt3) {
+            switch (alt2) {
                 case 1 :
                     // InternalSqlParser.g:139:3: lv_row_1_1= ROW
                     {
@@ -666,22 +655,22 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             // InternalSqlParser.g:233:1: ( ( () otherlv_1= ALL ) | ( ( (lv_l1_2_0= RULE_UNSIGNED ) ) (otherlv_3= Comma ( (lv_l2_4_0= RULE_UNSIGNED ) ) )? ) )
             {
             // InternalSqlParser.g:233:1: ( ( () otherlv_1= ALL ) | ( ( (lv_l1_2_0= RULE_UNSIGNED ) ) (otherlv_3= Comma ( (lv_l2_4_0= RULE_UNSIGNED ) ) )? ) )
-            int alt5=2;
-            int LA5_0 = input.LA(1);
+            int alt4=2;
+            int LA4_0 = input.LA(1);
 
-            if ( (LA5_0==ALL) ) {
-                alt5=1;
+            if ( (LA4_0==ALL) ) {
+                alt4=1;
             }
-            else if ( (LA5_0==RULE_UNSIGNED) ) {
-                alt5=2;
+            else if ( (LA4_0==RULE_UNSIGNED) ) {
+                alt4=2;
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("", 5, 0, input);
+                    new NoViableAltException("", 4, 0, input);
 
                 throw nvae;
             }
-            switch (alt5) {
+            switch (alt4) {
                 case 1 :
                     // InternalSqlParser.g:233:2: ( () otherlv_1= ALL )
                     {
@@ -742,13 +731,13 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     }
 
                     // InternalSqlParser.g:263:2: (otherlv_3= Comma ( (lv_l2_4_0= RULE_UNSIGNED ) ) )?
-                    int alt4=2;
-                    int LA4_0 = input.LA(1);
+                    int alt3=2;
+                    int LA3_0 = input.LA(1);
 
-                    if ( (LA4_0==Comma) ) {
-                        alt4=1;
+                    if ( (LA3_0==Comma) ) {
+                        alt3=1;
                     }
-                    switch (alt4) {
+                    switch (alt3) {
                         case 1 :
                             // InternalSqlParser.g:264:2: otherlv_3= Comma ( (lv_l2_4_0= RULE_UNSIGNED ) )
                             {
@@ -882,17 +871,17 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     afterParserOrEnumRuleCall();
                 
             // InternalSqlParser.g:316:1: ( (lv_op_1_0= ruleSelectSubSet ) )*
-            loop6:
+            loop5:
             do {
-                int alt6=2;
-                int LA6_0 = input.LA(1);
+                int alt5=2;
+                int LA5_0 = input.LA(1);
 
-                if ( (LA6_0==INTERSECT||LA6_0==EXCEPT||LA6_0==MINUS||LA6_0==UNION) ) {
-                    alt6=1;
+                if ( (LA5_0==INTERSECT||LA5_0==EXCEPT||LA5_0==MINUS||LA5_0==UNION) ) {
+                    alt5=1;
                 }
 
 
-                switch (alt6) {
+                switch (alt5) {
             	case 1 :
             	    // InternalSqlParser.g:317:1: (lv_op_1_0= ruleSelectSubSet )
             	    {
@@ -926,7 +915,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             	    break;
 
             	default :
-            	    break loop6;
+            	    break loop5;
                 }
             } while (true);
 
@@ -1015,36 +1004,36 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             // InternalSqlParser.g:357:1: (lv_op_0_1= UNION | lv_op_0_2= INTERSECT | lv_op_0_3= MINUS | lv_op_0_4= EXCEPT )
             {
             // InternalSqlParser.g:357:1: (lv_op_0_1= UNION | lv_op_0_2= INTERSECT | lv_op_0_3= MINUS | lv_op_0_4= EXCEPT )
-            int alt7=4;
+            int alt6=4;
             switch ( input.LA(1) ) {
             case UNION:
                 {
-                alt7=1;
+                alt6=1;
                 }
                 break;
             case INTERSECT:
                 {
-                alt7=2;
+                alt6=2;
                 }
                 break;
             case MINUS:
                 {
-                alt7=3;
+                alt6=3;
                 }
                 break;
             case EXCEPT:
                 {
-                alt7=4;
+                alt6=4;
                 }
                 break;
             default:
                 NoViableAltException nvae =
-                    new NoViableAltException("", 7, 0, input);
+                    new NoViableAltException("", 6, 0, input);
 
                 throw nvae;
             }
 
-            switch (alt7) {
+            switch (alt6) {
                 case 1 :
                     // InternalSqlParser.g:358:3: lv_op_0_1= UNION
                     {
@@ -1119,13 +1108,13 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             }
 
             // InternalSqlParser.g:413:2: ( (lv_all_1_0= ALL ) )?
-            int alt8=2;
-            int LA8_0 = input.LA(1);
+            int alt7=2;
+            int LA7_0 = input.LA(1);
 
-            if ( (LA8_0==ALL) ) {
-                alt8=1;
+            if ( (LA7_0==ALL) ) {
+                alt7=1;
             }
-            switch (alt8) {
+            switch (alt7) {
                 case 1 :
                     // InternalSqlParser.g:414:1: (lv_all_1_0= ALL )
                     {
@@ -1309,13 +1298,13 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             }
 
             // InternalSqlParser.g:484:2: (otherlv_1= DISTINCT )?
-            int alt9=2;
-            int LA9_0 = input.LA(1);
+            int alt8=2;
+            int LA8_0 = input.LA(1);
 
-            if ( (LA9_0==DISTINCT) ) {
-                alt9=1;
+            if ( (LA8_0==DISTINCT) ) {
+                alt8=1;
             }
-            switch (alt9) {
+            switch (alt8) {
                 case 1 :
                     // InternalSqlParser.g:485:2: otherlv_1= DISTINCT
                     {
@@ -1330,13 +1319,13 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             }
 
             // InternalSqlParser.g:489:3: (otherlv_2= TOP (this_INT_3= RULE_INT | this_SIGNED_DOUBLE_4= RULE_SIGNED_DOUBLE ) (otherlv_5= PERCENT )? (otherlv_6= WITHTIES )? )?
-            int alt13=2;
-            int LA13_0 = input.LA(1);
+            int alt12=2;
+            int LA12_0 = input.LA(1);
 
-            if ( (LA13_0==TOP) ) {
-                alt13=1;
+            if ( (LA12_0==TOP) ) {
+                alt12=1;
             }
-            switch (alt13) {
+            switch (alt12) {
                 case 1 :
                     // InternalSqlParser.g:490:2: otherlv_2= TOP (this_INT_3= RULE_INT | this_SIGNED_DOUBLE_4= RULE_SIGNED_DOUBLE ) (otherlv_5= PERCENT )? (otherlv_6= WITHTIES )?
                     {
@@ -1345,22 +1334,22 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                         	newLeafNode(otherlv_2, grammarAccess.getSelectAccess().getTOPKeyword_2_0());
                         
                     // InternalSqlParser.g:494:1: (this_INT_3= RULE_INT | this_SIGNED_DOUBLE_4= RULE_SIGNED_DOUBLE )
-                    int alt10=2;
-                    int LA10_0 = input.LA(1);
+                    int alt9=2;
+                    int LA9_0 = input.LA(1);
 
-                    if ( (LA10_0==RULE_INT) ) {
-                        alt10=1;
+                    if ( (LA9_0==RULE_INT) ) {
+                        alt9=1;
                     }
-                    else if ( (LA10_0==RULE_SIGNED_DOUBLE) ) {
-                        alt10=2;
+                    else if ( (LA9_0==RULE_SIGNED_DOUBLE) ) {
+                        alt9=2;
                     }
                     else {
                         NoViableAltException nvae =
-                            new NoViableAltException("", 10, 0, input);
+                            new NoViableAltException("", 9, 0, input);
 
                         throw nvae;
                     }
-                    switch (alt10) {
+                    switch (alt9) {
                         case 1 :
                             // InternalSqlParser.g:494:2: this_INT_3= RULE_INT
                             {
@@ -1385,13 +1374,13 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     }
 
                     // InternalSqlParser.g:503:2: (otherlv_5= PERCENT )?
-                    int alt11=2;
-                    int LA11_0 = input.LA(1);
+                    int alt10=2;
+                    int LA10_0 = input.LA(1);
 
-                    if ( (LA11_0==PERCENT) ) {
-                        alt11=1;
+                    if ( (LA10_0==PERCENT) ) {
+                        alt10=1;
                     }
-                    switch (alt11) {
+                    switch (alt10) {
                         case 1 :
                             // InternalSqlParser.g:504:2: otherlv_5= PERCENT
                             {
@@ -1406,13 +1395,13 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     }
 
                     // InternalSqlParser.g:508:3: (otherlv_6= WITHTIES )?
-                    int alt12=2;
-                    int LA12_0 = input.LA(1);
+                    int alt11=2;
+                    int LA11_0 = input.LA(1);
 
-                    if ( (LA12_0==WITHTIES) ) {
-                        alt12=1;
+                    if ( (LA11_0==WITHTIES) ) {
+                        alt11=1;
                     }
-                    switch (alt12) {
+                    switch (alt11) {
                         case 1 :
                             // InternalSqlParser.g:509:2: otherlv_6= WITHTIES
                             {
@@ -1499,13 +1488,13 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             }
 
             // InternalSqlParser.g:554:2: (otherlv_10= WHERE ( (lv_whereExpression_11_0= ruleFullExpression ) ) )?
-            int alt14=2;
-            int LA14_0 = input.LA(1);
+            int alt13=2;
+            int LA13_0 = input.LA(1);
 
-            if ( (LA14_0==WHERE) ) {
-                alt14=1;
+            if ( (LA13_0==WHERE) ) {
+                alt13=1;
             }
-            switch (alt14) {
+            switch (alt13) {
                 case 1 :
                     // InternalSqlParser.g:555:2: otherlv_10= WHERE ( (lv_whereExpression_11_0= ruleFullExpression ) )
                     {
@@ -1551,13 +1540,13 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             }
 
             // InternalSqlParser.g:577:4: (otherlv_12= GROUPBY ( (lv_groupByEntry_13_0= ruleGroupByColumns ) ) )?
-            int alt15=2;
-            int LA15_0 = input.LA(1);
+            int alt14=2;
+            int LA14_0 = input.LA(1);
 
-            if ( (LA15_0==GROUPBY) ) {
-                alt15=1;
+            if ( (LA14_0==GROUPBY) ) {
+                alt14=1;
             }
-            switch (alt15) {
+            switch (alt14) {
                 case 1 :
                     // InternalSqlParser.g:578:2: otherlv_12= GROUPBY ( (lv_groupByEntry_13_0= ruleGroupByColumns ) )
                     {
@@ -1603,13 +1592,13 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             }
 
             // InternalSqlParser.g:600:4: (otherlv_14= HAVING ( (lv_havingEntry_15_0= ruleFullExpression ) ) )?
-            int alt16=2;
-            int LA16_0 = input.LA(1);
+            int alt15=2;
+            int LA15_0 = input.LA(1);
 
-            if ( (LA16_0==HAVING) ) {
-                alt16=1;
+            if ( (LA15_0==HAVING) ) {
+                alt15=1;
             }
-            switch (alt16) {
+            switch (alt15) {
                 case 1 :
                     // InternalSqlParser.g:601:2: otherlv_14= HAVING ( (lv_havingEntry_15_0= ruleFullExpression ) )
                     {
@@ -1655,13 +1644,13 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             }
 
             // InternalSqlParser.g:623:4: (otherlv_16= ORDERBY ( (lv_orderByEntry_17_0= ruleOrderByColumns ) ) )?
-            int alt17=2;
-            int LA17_0 = input.LA(1);
+            int alt16=2;
+            int LA16_0 = input.LA(1);
 
-            if ( (LA17_0==ORDERBY) ) {
-                alt17=1;
+            if ( (LA16_0==ORDERBY) ) {
+                alt16=1;
             }
-            switch (alt17) {
+            switch (alt16) {
                 case 1 :
                     // InternalSqlParser.g:624:2: otherlv_16= ORDERBY ( (lv_orderByEntry_17_0= ruleOrderByColumns ) )
                     {
@@ -1707,13 +1696,13 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             }
 
             // InternalSqlParser.g:646:4: (otherlv_18= LIMIT ( (lv_lim_19_0= ruleLimit ) ) )?
-            int alt18=2;
-            int LA18_0 = input.LA(1);
+            int alt17=2;
+            int LA17_0 = input.LA(1);
 
-            if ( (LA18_0==LIMIT) ) {
-                alt18=1;
+            if ( (LA17_0==LIMIT) ) {
+                alt17=1;
             }
-            switch (alt18) {
+            switch (alt17) {
                 case 1 :
                     // InternalSqlParser.g:647:2: otherlv_18= LIMIT ( (lv_lim_19_0= ruleLimit ) )
                     {
@@ -1759,13 +1748,13 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             }
 
             // InternalSqlParser.g:669:4: (otherlv_20= OFFSET ( (lv_offset_21_0= ruleOffset ) ) )?
-            int alt19=2;
-            int LA19_0 = input.LA(1);
+            int alt18=2;
+            int LA18_0 = input.LA(1);
 
-            if ( (LA19_0==OFFSET) ) {
-                alt19=1;
+            if ( (LA18_0==OFFSET) ) {
+                alt18=1;
             }
-            switch (alt19) {
+            switch (alt18) {
                 case 1 :
                     // InternalSqlParser.g:670:2: otherlv_20= OFFSET ( (lv_offset_21_0= ruleOffset ) )
                     {
@@ -1811,17 +1800,17 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             }
 
             // InternalSqlParser.g:692:4: (otherlv_22= FETCHFIRST ( (lv_fetchFirst_23_0= ruleFetchFirst ) ) )?
-            int alt20=2;
-            int LA20_0 = input.LA(1);
+            int alt19=2;
+            int LA19_0 = input.LA(1);
 
-            if ( (LA20_0==FETCHFIRST) ) {
-                alt20=1;
+            if ( (LA19_0==FETCHFIRST) ) {
+                alt19=1;
             }
-            switch (alt20) {
+            switch (alt19) {
                 case 1 :
                     // InternalSqlParser.g:693:2: otherlv_22= FETCHFIRST ( (lv_fetchFirst_23_0= ruleFetchFirst ) )
                     {
-                    otherlv_22=(Token)match(input,FETCHFIRST,FOLLOW_27); 
+                    otherlv_22=(Token)match(input,FETCHFIRST,FOLLOW_7); 
 
                         	newLeafNode(otherlv_22, grammarAccess.getSelectAccess().getFETCHFIRSTKeyword_12_0());
                         
@@ -1951,13 +1940,13 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     afterParserOrEnumRuleCall();
                 
             // InternalSqlParser.g:745:1: ( () (otherlv_2= Comma ( (lv_entries_3_0= ruleColumnOrAlias ) ) )+ )?
-            int alt22=2;
-            int LA22_0 = input.LA(1);
+            int alt21=2;
+            int LA21_0 = input.LA(1);
 
-            if ( (LA22_0==Comma) ) {
-                alt22=1;
+            if ( (LA21_0==Comma) ) {
+                alt21=1;
             }
-            switch (alt22) {
+            switch (alt21) {
                 case 1 :
                     // InternalSqlParser.g:745:2: () (otherlv_2= Comma ( (lv_entries_3_0= ruleColumnOrAlias ) ) )+
                     {
@@ -1973,18 +1962,18 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     }
 
                     // InternalSqlParser.g:751:2: (otherlv_2= Comma ( (lv_entries_3_0= ruleColumnOrAlias ) ) )+
-                    int cnt21=0;
-                    loop21:
+                    int cnt20=0;
+                    loop20:
                     do {
-                        int alt21=2;
-                        int LA21_0 = input.LA(1);
+                        int alt20=2;
+                        int LA20_0 = input.LA(1);
 
-                        if ( (LA21_0==Comma) ) {
-                            alt21=1;
+                        if ( (LA20_0==Comma) ) {
+                            alt20=1;
                         }
 
 
-                        switch (alt21) {
+                        switch (alt20) {
                     	case 1 :
                     	    // InternalSqlParser.g:752:2: otherlv_2= Comma ( (lv_entries_3_0= ruleColumnOrAlias ) )
                     	    {
@@ -2028,12 +2017,12 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     	    break;
 
                     	default :
-                    	    if ( cnt21 >= 1 ) break loop21;
+                    	    if ( cnt20 >= 1 ) break loop20;
                                 EarlyExitException eee =
-                                    new EarlyExitException(21, input);
+                                    new EarlyExitException(20, input);
                                 throw eee;
                         }
-                        cnt21++;
+                        cnt20++;
                     } while (true);
 
 
@@ -2119,34 +2108,34 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             // InternalSqlParser.g:795:1: ( ( ( (lv_ce_0_0= ruleOperandGroup ) ) ( (lv_alias_1_0= AS ) )? ( (lv_colAlias_2_0= ruleDbObjectName ) )? ) | ( (lv_allCols_3_0= RULE_STAR ) ) | ( (lv_dbAllCols_4_0= ruleDbObjectNameAll ) ) )
             {
             // InternalSqlParser.g:795:1: ( ( ( (lv_ce_0_0= ruleOperandGroup ) ) ( (lv_alias_1_0= AS ) )? ( (lv_colAlias_2_0= ruleDbObjectName ) )? ) | ( (lv_allCols_3_0= RULE_STAR ) ) | ( (lv_dbAllCols_4_0= ruleDbObjectNameAll ) ) )
-            int alt25=3;
+            int alt24=3;
             switch ( input.LA(1) ) {
             case RULE_ID:
                 {
-                int LA25_1 = input.LA(2);
+                int LA24_1 = input.LA(2);
 
-                if ( (LA25_1==EOF||LA25_1==FROM||LA25_1==LeftParenthesisPlusSignRightParenthesis||LA25_1==AS||(LA25_1>=VerticalLineVerticalLine && LA25_1<=HyphenMinus)||LA25_1==Solidus||LA25_1==RULE_STAR||(LA25_1>=RULE_STRING && LA25_1<=RULE_ID)) ) {
-                    alt25=1;
+                if ( (LA24_1==EOF||LA24_1==FROM||LA24_1==LeftParenthesisPlusSignRightParenthesis||LA24_1==AS||(LA24_1>=VerticalLineVerticalLine && LA24_1<=HyphenMinus)||LA24_1==Solidus||LA24_1==RULE_STAR||(LA24_1>=RULE_STRING && LA24_1<=RULE_ID)) ) {
+                    alt24=1;
                 }
-                else if ( (LA25_1==FullStop) ) {
-                    int LA25_6 = input.LA(3);
+                else if ( (LA24_1==FullStop) ) {
+                    int LA24_6 = input.LA(3);
 
-                    if ( ((LA25_6>=RULE_STRING && LA25_6<=RULE_ID)) ) {
-                        alt25=1;
+                    if ( ((LA24_6>=RULE_STRING && LA24_6<=RULE_ID)) ) {
+                        alt24=1;
                     }
-                    else if ( (LA25_6==RULE_STAR) ) {
-                        alt25=3;
+                    else if ( (LA24_6==RULE_STAR) ) {
+                        alt24=3;
                     }
                     else {
                         NoViableAltException nvae =
-                            new NoViableAltException("", 25, 6, input);
+                            new NoViableAltException("", 24, 6, input);
 
                         throw nvae;
                     }
                 }
                 else {
                     NoViableAltException nvae =
-                        new NoViableAltException("", 25, 1, input);
+                        new NoViableAltException("", 24, 1, input);
 
                     throw nvae;
                 }
@@ -2154,30 +2143,30 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                 break;
             case RULE_DBNAME:
                 {
-                int LA25_2 = input.LA(2);
+                int LA24_2 = input.LA(2);
 
-                if ( (LA25_2==FullStop) ) {
-                    int LA25_6 = input.LA(3);
+                if ( (LA24_2==FullStop) ) {
+                    int LA24_6 = input.LA(3);
 
-                    if ( ((LA25_6>=RULE_STRING && LA25_6<=RULE_ID)) ) {
-                        alt25=1;
+                    if ( ((LA24_6>=RULE_STRING && LA24_6<=RULE_ID)) ) {
+                        alt24=1;
                     }
-                    else if ( (LA25_6==RULE_STAR) ) {
-                        alt25=3;
+                    else if ( (LA24_6==RULE_STAR) ) {
+                        alt24=3;
                     }
                     else {
                         NoViableAltException nvae =
-                            new NoViableAltException("", 25, 6, input);
+                            new NoViableAltException("", 24, 6, input);
 
                         throw nvae;
                     }
                 }
-                else if ( (LA25_2==EOF||LA25_2==FROM||LA25_2==LeftParenthesisPlusSignRightParenthesis||LA25_2==AS||LA25_2==VerticalLineVerticalLine||(LA25_2>=RightParenthesis && LA25_2<=HyphenMinus)||LA25_2==Solidus||LA25_2==RULE_STAR||(LA25_2>=RULE_STRING && LA25_2<=RULE_ID)) ) {
-                    alt25=1;
+                else if ( (LA24_2==EOF||LA24_2==FROM||LA24_2==LeftParenthesisPlusSignRightParenthesis||LA24_2==AS||LA24_2==VerticalLineVerticalLine||(LA24_2>=RightParenthesis && LA24_2<=HyphenMinus)||LA24_2==Solidus||LA24_2==RULE_STAR||(LA24_2>=RULE_STRING && LA24_2<=RULE_ID)) ) {
+                    alt24=1;
                 }
                 else {
                     NoViableAltException nvae =
-                        new NoViableAltException("", 25, 2, input);
+                        new NoViableAltException("", 24, 2, input);
 
                     throw nvae;
                 }
@@ -2185,30 +2174,30 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                 break;
             case RULE_STRING:
                 {
-                int LA25_3 = input.LA(2);
+                int LA24_3 = input.LA(2);
 
-                if ( (LA25_3==FullStop) ) {
-                    int LA25_6 = input.LA(3);
+                if ( (LA24_3==FullStop) ) {
+                    int LA24_6 = input.LA(3);
 
-                    if ( ((LA25_6>=RULE_STRING && LA25_6<=RULE_ID)) ) {
-                        alt25=1;
+                    if ( ((LA24_6>=RULE_STRING && LA24_6<=RULE_ID)) ) {
+                        alt24=1;
                     }
-                    else if ( (LA25_6==RULE_STAR) ) {
-                        alt25=3;
+                    else if ( (LA24_6==RULE_STAR) ) {
+                        alt24=3;
                     }
                     else {
                         NoViableAltException nvae =
-                            new NoViableAltException("", 25, 6, input);
+                            new NoViableAltException("", 24, 6, input);
 
                         throw nvae;
                     }
                 }
-                else if ( (LA25_3==EOF||LA25_3==FROM||LA25_3==LeftParenthesisPlusSignRightParenthesis||LA25_3==AS||LA25_3==VerticalLineVerticalLine||(LA25_3>=RightParenthesis && LA25_3<=HyphenMinus)||LA25_3==Solidus||LA25_3==RULE_STAR||(LA25_3>=RULE_STRING && LA25_3<=RULE_ID)) ) {
-                    alt25=1;
+                else if ( (LA24_3==EOF||LA24_3==FROM||LA24_3==LeftParenthesisPlusSignRightParenthesis||LA24_3==AS||LA24_3==VerticalLineVerticalLine||(LA24_3>=RightParenthesis && LA24_3<=HyphenMinus)||LA24_3==Solidus||LA24_3==RULE_STAR||(LA24_3>=RULE_STRING && LA24_3<=RULE_ID)) ) {
+                    alt24=1;
                 }
                 else {
                     NoViableAltException nvae =
-                        new NoViableAltException("", 25, 3, input);
+                        new NoViableAltException("", 24, 3, input);
 
                     throw nvae;
                 }
@@ -2225,22 +2214,22 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             case RULE_SIGNED_DOUBLE:
             case RULE_STRING_:
                 {
-                alt25=1;
+                alt24=1;
                 }
                 break;
             case RULE_STAR:
                 {
-                alt25=2;
+                alt24=2;
                 }
                 break;
             default:
                 NoViableAltException nvae =
-                    new NoViableAltException("", 25, 0, input);
+                    new NoViableAltException("", 24, 0, input);
 
                 throw nvae;
             }
 
-            switch (alt25) {
+            switch (alt24) {
                 case 1 :
                     // InternalSqlParser.g:795:2: ( ( (lv_ce_0_0= ruleOperandGroup ) ) ( (lv_alias_1_0= AS ) )? ( (lv_colAlias_2_0= ruleDbObjectName ) )? )
                     {
@@ -2256,7 +2245,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                      
                     	        newCompositeNode(grammarAccess.getColumnOrAliasAccess().getCeOperandGroupParserRuleCall_0_0_0()); 
                     	    
-                    pushFollow(FOLLOW_28);
+                    pushFollow(FOLLOW_27);
                     lv_ce_0_0=ruleOperandGroup();
 
                     state._fsp--;
@@ -2279,20 +2268,20 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     }
 
                     // InternalSqlParser.g:813:2: ( (lv_alias_1_0= AS ) )?
-                    int alt23=2;
-                    int LA23_0 = input.LA(1);
+                    int alt22=2;
+                    int LA22_0 = input.LA(1);
 
-                    if ( (LA23_0==AS) ) {
-                        alt23=1;
+                    if ( (LA22_0==AS) ) {
+                        alt22=1;
                     }
-                    switch (alt23) {
+                    switch (alt22) {
                         case 1 :
                             // InternalSqlParser.g:814:1: (lv_alias_1_0= AS )
                             {
                             // InternalSqlParser.g:814:1: (lv_alias_1_0= AS )
                             // InternalSqlParser.g:815:3: lv_alias_1_0= AS
                             {
-                            lv_alias_1_0=(Token)match(input,AS,FOLLOW_29); 
+                            lv_alias_1_0=(Token)match(input,AS,FOLLOW_28); 
 
                                     newLeafNode(lv_alias_1_0, grammarAccess.getColumnOrAliasAccess().getAliasASKeyword_0_1_0());
                                 
@@ -2312,13 +2301,13 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     }
 
                     // InternalSqlParser.g:829:3: ( (lv_colAlias_2_0= ruleDbObjectName ) )?
-                    int alt24=2;
-                    int LA24_0 = input.LA(1);
+                    int alt23=2;
+                    int LA23_0 = input.LA(1);
 
-                    if ( ((LA24_0>=RULE_STRING && LA24_0<=RULE_ID)) ) {
-                        alt24=1;
+                    if ( ((LA23_0>=RULE_STRING && LA23_0<=RULE_ID)) ) {
+                        alt23=1;
                     }
-                    switch (alt24) {
+                    switch (alt23) {
                         case 1 :
                             // InternalSqlParser.g:830:1: (lv_colAlias_2_0= ruleDbObjectName )
                             {
@@ -2507,7 +2496,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
              
                     newCompositeNode(grammarAccess.getColumnFullAccess().getDbObjectNameParserRuleCall_0()); 
                 
-            pushFollow(FOLLOW_30);
+            pushFollow(FOLLOW_29);
             this_DbObjectName_0=ruleDbObjectName();
 
             state._fsp--;
@@ -2517,13 +2506,13 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     afterParserOrEnumRuleCall();
                 
             // InternalSqlParser.g:915:1: ( () (otherlv_2= FullStop ( (lv_entries_3_0= ruleDbObjectName ) ) )+ )?
-            int alt27=2;
-            int LA27_0 = input.LA(1);
+            int alt26=2;
+            int LA26_0 = input.LA(1);
 
-            if ( (LA27_0==FullStop) ) {
-                alt27=1;
+            if ( (LA26_0==FullStop) ) {
+                alt26=1;
             }
-            switch (alt27) {
+            switch (alt26) {
                 case 1 :
                     // InternalSqlParser.g:915:2: () (otherlv_2= FullStop ( (lv_entries_3_0= ruleDbObjectName ) ) )+
                     {
@@ -2539,22 +2528,22 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     }
 
                     // InternalSqlParser.g:921:2: (otherlv_2= FullStop ( (lv_entries_3_0= ruleDbObjectName ) ) )+
-                    int cnt26=0;
-                    loop26:
+                    int cnt25=0;
+                    loop25:
                     do {
-                        int alt26=2;
-                        int LA26_0 = input.LA(1);
+                        int alt25=2;
+                        int LA25_0 = input.LA(1);
 
-                        if ( (LA26_0==FullStop) ) {
-                            alt26=1;
+                        if ( (LA25_0==FullStop) ) {
+                            alt25=1;
                         }
 
 
-                        switch (alt26) {
+                        switch (alt25) {
                     	case 1 :
                     	    // InternalSqlParser.g:922:2: otherlv_2= FullStop ( (lv_entries_3_0= ruleDbObjectName ) )
                     	    {
-                    	    otherlv_2=(Token)match(input,FullStop,FOLLOW_31); 
+                    	    otherlv_2=(Token)match(input,FullStop,FOLLOW_30); 
 
                     	        	newLeafNode(otherlv_2, grammarAccess.getColumnFullAccess().getFullStopKeyword_1_1_0());
                     	        
@@ -2567,7 +2556,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     	     
                     	    	        newCompositeNode(grammarAccess.getColumnFullAccess().getEntriesDbObjectNameParserRuleCall_1_1_1_0()); 
                     	    	    
-                    	    pushFollow(FOLLOW_30);
+                    	    pushFollow(FOLLOW_29);
                     	    lv_entries_3_0=ruleDbObjectName();
 
                     	    state._fsp--;
@@ -2594,12 +2583,12 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     	    break;
 
                     	default :
-                    	    if ( cnt26 >= 1 ) break loop26;
+                    	    if ( cnt25 >= 1 ) break loop25;
                                 EarlyExitException eee =
-                                    new EarlyExitException(26, input);
+                                    new EarlyExitException(25, input);
                                 throw eee;
                         }
-                        cnt26++;
+                        cnt25++;
                     } while (true);
 
 
@@ -2697,13 +2686,13 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     afterParserOrEnumRuleCall();
                 
             // InternalSqlParser.g:974:1: ( () (otherlv_2= Comma ( (lv_entries_3_0= ruleFromTable ) ) )+ )?
-            int alt29=2;
-            int LA29_0 = input.LA(1);
+            int alt28=2;
+            int LA28_0 = input.LA(1);
 
-            if ( (LA29_0==Comma) ) {
-                alt29=1;
+            if ( (LA28_0==Comma) ) {
+                alt28=1;
             }
-            switch (alt29) {
+            switch (alt28) {
                 case 1 :
                     // InternalSqlParser.g:974:2: () (otherlv_2= Comma ( (lv_entries_3_0= ruleFromTable ) ) )+
                     {
@@ -2719,18 +2708,18 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     }
 
                     // InternalSqlParser.g:980:2: (otherlv_2= Comma ( (lv_entries_3_0= ruleFromTable ) ) )+
-                    int cnt28=0;
-                    loop28:
+                    int cnt27=0;
+                    loop27:
                     do {
-                        int alt28=2;
-                        int LA28_0 = input.LA(1);
+                        int alt27=2;
+                        int LA27_0 = input.LA(1);
 
-                        if ( (LA28_0==Comma) ) {
-                            alt28=1;
+                        if ( (LA27_0==Comma) ) {
+                            alt27=1;
                         }
 
 
-                        switch (alt28) {
+                        switch (alt27) {
                     	case 1 :
                     	    // InternalSqlParser.g:981:2: otherlv_2= Comma ( (lv_entries_3_0= ruleFromTable ) )
                     	    {
@@ -2774,12 +2763,12 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     	    break;
 
                     	default :
-                    	    if ( cnt28 >= 1 ) break loop28;
+                    	    if ( cnt27 >= 1 ) break loop27;
                                 EarlyExitException eee =
-                                    new EarlyExitException(28, input);
+                                    new EarlyExitException(27, input);
                                 throw eee;
                         }
-                        cnt28++;
+                        cnt27++;
                     } while (true);
 
 
@@ -2872,7 +2861,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
              
             	        newCompositeNode(grammarAccess.getFromTableAccess().getTableTableOrAliasParserRuleCall_0_0()); 
             	    
-            pushFollow(FOLLOW_32);
+            pushFollow(FOLLOW_31);
             lv_table_0_0=ruleTableOrAlias();
 
             state._fsp--;
@@ -2895,17 +2884,17 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             }
 
             // InternalSqlParser.g:1042:2: ( (lv_fjoin_1_0= ruleFromTableJoin ) )*
-            loop30:
+            loop29:
             do {
-                int alt30=2;
-                int LA30_0 = input.LA(1);
+                int alt29=2;
+                int LA29_0 = input.LA(1);
 
-                if ( (LA30_0==STRAIGHT_JOIN||LA30_0==NATURAL||LA30_0==CROSS||LA30_0==INNER||LA30_0==RIGHT||LA30_0==FULL||LA30_0==JOIN||LA30_0==LEFT) ) {
-                    alt30=1;
+                if ( (LA29_0==STRAIGHT_JOIN||LA29_0==NATURAL||LA29_0==CROSS||LA29_0==INNER||LA29_0==RIGHT||LA29_0==FULL||LA29_0==JOIN||LA29_0==LEFT) ) {
+                    alt29=1;
                 }
 
 
-                switch (alt30) {
+                switch (alt29) {
             	case 1 :
             	    // InternalSqlParser.g:1043:1: (lv_fjoin_1_0= ruleFromTableJoin )
             	    {
@@ -2915,7 +2904,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             	     
             	    	        newCompositeNode(grammarAccess.getFromTableAccess().getFjoinFromTableJoinParserRuleCall_1_0()); 
             	    	    
-            	    pushFollow(FOLLOW_32);
+            	    pushFollow(FOLLOW_31);
             	    lv_fjoin_1_0=ruleFromTableJoin();
 
             	    state._fsp--;
@@ -2939,7 +2928,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             	    break;
 
             	default :
-            	    break loop30;
+            	    break loop29;
                 }
             } while (true);
 
@@ -3063,7 +3052,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
              
             	        newCompositeNode(grammarAccess.getFromTableJoinAccess().getOnTableTableOrAliasParserRuleCall_1_0()); 
             	    
-            pushFollow(FOLLOW_33);
+            pushFollow(FOLLOW_32);
             lv_onTable_1_0=ruleTableOrAlias();
 
             state._fsp--;
@@ -3086,22 +3075,22 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             }
 
             // InternalSqlParser.g:1117:2: ( (otherlv_2= ON ( (lv_joinExpr_3_0= ruleFullExpression ) ) ) | ( (lv_joinCond_4_0= ruleJoinCondition ) ) )
-            int alt31=2;
-            int LA31_0 = input.LA(1);
+            int alt30=2;
+            int LA30_0 = input.LA(1);
 
-            if ( (LA31_0==ON) ) {
-                alt31=1;
+            if ( (LA30_0==ON) ) {
+                alt30=1;
             }
-            else if ( (LA31_0==USING) ) {
-                alt31=2;
+            else if ( (LA30_0==USING) ) {
+                alt30=2;
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("", 31, 0, input);
+                    new NoViableAltException("", 30, 0, input);
 
                 throw nvae;
             }
-            switch (alt31) {
+            switch (alt30) {
                 case 1 :
                     // InternalSqlParser.g:1117:3: (otherlv_2= ON ( (lv_joinExpr_3_0= ruleFullExpression ) ) )
                     {
@@ -3265,11 +3254,11 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             // InternalSqlParser.g:1180:1: (otherlv_0= USING otherlv_1= LeftParenthesis ( (lv_useCols_2_0= ruleUsingCols ) ) otherlv_3= RightParenthesis )
             // InternalSqlParser.g:1181:2: otherlv_0= USING otherlv_1= LeftParenthesis ( (lv_useCols_2_0= ruleUsingCols ) ) otherlv_3= RightParenthesis
             {
-            otherlv_0=(Token)match(input,USING,FOLLOW_34); 
+            otherlv_0=(Token)match(input,USING,FOLLOW_33); 
 
                 	newLeafNode(otherlv_0, grammarAccess.getJoinConditionAccess().getUSINGKeyword_0());
                 
-            otherlv_1=(Token)match(input,LeftParenthesis,FOLLOW_31); 
+            otherlv_1=(Token)match(input,LeftParenthesis,FOLLOW_30); 
 
                 	newLeafNode(otherlv_1, grammarAccess.getJoinConditionAccess().getLeftParenthesisKeyword_1());
                 
@@ -3282,7 +3271,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
              
             	        newCompositeNode(grammarAccess.getJoinConditionAccess().getUseColsUsingColsParserRuleCall_2_0()); 
             	    
-            pushFollow(FOLLOW_35);
+            pushFollow(FOLLOW_34);
             lv_useCols_2_0=ruleUsingCols();
 
             state._fsp--;
@@ -3397,13 +3386,13 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     afterParserOrEnumRuleCall();
                 
             // InternalSqlParser.g:1243:1: ( () (otherlv_2= Comma ( (lv_entries_3_0= ruleDbObjectName ) ) )+ )?
-            int alt33=2;
-            int LA33_0 = input.LA(1);
+            int alt32=2;
+            int LA32_0 = input.LA(1);
 
-            if ( (LA33_0==Comma) ) {
-                alt33=1;
+            if ( (LA32_0==Comma) ) {
+                alt32=1;
             }
-            switch (alt33) {
+            switch (alt32) {
                 case 1 :
                     // InternalSqlParser.g:1243:2: () (otherlv_2= Comma ( (lv_entries_3_0= ruleDbObjectName ) ) )+
                     {
@@ -3419,22 +3408,22 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     }
 
                     // InternalSqlParser.g:1249:2: (otherlv_2= Comma ( (lv_entries_3_0= ruleDbObjectName ) ) )+
-                    int cnt32=0;
-                    loop32:
+                    int cnt31=0;
+                    loop31:
                     do {
-                        int alt32=2;
-                        int LA32_0 = input.LA(1);
+                        int alt31=2;
+                        int LA31_0 = input.LA(1);
 
-                        if ( (LA32_0==Comma) ) {
-                            alt32=1;
+                        if ( (LA31_0==Comma) ) {
+                            alt31=1;
                         }
 
 
-                        switch (alt32) {
+                        switch (alt31) {
                     	case 1 :
                     	    // InternalSqlParser.g:1250:2: otherlv_2= Comma ( (lv_entries_3_0= ruleDbObjectName ) )
                     	    {
-                    	    otherlv_2=(Token)match(input,Comma,FOLLOW_31); 
+                    	    otherlv_2=(Token)match(input,Comma,FOLLOW_30); 
 
                     	        	newLeafNode(otherlv_2, grammarAccess.getUsingColsAccess().getCommaKeyword_1_1_0());
                     	        
@@ -3474,12 +3463,12 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     	    break;
 
                     	default :
-                    	    if ( cnt32 >= 1 ) break loop32;
+                    	    if ( cnt31 >= 1 ) break loop31;
                                 EarlyExitException eee =
-                                    new EarlyExitException(32, input);
+                                    new EarlyExitException(31, input);
                                 throw eee;
                         }
-                        cnt32++;
+                        cnt31++;
                     } while (true);
 
 
@@ -3571,22 +3560,22 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             // InternalSqlParser.g:1293:2: ( ( (lv_tfull_0_0= ruleTableFull ) ) | ( (lv_sq_1_0= ruleSubQueryOperand ) ) ) ( ( (lv_pivot_2_0= rulePivotTable ) ) | ( (lv_unpivot_3_0= ruleUnpivotTable ) ) )? ( (lv_alias_4_0= AS ) )? ( (lv_tblAlias_5_0= ruleDbObjectName ) )?
             {
             // InternalSqlParser.g:1293:2: ( ( (lv_tfull_0_0= ruleTableFull ) ) | ( (lv_sq_1_0= ruleSubQueryOperand ) ) )
-            int alt34=2;
-            int LA34_0 = input.LA(1);
+            int alt33=2;
+            int LA33_0 = input.LA(1);
 
-            if ( ((LA34_0>=RULE_STRING && LA34_0<=RULE_ID)) ) {
-                alt34=1;
+            if ( ((LA33_0>=RULE_STRING && LA33_0<=RULE_ID)) ) {
+                alt33=1;
             }
-            else if ( (LA34_0==LeftParenthesis) ) {
-                alt34=2;
+            else if ( (LA33_0==LeftParenthesis) ) {
+                alt33=2;
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("", 34, 0, input);
+                    new NoViableAltException("", 33, 0, input);
 
                 throw nvae;
             }
-            switch (alt34) {
+            switch (alt33) {
                 case 1 :
                     // InternalSqlParser.g:1293:3: ( (lv_tfull_0_0= ruleTableFull ) )
                     {
@@ -3599,7 +3588,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                      
                     	        newCompositeNode(grammarAccess.getTableOrAliasAccess().getTfullTableFullParserRuleCall_0_0_0()); 
                     	    
-                    pushFollow(FOLLOW_36);
+                    pushFollow(FOLLOW_35);
                     lv_tfull_0_0=ruleTableFull();
 
                     state._fsp--;
@@ -3636,7 +3625,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                      
                     	        newCompositeNode(grammarAccess.getTableOrAliasAccess().getSqSubQueryOperandParserRuleCall_0_1_0()); 
                     	    
-                    pushFollow(FOLLOW_36);
+                    pushFollow(FOLLOW_35);
                     lv_sq_1_0=ruleSubQueryOperand();
 
                     state._fsp--;
@@ -3665,16 +3654,16 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             }
 
             // InternalSqlParser.g:1330:3: ( ( (lv_pivot_2_0= rulePivotTable ) ) | ( (lv_unpivot_3_0= ruleUnpivotTable ) ) )?
-            int alt35=3;
-            int LA35_0 = input.LA(1);
+            int alt34=3;
+            int LA34_0 = input.LA(1);
 
-            if ( (LA35_0==PIVOT) ) {
-                alt35=1;
+            if ( (LA34_0==PIVOT) ) {
+                alt34=1;
             }
-            else if ( (LA35_0==UNPIVOT) ) {
-                alt35=2;
+            else if ( (LA34_0==UNPIVOT) ) {
+                alt34=2;
             }
-            switch (alt35) {
+            switch (alt34) {
                 case 1 :
                     // InternalSqlParser.g:1330:4: ( (lv_pivot_2_0= rulePivotTable ) )
                     {
@@ -3687,7 +3676,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                      
                     	        newCompositeNode(grammarAccess.getTableOrAliasAccess().getPivotPivotTableParserRuleCall_1_0_0()); 
                     	    
-                    pushFollow(FOLLOW_28);
+                    pushFollow(FOLLOW_27);
                     lv_pivot_2_0=rulePivotTable();
 
                     state._fsp--;
@@ -3724,7 +3713,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                      
                     	        newCompositeNode(grammarAccess.getTableOrAliasAccess().getUnpivotUnpivotTableParserRuleCall_1_1_0()); 
                     	    
-                    pushFollow(FOLLOW_28);
+                    pushFollow(FOLLOW_27);
                     lv_unpivot_3_0=ruleUnpivotTable();
 
                     state._fsp--;
@@ -3753,20 +3742,20 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             }
 
             // InternalSqlParser.g:1367:4: ( (lv_alias_4_0= AS ) )?
-            int alt36=2;
-            int LA36_0 = input.LA(1);
+            int alt35=2;
+            int LA35_0 = input.LA(1);
 
-            if ( (LA36_0==AS) ) {
-                alt36=1;
+            if ( (LA35_0==AS) ) {
+                alt35=1;
             }
-            switch (alt36) {
+            switch (alt35) {
                 case 1 :
                     // InternalSqlParser.g:1368:1: (lv_alias_4_0= AS )
                     {
                     // InternalSqlParser.g:1368:1: (lv_alias_4_0= AS )
                     // InternalSqlParser.g:1369:3: lv_alias_4_0= AS
                     {
-                    lv_alias_4_0=(Token)match(input,AS,FOLLOW_29); 
+                    lv_alias_4_0=(Token)match(input,AS,FOLLOW_28); 
 
                             newLeafNode(lv_alias_4_0, grammarAccess.getTableOrAliasAccess().getAliasASKeyword_2_0());
                         
@@ -3786,13 +3775,13 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             }
 
             // InternalSqlParser.g:1383:3: ( (lv_tblAlias_5_0= ruleDbObjectName ) )?
-            int alt37=2;
-            int LA37_0 = input.LA(1);
+            int alt36=2;
+            int LA36_0 = input.LA(1);
 
-            if ( ((LA37_0>=RULE_STRING && LA37_0<=RULE_ID)) ) {
-                alt37=1;
+            if ( ((LA36_0>=RULE_STRING && LA36_0<=RULE_ID)) ) {
+                alt36=1;
             }
-            switch (alt37) {
+            switch (alt36) {
                 case 1 :
                     // InternalSqlParser.g:1384:1: (lv_tblAlias_5_0= ruleDbObjectName )
                     {
@@ -3908,22 +3897,22 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             // InternalSqlParser.g:1422:1: (otherlv_0= PIVOT (otherlv_1= XML )? otherlv_2= LeftParenthesis ( (lv_pfun_3_0= rulePivotFunctions ) ) ( (lv_pfor_4_0= rulePivotForClause ) ) ( (lv_pin_5_0= rulePivotInClause ) ) otherlv_6= RightParenthesis )
             // InternalSqlParser.g:1423:2: otherlv_0= PIVOT (otherlv_1= XML )? otherlv_2= LeftParenthesis ( (lv_pfun_3_0= rulePivotFunctions ) ) ( (lv_pfor_4_0= rulePivotForClause ) ) ( (lv_pin_5_0= rulePivotInClause ) ) otherlv_6= RightParenthesis
             {
-            otherlv_0=(Token)match(input,PIVOT,FOLLOW_37); 
+            otherlv_0=(Token)match(input,PIVOT,FOLLOW_36); 
 
                 	newLeafNode(otherlv_0, grammarAccess.getPivotTableAccess().getPIVOTKeyword_0());
                 
             // InternalSqlParser.g:1427:1: (otherlv_1= XML )?
-            int alt38=2;
-            int LA38_0 = input.LA(1);
+            int alt37=2;
+            int LA37_0 = input.LA(1);
 
-            if ( (LA38_0==XML) ) {
-                alt38=1;
+            if ( (LA37_0==XML) ) {
+                alt37=1;
             }
-            switch (alt38) {
+            switch (alt37) {
                 case 1 :
                     // InternalSqlParser.g:1428:2: otherlv_1= XML
                     {
-                    otherlv_1=(Token)match(input,XML,FOLLOW_34); 
+                    otherlv_1=(Token)match(input,XML,FOLLOW_33); 
 
                         	newLeafNode(otherlv_1, grammarAccess.getPivotTableAccess().getXMLKeyword_1());
                         
@@ -3933,7 +3922,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
 
             }
 
-            otherlv_2=(Token)match(input,LeftParenthesis,FOLLOW_38); 
+            otherlv_2=(Token)match(input,LeftParenthesis,FOLLOW_37); 
 
                 	newLeafNode(otherlv_2, grammarAccess.getPivotTableAccess().getLeftParenthesisKeyword_2());
                 
@@ -3946,7 +3935,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
              
             	        newCompositeNode(grammarAccess.getPivotTableAccess().getPfunPivotFunctionsParserRuleCall_3_0()); 
             	    
-            pushFollow(FOLLOW_39);
+            pushFollow(FOLLOW_38);
             lv_pfun_3_0=rulePivotFunctions();
 
             state._fsp--;
@@ -3977,7 +3966,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
              
             	        newCompositeNode(grammarAccess.getPivotTableAccess().getPforPivotForClauseParserRuleCall_4_0()); 
             	    
-            pushFollow(FOLLOW_40);
+            pushFollow(FOLLOW_39);
             lv_pfor_4_0=rulePivotForClause();
 
             state._fsp--;
@@ -4008,7 +3997,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
              
             	        newCompositeNode(grammarAccess.getPivotTableAccess().getPinPivotInClauseParserRuleCall_5_0()); 
             	    
-            pushFollow(FOLLOW_35);
+            pushFollow(FOLLOW_34);
             lv_pin_5_0=rulePivotInClause();
 
             state._fsp--;
@@ -4206,30 +4195,30 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             // InternalSqlParser.g:1558:1: (otherlv_0= IN otherlv_1= LeftParenthesis ( ( (lv_sq_2_0= ruleSubQueryOperand ) ) | ( (lv_args_3_0= ruleUnpivotInClauseArgs ) ) | ( (lv_pinany_4_0= rulePivotInClauseAny ) ) ) otherlv_5= RightParenthesis )
             // InternalSqlParser.g:1559:2: otherlv_0= IN otherlv_1= LeftParenthesis ( ( (lv_sq_2_0= ruleSubQueryOperand ) ) | ( (lv_args_3_0= ruleUnpivotInClauseArgs ) ) | ( (lv_pinany_4_0= rulePivotInClauseAny ) ) ) otherlv_5= RightParenthesis
             {
-            otherlv_0=(Token)match(input,IN,FOLLOW_34); 
+            otherlv_0=(Token)match(input,IN,FOLLOW_33); 
 
                 	newLeafNode(otherlv_0, grammarAccess.getPivotInClauseAccess().getINKeyword_0());
                 
-            otherlv_1=(Token)match(input,LeftParenthesis,FOLLOW_41); 
+            otherlv_1=(Token)match(input,LeftParenthesis,FOLLOW_40); 
 
                 	newLeafNode(otherlv_1, grammarAccess.getPivotInClauseAccess().getLeftParenthesisKeyword_1());
                 
             // InternalSqlParser.g:1568:1: ( ( (lv_sq_2_0= ruleSubQueryOperand ) ) | ( (lv_args_3_0= ruleUnpivotInClauseArgs ) ) | ( (lv_pinany_4_0= rulePivotInClauseAny ) ) )
-            int alt39=3;
+            int alt38=3;
             switch ( input.LA(1) ) {
             case LeftParenthesis:
                 {
-                int LA39_1 = input.LA(2);
+                int LA38_1 = input.LA(2);
 
-                if ( ((LA39_1>=RULE_STRING && LA39_1<=RULE_ID)) ) {
-                    alt39=2;
+                if ( (LA38_1==SELECT) ) {
+                    alt38=1;
                 }
-                else if ( (LA39_1==SELECT) ) {
-                    alt39=1;
+                else if ( ((LA38_1>=RULE_STRING && LA38_1<=RULE_ID)) ) {
+                    alt38=2;
                 }
                 else {
                     NoViableAltException nvae =
-                        new NoViableAltException("", 39, 1, input);
+                        new NoViableAltException("", 38, 1, input);
 
                     throw nvae;
                 }
@@ -4239,22 +4228,22 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             case RULE_DBNAME:
             case RULE_ID:
                 {
-                alt39=2;
+                alt38=2;
                 }
                 break;
             case ANY:
                 {
-                alt39=3;
+                alt38=3;
                 }
                 break;
             default:
                 NoViableAltException nvae =
-                    new NoViableAltException("", 39, 0, input);
+                    new NoViableAltException("", 38, 0, input);
 
                 throw nvae;
             }
 
-            switch (alt39) {
+            switch (alt38) {
                 case 1 :
                     // InternalSqlParser.g:1568:2: ( (lv_sq_2_0= ruleSubQueryOperand ) )
                     {
@@ -4267,7 +4256,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                      
                     	        newCompositeNode(grammarAccess.getPivotInClauseAccess().getSqSubQueryOperandParserRuleCall_2_0_0()); 
                     	    
-                    pushFollow(FOLLOW_35);
+                    pushFollow(FOLLOW_34);
                     lv_sq_2_0=ruleSubQueryOperand();
 
                     state._fsp--;
@@ -4304,7 +4293,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                      
                     	        newCompositeNode(grammarAccess.getPivotInClauseAccess().getArgsUnpivotInClauseArgsParserRuleCall_2_1_0()); 
                     	    
-                    pushFollow(FOLLOW_35);
+                    pushFollow(FOLLOW_34);
                     lv_args_3_0=ruleUnpivotInClauseArgs();
 
                     state._fsp--;
@@ -4341,7 +4330,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                      
                     	        newCompositeNode(grammarAccess.getPivotInClauseAccess().getPinanyPivotInClauseAnyParserRuleCall_2_2_0()); 
                     	    
-                    pushFollow(FOLLOW_35);
+                    pushFollow(FOLLOW_34);
                     lv_pinany_4_0=rulePivotInClauseAny();
 
                     state._fsp--;
@@ -4451,21 +4440,21 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     newLeafNode(kw, grammarAccess.getPivotInClauseAnyAccess().getANYKeyword_0()); 
                 
             // InternalSqlParser.g:1657:1: (kw= Comma kw= ANY )*
-            loop40:
+            loop39:
             do {
-                int alt40=2;
-                int LA40_0 = input.LA(1);
+                int alt39=2;
+                int LA39_0 = input.LA(1);
 
-                if ( (LA40_0==Comma) ) {
-                    alt40=1;
+                if ( (LA39_0==Comma) ) {
+                    alt39=1;
                 }
 
 
-                switch (alt40) {
+                switch (alt39) {
             	case 1 :
             	    // InternalSqlParser.g:1658:2: kw= Comma kw= ANY
             	    {
-            	    kw=(Token)match(input,Comma,FOLLOW_42); 
+            	    kw=(Token)match(input,Comma,FOLLOW_41); 
 
             	            current.merge(kw);
             	            newLeafNode(kw, grammarAccess.getPivotInClauseAnyAccess().getCommaKeyword_1_0()); 
@@ -4480,7 +4469,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             	    break;
 
             	default :
-            	    break loop40;
+            	    break loop39;
                 }
             } while (true);
 
@@ -4568,42 +4557,42 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             // InternalSqlParser.g:1690:1: (otherlv_0= UNPIVOT ( (otherlv_1= INCLUDE | otherlv_2= EXCLUDE ) otherlv_3= NULLS )? otherlv_4= LeftParenthesis ( (lv_pcols_5_0= rulePivotColumns ) ) ( (lv_pfor_6_0= rulePivotForClause ) ) ( (lv_inop_7_0= ruleUnpivotInClause ) ) otherlv_8= RightParenthesis )
             // InternalSqlParser.g:1691:2: otherlv_0= UNPIVOT ( (otherlv_1= INCLUDE | otherlv_2= EXCLUDE ) otherlv_3= NULLS )? otherlv_4= LeftParenthesis ( (lv_pcols_5_0= rulePivotColumns ) ) ( (lv_pfor_6_0= rulePivotForClause ) ) ( (lv_inop_7_0= ruleUnpivotInClause ) ) otherlv_8= RightParenthesis
             {
-            otherlv_0=(Token)match(input,UNPIVOT,FOLLOW_43); 
+            otherlv_0=(Token)match(input,UNPIVOT,FOLLOW_42); 
 
                 	newLeafNode(otherlv_0, grammarAccess.getUnpivotTableAccess().getUNPIVOTKeyword_0());
                 
             // InternalSqlParser.g:1695:1: ( (otherlv_1= INCLUDE | otherlv_2= EXCLUDE ) otherlv_3= NULLS )?
-            int alt42=2;
-            int LA42_0 = input.LA(1);
+            int alt41=2;
+            int LA41_0 = input.LA(1);
 
-            if ( (LA42_0==EXCLUDE||LA42_0==INCLUDE) ) {
-                alt42=1;
+            if ( (LA41_0==EXCLUDE||LA41_0==INCLUDE) ) {
+                alt41=1;
             }
-            switch (alt42) {
+            switch (alt41) {
                 case 1 :
                     // InternalSqlParser.g:1695:2: (otherlv_1= INCLUDE | otherlv_2= EXCLUDE ) otherlv_3= NULLS
                     {
                     // InternalSqlParser.g:1695:2: (otherlv_1= INCLUDE | otherlv_2= EXCLUDE )
-                    int alt41=2;
-                    int LA41_0 = input.LA(1);
+                    int alt40=2;
+                    int LA40_0 = input.LA(1);
 
-                    if ( (LA41_0==INCLUDE) ) {
-                        alt41=1;
+                    if ( (LA40_0==INCLUDE) ) {
+                        alt40=1;
                     }
-                    else if ( (LA41_0==EXCLUDE) ) {
-                        alt41=2;
+                    else if ( (LA40_0==EXCLUDE) ) {
+                        alt40=2;
                     }
                     else {
                         NoViableAltException nvae =
-                            new NoViableAltException("", 41, 0, input);
+                            new NoViableAltException("", 40, 0, input);
 
                         throw nvae;
                     }
-                    switch (alt41) {
+                    switch (alt40) {
                         case 1 :
                             // InternalSqlParser.g:1696:2: otherlv_1= INCLUDE
                             {
-                            otherlv_1=(Token)match(input,INCLUDE,FOLLOW_44); 
+                            otherlv_1=(Token)match(input,INCLUDE,FOLLOW_43); 
 
                                 	newLeafNode(otherlv_1, grammarAccess.getUnpivotTableAccess().getINCLUDEKeyword_1_0_0());
                                 
@@ -4613,7 +4602,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                         case 2 :
                             // InternalSqlParser.g:1702:2: otherlv_2= EXCLUDE
                             {
-                            otherlv_2=(Token)match(input,EXCLUDE,FOLLOW_44); 
+                            otherlv_2=(Token)match(input,EXCLUDE,FOLLOW_43); 
 
                                 	newLeafNode(otherlv_2, grammarAccess.getUnpivotTableAccess().getEXCLUDEKeyword_1_0_1());
                                 
@@ -4623,7 +4612,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
 
                     }
 
-                    otherlv_3=(Token)match(input,NULLS,FOLLOW_34); 
+                    otherlv_3=(Token)match(input,NULLS,FOLLOW_33); 
 
                         	newLeafNode(otherlv_3, grammarAccess.getUnpivotTableAccess().getNULLSKeyword_1_1());
                         
@@ -4646,7 +4635,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
              
             	        newCompositeNode(grammarAccess.getUnpivotTableAccess().getPcolsPivotColumnsParserRuleCall_3_0()); 
             	    
-            pushFollow(FOLLOW_39);
+            pushFollow(FOLLOW_38);
             lv_pcols_5_0=rulePivotColumns();
 
             state._fsp--;
@@ -4677,7 +4666,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
              
             	        newCompositeNode(grammarAccess.getUnpivotTableAccess().getPforPivotForClauseParserRuleCall_4_0()); 
             	    
-            pushFollow(FOLLOW_40);
+            pushFollow(FOLLOW_39);
             lv_pfor_6_0=rulePivotForClause();
 
             state._fsp--;
@@ -4708,7 +4697,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
              
             	        newCompositeNode(grammarAccess.getUnpivotTableAccess().getInopUnpivotInClauseParserRuleCall_5_0()); 
             	    
-            pushFollow(FOLLOW_35);
+            pushFollow(FOLLOW_34);
             lv_inop_7_0=ruleUnpivotInClause();
 
             state._fsp--;
@@ -4827,7 +4816,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             // InternalSqlParser.g:1803:1: (lv_op_1_0= IN )
             // InternalSqlParser.g:1804:3: lv_op_1_0= IN
             {
-            lv_op_1_0=(Token)match(input,IN,FOLLOW_34); 
+            lv_op_1_0=(Token)match(input,IN,FOLLOW_33); 
 
                     newLeafNode(lv_op_1_0, grammarAccess.getUnpivotInClauseAccess().getOpINKeyword_1_0());
                 
@@ -4856,7 +4845,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
              
             	        newCompositeNode(grammarAccess.getUnpivotInClauseAccess().getArgsUnpivotInClauseArgsParserRuleCall_3_0()); 
             	    
-            pushFollow(FOLLOW_35);
+            pushFollow(FOLLOW_34);
             lv_args_3_0=ruleUnpivotInClauseArgs();
 
             state._fsp--;
@@ -4971,13 +4960,13 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     afterParserOrEnumRuleCall();
                 
             // InternalSqlParser.g:1876:1: ( () (otherlv_2= Comma ( (lv_entries_3_0= ruleUnpivotInClauseArg ) ) )+ )?
-            int alt44=2;
-            int LA44_0 = input.LA(1);
+            int alt43=2;
+            int LA43_0 = input.LA(1);
 
-            if ( (LA44_0==Comma) ) {
-                alt44=1;
+            if ( (LA43_0==Comma) ) {
+                alt43=1;
             }
-            switch (alt44) {
+            switch (alt43) {
                 case 1 :
                     // InternalSqlParser.g:1876:2: () (otherlv_2= Comma ( (lv_entries_3_0= ruleUnpivotInClauseArg ) ) )+
                     {
@@ -4993,18 +4982,18 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     }
 
                     // InternalSqlParser.g:1882:2: (otherlv_2= Comma ( (lv_entries_3_0= ruleUnpivotInClauseArg ) ) )+
-                    int cnt43=0;
-                    loop43:
+                    int cnt42=0;
+                    loop42:
                     do {
-                        int alt43=2;
-                        int LA43_0 = input.LA(1);
+                        int alt42=2;
+                        int LA42_0 = input.LA(1);
 
-                        if ( (LA43_0==Comma) ) {
-                            alt43=1;
+                        if ( (LA42_0==Comma) ) {
+                            alt42=1;
                         }
 
 
-                        switch (alt43) {
+                        switch (alt42) {
                     	case 1 :
                     	    // InternalSqlParser.g:1883:2: otherlv_2= Comma ( (lv_entries_3_0= ruleUnpivotInClauseArg ) )
                     	    {
@@ -5048,12 +5037,12 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     	    break;
 
                     	default :
-                    	    if ( cnt43 >= 1 ) break loop43;
+                    	    if ( cnt42 >= 1 ) break loop42;
                                 EarlyExitException eee =
-                                    new EarlyExitException(43, input);
+                                    new EarlyExitException(42, input);
                                 throw eee;
                         }
-                        cnt43++;
+                        cnt42++;
                     } while (true);
 
 
@@ -5147,7 +5136,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
              
             	        newCompositeNode(grammarAccess.getUnpivotInClauseArgAccess().getPcolsPivotColumnsParserRuleCall_0_0()); 
             	    
-            pushFollow(FOLLOW_45);
+            pushFollow(FOLLOW_44);
             lv_pcols_0_0=rulePivotColumns();
 
             state._fsp--;
@@ -5170,13 +5159,13 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             }
 
             // InternalSqlParser.g:1944:2: (otherlv_1= AS ( (lv_cfuls_2_0= rulePivotColumns ) ) )?
-            int alt45=2;
-            int LA45_0 = input.LA(1);
+            int alt44=2;
+            int LA44_0 = input.LA(1);
 
-            if ( (LA45_0==AS) ) {
-                alt45=1;
+            if ( (LA44_0==AS) ) {
+                alt44=1;
             }
-            switch (alt45) {
+            switch (alt44) {
                 case 1 :
                     // InternalSqlParser.g:1945:2: otherlv_1= AS ( (lv_cfuls_2_0= rulePivotColumns ) )
                     {
@@ -5304,22 +5293,22 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                 	newLeafNode(otherlv_0, grammarAccess.getPivotForClauseAccess().getFORKeyword_0());
                 
             // InternalSqlParser.g:1993:1: (this_ColumnFull_1= ruleColumnFull | (otherlv_2= LeftParenthesis this_Columns_3= ruleColumns otherlv_4= RightParenthesis ) )
-            int alt46=2;
-            int LA46_0 = input.LA(1);
+            int alt45=2;
+            int LA45_0 = input.LA(1);
 
-            if ( ((LA46_0>=RULE_STRING && LA46_0<=RULE_ID)) ) {
-                alt46=1;
+            if ( ((LA45_0>=RULE_STRING && LA45_0<=RULE_ID)) ) {
+                alt45=1;
             }
-            else if ( (LA46_0==LeftParenthesis) ) {
-                alt46=2;
+            else if ( (LA45_0==LeftParenthesis) ) {
+                alt45=2;
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("", 46, 0, input);
+                    new NoViableAltException("", 45, 0, input);
 
                 throw nvae;
             }
-            switch (alt46) {
+            switch (alt45) {
                 case 1 :
                     // InternalSqlParser.g:1994:5: this_ColumnFull_1= ruleColumnFull
                     {
@@ -5351,7 +5340,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                      
                             newCompositeNode(grammarAccess.getPivotForClauseAccess().getColumnsParserRuleCall_1_1_1()); 
                         
-                    pushFollow(FOLLOW_35);
+                    pushFollow(FOLLOW_34);
                     this_Columns_3=ruleColumns();
 
                     state._fsp--;
@@ -5448,22 +5437,22 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             // InternalSqlParser.g:2043:1: (this_PivotCol_0= rulePivotCol | (otherlv_1= LeftParenthesis this_PivotCols_2= rulePivotCols otherlv_3= RightParenthesis ) )
             {
             // InternalSqlParser.g:2043:1: (this_PivotCol_0= rulePivotCol | (otherlv_1= LeftParenthesis this_PivotCols_2= rulePivotCols otherlv_3= RightParenthesis ) )
-            int alt47=2;
-            int LA47_0 = input.LA(1);
+            int alt46=2;
+            int LA46_0 = input.LA(1);
 
-            if ( ((LA47_0>=RULE_STRING && LA47_0<=RULE_ID)) ) {
-                alt47=1;
+            if ( ((LA46_0>=RULE_STRING && LA46_0<=RULE_ID)) ) {
+                alt46=1;
             }
-            else if ( (LA47_0==LeftParenthesis) ) {
-                alt47=2;
+            else if ( (LA46_0==LeftParenthesis) ) {
+                alt46=2;
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("", 47, 0, input);
+                    new NoViableAltException("", 46, 0, input);
 
                 throw nvae;
             }
-            switch (alt47) {
+            switch (alt46) {
                 case 1 :
                     // InternalSqlParser.g:2044:5: this_PivotCol_0= rulePivotCol
                     {
@@ -5488,14 +5477,14 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     // InternalSqlParser.g:2053:6: (otherlv_1= LeftParenthesis this_PivotCols_2= rulePivotCols otherlv_3= RightParenthesis )
                     // InternalSqlParser.g:2054:2: otherlv_1= LeftParenthesis this_PivotCols_2= rulePivotCols otherlv_3= RightParenthesis
                     {
-                    otherlv_1=(Token)match(input,LeftParenthesis,FOLLOW_31); 
+                    otherlv_1=(Token)match(input,LeftParenthesis,FOLLOW_30); 
 
                         	newLeafNode(otherlv_1, grammarAccess.getPivotColumnsAccess().getLeftParenthesisKeyword_1_0());
                         
                      
                             newCompositeNode(grammarAccess.getPivotColumnsAccess().getPivotColsParserRuleCall_1_1()); 
                         
-                    pushFollow(FOLLOW_35);
+                    pushFollow(FOLLOW_34);
                     this_PivotCols_2=rulePivotCols();
 
                     state._fsp--;
@@ -5603,13 +5592,13 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     afterParserOrEnumRuleCall();
                 
             // InternalSqlParser.g:2102:1: ( () (otherlv_2= Comma ( (lv_entries_3_0= rulePivotCol ) ) )+ )?
-            int alt49=2;
-            int LA49_0 = input.LA(1);
+            int alt48=2;
+            int LA48_0 = input.LA(1);
 
-            if ( (LA49_0==Comma) ) {
-                alt49=1;
+            if ( (LA48_0==Comma) ) {
+                alt48=1;
             }
-            switch (alt49) {
+            switch (alt48) {
                 case 1 :
                     // InternalSqlParser.g:2102:2: () (otherlv_2= Comma ( (lv_entries_3_0= rulePivotCol ) ) )+
                     {
@@ -5625,22 +5614,22 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     }
 
                     // InternalSqlParser.g:2108:2: (otherlv_2= Comma ( (lv_entries_3_0= rulePivotCol ) ) )+
-                    int cnt48=0;
-                    loop48:
+                    int cnt47=0;
+                    loop47:
                     do {
-                        int alt48=2;
-                        int LA48_0 = input.LA(1);
+                        int alt47=2;
+                        int LA47_0 = input.LA(1);
 
-                        if ( (LA48_0==Comma) ) {
-                            alt48=1;
+                        if ( (LA47_0==Comma) ) {
+                            alt47=1;
                         }
 
 
-                        switch (alt48) {
+                        switch (alt47) {
                     	case 1 :
                     	    // InternalSqlParser.g:2109:2: otherlv_2= Comma ( (lv_entries_3_0= rulePivotCol ) )
                     	    {
-                    	    otherlv_2=(Token)match(input,Comma,FOLLOW_31); 
+                    	    otherlv_2=(Token)match(input,Comma,FOLLOW_30); 
 
                     	        	newLeafNode(otherlv_2, grammarAccess.getPivotColsAccess().getCommaKeyword_1_1_0());
                     	        
@@ -5680,12 +5669,12 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     	    break;
 
                     	default :
-                    	    if ( cnt48 >= 1 ) break loop48;
+                    	    if ( cnt47 >= 1 ) break loop47;
                                 EarlyExitException eee =
-                                    new EarlyExitException(48, input);
+                                    new EarlyExitException(47, input);
                                 throw eee;
                         }
-                        cnt48++;
+                        cnt47++;
                     } while (true);
 
 
@@ -5773,7 +5762,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
              
                     newCompositeNode(grammarAccess.getPivotColAccess().getDbObjectNameParserRuleCall_0()); 
                 
-            pushFollow(FOLLOW_30);
+            pushFollow(FOLLOW_29);
             this_DbObjectName_0=ruleDbObjectName();
 
             state._fsp--;
@@ -5783,13 +5772,13 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     afterParserOrEnumRuleCall();
                 
             // InternalSqlParser.g:2161:1: ( () (otherlv_2= FullStop ( (lv_entries_3_0= ruleDbObjectName ) ) )+ )?
-            int alt51=2;
-            int LA51_0 = input.LA(1);
+            int alt50=2;
+            int LA50_0 = input.LA(1);
 
-            if ( (LA51_0==FullStop) ) {
-                alt51=1;
+            if ( (LA50_0==FullStop) ) {
+                alt50=1;
             }
-            switch (alt51) {
+            switch (alt50) {
                 case 1 :
                     // InternalSqlParser.g:2161:2: () (otherlv_2= FullStop ( (lv_entries_3_0= ruleDbObjectName ) ) )+
                     {
@@ -5805,22 +5794,22 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     }
 
                     // InternalSqlParser.g:2167:2: (otherlv_2= FullStop ( (lv_entries_3_0= ruleDbObjectName ) ) )+
-                    int cnt50=0;
-                    loop50:
+                    int cnt49=0;
+                    loop49:
                     do {
-                        int alt50=2;
-                        int LA50_0 = input.LA(1);
+                        int alt49=2;
+                        int LA49_0 = input.LA(1);
 
-                        if ( (LA50_0==FullStop) ) {
-                            alt50=1;
+                        if ( (LA49_0==FullStop) ) {
+                            alt49=1;
                         }
 
 
-                        switch (alt50) {
+                        switch (alt49) {
                     	case 1 :
                     	    // InternalSqlParser.g:2168:2: otherlv_2= FullStop ( (lv_entries_3_0= ruleDbObjectName ) )
                     	    {
-                    	    otherlv_2=(Token)match(input,FullStop,FOLLOW_31); 
+                    	    otherlv_2=(Token)match(input,FullStop,FOLLOW_30); 
 
                     	        	newLeafNode(otherlv_2, grammarAccess.getPivotColAccess().getFullStopKeyword_1_1_0());
                     	        
@@ -5833,7 +5822,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     	     
                     	    	        newCompositeNode(grammarAccess.getPivotColAccess().getEntriesDbObjectNameParserRuleCall_1_1_1_0()); 
                     	    	    
-                    	    pushFollow(FOLLOW_30);
+                    	    pushFollow(FOLLOW_29);
                     	    lv_entries_3_0=ruleDbObjectName();
 
                     	    state._fsp--;
@@ -5860,12 +5849,12 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     	    break;
 
                     	default :
-                    	    if ( cnt50 >= 1 ) break loop50;
+                    	    if ( cnt49 >= 1 ) break loop49;
                                 EarlyExitException eee =
-                                    new EarlyExitException(50, input);
+                                    new EarlyExitException(49, input);
                                 throw eee;
                         }
-                        cnt50++;
+                        cnt49++;
                     } while (true);
 
 
@@ -5953,7 +5942,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
              
                     newCompositeNode(grammarAccess.getTableFullAccess().getDbObjectNameParserRuleCall_0()); 
                 
-            pushFollow(FOLLOW_30);
+            pushFollow(FOLLOW_29);
             this_DbObjectName_0=ruleDbObjectName();
 
             state._fsp--;
@@ -5963,13 +5952,13 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     afterParserOrEnumRuleCall();
                 
             // InternalSqlParser.g:2220:1: ( () (otherlv_2= FullStop ( (lv_entries_3_0= ruleDbObjectName ) ) )+ )?
-            int alt53=2;
-            int LA53_0 = input.LA(1);
+            int alt52=2;
+            int LA52_0 = input.LA(1);
 
-            if ( (LA53_0==FullStop) ) {
-                alt53=1;
+            if ( (LA52_0==FullStop) ) {
+                alt52=1;
             }
-            switch (alt53) {
+            switch (alt52) {
                 case 1 :
                     // InternalSqlParser.g:2220:2: () (otherlv_2= FullStop ( (lv_entries_3_0= ruleDbObjectName ) ) )+
                     {
@@ -5985,22 +5974,22 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     }
 
                     // InternalSqlParser.g:2226:2: (otherlv_2= FullStop ( (lv_entries_3_0= ruleDbObjectName ) ) )+
-                    int cnt52=0;
-                    loop52:
+                    int cnt51=0;
+                    loop51:
                     do {
-                        int alt52=2;
-                        int LA52_0 = input.LA(1);
+                        int alt51=2;
+                        int LA51_0 = input.LA(1);
 
-                        if ( (LA52_0==FullStop) ) {
-                            alt52=1;
+                        if ( (LA51_0==FullStop) ) {
+                            alt51=1;
                         }
 
 
-                        switch (alt52) {
+                        switch (alt51) {
                     	case 1 :
                     	    // InternalSqlParser.g:2227:2: otherlv_2= FullStop ( (lv_entries_3_0= ruleDbObjectName ) )
                     	    {
-                    	    otherlv_2=(Token)match(input,FullStop,FOLLOW_31); 
+                    	    otherlv_2=(Token)match(input,FullStop,FOLLOW_30); 
 
                     	        	newLeafNode(otherlv_2, grammarAccess.getTableFullAccess().getFullStopKeyword_1_1_0());
                     	        
@@ -6013,7 +6002,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     	     
                     	    	        newCompositeNode(grammarAccess.getTableFullAccess().getEntriesDbObjectNameParserRuleCall_1_1_1_0()); 
                     	    	    
-                    	    pushFollow(FOLLOW_30);
+                    	    pushFollow(FOLLOW_29);
                     	    lv_entries_3_0=ruleDbObjectName();
 
                     	    state._fsp--;
@@ -6040,12 +6029,12 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     	    break;
 
                     	default :
-                    	    if ( cnt52 >= 1 ) break loop52;
+                    	    if ( cnt51 >= 1 ) break loop51;
                                 EarlyExitException eee =
-                                    new EarlyExitException(52, input);
+                                    new EarlyExitException(51, input);
                                 throw eee;
                         }
-                        cnt52++;
+                        cnt51++;
                     } while (true);
 
 
@@ -6138,7 +6127,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
              
             	        newCompositeNode(grammarAccess.getDbObjectNameAllAccess().getDbnameDBIDParserRuleCall_0_0()); 
             	    
-            pushFollow(FOLLOW_46);
+            pushFollow(FOLLOW_45);
             lv_dbname_0_0=ruleDBID();
 
             state._fsp--;
@@ -6160,7 +6149,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
 
             }
 
-            otherlv_1=(Token)match(input,FullStop,FOLLOW_47); 
+            otherlv_1=(Token)match(input,FullStop,FOLLOW_46); 
 
                 	newLeafNode(otherlv_1, grammarAccess.getDbObjectNameAllAccess().getFullStopKeyword_1());
                 
@@ -6355,13 +6344,13 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     afterParserOrEnumRuleCall();
                 
             // InternalSqlParser.g:2366:1: ( () (otherlv_2= Comma ( (lv_entries_3_0= ruleOrderByColumnFull ) ) )+ )?
-            int alt55=2;
-            int LA55_0 = input.LA(1);
+            int alt54=2;
+            int LA54_0 = input.LA(1);
 
-            if ( (LA55_0==Comma) ) {
-                alt55=1;
+            if ( (LA54_0==Comma) ) {
+                alt54=1;
             }
-            switch (alt55) {
+            switch (alt54) {
                 case 1 :
                     // InternalSqlParser.g:2366:2: () (otherlv_2= Comma ( (lv_entries_3_0= ruleOrderByColumnFull ) ) )+
                     {
@@ -6377,18 +6366,18 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     }
 
                     // InternalSqlParser.g:2372:2: (otherlv_2= Comma ( (lv_entries_3_0= ruleOrderByColumnFull ) ) )+
-                    int cnt54=0;
-                    loop54:
+                    int cnt53=0;
+                    loop53:
                     do {
-                        int alt54=2;
-                        int LA54_0 = input.LA(1);
+                        int alt53=2;
+                        int LA53_0 = input.LA(1);
 
-                        if ( (LA54_0==Comma) ) {
-                            alt54=1;
+                        if ( (LA53_0==Comma) ) {
+                            alt53=1;
                         }
 
 
-                        switch (alt54) {
+                        switch (alt53) {
                     	case 1 :
                     	    // InternalSqlParser.g:2373:2: otherlv_2= Comma ( (lv_entries_3_0= ruleOrderByColumnFull ) )
                     	    {
@@ -6432,12 +6421,12 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     	    break;
 
                     	default :
-                    	    if ( cnt54 >= 1 ) break loop54;
+                    	    if ( cnt53 >= 1 ) break loop53;
                                 EarlyExitException eee =
-                                    new EarlyExitException(54, input);
+                                    new EarlyExitException(53, input);
                                 throw eee;
                         }
-                        cnt54++;
+                        cnt53++;
                     } while (true);
 
 
@@ -6523,22 +6512,22 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             // InternalSqlParser.g:2416:2: ( ( (lv_colOrder_0_0= ruleColumnFull ) ) | ( (lv_colOrderInt_1_0= RULE_UNSIGNED ) ) ) ( ( (lv_direction_2_1= ASC | lv_direction_2_2= DESC ) ) )?
             {
             // InternalSqlParser.g:2416:2: ( ( (lv_colOrder_0_0= ruleColumnFull ) ) | ( (lv_colOrderInt_1_0= RULE_UNSIGNED ) ) )
-            int alt56=2;
-            int LA56_0 = input.LA(1);
+            int alt55=2;
+            int LA55_0 = input.LA(1);
 
-            if ( ((LA56_0>=RULE_STRING && LA56_0<=RULE_ID)) ) {
-                alt56=1;
+            if ( ((LA55_0>=RULE_STRING && LA55_0<=RULE_ID)) ) {
+                alt55=1;
             }
-            else if ( (LA56_0==RULE_UNSIGNED) ) {
-                alt56=2;
+            else if ( (LA55_0==RULE_UNSIGNED) ) {
+                alt55=2;
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("", 56, 0, input);
+                    new NoViableAltException("", 55, 0, input);
 
                 throw nvae;
             }
-            switch (alt56) {
+            switch (alt55) {
                 case 1 :
                     // InternalSqlParser.g:2416:3: ( (lv_colOrder_0_0= ruleColumnFull ) )
                     {
@@ -6551,7 +6540,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                      
                     	        newCompositeNode(grammarAccess.getOrderByColumnFullAccess().getColOrderColumnFullParserRuleCall_0_0_0()); 
                     	    
-                    pushFollow(FOLLOW_48);
+                    pushFollow(FOLLOW_47);
                     lv_colOrder_0_0=ruleColumnFull();
 
                     state._fsp--;
@@ -6585,7 +6574,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     // InternalSqlParser.g:2436:1: (lv_colOrderInt_1_0= RULE_UNSIGNED )
                     // InternalSqlParser.g:2437:3: lv_colOrderInt_1_0= RULE_UNSIGNED
                     {
-                    lv_colOrderInt_1_0=(Token)match(input,RULE_UNSIGNED,FOLLOW_48); 
+                    lv_colOrderInt_1_0=(Token)match(input,RULE_UNSIGNED,FOLLOW_47); 
 
                     			newLeafNode(lv_colOrderInt_1_0, grammarAccess.getOrderByColumnFullAccess().getColOrderIntUNSIGNEDTerminalRuleCall_0_1_0()); 
                     		
@@ -6612,13 +6601,13 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             }
 
             // InternalSqlParser.g:2453:3: ( ( (lv_direction_2_1= ASC | lv_direction_2_2= DESC ) ) )?
-            int alt58=2;
-            int LA58_0 = input.LA(1);
+            int alt57=2;
+            int LA57_0 = input.LA(1);
 
-            if ( (LA58_0==DESC||LA58_0==ASC) ) {
-                alt58=1;
+            if ( (LA57_0==DESC||LA57_0==ASC) ) {
+                alt57=1;
             }
-            switch (alt58) {
+            switch (alt57) {
                 case 1 :
                     // InternalSqlParser.g:2454:1: ( (lv_direction_2_1= ASC | lv_direction_2_2= DESC ) )
                     {
@@ -6626,22 +6615,22 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     // InternalSqlParser.g:2455:1: (lv_direction_2_1= ASC | lv_direction_2_2= DESC )
                     {
                     // InternalSqlParser.g:2455:1: (lv_direction_2_1= ASC | lv_direction_2_2= DESC )
-                    int alt57=2;
-                    int LA57_0 = input.LA(1);
+                    int alt56=2;
+                    int LA56_0 = input.LA(1);
 
-                    if ( (LA57_0==ASC) ) {
-                        alt57=1;
+                    if ( (LA56_0==ASC) ) {
+                        alt56=1;
                     }
-                    else if ( (LA57_0==DESC) ) {
-                        alt57=2;
+                    else if ( (LA56_0==DESC) ) {
+                        alt56=2;
                     }
                     else {
                         NoViableAltException nvae =
-                            new NoViableAltException("", 57, 0, input);
+                            new NoViableAltException("", 56, 0, input);
 
                         throw nvae;
                     }
-                    switch (alt57) {
+                    switch (alt56) {
                         case 1 :
                             // InternalSqlParser.g:2456:3: lv_direction_2_1= ASC
                             {
@@ -6775,13 +6764,13 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     afterParserOrEnumRuleCall();
                 
             // InternalSqlParser.g:2515:1: ( () (otherlv_2= Comma ( (lv_entries_3_0= ruleGroupByColumnFull ) ) )+ )?
-            int alt60=2;
-            int LA60_0 = input.LA(1);
+            int alt59=2;
+            int LA59_0 = input.LA(1);
 
-            if ( (LA60_0==Comma) ) {
-                alt60=1;
+            if ( (LA59_0==Comma) ) {
+                alt59=1;
             }
-            switch (alt60) {
+            switch (alt59) {
                 case 1 :
                     // InternalSqlParser.g:2515:2: () (otherlv_2= Comma ( (lv_entries_3_0= ruleGroupByColumnFull ) ) )+
                     {
@@ -6797,18 +6786,18 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     }
 
                     // InternalSqlParser.g:2521:2: (otherlv_2= Comma ( (lv_entries_3_0= ruleGroupByColumnFull ) ) )+
-                    int cnt59=0;
-                    loop59:
+                    int cnt58=0;
+                    loop58:
                     do {
-                        int alt59=2;
-                        int LA59_0 = input.LA(1);
+                        int alt58=2;
+                        int LA58_0 = input.LA(1);
 
-                        if ( (LA59_0==Comma) ) {
-                            alt59=1;
+                        if ( (LA58_0==Comma) ) {
+                            alt58=1;
                         }
 
 
-                        switch (alt59) {
+                        switch (alt58) {
                     	case 1 :
                     	    // InternalSqlParser.g:2522:2: otherlv_2= Comma ( (lv_entries_3_0= ruleGroupByColumnFull ) )
                     	    {
@@ -6852,12 +6841,12 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     	    break;
 
                     	default :
-                    	    if ( cnt59 >= 1 ) break loop59;
+                    	    if ( cnt58 >= 1 ) break loop58;
                                 EarlyExitException eee =
-                                    new EarlyExitException(59, input);
+                                    new EarlyExitException(58, input);
                                 throw eee;
                         }
-                        cnt59++;
+                        cnt58++;
                     } while (true);
 
 
@@ -6940,21 +6929,21 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             // InternalSqlParser.g:2565:1: ( ( (lv_colGrBy_0_0= ruleColumnFull ) ) | ( (lv_gbFunction_1_0= ruleOperandFunction ) ) | ( (lv_grByInt_2_0= RULE_UNSIGNED ) ) )
             {
             // InternalSqlParser.g:2565:1: ( ( (lv_colGrBy_0_0= ruleColumnFull ) ) | ( (lv_gbFunction_1_0= ruleOperandFunction ) ) | ( (lv_grByInt_2_0= RULE_UNSIGNED ) ) )
-            int alt61=3;
+            int alt60=3;
             switch ( input.LA(1) ) {
             case RULE_ID:
                 {
-                int LA61_1 = input.LA(2);
+                int LA60_1 = input.LA(2);
 
-                if ( (LA61_1==LeftParenthesis) ) {
-                    alt61=2;
+                if ( (LA60_1==EOF||LA60_1==FETCHFIRST||LA60_1==INTERSECT||LA60_1==ORDERBY||LA60_1==EXCEPT||LA60_1==HAVING||LA60_1==OFFSET||(LA60_1>=LIMIT && LA60_1<=MINUS)||LA60_1==UNION||LA60_1==RightParenthesis||LA60_1==Comma||LA60_1==FullStop) ) {
+                    alt60=1;
                 }
-                else if ( (LA61_1==EOF||LA61_1==FETCHFIRST||LA61_1==INTERSECT||LA61_1==ORDERBY||LA61_1==EXCEPT||LA61_1==HAVING||LA61_1==OFFSET||(LA61_1>=LIMIT && LA61_1<=MINUS)||LA61_1==UNION||LA61_1==RightParenthesis||LA61_1==Comma||LA61_1==FullStop) ) {
-                    alt61=1;
+                else if ( (LA60_1==LeftParenthesis) ) {
+                    alt60=2;
                 }
                 else {
                     NoViableAltException nvae =
-                        new NoViableAltException("", 61, 1, input);
+                        new NoViableAltException("", 60, 1, input);
 
                     throw nvae;
                 }
@@ -6963,22 +6952,22 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             case RULE_STRING:
             case RULE_DBNAME:
                 {
-                alt61=1;
+                alt60=1;
                 }
                 break;
             case RULE_UNSIGNED:
                 {
-                alt61=3;
+                alt60=3;
                 }
                 break;
             default:
                 NoViableAltException nvae =
-                    new NoViableAltException("", 61, 0, input);
+                    new NoViableAltException("", 60, 0, input);
 
                 throw nvae;
             }
 
-            switch (alt61) {
+            switch (alt60) {
                 case 1 :
                     // InternalSqlParser.g:2565:2: ( (lv_colGrBy_0_0= ruleColumnFull ) )
                     {
@@ -7163,7 +7152,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
              
                     newCompositeNode(grammarAccess.getFullExpressionAccess().getExpressionFragmentParserRuleCall_0()); 
                 
-            pushFollow(FOLLOW_49);
+            pushFollow(FOLLOW_48);
             this_ExpressionFragment_0=ruleExpressionFragment();
 
             state._fsp--;
@@ -7173,13 +7162,13 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     afterParserOrEnumRuleCall();
                 
             // InternalSqlParser.g:2651:1: ( () ( (lv_entries_2_0= ruleExpressionFragmentSecond ) )+ )?
-            int alt63=2;
-            int LA63_0 = input.LA(1);
+            int alt62=2;
+            int LA62_0 = input.LA(1);
 
-            if ( (LA63_0==AND||LA63_0==OR||LA63_0==RULE_JRNPARAM) ) {
-                alt63=1;
+            if ( (LA62_0==AND||LA62_0==OR||LA62_0==RULE_JRNPARAM) ) {
+                alt62=1;
             }
-            switch (alt63) {
+            switch (alt62) {
                 case 1 :
                     // InternalSqlParser.g:2651:2: () ( (lv_entries_2_0= ruleExpressionFragmentSecond ) )+
                     {
@@ -7195,18 +7184,18 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     }
 
                     // InternalSqlParser.g:2657:2: ( (lv_entries_2_0= ruleExpressionFragmentSecond ) )+
-                    int cnt62=0;
-                    loop62:
+                    int cnt61=0;
+                    loop61:
                     do {
-                        int alt62=2;
-                        int LA62_0 = input.LA(1);
+                        int alt61=2;
+                        int LA61_0 = input.LA(1);
 
-                        if ( (LA62_0==AND||LA62_0==OR||LA62_0==RULE_JRNPARAM) ) {
-                            alt62=1;
+                        if ( (LA61_0==AND||LA61_0==OR||LA61_0==RULE_JRNPARAM) ) {
+                            alt61=1;
                         }
 
 
-                        switch (alt62) {
+                        switch (alt61) {
                     	case 1 :
                     	    // InternalSqlParser.g:2658:1: (lv_entries_2_0= ruleExpressionFragmentSecond )
                     	    {
@@ -7216,7 +7205,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     	     
                     	    	        newCompositeNode(grammarAccess.getFullExpressionAccess().getEntriesExpressionFragmentSecondParserRuleCall_1_1_0()); 
                     	    	    
-                    	    pushFollow(FOLLOW_49);
+                    	    pushFollow(FOLLOW_48);
                     	    lv_entries_2_0=ruleExpressionFragmentSecond();
 
                     	    state._fsp--;
@@ -7240,12 +7229,12 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     	    break;
 
                     	default :
-                    	    if ( cnt62 >= 1 ) break loop62;
+                    	    if ( cnt61 >= 1 ) break loop61;
                                 EarlyExitException eee =
-                                    new EarlyExitException(62, input);
+                                    new EarlyExitException(61, input);
                                 throw eee;
                         }
-                        cnt62++;
+                        cnt61++;
                     } while (true);
 
 
@@ -7328,22 +7317,22 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             // InternalSqlParser.g:2696:1: ( ( ( ( (lv_c_0_1= AND | lv_c_0_2= OR ) ) ) ( (lv_efrag_1_0= ruleExpressionFragment ) ) ) | ( (lv_notPrm_2_0= RULE_JRNPARAM ) ) )
             {
             // InternalSqlParser.g:2696:1: ( ( ( ( (lv_c_0_1= AND | lv_c_0_2= OR ) ) ) ( (lv_efrag_1_0= ruleExpressionFragment ) ) ) | ( (lv_notPrm_2_0= RULE_JRNPARAM ) ) )
-            int alt65=2;
-            int LA65_0 = input.LA(1);
+            int alt64=2;
+            int LA64_0 = input.LA(1);
 
-            if ( (LA65_0==AND||LA65_0==OR) ) {
-                alt65=1;
+            if ( (LA64_0==AND||LA64_0==OR) ) {
+                alt64=1;
             }
-            else if ( (LA65_0==RULE_JRNPARAM) ) {
-                alt65=2;
+            else if ( (LA64_0==RULE_JRNPARAM) ) {
+                alt64=2;
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("", 65, 0, input);
+                    new NoViableAltException("", 64, 0, input);
 
                 throw nvae;
             }
-            switch (alt65) {
+            switch (alt64) {
                 case 1 :
                     // InternalSqlParser.g:2696:2: ( ( ( (lv_c_0_1= AND | lv_c_0_2= OR ) ) ) ( (lv_efrag_1_0= ruleExpressionFragment ) ) )
                     {
@@ -7357,22 +7346,22 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     // InternalSqlParser.g:2698:1: (lv_c_0_1= AND | lv_c_0_2= OR )
                     {
                     // InternalSqlParser.g:2698:1: (lv_c_0_1= AND | lv_c_0_2= OR )
-                    int alt64=2;
-                    int LA64_0 = input.LA(1);
+                    int alt63=2;
+                    int LA63_0 = input.LA(1);
 
-                    if ( (LA64_0==AND) ) {
-                        alt64=1;
+                    if ( (LA63_0==AND) ) {
+                        alt63=1;
                     }
-                    else if ( (LA64_0==OR) ) {
-                        alt64=2;
+                    else if ( (LA63_0==OR) ) {
+                        alt63=2;
                     }
                     else {
                         NoViableAltException nvae =
-                            new NoViableAltException("", 64, 0, input);
+                            new NoViableAltException("", 63, 0, input);
 
                         throw nvae;
                     }
-                    switch (alt64) {
+                    switch (alt63) {
                         case 1 :
                             // InternalSqlParser.g:2699:3: lv_c_0_1= AND
                             {
@@ -7565,27 +7554,27 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             // InternalSqlParser.g:2786:1: ( ( (lv_expgroup_0_0= ruleExpressionGroup ) ) | ( (lv_exp_1_0= ruleExpression ) ) | ( ( (lv_xexp_2_1= ruleXExpression | lv_xexp_2_2= ruleXExpression_ ) ) ) | ( (lv_notPrm_3_0= RULE_JRNPARAM ) ) | ( (lv_in_4_0= ruleInOperator ) ) | ( (lv_exists_5_0= ruleExistsOperator ) ) )
             {
             // InternalSqlParser.g:2786:1: ( ( (lv_expgroup_0_0= ruleExpressionGroup ) ) | ( (lv_exp_1_0= ruleExpression ) ) | ( ( (lv_xexp_2_1= ruleXExpression | lv_xexp_2_2= ruleXExpression_ ) ) ) | ( (lv_notPrm_3_0= RULE_JRNPARAM ) ) | ( (lv_in_4_0= ruleInOperator ) ) | ( (lv_exists_5_0= ruleExistsOperator ) ) )
-            int alt67=6;
+            int alt66=6;
             switch ( input.LA(1) ) {
             case NOT:
             case NOT_1:
                 {
-                alt67=1;
+                alt66=1;
                 }
                 break;
             case LeftParenthesis:
                 {
-                int LA67_2 = input.LA(2);
+                int LA66_2 = input.LA(2);
 
-                if ( (LA67_2==SELECT) ) {
-                    alt67=2;
+                if ( (LA66_2==NOTEXISTS||LA66_2==EXTRACT||LA66_2==EXISTS||LA66_2==NOTIN_1||LA66_2==CAST||LA66_2==CASE||(LA66_2>=NOT && LA66_2<=NOT_1)||LA66_2==X||LA66_2==IN||LA66_2==LeftParenthesis||(LA66_2>=RULE_JRPARAM && LA66_2<=RULE_JRNPARAM)||(LA66_2>=RULE_UNSIGNED && LA66_2<=RULE_SIGNED_DOUBLE)||(LA66_2>=RULE_STRING_ && LA66_2<=RULE_ID)) ) {
+                    alt66=1;
                 }
-                else if ( (LA67_2==NOTEXISTS||LA67_2==EXTRACT||LA67_2==EXISTS||LA67_2==NOTIN_1||LA67_2==CAST||LA67_2==CASE||(LA67_2>=NOT && LA67_2<=NOT_1)||LA67_2==X||LA67_2==IN||LA67_2==LeftParenthesis||(LA67_2>=RULE_JRPARAM && LA67_2<=RULE_JRNPARAM)||(LA67_2>=RULE_UNSIGNED && LA67_2<=RULE_SIGNED_DOUBLE)||(LA67_2>=RULE_STRING_ && LA67_2<=RULE_ID)) ) {
-                    alt67=1;
+                else if ( (LA66_2==SELECT) ) {
+                    alt66=2;
                 }
                 else {
                     NoViableAltException nvae =
-                        new NoViableAltException("", 67, 2, input);
+                        new NoViableAltException("", 66, 2, input);
 
                     throw nvae;
                 }
@@ -7603,22 +7592,22 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             case RULE_DBNAME:
             case RULE_ID:
                 {
-                alt67=2;
+                alt66=2;
                 }
                 break;
             case RULE_JRNPARAM:
                 {
-                int LA67_4 = input.LA(2);
+                int LA66_4 = input.LA(2);
 
-                if ( (LA67_4==EOF||LA67_4==STRAIGHT_JOIN||LA67_4==FETCHFIRST||LA67_4==INTERSECT||LA67_4==GROUPBY||LA67_4==ORDERBY||LA67_4==NATURAL||LA67_4==EXCEPT||LA67_4==HAVING||LA67_4==OFFSET||LA67_4==CROSS||LA67_4==INNER||(LA67_4>=LIMIT && LA67_4<=MINUS)||(LA67_4>=RIGHT && LA67_4<=UNION)||LA67_4==WHERE||LA67_4==FULL||LA67_4==JOIN||LA67_4==LEFT||LA67_4==THEN||LA67_4==WHEN||LA67_4==AND||LA67_4==OR||LA67_4==RightParenthesis||LA67_4==Comma||LA67_4==RULE_JRNPARAM) ) {
-                    alt67=4;
+                if ( (LA66_4==ISNOTNULL||LA66_4==NOTBETWEEN||LA66_4==NOTEXISTS||LA66_4==NOTLIKE||LA66_4==BETWEEN||LA66_4==ISNULL||LA66_4==EXISTS||LA66_4==NOTIN_1||LA66_4==LIKE||LA66_4==ExclamationMarkEqualsSign||(LA66_4>=LessThanSignEqualsSign && LA66_4<=GreaterThanSignEqualsSign)||LA66_4==IN||(LA66_4>=CircumflexAccentEqualsSign && LA66_4<=VerticalLineVerticalLine)||LA66_4==PlusSign||LA66_4==HyphenMinus||(LA66_4>=Solidus && LA66_4<=GreaterThanSign)||LA66_4==RULE_STAR) ) {
+                    alt66=2;
                 }
-                else if ( (LA67_4==ISNOTNULL||LA67_4==NOTBETWEEN||LA67_4==NOTEXISTS||LA67_4==NOTLIKE||LA67_4==BETWEEN||LA67_4==ISNULL||LA67_4==EXISTS||LA67_4==NOTIN_1||LA67_4==LIKE||LA67_4==ExclamationMarkEqualsSign||(LA67_4>=LessThanSignEqualsSign && LA67_4<=GreaterThanSignEqualsSign)||LA67_4==IN||(LA67_4>=CircumflexAccentEqualsSign && LA67_4<=VerticalLineVerticalLine)||LA67_4==PlusSign||LA67_4==HyphenMinus||(LA67_4>=Solidus && LA67_4<=GreaterThanSign)||LA67_4==RULE_STAR) ) {
-                    alt67=2;
+                else if ( (LA66_4==EOF||LA66_4==STRAIGHT_JOIN||LA66_4==FETCHFIRST||LA66_4==INTERSECT||LA66_4==GROUPBY||LA66_4==ORDERBY||LA66_4==NATURAL||LA66_4==EXCEPT||LA66_4==HAVING||LA66_4==OFFSET||LA66_4==CROSS||LA66_4==INNER||(LA66_4>=LIMIT && LA66_4<=MINUS)||(LA66_4>=RIGHT && LA66_4<=UNION)||LA66_4==WHERE||LA66_4==FULL||LA66_4==JOIN||LA66_4==LEFT||LA66_4==THEN||LA66_4==WHEN||LA66_4==AND||LA66_4==OR||LA66_4==RightParenthesis||LA66_4==Comma||LA66_4==RULE_JRNPARAM) ) {
+                    alt66=4;
                 }
                 else {
                     NoViableAltException nvae =
-                        new NoViableAltException("", 67, 4, input);
+                        new NoViableAltException("", 66, 4, input);
 
                     throw nvae;
                 }
@@ -7626,29 +7615,29 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                 break;
             case X:
                 {
-                alt67=3;
+                alt66=3;
                 }
                 break;
             case NOTIN_1:
             case IN:
                 {
-                alt67=5;
+                alt66=5;
                 }
                 break;
             case NOTEXISTS:
             case EXISTS:
                 {
-                alt67=6;
+                alt66=6;
                 }
                 break;
             default:
                 NoViableAltException nvae =
-                    new NoViableAltException("", 67, 0, input);
+                    new NoViableAltException("", 66, 0, input);
 
                 throw nvae;
             }
 
-            switch (alt67) {
+            switch (alt66) {
                 case 1 :
                     // InternalSqlParser.g:2786:2: ( (lv_expgroup_0_0= ruleExpressionGroup ) )
                     {
@@ -7733,9 +7722,9 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     // InternalSqlParser.g:2826:1: (lv_xexp_2_1= ruleXExpression | lv_xexp_2_2= ruleXExpression_ )
                     {
                     // InternalSqlParser.g:2826:1: (lv_xexp_2_1= ruleXExpression | lv_xexp_2_2= ruleXExpression_ )
-                    int alt66=2;
-                    alt66 = dfa66.predict(input);
-                    switch (alt66) {
+                    int alt65=2;
+                    alt65 = dfa65.predict(input);
+                    switch (alt65) {
                         case 1 :
                             // InternalSqlParser.g:2827:3: lv_xexp_2_1= ruleXExpression
                             {
@@ -7993,13 +7982,13 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             }
 
             // InternalSqlParser.g:2944:2: ( ( (lv_isnot_1_1= NOT_1 | lv_isnot_1_2= NOT ) ) )?
-            int alt69=2;
-            int LA69_0 = input.LA(1);
+            int alt68=2;
+            int LA68_0 = input.LA(1);
 
-            if ( ((LA69_0>=NOT && LA69_0<=NOT_1)) ) {
-                alt69=1;
+            if ( ((LA68_0>=NOT && LA68_0<=NOT_1)) ) {
+                alt68=1;
             }
-            switch (alt69) {
+            switch (alt68) {
                 case 1 :
                     // InternalSqlParser.g:2945:1: ( (lv_isnot_1_1= NOT_1 | lv_isnot_1_2= NOT ) )
                     {
@@ -8007,26 +7996,26 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     // InternalSqlParser.g:2946:1: (lv_isnot_1_1= NOT_1 | lv_isnot_1_2= NOT )
                     {
                     // InternalSqlParser.g:2946:1: (lv_isnot_1_1= NOT_1 | lv_isnot_1_2= NOT )
-                    int alt68=2;
-                    int LA68_0 = input.LA(1);
+                    int alt67=2;
+                    int LA67_0 = input.LA(1);
 
-                    if ( (LA68_0==NOT_1) ) {
-                        alt68=1;
+                    if ( (LA67_0==NOT_1) ) {
+                        alt67=1;
                     }
-                    else if ( (LA68_0==NOT) ) {
-                        alt68=2;
+                    else if ( (LA67_0==NOT) ) {
+                        alt67=2;
                     }
                     else {
                         NoViableAltException nvae =
-                            new NoViableAltException("", 68, 0, input);
+                            new NoViableAltException("", 67, 0, input);
 
                         throw nvae;
                     }
-                    switch (alt68) {
+                    switch (alt67) {
                         case 1 :
                             // InternalSqlParser.g:2947:3: lv_isnot_1_1= NOT_1
                             {
-                            lv_isnot_1_1=(Token)match(input,NOT_1,FOLLOW_34); 
+                            lv_isnot_1_1=(Token)match(input,NOT_1,FOLLOW_33); 
 
                                     newLeafNode(lv_isnot_1_1, grammarAccess.getExpressionGroupAccess().getIsnotNOTKeyword_1_0_0());
                                 
@@ -8042,7 +8031,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                         case 2 :
                             // InternalSqlParser.g:2960:8: lv_isnot_1_2= NOT
                             {
-                            lv_isnot_1_2=(Token)match(input,NOT,FOLLOW_34); 
+                            lv_isnot_1_2=(Token)match(input,NOT,FOLLOW_33); 
 
                                     newLeafNode(lv_isnot_1_2, grammarAccess.getExpressionGroupAccess().getIsnotNOTKeyword_1_0_1());
                                 
@@ -8080,7 +8069,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
              
             	        newCompositeNode(grammarAccess.getExpressionGroupAccess().getExprFullExpressionParserRuleCall_3_0()); 
             	    
-            pushFollow(FOLLOW_35);
+            pushFollow(FOLLOW_34);
             lv_expr_3_0=ruleFullExpression();
 
             state._fsp--;
@@ -8188,7 +8177,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             // InternalSqlParser.g:3025:1: (otherlv_0= X () otherlv_2= LeftCurlyBracket ( (lv_xf_3_0= ruleXFunction ) ) otherlv_4= Comma ( (lv_col_5_0= ruleOperandGroup ) ) (otherlv_6= Comma ( (lv_prm_7_0= ruleXExpressionParams ) ) )? otherlv_8= RightCurlyBracket )
             // InternalSqlParser.g:3026:2: otherlv_0= X () otherlv_2= LeftCurlyBracket ( (lv_xf_3_0= ruleXFunction ) ) otherlv_4= Comma ( (lv_col_5_0= ruleOperandGroup ) ) (otherlv_6= Comma ( (lv_prm_7_0= ruleXExpressionParams ) ) )? otherlv_8= RightCurlyBracket
             {
-            otherlv_0=(Token)match(input,X,FOLLOW_50); 
+            otherlv_0=(Token)match(input,X,FOLLOW_49); 
 
                 	newLeafNode(otherlv_0, grammarAccess.getXExpressionAccess().getXKeyword_0());
                 
@@ -8203,7 +8192,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
 
             }
 
-            otherlv_2=(Token)match(input,LeftCurlyBracket,FOLLOW_51); 
+            otherlv_2=(Token)match(input,LeftCurlyBracket,FOLLOW_50); 
 
                 	newLeafNode(otherlv_2, grammarAccess.getXExpressionAccess().getLeftCurlyBracketKeyword_2());
                 
@@ -8216,7 +8205,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
              
             	        newCompositeNode(grammarAccess.getXExpressionAccess().getXfXFunctionEnumRuleCall_3_0()); 
             	    
-            pushFollow(FOLLOW_52);
+            pushFollow(FOLLOW_51);
             lv_xf_3_0=ruleXFunction();
 
             state._fsp--;
@@ -8238,7 +8227,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
 
             }
 
-            otherlv_4=(Token)match(input,Comma,FOLLOW_53); 
+            otherlv_4=(Token)match(input,Comma,FOLLOW_52); 
 
                 	newLeafNode(otherlv_4, grammarAccess.getXExpressionAccess().getCommaKeyword_4());
                 
@@ -8251,7 +8240,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
              
             	        newCompositeNode(grammarAccess.getXExpressionAccess().getColOperandGroupParserRuleCall_5_0()); 
             	    
-            pushFollow(FOLLOW_54);
+            pushFollow(FOLLOW_53);
             lv_col_5_0=ruleOperandGroup();
 
             state._fsp--;
@@ -8274,17 +8263,17 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             }
 
             // InternalSqlParser.g:3082:2: (otherlv_6= Comma ( (lv_prm_7_0= ruleXExpressionParams ) ) )?
-            int alt70=2;
-            int LA70_0 = input.LA(1);
+            int alt69=2;
+            int LA69_0 = input.LA(1);
 
-            if ( (LA70_0==Comma) ) {
-                alt70=1;
+            if ( (LA69_0==Comma) ) {
+                alt69=1;
             }
-            switch (alt70) {
+            switch (alt69) {
                 case 1 :
                     // InternalSqlParser.g:3083:2: otherlv_6= Comma ( (lv_prm_7_0= ruleXExpressionParams ) )
                     {
-                    otherlv_6=(Token)match(input,Comma,FOLLOW_38); 
+                    otherlv_6=(Token)match(input,Comma,FOLLOW_37); 
 
                         	newLeafNode(otherlv_6, grammarAccess.getXExpressionAccess().getCommaKeyword_6_0());
                         
@@ -8297,7 +8286,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                      
                     	        newCompositeNode(grammarAccess.getXExpressionAccess().getPrmXExpressionParamsParserRuleCall_6_1_0()); 
                     	    
-                    pushFollow(FOLLOW_55);
+                    pushFollow(FOLLOW_54);
                     lv_prm_7_0=ruleXExpressionParams();
 
                     state._fsp--;
@@ -8411,7 +8400,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             // InternalSqlParser.g:3131:1: (otherlv_0= X () otherlv_2= LeftCurlyBracket ( (lv_xf_3_0= ruleXFunction ) ) otherlv_4= VerticalLine ( (lv_col_5_0= ruleOperandGroup ) ) (otherlv_6= VerticalLine ( (lv_prm_7_0= ruleXExpressionParams ) ) )? otherlv_8= RightCurlyBracket )
             // InternalSqlParser.g:3132:2: otherlv_0= X () otherlv_2= LeftCurlyBracket ( (lv_xf_3_0= ruleXFunction ) ) otherlv_4= VerticalLine ( (lv_col_5_0= ruleOperandGroup ) ) (otherlv_6= VerticalLine ( (lv_prm_7_0= ruleXExpressionParams ) ) )? otherlv_8= RightCurlyBracket
             {
-            otherlv_0=(Token)match(input,X,FOLLOW_50); 
+            otherlv_0=(Token)match(input,X,FOLLOW_49); 
 
                 	newLeafNode(otherlv_0, grammarAccess.getXExpression_Access().getXKeyword_0());
                 
@@ -8426,7 +8415,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
 
             }
 
-            otherlv_2=(Token)match(input,LeftCurlyBracket,FOLLOW_51); 
+            otherlv_2=(Token)match(input,LeftCurlyBracket,FOLLOW_50); 
 
                 	newLeafNode(otherlv_2, grammarAccess.getXExpression_Access().getLeftCurlyBracketKeyword_2());
                 
@@ -8439,7 +8428,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
              
             	        newCompositeNode(grammarAccess.getXExpression_Access().getXfXFunctionEnumRuleCall_3_0()); 
             	    
-            pushFollow(FOLLOW_56);
+            pushFollow(FOLLOW_55);
             lv_xf_3_0=ruleXFunction();
 
             state._fsp--;
@@ -8461,7 +8450,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
 
             }
 
-            otherlv_4=(Token)match(input,VerticalLine,FOLLOW_53); 
+            otherlv_4=(Token)match(input,VerticalLine,FOLLOW_52); 
 
                 	newLeafNode(otherlv_4, grammarAccess.getXExpression_Access().getVerticalLineKeyword_4());
                 
@@ -8474,7 +8463,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
              
             	        newCompositeNode(grammarAccess.getXExpression_Access().getColOperandGroupParserRuleCall_5_0()); 
             	    
-            pushFollow(FOLLOW_57);
+            pushFollow(FOLLOW_56);
             lv_col_5_0=ruleOperandGroup();
 
             state._fsp--;
@@ -8497,17 +8486,17 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             }
 
             // InternalSqlParser.g:3188:2: (otherlv_6= VerticalLine ( (lv_prm_7_0= ruleXExpressionParams ) ) )?
-            int alt71=2;
-            int LA71_0 = input.LA(1);
+            int alt70=2;
+            int LA70_0 = input.LA(1);
 
-            if ( (LA71_0==VerticalLine) ) {
-                alt71=1;
+            if ( (LA70_0==VerticalLine) ) {
+                alt70=1;
             }
-            switch (alt71) {
+            switch (alt70) {
                 case 1 :
                     // InternalSqlParser.g:3189:2: otherlv_6= VerticalLine ( (lv_prm_7_0= ruleXExpressionParams ) )
                     {
-                    otherlv_6=(Token)match(input,VerticalLine,FOLLOW_38); 
+                    otherlv_6=(Token)match(input,VerticalLine,FOLLOW_37); 
 
                         	newLeafNode(otherlv_6, grammarAccess.getXExpression_Access().getVerticalLineKeyword_6_0());
                         
@@ -8520,7 +8509,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                      
                     	        newCompositeNode(grammarAccess.getXExpression_Access().getPrmXExpressionParamsParserRuleCall_6_1_0()); 
                     	    
-                    pushFollow(FOLLOW_55);
+                    pushFollow(FOLLOW_54);
                     lv_prm_7_0=ruleXExpressionParams();
 
                     state._fsp--;
@@ -8641,13 +8630,13 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     afterParserOrEnumRuleCall();
                 
             // InternalSqlParser.g:3246:1: ( () (otherlv_2= Comma ( (lv_entries_3_0= ruleJRParameter ) ) )+ )?
-            int alt73=2;
-            int LA73_0 = input.LA(1);
+            int alt72=2;
+            int LA72_0 = input.LA(1);
 
-            if ( (LA73_0==Comma) ) {
-                alt73=1;
+            if ( (LA72_0==Comma) ) {
+                alt72=1;
             }
-            switch (alt73) {
+            switch (alt72) {
                 case 1 :
                     // InternalSqlParser.g:3246:2: () (otherlv_2= Comma ( (lv_entries_3_0= ruleJRParameter ) ) )+
                     {
@@ -8663,22 +8652,22 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     }
 
                     // InternalSqlParser.g:3252:2: (otherlv_2= Comma ( (lv_entries_3_0= ruleJRParameter ) ) )+
-                    int cnt72=0;
-                    loop72:
+                    int cnt71=0;
+                    loop71:
                     do {
-                        int alt72=2;
-                        int LA72_0 = input.LA(1);
+                        int alt71=2;
+                        int LA71_0 = input.LA(1);
 
-                        if ( (LA72_0==Comma) ) {
-                            alt72=1;
+                        if ( (LA71_0==Comma) ) {
+                            alt71=1;
                         }
 
 
-                        switch (alt72) {
+                        switch (alt71) {
                     	case 1 :
                     	    // InternalSqlParser.g:3253:2: otherlv_2= Comma ( (lv_entries_3_0= ruleJRParameter ) )
                     	    {
-                    	    otherlv_2=(Token)match(input,Comma,FOLLOW_38); 
+                    	    otherlv_2=(Token)match(input,Comma,FOLLOW_37); 
 
                     	        	newLeafNode(otherlv_2, grammarAccess.getXExpressionParamsAccess().getCommaKeyword_1_1_0());
                     	        
@@ -8718,12 +8707,12 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     	    break;
 
                     	default :
-                    	    if ( cnt72 >= 1 ) break loop72;
+                    	    if ( cnt71 >= 1 ) break loop71;
                                 EarlyExitException eee =
-                                    new EarlyExitException(72, input);
+                                    new EarlyExitException(71, input);
                                 throw eee;
                         }
-                        cnt72++;
+                        cnt71++;
                     } while (true);
 
 
@@ -8918,7 +8907,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
              
             	        newCompositeNode(grammarAccess.getExpressionAccess().getOp1OperandParserRuleCall_0_0()); 
             	    
-            pushFollow(FOLLOW_58);
+            pushFollow(FOLLOW_57);
             lv_op1_0_0=ruleOperand();
 
             state._fsp--;
@@ -8941,36 +8930,36 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             }
 
             // InternalSqlParser.g:3353:2: ( ( ( (lv_isnull_1_1= ISNULL | lv_isnull_1_2= ISNOTNULL ) ) ) | ( (lv_in_2_0= ruleInOperator ) ) | ( (lv_exists_3_0= ruleExistsOperator ) ) | ( (lv_between_4_0= ruleBetween ) ) | ( (lv_like_5_0= ruleLike ) ) | ( (lv_comp_6_0= ruleComparison ) ) )
-            int alt75=6;
+            int alt74=6;
             switch ( input.LA(1) ) {
             case ISNOTNULL:
             case ISNULL:
                 {
-                alt75=1;
+                alt74=1;
                 }
                 break;
             case NOTIN_1:
             case IN:
                 {
-                alt75=2;
+                alt74=2;
                 }
                 break;
             case NOTEXISTS:
             case EXISTS:
                 {
-                alt75=3;
+                alt74=3;
                 }
                 break;
             case NOTBETWEEN:
             case BETWEEN:
                 {
-                alt75=4;
+                alt74=4;
                 }
                 break;
             case NOTLIKE:
             case LIKE:
                 {
-                alt75=5;
+                alt74=5;
                 }
                 break;
             case ExclamationMarkEqualsSign:
@@ -8982,17 +8971,17 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             case EqualsSign:
             case GreaterThanSign:
                 {
-                alt75=6;
+                alt74=6;
                 }
                 break;
             default:
                 NoViableAltException nvae =
-                    new NoViableAltException("", 75, 0, input);
+                    new NoViableAltException("", 74, 0, input);
 
                 throw nvae;
             }
 
-            switch (alt75) {
+            switch (alt74) {
                 case 1 :
                     // InternalSqlParser.g:3353:3: ( ( (lv_isnull_1_1= ISNULL | lv_isnull_1_2= ISNOTNULL ) ) )
                     {
@@ -9003,22 +8992,22 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     // InternalSqlParser.g:3355:1: (lv_isnull_1_1= ISNULL | lv_isnull_1_2= ISNOTNULL )
                     {
                     // InternalSqlParser.g:3355:1: (lv_isnull_1_1= ISNULL | lv_isnull_1_2= ISNOTNULL )
-                    int alt74=2;
-                    int LA74_0 = input.LA(1);
+                    int alt73=2;
+                    int LA73_0 = input.LA(1);
 
-                    if ( (LA74_0==ISNULL) ) {
-                        alt74=1;
+                    if ( (LA73_0==ISNULL) ) {
+                        alt73=1;
                     }
-                    else if ( (LA74_0==ISNOTNULL) ) {
-                        alt74=2;
+                    else if ( (LA73_0==ISNOTNULL) ) {
+                        alt73=2;
                     }
                     else {
                         NoViableAltException nvae =
-                            new NoViableAltException("", 74, 0, input);
+                            new NoViableAltException("", 73, 0, input);
 
                         throw nvae;
                     }
-                    switch (alt74) {
+                    switch (alt73) {
                         case 1 :
                             // InternalSqlParser.g:3356:3: lv_isnull_1_1= ISNULL
                             {
@@ -9342,60 +9331,60 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             // InternalSqlParser.g:3503:1: (lv_operator_0_1= GreaterThanSign | lv_operator_0_2= GreaterThanSignEqualsSign | lv_operator_0_3= LessThanSign | lv_operator_0_4= LessThanSignEqualsSign | lv_operator_0_5= EqualsSign | lv_operator_0_6= LessThanSignGreaterThanSign | lv_operator_0_7= ExclamationMarkEqualsSign | lv_operator_0_8= CircumflexAccentEqualsSign )
             {
             // InternalSqlParser.g:3503:1: (lv_operator_0_1= GreaterThanSign | lv_operator_0_2= GreaterThanSignEqualsSign | lv_operator_0_3= LessThanSign | lv_operator_0_4= LessThanSignEqualsSign | lv_operator_0_5= EqualsSign | lv_operator_0_6= LessThanSignGreaterThanSign | lv_operator_0_7= ExclamationMarkEqualsSign | lv_operator_0_8= CircumflexAccentEqualsSign )
-            int alt76=8;
+            int alt75=8;
             switch ( input.LA(1) ) {
             case GreaterThanSign:
                 {
-                alt76=1;
+                alt75=1;
                 }
                 break;
             case GreaterThanSignEqualsSign:
                 {
-                alt76=2;
+                alt75=2;
                 }
                 break;
             case LessThanSign:
                 {
-                alt76=3;
+                alt75=3;
                 }
                 break;
             case LessThanSignEqualsSign:
                 {
-                alt76=4;
+                alt75=4;
                 }
                 break;
             case EqualsSign:
                 {
-                alt76=5;
+                alt75=5;
                 }
                 break;
             case LessThanSignGreaterThanSign:
                 {
-                alt76=6;
+                alt75=6;
                 }
                 break;
             case ExclamationMarkEqualsSign:
                 {
-                alt76=7;
+                alt75=7;
                 }
                 break;
             case CircumflexAccentEqualsSign:
                 {
-                alt76=8;
+                alt75=8;
                 }
                 break;
             default:
                 NoViableAltException nvae =
-                    new NoViableAltException("", 76, 0, input);
+                    new NoViableAltException("", 75, 0, input);
 
                 throw nvae;
             }
 
-            switch (alt76) {
+            switch (alt75) {
                 case 1 :
                     // InternalSqlParser.g:3504:3: lv_operator_0_1= GreaterThanSign
                     {
-                    lv_operator_0_1=(Token)match(input,GreaterThanSign,FOLLOW_59); 
+                    lv_operator_0_1=(Token)match(input,GreaterThanSign,FOLLOW_58); 
 
                             newLeafNode(lv_operator_0_1, grammarAccess.getComparisonAccess().getOperatorGreaterThanSignKeyword_0_0_0());
                         
@@ -9411,7 +9400,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                 case 2 :
                     // InternalSqlParser.g:3517:8: lv_operator_0_2= GreaterThanSignEqualsSign
                     {
-                    lv_operator_0_2=(Token)match(input,GreaterThanSignEqualsSign,FOLLOW_59); 
+                    lv_operator_0_2=(Token)match(input,GreaterThanSignEqualsSign,FOLLOW_58); 
 
                             newLeafNode(lv_operator_0_2, grammarAccess.getComparisonAccess().getOperatorGreaterThanSignEqualsSignKeyword_0_0_1());
                         
@@ -9427,7 +9416,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                 case 3 :
                     // InternalSqlParser.g:3530:8: lv_operator_0_3= LessThanSign
                     {
-                    lv_operator_0_3=(Token)match(input,LessThanSign,FOLLOW_59); 
+                    lv_operator_0_3=(Token)match(input,LessThanSign,FOLLOW_58); 
 
                             newLeafNode(lv_operator_0_3, grammarAccess.getComparisonAccess().getOperatorLessThanSignKeyword_0_0_2());
                         
@@ -9443,7 +9432,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                 case 4 :
                     // InternalSqlParser.g:3543:8: lv_operator_0_4= LessThanSignEqualsSign
                     {
-                    lv_operator_0_4=(Token)match(input,LessThanSignEqualsSign,FOLLOW_59); 
+                    lv_operator_0_4=(Token)match(input,LessThanSignEqualsSign,FOLLOW_58); 
 
                             newLeafNode(lv_operator_0_4, grammarAccess.getComparisonAccess().getOperatorLessThanSignEqualsSignKeyword_0_0_3());
                         
@@ -9459,7 +9448,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                 case 5 :
                     // InternalSqlParser.g:3556:8: lv_operator_0_5= EqualsSign
                     {
-                    lv_operator_0_5=(Token)match(input,EqualsSign,FOLLOW_59); 
+                    lv_operator_0_5=(Token)match(input,EqualsSign,FOLLOW_58); 
 
                             newLeafNode(lv_operator_0_5, grammarAccess.getComparisonAccess().getOperatorEqualsSignKeyword_0_0_4());
                         
@@ -9475,7 +9464,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                 case 6 :
                     // InternalSqlParser.g:3569:8: lv_operator_0_6= LessThanSignGreaterThanSign
                     {
-                    lv_operator_0_6=(Token)match(input,LessThanSignGreaterThanSign,FOLLOW_59); 
+                    lv_operator_0_6=(Token)match(input,LessThanSignGreaterThanSign,FOLLOW_58); 
 
                             newLeafNode(lv_operator_0_6, grammarAccess.getComparisonAccess().getOperatorLessThanSignGreaterThanSignKeyword_0_0_5());
                         
@@ -9491,7 +9480,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                 case 7 :
                     // InternalSqlParser.g:3582:8: lv_operator_0_7= ExclamationMarkEqualsSign
                     {
-                    lv_operator_0_7=(Token)match(input,ExclamationMarkEqualsSign,FOLLOW_59); 
+                    lv_operator_0_7=(Token)match(input,ExclamationMarkEqualsSign,FOLLOW_58); 
 
                             newLeafNode(lv_operator_0_7, grammarAccess.getComparisonAccess().getOperatorExclamationMarkEqualsSignKeyword_0_0_6());
                         
@@ -9507,7 +9496,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                 case 8 :
                     // InternalSqlParser.g:3595:8: lv_operator_0_8= CircumflexAccentEqualsSign
                     {
-                    lv_operator_0_8=(Token)match(input,CircumflexAccentEqualsSign,FOLLOW_59); 
+                    lv_operator_0_8=(Token)match(input,CircumflexAccentEqualsSign,FOLLOW_58); 
 
                             newLeafNode(lv_operator_0_8, grammarAccess.getComparisonAccess().getOperatorCircumflexAccentEqualsSignKeyword_0_0_7());
                         
@@ -9530,13 +9519,13 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             }
 
             // InternalSqlParser.g:3611:2: ( ( (lv_subOperator_1_1= ANY | lv_subOperator_1_2= ALL | lv_subOperator_1_3= SOME ) ) )?
-            int alt78=2;
-            int LA78_0 = input.LA(1);
+            int alt77=2;
+            int LA77_0 = input.LA(1);
 
-            if ( (LA78_0==SOME||LA78_0==ALL||LA78_0==ANY) ) {
-                alt78=1;
+            if ( (LA77_0==SOME||LA77_0==ALL||LA77_0==ANY) ) {
+                alt77=1;
             }
-            switch (alt78) {
+            switch (alt77) {
                 case 1 :
                     // InternalSqlParser.g:3612:1: ( (lv_subOperator_1_1= ANY | lv_subOperator_1_2= ALL | lv_subOperator_1_3= SOME ) )
                     {
@@ -9544,35 +9533,35 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     // InternalSqlParser.g:3613:1: (lv_subOperator_1_1= ANY | lv_subOperator_1_2= ALL | lv_subOperator_1_3= SOME )
                     {
                     // InternalSqlParser.g:3613:1: (lv_subOperator_1_1= ANY | lv_subOperator_1_2= ALL | lv_subOperator_1_3= SOME )
-                    int alt77=3;
+                    int alt76=3;
                     switch ( input.LA(1) ) {
                     case ANY:
                         {
-                        alt77=1;
+                        alt76=1;
                         }
                         break;
                     case ALL:
                         {
-                        alt77=2;
+                        alt76=2;
                         }
                         break;
                     case SOME:
                         {
-                        alt77=3;
+                        alt76=3;
                         }
                         break;
                     default:
                         NoViableAltException nvae =
-                            new NoViableAltException("", 77, 0, input);
+                            new NoViableAltException("", 76, 0, input);
 
                         throw nvae;
                     }
 
-                    switch (alt77) {
+                    switch (alt76) {
                         case 1 :
                             // InternalSqlParser.g:3614:3: lv_subOperator_1_1= ANY
                             {
-                            lv_subOperator_1_1=(Token)match(input,ANY,FOLLOW_53); 
+                            lv_subOperator_1_1=(Token)match(input,ANY,FOLLOW_52); 
 
                                     newLeafNode(lv_subOperator_1_1, grammarAccess.getComparisonAccess().getSubOperatorANYKeyword_1_0_0());
                                 
@@ -9588,7 +9577,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                         case 2 :
                             // InternalSqlParser.g:3627:8: lv_subOperator_1_2= ALL
                             {
-                            lv_subOperator_1_2=(Token)match(input,ALL,FOLLOW_53); 
+                            lv_subOperator_1_2=(Token)match(input,ALL,FOLLOW_52); 
 
                                     newLeafNode(lv_subOperator_1_2, grammarAccess.getComparisonAccess().getSubOperatorALLKeyword_1_0_1());
                                 
@@ -9604,7 +9593,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                         case 3 :
                             // InternalSqlParser.g:3640:8: lv_subOperator_1_3= SOME
                             {
-                            lv_subOperator_1_3=(Token)match(input,SOME,FOLLOW_53); 
+                            lv_subOperator_1_3=(Token)match(input,SOME,FOLLOW_52); 
 
                                     newLeafNode(lv_subOperator_1_3, grammarAccess.getComparisonAccess().getSubOperatorSOMEKeyword_1_0_2());
                                 
@@ -9742,26 +9731,26 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             // InternalSqlParser.g:3697:1: (lv_opLike_0_1= LIKE | lv_opLike_0_2= NOTLIKE )
             {
             // InternalSqlParser.g:3697:1: (lv_opLike_0_1= LIKE | lv_opLike_0_2= NOTLIKE )
-            int alt79=2;
-            int LA79_0 = input.LA(1);
+            int alt78=2;
+            int LA78_0 = input.LA(1);
 
-            if ( (LA79_0==LIKE) ) {
-                alt79=1;
+            if ( (LA78_0==LIKE) ) {
+                alt78=1;
             }
-            else if ( (LA79_0==NOTLIKE) ) {
-                alt79=2;
+            else if ( (LA78_0==NOTLIKE) ) {
+                alt78=2;
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("", 79, 0, input);
+                    new NoViableAltException("", 78, 0, input);
 
                 throw nvae;
             }
-            switch (alt79) {
+            switch (alt78) {
                 case 1 :
                     // InternalSqlParser.g:3698:3: lv_opLike_0_1= LIKE
                     {
-                    lv_opLike_0_1=(Token)match(input,LIKE,FOLLOW_60); 
+                    lv_opLike_0_1=(Token)match(input,LIKE,FOLLOW_59); 
 
                             newLeafNode(lv_opLike_0_1, grammarAccess.getLikeAccess().getOpLikeLIKEKeyword_0_0_0());
                         
@@ -9777,7 +9766,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                 case 2 :
                     // InternalSqlParser.g:3711:8: lv_opLike_0_2= NOTLIKE
                     {
-                    lv_opLike_0_2=(Token)match(input,NOTLIKE,FOLLOW_60); 
+                    lv_opLike_0_2=(Token)match(input,NOTLIKE,FOLLOW_59); 
 
                             newLeafNode(lv_opLike_0_2, grammarAccess.getLikeAccess().getOpLikeNOTLIKEKeyword_0_0_1());
                         
@@ -9907,36 +9896,36 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             // InternalSqlParser.g:3766:1: ( ( (lv_op2_0_0= ruleStringOperand ) ) | ( (lv_fop2_1_0= ruleOperandFunction ) ) | ( (lv_fcast_2_0= ruleOpFunctionCast ) ) | ( (lv_fparam_3_0= ruleParameterOperand ) ) )
             {
             // InternalSqlParser.g:3766:1: ( ( (lv_op2_0_0= ruleStringOperand ) ) | ( (lv_fop2_1_0= ruleOperandFunction ) ) | ( (lv_fcast_2_0= ruleOpFunctionCast ) ) | ( (lv_fparam_3_0= ruleParameterOperand ) ) )
-            int alt80=4;
+            int alt79=4;
             switch ( input.LA(1) ) {
             case RULE_STRING_:
                 {
-                alt80=1;
+                alt79=1;
                 }
                 break;
             case RULE_ID:
                 {
-                alt80=2;
+                alt79=2;
                 }
                 break;
             case CAST:
                 {
-                alt80=3;
+                alt79=3;
                 }
                 break;
             case RULE_JRPARAM:
                 {
-                alt80=4;
+                alt79=4;
                 }
                 break;
             default:
                 NoViableAltException nvae =
-                    new NoViableAltException("", 80, 0, input);
+                    new NoViableAltException("", 79, 0, input);
 
                 throw nvae;
             }
 
-            switch (alt80) {
+            switch (alt79) {
                 case 1 :
                     // InternalSqlParser.g:3766:2: ( (lv_op2_0_0= ruleStringOperand ) )
                     {
@@ -10170,26 +10159,26 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             // InternalSqlParser.g:3864:1: (lv_opBetween_0_1= BETWEEN | lv_opBetween_0_2= NOTBETWEEN )
             {
             // InternalSqlParser.g:3864:1: (lv_opBetween_0_1= BETWEEN | lv_opBetween_0_2= NOTBETWEEN )
-            int alt81=2;
-            int LA81_0 = input.LA(1);
+            int alt80=2;
+            int LA80_0 = input.LA(1);
 
-            if ( (LA81_0==BETWEEN) ) {
-                alt81=1;
+            if ( (LA80_0==BETWEEN) ) {
+                alt80=1;
             }
-            else if ( (LA81_0==NOTBETWEEN) ) {
-                alt81=2;
+            else if ( (LA80_0==NOTBETWEEN) ) {
+                alt80=2;
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("", 81, 0, input);
+                    new NoViableAltException("", 80, 0, input);
 
                 throw nvae;
             }
-            switch (alt81) {
+            switch (alt80) {
                 case 1 :
                     // InternalSqlParser.g:3865:3: lv_opBetween_0_1= BETWEEN
                     {
-                    lv_opBetween_0_1=(Token)match(input,BETWEEN,FOLLOW_53); 
+                    lv_opBetween_0_1=(Token)match(input,BETWEEN,FOLLOW_52); 
 
                             newLeafNode(lv_opBetween_0_1, grammarAccess.getBetweenAccess().getOpBetweenBETWEENKeyword_0_0_0());
                         
@@ -10205,7 +10194,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                 case 2 :
                     // InternalSqlParser.g:3878:8: lv_opBetween_0_2= NOTBETWEEN
                     {
-                    lv_opBetween_0_2=(Token)match(input,NOTBETWEEN,FOLLOW_53); 
+                    lv_opBetween_0_2=(Token)match(input,NOTBETWEEN,FOLLOW_52); 
 
                             newLeafNode(lv_opBetween_0_2, grammarAccess.getBetweenAccess().getOpBetweenNOTBETWEENKeyword_0_0_1());
                         
@@ -10236,7 +10225,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
              
             	        newCompositeNode(grammarAccess.getBetweenAccess().getOp2OperandGroupParserRuleCall_1_0()); 
             	    
-            pushFollow(FOLLOW_61);
+            pushFollow(FOLLOW_60);
             lv_op2_1_0=ruleOperandGroup();
 
             state._fsp--;
@@ -10258,7 +10247,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
 
             }
 
-            otherlv_2=(Token)match(input,AND,FOLLOW_53); 
+            otherlv_2=(Token)match(input,AND,FOLLOW_52); 
 
                 	newLeafNode(otherlv_2, grammarAccess.getBetweenAccess().getANDKeyword_2());
                 
@@ -10388,26 +10377,26 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             // InternalSqlParser.g:3964:1: (lv_op_1_1= NOTIN_1 | lv_op_1_2= IN )
             {
             // InternalSqlParser.g:3964:1: (lv_op_1_1= NOTIN_1 | lv_op_1_2= IN )
-            int alt82=2;
-            int LA82_0 = input.LA(1);
+            int alt81=2;
+            int LA81_0 = input.LA(1);
 
-            if ( (LA82_0==NOTIN_1) ) {
-                alt82=1;
+            if ( (LA81_0==NOTIN_1) ) {
+                alt81=1;
             }
-            else if ( (LA82_0==IN) ) {
-                alt82=2;
+            else if ( (LA81_0==IN) ) {
+                alt81=2;
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("", 82, 0, input);
+                    new NoViableAltException("", 81, 0, input);
 
                 throw nvae;
             }
-            switch (alt82) {
+            switch (alt81) {
                 case 1 :
                     // InternalSqlParser.g:3965:3: lv_op_1_1= NOTIN_1
                     {
-                    lv_op_1_1=(Token)match(input,NOTIN_1,FOLLOW_34); 
+                    lv_op_1_1=(Token)match(input,NOTIN_1,FOLLOW_33); 
 
                             newLeafNode(lv_op_1_1, grammarAccess.getInOperatorAccess().getOpNOTINKeyword_1_0_0());
                         
@@ -10423,7 +10412,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                 case 2 :
                     // InternalSqlParser.g:3978:8: lv_op_1_2= IN
                     {
-                    lv_op_1_2=(Token)match(input,IN,FOLLOW_34); 
+                    lv_op_1_2=(Token)match(input,IN,FOLLOW_33); 
 
                             newLeafNode(lv_op_1_2, grammarAccess.getInOperatorAccess().getOpINKeyword_1_0_1());
                         
@@ -10446,32 +10435,32 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             }
 
             // InternalSqlParser.g:3994:2: ( ( (lv_subquery_2_0= ruleSubQueryOperand ) ) | ( (lv_opList_3_0= ruleOperandListGroup ) ) )
-            int alt83=2;
-            int LA83_0 = input.LA(1);
+            int alt82=2;
+            int LA82_0 = input.LA(1);
 
-            if ( (LA83_0==LeftParenthesis) ) {
-                int LA83_1 = input.LA(2);
+            if ( (LA82_0==LeftParenthesis) ) {
+                int LA82_1 = input.LA(2);
 
-                if ( (LA83_1==SELECT) ) {
-                    alt83=1;
+                if ( (LA82_1==SELECT) ) {
+                    alt82=1;
                 }
-                else if ( ((LA83_1>=RULE_SIGNED_DOUBLE && LA83_1<=RULE_STRING_)) ) {
-                    alt83=2;
+                else if ( ((LA82_1>=RULE_SIGNED_DOUBLE && LA82_1<=RULE_STRING_)) ) {
+                    alt82=2;
                 }
                 else {
                     NoViableAltException nvae =
-                        new NoViableAltException("", 83, 1, input);
+                        new NoViableAltException("", 82, 1, input);
 
                     throw nvae;
                 }
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("", 83, 0, input);
+                    new NoViableAltException("", 82, 0, input);
 
                 throw nvae;
             }
-            switch (alt83) {
+            switch (alt82) {
                 case 1 :
                     // InternalSqlParser.g:3994:3: ( (lv_subquery_2_0= ruleSubQueryOperand ) )
                     {
@@ -10644,26 +10633,26 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             // InternalSqlParser.g:4060:1: (lv_op_1_1= NOTEXISTS | lv_op_1_2= EXISTS )
             {
             // InternalSqlParser.g:4060:1: (lv_op_1_1= NOTEXISTS | lv_op_1_2= EXISTS )
-            int alt84=2;
-            int LA84_0 = input.LA(1);
+            int alt83=2;
+            int LA83_0 = input.LA(1);
 
-            if ( (LA84_0==NOTEXISTS) ) {
-                alt84=1;
+            if ( (LA83_0==NOTEXISTS) ) {
+                alt83=1;
             }
-            else if ( (LA84_0==EXISTS) ) {
-                alt84=2;
+            else if ( (LA83_0==EXISTS) ) {
+                alt83=2;
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("", 84, 0, input);
+                    new NoViableAltException("", 83, 0, input);
 
                 throw nvae;
             }
-            switch (alt84) {
+            switch (alt83) {
                 case 1 :
                     // InternalSqlParser.g:4061:3: lv_op_1_1= NOTEXISTS
                     {
-                    lv_op_1_1=(Token)match(input,NOTEXISTS,FOLLOW_34); 
+                    lv_op_1_1=(Token)match(input,NOTEXISTS,FOLLOW_33); 
 
                             newLeafNode(lv_op_1_1, grammarAccess.getExistsOperatorAccess().getOpNOTEXISTSKeyword_1_0_0());
                         
@@ -10679,7 +10668,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                 case 2 :
                     // InternalSqlParser.g:4074:8: lv_op_1_2= EXISTS
                     {
-                    lv_op_1_2=(Token)match(input,EXISTS,FOLLOW_34); 
+                    lv_op_1_2=(Token)match(input,EXISTS,FOLLOW_33); 
 
                             newLeafNode(lv_op_1_2, grammarAccess.getExistsOperatorAccess().getOpEXISTSKeyword_1_0_1());
                         
@@ -10702,32 +10691,32 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             }
 
             // InternalSqlParser.g:4090:2: ( ( (lv_subquery_2_0= ruleSubQueryOperand ) ) | ( (lv_opList_3_0= ruleOperandListGroup ) ) )
-            int alt85=2;
-            int LA85_0 = input.LA(1);
+            int alt84=2;
+            int LA84_0 = input.LA(1);
 
-            if ( (LA85_0==LeftParenthesis) ) {
-                int LA85_1 = input.LA(2);
+            if ( (LA84_0==LeftParenthesis) ) {
+                int LA84_1 = input.LA(2);
 
-                if ( (LA85_1==SELECT) ) {
-                    alt85=1;
+                if ( ((LA84_1>=RULE_SIGNED_DOUBLE && LA84_1<=RULE_STRING_)) ) {
+                    alt84=2;
                 }
-                else if ( ((LA85_1>=RULE_SIGNED_DOUBLE && LA85_1<=RULE_STRING_)) ) {
-                    alt85=2;
+                else if ( (LA84_1==SELECT) ) {
+                    alt84=1;
                 }
                 else {
                     NoViableAltException nvae =
-                        new NoViableAltException("", 85, 1, input);
+                        new NoViableAltException("", 84, 1, input);
 
                     throw nvae;
                 }
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("", 85, 0, input);
+                    new NoViableAltException("", 84, 0, input);
 
                 throw nvae;
             }
-            switch (alt85) {
+            switch (alt84) {
                 case 1 :
                     // InternalSqlParser.g:4090:3: ( (lv_subquery_2_0= ruleSubQueryOperand ) )
                     {
@@ -10880,7 +10869,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             // InternalSqlParser.g:4148:1: (otherlv_0= LeftParenthesis ( (lv_opGroup_1_0= ruleOperandList ) ) otherlv_2= RightParenthesis )
             // InternalSqlParser.g:4149:2: otherlv_0= LeftParenthesis ( (lv_opGroup_1_0= ruleOperandList ) ) otherlv_2= RightParenthesis
             {
-            otherlv_0=(Token)match(input,LeftParenthesis,FOLLOW_62); 
+            otherlv_0=(Token)match(input,LeftParenthesis,FOLLOW_61); 
 
                 	newLeafNode(otherlv_0, grammarAccess.getOperandListGroupAccess().getLeftParenthesisKeyword_0());
                 
@@ -10893,7 +10882,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
              
             	        newCompositeNode(grammarAccess.getOperandListGroupAccess().getOpGroupOperandListParserRuleCall_1_0()); 
             	    
-            pushFollow(FOLLOW_35);
+            pushFollow(FOLLOW_34);
             lv_opGroup_1_0=ruleOperandList();
 
             state._fsp--;
@@ -11008,13 +10997,13 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     afterParserOrEnumRuleCall();
                 
             // InternalSqlParser.g:4206:1: ( () (otherlv_2= Comma ( (lv_entries_3_0= ruleScalarOperand ) ) )+ )?
-            int alt87=2;
-            int LA87_0 = input.LA(1);
+            int alt86=2;
+            int LA86_0 = input.LA(1);
 
-            if ( (LA87_0==Comma) ) {
-                alt87=1;
+            if ( (LA86_0==Comma) ) {
+                alt86=1;
             }
-            switch (alt87) {
+            switch (alt86) {
                 case 1 :
                     // InternalSqlParser.g:4206:2: () (otherlv_2= Comma ( (lv_entries_3_0= ruleScalarOperand ) ) )+
                     {
@@ -11030,22 +11019,22 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     }
 
                     // InternalSqlParser.g:4212:2: (otherlv_2= Comma ( (lv_entries_3_0= ruleScalarOperand ) ) )+
-                    int cnt86=0;
-                    loop86:
+                    int cnt85=0;
+                    loop85:
                     do {
-                        int alt86=2;
-                        int LA86_0 = input.LA(1);
+                        int alt85=2;
+                        int LA85_0 = input.LA(1);
 
-                        if ( (LA86_0==Comma) ) {
-                            alt86=1;
+                        if ( (LA85_0==Comma) ) {
+                            alt85=1;
                         }
 
 
-                        switch (alt86) {
+                        switch (alt85) {
                     	case 1 :
                     	    // InternalSqlParser.g:4213:2: otherlv_2= Comma ( (lv_entries_3_0= ruleScalarOperand ) )
                     	    {
-                    	    otherlv_2=(Token)match(input,Comma,FOLLOW_62); 
+                    	    otherlv_2=(Token)match(input,Comma,FOLLOW_61); 
 
                     	        	newLeafNode(otherlv_2, grammarAccess.getOperandListAccess().getCommaKeyword_1_1_0());
                     	        
@@ -11085,12 +11074,12 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     	    break;
 
                     	default :
-                    	    if ( cnt86 >= 1 ) break loop86;
+                    	    if ( cnt85 >= 1 ) break loop85;
                                 EarlyExitException eee =
-                                    new EarlyExitException(86, input);
+                                    new EarlyExitException(85, input);
                                 throw eee;
                         }
-                        cnt86++;
+                        cnt85++;
                     } while (true);
 
 
@@ -11174,35 +11163,35 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             // InternalSqlParser.g:4256:1: (this_Operand_0= ruleOperand | (otherlv_1= LeftParenthesis this_Operand_2= ruleOperand otherlv_3= RightParenthesis ) )
             {
             // InternalSqlParser.g:4256:1: (this_Operand_0= ruleOperand | (otherlv_1= LeftParenthesis this_Operand_2= ruleOperand otherlv_3= RightParenthesis ) )
-            int alt88=2;
-            int LA88_0 = input.LA(1);
+            int alt87=2;
+            int LA87_0 = input.LA(1);
 
-            if ( (LA88_0==EXTRACT||LA88_0==CAST||LA88_0==CASE||(LA88_0>=RULE_JRPARAM && LA88_0<=RULE_JRNPARAM)||(LA88_0>=RULE_UNSIGNED && LA88_0<=RULE_SIGNED_DOUBLE)||(LA88_0>=RULE_STRING_ && LA88_0<=RULE_ID)) ) {
-                alt88=1;
+            if ( (LA87_0==EXTRACT||LA87_0==CAST||LA87_0==CASE||(LA87_0>=RULE_JRPARAM && LA87_0<=RULE_JRNPARAM)||(LA87_0>=RULE_UNSIGNED && LA87_0<=RULE_SIGNED_DOUBLE)||(LA87_0>=RULE_STRING_ && LA87_0<=RULE_ID)) ) {
+                alt87=1;
             }
-            else if ( (LA88_0==LeftParenthesis) ) {
-                int LA88_2 = input.LA(2);
+            else if ( (LA87_0==LeftParenthesis) ) {
+                int LA87_2 = input.LA(2);
 
-                if ( (LA88_2==EXTRACT||LA88_2==CAST||LA88_2==CASE||LA88_2==LeftParenthesis||(LA88_2>=RULE_JRPARAM && LA88_2<=RULE_JRNPARAM)||(LA88_2>=RULE_UNSIGNED && LA88_2<=RULE_SIGNED_DOUBLE)||(LA88_2>=RULE_STRING_ && LA88_2<=RULE_ID)) ) {
-                    alt88=2;
+                if ( (LA87_2==EXTRACT||LA87_2==CAST||LA87_2==CASE||LA87_2==LeftParenthesis||(LA87_2>=RULE_JRPARAM && LA87_2<=RULE_JRNPARAM)||(LA87_2>=RULE_UNSIGNED && LA87_2<=RULE_SIGNED_DOUBLE)||(LA87_2>=RULE_STRING_ && LA87_2<=RULE_ID)) ) {
+                    alt87=2;
                 }
-                else if ( (LA88_2==SELECT) ) {
-                    alt88=1;
+                else if ( (LA87_2==SELECT) ) {
+                    alt87=1;
                 }
                 else {
                     NoViableAltException nvae =
-                        new NoViableAltException("", 88, 2, input);
+                        new NoViableAltException("", 87, 2, input);
 
                     throw nvae;
                 }
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("", 88, 0, input);
+                    new NoViableAltException("", 87, 0, input);
 
                 throw nvae;
             }
-            switch (alt88) {
+            switch (alt87) {
                 case 1 :
                     // InternalSqlParser.g:4257:5: this_Operand_0= ruleOperand
                     {
@@ -11227,14 +11216,14 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     // InternalSqlParser.g:4266:6: (otherlv_1= LeftParenthesis this_Operand_2= ruleOperand otherlv_3= RightParenthesis )
                     // InternalSqlParser.g:4267:2: otherlv_1= LeftParenthesis this_Operand_2= ruleOperand otherlv_3= RightParenthesis
                     {
-                    otherlv_1=(Token)match(input,LeftParenthesis,FOLLOW_53); 
+                    otherlv_1=(Token)match(input,LeftParenthesis,FOLLOW_52); 
 
                         	newLeafNode(otherlv_1, grammarAccess.getOperandGroupAccess().getLeftParenthesisKeyword_1_0());
                         
                      
                             newCompositeNode(grammarAccess.getOperandGroupAccess().getOperandParserRuleCall_1_1()); 
                         
-                    pushFollow(FOLLOW_35);
+                    pushFollow(FOLLOW_34);
                     this_Operand_2=ruleOperand();
 
                     state._fsp--;
@@ -11342,7 +11331,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
              
             	        newCompositeNode(grammarAccess.getOperandAccess().getOp1OperandFragmentParserRuleCall_0_0()); 
             	    
-            pushFollow(FOLLOW_63);
+            pushFollow(FOLLOW_62);
             lv_op1_0_0=ruleOperandFragment();
 
             state._fsp--;
@@ -11365,56 +11354,56 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             }
 
             // InternalSqlParser.g:4324:2: ( ( ( () otherlv_2= PlusSign ) | ( () otherlv_4= HyphenMinus ) | ( () otherlv_6= VerticalLineVerticalLine ) | ( () this_STAR_8= RULE_STAR ) | ( () otherlv_10= Solidus ) ) ( (lv_right_11_0= ruleOperandFragment ) ) )*
-            loop90:
+            loop89:
             do {
-                int alt90=2;
-                int LA90_0 = input.LA(1);
+                int alt89=2;
+                int LA89_0 = input.LA(1);
 
-                if ( (LA90_0==VerticalLineVerticalLine||LA90_0==PlusSign||LA90_0==HyphenMinus||LA90_0==Solidus||LA90_0==RULE_STAR) ) {
-                    alt90=1;
+                if ( (LA89_0==VerticalLineVerticalLine||LA89_0==PlusSign||LA89_0==HyphenMinus||LA89_0==Solidus||LA89_0==RULE_STAR) ) {
+                    alt89=1;
                 }
 
 
-                switch (alt90) {
+                switch (alt89) {
             	case 1 :
             	    // InternalSqlParser.g:4324:3: ( ( () otherlv_2= PlusSign ) | ( () otherlv_4= HyphenMinus ) | ( () otherlv_6= VerticalLineVerticalLine ) | ( () this_STAR_8= RULE_STAR ) | ( () otherlv_10= Solidus ) ) ( (lv_right_11_0= ruleOperandFragment ) )
             	    {
             	    // InternalSqlParser.g:4324:3: ( ( () otherlv_2= PlusSign ) | ( () otherlv_4= HyphenMinus ) | ( () otherlv_6= VerticalLineVerticalLine ) | ( () this_STAR_8= RULE_STAR ) | ( () otherlv_10= Solidus ) )
-            	    int alt89=5;
+            	    int alt88=5;
             	    switch ( input.LA(1) ) {
             	    case PlusSign:
             	        {
-            	        alt89=1;
+            	        alt88=1;
             	        }
             	        break;
             	    case HyphenMinus:
             	        {
-            	        alt89=2;
+            	        alt88=2;
             	        }
             	        break;
             	    case VerticalLineVerticalLine:
             	        {
-            	        alt89=3;
+            	        alt88=3;
             	        }
             	        break;
             	    case RULE_STAR:
             	        {
-            	        alt89=4;
+            	        alt88=4;
             	        }
             	        break;
             	    case Solidus:
             	        {
-            	        alt89=5;
+            	        alt88=5;
             	        }
             	        break;
             	    default:
             	        NoViableAltException nvae =
-            	            new NoViableAltException("", 89, 0, input);
+            	            new NoViableAltException("", 88, 0, input);
 
             	        throw nvae;
             	    }
 
-            	    switch (alt89) {
+            	    switch (alt88) {
             	        case 1 :
             	            // InternalSqlParser.g:4324:4: ( () otherlv_2= PlusSign )
             	            {
@@ -11432,7 +11421,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
 
             	            }
 
-            	            otherlv_2=(Token)match(input,PlusSign,FOLLOW_53); 
+            	            otherlv_2=(Token)match(input,PlusSign,FOLLOW_52); 
 
             	                	newLeafNode(otherlv_2, grammarAccess.getOperandAccess().getPlusSignKeyword_1_0_0_1());
             	                
@@ -11459,7 +11448,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
 
             	            }
 
-            	            otherlv_4=(Token)match(input,HyphenMinus,FOLLOW_53); 
+            	            otherlv_4=(Token)match(input,HyphenMinus,FOLLOW_52); 
 
             	                	newLeafNode(otherlv_4, grammarAccess.getOperandAccess().getHyphenMinusKeyword_1_0_1_1());
             	                
@@ -11486,7 +11475,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
 
             	            }
 
-            	            otherlv_6=(Token)match(input,VerticalLineVerticalLine,FOLLOW_53); 
+            	            otherlv_6=(Token)match(input,VerticalLineVerticalLine,FOLLOW_52); 
 
             	                	newLeafNode(otherlv_6, grammarAccess.getOperandAccess().getVerticalLineVerticalLineKeyword_1_0_2_1());
             	                
@@ -11513,7 +11502,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
 
             	            }
 
-            	            this_STAR_8=(Token)match(input,RULE_STAR,FOLLOW_53); 
+            	            this_STAR_8=(Token)match(input,RULE_STAR,FOLLOW_52); 
             	             
             	                newLeafNode(this_STAR_8, grammarAccess.getOperandAccess().getSTARTerminalRuleCall_1_0_3_1()); 
             	                
@@ -11540,7 +11529,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
 
             	            }
 
-            	            otherlv_10=(Token)match(input,Solidus,FOLLOW_53); 
+            	            otherlv_10=(Token)match(input,Solidus,FOLLOW_52); 
 
             	                	newLeafNode(otherlv_10, grammarAccess.getOperandAccess().getSolidusKeyword_1_0_4_1());
             	                
@@ -11562,7 +11551,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             	     
             	    	        newCompositeNode(grammarAccess.getOperandAccess().getRightOperandFragmentParserRuleCall_1_1_0()); 
             	    	    
-            	    pushFollow(FOLLOW_63);
+            	    pushFollow(FOLLOW_62);
             	    lv_right_11_0=ruleOperandFragment();
 
             	    state._fsp--;
@@ -11589,7 +11578,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             	    break;
 
             	default :
-            	    break loop90;
+            	    break loop89;
                 }
             } while (true);
 
@@ -11676,21 +11665,21 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             // InternalSqlParser.g:4421:1: ( ( (lv_column_0_0= ruleColumnOperand ) ) | ( (lv_xop_1_0= ruleXOperandFragment ) ) | ( (lv_subq_2_0= ruleSubQueryOperand ) ) | ( (lv_fcast_3_0= ruleOpFunctionCast ) ) | ( (lv_fext_4_0= ruleFunctionExtract ) ) | ( (lv_func_5_0= ruleOperandFunction ) ) | ( (lv_sqlcase_6_0= ruleSQLCASE ) ) )
             {
             // InternalSqlParser.g:4421:1: ( ( (lv_column_0_0= ruleColumnOperand ) ) | ( (lv_xop_1_0= ruleXOperandFragment ) ) | ( (lv_subq_2_0= ruleSubQueryOperand ) ) | ( (lv_fcast_3_0= ruleOpFunctionCast ) ) | ( (lv_fext_4_0= ruleFunctionExtract ) ) | ( (lv_func_5_0= ruleOperandFunction ) ) | ( (lv_sqlcase_6_0= ruleSQLCASE ) ) )
-            int alt91=7;
+            int alt90=7;
             switch ( input.LA(1) ) {
             case RULE_ID:
                 {
-                int LA91_1 = input.LA(2);
+                int LA90_1 = input.LA(2);
 
-                if ( (LA91_1==LeftParenthesis) ) {
-                    alt91=6;
+                if ( (LA90_1==EOF||LA90_1==ORDERSIBLINGSBY||LA90_1==STRAIGHT_JOIN||LA90_1==FETCHFIRST||LA90_1==ISNOTNULL||LA90_1==NOTBETWEEN||LA90_1==NOTEXISTS||(LA90_1>=KW_FOLLOWING && LA90_1<=PRECEDING)||(LA90_1>=GROUPBY && LA90_1<=NOTLIKE)||LA90_1==ORDERBY||LA90_1==BETWEEN||(LA90_1>=ISNULL && LA90_1<=NATURAL)||(LA90_1>=EXCEPT && LA90_1<=HAVING)||(LA90_1>=NOTIN_1 && LA90_1<=OFFSET)||LA90_1==CROSS||LA90_1==INNER||(LA90_1>=LIMIT && LA90_1<=MINUS)||LA90_1==NULLS||(LA90_1>=RANGE && LA90_1<=UNION)||LA90_1==WHERE||(LA90_1>=DESC && LA90_1<=FULL)||LA90_1==JOIN||LA90_1==LEFT||LA90_1==LIKE||LA90_1==ROWS||LA90_1==THEN||LA90_1==WHEN||LA90_1==LeftParenthesisPlusSignRightParenthesis||LA90_1==AND||LA90_1==ASC||LA90_1==END||LA90_1==ExclamationMarkEqualsSign||(LA90_1>=LessThanSignEqualsSign && LA90_1<=IN)||(LA90_1>=OR && LA90_1<=VerticalLineVerticalLine)||(LA90_1>=RightParenthesis && LA90_1<=GreaterThanSign)||(LA90_1>=VerticalLine && LA90_1<=RightCurlyBracket)||(LA90_1>=RULE_JRNPARAM && LA90_1<=RULE_STAR)||(LA90_1>=RULE_STRING && LA90_1<=RULE_ID)) ) {
+                    alt90=1;
                 }
-                else if ( (LA91_1==EOF||LA91_1==ORDERSIBLINGSBY||LA91_1==STRAIGHT_JOIN||LA91_1==FETCHFIRST||LA91_1==ISNOTNULL||LA91_1==NOTBETWEEN||LA91_1==NOTEXISTS||(LA91_1>=KW_FOLLOWING && LA91_1<=PRECEDING)||(LA91_1>=GROUPBY && LA91_1<=NOTLIKE)||LA91_1==ORDERBY||LA91_1==BETWEEN||(LA91_1>=ISNULL && LA91_1<=NATURAL)||(LA91_1>=EXCEPT && LA91_1<=HAVING)||(LA91_1>=NOTIN_1 && LA91_1<=OFFSET)||LA91_1==CROSS||LA91_1==INNER||(LA91_1>=LIMIT && LA91_1<=MINUS)||LA91_1==NULLS||(LA91_1>=RANGE && LA91_1<=UNION)||LA91_1==WHERE||(LA91_1>=DESC && LA91_1<=FULL)||LA91_1==JOIN||LA91_1==LEFT||LA91_1==LIKE||LA91_1==ROWS||LA91_1==THEN||LA91_1==WHEN||LA91_1==LeftParenthesisPlusSignRightParenthesis||LA91_1==AND||LA91_1==ASC||LA91_1==END||LA91_1==ExclamationMarkEqualsSign||(LA91_1>=LessThanSignEqualsSign && LA91_1<=IN)||(LA91_1>=OR && LA91_1<=VerticalLineVerticalLine)||(LA91_1>=RightParenthesis && LA91_1<=GreaterThanSign)||(LA91_1>=VerticalLine && LA91_1<=RightCurlyBracket)||(LA91_1>=RULE_JRNPARAM && LA91_1<=RULE_STAR)||(LA91_1>=RULE_STRING && LA91_1<=RULE_ID)) ) {
-                    alt91=1;
+                else if ( (LA90_1==LeftParenthesis) ) {
+                    alt90=6;
                 }
                 else {
                     NoViableAltException nvae =
-                        new NoViableAltException("", 91, 1, input);
+                        new NoViableAltException("", 90, 1, input);
 
                     throw nvae;
                 }
@@ -11699,7 +11688,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             case RULE_STRING:
             case RULE_DBNAME:
                 {
-                alt91=1;
+                alt90=1;
                 }
                 break;
             case RULE_JRPARAM:
@@ -11709,37 +11698,37 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             case RULE_SIGNED_DOUBLE:
             case RULE_STRING_:
                 {
-                alt91=2;
+                alt90=2;
                 }
                 break;
             case LeftParenthesis:
                 {
-                alt91=3;
+                alt90=3;
                 }
                 break;
             case CAST:
                 {
-                alt91=4;
+                alt90=4;
                 }
                 break;
             case EXTRACT:
                 {
-                alt91=5;
+                alt90=5;
                 }
                 break;
             case CASE:
                 {
-                alt91=7;
+                alt90=7;
                 }
                 break;
             default:
                 NoViableAltException nvae =
-                    new NoViableAltException("", 91, 0, input);
+                    new NoViableAltException("", 90, 0, input);
 
                 throw nvae;
             }
 
-            switch (alt91) {
+            switch (alt90) {
                 case 1 :
                     // InternalSqlParser.g:4421:2: ( (lv_column_0_0= ruleColumnOperand ) )
                     {
@@ -12098,7 +12087,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
              
             	        newCompositeNode(grammarAccess.getOperandFunctionAccess().getFnameFNAMEParserRuleCall_1_0()); 
             	    
-            pushFollow(FOLLOW_64);
+            pushFollow(FOLLOW_63);
             lv_fname_1_0=ruleFNAME();
 
             state._fsp--;
@@ -12121,16 +12110,16 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             }
 
             // InternalSqlParser.g:4598:2: ( ( (lv_star_2_0= RULE_STAR ) ) | ( (lv_args_3_0= ruleOpFunctionArg ) ) )?
-            int alt92=3;
-            int LA92_0 = input.LA(1);
+            int alt91=3;
+            int LA91_0 = input.LA(1);
 
-            if ( (LA92_0==RULE_STAR) ) {
-                alt92=1;
+            if ( (LA91_0==RULE_STAR) ) {
+                alt91=1;
             }
-            else if ( (LA92_0==DISTINCT||LA92_0==EXTRACT||LA92_0==CAST||LA92_0==CASE||LA92_0==ALL||LA92_0==LeftParenthesis||(LA92_0>=RULE_JRPARAM && LA92_0<=RULE_JRNPARAM)||(LA92_0>=RULE_UNSIGNED && LA92_0<=RULE_SIGNED_DOUBLE)||(LA92_0>=RULE_STRING_ && LA92_0<=RULE_ID)) ) {
-                alt92=2;
+            else if ( (LA91_0==DISTINCT||LA91_0==EXTRACT||LA91_0==CAST||LA91_0==CASE||LA91_0==ALL||LA91_0==LeftParenthesis||(LA91_0>=RULE_JRPARAM && LA91_0<=RULE_JRNPARAM)||(LA91_0>=RULE_UNSIGNED && LA91_0<=RULE_SIGNED_DOUBLE)||(LA91_0>=RULE_STRING_ && LA91_0<=RULE_ID)) ) {
+                alt91=2;
             }
-            switch (alt92) {
+            switch (alt91) {
                 case 1 :
                     // InternalSqlParser.g:4598:3: ( (lv_star_2_0= RULE_STAR ) )
                     {
@@ -12140,7 +12129,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     // InternalSqlParser.g:4599:1: (lv_star_2_0= RULE_STAR )
                     // InternalSqlParser.g:4600:3: lv_star_2_0= RULE_STAR
                     {
-                    lv_star_2_0=(Token)match(input,RULE_STAR,FOLLOW_35); 
+                    lv_star_2_0=(Token)match(input,RULE_STAR,FOLLOW_34); 
 
                     			newLeafNode(lv_star_2_0, grammarAccess.getOperandFunctionAccess().getStarSTARTerminalRuleCall_2_0_0()); 
                     		
@@ -12175,7 +12164,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                      
                     	        newCompositeNode(grammarAccess.getOperandFunctionAccess().getArgsOpFunctionArgParserRuleCall_2_1_0()); 
                     	    
-                    pushFollow(FOLLOW_35);
+                    pushFollow(FOLLOW_34);
                     lv_args_3_0=ruleOpFunctionArg();
 
                     state._fsp--;
@@ -12203,18 +12192,18 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
 
             }
 
-            otherlv_4=(Token)match(input,RightParenthesis,FOLLOW_65); 
+            otherlv_4=(Token)match(input,RightParenthesis,FOLLOW_64); 
 
                 	newLeafNode(otherlv_4, grammarAccess.getOperandFunctionAccess().getRightParenthesisKeyword_3());
                 
             // InternalSqlParser.g:4640:1: ( (lv_fan_5_0= ruleFunctionAnalytical ) )?
-            int alt93=2;
-            int LA93_0 = input.LA(1);
+            int alt92=2;
+            int LA92_0 = input.LA(1);
 
-            if ( (LA93_0==OVER) ) {
-                alt93=1;
+            if ( (LA92_0==OVER) ) {
+                alt92=1;
             }
-            switch (alt93) {
+            switch (alt92) {
                 case 1 :
                     // InternalSqlParser.g:4641:1: (lv_fan_5_0= ruleFunctionAnalytical )
                     {
@@ -12328,11 +12317,11 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             // InternalSqlParser.g:4679:1: (otherlv_0= EXTRACT otherlv_1= LeftParenthesis ( (lv_v_2_0= ruleEXTRACT_VALUES ) ) otherlv_3= FROM ( (lv_operand_4_0= ruleOperandGroup ) ) otherlv_5= RightParenthesis )
             // InternalSqlParser.g:4680:2: otherlv_0= EXTRACT otherlv_1= LeftParenthesis ( (lv_v_2_0= ruleEXTRACT_VALUES ) ) otherlv_3= FROM ( (lv_operand_4_0= ruleOperandGroup ) ) otherlv_5= RightParenthesis
             {
-            otherlv_0=(Token)match(input,EXTRACT,FOLLOW_34); 
+            otherlv_0=(Token)match(input,EXTRACT,FOLLOW_33); 
 
                 	newLeafNode(otherlv_0, grammarAccess.getFunctionExtractAccess().getEXTRACTKeyword_0());
                 
-            otherlv_1=(Token)match(input,LeftParenthesis,FOLLOW_66); 
+            otherlv_1=(Token)match(input,LeftParenthesis,FOLLOW_65); 
 
                 	newLeafNode(otherlv_1, grammarAccess.getFunctionExtractAccess().getLeftParenthesisKeyword_1());
                 
@@ -12367,7 +12356,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
 
             }
 
-            otherlv_3=(Token)match(input,FROM,FOLLOW_53); 
+            otherlv_3=(Token)match(input,FROM,FOLLOW_52); 
 
                 	newLeafNode(otherlv_3, grammarAccess.getFunctionExtractAccess().getFROMKeyword_3());
                 
@@ -12380,7 +12369,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
              
             	        newCompositeNode(grammarAccess.getFunctionExtractAccess().getOperandOperandGroupParserRuleCall_4_0()); 
             	    
-            pushFollow(FOLLOW_35);
+            pushFollow(FOLLOW_34);
             lv_operand_4_0=ruleOperandGroup();
 
             state._fsp--;
@@ -12482,11 +12471,11 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             // InternalSqlParser.g:4756:1: (otherlv_0= OVER otherlv_1= LeftParenthesis ( (lv_anClause_2_0= ruleAnalyticClause ) ) otherlv_3= RightParenthesis )
             // InternalSqlParser.g:4757:2: otherlv_0= OVER otherlv_1= LeftParenthesis ( (lv_anClause_2_0= ruleAnalyticClause ) ) otherlv_3= RightParenthesis
             {
-            otherlv_0=(Token)match(input,OVER,FOLLOW_34); 
+            otherlv_0=(Token)match(input,OVER,FOLLOW_33); 
 
                 	newLeafNode(otherlv_0, grammarAccess.getFunctionAnalyticalAccess().getOVERKeyword_0());
                 
-            otherlv_1=(Token)match(input,LeftParenthesis,FOLLOW_67); 
+            otherlv_1=(Token)match(input,LeftParenthesis,FOLLOW_66); 
 
                 	newLeafNode(otherlv_1, grammarAccess.getFunctionAnalyticalAccess().getLeftParenthesisKeyword_1());
                 
@@ -12499,7 +12488,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
              
             	        newCompositeNode(grammarAccess.getFunctionAnalyticalAccess().getAnClauseAnalyticClauseParserRuleCall_2_0()); 
             	    
-            pushFollow(FOLLOW_35);
+            pushFollow(FOLLOW_34);
             lv_anClause_2_0=ruleAnalyticClause();
 
             state._fsp--;
@@ -12614,13 +12603,13 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             }
 
             // InternalSqlParser.g:4816:2: ( (lv_abc_1_0= ruleQueryPartitionClause ) )?
-            int alt94=2;
-            int LA94_0 = input.LA(1);
+            int alt93=2;
+            int LA93_0 = input.LA(1);
 
-            if ( (LA94_0==PARTITIONBY) ) {
-                alt94=1;
+            if ( (LA93_0==PARTITIONBY) ) {
+                alt93=1;
             }
-            switch (alt94) {
+            switch (alt93) {
                 case 1 :
                     // InternalSqlParser.g:4817:1: (lv_abc_1_0= ruleQueryPartitionClause )
                     {
@@ -12630,7 +12619,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                      
                     	        newCompositeNode(grammarAccess.getAnalyticClauseAccess().getAbcQueryPartitionClauseParserRuleCall_1_0()); 
                     	    
-                    pushFollow(FOLLOW_68);
+                    pushFollow(FOLLOW_67);
                     lv_abc_1_0=ruleQueryPartitionClause();
 
                     state._fsp--;
@@ -12656,13 +12645,13 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             }
 
             // InternalSqlParser.g:4834:3: ( ( (lv_obc_2_0= ruleOrderByClause ) ) ( (lv_winc_3_0= ruleWindowingClause ) )? )?
-            int alt96=2;
-            int LA96_0 = input.LA(1);
+            int alt95=2;
+            int LA95_0 = input.LA(1);
 
-            if ( (LA96_0==ORDERSIBLINGSBY||LA96_0==ORDERBY) ) {
-                alt96=1;
+            if ( (LA95_0==ORDERSIBLINGSBY||LA95_0==ORDERBY) ) {
+                alt95=1;
             }
-            switch (alt96) {
+            switch (alt95) {
                 case 1 :
                     // InternalSqlParser.g:4834:4: ( (lv_obc_2_0= ruleOrderByClause ) ) ( (lv_winc_3_0= ruleWindowingClause ) )?
                     {
@@ -12675,7 +12664,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                      
                     	        newCompositeNode(grammarAccess.getAnalyticClauseAccess().getObcOrderByClauseParserRuleCall_2_0_0()); 
                     	    
-                    pushFollow(FOLLOW_69);
+                    pushFollow(FOLLOW_68);
                     lv_obc_2_0=ruleOrderByClause();
 
                     state._fsp--;
@@ -12698,13 +12687,13 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     }
 
                     // InternalSqlParser.g:4852:2: ( (lv_winc_3_0= ruleWindowingClause ) )?
-                    int alt95=2;
-                    int LA95_0 = input.LA(1);
+                    int alt94=2;
+                    int LA94_0 = input.LA(1);
 
-                    if ( (LA95_0==RANGE||LA95_0==ROWS) ) {
-                        alt95=1;
+                    if ( (LA94_0==RANGE||LA94_0==ROWS) ) {
+                        alt94=1;
                     }
-                    switch (alt95) {
+                    switch (alt94) {
                         case 1 :
                             // InternalSqlParser.g:4853:1: (lv_winc_3_0= ruleWindowingClause )
                             {
@@ -12823,26 +12812,26 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             // InternalSqlParser.g:4891:2: (otherlv_0= ROWS | otherlv_1= RANGE ) (this_WindowingClauseBetween_2= ruleWindowingClauseBetween | this_WindowingClauseOperandPreceding_3= ruleWindowingClauseOperandPreceding )
             {
             // InternalSqlParser.g:4891:2: (otherlv_0= ROWS | otherlv_1= RANGE )
-            int alt97=2;
-            int LA97_0 = input.LA(1);
+            int alt96=2;
+            int LA96_0 = input.LA(1);
 
-            if ( (LA97_0==ROWS) ) {
-                alt97=1;
+            if ( (LA96_0==ROWS) ) {
+                alt96=1;
             }
-            else if ( (LA97_0==RANGE) ) {
-                alt97=2;
+            else if ( (LA96_0==RANGE) ) {
+                alt96=2;
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("", 97, 0, input);
+                    new NoViableAltException("", 96, 0, input);
 
                 throw nvae;
             }
-            switch (alt97) {
+            switch (alt96) {
                 case 1 :
                     // InternalSqlParser.g:4892:2: otherlv_0= ROWS
                     {
-                    otherlv_0=(Token)match(input,ROWS,FOLLOW_70); 
+                    otherlv_0=(Token)match(input,ROWS,FOLLOW_69); 
 
                         	newLeafNode(otherlv_0, grammarAccess.getWindowingClauseAccess().getROWSKeyword_0_0());
                         
@@ -12852,7 +12841,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                 case 2 :
                     // InternalSqlParser.g:4898:2: otherlv_1= RANGE
                     {
-                    otherlv_1=(Token)match(input,RANGE,FOLLOW_70); 
+                    otherlv_1=(Token)match(input,RANGE,FOLLOW_69); 
 
                         	newLeafNode(otherlv_1, grammarAccess.getWindowingClauseAccess().getRANGEKeyword_0_1());
                         
@@ -12863,22 +12852,22 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             }
 
             // InternalSqlParser.g:4902:2: (this_WindowingClauseBetween_2= ruleWindowingClauseBetween | this_WindowingClauseOperandPreceding_3= ruleWindowingClauseOperandPreceding )
-            int alt98=2;
-            int LA98_0 = input.LA(1);
+            int alt97=2;
+            int LA97_0 = input.LA(1);
 
-            if ( (LA98_0==BETWEEN) ) {
-                alt98=1;
+            if ( (LA97_0==BETWEEN) ) {
+                alt97=1;
             }
-            else if ( (LA98_0==UNBOUNDEDPRECEDING||LA98_0==CURRENTROW||LA98_0==EXTRACT||LA98_0==CAST||LA98_0==CASE||LA98_0==LeftParenthesis||(LA98_0>=RULE_JRPARAM && LA98_0<=RULE_JRNPARAM)||(LA98_0>=RULE_UNSIGNED && LA98_0<=RULE_SIGNED_DOUBLE)||(LA98_0>=RULE_STRING_ && LA98_0<=RULE_ID)) ) {
-                alt98=2;
+            else if ( (LA97_0==UNBOUNDEDPRECEDING||LA97_0==CURRENTROW||LA97_0==EXTRACT||LA97_0==CAST||LA97_0==CASE||LA97_0==LeftParenthesis||(LA97_0>=RULE_JRPARAM && LA97_0<=RULE_JRNPARAM)||(LA97_0>=RULE_UNSIGNED && LA97_0<=RULE_SIGNED_DOUBLE)||(LA97_0>=RULE_STRING_ && LA97_0<=RULE_ID)) ) {
+                alt97=2;
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("", 98, 0, input);
+                    new NoViableAltException("", 97, 0, input);
 
                 throw nvae;
             }
-            switch (alt98) {
+            switch (alt97) {
                 case 1 :
                     // InternalSqlParser.g:4903:5: this_WindowingClauseBetween_2= ruleWindowingClauseBetween
                     {
@@ -12995,7 +12984,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             // InternalSqlParser.g:4942:1: (otherlv_0= BETWEEN ( (lv_wcoP_1_0= ruleWindowingClauseOperandPreceding ) ) otherlv_2= AND ( (lv_wcoF_3_0= ruleWindowingClauseOperandFollowing ) ) )
             // InternalSqlParser.g:4943:2: otherlv_0= BETWEEN ( (lv_wcoP_1_0= ruleWindowingClauseOperandPreceding ) ) otherlv_2= AND ( (lv_wcoF_3_0= ruleWindowingClauseOperandFollowing ) )
             {
-            otherlv_0=(Token)match(input,BETWEEN,FOLLOW_70); 
+            otherlv_0=(Token)match(input,BETWEEN,FOLLOW_69); 
 
                 	newLeafNode(otherlv_0, grammarAccess.getWindowingClauseBetweenAccess().getBETWEENKeyword_0());
                 
@@ -13008,7 +12997,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
              
             	        newCompositeNode(grammarAccess.getWindowingClauseBetweenAccess().getWcoPWindowingClauseOperandPrecedingParserRuleCall_1_0()); 
             	    
-            pushFollow(FOLLOW_61);
+            pushFollow(FOLLOW_60);
             lv_wcoP_1_0=ruleWindowingClauseOperandPreceding();
 
             state._fsp--;
@@ -13030,7 +13019,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
 
             }
 
-            otherlv_2=(Token)match(input,AND,FOLLOW_71); 
+            otherlv_2=(Token)match(input,AND,FOLLOW_70); 
 
                 	newLeafNode(otherlv_2, grammarAccess.getWindowingClauseBetweenAccess().getANDKeyword_2());
                 
@@ -13154,16 +13143,16 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             }
 
             // InternalSqlParser.g:5015:2: (otherlv_1= UNBOUNDEDFOLLOWING | otherlv_2= CURRENTROW | ( ( (lv_exp_3_0= ruleAnalyticExprArg ) ) (otherlv_4= PRECEDING | otherlv_5= KW_FOLLOWING ) ) )
-            int alt100=3;
+            int alt99=3;
             switch ( input.LA(1) ) {
             case UNBOUNDEDFOLLOWING:
                 {
-                alt100=1;
+                alt99=1;
                 }
                 break;
             case CURRENTROW:
                 {
-                alt100=2;
+                alt99=2;
                 }
                 break;
             case EXTRACT:
@@ -13180,17 +13169,17 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             case RULE_DBNAME:
             case RULE_ID:
                 {
-                alt100=3;
+                alt99=3;
                 }
                 break;
             default:
                 NoViableAltException nvae =
-                    new NoViableAltException("", 100, 0, input);
+                    new NoViableAltException("", 99, 0, input);
 
                 throw nvae;
             }
 
-            switch (alt100) {
+            switch (alt99) {
                 case 1 :
                     // InternalSqlParser.g:5016:2: otherlv_1= UNBOUNDEDFOLLOWING
                     {
@@ -13226,7 +13215,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                      
                     	        newCompositeNode(grammarAccess.getWindowingClauseOperandFollowingAccess().getExpAnalyticExprArgParserRuleCall_1_2_0_0()); 
                     	    
-                    pushFollow(FOLLOW_72);
+                    pushFollow(FOLLOW_71);
                     lv_exp_3_0=ruleAnalyticExprArg();
 
                     state._fsp--;
@@ -13249,22 +13238,22 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     }
 
                     // InternalSqlParser.g:5045:2: (otherlv_4= PRECEDING | otherlv_5= KW_FOLLOWING )
-                    int alt99=2;
-                    int LA99_0 = input.LA(1);
+                    int alt98=2;
+                    int LA98_0 = input.LA(1);
 
-                    if ( (LA99_0==PRECEDING) ) {
-                        alt99=1;
+                    if ( (LA98_0==PRECEDING) ) {
+                        alt98=1;
                     }
-                    else if ( (LA99_0==KW_FOLLOWING) ) {
-                        alt99=2;
+                    else if ( (LA98_0==KW_FOLLOWING) ) {
+                        alt98=2;
                     }
                     else {
                         NoViableAltException nvae =
-                            new NoViableAltException("", 99, 0, input);
+                            new NoViableAltException("", 98, 0, input);
 
                         throw nvae;
                     }
-                    switch (alt99) {
+                    switch (alt98) {
                         case 1 :
                             // InternalSqlParser.g:5046:2: otherlv_4= PRECEDING
                             {
@@ -13386,16 +13375,16 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             }
 
             // InternalSqlParser.g:5083:2: (otherlv_1= UNBOUNDEDPRECEDING | otherlv_2= CURRENTROW | ( ( (lv_expr_3_0= ruleAnalyticExprArg ) ) (otherlv_4= PRECEDING | otherlv_5= KW_FOLLOWING ) ) )
-            int alt102=3;
+            int alt101=3;
             switch ( input.LA(1) ) {
             case UNBOUNDEDPRECEDING:
                 {
-                alt102=1;
+                alt101=1;
                 }
                 break;
             case CURRENTROW:
                 {
-                alt102=2;
+                alt101=2;
                 }
                 break;
             case EXTRACT:
@@ -13412,17 +13401,17 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             case RULE_DBNAME:
             case RULE_ID:
                 {
-                alt102=3;
+                alt101=3;
                 }
                 break;
             default:
                 NoViableAltException nvae =
-                    new NoViableAltException("", 102, 0, input);
+                    new NoViableAltException("", 101, 0, input);
 
                 throw nvae;
             }
 
-            switch (alt102) {
+            switch (alt101) {
                 case 1 :
                     // InternalSqlParser.g:5084:2: otherlv_1= UNBOUNDEDPRECEDING
                     {
@@ -13458,7 +13447,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                      
                     	        newCompositeNode(grammarAccess.getWindowingClauseOperandPrecedingAccess().getExprAnalyticExprArgParserRuleCall_1_2_0_0()); 
                     	    
-                    pushFollow(FOLLOW_72);
+                    pushFollow(FOLLOW_71);
                     lv_expr_3_0=ruleAnalyticExprArg();
 
                     state._fsp--;
@@ -13481,22 +13470,22 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     }
 
                     // InternalSqlParser.g:5113:2: (otherlv_4= PRECEDING | otherlv_5= KW_FOLLOWING )
-                    int alt101=2;
-                    int LA101_0 = input.LA(1);
+                    int alt100=2;
+                    int LA100_0 = input.LA(1);
 
-                    if ( (LA101_0==PRECEDING) ) {
-                        alt101=1;
+                    if ( (LA100_0==PRECEDING) ) {
+                        alt100=1;
                     }
-                    else if ( (LA101_0==KW_FOLLOWING) ) {
-                        alt101=2;
+                    else if ( (LA100_0==KW_FOLLOWING) ) {
+                        alt100=2;
                     }
                     else {
                         NoViableAltException nvae =
-                            new NoViableAltException("", 101, 0, input);
+                            new NoViableAltException("", 100, 0, input);
 
                         throw nvae;
                     }
-                    switch (alt101) {
+                    switch (alt100) {
                         case 1 :
                             // InternalSqlParser.g:5114:2: otherlv_4= PRECEDING
                             {
@@ -13605,26 +13594,26 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             // InternalSqlParser.g:5145:2: (otherlv_0= ORDERBY | otherlv_1= ORDERSIBLINGSBY ) ( (lv_args_2_0= ruleOrderByClauseArgs ) )
             {
             // InternalSqlParser.g:5145:2: (otherlv_0= ORDERBY | otherlv_1= ORDERSIBLINGSBY )
-            int alt103=2;
-            int LA103_0 = input.LA(1);
+            int alt102=2;
+            int LA102_0 = input.LA(1);
 
-            if ( (LA103_0==ORDERBY) ) {
-                alt103=1;
+            if ( (LA102_0==ORDERBY) ) {
+                alt102=1;
             }
-            else if ( (LA103_0==ORDERSIBLINGSBY) ) {
-                alt103=2;
+            else if ( (LA102_0==ORDERSIBLINGSBY) ) {
+                alt102=2;
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("", 103, 0, input);
+                    new NoViableAltException("", 102, 0, input);
 
                 throw nvae;
             }
-            switch (alt103) {
+            switch (alt102) {
                 case 1 :
                     // InternalSqlParser.g:5146:2: otherlv_0= ORDERBY
                     {
-                    otherlv_0=(Token)match(input,ORDERBY,FOLLOW_70); 
+                    otherlv_0=(Token)match(input,ORDERBY,FOLLOW_69); 
 
                         	newLeafNode(otherlv_0, grammarAccess.getOrderByClauseAccess().getORDERBYKeyword_0_0());
                         
@@ -13634,7 +13623,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                 case 2 :
                     // InternalSqlParser.g:5152:2: otherlv_1= ORDERSIBLINGSBY
                     {
-                    otherlv_1=(Token)match(input,ORDERSIBLINGSBY,FOLLOW_70); 
+                    otherlv_1=(Token)match(input,ORDERSIBLINGSBY,FOLLOW_69); 
 
                         	newLeafNode(otherlv_1, grammarAccess.getOrderByClauseAccess().getORDERSIBLINGSBYKeyword_0_1());
                         
@@ -13764,13 +13753,13 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     afterParserOrEnumRuleCall();
                 
             // InternalSqlParser.g:5204:1: ( () (otherlv_2= Comma ( (lv_entries_3_0= ruleOrderByClauseArg ) ) )+ )?
-            int alt105=2;
-            int LA105_0 = input.LA(1);
+            int alt104=2;
+            int LA104_0 = input.LA(1);
 
-            if ( (LA105_0==Comma) ) {
-                alt105=1;
+            if ( (LA104_0==Comma) ) {
+                alt104=1;
             }
-            switch (alt105) {
+            switch (alt104) {
                 case 1 :
                     // InternalSqlParser.g:5204:2: () (otherlv_2= Comma ( (lv_entries_3_0= ruleOrderByClauseArg ) ) )+
                     {
@@ -13786,22 +13775,22 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     }
 
                     // InternalSqlParser.g:5210:2: (otherlv_2= Comma ( (lv_entries_3_0= ruleOrderByClauseArg ) ) )+
-                    int cnt104=0;
-                    loop104:
+                    int cnt103=0;
+                    loop103:
                     do {
-                        int alt104=2;
-                        int LA104_0 = input.LA(1);
+                        int alt103=2;
+                        int LA103_0 = input.LA(1);
 
-                        if ( (LA104_0==Comma) ) {
-                            alt104=1;
+                        if ( (LA103_0==Comma) ) {
+                            alt103=1;
                         }
 
 
-                        switch (alt104) {
+                        switch (alt103) {
                     	case 1 :
                     	    // InternalSqlParser.g:5211:2: otherlv_2= Comma ( (lv_entries_3_0= ruleOrderByClauseArg ) )
                     	    {
-                    	    otherlv_2=(Token)match(input,Comma,FOLLOW_70); 
+                    	    otherlv_2=(Token)match(input,Comma,FOLLOW_69); 
 
                     	        	newLeafNode(otherlv_2, grammarAccess.getOrderByClauseArgsAccess().getCommaKeyword_1_1_0());
                     	        
@@ -13841,12 +13830,12 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     	    break;
 
                     	default :
-                    	    if ( cnt104 >= 1 ) break loop104;
+                    	    if ( cnt103 >= 1 ) break loop103;
                                 EarlyExitException eee =
-                                    new EarlyExitException(104, input);
+                                    new EarlyExitException(103, input);
                                 throw eee;
                         }
-                        cnt104++;
+                        cnt103++;
                     } while (true);
 
 
@@ -13942,7 +13931,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
              
             	        newCompositeNode(grammarAccess.getOrderByClauseArgAccess().getColAnalyticExprArgParserRuleCall_0_0()); 
             	    
-            pushFollow(FOLLOW_73);
+            pushFollow(FOLLOW_72);
             lv_col_0_0=ruleAnalyticExprArg();
 
             state._fsp--;
@@ -13965,20 +13954,20 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             }
 
             // InternalSqlParser.g:5272:2: (otherlv_1= ASC | otherlv_2= DESC )?
-            int alt106=3;
-            int LA106_0 = input.LA(1);
+            int alt105=3;
+            int LA105_0 = input.LA(1);
 
-            if ( (LA106_0==ASC) ) {
-                alt106=1;
+            if ( (LA105_0==ASC) ) {
+                alt105=1;
             }
-            else if ( (LA106_0==DESC) ) {
-                alt106=2;
+            else if ( (LA105_0==DESC) ) {
+                alt105=2;
             }
-            switch (alt106) {
+            switch (alt105) {
                 case 1 :
                     // InternalSqlParser.g:5273:2: otherlv_1= ASC
                     {
-                    otherlv_1=(Token)match(input,ASC,FOLLOW_74); 
+                    otherlv_1=(Token)match(input,ASC,FOLLOW_73); 
 
                         	newLeafNode(otherlv_1, grammarAccess.getOrderByClauseArgAccess().getASCKeyword_1_0());
                         
@@ -13988,7 +13977,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                 case 2 :
                     // InternalSqlParser.g:5279:2: otherlv_2= DESC
                     {
-                    otherlv_2=(Token)match(input,DESC,FOLLOW_74); 
+                    otherlv_2=(Token)match(input,DESC,FOLLOW_73); 
 
                         	newLeafNode(otherlv_2, grammarAccess.getOrderByClauseArgAccess().getDESCKeyword_1_1());
                         
@@ -13999,37 +13988,37 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             }
 
             // InternalSqlParser.g:5283:3: (otherlv_3= NULLS (otherlv_4= FIRST | otherlv_5= LAST ) )?
-            int alt108=2;
-            int LA108_0 = input.LA(1);
+            int alt107=2;
+            int LA107_0 = input.LA(1);
 
-            if ( (LA108_0==NULLS) ) {
-                alt108=1;
+            if ( (LA107_0==NULLS) ) {
+                alt107=1;
             }
-            switch (alt108) {
+            switch (alt107) {
                 case 1 :
                     // InternalSqlParser.g:5284:2: otherlv_3= NULLS (otherlv_4= FIRST | otherlv_5= LAST )
                     {
-                    otherlv_3=(Token)match(input,NULLS,FOLLOW_75); 
+                    otherlv_3=(Token)match(input,NULLS,FOLLOW_74); 
 
                         	newLeafNode(otherlv_3, grammarAccess.getOrderByClauseArgAccess().getNULLSKeyword_2_0());
                         
                     // InternalSqlParser.g:5288:1: (otherlv_4= FIRST | otherlv_5= LAST )
-                    int alt107=2;
-                    int LA107_0 = input.LA(1);
+                    int alt106=2;
+                    int LA106_0 = input.LA(1);
 
-                    if ( (LA107_0==FIRST) ) {
-                        alt107=1;
+                    if ( (LA106_0==FIRST) ) {
+                        alt106=1;
                     }
-                    else if ( (LA107_0==LAST) ) {
-                        alt107=2;
+                    else if ( (LA106_0==LAST) ) {
+                        alt106=2;
                     }
                     else {
                         NoViableAltException nvae =
-                            new NoViableAltException("", 107, 0, input);
+                            new NoViableAltException("", 106, 0, input);
 
                         throw nvae;
                     }
-                    switch (alt107) {
+                    switch (alt106) {
                         case 1 :
                             // InternalSqlParser.g:5289:2: otherlv_4= FIRST
                             {
@@ -14137,40 +14126,40 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             // InternalSqlParser.g:5320:1: (otherlv_0= PARTITIONBY ( ( (lv_args_1_0= ruleAnalyticExprArgs ) ) | (otherlv_2= LeftParenthesis this_AnalyticExprArgs_3= ruleAnalyticExprArgs otherlv_4= RightParenthesis ) ) )
             // InternalSqlParser.g:5321:2: otherlv_0= PARTITIONBY ( ( (lv_args_1_0= ruleAnalyticExprArgs ) ) | (otherlv_2= LeftParenthesis this_AnalyticExprArgs_3= ruleAnalyticExprArgs otherlv_4= RightParenthesis ) )
             {
-            otherlv_0=(Token)match(input,PARTITIONBY,FOLLOW_70); 
+            otherlv_0=(Token)match(input,PARTITIONBY,FOLLOW_69); 
 
                 	newLeafNode(otherlv_0, grammarAccess.getQueryPartitionClauseAccess().getPARTITIONBYKeyword_0());
                 
             // InternalSqlParser.g:5325:1: ( ( (lv_args_1_0= ruleAnalyticExprArgs ) ) | (otherlv_2= LeftParenthesis this_AnalyticExprArgs_3= ruleAnalyticExprArgs otherlv_4= RightParenthesis ) )
-            int alt109=2;
-            int LA109_0 = input.LA(1);
+            int alt108=2;
+            int LA108_0 = input.LA(1);
 
-            if ( (LA109_0==EXTRACT||LA109_0==CAST||LA109_0==CASE||(LA109_0>=RULE_JRPARAM && LA109_0<=RULE_JRNPARAM)||(LA109_0>=RULE_UNSIGNED && LA109_0<=RULE_SIGNED_DOUBLE)||(LA109_0>=RULE_STRING_ && LA109_0<=RULE_ID)) ) {
-                alt109=1;
+            if ( (LA108_0==EXTRACT||LA108_0==CAST||LA108_0==CASE||(LA108_0>=RULE_JRPARAM && LA108_0<=RULE_JRNPARAM)||(LA108_0>=RULE_UNSIGNED && LA108_0<=RULE_SIGNED_DOUBLE)||(LA108_0>=RULE_STRING_ && LA108_0<=RULE_ID)) ) {
+                alt108=1;
             }
-            else if ( (LA109_0==LeftParenthesis) ) {
-                int LA109_2 = input.LA(2);
+            else if ( (LA108_0==LeftParenthesis) ) {
+                int LA108_2 = input.LA(2);
 
-                if ( (LA109_2==EXTRACT||LA109_2==CAST||LA109_2==CASE||LA109_2==LeftParenthesis||(LA109_2>=RULE_JRPARAM && LA109_2<=RULE_JRNPARAM)||(LA109_2>=RULE_UNSIGNED && LA109_2<=RULE_SIGNED_DOUBLE)||(LA109_2>=RULE_STRING_ && LA109_2<=RULE_ID)) ) {
-                    alt109=2;
+                if ( (LA108_2==EXTRACT||LA108_2==CAST||LA108_2==CASE||LA108_2==LeftParenthesis||(LA108_2>=RULE_JRPARAM && LA108_2<=RULE_JRNPARAM)||(LA108_2>=RULE_UNSIGNED && LA108_2<=RULE_SIGNED_DOUBLE)||(LA108_2>=RULE_STRING_ && LA108_2<=RULE_ID)) ) {
+                    alt108=2;
                 }
-                else if ( (LA109_2==SELECT) ) {
-                    alt109=1;
+                else if ( (LA108_2==SELECT) ) {
+                    alt108=1;
                 }
                 else {
                     NoViableAltException nvae =
-                        new NoViableAltException("", 109, 2, input);
+                        new NoViableAltException("", 108, 2, input);
 
                     throw nvae;
                 }
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("", 109, 0, input);
+                    new NoViableAltException("", 108, 0, input);
 
                 throw nvae;
             }
-            switch (alt109) {
+            switch (alt108) {
                 case 1 :
                     // InternalSqlParser.g:5325:2: ( (lv_args_1_0= ruleAnalyticExprArgs ) )
                     {
@@ -14214,14 +14203,14 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     // InternalSqlParser.g:5344:6: (otherlv_2= LeftParenthesis this_AnalyticExprArgs_3= ruleAnalyticExprArgs otherlv_4= RightParenthesis )
                     // InternalSqlParser.g:5345:2: otherlv_2= LeftParenthesis this_AnalyticExprArgs_3= ruleAnalyticExprArgs otherlv_4= RightParenthesis
                     {
-                    otherlv_2=(Token)match(input,LeftParenthesis,FOLLOW_70); 
+                    otherlv_2=(Token)match(input,LeftParenthesis,FOLLOW_69); 
 
                         	newLeafNode(otherlv_2, grammarAccess.getQueryPartitionClauseAccess().getLeftParenthesisKeyword_1_1_0());
                         
                      
                             newCompositeNode(grammarAccess.getQueryPartitionClauseAccess().getAnalyticExprArgsParserRuleCall_1_1_1()); 
                         
-                    pushFollow(FOLLOW_35);
+                    pushFollow(FOLLOW_34);
                     this_AnalyticExprArgs_3=ruleAnalyticExprArgs();
 
                     state._fsp--;
@@ -14332,13 +14321,13 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     afterParserOrEnumRuleCall();
                 
             // InternalSqlParser.g:5393:1: ( () (otherlv_2= Comma ( (lv_entries_3_0= ruleAnalyticExprArg ) ) )+ )?
-            int alt111=2;
-            int LA111_0 = input.LA(1);
+            int alt110=2;
+            int LA110_0 = input.LA(1);
 
-            if ( (LA111_0==Comma) ) {
-                alt111=1;
+            if ( (LA110_0==Comma) ) {
+                alt110=1;
             }
-            switch (alt111) {
+            switch (alt110) {
                 case 1 :
                     // InternalSqlParser.g:5393:2: () (otherlv_2= Comma ( (lv_entries_3_0= ruleAnalyticExprArg ) ) )+
                     {
@@ -14354,22 +14343,22 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     }
 
                     // InternalSqlParser.g:5399:2: (otherlv_2= Comma ( (lv_entries_3_0= ruleAnalyticExprArg ) ) )+
-                    int cnt110=0;
-                    loop110:
+                    int cnt109=0;
+                    loop109:
                     do {
-                        int alt110=2;
-                        int LA110_0 = input.LA(1);
+                        int alt109=2;
+                        int LA109_0 = input.LA(1);
 
-                        if ( (LA110_0==Comma) ) {
-                            alt110=1;
+                        if ( (LA109_0==Comma) ) {
+                            alt109=1;
                         }
 
 
-                        switch (alt110) {
+                        switch (alt109) {
                     	case 1 :
                     	    // InternalSqlParser.g:5400:2: otherlv_2= Comma ( (lv_entries_3_0= ruleAnalyticExprArg ) )
                     	    {
-                    	    otherlv_2=(Token)match(input,Comma,FOLLOW_70); 
+                    	    otherlv_2=(Token)match(input,Comma,FOLLOW_69); 
 
                     	        	newLeafNode(otherlv_2, grammarAccess.getAnalyticExprArgsAccess().getCommaKeyword_1_1_0());
                     	        
@@ -14409,12 +14398,12 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     	    break;
 
                     	default :
-                    	    if ( cnt110 >= 1 ) break loop110;
+                    	    if ( cnt109 >= 1 ) break loop109;
                                 EarlyExitException eee =
-                                    new EarlyExitException(110, input);
+                                    new EarlyExitException(109, input);
                                 throw eee;
                         }
-                        cnt110++;
+                        cnt109++;
                     } while (true);
 
 
@@ -14507,7 +14496,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
              
             	        newCompositeNode(grammarAccess.getAnalyticExprArgAccess().getCeOperandParserRuleCall_0_0()); 
             	    
-            pushFollow(FOLLOW_29);
+            pushFollow(FOLLOW_28);
             lv_ce_0_0=ruleOperand();
 
             state._fsp--;
@@ -14530,13 +14519,13 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             }
 
             // InternalSqlParser.g:5461:2: ( (lv_colAlias_1_0= ruleDbObjectName ) )?
-            int alt112=2;
-            int LA112_0 = input.LA(1);
+            int alt111=2;
+            int LA111_0 = input.LA(1);
 
-            if ( ((LA112_0>=RULE_STRING && LA112_0<=RULE_ID)) ) {
-                alt112=1;
+            if ( ((LA111_0>=RULE_STRING && LA111_0<=RULE_ID)) ) {
+                alt111=1;
             }
-            switch (alt112) {
+            switch (alt111) {
                 case 1 :
                     // InternalSqlParser.g:5462:1: (lv_colAlias_1_0= ruleDbObjectName )
                     {
@@ -14660,13 +14649,13 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     afterParserOrEnumRuleCall();
                 
             // InternalSqlParser.g:5509:1: ( () (otherlv_2= Comma ( (lv_entries_3_0= ruleOpFunctionArgOperand ) ) )+ )?
-            int alt114=2;
-            int LA114_0 = input.LA(1);
+            int alt113=2;
+            int LA113_0 = input.LA(1);
 
-            if ( (LA114_0==Comma) ) {
-                alt114=1;
+            if ( (LA113_0==Comma) ) {
+                alt113=1;
             }
-            switch (alt114) {
+            switch (alt113) {
                 case 1 :
                     // InternalSqlParser.g:5509:2: () (otherlv_2= Comma ( (lv_entries_3_0= ruleOpFunctionArgOperand ) ) )+
                     {
@@ -14682,22 +14671,22 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     }
 
                     // InternalSqlParser.g:5515:2: (otherlv_2= Comma ( (lv_entries_3_0= ruleOpFunctionArgOperand ) ) )+
-                    int cnt113=0;
-                    loop113:
+                    int cnt112=0;
+                    loop112:
                     do {
-                        int alt113=2;
-                        int LA113_0 = input.LA(1);
+                        int alt112=2;
+                        int LA112_0 = input.LA(1);
 
-                        if ( (LA113_0==Comma) ) {
-                            alt113=1;
+                        if ( (LA112_0==Comma) ) {
+                            alt112=1;
                         }
 
 
-                        switch (alt113) {
+                        switch (alt112) {
                     	case 1 :
                     	    // InternalSqlParser.g:5516:2: otherlv_2= Comma ( (lv_entries_3_0= ruleOpFunctionArgOperand ) )
                     	    {
-                    	    otherlv_2=(Token)match(input,Comma,FOLLOW_76); 
+                    	    otherlv_2=(Token)match(input,Comma,FOLLOW_75); 
 
                     	        	newLeafNode(otherlv_2, grammarAccess.getOpFunctionArgAccess().getCommaKeyword_1_1_0());
                     	        
@@ -14737,12 +14726,12 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     	    break;
 
                     	default :
-                    	    if ( cnt113 >= 1 ) break loop113;
+                    	    if ( cnt112 >= 1 ) break loop112;
                                 EarlyExitException eee =
-                                    new EarlyExitException(113, input);
+                                    new EarlyExitException(112, input);
                                 throw eee;
                         }
-                        cnt113++;
+                        cnt112++;
                     } while (true);
 
 
@@ -14830,22 +14819,22 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             // InternalSqlParser.g:5561:1: (lv_op_0_1= ruleOpFunctionArgAgregate | lv_op_0_2= ruleOperand )
             {
             // InternalSqlParser.g:5561:1: (lv_op_0_1= ruleOpFunctionArgAgregate | lv_op_0_2= ruleOperand )
-            int alt115=2;
-            int LA115_0 = input.LA(1);
+            int alt114=2;
+            int LA114_0 = input.LA(1);
 
-            if ( (LA115_0==DISTINCT||LA115_0==ALL) ) {
-                alt115=1;
+            if ( (LA114_0==DISTINCT||LA114_0==ALL) ) {
+                alt114=1;
             }
-            else if ( (LA115_0==EXTRACT||LA115_0==CAST||LA115_0==CASE||LA115_0==LeftParenthesis||(LA115_0>=RULE_JRPARAM && LA115_0<=RULE_JRNPARAM)||(LA115_0>=RULE_UNSIGNED && LA115_0<=RULE_SIGNED_DOUBLE)||(LA115_0>=RULE_STRING_ && LA115_0<=RULE_ID)) ) {
-                alt115=2;
+            else if ( (LA114_0==EXTRACT||LA114_0==CAST||LA114_0==CASE||LA114_0==LeftParenthesis||(LA114_0>=RULE_JRPARAM && LA114_0<=RULE_JRNPARAM)||(LA114_0>=RULE_UNSIGNED && LA114_0<=RULE_SIGNED_DOUBLE)||(LA114_0>=RULE_STRING_ && LA114_0<=RULE_ID)) ) {
+                alt114=2;
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("", 115, 0, input);
+                    new NoViableAltException("", 114, 0, input);
 
                 throw nvae;
             }
-            switch (alt115) {
+            switch (alt114) {
                 case 1 :
                     // InternalSqlParser.g:5562:3: lv_op_0_1= ruleOpFunctionArgAgregate
                     {
@@ -14984,7 +14973,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             // InternalSqlParser.g:5616:1: (otherlv_0= CAST ( (lv_op_1_0= ruleOperandGroup ) ) otherlv_2= AS ( (lv_type_3_0= RULE_ID ) ) (otherlv_4= LeftParenthesis ( (lv_p_5_0= RULE_INT ) ) (otherlv_6= Comma ( (lv_p2_7_0= RULE_INT ) ) )? otherlv_8= RightParenthesis )? otherlv_9= RightParenthesis )
             // InternalSqlParser.g:5617:2: otherlv_0= CAST ( (lv_op_1_0= ruleOperandGroup ) ) otherlv_2= AS ( (lv_type_3_0= RULE_ID ) ) (otherlv_4= LeftParenthesis ( (lv_p_5_0= RULE_INT ) ) (otherlv_6= Comma ( (lv_p2_7_0= RULE_INT ) ) )? otherlv_8= RightParenthesis )? otherlv_9= RightParenthesis
             {
-            otherlv_0=(Token)match(input,CAST,FOLLOW_53); 
+            otherlv_0=(Token)match(input,CAST,FOLLOW_52); 
 
                 	newLeafNode(otherlv_0, grammarAccess.getOpFunctionCastAccess().getCASTKeyword_0());
                 
@@ -14997,7 +14986,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
              
             	        newCompositeNode(grammarAccess.getOpFunctionCastAccess().getOpOperandGroupParserRuleCall_1_0()); 
             	    
-            pushFollow(FOLLOW_77);
+            pushFollow(FOLLOW_76);
             lv_op_1_0=ruleOperandGroup();
 
             state._fsp--;
@@ -15019,7 +15008,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
 
             }
 
-            otherlv_2=(Token)match(input,AS,FOLLOW_38); 
+            otherlv_2=(Token)match(input,AS,FOLLOW_37); 
 
                 	newLeafNode(otherlv_2, grammarAccess.getOpFunctionCastAccess().getASKeyword_2());
                 
@@ -15029,7 +15018,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             // InternalSqlParser.g:5645:1: (lv_type_3_0= RULE_ID )
             // InternalSqlParser.g:5646:3: lv_type_3_0= RULE_ID
             {
-            lv_type_3_0=(Token)match(input,RULE_ID,FOLLOW_78); 
+            lv_type_3_0=(Token)match(input,RULE_ID,FOLLOW_77); 
 
             			newLeafNode(lv_type_3_0, grammarAccess.getOpFunctionCastAccess().getTypeIDTerminalRuleCall_3_0()); 
             		
@@ -15050,13 +15039,13 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             }
 
             // InternalSqlParser.g:5662:2: (otherlv_4= LeftParenthesis ( (lv_p_5_0= RULE_INT ) ) (otherlv_6= Comma ( (lv_p2_7_0= RULE_INT ) ) )? otherlv_8= RightParenthesis )?
-            int alt117=2;
-            int LA117_0 = input.LA(1);
+            int alt116=2;
+            int LA116_0 = input.LA(1);
 
-            if ( (LA117_0==LeftParenthesis) ) {
-                alt117=1;
+            if ( (LA116_0==LeftParenthesis) ) {
+                alt116=1;
             }
-            switch (alt117) {
+            switch (alt116) {
                 case 1 :
                     // InternalSqlParser.g:5663:2: otherlv_4= LeftParenthesis ( (lv_p_5_0= RULE_INT ) ) (otherlv_6= Comma ( (lv_p2_7_0= RULE_INT ) ) )? otherlv_8= RightParenthesis
                     {
@@ -15070,7 +15059,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     // InternalSqlParser.g:5668:1: (lv_p_5_0= RULE_INT )
                     // InternalSqlParser.g:5669:3: lv_p_5_0= RULE_INT
                     {
-                    lv_p_5_0=(Token)match(input,RULE_INT,FOLLOW_79); 
+                    lv_p_5_0=(Token)match(input,RULE_INT,FOLLOW_78); 
 
                     			newLeafNode(lv_p_5_0, grammarAccess.getOpFunctionCastAccess().getPINTTerminalRuleCall_4_1_0()); 
                     		
@@ -15091,13 +15080,13 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     }
 
                     // InternalSqlParser.g:5685:2: (otherlv_6= Comma ( (lv_p2_7_0= RULE_INT ) ) )?
-                    int alt116=2;
-                    int LA116_0 = input.LA(1);
+                    int alt115=2;
+                    int LA115_0 = input.LA(1);
 
-                    if ( (LA116_0==Comma) ) {
-                        alt116=1;
+                    if ( (LA115_0==Comma) ) {
+                        alt115=1;
                     }
-                    switch (alt116) {
+                    switch (alt115) {
                         case 1 :
                             // InternalSqlParser.g:5686:2: otherlv_6= Comma ( (lv_p2_7_0= RULE_INT ) )
                             {
@@ -15111,7 +15100,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                             // InternalSqlParser.g:5691:1: (lv_p2_7_0= RULE_INT )
                             // InternalSqlParser.g:5692:3: lv_p2_7_0= RULE_INT
                             {
-                            lv_p2_7_0=(Token)match(input,RULE_INT,FOLLOW_35); 
+                            lv_p2_7_0=(Token)match(input,RULE_INT,FOLLOW_34); 
 
                             			newLeafNode(lv_p2_7_0, grammarAccess.getOpFunctionCastAccess().getP2INTTerminalRuleCall_4_2_1_0()); 
                             		
@@ -15137,7 +15126,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
 
                     }
 
-                    otherlv_8=(Token)match(input,RightParenthesis,FOLLOW_35); 
+                    otherlv_8=(Token)match(input,RightParenthesis,FOLLOW_34); 
 
                         	newLeafNode(otherlv_8, grammarAccess.getOpFunctionCastAccess().getRightParenthesisKeyword_4_3());
                         
@@ -15227,26 +15216,26 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             // InternalSqlParser.g:5739:2: (otherlv_0= ALL | otherlv_1= DISTINCT ) this_Operand_2= ruleOperand
             {
             // InternalSqlParser.g:5739:2: (otherlv_0= ALL | otherlv_1= DISTINCT )
-            int alt118=2;
-            int LA118_0 = input.LA(1);
+            int alt117=2;
+            int LA117_0 = input.LA(1);
 
-            if ( (LA118_0==ALL) ) {
-                alt118=1;
+            if ( (LA117_0==ALL) ) {
+                alt117=1;
             }
-            else if ( (LA118_0==DISTINCT) ) {
-                alt118=2;
+            else if ( (LA117_0==DISTINCT) ) {
+                alt117=2;
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("", 118, 0, input);
+                    new NoViableAltException("", 117, 0, input);
 
                 throw nvae;
             }
-            switch (alt118) {
+            switch (alt117) {
                 case 1 :
                     // InternalSqlParser.g:5740:2: otherlv_0= ALL
                     {
-                    otherlv_0=(Token)match(input,ALL,FOLLOW_53); 
+                    otherlv_0=(Token)match(input,ALL,FOLLOW_52); 
 
                         	newLeafNode(otherlv_0, grammarAccess.getOpFunctionArgAgregateAccess().getALLKeyword_0_0());
                         
@@ -15256,7 +15245,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                 case 2 :
                     // InternalSqlParser.g:5746:2: otherlv_1= DISTINCT
                     {
-                    otherlv_1=(Token)match(input,DISTINCT,FOLLOW_53); 
+                    otherlv_1=(Token)match(input,DISTINCT,FOLLOW_52); 
 
                         	newLeafNode(otherlv_1, grammarAccess.getOpFunctionArgAgregateAccess().getDISTINCTKeyword_0_1());
                         
@@ -15353,16 +15342,16 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             // InternalSqlParser.g:5780:1: ( ( (lv_param_0_0= ruleParameterOperand ) ) | ( (lv_eparam_1_0= ruleExclamationParameterOperand ) ) | ( (lv_scalar_2_0= ruleScalarNumberOperand ) ) )
             {
             // InternalSqlParser.g:5780:1: ( ( (lv_param_0_0= ruleParameterOperand ) ) | ( (lv_eparam_1_0= ruleExclamationParameterOperand ) ) | ( (lv_scalar_2_0= ruleScalarNumberOperand ) ) )
-            int alt119=3;
+            int alt118=3;
             switch ( input.LA(1) ) {
             case RULE_JRPARAM:
                 {
-                alt119=1;
+                alt118=1;
                 }
                 break;
             case RULE_JRNPARAM:
                 {
-                alt119=2;
+                alt118=2;
                 }
                 break;
             case RULE_UNSIGNED:
@@ -15370,17 +15359,17 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             case RULE_SIGNED_DOUBLE:
             case RULE_STRING_:
                 {
-                alt119=3;
+                alt118=3;
                 }
                 break;
             default:
                 NoViableAltException nvae =
-                    new NoViableAltException("", 119, 0, input);
+                    new NoViableAltException("", 118, 0, input);
 
                 throw nvae;
             }
 
-            switch (alt119) {
+            switch (alt118) {
                 case 1 :
                     // InternalSqlParser.g:5780:2: ( (lv_param_0_0= ruleParameterOperand ) )
                     {
@@ -15759,7 +15748,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
              
             	        newCompositeNode(grammarAccess.getColumnOperandAccess().getCfullColumnFullParserRuleCall_0_0()); 
             	    
-            pushFollow(FOLLOW_80);
+            pushFollow(FOLLOW_79);
             lv_cfull_0_0=ruleColumnFull();
 
             state._fsp--;
@@ -15782,13 +15771,13 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             }
 
             // InternalSqlParser.g:5953:2: ( (lv_ora_1_0= LeftParenthesisPlusSignRightParenthesis ) )?
-            int alt120=2;
-            int LA120_0 = input.LA(1);
+            int alt119=2;
+            int LA119_0 = input.LA(1);
 
-            if ( (LA120_0==LeftParenthesisPlusSignRightParenthesis) ) {
-                alt120=1;
+            if ( (LA119_0==LeftParenthesisPlusSignRightParenthesis) ) {
+                alt119=1;
             }
-            switch (alt120) {
+            switch (alt119) {
                 case 1 :
                     // InternalSqlParser.g:5954:1: (lv_ora_1_0= LeftParenthesisPlusSignRightParenthesis )
                     {
@@ -15913,7 +15902,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
              
             	        newCompositeNode(grammarAccess.getSubQueryOperandAccess().getSelSelectQueryParserRuleCall_2_0()); 
             	    
-            pushFollow(FOLLOW_35);
+            pushFollow(FOLLOW_34);
             lv_sel_2_0=ruleSelectQuery();
 
             state._fsp--;
@@ -16014,41 +16003,41 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             // InternalSqlParser.g:6045:1: ( ( (lv_sostr_0_0= ruleStringOperand ) ) | ( (lv_sodbl_1_0= RULE_SIGNED_DOUBLE ) ) | ( (lv_sodate_2_0= RULE_DATE ) ) | ( (lv_sotime_3_0= RULE_TIME ) ) | ( (lv_sodt_4_0= RULE_TIMESTAMP ) ) )
             {
             // InternalSqlParser.g:6045:1: ( ( (lv_sostr_0_0= ruleStringOperand ) ) | ( (lv_sodbl_1_0= RULE_SIGNED_DOUBLE ) ) | ( (lv_sodate_2_0= RULE_DATE ) ) | ( (lv_sotime_3_0= RULE_TIME ) ) | ( (lv_sodt_4_0= RULE_TIMESTAMP ) ) )
-            int alt121=5;
+            int alt120=5;
             switch ( input.LA(1) ) {
             case RULE_STRING_:
                 {
-                alt121=1;
+                alt120=1;
                 }
                 break;
             case RULE_SIGNED_DOUBLE:
                 {
-                alt121=2;
+                alt120=2;
                 }
                 break;
             case RULE_DATE:
                 {
-                alt121=3;
+                alt120=3;
                 }
                 break;
             case RULE_TIME:
                 {
-                alt121=4;
+                alt120=4;
                 }
                 break;
             case RULE_TIMESTAMP:
                 {
-                alt121=5;
+                alt120=5;
                 }
                 break;
             default:
                 NoViableAltException nvae =
-                    new NoViableAltException("", 121, 0, input);
+                    new NoViableAltException("", 120, 0, input);
 
                 throw nvae;
             }
 
-            switch (alt121) {
+            switch (alt120) {
                 case 1 :
                     // InternalSqlParser.g:6045:2: ( (lv_sostr_0_0= ruleStringOperand ) )
                     {
@@ -16288,36 +16277,36 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             // InternalSqlParser.g:6160:1: ( ( (lv_soUInt_0_0= RULE_UNSIGNED ) ) | ( (lv_soint_1_0= RULE_INT ) ) | ( (lv_sodbl_2_0= RULE_SIGNED_DOUBLE ) ) | ( (lv_sostr_3_0= ruleStringOperand ) ) )
             {
             // InternalSqlParser.g:6160:1: ( ( (lv_soUInt_0_0= RULE_UNSIGNED ) ) | ( (lv_soint_1_0= RULE_INT ) ) | ( (lv_sodbl_2_0= RULE_SIGNED_DOUBLE ) ) | ( (lv_sostr_3_0= ruleStringOperand ) ) )
-            int alt122=4;
+            int alt121=4;
             switch ( input.LA(1) ) {
             case RULE_UNSIGNED:
                 {
-                alt122=1;
+                alt121=1;
                 }
                 break;
             case RULE_INT:
                 {
-                alt122=2;
+                alt121=2;
                 }
                 break;
             case RULE_SIGNED_DOUBLE:
                 {
-                alt122=3;
+                alt121=3;
                 }
                 break;
             case RULE_STRING_:
                 {
-                alt122=4;
+                alt121=4;
                 }
                 break;
             default:
                 NoViableAltException nvae =
-                    new NoViableAltException("", 122, 0, input);
+                    new NoViableAltException("", 121, 0, input);
 
                 throw nvae;
             }
 
-            switch (alt122) {
+            switch (alt121) {
                 case 1 :
                     // InternalSqlParser.g:6160:2: ( (lv_soUInt_0_0= RULE_UNSIGNED ) )
                     {
@@ -16528,18 +16517,18 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             // InternalSqlParser.g:6256:1: (otherlv_0= CASE ( (lv_expr_1_0= ruleFullExpression ) )? ( (lv_when_2_0= ruleSQLCaseWhens ) ) otherlv_3= END )
             // InternalSqlParser.g:6257:2: otherlv_0= CASE ( (lv_expr_1_0= ruleFullExpression ) )? ( (lv_when_2_0= ruleSQLCaseWhens ) ) otherlv_3= END
             {
-            otherlv_0=(Token)match(input,CASE,FOLLOW_81); 
+            otherlv_0=(Token)match(input,CASE,FOLLOW_80); 
 
                 	newLeafNode(otherlv_0, grammarAccess.getSQLCASEAccess().getCASEKeyword_0());
                 
             // InternalSqlParser.g:6261:1: ( (lv_expr_1_0= ruleFullExpression ) )?
-            int alt123=2;
-            int LA123_0 = input.LA(1);
+            int alt122=2;
+            int LA122_0 = input.LA(1);
 
-            if ( (LA123_0==NOTEXISTS||LA123_0==EXTRACT||LA123_0==EXISTS||LA123_0==NOTIN_1||LA123_0==CAST||LA123_0==CASE||(LA123_0>=NOT && LA123_0<=NOT_1)||LA123_0==X||LA123_0==IN||LA123_0==LeftParenthesis||(LA123_0>=RULE_JRPARAM && LA123_0<=RULE_JRNPARAM)||(LA123_0>=RULE_UNSIGNED && LA123_0<=RULE_SIGNED_DOUBLE)||(LA123_0>=RULE_STRING_ && LA123_0<=RULE_ID)) ) {
-                alt123=1;
+            if ( (LA122_0==NOTEXISTS||LA122_0==EXTRACT||LA122_0==EXISTS||LA122_0==NOTIN_1||LA122_0==CAST||LA122_0==CASE||(LA122_0>=NOT && LA122_0<=NOT_1)||LA122_0==X||LA122_0==IN||LA122_0==LeftParenthesis||(LA122_0>=RULE_JRPARAM && LA122_0<=RULE_JRNPARAM)||(LA122_0>=RULE_UNSIGNED && LA122_0<=RULE_SIGNED_DOUBLE)||(LA122_0>=RULE_STRING_ && LA122_0<=RULE_ID)) ) {
+                alt122=1;
             }
-            switch (alt123) {
+            switch (alt122) {
                 case 1 :
                     // InternalSqlParser.g:6262:1: (lv_expr_1_0= ruleFullExpression )
                     {
@@ -16549,7 +16538,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                      
                     	        newCompositeNode(grammarAccess.getSQLCASEAccess().getExprFullExpressionParserRuleCall_1_0()); 
                     	    
-                    pushFollow(FOLLOW_81);
+                    pushFollow(FOLLOW_80);
                     lv_expr_1_0=ruleFullExpression();
 
                     state._fsp--;
@@ -16583,7 +16572,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
              
             	        newCompositeNode(grammarAccess.getSQLCASEAccess().getWhenSQLCaseWhensParserRuleCall_2_0()); 
             	    
-            pushFollow(FOLLOW_82);
+            pushFollow(FOLLOW_81);
             lv_when_2_0=ruleSQLCaseWhens();
 
             state._fsp--;
@@ -16687,7 +16676,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
              
                     newCompositeNode(grammarAccess.getSQLCaseWhensAccess().getSqlCaseWhenParserRuleCall_0()); 
                 
-            pushFollow(FOLLOW_83);
+            pushFollow(FOLLOW_82);
             this_SqlCaseWhen_0=ruleSqlCaseWhen();
 
             state._fsp--;
@@ -16697,13 +16686,13 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     afterParserOrEnumRuleCall();
                 
             // InternalSqlParser.g:6332:1: ( () ( (lv_entries_2_0= ruleSqlCaseWhen ) )+ )?
-            int alt125=2;
-            int LA125_0 = input.LA(1);
+            int alt124=2;
+            int LA124_0 = input.LA(1);
 
-            if ( (LA125_0==WHEN) ) {
-                alt125=1;
+            if ( (LA124_0==WHEN) ) {
+                alt124=1;
             }
-            switch (alt125) {
+            switch (alt124) {
                 case 1 :
                     // InternalSqlParser.g:6332:2: () ( (lv_entries_2_0= ruleSqlCaseWhen ) )+
                     {
@@ -16719,18 +16708,18 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     }
 
                     // InternalSqlParser.g:6338:2: ( (lv_entries_2_0= ruleSqlCaseWhen ) )+
-                    int cnt124=0;
-                    loop124:
+                    int cnt123=0;
+                    loop123:
                     do {
-                        int alt124=2;
-                        int LA124_0 = input.LA(1);
+                        int alt123=2;
+                        int LA123_0 = input.LA(1);
 
-                        if ( (LA124_0==WHEN) ) {
-                            alt124=1;
+                        if ( (LA123_0==WHEN) ) {
+                            alt123=1;
                         }
 
 
-                        switch (alt124) {
+                        switch (alt123) {
                     	case 1 :
                     	    // InternalSqlParser.g:6339:1: (lv_entries_2_0= ruleSqlCaseWhen )
                     	    {
@@ -16740,7 +16729,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     	     
                     	    	        newCompositeNode(grammarAccess.getSQLCaseWhensAccess().getEntriesSqlCaseWhenParserRuleCall_1_1_0()); 
                     	    	    
-                    	    pushFollow(FOLLOW_83);
+                    	    pushFollow(FOLLOW_82);
                     	    lv_entries_2_0=ruleSqlCaseWhen();
 
                     	    state._fsp--;
@@ -16764,12 +16753,12 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     	    break;
 
                     	default :
-                    	    if ( cnt124 >= 1 ) break loop124;
+                    	    if ( cnt123 >= 1 ) break loop123;
                                 EarlyExitException eee =
-                                    new EarlyExitException(124, input);
+                                    new EarlyExitException(123, input);
                                 throw eee;
                         }
-                        cnt124++;
+                        cnt123++;
                     } while (true);
 
 
@@ -16871,7 +16860,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
              
             	        newCompositeNode(grammarAccess.getSqlCaseWhenAccess().getExprFullExpressionParserRuleCall_1_0()); 
             	    
-            pushFollow(FOLLOW_84);
+            pushFollow(FOLLOW_83);
             lv_expr_1_0=ruleFullExpression();
 
             state._fsp--;
@@ -16893,7 +16882,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
 
             }
 
-            otherlv_2=(Token)match(input,THEN,FOLLOW_53); 
+            otherlv_2=(Token)match(input,THEN,FOLLOW_52); 
 
                 	newLeafNode(otherlv_2, grammarAccess.getSqlCaseWhenAccess().getTHENKeyword_2());
                 
@@ -16906,7 +16895,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
              
             	        newCompositeNode(grammarAccess.getSqlCaseWhenAccess().getTexpOperandGroupParserRuleCall_3_0()); 
             	    
-            pushFollow(FOLLOW_85);
+            pushFollow(FOLLOW_84);
             lv_texp_3_0=ruleOperandGroup();
 
             state._fsp--;
@@ -16929,17 +16918,17 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             }
 
             // InternalSqlParser.g:6423:2: (otherlv_4= ELSE ( (lv_eexp_5_0= ruleOperandGroup ) ) )?
-            int alt126=2;
-            int LA126_0 = input.LA(1);
+            int alt125=2;
+            int LA125_0 = input.LA(1);
 
-            if ( (LA126_0==ELSE) ) {
-                alt126=1;
+            if ( (LA125_0==ELSE) ) {
+                alt125=1;
             }
-            switch (alt126) {
+            switch (alt125) {
                 case 1 :
                     // InternalSqlParser.g:6424:2: otherlv_4= ELSE ( (lv_eexp_5_0= ruleOperandGroup ) )
                     {
-                    otherlv_4=(Token)match(input,ELSE,FOLLOW_53); 
+                    otherlv_4=(Token)match(input,ELSE,FOLLOW_52); 
 
                         	newLeafNode(otherlv_4, grammarAccess.getSqlCaseWhenAccess().getELSEKeyword_4_0());
                         
@@ -17053,17 +17042,17 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             // InternalSqlParser.g:6468:2: (kw= NATURAL )? (kw= INNER | ( (kw= LEFT | kw= RIGHT | kw= FULL ) (kw= OUTER )? ) | kw= CROSS | kw= STRAIGHT_JOIN )? kw= JOIN
             {
             // InternalSqlParser.g:6468:2: (kw= NATURAL )?
-            int alt127=2;
-            int LA127_0 = input.LA(1);
+            int alt126=2;
+            int LA126_0 = input.LA(1);
 
-            if ( (LA127_0==NATURAL) ) {
-                alt127=1;
+            if ( (LA126_0==NATURAL) ) {
+                alt126=1;
             }
-            switch (alt127) {
+            switch (alt126) {
                 case 1 :
                     // InternalSqlParser.g:6469:2: kw= NATURAL
                     {
-                    kw=(Token)match(input,NATURAL,FOLLOW_86); 
+                    kw=(Token)match(input,NATURAL,FOLLOW_85); 
 
                             current.merge(kw);
                             newLeafNode(kw, grammarAccess.getJoinTypeAccess().getNATURALKeyword_0()); 
@@ -17075,37 +17064,37 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             }
 
             // InternalSqlParser.g:6474:3: (kw= INNER | ( (kw= LEFT | kw= RIGHT | kw= FULL ) (kw= OUTER )? ) | kw= CROSS | kw= STRAIGHT_JOIN )?
-            int alt130=5;
+            int alt129=5;
             switch ( input.LA(1) ) {
                 case INNER:
                     {
-                    alt130=1;
+                    alt129=1;
                     }
                     break;
                 case RIGHT:
                 case FULL:
                 case LEFT:
                     {
-                    alt130=2;
+                    alt129=2;
                     }
                     break;
                 case CROSS:
                     {
-                    alt130=3;
+                    alt129=3;
                     }
                     break;
                 case STRAIGHT_JOIN:
                     {
-                    alt130=4;
+                    alt129=4;
                     }
                     break;
             }
 
-            switch (alt130) {
+            switch (alt129) {
                 case 1 :
                     // InternalSqlParser.g:6475:2: kw= INNER
                     {
-                    kw=(Token)match(input,INNER,FOLLOW_87); 
+                    kw=(Token)match(input,INNER,FOLLOW_86); 
 
                             current.merge(kw);
                             newLeafNode(kw, grammarAccess.getJoinTypeAccess().getINNERKeyword_1_0()); 
@@ -17120,35 +17109,35 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     // InternalSqlParser.g:6481:7: (kw= LEFT | kw= RIGHT | kw= FULL ) (kw= OUTER )?
                     {
                     // InternalSqlParser.g:6481:7: (kw= LEFT | kw= RIGHT | kw= FULL )
-                    int alt128=3;
+                    int alt127=3;
                     switch ( input.LA(1) ) {
                     case LEFT:
                         {
-                        alt128=1;
+                        alt127=1;
                         }
                         break;
                     case RIGHT:
                         {
-                        alt128=2;
+                        alt127=2;
                         }
                         break;
                     case FULL:
                         {
-                        alt128=3;
+                        alt127=3;
                         }
                         break;
                     default:
                         NoViableAltException nvae =
-                            new NoViableAltException("", 128, 0, input);
+                            new NoViableAltException("", 127, 0, input);
 
                         throw nvae;
                     }
 
-                    switch (alt128) {
+                    switch (alt127) {
                         case 1 :
                             // InternalSqlParser.g:6482:2: kw= LEFT
                             {
-                            kw=(Token)match(input,LEFT,FOLLOW_88); 
+                            kw=(Token)match(input,LEFT,FOLLOW_87); 
 
                                     current.merge(kw);
                                     newLeafNode(kw, grammarAccess.getJoinTypeAccess().getLEFTKeyword_1_1_0_0()); 
@@ -17159,7 +17148,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                         case 2 :
                             // InternalSqlParser.g:6489:2: kw= RIGHT
                             {
-                            kw=(Token)match(input,RIGHT,FOLLOW_88); 
+                            kw=(Token)match(input,RIGHT,FOLLOW_87); 
 
                                     current.merge(kw);
                                     newLeafNode(kw, grammarAccess.getJoinTypeAccess().getRIGHTKeyword_1_1_0_1()); 
@@ -17170,7 +17159,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                         case 3 :
                             // InternalSqlParser.g:6496:2: kw= FULL
                             {
-                            kw=(Token)match(input,FULL,FOLLOW_88); 
+                            kw=(Token)match(input,FULL,FOLLOW_87); 
 
                                     current.merge(kw);
                                     newLeafNode(kw, grammarAccess.getJoinTypeAccess().getFULLKeyword_1_1_0_2()); 
@@ -17182,17 +17171,17 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     }
 
                     // InternalSqlParser.g:6501:2: (kw= OUTER )?
-                    int alt129=2;
-                    int LA129_0 = input.LA(1);
+                    int alt128=2;
+                    int LA128_0 = input.LA(1);
 
-                    if ( (LA129_0==OUTER) ) {
-                        alt129=1;
+                    if ( (LA128_0==OUTER) ) {
+                        alt128=1;
                     }
-                    switch (alt129) {
+                    switch (alt128) {
                         case 1 :
                             // InternalSqlParser.g:6502:2: kw= OUTER
                             {
-                            kw=(Token)match(input,OUTER,FOLLOW_87); 
+                            kw=(Token)match(input,OUTER,FOLLOW_86); 
 
                                     current.merge(kw);
                                     newLeafNode(kw, grammarAccess.getJoinTypeAccess().getOUTERKeyword_1_1_1()); 
@@ -17212,7 +17201,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                 case 3 :
                     // InternalSqlParser.g:6509:2: kw= CROSS
                     {
-                    kw=(Token)match(input,CROSS,FOLLOW_87); 
+                    kw=(Token)match(input,CROSS,FOLLOW_86); 
 
                             current.merge(kw);
                             newLeafNode(kw, grammarAccess.getJoinTypeAccess().getCROSSKeyword_1_2()); 
@@ -17223,7 +17212,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                 case 4 :
                     // InternalSqlParser.g:6516:2: kw= STRAIGHT_JOIN
                     {
-                    kw=(Token)match(input,STRAIGHT_JOIN,FOLLOW_87); 
+                    kw=(Token)match(input,STRAIGHT_JOIN,FOLLOW_86); 
 
                             current.merge(kw);
                             newLeafNode(kw, grammarAccess.getJoinTypeAccess().getSTRAIGHT_JOINKeyword_1_3()); 
@@ -17312,31 +17301,31 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             // InternalSqlParser.g:6549:1: (this_ID_0= RULE_ID | this_DBNAME_1= RULE_DBNAME | this_STRING_2= RULE_STRING )
             {
             // InternalSqlParser.g:6549:1: (this_ID_0= RULE_ID | this_DBNAME_1= RULE_DBNAME | this_STRING_2= RULE_STRING )
-            int alt131=3;
+            int alt130=3;
             switch ( input.LA(1) ) {
             case RULE_ID:
                 {
-                alt131=1;
+                alt130=1;
                 }
                 break;
             case RULE_DBNAME:
                 {
-                alt131=2;
+                alt130=2;
                 }
                 break;
             case RULE_STRING:
                 {
-                alt131=3;
+                alt130=3;
                 }
                 break;
             default:
                 NoViableAltException nvae =
-                    new NoViableAltException("", 131, 0, input);
+                    new NoViableAltException("", 130, 0, input);
 
                 throw nvae;
             }
 
-            switch (alt131) {
+            switch (alt130) {
                 case 1 :
                     // InternalSqlParser.g:6549:6: this_ID_0= RULE_ID
                     {
@@ -17524,7 +17513,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             // InternalSqlParser.g:6623:1: (this_ID_0= RULE_ID kw= LeftParenthesis )
             // InternalSqlParser.g:6623:6: this_ID_0= RULE_ID kw= LeftParenthesis
             {
-            this_ID_0=(Token)match(input,RULE_ID,FOLLOW_34); 
+            this_ID_0=(Token)match(input,RULE_ID,FOLLOW_33); 
 
             		current.merge(this_ID_0);
                 
@@ -17557,25 +17546,25 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
     // $ANTLR end "ruleFNAME"
 
 
-    // $ANTLR start "entryRuleIntegerValue"
-    // InternalSqlParser.g:6644:1: entryRuleIntegerValue returns [EObject current=null] : iv_ruleIntegerValue= ruleIntegerValue EOF ;
-    public final EObject entryRuleIntegerValue() throws RecognitionException {
+    // $ANTLR start "entryRuleUnsignedValue"
+    // InternalSqlParser.g:6646:1: entryRuleUnsignedValue returns [EObject current=null] : iv_ruleUnsignedValue= ruleUnsignedValue EOF ;
+    public final EObject entryRuleUnsignedValue() throws RecognitionException {
         EObject current = null;
 
-        EObject iv_ruleIntegerValue = null;
+        EObject iv_ruleUnsignedValue = null;
 
 
         try {
-            // InternalSqlParser.g:6645:2: (iv_ruleIntegerValue= ruleIntegerValue EOF )
-            // InternalSqlParser.g:6646:2: iv_ruleIntegerValue= ruleIntegerValue EOF
+            // InternalSqlParser.g:6647:2: (iv_ruleUnsignedValue= ruleUnsignedValue EOF )
+            // InternalSqlParser.g:6648:2: iv_ruleUnsignedValue= ruleUnsignedValue EOF
             {
-             newCompositeNode(grammarAccess.getIntegerValueRule()); 
+             newCompositeNode(grammarAccess.getUnsignedValueRule()); 
             pushFollow(FOLLOW_1);
-            iv_ruleIntegerValue=ruleIntegerValue();
+            iv_ruleUnsignedValue=ruleUnsignedValue();
 
             state._fsp--;
 
-             current =iv_ruleIntegerValue; 
+             current =iv_ruleUnsignedValue; 
             match(input,EOF,FOLLOW_2); 
 
             }
@@ -17590,12 +17579,12 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
         }
         return current;
     }
-    // $ANTLR end "entryRuleIntegerValue"
+    // $ANTLR end "entryRuleUnsignedValue"
 
 
-    // $ANTLR start "ruleIntegerValue"
-    // InternalSqlParser.g:6653:1: ruleIntegerValue returns [EObject current=null] : ( (lv_integer_0_0= RULE_INT ) ) ;
-    public final EObject ruleIntegerValue() throws RecognitionException {
+    // $ANTLR start "ruleUnsignedValue"
+    // InternalSqlParser.g:6655:1: ruleUnsignedValue returns [EObject current=null] : ( (lv_integer_0_0= RULE_UNSIGNED ) ) ;
+    public final EObject ruleUnsignedValue() throws RecognitionException {
         EObject current = null;
 
         Token lv_integer_0_0=null;
@@ -17603,28 +17592,28 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
          enterRule(); 
             
         try {
-            // InternalSqlParser.g:6656:28: ( ( (lv_integer_0_0= RULE_INT ) ) )
-            // InternalSqlParser.g:6657:1: ( (lv_integer_0_0= RULE_INT ) )
+            // InternalSqlParser.g:6658:28: ( ( (lv_integer_0_0= RULE_UNSIGNED ) ) )
+            // InternalSqlParser.g:6659:1: ( (lv_integer_0_0= RULE_UNSIGNED ) )
             {
-            // InternalSqlParser.g:6657:1: ( (lv_integer_0_0= RULE_INT ) )
-            // InternalSqlParser.g:6658:1: (lv_integer_0_0= RULE_INT )
+            // InternalSqlParser.g:6659:1: ( (lv_integer_0_0= RULE_UNSIGNED ) )
+            // InternalSqlParser.g:6660:1: (lv_integer_0_0= RULE_UNSIGNED )
             {
-            // InternalSqlParser.g:6658:1: (lv_integer_0_0= RULE_INT )
-            // InternalSqlParser.g:6659:3: lv_integer_0_0= RULE_INT
+            // InternalSqlParser.g:6660:1: (lv_integer_0_0= RULE_UNSIGNED )
+            // InternalSqlParser.g:6661:3: lv_integer_0_0= RULE_UNSIGNED
             {
-            lv_integer_0_0=(Token)match(input,RULE_INT,FOLLOW_2); 
+            lv_integer_0_0=(Token)match(input,RULE_UNSIGNED,FOLLOW_2); 
 
-            			newLeafNode(lv_integer_0_0, grammarAccess.getIntegerValueAccess().getIntegerINTTerminalRuleCall_0()); 
+            			newLeafNode(lv_integer_0_0, grammarAccess.getUnsignedValueAccess().getIntegerUNSIGNEDTerminalRuleCall_0()); 
             		
 
             	        if (current==null) {
-            	            current = createModelElement(grammarAccess.getIntegerValueRule());
+            	            current = createModelElement(grammarAccess.getUnsignedValueRule());
             	        }
                    		setWithLastConsumed(
                    			current, 
                    			"integer",
                     		lv_integer_0_0, 
-                    		"com.jaspersoft.studio.data.Sql.INT");
+                    		"com.jaspersoft.studio.data.Sql.UNSIGNED");
             	    
 
             }
@@ -17646,11 +17635,11 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
         }
         return current;
     }
-    // $ANTLR end "ruleIntegerValue"
+    // $ANTLR end "ruleUnsignedValue"
 
 
     // $ANTLR start "ruleEXTRACT_VALUES"
-    // InternalSqlParser.g:6683:1: ruleEXTRACT_VALUES returns [Enumerator current=null] : ( (enumLiteral_0= MICROSECOND ) | (enumLiteral_1= SECOND ) | (enumLiteral_2= MINUTE ) | (enumLiteral_3= HOUR ) | (enumLiteral_4= DAY ) | (enumLiteral_5= WEEK ) | (enumLiteral_6= MONTH ) | (enumLiteral_7= QUARTER ) | (enumLiteral_8= YEAR ) | (enumLiteral_9= SECOND_MICROSECOND ) | (enumLiteral_10= MINUTE_MICROSECOND ) | (enumLiteral_11= MINUTE_SECOND ) | (enumLiteral_12= HOUR_MICROSECOND ) | (enumLiteral_13= HOUR_SECOND ) | (enumLiteral_14= HOUR_MINUTE ) | (enumLiteral_15= DAY_MICROSECOND ) | (enumLiteral_16= DAY_SECOND ) | (enumLiteral_17= DAY_MINUTE ) | (enumLiteral_18= DAY_HOUR ) | (enumLiteral_19= YEAR_MONTH ) ) ;
+    // InternalSqlParser.g:6685:1: ruleEXTRACT_VALUES returns [Enumerator current=null] : ( (enumLiteral_0= MICROSECOND ) | (enumLiteral_1= SECOND ) | (enumLiteral_2= MINUTE ) | (enumLiteral_3= HOUR ) | (enumLiteral_4= DAY ) | (enumLiteral_5= WEEK ) | (enumLiteral_6= MONTH ) | (enumLiteral_7= QUARTER ) | (enumLiteral_8= YEAR ) | (enumLiteral_9= SECOND_MICROSECOND ) | (enumLiteral_10= MINUTE_MICROSECOND ) | (enumLiteral_11= MINUTE_SECOND ) | (enumLiteral_12= HOUR_MICROSECOND ) | (enumLiteral_13= HOUR_SECOND ) | (enumLiteral_14= HOUR_MINUTE ) | (enumLiteral_15= DAY_MICROSECOND ) | (enumLiteral_16= DAY_SECOND ) | (enumLiteral_17= DAY_MINUTE ) | (enumLiteral_18= DAY_HOUR ) | (enumLiteral_19= YEAR_MONTH ) ) ;
     public final Enumerator ruleEXTRACT_VALUES() throws RecognitionException {
         Enumerator current = null;
 
@@ -17677,125 +17666,125 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
 
          enterRule(); 
         try {
-            // InternalSqlParser.g:6685:28: ( ( (enumLiteral_0= MICROSECOND ) | (enumLiteral_1= SECOND ) | (enumLiteral_2= MINUTE ) | (enumLiteral_3= HOUR ) | (enumLiteral_4= DAY ) | (enumLiteral_5= WEEK ) | (enumLiteral_6= MONTH ) | (enumLiteral_7= QUARTER ) | (enumLiteral_8= YEAR ) | (enumLiteral_9= SECOND_MICROSECOND ) | (enumLiteral_10= MINUTE_MICROSECOND ) | (enumLiteral_11= MINUTE_SECOND ) | (enumLiteral_12= HOUR_MICROSECOND ) | (enumLiteral_13= HOUR_SECOND ) | (enumLiteral_14= HOUR_MINUTE ) | (enumLiteral_15= DAY_MICROSECOND ) | (enumLiteral_16= DAY_SECOND ) | (enumLiteral_17= DAY_MINUTE ) | (enumLiteral_18= DAY_HOUR ) | (enumLiteral_19= YEAR_MONTH ) ) )
-            // InternalSqlParser.g:6686:1: ( (enumLiteral_0= MICROSECOND ) | (enumLiteral_1= SECOND ) | (enumLiteral_2= MINUTE ) | (enumLiteral_3= HOUR ) | (enumLiteral_4= DAY ) | (enumLiteral_5= WEEK ) | (enumLiteral_6= MONTH ) | (enumLiteral_7= QUARTER ) | (enumLiteral_8= YEAR ) | (enumLiteral_9= SECOND_MICROSECOND ) | (enumLiteral_10= MINUTE_MICROSECOND ) | (enumLiteral_11= MINUTE_SECOND ) | (enumLiteral_12= HOUR_MICROSECOND ) | (enumLiteral_13= HOUR_SECOND ) | (enumLiteral_14= HOUR_MINUTE ) | (enumLiteral_15= DAY_MICROSECOND ) | (enumLiteral_16= DAY_SECOND ) | (enumLiteral_17= DAY_MINUTE ) | (enumLiteral_18= DAY_HOUR ) | (enumLiteral_19= YEAR_MONTH ) )
+            // InternalSqlParser.g:6687:28: ( ( (enumLiteral_0= MICROSECOND ) | (enumLiteral_1= SECOND ) | (enumLiteral_2= MINUTE ) | (enumLiteral_3= HOUR ) | (enumLiteral_4= DAY ) | (enumLiteral_5= WEEK ) | (enumLiteral_6= MONTH ) | (enumLiteral_7= QUARTER ) | (enumLiteral_8= YEAR ) | (enumLiteral_9= SECOND_MICROSECOND ) | (enumLiteral_10= MINUTE_MICROSECOND ) | (enumLiteral_11= MINUTE_SECOND ) | (enumLiteral_12= HOUR_MICROSECOND ) | (enumLiteral_13= HOUR_SECOND ) | (enumLiteral_14= HOUR_MINUTE ) | (enumLiteral_15= DAY_MICROSECOND ) | (enumLiteral_16= DAY_SECOND ) | (enumLiteral_17= DAY_MINUTE ) | (enumLiteral_18= DAY_HOUR ) | (enumLiteral_19= YEAR_MONTH ) ) )
+            // InternalSqlParser.g:6688:1: ( (enumLiteral_0= MICROSECOND ) | (enumLiteral_1= SECOND ) | (enumLiteral_2= MINUTE ) | (enumLiteral_3= HOUR ) | (enumLiteral_4= DAY ) | (enumLiteral_5= WEEK ) | (enumLiteral_6= MONTH ) | (enumLiteral_7= QUARTER ) | (enumLiteral_8= YEAR ) | (enumLiteral_9= SECOND_MICROSECOND ) | (enumLiteral_10= MINUTE_MICROSECOND ) | (enumLiteral_11= MINUTE_SECOND ) | (enumLiteral_12= HOUR_MICROSECOND ) | (enumLiteral_13= HOUR_SECOND ) | (enumLiteral_14= HOUR_MINUTE ) | (enumLiteral_15= DAY_MICROSECOND ) | (enumLiteral_16= DAY_SECOND ) | (enumLiteral_17= DAY_MINUTE ) | (enumLiteral_18= DAY_HOUR ) | (enumLiteral_19= YEAR_MONTH ) )
             {
-            // InternalSqlParser.g:6686:1: ( (enumLiteral_0= MICROSECOND ) | (enumLiteral_1= SECOND ) | (enumLiteral_2= MINUTE ) | (enumLiteral_3= HOUR ) | (enumLiteral_4= DAY ) | (enumLiteral_5= WEEK ) | (enumLiteral_6= MONTH ) | (enumLiteral_7= QUARTER ) | (enumLiteral_8= YEAR ) | (enumLiteral_9= SECOND_MICROSECOND ) | (enumLiteral_10= MINUTE_MICROSECOND ) | (enumLiteral_11= MINUTE_SECOND ) | (enumLiteral_12= HOUR_MICROSECOND ) | (enumLiteral_13= HOUR_SECOND ) | (enumLiteral_14= HOUR_MINUTE ) | (enumLiteral_15= DAY_MICROSECOND ) | (enumLiteral_16= DAY_SECOND ) | (enumLiteral_17= DAY_MINUTE ) | (enumLiteral_18= DAY_HOUR ) | (enumLiteral_19= YEAR_MONTH ) )
-            int alt132=20;
+            // InternalSqlParser.g:6688:1: ( (enumLiteral_0= MICROSECOND ) | (enumLiteral_1= SECOND ) | (enumLiteral_2= MINUTE ) | (enumLiteral_3= HOUR ) | (enumLiteral_4= DAY ) | (enumLiteral_5= WEEK ) | (enumLiteral_6= MONTH ) | (enumLiteral_7= QUARTER ) | (enumLiteral_8= YEAR ) | (enumLiteral_9= SECOND_MICROSECOND ) | (enumLiteral_10= MINUTE_MICROSECOND ) | (enumLiteral_11= MINUTE_SECOND ) | (enumLiteral_12= HOUR_MICROSECOND ) | (enumLiteral_13= HOUR_SECOND ) | (enumLiteral_14= HOUR_MINUTE ) | (enumLiteral_15= DAY_MICROSECOND ) | (enumLiteral_16= DAY_SECOND ) | (enumLiteral_17= DAY_MINUTE ) | (enumLiteral_18= DAY_HOUR ) | (enumLiteral_19= YEAR_MONTH ) )
+            int alt131=20;
             switch ( input.LA(1) ) {
             case MICROSECOND:
                 {
-                alt132=1;
+                alt131=1;
                 }
                 break;
             case SECOND:
                 {
-                alt132=2;
+                alt131=2;
                 }
                 break;
             case MINUTE:
                 {
-                alt132=3;
+                alt131=3;
                 }
                 break;
             case HOUR:
                 {
-                alt132=4;
+                alt131=4;
                 }
                 break;
             case DAY:
                 {
-                alt132=5;
+                alt131=5;
                 }
                 break;
             case WEEK:
                 {
-                alt132=6;
+                alt131=6;
                 }
                 break;
             case MONTH:
                 {
-                alt132=7;
+                alt131=7;
                 }
                 break;
             case QUARTER:
                 {
-                alt132=8;
+                alt131=8;
                 }
                 break;
             case YEAR:
                 {
-                alt132=9;
+                alt131=9;
                 }
                 break;
             case SECOND_MICROSECOND:
                 {
-                alt132=10;
+                alt131=10;
                 }
                 break;
             case MINUTE_MICROSECOND:
                 {
-                alt132=11;
+                alt131=11;
                 }
                 break;
             case MINUTE_SECOND:
                 {
-                alt132=12;
+                alt131=12;
                 }
                 break;
             case HOUR_MICROSECOND:
                 {
-                alt132=13;
+                alt131=13;
                 }
                 break;
             case HOUR_SECOND:
                 {
-                alt132=14;
+                alt131=14;
                 }
                 break;
             case HOUR_MINUTE:
                 {
-                alt132=15;
+                alt131=15;
                 }
                 break;
             case DAY_MICROSECOND:
                 {
-                alt132=16;
+                alt131=16;
                 }
                 break;
             case DAY_SECOND:
                 {
-                alt132=17;
+                alt131=17;
                 }
                 break;
             case DAY_MINUTE:
                 {
-                alt132=18;
+                alt131=18;
                 }
                 break;
             case DAY_HOUR:
                 {
-                alt132=19;
+                alt131=19;
                 }
                 break;
             case YEAR_MONTH:
                 {
-                alt132=20;
+                alt131=20;
                 }
                 break;
             default:
                 NoViableAltException nvae =
-                    new NoViableAltException("", 132, 0, input);
+                    new NoViableAltException("", 131, 0, input);
 
                 throw nvae;
             }
 
-            switch (alt132) {
+            switch (alt131) {
                 case 1 :
-                    // InternalSqlParser.g:6686:2: (enumLiteral_0= MICROSECOND )
+                    // InternalSqlParser.g:6688:2: (enumLiteral_0= MICROSECOND )
                     {
-                    // InternalSqlParser.g:6686:2: (enumLiteral_0= MICROSECOND )
-                    // InternalSqlParser.g:6686:7: enumLiteral_0= MICROSECOND
+                    // InternalSqlParser.g:6688:2: (enumLiteral_0= MICROSECOND )
+                    // InternalSqlParser.g:6688:7: enumLiteral_0= MICROSECOND
                     {
                     enumLiteral_0=(Token)match(input,MICROSECOND,FOLLOW_2); 
 
@@ -17809,10 +17798,10 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 2 :
-                    // InternalSqlParser.g:6692:6: (enumLiteral_1= SECOND )
+                    // InternalSqlParser.g:6694:6: (enumLiteral_1= SECOND )
                     {
-                    // InternalSqlParser.g:6692:6: (enumLiteral_1= SECOND )
-                    // InternalSqlParser.g:6692:11: enumLiteral_1= SECOND
+                    // InternalSqlParser.g:6694:6: (enumLiteral_1= SECOND )
+                    // InternalSqlParser.g:6694:11: enumLiteral_1= SECOND
                     {
                     enumLiteral_1=(Token)match(input,SECOND,FOLLOW_2); 
 
@@ -17826,10 +17815,10 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 3 :
-                    // InternalSqlParser.g:6698:6: (enumLiteral_2= MINUTE )
+                    // InternalSqlParser.g:6700:6: (enumLiteral_2= MINUTE )
                     {
-                    // InternalSqlParser.g:6698:6: (enumLiteral_2= MINUTE )
-                    // InternalSqlParser.g:6698:11: enumLiteral_2= MINUTE
+                    // InternalSqlParser.g:6700:6: (enumLiteral_2= MINUTE )
+                    // InternalSqlParser.g:6700:11: enumLiteral_2= MINUTE
                     {
                     enumLiteral_2=(Token)match(input,MINUTE,FOLLOW_2); 
 
@@ -17843,10 +17832,10 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 4 :
-                    // InternalSqlParser.g:6704:6: (enumLiteral_3= HOUR )
+                    // InternalSqlParser.g:6706:6: (enumLiteral_3= HOUR )
                     {
-                    // InternalSqlParser.g:6704:6: (enumLiteral_3= HOUR )
-                    // InternalSqlParser.g:6704:11: enumLiteral_3= HOUR
+                    // InternalSqlParser.g:6706:6: (enumLiteral_3= HOUR )
+                    // InternalSqlParser.g:6706:11: enumLiteral_3= HOUR
                     {
                     enumLiteral_3=(Token)match(input,HOUR,FOLLOW_2); 
 
@@ -17860,10 +17849,10 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 5 :
-                    // InternalSqlParser.g:6710:6: (enumLiteral_4= DAY )
+                    // InternalSqlParser.g:6712:6: (enumLiteral_4= DAY )
                     {
-                    // InternalSqlParser.g:6710:6: (enumLiteral_4= DAY )
-                    // InternalSqlParser.g:6710:11: enumLiteral_4= DAY
+                    // InternalSqlParser.g:6712:6: (enumLiteral_4= DAY )
+                    // InternalSqlParser.g:6712:11: enumLiteral_4= DAY
                     {
                     enumLiteral_4=(Token)match(input,DAY,FOLLOW_2); 
 
@@ -17877,10 +17866,10 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 6 :
-                    // InternalSqlParser.g:6716:6: (enumLiteral_5= WEEK )
+                    // InternalSqlParser.g:6718:6: (enumLiteral_5= WEEK )
                     {
-                    // InternalSqlParser.g:6716:6: (enumLiteral_5= WEEK )
-                    // InternalSqlParser.g:6716:11: enumLiteral_5= WEEK
+                    // InternalSqlParser.g:6718:6: (enumLiteral_5= WEEK )
+                    // InternalSqlParser.g:6718:11: enumLiteral_5= WEEK
                     {
                     enumLiteral_5=(Token)match(input,WEEK,FOLLOW_2); 
 
@@ -17894,10 +17883,10 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 7 :
-                    // InternalSqlParser.g:6722:6: (enumLiteral_6= MONTH )
+                    // InternalSqlParser.g:6724:6: (enumLiteral_6= MONTH )
                     {
-                    // InternalSqlParser.g:6722:6: (enumLiteral_6= MONTH )
-                    // InternalSqlParser.g:6722:11: enumLiteral_6= MONTH
+                    // InternalSqlParser.g:6724:6: (enumLiteral_6= MONTH )
+                    // InternalSqlParser.g:6724:11: enumLiteral_6= MONTH
                     {
                     enumLiteral_6=(Token)match(input,MONTH,FOLLOW_2); 
 
@@ -17911,10 +17900,10 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 8 :
-                    // InternalSqlParser.g:6728:6: (enumLiteral_7= QUARTER )
+                    // InternalSqlParser.g:6730:6: (enumLiteral_7= QUARTER )
                     {
-                    // InternalSqlParser.g:6728:6: (enumLiteral_7= QUARTER )
-                    // InternalSqlParser.g:6728:11: enumLiteral_7= QUARTER
+                    // InternalSqlParser.g:6730:6: (enumLiteral_7= QUARTER )
+                    // InternalSqlParser.g:6730:11: enumLiteral_7= QUARTER
                     {
                     enumLiteral_7=(Token)match(input,QUARTER,FOLLOW_2); 
 
@@ -17928,10 +17917,10 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 9 :
-                    // InternalSqlParser.g:6734:6: (enumLiteral_8= YEAR )
+                    // InternalSqlParser.g:6736:6: (enumLiteral_8= YEAR )
                     {
-                    // InternalSqlParser.g:6734:6: (enumLiteral_8= YEAR )
-                    // InternalSqlParser.g:6734:11: enumLiteral_8= YEAR
+                    // InternalSqlParser.g:6736:6: (enumLiteral_8= YEAR )
+                    // InternalSqlParser.g:6736:11: enumLiteral_8= YEAR
                     {
                     enumLiteral_8=(Token)match(input,YEAR,FOLLOW_2); 
 
@@ -17945,10 +17934,10 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 10 :
-                    // InternalSqlParser.g:6740:6: (enumLiteral_9= SECOND_MICROSECOND )
+                    // InternalSqlParser.g:6742:6: (enumLiteral_9= SECOND_MICROSECOND )
                     {
-                    // InternalSqlParser.g:6740:6: (enumLiteral_9= SECOND_MICROSECOND )
-                    // InternalSqlParser.g:6740:11: enumLiteral_9= SECOND_MICROSECOND
+                    // InternalSqlParser.g:6742:6: (enumLiteral_9= SECOND_MICROSECOND )
+                    // InternalSqlParser.g:6742:11: enumLiteral_9= SECOND_MICROSECOND
                     {
                     enumLiteral_9=(Token)match(input,SECOND_MICROSECOND,FOLLOW_2); 
 
@@ -17962,10 +17951,10 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 11 :
-                    // InternalSqlParser.g:6746:6: (enumLiteral_10= MINUTE_MICROSECOND )
+                    // InternalSqlParser.g:6748:6: (enumLiteral_10= MINUTE_MICROSECOND )
                     {
-                    // InternalSqlParser.g:6746:6: (enumLiteral_10= MINUTE_MICROSECOND )
-                    // InternalSqlParser.g:6746:11: enumLiteral_10= MINUTE_MICROSECOND
+                    // InternalSqlParser.g:6748:6: (enumLiteral_10= MINUTE_MICROSECOND )
+                    // InternalSqlParser.g:6748:11: enumLiteral_10= MINUTE_MICROSECOND
                     {
                     enumLiteral_10=(Token)match(input,MINUTE_MICROSECOND,FOLLOW_2); 
 
@@ -17979,10 +17968,10 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 12 :
-                    // InternalSqlParser.g:6752:6: (enumLiteral_11= MINUTE_SECOND )
+                    // InternalSqlParser.g:6754:6: (enumLiteral_11= MINUTE_SECOND )
                     {
-                    // InternalSqlParser.g:6752:6: (enumLiteral_11= MINUTE_SECOND )
-                    // InternalSqlParser.g:6752:11: enumLiteral_11= MINUTE_SECOND
+                    // InternalSqlParser.g:6754:6: (enumLiteral_11= MINUTE_SECOND )
+                    // InternalSqlParser.g:6754:11: enumLiteral_11= MINUTE_SECOND
                     {
                     enumLiteral_11=(Token)match(input,MINUTE_SECOND,FOLLOW_2); 
 
@@ -17996,10 +17985,10 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 13 :
-                    // InternalSqlParser.g:6758:6: (enumLiteral_12= HOUR_MICROSECOND )
+                    // InternalSqlParser.g:6760:6: (enumLiteral_12= HOUR_MICROSECOND )
                     {
-                    // InternalSqlParser.g:6758:6: (enumLiteral_12= HOUR_MICROSECOND )
-                    // InternalSqlParser.g:6758:11: enumLiteral_12= HOUR_MICROSECOND
+                    // InternalSqlParser.g:6760:6: (enumLiteral_12= HOUR_MICROSECOND )
+                    // InternalSqlParser.g:6760:11: enumLiteral_12= HOUR_MICROSECOND
                     {
                     enumLiteral_12=(Token)match(input,HOUR_MICROSECOND,FOLLOW_2); 
 
@@ -18013,10 +18002,10 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 14 :
-                    // InternalSqlParser.g:6764:6: (enumLiteral_13= HOUR_SECOND )
+                    // InternalSqlParser.g:6766:6: (enumLiteral_13= HOUR_SECOND )
                     {
-                    // InternalSqlParser.g:6764:6: (enumLiteral_13= HOUR_SECOND )
-                    // InternalSqlParser.g:6764:11: enumLiteral_13= HOUR_SECOND
+                    // InternalSqlParser.g:6766:6: (enumLiteral_13= HOUR_SECOND )
+                    // InternalSqlParser.g:6766:11: enumLiteral_13= HOUR_SECOND
                     {
                     enumLiteral_13=(Token)match(input,HOUR_SECOND,FOLLOW_2); 
 
@@ -18030,10 +18019,10 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 15 :
-                    // InternalSqlParser.g:6770:6: (enumLiteral_14= HOUR_MINUTE )
+                    // InternalSqlParser.g:6772:6: (enumLiteral_14= HOUR_MINUTE )
                     {
-                    // InternalSqlParser.g:6770:6: (enumLiteral_14= HOUR_MINUTE )
-                    // InternalSqlParser.g:6770:11: enumLiteral_14= HOUR_MINUTE
+                    // InternalSqlParser.g:6772:6: (enumLiteral_14= HOUR_MINUTE )
+                    // InternalSqlParser.g:6772:11: enumLiteral_14= HOUR_MINUTE
                     {
                     enumLiteral_14=(Token)match(input,HOUR_MINUTE,FOLLOW_2); 
 
@@ -18047,10 +18036,10 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 16 :
-                    // InternalSqlParser.g:6776:6: (enumLiteral_15= DAY_MICROSECOND )
+                    // InternalSqlParser.g:6778:6: (enumLiteral_15= DAY_MICROSECOND )
                     {
-                    // InternalSqlParser.g:6776:6: (enumLiteral_15= DAY_MICROSECOND )
-                    // InternalSqlParser.g:6776:11: enumLiteral_15= DAY_MICROSECOND
+                    // InternalSqlParser.g:6778:6: (enumLiteral_15= DAY_MICROSECOND )
+                    // InternalSqlParser.g:6778:11: enumLiteral_15= DAY_MICROSECOND
                     {
                     enumLiteral_15=(Token)match(input,DAY_MICROSECOND,FOLLOW_2); 
 
@@ -18064,10 +18053,10 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 17 :
-                    // InternalSqlParser.g:6782:6: (enumLiteral_16= DAY_SECOND )
+                    // InternalSqlParser.g:6784:6: (enumLiteral_16= DAY_SECOND )
                     {
-                    // InternalSqlParser.g:6782:6: (enumLiteral_16= DAY_SECOND )
-                    // InternalSqlParser.g:6782:11: enumLiteral_16= DAY_SECOND
+                    // InternalSqlParser.g:6784:6: (enumLiteral_16= DAY_SECOND )
+                    // InternalSqlParser.g:6784:11: enumLiteral_16= DAY_SECOND
                     {
                     enumLiteral_16=(Token)match(input,DAY_SECOND,FOLLOW_2); 
 
@@ -18081,10 +18070,10 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 18 :
-                    // InternalSqlParser.g:6788:6: (enumLiteral_17= DAY_MINUTE )
+                    // InternalSqlParser.g:6790:6: (enumLiteral_17= DAY_MINUTE )
                     {
-                    // InternalSqlParser.g:6788:6: (enumLiteral_17= DAY_MINUTE )
-                    // InternalSqlParser.g:6788:11: enumLiteral_17= DAY_MINUTE
+                    // InternalSqlParser.g:6790:6: (enumLiteral_17= DAY_MINUTE )
+                    // InternalSqlParser.g:6790:11: enumLiteral_17= DAY_MINUTE
                     {
                     enumLiteral_17=(Token)match(input,DAY_MINUTE,FOLLOW_2); 
 
@@ -18098,10 +18087,10 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 19 :
-                    // InternalSqlParser.g:6794:6: (enumLiteral_18= DAY_HOUR )
+                    // InternalSqlParser.g:6796:6: (enumLiteral_18= DAY_HOUR )
                     {
-                    // InternalSqlParser.g:6794:6: (enumLiteral_18= DAY_HOUR )
-                    // InternalSqlParser.g:6794:11: enumLiteral_18= DAY_HOUR
+                    // InternalSqlParser.g:6796:6: (enumLiteral_18= DAY_HOUR )
+                    // InternalSqlParser.g:6796:11: enumLiteral_18= DAY_HOUR
                     {
                     enumLiteral_18=(Token)match(input,DAY_HOUR,FOLLOW_2); 
 
@@ -18115,10 +18104,10 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 20 :
-                    // InternalSqlParser.g:6800:6: (enumLiteral_19= YEAR_MONTH )
+                    // InternalSqlParser.g:6802:6: (enumLiteral_19= YEAR_MONTH )
                     {
-                    // InternalSqlParser.g:6800:6: (enumLiteral_19= YEAR_MONTH )
-                    // InternalSqlParser.g:6800:11: enumLiteral_19= YEAR_MONTH
+                    // InternalSqlParser.g:6802:6: (enumLiteral_19= YEAR_MONTH )
+                    // InternalSqlParser.g:6802:11: enumLiteral_19= YEAR_MONTH
                     {
                     enumLiteral_19=(Token)match(input,YEAR_MONTH,FOLLOW_2); 
 
@@ -18152,7 +18141,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleXFunction"
-    // InternalSqlParser.g:6810:1: ruleXFunction returns [Enumerator current=null] : ( (enumLiteral_0= IN ) | (enumLiteral_1= NOTIN ) | (enumLiteral_2= EQUAL ) | (enumLiteral_3= NOTEQUAL ) | (enumLiteral_4= LESS ) | (enumLiteral_5= GREATER ) | (enumLiteral_6= LESS_1 ) | (enumLiteral_7= GREATER_1 ) | (enumLiteral_8= BETWEEN ) | (enumLiteral_9= BETWEEN_3 ) | (enumLiteral_10= BETWEEN_2 ) | (enumLiteral_11= BETWEEN_1 ) ) ;
+    // InternalSqlParser.g:6812:1: ruleXFunction returns [Enumerator current=null] : ( (enumLiteral_0= IN ) | (enumLiteral_1= NOTIN ) | (enumLiteral_2= EQUAL ) | (enumLiteral_3= NOTEQUAL ) | (enumLiteral_4= LESS ) | (enumLiteral_5= GREATER ) | (enumLiteral_6= LESS_1 ) | (enumLiteral_7= GREATER_1 ) | (enumLiteral_8= BETWEEN ) | (enumLiteral_9= BETWEEN_3 ) | (enumLiteral_10= BETWEEN_2 ) | (enumLiteral_11= BETWEEN_1 ) ) ;
     public final Enumerator ruleXFunction() throws RecognitionException {
         Enumerator current = null;
 
@@ -18171,85 +18160,85 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
 
          enterRule(); 
         try {
-            // InternalSqlParser.g:6812:28: ( ( (enumLiteral_0= IN ) | (enumLiteral_1= NOTIN ) | (enumLiteral_2= EQUAL ) | (enumLiteral_3= NOTEQUAL ) | (enumLiteral_4= LESS ) | (enumLiteral_5= GREATER ) | (enumLiteral_6= LESS_1 ) | (enumLiteral_7= GREATER_1 ) | (enumLiteral_8= BETWEEN ) | (enumLiteral_9= BETWEEN_3 ) | (enumLiteral_10= BETWEEN_2 ) | (enumLiteral_11= BETWEEN_1 ) ) )
-            // InternalSqlParser.g:6813:1: ( (enumLiteral_0= IN ) | (enumLiteral_1= NOTIN ) | (enumLiteral_2= EQUAL ) | (enumLiteral_3= NOTEQUAL ) | (enumLiteral_4= LESS ) | (enumLiteral_5= GREATER ) | (enumLiteral_6= LESS_1 ) | (enumLiteral_7= GREATER_1 ) | (enumLiteral_8= BETWEEN ) | (enumLiteral_9= BETWEEN_3 ) | (enumLiteral_10= BETWEEN_2 ) | (enumLiteral_11= BETWEEN_1 ) )
+            // InternalSqlParser.g:6814:28: ( ( (enumLiteral_0= IN ) | (enumLiteral_1= NOTIN ) | (enumLiteral_2= EQUAL ) | (enumLiteral_3= NOTEQUAL ) | (enumLiteral_4= LESS ) | (enumLiteral_5= GREATER ) | (enumLiteral_6= LESS_1 ) | (enumLiteral_7= GREATER_1 ) | (enumLiteral_8= BETWEEN ) | (enumLiteral_9= BETWEEN_3 ) | (enumLiteral_10= BETWEEN_2 ) | (enumLiteral_11= BETWEEN_1 ) ) )
+            // InternalSqlParser.g:6815:1: ( (enumLiteral_0= IN ) | (enumLiteral_1= NOTIN ) | (enumLiteral_2= EQUAL ) | (enumLiteral_3= NOTEQUAL ) | (enumLiteral_4= LESS ) | (enumLiteral_5= GREATER ) | (enumLiteral_6= LESS_1 ) | (enumLiteral_7= GREATER_1 ) | (enumLiteral_8= BETWEEN ) | (enumLiteral_9= BETWEEN_3 ) | (enumLiteral_10= BETWEEN_2 ) | (enumLiteral_11= BETWEEN_1 ) )
             {
-            // InternalSqlParser.g:6813:1: ( (enumLiteral_0= IN ) | (enumLiteral_1= NOTIN ) | (enumLiteral_2= EQUAL ) | (enumLiteral_3= NOTEQUAL ) | (enumLiteral_4= LESS ) | (enumLiteral_5= GREATER ) | (enumLiteral_6= LESS_1 ) | (enumLiteral_7= GREATER_1 ) | (enumLiteral_8= BETWEEN ) | (enumLiteral_9= BETWEEN_3 ) | (enumLiteral_10= BETWEEN_2 ) | (enumLiteral_11= BETWEEN_1 ) )
-            int alt133=12;
+            // InternalSqlParser.g:6815:1: ( (enumLiteral_0= IN ) | (enumLiteral_1= NOTIN ) | (enumLiteral_2= EQUAL ) | (enumLiteral_3= NOTEQUAL ) | (enumLiteral_4= LESS ) | (enumLiteral_5= GREATER ) | (enumLiteral_6= LESS_1 ) | (enumLiteral_7= GREATER_1 ) | (enumLiteral_8= BETWEEN ) | (enumLiteral_9= BETWEEN_3 ) | (enumLiteral_10= BETWEEN_2 ) | (enumLiteral_11= BETWEEN_1 ) )
+            int alt132=12;
             switch ( input.LA(1) ) {
             case IN:
                 {
-                alt133=1;
+                alt132=1;
                 }
                 break;
             case NOTIN:
                 {
-                alt133=2;
+                alt132=2;
                 }
                 break;
             case EQUAL:
                 {
-                alt133=3;
+                alt132=3;
                 }
                 break;
             case NOTEQUAL:
                 {
-                alt133=4;
+                alt132=4;
                 }
                 break;
             case LESS:
                 {
-                alt133=5;
+                alt132=5;
                 }
                 break;
             case GREATER:
                 {
-                alt133=6;
+                alt132=6;
                 }
                 break;
             case LESS_1:
                 {
-                alt133=7;
+                alt132=7;
                 }
                 break;
             case GREATER_1:
                 {
-                alt133=8;
+                alt132=8;
                 }
                 break;
             case BETWEEN:
                 {
-                alt133=9;
+                alt132=9;
                 }
                 break;
             case BETWEEN_3:
                 {
-                alt133=10;
+                alt132=10;
                 }
                 break;
             case BETWEEN_2:
                 {
-                alt133=11;
+                alt132=11;
                 }
                 break;
             case BETWEEN_1:
                 {
-                alt133=12;
+                alt132=12;
                 }
                 break;
             default:
                 NoViableAltException nvae =
-                    new NoViableAltException("", 133, 0, input);
+                    new NoViableAltException("", 132, 0, input);
 
                 throw nvae;
             }
 
-            switch (alt133) {
+            switch (alt132) {
                 case 1 :
-                    // InternalSqlParser.g:6813:2: (enumLiteral_0= IN )
+                    // InternalSqlParser.g:6815:2: (enumLiteral_0= IN )
                     {
-                    // InternalSqlParser.g:6813:2: (enumLiteral_0= IN )
-                    // InternalSqlParser.g:6813:7: enumLiteral_0= IN
+                    // InternalSqlParser.g:6815:2: (enumLiteral_0= IN )
+                    // InternalSqlParser.g:6815:7: enumLiteral_0= IN
                     {
                     enumLiteral_0=(Token)match(input,IN,FOLLOW_2); 
 
@@ -18263,10 +18252,10 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 2 :
-                    // InternalSqlParser.g:6819:6: (enumLiteral_1= NOTIN )
+                    // InternalSqlParser.g:6821:6: (enumLiteral_1= NOTIN )
                     {
-                    // InternalSqlParser.g:6819:6: (enumLiteral_1= NOTIN )
-                    // InternalSqlParser.g:6819:11: enumLiteral_1= NOTIN
+                    // InternalSqlParser.g:6821:6: (enumLiteral_1= NOTIN )
+                    // InternalSqlParser.g:6821:11: enumLiteral_1= NOTIN
                     {
                     enumLiteral_1=(Token)match(input,NOTIN,FOLLOW_2); 
 
@@ -18280,10 +18269,10 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 3 :
-                    // InternalSqlParser.g:6825:6: (enumLiteral_2= EQUAL )
+                    // InternalSqlParser.g:6827:6: (enumLiteral_2= EQUAL )
                     {
-                    // InternalSqlParser.g:6825:6: (enumLiteral_2= EQUAL )
-                    // InternalSqlParser.g:6825:11: enumLiteral_2= EQUAL
+                    // InternalSqlParser.g:6827:6: (enumLiteral_2= EQUAL )
+                    // InternalSqlParser.g:6827:11: enumLiteral_2= EQUAL
                     {
                     enumLiteral_2=(Token)match(input,EQUAL,FOLLOW_2); 
 
@@ -18297,10 +18286,10 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 4 :
-                    // InternalSqlParser.g:6831:6: (enumLiteral_3= NOTEQUAL )
+                    // InternalSqlParser.g:6833:6: (enumLiteral_3= NOTEQUAL )
                     {
-                    // InternalSqlParser.g:6831:6: (enumLiteral_3= NOTEQUAL )
-                    // InternalSqlParser.g:6831:11: enumLiteral_3= NOTEQUAL
+                    // InternalSqlParser.g:6833:6: (enumLiteral_3= NOTEQUAL )
+                    // InternalSqlParser.g:6833:11: enumLiteral_3= NOTEQUAL
                     {
                     enumLiteral_3=(Token)match(input,NOTEQUAL,FOLLOW_2); 
 
@@ -18314,10 +18303,10 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 5 :
-                    // InternalSqlParser.g:6837:6: (enumLiteral_4= LESS )
+                    // InternalSqlParser.g:6839:6: (enumLiteral_4= LESS )
                     {
-                    // InternalSqlParser.g:6837:6: (enumLiteral_4= LESS )
-                    // InternalSqlParser.g:6837:11: enumLiteral_4= LESS
+                    // InternalSqlParser.g:6839:6: (enumLiteral_4= LESS )
+                    // InternalSqlParser.g:6839:11: enumLiteral_4= LESS
                     {
                     enumLiteral_4=(Token)match(input,LESS,FOLLOW_2); 
 
@@ -18331,10 +18320,10 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 6 :
-                    // InternalSqlParser.g:6843:6: (enumLiteral_5= GREATER )
+                    // InternalSqlParser.g:6845:6: (enumLiteral_5= GREATER )
                     {
-                    // InternalSqlParser.g:6843:6: (enumLiteral_5= GREATER )
-                    // InternalSqlParser.g:6843:11: enumLiteral_5= GREATER
+                    // InternalSqlParser.g:6845:6: (enumLiteral_5= GREATER )
+                    // InternalSqlParser.g:6845:11: enumLiteral_5= GREATER
                     {
                     enumLiteral_5=(Token)match(input,GREATER,FOLLOW_2); 
 
@@ -18348,10 +18337,10 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 7 :
-                    // InternalSqlParser.g:6849:6: (enumLiteral_6= LESS_1 )
+                    // InternalSqlParser.g:6851:6: (enumLiteral_6= LESS_1 )
                     {
-                    // InternalSqlParser.g:6849:6: (enumLiteral_6= LESS_1 )
-                    // InternalSqlParser.g:6849:11: enumLiteral_6= LESS_1
+                    // InternalSqlParser.g:6851:6: (enumLiteral_6= LESS_1 )
+                    // InternalSqlParser.g:6851:11: enumLiteral_6= LESS_1
                     {
                     enumLiteral_6=(Token)match(input,LESS_1,FOLLOW_2); 
 
@@ -18365,10 +18354,10 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 8 :
-                    // InternalSqlParser.g:6855:6: (enumLiteral_7= GREATER_1 )
+                    // InternalSqlParser.g:6857:6: (enumLiteral_7= GREATER_1 )
                     {
-                    // InternalSqlParser.g:6855:6: (enumLiteral_7= GREATER_1 )
-                    // InternalSqlParser.g:6855:11: enumLiteral_7= GREATER_1
+                    // InternalSqlParser.g:6857:6: (enumLiteral_7= GREATER_1 )
+                    // InternalSqlParser.g:6857:11: enumLiteral_7= GREATER_1
                     {
                     enumLiteral_7=(Token)match(input,GREATER_1,FOLLOW_2); 
 
@@ -18382,10 +18371,10 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 9 :
-                    // InternalSqlParser.g:6861:6: (enumLiteral_8= BETWEEN )
+                    // InternalSqlParser.g:6863:6: (enumLiteral_8= BETWEEN )
                     {
-                    // InternalSqlParser.g:6861:6: (enumLiteral_8= BETWEEN )
-                    // InternalSqlParser.g:6861:11: enumLiteral_8= BETWEEN
+                    // InternalSqlParser.g:6863:6: (enumLiteral_8= BETWEEN )
+                    // InternalSqlParser.g:6863:11: enumLiteral_8= BETWEEN
                     {
                     enumLiteral_8=(Token)match(input,BETWEEN,FOLLOW_2); 
 
@@ -18399,10 +18388,10 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 10 :
-                    // InternalSqlParser.g:6867:6: (enumLiteral_9= BETWEEN_3 )
+                    // InternalSqlParser.g:6869:6: (enumLiteral_9= BETWEEN_3 )
                     {
-                    // InternalSqlParser.g:6867:6: (enumLiteral_9= BETWEEN_3 )
-                    // InternalSqlParser.g:6867:11: enumLiteral_9= BETWEEN_3
+                    // InternalSqlParser.g:6869:6: (enumLiteral_9= BETWEEN_3 )
+                    // InternalSqlParser.g:6869:11: enumLiteral_9= BETWEEN_3
                     {
                     enumLiteral_9=(Token)match(input,BETWEEN_3,FOLLOW_2); 
 
@@ -18416,10 +18405,10 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 11 :
-                    // InternalSqlParser.g:6873:6: (enumLiteral_10= BETWEEN_2 )
+                    // InternalSqlParser.g:6875:6: (enumLiteral_10= BETWEEN_2 )
                     {
-                    // InternalSqlParser.g:6873:6: (enumLiteral_10= BETWEEN_2 )
-                    // InternalSqlParser.g:6873:11: enumLiteral_10= BETWEEN_2
+                    // InternalSqlParser.g:6875:6: (enumLiteral_10= BETWEEN_2 )
+                    // InternalSqlParser.g:6875:11: enumLiteral_10= BETWEEN_2
                     {
                     enumLiteral_10=(Token)match(input,BETWEEN_2,FOLLOW_2); 
 
@@ -18433,10 +18422,10 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 12 :
-                    // InternalSqlParser.g:6879:6: (enumLiteral_11= BETWEEN_1 )
+                    // InternalSqlParser.g:6881:6: (enumLiteral_11= BETWEEN_1 )
                     {
-                    // InternalSqlParser.g:6879:6: (enumLiteral_11= BETWEEN_1 )
-                    // InternalSqlParser.g:6879:11: enumLiteral_11= BETWEEN_1
+                    // InternalSqlParser.g:6881:6: (enumLiteral_11= BETWEEN_1 )
+                    // InternalSqlParser.g:6881:11: enumLiteral_11= BETWEEN_1
                     {
                     enumLiteral_11=(Token)match(input,BETWEEN_1,FOLLOW_2); 
 
@@ -18471,7 +18460,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
     // Delegated rules
 
 
-    protected DFA66 dfa66 = new DFA66(this);
+    protected DFA65 dfa65 = new DFA65(this);
     static final String dfa_1s = "\21\uffff";
     static final String dfa_2s = "\1\154\1\u0080\1\35\14\171\2\uffff";
     static final String dfa_3s = "\1\154\1\u0080\1\161\14\u0081\2\uffff";
@@ -18504,11 +18493,11 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
     static final short[] dfa_5 = DFA.unpackEncodedString(dfa_5s);
     static final short[][] dfa_6 = unpackEncodedStringArray(dfa_6s);
 
-    class DFA66 extends DFA {
+    class DFA65 extends DFA {
 
-        public DFA66(BaseRecognizer recognizer) {
+        public DFA65(BaseRecognizer recognizer) {
             this.recognizer = recognizer;
-            this.decisionNumber = 66;
+            this.decisionNumber = 65;
             this.eot = dfa_1;
             this.eof = dfa_1;
             this.min = dfa_2;
@@ -18549,67 +18538,66 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
     public static final BitSet FOLLOW_24 = new BitSet(new long[]{0x0040000000008002L});
     public static final BitSet FOLLOW_25 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000000080L});
     public static final BitSet FOLLOW_26 = new BitSet(new long[]{0x0000000000008002L});
-    public static final BitSet FOLLOW_27 = new BitSet(new long[]{0x0000000000000000L,0x0000010004000000L,0x0000000000000080L});
-    public static final BitSet FOLLOW_28 = new BitSet(new long[]{0x0000000000000002L,0x0001000000000000L,0x000000000000E000L});
-    public static final BitSet FOLLOW_29 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000000L,0x000000000000E000L});
-    public static final BitSet FOLLOW_30 = new BitSet(new long[]{0x0000000000000002L,0x0800000000000000L});
-    public static final BitSet FOLLOW_31 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x000000000000E000L});
-    public static final BitSet FOLLOW_32 = new BitSet(new long[]{0x2400200000001002L,0x00000000000A8080L});
-    public static final BitSet FOLLOW_33 = new BitSet(new long[]{0x0000000000000000L,0x0004000000000200L});
-    public static final BitSet FOLLOW_34 = new BitSet(new long[]{0x0000000000000000L,0x0040000000000000L});
-    public static final BitSet FOLLOW_35 = new BitSet(new long[]{0x0000000000000000L,0x0080000000000000L});
-    public static final BitSet FOLLOW_36 = new BitSet(new long[]{0x0001000000000002L,0x0001000000000020L,0x000000000000E000L});
-    public static final BitSet FOLLOW_37 = new BitSet(new long[]{0x0000000000000000L,0x0040040000000000L});
-    public static final BitSet FOLLOW_38 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000008000L});
-    public static final BitSet FOLLOW_39 = new BitSet(new long[]{0x0000000000000000L,0x0000008000000000L});
-    public static final BitSet FOLLOW_40 = new BitSet(new long[]{0x0000000000000000L,0x0002000000000000L});
-    public static final BitSet FOLLOW_41 = new BitSet(new long[]{0x0000000000000000L,0x0040000800000000L,0x000000000000E000L});
-    public static final BitSet FOLLOW_42 = new BitSet(new long[]{0x0000000000000000L,0x0000000800000000L});
-    public static final BitSet FOLLOW_43 = new BitSet(new long[]{0x0000090000000000L,0x0040000000000000L});
-    public static final BitSet FOLLOW_44 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000008L});
-    public static final BitSet FOLLOW_45 = new BitSet(new long[]{0x0000000000000002L,0x0001000000000000L});
-    public static final BitSet FOLLOW_46 = new BitSet(new long[]{0x0000000000000000L,0x0800000000000000L});
-    public static final BitSet FOLLOW_47 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000000020L});
-    public static final BitSet FOLLOW_48 = new BitSet(new long[]{0x0000000000000002L,0x0000001000001000L});
-    public static final BitSet FOLLOW_49 = new BitSet(new long[]{0x0000000000000002L,0x0008000400000000L,0x0000000000000010L});
-    public static final BitSet FOLLOW_50 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000000001L});
-    public static final BitSet FOLLOW_51 = new BitSet(new long[]{0x480004E860000000L,0x0002000000100004L});
-    public static final BitSet FOLLOW_52 = new BitSet(new long[]{0x0000000000000000L,0x0200000000000000L});
-    public static final BitSet FOLLOW_53 = new BitSet(new long[]{0x0200020000000000L,0x0040000000000800L,0x000000000000F1D8L});
-    public static final BitSet FOLLOW_54 = new BitSet(new long[]{0x0000000000000000L,0x0200000000000000L,0x0000000000000004L});
-    public static final BitSet FOLLOW_55 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000000004L});
-    public static final BitSet FOLLOW_56 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000000002L});
-    public static final BitSet FOLLOW_57 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000000006L});
-    public static final BitSet FOLLOW_58 = new BitSet(new long[]{0x0224128400940000L,0xE052F80000E00800L,0x000000000000F1D8L});
-    public static final BitSet FOLLOW_59 = new BitSet(new long[]{0x0200020000000000L,0x0040000A08000800L,0x000000000000F1D8L});
-    public static final BitSet FOLLOW_60 = new BitSet(new long[]{0x0200000000000000L,0x0000000000000000L,0x00000000000091D8L});
-    public static final BitSet FOLLOW_61 = new BitSet(new long[]{0x0000000000000000L,0x0000000400000000L});
-    public static final BitSet FOLLOW_62 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000001FD8L});
-    public static final BitSet FOLLOW_63 = new BitSet(new long[]{0x0000000000000002L,0x1520000000000000L,0x0000000000000020L});
-    public static final BitSet FOLLOW_64 = new BitSet(new long[]{0x0200020100000000L,0x00C0000200000800L,0x000000000000F1F8L});
-    public static final BitSet FOLLOW_65 = new BitSet(new long[]{0x0000000000000002L,0x0000000002000000L});
-    public static final BitSet FOLLOW_66 = new BitSet(new long[]{0x00908000816B0EC0L,0x00000020A0010002L});
-    public static final BitSet FOLLOW_67 = new BitSet(new long[]{0x0000001000002100L,0x0080000000000000L});
-    public static final BitSet FOLLOW_68 = new BitSet(new long[]{0x0000001000000102L});
-    public static final BitSet FOLLOW_69 = new BitSet(new long[]{0x0000000000000002L,0x0000000004000040L});
-    public static final BitSet FOLLOW_70 = new BitSet(new long[]{0x0200028000004020L,0x0040000000000800L,0x000000000000F1D8L});
-    public static final BitSet FOLLOW_71 = new BitSet(new long[]{0x0200028000004030L,0x0040000000000800L,0x000000000000F1D8L});
-    public static final BitSet FOLLOW_72 = new BitSet(new long[]{0x000000000A000000L});
-    public static final BitSet FOLLOW_73 = new BitSet(new long[]{0x0000000000000002L,0x0000001000001008L});
-    public static final BitSet FOLLOW_74 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000008L});
-    public static final BitSet FOLLOW_75 = new BitSet(new long[]{0x1000000000000000L,0x0000000000040000L});
-    public static final BitSet FOLLOW_76 = new BitSet(new long[]{0x0200020100000000L,0x0040000200000800L,0x000000000000F1D8L});
-    public static final BitSet FOLLOW_77 = new BitSet(new long[]{0x0000000000000000L,0x0001000000000000L});
-    public static final BitSet FOLLOW_78 = new BitSet(new long[]{0x0000000000000000L,0x00C0000000000000L});
-    public static final BitSet FOLLOW_79 = new BitSet(new long[]{0x0000000000000000L,0x0280000000000000L});
-    public static final BitSet FOLLOW_80 = new BitSet(new long[]{0x0000000000000002L,0x0000000100000000L});
-    public static final BitSet FOLLOW_81 = new BitSet(new long[]{0x0224020000800000L,0x0042100040C00800L,0x000000000000F1D8L});
-    public static final BitSet FOLLOW_82 = new BitSet(new long[]{0x0000000000000000L,0x0000004000000000L});
-    public static final BitSet FOLLOW_83 = new BitSet(new long[]{0x0224020000800002L,0x0042100040C00800L,0x000000000000F1D8L});
-    public static final BitSet FOLLOW_84 = new BitSet(new long[]{0x0000000000000000L,0x0000000010000000L});
-    public static final BitSet FOLLOW_85 = new BitSet(new long[]{0x0000000000000002L,0x0000000000002000L});
-    public static final BitSet FOLLOW_86 = new BitSet(new long[]{0x2400000000001000L,0x00000000000A8080L});
-    public static final BitSet FOLLOW_87 = new BitSet(new long[]{0x0000000000000000L,0x0000000000020000L});
-    public static final BitSet FOLLOW_88 = new BitSet(new long[]{0x0000000000000000L,0x0000000000020010L});
+    public static final BitSet FOLLOW_27 = new BitSet(new long[]{0x0000000000000002L,0x0001000000000000L,0x000000000000E000L});
+    public static final BitSet FOLLOW_28 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000000L,0x000000000000E000L});
+    public static final BitSet FOLLOW_29 = new BitSet(new long[]{0x0000000000000002L,0x0800000000000000L});
+    public static final BitSet FOLLOW_30 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x000000000000E000L});
+    public static final BitSet FOLLOW_31 = new BitSet(new long[]{0x2400200000001002L,0x00000000000A8080L});
+    public static final BitSet FOLLOW_32 = new BitSet(new long[]{0x0000000000000000L,0x0004000000000200L});
+    public static final BitSet FOLLOW_33 = new BitSet(new long[]{0x0000000000000000L,0x0040000000000000L});
+    public static final BitSet FOLLOW_34 = new BitSet(new long[]{0x0000000000000000L,0x0080000000000000L});
+    public static final BitSet FOLLOW_35 = new BitSet(new long[]{0x0001000000000002L,0x0001000000000020L,0x000000000000E000L});
+    public static final BitSet FOLLOW_36 = new BitSet(new long[]{0x0000000000000000L,0x0040040000000000L});
+    public static final BitSet FOLLOW_37 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000008000L});
+    public static final BitSet FOLLOW_38 = new BitSet(new long[]{0x0000000000000000L,0x0000008000000000L});
+    public static final BitSet FOLLOW_39 = new BitSet(new long[]{0x0000000000000000L,0x0002000000000000L});
+    public static final BitSet FOLLOW_40 = new BitSet(new long[]{0x0000000000000000L,0x0040000800000000L,0x000000000000E000L});
+    public static final BitSet FOLLOW_41 = new BitSet(new long[]{0x0000000000000000L,0x0000000800000000L});
+    public static final BitSet FOLLOW_42 = new BitSet(new long[]{0x0000090000000000L,0x0040000000000000L});
+    public static final BitSet FOLLOW_43 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000008L});
+    public static final BitSet FOLLOW_44 = new BitSet(new long[]{0x0000000000000002L,0x0001000000000000L});
+    public static final BitSet FOLLOW_45 = new BitSet(new long[]{0x0000000000000000L,0x0800000000000000L});
+    public static final BitSet FOLLOW_46 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000000020L});
+    public static final BitSet FOLLOW_47 = new BitSet(new long[]{0x0000000000000002L,0x0000001000001000L});
+    public static final BitSet FOLLOW_48 = new BitSet(new long[]{0x0000000000000002L,0x0008000400000000L,0x0000000000000010L});
+    public static final BitSet FOLLOW_49 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000000001L});
+    public static final BitSet FOLLOW_50 = new BitSet(new long[]{0x480004E860000000L,0x0002000000100004L});
+    public static final BitSet FOLLOW_51 = new BitSet(new long[]{0x0000000000000000L,0x0200000000000000L});
+    public static final BitSet FOLLOW_52 = new BitSet(new long[]{0x0200020000000000L,0x0040000000000800L,0x000000000000F1D8L});
+    public static final BitSet FOLLOW_53 = new BitSet(new long[]{0x0000000000000000L,0x0200000000000000L,0x0000000000000004L});
+    public static final BitSet FOLLOW_54 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000000004L});
+    public static final BitSet FOLLOW_55 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000000002L});
+    public static final BitSet FOLLOW_56 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000000006L});
+    public static final BitSet FOLLOW_57 = new BitSet(new long[]{0x0224128400940000L,0xE052F80000E00800L,0x000000000000F1D8L});
+    public static final BitSet FOLLOW_58 = new BitSet(new long[]{0x0200020000000000L,0x0040000A08000800L,0x000000000000F1D8L});
+    public static final BitSet FOLLOW_59 = new BitSet(new long[]{0x0200000000000000L,0x0000000000000000L,0x00000000000091D8L});
+    public static final BitSet FOLLOW_60 = new BitSet(new long[]{0x0000000000000000L,0x0000000400000000L});
+    public static final BitSet FOLLOW_61 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000001FD8L});
+    public static final BitSet FOLLOW_62 = new BitSet(new long[]{0x0000000000000002L,0x1520000000000000L,0x0000000000000020L});
+    public static final BitSet FOLLOW_63 = new BitSet(new long[]{0x0200020100000000L,0x00C0000200000800L,0x000000000000F1F8L});
+    public static final BitSet FOLLOW_64 = new BitSet(new long[]{0x0000000000000002L,0x0000000002000000L});
+    public static final BitSet FOLLOW_65 = new BitSet(new long[]{0x00908000816B0EC0L,0x00000020A0010002L});
+    public static final BitSet FOLLOW_66 = new BitSet(new long[]{0x0000001000002100L,0x0080000000000000L});
+    public static final BitSet FOLLOW_67 = new BitSet(new long[]{0x0000001000000102L});
+    public static final BitSet FOLLOW_68 = new BitSet(new long[]{0x0000000000000002L,0x0000000004000040L});
+    public static final BitSet FOLLOW_69 = new BitSet(new long[]{0x0200028000004020L,0x0040000000000800L,0x000000000000F1D8L});
+    public static final BitSet FOLLOW_70 = new BitSet(new long[]{0x0200028000004030L,0x0040000000000800L,0x000000000000F1D8L});
+    public static final BitSet FOLLOW_71 = new BitSet(new long[]{0x000000000A000000L});
+    public static final BitSet FOLLOW_72 = new BitSet(new long[]{0x0000000000000002L,0x0000001000001008L});
+    public static final BitSet FOLLOW_73 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000008L});
+    public static final BitSet FOLLOW_74 = new BitSet(new long[]{0x1000000000000000L,0x0000000000040000L});
+    public static final BitSet FOLLOW_75 = new BitSet(new long[]{0x0200020100000000L,0x0040000200000800L,0x000000000000F1D8L});
+    public static final BitSet FOLLOW_76 = new BitSet(new long[]{0x0000000000000000L,0x0001000000000000L});
+    public static final BitSet FOLLOW_77 = new BitSet(new long[]{0x0000000000000000L,0x00C0000000000000L});
+    public static final BitSet FOLLOW_78 = new BitSet(new long[]{0x0000000000000000L,0x0280000000000000L});
+    public static final BitSet FOLLOW_79 = new BitSet(new long[]{0x0000000000000002L,0x0000000100000000L});
+    public static final BitSet FOLLOW_80 = new BitSet(new long[]{0x0224020000800000L,0x0042100040C00800L,0x000000000000F1D8L});
+    public static final BitSet FOLLOW_81 = new BitSet(new long[]{0x0000000000000000L,0x0000004000000000L});
+    public static final BitSet FOLLOW_82 = new BitSet(new long[]{0x0224020000800002L,0x0042100040C00800L,0x000000000000F1D8L});
+    public static final BitSet FOLLOW_83 = new BitSet(new long[]{0x0000000000000000L,0x0000000010000000L});
+    public static final BitSet FOLLOW_84 = new BitSet(new long[]{0x0000000000000002L,0x0000000000002000L});
+    public static final BitSet FOLLOW_85 = new BitSet(new long[]{0x2400000000001000L,0x00000000000A8080L});
+    public static final BitSet FOLLOW_86 = new BitSet(new long[]{0x0000000000000000L,0x0000000000020000L});
+    public static final BitSet FOLLOW_87 = new BitSet(new long[]{0x0000000000000000L,0x0000000000020010L});
 
 }

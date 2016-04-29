@@ -340,6 +340,9 @@
     <genClasses ecoreClass="Sql.ecore#//IntegerValue">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//IntegerValue/integer"/>
     </genClasses>
+    <genClasses ecoreClass="Sql.ecore#//UnsignedValue">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//UnsignedValue/integer"/>
+    </genClasses>
     <genClasses ecoreClass="Sql.ecore#//Col">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Col/entries"/>
     </genClasses>

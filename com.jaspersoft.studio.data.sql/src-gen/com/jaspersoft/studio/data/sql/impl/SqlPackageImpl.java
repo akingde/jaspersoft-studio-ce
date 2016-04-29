@@ -87,6 +87,7 @@ import com.jaspersoft.studio.data.sql.UnpivotInClause;
 import com.jaspersoft.studio.data.sql.UnpivotInClauseArg;
 import com.jaspersoft.studio.data.sql.UnpivotInClauseArgs;
 import com.jaspersoft.studio.data.sql.UnpivotTable;
+import com.jaspersoft.studio.data.sql.UnsignedValue;
 import com.jaspersoft.studio.data.sql.UsingCols;
 import com.jaspersoft.studio.data.sql.WhenList;
 import com.jaspersoft.studio.data.sql.WindowingClause;
@@ -661,6 +662,13 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * @generated
    */
   private EClass integerValueEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass unsignedValueEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -3216,6 +3224,26 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EClass getUnsignedValue()
+  {
+    return unsignedValueEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getUnsignedValue_Integer()
+  {
+    return (EAttribute)unsignedValueEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EClass getCol()
   {
     return colEClass;
@@ -3855,6 +3883,9 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
     integerValueEClass = createEClass(INTEGER_VALUE);
     createEAttribute(integerValueEClass, INTEGER_VALUE__INTEGER);
 
+    unsignedValueEClass = createEClass(UNSIGNED_VALUE);
+    createEAttribute(unsignedValueEClass, UNSIGNED_VALUE__INTEGER);
+
     colEClass = createEClass(COL);
     createEReference(colEClass, COL__ENTRIES);
 
@@ -3982,7 +4013,7 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
     initEReference(getModel_Query(), this.getSelectQuery(), null, "query", null, 0, 1, Model.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(fetchFirstEClass, FetchFirst.class, "FetchFirst", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getFetchFirst_FetchFirst(), this.getIntegerValue(), null, "fetchFirst", null, 0, 1, FetchFirst.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getFetchFirst_FetchFirst(), this.getUnsignedValue(), null, "fetchFirst", null, 0, 1, FetchFirst.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getFetchFirst_Row(), ecorePackage.getEString(), "row", null, 0, 1, FetchFirst.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(offsetEClass, Offset.class, "Offset", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -4291,6 +4322,9 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
 
     initEClass(integerValueEClass, IntegerValue.class, "IntegerValue", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getIntegerValue_Integer(), ecorePackage.getEIntegerObject(), "integer", null, 0, 1, IntegerValue.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(unsignedValueEClass, UnsignedValue.class, "UnsignedValue", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getUnsignedValue_Integer(), ecorePackage.getEIntegerObject(), "integer", null, 0, 1, UnsignedValue.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(colEClass, Col.class, "Col", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getCol_Entries(), this.getDbObjectName(), null, "entries", null, 0, -1, Col.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

@@ -3,8 +3,8 @@
 package com.jaspersoft.studio.data.sql.impl;
 
 import com.jaspersoft.studio.data.sql.FetchFirst;
-import com.jaspersoft.studio.data.sql.IntegerValue;
 import com.jaspersoft.studio.data.sql.SqlPackage;
+import com.jaspersoft.studio.data.sql.UnsignedValue;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
@@ -39,7 +39,7 @@ public class FetchFirstImpl extends MinimalEObjectImpl.Container implements Fetc
    * @generated
    * @ordered
    */
-  protected IntegerValue fetchFirst;
+  protected UnsignedValue fetchFirst;
 
   /**
    * The default value of the '{@link #getRow() <em>Row</em>}' attribute.
@@ -87,7 +87,7 @@ public class FetchFirstImpl extends MinimalEObjectImpl.Container implements Fetc
    * <!-- end-user-doc -->
    * @generated
    */
-  public IntegerValue getFetchFirst()
+  public UnsignedValue getFetchFirst()
   {
     return fetchFirst;
   }
@@ -97,9 +97,9 @@ public class FetchFirstImpl extends MinimalEObjectImpl.Container implements Fetc
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetFetchFirst(IntegerValue newFetchFirst, NotificationChain msgs)
+  public NotificationChain basicSetFetchFirst(UnsignedValue newFetchFirst, NotificationChain msgs)
   {
-    IntegerValue oldFetchFirst = fetchFirst;
+    UnsignedValue oldFetchFirst = fetchFirst;
     fetchFirst = newFetchFirst;
     if (eNotificationRequired())
     {
@@ -114,7 +114,7 @@ public class FetchFirstImpl extends MinimalEObjectImpl.Container implements Fetc
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setFetchFirst(IntegerValue newFetchFirst)
+  public void setFetchFirst(UnsignedValue newFetchFirst)
   {
     if (newFetchFirst != fetchFirst)
     {
@@ -198,7 +198,7 @@ public class FetchFirstImpl extends MinimalEObjectImpl.Container implements Fetc
     switch (featureID)
     {
       case SqlPackage.FETCH_FIRST__FETCH_FIRST:
-        setFetchFirst((IntegerValue)newValue);
+        setFetchFirst((UnsignedValue)newValue);
         return;
       case SqlPackage.FETCH_FIRST__ROW:
         setRow((String)newValue);
@@ -218,7 +218,7 @@ public class FetchFirstImpl extends MinimalEObjectImpl.Container implements Fetc
     switch (featureID)
     {
       case SqlPackage.FETCH_FIRST__FETCH_FIRST:
-        setFetchFirst((IntegerValue)null);
+        setFetchFirst((UnsignedValue)null);
         return;
       case SqlPackage.FETCH_FIRST__ROW:
         setRow(ROW_EDEFAULT);

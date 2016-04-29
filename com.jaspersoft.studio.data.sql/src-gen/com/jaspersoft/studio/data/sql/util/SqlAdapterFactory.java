@@ -465,6 +465,11 @@ public class SqlAdapterFactory extends AdapterFactoryImpl
         return createIntegerValueAdapter();
       }
       @Override
+      public Adapter caseUnsignedValue(UnsignedValue object)
+      {
+        return createUnsignedValueAdapter();
+      }
+      @Override
       public Adapter caseCol(Col object)
       {
         return createColAdapter();
@@ -1732,6 +1737,21 @@ public class SqlAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createIntegerValueAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.UnsignedValue <em>Unsigned Value</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.UnsignedValue
+   * @generated
+   */
+  public Adapter createUnsignedValueAdapter()
   {
     return null;
   }

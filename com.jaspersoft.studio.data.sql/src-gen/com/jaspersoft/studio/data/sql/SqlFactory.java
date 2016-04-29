@@ -725,6 +725,15 @@ public interface SqlFactory extends EFactory
   IntegerValue createIntegerValue();
 
   /**
+   * Returns a new object of class '<em>Unsigned Value</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Unsigned Value</em>'.
+   * @generated
+   */
+  UnsignedValue createUnsignedValue();
+
+  /**
    * Returns a new object of class '<em>Col</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->

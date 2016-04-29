@@ -7,7 +7,7 @@ Model:
 	JRNPARAM? query=SelectQuery;
 
 FetchFirst:
-	fetchFirst=IntegerValue? row=('ROW' | 'ROWS') 'ONLY';
+	fetchFirst=UnsignedValue row=('ROW' | 'ROWS') 'ONLY';
 
 Offset:
 	offset=INT;
@@ -47,11 +47,11 @@ FromTable:
 	table=TableOrAlias (fjoin+=FromTableJoin)*;
 
 FromTableJoin:
-	join=JoinType onTable=TableOrAlias (('ON' joinExpr=FullExpression) | joinCond=JoinCondition) ;
-	
+	join=JoinType onTable=TableOrAlias (('ON' joinExpr=FullExpression) | joinCond=JoinCondition);
+
 JoinCondition:
 	'USING' '(' useCols=UsingCols ')';
-	
+
 UsingCols returns UsingCols:
 	DbObjectName ({UsingCols.entries+=current} ("," entries+=DbObjectName)+)?;
 
@@ -296,6 +296,9 @@ FNAME:
 
 IntegerValue:
 	integer=INT;
+
+UnsignedValue:
+	integer=UNSIGNED;
 
 terminal JRPARAM:
 	'$P{'->'}';

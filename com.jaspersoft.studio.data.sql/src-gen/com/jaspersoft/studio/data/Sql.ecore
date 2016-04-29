@@ -6,7 +6,7 @@
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="FetchFirst">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="fetchFirst" eType="#//IntegerValue"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fetchFirst" eType="#//UnsignedValue"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="row" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
@@ -438,6 +438,9 @@
     <eLiterals name="xbwnr" value="11" literal="BETWEEN]"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="IntegerValue">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="integer" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="UnsignedValue">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="integer" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Col" eSuperTypes="#//ColumnFull">

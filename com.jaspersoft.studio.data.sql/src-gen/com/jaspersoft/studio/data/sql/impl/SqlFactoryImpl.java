@@ -143,6 +143,7 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
       case SqlPackage.SQL_CASE_WHENS: return createSQLCaseWhens();
       case SqlPackage.SQL_CASE_WHEN: return createSqlCaseWhen();
       case SqlPackage.INTEGER_VALUE: return createIntegerValue();
+      case SqlPackage.UNSIGNED_VALUE: return createUnsignedValue();
       case SqlPackage.COL: return createCol();
       case SqlPackage.UNIPIVOT_IN_CLAUSE: return createUnipivotInClause();
       case SqlPackage.UICARGS: return createuicargs();
@@ -1058,6 +1059,17 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
   {
     IntegerValueImpl integerValue = new IntegerValueImpl();
     return integerValue;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public UnsignedValue createUnsignedValue()
+  {
+    UnsignedValueImpl unsignedValue = new UnsignedValueImpl();
+    return unsignedValue;
   }
 
   /**
