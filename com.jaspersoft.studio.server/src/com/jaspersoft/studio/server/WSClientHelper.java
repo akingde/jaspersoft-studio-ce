@@ -25,8 +25,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-import net.sf.jasperreports.eclipse.util.FileUtils;
-
 import org.apache.commons.codec.binary.Base64;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.widgets.Display;
@@ -37,12 +35,11 @@ import com.jaspersoft.jasperserver.dto.resources.ClientResource;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.server.model.AFileResource;
+import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.model.IInputControlsContainer;
 import com.jaspersoft.studio.server.model.MFolder;
 import com.jaspersoft.studio.server.model.MRDataAdapter;
-import com.jaspersoft.studio.server.model.MRDataAdapterFile;
 import com.jaspersoft.studio.server.model.MReportUnit;
-import com.jaspersoft.studio.server.model.AMResource;
 import com.jaspersoft.studio.server.model.datasource.filter.IDatasourceFilter;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
@@ -53,6 +50,8 @@ import com.jaspersoft.studio.server.protocol.ReportExecution;
 import com.jaspersoft.studio.server.protocol.restv2.RestV2ConnectionJersey;
 import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorDatasource;
 import com.jaspersoft.studio.utils.ModelUtils;
+
+import net.sf.jasperreports.eclipse.util.FileUtils;
 
 public class WSClientHelper {
 	private static Map<IConnection, ServerProfile> clients = new HashMap<IConnection, ServerProfile>();
@@ -297,7 +296,7 @@ public class WSClientHelper {
 				String wsType = rd.getWsType();
 				if (wsType.equals(ResourceDescriptor.TYPE_INPUT_CONTROL) && !rd.getIsNew())
 					rd = cli.addOrModifyResource(monitor, rd, file);
-				else if (res instanceof MRDataAdapterFile || res instanceof MRDataAdapter)
+				else if (res instanceof MRDataAdapter)
 					rd = cli.addOrModifyResource(monitor, rd, file);
 				else {
 					if (wsType.equals(ResourceDescriptor.TYPE_JRXML) && !rd.getIsNew()
@@ -337,8 +336,7 @@ public class WSClientHelper {
 					ResourceDescriptor v = f.getValue();
 					v.setParentFolder(getParentFolder(prd) + prd.getName());// $NON-NLS-1$
 					v.setUriString(getParentFolder(v) + f.getValue().getName());// $NON-NLS-1$
-				} else if (!(f instanceof MReportUnit || f instanceof MRDataAdapter
-						|| f instanceof MRDataAdapterFile)) {
+				} else if (!(f instanceof MReportUnit || f instanceof MRDataAdapter)) {
 					ResourceDescriptor prd = ((AMResource) f.getParent()).getValue();
 					ResourceDescriptor v = f.getValue();
 					v.setParentFolder(prd.getParentFolder() + "/" + prd.getName() + "_files");//$NON-NLS-1$
