@@ -2151,7 +2151,7 @@
              description="%parentSelectionModifierDescription"
              id="com.jaspersoft.studio.editor.ParentSelectionOverrider"
              name="%parentSelectionModifierName"
-             sequence="V">
+             sequence="P">
        </item>
        <item
              context="Dragging"
