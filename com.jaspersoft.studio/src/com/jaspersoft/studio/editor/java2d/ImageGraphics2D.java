@@ -90,10 +90,6 @@ public class ImageGraphics2D extends ACachedGraphics {
 		targetGraphics.drawImage(image, null, null);
 	}
 	
-	public void paintCache2(){
-		targetGraphics.drawImage(image, -2, 0, null);
-	}
-	
 	/**
 	 * Set the target graphics, where the content of the image will be 
 	 * copied calling the {@link #paintCache()} method
