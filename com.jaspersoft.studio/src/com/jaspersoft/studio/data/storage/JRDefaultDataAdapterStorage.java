@@ -12,6 +12,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.storage;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -85,7 +86,11 @@ public class JRDefaultDataAdapterStorage extends ADataAdapterStorage {
 	 */
 	@Override
 	public Collection<DataAdapterDescriptor> getDataAdapterDescriptors() {
-		return getDataAdapterDescriptors(design.getMainDesignDataset());
+		if (design != null){
+			return getDataAdapterDescriptors(design.getMainDesignDataset());
+		} else {
+			return new ArrayList<DataAdapterDescriptor>();
+		}
 	}
 	
 	/**
