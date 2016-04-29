@@ -75,7 +75,7 @@ public abstract class APageFigure extends FreeformLayeredPane implements HandleB
 	public APageFigure(boolean viewMargins, PageEditPart page) {
 		this.viewMargins = viewMargins;
 		this.page = page;
-		//add the figure to the page
+		//add the grid figure as first child of the page
 		add(grid);
 	}
 
@@ -145,12 +145,20 @@ public abstract class APageFigure extends FreeformLayeredPane implements HandleB
 
 
 	/**
-	 * Set the size of the grid figure 
+	 * Set the size of the grid figure. Also assure that the grid is always 
+	 * the first figure, to be under any other. This check is necessary since
+	 * this is a special figure that has not an edit part or a model and in
+	 * the children refresh operation could be moved in some cases
 	 * 
 	 * @param size a not null rectangle with the size of the grid figure
 	 */
 	protected void setGridSize(Rectangle size) {
 		if (grid.isVisible()) {
+			//There is for sure a child, since the grid figure is added on the creation
+			if (getChildren().get(0) != grid){
+				remove(grid);
+				add(grid, 0);
+			}
 			grid.setBounds(size);
 		}
 	}
