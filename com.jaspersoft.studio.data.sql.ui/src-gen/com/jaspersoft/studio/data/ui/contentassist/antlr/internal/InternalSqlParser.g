@@ -202,9 +202,9 @@ ruleModel
     }
     :
 (
-{ before(grammarAccess.getModelAccess().getQueryAssignment()); }
-(rule__Model__QueryAssignment)
-{ after(grammarAccess.getModelAccess().getQueryAssignment()); }
+{ before(grammarAccess.getModelAccess().getGroup()); }
+(rule__Model__Group__0)
+{ after(grammarAccess.getModelAccess().getGroup()); }
 )
 
 ;
@@ -4473,6 +4473,67 @@ finally {
 
 
 
+rule__Model__Group__0
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+	rule__Model__Group__0__Impl
+	rule__Model__Group__1
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__Model__Group__0__Impl
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+(
+{ before(grammarAccess.getModelAccess().getJRNPARAMTerminalRuleCall_0()); }
+(	RULE_JRNPARAM)?
+{ after(grammarAccess.getModelAccess().getJRNPARAMTerminalRuleCall_0()); }
+)
+
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+
+rule__Model__Group__1
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+	rule__Model__Group__1__Impl
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__Model__Group__1__Impl
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+(
+{ before(grammarAccess.getModelAccess().getQueryAssignment_1()); }
+(rule__Model__QueryAssignment_1)
+{ after(grammarAccess.getModelAccess().getQueryAssignment_1()); }
+)
+
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+
+
+
+
+
 rule__FetchFirst__Group__0
     @init {
 		int stackSize = keepStackSize();
@@ -7624,7 +7685,7 @@ rule__PivotInClauseAny__Group__1__Impl
 :
 (
 { before(grammarAccess.getPivotInClauseAnyAccess().getGroup_1()); }
-(rule__PivotInClauseAny__Group_1__0)?
+(rule__PivotInClauseAny__Group_1__0)*
 { after(grammarAccess.getPivotInClauseAnyAccess().getGroup_1()); }
 )
 
@@ -15813,14 +15874,14 @@ finally {
 
 
 
-rule__Model__QueryAssignment
+rule__Model__QueryAssignment_1
     @init {
 		int stackSize = keepStackSize();
     }
 :
 (
-{ before(grammarAccess.getModelAccess().getQuerySelectQueryParserRuleCall_0()); }
-	ruleSelectQuery{ after(grammarAccess.getModelAccess().getQuerySelectQueryParserRuleCall_0()); }
+{ before(grammarAccess.getModelAccess().getQuerySelectQueryParserRuleCall_1_0()); }
+	ruleSelectQuery{ after(grammarAccess.getModelAccess().getQuerySelectQueryParserRuleCall_1_0()); }
 )
 
 ;

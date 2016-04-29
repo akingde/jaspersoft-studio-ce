@@ -72,25 +72,29 @@ ruleModel returns [EObject current=null]
     @init { enterRule(); 
     }
     @after { leaveRule(); }:
-(
+((this_JRNPARAM_0=RULE_JRNPARAM
+    { 
+    newLeafNode(this_JRNPARAM_0, grammarAccess.getModelAccess().getJRNPARAMTerminalRuleCall_0()); 
+    }
+)?(
 (
 		{ 
-	        newCompositeNode(grammarAccess.getModelAccess().getQuerySelectQueryParserRuleCall_0()); 
+	        newCompositeNode(grammarAccess.getModelAccess().getQuerySelectQueryParserRuleCall_1_0()); 
 	    }
-		lv_query_0_0=ruleSelectQuery		{
+		lv_query_1_0=ruleSelectQuery		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getModelRule());
 	        }
        		set(
        			$current, 
        			"query",
-        		lv_query_0_0, 
-        		"SelectQuery");
+        		lv_query_1_0, 
+        		"com.jaspersoft.studio.data.Sql.SelectQuery");
 	        afterParserOrEnumRuleCall();
 	    }
 
 )
-)
+))
 ;
 
 
@@ -124,7 +128,7 @@ ruleFetchFirst returns [EObject current=null]
        			$current, 
        			"fetchFirst",
         		lv_fetchFirst_0_0, 
-        		"IntegerValue");
+        		"com.jaspersoft.studio.data.Sql.IntegerValue");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -201,7 +205,7 @@ ruleOffset returns [EObject current=null]
        			$current, 
        			"offset",
         		lv_offset_0_0, 
-        		"INT");
+        		"com.jaspersoft.studio.data.Sql.INT");
 	    }
 
 )
@@ -252,7 +256,7 @@ ruleLimit returns [EObject current=null]
        			$current, 
        			"l1",
         		lv_l1_2_0, 
-        		"UNSIGNED");
+        		"com.jaspersoft.studio.data.Sql.UNSIGNED");
 	    }
 
 )
@@ -275,7 +279,7 @@ ruleLimit returns [EObject current=null]
        			$current, 
        			"l2",
         		lv_l2_4_0, 
-        		"UNSIGNED");
+        		"com.jaspersoft.studio.data.Sql.UNSIGNED");
 	    }
 
 )
@@ -322,7 +326,7 @@ ruleSelectQuery returns [EObject current=null]
        			$current, 
        			"op",
         		lv_op_1_0, 
-        		"SelectSubSet");
+        		"com.jaspersoft.studio.data.Sql.SelectSubSet");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -435,7 +439,7 @@ ruleSelectSubSet returns [EObject current=null]
        			$current, 
        			"query",
         		lv_query_2_0, 
-        		"Select");
+        		"com.jaspersoft.studio.data.Sql.Select");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -519,7 +523,7 @@ ruleSelect returns [EObject current=null]
        			$current, 
        			"cols",
         		lv_cols_7_0, 
-        		"Columns");
+        		"com.jaspersoft.studio.data.Sql.Columns");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -542,7 +546,7 @@ ruleSelect returns [EObject current=null]
        			$current, 
        			"tbl",
         		lv_tbl_9_0, 
-        		"Tables");
+        		"com.jaspersoft.studio.data.Sql.Tables");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -565,7 +569,7 @@ ruleSelect returns [EObject current=null]
        			$current, 
        			"whereExpression",
         		lv_whereExpression_11_0, 
-        		"FullExpression");
+        		"com.jaspersoft.studio.data.Sql.FullExpression");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -588,7 +592,7 @@ ruleSelect returns [EObject current=null]
        			$current, 
        			"groupByEntry",
         		lv_groupByEntry_13_0, 
-        		"GroupByColumns");
+        		"com.jaspersoft.studio.data.Sql.GroupByColumns");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -611,7 +615,7 @@ ruleSelect returns [EObject current=null]
        			$current, 
        			"havingEntry",
         		lv_havingEntry_15_0, 
-        		"FullExpression");
+        		"com.jaspersoft.studio.data.Sql.FullExpression");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -634,7 +638,7 @@ ruleSelect returns [EObject current=null]
        			$current, 
        			"orderByEntry",
         		lv_orderByEntry_17_0, 
-        		"OrderByColumns");
+        		"com.jaspersoft.studio.data.Sql.OrderByColumns");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -657,7 +661,7 @@ ruleSelect returns [EObject current=null]
        			$current, 
        			"lim",
         		lv_lim_19_0, 
-        		"Limit");
+        		"com.jaspersoft.studio.data.Sql.Limit");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -680,7 +684,7 @@ ruleSelect returns [EObject current=null]
        			$current, 
        			"offset",
         		lv_offset_21_0, 
-        		"Offset");
+        		"com.jaspersoft.studio.data.Sql.Offset");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -703,7 +707,7 @@ ruleSelect returns [EObject current=null]
        			$current, 
        			"fetchFirst",
         		lv_fetchFirst_23_0, 
-        		"FetchFirst");
+        		"com.jaspersoft.studio.data.Sql.FetchFirst");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -762,7 +766,7 @@ ruleColumns returns [EObject current=null]
        			$current, 
        			"entries",
         		lv_entries_3_0, 
-        		"ColumnOrAlias");
+        		"com.jaspersoft.studio.data.Sql.ColumnOrAlias");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -801,7 +805,7 @@ ruleColumnOrAlias returns [EObject current=null]
        			$current, 
        			"ce",
         		lv_ce_0_0, 
-        		"OperandGroup");
+        		"com.jaspersoft.studio.data.Sql.OperandGroup");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -835,7 +839,7 @@ ruleColumnOrAlias returns [EObject current=null]
        			$current, 
        			"colAlias",
         		lv_colAlias_2_0, 
-        		"DbObjectName");
+        		"com.jaspersoft.studio.data.Sql.DbObjectName");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -855,7 +859,7 @@ ruleColumnOrAlias returns [EObject current=null]
        			$current, 
        			"allCols",
         		lv_allCols_3_0, 
-        		"STAR");
+        		"com.jaspersoft.studio.data.Sql.STAR");
 	    }
 
 )
@@ -873,7 +877,7 @@ ruleColumnOrAlias returns [EObject current=null]
        			$current, 
        			"dbAllCols",
         		lv_dbAllCols_4_0, 
-        		"DbObjectNameAll");
+        		"com.jaspersoft.studio.data.Sql.DbObjectNameAll");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -932,7 +936,7 @@ ruleColumnFull returns [EObject current=null]
        			$current, 
        			"entries",
         		lv_entries_3_0, 
-        		"DbObjectName");
+        		"com.jaspersoft.studio.data.Sql.DbObjectName");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -991,7 +995,7 @@ ruleTables returns [EObject current=null]
        			$current, 
        			"entries",
         		lv_entries_3_0, 
-        		"FromTable");
+        		"com.jaspersoft.studio.data.Sql.FromTable");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -1030,7 +1034,7 @@ ruleFromTable returns [EObject current=null]
        			$current, 
        			"table",
         		lv_table_0_0, 
-        		"TableOrAlias");
+        		"com.jaspersoft.studio.data.Sql.TableOrAlias");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -1048,7 +1052,7 @@ ruleFromTable returns [EObject current=null]
        			$current, 
        			"fjoin",
         		lv_fjoin_1_0, 
-        		"FromTableJoin");
+        		"com.jaspersoft.studio.data.Sql.FromTableJoin");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -1087,7 +1091,7 @@ ruleFromTableJoin returns [EObject current=null]
        			$current, 
        			"join",
         		lv_join_0_0, 
-        		"JoinType");
+        		"com.jaspersoft.studio.data.Sql.JoinType");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -1105,7 +1109,7 @@ ruleFromTableJoin returns [EObject current=null]
        			$current, 
        			"onTable",
         		lv_onTable_1_0, 
-        		"TableOrAlias");
+        		"com.jaspersoft.studio.data.Sql.TableOrAlias");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -1128,7 +1132,7 @@ ruleFromTableJoin returns [EObject current=null]
        			$current, 
        			"joinExpr",
         		lv_joinExpr_3_0, 
-        		"FullExpression");
+        		"com.jaspersoft.studio.data.Sql.FullExpression");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -1147,7 +1151,7 @@ ruleFromTableJoin returns [EObject current=null]
        			$current, 
        			"joinCond",
         		lv_joinCond_4_0, 
-        		"JoinCondition");
+        		"com.jaspersoft.studio.data.Sql.JoinCondition");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -1196,7 +1200,7 @@ ruleJoinCondition returns [EObject current=null]
        			$current, 
        			"useCols",
         		lv_useCols_2_0, 
-        		"UsingCols");
+        		"com.jaspersoft.studio.data.Sql.UsingCols");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -1260,7 +1264,7 @@ ruleUsingCols returns [EObject current=null]
        			$current, 
        			"entries",
         		lv_entries_3_0, 
-        		"DbObjectName");
+        		"com.jaspersoft.studio.data.Sql.DbObjectName");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -1299,7 +1303,7 @@ ruleTableOrAlias returns [EObject current=null]
        			$current, 
        			"tfull",
         		lv_tfull_0_0, 
-        		"TableFull");
+        		"com.jaspersoft.studio.data.Sql.TableFull");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -1318,7 +1322,7 @@ ruleTableOrAlias returns [EObject current=null]
        			$current, 
        			"sq",
         		lv_sq_1_0, 
-        		"SubQueryOperand");
+        		"com.jaspersoft.studio.data.Sql.SubQueryOperand");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -1336,7 +1340,7 @@ ruleTableOrAlias returns [EObject current=null]
        			$current, 
        			"pivot",
         		lv_pivot_2_0, 
-        		"PivotTable");
+        		"com.jaspersoft.studio.data.Sql.PivotTable");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -1355,7 +1359,7 @@ ruleTableOrAlias returns [EObject current=null]
        			$current, 
        			"unpivot",
         		lv_unpivot_3_0, 
-        		"UnpivotTable");
+        		"com.jaspersoft.studio.data.Sql.UnpivotTable");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -1389,7 +1393,7 @@ ruleTableOrAlias returns [EObject current=null]
        			$current, 
        			"tblAlias",
         		lv_tblAlias_5_0, 
-        		"DbObjectName");
+        		"com.jaspersoft.studio.data.Sql.DbObjectName");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -1443,7 +1447,7 @@ rulePivotTable returns [EObject current=null]
        			$current, 
        			"pfun",
         		lv_pfun_3_0, 
-        		"PivotFunctions");
+        		"com.jaspersoft.studio.data.Sql.PivotFunctions");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -1461,7 +1465,7 @@ rulePivotTable returns [EObject current=null]
        			$current, 
        			"pfor",
         		lv_pfor_4_0, 
-        		"PivotForClause");
+        		"com.jaspersoft.studio.data.Sql.PivotForClause");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -1479,7 +1483,7 @@ rulePivotTable returns [EObject current=null]
        			$current, 
        			"pin",
         		lv_pin_5_0, 
-        		"PivotInClause");
+        		"com.jaspersoft.studio.data.Sql.PivotInClause");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -1524,7 +1528,7 @@ rulePivotFunctions returns [EObject current=null]
        			$current, 
        			"abc",
         		lv_abc_0_0, 
-        		"ID");
+        		"com.jaspersoft.studio.data.Sql.ID");
 	    }
 
 )
@@ -1574,7 +1578,7 @@ rulePivotInClause returns [EObject current=null]
        			$current, 
        			"sq",
         		lv_sq_2_0, 
-        		"SubQueryOperand");
+        		"com.jaspersoft.studio.data.Sql.SubQueryOperand");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -1593,7 +1597,7 @@ rulePivotInClause returns [EObject current=null]
        			$current, 
        			"args",
         		lv_args_3_0, 
-        		"UnpivotInClauseArgs");
+        		"com.jaspersoft.studio.data.Sql.UnpivotInClauseArgs");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -1612,7 +1616,7 @@ rulePivotInClause returns [EObject current=null]
        			$current, 
        			"pinany",
         		lv_pinany_4_0, 
-        		"PivotInClauseAny");
+        		"com.jaspersoft.studio.data.Sql.PivotInClauseAny");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -1662,7 +1666,7 @@ rulePivotInClauseAny returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRu
         $current.merge(kw);
         newLeafNode(kw, grammarAccess.getPivotInClauseAnyAccess().getANYKeyword_1_1()); 
     }
-)?)
+)*)
     ;
 
 
@@ -1722,7 +1726,7 @@ ruleUnpivotTable returns [EObject current=null]
        			$current, 
        			"pcols",
         		lv_pcols_5_0, 
-        		"PivotColumns");
+        		"com.jaspersoft.studio.data.Sql.PivotColumns");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -1740,7 +1744,7 @@ ruleUnpivotTable returns [EObject current=null]
        			$current, 
        			"pfor",
         		lv_pfor_6_0, 
-        		"PivotForClause");
+        		"com.jaspersoft.studio.data.Sql.PivotForClause");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -1758,7 +1762,7 @@ ruleUnpivotTable returns [EObject current=null]
        			$current, 
        			"inop",
         		lv_inop_7_0, 
-        		"UnpivotInClause");
+        		"com.jaspersoft.studio.data.Sql.UnpivotInClause");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -1829,7 +1833,7 @@ ruleUnpivotInClause returns [EObject current=null]
        			$current, 
        			"args",
         		lv_args_3_0, 
-        		"UnpivotInClauseArgs");
+        		"com.jaspersoft.studio.data.Sql.UnpivotInClauseArgs");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -1893,7 +1897,7 @@ ruleUnpivotInClauseArgs returns [EObject current=null]
        			$current, 
        			"entries",
         		lv_entries_3_0, 
-        		"UnpivotInClauseArg");
+        		"com.jaspersoft.studio.data.Sql.UnpivotInClauseArg");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -1932,7 +1936,7 @@ ruleUnpivotInClauseArg returns [EObject current=null]
        			$current, 
        			"pcols",
         		lv_pcols_0_0, 
-        		"PivotColumns");
+        		"com.jaspersoft.studio.data.Sql.PivotColumns");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -1955,7 +1959,7 @@ ruleUnpivotInClauseArg returns [EObject current=null]
        			$current, 
        			"cfuls",
         		lv_cfuls_2_0, 
-        		"PivotColumns");
+        		"com.jaspersoft.studio.data.Sql.PivotColumns");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -2119,7 +2123,7 @@ rulePivotCols returns [EObject current=null]
        			$current, 
        			"entries",
         		lv_entries_3_0, 
-        		"PivotCol");
+        		"com.jaspersoft.studio.data.Sql.PivotCol");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -2178,7 +2182,7 @@ rulePivotCol returns [EObject current=null]
        			$current, 
        			"entries",
         		lv_entries_3_0, 
-        		"DbObjectName");
+        		"com.jaspersoft.studio.data.Sql.DbObjectName");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -2237,7 +2241,7 @@ ruleTableFull returns [EObject current=null]
        			$current, 
        			"entries",
         		lv_entries_3_0, 
-        		"DbObjectName");
+        		"com.jaspersoft.studio.data.Sql.DbObjectName");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -2276,7 +2280,7 @@ ruleDbObjectNameAll returns [EObject current=null]
        			$current, 
        			"dbname",
         		lv_dbname_0_0, 
-        		"DBID");
+        		"com.jaspersoft.studio.data.Sql.DBID");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -2324,7 +2328,7 @@ ruleDbObjectName returns [EObject current=null]
        			$current, 
        			"dbname",
         		lv_dbname_0_0, 
-        		"DBID");
+        		"com.jaspersoft.studio.data.Sql.DBID");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -2383,7 +2387,7 @@ ruleOrderByColumns returns [EObject current=null]
        			$current, 
        			"entries",
         		lv_entries_3_0, 
-        		"OrderByColumnFull");
+        		"com.jaspersoft.studio.data.Sql.OrderByColumnFull");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -2422,7 +2426,7 @@ ruleOrderByColumnFull returns [EObject current=null]
        			$current, 
        			"colOrder",
         		lv_colOrder_0_0, 
-        		"ColumnFull");
+        		"com.jaspersoft.studio.data.Sql.ColumnFull");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -2442,7 +2446,7 @@ ruleOrderByColumnFull returns [EObject current=null]
        			$current, 
        			"colOrderInt",
         		lv_colOrderInt_1_0, 
-        		"UNSIGNED");
+        		"com.jaspersoft.studio.data.Sql.UNSIGNED");
 	    }
 
 )
@@ -2532,7 +2536,7 @@ ruleGroupByColumns returns [EObject current=null]
        			$current, 
        			"entries",
         		lv_entries_3_0, 
-        		"GroupByColumnFull");
+        		"com.jaspersoft.studio.data.Sql.GroupByColumnFull");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -2571,7 +2575,7 @@ ruleGroupByColumnFull returns [EObject current=null]
        			$current, 
        			"colGrBy",
         		lv_colGrBy_0_0, 
-        		"ColumnFull");
+        		"com.jaspersoft.studio.data.Sql.ColumnFull");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -2590,7 +2594,7 @@ ruleGroupByColumnFull returns [EObject current=null]
        			$current, 
        			"gbFunction",
         		lv_gbFunction_1_0, 
-        		"OperandFunction");
+        		"com.jaspersoft.studio.data.Sql.OperandFunction");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -2610,7 +2614,7 @@ ruleGroupByColumnFull returns [EObject current=null]
        			$current, 
        			"grByInt",
         		lv_grByInt_2_0, 
-        		"UNSIGNED");
+        		"com.jaspersoft.studio.data.Sql.UNSIGNED");
 	    }
 
 )
@@ -2663,7 +2667,7 @@ ruleFullExpression returns [EObject current=null]
        			$current, 
        			"entries",
         		lv_entries_2_0, 
-        		"ExpressionFragmentSecond");
+        		"com.jaspersoft.studio.data.Sql.ExpressionFragmentSecond");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -2734,7 +2738,7 @@ ruleExpressionFragmentSecond returns [EObject current=null]
        			$current, 
        			"efrag",
         		lv_efrag_1_0, 
-        		"ExpressionFragment");
+        		"com.jaspersoft.studio.data.Sql.ExpressionFragment");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -2754,7 +2758,7 @@ ruleExpressionFragmentSecond returns [EObject current=null]
        			$current, 
        			"notPrm",
         		lv_notPrm_2_0, 
-        		"JRNPARAM");
+        		"com.jaspersoft.studio.data.Sql.JRNPARAM");
 	    }
 
 )
@@ -2792,7 +2796,7 @@ ruleExpressionFragment returns [EObject current=null]
        			$current, 
        			"expgroup",
         		lv_expgroup_0_0, 
-        		"ExpressionGroup");
+        		"com.jaspersoft.studio.data.Sql.ExpressionGroup");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -2811,7 +2815,7 @@ ruleExpressionFragment returns [EObject current=null]
        			$current, 
        			"exp",
         		lv_exp_1_0, 
-        		"Expression");
+        		"com.jaspersoft.studio.data.Sql.Expression");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -2831,7 +2835,7 @@ ruleExpressionFragment returns [EObject current=null]
        			$current, 
        			"xexp",
         		lv_xexp_2_1, 
-        		"XExpression");
+        		"com.jaspersoft.studio.data.Sql.XExpression");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -2846,7 +2850,7 @@ ruleExpressionFragment returns [EObject current=null]
        			$current, 
        			"xexp",
         		lv_xexp_2_2, 
-        		"XExpression_");
+        		"com.jaspersoft.studio.data.Sql.XExpression_");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -2868,7 +2872,7 @@ ruleExpressionFragment returns [EObject current=null]
        			$current, 
        			"notPrm",
         		lv_notPrm_3_0, 
-        		"JRNPARAM");
+        		"com.jaspersoft.studio.data.Sql.JRNPARAM");
 	    }
 
 )
@@ -2886,7 +2890,7 @@ ruleExpressionFragment returns [EObject current=null]
        			$current, 
        			"in",
         		lv_in_4_0, 
-        		"InOperator");
+        		"com.jaspersoft.studio.data.Sql.InOperator");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -2905,7 +2909,7 @@ ruleExpressionFragment returns [EObject current=null]
        			$current, 
        			"exists",
         		lv_exists_5_0, 
-        		"ExistsOperator");
+        		"com.jaspersoft.studio.data.Sql.ExistsOperator");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -2987,7 +2991,7 @@ ruleExpressionGroup returns [EObject current=null]
        			$current, 
        			"expr",
         		lv_expr_3_0, 
-        		"FullExpression");
+        		"com.jaspersoft.studio.data.Sql.FullExpression");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -3047,7 +3051,7 @@ ruleXExpression returns [EObject current=null]
        			$current, 
        			"xf",
         		lv_xf_3_0, 
-        		"XFunction");
+        		"com.jaspersoft.studio.data.Sql.XFunction");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -3070,7 +3074,7 @@ ruleXExpression returns [EObject current=null]
        			$current, 
        			"col",
         		lv_col_5_0, 
-        		"OperandGroup");
+        		"com.jaspersoft.studio.data.Sql.OperandGroup");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -3093,7 +3097,7 @@ ruleXExpression returns [EObject current=null]
        			$current, 
        			"prm",
         		lv_prm_7_0, 
-        		"XExpressionParams");
+        		"com.jaspersoft.studio.data.Sql.XExpressionParams");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -3153,7 +3157,7 @@ ruleXExpression_ returns [EObject current=null]
        			$current, 
        			"xf",
         		lv_xf_3_0, 
-        		"XFunction");
+        		"com.jaspersoft.studio.data.Sql.XFunction");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -3176,7 +3180,7 @@ ruleXExpression_ returns [EObject current=null]
        			$current, 
        			"col",
         		lv_col_5_0, 
-        		"OperandGroup");
+        		"com.jaspersoft.studio.data.Sql.OperandGroup");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -3199,7 +3203,7 @@ ruleXExpression_ returns [EObject current=null]
        			$current, 
        			"prm",
         		lv_prm_7_0, 
-        		"XExpressionParams");
+        		"com.jaspersoft.studio.data.Sql.XExpressionParams");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -3263,7 +3267,7 @@ ruleXExpressionParams returns [EObject current=null]
        			$current, 
        			"entries",
         		lv_entries_3_0, 
-        		"JRParameter");
+        		"com.jaspersoft.studio.data.Sql.JRParameter");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -3303,7 +3307,7 @@ ruleJRParameter returns [EObject current=null]
        			$current, 
        			"jrprm",
         		lv_jrprm_0_0, 
-        		"ID");
+        		"com.jaspersoft.studio.data.Sql.ID");
 	    }
 
 )
@@ -3341,7 +3345,7 @@ ruleExpression returns [EObject current=null]
        			$current, 
        			"op1",
         		lv_op1_0_0, 
-        		"Operand");
+        		"com.jaspersoft.studio.data.Sql.Operand");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -3392,7 +3396,7 @@ ruleExpression returns [EObject current=null]
        			$current, 
        			"in",
         		lv_in_2_0, 
-        		"InOperator");
+        		"com.jaspersoft.studio.data.Sql.InOperator");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -3411,7 +3415,7 @@ ruleExpression returns [EObject current=null]
        			$current, 
        			"exists",
         		lv_exists_3_0, 
-        		"ExistsOperator");
+        		"com.jaspersoft.studio.data.Sql.ExistsOperator");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -3430,7 +3434,7 @@ ruleExpression returns [EObject current=null]
        			$current, 
        			"between",
         		lv_between_4_0, 
-        		"Between");
+        		"com.jaspersoft.studio.data.Sql.Between");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -3449,7 +3453,7 @@ ruleExpression returns [EObject current=null]
        			$current, 
        			"like",
         		lv_like_5_0, 
-        		"Like");
+        		"com.jaspersoft.studio.data.Sql.Like");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -3468,7 +3472,7 @@ ruleExpression returns [EObject current=null]
        			$current, 
        			"comp",
         		lv_comp_6_0, 
-        		"Comparison");
+        		"com.jaspersoft.studio.data.Sql.Comparison");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -3662,7 +3666,7 @@ ruleComparison returns [EObject current=null]
        			$current, 
        			"op2",
         		lv_op2_2_0, 
-        		"Operand");
+        		"com.jaspersoft.studio.data.Sql.Operand");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -3733,7 +3737,7 @@ ruleLike returns [EObject current=null]
        			$current, 
        			"op2",
         		lv_op2_1_0, 
-        		"LikeOperand");
+        		"com.jaspersoft.studio.data.Sql.LikeOperand");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -3772,7 +3776,7 @@ ruleLikeOperand returns [EObject current=null]
        			$current, 
        			"op2",
         		lv_op2_0_0, 
-        		"StringOperand");
+        		"com.jaspersoft.studio.data.Sql.StringOperand");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -3791,7 +3795,7 @@ ruleLikeOperand returns [EObject current=null]
        			$current, 
        			"fop2",
         		lv_fop2_1_0, 
-        		"OperandFunction");
+        		"com.jaspersoft.studio.data.Sql.OperandFunction");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -3810,7 +3814,7 @@ ruleLikeOperand returns [EObject current=null]
        			$current, 
        			"fcast",
         		lv_fcast_2_0, 
-        		"OpFunctionCast");
+        		"com.jaspersoft.studio.data.Sql.OpFunctionCast");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -3829,7 +3833,7 @@ ruleLikeOperand returns [EObject current=null]
        			$current, 
        			"fparam",
         		lv_fparam_3_0, 
-        		"ParameterOperand");
+        		"com.jaspersoft.studio.data.Sql.ParameterOperand");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -3900,7 +3904,7 @@ ruleBetween returns [EObject current=null]
        			$current, 
        			"op2",
         		lv_op2_1_0, 
-        		"OperandGroup");
+        		"com.jaspersoft.studio.data.Sql.OperandGroup");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -3923,7 +3927,7 @@ ruleBetween returns [EObject current=null]
        			$current, 
        			"op3",
         		lv_op3_3_0, 
-        		"OperandGroup");
+        		"com.jaspersoft.studio.data.Sql.OperandGroup");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -4000,7 +4004,7 @@ ruleInOperator returns [EObject current=null]
        			$current, 
        			"subquery",
         		lv_subquery_2_0, 
-        		"SubQueryOperand");
+        		"com.jaspersoft.studio.data.Sql.SubQueryOperand");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -4019,7 +4023,7 @@ ruleInOperator returns [EObject current=null]
        			$current, 
        			"opList",
         		lv_opList_3_0, 
-        		"OperandListGroup");
+        		"com.jaspersoft.studio.data.Sql.OperandListGroup");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -4096,7 +4100,7 @@ ruleExistsOperator returns [EObject current=null]
        			$current, 
        			"subquery",
         		lv_subquery_2_0, 
-        		"SubQueryOperand");
+        		"com.jaspersoft.studio.data.Sql.SubQueryOperand");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -4115,7 +4119,7 @@ ruleExistsOperator returns [EObject current=null]
        			$current, 
        			"opList",
         		lv_opList_3_0, 
-        		"OperandListGroup");
+        		"com.jaspersoft.studio.data.Sql.OperandListGroup");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -4159,7 +4163,7 @@ ruleOperandListGroup returns [EObject current=null]
        			$current, 
        			"opGroup",
         		lv_opGroup_1_0, 
-        		"OperandList");
+        		"com.jaspersoft.studio.data.Sql.OperandList");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -4223,7 +4227,7 @@ ruleOperandList returns [EObject current=null]
        			$current, 
        			"entries",
         		lv_entries_3_0, 
-        		"ScalarOperand");
+        		"com.jaspersoft.studio.data.Sql.ScalarOperand");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -4312,7 +4316,7 @@ ruleOperand returns [EObject current=null]
        			$current, 
        			"op1",
         		lv_op1_0_0, 
-        		"OperandFragment");
+        		"com.jaspersoft.studio.data.Sql.OperandFragment");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -4388,7 +4392,7 @@ ruleOperand returns [EObject current=null]
        			$current, 
        			"right",
         		lv_right_11_0, 
-        		"OperandFragment");
+        		"com.jaspersoft.studio.data.Sql.OperandFragment");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -4427,7 +4431,7 @@ ruleOperandFragment returns [EObject current=null]
        			$current, 
        			"column",
         		lv_column_0_0, 
-        		"ColumnOperand");
+        		"com.jaspersoft.studio.data.Sql.ColumnOperand");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -4446,7 +4450,7 @@ ruleOperandFragment returns [EObject current=null]
        			$current, 
        			"xop",
         		lv_xop_1_0, 
-        		"XOperandFragment");
+        		"com.jaspersoft.studio.data.Sql.XOperandFragment");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -4465,7 +4469,7 @@ ruleOperandFragment returns [EObject current=null]
        			$current, 
        			"subq",
         		lv_subq_2_0, 
-        		"SubQueryOperand");
+        		"com.jaspersoft.studio.data.Sql.SubQueryOperand");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -4484,7 +4488,7 @@ ruleOperandFragment returns [EObject current=null]
        			$current, 
        			"fcast",
         		lv_fcast_3_0, 
-        		"OpFunctionCast");
+        		"com.jaspersoft.studio.data.Sql.OpFunctionCast");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -4503,7 +4507,7 @@ ruleOperandFragment returns [EObject current=null]
        			$current, 
        			"fext",
         		lv_fext_4_0, 
-        		"FunctionExtract");
+        		"com.jaspersoft.studio.data.Sql.FunctionExtract");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -4522,7 +4526,7 @@ ruleOperandFragment returns [EObject current=null]
        			$current, 
        			"func",
         		lv_func_5_0, 
-        		"OperandFunction");
+        		"com.jaspersoft.studio.data.Sql.OperandFunction");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -4541,7 +4545,7 @@ ruleOperandFragment returns [EObject current=null]
        			$current, 
        			"sqlcase",
         		lv_sqlcase_6_0, 
-        		"SQLCASE");
+        		"com.jaspersoft.studio.data.Sql.SQLCASE");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -4586,7 +4590,7 @@ ruleOperandFunction returns [EObject current=null]
        			$current, 
        			"fname",
         		lv_fname_1_0, 
-        		"FNAME");
+        		"com.jaspersoft.studio.data.Sql.FNAME");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -4605,7 +4609,7 @@ ruleOperandFunction returns [EObject current=null]
        			$current, 
        			"star",
         		lv_star_2_0, 
-        		"STAR");
+        		"com.jaspersoft.studio.data.Sql.STAR");
 	    }
 
 )
@@ -4623,7 +4627,7 @@ ruleOperandFunction returns [EObject current=null]
        			$current, 
        			"args",
         		lv_args_3_0, 
-        		"OpFunctionArg");
+        		"com.jaspersoft.studio.data.Sql.OpFunctionArg");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -4646,7 +4650,7 @@ ruleOperandFunction returns [EObject current=null]
        			$current, 
        			"fan",
         		lv_fan_5_0, 
-        		"FunctionAnalytical");
+        		"com.jaspersoft.studio.data.Sql.FunctionAnalytical");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -4695,7 +4699,7 @@ ruleFunctionExtract returns [EObject current=null]
        			$current, 
        			"v",
         		lv_v_2_0, 
-        		"EXTRACT_VALUES");
+        		"com.jaspersoft.studio.data.Sql.EXTRACT_VALUES");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -4718,7 +4722,7 @@ ruleFunctionExtract returns [EObject current=null]
        			$current, 
        			"operand",
         		lv_operand_4_0, 
-        		"OperandGroup");
+        		"com.jaspersoft.studio.data.Sql.OperandGroup");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -4772,7 +4776,7 @@ ruleFunctionAnalytical returns [EObject current=null]
        			$current, 
        			"anClause",
         		lv_anClause_2_0, 
-        		"AnalyticClause");
+        		"com.jaspersoft.studio.data.Sql.AnalyticClause");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -4822,7 +4826,7 @@ ruleAnalyticClause returns [EObject current=null]
        			$current, 
        			"abc",
         		lv_abc_1_0, 
-        		"QueryPartitionClause");
+        		"com.jaspersoft.studio.data.Sql.QueryPartitionClause");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -4840,7 +4844,7 @@ ruleAnalyticClause returns [EObject current=null]
        			$current, 
        			"obc",
         		lv_obc_2_0, 
-        		"OrderByClause");
+        		"com.jaspersoft.studio.data.Sql.OrderByClause");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -4858,7 +4862,7 @@ ruleAnalyticClause returns [EObject current=null]
        			$current, 
        			"winc",
         		lv_winc_3_0, 
-        		"WindowingClause");
+        		"com.jaspersoft.studio.data.Sql.WindowingClause");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -4953,7 +4957,7 @@ ruleWindowingClauseBetween returns [EObject current=null]
        			$current, 
        			"wcoP",
         		lv_wcoP_1_0, 
-        		"WindowingClauseOperandPreceding");
+        		"com.jaspersoft.studio.data.Sql.WindowingClauseOperandPreceding");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -4976,7 +4980,7 @@ ruleWindowingClauseBetween returns [EObject current=null]
        			$current, 
        			"wcoF",
         		lv_wcoF_3_0, 
-        		"WindowingClauseOperandFollowing");
+        		"com.jaspersoft.studio.data.Sql.WindowingClauseOperandFollowing");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -5033,7 +5037,7 @@ ruleWindowingClauseOperandFollowing returns [EObject current=null]
        			$current, 
        			"exp",
         		lv_exp_3_0, 
-        		"AnalyticExprArg");
+        		"com.jaspersoft.studio.data.Sql.AnalyticExprArg");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -5101,7 +5105,7 @@ ruleWindowingClauseOperandPreceding returns [EObject current=null]
        			$current, 
        			"expr",
         		lv_expr_3_0, 
-        		"AnalyticExprArg");
+        		"com.jaspersoft.studio.data.Sql.AnalyticExprArg");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -5162,7 +5166,7 @@ ruleOrderByClause returns [EObject current=null]
        			$current, 
        			"args",
         		lv_args_2_0, 
-        		"OrderByClauseArgs");
+        		"com.jaspersoft.studio.data.Sql.OrderByClauseArgs");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -5221,7 +5225,7 @@ ruleOrderByClauseArgs returns [EObject current=null]
        			$current, 
        			"entries",
         		lv_entries_3_0, 
-        		"OrderByClauseArg");
+        		"com.jaspersoft.studio.data.Sql.OrderByClauseArg");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -5260,7 +5264,7 @@ ruleOrderByClauseArg returns [EObject current=null]
        			$current, 
        			"col",
         		lv_col_0_0, 
-        		"AnalyticExprArg");
+        		"com.jaspersoft.studio.data.Sql.AnalyticExprArg");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -5331,7 +5335,7 @@ ruleQueryPartitionClause returns [EObject current=null]
        			$current, 
        			"args",
         		lv_args_1_0, 
-        		"AnalyticExprArgs");
+        		"com.jaspersoft.studio.data.Sql.AnalyticExprArgs");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -5410,7 +5414,7 @@ ruleAnalyticExprArgs returns [EObject current=null]
        			$current, 
        			"entries",
         		lv_entries_3_0, 
-        		"AnalyticExprArg");
+        		"com.jaspersoft.studio.data.Sql.AnalyticExprArg");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -5449,7 +5453,7 @@ ruleAnalyticExprArg returns [EObject current=null]
        			$current, 
        			"ce",
         		lv_ce_0_0, 
-        		"Operand");
+        		"com.jaspersoft.studio.data.Sql.Operand");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -5467,7 +5471,7 @@ ruleAnalyticExprArg returns [EObject current=null]
        			$current, 
        			"colAlias",
         		lv_colAlias_1_0, 
-        		"DbObjectName");
+        		"com.jaspersoft.studio.data.Sql.DbObjectName");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -5526,7 +5530,7 @@ ruleOpFunctionArg returns [EObject current=null]
        			$current, 
        			"entries",
         		lv_entries_3_0, 
-        		"OpFunctionArgOperand");
+        		"com.jaspersoft.studio.data.Sql.OpFunctionArgOperand");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -5566,7 +5570,7 @@ ruleOpFunctionArgOperand returns [EObject current=null]
        			$current, 
        			"op",
         		lv_op_0_1, 
-        		"OpFunctionArgAgregate");
+        		"com.jaspersoft.studio.data.Sql.OpFunctionArgAgregate");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -5581,7 +5585,7 @@ ruleOpFunctionArgOperand returns [EObject current=null]
        			$current, 
        			"op",
         		lv_op_0_2, 
-        		"Operand");
+        		"com.jaspersoft.studio.data.Sql.Operand");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -5627,7 +5631,7 @@ ruleOpFunctionCast returns [EObject current=null]
        			$current, 
        			"op",
         		lv_op_1_0, 
-        		"OperandGroup");
+        		"com.jaspersoft.studio.data.Sql.OperandGroup");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -5651,7 +5655,7 @@ ruleOpFunctionCast returns [EObject current=null]
        			$current, 
        			"type",
         		lv_type_3_0, 
-        		"ID");
+        		"com.jaspersoft.studio.data.Sql.ID");
 	    }
 
 )
@@ -5674,7 +5678,7 @@ ruleOpFunctionCast returns [EObject current=null]
        			$current, 
        			"p",
         		lv_p_5_0, 
-        		"INT");
+        		"com.jaspersoft.studio.data.Sql.INT");
 	    }
 
 )
@@ -5697,7 +5701,7 @@ ruleOpFunctionCast returns [EObject current=null]
        			$current, 
        			"p2",
         		lv_p2_7_0, 
-        		"INT");
+        		"com.jaspersoft.studio.data.Sql.INT");
 	    }
 
 )
@@ -5786,7 +5790,7 @@ ruleXOperandFragment returns [EObject current=null]
        			$current, 
        			"param",
         		lv_param_0_0, 
-        		"ParameterOperand");
+        		"com.jaspersoft.studio.data.Sql.ParameterOperand");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -5805,7 +5809,7 @@ ruleXOperandFragment returns [EObject current=null]
        			$current, 
        			"eparam",
         		lv_eparam_1_0, 
-        		"ExclamationParameterOperand");
+        		"com.jaspersoft.studio.data.Sql.ExclamationParameterOperand");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -5824,7 +5828,7 @@ ruleXOperandFragment returns [EObject current=null]
        			$current, 
        			"scalar",
         		lv_scalar_2_0, 
-        		"ScalarNumberOperand");
+        		"com.jaspersoft.studio.data.Sql.ScalarNumberOperand");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -5864,7 +5868,7 @@ ruleParameterOperand returns [EObject current=null]
        			$current, 
        			"prm",
         		lv_prm_0_0, 
-        		"JRPARAM");
+        		"com.jaspersoft.studio.data.Sql.JRPARAM");
 	    }
 
 )
@@ -5903,7 +5907,7 @@ ruleExclamationParameterOperand returns [EObject current=null]
        			$current, 
        			"prm",
         		lv_prm_0_0, 
-        		"JRNPARAM");
+        		"com.jaspersoft.studio.data.Sql.JRNPARAM");
 	    }
 
 )
@@ -5941,7 +5945,7 @@ ruleColumnOperand returns [EObject current=null]
        			$current, 
        			"cfull",
         		lv_cfull_0_0, 
-        		"ColumnFull");
+        		"com.jaspersoft.studio.data.Sql.ColumnFull");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -6007,7 +6011,7 @@ ruleSubQueryOperand returns [EObject current=null]
        			$current, 
        			"sel",
         		lv_sel_2_0, 
-        		"SelectQuery");
+        		"com.jaspersoft.studio.data.Sql.SelectQuery");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -6051,7 +6055,7 @@ ruleScalarOperand returns [EObject current=null]
        			$current, 
        			"sostr",
         		lv_sostr_0_0, 
-        		"StringOperand");
+        		"com.jaspersoft.studio.data.Sql.StringOperand");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -6071,7 +6075,7 @@ ruleScalarOperand returns [EObject current=null]
        			$current, 
        			"sodbl",
         		lv_sodbl_1_0, 
-        		"SIGNED_DOUBLE");
+        		"com.jaspersoft.studio.data.Sql.SIGNED_DOUBLE");
 	    }
 
 )
@@ -6090,7 +6094,7 @@ ruleScalarOperand returns [EObject current=null]
        			$current, 
        			"sodate",
         		lv_sodate_2_0, 
-        		"DATE");
+        		"com.jaspersoft.studio.data.Sql.DATE");
 	    }
 
 )
@@ -6109,7 +6113,7 @@ ruleScalarOperand returns [EObject current=null]
        			$current, 
        			"sotime",
         		lv_sotime_3_0, 
-        		"TIME");
+        		"com.jaspersoft.studio.data.Sql.TIME");
 	    }
 
 )
@@ -6128,7 +6132,7 @@ ruleScalarOperand returns [EObject current=null]
        			$current, 
        			"sodt",
         		lv_sodt_4_0, 
-        		"TIMESTAMP");
+        		"com.jaspersoft.studio.data.Sql.TIMESTAMP");
 	    }
 
 )
@@ -6167,7 +6171,7 @@ ruleScalarNumberOperand returns [EObject current=null]
        			$current, 
        			"soUInt",
         		lv_soUInt_0_0, 
-        		"UNSIGNED");
+        		"com.jaspersoft.studio.data.Sql.UNSIGNED");
 	    }
 
 )
@@ -6186,7 +6190,7 @@ ruleScalarNumberOperand returns [EObject current=null]
        			$current, 
        			"soint",
         		lv_soint_1_0, 
-        		"INT");
+        		"com.jaspersoft.studio.data.Sql.INT");
 	    }
 
 )
@@ -6205,7 +6209,7 @@ ruleScalarNumberOperand returns [EObject current=null]
        			$current, 
        			"sodbl",
         		lv_sodbl_2_0, 
-        		"SIGNED_DOUBLE");
+        		"com.jaspersoft.studio.data.Sql.SIGNED_DOUBLE");
 	    }
 
 )
@@ -6223,7 +6227,7 @@ ruleScalarNumberOperand returns [EObject current=null]
        			$current, 
        			"sostr",
         		lv_sostr_3_0, 
-        		"StringOperand");
+        		"com.jaspersoft.studio.data.Sql.StringOperand");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -6267,7 +6271,7 @@ ruleSQLCASE returns [EObject current=null]
        			$current, 
        			"expr",
         		lv_expr_1_0, 
-        		"FullExpression");
+        		"com.jaspersoft.studio.data.Sql.FullExpression");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -6285,7 +6289,7 @@ ruleSQLCASE returns [EObject current=null]
        			$current, 
        			"when",
         		lv_when_2_0, 
-        		"SQLCaseWhens");
+        		"com.jaspersoft.studio.data.Sql.SQLCaseWhens");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -6344,7 +6348,7 @@ ruleSQLCaseWhens returns [EObject current=null]
        			$current, 
        			"entries",
         		lv_entries_2_0, 
-        		"SqlCaseWhen");
+        		"com.jaspersoft.studio.data.Sql.SqlCaseWhen");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -6388,7 +6392,7 @@ ruleSqlCaseWhen returns [EObject current=null]
        			$current, 
        			"expr",
         		lv_expr_1_0, 
-        		"FullExpression");
+        		"com.jaspersoft.studio.data.Sql.FullExpression");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -6411,7 +6415,7 @@ ruleSqlCaseWhen returns [EObject current=null]
        			$current, 
        			"texp",
         		lv_texp_3_0, 
-        		"OperandGroup");
+        		"com.jaspersoft.studio.data.Sql.OperandGroup");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -6434,7 +6438,7 @@ ruleSqlCaseWhen returns [EObject current=null]
        			$current, 
        			"eexp",
         		lv_eexp_5_0, 
-        		"OperandGroup");
+        		"com.jaspersoft.studio.data.Sql.OperandGroup");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -6664,7 +6668,7 @@ ruleIntegerValue returns [EObject current=null]
        			$current, 
        			"integer",
         		lv_integer_0_0, 
-        		"INT");
+        		"com.jaspersoft.studio.data.Sql.INT");
 	    }
 
 )

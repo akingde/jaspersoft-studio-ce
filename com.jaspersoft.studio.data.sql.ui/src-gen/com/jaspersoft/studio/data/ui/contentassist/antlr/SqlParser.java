@@ -92,6 +92,7 @@ public class SqlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getDBIDAccess().getAlternatives(), "rule__DBID__Alternatives");
 					put(grammarAccess.getEXTRACT_VALUESAccess().getAlternatives(), "rule__EXTRACT_VALUES__Alternatives");
 					put(grammarAccess.getXFunctionAccess().getAlternatives(), "rule__XFunction__Alternatives");
+					put(grammarAccess.getModelAccess().getGroup(), "rule__Model__Group__0");
 					put(grammarAccess.getFetchFirstAccess().getGroup(), "rule__FetchFirst__Group__0");
 					put(grammarAccess.getLimitAccess().getGroup_0(), "rule__Limit__Group_0__0");
 					put(grammarAccess.getLimitAccess().getGroup_1(), "rule__Limit__Group_1__0");
@@ -227,7 +228,7 @@ public class SqlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getJoinTypeAccess().getGroup(), "rule__JoinType__Group__0");
 					put(grammarAccess.getJoinTypeAccess().getGroup_1_1(), "rule__JoinType__Group_1_1__0");
 					put(grammarAccess.getFNAMEAccess().getGroup(), "rule__FNAME__Group__0");
-					put(grammarAccess.getModelAccess().getQueryAssignment(), "rule__Model__QueryAssignment");
+					put(grammarAccess.getModelAccess().getQueryAssignment_1(), "rule__Model__QueryAssignment_1");
 					put(grammarAccess.getFetchFirstAccess().getFetchFirstAssignment_0(), "rule__FetchFirst__FetchFirstAssignment_0");
 					put(grammarAccess.getFetchFirstAccess().getRowAssignment_1(), "rule__FetchFirst__RowAssignment_1");
 					put(grammarAccess.getOffsetAccess().getOffsetAssignment(), "rule__Offset__OffsetAssignment");
