@@ -107,6 +107,7 @@ public class SPRWFloatCombo<T extends IPropertyDescriptor> extends ASPropertyWid
 	 */
 	@Override
 	public void setData(APropertyNode pnode, Object resolvedValue, Object elementValue) {
+		createContextualMenu(pnode);
 		refresh = true;
 		this.pnode = pnode;
 		combo.setEnabled(pnode.isEditable());

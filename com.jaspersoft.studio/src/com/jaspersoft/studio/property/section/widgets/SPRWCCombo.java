@@ -121,6 +121,7 @@ public class SPRWCCombo<T extends IPropertyDescriptor> extends ASPropertyWidget<
 	public void setData(APropertyNode pnode, Object b) {
 		this.pnode = pnode;
 		refresh = true;
+		createContextualMenu(pnode);
 		final RWCComboPropertyDescriptor pd = (RWCComboPropertyDescriptor) pDescriptor;
 
 		String str = (String) b;

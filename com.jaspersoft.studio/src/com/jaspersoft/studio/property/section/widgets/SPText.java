@@ -146,6 +146,7 @@ public class SPText<T extends IPropertyDescriptor> extends AHistorySPropertyWidg
 
 	@Override
 	public void setData(APropertyNode pnode, Object b) {
+		createContextualMenu(pnode);
 		this.pnode = pnode;
 		ftext.setEnabled(pnode.isEditable());
 		if (b != null) {

@@ -51,6 +51,7 @@ public class SPReadCombo extends ASPropertyWidget<IPropertyDescriptor> {
 	}
 
 	public void setData(APropertyNode pnode, Object b) {
+		createContextualMenu(pnode);
 		setRefreshing(true);
 		int index = 0;
 		if (b != null)

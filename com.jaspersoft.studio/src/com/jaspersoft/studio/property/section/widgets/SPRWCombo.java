@@ -31,8 +31,11 @@ import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.utils.Misc;
 
 public class SPRWCombo<T extends IPropertyDescriptor> extends ASPropertyWidget<T> {
+	
 	protected Combo combo;
 
+	protected APropertyNode pnode;
+	
 	public SPRWCombo(Composite parent, AbstractSection section, T pDescriptor) {
 		super(parent, section, pDescriptor);
 	}
@@ -76,9 +79,9 @@ public class SPRWCombo<T extends IPropertyDescriptor> extends ASPropertyWidget<T
 		combo.setToolTipText(pDescriptor.getDescription());
 	}
 
-	protected APropertyNode pnode;
 
 	public void setData(APropertyNode pnode, Object b) {
+		createContextualMenu(pnode);
 		refresh = true;
 		this.pnode = pnode;
 		final RWComboBoxPropertyDescriptor pd = (RWComboBoxPropertyDescriptor) pDescriptor;

@@ -60,6 +60,7 @@ public class SPSpinner<T extends IPropertyDescriptor> extends ASPropertyWidget<T
 	 */
 	@Override
 	public void setData(APropertyNode pnode, Object value) {
+		createContextualMenu(pnode);
 		if (value != null){
 			int intValue = Integer.parseInt(value.toString());
 			controlSpinner.setValue(intValue);

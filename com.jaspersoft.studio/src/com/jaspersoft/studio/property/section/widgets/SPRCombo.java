@@ -31,7 +31,12 @@ import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.utils.Misc;
 
 public class SPRCombo extends ASPropertyWidget<RComboBoxPropertyDescriptor> {
+
 	private Combo combo;
+
+	private APropertyNode pnode;
+	
+	private Object b;
 
 	private boolean refreshing = false;
 
@@ -69,9 +74,6 @@ public class SPRCombo extends ASPropertyWidget<RComboBoxPropertyDescriptor> {
 		section.changeProperty(pDescriptor.getId(), value);
 	}
 
-	private APropertyNode pnode;
-	private Object b;
-
 	public void refresh() {
 		UIUtils.getDisplay().syncExec(new Runnable() {
 
@@ -83,6 +85,7 @@ public class SPRCombo extends ASPropertyWidget<RComboBoxPropertyDescriptor> {
 	}
 
 	public void setData(APropertyNode pnode, Object b) {
+		createContextualMenu(pnode);
 		if (pnode != null && pnode.getDescriptors() != null)
 			// I see sometimes pdescriptor is not the same, because in some cases we have pdescriptor static or not,
 			// better is to setup the right one, if we want to get items from there

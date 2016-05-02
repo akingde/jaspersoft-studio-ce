@@ -33,8 +33,13 @@ import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 
 public class SPStroke extends ASPropertyWidget<IPropertyDescriptor> {
+	
 	protected Composite composite;
 
+	private Stroke series;
+	
+	private Text ftext;
+	
 	public SPStroke(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
 		super(parent, section, pDescriptor);
 	}
@@ -87,9 +92,6 @@ public class SPStroke extends ASPropertyWidget<IPropertyDescriptor> {
 	protected void handleTextChanged(final AbstractSection section, final Object property, Stroke text) {
 		section.changeProperty(property, text);
 	}
-
-	private Stroke series;
-	private Text ftext;
 
 	public void setData(APropertyNode pnode, Object b) {
 		series = (Stroke) b;

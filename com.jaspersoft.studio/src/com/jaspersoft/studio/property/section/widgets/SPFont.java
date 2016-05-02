@@ -337,6 +337,7 @@ public class SPFont extends ASPropertyWidget<IPropertyDescriptor> {
 	 * Set the font name, the font size and the font attribute in the respective controls
 	 */
 	public void setData(APropertyNode pnode, Object value) {
+		createContextualMenu(pnode);
 		this.parentNode = pnode;
 		this.mfont = (MFont) value;
 		if (mfont != null) {

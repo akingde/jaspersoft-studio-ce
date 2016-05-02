@@ -50,6 +50,7 @@ public class SPBoolean<T extends IPropertyDescriptor> extends ASPropertyWidget<T
 	}
 
 	public void setData(APropertyNode pnode, Object b) {
+		createContextualMenu(pnode);
 		cmb3Bool.setEnabled(pnode.isEditable());
 		cmb3Bool.setSelection(b != null ? (Boolean) b : false);
 	}

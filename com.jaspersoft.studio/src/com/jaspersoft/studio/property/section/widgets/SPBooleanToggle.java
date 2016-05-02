@@ -59,6 +59,7 @@ public class SPBooleanToggle extends ASPropertyWidget<CheckBoxPropertyDescriptor
 	}
 
 	public void setData(APropertyNode pnode, Object b) {
+		createContextualMenu(pnode);
 		cmb3Bool.setEnabled(pnode.isEditable());
 		boolean v = false;
 		if (b != null)

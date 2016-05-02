@@ -47,6 +47,7 @@ public class SPReadComboEnum<T extends IPropertyDescriptor & IEnumDescriptors> e
 	}
 
 	public void setData(APropertyNode pnode, Object b) {
+		createContextualMenu(pnode);
 		int index = 0;
 		if (b != null)
 			index = ((Number) b).intValue();

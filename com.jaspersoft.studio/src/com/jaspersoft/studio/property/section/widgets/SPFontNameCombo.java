@@ -98,6 +98,7 @@ public class SPFontNameCombo<T extends IPropertyDescriptor> extends ASPropertyWi
 	@Override
 	public void setData(final APropertyNode pnode, Object b) {
 		if (pnode != null) {
+			createContextualMenu(pnode);
 			isRefreshing = true;
 			combo.setEnabled(pnode.isEditable());
 			JasperReportsConfiguration jConfig = pnode.getJasperConfiguration();

@@ -75,6 +75,7 @@ public class SPExpression extends AHistorySPropertyWidget<IPropertyDescriptor> i
 	}
 
 	public void setData(APropertyNode pnode, Object b) {
+		createContextualMenu(pnode);
 		expr.setExpression((JRDesignExpression) b);
 		JRDesignElement designEl = null;
 		if (pnode.getValue() instanceof JRDesignElement) {

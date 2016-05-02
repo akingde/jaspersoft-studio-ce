@@ -132,6 +132,7 @@ public class SPNumber extends AHistorySPropertyWidget<IPropertyDescriptor> {
 		}
 	}
 
+	@Override
 	public void setData(APropertyNode pnode, Object b) {
 		setData(pnode, b, b); 
 	}
@@ -142,6 +143,7 @@ public class SPNumber extends AHistorySPropertyWidget<IPropertyDescriptor> {
 	 */
 	@Override
 	public void setData(APropertyNode pnode, Object resolvedValue, Object elementValue) {
+		createContextualMenu(pnode);
 		ftext.setEnabled(pnode.isEditable());
 		Number resolvedNumber = (Number) resolvedValue;
 		Number ownNumber = (Number)elementValue;

@@ -95,6 +95,7 @@ public class SPColor extends ASPropertyWidget<ColorPropertyDescriptor> {
 	}
 
 	public void setData(APropertyNode pnode, Object b) {
+		createContextualMenu(pnode);
 		isEnabled = pnode.isEditable();
 		setData(null, (AlfaRGB) b);
 	}

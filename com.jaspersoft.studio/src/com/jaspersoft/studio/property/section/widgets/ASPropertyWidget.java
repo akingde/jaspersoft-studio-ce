@@ -8,17 +8,23 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.section.widgets;
 
+import java.util.Map;
+
 import org.eclipse.jface.action.IStatusLineManager;
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.ToolBar;
@@ -37,6 +43,7 @@ import com.jaspersoft.studio.help.HelpSystem;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.properties.internal.IHighlightPropertyWidget;
 import com.jaspersoft.studio.properties.view.validation.ValidationError;
+import com.jaspersoft.studio.property.ResetValueCommand;
 import com.jaspersoft.studio.property.combomenu.ComboButton;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.utils.UIUtil;
@@ -88,6 +95,37 @@ public abstract class ASPropertyWidget<T extends IPropertyDescriptor> implements
 	 */
 	public void setData(APropertyNode pnode, Object resolvedValue, Object elementValue) {
 		setData(pnode, resolvedValue);
+	}
+	
+	/**
+	 * Create a contextual menu for the current control. This contextual menu
+	 * will contains the action to reset the value of a property if the property
+	 * has default value inside the node.
+	 */
+	protected void createContextualMenu(final APropertyNode node){
+		Control control = getControl();
+		if (node != null && control != null && !control.isDisposed()){
+			node.getPropertyDescriptors();
+			Map<String, Object> defaultMap = node.getDefaultsMap();
+			if (defaultMap.containsKey(pDescriptor.getId().toString())){
+				Menu controlMenu = new Menu(control);
+				MenuItem refreshItem = new MenuItem(controlMenu, SWT.NONE);
+				refreshItem.addSelectionListener(new SelectionAdapter() {
+					@Override
+					public void widgetSelected(SelectionEvent e) {
+						ResetValueCommand cmd = new ResetValueCommand();
+						cmd.setPropertyId(pDescriptor.getId());
+						cmd.setTarget(node);
+						section.getEditDomain().getCommandStack().execute(cmd);
+					}
+				});
+		    refreshItem.setText("Reset to Default");
+				control.setMenu(controlMenu);
+			} else {
+				control.setMenu(null);
+			}
+		}
+		
 	}
 
 	public String getId() {

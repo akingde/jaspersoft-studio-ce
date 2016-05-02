@@ -930,6 +930,7 @@ public class SPPixel extends ASPropertyWidget<PixelPropertyDescriptor> {
 
 	@Override
 	public void setData(APropertyNode pnode, Object value) {
+		createContextualMenu(pnode);
 		insertField.setEnabled(pnode.isEditable());
 		defaultValue = MReport.getMeasureUnit(jConfig, jConfig.getJasperDesign());
 		if (pnode.getValue() instanceof JRPropertiesHolder){
