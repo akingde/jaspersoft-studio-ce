@@ -58,10 +58,10 @@ public class EditorContentOutlinePage extends ContentOutlinePage
 		public void run() {
     	IDocument document = getDocument(input);
     	XMLElement newRoot = null;
-			if (document != null) {
+			if (document != null && !monitor.isCanceled()) {
 				document.addPositionCategory(TAG_POSITIONS);
 				document.addPositionUpdater(positionUpdater);
-				newRoot = parseRootElement(document);
+				newRoot = parseRootElement(document, monitor);
 			}
 			if (!monitor.isCanceled()) {
 				root = newRoot;
@@ -79,10 +79,10 @@ public class EditorContentOutlinePage extends ContentOutlinePage
 		 * @param document the document to parse
 		 * @return the created tree or null if something went wrong during the execution
 		 */
-		private XMLElement parseRootElement(IDocument document) {
+		private XMLElement parseRootElement(IDocument document, IProgressMonitor monitor) {
 			try {
 				XMLParser xmlParser = new XMLParser();
-				OutlineContentHandler contentHandler = new OutlineContentHandler();
+				OutlineContentHandler contentHandler = new OutlineContentHandler(monitor);
 				contentHandler.setDocument(document);
 				contentHandler.setPositionCategory(TAG_POSITIONS);
 				contentHandler.setDocumentLocator(new LocatorImpl());

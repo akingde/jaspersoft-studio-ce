@@ -12,6 +12,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.xml.outline;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.BadPositionCategoryException;
 import org.eclipse.jface.text.IDocument;
@@ -37,9 +38,12 @@ public class OutlineContentHandler extends DefaultHandler implements ContentHand
 	private IDocument document;
 
 	private String positionCategory;
+	
+	private IProgressMonitor monitor;
 
-	public OutlineContentHandler() {
+	public OutlineContentHandler(IProgressMonitor monitor) {
 		super();
+		this.monitor = monitor;
 	}
 
 	public void setDocumentLocator(Locator locator) {
@@ -48,6 +52,10 @@ public class OutlineContentHandler extends DefaultHandler implements ContentHand
 
 	public void startElement(String namespace, String localname, String qName, Attributes attributes) throws SAXException {
 
+		if (monitor.isCanceled()){
+			throw new SAXException("Parsing operation cancelled");
+		}
+		
 		int lineNumber = locator.getLineNumber() - 1;
 		XMLElement element = new XMLElement(localname);
 
