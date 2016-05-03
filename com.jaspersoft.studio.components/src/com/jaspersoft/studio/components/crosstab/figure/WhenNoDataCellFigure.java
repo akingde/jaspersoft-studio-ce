@@ -24,7 +24,7 @@ import org.eclipse.draw2d.geometry.Rectangle;
 
 import com.jaspersoft.studio.editor.gef.figures.APageFigure;
 import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
-import com.jaspersoft.studio.editor.gef.figures.layers.GridLayer;
+import com.jaspersoft.studio.editor.gef.figures.GridPainter;
 import com.jaspersoft.studio.editor.gef.util.FigureTextWriter;
 
 public class WhenNoDataCellFigure extends CellFigure {
@@ -72,10 +72,10 @@ public class WhenNoDataCellFigure extends CellFigure {
 			g.setFont(currfont);
 		}
 		if (getParent() instanceof APageFigure) {
-			GridLayer grid = ((APageFigure) getParent()).getGrid();
+			GridPainter grid = ((APageFigure) getParent()).getGrid();
 			if (grid.isVisible()) {
 				grid.setBounds(b);
-				grid.paint(graphics);
+				grid.paintGrid(graphics, this);
 			}
 		}
 		if (getBorder() != null)
