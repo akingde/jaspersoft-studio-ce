@@ -24,6 +24,7 @@ import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
 import com.jaspersoft.studio.editor.java2d.J2DUtils;
 
 public class GridLayer extends org.eclipse.gef.editparts.GridLayer {
+	
 	public GridLayer() {
 		super();
 		setForegroundColor(ColorConstants.lightGray);

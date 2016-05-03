@@ -42,7 +42,7 @@ public class ContainerPageFigure extends APageFigure {
 			g.setBackgroundColor(pageBackground);
 			g.fillRectangle(rectangle);
 
-			setGridSize(rectangle);
+			setGridSize(rectangle, g);
 		}
 		if (getBorder() != null)
 			getBorder().paint(this, g, NO_INSETS);

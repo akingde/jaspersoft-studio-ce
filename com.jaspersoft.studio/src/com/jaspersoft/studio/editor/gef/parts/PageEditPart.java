@@ -17,9 +17,6 @@ import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.engine.design.JasperDesign;
-
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.XYLayout;
@@ -50,6 +47,7 @@ import com.jaspersoft.studio.callout.pin.MPinConnection;
 import com.jaspersoft.studio.callout.pin.PinEditPart;
 import com.jaspersoft.studio.editor.gef.figures.APageFigure;
 import com.jaspersoft.studio.editor.gef.figures.ContainerPageFigure;
+import com.jaspersoft.studio.editor.gef.figures.GridPainter;
 import com.jaspersoft.studio.editor.gef.figures.borders.ShadowBorder;
 import com.jaspersoft.studio.editor.gef.figures.borders.SimpleShadowBorder;
 import com.jaspersoft.studio.editor.gef.figures.layers.GridLayer;
@@ -64,6 +62,9 @@ import com.jaspersoft.studio.model.util.ModelVisitor;
 import com.jaspersoft.studio.preferences.DesignerPreferencePage;
 import com.jaspersoft.studio.preferences.RulersGridPreferencePage;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 /*
  * The Class PageEditPart.
@@ -178,7 +179,7 @@ public class PageEditPart extends AJDEditPart implements PropertyChangeListener 
 	protected void refreshGridLayer() {
 		if (jConfig != null) {
 			boolean visible = jConfig.getPropertyBoolean(RulersGridPreferencePage.P_PAGE_RULERGRID_SHOWGRID, true);
-			GridLayer grid = ((APageFigure) getFigure()).getGrid();
+			GridPainter grid = ((APageFigure) getFigure()).getGrid();
 			grid.setOrigin((Point) getViewer().getProperty(SnapToGrid.PROPERTY_GRID_ORIGIN));
 
 			int x = jConfig.getPropertyInteger(RulersGridPreferencePage.P_PAGE_RULERGRID_GRIDSPACEX, 10);

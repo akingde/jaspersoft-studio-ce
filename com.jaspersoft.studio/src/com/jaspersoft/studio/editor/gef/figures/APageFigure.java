@@ -24,7 +24,6 @@ import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.handles.HandleBounds;
 import org.eclipse.wb.swt.SWTResourceManager;
 
-import com.jaspersoft.studio.editor.gef.figures.layers.GridLayer;
 import com.jaspersoft.studio.editor.gef.parts.JSSScalableFreeformRootEditPart;
 import com.jaspersoft.studio.editor.gef.parts.PageEditPart;
 import com.jaspersoft.studio.editor.java2d.JSSScrollingGraphicalViewer;
@@ -47,7 +46,7 @@ public abstract class APageFigure extends FreeformLayeredPane implements HandleB
 	/**
 	 * The grid figure, it is the first figure added to the page
 	 */
-	protected GridLayer grid = new GridLayer();
+	protected GridPainter grid = new GridPainter();
 	
 	/**
 	 * The current page
@@ -75,8 +74,6 @@ public abstract class APageFigure extends FreeformLayeredPane implements HandleB
 	public APageFigure(boolean viewMargins, PageEditPart page) {
 		this.viewMargins = viewMargins;
 		this.page = page;
-		//add the grid figure as first child of the page
-		add(grid);
 	}
 
 	public void setPageBackground(org.eclipse.swt.graphics.Color pageBackground) {
@@ -106,28 +103,13 @@ public abstract class APageFigure extends FreeformLayeredPane implements HandleB
 			clientArea.y -= dy;
 
 			int pageWidth = getSize().width;
-			int pageHeight = getSize().height;// + jrDesign.getTopMargin() + jrDesign.getBottomMargin();
-
-			// int leftMargin = PAGE_BORDER.left;
-			// int rightMargin = PAGE_BORDER.right;
-			// int topMargin = PAGE_BORDER.top;
-			// int bottomMargin = PAGE_BORDER.bottom;
+			int pageHeight = getSize().height;
 
 			Rectangle rectangle = new Rectangle(clientArea.x, clientArea.y, pageWidth, pageHeight);
 			g.setBackgroundColor(pageBackground);
 			g.fillRectangle(rectangle);
-
-			// Point topLeft = new Point(clientArea.x + leftMargin, clientArea.y);
-			// Point topRight = new Point(clientArea.x + pageWidth - rightMargin, clientArea.y);
-
-			// Point bottomLeft = new Point(topLeft.x, clientArea.y + pageHeight);
-			// Point bottomRight = new Point(topRight.x, clientArea.y + pageHeight);
-
-			// Graphics2D graphics2d = ((J2DGraphics) g).getGraphics2D();
-			// Stroke oldStroke = graphics2d.getStroke();
-			// graphics2d.setStroke(J2DUtils.getInvertedZoomedStroke(oldStroke, g.getAbsoluteScale()));
-
-			setGridSize(rectangle);
+			
+			setGridSize(rectangle, g);
 		}
 		if (getBorder() != null)
 			getBorder().paint(this, g, NO_INSETS);
@@ -152,14 +134,10 @@ public abstract class APageFigure extends FreeformLayeredPane implements HandleB
 	 * 
 	 * @param size a not null rectangle with the size of the grid figure
 	 */
-	protected void setGridSize(Rectangle size) {
+	protected void setGridSize(Rectangle size, Graphics graphics) {
 		if (grid.isVisible()) {
-			//There is for sure a child, since the grid figure is added on the creation
-			if (getChildren().get(0) != grid){
-				remove(grid);
-				add(grid, 0);
-			}
 			grid.setBounds(size);
+			grid.paintGrid(graphics, this);
 		}
 	}
 
@@ -192,7 +170,7 @@ public abstract class APageFigure extends FreeformLayeredPane implements HandleB
 		return freeformExtent;
 	}
 
-	public GridLayer getGrid() {
+	public GridPainter getGrid() {
 		return grid;
 	}
 	
