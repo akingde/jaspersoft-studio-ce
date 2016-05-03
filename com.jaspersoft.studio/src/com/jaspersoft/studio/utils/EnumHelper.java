@@ -128,7 +128,7 @@ public class EnumHelper {
 			return null;
 		} else if (objValue instanceof Number) {
 			Integer val = ((Number) objValue).intValue();
-			if (0 >= val.intValue() || val > enums.length)
+			if (val < 0 || val > enums.length)
 				return null;
 			if (isNullable) {
 				if (val == 0) {
