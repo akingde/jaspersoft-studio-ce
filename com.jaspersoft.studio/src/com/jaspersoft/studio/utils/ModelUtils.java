@@ -130,7 +130,7 @@ public class ModelUtils {
 			if (n instanceof MElementDataset) {
 				JRElementDataset elementDS = (JRElementDataset) n.getValue();
 				JRDatasetRun datasetRun = elementDS.getDatasetRun();
-				if(datasetRun!=null){
+				if (datasetRun != null) {
 					return (JRDesignDataset) node.getJasperDesign().getDatasetMap().get(datasetRun.getDatasetName());
 				}
 			}
@@ -163,8 +163,8 @@ public class ModelUtils {
 				List<MDatasetRun> datasets = ((IDatasetContainer) n).getDatasetRunList();
 				JasperDesign design = n.getJasperDesign();
 				for (MDatasetRun parentDataset : datasets) {
-					JRDesignDataset dataset = (JRDesignDataset) design.getDatasetMap().get(
-							parentDataset.getValue().getDatasetName());
+					JRDesignDataset dataset = (JRDesignDataset) design.getDatasetMap()
+							.get(parentDataset.getValue().getDatasetName());
 					if (dataset != null)
 						return dataset;
 				}
@@ -989,8 +989,8 @@ public class ModelUtils {
 			}
 		}
 
-		int maxAlternativeSection = Math
-				.max(detailHeight, Math.max(heighestGroupFooter, heighestGroupHeader) + titleHeight);
+		int maxAlternativeSection = Math.max(detailHeight,
+				Math.max(heighestGroupFooter, heighestGroupHeader) + titleHeight);
 
 		basicBandsHeight += maxAlternativeSection;
 
@@ -1023,9 +1023,9 @@ public class ModelUtils {
 	}
 
 	public static String getDefaultName(JRDesignCrosstab c, String name) {
-		//Check the base name, if it is good return it
+		// Check the base name, if it is good return it
 		if (!c.getMeasureIndicesMap().containsKey(name) && !c.getColumnGroupIndicesMap().containsKey(name)
-				&& !c.getRowGroupIndicesMap().containsKey(name)){
+				&& !c.getRowGroupIndicesMap().containsKey(name)) {
 			return name;
 		}
 		int i = 1;
@@ -1151,8 +1151,8 @@ public class ModelUtils {
 		lst.add(""); //$NON-NLS-1$
 		lst.add("none"); //$NON-NLS-1$
 		lst.add("styled"); //$NON-NLS-1$
-		List<PropertySuffix> props = JRPropertiesUtil.getInstance(jrContext).getProperties(
-				MarkupProcessorFactory.PROPERTY_MARKUP_PROCESSOR_FACTORY_PREFIX);
+		List<PropertySuffix> props = JRPropertiesUtil.getInstance(jrContext)
+				.getProperties(MarkupProcessorFactory.PROPERTY_MARKUP_PROCESSOR_FACTORY_PREFIX);
 		for (PropertySuffix p : props) {
 			lst.add(p.getSuffix());
 		}
@@ -1169,7 +1169,7 @@ public class ModelUtils {
 	public static List<String[]> getFontNames(JasperReportsConfiguration jContext) {
 		java.util.List<String[]> classes = new ArrayList<String[]>();
 		java.util.List<String> elements = new ArrayList<String>();
-		Collection<?> extensionFonts = FontUtil.getInstance(jContext).getFontFamilyNames();
+		Collection<String> extensionFonts = FontUtil.getInstance(jContext).getFontNames();
 		for (Iterator<?> it = extensionFonts.iterator(); it.hasNext();) {
 			String fname = (String) it.next();
 			elements.add(fname);
@@ -1294,22 +1294,22 @@ public class ModelUtils {
 		}
 		return key;
 	}
-	
+
 	/**
 	 * Starting from a node go up in the hierarchy until an MReport is found
 	 * 
-	 * @param node the starting node
-	 * @return the MReport where the starting node is contained, or null
-	 * if it can't be found
+	 * @param node
+	 *          the starting node
+	 * @return the MReport where the starting node is contained, or null if it can't be found
 	 */
-	public static MReport getReport(ANode node){
+	public static MReport getReport(ANode node) {
 		ANode parent = node.getParent();
 		MReport reportNode = null;
-		while(reportNode == null && parent != null){
-			if (parent instanceof MReport){
-				reportNode = (MReport)parent;
-			} else if (parent instanceof MPage){
-				parent = ((MPage)parent).getRealParent();
+		while (reportNode == null && parent != null) {
+			if (parent instanceof MReport) {
+				reportNode = (MReport) parent;
+			} else if (parent instanceof MPage) {
+				parent = ((MPage) parent).getRealParent();
 			} else {
 				parent = parent.getParent();
 			}
@@ -1426,12 +1426,12 @@ public class ModelUtils {
 			if (ec != null) {
 				return ec;
 			}
-			
+
 			// Last resort, we try to gather a proper JRDesignDataset from the node information
-			if(node!=null) {
+			if (node != null) {
 				JRDesignDataset dataset = getDataset(node);
 				JasperReportsConfiguration jconfig = node.getJasperConfiguration();
-				if(dataset!=null && jconfig!=null) {
+				if (dataset != null && jconfig != null) {
 					return new ExpressionContext(dataset, jconfig);
 				}
 			}
@@ -1711,7 +1711,7 @@ public class ModelUtils {
 		String value = jd.getProperty(key);
 		return value != null ? value : defaultValue;
 	}
-	
+
 	/**
 	 * Determines whether two objects are equal, including <code>null</code> values.
 	 * 
@@ -1719,87 +1719,86 @@ public class ModelUtils {
 	 * @param o2
 	 * @return whether the two objects are equal
 	 */
-	public static boolean safeEquals(Object o1, Object o2)
-	{
+	public static boolean safeEquals(Object o1, Object o2) {
 		return (o1 == null) ? (o2 == null) : (o2 != null && o1.equals(o2));
 	}
-	
+
 	/**
-	 * Compare two JRPropertiesMap to check if they are equals. They are
-	 * equals when they have the same set of keys associated with the same values
+	 * Compare two JRPropertiesMap to check if they are equals. They are equals when they have the same set of keys
+	 * associated with the same values
 	 * 
-	 * @param map1 the first map, can be null
-	 * @param map2 the second map, can be null
+	 * @param map1
+	 *          the first map, can be null
+	 * @param map2
+	 *          the second map, can be null
 	 * @return true if the map are equals, false otherwise
 	 */
-	public static boolean jrPropertiesMapEquals(JRPropertiesMap map1, JRPropertiesMap map2){
-		//if one is null the both must be null
-		if (map1 == null || map2 == null) return (map2 == null && map1 == null);
+	public static boolean jrPropertiesMapEquals(JRPropertiesMap map1, JRPropertiesMap map2) {
+		// if one is null the both must be null
+		if (map1 == null || map2 == null)
+			return (map2 == null && map1 == null);
 		String[] names1 = map1.getPropertyNames();
-		//Must have the same number of keys
-		if (names1.length != map2.getPropertyNames().length) return false;
-		//check entry by entry
-		for(String name : names1){
-			if (!map2.containsProperty(name) || !safeEquals(map1.getProperty(name), map2.getProperty(name))){
+		// Must have the same number of keys
+		if (names1.length != map2.getPropertyNames().length)
+			return false;
+		// check entry by entry
+		for (String name : names1) {
+			if (!map2.containsProperty(name) || !safeEquals(map1.getProperty(name), map2.getProperty(name))) {
 				return false;
 			}
 		}
 		return true;
 	}
-	
+
 	/**
-	 * Tries to retrieve a valid group name from the specified parameter.
-	 * If the information can not be extracted null string is returned.
+	 * Tries to retrieve a valid group name from the specified parameter. If the information can not be extracted null
+	 * string is returned.
 	 * <p>
 	 * 
-	 * This method should be used when setting/getting the group name details for a
-	 * model element property.
+	 * This method should be used when setting/getting the group name details for a model element property.
 	 * 
-	 * @param value a generic object possibly containing the group information
+	 * @param value
+	 *          a generic object possibly containing the group information
 	 * @return the group name if any, <code>null</code> otherwise
 	 */
 	public static String getGroupNameForProperty(Object value) {
-		if(value instanceof JRGroup) {
+		if (value instanceof JRGroup) {
 			return ((JRGroup) value).getName();
-		}
-		else if(value instanceof String) {
-			if(((String) value).trim().isEmpty()){
+		} else if (value instanceof String) {
+			if (((String) value).trim().isEmpty()) {
 				return null;
-			}
-			else {
+			} else {
 				return (String) value;
 			}
-		}
-		else {
+		} else {
 			return null;
 		}
 	}
-	
+
 	/**
-	 * Tries to retrieve a valid group instance from the specified parameters.
-	 * The dataset can be used to extract the group, for example based on a value string.
+	 * Tries to retrieve a valid group instance from the specified parameters. The dataset can be used to extract the
+	 * group, for example based on a value string.
 	 * 
-	 * @param value a generic object possibly containing group details
-	 * @param dataset a dataset instance that can allow to retrieve the group
+	 * @param value
+	 *          a generic object possibly containing group details
+	 * @param dataset
+	 *          a dataset instance that can allow to retrieve the group
 	 * @return the group instance if any, <code>null</code> otherwise
 	 */
 	public static JRGroup getGroupForProperty(Object value, JRDesignDataset dataset) {
-		if(value instanceof JRGroup) {
+		if (value instanceof JRGroup) {
 			return (JRGroup) value;
-		}
-		else if(value instanceof String) {
-			if(((String) value).trim().isEmpty() || dataset == null){
+		} else if (value instanceof String) {
+			if (((String) value).trim().isEmpty() || dataset == null) {
 				return null;
-			}
-			else {
+			} else {
 				return dataset.getGroupsMap().get(value);
 			}
-		}
-		else {
+		} else {
 			return null;
 		}
 	}
-	
+
 	public static INode getNode(final Object obj, INode parent) {
 		ModelVisitor<INode> mv = new ModelVisitor<INode>(parent) {
 
@@ -1829,201 +1828,201 @@ public class ModelUtils {
 	public static boolean isEmpty(ANode n) {
 		return Misc.isNullOrEmpty(n.getChildren()) || n.getChildren().get(0) instanceof MDummy;
 	}
-	
+
 	/**
 	 * Compare two field instances deciding they can be considered equals.<br>
 	 * In order this to happen the following properties are considered:
 	 * <ul>
-	 * 	<li>name</li>
-	 * 	<li>description</li>
-	 *  <li>value class</li>
-	 *  <li>value class name</li>
+	 * <li>name</li>
+	 * <li>description</li>
+	 * <li>value class</li>
+	 * <li>value class name</li>
 	 * </ul>
 	 * 
-	 * @param field1 the first field to compare
-	 * @param field2 the second field to compare
-	 * @return <code>true</code> if the fields are considered equals,
-	 * 					<code>false</code> otherwise
+	 * @param field1
+	 *          the first field to compare
+	 * @param field2
+	 *          the second field to compare
+	 * @return <code>true</code> if the fields are considered equals, <code>false</code> otherwise
 	 */
 	public static boolean areFieldsEquals(JRField field1, JRField field2) {
 		Assert.isNotNull(field1);
 		Assert.isNotNull(field2);
-		if(!ObjectUtils.equals(field1.getName(), field2.getName())){
+		if (!ObjectUtils.equals(field1.getName(), field2.getName())) {
 			return false;
 		}
-		if(!ObjectUtils.equals(field1.getDescription(), field2.getDescription())){
+		if (!ObjectUtils.equals(field1.getDescription(), field2.getDescription())) {
 			return false;
 		}
-		if(!ObjectUtils.equals(field1.getValueClassName(),field2.getValueClassName())){
+		if (!ObjectUtils.equals(field1.getValueClassName(), field2.getValueClassName())) {
 			return false;
 		}
 		return true;
 	}
-	
+
 	/**
 	 * Compare two parameter instances deciding they can be considered equals.<br>
 	 * In order this to happen the following properties are considered:
 	 * <ul>
-	 * 	<li>name</li>
-	 * 	<li>description</li>
-	 *  <li>value class</li>
-	 *  <li>value class name</li>
-	 *  <li>nested type</li>
-	 *  <li>nested type name</li>
-	 *  <li>is for prompting</li>
+	 * <li>name</li>
+	 * <li>description</li>
+	 * <li>value class</li>
+	 * <li>value class name</li>
+	 * <li>nested type</li>
+	 * <li>nested type name</li>
+	 * <li>is for prompting</li>
 	 * </ul>
 	 * 
-	 * @param param1 the first parameter to compare
-	 * @param param2 the second parameter to compare
-	 * @return <code>true</code> if the parameters are considered equals,
-	 * 					<code>false</code> otherwise
+	 * @param param1
+	 *          the first parameter to compare
+	 * @param param2
+	 *          the second parameter to compare
+	 * @return <code>true</code> if the parameters are considered equals, <code>false</code> otherwise
 	 */
 	public static boolean areParametersEquals(JRParameter param1, JRParameter param2) {
 		Assert.isNotNull(param1);
 		Assert.isNotNull(param2);
-		if(!ObjectUtils.equals(param1.getName(), param2.getName())){
+		if (!ObjectUtils.equals(param1.getName(), param2.getName())) {
 			return false;
 		}
-		if(!ObjectUtils.equals(param1.getDescription(), param2.getDescription())){
+		if (!ObjectUtils.equals(param1.getDescription(), param2.getDescription())) {
 			return false;
 		}
-		if(!ObjectUtils.equals(param1.getValueClassName(),param2.getValueClassName())){
+		if (!ObjectUtils.equals(param1.getValueClassName(), param2.getValueClassName())) {
 			return false;
 		}
-		if(!ObjectUtils.equals(param1.getNestedTypeName(),param2.getNestedTypeName())){
+		if (!ObjectUtils.equals(param1.getNestedTypeName(), param2.getNestedTypeName())) {
 			return false;
 		}
-		if(param1.isForPrompting()!=param2.isForPrompting()){
+		if (param1.isForPrompting() != param2.isForPrompting()) {
 			return false;
 		}
 		return true;
 	}
-	
+
 	/**
 	 * Compare two sort field instances deciding they can be considered equals.<br>
 	 * In order this to happen the following properties are considered:
 	 * <ul>
-	 * 	<li>name</li>
-	 * 	<li>order</li>
-	 * 	<li>type</li>
+	 * <li>name</li>
+	 * <li>order</li>
+	 * <li>type</li>
 	 * </ul>
 	 * 
-	 * @param sfield1 the first sort field
-	 * @param sfield2 the second sort field
-	 * @return <code>true</code> if the sort fields are considered equals,
-	 * 					<code>false</code> otherwise
+	 * @param sfield1
+	 *          the first sort field
+	 * @param sfield2
+	 *          the second sort field
+	 * @return <code>true</code> if the sort fields are considered equals, <code>false</code> otherwise
 	 */
 	public static boolean areSortFieldsEquals(JRSortField sfield1, JRSortField sfield2) {
 		Assert.isNotNull(sfield1);
 		Assert.isNotNull(sfield2);
-		if(!ObjectUtils.equals(sfield1.getName(),sfield2.getName())){
+		if (!ObjectUtils.equals(sfield1.getName(), sfield2.getName())) {
 			return false;
 		}
-		if(!ObjectUtils.equals(sfield1.getOrderValue(),sfield2.getOrderValue())){
+		if (!ObjectUtils.equals(sfield1.getOrderValue(), sfield2.getOrderValue())) {
 			return false;
 		}
-		if(!ObjectUtils.equals(sfield1.getType(),sfield2.getType())){
+		if (!ObjectUtils.equals(sfield1.getType(), sfield2.getType())) {
 			return false;
 		}
 		return true;
 	}
-	
-	//Utility methods used to check if a string can be converted to a numeric or a boolean type
-	
-	public static boolean isInteger(String value){
-		try{
+
+	// Utility methods used to check if a string can be converted to a numeric or a boolean type
+
+	public static boolean isInteger(String value) {
+		try {
 			Integer.parseInt(value);
 			return true;
-		} catch (NumberFormatException ex){
+		} catch (NumberFormatException ex) {
 		}
 		return false;
 	}
-	
-	public static boolean isLong(String value){
-		try{
+
+	public static boolean isLong(String value) {
+		try {
 			Long.parseLong(value);
 			return true;
-		} catch (NumberFormatException ex){
+		} catch (NumberFormatException ex) {
 		}
 		return false;
 	}
-	
-	public static boolean isFloat(String value){
-		try{
+
+	public static boolean isFloat(String value) {
+		try {
 			Float.parseFloat(value);
 			return true;
-		} catch (NumberFormatException ex){
+		} catch (NumberFormatException ex) {
 		}
 		return false;
 	}
-	
-	public static boolean isDouble(String value){
-		try{
+
+	public static boolean isDouble(String value) {
+		try {
 			Double.parseDouble(value);
 			return true;
-		} catch (NumberFormatException ex){
+		} catch (NumberFormatException ex) {
 		}
 		return false;
 	}
-	
-	public static boolean isBoolean(String value){
-		if (value != null){
+
+	public static boolean isBoolean(String value) {
+		if (value != null) {
 			String lowerCase = value.trim().toLowerCase();
 			return Boolean.FALSE.toString().equals(lowerCase) || Boolean.TRUE.toString().equals(lowerCase);
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Tries the conversion of a generic value into a Integer one.
 	 * 
-	 * @param value the value to convert
+	 * @param value
+	 *          the value to convert
 	 * @return a converted Integer instance, <code>null</code> otherwise
-	 */	
+	 */
 	public static Integer getInteger(Object value) {
-		if(value instanceof String && isInteger((String) value)){
+		if (value instanceof String && isInteger((String) value)) {
 			return Integer.parseInt((String) value);
-		}
-		else if(value instanceof Number) {
+		} else if (value instanceof Number) {
 			return ((Number) value).intValue();
-		}
-		else {
+		} else {
 			return null;
 		}
 	}
-	
+
 	/**
 	 * Tries the conversion of a generic value into a Long one.
 	 * 
-	 * @param value the value to convert
+	 * @param value
+	 *          the value to convert
 	 * @return a converted Long instance, <code>null</code> otherwise
-	 */	
+	 */
 	public static Long getLong(Object value) {
-		if(value instanceof String && isLong((String) value)){
+		if (value instanceof String && isLong((String) value)) {
 			return Long.parseLong((String) value);
-		}
-		else if(value instanceof Number) {
+		} else if (value instanceof Number) {
 			return ((Number) value).longValue();
-		}
-		else {
+		} else {
 			return null;
 		}
-	}	
-	
+	}
+
 	/**
 	 * Tries the conversion of a generic value into a Float one.
 	 * 
-	 * @param value the value to convert
+	 * @param value
+	 *          the value to convert
 	 * @return a converted Float instance, <code>null</code> otherwise
 	 */
 	public static Float getFloat(Object value) {
-		if(value instanceof String && isFloat((String) value)){
+		if (value instanceof String && isFloat((String) value)) {
 			return Float.parseFloat((String) value);
-		}
-		else if(value instanceof Number) {
+		} else if (value instanceof Number) {
 			return ((Number) value).floatValue();
-		}
-		else {
+		} else {
 			return null;
 		}
 	}
@@ -2031,37 +2030,34 @@ public class ModelUtils {
 	/**
 	 * Tries the conversion of a generic value into a Double one.
 	 * 
-	 * @param value the value to convert
+	 * @param value
+	 *          the value to convert
 	 * @return a converted Double instance, <code>null</code> otherwise
 	 */
 	public static Double getDouble(Object value) {
-		if(value instanceof String && isDouble((String) value)){
+		if (value instanceof String && isDouble((String) value)) {
 			return Double.parseDouble((String) value);
-		}
-		else if(value instanceof Number) {
+		} else if (value instanceof Number) {
 			return ((Number) value).doubleValue();
-		}
-		else {
+		} else {
 			return null;
 		}
 	}
-	
+
 	/**
 	 * Tries the conversion of a generic value into a Boolean one.
 	 * 
-	 * @param value the value to convert
+	 * @param value
+	 *          the value to convert
 	 * @return a converted Boolean instance, <code>null</code> otherwise
 	 */
 	public static Boolean getBoolean(Object value) {
-		if(value instanceof String && isBoolean((String) value)){
+		if (value instanceof String && isBoolean((String) value)) {
 			return Boolean.parseBoolean((String) value);
-		}
-		else if(value instanceof Boolean) {
+		} else if (value instanceof Boolean) {
 			return (Boolean) value;
-		}
-		else {
+		} else {
 			return null;
 		}
 	}
 }
-	

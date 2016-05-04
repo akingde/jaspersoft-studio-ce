@@ -9,6 +9,7 @@
 package com.jaspersoft.studio.preferences.fonts;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -32,20 +33,28 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.ErrorDialog;
+import org.eclipse.jface.viewers.ColumnLabelProvider;
+import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider;
+import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider.IStyledLabelProvider;
+import org.eclipse.jface.viewers.ITreeContentProvider;
+import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.StyledString;
+import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
-import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Widget;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.preferences.editor.table.TableFieldEditor;
+import com.jaspersoft.studio.preferences.editor.table.TreeFieldEditor;
 import com.jaspersoft.studio.preferences.fonts.wizard.FontConfigWizard;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ModelUtils;
@@ -57,107 +66,276 @@ import net.sf.jasperreports.eclipse.util.StringUtils;
 import net.sf.jasperreports.engine.JRCloneable;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRRuntimeException;
+import net.sf.jasperreports.engine.fonts.FontExtensionsCollector;
 import net.sf.jasperreports.engine.fonts.FontFace;
 import net.sf.jasperreports.engine.fonts.FontFamily;
+import net.sf.jasperreports.engine.fonts.FontSet;
+import net.sf.jasperreports.engine.fonts.FontSetFamily;
 import net.sf.jasperreports.engine.fonts.SimpleFontExtensionHelper;
+import net.sf.jasperreports.engine.fonts.SimpleFontExtensionsContainer;
 import net.sf.jasperreports.engine.fonts.SimpleFontFace;
 import net.sf.jasperreports.engine.fonts.SimpleFontFamily;
+import net.sf.jasperreports.engine.fonts.SimpleFontSet;
+import net.sf.jasperreports.engine.fonts.SimpleFontSetFamily;
 
-public class FontListFieldEditor extends TableFieldEditor {
+public class FontListFieldEditor extends TreeFieldEditor {
 
 	private Button editButton;
 	private Button exportButton;
-	private List<FontFamily> fontFamilies = new ArrayList<FontFamily>();
+	private FontExtensionsCollector fontFamilies;
 	private static String lastLocation;
 	private Button addURLButton;
 	private Button addPathButton;
+	private Button addSetButton;
 
 	public FontListFieldEditor() {
 		super();
 	}
 
 	public FontListFieldEditor(String name, String labelText, Composite parent) {
-		super(name, labelText, new String[] { Messages.FontListFieldEditor_fontNameLabel }, new int[] { 100 }, parent);
+		super(name, labelText, parent);
 	}
 
 	@Override
-	protected String createList(String[][] items) {
-		return SimpleFontExtensionHelper.getFontsXml(fontFamilies);
+	protected void setupTree(TreeViewer tree) {
+		tree.setContentProvider(new ITreeContentProvider() {
+
+			@Override
+			public void dispose() {
+			}
+
+			@Override
+			public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+			}
+
+			@Override
+			public Object[] getElements(Object inputElement) {
+				if (inputElement instanceof FontExtensionsCollector) {
+					List<Object> lst = new ArrayList<Object>();
+					lst.addAll(((FontExtensionsCollector) inputElement).getFontFamilies());
+					lst.addAll(((FontExtensionsCollector) inputElement).getFontSets());
+					return lst.toArray();
+				}
+				if (inputElement instanceof List<?>)
+					return ((List<?>) inputElement).toArray();
+				return new Object[0];
+			}
+
+			@Override
+			public Object[] getChildren(Object parentElement) {
+				if (parentElement instanceof SimpleFontSet)
+					return ((SimpleFontSet) parentElement).getFamilies().toArray();
+				return null;
+			}
+
+			@Override
+			public Object getParent(Object element) {
+				return null;
+			}
+
+			@Override
+			public boolean hasChildren(Object element) {
+				if (element instanceof SimpleFontSet && !Misc.isNullOrEmpty(((SimpleFontSet) element).getFamilies()))
+					return true;
+				return false;
+			}
+
+		});
+		tree.setLabelProvider(new DelegatingStyledCellLabelProvider(new FontLabelProvider()));
+	}
+
+	class FontLabelProvider extends ColumnLabelProvider implements IStyledLabelProvider {
+		@Override
+		public String getText(Object element) {
+			if (element instanceof SimpleFontSet)
+				return ((SimpleFontSet) element).getName();
+			else if (element instanceof SimpleFontFamily)
+				return ((SimpleFontFamily) element).getName();
+			else if (element instanceof SimpleFontSetFamily)
+				return ((SimpleFontSetFamily) element).getFamilyName();
+			return "";
+		}
+
+		@Override
+		public Image getImage(Object element) {
+			if (element instanceof SimpleFontSetFamily && ((SimpleFontSetFamily) element).isPrimary())
+				return JaspersoftStudioPlugin.getInstance().getImage("icons/resources/check-16.png");
+			return null;
+		}
+
+		@Override
+		public StyledString getStyledText(Object element) {
+			StyledString ss = new StyledString();
+			if (element instanceof SimpleFontSet)
+				ss.append(((SimpleFontSet) element).getName(), StyledString.QUALIFIER_STYLER);
+			else if (element instanceof SimpleFontFamily)
+				ss.append(((SimpleFontFamily) element).getName());
+			else if (element instanceof SimpleFontSetFamily)
+				ss.append(((SimpleFontSetFamily) element).getFamilyName(), StyledString.DECORATIONS_STYLER);
+			return ss;
+		}
+
+	}
+
+	@Override
+	protected void doLoadDefault() {
+		if (tree != null) {
+			String s = getPreferenceStore().getDefaultString(getPreferenceName());
+			fontFamilies = new FontExtensionsCollector();
+			SimpleFontExtensionHelper.getInstance().loadFontExtensions(JasperReportsConfiguration.getDefaultInstance(),
+					new ByteArrayInputStream(s.getBytes()), fontFamilies);
+			tree.setInput(fontFamilies);
+		}
+	}
+
+	@Override
+	protected void doLoad() {
+		if (tree != null) {
+			String s = getPreferenceStore().getString(getPreferenceName());
+			fontFamilies = new FontExtensionsCollector();
+			SimpleFontExtensionHelper.getInstance().loadFontExtensions(JasperReportsConfiguration.getDefaultInstance(),
+					new ByteArrayInputStream(s.getBytes()), fontFamilies);
+			tree.setInput(fontFamilies);
+		}
+	}
+
+	protected void doStore() {
+		String pname = getPreferenceName();
+		if (fontFamilies != null) {
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			try {
+				SimpleFontExtensionHelper.writeFontExtensionsXml(baos,
+						new SimpleFontExtensionsContainer(fontFamilies.getFontFamilies(), fontFamilies.getFontSets()));
+				getPreferenceStore().setValue(pname, new String(baos.toByteArray()));
+			} catch (JRException e) {
+				UIUtils.showError(e);
+			} finally {
+				FileUtils.closeStream(baos);
+			}
+		} else
+			getPreferenceStore().setValue(pname, getPreferenceStore().getDefaultString(pname));
+	}
+
+	@Override
+	protected void addPressed() {
+		setPresentsDefaultValue(false);
+		SimpleFontFamily ff = new SimpleFontFamily();
+		ff.setName(Messages.FontListFieldEditor_newFontSuggestedName);
+		FontFamily font = runDialog(ff);
+		if (font != null) {
+			fontFamilies.getFontFamilies().add(ff);
+			tree.refresh(true);
+			tree.setSelection(new StructuredSelection(ff), true);
+			selectionChanged();
+		}
 	}
 
 	@Override
 	protected void removePressed() {
 		if (UIUtils.showDeleteConfirmation()) {
-			int[] selected = table.getSelectionIndices();
-			List<FontFamily> toDel = new ArrayList<FontFamily>();
-			for (int s : selected)
-				toDel.add(fontFamilies.get(s));
-			for (FontFamily ff : toDel)
-				fontFamilies.remove(ff);
-			table.remove(selected);
-			super.removePressed();
+			setPresentsDefaultValue(false);
+			StructuredSelection sel = (StructuredSelection) tree.getSelection();
+			for (Object obj : sel.toList()) {
+				if (obj instanceof FontFamily)
+					fontFamilies.getFontFamilies().remove(obj);
+				else if (obj instanceof FontSet)
+					fontFamilies.getFontSets().remove(obj);
+				else if (obj instanceof FontSetFamily) {
+					for (FontSet fs : fontFamilies.getFontSets())
+						fs.getFamilies().remove(obj);
+				}
+			}
+			tree.refresh(true);
+			selectionChanged();
 		}
 	}
 
 	@Override
 	protected void duplicatePressed() {
-		int index = table.getSelectionIndex();
-		FontFamily originalFontFamily = fontFamilies.get(index);
-		super.duplicatePressed();
-		SimpleFontFamily clone = (SimpleFontFamily) ((SimpleFontFamily) originalFontFamily).clone();
-		clone.setName(table.getItem(table.getItemCount() - 1).getText());
-		fontFamilies.add(clone);
-	}
-
-	@Override
-	protected String[][] parseString(String string) {
-		String[][] res = null;
-		if (string != null && !string.isEmpty()) {
-			try {
-				fontFamilies = SimpleFontExtensionHelper.getInstance().loadFontFamilies(
-						JasperReportsConfiguration.getDefaultInstance(), new ByteArrayInputStream(string.getBytes()));
-
-				res = new String[fontFamilies.size()][1];
-				for (int i = 0; i < fontFamilies.size(); i++)
-					res[i][0] = fontFamilies.get(i).getName();
-			} catch (Exception e) {
-				e.printStackTrace();
-				fontFamilies = new ArrayList<FontFamily>();
-				res = new String[0][0];
+		setPresentsDefaultValue(false);
+		StructuredSelection sel = (StructuredSelection) tree.getSelection();
+		for (Object obj : sel.toList()) {
+			if (obj instanceof FontFamily) {
+				SimpleFontFamily clone = (SimpleFontFamily) ((SimpleFontFamily) obj).clone();
+				clone.setName(((FontFamily) obj).getName() + "_copy");
+				fontFamilies.getFontFamilies().add(clone);
+				tree.refresh(true);
+				tree.setSelection(new StructuredSelection(clone), true);
+				selectionChanged();
+			} else if (obj instanceof FontSet) {
+				SimpleFontSet clone = (SimpleFontSet) ((SimpleFontSet) obj).clone();
+				clone.setName(((SimpleFontSet) obj).getName() + "_copy");
+				fontFamilies.getFontSets().add(clone);
+				tree.refresh(true);
+				tree.setSelection(new StructuredSelection(clone), true);
+				selectionChanged();
 			}
-		} else {
-			fontFamilies = new ArrayList<FontFamily>();
-			res = new String[0][0];
 		}
-		return res;
-	}
-
-	@Override
-	protected String[] getNewInputObject() {
-		// run dialog wizard
-		SimpleFontFamily font2 = new SimpleFontFamily();
-		font2.setName(Messages.FontListFieldEditor_newFontSuggestedName);
-		FontFamily font = runDialog(font2);
-		if (font != null) {
-			fontFamilies.add(font);
-			return new String[] { font.getName() };
-		}
-		return null;
 	}
 
 	protected void editPressed() {
 		setPresentsDefaultValue(false);
-		int index = table.getSelectionIndex();
-		if (index >= 0) {
-			TableItem titem = table.getItem(index);
-			FontFamily font = fontFamilies.get(index);
+		StructuredSelection sel = (StructuredSelection) tree.getSelection();
+		if (sel.getFirstElement() instanceof SimpleFontFamily) {
+			FontFamily font = (SimpleFontFamily) sel.getFirstElement();
+			int index = fontFamilies.getFontFamilies().indexOf(font);
+			font = runDialog((FontFamily) ((SimpleFontFamily) font).clone());
 			if (font != null) {
-				font = runDialog((SimpleFontFamily) ((SimpleFontFamily) font).clone());
-				if (font != null) {
-					titem.setText(font.getName());
-					fontFamilies.set(index, font);
+				fontFamilies.getFontFamilies().set(index, font);
+				tree.refresh(true);
+				tree.setSelection(new StructuredSelection(font), true);
+				selectionChanged();
+			}
+		} else if (sel.getFirstElement() instanceof SimpleFontSet) {
+			SimpleFontSet fset = (SimpleFontSet) sel.getFirstElement();
+			FontSetDialog d = new FontSetDialog(UIUtils.getShell(), (SimpleFontSet) fset.clone());
+			if (d.open() == Dialog.OK) {
+				fset.setName(d.getValue().getName());
+				tree.refresh(true);
+				tree.setSelection(new StructuredSelection(fset), true);
+				selectionChanged();
+			}
+		} else if (sel.getFirstElement() instanceof SimpleFontSetFamily) {
+			SimpleFontSetFamily fsetf = (SimpleFontSetFamily) sel.getFirstElement();
+			for (FontSet fs : fontFamilies.getFontSets()) {
+				if (fs.getFamilies().contains(fsetf)) {
+					FontSetFamilyDialog d = new FontSetFamilyDialog(UIUtils.getShell(), (SimpleFontSet) fs,
+							(SimpleFontSetFamily) fsetf.clone());
+					if (d.open() == Dialog.OK) {
+						SimpleFontSetFamily v = d.getValue();
+						fsetf.setPrimary(v.isPrimary());
+						fsetf.setIncludedScripts(v.getIncludedScripts());
+						fsetf.setExcludedScripts(v.getExcludedScripts());
+						tree.refresh(true);
+						tree.setSelection(new StructuredSelection(fsetf), true);
+						selectionChanged();
+					}
 				}
 			}
+		}
+	}
+
+	protected void addSetPressed() {
+		setPresentsDefaultValue(false);
+		StructuredSelection sel = (StructuredSelection) tree.getSelection();
+		SimpleFontSet fs = new SimpleFontSet();
+		fs.setName("FontSet");
+		FontSetDialog d = new FontSetDialog(UIUtils.getShell(), fs);
+		if (d.open() == Dialog.OK) {
+			boolean first = true;
+			for (Object obj : sel.toList()) {
+				if (obj instanceof FontFamily) {
+					SimpleFontSetFamily fsf = new SimpleFontSetFamily();
+					fsf.setFamilyName(((FontFamily) obj).getName());
+					fsf.setPrimary(first);
+					first = false;
+					fs.addFamily(fsf);
+				}
+			}
+			fontFamilies.getFontSets().add(fs);
+			tree.refresh(true);
+			tree.setSelection(new StructuredSelection(fs), true);
+			selectionChanged();
 		}
 	}
 
@@ -176,57 +354,63 @@ public class FontListFieldEditor extends TableFieldEditor {
 	}
 
 	protected void exportPressed() {
-		int[] selection = table.getSelectionIndices();
-		if (selection != null && selection.length > 0) {
-			final List<FontFamily> lst = new ArrayList<FontFamily>(selection.length);
-			for (int s : selection) {
-				FontFamily font = fontFamilies.get(s);
-				if (font instanceof JRCloneable)
-					lst.add((FontFamily) ((JRCloneable) font).clone());
-			}
-			final IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-			FileDialog fd = new FileDialog(Display.getCurrent().getActiveShell(), SWT.SAVE);
-			fd.setText(Messages.FontListFieldEditor_exportToJar);
-			setupLastLocation(fd);
-			fd.setFilterExtensions(new String[] { "*.jar", "*.zip" }); //$NON-NLS-1$ //$NON-NLS-2$
-			final String selected = fd.open();
-			setLastLocation(fd, selected);
-			if (selected != null) {
-				Job job = new Job(Messages.FontListFieldEditor_exportToJar) {
-					@Override
-					protected IStatus run(IProgressMonitor monitor) {
-						monitor.beginTask(Messages.FontListFieldEditor_exportToJar, IProgressMonitor.UNKNOWN);
-						try {
-							exportJAR(lst, selected);
+		StructuredSelection sel = (StructuredSelection) tree.getSelection();
+		if (sel.isEmpty())
+			return;
 
-							IFile[] resource = root.findFilesForLocationURI(new File(selected).toURI());
-							if (resource != null) {
-								for (IFile f : resource)
-									f.refreshLocal(1, monitor);
-							}
-						} catch (final Exception e) {
-							e.printStackTrace();
-							UIUtils.getDisplay().asyncExec(new Runnable() {
-								public void run() {
-									IStatus status = new OperationStatus(IStatus.ERROR, JaspersoftStudioPlugin.getUniqueIdentifier(), 1,
-											"Error saving file.", e.getCause()); //$NON-NLS-1$
-									ErrorDialog.openError(Display.getDefault().getActiveShell(), Messages.FontListFieldEditor_errorSave,
-											null, status);
-								}
-							});
-						} finally {
-							monitor.done();
+		List<FontFamily> ff = new ArrayList<FontFamily>();
+		for (Object obj : sel.toList())
+			if (obj instanceof FontFamily)
+				ff.add((FontFamily) ((JRCloneable) obj).clone());
+		List<FontSet> fs = new ArrayList<FontSet>();
+		for (Object obj : sel.toList())
+			if (obj instanceof FontSet)
+				fs.add((FontSet) ((JRCloneable) obj).clone());
+
+		final SimpleFontExtensionsContainer c = new SimpleFontExtensionsContainer(ff, fs);
+
+		final IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+		FileDialog fd = new FileDialog(Display.getCurrent().getActiveShell(), SWT.SAVE);
+		fd.setText(Messages.FontListFieldEditor_exportToJar);
+		setupLastLocation(fd);
+		fd.setFilterExtensions(new String[] { "*.jar", "*.zip" }); //$NON-NLS-1$ //$NON-NLS-2$
+		final String selected = fd.open();
+		setLastLocation(fd, selected);
+		if (selected != null) {
+			Job job = new Job(Messages.FontListFieldEditor_exportToJar) {
+				@Override
+				protected IStatus run(IProgressMonitor monitor) {
+					monitor.beginTask(Messages.FontListFieldEditor_exportToJar, IProgressMonitor.UNKNOWN);
+					try {
+						exportJAR(c, selected);
+
+						IFile[] resource = root.findFilesForLocationURI(new File(selected).toURI());
+						if (resource != null) {
+							for (IFile f : resource)
+								f.refreshLocal(1, monitor);
 						}
-						return Status.OK_STATUS;
+					} catch (final Exception e) {
+						e.printStackTrace();
+						UIUtils.getDisplay().asyncExec(new Runnable() {
+							public void run() {
+								IStatus status = new OperationStatus(IStatus.ERROR, JaspersoftStudioPlugin.getUniqueIdentifier(), 1,
+										"Error saving file.", e.getCause()); //$NON-NLS-1$
+								ErrorDialog.openError(Display.getDefault().getActiveShell(), Messages.FontListFieldEditor_errorSave,
+										null, status);
+							}
+						});
+					} finally {
+						monitor.done();
 					}
-				};
-				job.setPriority(Job.LONG);
-				job.schedule();
-			}
+					return Status.OK_STATUS;
+				}
+			};
+			job.setPriority(Job.LONG);
+			job.schedule();
 		}
 	}
 
-	private void exportJAR(List<FontFamily> lst, String selected) throws IOException, JRException {
+	private void exportJAR(SimpleFontExtensionsContainer c, String selected) throws IOException, JRException {
 		FileOutputStream fos = new FileOutputStream(selected);
 		try {
 			ZipOutputStream zipos = new java.util.zip.ZipOutputStream(fos);
@@ -246,8 +430,7 @@ public class FontListFieldEditor extends TableFieldEditor {
 
 			pw.flush();
 			Set<String> names = new HashSet<String>();
-			List<FontFamily> newfonts = new ArrayList<FontFamily>(lst.size());
-			for (FontFamily f : lst) {
+			for (FontFamily f : c.getFontFamilies()) {
 				writeFont2zip(names, zipos, f, (SimpleFontFace) f.getNormalFace());
 				writeFont2zip(names, zipos, f, (SimpleFontFace) f.getBoldFace());
 				writeFont2zip(names, zipos, f, (SimpleFontFace) f.getItalicFace());
@@ -258,13 +441,12 @@ public class FontListFieldEditor extends TableFieldEditor {
 					pdfenc = ModelUtils.getPDFEncoding2key(pdfenc);
 					((SimpleFontFamily) f).setPdfEncoding(pdfenc);
 				}
-				newfonts.add(f);
 			}
 
 			ZipEntry fontsXmlEntry = new ZipEntry("fonts/" + fontXmlFile); //$NON-NLS-1$
 			zipos.putNextEntry(fontsXmlEntry);
 
-			SimpleFontExtensionHelper.writeFontsXml(zipos, newfonts);
+			SimpleFontExtensionHelper.writeFontExtensionsXml(zipos, c);
 
 			zipos.finish();
 		} finally {
@@ -331,6 +513,8 @@ public class FontListFieldEditor extends TableFieldEditor {
 
 		super.createButtons(box);
 
+		addSetButton = createPushButton(box, "Create Set");
+
 		editButton = createPushButton(box, Messages.FontListFieldEditor_editButton);
 
 		exportButton = createPushButton(box, Messages.FontListFieldEditor_exportButton);
@@ -342,6 +526,8 @@ public class FontListFieldEditor extends TableFieldEditor {
 				Widget widget = event.widget;
 				if (widget == addButton)
 					addPressed();
+				else if (widget == addSetButton)
+					addSetPressed();
 				else if (widget == duplicateButton)
 					duplicatePressed();
 				else if (widget == removeButton)
@@ -354,7 +540,7 @@ public class FontListFieldEditor extends TableFieldEditor {
 					editPressed();
 				else if (widget == exportButton)
 					exportPressed();
-				else if (widget == table)
+				else if (widget == tree.getTree())
 					selectionChanged();
 				else if (widget == addURLButton)
 					addURLPressed();
@@ -365,55 +551,69 @@ public class FontListFieldEditor extends TableFieldEditor {
 	}
 
 	protected void addURLPressed() {
-		FontURLWizard wiz = new FontURLWizard(new ArrayList<FontFamily>(fontFamilies));
+		FontURLWizard wiz = new FontURLWizard(new ArrayList<FontFamily>(fontFamilies.getFontFamilies()));
 		WizardDialog d = new WizardDialog(UIUtils.getShell(), wiz);
 		d.setPageSize(800, 50);
 		if (d.open() == Dialog.OK) {
-			fontFamilies.clear();
-			fontFamilies.addAll(wiz.getFonts());
-
-			table.removeAll();
-			for (FontFamily ff : fontFamilies) {
-				TableItem tableItem = new TableItem(table, SWT.NONE);
-				tableItem.setText(ff.getName());
-			}
+			fontFamilies.getFontFamilies().clear();
+			fontFamilies.getFontFamilies().addAll(wiz.getFonts());
+			tree.refresh(true);
+			selectionChanged();
 		}
 	}
 
 	protected void addPathPressed() {
-		FontPathWizard wiz = new FontPathWizard(new ArrayList<FontFamily>(fontFamilies));
+		FontPathWizard wiz = new FontPathWizard(new ArrayList<FontFamily>(fontFamilies.getFontFamilies()));
 		WizardDialog d = new WizardDialog(UIUtils.getShell(), wiz);
 		d.setPageSize(800, 50);
 		if (d.open() == Dialog.OK) {
-			fontFamilies.clear();
-			fontFamilies.addAll(wiz.getFonts());
-
-			table.removeAll();
-			for (FontFamily ff : fontFamilies) {
-				TableItem tableItem = new TableItem(table, SWT.NONE);
-				tableItem.setText(ff.getName());
-			}
+			fontFamilies.getFontFamilies().clear();
+			fontFamilies.getFontFamilies().addAll(wiz.getFonts());
+			tree.refresh(true);
+			selectionChanged();
 		}
 	}
 
+	@Override
 	protected void selectionChanged() {
 		super.selectionChanged();
-		int index = table.getSelectionIndex();
-		int size = table.getItemCount();
+		StructuredSelection sel = (StructuredSelection) tree.getSelection();
+		if (addButton != null)
+			addButton.setEnabled(sel.isEmpty()
+					|| (!sel.isEmpty() && sel.size() == 1 && !(sel.getFirstElement() instanceof SimpleFontSetFamily)));
 		if (editButton != null)
-			editButton.setEnabled(size >= 1 && index >= 0 && index < size && isEditable(index));
-		if (exportButton != null)
-			exportButton.setEnabled(size >= 1 && index >= 0 && index < size);
+			editButton.setEnabled(!sel.isEmpty() && sel.size() == 1);
+		if (duplicateButton != null)
+			duplicateButton.setEnabled(!sel.isEmpty() && !(sel.getFirstElement() instanceof SimpleFontSetFamily));
+		if (exportButton != null) {
+			boolean en = !sel.isEmpty();
+			if (en)
+				for (Object obj : sel.toList())
+					if (obj instanceof FontSetFamily) {
+						en = false;
+						break;
+					}
+			exportButton.setEnabled(en);
+		}
+		if (addSetButton != null) {
+			boolean en = !sel.isEmpty();
+			if (en)
+				for (Object obj : sel.toList())
+					if (!(obj instanceof FontFamily)) {
+						en = false;
+						break;
+					}
+			addSetButton.setEnabled(en);
+		}
 	}
 
 	public void setEnabled(boolean enabled, Composite parent) {
 		super.setEnabled(enabled, parent);
 		editButton.setEnabled(enabled);
 		exportButton.setEnabled(enabled);
-	}
-
-	protected boolean isEditable(int row) {
-		return true;
+		addPathButton.setEnabled(enabled);
+		addURLButton.setEnabled(enabled);
+		addSetButton.setEnabled(enabled);
 	}
 
 	@Override
@@ -427,18 +627,96 @@ public class FontListFieldEditor extends TableFieldEditor {
 	}
 
 	@Override
-	protected boolean isRemovable(int row) {
-		return super.isRemovable(row);
+	protected boolean canGoUp(StructuredSelection sel) {
+		Object obj = sel.getFirstElement();
+		if (obj instanceof FontFamily)
+			return fontFamilies.getFontFamilies().indexOf(obj) > 0;
+		else if (obj instanceof FontSet) {
+			return fontFamilies.getFontSets().indexOf(obj) > 0;
+		} else if (obj instanceof FontSetFamily) {
+			for (FontSet fs : fontFamilies.getFontSets())
+				if (fs.getFamilies().contains(obj))
+					return fs.getFamilies().indexOf(obj) > 0;
+		}
+		return false;
 	}
 
 	@Override
-	protected boolean isSortable(int row) {
+	protected boolean canGoDown(StructuredSelection sel) {
+		Object obj = sel.getFirstElement();
+		if (obj instanceof FontFamily)
+			return fontFamilies.getFontFamilies().indexOf(obj) < fontFamilies.getFontFamilies().size() - 1;
+		else if (obj instanceof FontSet) {
+			return fontFamilies.getFontSets().indexOf(obj) < fontFamilies.getFontSets().size() - 1;
+		} else if (obj instanceof FontSetFamily) {
+			for (FontSet fs : fontFamilies.getFontSets())
+				if (fs.getFamilies().contains(obj))
+					return fs.getFamilies().indexOf(obj) < fs.getFamilies().size() - 1;
+		}
 		return false;
+	}
+
+	@Override
+	protected boolean isSortable(StructuredSelection sel) {
+		return sel.size() == 1;
 	}
 
 	@Override
 	protected void handleTableDoubleClick() {
 		super.handleTableDoubleClick();
-		editPressed();
+		if (editButton.isEnabled())
+			editPressed();
+	}
+
+	@Override
+	protected void upPressed() {
+		StructuredSelection sel = (StructuredSelection) tree.getSelection();
+		Object obj = sel.getFirstElement();
+		if (obj instanceof FontFamily) {
+			int ind = fontFamilies.getFontFamilies().indexOf(obj);
+			fontFamilies.getFontFamilies().remove(ind);
+			fontFamilies.getFontFamilies().add(ind - 1, (FontFamily) obj);
+		} else if (obj instanceof FontSet) {
+			int ind = fontFamilies.getFontSets().indexOf(obj);
+			fontFamilies.getFontSets().remove(ind);
+			fontFamilies.getFontSets().add(ind - 1, (FontSet) obj);
+		} else if (obj instanceof FontSetFamily) {
+			for (FontSet fs : fontFamilies.getFontSets())
+				if (fs.getFamilies().contains(obj)) {
+					int ind = fs.getFamilies().indexOf(obj);
+					fs.getFamilies().remove(ind);
+					fs.getFamilies().add(ind - 1, (FontSetFamily) obj);
+					break;
+				}
+		}
+		tree.refresh(true);
+		tree.setSelection(new StructuredSelection(obj), true);
+		selectionChanged();
+	}
+
+	@Override
+	protected void downPressed() {
+		StructuredSelection sel = (StructuredSelection) tree.getSelection();
+		Object obj = sel.getFirstElement();
+		if (obj instanceof FontFamily) {
+			int ind = fontFamilies.getFontFamilies().indexOf(obj);
+			fontFamilies.getFontFamilies().remove(ind);
+			fontFamilies.getFontFamilies().add(ind + 1, (FontFamily) obj);
+		} else if (obj instanceof FontSet) {
+			int ind = fontFamilies.getFontSets().indexOf(obj);
+			fontFamilies.getFontSets().remove(ind);
+			fontFamilies.getFontSets().add(ind + 1, (FontSet) obj);
+		} else if (obj instanceof FontSetFamily) {
+			for (FontSet fs : fontFamilies.getFontSets())
+				if (fs.getFamilies().contains(obj)) {
+					int ind = fs.getFamilies().indexOf(obj);
+					fs.getFamilies().remove(ind);
+					fs.getFamilies().add(ind + 1, (FontSetFamily) obj);
+					break;
+				}
+		}
+		tree.refresh(true);
+		tree.setSelection(new StructuredSelection(obj), true);
+		selectionChanged();
 	}
 }

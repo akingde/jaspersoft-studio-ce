@@ -29,7 +29,6 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.Set;
-import java.util.Vector;
 
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.fluent.Executor;
@@ -66,7 +65,9 @@ import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.component.ComponentsBundle;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.fonts.FontExtensionsCollector;
 import net.sf.jasperreports.engine.fonts.FontFamily;
+import net.sf.jasperreports.engine.fonts.FontSet;
 import net.sf.jasperreports.engine.fonts.SimpleFontExtensionHelper;
 import net.sf.jasperreports.engine.query.JRQueryExecuterFactoryBundle;
 import net.sf.jasperreports.engine.util.CompositeClassloader;
@@ -100,7 +101,7 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 	private boolean refreshBundles = true;
 	private boolean refreshMessageProviderFactory = true;
 	private boolean refreshFunctionsBundles = true;
-	private List<FontFamily> lst;
+	private FontExtensionsCollector lst;
 	private JavaProjectClassLoader javaclassloader;
 	private List<ComponentsBundle> bundles;
 	private List<FunctionsBundle> functionsBundles;
@@ -604,36 +605,37 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 	 * @return a not null font extension
 	 */
 	private List<FontFamily> getExtensionFonts() {
-		if (lst == null) {
-			lst = new Vector<FontFamily>();
-		}
+		readFonts();
+		return lst != null ? lst.getFontFamilies() : null;
+	}
+
+	private List<FontSet> getExtensionFontSets() {
+		readFonts();
+		return lst != null ? lst.getFontSets() : null;
+	}
+
+	protected void readFonts() {
 		if (refreshFonts) {
+			lst = new FontExtensionsCollector();
 			String strprop = getProperty(FontsPreferencePage.FPP_FONT_LIST);
-			if (strprop != null) {
-				lst.clear();
-				try {
-					List<FontFamily> fonts = SimpleFontExtensionHelper.getInstance().loadFontFamilies(this,
-							new ByteArrayInputStream(strprop.getBytes()));
-					if (fonts != null && !fonts.isEmpty()) {
-						for (FontFamily f : fonts)
-							if (f != null)
-								lst.add(f);
-					}
-				} catch (Exception e) {
-					// e.printStackTrace();
-				}
-			}
+			if (strprop != null)
+				SimpleFontExtensionHelper.getInstance().loadFontExtensions(this, new ByteArrayInputStream(strprop.getBytes()),
+						lst);
 
 			List<FontFamily> superlist = super.getExtensions(FontFamily.class);
 			if (superlist != null) {
 				for (FontFamily f : superlist)
 					if (f != null)
-						lst.add(f);
+						lst.getFontFamilies().add(f);
 			}
-
+			List<FontSet> sets = super.getExtensions(FontSet.class);
+			if (sets != null) {
+				for (FontSet f : sets)
+					if (f != null)
+						lst.getFontSets().add(f);
+			}
 			refreshFonts = false;
 		}
-		return lst;
 	}
 
 	/**
@@ -687,6 +689,8 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 
 			if (extensionType == FontFamily.class) {
 				result = (List<T>) getExtensionFonts();
+			} else if (extensionType == FontSet.class) {
+				result = (List<T>) getExtensionFontSets();
 			} else if (extensionType == ComponentsBundle.class) {
 				result = (List<T>) getExtensionComponents();
 			} else if (extensionType == FunctionsBundle.class) {
