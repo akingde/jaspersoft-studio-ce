@@ -153,13 +153,13 @@ public class FontListFieldEditor extends TreeFieldEditor {
 				return ((SimpleFontFamily) element).getName();
 			else if (element instanceof SimpleFontSetFamily)
 				return ((SimpleFontSetFamily) element).getFamilyName();
-			return "";
+			return ""; //$NON-NLS-1$
 		}
 
 		@Override
 		public Image getImage(Object element) {
 			if (element instanceof SimpleFontSetFamily && ((SimpleFontSetFamily) element).isPrimary())
-				return JaspersoftStudioPlugin.getInstance().getImage("icons/resources/check-16.png");
+				return JaspersoftStudioPlugin.getInstance().getImage("icons/resources/check-16.png"); //$NON-NLS-1$
 			return null;
 		}
 
@@ -257,14 +257,14 @@ public class FontListFieldEditor extends TreeFieldEditor {
 		for (Object obj : sel.toList()) {
 			if (obj instanceof FontFamily) {
 				SimpleFontFamily clone = (SimpleFontFamily) ((SimpleFontFamily) obj).clone();
-				clone.setName(((FontFamily) obj).getName() + "_copy");
+				clone.setName(((FontFamily) obj).getName() + "_copy"); //$NON-NLS-1$
 				fontFamilies.getFontFamilies().add(clone);
 				tree.refresh(true);
 				tree.setSelection(new StructuredSelection(clone), true);
 				selectionChanged();
 			} else if (obj instanceof FontSet) {
 				SimpleFontSet clone = (SimpleFontSet) ((SimpleFontSet) obj).clone();
-				clone.setName(((SimpleFontSet) obj).getName() + "_copy");
+				clone.setName(((SimpleFontSet) obj).getName() + "_copy"); //$NON-NLS-1$
 				fontFamilies.getFontSets().add(clone);
 				tree.refresh(true);
 				tree.setSelection(new StructuredSelection(clone), true);
@@ -319,7 +319,7 @@ public class FontListFieldEditor extends TreeFieldEditor {
 		setPresentsDefaultValue(false);
 		StructuredSelection sel = (StructuredSelection) tree.getSelection();
 		SimpleFontSet fs = new SimpleFontSet();
-		fs.setName("FontSet");
+		fs.setName("FontSet"); //$NON-NLS-1$
 		FontSetDialog d = new FontSetDialog(UIUtils.getShell(), fs);
 		if (d.open() == Dialog.OK) {
 			boolean first = true;
@@ -364,8 +364,27 @@ public class FontListFieldEditor extends TreeFieldEditor {
 				ff.add((FontFamily) ((JRCloneable) obj).clone());
 		List<FontSet> fs = new ArrayList<FontSet>();
 		for (Object obj : sel.toList())
-			if (obj instanceof FontSet)
+			if (obj instanceof FontSet) {
 				fs.add((FontSet) ((JRCloneable) obj).clone());
+				// let's add all fonts from the family
+				for (FontSetFamily fsf : ((FontSet) obj).getFamilies()) {
+					for (FontFamily f : fontFamilies.getFontFamilies()) {
+						if (f.getName().equals(fsf.getFamilyName())) {
+							boolean exists = false;
+							for (FontFamily item : ff) {
+								if (item.getName().equals(fsf.getFamilyName())) {
+									exists = true;
+									break;
+								}
+							}
+							if (exists)
+								break;
+							ff.add((FontFamily) ((JRCloneable) f).clone());
+							break;
+						}
+					}
+				}
+			}
 
 		final SimpleFontExtensionsContainer c = new SimpleFontExtensionsContainer(ff, fs);
 
@@ -474,7 +493,7 @@ public class FontListFieldEditor extends TreeFieldEditor {
 			return fontname;
 		File file = new File(fontname);
 		if (file.exists()) {
-			String name = "fonts/" + StringUtils.toPackageName(fontFamily.getName()) + "/" + file.getName(); //$NON-NLS-1$
+			String name = "fonts/" + StringUtils.toPackageName(fontFamily.getName()) + "/" + file.getName(); //$NON-NLS-1$ //$NON-NLS-2$
 			if (!names.contains(name)) {
 				ZipEntry ttfZipEntry = new ZipEntry(name);
 				zipos.putNextEntry(ttfZipEntry);
@@ -513,7 +532,7 @@ public class FontListFieldEditor extends TreeFieldEditor {
 
 		super.createButtons(box);
 
-		addSetButton = createPushButton(box, "Create Set");
+		addSetButton = createPushButton(box, Messages.FontListFieldEditor_6);
 
 		editButton = createPushButton(box, Messages.FontListFieldEditor_editButton);
 

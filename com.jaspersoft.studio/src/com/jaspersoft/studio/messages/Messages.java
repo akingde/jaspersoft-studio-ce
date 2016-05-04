@@ -811,6 +811,7 @@ public class Messages extends NLS {
 	public static String FontFamilyPage_pdfEncodingLabel;
 	public static String FontFamilyPage_pdfGroup;
 	public static String FontFamilyPage_pdfHintText;
+	public static String FontListFieldEditor_6;
 	public static String FontListFieldEditor_editButton;
 	public static String FontListFieldEditor_errorSave;
 	public static String FontListFieldEditor_exportButton;
@@ -831,6 +832,15 @@ public class Messages extends NLS {
 	public static String FontPathPage_0;
 	public static String FontPathPage_1;
 	public static String FontPathPage_2;
+	public static String FontSetFamilyDialog_0;
+	public static String FontSetFamilyDialog_1;
+	public static String FontSetFamilyDialog_2;
+	public static String FontSetFamilyDialog_3;
+	public static String FontSetFamilyDialog_4;
+	public static String FontSetFamilyDialog_5;
+	public static String FontSetFamilyDialog_6;
+	public static String FontSetFamilyDialog_7;
+	public static String FontSetFamilyDialog_8;
 	public static String FontsPreferencePage_fontListTitle;
 	public static String FontURLPage_0;
 	public static String FontURLPage_1;
