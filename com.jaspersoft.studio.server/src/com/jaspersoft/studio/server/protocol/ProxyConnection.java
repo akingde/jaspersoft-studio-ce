@@ -127,6 +127,8 @@ public class ProxyConnection implements IConnection {
 				while (cause != null) {
 					if (cause instanceof CertificateException)
 						throw e;
+					if (cause instanceof RuntimeException && cause.getCause() instanceof InterruptedException)
+						return connect(monitor, sp);
 					cause = cause.getCause();
 				}
 				Activator.getDefault().logError(e);

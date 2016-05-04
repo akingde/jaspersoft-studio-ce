@@ -126,7 +126,7 @@ public class CertificatesDialog extends CertificateDialog {
 				viewer.refresh(true);
 				if (trustCertificates.size() < ind)
 					ind--;
-				if (ind >= 0)
+				if (ind >= 0 && !trustCertificates.isEmpty())
 					viewer.setSelection(new StructuredSelection(trustCertificates.get(ind)), true);
 			}
 		}
