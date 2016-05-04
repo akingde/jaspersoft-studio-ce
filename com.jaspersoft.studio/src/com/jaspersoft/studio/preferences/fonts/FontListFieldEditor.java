@@ -258,7 +258,7 @@ public class FontListFieldEditor extends TreeFieldEditor {
 			if (obj instanceof FontFamily) {
 				SimpleFontFamily clone = (SimpleFontFamily) ((SimpleFontFamily) obj).clone();
 				String newname = ((FontFamily) obj).getName() + "_copy"; // $NON-NLS-1$
-				for (int i = 0; i < 1000; i++) {
+				for (int i = 1; i < 1000; i++) {
 					boolean exists = false;
 					for (FontFamily f : fontFamilies.getFontFamilies()) {
 						if (f.getName().equals(newname)) {
@@ -279,7 +279,7 @@ public class FontListFieldEditor extends TreeFieldEditor {
 			} else if (obj instanceof FontSet) {
 				SimpleFontSet clone = (SimpleFontSet) ((SimpleFontSet) obj).clone();
 				String newname = ((FontSet) obj).getName() + "_copy"; // $NON-NLS-1$
-				for (int i = 0; i < 1000; i++) {
+				for (int i = 1; i < 1000; i++) {
 					boolean exists = false;
 					for (FontSet f : fontFamilies.getFontSets()) {
 						if (f.getName().equals(newname)) {
