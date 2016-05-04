@@ -257,14 +257,41 @@ public class FontListFieldEditor extends TreeFieldEditor {
 		for (Object obj : sel.toList()) {
 			if (obj instanceof FontFamily) {
 				SimpleFontFamily clone = (SimpleFontFamily) ((SimpleFontFamily) obj).clone();
-				clone.setName(((FontFamily) obj).getName() + "_copy"); //$NON-NLS-1$
+				String newname = ((FontFamily) obj).getName() + "_copy"; // $NON-NLS-1$
+				for (int i = 0; i < 1000; i++) {
+					boolean exists = false;
+					for (FontFamily f : fontFamilies.getFontFamilies()) {
+						if (f.getName().equals(newname)) {
+							exists = true;
+							break;
+						}
+					}
+					if (!exists)
+						break;
+					newname = ((FontFamily) obj).getName() + "_copy" + i; // $NON-NLS-1$
+				}
+
+				clone.setName(newname);
 				fontFamilies.getFontFamilies().add(clone);
 				tree.refresh(true);
 				tree.setSelection(new StructuredSelection(clone), true);
 				selectionChanged();
 			} else if (obj instanceof FontSet) {
 				SimpleFontSet clone = (SimpleFontSet) ((SimpleFontSet) obj).clone();
-				clone.setName(((SimpleFontSet) obj).getName() + "_copy"); //$NON-NLS-1$
+				String newname = ((FontSet) obj).getName() + "_copy"; // $NON-NLS-1$
+				for (int i = 0; i < 1000; i++) {
+					boolean exists = false;
+					for (FontSet f : fontFamilies.getFontSets()) {
+						if (f.getName().equals(newname)) {
+							exists = true;
+							break;
+						}
+					}
+					if (!exists)
+						break;
+					newname = ((FontSet) obj).getName() + "_copy" + i; // $NON-NLS-1$
+				}
+				clone.setName(newname); // $NON-NLS-1$
 				fontFamilies.getFontSets().add(clone);
 				tree.refresh(true);
 				tree.setSelection(new StructuredSelection(clone), true);
