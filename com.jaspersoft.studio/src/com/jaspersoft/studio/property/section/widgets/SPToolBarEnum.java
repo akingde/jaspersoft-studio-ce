@@ -100,6 +100,7 @@ public class SPToolBarEnum<T extends IPropertyDescriptor & IEnumDescriptors> ext
 	private boolean refresh = false;
 
 	public void setData(APropertyNode pnode, Object b) {
+		createContextualMenu(pnode);
 		refresh = true;
 		toolBar.setEnabled(pnode.isEditable());
 		int index = 0;
