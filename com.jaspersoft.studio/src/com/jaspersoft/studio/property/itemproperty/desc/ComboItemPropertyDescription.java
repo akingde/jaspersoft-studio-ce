@@ -130,9 +130,9 @@ public class ComboItemPropertyDescription<T> extends ItemPropertyDescription<T> 
 
 		super.createControl(wiProp, cmp);
 
-		final Combo textExpression = new Combo(cmp, readOnly ? SWT.READ_ONLY : SWT.NONE);
-		textExpression.setItems(values);
-		textExpression.addSelectionListener(new SelectionAdapter() {
+		final Combo c = new Combo(cmp, readOnly ? SWT.READ_ONLY : SWT.NONE);
+		c.setItems(values);
+		c.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				if (wiProp.isRefresh())
@@ -140,27 +140,28 @@ public class ComboItemPropertyDescription<T> extends ItemPropertyDescription<T> 
 				StandardItemProperty v = wiProp.getValue();
 				if (v == null)
 					v = new StandardItemProperty(getName(), null, null);
-				handleEdit(textExpression, v);
+				handleEdit(c, v);
 				wiProp.setValue(wiProp.getValue());
 			}
 		});
 
-		textExpression.addModifyListener(new ModifyListener() {
+		c.addModifyListener(new ModifyListener() {
 
 			@Override
 			public void modifyText(ModifyEvent e) {
 				if (wiProp.isRefresh())
 					return;
-				Point p = textExpression.getSelection();
+				Point p = c.getSelection();
 				StandardItemProperty v = wiProp.getValue();
 				if (v == null)
 					v = new StandardItemProperty(getName(), null, null);
-				handleEdit(textExpression, v);
+				handleEdit(c, v);
 				wiProp.setValue(wiProp.getValue());
-				textExpression.setSelection(p);
+				c.setSelection(p);
 			}
 		});
-		layout.topControl = textExpression;
+		setupContextMenu(c, wiProp);
+		layout.topControl = c;
 		return cmp;
 	}
 

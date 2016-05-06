@@ -80,6 +80,7 @@ public class NumberPropertyDescription<T extends Number> extends ItemPropertyDes
 			}
 
 		});
+		setupContextMenu(ctrl, wiProp);
 		return ctrl;
 	}
 

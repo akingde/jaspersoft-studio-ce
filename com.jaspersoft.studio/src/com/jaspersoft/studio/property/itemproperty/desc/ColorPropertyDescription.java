@@ -58,8 +58,8 @@ public class ColorPropertyDescription<T> extends ItemPropertyDescription<T> {
 
 		super.createControl(wiProp, cmp);
 
-		final WColorPicker textExpression = new WColorPicker(new AlfaRGB(new RGB(0, 0, 0), 0), cmp);
-		textExpression.addColorSelectionListener(new ColorSelectionListener() {
+		final WColorPicker cp = new WColorPicker(new AlfaRGB(new RGB(0, 0, 0), 0), cmp);
+		cp.addColorSelectionListener(new ColorSelectionListener() {
 
 			@Override
 			public void changed(ColorSelectedEvent e) {
@@ -68,11 +68,13 @@ public class ColorPropertyDescription<T> extends ItemPropertyDescription<T> {
 				StandardItemProperty v = wiProp.getValue();
 				if (v == null)
 					v = new StandardItemProperty(getName(), null, null);
-				handleEdit(textExpression, v);
+				handleEdit(cp, v);
 				wiProp.setValue(wiProp.getValue());
 			}
 		});
-		layout.topControl = textExpression;
+		for (Control c : cp.getChildren())
+			setupContextMenu(c, wiProp);
+		layout.topControl = cp;
 		return cmp;
 	}
 

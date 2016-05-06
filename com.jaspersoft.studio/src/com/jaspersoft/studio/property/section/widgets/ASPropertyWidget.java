@@ -40,6 +40,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.help.HelpSystem;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.properties.internal.IHighlightPropertyWidget;
 import com.jaspersoft.studio.properties.view.validation.ValidationError;
@@ -119,7 +120,7 @@ public abstract class ASPropertyWidget<T extends IPropertyDescriptor> implements
 						section.getEditDomain().getCommandStack().execute(cmd);
 					}
 				});
-		    refreshItem.setText("Reset to Default");
+		    refreshItem.setText(Messages.ASPropertyWidget_0);
 				control.setMenu(controlMenu);
 			} else {
 				control.setMenu(null);

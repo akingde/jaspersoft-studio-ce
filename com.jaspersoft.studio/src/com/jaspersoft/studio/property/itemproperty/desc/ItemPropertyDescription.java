@@ -8,24 +8,29 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.itemproperty.desc;
 
-import net.sf.jasperreports.components.items.StandardItemProperty;
-import net.sf.jasperreports.engine.design.JRDesignExpression;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Text;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.UIUtil;
 import com.jaspersoft.studio.utils.inputhistory.InputHistoryCache;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
+import net.sf.jasperreports.components.items.StandardItemProperty;
+import net.sf.jasperreports.engine.design.JRDesignExpression;
 
 public class ItemPropertyDescription<T> {
 	protected String name;
@@ -189,7 +194,33 @@ public class ItemPropertyDescription<T> {
 				textExpression.setSelection(p);
 			}
 		});
+		setupContextMenu(textExpression, wiProp);
+
 		return textExpression;
+	}
+
+	protected void setupContextMenu(final Control c, final IWItemProperty wiProp) {
+		if (getDefaultValue() != null) {
+			Menu controlMenu = c.getMenu();
+			if (controlMenu == null) {
+				controlMenu = new Menu(c);
+				c.setMenu(controlMenu);
+			}
+			for (MenuItem mi : controlMenu.getItems())
+				if (mi.getText().equals(Messages.ASPropertyWidget_0))
+					return;
+
+			MenuItem refreshItem = new MenuItem(controlMenu, SWT.NONE);
+			refreshItem.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					StandardItemProperty v = new StandardItemProperty(getName(), getDefaultValueString(), null);
+					wiProp.setValue(v);
+				}
+			});
+			refreshItem.setText(Messages.ASPropertyWidget_0);
+
+		}
 	}
 
 	public void setValue(Control c, IWItemProperty wip) {
