@@ -36,10 +36,15 @@ import com.jaspersoft.studio.utils.AlfaRGB;
 import com.jaspersoft.studio.utils.Colors;
 
 public class MLinePen extends APropertyNode implements IPropertySource {
+	
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	private static List<ComboItem> lineSpacingItems = null;
 
+	private static IPropertyDescriptor[] descriptors;
+	
+	private static JSSPopupPropertyDescriptor penLineStyleD;
+	
 	public MLinePen(JRPen linePen) {
 		super();
 		setValue(linePen);
@@ -77,7 +82,7 @@ public class MLinePen extends APropertyNode implements IPropertySource {
 	}
 
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
 		// pen
 		ColorPropertyDescriptor penLineColorD = new ColorPropertyDescriptor(JRBasePen.PROPERTY_LINE_COLOR,
 				Messages.common_line_color, NullEnum.INHERITED);
@@ -98,20 +103,19 @@ public class MLinePen extends APropertyNode implements IPropertySource {
 		penLineStyleD.setHelpRefBuilder(new HelpReferenceBuilder(
 				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#pen_lineStyle"));
 		desc.add(penLineStyleD);
-
-		defaultsMap.put(JRBasePen.PROPERTY_LINE_STYLE, null);
-		defaultsMap.put(JRBasePen.PROPERTY_LINE_COLOR, null);
-		defaultsMap.put(JRBasePen.PROPERTY_LINE_WIDTH, null);
 	}
-
-	private static IPropertyDescriptor[] descriptors;
-	private static Map<String, Object> defaultsMap;
-	private static JSSPopupPropertyDescriptor penLineStyleD;
 
 	@Override
-	public Map<String, Object> getDefaultsMap() {
+	protected Map<String, DefaultValue> createDefaultsMap() {
+		Map<String, DefaultValue> defaultsMap = super.createDefaultsMap();
+		
+		defaultsMap.put(JRBasePen.PROPERTY_LINE_STYLE, new DefaultValue(null, true));
+		defaultsMap.put(JRBasePen.PROPERTY_LINE_COLOR, new DefaultValue(null, true));
+		defaultsMap.put(JRBasePen.PROPERTY_LINE_WIDTH, new DefaultValue(null, true));
+		
 		return defaultsMap;
 	}
+
 
 	@Override
 	public IPropertyDescriptor[] getDescriptors() {
@@ -119,9 +123,8 @@ public class MLinePen extends APropertyNode implements IPropertySource {
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1) {
 		descriptors = descriptors1;
-		defaultsMap = defaultsMap1;
 	}
 
 	/*

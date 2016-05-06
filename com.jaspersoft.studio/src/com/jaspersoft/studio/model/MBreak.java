@@ -71,13 +71,8 @@ public class MBreak extends MGraphicElement {
 	}
 
 	private static IPropertyDescriptor[] descriptors;
-	private static Map<String, Object> defaultsMap;
 	private static NamedEnumPropertyDescriptor<BreakTypeEnum> typeD;
 
-	@Override
-	public Map<String, Object> getDefaultsMap() {
-		return defaultsMap;
-	}
 
 	@Override
 	public IPropertyDescriptor[] getDescriptors() {
@@ -85,9 +80,8 @@ public class MBreak extends MGraphicElement {
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1) {
 		descriptors = descriptors1;
-		defaultsMap = defaultsMap1;
 	}
 
 	/**
@@ -97,8 +91,8 @@ public class MBreak extends MGraphicElement {
 	 *          the desc
 	 */
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		super.createPropertyDescriptors(desc, defaultsMap);
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
+		super.createPropertyDescriptors(desc);
 
 		typeD = new NamedEnumPropertyDescriptor<BreakTypeEnum>(JRBaseBreak.PROPERTY_TYPE, Messages.MBreak_type,
 				BreakTypeEnum.COLUMN, NullEnum.NOTNULL);
@@ -106,9 +100,19 @@ public class MBreak extends MGraphicElement {
 		desc.add(typeD);
 		typeD.setCategory(Messages.MBreak_break_properties_category);
 
-		defaultsMap.put(JRBaseBreak.PROPERTY_TYPE, typeD.getIntValue(BreakTypeEnum.PAGE));
+		
 
 		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#break");
+	}
+	
+	@Override
+	protected Map<String, DefaultValue> createDefaultsMap() {
+		Map<String,DefaultValue> defaultsMap = super.createDefaultsMap();
+		
+		int rotationValue = NamedEnumPropertyDescriptor.getIntValue(BreakTypeEnum.PAGE, NullEnum.NOTNULL, BreakTypeEnum.PAGE);
+		defaultsMap.put(JRBaseBreak.PROPERTY_TYPE, new DefaultValue(rotationValue, false));
+		
+		return defaultsMap;
 	}
 
 	@Override

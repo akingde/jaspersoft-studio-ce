@@ -44,6 +44,7 @@ import com.jaspersoft.studio.editor.layout.VerticalRowLayout;
 import com.jaspersoft.studio.editor.report.ReportContainer;
 import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.DefaultValue;
 import com.jaspersoft.studio.model.IContainer;
 import com.jaspersoft.studio.model.IContainerEditPart;
 import com.jaspersoft.studio.model.IContainerLayout;
@@ -100,6 +101,12 @@ public class MCrosstab extends MGraphicElementLineBox implements IContainer,
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
 	
+	private static IPropertyDescriptor[] descriptors;
+	
+	private CrosstabManager ctManager;
+	
+	private MCrosstabDataset mCrosstabDataset;
+	
 	/**
 	 * Gets the icon descriptor.
 	 * 
@@ -122,8 +129,6 @@ public class MCrosstab extends MGraphicElementLineBox implements IContainer,
 		super(parent, newIndex);
 		this.ctManager = ctManager;
 	}
-
-	private CrosstabManager ctManager;
 
 	public CrosstabManager getCrosstabManager() {
 		return ctManager;
@@ -151,24 +156,14 @@ public class MCrosstab extends MGraphicElementLineBox implements IContainer,
 		return (JRDesignCrosstab) super.getValue();
 	}
 
-	private static IPropertyDescriptor[] descriptors;
-	private static Map<String, Object> defaultsMap;
-
-	@Override
-	public Map<String, Object> getDefaultsMap() {
-		return defaultsMap;
-	}
-
 	@Override
 	public IPropertyDescriptor[] getDescriptors() {
 		return descriptors;
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1,
-			Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1) {
 		descriptors = descriptors1;
-		defaultsMap = defaultsMap1;
 	}
 
 	/**
@@ -178,9 +173,8 @@ public class MCrosstab extends MGraphicElementLineBox implements IContainer,
 	 *            the desc
 	 */
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc,
-			Map<String, Object> defaultsMap) {
-		super.createPropertyDescriptors(desc, defaultsMap);
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
+		super.createPropertyDescriptors(desc);
 
 		runDirectionD = new NamedEnumPropertyDescriptor<RunDirectionEnum>(
 				JRBaseCrosstab.PROPERTY_RUN_DIRECTION,
@@ -243,7 +237,6 @@ public class MCrosstab extends MGraphicElementLineBox implements IContainer,
 		CheckBoxPropertyDescriptor columnsFillDescriptor = new CheckBoxPropertyDescriptor(MTable.PROPERTY_COLUMNS_AUTORESIZE_PROPORTIONAL, Messages.MCrosstab_columnFitName);
 		columnsFillDescriptor.setDescription(Messages.MCrosstab_columnFitDescription);
 		desc.add(columnsFillDescriptor);
-		defaultsMap.put(MTable.PROPERTY_COLUMNS_AUTORESIZE_PROPORTIONAL, Boolean.FALSE);
 
 		horizongalPositionD.setCategory(Messages.MCrosstab_crosstab_properties_category);
 		datasetD.setCategory(Messages.MCrosstab_crosstab_properties_category);
@@ -258,14 +251,21 @@ public class MCrosstab extends MGraphicElementLineBox implements IContainer,
 		setHelpPrefix(desc,
 				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#crosstab"); //$NON-NLS-1$
 	}
+	
+	@Override
+	protected Map<String, DefaultValue> createDefaultsMap() {
+		Map<String, DefaultValue> defaultsMap = super.createDefaultsMap();
+		
+		defaultsMap.put(MTable.PROPERTY_COLUMNS_AUTORESIZE_PROPORTIONAL, new DefaultValue(Boolean.FALSE, false));
+		
+		return defaultsMap;
+	}
 
 	@Override
 	public void setGroupItems(String[] items) {
 		if (mCrosstabDataset != null)
 			mCrosstabDataset.setGroupItems(items);
 	}
-
-	private MCrosstabDataset mCrosstabDataset;
 
 	@Override
 	public Object getPropertyValue(Object id) {

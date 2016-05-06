@@ -30,6 +30,7 @@ import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.model.DefaultValue;
 import com.jaspersoft.studio.model.MHyperLink;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.JRPropertyDescriptor;
@@ -39,9 +40,15 @@ import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class MCategorySeries extends APropertyNode {
+	
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+	
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
+	
+	private static IPropertyDescriptor[] descriptors;
+	
+	private MHyperLink mHyperLink;
 
 	/**
 	 * Gets the icon descriptor.
@@ -69,24 +76,14 @@ public class MCategorySeries extends APropertyNode {
 		return (JRDesignCategorySeries) super.getValue();
 	}
 
-	private static IPropertyDescriptor[] descriptors;
-	private static Map<String, Object> defaultsMap;
-
-	@Override
-	public Map<String, Object> getDefaultsMap() {
-		return defaultsMap;
-	}
-
 	@Override
 	public IPropertyDescriptor[] getDescriptors() {
 		return descriptors;
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1,
-			Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1) {
 		descriptors = descriptors1;
-		defaultsMap = defaultsMap1;
 	}
 
 	/**
@@ -96,8 +93,7 @@ public class MCategorySeries extends APropertyNode {
 	 *            the desc
 	 */
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc,
-			Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
 
 		JRExpressionPropertyDescriptor catExpD = new JRExpressionPropertyDescriptor(
 				JRDesignCategorySeries.PROPERTY_CATEGORY_EXPRESSION,
@@ -130,18 +126,20 @@ public class MCategorySeries extends APropertyNode {
 		itemHyperLinkD
 				.setDescription(Messages.MCategorySeries_item_hyperlink_description);
 		desc.add(itemHyperLinkD);
-
-		defaultsMap.put(JRDesignCategorySeries.PROPERTY_CATEGORY_EXPRESSION,
-				null);
-		defaultsMap.put(JRDesignCategorySeries.PROPERTY_LABEL_EXPRESSION, null);
-		defaultsMap
-				.put(JRDesignCategorySeries.PROPERTY_SERIES_EXPRESSION, null);
-		defaultsMap.put(JRDesignCategorySeries.PROPERTY_VALUE_EXPRESSION, null);
-		defaultsMap.put(JRDesignCategorySeries.PROPERTY_ITEM_HYPERLINK, null);
-
 	}
-
-	private MHyperLink mHyperLink;
+	
+	@Override
+	protected Map<String, DefaultValue> createDefaultsMap() {
+		
+		Map<String, DefaultValue> defaultsMap = super.createDefaultsMap();
+		defaultsMap.put(JRDesignCategorySeries.PROPERTY_CATEGORY_EXPRESSION, new DefaultValue(null, true));
+		defaultsMap.put(JRDesignCategorySeries.PROPERTY_LABEL_EXPRESSION, new DefaultValue(null, true));
+		defaultsMap.put(JRDesignCategorySeries.PROPERTY_SERIES_EXPRESSION, new DefaultValue(null, true));
+		defaultsMap.put(JRDesignCategorySeries.PROPERTY_VALUE_EXPRESSION, new DefaultValue(null, true));
+		defaultsMap.put(JRDesignCategorySeries.PROPERTY_ITEM_HYPERLINK, new DefaultValue(null, true));
+		
+		return defaultsMap;
+	}
 
 	public Object getPropertyValue(Object id) {
 		JRDesignCategorySeries jrElement = (JRDesignCategorySeries) getValue();

@@ -13,12 +13,6 @@
 package com.jaspersoft.studio.components.chart.model.plot;
 
 import java.util.List;
-import java.util.Map;
-
-import net.sf.jasperreports.charts.JRPie3DPlot;
-import net.sf.jasperreports.charts.design.JRDesignPie3DPlot;
-import net.sf.jasperreports.charts.design.JRDesignPiePlot;
-import net.sf.jasperreports.engine.JRConstants;
 
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
@@ -31,8 +25,16 @@ import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescri
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.DoublePropertyDescriptor;
 
+import net.sf.jasperreports.charts.JRPie3DPlot;
+import net.sf.jasperreports.charts.design.JRDesignPie3DPlot;
+import net.sf.jasperreports.charts.design.JRDesignPiePlot;
+import net.sf.jasperreports.engine.JRConstants;
+
 public class MPie3DPlot extends MChartPlot {
+	
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+	
+	private static IPropertyDescriptor[] descriptors;
 
 	public MPie3DPlot(JRPie3DPlot value) {
 		super(value);
@@ -43,30 +45,19 @@ public class MPie3DPlot extends MChartPlot {
 		return Messages.MPie3DPlot_pie3d_plot;
 	}
 
-	private static IPropertyDescriptor[] descriptors;
-	private static Map<String, Object> defaultsMap;
-
-	@Override
-	public Map<String, Object> getDefaultsMap() {
-		return defaultsMap;
-	}
-
 	@Override
 	public IPropertyDescriptor[] getDescriptors() {
 		return descriptors;
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1,
-			Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1) {
 		descriptors = descriptors1;
-		defaultsMap = defaultsMap1;
 	}
 
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc,
-			Map<String, Object> defaultsMap) {
-		super.createPropertyDescriptors(desc, defaultsMap);
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
+		super.createPropertyDescriptors(desc);
 
 		PlotPropertyDescriptor itemLabelD = new PlotPropertyDescriptor(
 				JRDesignPie3DPlot.PROPERTY_ITEM_LABEL,

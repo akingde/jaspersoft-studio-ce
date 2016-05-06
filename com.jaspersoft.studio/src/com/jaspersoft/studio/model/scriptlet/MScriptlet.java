@@ -42,9 +42,13 @@ import net.sf.jasperreports.engine.design.JRDesignScriptlet;
  * @author Chicu Veaceslav
  */
 public class MScriptlet extends APropertyNode implements ICopyable, IDragable {
+	
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+	
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
+	
+	private static IPropertyDescriptor[] descriptors;
 
 	/**
 	 * Gets the icon descriptor.
@@ -107,23 +111,14 @@ public class MScriptlet extends APropertyNode implements ICopyable, IDragable {
 		return getIconDescriptor().getToolTip();
 	}
 
-	private static IPropertyDescriptor[] descriptors;
-	private static Map<String, Object> defaultsMap;
-
-	@Override
-	public Map<String, Object> getDefaultsMap() {
-		return defaultsMap;
-	}
-
 	@Override
 	public IPropertyDescriptor[] getDescriptors() {
 		return descriptors;
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1) {
 		descriptors = descriptors1;
-		defaultsMap = defaultsMap1;
 	}
 
 	/**
@@ -133,7 +128,7 @@ public class MScriptlet extends APropertyNode implements ICopyable, IDragable {
 	 *          the desc
 	 */
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
 		NTextPropertyDescriptor nameD = new NTextPropertyDescriptor(JRDesignScriptlet.PROPERTY_NAME, Messages.common_name);
 		nameD.setDescription(Messages.MScriptlet_name_description);
 		desc.add(nameD);

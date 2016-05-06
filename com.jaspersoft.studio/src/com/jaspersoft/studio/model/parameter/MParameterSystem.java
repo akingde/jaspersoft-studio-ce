@@ -26,6 +26,7 @@ import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.model.DefaultValue;
 import com.jaspersoft.studio.model.IDragable;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
@@ -46,8 +47,6 @@ public class MParameterSystem extends APropertyNode implements IDragable {
 	private static IIconDescriptor iconDescriptor;
 
 	private static IPropertyDescriptor[] descriptors;
-	
-	private static Map<String, Object> defaultsMap;
 	
 	private static ParameterNameValidator validator;
 	
@@ -123,19 +122,13 @@ public class MParameterSystem extends APropertyNode implements IDragable {
 	}
 
 	@Override
-	public Map<String, Object> getDefaultsMap() {
-		return defaultsMap;
-	}
-
-	@Override
 	public IPropertyDescriptor[] getDescriptors() {
 		return descriptors;
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1) {
 		descriptors = descriptors1;
-		defaultsMap = defaultsMap1;
 	}
 
 	@Override
@@ -152,7 +145,7 @@ public class MParameterSystem extends APropertyNode implements IDragable {
 	 *          the desc
 	 */
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
 		validator = new ParameterNameValidator();
 		validator.setTargetNode(this);
 		JSSValidatedTextPropertyDescriptor nameD = new JSSValidatedTextPropertyDescriptor(JRDesignParameter.PROPERTY_NAME,
@@ -166,8 +159,13 @@ public class MParameterSystem extends APropertyNode implements IDragable {
 		desc.add(classD);
 		classD.setHelpRefBuilder(new HelpReferenceBuilder(
 				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#parameter_class"));
-
-		defaultsMap.put(JRDesignParameter.PROPERTY_VALUE_CLASS_NAME, "java.lang.String"); //$NON-NLS-1$
+	}
+	
+	@Override
+	protected Map<String, DefaultValue> createDefaultsMap() {
+		Map<String, DefaultValue> defaultsMap = super.createDefaultsMap();
+		defaultsMap.put(JRDesignParameter.PROPERTY_VALUE_CLASS_NAME, new DefaultValue("java.lang.String", false)); //$NON-NLS-1$
+		return defaultsMap;
 	}
 
 	/*

@@ -28,6 +28,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.DefaultValue;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MHyperLink;
 import com.jaspersoft.studio.model.util.ReportFactory;
@@ -38,31 +39,26 @@ import com.jaspersoft.studio.property.descriptors.FloatPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.IntegerPropertyDescriptor;
 
 public class MChartPieDataset extends MChartDataset {
+	
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
+	private static IPropertyDescriptor[] descriptors;
+	
+	private MHyperLink omHyperLink;
+	
 	public MChartPieDataset(ANode parent, JRDesignPieDataset value,
 			JasperDesign jasperDesign) {
 		super(parent, value, jasperDesign);
 	}
-
-	private static IPropertyDescriptor[] descriptors;
-	private static Map<String, Object> defaultsMap;
-
-	@Override
-	public Map<String, Object> getDefaultsMap() {
-		return defaultsMap;
-	}
-
+	
 	@Override
 	public IPropertyDescriptor[] getDescriptors() {
 		return descriptors;
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1,
-			Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1) {
 		descriptors = descriptors1;
-		defaultsMap = defaultsMap1;
 	}
 
 	/**
@@ -72,9 +68,8 @@ public class MChartPieDataset extends MChartDataset {
 	 *            the desc
 	 */
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc,
-			Map<String, Object> defaultsMap) {
-		super.createPropertyDescriptors(desc, defaultsMap);
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
+		super.createPropertyDescriptors(desc);
 
 		// JRExpressionPropertyDescriptor keyExprD = new
 		// JRExpressionPropertyDescriptor(
@@ -163,18 +158,21 @@ public class MChartPieDataset extends MChartDataset {
 				.setCategory(Messages.MChartPieDataset_chart_pie_dataset_category);
 		minPercD.setCategory(Messages.MChartPieDataset_chart_pie_dataset_category);
 
-		defaultsMap.put(JRDesignPieDataset.PROPERTY_KEY_EXPRESSION, null);
-		defaultsMap.put(JRDesignPieDataset.PROPERTY_LABEL_EXPRESSION, null);
-		defaultsMap.put(JRDesignPieDataset.PROPERTY_OTHER_KEY_EXPRESSION, null);
-		defaultsMap.put(JRDesignPieDataset.PROPERTY_OTHER_LABEL_EXPRESSION,
-				null);
-		defaultsMap.put(JRDesignPieDataset.PROPERTY_VALUE_EXPRESSION, null);
-
-		setHelpPrefix(desc,
-				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#pieDataset");
+		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#pieDataset");
 	}
-
-	private MHyperLink omHyperLink;
+	
+	@Override
+	protected Map<String, DefaultValue> createDefaultsMap() {
+		Map<String, DefaultValue> defaultsMap = super.createDefaultsMap();
+		
+		defaultsMap.put(JRDesignPieDataset.PROPERTY_KEY_EXPRESSION, new DefaultValue(null, true));
+		defaultsMap.put(JRDesignPieDataset.PROPERTY_LABEL_EXPRESSION, new DefaultValue(null, true));
+		defaultsMap.put(JRDesignPieDataset.PROPERTY_OTHER_KEY_EXPRESSION, new DefaultValue(null, true));
+		defaultsMap.put(JRDesignPieDataset.PROPERTY_OTHER_LABEL_EXPRESSION, new DefaultValue(null, true));
+		defaultsMap.put(JRDesignPieDataset.PROPERTY_VALUE_EXPRESSION, new DefaultValue(null, true));
+		
+		return defaultsMap;
+	}
 
 	@Override
 	public Object getPropertyValue(Object id) {

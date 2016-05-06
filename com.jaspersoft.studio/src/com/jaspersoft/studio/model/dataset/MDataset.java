@@ -28,6 +28,7 @@ import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.model.DefaultValue;
 import com.jaspersoft.studio.model.ICopyable;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MQuery;
@@ -63,12 +64,20 @@ public class MDataset extends APropertyNode implements ICopyable {
 	
 	public static final String PROPERTY_MAP = "PROPERTY_MAP"; //$NON-NLS-1$
 	
+	private static NamedEnumPropertyDescriptor<WhenResourceMissingTypeEnum> whenResMissTypeD;
+	
+	private static IPropertyDescriptor[] descriptors;
+	
+	private static DatasetNameValidator validator;
+
 	/** 
 	 * The icon descriptor. 
 	 */
 	private static IIconDescriptor iconDescriptor;
 
 	private MReport mreport;
+
+	private MQuery mQuery;
 	
 	/**
 	 * Gets the icon descriptor.
@@ -168,24 +177,14 @@ public class MDataset extends APropertyNode implements ICopyable {
 		return getIconDescriptor().getToolTip();
 	}
 
-	private static IPropertyDescriptor[] descriptors;
-	private static Map<String, Object> defaultsMap;
-	private static DatasetNameValidator validator;
-
-	@Override
-	public Map<String, Object> getDefaultsMap() {
-		return defaultsMap;
-	}
-
 	@Override
 	public IPropertyDescriptor[] getDescriptors() {
 		return descriptors;
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1) {
 		descriptors = descriptors1;
-		defaultsMap = defaultsMap1;
 	}
 
 	@Override
@@ -202,7 +201,7 @@ public class MDataset extends APropertyNode implements ICopyable {
 	 *          the desc
 	 */
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
 		validator = new DatasetNameValidator();
 		validator.setTargetNode(this);
 		JSSValidatedTextPropertyDescriptor nameD = new JSSValidatedTextPropertyDescriptor(JRDesignDataset.PROPERTY_NAME,
@@ -253,16 +252,21 @@ public class MDataset extends APropertyNode implements ICopyable {
 		filterExpression.setHelpRefBuilder(new HelpReferenceBuilder(
 				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#filterExpression")); //$NON-NLS-1$
 
-		defaultsMap.put(JRDesignDataset.PROPERTY_RESOURCE_BUNDLE, null);
-		defaultsMap.put(JRDesignDataset.PROPERTY_WHEN_RESOURCE_MISSING_TYPE,
-				whenResMissTypeD.getIntValue(WhenResourceMissingTypeEnum.NULL));
-		defaultsMap.put(JRDesignDataset.PROPERTY_FILTER_EXPRESSION, null);
-
 		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#subDataset"); //$NON-NLS-1$
 	}
-
-	private MQuery mQuery;
-	private static NamedEnumPropertyDescriptor<WhenResourceMissingTypeEnum> whenResMissTypeD;
+	
+	@Override
+	protected Map<String, DefaultValue> createDefaultsMap() {
+		Map<String, DefaultValue> defaultsMap = super.createDefaultsMap();
+		defaultsMap.put(JRDesignDataset.PROPERTY_RESOURCE_BUNDLE, new DefaultValue(null, true));
+		defaultsMap.put(JRDesignDataset.PROPERTY_FILTER_EXPRESSION, new DefaultValue(null, true));
+		
+		int whenResourceMissingValue = NamedEnumPropertyDescriptor.getIntValue(WhenResourceMissingTypeEnum.NULL, NullEnum.NOTNULL, 
+																																						WhenResourceMissingTypeEnum.NULL);
+		defaultsMap.put(JRDesignDataset.PROPERTY_WHEN_RESOURCE_MISSING_TYPE, new DefaultValue(whenResourceMissingValue, false));
+		
+		return defaultsMap;
+	}
 
 	/*
 	 * (non-Javadoc)

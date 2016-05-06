@@ -20,6 +20,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.barcode.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.DefaultValue;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.combo.RComboBoxPropertyDescriptor;
@@ -37,9 +38,7 @@ public abstract class MBarcode extends MGraphicElement {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	private IPropertyDescriptor[] descriptors;
-	
-	private static Map<String, Object> defaultsMap;
-	
+
 	public MBarcode() {
 		super();
 	}
@@ -49,20 +48,13 @@ public abstract class MBarcode extends MGraphicElement {
 	}
 
 	@Override
-	public Map<String, Object> getDefaultsMap() {
-		return defaultsMap;
-	}
-
-	@Override
 	public IPropertyDescriptor[] getDescriptors() {
 		return descriptors;
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1,
-			Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1) {
 		descriptors = descriptors1;
-		defaultsMap = defaultsMap1;
 	}
 
 	/**
@@ -72,9 +64,8 @@ public abstract class MBarcode extends MGraphicElement {
 	 *            the desc
 	 */
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc,
-			Map<String, Object> defaultsMap) {
-		super.createPropertyDescriptors(desc, defaultsMap);
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
+		super.createPropertyDescriptors(desc);
 
 		JRExpressionPropertyDescriptor codeExprD = new JRExpressionPropertyDescriptor(
 				StandardBarbecueComponent.PROPERTY_CODE_EXPRESSION,
@@ -100,8 +91,13 @@ public abstract class MBarcode extends MGraphicElement {
 		evaluationTimeD.setCategory(Messages.common_properties_category);
 		evaluationGroupNameD.setCategory(Messages.common_properties_category);
 		codeExprD.setCategory(Messages.common_properties_category);
-
-		defaultsMap.put(StandardBarbecueComponent.PROPERTY_EVALUATION_TIME, EvaluationTimeEnum.NOW);
+	}
+	
+	@Override
+	protected Map<String, DefaultValue> createDefaultsMap() {
+		Map<String, DefaultValue> defaultsMap = super.createDefaultsMap();
+		defaultsMap.put(StandardBarbecueComponent.PROPERTY_EVALUATION_TIME, new DefaultValue(EvaluationTimeEnum.NOW, false));
+		return defaultsMap;
 	}
 
 	@Override

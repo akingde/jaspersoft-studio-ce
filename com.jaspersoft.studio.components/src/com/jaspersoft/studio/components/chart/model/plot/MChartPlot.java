@@ -16,12 +16,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.jasperreports.charts.type.PlotOrientationEnum;
-import net.sf.jasperreports.engine.JRChartPlot;
-import net.sf.jasperreports.engine.JRChartPlot.JRSeriesColor;
-import net.sf.jasperreports.engine.JRConstants;
-import net.sf.jasperreports.engine.base.JRBaseChartPlot;
-
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
@@ -29,6 +23,7 @@ import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.components.chart.property.descriptor.seriescolor.SeriesColorPropertyDescriptor;
 import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.model.DefaultValue;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.color.ColorPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.FloatPropertyDescriptor;
@@ -37,8 +32,19 @@ import com.jaspersoft.studio.property.descriptors.TransparencyPropertyDescriptor
 import com.jaspersoft.studio.utils.AlfaRGB;
 import com.jaspersoft.studio.utils.Colors;
 
+import net.sf.jasperreports.charts.type.PlotOrientationEnum;
+import net.sf.jasperreports.engine.JRChartPlot;
+import net.sf.jasperreports.engine.JRChartPlot.JRSeriesColor;
+import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.base.JRBaseChartPlot;
+
 public class MChartPlot extends APropertyNode {
+	
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+	
+	private static IPropertyDescriptor[] descriptors;
+	
+	private static NamedEnumPropertyDescriptor<PlotOrientationEnum> orientationD;
 
 	public MChartPlot(JRChartPlot value) {
 		super();
@@ -46,8 +52,7 @@ public class MChartPlot extends APropertyNode {
 	}
 
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc,
-			Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
 		ColorPropertyDescriptor backcolorD = new ColorPropertyDescriptor(
 				JRBaseChartPlot.PROPERTY_BACKCOLOR,
 				Messages.MChartPlot_backcolor, NullEnum.INHERITED);
@@ -84,19 +89,17 @@ public class MChartPlot extends APropertyNode {
 		scpd.setHelpRefBuilder(new HelpReferenceBuilder(
 				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#seriesColor"));
 
-		defaultsMap.put(JRBaseChartPlot.PROPERTY_BACKGROUND_ALPHA, null);
-		defaultsMap.put(JRBaseChartPlot.PROPERTY_FOREGROUND_ALPHA, null);
-
 		setHelpPrefix(desc,
 				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#plot");
 	}
-
-	private static IPropertyDescriptor[] descriptors;
-	private static Map<String, Object> defaultsMap;
-	private static NamedEnumPropertyDescriptor<PlotOrientationEnum> orientationD;
-
+	
 	@Override
-	public Map<String, Object> getDefaultsMap() {
+	protected Map<String, DefaultValue> createDefaultsMap() {
+		Map<String, DefaultValue> defaultsMap = super.createDefaultsMap();
+		
+		defaultsMap.put(JRBaseChartPlot.PROPERTY_BACKGROUND_ALPHA, new DefaultValue(null, true));
+		defaultsMap.put(JRBaseChartPlot.PROPERTY_FOREGROUND_ALPHA, new DefaultValue(null, true));
+		
 		return defaultsMap;
 	}
 
@@ -106,10 +109,8 @@ public class MChartPlot extends APropertyNode {
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1,
-			Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1) {
 		descriptors = descriptors1;
-		defaultsMap = defaultsMap1;
 	}
 
 	/*

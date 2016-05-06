@@ -14,12 +14,6 @@ package com.jaspersoft.studio.components.barcode.model.barcode4j;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-
-import net.sf.jasperreports.components.barcode4j.FourStateBarcodeComponent;
-import net.sf.jasperreports.engine.JRConstants;
-import net.sf.jasperreports.engine.JRElement;
-import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
@@ -28,8 +22,16 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.property.descriptors.DoublePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSComboPropertyDescriptor;
 
+import net.sf.jasperreports.components.barcode4j.FourStateBarcodeComponent;
+import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRElement;
+import net.sf.jasperreports.engine.design.JRDesignComponentElement;
+
 public class MFourStateBarcode extends MBarcode4j {
+	
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+	
+	private static IPropertyDescriptor[] descriptors;
 
 	public MFourStateBarcode() {
 		super();
@@ -40,24 +42,14 @@ public class MFourStateBarcode extends MBarcode4j {
 		super(parent, jrBarcode, newIndex);
 	}
 
-	private static IPropertyDescriptor[] descriptors;
-	private static Map<String, Object> defaultsMap;
-
-	@Override
-	public Map<String, Object> getDefaultsMap() {
-		return defaultsMap;
-	}
-
 	@Override
 	public IPropertyDescriptor[] getDescriptors() {
 		return descriptors;
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1,
-			Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1) {
 		descriptors = descriptors1;
-		defaultsMap = defaultsMap1;
 	}
 
 	/**
@@ -67,9 +59,8 @@ public class MFourStateBarcode extends MBarcode4j {
 	 *            the desc
 	 */
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc,
-			Map<String, Object> defaultsMap) {
-		super.createPropertyDescriptors(desc, defaultsMap);
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
+		super.createPropertyDescriptors(desc);
 
 		JSSComboPropertyDescriptor checksumModeD = new JSSComboPropertyDescriptor(
 				FourStateBarcodeComponent.PROPERTY_CHECKSUM_MODE,

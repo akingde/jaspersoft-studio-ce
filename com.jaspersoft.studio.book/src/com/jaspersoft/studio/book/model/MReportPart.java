@@ -48,6 +48,7 @@ import com.jaspersoft.studio.editor.expression.ExpressionEditorSupportUtil;
 import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.model.DefaultValue;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.ButtonsPropertyDescriptor;
@@ -91,8 +92,6 @@ public class MReportPart extends APropertyNode {
 	private static IIconDescriptor iconDescriptor;
 	// Array of property descriptors
 	private static IPropertyDescriptor[] descriptors;
-	// A map for propery defaults
-	private static Map<String, Object> defaultsMap;
 	
 	public MReportPart(ANode parent, JRPart bookpart, int newIndex) {
 		super(parent, newIndex);
@@ -329,15 +328,10 @@ public class MReportPart extends APropertyNode {
 		return NLS.bind("<Part {0}>",(index+1)); //$NON-NLS-1$
 	}
 
-	@Override
-	public Map<String, Object> getDefaultsMap() {
-		return defaultsMap;
-	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1) {
 		descriptors=descriptors1;
-		defaultsMap=defaultsMap1;
 	}
 
 	@Override
@@ -346,7 +340,7 @@ public class MReportPart extends APropertyNode {
 	}
 
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
 		JRExpressionPropertyDescriptor printWhenExpD = new JRExpressionPropertyDescriptor(JRDesignPart.PROPERTY_PRINT_WHEN_EXPRESSION, Messages.MReportPart_printWhen);
 		printWhenExpD.setDescription(Messages.MReportPart_printWhenTooltip);
 		printWhenExpD.setHelpRefBuilder(new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#printWhenExpression")); //$NON-NLS-1$
@@ -391,12 +385,19 @@ public class MReportPart extends APropertyNode {
 		dsExprD.setDescription(Messages.MReportPart_dataSourceExpDesc);
 		desc.add(dsExprD);
 		
-		defaultsMap.put(PROPERTY_EVALTIME_TYPE, PartEvaluationTimeType.NOW);
-		defaultsMap.put(PROPERTY_EVALTIME_GROUP, null);
-		defaultsMap.put(JRDesignPart.PROPERTY_PART_NAME_EXPRESSION, null);
-		defaultsMap.put(JRDesignPart.PROPERTY_PRINT_WHEN_EXPRESSION, null);
-		
 		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#part"); //$NON-NLS-1$
+	}
+	
+	@Override
+	protected Map<String, DefaultValue> createDefaultsMap() {
+		Map<String, DefaultValue> defaultsMap = super.createDefaultsMap();
+		
+		defaultsMap.put(PROPERTY_EVALTIME_TYPE, new DefaultValue(PartEvaluationTimeType.NOW, false));
+		defaultsMap.put(PROPERTY_EVALTIME_GROUP, new DefaultValue(null, true));
+		defaultsMap.put(JRDesignPart.PROPERTY_PART_NAME_EXPRESSION, new DefaultValue(null, true));
+		defaultsMap.put(JRDesignPart.PROPERTY_PRINT_WHEN_EXPRESSION, new DefaultValue(null, true));
+		
+		return defaultsMap;
 	}
 	
 	public static JRDesignPart createJRElement(JRDesignExpression exp) {

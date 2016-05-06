@@ -14,9 +14,6 @@ package com.jaspersoft.studio.server.model;
 
 import java.io.UnsupportedEncodingException;
 import java.util.List;
-import java.util.Map;
-
-import net.sf.jasperreports.engine.JRConstants;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -41,15 +38,20 @@ import com.jaspersoft.studio.server.protocol.IConnection;
 import com.jaspersoft.studio.server.publish.PublishOptions;
 import com.jaspersoft.studio.utils.Misc;
 
+import net.sf.jasperreports.engine.JRConstants;
+
 /* 
  * 
  * @author schicu
  *
  */
 public abstract class AMResource extends APropertyNode implements ICopyable {
-	public static final ImageDescriptor LINK_DECORATOR = Activator.getDefault()
-			.getImageDescriptor("/icons/link_decorator.png");
+	
+	public static final ImageDescriptor LINK_DECORATOR = Activator.getDefault().getImageDescriptor("/icons/link_decorator.png");
+	
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+	
+	private static IPropertyDescriptor[] descriptors;
 
 	public AMResource(ANode parent, ResourceDescriptor rd, int index) {
 		super(parent, index);
@@ -126,27 +128,18 @@ public abstract class AMResource extends APropertyNode implements ICopyable {
 		return icon16;
 	}
 
-	private static IPropertyDescriptor[] descriptors;
-	private static Map<String, Object> defaultsMap;
-
-	@Override
-	public Map<String, Object> getDefaultsMap() {
-		return defaultsMap;
-	}
-
 	@Override
 	public IPropertyDescriptor[] getDescriptors() {
 		return descriptors;
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1) {
 		descriptors = descriptors1;
-		defaultsMap = defaultsMap1;
 	}
 
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
 		NTextPropertyDescriptor textD = new NTextPropertyDescriptor("SOMEPROPERTIES", Messages.common_datasource_name);
 		desc.add(textD);
 	}

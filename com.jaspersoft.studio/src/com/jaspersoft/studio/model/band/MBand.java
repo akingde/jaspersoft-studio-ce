@@ -43,6 +43,7 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.messages.MessagesByKeys;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.model.DefaultValue;
 import com.jaspersoft.studio.model.IContainer;
 import com.jaspersoft.studio.model.IContainerEditPart;
 import com.jaspersoft.studio.model.IContainerLayout;
@@ -77,6 +78,8 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 
 	private static final Integer CONST_HEIGHT = new Integer(50);
 
+	private static IPropertyDescriptor[] descriptors;
+	
 	/**
 	 * The icon descriptor.
 	 */
@@ -91,6 +94,8 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 	 * The band type.
 	 */
 	private BandTypeEnum bandType;
+	
+	private JRBandDTO returnValuesDTO;
 
 	/**
 	 * Gets the icon descriptor.
@@ -324,24 +329,14 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 
 		return getIconDescriptor().getToolTip();
 	}
-
-	private static IPropertyDescriptor[] descriptors;
-	private static Map<String, Object> defaultsMap;
-
-	@Override
-	public Map<String, Object> getDefaultsMap() {
-		return defaultsMap;
-	}
-
 	@Override
 	public IPropertyDescriptor[] getDescriptors() {
 		return descriptors;
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1) {
 		descriptors = descriptors1;
-		defaultsMap = defaultsMap1;
 	}
 
 	/**
@@ -351,13 +346,12 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 	public IPropertyDescriptor[] getPropertyDescriptors() {
 		IPropertyDescriptor[] descriptors = getDescriptors();
 		if (descriptors == null) {
-			Map<String, Object> defaultsMap = new HashMap<String, Object>();
 			List<IPropertyDescriptor> desc = new ArrayList<IPropertyDescriptor>();
 
-			createPropertyDescriptors(desc, defaultsMap);
+			createPropertyDescriptors(desc);
 
 			descriptors = desc.toArray(new IPropertyDescriptor[desc.size()]);
-			setDescriptors(descriptors, defaultsMap);
+			setDescriptors(descriptors);
 		}
 		postDescriptors(descriptors);
 		return descriptors;
@@ -370,7 +364,7 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 	 *          the desc
 	 */
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
 		PixelPropertyDescriptor heightD = new PixelPropertyDescriptor(JRDesignBand.PROPERTY_HEIGHT, Messages.common_height);
 		heightD.setValidator(new JSSPixelNotNullValidator());
 		heightD.setDescription(Messages.MBand_height_description);
@@ -403,14 +397,17 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 		returnValuesD.setHelpRefBuilder(
 				new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#returnValue")); //$NON-NLS-1$
 
-		defaultsMap.put(JRDesignBand.PROPERTY_HEIGHT, CONST_HEIGHT);
-		defaultsMap.put(JRDesignBand.PROPERTY_SPLIT_TYPE, null);
-		defaultsMap.put(JRDesignBand.PROPERTY_PRINT_WHEN_EXPRESSION, null);
-
 		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#band"); //$NON-NLS-1$
 	}
 
-	private JRBandDTO returnValuesDTO;
+	@Override
+	protected Map<String, DefaultValue> createDefaultsMap() {
+		Map<String, DefaultValue> defaultsMap = super.createDefaultsMap();
+		defaultsMap.put(JRDesignBand.PROPERTY_HEIGHT, new DefaultValue(CONST_HEIGHT, false));
+		defaultsMap.put(JRDesignBand.PROPERTY_SPLIT_TYPE, new DefaultValue(null, true));
+		defaultsMap.put(JRDesignBand.PROPERTY_PRINT_WHEN_EXPRESSION, new DefaultValue(null, true));
+		return defaultsMap;
+	}
 
 	/*
 	 * (non-Javadoc)

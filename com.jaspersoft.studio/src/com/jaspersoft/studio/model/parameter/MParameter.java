@@ -113,8 +113,8 @@ public class MParameter extends MParameterSystem implements ICopyable {
 	 *          the desc
 	 */
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		super.createPropertyDescriptors(desc, defaultsMap);
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
+		super.createPropertyDescriptors(desc);
 
 		NTextPropertyDescriptor descriptionD = new NTextPropertyDescriptor(JRDesignParameter.PROPERTY_DESCRIPTION,
 				Messages.common_description);
@@ -272,10 +272,6 @@ public class MParameter extends MParameterSystem implements ICopyable {
 		return false;
 	}
 	
-	@Override
-	public Map<String, Object> getDefaultsMap() {
-		return defaultsMap;
-	}
 
 	@Override
 	public IPropertyDescriptor[] getDescriptors() {
@@ -283,8 +279,7 @@ public class MParameter extends MParameterSystem implements ICopyable {
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1) {
 		descriptors = descriptors1;
-		defaultsMap = defaultsMap1;
 	}
 }

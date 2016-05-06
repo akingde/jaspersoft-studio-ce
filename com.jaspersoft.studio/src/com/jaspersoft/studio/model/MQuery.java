@@ -32,10 +32,15 @@ import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ModelUtils;
 
 public class MQuery extends APropertyNode implements IPropertySource {
+	
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+	
+	private static IPropertyDescriptor[] descriptors;
 
 	private MDataset mdataset;
 
+	private RWComboBoxPropertyDescriptor languageD;
+	
 	public MQuery(JRQuery jrQuery, MDataset mdataset) {
 		super();
 		this.mdataset = mdataset;
@@ -59,7 +64,7 @@ public class MQuery extends APropertyNode implements IPropertySource {
 	}
 
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
 		// pen
 		NTextPropertyDescriptor textD = new NTextPropertyDescriptor(JRDesignQuery.PROPERTY_TEXT, Messages.common_text);
 		textD.setDescription(Messages.MQuery_text_description);
@@ -70,18 +75,6 @@ public class MQuery extends APropertyNode implements IPropertySource {
 		languageD.setDescription(Messages.MQuery_language_description);
 		languageD.setCategory(Messages.common_report);
 		desc.add(languageD);
-
-		defaultsMap.put(JRDesignQuery.PROPERTY_LANGUAGE, "SQL"); //$NON-NLS-1$
-	}
-
-	private static IPropertyDescriptor[] descriptors;
-	private static Map<String, Object> defaultsMap;
-
-	private RWComboBoxPropertyDescriptor languageD;
-
-	@Override
-	public Map<String, Object> getDefaultsMap() {
-		return defaultsMap;
 	}
 
 	@Override
@@ -90,9 +83,17 @@ public class MQuery extends APropertyNode implements IPropertySource {
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1) {
 		descriptors = descriptors1;
-		defaultsMap = defaultsMap1;
+	}
+	
+	@Override
+	protected Map<String, DefaultValue> createDefaultsMap() {
+		Map<String, DefaultValue> defaultsMap = super.createDefaultsMap();
+		
+		defaultsMap.put(JRDesignQuery.PROPERTY_LANGUAGE, new DefaultValue("SQL", false)); //$NON-NLS-1$
+		
+		return defaultsMap;
 	}
 
 	/*

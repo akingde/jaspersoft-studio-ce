@@ -14,7 +14,6 @@ package com.jaspersoft.studio.components.barcode.model.barcode4j;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
@@ -56,8 +55,6 @@ public class MBarcode4j extends MBarcode {
 	private static IIconDescriptor iconDescriptor;
 
 	private static IPropertyDescriptor[] descriptors;
-	
-	private static Map<String, Object> defaultsMap;
 	
 	/**
 	 * Gets the icon descriptor.
@@ -127,11 +124,6 @@ public class MBarcode4j extends MBarcode {
 	public String getToolTip() {
 		return getIconDescriptor().getToolTip();
 	}
-	
-	@Override
-	public Map<String, Object> getDefaultsMap() {
-		return defaultsMap;
-	}
 
 	@Override
 	public IPropertyDescriptor[] getDescriptors() {
@@ -139,9 +131,8 @@ public class MBarcode4j extends MBarcode {
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1) {
 		descriptors = descriptors1;
-		defaultsMap = defaultsMap1;
 	}
 
 	/**
@@ -151,8 +142,8 @@ public class MBarcode4j extends MBarcode {
 	 *            the desc
 	 */
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		super.createPropertyDescriptors(desc, defaultsMap);
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
+		super.createPropertyDescriptors(desc);
 
 		NamedEnumPropertyDescriptor<OrientationEnum> orientationD = new NamedEnumPropertyDescriptor<OrientationEnum>(Barcode4jComponent.PROPERTY_ORIENTATION,
 				Messages.MBarcode4j_orientation, OrientationEnum.UP, NullEnum.NOTNULL);

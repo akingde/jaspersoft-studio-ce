@@ -12,15 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.jasperreports.engine.JRConstants;
-import net.sf.jasperreports.engine.JRField;
-import net.sf.jasperreports.engine.JRSortField;
-import net.sf.jasperreports.engine.JRVariable;
-import net.sf.jasperreports.engine.design.JRDesignDataset;
-import net.sf.jasperreports.engine.design.JRDesignSortField;
-import net.sf.jasperreports.engine.type.SortFieldTypeEnum;
-import net.sf.jasperreports.engine.type.SortOrderEnum;
-
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
@@ -30,6 +21,7 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.model.DefaultValue;
 import com.jaspersoft.studio.model.ICopyable;
 import com.jaspersoft.studio.model.IDragable;
 import com.jaspersoft.studio.model.field.MField;
@@ -44,15 +36,30 @@ import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 import com.jaspersoft.studio.property.section.widgets.SPToolBarEnum;
 import com.jaspersoft.studio.utils.ModelUtils;
 
+import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRField;
+import net.sf.jasperreports.engine.JRSortField;
+import net.sf.jasperreports.engine.JRVariable;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
+import net.sf.jasperreports.engine.design.JRDesignSortField;
+import net.sf.jasperreports.engine.type.SortFieldTypeEnum;
+import net.sf.jasperreports.engine.type.SortOrderEnum;
+
 /*
  * The Class MField.
  * 
  * @author Chicu Veaceslav
  */
 public class MSortField extends APropertyNode implements ICopyable, IDragable {
+	
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+	
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
+	
+	private IPropertyDescriptor[] descriptors;
+	
+	private RComboBoxPropertyDescriptor nameD;
 
 	/**
 	 * Gets the icon descriptor.
@@ -122,24 +129,14 @@ public class MSortField extends APropertyNode implements ICopyable, IDragable {
 		return getIconDescriptor().getToolTip();
 	}
 
-	private IPropertyDescriptor[] descriptors;
-	private static Map<String, Object> defaultsMap;
-	private RComboBoxPropertyDescriptor nameD;
-
-	@Override
-	public Map<String, Object> getDefaultsMap() {
-		return defaultsMap;
-	}
-
 	@Override
 	public IPropertyDescriptor[] getDescriptors() {
 		return descriptors;
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1) {
 		descriptors = descriptors1;
-		defaultsMap = defaultsMap1;
 	}
 
 	@Override
@@ -192,7 +189,7 @@ public class MSortField extends APropertyNode implements ICopyable, IDragable {
 	 *          the desc
 	 */
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
 		nameD = new RComboBoxPropertyDescriptor(JRDesignSortField.PROPERTY_NAME, Messages.common_name, new String[] { "" }); //$NON-NLS-1$
 		nameD.setDescription(Messages.MSortField_name_description);
 		desc.add(nameD);
@@ -223,12 +220,22 @@ public class MSortField extends APropertyNode implements ICopyable, IDragable {
 		orderD.setDescription(Messages.MSortField_order_description);
 		desc.add(orderD);
 
-		defaultsMap.put(JRDesignSortField.PROPERTY_ORDER, typeD.getEnumValue(SortOrderEnum.ASCENDING));
-		defaultsMap.put(JRDesignSortField.PROPERTY_TYPE, orderD.getEnumValue(SortFieldTypeEnum.FIELD));
-
 		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#sortField"); //$NON-NLS-1$
 	}
 
+	@Override
+	protected Map<String, DefaultValue> createDefaultsMap() {
+		Map<String, DefaultValue> defaultsMap = super.createDefaultsMap();
+		
+		SortOrderEnum sortOrderValue = NamedEnumPropertyDescriptor.getEnumValue(SortOrderEnum.ASCENDING, NullEnum.NOTNULL, SortOrderEnum.ASCENDING);
+		defaultsMap.put(JRDesignSortField.PROPERTY_ORDER, new DefaultValue(sortOrderValue, false));
+		
+		SortFieldTypeEnum sortTypeValue = NamedEnumPropertyDescriptor.getEnumValue(SortFieldTypeEnum.FIELD, NullEnum.NOTNULL, SortFieldTypeEnum.FIELD);
+		defaultsMap.put(JRDesignSortField.PROPERTY_TYPE, new DefaultValue(sortTypeValue, false));
+		
+		return defaultsMap;
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 

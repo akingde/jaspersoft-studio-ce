@@ -15,16 +15,6 @@ package com.jaspersoft.studio.components.chart.model.plot;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
-
-import net.sf.jasperreports.charts.JRMeterPlot;
-import net.sf.jasperreports.charts.design.JRDesignDataRange;
-import net.sf.jasperreports.charts.design.JRDesignMeterPlot;
-import net.sf.jasperreports.charts.design.JRDesignValueDisplay;
-import net.sf.jasperreports.charts.type.MeterShapeEnum;
-import net.sf.jasperreports.charts.util.JRMeterInterval;
-import net.sf.jasperreports.engine.JRConstants;
-import net.sf.jasperreports.engine.JRException;
 
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
@@ -45,8 +35,20 @@ import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 import com.jaspersoft.studio.utils.AlfaRGB;
 import com.jaspersoft.studio.utils.Colors;
 
+import net.sf.jasperreports.charts.JRMeterPlot;
+import net.sf.jasperreports.charts.design.JRDesignDataRange;
+import net.sf.jasperreports.charts.design.JRDesignMeterPlot;
+import net.sf.jasperreports.charts.design.JRDesignValueDisplay;
+import net.sf.jasperreports.charts.type.MeterShapeEnum;
+import net.sf.jasperreports.charts.util.JRMeterInterval;
+import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRException;
+
 public class MMeterPlot extends MChartPlot {
+	
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+	
+	private static IPropertyDescriptor[] descriptors;
 
 	public MMeterPlot(JRMeterPlot value) {
 		super(value);
@@ -57,30 +59,19 @@ public class MMeterPlot extends MChartPlot {
 		return Messages.MMeterPlot_meter_plot;
 	}
 
-	private static IPropertyDescriptor[] descriptors;
-	private static Map<String, Object> defaultsMap;
-
-	@Override
-	public Map<String, Object> getDefaultsMap() {
-		return defaultsMap;
-	}
-
 	@Override
 	public IPropertyDescriptor[] getDescriptors() {
 		return descriptors;
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1,
-			Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1) {
 		descriptors = descriptors1;
-		defaultsMap = defaultsMap1;
 	}
 
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc,
-			Map<String, Object> defaultsMap) {
-		super.createPropertyDescriptors(desc, defaultsMap);
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
+		super.createPropertyDescriptors(desc);
 
 		ColorPropertyDescriptor meterBackgroundColorD = new ColorPropertyDescriptor(
 				JRDesignMeterPlot.PROPERTY_METER_BACKGROUND_COLOR,

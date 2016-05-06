@@ -49,10 +49,16 @@ import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.util.Pair;
 
 public class MColumnGroup extends MCrosstabGroup implements ICopyable, IDragable{
+	
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+	
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
 
+	private static IPropertyDescriptor[] descriptors;
+
+	private static NamedEnumPropertyDescriptor<CrosstabColumnPositionEnum> columnPositionD;
+	
 	/**
 	 * Gets the icon descriptor.
 	 * 
@@ -110,25 +116,14 @@ public class MColumnGroup extends MCrosstabGroup implements ICopyable, IDragable
 		return getIconDescriptor().getToolTip();
 	}
 
-	private static IPropertyDescriptor[] descriptors;
-	private static Map<String, Object> defaultsMap;
-	private static NamedEnumPropertyDescriptor<CrosstabColumnPositionEnum> columnPositionD;
-
-	@Override
-	public Map<String, Object> getDefaultsMap() {
-		return defaultsMap;
-	}
-
 	@Override
 	public IPropertyDescriptor[] getDescriptors() {
 		return descriptors;
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1,
-			Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1) {
 		descriptors = descriptors1;
-		defaultsMap = defaultsMap1;
 	}
 
 	/**
@@ -138,9 +133,8 @@ public class MColumnGroup extends MCrosstabGroup implements ICopyable, IDragable
 	 *            the desc
 	 */
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc,
-			Map<String, Object> defaultsMap) {
-		super.createPropertyDescriptors(desc, defaultsMap);
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
+		super.createPropertyDescriptors(desc);
 
 		columnPositionD = new NamedEnumPropertyDescriptor<CrosstabColumnPositionEnum>(
 				JRDesignCrosstabColumnGroup.PROPERTY_POSITION,

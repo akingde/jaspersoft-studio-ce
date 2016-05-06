@@ -165,6 +165,10 @@ public class NamedEnumPropertyDescriptor<T extends Enum<?> & NamedEnum> extends 
 		return (T[])cachedEnum;
 	}
 	
+	public static <T extends Enum<?> & NamedEnum> Integer getIntValue(NullEnum type, T jrvalue) {
+		return getIntValue(jrvalue, type, jrvalue);	
+	}
+	
 	/**
 	 * Static version of the method getIntValue, can be used in the case the PropertyDescriptor
 	 * are created statically and no reference to them is keep locally

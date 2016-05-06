@@ -35,6 +35,7 @@ import com.jaspersoft.studio.components.barcode.messages.Messages;
 import com.jaspersoft.studio.components.barcode.model.MBarcode;
 import com.jaspersoft.studio.editor.defaults.DefaultManager;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.DefaultValue;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
@@ -43,8 +44,13 @@ import com.jaspersoft.studio.property.descriptors.PixelPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
 
 public class MQRCode extends MBarcode {
+	
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
+	private static IPropertyDescriptor[] descriptors;
+	
+	private static NamedEnumPropertyDescriptor<ErrorCorrectionLevelEnum> errLevelD;
+	
 	public MQRCode() {
 		super();
 	}
@@ -114,25 +120,14 @@ public class MQRCode extends MBarcode {
 		return el;
 	}
 
-	private static IPropertyDescriptor[] descriptors;
-	private static Map<String, Object> defaultsMap;
-	private static NamedEnumPropertyDescriptor<ErrorCorrectionLevelEnum> errLevelD;
-
-	@Override
-	public Map<String, Object> getDefaultsMap() {
-		return defaultsMap;
-	}
-
 	@Override
 	public IPropertyDescriptor[] getDescriptors() {
 		return descriptors;
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1,
-			Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1) {
 		descriptors = descriptors1;
-		defaultsMap = defaultsMap1;
 	}
 
 	/**
@@ -142,9 +137,8 @@ public class MQRCode extends MBarcode {
 	 *            the desc
 	 */
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc,
-			Map<String, Object> defaultsMap) {
-		super.createPropertyDescriptors(desc, defaultsMap);
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
+		super.createPropertyDescriptors(desc);
 
 		errLevelD = new NamedEnumPropertyDescriptor<ErrorCorrectionLevelEnum>(
 				QRCodeComponent.PROPERTY_ERROR_CORRECTION_LEVEL,
@@ -159,10 +153,16 @@ public class MQRCode extends MBarcode {
 		margind.setDescription(Messages.MQRCode_6);
 		margind.setCategory("QR Code"); //$NON-NLS-1$
 		desc.add(margind);
-
-		defaultsMap.put(QRCodeComponent.PROPERTY_ERROR_CORRECTION_LEVEL,
-				ErrorCorrectionLevelEnum.H);
-		defaultsMap.put(QRCodeComponent.PROPERTY_MARGIN, new Integer(1));
+	}
+	
+	@Override
+	protected Map<String, DefaultValue> createDefaultsMap() {
+		Map<String, DefaultValue> defaultsMap = super.createDefaultsMap();
+		
+		defaultsMap.put(QRCodeComponent.PROPERTY_ERROR_CORRECTION_LEVEL, new DefaultValue(ErrorCorrectionLevelEnum.H, false));
+ 		defaultsMap.put(QRCodeComponent.PROPERTY_MARGIN, new DefaultValue(new Integer(1), false));
+		
+		return defaultsMap;
 	}
 
 	@Override

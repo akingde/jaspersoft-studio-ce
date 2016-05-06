@@ -15,7 +15,6 @@ package com.jaspersoft.studio.model;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
@@ -64,8 +63,8 @@ public abstract class MGraphicElementLineBox extends MGraphicElement implements 
 	}
 
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		super.createPropertyDescriptors(desc, defaultsMap);
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
+		super.createPropertyDescriptors(desc);
 
 		BoxPropertyDescriptor lineBoxD = new BoxPropertyDescriptor(LINE_BOX, Messages.common_line_box);
 		lineBoxD.setDescription(Messages.MGraphicElementLineBox_line_box_description);

@@ -12,12 +12,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import net.sf.jasperreports.engine.JRConstants;
-import net.sf.jasperreports.engine.TabStop;
-import net.sf.jasperreports.engine.base.JRBaseParagraph;
-import net.sf.jasperreports.engine.type.LineSpacingEnum;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
@@ -31,8 +25,18 @@ import com.jaspersoft.studio.property.descriptors.FloatPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.PixelPropertyDescriptor;
 
+import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.TabStop;
+import net.sf.jasperreports.engine.base.JRBaseParagraph;
+import net.sf.jasperreports.engine.type.LineSpacingEnum;
+
 public class MParagraph extends APropertyNode {
+	
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+	
+	private static IPropertyDescriptor[] descriptors;
+	
+	private static NamedEnumPropertyDescriptor<LineSpacingEnum> lineSpacingD;
 
 	public MParagraph(ANode parent, JRBaseParagraph bParagraph) {
 		super();
@@ -54,7 +58,7 @@ public class MParagraph extends APropertyNode {
 	 */
 
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
 		lineSpacingD = new NamedEnumPropertyDescriptor<LineSpacingEnum>(JRBaseParagraph.PROPERTY_LINE_SPACING,
 				Messages.common_line_spacing, LineSpacingEnum.AT_LEAST, NullEnum.INHERITED);
 		lineSpacingD.setDescription(Messages.MTextElement_line_spacing_description);
@@ -113,24 +117,14 @@ public class MParagraph extends APropertyNode {
 		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#paragraph"); //$NON-NLS-1$
 	}
 
-	private static IPropertyDescriptor[] descriptors;
-	private static Map<String, Object> defaultsMap;
-	private static NamedEnumPropertyDescriptor<LineSpacingEnum> lineSpacingD;
-
-	@Override
-	public Map<String, Object> getDefaultsMap() {
-		return defaultsMap;
-	}
-
 	@Override
 	public IPropertyDescriptor[] getDescriptors() {
 		return descriptors;
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1) {
 		descriptors = descriptors1;
-		defaultsMap = defaultsMap1;
 	}
 
 	public Object getPropertyActualValue(Object id) {

@@ -33,6 +33,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.model.DefaultValue;
 import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
@@ -96,11 +97,6 @@ public class MBackgrounImage extends APropertyNode implements IGraphicElement {
 	private IPropertyDescriptor[] descriptors;
 	
 	/**
-	 * Map for the default proeprties value
-	 */
-	private static Map<String, Object> defaultsMap;
-	
-	/**
 	 * Path of the last background image loaded
 	 */
 	private String lastPath;
@@ -147,14 +143,6 @@ public class MBackgrounImage extends APropertyNode implements IGraphicElement {
 	}
 
 	/**
-	 * Return the map of the default values of the element
-	 */
-	@Override
-	public Map<String, Object> getDefaultsMap() {
-		return defaultsMap;
-	}
-
-	/**
 	 * Return the property descriptors of the element
 	 */
 	@Override
@@ -163,16 +151,15 @@ public class MBackgrounImage extends APropertyNode implements IGraphicElement {
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1) {
 		descriptors = descriptors1;
-		defaultsMap = defaultsMap1;
 	}
 
 	/**
 	 * Creates the property descriptors for the background and initialize the default map
 	 */
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
 		// bounds
 		JSSBackgroundPixelLocationValidator heightValidator = new JSSBackgroundPixelLocationValidator(PROPERTY_HEIGHT);
 		heightValidator.setTargetNode(this);
@@ -215,13 +202,18 @@ public class MBackgrounImage extends APropertyNode implements IGraphicElement {
 		keepRatio.setCategory(Messages.MBackgrounImage_labelCategory); 
 		keepRatio.setDescription(Messages.MBackgrounImage_descriptionKeepRatio);
 		desc.add(keepRatio);
-		
-		defaultsMap.put(PROPERTY_KEEP_RATIO, false);
-		defaultsMap.put(PROPERTY_ALPHA, 0.5f);
-		defaultsMap.put(PROPERTY_HEIGHT, 100);
-		defaultsMap.put(PROPERTY_WIDTH, 100);
-		defaultsMap.put(PROPERTY_X, 10);
-		defaultsMap.put(PROPERTY_Y, 10);
+	}
+	
+	@Override
+	protected Map<String, DefaultValue> createDefaultsMap() {
+		Map<String, DefaultValue> defaultsMap = super.createDefaultsMap();
+		defaultsMap.put(PROPERTY_KEEP_RATIO, new DefaultValue(false, false));
+		defaultsMap.put(PROPERTY_ALPHA, new DefaultValue(0.5f, false));
+		defaultsMap.put(PROPERTY_HEIGHT, new DefaultValue(100, false));
+		defaultsMap.put(PROPERTY_WIDTH, new DefaultValue(100, false));
+		defaultsMap.put(PROPERTY_X, new DefaultValue(10, false));
+		defaultsMap.put(PROPERTY_Y, new DefaultValue(10, false));
+		return defaultsMap;
 	}
 
 	@Override

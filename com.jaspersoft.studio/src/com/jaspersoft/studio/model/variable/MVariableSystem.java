@@ -27,6 +27,7 @@ import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.model.DefaultValue;
 import com.jaspersoft.studio.model.IDragable;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
@@ -41,9 +42,14 @@ import com.jaspersoft.studio.utils.ModelUtils;
  * @author Chicu Veaceslav
  */
 public class MVariableSystem extends APropertyNode implements IDragable {
+	
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
+	
+	private static IPropertyDescriptor[] descriptors;
+	
+	private static VariableNameValidator validator;
 
 	/**
 	 * Gets the icon descriptor.
@@ -116,24 +122,14 @@ public class MVariableSystem extends APropertyNode implements IDragable {
 		return getIconDescriptor().getToolTip();
 	}
 
-	private static IPropertyDescriptor[] descriptors;
-	private static Map<String, Object> defaultsMap;
-	private static VariableNameValidator validator;
-
-	@Override
-	public Map<String, Object> getDefaultsMap() {
-		return defaultsMap;
-	}
-
 	@Override
 	public IPropertyDescriptor[] getDescriptors() {
 		return descriptors;
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1) {
 		descriptors = descriptors1;
-		defaultsMap = defaultsMap1;
 	}
 
 	@Override
@@ -150,7 +146,7 @@ public class MVariableSystem extends APropertyNode implements IDragable {
 	 *          the desc
 	 */
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
 		validator = new VariableNameValidator();
 		validator.setTargetNode(this);
 		JSSTextPropertyDescriptor nameD = new JSSValidatedTextPropertyDescriptor(JRDesignVariable.PROPERTY_NAME,
@@ -164,8 +160,13 @@ public class MVariableSystem extends APropertyNode implements IDragable {
 		desc.add(classD);
 		classD.setHelpRefBuilder(new HelpReferenceBuilder(
 				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#variable_class"));
-
-		defaultsMap.put(JRDesignVariable.PROPERTY_VALUE_CLASS_NAME, "java.lang.String"); //$NON-NLS-1$
+	}
+	
+	@Override
+	protected Map<String, DefaultValue> createDefaultsMap() {
+		Map<String, DefaultValue> defaultsMap = super.createDefaultsMap();
+		defaultsMap.put(JRDesignVariable.PROPERTY_VALUE_CLASS_NAME, new DefaultValue("java.lang.String", false)); //$NON-NLS-1$
+		return defaultsMap;
 	}
 
 	/*

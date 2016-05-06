@@ -26,26 +26,23 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.DefaultValue;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.util.ReportFactory;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 
 public class MChartTimeSeriesDataset extends MChartDataset {
+	
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+	
+	private static IPropertyDescriptor[] descriptors;
+	
+	private NamedEnumPropertyDescriptor<TimePeriodEnum> timePeriodD;
 
 	public MChartTimeSeriesDataset(ANode parent,
 			JRDesignTimeSeriesDataset value, JasperDesign jasperDesign) {
 		super(parent, value, jasperDesign);
-	}
-
-	private static IPropertyDescriptor[] descriptors;
-	private static Map<String, Object> defaultsMap;
-	private NamedEnumPropertyDescriptor<TimePeriodEnum> timePeriodD;
-
-	@Override
-	public Map<String, Object> getDefaultsMap() {
-		return defaultsMap;
 	}
 
 	@Override
@@ -54,10 +51,8 @@ public class MChartTimeSeriesDataset extends MChartDataset {
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1,
-			Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1) {
 		descriptors = descriptors1;
-		defaultsMap = defaultsMap1;
 	}
 
 	/**
@@ -67,9 +62,8 @@ public class MChartTimeSeriesDataset extends MChartDataset {
 	 *            the desc
 	 */
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc,
-			Map<String, Object> defaultsMap) {
-		super.createPropertyDescriptors(desc, defaultsMap);
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
+		super.createPropertyDescriptors(desc);
 
 		timePeriodD = new NamedEnumPropertyDescriptor<TimePeriodEnum>(
 				JRDesignTimeSeriesDataset.PROPERTY_TIME_PERIOD,
@@ -82,11 +76,18 @@ public class MChartTimeSeriesDataset extends MChartDataset {
 		timePeriodD
 				.setCategory(Messages.MChartTimeSeriesDataset_chart_time_period_dataset_category);
 
-		defaultsMap.put(JRDesignTimeSeriesDataset.PROPERTY_TIME_PERIOD,
-				timePeriodD.getIntValue(TimePeriodEnum.DAY));
-
 		setHelpPrefix(desc,
 				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#timeSeriesDataset");
+	}
+	
+	@Override
+	protected Map<String, DefaultValue> createDefaultsMap() {
+		Map<String, DefaultValue> defaultsMap = super.createDefaultsMap();
+		
+		int timePeriodValue = NamedEnumPropertyDescriptor.getIntValue(TimePeriodEnum.DAY, NullEnum.NULL, TimePeriodEnum.DAY);
+		defaultsMap.put(JRDesignTimeSeriesDataset.PROPERTY_TIME_PERIOD, new DefaultValue(timePeriodValue, true));
+		
+		return defaultsMap;
 	}
 
 	@Override

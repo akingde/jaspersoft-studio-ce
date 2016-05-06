@@ -14,16 +14,6 @@ package com.jaspersoft.studio.model;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-
-import net.sf.jasperreports.engine.JRConstants;
-import net.sf.jasperreports.engine.JRElement;
-import net.sf.jasperreports.engine.JREllipse;
-import net.sf.jasperreports.engine.base.JRBaseStyle;
-import net.sf.jasperreports.engine.design.JRDesignElement;
-import net.sf.jasperreports.engine.design.JRDesignEllipse;
-import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.type.FillEnum;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
@@ -36,6 +26,15 @@ import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.utils.EnumHelper;
 
+import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRElement;
+import net.sf.jasperreports.engine.JREllipse;
+import net.sf.jasperreports.engine.base.JRBaseStyle;
+import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.design.JRDesignEllipse;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.type.FillEnum;
+
 /*
  * The Class MEllipse.
  */
@@ -43,7 +42,6 @@ public class MEllipse extends MGraphicElementLinePen {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	private static IIconDescriptor iconDescriptor;
 	private static IPropertyDescriptor[] descriptors;
-	private static Map<String, Object> defaultsMap;
 	private static final String[] fillEnumNames = EnumHelper.getEnumNames(FillEnum.values(), NullEnum.INHERITED);
 	
 	
@@ -66,19 +64,13 @@ public class MEllipse extends MGraphicElementLinePen {
 	}
 
 	@Override
-	public Map<String, Object> getDefaultsMap() {
-		return defaultsMap;
-	}
-
-	@Override
 	public IPropertyDescriptor[] getDescriptors() {
 		return descriptors;
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1) {
 		descriptors = descriptors1;
-		defaultsMap = defaultsMap1;
 	}
 
 	/**
@@ -88,8 +80,8 @@ public class MEllipse extends MGraphicElementLinePen {
 	 *          the desc
 	 */
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		super.createPropertyDescriptors(desc, defaultsMap);
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
+		super.createPropertyDescriptors(desc);
 
 		ComboBoxPropertyDescriptor fillD = new ComboBoxPropertyDescriptor(
 				JRBaseStyle.PROPERTY_FILL, Messages.common_fill, fillEnumNames);

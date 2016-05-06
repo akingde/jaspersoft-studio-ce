@@ -26,6 +26,7 @@ import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.DefaultValue;
 import com.jaspersoft.studio.model.ICopyable;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
@@ -45,9 +46,13 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  * @author Chicu Veaceslav
  */
 public class MVariable extends MVariableSystem implements ICopyable {
+	
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+	
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
+	
+	private IPropertyDescriptor[] descriptors;
 
 	/**
 	 * Gets the icon descriptor.
@@ -86,25 +91,14 @@ public class MVariable extends MVariableSystem implements ICopyable {
 		super(parent, jrVariable, newIndex);
 	}
 
-	
-
-	private IPropertyDescriptor[] descriptors;
-	private static Map<String, Object> defaultsMap;
-
-	@Override
-	public Map<String, Object> getDefaultsMap() {
-		return defaultsMap;
-	}
-
 	@Override
 	public IPropertyDescriptor[] getDescriptors() {
 		return descriptors;
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1) {
 		descriptors = descriptors1;
-		defaultsMap = defaultsMap1;
 	}
 
 	/**
@@ -130,11 +124,7 @@ public class MVariable extends MVariableSystem implements ICopyable {
 	 *          the desc
 	 */
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		super.createPropertyDescriptors(desc, defaultsMap);
-
-		defaultsMap.put(JRDesignVariable.PROPERTY_VALUE_CLASS_NAME, "java.lang.String"); //$NON-NLS-1$
-
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
 		resetGroupD = new RWComboBoxPropertyDescriptor(JRDesignVariable.PROPERTY_RESET_GROUP, Messages.common_reset_group,
 				new String[] { "" }, NullEnum.NULL); //$NON-NLS-1$
 		resetGroupD.setDescription(Messages.MVariable_reset_group_description);
@@ -179,11 +169,20 @@ public class MVariable extends MVariableSystem implements ICopyable {
 		factoryClassName.setDescription(Messages.MVariable_incrementer_factory_class_name_description);
 		desc.add(factoryClassName);
 
-		defaultsMap.put(JRDesignVariable.PROPERTY_CALCULATION, calculationD.getIntValue(CalculationEnum.NOTHING));
-		defaultsMap.put(JRDesignVariable.PROPERTY_RESET_TYPE, ResetTypeEnum.REPORT);
-		defaultsMap.put(JRDesignVariable.PROPERTY_INCREMENT_TYPE, IncrementTypeEnum.NONE);
-
 		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#variable");
+	}
+	
+	@Override
+	protected Map<String, DefaultValue> createDefaultsMap() {
+		Map<String, DefaultValue> defaultsMap = super.createDefaultsMap();
+		
+		defaultsMap.put(JRDesignVariable.PROPERTY_RESET_TYPE, new DefaultValue(ResetTypeEnum.REPORT, false));
+		defaultsMap.put(JRDesignVariable.PROPERTY_INCREMENT_TYPE, new DefaultValue(IncrementTypeEnum.NONE, false));
+		
+		int calculationValue = NamedEnumPropertyDescriptor.getIntValue(CalculationEnum.NOTHING, NullEnum.NOTNULL, CalculationEnum.NOTHING);
+		defaultsMap.put(JRDesignVariable.PROPERTY_CALCULATION, new DefaultValue(calculationValue, false));
+		
+		return defaultsMap;
 	}
 
 	public ExpressionContext getExpressionContext() {

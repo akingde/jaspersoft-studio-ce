@@ -16,6 +16,7 @@ import com.jaspersoft.studio.editor.expression.ExpressionEditorSupportUtil;
 import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.DefaultValue;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.MReport;
@@ -49,8 +50,6 @@ public class MBookReport extends MReport {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	private IPropertyDescriptor[] descriptors;
-
-	private Map<String, Object> defaultsMap;
 	
 	public MBookReport(ANode parent, JasperReportsConfiguration jConfig) {
 		super(parent, jConfig);
@@ -130,23 +129,17 @@ public class MBookReport extends MReport {
 	}
 	
 	@Override
-	public Map<String, Object> getDefaultsMap() {
-		return defaultsMap;
-	}
-
-	@Override
 	public IPropertyDescriptor[] getDescriptors() {
 		return descriptors;
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1) {
 		descriptors = descriptors1;
-		defaultsMap = defaultsMap1;
 	}
 	
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
 
 		ImportDeclarationPropertyDescriptor importsD = new ImportDeclarationPropertyDescriptor(
 				JasperDesign.PROPERTY_IMPORTS, Messages.MReport_imports);
@@ -259,23 +252,34 @@ public class MBookReport extends MReport {
 		propertiesMapD.setDescription(Messages.common_properties);
 		desc.add(propertiesMapD);
 
-		defaultsMap.put(JasperDesign.PROPERTY_PAGE_WIDTH, new Integer(595));
-		defaultsMap.put(JasperDesign.PROPERTY_PAGE_HEIGHT, new Integer(842));
-		defaultsMap.put(JasperDesign.PROPERTY_TOP_MARGIN, new Integer(30));
-		defaultsMap.put(JasperDesign.PROPERTY_BOTTOM_MARGIN, new Integer(30));
-		defaultsMap.put(JasperDesign.PROPERTY_LEFT_MARGIN, new Integer(20));
-		defaultsMap.put(JasperDesign.PROPERTY_RIGHT_MARGIN, new Integer(20));
-
-		defaultsMap.put(JasperDesign.PROPERTY_LANGUAGE, "Java"); //$NON-NLS-1$
-
-		defaultsMap.put(JasperDesign.PROPERTY_COLUMN_COUNT, new Integer(1));
-		defaultsMap.put(JasperDesign.PROPERTY_COLUMN_WIDTH, new Integer(555));
-		defaultsMap.put(JasperDesign.PROPERTY_COLUMN_SPACING, new Integer(0));
-		defaultsMap.put(JasperDesign.PROPERTY_ORIENTATION, orientationD.getIntValue(OrientationEnum.PORTRAIT));
-		defaultsMap.put(JasperDesign.PROPERTY_PRINT_ORDER, printOrderD.getIntValue(PrintOrderEnum.VERTICAL));
-		defaultsMap.put(JasperDesign.PROPERTY_WHEN_NO_DATA_TYPE, whenNoDataD.getIntValue(WhenNoDataTypeEnum.NO_PAGES));
-
 		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#jasperReport"); //$NON-NLS-1$
+	}
+	
+	@Override
+	protected Map<String, DefaultValue> createDefaultsMap() {
+		Map<String, DefaultValue> defaultsMap = super.createDefaultsMap();
+		
+		defaultsMap.put(JasperDesign.PROPERTY_PAGE_WIDTH, new DefaultValue(new Integer(595), false));
+		defaultsMap.put(JasperDesign.PROPERTY_PAGE_HEIGHT, new DefaultValue(new Integer(842), false));
+		defaultsMap.put(JasperDesign.PROPERTY_TOP_MARGIN, new DefaultValue(new Integer(30), false));
+		defaultsMap.put(JasperDesign.PROPERTY_BOTTOM_MARGIN, new DefaultValue(new Integer(30), false));
+		defaultsMap.put(JasperDesign.PROPERTY_LEFT_MARGIN, new DefaultValue(new Integer(20), false));
+		defaultsMap.put(JasperDesign.PROPERTY_RIGHT_MARGIN, new DefaultValue(new Integer(20), false));
+		defaultsMap.put(JasperDesign.PROPERTY_LANGUAGE, new DefaultValue("Java", false)); //$NON-NLS-1$
+		defaultsMap.put(JasperDesign.PROPERTY_COLUMN_COUNT, new DefaultValue(new Integer(1), false));
+		defaultsMap.put(JasperDesign.PROPERTY_COLUMN_WIDTH, new DefaultValue(new Integer(555), false));
+		defaultsMap.put(JasperDesign.PROPERTY_COLUMN_SPACING, new DefaultValue(new Integer(0), false));
+
+		int orientationValue = NamedEnumPropertyDescriptor.getIntValue(OrientationEnum.PORTRAIT, NullEnum.NOTNULL, OrientationEnum.PORTRAIT);
+		defaultsMap.put(JasperDesign.PROPERTY_ORIENTATION, new DefaultValue(orientationValue, false));
+		
+		int printOrderValue = NamedEnumPropertyDescriptor.getIntValue(PrintOrderEnum.VERTICAL, NullEnum.NULL, PrintOrderEnum.VERTICAL);
+		defaultsMap.put(JasperDesign.PROPERTY_PRINT_ORDER, new DefaultValue(printOrderValue, true));
+		
+		int whenNoDataValue = NamedEnumPropertyDescriptor.getIntValue(WhenNoDataTypeEnum.NO_PAGES, NullEnum.NULL, WhenNoDataTypeEnum.NO_PAGES);
+		defaultsMap.put(JasperDesign.PROPERTY_WHEN_NO_DATA_TYPE, new DefaultValue(whenNoDataValue, true));
+		
+		return defaultsMap;
 	}
 
 }

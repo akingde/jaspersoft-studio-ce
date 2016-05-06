@@ -38,6 +38,7 @@ import com.jaspersoft.studio.components.chart.model.theme.strokes.StrokesPropert
 import com.jaspersoft.studio.components.chart.model.theme.util.PadUtil;
 import com.jaspersoft.studio.jasper.CachedImageProvider;
 import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.model.DefaultValue;
 import com.jaspersoft.studio.model.text.MFont;
 import com.jaspersoft.studio.model.text.MFontUtil;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
@@ -49,8 +50,19 @@ import com.jaspersoft.studio.property.descriptors.TransparencyPropertyDescriptor
 import com.jaspersoft.studio.utils.Misc;
 
 public class MPlotSettings extends APropertyNode {
+	
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
+	private static NamedEnumPropertyDescriptor<JFreeChartPlotOrientationEnum> orientation;
+	
+	private static NamedEnumPropertyDescriptor<JFreeChartAlignEnum> bia;
+	
+	private MFont dFont;
+	
+	private MFont tlFont;
+	
+	private IPropertyDescriptor[] descriptors;
+	
 	public MPlotSettings(MChartThemeSettings parent, PlotSettings ps) {
 		super(parent, -1);
 		setValue(ps);
@@ -71,24 +83,14 @@ public class MPlotSettings extends APropertyNode {
 		return "Plot"; //$NON-NLS-1$
 	}
 
-	private IPropertyDescriptor[] descriptors;
-	private static Map<String, Object> defaultsMap;
-
-	@Override
-	public Map<String, Object> getDefaultsMap() {
-		return defaultsMap;
-	}
-
 	@Override
 	public IPropertyDescriptor[] getDescriptors() {
 		return descriptors;
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1,
-			Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1) {
 		descriptors = descriptors1;
-		defaultsMap = defaultsMap1;
 	}
 
 	/**
@@ -98,8 +100,7 @@ public class MPlotSettings extends APropertyNode {
 	 *            the desc
 	 */
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc,
-			Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
 		PropertyDescriptor pd = new CheckBoxPropertyDescriptor(
 				PlotSettings.PROPERTY_outlineVisible,
 				Messages.MPlotSettings_outlineVisibleTitle);
@@ -255,44 +256,46 @@ public class MPlotSettings extends APropertyNode {
 		pd.setCategory("Series"); //$NON-NLS-1$
 		desc.add(pd);
 
-		PadUtil.createPropertyDescriptors(desc, defaultsMap);
-
-		defaultsMap.put(PlotSettings.PROPERTY_backgroundPaint, null);
-		defaultsMap.put(PlotSettings.PROPERTY_outlinePaint, null);
-		defaultsMap.put(PlotSettings.PROPERTY_domainGridlinePaint, null);
-		defaultsMap.put(PlotSettings.PROPERTY_rangeGridlinePaint, null);
-		defaultsMap.put(PlotSettings.PROPERTY_backgroundPaint, null);
-		defaultsMap.put(PlotSettings.PROPERTY_backgroundImage, null);
-		defaultsMap.put(PlotSettings.PROPERTY_outlineStroke, null);
-		defaultsMap.put(PlotSettings.PROPERTY_domainGridlineStroke, null);
-		defaultsMap.put(PlotSettings.PROPERTY_rangeGridlineStroke, null);
-		defaultsMap.put(PlotSettings.PROPERTY_seriesStrokeSequence, null);
-		defaultsMap
-				.put(PlotSettings.PROPERTY_seriesOutlineStrokeSequence, null);
-		defaultsMap.put(PlotSettings.PROPERTY_seriesColorSequence, null);
-		defaultsMap
-				.put(PlotSettings.PROPERTY_seriesGradientPaintSequence, null);
-		defaultsMap.put(PlotSettings.PROPERTY_seriesOutlinePaintSequence, null);
-
-		defaultsMap.put(PlotSettings.PROPERTY_outlineVisible, Boolean.TRUE);
-		defaultsMap.put(PlotSettings.PROPERTY_domainGridlineVisible,
-				Boolean.TRUE);
-		defaultsMap.put(PlotSettings.PROPERTY_rangeGridlineVisible,
-				Boolean.TRUE);
-		defaultsMap.put(PlotSettings.PROPERTY_backgroundImageAlignment,
-				bia.getIntValue(JFreeChartAlignEnum.TOP_LEFT));
-		defaultsMap.put(PlotSettings.PROPERTY_orientation, orientation
-				.getIntValue(JFreeChartPlotOrientationEnum.HORIZONTAL));
+		PadUtil.createPropertyDescriptors(desc);
 
 		setHelpPrefix(
 				desc,
 				"net.sf.jasperreports.doc/docs/sample.reference/chartthemes/index.html#chartthemes"); //$NON-NLS-1$
 	}
+	
+	@Override
+	protected Map<String, DefaultValue> createDefaultsMap() {
+		Map<String, DefaultValue> defaultsMap = super.createDefaultsMap();
+		
+		defaultsMap.put(PlotSettings.PROPERTY_backgroundPaint, new DefaultValue(null, true));
+		defaultsMap.put(PlotSettings.PROPERTY_outlinePaint, new DefaultValue(null, true));
+		defaultsMap.put(PlotSettings.PROPERTY_domainGridlinePaint, new DefaultValue(null, true));
+		defaultsMap.put(PlotSettings.PROPERTY_rangeGridlinePaint, new DefaultValue(null, true));
+		defaultsMap.put(PlotSettings.PROPERTY_backgroundPaint, new DefaultValue(null, true));
+		defaultsMap.put(PlotSettings.PROPERTY_backgroundImage, new DefaultValue(null, true));
+		defaultsMap.put(PlotSettings.PROPERTY_outlineStroke, new DefaultValue(null, true));
+		defaultsMap.put(PlotSettings.PROPERTY_domainGridlineStroke, new DefaultValue(null, true));
+		defaultsMap.put(PlotSettings.PROPERTY_rangeGridlineStroke, new DefaultValue(null, true));
+		defaultsMap.put(PlotSettings.PROPERTY_seriesStrokeSequence, new DefaultValue(null, true));
+		defaultsMap.put(PlotSettings.PROPERTY_seriesOutlineStrokeSequence, new DefaultValue(null, true));
+		defaultsMap.put(PlotSettings.PROPERTY_seriesColorSequence, new DefaultValue(null, true));
+		defaultsMap.put(PlotSettings.PROPERTY_seriesGradientPaintSequence, new DefaultValue(null, true));
+		defaultsMap.put(PlotSettings.PROPERTY_seriesOutlinePaintSequence, new DefaultValue(null, true));
 
-	private static NamedEnumPropertyDescriptor<JFreeChartPlotOrientationEnum> orientation;
-	private static NamedEnumPropertyDescriptor<JFreeChartAlignEnum> bia;
-	private MFont dFont;
-	private MFont tlFont;
+		defaultsMap.put(PlotSettings.PROPERTY_outlineVisible, new DefaultValue(Boolean.TRUE, false));
+		defaultsMap.put(PlotSettings.PROPERTY_domainGridlineVisible, new DefaultValue(Boolean.TRUE, false));
+		defaultsMap.put(PlotSettings.PROPERTY_rangeGridlineVisible, new DefaultValue(Boolean.TRUE, false));
+		
+		int backAligment = NamedEnumPropertyDescriptor.getIntValue(NullEnum.NOTNULL, JFreeChartAlignEnum.TOP_LEFT);
+		defaultsMap.put(PlotSettings.PROPERTY_backgroundImageAlignment, new DefaultValue(backAligment, false));
+		
+		int orientationValue = NamedEnumPropertyDescriptor.getIntValue(NullEnum.NOTNULL, JFreeChartPlotOrientationEnum.HORIZONTAL);
+		defaultsMap.put(PlotSettings.PROPERTY_orientation, new DefaultValue(orientationValue, false));
+		
+		PadUtil.createDefaults("", defaultsMap);
+		
+		return defaultsMap;
+	}
 
 	@Override
 	public Object getPropertyValue(Object id) {

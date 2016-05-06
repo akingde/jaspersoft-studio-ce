@@ -82,8 +82,7 @@ import net.sf.jasperreports.engine.type.StretchTypeEnum;
 /*
  * The Class MGeneric.
  */
-public class MGraphicElement extends APropertyNode
-		implements IGraphicElement, ICopyable, IGuidebleElement, IDragable, IDesignDragable, IGraphicalPropertiesHandler {
+public class MGraphicElement extends APropertyNode implements IGraphicElement, ICopyable, IGuidebleElement, IDragable, IDesignDragable, IGraphicalPropertiesHandler {
 
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
@@ -93,7 +92,6 @@ public class MGraphicElement extends APropertyNode
 
 	private static NamedEnumPropertyDescriptor<StretchTypeEnum> stretchTypeD;
 
-	private static Map<String, Object> defaultsMap;
 
 	private IPropertyDescriptor[] descriptors;
 
@@ -326,10 +324,6 @@ public class MGraphicElement extends APropertyNode
 		return new Rectangle(jr.getX(), jr.getY(), jr.getWidth(), jr.getHeight());
 	}
 
-	@Override
-	public Map<String, Object> getDefaultsMap() {
-		return defaultsMap;
-	}
 
 	@Override
 	public IPropertyDescriptor[] getDescriptors() {
@@ -337,9 +331,8 @@ public class MGraphicElement extends APropertyNode
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1) {
 		descriptors = descriptors1;
-		defaultsMap = defaultsMap1;
 	}
 
 	@Override
@@ -403,7 +396,7 @@ public class MGraphicElement extends APropertyNode
 	 *          the desc
 	 */
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
 		RWStyleComboBoxPropertyDescriptor styleD = new RWStyleComboBoxPropertyDescriptor(
 				JRDesignElement.PROPERTY_PARENT_STYLE, Messages.common_parent_style, new String[] { "" }, NullEnum.NULL); //$NON-NLS-1$
 		styleD.setDescription(Messages.MGraphicElement_parent_style_description);
@@ -540,21 +533,32 @@ public class MGraphicElement extends APropertyNode
 		forecolorD.setCategory(Messages.common_graphic);
 		backcolorD.setCategory(Messages.common_graphic);
 		styleD.setCategory(Messages.common_graphic);
+	}
+	
+	@Override
+	protected Map<String, DefaultValue> createDefaultsMap() {
+		Map<String, DefaultValue> defaultsMap = super.createDefaultsMap();
+		defaultsMap.put(JRDesignElement.PROPERTY_PARENT_STYLE, new DefaultValue(null, true));
+		defaultsMap.put(JRBaseStyle.PROPERTY_FORECOLOR, new DefaultValue(null, true));
+		defaultsMap.put(JRBaseStyle.PROPERTY_BACKCOLOR, new DefaultValue(null, true));
 
-		defaultsMap.put(JRDesignElement.PROPERTY_PARENT_STYLE, null);
-		defaultsMap.put(JRBaseStyle.PROPERTY_FORECOLOR, null);
-		defaultsMap.put(JRBaseStyle.PROPERTY_BACKCOLOR, null);
-
-		defaultsMap.put(JRBaseStyle.PROPERTY_MODE, Boolean.FALSE);
-		defaultsMap.put(JRDesignElement.PROPERTY_POSITION_TYPE,
-				positionTypeD.getIntValue(PositionTypeEnum.FIX_RELATIVE_TO_TOP));
-		defaultsMap.put(JRDesignElement.PROPERTY_STRETCH_TYPE, stretchTypeD.getEnumValue(StretchTypeEnum.NO_STRETCH));
-		defaultsMap.put(JRDesignElement.PROPERTY_PRINT_REPEATED_VALUES, Boolean.TRUE);
-		defaultsMap.put(JRDesignElement.PROPERTY_REMOVE_LINE_WHEN_BLANK, Boolean.FALSE);
-		defaultsMap.put(JRDesignElement.PROPERTY_PRINT_IN_FIRST_WHOLE_BAND, Boolean.FALSE);
-		defaultsMap.put(JRDesignElement.PROPERTY_PRINT_WHEN_DETAIL_OVERFLOWS, Boolean.FALSE);
-		defaultsMap.put(JRDesignElement.PROPERTY_PRINT_WHEN_EXPRESSION, null);
-
+		defaultsMap.put(JRBaseStyle.PROPERTY_MODE, new DefaultValue(Boolean.FALSE, true));
+		
+		int positionDefault = NamedEnumPropertyDescriptor.getIntValue(PositionTypeEnum.FIX_RELATIVE_TO_TOP, 
+																																		NullEnum.NOTNULL, PositionTypeEnum.FIX_RELATIVE_TO_TOP);
+		defaultsMap.put(JRDesignElement.PROPERTY_POSITION_TYPE, new DefaultValue(positionDefault, false));
+		
+		StretchTypeEnum stretchDefault = NamedEnumPropertyDescriptor.getEnumValue(StretchTypeEnum.NO_STRETCH, 
+																																								NullEnum.NOTNULL, 
+																																									StretchTypeEnum.NO_STRETCH);
+		defaultsMap.put(JRDesignElement.PROPERTY_STRETCH_TYPE, new DefaultValue(stretchDefault, false));
+		
+		defaultsMap.put(JRDesignElement.PROPERTY_PRINT_REPEATED_VALUES, new DefaultValue(Boolean.TRUE, true));
+		defaultsMap.put(JRDesignElement.PROPERTY_REMOVE_LINE_WHEN_BLANK, new DefaultValue(Boolean.FALSE, true));
+		defaultsMap.put(JRDesignElement.PROPERTY_PRINT_IN_FIRST_WHOLE_BAND, new DefaultValue(Boolean.FALSE, true));
+		defaultsMap.put(JRDesignElement.PROPERTY_PRINT_WHEN_DETAIL_OVERFLOWS, new DefaultValue(Boolean.FALSE, true));
+		defaultsMap.put(JRDesignElement.PROPERTY_PRINT_WHEN_EXPRESSION, new DefaultValue(null, true));
+		return defaultsMap;
 	}
 
 	/**

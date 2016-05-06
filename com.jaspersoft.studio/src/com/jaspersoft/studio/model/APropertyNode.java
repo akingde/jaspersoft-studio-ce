@@ -33,6 +33,9 @@ import net.sf.jasperreports.engine.design.JRDesignElement;
 
 public abstract class APropertyNode extends ANode implements IPropertySource, IPropertySource2 {
 	
+	private static HashMap<Class<? extends APropertyNode>, Map<String, DefaultValue>> defaultsMap = 
+														new HashMap<Class<? extends APropertyNode>, Map<String,DefaultValue>>();
+	
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	public static final String PROPERTY_MAP = "PROPERTY_MAP"; //$NON-NLS-1$
@@ -50,9 +53,20 @@ public abstract class APropertyNode extends ANode implements IPropertySource, IP
 		return true;
 	}
 
-	public abstract Map<String, Object> getDefaultsMap();
+	public Map<String, DefaultValue> getDefaultsMap(){
+		Map<String, DefaultValue> result = defaultsMap.get(this.getClass());
+		if (result == null){
+			result = createDefaultsMap();
+			defaultsMap.put(this.getClass(), result);
+		}
+		return result;
+	}
+	
+	protected Map<String, DefaultValue> createDefaultsMap(){
+		return new HashMap<String, DefaultValue>();
+	}
 
-	public abstract void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1);
+	public abstract void setDescriptors(IPropertyDescriptor[] descriptors1);
 
 	public abstract IPropertyDescriptor[] getDescriptors();
 
@@ -74,7 +88,7 @@ public abstract class APropertyNode extends ANode implements IPropertySource, IP
 	 * @param desc
 	 *          the desc
 	 */
-	public abstract void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap);
+	public abstract void createPropertyDescriptors(List<IPropertyDescriptor> desc);
 
 	/**
 	 * @param descriptors
@@ -143,13 +157,12 @@ public abstract class APropertyNode extends ANode implements IPropertySource, IP
 		// return new IPropertyDescriptor[0];
 		IPropertyDescriptor[] descriptors = getDescriptors();
 		if (descriptors == null) {
-			Map<String, Object> defaultsMap = new HashMap<String, Object>();
 			List<IPropertyDescriptor> desc = new ArrayList<IPropertyDescriptor>();
 
-			createPropertyDescriptors(desc, defaultsMap);
+			createPropertyDescriptors(desc);
 
 			descriptors = desc.toArray(new IPropertyDescriptor[desc.size()]);
-			setDescriptors(descriptors, defaultsMap);
+			setDescriptors(descriptors);
 		}
 		postDescriptors(descriptors);
 		return descriptors;
@@ -191,9 +204,9 @@ public abstract class APropertyNode extends ANode implements IPropertySource, IP
 	 * @return default value
 	 */
 	public Object getPropertyDefaultValue(String id) throws Exception {
-		Map<String, Object> defaultsMap = getDefaultsMap();
+		Map<String, DefaultValue> defaultsMap = getDefaultsMap();
 		if (defaultsMap != null && defaultsMap.containsKey(id))
-			return defaultsMap.get(id);
+			return defaultsMap.get(id).getValue();
 		throw new Exception("Key not found"); //$NON-NLS-1$
 	}
 

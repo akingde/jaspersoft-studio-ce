@@ -14,9 +14,6 @@ package com.jaspersoft.studio.model.datasource.jdbc;
 
 import java.sql.Connection;
 import java.util.List;
-import java.util.Map;
-
-import net.sf.jasperreports.engine.JRConstants;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
@@ -28,10 +25,15 @@ import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 
+import net.sf.jasperreports.engine.JRConstants;
+
 public class MJDBCDataSource extends AMDatasource {
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+	
+	private static IPropertyDescriptor[] descriptors;
+	
 
 	/**
 	 * Gets the icon descriptor.
@@ -71,28 +73,19 @@ public class MJDBCDataSource extends AMDatasource {
 		return getIconDescriptor().getToolTip();
 	}
 
-	private static IPropertyDescriptor[] descriptors;
-	private static Map<String, Object> defaultsMap;
-
-	@Override
-	public Map<String, Object> getDefaultsMap() {
-		return defaultsMap;
-	}
-
 	@Override
 	public IPropertyDescriptor[] getDescriptors() {
 		return descriptors;
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1) {
 		descriptors = descriptors1;
-		defaultsMap = defaultsMap1;
 	}
 
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		super.createPropertyDescriptors(desc, defaultsMap);
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
+		super.createPropertyDescriptors(desc);
 
 		NTextPropertyDescriptor driverClassD = new NTextPropertyDescriptor(PROPERTY_DRIVERCLASS,
 				Messages.common_driver_class);

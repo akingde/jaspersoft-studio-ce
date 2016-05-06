@@ -14,7 +14,6 @@ package com.jaspersoft.studio.components.crosstab.model;
 
 import java.beans.PropertyChangeEvent;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource;
@@ -33,8 +32,15 @@ import net.sf.jasperreports.crosstabs.type.CrosstabTotalPositionEnum;
 import net.sf.jasperreports.engine.JRConstants;
 
 public abstract class MCrosstabGroup extends MDatasetGroupNode implements IPropertySource {
+	
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+	
+	private static IPropertyDescriptor[] descriptors;
 
+	private static NamedEnumPropertyDescriptor<CrosstabTotalPositionEnum> totalPositionD;
+	
+	private MBucket mBucket;
+	
 	/**
 	 * Instantiates a new m field.
 	 */
@@ -66,23 +72,14 @@ public abstract class MCrosstabGroup extends MDatasetGroupNode implements IPrope
 		return ((JRCrosstabGroup) getValue()).getName();
 	}
 
-	private static IPropertyDescriptor[] descriptors;
-	private static Map<String, Object> defaultsMap;
-
-	@Override
-	public Map<String, Object> getDefaultsMap() {
-		return defaultsMap;
-	}
-
 	@Override
 	public IPropertyDescriptor[] getDescriptors() {
 		return descriptors;
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1) {
 		descriptors = descriptors1;
-		defaultsMap = defaultsMap1;
 	}
 
 	/**
@@ -92,7 +89,7 @@ public abstract class MCrosstabGroup extends MDatasetGroupNode implements IPrope
 	 *            the desc
 	 */
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
 		totalPositionD = new NamedEnumPropertyDescriptor<CrosstabTotalPositionEnum>(
 				JRDesignCrosstabGroup.PROPERTY_TOTAL_POSITION, Messages.common_total_position,
 				CrosstabTotalPositionEnum.NONE, NullEnum.NOTNULL);
@@ -115,9 +112,6 @@ public abstract class MCrosstabGroup extends MDatasetGroupNode implements IPrope
 		desc.add(merge);
 
 	}
-
-	private MBucket mBucket;
-	private static NamedEnumPropertyDescriptor<CrosstabTotalPositionEnum> totalPositionD;
 
 	/*
 	 * (non-Javadoc)

@@ -13,13 +13,6 @@
 package com.jaspersoft.studio.model;
 
 import java.util.List;
-import java.util.Map;
-
-import net.sf.jasperreports.engine.JRConstants;
-import net.sf.jasperreports.engine.JRHyperlink;
-import net.sf.jasperreports.engine.JRHyperlinkParameter;
-import net.sf.jasperreports.engine.design.JRDesignHyperlink;
-import net.sf.jasperreports.engine.type.HyperlinkTargetEnum;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
@@ -34,7 +27,16 @@ import com.jaspersoft.studio.property.descriptor.hyperlink.parameter.HyperlinkPa
 import com.jaspersoft.studio.swt.widgets.WHyperlink;
 import com.jaspersoft.studio.utils.EnumHelper;
 
+import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRHyperlink;
+import net.sf.jasperreports.engine.JRHyperlinkParameter;
+import net.sf.jasperreports.engine.design.JRDesignHyperlink;
+import net.sf.jasperreports.engine.type.HyperlinkTargetEnum;
+
 public class MHyperLink extends APropertyNode {
+	
+	private static IPropertyDescriptor[] descriptors;
+	
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	public MHyperLink(JRHyperlink hyperLink) {
@@ -43,7 +45,7 @@ public class MHyperLink extends APropertyNode {
 	}
 
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
 		
 		String prefix = "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#";
 		
@@ -109,23 +111,14 @@ public class MHyperLink extends APropertyNode {
 
 	}
 
-	private static IPropertyDescriptor[] descriptors;
-	private static Map<String, Object> defaultsMap;
-
-	@Override
-	public Map<String, Object> getDefaultsMap() {
-		return defaultsMap;
-	}
-
 	@Override
 	public IPropertyDescriptor[] getDescriptors() {
 		return descriptors;
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1) {
 		descriptors = descriptors1;
-		defaultsMap = defaultsMap1;
 	}
 
 	/*

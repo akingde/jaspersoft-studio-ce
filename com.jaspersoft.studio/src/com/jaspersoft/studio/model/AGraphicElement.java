@@ -53,7 +53,7 @@ public abstract class AGraphicElement extends AMapElement {
 	}
 
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
 		PixelPropertyDescriptor xd = new PixelPropertyDescriptor(PROP_X, Messages.common_left);
 		xd.setCategory(Messages.common_graphic);
 		xd.setDescription(Messages.common_left);
@@ -82,11 +82,16 @@ public abstract class AGraphicElement extends AMapElement {
 				Messages.common_descriptionLabel, SWT.MULTI | SWT.WRAP | SWT.V_SCROLL | SWT.H_SCROLL);
 		description.setDescription(Messages.common_description);
 		desc.add(description);
-
-		defaultsMap.put(PROP_X, 10);
-		defaultsMap.put(PROP_Y, 10);
-		defaultsMap.put(PROP_W, 100);
-		defaultsMap.put(PROP_H, 100);
+	}
+	
+	@Override
+	protected Map<String, DefaultValue> createDefaultsMap() {
+		Map<String, DefaultValue> defaultsMap = super.createDefaultsMap();
+		defaultsMap.put(PROP_X, new DefaultValue(10, false));
+		defaultsMap.put(PROP_Y, new DefaultValue(10, false));
+		defaultsMap.put(PROP_W, new DefaultValue(100, false));
+		defaultsMap.put(PROP_H, new DefaultValue(100, false));
+		return defaultsMap;
 	}
 
 	public void setPropertyValue(Object id, Object value) {

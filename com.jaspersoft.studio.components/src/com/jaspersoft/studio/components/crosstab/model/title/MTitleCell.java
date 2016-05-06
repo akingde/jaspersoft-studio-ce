@@ -14,13 +14,6 @@ package com.jaspersoft.studio.components.crosstab.model.title;
 
 import java.beans.PropertyChangeEvent;
 import java.util.List;
-import java.util.Map;
-
-import net.sf.jasperreports.crosstabs.CrosstabColumnCell;
-import net.sf.jasperreports.crosstabs.design.DesignCrosstabColumnCell;
-import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabCell;
-import net.sf.jasperreports.crosstabs.type.CrosstabColumnPositionEnum;
-import net.sf.jasperreports.engine.JRConstants;
 
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.swt.graphics.Color;
@@ -33,9 +26,20 @@ import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.PixelPropertyDescriptor;
 
+import net.sf.jasperreports.crosstabs.CrosstabColumnCell;
+import net.sf.jasperreports.crosstabs.design.DesignCrosstabColumnCell;
+import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabCell;
+import net.sf.jasperreports.crosstabs.type.CrosstabColumnPositionEnum;
+import net.sf.jasperreports.engine.JRConstants;
+
 public class MTitleCell extends MCell {
+	
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
+	private static IPropertyDescriptor[] descriptors;
+
+	private static NamedEnumPropertyDescriptor<CrosstabColumnPositionEnum> positionD;
+	
 	public MTitleCell() {
 		super();
 	}
@@ -88,30 +92,18 @@ public class MTitleCell extends MCell {
 		return 30;
 	}
 
-	private static IPropertyDescriptor[] descriptors;
-	private static Map<String, Object> defaultsMap;
-	private static NamedEnumPropertyDescriptor<CrosstabColumnPositionEnum> positionD;
-
-	@Override
-	public Map<String, Object> getDefaultsMap() {
-		return defaultsMap;
-	}
-
 	@Override
 	public IPropertyDescriptor[] getDescriptors() {
 		return descriptors;
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1,
-			Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1) {
 		descriptors = descriptors1;
-		defaultsMap = defaultsMap1;
 	}
 
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc,
-			Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
 		positionD = new NamedEnumPropertyDescriptor<CrosstabColumnPositionEnum>(
 				DesignCrosstabColumnCell.PROPERTY_CONTENTS_POSITION,
 				Messages.MTitleCell_contentPosition,
@@ -119,7 +111,7 @@ public class MTitleCell extends MCell {
 		positionD.setDescription(Messages.MTitleCell_contentPosition);
 		desc.add(positionD);
 
-		super.createPropertyDescriptors(desc, defaultsMap);
+		super.createPropertyDescriptors(desc);
 
 		for (IPropertyDescriptor pd : desc) {
 			if (pd.getId().equals(JRDesignCrosstabCell.PROPERTY_WIDTH))

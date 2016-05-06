@@ -15,7 +15,6 @@ package com.jaspersoft.studio.model;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
@@ -60,8 +59,8 @@ public abstract class MGraphicElementLinePen extends MGraphicElement implements 
 	}
 
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		super.createPropertyDescriptors(desc, defaultsMap);
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
+		super.createPropertyDescriptors(desc);
 
 		PenPropertyDescriptor linePenD = new PenPropertyDescriptor(LINE_PEN, Messages.common_line_pen);
 		linePenD.setDescription(Messages.MGraphicElementLinePen_line_pen_description);

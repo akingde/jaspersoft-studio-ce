@@ -41,6 +41,7 @@ import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.model.DefaultValue;
 import com.jaspersoft.studio.model.IGraphicalPropertiesHandler;
 import com.jaspersoft.studio.model.MHyperLink;
 import com.jaspersoft.studio.model.dataset.MDatasetRun;
@@ -69,6 +70,8 @@ public class MTextField extends MTextElement {
 	private MHyperLink mHyperLink;
 
 	private static NamedEnumPropertyDescriptor<EvaluationTimeEnum> evaluationTimeD;
+	
+	private IPropertyDescriptor[] descriptors;
 
 	/**
 	 * Gets the icon descriptor.
@@ -103,23 +106,14 @@ public class MTextField extends MTextElement {
 		setValue(jrStaticText);
 	}
 
-	private IPropertyDescriptor[] descriptors;
-	private static Map<String, Object> defaultsMap;
-
-	@Override
-	public Map<String, Object> getDefaultsMap() {
-		return defaultsMap;
-	}
-
 	@Override
 	public IPropertyDescriptor[] getDescriptors() {
 		return descriptors;
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1) {
 		descriptors = descriptors1;
-		defaultsMap = defaultsMap1;
 	}
 
 	@Override
@@ -173,8 +167,8 @@ public class MTextField extends MTextElement {
 	 *          the desc
 	 */
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		super.createPropertyDescriptors(desc, defaultsMap);
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
+		super.createPropertyDescriptors(desc);
 
 		evaluationTimeD = new NamedEnumPropertyDescriptor<EvaluationTimeEnum>(JRDesignTextField.PROPERTY_EVALUATION_TIME,
 				Messages.common_evaluation_time, EvaluationTimeEnum.AUTO, NullEnum.NOTNULL);
@@ -232,7 +226,7 @@ public class MTextField extends MTextElement {
 
 		if (mHyperLink == null)
 			mHyperLink = new MHyperLink(null);
-		mHyperLink.createPropertyDescriptors(desc, defaultsMap);
+		mHyperLink.createPropertyDescriptors(desc);
 
 		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#textField"); //$NON-NLS-1$
 
@@ -243,11 +237,20 @@ public class MTextField extends MTextElement {
 		blankWhenNullD.setCategory(Messages.MTextField_textfield_category);
 		stretchOverflowD.setCategory(Messages.MTextField_textfield_category);
 		pexprD.setCategory(Messages.MTextField_textfield_category);
-
-		defaultsMap.put(JRDesignTextField.PROPERTY_EVALUATION_TIME, EvaluationTimeEnum.NOW);
-		defaultsMap.put(JRDesignStyle.PROPERTY_BLANK_WHEN_NULL, Boolean.FALSE);
-		defaultsMap.put(JRBaseTextField.PROPERTY_STRETCH_WITH_OVERFLOW, Boolean.FALSE);
-		defaultsMap.put(JRDesignStyle.PROPERTY_PATTERN, null);
+	}
+	
+	@Override
+	protected Map<String, DefaultValue> createDefaultsMap() {
+		Map<String, DefaultValue> defaultsMap = super.createDefaultsMap();
+		
+		defaultsMap.put(JRDesignTextField.PROPERTY_EVALUATION_TIME, new DefaultValue(EvaluationTimeEnum.NOW, false));
+		defaultsMap.put(JRDesignStyle.PROPERTY_BLANK_WHEN_NULL, new DefaultValue(Boolean.FALSE, false));
+		defaultsMap.put(JRBaseTextField.PROPERTY_STRETCH_WITH_OVERFLOW, new DefaultValue(Boolean.FALSE, false));
+		defaultsMap.put(JRDesignStyle.PROPERTY_PATTERN, new DefaultValue(null, true));
+		
+		defaultsMap.putAll(new MHyperLink(null).getDefaultsMap());
+		
+		return defaultsMap;
 	}
 
 	@Override

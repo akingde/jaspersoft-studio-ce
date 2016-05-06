@@ -9,17 +9,6 @@
 package com.jaspersoft.studio.model.dataset;
 
 import java.util.List;
-import java.util.Map;
-
-import net.sf.jasperreports.engine.JRConstants;
-import net.sf.jasperreports.engine.JRDatasetRun;
-import net.sf.jasperreports.engine.JRElementDataset;
-import net.sf.jasperreports.engine.JRGroup;
-import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
-import net.sf.jasperreports.engine.design.JRDesignElementDataset;
-import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.type.IncrementTypeEnum;
-import net.sf.jasperreports.engine.type.ResetTypeEnum;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
@@ -40,10 +29,23 @@ import com.jaspersoft.studio.property.descriptor.expression.JRExpressionProperty
 import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
 
+import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRDatasetRun;
+import net.sf.jasperreports.engine.JRElementDataset;
+import net.sf.jasperreports.engine.JRGroup;
+import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
+import net.sf.jasperreports.engine.design.JRDesignElementDataset;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.type.IncrementTypeEnum;
+import net.sf.jasperreports.engine.type.ResetTypeEnum;
+
 public class MElementDataset extends APropertyNode implements IContainer, IContainerEditPart {
 	private static IIconDescriptor iconDescriptor;
+	
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
+	private IPropertyDescriptor[] descriptors;
+	
 	/**
 	 * Gets the icon descriptor.
 	 * 
@@ -84,28 +86,19 @@ public class MElementDataset extends APropertyNode implements IContainer, IConta
 		setValue(value);
 		this.jasperDesign = jasperDesign;
 	}
-
-	private IPropertyDescriptor[] descriptors;
-	private static Map<String, Object> defaultsMap;
-
-	@Override
-	public Map<String, Object> getDefaultsMap() {
-		return defaultsMap;
-	}
-
+	
 	@Override
 	public IPropertyDescriptor[] getDescriptors() {
 		return descriptors;
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1) {
 		descriptors = descriptors1;
-		defaultsMap = defaultsMap1;
 	}
 
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
 		resetTypeD = new NamedEnumPropertyDescriptor<ResetTypeEnum>(JRDesignElementDataset.PROPERTY_RESET_TYPE,
 				Messages.common_reset_type, ResetTypeEnum.COLUMN, NullEnum.NOTNULL);
 		resetTypeD.setDescription(Messages.MElementDataset_reset_type_description);

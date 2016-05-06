@@ -24,16 +24,33 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.DefaultValue;
 import com.jaspersoft.studio.model.datasource.AMFileDataSource;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 
 public class MXMLDataSource extends AMFileDataSource {
+	
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+	
+	private static IPropertyDescriptor[] descriptors;
+	
+	public static final String PROPERTY_XPATHSELECT = "PROPERTY_XPATHSELECT"; //$NON-NLS-1$
+
+	public static final String PROPERTY_XPATHLOCALE = "PROPERTY_XPATHLOCALE"; //$NON-NLS-1$
+
+	public static final String PROPERTY_XPATHTIMEZONE = "PROPERTY_XPATHTIMEZONE"; //$NON-NLS-1$
+	
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
 
+	private String xpathselect;
+	
+	private TimeZone xpathTimeZone;
+	
+	private Locale xpathlocale;
+	
 	/**
 	 * Gets the icon descriptor.
 	 * 
@@ -72,28 +89,19 @@ public class MXMLDataSource extends AMFileDataSource {
 		return getIconDescriptor().getToolTip();
 	}
 
-	private static IPropertyDescriptor[] descriptors;
-	private static Map<String, Object> defaultsMap;
-
-	@Override
-	public Map<String, Object> getDefaultsMap() {
-		return defaultsMap;
-	}
-
 	@Override
 	public IPropertyDescriptor[] getDescriptors() {
 		return descriptors;
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1) {
 		descriptors = descriptors1;
-		defaultsMap = defaultsMap1;
 	}
 
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		super.createPropertyDescriptors(desc, defaultsMap);
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
+		super.createPropertyDescriptors(desc);
 
 		NTextPropertyDescriptor jdbcURLD = new NTextPropertyDescriptor(PROPERTY_XPATHSELECT, Messages.common_xpath_select);
 		desc.add(jdbcURLD);
@@ -104,19 +112,15 @@ public class MXMLDataSource extends AMFileDataSource {
 
 		NTextPropertyDescriptor localeD = new NTextPropertyDescriptor(PROPERTY_XPATHLOCALE, Messages.common_xpath_locale);
 		desc.add(localeD);
-
-		defaultsMap.put(PROPERTY_XPATHTIMEZONE, TimeZone.getDefault());
-		defaultsMap.put(PROPERTY_XPATHLOCALE, Locale.getDefault());
 	}
-
-	public static final String PROPERTY_XPATHSELECT = "PROPERTY_XPATHSELECT"; //$NON-NLS-1$
-	private String xpathselect;
-
-	public static final String PROPERTY_XPATHLOCALE = "PROPERTY_XPATHLOCALE"; //$NON-NLS-1$
-	private Locale xpathlocale;
-
-	public static final String PROPERTY_XPATHTIMEZONE = "PROPERTY_XPATHTIMEZONE"; //$NON-NLS-1$
-	private TimeZone xpathTimeZone;
+	
+	@Override
+	protected Map<String, DefaultValue> createDefaultsMap() {
+		Map<String, DefaultValue> defaultsMap = super.createDefaultsMap();
+		defaultsMap.put(PROPERTY_XPATHTIMEZONE, new DefaultValue(TimeZone.getDefault(), false));
+		defaultsMap.put(PROPERTY_XPATHLOCALE, new DefaultValue(Locale.getDefault(), false));
+		return defaultsMap;
+	}
 
 	@Override
 	public Object getPropertyValue(Object id) {

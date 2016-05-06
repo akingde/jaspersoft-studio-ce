@@ -13,11 +13,6 @@
 package com.jaspersoft.studio.components.chart.model.plot;
 
 import java.util.List;
-import java.util.Map;
-
-import net.sf.jasperreports.charts.JRPiePlot;
-import net.sf.jasperreports.charts.design.JRDesignPiePlot;
-import net.sf.jasperreports.engine.JRConstants;
 
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
@@ -29,8 +24,15 @@ import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 
+import net.sf.jasperreports.charts.JRPiePlot;
+import net.sf.jasperreports.charts.design.JRDesignPiePlot;
+import net.sf.jasperreports.engine.JRConstants;
+
 public class MPiePlot extends MChartPlot {
+	
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+	
+	private static IPropertyDescriptor[] descriptors;
 
 	public MPiePlot(JRPiePlot value) {
 		super(value);
@@ -41,30 +43,19 @@ public class MPiePlot extends MChartPlot {
 		return Messages.MPiePlot_pie_plot;
 	}
 
-	private static IPropertyDescriptor[] descriptors;
-	private static Map<String, Object> defaultsMap;
-
-	@Override
-	public Map<String, Object> getDefaultsMap() {
-		return defaultsMap;
-	}
-
 	@Override
 	public IPropertyDescriptor[] getDescriptors() {
 		return descriptors;
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1,
-			Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1) {
 		descriptors = descriptors1;
-		defaultsMap = defaultsMap1;
 	}
 
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc,
-			Map<String, Object> defaultsMap) {
-		super.createPropertyDescriptors(desc, defaultsMap);
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
+		super.createPropertyDescriptors(desc);
 
 		PlotPropertyDescriptor itemLabelD = new PlotPropertyDescriptor(
 				JRDesignPiePlot.PROPERTY_ITEM_LABEL, Messages.common_item_label);

@@ -28,6 +28,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import com.jaspersoft.studio.components.crosstab.messages.Messages;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.model.DefaultValue;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.classname.NClassTypePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
@@ -35,7 +36,12 @@ import com.jaspersoft.studio.property.descriptor.expression.JRExpressionProperty
 import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 
 public class MBucket extends APropertyNode {
+	
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+	
+	private static IPropertyDescriptor[] descriptors;
+	
+	private static NamedEnumPropertyDescriptor<SortOrderEnum> orderD;
 
 	private APropertyNode bucketContainer;
 	
@@ -81,25 +87,14 @@ public class MBucket extends APropertyNode {
 		return getIconDescriptor().getToolTip();
 	}
 
-	private static IPropertyDescriptor[] descriptors;
-	private static Map<String, Object> defaultsMap;
-	private static NamedEnumPropertyDescriptor<SortOrderEnum> orderD;
-
-	@Override
-	public Map<String, Object> getDefaultsMap() {
-		return defaultsMap;
-	}
-
 	@Override
 	public IPropertyDescriptor[] getDescriptors() {
 		return descriptors;
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1,
-			Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1) {
 		descriptors = descriptors1;
-		defaultsMap = defaultsMap1;
 	}
 
 	/**
@@ -109,8 +104,7 @@ public class MBucket extends APropertyNode {
 	 *            the desc
 	 */
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc,
-			Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
 		orderD = new NamedEnumPropertyDescriptor<SortOrderEnum>(JRDesignCrosstabBucket.PROPERTY_ORDER, Messages.common_order,SortOrderEnum.ASCENDING, NullEnum.NOTNULL);
 		orderD.setDescription(Messages.MBucket_order_description);
 		desc.add(orderD);
@@ -139,11 +133,17 @@ public class MBucket extends APropertyNode {
 				JRDesignCrosstabBucket.PROPERTY_VALUE_CLASS, Messages.MBucket_valueClassTitle);
 		classD.setDescription(Messages.MBucket_valueClassDescription);
 		desc.add(classD);
-
-		defaultsMap.put(JRDesignCrosstabBucket.PROPERTY_VALUE_CLASS, null);
-
 	}
 
+	@Override
+	protected Map<String, DefaultValue> createDefaultsMap() {
+		Map<String, DefaultValue> defaultsMap = super.createDefaultsMap();
+		
+		defaultsMap.put(JRDesignCrosstabBucket.PROPERTY_VALUE_CLASS, new DefaultValue(null, true));
+		
+		return defaultsMap;
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 

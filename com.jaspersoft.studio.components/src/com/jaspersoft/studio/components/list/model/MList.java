@@ -35,6 +35,7 @@ import com.jaspersoft.studio.editor.layout.LayoutManager;
 import com.jaspersoft.studio.editor.report.ReportContainer;
 import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.DefaultValue;
 import com.jaspersoft.studio.model.IContainer;
 import com.jaspersoft.studio.model.IContainerEditPart;
 import com.jaspersoft.studio.model.IContainerLayout;
@@ -87,8 +88,6 @@ public class MList extends MGraphicElement implements IPastable,
 
 	private static IPropertyDescriptor[] descriptors;
 	
-	private static Map<String, Object> defaultsMap;
-	
 	private static NamedEnumPropertyDescriptor<PrintOrderEnum> printOrderD;
 	
 	public static final String PREFIX = "CONTENTS."; //$NON-NLS-1$
@@ -134,20 +133,13 @@ public class MList extends MGraphicElement implements IPastable,
 	}
 
 	@Override
-	public Map<String, Object> getDefaultsMap() {
-		return defaultsMap;
-	}
-
-	@Override
 	public IPropertyDescriptor[] getDescriptors() {
 		return descriptors;
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1,
-			Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1) {
 		descriptors = descriptors1;
-		defaultsMap = defaultsMap1;
 	}
 
 	/**
@@ -157,9 +149,8 @@ public class MList extends MGraphicElement implements IPastable,
 	 *            the desc
 	 */
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc,
-			Map<String, Object> defaultsMap) {
-		super.createPropertyDescriptors(desc, defaultsMap);
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
+		super.createPropertyDescriptors(desc);
 
 		printOrderD = new NamedEnumPropertyDescriptor<PrintOrderEnum>(
 				StandardListComponent.PROPERTY_PRINT_ORDER,
@@ -214,12 +205,18 @@ public class MList extends MGraphicElement implements IPastable,
 		desc.add(widthD);
 		widthD.setHelpRefBuilder(new HelpReferenceBuilder(
 				"net.sf.jasperreports.doc/docs/components.schema.reference.html#listContents_width"));
-
-		defaultsMap.put(StandardListComponent.PROPERTY_IGNORE_WIDTH,
-				new Boolean(false));
-		defaultsMap.put(StandardListComponent.PROPERTY_PRINT_ORDER,
-				printOrderD.getIntValue(PrintOrderEnum.HORIZONTAL));
-
+	}
+	
+	@Override
+	protected Map<String, DefaultValue> createDefaultsMap() {
+		Map<String, DefaultValue> defaultsMap = super.createDefaultsMap();
+		
+		defaultsMap.put(StandardListComponent.PROPERTY_IGNORE_WIDTH, new DefaultValue(false, false));
+		
+		int printOrderValue = NamedEnumPropertyDescriptor.getIntValue(PrintOrderEnum.HORIZONTAL, NullEnum.NOTNULL, PrintOrderEnum.HORIZONTAL);
+		defaultsMap.put(StandardListComponent.PROPERTY_PRINT_ORDER, new DefaultValue(printOrderValue, false));
+		
+		return defaultsMap;
 	}
 
 	@Override

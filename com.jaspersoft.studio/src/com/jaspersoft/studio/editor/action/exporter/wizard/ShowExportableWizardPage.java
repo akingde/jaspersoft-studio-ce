@@ -28,6 +28,10 @@ import com.jaspersoft.studio.editor.action.exporter.IExportedResourceHandler;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.plugin.ExtensionManager;
 import com.jaspersoft.studio.wizards.JSSWizardPage;
+import com.lowagie.text.pdf.PRStream;
+import com.lowagie.text.pdf.PdfName;
+import com.lowagie.text.pdf.PdfObject;
+import com.lowagie.text.pdf.PdfReader;
 
 /**
  * Wizard page where all the exportable resources are listed and the user can define
@@ -100,6 +104,8 @@ public class ShowExportableWizardPage extends JSSWizardPage {
 	  sc.setExpandVertical(true);
 	  setControl(sc);
 	  validate();
+	  
+		readPdf("/Users/marco/Desktop/ORLANDINI.pdf");
 	}
 	
 	/**
@@ -123,6 +129,24 @@ public class ShowExportableWizardPage extends JSSWizardPage {
 	 */
 	protected void validate(){
 		setPageComplete(!selectionList.isEmpty());
+	}
+	
+	protected void readPdf(String src){
+		try{
+			  PdfReader reader = new PdfReader(src);
+		    PdfObject obj;
+		
+		    for (int i = 1; i <= reader.getXrefSize(); i++) {
+		        obj = reader.getPdfObject(i);
+		        if (obj != null && obj.isStream()) {
+		            PRStream stream = (PRStream)obj;
+		            System.out.println(stream.get(PdfName.SUBTYPE));
+		            System.out.println(stream.get(PdfName.NAME));
+		        }
+		    }
+		} catch (Exception ex){
+			
+		}
 	}
 
 }

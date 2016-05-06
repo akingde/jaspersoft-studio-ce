@@ -12,12 +12,16 @@ import java.util.Map;
 
 import org.eclipse.jface.action.IStatusLineManager;
 import org.eclipse.jface.fieldassist.ControlDecoration;
+import org.eclipse.jface.util.Util;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
@@ -42,6 +46,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import com.jaspersoft.studio.help.HelpSystem;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.model.DefaultValue;
 import com.jaspersoft.studio.properties.internal.IHighlightPropertyWidget;
 import com.jaspersoft.studio.properties.view.validation.ValidationError;
 import com.jaspersoft.studio.property.ResetValueCommand;
@@ -99,6 +104,25 @@ public abstract class ASPropertyWidget<T extends IPropertyDescriptor> implements
 	}
 	
 	/**
+	 * On mac seems the contextual menu is not opened on combo, this
+	 * lister will force it to open when a right click is found
+	 */
+	private MouseAdapter macComboMenuOpener = new MouseAdapter() {
+		
+		@Override
+		public void mouseUp(MouseEvent e) {	
+			if (e.button == 3 && ((Control)e.widget).getMenu() != null){
+				Menu menu = ((Control)e.widget).getMenu();
+				if (!menu.isDisposed() && !menu.isVisible()){
+	        Point location = e.widget.getDisplay().getCursorLocation();
+					menu.setLocation(location.x, location.y);
+	        menu.setVisible(true);
+				}
+			}
+		}
+	};
+	
+	/**
 	 * Create a contextual menu for the current control. This contextual menu
 	 * will contains the action to reset the value of a property if the property
 	 * has default value inside the node.
@@ -106,8 +130,14 @@ public abstract class ASPropertyWidget<T extends IPropertyDescriptor> implements
 	protected void createContextualMenu(final APropertyNode node){
 		Control control = getControl();
 		if (node != null && control != null && !control.isDisposed()){
-			node.getPropertyDescriptors();
-			Map<String, Object> defaultMap = node.getDefaultsMap();
+			
+			//Mac fix, the combo on mac doesn't have a contextual menu, so we need to set this listener manually
+			boolean handleComboListener = Util.isMac() && control.getClass() == Combo.class;
+			if (handleComboListener){
+				control.removeMouseListener(macComboMenuOpener);
+			}
+			
+			Map<String, DefaultValue> defaultMap = node.getDefaultsMap();
 			if (defaultMap.containsKey(pDescriptor.getId().toString())){
 				Menu controlMenu = new Menu(control);
 				MenuItem refreshItem = new MenuItem(controlMenu, SWT.NONE);
@@ -122,6 +152,9 @@ public abstract class ASPropertyWidget<T extends IPropertyDescriptor> implements
 				});
 		    refreshItem.setText(Messages.ASPropertyWidget_0);
 				control.setMenu(controlMenu);
+				if (handleComboListener){
+					control.addMouseListener(macComboMenuOpener);
+				}
 			} else {
 				control.setMenu(null);
 			}

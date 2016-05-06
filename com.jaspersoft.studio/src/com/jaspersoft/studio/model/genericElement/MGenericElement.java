@@ -26,6 +26,7 @@ import com.jaspersoft.studio.editor.defaults.DefaultManager;
 import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.DefaultValue;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
@@ -38,10 +39,22 @@ import com.jaspersoft.studio.utils.EnumHelper;
 import com.jaspersoft.studio.utils.ModelUtils;
 
 public class MGenericElement extends MGraphicElement {
+	
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+	
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
+	
+	public static final String PROPERTY_NAME = "name"; //$NON-NLS-1$
+	
+	public static final String PROPERTY_NAMESPACE = "namespace"; //$NON-NLS-1$
+	
+	private static NamedEnumPropertyDescriptor<EvaluationTimeEnum> evaluationTimeD;
 
+	private IPropertyDescriptor[] descriptors;
+	
+	private RComboBoxPropertyDescriptor evaluationGroupNameD;
+	
 	/**
 	 * Gets the icon descriptor.
 	 * 
@@ -105,24 +118,14 @@ public class MGenericElement extends MGraphicElement {
 		return getIconDescriptor().getToolTip();
 	}
 
-	private IPropertyDescriptor[] descriptors;
-	private static Map<String, Object> defaultsMap;
-	private RComboBoxPropertyDescriptor evaluationGroupNameD;
-
-	@Override
-	public Map<String, Object> getDefaultsMap() {
-		return defaultsMap;
-	}
-
 	@Override
 	public IPropertyDescriptor[] getDescriptors() {
 		return descriptors;
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1) {
 		descriptors = descriptors1;
-		defaultsMap = defaultsMap1;
 	}
 
 	/**
@@ -132,8 +135,8 @@ public class MGenericElement extends MGraphicElement {
 	 *          the desc
 	 */
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		super.createPropertyDescriptors(desc, defaultsMap);
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
+		super.createPropertyDescriptors(desc);
 
 		evaluationTimeD = new NamedEnumPropertyDescriptor<EvaluationTimeEnum>(
 				JRDesignGenericElement.PROPERTY_EVALUATION_TIME, Messages.common_evaluation_time, EvaluationTimeEnum.AUTO,
@@ -172,13 +175,14 @@ public class MGenericElement extends MGraphicElement {
 		nameSpaceD.setCategory(Messages.MGenericElement_generic_element_properties_category);
 		evaluationTimeD.setCategory(Messages.MGenericElement_generic_element_properties_category);
 		evaluationGroupNameD.setCategory(Messages.MGenericElement_generic_element_properties_category);
-
-		defaultsMap.put(JRDesignGenericElement.PROPERTY_EVALUATION_TIME, EvaluationTimeEnum.NOW);
 	}
-
-	public static final String PROPERTY_NAME = "name"; //$NON-NLS-1$
-	public static final String PROPERTY_NAMESPACE = "namespace"; //$NON-NLS-1$
-	private static NamedEnumPropertyDescriptor<EvaluationTimeEnum> evaluationTimeD;
+	
+	@Override
+	protected Map<String, DefaultValue> createDefaultsMap() {
+		Map<String, DefaultValue> defaultsMap = super.createDefaultsMap();
+		defaultsMap.put(JRDesignGenericElement.PROPERTY_EVALUATION_TIME, new DefaultValue(EvaluationTimeEnum.NOW, false));
+		return defaultsMap;
+	}
 
 	@Override
 	protected void setGroupItems(String[] items) {

@@ -42,6 +42,18 @@ public class MLineBox extends APropertyNode implements IPropertySource {
 	
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	
+	private static IPropertyDescriptor[] descriptors;
+	
+	private MLinePen linePen;
+	
+	private MLinePen linePenTop;
+	
+	private MLinePen linePenBottom;
+	
+	private MLinePen linePenLeft;
+	
+	private MLinePen linePenRight;
+	
 	private ANode container;
 
 	public MLineBox(JRLineBox lineBox, ANode container) {
@@ -75,9 +87,8 @@ public class MLineBox extends APropertyNode implements IPropertySource {
 	}
 
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		IntegerPropertyDescriptor paddingD = new IntegerPropertyDescriptor(JRBaseLineBox.PROPERTY_PADDING,
-				Messages.common_padding);
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
+		IntegerPropertyDescriptor paddingD = new IntegerPropertyDescriptor(JRBaseLineBox.PROPERTY_PADDING, Messages.common_padding);
 		paddingD.setDescription(Messages.MLineBox_padding_description);
 		desc.add(paddingD);
 
@@ -127,28 +138,8 @@ public class MLineBox extends APropertyNode implements IPropertySource {
 		PenPropertyDescriptor linePenRightD = new PenPropertyDescriptor(LINE_PEN_RIGHT, Messages.MLineBox_line_pen_right);
 		linePenRightD.setDescription(Messages.MLineBox_line_pen_right_description);
 		desc.add(linePenRightD);
-
-		defaultsMap.put(JRBaseLineBox.PROPERTY_PADDING, null);
-		defaultsMap.put(JRBaseLineBox.PROPERTY_LEFT_PADDING, null);
-		defaultsMap.put(JRBaseLineBox.PROPERTY_RIGHT_PADDING, null);
-		defaultsMap.put(JRBaseLineBox.PROPERTY_TOP_PADDING, null);
-		defaultsMap.put(JRBaseLineBox.PROPERTY_BOTTOM_PADDING, null);
-
+		
 		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#box");
-	}
-
-	private MLinePen linePen;
-	private MLinePen linePenTop;
-	private MLinePen linePenBottom;
-	private MLinePen linePenLeft;
-	private MLinePen linePenRight;
-
-	private static IPropertyDescriptor[] descriptors;
-	private static Map<String, Object> defaultsMap;
-
-	@Override
-	public Map<String, Object> getDefaultsMap() {
-		return defaultsMap;
 	}
 
 	@Override
@@ -157,9 +148,21 @@ public class MLineBox extends APropertyNode implements IPropertySource {
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1) {
 		descriptors = descriptors1;
-		defaultsMap = defaultsMap1;
+	}
+	
+	@Override
+	protected Map<String, DefaultValue> createDefaultsMap() {
+		Map<String, DefaultValue> defaultsMap = super.createDefaultsMap();
+		
+		defaultsMap.put(JRBaseLineBox.PROPERTY_PADDING, new DefaultValue(null, true));
+		defaultsMap.put(JRBaseLineBox.PROPERTY_LEFT_PADDING, new DefaultValue(null, true));
+		defaultsMap.put(JRBaseLineBox.PROPERTY_RIGHT_PADDING, new DefaultValue(null, true));
+		defaultsMap.put(JRBaseLineBox.PROPERTY_TOP_PADDING, new DefaultValue(null, true));
+		defaultsMap.put(JRBaseLineBox.PROPERTY_BOTTOM_PADDING, new DefaultValue(null, true));
+		
+		return defaultsMap;
 	}
 
 	/*

@@ -35,6 +35,7 @@ import com.jaspersoft.studio.components.sort.SortNodeIconDescriptor;
 import com.jaspersoft.studio.editor.defaults.DefaultManager;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.DefaultValue;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
@@ -55,9 +56,24 @@ import com.jaspersoft.studio.utils.ModelUtils;
  * 
  */
 public class MSort extends MGraphicElement {
+	
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+	
 	private static final String[] evalTimeEnumNames = EnumHelper.getEnumNames(EvaluationTimeEnum.values(), NullEnum.NOTNULL);
+	
+	private static NamedEnumPropertyDescriptor<SortFieldTypeEnum> sortFieldType;
 
+	/** The icon descriptor. */
+	private static IIconDescriptor iconDescriptor;
+
+	private RComboBoxPropertyDescriptor evaluationGroupNameD;
+	
+	private IPropertyDescriptor[] descriptors;
+
+	private ImageHAlignPropertyDescriptor horizAlign;
+
+	private ImageVAlignPropertyDescriptor vertAlign;
+	
 	public MSort() {
 		super();
 	}
@@ -65,11 +81,6 @@ public class MSort extends MGraphicElement {
 	public MSort(ANode parent, JRDesignComponentElement jrObject, int newIndex) {
 		super(parent, jrObject, newIndex);
 	}
-
-	/** The icon descriptor. */
-	private static IIconDescriptor iconDescriptor;
-
-	private RComboBoxPropertyDescriptor evaluationGroupNameD;
 
 	@Override
 	public void setValue(Object value) {
@@ -156,15 +167,6 @@ public class MSort extends MGraphicElement {
 		return getIconDescriptor().getToolTip();
 	}
 
-	private IPropertyDescriptor[] descriptors;
-	private static Map<String, Object> defaultsMap;
-
-	private ImageHAlignPropertyDescriptor horizAlign;
-
-	private ImageVAlignPropertyDescriptor vertAlign;
-
-	private static NamedEnumPropertyDescriptor<SortFieldTypeEnum> sortFieldType;
-
 	/**
 	 * @return the sortFieldType
 	 */
@@ -179,20 +181,13 @@ public class MSort extends MGraphicElement {
 	}
 
 	@Override
-	public Map<String, Object> getDefaultsMap() {
-		return defaultsMap;
-	}
-
-	@Override
 	public IPropertyDescriptor[] getDescriptors() {
 		return descriptors;
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1,
-			Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1) {
 		descriptors = descriptors1;
-		defaultsMap = defaultsMap1;
 	}
 
 	/**
@@ -202,9 +197,8 @@ public class MSort extends MGraphicElement {
 	 *            the desc
 	 */
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc,
-			Map<String, Object> defaultsMap) {
-		super.createPropertyDescriptors(desc, defaultsMap);
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
+		super.createPropertyDescriptors(desc);
 
 		ComboBoxPropertyDescriptor evaluationTimeD = new ComboBoxPropertyDescriptor(
 				SortComponent.PROPERTY_EVALUATION_TIME,
@@ -256,17 +250,19 @@ public class MSort extends MGraphicElement {
 		vertAlign.setCategory("Sort Properties");
 		evaluationTimeD.setCategory("Sort Properties");
 		evaluationGroupNameD.setCategory("Sort Properties");
-
-		defaultsMap.put(SortComponent.PROPERTY_HANDLER_VERTICAL_ALIGN,
-				VerticalImageAlignEnum.MIDDLE);
-		defaultsMap.put(SortComponent.PROPERTY_HANDLER_HORIZONTAL_ALIGN,
-				HorizontalImageAlignEnum.LEFT);
-		defaultsMap.put(SortComponent.PROPERTY_EVALUATION_TIME,
-				EvaluationTimeEnum.NOW);
-		defaultsMap.put(SortComponent.PROPERTY_HANDLER_COLOR, null);
-		defaultsMap.put(SortComponent.PROPERTY_COLUMN_TYPE,
-				SortFieldTypeEnum.FIELD);
-
+	}
+	
+	@Override
+	protected Map<String, DefaultValue> createDefaultsMap() {
+		Map<String, DefaultValue> defaultsMap = super.createDefaultsMap();
+		
+		defaultsMap.put(SortComponent.PROPERTY_HANDLER_VERTICAL_ALIGN, new DefaultValue(VerticalImageAlignEnum.MIDDLE, false));
+		defaultsMap.put(SortComponent.PROPERTY_HANDLER_HORIZONTAL_ALIGN, new DefaultValue(HorizontalImageAlignEnum.LEFT, false));
+		defaultsMap.put(SortComponent.PROPERTY_EVALUATION_TIME, new DefaultValue(EvaluationTimeEnum.NOW, false));
+		defaultsMap.put(SortComponent.PROPERTY_HANDLER_COLOR, new DefaultValue(null, true));
+		defaultsMap.put(SortComponent.PROPERTY_COLUMN_TYPE, new DefaultValue(SortFieldTypeEnum.FIELD, false));
+		
+		return defaultsMap;
 	}
 
 	@Override

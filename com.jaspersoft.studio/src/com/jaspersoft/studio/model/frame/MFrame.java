@@ -11,14 +11,6 @@ package com.jaspersoft.studio.model.frame;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-
-import net.sf.jasperreports.engine.JRConstants;
-import net.sf.jasperreports.engine.JRPropertiesHolder;
-import net.sf.jasperreports.engine.design.JRDesignElement;
-import net.sf.jasperreports.engine.design.JRDesignFrame;
-import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.type.BorderSplitType;
 
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -46,12 +38,21 @@ import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescri
 import com.jaspersoft.studio.property.descriptor.combo.RComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.utils.Misc;
 
+import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRPropertiesHolder;
+import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.design.JRDesignFrame;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.type.BorderSplitType;
+
 /*
  * The Class MFrame.
  */
 public class MFrame extends MGraphicElementLineBox implements IPastable, IPastableGraphic, IContainer,
 		IContainerLayout, IContainerEditPart, IGraphicElementContainer {
+	
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+	
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
 	
@@ -59,6 +60,8 @@ public class MFrame extends MGraphicElementLineBox implements IPastable, IPastab
 	 * Property used on JSS level to show or hide the elements placed outside the frame
 	 */
 	public static final String PROPERTY_SHOW_OUT_OF_BOUND = "ShowOutOfBoundContent"; //$NON-NLS-1$
+	
+	private static IPropertyDescriptor[] descriptors;
 
 	/**
 	 * Gets the icon descriptor.
@@ -93,13 +96,6 @@ public class MFrame extends MGraphicElementLineBox implements IPastable, IPastab
 		setValue(jrFrame);
 	}
 
-	private static IPropertyDescriptor[] descriptors;
-	private static Map<String, Object> defaultsMap;
-
-	@Override
-	public Map<String, Object> getDefaultsMap() {
-		return defaultsMap;
-	}
 
 	@Override
 	public IPropertyDescriptor[] getDescriptors() {
@@ -107,14 +103,13 @@ public class MFrame extends MGraphicElementLineBox implements IPastable, IPastab
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1) {
 		descriptors = descriptors1;
-		defaultsMap = defaultsMap1;
 	}
 
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		super.createPropertyDescriptors(desc, defaultsMap);
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
+		super.createPropertyDescriptors(desc);
 
 		RComboBoxPropertyDescriptor positionTypeD = new RComboBoxPropertyDescriptor(
 				JRDesignFrame.PROPERTY_BORDER_SPLIT_TYPE, Messages.MFrame_splitType, new String[] { "", //$NON-NLS-2$

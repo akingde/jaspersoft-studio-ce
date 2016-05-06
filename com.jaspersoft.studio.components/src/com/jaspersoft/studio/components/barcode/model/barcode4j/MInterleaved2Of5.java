@@ -14,16 +14,6 @@ package com.jaspersoft.studio.components.barcode.model.barcode4j;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-
-import net.sf.jasperreports.components.barcode4j.Code39Component;
-import net.sf.jasperreports.components.barcode4j.Interleaved2Of5Component;
-import net.sf.jasperreports.engine.JRConstants;
-import net.sf.jasperreports.engine.JRElement;
-import net.sf.jasperreports.engine.component.ComponentKey;
-import net.sf.jasperreports.engine.design.JRDesignComponentElement;
-import net.sf.jasperreports.engine.design.JRDesignExpression;
-import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
@@ -35,8 +25,20 @@ import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescri
 import com.jaspersoft.studio.property.descriptors.DoublePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSComboPropertyDescriptor;
 
+import net.sf.jasperreports.components.barcode4j.Code39Component;
+import net.sf.jasperreports.components.barcode4j.Interleaved2Of5Component;
+import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRElement;
+import net.sf.jasperreports.engine.component.ComponentKey;
+import net.sf.jasperreports.engine.design.JRDesignComponentElement;
+import net.sf.jasperreports.engine.design.JRDesignExpression;
+import net.sf.jasperreports.engine.design.JasperDesign;
+
 public class MInterleaved2Of5 extends MBarcode4j {
+	
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+	
+	private static IPropertyDescriptor[] descriptors;
 
 	public MInterleaved2Of5() {
 		super();
@@ -62,24 +64,14 @@ public class MInterleaved2Of5 extends MBarcode4j {
 		return el;
 	}
 
-	private static IPropertyDescriptor[] descriptors;
-	private static Map<String, Object> defaultsMap;
-
-	@Override
-	public Map<String, Object> getDefaultsMap() {
-		return defaultsMap;
-	}
-
 	@Override
 	public IPropertyDescriptor[] getDescriptors() {
 		return descriptors;
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1,
-			Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1) {
 		descriptors = descriptors1;
-		defaultsMap = defaultsMap1;
 	}
 
 	/**
@@ -89,9 +81,8 @@ public class MInterleaved2Of5 extends MBarcode4j {
 	 *            the desc
 	 */
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc,
-			Map<String, Object> defaultsMap) {
-		super.createPropertyDescriptors(desc, defaultsMap);
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
+		super.createPropertyDescriptors(desc);
 
 		JSSComboPropertyDescriptor checksumModeD = new JSSComboPropertyDescriptor(
 				Interleaved2Of5Component.PROPERTY_CHECKSUM_MODE,

@@ -38,14 +38,6 @@ public abstract class AMapElement extends APropertyNode {
 	}
 
 	private IPropertyDescriptor[] descriptors;
-	private Map<String, Object> defaultsMap;
-
-	@Override
-	public Map<String, Object> getDefaultsMap() {
-		if (defaultsMap == null)
-			getPropertyDescriptors();
-		return defaultsMap;
-	}
 
 	@Override
 	public IPropertyDescriptor[] getDescriptors() {
@@ -53,13 +45,12 @@ public abstract class AMapElement extends APropertyNode {
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1) {
 		descriptors = descriptors1;
-		defaultsMap = defaultsMap1;
 	}
 
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
 	}
 
 	protected Map<String, Object> props = new HashMap<String, Object>();

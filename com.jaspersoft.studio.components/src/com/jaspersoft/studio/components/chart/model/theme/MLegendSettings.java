@@ -33,6 +33,7 @@ import com.jaspersoft.studio.components.chart.model.enums.JFreeChartVerticalAlig
 import com.jaspersoft.studio.components.chart.model.theme.paintprovider.PaintProviderPropertyDescriptor;
 import com.jaspersoft.studio.components.chart.model.theme.util.PadUtil;
 import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.model.DefaultValue;
 import com.jaspersoft.studio.model.text.MFont;
 import com.jaspersoft.studio.model.text.MFontUtil;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
@@ -42,7 +43,18 @@ import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 import com.jaspersoft.studio.utils.Misc;
 
 public class MLegendSettings extends APropertyNode {
+	
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+	
+	private static NamedEnumPropertyDescriptor<EdgeEnum> posD;
+	
+	private static NamedEnumPropertyDescriptor<JFreeChartHorizontalAlignmentEnum> hp;
+	
+	private static NamedEnumPropertyDescriptor<JFreeChartVerticalAlignmentEnum> vp;
+	
+	private IPropertyDescriptor[] descriptors;
+	
+	private MFont clFont;
 
 	public MLegendSettings(MChartThemeSettings parent, LegendSettings cts) {
 		super(parent, -1);
@@ -64,24 +76,14 @@ public class MLegendSettings extends APropertyNode {
 		return "Legend"; //$NON-NLS-1$
 	}
 
-	private IPropertyDescriptor[] descriptors;
-	private static Map<String, Object> defaultsMap;
-
-	@Override
-	public Map<String, Object> getDefaultsMap() {
-		return defaultsMap;
-	}
-
 	@Override
 	public IPropertyDescriptor[] getDescriptors() {
 		return descriptors;
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1,
-			Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1) {
 		descriptors = descriptors1;
-		defaultsMap = defaultsMap1;
 	}
 
 	/**
@@ -91,8 +93,7 @@ public class MLegendSettings extends APropertyNode {
 	 *            the desc
 	 */
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc,
-			Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
 		PropertyDescriptor pd = new CheckBoxPropertyDescriptor(
 				LegendSettings.PROPERTY_showLegend,
 				Messages.MLegendSettings_showLegendTitle);
@@ -124,7 +125,7 @@ public class MLegendSettings extends APropertyNode {
 		vp.setDescription(Messages.MLegendSettings_legendVAlignDescription);
 		desc.add(vp);
 
-		PadUtil.createPropertyDescriptors(desc, defaultsMap);
+		PadUtil.createPropertyDescriptors(desc);
 
 		pd = new PaintProviderPropertyDescriptor(
 				LegendSettings.PROPERTY_foregroundPaint,
@@ -138,28 +139,35 @@ public class MLegendSettings extends APropertyNode {
 		pd.setDescription(Messages.MLegendSettings_legendBackgroundColorDescription);
 		desc.add(pd);
 
-		PadUtil.createBlockFramePropertyDescriptors(desc, defaultsMap, "Block Frame"); //$NON-NLS-1$
-
-		defaultsMap.put(LegendSettings.PROPERTY_backgroundPaint, null);
-		defaultsMap.put(LegendSettings.PROPERTY_foregroundPaint, null);
-
-		defaultsMap.put(LegendSettings.PROPERTY_showLegend, Boolean.TRUE);
-		defaultsMap.put(LegendSettings.PROPERTY_position,
-				posD.getIntValue(EdgeEnum.TOP));
-		defaultsMap.put(LegendSettings.PROPERTY_horizontalAlignment,
-				hp.getIntValue(JFreeChartHorizontalAlignmentEnum.LEFT));
-		defaultsMap.put(LegendSettings.PROPERTY_verticalAlignment,
-				vp.getIntValue(JFreeChartVerticalAlignmentEnum.TOP));
+		PadUtil.createBlockFramePropertyDescriptors(desc, "Block Frame"); //$NON-NLS-1$
 
 		setHelpPrefix(
 				desc,
 				"net.sf.jasperreports.doc/docs/sample.reference/chartthemes/index.html#chartthemes"); //$NON-NLS-1$
 	}
+	
+	@Override
+	protected Map<String, DefaultValue> createDefaultsMap() {
+		Map<String, DefaultValue> defaultsMap = super.createDefaultsMap();
+		
+		defaultsMap.put(LegendSettings.PROPERTY_backgroundPaint, new DefaultValue(null, true));
+		defaultsMap.put(LegendSettings.PROPERTY_foregroundPaint, new DefaultValue(null, true));
 
-	private static NamedEnumPropertyDescriptor<EdgeEnum> posD;
-	private static NamedEnumPropertyDescriptor<JFreeChartHorizontalAlignmentEnum> hp;
-	private static NamedEnumPropertyDescriptor<JFreeChartVerticalAlignmentEnum> vp;
-	private MFont clFont;
+		defaultsMap.put(LegendSettings.PROPERTY_showLegend, new DefaultValue(true, false));
+		
+		int positionValue = NamedEnumPropertyDescriptor.getIntValue(NullEnum.NULL, EdgeEnum.TOP);		
+		defaultsMap.put(LegendSettings.PROPERTY_position, new DefaultValue(positionValue, true));
+		
+		int horizontalValue = NamedEnumPropertyDescriptor.getIntValue(NullEnum.NULL, JFreeChartHorizontalAlignmentEnum.LEFT);
+		defaultsMap.put(LegendSettings.PROPERTY_horizontalAlignment, new DefaultValue(horizontalValue, true));
+		
+		int vertivalValue = NamedEnumPropertyDescriptor.getIntValue(NullEnum.NULL, JFreeChartVerticalAlignmentEnum.TOP);
+		defaultsMap.put(LegendSettings.PROPERTY_verticalAlignment, new DefaultValue(vertivalValue, true));
+		
+		PadUtil.createDefaults("", defaultsMap);
+		
+		return defaultsMap;
+	}
 
 	@Override
 	public Object getPropertyValue(Object id) {

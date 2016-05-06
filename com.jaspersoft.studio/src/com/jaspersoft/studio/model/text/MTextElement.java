@@ -19,6 +19,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.DefaultValue;
 import com.jaspersoft.studio.model.IRotatable;
 import com.jaspersoft.studio.model.MGraphicElementLineBox;
 import com.jaspersoft.studio.properties.view.validation.ValidationError;
@@ -51,6 +52,16 @@ public abstract class MTextElement extends MGraphicElementLineBox implements IRo
 	public static final String PARAGRAPH = "paragraph"; //$NON-NLS-1$
 
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+	
+	private static TextHAlignPropertyDescriptor hAlignD;
+	
+	private static TextVAlignPropertyDescriptor vAlignD;
+	
+	private static RotationPropertyDescriptor rotationD;
+	
+	private MFont tFont;
+	
+	private MParagraph mParagraph;
 
 	public MTextElement() {
 		super();
@@ -81,8 +92,8 @@ public abstract class MTextElement extends MGraphicElementLineBox implements IRo
 	}
 
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		super.createPropertyDescriptors(desc, defaultsMap);
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
+		super.createPropertyDescriptors(desc);
 
 		RWComboBoxPropertyDescriptor markupD = new RWComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_MARKUP,
 				Messages.MTextElement_markup, ModelUtils.getMarkups(getJasperConfiguration()), NullEnum.INHERITED);
@@ -109,26 +120,27 @@ public abstract class MTextElement extends MGraphicElementLineBox implements IRo
 
 		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#textElement"); //$NON-NLS-1$
 
-		tFont = getMFont();
-		tFont.createPropertyDescriptors(desc, defaultsMap);
+		getMFont().createPropertyDescriptors(desc);
 
 		paragraph.setCategory(Messages.MTextElement_text_properties_category);
 		markupD.setCategory(Messages.MTextElement_text_properties_category);
 		hAlignD.setCategory(Messages.MTextElement_text_properties_category);
 		vAlignD.setCategory(Messages.MTextElement_text_properties_category);
 		rotationD.setCategory(Messages.MTextElement_text_properties_category);
-
-		defaultsMap.put(JRBaseStyle.PROPERTY_HORIZONTAL_TEXT_ALIGNMENT, null);
-		defaultsMap.put(JRBaseStyle.PROPERTY_VERTICAL_TEXT_ALIGNMENT, null);
-		defaultsMap.put(JRBaseStyle.PROPERTY_ROTATION, null);
-
 	}
-
-	private MFont tFont;
-	private MParagraph mParagraph;
-	private static TextHAlignPropertyDescriptor hAlignD;
-	private static TextVAlignPropertyDescriptor vAlignD;
-	private static RotationPropertyDescriptor rotationD;
+	
+	@Override
+	protected Map<String, DefaultValue> createDefaultsMap() {
+		Map<String, DefaultValue> defaultsMap = super.createDefaultsMap();
+		
+		defaultsMap.put(JRBaseStyle.PROPERTY_HORIZONTAL_TEXT_ALIGNMENT, new DefaultValue(null, true));
+		defaultsMap.put(JRBaseStyle.PROPERTY_VERTICAL_TEXT_ALIGNMENT, new DefaultValue(null, true));
+		defaultsMap.put(JRBaseStyle.PROPERTY_ROTATION, new DefaultValue(null, true));
+		
+		defaultsMap.putAll(getMFont().getDefaultsMap());
+		
+		return defaultsMap;
+	}
 
 	private MFont getMFont() {
 		if (tFont == null) {

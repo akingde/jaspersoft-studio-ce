@@ -13,10 +13,6 @@
 package com.jaspersoft.studio.callout.pin;
 
 import java.util.List;
-import java.util.Map;
-
-import net.sf.jasperreports.engine.JRConstants;
-import net.sf.jasperreports.engine.design.JRDesignElement;
 
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -25,6 +21,9 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import com.jaspersoft.studio.callout.MCallout;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
+
+import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.design.JRDesignElement;
 
 public class MPin extends APropertyNode {
 
@@ -81,13 +80,9 @@ public class MPin extends APropertyNode {
 		return null;
 	}
 
-	@Override
-	public Map<String, Object> getDefaultsMap() {
-		return null;
-	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1) {
 
 	}
 
@@ -97,7 +92,7 @@ public class MPin extends APropertyNode {
 	}
 
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
 
 	}
 

@@ -30,6 +30,7 @@ import com.jaspersoft.studio.components.map.property.StylePropertyDescriptor;
 import com.jaspersoft.studio.editor.defaults.DefaultManager;
 import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.DefaultValue;
 import com.jaspersoft.studio.model.IDatasetContainer;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.dataset.MDatasetRun;
@@ -73,7 +74,12 @@ import net.sf.jasperreports.engine.type.OnErrorTypeEnum;
  * 
  */
 public class MMap extends MGraphicElement implements IDatasetContainer {
+	
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+	
+	private IPropertyDescriptor[] descriptors;
+	
+	private NamedEnumPropertyDescriptor<OnErrorTypeEnum> onErrorTypeD;
 
 	public MMap() {
 		super();
@@ -127,24 +133,14 @@ public class MMap extends MGraphicElement implements IDatasetContainer {
 		return getIconDescriptor().getToolTip();
 	}
 
-	private IPropertyDescriptor[] descriptors;
-	private NamedEnumPropertyDescriptor<OnErrorTypeEnum> onErrorTypeD;
-	private static Map<String, Object> defaultsMap;
-
-	@Override
-	public Map<String, Object> getDefaultsMap() {
-		return defaultsMap;
-	}
-
 	@Override
 	public IPropertyDescriptor[] getDescriptors() {
 		return descriptors;
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1) {
 		descriptors = descriptors1;
-		defaultsMap = defaultsMap1;
 	}
 
 	/**
@@ -154,8 +150,8 @@ public class MMap extends MGraphicElement implements IDatasetContainer {
 	 *            the desc
 	 */
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		super.createPropertyDescriptors(desc, defaultsMap);
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
+		super.createPropertyDescriptors(desc);
 
 		NamedEnumPropertyDescriptor<EvaluationTimeEnum> evaluationTimeD = new NamedEnumPropertyDescriptor<EvaluationTimeEnum>(
 				StandardMapComponent.PROPERTY_EVALUATION_TIME, Messages.MMap_evaluation_time, EvaluationTimeEnum.NOW,
@@ -280,13 +276,28 @@ public class MMap extends MGraphicElement implements IDatasetContainer {
 
 		mapPathStylesD.setCategory(Messages.MMap_PathsStylesCategory);
 		mapPathsD.setCategory(Messages.MMap_PathsStylesCategoryDesc);
-
-		defaultsMap.put(StandardMapComponent.PROPERTY_MAP_TYPE, mapTypeD.getIntValue(MapTypeEnum.ROADMAP));
-		defaultsMap.put(StandardMapComponent.PROPERTY_MAP_TYPE, mapScaleD.getIntValue(MapScaleEnum.ONE));
-		defaultsMap.put(StandardMapComponent.PROPERTY_IMAGE_TYPE, imageTypeD.getIntValue(MapImageTypeEnum.PNG));
-		defaultsMap.put(StandardMapComponent.PROPERTY_ON_ERROR_TYPE, onErrorTypeD.getIntValue(OnErrorTypeEnum.ERROR));
-		defaultsMap.put(StandardMapComponent.PROPERTY_EVALUATION_TIME, EvaluationTimeEnum.NOW);
-		defaultsMap.put(StandardMapComponent.PROPERTY_ZOOM_EXPRESSION, MapComponent.DEFAULT_ZOOM);
+	}
+	
+	@Override
+	protected Map<String, DefaultValue> createDefaultsMap() {
+		Map<String, DefaultValue> defaultsMap = super.createDefaultsMap();
+		
+		int roadMapValue = NamedEnumPropertyDescriptor.getIntValue(MapTypeEnum.ROADMAP, NullEnum.NOTNULL, MapTypeEnum.ROADMAP);
+		defaultsMap.put(StandardMapComponent.PROPERTY_MAP_TYPE, new DefaultValue(roadMapValue, false));
+		
+		int mapTypeValue = NamedEnumPropertyDescriptor.getIntValue(MapScaleEnum.ONE, NullEnum.NOTNULL, MapScaleEnum.ONE);
+		defaultsMap.put(StandardMapComponent.PROPERTY_MAP_TYPE, new DefaultValue(mapTypeValue, false));
+		
+		int imageTypeValue = NamedEnumPropertyDescriptor.getIntValue(MapImageTypeEnum.PNG, NullEnum.NOTNULL, MapImageTypeEnum.PNG);
+		defaultsMap.put(StandardMapComponent.PROPERTY_IMAGE_TYPE, new DefaultValue(imageTypeValue, false));
+		
+		int onErrorValue = NamedEnumPropertyDescriptor.getIntValue(OnErrorTypeEnum.ERROR, NullEnum.NULL, OnErrorTypeEnum.ERROR);
+		defaultsMap.put(StandardMapComponent.PROPERTY_ON_ERROR_TYPE, new DefaultValue(onErrorValue, true));
+		
+		defaultsMap.put(StandardMapComponent.PROPERTY_EVALUATION_TIME, new DefaultValue(EvaluationTimeEnum.NOW, false));
+		defaultsMap.put(StandardMapComponent.PROPERTY_ZOOM_EXPRESSION, new DefaultValue(MapComponent.DEFAULT_ZOOM, false));
+		
+		return defaultsMap;
 	}
 
 	@Override

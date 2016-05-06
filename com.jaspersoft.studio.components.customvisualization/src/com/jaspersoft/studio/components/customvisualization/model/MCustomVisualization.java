@@ -19,6 +19,7 @@ import com.jaspersoft.studio.components.customvisualization.messages.Messages;
 import com.jaspersoft.studio.components.customvisualization.properties.ItemPropertiesUtil;
 import com.jaspersoft.studio.components.customvisualization.ui.ComponentDescriptor;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.DefaultValue;
 import com.jaspersoft.studio.model.IDatasetContainer;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.dataset.MDatasetRun;
@@ -53,7 +54,6 @@ public class MCustomVisualization extends MGraphicElement implements IDatasetCon
 	private static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	private static IIconDescriptor iconDescriptor;
 	private IPropertyDescriptor[] descriptors;
-	private static Map<String, Object> defaultsMap;
 	private RComboBoxPropertyDescriptor evaluationGroupNameD;
 	private static NamedEnumPropertyDescriptor<EvaluationTimeEnum> evaluationTimeD;
 	private static NamedEnumPropertyDescriptor<OnErrorTypeEnum> onErrorTypeD;
@@ -67,19 +67,13 @@ public class MCustomVisualization extends MGraphicElement implements IDatasetCon
 	}
 
 	@Override
-	public Map<String, Object> getDefaultsMap() {
-		return defaultsMap;
-	}
-
-	@Override
 	public IPropertyDescriptor[] getDescriptors() {
 		return descriptors;
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1) {
 		descriptors = descriptors1;
-		defaultsMap = defaultsMap1;
 	}
 
 	@Override
@@ -152,8 +146,8 @@ public class MCustomVisualization extends MGraphicElement implements IDatasetCon
 	}
 
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		super.createPropertyDescriptors(desc, defaultsMap);
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
+		super.createPropertyDescriptors(desc);
 
 		evaluationTimeD = new NamedEnumPropertyDescriptor<EvaluationTimeEnum>(
 				CVDesignComponent.PROPERTY_EVALUATION_TIME, Messages.MCustomVisualization_EvalTime,
@@ -187,14 +181,24 @@ public class MCustomVisualization extends MGraphicElement implements IDatasetCon
 		bItemPropsD.setCategory(Messages.MCustomVisualization_CVPropertiesCategory);
 		bItemDataD.setCategory(Messages.MCustomVisualization_CVPropertiesCategory);
 
-		defaultsMap.put(CVDesignComponent.PROPERTY_EVALUATION_TIME, EvaluationTimeEnum.NOW);
-
 		onErrorTypeD = new NamedEnumPropertyDescriptor<OnErrorTypeEnum>(CVDesignComponent.PROPERTY_ON_ERROR_TYPE,
 				Messages.MCustomVisualization_OnErrorType, OnErrorTypeEnum.BLANK, NullEnum.NULL);
 		onErrorTypeD.setDescription(Messages.MCustomVisualization_OnErrorTypeDesc);
 		desc.add(onErrorTypeD);
 
-		defaultsMap.put(CVDesignComponent.PROPERTY_ON_ERROR_TYPE, onErrorTypeD.getIntValue(OnErrorTypeEnum.ERROR));
+
+	}
+	
+	@Override
+	protected Map<String, DefaultValue> createDefaultsMap() {
+		Map<String, DefaultValue> defaultsMap = super.createDefaultsMap();
+		
+		defaultsMap.put(CVDesignComponent.PROPERTY_EVALUATION_TIME, new DefaultValue(EvaluationTimeEnum.NOW, false));
+		
+		int errorTypeValue = NamedEnumPropertyDescriptor.getIntValue(OnErrorTypeEnum.ERROR, NullEnum.NULL, OnErrorTypeEnum.ERROR);
+		defaultsMap.put(CVDesignComponent.PROPERTY_ON_ERROR_TYPE, new DefaultValue(errorTypeValue, true));
+		
+		return defaultsMap;
 	}
 
 	@Override

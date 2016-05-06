@@ -36,10 +36,18 @@ import org.w3c.dom.Node;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.model.DefaultValue;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 
 public abstract class AMDatasource extends APropertyNode {
+	
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+	
+	public static final String PROPERTY_NAME = "PROPERTY_NAME"; //$NON-NLS-1$
+	
+	private static IPropertyDescriptor[] descriptors;
+	
+	private String name;
 
 	public AMDatasource(ANode parent, int index) {
 		super(parent, index);
@@ -55,36 +63,28 @@ public abstract class AMDatasource extends APropertyNode {
 		return (String) getPropertyValue(AMDatasource.PROPERTY_NAME);
 	}
 
-	private static IPropertyDescriptor[] descriptors;
-	private static Map<String, Object> defaultsMap;
-
-	@Override
-	public Map<String, Object> getDefaultsMap() {
-		return defaultsMap;
-	}
-
 	@Override
 	public IPropertyDescriptor[] getDescriptors() {
 		return descriptors;
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1) {
 		descriptors = descriptors1;
-		defaultsMap = defaultsMap1;
 	}
 
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
 		NTextPropertyDescriptor textD = new NTextPropertyDescriptor(PROPERTY_NAME, Messages.common_datasource_name);
 		desc.add(textD);
-
-		defaultsMap.put(PROPERTY_NAME, "DataSource"); //$NON-NLS-1$
 	}
-
-	public static final String PROPERTY_NAME = "PROPERTY_NAME"; //$NON-NLS-1$
-	private String name;
+	
+	@Override
+	protected Map<String, DefaultValue> createDefaultsMap() {
+		Map<String, DefaultValue> defaultsMap = super.createDefaultsMap();
+		defaultsMap.put(PROPERTY_NAME, new DefaultValue("DataSource", false)); //$NON-NLS-1$
+		return defaultsMap;
+	}
 
 	public Object getPropertyValue(Object id) {
 		if (id.equals(PROPERTY_NAME)) {

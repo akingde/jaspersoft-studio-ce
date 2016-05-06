@@ -36,6 +36,7 @@ import com.jaspersoft.studio.components.chart.wizard.fragments.data.series.XyzSe
 import com.jaspersoft.studio.editor.defaults.DefaultManager;
 import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.DefaultValue;
 import com.jaspersoft.studio.model.IContainer;
 import com.jaspersoft.studio.model.IContainerEditPart;
 import com.jaspersoft.studio.model.ICopyable;
@@ -122,10 +123,33 @@ import net.sf.jasperreports.engine.util.StyleResolver;
  */
 public class MChart extends MGraphicElementLineBox
 		implements IContainer, IContainerEditPart, IPastable, IDatasetContainer {
+	
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+	
 	public static final String PLOTPROPERTY = "PLOTPROPERTY";
+	
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
+	
+	private static EdgePropertyDescriptor titlePositionD;
+	
+	private static EdgePropertyDescriptor legendPositionD;
+	
+	private static NamedEnumPropertyDescriptor<EvaluationTimeEnum> evaluationTimeD;
+	
+	private IPropertyDescriptor[] descriptors;
+	
+	private RComboBoxPropertyDescriptor evaluationGroupD;
+	
+	private MChartPlot mChartPlot;
+	
+	private MFont tFont;
+	
+	private MFont stFont;
+	
+	private MFont lFont;
+
+	private MHyperLink mHyperLink;
 
 	/**
 	 * Gets the icon descriptor.
@@ -169,23 +193,14 @@ public class MChart extends MGraphicElementLineBox
 		return (JRDesignChart) super.getValue();
 	}
 
-	private IPropertyDescriptor[] descriptors;
-	private static Map<String, Object> defaultsMap;
-
-	@Override
-	public Map<String, Object> getDefaultsMap() {
-		return defaultsMap;
-	}
-
 	@Override
 	public IPropertyDescriptor[] getDescriptors() {
 		return descriptors;
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1) {
 		descriptors = descriptors1;
-		defaultsMap = defaultsMap1;
 	}
 
 	/**
@@ -195,8 +210,8 @@ public class MChart extends MGraphicElementLineBox
 	 *            the desc
 	 */
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		super.createPropertyDescriptors(desc, defaultsMap);
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
+		super.createPropertyDescriptors(desc);
 
 		titlePositionD = new EdgePropertyDescriptor(JRBaseChart.PROPERTY_TITLE_POSITION, Messages.MChart_title_position,
 				NullEnum.NULL);
@@ -244,7 +259,7 @@ public class MChart extends MGraphicElementLineBox
 
 		if (mHyperLink == null)
 			mHyperLink = new MHyperLink(null);
-		mHyperLink.createPropertyDescriptors(desc, defaultsMap);
+		mHyperLink.createPropertyDescriptors(desc);
 		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#chart");
 
 		FontPropertyDescriptor titleFontD = new FontPropertyDescriptor(JRDesignChart.PROPERTY_TITLE_FONT,
@@ -356,22 +371,31 @@ public class MChart extends MGraphicElementLineBox
 		evaluationTimeD.setCategory(Messages.MChart_common_chart_properties_category);
 
 		rendererTypeD.setCategory(Messages.MChart_common_chart_properties_category);
+	}
+	
+	@Override
+	protected Map<String, DefaultValue> createDefaultsMap() {
+		Map<String, DefaultValue> defaultsMap = super.createDefaultsMap();
+		
+		defaultsMap.put(JRBaseChart.PROPERTY_THEME, new DefaultValue(null, true));
+		defaultsMap.put(JRDesignChart.PROPERTY_CUSTOMIZER_CLASS, new DefaultValue(null, true));
+		defaultsMap.put(JRBaseChart.PROPERTY_SHOW_LEGEND, new DefaultValue(true, true));
+		defaultsMap.put(JRBaseChart.PROPERTY_TITLE_COLOR, new DefaultValue(null, true));
+		defaultsMap.put(JRBaseChart.PROPERTY_SUBTITLE_COLOR, new DefaultValue(null, true));
+		defaultsMap.put(JRBaseChart.PROPERTY_LEGEND_COLOR, new DefaultValue(null, true));
+		defaultsMap.put(JRBaseChart.PROPERTY_LEGEND_BACKGROUND_COLOR, new DefaultValue(null, true));
 
-		defaultsMap.put(JRBaseChart.PROPERTY_THEME, null);
-		defaultsMap.put(JRDesignChart.PROPERTY_CUSTOMIZER_CLASS, null);
-		defaultsMap.put(JRBaseChart.PROPERTY_SHOW_LEGEND, new Boolean(true));
-		defaultsMap.put(JRBaseChart.PROPERTY_TITLE_COLOR, null);
-		defaultsMap.put(JRBaseChart.PROPERTY_SUBTITLE_COLOR, null);
-		defaultsMap.put(JRBaseChart.PROPERTY_LEGEND_COLOR, null);
-		defaultsMap.put(JRBaseChart.PROPERTY_LEGEND_BACKGROUND_COLOR, null);
+		defaultsMap.put(JRDesignChart.PROPERTY_TITLE_FONT, new DefaultValue(null, true));
+		defaultsMap.put(JRDesignChart.PROPERTY_SUBTITLE_FONT, new DefaultValue(null, true));
+		defaultsMap.put(JRDesignChart.PROPERTY_LEGEND_FONT, new DefaultValue(null, true));
 
-		defaultsMap.put(JRDesignChart.PROPERTY_TITLE_FONT, null);
-		defaultsMap.put(JRDesignChart.PROPERTY_SUBTITLE_FONT, null);
-		defaultsMap.put(JRDesignChart.PROPERTY_LEGEND_FONT, null);
-
-		defaultsMap.put(JRBaseChart.PROPERTY_TITLE_POSITION, null);
-		defaultsMap.put(JRBaseChart.PROPERTY_LEGEND_POSITION, null);
-		defaultsMap.put(JRDesignChart.PROPERTY_EVALUATION_TIME, EvaluationTimeEnum.NOW);
+		defaultsMap.put(JRBaseChart.PROPERTY_TITLE_POSITION, new DefaultValue(null, true));
+		defaultsMap.put(JRBaseChart.PROPERTY_LEGEND_POSITION, new DefaultValue(null, true));
+		defaultsMap.put(JRDesignChart.PROPERTY_EVALUATION_TIME, new DefaultValue(EvaluationTimeEnum.NOW, true));
+		
+		defaultsMap.putAll(new MHyperLink(null).getDefaultsMap());
+		
+		return defaultsMap;
 	}
 
 	@Override
@@ -380,18 +404,6 @@ public class MChart extends MGraphicElementLineBox
 		if (evaluationGroupD != null)
 			evaluationGroupD.setItems(items);
 	}
-
-	private RComboBoxPropertyDescriptor evaluationGroupD;
-	private MChartPlot mChartPlot;
-	private MFont tFont;
-	private MFont stFont;
-	private MFont lFont;
-
-	private MHyperLink mHyperLink;
-
-	private static EdgePropertyDescriptor titlePositionD;
-	private static EdgePropertyDescriptor legendPositionD;
-	private static NamedEnumPropertyDescriptor<EvaluationTimeEnum> evaluationTimeD;
 
 	@Override
 	public Object getPropertyValue(Object id) {

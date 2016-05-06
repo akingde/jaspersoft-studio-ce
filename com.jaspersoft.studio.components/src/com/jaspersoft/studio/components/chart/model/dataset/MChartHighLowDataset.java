@@ -27,25 +27,23 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.DefaultValue;
 import com.jaspersoft.studio.model.MHyperLink;
 import com.jaspersoft.studio.property.descriptor.JRPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 
 public class MChartHighLowDataset extends MChartDataset {
+	
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+	
+	private static IPropertyDescriptor[] descriptors;
+	
+	private MHyperLink mHyperLink;
 
 	public MChartHighLowDataset(ANode parent, JRDesignHighLowDataset value,
 			JasperDesign jasperDesign) {
 		super(parent, value, jasperDesign);
-	}
-
-	private static IPropertyDescriptor[] descriptors;
-	private static Map<String, Object> defaultsMap;
-
-	@Override
-	public Map<String, Object> getDefaultsMap() {
-		return defaultsMap;
 	}
 
 	@Override
@@ -54,10 +52,8 @@ public class MChartHighLowDataset extends MChartDataset {
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1,
-			Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1) {
 		descriptors = descriptors1;
-		defaultsMap = defaultsMap1;
 	}
 
 	/**
@@ -67,9 +63,8 @@ public class MChartHighLowDataset extends MChartDataset {
 	 *            the desc
 	 */
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc,
-			Map<String, Object> defaultsMap) {
-		super.createPropertyDescriptors(desc, defaultsMap);
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
+		super.createPropertyDescriptors(desc);
 
 		JRExpressionPropertyDescriptor closeExprD = new JRExpressionPropertyDescriptor(
 				JRDesignHighLowDataset.PROPERTY_CLOSE_EXPRESSION,
@@ -164,19 +159,22 @@ public class MChartHighLowDataset extends MChartDataset {
 				.setCategory(Messages.MChartHighLowDataset_chart_highlow_dataset_category);
 		hyperLinkD
 				.setCategory(Messages.MChartHighLowDataset_chart_highlow_dataset_category);
-
-		defaultsMap.put(JRDesignHighLowDataset.PROPERTY_CLOSE_EXPRESSION, null);
-		defaultsMap.put(JRDesignHighLowDataset.PROPERTY_DATE_EXPRESSION, null);
-		defaultsMap.put(JRDesignHighLowDataset.PROPERTY_HIGH_EXPRESSION, null);
-		defaultsMap.put(JRDesignHighLowDataset.PROPERTY_LOW_EXPRESSION, null);
-		defaultsMap.put(JRDesignHighLowDataset.PROPERTY_OPEN_EXPRESSION, null);
-		defaultsMap
-				.put(JRDesignHighLowDataset.PROPERTY_SERIES_EXPRESSION, null);
-		defaultsMap
-				.put(JRDesignHighLowDataset.PROPERTY_VOLUME_EXPRESSION, null);
 	}
-
-	private MHyperLink mHyperLink;
+	
+	@Override
+	protected Map<String, DefaultValue> createDefaultsMap() {
+		Map<String, DefaultValue> defaultsMap = super.createDefaultsMap();
+		
+		defaultsMap.put(JRDesignHighLowDataset.PROPERTY_CLOSE_EXPRESSION, new DefaultValue(null, true));
+		defaultsMap.put(JRDesignHighLowDataset.PROPERTY_DATE_EXPRESSION, new DefaultValue(null, true));
+		defaultsMap.put(JRDesignHighLowDataset.PROPERTY_HIGH_EXPRESSION, new DefaultValue(null, true));
+		defaultsMap.put(JRDesignHighLowDataset.PROPERTY_LOW_EXPRESSION, new DefaultValue(null, true));
+		defaultsMap.put(JRDesignHighLowDataset.PROPERTY_OPEN_EXPRESSION, new DefaultValue(null, true));
+		defaultsMap.put(JRDesignHighLowDataset.PROPERTY_SERIES_EXPRESSION, new DefaultValue(null, true));
+		defaultsMap.put(JRDesignHighLowDataset.PROPERTY_VOLUME_EXPRESSION, new DefaultValue(null, true));
+		
+		return defaultsMap;
+	}
 
 	@Override
 	public Object getPropertyValue(Object id) {

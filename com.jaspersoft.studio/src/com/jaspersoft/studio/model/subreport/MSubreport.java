@@ -9,19 +9,6 @@
 package com.jaspersoft.studio.model.subreport;
 
 import java.util.List;
-import java.util.Map;
-
-import net.sf.jasperreports.engine.JRConstants;
-import net.sf.jasperreports.engine.JRElement;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JRSubreportParameter;
-import net.sf.jasperreports.engine.JRSubreportReturnValue;
-import net.sf.jasperreports.engine.base.JRBaseSubreport;
-import net.sf.jasperreports.engine.design.JRDesignElement;
-import net.sf.jasperreports.engine.design.JRDesignSubreport;
-import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.type.OverflowType;
-import net.sf.jasperreports.engine.util.JRCloneUtils;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
@@ -42,6 +29,18 @@ import com.jaspersoft.studio.property.descriptor.returnvalue.RVPropertyDescripto
 import com.jaspersoft.studio.property.descriptor.subreport.parameter.SubreportPropertiesPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 
+import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRElement;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRSubreportParameter;
+import net.sf.jasperreports.engine.JRSubreportReturnValue;
+import net.sf.jasperreports.engine.base.JRBaseSubreport;
+import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.design.JRDesignSubreport;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.type.OverflowType;
+import net.sf.jasperreports.engine.util.JRCloneUtils;
+
 /*
  * The Class MSubreport.
  */
@@ -50,6 +49,8 @@ public class MSubreport extends MGraphicElement {
 
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
+	
+	private static IPropertyDescriptor[] descriptors;
 
 	/**
 	 * Gets the icon descriptor.
@@ -86,23 +87,14 @@ public class MSubreport extends MGraphicElement {
 			(jrSubreport).getEventSupport().addPropertyChangeListener(this);
 	}
 
-	private static IPropertyDescriptor[] descriptors;
-	private static Map<String, Object> defaultsMap;
-
-	@Override
-	public Map<String, Object> getDefaultsMap() {
-		return defaultsMap;
-	}
-
 	@Override
 	public IPropertyDescriptor[] getDescriptors() {
 		return descriptors;
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1) {
 		descriptors = descriptors1;
-		defaultsMap = defaultsMap1;
 	}
 
 	/**
@@ -112,8 +104,8 @@ public class MSubreport extends MGraphicElement {
 	 *          the desc
 	 */
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		super.createPropertyDescriptors(desc, defaultsMap);
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
+		super.createPropertyDescriptors(desc);
 
 		CheckBoxPropertyDescriptor runToBottomD = new CheckBoxPropertyDescriptor(JRBaseSubreport.PROPERTY_RUN_TO_BOTTOM,
 				Messages.MSubreport_run_to_bottom, NullEnum.NULL);

@@ -15,7 +15,6 @@ package com.jaspersoft.studio.components.table.model.column;
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.geometry.Rectangle;
@@ -78,9 +77,11 @@ public class MColumn extends APropertyNode implements IPastable, IContainer,ICon
 
 	private static IIconDescriptor iconDescriptor;
 
-	public static String PROPERTY_NAME = "NAME";
+	public static String PROPERTY_NAME = "NAME";	
 	
 	public static String COLUMN_NAME = "com.jaspersoft.studio.components.table.model.column.name";
+	
+	private static IPropertyDescriptor[] descriptors;
 
 	private JRDesignGroup jrGroup;
 	
@@ -272,24 +273,14 @@ public class MColumn extends APropertyNode implements IPastable, IContainer,ICon
 		return tt;
 	}
 
-	private static IPropertyDescriptor[] descriptors;
-	private static Map<String, Object> defaultsMap;
-
-	@Override
-	public Map<String, Object> getDefaultsMap() {
-		return defaultsMap;
-	}
-
 	@Override
 	public IPropertyDescriptor[] getDescriptors() {
 		return descriptors;
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1,
-			Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1) {
 		descriptors = descriptors1;
-		defaultsMap = defaultsMap1;
 	}
 
 	/**
@@ -299,8 +290,7 @@ public class MColumn extends APropertyNode implements IPastable, IContainer,ICon
 	 *            the desc
 	 */
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc,
-			Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
 		JRExpressionPropertyDescriptor printWhenExprD = new JRExpressionPropertyDescriptor(
 				StandardBaseColumn.PROPERTY_PRINT_WHEN_EXPRESSION,
 				Messages.MColumn_print_when_expression);

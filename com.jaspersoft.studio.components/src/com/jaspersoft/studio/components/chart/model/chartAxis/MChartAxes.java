@@ -13,16 +13,6 @@
 package com.jaspersoft.studio.components.chart.model.chartAxis;
 
 import java.util.List;
-import java.util.Map;
-
-import net.sf.jasperreports.charts.JRChartAxis;
-import net.sf.jasperreports.charts.design.JRDesignChartAxis;
-import net.sf.jasperreports.charts.type.AxisPositionEnum;
-import net.sf.jasperreports.engine.JRChart;
-import net.sf.jasperreports.engine.JRConstants;
-import net.sf.jasperreports.engine.JRGroup;
-import net.sf.jasperreports.engine.design.JRDesignChart;
-import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
@@ -42,11 +32,24 @@ import com.jaspersoft.studio.property.descriptor.JRPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
 
+import net.sf.jasperreports.charts.JRChartAxis;
+import net.sf.jasperreports.charts.design.JRDesignChartAxis;
+import net.sf.jasperreports.charts.type.AxisPositionEnum;
+import net.sf.jasperreports.engine.JRChart;
+import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRGroup;
+import net.sf.jasperreports.engine.design.JRDesignChart;
+import net.sf.jasperreports.engine.design.JasperDesign;
+
 public class MChartAxes extends APropertyNode implements IDragable, ICopyable {
+	
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+	
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
 
+	private static IPropertyDescriptor[] descriptors;
+	
 	/**
 	 * Gets the icon descriptor.
 	 * 
@@ -88,24 +91,14 @@ public class MChartAxes extends APropertyNode implements IDragable, ICopyable {
 		return (JRChartAxis) super.getValue();
 	}
 
-	private static IPropertyDescriptor[] descriptors;
-	private static Map<String, Object> defaultsMap;
-
-	@Override
-	public Map<String, Object> getDefaultsMap() {
-		return defaultsMap;
-	}
-
 	@Override
 	public IPropertyDescriptor[] getDescriptors() {
 		return descriptors;
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1,
-			Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1) {
 		descriptors = descriptors1;
-		defaultsMap = defaultsMap1;
 	}
 
 	/**
@@ -115,8 +108,7 @@ public class MChartAxes extends APropertyNode implements IDragable, ICopyable {
 	 *            the desc
 	 */
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc,
-			Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
 		// super.createPropertyDescriptors(desc, defaultsMap);
 
 		positionD = new NamedEnumPropertyDescriptor<AxisPositionEnum>(

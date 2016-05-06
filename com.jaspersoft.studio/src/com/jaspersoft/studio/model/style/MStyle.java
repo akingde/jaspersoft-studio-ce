@@ -24,6 +24,7 @@ import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.model.DefaultValue;
 import com.jaspersoft.studio.model.IContainerEditPart;
 import com.jaspersoft.studio.model.ICopyable;
 import com.jaspersoft.studio.model.IDragable;
@@ -90,10 +91,46 @@ import net.sf.jasperreports.engine.type.VerticalTextAlignEnum;
  * @author Chicu Veaceslav
  */
 public class MStyle extends APropertyNode implements ICopyable, IPastable, IContainerEditPart, IDragable, MNotConditionalMarker {
+	
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+	
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
+	
+	private static IPropertyDescriptor[] descriptors;
+	
+	private static StyleNameValidator validator;
+	
+	private static RWComboBoxPropertyDescriptor styleD;
+	
+	private static NamedEnumPropertyDescriptor<FillEnum> fillD;
+	
+	private static NamedEnumPropertyDescriptor<ScaleImageEnum> scaleD;
+	
+	private static TextHAlignPropertyDescriptor halignText;
+	
+	private static TextVAlignPropertyDescriptor valignText;
+	
+	private static ImageHAlignPropertyDescriptor halignImage;
+	
+	private static ImageVAlignPropertyDescriptor valignImage;
+	
+	private static RotationPropertyDescriptor rotationD;
+	
+	private static OpaqueModePropertyDescriptor modeD;
+	
+	private static final String LINE_PEN = "LinePen"; //$NON-NLS-1$
+	
+	private static final String LINE_BOX = "LineBox"; //$NON-NLS-1$
+	
+	public static final String PARAGRAPH = "paragraph"; //$NON-NLS-1$
 
+	private MLinePen linePen;
+	
+	private MLineBox lineBox;
+	
+	private MParagraph mParagraph;
+	
 	/**
 	 * Gets the icon descriptor.
 	 * 
@@ -159,29 +196,15 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		return getIconDescriptor().getToolTip();
 	}
 
-	private static IPropertyDescriptor[] descriptors;
-	private static Map<String, Object> defaultsMap;
-	private static StyleNameValidator validator;
-
-	@Override
-	public Map<String, Object> getDefaultsMap() {
-		return defaultsMap;
-	}
-
 	@Override
 	public IPropertyDescriptor[] getDescriptors() {
 		return descriptors;
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1) {
 		descriptors = descriptors1;
-		defaultsMap = defaultsMap1;
 	}
-
-	private static final String LINE_PEN = "LinePen"; //$NON-NLS-1$
-	private static final String LINE_BOX = "LineBox"; //$NON-NLS-1$
-	public static final String PARAGRAPH = "paragraph"; //$NON-NLS-1$
 
 	@Override
 	protected void postDescriptors(IPropertyDescriptor[] descriptors) {
@@ -233,8 +256,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 	 *          the desc
 	 */
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
 		styleD = new RWStyleComboBoxPropertyDescriptor(JRDesignStyle.PROPERTY_PARENT_STYLE, Messages.common_parent_style,
 				new String[] { "" }, NullEnum.NULL); //$NON-NLS-1$
 		styleD.setDescription(Messages.MStyle_parent_style_description);
@@ -442,41 +464,36 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		underlineD.setCategory(Messages.MStyle_text_font_category);
 		strikeThroughD.setCategory(Messages.MStyle_text_font_category);
 
-		defaultsMap.put(JRBaseStyle.PROPERTY_FORECOLOR, null);
-		defaultsMap.put(JRBaseStyle.PROPERTY_BACKCOLOR, null);
-
-		defaultsMap.put(JRBaseStyle.PROPERTY_FILL, null);
-		defaultsMap.put(JRBaseStyle.PROPERTY_SCALE_IMAGE, null);
-		defaultsMap.put(JRBaseStyle.PROPERTY_HORIZONTAL_TEXT_ALIGNMENT, null);
-		defaultsMap.put(JRBaseStyle.PROPERTY_VERTICAL_TEXT_ALIGNMENT, null);
-		defaultsMap.put(JRBaseStyle.PROPERTY_HORIZONTAL_IMAGE_ALIGNMENT, null);
-		defaultsMap.put(JRBaseStyle.PROPERTY_VERTICAL_IMAGE_ALIGNMENT, null);
-		defaultsMap.put(JRBaseStyle.PROPERTY_ROTATION, null);
-		defaultsMap.put(JRBaseStyle.PROPERTY_MODE, modeD.getIntValue(ModeEnum.OPAQUE));
-
-		defaultsMap.put(JRDesignStyle.PROPERTY_BLANK_WHEN_NULL, Boolean.FALSE);
-		defaultsMap.put(JRBaseStyle.PROPERTY_STRIKE_THROUGH, Boolean.FALSE);
-		defaultsMap.put(JRBaseStyle.PROPERTY_UNDERLINE, Boolean.FALSE);
-		defaultsMap.put(JRBaseStyle.PROPERTY_ITALIC, Boolean.FALSE);
-		defaultsMap.put(JRBaseStyle.PROPERTY_BOLD, Boolean.FALSE);
-		defaultsMap.put(JRBaseStyle.PROPERTY_FONT_NAME, "SansSerif"); //$NON-NLS-1$
-		defaultsMap.put(JRBaseStyle.PROPERTY_FONT_SIZE, 10f); //$NON-NLS-1$
-
 		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#style"); //$NON-NLS-1$
 	}
+	
+	@Override
+	protected Map<String, DefaultValue> createDefaultsMap() {
+		Map<String, DefaultValue> defaultsMap = super.createDefaultsMap();
+		defaultsMap.put(JRBaseStyle.PROPERTY_FORECOLOR, new DefaultValue(null, true));
+		defaultsMap.put(JRBaseStyle.PROPERTY_BACKCOLOR, new DefaultValue(null, true));
 
-	private MLinePen linePen;
-	private MLineBox lineBox;
-	private MParagraph mParagraph;
-	private static RWComboBoxPropertyDescriptor styleD;
-	private static NamedEnumPropertyDescriptor<FillEnum> fillD;
-	private static NamedEnumPropertyDescriptor<ScaleImageEnum> scaleD;
-	private static TextHAlignPropertyDescriptor halignText;
-	private static TextVAlignPropertyDescriptor valignText;
-	private static ImageHAlignPropertyDescriptor halignImage;
-	private static ImageVAlignPropertyDescriptor valignImage;
-	private static RotationPropertyDescriptor rotationD;
-	private static OpaqueModePropertyDescriptor modeD;
+		defaultsMap.put(JRBaseStyle.PROPERTY_FILL, new DefaultValue(null, true));
+		defaultsMap.put(JRBaseStyle.PROPERTY_SCALE_IMAGE, new DefaultValue(null, true));
+		defaultsMap.put(JRBaseStyle.PROPERTY_HORIZONTAL_TEXT_ALIGNMENT, new DefaultValue(null, true));
+		defaultsMap.put(JRBaseStyle.PROPERTY_VERTICAL_TEXT_ALIGNMENT, new DefaultValue(null, true));
+		defaultsMap.put(JRBaseStyle.PROPERTY_HORIZONTAL_IMAGE_ALIGNMENT, new DefaultValue(null, true));
+		defaultsMap.put(JRBaseStyle.PROPERTY_VERTICAL_IMAGE_ALIGNMENT, new DefaultValue(null, true));
+		defaultsMap.put(JRBaseStyle.PROPERTY_ROTATION, new DefaultValue(null, true));
+
+		defaultsMap.put(JRDesignStyle.PROPERTY_BLANK_WHEN_NULL, new DefaultValue(Boolean.FALSE, false));
+		defaultsMap.put(JRBaseStyle.PROPERTY_STRIKE_THROUGH, new DefaultValue(Boolean.FALSE, false));
+		defaultsMap.put(JRBaseStyle.PROPERTY_UNDERLINE, new DefaultValue(Boolean.FALSE, false));
+		defaultsMap.put(JRBaseStyle.PROPERTY_ITALIC, new DefaultValue(Boolean.FALSE, false));
+		defaultsMap.put(JRBaseStyle.PROPERTY_BOLD, new DefaultValue(Boolean.FALSE, false));
+		defaultsMap.put(JRBaseStyle.PROPERTY_FONT_NAME, new DefaultValue("SansSerif", false)); //$NON-NLS-1$
+		defaultsMap.put(JRBaseStyle.PROPERTY_FONT_SIZE, new DefaultValue(10f, false)); //$NON-NLS-1$
+		
+		int modeValue = NamedEnumPropertyDescriptor.getIntValue(ModeEnum.OPAQUE, NullEnum.NOTNULL, ModeEnum.OPAQUE);
+		defaultsMap.put(JRBaseStyle.PROPERTY_MODE, new DefaultValue(modeValue, true));
+
+		return defaultsMap;
+	}
 
 	/**
 	 * Return the internal style used. If the internal style is a reference to a removed style then it is also removed

@@ -13,12 +13,6 @@
 package com.jaspersoft.studio.components.chart.model.plot;
 
 import java.util.List;
-import java.util.Map;
-
-import net.sf.jasperreports.charts.JRBarPlot;
-import net.sf.jasperreports.charts.design.JRDesignBarPlot;
-import net.sf.jasperreports.charts.design.JRDesignPiePlot;
-import net.sf.jasperreports.engine.JRConstants;
 
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
@@ -40,20 +34,21 @@ import com.jaspersoft.studio.property.descriptors.DoublePropertyDescriptor;
 import com.jaspersoft.studio.utils.AlfaRGB;
 import com.jaspersoft.studio.utils.Colors;
 
+import net.sf.jasperreports.charts.JRBarPlot;
+import net.sf.jasperreports.charts.design.JRDesignBarPlot;
+import net.sf.jasperreports.charts.design.JRDesignPiePlot;
+import net.sf.jasperreports.engine.JRConstants;
+
 public class MBarPlot extends MChartPlot {
+	
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+	
+	private static IPropertyDescriptor[] descriptors;
 
 	public MBarPlot(JRBarPlot value) {
 		super(value);
 	}
 
-	private static IPropertyDescriptor[] descriptors;
-	private static Map<String, Object> defaultsMap;
-
-	@Override
-	public Map<String, Object> getDefaultsMap() {
-		return defaultsMap;
-	}
 
 	@Override
 	public String getDisplayText() {
@@ -66,14 +61,13 @@ public class MBarPlot extends MChartPlot {
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1) {
 		descriptors = descriptors1;
-		defaultsMap = defaultsMap1;
 	}
 
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		super.createPropertyDescriptors(desc, defaultsMap);
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
+		super.createPropertyDescriptors(desc);
 
 		ColorPropertyDescriptor catAxisLabelColorD = new ColorPropertyDescriptor(JRDesignBarPlot.PROPERTY_CATEGORY_AXIS_LABEL_COLOR, Messages.common_category_axis_label_color, NullEnum.NULL);
 		catAxisLabelColorD.setDescription(Messages.MBarPlot_category_axis_label_color_description);

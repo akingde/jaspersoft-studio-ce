@@ -35,6 +35,7 @@ import com.jaspersoft.studio.components.chart.model.theme.stroke.StrokePropertyD
 import com.jaspersoft.studio.components.chart.model.theme.util.PadUtil;
 import com.jaspersoft.studio.jasper.CachedImageProvider;
 import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.model.DefaultValue;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.NamedEnumPropertyDescriptor;
@@ -42,7 +43,12 @@ import com.jaspersoft.studio.property.descriptors.TransparencyPropertyDescriptor
 import com.jaspersoft.studio.utils.Misc;
 
 public class MChartSettings extends APropertyNode {
+	
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+	
+	private static NamedEnumPropertyDescriptor<JFreeChartAlignEnum> bia;
+	
+	private IPropertyDescriptor[] descriptors;
 
 	public MChartSettings(MChartThemeSettings parent, ChartSettings cs) {
 		super(parent, -1);
@@ -64,24 +70,14 @@ public class MChartSettings extends APropertyNode {
 		return "Chart";
 	}
 
-	private IPropertyDescriptor[] descriptors;
-	private static Map<String, Object> defaultsMap;
-
-	@Override
-	public Map<String, Object> getDefaultsMap() {
-		return defaultsMap;
-	}
-
 	@Override
 	public IPropertyDescriptor[] getDescriptors() {
 		return descriptors;
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1,
-			Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1) {
 		descriptors = descriptors1;
-		defaultsMap = defaultsMap1;
 	}
 
 	/**
@@ -91,8 +87,7 @@ public class MChartSettings extends APropertyNode {
 	 *            the desc
 	 */
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc,
-			Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
 		PropertyDescriptor pd = new CheckBoxPropertyDescriptor(
 				ChartSettings.PROPERTY_textAntiAlias,
 				Messages.MChartSettings_textAATitle);
@@ -126,7 +121,7 @@ public class MChartSettings extends APropertyNode {
 		bia.setCategory("Background"); //$NON-NLS-1$
 		desc.add(bia);
 
-		PadUtil.createPropertyDescriptors(desc, defaultsMap);
+		PadUtil.createPropertyDescriptors(desc);
 
 		pd = new PaintProviderPropertyDescriptor(
 				ChartSettings.PROPERTY_backgroundPaint,
@@ -155,23 +150,31 @@ public class MChartSettings extends APropertyNode {
 		pd.setCategory("Borders"); //$NON-NLS-1$
 		desc.add(pd);
 
-		defaultsMap.put(ChartSettings.PROPERTY_backgroundPaint, null);
-		defaultsMap.put(ChartSettings.PROPERTY_borderPaint, null);
-		defaultsMap.put(ChartSettings.PROPERTY_backgroundImage, null);
-		defaultsMap.put(ChartSettings.PROPERTY_borderStroke, null);
-
-		defaultsMap.put(ChartSettings.PROPERTY_textAntiAlias, Boolean.TRUE);
-		defaultsMap.put(ChartSettings.PROPERTY_antiAlias, Boolean.TRUE);
-		defaultsMap.put(ChartSettings.PROPERTY_borderVisible, Boolean.TRUE);
-		defaultsMap.put(ChartSettings.PROPERTY_backgroundImageAlignment,
-				bia.getIntValue(JFreeChartAlignEnum.TOP_LEFT));
-
 		setHelpPrefix(
 				desc,
 				"net.sf.jasperreports.doc/docs/sample.reference/chartthemes/index.html#chartthemes"); //$NON-NLS-1$
 	}
+	
+	@Override
+	protected Map<String, DefaultValue> createDefaultsMap() {
+		Map<String, DefaultValue> defaultsMap = super.createDefaultsMap();
+		
+		defaultsMap.put(ChartSettings.PROPERTY_backgroundPaint, new DefaultValue(null, true));
+		defaultsMap.put(ChartSettings.PROPERTY_borderPaint, new DefaultValue(null, true));
+		defaultsMap.put(ChartSettings.PROPERTY_backgroundImage, new DefaultValue(null, true));
+		defaultsMap.put(ChartSettings.PROPERTY_borderStroke, new DefaultValue(null, true));
 
-	private static NamedEnumPropertyDescriptor<JFreeChartAlignEnum> bia;
+		defaultsMap.put(ChartSettings.PROPERTY_textAntiAlias, new DefaultValue(Boolean.TRUE, false));
+		defaultsMap.put(ChartSettings.PROPERTY_antiAlias, new DefaultValue(Boolean.TRUE, false));
+		defaultsMap.put(ChartSettings.PROPERTY_borderVisible, new DefaultValue(Boolean.TRUE, false));
+		
+		int backAlignValue = NamedEnumPropertyDescriptor.getIntValue(JFreeChartAlignEnum.TOP_LEFT, NullEnum.NOTNULL, JFreeChartAlignEnum.TOP_LEFT);
+		defaultsMap.put(ChartSettings.PROPERTY_backgroundImageAlignment, new DefaultValue(backAlignValue, false));
+		
+		PadUtil.createDefaults("", defaultsMap);
+		
+		return defaultsMap;
+	}
 
 	@Override
 	public Object getPropertyValue(Object id) {

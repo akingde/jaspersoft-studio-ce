@@ -14,7 +14,6 @@ package com.jaspersoft.studio.components.crosstab.model.parameter;
 
 import java.beans.PropertyChangeEvent;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
@@ -39,9 +38,7 @@ public class MCrosstabParameter extends MParameter {
 	//Must use its own descriptors since they are different from the ones of the superclass
 	
 	private static IPropertyDescriptor[] descriptors;
-	
-	private static Map<String, Object> defaultsMap;
-	
+
 	/**
 	 * Create a parameter model node for a JRDesignCrosstabParameter
 	 * 
@@ -90,8 +87,8 @@ public class MCrosstabParameter extends MParameter {
 	}
 	
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		super.createPropertyDescriptors(desc, defaultsMap);
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
+		super.createPropertyDescriptors(desc);
 		
 		JRExpressionPropertyDescriptor valueExprD = new JRExpressionPropertyDescriptor(JRDesignCrosstabParameter.PROPERTY_VALUE_EXPRESSION, 
 																					   Messages.MCrosstabParameter_valueLabel);
@@ -135,11 +132,6 @@ public class MCrosstabParameter extends MParameter {
 		}
 		return null;
 	}
-	
-	@Override
-	public Map<String, Object> getDefaultsMap() {
-		return defaultsMap;
-	}
 
 	@Override
 	public IPropertyDescriptor[] getDescriptors() {
@@ -147,8 +139,7 @@ public class MCrosstabParameter extends MParameter {
 	}
 	
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1) {
 		descriptors = descriptors1;
-		defaultsMap = defaultsMap1;
 	}
 }

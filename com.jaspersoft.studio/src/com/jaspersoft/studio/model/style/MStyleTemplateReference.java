@@ -16,7 +16,6 @@ import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -44,10 +43,15 @@ import net.sf.jasperreports.engine.JRTemplateReference;
  * @author Chicu Veaceslav
  */
 public class MStyleTemplateReference extends APropertyNode implements IPropertySource, ICopyable {
+	
 	public static final String PROPERTY_LOCATION = "location";
+	
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+	
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
+	
+	private static IPropertyDescriptor[] descriptors;
 
 	/**
 	 * Gets the icon descriptor.
@@ -113,27 +117,18 @@ public class MStyleTemplateReference extends APropertyNode implements IPropertyS
 		return getIconDescriptor().getToolTip();
 	}
 
-	private static IPropertyDescriptor[] descriptors;
-	private static Map<String, Object> defaultsMap;
-
-	@Override
-	public Map<String, Object> getDefaultsMap() {
-		return defaultsMap;
-	}
-
 	@Override
 	public IPropertyDescriptor[] getDescriptors() {
 		return descriptors;
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1) {
 		descriptors = descriptors1;
-		defaultsMap = defaultsMap1;
 	}
 
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
 		NTextPropertyDescriptor nameD = new NTextPropertyDescriptor(PROPERTY_LOCATION, Messages.MStyleTemplateReference_location); //$NON-NLS-1$
 		nameD.setDescription(Messages.MStyleTemplateReference_location_description);
 		desc.add(nameD);

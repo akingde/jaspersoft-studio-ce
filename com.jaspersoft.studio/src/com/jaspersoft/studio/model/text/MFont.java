@@ -20,6 +20,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.model.DefaultValue;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.FontNamePropertyDescriptor;
@@ -44,8 +45,6 @@ public class MFont extends APropertyNode {
 	
 	private static IPropertyDescriptor[] descriptors;
 	
-	private static Map<String, Object> defaultsMap;
-
 	public MFont(JRFont value) {
 		super();
 		setValue(value);
@@ -83,7 +82,7 @@ public class MFont extends APropertyNode {
 	}
 
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
 		FontNamePropertyDescriptor fontNameD = new FontNamePropertyDescriptor(JRBaseFont.PROPERTY_FONT_NAME,
 				Messages.common_font_name, getJasperConfiguration().getFontList(), NullEnum.INHERITED);
 		fontNameD.setDescription(Messages.MFont_font_name_description);
@@ -158,13 +157,6 @@ public class MFont extends APropertyNode {
 		pdfEmbedD.setCategory(Messages.MFont_pdfCategory);
 		desc.add(pdfEmbedD);
 
-		defaultsMap.put(JRBaseFont.PROPERTY_FONT_NAME, "SansSerif"); //$NON-NLS-1$
-		defaultsMap.put(JRBaseFont.PROPERTY_FONT_SIZE, 10f); //$NON-NLS-1$
-		defaultsMap.put(JRBaseFont.PROPERTY_STRIKE_THROUGH, Boolean.FALSE);
-		defaultsMap.put(JRBaseFont.PROPERTY_UNDERLINE, Boolean.FALSE);
-		defaultsMap.put(JRBaseFont.PROPERTY_ITALIC, Boolean.FALSE);
-		defaultsMap.put(JRBaseFont.PROPERTY_BOLD, Boolean.FALSE);
-
 		fontNameD.setCategory(Messages.common_font);
 		fontSizeD.setCategory(Messages.common_font);
 		boldD.setCategory(Messages.common_font);
@@ -174,11 +166,21 @@ public class MFont extends APropertyNode {
 
 		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#font");
 	}
-
+	
 	@Override
-	public Map<String, Object> getDefaultsMap() {
+	protected Map<String, DefaultValue> createDefaultsMap() {
+		Map<String, DefaultValue> defaultsMap = super.createDefaultsMap();
+		
+		defaultsMap.put(JRBaseFont.PROPERTY_FONT_NAME, new DefaultValue("SansSerif", false)); //$NON-NLS-1$
+		defaultsMap.put(JRBaseFont.PROPERTY_FONT_SIZE, new DefaultValue(10f, false)); //$NON-NLS-1$
+		defaultsMap.put(JRBaseFont.PROPERTY_STRIKE_THROUGH, new DefaultValue(Boolean.FALSE, false));
+		defaultsMap.put(JRBaseFont.PROPERTY_UNDERLINE, new DefaultValue(Boolean.FALSE, false));
+		defaultsMap.put(JRBaseFont.PROPERTY_ITALIC, new DefaultValue(Boolean.FALSE, false));
+		defaultsMap.put(JRBaseFont.PROPERTY_BOLD, new DefaultValue(Boolean.FALSE, false));
+		
 		return defaultsMap;
 	}
+
 
 	@Override
 	public IPropertyDescriptor[] getDescriptors() {
@@ -186,9 +188,8 @@ public class MFont extends APropertyNode {
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1) {
 		descriptors = descriptors1;
-		defaultsMap = defaultsMap1;
 	}
 
 	@Override

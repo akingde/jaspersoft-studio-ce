@@ -34,6 +34,7 @@ import com.jaspersoft.studio.components.barcode.messages.Messages;
 import com.jaspersoft.studio.components.barcode.property.JSSPixelBarcodeSizeValidator;
 import com.jaspersoft.studio.editor.defaults.DefaultManager;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.DefaultValue;
 import com.jaspersoft.studio.model.IRotatable;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
@@ -50,9 +51,15 @@ import com.jaspersoft.studio.utils.ModelUtils;
  * The Class MBarcode.
  */
 public class MBarcodeBarbecue extends MBarcode implements IRotatable {
+	
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+	
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
+	
+	private static IPropertyDescriptor[] descriptors;
+	
+	private static NamedEnumPropertyDescriptor<RotationEnum> rotationD;
 
 	/**
 	 * Gets the icon descriptor.
@@ -134,25 +141,14 @@ public class MBarcodeBarbecue extends MBarcode implements IRotatable {
 		return getIconDescriptor().getToolTip();
 	}
 
-	private static IPropertyDescriptor[] descriptors;
-	private static Map<String, Object> defaultsMap;
-	private static NamedEnumPropertyDescriptor<RotationEnum> rotationD;
-
-	@Override
-	public Map<String, Object> getDefaultsMap() {
-		return defaultsMap;
-	}
-
 	@Override
 	public IPropertyDescriptor[] getDescriptors() {
 		return descriptors;
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1,
-			Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1) {
 		descriptors = descriptors1;
-		defaultsMap = defaultsMap1;
 	}
 
 	@Override
@@ -173,9 +169,8 @@ public class MBarcodeBarbecue extends MBarcode implements IRotatable {
 	 *            the desc
 	 */
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc,
-			Map<String, Object> defaultsMap) {
-		super.createPropertyDescriptors(desc, defaultsMap);
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
+		super.createPropertyDescriptors(desc);
 
 		PixelPropertyDescriptor widthD = new PixelPropertyDescriptor(
 				StandardBarbecueComponent.PROPERTY_BAR_WIDTH,
@@ -238,10 +233,16 @@ public class MBarcodeBarbecue extends MBarcode implements IRotatable {
 		checksumRequiredD.setCategory(Messages.common_properties_category);
 		heightD.setCategory(Messages.common_properties_category);
 		appIDexprD.setCategory(Messages.common_properties_category);
-
-		defaultsMap.put(StandardBarbecueComponent.PROPERTY_EVALUATION_TIME,
-				EvaluationTimeEnum.NOW);
-		defaultsMap.put(StandardBarbecueComponent.PROPERTY_ROTATION, null);
+	}
+	
+	@Override
+	protected Map<String, DefaultValue> createDefaultsMap() {
+		Map<String, DefaultValue> defaultsMap = super.createDefaultsMap();
+		
+		defaultsMap.put(StandardBarbecueComponent.PROPERTY_EVALUATION_TIME, new DefaultValue(EvaluationTimeEnum.NOW, false));
+		defaultsMap.put(StandardBarbecueComponent.PROPERTY_ROTATION, new DefaultValue(null, true));
+		
+		return defaultsMap;
 	}
 
 	@Override

@@ -28,6 +28,7 @@ import com.jaspersoft.studio.components.chart.ChartNodeIconDescriptor;
 import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.model.DefaultValue;
 import com.jaspersoft.studio.model.MHyperLink;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.JRPropertyDescriptor;
@@ -35,9 +36,15 @@ import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 
 public class MPieSeries extends APropertyNode {
+	
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+	
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
+	
+	private static IPropertyDescriptor[] descriptors;
+	
+	private MHyperLink mHyperLink;
 
 	/**
 	 * Gets the icon descriptor.
@@ -59,24 +66,14 @@ public class MPieSeries extends APropertyNode {
 		setValue(value);
 	}
 
-	private static IPropertyDescriptor[] descriptors;
-	private static Map<String, Object> defaultsMap;
-
-	@Override
-	public Map<String, Object> getDefaultsMap() {
-		return defaultsMap;
-	}
-
 	@Override
 	public IPropertyDescriptor[] getDescriptors() {
 		return descriptors;
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1,
-			Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1) {
 		descriptors = descriptors1;
-		defaultsMap = defaultsMap1;
 	}
 
 	/**
@@ -86,8 +83,7 @@ public class MPieSeries extends APropertyNode {
 	 *            the desc
 	 */
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc,
-			Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
 
 		JRExpressionPropertyDescriptor keyExpD = new JRExpressionPropertyDescriptor(
 				JRDesignPieSeries.PROPERTY_KEY_EXPRESSION,
@@ -113,15 +109,19 @@ public class MPieSeries extends APropertyNode {
 		sectionHyperLinkD
 				.setDescription(Messages.MPieSeries_section_hyperlink_description);
 		desc.add(sectionHyperLinkD);
-
-		defaultsMap.put(JRDesignPieSeries.PROPERTY_KEY_EXPRESSION, null);
-		defaultsMap.put(JRDesignPieSeries.PROPERTY_LABEL_EXPRESSION, null);
-		defaultsMap.put(JRDesignPieSeries.PROPERTY_VALUE_EXPRESSION, null);
-		defaultsMap.put(JRDesignPieSeries.PROPERTY_SECTION_HYPERLINK, null);
-
 	}
-
-	private MHyperLink mHyperLink;
+	
+	@Override
+	protected Map<String, DefaultValue> createDefaultsMap() {
+		Map<String, DefaultValue> defaultsMap = super.createDefaultsMap();
+		
+		defaultsMap.put(JRDesignPieSeries.PROPERTY_KEY_EXPRESSION, new DefaultValue(null, true));
+		defaultsMap.put(JRDesignPieSeries.PROPERTY_LABEL_EXPRESSION, new DefaultValue(null, true));
+		defaultsMap.put(JRDesignPieSeries.PROPERTY_VALUE_EXPRESSION, new DefaultValue(null, true));
+		defaultsMap.put(JRDesignPieSeries.PROPERTY_SECTION_HYPERLINK, new DefaultValue(null, true));
+		
+		return defaultsMap;
+	}
 
 	public Object getPropertyValue(Object id) {
 		JRDesignPieSeries jrElement = getValue();

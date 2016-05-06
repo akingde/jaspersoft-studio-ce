@@ -16,7 +16,6 @@ import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -68,11 +67,6 @@ public class MStyleTemplate extends APropertyNode implements IPropertySource, IC
 	 * Array of the descriptors of the element
 	 */
 	private static IPropertyDescriptor[] descriptors;
-	
-	/**
-	 * Default values for the element
-	 */
-	private static Map<String, Object> defaultsMap;
 
 	/**
 	 * Timeout time to wait between the end of an expression change and the refresh of the 
@@ -84,11 +78,6 @@ public class MStyleTemplate extends APropertyNode implements IPropertySource, IC
 	 * The job that update the styles content in background
 	 */
 	private UpdateStyleJob updateStyleJob;
-	
-	@Override
-	public Map<String, Object> getDefaultsMap() {
-		return defaultsMap;
-	}
 
 	@Override
 	public IPropertyDescriptor[] getDescriptors() {
@@ -96,13 +85,12 @@ public class MStyleTemplate extends APropertyNode implements IPropertySource, IC
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1) {
 		descriptors = descriptors1;
-		defaultsMap = defaultsMap1;
 	}
 
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc) {
 		JRExpressionPropertyDescriptor sourceExpression = new JRExpressionPropertyDescriptor(
 				JRDesignReportTemplate.PROPERTY_SOURCE_EXPRESSION, Messages.MStyleTemplate_source_expression);
 		sourceExpression.setDescription(Messages.MStyleTemplate_source_expression_description);
