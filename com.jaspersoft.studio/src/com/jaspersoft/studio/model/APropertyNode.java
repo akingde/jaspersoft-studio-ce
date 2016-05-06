@@ -33,6 +33,9 @@ import net.sf.jasperreports.engine.design.JRDesignElement;
 
 public abstract class APropertyNode extends ANode implements IPropertySource, IPropertySource2 {
 	
+	/**
+	 * Static default map used to keep the defaults value of every implementation of a property node.
+	 */
 	private static HashMap<Class<? extends APropertyNode>, Map<String, DefaultValue>> defaultsMap = 
 														new HashMap<Class<? extends APropertyNode>, Map<String,DefaultValue>>();
 	
@@ -53,6 +56,12 @@ public abstract class APropertyNode extends ANode implements IPropertySource, IP
 		return true;
 	}
 
+	/**
+	 * Return the default map of this node. First is chekced if it is already available
+	 * in the cache map, in that case is returned otherwise it is created, stored and returned
+	 * 
+	 * @return a map of the default value, could be null
+	 */
 	public Map<String, DefaultValue> getDefaultsMap(){
 		Map<String, DefaultValue> result = defaultsMap.get(this.getClass());
 		if (result == null){

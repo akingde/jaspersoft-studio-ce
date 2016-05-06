@@ -50,13 +50,35 @@ import com.jaspersoft.studio.model.DefaultValue;
 import com.jaspersoft.studio.properties.internal.IHighlightPropertyWidget;
 import com.jaspersoft.studio.properties.view.validation.ValidationError;
 import com.jaspersoft.studio.property.ResetValueCommand;
+import com.jaspersoft.studio.property.SetValueCommand;
 import com.jaspersoft.studio.property.combomenu.ComboButton;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.utils.UIUtil;
 
 public abstract class ASPropertyWidget<T extends IPropertyDescriptor> implements IHighlightPropertyWidget {
+	
 	protected T pDescriptor;
+	
 	protected AbstractSection section;
+	
+	/**
+	 * On MacOS seems the contextual menu is not opened on combo, this
+	 * lister will force it to open when a right click is found
+	 */
+	protected static MouseAdapter macComboMenuOpener = new MouseAdapter() {
+		
+		@Override
+		public void mouseUp(MouseEvent e) {	
+			if (e.button == 3 && ((Control)e.widget).getMenu() != null){
+				Menu menu = ((Control)e.widget).getMenu();
+				if (!menu.isDisposed() && !menu.isVisible()){
+	        		Point location = e.widget.getDisplay().getCursorLocation();
+					menu.setLocation(location.x, location.y);
+					menu.setVisible(true);
+				}
+			}
+		}
+	};
 
 	public ASPropertyWidget(Composite parent, AbstractSection section, T pDescriptor) {
 		this.pDescriptor = pDescriptor;
@@ -104,58 +126,72 @@ public abstract class ASPropertyWidget<T extends IPropertyDescriptor> implements
 	}
 	
 	/**
-	 * On mac seems the contextual menu is not opened on combo, this
-	 * lister will force it to open when a right click is found
-	 */
-	private MouseAdapter macComboMenuOpener = new MouseAdapter() {
-		
-		@Override
-		public void mouseUp(MouseEvent e) {	
-			if (e.button == 3 && ((Control)e.widget).getMenu() != null){
-				Menu menu = ((Control)e.widget).getMenu();
-				if (!menu.isDisposed() && !menu.isVisible()){
-	        Point location = e.widget.getDisplay().getCursorLocation();
-					menu.setLocation(location.x, location.y);
-	        menu.setVisible(true);
-				}
-			}
-		}
-	};
-	
-	/**
 	 * Create a contextual menu for the current control. This contextual menu
 	 * will contains the action to reset the value of a property if the property
-	 * has default value inside the node.
+	 * has default value inside the node. Also it will contain the action to set the
+	 * value to null if the operation is allowed.
+	 * 
+	 * Since on mac the combo item doens't have a contextual menu it add a special listneer
+	 * for them as workaround to the problem
 	 */
 	protected void createContextualMenu(final APropertyNode node){
 		Control control = getControl();
 		if (node != null && control != null && !control.isDisposed()){
-			
-			//Mac fix, the combo on mac doesn't have a contextual menu, so we need to set this listener manually
+		
+			//MacOS fix, the combo on MacOS doesn't have a contextual menu, so we need to handle this listener manually
 			boolean handleComboListener = Util.isMac() && control.getClass() == Combo.class;
 			if (handleComboListener){
 				control.removeMouseListener(macComboMenuOpener);
 			}
 			
+			boolean entryCreated = false;
 			Map<String, DefaultValue> defaultMap = node.getDefaultsMap();
-			if (defaultMap.containsKey(pDescriptor.getId().toString())){
-				Menu controlMenu = new Menu(control);
-				MenuItem refreshItem = new MenuItem(controlMenu, SWT.NONE);
-				refreshItem.addSelectionListener(new SelectionAdapter() {
-					@Override
-					public void widgetSelected(SelectionEvent e) {
-						ResetValueCommand cmd = new ResetValueCommand();
-						cmd.setPropertyId(pDescriptor.getId());
-						cmd.setTarget(node);
-						section.getEditDomain().getCommandStack().execute(cmd);
+			if (defaultMap != null){
+				DefaultValue defaultEntry = defaultMap.get(pDescriptor.getId().toString());
+				if (defaultEntry != null && (defaultEntry.isNullable() || defaultEntry.hasDefault())){
+					Menu controlMenu = new Menu(control);
+					
+					//Create the reset entry if necessary
+					if (defaultEntry.hasDefault()){
+						MenuItem resetItem = new MenuItem(controlMenu, SWT.NONE);
+						entryCreated = true;
+						resetItem.addSelectionListener(new SelectionAdapter() {
+							@Override
+							public void widgetSelected(SelectionEvent e) {
+								ResetValueCommand cmd = new ResetValueCommand();
+								cmd.setPropertyId(pDescriptor.getId());
+								cmd.setTarget(node);
+								section.getEditDomain().getCommandStack().execute(cmd);
+							}
+						});
+				    resetItem.setText(Messages.ASPropertyWidget_0);
 					}
-				});
-		    refreshItem.setText(Messages.ASPropertyWidget_0);
-				control.setMenu(controlMenu);
-				if (handleComboListener){
-					control.addMouseListener(macComboMenuOpener);
+					
+					//Create the null entry if necessary
+					if (defaultEntry.isNullable()){
+						MenuItem nullItem = new MenuItem(controlMenu, SWT.NONE);
+						entryCreated = true;
+						nullItem.addSelectionListener(new SelectionAdapter() {
+							@Override
+							public void widgetSelected(SelectionEvent e) {
+								SetValueCommand cmd = new SetValueCommand();
+								cmd.setPropertyId(pDescriptor.getId());
+								cmd.setTarget(node);
+								cmd.setPropertyValue(null);
+								section.getEditDomain().getCommandStack().execute(cmd);
+							}
+						});
+				    nullItem.setText(Messages.ASPropertyWidget_1);
+					}
+					
+					control.setMenu(controlMenu);
+					if (handleComboListener){
+						control.addMouseListener(macComboMenuOpener);
+					}
 				}
-			} else {
+			}
+			if (!entryCreated) {
+				//if no entry was created remove the contextual menu
 				control.setMenu(null);
 			}
 		}

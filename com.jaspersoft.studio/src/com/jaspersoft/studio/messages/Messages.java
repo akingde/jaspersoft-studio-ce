@@ -223,6 +223,7 @@ public class Messages extends NLS {
 	public static String AppContextMenuProvider_size_to_container;
 	public static String AppContextMenuProvider_verticalSpacingSubMenu;
 	public static String ASPropertyWidget_0;
+	public static String ASPropertyWidget_1;
 	public static String ATableComboContribution_presets_label;
 	public static String ATreeWizardDataEditorComposite_Title;
 	public static String BandConstraintCommand_band_resized;
