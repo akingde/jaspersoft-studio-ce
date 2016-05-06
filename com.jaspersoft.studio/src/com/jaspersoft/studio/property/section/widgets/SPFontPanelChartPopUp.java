@@ -13,6 +13,8 @@ import java.util.List;
 
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -121,7 +123,7 @@ public class SPFontPanelChartPopUp extends ASPropertyWidget<IPropertyDescriptor>
 	public SPFontPanelChartPopUp(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
 		super(parent, section, pDescriptor);
 		preferenceListener = new PreferenceListener();
-		JaspersoftStudioPlugin.getInstance().getPreferenceStore().addPropertyChangeListener(preferenceListener);
+		JaspersoftStudioPlugin.getInstance().addPreferenceListener(preferenceListener);
 		itemsSetted = false;
 	}
 
@@ -223,6 +225,13 @@ public class SPFontPanelChartPopUp extends ASPropertyWidget<IPropertyDescriptor>
 			public void exec() {
 				propertyChange(section, JRBaseFont.PROPERTY_FONT_NAME,
 						fontName.getSelectionValue() != null ? fontName.getSelectionValue().toString() : null, pd);
+			}
+		});
+		fontName.getControl().addDisposeListener(new DisposeListener() {
+
+			@Override
+			public void widgetDisposed(DisposeEvent e) {
+				JaspersoftStudioPlugin.getInstance().removePreferenceListener(preferenceListener);
 			}
 		});
 

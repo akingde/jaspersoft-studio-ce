@@ -10,6 +10,8 @@ package com.jaspersoft.studio.property.section.widgets;
 
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -113,7 +115,7 @@ public class SPFont extends ASPropertyWidget<IPropertyDescriptor> {
 	public SPFont(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
 		super(parent, section, pDescriptor);
 		preferenceListener = new PreferenceListener();
-		JaspersoftStudioPlugin.getInstance().getPreferenceStore().addPropertyChangeListener(preferenceListener);
+		JaspersoftStudioPlugin.getInstance().addPreferenceListener(preferenceListener);
 		itemsSetted = false;
 	}
 
@@ -222,6 +224,13 @@ public class SPFont extends ASPropertyWidget<IPropertyDescriptor> {
 					fontName.setSelection(new Point(stringLength, stringLength));
 				}
 				time = e.time;
+			}
+		});
+		fontName.addDisposeListener(new DisposeListener() {
+
+			@Override
+			public void widgetDisposed(DisposeEvent e) {
+				JaspersoftStudioPlugin.getInstance().removePreferenceListener(preferenceListener);
 			}
 		});
 

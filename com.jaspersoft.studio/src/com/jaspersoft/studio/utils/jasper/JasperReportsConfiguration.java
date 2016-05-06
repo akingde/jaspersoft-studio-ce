@@ -121,8 +121,10 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 			if (property.equals(FontsPreferencePage.FPP_FONT_LIST)
 					|| property.equals(FilePrefUtil.NET_SF_JASPERREPORTS_JRPROPERTIES)) {
 				refreshFonts = true;
-				refreshBundles = true;
 				fontList = null;
+				getFontList();
+
+				refreshBundles = true;
 				isPropsCached = false;
 				getProperties();
 				qExecutors = null;
@@ -741,9 +743,11 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 		return map;
 	}
 
-	public String[] getFontList() {
-		if (fontList == null)
+	public synchronized String[] getFontList() {
+		if (refreshFonts || fontList == null) {
+			refreshFonts = true;
 			fontList = FontUtils.stringToItems(ModelUtils.getFontNames(this));
+		}
 		return fontList;
 	}
 
