@@ -1,0 +1,23 @@
+Manifest-Version: 1.0
+Eclipse-ExtensibleAPI: true
+Bundle-ManifestVersion: 2
+Bundle-Name: Google Map Widget
+Bundle-SymbolicName: com.jaspersoft.studio.widgets.map
+Bundle-Version: 6.2.2.final
+Bundle-Activator: com.jaspersoft.studio.widgets.map.MapActivator
+Bundle-Vendor: Buzzcoders.com
+Require-Bundle: com.jaspersoft.studio;bundle-version="6.2.2",
+ org.apache.commons.httpclient;bundle-version="3.1.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ActivationPolicy: lazy
+Export-Package: com.jaspersoft.studio.widgets.map;uses:="org.eclipse.ui.plugin,org.osgi.framework",
+ com.jaspersoft.studio.widgets.map.browserfunctions;uses:="com.jaspersoft.studio.widgets.map.support,org.eclipse.swt.browser",
+ com.jaspersoft.studio.widgets.map.core,
+ com.jaspersoft.studio.widgets.map.support;uses:="com.jaspersoft.studio.widgets.map.core,org.eclipse.swt.browser",
+ com.jaspersoft.studio.widgets.map.ui;
+  uses:="com.jaspersoft.studio.widgets.map.support,
+   com.jaspersoft.studio.widgets.map.core,
+   org.eclipse.swt.widgets,
+   org.eclipse.swt.browser"
+Bundle-ClassPath: patch-library.jar,
+ .
