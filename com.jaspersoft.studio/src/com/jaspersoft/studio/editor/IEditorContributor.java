@@ -28,6 +28,8 @@ public interface IEditorContributor {
 	public void onSave(JasperReportsContext jrConfig, IProgressMonitor monitor);
 
 	public void onSaveAs(IFile oldName, IFile newName, JasperReportsContext jrConfig, IProgressMonitor monitor);
+	
+	public void onRename(IFile oldName, IFile newName, JasperReportsContext jrConfig, IProgressMonitor monitor);
 
 	public void onRun(JasperReportsConfiguration jrConfig, JasperReport jr, Map<String, Object> params);
 

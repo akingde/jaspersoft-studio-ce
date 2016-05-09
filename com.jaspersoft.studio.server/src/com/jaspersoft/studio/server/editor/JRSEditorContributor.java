@@ -50,9 +50,9 @@ public class JRSEditorContributor implements IEditorContributor {
 	public void onLoad(final JasperDesign jd, final EditorPart editor) {
 		if (!(editor instanceof AbstractJRXMLEditor))
 			return;
-//		String prop = jd.getProperty(AExporter.PROP_SERVERURL);
-//		if (prop == null)
-//			return;
+		// String prop = jd.getProperty(AExporter.PROP_SERVERURL);
+		// if (prop == null)
+		// return;
 		AbstractJRXMLEditor jEditor = (AbstractJRXMLEditor) editor;
 		JasperReportsConfiguration jConfig = jEditor.getJrContext(null);
 		JSSFileRepositoryService repService = jConfig.getFileRepositoryService();
@@ -107,6 +107,15 @@ public class JRSEditorContributor implements IEditorContributor {
 			action.setSilent(run);
 			action.run();
 		}
+	}
+
+	@Override
+	public void onRename(IFile oldName, IFile newName, JasperReportsContext jrConfig, IProgressMonitor monitor) {
+		JasperReportsConfiguration jConfig = (JasperReportsConfiguration) jrConfig;
+		JasperDesign jd = jConfig.getJasperDesign();
+
+		if (!replaceURL(AExporter.PROP_REPORTUNIT, jd, oldName, newName))
+			replaceURL(AExporter.PROP_REPORTRESOURCE, jd, oldName, newName);
 	}
 
 	@Override

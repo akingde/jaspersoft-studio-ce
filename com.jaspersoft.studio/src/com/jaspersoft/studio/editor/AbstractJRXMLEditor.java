@@ -353,8 +353,13 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart
 			try {
 				DeltaVisitor visitor = new DeltaVisitor(this);
 				event.getDelta().accept(visitor);
-				if (jrContext != null && getEditorInput() != null)
-					jrContext.init(((IFileEditorInput) getEditorInput()).getFile());
+				if (jrContext != null && getEditorInput() != null) {
+					IFile old = jrContext.getAssociatedReportFile();
+					IFile newf = ((IFileEditorInput) getEditorInput()).getFile();
+					jrContext.init(newf);
+					JaspersoftStudioPlugin.getExtensionManager().onRename(old, newf, jrContext,
+							getActiveEditor().getEditorSite().getActionBars().getStatusLineManager().getProgressMonitor());
+				}
 			} catch (CoreException e) {
 				UIUtils.showError(e);
 			}
@@ -1048,10 +1053,9 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart
 	public IEditorPart getActiveEditor() {
 		return super.getActiveEditor();
 	}
-	
+
 	/**
-	 * In case of multipage editor implementation (like the JRXML editor)
-	 * this return the internal editor currently active
+	 * In case of multipage editor implementation (like the JRXML editor) this return the internal editor currently active
 	 */
 	public IEditorPart getActiveInnerEditor() {
 		return getActiveEditor();
