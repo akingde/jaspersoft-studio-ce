@@ -124,7 +124,7 @@ public class CrosstabWizardMeasurePage extends StaticWizardFieldsPage {
 	@Override
 	protected void attachCellEditors(final TableViewer viewer, Composite parent) {
 		String[] enumNames = enumValuesMap.values().toArray(new String[enumValuesMap.values().size()]);
-		final ComboBoxCellEditor calcCombo = new ComboBoxCellEditor(parent, enumNames);
+		final ComboBoxCellEditor calcCombo = new ComboBoxCellEditor(parent, enumNames, SWT.READ_ONLY);
 		viewer.setCellModifier(new ICellModifier() {
 			
 			public boolean canModify(Object element, String property) {
@@ -188,8 +188,7 @@ public class CrosstabWizardMeasurePage extends StaticWizardFieldsPage {
 			}
 		});
 
-		viewer.setCellEditors(new CellEditor[] { new TextCellEditor(parent),
-				calcCombo });
+		viewer.setCellEditors(new CellEditor[] { new TextCellEditor(parent), calcCombo });
 		viewer.setColumnProperties(new String[] { F_NAME, F_CALCULATION }); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 

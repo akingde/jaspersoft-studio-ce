@@ -30,6 +30,7 @@ import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TableItem;
@@ -185,12 +186,9 @@ public class CrosstabWizardRowPage extends CrosstabWizardColumnPage {
 
 		viewer.setCellEditors(new CellEditor[] {
 				new TextCellEditor(parent),
-				new ComboBoxCellEditor(parent, EnumHelper.getEnumNames(
-						SortOrderEnum.values(), NullEnum.NOTNULL)),
-				new ComboBoxCellEditor(parent, EnumHelper.getEnumNames(
-						CrosstabTotalPositionEnum.values(), NullEnum.NOTNULL)),
-				new ComboBoxCellEditor(parent, AgregationFunctionEnum
-						.getStringValues()) });
+				new ComboBoxCellEditor(parent, EnumHelper.getEnumNames(SortOrderEnum.values(), NullEnum.NOTNULL), SWT.READ_ONLY),
+				new ComboBoxCellEditor(parent, EnumHelper.getEnumNames(CrosstabTotalPositionEnum.values(), NullEnum.NOTNULL), SWT.READ_ONLY),
+				new ComboBoxCellEditor(parent, AgregationFunctionEnum.getStringValues(), SWT.READ_ONLY) });
 		viewer.setColumnProperties(new String[] { F_NAME, F_ORDER,
 				F_TOTALPOSITION, F_CALCULATION });
 	}
