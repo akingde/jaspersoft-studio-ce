@@ -67,7 +67,7 @@ public class CertificateDialog extends ATitledDialog {
 	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
 		createButton(parent, IDialogConstants.OK_ID, Messages.CertificateDialog_1, true);
-		createButton(parent, IDialogConstants.CANCEL_ID, IDialogConstants.CANCEL_LABEL, false);
+		createButton(parent, IDialogConstants.CANCEL_ID, Messages.CertificatesDialog_2, false);
 	}
 
 	@Override

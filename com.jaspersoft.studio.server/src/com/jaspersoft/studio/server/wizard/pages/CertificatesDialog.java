@@ -111,7 +111,7 @@ public class CertificatesDialog extends CertificateDialog {
 				else
 					getButton(IDialogConstants.OK_ID).setEnabled(false);
 				getButton(IDialogConstants.OK_ID).setText(Messages.CertificatesDialog_3);
-				getButton(IDialogConstants.CANCEL_ID).setText(IDialogConstants.CANCEL_LABEL);
+				getButton(IDialogConstants.CANCEL_ID).setText(Messages.CertificatesDialog_2);
 				show = false;
 			} catch (KeyStoreException e1) {
 				UIUtils.showError(e1);
