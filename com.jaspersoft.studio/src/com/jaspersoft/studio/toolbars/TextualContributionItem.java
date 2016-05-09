@@ -19,7 +19,10 @@ import java.util.List;
 
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
+import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -40,6 +43,7 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.text.MTextElement;
+import com.jaspersoft.studio.preferences.fonts.FontsPreferencePage;
 import com.jaspersoft.studio.property.SetValueCommand;
 import com.jaspersoft.studio.swt.widgets.NumericCombo;
 import com.jaspersoft.studio.utils.Misc;
@@ -58,6 +62,21 @@ import net.sf.jasperreports.engine.type.VerticalTextAlignEnum;
  *
  */
 public class TextualContributionItem extends CommonToolbarHandler {
+	
+	/**
+	 * Listener used to check if the font contribution in the preferences are changed, 
+	 * and trigger the update of the combo
+	 */
+	private final class PreferenceListener implements IPropertyChangeListener {
+
+		public void propertyChange(org.eclipse.jface.util.PropertyChangeEvent event) {
+			if (event.getProperty().equals(FontsPreferencePage.FPP_FONT_LIST)) {
+				//If the property change in the preferences force the refresh of the fonts
+				setAvailableFonts();
+				setAllControlsData();
+			}
+		}
+	}
 	
 	/**
 	 * The node actually selected which attributes are shown in the controls
@@ -116,6 +135,8 @@ public class TextualContributionItem extends CommonToolbarHandler {
 	 * so it is better to compare it with this one first
 	 */
 	private String[] fontList = null;
+	
+	PreferenceListener preferenceListener = new PreferenceListener();
 	
 	//Used listener
 	
@@ -305,6 +326,14 @@ public class TextualContributionItem extends CommonToolbarHandler {
 		fontName = new Combo(controlsArea, SWT.DROP_DOWN);
 		fontName.setData(WIDGET_DATA_KEY, JRDesignStyle.PROPERTY_FONT_NAME);
 		fontName.addSelectionListener(fontNameComboSelect);
+		fontName.addDisposeListener(new DisposeListener() {
+			
+			@Override
+			public void widgetDisposed(DisposeEvent e) {
+				JaspersoftStudioPlugin.getInstance().removePreferenceListener(preferenceListener);
+			}
+		});
+		JaspersoftStudioPlugin.getInstance().addPreferenceListener(preferenceListener);
 		setAvailableFonts();
 		
 		fontSize = new NumericCombo(controlsArea, SWT.DROP_DOWN, 0, 6);
@@ -392,6 +421,14 @@ public class TextualContributionItem extends CommonToolbarHandler {
 		fontName = new Combo(parent, SWT.DROP_DOWN);
 		fontName.setData(WIDGET_DATA_KEY, JRDesignStyle.PROPERTY_FONT_NAME);
 		fontName.addSelectionListener(fontNameComboSelect);
+		fontName.addDisposeListener(new DisposeListener() {
+			
+			@Override
+			public void widgetDisposed(DisposeEvent e) {
+				JaspersoftStudioPlugin.getInstance().removePreferenceListener(preferenceListener);
+			}
+		});
+		JaspersoftStudioPlugin.getInstance().addPreferenceListener(preferenceListener);
 		setAvailableFonts();
 		fontName.pack();
 		tiFontName.setWidth(fontName.getSize().x);
@@ -543,14 +580,14 @@ public class TextualContributionItem extends CommonToolbarHandler {
 		List<Object> selection = getSelectionForType(MTextElement.class);
 		if (selection.size() > 0){
 			APropertyNode node = (APropertyNode)selection.get(0);
-			String[] fonts = JaspersoftStudioPlugin.getToolItemsManager().getFonts(node.getJasperConfiguration());
+			//The fonts are already cached here
+			String[] fonts = node.getJasperConfiguration().getFontList();
 			if (needFontsUpdate(fonts) &&  fontName != null && !fontName.isDisposed()) {
 				fontName.setItems(fonts);
 				fontList = fonts;
 			}
 		}
 	}
-
 
 	@Override
 	public boolean isVisible() {

@@ -12,21 +12,16 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.toolitems;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.preference.IPreferenceStore;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
-import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 
 
@@ -64,27 +59,6 @@ public class ToolItemsManager {
 	 */
 	private Map<String, String> itemsSetMap = new HashMap<String, String>();
 
-	/**
-	 * Cache for the fonts available inside for a specific jasperdesign
-	 */
-  private HashMap<JasperDesign, String[]> fontsCache = new HashMap<JasperDesign, String[]>();
-  
-  /**
-   * Listener to discard the fonts list cache when something in a jasperdesign changes
-   */
-  private PropertyChangeListener designChange = new PropertyChangeListener() {
-		
-		@Override
-		public void propertyChange(PropertyChangeEvent evt) {
-			if (evt.getSource() instanceof JasperDesign){
-				JasperDesign jd = (JasperDesign)evt.getSource();
-				fontsCache.remove(jd);
-			}
-			
-		}
-	};
-	
-	
 	public boolean isToolbarVisible(String controlId){
 		IPreferenceStore store = JaspersoftStudioPlugin.getInstance().getPreferenceStore();
 		String toolbarID = itemsSetMap.get(controlId);
@@ -115,28 +89,6 @@ public class ToolItemsManager {
 			}
 		}
 	}
-
-	/**
-	 * Return the list of the fonts available for a specific report
-	 * 
-	 * @param jrConfig the configuration of the report
-	 * @return a not null array of string representing the font names
-	 */
-  public String[] getFonts(JasperReportsConfiguration jrConfig){  	
-  	JasperDesign jd = jrConfig.getJasperDesign();
-  	
-  	//Set the change listener
-  	if (jd != null && jd.getEventSupport() != null){
-	  	jd.getEventSupport().removePropertyChangeListener(designChange);
-	  	jd.getEventSupport().addPropertyChangeListener(designChange);
-  	}
-  	String[] fonts = fontsCache.get(jd);
-  	if (fonts == null){
-  		fonts = jrConfig.getFontList();
-  		fontsCache.put(jd, fonts);
-  	}
-  	return fonts;
-  }
 	
 	public List<ToolItemsSet> getSets() {
 		return sets;
