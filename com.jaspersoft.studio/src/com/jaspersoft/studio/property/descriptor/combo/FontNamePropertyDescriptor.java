@@ -12,8 +12,10 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.descriptor.combo;
 
+import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.help.HelpSystem;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
@@ -25,7 +27,7 @@ import com.jaspersoft.studio.property.section.widgets.SPFontNameCombo;
  *
  */
 public class FontNamePropertyDescriptor extends RWCComboPropertyDescriptor {
-
+	
 	public FontNamePropertyDescriptor(Object id, String displayName, String[] labelsArray, NullEnum canBeNull,
 			boolean caseSensitive) {
 		super(id, displayName, labelsArray, canBeNull, caseSensitive);
@@ -38,5 +40,14 @@ public class FontNamePropertyDescriptor extends RWCComboPropertyDescriptor {
 	@Override
 	public ASPropertyWidget<RWCComboPropertyDescriptor> createWidget(Composite parent, AbstractSection section) {
 		return new SPFontNameCombo<RWCComboPropertyDescriptor>(parent, section, this);
+	}
+		
+	@Override
+	public CellEditor createPropertyEditor(Composite parent) {
+		cellEditor = new FontNameCellEditor(parent, labels);
+		if (getValidator() != null)
+			cellEditor.setValidator(getValidator());
+		HelpSystem.bindToHelp(this, cellEditor.getControl());
+		return cellEditor;
 	}
 }

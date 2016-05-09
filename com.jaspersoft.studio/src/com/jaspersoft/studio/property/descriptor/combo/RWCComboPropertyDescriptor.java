@@ -27,9 +27,9 @@ import com.jaspersoft.studio.property.section.widgets.IPropertyDescriptorWidget;
 import com.jaspersoft.studio.property.section.widgets.SPRWCombo;
 
 public class RWCComboPropertyDescriptor extends ComboBoxPropertyDescriptor implements IPropertyDescriptorWidget, IHelp {
-	private String[] labels;
+	protected String[] labels;
 	private NullEnum canBeNull;
-	private RWComboBoxCellEditor cellEditor;
+	protected RWComboBoxCellEditor cellEditor;
 	private boolean caseSensitive;
 
 	public RWCComboPropertyDescriptor(Object id, String displayName, String[] labelsArray, NullEnum canBeNull) {
