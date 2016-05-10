@@ -453,6 +453,9 @@ public class WHyperlink extends Composite implements IExpressionContextSetter {
 					tbtmTooltip.setControl(tooltipContent);
 					break;
 				case NONE:
+					tbtmTooltip = new CTabItem(tabFolder, SWT.NONE);
+					tbtmTooltip.setText(Messages.WHyperlink_TooltipTab);
+					tbtmTooltip.setControl(tooltipContent);
 					break;
 				case REFERENCE:
 					tbtmReference=new CTabItem(tabFolder, SWT.NONE);
