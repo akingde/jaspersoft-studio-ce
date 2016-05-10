@@ -21,8 +21,6 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.DisposeEvent;
-import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -326,14 +324,6 @@ public class TextualContributionItem extends CommonToolbarHandler {
 		fontName = new Combo(controlsArea, SWT.DROP_DOWN);
 		fontName.setData(WIDGET_DATA_KEY, JRDesignStyle.PROPERTY_FONT_NAME);
 		fontName.addSelectionListener(fontNameComboSelect);
-		fontName.addDisposeListener(new DisposeListener() {
-			
-			@Override
-			public void widgetDisposed(DisposeEvent e) {
-				JaspersoftStudioPlugin.getInstance().removePreferenceListener(preferenceListener);
-			}
-		});
-		JaspersoftStudioPlugin.getInstance().addPreferenceListener(preferenceListener);
 		setAvailableFonts();
 		
 		fontSize = new NumericCombo(controlsArea, SWT.DROP_DOWN, 0, 6);
@@ -421,14 +411,6 @@ public class TextualContributionItem extends CommonToolbarHandler {
 		fontName = new Combo(parent, SWT.DROP_DOWN);
 		fontName.setData(WIDGET_DATA_KEY, JRDesignStyle.PROPERTY_FONT_NAME);
 		fontName.addSelectionListener(fontNameComboSelect);
-		fontName.addDisposeListener(new DisposeListener() {
-			
-			@Override
-			public void widgetDisposed(DisposeEvent e) {
-				JaspersoftStudioPlugin.getInstance().removePreferenceListener(preferenceListener);
-			}
-		});
-		JaspersoftStudioPlugin.getInstance().addPreferenceListener(preferenceListener);
 		setAvailableFonts();
 		fontName.pack();
 		tiFontName.setWidth(fontName.getSize().x);
@@ -591,7 +573,10 @@ public class TextualContributionItem extends CommonToolbarHandler {
 
 	@Override
 	public boolean isVisible() {
-		if (!super.isVisible()) return false;
+		JaspersoftStudioPlugin.getInstance().removePreferenceListener(preferenceListener);
+		if (!super.isVisible()) {
+			return false;
+		}
 		
 		List<Object> selection = getSelectionForType(MTextElement.class);
 		boolean selectionValid = selection.size() > 0;
@@ -601,6 +586,9 @@ public class TextualContributionItem extends CommonToolbarHandler {
 		} else if (showedNode != null) {
 			showedNode.getPropertyChangeSupport().removePropertyChangeListener(nodeChangeListener);
 			showedNode = null;
+		}
+		if (selectionValid){
+			JaspersoftStudioPlugin.getInstance().addPreferenceListener(preferenceListener);
 		}
 		return selectionValid;
 	}
