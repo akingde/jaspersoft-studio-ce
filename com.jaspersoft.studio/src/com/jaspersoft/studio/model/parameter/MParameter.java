@@ -30,6 +30,7 @@ import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
 import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.DefaultValue;
 import com.jaspersoft.studio.model.ICopyable;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
@@ -57,8 +58,6 @@ public class MParameter extends MParameterSystem implements ICopyable {
 	//Must use its own descriptors since they are different from the ones of the superclass
 	
 	private static IPropertyDescriptor[] descriptors;
-	
-	private static Map<String, Object> defaultsMap;
 	
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
@@ -147,12 +146,19 @@ public class MParameter extends MParameterSystem implements ICopyable {
 		classD.setDescription(Messages.MParameter_nested_type_name_description);
 		desc.add(classD);
 
-		defaultsMap.put(JRDesignParameter.PROPERTY_FOR_PROMPTING, Boolean.TRUE);
-		defaultsMap.put(JRDesignParameter.PROPERTY_NESTED_TYPE_NAME, null);
-
 		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#parameter");
 	}
 
+	@Override
+	protected Map<String, DefaultValue> createDefaultsMap() {
+		Map<String, DefaultValue> defaultsMap = super.createDefaultsMap();
+		
+		defaultsMap.put(JRDesignParameter.PROPERTY_FOR_PROMPTING, new DefaultValue(Boolean.TRUE, false));
+		defaultsMap.put(JRDesignParameter.PROPERTY_NESTED_TYPE_NAME, new DefaultValue(null, true));
+		
+		return defaultsMap;
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 
