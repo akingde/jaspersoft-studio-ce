@@ -130,10 +130,10 @@ import com.jaspersoft.studio.editor.outline.actions.CreateSortFieldAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateStyleAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateStyleTemplateAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateVariableAction;
-import com.jaspersoft.studio.editor.outline.actions.SaveStyleAsTemplateAction;
 import com.jaspersoft.studio.editor.outline.actions.RefreshTemplateStyleExpression;
 import com.jaspersoft.studio.editor.outline.actions.RefreshTemplateStyleReference;
 import com.jaspersoft.studio.editor.outline.actions.ResetStyleAction;
+import com.jaspersoft.studio.editor.outline.actions.SaveStyleAsTemplateAction;
 import com.jaspersoft.studio.editor.outline.page.MultiOutlineView;
 import com.jaspersoft.studio.editor.palette.JDPaletteFactory;
 import com.jaspersoft.studio.editor.palette.JSSPaletteContextMenuProvider;
@@ -575,6 +575,9 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 			protected void configurePaletteViewer(PaletteViewer viewer) {
 				viewer.setContextMenu(new JSSPaletteContextMenuProvider(viewer));
 				viewer.addDragSourceListener(new TemplateTransferDragSourceListener(viewer));
+				//set the selection tool into the palette
+				viewer.getEditDomain().setDefaultTool(new JSSPaletteSelectionTool(getEditDomain()));
+				viewer.getEditDomain().loadDefaultTool();
 				// Uncomment these lines if you want to set as default a palette
 				// with column layout and large icons.
 				// // TODO: we should replace these default suggestions not using the GEF preference
