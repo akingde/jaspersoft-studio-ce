@@ -110,13 +110,13 @@ public class CertificatesDialog extends CertificateDialog {
 					viewer.setSelection(new StructuredSelection(trustCertificates.get(0)), true);
 				else
 					getButton(IDialogConstants.OK_ID).setEnabled(false);
+				getShell().setText(Messages.CertificatesDialog_4);
 				getButton(IDialogConstants.OK_ID).setText(Messages.CertificatesDialog_3);
 				getButton(IDialogConstants.CANCEL_ID).setText(Messages.CertificatesDialog_2);
 				show = false;
 			} catch (KeyStoreException e1) {
 				UIUtils.showError(e1);
 			}
-			return;
 		} else {
 			StructuredSelection sel = (StructuredSelection) viewer.getSelection();
 			if (!sel.isEmpty()) {
@@ -130,7 +130,6 @@ public class CertificatesDialog extends CertificateDialog {
 					viewer.setSelection(new StructuredSelection(trustCertificates.get(ind)), true);
 			}
 		}
-		super.okPressed();
 	}
 
 	@Override

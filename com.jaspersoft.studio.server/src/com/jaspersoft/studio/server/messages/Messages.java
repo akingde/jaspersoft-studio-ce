@@ -93,6 +93,7 @@ public class Messages extends NLS {
 	public static String CertificatesDialog_1;
 	public static String CertificatesDialog_2;
 	public static String CertificatesDialog_3;
+	public static String CertificatesDialog_4;
 	public static String CreateServerAction_desc;
 	public static String CreateServerAction_name;
 	public static String CreateServerAction_title;
