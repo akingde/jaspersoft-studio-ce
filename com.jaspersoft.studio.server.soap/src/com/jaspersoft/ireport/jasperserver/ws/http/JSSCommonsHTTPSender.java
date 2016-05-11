@@ -235,7 +235,7 @@ public class JSSCommonsHTTPSender extends BasicHandler {
 					try {
 						StatusLine statusLine = response.getStatusLine();
 						int returnCode = statusLine.getStatusCode();
-						String contentType = en.getContentType().getValue();
+						String contentType = en.getContentType() != null ? en.getContentType().getValue() : null;
 
 						in = new BufferedHttpEntity(en).getContent();
 						// String str = IOUtils.toString(in);
