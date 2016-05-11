@@ -18,6 +18,7 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.Future;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHost;
@@ -26,8 +27,11 @@ import org.apache.http.StatusLine;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpResponseException;
 import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.fluent.Async;
+import org.apache.http.client.fluent.Content;
 import org.apache.http.client.fluent.Executor;
 import org.apache.http.client.fluent.Request;
+import org.apache.http.concurrent.FutureCallback;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 import com.jaspersoft.studio.ConfigurationManager;
@@ -117,10 +121,10 @@ public class JRBackwardManager {
 		Request req = Request.Get(def.getResourceURL());
 		if (proxy != null)
 			req.viaProxy(proxy);
-		req.execute().handleResponse(new ResponseHandler<Boolean>() {
+		Future<Content> future = Async.newInstance().use(exec).execute(req, new ResponseHandler<Content>() {
 
 			@Override
-			public Boolean handleResponse(HttpResponse response) throws ClientProtocolException, IOException {
+			public Content handleResponse(HttpResponse response) throws ClientProtocolException, IOException {
 				StatusLine statusLine = response.getStatusLine();
 
 				HttpEntity entity = response.getEntity();
@@ -143,9 +147,32 @@ public class JRBackwardManager {
 					}
 				});
 
-				return true;
+				return null;
 			}
+		}, new FutureCallback<Content>() {
+
+			public void failed(final Exception ex) {
+				ex.printStackTrace();
+			}
+
+			public void completed(final Content content) {
+			}
+
+			public void cancelled() {
+			}
+
 		});
+		while (!future.isDone() && !future.isCancelled()) {
+			try {
+				Thread.sleep(5);
+			} catch (InterruptedException e) {
+				return;
+			}
+			if (monitor.isCanceled()) {
+				future.cancel(true);
+				return;
+			}
+		}
 	}
 
 	/**

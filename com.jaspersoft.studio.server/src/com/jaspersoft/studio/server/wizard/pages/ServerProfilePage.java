@@ -22,13 +22,17 @@ import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Future;
 
 import javax.net.ssl.SSLHandshakeException;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.http.HttpHost;
+import org.apache.http.client.fluent.Async;
+import org.apache.http.client.fluent.Content;
 import org.apache.http.client.fluent.Executor;
 import org.apache.http.client.fluent.Request;
+import org.apache.http.concurrent.FutureCallback;
 import org.apache.http.conn.ssl.BrowserCompatHostnameVerifier;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.conn.ssl.SSLContextBuilder;
@@ -53,6 +57,7 @@ import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.databinding.wizard.WizardPageSupport;
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -697,6 +702,8 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 
 		private MouseAdapter mlistener = new MouseAdapter() {
 			private long time1;
+			private ProgressMonitorDialog pmd;
+			private boolean shown;
 
 			@Override
 			public void mouseUp(MouseEvent e) {
@@ -710,8 +717,18 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 					final KeyStore trustStore = CertChainValidator.getDefaultTrustStore();
 					builder.loadTrustMaterial(trustStore, new JSSTrustStrategy(trustStore) {
 						@Override
-						public boolean isTrusted(X509Certificate[] chain, String authType) throws CertificateException {
-							new CertificatesDialog(UIUtils.getShell(), "", chain[0], chain, trustStore).open(); //$NON-NLS-1$
+						public boolean isTrusted(final X509Certificate[] chain, String authType)
+								throws CertificateException {
+							getContainer().getShell().getDisplay().syncExec(new Runnable() {
+								public void run() {
+									if (!shown) {
+										new CertificatesDialog(UIUtils.getShell(), "", chain[0], chain, trustStore) //$NON-NLS-1$
+												.open();
+										shown = true;
+									}
+								}
+							});
+
 							return true;
 						}
 					});
@@ -720,13 +737,51 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 
 					URL targetURL = sp.getURL();
 
-					Executor exec = Executor.newInstance(HttpClientBuilder.create().setSSLSocketFactory(sslsf).build());
+					final Executor exec = Executor
+							.newInstance(HttpClientBuilder.create().setSSLSocketFactory(sslsf).build());
 					HttpUtils.setupProxy(exec, targetURL.toURI());
 					HttpHost proxy = HttpUtils.getUnauthProxy(exec, targetURL.toURI());
-					Request req = Request.Get(targetURL.toString());
+					final Request req = Request.Get(targetURL.toString());
 					if (proxy != null)
 						req.viaProxy(proxy);
-					exec.execute(req);
+					if (pmd != null) {
+						pmd.getProgressMonitor().setCanceled(true);
+					}
+					shown = false;
+					pmd = new ProgressMonitorDialog(getContainer().getShell());
+					pmd.run(true, true, new IRunnableWithProgress() {
+
+						@Override
+						public void run(IProgressMonitor monitor)
+								throws InvocationTargetException, InterruptedException {
+							monitor.beginTask("Connecting", IProgressMonitor.UNKNOWN);
+							Future<Content> future = Async.newInstance().use(exec).execute(req,
+									new FutureCallback<Content>() {
+
+										public void failed(final Exception ex) {
+											ex.printStackTrace();
+										}
+
+										public void completed(final Content content) {
+										}
+
+										public void cancelled() {
+										}
+
+									});
+							while (!future.isDone() && !future.isCancelled()) {
+								try {
+									Thread.sleep(5);
+								} catch (InterruptedException e) {
+									return;
+								}
+								if (monitor.isCanceled()) {
+									future.cancel(true);
+									return;
+								}
+							}
+						}
+					});
 				} catch (Exception ex) {
 					if (ex instanceof SSLHandshakeException)
 						return;
